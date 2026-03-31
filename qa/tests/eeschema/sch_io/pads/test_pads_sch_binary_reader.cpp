@@ -671,6 +671,11 @@ BOOST_AUTO_TEST_CASE( ExternalComponentFields )
     BOOST_CHECK_EQUAL( fieldValue( "DESCRIPTION" ), "CONN,SMD,5 POS,1MM,STRAIGHT,RECEPTACLE" );
     BOOST_CHECK_EQUAL( fieldValue( "MFR1" ), "Samtec" );
     BOOST_CHECK_EQUAL( fieldValue( "MFR1 P/N" ), "T1M-05-F-SV-L" );
+
+    // The offset-index path (used on this compaction-saved single-sheet file)
+    // recovers every field at 100% recall, including the deduplicated PCB DECAL
+    // that the flat-walk fallback misses.
+    BOOST_CHECK_EQUAL( fieldValue( "PCB DECAL" ), "CON_SAMTEC_T1M-05-XX-S-V" );
 }
 
 

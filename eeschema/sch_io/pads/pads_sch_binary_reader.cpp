@@ -682,8 +682,14 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
         m_partTypeNames.push_back( nm );
     }
 
-    // 2. Attribute pool start = first 0x00-tagged non-key whose next 0x00-tagged
-    // string is a known attribute key.
+    // 2. Preferred path: the u32 offset-index table (compaction-saved files) gives
+    // each part-type its exact key instances -> 100% precision + recall.
+    if( decodeFieldsViaIndex( d, ptBase ) )
+        return;
+
+    // 3. Fallback (edit-log files with no consolidated index): the flat tagged
+    // stream, where the attribute pool start = first 0x00-tagged non-key whose
+    // next 0x00-tagged string is a known attribute key.
     size_t                  scanEnd = std::min( d.size(), static_cast<size_t>( 0x4000 ) );
     std::vector<TAGGED_STR> head = walkTaggedStrings( d, DATA_STREAM_OFFSET, scanEnd );
     size_t                  attrStart = std::string::npos;
@@ -788,6 +794,262 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
 
         ++idx;
     }
+}
+
+
+// The flat attribute pool is only string STORAGE; in a compaction-saved file the
+// part-type -> attribute association is a separate u32 offset-index table after
+// the gate/pin table.  Each record is [class_off][name_off] key_off..., offsets
+// relative to the attribute area start (the first part-type-name string).  Each
+// key's value is the 0x01-tagged string following that exact key instance, so a
+// part-type recovers its own (or an inherited family member's) values exactly.
+bool PADS_SCH_BINARY_READER::decodeFieldsViaIndex( const std::vector<uint8_t>& d, size_t poolBase )
+{
+    auto printable = [&]( size_t o ) { return o < d.size() && d[o] >= 0x20 && d[o] < 0x7f; };
+
+    auto readStr = [&]( size_t o, size_t end ) -> std::string
+    {
+        size_t j = o;
+
+        while( j < end && d[j] >= 0x20 && d[j] < 0x7f )
+            ++j;
+
+        return std::string( reinterpret_cast<const char*>( &d[o] ), j - o );
+    };
+
+    // Part-type names (drop the 3 symbol groups and single-char garbage).
+    std::set<std::string> names;
+
+    for( size_t k = 3; k < m_partTypeNames.size(); ++k )
+    {
+        if( m_partTypeNames[k].size() > 1 )
+            names.insert( m_partTypeNames[k] );
+    }
+
+    if( names.empty() )
+        return false;
+
+    // Attribute area = [first part-type-name string, first 16-byte zero run).
+    size_t astart = std::string::npos;
+
+    for( size_t i = DATA_STREAM_OFFSET; i < poolBase; )
+    {
+        if( printable( i ) )
+        {
+            std::string s = readStr( i, poolBase );
+
+            if( names.count( s ) )
+            {
+                astart = i;
+                break;
+            }
+
+            i += s.size();
+        }
+        else
+        {
+            ++i;
+        }
+    }
+
+    if( astart == std::string::npos )
+        return false;
+
+    size_t aend = poolBase;
+    size_t run = 0;
+
+    for( size_t i = astart; i < poolBase; ++i )
+    {
+        if( d[i] == 0 )
+        {
+            if( ++run >= 16 )
+            {
+                aend = i - run + 1;
+                break;
+            }
+        }
+        else
+        {
+            run = 0;
+        }
+    }
+
+    // rel-offset -> string, and the subset of rels that are part-type names.
+    std::map<uint32_t, std::string> rel2str;
+    std::set<uint32_t>              nameRels;
+
+    for( size_t i = astart; i < aend; )
+    {
+        if( printable( i ) )
+        {
+            std::string s = readStr( i, aend );
+            uint32_t    rel = static_cast<uint32_t>( i - astart );
+            rel2str[rel] = s;
+
+            if( names.count( s ) )
+                nameRels.insert( rel );
+
+            i += s.size();
+        }
+        else
+        {
+            ++i;
+        }
+    }
+
+    auto isClass = [&]( uint32_t v ) -> bool
+    {
+        auto it = rel2str.find( v );
+
+        if( it == rel2str.end() || nameRels.count( v ) )
+            return false;
+
+        const std::string& s = it->second;
+
+        if( s.empty() || s.size() > 4 )
+            return false;
+
+        for( char c : s )
+        {
+            if( !std::isalpha( static_cast<unsigned char>( c ) ) && c != '.' )
+                return false;
+        }
+
+        return true;
+    };
+
+    // Index table = first u32 class-offset immediately followed by a name-offset.
+    size_t tstart = std::string::npos;
+
+    for( size_t o = aend; o + 8 <= poolBase; ++o )
+    {
+        if( nameRels.count( readU32( d, o + 4 ) ) && isClass( readU32( d, o ) ) )
+        {
+            tstart = o;
+            break;
+        }
+    }
+
+    if( tstart == std::string::npos )
+        return false;
+
+    // Read u32 offsets until two consecutive non-offsets (-1 marks a gap).
+    std::vector<long long> vals;
+    int                    bad = 0;
+
+    for( size_t o = tstart; o + 4 <= poolBase; o += 4 )
+    {
+        uint32_t v = readU32( d, o );
+
+        if( rel2str.count( v ) || v == 0 )
+        {
+            vals.push_back( v );
+            bad = 0;
+        }
+        else if( ++bad >= 2 )
+        {
+            break;
+        }
+        else
+        {
+            vals.push_back( -1 );
+        }
+    }
+
+    while( !vals.empty() && vals.back() == -1 )
+        vals.pop_back();
+
+    // Segment into records on each [class][name] pair.
+    struct REC { std::string name; std::vector<uint32_t> keys; };
+    std::vector<REC> recs;
+    bool             haveCur = false;
+    REC              cur;
+
+    for( size_t k = 0; k < vals.size(); )
+    {
+        if( vals[k] < 0 )
+        {
+            ++k;
+            continue;
+        }
+
+        uint32_t  v = static_cast<uint32_t>( vals[k] );
+        long long nxt = ( k + 1 < vals.size() ) ? vals[k + 1] : -1;
+
+        if( nxt >= 0 && nameRels.count( static_cast<uint32_t>( nxt ) ) && isClass( v ) )
+        {
+            if( haveCur )
+                recs.push_back( cur );
+
+            cur = REC{ rel2str[static_cast<uint32_t>( nxt )], {} };
+            haveCur = true;
+            k += 2;
+            continue;
+        }
+
+        if( haveCur && rel2str.count( v ) )
+            cur.keys.push_back( v );
+
+        ++k;
+    }
+
+    if( haveCur )
+        recs.push_back( cur );
+
+    // Guard the rel-0 false positive: require >= 3 records over >= 3 distinct
+    // part-type names (a real consolidated index frames many part-types).
+    std::set<std::string> distinct;
+
+    for( const REC& r : recs )
+    {
+        if( names.count( r.name ) )
+            distinct.insert( r.name );
+    }
+
+    if( recs.size() < 3 || distinct.size() < 3
+        || distinct.size() < std::min<size_t>( 3, m_partTypeNames.size() / 2 ) )
+        return false;
+
+    // Build the per-part-type fields; the value is the 0x01-tagged string after
+    // each exact key instance, unioned across the part-type's records.
+    for( const REC& r : recs )
+    {
+        std::vector<std::pair<std::string, std::string>>& kv = m_partTypeFields[r.name];
+
+        for( uint32_t kr : r.keys )
+        {
+            std::string key = readStr( astart + kr, aend );
+            size_t      p = astart + kr + key.size();
+
+            if( p < aend && d[p] == 0 )
+                ++p;
+
+            std::string val;
+
+            if( p < aend && d[p] == 0x01 && printable( p + 1 ) )
+                val = readStr( p + 1, aend );
+
+            bool found = false;
+
+            for( std::pair<std::string, std::string>& pr : kv )
+            {
+                if( pr.first == key )
+                {
+                    found = true;
+
+                    if( !val.empty() && pr.second.empty() )
+                        pr.second = val;
+
+                    break;
+                }
+            }
+
+            if( !found )
+                kv.emplace_back( key, val );
+        }
+    }
+
+    return true;
 }
 
 

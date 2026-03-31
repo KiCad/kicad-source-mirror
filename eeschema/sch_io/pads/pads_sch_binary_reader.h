@@ -179,6 +179,10 @@ private:
     /// Decode the part-type pool and the per-part-type component attribute pool.
     void decodeFields( const std::vector<uint8_t>& aData );
 
+    /// Decode component fields via the u32 offset-index table (present in
+    /// compaction-saved files; exact).  Returns true if a genuine index was used.
+    bool decodeFieldsViaIndex( const std::vector<uint8_t>& aData, size_t aPoolBase );
+
     /// Decode the CAE-decal geometry library + pin terminals, and locate the
     /// per-sheet used-decal name tables (for the placement->decal binding).
     void decodeDecals( const std::vector<uint8_t>& aData );
