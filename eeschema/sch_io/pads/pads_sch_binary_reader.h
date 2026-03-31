@@ -45,6 +45,10 @@ struct PLACEMENT
     int         rotation = 0;///< 0 or 90 degrees.
     int         sheetIndex = 0; ///< Owning PADS sheet (0-based).
     std::string decalName;   ///< Bound CAE-decal (gate symbol) name, empty if unbound.
+    std::string partType;    ///< Bound part-type name, empty if unbound.
+
+    /// Component user-attribute fields (key, value) of this part's part-type.
+    std::vector<std::pair<std::string, std::string>> fields;
 };
 
 /// One drawing piece of a CAE decal (a polyline of decal-relative mil vertices).
@@ -172,6 +176,9 @@ private:
     /// block boundaries.
     int sheetIndexForOffset( size_t aOffset ) const;
 
+    /// Decode the part-type pool and the per-part-type component attribute pool.
+    void decodeFields( const std::vector<uint8_t>& aData );
+
     /// Decode the CAE-decal geometry library + pin terminals, and locate the
     /// per-sheet used-decal name tables (for the placement->decal binding).
     void decodeDecals( const std::vector<uint8_t>& aData );
@@ -204,6 +211,10 @@ private:
     /// Per-sheet used-decal name tables: (file offset, ordered decal names).
     std::vector<std::pair<size_t, std::vector<std::string>>> m_usedDecalTables;
     size_t                               m_decalBuiltinCount = 0; ///< pool5.used_count (handle base).
+
+    /// Part-type pool names (block+4 ordinal indexes this) and per-part-type fields.
+    std::vector<std::string>             m_partTypeNames;
+    std::map<std::string, std::vector<std::pair<std::string, std::string>>> m_partTypeFields;
 
     std::vector<PLACEMENT>               m_placements;
     std::vector<WIRE_VERTEX>             m_wireVertices;   ///< Flat pool, file order.

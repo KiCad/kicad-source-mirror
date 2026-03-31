@@ -635,6 +635,45 @@ BOOST_AUTO_TEST_CASE( ExternalSheetCountMatchesDesign )
     {
 
 
+BOOST_AUTO_TEST_CASE( ExternalComponentFields )
+{
+    // SC350430B01 binds each part to its part-type and the per-part-type attribute
+    // pool; J6-1 (part-type 301134) carries DESCRIPTION/MFR1/MFR1 P/N exactly.
+
+    std::vector<uint8_t> data;
+    BOOST_REQUIRE( PADS_SCH_BINARY_READER::ReadFile( wxString::FromUTF8( pair.binaryPath ), data ) );
+
+    PADS_SCH_BINARY_READER reader;
+    BOOST_REQUIRE( reader.Parse( data ) );
+
+    const PADS_SCH_BINARY::PLACEMENT* j6 = nullptr;
+
+    for( const PADS_SCH_BINARY::PLACEMENT& pl : reader.GetPlacements() )
+    {
+        if( pl.reference == "J6-1" )
+            j6 = &pl;
+    }
+
+    BOOST_REQUIRE( j6 );
+    BOOST_CHECK_EQUAL( j6->partType, "301134" );
+
+    auto fieldValue = [&]( const std::string& key ) -> std::string
+    {
+        for( const std::pair<std::string, std::string>& f : j6->fields )
+        {
+            if( f.first == key )
+                return f.second;
+        }
+
+        return std::string();
+    };
+
+    BOOST_CHECK_EQUAL( fieldValue( "DESCRIPTION" ), "CONN,SMD,5 POS,1MM,STRAIGHT,RECEPTACLE" );
+    BOOST_CHECK_EQUAL( fieldValue( "MFR1" ), "Samtec" );
+    BOOST_CHECK_EQUAL( fieldValue( "MFR1 P/N" ), "T1M-05-F-SV-L" );
+}
+
+
 BOOST_AUTO_TEST_CASE( ExternalDecalBindingAndGeometry )
 {
     // SC350430B01: the placement->decal binding (handle @ refdes-0x1a indexing the

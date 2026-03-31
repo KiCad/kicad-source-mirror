@@ -24,6 +24,7 @@
 #include <lib_id.h>
 #include <lib_symbol.h>
 #include <page_info.h>
+#include <sch_field.h>
 #include <sch_junction.h>
 #include <sch_label.h>
 #include <sch_line.h>
@@ -136,6 +137,8 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     m_decalIndex.clear();
     m_usedDecalTables.clear();
     m_decalBuiltinCount = 0;
+    m_partTypeNames.clear();
+    m_partTypeFields.clear();
     m_placements.clear();
     m_wireVertices.clear();
     m_wirePolylines.clear();
@@ -151,6 +154,7 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
 
     decodeSheets( aData );
     decodeDecals( aData );
+    decodeFields( aData );
     decodePlacements( aData );
     decodeWires( aData );
     decodeTexts( aData );
@@ -595,6 +599,199 @@ const std::vector<std::string>* PADS_SCH_BINARY_READER::usedDecalTableForOffset(
 
 
 // ---------------------------------------------------------------------------
+// COMPONENT FIELDS (per-part-type user attributes)
+//
+// The part-type pool ($OSR_SYMS/$GND_SYMS/$PWR_SYMS header, stride 0x4c) names
+// every part-type; a placement's part-type is pool[u16 @ (refdes-0x1c)].  The
+// attribute pool (after the global *FIELDS* block) is a flat tagged stream where
+// the control byte before each printable string is 0x00 (a KEY or a part-type
+// HEADER) or 0x01 (the VALUE of the preceding key).  A header is the part-type
+// whose next string is a known attribute key.  Values accumulate per part-type;
+// "repeat-lock" stops a block at the first repeated key (the sub-record divider)
+// so cross-record bleed does not corrupt the values.
+// ---------------------------------------------------------------------------
+static const std::set<std::string> FIELD_ATTR_KEYS = {
+    "DESCRIPTION", "MFR1", "MFR1 P/N", "MFR2", "MFR2 P/N", "MFR3", "MFR3 P/N",
+    "MFR P/N", "VALUE", "Value", "Tolerance", "Voltage Rating", "Power",
+    "WDI.Install Option", "WDI P/N", "PCB DECAL", "Geometry.Height", "HOLE",
+    "Revision", "Current Rating",
+};
+
+
+struct TAGGED_STR { int tag; size_t off; std::string text; };
+
+
+static std::vector<TAGGED_STR> walkTaggedStrings( const std::vector<uint8_t>& d, size_t start, size_t end )
+{
+    std::vector<TAGGED_STR> out;
+    int                     prevTag = -1;
+    size_t                  i = start;
+
+    while( i < end )
+    {
+        if( d[i] >= 0x20 && d[i] < 0x7f )
+        {
+            size_t j = i;
+
+            while( j < end && d[j] >= 0x20 && d[j] < 0x7f )
+                ++j;
+
+            out.push_back( { prevTag, i, std::string( reinterpret_cast<const char*>( &d[i] ), j - i ) } );
+            prevTag = -1;
+            i = j;
+        }
+        else
+        {
+            prevTag = d[i];
+            ++i;
+        }
+    }
+
+    return out;
+}
+
+
+void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
+{
+    static constexpr size_t PT_STRIDE = 0x4c;
+
+    // 1. Part-type pool, anchored on the $OSR_SYMS/$GND_SYMS/$PWR_SYMS header.
+    size_t ptBase = std::string::npos;
+
+    for( size_t i = DATA_STREAM_OFFSET; i + 2 * PT_STRIDE + 16 < d.size(); ++i )
+    {
+        if( nameAt( d, i, 0x26 ) == "$OSR_SYMS"
+            && nameAt( d, i + PT_STRIDE, 0x26 ) == "$GND_SYMS"
+            && nameAt( d, i + 2 * PT_STRIDE, 0x26 ) == "$PWR_SYMS" )
+        {
+            ptBase = i;
+            break;
+        }
+    }
+
+    if( ptBase == std::string::npos )
+        return;
+
+    for( size_t j = 0; j < 64; ++j )
+    {
+        std::string nm = nameAt( d, ptBase + PT_STRIDE * j, 0x26 );
+
+        if( nm.empty() )
+            break;
+
+        m_partTypeNames.push_back( nm );
+    }
+
+    // 2. Attribute pool start = first 0x00-tagged non-key whose next 0x00-tagged
+    // string is a known attribute key.
+    size_t                  scanEnd = std::min( d.size(), static_cast<size_t>( 0x4000 ) );
+    std::vector<TAGGED_STR> head = walkTaggedStrings( d, DATA_STREAM_OFFSET, scanEnd );
+    size_t                  attrStart = std::string::npos;
+
+    for( size_t k = 0; k + 1 < head.size(); ++k )
+    {
+        bool zero = ( head[k].tag == 0 || head[k].tag == -1 );
+
+        if( zero && !FIELD_ATTR_KEYS.count( head[k].text )
+            && head[k + 1].tag == 0 && FIELD_ATTR_KEYS.count( head[k + 1].text ) )
+        {
+            attrStart = head[k].off;
+            break;
+        }
+    }
+
+    if( attrStart == std::string::npos )
+        return;
+
+    // End = the first >= 16-byte zero run after the start.
+    size_t attrEnd = d.size();
+    size_t run = 0;
+
+    for( size_t o = attrStart; o < d.size(); ++o )
+    {
+        if( d[o] == 0 )
+        {
+            if( ++run >= 16 )
+            {
+                attrEnd = o - run + 1;
+                break;
+            }
+        }
+        else
+        {
+            run = 0;
+        }
+    }
+
+    size_t walkFrom = ( attrStart > 0 && d[attrStart - 1] < 0x20 ) ? attrStart - 1 : attrStart;
+    std::vector<TAGGED_STR> toks = walkTaggedStrings( d, walkFrom, attrEnd );
+
+    // 3. Parse with repeat-lock.
+    std::string cur;
+    bool        locked = false;
+
+    for( size_t idx = 0; idx < toks.size(); )
+    {
+        const TAGGED_STR& t = toks[idx];
+        bool              zero = ( t.tag == 0 || t.tag == -1 );
+
+        if( zero && !FIELD_ATTR_KEYS.count( t.text ) )
+        {
+            if( idx + 1 < toks.size() && toks[idx + 1].tag == 0 && FIELD_ATTR_KEYS.count( toks[idx + 1].text ) )
+            {
+                cur = t.text;
+                m_partTypeFields[cur];
+                locked = false;
+            }
+
+            ++idx;
+            continue;
+        }
+
+        if( zero )
+        {
+            std::string key = t.text;
+            std::string val;
+
+            if( idx + 1 < toks.size() && toks[idx + 1].tag == 1 )
+            {
+                val = toks[idx + 1].text;
+                idx += 2;
+            }
+            else
+            {
+                ++idx;
+            }
+
+            if( !cur.empty() && !locked )
+            {
+                std::vector<std::pair<std::string, std::string>>& kv = m_partTypeFields[cur];
+                bool present = false;
+
+                for( const auto& pr : kv )
+                {
+                    if( pr.first == key )
+                    {
+                        present = true;
+                        break;
+                    }
+                }
+
+                if( present )
+                    locked = true;
+                else
+                    kv.emplace_back( key, val );
+            }
+
+            continue;
+        }
+
+        ++idx;
+    }
+}
+
+
+// ---------------------------------------------------------------------------
 // PAGE SIZE
 //
 // The sheet size is stored symbolically as WDITBSIZE<X> (X = A..E).  Only the
@@ -791,6 +988,22 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
 
                     if( idx < table->size() )
                         pl.decalName = ( *table )[idx];
+                }
+            }
+
+            // Bind the part-type (block+4 ordinal into the part-type pool) and its
+            // component attribute fields.
+            if( p >= 0x1c )
+            {
+                uint16_t ptIdx = readU16( d, p - 0x1c );
+
+                if( ptIdx < m_partTypeNames.size() )
+                {
+                    pl.partType = m_partTypeNames[ptIdx];
+                    auto it = m_partTypeFields.find( pl.partType );
+
+                    if( it != m_partTypeFields.end() )
+                        pl.fields = it->second;
                 }
             }
 
@@ -1634,6 +1847,27 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
         symbol->SetUnit( 1 );
         symbol->SetRef( &path, wxString::FromUTF8( pl.reference ) );
         symbol->AddHierarchicalReference( path.Path(), wxString::FromUTF8( pl.reference ), 1 );
+
+        // Component attribute fields: map VALUE to the symbol Value field, the
+        // rest to user fields.  The per-instance WDI.Install Option is dropped
+        // (not serialized per instance).
+        for( const std::pair<std::string, std::string>& f : pl.fields )
+        {
+            if( f.second.empty() || f.first == "WDI.Install Option" )
+                continue;
+
+            if( f.first == "VALUE" || f.first == "Value" )
+            {
+                symbol->GetField( FIELD_T::VALUE )->SetText( wxString::FromUTF8( f.second ) );
+                continue;
+            }
+
+            SCH_FIELD field( symbol.get(), FIELD_T::USER, wxString::FromUTF8( f.first ) );
+            field.SetText( wxString::FromUTF8( f.second ) );
+            field.SetVisible( false );
+            field.SetPosition( symbol->GetPosition() );
+            symbol->AddField( field );
+        }
 
         aScreen->Append( symbol.release() );
         ++appended;
