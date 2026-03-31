@@ -1011,17 +1011,107 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
             return false;
     }
 
-    // Introduce a last point to cover the via centre to ensure it is seen as connected
-    VECTOR2I pointD = aOtherPos;
-    // add a small offset in order to have the aViaPad.m_Pos reference point inside
-    // the teardrop area, just in case...
+    // Compute pointD, the "back" point of the teardrop behind the pad/via center.
+    // For off-center track connections (where the track doesn't pass through the pad center),
+    // we project the pad center onto the track axis so the teardrop is built symmetrically
+    // about the track rather than being skewed toward the pad center.
+    int padRadius = GetWidth( aOther, layer ) / 2;
+    VECTOR2D intToPad = VECTOR2D( aOtherPos - intersection );
+    double projOnTrack = -( intToPad.x * vecT.x + intToPad.y * vecT.y );
+    double effectiveDist = std::max( projOnTrack, static_cast<double>( padRadius ) );
     int offset = pcbIUScale.mmToIU( 0.001 );
-    pointD += VECTOR2I( int( -vecT.x*offset), int(-vecT.y*offset) );
+    VECTOR2I pointD = intersection + VECTOR2I( KiROUND( -vecT.x * ( effectiveDist + offset ) ),
+                                               KiROUND( -vecT.y * ( effectiveDist + offset ) ) );
 
     VECTOR2I pointC, pointE;     // Point on pad/via outlines
     std::vector<VECTOR2I> pts = { pointA, pointB, pointC, pointD, pointE };
 
     computeAnchorPoints( aParams, aTrack->GetLayer(), aOther, aOtherPos, pts );
+
+    // For off-center track connections, the convex hull produces asymmetric anchor points
+    // (C and E at different distances from the track axis). Recompute them to be symmetric
+    // so the teardrop flares out evenly from the track on both sides.
+    if( IsRound( aOther, layer ) )
+    {
+        VECTOR2D perpT( -vecT.y, vecT.x );
+
+        // Perpendicular distance from pad center to the track axis
+        VECTOR2D padOffset = VECTOR2D( aOtherPos - intersection );
+        double perpDistToCenter = padOffset.x * perpT.x + padOffset.y * perpT.y;
+
+        // Only apply the symmetric adjustment when the track is significantly off-center.
+        if( std::abs( perpDistToCenter ) > padRadius * 0.1 )
+        {
+            double d = std::abs( perpDistToCenter );
+
+            if( d < padRadius )
+            {
+                // The maximum symmetric half-width is limited by the shorter side, which is
+                // the distance from the track axis to the nearest circle edge (R - d).
+                double maxSymmetric = static_cast<double>( padRadius ) - d;
+
+                // Apply the configured width ratio and max width constraints
+                int preferred_width = KiROUND( GetWidth( aOther, layer ) * aParams.m_BestWidthRatio );
+                int maxHalfWidth = preferred_width / 2;
+
+                if( aParams.m_TdMaxWidth > 0 )
+                    maxHalfWidth = std::min( maxHalfWidth, aParams.m_TdMaxWidth / 2 );
+
+                double symHalfWidth = std::min( maxSymmetric,
+                                                static_cast<double>( maxHalfWidth ) );
+
+                if( symHalfWidth > track_halfwidth )
+                {
+                    VECTOR2D center = VECTOR2D( aOtherPos );
+                    double R = static_cast<double>( padRadius );
+
+                    // Find C on the circle at perpendicular distance +symHalfWidth from track.
+                    // Line: p = (perpFoot + perpT*symHalfWidth) + t * vecT
+                    // Intersect with circle (center, R) and pick the point closest to
+                    // the intersection point (track entry side).
+                    auto findCircleLineIntersection =
+                        [&]( double perpDist ) -> VECTOR2I
+                        {
+                            double projAlongTrack = padOffset.x * vecT.x
+                                                  + padOffset.y * vecT.y;
+                            VECTOR2D lineOrigin = VECTOR2D( intersection )
+                                                + vecT * projAlongTrack
+                                                + perpT * perpDist;
+
+                            VECTOR2D oc = lineOrigin - center;
+                            // a_coeff = 1.0 since vecT is unit length
+                            double b_coeff = oc.x * vecT.x + oc.y * vecT.y;
+                            double c_coeff = oc.x * oc.x + oc.y * oc.y - R * R;
+                            double disc = b_coeff * b_coeff - c_coeff;
+
+                            if( disc < 0 )
+                                return VECTOR2I( KiROUND( lineOrigin.x ),
+                                                 KiROUND( lineOrigin.y ) );
+
+                            double sqrtDisc = std::sqrt( disc );
+                            double t1 = -b_coeff - sqrtDisc;
+                            double t2 = -b_coeff + sqrtDisc;
+
+                            // Pick the point on the intersection side (closer to the track entry)
+                            VECTOR2D p1 = lineOrigin + vecT * t1;
+                            VECTOR2D p2 = lineOrigin + vecT * t2;
+                            VECTOR2D intPt = VECTOR2D( intersection );
+
+                            if( ( p1 - intPt ).EuclideanNorm()
+                                < ( p2 - intPt ).EuclideanNorm() )
+                            {
+                                return VECTOR2I( KiROUND( p1.x ), KiROUND( p1.y ) );
+                            }
+
+                            return VECTOR2I( KiROUND( p2.x ), KiROUND( p2.y ) );
+                        };
+
+                    pts[2] = findCircleLineIntersection( symHalfWidth );
+                    pts[4] = findCircleLineIntersection( -symHalfWidth );
+                }
+            }
+        }
+    }
 
     if( !aParams.m_CurvedEdges )
     {

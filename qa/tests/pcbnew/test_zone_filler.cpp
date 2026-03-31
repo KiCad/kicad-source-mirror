@@ -1702,3 +1702,89 @@ BOOST_FIXTURE_TEST_CASE( RegressionThermalReliefsToNowhere, ZONE_FILL_TEST_FIXTU
                          "GND zone fill does not contain copper at the valid spoke test point "
                          "(5.6, 5.0). The fix may have incorrectly removed valid spokes." );
 }
+
+
+/**
+ * Test for issue 23380: Teardrops on off-center tracks should be approximately symmetric
+ * about the track axis.
+ *
+ * When a track connects to a pad off-center (not through the pad center), the teardrop shape
+ * should still flare out symmetrically from the track. Before the fix, the teardrop axis was
+ * computed from the track to the pad center, causing the clipping rectangle (and thus the
+ * anchor points) to be skewed relative to the track path.
+ */
+BOOST_FIXTURE_TEST_CASE( OffCenterTeardropSymmetry, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "off_center_teardrop", m_board );
+
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    toolMgr.RegisterTool( dummyTool );
+
+    BOARD_COMMIT commit( dummyTool );
+    TEARDROP_MANAGER teardropMgr( m_board.get(), &toolMgr );
+    teardropMgr.UpdateTeardrops( commit, nullptr, nullptr, true );
+
+    if( !commit.Empty() )
+        commit.Push( _( "Add teardrops" ), SKIP_UNDO | SKIP_SET_DIRTY );
+
+    // The test board has a 3mm circle pad at (100, 100) with a 0.25mm track connecting
+    // at (100.75, 99) heading to (115, 99). The track enters the pad off-center: 1mm above
+    // and 0.75mm right of center. The teardrop should be approximately symmetric about the
+    // track's axis (the line from ~(100.75, 99) toward (115, 99), i.e., horizontal).
+
+    int teardropCount = 0;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone->IsTeardropArea() )
+            continue;
+
+        teardropCount++;
+
+        const SHAPE_POLY_SET* outline = zone->Outline();
+
+        if( !outline || outline->OutlineCount() == 0 )
+            continue;
+
+        const SHAPE_LINE_CHAIN& chain = outline->Outline( 0 );
+
+        // The track axis is approximately at Y=99mm (in board coordinates = 99 * 1e6 nm).
+        // Measure the maximum extent above and below this axis across all teardrop vertices.
+        int trackY = pcbIUScale.mmToIU( 99 );
+        int maxAbove = 0;
+        int maxBelow = 0;
+
+        for( int i = 0; i < chain.PointCount(); i++ )
+        {
+            int dy = chain.CPoint( i ).y - trackY;
+
+            if( dy < 0 )
+                maxAbove = std::max( maxAbove, -dy );
+            else
+                maxBelow = std::max( maxBelow, dy );
+        }
+
+        // Both sides should have some extent (the teardrop flares out on both sides)
+        BOOST_CHECK_MESSAGE( maxAbove > 0 && maxBelow > 0,
+                             "Teardrop should extend on both sides of the track axis" );
+
+        if( maxAbove > 0 && maxBelow > 0 )
+        {
+            // The two sides should be approximately equal. Allow 30% asymmetry tolerance
+            // to account for polygon approximation of the circular pad and convex hull rounding.
+            double ratio = static_cast<double>( std::min( maxAbove, maxBelow ) )
+                         / static_cast<double>( std::max( maxAbove, maxBelow ) );
+
+            BOOST_CHECK_MESSAGE( ratio > 0.7,
+                                 wxString::Format( "Teardrop asymmetry ratio %.2f is too low "
+                                                   "(above=%d, below=%d). Expected roughly "
+                                                   "symmetric about the track axis.",
+                                                   ratio, maxAbove, maxBelow ) );
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( teardropCount > 0, "Expected at least one teardrop zone for off-center track" );
+}
