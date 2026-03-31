@@ -126,7 +126,9 @@ void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
 
     if( backAnno.FetchNetlistFromPCB( netlist ) && backAnno.BackAnnotateSymbols( netlist ) )
     {
-        m_frame->GetCurrentSheet().UpdateAllScreenReferences();
+        for( SCH_SHEET_PATH& sheet : m_frame->Schematic().Hierarchy() )
+            sheet.UpdateAllScreenReferences();
+
         m_frame->SetSheetNumberAndCount();
         m_frame->SyncView();
         m_frame->OnModify();
