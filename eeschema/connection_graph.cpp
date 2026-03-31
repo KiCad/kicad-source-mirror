@@ -4249,7 +4249,11 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
                 // (e.g., connecting sheet pins from different sub-sheet
                 // instances) is serving a valid routing purpose even
                 // without local component pins.
-                if( aSubgraph->m_hier_pins.size() + aSubgraph->m_hier_ports.size() > 1 )
+                std::set<wxString> uniquePortNames;
+                for( SCH_HIERLABEL* port : aSubgraph->m_hier_ports )
+                    uniquePortNames.insert( aSubgraph->GetNameForDriver( port ) );
+
+                if( aSubgraph->m_hier_pins.size() + uniquePortNames.size() > 1 )
                 {
                     hasLocalHierarchy = true;
                 }
