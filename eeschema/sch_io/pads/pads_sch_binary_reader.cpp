@@ -1025,7 +1025,7 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
 // Each per-sheet pool is preceded by a stride-40 split-header run whose
 // cumulative-index chain tiles the pool exactly into connection polylines; the
 // explicit gap slices between cumulative jumps are bus geometry.  Runs appear
-// in sheet order, the first framing the active sheet.
+// in sheet order (file order, not active-first; see decodeSheets).
 // ---------------------------------------------------------------------------
 static bool isVertexRecord( const std::vector<uint8_t>& d, size_t o, int aPageWidth, int aPageHeight )
 {
@@ -1443,7 +1443,7 @@ void PADS_SCH_BINARY_READER::decodeTexts( const std::vector<uint8_t>& d )
 // Tie-dots are fixed 12-byte records: X (u16) and Y (u16) in the page-biased
 // half-mil encoding, a net-index word at +4, and a constant 0xfc marker at +6
 // with a zero tail at +7..+11.  PADS stores one contiguous run per sheet; the
-// runs appear in sheet order (the first frames the active sheet), so every run
+// runs appear in sheet order (file order, not active-first), so every run
 // is a tie-dot array and all are collected.
 // ---------------------------------------------------------------------------
 static constexpr size_t   JUNCTION_STRIDE = 12;
