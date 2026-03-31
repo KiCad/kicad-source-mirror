@@ -171,6 +171,7 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     parseBoardOutlineDrwOrigin();
     parseBoardOutline();
     parseNetNames();
+    parseNetClasses();
     parseTextRecords();
     parseRouteVertices();
     computeSec12Base();
@@ -1778,6 +1779,13 @@ void BINARY_PARSER::parseNetNames()
                     m_nets.push_back( net );
                     existing.insert( name );
                     m_sec23IndexToNet[i] = name;
+
+                    // +188 is the net's net-class owner pointer (shared by all members
+                    // of a class). Captured for deterministic net-class membership.
+                    uint32_t owner = readU32( base + 188 );
+
+                    if( owner != 0 )
+                        m_netClassOwner[name] = owner;
                 }
             }
         }
@@ -2218,6 +2226,145 @@ BINARY_PARSER::parseDftNullSeparated( size_t aPos, size_t aEnd ) const
     }
 
     return config;
+}
+
+
+void BINARY_PARSER::parseNetClasses()
+{
+    if( m_netClassOwner.empty() || m_data.size() < 24 )
+        return;
+
+    // Distinct net-class owner pointers, ascending == net-class declaration order.
+    std::set<uint32_t> ownerSet;
+
+    for( const auto& [name, owner] : m_netClassOwner )
+        ownerSet.insert( owner );
+
+    std::vector<uint32_t>      owners( ownerSet.begin(), ownerSet.end() );
+    std::map<uint32_t, size_t> ownerOrdinal;
+
+    for( size_t k = 0; k < owners.size(); ++k )
+        ownerOrdinal[owners[k]] = k;
+
+    // Scan the trailing arena for the type-66 rule table: 24-byte records with tag 0x42
+    // at +4 and a net-class owner pointer at +8 (== a net's +188). Each record carries
+    // the rule-detail page at +0 (which selects the rule kind) and the layer at +20.
+    struct EdgeRec
+    {
+        uint32_t owner;
+        uint32_t page;
+        int      layer;
+        size_t   off;
+    };
+
+    std::vector<EdgeRec> edges;
+
+    for( size_t off = 0; off + 24 <= m_data.size(); ++off )
+    {
+        if( readU32( off + 4 ) != 0x42 )
+            continue;
+
+        uint32_t owner = readU32( off + 8 );
+
+        if( !ownerSet.count( owner ) )
+            continue;
+
+        edges.push_back( { owner, readU32( off ) & ~0xfffu,
+                           static_cast<int>( readU32( off + 20 ) ), off } );
+    }
+
+    if( edges.empty() )
+        return;
+
+    // The 0x118-stride NET_CLASS name records sit just before the rule table; anchor off
+    // the first rule record: name_head = first_edge - num_classes*0x118 - 0x50 (a blind
+    // 0x118 ASCII scan false-positives on silkscreen text, so use this structural anchor).
+    size_t firstEdge = edges.front().off;
+
+    for( const EdgeRec& e : edges )
+        firstEdge = std::min( firstEdge, e.off );
+
+    size_t headSpan = owners.size() * 0x118 + 0x50;
+    size_t nameHead = ( firstEdge >= headSpan ) ? firstEdge - headSpan : 0;
+
+    m_netClasses.clear();
+    m_netClasses.resize( owners.size() );
+
+    for( size_t k = 0; k < owners.size(); ++k )
+    {
+        std::string name = readFixedString( nameHead + k * 0x118, 40 );
+
+        if( name.empty() || !std::isalnum( static_cast<unsigned char>( name[0] ) ) )
+            name = "PADS_NetClass_" + std::to_string( k + 1 );
+
+        m_netClasses[k].name = name;
+    }
+
+    for( const auto& [net, owner] : m_netClassOwner )
+    {
+        auto it = ownerOrdinal.find( owner );
+
+        if( it != ownerOrdinal.end() )
+            m_netClasses[it->second].nets.push_back( net );
+    }
+
+    // The clearance rule kind is the rule-detail page whose (class, layer) keys are all
+    // unique and that spans the most classes. Record each class's clearance-rule layers.
+    std::map<uint32_t, std::set<std::pair<uint32_t, int>>> pageKeys;
+    std::map<uint32_t, bool>                               pageUnique;
+
+    for( const EdgeRec& e : edges )
+    {
+        bool& uniq = pageUnique.try_emplace( e.page, true ).first->second;
+
+        if( !pageKeys[e.page].insert( { e.owner, e.layer } ).second )
+            uniq = false;
+    }
+
+    uint32_t clearancePage = 0;
+    size_t   bestSpan = 0;
+    bool     havePage = false;
+
+    for( const auto& [page, keys] : pageKeys )
+    {
+        if( !pageUnique[page] )
+            continue;
+
+        std::set<uint32_t> classes;
+
+        for( const auto& [owner, layer] : keys )
+            classes.insert( owner );
+
+        if( !havePage || classes.size() > bestSpan )
+        {
+            havePage = true;
+            bestSpan = classes.size();
+            clearancePage = page;
+        }
+    }
+
+    if( havePage )
+    {
+        for( const EdgeRec& e : edges )
+        {
+            if( e.page != clearancePage )
+                continue;
+
+            auto it = ownerOrdinal.find( e.owner );
+
+            if( it != ownerOrdinal.end() )
+                m_netClasses[it->second].ruleLayers.push_back( e.layer );
+        }
+    }
+
+    // Deterministic ordering for reproducible output.
+    for( NETCLASS_DEF& nc : m_netClasses )
+    {
+        std::sort( nc.nets.begin(), nc.nets.end() );
+        std::sort( nc.ruleLayers.begin(), nc.ruleLayers.end() );
+        nc.ruleLayers.erase( std::unique( nc.ruleLayers.begin(), nc.ruleLayers.end() ),
+                             nc.ruleLayers.end() );
+    }
 }
 
 

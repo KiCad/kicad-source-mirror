@@ -43,6 +43,7 @@
 #include <pcb_shape.h>
 #include <board_design_settings.h>
 #include <netclass.h>
+#include <project/net_settings.h>
 #include <geometry/eda_angle.h>
 #include <string_utils.h>
 #include <progress_reporter.h>
@@ -297,6 +298,34 @@ void PCB_IO_PADS_BINARY::loadNets()
 
     for( const auto& padsNet : nets )
         ensureNet( padsNet.name );
+
+    // Net classes: one KiCad NETCLASS per PADS net class, with its member nets. Membership
+    // is deterministic (section-23 +188 owner-pointer grouping). Empty on boards that carry
+    // no net classes (e.g. the v0x2021 dialect), so this is a no-op there.
+    const std::vector<PADS_IO::NETCLASS_DEF>& netClasses = m_parser->GetNetClasses();
+
+    if( netClasses.empty() )
+        return;
+
+    std::shared_ptr<NET_SETTINGS> netSettings = m_loadBoard->GetDesignSettings().m_NetSettings;
+
+    for( const PADS_IO::NETCLASS_DEF& nc : netClasses )
+    {
+        if( nc.name.empty() || nc.nets.empty() )
+            continue;
+
+        wxString className = wxString::FromUTF8( nc.name );
+
+        if( !netSettings->HasNetclass( className ) )
+        {
+            std::shared_ptr<NETCLASS> kicadClass = std::make_shared<NETCLASS>( className );
+            netSettings->SetNetclass( className, kicadClass );
+        }
+
+        for( const std::string& net : nc.nets )
+            netSettings->SetNetclassLabelAssignment( PADS_COMMON::ConvertInvertedNetName( net ),
+                                                     { className } );
+    }
 }
 
 

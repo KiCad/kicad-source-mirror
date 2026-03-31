@@ -60,6 +60,21 @@ enum class SECTION : int
 };
 
 /**
+ * A PADS net class recovered from the binary design-rule graph.
+ *
+ * Membership is deterministic: every section-23 net record carries its net-class
+ * object pointer at +188, identical for all members of a class. Class names and
+ * per-class clearance-rule layers come from the trailing-arena type-66 rule table
+ * (24 B records, tag 0x42 @ +4, net-class pointer @ +8, layer @ +20).
+ */
+struct NETCLASS_DEF
+{
+    std::string              name;        // net-class name (from the 0x118 name table)
+    std::vector<std::string> nets;        // member net names (sec23 +188 grouping)
+    std::vector<int>         ruleLayers;  // layers carrying a clearance rule (0 = all layers)
+};
+
+/**
  * Parser for PADS binary PCB file format (.pcb).
  *
  * Reads the binary PADS file and populates the same intermediate structs as the
@@ -98,6 +113,7 @@ public:
     const PARAMETERS& GetParameters() const { return m_parameters; }
     const std::vector<PART>& GetParts() const { return m_parts; }
     const std::vector<NET>& GetNets() const { return m_nets; }
+    const std::vector<NETCLASS_DEF>& GetNetClasses() const { return m_netClasses; }
     const std::vector<ROUTE>& GetRoutes() const { return m_routes; }
     const std::vector<TEXT>& GetTexts() const { return m_texts; }
     const std::vector<POUR>& GetPours() const { return m_pours; }
@@ -200,6 +216,12 @@ private:
     void parseBoardOutline();
     bool parseArcBoardOutline();
     void parseNetNames();
+
+    // Recover net classes deterministically from the trailing design-rule arena:
+    // group nets by their section-23 +188 net-class pointer (membership), name each
+    // class from the 0x118 name table, and read per-class clearance-rule layers from
+    // the type-66 rule table (tag 0x42 @ +4, class pointer @ +8, layer @ +20).
+    void parseNetClasses();
     void parseMetadataRegion();
     void parseDftConfig( size_t aStart, size_t aEnd );
     void parseRouteVertices();
@@ -338,6 +360,13 @@ private:
 
     // Section 23 array index -> net name, used to attribute structural vias to nets
     std::map<uint32_t, std::string> m_sec23IndexToNet;
+
+    // Net name -> its net-class object pointer (section-23 record +188). Zero/absent
+    // for unclassed nets. The membership key: nets sharing a value are one class.
+    std::map<std::string, uint32_t> m_netClassOwner;
+
+    // Recovered net classes (membership + per-class clearance-rule layers).
+    std::vector<NETCLASS_DEF> m_netClasses;
 
     // Output data (same structs as ASCII parser)
     PARAMETERS                          m_parameters;
