@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-30 17:09+0000\n"
+"PO-Revision-Date: 2026-03-31 20:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -18462,7 +18462,7 @@ msgstr "Otvorený emitor"
 
 #: eeschema/pin_type.cpp:96 eeschema/sch_pin.cpp:2095
 msgid "Unconnected"
-msgstr "Nezapojený"
+msgstr "Nepripojené"
 
 #: eeschema/pin_type.cpp:101 eeschema/sch_pin.cpp:2103
 msgid "Inverted"
@@ -19318,7 +19318,7 @@ msgstr "Nepodarilo sa spracovať hodnotu: '%s'"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:51
 msgid "httplib plugin missing library table handle!"
-msgstr ""
+msgstr "chýbajúci manipulátor tabuľky knižnice v doplnku httplib!"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:208
 #, c-format
@@ -19328,7 +19328,7 @@ msgstr "Súbor nastavení knižnice HTTP %s chýba alebo je neplatný"
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:216
 #, c-format
 msgid "HTTP library settings file %s is missing the API version number!"
-msgstr ""
+msgstr "V súbore nastavení knižnice HTTP %s chýba číslo verzie API!"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:224
 #, c-format
@@ -19336,16 +19336,18 @@ msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s"
 msgstr ""
+"Súbor nastavení knižnice HTTP %s používa API verzie %s, ale KiCad vyžaduje "
+"verziu %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:235
 #, c-format
 msgid "HTTP library settings file %s is missing the root URL!"
-msgstr ""
+msgstr "V súbore nastavení knižnice HTTP %s chýba východzia URL adresa!"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:246
 #, c-format
 msgid "HTTP library settings file %s has an invalid library type"
-msgstr ""
+msgstr "Súbor nastavení knižnice HTTP %s má neplatný typ"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:291
 #, c-format
@@ -20726,7 +20728,7 @@ msgstr "Rozmer matíc by mal byť >= 1."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:74
 msgid "Bandwidth of banded matrices should be >= 1."
-msgstr ""
+msgstr "Šírka pásma pásmových matíc by mala byť >= 1."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:82 eeschema/sim/kibis/ibis_parser.cpp:105
 #: eeschema/sim/kibis/ibis_parser.cpp:128
@@ -25194,6 +25196,11 @@ msgid ""
 "No leading zeros format means the leading zeros are stripped\n"
 "No trailing zeros  format means the trailing zeros are stripped"
 msgstr ""
+"Celé čísla v súboroch môžu mať odstránené nuly.\n"
+"Formát bez úvodných núl (leading zeros) znamená, že úvodné nuly sú "
+"odstránené.\n"
+"Formát bez koncových núl (trailing zeros) znamená, že koncové nuly sú "
+"odstránené"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "Coordinates Format"
@@ -25517,12 +25524,12 @@ msgstr "Spoj:"
 #: gerbview/gerber_draw_item.cpp:760
 #, c-format
 msgid "Cmp: %s  Pad: %s"
-msgstr "Cmp: %s Pad: %s"
+msgstr "Súč: %s plôška: %s"
 
 #: gerbview/gerber_draw_item.cpp:766
 #, c-format
 msgid "Cmp: %s  Pad: %s  Fct %s"
-msgstr "Cmp: %s Pad: %s Fct %s"
+msgstr "Súč: %s Plôška: %s Fun %s"
 
 #: gerbview/gerber_draw_item.cpp:775 gerbview/toolbars_gerber.cpp:129
 #: gerbview/toolbars_gerber.cpp:132
@@ -26267,6 +26274,8 @@ msgstr "Nástroje exportu (Gerbers, vrtanie, súbory pozícií atď.)"
 msgid ""
 "Output file format, options: step, brep, xao, glb (binary glTF), ply, stl"
 msgstr ""
+"Formát výstupného súboru, možnosti: step, brep, xao, glb (binárny glTF), "
+"ply, stl"
 
 #: kicad/cli/command_pcb_export_3d.cpp:83
 msgid "Overwrite output file"
@@ -26425,11 +26434,11 @@ msgstr "Platné možnosti excellon, gerber."
 
 #: kicad/cli/command_pcb_export_drill.cpp:59
 msgid "Valid options are: absolute,plot"
-msgstr ""
+msgstr "Platné možnosti sú: absolute,plot"
 
 #: kicad/cli/command_pcb_export_drill.cpp:65
 msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
-msgstr ""
+msgstr "Platné možnosti sú: decimal,suppressleading,suppresstrailing,keep."
 
 #: kicad/cli/command_pcb_export_drill.cpp:70
 #, fuzzy
@@ -26667,6 +26676,8 @@ msgstr "Použiť príponu súboru KiCad Gerber"
 msgid ""
 "This command is deprecated as of KiCad 9.0, please use \"gerbers\" instead\n"
 msgstr ""
+"Tento príkaz je od verzie KiCad 9.0 zastaraný, použite namiesto neho "
+"\"gerbers\".\n"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:37
 msgid ""
@@ -26717,6 +26728,8 @@ msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
+"Platné možnosti: front,back,both. Formát Gerber podporuje iba \"front\" "
+"alebo \"back\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:54
 msgid "Valid options: ascii,csv,gerber"
@@ -26724,7 +26737,7 @@ msgstr "Platné volby: ascii,csv,gerber"
 
 #: kicad/cli/command_pcb_export_pos.cpp:59
 msgid "Output units; ascii or csv format only; valid options: in,mm"
-msgstr ""
+msgstr "Výstupné jednotky; formát iba ascii alebo csv; platné možnosti: in,mm"
 
 #: kicad/cli/command_pcb_export_pos.cpp:64
 msgid ""
@@ -27042,10 +27055,12 @@ msgstr "Veľkosť strany B"
 #: kicad/cli/command_sch_export_plot.cpp:124
 msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
 msgstr ""
+"Počiatok a mierka: 0 dole vľavo, 1 uprostred, 2 prispôsobiť stránke, 3 "
+"prispôsobiť obsahu"
 
 #: kicad/cli/command_sch_export_plot.cpp:196
 msgid "HPGL origin option must be 0, 1, 2 or 3\n"
-msgstr ""
+msgstr "Možnosť počiatku HPGL musí byť 0, 1, 2 alebo 3\n"
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
 msgid ""
@@ -27189,7 +27204,7 @@ msgstr "Spájkovacia pasta:"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:27
 msgid "Would you like to automatically check for updates on startup?"
-msgstr ""
+msgstr "Automaticky kontrolovať aktualizácie pri spustení?"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.h:45
 #, fuzzy
@@ -33227,7 +33242,7 @@ msgstr "Odstrániť ostrovčeky:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:353
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:278
 msgid "Choose what to do with unconnected copper islands"
-msgstr "Vybrať čo robiť s neprepojenými medenými ostrovčekmi"
+msgstr "Vybrať čo robiť s nepripojenými medenými ostrovčekmi"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357 pcbnew/zone.cpp:1909
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:282
@@ -36735,7 +36750,7 @@ msgstr "Režim padstack:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
 msgid "Front/Inner/Bottom"
-msgstr ""
+msgstr "Predná/Vnútorná/Spodná"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:105
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:289
@@ -36884,7 +36899,7 @@ msgstr "Oválny"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:487
 msgid "Specify pad to die length"
-msgstr "Zadajte dĺžku plôšky po čip"
+msgstr "Zadať vzdialenosť plôšky po čip"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:522
 msgid ""
@@ -38045,11 +38060,11 @@ msgstr "Vzdialenosť medzi paralelnými čiarami šrafovania plochy"
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:66
 msgid "Reset this value to zero."
-msgstr ""
+msgstr "Vynulovať hodnotu."
 
 #: pcbnew/dialogs/dialog_set_offset.cpp:76
 msgid "Reset this value to the original value."
-msgstr ""
+msgstr "Obnoviť hodnotu na predvolenú."
 
 #: pcbnew/dialogs/dialog_set_offset_base.cpp:19
 msgid "Set a new value for this offset:"
@@ -38288,7 +38303,7 @@ msgstr "Popis nadradeného puzdra"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:274
 msgid "Update Thickness According to Text Size"
-msgstr ""
+msgstr "Aktualizovať hrúbku podľa veľkosti textu"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:275
 msgid ""
@@ -38296,6 +38311,9 @@ msgid ""
 "Normal text: thickness is size/8\n"
 "Bold text: thickness is size/5"
 msgstr ""
+"Nastaviť najlepšiu hrúbku textu zo šírky a výšky textu\n"
+"Normálny text: hrúbka je veľkosť/8\n"
+"Tučný text: hrúbka je veľkosť/5"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:414
 msgid "Edit Text Box Properties"
@@ -38463,11 +38481,11 @@ msgstr "Neprikryté"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:402
 msgid "Whether to tent (cover with soldermask) this via on the front side"
-msgstr ""
+msgstr "Ak prekryť tento otvor (spájkovacou maskou) na prednej strane"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:408
 msgid "Link front and back tenting settings"
-msgstr ""
+msgstr "Prepojiť predné a zadné nastavenia prekrytia"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:415
 #, fuzzy
@@ -38476,7 +38494,7 @@ msgstr "Zadná predpona:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:423
 msgid "Whether to tent (cover with soldermask) this via on the back side"
-msgstr ""
+msgstr "Ak prekryť tento otvor (spájkovacou maskou) na spodnej strane"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:473
 msgid "Add teardrops on via's track connections"
@@ -38728,6 +38746,8 @@ msgid ""
 "If checked, no prompt will be shown when attempting to edit locked items.  "
 "This setting is reset when KiCad restarts."
 msgstr ""
+"Ak je začiarknuté, pri pokuse o úpravu uzamknutých položiek sa nezobrazí "
+"žiadna výzva.  Toto nastavenie sa resetuje po reštarte KiCadu."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:179
 #: pcbnew/dialogs/panel_edit_options_base.cpp:247
@@ -39147,6 +39167,11 @@ msgid ""
 "\n"
 "<br>"
 msgstr ""
+"### Klauzula\n"
+"\n"
+"    (podmienka\"<výraz>\")\n"
+"\n"
+"<br>"
 
 #: pcbnew/dialogs/panel_setup_condition_help_6notes.h:2
 msgid ""
@@ -39332,6 +39357,9 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
+"Minimálna vzdialenosť medzi dvoma položkami na tej istej vrstve potlače. Ak "
+"je nastavená, môže sa zlepšiť čitateľnosť. (Poznámka: nevzťahuje sa na "
+"viacero tvarov v rámci jednej plochy.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:331
 msgid "Minimum text height:"
@@ -39675,7 +39703,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
-msgstr ""
+msgstr "Ak nie sú zadané žiadne, odporúča sa nastaviť hodnoty na nulu."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:49
 msgid "Solder Mask Settings"
@@ -40188,6 +40216,22 @@ msgid ""
 "<br><br><br>\n"
 "\n"
 msgstr ""
+"### Poznámky\n"
+"\n"
+"Klauzula Verzia, musí byť ako prvá.  Označuje verziu syntaxe súboru, aby "
+"budúce parsery \n"
+"pravidiel mohli vykonávať automatické aktualizácie. \n"
+"Mala by byť nastavená na hodnotu „1“.\n"
+"\n"
+"Pravidlá by mali byť zoradené podľa špecifickosti. Neskoršie pravidlá majú "
+"prednosť pred \n"
+"skoršími pravidlami; akonáhle sa nájde zodpovedajúce pravidlo, nebudú sa "
+"kontrolovať \n"
+"žiadne ďalšie pravidlá.\n"
+"\n"
+"Na komentovanie alebo odkomentovanie riadkov použite Ctrl+/.\n"
+"<br><br><br>\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_7properties.h:2
 msgid ""
@@ -41005,7 +41049,7 @@ msgstr "Prekov nie je pripojený alebo pripojený iba na jednej vrstve"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Track has unconnected end"
-msgstr "Spoj má nespojený koniec"
+msgstr "Spoj má nepripojený koniec"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Hole clearance violation"
@@ -41564,7 +41608,7 @@ msgstr "%s má prepísané nastavenie výrezu zóny."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:331
 #, c-format
 msgid "%s pad to die length differs."
-msgstr "%s dĺžka pad-to-die sa líši."
+msgstr "%s vzdialenosť plôšky po čip sa nezhoduje."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:333
 #, c-format
@@ -42157,7 +42201,7 @@ msgstr ""
 
 #: pcbnew/exporters/export_hyperlynx.cpp:174
 msgid "They have been exported as oval pads."
-msgstr "Boli exportované ako oválne podložky."
+msgstr "Boli exportované ako oválne plôšky."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:290
 #: pcbnew/exporters/exporter_vrml.cpp:781
@@ -42264,7 +42308,7 @@ msgstr ""
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:649
 msgid "** Got problems while fusing shapes **"
-msgstr ""
+msgstr "** Vyskytli sa problémy pri zlučovaní tvarov **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:653
 #: pcbnew/exporters/step/step_pcb_model.cpp:2072
@@ -42278,7 +42322,7 @@ msgstr "Upozornenia:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:684
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **"
-msgstr ""
+msgstr "** Funkcia ShapeUpgrade_UnifySameDomain vytvorila prázdny tvar **"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:945
 msgid "OCC error adding pad/via polygon."
@@ -42408,7 +42452,7 @@ msgstr "tvary"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2124
 msgid "pads"
-msgstr "podložky"
+msgstr "plôšky"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2125
 msgid "vias"
@@ -42652,12 +42696,12 @@ msgstr "(očakávalo sa 'SMD'; aktuálne '%s')"
 #: pcbnew/footprint.cpp:3611
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
-msgstr "(skupina podložiek net-tie obsahuje neznáme číslo podložky %s)"
+msgstr "(skupina prepojovacích plôšok obsahuje neznáme číslo plôšky %s)"
 
 #: pcbnew/footprint.cpp:3616
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
-msgstr "(podložka %s sa nachádza vo viac ako jednej skupine podložiek net-tie)"
+msgstr "(plôška %s sa nachádza vo viac ako jednej skupine prepojok spojov)"
 
 #: pcbnew/footprint.cpp:4197 pcbnew/pad.cpp:2764 pcbnew/zone.cpp:1886
 msgid "Inherited"
@@ -43013,7 +43057,7 @@ msgstr "Naroutovaná dĺžka"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2196 pcbnew/pad.cpp:2934
 #: pcbnew/pcb_track.cpp:1670
 msgid "Pad To Die Length"
-msgstr "Dĺžka plôšky po čip"
+msgstr "Vzdialenosť plôšky po čip"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2199 pcbnew/pcb_track.cpp:1673
 msgid "Full Length"
@@ -43994,11 +44038,11 @@ msgstr "Conn"
 #: pcbnew/pad.cpp:1663
 #, c-format
 msgid "NPTH pad of %s"
-msgstr "Nepokovená podložka súčiastky %s"
+msgstr "NPTH plôška z %s"
 
 #: pcbnew/pad.cpp:1665
 msgid "NPTH pad"
-msgstr "Nepokovená podložka"
+msgstr "NPTH plôška"
 
 #: pcbnew/pad.cpp:1673
 #, c-format
@@ -44008,36 +44052,36 @@ msgstr "Plôška %s z %s na %s"
 #: pcbnew/pad.cpp:1680
 #, c-format
 msgid "Pad on %s"
-msgstr "Podložka na %s"
+msgstr "Plôška na %s"
 
 #: pcbnew/pad.cpp:1688
 #, c-format
 msgid "PTH pad %s of %s"
-msgstr "Pokovená podložka %s súčiastky %s"
+msgstr "PTH plôška %s z %s"
 
 #: pcbnew/pad.cpp:1694
 msgid "PTH pad"
-msgstr "Pokovená podložka"
+msgstr "PTH plôška"
 
 #: pcbnew/pad.cpp:1704
 #, c-format
 msgid "Pad %s %s of %s on %s"
-msgstr "Podložka %s %s súčiastky %s na %s"
+msgstr "Plôška %s %s z %s na %s"
 
 #: pcbnew/pad.cpp:1712
 #, c-format
 msgid "Pad %s on %s"
-msgstr "Podložka %s na %s"
+msgstr "Plôška %s na %s"
 
 #: pcbnew/pad.cpp:1721
 #, c-format
 msgid "PTH pad %s %s of %s"
-msgstr "Pokovená podložka %s %s súčiastky %s"
+msgstr "PTH plôška %s %s z %s"
 
 #: pcbnew/pad.cpp:1728
 #, c-format
 msgid "PTH pad %s"
-msgstr "Pokovená podložka %s"
+msgstr "PTH plôška %s"
 
 #: pcbnew/pad.cpp:2286
 msgid ""
@@ -44083,7 +44127,7 @@ msgstr ""
 
 #: pcbnew/pad.cpp:2334
 msgid "(SMD pad has a hole)"
-msgstr "(SMD podložka má otvor)"
+msgstr "(SMD plôška má otvor)"
 
 #: pcbnew/pad.cpp:2340
 msgid "(SMD pad has copper on both sides of the board)"
@@ -44099,28 +44143,28 @@ msgstr "(SMD plôška má meď a pastu na rôznych stranách dosky)"
 
 #: pcbnew/pad.cpp:2370
 msgid "(SMD pad has no outer layers)"
-msgstr "(SMD podložka nemá žiadne vonkajšie vrstvy)"
+msgstr "(SMD plôška nemá žiadne vonkajšie vrstvy)"
 
 #: pcbnew/pad.cpp:2389
 msgid "(Pad must have a positive size)"
-msgstr "(Podložka musí mať kladnú veľkosť)"
+msgstr "(Plôška musí mať kladnú veľkosť)"
 
 #: pcbnew/pad.cpp:2400
 #, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "(Veľkosť otvoru pokovené podložky musí byť väčšia ako %s)"
+msgstr "(Veľkosť otvoru PTH plôšky musí byť väčší ako %s)"
 
 #: pcbnew/pad.cpp:2424
 msgid "(PTH pad hole leaves no copper)"
-msgstr "(otvor PTH podložky nezanecháva meď)"
+msgstr "(otvor PTH plôšky nezanecháva žiadnu meď)"
 
 #: pcbnew/pad.cpp:2434
 msgid "(PTH pad hole not fully inside copper)"
-msgstr "(otvor PTH podložky nie je celý vo vnútri medi)"
+msgstr "(otvor PTH plôšky nie je celý vo vnútri medi)"
 
 #: pcbnew/pad.cpp:2441
 msgid "(pad hole not inside pad shape)"
-msgstr "(otvor podložky nie je vo vnútri tvaru podložky)"
+msgstr "(otvor plôšky nie je vo vnútri tvaru plôšky)"
 
 #: pcbnew/pad.cpp:2446
 msgid "(negative local clearance values have no effect)"
@@ -44156,7 +44200,7 @@ msgstr "(záporný polomer rohu nie je povolený)"
 
 #: pcbnew/pad.cpp:2503
 msgid "(corner size will make pad circular)"
-msgstr "(veľkosť rohu spraví podložku kruhovú)"
+msgstr "(veľkosť rohu vytvorí plôšku kruhovú)"
 
 #: pcbnew/pad.cpp:2508
 msgid "(negative corner chamfer is not allowed)"
@@ -44172,7 +44216,7 @@ msgstr "(delta lichobežníka je príliš veľká)"
 
 #: pcbnew/pad.cpp:2529
 msgid "(custom pad shape must resolve to a single polygon)"
-msgstr "(vlastný tvar podložky musí zodpovedať jednému mnohouholníku)"
+msgstr "(vlastný tvar plôšky musí zodpovedať jednému mnohouholníku)"
 
 #: pcbnew/pad.cpp:2733
 msgid "Edge connector"
@@ -44204,7 +44248,7 @@ msgstr "Typ plôšky"
 
 #: pcbnew/pad.cpp:2829
 msgid "Pad Shape"
-msgstr "Tvar podložky"
+msgstr "Tvar plôšky"
 
 #: pcbnew/pad.cpp:2834
 msgid "Pad Number"
@@ -44494,7 +44538,7 @@ msgstr "Neznámy typ rozšírených základných informácií: '%s'."
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:875
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr "Prúd Pads6 má neočakávanú dĺžku pre podrekord 6: %d."
+msgstr "Dátový tok Pads6 má neočakávanú dĺžku pre podzáznam 6: %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:287
 #, c-format
@@ -44722,8 +44766,7 @@ msgstr ""
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
-"Podložka %s puzdra %s nie je označená ako viacvrstvová, ale je to podložka s "
-"priechodným otvorom."
+"Puzdro %s plôška %s nie je označená ako viacvrstvová, ale je to TH plôška."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3381
 #, c-format
@@ -44737,7 +44780,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3394
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
-msgstr "Podložka %s puzdra %s má štvorcový otvor (zatiaľ nepodporovaný)."
+msgstr "Puzdro %s plôška %s má štvorcový otvor (zatiaľ nepodporovaný)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3429
 #, c-format
@@ -44771,7 +44814,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3478
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "Podložka %s puzdra %s používa otvor neznámeho druhu %d."
+msgstr "Puzdro %s plôška %s používa otvor neznámeho druhu %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3543
 #, c-format
@@ -44819,18 +44862,17 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3728
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
-msgstr "Nemedená podložka %s je pripojená k sieti, čo nie je podporované."
+msgstr "Nemedená plôška %s je pripojená k spoju, čo nie je podporované."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3739
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr "Nemedená podložka %s má otvor, čo nie je podporované."
+msgstr "Nemedená plôška %s má otvor, čo nie je podporované."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3749
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
-msgstr ""
-"Nemedená podložka %s má komplexný zásobník podložiek (zatiaľ nepodporovaný)."
+msgstr "Nemedená plôška %s má komplexný padstack (zatiaľ nepodporované)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3896
 #, c-format
@@ -45027,6 +45069,9 @@ msgid ""
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
 msgstr ""
+"Definícia puzdra '%s' má meď súčiastky priradenú k plôške na viacerých "
+"vrstvách. Vlastné vrstvy plôšok nie sú v KiCad podporované. Medené položky "
+"boli importované ako grafické prvky."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:994
 #, c-format
@@ -45542,12 +45587,13 @@ msgstr "Očakávaná hodnota veľkosti vrtáku, ale nájdené %s!%s!%s v riadku 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:561
 #, c-format
 msgid "Expecting pad size values but found %s : %s in row %zu."
-msgstr "Očakávané hodnoty veľkosti podložky, ale nájdené %s : %s v riadku %zu."
+msgstr ""
+"Očakávajú sa hodnoty veľkosti plôšky, ale nájdené bolo %s : %s v riadku %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:583
 #, c-format
 msgid "Invalid pad size in row %zu."
-msgstr "Neplatná veľkosť podložky v riadku %zu."
+msgstr "Neplatná veľkosť plôšky v riadku %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:618
 #, c-format
@@ -45557,7 +45603,7 @@ msgstr "Očakávajú sa hodnoty posunu plôšky, ale našlo sa %s:%s v riadku %z
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:663
 #, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
-msgstr "Neznámy názov tvaru podložky '%s' na vrstve '%s' v riadku %zu."
+msgstr "Neznámy názov tvaru plôšky '%s' na vrstve '%s' v riadku %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:805
 #, c-format
@@ -45567,7 +45613,7 @@ msgstr "Žiadna užívateľská vrstva pre vrstvu %s"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1021
 #, c-format
 msgid "Invalid format for id string '%s' in custom pad row %zu."
-msgstr "Neplatný formát reťazca id '%s' v riadku vlastnej podložky %zu."
+msgstr "Neplatný formát id reťazca '%s' v riadku vlastnej plôšky %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1063
 #, c-format
@@ -45587,7 +45633,7 @@ msgstr "Kružnica s nerovnakými polomermi x a y (x=%d, y=%d)"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1314
 #, c-format
 msgid "Expected x and y to be the same, got x = %f and y = %f "
-msgstr ""
+msgstr "Očakávané bolo, že x a y budú rovnaké, prijaté boli x = %f a y = %f "
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1415
 #, c-format
@@ -45636,12 +45682,12 @@ msgstr "Nepodarilo sa nájsť padstack %s v súbore %s\n"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2762
 #, c-format
 msgid "Invalid custom pad '%s'. Replacing with circular pad."
-msgstr "Neplatná vlastná podložka '%s'. Nahradená kruhovou podložkou."
+msgstr "Neplatná vlastná plôška '%s'. Nahradená kruhovou plôškou."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2770
 #, c-format
 msgid "Could not find custom pad '%s'."
-msgstr "Nepodarilo sa nájsť vlastnú podložku '%s'."
+msgstr "Nebolo možné nájsť vlastnú plôšku '%s'."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2996
 #, c-format
@@ -45745,7 +45791,7 @@ msgstr "Generovanie sekcie obsahu"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:925
 msgid "Pad has unsupported type; it was skipped."
-msgstr "Podložka má nepodporovaný typ; bola preskočená."
+msgstr "Plôška je nepodporovaného typu; bola preskočená."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1286
 msgid "Generating history section"
@@ -46629,7 +46675,7 @@ msgstr "DRC"
 #: pcbnew/pcbnew_jobs_handler.cpp:2089
 #, c-format
 msgid "Found %d unconnected items\n"
-msgstr "Nájdených %d neprepojených položiek\n"
+msgstr "Nájdených %d nepripojených položiek\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2095
 #, c-format
@@ -48130,7 +48176,7 @@ msgstr "Zbaliť puzdra"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:340
 msgid "Angle snap guides: H, V, 45°"
-msgstr ""
+msgstr "Vodiace uhly prichytávania: H, V, 45°"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:350
 #, c-format
@@ -48144,7 +48190,7 @@ msgstr ""
 #: pcbnew/tools/edit_tool_move_fct.cpp:363
 #, c-format
 msgid "%s pad %s"
-msgstr "%s podložka %s"
+msgstr "%s plôška %s"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:406
 msgid "Select reference point for move..."
@@ -48384,6 +48430,8 @@ msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheet(s) or component classes."
 msgstr ""
+"Nie je možné automaticky vygenerovať žiadne oblasti umiestnenia, pretože "
+"schéma má iba jeden alebo žiadny hierarchické listy alebo triedy komponentov."
 
 #: pcbnew/tools/multichannel_tool.cpp:1151
 msgid "Auto-generate placement rule areas"
@@ -48413,7 +48461,7 @@ msgstr ""
 
 #: pcbnew/tools/pad_tool.cpp:433 pcbnew/tools/pad_tool.cpp:536
 msgid "Renumber Pads"
-msgstr "Prečíslovať podložky"
+msgstr "Prečíslovať plôšky"
 
 #: pcbnew/tools/pad_tool.cpp:711
 msgid "Place pad"
@@ -48931,8 +48979,8 @@ msgstr "Odstrániť nepoužívané plôšky..."
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
 msgstr ""
-"Odstrániť alebo obnoviť nespojené vnútorné vrstvy v plôškach s priechodzími "
-"otvormi a prekovoch"
+"Odstrániť alebo obnoviť nepripojené vnútorné vrstvy v plôškach s "
+"priechodzími otvormi a prekovoch"
 
 #: pcbnew/tools/pcb_actions.cpp:806
 msgid "Assign a different footprint from the library"
@@ -49925,22 +49973,22 @@ msgstr "Zrušiť výber všetkých spojov a prekovov patriacich rovnakému spoju
 
 #: pcbnew/tools/pcb_actions.cpp:2144
 msgid "Select All Unconnected Footprints"
-msgstr "Vybrať všetky neprepojené puzdra"
+msgstr "Vybrať všetky nepripojené puzdrá"
 
 #: pcbnew/tools/pcb_actions.cpp:2145
 msgid "Selects all unconnected footprints belonging to each selected net."
-msgstr "Vyberie všetky neprepojené puzdra patriace každej vybranej sieti."
+msgstr "Vyberie všetky nepripojené puzdrá patriace každému vybranému spoju."
 
 #: pcbnew/tools/pcb_actions.cpp:2151
 msgid "Grab Nearest Unconnected Footprints"
-msgstr "Uchopiť najbližšie neprepojené puzdra"
+msgstr "Uchopiť najbližšie nepripojené puzdrá"
 
 #: pcbnew/tools/pcb_actions.cpp:2152
 msgid ""
 "Selects and initiates moving the nearest unconnected footprint on each "
 "selected net."
 msgstr ""
-"Vyberie a spustí presúvanie najbližšieho neprepojeného puzdra na každom "
+"Vyberie a spustí presúvanie najbližšieho nepripojeného puzdra na každom "
 "vybranom spoji."
 
 #: pcbnew/tools/pcb_actions.cpp:2158
@@ -51365,7 +51413,7 @@ msgstr "Zobraziť spoje s nulovým počtom plôšok"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1422
 msgid "Show Unconnected Nets"
-msgstr "Zobraziť neprepojené siete"
+msgstr "Zobraziť nepripojené spoje"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1431
 #, fuzzy
