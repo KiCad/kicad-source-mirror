@@ -104,10 +104,17 @@ PANEL_TOOLBAR_CUSTOMIZATION_BASE::PANEL_TOOLBAR_CUSTOMIZATION_BASE( wxWindow* pa
 	m_customizeControls->Add( bSizer6, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer9;
-	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
+	bSizer9 = new wxBoxSizer( wxVERTICAL );
+
+	m_actionFilter = new wxSearchCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	#ifndef __WXMAC__
+	m_actionFilter->ShowSearchButton( true );
+	#endif
+	m_actionFilter->ShowCancelButton( false );
+	bSizer9->Add( m_actionFilter, 0, wxALL|wxEXPAND, 5 );
 
 	m_actionsList = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_NO_HEADER|wxLC_REPORT|wxLC_SINGLE_SEL );
-	bSizer9->Add( m_actionsList, 0, wxALL|wxEXPAND, 5 );
+	bSizer9->Add( m_actionsList, 1, wxALL|wxEXPAND, 5 );
 
 
 	m_customizeControls->Add( bSizer9, 1, wxEXPAND|wxBOTTOM, 5 );

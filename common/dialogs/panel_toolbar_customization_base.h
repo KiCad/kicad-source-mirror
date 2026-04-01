@@ -31,6 +31,7 @@ class UP_DOWN_TREE;
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/srchctrl.h>
 #include <wx/listctrl.h>
 #include <wx/panel.h>
 
@@ -54,6 +55,7 @@ class PANEL_TOOLBAR_CUSTOMIZATION_BASE : public RESETTABLE_PANEL
 		STD_BITMAP_BUTTON* m_btnToolMoveDown;
 		STD_BITMAP_BUTTON* m_btnToolDelete;
 		STD_BITMAP_BUTTON* m_btnAddTool;
+		wxSearchCtrl* m_actionFilter;
 		wxListCtrl* m_actionsList;
 
 		// Virtual event handlers, override them in your derived class

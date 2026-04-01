@@ -64,6 +64,16 @@ private:
 class PANEL_TOOLBAR_CUSTOMIZATION : public PANEL_TOOLBAR_CUSTOMIZATION_BASE
 {
 public:
+    struct ACTION_LIST_ENTRY
+    {
+        wxString                label;
+        wxString                tooltip;
+        wxString                search_text;
+        TOOL_ACTION*            action = nullptr;
+        ACTION_TOOLBAR_CONTROL* control = nullptr;
+        int                     image_index = -1;
+    };
+
     PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP_SETTINGS_BASE* aCfg, TOOLBAR_SETTINGS* aTbSettings,
                                  const std::vector<TOOL_ACTION*>& aTools,
                                  const std::vector<ACTION_TOOLBAR_CONTROL*>& aControls );
@@ -82,6 +92,9 @@ protected:
 
     void populateActions();
 
+    void applyActionFilter();
+    bool actionMatchesFilter( const ACTION_LIST_ENTRY& aEntry, const wxString& aFilter ) const;
+
     void enableCustomControls( bool enable );
     void enableToolbarControls( bool enable );
 
@@ -99,10 +112,14 @@ protected:
     void onTreeEndLabelEdit( wxTreeEvent& event ) override;
     void onTbChoiceSelect( wxCommandEvent& event ) override;
     void onListItemActivated( wxListEvent& event ) override;
+    void onActionFilterText( wxCommandEvent& event );
+    void onActionListMouseMove( wxMouseEvent& event );
 
 protected:
     wxVector<wxBitmapBundle>   m_actionImageBundleVector;
     std::map<std::string, int> m_actionImageListMap;
+    std::vector<ACTION_LIST_ENTRY> m_actionEntries;
+    long m_hoveredActionEntry = -1;
 
     // Actual settings for the frame
     APP_SETTINGS_BASE* m_appSettings;
@@ -116,7 +133,6 @@ protected:
 
     std::map<std::string, TOOL_ACTION*>            m_availableTools;
     std::map<std::string, ACTION_TOOLBAR_CONTROL*> m_availableControls;
-    int                                            m_firstControlId;
 };
 
  #endif /* PANEL_TOOLBAR_CUSTOMIZATION_H_ */
