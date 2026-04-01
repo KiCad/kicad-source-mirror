@@ -1597,19 +1597,21 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
         if( aFrom && aSelectionFilter && !aSelectionFilter->footprints )
             break;
 
-        // If the cursor is not over a pad, snap to the anchor (if visible) or the center
-        // (if markedly different from the anchor).
+        // Snap to the footprint origin so that move operations keep the part aligned to
+        // the grid regardless of anchor layer visibility, but not when the footprint's
+        // side is hidden.
+        int fpRenderLayer = ( footprint->GetLayer() == F_Cu ) ? LAYER_FOOTPRINTS_FR
+                            : ( footprint->GetLayer() == B_Cu ) ? LAYER_FOOTPRINTS_BK
+                                                                 : LAYER_ANCHOR;
+
+        if( !view->IsLayerVisible( fpRenderLayer ) )
+            break;
+
         VECTOR2I position = footprint->GetPosition();
         VECTOR2I center = footprint->GetBoundingBox( false ).Centre();
         VECTOR2I grid( GetGrid() );
 
-        // Don't snap to invisible anchors, which may be invisible because anchors are off,
-        // or the footprint is on a layer not currently visible.
-        if( view->IsLayerVisible( LAYER_ANCHOR )
-            && footprint->ViewGetLOD( LAYER_ANCHOR, view ) < view->GetScale() )
-        {
-            addAnchor( position, ORIGIN | SNAPPABLE, footprint, POINT_TYPE::PT_CENTER );
-        }
+        addAnchor( position, ORIGIN | SNAPPABLE, footprint, POINT_TYPE::PT_CENTER );
 
         if( ( center - position ).SquaredEuclideanNorm() > grid.SquaredEuclideanNorm() )
             addAnchor( center, ORIGIN | SNAPPABLE, footprint, POINT_TYPE::PT_CENTER );
