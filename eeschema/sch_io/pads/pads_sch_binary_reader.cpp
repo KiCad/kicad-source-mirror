@@ -868,6 +868,113 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
                 dst.emplace_back( p.first, p.second );
         }
     }
+
+    // Fabrication-free recall fallbacks for the edit-log head path (the compaction
+    // index path returns above and never reaches here):
+    //   (a) fill an EMPTY VALUE/Tolerance/Voltage Rating from the part-type's OWN
+    //       DESCRIPTION CSV (RES/CAP positional schema) -- the description is the
+    //       part-type's own serialized attribute, so this fabricates nothing.  Power
+    //       is deliberately NOT parsed (a RES description's power token is itself
+    //       sometimes stale vs the export).
+    //   (b) a self-referential SMD test-point decal (TP_SMD_*) resolves to its own
+    //       name; gated to TP_SMD_ so it can never touch a through-hole test point.
+    for( std::pair<const std::string, std::vector<std::pair<std::string, std::string>>>& pt :
+         m_partTypeFields )
+    {
+        std::vector<std::pair<std::string, std::string>>& kv = pt.second;
+
+        auto getField = [&]( const std::string& k ) -> std::string
+        {
+            for( const std::pair<std::string, std::string>& f : kv )
+            {
+                if( f.first == k )
+                    return f.second;
+            }
+
+            return std::string();
+        };
+
+        auto fillEmpty = [&]( const std::string& k, const std::string& v )
+        {
+            if( v.empty() )
+                return;
+
+            for( std::pair<std::string, std::string>& f : kv )
+            {
+                if( f.first == k )
+                {
+                    if( f.second.empty() )
+                        f.second = v;
+
+                    return;
+                }
+            }
+
+            kv.emplace_back( k, v );
+        };
+
+        std::string desc = getField( "DESCRIPTION" );
+
+        if( !desc.empty() )
+        {
+            std::vector<std::string> parts;
+
+            for( size_t s = 0; s <= desc.size(); )
+            {
+                size_t      comma = desc.find( ',', s );
+                size_t      stop = ( comma == std::string::npos ) ? desc.size() : comma;
+                std::string tok = desc.substr( s, stop - s );
+
+                size_t a = tok.find_first_not_of( " \t" );
+                size_t b = tok.find_last_not_of( " \t" );
+
+                parts.push_back( a == std::string::npos ? std::string() : tok.substr( a, b - a + 1 ) );
+
+                if( comma == std::string::npos )
+                    break;
+
+                s = comma + 1;
+            }
+
+            const std::string& cls = parts.empty() ? desc : parts[0];
+
+            if( cls == "RES" && parts.size() >= 5 )
+            {
+                fillEmpty( "VALUE", parts[2] );
+
+                if( !parts[3].empty() && parts[3].back() == '%' )
+                    fillEmpty( "Tolerance", parts[3] );
+            }
+            else if( cls == "CAP" && parts.size() >= 5 )
+            {
+                fillEmpty( "VALUE", parts[2] );
+
+                if( !parts[3].empty() && parts[3].back() == '%' )
+                    fillEmpty( "Tolerance", parts[3] );
+
+                if( !parts[4].empty() && parts[4].back() == 'V' )
+                    fillEmpty( "Voltage Rating", parts[4] );
+            }
+        }
+
+        if( pt.first.rfind( "TP_SMD_", 0 ) == 0 && getField( "PCB DECAL" ) != pt.first )
+        {
+            bool present = false;
+
+            for( std::pair<std::string, std::string>& f : kv )
+            {
+                if( f.first == "PCB DECAL" )
+                {
+                    f.second = pt.first;
+                    present = true;
+                    break;
+                }
+            }
+
+            if( !present )
+                kv.emplace_back( "PCB DECAL", pt.first );
+        }
+    }
 }
 
 

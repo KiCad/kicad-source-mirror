@@ -721,6 +721,33 @@ BOOST_AUTO_TEST_CASE( ExternalEditLogHeadTableFields )
     BOOST_CHECK_EQUAL( fieldValue( "DESCRIPTION" ), "CAP,SMD,0.47uF,10%,50V,X5R,CER,0402" );
     BOOST_CHECK_EQUAL( fieldValue( "VALUE" ), "0.47uF" );
     BOOST_CHECK_EQUAL( fieldValue( "PCB DECAL" ), "CAPC1005X55N" );
+
+    // Part-type 300080 (a resistor) leaves Tolerance unserialized as a discrete
+    // field on this edit-log save; it is recovered fabrication-free from the
+    // part-type's own DESCRIPTION CSV (RES,SMD,10K0,1%,1/16W,0402 -> Tolerance=1%).
+    const PADS_SCH_BINARY::PLACEMENT* res = nullptr;
+
+    for( const PADS_SCH_BINARY::PLACEMENT& pl : reader.GetPlacements() )
+    {
+        if( pl.partType == "300080" && !pl.fields.empty() )
+        {
+            res = &pl;
+            break;
+        }
+    }
+
+    if( res )
+    {
+        std::string tol;
+
+        for( const std::pair<std::string, std::string>& f : res->fields )
+        {
+            if( f.first == "Tolerance" )
+                tol = f.second;
+        }
+
+        BOOST_CHECK_EQUAL( tol, "1%" );
+    }
 }
 
 
