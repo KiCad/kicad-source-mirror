@@ -26,6 +26,8 @@
 #include <memory>
 #include <vector>
 
+class BOARD;
+class PROGRESS_REPORTER;
 class ZONE;
 
 
@@ -37,3 +39,17 @@ class ZONE;
  * @return the merged zones. Ownership of all the returned zones is transferred to the caller.
  */
 std::vector<std::unique_ptr<ZONE>> MergeZonesWithSameOutline( std::vector<std::unique_ptr<ZONE>>&& aZones );
+
+/**
+ * Automatically assign zone priorities based on connectivity analysis of overlapping regions.
+ *
+ * For each pair of overlapping zones, counts pads and vias per-net in the intersection area.
+ * The zone whose net has more items in the overlap gets higher priority. When item counts are
+ * within 20% of the larger count, the smaller zone gets higher priority. Overlap analysis for
+ * each pair runs in parallel via the KiCad thread pool.
+ *
+ * @param aBoard the board whose zone priorities will be reassigned
+ * @param aReporter optional progress reporter
+ * @return true if any priorities were changed
+ */
+bool AutoAssignZonePriorities( BOARD* aBoard, PROGRESS_REPORTER* aReporter = nullptr );

@@ -88,6 +88,7 @@ protected:
     void OnMoveUpClick( wxCommandEvent& aEvent ) override;
     void OnMoveDownClick( wxCommandEvent& aEvent ) override;
     void OnMoveBottomClick( wxCommandEvent& aEvent ) override;
+    void OnAutoAssignClick( wxCommandEvent& aEvent ) override;
     void OnFilterCtrlCancel( wxCommandEvent& aEvent ) override;
     void OnFilterCtrlSearch( wxCommandEvent& aEvent ) override;
     void OnFilterCtrlTextChange( wxCommandEvent& aEvent ) override;

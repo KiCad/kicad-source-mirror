@@ -40,6 +40,7 @@
 #include <bitmaps.h>
 #include <string_utils.h>
 #include <zone_filler.h>
+#include <zone_utils.h>
 
 #include <zone_manager/model_zones_overview.h>
 #include <dialogs/panel_zone_properties.h>
@@ -63,6 +64,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
     m_btnMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_btnMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
     m_btnMoveBottom->SetBitmap( KiBitmapBundle( BITMAPS::small_bottom ) );
+    m_btnAutoAssign->SetBitmap( KiBitmapBundle( BITMAPS::small_sort_desc ) );
 
     m_panelZoneProperties = new PANEL_ZONE_PROPERTIES( m_zonePanel, aParent, m_zoneSettingsBag );
     m_sizerProperties->Add( m_panelZoneProperties, 1,  wxEXPAND, 5 );
@@ -391,6 +393,36 @@ void DIALOG_ZONE_MANAGER::OnMoveBottomClick( wxCommandEvent& aEvent )
 }
 
 
+void DIALOG_ZONE_MANAGER::OnAutoAssignClick( wxCommandEvent& aEvent )
+{
+    BOARD* board = m_pcbFrame->GetBoard();
+
+    // Save original priorities so we can restore them after copying to clones.
+    // The dialog operates on clones; originals must stay untouched until OnOk.
+    std::unordered_map<ZONE*, unsigned> savedPriorities;
+
+    for( ZONE* zone : board->Zones() )
+        savedPriorities[zone] = zone->GetAssignedPriority();
+
+    if( AutoAssignZonePriorities( board ) )
+    {
+        for( auto& [original, clone] : m_zoneSettingsBag.GetZonesCloneMap() )
+        {
+            unsigned newPri = original->GetAssignedPriority();
+            clone->SetAssignedPriority( newPri );
+            m_zoneSettingsBag.SetZonePriority( clone.get(), newPri );
+        }
+
+        PostProcessZoneViewSelChange(
+                m_modelZonesOverview->ApplyFilter( m_filterCtrl->GetValue(),
+                                                   m_viewZonesOverview->GetSelection() ) );
+    }
+
+    for( auto& [zone, priority] : savedPriorities )
+        zone->SetAssignedPriority( priority );
+}
+
+
 void DIALOG_ZONE_MANAGER::OnFilterCtrlCancel( wxCommandEvent& aEvent )
 {
     PostProcessZoneViewSelChange( m_modelZonesOverview->ClearFilter( m_viewZonesOverview->GetSelection() ) );
@@ -509,8 +541,11 @@ void DIALOG_ZONE_MANAGER::OnZonesTableRowCountChange( wxCommandEvent& aEvent )
 {
     unsigned count = aEvent.GetInt();
 
-    for( STD_BITMAP_BUTTON* btn : { m_btnMoveTop, m_btnMoveUp, m_btnMoveDown, m_btnMoveBottom } )
+    for( STD_BITMAP_BUTTON* btn : { m_btnMoveTop, m_btnMoveUp, m_btnMoveDown, m_btnMoveBottom,
+                                    m_btnAutoAssign } )
+    {
         btn->Enable( count > 1 );
+    }
 }
 
 

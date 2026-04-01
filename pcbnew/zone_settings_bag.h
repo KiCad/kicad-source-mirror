@@ -47,6 +47,13 @@ public:
     void SwapPriority( ZONE* aZOne, ZONE* otherZone );
 
     /**
+     * Update the tracked priority for a cloned zone. This keeps both the
+     * m_zonePriorities pair and the ZONE_SETTINGS m_ZonePriority in sync
+     * so that UpdateClonedZones() will not revert auto-assigned values.
+     */
+    void SetZonePriority( ZONE* aClone, unsigned aPriority );
+
+    /**
      * The cloned list is the working storage.
      */
     void UpdateClonedZones();

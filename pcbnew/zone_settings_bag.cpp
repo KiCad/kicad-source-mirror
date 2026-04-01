@@ -89,6 +89,15 @@ void ZONE_SETTINGS_BAG::SwapPriority( ZONE* aZone, ZONE* otherZone )
 }
 
 
+void ZONE_SETTINGS_BAG::SetZonePriority( ZONE* aClone, unsigned aPriority )
+{
+    m_zonePriorities[aClone].second = aPriority;
+
+    if( m_zoneSettings.contains( aClone ) )
+        m_zoneSettings[aClone]->m_ZonePriority = aPriority;
+}
+
+
 void ZONE_SETTINGS_BAG::UpdateClonedZones()
 {
     for( ZONE* zone : m_clonedZoneList )

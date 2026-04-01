@@ -27,6 +27,10 @@
 #include <board.h>
 #include <footprint.h>
 #include <geometry/shape_utils.h>
+#include <netinfo.h>
+#include <pad.h>
+#include <padstack.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <zone_utils.h>
 
@@ -242,5 +246,266 @@ BOOST_AUTO_TEST_CASE( ZoneMergeMergeSameGeomDifferentOrder )
     BOOST_TEST( merged[0]->GetLayerSet() == LSET( { F_Cu, B_Cu } ) );
     BOOST_TEST( merged[0]->GetNumCorners() == 4 );
 }
+
+static PCB_VIA* AddVia( BOARD& aBoard, const VECTOR2I& aPos, int aNetCode,
+                        PCB_LAYER_ID aTopLayer = F_Cu, PCB_LAYER_ID aBotLayer = B_Cu )
+{
+    PCB_VIA* via = new PCB_VIA( &aBoard );
+    via->SetPosition( aPos );
+    via->SetLayerPair( aTopLayer, aBotLayer );
+    via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.6 ) );
+    via->SetDrill( pcbIUScale.mmToIU( 0.3 ) );
+    via->SetNetCode( aNetCode );
+    aBoard.Add( via );
+    return via;
+}
+
+
+static PAD* AddPadToBoard( BOARD& aBoard, const VECTOR2I& aPos, int aNetCode,
+                           PCB_LAYER_ID aLayer = F_Cu )
+{
+    FOOTPRINT* fp = new FOOTPRINT( &aBoard );
+    fp->SetPosition( aPos );
+    aBoard.Add( fp );
+
+    PAD* pad = new PAD( fp );
+    pad->SetPosition( aPos );
+    pad->SetSize( PADSTACK::ALL_LAYERS,
+                  VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+    pad->SetLayerSet( LSET( { aLayer } ) );
+    pad->SetNetCode( aNetCode );
+    fp->Add( pad );
+    return pad;
+}
+
+
+BOOST_AUTO_TEST_CASE( AutoPriority_NonOverlapping )
+{
+    NETINFO_ITEM* netA = new NETINFO_ITEM( &m_board, wxT( "NetA" ) );
+    m_board.Add( netA );
+    NETINFO_ITEM* netB = new NETINFO_ITEM( &m_board, wxT( "NetB" ) );
+    m_board.Add( netB );
+
+    auto zoneA = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( 0, 0 ),
+                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
+            F_Cu );
+    zoneA->SetNetCode( netA->GetNetCode() );
+    zoneA->SetAssignedPriority( 5 );
+
+    auto zoneB = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( pcbIUScale.mmToIU( 20 ), 0 ),
+                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
+            F_Cu );
+    zoneB->SetNetCode( netB->GetNetCode() );
+    zoneB->SetAssignedPriority( 10 );
+
+    ZONE* ptrA = zoneA.get();
+    ZONE* ptrB = zoneB.get();
+    m_board.Add( zoneA.release() );
+    m_board.Add( zoneB.release() );
+
+    AutoAssignZonePriorities( &m_board );
+
+    BOOST_TEST( ptrA->GetAssignedPriority() <= ptrB->GetAssignedPriority() );
+}
+
+
+BOOST_AUTO_TEST_CASE( AutoPriority_ItemCountWins )
+{
+    NETINFO_ITEM* netA = new NETINFO_ITEM( &m_board, wxT( "NetA" ) );
+    m_board.Add( netA );
+    NETINFO_ITEM* netB = new NETINFO_ITEM( &m_board, wxT( "NetB" ) );
+    m_board.Add( netB );
+
+    auto zoneA = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( 0, 0 ),
+                   VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) ),
+            F_Cu );
+    zoneA->SetNetCode( netA->GetNetCode() );
+
+    auto zoneB = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
+                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
+            F_Cu );
+    zoneB->SetNetCode( netB->GetNetCode() );
+
+    ZONE* ptrA = zoneA.get();
+    ZONE* ptrB = zoneB.get();
+    m_board.Add( zoneA.release() );
+    m_board.Add( zoneB.release() );
+
+    for( int i = 0; i < 5; i++ )
+    {
+        AddVia( m_board,
+                VECTOR2I( pcbIUScale.mmToIU( 7 + i ), pcbIUScale.mmToIU( 10 ) ),
+                netA->GetNetCode() );
+    }
+
+    AddVia( m_board,
+            VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 7 ) ),
+            netB->GetNetCode() );
+
+    AutoAssignZonePriorities( &m_board );
+
+    BOOST_TEST( ptrA->GetAssignedPriority() > ptrB->GetAssignedPriority() );
+}
+
+
+BOOST_AUTO_TEST_CASE( AutoPriority_SimilarCountsSmallerWins )
+{
+    NETINFO_ITEM* netA = new NETINFO_ITEM( &m_board, wxT( "NetA" ) );
+    m_board.Add( netA );
+    NETINFO_ITEM* netB = new NETINFO_ITEM( &m_board, wxT( "NetB" ) );
+    m_board.Add( netB );
+
+    auto zoneA = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( 0, 0 ),
+                   VECTOR2I( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 30 ) ) ),
+            F_Cu );
+    zoneA->SetNetCode( netA->GetNetCode() );
+
+    auto zoneB = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
+                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
+            F_Cu );
+    zoneB->SetNetCode( netB->GetNetCode() );
+
+    ZONE* ptrA = zoneA.get();
+    ZONE* ptrB = zoneB.get();
+    m_board.Add( zoneA.release() );
+    m_board.Add( zoneB.release() );
+
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 8 ) ),
+            netA->GetNetCode() );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 8 ) ),
+            netA->GetNetCode() );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 12 ) ),
+            netB->GetNetCode() );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 12 ) ),
+            netB->GetNetCode() );
+
+    AutoAssignZonePriorities( &m_board );
+
+    BOOST_TEST( ptrB->GetAssignedPriority() > ptrA->GetAssignedPriority() );
+}
+
+
+BOOST_AUTO_TEST_CASE( AutoPriority_MultiLayerAggregate )
+{
+    m_board.SetCopperLayerCount( 2 );
+
+    NETINFO_ITEM* netA = new NETINFO_ITEM( &m_board, wxT( "NetA" ) );
+    m_board.Add( netA );
+    NETINFO_ITEM* netB = new NETINFO_ITEM( &m_board, wxT( "NetB" ) );
+    m_board.Add( netB );
+
+    auto zoneA = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( 0, 0 ),
+                   VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) ),
+            F_Cu );
+    zoneA->SetLayerSet( LSET( { F_Cu, B_Cu } ) );
+    zoneA->SetNetCode( netA->GetNetCode() );
+
+    auto zoneB = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
+                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
+            F_Cu );
+    zoneB->SetLayerSet( LSET( { F_Cu, B_Cu } ) );
+    zoneB->SetNetCode( netB->GetNetCode() );
+
+    ZONE* ptrA = zoneA.get();
+    ZONE* ptrB = zoneB.get();
+    m_board.Add( zoneA.release() );
+    m_board.Add( zoneB.release() );
+
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 8 ) ),
+            netA->GetNetCode(), F_Cu, B_Cu );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 8 ) ),
+            netA->GetNetCode(), F_Cu, B_Cu );
+
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 12 ) ),
+            netB->GetNetCode(), F_Cu, B_Cu );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ),
+            netB->GetNetCode(), F_Cu, B_Cu );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 12 ) ),
+            netB->GetNetCode(), F_Cu, B_Cu );
+
+    AutoAssignZonePriorities( &m_board );
+
+    BOOST_TEST( ptrB->GetAssignedPriority() > ptrA->GetAssignedPriority() );
+}
+
+
+BOOST_AUTO_TEST_CASE( AutoPriority_SameNetSmallerWins )
+{
+    NETINFO_ITEM* net = new NETINFO_ITEM( &m_board, wxT( "SharedNet" ) );
+    m_board.Add( net );
+
+    auto zoneA = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( 0, 0 ),
+                   VECTOR2I( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 30 ) ) ),
+            F_Cu );
+    zoneA->SetNetCode( net->GetNetCode() );
+
+    auto zoneB = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
+                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
+            F_Cu );
+    zoneB->SetNetCode( net->GetNetCode() );
+
+    ZONE* ptrA = zoneA.get();
+    ZONE* ptrB = zoneB.get();
+    m_board.Add( zoneA.release() );
+    m_board.Add( zoneB.release() );
+
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 8 ), pcbIUScale.mmToIU( 8 ) ),
+            net->GetNetCode() );
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 12 ) ),
+            net->GetNetCode() );
+
+    AutoAssignZonePriorities( &m_board );
+
+    // Smaller zone (B) should get higher priority even though they share a net
+    BOOST_TEST( ptrB->GetAssignedPriority() > ptrA->GetAssignedPriority() );
+}
+
+
+BOOST_AUTO_TEST_CASE( AutoPriority_EqualAreaNoChange )
+{
+    NETINFO_ITEM* netA = new NETINFO_ITEM( &m_board, wxT( "NetA" ) );
+    m_board.Add( netA );
+    NETINFO_ITEM* netB = new NETINFO_ITEM( &m_board, wxT( "NetB" ) );
+    m_board.Add( netB );
+
+    // Two identical-sized overlapping zones with no items in the overlap
+    auto zoneA = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( 0, 0 ),
+                   VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) ),
+            F_Cu );
+    zoneA->SetNetCode( netA->GetNetCode() );
+    zoneA->SetAssignedPriority( 50 );
+
+    auto zoneB = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( 0, 0 ),
+                   VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) ),
+            F_Cu );
+    zoneB->SetNetCode( netB->GetNetCode() );
+    zoneB->SetAssignedPriority( 50 );
+
+    ZONE* ptrA = zoneA.get();
+    ZONE* ptrB = zoneB.get();
+    m_board.Add( zoneA.release() );
+    m_board.Add( zoneB.release() );
+
+    bool changed = AutoAssignZonePriorities( &m_board );
+
+    // Equal areas, no items: no ordering evidence, priorities must not change
+    BOOST_TEST( changed == false );
+    BOOST_TEST( ptrA->GetAssignedPriority() == 50u );
+    BOOST_TEST( ptrB->GetAssignedPriority() == 50u );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -49,6 +49,7 @@
 #include <pcb_text.h>
 #include <pcb_track.h>
 #include <zone.h>
+#include <zone_utils.h>
 #include <common.h>
 #include <geometry/shape_arc.h>
 #include <geometry/shape_utils.h>
@@ -3669,36 +3670,7 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
 
 bool FABMASTER::orderZones( BOARD* aBoard )
 {
-    std::vector<ZONE*> sortedZones;
-    std::copy( aBoard->Zones().begin(), aBoard->Zones().end(), std::back_inserter( sortedZones ) );
-    std::sort( sortedZones.begin(), sortedZones.end(),
-            [&]( const ZONE* a, const ZONE* b )
-            {
-                if( a->GetLayer() == b->GetLayer() )
-                    return a->GetBoundingBox().GetArea() > b->GetBoundingBox().GetArea();
-
-                return a->GetLayer() < b->GetLayer();
-            } );
-
-    PCB_LAYER_ID layer = UNDEFINED_LAYER;
-    unsigned int priority = 0;
-
-    for( ZONE* zone : sortedZones )
-    {
-        /// Rule areas do not have priorities
-        if( zone->GetIsRuleArea() )
-            continue;
-
-        if( zone->GetLayer() != layer )
-        {
-            layer = zone->GetLayer();
-            priority = 0;
-        }
-
-        zone->SetAssignedPriority( priority );
-        priority += 10;
-    }
-
+    AutoAssignZonePriorities( aBoard );
     return true;
 }
 
