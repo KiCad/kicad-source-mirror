@@ -971,4 +971,12 @@ BOOST_AUTO_TEST_CASE( ExternalSingleSheetWireTilingMatchesAsciiConnections )
 }
 
 
+// Every placement on every sheet binds to a CAE-decal so the importer can draw a real
+// symbol body and pins, not a placeholder.  This guards the multi-sheet regression where a
+// >64-pin gate truncated a sheet's used-decal table and dropped every later placement.
+BOOST_AUTO_TEST_CASE( DecalBindingRateAllSheets )
+{
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

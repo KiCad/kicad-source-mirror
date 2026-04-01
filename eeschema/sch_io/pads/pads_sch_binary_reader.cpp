@@ -500,7 +500,12 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
                 int         cnt = d[rec + 0x2b];
                 int         cum = readU16( d, rec + 0x2d );
 
-                if( nm.empty() || cum != expect || cnt > 64 )
+                // The running cumulative prefix sum (cum == expect) is the table's integrity
+                // invariant; it terminates the run at the first non-record. cnt is a u8 gate
+                // terminal count with no cap - a large-pin gate (e.g. a 73-pin FPGA bank)
+                // must not truncate the table, or every placement past it falls off and binds
+                // to nothing on that sheet.
+                if( nm.empty() || cum != expect )
                     break;
 
                 recs.push_back( { nm, cnt, cum } );
