@@ -1149,7 +1149,12 @@ bool PANEL_REMOTE_SYMBOL::receiveSymbol( const nlohmann::json& aParams,
     const LIBRARY_TABLE_SCOPE scope = settings->m_RemoteSymbol.add_to_global_table
                                               ? LIBRARY_TABLE_SCOPE::GLOBAL
                                               : LIBRARY_TABLE_SCOPE::PROJECT;
+
+    // Reload the library entry to pick up the new file, then force a full load so the
+    // library reaches LOADED state. Without the LoadOne call the library stays in LOADING
+    // state and GetLibSymbol / the symbol chooser cannot see it.
     Pgm().GetLibraryManager().ReloadLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, nickname, scope );
+    adapter->LoadOne( nickname );
 
     if( placeAfterDownload )
         return PlaceRemoteDownloadedSymbol( m_frame, nickname, libItemName, aError );
@@ -1322,7 +1327,10 @@ bool PANEL_REMOTE_SYMBOL::receiveFootprint( const nlohmann::json& aParams,
     const LIBRARY_TABLE_SCOPE scope = settings->m_RemoteSymbol.add_to_global_table
                                               ? LIBRARY_TABLE_SCOPE::GLOBAL
                                               : LIBRARY_TABLE_SCOPE::PROJECT;
-    Pgm().GetLibraryManager().ReloadLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, libNickname, scope );
+
+    LIBRARY_MANAGER& libMgr = Pgm().GetLibraryManager();
+    libMgr.ReloadLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, libNickname, scope );
+    libMgr.LoadLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, libNickname );
     return true;
 }
 

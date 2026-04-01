@@ -158,6 +158,10 @@ public:
     void ReloadLibraryEntry( const wxString& aNickname,
                              LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH );
 
+    /// Synchronously loads the named library to LOADED state. Returns the resulting status,
+    /// or nullopt if the library is not found in any table.
+    std::optional<LIB_STATUS> LoadLibraryEntry( const wxString& aNickname );
+
     /// Return true if the given nickname exists and is not a read-only library
     virtual bool IsWritable( const wxString& aNickname ) const;
 
@@ -303,6 +307,11 @@ public:
 
     void ReloadLibraryEntry( LIBRARY_TABLE_TYPE aType, const wxString& aNickname,
                              LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH );
+
+    /// Synchronously loads the named library to LOADED state for the given type.
+    /// Returns the resulting status, or nullopt if the library is not found.
+    std::optional<LIB_STATUS> LoadLibraryEntry( LIBRARY_TABLE_TYPE aType,
+                                                const wxString& aNickname );
 
     void LoadProjectTables( const wxString& aProjectPath,
                             std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad = {} );

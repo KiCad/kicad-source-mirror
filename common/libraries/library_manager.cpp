@@ -752,6 +752,16 @@ void LIBRARY_MANAGER::ReloadLibraryEntry( LIBRARY_TABLE_TYPE aType, const wxStri
 }
 
 
+std::optional<LIB_STATUS> LIBRARY_MANAGER::LoadLibraryEntry( LIBRARY_TABLE_TYPE aType,
+                                                              const wxString& aNickname )
+{
+    if( std::optional<LIBRARY_MANAGER_ADAPTER*> adapter = Adapter( aType ); adapter )
+        return ( *adapter )->LoadLibraryEntry( aNickname );
+
+    return std::nullopt;
+}
+
+
 void LIBRARY_MANAGER::LoadProjectTables( const wxString& aProjectPath,
                                          std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad )
 {
@@ -1193,6 +1203,17 @@ wxString LIBRARY_MANAGER_ADAPTER::GetLibraryLoadErrors() const
     }
 
     return errors;
+}
+
+
+std::optional<LIB_STATUS> LIBRARY_MANAGER_ADAPTER::LoadLibraryEntry( const wxString& aNickname )
+{
+    LIBRARY_RESULT<LIB_DATA*> result = loadIfNeeded( aNickname );
+
+    if( result.has_value() )
+        return LoadOne( *result );
+
+    return std::nullopt;
 }
 
 

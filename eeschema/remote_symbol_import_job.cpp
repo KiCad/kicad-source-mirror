@@ -146,9 +146,15 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
                                                addToGlobal, true, aError ) )
                     return false;
 
-                Pgm().GetLibraryManager().ReloadLibraryEntry(
-                        LIBRARY_TABLE_TYPE::SYMBOL, nickname,
-                        addToGlobal ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT );
+                LIBRARY_MANAGER& libMgr = Pgm().GetLibraryManager();
+                const LIBRARY_TABLE_SCOPE scope =
+                        addToGlobal ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT;
+
+                libMgr.ReloadLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, nickname, scope );
+
+                // Force the library to LOADED state so GetLibSymbol and the symbol chooser
+                // can see the new symbol immediately. ReloadLibraryEntry leaves it in LOADING.
+                libMgr.LoadLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, nickname );
             }
 
             importedSymbol = true;
@@ -187,9 +193,12 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
                                                addToGlobal, true, aError ) )
                     return false;
 
-                Pgm().GetLibraryManager().ReloadLibraryEntry(
-                        LIBRARY_TABLE_TYPE::FOOTPRINT, nickname,
-                        addToGlobal ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT );
+                LIBRARY_MANAGER& libMgr = Pgm().GetLibraryManager();
+                const LIBRARY_TABLE_SCOPE scope =
+                        addToGlobal ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT;
+
+                libMgr.ReloadLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, nickname, scope );
+                libMgr.LoadLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, nickname );
             }
         }
         else if( asset.asset_type == wxS( "3dmodel" ) )
