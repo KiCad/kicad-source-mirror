@@ -42,6 +42,7 @@
 #include <fstream>
 #include <map>
 #include <set>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -508,6 +509,56 @@ BOOST_AUTO_TEST_CASE( NoTracksOrVias_MC4_PLUS_CSHAPE )
 
     BOOST_CHECK_EQUAL( CountTraces( bin ), 0u );
     BOOST_CHECK_EQUAL( CountVias( bin ), 0u );
+}
+
+
+// The per-pin padstack assignment (section-15 (pin, ref) pairs sliced by the section-14
+// descriptor table, indexed into the extended section-4 pool) gives each decal's pads their
+// own geometry. Before it, every pad on the board shared pad stack 0, collapsing the whole
+// board to a single distinct pad geometry. Assert the imported board now carries a variety of
+// pad geometries that approaches the ASCII reference's variety.
+static size_t DistinctPadGeometries( BOARD* aBoard )
+{
+    std::set<std::tuple<int, int, int>> geoms;
+
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            VECTOR2I sz = pad->GetSize( F_Cu );
+            geoms.emplace( static_cast<int>( pad->GetShape( F_Cu ) ), sz.x, sz.y );
+        }
+    }
+
+    return geoms.size();
+}
+
+
+BOOST_AUTO_TEST_CASE( PerPinPadStackGeometry_MC4_PLUS_CSHAPE )
+{
+    auto bin = LoadBinary( PADS_BINARY_BOARDS[1] );
+
+    if( !bin )
+        return;
+
+    size_t binGeoms = DistinctPadGeometries( bin.get() );
+    BOOST_TEST_MESSAGE( "MC4_PLUS_CSHAPE binary distinct pad geometries: " << binGeoms );
+
+    // A single shared pad stack 0 would yield one geometry; per-pin assignment recovers the
+    // real spread.
+    BOOST_CHECK_GE( binGeoms, 5u );
+
+    auto asc = LoadAsc( PADS_BINARY_BOARDS[1] );
+
+    if( asc )
+    {
+        size_t ascGeoms = DistinctPadGeometries( asc.get() );
+        BOOST_TEST_MESSAGE( "MC4_PLUS_CSHAPE ASCII distinct pad geometries: " << ascGeoms );
+
+        // De-duplicated library passives without a descriptor keep the default geometry, so
+        // allow margin, but the binary should reach a substantial fraction of the reference.
+        BOOST_CHECK_GE( binGeoms, ascGeoms / 2 );
+    }
 }
 
 

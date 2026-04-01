@@ -236,6 +236,11 @@ private:
 
     // Assign the default pad stack (global cache index 0) to every decal that has terminals.
     void assignDefaultPadStacks();
+
+    // Recover the per-pin pad-stack assignment from the section-15 tail (pin, ref) pair pool,
+    // sliced per decal by the section-14 descriptor table. Each ref indexes m_padStackPool.
+    // Refines the convention-based default for the decals that carry a descriptor.
+    void parsePerPinPadstacks();
     void parseKeepouts();
     void parseCopperShapes();
     void parseCopperPours();
@@ -326,6 +331,11 @@ private:
 
     // Pad stack cache indexed by section 4 record number
     std::map<int, std::vector<PAD_STACK_LAYER>> m_padStackCache;
+
+    // Extended section-4 pad-stack pool, 0-based from the true pool start (sec4.dataOffset
+    // minus the de-duplicated library head the section directory does not index). The
+    // per-pin (pin, ref) pairs in the section-15 tail index this pool directly.
+    std::vector<std::vector<PAD_STACK_LAYER>> m_padStackPool;
 
     // Part index -> parttype index from the NEXT section 22 record (@+4 with +1
     // block lag). Indexes into m_partTypeDecalIndex (the parttype-definition table).

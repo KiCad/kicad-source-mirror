@@ -659,6 +659,39 @@ void BINARY_PARSER::parsePadStacks()
     const PADSTACK_LAYOUT& layout = padstackLayout( isOldFormat() );
     uint32_t               recSize = entry->perItem;
 
+    // Read one 0xFE-marked padstack record's default (layer 0) geometry. For finger pads
+    // (RF, OF, RC) finLength is the second dimension; round (R) and square (S) use sizeA.
+    auto readLayer = [&]( size_t base ) -> PAD_STACK_LAYER
+    {
+        uint8_t     shapeCode = readU8( base + layout.shapeOff );
+        std::string shapeName = "R";
+        auto        shapeIt = PAD_SHAPE_NAMES.find( shapeCode );
+
+        if( shapeIt != PAD_SHAPE_NAMES.end() )
+            shapeName = shapeIt->second;
+
+        int32_t padWidth = readI32( base + layout.padWidthOff );
+        int32_t drill = readI32( base + layout.drillOff );
+        int32_t finLength = readI32( base + layout.finLenOff );
+
+        PAD_STACK_LAYER psl;
+        psl.layer = 0;
+        psl.shape = shapeName;
+        psl.sizeA = static_cast<double>( padWidth );
+        psl.drill = static_cast<double>( drill );
+        psl.plated = ( drill > 0 );
+        psl.rotation = toBasicAngle( readI32( base + layout.angleOff ) );
+
+        bool isFinger = ( shapeName == "RF" || shapeName == "OF" || shapeName == "RC" );
+
+        if( isFinger && finLength > 0 )
+            psl.sizeB = static_cast<double>( finLength );
+        else
+            psl.sizeB = static_cast<double>( padWidth );
+
+        return psl;
+    };
+
     // We store pad stacks indexed by their position in section 4.
     // Part decals reference these by index.
     for( uint32_t i = 0; i < entry->count; ++i )
@@ -670,44 +703,46 @@ void BINARY_PARSER::parsePadStacks()
 
         size_t base = entry->dataOffset + off;
 
-        int32_t padWidth = readI32( base + layout.padWidthOff );
-        int32_t drill = readI32( base + layout.drillOff );
-        int32_t finLength = readI32( base + layout.finLenOff );
-        int32_t angleRaw = readI32( base + layout.angleOff );
-        uint8_t marker = readU8( base + layout.markerOff );
-        uint8_t shapeCode = readU8( base + layout.shapeOff );
-
         // Only process valid pad definitions (marker == 0xFE)
-        if( marker != 0xFE )
+        if( readU8( base + layout.markerOff ) != 0xFE )
             continue;
 
-        std::string shapeName = "R";
-        auto shapeIt = PAD_SHAPE_NAMES.find( shapeCode );
+        m_padStackCache[static_cast<int>( i )].push_back( readLayer( base ) );
+    }
 
-        if( shapeIt != PAD_SHAPE_NAMES.end() )
-            shapeName = shapeIt->second;
+    // The section directory points partway into the padstack table: a run of de-duplicated
+    // library padstacks precedes section-4 dataOffset and the directory never indexes it.
+    // Recover the true pool start by walking back over the contiguous 0xFE / shape<=3
+    // records, then read the full pool 0-based from there. The per-pin (pin, ref) pairs in
+    // the section-15 tail index this extended pool (see parsePerPinPadstacks).
+    size_t head = 0;
 
-        double angle = toBasicAngle( angleRaw );
+    while( entry->dataOffset >= ( head + 1 ) * recSize )
+    {
+        size_t recOff = entry->dataOffset - ( head + 1 ) * recSize;
 
-        // Build a PAD_STACK_LAYER for the default layer (layer 0).
-        // For finger pads (RF, OF, RC), finLength is the second dimension (sizeB).
-        // For round (R) and square (S) pads, sizeB equals sizeA.
-        PAD_STACK_LAYER psl;
-        psl.layer = 0;
-        psl.shape = shapeName;
-        psl.sizeA = static_cast<double>( padWidth );
-        psl.drill = static_cast<double>( drill );
-        psl.plated = ( drill > 0 );
-        psl.rotation = angle;
+        if( readU8( recOff + layout.markerOff ) != 0xFE || readU8( recOff + layout.shapeOff ) > 3 )
+            break;
 
-        bool isFinger = ( shapeName == "RF" || shapeName == "OF" || shapeName == "RC" );
+        ++head;
+    }
 
-        if( isFinger && finLength > 0 )
-            psl.sizeB = static_cast<double>( finLength );
-        else
-            psl.sizeB = static_cast<double>( padWidth );
+    size_t poolStart = entry->dataOffset - head * recSize;
+    size_t poolCount = head + entry->count;
 
-        m_padStackCache[static_cast<int>( i )].push_back( psl );
+    m_padStackPool.assign( poolCount, {} );
+
+    for( size_t i = 0; i < poolCount; ++i )
+    {
+        size_t base = poolStart + i * recSize;
+
+        if( base + recSize > m_data.size() )
+            break;
+
+        if( readU8( base + layout.markerOff ) != 0xFE )
+            continue;
+
+        m_padStackPool[i].push_back( readLayer( base ) );
     }
 
     // Extract default via dimensions from the pad stack cache.
@@ -1080,6 +1115,7 @@ void BINARY_PARSER::parseTerminals()
     // falls back to the count-correct placeholder layout.
     synthesizePlaceholderTerminals();
     assignDefaultPadStacks();
+    parsePerPinPadstacks();
 }
 
 
@@ -1135,6 +1171,114 @@ void BINARY_PARSER::assignDefaultPadStacks()
 
         if( m_padStackCache.count( 0 ) )
             decal.pad_stacks[0] = m_padStackCache[0];
+    }
+}
+
+
+void BINARY_PARSER::parsePerPinPadstacks()
+{
+    // The per-pin padstack assignment is serialized in stable design data, not the volatile
+    // object-graph heap snapshot. A flat pool of (pin, ref) pairs follows the terminal
+    // records in section 15; the section-14 descriptor table slices it per decal. Each ref
+    // is a direct index into the extended pad-stack pool. A (0, ref) pair sets the decal
+    // default; a (pin>0, ref) pair overrides that one terminal. This recovers per-pin pad
+    // geometry that the convention-based default (pad stack 0 everywhere) cannot express.
+    //
+    // Decals without a section-14 descriptor (the de-duplicated high-volume passives) keep
+    // the convention default rather than a fabricated geometry.
+    if( isOldFormat() || m_padStackPool.empty() )
+        return;
+
+    const DirEntry* sec14 = getSection( SECTION::DecalHeader );
+    const DirEntry* sec15 = getSection( SECTION::TerminalPool );
+
+    if( !sec14 || !sec15 || sec15->perItem != 36 )
+        return;
+
+    // The (pin, ref) pair pool begins at the first section-15 record whose +24/+28/+32 tail
+    // is non-zero, the same boundary parseTerminals uses to end the terminal-geometry block.
+    static constexpr size_t TERM_SIZE = 36;
+    size_t end = static_cast<size_t>( sec15->dataOffset ) + sec15->totalBytes;
+    size_t pairBase = end;
+
+    for( uint32_t i = 0; i < sec15->count; ++i )
+    {
+        size_t recOff = static_cast<size_t>( sec15->dataOffset ) + i * TERM_SIZE;
+
+        if( recOff + TERM_SIZE > end )
+            break;
+
+        if( readI32( recOff + 24 ) != 0 || readI32( recOff + 28 ) != 0 || readI32( recOff + 32 ) != 0 )
+        {
+            pairBase = recOff;
+            break;
+        }
+    }
+
+    if( pairBase >= end )
+        return;
+
+    std::vector<std::pair<int32_t, int32_t>> pairs;
+
+    for( size_t off = pairBase; off + 8 <= m_data.size(); off += 8 )
+    {
+        int32_t pin = readI32( off );
+        int32_t ref = readI32( off + 4 );
+
+        if( pin < 0 || pin > 20000 || ref < 0 || ref > 20000 )
+            break;
+
+        pairs.emplace_back( pin, ref );
+    }
+
+    if( pairs.empty() )
+        return;
+
+    // The section-14 descriptor table is the section data itself (distinct from the -1188
+    // header used for terminal positions): 112-byte records with a 0xFFFE sentinel at +108,
+    // the decal NAME at +44, the pair count at +20 and the pair-pool start cursor at +88.
+    static constexpr size_t DESC_SIZE = 112;
+    static constexpr size_t DESC_COUNT_OFF = 20;
+    static constexpr size_t DESC_NAME_OFF = 44;
+    static constexpr size_t DESC_START_OFF = 88;
+    static constexpr size_t DESC_SENTINEL_OFF = 108;
+
+    for( uint32_t k = 0; k < sec14->count; ++k )
+    {
+        size_t off = static_cast<size_t>( sec14->dataOffset ) + k * DESC_SIZE;
+
+        if( off + DESC_SIZE > m_data.size() || readU16( off + DESC_SENTINEL_OFF ) != 0xFFFE )
+            continue;
+
+        std::string name = readFixedString( off + DESC_NAME_OFF, 41 );
+
+        if( name.empty() )
+            continue;
+
+        auto decalIt = m_decals.find( name );
+
+        if( decalIt == m_decals.end() )
+            continue;
+
+        int32_t start = readI32( off + DESC_START_OFF );
+        int32_t count = readI32( off + DESC_COUNT_OFF );
+
+        if( start < 0 || count <= 0
+            || static_cast<size_t>( start ) + static_cast<size_t>( count ) > pairs.size() )
+            continue;
+
+        PART_DECAL& decal = decalIt->second;
+
+        for( int32_t p = 0; p < count; ++p )
+        {
+            const std::pair<int32_t, int32_t>& pair = pairs[static_cast<size_t>( start ) + p];
+
+            if( static_cast<size_t>( pair.second ) >= m_padStackPool.size()
+                || m_padStackPool[pair.second].empty() )
+                continue;
+
+            decal.pad_stacks[pair.first] = m_padStackPool[pair.second];
+        }
     }
 }
 
