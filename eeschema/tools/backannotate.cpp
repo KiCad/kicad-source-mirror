@@ -50,7 +50,7 @@
 #include <fmt.h>
 #include <fmt/ranges.h>
 #include <fmt/xchar.h>
-
+#include <connection_graph.h>
 
 BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                               bool aProcessFootprints, bool aProcessValues, bool aProcessReferences,
@@ -1422,6 +1422,32 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ERROR );
             break;
+        }
+
+        // The physical connection walk could not find a label driver.  This can happen when
+        // a label sits in the middle of an unsplit wire.  Fall back to the connection graph's
+        // resolved driver which handles this case through subgraph merging.
+        {
+            CONNECTION_GRAPH*    connGraph = m_frame->Schematic().ConnectionGraph();
+            CONNECTION_SUBGRAPH* sg = connGraph ? connGraph->GetSubgraphForItem( aPin ) : nullptr;
+
+            if( sg && sg->GetDriver() && sg->GetDriverPriority() >= CONNECTION_SUBGRAPH::PRIORITY::LOCAL_LABEL )
+            {
+                SCH_ITEM* resolvedDriver = const_cast<SCH_ITEM*>( sg->GetDriver() );
+
+                ++m_changesCount;
+                msg.Printf( _( "Change %s pin %s net label from '%s' to '%s'." ), DescribeRef( aRef ),
+                            EscapeHTML( aPin->GetShownNumber() ), EscapeHTML( aOldName ), EscapeHTML( aNewName ) );
+
+                if( !m_dryRun )
+                {
+                    aCommit->Modify( resolvedDriver, sg->GetSheet().LastScreen() );
+                    static_cast<SCH_LABEL_BASE*>( resolvedDriver )->SetText( aNewName );
+                }
+
+                m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
+                break;
+            }
         }
 
         ++m_changesCount;

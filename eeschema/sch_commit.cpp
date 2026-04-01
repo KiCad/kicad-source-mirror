@@ -277,6 +277,8 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
             if( frame && screen == currentScreen )
                 frame->UpdateItem( schItem, true, true );
+            else if( screen )
+                screen->Update( schItem );
 
             bulkAddedItems.push_back( schItem );
 
@@ -325,6 +327,8 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
             if( frame && screen == currentScreen )
                 frame->UpdateItem( schItem, true, true );
+            else if( screen )
+                screen->Update( schItem );
 
             if( schItem->Type() == SCH_SHEET_T )
                 refreshHierarchy = true;
@@ -380,6 +384,8 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
             if( frame && screen == currentScreen )
                 frame->UpdateItem( schItem, false, true );
+            else if( screen )
+                screen->Update( schItem );
 
             itemsChanged.push_back( schItem );
             break;
