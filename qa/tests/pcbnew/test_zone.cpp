@@ -438,7 +438,7 @@ BOOST_AUTO_TEST_CASE( AutoPriority_MultiLayerAggregate )
 }
 
 
-BOOST_AUTO_TEST_CASE( AutoPriority_SameNetSmallerWins )
+BOOST_AUTO_TEST_CASE( AutoPriority_SameNetEqualPriority )
 {
     NETINFO_ITEM* net = new NETINFO_ITEM( &m_board, wxT( "SharedNet" ) );
     m_board.Add( net );
@@ -467,8 +467,8 @@ BOOST_AUTO_TEST_CASE( AutoPriority_SameNetSmallerWins )
 
     AutoAssignZonePriorities( &m_board );
 
-    // Smaller zone (B) should get higher priority even though they share a net
-    BOOST_TEST( ptrB->GetAssignedPriority() > ptrA->GetAssignedPriority() );
+    // Same-net overlapping zones are cooperative and must share equal priority
+    BOOST_TEST( ptrA->GetAssignedPriority() == ptrB->GetAssignedPriority() );
 }
 
 
@@ -505,6 +505,62 @@ BOOST_AUTO_TEST_CASE( AutoPriority_EqualAreaNoChange )
     BOOST_TEST( changed == false );
     BOOST_TEST( ptrA->GetAssignedPriority() == 50u );
     BOOST_TEST( ptrB->GetAssignedPriority() == 50u );
+}
+
+
+BOOST_AUTO_TEST_CASE( AutoPriority_SameNetGroupInheritsEdge )
+{
+    NETINFO_ITEM* netGND = new NETINFO_ITEM( &m_board, wxT( "GND" ) );
+    m_board.Add( netGND );
+    NETINFO_ITEM* netVCC = new NETINFO_ITEM( &m_board, wxT( "VCC" ) );
+    m_board.Add( netVCC );
+
+    // Large GND zone (A) overlaps with small VCC zone (C).
+    // Small GND zone (B) overlaps with A but NOT with C.
+    // A should beat C (more items), and B should inherit A's priority.
+    auto zoneA = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( 0, 0 ),
+                   VECTOR2I( pcbIUScale.mmToIU( 40 ), pcbIUScale.mmToIU( 40 ) ) ),
+            F_Cu );
+    zoneA->SetNetCode( netGND->GetNetCode() );
+
+    auto zoneB = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( pcbIUScale.mmToIU( 25 ), pcbIUScale.mmToIU( 25 ) ),
+                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
+            F_Cu );
+    zoneB->SetNetCode( netGND->GetNetCode() );
+
+    auto zoneC = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ),
+                   VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) ),
+            F_Cu );
+    zoneC->SetNetCode( netVCC->GetNetCode() );
+
+    ZONE* ptrA = zoneA.get();
+    ZONE* ptrB = zoneB.get();
+    ZONE* ptrC = zoneC.get();
+    m_board.Add( zoneA.release() );
+    m_board.Add( zoneB.release() );
+    m_board.Add( zoneC.release() );
+
+    // GND items in the A/C overlap region
+    for( int i = 0; i < 4; i++ )
+    {
+        AddVia( m_board,
+                VECTOR2I( pcbIUScale.mmToIU( 8 + i * 2 ), pcbIUScale.mmToIU( 10 ) ),
+                netGND->GetNetCode() );
+    }
+
+    AddVia( m_board, VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 8 ) ),
+            netVCC->GetNetCode() );
+
+    AutoAssignZonePriorities( &m_board );
+
+    // A beats C because GND has more items in the overlap
+    BOOST_TEST( ptrA->GetAssignedPriority() > ptrC->GetAssignedPriority() );
+
+    // B shares A's priority because they are same-net and overlap
+    BOOST_TEST( ptrA->GetAssignedPriority() == ptrB->GetAssignedPriority() );
 }
 
 
