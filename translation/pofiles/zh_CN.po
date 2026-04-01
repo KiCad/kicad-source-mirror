@@ -46,7 +46,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-30 17:09+0000\n"
+"PO-Revision-Date: 2026-04-02 11:36+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hans/>\n"
@@ -9128,7 +9128,7 @@ msgstr ""
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:765
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:946
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
@@ -9136,8 +9136,8 @@ msgid ""
 "offset: %d"
 msgstr ""
 "无效的 lib_id 标识, 位于\n"
-"file: '%s'\n"
-"line: %d\n"
+"file: '%s' \n"
+"line: %d \n"
 "offset: %d"
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:115
@@ -14370,9 +14370,9 @@ msgid "No symbols found in library '%s'."
 msgstr "在库 '%s' 中找不到符号 。"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:582
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "加载符号 %s 出错: %s"
+msgstr "加载符号 '%s' 出错: %s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:590
 msgid "No related symbols could be loaded from the library."
@@ -19922,7 +19922,7 @@ msgstr "使用原理图编辑器配色主题"
 
 #: eeschema/remote_symbol_import_utils.cpp:76
 msgid "Payload was empty."
-msgstr ""
+msgstr "payload 为空。"
 
 #: eeschema/remote_symbol_import_utils.cpp:85
 #, c-format
@@ -26958,14 +26958,12 @@ msgid "(page %s)"
 msgstr "(第 %s 页)"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:76
-#, fuzzy
 msgid "Missing payload data."
-msgstr "缺少关键字。"
+msgstr "缺少 payload 数据。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:84
-#, fuzzy
 msgid "Failed to decode base64 payload."
-msgstr "单词读取失败。"
+msgstr "无法解码 base64 payload。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:107
 #, fuzzy, c-format
@@ -26987,9 +26985,8 @@ msgid "ZSTD decompression failed: %s"
 msgstr "ZSTD 解压失败: %s"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:169
-#, fuzzy
 msgid "Symbol payload was empty."
-msgstr "符号库文件 '%s' 为空。"
+msgstr "符号 payload 为空。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:177
 #: eeschema/widgets/panel_remote_symbol.cpp:186
@@ -27073,9 +27070,8 @@ msgid "No remote provider is currently selected."
 msgstr "缩放至选中对象"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1052
-#, fuzzy
 msgid "Unable to process provider payload."
-msgstr "无法打开文件"
+msgstr ""
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1058
 #, c-format
@@ -27088,9 +27084,8 @@ msgid "Unsupported transfer mode '%s'."
 msgstr "不支持原理图文件 '%s'。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1077
-#, fuzzy
 msgid "Unsupported symbol payload type."
-msgstr "[未加载符号]"
+msgstr "不支持的符号 payload 类型。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1083
 #, fuzzy
@@ -27131,9 +27126,8 @@ msgid "Unsupported component type '%s'."
 msgstr "不支持原理图文件 '%s'。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1275
-#, fuzzy
 msgid "Unsupported footprint payload type."
-msgstr "未加载任何封装。"
+msgstr "不支持的封装 payload 类型。"
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1390
 msgid "Remote provider metadata is not loaded."
