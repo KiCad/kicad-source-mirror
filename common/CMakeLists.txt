@@ -75,6 +75,13 @@ if( NOT (${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR} ) )
     )
 endif()
 
+install( FILES
+    ${CMAKE_SOURCE_DIR}/resources/schemas/kicad-remote-provider-metadata-v1.schema.json
+    ${CMAKE_SOURCE_DIR}/resources/schemas/kicad-remote-symbol-manifest-v1.schema.json
+    DESTINATION ${KICAD_DATA}/schemas
+    COMPONENT Runtime
+)
+
 # A shared library used by multiple *.kiface files and one or two program
 # launchers.  Object files can migrate into here over time, but only if they are
 # surely needed and certainly used from more than one place without recompilation.
