@@ -46,6 +46,7 @@ enum class SECTION : int
     DrwItems       = 10,   // LINES/DRW drawing-object array (112 B)
     GraphicPieces  = 11,   // graphic-piece header + inline outline coords (20 B)
     Vertices       = 12,   // graphic-piece vertex pool (12 B)
+    DecalLibrary   = 13,   // per-decal block table + trailing library padstack-index table
     DecalHeader    = 14,   // PARTDECAL definition table (112 B)
     TerminalPool   = 15,   // decal terminal position table (36 B)
     ParttypeDefs   = 17,   // parttype/footprint defs (224 B)
@@ -237,10 +238,16 @@ private:
     // Assign the default pad stack (global cache index 0) to every decal that has terminals.
     void assignDefaultPadStacks();
 
-    // Recover the per-pin pad-stack assignment from the section-15 tail (pin, ref) pair pool,
-    // sliced per decal by the section-14 descriptor table. Each ref indexes m_padStackPool.
-    // Refines the convention-based default for the decals that carry a descriptor.
+    // Recover the per-pin pad-stack assignment from the section-15 tail (pin, ref) pair pool.
+    // Descriptor decals are sliced by the section-14 descriptor table; the de-duplicated
+    // library decals are sliced by the section-13 0x4D00 table. Each ref indexes m_padStackPool.
     void parsePerPinPadstacks();
+
+    // Apply one decal's (pin, ref) pair slice: pin 0 sets the decal default, pin>0 overrides
+    // that terminal. ref indexes m_padStackPool. Shared by the descriptor and library passes.
+    void applyPadstackPairs( PART_DECAL& aDecal,
+                             const std::vector<std::pair<int32_t, int32_t>>& aPairs,
+                             int32_t aStart, int32_t aCount );
     void parseKeepouts();
     void parseCopperShapes();
     void parseCopperPours();
@@ -367,6 +374,11 @@ private:
     // the de-dup-aware per-decal terminal index; it cannot be derived from counts because
     // the pool de-duplicates geometrically identical decals onto shared windows.
     std::map<std::string, int32_t> m_decalTerminalStart;
+
+    // Decal name -> pad-stack count (i32 @ +88 of the same -1188 header record): the number
+    // of distinct pad stacks the decal uses, i.e. the length of its (pin, ref) pair slice.
+    // Drives the library-decal pass in parsePerPinPadstacks.
+    std::map<std::string, int32_t> m_decalStackCount;
 
     // Section 23 array index -> net name, used to attribute structural vias to nets
     std::map<uint32_t, std::string> m_sec23IndexToNet;

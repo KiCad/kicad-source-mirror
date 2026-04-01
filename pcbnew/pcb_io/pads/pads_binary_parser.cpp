@@ -795,6 +795,7 @@ void BINARY_PARSER::parseDecalNameTable()
     static constexpr int SENTINEL_OFFSET = 64;
     static constexpr int START_OFFSET = 68;
     static constexpr int COUNT_OFFSET = 72;
+    static constexpr int STACK_COUNT_OFFSET = 88;
 
     const DirEntry* sec14 = getSection( SECTION::DecalHeader );
 
@@ -835,6 +836,11 @@ void BINARY_PARSER::parseDecalNameTable()
 
             if( startCursor >= 0 )
                 m_decalTerminalStart.emplace( name, startCursor );
+
+            int32_t stackCount = readI32( off + STACK_COUNT_OFFSET );
+
+            if( stackCount > 0 && stackCount <= 1000 )
+                m_decalStackCount.emplace( name, stackCount );
         }
     }
 }
@@ -1243,6 +1249,8 @@ void BINARY_PARSER::parsePerPinPadstacks()
     static constexpr size_t DESC_START_OFF = 88;
     static constexpr size_t DESC_SENTINEL_OFF = 108;
 
+    std::set<std::string> descriptorDecals;
+
     for( uint32_t k = 0; k < sec14->count; ++k )
     {
         size_t off = static_cast<size_t>( sec14->dataOffset ) + k * DESC_SIZE;
@@ -1260,25 +1268,68 @@ void BINARY_PARSER::parsePerPinPadstacks()
         if( decalIt == m_decals.end() )
             continue;
 
-        int32_t start = readI32( off + DESC_START_OFF );
-        int32_t count = readI32( off + DESC_COUNT_OFF );
+        descriptorDecals.insert( name );
+        applyPadstackPairs( decalIt->second, pairs, readI32( off + DESC_START_OFF ),
+                            readI32( off + DESC_COUNT_OFF ) );
+    }
 
-        if( start < 0 || count <= 0
-            || static_cast<size_t>( start ) + static_cast<size_t>( count ) > pairs.size() )
+    // The de-duplicated library decals (high-volume passives, library connectors) carry no
+    // section-14 descriptor. Their pair-pool start cursor lives in a trailing section-13
+    // table of 112-byte records, each tagged with a 0x4D00 marker at +40 and the decal NAME
+    // at +0; the start cursor is the i32 at +44. The slice length is the decal's pad-stack
+    // count from the -1188 header (m_decalStackCount). They resolve through the same pair
+    // pool and pad-stack pool as the descriptor decals.
+    static constexpr int32_t LIB_MARKER = 0x4D00;
+    static constexpr size_t  LIB_STRIDE = 112;
+    static constexpr size_t  LIB_MARKER_OFF = 40;
+    static constexpr size_t  LIB_START_OFF = 44;
+
+    const DirEntry* sec13 = getSection( SECTION::DecalLibrary );
+
+    if( !sec13 || sec13->totalBytes < LIB_STRIDE )
+        return;
+
+    size_t sec13End = static_cast<size_t>( sec13->dataOffset ) + sec13->totalBytes;
+
+    for( size_t off = sec13->dataOffset; off + LIB_START_OFF + 4 <= sec13End; off += 4 )
+    {
+        if( readI32( off + LIB_MARKER_OFF ) != LIB_MARKER )
             continue;
 
-        PART_DECAL& decal = decalIt->second;
+        std::string name = readFixedString( off, 40 );
 
-        for( int32_t p = 0; p < count; ++p )
-        {
-            const std::pair<int32_t, int32_t>& pair = pairs[static_cast<size_t>( start ) + p];
+        if( name.empty() || descriptorDecals.count( name ) )
+            continue;
 
-            if( static_cast<size_t>( pair.second ) >= m_padStackPool.size()
-                || m_padStackPool[pair.second].empty() )
-                continue;
+        auto decalIt = m_decals.find( name );
+        auto countIt = m_decalStackCount.find( name );
 
-            decal.pad_stacks[pair.first] = m_padStackPool[pair.second];
-        }
+        if( decalIt == m_decals.end() || countIt == m_decalStackCount.end() )
+            continue;
+
+        applyPadstackPairs( decalIt->second, pairs, readI32( off + LIB_START_OFF ),
+                            countIt->second );
+    }
+}
+
+
+void BINARY_PARSER::applyPadstackPairs( PART_DECAL&                                     aDecal,
+                                        const std::vector<std::pair<int32_t, int32_t>>& aPairs,
+                                        int32_t aStart, int32_t aCount )
+{
+    if( aStart < 0 || aCount <= 0
+        || static_cast<size_t>( aStart ) + static_cast<size_t>( aCount ) > aPairs.size() )
+        return;
+
+    for( int32_t p = 0; p < aCount; ++p )
+    {
+        const std::pair<int32_t, int32_t>& pair = aPairs[static_cast<size_t>( aStart ) + p];
+
+        if( pair.first < 0 || static_cast<size_t>( pair.second ) >= m_padStackPool.size()
+            || m_padStackPool[pair.second].empty() )
+            continue;
+
+        aDecal.pad_stacks[pair.first] = m_padStackPool[pair.second];
     }
 }
 
