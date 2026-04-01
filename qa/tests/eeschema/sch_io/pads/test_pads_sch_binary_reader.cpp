@@ -153,7 +153,9 @@ static void writePartSlot( std::vector<uint8_t>& buf, size_t refBase, const char
 
     putU16( buf, refBase - 0x3e, encodeMil( x ) );
     putU16( buf, refBase - 0x3c, encodeMil( y ) );
-    buf[refBase - 0x3a] = rot90 ? 0x84 : 0x00;
+
+    // Orientation is a u16 angle in tenths of a degree (900 = 90 deg).
+    putU16( buf, refBase - 0x3a, rot90 ? 900 : 0 );
 }
 
 

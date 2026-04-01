@@ -73,8 +73,7 @@ static constexpr int DEFAULT_PAGE_HEIGHT_MIL = 11000;
 static constexpr size_t PART_STRIDE = 136;
 static constexpr int    PART_X_OFF = -0x3e;  // u16, relative to refdes
 static constexpr int    PART_Y_OFF = -0x3c;  // u16
-static constexpr int    PART_ORI_OFF = -0x3a;// byte: 0x00 = 0deg, 0x84 = 90deg
-static constexpr uint8_t PART_ORI_90 = 0x84;
+static constexpr int    PART_ORI_OFF = -0x3a;// u16 angle in tenths of a degree (900 = 90deg)
 
 // MFC object-class word at +0x28: 00 <class-id> marks a part-instance slot.
 static constexpr int                    PART_CLASS_OFF = 0x28;
@@ -1456,7 +1455,9 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
             pl.reference.assign( reinterpret_cast<const char*>( &d[p] ), z - p );
             pl.x_mils = designMil( readU16( d, p + PART_X_OFF ) );
             pl.y_mils = designMil( readU16( d, p + PART_Y_OFF ) );
-            pl.rotation = ( d[p + PART_ORI_OFF] == PART_ORI_90 ) ? 90 : 0;
+            // Orientation is a u16 angle in tenths of a degree; the prior 0x84 byte test
+            // read only its low byte (0x0384 = 900 = 90deg) and so could not see 180/270.
+            pl.rotation = readU16( d, p + PART_ORI_OFF ) / 10;
             pl.sheetIndex = sheetIndexForOffset( p );
 
             // Bind the gate decal: handle at refdes-0x1a indexes this sheet's
@@ -2325,10 +2326,13 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
 
         symbol->SetPosition( VECTOR2I( schIUScale.MilsToIU( pl.x_mils ), milToY( pl.y_mils ) ) );
 
-        if( pl.rotation == 90 )
-            symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_90 );
-        else
-            symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_0 );
+        switch( pl.rotation )
+        {
+        case 90:  symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_90 );  break;
+        case 180: symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_180 ); break;
+        case 270: symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_270 ); break;
+        default:  symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_0 );   break;
+        }
 
         symbol->SetUnit( 1 );
         symbol->SetRef( &path, wxString::FromUTF8( pl.reference ) );
