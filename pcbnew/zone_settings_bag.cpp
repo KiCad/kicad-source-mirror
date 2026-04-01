@@ -52,7 +52,7 @@ ZONE_SETTINGS_BAG::ZONE_SETTINGS_BAG( BOARD* aBoard )
     std::sort( sortedClonedZones.begin(), sortedClonedZones.end(),
                []( ZONE* const& l, ZONE* const& r )
                {
-                   return l->GetAssignedPriority() > r->GetAssignedPriority();
+                   return l->HigherPriority( r );
                } );
 
     unsigned currentPriority = sortedClonedZones.size() - 1;

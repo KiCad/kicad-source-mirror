@@ -41,7 +41,7 @@ void MODEL_ZONES_OVERVIEW::SortFilteredZones()
     std::sort( m_filteredZones.begin(), m_filteredZones.end(),
                [&]( ZONE* const& l, ZONE* const& r )
                {
-                   return m_zoneSettingsBag.GetZonePriority( l ) > m_zoneSettingsBag.GetZonePriority( r );
+                   return l->HigherPriority( r );
                } );
 }
 
