@@ -25,6 +25,8 @@
 
 #include "board_editor_control.h"
 
+#include <algorithm>
+#include <climits>
 #include <functional>
 #include <memory>
 
@@ -90,6 +92,176 @@
 using namespace std::placeholders;
 
 
+namespace
+{
+
+using ZonePriorityMap = std::map<unsigned, std::vector<ZONE*>>;
+
+
+std::vector<ZONE*> getOverlappingZones( BOARD* aBoard, ZONE* aZone )
+{
+    std::vector<ZONE*> overlapping;
+    BOX2I              bbox = aZone->GetBoundingBox();
+
+    for( ZONE* candidate : aBoard->Zones() )
+    {
+        if( candidate == aZone )
+            continue;
+
+        if( candidate->GetIsRuleArea() || candidate->IsTeardropArea() )
+            continue;
+
+        if( !( candidate->GetLayerSet() & aZone->GetLayerSet() ).any() )
+            continue;
+
+        if( !candidate->GetBoundingBox().Intersects( bbox ) )
+            continue;
+
+        // Check edge collision and containment (one zone entirely inside another)
+        if( aZone->Outline()->Collide( candidate->Outline() )
+            || ( candidate->Outline()->TotalVertices() > 0
+                 && aZone->Outline()->Contains( candidate->Outline()->CVertex( 0 ) ) )
+            || ( aZone->Outline()->TotalVertices() > 0
+                 && candidate->Outline()->Contains( aZone->Outline()->CVertex( 0 ) ) ) )
+        {
+            overlapping.push_back( candidate );
+        }
+    }
+
+    return overlapping;
+}
+
+
+ZonePriorityMap buildPriorityMap( BOARD* aBoard, ZONE* aExclude )
+{
+    ZonePriorityMap byPriority;
+
+    for( ZONE* z : aBoard->Zones() )
+    {
+        if( z == aExclude || z->GetIsRuleArea() || z->IsTeardropArea() )
+            continue;
+
+        byPriority[z->GetAssignedPriority()].push_back( z );
+    }
+
+    return byPriority;
+}
+
+
+/**
+ * Find the contiguous chain of zones that must shift to free a priority slot.
+ *
+ * Starting at aFromPriority, walks in the given direction collecting all zones
+ * at each consecutive occupied priority until an empty slot is found. Each
+ * collected zone would need its priority adjusted by +1 (up) or -1 (down)
+ * to open the starting slot.
+ *
+ * @param aViable set to true if the cascade terminates at a gap, false if it
+ *                hits the unsigned boundary (0 or UINT_MAX) while still occupied.
+ *                A non-viable cascade cannot be executed without underflow/overflow.
+ */
+std::vector<ZONE*> findCascadeZones( const ZonePriorityMap& aByPriority,
+                                     unsigned aFromPriority, bool aCascadeUp,
+                                     bool& aViable )
+{
+    std::vector<ZONE*> result;
+    unsigned           p = aFromPriority;
+    aViable = true;
+
+    for( auto it = aByPriority.find( p ); it != aByPriority.end();
+         it = aByPriority.find( p ) )
+    {
+        for( ZONE* z : it->second )
+            result.push_back( z );
+
+        if( aCascadeUp )
+        {
+            if( p == UINT_MAX )
+            {
+                aViable = false;
+                break;
+            }
+
+            p++;
+        }
+        else
+        {
+            if( p == 0 )
+            {
+                aViable = false;
+                break;
+            }
+
+            p--;
+        }
+    }
+
+    return result;
+}
+
+} // anonymous namespace
+
+
+class ZONE_PRIORITY_CONTEXT_MENU : public ACTION_MENU
+{
+public:
+    ZONE_PRIORITY_CONTEXT_MENU() :
+        ACTION_MENU( true )
+    {
+        SetIcon( BITMAPS::swap );
+        SetTitle( _( "Zone Priority" ) );
+
+        Add( PCB_ACTIONS::zonePriorityMoveToTop );
+        Add( PCB_ACTIONS::zonePriorityRaise );
+        Add( PCB_ACTIONS::zonePriorityLower );
+        Add( PCB_ACTIONS::zonePriorityMoveToBottom );
+    }
+
+protected:
+    ACTION_MENU* create() const override
+    {
+        return new ZONE_PRIORITY_CONTEXT_MENU();
+    }
+
+    void update() override
+    {
+        PCB_SELECTION_TOOL* selTool = getToolManager()->GetTool<PCB_SELECTION_TOOL>();
+
+        if( !selTool )
+            return;
+
+        const PCB_SELECTION& selection = selTool->GetSelection();
+        bool                 canRaise = false;
+        bool                 canLower = false;
+
+        if( selection.Size() == 1 )
+        {
+            ZONE* zone = dynamic_cast<ZONE*>( selection[0] );
+
+            if( zone && !zone->GetIsRuleArea() && !zone->IsTeardropArea() )
+            {
+                BOARD*              board = zone->GetBoard();
+                std::vector<ZONE*>  overlapping = getOverlappingZones( board, zone );
+
+                for( ZONE* other : overlapping )
+                {
+                    if( other->GetAssignedPriority() > zone->GetAssignedPriority() )
+                        canRaise = true;
+
+                    if( other->GetAssignedPriority() < zone->GetAssignedPriority() )
+                        canLower = true;
+                }
+            }
+        }
+
+        Enable( PCB_ACTIONS::zonePriorityMoveToTop.GetUIId(), canRaise );
+        Enable( PCB_ACTIONS::zonePriorityRaise.GetUIId(), canRaise );
+        Enable( PCB_ACTIONS::zonePriorityLower.GetUIId(), canLower );
+        Enable( PCB_ACTIONS::zonePriorityMoveToBottom.GetUIId(), canLower );
+    }
+};
+
+
 class ZONE_CONTEXT_MENU : public ACTION_MENU
 {
 public:
@@ -110,6 +282,10 @@ public:
         Add( PCB_ACTIONS::zoneDuplicate );
         Add( PCB_ACTIONS::drawZoneCutout );
         Add( PCB_ACTIONS::drawSimilarZone );
+
+        AppendSeparator();
+
+        Add( new ZONE_PRIORITY_CONTEXT_MENU() );
 
         AppendSeparator();
 
@@ -1657,6 +1833,273 @@ int BOARD_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
 }
 
 
+int BOARD_EDITOR_CONTROL::ZonePriorityMoveToTop( const TOOL_EVENT& aEvent )
+{
+    const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
+
+    if( selection.Size() != 1 )
+        return 0;
+
+    ZONE* zone = dynamic_cast<ZONE*>( selection[0] );
+
+    if( !zone || zone->GetIsRuleArea() || zone->IsTeardropArea() )
+        return 0;
+
+    std::vector<ZONE*> overlapping = getOverlappingZones( board(), zone );
+
+    unsigned maxOverlapping = zone->GetAssignedPriority();
+
+    for( ZONE* other : overlapping )
+        maxOverlapping = std::max( maxOverlapping, other->GetAssignedPriority() );
+
+    if( zone->GetAssignedPriority() >= maxOverlapping )
+        return 0;
+
+    // Two options to place our zone above all overlapping zones.
+    // Pick whichever viable option displaces fewer other zones.
+    ZonePriorityMap byPriority = buildPriorityMap( board(), zone );
+
+    // Option A: take maxOverlapping, cascade displaced zones down
+    bool               cascadeDownViable = false;
+    std::vector<ZONE*> cascadeDown =
+            findCascadeZones( byPriority, maxOverlapping, false, cascadeDownViable );
+
+    // Option B: take maxOverlapping + 1, cascade displaced zones up
+    bool               cascadeUpViable = false;
+    std::vector<ZONE*> cascadeUp;
+    bool               canCascadeUp = ( maxOverlapping < UINT_MAX );
+
+    if( canCascadeUp )
+        cascadeUp = findCascadeZones( byPriority, maxOverlapping + 1, true, cascadeUpViable );
+
+    if( !cascadeDownViable && !cascadeUpViable )
+        return 0;
+
+    BOARD_COMMIT commit( m_frame );
+    commit.Modify( zone );
+
+    bool useDown = cascadeDownViable
+                   && ( !cascadeUpViable || cascadeDown.size() <= cascadeUp.size() );
+
+    if( useDown )
+    {
+        zone->SetAssignedPriority( maxOverlapping );
+
+        for( ZONE* z : cascadeDown )
+        {
+            commit.Modify( z );
+            z->SetAssignedPriority( z->GetAssignedPriority() - 1 );
+            z->SetNeedRefill( true );
+        }
+    }
+    else
+    {
+        zone->SetAssignedPriority( maxOverlapping + 1 );
+
+        for( ZONE* z : cascadeUp )
+        {
+            commit.Modify( z );
+            z->SetAssignedPriority( z->GetAssignedPriority() + 1 );
+            z->SetNeedRefill( true );
+        }
+    }
+
+    zone->SetNeedRefill( true );
+    commit.Push( _( "Move Zone to Top Priority" ) );
+
+    return 0;
+}
+
+
+int BOARD_EDITOR_CONTROL::ZonePriorityRaise( const TOOL_EVENT& aEvent )
+{
+    const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
+
+    if( selection.Size() != 1 )
+        return 0;
+
+    ZONE* zone = dynamic_cast<ZONE*>( selection[0] );
+
+    if( !zone || zone->GetIsRuleArea() || zone->IsTeardropArea() )
+        return 0;
+
+    std::vector<ZONE*> overlapping = getOverlappingZones( board(), zone );
+
+    // Find the overlapping zone with the lowest priority still above ours
+    ZONE*    target = nullptr;
+    unsigned zonePriority = zone->GetAssignedPriority();
+
+    for( ZONE* other : overlapping )
+    {
+        if( other->GetAssignedPriority() > zonePriority )
+        {
+            if( !target || other->GetAssignedPriority() < target->GetAssignedPriority() )
+                target = other;
+        }
+    }
+
+    if( !target )
+        return 0;
+
+    BOARD_COMMIT commit( m_frame );
+    commit.Modify( zone );
+
+    // Place our zone just above the target without modifying any other zone
+    if( target->GetAssignedPriority() < UINT_MAX )
+    {
+        zone->SetAssignedPriority( target->GetAssignedPriority() + 1 );
+    }
+    else
+    {
+        // Can't go above UINT_MAX; swap as last resort
+        commit.Modify( target );
+        zone->SetAssignedPriority( UINT_MAX );
+        target->SetAssignedPriority( zonePriority );
+        target->SetNeedRefill( true );
+    }
+
+    zone->SetNeedRefill( true );
+    commit.Push( _( "Raise Zone Priority" ) );
+
+    return 0;
+}
+
+
+int BOARD_EDITOR_CONTROL::ZonePriorityLower( const TOOL_EVENT& aEvent )
+{
+    const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
+
+    if( selection.Size() != 1 )
+        return 0;
+
+    ZONE* zone = dynamic_cast<ZONE*>( selection[0] );
+
+    if( !zone || zone->GetIsRuleArea() || zone->IsTeardropArea() )
+        return 0;
+
+    std::vector<ZONE*> overlapping = getOverlappingZones( board(), zone );
+
+    // Find the overlapping zone with the highest priority still below ours
+    ZONE*    target = nullptr;
+    unsigned zonePriority = zone->GetAssignedPriority();
+
+    for( ZONE* other : overlapping )
+    {
+        if( other->GetAssignedPriority() < zonePriority )
+        {
+            if( !target || other->GetAssignedPriority() > target->GetAssignedPriority() )
+                target = other;
+        }
+    }
+
+    if( !target )
+        return 0;
+
+    BOARD_COMMIT commit( m_frame );
+    commit.Modify( zone );
+
+    // Place our zone just below the target without modifying any other zone
+    if( target->GetAssignedPriority() > 0 )
+    {
+        zone->SetAssignedPriority( target->GetAssignedPriority() - 1 );
+    }
+    else
+    {
+        // Can't go below 0; swap as last resort
+        commit.Modify( target );
+        zone->SetAssignedPriority( 0 );
+        target->SetAssignedPriority( zonePriority );
+        target->SetNeedRefill( true );
+    }
+
+    zone->SetNeedRefill( true );
+    commit.Push( _( "Lower Zone Priority" ) );
+
+    return 0;
+}
+
+
+int BOARD_EDITOR_CONTROL::ZonePriorityMoveToBottom( const TOOL_EVENT& aEvent )
+{
+    const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
+
+    if( selection.Size() != 1 )
+        return 0;
+
+    ZONE* zone = dynamic_cast<ZONE*>( selection[0] );
+
+    if( !zone || zone->GetIsRuleArea() || zone->IsTeardropArea() )
+        return 0;
+
+    std::vector<ZONE*> overlapping = getOverlappingZones( board(), zone );
+
+    unsigned minOverlapping = zone->GetAssignedPriority();
+
+    for( ZONE* other : overlapping )
+        minOverlapping = std::min( minOverlapping, other->GetAssignedPriority() );
+
+    if( zone->GetAssignedPriority() <= minOverlapping )
+        return 0;
+
+    // Two options to place our zone below all overlapping zones.
+    // Pick whichever viable option displaces fewer other zones.
+    ZonePriorityMap byPriority = buildPriorityMap( board(), zone );
+
+    // Option A: take minOverlapping, cascade displaced zones up
+    bool               cascadeUpViable = false;
+    std::vector<ZONE*> cascadeUp =
+            findCascadeZones( byPriority, minOverlapping, true, cascadeUpViable );
+
+    // Option B: take minOverlapping - 1, cascade displaced zones down
+    bool               cascadeDownViable = false;
+    std::vector<ZONE*> cascadeDown;
+    bool               canCascadeDown = ( minOverlapping > 0 );
+
+    if( canCascadeDown )
+    {
+        cascadeDown =
+                findCascadeZones( byPriority, minOverlapping - 1, false, cascadeDownViable );
+    }
+
+    if( !cascadeUpViable && !cascadeDownViable )
+        return 0;
+
+    BOARD_COMMIT commit( m_frame );
+    commit.Modify( zone );
+
+    bool useUp = cascadeUpViable
+                 && ( !cascadeDownViable || cascadeUp.size() <= cascadeDown.size() );
+
+    if( useUp )
+    {
+        zone->SetAssignedPriority( minOverlapping );
+
+        for( ZONE* z : cascadeUp )
+        {
+            commit.Modify( z );
+            z->SetAssignedPriority( z->GetAssignedPriority() + 1 );
+            z->SetNeedRefill( true );
+        }
+    }
+    else
+    {
+        zone->SetAssignedPriority( minOverlapping - 1 );
+
+        for( ZONE* z : cascadeDown )
+        {
+            commit.Modify( z );
+            z->SetAssignedPriority( z->GetAssignedPriority() - 1 );
+            z->SetNeedRefill( true );
+        }
+    }
+
+    zone->SetNeedRefill( true );
+    commit.Push( _( "Move Zone to Bottom Priority" ) );
+
+    return 0;
+}
+
+
 int BOARD_EDITOR_CONTROL::CrossProbeToSch( const TOOL_EVENT& aEvent )
 {
     doCrossProbePcbToSch( aEvent, false );
@@ -1907,6 +2350,10 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     // Zone actions
     Go( &BOARD_EDITOR_CONTROL::ZoneMerge,              PCB_ACTIONS::zoneMerge.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ZoneDuplicate,          PCB_ACTIONS::zoneDuplicate.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ZonePriorityMoveToTop,  PCB_ACTIONS::zonePriorityMoveToTop.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ZonePriorityRaise,      PCB_ACTIONS::zonePriorityRaise.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ZonePriorityLower,      PCB_ACTIONS::zonePriorityLower.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ZonePriorityMoveToBottom, PCB_ACTIONS::zonePriorityMoveToBottom.MakeEvent() );
 
     // Placing tools
     Go( &BOARD_EDITOR_CONTROL::PlaceFootprint,         PCB_ACTIONS::placeFootprint.MakeEvent() );

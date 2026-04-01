@@ -111,6 +111,12 @@ public:
     ///< Duplicate a zone onto a layer (prompts for new layer)
     int ZoneDuplicate( const TOOL_EVENT& aEvent );
 
+    // Zone priority manipulation
+    int ZonePriorityMoveToTop( const TOOL_EVENT& aEvent );
+    int ZonePriorityRaise( const TOOL_EVENT& aEvent );
+    int ZonePriorityLower( const TOOL_EVENT& aEvent );
+    int ZonePriorityMoveToBottom( const TOOL_EVENT& aEvent );
+
     int EditFpInFpEditor( const TOOL_EVENT& aEvent );
 
     ///< Notify Eeschema about selected items.

@@ -1422,6 +1422,30 @@ TOOL_ACTION PCB_ACTIONS::zoneDuplicate( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Duplicate Zone onto Layer..." ) )
         .Icon( BITMAPS::zone_duplicate ) );
 
+TOOL_ACTION PCB_ACTIONS::zonePriorityMoveToTop( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.zonePriorityMoveToTop" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Move to Top" ) )
+        .Icon( BITMAPS::go_up ) );
+
+TOOL_ACTION PCB_ACTIONS::zonePriorityRaise( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.zonePriorityRaise" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Raise" ) )
+        .Icon( BITMAPS::small_up ) );
+
+TOOL_ACTION PCB_ACTIONS::zonePriorityLower( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.zonePriorityLower" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Lower" ) )
+        .Icon( BITMAPS::small_down ) );
+
+TOOL_ACTION PCB_ACTIONS::zonePriorityMoveToBottom( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.zonePriorityMoveToBottom" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Move to Bottom" ) )
+        .Icon( BITMAPS::go_down ) );
+
 TOOL_ACTION PCB_ACTIONS::placeFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.placeFootprint" )
         .Scope( AS_GLOBAL )
