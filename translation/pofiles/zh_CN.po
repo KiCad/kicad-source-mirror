@@ -41,7 +41,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-20 17:12+0000\n"
+"PO-Revision-Date: 2026-04-02 11:36+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
@@ -13122,9 +13122,9 @@ msgid "No symbols found in library %s."
 msgstr "在库中 %s 找不到符号。"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "加载符号 %s 出错: %s"
+msgstr "加载符号 '%s' 出错: %s"
 
 #: eeschema/dialogs/dialog_lib_fields.cpp:436
 msgid "No symbols could be loaded from the library."
