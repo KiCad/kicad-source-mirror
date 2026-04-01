@@ -190,6 +190,9 @@ private:
     /// The used-decal name table that owns @p aOffset (greatest table at/below it).
     const std::vector<std::string>* usedDecalTableForOffset( size_t aOffset ) const;
 
+    /// The per-sheet part-type pool that owns @p aOffset (greatest pool at/below it).
+    const std::vector<std::string>* partTypePoolForOffset( size_t aOffset ) const;
+
     void decodePlacements( const std::vector<uint8_t>& aData );
     void decodeWires( const std::vector<uint8_t>& aData );
     void decodeTexts( const std::vector<uint8_t>& aData );
@@ -218,6 +221,11 @@ private:
 
     /// Part-type pool names (block+4 ordinal indexes this) and per-part-type fields.
     std::vector<std::string>             m_partTypeNames;
+
+    // Per-sheet part-type pools (file offset -> stride-0x4c name list). A placement's
+    // ptidx indexes the pool of its OWN sheet; m_partTypeNames is the union of all pools.
+    std::vector<std::pair<size_t, std::vector<std::string>>> m_partTypePools;
+
     std::map<std::string, std::vector<std::pair<std::string, std::string>>> m_partTypeFields;
 
     std::vector<PLACEMENT>               m_placements;

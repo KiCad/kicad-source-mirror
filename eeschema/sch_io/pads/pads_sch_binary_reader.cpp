@@ -138,6 +138,7 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     m_usedDecalTables.clear();
     m_decalBuiltinCount = 0;
     m_partTypeNames.clear();
+    m_partTypePools.clear();
     m_partTypeFields.clear();
     m_placements.clear();
     m_wireVertices.clear();
@@ -603,6 +604,22 @@ const std::vector<std::string>* PADS_SCH_BINARY_READER::usedDecalTableForOffset(
 }
 
 
+const std::vector<std::string>* PADS_SCH_BINARY_READER::partTypePoolForOffset( size_t aOffset ) const
+{
+    const std::vector<std::string>* best = nullptr;
+
+    for( const std::pair<size_t, std::vector<std::string>>& pool : m_partTypePools )
+    {
+        if( pool.first <= aOffset )
+            best = &pool.second;
+        else
+            break;
+    }
+
+    return best;
+}
+
+
 // ---------------------------------------------------------------------------
 // COMPONENT FIELDS (per-part-type user attributes)
 //
@@ -660,32 +677,51 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
 {
     static constexpr size_t PT_STRIDE = 0x4c;
 
-    // 1. Part-type pool, anchored on the $OSR_SYMS/$GND_SYMS/$PWR_SYMS header.
-    size_t ptBase = std::string::npos;
-
+    // 1. Part-type pools.  Each schematic sheet carries its own stride-0x4c pool anchored
+    // on the $OSR_SYMS/$GND_SYMS/$PWR_SYMS header; a placement's ptidx is the ordinal into
+    // the pool of ITS sheet (resolved per sheet in decodePlacements).  Binding every
+    // placement to only the first sheet's pool dropped every ptidx past that pool's size.
     for( size_t i = DATA_STREAM_OFFSET; i + 2 * PT_STRIDE + 16 < d.size(); ++i )
     {
-        if( nameAt( d, i, 0x26 ) == "$OSR_SYMS"
-            && nameAt( d, i + PT_STRIDE, 0x26 ) == "$GND_SYMS"
-            && nameAt( d, i + 2 * PT_STRIDE, 0x26 ) == "$PWR_SYMS" )
+        if( nameAt( d, i, 0x26 ) != "$OSR_SYMS"
+            || nameAt( d, i + PT_STRIDE, 0x26 ) != "$GND_SYMS"
+            || nameAt( d, i + 2 * PT_STRIDE, 0x26 ) != "$PWR_SYMS" )
+            continue;
+
+        std::vector<std::string> names;
+
+        for( size_t j = 0; j < 64; ++j )
         {
-            ptBase = i;
-            break;
+            std::string nm = nameAt( d, i + PT_STRIDE * j, 0x26 );
+
+            // Stop at the pool terminator: an empty record, or the trailing 1-char
+            // sentinel ('i'/'d') that is not a $-group name.
+            if( nm.empty() || ( nm.size() < 2 && nm[0] != '$' ) )
+                break;
+
+            names.push_back( nm );
+        }
+
+        m_partTypePools.emplace_back( i, std::move( names ) );
+    }
+
+    if( m_partTypePools.empty() )
+        return;
+
+    // The union of every sheet pool (sheet-0 first, so ordinals 0/1/2 stay the symbol
+    // groups) keys the field index below.
+    std::set<std::string> seen;
+
+    for( const std::pair<size_t, std::vector<std::string>>& pool : m_partTypePools )
+    {
+        for( const std::string& nm : pool.second )
+        {
+            if( seen.insert( nm ).second )
+                m_partTypeNames.push_back( nm );
         }
     }
 
-    if( ptBase == std::string::npos )
-        return;
-
-    for( size_t j = 0; j < 64; ++j )
-    {
-        std::string nm = nameAt( d, ptBase + PT_STRIDE * j, 0x26 );
-
-        if( nm.empty() )
-            break;
-
-        m_partTypeNames.push_back( nm );
-    }
+    size_t ptBase = m_partTypePools.front().first;
 
     // 2. Preferred path: the u32 offset-index table (compaction-saved files) gives
     // each part-type its exact key instances -> 100% precision + recall.
@@ -1439,15 +1475,17 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
                 }
             }
 
-            // Bind the part-type (block+4 ordinal into the part-type pool) and its
-            // component attribute fields.
+            // Bind the part-type (block+4 ordinal into THIS sheet's part-type pool) and its
+            // component attribute fields.  ptidx indexes the placement's own sheet pool, not
+            // the global first-sheet pool.
             if( p >= 0x1c )
             {
-                uint16_t ptIdx = readU16( d, p - 0x1c );
+                uint16_t                        ptIdx = readU16( d, p - 0x1c );
+                const std::vector<std::string>* pool = partTypePoolForOffset( p );
 
-                if( ptIdx < m_partTypeNames.size() )
+                if( pool && ptIdx < pool->size() )
                 {
-                    pl.partType = m_partTypeNames[ptIdx];
+                    pl.partType = ( *pool )[ptIdx];
                     auto it = m_partTypeFields.find( pl.partType );
 
                     if( it != m_partTypeFields.end() )
