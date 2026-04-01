@@ -173,7 +173,6 @@ public:
         wxString            intersheets_ref_prefix;
         wxString            intersheets_ref_suffix;
         bool                auto_start_wires;
-        std::vector<double> junction_size_mult_list;
 
         // Pulldown index for user default junction dot size (e.g. none = 0, smallest = 1, small = 2, etc)
         int                 junction_size_choice;

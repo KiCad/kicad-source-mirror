@@ -1965,9 +1965,6 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
 
-    settings.m_JunctionSize = GetSchematicJunctionSize();
-    settings.m_HopOverScale = GetSchematicHopOverScale();
-
     ShowAllIntersheetRefs( settings.m_IntersheetRefsShow );
 
     if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )

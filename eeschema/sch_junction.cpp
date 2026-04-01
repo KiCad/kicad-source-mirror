@@ -84,7 +84,7 @@ SHAPE_CIRCLE SCH_JUNCTION::getEffectiveShape() const
     if( m_diameter != 0 )
         m_lastResolvedDiameter = m_diameter;
     else if( Schematic() )
-        m_lastResolvedDiameter = Schematic()->Settings().m_JunctionSize;
+        m_lastResolvedDiameter = Schematic()->Settings().GetJunctionSize();
     else
         m_lastResolvedDiameter = schIUScale.MilsToIU( DEFAULT_JUNCTION_DIAM );
 

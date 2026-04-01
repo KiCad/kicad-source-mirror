@@ -353,7 +353,7 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
     plotOpts.m_PDFMetadata = m_plotPDFMetadata->GetValue();
     plotOpts.m_outputDirectory = getOutputPath();
     plotOpts.m_pageSizeSelect = m_paperSizeOption->GetSelection();
-    plotOpts.m_plotHopOver = m_editFrame->Schematic().Settings().m_HopOverScale > 0.0;
+    plotOpts.m_plotHopOver = m_editFrame->Schematic().Settings().GetHopOverScale() > 0.0;
 
     // Select the DXF file unit
     plotOpts.m_DXF_File_Unit = m_DXF_plotUnits->GetSelection() == 0 ? DXF_UNITS::INCH : DXF_UNITS::MM;

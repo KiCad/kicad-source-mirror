@@ -51,6 +51,16 @@ public:
 
     wxString SubReference( int aUnit, bool aAddSeparator = true ) const;
 
+    /**
+     * Accessor that computes the current junction size
+     */
+    int GetJunctionSize();
+
+    /**
+     * Accessor that computes the current hop-over size
+     */
+    double GetHopOverScale();
+
 public:
     // Default sizes are all stored in IU here, and in mils in the JSON file
 
@@ -61,10 +71,7 @@ public:
     int       m_PinSymbolSize;
 
     int       m_JunctionSizeChoice;     // none = 0, smallest = 1, small = 2, etc.
-    int       m_JunctionSize;           // a runtime cache of the calculated size
-
     int       m_HopOverSizeChoice;      // none = 0, smallest = 1, etc.
-    double    m_HopOverScale;           // a runtime cache of the calculated lineWidth multiplier
 
     int       m_ConnectionGridSize;     // usually 50mils (IU internally; mils in the JSON file)
 

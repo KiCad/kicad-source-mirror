@@ -925,7 +925,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts, const 
 
     if( !aItems.empty() && aItems[0]->Schematic() )
     {
-        hopOverScale = aItems[0]->Schematic()->Settings().m_HopOverScale;
+        hopOverScale = aItems[0]->Schematic()->Settings().GetHopOverScale();
         defaultLineWidth = aItems[0]->Schematic()->Settings().m_DefaultLineWidth;
     }
 

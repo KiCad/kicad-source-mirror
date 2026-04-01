@@ -1791,7 +1791,7 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
 
     if( aLine->Schematic() )    // Can be nullptr when run from the color selection panel
     {
-        hopOverScale = aLine->Schematic()->Settings().m_HopOverScale;
+        hopOverScale = aLine->Schematic()->Settings().GetHopOverScale();
         defaultLineWidth = aLine->Schematic()->Settings().m_DefaultLineWidth;
     }
 

@@ -231,7 +231,7 @@ bool plotSelectionToSvg( SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSelection
 
     LOCALE_IO     toggle;
     SCH_PLOT_OPTS plotOpts;
-    plotOpts.m_plotHopOver = aFrame->Schematic().Settings().m_HopOverScale > 0.0;
+    plotOpts.m_plotHopOver = aFrame->Schematic().Settings().GetHopOverScale() > 0.0;
 
     plotter->StartPlot( wxT( "1" ) );
     aFrame->GetScreen()->Plot( plotter.get(), plotOpts, collectSelectionItems( aSelection ) );
