@@ -156,6 +156,11 @@ static void writePartSlot( std::vector<uint8_t>& buf, size_t refBase, const char
 
     // Orientation is a u16 angle in tenths of a degree (900 = 90 deg).
     putU16( buf, refBase - 0x3a, rot90 ? 900 : 0 );
+
+    // Inline REF-DES field placement subrecord (ksy+0x08): dx/2, dy/2 in half-mils, so a
+    // 200/100 mil offset stores as 100/50.
+    putU16( buf, refBase - 0x36, 100 );
+    putU16( buf, refBase - 0x34, 50 );
 }
 
 
@@ -427,6 +432,11 @@ BOOST_AUTO_TEST_CASE( RecoversPlacements )
     BOOST_CHECK_EQUAL( parts[1].x_mils, 5300 );
     BOOST_CHECK_EQUAL( parts[1].y_mils, 4700 );
     BOOST_CHECK_EQUAL( parts[1].rotation, 90 );
+
+    // Inline REF-DES field placement: half-mil deltas (100/50) decode to 200/100 mils.
+    BOOST_CHECK( parts[0].refdesPlace.valid );
+    BOOST_CHECK_EQUAL( parts[0].refdesPlace.dx_mils, 200 );
+    BOOST_CHECK_EQUAL( parts[0].refdesPlace.dy_mils, 100 );
 }
 
 

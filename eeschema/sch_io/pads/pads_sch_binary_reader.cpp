@@ -1442,7 +1442,9 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
         if( i >= DATA_STREAM_OFFSET + PART_STRIDE && isPartSlot( d, i - PART_STRIDE ) )
             continue;
 
-        size_t p = i;
+        size_t              p = i;
+        size_t              runFirst = m_placements.size();
+        std::vector<size_t> runOffsets;
 
         while( p + PART_STRIDE < n && isPartSlot( d, p ) )
         {
@@ -1455,6 +1457,14 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
             pl.reference.assign( reinterpret_cast<const char*>( &d[p] ), z - p );
             pl.x_mils = designMil( readU16( d, p + PART_X_OFF ) );
             pl.y_mils = designMil( readU16( d, p + PART_Y_OFF ) );
+
+            // Inline REF-DES field placement (subrecord at ksy+0x08, ksy = refdes-0x3e):
+            // half-mil deltas page-relative to the symbol origin, u16 tenths-degree angle.
+            pl.refdesPlace.dx_mils = decalMil( d, p - 0x36 );
+            pl.refdesPlace.dy_mils = decalMil( d, p - 0x34 );
+            pl.refdesPlace.orientation_deg = readU16( d, p - 0x32 ) / 10;
+            pl.refdesPlace.visible = true;
+            pl.refdesPlace.valid = true;
             // Orientation is a u16 angle in tenths of a degree; the prior 0x84 byte test
             // read only its low byte (0x0384 = 900 = 90deg) and so could not see 180/270.
             pl.rotation = readU16( d, p + PART_ORI_OFF ) / 10;
@@ -1494,12 +1504,88 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
                 }
             }
 
+            runOffsets.push_back( p );
             m_placements.push_back( std::move( pl ) );
 
             p += PART_STRIDE;
         }
 
+        // The 24-byte per-field placement array for this sheet follows its placement block.
+        assignFieldPlacements( d, p, runFirst, runOffsets );
+
         i = p - 1;  // continue past the run
+    }
+}
+
+
+// Each sheet serializes its stride-136 placement block, then a 24-byte field-placement array.
+// The array start is the first 24-byte record after the block whose 6-byte lead is zero and
+// whose +0x16 terminator is 0xFFFF (and whose 24-byte predecessor is not such a record). Each
+// placement consumes u16 @ (refdes-0x3e + 0x2e) records, in placement order.
+void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& d, size_t aBlockEnd,
+                                                    size_t aRunFirst,
+                                                    const std::vector<size_t>& aRunOffsets )
+{
+    static constexpr size_t REC = 24;
+
+    auto isFieldRec = [&]( size_t o ) -> bool
+    {
+        if( o + REC > d.size() )
+            return false;
+
+        for( size_t k = 0; k < 6; ++k )
+        {
+            if( d[o + k] != 0 )
+                return false;
+        }
+
+        return readU16( d, o + 0x16 ) == 0xFFFF;
+    };
+
+    size_t start = std::string::npos;
+
+    for( size_t o = aBlockEnd; o + REC <= d.size() && o < aBlockEnd + 0x4000; ++o )
+    {
+        if( isFieldRec( o ) && !( o >= REC && isFieldRec( o - REC ) ) )
+        {
+            start = o;
+            break;
+        }
+    }
+
+    if( start == std::string::npos )
+        return;
+
+    size_t cursor = start;
+
+    for( size_t idx = 0; idx < aRunOffsets.size(); ++idx )
+    {
+        size_t    ksy = aRunOffsets[idx] - 0x3e;
+        uint16_t  fieldCount = readU16( d, ksy + 0x2e );
+        PLACEMENT& pl = m_placements[aRunFirst + idx];
+
+        for( uint16_t k = 0; k < fieldCount; ++k )
+        {
+            if( cursor + REC > d.size() )
+                break;
+
+            uint8_t vis = d[cursor + 0x13];
+
+            // A real field record carries a {0,1,3} visibility code; anything else means the
+            // array has run into unrelated data (the 420B edit-log sheet) - stop, never fake.
+            if( vis != 0 && vis != 1 && vis != 3 )
+                break;
+
+            FIELD_PLACEMENT fp;
+            fp.dx_mils = decalMil( d, cursor + 0x06 );
+            fp.dy_mils = decalMil( d, cursor + 0x08 );
+            fp.orientation_deg = readU16( d, cursor + 0x0a ) / 10;
+            fp.visible = ( vis != 0 );
+            fp.valid = true;
+            pl.fieldPlaces.push_back( fp );
+
+            cursor += REC;
+        }
     }
 }
 
@@ -2338,24 +2424,64 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
         symbol->SetRef( &path, wxString::FromUTF8( pl.reference ) );
         symbol->AddHierarchicalReference( path.Path(), wxString::FromUTF8( pl.reference ), 1 );
 
-        // Component attribute fields: map VALUE to the symbol Value field, the
-        // rest to user fields.  The per-instance WDI.Install Option is dropped
-        // (not serialized per instance).
-        for( const std::pair<std::string, std::string>& f : pl.fields )
+        // A field's recovered delta is page-relative to the symbol origin in PADS Y-up
+        // coordinates; convert to the symbol-absolute KiCad position (Y-down).
+        auto fieldPos = [&]( const FIELD_PLACEMENT& fp ) -> VECTOR2I
         {
+            return symbol->GetPosition()
+                   + VECTOR2I( schIUScale.MilsToIU( fp.dx_mils ), -schIUScale.MilsToIU( fp.dy_mils ) );
+        };
+
+        if( pl.refdesPlace.valid )
+        {
+            SCH_FIELD* ref = symbol->GetField( FIELD_T::REFERENCE );
+            ref->SetPosition( fieldPos( pl.refdesPlace ) );
+            ref->SetVisible( pl.refdesPlace.visible );
+        }
+
+        // Component attribute fields: map VALUE to the symbol Value field, the rest to user
+        // fields.  Each field's placement (position + visibility) comes from the index-aligned
+        // post-placement array; fields with no recovered placement keep the old hidden default.
+        // The per-instance WDI.Install Option is dropped (not serialized per instance).
+        for( size_t fi = 0; fi < pl.fields.size(); ++fi )
+        {
+            const std::pair<std::string, std::string>& f = pl.fields[fi];
+
             if( f.second.empty() || f.first == "WDI.Install Option" )
                 continue;
 
+            const FIELD_PLACEMENT* fp =
+                    ( fi < pl.fieldPlaces.size() && pl.fieldPlaces[fi].valid ) ? &pl.fieldPlaces[fi]
+                                                                              : nullptr;
+
             if( f.first == "VALUE" || f.first == "Value" )
             {
-                symbol->GetField( FIELD_T::VALUE )->SetText( wxString::FromUTF8( f.second ) );
+                SCH_FIELD* value = symbol->GetField( FIELD_T::VALUE );
+                value->SetText( wxString::FromUTF8( f.second ) );
+
+                if( fp )
+                {
+                    value->SetPosition( fieldPos( *fp ) );
+                    value->SetVisible( fp->visible );
+                }
+
                 continue;
             }
 
             SCH_FIELD field( symbol.get(), FIELD_T::USER, wxString::FromUTF8( f.first ) );
             field.SetText( wxString::FromUTF8( f.second ) );
-            field.SetVisible( false );
-            field.SetPosition( symbol->GetPosition() );
+
+            if( fp )
+            {
+                field.SetPosition( fieldPos( *fp ) );
+                field.SetVisible( fp->visible );
+            }
+            else
+            {
+                field.SetVisible( false );
+                field.SetPosition( symbol->GetPosition() );
+            }
+
             symbol->AddField( field );
         }
 

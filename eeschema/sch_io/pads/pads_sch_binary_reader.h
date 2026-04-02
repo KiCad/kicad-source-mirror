@@ -37,18 +37,34 @@ namespace PADS_SCH_BINARY
 {
 
 /// One placed schematic symbol recovered from the binary .sch part array.
+/// Placement of one component text field (refdes/value/user) relative to the symbol origin.
+struct FIELD_PLACEMENT
+{
+    int  dx_mils = 0;          ///< Page-relative X offset from the symbol origin.
+    int  dy_mils = 0;          ///< Page-relative Y offset (PADS Y-up).
+    int  orientation_deg = 0;  ///< 0/90/180/270.
+    bool visible = false;      ///< Whether the field is shown.
+    bool valid = false;        ///< A real record was decoded for this field.
+};
+
 struct PLACEMENT
 {
     std::string reference;   ///< Reference designator (e.g. "U1", "J6-1").
     int         x_mils = 0;  ///< Page X in mils.
     int         y_mils = 0;  ///< Page Y in mils (PADS is Y-up).
-    int         rotation = 0;///< 0 or 90 degrees.
+    int         rotation = 0;///< 0/90/180/270 degrees.
     int         sheetIndex = 0; ///< Owning PADS sheet (0-based).
     std::string decalName;   ///< Bound CAE-decal (gate symbol) name, empty if unbound.
     std::string partType;    ///< Bound part-type name, empty if unbound.
 
     /// Component user-attribute fields (key, value) of this part's part-type.
     std::vector<std::pair<std::string, std::string>> fields;
+
+    /// Reference-designator field placement (inline in the placement record).
+    FIELD_PLACEMENT refdesPlace;
+
+    /// Per-field placements from the post-placement array, index-aligned with @ref fields.
+    std::vector<FIELD_PLACEMENT> fieldPlaces;
 };
 
 /// One drawing piece of a CAE decal (a polyline of decal-relative mil vertices).
@@ -194,6 +210,11 @@ private:
     const std::vector<std::string>* partTypePoolForOffset( size_t aOffset ) const;
 
     void decodePlacements( const std::vector<uint8_t>& aData );
+
+    /// Decode the per-sheet 24-byte field-placement array following a placement run and
+    /// attach each record to its placement's @ref PLACEMENT::fieldPlaces.
+    void assignFieldPlacements( const std::vector<uint8_t>& aData, size_t aBlockEnd,
+                                size_t aRunFirst, const std::vector<size_t>& aRunOffsets );
     void decodeWires( const std::vector<uint8_t>& aData );
     void decodeTexts( const std::vector<uint8_t>& aData );
     void decodeJunctions( const std::vector<uint8_t>& aData );
