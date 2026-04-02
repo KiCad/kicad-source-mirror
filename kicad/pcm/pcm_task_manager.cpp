@@ -610,7 +610,17 @@ void PCM_TASK_MANAGER::RunQueue( wxWindow* aParent )
                 {
                     PCM_TASK task;
                     m_download_queue.pop( task );
-                    task();
+                    PCM_TASK_MANAGER::STATUS task_status = task();
+
+                    count_tasks++;
+
+                    if( task_status == PCM_TASK_MANAGER::STATUS::SUCCESS )
+                        count_success_tasks++;
+                    else if( task_status != PCM_TASK_MANAGER::STATUS::INITIALIZED )
+                        count_failed_tasks++;
+
+                    m_reporter->AdvancePhase();
+
                     condvar.notify_all();
                 }
 
