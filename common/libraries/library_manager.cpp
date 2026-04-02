@@ -900,6 +900,19 @@ void LIBRARY_MANAGER_ADAPTER::GlobalTablesChanged( std::initializer_list<LIBRARY
 
 void LIBRARY_MANAGER_ADAPTER::CheckTableRow( LIBRARY_TABLE_ROW& aRow )
 {
+    // Testing is expensive; skip it if we already have a library with the same
+    // nickname and URI as the row under test
+    if( std::optional<LIB_DATA*> libData = fetchIfLoaded( aRow.Nickname() ) )
+    {
+        const LIBRARY_TABLE_ROW* loadedRow = ( *libData )->row;
+
+        if( loadedRow->URI() == aRow.URI() && loadedRow->Type() == aRow.Type() )
+        {
+            aRow.SetOk( loadedRow->IsOk() );
+            return;
+        }
+    }
+
     abortLoad();
 
     LIBRARY_RESULT<IO_BASE*> plugin = createPlugin( &aRow );
