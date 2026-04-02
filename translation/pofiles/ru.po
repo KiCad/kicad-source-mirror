@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-19 17:29+0000\n"
+"PO-Revision-Date: 2026-04-02 14:17+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v9/ru/>\n"
 "Language: ru\n"
@@ -38754,7 +38754,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:52
 msgid "Override locks"
-msgstr "Перезаписывать заблокированные"
+msgstr "Разблокировать"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:64
 msgid "Update footprint fields from symbols"
