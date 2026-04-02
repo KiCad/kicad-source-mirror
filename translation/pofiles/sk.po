@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-20 20:14+0300\n"
-"PO-Revision-Date: 2026-03-31 20:12+0000\n"
+"PO-Revision-Date: 2026-04-02 11:36+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -11094,7 +11094,7 @@ msgstr "návrat vozíka"
 
 #: common/validators.cpp:318
 msgid "line feed"
-msgstr "line feed"
+msgstr "posun riadku"
 
 #: common/validators.cpp:320
 msgid "tab"
@@ -28840,7 +28840,7 @@ msgstr "Súč: %s Plôška: %s Fun %s"
 #: gerbview/gerber_draw_item.cpp:768 gerbview/toolbars_gerber.cpp:185
 #: gerbview/toolbars_gerber.cpp:188
 msgid "Cmp:"
-msgstr "Cmp:"
+msgstr "Komp:"
 
 #: gerbview/gerber_draw_item.cpp:1029
 #, c-format
@@ -29010,7 +29010,7 @@ msgstr "Zvýraznite položky patriace do tejto siete"
 
 #: gerbview/toolbars_gerber.cpp:229 gerbview/toolbars_gerber.cpp:232
 msgid "Attr:"
-msgstr "Attr:"
+msgstr "Atrib:"
 
 #: gerbview/toolbars_gerber.cpp:231 gerbview/toolbars_gerber.cpp:314
 msgid "Highlight items with this aperture attribute"
@@ -35680,7 +35680,7 @@ msgstr "Jadro"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:122
 msgid "PrePreg"
-msgstr "PrePreg"
+msgstr "Prepreg"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:218
 #, c-format
@@ -37762,7 +37762,7 @@ msgstr "0,00000"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/pcb_dimension.cpp:1837
 msgid "0.00 in / 0 mils / 0.0 mm"
-msgstr "0.00 in / 0 mils / 0.0 mm"
+msgstr "0.00 palcov / 0 milov / 0.0 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:172
 #: pcbnew/pcb_dimension.cpp:1838
@@ -41772,7 +41772,7 @@ msgstr "Súbor > Nastavenie dosky..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:222
 msgid "Gerber Options"
-msgstr "Gerber Options"
+msgstr "Možnosti Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:229
 msgid "Use Protel filename extensions"
@@ -42385,7 +42385,7 @@ msgstr "Z"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:188
 msgid "Pivot:"
-msgstr "Pivot:"
+msgstr "Bod otáčania:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:208
 msgid "Pan:"
@@ -42791,7 +42791,7 @@ msgstr "Priechodzí"
 #: pcbnew/drc/rule_editor/drc_re_via_style_overlay_panel.cpp:64
 #: pcbnew/pcb_track.cpp:2881
 msgid "Micro"
-msgstr "Micro"
+msgstr "Mikro"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 #: pcbnew/drc/rule_editor/drc_re_via_style_overlay_panel.cpp:65
@@ -44037,7 +44037,7 @@ msgstr "zmiešané"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:489
 msgid "jumper"
-msgstr "jumper"
+msgstr "prepojka"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:492
 msgid ""
@@ -48787,7 +48787,7 @@ msgstr "Zadné (prevrátené)"
 
 #: pcbnew/footprint.cpp:2154
 msgid "autoplaced"
-msgstr "autoplaced"
+msgstr "automaticky umiestnené"
 
 #: pcbnew/footprint.cpp:2157
 msgid "not in schematic"
@@ -50322,7 +50322,7 @@ msgstr "Skosený štvoruholník"
 
 #: pcbnew/pad.cpp:2178
 msgid "CustomShape"
-msgstr "CustomShape"
+msgstr "VlastnýTvar"
 
 #: pcbnew/pad.cpp:2190
 msgid "Conn"
