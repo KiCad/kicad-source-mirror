@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-02 14:40+0300\n"
-"PO-Revision-Date: 2026-03-29 16:09+0000\n"
+"PO-Revision-Date: 2026-04-03 00:13+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -4412,9 +4412,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "Potenzieller Abblendfaktor für inaktive Lagen:"
 
 #: common/dialogs/panel_common_settings_base.cpp:298
-#, fuzzy
 msgid "App theme:"
-msgstr "Dieses Thema verwenden:"
+msgstr "App-Thema:"
 
 #: common/dialogs/panel_common_settings_base.cpp:330
 msgid "Scaling"
@@ -5977,9 +5976,8 @@ msgid "How would you like KiCad to create them?"
 msgstr "Wie soll KiCad diese erstellen?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
-#, fuzzy
 msgid "Start with the built-in KiCad libraries"
-msgstr "Mit integrierten KiCad-Bibliotheken beginnen (empfohlen)"
+msgstr "Mit integrierten KiCad-Bibliotheken beginnen"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
 msgid "Import tables from the previous version"
@@ -5996,9 +5994,9 @@ msgstr ""
 "können, werden mit den Standardbibliotheken von KiCad erstellt."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:53
-#, fuzzy
 msgid "Migrate built-in libraries to the latest version (recommended)"
-msgstr "Mit integrierten KiCad-Bibliotheken beginnen (empfohlen)"
+msgstr ""
+"Integrierte KiCad-Bibliotheken zur neuesten Version migrieren (empfohlen)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:55
 msgid ""
@@ -6150,9 +6148,8 @@ msgid "Insert Group"
 msgstr "Gruppe einfügen"
 
 #: common/dialogs/panel_toolbar_customization.cpp:171
-#, fuzzy
 msgid "Filter actions"
-msgstr "Filtereinstellungen"
+msgstr "Filteraktionen"
 
 #: common/dialogs/panel_toolbar_customization.cpp:399
 #: common/dialogs/panel_toolbar_customization.cpp:709
@@ -24292,13 +24289,13 @@ msgstr ""
 "Installation überprüfen."
 
 #: eeschema/sim/ngspice.cpp:779
-#, fuzzy
 msgid ""
 "Simulation terminated by ngspice. This may be caused by insufficient memory "
 "or an internal error. The simulator will be reset."
 msgstr ""
-"Die Simulation ist abgestürzt (%s). Der Grund dafür ist meistens Fehler in "
-"ngspice oder eine ungültige Netzliste. Der Simulator wird zurückgesetzt."
+"Die Simulation wurde durch ngspice beendet. Der Grund dafür ist meistens "
+"Fehler zu wenig Arbeitsspeicher oder ein interner Fehler. Der Simulator wird "
+"zurückgesetzt."
 
 #: eeschema/sim/sim_lib_mgr.cpp:109 eeschema/sim/sim_lib_mgr.cpp:162
 #, c-format
