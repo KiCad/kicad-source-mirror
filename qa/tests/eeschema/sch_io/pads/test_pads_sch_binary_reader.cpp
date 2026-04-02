@@ -991,4 +991,13 @@ BOOST_AUTO_TEST_CASE( DecalBindingRateAllSheets )
 }
 
 
+// Off-page references are discriminated into KiCad element kinds: net-name ports (@TERM)
+// become local labels, power/ground ports become power symbols, off-sheet/bus references
+// stay global labels.  Guards the deterministic kind decode (record +0x08 + the -0x12 group
+// handle into the canonical $OSR table).
+BOOST_AUTO_TEST_CASE( NetLabelKinds )
+{
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

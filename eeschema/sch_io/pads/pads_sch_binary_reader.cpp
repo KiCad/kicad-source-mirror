@@ -2239,6 +2239,61 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
         i = p;
     }
 
+    // The symbol-group of an off-page is read from its used-decal handle (interleaved one
+    // slot back at record-0x12), indexed into the CANONICAL group table: the used-decal
+    // table whose leading entries are the full $OSR_* off-sheet-reference orientation set.
+    // Per-sheet tables that drop $OSR variants shift every handle, so the nearest table is
+    // wrong here; the canonical (most-$OSR-leading) table is the design-global group block.
+    const std::vector<std::string>* canonical = nullptr;
+    size_t                          bestOsr = 0;
+
+    for( const auto& tbl : m_usedDecalTables )
+    {
+        size_t osr = 0;
+
+        for( const std::string& nm : tbl.second )
+        {
+            if( nm.rfind( "$OSR", 0 ) == 0 )
+                ++osr;
+            else
+                break;
+        }
+
+        if( osr > bestOsr )
+        {
+            bestOsr = osr;
+            canonical = &tbl.second;
+        }
+    }
+
+    auto offpageKind = [&]( size_t recOff ) -> NETLABEL_KIND
+    {
+        uint8_t flag = d[recOff + 0x08];
+
+        if( flag == 0xFF )
+            return NETLABEL_KIND::BUS;
+
+        if( flag == 0xFE )
+            return NETLABEL_KIND::LOCAL;
+
+        // A symbol off-page: off-sheet ref ($OSR group) vs power/ground (any other group).
+        if( recOff >= 0x12 && canonical )
+        {
+            uint16_t handle = readU16( d, recOff - 0x12 );
+
+            if( handle >= m_decalBuiltinCount
+                && ( handle - m_decalBuiltinCount ) < canonical->size() )
+            {
+                const std::string& grp = ( *canonical )[handle - m_decalBuiltinCount];
+
+                if( grp.rfind( "$OSR", 0 ) != 0 )
+                    return NETLABEL_KIND::POWER;
+            }
+        }
+
+        return NETLABEL_KIND::GLOBAL;
+    };
+
     // 3. Off-page arrays -> emit a label per decoded (sheet, index).
     int pageWidth = 0;
     int pageHeight = 0;
@@ -2289,6 +2344,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
                 lbl.y_mils = designMil( readU16( d, j + 2 ) );
                 lbl.netName = it->second;
                 lbl.sheetIndex = sheet;
+                lbl.kind = offpageKind( j );
                 m_netLabels.push_back( std::move( lbl ) );
             }
 
@@ -2570,14 +2626,56 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
     }
 
     // --- NET LABELS (off-page refs / power ports) ---
+    // The recovered kind selects the faithful KiCad element: a net-name port (@TERM) is a
+    // sheet-local label, a power/ground port is a global-power symbol, and an off-sheet/bus
+    // reference is a global label (current behaviour).
     for( const NET_LABEL& lbl : m_netLabels )
     {
         if( !onSheet( lbl.sheetIndex ) )
             continue;
 
-        VECTOR2I        pos( schIUScale.MilsToIU( lbl.x_mils ), milToY( lbl.y_mils ) );
-        SCH_GLOBALLABEL* label = new SCH_GLOBALLABEL( pos, wxString::FromUTF8( lbl.netName ) );
-        aScreen->Append( label );
+        VECTOR2I pos( schIUScale.MilsToIU( lbl.x_mils ), milToY( lbl.y_mils ) );
+        wxString net = wxString::FromUTF8( lbl.netName );
+
+        if( lbl.kind == NETLABEL_KIND::LOCAL )
+        {
+            aScreen->Append( new SCH_LABEL( pos, net ) );
+        }
+        else if( lbl.kind == NETLABEL_KIND::POWER )
+        {
+            // A global-power library symbol whose value is the driven net.
+            std::unique_ptr<LIB_SYMBOL> libSym =
+                    std::make_unique<LIB_SYMBOL>( wxString::Format( wxT( "pads_pwr_%s" ), net ) );
+            libSym->SetGlobalPower();
+            libSym->GetReferenceField().SetText( wxT( "#PWR" ) );
+            libSym->GetReferenceField().SetVisible( false );
+            libSym->GetValueField().SetText( net );
+
+            SCH_PIN* pin = new SCH_PIN( libSym.get() );
+            libSym->AddDrawItem( pin, false );
+            pin->SetName( net );
+            pin->SetPosition( VECTOR2I( 0, 0 ) );
+            pin->SetLength( 0 );
+            pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
+            pin->SetVisible( false );
+
+            std::unique_ptr<SCH_SYMBOL> sym = std::make_unique<SCH_SYMBOL>();
+            LIB_ID                      libId;
+            libId.SetLibNickname( wxT( "pads_import" ) );
+            libId.SetLibItemName( libSym->GetName() );
+            sym->SetLibId( libId );
+            sym->SetLibSymbol( new LIB_SYMBOL( *libSym ) );
+            sym->SetRef( &path, wxT( "#PWR?" ) );
+            sym->GetField( FIELD_T::REFERENCE )->SetVisible( false );
+            sym->SetValueFieldText( net );
+            sym->SetPosition( pos );
+            aScreen->Append( sym.release() );
+        }
+        else
+        {
+            aScreen->Append( new SCH_GLOBALLABEL( pos, net ) );
+        }
+
         ++appended;
     }
 

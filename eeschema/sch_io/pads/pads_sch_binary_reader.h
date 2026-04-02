@@ -98,13 +98,23 @@ struct JUNCTION
     int sheetIndex = 0; ///< Owning PADS sheet (0-based).
 };
 
+/// What KiCad element a recovered off-page reference represents.
+enum class NETLABEL_KIND
+{
+    GLOBAL, ///< Off-sheet connector ($OSR group) -> global label.
+    LOCAL,  ///< Net-name port (@TERM) -> local label.
+    POWER,  ///< Power/ground port ($GND/$PWR group) -> power symbol.
+    BUS     ///< Bus tap (@@@Bn) -> bus label.
+};
+
 /// One net label / off-page reference (power port, off-sheet connector).
 struct NET_LABEL
 {
-    int         x_mils = 0;
-    int         y_mils = 0;
-    std::string netName;
-    int         sheetIndex = 0;
+    int           x_mils = 0;
+    int           y_mils = 0;
+    std::string   netName;
+    int           sheetIndex = 0;
+    NETLABEL_KIND kind = NETLABEL_KIND::GLOBAL;
 };
 
 /// One free-text item recovered from the binary 32-byte text record pool.
