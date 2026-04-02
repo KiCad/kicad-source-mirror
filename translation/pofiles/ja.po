@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-03-31 20:09+0000\n"
+"PO-Revision-Date: 2026-04-03 00:12+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -7634,7 +7634,7 @@ msgstr "不正な円弧 (半径 %f 、角度 %f )"
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "'%s' から数値のパースできませんでした"
+msgstr "'%s' から数値の解析に失敗しました"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:181
 #: common/io/easyedapro/easyedapro_import_utils.cpp:236
@@ -19261,7 +19261,7 @@ msgstr "EasyEDA (JLCEDA) Std ファイル"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.cpp:75
 #, c-format
 msgid "Failed to parse value: '%s'"
-msgstr "値のパースに失敗しました: '%s'"
+msgstr "値の解析に失敗しました: '%s'"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:51
 msgid "httplib plugin missing library table handle!"
