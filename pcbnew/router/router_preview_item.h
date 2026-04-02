@@ -119,7 +119,7 @@ public:
     void drawShape( const SHAPE* aShape, KIGFX::GAL* aGal ) const;
 
 private:
-    const KIGFX::COLOR4D getLayerColor( int aLayer ) const;
+    const KIGFX::COLOR4D getLayerColor( int aLayer, const PNS::ITEM* aItem = nullptr ) const;
 
 private:
     KIGFX::VIEW*   m_view;
