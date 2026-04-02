@@ -198,6 +198,53 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 }
 
 
+bool EDA_DRAW_PANEL_GAL::recoverFromGalError( const std::exception& aError )
+{
+    try
+    {
+        // Sleep/wake and GPU resets can invalidate the entire GL context.
+        // Try a full reinit of the current backend before falling back.
+        if( !m_glRecoveryAttempted )
+        {
+            m_glRecoveryAttempted = true;
+            GAL_TYPE prevBackend = m_backend;
+            m_backend = GAL_TYPE_NONE;
+
+            if( SwitchBackend( prevBackend ) )
+            {
+                StartDrawing();
+                return true;
+            }
+        }
+
+        if( GAL_FALLBACK_AVAILABLE && GAL_FALLBACK != m_backend )
+        {
+            m_glRecoveryAttempted = false;
+            SwitchBackend( GAL_FALLBACK );
+
+            DisplayInfoMessage( m_parent, _( "Could not use OpenGL, falling back to software rendering" ),
+                                wxString( aError.what() ) );
+
+            StartDrawing();
+            return true;
+        }
+
+        DisplayErrorMessage( m_parent, _( "Graphics error" ), wxString( aError.what() ) );
+    }
+    catch( std::exception& recoveryErr )
+    {
+        DisplayErrorMessage( m_parent, _( "Graphics error during recovery" ), wxString( recoveryErr.what() ) );
+    }
+    catch( ... )
+    {
+        DisplayErrorMessage( m_parent, _( "Graphics error during recovery" ),
+                             _( "Unknown exception during backend switch" ) );
+    }
+
+    return false;
+}
+
+
 bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 {
     if( !m_refreshMutex.try_lock() )
@@ -357,39 +404,17 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
     }
     catch( std::exception& err )
     {
-        if( GAL_FALLBACK != m_backend )
-        {
-            // Sleep/wake and GPU resets can invalidate the entire GL context. Try a
-            // full OpenGL reinit once before falling back to software rendering.
-            if( !m_glRecoveryAttempted )
-            {
-                m_glRecoveryAttempted = true;
-                GAL_TYPE prevBackend = m_backend;
-                m_backend = GAL_TYPE_NONE;
+        wxLogTrace( traceDrawPanel, wxS( "DoRePaint exception: %s" ), err.what() );
 
-                if( SwitchBackend( prevBackend ) )
-                {
-                    StartDrawing();
-                    return true;
-                }
-            }
+        if( recoverFromGalError( err ) )
+            return true;
 
-            m_glRecoveryAttempted = false;
-            SwitchBackend( GAL_FALLBACK );
-
-            DisplayInfoMessage( m_parent,
-                                _( "Could not use OpenGL, falling back to software rendering" ),
-                                wxString( err.what() ) );
-
-            StartDrawing();
-        }
-        else
-        {
-            // We're well and truly banjaxed if we get here without a fallback.
-            DisplayErrorMessage( m_parent, _( "Graphics error" ), wxString( err.what() ) );
-
-            StopDrawing();
-        }
+        StopDrawing();
+    }
+    catch( ... )
+    {
+        DisplayErrorMessage( m_parent, _( "Graphics error" ), _( "Unknown exception" ) );
+        StopDrawing();
     }
 
     if( isDirty )

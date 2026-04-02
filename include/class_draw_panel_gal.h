@@ -74,6 +74,7 @@ public:
 #else
     static constexpr GAL_TYPE GAL_FALLBACK = GAL_TYPE_CAIRO;
 #endif
+    static constexpr bool GAL_FALLBACK_AVAILABLE = GAL_FALLBACK != GAL_TYPE_OPENGL;
 
     /**
      * Create a drawing panel that is contained inside \p aParentWindow.
@@ -269,6 +270,8 @@ protected:
     void onIdle( wxIdleEvent& aEvent );
     void onRefreshTimer( wxTimerEvent& aEvent );
     void onShowEvent( wxShowEvent& aEvent );
+
+    bool recoverFromGalError( const std::exception& aErr );
 
     wxWindow*                m_parent;           ///< Pointer to the parent window
     EDA_DRAW_FRAME*          m_edaFrame;         ///< Parent EDA_DRAW_FRAME (if available)
