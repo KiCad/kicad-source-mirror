@@ -773,15 +773,14 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         menu.Append( ID_SET_SEVERITY_TO_ERROR,
                      wxString::Format( _( "Change severity to Error for all '%s' violations" ),
                                        rcItem->GetErrorText( true ) ),
-                     _( "Violation severities can also be edited in the Schematic Setup... dialog" ) );
+                     _( "Violation severities can also be edited in Schematic Setup" ) );
     }
     else
     {
         menu.Append( ID_SET_SEVERITY_TO_WARNING,
                      wxString::Format( _( "Change severity to Warning for all '%s' violations" ),
                                        rcItem->GetErrorText( true ) ),
-                     _( "Violation severities can also be edited in the Schematic Setup... "
-                        "dialog" ) );
+                     _( "Violation severities can also be edited in Schematic Setup" ) );
     }
 
     menu.Append( ID_SET_SEVERITY_TO_IGNORE,
@@ -795,20 +794,20 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
     {
         menu.Append( ID_EDIT_PIN_CONFLICT_MAP,
                      _( "Edit pin-to-pin conflict map..." ),
-                     _( "Open the Schematic Setup... dialog" ) );
+                     _( "Open the Schematic Setup dialog" ) );
     }
     else
     {
         menu.Append( ID_EDIT_SEVERITIES,
                      _( "Edit violation severities..." ),
-                     _( "Open the Schematic Setup... dialog" ) );
+                     _( "Open the Schematic Setup dialog" ) );
     }
 
     if( rcItem->GetErrorCode() == ERCE_ENDPOINT_OFF_GRID )
     {
         menu.Append( ID_EDIT_CONNECTION_GRID,
                      _( "Edit connection grid spacing..." ),
-                     _( "Open the Schematic Setup... dialog" ) );
+                     _( "Open the Schematic Setup dialog" ) );
     }
 
     bool modified = false;

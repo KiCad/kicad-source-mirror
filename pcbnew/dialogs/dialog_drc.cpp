@@ -785,14 +785,14 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         menu.Append( ID_SET_SEVERITY_TO_ERROR,
                      wxString::Format( _( "Change severity to Error for all '%s' violations" ),
                                        rcItem->GetErrorText( true ) ),
-                     _( "Violation severities can also be edited in the Board Setup... dialog" ) );
+                     _( "Violation severities can also be edited in Board Setup" ) );
     }
     else
     {
         menu.Append( ID_SET_SEVERITY_TO_WARNING,
                      wxString::Format( _( "Change severity to Warning for all '%s' violations" ),
                                        rcItem->GetErrorText( true ) ),
-                     _( "Violation severities can also be edited in the Board Setup... dialog" ) );
+                     _( "Violation severities can also be edited in Board Setup" ) );
     }
 
     menu.Append( ID_SET_SEVERITY_TO_IGNORE,
@@ -803,7 +803,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
     menu.Append( ID_EDIT_SEVERITIES,
                  _( "Edit violation severities..." ),
-                 _( "Open the Board Setup... dialog" ) );
+                 _( "Open the Board Setup dialog" ) );
 
     bool modified = false;
     int  command = GetPopupMenuSelectionFromUser( menu );
