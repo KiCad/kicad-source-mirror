@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-02 14:40+0300\n"
-"PO-Revision-Date: 2026-03-22 14:28+0000\n"
+"PO-Revision-Date: 2026-04-02 14:17+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v10/ru/>\n"
 "Language: ru\n"
@@ -6109,9 +6109,8 @@ msgid "Insert Group"
 msgstr "Вставить группу"
 
 #: common/dialogs/panel_toolbar_customization.cpp:171
-#, fuzzy
 msgid "Filter actions"
-msgstr "Настройки фильтра"
+msgstr "Фильтр действий"
 
 #: common/dialogs/panel_toolbar_customization.cpp:399
 #: common/dialogs/panel_toolbar_customization.cpp:709
@@ -6612,7 +6611,7 @@ msgstr "Неизвестный MIME-тип для файла документа�
 #: common/eda_draw_frame.cpp:237 common/tool/action_toolbar.cpp:1235
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
 msgid "Override locks"
-msgstr "Перезаписывать заблокированные"
+msgstr "Разблокировать"
 
 #: common/eda_draw_frame.cpp:450 common/tool/actions.cpp:1096
 msgid "Edit Grids..."
@@ -41357,7 +41356,7 @@ msgstr "Верх и низ"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1213
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:461
 msgid "Top backdrill must-cut:"
-msgstr "Область обязательного удаления сверху (must-cut):"
+msgstr "Верхний слой обр. сверления:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1215
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1220
@@ -41370,17 +41369,17 @@ msgstr "Обратное сверление должно проходить че
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1224
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
 msgid "Top backdrill size:"
-msgstr "Размер обратного сверления сверху:"
+msgstr "Верхний размер обр. сверления:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1246
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:493
 msgid "Bottom backdrill must-cut:"
-msgstr "Область обязательного удаления снизу (must-cut):"
+msgstr "Нижний слой обр. сверления:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1257
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:476
 msgid "Bottom backdrill size:"
-msgstr "Размер обратного сверления снизу:"
+msgstr "Нижний размер обр. сверления:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1421
 msgid "Preview pad in sketch mode"
@@ -50315,7 +50314,7 @@ msgstr "Обратное сверление сверху"
 
 #: pcbnew/pad.cpp:3340
 msgid "Backdrill both"
-msgstr "Обратное сверление с обеих сторон"
+msgstr "Обр. сверление с обеих сторон"
 
 #: pcbnew/pad.cpp:3359
 msgid "Front, back and connected layers"
@@ -50405,7 +50404,7 @@ msgstr "Размер обратного сверления снизу"
 #: pcbnew/widgets/pcb_properties_panel.cpp:659
 #: pcbnew/widgets/pcb_properties_panel.cpp:663
 msgid "Bottom Backdrill Must-Cut"
-msgstr "Область обязательного удаления снизу"
+msgstr "Нижний слой обр. сверления"
 
 #: pcbnew/pad.cpp:3681 pcbnew/pcb_track.cpp:3262
 msgid "Top Backdrill Size"
@@ -50415,7 +50414,7 @@ msgstr "Размер обратного сверления сверху"
 #: pcbnew/widgets/pcb_properties_panel.cpp:660
 #: pcbnew/widgets/pcb_properties_panel.cpp:664
 msgid "Top Backdrill Must-Cut"
-msgstr "Область обязательного удаления сверху"
+msgstr "Верхний слой обр. сверления"
 
 #: pcbnew/pad.cpp:3716
 msgid "Fabrication Property"
