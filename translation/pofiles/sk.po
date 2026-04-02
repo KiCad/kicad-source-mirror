@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-02 14:40+0300\n"
-"PO-Revision-Date: 2026-04-02 11:36+0000\n"
+"PO-Revision-Date: 2026-04-02 14:17+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -4349,9 +4349,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "Koeficient zatmenia v režime s vysokým kontrastom:"
 
 #: common/dialogs/panel_common_settings_base.cpp:298
-#, fuzzy
 msgid "App theme:"
-msgstr "Použiť motív:"
+msgstr "Použitá téma:"
 
 #: common/dialogs/panel_common_settings_base.cpp:330
 msgid "Scaling"
@@ -5890,9 +5889,8 @@ msgid "How would you like KiCad to create them?"
 msgstr "Ako by ste chceli, aby ich KiCad vytvoril?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
-#, fuzzy
 msgid "Start with the built-in KiCad libraries"
-msgstr "Začať so vstavanými knižnicami KiCad (odporúčané)"
+msgstr "Začať so vstavanými knižnicami KiCad"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
 msgid "Import tables from the previous version"
@@ -5909,15 +5907,16 @@ msgstr ""
 "vytvorené s predvolenými knižnicami KiCad."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:53
-#, fuzzy
 msgid "Migrate built-in libraries to the latest version (recommended)"
-msgstr "Začať so vstavanými knižnicami KiCad (odporúčané)"
+msgstr "Migrácia vstavaných knižníc na najnovšiu verziu (odporúčané)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:55
 msgid ""
 "When enabled, KiCad will replace any existing references to built-in "
 "libraries with references to the latest version"
 msgstr ""
+"Keď je táto funkcia povolená, KiCad nahradí všetky existujúce odkazy na "
+"vstavané knižnice odkazmi na najnovšiu verziu"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:62
 msgid "Start with no libraries"
@@ -6062,9 +6061,8 @@ msgid "Insert Group"
 msgstr "Vložiť skupinu"
 
 #: common/dialogs/panel_toolbar_customization.cpp:171
-#, fuzzy
 msgid "Filter actions"
-msgstr "Nastavenia filtra"
+msgstr "Akcie filtra"
 
 #: common/dialogs/panel_toolbar_customization.cpp:399
 #: common/dialogs/panel_toolbar_customization.cpp:709
@@ -24018,13 +24016,12 @@ msgstr ""
 "inštaláciu."
 
 #: eeschema/sim/ngspice.cpp:779
-#, fuzzy
 msgid ""
 "Simulation terminated by ngspice. This may be caused by insufficient memory "
 "or an internal error. The simulator will be reset."
 msgstr ""
-"Simulácia zlyhala (%s). Toto je zvyčajne spôsobené chybou v ngspice alebo "
-"neplatným netlistom. Simulátor bude resetovaný."
+"NGSpice ukončil simuláciu. Môže to byť spôsobené nedostatkom pamäte alebo "
+"internou chybou. Simulátor bude resetovaný."
 
 #: eeschema/sim/sim_lib_mgr.cpp:109 eeschema/sim/sim_lib_mgr.cpp:162
 #, c-format
@@ -29581,7 +29578,6 @@ msgstr ""
 "Použite vo formáte '--define-var key=value' alebo '-D key=value'"
 
 #: kicad/cli/command.cpp:235
-#, fuzzy
 msgid ""
 "The variant name(s) to output, can be used multiple times to specify "
 "multiple variants.\n"
@@ -29589,11 +29585,11 @@ msgid ""
 "generate separate files for each variant.\n"
 "When no --variant argument is provided, the default variant is output."
 msgstr ""
-"Názvy variantov pre výstup, možno použiť viackrát na zadanie viacerých "
+"Názvy variantov pre výstup, sa môžu použiť viackrát na určenie viacerých "
 "variantov.\n"
-"Pri zadávaní viacerých variantov použite premennú ${VARIANT} vo výstupnej "
-"ceste, pre generovanie samostatných súborov pre každý variant.\n"
-"Ak nie je zadaný argument --variant, výstupom je predvolený variant."
+"Pri zadávaní viacerých variantov použite vo výstupnej ceste parameter $"
+"{VARIANT} na vygenerovanie samostatných súborov pre každý variant.\n"
+"Ak nie je uvedený argument --variant, vypíše sa predvolený variant."
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -47070,9 +47066,8 @@ msgid "Checking copper zone clearances..."
 msgstr "Kontrolujú sa min. vzdialenosti zóny na medi..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:177
-#, fuzzy
 msgid "Checking teardrop clearances..."
-msgstr "Kontrolujú sa min. vzdialenosti plôšky..."
+msgstr "Kontrolujú sa min. vzdialenosti teardropov..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:292
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:583
@@ -51975,9 +51970,9 @@ msgstr ""
 "Ignorovaný mnohouholník, pretože Eagle vrstva '%s' (%d) nebola priradená"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1572
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): less than 3 vertices"
-msgstr "Ignorovaný mnohouholník na vrstve '%s' (%d): počet obrysov nie je 1"
+msgstr "Preskočenie mnohouholníka na vrstve '%s' (%d): menej ako 3 vrcholy"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1618
 #, c-format
