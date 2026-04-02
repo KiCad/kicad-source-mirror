@@ -2280,6 +2280,28 @@ bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_T aConstraintId, DRC_CONST
 }
 
 
+bool DRC_ENGINE::HasUserDefinedPhysicalConstraint()
+{
+    for( DRC_CONSTRAINT_T type : { PHYSICAL_CLEARANCE_CONSTRAINT, PHYSICAL_HOLE_CLEARANCE_CONSTRAINT } )
+    {
+        auto it = m_constraintMap.find( type );
+
+        if( it != m_constraintMap.end() )
+        {
+            for( DRC_ENGINE_CONSTRAINT* c : *it->second )
+            {
+                if( c->condition && c->parentRule && !c->parentRule->IsImplicit() )
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+
 std::set<int> DRC_ENGINE::QueryDistinctConstraints( DRC_CONSTRAINT_T aConstraintId )
 {
     std::set<int> distinctMinimums;
