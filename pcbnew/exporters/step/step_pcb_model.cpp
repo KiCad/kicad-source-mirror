@@ -3365,9 +3365,7 @@ bool STEP_PCB_MODEL::getModelLabel( const wxString& aBaseName, const wxString& a
                 }
                 catch( ... )
                 {
-                    m_reporter->Report(
-                            wxString::Format( wxT( "failed to decompress '%s'." ), aFileName ),
-                            RPT_SEVERITY_ERROR );
+                    // ignore - we try unzipping it below
                 }
 
                 if( expanded.empty() )
@@ -3381,6 +3379,11 @@ bool STEP_PCB_MODEL::getModelLabel( const wxString& aBaseName, const wxString& a
                     {
                         izipfile.Read( ofile );
                         success = true;
+                    }
+                    else
+                    {
+                        m_reporter->Report( wxString::Format( wxT( "failed to decompress '%s'." ), aFileName ),
+                                            RPT_SEVERITY_ERROR );
                     }
                 }
                 else
