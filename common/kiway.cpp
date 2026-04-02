@@ -609,6 +609,15 @@ void KIWAY::CommonSettingsChanged( int aFlags )
             top->CommonSettingsChanged( aFlags );
     }
 
+    if( aFlags & ENVVARS_CHANGED )
+    {
+        if( KIFACE* sch = KiFACE( FACE_SCH, false ) )
+            sch->PreloadLibraries( this );
+
+        if( KIFACE* pcb = KiFACE( FACE_PCB, false ) )
+            pcb->PreloadLibraries( this );
+    }
+
     for( unsigned i=0;  i < KIWAY_PLAYER_COUNT;  ++i )
     {
         KIWAY_PLAYER* frame = GetPlayerFrame( ( FRAME_T )i );
