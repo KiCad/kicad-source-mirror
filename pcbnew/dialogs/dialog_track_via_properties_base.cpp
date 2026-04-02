@@ -449,7 +449,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	bSizer31 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_backdrillFrontSizeCtrl = new wxTextCtrl( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer31->Add( m_backdrillFrontSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxEXPAND, 5 );
+	bSizer31->Add( m_backdrillFrontSizeCtrl, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_backdrillFrontSizeUnits = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_backdrillFrontSizeUnits->Wrap( -1 );
