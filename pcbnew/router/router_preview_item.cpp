@@ -38,6 +38,10 @@
 #include "pns_via.h"
 #include "pns_kicad_iface.h"
 
+#include <pcb_painter.h>
+#include <netinfo.h>
+#include <layer_ids.h>
+
 using namespace KIGFX;
 
 
@@ -138,7 +142,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
         m_originLayer = 0;
 
     m_layer = m_originLayer;
-    m_color = getLayerColor( m_originLayer );
+    m_color = getLayerColor( m_originLayer, aItem );
     m_color.a = 0.8;
     m_depth = m_originDepth - ( ( aItem->Layers().Start() + 1 ) * LayerDepthFactor );
 
@@ -539,11 +543,20 @@ void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-const COLOR4D ROUTER_PREVIEW_ITEM::getLayerColor( int aLayer ) const
+const COLOR4D ROUTER_PREVIEW_ITEM::getLayerColor( int aLayer, const PNS::ITEM* aItem ) const
 {
     auto settings = static_cast<PCB_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() );
 
     COLOR4D color = settings->GetLayerColor( aLayer );
+
+    if( aItem && aItem->Net() && settings->GetNetColorMode() == NET_COLOR_MODE::ALL && IsCopperLayer( aLayer ) )
+    {
+        NETINFO_ITEM* ni = static_cast<NETINFO_ITEM*>( aItem->Net() );
+        NETCLASS*     nc = ni->GetNetClass();
+
+        if( nc && nc->HasPcbColor() )
+            color = nc->GetPcbColor();
+    }
 
     if( m_flags & PNS_HEAD_TRACE )
         return color.Saturate( 1.0 );
