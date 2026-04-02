@@ -96,7 +96,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             for( ACTION_TOOLBAR_CONTROL* control : ACTION_TOOLBAR::GetCustomControlList( FRAME_PL_EDITOR ) )
                 controls.push_back( control );
 
-            return new PANEL_TOOLBAR_CUSTOMIZATION( aParent, cfg, tb, actions, controls );
+            return new PANEL_TOOLBAR_CUSTOMIZATION( aParent, cfg, tb, FRAME_PL_EDITOR, actions, controls );
         }
 
         default:
