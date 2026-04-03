@@ -2192,13 +2192,18 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 {
                     int gap = evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT, aZone, aFootprint, aLayer );
 
+                    // For internal copper layers, GetCourtyard( aLayer ) always returns the
+                    // front courtyard because IsBackLayer() is false for all internal layers.
+                    // Use the footprint's own layer to select the correct courtyard instead.
+                    PCB_LAYER_ID courtyardSide = IsInnerCopperLayer( aLayer ) ? aFootprint->GetLayer() : aLayer;
+
                     if( gap == 0 )
                     {
-                        aHoles.Append( aFootprint->GetCourtyard( aLayer ) );
+                        aHoles.Append( aFootprint->GetCourtyard( courtyardSide ) );
                     }
                     else if( gap > 0 )
                     {
-                        SHAPE_POLY_SET hole = aFootprint->GetCourtyard( aLayer );
+                        SHAPE_POLY_SET hole = aFootprint->GetCourtyard( courtyardSide );
                         hole.Inflate( gap, CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
                         aHoles.Append( hole );
                     }
