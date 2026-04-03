@@ -31,7 +31,7 @@ SCH_IO_LIB_CACHE::SCH_IO_LIB_CACHE( const wxString& aFullPathAndFileName ) :
     m_modHash( 1 ),
     m_fileName( aFullPathAndFileName ),
     m_libFileName(),
-    m_fileModTime( 0 ),
+    m_fileModTime( -1 ),
     m_isWritable( true ),
     m_isModified( false ),
     m_hasParseError( false )
@@ -123,6 +123,9 @@ void SCH_IO_LIB_CACHE::SetFileName( const wxString& aFileName )
 bool SCH_IO_LIB_CACHE::IsFileChanged() const
 {
     wxFileName fn = GetRealFile();
+
+    if( m_fileModTime < 0 )
+        return false;
 
     if( !fn.IsOk() )
         return false;
