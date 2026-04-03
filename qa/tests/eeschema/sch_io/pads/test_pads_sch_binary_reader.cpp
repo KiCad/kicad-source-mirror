@@ -1027,4 +1027,74 @@ BOOST_AUTO_TEST_CASE( MultiGateGrouping )
 }
 
 
+// Reference part geometry parsed from the PADS ASCII (.txt) *PART* section: the part anchor
+// (x, y, rotation in mils) and the inline refdes-field placement on the following line.
+struct AsciiPart
+{
+    int x = 0, y = 0, rot = 0;
+    int fdx = 0, fdy = 0, fh = 0;  // refdes field dx, dy, text height
+};
+
+
+static std::map<std::string, AsciiPart> parseAsciiParts( const char* aTxtPath )
+{
+    std::map<std::string, AsciiPart> parts;
+    std::ifstream                    in( aTxtPath );
+    std::string                      line;
+    bool                             inPart = false;
+    std::string                      pendingRef;
+
+    while( std::getline( in, line ) )
+    {
+        if( !line.empty() && line[0] == '*' )
+        {
+            inPart = line.rfind( "*PART*", 0 ) == 0;
+            pendingRef.clear();
+            continue;
+        }
+
+        if( !inPart || line.empty() )
+            continue;
+
+        std::istringstream       ss( line );
+        std::vector<std::string> t;
+        std::string              tok;
+
+        while( ss >> tok )
+            t.push_back( tok );
+
+        if( t.empty() )
+            continue;
+
+        bool alpha = ( t[0][0] >= 'A' && t[0][0] <= 'Z' ) || ( t[0][0] >= 'a' && t[0][0] <= 'z' );
+
+        if( alpha && t.size() >= 5 )
+        {
+            AsciiPart p;
+            p.x = std::atoi( t[2].c_str() );
+            p.y = std::atoi( t[3].c_str() );
+            p.rot = std::atoi( t[4].c_str() );
+            parts[t[0]] = p;
+            pendingRef = t[0];
+        }
+        else if( !pendingRef.empty() && t.size() >= 5
+                 && ( ( t[0][0] >= '0' && t[0][0] <= '9' ) || t[0][0] == '-' ) )
+        {
+            AsciiPart& p = parts[pendingRef];
+            p.fdx = std::atoi( t[0].c_str() );
+            p.fdy = std::atoi( t[1].c_str() );
+            p.fh = std::atoi( t[4].c_str() );
+            pendingRef.clear();
+        }
+    }
+
+    return parts;
+}
+
+
+BOOST_AUTO_TEST_CASE( PartGeometryVsAscii )
+{
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
