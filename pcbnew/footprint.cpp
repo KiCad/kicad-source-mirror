@@ -2724,8 +2724,7 @@ std::vector<int> FOOTPRINT::ViewGetLayers() const
         break;
     }
 
-    if( IsConflicting() )
-        layers.push_back( LAYER_CONFLICTS_SHADOW );
+    layers.push_back( LAYER_CONFLICTS_SHADOW );
 
     // If there are no pads, and only drawings on a silkscreen layer, then report the silkscreen
     // layer as well so that the component can be edited with the silkscreen layer
