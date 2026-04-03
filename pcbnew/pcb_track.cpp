@@ -1080,7 +1080,7 @@ double PCB_TRACK::GetDelay() const
 
     const LENGTH_DELAY_CALCULATION*            calc = board->GetLengthCalculation();
     std::vector<LENGTH_DELAY_CALCULATION_ITEM> items{ calc->GetLengthCalculationItem( this ) };
-    constexpr PATH_OPTIMISATIONS               opts = { .OptimiseViaLayers = false,
+    constexpr PATH_OPTIMISATIONS               opts = { .OptimiseVias = false,
                                                         .MergeTracks = false,
                                                         .OptimiseTracesInPads = false,
                                                         .InferViaInPad = false

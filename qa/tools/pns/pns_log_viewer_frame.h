@@ -124,7 +124,7 @@ public:
             endPad = static_cast<PAD*>( aEndPad->Parent() );
 
         constexpr PATH_OPTIMISATIONS opts = {
-            .OptimiseViaLayers = false, .MergeTracks = false, .OptimiseTracesInPads = false, .InferViaInPad = true
+            .OptimiseVias = false, .MergeTracks = false, .OptimiseTracesInPads = false, .InferViaInPad = true
         };
 
         return m_board->GetLengthCalculation()->CalculateLength( lengthItems, opts, startPad, endPad );
@@ -145,7 +145,7 @@ public:
             endPad = static_cast<PAD*>( aEndPad->Parent() );
 
         constexpr PATH_OPTIMISATIONS opts = {
-            .OptimiseViaLayers = false, .MergeTracks = false, .OptimiseTracesInPads = false, .InferViaInPad = true
+            .OptimiseVias = false, .MergeTracks = false, .OptimiseTracesInPads = false, .InferViaInPad = true
         };
 
         return m_board->GetLengthCalculation()->CalculateDelay( lengthItems, opts, startPad, endPad );

@@ -2012,10 +2012,48 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
                 VECTOR2I pt = activePts[i].first;
                 LSET     layerSetCu = activePts[i].second & LSET::AllCuMask();
 
-                auto viaIt = viaMap.find( pt );
+                PCB_VIA* hitVia = nullptr;
+
+                // exact position match (common case)
+                auto exactIt = viaMap.find( pt );
+
+                if( exactIt != viaMap.end() && ( exactIt->second->GetLayerSet() & layerSetCu ).any() )
+                {
+                    hitVia = exactIt->second;
+                }
+                else
+                {
+                    // off-center VIA connection
+                    for( auto& [pos, via] : viaMap )
+                    {
+                        if( !( via->GetLayerSet() & layerSetCu ).any() )
+                            continue;
+
+                        bool hit = false;
+
+                        for( PCB_LAYER_ID layer : LSET( via->GetLayerSet() & layerSetCu ).CuStack() )
+                        {
+                            int     radius = via->GetWidth( layer ) / 2;
+                            int64_t radiusSq = static_cast<int64_t>( radius ) * radius;
+
+                            if( ( pt - pos ).SquaredEuclideanNorm() <= radiusSq )
+                            {
+                                hit = true;
+                                break;
+                            }
+                        }
+
+                        if( hit )
+                        {
+                            hitVia = via;
+                            break;
+                        }
+                    }
+                }
+
                 auto padIt = padMap.find( pt );
 
-                bool gotVia = viaIt != viaMap.end() && ( viaIt->second->GetLayerSet() & layerSetCu ).any();
+                bool gotVia = hitVia != nullptr;
                 bool gotPad = padIt != padMap.end() && ( padIt->second->GetLayerSet() & layerSetCu ).any();
                 bool gotNonStartPad = gotPad && ( startPadSet.find( padIt->second ) == startPadSet.end() );
 
@@ -2025,7 +2063,7 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
                     continue;
                 }
 
-                if( gotVia && !itemPassesFilter( viaIt->second, true ) )
+                if( gotVia && !itemPassesFilter( hitVia, true ) )
                 {
                     activePts.erase( activePts.begin() + i );
                     continue;
@@ -2125,25 +2163,53 @@ void PCB_SELECTION_TOOL::selectAllConnectedTracks( const std::vector<BOARD_CONNE
                     }
                 }
 
-                if( viaMap.count( pt ) )
+                if( hitVia )
                 {
-                    PCB_VIA* via = viaMap[pt];
+                    if( !hitVia->IsSelected() )
+                        select( hitVia );
 
-                    if( !itemPassesFilter( via, true ) )
+                    if( !hitVia->HasFlag( SKIP_STRUCT ) )
                     {
-                        activePts.erase( activePts.begin() + i );
-                        continue;
-                    }
+                        hitVia->SetFlags( SKIP_STRUCT );
+                        cleanupItems.push_back( hitVia );
 
-                    if( !via->IsSelected() )
-                        select( via );
+                        VECTOR2I viaPos = hitVia->GetPosition();
 
-                    if( !via->HasFlag( SKIP_STRUCT ) )
-                    {
-                        via->SetFlags( SKIP_STRUCT );
-                        cleanupItems.push_back( via );
+                        int maxRadius = 0;
 
-                        activePts.push_back( { via->GetPosition(), via->GetLayerSet() } );
+                        for( PCB_LAYER_ID layer : hitVia->GetLayerSet().CuStack() )
+                            maxRadius = std::max( maxRadius, hitVia->GetWidth( layer ) / 2 );
+
+                        int64_t maxRadiusSq = static_cast<int64_t>( maxRadius ) * maxRadius;
+
+                        for( auto& [trkPt, tracks] : trackMap )
+                        {
+                            if( ( trkPt - viaPos ).SquaredEuclideanNorm() > maxRadiusSq )
+                                continue;
+
+                            // Verify point is inside the VIA pad on at least one track layer
+                            bool inside = false;
+
+                            for( PCB_TRACK* trk : tracks )
+                            {
+                                PCB_LAYER_ID trkLayer = trk->GetLayer();
+
+                                if( !hitVia->GetLayerSet().Contains( trkLayer ) )
+                                    continue;
+
+                                int     r = hitVia->GetWidth( trkLayer ) / 2;
+                                int64_t rSq = static_cast<int64_t>( r ) * r;
+
+                                if( ( trkPt - viaPos ).SquaredEuclideanNorm() <= rSq )
+                                {
+                                    inside = true;
+                                    break;
+                                }
+                            }
+
+                            if( inside )
+                                activePts.push_back( { trkPt, hitVia->GetLayerSet() } );
+                        }
 
                         if( aStopCondition != STOP_AT_SEGMENT )
                             expand = true;

@@ -405,7 +405,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             }
 
             constexpr PATH_OPTIMISATIONS opts = {
-                .OptimiseViaLayers = true, .MergeTracks = true, .OptimiseTracesInPads = true, .InferViaInPad = false
+                .OptimiseVias = true, .MergeTracks = true, .OptimiseTracesInPads = true, .InferViaInPad = false
             };
             LENGTH_DELAY_STATS details = calc->CalculateLengthDetails( lengthItems, opts, nullptr, nullptr,
                                                                        LENGTH_DELAY_LAYER_OPT::NO_LAYER_DETAIL,

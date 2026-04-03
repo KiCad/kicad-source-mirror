@@ -2938,7 +2938,7 @@ long long int PNS_KICAD_IFACE_BASE::CalculateRoutedPathLength( const PNS::ITEM_S
         endPad = static_cast<PAD*>( aEndPad->Parent() );
 
     constexpr PATH_OPTIMISATIONS opts = {
-        .OptimiseViaLayers = false,
+        .OptimiseVias = false,
         .MergeTracks = false,
         .OptimiseTracesInPads = false,
         .InferViaInPad = true
@@ -2963,7 +2963,7 @@ int64_t PNS_KICAD_IFACE_BASE::CalculateRoutedPathDelay( const PNS::ITEM_SET& aLi
         endPad = static_cast<PAD*>( aEndPad->Parent() );
 
     constexpr PATH_OPTIMISATIONS opts = {
-        .OptimiseViaLayers = false,
+        .OptimiseVias = false,
         .MergeTracks = false,
         .OptimiseTracesInPads = false,
         .InferViaInPad = true

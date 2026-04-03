@@ -87,7 +87,7 @@ BOOST_FIXTURE_TEST_CASE( LengthCalculationIncludesAllWidths, TUNER_DRC_TEST_FIXT
 
     // Calculate total length including all track widths
     constexpr PATH_OPTIMISATIONS opts = {
-        .OptimiseViaLayers = true, .MergeTracks = true, .OptimiseTracesInPads = true, .InferViaInPad = false
+        .OptimiseVias = true, .MergeTracks = true, .OptimiseTracesInPads = true, .InferViaInPad = false
     };
     LENGTH_DELAY_STATS stats = lengthCalc->CalculateLengthDetails( lengthItems, opts, nullptr, nullptr,
                                                                     LENGTH_DELAY_LAYER_OPT::NO_LAYER_DETAIL,

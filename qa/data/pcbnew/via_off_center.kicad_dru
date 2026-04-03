@@ -1,0 +1,16 @@
+(version 1)
+
+(rule "PAIR_A"
+   (condition "A.NetName == '/CENTERED_A' || A.NetName == '/NON_CENTERED_A'")
+   (constraint length (min 19.95mm) (max 20.05mm))
+)
+
+(rule "PAIR_B"
+   (condition "A.NetName == '/CENTERED_B' || A.NetName == '/NON_CENTERED_B'")
+   (constraint length (min 19.95mm) (max 20.05mm))
+)
+
+(rule "PAIR_C"
+   (condition "A.NetName == '/CENTERED_C' || A.NetName == '/NON_CENTERED_C'")
+   (constraint length (min 19.95mm) (max 20.05mm))
+)

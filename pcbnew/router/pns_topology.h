@@ -37,6 +37,7 @@ class SOLID;
 class DIFF_PAIR;
 class ROUTER_IFACE;
 class LINKED_ITEM;
+class VIA;
 
 class TOPOLOGY
 {
@@ -112,6 +113,24 @@ private:
 
         PATH_RESULT() : m_end( nullptr ), m_length( 0 ) {}
     };
+
+    struct WALK_RESULT
+    {
+        ITEM_SET m_items;
+        SOLID*   m_endPad;
+        int64_t  m_length;
+
+        WALK_RESULT() :
+                m_endPad( nullptr ),
+                m_length( -1 )
+        {
+        }
+    };
+
+    std::vector<LINE> findLinesFromVia( ROUTER_IFACE* aRouterIface, VIA* aVia, const std::set<ITEM*>& aVisited );
+
+    WALK_RESULT walkTuningPath( ROUTER_IFACE* aRouterIface, LINE& aStartLine, bool aStartFromBack,
+                                const std::set<ITEM*>& aVisited );
 
     PATH_RESULT followBranch( const JOINT* aStartJoint, LINKED_ITEM* aPrev,
                               std::set<ITEM*>& aVisited, bool aFollowLockedSegments );

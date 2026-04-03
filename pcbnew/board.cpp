@@ -2944,7 +2944,7 @@ std::tuple<int, double, double, double, double> BOARD::GetTrackLength( const PCB
     }
 
     constexpr PATH_OPTIMISATIONS opts = {
-        .OptimiseViaLayers = true, .MergeTracks = true, .OptimiseTracesInPads = true, .InferViaInPad = false
+        .OptimiseVias = true, .MergeTracks = true, .OptimiseTracesInPads = true, .InferViaInPad = false
     };
     LENGTH_DELAY_STATS details = GetLengthCalculation()->CalculateLengthDetails(
             items, opts, nullptr, nullptr, LENGTH_DELAY_LAYER_OPT::NO_LAYER_DETAIL,

@@ -722,7 +722,7 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
             {
                 int netCode = foundNets[i]->GetNetCode();
 
-                constexpr PATH_OPTIMISATIONS opts = { .OptimiseViaLayers = true,
+                constexpr PATH_OPTIMISATIONS opts = { .OptimiseVias = true,
                                                       .MergeTracks = true,
                                                       .OptimiseTracesInPads = true,
                                                       .InferViaInPad = false };
