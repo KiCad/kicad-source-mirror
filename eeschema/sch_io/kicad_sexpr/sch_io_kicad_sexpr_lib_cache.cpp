@@ -310,9 +310,14 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
         // Write each file
         for( auto& [ filePath, symbols ] : symbolsByFile )
         {
+            wxFileName oldFn = filePath;
+
+            if( oldFn.GetPath() != m_libFileName.GetPath() )
+                oldFn.SetPath( m_libFileName.GetPath() );
+
             std::sort( symbols.begin(), symbols.end(), sortByInheritance );
 
-            auto formatter = std::make_unique<PRETTIFIED_FILE_OUTPUTFORMATTER>( filePath );
+            auto formatter = std::make_unique<PRETTIFIED_FILE_OUTPUTFORMATTER>( oldFn.GetFullPath() );
 
             formatLibraryHeader( *formatter.get() );
 
