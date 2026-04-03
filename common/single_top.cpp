@@ -168,6 +168,31 @@ void CustomAssertHandler( const wxString& file,
 }
 #endif
 
+#include <wx/evtloop.h>
+
+class KI_TIMED_EVENT_LOOP : public wxGUIEventLoop {
+public:
+  
+   public:
+    int Run() override {
+        while (!m_shouldExit) {
+            // process one native/queued event, with your pre/post hooks
+            Dispatch();
+        }
+        return 0;
+    }
+
+    bool Dispatch() override {
+        // peek/handle one event or call base to handle available events
+        // call OnBeforeDispatch(event); ...
+        return wxGUIEventLoop::Dispatch();
+    }
+
+    void Exit() { m_shouldExit = true; }
+
+    private:
+    bool m_shouldExit = false;
+};
 
 /**
  * Implement a bare naked wxApp (so that we don't become dependent on
@@ -237,8 +262,11 @@ struct APP_SINGLE_TOP : public wxApp
     {
         int ret = -1;
 
+  //      wxEventLoopBase* loop = new KI_TIMED_EVENT_LOOP();
+
         try
         {
+//            ret = loop->Run();
             ret = wxApp::OnRun();
         }
         catch(...)
@@ -278,6 +306,51 @@ struct APP_SINGLE_TOP : public wxApp
         }
 
         return Event_Skip;
+    }
+
+
+    void ProcessPendingEvents() override
+    {
+        if( m_bDoPendingEventProcessing )
+        {
+            wxENTER_CRIT_SECT( m_handlersWithPendingEventsLocker );
+
+            wxCHECK_RET( m_handlersWithPendingDelayedEvents.IsEmpty(), "this helper list should be empty" );
+
+            // iterate until the list becomes empty: the handlers remove themselves
+            // from it when they don't have any more pending events
+            while( !m_handlersWithPendingEvents.IsEmpty() )
+            {
+                // NOTE: we always call ProcessPendingEvents() on the first event handler
+                //       with pending events because handlers auto-remove themselves
+                //       from this list (see RemovePendingEventHandler) if they have no
+                //       more pending events.
+                wxEvtHandler* const handler = m_handlersWithPendingEvents[0];
+
+                // In ProcessPendingEvents(), new handlers might be added
+                // and we can safely leave the critical section here as we're not
+                // accessing m_handlersWithPendingEvents while we don't hold it.
+                wxLEAVE_CRIT_SECT( m_handlersWithPendingEventsLocker );
+
+                fprintf(stderr, "do handler %p\n", handler);
+                handler->ProcessPendingEvents();
+
+                wxENTER_CRIT_SECT( m_handlersWithPendingEventsLocker );
+            }
+
+            // now the wxHandlersWithPendingEvents is surely empty; however some event
+            // handlers may have moved themselves into wxHandlersWithPendingDelayedEvents
+            // because of a selective wxYield call in progress.
+            // Now we need to move them back to wxHandlersWithPendingEvents so the next
+            // call to this function has the chance of processing them:
+            if( !m_handlersWithPendingDelayedEvents.IsEmpty() )
+            {
+                WX_APPEND_ARRAY( m_handlersWithPendingEvents, m_handlersWithPendingDelayedEvents );
+                m_handlersWithPendingDelayedEvents.Clear();
+            }
+
+            wxLEAVE_CRIT_SECT( m_handlersWithPendingEventsLocker );
+        }
     }
 
     void OnUnhandledException() override

@@ -330,8 +330,8 @@ bool TRACE_MANAGER::IsTraceEnabled( const wxString& aWhat )
 
 void TRACE_MANAGER::traceV( const wxString& aWhat, const wxString& aFmt, va_list vargs )
 {
-    if( !IsTraceEnabled( aWhat ) )
-        return;
+    //if( !IsTraceEnabled( aWhat ) )
+      //  return;
 
     wxString str;
     str.PrintfV( aFmt, vargs );

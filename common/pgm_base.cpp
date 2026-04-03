@@ -853,6 +853,8 @@ void PGM_BASE::HandleAssert( const wxString& aFile, int aLine, const wxString& a
                                       aCond );
     }
 
+    fprintf(stderr, "%s", assertStr.c_str().AsChar() );
+
 #ifndef NDEBUG
     wxLogError( assertStr );
 #endif
