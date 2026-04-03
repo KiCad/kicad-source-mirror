@@ -2011,6 +2011,7 @@ void APPEARANCE_CONTROLS::OnLayerContextMenu( wxCommandEvent& aEvent )
     // The new preset. We keep the visibility state of objects:
     LAYER_PRESET preset;
     preset.renderLayers = getVisibleObjects();
+    preset.flipBoard = m_frame->GetDisplayOptions().m_FlipBoardView;
 
     switch( aEvent.GetId() )
     {
