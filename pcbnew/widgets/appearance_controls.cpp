@@ -2550,7 +2550,6 @@ void APPEARANCE_CONTROLS::rebuildNets()
 
     COLOR_SETTINGS* theme   = m_frame->GetColorSettings();
     COLOR4D         bgColor = theme->GetColor( LAYER_PCB_BACKGROUND );
-        return;
 
     m_staticTextNets->SetLabel( _( "Nets" ) );
     m_staticTextNetClasses->SetLabel( _( "Net Classes" ) );
