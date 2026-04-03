@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <map>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -32,6 +33,7 @@ class SCHEMATIC;
 class SCH_SHEET;
 class SCH_SCREEN;
 class SCH_SHEET_PATH;
+class LIB_SYMBOL;
 
 namespace PADS_SCH_BINARY
 {
@@ -65,6 +67,12 @@ struct PLACEMENT
 
     /// Per-field placements from the post-placement array, index-aligned with @ref fields.
     std::vector<FIELD_PLACEMENT> fieldPlaces;
+
+    /// Multi-gate grouping: base reference (suffix stripped) shared by a part's gates, the
+    /// 1-based KiCad unit, and whether this placement is one gate of a multi-unit part.
+    std::string baseRef;
+    int         unit = 1;
+    bool        multiUnit = false;
 };
 
 /// One drawing piece of a CAE decal (a polyline of decal-relative mil vertices).
@@ -239,6 +247,12 @@ private:
     /// Decode every part-type's pin numbers, names and electrical types from the per-sheet
     /// stride-24 pin pool sliced by the part-type pool's +0x30 cursor, into m_partTypePins.
     void decodePinNames( const std::vector<uint8_t>& aData );
+
+    /// Build a multi-unit LIB_SYMBOL for a part whose gates share @p aBase: one unit per
+    /// gate, each carrying that gate's body (its placed decal) and pin slice. Returns null
+    /// when the part-type has fewer than two gates.
+    std::unique_ptr<LIB_SYMBOL> buildMultiUnitLib( const std::string& aBase,
+                                                   const std::string& aPartType ) const;
     void decodeWires( const std::vector<uint8_t>& aData );
     void decodeTexts( const std::vector<uint8_t>& aData );
     void decodeJunctions( const std::vector<uint8_t>& aData );

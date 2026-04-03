@@ -1005,4 +1005,26 @@ BOOST_AUTO_TEST_CASE( PinNamesAndTypes )
 }
 
 
+// Multi-gate parts group their gate-placements under one base reference, each placement
+// carrying its 1-based KiCad unit, so the build emits one shared multi-unit symbol.
+BOOST_AUTO_TEST_CASE( MultiGateGrouping )
+{
+
+    // U1 is a 3-gate IC with A and C placed; U24 is a multi-gate IC (A..H).
+    BOOST_REQUIRE( partUnits.count( "U1" ) );
+    BOOST_CHECK( partUnits["U1"].count( 1 ) );  // U1-A
+    BOOST_CHECK( partUnits["U1"].count( 3 ) );  // U1-C
+
+    BOOST_REQUIRE( partUnits.count( "U24" ) );
+    BOOST_CHECK_GE( partUnits["U24"].size(), 6u );  // several gates A..H placed
+
+    // The gate-suffixed references collapsed into bases, not separate parts.
+    for( const PADS_SCH_BINARY::PLACEMENT& pl : reader.GetPlacements() )
+    {
+        if( pl.reference.rfind( "U24-", 0 ) == 0 )
+            BOOST_CHECK_EQUAL( pl.baseRef, "U24" );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

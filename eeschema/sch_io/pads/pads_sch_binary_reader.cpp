@@ -1507,6 +1507,31 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
                 }
             }
 
+            // Multi-gate grouping: a part-type with more than one real (pin-bearing) gate is
+            // a multi-unit symbol. Its placements carry a -<gate> suffix; the base reference
+            // groups them and the unit slot is at block+0xc (refdes-0x14, 0-based).
+            pl.baseRef = pl.reference;
+
+            auto gpIt = m_partTypeGatePins.find( pl.partType );
+
+            if( gpIt != m_partTypeGatePins.end() )
+            {
+                int realGates = 0;
+
+                for( const std::vector<PIN_INFO>& g : gpIt->second )
+                    realGates += g.empty() ? 0 : 1;
+
+                size_t dash = pl.reference.rfind( '-' );
+
+                if( realGates > 1 && dash != std::string::npos && dash > 0 )
+                {
+                    pl.baseRef = pl.reference.substr( 0, dash );
+                    pl.multiUnit = true;
+                    int slot = static_cast<int>( readU16( d, p - 0x14 ) ) + 1;
+                    pl.unit = ( slot >= 1 && slot <= static_cast<int>( gpIt->second.size() ) ) ? slot : 1;
+                }
+            }
+
             runOffsets.push_back( p );
             m_placements.push_back( std::move( pl ) );
 
@@ -2624,6 +2649,164 @@ static ELECTRICAL_PINTYPE pinTypeFromLetter( char aLetter )
 }
 
 
+// Add one gate's body shapes and pins to a LIB_SYMBOL on unit @p aUnit (0 = common to all
+// units, for single-unit symbols). When @p aDecal is null (an unplaced or unbound gate) the
+// pins are laid out in a column so the unit stays electrically complete. Pins are labelled
+// from @p aGatePins when their count matches the decal's terminals; otherwise bare-numbered.
+static void addGateUnit( LIB_SYMBOL* aLib, const PADS_SCH_BINARY::DECAL* aDecal,
+                         const std::vector<PADS_SCH_BINARY::PIN_INFO>& aGatePins, int aUnit )
+{
+    using namespace PADS_SCH_BINARY;
+
+    if( aDecal )
+    {
+        for( const DECAL_PIECE& piece : aDecal->pieces )
+        {
+            SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
+
+            for( const std::pair<int, int>& v : piece.verts )
+                shape->AddPoint( VECTOR2I( schIUScale.MilsToIU( v.first ),
+                                           -schIUScale.MilsToIU( v.second ) ) );
+
+            int width = piece.width_mils > 0 ? schIUScale.MilsToIU( piece.width_mils ) : 0;
+            shape->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
+
+            if( piece.closed )
+                shape->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
+
+            shape->SetUnit( aUnit );
+            aLib->AddDrawItem( shape );
+        }
+
+        double cx = 0.0;
+        double cy = 0.0;
+        int    nv = 0;
+
+        for( const DECAL_PIECE& piece : aDecal->pieces )
+        {
+            for( const std::pair<int, int>& v : piece.verts )
+            {
+                cx += v.first;
+                cy += v.second;
+                ++nv;
+            }
+        }
+
+        if( nv > 0 )
+        {
+            cx /= nv;
+            cy /= nv;
+        }
+
+        bool   label = aGatePins.size() == aDecal->terminals.size();
+        int    pinNumber = 1;
+        size_t ti = 0;
+
+        for( const std::pair<int, int>& term : aDecal->terminals )
+        {
+            SCH_PIN* pin = new SCH_PIN( aLib );
+            pin->SetPosition( VECTOR2I( schIUScale.MilsToIU( term.first ),
+                                        -schIUScale.MilsToIU( term.second ) ) );
+
+            if( label )
+            {
+                const PIN_INFO& info = aGatePins[ti];
+                pin->SetNumber( wxString::FromUTF8( info.number ) );
+
+                if( !info.name.empty() )
+                    pin->SetName( wxString::FromUTF8( info.name ) );
+
+                pin->SetType( pinTypeFromLetter( info.type ) );
+            }
+            else
+            {
+                pin->SetNumber( wxString::Format( wxT( "%d" ), pinNumber++ ) );
+                pin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+            }
+
+            ++ti;
+
+            int ddx = static_cast<int>( cx ) - term.first;
+            int ddy = static_cast<int>( cy ) - term.second;
+
+            if( std::abs( ddx ) >= std::abs( ddy ) )
+                pin->SetOrientation( ddx >= 0 ? PIN_ORIENTATION::PIN_RIGHT : PIN_ORIENTATION::PIN_LEFT );
+            else
+                pin->SetOrientation( ddy < 0 ? PIN_ORIENTATION::PIN_UP : PIN_ORIENTATION::PIN_DOWN );
+
+            pin->SetLength( schIUScale.MilsToIU( 100 ) );
+            pin->SetUnit( aUnit );
+            aLib->AddDrawItem( pin );
+        }
+    }
+    else
+    {
+        int y = 0;
+
+        for( const PIN_INFO& info : aGatePins )
+        {
+            SCH_PIN* pin = new SCH_PIN( aLib );
+            pin->SetPosition( VECTOR2I( 0, schIUScale.MilsToIU( y ) ) );
+            y -= 100;
+            pin->SetNumber( wxString::FromUTF8( info.number ) );
+
+            if( !info.name.empty() )
+                pin->SetName( wxString::FromUTF8( info.name ) );
+
+            pin->SetType( pinTypeFromLetter( info.type ) );
+            pin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
+            pin->SetLength( schIUScale.MilsToIU( 100 ) );
+            pin->SetUnit( aUnit );
+            aLib->AddDrawItem( pin );
+        }
+    }
+}
+
+
+std::unique_ptr<LIB_SYMBOL> PADS_SCH_BINARY_READER::buildMultiUnitLib( const std::string& aBase,
+                                                                      const std::string& aPartType ) const
+{
+    auto git = m_partTypeGatePins.find( aPartType );
+
+    if( git == m_partTypeGatePins.end() || git->second.size() < 2 )
+        return nullptr;
+
+    const std::vector<std::vector<PIN_INFO>>& slices = git->second;
+    int                                       ngates = static_cast<int>( slices.size() );
+
+    auto lib = std::make_unique<LIB_SYMBOL>( wxString::FromUTF8( aBase ) );
+    lib->SetUnitCount( ngates, false );
+    lib->LockUnits( true );
+
+    // The placed gates of this part give each unit its body decal.
+    std::map<int, std::string> placed;
+
+    for( const PLACEMENT& pl : m_placements )
+    {
+        if( pl.multiUnit && pl.baseRef == aBase && pl.unit >= 1 && pl.unit <= ngates )
+            placed[pl.unit] = pl.decalName;
+    }
+
+    for( int u = 1; u <= ngates; ++u )
+    {
+        const DECAL* decal = nullptr;
+        auto         pit = placed.find( u );
+
+        if( pit != placed.end() && !pit->second.empty() )
+        {
+            auto dit = m_decalIndex.find( pit->second );
+
+            if( dit != m_decalIndex.end() )
+                decal = &m_decals[dit->second];
+        }
+
+        addGateUnit( lib.get(), decal, slices[u - 1], u );
+    }
+
+    return lib;
+}
+
+
 int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aPath,
                                                 int aSheetIndex, int aPageHeightIU ) const
 {
@@ -2646,16 +2829,32 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
         if( !onSheet( pl.sheetIndex ) )
             continue;
 
-        // Use the bound CAE-decal as the symbol identity + body; fall back to a
-        // generic placeholder named after the refdes when the decal is unbound.
+        // A multi-gate part becomes one shared N-unit LIB_SYMBOL; this placement is one of
+        // its units, sharing the base reference. Single-gate parts use the bound CAE-decal as
+        // the symbol identity + body, or a generic placeholder when the decal is unbound.
         auto    decalIt = m_decalIndex.find( pl.decalName );
         bool    haveDecal = !pl.decalName.empty() && decalIt != m_decalIndex.end();
         wxString name = haveDecal ? wxString::FromUTF8( pl.decalName )
                                   : wxString::Format( wxT( "PADS_%s" ), wxString::FromUTF8( pl.reference ) );
 
-        std::unique_ptr<LIB_SYMBOL> libSym = std::make_unique<LIB_SYMBOL>( name );
+        std::unique_ptr<LIB_SYMBOL> libSym;
+        bool                        multiUnitBuilt = false;
 
-        if( haveDecal )
+        if( pl.multiUnit )
+        {
+            libSym = buildMultiUnitLib( pl.baseRef, pl.partType );
+
+            if( libSym )
+            {
+                name = wxString::FromUTF8( pl.baseRef );
+                multiUnitBuilt = true;
+            }
+        }
+
+        if( !libSym )
+            libSym = std::make_unique<LIB_SYMBOL>( name );
+
+        if( !multiUnitBuilt && haveDecal )
         {
             // Each decal drawing piece becomes a polyline body shape; PADS decal
             // geometry is Y-up, so the symbol-local Y is negated (library convention).
@@ -2767,9 +2966,13 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
         default:  symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_0 );   break;
         }
 
-        symbol->SetUnit( 1 );
-        symbol->SetRef( &path, wxString::FromUTF8( pl.reference ) );
-        symbol->AddHierarchicalReference( path.Path(), wxString::FromUTF8( pl.reference ), 1 );
+        wxString symRef = multiUnitBuilt ? wxString::FromUTF8( pl.baseRef )
+                                         : wxString::FromUTF8( pl.reference );
+        int      symUnit = multiUnitBuilt ? pl.unit : 1;
+
+        symbol->SetUnit( symUnit );
+        symbol->SetRef( &path, symRef );
+        symbol->AddHierarchicalReference( path.Path(), symRef, symUnit );
 
         // A field's recovered delta is page-relative to the symbol origin in PADS Y-up
         // coordinates; convert to the symbol-absolute KiCad position (Y-down).
