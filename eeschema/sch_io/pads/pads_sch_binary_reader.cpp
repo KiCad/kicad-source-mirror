@@ -139,6 +139,7 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     m_partTypeNames.clear();
     m_partTypePools.clear();
     m_partTypePins.clear();
+    m_partTypeGatePins.clear();
     m_partTypeFields.clear();
     m_placements.clear();
     m_wireVertices.clear();
@@ -1665,9 +1666,10 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
 
         // Re-walk the pool record run reading the +0x30 pin cursor (and the +0x2c gate cursor
         // as the monotone guard), stopping where either wraps - the junk boundary record.
-        std::vector<std::pair<std::string, uint32_t>> recs;
-        uint32_t                                      prev30 = 0;
-        uint32_t                                      prev2c = 0;
+        struct POOLREC { std::string name; uint32_t f2c; uint32_t f30; };
+        std::vector<POOLREC> recs;
+        uint32_t             prev30 = 0;
+        uint32_t             prev2c = 0;
 
         for( size_t j = 0;; ++j )
         {
@@ -1690,7 +1692,7 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
             if( ( j && ( f30 < prev30 || f2c < prev2c ) ) || f30 > 1000000 || f2c > 1000000 )
                 break;
 
-            recs.emplace_back( std::string( reinterpret_cast<const char*>( &d[rec] ), z - rec ), f30 );
+            recs.push_back( { std::string( reinterpret_cast<const char*>( &d[rec] ), z - rec ), f2c, f30 } );
             prev30 = f30;
             prev2c = f2c;
         }
@@ -1714,6 +1716,14 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
         if( start == std::string::npos )
             continue;
 
+        // The stride-12 GATE descriptor pool sits between the part-type pool and the pin
+        // pool; byte 8 of each record is that gate's pin count, indexed by the part-type
+        // record's +0x2c cumulative gate cursor.
+        std::vector<uint8_t> gateNpins;
+
+        for( size_t go = base + PT_STRIDE * recs.size(); go + 12 <= start; go += 12 )
+            gateNpins.push_back( d[go + 8] );
+
         struct PINREC { std::string number; char type; bool named; };
         std::vector<PINREC> pins;
         size_t              o = start;
@@ -1734,7 +1744,7 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
         }
 
         int    want = 0;
-        size_t lastStop = std::min<size_t>( recs.back().second, pins.size() );
+        size_t lastStop = std::min<size_t>( recs.back().f30, pins.size() );
 
         for( size_t i = 0; i < lastStop; ++i )
             want += pins[i].named ? 1 : 0;
@@ -1767,8 +1777,8 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
 
         for( size_t k = 0; k < recs.size(); ++k )
         {
-            size_t sliceStart = recs[k].second;
-            size_t sliceStop = ( k + 1 < recs.size() ) ? recs[k + 1].second : pins.size();
+            size_t sliceStart = recs[k].f30;
+            size_t sliceStop = ( k + 1 < recs.size() ) ? recs[k + 1].f30 : pins.size();
             sliceStop = std::min( sliceStop, pins.size() );
 
             std::vector<PIN_INFO> out;
@@ -1790,10 +1800,27 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
                 out.push_back( std::move( pi ) );
             }
 
-            const std::string& ptName = recs[k].first;
+            const std::string& ptName = recs[k].name;
 
             if( ptName.empty() || ptName[0] == '$' )
                 continue;
+
+            // Split this part-type's flat pin list into its gates for multi-unit symbols.
+            std::vector<std::vector<PIN_INFO>> gates;
+            uint32_t                           g0 = recs[k].f2c;
+            uint32_t                           g1 = ( k + 1 < recs.size() ) ? recs[k + 1].f2c
+                                                                           : static_cast<uint32_t>( gateNpins.size() );
+            size_t                             gi = 0;
+
+            for( uint32_t g = g0; g < g1 && g < gateNpins.size(); ++g )
+            {
+                std::vector<PIN_INFO> gate;
+
+                for( uint8_t n = 0; n < gateNpins[g] && gi < out.size(); ++n )
+                    gate.push_back( out[gi++] );
+
+                gates.push_back( std::move( gate ) );
+            }
 
             // The library is redefined per sheet; keep the first complete (named) definition.
             auto it = m_partTypePins.find( ptName );
@@ -1801,7 +1828,10 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
             if( it == m_partTypePins.end()
                 || std::all_of( it->second.begin(), it->second.end(),
                                 []( const PIN_INFO& p ) { return p.name.empty(); } ) )
+            {
+                m_partTypeGatePins[ptName] = std::move( gates );
                 m_partTypePins[ptName] = std::move( out );
+            }
         }
     }
 }

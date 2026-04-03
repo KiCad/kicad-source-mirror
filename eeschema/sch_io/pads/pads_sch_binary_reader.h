@@ -190,6 +190,7 @@ public:
     const std::vector<NET_LABEL>&                   GetNetLabels() const { return m_netLabels; }
     const std::vector<DECAL>&                       GetDecals() const { return m_decals; }
     const std::map<std::string, std::vector<PIN_INFO>>& GetPartTypePins() const { return m_partTypePins; }
+    const std::map<std::string, std::vector<std::vector<PIN_INFO>>>& GetPartTypeGatePins() const { return m_partTypeGatePins; }
 
     /// Number of PADS sheets in the design (>= 1).
     size_t GetSheetCount() const { return m_sheetOffsets.empty() ? 1 : m_sheetOffsets.size(); }
@@ -273,6 +274,10 @@ private:
     // Part-type name -> its ordered pins (number, name, electrical type). Decoded from the
     // per-sheet stride-24 pin pool; used to label symbol pins instead of bare numbers.
     std::map<std::string, std::vector<PIN_INFO>> m_partTypePins;
+
+    // Part-type name -> its pins split per gate (the stride-12 gate pool boundaries). Drives
+    // multi-unit symbol reconstruction: gate g's pins go on LIB_SYMBOL unit g+1.
+    std::map<std::string, std::vector<std::vector<PIN_INFO>>> m_partTypeGatePins;
 
     std::map<std::string, std::vector<std::pair<std::string, std::string>>> m_partTypeFields;
 
