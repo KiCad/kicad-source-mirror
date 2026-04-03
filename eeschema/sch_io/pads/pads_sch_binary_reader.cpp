@@ -138,6 +138,7 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     m_decalBuiltinCount = 0;
     m_partTypeNames.clear();
     m_partTypePools.clear();
+    m_partTypePins.clear();
     m_partTypeFields.clear();
     m_placements.clear();
     m_wireVertices.clear();
@@ -155,6 +156,7 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     decodeSheets( aData );
     decodeDecals( aData );
     decodeFields( aData );
+    decodePinNames( aData );
     decodePlacements( aData );
     decodeWires( aData );
     decodeTexts( aData );
@@ -1590,6 +1592,221 @@ void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& 
 }
 
 
+void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
+{
+    static constexpr size_t      PT_STRIDE = 0x4c;
+    static constexpr size_t      PIN_STRIDE = 24;
+    static const std::string     TYPES = "USLBTCPGZ";
+
+    // A stride-24 pin record: type letter @+21, ASCII pin number @+4 (NUL-terminated), a u32
+    // named-flag @+0 (0xFFFFFFFF = unnamed).  The strict zero tail is intentionally NOT
+    // required so the handle-bearing variant (a live heap handle in bytes 22/23) still reads.
+    auto isPinRec = [&]( size_t o ) -> bool
+    {
+        if( o + PIN_STRIDE > d.size() || TYPES.find( static_cast<char>( d[o + 21] ) ) == std::string::npos )
+            return false;
+
+        uint8_t c = d[o + 4];
+
+        if( !( ( c >= '0' && c <= '9' ) || ( c >= 'A' && c <= 'Z' ) ) )
+            return false;
+
+        size_t z = o + 4;
+
+        while( z < o + 0x14 && d[z] != 0 )
+        {
+            if( d[z] < 0x21 || d[z] >= 0x7f )
+                return false;
+
+            ++z;
+        }
+
+        return z > o + 4 && z < o + 0x14;
+    };
+
+    // A name-pool token: a printable run (first char non-space) up to 24 bytes, NUL-terminated.
+    auto tokenEnd = [&]( size_t o ) -> size_t
+    {
+        if( o >= d.size() || d[o] < 0x21 || d[o] >= 0x7f )
+            return 0;
+
+        size_t z = o;
+
+        while( z < d.size() && z < o + 24 && d[z] != 0 )
+        {
+            if( d[z] < 0x20 || d[z] >= 0x7f )
+                return 0;
+
+            ++z;
+        }
+
+        return ( z < d.size() && d[z] == 0 ) ? z + 1 : 0;
+    };
+
+    auto isNameRun = [&]( size_t o, int want ) -> bool
+    {
+        int    c = 0;
+        size_t j = o;
+
+        for( size_t e = tokenEnd( j ); e; e = tokenEnd( j ) )
+        {
+            j = e;
+
+            if( ++c >= want )
+                return true;
+        }
+
+        return false;
+    };
+
+    for( const std::pair<size_t, std::vector<std::string>>& pool : m_partTypePools )
+    {
+        size_t base = pool.first;
+
+        // Re-walk the pool record run reading the +0x30 pin cursor (and the +0x2c gate cursor
+        // as the monotone guard), stopping where either wraps - the junk boundary record.
+        std::vector<std::pair<std::string, uint32_t>> recs;
+        uint32_t                                      prev30 = 0;
+        uint32_t                                      prev2c = 0;
+
+        for( size_t j = 0;; ++j )
+        {
+            size_t rec = base + PT_STRIDE * j;
+
+            if( rec + PT_STRIDE > d.size() )
+                break;
+
+            size_t z = rec;
+
+            while( z < rec + 0x26 && z < d.size() && d[z] != 0 && d[z] >= 0x20 && d[z] < 0x7f )
+                ++z;
+
+            if( z == rec || ( z < rec + 0x26 && d[z] != 0 ) )
+                break;
+
+            uint32_t f2c = readU32( d, rec + 0x2c );
+            uint32_t f30 = readU32( d, rec + 0x30 );
+
+            if( ( j && ( f30 < prev30 || f2c < prev2c ) ) || f30 > 1000000 || f2c > 1000000 )
+                break;
+
+            recs.emplace_back( std::string( reinterpret_cast<const char*>( &d[rec] ), z - rec ), f30 );
+            prev30 = f30;
+            prev2c = f2c;
+        }
+
+        if( recs.size() < 4 )
+            continue;
+
+        size_t pp = base + PT_STRIDE * ( recs.size() + 1 );
+        size_t scanEnd = std::min( pp + 0x2000, d.size() );
+        size_t start = std::string::npos;
+
+        for( size_t o = pp; o + PIN_STRIDE < scanEnd; ++o )
+        {
+            if( isPinRec( o ) )
+            {
+                start = o;
+                break;
+            }
+        }
+
+        if( start == std::string::npos )
+            continue;
+
+        struct PINREC { std::string number; char type; bool named; };
+        std::vector<PINREC> pins;
+        size_t              o = start;
+
+        while( o + PIN_STRIDE <= d.size() )
+        {
+            if( isNameRun( o, 6 ) || !isPinRec( o ) )
+                break;
+
+            size_t z = o + 4;
+
+            while( z < o + 0x14 && d[z] != 0 )
+                ++z;
+
+            pins.push_back( { std::string( reinterpret_cast<const char*>( &d[o + 4] ), z - ( o + 4 ) ),
+                              static_cast<char>( d[o + 21] ), readU32( d, o ) != 0xFFFFFFFF } );
+            o += PIN_STRIDE;
+        }
+
+        int    want = 0;
+        size_t lastStop = std::min<size_t>( recs.back().second, pins.size() );
+
+        for( size_t i = 0; i < lastStop; ++i )
+            want += pins[i].named ? 1 : 0;
+
+        size_t nameBase = std::string::npos;
+
+        for( size_t s = o; s + 1 < d.size(); ++s )
+        {
+            if( isNameRun( s, std::max( 4, want ) ) )
+            {
+                nameBase = s;
+                break;
+            }
+        }
+
+        std::vector<std::string> run;
+
+        for( size_t t = nameBase; nameBase != std::string::npos; )
+        {
+            size_t e = tokenEnd( t );
+
+            if( !e )
+                break;
+
+            run.emplace_back( reinterpret_cast<const char*>( &d[t] ), e - t - 1 );
+            t = e;
+        }
+
+        size_t cursor = 0;
+
+        for( size_t k = 0; k < recs.size(); ++k )
+        {
+            size_t sliceStart = recs[k].second;
+            size_t sliceStop = ( k + 1 < recs.size() ) ? recs[k + 1].second : pins.size();
+            sliceStop = std::min( sliceStop, pins.size() );
+
+            std::vector<PIN_INFO> out;
+
+            for( size_t i = sliceStart; i < sliceStop; ++i )
+            {
+                PIN_INFO pi;
+                pi.number = pins[i].number;
+                pi.type = pins[i].type;
+
+                if( pins[i].named )
+                {
+                    if( cursor < run.size() )
+                        pi.name = run[cursor];
+
+                    ++cursor;
+                }
+
+                out.push_back( std::move( pi ) );
+            }
+
+            const std::string& ptName = recs[k].first;
+
+            if( ptName.empty() || ptName[0] == '$' )
+                continue;
+
+            // The library is redefined per sheet; keep the first complete (named) definition.
+            auto it = m_partTypePins.find( ptName );
+
+            if( it == m_partTypePins.end()
+                || std::all_of( it->second.begin(), it->second.end(),
+                                []( const PIN_INFO& p ) { return p.name.empty(); } ) )
+                m_partTypePins[ptName] = std::move( out );
+        }
+    }
+}
+
+
 // ---------------------------------------------------------------------------
 // WIRES
 //
@@ -2360,6 +2577,23 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
 // ---------------------------------------------------------------------------
 // SCHEMATIC BUILD
 // ---------------------------------------------------------------------------
+static ELECTRICAL_PINTYPE pinTypeFromLetter( char aLetter )
+{
+    switch( aLetter )
+    {
+    case 'S': return ELECTRICAL_PINTYPE::PT_OUTPUT;
+    case 'L': return ELECTRICAL_PINTYPE::PT_INPUT;
+    case 'B': return ELECTRICAL_PINTYPE::PT_BIDI;
+    case 'T':
+    case 'Z': return ELECTRICAL_PINTYPE::PT_TRISTATE;
+    case 'C': return ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR;
+    case 'P':
+    case 'G': return ELECTRICAL_PINTYPE::PT_POWER_IN;
+    default:  return ELECTRICAL_PINTYPE::PT_PASSIVE;
+    }
+}
+
+
 int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aPath,
                                                 int aSheetIndex, int aPageHeightIU ) const
 {
@@ -2435,15 +2669,42 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
                 cy /= nv;
             }
 
+            // Recovered electrical pins for the part-type label the symbol's pins (number,
+            // name, type) when their count matches the decal's terminals (the single-gate
+            // case); otherwise the terminals keep bare numbers + passive type.
+            auto ptPinsIt = m_partTypePins.find( pl.partType );
+            const std::vector<PIN_INFO>* ptPins =
+                    ( ptPinsIt != m_partTypePins.end()
+                      && ptPinsIt->second.size() == decal.terminals.size() )
+                            ? &ptPinsIt->second
+                            : nullptr;
+
             int pinNumber = 1;
+            size_t ti = 0;
 
             for( const std::pair<int, int>& term : decal.terminals )
             {
                 SCH_PIN* pin = new SCH_PIN( libSym.get() );
                 pin->SetPosition( VECTOR2I( schIUScale.MilsToIU( term.first ),
                                             -schIUScale.MilsToIU( term.second ) ) );
-                pin->SetNumber( wxString::Format( wxT( "%d" ), pinNumber++ ) );
-                pin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+
+                if( ptPins )
+                {
+                    const PIN_INFO& info = ( *ptPins )[ti];
+                    pin->SetNumber( wxString::FromUTF8( info.number ) );
+
+                    if( !info.name.empty() )
+                        pin->SetName( wxString::FromUTF8( info.name ) );
+
+                    pin->SetType( pinTypeFromLetter( info.type ) );
+                }
+                else
+                {
+                    pin->SetNumber( wxString::Format( wxT( "%d" ), pinNumber++ ) );
+                    pin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+                }
+
+                ++ti;
 
                 int ddx = static_cast<int>( cx ) - term.first;
                 int ddy = static_cast<int>( cy ) - term.second;

@@ -83,6 +83,14 @@ struct DECAL
     std::vector<std::pair<int, int>> terminals;      ///< Pin connection points (mils).
 };
 
+/// One part-type pin: its number, optional name, and electrical-type letter.
+struct PIN_INFO
+{
+    std::string number;       ///< Pin number/designator (e.g. "1", "A8").
+    std::string name;         ///< Pin name; empty when the name is the number.
+    char        type = 'U';   ///< PADS electrical-type letter (U S L B T C P G Z).
+};
+
 /// One wire vertex recovered from the binary 8-byte vertex pool.
 struct WIRE_VERTEX
 {
@@ -181,6 +189,7 @@ public:
     const std::vector<JUNCTION>&                    GetJunctions() const { return m_junctions; }
     const std::vector<NET_LABEL>&                   GetNetLabels() const { return m_netLabels; }
     const std::vector<DECAL>&                       GetDecals() const { return m_decals; }
+    const std::map<std::string, std::vector<PIN_INFO>>& GetPartTypePins() const { return m_partTypePins; }
 
     /// Number of PADS sheets in the design (>= 1).
     size_t GetSheetCount() const { return m_sheetOffsets.empty() ? 1 : m_sheetOffsets.size(); }
@@ -225,6 +234,10 @@ private:
     /// attach each record to its placement's @ref PLACEMENT::fieldPlaces.
     void assignFieldPlacements( const std::vector<uint8_t>& aData, size_t aBlockEnd,
                                 size_t aRunFirst, const std::vector<size_t>& aRunOffsets );
+
+    /// Decode every part-type's pin numbers, names and electrical types from the per-sheet
+    /// stride-24 pin pool sliced by the part-type pool's +0x30 cursor, into m_partTypePins.
+    void decodePinNames( const std::vector<uint8_t>& aData );
     void decodeWires( const std::vector<uint8_t>& aData );
     void decodeTexts( const std::vector<uint8_t>& aData );
     void decodeJunctions( const std::vector<uint8_t>& aData );
@@ -256,6 +269,10 @@ private:
     // Per-sheet part-type pools (file offset -> stride-0x4c name list). A placement's
     // ptidx indexes the pool of its OWN sheet; m_partTypeNames is the union of all pools.
     std::vector<std::pair<size_t, std::vector<std::string>>> m_partTypePools;
+
+    // Part-type name -> its ordered pins (number, name, electrical type). Decoded from the
+    // per-sheet stride-24 pin pool; used to label symbol pins instead of bare numbers.
+    std::map<std::string, std::vector<PIN_INFO>> m_partTypePins;
 
     std::map<std::string, std::vector<std::pair<std::string, std::string>>> m_partTypeFields;
 

@@ -1000,4 +1000,9 @@ BOOST_AUTO_TEST_CASE( NetLabelKinds )
 }
 
 
+BOOST_AUTO_TEST_CASE( PinNamesAndTypes )
+{
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
