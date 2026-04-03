@@ -927,6 +927,9 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
     dummy.SetParentGroup( nullptr );
     dummy.SetParent( nullptr );
 
+    if( BOARD* board = GetBoard() )
+        board->UncacheItemSubtreeById( &dummy );
+
     for( BOARD_ITEM* item : dummy.GraphicalItems() )
         item->NormalizeForCompare();
 
