@@ -324,6 +324,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     // Connect Events
     m_grid->Bind( wxEVT_GRID_COL_SORT, &DIALOG_SYMBOL_FIELDS_TABLE::OnColSort, this );
     m_grid->Bind( wxEVT_GRID_COL_MOVE, &DIALOG_SYMBOL_FIELDS_TABLE::OnColMove, this );
+    m_grid->GetGridWindow()->Bind( wxEVT_MOTION, &DIALOG_SYMBOL_FIELDS_TABLE::OnGridMouseMove, this );
     m_cbBomPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged, this );
     m_cbBomFmtPresets->Bind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomFmtPresetChanged, this );
     m_viewControlsGrid->Bind( wxEVT_GRID_CELL_CHANGED, &DIALOG_SYMBOL_FIELDS_TABLE::OnViewControlsCellChanged, this );
@@ -365,6 +366,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
     }
 
     // Disconnect Events
+    m_grid->GetGridWindow()->Unbind( wxEVT_MOTION, &DIALOG_SYMBOL_FIELDS_TABLE::OnGridMouseMove, this );
     m_grid->Unbind( wxEVT_GRID_COL_SORT, &DIALOG_SYMBOL_FIELDS_TABLE::OnColSort, this );
     m_grid->Unbind( wxEVT_GRID_COL_SORT, &DIALOG_SYMBOL_FIELDS_TABLE::OnColMove, this );
     m_cbBomPresets->Unbind( wxEVT_CHOICE, &DIALOG_SYMBOL_FIELDS_TABLE::onBomPresetChanged, this );
@@ -1227,6 +1229,36 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
     else
     {
         event.Skip();
+    }
+}
+
+
+void DIALOG_SYMBOL_FIELDS_TABLE::OnGridMouseMove( wxMouseEvent& aEvent )
+{
+    aEvent.Skip();
+
+    wxPoint pos = aEvent.GetPosition();
+    int     ux, uy;
+    m_grid->CalcUnscrolledPosition( pos.x, pos.y, &ux, &uy );
+    int row = m_grid->YToRow( uy );
+    int col = m_grid->XToCol( ux );
+
+
+    if( row == wxNOT_FOUND || col == wxNOT_FOUND )
+    {
+        m_grid->GetGridWindow()->UnsetToolTip();
+        return;
+    }
+
+    wxString rawValue = m_dataModel->GetValue( row, col );
+
+    if( rawValue.Contains( wxT( "${" ) ) )
+    {
+        m_grid->GetGridWindow()->SetToolTip( rawValue );
+    }
+    else
+    {
+        m_grid->GetGridWindow()->UnsetToolTip();
     }
 }
 

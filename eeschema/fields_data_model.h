@@ -139,7 +139,8 @@ public:
             m_excludeDNP( false ),
             m_includeExcluded( false ),
             m_rebuildsEnabled( true ),
-            m_urlEditor( aURLEditor )
+            m_urlEditor( aURLEditor ),
+            m_textVarRenderer( nullptr )
     {
         m_symbolsList.SplitReferences();
     }
@@ -147,6 +148,7 @@ public:
     ~FIELDS_EDITOR_GRID_DATA_MODEL() override
     {
         wxSafeDecRef( m_urlEditor );
+        wxSafeDecRef( m_textVarRenderer );
     }
 
     static const wxString QUANTITY_VARIABLE;
@@ -209,6 +211,7 @@ public:
     }
 
     wxString GetValue( int aRow, int aCol ) override;
+    wxString        GetResolvedValue( int aRow, int aCol );
     wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override;
 
     wxString GetValue( const DATA_MODEL_ROW& group, int aCol,
@@ -413,6 +416,7 @@ protected:
     bool               m_includeExcluded;
     bool               m_rebuildsEnabled;
     wxGridCellAttr*    m_urlEditor;
+    wxGridCellRenderer*     m_textVarRenderer; ///< Renderer for cells with text variable references
     wxString                m_currentVariant;  ///< Current variant name for highlighting
     std::vector<wxString>   m_variantNames;    ///< Variant names for multi-variant DNP filtering
 

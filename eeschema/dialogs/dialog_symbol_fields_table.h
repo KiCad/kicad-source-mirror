@@ -85,6 +85,7 @@ private:
 
     void OnTableValueChanged( wxGridEvent& event ) override;
     void OnTableCellClick( wxGridEvent& event ) override;
+    void OnGridMouseMove( wxMouseEvent& aEvent );
     void OnTableColSize( wxGridSizeEvent& event ) override;
 
     void OnSidebarToggle( wxCommandEvent& event ) override;
