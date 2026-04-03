@@ -127,6 +127,8 @@ public:
     virtual void Format( OUTPUTFORMATTER* aFormatter ) const;
 
     static wxString GetCurrentDate();
+    static wxString GetCurrentTimeHHMMSS();
+    static wxString GetCurrentTimeLocale();
 
 private:
     wxArrayString m_tbTexts;

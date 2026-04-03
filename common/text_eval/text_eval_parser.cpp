@@ -316,6 +316,41 @@ public:
         auto timeT = std::chrono::system_clock::to_time_t( now );
         return static_cast<double>( timeT );
     }
+
+    static auto FormatTime( double aSecondsSinceEpoch, const std::string& aFormat ) -> std::string
+    {
+        auto      timeT = static_cast<time_t>( aSecondsSinceEpoch );
+        struct tm tmBuf;
+
+#ifdef _WIN32
+        localtime_s( &tmBuf, &timeT );
+#else
+        localtime_r( &timeT, &tmBuf );
+#endif
+
+        int hour = tmBuf.tm_hour;
+        int min = tmBuf.tm_min;
+        int sec = tmBuf.tm_sec;
+
+        if( aFormat == "24h" || aFormat == "ISO" || aFormat == "iso" )
+            return fmt::format( "{:02d}:{:02d}:{:02d}", hour, min, sec );
+        else if( aFormat == "12h" )
+        {
+            const char* ampm = hour >= 12 ? "PM" : "AM";
+            int         hour12 = hour % 12;
+
+            if( hour12 == 0 )
+                hour12 = 12;
+
+            return fmt::format( "{}:{:02d}:{:02d} {}", hour12, min, sec, ampm );
+        }
+        else if( aFormat == "HH_MM_SS" || aFormat == "filename" )
+            return fmt::format( "{:02d}h{:02d}m{:02d}s", hour, min, sec );
+        else if( aFormat == "short" )
+            return fmt::format( "{:02d}:{:02d}", hour, min );
+        else
+            return fmt::format( "{:02d}:{:02d}:{:02d}", hour, min, sec );
+    }
 };
 
 
@@ -674,6 +709,17 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
         const auto days = static_cast<int>( dateResult.GetValue() );
         return MakeValue<Value>( DATE_UTILS::GetWeekdayName( days ) );
+    }
+    else if( name == "timeformat" && argc >= 1 )
+    {
+        auto timeResult = VALUE_UTILS::ToDouble( argValues[0] );
+        if( !timeResult )
+            return MakeError<Value>( timeResult.GetError() );
+
+        const auto timestamp = timeResult.GetValue();
+        const auto format = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "ISO";
+
+        return MakeValue<Value>( DATE_UTILS::FormatTime( timestamp, format ) );
     }
 
     // VCS functions (return strings!)

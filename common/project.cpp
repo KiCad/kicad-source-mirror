@@ -97,6 +97,16 @@ bool PROJECT::TextVarResolver( wxString* aToken ) const
         *aToken = TITLE_BLOCK::GetCurrentDate();
         return true;
     }
+    else if( aToken->IsSameAs( wxT( "CURRENT_TIME_HH_MM_SS" ) ) )
+    {
+        *aToken = TITLE_BLOCK::GetCurrentTimeHHMMSS();
+        return true;
+    }
+    else if( aToken->IsSameAs( wxT( "CURRENT_TIME_LOCALE" ) ) )
+    {
+        *aToken = TITLE_BLOCK::GetCurrentTimeLocale();
+        return true;
+    }
     else if( aToken->IsSameAs( wxT( "VCSHASH" ) ) )
     {
         *aToken = KIGIT::PROJECT_GIT_UTILS::GetCurrentHash( GetProjectFullName(), false );

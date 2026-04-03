@@ -78,6 +78,8 @@ void TITLE_BLOCK::GetContextualTextVars( wxArrayString* aVars )
     {
         aVars->push_back( wxT( "ISSUE_DATE" ) );
         aVars->push_back( wxT( "CURRENT_DATE" ) );
+        aVars->push_back( wxT( "CURRENT_TIME_LOCALE" ) );
+        aVars->push_back( wxT( "CURRENT_TIME_HH_MM_SS" ) );
         aVars->push_back( wxT( "REVISION" ) );
         aVars->push_back( wxT( "TITLE" ) );
         aVars->push_back( wxT( "COMPANY" ) );
@@ -106,6 +108,21 @@ wxString TITLE_BLOCK::GetCurrentDate()
 };
 
 
+wxString TITLE_BLOCK::GetCurrentTimeHHMMSS()
+{
+    // Returns time in HHhMMmSSs format (e.g., "19h23m42s").
+    // Uses letters as separators to be safe for filenames (':' can't be used as a separator).
+    return wxDateTime::Now().Format( wxT( "%Hh%Mm%Ss" ) );
+}
+
+
+wxString TITLE_BLOCK::GetCurrentTimeLocale()
+{
+    // Returns time formatted according to the current locale (e.g., "7:23:42 PM" or "19:23:42").
+    return wxDateTime::Now().FormatTime();
+}
+
+
 bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject, int aFlags ) const
 {
     bool tokenUpdated = false;
@@ -119,6 +136,16 @@ bool TITLE_BLOCK::TextVarResolver( wxString* aToken, const PROJECT* aProject, in
     else if( aToken->IsSameAs( wxT( "CURRENT_DATE" ) ) )
     {
         *aToken = GetCurrentDate();
+        tokenUpdated = true;
+    }
+    else if( aToken->IsSameAs( wxT( "CURRENT_TIME_HH_MM_SS" ) ) )
+    {
+        *aToken = GetCurrentTimeHHMMSS();
+        tokenUpdated = true;
+    }
+    else if( aToken->IsSameAs( wxT( "CURRENT_TIME_LOCALE" ) ) )
+    {
+        *aToken = GetCurrentTimeLocale();
         tokenUpdated = true;
     }
     else if( aToken->IsSameAs( wxT( "REVISION" ) ) )
