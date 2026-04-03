@@ -354,12 +354,6 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
         return;
     }
 
-    m_footprintTestsRun = false;
-    m_cancelled = false;
-
-    m_frame->GetBoard()->RecordDRCExclusions();
-    deleteAllMarkers( true );
-
     // This is not the time to have stale or buggy rules.  Ensure they're up-to-date
     // and that they at least parse.
     try
@@ -385,6 +379,12 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
         KIPLATFORM::UI::SetFloatLevel( this );
         return;
     }
+
+    m_footprintTestsRun = false;
+    m_cancelled = false;
+
+    m_frame->GetBoard()->RecordDRCExclusions();
+    deleteAllMarkers( true );
 
     std::vector<std::reference_wrapper<RC_ITEM>> violations = DRC_ITEM::GetItemsWithSeverities();
     m_ignoredList->DeleteAllItems();
