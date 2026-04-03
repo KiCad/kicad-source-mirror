@@ -1543,6 +1543,34 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
 
         i = p - 1;  // continue past the run
     }
+
+    // Field text height is a single design-wide value; parts with no field array (only a
+    // refdes/value) carry no height record, so backfill them from the design's field height.
+    int designFieldHeight = 0;
+
+    for( const PLACEMENT& pl : m_placements )
+    {
+        for( const FIELD_PLACEMENT& fp : pl.fieldPlaces )
+        {
+            if( fp.height_mils > 0 )
+            {
+                designFieldHeight = fp.height_mils;
+                break;
+            }
+        }
+
+        if( designFieldHeight > 0 )
+            break;
+    }
+
+    if( designFieldHeight > 0 )
+    {
+        for( PLACEMENT& pl : m_placements )
+        {
+            if( pl.refdesPlace.valid && pl.refdesPlace.height_mils == 0 )
+                pl.refdesPlace.height_mils = designFieldHeight;
+        }
+    }
 }
 
 
@@ -1608,12 +1636,17 @@ void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& 
             fp.dx_mils = decalMil( d, cursor + 0x06 );
             fp.dy_mils = decalMil( d, cursor + 0x08 );
             fp.orientation_deg = readU16( d, cursor + 0x0a ) / 10;
+            fp.height_mils = readU16( d, cursor + 0x10 );
             fp.visible = ( vis != 0 );
             fp.valid = true;
             pl.fieldPlaces.push_back( fp );
 
             cursor += REC;
         }
+
+        // The inline REF-DES record carries no text height; share the part's field height.
+        if( pl.refdesPlace.valid && !pl.fieldPlaces.empty() )
+            pl.refdesPlace.height_mils = pl.fieldPlaces.front().height_mils;
     }
 }
 
@@ -2982,12 +3015,20 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
                    + VECTOR2I( schIUScale.MilsToIU( fp.dx_mils ), -schIUScale.MilsToIU( fp.dy_mils ) );
         };
 
-        if( pl.refdesPlace.valid )
+        auto applyPlace = [&]( SCH_FIELD* aField, const FIELD_PLACEMENT& fp )
         {
-            SCH_FIELD* ref = symbol->GetField( FIELD_T::REFERENCE );
-            ref->SetPosition( fieldPos( pl.refdesPlace ) );
-            ref->SetVisible( pl.refdesPlace.visible );
-        }
+            aField->SetPosition( fieldPos( fp ) );
+            aField->SetVisible( fp.visible );
+
+            if( fp.height_mils > 0 )
+            {
+                aField->SetTextHeight( schIUScale.MilsToIU( fp.height_mils ) );
+                aField->SetTextWidth( schIUScale.MilsToIU( fp.height_mils ) );
+            }
+        };
+
+        if( pl.refdesPlace.valid )
+            applyPlace( symbol->GetField( FIELD_T::REFERENCE ), pl.refdesPlace );
 
         // Component attribute fields: map VALUE to the symbol Value field, the rest to user
         // fields.  Each field's placement (position + visibility) comes from the index-aligned
@@ -3010,10 +3051,7 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
                 value->SetText( wxString::FromUTF8( f.second ) );
 
                 if( fp )
-                {
-                    value->SetPosition( fieldPos( *fp ) );
-                    value->SetVisible( fp->visible );
-                }
+                    applyPlace( value, *fp );
 
                 continue;
             }
@@ -3023,8 +3061,7 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
 
             if( fp )
             {
-                field.SetPosition( fieldPos( *fp ) );
-                field.SetVisible( fp->visible );
+                applyPlace( &field, *fp );
             }
             else
             {

@@ -45,6 +45,7 @@ struct FIELD_PLACEMENT
     int  dx_mils = 0;          ///< Page-relative X offset from the symbol origin.
     int  dy_mils = 0;          ///< Page-relative Y offset (PADS Y-up).
     int  orientation_deg = 0;  ///< 0/90/180/270.
+    int  height_mils = 0;      ///< Field text height (0 = use the KiCad default).
     bool visible = false;      ///< Whether the field is shown.
     bool valid = false;        ///< A real record was decoded for this field.
 };
