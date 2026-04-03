@@ -426,7 +426,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
             while( candidate && !candidate->IsSelected() && candidate->GetParentGroup() )
                 candidate = candidate->GetParentGroup()->AsEdaItem();
 
-            if( !candidate )
+            if( !candidate || !candidate->IsSelected() )
                 return;
         }
     }
