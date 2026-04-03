@@ -108,6 +108,7 @@ public:
 
     void RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction, RECURSE_MODE aMode ) const override;
 
+    void SetLayer( PCB_LAYER_ID aLayer ) override;
     void SetPosition( const VECTOR2I& aPos ) override;
     VECTOR2I GetPosition() const override;
     VECTOR2I GetEnd() const;

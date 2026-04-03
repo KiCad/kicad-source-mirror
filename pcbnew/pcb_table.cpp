@@ -105,6 +105,15 @@ void PCB_TABLE::swapData( BOARD_ITEM* aImage )
 }
 
 
+void PCB_TABLE::SetLayer( PCB_LAYER_ID aLayer )
+{
+    m_layer = aLayer;
+
+    for( PCB_TABLECELL* cell : m_cells )
+        cell->SetLayer( aLayer );
+}
+
+
 void PCB_TABLE::SetPosition( const VECTOR2I& aPos )
 {
     Move( aPos - GetPosition() );
