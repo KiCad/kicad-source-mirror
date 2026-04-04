@@ -431,6 +431,18 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         newGrid->m_delta.x = m_hSpacing.GetIntValue();
         newGrid->m_delta.y = m_vSpacing.GetIntValue();
 
+        if( ( newGrid->m_nx > 1 ) && ( newGrid->m_delta.x == 0 ) )
+        {
+            errors.Add( wxString::Format( _( "horizontal delta of zero with %ld objects" ), newGrid->m_nx ) );
+            ok = false;
+        }
+
+        if( ( newGrid->m_ny > 1 ) && ( newGrid->m_delta.y == 0 ) )
+        {
+            errors.Add( wxString::Format( _( "vertical delta of zero with %ld objects" ), newGrid->m_ny ) );
+            ok = false;
+        }
+
         newGrid->m_offset.x = m_hOffset.GetIntValue();
         newGrid->m_offset.y = m_vOffset.GetIntValue();
 
@@ -499,6 +511,12 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
         newCirc->m_rotateItems = m_entryRotateItemsCb->GetValue();
         newCirc->SetShouldNumber( m_isFootprintEditor );
+
+        if( ( newCirc->m_nPts > 1 ) && newCirc->m_angle.IsZero() )
+        {
+            errors.Add( wxString::Format( _( "angular delta of zero with %ld objects" ), newCirc->m_nPts ) );
+            ok = false;
+        }
 
         if( m_isFootprintEditor )
         {
