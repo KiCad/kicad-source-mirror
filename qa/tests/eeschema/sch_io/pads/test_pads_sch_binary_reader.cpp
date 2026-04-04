@@ -1097,4 +1097,97 @@ BOOST_AUTO_TEST_CASE( PartGeometryVsAscii )
 }
 
 
+BOOST_AUTO_TEST_CASE( PinStubOrientationFromDecalGeometry )
+{
+    // A pin stub faces the body-outline edge its terminal lies beyond and its length reaches
+    // that edge (decal coords are PADS Y-up).  The SC350420B02 STM32F071CB CAE decal exports a
+    // 1500x2600 body box with every terminal exactly 200 mils outside one edge, so the edge rule
+    // must fire for every pin (never the centroid fallback) and yield all four orientations.
+
+    std::vector<uint8_t> data;
+    BOOST_REQUIRE( PADS_SCH_BINARY_READER::ReadFile( wxString::FromUTF8( pair.binaryPath ), data ) );
+
+    PADS_SCH_BINARY_READER reader;
+    BOOST_REQUIRE( reader.Parse( data ) );
+
+    // Locate the STM32F071CB gate decal via U4's placement binding.
+    std::string decalName;
+
+    for( const PADS_SCH_BINARY::PLACEMENT& pl : reader.GetPlacements() )
+    {
+        if( pl.reference == "U4" )
+            decalName = pl.decalName;
+    }
+
+    BOOST_REQUIRE_EQUAL( decalName, "STM32F071CB" );
+
+    const PADS_SCH_BINARY::DECAL* sym = nullptr;
+
+    for( const PADS_SCH_BINARY::DECAL& dec : reader.GetDecals() )
+    {
+        if( dec.name == decalName )
+            sym = &dec;
+    }
+
+    BOOST_REQUIRE( sym );
+    BOOST_REQUIRE( !sym->terminals.empty() );
+
+    int  minX = 0, maxX = 0, minY = 0, maxY = 0;
+    bool first = true;
+
+    for( const PADS_SCH_BINARY::DECAL_PIECE& piece : sym->pieces )
+    {
+        for( const std::pair<int, int>& v : piece.verts )
+        {
+            if( first )
+            {
+                minX = maxX = v.first;
+                minY = maxY = v.second;
+                first = false;
+            }
+            else
+            {
+                minX = std::min( minX, v.first );
+                maxX = std::max( maxX, v.first );
+                minY = std::min( minY, v.second );
+                maxY = std::max( maxY, v.second );
+            }
+        }
+    }
+
+    BOOST_CHECK_EQUAL( minX, 0 );
+    BOOST_CHECK_EQUAL( minY, 0 );
+    BOOST_CHECK_EQUAL( maxX, 1500 );
+    BOOST_CHECK_EQUAL( maxY, 2600 );
+
+    int nRight = 0, nLeft = 0, nUp = 0, nDown = 0;
+
+    for( const std::pair<int, int>& t : sym->terminals )
+    {
+        int leftOver = minX - t.first;
+        int rightOver = t.first - maxX;
+        int topOver = t.second - maxY;
+        int botOver = minY - t.second;
+        int over = std::max( std::max( leftOver, rightOver ), std::max( topOver, botOver ) );
+
+        BOOST_CHECK_GT( over, 0 );      // outside the body: edge rule fires, not the fallback
+        BOOST_CHECK_EQUAL( over, 200 ); // stub reaches the body edge (200 mils = 5.08 mm)
+
+        if( over == leftOver )
+            ++nRight;
+        else if( over == rightOver )
+            ++nLeft;
+        else if( over == topOver )
+            ++nDown;
+        else
+            ++nUp;
+    }
+
+    BOOST_CHECK_GT( nRight, 0 );
+    BOOST_CHECK_GT( nLeft, 0 );
+    BOOST_CHECK_GT( nUp, 0 );
+    BOOST_CHECK_GT( nDown, 0 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

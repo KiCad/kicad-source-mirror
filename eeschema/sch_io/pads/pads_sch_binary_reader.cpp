@@ -2682,6 +2682,57 @@ static ELECTRICAL_PINTYPE pinTypeFromLetter( char aLetter )
 }
 
 
+// Orient a stub pin from its decal geometry. A PADS terminal is the pin's connection point and
+// sits outside the gate body outline; the pin faces the bbox edge it lies beyond and its length
+// reaches that edge. Decal coords are PADS Y-up, so an above-body terminal points down and a
+// below-body one points up. A terminal inside the outline (no edge crossed) falls back to the
+// body centroid direction. @p aMinX..aMaxY bound the body, @p aCx/@p aCy are its centroid and
+// @p aTx/@p aTy the terminal, all in decal mils.
+static void orientStubPin( SCH_PIN* aPin, int aMinX, int aMaxX, int aMinY, int aMaxY, double aCx,
+                           double aCy, int aTx, int aTy )
+{
+    int leftOver = aMinX - aTx;
+    int rightOver = aTx - aMaxX;
+    int topOver = aTy - aMaxY;
+    int botOver = aMinY - aTy;
+    int over = std::max( std::max( leftOver, rightOver ), std::max( topOver, botOver ) );
+    int lenMils = 100;
+
+    if( over <= 0 )
+    {
+        int ddx = static_cast<int>( aCx ) - aTx;
+        int ddy = static_cast<int>( aCy ) - aTy;
+
+        if( std::abs( ddx ) >= std::abs( ddy ) )
+            aPin->SetOrientation( ddx >= 0 ? PIN_ORIENTATION::PIN_RIGHT : PIN_ORIENTATION::PIN_LEFT );
+        else
+            aPin->SetOrientation( ddy < 0 ? PIN_ORIENTATION::PIN_DOWN : PIN_ORIENTATION::PIN_UP );
+    }
+    else if( over == leftOver )
+    {
+        aPin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
+        lenMils = leftOver;
+    }
+    else if( over == rightOver )
+    {
+        aPin->SetOrientation( PIN_ORIENTATION::PIN_LEFT );
+        lenMils = rightOver;
+    }
+    else if( over == topOver )
+    {
+        aPin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );
+        lenMils = topOver;
+    }
+    else
+    {
+        aPin->SetOrientation( PIN_ORIENTATION::PIN_UP );
+        lenMils = botOver;
+    }
+
+    aPin->SetLength( schIUScale.MilsToIU( lenMils > 0 ? lenMils : 100 ) );
+}
+
+
 // Add one gate's body shapes and pins to a LIB_SYMBOL on unit @p aUnit (0 = common to all
 // units, for single-unit symbols). When @p aDecal is null (an unplaced or unbound gate) the
 // pins are laid out in a column so the unit stays electrically complete. Pins are labelled
@@ -2711,6 +2762,7 @@ static void addGateUnit( LIB_SYMBOL* aLib, const PADS_SCH_BINARY::DECAL* aDecal,
             aLib->AddDrawItem( shape );
         }
 
+        int    minX = 0, maxX = 0, minY = 0, maxY = 0;
         double cx = 0.0;
         double cy = 0.0;
         int    nv = 0;
@@ -2719,6 +2771,19 @@ static void addGateUnit( LIB_SYMBOL* aLib, const PADS_SCH_BINARY::DECAL* aDecal,
         {
             for( const std::pair<int, int>& v : piece.verts )
             {
+                if( nv == 0 )
+                {
+                    minX = maxX = v.first;
+                    minY = maxY = v.second;
+                }
+                else
+                {
+                    minX = std::min( minX, v.first );
+                    maxX = std::max( maxX, v.first );
+                    minY = std::min( minY, v.second );
+                    maxY = std::max( maxY, v.second );
+                }
+
                 cx += v.first;
                 cy += v.second;
                 ++nv;
@@ -2759,15 +2824,7 @@ static void addGateUnit( LIB_SYMBOL* aLib, const PADS_SCH_BINARY::DECAL* aDecal,
 
             ++ti;
 
-            int ddx = static_cast<int>( cx ) - term.first;
-            int ddy = static_cast<int>( cy ) - term.second;
-
-            if( std::abs( ddx ) >= std::abs( ddy ) )
-                pin->SetOrientation( ddx >= 0 ? PIN_ORIENTATION::PIN_RIGHT : PIN_ORIENTATION::PIN_LEFT );
-            else
-                pin->SetOrientation( ddy < 0 ? PIN_ORIENTATION::PIN_UP : PIN_ORIENTATION::PIN_DOWN );
-
-            pin->SetLength( schIUScale.MilsToIU( 100 ) );
+            orientStubPin( pin, minX, maxX, minY, maxY, cx, cy, term.first, term.second );
             pin->SetUnit( aUnit );
             aLib->AddDrawItem( pin );
         }
@@ -2911,6 +2968,7 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
             // Pin terminals -> SCH_PINs at the connection points, the stub oriented
             // toward the decal body so wires connect at the terminal.
             const DECAL& decal = m_decals[decalIt->second];
+            int          minX = 0, maxX = 0, minY = 0, maxY = 0;
             double       cx = 0.0;
             double       cy = 0.0;
             int          nv = 0;
@@ -2919,6 +2977,19 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
             {
                 for( const std::pair<int, int>& v : piece.verts )
                 {
+                    if( nv == 0 )
+                    {
+                        minX = maxX = v.first;
+                        minY = maxY = v.second;
+                    }
+                    else
+                    {
+                        minX = std::min( minX, v.first );
+                        maxX = std::max( maxX, v.first );
+                        minY = std::min( minY, v.second );
+                        maxY = std::max( maxY, v.second );
+                    }
+
                     cx += v.first;
                     cy += v.second;
                     ++nv;
@@ -2968,15 +3039,7 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
 
                 ++ti;
 
-                int ddx = static_cast<int>( cx ) - term.first;
-                int ddy = static_cast<int>( cy ) - term.second;
-
-                if( std::abs( ddx ) >= std::abs( ddy ) )
-                    pin->SetOrientation( ddx >= 0 ? PIN_ORIENTATION::PIN_RIGHT : PIN_ORIENTATION::PIN_LEFT );
-                else
-                    pin->SetOrientation( ddy < 0 ? PIN_ORIENTATION::PIN_UP : PIN_ORIENTATION::PIN_DOWN );
-
-                pin->SetLength( schIUScale.MilsToIU( 100 ) );
+                orientStubPin( pin, minX, maxX, minY, maxY, cx, cy, term.first, term.second );
                 libSym->AddDrawItem( pin );
             }
         }
@@ -3071,6 +3134,13 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
 
             symbol->AddField( field );
         }
+
+        // PADS carries no per-instance VALUE attribute; its ASCII export shows the part-type
+        // name as the component value, so mirror that when no VALUE field was recovered.
+        SCH_FIELD* valueField = symbol->GetField( FIELD_T::VALUE );
+
+        if( valueField->GetText().IsEmpty() && !pl.partType.empty() )
+            valueField->SetText( wxString::FromUTF8( pl.partType ) );
 
         aScreen->Append( symbol.release() );
         ++appended;
