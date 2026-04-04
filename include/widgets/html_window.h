@@ -54,9 +54,17 @@ public:
     bool ScrollToAnchor( const wxString& aAnchor );
 
 private:
+    enum MENU_ID
+    {
+        ID_COPY_SELECTION = wxID_HIGHEST + 1,
+        ID_SELECT_ALL
+    };
+
     void onThemeChanged( wxSysColourChangedEvent& aEvent );
     void onRightClick( wxMouseEvent& event );
     void onMenuEvent( wxMenuEvent& event );
+    void onCharHook( wxKeyEvent& aEvent );
+    void doCopySelection();
 
     wxString m_pageSource;
 };
