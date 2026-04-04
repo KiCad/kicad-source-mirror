@@ -183,6 +183,7 @@ public:
 
     int AddVariant( const TOOL_EVENT& aEvent );
     int RemoveVariant( const TOOL_EVENT& aEvent );
+    int EditVariantDescription( const TOOL_EVENT& aEvent );
 
 private:
     ///< copy selection to clipboard or to m_duplicateClipboard

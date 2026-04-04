@@ -212,6 +212,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     m_deleteVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_renameVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
     m_copyVariantButton->SetBitmap( KiBitmapBundle( BITMAPS::copy ) );
+    m_editVariantDescButton->SetBitmap( KiBitmapBundle( BITMAPS::text ) );
 
     m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
 
@@ -2937,6 +2938,54 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onCopyVariant( wxCommandEvent& aEvent )
 }
 
 
+void DIALOG_SYMBOL_FIELDS_TABLE::onEditVariantDescription( wxCommandEvent& aEvent )
+{
+    int selection = m_variantListBox->GetSelection();
+
+    if( ( selection == wxNOT_FOUND ) || ( selection == 0 ) )
+    {
+        m_parent->GetInfoBar()->ShowMessageFor( _( "Cannot edit the default variant description." ), 10000,
+                                                wxICON_ERROR );
+        return;
+    }
+
+    wxString variantName = m_variantListBox->GetString( selection );
+    wxString currentDesc = m_parent->Schematic().GetVariantDescription( variantName );
+
+    wxDialog dlg( this, wxID_ANY, wxString::Format( _( "Edit Description for '%s'" ), variantName ), wxDefaultPosition,
+                  wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
+
+    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+
+    wxStaticText* label = new wxStaticText( &dlg, wxID_ANY, _( "Description:" ) );
+    mainSizer->Add( label, 0, wxLEFT | wxRIGHT | wxTOP | wxEXPAND, 10 );
+
+    mainSizer->AddSpacer( 3 );
+
+    wxTextCtrl* descCtrl =
+            new wxTextCtrl( &dlg, wxID_ANY, currentDesc, wxDefaultPosition, wxSize( 300, 60 ), wxTE_MULTILINE );
+    mainSizer->Add( descCtrl, 1, wxLEFT | wxRIGHT | wxBOTTOM | wxEXPAND, 10 );
+
+    wxStdDialogButtonSizer* btnSizer = new wxStdDialogButtonSizer();
+    btnSizer->AddButton( new wxButton( &dlg, wxID_OK ) );
+    btnSizer->AddButton( new wxButton( &dlg, wxID_CANCEL ) );
+    btnSizer->Realize();
+    mainSizer->Add( btnSizer, 0, wxALL | wxALIGN_RIGHT, 5 );
+
+    dlg.SetSizer( mainSizer );
+    dlg.Fit();
+    dlg.Centre();
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxString newDesc = descCtrl->GetValue().Trim().Trim( false );
+
+    m_parent->Schematic().SetVariantDescription( variantName, newDesc );
+    m_parent->OnModify();
+}
+
+
 void DIALOG_SYMBOL_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aEvent )
 {
     wxString currentVariant;
@@ -2990,6 +3039,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::updateVariantButtonStates()
 
     m_copyVariantButton->Enable( canModify );
     m_renameVariantButton->Enable( canModify );
+    m_editVariantDescButton->Enable( canModify );
     m_deleteVariantButton->Enable( canModify );
 }
 

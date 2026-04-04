@@ -195,6 +195,7 @@ public:
     // Variant operations
     static TOOL_ACTION addVariant;
     static TOOL_ACTION removeVariant;
+    static TOOL_ACTION editVariantDescription;
 
     // Attribute Toggles
     static TOOL_ACTION setExcludeFromBOM;

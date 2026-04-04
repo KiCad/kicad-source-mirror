@@ -156,6 +156,7 @@ private:
     void onDeleteVariant( wxCommandEvent& aEvent ) override;
     void onRenameVariant( wxCommandEvent& aEvent ) override;
     void onCopyVariant( wxCommandEvent& aEvent ) override;
+    void onEditVariantDescription( wxCommandEvent& aEvent ) override;
     void onVariantSelectionChange( wxCommandEvent& aEvent ) override;
 
     void updateVariantButtonStates();

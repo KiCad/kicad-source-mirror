@@ -3030,6 +3030,68 @@ void SCH_EDIT_FRAME::AddVariant()
 }
 
 
+void SCH_EDIT_FRAME::EditVariantDescription()
+{
+    wxArrayString choices = Schematic().GetVariantNamesForUI();
+
+    // Default variant cannot be edited.
+    choices.RemoveAt( 0 );
+
+    if( choices.IsEmpty() )
+    {
+        GetInfoBar()->ShowMessageFor( _( "No design variants to edit." ), 10000, wxICON_ERROR );
+        return;
+    }
+
+    wxSingleChoiceDialog chooser( this, _( "Select variant to edit description:" ) + wxS( "                " ),
+                                  _( "Edit Variant Description" ), choices );
+    chooser.Layout();
+
+    if( chooser.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxString variantName = chooser.GetStringSelection();
+
+    if( variantName.IsEmpty() )
+        return;
+
+    wxString currentDesc = Schematic().GetVariantDescription( variantName );
+
+    wxDialog dlg( this, wxID_ANY, wxString::Format( _( "Edit Description for '%s'" ), variantName ), wxDefaultPosition,
+                  wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
+
+    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+
+    wxStaticText* label = new wxStaticText( &dlg, wxID_ANY, _( "Description:" ) );
+    mainSizer->Add( label, 0, wxLEFT | wxRIGHT | wxTOP | wxEXPAND, 10 );
+
+    mainSizer->AddSpacer( 3 );
+
+    wxTextCtrl* descCtrl =
+            new wxTextCtrl( &dlg, wxID_ANY, currentDesc, wxDefaultPosition, wxSize( 300, 60 ), wxTE_MULTILINE );
+    mainSizer->Add( descCtrl, 1, wxLEFT | wxRIGHT | wxBOTTOM | wxEXPAND, 10 );
+
+    wxStdDialogButtonSizer* btnSizer = new wxStdDialogButtonSizer();
+    btnSizer->AddButton( new wxButton( &dlg, wxID_OK ) );
+    btnSizer->AddButton( new wxButton( &dlg, wxID_CANCEL ) );
+    btnSizer->Realize();
+    mainSizer->Add( btnSizer, 0, wxALL | wxALIGN_RIGHT, 5 );
+
+    dlg.SetSizer( mainSizer );
+    dlg.Fit();
+    dlg.Centre();
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
+
+    wxString newDesc = descCtrl->GetValue().Trim().Trim( false );
+
+    Schematic().SetVariantDescription( variantName, newDesc );
+    OnModify();
+    GetCanvas()->Refresh();
+}
+
+
 void SCH_EDIT_FRAME::RemoveVariant()
 {
     if( !m_currentVariantCtrl )

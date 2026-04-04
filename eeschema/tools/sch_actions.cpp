@@ -1774,4 +1774,10 @@ TOOL_ACTION SCH_ACTIONS::removeVariant( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Remove Design Variant..." ) )
         .Tooltip( _( "Remove an existing design variant from the schematic." ) ) );
 
+TOOL_ACTION SCH_ACTIONS::editVariantDescription( TOOL_ACTION_ARGS()                                                   
+        .Name( "eeschema.EditorControl.editVariantDescription" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Edit Variant Description..." ) )
+        .Tooltip( _( "Edit the description of an existing design variant." ) ) );
+
 // clang-format on
