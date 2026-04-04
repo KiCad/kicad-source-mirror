@@ -61,17 +61,27 @@ protected:
 
 void PLUGINS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 {
-#ifdef KICAD_IPC_API
-    API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
-    wxString id = m_grid->GetCellValue( m_grid->GetGridCursorRow(),
-                                        PANEL_PCBNEW_ACTION_PLUGINS::COLUMN_SETTINGS_IDENTIFIER );
+    const int clickedRow = aEvent.GetRow();
 
-    if( std::optional<const PLUGIN_ACTION*> action = mgr.GetAction( id ) )
+    if( clickedRow >= 0 )
     {
-        menu.Append( MYID_RECREATE_ENV, _( "Recreate Plugin Environment" ), _( "Recreate Plugin Environment" ) );
-        menu.AppendSeparator();
-    }
+        m_grid->SetGridCursor( clickedRow, m_grid->GetGridCursorCol() );
+        m_grid->ClearSelection();
+        m_grid->SelectRow( clickedRow );
+
+#ifdef KICAD_IPC_API
+        API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
+        wxString id = m_grid->GetCellValue( clickedRow,
+                                            PANEL_PCBNEW_ACTION_PLUGINS::COLUMN_SETTINGS_IDENTIFIER );
+
+        if( std::optional<const PLUGIN_ACTION*> action = mgr.GetAction( id );
+            action && ( *action )->plugin.Runtime().type == PLUGIN_RUNTIME_TYPE::PYTHON )
+        {
+            menu.Append( MYID_RECREATE_ENV, _( "Recreate Plugin Environment" ), _( "Recreate Plugin Environment" ) );
+            menu.AppendSeparator();
+        }
 #endif
+    }
 
     GRID_TRICKS::showPopupMenu( menu, aEvent );
 }
@@ -86,8 +96,11 @@ void PLUGINS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         wxString id = m_grid->GetCellValue( m_grid->GetGridCursorRow(),
                                             PANEL_PCBNEW_ACTION_PLUGINS::COLUMN_SETTINGS_IDENTIFIER );
 
-        if( std::optional<const PLUGIN_ACTION*> action = mgr.GetAction( id ) )
+        if( std::optional<const PLUGIN_ACTION*> action = mgr.GetAction( id );
+            action && ( *action )->plugin.Runtime().type == PLUGIN_RUNTIME_TYPE::PYTHON )
+        {
             mgr.RecreatePluginEnvironment( ( *action )->plugin.Identifier() );
+        }
 #endif
     }
     else

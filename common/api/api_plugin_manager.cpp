@@ -256,6 +256,9 @@ void API_PLUGIN_MANAGER::RecreatePluginEnvironment( const wxString& aIdentifier 
     const API_PLUGIN* plugin = m_pluginsCache.at( aIdentifier );
     wxCHECK( plugin, /* void */ );
 
+    if( plugin->Runtime().type != PLUGIN_RUNTIME_TYPE::PYTHON )
+        return;
+
     std::optional<wxString> env = PYTHON_MANAGER::GetPythonEnvironment( plugin->Identifier() );
     wxCHECK( env.has_value(), /* void */ );
 
