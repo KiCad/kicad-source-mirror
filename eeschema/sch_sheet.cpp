@@ -1431,14 +1431,6 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         aPlotter->HyperlinkMenu( GetBoundingBox(), properties );
     }
 
-    // Plot sheet pins
-    for( SCH_SHEET_PIN* sheetPin : m_pins )
-        sheetPin->Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
-
-    // Plot the fields
-    for( SCH_FIELD& field : m_fields )
-        field.Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
-
     SCH_SHEET_PATH instance;
     wxString variantName;
 
@@ -1448,7 +1440,17 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         variantName = Schematic()->GetCurrentVariant();
     }
 
-    if( GetDNP( &instance, variantName) )
+    bool dnp = GetDNP( &instance, variantName );
+
+    // Plot sheet pins
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
+        sheetPin->Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed || dnp );
+
+    // Plot the fields
+    for( SCH_FIELD& field : m_fields )
+        field.Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed || dnp );
+
+    if( dnp )
     {
         BOX2I    bbox = GetBodyBoundingBox();
         BOX2I    pins = GetBoundingBox();
