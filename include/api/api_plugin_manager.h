@@ -28,6 +28,7 @@
 #include <json_schema_validator.h>
 #include <kicommon.h>
 
+class REPORTER;
 class wxTimer;
 
 /// Internal event used for handling async tasks
@@ -49,7 +50,8 @@ public:
 
     void RecreatePluginEnvironment( const wxString& aIdentifier );
 
-    void InvokeAction( const wxString& aIdentifier );
+    void InvokeAction( const wxString& aIdentifier,
+                       std::shared_ptr<REPORTER> aReporter = nullptr );
 
     std::optional<const PLUGIN_ACTION*> GetAction( const wxString& aIdentifier );
 

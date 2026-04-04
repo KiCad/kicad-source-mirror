@@ -48,6 +48,8 @@ class wxStatusBar;
 class wxTextCtrl;
 class WX_HTML_REPORT_PANEL;
 class WX_INFOBAR;
+class KISTATUSBAR;
+class STATUSBAR_WARNING_REPORTER_IMPL;
 
 
 /**
@@ -369,6 +371,19 @@ public:
 private:
     wxStatusBar* m_statusBar;
     int          m_position;
+};
+
+
+class KICOMMON_API STATUSBAR_WARNING_REPORTER : public REPORTER
+{
+public:
+    STATUSBAR_WARNING_REPORTER( KISTATUSBAR* aStatusBar, const wxString& aSource );
+    ~STATUSBAR_WARNING_REPORTER() override;
+
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+private:
+    std::shared_ptr<STATUSBAR_WARNING_REPORTER_IMPL> m_impl;
 };
 
 #endif     // _REPORTER_H_

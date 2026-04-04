@@ -24,6 +24,7 @@
 #include <fmt/format.h>
 #include <wx/dir.h>
 #include <wx/log.h>
+#include <wx/process.h>
 #include <wx/timer.h>
 #include <wx/utils.h>
 
@@ -34,12 +35,87 @@
 #include <paths.h>
 #include <pgm_base.h>
 #include <python_manager.h>
+#include <reporter.h>
 #include <settings/settings_manager.h>
 #include <settings/common_settings.h>
 
 
 wxDEFINE_EVENT( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxCommandEvent );
 wxDEFINE_EVENT( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, wxCommandEvent );
+
+
+class ACTION_PROCESS : public wxProcess
+{
+public:
+    ACTION_PROCESS( std::function<void( int, const wxString&, const wxString& )> aCallback ) :
+            wxProcess(),
+            m_callback( std::move( aCallback ) )
+    {}
+
+    void OnTerminate( int aPid, int aStatus ) override
+    {
+        if( m_callback )
+        {
+            wxString output, error;
+
+            if( wxInputStream* processOut = GetInputStream() )
+            {
+                while( processOut->CanRead() )
+                {
+                    char buffer[4096];
+                    buffer[ processOut->Read( buffer, sizeof( buffer ) - 1 ).LastRead() ] = '\0';
+                    output.append( buffer, processOut->LastRead() );
+                }
+            }
+
+            if( wxInputStream* processErr = GetErrorStream() )
+            {
+                while( processErr->CanRead() )
+                {
+                    char buffer[4096];
+                    buffer[ processErr->Read( buffer, sizeof( buffer ) - 1 ).LastRead() ] = '\0';
+                    error.append( buffer, processErr->LastRead() );
+                }
+            }
+
+            m_callback( aStatus, output, error );
+        }
+
+        wxProcess::OnTerminate( aPid, aStatus );
+    }
+
+private:
+    std::function<void( int, const wxString&, const wxString& )> m_callback;
+};
+
+
+static void reportPluginActionMessage( REPORTER* aReporter, const wxString& aActionName,
+                                       const wxString& aMessage )
+{
+    if( !aReporter || aMessage.IsEmpty() )
+        return;
+
+    aReporter->Report( wxString::Format( _( "Plugin action '%s': %s" ), aActionName, aMessage ),
+                       RPT_SEVERITY_ERROR );
+}
+
+
+static void reportPluginActionResult( REPORTER* aReporter, const wxString& aActionName,
+                                      int aRetVal, const wxString& aError )
+{
+    wxString trimmedError = aError;
+    trimmedError.Trim();
+    trimmedError.Trim( false );
+
+    if( aRetVal != 0 )
+    {
+        reportPluginActionMessage( aReporter, aActionName,
+                                   wxString::Format( _( "exited with code %d" ), aRetVal ) );
+    }
+
+    if( !trimmedError.IsEmpty() )
+        reportPluginActionMessage( aReporter, aActionName, trimmedError );
+}
 
 
 API_PLUGIN_MANAGER::API_PLUGIN_MANAGER( wxEvtHandler* aEvtHandler ) :
@@ -214,7 +290,7 @@ std::optional<const PLUGIN_ACTION*> API_PLUGIN_MANAGER::GetAction( const wxStrin
 }
 
 
-void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
+void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier, std::shared_ptr<REPORTER> aReporter )
 {
     if( !m_actionsCache.contains( aIdentifier ) )
         return;
@@ -247,6 +323,8 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
         {
             wxLogTrace( traceApi, wxString::Format( "Manager: Python interpreter for %s not found",
                                                     plugin.Identifier() ) );
+            reportPluginActionMessage( aReporter.get(), action->name,
+                                       _( "Python environment does not exist" ) );
             return;
         }
 
@@ -254,6 +332,9 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
         {
             wxLogTrace( traceApi, wxString::Format( "Manager: Python entrypoint %s is not readable",
                                                     pluginFile.GetFullPath() ) );
+            reportPluginActionMessage( aReporter.get(), action->name,
+                                       wxString::Format( _( "entrypoint '%s' could not be read" ),
+                                                         pluginFile.GetFullPath() ) );
             return;
         }
 
@@ -285,15 +366,23 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
             env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
 
         [[maybe_unused]] long pid = manager.Execute( { pluginFile.GetFullPath() },
-                []( int aRetVal, const wxString& aOutput, const wxString& aError )
+                [aReporter, action]( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
                     wxLogTrace( traceApi,
                                 wxString::Format( "Manager: action exited with code %d", aRetVal ) );
 
                     if( !aError.IsEmpty() )
                         wxLogTrace( traceApi, wxString::Format( "Manager: action stderr: %s", aError ) );
+
+                    reportPluginActionResult( aReporter.get(), action->name, aRetVal, aError );
                 },
                 &env, true );
+
+        if( !pid )
+        {
+            reportPluginActionMessage( aReporter.get(), action->name, _( "process could not be created" ) );
+            return;
+        }
 
 #ifdef __WXMAC__
         if( pid )
@@ -334,6 +423,10 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
         {
             wxLogTrace( traceApi, wxString::Format( "Manager: Exec entrypoint %s is not executable",
                                                     pluginFile.GetFullPath() ) );
+
+            reportPluginActionMessage( aReporter.get(), action->name,
+                                       wxString::Format( _( "entrypoint '%s' is not executable" ),
+                                                         pluginFile.GetFullPath() ) );
             return;
         }
 
@@ -350,18 +443,42 @@ void API_PLUGIN_MANAGER::InvokeAction( const wxString& aIdentifier )
         env.env[wxS( "KICAD_API_TOKEN" )] = Pgm().GetApiServer().Token();
         env.cwd = pluginFile.GetPath();
 
-        long p = wxExecute( const_cast<wchar_t**>( args.data() ),
-                            wxEXEC_ASYNC | wxEXEC_HIDE_CONSOLE, nullptr, &env );
+        ACTION_PROCESS* process = new ACTION_PROCESS(
+                [aReporter, action]( int aRetVal, const wxString& aOutput, const wxString& aError )
+                {
+                    wxLogTrace( traceApi,
+                                wxString::Format( "Manager: action exited with code %d", aRetVal ) );
 
-        if( !p )
+                    if( !aError.IsEmpty() )
+                        wxLogTrace( traceApi, wxString::Format( "Manager: action stderr: %s", aError ) );
+
+                    reportPluginActionResult( aReporter.get(), action->name, aRetVal, aError );
+                } );
+
+        process->Redirect();
+        args.emplace_back( pluginPath.wc_str() );
+
+        for( const wxString& arg : action->args )
+            args.emplace_back( arg.wc_str() );
+
+        args.emplace_back( nullptr );
+
+        long pidOrRetCode = wxExecute( const_cast<wchar_t**>( args.data() ),
+                                       wxEXEC_ASYNC | wxEXEC_HIDE_CONSOLE, process, &env );
+
+        if( !pidOrRetCode )
+            delete process;
+
+        if( !pidOrRetCode )
         {
             wxLogTrace( traceApi, wxString::Format( "Manager: launching action %s failed",
                                                     action->identifier ) );
+            reportPluginActionMessage( aReporter.get(), action->name, _( "could not launch plugin" ) );
         }
         else
         {
             wxLogTrace( traceApi, wxString::Format( "Manager: launching action %s -> pid %ld",
-                                                    action->identifier, p ) );
+                                                    action->identifier, pidOrRetCode ) );
         }
         break;
     }

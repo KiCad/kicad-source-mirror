@@ -44,6 +44,7 @@
 #include <page_info.h>
 #include <paths.h>
 #include <pgm_base.h>
+#include <reporter.h>
 #include <render_settings.h>
 #include <settings/app_settings.h>
 #include <settings/color_settings.h>
@@ -1530,6 +1531,13 @@ void EDA_DRAW_FRAME::OnApiPluginInvoke( wxCommandEvent& aEvent )
     API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
 
     if( mgr.ButtonBindings().count( aEvent.GetId() ) )
-        mgr.InvokeAction( mgr.ButtonBindings().at( aEvent.GetId() ) );
+    {
+        std::shared_ptr<REPORTER> reporter;
+
+        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+            reporter = std::make_shared<STATUSBAR_WARNING_REPORTER>( statusBar, wxS( "plugin" ) );
+
+        mgr.InvokeAction( mgr.ButtonBindings().at( aEvent.GetId() ), reporter );
+    }
 #endif
 }
