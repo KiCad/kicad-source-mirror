@@ -914,7 +914,7 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
     if( m_FootprintsList->GetErrorCount() )
     {
         if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
-            statusBar->SetLoadWarningMessages( m_FootprintsList->GetErrorMessages() );
+            statusBar->AddWarningMessages( "load", m_FootprintsList->GetErrorMessages() );
     }
 
     return true;

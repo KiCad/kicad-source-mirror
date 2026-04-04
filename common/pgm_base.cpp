@@ -1014,7 +1014,7 @@ void PGM_BASE::AddLibraryLoadMessages( const std::vector<LOAD_MESSAGE>& aMessage
         if( statusBar )
         {
             wxLogTrace( traceLibraries, "  -> forwarding to statusBar=%p", statusBar );
-            statusBar->AddLoadWarningMessages( aMessages );
+            statusBar->AddWarningMessages( "load", aMessages );
         }
     }
 }
@@ -1030,7 +1030,7 @@ void PGM_BASE::ClearLibraryLoadMessages()
     for( KISTATUSBAR* statusBar : m_libraryLoadStatusBars )
     {
         if( statusBar )
-            statusBar->ClearLoadWarningMessages();
+            statusBar->ClearWarningMessages( "load" );
     }
 }
 

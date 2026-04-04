@@ -556,7 +556,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     GetInfoBar()->Dismiss();
 
     if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
-        statusBar->ClearLoadWarningMessages();
+        statusBar->ClearWarningMessages( "load" );
 
     WX_PROGRESS_REPORTER progressReporter( this, is_new ? _( "Create PCB" ) : _( "Load PCB" ), 1,
                                            PR_CAN_ABORT );
@@ -726,7 +726,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
             // Show any messages collected before the failure
             if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
-                statusBar->SetLoadWarningMessages( loadReporter.GetMessages() );
+                statusBar->AddWarningMessages( "load", loadReporter.GetMessages() );
 
             return false;
         }
@@ -1009,7 +1009,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
-        statusBar->SetLoadWarningMessages( loadReporter.GetMessages() );
+        statusBar->AddWarningMessages( "load", loadReporter.GetMessages() );
 
     return true;
 }

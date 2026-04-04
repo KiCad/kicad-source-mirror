@@ -1148,7 +1148,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
             wxString errors = adapter->GetLibraryLoadErrors();
 
             if( !errors.IsEmpty() )
-                statusBar->SetLoadWarningMessages( errors );
+                statusBar->AddWarningMessages( "load", errors );
         }
 
         break;
