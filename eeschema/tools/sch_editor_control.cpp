@@ -3318,17 +3318,6 @@ int SCH_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
     m_frame->ScriptingConsoleEnableDisable();
     return 0;
 }
-
-
-int SCH_EDITOR_CONTROL::ReloadPlugins( const TOOL_EVENT& aEvent )
-{
-#ifdef KICAD_IPC_API
-    if( Pgm().GetCommonSettings()->m_Api.enable_server )
-        Pgm().GetPluginManager().ReloadPlugins();
-#endif
-    return 0;
-}
-
 int SCH_EDITOR_CONTROL::OnAngleSnapModeChanged( const TOOL_EVENT& aEvent )
 {
     // Update the left toolbar Line modes group icon to match current mode
@@ -3576,8 +3565,6 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::NextLineMode,            SCH_ACTIONS::lineModeNext.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::OnAngleSnapModeChanged,  SCH_ACTIONS::angleSnapModeChanged.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleAnnotateAuto,      SCH_ACTIONS::toggleAnnotateAuto.MakeEvent() );
-
-    Go( &SCH_EDITOR_CONTROL::ReloadPlugins,           ACTIONS::pluginsReload.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ExportSymbolsToLibrary,  SCH_ACTIONS::exportSymbolsToLibrary.MakeEvent() );
 

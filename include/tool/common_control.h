@@ -60,6 +60,7 @@ public:
     int GetInvolved( const TOOL_EVENT& aEvent );
     int Donate( const TOOL_EVENT& aEvent );
     int ReportBug( const TOOL_EVENT& aEvent );
+    int ReloadPlugins( const TOOL_EVENT& aEvent );
 
     ///< Sets up handlers for various events.
     void setTransitions() override;

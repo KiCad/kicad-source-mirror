@@ -25,6 +25,8 @@
 #include <optional>
 #include <set>
 #include <nlohmann/json_fwd.hpp>
+#include <nlohmann/json-schema.hpp>
+#include <tl/expected.hpp>
 #include <wx/bmpbndl.h>
 #include <wx/filename.h>
 #include <wx/string.h>
@@ -55,7 +57,7 @@ enum class PLUGIN_RUNTIME_TYPE
 
 struct PLUGIN_RUNTIME
 {
-    bool FromJson( const nlohmann::json& aJson );
+    tl::expected<bool, wxString> FromJson( const nlohmann::json& aJson );
 
     PLUGIN_RUNTIME_TYPE type;
     wxString min_version;
@@ -101,6 +103,8 @@ public:
 
     bool IsOk() const;
 
+    const wxString& ErrorMessage() const;
+
     static bool IsValidIdentifier( const wxString& aIdentifier );
 
     const wxString& Identifier() const;
@@ -134,5 +138,4 @@ struct CompareApiPluginIdentifiers
         return item1->Identifier() < item2->Identifier();
     }
 };
-
 #endif //KICAD_API_PLUGIN_H
