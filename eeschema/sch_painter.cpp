@@ -3210,7 +3210,7 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL* aLabel, int aLayer, bool aDimmed )
     m_gal->SetStrokeColor( color );
     m_gal->DrawPolyline( d_pts );
 
-    draw( static_cast<const SCH_TEXT*>( aLabel ), aLayer, false );
+    draw( static_cast<const SCH_TEXT*>( aLabel ), aLayer, aDimmed );
 }
 
 
@@ -3342,7 +3342,7 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
 
     if( aLayer == LAYER_SHEET || aLayer == LAYER_SELECTION_SHADOWS )
     {
-        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEET, drawingShadows ) );
+        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEET, drawingShadows, DNP ) );
         m_gal->SetIsStroke( true );
         m_gal->SetLineWidth( getLineWidth( aSheet, drawingShadows ) );
         m_gal->SetIsFill( false );

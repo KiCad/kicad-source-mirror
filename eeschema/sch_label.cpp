@@ -1460,6 +1460,12 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
     if( color.m_text && Schematic() )
         color = COLOR4D( ResolveText( *color.m_text, &Schematic()->CurrentSheet() ) );
 
+    if( aDimmed )
+    {
+        color.Desaturate();
+        color = color.Mix( bg, 0.5f );
+    }
+
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
 
