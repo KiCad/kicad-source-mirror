@@ -2515,9 +2515,9 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
     {
         if( GetCornerRadius() > 0 )
         {
-            // Use specialized function for rounded rectangles
-            VECTOR2I size( GetRectangleWidth(), GetRectangleHeight() );
-            VECTOR2I position = GetStart() + size / 2;  // Center position
+            VECTOR2I size( std::abs( GetRectangleWidth() ), std::abs( GetRectangleHeight() ) );
+            BOX2I    bbox = getBoundingBox();
+            VECTOR2I position = bbox.GetCenter();
 
             if( solidFill )
             {
