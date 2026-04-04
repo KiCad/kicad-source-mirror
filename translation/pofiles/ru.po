@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-04-02 14:17+0000\n"
+"PO-Revision-Date: 2026-04-05 15:09+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v9/ru/>\n"
 "Language: ru\n"
@@ -27735,7 +27735,7 @@ msgstr "Плагины (%d)"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:52
 #, c-format
 msgid "Fabrication plugins (%d)"
-msgstr "Плагины для изготовления (%d)"
+msgstr "Плагины производства (%d)"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:53
 #, c-format
