@@ -60,6 +60,7 @@
       },
       "rule_severities": {
         "annular_width": "error",
+        "assertion_failure": "error",
         "clearance": "error",
         "connection_width": "warning",
         "copper_edge_clearance": "error",
@@ -120,6 +121,7 @@
         "unconnected_items": "error",
         "unresolved_variable": "error",
         "via_dangling": "warning",
+        "via_diameter": "error",
         "zones_intersect": "error"
       },
       "rules": {
@@ -472,7 +474,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "ViaOffCenterTest.kicad_pro",
+    "filename": "via_off_center.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -505,6 +507,9 @@
     "netclass_patterns": []
   },
   "pcbnew": {
+    "find_by_properties": {
+      "recent_queries": []
+    },
     "last_paths": {
       "idf": "",
       "netlist": "",
@@ -627,8 +632,8 @@
     "subpart_id_separator": 0,
     "top_level_sheets": [
       {
-        "filename": "ViaOffCenterTest.kicad_sch",
-        "name": "Root",
+        "filename": "via_off_center.kicad_sch",
+        "name": "via_off_center",
         "uuid": "7488b81c-5d19-47a6-b3d6-a1f972945c61"
       }
     ],
