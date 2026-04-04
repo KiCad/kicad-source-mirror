@@ -295,6 +295,18 @@ bool PCM_TASK_MANAGER::extract( const wxString& aFilePath, const wxString& aPack
             return false;
         }
 
+#ifndef __WXMSW__
+        if( const wxZipEntry* zipEntry = dynamic_cast<const wxZipEntry*>( entry ) )
+        {
+            int exec = zipEntry->GetMode() & ( wxPOSIX_USER_EXECUTE | wxPOSIX_GROUP_EXECUTE | wxPOSIX_OTHERS_EXECUTE );
+
+            wxStructStat stat;
+
+            if( exec && wxStat( fullname, &stat ) == 0 )
+                wxChmod( fullname, stat.st_mode | exec );
+        }
+#endif
+
         extracted++;
         m_reporter->SetPackageProgress( extracted, entries );
 
