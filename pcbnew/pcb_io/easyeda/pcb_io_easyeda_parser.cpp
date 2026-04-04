@@ -578,7 +578,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                 zone->SetIsFilled( true );
                 zone->SetNeedRefill( false );
             }
-            catch( nlohmann::json::exception& e )
+            catch( nlohmann::json::exception& )
             {
             }
 

@@ -501,8 +501,6 @@ LIB_SYMBOL* SCH_IO_EASYEDA::LoadSymbol( const wxString&        aLibraryPath,
         THROW_IO_ERROR( wxString::Format( _( "Error loading symbol '%s' from library '%s': %s" ),
                                           aAliasName, aLibraryPath, e.what() ) );
     }
-
-    return nullptr;
 }
 
 

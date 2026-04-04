@@ -222,7 +222,7 @@ static wxString filterFootprints( const wxString& aFilterJson )
 
         return wxString::FromUTF8( output.dump() );
     }
-    catch( const std::exception& e )
+    catch( const std::exception& )
     {
         return wxS( "[]" );
     }

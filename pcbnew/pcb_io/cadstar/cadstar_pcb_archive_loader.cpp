@@ -3961,8 +3961,6 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
         m_netMap.insert( { aCadstarNetID, netInfo } );
         return netInfo;
     }
-
-    return nullptr;
 }
 
 
@@ -4027,8 +4025,6 @@ bool CADSTAR_PCB_ARCHIVE_LOADER::isLayerSet( const LAYER_ID& aCadstarLayerID )
     default:
         return false;
     }
-
-    return false;
 }
 
 
