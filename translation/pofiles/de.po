@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-02 14:40+0300\n"
-"PO-Revision-Date: 2026-04-04 04:09+0000\n"
+"PO-Revision-Date: 2026-04-05 09:09+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -29949,7 +29949,6 @@ msgstr ""
 "Im Format \"--define-var key=value\" oder \"-D key=value\" verwenden"
 
 #: kicad/cli/command.cpp:235
-#, fuzzy
 msgid ""
 "The variant name(s) to output, can be used multiple times to specify "
 "multiple variants.\n"
@@ -29958,9 +29957,9 @@ msgid ""
 "When no --variant argument is provided, the default variant is output."
 msgstr ""
 "Der/die auszugebende(n) Variantenname(n) kann/können mehrfach verwendet "
-"werden, um mehrere Varianten festzulegen.\n"
-"Wenn Sie mehrere Varianten angeben, verwenden Sie im Ausgabepfad ${VARIANT}, "
-"um für jede Variante eigene Dateien zu erzeugen.\n"
+"werden, um mehrere Varianten zu definieren.\n"
+"Wenn Sie mehrere Varianten erstellen, verwenden Sie im Ausgabepfad ${VARIANT}"
+", um für jede Variante eigene Dateien zu erzeugen.\n"
 "Ohne Angabe des Arguments --variant wird die Standardvariante ausgegeben."
 
 #: kicad/cli/command.h:32
@@ -47640,9 +47639,8 @@ msgid "Checking copper zone clearances..."
 msgstr "Prüfe Freiräume von Kupferzonen ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:177
-#, fuzzy
 msgid "Checking teardrop clearances..."
-msgstr "Prüfe Pad-Freiräume ..."
+msgstr "Prüfe Teardrop-Freiräume ..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:292
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:583
@@ -52624,10 +52622,10 @@ msgstr ""
 "wurde"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1572
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): less than 3 vertices"
 msgstr ""
-"Ein Polygon auf Lage \"%s\" (%d) wird übersprungen: Umrissanzahl ist nicht 1"
+"Ein Polygon auf Lage \"%s\" (%d) wird übersprungen: Weniger als drei Punkte"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1618
 #, c-format
