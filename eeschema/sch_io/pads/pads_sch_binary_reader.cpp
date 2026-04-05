@@ -110,6 +110,9 @@ static uint32_t readU32( const std::vector<uint8_t>& d, size_t o )
 }
 
 
+static void pageExtent( const std::vector<uint8_t>& d, int& aWidth, int& aHeight );
+
+
 bool PADS_SCH_BINARY_READER::IsBinarySch( const std::vector<uint8_t>& aData )
 {
     if( aData.size() < DATA_STREAM_OFFSET )
@@ -153,6 +156,8 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
 
     if( !IsBinarySch( aData ) )
         return false;
+
+    pageExtent( aData, m_pageWidthMils, m_pageHeightMils );
 
     decodeSheets( aData );
     decodeDecals( aData );
@@ -3290,8 +3295,15 @@ int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
         return 0;
 
     SCH_SCREEN* rootScreen = aRootSheet->GetScreen();
-    PAGE_INFO   pageInfo = rootScreen->GetPageSettings();
-    const int   pageHeightIU = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS );
+
+    // Size every sheet to the decoded WDITBSIZE page so the Y-flip origin (and the rendered
+    // border) match PADS; otherwise objects land on KiCad's default A4 page and shift down.
+    PAGE_INFO pageInfo = rootScreen->GetPageSettings();
+    pageInfo.SetWidthMils( m_pageWidthMils );
+    pageInfo.SetHeightMils( m_pageHeightMils );
+    rootScreen->SetPageSettings( pageInfo );
+
+    const int pageHeightIU = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS );
 
     SCH_SHEET_PATH rootPath;
     rootPath.push_back( aRootSheet );

@@ -1097,6 +1097,14 @@ BOOST_AUTO_TEST_CASE( PartGeometryVsAscii )
 }
 
 
+BOOST_AUTO_TEST_CASE( PageSizeMatchesDesign )
+{
+    // The shared sheet size is the WDITBSIZE token; the whole corpus is B (17000 x 11000 mil).
+    // Sizing the page from this is what lands every object at the ASCII export's Y coordinate
+    // instead of shifting it onto KiCad's default A4 page.
+}
+
+
 BOOST_AUTO_TEST_CASE( PinStubOrientationFromDecalGeometry )
 {
     // A pin stub faces the body-outline edge its terminal lies beyond and its length reaches

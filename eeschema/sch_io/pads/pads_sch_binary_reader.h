@@ -204,6 +204,10 @@ public:
     /// Number of PADS sheets in the design (>= 1).
     size_t GetSheetCount() const { return m_sheetOffsets.empty() ? 1 : m_sheetOffsets.size(); }
 
+    /// Decoded WDITBSIZE page extent in mils (shared by every sheet).
+    int GetPageWidthMils() const { return m_pageWidthMils; }
+    int GetPageHeightMils() const { return m_pageHeightMils; }
+
     /// Per-sheet "[N]NAME" names from the pool3 sheet table, in file order.
     const std::vector<std::string>& GetSheetNames() const { return m_sheetNames; }
 
@@ -270,6 +274,10 @@ private:
 
     /// Per-sheet display name ("[N]NAME") from the sheet table, parallel to m_sheetOffsets.
     std::vector<std::string>             m_sheetNames;
+
+    /// Decoded WDITBSIZE page extent in mils (B = 17000 x 11000 when unspecified).
+    int                                  m_pageWidthMils = 17000;
+    int                                  m_pageHeightMils = 11000;
 
     /// CAE-decal geometry library, indexed by name via m_decalIndex.
     std::vector<DECAL>                   m_decals;
