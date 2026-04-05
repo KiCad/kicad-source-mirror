@@ -18,10 +18,10 @@
  */
 
 #include <boost/test/unit_test.hpp>
-#include <boost/bimap.hpp>
 #include <magic_enum.hpp>
 #include <import_export.h>
 #include <qa_utils/wx_utils/wx_assert.h>
+#include <qa_utils/api_test_utils.h>
 
 // Common
 #include <api/api_enums.h>
@@ -47,91 +47,6 @@
 using namespace kiapi::common;
 
 BOOST_AUTO_TEST_SUITE( ApiEnums )
-
-/**
- * Checks if a KiCad enum has been properly mapped to a Protobuf enum
- * @tparam KiCadEnum is an enum type
- * @tparam ProtoEnum is a Protobuf enum type
- * @param aPartiallyMapped is true if only some of the KiCad enum values are exposed to the API
- */
-template<typename KiCadEnum, typename ProtoEnum>
-void testEnums( bool aPartiallyMapped = false )
-{
-    boost::bimap<ProtoEnum, KiCadEnum> protoToKiCadSeen;
-    std::set<ProtoEnum> seenProtos;
-
-    for( ProtoEnum value : magic_enum::enum_values<ProtoEnum>() )
-    {
-        BOOST_TEST_CONTEXT( magic_enum::enum_type_name<ProtoEnum>() << "::"
-                            << magic_enum::enum_name( value ) )
-        {
-            std::string name( magic_enum::enum_name( value ) );
-            auto splitPos = name.find_first_of( '_' );
-
-            // Protobuf enum names should be formatted as PREFIX_KEY
-            BOOST_REQUIRE_MESSAGE( splitPos != std::string::npos,
-                                   "Proto enum name doesn't have a prefix" );
-
-            std::string suffix = name.substr( splitPos );
-
-            // Protobuf enum with the value 0 should not map to anything
-            if( static_cast<int>( value ) == 0 )
-            {
-                BOOST_REQUIRE_MESSAGE( suffix.compare( "_UNKNOWN" ) == 0,
-                                       "Proto enum with value 0 must be named <PREFIX>_UNKNOWN" );
-                continue;
-            }
-
-            KiCadEnum result;
-            // Every non-unknown Proto value should map to a valid KiCad value
-            BOOST_REQUIRE_NO_THROW( result = ( FromProtoEnum<KiCadEnum, ProtoEnum>( value ) ) );
-
-            // There should be a 1:1 mapping
-            BOOST_REQUIRE( !protoToKiCadSeen.left.count( value ) );
-            protoToKiCadSeen.left.insert( { value, result } );
-        }
-    }
-
-    for( KiCadEnum value : magic_enum::enum_values<KiCadEnum>() )
-    {
-        BOOST_TEST_CONTEXT( magic_enum::enum_type_name<KiCadEnum>() << "::"
-                            << magic_enum::enum_name( value ) )
-        {
-            ProtoEnum result;
-
-            if( aPartiallyMapped )
-            {
-                try
-                {
-                     result = ToProtoEnum<KiCadEnum, ProtoEnum>( value );
-                }
-                catch( KI_TEST::WX_ASSERT_ERROR )
-                {
-                    // If it wasn't mapped from KiCad to Proto, it shouldn't be mapped the other way
-                    BOOST_REQUIRE_MESSAGE( !protoToKiCadSeen.right.count( value ),
-                            "Proto enum is mapped to this KiCad enum, but not vice versa" );
-                    continue;
-                }
-            }
-            else
-            {
-                // Every KiCad enum value should map to a non-unknown Protobuf value
-                BOOST_REQUIRE_NO_THROW( result = ( ToProtoEnum<KiCadEnum, ProtoEnum>( value ) ) );
-            }
-
-            // Protobuf "unknown" should always be zero value by convention
-            BOOST_REQUIRE( result != static_cast<ProtoEnum>( 0 ) );
-
-            // There should be a 1:1 mapping
-            BOOST_REQUIRE( !seenProtos.count( result ) );
-            seenProtos.insert( result );
-
-            // Round-tripping should work
-            KiCadEnum roundTrip = FromProtoEnum<KiCadEnum, ProtoEnum>( result );
-            BOOST_REQUIRE( roundTrip == value );
-        }
-    }
-}
 
 BOOST_AUTO_TEST_CASE( HorizontalAlignment )
 {

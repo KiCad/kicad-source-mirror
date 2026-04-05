@@ -20,10 +20,10 @@
 
 #include <boost/test/unit_test.hpp>
 #include <import_export.h>
+#include <qa_utils/api_test_utils.h>
 #include <qa_utils/wx_utils/wx_assert.h>
 #include <pcbnew_utils/board_test_utils.h>
 #include <settings/settings_manager.h>
-#include <google/protobuf/any.pb.h>
 
 #include <api/board/board_types.pb.h>
 
@@ -46,54 +46,6 @@ struct PROTO_TEST_FIXTURE
     SETTINGS_MANAGER       m_settingsManager;
     std::unique_ptr<BOARD> m_board;
 };
-
-
-template<typename ProtoClass, typename KiCadClass, typename ParentClass>
-void testProtoFromKiCadObject( KiCadClass* aInput, ParentClass* aParent, bool aStrict = true )
-{
-    BOOST_TEST_CONTEXT( aInput->GetFriendlyName() << ": " << aInput->m_Uuid.AsStdString() )
-    {
-        google::protobuf::Any any;
-        BOOST_REQUIRE_NO_THROW( aInput->Serialize( any ) );
-
-        ProtoClass proto;
-        BOOST_REQUIRE_MESSAGE( any.UnpackTo( &proto ),
-                               "Any message did not unpack into the requested type" );
-
-        std::unique_ptr<KiCadClass> output;
-
-        if( aStrict )
-        {
-            output = std::make_unique<KiCadClass>( aParent );
-        }
-        else
-        {
-            std::unique_ptr<KiCadClass> cloned( static_cast<KiCadClass*>( aInput->Clone() ) );
-            output = std::make_unique<KiCadClass>( *cloned );
-        }
-
-        bool deserializeResult = false;
-        BOOST_REQUIRE_NO_THROW( deserializeResult = output->Deserialize( any ) );
-        BOOST_REQUIRE_MESSAGE( deserializeResult, "Deserialize failed" );
-
-        // This round-trip checks that we can create an equivalent protobuf
-        google::protobuf::Any outputAny;
-        BOOST_REQUIRE_NO_THROW( output->Serialize( outputAny ) );
-
-        if( !( outputAny.SerializeAsString() == any.SerializeAsString() ) )
-        {
-            BOOST_TEST_MESSAGE( "Input: " << any.Utf8DebugString() );
-            BOOST_TEST_MESSAGE( "Output: " << outputAny.Utf8DebugString() );
-            BOOST_TEST_FAIL( "Round-tripped protobuf does not match" );
-        }
-
-        // This round-trip checks that we can create an equivalent KiCad object
-        if( !( *output == *aInput ) )
-        {
-            BOOST_TEST_FAIL( "Round-tripped object does not match" );
-        }
-    }
-}
 
 
 BOOST_FIXTURE_TEST_CASE( BoardTypes, PROTO_TEST_FIXTURE )
