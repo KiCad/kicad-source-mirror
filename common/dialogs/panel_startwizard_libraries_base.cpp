@@ -74,7 +74,7 @@ PANEL_STARTWIZARD_LIBRARIES_BASE::PANEL_STARTWIZARD_LIBRARIES_BASE( wxWindow* pa
 
 	m_stWarning = new wxStaticText( this, wxID_ANY, _("The built-in library tables could not be found in the expected location. This usually means that you have installed the KiCad software without also installing the libraries. You can proceed with setup, but you will need to install the libraries separately in order for them to be available."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stWarning->Wrap( -1 );
-	m_sizerWarning->Add( m_stWarning, 0, wxALL, 5 );
+	m_sizerWarning->Add( m_stWarning, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizer8->Add( m_sizerWarning, 0, wxEXPAND, 5 );
