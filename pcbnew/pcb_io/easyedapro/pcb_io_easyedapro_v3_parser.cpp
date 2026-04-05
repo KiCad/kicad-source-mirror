@@ -146,21 +146,17 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_V3_PARSER::createV3PAD( FOOTPRINT*       
             size.x = V3GetDouble( padDef, "width", 1.0 );
             size.y = V3GetDouble( padDef, "height", 1.0 );
             double radius = V3GetDouble( padDef, "radius" );
-
-            double radiusPct = 0.0;
-
-            if( radius > 0.0 && std::min( size.x, size.y ) > 0.0 )
-                radiusPct = std::clamp( 200.0 * radius / std::min( size.x, size.y ), 0.0, 100.0 );
+            double radiusRatio = std::clamp( radius, 0.0, 100.0 ) / 100 / 2;
 
             pad->SetSize( PADSTACK::ALL_LAYERS,
                           PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size ) );
 
-            if( radiusPct == 0 )
+            if( radiusRatio == 0 )
                 pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
             else
             {
                 pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
-                pad->SetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS, radiusPct / 100 );
+                pad->SetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS, radiusRatio );
             }
         }
         else if( padType == wxS( "ELLIPSE" ) )
