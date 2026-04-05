@@ -178,6 +178,9 @@ bool V3GetBool( const nlohmann::json& aObj, const char* aKey, bool aDefault )
 
 bool V3IsNullOrMissing( const nlohmann::json& aObj, const char* aKey )
 {
+    if( !aObj.is_object() )
+        return true;
+
     auto it = aObj.find( aKey );
 
     return it == aObj.end() || it->is_null();
@@ -274,7 +277,10 @@ static void ParseEpruStream( wxInputStream& aInput, const wxString& aSource,
         try
         {
             nlohmann::json outer = nlohmann::json::parse( ToStdString( outerStr ) );
-            nlohmann::json inner = nlohmann::json::parse( ToStdString( innerStr ) );
+            nlohmann::json inner;
+
+            if( !innerStr.empty() )
+                inner = nlohmann::json::parse( ToStdString( innerStr ) );
 
             wxString type = GetString( outer, "type" );
 
