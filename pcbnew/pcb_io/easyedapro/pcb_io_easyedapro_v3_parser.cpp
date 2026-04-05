@@ -212,7 +212,7 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_V3_PARSER::createV3PAD( FOOTPRINT*       
 
     pad->SetThermalSpokeAngle( ANGLE_90 );
 
-    return std::move( pad );
+    return pad;
 }
 
 
