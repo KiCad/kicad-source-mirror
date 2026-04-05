@@ -67,7 +67,7 @@ public:
     template <typename T>
     static T ScaleSize( T aValue )
     {
-        return KiROUND( schIUScale.MilsToIU( aValue * 10 ) );
+        return schIUScale.MilsToIU( KiROUND( aValue * 10 ) );
     }
 
     template <typename T>
