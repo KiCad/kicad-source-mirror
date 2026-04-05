@@ -271,6 +271,7 @@ public:
     static TOOL_ACTION symbolTreeSearch;
     static TOOL_ACTION drawSheetOnClipboard;
     static TOOL_ACTION importGraphics;
+    static TOOL_ACTION importNonKicadSchematic;
     static TOOL_ACTION exportSymbolView;
     static TOOL_ACTION exportSymbolAsSVG;
     static TOOL_ACTION showPythonConsole;

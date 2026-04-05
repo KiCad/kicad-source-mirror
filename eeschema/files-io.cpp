@@ -851,7 +851,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 }
 
 
-void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
+void SCH_EDIT_FRAME::OnImportProject()
 {
     if( Schematic().RootScreen() && !Schematic().RootScreen()->Items().empty() )
     {

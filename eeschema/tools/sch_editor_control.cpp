@@ -2953,6 +2953,13 @@ int SCH_EDITOR_CONTROL::ShowCvpcb( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::ImportNonKicadSchematic( const TOOL_EVENT& aEvent )
+{
+    m_frame->OnImportProject();
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::EditSymbolFields( const TOOL_EVENT& aEvent )
 {
     DIALOG_SYMBOL_FIELDS_TABLE* dlg = m_frame->GetSymbolFieldsTableDialog();
@@ -3529,6 +3536,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,    SCH_ACTIONS::editLibSymbolWithLibEdit.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowCvpcb,               SCH_ACTIONS::assignFootprints.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ImportFPAssignments,     SCH_ACTIONS::importFPAssignments.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ImportNonKicadSchematic, SCH_ACTIONS::importNonKicadSchematic.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Annotate,                SCH_ACTIONS::annotate.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::IncrementAnnotations,    SCH_ACTIONS::incrementAnnotations.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::EditSymbolFields,        SCH_ACTIONS::editSymbolFields.MakeEvent() );

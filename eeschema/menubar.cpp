@@ -101,13 +101,9 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     submenuImport->SetTitle( _( "Import" ) );
     submenuImport->SetIcon( BITMAPS::import );
 
-    submenuImport->Add( _( "Non-KiCad Schematic..." ),
-                _( "Replace current schematic sheet with one imported from another application" ),
-                ID_IMPORT_NON_KICAD_SCH,
-                BITMAPS::import_document );
-
+    submenuImport->Add( SCH_ACTIONS::importNonKicadSchematic, ACTION_MENU::NORMAL, _( "Non-KiCad Schematic..." ) );
     submenuImport->Add( SCH_ACTIONS::importFPAssignments, ACTION_MENU::NORMAL, _( "Footprint Assignments..." ) );
-    submenuImport->Add( SCH_ACTIONS::importGraphics,      ACTION_MENU::NORMAL, _( "Graphics..." ) );
+    submenuImport->Add( SCH_ACTIONS::importGraphics, ACTION_MENU::NORMAL, _( "Graphics..." ) );
 
     fileMenu->Add( submenuImport );
 

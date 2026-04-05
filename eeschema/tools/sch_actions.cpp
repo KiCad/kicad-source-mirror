@@ -1206,6 +1206,13 @@ TOOL_ACTION SCH_ACTIONS::importGraphics( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::import_vector )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION SCH_ACTIONS::importNonKicadSchematic( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.importNonKicadSchematic" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Import Non-KiCad Schematic..." ) )
+        .Tooltip( _( "Replace current schematic sheet with one imported from another application" ) )
+        .Icon( BITMAPS::import_document ) );
+
 TOOL_ACTION SCH_ACTIONS::showPcbNew( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.showPcbNew" )
         .Scope( AS_GLOBAL )

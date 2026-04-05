@@ -1205,7 +1205,7 @@ TOOL_ACTION PCB_ACTIONS::rescueAutosave( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::openNonKicadBoard( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.openNonKicadBoard" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Non-KiCad Board File..." ) )
+        .FriendlyName( _( "Import Non-KiCad Board File..." ) )
         .Tooltip( _( "Import board file from other applications" ) )
         .Icon( BITMAPS::import_brd_file ) );
 

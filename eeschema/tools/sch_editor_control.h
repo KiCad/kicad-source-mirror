@@ -123,6 +123,7 @@ public:
     int UpdatePCB( const TOOL_EVENT& aEvent );
     int UpdateFromPCB( const TOOL_EVENT& aEvent );
     int ImportFPAssignments( const TOOL_EVENT& aEvent );
+    int ImportNonKicadSchematic( const TOOL_EVENT& aEvent );
     int ExportNetlist( const TOOL_EVENT& aEvent );
     int GenerateBOM( const TOOL_EVENT& aEvent );
     int GenerateBOMLegacy( const TOOL_EVENT& aEvent );
