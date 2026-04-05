@@ -34,6 +34,7 @@
 #include <sch_no_connect.h>
 #include <sch_label.h>
 #include <sch_junction.h>
+#include <sch_screen.h>
 #include <sch_symbol.h>
 #include <sch_shape.h>
 #include <string_utils.h>
