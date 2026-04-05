@@ -332,7 +332,10 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_V3_PARSER::ParseFootprint(
             {
                 for( const auto& pt : prohibitTypes )
                 {
-                    wxString ptStr = pt.is_string() ? wxString( pt.get<std::string>() ) : wxS( "" );
+                    wxString ptStr;
+
+                    if( pt.is_string() )
+                        ptStr = pt.get<std::string>();
 
                     if( ptStr == wxS( "COMPONENT" ) )
                         flags.insert( 2 );
@@ -888,9 +891,10 @@ void PCB_IO_EASYEDAPRO_V3_PARSER::ParseBoard(
             {
                 for( const auto& pt : prohibitTypes )
                 {
-                    wxString ptStr = pt.is_string()
-                                             ? wxString( pt.get<std::string>() )
-                                             : wxS( "" );
+                    wxString ptStr;
+
+                    if( pt.is_string() )
+                        ptStr = pt.get<std::string>();
 
                     if( ptStr == wxS( "COMPONENT" ) )
                         flags.insert( 2 );
