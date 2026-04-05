@@ -197,7 +197,7 @@ template <typename T>
 void SCH_EASYEDAPRO_V3_PARSER::ApplyV3FontStyle( T& text, const nlohmann::json& aInner,
                                                   const char* aAlignField )
 {
-    wxString color = V3GetString( aInner, "color", wxS( "#000080" ) );
+    wxString color = V3GetString( aInner, "color", wxEmptyString );
     wxString fontFamily = V3GetString( aInner, "fontFamily", wxS( "default" ) );
     wxString align = V3GetString( aInner, aAlignField, wxS( "LEFT_BOTTOM" ) );
 
@@ -243,7 +243,7 @@ void SCH_EASYEDAPRO_V3_PARSER::ApplyV3LineStyle( T& shape, const nlohmann::json&
 {
     STROKE_PARAMS stroke = shape->GetStroke();
 
-    wxString colorStr = V3GetString( aInner, "strokeColor", wxS( "#000080" ) );
+    wxString colorStr = V3GetString( aInner, "strokeColor", wxEmptyString );
 
     if( !colorStr.empty() && colorStr.StartsWith( wxS( "#" ) ) )
     {
@@ -253,8 +253,10 @@ void SCH_EASYEDAPRO_V3_PARSER::ApplyV3LineStyle( T& shape, const nlohmann::json&
 
     stroke.SetLineStyle( ConvertStrokeStyle( aInner.value( "strokeStyle", nlohmann::json() ) ) );
 
-    double width = V3GetDouble( aInner, "strokeWidth", 1.0 );
-    stroke.SetWidth( SCH_EASYEDAPRO_PARSER::ScaleSize( width ) );
+    double width = V3GetDouble( aInner, "strokeWidth", 0.0 );
+
+    if( width != 0 )
+        stroke.SetWidth( SCH_EASYEDAPRO_PARSER::ScaleSize( width ) );
 
     shape->SetStroke( stroke );
 }
@@ -645,7 +647,7 @@ SCH_EASYEDAPRO_V3_PARSER::ParseSymbol( const EASYEDAPRO::V3_DOC_RAW&       aDoc,
             {
                 const nlohmann::json& attrInner = ( *globalNetAttrRow )->inner;
 
-                wxString color = V3GetString( attrInner, "color", wxS( "#000080" ) );
+                wxString color = V3GetString( attrInner, "color", wxEmptyString );
                 wxString fontFamily = V3GetString( attrInner, "fontFamily", wxS( "default" ) );
                 wxString align = V3GetString( attrInner, "align", wxS( "LEFT_BOTTOM" ) );
 
@@ -957,7 +959,7 @@ static void ApplyV3AttrToField( SCH_FIELD* aField, const EASYEDAPRO::SCH_ATTR& a
     }
 
     // Apply inline font style from v3 JSON
-    wxString color = V3GetString( aInner, "color", wxS( "#000080" ) );
+    wxString color = V3GetString( aInner, "color", wxEmptyString );
     wxString fontFamily = V3GetString( aInner, "fontFamily", wxS( "default" ) );
     wxString align = V3GetString( aInner, "align", wxS( "LEFT_BOTTOM" ) );
 
@@ -1668,7 +1670,7 @@ void SCH_EASYEDAPRO_V3_PARSER::ParseSchematic(
                         EASYEDAPRO::V3GetBool( attrRow->inner, "valueVisible", true )
                         && !netName.IsEmpty();
 
-                wxString color = V3GetString( attrRow->inner, "color", wxS( "#000080" ) );
+                wxString color = V3GetString( attrRow->inner, "color", wxEmptyString );
                 wxString fontFamily =
                         V3GetString( attrRow->inner, "fontFamily", wxS( "default" ) );
 
