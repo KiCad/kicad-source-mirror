@@ -56,7 +56,7 @@ LIB_ID EASYEDAPRO::ToKiCadLibID( const wxString& aLibName, const wxString& aLibR
     wxString libName = LIB_ID::FixIllegalChars( aLibName, true );
     wxString libReference = EscapeString( aLibReference, CTX_LIBID );
 
-    wxString key = !aLibName.empty() ? ( aLibName + ':' + libReference ) : libReference;
+    wxString key = !libName.empty() ? ( libName + ':' + libReference ) : libReference;
 
     LIB_ID libId;
     libId.Parse( key, true );
