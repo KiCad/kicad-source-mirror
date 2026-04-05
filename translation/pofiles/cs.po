@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-02 14:40+0300\n"
-"PO-Revision-Date: 2026-03-27 01:05+0000\n"
+"PO-Revision-Date: 2026-04-06 18:09+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v10/cs/>\n"
 "Language: cs\n"
@@ -36163,7 +36163,7 @@ msgstr "Upravit čárový kód"
 #: pcbnew/pcb_dimension.cpp:2167 pcbnew/pcb_fields_grid_table.cpp:159
 #: pcbnew/pcb_text.cpp:747 pcbnew/pcb_textbox.cpp:871
 msgid "Knockout"
-msgstr "Text v Negativu"
+msgstr "V negativu"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:59
 msgid "If checked, the barcode will be inverted with a margin around it"
@@ -42256,7 +42256,7 @@ msgstr "Zaměnit vrstvy"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:197
 msgid "Adjust the text thickness"
-msgstr "Upravit tloušťku textu"
+msgstr "Úměrná tloušťka textu"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:109
 msgid "Edit Alignment Target"
