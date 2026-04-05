@@ -1955,6 +1955,11 @@ void SCH_EASYEDAPRO_V3_PARSER::ParseSchematic(
         VECTOR2I offset( -sheetBBox.GetLeft() + margin,
                          -sheetBBox.GetTop() + margin );
 
+        int alignGrid = schIUScale.MilsToIU( 50 );
+
+        offset.x = KiROUND( offset.x / alignGrid ) * alignGrid;
+        offset.y = KiROUND( offset.y / alignGrid ) * alignGrid;
+
         PAGE_INFO pageInfo = screen->GetPageSettings();
         pageInfo.SetWidthMils( schIUScale.IUToMils( sheetBBox.GetWidth() + 2 * margin ) );
         pageInfo.SetHeightMils( schIUScale.IUToMils( sheetBBox.GetHeight() + 2 * margin ) );
