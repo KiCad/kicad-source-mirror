@@ -1055,12 +1055,24 @@ private:
             VERTEX* leftmost = hole;
             VERTEX* p = hole->next;
 
+            if( !p )
+            {
+                wxFAIL;
+                break;
+            }
+
             while( p != hole )
             {
                 if( p->x < leftmost->x || ( p->x == leftmost->x && p->y < leftmost->y ) )
                     leftmost = p;
 
                 p = p->next;
+
+                if( !p )
+                {
+                    wxFAIL;
+                    break;
+                }
             }
 
             holes.push_back( { leftmost, leftmost->x } );
