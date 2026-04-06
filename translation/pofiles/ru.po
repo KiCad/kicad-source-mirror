@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-02 14:40+0300\n"
-"PO-Revision-Date: 2026-04-05 09:09+0000\n"
+"PO-Revision-Date: 2026-04-06 18:09+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v10/ru/>\n"
 "Language: ru\n"
@@ -5977,9 +5977,9 @@ msgid ""
 "install the libraries separately in order for them to be available."
 msgstr ""
 "Встроенные таблицы библиотек не найдены в ожидаемом месте. Обычно это "
-"означает, что вы установили KiCad без установки библиотек. Вы можете "
-"продолжить настройку, но вам потребуется установить библиотеки отдельно, "
-"чтобы они стали доступны."
+"означает, что вы установили KiCad без библиотек. Вы можете продолжить "
+"настройку, но вам потребуется установить библиотеки отдельно, чтобы они "
+"стали доступны."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
 msgid "Updates"
@@ -5990,8 +5990,8 @@ msgid ""
 "Allow connections to the Internet to check for updated versions of KiCad and "
 "packages installed through the Plugin and Content Manager?"
 msgstr ""
-"Разрешить подключения к Интернету для проверки обновленных версий KiCad и "
-"пакетов, установленных через Менеджер плагинов и контента?"
+"Разрешить подключение к Интернету для проверки обновлений KiCad и пакетов, "
+"установленных через Менеджер плагинов и контента?"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
 #: common/eda_base_frame.cpp:1429
@@ -6031,7 +6031,7 @@ msgstr "Как следует настроить KiCad?"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:25
 msgid "Import settings from a previous version at:"
-msgstr "Импорировать параметры из предыдущей версии:"
+msgstr "Импортировать настройки из предыдущей версии:"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:38
 msgid "Choose a different path"
@@ -9909,7 +9909,7 @@ msgstr "Обновления и конфиденциальность"
 
 #: common/startwizard/startwizard_provider_settings.cpp:73
 msgid "Import settings from a previous version (none found)"
-msgstr "Импортировать параметры из предыдущей версии (не найдена)"
+msgstr "Импортировать настройки из предыдущей версии (не найдена)"
 
 #: common/startwizard/startwizard_provider_settings.cpp:143
 msgid "Select Settings Path"
@@ -52661,7 +52661,7 @@ msgstr "В оттенках серого"
 
 #: pcbnew/pcb_shape.cpp:700
 msgid "Drawing"
-msgstr "Чертёж"
+msgstr "Рисунок"
 
 #: pcbnew/pcb_shape.cpp:729
 #, c-format
