@@ -50,7 +50,6 @@
 #include <fmt.h>
 #include <fmt/ranges.h>
 #include <fmt/xchar.h>
-#include <connection_graph.h>
 
 BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                               bool aProcessFootprints, bool aProcessValues, bool aProcessReferences,
@@ -1441,8 +1440,19 @@ void BACK_ANNOTATE::processNetNameChange( SCH_COMMIT* aCommit, const wxString& a
 
                 if( !m_dryRun )
                 {
-                    aCommit->Modify( resolvedDriver, sg->GetSheet().LastScreen() );
-                    static_cast<SCH_LABEL_BASE*>( resolvedDriver )->SetText( aNewName );
+                    if( resolvedDriver->Type() == SCH_PIN_T )
+                    {
+                        SCH_PIN*    powerPin = static_cast<SCH_PIN*>( resolvedDriver );
+                        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( powerPin->GetParentSymbol() );
+
+                        aCommit->Modify( symbol, sg->GetSheet().LastScreen() );
+                        symbol->GetField( FIELD_T::VALUE )->SetText( aNewName );
+                    }
+                    else
+                    {
+                        aCommit->Modify( resolvedDriver, sg->GetSheet().LastScreen() );
+                        static_cast<SCH_LABEL_BASE*>( resolvedDriver )->SetText( aNewName );
+                    }
                 }
 
                 m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
