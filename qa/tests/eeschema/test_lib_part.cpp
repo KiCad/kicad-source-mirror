@@ -703,4 +703,53 @@ BOOST_AUTO_TEST_CASE( IsPowerTest )
 }
 
 
+/**
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23788
+ *
+ * SetUnitCount() must reject values less than 1. Previously, an importer (Altium .schdoc)
+ * could pass a negative or zero unit count, which caused the deletion loop to erase the
+ * mandatory fields (REFERENCE, VALUE, etc.) because their m_unit (== 0) was greater than
+ * the requested aCount. The symbol then crashed later when GetReferenceField() returned
+ * a null pointer that was implicitly dereferenced.
+ */
+BOOST_AUTO_TEST_CASE( SetUnitCountRejectsInvalidValues )
+{
+    auto checkMandatoryFields = []( LIB_SYMBOL& aSymbol )
+    {
+        BOOST_CHECK_EQUAL( aSymbol.GetUnitCount(), 1 );
+        BOOST_CHECK_NE( aSymbol.GetField( FIELD_T::REFERENCE ), nullptr );
+        BOOST_CHECK_NE( aSymbol.GetField( FIELD_T::VALUE ), nullptr );
+        BOOST_CHECK_NE( aSymbol.GetField( FIELD_T::FOOTPRINT ), nullptr );
+        BOOST_CHECK_NE( aSymbol.GetField( FIELD_T::DATASHEET ), nullptr );
+        BOOST_CHECK_NE( aSymbol.GetField( FIELD_T::DESCRIPTION ), nullptr );
+
+        // Reading the reference field text must not crash. This was the original SIGSEGV
+        // path through CONNECTION_SUBGRAPH::GetDriverPriority() reported in issue 23788.
+        BOOST_CHECK_NO_THROW( (void) aSymbol.GetReferenceField().GetText() );
+    };
+
+    // Sanity check the freshly constructed symbol.
+    LIB_SYMBOL baseline( wxS( "test_part" ) );
+    checkMandatoryFields( baseline );
+
+    // In debug builds the wxCHECK fires (caught by CHECK_WX_ASSERT) and the function does
+    // not modify the symbol. In release builds, the wxCHECK is silent and the function
+    // returns early without modification. Cover both call paths so the test exercises the
+    // actual SetUnitCount entry on every build configuration.
+    LIB_SYMBOL zeroCount( wxS( "test_part" ) );
+    CHECK_WX_ASSERT( zeroCount.SetUnitCount( 0, true ) );
+#ifndef __WXDEBUG__
+    zeroCount.SetUnitCount( 0, true );
+#endif
+    checkMandatoryFields( zeroCount );
+
+    LIB_SYMBOL negativeCount( wxS( "test_part" ) );
+    CHECK_WX_ASSERT( negativeCount.SetUnitCount( -1, true ) );
+#ifndef __WXDEBUG__
+    negativeCount.SetUnitCount( -1, true );
+#endif
+    checkMandatoryFields( negativeCount );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
