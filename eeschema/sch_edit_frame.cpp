@@ -1275,13 +1275,14 @@ void SCH_EDIT_FRAME::doCloseWindow()
     if( !Schematic().GetFileName().IsEmpty() && !Schematic().RootScreen()->IsEmpty() )
         UpdateFileHistory( fileName );
 
+    // Clear the view before freeing any schematic items.  VIEW::Clear() walks m_allItems and
+    // touches each item's private data, so the items must still be alive when this runs.
+    SetScreen( nullptr );
+
     Schematic().RootScreen()->Clear( true );
 
     // all sub sheets are deleted, only the main sheet is usable
     GetCurrentSheet().clear();
-
-    // Clear view before destroying schematic as repaints depend on schematic being valid
-    SetScreen( nullptr );
 
     Schematic().Reset();
 
