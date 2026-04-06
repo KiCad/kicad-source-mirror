@@ -987,8 +987,16 @@ static bool copyTreeObjects( git_repository* aSrcRepo, git_odb* aSrcOdb, git_odb
             if( git_odb_read( &blobObj, aSrcOdb, entryId ) == 0 )
             {
                 git_oid blobWritten;
-                git_odb_write( &blobWritten, aDstOdb, git_odb_object_data( blobObj ), git_odb_object_size( blobObj ),
-                               git_odb_object_type( blobObj ) );
+
+                if( git_odb_write( &blobWritten, aDstOdb, git_odb_object_data( blobObj ),
+                                   git_odb_object_size( blobObj ), git_odb_object_type( blobObj ) )
+                    != 0 )
+                {
+                    git_odb_object_free( blobObj );
+                    git_tree_free( tree );
+                    return false;
+                }
+
                 git_odb_object_free( blobObj );
                 aCopied.insert( *entryId );
             }
@@ -1192,7 +1200,13 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
     }
 
     git_odb* dstOdb = nullptr;
-    git_repository_odb( &dstOdb, newRepo );
+
+    if( git_repository_odb( &dstOdb, newRepo ) != 0 )
+    {
+        git_repository_free( newRepo );
+        git_odb_free( odb );
+        return false;
+    }
 
     std::set<git_oid, bool ( * )( const git_oid&, const git_oid& )> copiedObjects(
             []( const git_oid& a, const git_oid& b )
