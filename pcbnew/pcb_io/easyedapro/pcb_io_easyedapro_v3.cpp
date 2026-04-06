@@ -114,6 +114,22 @@ BOARD* PCB_IO_EASYEDAPRO_V3::LoadBoard( const wxString& aFileName, BOARD* aAppen
 
     PCB_IO_EASYEDAPRO_V3_PARSER parser( nullptr, nullptr );
 
+    std::map<wxString, EASYEDAPRO::BLOB> blobs;
+
+    for( const auto& [uuid, rawDoc] : adapter.GetRawDocs( wxS( "BLOB" ) ) )
+    {
+        for( const EASYEDAPRO::V3_ROW& row : rawDoc.rows )
+        {
+            if( row.type != wxS( "BLOB" ) )
+                continue;
+
+            EASYEDAPRO::BLOB blob;
+            blob.objectId = EASYEDAPRO::V3GetString( row.outer, "id" );
+            blob.url = EASYEDAPRO::V3GetString( row.inner, "content" );
+            blobs[blob.objectId] = blob;
+        }
+    }
+
     wxFileName fp( aFileName );
     wxString   fpLibName = EASYEDAPRO::ShortenLibName( fp.GetName() );
 
@@ -121,7 +137,7 @@ BOARD* PCB_IO_EASYEDAPRO_V3::LoadBoard( const wxString& aFileName, BOARD* aAppen
 
     for( const auto& [uuid, rawDoc] : adapter.GetRawDocs( wxS( "FOOTPRINT" ) ) )
     {
-        FOOTPRINT* footprint = parser.ParseFootprint( project, uuid, rawDoc );
+        FOOTPRINT* footprint = parser.ParseFootprint( project, uuid, blobs, rawDoc );
 
         if( !footprint )
             continue;
@@ -150,22 +166,6 @@ BOARD* PCB_IO_EASYEDAPRO_V3::LoadBoard( const wxString& aFileName, BOARD* aAppen
         footprint->SetFPID( fpID );
 
         footprints.emplace( uuid, footprint );
-    }
-
-    std::map<wxString, EASYEDAPRO::BLOB> blobs;
-
-    for( const auto& [uuid, rawDoc] : adapter.GetRawDocs( wxS( "BLOB" ) ) )
-    {
-        for( const EASYEDAPRO::V3_ROW& row : rawDoc.rows )
-        {
-            if( row.type != wxS( "BLOB" ) )
-                continue;
-
-            EASYEDAPRO::BLOB blob;
-            blob.objectId = EASYEDAPRO::V3GetString( row.inner, "objectId" );
-            blob.url = EASYEDAPRO::V3GetString( row.inner, "url" );
-            blobs[blob.objectId] = blob;
-        }
     }
 
     const EASYEDAPRO::V3_DOC_RAW* pcbRawDoc = adapter.FindRawDoc( wxS( "PCB" ), pcbToLoad );

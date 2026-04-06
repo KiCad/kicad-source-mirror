@@ -212,9 +212,9 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_V3_PARSER::createV3PAD( FOOTPRINT*       
 }
 
 
-FOOTPRINT* PCB_IO_EASYEDAPRO_V3_PARSER::ParseFootprint(
-        const nlohmann::json& aProject, const wxString& aFpUuid,
-        const V3_DOC_RAW& aDoc )
+FOOTPRINT* PCB_IO_EASYEDAPRO_V3_PARSER::ParseFootprint( const nlohmann::json& aProject, const wxString& aFpUuid,
+                                                        const std::map<wxString, EASYEDAPRO::BLOB>& aBlobMap,
+                                                        const V3_DOC_RAW&                           aDoc )
 {
     std::unique_ptr<FOOTPRINT> footprintPtr = std::make_unique<FOOTPRINT>( m_board );
     FOOTPRINT*                 footprint = footprintPtr.get();
@@ -376,6 +376,174 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_V3_PARSER::ParseFootprint(
                 zone->Outline()->Append( polySet );
 
                 footprint->Add( zone.release(), ADD_MODE::APPEND );
+            }
+        }
+        else if( row.type == wxS( "IMAGE" ) )
+        {
+            int          layer = V3GetInt( row.inner, "layerId", 1 );
+            PCB_LAYER_ID klayer = m_v2Parser.LayerToKi( layer );
+
+            VECTOR2D start;
+            start.x = V3GetDouble( row.inner, "startX" );
+            start.y = V3GetDouble( row.inner, "startY" );
+
+            VECTOR2D size;
+            size.x = V3GetDouble( row.inner, "width" );
+            size.y = V3GetDouble( row.inner, "height" );
+
+            double         angle = V3GetDouble( row.inner, "angle" );
+            bool           mirror = V3GetBool( row.inner, "mirror" );
+            nlohmann::json polyDataList = row.inner.value( "path", nlohmann::json::array() );
+
+            BOX2I                         bbox;
+            std::vector<SHAPE_LINE_CHAIN> contours;
+            for( nlohmann::json& polyData : polyDataList )
+            {
+                SHAPE_LINE_CHAIN contour = m_v2Parser.ParseContour( polyData, false );
+                contour.SetClosed( true );
+
+                contours.push_back( contour );
+
+                bbox.Merge( contour.BBox() );
+            }
+
+            VECTOR2D scale( PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size.x ) / bbox.GetSize().x,
+                            PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size.y ) / bbox.GetSize().y );
+
+            SHAPE_POLY_SET polySet;
+
+            for( SHAPE_LINE_CHAIN& contour : contours )
+            {
+                for( int i = 0; i < contour.PointCount(); i++ )
+                {
+                    VECTOR2I pt = contour.CPoint( i );
+                    contour.SetPoint( i, VECTOR2I( pt.x * scale.x, pt.y * scale.y ) );
+                }
+
+                polySet.AddOutline( contour );
+            }
+
+            polySet.RebuildHolesFromContours();
+
+            std::unique_ptr<PCB_GROUP> group;
+
+            if( polySet.OutlineCount() > 1 )
+                group = std::make_unique<PCB_GROUP>( footprint );
+
+            BOX2I polyBBox = polySet.BBox();
+
+            for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
+            {
+                std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( footprint, SHAPE_T::POLY );
+
+                shape->SetFilled( true );
+                shape->SetPolyShape( poly );
+                shape->SetLayer( klayer );
+                shape->SetWidth( 0 );
+
+                shape->Move( PCB_IO_EASYEDAPRO_PARSER::ScalePos( start ) - polyBBox.GetOrigin() );
+                shape->Rotate( PCB_IO_EASYEDAPRO_PARSER::ScalePos( start ), EDA_ANGLE( angle, DEGREES_T ) );
+
+                if( IsBackLayer( klayer ) ^ mirror )
+                {
+                    FLIP_DIRECTION flipDirection = FLIP_DIRECTION::LEFT_RIGHT;
+                    shape->Mirror( PCB_IO_EASYEDAPRO_PARSER::ScalePos( start ), flipDirection );
+                }
+
+                if( group )
+                    group->AddItem( shape.get() );
+
+                footprint->Add( shape.release(), ADD_MODE::APPEND );
+            }
+
+            if( group )
+                footprint->Add( group.release(), ADD_MODE::APPEND );
+        }
+        else if( row.type == wxS( "OBJ" ) )
+        {
+            int          layer = V3GetInt( row.inner, "layerId", 1 );
+            PCB_LAYER_ID klayer = m_v2Parser.LayerToKi( layer );
+
+            VECTOR2D start;
+            start.x = V3GetDouble( row.inner, "startX" );
+            start.y = V3GetDouble( row.inner, "startY" );
+
+            VECTOR2D size;
+            size.x = V3GetDouble( row.inner, "width" );
+            size.y = V3GetDouble( row.inner, "height" );
+
+            double   angle = V3GetDouble( row.inner, "angle" );
+            bool     mirror = V3GetBool( row.inner, "mirror" );
+            wxString imageUrl = V3GetString( row.inner, "path" );
+
+            if( imageUrl.empty() )
+                continue;
+
+            wxString mimeType, base64Data;
+
+            if( imageUrl.BeforeFirst( ':' ) == wxS( "blob" ) )
+            {
+                wxString objectId = imageUrl.AfterLast( ':' );
+
+                if( auto blob = get_opt( aBlobMap, objectId ) )
+                {
+                    wxString blobUrl = blob->url;
+
+                    if( blobUrl.BeforeFirst( ':' ) == wxS( "data" ) )
+                    {
+                        wxArrayString paramsArr =
+                                wxSplit( blobUrl.AfterFirst( ':' ).BeforeFirst( ',' ), ';', '\0' );
+
+                        base64Data = blobUrl.AfterFirst( ',' );
+
+                        if( paramsArr.size() > 0 )
+                            mimeType = paramsArr[0];
+                    }
+                }
+            }
+
+            VECTOR2D kstart = PCB_IO_EASYEDAPRO_PARSER::ScalePos( start );
+            VECTOR2D ksize = PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size );
+
+            if( mimeType.empty() || base64Data.empty() )
+                continue;
+
+            wxMemoryBuffer buf = wxBase64Decode( base64Data );
+
+            if( mimeType == wxS( "image/svg+xml" ) )
+            {
+                // Not yet supported by EasyEDA
+            }
+            else
+            {
+                VECTOR2D kcenter = kstart + ksize / 2;
+
+                std::unique_ptr<PCB_REFERENCE_IMAGE> bitmap =
+                        std::make_unique<PCB_REFERENCE_IMAGE>( footprint, kcenter, klayer );
+                REFERENCE_IMAGE& refImage = bitmap->GetReferenceImage();
+
+                wxImage::SetDefaultLoadFlags( wxImage::GetDefaultLoadFlags()
+                                              & ~wxImage::Load_Verbose );
+
+                if( refImage.ReadImageFile( buf ) )
+                {
+                    double scaleFactor = PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size.x ) / refImage.GetSize().x;
+                    refImage.SetImageScale( scaleFactor );
+
+                    // TODO: support non-90-deg angles
+                    bitmap->Rotate( kstart, EDA_ANGLE( angle, DEGREES_T ) );
+
+                    if( mirror )
+                    {
+                        int x = bitmap->GetPosition().x;
+                        MIRROR( x, KiROUND( kstart.x ) );
+                        bitmap->SetX( x );
+
+                        refImage.MutableImage().Mirror( FLIP_DIRECTION::LEFT_RIGHT );
+                    }
+
+                    footprint->Add( bitmap.release(), ADD_MODE::APPEND );
+                }
             }
         }
     }
@@ -1065,6 +1233,174 @@ void PCB_IO_EASYEDAPRO_V3_PARSER::ParseBoard(
             footprint->AutoPositionFields();
 
             aBoard->Add( footprint.release(), ADD_MODE::APPEND );
+        }
+        else if( row.type == wxS( "IMAGE" ) )
+        {
+            int          layer = V3GetInt( row.inner, "layerId", 1 );
+            PCB_LAYER_ID klayer = m_v2Parser.LayerToKi( layer );
+
+            VECTOR2D start;
+            start.x = V3GetDouble( row.inner, "startX" );
+            start.y = V3GetDouble( row.inner, "startY" );
+
+            VECTOR2D size;
+            size.x = V3GetDouble( row.inner, "width" );
+            size.y = V3GetDouble( row.inner, "height" );
+
+            double         angle = V3GetDouble( row.inner, "angle" );
+            bool           mirror = V3GetBool( row.inner, "mirror" );
+            nlohmann::json polyDataList = row.inner.value( "path", nlohmann::json::array() );
+
+            BOX2I                         bbox;
+            std::vector<SHAPE_LINE_CHAIN> contours;
+            for( nlohmann::json& polyData : polyDataList )
+            {
+                SHAPE_LINE_CHAIN contour = m_v2Parser.ParseContour( polyData, false );
+                contour.SetClosed( true );
+
+                contours.push_back( contour );
+
+                bbox.Merge( contour.BBox() );
+            }
+
+            VECTOR2D scale( PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size.x ) / bbox.GetSize().x,
+                            PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size.y ) / bbox.GetSize().y );
+
+            SHAPE_POLY_SET polySet;
+
+            for( SHAPE_LINE_CHAIN& contour : contours )
+            {
+                for( int i = 0; i < contour.PointCount(); i++ )
+                {
+                    VECTOR2I pt = contour.CPoint( i );
+                    contour.SetPoint( i, VECTOR2I( pt.x * scale.x, pt.y * scale.y ) );
+                }
+
+                polySet.AddOutline( contour );
+            }
+
+            polySet.RebuildHolesFromContours();
+
+            std::unique_ptr<PCB_GROUP> group;
+
+            if( polySet.OutlineCount() > 1 )
+                group = std::make_unique<PCB_GROUP>( aBoard );
+
+            BOX2I polyBBox = polySet.BBox();
+
+            for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
+            {
+                std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( aBoard, SHAPE_T::POLY );
+
+                shape->SetFilled( true );
+                shape->SetPolyShape( poly );
+                shape->SetLayer( klayer );
+                shape->SetWidth( 0 );
+
+                shape->Move( PCB_IO_EASYEDAPRO_PARSER::ScalePos( start ) - polyBBox.GetOrigin() );
+                shape->Rotate( PCB_IO_EASYEDAPRO_PARSER::ScalePos( start ), EDA_ANGLE( angle, DEGREES_T ) );
+
+                if( IsBackLayer( klayer ) ^ mirror )
+                {
+                    FLIP_DIRECTION flipDirection = FLIP_DIRECTION::LEFT_RIGHT;
+                    shape->Mirror( PCB_IO_EASYEDAPRO_PARSER::ScalePos( start ), flipDirection );
+                }
+
+                if( group )
+                    group->AddItem( shape.get() );
+
+                aBoard->Add( shape.release(), ADD_MODE::APPEND );
+            }
+
+            if( group )
+                aBoard->Add( group.release(), ADD_MODE::APPEND );
+        }
+        else if( row.type == wxS( "OBJ" ) )
+        {
+            int          layer = V3GetInt( row.inner, "layerId", 1 );
+            PCB_LAYER_ID klayer = m_v2Parser.LayerToKi( layer );
+
+            VECTOR2D start;
+            start.x = V3GetDouble( row.inner, "startX" );
+            start.y = V3GetDouble( row.inner, "startY" );
+
+            VECTOR2D size;
+            size.x = V3GetDouble( row.inner, "width" );
+            size.y = V3GetDouble( row.inner, "height" );
+
+            double   angle = V3GetDouble( row.inner, "angle" );
+            bool     mirror = V3GetBool( row.inner, "mirror" );
+            wxString imageUrl = V3GetString( row.inner, "path" );
+
+            if( imageUrl.empty() )
+                continue;
+
+            wxString mimeType, base64Data;
+
+            if( imageUrl.BeforeFirst( ':' ) == wxS( "blob" ) )
+            {
+                wxString objectId = imageUrl.AfterLast( ':' );
+
+                if( auto blob = get_opt( aBlobMap, objectId ) )
+                {
+                    wxString blobUrl = blob->url;
+
+                    if( blobUrl.BeforeFirst( ':' ) == wxS( "data" ) )
+                    {
+                        wxArrayString paramsArr =
+                                wxSplit( blobUrl.AfterFirst( ':' ).BeforeFirst( ',' ), ';', '\0' );
+
+                        base64Data = blobUrl.AfterFirst( ',' );
+
+                        if( paramsArr.size() > 0 )
+                            mimeType = paramsArr[0];
+                    }
+                }
+            }
+
+            VECTOR2D kstart = PCB_IO_EASYEDAPRO_PARSER::ScalePos( start );
+            VECTOR2D ksize = PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size );
+
+            if( mimeType.empty() || base64Data.empty() )
+                continue;
+
+            wxMemoryBuffer buf = wxBase64Decode( base64Data );
+
+            if( mimeType == wxS( "image/svg+xml" ) )
+            {
+                // Not yet supported by EasyEDA
+            }
+            else
+            {
+                VECTOR2D kcenter = kstart + ksize / 2;
+
+                std::unique_ptr<PCB_REFERENCE_IMAGE> bitmap =
+                        std::make_unique<PCB_REFERENCE_IMAGE>( aBoard, kcenter, klayer );
+                REFERENCE_IMAGE& refImage = bitmap->GetReferenceImage();
+
+                wxImage::SetDefaultLoadFlags( wxImage::GetDefaultLoadFlags()
+                                              & ~wxImage::Load_Verbose );
+
+                if( refImage.ReadImageFile( buf ) )
+                {
+                    double scaleFactor = PCB_IO_EASYEDAPRO_PARSER::ScaleSize( size.x ) / refImage.GetSize().x;
+                    refImage.SetImageScale( scaleFactor );
+
+                    // TODO: support non-90-deg angles
+                    bitmap->Rotate( kstart, EDA_ANGLE( angle, DEGREES_T ) );
+
+                    if( mirror )
+                    {
+                        int x = bitmap->GetPosition().x;
+                        MIRROR( x, KiROUND( kstart.x ) );
+                        bitmap->SetX( x );
+
+                        refImage.MutableImage().Mirror( FLIP_DIRECTION::LEFT_RIGHT );
+                    }
+
+                    aBoard->Add( bitmap.release(), ADD_MODE::APPEND );
+                }
+            }
         }
     } // end first pass
 
