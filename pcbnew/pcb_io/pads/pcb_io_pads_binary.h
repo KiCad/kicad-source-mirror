@@ -30,6 +30,7 @@
 
 class BOARD;
 class PCB_SHAPE;
+class FOOTPRINT;
 
 namespace PADS_IO { class BINARY_PARSER; struct ARC_POINT; }
 
@@ -69,6 +70,12 @@ private:
     void loadBoardSetup();
     void loadNets();
     void loadFootprints();
+
+    // Group footprints into PADS part clusters (.asc *CLUSTER* groups). Builds one
+    // PCB_GROUP per cluster from the parser's cluster table and adds each footprint to
+    // the group named by its part's CLSTID. Must run after loadFootprints().
+    void loadClusterGroups();
+
     void loadBoardOutline();
     void setBoardOutlineArc( PCB_SHAPE* aShape, const PADS_IO::ARC_POINT& aPrev,
                              const PADS_IO::ARC_POINT& aCurr );
@@ -77,6 +84,11 @@ private:
     void loadCopperShapes();
     void loadZones();
     void loadKeepouts();
+    void loadDimensions();
+
+    // Emit a (version 1) .kicad_dru beside the imported board carrying one clearance rule per
+    // differential pair with a gap. Mirrors PCB_IO_PADS::generateDrcRules.
+    void generateDrcRules( const wxString& aFileName );
     void reportStatistics();
     void clearLoadingState();
 
@@ -93,4 +105,8 @@ private:
     double                              m_originX = 0.0;
     double                              m_originY = 0.0;
     std::map<std::string, std::string>  m_pinToNetMap;
+
+    // Footprint built for each parser part index, populated by loadFootprints() and
+    // consumed by loadClusterGroups() to resolve part-index-keyed cluster membership.
+    std::vector<FOOTPRINT*>             m_partFootprints;
 };

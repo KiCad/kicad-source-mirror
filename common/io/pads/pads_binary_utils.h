@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <cstring>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -70,6 +71,20 @@ inline uint32_t getU32LE( const std::vector<uint8_t>& aData, size_t aOffset )
 inline int32_t getI32LE( const std::vector<uint8_t>& aData, size_t aOffset )
 {
     return static_cast<int32_t>( getU32LE( aData, aOffset ) );
+}
+
+
+inline double getF64LE( const std::vector<uint8_t>& aData, size_t aOffset )
+{
+    uint64_t bits = 0;
+
+    for( int i = 0; i < 8; ++i )
+        bits |= static_cast<uint64_t>( aData[aOffset + i] ) << ( 8 * i );
+
+    double value = 0;
+    std::memcpy( &value, &bits, sizeof( value ) );
+
+    return value;
 }
 
 
@@ -174,6 +189,12 @@ public:
     }
 
     int32_t I32At( size_t aOffset ) const { return static_cast<int32_t>( U32At( aOffset ) ); }
+
+    double F64At( size_t aOffset ) const
+    {
+        check( aOffset, 8 );
+        return getF64LE( m_data, aOffset );
+    }
 
     // Unlike the numeric accessors this does NOT throw out of range: readFixedString
     // already clamps aMaxLen to the available bytes and returns empty past EOF, so a

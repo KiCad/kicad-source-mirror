@@ -76,6 +76,20 @@ struct NETCLASS_DEF
 };
 
 /**
+ * A PADS *CLUSTER* (group/union) recovered from the binary part-cluster table.
+ *
+ * This is the part-keyed cluster of the .asc *CLUSTER* section: a named set of
+ * PARTS. It is deliberately distinct from the net-keyed CLUSTER in pads_parser.h
+ * (the ASCII net-cluster struct), which carries net/segment members this binary
+ * table does not, so a separate type avoids a redefinition clash.
+ */
+struct PART_CLUSTER
+{
+    std::string name;     // cluster name (.asc *CLUSTER* NAME column)
+    int         id = 0;   // 1-based ordinal; equals the sec22 +108 CLSTID reference
+};
+
+/**
  * Parser for PADS binary PCB file format (.pcb).
  *
  * Reads the binary PADS file and populates the same intermediate structs as the
@@ -115,13 +129,22 @@ public:
     const std::vector<PART>& GetParts() const { return m_parts; }
     const std::vector<NET>& GetNets() const { return m_nets; }
     const std::vector<NETCLASS_DEF>& GetNetClasses() const { return m_netClasses; }
+    const std::vector<DIFF_PAIR_DEF>& GetDiffPairs() const { return m_diffPairs; }
     const std::vector<ROUTE>& GetRoutes() const { return m_routes; }
     const std::vector<TEXT>& GetTexts() const { return m_texts; }
     const std::vector<POUR>& GetPours() const { return m_pours; }
     const std::vector<KEEPOUT>& GetKeepouts() const { return m_keepouts; }
     const std::vector<COPPER_SHAPE>& GetCopperShapes() const { return m_copper_shapes; }
+    const std::vector<DIMENSION>& GetDimensions() const { return m_dimensions; }
     const std::vector<POLYLINE>& GetBoardOutlines() const { return m_boardOutlines; }
     const std::map<std::string, PART_DECAL>& GetPartDecals() const { return m_decals; }
+
+    // Part clusters (.asc *CLUSTER* groups) and the per-part membership map. The
+    // membership key is an index into GetParts(); the value is the 1-based CLSTID,
+    // which equals the cluster's GetClusters() ordinal.
+    const std::vector<PART_CLUSTER>& GetClusters() const { return m_clusters; }
+    const std::map<size_t, int>& GetPartClusterIds() const { return m_partClusterId; }
+
     int GetLayerCount() const { return m_parameters.layer_count; }
     bool IsBasicUnits() const { return true; }
 
@@ -186,6 +209,7 @@ private:
     uint16_t readU16( size_t aOffset ) const;
     uint32_t readU32( size_t aOffset ) const;
     int32_t  readI32( size_t aOffset ) const;
+    double   readF64( size_t aOffset ) const;
     std::string readFixedString( size_t aOffset, size_t aMaxLen ) const;
 
     // File structure parsing
@@ -218,11 +242,27 @@ private:
     bool parseArcBoardOutline();
     void parseNetNames();
 
+    // Recover part clusters (.asc *CLUSTER* groups). Locates the 60-byte cluster-table
+    // run in the late route-coord section tail (whole-file fallback), validating each
+    // record by a printable name at +0 and sane design coords from the +16/+20 RAW
+    // XLOC/YLOC. A record's 1-based ordinal is the CLSTID that sec22 +108 references.
+    // Membership itself is captured during parsePartPlacements into m_partClusterId.
+    void parseClusters();
+
     // Recover net classes deterministically from the trailing design-rule arena:
     // group nets by their section-23 +188 net-class pointer (membership), name each
     // class from the 0x118 name table, and read per-class clearance-rule layers from
     // the type-66 rule table (tag 0x42 @ +4, class pointer @ +8, layer @ +20).
     void parseNetClasses();
+
+    // Recover serialized differential pairs from the sec49 (ClearanceRules) MFC heap.
+    // Each override pair is an 864-byte DIF_PAIR object located by its trailing 0xFF
+    // allocator free-fill run (object_start = ff_run_start - 864). Member nets are the
+    // self-pointers at +12/+16, value-joined to a net name via m_netSelfPtrToName (the
+    // sec23 +184 self-pointer). GAP = f64@+56 if != -1.0 else f64@+40; WIDTH = i32@+600
+    // if != -1 else i32@+592. Inherit-default pairs are not serialized, so coverage is
+    // limited to override pairs (the same limit as the clearance matrices). v0x2027 only.
+    void parseDiffPairs();
     void parseMetadataRegion();
     void parseDftConfig( size_t aStart, size_t aEnd );
     void parseRouteVertices();
@@ -251,6 +291,23 @@ private:
     void parseKeepouts();
     void parseCopperShapes();
     void parseCopperPours();
+
+    // Reconstruct PADS dimensions, which the binary does not store as a dedicated section.
+    // Each dimension is a DRW graphic-piece owner named DIM* (sec10) whose sec12 vertex run
+    // holds the BASPNT/ARWLN/ARWHD/EXTLN sub-pieces in ASC order, plus a sec8 value-text
+    // record (idx2 string, anchor, height, width, rotation, layer) bound to the owner by
+    // anchor-in-bbox. Geometry comes from the owner run via sec12Vertex; the value text uses
+    // the same +1 metadata-lag layout as parseTextRecords. Consumes the owner runs and the
+    // sec8 text stream, so it must run after buildOwnerRuns and parseTextRecords.
+    void parseDimensions();
+
+    // Decode the sec69 layer-definition + physical-stackup table (31 records of 152 bytes).
+    // The table is located by the inline string "(All layers)" rather than the directory
+    // data_offset, which is stale/overflowed on large boards. Populates m_layerInfos with
+    // per-layer thickness, copper thickness and dielectric constant for stackup import.
+    // Verified on v0x2027 only; older dialects keep the synthesized fallback.
+    void parseLayerStackup();
+
     void linkPartsToDecals();
 
     // Structural shape -> sec12 vertex link.
@@ -390,6 +447,14 @@ private:
     // Recovered net classes (membership + per-class clearance-rule layers).
     std::vector<NETCLASS_DEF> m_netClasses;
 
+    // Net self-pointer (section-23 record +184) -> net name. The within-file JOIN key
+    // that resolves a sec49 DIF_PAIR object's +12/+16 member-net pointers to names.
+    std::map<uint32_t, std::string> m_netSelfPtrToName;
+
+    // Recovered differential pairs (sec49 serialized override objects). Reuses the ASCII
+    // DIFF_PAIR_DEF shape so the importer's diff-pair consumers are shared verbatim.
+    std::vector<DIFF_PAIR_DEF> m_diffPairs;
+
     // Output data (same structs as ASCII parser)
     PARAMETERS                          m_parameters;
     std::vector<PART>                   m_parts;
@@ -399,8 +464,20 @@ private:
     std::vector<POUR>                   m_pours;
     std::vector<KEEPOUT>                m_keepouts;
     std::vector<COPPER_SHAPE>           m_copper_shapes;
+    std::vector<DIMENSION>              m_dimensions;
     std::vector<POLYLINE>               m_boardOutlines;
     std::map<std::string, PART_DECAL>   m_decals;
+
+    // Part clusters (.asc *CLUSTER* groups), in table order. Index+1 is the CLSTID.
+    std::vector<PART_CLUSTER>          m_clusters;
+
+    // Part index (into m_parts) -> 1-based CLSTID from the sec22 placement record's
+    // +108 field. Recorded for the new 112-byte layout only; -1/absent = unclustered.
+    std::map<size_t, int>              m_partClusterId;
+
+    // sec69 physical stackup, decoded by parseLayerStackup() on v0x2027. Empty when the
+    // table could not be located, in which case GetLayerInfos() synthesizes a fallback.
+    std::vector<LAYER_INFO>             m_layerInfos;
 };
 
 } // namespace PADS_IO

@@ -29,7 +29,9 @@
 #include <board.h>
 #include <pcb_track.h>
 #include <pcb_text.h>
+#include <pcb_dimension.h>
 #include <footprint.h>
+#include <pcb_group.h>
 #include <zone.h>
 
 #include <io/pads/pads_unit_converter.h>
@@ -38,10 +40,12 @@
 #include <netinfo.h>
 #include <wx/log.h>
 #include <wx/file.h>
+#include <wx/filefn.h>
 #include <wx/filename.h>
 #include <pad.h>
 #include <pcb_shape.h>
 #include <board_design_settings.h>
+#include <board_stackup_manager/board_stackup.h>
 #include <netclass.h>
 #include <project/net_settings.h>
 #include <geometry/eda_angle.h>
@@ -146,12 +150,19 @@ BOARD* PCB_IO_PADS_BINARY::LoadBoard( const wxString& aFileName, BOARD* aAppendT
             m_progressReporter->BeginPhase( 2 );
 
         loadFootprints();
+        loadClusterGroups();
         loadBoardOutline();
         loadTracksAndVias();
         loadTexts();
         loadCopperShapes();
         loadZones();
         loadKeepouts();
+        loadDimensions();
+
+        // Appending merges into a board that already has its own rule file, so nothing would
+        // ever load rules written beside the PADS source
+        if( !aAppendToMe )
+            generateDrcRules( aFileName );
 
         reportStatistics();
     }
@@ -251,6 +262,89 @@ void PCB_IO_PADS_BINARY::loadBoardSetup()
 
     m_loadBoard->SetCopperLayerCount( copperLayerCount );
 
+    // Build the board stackup from the sec69 physical-layer table when it carries meaningful
+    // thickness/dielectric data. This mirrors the proven ASCII path (pcb_io_pads.cpp ~L2943).
+    {
+        BOARD_DESIGN_SETTINGS& bds = m_loadBoard->GetDesignSettings();
+
+        std::vector<const PADS_IO::LAYER_INFO*> copperLayerInfos;
+
+        for( const auto& li : padsLayerInfos )
+        {
+            if( li.is_copper )
+                copperLayerInfos.push_back( &li );
+        }
+
+        bool hasStackupData = false;
+
+        for( const auto* li : copperLayerInfos )
+        {
+            if( li->layer_thickness > 0.0 || li->dielectric_constant > 0.0 )
+            {
+                hasStackupData = true;
+                break;
+            }
+        }
+
+        if( hasStackupData )
+        {
+            BOARD_STACKUP& stackup = bds.GetStackupDescriptor();
+            stackup.RemoveAll();
+            stackup.BuildDefaultStackupList( &bds, copperLayerCount );
+
+            std::map<PCB_LAYER_ID, const PADS_IO::LAYER_INFO*> copperInfoMap;
+
+            for( const auto* li : copperLayerInfos )
+            {
+                PCB_LAYER_ID kicadLayer = getMappedLayer( li->number );
+
+                if( kicadLayer != UNDEFINED_LAYER )
+                    copperInfoMap[kicadLayer] = li;
+            }
+
+            const PADS_IO::LAYER_INFO* prevCopperInfo = nullptr;
+
+            for( BOARD_STACKUP_ITEM* item : stackup.GetList() )
+            {
+                if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_COPPER )
+                {
+                    auto it = copperInfoMap.find( item->GetBrdLayerId() );
+
+                    if( it != copperInfoMap.end() )
+                    {
+                        prevCopperInfo = it->second;
+
+                        if( it->second->copper_thickness > 0.0 )
+                            item->SetThickness( scaleSize( it->second->copper_thickness ) );
+                    }
+                }
+                else if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_DIELECTRIC )
+                {
+                    if( prevCopperInfo )
+                    {
+                        if( prevCopperInfo->layer_thickness > 0.0 )
+                            item->SetThickness( scaleSize( prevCopperInfo->layer_thickness ) );
+
+                        if( prevCopperInfo->dielectric_constant > 0.0 )
+                            item->SetEpsilonR( prevCopperInfo->dielectric_constant );
+                    }
+                }
+                else if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SILKSCREEN )
+                {
+                    item->SetColor( wxT( "White" ) );
+                }
+                else if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SOLDERMASK )
+                {
+                    item->SetColor( wxT( "Green" ) );
+                }
+            }
+
+            int thickness = stackup.BuildBoardThicknessFromStackup();
+            bds.SetBoardThickness( thickness );
+            bds.m_HasStackup = true;
+        }
+    }
+
     // Binary files always use BASIC units
     m_unitConverter.SetBasicUnitsMode( true );
     m_scaleFactor = PADS_UNIT_CONVERTER::BASIC_TO_NM;
@@ -303,8 +397,9 @@ void PCB_IO_PADS_BINARY::loadNets()
     // is deterministic (section-23 +188 owner-pointer grouping). Empty on boards that carry
     // no net classes (e.g. the v0x2021 dialect), so this is a no-op there.
     const std::vector<PADS_IO::NETCLASS_DEF>& netClasses = m_parser->GetNetClasses();
+    const std::vector<PADS_IO::DIFF_PAIR_DEF>& diffPairs = m_parser->GetDiffPairs();
 
-    if( netClasses.empty() )
+    if( netClasses.empty() && diffPairs.empty() )
         return;
 
     std::shared_ptr<NET_SETTINGS> netSettings = m_loadBoard->GetDesignSettings().m_NetSettings;
@@ -325,6 +420,37 @@ void PCB_IO_PADS_BINARY::loadNets()
         for( const std::string& net : nc.nets )
             netSettings->SetNetclassLabelAssignment( PADS_COMMON::ConvertInvertedNetName( net ),
                                                      { className } );
+    }
+
+    // Differential pairs become one DiffPair_<name> net class each, mirroring the ASCII
+    // importer (pcb_io_pads.cpp loadDesignSettings). Gap/width are BASIC units; scaleSize
+    // applies the GOLDEN-RULE 1/38100 mil conversion.
+    for( const PADS_IO::DIFF_PAIR_DEF& dp : diffPairs )
+    {
+        if( dp.name.empty() )
+            continue;
+
+        wxString dpClassName = wxString::Format( wxT( "DiffPair_%s" ), wxString::FromUTF8( dp.name ) );
+        std::shared_ptr<NETCLASS> dpNetclass = std::make_shared<NETCLASS>( dpClassName );
+
+        if( dp.gap > 0 )
+            dpNetclass->SetDiffPairGap( scaleSize( dp.gap ) );
+
+        if( dp.width > 0 )
+        {
+            dpNetclass->SetDiffPairWidth( scaleSize( dp.width ) );
+            dpNetclass->SetTrackWidth( scaleSize( dp.width ) );
+        }
+
+        netSettings->SetNetclass( dpClassName, dpNetclass );
+
+        if( !dp.positive_net.empty() )
+            netSettings->SetNetclassPatternAssignment(
+                    PADS_COMMON::ConvertInvertedNetName( dp.positive_net ), dpClassName );
+
+        if( !dp.negative_net.empty() )
+            netSettings->SetNetclassPatternAssignment(
+                    PADS_COMMON::ConvertInvertedNetName( dp.negative_net ), dpClassName );
     }
 }
 
@@ -488,6 +614,48 @@ void PCB_IO_PADS_BINARY::loadFootprints()
 
         if( padsPart.bottom_layer )
             footprint->Flip( footprint->GetPosition(), FLIP_DIRECTION::LEFT_RIGHT );
+
+        m_partFootprints.push_back( footprint );
+    }
+}
+
+
+void PCB_IO_PADS_BINARY::loadClusterGroups()
+{
+    const std::vector<PADS_IO::PART_CLUSTER>& clusters = m_parser->GetClusters();
+
+    if( clusters.empty() )
+        return;
+
+    // One PCB_GROUP per cluster, keyed by the 1-based CLSTID the sec22 +108 membership
+    // field references. Mirrors the ASCII reuse-block grouping (pcb_io_pads.cpp:1191-1209)
+    // and the ASCII cluster build (pcb_io_pads.cpp:1824-1827), but uses PADS part-cluster
+    // membership rather than the ASCII net-cluster path.
+    std::map<int, PCB_GROUP*> clusterGroups;
+
+    for( const PADS_IO::PART_CLUSTER& cluster : clusters )
+    {
+        PCB_GROUP* group = new PCB_GROUP( m_loadBoard );
+        group->SetName( wxString::FromUTF8( cluster.name ) );
+        m_loadBoard->Add( group );
+        clusterGroups[cluster.id] = group;
+    }
+
+    // m_partFootprints holds the footprint built for each m_parts index, so the parser's
+    // part-index-keyed membership map resolves directly to a footprint.
+    const std::map<size_t, int>& partClusterIds = m_parser->GetPartClusterIds();
+
+    for( size_t i = 0; i < m_partFootprints.size(); ++i )
+    {
+        auto idIt = partClusterIds.find( i );
+
+        if( idIt == partClusterIds.end() || idIt->second <= 0 )
+            continue;
+
+        auto groupIt = clusterGroups.find( idIt->second );
+
+        if( groupIt != clusterGroups.end() )
+            groupIt->second->AddItem( m_partFootprints[i] );
     }
 }
 
@@ -1013,6 +1181,210 @@ void PCB_IO_PADS_BINARY::loadKeepouts()
 }
 
 
+void PCB_IO_PADS_BINARY::loadDimensions()
+{
+    // Mirrors PCB_IO_PADS::loadDimensions (pcb_io_pads.cpp) field-for-field, differing only in
+    // the binary scaleCoord/scaleSize that apply the per-axis origin and BASIC-unit factor. The
+    // binary parser leaves the override text empty, so KiCad recomputes the displayed value from
+    // the exact start/end geometry.
+    const auto& dimensions = m_parser->GetDimensions();
+
+    for( const auto& dim : dimensions )
+    {
+        if( dim.points.size() < 2 )
+            continue;
+
+        PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_loadBoard, PCB_DIM_ALIGNED_T );
+
+        VECTOR2I start( scaleCoord( dim.points[0].x, true ), scaleCoord( dim.points[0].y, false ) );
+        VECTOR2I end( scaleCoord( dim.points[1].x, true ), scaleCoord( dim.points[1].y, false ) );
+
+        // PADS horizontal/vertical dimensions measure only the X or Y projection, so project the
+        // end point onto the measured axis to keep the PCB_DIM_ALIGNED line square.
+        if( dim.is_horizontal )
+            end.y = start.y;
+        else
+            end.x = start.x;
+
+        dimension->SetStart( start );
+        dimension->SetEnd( end );
+
+        if( dim.is_horizontal )
+        {
+            double heightOffset = dim.crossbar_pos - dim.points[0].y;
+            dimension->SetHeight( -scaleSize( heightOffset ) );
+        }
+        else
+        {
+            double heightOffset = dim.crossbar_pos - dim.points[0].x;
+            dimension->SetHeight( scaleSize( heightOffset ) );
+        }
+
+        PCB_LAYER_ID dimLayer = getMappedLayer( dim.layer );
+
+        if( dimLayer == UNDEFINED_LAYER || IsCopperLayer( dimLayer ) )
+            dimLayer = Cmts_User;
+
+        dimension->SetLayer( dimLayer );
+
+        if( dim.text_height > 0 )
+        {
+            int scaledSize = scaleSize( dim.text_height );
+            int charHeight =
+                    static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsPcbTextHeightScale );
+            int charWidth =
+                    static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsPcbTextWidthScale );
+            dimension->SetTextSize( VECTOR2I( charWidth, charHeight ) );
+
+            if( dim.text_width > 0 )
+                dimension->SetTextThickness( scaleSize( dim.text_width ) );
+        }
+
+        if( !dim.text.empty() )
+        {
+            dimension->SetOverrideTextEnabled( true );
+            dimension->SetOverrideText( wxString::FromUTF8( dim.text ) );
+        }
+
+        dimension->SetLineThickness( scaleSize( 5.0 ) );
+
+        if( dim.rotation != 0.0 )
+            dimension->SetTextAngle( EDA_ANGLE( dim.rotation, DEGREES_T ) );
+
+        dimension->Update();
+        m_loadBoard->Add( dimension );
+    }
+}
+
+
+void PCB_IO_PADS_BINARY::generateDrcRules( const wxString& aFileName )
+{
+    const std::vector<PADS_IO::DIFF_PAIR_DEF>& diffPairs = m_parser->GetDiffPairs();
+
+    if( diffPairs.empty() )
+        return;
+
+    wxFileName fn( aFileName );
+    fn.SetExt( wxT( "kicad_dru" ) );
+
+    // The expression tokenizer reads \ before the closing quote as an escaped quote and has no
+    // rule that yields a trailing backslash, so only that one shape has no faithful encoding
+    auto isSerializable =
+            []( const wxString& aName )
+            {
+                return !aName.EndsWith( wxS( "\\" ) );
+            };
+
+    // The name is read back through two layers, so escape for the inner one first. The expression
+    // tokenizer takes \' inside a quoted operand and the s-expression lexer takes \\ \" \r \n
+    auto escapeOperand =
+            []( const wxString& aName )
+            {
+                wxString out = aName;
+
+                out.Replace( wxS( "'" ), wxS( "\\'" ) );
+                out.Replace( wxS( "\\" ), wxS( "\\\\" ) );
+                out.Replace( wxS( "\"" ), wxS( "\\\"" ) );
+                out.Replace( wxS( "\r" ), wxS( "\\r" ) );
+                out.Replace( wxS( "\n" ), wxS( "\\n" ) );
+
+                return out;
+            };
+
+    auto escapeSymbol =
+            []( const wxString& aName )
+            {
+                wxString out = aName;
+
+                out.Replace( wxS( "\\" ), wxS( "\\\\" ) );
+                out.Replace( wxS( "\"" ), wxS( "\\\"" ) );
+                out.Replace( wxS( "\r" ), wxS( "\\r" ) );
+                out.Replace( wxS( "\n" ), wxS( "\\n" ) );
+
+                return out;
+            };
+
+    wxString customRules = wxT( "(version 1)\n" );
+
+    for( const PADS_IO::DIFF_PAIR_DEF& dp : diffPairs )
+    {
+        if( dp.name.empty() || ( dp.gap <= 0 && dp.width <= 0 ) )
+            continue;
+
+        wxString ruleName = wxString::Format( wxT( "DiffPair_%s" ), wxString::FromUTF8( dp.name ) );
+
+        if( dp.gap > 0 && !dp.positive_net.empty() && !dp.negative_net.empty() )
+        {
+            wxString posNet = PADS_COMMON::ConvertInvertedNetName( dp.positive_net );
+            wxString negNet = PADS_COMMON::ConvertInvertedNetName( dp.negative_net );
+
+            // The rule name is followed by _gap, so only the net names can end the quoted operand
+            if( !isSerializable( posNet ) || !isSerializable( negNet ) )
+            {
+                if( m_reporter )
+                {
+                    m_reporter->Report( wxString::Format( _( "Skipped design rule for differential pair "
+                                                             "'%s'; a net name ends with a backslash." ),
+                                                          ruleName ),
+                                        RPT_SEVERITY_WARNING );
+                }
+
+                continue;
+            }
+
+            double   gapMm = scaleSize( dp.gap ) / PADS_UNIT_CONVERTER::MM_TO_NM;
+            wxString gapStr = wxString::FromUTF8( FormatDouble2Str( gapMm ) ) + wxT( "mm" );
+
+            customRules += wxString::Format(
+                    wxT( "\n(rule \"%s_gap\"\n" )
+                    wxT( "  (condition \"A.NetName == '%s' && B.NetName == '%s'\")\n" )
+                    wxT( "  (constraint clearance (min %s)))\n" ),
+                    escapeSymbol( ruleName ), escapeOperand( posNet ), escapeOperand( negNet ), gapStr );
+        }
+    }
+
+    if( customRules.length() <= 15 )
+        return;
+
+    // An import must not destroy rules the user already has. Creating exclusively both refuses an
+    // existing file and closes the race a FileExists test would leave open
+    wxFile rulesFile( fn.GetFullPath(), wxFile::write_excl );
+
+    if( !rulesFile.IsOpened() )
+    {
+        if( m_reporter )
+        {
+            wxString msg = fn.FileExists() ? _( "Design rules for the imported differential pairs were not "
+                                                "written; '%s' already exists." )
+                                           : _( "Could not write design rules to '%s'." );
+
+            m_reporter->Report( wxString::Format( msg, fn.GetFullPath() ), RPT_SEVERITY_WARNING );
+        }
+
+        return;
+    }
+
+    bool written = rulesFile.Write( customRules );
+
+    if( !rulesFile.Close() )
+        written = false;
+
+    // A partial sidecar will not parse, and because the file is created exclusively it would also
+    // block the next import from writing a good one
+    if( !written )
+    {
+        wxRemoveFile( fn.GetFullPath() );
+
+        if( m_reporter )
+        {
+            m_reporter->Report( wxString::Format( _( "Could not write design rules to '%s'." ),
+                                                  fn.GetFullPath() ),
+                                RPT_SEVERITY_WARNING );
+        }
+    }
+}
+
+
 void PCB_IO_PADS_BINARY::reportStatistics()
 {
     if( !m_reporter )
@@ -1118,4 +1490,5 @@ void PCB_IO_PADS_BINARY::clearLoadingState()
     m_originX = 0.0;
     m_originY = 0.0;
     m_pinToNetMap.clear();
+    m_partFootprints.clear();
 }

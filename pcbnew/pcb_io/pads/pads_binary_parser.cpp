@@ -163,6 +163,7 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     parseBoardSetup();
     parseMetadataRegion();
     parsePartPlacements();
+    parseClusters();
     parseSection19Parts();
     parsePadStacks();
     parseDecalNameTable();
@@ -172,6 +173,7 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     parseBoardOutline();
     parseNetNames();
     parseNetClasses();
+    parseDiffPairs();
     parseTextRecords();
     parseRouteVertices();
     computeSec12Base();
@@ -179,6 +181,8 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     parseKeepouts();
     parseCopperShapes();
     parseCopperPours();
+    parseDimensions();
+    parseLayerStackup();
     linkPartsToDecals();
 
     // Filter out parts with empty ref des
@@ -224,6 +228,12 @@ uint32_t BINARY_PARSER::readU32( size_t aOffset ) const
 int32_t BINARY_PARSER::readI32( size_t aOffset ) const
 {
     return m_cursor.I32At( aOffset );
+}
+
+
+double BINARY_PARSER::readF64( size_t aOffset ) const
+{
+    return m_cursor.F64At( aOffset );
 }
 
 
@@ -476,7 +486,132 @@ void BINARY_PARSER::parsePartPlacements()
                 m_partDecalIndex[m_parts.size()] = readU32( entry->dataOffset + nextOff + 56 );
         }
 
+        // Cluster (.asc *CLUSTER*) membership is the i32 at base+nameOff+64 (=+108) of
+        // this placement record, present only in the new 112-byte layout. It is the
+        // 1-based CLSTID into the cluster table; -1 means the part is in no cluster.
+        // Record it under the new part's index before the push, mirroring the
+        // m_partTypeIndex[m_parts.size()] convention above.
+        if( !isOld && layout.nameOff == 44
+            && off + static_cast<size_t>( layout.nameOff ) + 68 <= entry->totalBytes )
+        {
+            int32_t clstid = readI32( base + layout.nameOff + 64 );
+
+            if( clstid > 0 )
+                m_partClusterId[m_parts.size()] = clstid;
+        }
+
         m_parts.push_back( part );
+    }
+}
+
+
+void BINARY_PARSER::parseClusters()
+{
+    // The cluster table is a run of 60-byte records appended in the directory-covered
+    // tail of the late route-coord section (sec64 or sec69 depending on layout). Each
+    // record carries:
+    //   +0  char[16] NAME (NUL-padded)
+    //   +16 i32 XLOC raw   (design = raw - origin, BASIC = 1/38100 mil)
+    //   +20 i32 YLOC raw
+    //   +28 i32 ATTRIBUTE  (.asc ATTRIBUTE in the low 16 bits)
+    // Records are in .asc *CLUSTER* order, so a record's 1-based ordinal IS the CLSTID
+    // that the sec22 +108 field references.
+    //
+    // The cluster NAME also appears as a decoy NUL-separated run in the sec8 string
+    // pool, but that copy has garbage at +16/+20, so a valid-RAW-coord test rejects it.
+    // The old 96-byte placement layout has no room for the +108 CLSTID, so old-format
+    // boards carry no recoverable clusters; nothing is emitted for them.
+    if( isOldFormat() || m_partClusterId.empty() )
+        return;
+
+    static constexpr size_t  REC_SIZE = 60;
+    static constexpr int64_t MAX_COORD_DEVIATION = 1000000000; // ~660mm from origin
+
+    // A candidate record's name is a printable, NUL-terminated, non-empty string
+    // (readFixedString already rejects any non-printable byte) and its +16/+20 raw coords
+    // fall within a sane design-coordinate window around the origin. The coord window alone
+    // is too loose (a stray single-char string with a mid-range coord clears it), so also
+    // require the record's structural constants: +24 PARENTID == 0, +32 flag == 1, +36 == 0.
+    // These hold on every genuine cluster record (MC4 v2027, LCORE_3_1 v2026) and reject
+    // both the sec8 string-pool decoy and the 60-byte-early garbage record that otherwise
+    // shifts the whole table by one ordinal.
+    auto isValidRecord = [&]( size_t aOff ) -> bool
+    {
+        if( aOff + REC_SIZE > m_data.size() )
+            return false;
+
+        if( readFixedString( aOff, 16 ).empty() )
+            return false;
+
+        if( readI32( aOff + 24 ) != 0 || readI32( aOff + 32 ) != 1 || readI32( aOff + 36 ) != 0 )
+            return false;
+
+        int64_t dx = static_cast<int64_t>( readI32( aOff + 16 ) ) - m_originX;
+        int64_t dy = static_cast<int64_t>( readI32( aOff + 20 ) ) - m_originY;
+
+        return std::llabs( dx ) <= MAX_COORD_DEVIATION && std::llabs( dy ) <= MAX_COORD_DEVIATION;
+    };
+
+    // Read the contiguous 60-byte run starting at aStart into out; stop at the first
+    // record that fails the name/coord test. Returns the number of records read.
+    auto readRun = [&]( size_t aStart, std::vector<PART_CLUSTER>& aOut ) -> size_t
+    {
+        aOut.clear();
+
+        for( size_t off = aStart; isValidRecord( off ); off += REC_SIZE )
+        {
+            PART_CLUSTER cluster;
+            cluster.name = readFixedString( off, 16 );
+            cluster.id = static_cast<int>( aOut.size() ) + 1;
+            aOut.push_back( std::move( cluster ) );
+        }
+
+        return aOut.size();
+    };
+
+    // The highest CLSTID referenced by sec22 +108 is the minimum table length we must
+    // recover. A run shorter than that is the sec8 decoy or an unrelated table.
+    int maxClstId = 0;
+
+    for( const auto& [partIdx, clstid] : m_partClusterId )
+        maxClstId = std::max( maxClstId, clstid );
+
+    // Scan the route-coord section tails first, then fall back to the whole file. Pick
+    // the first run that covers every referenced CLSTID, validating the start by the
+    // name/coord test so the sec8 decoy (garbage +16/+20) is skipped.
+    std::vector<std::pair<size_t, size_t>> scanRanges;
+
+    for( int secIdx : { 64, 69 } )
+    {
+        const DirEntry* entry = getSection( secIdx );
+
+        if( entry && entry->totalBytes >= REC_SIZE )
+        {
+            size_t secStart = entry->dataOffset;
+            size_t secEnd = static_cast<size_t>( entry->dataOffset ) + entry->totalBytes;
+
+            if( secEnd <= m_data.size() )
+                scanRanges.emplace_back( secStart, secEnd );
+        }
+    }
+
+    scanRanges.emplace_back( 0, m_data.size() );
+
+    for( const auto& [scanStart, scanEnd] : scanRanges )
+    {
+        for( size_t off = scanStart; off + REC_SIZE <= scanEnd; ++off )
+        {
+            if( !isValidRecord( off ) )
+                continue;
+
+            std::vector<PART_CLUSTER> run;
+
+            if( readRun( off, run ) >= static_cast<size_t>( maxClstId ) )
+            {
+                m_clusters = std::move( run );
+                return;
+            }
+        }
     }
 }
 
@@ -1981,6 +2116,13 @@ void BINARY_PARSER::parseNetNames()
 
                     if( owner != 0 )
                         m_netClassOwner[name] = owner;
+
+                    // +184 is the net's own self-pointer, the JOIN key a sec49 DIF_PAIR
+                    // object's +12/+16 member-net fields value-equal.
+                    uint32_t selfPtr = readU32( base + 184 );
+
+                    if( selfPtr != 0 )
+                        m_netSelfPtrToName[selfPtr] = name;
                 }
             }
         }
@@ -2563,6 +2705,114 @@ void BINARY_PARSER::parseNetClasses()
 }
 
 
+void BINARY_PARSER::parseDiffPairs()
+{
+    constexpr size_t OBJECT_SIZE  = 864;
+    constexpr size_t FF_RUN_MIN   = 200;
+    constexpr double F64_INHERIT  = -1.0;
+    constexpr int32_t I32_INHERIT = -1;
+
+    const DirEntry* sec49 = getSection( SECTION::ClearanceRules );
+
+    if( !sec49 || sec49->totalBytes == 0 || m_netSelfPtrToName.empty() )
+        return;
+
+    const uint8_t* pool = sectionData( SECTION::ClearanceRules );
+
+    if( !pool )
+        return;
+
+    const size_t poolSize = sec49->totalBytes;
+    const size_t poolBase = sec49->dataOffset;
+
+    if( poolSize < OBJECT_SIZE )
+        return;
+
+    // The serialized DIF_PAIR objects are packed back-to-back as a contiguous run of 864-byte
+    // records, and the LAST one before any allocator gap is trailed by a >=200-byte 0xFF
+    // free-fill run. The +8 word is NOT a usable discriminator (it is 1 for the first object
+    // group, 17 for later groups), so the validity test is that BOTH +12/+16 member-net
+    // self-pointers resolve through m_netSelfPtrToName. Locate the run by the trailing fill
+    // (object_end == fill_start, i.e. object_start == fill_start - 864), then walk backward and
+    // forward in 864-byte strides while the self-pointers resolve.
+    auto objectResolves = [&]( size_t aObjStart ) -> bool
+    {
+        if( aObjStart < poolBase || aObjStart + OBJECT_SIZE > poolBase + poolSize )
+            return false;
+
+        return m_netSelfPtrToName.count( readU32( aObjStart + 12 ) )
+               && m_netSelfPtrToName.count( readU32( aObjStart + 16 ) );
+    };
+
+    size_t anchor = 0;
+    bool   haveAnchor = false;
+
+    for( size_t i = 0; i < poolSize && !haveAnchor; )
+    {
+        if( pool[i] != 0xFF )
+        {
+            ++i;
+            continue;
+        }
+
+        size_t runStart = i;
+
+        while( i < poolSize && pool[i] == 0xFF )
+            ++i;
+
+        size_t runEnd = i;
+
+        if( runEnd - runStart < FF_RUN_MIN || runEnd < OBJECT_SIZE )
+            continue;
+
+        // The packed object's own trailing free-fill occupies its last bytes, so the object
+        // that ends at this run boundary starts one object width back from the run END (the
+        // 0xFF fill of consecutive objects merges into one run; run_END is the boundary of the
+        // last object before the gap). Rebase the relative run index to an absolute offset.
+        size_t objStart = poolBase + ( runEnd - OBJECT_SIZE );
+
+        if( objectResolves( objStart ) )
+        {
+            anchor = objStart;
+            haveAnchor = true;
+        }
+    }
+
+    if( !haveAnchor )
+        return;
+
+    // Rewind to the first object of the contiguous run.
+    while( anchor >= poolBase + OBJECT_SIZE && objectResolves( anchor - OBJECT_SIZE ) )
+        anchor -= OBJECT_SIZE;
+
+    std::set<std::pair<std::string, std::string>> seen;
+
+    for( size_t objStart = anchor; objectResolves( objStart ); objStart += OBJECT_SIZE )
+    {
+        const std::string& nameA = m_netSelfPtrToName.at( readU32( objStart + 12 ) );
+        const std::string& nameB = m_netSelfPtrToName.at( readU32( objStart + 16 ) );
+
+        if( !seen.insert( { nameA, nameB } ).second )
+            continue;
+
+        double  gapOverride = readF64( objStart + 56 );
+        double  gap = ( gapOverride != F64_INHERIT ) ? gapOverride : readF64( objStart + 40 );
+        int32_t w600 = readI32( objStart + 600 );
+        double  width = ( w600 != I32_INHERIT ) ? static_cast<double>( w600 )
+                                                : static_cast<double>( readI32( objStart + 592 ) );
+
+        DIFF_PAIR_DEF dp;
+        dp.name = nameA + "_" + nameB;
+        dp.positive_net = nameA;
+        dp.negative_net = nameB;
+        dp.gap = ( gap != F64_INHERIT ) ? gap : 0.0;
+        dp.width = ( width != static_cast<double>( I32_INHERIT ) ) ? width : 0.0;
+
+        m_diffPairs.push_back( std::move( dp ) );
+    }
+}
+
+
 void BINARY_PARSER::parseTextRecords()
 {
     // Free-text items live in a 72-byte text-header stream that the container
@@ -3022,6 +3272,71 @@ void BINARY_PARSER::parseCopperShapes()
         }
 
         m_copper_shapes.push_back( std::move( copper ) );
+    }
+}
+
+
+void BINARY_PARSER::parseDimensions()
+{
+    const DirEntry* sec10 = getSection( SECTION::DrwItems );
+
+    if( !sec10 || sec10->perItem < 112 || m_ownerRuns.empty() )
+        return;
+
+    // A dimension's leader geometry is the sec12 vertex run of its DIM* DRW owner, laid out
+    // in ASC sub-piece order: BASPNT1(2v) BASPNT2(2v) ARWLN1(2v) ARWHD1(4v) ARWLN2(2v)
+    // ARWHD2(4v) EXTLN1(2v) EXTLN2(2v). The measurement endpoints are the two BASPNT first
+    // points (run rows 0 and 2); the crossbar is the ARWLN1 first point (run row 4). The
+    // vertices are absolute DESIGN coords (no owner-origin shift), the same space as every
+    // other parser geometry output.
+    //
+    // The value-label text lives in a sec8 record bound to the dimension only by anchor
+    // proximity, and that bind is not reliable on boards whose title-block notes share the
+    // dimension layer and overlap the leader extent. Following the correct-or-silent rule
+    // we emit only the exact geometry and leave the override text empty, so KiCad recomputes
+    // the displayed value from start/end. That computed value equals the PADS value exactly
+    // (e.g. a 90000000 BASIC span renders as 60.00 mm, matching the ASC "60.00mm").
+    for( uint32_t rec = 0; rec < sec10->count; ++rec )
+    {
+        size_t base = sec10->dataOffset + static_cast<size_t>( rec ) * sec10->perItem;
+
+        std::string name = readFixedString( base + 44, 24 );
+
+        if( name.size() < 4 || name.substr( 0, 3 ) != "DIM" )
+            continue;
+
+        auto it = m_ownerRuns.find( name );
+
+        if( it == m_ownerRuns.end() )
+            continue;
+
+        int32_t startRow = it->second.vertexStart - m_sec12Base;
+
+        int32_t bp1x = 0, bp1y = 0, bp2x = 0, bp2y = 0, arwx = 0, arwy = 0, attr = 0;
+
+        if( !sec12Vertex( startRow + 0, bp1x, bp1y, attr )
+            || !sec12Vertex( startRow + 2, bp2x, bp2y, attr )
+            || !sec12Vertex( startRow + 4, arwx, arwy, attr ) )
+        {
+            continue;
+        }
+
+        DIMENSION dim;
+        dim.name = name;
+        dim.x = toBasicCoordX( bp1x );
+        dim.y = toBasicCoordY( bp1y );
+
+        POINT pt1{ toBasicCoordX( bp1x ), toBasicCoordY( bp1y ) };
+        POINT pt2{ toBasicCoordX( bp2x ), toBasicCoordY( bp2y ) };
+        dim.points.push_back( pt1 );
+        dim.points.push_back( pt2 );
+
+        // Horizontal vs vertical from the larger BASPNT delta, mirroring the ASCII parser.
+        // crossbar_pos is the ARWLN1 first point projected onto the measured axis.
+        dim.is_horizontal = std::abs( bp2x - bp1x ) > std::abs( bp2y - bp1y );
+        dim.crossbar_pos = dim.is_horizontal ? toBasicCoordY( arwy ) : toBasicCoordX( arwx );
+
+        m_dimensions.push_back( std::move( dim ) );
     }
 }
 
@@ -3680,8 +3995,145 @@ void BINARY_PARSER::parseCopperPours()
 }
 
 
+void BINARY_PARSER::parseLayerStackup()
+{
+    m_layerInfos.clear();
+
+    // The sec69 layout (name@+0, routing_dir@+32, layer_thickness@+52, copper_thickness@+56,
+    // dielectric f32@+60, usage@+148; 31 records of 152 bytes) is verified on v0x2027 only.
+    // Older dialects keep the synthesized fallback in GetLayerInfos().
+    if( m_version != 0x2027 )
+        return;
+
+    static constexpr size_t REC_SIZE   = 152;
+    static constexpr size_t REC_COUNT  = 31;
+    static constexpr size_t NAME_LEN   = 24;
+    static constexpr size_t OFF_ROUT   = 32;
+    static constexpr size_t OFF_LAYTH  = 52;
+    static constexpr size_t OFF_COPTH  = 56;
+    static constexpr size_t OFF_DIEL   = 60;
+
+    static const std::string ANCHOR = "(All layers)";
+
+    // Locate the single "(All layers)" occurrence. This anchors the first record; the
+    // directory data_offset is stale and overflows the indexed region on large boards.
+    auto it = std::search( m_data.begin(), m_data.end(), ANCHOR.begin(), ANCHOR.end() );
+
+    if( it == m_data.end() )
+        return;
+
+    size_t recordBase = static_cast<size_t>( it - m_data.begin() );
+
+    if( !m_cursor.InBounds( recordBase, REC_COUNT * REC_SIZE ) )
+        return;
+
+    for( size_t k = 0; k < REC_COUNT; ++k )
+    {
+        size_t rec = recordBase + k * REC_SIZE;
+
+        LAYER_INFO info;
+        info.number = static_cast<int>( k );
+        info.name = readFixedString( rec, NAME_LEN );
+
+        int32_t routingDir = readI32( rec + OFF_ROUT );
+
+        info.layer_thickness   = static_cast<double>( readI32( rec + OFF_LAYTH ) );
+        info.copper_thickness  = static_cast<double>( readI32( rec + OFF_COPTH ) );
+
+        float dielectric = 0.0f;
+        std::memcpy( &dielectric, &m_data[rec + OFF_DIEL], sizeof( float ) );
+        info.dielectric_constant = static_cast<double>( dielectric );
+
+        // A real copper layer carries a non-zero COPPER_THICKNESS; the count of these equals
+        // the ASC MAXIMUMLAYER on every corpus file (4/4/12). The usage==1 enum is NOT a
+        // reliable copper signal on its own: the "(All layers)" pseudo-layer also reads
+        // usage==1, and a routed outer layer can read usage==0 (BR350460A's Bottom), so a
+        // usage-only test both over- and under-counts. COPPER_THICKNESS is the stable
+        // discriminator that includes Bottom and excludes the pseudo-layer and doc layers.
+        info.is_copper = ( info.copper_thickness > 0.0 );
+        info.required  = info.is_copper;
+
+        if( info.is_copper )
+        {
+            info.layer_type = ( routingDir == 2 ) ? PADS_LAYER_FUNCTION::PLANE
+                                                  : PADS_LAYER_FUNCTION::ROUTING;
+        }
+        else
+        {
+            info.layer_type = PADS_LAYER_FUNCTION::UNASSIGNED;
+        }
+
+        m_layerInfos.push_back( std::move( info ) );
+    }
+
+    // The leading "(All layers)" aggregate is a pseudo-layer, never a real copper layer.
+    // It always carries usage==1, so demote it explicitly to avoid an extra copper entry.
+    if( !m_layerInfos.empty() && m_layerInfos.front().name == ANCHOR )
+    {
+        m_layerInfos.front().is_copper = false;
+        m_layerInfos.front().required  = false;
+        m_layerInfos.front().layer_type = PADS_LAYER_FUNCTION::UNASSIGNED;
+    }
+}
+
+
 std::vector<LAYER_INFO> BINARY_PARSER::GetLayerInfos() const
 {
+    // When the sec69 stackup table was decoded, renumber its active copper layers 1..N in
+    // table order and append the standard non-copper technical layers (which sec69 names by
+    // documentation subtype rather than the canonical PADS numbers the importer maps).
+    if( !m_layerInfos.empty() )
+    {
+        std::vector<LAYER_INFO> infos;
+        int                     copperNum = 0;
+
+        for( const LAYER_INFO& src : m_layerInfos )
+        {
+            if( !src.is_copper )
+                continue;
+
+            LAYER_INFO info = src;
+            info.number = ++copperNum;
+            info.required = true;
+            infos.push_back( std::move( info ) );
+        }
+
+        if( copperNum > 0 )
+        {
+            struct NonCopperDef
+            {
+                int                 number;
+                const char*         name;
+                PADS_LAYER_FUNCTION type;
+            };
+
+            static const NonCopperDef nonCopperLayers[] = {
+                { 21, "Assembly Top",       PADS_LAYER_FUNCTION::ASSEMBLY },
+                { 22, "Assembly Bottom",    PADS_LAYER_FUNCTION::ASSEMBLY },
+                { 25, "Solder Mask Top",    PADS_LAYER_FUNCTION::SOLDER_MASK },
+                { 26, "Silkscreen Top",     PADS_LAYER_FUNCTION::SILK_SCREEN },
+                { 27, "Silkscreen Bottom",  PADS_LAYER_FUNCTION::SILK_SCREEN },
+                { 28, "Solder Mask Bottom", PADS_LAYER_FUNCTION::SOLDER_MASK },
+                { 29, "Paste Mask Top",     PADS_LAYER_FUNCTION::PASTE_MASK },
+                { 30, "Paste Mask Bottom",  PADS_LAYER_FUNCTION::PASTE_MASK },
+            };
+
+            for( const auto& def : nonCopperLayers )
+            {
+                LAYER_INFO info;
+                info.number = def.number;
+                info.name = def.name;
+                info.is_copper = false;
+                info.required = false;
+                info.layer_type = def.type;
+                infos.push_back( info );
+            }
+
+            return infos;
+        }
+    }
+
+
     std::vector<LAYER_INFO> infos;
     int layerCount = m_parameters.layer_count;
 

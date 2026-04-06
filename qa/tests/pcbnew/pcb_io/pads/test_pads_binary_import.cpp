@@ -32,10 +32,15 @@
 #include <pcb_field.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <pcb_group.h>
+#include <pcb_dimension.h>
 #include <footprint.h>
 #include <netinfo.h>
 #include <zone.h>
 #include <board_design_settings.h>
+#include <board_stackup_manager/board_stackup.h>
+#include <netclass.h>
+#include <project/net_settings.h>
 #include <algorithm>
 #include <cstdlib>
 #include <filesystem>
@@ -1653,6 +1658,54 @@ BOOST_AUTO_TEST_CASE( DedupePoolTerminalPositions_MC4 )
             }
         }
     }
+}
+
+
+//---------------------------------------------------------------------------------------
+// WAVE 3 round-trip oracle tests: part clusters (groups), dimensions, stackup, diff pairs.
+//---------------------------------------------------------------------------------------
+
+/**
+ * PADS *CLUSTER* part groups become KiCad PCB_GROUPs.
+ *
+ * MC4_PLUS_CSHAPE (v0x2027) carries two clusters in its .asc *CLUSTER* section:
+ * CLU_DCDC5V (CLSTID 1, 16 parts) and CLU_DCDC3V3 (CLSTID 2, 16 parts). The binary
+ * decode (sec22 +108 CLSTID -> 60-byte cluster-table ordinal -> name) must reproduce
+ * both named groups with their exact 16-member footprint sets.
+ */
+BOOST_AUTO_TEST_CASE( ClusterGroups_MC4_PLUS_CSHAPE )
+{
+    const PADS_BINARY_BOARD_INFO board{ "MC4_PLUS_CSHAPE", "MC4_PLUS_CSHAPE.pcb",
+                                        "MC4_PLUS_CSHAPE.asc", false };
+
+    std::unique_ptr<BOARD> brd = LoadBinary( board );
+    BOOST_REQUIRE( brd != nullptr );
+
+    std::map<wxString, std::set<wxString>> groupMembers;
+
+    for( PCB_GROUP* group : brd->Groups() )
+    {
+        std::set<wxString>& refs = groupMembers[group->GetName()];
+
+        for( EDA_ITEM* item : group->GetItems() )
+        {
+            if( item->Type() == PCB_FOOTPRINT_T )
+                refs.insert( static_cast<FOOTPRINT*>( item )->GetReference() );
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( groupMembers.count( "CLU_DCDC5V" ),
+                           "cluster CLU_DCDC5V missing from PCB_GROUPs" );
+    BOOST_REQUIRE_MESSAGE( groupMembers.count( "CLU_DCDC3V3" ),
+                           "cluster CLU_DCDC3V3 missing from PCB_GROUPs" );
+
+    const std::set<wxString> clu5v = { "C79", "C80", "C81", "C82", "C83", "C84", "C85", "C86",
+                                       "D4", "L2", "R84", "R85", "R86", "R87", "R89", "U10" };
+    const std::set<wxString> clu3v3 = { "C72", "C73", "C74", "C75", "C76", "C77", "C78", "D3",
+                                        "L1", "R77", "R78", "R79", "R80", "R81", "R83", "U9" };
+
+    BOOST_CHECK( groupMembers["CLU_DCDC5V"] == clu5v );
+    BOOST_CHECK( groupMembers["CLU_DCDC3V3"] == clu3v3 );
 }
 
 
