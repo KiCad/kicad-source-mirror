@@ -2030,6 +2030,7 @@ std::vector<LOCAL_HISTORY_SNAPSHOT_INFO> LOCAL_HISTORY::LoadSnapshots( const wxS
         return snapshots;
     }
 
+    git_revwalk_sorting( walk, GIT_SORT_TIME );
     git_revwalk_push_head( walk );
 
     git_oid oid;
