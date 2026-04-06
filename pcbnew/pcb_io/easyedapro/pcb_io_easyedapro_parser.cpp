@@ -1793,10 +1793,10 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                     }
                     else
                     {
-                        field->SetVisible( false );
                         field->SetText( attr.value );
                     }
 
+                    field->SetVisible( attr.keyVisible || attr.valVisible );
                     field->SetLayer( klayer );
                     field->SetPosition( ScalePos( attr.position ) );
                     field->SetTextAngleDegrees( footprint->IsFlipped() ? -attr.rotation
