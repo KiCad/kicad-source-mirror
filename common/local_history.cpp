@@ -242,6 +242,8 @@ bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxSt
     git_repository* repo = lock.GetRepository();
     git_index* index = lock.GetIndex();
 
+    git_repository_set_workdir( repo, hist.mb_str().data(), false );
+
     // Stage all written files
     for( const HISTORY_FILE_DATA& entry : aFileData )
     {
