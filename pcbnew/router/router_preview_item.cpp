@@ -552,10 +552,20 @@ const COLOR4D ROUTER_PREVIEW_ITEM::getLayerColor( int aLayer, const PNS::ITEM* a
     if( aItem && aItem->Net() && settings->GetNetColorMode() == NET_COLOR_MODE::ALL && IsCopperLayer( aLayer ) )
     {
         NETINFO_ITEM* ni = static_cast<NETINFO_ITEM*>( aItem->Net() );
-        NETCLASS*     nc = ni->GetNetClass();
 
-        if( nc && nc->HasPcbColor() )
-            color = nc->GetPcbColor();
+        auto ii = settings->GetNetColorMap().find( ni->GetNetCode() );
+
+        if( ii != settings->GetNetColorMap().end() && ii->second != COLOR4D::UNSPECIFIED )
+        {
+            color = ii->second;
+        }
+        else
+        {
+            NETCLASS* nc = ni->GetNetClass();
+
+            if( nc && nc->HasPcbColor() )
+                color = nc->GetPcbColor();
+        }
     }
 
     if( m_flags & PNS_HEAD_TRACE )
