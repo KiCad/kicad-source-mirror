@@ -935,6 +935,70 @@ static size_t dirSizeRecursive( const wxString& path )
     return total;
 }
 
+// Copy tree and all blob objects directly between ODBs
+static bool copyTreeObjects( git_repository* aSrcRepo, git_odb* aSrcOdb, git_odb* aDstOdb, const git_oid* aTreeOid,
+                             std::set<git_oid, bool ( * )( const git_oid&, const git_oid& )>& aCopied )
+{
+    if( aCopied.count( *aTreeOid ) )
+        return true;
+
+    git_odb_object* obj = nullptr;
+
+    if( git_odb_read( &obj, aSrcOdb, aTreeOid ) != 0 )
+        return false;
+
+    git_oid written;
+    int     err = git_odb_write( &written, aDstOdb, git_odb_object_data( obj ), git_odb_object_size( obj ),
+                                 git_odb_object_type( obj ) );
+    git_odb_object_free( obj );
+
+    if( err != 0 )
+        return false;
+
+    aCopied.insert( *aTreeOid );
+
+    git_tree* tree = nullptr;
+
+    if( git_tree_lookup( &tree, aSrcRepo, aTreeOid ) != 0 )
+        return false;
+
+    size_t cnt = git_tree_entrycount( tree );
+
+    for( size_t i = 0; i < cnt; ++i )
+    {
+        const git_tree_entry* entry = git_tree_entry_byindex( tree, i );
+        const git_oid*        entryId = git_tree_entry_id( entry );
+
+        if( aCopied.count( *entryId ) )
+            continue;
+
+        if( git_tree_entry_type( entry ) == GIT_OBJECT_TREE )
+        {
+            if( !copyTreeObjects( aSrcRepo, aSrcOdb, aDstOdb, entryId, aCopied ) )
+            {
+                git_tree_free( tree );
+                return false;
+            }
+        }
+        else if( git_tree_entry_type( entry ) == GIT_OBJECT_BLOB )
+        {
+            git_odb_object* blobObj = nullptr;
+
+            if( git_odb_read( &blobObj, aSrcOdb, entryId ) == 0 )
+            {
+                git_oid blobWritten;
+                git_odb_write( &blobWritten, aDstOdb, git_odb_object_data( blobObj ), git_odb_object_size( blobObj ),
+                               git_odb_object_type( blobObj ) );
+                git_odb_object_free( blobObj );
+                aCopied.insert( *entryId );
+            }
+        }
+    }
+
+    git_tree_free( tree );
+    return true;
+}
+
 bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxBytes )
 {
     if( aMaxBytes == 0 )
@@ -1053,8 +1117,6 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
             break; // stop once limit exceeded
     }
 
-    git_odb_free( odb );
-
     if( keep.empty() )
         keep.push_back( commits.front() ); // ensure at least head
 
@@ -1124,9 +1186,21 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
     git_repository* newRepo = nullptr;
 
     if( git_repository_init( &newRepo, trimPath.mb_str().data(), 0 ) != 0 )
+    {
+        git_odb_free( odb );
         return false;
+    }
 
-    // We will materialize each kept commit chronologically (oldest first) to preserve order.
+    git_odb* dstOdb = nullptr;
+    git_repository_odb( &dstOdb, newRepo );
+
+    std::set<git_oid, bool ( * )( const git_oid&, const git_oid& )> copiedObjects(
+            []( const git_oid& a, const git_oid& b )
+            {
+                return memcmp( &a, &b, sizeof( git_oid ) ) < 0;
+            } );
+
+    // Replay kept commits chronologically (oldest first) to preserve order.
     std::reverse( keep.begin(), keep.end() );
     git_commit* parent = nullptr;
     struct MAP_ENTRY { git_oid orig; git_oid neu; };
@@ -1142,79 +1216,12 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
         git_tree* tree = nullptr;
         git_commit_tree( &tree, orig );
 
-        // Checkout tree into filesystem (simple extractor)
-        // Remove all files first (except .git).
-        wxArrayString toDelete;
-        wxDir d( trimPath );
-        wxString nm;
-        bool cont = d.GetFirst( &nm );
-        while( cont )
-        {
-            if( nm != wxS(".git") )
-                toDelete.Add( nm );
-            cont = d.GetNext( &nm );
-        }
+        copyTreeObjects( repo, odb, dstOdb, git_tree_id( tree ), copiedObjects );
 
-        for( auto& del : toDelete )
-        {
-            wxFileName f( trimPath, del );
-            if( f.DirExists() )
-                wxFileName::Rmdir( f.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
-            else if( f.FileExists() )
-                wxRemoveFile( f.GetFullPath() );
-        }
-
-        // Recursively write tree entries
-        std::function<void(git_tree*, const wxString&)> writeTree = [&]( git_tree* t, const wxString& base )
-        {
-            size_t ecnt = git_tree_entrycount( t );
-            for( size_t i = 0; i < ecnt; ++i )
-            {
-                const git_tree_entry* e = git_tree_entry_byindex( t, i );
-                wxString name = wxString::FromUTF8( git_tree_entry_name( e ) );
-
-                if( git_tree_entry_type( e ) == GIT_OBJECT_TREE )
-                {
-                    wxFileName dir( base, name );
-                    wxMkdir( dir.GetFullPath() );
-                    git_tree* sub = nullptr;
-
-                    if( git_tree_lookup( &sub, repo, git_tree_entry_id( e ) ) == 0 )
-                    {
-                        writeTree( sub, dir.GetFullPath() );
-                        git_tree_free( sub );
-                    }
-                }
-                else if( git_tree_entry_type( e ) == GIT_OBJECT_BLOB )
-                {
-                    git_blob* blob = nullptr;
-
-                    if( git_blob_lookup( &blob, repo, git_tree_entry_id( e ) ) == 0 )
-                    {
-                        wxFileName file( base, name );
-                        wxFFile f( file.GetFullPath(), wxT("wb") );
-
-                        if( f.IsOpened() )
-                        {
-                            f.Write( (const char*) git_blob_rawcontent( blob ), git_blob_rawsize( blob ) );
-                            f.Close();
-                        }
-                        git_blob_free( blob );
-                    }
-                }
-            }
-        };
-
-        writeTree( tree, trimPath );
-
-        git_index* newIndex = nullptr;
-        git_repository_index( &newIndex, newRepo );
-        git_index_add_all( newIndex, nullptr, 0, nullptr, nullptr );
-        git_index_write( newIndex );
-        git_oid newTreeOid;
-        git_index_write_tree( &newTreeOid, newIndex );
         git_tree* newTree = nullptr;
-        git_tree_lookup( &newTree, newRepo, &newTreeOid );
+        git_tree_lookup( &newTree, newRepo, git_tree_id( tree ) );
+
+        git_tree_free( tree );
 
         // Recreate original author/committer signatures preserving timestamp.
         const git_signature* origAuthor = git_commit_author( orig );
@@ -1239,18 +1246,17 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
         git_oid newCommitOid;
         git_commit_create( &newCommitOid, newRepo, "HEAD", sigAuthor, sigCommitter, nullptr, git_commit_message( orig ),
                            newTree, parentCount, parentCount ? parents : nullptr );
+
         if( parent )
             git_commit_free( parent );
 
         git_commit_lookup( &parent, newRepo, &newCommitOid );
 
-        commitMap.emplace_back(  co, newCommitOid  );
+        commitMap.emplace_back( co, newCommitOid );
 
         git_signature_free( sigAuthor );
         git_signature_free( sigCommitter );
         git_tree_free( newTree );
-        git_index_free( newIndex );
-        git_tree_free( tree );
         git_commit_free( orig );
     }
 
@@ -1284,9 +1290,11 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
         }
     }
 
-    // Close both repositories before swapping directories to avoid file locking issues.
+    // Free ODBs and close repos before swapping directories to avoid file locking issues.
     // Note: The lock manager will automatically free the original repo when it goes out of scope,
-    // but we need to manually free the new trimmed repo we created.
+    // but we need to manually free the ODBs and new trimmed repo we created.
+    git_odb_free( dstOdb );
+    git_odb_free( odb );
     git_repository_free( newRepo );
 
     // Replace old history dir with trimmed one
