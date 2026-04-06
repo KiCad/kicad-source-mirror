@@ -534,8 +534,8 @@ wxGridCellAttr* FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGr
             wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
             bool     isDark = ( bg.Red() + bg.Green() + bg.Blue() ) < 384;
 
-            attr->SetBackgroundColour( isDark ? wxColour( 40, 60, 80 )       // Dark blue-grey
-                                              : wxColour( 220, 235, 255 ) ); // Light blue
+            attr->SetBackgroundColour( isDark ? wxColour( 80, 70, 30 )       // Dark amber
+                                              : wxColour( 255, 252, 200 ) ); // Light yellow
         }
     }
 
