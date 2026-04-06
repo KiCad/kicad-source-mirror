@@ -189,8 +189,8 @@ SCH_SHEET* SCH_IO_EASYEDAPRO_V3::LoadSchematicFile( const wxString& aFileName,
             try
             {
                 EASYEDAPRO::BLOB blob;
-                blob.objectId = EASYEDAPRO::V3GetString( row.inner, "objectId" );
-                blob.url = EASYEDAPRO::V3GetString( row.inner, "url" );
+                blob.objectId = EASYEDAPRO::V3GetString( row.outer, "id" );
+                blob.url = EASYEDAPRO::V3GetString( row.inner, "content" );
                 blobs[blob.objectId] = blob;
             }
             catch( nlohmann::json::exception& e )

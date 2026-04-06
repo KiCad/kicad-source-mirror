@@ -78,6 +78,9 @@ wxString V3JsonToString( const nlohmann::json& aValue, const wxString& aDefault 
 
 wxString V3GetString( const nlohmann::json& aObj, const char* aKey, const wxString& aDefault )
 {
+    if( !aObj.is_object() )
+        return aDefault;
+
     auto it = aObj.find( aKey );
 
     if( it == aObj.end() )
@@ -95,6 +98,9 @@ wxString V3GetString( const nlohmann::json& aObj, const wxString& aKey, const wx
 
 double V3GetDouble( const nlohmann::json& aObj, const char* aKey, double aDefault )
 {
+    if( !aObj.is_object() )
+        return aDefault;
+        
     auto it = aObj.find( aKey );
 
     if( it == aObj.end() )
@@ -117,6 +123,9 @@ double V3GetDouble( const nlohmann::json& aObj, const char* aKey, double aDefaul
 
 int V3GetInt( const nlohmann::json& aObj, const char* aKey, int aDefault )
 {
+    if( !aObj.is_object() )
+        return aDefault;
+
     auto it = aObj.find( aKey );
 
     if( it == aObj.end() )
@@ -145,6 +154,9 @@ int V3GetInt( const nlohmann::json& aObj, const char* aKey, int aDefault )
 
 bool V3GetBool( const nlohmann::json& aObj, const char* aKey, bool aDefault )
 {
+    if( !aObj.is_object() )
+        return aDefault;
+        
     auto it = aObj.find( aKey );
 
     if( it == aObj.end() )
