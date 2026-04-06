@@ -1503,6 +1503,7 @@ void LIB_SYMBOL::SetFields( const std::vector<SCH_FIELD>& aFieldsList )
     m_drawings.sort();
     cacheSearchTerms();
     cacheChooserFields();
+    cacheShownDescription();
 }
 
 

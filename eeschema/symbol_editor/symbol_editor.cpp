@@ -1231,6 +1231,11 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, m_symbol->GetName() ) );
     }
 
+    wxDataViewItem treeItem = m_libMgr->GetAdapter()->FindItem( LIB_ID( lib, m_symbol->GetName() ) );
+
+    if( treeItem.IsOk() )
+        UpdateLibraryTree( treeItem, m_symbol );
+
     RebuildSymbolUnitAndBodyStyleLists();
     UpdateTitle();
 
