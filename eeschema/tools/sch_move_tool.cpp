@@ -1863,13 +1863,36 @@ void SCH_MOVE_TOOL::finalizeMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT
 
     m_frame->Schematic().CleanUp( aCommit );
 
+    // Mirror the IS_MOVING flag propagation done at the start of the move so that child items
+    // (e.g. label fields, symbol pins/fields) don't keep their edit flags after the move ends.
+    auto clearChildEditFlags =
+            []( SCH_ITEM* aItem )
+            {
+                aItem->RunOnChildren(
+                        []( SCH_ITEM* aChild )
+                        {
+                            aChild->ClearEditFlags();
+                        },
+                        RECURSE_MODE::RECURSE );
+            };
+
     for( EDA_ITEM* item : m_frame->GetScreen()->Items() )
+    {
         item->ClearEditFlags();
+
+        if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item ) )
+            clearChildEditFlags( schItem );
+    }
 
     // Ensure any selected item not in screen main list (for instance symbol fields) has its
     // edit flags cleared
     for( EDA_ITEM* item : selectionCopy )
+    {
         item->ClearEditFlags();
+
+        if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item ) )
+            clearChildEditFlags( schItem );
+    }
 
     m_newDragLines.clear();
     m_changedDragLines.clear();

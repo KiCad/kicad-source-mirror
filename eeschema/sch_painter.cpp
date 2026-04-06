@@ -3042,8 +3042,13 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
             drawLocalPowerIcon( pos, size, rotated, color, drawingShadows, aField->IsBrightened() );
     }
 
-    // Draw anchor or umbilical line
-    if( aField->IsMoving() && m_schematic )
+    // Draw anchor or umbilical line.  The umbilical line shows independent motion of a field
+    // relative to its parent; suppress it when the parent is also moving (e.g. dragging the
+    // whole label) or its endpoints would span the entire label, drawing a long stray line.
+    SCH_ITEM* fieldParent = dynamic_cast<SCH_ITEM*>( aField->GetParent() );
+    bool      parentMoving = fieldParent && fieldParent->IsMoving();
+
+    if( aField->IsMoving() && !parentMoving && m_schematic )
     {
         VECTOR2I parentPos = aField->GetParentPosition();
 
@@ -3051,7 +3056,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
         m_gal->SetStrokeColor( getRenderColor( aField, LAYER_SCHEMATIC_ANCHOR, drawingShadows ) );
         m_gal->DrawLine( aField->GetPosition(), parentPos );
     }
-    else if( aField->IsSelected() )
+    else if( aField->IsSelected() && !parentMoving )
     {
         drawAnchor( aField->GetPosition(), drawingShadows );
     }
