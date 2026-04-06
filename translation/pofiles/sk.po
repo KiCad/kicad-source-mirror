@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-04-03 00:12+0000\n"
+"PO-Revision-Date: 2026-04-07 15:56+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -291,7 +291,7 @@ msgstr "Vykresliť aktuálne zobrazenie pomocou Raytracingu"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:102
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
 msgid "KiCad 3D Viewer"
-msgstr "KiCad 3D prehliadač"
+msgstr "KiCad prehliadač 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:164
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:677
@@ -1110,7 +1110,7 @@ msgstr "Vložiť model"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:64
 msgid "Select 3D Model"
-msgstr "Výbrať 3D model"
+msgstr "Vybrať 3D model"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:23
 msgid "Render Options"
@@ -1183,7 +1183,7 @@ msgstr "Rýchlosť prekreslenia:"
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
 msgid "Rendering Options"
-msgstr "Nastavenie vykreslovania"
+msgstr "Nastavenie vykresľovania"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
@@ -4282,7 +4282,7 @@ msgstr "Motív ikon:"
 
 #: common/dialogs/panel_common_settings_base.cpp:189
 msgid "Light"
-msgstr "Svetlo"
+msgstr "Svetlé"
 
 #: common/dialogs/panel_common_settings_base.cpp:190
 msgid "Use icons designed for light window backgrounds"
@@ -4291,7 +4291,7 @@ msgstr "Použiť ikony navrhnuté pre svetlé pozadie okna"
 #: common/dialogs/panel_common_settings_base.cpp:194
 #: gerbview/gerber_draw_item.cpp:725
 msgid "Dark"
-msgstr "Tmavá"
+msgstr "Tmavé"
 
 #: common/dialogs/panel_common_settings_base.cpp:195
 msgid "Use icons designed for dark window backgrounds"
@@ -5060,7 +5060,7 @@ msgstr "Pripojené položky:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:130
 msgid "Wires:"
-msgstr "Drôty:"
+msgstr "Spoje:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:138
 msgid "Vias:"
@@ -5668,7 +5668,7 @@ msgstr "Farba DPS"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
-msgstr "Hrúbka drôtu"
+msgstr "Hrúbka spoja"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:62
 msgid "Bus Thickness"
@@ -5780,7 +5780,7 @@ msgstr "Nepodarilo sa použiť OpenGL"
 
 #: common/draw_panel_gal.cpp:541
 msgid "Error switching GAL backend"
-msgstr "Pri prepínaní vykreslovacieho jadra GAL nastala chyba"
+msgstr "Pri prepínaní vykresľovacieho jadra GAL nastala chyba"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:559
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3429
@@ -6117,18 +6117,18 @@ msgstr "Doplnky"
 
 #: common/eda_base_frame.cpp:1197
 msgid "Realtime Renderer"
-msgstr "Reálny čas vykreslovania"
+msgstr "Reálny čas vykresľovania"
 
 #: common/eda_base_frame.cpp:1198
 msgid "Raytracing Renderer"
-msgstr "Raytracing vykreslovanie"
+msgstr "Raytracing vykresľovanie"
 
 #: common/eda_base_frame.cpp:1216 common/hotkey_store.cpp:81
 #: common/tool/common_tools.cpp:617 gerbview/gerbview_frame.cpp:652
 #: gerbview/gerbview_frame.cpp:675 gerbview/menubar.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:158
 msgid "Gerber Viewer"
-msgstr "Gerber prehliadač"
+msgstr "Prehliadač Gerber"
 
 #: common/eda_base_frame.cpp:1221
 msgid "Excellon Options"
@@ -8013,7 +8013,7 @@ msgstr "Záchrana"
 #: common/layer_id.cpp:71 eeschema/widgets/panel_sch_selection_filter.cpp:204
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:37
 msgid "Wires"
-msgstr "Drôty"
+msgstr "Spoje"
 
 #: common/layer_id.cpp:72
 msgid "Buses"
@@ -9551,7 +9551,7 @@ msgstr "Zobraziť okno projektu"
 
 #: common/tool/actions.cpp:1081
 msgid "Show 3D viewer window"
-msgstr "Zobraziť okno 3D prehliadača"
+msgstr "Zobraziť okno prehliadača 3D"
 
 #: common/tool/actions.cpp:1087 eeschema/symbol_diff_frame.cpp:57
 #: eeschema/symbol_viewer_frame.cpp:104 eeschema/symbol_viewer_frame.cpp:1102
@@ -9565,7 +9565,7 @@ msgstr "Vytvárať, odstraňovať a upravovať schematické symbolov"
 #: common/tool/actions.cpp:1104 pcbnew/footprint_viewer_frame.cpp:111
 #: pcbnew/footprint_viewer_frame.cpp:1041
 msgid "Footprint Library Browser"
-msgstr "Prehliadač knižníc pudzier"
+msgstr "Prehliadač knižnice pudzier"
 
 #: common/tool/actions.cpp:1113
 msgid "Create, delete and edit board footprints"
@@ -9660,7 +9660,7 @@ msgstr "Pomocník"
 
 #: common/tool/actions.cpp:1198
 msgid "Open product documentation in a web browser"
-msgstr "Otvorte dokumentáciu k produktu vo webovom prehliadači"
+msgstr "Otvoriť dokumentáciu k produktu vo webovom prehliadači"
 
 #: common/tool/actions.cpp:1204
 msgid "About KiCad"
@@ -9947,7 +9947,7 @@ msgstr "Žiadne predvolené puzdro"
 
 #: common/widgets/gal_options_panel_base.cpp:19
 msgid "Rendering Engine"
-msgstr "Vykreslovacie jadro"
+msgstr "Vykresľovacie jadro"
 
 #: common/widgets/gal_options_panel_base.cpp:31
 msgid "Accelerated graphics"
@@ -14505,11 +14505,11 @@ msgstr "Štýl výplne"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:165
 msgid "Do not fill"
-msgstr "Nevyplň"
+msgstr "Nevyplniť"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:168
 msgid "Fill with body outline color"
-msgstr "Vyplňte farbou obrysu tela"
+msgstr "Vyplniť farbou obrysu tela"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:171
 msgid "Fill with body background color"
@@ -15704,7 +15704,7 @@ msgstr "Číslo vývodu"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:280
 msgid "Base Pin Name"
-msgstr "Názov základného kolíka"
+msgstr "Názov základného vývodu"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:305
 msgid "Pin Functions"
@@ -16228,7 +16228,7 @@ msgstr "Kresliť vybrané podradené položky"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:154
 msgid "Fill selected shapes"
-msgstr "Vyplňte vybrané tvary"
+msgstr "Vyplniť vybrané tvary"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:163
 msgid "Selection thickness:"
@@ -16826,7 +16826,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:59
 msgid "D&efault pin length:"
-msgstr "Pr&edvolená dĺžka kolíka:"
+msgstr "Pr&edvolená dĺžka vývodu:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:70
 msgid "De&fault pin number size:"
@@ -17271,7 +17271,7 @@ msgstr "Vývod typu „bez pripojenia“ je pripojený"
 #: eeschema/erc/erc.cpp:1159
 #, c-format
 msgid "Pins of type %s and %s are connected"
-msgstr "Kolíky typu %s a %s sú spojené"
+msgstr "Vývody typu %s a %s sú spojené"
 
 #: eeschema/erc/erc.cpp:1226
 #, c-format
@@ -17439,7 +17439,7 @@ msgstr "Vstupný vývod nie je napájaný žiadnymi výstupnými vývodmi"
 #: eeschema/erc/erc_item.cpp:61
 msgid "Input Power pin not driven by any Output Power pins"
 msgstr ""
-"Kolík vstupného napájania nie je napájaný žiadnymi kolíkmi výstupného "
+"Vývod vstupného napájania nie je napájaný žiadnymi Vývodmi výstupného "
 "napájania"
 
 #: eeschema/erc/erc_item.cpp:65
@@ -17448,7 +17448,7 @@ msgstr "Duplicitné vývody s rôznymi spojmi"
 
 #: eeschema/erc/erc_item.cpp:69 eeschema/erc/erc_item.cpp:73
 msgid "Conflict problem between pins"
-msgstr "Konfliktný problém medzi kolíkmi"
+msgstr "Konfliktný problém medzi vývodmi"
 
 #: eeschema/erc/erc_item.cpp:85
 msgid "Mismatch between hierarchical labels and sheet pins"
@@ -17543,7 +17543,7 @@ msgstr "Problém so SPICE modelom"
 
 #: eeschema/erc/erc_item.cpp:173
 msgid "Wires not connected to anything"
-msgstr "Drôty nie sú k ničomu pripojené"
+msgstr "Spoje nie sú k ničomu pripojené"
 
 #: eeschema/erc/erc_item.cpp:177
 msgid "Library symbol issue"
@@ -19800,7 +19800,7 @@ msgstr "Grafická čára"
 #: eeschema/sch_line.cpp:738
 #, c-format
 msgid "Vertical Wire, length %s"
-msgstr "Vertikální drôt, dĺžka %s"
+msgstr "Zvislý, dĺžka %s"
 
 #: eeschema/sch_line.cpp:739
 #, c-format
@@ -19815,7 +19815,7 @@ msgstr "Vertikální grafická čára, dĺžka %s"
 #: eeschema/sch_line.cpp:747
 #, c-format
 msgid "Horizontal Wire, length %s"
-msgstr "Horizontální drôt, dĺžka %s"
+msgstr "Vodorovný spoj, dĺžka %s"
 
 #: eeschema/sch_line.cpp:748
 #, c-format
@@ -19830,7 +19830,7 @@ msgstr "Vodorovná grafická čára, dĺžka %s"
 #: eeschema/sch_line.cpp:756
 #, c-format
 msgid "Wire, length %s"
-msgstr "Drôt, dĺžka %s"
+msgstr "Spoj, dĺžka %s"
 
 #: eeschema/sch_line.cpp:757
 #, c-format
@@ -19888,7 +19888,7 @@ msgstr "Poz"
 #: eeschema/sch_pin.cpp:1854
 #, c-format
 msgid "Pin %s [%s, %s, %s]"
-msgstr "Kolík %s [%s, %s, %s]"
+msgstr "Vývod %s [%s, %s, %s]"
 
 #: eeschema/sch_pin.cpp:1862
 #, c-format
@@ -22509,7 +22509,7 @@ msgstr "(nepodarilo sa načítať)"
 
 #: eeschema/symbol_viewer_frame.cpp:111
 msgid "KiCad Symbol Library Browser"
-msgstr "Prehliadač knižníc symbolov KiCad"
+msgstr "Prehliadač knižnice symbolov KiCad"
 
 #: eeschema/symbol_viewer_frame.cpp:1100 pcbnew/footprint_viewer_frame.cpp:1033
 #: pcbnew/footprint_viewer_frame.cpp:1038
@@ -23487,7 +23487,7 @@ msgstr "Očíslovať schému..."
 
 #: eeschema/tools/sch_actions.cpp:1036
 msgid "Fill in schematic symbol reference designators"
-msgstr "Vyplňte schematické označenia symbolov"
+msgstr "Vyplniť schematické označenia symbolov"
 
 #: eeschema/tools/sch_actions.cpp:1042
 msgid "Increment Annotations From..."
@@ -24715,7 +24715,7 @@ msgstr "Obrázky"
 #: pcbnew/widgets/panel_selection_filter.cpp:205
 #: pcbnew/widgets/panel_selection_filter_base.cpp:65
 msgid "Other items"
-msgstr "Ostatné veci"
+msgstr "Iné položky"
 
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:47
 msgid "Graphical shapes"
@@ -25431,7 +25431,7 @@ msgstr "<b>chyba čítania rozbaleného súboru %s</b>"
 
 #: gerbview/files.cpp:647
 msgid "Open Zip File"
-msgstr "Otvorte súbor Zip"
+msgstr "Otvoriť súbor Zip"
 
 #: gerbview/files.cpp:681 gerbview/job_file_reader.cpp:241
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:164
@@ -25580,7 +25580,7 @@ msgstr "Tento súbor úloh používa zastaraný formát. Prosím, znova ju vytvo
 
 #: gerbview/job_file_reader.cpp:192
 msgid "Open Gerber Job File"
-msgstr "Otvorte Gerber Job File"
+msgstr "Otvoriť súbor Gerber Job"
 
 #: gerbview/menubar.cpp:68 gerbview/menubar.cpp:75
 msgid "Clear Recent Gerber Files"
@@ -25588,7 +25588,7 @@ msgstr "Vymazať posledné súbory Gerber"
 
 #: gerbview/menubar.cpp:74 gerbview/menubar.cpp:97
 msgid "Open Recent Gerber File"
-msgstr "Otvorte posledný súbor Gerber"
+msgstr "Otvoriť posledný súbor Gerber"
 
 #: gerbview/menubar.cpp:88
 msgid "Open Recent Drill File"
@@ -25596,7 +25596,7 @@ msgstr "Otvoriť nedávno otvorený vŕtací súbor"
 
 #: gerbview/menubar.cpp:118
 msgid "Open Recent Job File"
-msgstr "Otvorte súbor posledných úloh"
+msgstr "Otvoriť súbor posledných úloh"
 
 #: gerbview/menubar.cpp:139
 msgid "Open Recent Zip File"
@@ -27210,7 +27210,7 @@ msgstr "&Zobraziť podrobnosti"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 msgid "Launch a web browser to the release announcements page."
-msgstr "Otvorí webový prehliadač na stránke s oznámeniami o vydaniach."
+msgstr "Otvoriť webový prehliadač na stránke s oznámeniami o vydaniach."
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:70
 msgid "Open &Downloads Page"
@@ -27629,7 +27629,7 @@ msgstr "Prehliadať súbory projektu"
 
 #: kicad/menubar.cpp:176
 msgid "Open project directory in file browser"
-msgstr "Otvorte adresár projektu v prehliadači súborov"
+msgstr "Otvoriť adresár projektu v prehliadači súborov"
 
 #: kicad/menubar.cpp:209
 msgid "Edit Local File..."
@@ -27649,7 +27649,7 @@ msgstr "Odhalte priečinok projektu vo vyhľadávači"
 
 #: kicad/menubar.cpp:287
 msgid "Open project directory in file explorer"
-msgstr "Otvorte adresár projektu v prehliadači súborov"
+msgstr "Otvoriť adresár projektu v prehliadači súborov"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
 msgid "Add Default Repository"
@@ -28231,7 +28231,7 @@ msgstr "Ukázať adresár v prehliadači"
 
 #: kicad/project_tree_pane.cpp:924
 msgid "Open Directory in File Explorer"
-msgstr "Otvorte adresár v Prieskumníkovi súborov"
+msgstr "Otvoriť adresár v Prieskumníkovi súborov"
 
 #: kicad/project_tree_pane.cpp:925 pcbnew/tools/pcb_actions.cpp:986
 msgid "Opens the directory in the default system file manager"
@@ -28243,7 +28243,7 @@ msgstr "Ukázať adresáre v okne prehliadača"
 
 #: kicad/project_tree_pane.cpp:934
 msgid "Open Directories in File Explorer"
-msgstr "Otvorte adresáre v Prieskumníkovi súborov"
+msgstr "Otvoriť adresáre v Prieskumníkovi súborov"
 
 #: kicad/project_tree_pane.cpp:935
 msgid "Opens the directories in the default system file manager"
@@ -28255,7 +28255,7 @@ msgstr "Otvorí súbor v textovom editore"
 
 #: kicad/project_tree_pane.cpp:948
 msgid "Open files in a Text Editor"
-msgstr "Otvorte súbory v textovom editore"
+msgstr "Otvoriť súbory v textovom editore"
 
 #: kicad/project_tree_pane.cpp:950
 msgid "Edit in a Text Editor"
@@ -28571,7 +28571,7 @@ msgstr "Spustiť správcu doplnkov a obsahu"
 
 #: kicad/tools/kicad_manager_actions.cpp:203
 msgid "Open Text Editor"
-msgstr "Otvorte textový editor"
+msgstr "Otvoriť textový editor"
 
 #: kicad/tools/kicad_manager_actions.cpp:204
 msgid "Launch preferred text editor"
@@ -29537,7 +29537,7 @@ msgstr "ohm"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:258
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:238
 msgid "Voltage drop:"
-msgstr "Pokles napätia:"
+msgstr "Úbytok napätia:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:240
 msgid "Dissipated power:"
@@ -30520,7 +30520,7 @@ msgstr "Odpor:"
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:270
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:250
 msgid "Power loss:"
-msgstr "Strata výkonu:"
+msgstr "Stratový výkon:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:180
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:278
@@ -31151,8 +31151,8 @@ msgstr ""
 "kde:<br>\n"
 "___I___ je maximálny prúd v A<br>\n"
 "___&Delta;T___ je nárast teploty nad teplotu okolia v &deg;C<br>\n"
-"___W___ je šírka v mils<br>\n"
-"___H___ je hrúbka v mils<br>\n"
+"___W___ je šírka v miloch<br>\n"
+"___H___ je hrúbka v miloch<br>\n"
 "___K___ je 0,024 pre vnútorné spoje alebo 0,048 pre vonkajšie spoje\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:61
@@ -33952,7 +33952,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc.cpp:786
 msgid "Open the Board Setup... dialog"
-msgstr "Otvorte dialógové okno Nastavenie dosky..."
+msgstr "Otvoriť dialógové okno Nastavenie dosky..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:1099
 #, c-format
@@ -39027,7 +39027,7 @@ msgstr "Posunúť nižšie"
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:78
 #: pcbnew/tools/pcb_actions.cpp:985
 msgid "Open Plugin Directory"
-msgstr "Otvorte adresár doplnkov"
+msgstr "Otvoriť adresár doplnkov"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:83
 msgid "Reload Plugins"
@@ -43168,7 +43168,7 @@ msgstr "Výber puzdier"
 
 #: pcbnew/footprint_chooser_frame.cpp:167
 msgid "Show 3D viewer in own window"
-msgstr "Zobraziť 3D prehliadač vo vlastnom okne"
+msgstr "Zobraziť prehliadač 3D vo vlastnom okne"
 
 #: pcbnew/footprint_chooser_frame.cpp:483
 #, c-format
@@ -43387,7 +43387,7 @@ msgstr "Sprievodca puzdrom"
 #: pcbnew/footprint_wizard_frame.cpp:561
 #, c-format
 msgid "ModView: 3D Viewer [%s]"
-msgstr "ModView: 3D prehliadač [%s]"
+msgstr "ModView: prehliadač 3D [%s]"
 
 #: pcbnew/footprint_wizard_frame.cpp:582
 msgid "Select wizard script to run"
@@ -44140,7 +44140,7 @@ msgstr "Odstránený atribút výroby 'Neosadzovať' pre %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:844
 #, c-format
 msgid "Disconnect %s pin %s."
-msgstr "Odpojte %s kolík %s."
+msgstr "Odpojiť %s vývod %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:850
 #, c-format
@@ -45963,7 +45963,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:309
 msgid "Could not find units value, defaulting to mils."
-msgstr "Nepodarilo sa nájsť hodnotu jednotiek, predvolene sú nastavené mils."
+msgstr "Nepodarilo sa nájsť hodnotu jednotiek, predvolene sú nastavené mily."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:334
 #, c-format
@@ -50444,7 +50444,7 @@ msgstr "Odstrániť výplň medi z vybranej zóny/zón"
 
 #: pcbnew/tools/pcb_actions.cpp:2218 pcbnew/tools/zone_filler_tool.cpp:426
 msgid "Unfill All Zones"
-msgstr "Vyplňte všetky zóny"
+msgstr "Odstrániť vyplnenie všetkých zón"
 
 #: pcbnew/tools/pcb_actions.cpp:2219
 msgid "Remove copper fill from all zones"
