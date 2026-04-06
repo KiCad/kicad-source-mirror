@@ -2324,6 +2324,133 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
     results.wait();
 
+    // Build equivalence classes over global subgraphs that are linked by shared
+    // global label names. Two global subgraphs are in the same class whenever
+    // (transitively) some subgraph has a global driver named X and another
+    // subgraph has a global driver also named X, OR a single multi-driver
+    // subgraph has both X and Y as global drivers.
+    //
+    // This is the transitive closure over the relation "shares a global name".
+    // When users chain nets across sheets via differently-named global labels,
+    // every subgraph reachable through any sequence of shared names must end
+    // up on the same final net.
+    //
+    // The per-subgraph promote pass that follows is order-dependent and walks
+    // candidates by their *original* driver text rather than by their already-
+    // promoted name. As a result, when subgraph S2 promotes subgraph S1 to a
+    // new name, and then a third subgraph S3 later renames S2 again, S1 is
+    // left orphaned with the intermediate name. This pre-pass solves the
+    // transitivity problem before the order-dependent loop runs (issue 23719).
+    if( !global_subgraphs.empty() )
+    {
+        std::unordered_map<CONNECTION_SUBGRAPH*, CONNECTION_SUBGRAPH*> sg_root;
+
+        auto find_sg_root =
+                [&]( CONNECTION_SUBGRAPH* aSg ) -> CONNECTION_SUBGRAPH*
+                {
+                    CONNECTION_SUBGRAPH* cur = aSg;
+
+                    while( true )
+                    {
+                        auto it = sg_root.find( cur );
+
+                        if( it == sg_root.end() || it->second == cur )
+                            return cur;
+
+                        // Path compression. Hop the current node directly to its
+                        // grandparent on the way up so subsequent finds are O(1).
+                        auto parent_it = sg_root.find( it->second );
+
+                        if( parent_it != sg_root.end() && parent_it->second != it->second )
+                            it->second = parent_it->second;
+
+                        cur = it->second;
+                    }
+                };
+
+        // Pick the subgraph whose primary driver CONNECTION_SUBGRAPH::ResolveDrivers
+        // would have preferred as the representative for the equivalence class.
+        // Higher driver priority wins; ties broken by alphabetically lower current
+        // primary name (matching ResolveDrivers' candidate_cmp tie-break).
+        auto prefer_as_representative =
+                [&]( CONNECTION_SUBGRAPH* aA, CONNECTION_SUBGRAPH* aB ) -> bool
+                {
+                    CONNECTION_SUBGRAPH::PRIORITY pa =
+                            CONNECTION_SUBGRAPH::GetDriverPriority( aA->m_driver );
+                    CONNECTION_SUBGRAPH::PRIORITY pb =
+                            CONNECTION_SUBGRAPH::GetDriverPriority( aB->m_driver );
+
+                    if( pa != pb )
+                        return pa > pb;
+
+                    return aA->m_driver_connection->Name() < aB->m_driver_connection->Name();
+                };
+
+        auto union_sgs =
+                [&]( CONNECTION_SUBGRAPH* aA, CONNECTION_SUBGRAPH* aB )
+                {
+                    sg_root.try_emplace( aA, aA );
+                    sg_root.try_emplace( aB, aB );
+
+                    CONNECTION_SUBGRAPH* root_a = find_sg_root( aA );
+                    CONNECTION_SUBGRAPH* root_b = find_sg_root( aB );
+
+                    if( root_a == root_b )
+                        return;
+
+                    if( prefer_as_representative( root_a, root_b ) )
+                        sg_root[root_b] = root_a;
+                    else
+                        sg_root[root_a] = root_b;
+                };
+
+        std::unordered_map<wxString, std::vector<CONNECTION_SUBGRAPH*>> name_to_sgs;
+
+        for( CONNECTION_SUBGRAPH* subgraph : global_subgraphs )
+        {
+            for( SCH_ITEM* driver : subgraph->m_drivers )
+            {
+                if( CONNECTION_SUBGRAPH::GetDriverPriority( driver )
+                    < CONNECTION_SUBGRAPH::PRIORITY::GLOBAL_POWER_PIN )
+                {
+                    continue;
+                }
+
+                name_to_sgs[subgraph->GetNameForDriver( driver )].push_back( subgraph );
+            }
+        }
+
+        for( auto& [name, sgs] : name_to_sgs )
+        {
+            if( sgs.size() < 2 )
+                continue;
+
+            for( size_t ii = 1; ii < sgs.size(); ++ii )
+                union_sgs( sgs[0], sgs[ii] );
+        }
+
+        // Every subgraph in sg_root now maps (with path compression) to the
+        // representative of its equivalence class. Clone the representative's
+        // connection into each member that currently differs.
+        for( const auto& entry : sg_root )
+        {
+            CONNECTION_SUBGRAPH* sg   = entry.first;
+            CONNECTION_SUBGRAPH* root = find_sg_root( sg );
+
+            if( sg == root )
+                continue;
+
+            if( sg->m_driver_connection->Name() == root->m_driver_connection->Name() )
+                continue;
+
+            wxLogTrace( ConnTrace, wxS( "Global %lu (%s) canonicalized to %lu (%s)" ),
+                        sg->m_code, sg->m_driver_connection->Name(), root->m_code,
+                        root->m_driver_connection->Name() );
+
+            sg->m_driver_connection->Clone( *root->m_driver_connection );
+        }
+    }
+
     // Next time through the subgraphs, we do some post-processing to handle things like
     // connecting bus members to their neighboring subgraphs, and then propagate connections
     // through the hierarchy
