@@ -39,14 +39,12 @@ public:
 
     const IO_BASE::IO_FILE_DESC GetSchematicFileDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro v3 files" ),
-                                      { "epro2", "zip" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro v3 files" ), { "epro2" } );
     }
 
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro v3 files" ),
-                                      { "epro2", "zip" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "EasyEDA (JLCEDA) Pro v3 files" ), { "epro2" } );
     }
 
     bool CanReadSchematicFile( const wxString& aFileName ) const override;
