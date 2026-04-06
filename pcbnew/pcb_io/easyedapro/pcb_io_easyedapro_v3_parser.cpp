@@ -1499,10 +1499,9 @@ void PCB_IO_EASYEDAPRO_V3_PARSER::ParseBoard(
                 else if( attr.keyVisible )
                     field->SetText( attr.key );
                 else
-                {
-                    field->SetVisible( false );
                     field->SetText( attr.value );
-                }
+
+                field->SetVisible( attr.keyVisible || attr.valVisible );
 
                 PCB_LAYER_ID attrLayer = m_v2Parser.LayerToKi( attr.layer );
                 field->SetLayer( attrLayer );
@@ -1513,6 +1512,7 @@ void PCB_IO_EASYEDAPRO_V3_PARSER::ParseBoard(
                             VECTOR2D( attr.x, attr.y ) ) );
                 }
 
+                field->SetKeepUpright( false );
                 field->SetTextAngleDegrees( footprint->IsFlipped() ? -attr.angle
                                                                     : attr.angle );
                 field->SetIsKnockout( attr.inverted );
