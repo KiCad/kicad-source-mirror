@@ -3703,7 +3703,15 @@ int BOARD::GetPadWithCastellatedAttrCount()
 
 void BOARD::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY_FILE_DATA>& aFileData )
 {
-    wxString projPath = GetProject()->GetProjectPath();
+    // The board can transiently have no project (e.g. during a non-KiCad import while the old
+    // project is being unloaded and the new one has not yet been linked). The autosave timer can
+    // fire in that window, so guard against a null project here rather than dereferencing it.
+    PROJECT* project = GetProject();
+
+    if( !project )
+        return;
+
+    wxString projPath = project->GetProjectPath();
 
     if( projPath.IsEmpty() )
         return;
