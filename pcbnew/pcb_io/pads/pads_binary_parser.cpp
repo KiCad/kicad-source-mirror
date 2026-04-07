@@ -34,13 +34,9 @@
 #include <io/pads/pads_binary_utils.h>
 #include <ki_exception.h>
 #include <wx/log.h>
-#include <trace_helpers.h>
 
 namespace PADS_IO
 {
-
-// Expected footer GUID
-static const uint8_t FOOTER_GUID[] = "{2FE18320-6448-11d1-A412-000000000000}";
 
 // Section 4 pad-shape codes. Validated against the ASC PARTDECAL pad shapes and by
 // the finger-geometry invariant: codes 0 (OF) and 1 (RF) carry a non-zero finLength
@@ -154,12 +150,23 @@ bool BINARY_PARSER::IsBinaryPadsFile( const wxString& aFileName )
 
 void BINARY_PARSER::Parse( const wxString& aFileName )
 {
-    if( !PADS_IO::ReadFileToBuffer( aFileName, m_data ) )
+    std::vector<uint8_t> bytes;
+
+    if( !PADS_IO::ReadFileToBuffer( aFileName, bytes ) )
         THROW_IO_ERROR( "Cannot open or read file" );
 
-    parseHeader();
-    parseFooter();
-    parseDirectory();
+    // The SDB owns the bytes and decodes the file container: header, directory and the
+    // coordinate origin. The section readers below read its directory through getSection.
+    m_sdb.Load( std::move( bytes ) );
+
+    m_version     = m_sdb.Version();
+    m_originX     = m_sdb.Coords().OriginX();
+    m_originY     = m_sdb.Coords().OriginY();
+    m_originFound = m_sdb.Coords().Found();
+
+    m_parameters.origin.x = static_cast<double>( m_originX );
+    m_parameters.origin.y = static_cast<double>( m_originY );
+
     parseBoardSetup();
     parseMetadataRegion();
     parsePartPlacements();
@@ -189,21 +196,6 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     m_parts.erase( std::remove_if( m_parts.begin(), m_parts.end(),
                                    []( const PART& p ) { return p.name.empty(); } ),
                    m_parts.end() );
-}
-
-
-int BINARY_PARSER::dirEntryCount() const
-{
-    switch( m_version )
-    {
-    case 0x2021: return 73;
-    case 0x2022:
-    case 0x2024:
-    case 0x2025:
-    case 0x2026:
-    case 0x2027: return 74;
-    default:     return 0;
-    }
 }
 
 
@@ -243,94 +235,15 @@ std::string BINARY_PARSER::readFixedString( size_t aOffset, size_t aMaxLen ) con
 }
 
 
-void BINARY_PARSER::parseHeader()
+const SDB_SECTION* BINARY_PARSER::getSection( int aIndex ) const
 {
-    if( m_data.size() < static_cast<size_t>( HEADER_SIZE + FOOTER_SIZE ) )
-        THROW_IO_ERROR( "File too small for PADS binary format" );
-
-    if( m_data[0] != 0x00 || m_data[1] != 0xFF )
-        THROW_IO_ERROR( "Invalid magic bytes" );
-
-    m_version = readU16( 2 );
-
-    if( m_version != 0x2021 && m_version != 0x2022 && m_version != 0x2024
-        && m_version != 0x2025 && m_version != 0x2026 && m_version != 0x2027 )
-        THROW_IO_ERROR( "Unsupported PADS binary version" );
-
-    m_numDirEntries = dirEntryCount();
-}
-
-
-void BINARY_PARSER::parseFooter()
-{
-    size_t footerStart = m_data.size() - FOOTER_SIZE;
-
-    // Verify GUID at footer offset + 4
-    if( std::memcmp( &m_data[footerStart + 4], FOOTER_GUID, 38 ) != 0 )
-        THROW_IO_ERROR( "Invalid footer GUID" );
-
-    uint32_t sizeCheck = readU32( footerStart + 42 );
-    uint32_t expected = static_cast<uint32_t>( m_data.size() - FOOTER_SIZE );
-
-    if( sizeCheck != expected )
-    {
-        wxLogTrace( tracePadsIo, "PADS binary footer size mismatch: stored=%u, expected=%u",
-                      sizeCheck, expected );
-    }
-}
-
-
-void BINARY_PARSER::parseDirectory()
-{
-    size_t dirStart = HEADER_SIZE;
-    size_t dirSize = static_cast<size_t>( m_numDirEntries ) * DIR_ENTRY_SIZE;
-
-    if( dirStart + dirSize > m_data.size() )
-        THROW_IO_ERROR( "File too small for section directory" );
-
-    uint32_t dataOffset = static_cast<uint32_t>( dirStart + dirSize );
-
-    m_dirEntries.clear();
-    m_dirEntries.reserve( m_numDirEntries );
-
-    for( int i = 0; i < m_numDirEntries; ++i )
-    {
-        size_t off = dirStart + static_cast<size_t>( i ) * DIR_ENTRY_SIZE;
-
-        DirEntry entry;
-        entry.index = i;
-        entry.count = readU32( off );
-        entry.totalBytes = readU32( off + 4 );
-        entry.dataOffset = 0;
-        entry.perItem = 0;
-
-        if( i > 0 )
-        {
-            entry.dataOffset = dataOffset;
-
-            if( entry.count > 0 && entry.totalBytes > 0 )
-                entry.perItem = entry.totalBytes / entry.count;
-
-            dataOffset += entry.totalBytes;
-        }
-
-        m_dirEntries.push_back( entry );
-    }
-}
-
-
-const BINARY_PARSER::DirEntry* BINARY_PARSER::getSection( int aIndex ) const
-{
-    if( aIndex >= 0 && aIndex < static_cast<int>( m_dirEntries.size() ) )
-        return &m_dirEntries[aIndex];
-
-    return nullptr;
+    return m_sdb.Section( aIndex );
 }
 
 
 const uint8_t* BINARY_PARSER::sectionData( int aIndex ) const
 {
-    const DirEntry* entry = getSection( aIndex );
+    const SDB_SECTION* entry = getSection( aIndex );
 
     if( !entry || entry->totalBytes == 0 )
         return nullptr;
@@ -344,7 +257,7 @@ const uint8_t* BINARY_PARSER::sectionData( int aIndex ) const
 
 uint32_t BINARY_PARSER::sectionSize( int aIndex ) const
 {
-    const DirEntry* entry = getSection( aIndex );
+    const SDB_SECTION* entry = getSection( aIndex );
 
     if( !entry )
         return 0;
@@ -376,34 +289,20 @@ double BINARY_PARSER::toBasicAngle( int32_t aRawAngle ) const
 
 void BINARY_PARSER::parseBoardSetup()
 {
-    const uint8_t* data = sectionData( SECTION::BoardSetup );
-    uint32_t       size = sectionSize( SECTION::BoardSetup );
+    const SDB_SECTION* setup = getSection( SECTION::BoardSetup );
 
-    if( !data || size < 160 )
+    if( !setup || setup->totalBytes < 160 )
         return;
 
-    // Board setup section contains u32 parameters at known offsets.
-    // Index 4 holds the maximum layer count.
-    uint32_t maxLayer = readU32( m_dirEntries[1].dataOffset + 4 * 4 );
+    // The board-setup section holds u32 parameters at fixed word offsets; word 4 is the
+    // maximum layer count. The coordinate origin (also in this section) is already read
+    // by the SDB and applied in Parse().
+    uint32_t maxLayer = readU32( setup->dataOffset + 4 * 4 );
 
     if( maxLayer >= 1 && maxLayer <= 64 )
         m_parameters.layer_count = static_cast<int>( maxLayer );
     else
         m_parameters.layer_count = 2;
-
-    // Section 1 stores the coordinate origin at offset +60/+64 as i32 LE pair.
-    // This is the same value as DFT_CONFIGURATION POLAR_GRID X/Y but is always present.
-    size_t secBase = m_dirEntries[1].dataOffset;
-
-    if( size >= 68 )
-    {
-        m_originX = readI32( secBase + 60 );
-        m_originY = readI32( secBase + 64 );
-        m_originFound = true;
-
-        m_parameters.origin.x = static_cast<double>( m_originX );
-        m_parameters.origin.y = static_cast<double>( m_originY );
-    }
 
     // Binary coordinates are in BASIC units (1 BASIC = 1/38100 mil).
     // Set MILS for the display unit; actual coordinate handling uses BASIC mode
@@ -414,7 +313,7 @@ void BINARY_PARSER::parseBoardSetup()
 
 void BINARY_PARSER::parsePartPlacements()
 {
-    const DirEntry* entry = getSection( SECTION::Placements );
+    const SDB_SECTION* entry = getSection( SECTION::Placements );
 
     if( !entry || entry->count == 0 || entry->perItem == 0 )
         return;
@@ -583,7 +482,7 @@ void BINARY_PARSER::parseClusters()
 
     for( int secIdx : { 64, 69 } )
     {
-        const DirEntry* entry = getSection( secIdx );
+        const SDB_SECTION* entry = getSection( secIdx );
 
         if( entry && entry->totalBytes >= REC_SIZE )
         {
@@ -640,7 +539,7 @@ void BINARY_PARSER::parseSection19Parts()
 
     for( int secIdx : { 19, 21 } )
     {
-        const DirEntry* entry = getSection( secIdx );
+        const SDB_SECTION* entry = getSection( secIdx );
 
         if( !entry || entry->totalBytes == 0 )
             continue;
@@ -781,7 +680,7 @@ void BINARY_PARSER::parseSection19Parts()
 
 void BINARY_PARSER::parsePadStacks()
 {
-    const DirEntry* entry = getSection( SECTION::PadStacks );
+    const SDB_SECTION* entry = getSection( SECTION::PadStacks );
 
     if( !entry || entry->count == 0 || entry->perItem == 0 )
         return;
@@ -932,7 +831,7 @@ void BINARY_PARSER::parseDecalNameTable()
     static constexpr int COUNT_OFFSET = 72;
     static constexpr int STACK_COUNT_OFFSET = 88;
 
-    const DirEntry* sec14 = getSection( SECTION::DecalHeader );
+    const SDB_SECTION* sec14 = getSection( SECTION::DecalHeader );
 
     if( !sec14 || sec14->count == 0 || sec14->dataOffset < DECAL_HDR_OFFSET )
         return;
@@ -1054,7 +953,7 @@ void BINARY_PARSER::parsePartTypeTable()
     static constexpr int PARTTYPE_HDR_OFFSET = 1232;
     static constexpr int REC_SIZE = 224;
 
-    const DirEntry* sec17 = getSection( SECTION::ParttypeDefs );
+    const SDB_SECTION* sec17 = getSection( SECTION::ParttypeDefs );
 
     if( !sec17 || sec17->count == 0 || sec17->dataOffset < PARTTYPE_HDR_OFFSET )
         return;
@@ -1081,7 +980,7 @@ void BINARY_PARSER::parsePartTypeTable()
 
 void BINARY_PARSER::parsePartDecals()
 {
-    const DirEntry* entry = getSection( SECTION::DrwItems );
+    const SDB_SECTION* entry = getSection( SECTION::DrwItems );
 
     if( !entry || entry->count == 0 || entry->perItem == 0 )
         return;
@@ -1185,7 +1084,7 @@ void BINARY_PARSER::parseTerminals()
 
     std::vector<std::pair<int32_t, int32_t>> stream;
 
-    const DirEntry* sec14 = getSection( SECTION::DecalHeader );
+    const SDB_SECTION* sec14 = getSection( SECTION::DecalHeader );
 
     if( sec14 && sec14->count >= 11 )
     {
@@ -1203,7 +1102,7 @@ void BINARY_PARSER::parseTerminals()
         }
     }
 
-    const DirEntry* sec15 = getSection( SECTION::TerminalPool );
+    const SDB_SECTION* sec15 = getSection( SECTION::TerminalPool );
 
     if( sec15 && sec15->totalBytes > 0 && sec15->perItem == TERM_SIZE )
     {
@@ -1330,8 +1229,8 @@ void BINARY_PARSER::parsePerPinPadstacks()
     if( isOldFormat() || m_padStackPool.empty() )
         return;
 
-    const DirEntry* sec14 = getSection( SECTION::DecalHeader );
-    const DirEntry* sec15 = getSection( SECTION::TerminalPool );
+    const SDB_SECTION* sec14 = getSection( SECTION::DecalHeader );
+    const SDB_SECTION* sec15 = getSection( SECTION::TerminalPool );
 
     if( !sec14 || !sec15 || sec15->perItem != 36 )
         return;
@@ -1419,7 +1318,7 @@ void BINARY_PARSER::parsePerPinPadstacks()
     static constexpr size_t  LIB_MARKER_OFF = 40;
     static constexpr size_t  LIB_START_OFF = 44;
 
-    const DirEntry* sec13 = getSection( SECTION::DecalLibrary );
+    const SDB_SECTION* sec13 = getSection( SECTION::DecalLibrary );
 
     if( !sec13 || sec13->totalBytes < LIB_STRIDE )
         return;
@@ -1484,7 +1383,7 @@ void BINARY_PARSER::parseBoardOutlineDrwOrigin()
     // absolute coordinates.
     static constexpr int LINE_ITEM_SIZE = 112;
 
-    const DirEntry* entry9 = getSection( SECTION::StringPool );
+    const SDB_SECTION* entry9 = getSection( SECTION::StringPool );
 
     if( !entry9 || entry9->totalBytes < LINE_ITEM_SIZE )
         return;
@@ -1533,7 +1432,7 @@ void BINARY_PARSER::parseBoardOutline()
     if( parseArcBoardOutline() )
         return;
 
-    const DirEntry* entry11 = getSection( SECTION::GraphicPieces );
+    const SDB_SECTION* entry11 = getSection( SECTION::GraphicPieces );
 
     if( !entry11 || entry11->totalBytes < 12 )
         return;
@@ -1683,7 +1582,7 @@ bool BINARY_PARSER::parseArcBoardOutline()
         if( nArcs == 0 )
             return -1;
 
-        const DirEntry* sec1 = getSection( SECTION::BoardSetup );
+        const SDB_SECTION* sec1 = getSection( SECTION::BoardSetup );
         size_t          scanStart = sec1 ? sec1->dataOffset : 0;
 
         if( m_data.size() < ARC_REC * nArcs )
@@ -1741,8 +1640,8 @@ bool BINARY_PARSER::parseArcBoardOutline()
     auto collectDrawingItems = [&]() -> std::vector<DrawingItem>
     {
         std::vector<DrawingItem> items;
-        const DirEntry* s8 = getSection( SECTION::FreeText );
-        const DirEntry* s10 = getSection( SECTION::DrwItems );
+        const SDB_SECTION* s8 = getSection( SECTION::FreeText );
+        const SDB_SECTION* s10 = getSection( SECTION::DrwItems );
 
         if( !s8 || !s10 )
             return items;
@@ -1831,7 +1730,7 @@ bool BINARY_PARSER::parseArcBoardOutline()
 
     for( int si : { 10, 11, 12 } )
     {
-        const DirEntry* sec = getSection( si );
+        const SDB_SECTION* sec = getSection( si );
 
         if( !sec || sec->totalBytes < VTX )
             continue;
@@ -2088,7 +1987,7 @@ void BINARY_PARSER::parseNetNames()
     if( !isOldFormat() )
     {
         // New format: section 23 has 424-byte records with net index at +112 and name at +116
-        const DirEntry* entry23 = getSection( SECTION::Nets );
+        const SDB_SECTION* entry23 = getSection( SECTION::Nets );
 
         if( entry23 && entry23->count > 0 && entry23->perItem == 424 )
         {
@@ -2128,7 +2027,7 @@ void BINARY_PARSER::parseNetNames()
         }
 
         // Section 22 fills in power/ground nets from 112-byte records
-        const DirEntry* entry22 = getSection( SECTION::Placements );
+        const SDB_SECTION* entry22 = getSection( SECTION::Placements );
 
         if( entry22 && entry22->count > 0 && entry22->perItem == 112 )
         {
@@ -2179,7 +2078,7 @@ void BINARY_PARSER::parseNetNames()
 
         // Phase 1: collect sec19 net names in file order
         std::vector<std::string> sec19Nets;
-        const DirEntry*          entry19 = getSection( SECTION::PartPins );
+        const SDB_SECTION*          entry19 = getSection( SECTION::PartPins );
 
         if( entry19 && entry19->count > 0 )
         {
@@ -2236,7 +2135,7 @@ void BINARY_PARSER::parseNetNames()
 
         std::vector<IndexedNet> indexedNets;
 
-        const DirEntry* entry22 = getSection( SECTION::Placements );
+        const SDB_SECTION* entry22 = getSection( SECTION::Placements );
 
         if( entry22 && entry22->count > 0 && entry22->perItem == 96 )
         {
@@ -2268,7 +2167,7 @@ void BINARY_PARSER::parseNetNames()
             }
         }
 
-        const DirEntry* entry23 = getSection( SECTION::Nets );
+        const SDB_SECTION* entry23 = getSection( SECTION::Nets );
 
         if( entry23 && entry23->count > 0 && entry23->perItem == 144 )
         {
@@ -2324,30 +2223,31 @@ void BINARY_PARSER::parseNetNames()
 
 void BINARY_PARSER::parseMetadataRegion()
 {
-    // Origin is already read from section 1 in parseBoardSetup().
-    // Only fall back to the DFT_CONFIGURATION scan if that didn't work.
+    // The SDB locates the origin from section 1; only fall back to the
+    // DFT_CONFIGURATION scan when that did not yield one.
     if( m_originFound )
         return;
 
-    size_t lastDataEnd = HEADER_SIZE + static_cast<size_t>( m_numDirEntries ) * DIR_ENTRY_SIZE;
+    // The DFT region sits between the last section payload and the 46-byte footer.
+    // The directory ends where section 1's payload begins (section 0 carries none).
+    const SDB_SECTION* firstSection = getSection( 1 );
+    size_t             dirEnd = firstSection ? firstSection->dataOffset : 0;
+    size_t             lastDataEnd = dirEnd;
 
-    for( const auto& entry : m_dirEntries )
+    for( size_t i = 0; i < m_sdb.SectionCount(); ++i )
     {
-        if( entry.index > 0 && entry.totalBytes > 0 )
-        {
-            size_t end = entry.dataOffset + entry.totalBytes;
+        const SDB_SECTION* entry = getSection( static_cast<int>( i ) );
 
-            if( end > lastDataEnd )
-                lastDataEnd = end;
-        }
+        if( entry && entry->index > 0 && entry->totalBytes > 0 )
+            lastDataEnd = std::max<size_t>( lastDataEnd, entry->End() );
     }
 
-    size_t footerStart = m_data.size() - FOOTER_SIZE;
+    constexpr size_t FOOTER_BYTES = 46;
+    size_t           footerStart = m_data.size() - FOOTER_BYTES;
 
     if( lastDataEnd >= footerStart )
         return;
 
-    size_t dirEnd = HEADER_SIZE + static_cast<size_t>( m_numDirEntries ) * DIR_ENTRY_SIZE;
     parseDftConfig( dirEnd, footerStart );
 }
 
@@ -2799,7 +2699,7 @@ void BINARY_PARSER::parseDiffPairs()
     constexpr double F64_INHERIT  = -1.0;
     constexpr int32_t I32_INHERIT = -1;
 
-    const DirEntry* sec49 = getSection( SECTION::ClearanceRules );
+    const SDB_SECTION* sec49 = getSection( SECTION::ClearanceRules );
 
     if( !sec49 || sec49->totalBytes == 0 || m_netSelfPtrToName.empty() )
         return;
@@ -2920,12 +2820,12 @@ void BINARY_PARSER::parseTextRecords()
     // item iff record K+1 has tag@28 == 0x49000000 and (word@24 >> 16) == 0x0020
     // (the high half marks a TEXT object, the low byte is the layer), and record K
     // has positive height and width.
-    const DirEntry* s8 = getSection( SECTION::FreeText );
+    const SDB_SECTION* s8 = getSection( SECTION::FreeText );
 
     if( !s8 || s8->totalBytes == 0 || s8->perItem < 72 )
         return;
 
-    const DirEntry* s5 = getSection( SECTION::PadShapes );
+    const SDB_SECTION* s5 = getSection( SECTION::PadShapes );
 
     size_t lo = ( s5 && s5->totalBytes > 0 ) ? s5->dataOffset : s8->dataOffset;
     size_t hi = s8->dataOffset + s8->totalBytes;
@@ -2941,7 +2841,7 @@ void BINARY_PARSER::parseTextRecords()
     // byte blob (perItem 1) directly after section 8 and bound the extension with
     // subtraction to avoid wrap.
     size_t          poolHi = hi;
-    const DirEntry* s9     = getSection( SECTION::StringPool );
+    const SDB_SECTION* s9     = getSection( SECTION::StringPool );
 
     if( s9 && s9->totalBytes > 0 && s9->perItem == 1 && s9->dataOffset == hi
         && s9->dataOffset <= m_data.size() && s9->totalBytes <= m_data.size() - s9->dataOffset )
@@ -3156,7 +3056,7 @@ void BINARY_PARSER::parseRouteVertices()
 
     std::vector<ViaLocation> viaLocations;
 
-    const DirEntry* entry60 = getSection( SECTION::Vias );
+    const SDB_SECTION* entry60 = getSection( SECTION::Vias );
 
     if( !entry60 || entry60->count == 0 || entry60->perItem == 0 || !sectionData( SECTION::Vias ) )
         return;
@@ -3256,9 +3156,9 @@ void BINARY_PARSER::parseRouteVertices()
 
 void BINARY_PARSER::parseCopperShapes()
 {
-    const DirEntry* sec10 = getSection( SECTION::DrwItems );
-    const DirEntry* sec11 = getSection( SECTION::GraphicPieces );
-    const DirEntry* sec12 = getSection( SECTION::Vertices );
+    const SDB_SECTION* sec10 = getSection( SECTION::DrwItems );
+    const SDB_SECTION* sec11 = getSection( SECTION::GraphicPieces );
+    const SDB_SECTION* sec12 = getSection( SECTION::Vertices );
 
     if( !sec10 || !sec11 || !sec12 || sec10->perItem < 112
         || sec11->perItem < 20 || sec12->perItem < 12 )
@@ -3365,7 +3265,7 @@ void BINARY_PARSER::parseCopperShapes()
 
 void BINARY_PARSER::parseDimensions()
 {
-    const DirEntry* sec10 = getSection( SECTION::DrwItems );
+    const SDB_SECTION* sec10 = getSection( SECTION::DrwItems );
 
     if( !sec10 || sec10->perItem < 112 || m_ownerRuns.empty() )
         return;
@@ -3433,7 +3333,7 @@ void BINARY_PARSER::computeSec12Base()
     m_sec12Base = 0;
     m_sec12CleanRows = 0;
 
-    const DirEntry* sec12 = getSection( SECTION::Vertices );
+    const SDB_SECTION* sec12 = getSection( SECTION::Vertices );
 
     if( !sec12 || sec12->perItem < 12 || sec12->totalBytes == 0 )
         return;
@@ -3464,8 +3364,8 @@ void BINARY_PARSER::buildOwnerRuns()
 {
     m_ownerRuns.clear();
 
-    const DirEntry* sec8 = getSection( SECTION::FreeText );
-    const DirEntry* sec10 = getSection( SECTION::DrwItems );
+    const SDB_SECTION* sec8 = getSection( SECTION::FreeText );
+    const SDB_SECTION* sec10 = getSection( SECTION::DrwItems );
 
     if( !sec8 || !sec10 )
         return;
@@ -3559,7 +3459,7 @@ void BINARY_PARSER::buildOwnerRuns()
 
 bool BINARY_PARSER::sec12Vertex( int32_t aRow, int32_t& aX, int32_t& aY, int32_t& aAttr ) const
 {
-    const DirEntry* sec12 = getSection( SECTION::Vertices );
+    const SDB_SECTION* sec12 = getSection( SECTION::Vertices );
 
     if( !sec12 || aRow < 0 || aRow >= m_sec12CleanRows )
         return false;
@@ -3618,8 +3518,8 @@ bool BINARY_PARSER::fetchOwnerLoop( const std::string& aName, size_t aMaxVerts,
 
 void BINARY_PARSER::parseKeepouts()
 {
-    const DirEntry* sec10 = getSection( SECTION::DrwItems );
-    const DirEntry* sec12 = getSection( SECTION::Vertices );
+    const SDB_SECTION* sec10 = getSection( SECTION::DrwItems );
+    const SDB_SECTION* sec12 = getSection( SECTION::Vertices );
 
     if( !sec10 || !sec12 || sec10->perItem < 112 || sec12->perItem < 12 )
         return;
@@ -3746,7 +3646,7 @@ void BINARY_PARSER::parseCopperPours()
     bool                    simpleFormat = false;
 
     // Try sec49 simple format first
-    const DirEntry* sec49 = getSection( SECTION::ClearanceRules );
+    const SDB_SECTION* sec49 = getSection( SECTION::ClearanceRules );
 
     if( sec49 && sec49->totalBytes > 0 )
     {
@@ -3876,9 +3776,9 @@ void BINARY_PARSER::parseCopperPours()
     // Complex format: sec52 has POR records, sec53 has per-pour metadata table,
     // sec54 has piece metadata followed by vertex data.
 
-    const DirEntry* sec52 = getSection( SECTION::PourTokensA );
-    const DirEntry* sec53 = getSection( SECTION::PourTokensB );
-    const DirEntry* sec54 = getSection( SECTION::PourTokensC );
+    const SDB_SECTION* sec52 = getSection( SECTION::PourTokensA );
+    const SDB_SECTION* sec53 = getSection( SECTION::PourTokensB );
+    const SDB_SECTION* sec54 = getSection( SECTION::PourTokensC );
 
     if( !sec52 || sec52->totalBytes == 0 || !sec53 || sec53->totalBytes == 0
         || !sec54 || sec54->totalBytes == 0 )

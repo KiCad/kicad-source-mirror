@@ -31,6 +31,7 @@
 #include <io/pads/pads_binary_utils.h>
 
 #include "pads_parser.h"
+#include "pads_sdb.h"
 
 namespace PADS_IO
 {
@@ -190,20 +191,7 @@ public:
     }
 
 private:
-    static constexpr uint16_t MAGIC           = 0xFF00;
-    static constexpr int      HEADER_SIZE     = 10;
-    static constexpr int      FOOTER_SIZE     = 46;
-    static constexpr int      DIR_ENTRY_SIZE  = 16;
-    static constexpr int32_t  ANGLE_SCALE     = 1800000;
-
-    struct DirEntry
-    {
-        int      index      = 0;
-        uint32_t count      = 0;
-        uint32_t totalBytes = 0;
-        uint32_t dataOffset = 0;
-        uint32_t perItem    = 0;
-    };
+    static constexpr int32_t  ANGLE_SCALE = 1800000;
 
     // Version helpers
     bool isOldFormat() const { return m_version == 0x2021 || m_version == 0x2022; }
@@ -212,7 +200,6 @@ private:
     // table + @+56 lag) is verified only on v0x2021. v0x2022 shares the old-format
     // placement layout but its decal chain is unverified, so it is not enabled.
     bool isV2021PadChain() const { return m_version == 0x2021; }
-    int  dirEntryCount() const;
 
     // Low-level readers
     uint8_t  readU8( size_t aOffset ) const;
@@ -222,21 +209,16 @@ private:
     double   readF64( size_t aOffset ) const;
     std::string readFixedString( size_t aOffset, size_t aMaxLen ) const;
 
-    // File structure parsing
-    void parseHeader();
-    void parseFooter();
-    void parseDirectory();
-
-    // Section data accessors. The SECTION overloads forward to the int form so a
-    // constant section reads by role; the int form serves the few callers that
-    // iterate a computed directory index.
+    // Section data accessors over the parsed SDB directory. The SECTION overloads
+    // forward to the int form so a constant section reads by role; the int form serves
+    // the few callers that iterate a computed directory index.
     const uint8_t* sectionData( int aIndex ) const;
     uint32_t       sectionSize( int aIndex ) const;
-    const DirEntry* getSection( int aIndex ) const;
+    const SDB_SECTION* getSection( int aIndex ) const;
 
     const uint8_t* sectionData( SECTION aSection ) const { return sectionData( static_cast<int>( aSection ) ); }
     uint32_t       sectionSize( SECTION aSection ) const { return sectionSize( static_cast<int>( aSection ) ); }
-    const DirEntry* getSection( SECTION aSection ) const { return getSection( static_cast<int>( aSection ) ); }
+    const SDB_SECTION* getSection( SECTION aSection ) const { return getSection( static_cast<int>( aSection ) ); }
 
     // Section parsers
     void parseBoardSetup();
@@ -373,19 +355,17 @@ private:
     double toBasicCoordY( int32_t aRawValue ) const;
     double toBasicAngle( int32_t aRawAngle ) const;
 
-    // File data
-    std::vector<uint8_t> m_data;
+    // The parsed file container: header, section directory, and coordinate origin.
+    // Owns the file bytes; the section readers below it work through its directory.
+    PADS_SDB             m_sdb;
 
-    // Bounds-checked read cursor over m_data. Declared after m_data so its
-    // reference binds to a live object; all low-level reads route through it.
-    BINARY_CURSOR        m_cursor{ m_data };
+    // Read substrate shared by the section readers. m_data aliases the SDB's bytes so
+    // the absolute-offset readers keep their form; m_cursor follows it. Both are
+    // declared after m_sdb so their references bind to its live buffer.
+    const std::vector<uint8_t>& m_data = m_sdb.Bytes();
+    BINARY_CURSOR               m_cursor{ m_data };
 
     uint16_t             m_version = 0;
-    int                  m_numDirEntries = 0;
-
-    // Directory
-    std::vector<DirEntry> m_dirEntries;
-
 
     // Coordinate origin from DFT_CONFIGURATION (may be overwritten by parseDftConfig)
     int32_t m_originX = 0;
