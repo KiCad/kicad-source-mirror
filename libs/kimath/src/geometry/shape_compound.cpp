@@ -104,7 +104,8 @@ int SHAPE_COMPOUND::Distance( const SEG& aSeg ) const
 
 void SHAPE_COMPOUND::Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter )
 {
-    assert( false );
+    for( auto& item : m_shapes )
+        item->Rotate( aAngle, aCenter );
 }
 
 
