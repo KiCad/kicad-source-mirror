@@ -208,7 +208,6 @@ _HTML_TEMPLATE = """\
         const PARTS_ROOT = document.getElementById("parts-root");
         const LOGIN_BUTTON = document.getElementById("login-button");
         const LOGIN_STATUS = document.getElementById("login-status");
-        const LOGIN_ENDPOINT = new URL("/login", window.location.origin).toString();
         const RESPONSE_WAITERS = new Map();
         const BACKOFF_MS = [500, 1500, 3000];
         let messageCounter = 0;
@@ -262,22 +261,6 @@ _HTML_TEMPLATE = """\
           }});
         }}
 
-        async function mockAuthentication(port) {{
-          const userId =
-            (window.crypto && window.crypto.randomUUID && window.crypto.randomUUID()) ||
-            generateFallbackUuid();
-
-          const callbackUrl = `http://localhost:${{port}}/login?user_id=${{encodeURIComponent(userId)}}`;
-
-          try {{
-            await fetch(callbackUrl, {{ method: "GET", mode: "cors" }});
-          }} catch (err) {{
-            console.warn("Login callback fetch failed", err);
-          }}
-
-          return userId;
-        }}
-
         async function requestLogin(button) {{
           if (!sessionId) {{
             appendLog("Cannot log in until KiCad establishes a session.");
@@ -293,24 +276,31 @@ _HTML_TEMPLATE = """\
             button.disabled = true;
           }}
 
-          updateLoginStatus("Waiting for browser login...");
+          updateLoginStatus("Requesting login status...");
           appendLog("Issuing REMOTE_LOGIN command...");
 
           try {{
-            const response = await sendRpcCommand("REMOTE_LOGIN", {{ url: LOGIN_ENDPOINT }});
-            const port = response?.parameters?.port ?? response?.port;
-            const numericPort = Number(port);
+            const response = await sendRpcCommand("REMOTE_LOGIN", {{ interactive: true }});
+            const params = (response && response.parameters) ? response.parameters : {{}};
 
-            if (!Number.isFinite(numericPort) || numericPort <= 0) {{
-              throw new Error("KiCad did not provide a callback port.");
+            if (params.authenticated === true) {{
+              const label = params.provider_id ? ` (provider: ${{params.provider_id}})` : "";
+              updateLoginStatus(`Authenticated${{label}}`);
+              appendLog("Already authenticated.");
+            }} else if (params.auth_type === "none") {{
+              updateLoginStatus("Provider does not require authentication.");
+              appendLog("Provider auth type is none.");
+            }} else if (params.started === true) {{
+              updateLoginStatus("Login flow started in external browser...");
+              appendLog("OAuth login flow opened in system browser.");
+            }} else {{
+              updateLoginStatus("Login response received.");
+              appendLog(`REMOTE_LOGIN: ${{JSON.stringify(params)}}`);
             }}
-
-            appendLog(`Please complete login in the external browser (port ${{numericPort}})...`);
-            updateLoginStatus("Waiting for external login...");
-
           }} catch (err) {{
             appendLog(`Remote login failed: ${{err.message}}`);
             updateLoginStatus("Login failed");
+          }} finally {{
             loginInFlight = false;
             if (button) {{
               button.disabled = false;
@@ -381,10 +371,11 @@ _HTML_TEMPLATE = """\
             return;
           }}
 
+          const msgId = ++messageCounter;
           const payload = {{
             version: RPC_VERSION,
             session_id: sessionId,
-            message_id: ++messageCounter,
+            message_id: msgId,
             response_to: request.message_id,
             command: "NEW_SESSION",
             status: "OK",
@@ -394,6 +385,7 @@ _HTML_TEMPLATE = """\
             }}
           }};
 
+          waitForResponse(msgId, 4000).catch(() => {{}});
           postToKiCad(JSON.stringify(payload));
         }}
 
@@ -741,6 +733,23 @@ class _ServerState:
     def login_page(self) -> bytes:
         return self._login_page_bytes
 
+    def build_provider_metadata(self, base_url: str) -> bytes:
+        metadata = {
+            "provider_name": "KiCad WebView Test Provider",
+            "provider_version": "1.0.0",
+            "api_base_url": base_url,
+            "panel_url": f"{base_url}/",
+            "auth": {"type": "none"},
+            "capabilities": {
+                "web_ui_v1": True,
+                "inline_payloads_v1": True,
+            },
+            "max_download_bytes": 104857600,
+            "supported_asset_types": ["symbol", "footprint", "3dmodel", "spice"],
+            "allow_insecure_localhost": True,
+        }
+        return json.dumps(metadata).encode("utf-8")
+
     def _render_page(self) -> bytes:
         parts_payload = [part.to_dict() for part in self._parts]
         parts_json = json.dumps(parts_payload, separators=(",", ":")).replace("</", "<\\/")
@@ -960,14 +969,20 @@ def _build_handler(state: _ServerState) -> type[http.server.BaseHTTPRequestHandl
 
             if path in ("/", "/index.html"):
                 content = state.page
+                content_type = "text/html; charset=utf-8"
             elif path == "/login":
                 content = state.login_page
+                content_type = "text/html; charset=utf-8"
+            elif path == "/.well-known/kicad-remote-provider":
+                host = self.headers.get("Host") or f"localhost:{self.server.server_address[1]}"
+                content = state.build_provider_metadata(f"http://{host}")
+                content_type = "application/json; charset=utf-8"
             else:
                 self.send_error(404)
                 return
 
             self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Type", content_type)
             self.send_header("Content-Length", str(len(content)))
             self.end_headers()
             self.wfile.write(content)

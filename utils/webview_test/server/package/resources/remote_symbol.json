@@ -1,5 +1,4 @@
 {
-  "host": "http://localhost",
-  "port": 8080,
-  "path": "/"
+  "metadata_url": "http://localhost:8080",
+  "description": "Add http://localhost:8080 as a Remote Symbol provider in KiCad eeschema settings. KiCad discovers the provider at http://localhost:8080/.well-known/kicad-remote-provider automatically."
 }

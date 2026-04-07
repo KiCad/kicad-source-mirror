@@ -1140,7 +1140,7 @@ bool PANEL_REMOTE_SYMBOL::receiveSymbol( const nlohmann::json& aParams,
     savedId.SetLibItemName( libItemName );
     downloadedSymbol->SetLibId( savedId );
 
-    if( adapter->SaveSymbol( nickname, downloadedSymbol.get(), true ) != SYMBOL_LIBRARY_ADAPTER::SAVE_OK )
+    if( adapter->SaveSymbol( nickname, downloadedSymbol.release(), true ) != SYMBOL_LIBRARY_ADAPTER::SAVE_OK )
     {
         aError = _( "Unable to save the downloaded symbol." );
         return false;
