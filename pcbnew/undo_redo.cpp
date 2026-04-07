@@ -508,7 +508,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
                 }
 
                 view->Remove( item );
-                parent->Remove( item );
+                parent->Remove( item, REMOVE_MODE::BULK );
 
                 item->SwapItemData( image );
 
@@ -518,7 +518,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
                 view->Add( item );
                 view->Hide( item, false );
-                parent->Add( item );
+                parent->Add( item, ADD_MODE::BULK_INSERT );
 
                 if( item->Type() == PCB_ZONE_T && static_cast<ZONE*>( item )->GetIsRuleArea() )
                 {
