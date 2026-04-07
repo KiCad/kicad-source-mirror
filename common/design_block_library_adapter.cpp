@@ -64,7 +64,7 @@ LIBRARY_RESULT<IO_BASE*> DESIGN_BLOCK_LIBRARY_ADAPTER::createPlugin( const LIBRA
     if( type == DESIGN_BLOCK_IO_MGR::NESTED_TABLE )
     {
         wxString   msg;
-        wxFileName fileName( row->URI() );
+        wxFileName fileName( m_manager.GetFullURI( row, true ) );
 
         if( fileName.FileExists() )
             return tl::unexpected( LIBRARY_TABLE_OK() );

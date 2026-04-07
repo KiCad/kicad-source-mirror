@@ -499,7 +499,7 @@ LIBRARY_RESULT<IO_BASE*> FOOTPRINT_LIBRARY_ADAPTER::createPlugin( const LIBRARY_
     if( type == PCB_IO_MGR::NESTED_TABLE )
     {
         wxString   msg;
-        wxFileName fileName( row->URI() );
+        wxFileName fileName( m_manager.GetFullURI( row, true ) );
 
         if( fileName.FileExists() )
             return tl::unexpected( LIBRARY_TABLE_OK() );
