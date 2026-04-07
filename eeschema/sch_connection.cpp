@@ -545,6 +545,7 @@ wxString SCH_CONNECTION::PrintBusForUI( const wxString& aGroup )
     {
         if( isSuperSubOverbar( aGroup[i] ) && i + 1 < groupLen && aGroup[i+1] == '{' )
         {
+            ret += aGroup[i];
             i++;
             continue;
         }
@@ -575,6 +576,7 @@ wxString SCH_CONNECTION::PrintBusForUI( const wxString& aGroup )
     {
         if( isSuperSubOverbar( aGroup[i] ) && i + 1 < groupLen && aGroup[i+1] == '{' )
         {
+            ret += aGroup[i];
             i++;
             continue;
         }

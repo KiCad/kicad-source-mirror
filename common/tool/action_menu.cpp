@@ -554,7 +554,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
             {
                 ACTION_MENU* actionMenu = dynamic_cast<ACTION_MENU*>( GetParent() );
 
-                if( actionMenu && actionMenu->PassHelpTextToHandler() )
+                if( PassHelpTextToHandler() || ( actionMenu && actionMenu->PassHelpTextToHandler() ) )
                     menuText = GetHelpString( aEvent.GetId() );
                 else
                     menuText = GetLabelText( aEvent.GetId() );
