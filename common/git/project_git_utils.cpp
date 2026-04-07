@@ -125,53 +125,39 @@ wxString PROJECT_GIT_UTILS::ComputeSymlinkPreservingWorkDir( const wxString& aUs
     if( !canonicalWorkDirNorm.EndsWith( wxFileName::GetPathSeparator() ) )
         canonicalWorkDirNorm += wxFileName::GetPathSeparator();
 
-    // The workdir could be at or above the project directory
-    if( canonicalUserPath.StartsWith( canonicalWorkDirNorm ) )
+    // The user project path resolves to the same directory as the git workdir (e.g., the
+    // project is at the repo root but opened via a symlinked path). Return the user path
+    // to preserve symlinks.  When the project is in a subdirectory of the workdir, the
+    // paths will differ and we fall through to extract only the workdir portion below.
+    if( canonicalUserPath == canonicalWorkDirNorm )
     {
         return aUserProjectPath.EndsWith( wxFileName::GetPathSeparator() )
                    ? aUserProjectPath
                    : aUserProjectPath + wxFileName::GetPathSeparator();
     }
 
-    // The workdir is above the user path - find the portion that corresponds to the workdir
-    wxFileName userFn( aUserProjectPath );
-    wxFileName workDirFn( aCanonicalWorkDir );
-    wxArrayString workDirParts = workDirFn.GetDirs();
-    size_t workDirDepth = workDirParts.GetCount();
+    // Walk both paths upward in lockstep until the canonical user path matches the canonical
+    // workdir. This correctly handles symlinks that compress multiple canonical path
+    // components into fewer visible components (e.g. /work/repo -> /real/deep/path/root).
+    wxFileName userFn;
+    userFn.AssignDir( aUserProjectPath );
 
-    wxFileName canonicalUserFn( canonicalUserPath );
-    wxArrayString canonicalUserParts = canonicalUserFn.GetDirs();
+    wxFileName canonicalUserFn;
+    canonicalUserFn.AssignDir( canonicalUserPath );
 
-    if( canonicalUserParts.GetCount() < workDirDepth )
-        return aCanonicalWorkDir;
+    wxFileName canonicalWorkDirFn;
+    canonicalWorkDirFn.AssignDir( canonicalWorkDirNorm );
 
-    wxArrayString canonicalWorkDirParts = workDirFn.GetDirs();
-
-    for( size_t i = 0; i < workDirDepth; ++i )
+    while( canonicalUserFn.GetFullPath() != canonicalWorkDirFn.GetFullPath() )
     {
-        if( canonicalUserParts[i] != canonicalWorkDirParts[i] )
+        if( canonicalUserFn.GetDirCount() == 0 || userFn.GetDirCount() == 0 )
             return aCanonicalWorkDir;
+
+        canonicalUserFn.RemoveLastDir();
+        userFn.RemoveLastDir();
     }
 
-    wxArrayString userParts = userFn.GetDirs();
-
-    if( userParts.GetCount() < workDirDepth )
-        return aCanonicalWorkDir;
-
-    wxString result = userFn.GetVolume();
-
-    if( !result.IsEmpty() )
-        result += wxFileName::GetVolumeSeparator();
-
-    result += wxFileName::GetPathSeparator();
-
-    for( size_t i = 0; i < workDirDepth; ++i )
-    {
-        result += userParts[i];
-        result += wxFileName::GetPathSeparator();
-    }
-
-    return result;
+    return userFn.GetPathWithSep();
 #endif
 }
 
