@@ -2589,7 +2589,8 @@ void BINARY_PARSER::parseNetClasses()
     struct EdgeRec
     {
         uint32_t owner;
-        uint32_t page;
+        uint32_t page;     // rulePtr & ~0xfff, selects the rule kind
+        uint32_t rulePtr;  // full rule-value-object pointer (+0); declaration order within a page
         int      layer;
         size_t   off;
     };
@@ -2606,7 +2607,9 @@ void BINARY_PARSER::parseNetClasses()
         if( !ownerSet.count( owner ) )
             continue;
 
-        edges.push_back( { owner, readU32( off ) & ~0xfffu,
+        uint32_t rulePtr = readU32( off );
+
+        edges.push_back( { owner, rulePtr & ~0xfffu, rulePtr,
                            static_cast<int>( readU32( off + 20 ) ), off } );
     }
 
@@ -2691,6 +2694,90 @@ void BINARY_PARSER::parseNetClasses()
 
             if( it != ownerOrdinal.end() )
                 m_netClasses[it->second].ruleLayers.push_back( e.layer );
+        }
+
+        // Per-class rule VALUES (clearance, track width, via clearance). The clearance-page
+        // edge's full +0 pointer is the rule-value-object's declaration ordinal; the value
+        // records live in a separate arena keyed by their own self-pointer at +12, with no
+        // pointer chain between the two (independent malloc bases). The arenas are emitted in
+        // the same declaration order, so the join is positional: the i-th layer-0 clearance
+        // edge pairs with the i-th layer-0 (discriminator 1) value record.
+        std::vector<const EdgeRec*> layer0Edges;
+
+        for( const EdgeRec& e : edges )
+        {
+            if( e.page == clearancePage && e.layer == 0 )
+                layer0Edges.push_back( &e );
+        }
+
+        std::sort( layer0Edges.begin(), layer0Edges.end(),
+                   []( const EdgeRec* a, const EdgeRec* b ) { return a->rulePtr < b->rulePtr; } );
+
+        // File-wide scan for the 457200 marker (== 12 mil, the TRACK_TO_TRACK schema default and
+        // a VALUE, not a delimiter). The value arena sits in a broader MFC blob just outside the
+        // sec49 directory byte-range, so the scan must cover the whole file. Discriminator 1 is a
+        // layer-0 NET_CLASS rule; the int32[38] core begins at marker+20.
+        struct ValueRec
+        {
+            uint32_t selfPtr;
+            int32_t  core[38];
+        };
+
+        std::vector<ValueRec> values;
+
+        for( size_t off = 0; off + 20 + 38 * sizeof( int32_t ) <= m_data.size(); ++off )
+        {
+            if( readI32( off ) != 457200 )
+                continue;
+
+            uint32_t selfPtr = readU32( off + 12 );
+
+            if( selfPtr < 0x10000000u || selfPtr >= 0x20000000u )
+                continue;
+
+            if( readI32( off + 8 ) != 1 )
+                continue;
+
+            ValueRec v{};
+            v.selfPtr = selfPtr;
+            bool anyNonZero = false;
+
+            for( int i = 0; i < 38; ++i )
+            {
+                v.core[i] = readI32( off + 20 + sizeof( int32_t ) * i );
+
+                if( v.core[i] != 0 )
+                    anyNonZero = true;
+            }
+
+            if( anyNonZero )
+                values.push_back( v );
+        }
+
+        std::sort( values.begin(), values.end(),
+                   []( const ValueRec& a, const ValueRec& b ) { return a.selfPtr < b.selfPtr; } );
+
+        // Equal counts are required for a sound positional join; otherwise leave values unset so
+        // membership still ships (correct-or-silent).
+        if( !layer0Edges.empty() && layer0Edges.size() == values.size() )
+        {
+            for( size_t i = 0; i < layer0Edges.size(); ++i )
+            {
+                auto it = ownerOrdinal.find( layer0Edges[i]->owner );
+
+                if( it == ownerOrdinal.end() )
+                    continue;
+
+                const int32_t* core = values[i].core;
+                NETCLASS_DEF&  nc = m_netClasses[it->second];
+
+                nc.clearance     = core[0];
+                nc.viaClearance  = core[2];
+                nc.minTrackWidth = core[33];
+                nc.trackWidth    = core[34];
+                nc.maxTrackWidth = core[35];
+                nc.hasRuleValues = true;
+            }
         }
     }
 

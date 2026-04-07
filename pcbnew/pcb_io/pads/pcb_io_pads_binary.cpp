@@ -414,6 +414,20 @@ void PCB_IO_PADS_BINARY::loadNets()
         if( !netSettings->HasNetclass( className ) )
         {
             std::shared_ptr<NETCLASS> kicadClass = std::make_shared<NETCLASS>( className );
+
+            // Per-class rule values are positionally joined from the layer-0 clearance record
+            // (BASIC units). Track width maps to the recommended width; min/max are advisory and
+            // KiCad's single-clearance netclass carries only the one clearance. Mirrors the ASCII
+            // importer (pcb_io_pads.cpp ~L2851).
+            if( nc.hasRuleValues )
+            {
+                if( nc.clearance > 0 )
+                    kicadClass->SetClearance( scaleSize( nc.clearance ) );
+
+                if( nc.trackWidth > 0 )
+                    kicadClass->SetTrackWidth( scaleSize( nc.trackWidth ) );
+            }
+
             netSettings->SetNetclass( className, kicadClass );
         }
 

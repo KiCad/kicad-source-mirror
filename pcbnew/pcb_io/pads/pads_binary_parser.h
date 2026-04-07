@@ -73,6 +73,16 @@ struct NETCLASS_DEF
     std::string              name;        // net-class name (from the 0x118 name table)
     std::vector<std::string> nets;        // member net names (sec23 +188 grouping)
     std::vector<int>         ruleLayers;  // layers carrying a clearance rule (0 = all layers)
+
+    // Per-class rule VALUES from the layer-0 (discriminator 1) clearance record, positionally
+    // joined to the type-66 clearance edge by declaration order (see parseNetClasses). All in
+    // BASIC units; hasRuleValues is false when the value/edge counts disagree (correct-or-silent).
+    int  clearance     = 0;   // ASC TRACK_TO_TRACK (core[0])
+    int  trackWidth    = 0;   // ASC REC_TRACK_WIDTH (core[34])
+    int  minTrackWidth = 0;   // ASC MIN_TRACK_WIDTH (core[33])
+    int  maxTrackWidth = 0;   // ASC MAX_TRACK_WIDTH (core[35])
+    int  viaClearance  = 0;   // ASC SAME_NET_VIA_TO_VIA (core[2])
+    bool hasRuleValues = false;
 };
 
 /**
