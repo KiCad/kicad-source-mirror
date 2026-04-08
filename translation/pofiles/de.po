@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-07 18:58+0300\n"
 "PO-Revision-Date: 2026-04-08 22:09+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1578,7 +1578,7 @@ msgstr "Während des Verschiebens"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:85
 msgid "Disable anti-aliasing"
-msgstr "Kein Anti-Aliasing"
+msgstr "Kantenglättung deaktivieren"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:88
 msgid "Disable thickness"
@@ -4312,15 +4312,15 @@ msgstr "Kantenglättung:"
 
 #: common/dialogs/panel_common_settings_base.cpp:62
 msgid "No Antialiasing"
-msgstr "Kein Anti-Aliasing"
+msgstr "Keine Kantenglättung"
 
 #: common/dialogs/panel_common_settings_base.cpp:62
 msgid "Fast Antialiasing"
-msgstr "Schnelles Anti-Aliasing"
+msgstr "Schnelle Kantenglättung"
 
 #: common/dialogs/panel_common_settings_base.cpp:62
 msgid "High Quality Antialiasing"
-msgstr "Hochwertiges Anti-Aliasing"
+msgstr "Hochwertige Kantenglättung"
 
 #: common/dialogs/panel_common_settings_base.cpp:82
 msgid "Helper Applications"
@@ -11572,14 +11572,13 @@ msgid "View load messages"
 msgstr "Zeige Lade-Meldungen"
 
 #: common/widgets/kistatusbar.cpp:509
-#, fuzzy, c-format
+#, c-format
 msgid "View %zu message(s)"
-msgstr "%zu Ladenachricht(en) zeigen"
+msgstr "%zu Meldung(en) ansehen"
 
 #: common/widgets/kistatusbar.cpp:522
-#, fuzzy
 msgid "View messages"
-msgstr "Zeige Lade-Meldungen"
+msgstr "Meldungen ansehen"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
@@ -17278,9 +17277,8 @@ msgid "Copy Design Variant"
 msgstr "Designvariante kopieren"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2947
-#, fuzzy
 msgid "Cannot edit the default variant description."
-msgstr "Die Standardvariante kann nicht gelöscht werden."
+msgstr "Die Standardvariantenbeschreibung kann nicht bearbeitet werden."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2955
 #: eeschema/sch_edit_frame.cpp:3059
@@ -20696,9 +20694,8 @@ msgid "Resolved Netclass"
 msgstr "Aufgelöste Netzklasse"
 
 #: eeschema/sch_bus_entry.cpp:652 eeschema/sch_line.cpp:1286
-#, fuzzy
 msgid "Wire Style"
-msgstr "Linienstil"
+msgstr "Stil der elektrischen Verbindung"
 
 #: eeschema/sch_connection.cpp:455
 msgid "Connection Name"
@@ -20870,14 +20867,12 @@ msgid "No design variants to edit."
 msgstr "Neue Designvariante zum Schaltplan hinzufügen."
 
 #: eeschema/sch_edit_frame.cpp:3045
-#, fuzzy
 msgid "Select variant to edit description:"
-msgstr "Zu löschenden Variantennamen wählen:"
+msgstr "Variante zum Bearbeiten der Beschreibung auswählen:"
 
 #: eeschema/sch_edit_frame.cpp:3046
-#, fuzzy
 msgid "Edit Variant Description"
-msgstr "Auftragsbeschreibung bearbeiten"
+msgstr "Variantenbeschreibung bearbeiten"
 
 #: eeschema/sch_edit_frame.cpp:3106
 msgid "Select variant name to remove:"
@@ -26934,9 +26929,8 @@ msgid "Import 2D drawing file"
 msgstr "Eine 2D-Zeichnung importieren"
 
 #: eeschema/tools/sch_actions.cpp:1212
-#, fuzzy
 msgid "Import Non-KiCad Schematic..."
-msgstr "Nicht-KiCad-Schaltplan ..."
+msgstr "Nicht-KiCad-Schaltplan importieren ..."
 
 #: eeschema/tools/sch_actions.cpp:1213
 msgid ""
@@ -27471,9 +27465,8 @@ msgid "Remove an existing design variant from the schematic."
 msgstr "Eine bestehende Designvariante aus dem Schaltplan entfernen."
 
 #: eeschema/tools/sch_actions.cpp:1787
-#, fuzzy
 msgid "Edit Variant Description..."
-msgstr "Auftragsbeschreibung bearbeiten"
+msgstr "Variantenbeschreibung bearbeiten ..."
 
 #: eeschema/tools/sch_actions.cpp:1788
 #, fuzzy
@@ -57702,9 +57695,8 @@ msgstr ""
 "Rettungsdatei öffnen"
 
 #: pcbnew/tools/pcb_actions.cpp:1208
-#, fuzzy
 msgid "Import Non-KiCad Board File..."
-msgstr "Importiere Nicht Kicad Platinendatei"
+msgstr "Nicht-KiCad-Platinendatei importieren ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1209
 msgid "Import board file from other applications"
