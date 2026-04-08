@@ -496,6 +496,30 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
                 strResult << str_n << strVarName;
             }
 
+            // When a versioned-wildcard branch matched but no env var was found, emit
+            // the original ${VARNAME} text so the closing-bracket handler can append the
+            // closing bracket.  Without this, the handler emits only '}', producing a
+            // garbage path like "}/Device.kicad_sym" instead of the full unexpanded var.
+            if( !expanded && bracket != Bracket_None )
+            {
+                auto isVersionedWildcard =
+                        strVarName.Contains( wxT( "KISYS3DMOD" ) )
+                        || strVarName.Matches( wxT( "KICAD*_3DMODEL_DIR" ) )
+                        || strVarName.Matches( wxT( "KICAD*_SYMBOL_DIR" ) )
+                        || strVarName.Matches( wxT( "KICAD*_FOOTPRINT_DIR" ) )
+                        || strVarName.Matches( wxT( "KICAD*_3RD_PARTY" ) );
+
+                if( isVersionedWildcard )
+                {
+#ifdef __WINDOWS__
+                    if( bracket != Bracket_Windows )
+#endif
+                        strResult << str[n - 1];
+
+                    strResult << str_n << strVarName;
+                }
+            }
+
             // check the closing bracket
             if( bracket != Bracket_None )
             {
