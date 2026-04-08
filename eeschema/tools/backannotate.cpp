@@ -51,6 +51,141 @@
 #include <fmt/ranges.h>
 #include <fmt/xchar.h>
 
+// Compare nets in the deterministic library order so diode arrays and similar map cleanly.
+static std::vector<wxString> netsInUnitOrder( const std::vector<wxString>&        aPins,
+                                              const std::map<wxString, wxString>& aNetByPin )
+{
+    std::vector<wxString> nets;
+
+    if( !aPins.empty() )
+    {
+        for( const wxString& pinNum : aPins )
+        {
+            auto it = aNetByPin.find( pinNum );
+            nets.push_back( it != aNetByPin.end() ? it->second : wxString() );
+        }
+    }
+    else
+    {
+        for( const std::pair<const wxString, wxString>& kv : aNetByPin )
+            nets.push_back( kv.second );
+    }
+
+    return nets;
+}
+
+
+BACKANNOTATE_UNIT_SWAP_PLAN PlanBackannotateUnitSwaps(
+        const std::vector<BACKANNOTATE_UNIT_SWAP_CANDIDATE>& aCandidates,
+        const std::map<wxString, wxString>& aPcbPinMap )
+{
+    BACKANNOTATE_UNIT_SWAP_PLAN plan;
+
+    if( aCandidates.size() < 2 )
+    {
+        plan.m_mappingOk = true;
+        return plan;
+    }
+
+    std::map<size_t, size_t> desiredTarget;
+    std::set<size_t>         usedTargets;
+
+    for( size_t candidateIdx = 0; candidateIdx < aCandidates.size(); ++candidateIdx )
+    {
+        const BACKANNOTATE_UNIT_SWAP_CANDIDATE& candidate = aCandidates[candidateIdx];
+        std::map<wxString, wxString>            pcbNetsByPin;
+
+        for( const wxString& pinNum : candidate.m_unitPinNumbers )
+        {
+            auto it = aPcbPinMap.find( pinNum );
+            pcbNetsByPin[pinNum] = ( it != aPcbPinMap.end() ) ? it->second : wxString();
+        }
+
+        std::vector<wxString> pcbNets = netsInUnitOrder( candidate.m_unitPinNumbers, pcbNetsByPin );
+        bool                  matched = false;
+
+        for( size_t matchIdx = 0; matchIdx < aCandidates.size(); ++matchIdx )
+        {
+            if( usedTargets.count( matchIdx ) )
+                continue;
+
+            const BACKANNOTATE_UNIT_SWAP_CANDIDATE& potentialMatch = aCandidates[matchIdx];
+            std::vector<wxString> schNets =
+                    netsInUnitOrder( potentialMatch.m_unitPinNumbers, potentialMatch.m_schNetsByPin );
+
+            if( pcbNets == schNets )
+            {
+                desiredTarget[candidateIdx] = matchIdx;
+                usedTargets.insert( matchIdx );
+                matched = true;
+                break;
+            }
+        }
+
+        if( !matched )
+            return plan;
+    }
+
+    plan.m_mappingOk = true;
+    plan.m_identity = true;
+
+    for( size_t candidateIdx = 0; candidateIdx < aCandidates.size(); ++candidateIdx )
+    {
+        auto it = desiredTarget.find( candidateIdx );
+
+        if( it == desiredTarget.end() || it->second != candidateIdx )
+        {
+            plan.m_identity = false;
+            break;
+        }
+    }
+
+    if( plan.m_identity )
+        return plan;
+
+    std::set<size_t> visited;
+
+    for( size_t startIdx = 0; startIdx < aCandidates.size(); ++startIdx )
+    {
+        if( visited.count( startIdx ) )
+            continue;
+
+        std::vector<size_t> cycle;
+        size_t              curIdx = startIdx;
+
+        while( !visited.count( curIdx ) )
+        {
+            visited.insert( curIdx );
+            cycle.push_back( curIdx );
+
+            auto nextIt = desiredTarget.find( curIdx );
+
+            if( nextIt == desiredTarget.end() || nextIt->second == curIdx )
+                break;
+
+            curIdx = nextIt->second;
+        }
+
+        if( cycle.size() < 2 )
+            continue;
+
+        for( size_t i = cycle.size() - 1; i > 0; --i )
+        {
+            size_t firstIdx = cycle[i - 1];
+            size_t secondIdx = cycle[i];
+
+            plan.m_steps.push_back( { firstIdx, secondIdx,
+                                      aCandidates[firstIdx].m_currentUnit,
+                                      aCandidates[secondIdx].m_currentUnit } );
+            plan.m_swappedCandidateIndices.insert( firstIdx );
+            plan.m_swappedCandidateIndices.insert( secondIdx );
+        }
+    }
+
+    return plan;
+}
+
+
 BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                               bool aProcessFootprints, bool aProcessValues, bool aProcessReferences,
                               bool aProcessNetNames, bool aProcessAttributes, bool aProcessOtherFields,
@@ -441,34 +576,6 @@ void BACK_ANNOTATE::applyChangelist()
                     return unitInfos[unitNumber - 1].m_pinNumbers;
                 };
 
-            // Compare nets in the deterministic library order so diode arrays and similar map cleanly
-            auto netsInUnitOrder =
-                   []( const std::vector<wxString>& pins,
-                       const std::map<wxString, wxString>& netByPin )
-                   {
-                       std::vector<wxString> nets;
-
-                       if( !pins.empty() )
-                       {
-                           nets.reserve( pins.size() );
-
-                           for( const wxString& pinNum : pins )
-                           {
-                               auto it = netByPin.find( pinNum );
-                               nets.push_back( it != netByPin.end() ? it->second : wxString() );
-                           }
-                       }
-                       else
-                       {
-                           nets.reserve( netByPin.size() );
-
-                           for( const std::pair<const wxString, wxString>& kv : netByPin )
-                               nets.push_back( kv.second );
-                       }
-
-                       return nets;
-                   };
-
             for( CHANGELIST_ITEM* changedItem : changedFpItems )
             {
                 SCH_REFERENCE& ref    = changedItem->first;
@@ -554,12 +661,6 @@ void BACK_ANNOTATE::applyChangelist()
                            return a.ref < b.ref;
                        } );
 
-            // Store addresses so identical SCH_SYMBOLs on different sheet instances stay unique
-            std::vector<SYM_UNIT*> symbolUnitPtrs;
-
-            for( SYM_UNIT& su : symbolUnits )
-                symbolUnitPtrs.push_back( &su );
-
             for( const SYM_UNIT& su : symbolUnits )
             {
                 wxString pcbPins = mapToString( su.pcbNetsByPin );
@@ -577,191 +678,98 @@ void BACK_ANNOTATE::applyChangelist()
             if( symbolUnits.size() < 2 )
                 continue;
 
-            // For each symbol unit, find the target unit whose schematic nets match this unit's
-            // PCB nets when treated as a multiset of net names.  This allows units with different
-            // pin numbering (e.g. diode arrays) to be matched while still requiring every net in
-            // the unit to move as a group.
-            // desiredTarget maps each PCB unit to the schematic unit whose nets it matches
-            std::map<SYM_UNIT*, SYM_UNIT*> desiredTarget;
-            std::set<SYM_UNIT*>            usedTargets;
-            bool                           mappingOk = true;
+            std::vector<BACKANNOTATE_UNIT_SWAP_CANDIDATE> candidates;
 
-            for( SYM_UNIT* symbolUnit : symbolUnitPtrs )
+            for( const SYM_UNIT& symbolUnit : symbolUnits )
             {
-                SYM_UNIT* match = nullptr;
-
-                for( SYM_UNIT* potentialMatch : symbolUnitPtrs )
-                {
-                    if( usedTargets.count( potentialMatch ) )
-                        continue;
-
-                    if( symbolUnit->pcbNetsInUnitOrder == potentialMatch->schNetsInUnitOrder )
-                    {
-                        match = potentialMatch;
-                        break;
-                    }
-                }
-
-                if( !match )
-                {
-                    wxString pcbPins = mapToString( symbolUnit->pcbNetsByPin );
-                    wxString schPins = mapToString( symbolUnit->schNetsByPin );
-                    wxString unitPins = vectorToString( symbolUnit->unitPinNumbers );
-                    wxString pcbUnitNetSeq = vectorToString( symbolUnit->pcbNetsInUnitOrder );
-                    wxString schUnitNetSeq = vectorToString( symbolUnit->schNetsInUnitOrder );
-
-                    msg.Printf( wxT( "DEBUG(unit-swap): no schematic match for %s (%s) pcbPins[%s] schPins[%s] "
-                                     "unitPins[%s] pcbUnitNets[%s] schUnitNets[%s]." ),
-                                symbolUnit->ref, fp->m_ref, pcbPins, schPins, unitPins, pcbUnitNetSeq, schUnitNetSeq );
-                    debugReporter.ReportHead( msg, RPT_SEVERITY_INFO );
-                    mappingOk = false;
-                    break;
-                }
-
-                msg.Printf( wxT( "DEBUG(unit-swap): %s matches %s for footprint %s." ), symbolUnit->ref, match->ref,
-                            fp->m_ref );
-                debugReporter.ReportHead( msg, RPT_SEVERITY_INFO );
-                desiredTarget[symbolUnit] = match;
-                usedTargets.insert( match );
+                BACKANNOTATE_UNIT_SWAP_CANDIDATE candidate;
+                candidate.m_ref = symbolUnit.ref;
+                candidate.m_currentUnit = symbolUnit.currentUnit;
+                candidate.m_schNetsByPin = symbolUnit.schNetsByPin;
+                candidate.m_unitPinNumbers = symbolUnit.unitPinNumbers;
+                candidates.push_back( candidate );
             }
 
-            if( !mappingOk )
+            BACKANNOTATE_UNIT_SWAP_PLAN plan = PlanBackannotateUnitSwaps( candidates, fp->m_pinMap );
+
+            if( !plan.m_mappingOk )
             {
                 msg.Printf( wxT( "DEBUG(unit-swap): mapping failed for footprint %s." ), fp->m_ref );
                 debugReporter.ReportHead( msg, RPT_SEVERITY_INFO );
                 continue;
             }
 
-            // Check if mapping is identity (no swap needed)
-            bool isIdentity = true;
-
-            for( SYM_UNIT* su : symbolUnitPtrs )
-            {
-                auto it = desiredTarget.find( su );
-
-                if( it == desiredTarget.end() || it->second != su )
-                {
-                    isIdentity = false;
-                    break;
-                }
-            }
-
-            if( isIdentity )
+            if( plan.m_identity )
             {
                 msg.Printf( wxT( "DEBUG(unit-swap): footprint %s already aligned (identity mapping)." ), fp->m_ref );
                 debugReporter.ReportHead( msg, RPT_SEVERITY_INFO );
                 continue;
             }
 
-            // Decompose into cycles over the symbols and perform swaps along cycles
-            std::set<SYM_UNIT*> visited;
-
-            for( SYM_UNIT* symbolUnit : symbolUnitPtrs )
+            if( !m_dryRun )
             {
-                SYM_UNIT* start = symbolUnit;
+                for( size_t candidateIdx : plan.m_swappedCandidateIndices )
+                    commit.Modify( symbolUnits[candidateIdx].sym, symbolUnits[candidateIdx].screen );
+            }
 
-                if( visited.count( start ) )
-                    continue;
+            for( const BACKANNOTATE_UNIT_SWAP_STEP& step : plan.m_steps )
+            {
+                SYM_UNIT& a = symbolUnits[step.m_firstIndex];
+                SYM_UNIT& b = symbolUnits[step.m_secondIndex];
+                int       aUnit = a.currentUnit;
+                int       bUnit = b.currentUnit;
 
-                // Build cycle starting at 'start'
-                std::vector<SYM_UNIT*> cycle;
-                SYM_UNIT*              cur = start;
-
-                while( !visited.count( cur ) )
-                {
-                    visited.insert( cur );
-                    cycle.push_back( cur );
-
-                    auto nextIt = desiredTarget.find( cur );
-
-                    if( nextIt == desiredTarget.end() )
-                        break;
-
-                    SYM_UNIT* nextSym = nextIt->second;
-
-                    if( !nextSym || nextSym == cur )
-                        break;
-
-                    cur = nextSym;
-                }
-
-                if( cycle.size() < 2 )
-                {
-                    msg.Printf( wxT( "DEBUG(unit-swap): cycle length %zu for footprint %s starting at %s." ),
-                                cycle.size(), fp->m_ref, start->ref );
-                    debugReporter.ReportHead( msg, RPT_SEVERITY_INFO );
-                    continue;
-                }
-
-                // Apply swaps along the cycle from end to start,
-                // modify all symbol units in the cycle
                 if( !m_dryRun )
                 {
-                    for( SYM_UNIT* s : cycle )
-                        commit.Modify( s->sym, s->screen );
+                    a.sym->SetUnit( bUnit );
+                    b.sym->SetUnit( aUnit );
+
+                    if( const SCH_SHEET_PATH* sheet = a.sheetPath )
+                        a.sym->SetUnitSelection( sheet, bUnit );
+
+                    if( const SCH_SHEET_PATH* sheet = b.sheetPath )
+                        b.sym->SetUnitSelection( sheet, aUnit );
                 }
 
-                for( size_t i = cycle.size() - 1; i > 0; --i )
+                a.currentUnit = bUnit;
+                b.currentUnit = aUnit;
+
+                swappedSymbols.insert( a.sym );
+                swappedSymbols.insert( b.sym );
+
+                if( a.changeItem )
                 {
-                    SYM_UNIT* a = cycle[i - 1];
-                    SYM_UNIT* b = cycle[i];
-                    int       aUnit = a->currentUnit;
-                    int       bUnit = b->currentUnit;
-
-                    // Swap unit numbers between a and b
-                    if( !m_dryRun )
-                    {
-                        a->sym->SetUnit( bUnit );
-                        b->sym->SetUnit( aUnit );
-
-                        if( const SCH_SHEET_PATH* sheet = a->sheetPath )
-                            a->sym->SetUnitSelection( sheet, bUnit );
-
-                        if( const SCH_SHEET_PATH* sheet = b->sheetPath )
-                            b->sym->SetUnitSelection( sheet, aUnit );
-                    }
-
-                    a->currentUnit = bUnit;
-                    b->currentUnit = aUnit;
-
-                    swappedSymbols.insert( a->sym );
-                    swappedSymbols.insert( b->sym );
-
-                    // Track which changelist entries participated so later net-label updates skip them
-                    if( a->changeItem )
-                    {
-                        swappedItems.insert( a->changeItem );
-                        unitSwapItems.insert( a->changeItem );
-                    }
-
-                    if( b->changeItem )
-                    {
-                        swappedItems.insert( b->changeItem );
-                        unitSwapItems.insert( b->changeItem );
-                    }
-
-                    wxString baseRef = a->sym->GetRef( a->sheetPath, false );
-                    wxString unitAString = a->sym->SubReference( aUnit, false );
-                    wxString unitBString = b->sym->SubReference( bUnit, false );
-
-                    if( unitAString.IsEmpty() )
-                        unitAString.Printf( wxT( "%d" ), aUnit );
-
-                    if( unitBString.IsEmpty() )
-                        unitBString.Printf( wxT( "%d" ), bUnit );
-
-                    msg.Printf( _( "Swap %s unit %s with unit %s." ),
-                                DescribeRef( baseRef ),
-                                unitAString,
-                                unitBString );
-                    m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
-                    ++m_changesCount;
+                    swappedItems.insert( a.changeItem );
+                    unitSwapItems.insert( a.changeItem );
                 }
 
-                msg.Printf( wxT( "DEBUG(unit-swap): applied %zu swap steps for footprint %s." ), cycle.size() - 1,
-                            fp->m_ref );
-                debugReporter.ReportHead( msg, RPT_SEVERITY_INFO );
+                if( b.changeItem )
+                {
+                    swappedItems.insert( b.changeItem );
+                    unitSwapItems.insert( b.changeItem );
+                }
+
+                wxString baseRef = a.sym->GetRef( a.sheetPath, false );
+                wxString unitAString = a.sym->SubReference( aUnit, false );
+                wxString unitBString = b.sym->SubReference( bUnit, false );
+
+                if( unitAString.IsEmpty() )
+                    unitAString.Printf( wxT( "%d" ), aUnit );
+
+                if( unitBString.IsEmpty() )
+                    unitBString.Printf( wxT( "%d" ), bUnit );
+
+                msg.Printf( _( "Swap %s unit %s with unit %s." ),
+                            DescribeRef( baseRef ),
+                            unitAString,
+                            unitBString );
+                m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
+                ++m_changesCount;
             }
+
+            msg.Printf( wxT( "DEBUG(unit-swap): applied %zu swap steps for footprint %s." ),
+                        plan.m_steps.size(), fp->m_ref );
+            debugReporter.ReportHead( msg, RPT_SEVERITY_INFO );
 
             // Remove label updates for swapped symbols by marking their SKIP_STRUCT flag
             if( !m_dryRun )

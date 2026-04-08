@@ -28,6 +28,7 @@
 #include <map>
 #include <set>
 #include <memory>
+#include <vector>
 #include <sch_reference_list.h>
 #include <template_fieldnames.h>
 #include <wx/string.h>
@@ -37,6 +38,40 @@ class REPORTER;
 class SCH_SHEET_LIST;
 class SCH_EDIT_FRAME;
 class SCH_COMMIT;
+
+struct BACKANNOTATE_UNIT_SWAP_CANDIDATE
+{
+    wxString                     m_ref;
+    int                          m_currentUnit = 0;
+    std::map<wxString, wxString> m_schNetsByPin;
+    std::vector<wxString>        m_unitPinNumbers;
+};
+
+struct BACKANNOTATE_UNIT_SWAP_STEP
+{
+    size_t m_firstIndex = 0;
+    size_t m_secondIndex = 0;
+    int    m_firstUnit = 0;
+    int    m_secondUnit = 0;
+};
+
+struct BACKANNOTATE_UNIT_SWAP_PLAN
+{
+    bool                                     m_mappingOk = false;
+    bool                                     m_identity = true;
+    std::vector<BACKANNOTATE_UNIT_SWAP_STEP> m_steps;
+    std::set<size_t>                         m_swappedCandidateIndices;
+};
+
+/**
+ * Compute a pure unit-swap plan from schematic-side unit definitions and the final PCB pin map.
+ *
+ * This is shared by backannotation and unit tests so swap inference can be exercised without
+ * constructing a full schematic editor test harness.
+ */
+BACKANNOTATE_UNIT_SWAP_PLAN PlanBackannotateUnitSwaps(
+        const std::vector<BACKANNOTATE_UNIT_SWAP_CANDIDATE>& aCandidates,
+        const std::map<wxString, wxString>& aPcbPinMap );
 
 /**
  * Back annotation algorithm class used to receive, check, and apply a \ref NETLIST from
