@@ -316,10 +316,49 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName, const wxStri
         return tname;
     }
 
-    // if a path begins with ${ENV_VAR}/$(ENV_VAR) and is not resolved then the file either does
-    // not exist or the ENV_VAR is not defined
+    // if a path begins with ${ENV_VAR}/$(ENV_VAR) and is not resolved then either the ENV_VAR is
+    // not defined, or this is a user-defined alias that was incorrectly stored in ${} format by
+    // older versions of KiCad. Try to match against user-defined aliases before giving up.
     if( aFileName.StartsWith( "${" ) || aFileName.StartsWith( "$(" ) )
     {
+        // If expansion left the string unchanged, the variable was not found in the environment.
+        // Try matching the variable name against user-defined (non-env-var) aliases in m_paths.
+        if( tname == aFileName )
+        {
+            bool   useBrace = aFileName.StartsWith( "${" );
+            size_t aliasEnd = aFileName.find( useBrace ? '}' : ')' );
+
+            if( aliasEnd != wxString::npos )
+            {
+                wxString alias = aFileName.substr( 2, aliasEnd - 2 );
+                wxString relpath = aFileName.substr( aliasEnd + 2 ); // skip }/ or )/
+
+                for( const SEARCH_PATH& path : m_paths )
+                {
+                    if( path.m_Alias.StartsWith( wxS( "${" ) ) || path.m_Alias.StartsWith( wxS( "$(" ) ) )
+                        continue;
+
+                    if( path.m_Alias == alias && !path.m_Pathexp.empty() )
+                    {
+                        wxFileName fpath( wxFileName::DirName( path.m_Pathexp ) );
+                        wxString   fullPath = fpath.GetPathWithSep() + relpath;
+
+                        fullPath = ExpandEnvVarSubstitutions( fullPath, m_project );
+
+                        if( wxFileName::FileExists( fullPath ) )
+                        {
+                            wxFileName tmp( fullPath );
+
+                            if( tmp.Normalize( FN_NORMALIZE_FLAGS ) )
+                                fullPath = tmp.GetFullPath();
+
+                            return fullPath;
+                        }
+                    }
+                }
+            }
+        }
+
         if( !( m_errflags & ERRFLG_ENVPATH ) )
         {
             m_errflags |= ERRFLG_ENVPATH;
@@ -664,8 +703,8 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
             }
             else
             {
-                // new style alias
-                tname = "${";
+                // user-defined alias: use ${alias}/path format
+                tname = wxS( "${" );
                 tname.append( sL->m_Alias );
                 tname.append( wxS( "}/" ) );
                 tname.append( fname );

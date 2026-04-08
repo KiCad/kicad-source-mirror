@@ -81,11 +81,71 @@ BOOST_AUTO_TEST_CASE( ResolveAliasAndErrors )
     std::vector<SEARCH_PATH> paths = { sp };
     resolver.UpdatePathList( paths );
 
+    // canonical ALIAS:path format (no leading colon)
     wxString resolved = resolver.ResolvePath( wxS( "ALIAS:a.txt" ), wxEmptyString, {} );
     BOOST_CHECK_EQUAL( resolved, wxString::FromUTF8( file.string() ) );
 
+    // legacy :ALIAS:path format (leading colon)
+    wxString resolvedLeadingColon = resolver.ResolvePath( wxS( ":ALIAS:a.txt" ), wxEmptyString, {} );
+    BOOST_CHECK_EQUAL( resolvedLeadingColon, wxString::FromUTF8( file.string() ) );
+
+    // unknown alias returns empty
     wxString missing = resolver.ResolvePath( wxS( "MISSING:a.txt" ), wxEmptyString, {} );
     BOOST_CHECK( missing.IsEmpty() );
+}
+
+// Verify that ShortenPath outputs ${ALIAS}/path and that the result round-trips through ResolvePath.
+BOOST_AUTO_TEST_CASE( ShortenPathRoundTrip )
+{
+    fs::path temp = fs::temp_directory_path() / "fnres_shorten";
+    fs::create_directories( temp );
+
+    fs::path file = temp / "sub" / "model.wrl";
+    fs::create_directories( file.parent_path() );
+    std::ofstream( file.string() ) << "dummy";
+
+    FILENAME_RESOLVER resolver;
+
+    SEARCH_PATH sp;
+    sp.m_Alias = wxS( "MYLIB" );
+    sp.m_Pathvar = wxString::FromUTF8( temp.string() );
+    resolver.UpdatePathList( { sp } );
+
+    wxString full = wxString::FromUTF8( file.string() );
+    wxString shortened = resolver.ShortenPath( full );
+
+    // ShortenPath produces ${ALIAS}/path for user-defined aliases
+    BOOST_CHECK( shortened.StartsWith( wxS( "${MYLIB}/" ) ) );
+
+    // The shortened path must resolve back to the original file
+    wxString resolvedBack = resolver.ResolvePath( shortened, wxEmptyString, {} );
+    wxFileName fn( full );
+    fn.Normalize( wxPATH_NORM_ABSOLUTE | wxPATH_NORM_DOTS );
+    BOOST_CHECK_EQUAL( resolvedBack, fn.GetFullPath() );
+}
+
+// Backward compatibility: files saved by older KiCad versions with :ALIAS:path format
+// for user-defined aliases must still resolve correctly.
+BOOST_AUTO_TEST_CASE( ResolveBackCompatColonAlias )
+{
+    fs::path temp = fs::temp_directory_path() / "fnres_colon_alias";
+    fs::create_directories( temp );
+
+    fs::path file = temp / "model.wrl";
+    std::ofstream( file.string() ) << "dummy";
+
+    FILENAME_RESOLVER resolver;
+
+    SEARCH_PATH sp;
+    sp.m_Alias = wxS( "MYLIB" );
+    sp.m_Pathvar = wxString::FromUTF8( temp.string() );
+    resolver.UpdatePathList( { sp } );
+
+    // :MYLIB:model.wrl is the legacy format produced by KiCad before e7d6c84aef
+    wxString resolved = resolver.ResolvePath( wxS( ":MYLIB:model.wrl" ), wxEmptyString, {} );
+    wxFileName fn( wxString::FromUTF8( file.string() ) );
+    fn.Normalize( wxPATH_NORM_ABSOLUTE | wxPATH_NORM_DOTS );
+    BOOST_CHECK_EQUAL( resolved, fn.GetFullPath() );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
