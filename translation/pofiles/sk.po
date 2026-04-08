@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-07 18:58+0300\n"
-"PO-Revision-Date: 2026-04-07 15:56+0000\n"
+"PO-Revision-Date: 2026-04-08 22:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -13388,9 +13388,8 @@ msgstr "Upraviť konfliktnú mapu typu vývod-na-vývod..."
 
 #: eeschema/dialogs/dialog_erc.cpp:797 eeschema/dialogs/dialog_erc.cpp:803
 #: eeschema/dialogs/dialog_erc.cpp:810
-#, fuzzy
 msgid "Open the Schematic Setup dialog"
-msgstr "Otvorte dialógové okno Nastavenie schémy..."
+msgstr "Otvoriť dialógové okno Nastavenie schémy"
 
 #: eeschema/dialogs/dialog_erc.cpp:802 pcbnew/dialogs/dialog_drc.cpp:805
 msgid "Edit violation severities..."
@@ -38221,9 +38220,8 @@ msgstr ""
 "Závažnosti porušenia je možné upraviť v dialógovom okne Nastavenie dosky..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:806
-#, fuzzy
 msgid "Open the Board Setup dialog"
-msgstr "Otvoriť dialógové okno Nastavenie dosky..."
+msgstr "Otvoriť dialógové okno Nastavenie dosky"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1110
 #, c-format
