@@ -351,6 +351,15 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 updateConnectivityFlag( schItem );
             }
 
+            if( schItem->Type() == SCH_SYMBOL_T )
+            {
+                const SCH_SYMBOL* origSymbol = static_cast<const SCH_SYMBOL*>( itemCopy );
+                const SCH_SYMBOL* modSymbol = static_cast<const SCH_SYMBOL*>( schItem );
+
+                if( origSymbol->GetPins().size() != modSymbol->GetPins().size() )
+                    connectivityCleanUp = GLOBAL_CLEANUP;
+            }
+
             if( !( aCommitFlags & SKIP_UNDO ) )
             {
 #if 0
