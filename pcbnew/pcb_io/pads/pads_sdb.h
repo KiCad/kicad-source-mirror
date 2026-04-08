@@ -96,6 +96,46 @@ private:
 };
 
 /**
+ * A bounds-checked reader positioned at one record inside a section.
+ *
+ * Field reads are by named offset relative to the record base, so a section reader
+ * documents its record layout in one place (named field constants) instead of
+ * threading absolute file offsets. @c DesignX / @c DesignY additionally apply the
+ * coordinate origin, the one operation every geometry field needs.
+ *
+ * Holds references to the owning database's cursor and coordinate system; it is a
+ * transient view and must not outlive the PADS_SDB it came from.
+ */
+class SDB_RECORD
+{
+public:
+    SDB_RECORD( const BINARY_CURSOR& aCursor, const SDB_COORDS& aCoords, uint32_t aBase ) :
+            m_cursor( aCursor ), m_coords( aCoords ), m_base( aBase )
+    {
+    }
+
+    uint8_t     U8( uint32_t aOffset ) const { return m_cursor.U8At( m_base + aOffset ); }
+    uint16_t    U16( uint32_t aOffset ) const { return m_cursor.U16At( m_base + aOffset ); }
+    uint32_t    U32( uint32_t aOffset ) const { return m_cursor.U32At( m_base + aOffset ); }
+    int32_t     I32( uint32_t aOffset ) const { return m_cursor.I32At( m_base + aOffset ); }
+    double      F64( uint32_t aOffset ) const { return m_cursor.F64At( m_base + aOffset ); }
+    std::string Str( uint32_t aOffset, size_t aMaxLen ) const
+    {
+        return m_cursor.StringAt( m_base + aOffset, aMaxLen );
+    }
+
+    int32_t DesignX( uint32_t aOffset ) const { return m_coords.DesignX( I32( aOffset ) ); }
+    int32_t DesignY( uint32_t aOffset ) const { return m_coords.DesignY( I32( aOffset ) ); }
+
+    uint32_t Base() const { return m_base; }
+
+private:
+    const BINARY_CURSOR& m_cursor;
+    const SDB_COORDS&    m_coords;
+    uint32_t             m_base;
+};
+
+/**
  * The parsed container of a PADS `.pcb` file: header, the section directory, and
  * the coordinate system. Owns the file bytes and the bounds-checked read cursor
  * the section readers use.
@@ -128,6 +168,14 @@ public:
 
     size_t             SectionCount() const { return m_sections.size(); }
     const SDB_SECTION* Section( int aIndex ) const;
+
+    /// A reader for record @p aIndex of @p aSection, treating the section as a run of
+    /// fixed-stride @p aStride records. The caller is responsible for staying within
+    /// the section; the field reads remain bounds-checked against the file.
+    SDB_RECORD Record( const SDB_SECTION& aSection, uint32_t aIndex, uint32_t aStride ) const
+    {
+        return SDB_RECORD( m_cursor, m_coords, aSection.dataOffset + aIndex * aStride );
+    }
 
 private:
     void parseHeader();

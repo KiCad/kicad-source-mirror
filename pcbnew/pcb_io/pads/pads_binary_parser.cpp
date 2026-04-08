@@ -1986,43 +1986,42 @@ void BINARY_PARSER::parseNetNames()
 
     if( !isOldFormat() )
     {
-        // New format: section 23 has 424-byte records with net index at +112 and name at +116
-        const SDB_SECTION* entry23 = getSection( SECTION::Nets );
+        // Section 23 net record (424 B): the net NAME plus the two object pointers that
+        // drive net-class membership (the class owner, shared by every member) and the
+        // diff-pair join (the net's own self-pointer, value-equal to a sec49 DIF_PAIR's
+        // +12/+16 member fields).
+        constexpr uint32_t NET_RECORD_SIZE = 424;
+        constexpr uint32_t NET_NAME        = 116;
+        constexpr uint32_t NET_NAME_LEN    = 48;
+        constexpr uint32_t NET_SELF_PTR    = 184;
+        constexpr uint32_t NET_CLASS_PTR   = 188;
 
-        if( entry23 && entry23->count > 0 && entry23->perItem == 424 )
+        const SDB_SECTION* nets = getSection( SECTION::Nets );
+
+        if( nets && nets->count > 0 && nets->perItem == NET_RECORD_SIZE )
         {
-            for( uint32_t i = 0; i < entry23->count; ++i )
+            for( uint32_t i = 0; i < nets->count; ++i )
             {
-                size_t off = static_cast<size_t>( i ) * 424;
-
-                if( off + 424 > entry23->totalBytes )
+                if( ( i + 1 ) * NET_RECORD_SIZE > nets->totalBytes )
                     break;
 
-                size_t base = entry23->dataOffset + off;
-                std::string name = readFixedString( base + 116, 48 );
+                SDB_RECORD  rec  = m_sdb.Record( *nets, i, NET_RECORD_SIZE );
+                std::string name = rec.Str( NET_NAME, NET_NAME_LEN );
 
-                if( !name.empty() && isValidNetName( name ) && !existing.count( name ) )
-                {
-                    NET net;
-                    net.name = name;
-                    m_nets.push_back( net );
-                    existing.insert( name );
-                    m_sec23IndexToNet[i] = name;
+                if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
+                    continue;
 
-                    // +188 is the net's net-class owner pointer (shared by all members
-                    // of a class). Captured for deterministic net-class membership.
-                    uint32_t owner = readU32( base + 188 );
+                NET net;
+                net.name = name;
+                m_nets.push_back( net );
+                existing.insert( name );
+                m_sec23IndexToNet[i] = name;
 
-                    if( owner != 0 )
-                        m_netClassOwner[name] = owner;
+                if( uint32_t owner = rec.U32( NET_CLASS_PTR ) )
+                    m_netClassOwner[name] = owner;
 
-                    // +184 is the net's own self-pointer, the JOIN key a sec49 DIF_PAIR
-                    // object's +12/+16 member-net fields value-equal.
-                    uint32_t selfPtr = readU32( base + 184 );
-
-                    if( selfPtr != 0 )
-                        m_netSelfPtrToName[selfPtr] = name;
-                }
+                if( uint32_t selfPtr = rec.U32( NET_SELF_PTR ) )
+                    m_netSelfPtrToName[selfPtr] = name;
             }
         }
 

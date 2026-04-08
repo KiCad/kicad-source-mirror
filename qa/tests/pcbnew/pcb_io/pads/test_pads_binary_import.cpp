@@ -24,6 +24,8 @@
 #include <pcb_io/pads/pcb_io_pads_binary.h>
 #include <pcb_io/pads/pcb_io_pads.h>
 #include <pcb_io/pads/pads_binary_parser.h>
+#include <pcb_io/pads/pads_sdb.h>
+#include <io/pads/pads_binary_utils.h>
 #include <layer_ids.h>
 #include <padstack.h>
 #include <board.h>
@@ -1706,6 +1708,49 @@ BOOST_AUTO_TEST_CASE( ClusterGroups_MC4_PLUS_CSHAPE )
 
     BOOST_CHECK( groupMembers["CLU_DCDC5V"] == clu5v );
     BOOST_CHECK( groupMembers["CLU_DCDC3V3"] == clu3v3 );
+}
+
+
+/**
+ * Direct coverage of the SDB database container: the header, the section directory and
+ * the coordinate origin decoded from a known board, independent of the board-level
+ * import. Locks the database-centric foundation the section readers sit on.
+ */
+BOOST_AUTO_TEST_CASE( SdbContainerDecode )
+{
+    wxString path = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/LCORE_2/LCORE_2.pcb";
+
+    std::vector<uint8_t> bytes;
+    BOOST_REQUIRE_MESSAGE( PADS_IO::ReadFileToBuffer( path, bytes ),
+                           "LCORE_2.pcb test data should be readable" );
+
+    PADS_IO::PADS_SDB sdb;
+    BOOST_REQUIRE_NO_THROW( sdb.Load( std::move( bytes ) ) );
+
+    // LCORE_2 is a v0x2026 board: the modern 74-entry directory and a per-axis origin.
+    BOOST_CHECK_EQUAL( sdb.Version(), 0x2026 );
+    BOOST_CHECK( !sdb.IsOldFormat() );
+    BOOST_CHECK_EQUAL( sdb.SectionCount(), 74u );
+
+    BOOST_REQUIRE( sdb.Coords().Found() );
+    BOOST_CHECK_EQUAL( sdb.Coords().OriginX(), -2290000 );
+    BOOST_CHECK_EQUAL( sdb.Coords().OriginY(), -213230500 );
+
+    // design = raw - origin, so the origin itself maps to design (0, 0).
+    BOOST_CHECK_EQUAL( sdb.Coords().DesignX( sdb.Coords().OriginX() ), 0 );
+    BOOST_CHECK_EQUAL( sdb.Coords().DesignY( sdb.Coords().OriginY() ), 0 );
+
+    // Section payloads accumulate after the directory; the net controller (23) is present.
+    const PADS_IO::SDB_SECTION* setup = sdb.Section( 1 );
+    const PADS_IO::SDB_SECTION* nets  = sdb.Section( 23 );
+    BOOST_REQUIRE( setup != nullptr );
+    BOOST_REQUIRE( nets != nullptr );
+    BOOST_CHECK( setup->dataOffset > 0 );
+    BOOST_CHECK( nets->dataOffset >= setup->End() );
+
+    // Out-of-range section indices return null rather than indexing past the directory.
+    BOOST_CHECK( sdb.Section( -1 ) == nullptr );
+    BOOST_CHECK( sdb.Section( 10000 ) == nullptr );
 }
 
 
