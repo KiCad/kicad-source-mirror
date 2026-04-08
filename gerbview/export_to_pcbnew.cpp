@@ -185,6 +185,9 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
         d_codeDescr->ConvertShapeToPolygon( aGbrItem );
         SHAPE_POLY_SET polyshape = d_codeDescr->m_Polygon;
 
+        if( polyshape.OutlineCount() == 0 )
+            break;
+
         // Compensate the Y axis orientation ( writePcbPolygon invert the Y coordinate )
         polyshape.Outline( 0 ).Mirror( { 0, 0 }, FLIP_DIRECTION::TOP_BOTTOM );
         writePcbPolygon( polyshape, aLayer, aGbrItem->GetABPosition( seg_start ) );
@@ -522,6 +525,9 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aG
     {
         SHAPE_POLY_SET macroShape;
         macroShape = *macro->GetApertureMacroShape( aGbrItem, VECTOR2I( 0, 0 ) );
+
+        if( macroShape.OutlineCount() == 0 )
+            return;
 
         // Compensate the Y axis orientation ( writePcbPolygon invert the Y coordinate )
         macroShape.Outline( 0 ).Mirror( { 0, 0 }, FLIP_DIRECTION::TOP_BOTTOM );
