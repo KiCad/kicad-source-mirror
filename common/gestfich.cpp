@@ -38,6 +38,7 @@
 #include <string_utils.h>
 #include <launch_ext.h>
 #include "wx/tokenzr.h"
+#include <richio.h>
 #include <sexpr/sexpr.h>
 #include <sexpr/sexpr_parser.h>
 
@@ -353,12 +354,14 @@ void CopySexprFile( const wxString& aSrcPath, const wxString& aDestPath,
                     }
                 } );
 
-        wxFFile destFile( aDestPath, "wb" );
 
-        if( destFile.IsOpened() )
-            success = destFile.Write( sexpr->AsString( 0 ) );
+        // Pass through the pretifier to ensure format is the same as when a file is saved by a frame
+        PRETTIFIED_FILE_OUTPUTFORMATTER formatter( aDestPath );
 
-        // wxFFile dtor will close the file
+        // Format as a string to prevent format string attacks
+        formatter.Print( "%s",  sexpr->AsString( 0 ).c_str() );
+
+        success = formatter.Finish();
     }
     catch( ... )
     {
