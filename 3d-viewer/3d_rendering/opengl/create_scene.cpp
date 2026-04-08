@@ -719,6 +719,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     SHAPE_POLY_SET board_poly_with_holes = m_boardAdapter.GetBoardPoly().CloneDropTriangulation();
     board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetTH_ODPolys() );
+    board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetNPTH_ODPolys() );
 
     // Also subtract counterbore, countersink, and backdrill polygons from the board
     if( m_boardAdapter.GetFrontCounterborePolys().OutlineCount() > 0 )
