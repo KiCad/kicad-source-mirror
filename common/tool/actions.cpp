@@ -115,7 +115,7 @@ TOOL_ACTION ACTIONS::saveAll( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Save All" ) )
         .Tooltip( _( "Save all changes" ) )
-        .Icon( BITMAPS::save ) );
+        .Icon( BITMAPS::save_all ) );
 
 TOOL_ACTION ACTIONS::revert( TOOL_ACTION_ARGS()
         .Name( "common.Control.revert" )

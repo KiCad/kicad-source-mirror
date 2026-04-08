@@ -531,6 +531,7 @@ enum class BITMAPS : unsigned int
     router_len_tuner_dist_incr,
     router_len_tuner_setup,
     save,
+    save_all,
     save_as,
     search_tree,
     select_layer_pair,

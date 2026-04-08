@@ -502,6 +502,7 @@ set( BMAPS_MID
     rotate_cw_z
     save_as
     save
+    save_all
     select_layer_pair
     select_w_layer
     select_same_sheet
