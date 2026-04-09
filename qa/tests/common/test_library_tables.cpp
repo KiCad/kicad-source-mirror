@@ -216,4 +216,56 @@ BOOST_AUTO_TEST_CASE( NestedTablesDisabledHidden )
 }
 
 
+/**
+ * Regression test: inserting rows into a loaded LIBRARY_TABLE must not invalidate
+ * pointers or references to previously-captured rows. The remote symbol import path
+ * (EnsureRemoteLibraryEntry) calls InsertRow() at runtime while LIB_DATA instances
+ * and LIBRARY_MANAGER::m_rowCache hold raw pointers into the rows container. A
+ * std::vector-backed container would reallocate on growth and leave those pointers
+ * dangling, which produced an intermittent std::bad_alloc crash deep in
+ * KIwxExpandEnvVars when the next symbol placement tried to read the stale URI.
+ */
+BOOST_AUTO_TEST_CASE( InsertRowPreservesExistingRowPointers )
+{
+    LIBRARY_TABLE table( true, wxEmptyString, LIBRARY_TABLE_SCOPE::PROJECT );
+    table.SetType( LIBRARY_TABLE_TYPE::SYMBOL );
+
+    // Seed with a few rows and snapshot pointers plus the expected URIs.
+    std::vector<const LIBRARY_TABLE_ROW*> seededPointers;
+    std::vector<wxString>                 seededUris;
+
+    for( int i = 0; i < 4; ++i )
+    {
+        LIBRARY_TABLE_ROW& row = table.InsertRow();
+        row.SetNickname( wxString::Format( wxS( "seed_%d" ), i ) );
+        row.SetURI( wxString::Format( wxS( "${KIPRJMOD}/libs/seed_%d.kicad_sym" ), i ) );
+        row.SetType( wxS( "KiCad" ) );
+
+        seededPointers.push_back( &row );
+        seededUris.push_back( row.URI() );
+    }
+
+    // Insert additional rows to force container growth that would reallocate
+    // a std::vector, and verify the seeded pointers continue to resolve to the
+    // same logical rows (same nickname and URI).
+    for( int i = 0; i < 64; ++i )
+    {
+        LIBRARY_TABLE_ROW& row = table.InsertRow();
+        row.SetNickname( wxString::Format( wxS( "extra_%d" ), i ) );
+        row.SetURI( wxString::Format( wxS( "${KIPRJMOD}/libs/extra_%d.kicad_sym" ), i ) );
+        row.SetType( wxS( "KiCad" ) );
+
+        for( size_t j = 0; j < seededPointers.size(); ++j )
+        {
+            BOOST_REQUIRE_MESSAGE(
+                    seededPointers[j]->URI() == seededUris[j],
+                    wxString::Format(
+                            wxS( "Seed row %zu pointer was invalidated after inserting %d rows: "
+                                 "expected URI '%s', got '%s'" ),
+                            j, i + 1, seededUris[j], seededPointers[j]->URI() ) );
+        }
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
