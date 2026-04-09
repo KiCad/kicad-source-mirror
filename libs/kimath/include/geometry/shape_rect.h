@@ -220,10 +220,15 @@ public:
      */
     void Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override
     {
-        RotatePoint( m_p0, aCenter, aAngle );
+        VECTOR2I c1 = m_p0;
+        VECTOR2I c2 = m_p0 + VECTOR2I( m_w, m_h );
 
-        if( abs( aAngle.Sin() ) == 1 )
-            std::swap( m_h, m_w );
+        RotatePoint( c1, aCenter, aAngle );
+        RotatePoint( c2, aCenter, aAngle );
+
+        m_p0 = VECTOR2I( std::min( c1.x, c2.x ), std::min( c1.y, c2.y ) );
+        m_w = std::abs( c2.x - c1.x );
+        m_h = std::abs( c2.y - c1.y );
     }
 
     bool IsSolid() const override
