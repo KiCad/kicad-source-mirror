@@ -268,4 +268,61 @@ BOOST_AUTO_TEST_CASE( InsertRowPreservesExistingRowPointers )
 }
 
 
+/**
+ * Regression test for the PCM auto-remove identification predicate. Rows inserted by
+ * the PCM traverser reference `${KICADn_3RD_PARTY}` directly, so matching on the URI
+ * template uniquely identifies them and avoids cleaning up user-added libraries whose
+ * expanded absolute paths happen to be descendants of the 3RD_PARTY directory via a
+ * different env var (e.g. `${KICAD_USER_LIB}` pointing to `${KICAD10_3RD_PARTY}/V10`).
+ *
+ * Prior to this fix, `cleanupRemovedPCMLibraries` did a raw prefix check on the
+ * expanded path, mis-identifying overlapping user libraries as PCM-managed and
+ * silently deleting their rows any time the file was temporarily absent. The
+ * user-visible symptom was "Could not create the library file" when adding a new
+ * library through the symbol editor.
+ */
+BOOST_AUTO_TEST_CASE( IsPcmManagedRow_URITemplateMatching )
+{
+    struct CASE
+    {
+        wxString uri;
+        bool     expectedPcmManaged;
+        wxString description;
+    };
+
+    std::vector<CASE> cases = {
+        { wxS( "${KICAD10_3RD_PARTY}/symbols/foo/foo.kicad_sym" ), true,
+          wxS( "Versioned 3RD_PARTY template should be recognised as PCM-managed" ) },
+        { wxS( "${KICAD9_3RD_PARTY}/symbols/legacy/legacy.kicad_sym" ), true,
+          wxS( "Legacy versioned 3RD_PARTY template should still match the wildcard" ) },
+        { wxS( "${KICAD10_3RD_PARTY}/footprints/bar/bar.pretty" ), true,
+          wxS( "Footprint library using 3RD_PARTY template should match" ) },
+        { wxS( "${KICAD_USER_LIB}/symbols/test.kicad_sym" ), false,
+          wxS( "Row using a different env var must not be flagged as PCM-managed" ) },
+        { wxS( "${KIPRJMOD}/libs/local.kicad_sym" ), false,
+          wxS( "Project-relative row must not be flagged as PCM-managed" ) },
+        { wxS( "/abs/path/to/lib.kicad_sym" ), false,
+          wxS( "Absolute path row must not be flagged as PCM-managed" ) },
+        { wxS( "${}" ), false,
+          wxS( "Malformed empty var name must not match" ) },
+        { wxS( "${KICAD10_3RD_PARTY_EXTRA}/foo" ), false,
+          wxS( "Similar-but-different var name must not match" ) },
+    };
+
+    for( const CASE& c : cases )
+    {
+        LIBRARY_TABLE_ROW row;
+        row.SetURI( c.uri );
+
+        bool actual = LIBRARY_MANAGER::IsPcmManagedRow( row );
+
+        BOOST_CHECK_MESSAGE(
+                actual == c.expectedPcmManaged,
+                wxString::Format( wxS( "%s: URI='%s' expected=%d actual=%d" ),
+                                  c.description, c.uri, c.expectedPcmManaged ? 1 : 0,
+                                  actual ? 1 : 0 ) );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

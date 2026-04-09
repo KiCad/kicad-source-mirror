@@ -20,7 +20,13 @@
 
 #define BOOST_TEST_NO_MAIN
 #include <boost/test/unit_test.hpp>
+#include <filesystem>
 #include <common.h>
+#include <env_paths.h>
+#include <pgm_base.h>
+#include <settings/environment.h>
+#include <wx/filename.h>
+#include <wx/utils.h>
 
 /**
  * Test fixture for ExpandTextVars tests
@@ -173,5 +179,107 @@ BOOST_AUTO_TEST_CASE( ConsecutiveEscaped )
 
     BOOST_CHECK_EQUAL( dollarCount, 2 );
 }
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+/**
+ * Regression tests for overlapping-prefix environment variables. Reproduces the scenario
+ * from a KiCad V10 bug report where users set both a versioned package path and a narrower
+ * user library path that is a descendant of the package path, e.g.
+ *
+ *   KICAD10_3RD_PARTY = /tmp/kicadlib
+ *   KICAD_USER_LIB    = /tmp/kicadlib/V10
+ *
+ * Creating a symbol library at `${KICAD_USER_LIB}/symbols/test.kicad_sym` round-trips
+ * through NormalizePath (at InsertRow time) and ExpandEnvVarSubstitutions (at plugin
+ * CreateLibrary time). If the round-trip loses fidelity, the plugin tries to open a
+ * malformed path and fails with a generic "Could not create the library file" error.
+ */
+struct OverlappingEnvVarsFixture
+{
+    wxString rootDir;
+    wxString outerDir;
+    wxString innerDir;
+    wxString targetDir;
+
+    OverlappingEnvVarsFixture()
+    {
+        std::filesystem::path tmp = std::filesystem::temp_directory_path() /
+                                     "kicad_qa_overlap_env_vars";
+        std::error_code       ec;
+        std::filesystem::remove_all( tmp, ec );
+        std::filesystem::create_directories( tmp / "V10" / "symbols", ec );
+
+        rootDir   = wxString::FromUTF8( tmp.string() );
+        outerDir  = rootDir;
+        innerDir  = wxString::FromUTF8( ( tmp / "V10" ).string() );
+        targetDir = wxString::FromUTF8( ( tmp / "V10" / "symbols" ).string() );
+
+        wxSetEnv( wxS( "KICAD_QA_3RD_PARTY_OUTER" ), outerDir );
+        wxSetEnv( wxS( "KICAD_QA_USER_LIB_INNER" ), innerDir );
+    }
+
+    ~OverlappingEnvVarsFixture()
+    {
+        wxUnsetEnv( wxS( "KICAD_QA_3RD_PARTY_OUTER" ) );
+        wxUnsetEnv( wxS( "KICAD_QA_USER_LIB_INNER" ) );
+
+        std::filesystem::path tmp = std::filesystem::temp_directory_path() /
+                                     "kicad_qa_overlap_env_vars";
+        std::error_code ec;
+        std::filesystem::remove_all( tmp, ec );
+    }
+
+    ENV_VAR_MAP BuildEnvMap() const
+    {
+        ENV_VAR_MAP map;
+        map[wxS( "KICAD_QA_3RD_PARTY_OUTER" )] = ENV_VAR_ITEM( outerDir );
+        map[wxS( "KICAD_QA_USER_LIB_INNER" )]  = ENV_VAR_ITEM( innerDir );
+        return map;
+    }
+};
+
+
+BOOST_FIXTURE_TEST_SUITE( OverlappingEnvVarPaths, OverlappingEnvVarsFixture )
+
+
+BOOST_AUTO_TEST_CASE( NormalizePicksLongestPrefix )
+{
+    wxFileName target( targetDir, wxS( "test.kicad_sym" ) );
+    ENV_VAR_MAP envMap = BuildEnvMap();
+
+    wxString normalized = NormalizePath( target, &envMap, wxEmptyString );
+
+    // NormalizePath should pick KICAD_QA_USER_LIB_INNER because it is a deeper match.
+    BOOST_CHECK_MESSAGE(
+            normalized == wxS( "${KICAD_QA_USER_LIB_INNER}/symbols/test.kicad_sym" ),
+            wxString::Format( wxS( "Expected '%s' but got '%s'" ),
+                              wxS( "${KICAD_QA_USER_LIB_INNER}/symbols/test.kicad_sym" ),
+                              normalized ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( RoundTripPreservesAbsolutePath )
+{
+    wxFileName target( targetDir, wxS( "test.kicad_sym" ) );
+    ENV_VAR_MAP envMap = BuildEnvMap();
+
+    wxString normalized = NormalizePath( target, &envMap, wxEmptyString );
+    wxString expanded   = ExpandEnvVarSubstitutions( normalized, nullptr );
+
+    wxFileName expandedFn( expanded );
+    expandedFn.Normalize( wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE );
+
+    wxFileName originalFn( target );
+    originalFn.Normalize( wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE );
+
+    BOOST_CHECK_MESSAGE(
+            expandedFn.GetFullPath() == originalFn.GetFullPath(),
+            wxString::Format(
+                    wxS( "Round-trip mismatch: normalized='%s' expanded='%s' original='%s'" ),
+                    normalized, expandedFn.GetFullPath(), originalFn.GetFullPath() ) );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

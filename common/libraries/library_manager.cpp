@@ -489,10 +489,11 @@ void LIBRARY_MANAGER::LoadGlobalTables( std::initializer_list<LIBRARY_TABLE_TYPE
                 auto toErase = std::ranges::remove_if( table->Rows(),
                         [&]( const LIBRARY_TABLE_ROW& aRow )
                         {
-                            wxString path = GetFullURI( &aRow, true );
+                            if( !IsPcmManagedRow( aRow ) )
+                                return false;
 
-                            return path.StartsWith( *packagesPath )
-                                   && !wxFileName::Exists( path );
+                            wxString path = GetFullURI( &aRow, true );
+                            return !wxFileName::Exists( path );
                         } );
 
                 bool hadRemovals = !toErase.empty();
@@ -818,6 +819,29 @@ wxString LIBRARY_MANAGER::ExpandURI( const wxString& aShortURI, const PROJECT& a
     wxFileName path( ExpandEnvVarSubstitutions( aShortURI, &aProject ) );
     path.MakeAbsolute();
     return path.GetFullPath();
+}
+
+
+bool LIBRARY_MANAGER::IsPcmManagedRow( const LIBRARY_TABLE_ROW& aRow )
+{
+    // PCM_LIB_TRAVERSER always stores URIs that begin with the versioned
+    // ${KICADn_3RD_PARTY} env var token. Any row whose URI does not start with that
+    // token was not added by PCM and must not be auto-removed even if its expanded
+    // absolute path happens to live inside the 3RD_PARTY directory via a different
+    // env var.
+    const wxString& uri = aRow.URI();
+
+    if( !uri.StartsWith( wxS( "${" ) ) )
+        return false;
+
+    size_t end = uri.find( wxS( '}' ) );
+
+    if( end == wxString::npos || end <= 2 )
+        return false;
+
+    wxString varName = uri.SubString( 2, end - 1 );
+
+    return varName.Matches( wxS( "KICAD*_3RD_PARTY" ) );
 }
 
 
@@ -1292,12 +1316,21 @@ bool LIBRARY_MANAGER_ADAPTER::CreateLibrary( const wxString& aNickname )
             data->plugin->CreateLibrary( getUri( data->row ), &options );
             return true;
         }
-        catch( ... )
+        catch( const IO_ERROR& ioe )
         {
+            wxLogTrace( traceLibraries, "CreateLibrary: IO_ERROR for %s: %s",
+                        aNickname, ioe.What() );
+            return false;
+        }
+        catch( const std::exception& e )
+        {
+            wxLogTrace( traceLibraries, "CreateLibrary: std::exception for %s: %s",
+                        aNickname, e.what() );
             return false;
         }
     }
 
+    wxLogTrace( traceLibraries, "CreateLibrary: library row '%s' not found", aNickname );
     return false;
 }
 

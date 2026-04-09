@@ -334,6 +334,17 @@ public:
 
     static bool UrisAreEquivalent( const wxString& aURI1, const wxString& aURI2 );
 
+    /**
+     * Return true if a library table row was added by the Plugin and Content Manager.
+     *
+     * PCM-managed rows are identified by the unexpanded URI template referencing the
+     * versioned 3RD_PARTY env var (as produced by PCM_LIB_TRAVERSER). Matching on the
+     * URI template, rather than on the expanded absolute path, prevents false positives
+     * when a user library uses a different env var whose expanded path is a descendant
+     * of the 3RD_PARTY directory (e.g. KICAD_USER_LIB pointing inside KICAD10_3RD_PARTY).
+     */
+    static bool IsPcmManagedRow( const LIBRARY_TABLE_ROW& aRow );
+
 private:
     void loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOPE aScope,
                      std::vector<LIBRARY_TABLE_TYPE> aTablesToLoad = {} );
