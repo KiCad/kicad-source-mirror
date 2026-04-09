@@ -318,9 +318,7 @@ void BINARY_PARSER::parsePartPlacements()
     if( !entry || entry->count == 0 || entry->perItem == 0 )
         return;
 
-    const uint8_t* data = sectionData( SECTION::Placements );
-
-    if( !data )
+    if( entry->End() > m_data.size() )
         return;
 
     const PLACEMENT_LAYOUT& layout = placementLayout( m_version );
@@ -343,25 +341,22 @@ void BINARY_PARSER::parsePartPlacements()
         if( off + fieldSpan > entry->totalBytes )
             break;
 
-        size_t base = entry->dataOffset + off;
-        std::string refDes = readFixedString( base + layout.nameOff, 16 );
+        SDB_RECORD  rec    = m_sdb.Record( *entry, i, recSize );
+        std::string refDes = rec.Str( layout.nameOff, 16 );
 
         if( refDes.empty() || !std::isalnum( static_cast<unsigned char>( refDes[0] ) ) )
             continue;
 
-        int32_t x = readI32( base + layout.xOff );
-        int32_t y = layout.yOff ? readI32( base + *layout.yOff ) : 0;
-        int32_t angleRaw = readI32( base + layout.angleOff );
-
+        // Coordinates are kept raw here; the origin is applied downstream by the IO layer.
         PART part;
         part.name = refDes;
-        part.location.x = toBasicCoordX( x );
-        part.location.y = toBasicCoordY( y );
-        part.rotation = toBasicAngle( angleRaw );
+        part.location.x = toBasicCoordX( rec.I32( layout.xOff ) );
+        part.location.y = toBasicCoordY( layout.yOff ? rec.I32( *layout.yOff ) : 0 );
+        part.rotation = toBasicAngle( rec.I32( layout.angleOff ) );
 
         // Side flag is the i32 at nameOff+28 in both dialects (new: +72, old: +104);
         // bit 0 set marks a mirrored (bottom-side) placement.
-        part.bottom_layer = readU8( base + layout.nameOff + 28 ) != 0;
+        part.bottom_layer = rec.U8( layout.nameOff + 28 ) != 0;
         part.units = "M";
 
         // The placement's parttype index lives in the NEXT physical sec22 record's
@@ -372,7 +367,7 @@ void BINARY_PARSER::parsePartPlacements()
             size_t nextOff = ( static_cast<size_t>( i ) + 1 ) * recSize;
 
             if( nextOff + 8 <= entry->totalBytes )
-                m_partTypeIndex[m_parts.size()] = readU32( entry->dataOffset + nextOff + 4 );
+                m_partTypeIndex[m_parts.size()] = m_sdb.Record( *entry, i + 1, recSize ).U32( 4 );
         }
 
         // v0x2021 has no parttype layer; the decal index is selected directly from the
@@ -382,18 +377,17 @@ void BINARY_PARSER::parsePartPlacements()
             size_t nextOff = ( static_cast<size_t>( i ) + 1 ) * recSize;
 
             if( nextOff + 60 <= entry->totalBytes )
-                m_partDecalIndex[m_parts.size()] = readU32( entry->dataOffset + nextOff + 56 );
+                m_partDecalIndex[m_parts.size()] = m_sdb.Record( *entry, i + 1, recSize ).U32( 56 );
         }
 
-        // Cluster (.asc *CLUSTER*) membership is the i32 at base+nameOff+64 (=+108) of
-        // this placement record, present only in the new 112-byte layout. It is the
-        // 1-based CLSTID into the cluster table; -1 means the part is in no cluster.
-        // Record it under the new part's index before the push, mirroring the
-        // m_partTypeIndex[m_parts.size()] convention above.
+        // Cluster (.asc *CLUSTER*) membership is the i32 at nameOff+64 (=+108) of this
+        // placement record, present only in the new 112-byte layout. It is the 1-based
+        // CLSTID into the cluster table; -1 means the part is in no cluster. Record it
+        // under the new part's index before the push, mirroring m_partTypeIndex above.
         if( !isOld && layout.nameOff == 44
             && off + static_cast<size_t>( layout.nameOff ) + 68 <= entry->totalBytes )
         {
-            int32_t clstid = readI32( base + layout.nameOff + 64 );
+            int32_t clstid = rec.I32( layout.nameOff + 64 );
 
             if( clstid > 0 )
                 m_partClusterId[m_parts.size()] = clstid;

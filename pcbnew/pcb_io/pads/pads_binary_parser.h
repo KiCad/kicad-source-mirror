@@ -101,20 +101,18 @@ struct PART_CLUSTER
 };
 
 /**
- * Parser for PADS binary PCB file format (.pcb).
+ * Reader for the PADS PowerPCB binary `.pcb` format.
  *
- * Reads the binary PADS file and populates the same intermediate structs as the
- * ASCII PARSER class, allowing the existing struct-to-KiCad conversion code to
- * be shared between both importers.
+ * The file is a serialized snapshot of PADS' in-memory SDB (System DataBase). This
+ * class is organized around that model: a PADS_SDB (see pads_sdb.h) owns the bytes and
+ * decodes the file container (header, the section directory of per-controller record
+ * streams, and the coordinate origin), and the per-section readers below sit on top of
+ * it. A reader names its section by role (the SECTION enum), walks the section's records
+ * through an SDB_RECORD reader (named field offsets, design-coordinate helpers), and
+ * populates the same intermediate structs as the ASCII PARSER (PART, NET, ROUTE, ...) so
+ * the struct-to-KiCad conversion is shared between both importers.
  *
- * Binary file structure:
- *   [Header]           10 bytes: magic(2) + version(2) + reserved(6)
- *   [Section Directory] N*16 bytes per entry
- *   [Section Data]     Concatenated section payloads
- *   [Metadata Region]  Part types, components, nets, config, attributes
- *   [Footer]           46 bytes: padding(4) + GUID(38) + size_check(4)
- *
- * Supported versions: 0x2021, 0x2022, 0x2024, 0x2025, 0x2026, 0x2027
+ * Supported versions: 0x2021, 0x2022, 0x2024, 0x2025, 0x2026, 0x2027.
  */
 class BINARY_PARSER
 {
