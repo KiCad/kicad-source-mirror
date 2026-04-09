@@ -197,16 +197,18 @@ PCB_LAYER_ID FlipLayer( PCB_LAYER_ID aLayerId, int aCopperLayersCount )
     default:    // change internal layer if aCopperLayersCount is >= 4
         if( IsCopperLayer( aLayerId ) && aCopperLayersCount >= 4 )
         {
-            // internal copper layers count is aCopperLayersCount-2
-            PCB_LAYER_ID fliplayer = PCB_LAYER_ID(aCopperLayersCount - 2 - ( aLayerId - In1_Cu ) );
-            // Ensure fliplayer has a value which does not crash Pcbnew:
-            if( fliplayer < F_Cu )
-                fliplayer = F_Cu;
+            int innerIndex = ( aLayerId - In1_Cu ) / 2;
+            int flippedIndex = aCopperLayersCount - 3 - innerIndex;
 
-            if( fliplayer > B_Cu )
-                fliplayer = B_Cu;
+            if( flippedIndex < 0 )
+                flippedIndex = 0;
 
-            return fliplayer;
+            int maxIndex = aCopperLayersCount - 3;
+
+            if( flippedIndex > maxIndex )
+                flippedIndex = maxIndex;
+
+            return PCB_LAYER_ID( In1_Cu + flippedIndex * 2 );
         }
 
         // No change for the other layers
