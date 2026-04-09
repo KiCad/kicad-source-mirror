@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-04-09 11:09+0000\n"
+"PO-Revision-Date: 2026-04-10 23:09+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -12402,8 +12402,8 @@ msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
-"全体的なシート間リファレンスの表示の設定は 回路図の設定 > 一般設定 > "
-"フォーマット から制御できます"
+"全体的なシート間リファレンスの表示の設定は [回路図の設定...] > [一般設定] > "
+"[フォーマット] から制御できます"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:85
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:133
@@ -35652,7 +35652,7 @@ msgstr "フィルターオプションにかかわらず、すべてのティア
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:130
 msgid "Edit default values in Board Setup"
-msgstr "デフォルト値を[基板の設定]で編集"
+msgstr "デフォルト値を [基板の設定...] で編集"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:148
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:642
@@ -37208,11 +37208,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
-msgstr "基板セットアップ"
+msgstr "基板の設定"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:184
 msgid "File > Board Setup..."
-msgstr "ファイル >基板の設定..."
+msgstr "[ファイル] > [基板の設定...]"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:197
 msgid "Gerber Options"
@@ -38074,7 +38074,7 @@ msgid ""
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
 "この形状とハンダマスク間のローカル クリアランスです。\n"
-"0 とした場合、基板の設定値が使用されます。"
+"0 とした場合、[基板の設定...]値が使用されます。"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:48
 msgid "Move items on:"
@@ -38257,7 +38257,7 @@ msgid ""
 "Leave blank to use the value defined in the Board Setup."
 msgstr ""
 "これは配線とハンダマスク間のローカル クリアランスです。\n"
-"基盤の設定で定義された値を使う場合は空白を指定します。"
+"[基板の設定...]で定義された値を使う場合は空白を指定します。"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:283
 msgid "Front/Inner/Back"
