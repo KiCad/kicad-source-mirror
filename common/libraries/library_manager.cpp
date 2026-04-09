@@ -766,14 +766,44 @@ std::optional<LIB_STATUS> LIBRARY_MANAGER::LoadLibraryEntry( LIBRARY_TABLE_TYPE 
 void LIBRARY_MANAGER::LoadProjectTables( const wxString& aProjectPath,
                                          std::initializer_list<LIBRARY_TABLE_TYPE> aTablesToLoad )
 {
+    // Cancel any in-progress loads and clear adapter caches before destroying project
+    // tables. Cached LIB_DATA entries hold raw LIBRARY_TABLE_ROW pointers into the old
+    // tables, which would dangle once loadTables() replaces them. Mirrors the safety
+    // ordering in LoadGlobalTables().
+    {
+        std::scoped_lock lock( m_adaptersMutex );
+
+        for( const std::unique_ptr<LIBRARY_MANAGER_ADAPTER>& adapter : m_adapters | std::views::values )
+            adapter->ProjectTablesChanged( aTablesToLoad );
+    }
+
     if( wxFileName::IsDirReadable( aProjectPath ) )
     {
         loadTables( aProjectPath, LIBRARY_TABLE_SCOPE::PROJECT, aTablesToLoad );
     }
     else
     {
+        // loadTables() would have cleared m_rowCache before rebuilding the new
+        // table; do the same here so cached entries don't point into the
+        // project tables we are about to destroy.
+        {
+            std::lock_guard lock( m_rowCacheMutex );
+            m_rowCache.clear();
+        }
+
         m_projectTables.clear();
         wxLogTrace( traceLibraries, "New project path %s is not readable, not loading project tables", aProjectPath );
+    }
+
+    // Phase 2: let adapters reconcile their cache against the rebuilt project
+    // table. This erases sentinels installed by ProjectTablesChanged() for any
+    // nickname that no longer has a project row, so a library removed from the
+    // project table stops masking a same-named global library.
+    {
+        std::scoped_lock lock( m_adaptersMutex );
+
+        for( const std::unique_ptr<LIBRARY_MANAGER_ADAPTER>& adapter : m_adapters | std::views::values )
+            adapter->ProjectTablesReloaded( aTablesToLoad );
     }
 }
 
@@ -892,12 +922,24 @@ LIBRARY_MANAGER& LIBRARY_MANAGER_ADAPTER::Manager() const
 
 void LIBRARY_MANAGER_ADAPTER::ProjectChanged()
 {
+    resetProjectCache();
+}
+
+
+void LIBRARY_MANAGER_ADAPTER::resetProjectCache()
+{
     abortLoad();
 
-    {
-        std::unique_lock lock( m_librariesMutex );
-        m_libraries.clear();
-    }
+    std::unique_lock lock( m_librariesMutex );
+
+    // Reset entries in place rather than erasing them. Erasing would let
+    // fetchIfLoaded() fall through to globalLibs() for any nickname that is
+    // shadowed by a project library, defeating the project-over-global
+    // precedence enforced by LIBRARY_MANAGER::Rows(). ProjectTablesReloaded()
+    // later prunes any sentinels whose nicknames are no longer in the rebuilt
+    // project table, so stale shadowing cannot persist.
+    for( auto& entry : m_libraries )
+        entry.second = LIB_DATA{};
 }
 
 
@@ -929,6 +971,60 @@ void LIBRARY_MANAGER_ADAPTER::GlobalTablesChanged( std::initializer_list<LIBRARY
         std::unique_lock lock( globalLibsMutex() );
         globalLibs().clear();
     }
+}
+
+
+void LIBRARY_MANAGER_ADAPTER::ProjectTablesChanged( std::initializer_list<LIBRARY_TABLE_TYPE> aChangedTables )
+{
+    bool me = aChangedTables.size() == 0;
+
+    for( LIBRARY_TABLE_TYPE type : aChangedTables )
+    {
+        if( type == Type() )
+        {
+            me = true;
+            break;
+        }
+    }
+
+    if( !me )
+        return;
+
+    resetProjectCache();
+}
+
+
+void LIBRARY_MANAGER_ADAPTER::ProjectTablesReloaded(
+        std::initializer_list<LIBRARY_TABLE_TYPE> aChangedTables )
+{
+    bool me = aChangedTables.size() == 0;
+
+    for( LIBRARY_TABLE_TYPE type : aChangedTables )
+    {
+        if( type == Type() )
+        {
+            me = true;
+            break;
+        }
+    }
+
+    if( !me )
+        return;
+
+    // Erase sentinels installed by resetProjectCache() for nicknames that no
+    // longer appear in the rebuilt project table. Without this, a library
+    // removed from the project would remain masked in m_libraries and hide a
+    // same-named global library from HasLibrary() / fetchIfLoaded() / etc.
+    // GetRow() is safe to call here: loadTables() reset m_rowCache before
+    // building the new table, and async loads were aborted in phase 1.
+    std::unique_lock lock( m_librariesMutex );
+
+    std::erase_if( m_libraries,
+                   [this]( const auto& aEntry )
+                   {
+                       return !m_manager.GetRow( Type(), aEntry.first,
+                                                 LIBRARY_TABLE_SCOPE::PROJECT ).has_value();
+                   } );
 }
 
 
