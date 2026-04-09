@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-04-03 00:12+0000\n"
+"PO-Revision-Date: 2026-04-09 11:09+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -7619,7 +7619,7 @@ msgstr "未知のパラメーター '%s' ( '%s' 中)"
 #: common/io/cadstar/cadstar_archive_parser.h:55
 #, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr "'%s' をパース出来ません ('%s' 中)"
+msgstr "'%s' を解釈出来ません ('%s' 中)"
 
 #: common/io/eagle/eagle_parser.cpp:288
 #, c-format
@@ -7634,7 +7634,7 @@ msgstr "不正な円弧 (半径 %f 、角度 %f )"
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "'%s' から数値の解析に失敗しました"
+msgstr "'%s' から数値の解釈に失敗しました"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:181
 #: common/io/easyedapro/easyedapro_import_utils.cpp:236
@@ -7666,7 +7666,7 @@ msgstr "Zipアーカイブ '%s' を読み取れません"
 #: common/io/easyedapro/easyedapro_import_utils.cpp:311
 #, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "JSONのパースに失敗: %d行目 '%s': %s"
+msgstr "JSONの解釈に失敗: %d行目 '%s': %s"
 
 #: common/io/io_base.cpp:139
 msgid "Loading file canceled by user."
@@ -19261,7 +19261,7 @@ msgstr "EasyEDA (JLCEDA) Std ファイル"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.cpp:75
 #, c-format
 msgid "Failed to parse value: '%s'"
-msgstr "値の解析に失敗しました: '%s'"
+msgstr "値の解釈に失敗しました: '%s'"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:51
 msgid "httplib plugin missing library table handle!"
@@ -19426,7 +19426,7 @@ msgstr ""
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:291
 #, c-format
 msgid "Cannot parse %s as a symbol"
-msgstr "%s をシンボルとして読み込めません"
+msgstr "%s をシンボルとして解釈できません"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:328
 msgid "Invalid symbol name"
@@ -21498,7 +21498,7 @@ msgstr "別のシミュレーションがすでに実行中です。"
 #: eeschema/sim/simulator_frame.cpp:550
 #, c-format
 msgid "Unable to load or parse file %s"
-msgstr "ファイル %s の読み込みもしくは解析ができません"
+msgstr "ファイル %s の読み込みもしくは解釈ができません"
 
 #: eeschema/sim/simulator_frame.cpp:621
 msgid "Save changes to workbook?"
@@ -27874,7 +27874,7 @@ msgstr "リポジトリを取得"
 #: kicad/pcm/pcm.cpp:276
 #, c-format
 msgid "Unable to parse repository: %s"
-msgstr "リポジトリの解析ができません: %s"
+msgstr "リポジトリの解釈が失敗しました: %s"
 
 #: kicad/pcm/pcm.cpp:277
 msgid ""
@@ -27903,13 +27903,13 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"パッケージの付帯情報(Metadata)解析ができません:\n"
+"パッケージの付帯情報(Metadata)解釈ができません:\n"
 "\n"
 "%s"
 
 #: kicad/pcm/pcm.cpp:418
 msgid "Failed to parse locally stored repository.json."
-msgstr "ローカルに保存された repository.json の解析に失敗しました。"
+msgstr "ローカルに保存された repository.json の解釈に失敗しました。"
 
 #: kicad/pcm/pcm.cpp:446
 msgid ""
@@ -28013,7 +28013,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"パッケージの付帯情報(Metadata)解析ができません:\n"
+"パッケージの付帯情報(Metadata)の解釈ができません:\n"
 "\n"
 "%s"
 
@@ -28626,7 +28626,7 @@ msgstr "情報の更新をリクエスト"
 #: kicad/update_manager.cpp:270
 #, c-format
 msgid "Unable to parse update response: %s"
-msgstr "更新の応答の解析ができません: %s"
+msgstr "更新の応答の解釈ができません: %s"
 
 #: kicad/widgets/filedlg_new_project.h:36
 msgid "Create a new folder for the project"
