@@ -171,7 +171,7 @@ int LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldNameCol( const wxString& aFieldNa
 {
     for( size_t i = 0; i < m_cols.size(); i++ )
     {
-        if( m_cols[i].m_fieldName == aFieldName )
+        if( m_cols[i].m_fieldName.CmpNoCase( aFieldName ) == 0 )
             return (int) i;
     }
 

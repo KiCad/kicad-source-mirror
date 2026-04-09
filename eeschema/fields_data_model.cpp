@@ -341,7 +341,7 @@ int FIELDS_EDITOR_GRID_DATA_MODEL::GetFieldNameCol( const wxString& aFieldName )
 {
     for( size_t i = 0; i < m_cols.size(); i++ )
     {
-        if( m_cols[i].m_fieldName == aFieldName )
+        if( m_cols[i].m_fieldName.CmpNoCase( aFieldName ) == 0 )
             return static_cast<int>( i );
     }
 

@@ -706,7 +706,7 @@ void DIALOG_LIB_FIELDS_TABLE::OnAddField(wxCommandEvent& event)
 
     for( int i = 0; i < m_dataModel->GetNumberCols(); ++i )
     {
-        if( fieldName == m_dataModel->GetColFieldName( i ) )
+        if( fieldName.CmpNoCase( m_dataModel->GetColFieldName( i ) ) == 0 )
         {
             DisplayError( this, wxString::Format( _( "Field name '%s' already in use." ), fieldName ) );
             return;
@@ -1080,7 +1080,7 @@ void DIALOG_LIB_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxStri
     // e.g. ${QUANTITY} so make sure we don't add them twice
     for( int row = 0; row < m_viewControlsDataModel->GetNumberRows(); row++ )
     {
-        if( m_viewControlsDataModel->GetCanonicalFieldName( row ) == aFieldName )
+        if( m_viewControlsDataModel->GetCanonicalFieldName( row ).CmpNoCase( aFieldName ) == 0 )
             return;
     }
 
