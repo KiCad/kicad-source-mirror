@@ -442,4 +442,20 @@ BOOST_AUTO_TEST_CASE( PrintBusForUIHandlesMixedFormatting )
 }
 
 
+BOOST_AUTO_TEST_CASE( ParsesOverbarWrappingNameAndRange )
+{
+    // Regression test for issue #23827: ~{BE[0..3]} where the overbar wraps
+    // both the signal name and the range must produce ~{BE0}, ~{BE1}, etc.
+    wxString              name;
+    std::vector<wxString> members;
+
+    BOOST_CHECK( NET_SETTINGS::ParseBusVector( wxS( "~{BE[0..3]}" ), &name, &members ) );
+    BOOST_CHECK_EQUAL( name, wxS( "~{BE" ) );
+
+    std::vector<wxString> expected = { wxS( "~{BE0}" ), wxS( "~{BE1}" ), wxS( "~{BE2}" ), wxS( "~{BE3}" ) };
+
+    BOOST_CHECK_EQUAL_COLLECTIONS( members.begin(), members.end(), expected.begin(), expected.end() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

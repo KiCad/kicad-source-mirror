@@ -1152,6 +1152,7 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
     long     begin = 0;
     long     end = 0;
     int      braceNesting = 0;
+    bool     fmtWrapsName = false;
     bool     inQuotes = false;
 
     prefix.reserve( busLen );
@@ -1221,15 +1222,25 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
         {
             if( braceNesting > 0 )
             {
-                // The range bracket is inside formatting braces (e.g. D_{[1..2]}).
-                // Strip the formatting wrapper from the prefix since it decorates the
-                // range indices, not the name itself.
                 size_t fmtStart = prefix.rfind( wxT( '{' ) );
 
                 if( fmtStart != wxString::npos && fmtStart > 0
                     && isSuperSubOverbar( prefix[fmtStart - 1] ) )
                 {
-                    prefix.erase( fmtStart - 1 );
+                    if( fmtStart == prefix.length() - 1 )
+                    {
+                        // '{' immediately precedes '[' (e.g. D_{[1..2]}).
+                        // The formatting decorates the range indices, not the
+                        // name itself.
+                        prefix.erase( fmtStart - 1 );
+                    }
+                    else
+                    {
+                        // Name characters exist between '{' and '[' (e.g.
+                        // ~{BE[0..3]}).  The formatting wraps the signal name,
+                        // not the range.
+                        fmtWrapsName = true;
+                    }
                 }
             }
 
@@ -1290,6 +1301,9 @@ bool NET_SETTINGS::ParseBusVector( const wxString& aBus, wxString* aName,
         if( aBus[i] == '}' )
         {
             braceNesting--;
+
+            if( fmtWrapsName )
+                suffix += aBus[i];
         }
         else if( aBus[i] == '+' || aBus[i] == '-' || aBus[i] == 'P' || aBus[i] == 'N' )
         {
