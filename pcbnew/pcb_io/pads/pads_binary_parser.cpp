@@ -2019,36 +2019,37 @@ void BINARY_PARSER::parseNetNames()
             }
         }
 
-        // Section 22 fills in power/ground nets from 112-byte records
+        // Section 22 (placements) fills in power/ground nets: each 112-byte record may
+        // carry up to three net names at +28/+52/+76 (24 chars), each preceded by a
+        // 4-byte net index that must look like a real index (small or the 0xFFFF.. sentinel).
+        constexpr uint32_t PLACEMENT_RECORD_SIZE = 112;
         const SDB_SECTION* entry22 = getSection( SECTION::Placements );
 
-        if( entry22 && entry22->count > 0 && entry22->perItem == 112 )
+        if( entry22 && entry22->count > 0 && entry22->perItem == PLACEMENT_RECORD_SIZE )
         {
             for( uint32_t i = 0; i < entry22->count; ++i )
             {
-                size_t off = static_cast<size_t>( i ) * 112;
-
-                if( off + 112 > entry22->totalBytes )
+                if( ( i + 1 ) * PLACEMENT_RECORD_SIZE > entry22->totalBytes )
                     break;
 
-                size_t base = entry22->dataOffset + off;
+                SDB_RECORD rec = m_sdb.Record( *entry22, i, PLACEMENT_RECORD_SIZE );
 
-                for( int nameOff : { 28, 52, 76 } )
+                for( uint32_t nameOff : { 28u, 52u, 76u } )
                 {
-                    std::string name = readFixedString( base + nameOff, 24 );
+                    std::string name = rec.Str( nameOff, 24 );
 
-                    if( !name.empty() && isValidNetName( name ) && !existing.count( name ) )
+                    if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
+                        continue;
+
+                    uint32_t netIdx = rec.U32( nameOff - 4 );
+
+                    if( netIdx < 100000 || netIdx >= 0xFFFF0000 )
                     {
-                        uint32_t netIdx = readU32( base + nameOff - 4 );
-
-                        if( netIdx < 100000 || netIdx >= 0xFFFF0000 )
-                        {
-                            NET net;
-                            net.name = name;
-                            m_nets.push_back( net );
-                            existing.insert( name );
-                            break;
-                        }
+                        NET net;
+                        net.name = name;
+                        m_nets.push_back( net );
+                        existing.insert( name );
+                        break;
                     }
                 }
             }
