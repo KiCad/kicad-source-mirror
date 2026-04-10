@@ -170,6 +170,7 @@ DIALOG_ANNOTATE_BASE::DIALOG_ANNOTATE_BASE( wxWindow* parent, wxWindowID id, con
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_ANNOTATE_BASE::OnClose ) );
 	m_rbSortBy_X_Position->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
 	m_rbSortBy_Y_Position->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
+	m_rbKeep_Annotations->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
 	m_rbReset_Annotations->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
 	m_checkRegroupUnits->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
 	m_rbFirstFree->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
@@ -187,6 +188,7 @@ DIALOG_ANNOTATE_BASE::~DIALOG_ANNOTATE_BASE()
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_ANNOTATE_BASE::OnClose ) );
 	m_rbSortBy_X_Position->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
 	m_rbSortBy_Y_Position->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
+	m_rbKeep_Annotations->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
 	m_rbReset_Annotations->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
 	m_checkRegroupUnits->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
 	m_rbFirstFree->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_ANNOTATE_BASE::OnOptionChanged ), NULL, this );
