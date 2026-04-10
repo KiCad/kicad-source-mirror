@@ -341,7 +341,7 @@ private:
 class CN_VISITOR
 {
 public:
-    CN_VISITOR( CN_ITEM* aItem, std::vector<std::pair<BOARD_CONNECTED_ITEM*, int>>* aDeferredNetCodes,
+    CN_VISITOR( CN_ITEM* aItem, std::vector<std::pair<CN_ITEM*, int>>* aDeferredNetCodes,
                 std::mutex* aDeferredNetCodesMutex ) :
         m_item( aItem ),
         m_deferredNetCodes( aDeferredNetCodes ),
@@ -360,7 +360,7 @@ protected:
 
     /// Deferred net code changes collected during parallel connectivity search. Thread-safe
     /// collection via mutex. Processed after parallel search completes.
-    std::vector<std::pair<BOARD_CONNECTED_ITEM*, int>>* m_deferredNetCodes;
+    std::vector<std::pair<CN_ITEM*, int>>* m_deferredNetCodes;
     std::mutex* m_deferredNetCodesMutex;
 };
 

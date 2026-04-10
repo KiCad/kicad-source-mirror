@@ -277,9 +277,9 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
         std::vector<std::future<size_t>> returns( dirtyItems.size() );
 
         // Collect deferred net code changes to avoid data races in parallel search.
-        // Free vias connected to zones have their net codes updated after all parallel
-        // work completes.
-        std::vector<std::pair<BOARD_CONNECTED_ITEM*, int>> deferredNetCodes;
+        // Vias connected to zones have their net codes updated after all parallel work
+        // completes, but only if the via has no higher-priority connections (tracks, pads).
+        std::vector<std::pair<CN_ITEM*, int>> deferredNetCodes;
         std::mutex deferredNetCodesMutex;
 
         for( size_t ii = 0; ii < dirtyItems.size(); ++ii )
@@ -314,9 +314,30 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
             }
         }
 
-        // Apply deferred net code changes now that parallel search is complete
-        for( const auto& [item, netCode] : deferredNetCodes )
-            item->SetNetCode( netCode );
+        // Apply deferred zone net changes, but only for vias that have no non-zone
+        // connections.  Tracks and pads take priority over zones for net assignment;
+        // cluster-based propagation will handle those vias.
+        std::sort( deferredNetCodes.begin(), deferredNetCodes.end(),
+                   []( const auto& a, const auto& b ) { return a.first < b.first; } );
+
+        CN_ITEM* lastItem = nullptr;
+
+        for( const auto& [cnItem, netCode] : deferredNetCodes )
+        {
+            if( cnItem == lastItem )
+                continue;
+
+            lastItem = cnItem;
+
+            if( std::ranges::none_of( cnItem->ConnectedItems(),
+                    []( const CN_ITEM* c )
+                    {
+                        return c->Parent()->Type() != PCB_ZONE_T;
+                    } ) )
+            {
+                cnItem->Parent()->SetNetCode( netCode );
+            }
+        }
 
         if( m_progressReporter )
             m_progressReporter->KeepRefreshing();
@@ -761,12 +782,12 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE_LAYER* aZoneLayer, CN_ITEM* aI
     auto connect =
             [&]()
             {
-                // We don't propagate nets from zones, so any free-via net changes need to happen now.
-                // Defer the SetNetCode call to avoid data races during parallel connectivity search.
+                // We don't propagate nets from zones, so via-zone net changes are deferred
+                // and applied only if the via has no higher-priority connections (tracks, pads).
                 if( aItem->Parent()->Type() == PCB_VIA_T && aItem->CanChangeNet() )
                 {
                     std::lock_guard<std::mutex> lock( *m_deferredNetCodesMutex );
-                    m_deferredNetCodes->emplace_back( aItem->Parent(), aZoneLayer->Net() );
+                    m_deferredNetCodes->emplace_back( aItem, aZoneLayer->Net() );
                 }
 
                 aZoneLayer->Connect( aItem );
