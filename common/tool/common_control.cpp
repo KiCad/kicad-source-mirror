@@ -48,7 +48,6 @@
 #include <gestfich.h>
 #include <tools/kicad_manager_actions.h>
 #include <confirm.h>
-#include <python/scripting/pcb_scripting_tool.h>
 #include <reporter.h>
 #include <widgets/kistatusbar.h>
 
@@ -432,8 +431,6 @@ int COMMON_CONTROL::ReportBug( const TOOL_EVENT& aEvent )
 
 int COMMON_CONTROL::ReloadPlugins( const TOOL_EVENT& aEvent )
 {
-    SCRIPTING_TOOL::ReloadPlugins();
-
 #ifdef KICAD_IPC_API
     if( Pgm().GetCommonSettings()->m_Api.enable_server )
     {
