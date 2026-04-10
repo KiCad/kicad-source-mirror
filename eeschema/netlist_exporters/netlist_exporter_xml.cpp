@@ -403,7 +403,9 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                     xproperty->AddAttribute( wxT( "value" ), sheetField.GetText() );
             }
 
-            if( symbol->ResolveExcludedFromBOM( &sheet ) || sheet.GetExcludedFromBOM() )
+            const bool baseExcludedFromBOM = symbol->ResolveExcludedFromBOM( &sheet ) || sheet.GetExcludedFromBOM();
+
+            if( baseExcludedFromBOM )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_bom" ) );
@@ -415,13 +417,17 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_board" ) );
             }
 
-            if( symbol->ResolveExcludedFromPosFiles( &sheet ) )
+            const bool baseExcludedFromPosFiles = symbol->ResolveExcludedFromPosFiles( &sheet );
+
+            if( baseExcludedFromPosFiles )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_pos_files" ) );
             }
 
-            if( symbol->ResolveDNP( &sheet ) || sheet.GetDNP() )
+            const bool baseDnp = symbol->ResolveDNP( &sheet ) || sheet.GetDNP();
+
+            if( baseDnp )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "dnp" ) );
@@ -431,10 +437,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
             if( symbol->GetInstance( instance, sheet.Path() ) && !instance.m_Variants.empty() )
             {
-                const bool baseDnp = symbol->GetDNP( &sheet );
-                const bool baseExcludedFromBOM = symbol->GetExcludedFromBOM( &sheet );
-                const bool baseExcludedFromSim = symbol->GetExcludedFromSim( &sheet );
-                const bool baseExcludedFromPosFiles = symbol->GetExcludedFromPosFiles( &sheet );
+                const bool baseExcludedFromSim = symbol->ResolveExcludedFromSim( &sheet ) || sheet.GetExcludedFromSim();
                 XNODE*     xvariants = nullptr;
 
                 for( const auto& [variantName, variant] : instance.m_Variants )
