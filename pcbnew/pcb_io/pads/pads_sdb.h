@@ -177,6 +177,10 @@ public:
         return SDB_RECORD( m_cursor, m_coords, aSection.dataOffset + aIndex * aStride );
     }
 
+    /// A reader positioned at an absolute file offset, for the readers that walk a pool
+    /// or a byte region rather than a section's fixed-stride records.
+    SDB_RECORD RecordAt( uint32_t aBase ) const { return SDB_RECORD( m_cursor, m_coords, aBase ); }
+
 private:
     void parseHeader();
     void parseDirectory();

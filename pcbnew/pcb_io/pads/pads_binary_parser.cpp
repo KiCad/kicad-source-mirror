@@ -679,9 +679,7 @@ void BINARY_PARSER::parsePadStacks()
     if( !entry || entry->count == 0 || entry->perItem == 0 )
         return;
 
-    const uint8_t* data = sectionData( SECTION::PadStacks );
-
-    if( !data )
+    if( entry->End() > m_data.size() )
         return;
 
     const PADSTACK_LAYOUT& layout = padstackLayout( isOldFormat() );
@@ -689,18 +687,18 @@ void BINARY_PARSER::parsePadStacks()
 
     // Read one 0xFE-marked padstack record's default (layer 0) geometry. For finger pads
     // (RF, OF, RC) finLength is the second dimension; round (R) and square (S) use sizeA.
-    auto readLayer = [&]( size_t base ) -> PAD_STACK_LAYER
+    auto readLayer = [&]( uint32_t aBase ) -> PAD_STACK_LAYER
     {
-        uint8_t     shapeCode = readU8( base + layout.shapeOff );
+        SDB_RECORD  rec = m_sdb.RecordAt( aBase );
         std::string shapeName = "R";
-        auto        shapeIt = PAD_SHAPE_NAMES.find( shapeCode );
+        auto        shapeIt = PAD_SHAPE_NAMES.find( rec.U8( layout.shapeOff ) );
 
         if( shapeIt != PAD_SHAPE_NAMES.end() )
             shapeName = shapeIt->second;
 
-        int32_t padWidth = readI32( base + layout.padWidthOff );
-        int32_t drill = readI32( base + layout.drillOff );
-        int32_t finLength = readI32( base + layout.finLenOff );
+        int32_t padWidth = rec.I32( layout.padWidthOff );
+        int32_t drill = rec.I32( layout.drillOff );
+        int32_t finLength = rec.I32( layout.finLenOff );
 
         PAD_STACK_LAYER psl;
         psl.layer = 0;
@@ -708,7 +706,7 @@ void BINARY_PARSER::parsePadStacks()
         psl.sizeA = static_cast<double>( padWidth );
         psl.drill = static_cast<double>( drill );
         psl.plated = ( drill > 0 );
-        psl.rotation = toBasicAngle( readI32( base + layout.angleOff ) );
+        psl.rotation = toBasicAngle( rec.I32( layout.angleOff ) );
 
         bool isFinger = ( shapeName == "RF" || shapeName == "OF" || shapeName == "RC" );
 
@@ -724,15 +722,13 @@ void BINARY_PARSER::parsePadStacks()
     // Part decals reference these by index.
     for( uint32_t i = 0; i < entry->count; ++i )
     {
-        size_t off = static_cast<size_t>( i ) * recSize;
-
-        if( off + recSize > entry->totalBytes )
+        if( ( i + 1 ) * recSize > entry->totalBytes )
             break;
 
-        size_t base = entry->dataOffset + off;
+        uint32_t base = entry->dataOffset + i * recSize;
 
         // Only process valid pad definitions (marker == 0xFE)
-        if( readU8( base + layout.markerOff ) != 0xFE )
+        if( m_sdb.RecordAt( base ).U8( layout.markerOff ) != 0xFE )
             continue;
 
         m_padStackCache[static_cast<int>( i )].push_back( readLayer( base ) );
@@ -743,31 +739,31 @@ void BINARY_PARSER::parsePadStacks()
     // Recover the true pool start by walking back over the contiguous 0xFE / shape<=3
     // records, then read the full pool 0-based from there. The per-pin (pin, ref) pairs in
     // the section-15 tail index this extended pool (see parsePerPinPadstacks).
-    size_t head = 0;
+    uint32_t head = 0;
 
     while( entry->dataOffset >= ( head + 1 ) * recSize )
     {
-        size_t recOff = entry->dataOffset - ( head + 1 ) * recSize;
+        SDB_RECORD rec = m_sdb.RecordAt( entry->dataOffset - ( head + 1 ) * recSize );
 
-        if( readU8( recOff + layout.markerOff ) != 0xFE || readU8( recOff + layout.shapeOff ) > 3 )
+        if( rec.U8( layout.markerOff ) != 0xFE || rec.U8( layout.shapeOff ) > 3 )
             break;
 
         ++head;
     }
 
-    size_t poolStart = entry->dataOffset - head * recSize;
-    size_t poolCount = head + entry->count;
+    uint32_t poolStart = entry->dataOffset - head * recSize;
+    uint32_t poolCount = head + entry->count;
 
     m_padStackPool.assign( poolCount, {} );
 
-    for( size_t i = 0; i < poolCount; ++i )
+    for( uint32_t i = 0; i < poolCount; ++i )
     {
-        size_t base = poolStart + i * recSize;
+        uint32_t base = poolStart + i * recSize;
 
         if( base + recSize > m_data.size() )
             break;
 
-        if( readU8( base + layout.markerOff ) != 0xFE )
+        if( m_sdb.RecordAt( base ).U8( layout.markerOff ) != 0xFE )
             continue;
 
         m_padStackPool[i].push_back( readLayer( base ) );
@@ -952,14 +948,14 @@ void BINARY_PARSER::parsePartTypeTable()
     if( !sec17 || sec17->count == 0 || sec17->dataOffset < PARTTYPE_HDR_OFFSET )
         return;
 
-    size_t start = sec17->dataOffset - PARTTYPE_HDR_OFFSET;
+    uint32_t start = sec17->dataOffset - PARTTYPE_HDR_OFFSET;
 
     m_partTypeDecalIndex.clear();
     m_partTypeDecalIndex.reserve( sec17->count );
 
     for( uint32_t k = 0; k < sec17->count; ++k )
     {
-        size_t off = start + static_cast<size_t>( k ) * REC_SIZE;
+        uint32_t off = start + k * REC_SIZE;
 
         if( off + 100 > m_data.size() )
         {
@@ -967,7 +963,7 @@ void BINARY_PARSER::parsePartTypeTable()
             continue;
         }
 
-        m_partTypeDecalIndex.push_back( readI32( off + 96 ) );
+        m_partTypeDecalIndex.push_back( m_sdb.RecordAt( off ).I32( 96 ) );
     }
 }
 
@@ -3038,7 +3034,7 @@ void BINARY_PARSER::parseRouteVertices()
 
     const SDB_SECTION* entry60 = getSection( SECTION::Vias );
 
-    if( !entry60 || entry60->count == 0 || entry60->perItem == 0 || !sectionData( SECTION::Vias ) )
+    if( !entry60 || entry60->count == 0 || entry60->perItem == 0 || entry60->End() > m_data.size() )
         return;
 
     uint32_t n60 = entry60->count;
@@ -3063,7 +3059,7 @@ void BINARY_PARSER::parseRouteVertices()
 
         for( uint32_t vi = 0; vi < n60; ++vi )
         {
-            size_t base = entry60->dataOffset + static_cast<size_t>( vi ) * r60;
+            uint32_t base = entry60->dataOffset + vi * r60;
 
             if( base + need > end )
                 break;
@@ -3071,9 +3067,10 @@ void BINARY_PARSER::parseRouteVertices()
             if( !layout->matchesMarker( m_cursor, base ) )
                 continue;
 
-            int32_t vx   = readI32( base + layout->xOff );
-            int32_t rawY = readI32( base + layout->yOff );
-            int32_t vy   = static_cast<int32_t>( 2LL * m_originY - rawY );
+            SDB_RECORD rec  = m_sdb.RecordAt( base );
+            int32_t    vx   = rec.I32( layout->xOff );
+            int32_t    rawY = rec.I32( layout->yOff );
+            int32_t    vy   = static_cast<int32_t>( 2LL * m_originY - rawY );
 
             // Per-version: the old/0x2026 arms guarded the narrowed vy, 0x2025 the raw Y.
             // They share a magnitude only while 2*originY - rawY stays in int32_t range,
@@ -3092,7 +3089,7 @@ void BINARY_PARSER::parseRouteVertices()
 
             if( layout->netIndexOff )
             {
-                uint32_t netIdx = m_cursor.U8At( base + *layout->netIndexOff );
+                uint32_t netIdx = rec.U8( *layout->netIndexOff );
                 auto     it = m_sec23IndexToNet.find( netIdx );
 
                 if( it != m_sec23IndexToNet.end() )
@@ -3150,11 +3147,11 @@ void BINARY_PARSER::parseCopperShapes()
 
     for( uint32_t rec = 0; rec < sec10->count; ++rec )
     {
-        size_t base = sec10->dataOffset + static_cast<size_t>( rec ) * sec10->perItem;
+        SDB_RECORD hdr = m_sdb.Record( *sec10, rec, sec10->perItem );
 
-        uint32_t flag6 = readU32( base + 24 );
-        uint32_t flag7 = readU32( base + 28 );
-        uint32_t blockTag = readU32( base + 84 );
+        uint32_t flag6 = hdr.U32( 24 );
+        uint32_t flag7 = hdr.U32( 28 );
+        uint32_t blockTag = hdr.U32( 84 );
         bool legacyCopper = ( blockTag == 0x00004900 && flag6 == 1 && flag7 != 3 );
         bool v2026LineCopper = ( m_version == 0x2026 && blockTag == 0x00004D00
                                  && flag6 == 7 && flag7 == 0 );
@@ -3162,23 +3159,23 @@ void BINARY_PARSER::parseCopperShapes()
         if( !legacyCopper && !v2026LineCopper )
             continue;
 
-        std::string name = readFixedString( base + 44, 24 );
+        std::string name = hdr.Str( 44, 24 );
 
         if( name.size() < 4 || name.substr( 0, 3 ) != "DRW" )
             continue;
 
-        uint32_t sec11Index = readU32( base + 8 );
+        uint32_t sec11Index = hdr.U32( 8 );
 
         if( legacyCopper && sec11Index >= sec11->count )
             continue;
 
-        int32_t originX = readI32( base + 88 );
-        int32_t originY = readI32( base + 92 );
+        int32_t originX = hdr.I32( 88 );
+        int32_t originY = hdr.I32( 92 );
 
-        int64_t localMinX = static_cast<int64_t>( readI32( base + 96 ) ) - originX;
-        int64_t localMinY = static_cast<int64_t>( readI32( base + 100 ) ) - originY;
-        int64_t localMaxX = static_cast<int64_t>( readI32( base + 104 ) ) - originX;
-        int64_t localMaxY = static_cast<int64_t>( readI32( base + 108 ) ) - originY;
+        int64_t localMinX = static_cast<int64_t>( hdr.I32( 96 ) ) - originX;
+        int64_t localMinY = static_cast<int64_t>( hdr.I32( 100 ) ) - originY;
+        int64_t localMaxX = static_cast<int64_t>( hdr.I32( 104 ) ) - originX;
+        int64_t localMaxY = static_cast<int64_t>( hdr.I32( 108 ) ) - originY;
 
         std::vector<VECTOR2I> loop;
         size_t minEdges = v2026LineCopper ? 4 : 5;
@@ -3220,10 +3217,10 @@ void BINARY_PARSER::parseCopperShapes()
         }
         else
         {
-            size_t sec11Base = sec11->dataOffset + static_cast<size_t>( sec11Index ) * sec11->perItem;
-            uint8_t sideByte = readU8( sec11Base );
-            int32_t layerHint = readI32( sec11Base + 16 );
-            copper.width = static_cast<double>( readI32( sec11Base + 12 ) );
+            SDB_RECORD gfx = m_sdb.Record( *sec11, sec11Index, sec11->perItem );
+            uint8_t    sideByte = gfx.U8( 0 );
+            int32_t    layerHint = gfx.I32( 16 );
+            copper.width = static_cast<double>( gfx.I32( 12 ) );
 
             if( sideByte == 0 || layerHint == m_parameters.layer_count )
                 copper.layer = m_parameters.layer_count;
@@ -3265,9 +3262,7 @@ void BINARY_PARSER::parseDimensions()
     // (e.g. a 90000000 BASIC span renders as 60.00 mm, matching the ASC "60.00mm").
     for( uint32_t rec = 0; rec < sec10->count; ++rec )
     {
-        size_t base = sec10->dataOffset + static_cast<size_t>( rec ) * sec10->perItem;
-
-        std::string name = readFixedString( base + 44, 24 );
+        std::string name = m_sdb.Record( *sec10, rec, sec10->perItem ).Str( 44, 24 );
 
         if( name.size() < 4 || name.substr( 0, 3 ) != "DIM" )
             continue;
@@ -3326,8 +3321,7 @@ void BINARY_PARSER::computeSec12Base()
     // small arc-table ordinal; the tail is reached when attr becomes coordinate-scale.
     for( int32_t j = 0; j < directoryRows; ++j )
     {
-        size_t  off = sec12->dataOffset + static_cast<size_t>( j ) * 12;
-        int32_t attr = readI32( off + 8 );
+        int32_t attr = m_sdb.Record( *sec12, static_cast<uint32_t>( j ), 12 ).I32( 8 );
 
         if( attr == -1 || ( attr >= 0 && attr < 4096 ) )
             cleanRows = j + 1;
@@ -3444,14 +3438,13 @@ bool BINARY_PARSER::sec12Vertex( int32_t aRow, int32_t& aX, int32_t& aY, int32_t
     if( !sec12 || aRow < 0 || aRow >= m_sec12CleanRows )
         return false;
 
-    size_t off = sec12->dataOffset + static_cast<size_t>( aRow ) * 12;
-
-    if( off + 12 > m_data.size() )
+    if( sec12->dataOffset + static_cast<size_t>( aRow + 1 ) * 12 > m_data.size() )
         return false;
 
-    aX = readI32( off );
-    aY = readI32( off + 4 );
-    aAttr = readI32( off + 8 );
+    SDB_RECORD rec = m_sdb.Record( *sec12, static_cast<uint32_t>( aRow ), 12 );
+    aX = rec.I32( 0 );
+    aY = rec.I32( 4 );
+    aAttr = rec.I32( 8 );
     return true;
 }
 
@@ -3519,29 +3512,29 @@ void BINARY_PARSER::parseKeepouts()
 
     for( uint32_t rec = 0; rec < sec10->count; ++rec )
     {
-        size_t base = sec10->dataOffset + static_cast<size_t>( rec ) * sec10->perItem;
+        SDB_RECORD hdr = m_sdb.Record( *sec10, rec, sec10->perItem );
 
-        if( readU32( base + 84 ) != 0 || readU32( base + 24 ) != 1 )
+        if( hdr.U32( 84 ) != 0 || hdr.U32( 24 ) != 1 )
             continue;
 
-        uint32_t typeBucket = readU32( base + 28 );
+        uint32_t typeBucket = hdr.U32( 28 );
 
         if( typeBucket != 1 && typeBucket != 10 )
             continue;
 
-        std::string name = readFixedString( base + 44, 24 );
+        std::string name = hdr.Str( 44, 24 );
 
         if( name.size() < 4 || name.substr( 0, 3 ) != "DRW" )
             continue;
 
         Owner owner;
         owner.name = std::move( name );
-        owner.originX = readI32( base + 88 );
-        owner.originY = readI32( base + 92 );
-        owner.minX = static_cast<int64_t>( readI32( base + 96 ) ) - owner.originX;
-        owner.minY = static_cast<int64_t>( readI32( base + 100 ) ) - owner.originY;
-        owner.maxX = static_cast<int64_t>( readI32( base + 104 ) ) - owner.originX;
-        owner.maxY = static_cast<int64_t>( readI32( base + 108 ) ) - owner.originY;
+        owner.originX = hdr.I32( 88 );
+        owner.originY = hdr.I32( 92 );
+        owner.minX = static_cast<int64_t>( hdr.I32( 96 ) ) - owner.originX;
+        owner.minY = static_cast<int64_t>( hdr.I32( 100 ) ) - owner.originY;
+        owner.maxX = static_cast<int64_t>( hdr.I32( 104 ) ) - owner.originX;
+        owner.maxY = static_cast<int64_t>( hdr.I32( 108 ) ) - owner.originY;
 
         owners.push_back( std::move( owner ) );
     }
