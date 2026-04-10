@@ -1765,20 +1765,22 @@ void PCB_IO_IPC2581::generateCadSpecs( wxXmlNode* aCadLayerNode )
         }
     }
 
-    // Generate SurfaceFinish spec from board's copper finish setting
-    surfaceFinishType finishType = getSurfaceFinishType( stackup.m_FinishType );
-
-    if( finishType != surfaceFinishType::NONE )
+    // SurfaceFinish is only defined as a SpecificationType in IPC-2581C
+    if( m_version > 'B' )
     {
-        wxXmlNode* specNode = appendNode( aCadLayerNode, "Spec" );
-        addAttribute( specNode, "name", "SURFACE_FINISH" );
+        surfaceFinishType finishType = getSurfaceFinishType( stackup.m_FinishType );
 
-        wxXmlNode* surfaceFinishNode = appendNode( specNode, "SurfaceFinish" );
-        addAttribute( surfaceFinishNode, "type", surfaceFinishTypeToString.at( finishType ) );
+        if( finishType != surfaceFinishType::NONE )
+        {
+            wxXmlNode* specNode = appendNode( aCadLayerNode, "Spec" );
+            addAttribute( specNode, "name", "SURFACE_FINISH" );
 
-        // Add original finish string as comment if it maps to OTHER
-        if( finishType == surfaceFinishType::OTHER )
-            addAttribute( surfaceFinishNode, "comment", stackup.m_FinishType );
+            wxXmlNode* surfaceFinishNode = appendNode( specNode, "SurfaceFinish" );
+            addAttribute( surfaceFinishNode, "type", surfaceFinishTypeToString.at( finishType ) );
+
+            if( finishType == surfaceFinishType::OTHER )
+                addAttribute( surfaceFinishNode, "comment", stackup.m_FinishType );
+        }
     }
 }
 
@@ -1886,8 +1888,9 @@ void PCB_IO_IPC2581::generateStackup( wxXmlNode* aCadLayerNode )
     BOARD_STACKUP&         stackup = dsnSettings.GetStackupDescriptor();
     stackup.SynchronizeWithBoard( &dsnSettings );
 
+    // Coating layers reference the SurfaceFinish Spec which is only valid in IPC-2581C
     surfaceFinishType finishType = getSurfaceFinishType( stackup.m_FinishType );
-    bool              hasCoating = ( finishType != surfaceFinishType::NONE );
+    bool              hasCoating = ( m_version > 'B' && finishType != surfaceFinishType::NONE );
 
     wxXmlNode* stackupNode = appendNode( aCadLayerNode, "Stackup" );
     addAttribute( stackupNode, "name", "Primary_Stackup" );
@@ -2055,22 +2058,25 @@ void PCB_IO_IPC2581::generateCadLayers( wxXmlNode* aCadLayerNode )
         addLayerAttributes( cadLayerNode, layer );
     }
 
-    // Generate COATINGCOND layers for surface finish if specified
-    surfaceFinishType finishType = getSurfaceFinishType( stackup.m_FinishType );
-
-    if( finishType != surfaceFinishType::NONE )
+    // COATINGCOND layers reference the SurfaceFinish Spec which is only valid in IPC-2581C
+    if( m_version > 'B' )
     {
-        wxXmlNode* topCoatingNode = appendNode( aCadLayerNode, "Layer" );
-        addAttribute( topCoatingNode, "name", "COATING_TOP" );
-        addAttribute( topCoatingNode, "layerFunction", "COATINGCOND" );
-        addAttribute( topCoatingNode, "side", "TOP" );
-        addAttribute( topCoatingNode, "polarity", "POSITIVE" );
+        surfaceFinishType finishType = getSurfaceFinishType( stackup.m_FinishType );
 
-        wxXmlNode* botCoatingNode = appendNode( aCadLayerNode, "Layer" );
-        addAttribute( botCoatingNode, "name", "COATING_BOTTOM" );
-        addAttribute( botCoatingNode, "layerFunction", "COATINGCOND" );
-        addAttribute( botCoatingNode, "side", "BOTTOM" );
-        addAttribute( botCoatingNode, "polarity", "POSITIVE" );
+        if( finishType != surfaceFinishType::NONE )
+        {
+            wxXmlNode* topCoatingNode = appendNode( aCadLayerNode, "Layer" );
+            addAttribute( topCoatingNode, "name", "COATING_TOP" );
+            addAttribute( topCoatingNode, "layerFunction", "COATINGCOND" );
+            addAttribute( topCoatingNode, "side", "TOP" );
+            addAttribute( topCoatingNode, "polarity", "POSITIVE" );
+
+            wxXmlNode* botCoatingNode = appendNode( aCadLayerNode, "Layer" );
+            addAttribute( botCoatingNode, "name", "COATING_BOTTOM" );
+            addAttribute( botCoatingNode, "layerFunction", "COATINGCOND" );
+            addAttribute( botCoatingNode, "side", "BOTTOM" );
+            addAttribute( botCoatingNode, "polarity", "POSITIVE" );
+        }
     }
 }
 
