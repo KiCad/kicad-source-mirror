@@ -321,7 +321,9 @@
   "remote_symbols": {
     "add_to_global_table": false,
     "destination_dir": "${KIPRJMOD}/RemoteLibrary",
+    "last_used_provider_id": "",
     "library_prefix": "remote",
+    "providers": [],
     "user_ids": {}
   },
   "search_pane": {

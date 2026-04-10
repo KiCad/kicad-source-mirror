@@ -95,11 +95,17 @@ BOOST_AUTO_TEST_CASE( BarcodeFootprintWriteRead )
 
     footprint.Add( barcode, ADD_MODE::APPEND, true );
 
-    const std::filesystem::path savePath = std::filesystem::temp_directory_path() / "barcode_roundtrip.kicad_mod";
+    const std::filesystem::path tempDir =
+            std::filesystem::temp_directory_path() / "kicad_qa_barcode_fp_roundtrip";
+    const std::filesystem::path savePath = tempDir / "barcode_roundtrip.kicad_mod";
 
-    std::filesystem::remove( savePath );
+    std::filesystem::remove_all( tempDir );
+    std::filesystem::create_directories( tempDir );
+
     KI_TEST::DumpFootprintToFile( footprint, savePath.string() );
     std::unique_ptr<FOOTPRINT> footprint2 = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );
+
+    std::filesystem::remove_all( tempDir );
 
     PCB_BARCODE* loaded = nullptr;
 
