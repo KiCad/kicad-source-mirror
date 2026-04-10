@@ -1440,6 +1440,7 @@ TOOL_ACTION ACTIONS::ddAddLibrary( TOOL_ACTION_ARGS()
 
 TOOL_ACTION ACTIONS::pluginsReload( TOOL_ACTION_ARGS()
         .Name( "common.API.pluginsReload" )
+        .Flags( AF_NOTIFY )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Refresh Plugins" ) )
         .Tooltip( _( "Reload all python plugins and refresh plugin menus" ) )
