@@ -68,11 +68,11 @@ protected:
     /// Only needed by tests that load a global library before any project is open.
     void EnsureGlobalSymbolDir()
     {
-        if( !wxGetEnv( wxT( "KICAD9_SYMBOL_DIR" ), nullptr ) )
+        if( !wxGetEnv( wxT( "KICAD10_SYMBOL_DIR" ), nullptr ) )
         {
             wxString path( KI_TEST::GetTestDataRootDir() );
             path += wxT( "/libraries" );
-            wxSetEnv( wxT( "KICAD9_SYMBOL_DIR" ), path );
+            wxSetEnv( wxT( "KICAD10_SYMBOL_DIR" ), path );
         }
     }
 };
