@@ -979,43 +979,28 @@ void BINARY_PARSER::parsePartDecals()
     if( !entry || entry->count == 0 || entry->perItem == 0 )
         return;
 
-    const uint8_t* data = sectionData( SECTION::DrwItems );
-
-    if( !data )
+    if( entry->End() > m_data.size() )
         return;
 
-    bool isNew = !isOldFormat();
+    bool     isNew = !isOldFormat();
     uint32_t recSize = entry->perItem;
 
     for( uint32_t i = 0; i < entry->count; ++i )
     {
-        size_t off = static_cast<size_t>( i ) * recSize;
-
-        if( off + recSize > entry->totalBytes )
+        if( ( i + 1 ) * recSize > entry->totalBytes )
             break;
 
-        size_t base = entry->dataOffset + off;
+        SDB_RECORD rec = m_sdb.Record( *entry, i, recSize );
 
-        std::string name;
-        std::string units = "I";
-
-        if( isNew )
-        {
-            name = readFixedString( base + 44, 32 );
-            uint8_t unitFlag = readU8( base + 76 );
-            units = ( unitFlag == 0x4D ) ? "M" : "I";
-        }
-        else
-        {
-            name = readFixedString( base + 28, 32 );
-        }
+        // The decal NAME and (new format only) a unit flag: 0x4D 'M' = metric, else inch.
+        std::string name = isNew ? rec.Str( 44, 32 ) : rec.Str( 28, 32 );
 
         if( name.empty() )
             continue;
 
         PART_DECAL decal;
         decal.name = name;
-        decal.units = units;
+        decal.units = ( isNew && rec.U8( 76 ) == 0x4D ) ? "M" : "I";
 
         m_decals[name] = decal;
     }
@@ -2129,52 +2114,53 @@ void BINARY_PARSER::parseNetNames()
 
         std::vector<IndexedNet> indexedNets;
 
+        // Old-format placement record (96 B): up to two net names at +12/+60, each
+        // preceded by a 4-byte stored net index.
+        constexpr uint32_t OLD_PLACEMENT_SIZE = 96;
         const SDB_SECTION* entry22 = getSection( SECTION::Placements );
 
-        if( entry22 && entry22->count > 0 && entry22->perItem == 96 )
+        if( entry22 && entry22->count > 0 && entry22->perItem == OLD_PLACEMENT_SIZE )
         {
             for( uint32_t i = 0; i < entry22->count; ++i )
             {
-                size_t off = static_cast<size_t>( i ) * 96;
-
-                if( off + 96 > entry22->totalBytes )
+                if( ( i + 1 ) * OLD_PLACEMENT_SIZE > entry22->totalBytes )
                     break;
 
-                size_t base = entry22->dataOffset + off;
+                SDB_RECORD rec = m_sdb.Record( *entry22, i, OLD_PLACEMENT_SIZE );
 
-                for( int nameOff : { 12, 60 } )
+                for( uint32_t nameOff : { 12u, 60u } )
                 {
-                    std::string name = readFixedString( base + nameOff, 48 );
+                    std::string name = rec.Str( nameOff, 48 );
 
-                    if( !name.empty() && isValidNetName( name ) && !existing.count( name ) )
+                    if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
+                        continue;
+
+                    uint32_t netIdx = rec.U32( nameOff - 4 );
+
+                    if( netIdx < 100000 )
                     {
-                        uint32_t netIdx = readU32( base + nameOff - 4 );
-
-                        if( netIdx < 100000 )
-                        {
-                            indexedNets.push_back( { netIdx, name } );
-                            existing.insert( name );
-                            break;
-                        }
+                        indexedNets.push_back( { netIdx, name } );
+                        existing.insert( name );
+                        break;
                     }
                 }
             }
         }
 
+        // Old-format net record (144 B): stored net index at +8, name at +12.
+        constexpr uint32_t OLD_NET_SIZE = 144;
         const SDB_SECTION* entry23 = getSection( SECTION::Nets );
 
-        if( entry23 && entry23->count > 0 && entry23->perItem == 144 )
+        if( entry23 && entry23->count > 0 && entry23->perItem == OLD_NET_SIZE )
         {
             for( uint32_t i = 0; i < entry23->count; ++i )
             {
-                size_t off = static_cast<size_t>( i ) * 144;
-
-                if( off + 144 > entry23->totalBytes )
+                if( ( i + 1 ) * OLD_NET_SIZE > entry23->totalBytes )
                     break;
 
-                size_t base = entry23->dataOffset + off;
-                uint32_t netIdx = readU32( base + 8 );
-                std::string name = readFixedString( base + 12, 48 );
+                SDB_RECORD  rec    = m_sdb.Record( *entry23, i, OLD_NET_SIZE );
+                uint32_t    netIdx = rec.U32( 8 );
+                std::string name   = rec.Str( 12, 48 );
 
                 if( !name.empty() && isValidNetName( name ) && netIdx < 100000
                     && !existing.count( name ) )
