@@ -1591,7 +1591,12 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
             addAnchor( pt->GetPosition(), ORIGIN | SNAPPABLE, footprint, POINT_TYPE::PT_CENTER );
         }
 
-        if( !footprintVisible )
+        // When computing drag origins (aFrom=true), always proceed to add the footprint
+        // position anchor regardless of the visibility state. The footprint is already
+        // selected, so its anchor must be reachable as a drag point even if the active layer
+        // or zoom level causes checkVisibility to return false. Snapping TO an external
+        // footprint (aFrom=false) should still respect visibility.
+        if( !footprintVisible && !aFrom )
             break;
 
         if( aFrom && aSelectionFilter && !aSelectionFilter->footprints )
