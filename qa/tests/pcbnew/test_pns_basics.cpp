@@ -31,6 +31,7 @@
 #include <pcbnew/pcbexpr_evaluator.h>
 
 #include <geometry/shape_circle.h>
+#include <router/pns_component_dragger.h>
 #include <router/pns_item.h>
 #include <router/pns_kicad_iface.h>
 #include <router/pns_node.h>
@@ -692,5 +693,124 @@ BOOST_AUTO_TEST_CASE( PCBExprGeometryDependentFunctionDetection )
     // Deprecated aliases should also be detected
     compileAndCheck( wxT( "A.insideCourtyard('U1')" ), true );
     compileAndCheck( wxT( "A.insideArea('Zone1')" ), true );
+}
+
+
+/**
+ * Test that collideSimple handles items with null shapes gracefully.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23851
+ * When ITEM::Shape() returns nullptr, collision checking must not crash.
+ * The syncPad fix prevents null-shape SOLIDs from entering the PNS world,
+ * but collideSimple should also be defensive.
+ */
+BOOST_FIXTURE_TEST_CASE( PNSCollideSimpleNullShapeGuard, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( &m_ruleResolver );
+
+    PNS::NET_HANDLE net1 = (PNS::NET_HANDLE) 1;
+    PNS::NET_HANDLE net2 = (PNS::NET_HANDLE) 2;
+
+    PNS::SOLID* solid1 = new PNS::SOLID;
+    solid1->SetShape( new SHAPE_CIRCLE( VECTOR2I( 0, 0 ), 500000 ) );
+    solid1->SetPos( VECTOR2I( 0, 0 ) );
+    solid1->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    solid1->SetNet( net1 );
+
+    PNS::SOLID* solid2 = new PNS::SOLID;
+    solid2->SetShape( new SHAPE_CIRCLE( VECTOR2I( 100000, 0 ), 500000 ) );
+    solid2->SetPos( VECTOR2I( 100000, 0 ) );
+    solid2->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    solid2->SetNet( net2 );
+
+    world->AddRaw( solid1 );
+    world->AddRaw( solid2 );
+
+    // Verify collision works normally with valid shapes
+    PNS::NODE::OBSTACLES obstacles;
+    int count = world->QueryColliding( solid1, obstacles );
+    BOOST_CHECK( count > 0 );
+
+    // Exercise the null-shape guard in collideSimple by calling Collide() directly with a
+    // null-shape solid as the head item. This bypasses the spatial index (which requires a
+    // valid shape for bounding-box computation) and hits the exact code path the guard protects.
+    PNS::SOLID nullShapeSolid;
+    nullShapeSolid.SetPos( VECTOR2I( 0, 0 ) );
+    nullShapeSolid.SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    nullShapeSolid.SetNet( net2 );
+
+    bool collided = solid1->Collide( &nullShapeSolid, world.get(), F_Cu, nullptr );
+    BOOST_CHECK( !collided );
+}
+
+
+/**
+ * Test that COMPONENT_DRAGGER works correctly with basic solid dragging.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23851
+ * Exercises the component dragger Start() and multiple Drag() calls to ensure
+ * no crashes occur during the drag sequence. This simulates the core PNS
+ * operations that happen during an InlineDrag (G key) of a footprint.
+ */
+BOOST_FIXTURE_TEST_CASE( PNSComponentDraggerBasicDrag, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( &m_ruleResolver );
+
+    PNS::NET_HANDLE net1 = (PNS::NET_HANDLE) 1;
+
+    VECTOR2I pad1Pos( 0, 0 );
+
+    PNS::SOLID* pad1 = new PNS::SOLID;
+    pad1->SetShape( new SHAPE_CIRCLE( pad1Pos, 500000 ) );
+    pad1->SetPos( pad1Pos );
+    pad1->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    pad1->SetNet( net1 );
+    pad1->SetRoutable( true );
+
+    VECTOR2I traceEnd( 2500000, 2500000 );
+    PNS::SEGMENT* trace = new PNS::SEGMENT( SEG( pad1Pos, traceEnd ), net1 );
+    trace->SetWidth( 250000 );
+    trace->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+
+    world->AddRaw( pad1 );
+    world->AddRaw( trace );
+
+    PNS::COMPONENT_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( pad1 );
+
+    bool started = dragger.Start( pad1Pos, itemsToDrag );
+    BOOST_REQUIRE( started );
+
+    // Simulate multiple drag events (mimics mouse movement during drag)
+    VECTOR2I dragPositions[] = {
+        VECTOR2I( 100000, 100000 ),
+        VECTOR2I( 500000, 500000 ),
+        VECTOR2I( 1000000, 1000000 ),
+        VECTOR2I( 500000, 200000 ),
+        VECTOR2I( 0, 0 )
+    };
+
+    for( const VECTOR2I& pos : dragPositions )
+    {
+        bool dragOk = dragger.Drag( pos );
+        BOOST_CHECK( dragOk );
+
+        PNS::NODE* currentNode = dragger.CurrentNode();
+        BOOST_CHECK( currentNode != nullptr );
+    }
+
+    // Verify the dragged items set is populated
+    PNS::ITEM_SET traces = dragger.Traces();
+    BOOST_CHECK( traces.Size() > 0 );
+
+    // Clean up branch nodes before the world is destroyed
+    world->KillChildren();
 }
 

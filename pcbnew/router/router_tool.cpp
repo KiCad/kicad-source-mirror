@@ -2393,6 +2393,10 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     std::vector<PNS::ITEM*>             leaderSegments;
     bool                                singleFootprintDrag = false;
 
+    // The PNS world may be stale if the board has been modified since the last sync (e.g. by
+    // a Move operation). Sync it now so that FindItemByParent and joint lookups work correctly.
+    m_router->SyncWorld();
+
     if( !footprints.empty() )
     {
         if( footprints.size() == 1 )
@@ -2473,14 +2477,22 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     if( itemsToDrag.Count() >= 1 )
     {
-        // Snap to closest item
-        int         layer = m_iface->GetPNSLayerFromBoardLayer( m_originalActiveLayer );
-        PNS::ITEM*  closestItem = nullptr;
-        SEG::ecoord closestDistSq = std::numeric_limits<SEG::ecoord>::max();
+        // Snap to closest item. Use the frame's active layer rather than m_originalActiveLayer,
+        // which is only set during prepareInteractive() and remains UNDEFINED_LAYER for inline
+        // drag operations.
+        PCB_LAYER_ID activeLayer = frame()->GetActiveLayer();
+        int          layer = m_iface->GetPNSLayerFromBoardLayer( activeLayer );
+        PNS::ITEM*   closestItem = nullptr;
+        SEG::ecoord  closestDistSq = std::numeric_limits<SEG::ecoord>::max();
 
         for( PNS::ITEM* pitem : itemsToDrag.Items() )
         {
-            SEG::ecoord distSq = pitem->Shape( layer )->SquaredDistance( p0, 0 );
+            const SHAPE* shape = pitem->Shape( layer );
+
+            if( !shape )
+                continue;
+
+            SEG::ecoord distSq = shape->SquaredDistance( p0, 0 );
 
             if( distSq < closestDistSq )
             {

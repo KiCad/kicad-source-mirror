@@ -226,6 +226,9 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode, int aLayer,
         const SHAPE* shapeI = Shape( aLayer );
         const SHAPE* shapeH = aHead->Shape( aLayer );
 
+        if( !shapeI || !shapeH )
+            return false;
+
         if( checkCastellation || checkNetTie )
         {
             // Slow method

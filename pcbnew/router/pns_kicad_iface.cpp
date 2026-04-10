@@ -1574,6 +1574,9 @@ std::vector<std::unique_ptr<PNS::SOLID>> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPa
                         solid->SetShape( new SHAPE_SIMPLE( poly->Outline( 0 ) ) );
                 }
 
+                if( !solid->Shape( 0 ) )
+                    return;
+
                 solids.emplace_back( std::move( solid ) );
             };
 

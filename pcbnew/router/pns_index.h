@@ -149,7 +149,12 @@ int INDEX::Query( const ITEM* aItem, int aMinDistance, Visitor& aVisitor ) const
     const PNS_LAYER_RANGE& layers = aItem->Layers();
 
     for( int i = layers.Start(); i <= layers.End(); ++i )
-        total += querySingle( i, aItem->Shape( i ), aMinDistance, aVisitor );
+    {
+        const SHAPE* shape = aItem->Shape( i );
+
+        if( shape )
+            total += querySingle( i, shape, aMinDistance, aVisitor );
+    }
 
     return total;
 }
