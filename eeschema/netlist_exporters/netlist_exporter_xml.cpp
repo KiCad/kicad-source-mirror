@@ -432,38 +432,44 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
                     xvariant->AddAttribute( wxT( "name" ), variantName );
 
-                    if( variant.m_DNP != baseDnp )
+                    bool effectiveDnp = symbol->ResolveDNP( &sheet, variantName ) || sheet.GetDNP( variantName );
+                    if( effectiveDnp != baseDnp )
                     {
                         XNODE* xvarprop = node( wxT( "property" ) );
                         xvarprop->AddAttribute( wxT( "name" ), wxT( "dnp" ) );
-                        xvarprop->AddAttribute( wxT( "value" ), variant.m_DNP ? wxT( "1" ) : wxT( "0" ) );
+                        xvarprop->AddAttribute( wxT( "value" ), effectiveDnp ? wxT( "1" ) : wxT( "0" ) );
                         xvariant->AddChild( xvarprop );
                         hasVariantData = true;
                     }
 
-                    if( variant.m_ExcludedFromBOM != baseExcludedFromBOM )
+                    bool effectiveExcludedFromBOM = symbol->ResolveExcludedFromBOM( &sheet, variantName )
+                                                    || sheet.GetExcludedFromBOM( variantName );
+                    if( effectiveExcludedFromBOM != baseExcludedFromBOM )
                     {
                         XNODE* xvarprop = node( wxT( "property" ) );
                         xvarprop->AddAttribute( wxT( "name" ), wxT( "exclude_from_bom" ) );
-                        xvarprop->AddAttribute( wxT( "value" ), variant.m_ExcludedFromBOM ? wxT( "1" ) : wxT( "0" ) );
+                        xvarprop->AddAttribute( wxT( "value" ), effectiveExcludedFromBOM ? wxT( "1" ) : wxT( "0" ) );
                         xvariant->AddChild( xvarprop );
                         hasVariantData = true;
                     }
 
-                    if( variant.m_ExcludedFromSim != baseExcludedFromSim )
+                    bool effectiveExcludedFromSim = symbol->ResolveExcludedFromSim( &sheet, variantName )
+                                                    || sheet.GetExcludedFromSim( variantName );
+                    if( effectiveExcludedFromSim != baseExcludedFromSim )
                     {
                         XNODE* xvarprop = node( wxT( "property" ) );
                         xvarprop->AddAttribute( wxT( "name" ), wxT( "exclude_from_sim" ) );
-                        xvarprop->AddAttribute( wxT( "value" ), variant.m_ExcludedFromSim ? wxT( "1" ) : wxT( "0" ) );
+                        xvarprop->AddAttribute( wxT( "value" ), effectiveExcludedFromSim ? wxT( "1" ) : wxT( "0" ) );
                         xvariant->AddChild( xvarprop );
                         hasVariantData = true;
                     }
 
-                    if( variant.m_ExcludedFromPosFiles != baseExcludedFromPosFiles )
+                    bool effectiveExcludedFromPosFiles = symbol->ResolveExcludedFromPosFiles( &sheet, variantName );
+                    if( effectiveExcludedFromPosFiles != baseExcludedFromPosFiles )
                     {
                         XNODE* xvarprop = node( wxT( "property" ) );
                         xvarprop->AddAttribute( wxT( "name" ), wxT( "exclude_from_pos_files" ) );
-                        xvarprop->AddAttribute( wxT( "value" ), variant.m_ExcludedFromPosFiles ? wxT( "1" ) : wxT( "0" ) );
+                        xvarprop->AddAttribute( wxT( "value" ), effectiveExcludedFromPosFiles ? wxT( "1" ) : wxT( "0" ) );
                         xvariant->AddChild( xvarprop );
                         hasVariantData = true;
                     }
