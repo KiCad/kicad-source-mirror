@@ -826,9 +826,9 @@ void BINARY_PARSER::parseDecalNameTable()
     if( !sec14 || sec14->count == 0 || sec14->dataOffset < DECAL_HDR_OFFSET )
         return;
 
-    size_t start = sec14->dataOffset - DECAL_HDR_OFFSET;
+    uint32_t start = sec14->dataOffset - DECAL_HDR_OFFSET;
 
-    if( start + 12 > m_data.size() || readFixedString( start, 12 ) != "JMPVIA_AAAAA" )
+    if( start + 12 > m_data.size() || m_sdb.RecordAt( start ).Str( 0, 12 ) != "JMPVIA_AAAAA" )
         return;
 
     // Bound the file-supplied count before it sizes an allocation or a loop
@@ -840,19 +840,20 @@ void BINARY_PARSER::parseDecalNameTable()
 
     for( uint32_t k = 0; k < sec14->count; ++k )
     {
-        size_t off = start + static_cast<size_t>( k ) * REC_SIZE;
+        uint32_t   off = start + k * REC_SIZE;
+        SDB_RECORD rec = m_sdb.RecordAt( off );
 
-        if( off + REC_SIZE > m_data.size() || readU16( off + SENTINEL_OFFSET ) != 0xFFFE )
+        if( off + REC_SIZE > m_data.size() || rec.U16( SENTINEL_OFFSET ) != 0xFFFE )
         {
             m_decalNameTable.emplace_back();
             continue;
         }
 
-        std::string name = readFixedString( off, 41 );
+        std::string name = rec.Str( 0, 41 );
         m_decalNameTable.push_back( name );
 
-        int32_t startCursor = readI32( off + START_OFFSET );
-        int32_t count = readI32( off + COUNT_OFFSET );
+        int32_t startCursor = rec.I32( START_OFFSET );
+        int32_t count = rec.I32( COUNT_OFFSET );
 
         if( !name.empty() && count > 0 && count <= 1000 )
         {
@@ -861,7 +862,7 @@ void BINARY_PARSER::parseDecalNameTable()
             if( startCursor >= 0 )
                 m_decalTerminalStart.emplace( name, startCursor );
 
-            int32_t stackCount = readI32( off + STACK_COUNT_OFFSET );
+            int32_t stackCount = rec.I32( STACK_COUNT_OFFSET );
 
             if( stackCount > 0 && stackCount <= 1000 )
                 m_decalStackCount.emplace( name, stackCount );
@@ -905,16 +906,20 @@ void BINARY_PARSER::parseDecalNameTableOld()
         {
             size_t off = start + k * REC_SIZE;
 
-            if( off + SENTINEL_OFFSET + 2 > m_data.size()
-                || readU16( off + SENTINEL_OFFSET ) != 0xFFFE )
+            if( off + SENTINEL_OFFSET + 2 > m_data.size() )
                 break;
 
-            std::string name = readFixedString( off, 40 );
+            SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( off ) );
+
+            if( rec.U16( SENTINEL_OFFSET ) != 0xFFFE )
+                break;
+
+            std::string name = rec.Str( 0, 40 );
             table.push_back( name );
 
             if( off + COUNT_OFFSET + 4 <= m_data.size() )
             {
-                int32_t count = readI32( off + COUNT_OFFSET );
+                int32_t count = rec.I32( COUNT_OFFSET );
 
                 if( !name.empty() && count > 0 && count <= 1000 )
                     counts.emplace( name, static_cast<uint32_t>( count ) );
@@ -1071,9 +1076,14 @@ void BINARY_PARSER::parseTerminals()
             size_t off = poolBase + static_cast<size_t>( i ) * TERM_SIZE;
 
             if( off + 8 <= m_data.size() )
-                stream.emplace_back( readI32( off ), readI32( off + 4 ) );
+            {
+                SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( off ) );
+                stream.emplace_back( rec.I32( 0 ), rec.I32( 4 ) );
+            }
             else
+            {
                 stream.emplace_back( 0, 0 );
+            }
         }
     }
 
@@ -1081,21 +1091,19 @@ void BINARY_PARSER::parseTerminals()
 
     if( sec15 && sec15->totalBytes > 0 && sec15->perItem == TERM_SIZE )
     {
-        size_t end = static_cast<size_t>( sec15->dataOffset ) + sec15->totalBytes;
-
         for( uint32_t i = 0; i < sec15->count; ++i )
         {
-            size_t off = sec15->dataOffset + static_cast<size_t>( i ) * TERM_SIZE;
-
-            if( off + TERM_SIZE > end )
+            if( ( i + 1 ) * TERM_SIZE > sec15->totalBytes )
                 break;
+
+            SDB_RECORD rec = m_sdb.Record( *sec15, i, TERM_SIZE );
 
             // The geometry block ends at the first record whose +24/+28/+32 tail is
             // non-zero (the per-save heap trailer that follows the terminal records).
-            if( readI32( off + 24 ) != 0 || readI32( off + 28 ) != 0 || readI32( off + 32 ) != 0 )
+            if( rec.I32( 24 ) != 0 || rec.I32( 28 ) != 0 || rec.I32( 32 ) != 0 )
                 break;
 
-            stream.emplace_back( readI32( off ), readI32( off + 4 ) );
+            stream.emplace_back( rec.I32( 0 ), rec.I32( 4 ) );
         }
     }
 
@@ -2057,9 +2065,7 @@ void BINARY_PARSER::parseNetNames()
 
         if( entry19 && entry19->count > 0 )
         {
-            const uint8_t* sec19Data = sectionData( SECTION::PartPins );
-
-            if( sec19Data )
+            if( entry19->End() <= m_data.size() )
             {
                 size_t sec19Size = entry19->totalBytes;
 
@@ -2069,14 +2075,12 @@ void BINARY_PARSER::parseNetNames()
                 // name string starts at +24.
                 for( size_t pos = 0; pos + 28 < sec19Size; ++pos )
                 {
-                    uint32_t val = readU32( entry19->dataOffset + pos );
+                    SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( entry19->dataOffset + pos ) );
 
-                    if( val != 0xFFFFFFFF )
+                    if( rec.U32( 0 ) != 0xFFFFFFFF )
                         continue;
 
-                    uint32_t field4 = readU32( entry19->dataOffset + pos + 4 );
-
-                    if( field4 != 0 )
+                    if( rec.U32( 4 ) != 0 )
                     {
                         pos += 3;
                         continue;
@@ -2088,7 +2092,7 @@ void BINARY_PARSER::parseNetNames()
                         continue;
                     }
 
-                    std::string name = readFixedString( entry19->dataOffset + pos + 24, 48 );
+                    std::string name = rec.Str( 24, 48 );
 
                     if( !name.empty() && isValidNetName( name ) && !existing.count( name ) )
                     {
@@ -3621,54 +3625,48 @@ void BINARY_PARSER::parseCopperPours()
     // Try sec49 simple format first
     const SDB_SECTION* sec49 = getSection( SECTION::ClearanceRules );
 
-    if( sec49 && sec49->totalBytes > 0 )
+    if( sec49 && sec49->totalBytes > 0 && sec49->End() <= m_data.size() )
     {
-        const uint8_t* pool = sectionData( SECTION::ClearanceRules );
+        uint32_t poolSize = sec49->totalBytes;
 
-        if( pool )
+        for( size_t i = 0; i + 26 < poolSize; )
         {
-            uint32_t poolSize = sec49->totalBytes;
+            SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( sec49->dataOffset + i ) );
 
-            for( size_t i = 0; i + 26 < poolSize; )
+            // A pour header starts on a 0xFFFFFFFF delimiter, then marker==1 and sig 0x80.
+            if( rec.U32( 0 ) != 0xFFFFFFFF )
             {
-                if( pool[i] != 0xFF || pool[i + 1] != 0xFF
-                    || pool[i + 2] != 0xFF || pool[i + 3] != 0xFF )
-                {
-                    i++;
-                    continue;
-                }
-
-                if( i + 32 > poolSize )
-                    break;
-
-                uint32_t marker = readU32( sec49->dataOffset + i + 4 );
-                uint8_t  sig    = readU8( sec49->dataOffset + i + 8 );
-
-                if( marker != 1 || sig != 0x80 )
-                {
-                    i += 4;
-                    continue;
-                }
-
-                std::string name = readFixedString( sec49->dataOffset + i + 10, 16 );
-
-                if( name.size() < 4 || name.substr( 0, 3 ) != "POR" )
-                {
-                    i += 4;
-                    continue;
-                }
-
-                PourHeader hdr;
-                hdr.offset   = i;
-                hdr.name     = name;
-                hdr.vtxCount = readU32( sec49->dataOffset + i + 32 );
-                porHeaders.push_back( hdr );
-                i += 28;
+                i++;
+                continue;
             }
 
-            if( !porHeaders.empty() )
-                simpleFormat = true;
+            if( i + 32 > poolSize )
+                break;
+
+            if( rec.U32( 4 ) != 1 || rec.U8( 8 ) != 0x80 )
+            {
+                i += 4;
+                continue;
+            }
+
+            std::string name = rec.Str( 10, 16 );
+
+            if( name.size() < 4 || name.substr( 0, 3 ) != "POR" )
+            {
+                i += 4;
+                continue;
+            }
+
+            PourHeader hdr;
+            hdr.offset   = i;
+            hdr.name     = name;
+            hdr.vtxCount = rec.U32( 32 );
+            porHeaders.push_back( hdr );
+            i += 28;
         }
+
+        if( !porHeaders.empty() )
+            simpleFormat = true;
     }
 
     if( simpleFormat )
