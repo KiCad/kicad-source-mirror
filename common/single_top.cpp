@@ -499,8 +499,6 @@ bool PGM_SINGLE_TOP::OnPgmInit()
         frame->OpenProjectFiles( fileArgs );
     }
 
-    // In single-top mode, OpenProjectFiles() may switch to a different project. Preload
-    // libraries only after that so project-local libraries are loaded for the active project.
     if( KIFACE* topFrame = Kiway.KiFACE( KIWAY::KifaceType( TOP_FRAME ) ) )
         topFrame->PreloadLibraries( &Kiway );
 
