@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-07 18:58+0300\n"
-"PO-Revision-Date: 2026-04-05 09:09+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2026-04-12 05:09+0000\n"
+"Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -2075,95 +2075,90 @@ msgstr "Modyfikacja z pomocą API"
 #: common/api/api_plugin.cpp:60
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr ""
+msgstr "nieprawidłowa konfiguracja wtyczki w '%s': %s"
 
 #: common/api/api_plugin.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "Nieprawidłowa nazwa pinu"
+msgstr "nieprawidłowy czas wykonania: %s"
 
 #: common/api/api_plugin.cpp:112
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "Nie można uzyskać konfiguracji repozytorium"
+msgstr "nie można odczytać pliku konfiguracji wtyczki"
 
 #: common/api/api_plugin.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "plugin configuration file error: %s"
-msgstr "Błąd Konfiguracji"
+msgstr "błąd konfiguracji pliku wtyczki: %s"
 
 #: common/api/api_plugin.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "missing or invalid required keys: %s"
-msgstr "Brak lub niepoprawna wartość Zakres temperatury."
+msgstr "brak lub niepoprawne wymagane klucze: %s"
 
 #: common/api/api_plugin.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "identifier '%s' is invalid"
-msgstr "Identyfikator symbolu %s nie jest prawidłowy."
+msgstr "identyfikator '%s' nie jest prawidłowy"
 
 #: common/api/api_plugin.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "actions section is invalid: %s"
-msgstr "Niepowodzenie przy połączeniu z bazą danych: %s"
+msgstr "sekcja akcji nie jest prawidłowa: %s"
 
 #: common/api/api_plugin_manager.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s': %s"
-msgstr "Opcje wtyczki"
+msgstr "Akcje wtyczki '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s': %s"
-msgstr "Wtyczki (%d)"
+msgstr "Wtyczka '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "exited with code %d"
-msgstr "Proces zakończony z kodem błędu %d"
+msgstr "zakończono z kodem błędu %d"
 
 #: common/api/api_plugin_manager.cpp:351 common/api/api_plugin_manager.cpp:691
 #: common/api/api_plugin_manager.cpp:775
-#, fuzzy
 msgid "missing plugin environment"
-msgstr "Ponownie utwórz środowisko wtyczek"
+msgstr "brak środowiska wtyczki"
 
 #: common/api/api_plugin_manager.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' could not be read"
-msgstr "Plik '%s' nie może zostać utworzony."
+msgstr "punkt wejścia '%s' nie może zostać odczytany"
 
 #: common/api/api_plugin_manager.cpp:407
-#, fuzzy
 msgid "process could not be created"
-msgstr "Proces nie mógł zostać utworzony"
+msgstr "proces nie mógł zostać utworzony"
 
 #: common/api/api_plugin_manager.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' is not executable"
-msgstr "Folder '%s' nie posiada możliwości zapisu."
+msgstr "punkt wejścia '%s' nie posiada możliwości wykonywania"
 
 #: common/api/api_plugin_manager.cpp:500
-#, fuzzy
 msgid "could not launch plugin"
-msgstr "Nie można wykorzystać OpenGL"
+msgstr "nie można uruchomić wtyczki"
 
 #: common/api/api_plugin_manager.cpp:661 common/api/api_plugin_manager.cpp:743
 #: common/api/api_plugin_manager.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "error code %d"
-msgstr "Kod błędu: %d"
+msgstr "kod błędu %d"
 
 #: common/api/api_plugin_manager.cpp:663 common/api/api_plugin_manager.cpp:745
 #: common/api/api_plugin_manager.cpp:835
-#, fuzzy, c-format
+#, c-format
 msgid "could not create plugin environment: %s"
-msgstr "Ponownie utwórz środowisko wtyczek"
+msgstr "nie można utworzyć środowiska wtyczek: %s"
 
 #: common/api/api_plugin_manager.cpp:784
-#, fuzzy
 msgid "requirements.txt could not be read"
-msgstr "Proces nie mógł zostać utworzony"
+msgstr "plik requirements.txt nie mógł zostać odczytany"
 
 #: common/background_jobs_monitor.cpp:98
 msgid "Background Jobs"
@@ -11494,14 +11489,13 @@ msgid "View load messages"
 msgstr "Pokazuj wiadomości podczas wczytywania"
 
 #: common/widgets/kistatusbar.cpp:509
-#, fuzzy, c-format
+#, c-format
 msgid "View %zu message(s)"
-msgstr "Podgląd %zu załadowanych wiadomości"
+msgstr "Wyświetl %zu wiadomości"
 
 #: common/widgets/kistatusbar.cpp:522
-#, fuzzy
 msgid "View messages"
-msgstr "Pokazuj wiadomości podczas wczytywania"
+msgstr "Wyświetl wiadomości"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
@@ -13430,7 +13424,6 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "Zmień stopień na Błąd dla wszystkich naruszeń typu '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:776 eeschema/dialogs/dialog_erc.cpp:783
-#, fuzzy
 msgid "Violation severities can also be edited in Schematic Setup"
 msgstr ""
 "Stopnie naruszeń można również zmieniać w oknie dialogowym Ustawienia "
@@ -13456,7 +13449,6 @@ msgstr "Edytuj mapę konfliktów pin-do-pinu..."
 
 #: eeschema/dialogs/dialog_erc.cpp:797 eeschema/dialogs/dialog_erc.cpp:803
 #: eeschema/dialogs/dialog_erc.cpp:810
-#, fuzzy
 msgid "Open the Schematic Setup dialog"
 msgstr "Otwiera okno dialogowe Ustawienia schematu"
 
@@ -17183,15 +17175,14 @@ msgid "Copy Design Variant"
 msgstr "Kopiuj wariant"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2947
-#, fuzzy
 msgid "Cannot edit the default variant description."
-msgstr "Nie można usunąć podstawowego wariantu."
+msgstr "Nie można zmienić opisu podstawowego wariantu."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2955
 #: eeschema/sch_edit_frame.cpp:3059
-#, fuzzy, c-format
+#, c-format
 msgid "Edit Description for '%s'"
-msgstr "Edytuj opis zadania"
+msgstr "Edytuj opis dla '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -20598,9 +20589,8 @@ msgid "Resolved Netclass"
 msgstr "Przeanalizowane klasy sieci"
 
 #: eeschema/sch_bus_entry.cpp:652 eeschema/sch_line.cpp:1286
-#, fuzzy
 msgid "Wire Style"
-msgstr "Styl linii"
+msgstr "Styl połączenia"
 
 #: eeschema/sch_connection.cpp:455
 msgid "Connection Name"
@@ -20763,19 +20753,16 @@ msgid "Find in Net Inspector"
 msgstr "Szukaj w Inspektorze sieci"
 
 #: eeschema/sch_edit_frame.cpp:3041
-#, fuzzy
 msgid "No design variants to edit."
-msgstr "Dodaje nowy wariant projektu do schematu."
+msgstr "Brak wariantu projektowego by go edytować."
 
 #: eeschema/sch_edit_frame.cpp:3045
-#, fuzzy
 msgid "Select variant to edit description:"
-msgstr "Wybierz nazwę wariantu do usunięcia:"
+msgstr "Wybierz wariant by zmienić opis:"
 
 #: eeschema/sch_edit_frame.cpp:3046
-#, fuzzy
 msgid "Edit Variant Description"
-msgstr "Edytuj opis zadania"
+msgstr "Edytuj opis wariantu"
 
 #: eeschema/sch_edit_frame.cpp:3106
 msgid "Select variant name to remove:"
@@ -26794,9 +26781,8 @@ msgid "Import 2D drawing file"
 msgstr "Importuj plik z rysunkami 2D"
 
 #: eeschema/tools/sch_actions.cpp:1212
-#, fuzzy
 msgid "Import Non-KiCad Schematic..."
-msgstr "Schemat spoza programu KiCad..."
+msgstr "Importuj schemat spoza programu KiCad..."
 
 #: eeschema/tools/sch_actions.cpp:1213
 msgid ""
@@ -27326,14 +27312,12 @@ msgid "Remove an existing design variant from the schematic."
 msgstr "Usuwa istniejący wariant projektu ze schematu."
 
 #: eeschema/tools/sch_actions.cpp:1787
-#, fuzzy
 msgid "Edit Variant Description..."
-msgstr "Edytuj opis zadania"
+msgstr "Edycja opisu wariantu..."
 
 #: eeschema/tools/sch_actions.cpp:1788
-#, fuzzy
 msgid "Edit the description of an existing design variant."
-msgstr "Edycja pliku skryptu w edytorze tekstu"
+msgstr "Edycja opisu istniejącego wariantu projektowego."
 
 #: eeschema/tools/sch_align_tool.cpp:64
 msgid "Align"
@@ -37774,12 +37758,12 @@ msgstr "liczba pionowo"
 #: pcbnew/dialogs/dialog_create_array.cpp:436
 #, c-format
 msgid "horizontal delta of zero with %ld objects"
-msgstr ""
+msgstr "pozioma delta zera z obiektami %ld"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:442
 #, c-format
 msgid "vertical delta of zero with %ld objects"
-msgstr ""
+msgstr "pinowa delta zera z obiektami %ld"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:451
 msgid "stagger"
@@ -37792,7 +37776,7 @@ msgstr "liczba wyprowadzeń"
 #: pcbnew/dialogs/dialog_create_array.cpp:517
 #, c-format
 msgid "angular delta of zero with %ld objects"
-msgstr ""
+msgstr "kątowa delta zera z obiektami %ld"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:564
 msgid "Bad parameters"
@@ -38476,13 +38460,11 @@ msgid "They will be excluded from the %s list"
 msgstr "Zostanie wykluczone z listy %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:788 pcbnew/dialogs/dialog_drc.cpp:795
-#, fuzzy
 msgid "Violation severities can also be edited in Board Setup"
 msgstr ""
 "Stopnie naruszeń można również zmieniać w oknie dialogowym Ustawienia płytki"
 
 #: pcbnew/dialogs/dialog_drc.cpp:806
-#, fuzzy
 msgid "Open the Board Setup dialog"
 msgstr "Otwiera okno dialogowe Ustawienia płytki"
 
@@ -57408,9 +57390,8 @@ msgstr ""
 "automatycznie przez edytor PCB"
 
 #: pcbnew/tools/pcb_actions.cpp:1208
-#, fuzzy
 msgid "Import Non-KiCad Board File..."
-msgstr "Importuj płytkę spoza programu KiCad"
+msgstr "Importuj płytkę spoza programu KiCad..."
 
 #: pcbnew/tools/pcb_actions.cpp:1209
 msgid "Import board file from other applications"
