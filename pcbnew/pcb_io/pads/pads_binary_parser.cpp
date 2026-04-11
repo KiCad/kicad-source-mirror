@@ -241,31 +241,6 @@ const SDB_SECTION* BINARY_PARSER::getSection( int aIndex ) const
 }
 
 
-const uint8_t* BINARY_PARSER::sectionData( int aIndex ) const
-{
-    const SDB_SECTION* entry = getSection( aIndex );
-
-    if( !entry || entry->totalBytes == 0 )
-        return nullptr;
-
-    if( entry->dataOffset + entry->totalBytes > m_data.size() )
-        return nullptr;
-
-    return &m_data[entry->dataOffset];
-}
-
-
-uint32_t BINARY_PARSER::sectionSize( int aIndex ) const
-{
-    const SDB_SECTION* entry = getSection( aIndex );
-
-    if( !entry )
-        return 0;
-
-    return entry->totalBytes;
-}
-
-
 double BINARY_PARSER::toBasicCoordX( int32_t aRawValue ) const
 {
     return static_cast<double>( aRawValue );
@@ -297,7 +272,7 @@ void BINARY_PARSER::parseBoardSetup()
     // The board-setup section holds u32 parameters at fixed word offsets; word 4 is the
     // maximum layer count. The coordinate origin (also in this section) is already read
     // by the SDB and applied in Parse().
-    uint32_t maxLayer = readU32( setup->dataOffset + 4 * 4 );
+    uint32_t maxLayer = m_sdb.RecordAt( setup->dataOffset ).U32( 16 );
 
     if( maxLayer >= 1 && maxLayer <= 64 )
         m_parameters.layer_count = static_cast<int>( maxLayer );
@@ -538,11 +513,10 @@ void BINARY_PARSER::parseSection19Parts()
         if( !entry || entry->totalBytes == 0 )
             continue;
 
-        const uint8_t* data = sectionData( secIdx );
-        uint32_t       size = sectionSize( secIdx );
-
-        if( !data || size == 0 )
+        if( entry->End() > m_data.size() )
             continue;
+
+        uint32_t size = entry->totalBytes;
 
         // v0x2021 lays its placements as a contiguous 96 B run; every block carries an
         // 0xFEFF marker at +28 except the first (anchor) block. The FEFF scan therefore
@@ -554,10 +528,10 @@ void BINARY_PARSER::parseSection19Parts()
 
         for( size_t pos = 0; pos + 1 < size; ++pos )
         {
-            if( data[pos] != 0xFE || data[pos + 1] != 0xFF )
-                continue;
-
             size_t markerBase = static_cast<size_t>( entry->dataOffset ) + pos;
+
+            if( m_data[markerBase] != 0xFE || m_data[markerBase + 1] != 0xFF )
+                continue;
 
             if( markerBase < static_cast<size_t>( layout.feffOff ) )
                 continue;
@@ -2684,9 +2658,7 @@ void BINARY_PARSER::parseDiffPairs()
     if( !sec49 || sec49->totalBytes == 0 || m_netSelfPtrToName.empty() )
         return;
 
-    const uint8_t* pool = sectionData( SECTION::ClearanceRules );
-
-    if( !pool )
+    if( sec49->End() > m_data.size() )
         return;
 
     const size_t poolSize = sec49->totalBytes;
@@ -2716,7 +2688,7 @@ void BINARY_PARSER::parseDiffPairs()
 
     for( size_t i = 0; i < poolSize && !haveAnchor; )
     {
-        if( pool[i] != 0xFF )
+        if( m_data[poolBase + i] != 0xFF )
         {
             ++i;
             continue;
@@ -2724,7 +2696,7 @@ void BINARY_PARSER::parseDiffPairs()
 
         size_t runStart = i;
 
-        while( i < poolSize && pool[i] == 0xFF )
+        while( i < poolSize && m_data[poolBase + i] == 0xFF )
             ++i;
 
         size_t runEnd = i;
@@ -3757,12 +3729,17 @@ void BINARY_PARSER::parseCopperPours()
         return;
     }
 
-    const uint8_t* sec52Data = sectionData( SECTION::PourTokensA );
-    const uint8_t* sec53Data = sectionData( SECTION::PourTokensB );
-    const uint8_t* sec54Data = sectionData( SECTION::PourTokensC );
-
-    if( !sec52Data || !sec53Data || !sec54Data )
+    if( sec52->End() > m_data.size() || sec53->End() > m_data.size()
+        || sec54->End() > m_data.size() )
+    {
         return;
+    }
+
+    // Byte-stream scans over the three pour-token sections; the pointers index the SDB
+    // bytes at each section's payload offset.
+    const uint8_t* sec52Data = m_data.data() + sec52->dataOffset;
+    const uint8_t* sec53Data = m_data.data() + sec53->dataOffset;
+    const uint8_t* sec54Data = m_data.data() + sec54->dataOffset;
 
     // Scan sec52 byte stream for POR records identified by FFFFFFFF + u32(marker) +
     // u8(0x80) + u8(flag) + "POR..." name. Extract cumulative vertex counts at FF+32.
@@ -3780,7 +3757,8 @@ void BINARY_PARSER::parseCopperPours()
             continue;
         }
 
-        std::string name = readFixedString( sec52->dataOffset + i + 10, 16 );
+        SDB_RECORD  rec  = m_sdb.RecordAt( static_cast<uint32_t>( sec52->dataOffset + i ) );
+        std::string name = rec.Str( 10, 16 );
 
         if( name.size() < 4 || name.substr( 0, 3 ) != "POR" )
             continue;
@@ -3788,7 +3766,7 @@ void BINARY_PARSER::parseCopperPours()
         PourHeader hdr;
         hdr.offset   = i;
         hdr.name     = name;
-        hdr.vtxCount = readU32( sec52->dataOffset + i + 32 );
+        hdr.vtxCount = rec.U32( 32 );
         porHeaders.push_back( hdr );
     }
 
@@ -3860,7 +3838,8 @@ void BINARY_PARSER::parseCopperPours()
         // Width for pour p is stored in the previous 16-byte entry (bytes 11-14).
         // For the first pour, the previous entry is the pre-table block.
         size_t widthSrc = ( p == 0 ) ? preTableStart : metaTableStart + ( p - 1 ) * 16;
-        pourMeta[p].width = readI32( sec53->dataOffset + widthSrc + 11 );
+        pourMeta[p].width =
+                m_sdb.RecordAt( static_cast<uint32_t>( sec53->dataOffset + widthSrc ) ).I32( 11 );
     }
 
     // Locate POR vertex data in sec54. The section begins with 16-byte piece

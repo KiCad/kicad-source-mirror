@@ -207,15 +207,11 @@ private:
     double   readF64( size_t aOffset ) const;
     std::string readFixedString( size_t aOffset, size_t aMaxLen ) const;
 
-    // Section data accessors over the parsed SDB directory. The SECTION overloads
-    // forward to the int form so a constant section reads by role; the int form serves
-    // the few callers that iterate a computed directory index.
-    const uint8_t* sectionData( int aIndex ) const;
-    uint32_t       sectionSize( int aIndex ) const;
+    // Section lookup over the parsed SDB directory. The SECTION overload forwards to the
+    // int form so a constant section reads by role; the int form serves the few callers
+    // that iterate a computed directory index. Records are read through m_sdb.Record /
+    // RecordAt; byte-scan readers index m_sdb.Bytes() at the section's dataOffset.
     const SDB_SECTION* getSection( int aIndex ) const;
-
-    const uint8_t* sectionData( SECTION aSection ) const { return sectionData( static_cast<int>( aSection ) ); }
-    uint32_t       sectionSize( SECTION aSection ) const { return sectionSize( static_cast<int>( aSection ) ); }
     const SDB_SECTION* getSection( SECTION aSection ) const { return getSection( static_cast<int>( aSection ) ); }
 
     // Section parsers
