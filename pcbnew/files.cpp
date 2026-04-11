@@ -603,6 +603,14 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         mgr->LoadProject( pro.GetFullPath() );
 
+        if( Kiface().IsSingle() )
+        {
+            // Standalone opens can switch to a different project.  Preload libraries after the
+            // project switch so the board load sees project-local library tables.
+            Kiface().PreloadLibraries( &Kiway() );
+            Pgm().PreloadDesignBlockLibraries( &Kiway() );
+        }
+
         // Do not allow saving a project if one doesn't exist.  This normally happens if we are
         // opening a board that has been moved from its project folder.
         // For converted projects, we don't want to set the read-only flag because we want a
