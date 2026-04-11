@@ -433,14 +433,16 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                 xproperty->AddAttribute( wxT( "name" ), wxT( "dnp" ) );
             }
 
-            SCH_SYMBOL_INSTANCE instance;
+            // Iterate all variants in the schematic, not just those in the symbol instance,
+            // because a sheet can have variant-specific attributes even if the symbol does not.
+            const std::set<wxString>& variantNames = m_schematic->GetVariantNames();
 
-            if( symbol->GetInstance( instance, sheet.Path() ) && !instance.m_Variants.empty() )
+            if( !variantNames.empty() )
             {
                 const bool baseExcludedFromSim = symbol->ResolveExcludedFromSim( &sheet ) || sheet.GetExcludedFromSim();
                 XNODE*     xvariants = nullptr;
 
-                for( const auto& [variantName, variant] : instance.m_Variants )
+                for( const auto& variantName : variantNames )
                 {
                     XNODE* xvariant = node( wxT( "variant" ) );
                     bool   hasVariantData = false;
@@ -489,11 +491,17 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                         hasVariantData = true;
                     }
 
-                    if( !variant.m_Fields.empty() )
+                    SCH_SYMBOL_INSTANCE       instance;
+                    const SCH_SYMBOL_VARIANT* variant = nullptr;
+
+                    if( symbol->GetInstance( instance, sheet.Path() ) && instance.m_Variants.contains( variantName ) )
+                        variant = &instance.m_Variants.at( variantName );
+
+                    if( variant && !variant->m_Fields.empty() )
                     {
                         XNODE* xfields = nullptr;
 
-                        for( const auto& [fieldName, fieldValue] : variant.m_Fields )
+                        for( const auto& [fieldName, fieldValue] : variant->m_Fields )
                         {
                             const wxString baseValue =
                                     symbol->GetFieldText( fieldName, &sheet, wxEmptyString );
