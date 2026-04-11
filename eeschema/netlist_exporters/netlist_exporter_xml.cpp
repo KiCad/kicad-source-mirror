@@ -444,52 +444,47 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
                 for( const auto& variantName : variantNames )
                 {
-                    XNODE* xvariant = node( wxT( "variant" ) );
-                    bool   hasVariantData = false;
+                    XNODE* xvariant = nullptr;
 
-                    xvariant->AddAttribute( wxT( "name" ), variantName );
+                    auto addToVariant = [this, &xvariant, &variantName]( XNODE* child ) -> void
+                    {
+                        if( !child )
+                            return;
+
+                        if( !xvariant )
+                        {
+                            xvariant = node( wxT( "variant" ) );
+                            xvariant->AddAttribute( wxT( "name" ), variantName );
+                        }
+                        xvariant->AddChild( child );
+                    };
+
+                    auto addBinaryProp = [this, &addToVariant]( wxString const& name, bool base,
+                                                                bool effective ) -> void
+                    {
+                        if( base == effective )
+                            return;
+
+                        XNODE* xvarprop = node( wxT( "property" ) );
+                        xvarprop->AddAttribute( wxT( "name" ), name );
+                        xvarprop->AddAttribute( wxT( "value" ), effective ? wxT( "1" ) : wxT( "0" ) );
+                        addToVariant( xvarprop );
+                    };
 
                     bool effectiveDnp = symbol->ResolveDNP( &sheet, variantName ) || sheet.GetDNP( variantName );
-                    if( effectiveDnp != baseDnp )
-                    {
-                        XNODE* xvarprop = node( wxT( "property" ) );
-                        xvarprop->AddAttribute( wxT( "name" ), wxT( "dnp" ) );
-                        xvarprop->AddAttribute( wxT( "value" ), effectiveDnp ? wxT( "1" ) : wxT( "0" ) );
-                        xvariant->AddChild( xvarprop );
-                        hasVariantData = true;
-                    }
+                    addBinaryProp( wxT( "dnp" ), baseDnp, effectiveDnp );
 
                     bool effectiveExcludedFromBOM = symbol->ResolveExcludedFromBOM( &sheet, variantName )
                                                     || sheet.GetExcludedFromBOM( variantName );
-                    if( effectiveExcludedFromBOM != baseExcludedFromBOM )
-                    {
-                        XNODE* xvarprop = node( wxT( "property" ) );
-                        xvarprop->AddAttribute( wxT( "name" ), wxT( "exclude_from_bom" ) );
-                        xvarprop->AddAttribute( wxT( "value" ), effectiveExcludedFromBOM ? wxT( "1" ) : wxT( "0" ) );
-                        xvariant->AddChild( xvarprop );
-                        hasVariantData = true;
-                    }
+                    addBinaryProp( wxT( "exclude_from_bom" ), baseExcludedFromBOM, effectiveExcludedFromBOM );
 
                     bool effectiveExcludedFromSim = symbol->ResolveExcludedFromSim( &sheet, variantName )
                                                     || sheet.GetExcludedFromSim( variantName );
-                    if( effectiveExcludedFromSim != baseExcludedFromSim )
-                    {
-                        XNODE* xvarprop = node( wxT( "property" ) );
-                        xvarprop->AddAttribute( wxT( "name" ), wxT( "exclude_from_sim" ) );
-                        xvarprop->AddAttribute( wxT( "value" ), effectiveExcludedFromSim ? wxT( "1" ) : wxT( "0" ) );
-                        xvariant->AddChild( xvarprop );
-                        hasVariantData = true;
-                    }
+                    addBinaryProp( wxT( "exclude_from_sim" ), baseExcludedFromSim, effectiveExcludedFromSim );
 
                     bool effectiveExcludedFromPosFiles = symbol->ResolveExcludedFromPosFiles( &sheet, variantName );
-                    if( effectiveExcludedFromPosFiles != baseExcludedFromPosFiles )
-                    {
-                        XNODE* xvarprop = node( wxT( "property" ) );
-                        xvarprop->AddAttribute( wxT( "name" ), wxT( "exclude_from_pos_files" ) );
-                        xvarprop->AddAttribute( wxT( "value" ), effectiveExcludedFromPosFiles ? wxT( "1" ) : wxT( "0" ) );
-                        xvariant->AddChild( xvarprop );
-                        hasVariantData = true;
-                    }
+                    addBinaryProp( wxT( "exclude_from_pos_files" ), baseExcludedFromPosFiles,
+                                   effectiveExcludedFromPosFiles );
 
                     SCH_SYMBOL_INSTANCE       instance;
                     const SCH_SYMBOL_VARIANT* variant = nullptr;
@@ -520,23 +515,17 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                             XNODE* xfield = node( wxT( "field" ), UnescapeString( resolvedValue ) );
                             xfield->AddAttribute( wxT( "name" ), UnescapeString( fieldName ) );
                             xfields->AddChild( xfield );
-                            hasVariantData = true;
                         }
 
-                        if( xfields )
-                            xvariant->AddChild( xfields );
+                        addToVariant( xfields );
                     }
 
-                    if( hasVariantData )
+                    if( xvariant )
                     {
                         if( !xvariants )
                             xvariants = node( wxT( "variants" ) );
 
                         xvariants->AddChild( xvariant );
-                    }
-                    else
-                    {
-                        delete xvariant;
                     }
                 }
 
