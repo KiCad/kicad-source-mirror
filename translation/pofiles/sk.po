@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-04-07 15:56+0000\n"
+"PO-Revision-Date: 2026-04-13 18:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -1322,7 +1322,7 @@ msgstr "Počet odrazov, ktoré môže lúč dopadnúť na reflexné objekty"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:121
 msgid "Lights Configuration"
-msgstr "Nastavenie svetla"
+msgstr "Nastavenie osvetlenia"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:134
 msgid "Ambient camera light:"
@@ -2567,11 +2567,11 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
-"Pri ďalšom spustení KiCadu všetky cesty, ktoré už bolidefinované,\n"
-"budú dodržané a všetky ostatné nastavenia definované v ceste\n"
-"konfiguračného dialógu sú ignorované. Ak ste nemali v úmysle\n"
-"toto správanie, premenujte všetky konfliktné položky, alebo odstráňte\n"
-"premenné externého prostredia z vášho systému."
+"Pri ďalšom spustení KiCadu budú akceptované všetky\n"
+"už definované cesty a všetky nastavenia definované v dialógovom\n"
+"okne nastavenia ciest sa ignorujú.  Ak ste s toto správanie\n"
+"nezamýšľali, premenujte všetky konfliktné položky alebo odstráňte\n"
+"externú(-é) premennú(-é) prostredia zo systému."
 
 #: common/dialogs/dialog_configure_paths.cpp:310
 #, c-format
@@ -3064,7 +3064,7 @@ msgstr "Vybraná cesta neobsahuje platné nastavenia KiCad-u!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
 msgid "Import library configuration from previous version"
-msgstr "Import konfigurácie knižnice z predošlej verzie"
+msgstr "Importovať nastavenia knižnice z predchádzajúcej verzie"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
@@ -6824,7 +6824,7 @@ msgstr "Zrkadlený"
 #: common/eda_text.cpp:1400 eeschema/sch_field.cpp:1884
 #: eeschema/sch_field.cpp:1887 eeschema/sch_label.cpp:2352
 msgid "Horizontal Justification"
-msgstr "Horizontálne zarovnanie"
+msgstr "Vodorovné zarovnanie"
 
 #: common/eda_text.cpp:1404 eeschema/sch_field.cpp:1891
 #: eeschema/sch_field.cpp:1894 eeschema/sch_label.cpp:2354
@@ -6832,7 +6832,7 @@ msgstr "Horizontálne zarovnanie"
 #: pcbnew/pcb_dimension.cpp:2009 pcbnew/pcb_dimension.cpp:2051
 #: pcbnew/pcb_dimension.cpp:2085
 msgid "Vertical Justification"
-msgstr "Vertikálne zarovnanie"
+msgstr "Zvislé zarovnanie"
 
 #: common/eda_text.cpp:1412 eeschema/sch_field.cpp:1903
 #: eeschema/sch_label.cpp:2312 eeschema/sch_tablecell.cpp:242
@@ -9616,7 +9616,7 @@ msgstr "Konfigurovať cesty..."
 
 #: common/tool/actions.cpp:1163
 msgid "Edit path configuration environment variables"
-msgstr "Upraviť konfiguráciu ciesty premenných prostredia"
+msgstr "Upraviť nastavenie cesty v premenných prostredia"
 
 #: common/tool/actions.cpp:1169
 msgid "Manage Symbol Libraries..."
@@ -10698,7 +10698,7 @@ msgstr ""
 
 #: cvpcb/cvpcb_mainframe.cpp:895
 msgid "Configuration Error"
-msgstr "Chyby v nastavení"
+msgstr "Chyba v nastavení"
 
 #: cvpcb/cvpcb_mainframe.cpp:963
 #, c-format
@@ -11857,11 +11857,11 @@ msgstr "Knižnice"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:104
 msgid "Reload Configuration"
-msgstr "Znova načítať konfiguráciu"
+msgstr "Znova načítať nastavenie"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:105
 msgid "Reload the database library configuration file"
-msgstr "Znova načítať konfiguračný súbor databázovej knižnice"
+msgstr "Znova načítať súbor nastavení databázovej knižnice"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
 msgid "Caching"
@@ -15004,7 +15004,7 @@ msgstr "Režim kompatibility:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "User configuration"
-msgstr "Používateľská konfigurácia"
+msgstr "Používateľské nastavenia"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:666
 msgid "Spice"
@@ -17286,7 +17286,7 @@ msgstr "Vývod %s symbolu '%s' je pripojený k rozdielnym spojom: %s a %s"
 #: eeschema/erc/erc.cpp:1524
 #, c-format
 msgid "The current configuration does not include the symbol library '%s'"
-msgstr "Aktuálna konfigurácia nezahŕňa knižnicu symbolov '%s'"
+msgstr "Aktuálne nastavenie nezahŕňa knižnicu symbolov '%s'"
 
 #: eeschema/erc/erc.cpp:1539
 #, c-format
@@ -17318,14 +17318,14 @@ msgstr "'%s' nie je platný identifikátor puzdra."
 #: pcbnew/footprint_editor_utils.cpp:363
 #, c-format
 msgid "The current configuration does not include the footprint library '%s'."
-msgstr "Aktuálna konfigurácia neobsahuje knižnicu puzdier '%s'."
+msgstr "Aktuálne nastavenie neobsahuje knižnicu puzdier '%s'."
 
 #: eeschema/erc/erc.cpp:1674
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:983
 #: pcbnew/footprint_editor_utils.cpp:375
 #, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration."
-msgstr "Knižnica puzdier '%s' nie je povolená v aktuálnej konfigurácii."
+msgstr "Knižnica puzdier '%s' nie je povolená v aktuálnom nastavení."
 
 #: eeschema/erc/erc.cpp:1683
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:1034
@@ -18183,7 +18183,7 @@ msgstr "Importovať"
 
 #: eeschema/menubar.cpp:103
 msgid "Non-KiCad Schematic..."
-msgstr "Importovať schému inú ako KiCad..."
+msgstr "Schéma inú ako KiCad..."
 
 #: eeschema/menubar.cpp:104
 msgid ""
@@ -19805,12 +19805,12 @@ msgstr "Zvislý, dĺžka %s"
 #: eeschema/sch_line.cpp:739
 #, c-format
 msgid "Vertical Bus, length %s"
-msgstr "Vertikální zbernica, dĺžka %s"
+msgstr "Zvislá zbernica, dĺžka %s"
 
 #: eeschema/sch_line.cpp:740
 #, c-format
 msgid "Vertical Graphic Line, length %s"
-msgstr "Vertikální grafická čára, dĺžka %s"
+msgstr "Zvislá grafická čiara, dĺžka %s"
 
 #: eeschema/sch_line.cpp:747
 #, c-format
@@ -19820,7 +19820,7 @@ msgstr "Vodorovný spoj, dĺžka %s"
 #: eeschema/sch_line.cpp:748
 #, c-format
 msgid "Horizontal Bus, length %s"
-msgstr "Horizontální zbernica, dĺžka %s"
+msgstr "Vodorovná zbernica, dĺžka %s"
 
 #: eeschema/sch_line.cpp:749
 #, c-format
@@ -22166,12 +22166,12 @@ msgstr "Nepodarilo sa uložiť zálohu do '%s'."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1545
 #, c-format
 msgid "The current configuration does not include the symbol library '%s'."
-msgstr "Aktuálna konfigurácia nezahŕňa knižnicu symbolov '%s'."
+msgstr "Aktuálne nastavenie nezahŕňa knižnicu symbolov '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1547
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1558
 msgid "Use Manage Symbol Libraries to edit the configuration."
-msgstr "Na úpravu konfigurácie použite 'Spravovať knižnice symbolov'."
+msgstr "Na úpravu nastavenia, použite 'Spravovať knižnice symbolov'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1548
 msgid "Library not found in symbol library table."
@@ -22180,7 +22180,7 @@ msgstr "Knižnica sa nenašla v tabuľke knižnice symbolov."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1556
 #, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration."
-msgstr "Knižnica symbolov '%s' nie je povolená v aktuálnej konfigurácii."
+msgstr "Knižnica symbolov '%s' nie je povolená v aktuálnom nastavení."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1559
 msgid "Symbol library not enabled."
@@ -23715,15 +23715,15 @@ msgstr "Kresliť a ťahať v ľubovolnom uhle"
 
 #: eeschema/tools/sch_actions.cpp:1235
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
-msgstr "Obmedziť kreslenie a ťahanie na horizontálne alebo vertikálne pohyby"
+msgstr "Obmedziť kreslenie a ťahanie na vodorovné alebo zvislé pohyby"
 
 #: eeschema/tools/sch_actions.cpp:1244
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
 msgstr ""
-"Obmedziť kreslenie a ťahanie na pohyby horizontálne, vertikálne alebo pod "
-"uhlom 45 stupňov"
+"Obmedziť kreslenie a ťahanie na pohyby vodorovné, zvislé alebo pod uhlom 45 "
+"stupňov"
 
 #: eeschema/tools/sch_actions.cpp:1254
 msgid "Switch to next line mode"
@@ -24391,7 +24391,7 @@ msgstr "Položka knižnice: "
 #: eeschema/tools/sch_inspection_tool.cpp:400
 #: pcbnew/tools/board_inspection_tool.cpp:1608
 msgid "The library is not included in the current configuration."
-msgstr "Knižnica nie je zahrnutá v aktuálnej konfigurácii."
+msgstr "Knižnica nie je zahrnutá v aktuálnom nastavení."
 
 #: eeschema/tools/sch_inspection_tool.cpp:402
 #: eeschema/tools/sch_inspection_tool.cpp:408
@@ -24401,7 +24401,7 @@ msgstr "Spravovať knižnice symbolov"
 #: eeschema/tools/sch_inspection_tool.cpp:406
 #: pcbnew/tools/board_inspection_tool.cpp:1616
 msgid "The library is not enabled in the current configuration."
-msgstr "Knižnica nie je povolená v aktuálnej konfigurácii."
+msgstr "Knižnica nie je povolená v aktuálnom nastavení."
 
 #: eeschema/tools/sch_inspection_tool.cpp:426
 #: pcbnew/tools/board_inspection_tool.cpp:1636
@@ -32310,15 +32310,15 @@ msgstr "Vodorovne: z ľava hore na doprava dole"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:61
 msgid "Horizontally: top right to bottom left"
-msgstr "Horizontálne: z vpravo hore na dole vľavo"
+msgstr "Vodorovne: z vpravo hore na dole vľavo"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:72
 msgid "Horizontally: bottom left to top right"
-msgstr "Horizontálne: z vľavo dole na vpravo hore"
+msgstr "Vodorovne: z vľavo dole na vpravo hore"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:83
 msgid "Horizontally:: bottom right to top left"
-msgstr "Horizontálne:: z vpravo dole na dole vľavo"
+msgstr "Vodorovne: z vpravo dole na dole vľavo"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:91
 msgid "Vertically: top left to bottom right"
@@ -32326,15 +32326,15 @@ msgstr "Zvislo: z ľava hore na doprava dole"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:102
 msgid "Vertically: bottom left to top right"
-msgstr "Vertikálne: z vľavo dole na vpravo hore"
+msgstr "Zvislo: z vľavo dole na vpravo hore"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:113
 msgid "Vertically: top right to bottom left"
-msgstr "Vertikálne: z vpravo hore na dole vľavo"
+msgstr "Zvislo: z vpravo hore na dole vľavo"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:124
 msgid "Vertically: bottom right to top left"
-msgstr "Vertikálne: z vpravo dole na dole vľavo"
+msgstr "Zvislo: z vpravo dole na dole vľavo"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:137
 msgid "Based on location of:"
@@ -33291,11 +33291,11 @@ msgstr "hodnota kroku"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:414
 msgid "horizontal count"
-msgstr "horizontálny počet"
+msgstr "počet vodorovne"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:415
 msgid "vertical count"
-msgstr "vertikálny počet"
+msgstr "počet zvislo"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:425
 msgid "stagger"
@@ -33315,7 +33315,7 @@ msgstr "Veľkosť poľa mriežky"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:41
 msgid "Horizontal count:"
-msgstr "Horizontálny počet:"
+msgstr "Počet vodorovne:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:43
 msgid "Number of columns"
@@ -33323,7 +33323,7 @@ msgstr "Počet stĺpcov"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:52
 msgid "Vertical count:"
-msgstr "Vertikálny počet:"
+msgstr "Počet zvislo:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:54
 #: pcbnew/dialogs/dialog_create_array_base.cpp:59
@@ -33336,7 +33336,7 @@ msgstr "Rozstup prvkov"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:79
 msgid "Horizontal spacing:"
-msgstr "Horizontálne rozstupy:"
+msgstr "Rozstupy vodorovne:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:81
 msgid "Distance between columns"
@@ -33344,7 +33344,7 @@ msgstr "Vzdialenosť medzi stĺpcami"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:92
 msgid "Vertical spacing:"
-msgstr "Vertikálne rozstupy:"
+msgstr "Rozstupy zvislo:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:94
 msgid "Distance between rows"
@@ -33352,7 +33352,7 @@ msgstr "Vzdialenosť medzi riadkami"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:114
 msgid "Horizontal offset:"
-msgstr "Vodorovný posun:"
+msgstr "Posun vodorovne:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:116
 msgid "Offset added to the next row position."
@@ -33360,7 +33360,7 @@ msgstr "Posun pridaný k pozícii nasledujúceho riadku."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:127
 msgid "Vertical offset:"
-msgstr "Zvislý posun:"
+msgstr "Posun zvislo:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:129
 msgid "Offset added to the next column position"
@@ -33400,11 +33400,11 @@ msgstr "Centrovať na zdrojové prvky"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
 msgid "Horizontal, then vertical"
-msgstr "Horizontálne, potom vertikálne"
+msgstr "Vodorovne, potom zvislo"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:197
 msgid "Vertical, then horizontal"
-msgstr "Vertikálne, potom horizontálne"
+msgstr "Zvislo, potom vodorovne"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:199
 msgid "Numbering Direction"
@@ -35335,7 +35335,7 @@ msgstr ""
 "Toto je lokálny pomer odstupu ako percentuálna šírka a výška plôšky pre toto "
 "puzdro.\n"
 "Hodnota 10 znamená, že hodnota vodorovného odstupu je 10% šírky plôšky a "
-"vertikálneho odstupu je 10% výšky plôšky.\n"
+"zvislého odstupu je 10% výšky plôšky.\n"
 "Výsledná hodnota odstupu je súčet týchto hodnôt a absolútnej hodnoty "
 "odstupu.\n"
 "Záporná hodnota znamená menšiu veľkosť apertúry ako je veľkosť plôšky.\n"
@@ -43234,7 +43234,7 @@ msgstr "Upraviť zónu"
 
 #: pcbnew/footprint_editor_utils.cpp:365 pcbnew/footprint_editor_utils.cpp:377
 msgid "Use Manage Footprint Libraries to edit the configuration."
-msgstr "Použite Spravovať knižnice puzdier na úpravu konfigurácie."
+msgstr "Na úpravu nastavenia, použite \"Spravovať knižnice puzdier\"."
 
 #: pcbnew/footprint_editor_utils.cpp:366
 msgid "Library not found in footprint library table."
@@ -50225,7 +50225,7 @@ msgstr "Zarovnať vybrané položky k vodorovnému stredu"
 
 #: pcbnew/tools/pcb_actions.cpp:1946
 msgid "Distribute Horizontally by Centers"
-msgstr "Rozdeliť horizontálne podľa stredov"
+msgstr "Rozdeliť vodorovne podľa stredov"
 
 #: pcbnew/tools/pcb_actions.cpp:1947
 msgid ""
@@ -50237,7 +50237,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1954
 msgid "Distribute Horizontally with Even Gaps"
-msgstr "Rozdeliť horizontálne s rovnomernými medzerami"
+msgstr "Rozdeliť vodorovne s rovnomernými medzerami"
 
 #: pcbnew/tools/pcb_actions.cpp:1955
 msgid ""
@@ -50249,7 +50249,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1962
 msgid "Distribute Vertically with Even Gaps"
-msgstr "Rozdeliť vertikálne s rovnomernými medzerami"
+msgstr "Rozdeliť zvislo s rovnomernými medzerami"
 
 #: pcbnew/tools/pcb_actions.cpp:1963
 msgid ""
@@ -50261,7 +50261,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1970
 msgid "Distribute Vertically by Centers"
-msgstr "Rozdeliť vertikálne podľa stredov"
+msgstr "Rozdeliť zvislo podľa stredov"
 
 #: pcbnew/tools/pcb_actions.cpp:1971
 msgid ""
