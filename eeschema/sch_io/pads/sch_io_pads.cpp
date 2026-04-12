@@ -259,7 +259,8 @@ bool SCH_IO_PADS::CanReadSchematicFile( const wxString& aFileName ) const
     if( !SCH_IO::CanReadSchematicFile( aFileName ) )
         return false;
 
-    return checkFileHeader( aFileName );
+    // Keep the shared header predicate ASCII-only because binary import is schematic-only
+    return checkFileHeader( aFileName ) || isBinarySchematicFile( aFileName );
 }
 
 
@@ -1601,7 +1602,7 @@ bool SCH_IO_PADS::checkFileHeader( const wxString& aFileName ) const
     {
     }
 
-    return isBinarySchematicFile( aFileName );
+    return false;
 }
 
 

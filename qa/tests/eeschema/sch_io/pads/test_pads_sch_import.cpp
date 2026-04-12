@@ -36,6 +36,9 @@
 #include <settings/settings_manager.h>
 
 #include <algorithm>
+#include <cstdint>
+#include <filesystem>
+#include <fstream>
 #include <map>
 #include <vector>
 
@@ -177,6 +180,39 @@ BOOST_AUTO_TEST_CASE( CanReadLibrary )
             KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
 
     BOOST_CHECK( plugin.CanReadLibrary( padsFile ) );
+}
+
+
+// Only the schematic path reads the binary format, so the library predicate must refuse a binary
+// container even though the schematic predicate accepts it.  The file is named .txt because
+// CanReadLibrary() screens .sch out by extension, which would make the check vacuous.
+BOOST_AUTO_TEST_CASE( CanReadLibraryRefusesBinaryContainer )
+{
+    // Minimum container the binary sniffer accepts: magic 00 FE, version 0x000D, 0x250 bytes
+    std::vector<uint8_t> container( 0x250, 0 );
+
+    container[0] = 0x00;
+    container[1] = 0xFE;
+    container[2] = 0x0D;
+    container[3] = 0x00;
+
+    std::filesystem::path binaryAsTxt =
+            std::filesystem::temp_directory_path() / "kicad_pads_binary_container.txt";
+
+    {
+        std::ofstream out( binaryAsTxt, std::ios::binary );
+
+        out.write( reinterpret_cast<const char*>( container.data() ),
+                   static_cast<std::streamsize>( container.size() ) );
+    }
+
+    SCH_IO_PADS plugin;
+    wxString    path = wxString::FromUTF8( binaryAsTxt.string() );
+
+    BOOST_CHECK( plugin.CanReadSchematicFile( path ) );
+    BOOST_CHECK( !plugin.CanReadLibrary( path ) );
+
+    std::filesystem::remove( binaryAsTxt );
 }
 
 

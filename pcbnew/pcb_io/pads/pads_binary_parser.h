@@ -192,7 +192,7 @@ private:
     static constexpr int32_t  ANGLE_SCALE = 1800000;
 
     // Version helpers
-    bool isOldFormat() const { return m_version == 0x2021 || m_version == 0x2022; }
+    bool isOldFormat() const { return m_sdb.IsOldFormat(); }
 
     // The v0x2021 direct decal-index pad chain (96 B placements + JMPVIA 100 B decal
     // table + @+56 lag) is verified only on v0x2021. v0x2022 shares the old-format

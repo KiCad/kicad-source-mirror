@@ -45,6 +45,21 @@ bool PADS_SDB::HasMagic( const std::vector<uint8_t>& aBytes )
 }
 
 
+bool PADS_SDB::IsSupportedVersion( uint16_t aVersion )
+{
+    switch( aVersion )
+    {
+    case 0x2021:
+    case 0x2022:
+    case 0x2024:
+    case 0x2025:
+    case 0x2026:
+    case 0x2027: return true;
+    default:     return false;
+    }
+}
+
+
 void PADS_SDB::Load( std::vector<uint8_t> aBytes )
 {
     m_data = std::move( aBytes );
@@ -73,16 +88,8 @@ void PADS_SDB::parseHeader()
 
     m_version = m_cursor.U16At( 2 );
 
-    switch( m_version )
-    {
-    case 0x2021:
-    case 0x2022:
-    case 0x2024:
-    case 0x2025:
-    case 0x2026:
-    case 0x2027: break;
-    default: THROW_IO_ERROR( wxString::Format( "Unsupported PADS binary version 0x%04X", m_version ) );
-    }
+    if( !IsSupportedVersion( m_version ) )
+        THROW_IO_ERROR( wxString::Format( "Unsupported PADS binary version 0x%04X", m_version ) );
 }
 
 
@@ -156,7 +163,7 @@ void PADS_SDB::locateOrigin()
 {
     const SDB_SECTION* setup = Section( 1 );
 
-    if( !setup || setup->totalBytes < 68 )
+    if( !setup || setup->totalBytes < 68 || setup->End() > m_data.size() )
         return;
 
     // The per-axis origin is the i32 pair at section-1 offset +60/+64 on the supported

@@ -160,6 +160,10 @@ public:
     /// True if the first two bytes match the PADS binary magic (cheap pre-check).
     static bool HasMagic( const std::vector<uint8_t>& aBytes );
 
+    /// The set of PADS binary container versions this decoder understands. The header
+    /// validation and the file-type probe share it so the supported set has one home.
+    static bool IsSupportedVersion( uint16_t aVersion );
+
     uint16_t                    Version() const { return m_version; }
     bool                        IsOldFormat() const { return m_version == 0x2021 || m_version == 0x2022; }
     const std::vector<uint8_t>& Bytes() const { return m_data; }

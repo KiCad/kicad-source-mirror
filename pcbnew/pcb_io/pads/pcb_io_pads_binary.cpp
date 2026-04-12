@@ -979,7 +979,10 @@ void PCB_IO_PADS_BINARY::loadCopperShapes()
 
         PCB_LAYER_ID layer = getMappedLayer( copper.layer );
 
-        if( layer == UNDEFINED_LAYER )
+        // A filled COPPER area is meaningful only on a copper layer; an unmapped or
+        // non-copper mapping falls back to F.Cu rather than placing a copper zone on,
+        // say, a silkscreen layer.
+        if( layer == UNDEFINED_LAYER || !IsCopperLayer( layer ) )
         {
             if( m_reporter )
             {
@@ -1031,7 +1034,7 @@ void PCB_IO_PADS_BINARY::loadZones()
 
         PCB_LAYER_ID pourLayer = getMappedLayer( pour_def.layer );
 
-        if( pourLayer == UNDEFINED_LAYER )
+        if( pourLayer == UNDEFINED_LAYER || !IsCopperLayer( pourLayer ) )
         {
             if( m_reporter )
             {

@@ -143,8 +143,7 @@ bool BINARY_PARSER::IsBinaryPadsFile( const wxString& aFileName )
 
     uint16_t version = static_cast<uint16_t>( header[2] ) | ( static_cast<uint16_t>( header[3] ) << 8 );
 
-    return version == 0x2021 || version == 0x2022 || version == 0x2024
-           || version == 0x2025 || version == 0x2026 || version == 0x2027;
+    return PADS_SDB::IsSupportedVersion( version );
 }
 
 
@@ -269,6 +268,11 @@ void BINARY_PARSER::parseBoardSetup()
     if( !setup || setup->totalBytes < 160 )
         return;
 
+    // A directory that declares a section larger than the file must not abort the import;
+    // skip gracefully and fall back to the default layer count, as every other reader does.
+    if( setup->End() > m_data.size() )
+        return;
+
     // The board-setup section holds u32 parameters at fixed word offsets; word 4 is the
     // maximum layer count. The coordinate origin (also in this section) is already read
     // by the SDB and applied in Parse().
@@ -308,11 +312,9 @@ void BINARY_PARSER::parsePartPlacements()
     {
         size_t off = static_cast<size_t>( i ) * recSize;
 
-        if( off + recSize > entry->totalBytes )
-            break;
-
-        // Guard against a directory whose perItem is smaller than the fields we read, so a
-        // count/size-skewed file cannot pull bytes from beyond the record into a placement.
+        // fieldSpan covers the full record (it is max(recSize, ...)), so this single guard
+        // also rejects a directory whose perItem is smaller than the fields we read, keeping
+        // a count/size-skewed file from pulling bytes beyond the record into a placement.
         if( off + fieldSpan > entry->totalBytes )
             break;
 
@@ -538,6 +540,10 @@ void BINARY_PARSER::parseSection19Parts()
 
             size_t base = markerBase - static_cast<size_t>( layout.feffOff );
 
+            // Section payloads are contiguous, so a genuine placement whose marker sits near
+            // the nominal section end legitimately reads its trailing fields from the bytes
+            // that follow (see the SectionBoundaryPlacement regression). Bound the read to the
+            // file, not the section; the alphanumeric-refdes filter below rejects stray markers.
             if( !m_cursor.InBounds( base, fieldSpan ) )
                 continue;
 
