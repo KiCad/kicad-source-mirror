@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-07 18:58+0300\n"
-"PO-Revision-Date: 2026-04-08 22:09+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2026-04-13 09:09+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2186,20 +2186,19 @@ msgstr "OpenGL kann nicht verwendet werden"
 
 #: common/api/api_plugin_manager.cpp:661 common/api/api_plugin_manager.cpp:743
 #: common/api/api_plugin_manager.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "error code %d"
-msgstr "Fehlercode: %d"
+msgstr "Fehlercode %d"
 
 #: common/api/api_plugin_manager.cpp:663 common/api/api_plugin_manager.cpp:745
 #: common/api/api_plugin_manager.cpp:835
-#, fuzzy, c-format
+#, c-format
 msgid "could not create plugin environment: %s"
-msgstr "Plugin-Umgebung neu erstellen"
+msgstr "Konnte Plugin-Umgebung nicht erstellen: %s"
 
 #: common/api/api_plugin_manager.cpp:784
-#, fuzzy
 msgid "requirements.txt could not be read"
-msgstr "Prozess konnte nicht erstellt werden"
+msgstr "Konnte requirements.txt nicht lesen"
 
 #: common/background_jobs_monitor.cpp:98
 msgid "Background Jobs"
