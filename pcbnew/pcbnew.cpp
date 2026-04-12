@@ -47,6 +47,7 @@
 #include <footprint_edit_frame.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_chooser_frame.h>
+#include <footprint_3d_preview_panel.h>
 #include <footprint_wizard_frame.h>
 #include <footprint_preview_panel.h>
 #include <footprint_info_impl.h>
@@ -280,6 +281,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case FRAME_FOOTPRINT_PREVIEW:
             return FOOTPRINT_PREVIEW_PANEL::New( aKiway, aParent, this );
+
+        case FRAME_FOOTPRINT_3D_PREVIEW:
+            return FOOTPRINT_3D_PREVIEW_PANEL::New( aKiway, aParent );
 
         case DIALOG_CONFIGUREPATHS:
         {

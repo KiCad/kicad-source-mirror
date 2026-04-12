@@ -584,6 +584,7 @@ set( COMMON_WIDGET_SRCS
     widgets/font_choice.cpp
     widgets/footprint_choice.cpp
     widgets/footprint_diff_widget.cpp
+    widgets/footprint_3d_preview_widget.cpp
     widgets/footprint_preview_widget.cpp
     widgets/footprint_select_widget.cpp
     widgets/grid_bitmap_toggle.cpp

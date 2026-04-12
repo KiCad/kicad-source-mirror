@@ -38,6 +38,7 @@
 #include <widgets/wx_menubar.h>
 #include <widgets/panel_remote_symbol.h>
 #include <advanced_config.h>
+#include <sch_action_plugin.h>
 
 
 void SCH_EDIT_FRAME::doReCreateMenuBar()
@@ -331,6 +332,18 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     submenuVariants->Add( SCH_ACTIONS::addVariant );
     submenuVariants->Add( SCH_ACTIONS::removeVariant );
     toolsMenu->Add( submenuVariants );
+
+    // Action Plugins
+    if( SCH_ACTION_PLUGINS::GetActionsCount() > 0 )
+    {
+        toolsMenu->AppendSeparator();
+
+        ACTION_MENU* submenuActionPlugins = new ACTION_MENU( false, selTool );
+        submenuActionPlugins->SetTitle( _( "External Plugins" ) );
+        submenuActionPlugins->SetIcon( BITMAPS::puzzle_piece );
+        buildActionPluginMenus( submenuActionPlugins );
+        toolsMenu->Add( submenuActionPlugins );
+    }
 
 #ifdef KICAD_IPC_API
     toolsMenu->AppendSeparator();

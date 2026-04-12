@@ -147,19 +147,49 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootp
 
 void FOOTPRINT_PREVIEW_PANEL::fitToCurrentFootprint()
 {
+    if( !m_currentFootprint )
+        return;
+
     bool  includeText = m_currentFootprint->TextOnly();
     BOX2I bbox = m_currentFootprint->GetBoundingBox( includeText );
 
-    if( bbox.GetSize().x > 0 && bbox.GetSize().y > 0 )
+    if( bbox.GetSize().x <= 0 || bbox.GetSize().y <= 0 )
+        return;
+
+    // Use the same scale-based fit that SYMBOL_PREVIEW_WIDGET::fitOnDrawArea()
+    // uses.  SetViewport() internally calls m_gal->GetScreenPixelSize() which
+    // returns zero when the canvas has not been mapped yet (e.g. the panel is
+    // on a hidden notebook tab), causing the autozoom to silently fail.
+    // Computing the scale from GetClientSize() + ToWorld() works regardless of
+    // whether the GAL surface is fully initialised.
+    //
+    // The fit is applied immediately AND deferred via CallAfter.  The immediate
+    // call handles the case where the canvas already has its final size.  The
+    // deferred call fires after FOOTPRINT_PREVIEW_WIDGET::ClearStatus() calls
+    // Layout() and gives the canvas its settled dimensions — which is the common
+    // case when DisplayFootprint() is called for the first time (canvas is
+    // initially hidden and sized to zero / stale value).
+    auto applyFit = [this, bbox]()
     {
-        // Autozoom
-        GetView()->SetViewport( BOX2D( bbox.GetOrigin(), bbox.GetSize() ) );
+        KIGFX::VIEW* view = GetView();
+        view->SetScale( 1.0 );
+        VECTOR2D clientSize = view->ToWorld(
+                VECTOR2D( GetClientSize().x, GetClientSize().y ), false );
 
-        // Add a margin
-        GetView()->SetScale( GetView()->GetScale() * 0.7 );
+        if( clientSize.x != 0.0 && clientSize.y != 0.0 )
+        {
+            double scale = std::min( std::fabs( clientSize.x / (double) bbox.GetWidth() ),
+                                     std::fabs( clientSize.y / (double) bbox.GetHeight() ) );
+            scale /= 1.2;
+            view->SetScale( scale );
+        }
 
-        Refresh();
-    }
+        view->SetCenter( VECTOR2D( bbox.Centre() ) );
+        ForceRefresh();
+    };
+
+    applyFit();              // immediate attempt
+    CallAfter( applyFit );   // deferred attempt with settled canvas size
 }
 
 

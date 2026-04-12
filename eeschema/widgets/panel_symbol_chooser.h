@@ -36,10 +36,12 @@ class wxSplitterWindow;
 
 class SYMBOL_LIBRARY_FILTER;
 class SYMBOL_PREVIEW_WIDGET;
+class FOOTPRINT_3D_PREVIEW_WIDGET;
 class FOOTPRINT_PREVIEW_WIDGET;
 class FOOTPRINT_SELECT_WIDGET;
 class SCH_BASE_FRAME;
 struct PICKED_SYMBOL;
+class wxNotebook;
 
 
 class PANEL_SYMBOL_CHOOSER : public wxPanel
@@ -167,7 +169,9 @@ protected:
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
 
     FOOTPRINT_SELECT_WIDGET*  m_fp_sel_ctrl;
+    wxNotebook*               m_fp_preview_book;
     FOOTPRINT_PREVIEW_WIDGET* m_fp_preview;
+    FOOTPRINT_3D_PREVIEW_WIDGET* m_fp_3d_preview;
     LIB_TREE*                 m_tree;
     HTML_WINDOW*              m_details;
 

@@ -23,6 +23,7 @@
  */
 
 #include <algorithm>
+#include <python/scripting/eeschema_action_plugins.h>
 #include <api/api_handler_sch.h>
 #include <api/api_server.h>
 #include <base_units.h>
@@ -207,6 +208,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetIcons( icon_bundle );
 
     LoadSettings( eeconfig() );
+
+    // Load Python action plugins before creating menus/toolbars
+    LoadEeschemaActionPlugins();
 
     setupTools();
     setupUIConditions();

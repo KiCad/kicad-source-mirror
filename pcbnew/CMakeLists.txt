@@ -400,6 +400,7 @@ set( PCBNEW_CLASS_SRCS
     fp_tree_synchronizing_adapter.cpp
     footprint_chooser_frame.cpp
     footprint_edit_frame.cpp
+    footprint_3d_preview_panel.cpp
     footprint_libraries_utils.cpp
     footprint_viewer_frame.cpp
     fp_tree_model_adapter.cpp

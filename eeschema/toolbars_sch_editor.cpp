@@ -33,6 +33,7 @@
 #include <eeschema_id.h>
 #include <pgm_base.h>
 #include <python_scripting.h>
+#include <sch_action_plugin.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <settings/common_settings.h>
@@ -263,9 +264,20 @@ void SCH_EDIT_FRAME::configureToolbars()
                 bool haveApiPlugins = false;
 #endif
 
-                if( scriptingAvailable || haveApiPlugins )
+                if( scriptingAvailable || haveApiPlugins
+                    || SCH_ACTION_PLUGINS::GetActionsCount() > 0 )
                 {
                     aToolbar->AddScaledSeparator( aToolbar->GetParent() );
+
+                    // Add legacy Python action plugin buttons
+                    if( SCH_ACTION_PLUGINS::GetActionsCount() > 0 )
+                    {
+                        SCH_EDIT_FRAME* schFrame =
+                                dynamic_cast<SCH_EDIT_FRAME*>( aToolbar->GetParent() );
+
+                        if( schFrame )
+                            schFrame->addActionPluginTools( aToolbar );
+                    }
 
                     if( haveApiPlugins )
                         AddApiPluginTools( aToolbar );

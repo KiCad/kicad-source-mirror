@@ -31,6 +31,7 @@
 #include <project_sch.h>
 #include <libraries/symbol_library_adapter.h>
 #include <widgets/lib_tree.h>
+#include <widgets/footprint_3d_preview_widget.h>
 #include <widgets/symbol_preview_widget.h>
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/footprint_select_widget.h>
@@ -42,6 +43,7 @@
 #include <algorithm>
 #include <wx/button.h>
 #include <wx/clipbrd.h>
+#include <wx/notebook.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/splitter.h>
@@ -66,7 +68,9 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
         m_hsplitter( nullptr ),
         m_vsplitter( nullptr ),
         m_fp_sel_ctrl( nullptr ),
+        m_fp_preview_book( nullptr ),
         m_fp_preview( nullptr ),
+        m_fp_3d_preview( nullptr ),
         m_tree( nullptr ),
         m_details( nullptr ),
         m_acceptHandler( std::move( aAcceptHandler ) ),
@@ -383,11 +387,16 @@ wxPanel* PANEL_SYMBOL_CHOOSER::constructRightPanel( wxWindow* aParent )
         m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( m_frame, panel );
         sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxLEFT | wxRIGHT, 5 );
 
-        m_fp_preview = new FOOTPRINT_PREVIEW_WIDGET( panel, m_frame->Kiway() );
-        m_fp_preview->SetUserUnits( m_frame->GetUserUnits() );
+        m_fp_preview_book = new wxNotebook( panel, wxID_ANY );
 
-        if( m_fp_preview )
-            sizer->Add( m_fp_preview, 10, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+        m_fp_preview = new FOOTPRINT_PREVIEW_WIDGET( m_fp_preview_book, m_frame->Kiway() );
+        m_fp_preview->SetUserUnits( m_frame->GetUserUnits() );
+        m_fp_preview_book->AddPage( m_fp_preview, _( "2D" ), true );
+
+        m_fp_3d_preview = new FOOTPRINT_3D_PREVIEW_WIDGET( m_fp_preview_book, m_frame->Kiway() );
+        m_fp_preview_book->AddPage( m_fp_3d_preview, _( "3D" ), false );
+
+        sizer->Add( m_fp_preview_book, 10, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
     }
     else
     {
@@ -493,6 +502,9 @@ void PANEL_SYMBOL_CHOOSER::ShutdownCanvases()
         m_fp_preview->GetPreviewPanel()->GetCanvas()->SetEvtHandlerEnabled( false );
         m_fp_preview->GetPreviewPanel()->GetCanvas()->StopDrawing();
     }
+
+    if( m_fp_3d_preview )
+        m_fp_3d_preview->Shutdown();
 }
 
 
@@ -525,7 +537,7 @@ void PANEL_SYMBOL_CHOOSER::onOpenLibsTimer( wxTimerEvent& aEvent )
 
 void PANEL_SYMBOL_CHOOSER::showFootprintFor( LIB_ID const& aLibId )
 {
-    if( !m_fp_preview || !m_fp_preview->IsInitialized() )
+    if( ( !m_fp_preview || !m_fp_preview->IsInitialized() ) && !m_fp_3d_preview )
         return;
 
     LIB_SYMBOL* symbol = nullptr;
@@ -554,12 +566,16 @@ void PANEL_SYMBOL_CHOOSER::showFootprintFor( LIB_ID const& aLibId )
 
 void PANEL_SYMBOL_CHOOSER::showFootprint( wxString const& aFootprint )
 {
-    if( !m_fp_preview || !m_fp_preview->IsInitialized() )
+    if( ( !m_fp_preview || !m_fp_preview->IsInitialized() ) && !m_fp_3d_preview )
         return;
 
     if( aFootprint == wxEmptyString )
     {
-        m_fp_preview->SetStatusText( _( "No footprint specified" ) );
+        if( m_fp_preview && m_fp_preview->IsInitialized() )
+            m_fp_preview->SetStatusText( _( "No footprint specified" ) );
+
+        if( m_fp_3d_preview )
+            m_fp_3d_preview->SetStatusText( _( "No footprint specified" ) );
     }
     else
     {
@@ -567,12 +583,25 @@ void PANEL_SYMBOL_CHOOSER::showFootprint( wxString const& aFootprint )
 
         if( lib_id.Parse( aFootprint ) == -1 && lib_id.IsValid() )
         {
-            m_fp_preview->ClearStatus();
-            m_fp_preview->DisplayFootprint( lib_id );
+            if( m_fp_preview && m_fp_preview->IsInitialized() )
+            {
+                m_fp_preview->ClearStatus();
+                m_fp_preview->DisplayFootprint( lib_id );
+            }
+
+            if( m_fp_3d_preview )
+            {
+                m_fp_3d_preview->ClearStatus();
+                m_fp_3d_preview->DisplayFootprint( lib_id );
+            }
         }
         else
         {
-            m_fp_preview->SetStatusText( _( "Invalid footprint specified" ) );
+            if( m_fp_preview && m_fp_preview->IsInitialized() )
+                m_fp_preview->SetStatusText( _( "Invalid footprint specified" ) );
+
+            if( m_fp_3d_preview )
+                m_fp_3d_preview->SetStatusText( _( "Invalid footprint specified" ) );
         }
     }
 }
@@ -658,6 +687,9 @@ void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
 
         if( m_fp_preview && m_fp_preview->IsInitialized() )
             m_fp_preview->SetStatusText( wxEmptyString );
+
+        if( m_fp_3d_preview )
+            m_fp_3d_preview->SetStatusText( wxEmptyString );
 
         populateFootprintSelector( LIB_ID() );
     }

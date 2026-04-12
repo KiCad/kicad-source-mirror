@@ -298,6 +298,7 @@ set( EESCHEMA_WIDGETS
     widgets/panel_sch_selection_filter.cpp
     widgets/panel_symbol_chooser.cpp
     widgets/panel_remote_symbol.cpp
+    widgets/panel_lcsc_import.cpp
     widgets/pinshape_combobox.cpp
     widgets/pintype_combobox.cpp
     widgets/symbol_diff_widget.cpp
@@ -366,6 +367,8 @@ set( EESCHEMA_SRCS
     ${EESCHEMA_WIDGETS}
     ${EESCHEMA_IMPORT_GFX}
     ${SYNC_SHEET_PIN_SRCS}
+    sch_action_plugin.cpp
+    python/scripting/eeschema_action_plugins.cpp
     annotate.cpp
     autoplace_fields.cpp
     bom_plugins.cpp

@@ -71,6 +71,9 @@ class PROGRESS_REPORTER;
 class wxSearchCtrl;
 class wxGenericTreeCtrl;
 class BITMAP_BUTTON;
+class SCH_ACTION_PLUGIN;
+class ACTION_MENU;
+class ACTION_TOOLBAR;
 
 
 /// Schematic search type used by the socket link with Pcbnew
@@ -933,6 +936,13 @@ protected:
     void configureToolbars() override;
 
     void doReCreateMenuBar() override;
+
+    // Action plugin support
+    void OnActionPluginMenu( wxCommandEvent& aEvent );
+    void OnActionPluginButton( wxCommandEvent& aEvent );
+    void RunActionPlugin( SCH_ACTION_PLUGIN* aActionPlugin );
+    void buildActionPluginMenus( ACTION_MENU* aActionMenu );
+    void addActionPluginTools( ACTION_TOOLBAR* aToolbar );
 
     /**
      * Send the KiCad netlist over to CVPCB.

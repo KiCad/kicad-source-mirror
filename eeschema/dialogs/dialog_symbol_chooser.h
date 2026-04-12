@@ -30,10 +30,12 @@
 #include <footprint_info.h>
 #include <widgets/html_window.h>
 #include <wx/checkbox.h>
+#include <wx/notebook.h>
 
 
 class SCH_BASE_FRAME;
 class PANEL_SYMBOL_CHOOSER;
+class PANEL_LCSC_IMPORT;
 struct PICKED_SYMBOL;
 
 
@@ -84,12 +86,15 @@ public:
     static std::mutex         g_Mutex;
 
 protected:
+    wxNotebook*               m_notebook;
     PANEL_SYMBOL_CHOOSER*     m_chooserPanel;
+    PANEL_LCSC_IMPORT*        m_lcscPanel;
     wxCheckBox*               m_keepSymbol;
     wxCheckBox*               m_useUnits;
 
 private:
     void onLazyLoadUpdate();
+    void onNotebookPageChanged( wxBookCtrlEvent& aEvent );
 
     wxString                  m_originalTitle;
 };

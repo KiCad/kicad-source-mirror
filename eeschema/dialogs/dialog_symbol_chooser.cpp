@@ -23,6 +23,7 @@
 
 #include <dialog_symbol_chooser.h>
 #include <widgets/panel_symbol_chooser.h>
+#include <widgets/panel_lcsc_import.h>
 #include <eeschema_settings.h>
 #include <kiface_base.h>
 #include <sch_base_frame.h>
@@ -34,6 +35,7 @@
 
 #include <wx/button.h>
 #include <wx/checkbox.h>
+#include <wx/notebook.h>
 #include <wx/sizer.h>
 
 std::mutex DIALOG_SYMBOL_CHOOSER::g_Mutex;
@@ -48,8 +50,13 @@ DIALOG_SYMBOL_CHOOSER::DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
-    m_chooserPanel = new PANEL_SYMBOL_CHOOSER( aParent, this, aFilter, aHistoryList, aAlreadyPlaced,
-                                               aAllowFieldEdits, aShowFootprints, aCancelled,
+
+    // Create notebook with two tabs: Library and LCSC Import
+    m_notebook = new wxNotebook( this, wxID_ANY );
+
+    m_chooserPanel = new PANEL_SYMBOL_CHOOSER( aParent, m_notebook, aFilter, aHistoryList,
+                                               aAlreadyPlaced, aAllowFieldEdits, aShowFootprints,
+                                               aCancelled,
                                                // Accept handler
                                                [this]()
                                                {
@@ -61,7 +68,17 @@ DIALOG_SYMBOL_CHOOSER::DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB
                                                    EndModal( wxID_CANCEL );
                                                } );
 
-    sizer->Add( m_chooserPanel, 1, wxEXPAND, 5 );
+    m_notebook->AddPage( m_chooserPanel, _( "Library" ), true );
+
+    m_lcscPanel = new PANEL_LCSC_IMPORT( aParent, m_notebook,
+                                          [this]()
+                                          {
+                                              EndModal( wxID_OK );
+                                          } );
+
+    m_notebook->AddPage( m_lcscPanel, _( "LCSC Import" ), false );
+
+    sizer->Add( m_notebook, 1, wxEXPAND, 5 );
 
     if( aPreselect && aPreselect->IsValid() )
         m_chooserPanel->SetPreselect( *aPreselect );
@@ -106,17 +123,25 @@ DIALOG_SYMBOL_CHOOSER::DIALOG_SYMBOL_CHOOSER( SCH_BASE_FRAME* aParent, const LIB
     Layout();
 
     Bind( wxEVT_CHAR_HOOK, &PANEL_SYMBOL_CHOOSER::OnChar, m_chooserPanel );
+    m_notebook->Bind( wxEVT_NOTEBOOK_PAGE_CHANGED, &DIALOG_SYMBOL_CHOOSER::onNotebookPageChanged,
+                      this );
 }
 
 
 DIALOG_SYMBOL_CHOOSER::~DIALOG_SYMBOL_CHOOSER()
 {
+    m_chooserPanel->ShutdownCanvases();
+    m_lcscPanel->ShutdownCanvases();
     Unbind( wxEVT_CHAR_HOOK, &PANEL_SYMBOL_CHOOSER::OnChar, m_chooserPanel );
 }
 
 
 LIB_ID DIALOG_SYMBOL_CHOOSER::GetSelectedLibId( int* aUnit ) const
 {
+    // If on the LCSC tab and a symbol was imported, return that
+    if( m_notebook->GetSelection() == 1 && m_lcscPanel->HasImportedSymbol() )
+        return m_lcscPanel->GetSelectedLibId();
+
     return m_chooserPanel->GetSelectedLibId( aUnit );
 }
 
@@ -126,6 +151,11 @@ std::vector<std::pair<FIELD_T, wxString>> DIALOG_SYMBOL_CHOOSER::GetFields() con
     return m_chooserPanel->GetFields();
 }
 
+
+void DIALOG_SYMBOL_CHOOSER::onNotebookPageChanged( wxBookCtrlEvent& aEvent )
+{
+    aEvent.Skip();
+}
 
 
 void DIALOG_SYMBOL_CHOOSER::onLazyLoadUpdate()
