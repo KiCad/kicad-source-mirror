@@ -683,6 +683,9 @@ bool TEARDROP_MANAGER::computeAnchorPoints( const TEARDROP_PARAMETERS& aParams, 
      * D is midpoint behind the aViaPad centre ( aPts[3] )
      */
 
+    if( c_buffer.OutlineCount() == 0 )
+        return false;
+
     SHAPE_LINE_CHAIN& padpoly = c_buffer.Outline(0);
     std::vector<VECTOR2I> points = padpoly.CPoints();
 
