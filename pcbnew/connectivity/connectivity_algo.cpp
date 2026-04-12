@@ -50,6 +50,7 @@
 
 bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
 {
+    bool anythingDeleted = false;
     markItemNetAsDirty( aItem );
 
     switch( aItem->Type() )
@@ -57,8 +58,12 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
     case PCB_FOOTPRINT_T:
         for( PAD* pad : static_cast<FOOTPRINT*>( aItem )->Pads() )
         {
-            m_itemMap[pad].MarkItemsAsInvalid();
-            m_itemMap.erase( pad );
+            if( m_itemMap.find( pad ) != m_itemMap.end() ) // prevent double deletion
+            {
+                m_itemMap[pad].MarkItemsAsInvalid();
+                m_itemMap.erase( pad );
+                anythingDeleted = true;
+            }
         }
 
         m_itemList.SetDirty( true );
@@ -70,17 +75,23 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
     case PCB_VIA_T:
     case PCB_ZONE_T:
     case PCB_SHAPE_T:
-        m_itemMap[aItem].MarkItemsAsInvalid();
-        m_itemMap.erase ( aItem );
-        m_itemList.SetDirty( true );
+        if( m_itemMap.find( aItem ) != m_itemMap.end() ) // prevent double deletion
+        {
+            m_itemMap[aItem].MarkItemsAsInvalid();
+            m_itemMap.erase ( aItem );
+            m_itemList.SetDirty( true );
+            anythingDeleted = true;
+        }
         break;
 
     default:
         return false;
     }
 
+
     // Once we delete an item, it may connect between lists, so mark both as potentially invalid
-    m_itemList.SetHasInvalid( true );
+    if( anythingDeleted )
+        m_itemList.SetHasInvalid( true );
 
     return true;
 }

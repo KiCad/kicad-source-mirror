@@ -790,6 +790,12 @@ void BOARD_COMMIT::Revert()
     if( bulkAddedItems.size() > 0 || bulkRemovedItems.size() > 0 || itemsChanged.size() > 0 )
         board->OnItemsCompositeUpdate( bulkAddedItems, bulkRemovedItems, itemsChanged );
 
+    if( m_isBoardEditor )
+    {
+        for( BOARD_ITEM* item : itemsToDelete )
+            connectivity->Remove( item );
+    }
+
     for( BOARD_ITEM* item : itemsToDelete )
         delete item;
 
