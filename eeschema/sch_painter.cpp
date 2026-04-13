@@ -1919,7 +1919,7 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     if( ( aLine->IsWire() || aLine->IsBus() ) && hopOverScale > 0.0 )
     {
         double arcRadius = defaultLineWidth * hopOverScale;
-        curr_wire_shape = aLine->BuildWireWithHopShape( m_schematic->GetCurrentScreen(), arcRadius );
+        curr_wire_shape = aLine->BuildWireWithHopShape( aLine->Schematic()->GetCurrentScreen(), arcRadius );
     }
     else
     {
