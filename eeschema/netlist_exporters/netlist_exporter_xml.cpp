@@ -40,6 +40,7 @@
 #include <sch_rule_area.h>
 #include <trace_helpers.h>
 
+#include <map>
 #include <set>
 #include <libraries/symbol_library_adapter.h>
 
@@ -598,13 +599,64 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             XNODE* xunitInfo;
             xcomp->AddChild( xunitInfo = node( wxT( "units" ) ) );
 
-            // Emit all units defined by the library symbol, independent of placement
             const std::unique_ptr<LIB_SYMBOL>& libSym = symbol->GetLibSymbolRef();
 
             if( libSym )
             {
-                for( const LIB_SYMBOL::UNIT_PIN_INFO& unitInfo : libSym->GetUnitPinInfo() )
+                // A multi-unit symbol can resolve to a different lib symbol per placed unit
+                // after unit-specific edits. For instane, if you have units A B C in a multi-unit
+                // symbol, and you edit only unit B, unit B will point to new, modified lib symbol
+                // but A and C will point to the original lib symbol.
+                //
+                // Export the unit metadata from the actual unit instances's lib symbols so the PCB
+                // footprint metadata matches during backannotation, which always works per unit.
+                //
+                // However, the user isn't required to place all units, so keep a fallback default unit info.
+                const std::vector<LIB_SYMBOL::UNIT_PIN_INFO>& defaultUnitInfo = libSym->GetUnitPinInfo();
+                std::map<int, SCH_SYMBOL*>                    symbolByUnit;
+
+                auto addUnitSymbol =
+                        [&]( SCH_SYMBOL* aUnitSymbol )
+                        {
+                            if( !aUnitSymbol )
+                                return;
+
+                            int unit = aUnitSymbol->GetUnitSelection( &sheet );
+
+                            if( unit > 0 )
+                                symbolByUnit.try_emplace( unit, aUnitSymbol );
+                        };
+
+                addUnitSymbol( symbol );
+
+                auto extraUnitRange = extra_units.equal_range( symbol );
+
+                // Collect the other placed units that share this reference so each unit number
+                // can be resolved back to the specific SCH_SYMBOL instance on the sheet.
+                for( auto it = extraUnitRange.first; it != extraUnitRange.second; ++it )
+                    addUnitSymbol( *it );
+
+                // Emit every unit slot from the default library symbol, but override that slot's
+                // metadata with the placed unit's resolved library symbol when one exists.
+                for( size_t unitIdx = 0; unitIdx < defaultUnitInfo.size(); ++unitIdx )
                 {
+                    LIB_SYMBOL::UNIT_PIN_INFO unitInfo = defaultUnitInfo[unitIdx];
+                    auto                      symbolIt = symbolByUnit.find( unitIdx + 1 );
+
+                    if( symbolIt != symbolByUnit.end() )
+                    {
+                        const std::unique_ptr<LIB_SYMBOL>& unitLibSym = symbolIt->second->GetLibSymbolRef();
+
+                        if( unitLibSym )
+                        {
+                            const std::vector<LIB_SYMBOL::UNIT_PIN_INFO>& unitSpecificInfo =
+                                    unitLibSym->GetUnitPinInfo();
+
+                            if( unitIdx < unitSpecificInfo.size() )
+                                unitInfo = unitSpecificInfo[unitIdx];
+                        }
+                    }
+
                     XNODE* xunit;
                     xunitInfo->AddChild( xunit = node( wxT( "unit" ) ) );
                     xunit->AddAttribute( wxT( "name" ), unitInfo.m_unitName );

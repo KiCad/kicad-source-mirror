@@ -71,6 +71,44 @@ static std::vector<wxXmlNode*> find_children( wxXmlNode* parent, const wxString&
     return out;
 }
 
+static wxXmlNode* find_component( wxXmlNode* components, const wxString& ref )
+{
+    for( wxXmlNode* comp : find_children( components, wxT( "comp" ) ) )
+    {
+        if( comp->GetAttribute( wxT( "ref" ), wxEmptyString ) == ref )
+            return comp;
+    }
+
+    return nullptr;
+}
+
+static wxXmlNode* find_unit( wxXmlNode* units, const wxString& name )
+{
+    for( wxXmlNode* unit : find_children( units, wxT( "unit" ) ) )
+    {
+        if( unit->GetAttribute( wxT( "name" ), wxEmptyString ) == name )
+            return unit;
+    }
+
+    return nullptr;
+}
+
+static std::vector<wxString> get_pin_numbers( wxXmlNode* unit )
+{
+    std::vector<wxString> pins;
+    wxXmlNode*            pinList = find_child( unit, wxT( "pins" ) );
+
+    BOOST_REQUIRE( pinList );
+
+    if( !pinList )
+        return pins;
+
+    for( wxXmlNode* pin : find_children( pinList, wxT( "pin" ) ) )
+        pins.push_back( pin->GetAttribute( wxT( "num" ), wxEmptyString ) );
+
+    return pins;
+}
+
 BOOST_FIXTURE_TEST_CASE( NetlistExporterXML_StackedPinNomenclature, XML_STACKED_PIN_FIXTURE )
 {
     // Load schematic with stacked pin numbers
@@ -146,5 +184,59 @@ BOOST_FIXTURE_TEST_CASE( NetlistExporterXML_StackedPinNomenclature, XML_STACKED_
     BOOST_CHECK( matchA || matchB );
 
     // Cleanup test artifact
+    wxRemoveFile( netFile.GetFullPath() );
+}
+
+
+// OK, this isn't really a "stacked pin" test, but it's a convenient place to verify that the XML netlist exporter is correctly
+// resolving per-unit lib symbol metadata for components with multiple placed units.
+BOOST_FIXTURE_TEST_CASE( NetlistExporterXML_UsesPerUnitResolvedLibraryMetadata, XML_STACKED_PIN_FIXTURE )
+{
+    KI_TEST::LoadSchematic( m_settingsManager, wxT( "netlist_exporter_unit_metadata_per_unit" ), m_schematic );
+
+    wxFileName netFile = m_schematic->Project().GetProjectFullName();
+    netFile.SetName( netFile.GetName() + wxT( "_xml_unit_metadata_test" ) );
+    netFile.SetExt( wxT( "xml" ) );
+
+    if( wxFileExists( netFile.GetFullPath() ) )
+        wxRemoveFile( netFile.GetFullPath() );
+
+    WX_STRING_REPORTER                    reporter;
+    std::unique_ptr<NETLIST_EXPORTER_XML> exporter = std::make_unique<NETLIST_EXPORTER_XML>( m_schematic.get() );
+
+    bool success = exporter->WriteNetlist( netFile.GetFullPath(), 0, reporter );
+    BOOST_REQUIRE( success && reporter.GetMessages().IsEmpty() );
+
+    wxXmlDocument xdoc;
+    BOOST_REQUIRE( xdoc.Load( netFile.GetFullPath() ) );
+
+    wxXmlNode* root = xdoc.GetRoot();
+    BOOST_REQUIRE( root );
+
+    wxXmlNode* components = find_child( root, wxT( "components" ) );
+    BOOST_REQUIRE( components );
+
+    wxXmlNode* u1 = find_component( components, wxT( "U1" ) );
+    BOOST_REQUIRE( u1 );
+
+    wxXmlNode* units = find_child( u1, wxT( "units" ) );
+    BOOST_REQUIRE( units );
+
+    wxXmlNode* unitA = find_unit( units, wxT( "A" ) );
+    wxXmlNode* unitB = find_unit( units, wxT( "B" ) );
+    wxXmlNode* unitC = find_unit( units, wxT( "C" ) );
+
+    BOOST_REQUIRE( unitA );
+    BOOST_REQUIRE( unitB );
+    BOOST_REQUIRE( unitC );
+
+    const std::vector<wxString> expectedUnitA{ wxT( "3" ), wxT( "2" ), wxT( "1" ) };
+    const std::vector<wxString> expectedUnitB{ wxT( "6" ), wxT( "5" ), wxT( "7" ) };
+    const std::vector<wxString> expectedUnitC{ wxT( "8" ), wxT( "4" ) };
+
+    BOOST_CHECK( get_pin_numbers( unitA ) == expectedUnitA );
+    BOOST_CHECK( get_pin_numbers( unitB ) == expectedUnitB );
+    BOOST_CHECK( get_pin_numbers( unitC ) == expectedUnitC );
+
     wxRemoveFile( netFile.GetFullPath() );
 }
