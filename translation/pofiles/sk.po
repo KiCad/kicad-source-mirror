@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-07 18:58+0300\n"
-"PO-Revision-Date: 2026-04-13 09:09+0000\n"
+"PO-Revision-Date: 2026-04-14 20:41+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -4481,7 +4481,7 @@ msgid ""
 "and board editors with previously open files"
 msgstr ""
 "Ak je začiarknuté, pri spustení projektu sa spustia nástroje, ako sú editory "
-"schém a plošných spojov s predtým otvorenými súbormi"
+"schém a plošných spojov s predchádzajúcimi otvorenými súbormi"
 
 #: common/dialogs/panel_common_settings_base.cpp:395
 msgid "File history size:"
@@ -18321,7 +18321,7 @@ msgstr "Dĺžka medzery:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:259
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:49
 msgid "Dash and dot lengths are ratios of the line width."
-msgstr "Délky pomlčky a bodu sú poměry šířky linky."
+msgstr "Dĺžka pomlčiek a bodiek je pomer šírky čiary."
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:267
 msgid "Operating-point Overlay"
@@ -21125,7 +21125,8 @@ msgstr ""
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
-"Nemožno načíst databázovou knižnicu: nemožno se připojit k databáze %s (%s)"
+"Nebolo možné načítať databázovú knižnicu: nebolo možné sa pripojiť k "
+"databáze %s (%s)"
 
 #: eeschema/sch_io/database/sch_io_database.h:52
 msgid "KiCad database library files"
@@ -21678,13 +21679,13 @@ msgstr "Neplatné knižničné ID"
 #, c-format
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
 msgstr ""
-"Súbor '%s' bol ignorovaný. Namiesto neho sa použije predtým nájdený súbor "
-"'%s'."
+"Súbor '%s' bol ignorovaný. Namiesto neho sa použije predchádzajúci nájdený "
+"súbor '%s'."
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:365
 #, c-format
 msgid "Expecting integer at line %d in file %s"
-msgstr "Očekáváno celé číslo na řádku %d v súboru %s"
+msgstr "Očakávané celé číslo na riadku %d v súbore %s"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:388
 #, c-format
@@ -22021,7 +22022,7 @@ msgstr "Neočíslované položky: %s%s"
 #: eeschema/sch_reference_list.cpp:665
 #, c-format
 msgid "Error: symbol %s%s%s (unit %d) exceeds units defined (%d)"
-msgstr "Chyba: symbol %s%s%s (jednotka %d) překračuje definované jednotky (%d)"
+msgstr "Chyba: symbol %s%s%s (jednotka %d) prekračuje definované jednotky (%d)"
 
 #: eeschema/sch_reference_list.cpp:704
 #, c-format
@@ -23233,9 +23234,9 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
-"Nemožno normalizovat novou cestu ke súboru schématu:\n"
+"Nie je možné normalizovať cestu k súboru so schémou nového listu:\n"
 "'%s'\n"
-"proti cestě k súboru nadřazeného listu:\n"
+"oproti ceste k súboru schémy nadradeného listu:\n"
 "'%s'."
 
 #: eeschema/sheet.cpp:237 kicad/tools/kicad_manager_control.cpp:692
@@ -24004,7 +24005,7 @@ msgstr "Model má iba jeden pár tvarov vlny, znížená presnosť"
 
 #: eeschema/sim/kibis/kibis.cpp:976 eeschema/sim/kibis/kibis.cpp:1182
 msgid "Driver needs at least a pullup or a pulldown"
-msgstr "Řadič vyžaduje alespoň jeden pullup alebo pulldown"
+msgstr "Radič vyžaduje aspoň jeden pullup alebo pulldown"
 
 #: eeschema/sim/kibis/kibis.cpp:1165 eeschema/sim/kibis/kibis.cpp:1174
 msgid ""
@@ -26829,7 +26830,7 @@ msgstr "Prejsť vpred"
 
 #: eeschema/tools/sch_actions.cpp:1442
 msgid "Move forward in sheet navigation history"
-msgstr "Posun vpřed v historii navigace listů"
+msgstr "Posun vpred v histórií navigácie listov"
 
 #: eeschema/tools/sch_actions.cpp:1449
 msgid "Previous Sheet"
@@ -28703,11 +28704,11 @@ msgstr "Formát núl:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:51
 msgid "No leading zeros (TZ format)"
-msgstr "Žádné přední nuly (TZ formát)"
+msgstr "Žiadne úvodné nuly (TZ formát)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:54
 msgid "No trailing zeros (LZ format)"
-msgstr "Žádné koncové nuly (LZ formát)"
+msgstr "Žiadne koncové nuly (LZ formát)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:66
 msgid "Coordinates Format"
@@ -28788,7 +28789,7 @@ msgstr "Formát pre palce:"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:144
 msgid "Usually: 3:3 in mm and 2:4 in inches"
-msgstr "Většinou: 3:3 v mm a 2:4 v palcích"
+msgstr "Zvyčajne: 3:3 v mm a 2:4 v palcoch"
 
 #: gerbview/events_called_functions.cpp:160 gerbview/gerbview_frame.cpp:170
 msgid "Layers Manager"
@@ -30005,8 +30006,8 @@ msgstr "Zadaný formát je neplatný\n"
 msgid ""
 "Comma separated list of untranslated layer names to include such as F.Cu,B.Cu"
 msgstr ""
-"Čárkou oddělený seznam nepřeložených názvů vrstev tak, aby obsahovaly "
-"například F.Cu,B.Cu"
+"Čiarkou oddelený zoznam nepreložených názvov vrstiev tak, aby obsahovali "
+"napríklad F.Cu,B.Cu"
 
 #: kicad/cli/command_pcb_export_base.cpp:48
 msgid ""
@@ -33617,7 +33618,7 @@ msgstr "Menovité napätie (RMS alebo DC):"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:43
 msgid "Voltage of the mains supply"
-msgstr "Napětí hlavního zdroje"
+msgstr "Napätie hlavného zdroja"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:54
 msgid "Overvoltage category:"
@@ -35884,7 +35885,7 @@ msgstr "Nastaviť odomknuté dielektrické vrstvy"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:236
 #, c-format
 msgid "Value too small (min value %s)."
-msgstr "Hodnota příliš malá (min hodnota %s)."
+msgstr "Hodnota je príliš malá (min hodnota %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:246
 msgid "All dielectric  thickness layers are locked"
@@ -38946,7 +38947,7 @@ msgstr "Nezobraziť komponenty s puzdrom typu 'Nešpecifikovaný'"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:260
 msgid "Substitute similarly named models"
-msgstr "Vyměnit modely s podobným názvem"
+msgstr "Nahradiť podobne pomenované modely"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:262
 msgid "Replace VRML models with STEP models of the same name"
@@ -43788,7 +43789,7 @@ msgstr "Držať mimo vyplnené zóny"
 
 #: pcbnew/dialogs/panel_rule_area_properties_keepout_base.cpp:34
 msgid "Zones will not fill copper into this area"
-msgstr "Zóny nebudou do této oblasti vyplňovat měď"
+msgstr "Zóny nebudú v tejto oblasti vyplňovať meď"
 
 #: pcbnew/dialogs/panel_rule_area_properties_keepout_base.cpp:38
 msgid "Keep out footprints"
@@ -46224,8 +46225,8 @@ msgstr "Názov zóny:"
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:72
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
 msgstr ""
-"Izolační medzera mědi pre tuto zónu (nastavit na 0 pre použití izolační "
-"mezery třídy sítě)"
+"Minimálna vzdialenosť medi pre túto zónu (nastaviť na 0, pre použitie "
+"vzdialenosť z triedy spojov)"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:85
 msgid "Minimum thickness of filled areas."
@@ -47470,7 +47471,7 @@ msgstr "%s veľkosť sa líši na vrstve %s."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:388
 #, c-format
 msgid "%s trapezoid delta differs on layer %s."
-msgstr "%s delta lichoběžníka sa líši na vrstve %s."
+msgstr "%s delta lichobežníka sa líši na vrstve %s."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:396
 #, c-format
@@ -52026,7 +52027,8 @@ msgstr ""
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2440
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr ""
-"Textové proměnné nemožno nastavit, protože nie je načten žiadny projekt."
+"Nebolo možné nastaviť textové premenné, pretože nie je načítaný žiadny "
+"projekt."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2516
 msgid ""
@@ -56201,7 +56203,7 @@ msgstr "Pridať charakteristiky dosky"
 
 #: pcbnew/tools/pcb_actions.cpp:178
 msgid "Add a board characteristics table on a graphic layer"
-msgstr "Přidat tabulku vlastností dosky do grafické vrstvy"
+msgstr "Pridať tabuľku charakteristík dosky na grafickú vrstvu"
 
 #: pcbnew/tools/pcb_actions.cpp:186
 msgid "Add Stackup Table"
@@ -56690,7 +56692,7 @@ msgstr "Vložte puzdro do súčasnej dosky"
 
 #: pcbnew/tools/pcb_actions.cpp:966
 msgid "Display previous footprint"
-msgstr "Zobraziť predchádzajúcu puzdro"
+msgstr "Zobraziť predchádzajúce puzdro"
 
 #: pcbnew/tools/pcb_actions.cpp:973
 msgid "Display next footprint"
@@ -57086,7 +57088,7 @@ msgstr "Prepnúť šírku spoja na ďalšiu"
 
 #: pcbnew/tools/pcb_actions.cpp:1360
 msgid "Change track width to next pre-defined size"
-msgstr "Změnit šířku spoje na další předdefinovanou velikost"
+msgstr "Zmeniť šírku spoja na nasledujúcu preddefinovanú veľkosť"
 
 #: pcbnew/tools/pcb_actions.cpp:1367
 msgid "Switch Track Width to Previous"
@@ -57094,7 +57096,7 @@ msgstr "Prepnúť šírku spoja na predchádzajúcu"
 
 #: pcbnew/tools/pcb_actions.cpp:1368
 msgid "Change track width to previous pre-defined size"
-msgstr "Změnit šířku spoje na předchozí předdefinovanou velikost"
+msgstr "Zmeniť šírku spoja na predchádzajúcu preddefinovanú veľkosť"
 
 #: pcbnew/tools/pcb_actions.cpp:1376
 msgid "Change via size to next pre-defined size"
