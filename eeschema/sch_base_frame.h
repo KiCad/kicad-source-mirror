@@ -277,15 +277,15 @@ public:
     void OnSymChangeDebounceTimer( wxTimerEvent& aEvent );
 
     /**
-     * Set the modification time of the symbol library table file.
+     * Set the modification timestamp of the watched symbol library.
      *
-     * This is used to detect changes to the symbol library table file.
-     *
-     * @param aTime is the modification time of the symbol library table file.
+     * For single-file libraries this is the file modification time.
+     * For directory-based libraries (.kicad_symdir) this is a hash of
+     * modification times from KIPLATFORM::IO::TimestampDir().
      */
-    void SetSymModificationTime( const wxDateTime& aTime )
+    void SetSymModificationTime( long long aTimestamp )
     {
-        m_watcherLastModified = aTime;
+        m_watcherTimestamp = aTimestamp;
     }
 
     SCH_SELECTION_TOOL* GetSelectionTool() override;
@@ -325,7 +325,8 @@ private:
     /// These are file watchers for the symbol library tables.
     std::unique_ptr<wxFileSystemWatcher>    m_watcher;
     wxFileName                              m_watcherFileName;
-    wxDateTime                              m_watcherLastModified;
+    long long                               m_watcherTimestamp;
+    bool                                    m_watcherIsDir;
     wxTimer                                 m_watcherDebounceTimer;
     bool                                    m_inSymChangeTimerEvent;
 
