@@ -165,6 +165,7 @@ bool PADS_SCH_BINARY_READER::ReadFile( const wxString& aFileName, std::vector<ui
 bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
 {
     m_sheetOffsets.clear();
+    m_streamEnd = 0;
     m_sheetNames.clear();
     m_decals.clear();
     m_decalIndex.clear();
@@ -292,6 +293,15 @@ void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
         {
             m_sheetOffsets.push_back( offs[k] );
 
+            // Each sheet record carries its block byte-length at +4; the blocks tile
+            // [start, start+length) contiguously, so the highest end is the end of the
+            // schematic SDB payload (the embedded OLE preview region follows it).
+            uint32_t blockLen = readU32( d, o + k * 48 + 4 );
+            size_t   blockEnd = static_cast<size_t>( offs[k] ) + blockLen;
+
+            if( blockEnd <= d.size() && blockEnd > m_streamEnd )
+                m_streamEnd = blockEnd;
+
             std::string name;
 
             for( size_t j = o + k * 48 + 0x0c; j < o + k * 48 + 48; ++j )
@@ -310,6 +320,12 @@ void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
 
         return;
     }
+}
+
+
+size_t PADS_SCH_BINARY_READER::streamLimit( const std::vector<uint8_t>& aData ) const
+{
+    return ( m_streamEnd > 0 && m_streamEnd <= aData.size() ) ? m_streamEnd : aData.size();
 }
 
 
@@ -378,7 +394,7 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
     // BUILTIN handle base = the decal controller's authoritative object count.
     m_decalBuiltinCount = m_pools.Count( POOL_DIRECTORY::DECAL_HANDLE_BASE );
 
-    size_t n = d.size();
+    size_t n = streamLimit( d );
 
     // --- Geometry library: find the decal-record table base (a run of >= 8 records
     // with 0x06@+0x29 and cumVertex@+0x34 monotone non-decreasing from 0). ---
@@ -719,7 +735,7 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
     // on the $OSR_SYMS/$GND_SYMS/$PWR_SYMS header; a placement's ptidx is the ordinal into
     // the pool of ITS sheet (resolved per sheet in decodePlacements).  Binding every
     // placement to only the first sheet's pool dropped every ptidx past that pool's size.
-    for( size_t i = DATA_STREAM_OFFSET; i + 2 * PT_STRIDE + 16 < d.size(); ++i )
+    for( size_t i = DATA_STREAM_OFFSET; i + 2 * PT_STRIDE + 16 < streamLimit( d ); ++i )
     {
         if( nameAt( d, i, 0x26 ) != "$OSR_SYMS"
             || nameAt( d, i + PT_STRIDE, 0x26 ) != "$GND_SYMS"
@@ -1470,7 +1486,7 @@ static bool isPartSlot( const std::vector<uint8_t>& d, size_t o )
 
 void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
 {
-    size_t n = d.size();
+    size_t n = streamLimit( d );
 
     for( size_t i = DATA_STREAM_OFFSET; i + PART_STRIDE < n; ++i )
     {
@@ -2051,7 +2067,7 @@ void PADS_SCH_BINARY_READER::decodeWires( const std::vector<uint8_t>& d )
 
     size_t i = DATA_STREAM_OFFSET;
 
-    while( i + SPLIT_STRIDE + VERTEX_STRIDE <= d.size() )
+    while( i + SPLIT_STRIDE + VERTEX_STRIDE <= streamLimit( d ) )
     {
         uint8_t marker = d[i + SPLIT_MARKER_OFF];
 
@@ -2281,7 +2297,7 @@ void PADS_SCH_BINARY_READER::decodeTexts( const std::vector<uint8_t>& d )
 {
     std::vector<TEXT_RECORD> records;
 
-    for( size_t i = DATA_STREAM_OFFSET; i + TEXT_STRIDE <= d.size(); ++i )
+    for( size_t i = DATA_STREAM_OFFSET; i + TEXT_STRIDE <= streamLimit( d ); ++i )
     {
         TEXT_RECORD rec;
 
@@ -2394,7 +2410,7 @@ void PADS_SCH_BINARY_READER::decodeJunctions( const std::vector<uint8_t>& d )
 
     size_t i = DATA_STREAM_OFFSET;
 
-    while( i + JUNCTION_STRIDE <= d.size() )
+    while( i + JUNCTION_STRIDE <= streamLimit( d ) )
     {
         if( !isJunctionRecord( d, i, pageWidth, pageHeight ) )
         {
@@ -2482,7 +2498,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
     size_t           netCount = 0;
     std::set<size_t> seenNet;
 
-    for( size_t i = DATA_STREAM_OFFSET; i + NET_STRIDE < d.size(); )
+    for( size_t i = DATA_STREAM_OFFSET; i + NET_STRIDE < streamLimit( d ); )
     {
         if( !isNetRecord( d, i ) )
         {
@@ -2533,7 +2549,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
     std::map<std::pair<int, int>, std::string> offNet;
     std::set<size_t>                           seenSeg;
 
-    for( size_t i = DATA_STREAM_OFFSET; i + SEG_STRIDE < d.size(); )
+    for( size_t i = DATA_STREAM_OFFSET; i + SEG_STRIDE < streamLimit( d ); )
     {
         if( !isSegmentMarker( readU16( d, i + 0x0c ) ) )
         {
@@ -2653,7 +2669,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
 
     std::set<std::pair<int, int>> emitted;
 
-    for( size_t i = DATA_STREAM_OFFSET; i + OFFPAGE_STRIDE * 2 < d.size(); )
+    for( size_t i = DATA_STREAM_OFFSET; i + OFFPAGE_STRIDE * 2 < streamLimit( d ); )
     {
         if( !coordOk( i ) || !coordOk( i + OFFPAGE_STRIDE )
             || readU16( d, i + OFFPAGE_STRIDE + 0x14 ) != readU16( d, i + 0x14 ) + 1 )

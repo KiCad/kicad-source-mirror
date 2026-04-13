@@ -265,6 +265,12 @@ private:
     /// block boundaries.
     int sheetIndexForOffset( size_t aOffset ) const;
 
+    /// Upper bound for the object scans: the end of the schematic SDB payload (the
+    /// last sheet block's end, from the p3 sheet table) so the embedded OLE preview
+    /// blobs that follow are never scanned.  Falls back to the buffer size when the
+    /// sheet table was not located.
+    size_t streamLimit( const std::vector<uint8_t>& aData ) const;
+
     /// Decode the part-type pool and the per-part-type component attribute pool.
     void decodeFields( const std::vector<uint8_t>& aData );
 
@@ -315,6 +321,11 @@ private:
     /// Start file offset of each per-sheet object block, from the pool3 sheet table
     /// (empty for a single-sheet design).
     std::vector<size_t>                  m_sheetOffsets;
+
+    /// End of the schematic SDB payload = the highest sheet-block end (start+length)
+    /// from the p3 sheet table; 0 when the table was not located.  Everything past it
+    /// is the embedded OLE preview region, which the object scans must not read.
+    size_t                               m_streamEnd = 0;
 
     /// Per-sheet display name ("[N]NAME") from the sheet table, parallel to m_sheetOffsets.
     std::vector<std::string>             m_sheetNames;
