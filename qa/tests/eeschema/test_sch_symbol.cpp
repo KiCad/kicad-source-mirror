@@ -198,6 +198,79 @@ BOOST_AUTO_TEST_CASE( FieldAdditionByName )
 
 
 /**
+ * Regression test for backannotation unit-swap undo.
+ *
+ * Undo restores symbols by swapping the current item image with the saved one through
+ * SCH_ITEM::SwapItemData().  A symbol whose unit was changed by backannotation must come back
+ * with both its per-sheet unit selection and its cached base unit in sync, otherwise the UI can
+ * show the restored unit letter while still drawing the other unit's pin numbers.
+ */
+BOOST_AUTO_TEST_CASE( UndoSwapItemDataRestoresUnitPinDisplayState )
+{
+    LoadSchematic( SchematicQAPath( wxS( "component_classes" ) ) );
+    BOOST_REQUIRE( m_schematic );
+
+    SCH_SHEET_LIST hierarchy = m_schematic->Hierarchy();
+    BOOST_REQUIRE( !hierarchy.empty() );
+
+    const SCH_SHEET_PATH& sheet = hierarchy[0];
+    SCH_SYMBOL*           symbol = nullptr;
+
+    for( SCH_ITEM* item : m_schematic->RootScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* candidate = static_cast<SCH_SYMBOL*>( item );
+
+        if( candidate->GetRef( &sheet, false ) == wxS( "U1" )
+            && candidate->GetUnitSelection( &sheet ) == 1 )
+        {
+            symbol = candidate;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( symbol );
+
+    auto pinNumbers =
+            []( const std::vector<SCH_PIN*>& aPins )
+            {
+                std::set<wxString> numbers;
+
+                for( SCH_PIN* pin : aPins )
+                    numbers.insert( pin->GetNumber() );
+
+                return numbers;
+            };
+
+    const std::set<wxString> unitAPins = { wxS( "1" ), wxS( "2" ), wxS( "3" ) };
+    const std::set<wxString> unitBPins = { wxS( "5" ), wxS( "6" ), wxS( "7" ) };
+
+    BOOST_CHECK_EQUAL( symbol->GetUnitSelection( &sheet ), 1 );
+    BOOST_CHECK_EQUAL( symbol->GetUnit(), 1 );
+    BOOST_CHECK( pinNumbers( symbol->GetLibPins() ) == unitAPins );
+
+    std::unique_ptr<SCH_SYMBOL> undoImage( static_cast<SCH_SYMBOL*>( symbol->Clone() ) );
+
+    symbol->SetUnitSelection( &sheet, 2 );
+    symbol->SetUnit( 2 );
+
+    BOOST_CHECK_EQUAL( symbol->GetUnitSelection( &sheet ), 2 );
+    BOOST_CHECK_EQUAL( symbol->GetUnit(), 2 );
+    BOOST_CHECK( pinNumbers( symbol->GetLibPins() ) == unitBPins );
+
+    symbol->SwapItemData( undoImage.get() );
+    symbol->UpdatePins();
+
+    BOOST_CHECK_EQUAL( symbol->GetUnitSelection( &sheet ), 1 );
+    BOOST_CHECK_EQUAL( symbol->GetUnit(), 1 );
+    BOOST_CHECK( pinNumbers( symbol->GetLibPins() ) == unitAPins );
+
+    BOOST_CHECK_EQUAL( undoImage->GetUnitSelection( &sheet ), 2 );
+    BOOST_CHECK_EQUAL( undoImage->GetUnit(), 2 );
+    BOOST_CHECK( pinNumbers( undoImage->GetLibPins() ) == unitBPins );
+}
+
+
+/**
  * Regression test for issue #23545.
  *
  * The symbol properties dialog called SetExcludedFromBoard() and SetExcludedFromPosFiles()

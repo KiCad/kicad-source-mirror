@@ -1712,8 +1712,6 @@ void SCH_SYMBOL::swapData( SCH_ITEM* aItem )
     UpdatePins();
 
     std::swap( m_pos, symbol->m_pos );
-    std::swap( m_unit, symbol->m_unit );
-    std::swap( m_bodyStyle, symbol->m_bodyStyle );
 
     m_fields.swap( symbol->m_fields ); // std::vector's swap()
 
