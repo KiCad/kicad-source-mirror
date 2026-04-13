@@ -159,8 +159,17 @@ private:
             __tsan_switch_to_fiber( m_mainStackContext->tsan_fiber, 0 );
 #endif
 
+#ifdef KICAD_SANITIZE_ADDRESS
+            void* fake_stack_save = nullptr;
+            __sanitizer_start_switch_fiber( &fake_stack_save, nullptr, 0 );
+#endif
+
             libcontext::jump_fcontext( &( aCor->m_callee.ctx ), m_mainStackContext->ctx,
                 reinterpret_cast<intptr_t>( &args ) );
+
+#ifdef KICAD_SANITIZE_ADDRESS
+            __sanitizer_finish_switch_fiber( fake_stack_save, nullptr, nullptr );
+#endif
         }
 
         void Continue( INVOCATION_ARGS* args )
@@ -208,7 +217,10 @@ public:
         ,m_valgrind_stack( 0 )
 #endif
 #ifdef KICAD_SANITIZE_ADDRESS
-        ,asan_stack( nullptr )
+        ,m_asanStackBottom( nullptr )
+        ,m_asanStackSize( 0 )
+        ,m_asanCallerStackBottom( nullptr )
+        ,m_asanCallerStackSize( 0 )
 #endif
     {
         m_stacksize = ADVANCED_CFG::GetCfg().m_CoroutineStackSize;
@@ -418,6 +430,11 @@ private:
         __tsan_set_fiber_name( m_callee.tsan_fiber, "Coroutine fiber" );
 #endif
 
+#if defined( KICAD_SANITIZE_ADDRESS ) && !defined( LIBCONTEXT_HAS_OWN_STACK )
+        m_asanStackBottom = m_stack.get();
+        m_asanStackSize = stackSize;
+#endif
+
         m_callee.ctx = libcontext::make_fcontext( sp, stackSize, callerStub );
         m_running = true;
 
@@ -500,10 +517,21 @@ private:
     // real entry point of the coroutine
     static void callerStub( intptr_t aData )
     {
+#ifdef KICAD_SANITIZE_ADDRESS
+        const void* caller_bottom = nullptr;
+        size_t      caller_size = 0;
+        __sanitizer_finish_switch_fiber( nullptr, &caller_bottom, &caller_size );
+#endif
+
         INVOCATION_ARGS& args = *reinterpret_cast<INVOCATION_ARGS*>( aData );
 
         // get pointer to self
         COROUTINE* cor     = args.destination;
+
+#ifdef KICAD_SANITIZE_ADDRESS
+        cor->m_asanCallerStackBottom = caller_bottom;
+        cor->m_asanCallerStackSize = caller_size;
+#endif
         cor->m_callContext = args.context;
 
         if( args.type == INVOCATION_ARGS::FROM_ROOT )
@@ -524,12 +552,21 @@ private:
         __tsan_switch_to_fiber( m_callee.tsan_fiber, 0 );
 #endif
 
+#ifdef KICAD_SANITIZE_ADDRESS
+        void* fake_stack_save = nullptr;
+        __sanitizer_start_switch_fiber( &fake_stack_save, m_asanStackBottom, m_asanStackSize );
+#endif
+
         wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::jumpIn" ) );
 
         args = reinterpret_cast<INVOCATION_ARGS*>(
             libcontext::jump_fcontext( &( m_caller.ctx ), m_callee.ctx,
                                        reinterpret_cast<intptr_t>( args ) )
             );
+
+#ifdef KICAD_SANITIZE_ADDRESS
+        __sanitizer_finish_switch_fiber( fake_stack_save, nullptr, nullptr );
+#endif
 
         return args;
     }
@@ -544,12 +581,23 @@ private:
         __tsan_switch_to_fiber( m_caller.tsan_fiber, 0 );
 #endif
 
+#ifdef KICAD_SANITIZE_ADDRESS
+        void* fake_stack_save = nullptr;
+        __sanitizer_start_switch_fiber( &fake_stack_save,
+                                        m_asanCallerStackBottom, m_asanCallerStackSize );
+#endif
+
         wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::jumpOut" ) );
 
         ret = reinterpret_cast<INVOCATION_ARGS*>(
             libcontext::jump_fcontext( &( m_callee.ctx ), m_caller.ctx,
                                        reinterpret_cast<intptr_t>( &args ) )
             );
+
+#ifdef KICAD_SANITIZE_ADDRESS
+        __sanitizer_finish_switch_fiber( fake_stack_save,
+                                         &m_asanCallerStackBottom, &m_asanCallerStackSize );
+#endif
 
         m_callContext = ret->context;
 
@@ -589,7 +637,10 @@ private:
 #endif
 
 #ifdef KICAD_SANITIZE_ADDRESS
-    void* asan_stack;
+    const void* m_asanStackBottom;
+    size_t      m_asanStackSize;
+    const void* m_asanCallerStackBottom;
+    size_t      m_asanCallerStackSize;
 #endif
 };
 
