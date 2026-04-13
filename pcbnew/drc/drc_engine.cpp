@@ -535,9 +535,9 @@ void DRC_ENGINE::loadImplicitRules()
                     diffPairClearanceRule->m_Name = wxString::Format( _( "tuning profile '%s'" ), aProfileName );
                     diffPairClearanceRule->SetImplicitSource( DRC_IMPLICIT_SOURCE::TUNING_PROFILE );
 
-                    expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && A.inDiffPair('*')" ),
-                                             aNetclass->GetName(),
-                                             LSET::Name( aLayerEntry.GetSignalLayer() ) );
+                    expr = wxString::Format(
+                            wxT( "A.hasExactNetclass('%s') && A.Layer == '%s' && AB.isCoupledDiffPair()" ),
+                            aNetclass->GetName(), LSET::Name( aLayerEntry.GetSignalLayer() ) );
                     diffPairClearanceRule->m_Condition = new DRC_RULE_CONDITION( expr );
 
                     DRC_CONSTRAINT min_clearanceConstraint( CLEARANCE_CONSTRAINT );
