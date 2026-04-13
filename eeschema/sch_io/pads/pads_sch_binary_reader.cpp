@@ -113,6 +113,37 @@ static uint32_t readU32( const std::vector<uint8_t>& d, size_t o )
 static void pageExtent( const std::vector<uint8_t>& d, int& aWidth, int& aHeight );
 
 
+void POOL_DIRECTORY::Parse( const std::vector<uint8_t>& aData )
+{
+    valid = false;
+    usedCount.fill( 0 );
+    usedBytes.fill( 0 );
+
+    if( aData.size() < TABLE_OFFSET + POOL_COUNT * DESCRIPTOR_SIZE )
+        return;
+
+    PADS_IO::BINARY_CURSOR cursor( aData );
+
+    for( size_t i = 0; i < POOL_COUNT; ++i )
+    {
+        size_t base = TABLE_OFFSET + i * DESCRIPTOR_SIZE;
+        usedCount[i] = cursor.U32At( base + USED_COUNT_OFFSET );
+        usedBytes[i] = cursor.U32At( base + USED_BYTES_OFFSET );
+    }
+
+    valid = true;
+}
+
+
+uint32_t POOL_DIRECTORY::Count( int aPool ) const
+{
+    if( aPool < 0 || aPool >= static_cast<int>( POOL_COUNT ) )
+        return 0;
+
+    return usedCount[aPool];
+}
+
+
 bool PADS_SCH_BINARY_READER::IsBinarySch( const std::vector<uint8_t>& aData )
 {
     if( aData.size() < DATA_STREAM_OFFSET )
@@ -157,6 +188,10 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     if( !IsBinarySch( aData ) )
         return false;
 
+    // Read the SDB pool directory once; the decoders take their authoritative
+    // object counts from it instead of rediscovering them from payload scans.
+    m_pools.Parse( aData );
+
     pageExtent( aData, m_pageWidthMils, m_pageHeightMils );
 
     decodeSheets( aData );
@@ -192,11 +227,8 @@ static constexpr uint32_t SHEET_SIG_TO_BLOCK = 664;  // block_off_A = signature 
 
 void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
 {
-    if( 0x7c + 4 > d.size() )
-        return;
-
-    // pool3.used_count (descriptor #3 @ 0x74, used_count at +8) = sheet count.
-    size_t sheetCount = readU32( d, 0x7c );
+    // The sheet count is the sheet controller's authoritative object count.
+    size_t sheetCount = m_pools.Count( POOL_DIRECTORY::SHEETS );
 
     if( sheetCount == 0 || sheetCount > 4096 )
         return;
@@ -343,9 +375,8 @@ static std::string nameAt( const std::vector<uint8_t>& d, size_t o, size_t maxle
 
 void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
 {
-    // BUILTIN handle base = pool5.used_count (header pool descriptor #5, +8).
-    if( 0x20 + 28 * 5 + 8 + 4 <= d.size() )
-        m_decalBuiltinCount = readU32( d, 0x20 + 28 * 5 + 8 );
+    // BUILTIN handle base = the decal controller's authoritative object count.
+    m_decalBuiltinCount = m_pools.Count( POOL_DIRECTORY::DECAL_HANDLE_BASE );
 
     size_t n = d.size();
 

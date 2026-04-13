@@ -32,6 +32,7 @@
 #include <wx/filename.h>
 
 using PADS_SCH_BINARY::PADS_SCH_BINARY_READER;
+using PADS_SCH_BINARY::POOL_DIRECTORY;
 
 namespace
 {
@@ -412,6 +413,38 @@ BOOST_AUTO_TEST_CASE( DetectsBinaryMagic )
     std::vector<uint8_t> wrongVer = makeSyntheticSch();
     wrongVer[2] = 0x99;
     BOOST_CHECK( !PADS_SCH_BINARY_READER::IsBinarySch( wrongVer ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( PoolDirectoryDecode )
+{
+    // The directory is 20 descriptors of 28 bytes at 0x20; used_count is at +8.
+    // Descriptor 3's used_count sits at 0x20 + 3*28 + 8 = 0x7c, descriptor 5's at
+    // 0x20 + 5*28 + 8 = 0xb4 -- the two roles the decode consumes.
+    std::vector<uint8_t> buf( POOL_DIRECTORY::TABLE_OFFSET
+                                      + POOL_DIRECTORY::POOL_COUNT * POOL_DIRECTORY::DESCRIPTOR_SIZE,
+                              0x00 );
+
+    putU16( buf, 0x20 + POOL_DIRECTORY::SHEETS * 28 + 8, 7 );           // sheet count low word
+    putU16( buf, 0x20 + POOL_DIRECTORY::DECAL_HANDLE_BASE * 28 + 8, 100 );
+
+    POOL_DIRECTORY dir;
+    dir.Parse( buf );
+
+    BOOST_CHECK( dir.valid );
+    BOOST_CHECK_EQUAL( dir.Count( POOL_DIRECTORY::SHEETS ), 7u );
+    BOOST_CHECK_EQUAL( dir.Count( POOL_DIRECTORY::DECAL_HANDLE_BASE ), 100u );
+
+    // Out-of-range pool indices are a defined 0, not an out-of-bounds read.
+    BOOST_CHECK_EQUAL( dir.Count( -1 ), 0u );
+    BOOST_CHECK_EQUAL( dir.Count( POOL_DIRECTORY::POOL_COUNT ), 0u );
+
+    // A buffer too small to hold the full table leaves the directory invalid.
+    POOL_DIRECTORY shortDir;
+    std::vector<uint8_t> tooSmall( 0x40, 0x00 );
+    shortDir.Parse( tooSmall );
+    BOOST_CHECK( !shortDir.valid );
+    BOOST_CHECK_EQUAL( shortDir.Count( POOL_DIRECTORY::SHEETS ), 0u );
 }
 
 

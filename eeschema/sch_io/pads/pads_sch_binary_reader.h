@@ -20,6 +20,7 @@
 #ifndef PADS_SCH_BINARY_READER_H_
 #define PADS_SCH_BINARY_READER_H_
 
+#include <array>
 #include <cstdint>
 #include <map>
 #include <memory>
@@ -37,6 +38,45 @@ class LIB_SYMBOL;
 
 namespace PADS_SCH_BINARY
 {
+
+/**
+ * The SDB pool directory of a PADS Logic binary `.sch`.
+ *
+ * A `.sch` is a serialized PADS SDB database, the same container family as the
+ * `.pcb`: a header, a fixed directory of controller descriptors, the serialized
+ * controller payloads, and a footer GUID.  The directory is 20 descriptors of 28
+ * bytes each at file offset 0x20 (so the payload stream begins at 0x250, exactly
+ * past the table).  Each descriptor's `used_count` (+8) is the authoritative
+ * object count for that controller and `used_bytes` (+12) its serialized extent,
+ * giving `element_stride = used_bytes / used_count`.
+ *
+ * Reading the directory turns the per-pool object count into a deterministic
+ * value rather than something a payload scan has to rediscover from a heuristic
+ * terminator.  Pool roles are stable across the v0x000D corpus; only the two the
+ * decode consumes directly are named here.
+ */
+struct POOL_DIRECTORY
+{
+    static constexpr size_t   POOL_COUNT = 20;
+    static constexpr size_t   TABLE_OFFSET = 0x20;
+    static constexpr size_t   DESCRIPTOR_SIZE = 28;
+    static constexpr unsigned USED_COUNT_OFFSET = 8;
+    static constexpr unsigned USED_BYTES_OFFSET = 12;
+
+    static constexpr int SHEETS = 3;            ///< pool3.used_count = sheet count.
+    static constexpr int DECAL_HANDLE_BASE = 5; ///< pool5.used_count = builtin decal handle base.
+
+    /// Read the descriptor table from @p aData.  Leaves @ref valid false (and all
+    /// counts zero) when the buffer is too small to hold the table.
+    void Parse( const std::vector<uint8_t>& aData );
+
+    /// Authoritative object count of controller @p aPool, or 0 when out of range.
+    uint32_t Count( int aPool ) const;
+
+    std::array<uint32_t, POOL_COUNT> usedCount{};
+    std::array<uint32_t, POOL_COUNT> usedBytes{};
+    bool                             valid = false;
+};
 
 /// One placed schematic symbol recovered from the binary .sch part array.
 /// Placement of one component text field (refdes/value/user) relative to the symbol origin.
@@ -267,6 +307,10 @@ private:
     /// negative) onto @p aScreen, returning the count appended.
     int appendSheetContent( SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aPath, int aSheetIndex,
                             int aPageHeightIU ) const;
+
+    /// The SDB pool directory, parsed once at the top of Parse().  Supplies the
+    /// authoritative per-controller object counts the decoders rely on.
+    POOL_DIRECTORY                       m_pools;
 
     /// Start file offset of each per-sheet object block, from the pool3 sheet table
     /// (empty for a single-sheet design).
