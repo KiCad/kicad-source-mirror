@@ -1594,7 +1594,12 @@ SCH_ITEM* SCH_IO_EAGLE::loadWire( const std::unique_ptr<EWIRE>& aWire, SEG& endp
     // For segment wires.
     endpoints = SEG( start, end );
 
-    if( aWire->curve )
+    int kicadLayer = kiCadLayer( aWire->layer );
+
+    // Don't process curved wires on an electrical layer into arcs, they aren't supported
+    // in the rest of the code
+    // TODO: When curved wires/buses are added, remove this restriction
+    if( (kicadLayer == LAYER_NOTES) && aWire->curve )
     {
         std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC );
 
