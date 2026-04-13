@@ -673,11 +673,13 @@ void KIWAY::ProjectChanged()
             top->ProjectChanged();
     }
 
-    // Cancel an in-progress load of libraries; handled through the schematic and PCB ifaces
-    if ( KIFACE* schface = KiFACE( KIWAY::FACE_SCH ) )
+    // Cancel an in-progress load of libraries; handled through the schematic and PCB ifaces.
+    // Use doLoad=false: only notify already-loaded kifaces, don't force-load absent ones
+    // (e.g. eeschema kiface isn't available in standalone pcbnew).
+    if ( KIFACE* schface = KiFACE( KIWAY::FACE_SCH, false ) )
         schface->ProjectChanged();
 
-    if ( KIFACE* pcbface = KiFACE( KIWAY::FACE_PCB ) )
+    if ( KIFACE* pcbface = KiFACE( KIWAY::FACE_PCB, false ) )
         pcbface->ProjectChanged();
 
     for( unsigned i=0;  i < KIWAY_PLAYER_COUNT;  ++i )
