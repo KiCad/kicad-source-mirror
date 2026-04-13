@@ -72,8 +72,13 @@ std::unordered_set<SCH_ITEM*> SCH_GROUP::GetSchItems() const
  */
 EDA_GROUP* getClosestGroup( SCH_ITEM* aItem, bool isSymbolEditor )
 {
+    // In the schematic editor, items with either symbols or sheets as their parents (e.g., fields,
+    // pins, sheet pins, etc.) don't get their own groups and instead follow the group of their parent
+    // object.
     if( !isSymbolEditor && aItem->GetParent() && aItem->GetParent()->Type() == SCH_SYMBOL_T )
         return static_cast<SCH_SYMBOL*>( aItem->GetParent() )->GetParentGroup();
+    else if( aItem->GetParent() && aItem->GetParent()->Type() == SCH_SHEET_T )
+        return static_cast<SCH_SHEET*>( aItem->GetParent() )->GetParentGroup();
     else
         return aItem->GetParentGroup();
 }

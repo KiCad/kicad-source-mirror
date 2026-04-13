@@ -134,9 +134,12 @@ bool SCH_ITEM::IsGroupableType() const
     case SCH_HIER_LABEL_T:
     case SCH_RULE_AREA_T:
     case SCH_DIRECTIVE_LABEL_T:
-    case SCH_SHEET_PIN_T:
     case SCH_SHEET_T:
         return true;
+
+    // Don't group sheet pins directly, they go along with an SCH_SHEET, and all operations
+    // should be performed on that sheet.
+    case SCH_SHEET_PIN_T:
     default:
         return false;
     }
