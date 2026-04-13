@@ -891,7 +891,12 @@ void OPENGL_GAL::LockContext( int aClientCookie )
     m_isContextLocked = true;
     m_lockClientCookie = aClientCookie;
 
-    Pgm().GetGLContextManager()->LockCtx( m_glPrivContext, this );
+    GL_CONTEXT_MANAGER* mgr = Pgm().GetGLContextManager();
+
+    if( !mgr )
+        return;
+
+    mgr->LockCtx( m_glPrivContext, this );
 }
 
 
@@ -906,7 +911,12 @@ void OPENGL_GAL::UnlockContext( int aClientCookie )
 
     m_isContextLocked = false;
 
-    Pgm().GetGLContextManager()->UnlockCtx( m_glPrivContext );
+    GL_CONTEXT_MANAGER* mgr = Pgm().GetGLContextManager();
+
+    if( !mgr )
+        return;
+
+    mgr->UnlockCtx( m_glPrivContext );
 }
 
 
