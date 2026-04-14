@@ -1140,11 +1140,14 @@ bool PANEL_REMOTE_SYMBOL::receiveSymbol( const nlohmann::json& aParams,
     savedId.SetLibItemName( libItemName );
     downloadedSymbol->SetLibId( savedId );
 
-    if( adapter->SaveSymbol( nickname, downloadedSymbol.release(), true ) != SYMBOL_LIBRARY_ADAPTER::SAVE_OK )
+    if( adapter->SaveSymbol( nickname, downloadedSymbol.get(), true ) != SYMBOL_LIBRARY_ADAPTER::SAVE_OK )
     {
         aError = _( "Unable to save the downloaded symbol." );
         return false;
     }
+
+    // Ownership transferred to the library cache on successful save
+    (void) downloadedSymbol.release();
 
     const LIBRARY_TABLE_SCOPE scope = settings->m_RemoteSymbol.add_to_global_table
                                               ? LIBRARY_TABLE_SCOPE::GLOBAL
