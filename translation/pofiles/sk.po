@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-04-14 21:09+0000\n"
+"PO-Revision-Date: 2026-04-15 16:10+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -3828,7 +3828,7 @@ msgstr "Zrušiť"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr "Adresa"
+msgstr "Url Adresa"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -4310,7 +4310,7 @@ msgstr "Automaticky"
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
 msgstr ""
-"Automatický vybrať svetlé alebo tmavé ikony na základe nastavenia farebnej "
+"Automaticky vybrať svetlé alebo tmavé ikony na základe nastavenia farebnej "
 "témy systému"
 
 #: common/dialogs/panel_common_settings_base.cpp:211
@@ -8558,7 +8558,7 @@ msgstr "Strana %s"
 #: common/plotters/PDF_plotter.cpp:671 common/plotters/PDF_plotter.cpp:674
 #, c-format
 msgid "%s (Page %s)"
-msgstr "%s (strana %s)"
+msgstr "%s (Strana %s)"
 
 #: common/plotters/PDF_plotter.cpp:1425
 #, c-format
@@ -28098,7 +28098,7 @@ msgstr ""
 
 #: kicad/pcm/pcm_task_manager.cpp:369
 msgid "Archive does not contain a valid metadata.json file"
-msgstr "Archiv neobsahuje platný súbor metadat .json"
+msgstr "Archív neobsahuje platný súbor metadát .json"
 
 #: kicad/pcm/pcm_task_manager.cpp:378
 msgid "Archive metadata must have a single version defined"
@@ -28308,7 +28308,7 @@ msgstr "Odovzdať projekt..."
 
 #: kicad/project_tree_pane.cpp:1015 kicad/project_tree_pane.cpp:1029
 msgid "Commit changes to the local repository"
-msgstr "Commit-núť zmeny do lokálneho repozitára"
+msgstr "Commitnúť zmeny do lokálneho repozitára"
 
 #: kicad/project_tree_pane.cpp:1018
 msgid "Push"
@@ -37057,11 +37057,11 @@ msgstr "Medzera reliéfu:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:900
 msgid "Spoke width:"
-msgstr "Šírka paprsku:"
+msgstr "Šírka ramena tep.prep.:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:911
 msgid "Spoke angle:"
-msgstr "Uhol paprsku:"
+msgstr "Uhol ramena tep.prep.:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:947
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1075
@@ -37375,11 +37375,11 @@ msgstr "Formát súradníc:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:220
 msgid "4.5, unit mm"
-msgstr "4,5, jednotka mm"
+msgstr "4.5, jednotka mm"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:220
 msgid "4.6, unit mm"
-msgstr "4,6, jednotka mm"
+msgstr "4.6, jednotka mm"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:226
 msgid "Use extended X2 format (recommended)"
@@ -41161,7 +41161,7 @@ msgstr "Lokálne prepísať na %s; tepelná medzera profilu: %s."
 #: pcbnew/drc/drc_engine.cpp:943
 #, c-format
 msgid "%s min thickness: %s."
-msgstr "%s minimálna hrúbka: %s."
+msgstr "%s min. hrúbka: %s."
 
 #: pcbnew/drc/drc_engine.cpp:957
 #, c-format
@@ -42014,12 +42014,12 @@ msgstr "%s má prepísanú medzeru tepelného reliéfu."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:307
 #, c-format
 msgid "%s has thermal relief spoke width override."
-msgstr "%s má prepísanú šírku paprska tepelného reliéfu."
+msgstr "%s má prepísanú šírku ramena tepelného reliéfu."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:313
 #, c-format
 msgid "%s has thermal relief spoke angle override."
-msgstr "%s má prepísaný uhol paprska tepelného reliéfu."
+msgstr "%s má prepísaný uhol ramena tepelného reliéfu."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:319
 #, c-format
@@ -42185,7 +42185,7 @@ msgstr "%s šírka ramena tep. prepojenia sa nezhoduje."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:625
 #, c-format
 msgid "%s min thickness differs."
-msgstr "%s min hrúbka sa nezhoduje."
+msgstr "%s min. hrúbka sa nezhoduje."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:628
 #, c-format
@@ -42576,7 +42576,7 @@ msgstr "(%s maximálny priemer %s; aktuálny %s)"
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:222
 #, c-format
 msgid "(layer %s; %d spokes connected to isolated island)"
-msgstr "(vrstva %s; %d paprskov pripojených k izolovanému ostrovčeku)"
+msgstr "(vrstva %s; %d ramien pripojených k izolovanému ostrovčeku)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:229
 #, c-format
@@ -43110,7 +43110,7 @@ msgstr "(očakávané 'THD'; aktuálne '%s')"
 #: pcbnew/footprint.cpp:3390
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(očakávalo sa 'SMD'; aktuálne '%s')"
+msgstr "(očakávané 'SMD'; aktuálne '%s')"
 
 #: pcbnew/footprint.cpp:3611
 #, c-format
@@ -45669,7 +45669,7 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
-"CADSTAR šablona '%s' má tepelný reliéf v pôvodnom prevedení, ale šírka "
+"CADSTAR šablóna '%s' má tepelný reliéf v pôvodnom prevedení, ale šírka "
 "ramena tepelného prepojenia (%.2f mm) je tenšia ako minimálna šírky zóny "
 "(%.2f mm). KiCad vyžaduje zachovanie minimálnej šírky zóny. Preto bola "
 "minimálna šírka použitá jako nová šírka ramena tep. prepojenia a bude "
@@ -47765,7 +47765,7 @@ msgstr "Nenájdené žiadne problémy s doskou."
 
 #: pcbnew/tools/board_editor_control.cpp:647
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr "Aktualizácia DPS vyžaduje plne anotovanú schému."
+msgstr "Aktualizácia DPS vyžaduje plne očíslovanú schému."
 
 #: pcbnew/tools/board_editor_control.cpp:661
 msgid ""
