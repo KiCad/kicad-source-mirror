@@ -268,25 +268,25 @@ private:
 class SDB_RECORD
 {
 public:
-    SDB_RECORD( const BINARY_CURSOR& aCursor, uint32_t aBase ) : m_cursor( aCursor ), m_base( aBase )
+    SDB_RECORD( const BINARY_CURSOR& aCursor, size_t aBase ) : m_cursor( aCursor ), m_base( aBase )
     {
     }
 
-    uint8_t     U8( uint32_t aOffset ) const { return m_cursor.U8At( m_base + aOffset ); }
-    uint16_t    U16( uint32_t aOffset ) const { return m_cursor.U16At( m_base + aOffset ); }
-    uint32_t    U32( uint32_t aOffset ) const { return m_cursor.U32At( m_base + aOffset ); }
-    int32_t     I32( uint32_t aOffset ) const { return m_cursor.I32At( m_base + aOffset ); }
-    double      F64( uint32_t aOffset ) const { return m_cursor.F64At( m_base + aOffset ); }
-    std::string Str( uint32_t aOffset, size_t aMaxLen ) const
+    uint8_t     U8( size_t aOffset ) const { return m_cursor.U8At( m_base + aOffset ); }
+    uint16_t    U16( size_t aOffset ) const { return m_cursor.U16At( m_base + aOffset ); }
+    uint32_t    U32( size_t aOffset ) const { return m_cursor.U32At( m_base + aOffset ); }
+    int32_t     I32( size_t aOffset ) const { return m_cursor.I32At( m_base + aOffset ); }
+    double      F64( size_t aOffset ) const { return m_cursor.F64At( m_base + aOffset ); }
+    std::string Str( size_t aOffset, size_t aMaxLen ) const
     {
         return m_cursor.StringAt( m_base + aOffset, aMaxLen );
     }
 
-    uint32_t Base() const { return m_base; }
+    size_t Base() const { return m_base; }
 
 private:
     const BINARY_CURSOR& m_cursor;
-    uint32_t             m_base;
+    size_t               m_base;
 };
 
 } // namespace PADS_IO

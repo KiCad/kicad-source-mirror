@@ -53,6 +53,9 @@
 namespace PADS_SCH_BINARY
 {
 
+using PADS_IO::BINARY_CURSOR;
+using PADS_IO::SDB_RECORD;
+
 static constexpr uint8_t  MAGIC1 = 0xFE;
 static constexpr uint16_t VERSION = 0x000D;
 static constexpr size_t   DATA_STREAM_OFFSET = 0x250;
@@ -226,6 +229,13 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
 // ---------------------------------------------------------------------------
 static const std::array<uint8_t, 8> SHEET_SIGNATURE = { 0x80, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00 };
 static constexpr uint32_t SHEET_SIG_TO_BLOCK = 664;  // block_off_A = signature - 664
+static constexpr int      SHEET_SIG_SCALE_OFF = 8;   // f32 SCALE, in [1,60]
+static constexpr int      SHEET_SIG_HEAPPTR_OFF = 12;// heap ptr, high byte >= 0xC0
+static constexpr size_t   SHEET_TABLE_STRIDE = 48;
+static constexpr int      SHEET_REC_START_OFF = 0;   // u32 block start offset
+static constexpr int      SHEET_REC_LEN_OFF = 4;     // u32 block byte length
+static constexpr int      SHEET_REC_MARKER_OFF = 0x0a;// u16 == 0xFFFF
+static constexpr int      SHEET_REC_NAME_OFF = 0x0c; // "[N]NAME"
 
 
 void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
@@ -235,6 +245,8 @@ void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
 
     if( sheetCount == 0 || sheetCount > 4096 )
         return;
+
+    BINARY_CURSOR cur( d );
 
     // The first VALID per-sheet CAE signature: SCALE f32 in [1,60] at +8, and a
     // heap pointer (high byte >= 0xC0) at +12, rejecting stray byte coincidences.
@@ -246,10 +258,11 @@ void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
         if( !std::equal( SHEET_SIGNATURE.begin(), SHEET_SIGNATURE.end(), &d[i] ) )
             continue;
 
-        uint32_t scaleBits = readU32( d, i + 8 );
-        float    scale = 0.0f;
+        SDB_RECORD sig( cur, i );
+        uint32_t   scaleBits = sig.U32( SHEET_SIG_SCALE_OFF );
+        float      scale = 0.0f;
         std::memcpy( &scale, &scaleBits, sizeof( scale ) );
-        uint32_t heapPtr = readU32( d, i + 12 );
+        uint32_t heapPtr = sig.U32( SHEET_SIG_HEAPPTR_OFF );
 
         if( scale >= 1.0f && scale <= 60.0f && ( heapPtr >> 24 ) >= 0xC0 )
         {
@@ -267,9 +280,11 @@ void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
     // Locate the stride-48 sheet table: a record whose block offset equals targetA0
     // and whose 0xFFFF marker is present, followed by sheetCount strictly-increasing
     // in-bounds block offsets.
-    for( size_t o = DATA_STREAM_OFFSET; o + sheetCount * 48 <= d.size(); ++o )
+    for( size_t o = DATA_STREAM_OFFSET; o + sheetCount * SHEET_TABLE_STRIDE <= d.size(); ++o )
     {
-        if( readU32( d, o ) != targetA0 || readU16( d, o + 0x0a ) != 0xFFFF )
+        SDB_RECORD head( cur, o );
+
+        if( head.U32( SHEET_REC_START_OFF ) != targetA0 || head.U16( SHEET_REC_MARKER_OFF ) != 0xFFFF )
             continue;
 
         std::vector<uint32_t> offs;
@@ -277,7 +292,7 @@ void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
 
         for( size_t k = 0; k < sheetCount; ++k )
         {
-            uint32_t a = readU32( d, o + k * 48 );
+            uint32_t a = SDB_RECORD( cur, o + k * SHEET_TABLE_STRIDE ).U32( SHEET_REC_START_OFF );
 
             if( a < DATA_STREAM_OFFSET || a >= d.size() || ( k > 0 && a <= offs.back() ) )
             {
@@ -298,7 +313,8 @@ void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
             // Each sheet record carries its block byte-length at +4; the blocks tile
             // [start, start+length) contiguously, so the highest end is the end of the
             // schematic SDB payload (the embedded OLE preview region follows it).
-            uint32_t blockLen = readU32( d, o + k * 48 + 4 );
+            size_t   recBase = o + k * SHEET_TABLE_STRIDE;
+            uint32_t blockLen = SDB_RECORD( cur, recBase ).U32( SHEET_REC_LEN_OFF );
             size_t   blockEnd = static_cast<size_t>( offs[k] ) + blockLen;
 
             if( blockEnd <= d.size() && blockEnd > m_streamEnd )
@@ -306,7 +322,7 @@ void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
 
             std::string name;
 
-            for( size_t j = o + k * 48 + 0x0c; j < o + k * 48 + 48; ++j )
+            for( size_t j = recBase + SHEET_REC_NAME_OFF; j < recBase + SHEET_TABLE_STRIDE; ++j )
             {
                 uint8_t c = d[j];
 
@@ -1959,21 +1975,28 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
 // explicit gap slices between cumulative jumps are bus geometry.  Runs appear
 // in sheet order (file order, not active-first; see decodeSheets).
 // ---------------------------------------------------------------------------
-static bool isVertexRecord( const std::vector<uint8_t>& d, size_t o, int aPageWidth, int aPageHeight )
+static constexpr int VERTEX_X_OFF = 3;       // u16 page-biased X (after 3 zero bytes)
+static constexpr int VERTEX_Y_OFF = 5;       // u16 page-biased Y
+static constexpr int VERTEX_TRAILER_OFF = 7; // 0x00, or 0xff on the terminal slot
+
+
+static bool isVertexRecord( const BINARY_CURSOR& cur, size_t o, int aPageWidth, int aPageHeight )
 {
-    if( o + VERTEX_STRIDE > d.size() )
+    if( !cur.InBounds( o, VERTEX_STRIDE ) )
         return false;
+
+    SDB_RECORD rec( cur, o );
 
     // Slot grammar: first three bytes zero; trailer 0x00, with 0xff allowed for
     // the terminal slot abutting the trailing label pool.
-    if( d[o] != 0 || d[o + 1] != 0 || d[o + 2] != 0 )
+    if( rec.U8( 0 ) != 0 || rec.U8( 1 ) != 0 || rec.U8( 2 ) != 0 )
         return false;
 
-    if( d[o + 7] != 0x00 && d[o + 7] != 0xFF )
+    if( rec.U8( VERTEX_TRAILER_OFF ) != 0x00 && rec.U8( VERTEX_TRAILER_OFF ) != 0xFF )
         return false;
 
-    int x = designMil( readU16( d, o + 3 ) );
-    int y = designMil( readU16( d, o + 5 ) );
+    int x = designMil( rec.U16( VERTEX_X_OFF ) );
+    int y = designMil( rec.U16( VERTEX_Y_OFF ) );
 
     if( x % 50 != 0 || y % 50 != 0 )
         return false;
@@ -1994,20 +2017,22 @@ struct SPLIT_RUN
 };
 
 
-static bool parseSplitRun( const std::vector<uint8_t>& d, size_t aOffset, uint8_t aMarker, int aPageWidth,
+static bool parseSplitRun( const BINARY_CURSOR& cur, size_t aOffset, uint8_t aMarker, int aPageWidth,
                            int aPageHeight, SPLIT_RUN& aRun )
 {
     size_t pos = aOffset;
     size_t previousStart = 0;
-    size_t maxVertices = d.size() / VERTEX_STRIDE;
+    size_t maxVertices = cur.Size() / VERTEX_STRIDE;
 
     std::vector<int>    nverts;
     std::vector<size_t> cumulative;
 
-    while( pos + SPLIT_STRIDE + VERTEX_STRIDE <= d.size() && d[pos + SPLIT_MARKER_OFF] == aMarker )
+    while( cur.InBounds( pos, SPLIT_STRIDE + VERTEX_STRIDE )
+           && SDB_RECORD( cur, pos ).U8( SPLIT_MARKER_OFF ) == aMarker )
     {
-        int    nv = d[pos + SPLIT_NVERTS_OFF];
-        size_t cum = readU32( d, pos + SPLIT_CUMULATIVE_OFF );
+        SDB_RECORD rec = SDB_RECORD( cur, pos );
+        int    nv = rec.U8( SPLIT_NVERTS_OFF );
+        size_t cum = rec.U32( SPLIT_CUMULATIVE_OFF );
 
         if( nv == 0 )
             break;
@@ -2027,10 +2052,10 @@ static bool parseSplitRun( const std::vector<uint8_t>& d, size_t aOffset, uint8_
     if( nverts.empty() )
         return false;
 
-    if( pos + VERTEX_STRIDE > d.size() || d[pos + SPLIT_MARKER_OFF] != aMarker )
+    if( !cur.InBounds( pos, VERTEX_STRIDE ) || SDB_RECORD( cur, pos ).U8( SPLIT_MARKER_OFF ) != aMarker )
         return false;
 
-    int terminalNverts = d[pos + SPLIT_NVERTS_OFF];
+    int terminalNverts = SDB_RECORD( cur, pos ).U8( SPLIT_NVERTS_OFF );
 
     if( terminalNverts == 0 )
         return false;
@@ -2038,12 +2063,12 @@ static bool parseSplitRun( const std::vector<uint8_t>& d, size_t aOffset, uint8_
     size_t vertexOffset = pos + VERTEX_STRIDE;
     size_t rawVertexCount = previousStart + static_cast<size_t>( terminalNverts );
 
-    if( rawVertexCount == 0 || vertexOffset + rawVertexCount * VERTEX_STRIDE > d.size() )
+    if( rawVertexCount == 0 || vertexOffset + rawVertexCount * VERTEX_STRIDE > cur.Size() )
         return false;
 
     for( size_t idx = 0; idx < rawVertexCount; ++idx )
     {
-        if( !isVertexRecord( d, vertexOffset + idx * VERTEX_STRIDE, aPageWidth, aPageHeight ) )
+        if( !isVertexRecord( cur, vertexOffset + idx * VERTEX_STRIDE, aPageWidth, aPageHeight ) )
             return false;
     }
 
@@ -2060,6 +2085,7 @@ static bool parseSplitRun( const std::vector<uint8_t>& d, size_t aOffset, uint8_
 
 void PADS_SCH_BINARY_READER::decodeWires( const std::vector<uint8_t>& d )
 {
+    BINARY_CURSOR cur( d );
     int pageWidth = 0;
     int pageHeight = 0;
     pageExtent( d, pageWidth, pageHeight );
@@ -2071,7 +2097,7 @@ void PADS_SCH_BINARY_READER::decodeWires( const std::vector<uint8_t>& d )
 
     while( i + SPLIT_STRIDE + VERTEX_STRIDE <= streamLimit( d ) )
     {
-        uint8_t marker = d[i + SPLIT_MARKER_OFF];
+        uint8_t marker = SDB_RECORD( cur, i ).U8( SPLIT_MARKER_OFF );
 
         if( marker != SPLIT_MARKER_FD && marker != SPLIT_MARKER_FC )
         {
@@ -2081,7 +2107,7 @@ void PADS_SCH_BINARY_READER::decodeWires( const std::vector<uint8_t>& d )
 
         SPLIT_RUN run;
 
-        if( !parseSplitRun( d, i, marker, pageWidth, pageHeight, run ) )
+        if( !parseSplitRun( cur, i, marker, pageWidth, pageHeight, run ) )
         {
             ++i;
             continue;
@@ -2092,10 +2118,10 @@ void PADS_SCH_BINARY_READER::decodeWires( const std::vector<uint8_t>& d )
 
         for( size_t idx = 0; idx < run.rawVertexCount; ++idx )
         {
-            size_t      o = run.vertexOffset + idx * VERTEX_STRIDE;
+            SDB_RECORD  rec = SDB_RECORD( cur, run.vertexOffset + idx * VERTEX_STRIDE );
             WIRE_VERTEX v;
-            v.x_mils = designMil( readU16( d, o + 3 ) );
-            v.y_mils = designMil( readU16( d, o + 5 ) );
+            v.x_mils = designMil( rec.U16( VERTEX_X_OFF ) );
+            v.y_mils = designMil( rec.U16( VERTEX_Y_OFF ) );
             vertices.push_back( v );
             m_wireVertices.push_back( v );
         }
@@ -2154,7 +2180,16 @@ void PADS_SCH_BINARY_READER::decodeWires( const std::vector<uint8_t>& d )
 // walk anchored on the pool whose matched offsets best track the +28 cursor.
 // ---------------------------------------------------------------------------
 static constexpr size_t TEXT_STRIDE = 32;
-static constexpr int    TEXT_REF_OFF = 28;  // u32 string-pool cursor
+static constexpr int    TEXT_X_OFF = 0;      // u16 page-biased X
+static constexpr int    TEXT_Y_OFF = 2;      // u16 page-biased Y
+static constexpr int    TEXT_ORI_OFF = 4;    // u16 tenths-degree angle
+static constexpr int    TEXT_JUST_OFF = 6;   // u16 justification
+static constexpr int    TEXT_SLEN_OFF = 8;   // u16 string length + 1
+static constexpr int    TEXT_HEIGHT_OFF = 10;// u16 text height
+static constexpr int    TEXT_C0_OFF = 12;    // u16 duplicated counter
+static constexpr int    TEXT_C1_OFF = 14;    // u16 duplicated counter (== C0)
+static constexpr int    TEXT_LW_OFF = 18;    // u16 linewidth
+static constexpr int    TEXT_REF_OFF = 28;   // u32 string-pool cursor
 
 
 struct TEXT_RECORD
@@ -2171,20 +2206,21 @@ struct TEXT_RECORD
 };
 
 
-static bool isTextRecord( const std::vector<uint8_t>& d, size_t o, TEXT_RECORD& aRec )
+static bool isTextRecord( const BINARY_CURSOR& cur, size_t o, TEXT_RECORD& aRec )
 {
-    if( o + TEXT_STRIDE > d.size() )
+    if( !cur.InBounds( o, TEXT_STRIDE ) )
         return false;
 
-    uint16_t rx = readU16( d, o + 0 );
-    uint16_t ry = readU16( d, o + 2 );
-    uint16_t ori = readU16( d, o + 4 );
-    uint16_t just = readU16( d, o + 6 );
-    uint16_t slen = readU16( d, o + 8 );
-    uint16_t height = readU16( d, o + 10 );
-    uint16_t c0 = readU16( d, o + 12 );
-    uint16_t c1 = readU16( d, o + 14 );
-    uint16_t lw = readU16( d, o + 18 );
+    SDB_RECORD rec( cur, o );
+    uint16_t   rx = rec.U16( TEXT_X_OFF );
+    uint16_t   ry = rec.U16( TEXT_Y_OFF );
+    uint16_t   ori = rec.U16( TEXT_ORI_OFF );
+    uint16_t   just = rec.U16( TEXT_JUST_OFF );
+    uint16_t   slen = rec.U16( TEXT_SLEN_OFF );
+    uint16_t   height = rec.U16( TEXT_HEIGHT_OFF );
+    uint16_t   c0 = rec.U16( TEXT_C0_OFF );
+    uint16_t   c1 = rec.U16( TEXT_C1_OFF );
+    uint16_t   lw = rec.U16( TEXT_LW_OFF );
 
     if( c0 != c1 || c0 == 0 || c0 > 4000 )
         return false;
@@ -2211,7 +2247,7 @@ static bool isTextRecord( const std::vector<uint8_t>& d, size_t o, TEXT_RECORD& 
     aRec.height_mils = height;
     aRec.linewidth_mils = lw;
     aRec.strlen = slen - 1;
-    aRec.ref = readU32( d, o + TEXT_REF_OFF );
+    aRec.ref = rec.U32( TEXT_REF_OFF );
 
     return true;
 }
@@ -2297,13 +2333,14 @@ static bool lengthMatchedWalk( const std::vector<POOL_STRING>& aPool, size_t aSt
 
 void PADS_SCH_BINARY_READER::decodeTexts( const std::vector<uint8_t>& d )
 {
+    BINARY_CURSOR            cur( d );
     std::vector<TEXT_RECORD> records;
 
     for( size_t i = DATA_STREAM_OFFSET; i + TEXT_STRIDE <= streamLimit( d ); ++i )
     {
         TEXT_RECORD rec;
 
-        if( isTextRecord( d, i, rec ) )
+        if( isTextRecord( cur, i, rec ) )
         {
             rec.offset = i;
             records.push_back( rec );
@@ -2379,23 +2416,31 @@ void PADS_SCH_BINARY_READER::decodeTexts( const std::vector<uint8_t>& d )
 // is a tie-dot array and all are collected.
 // ---------------------------------------------------------------------------
 static constexpr size_t   JUNCTION_STRIDE = 12;
+static constexpr int      JUNCTION_X_OFF = 0;       // u16 page-biased X
+static constexpr int      JUNCTION_Y_OFF = 2;       // u16 page-biased Y
 static constexpr int      JUNCTION_MARKER_OFF = 6;
+static constexpr int      JUNCTION_TAIL_OFF = 7;    // zero tail @+7..+11
 static constexpr uint8_t  JUNCTION_MARKER = 0xFC;
 
 
-static bool isJunctionRecord( const std::vector<uint8_t>& d, size_t o, int aPageWidth, int aPageHeight )
+static bool isJunctionRecord( const BINARY_CURSOR& cur, size_t o, int aPageWidth, int aPageHeight )
 {
-    if( o + JUNCTION_STRIDE > d.size() )
+    if( !cur.InBounds( o, JUNCTION_STRIDE ) )
         return false;
 
-    if( d[o + JUNCTION_MARKER_OFF] != JUNCTION_MARKER || d[o + 7] != 0 )
+    SDB_RECORD rec( cur, o );
+
+    if( rec.U8( JUNCTION_MARKER_OFF ) != JUNCTION_MARKER )
         return false;
 
-    if( d[o + 8] != 0 || d[o + 9] != 0 || d[o + 10] != 0 || d[o + 11] != 0 )
-        return false;
+    for( size_t k = JUNCTION_TAIL_OFF; k < JUNCTION_STRIDE; ++k )
+    {
+        if( rec.U8( k ) != 0 )
+            return false;
+    }
 
-    int x = designMil( readU16( d, o ) );
-    int y = designMil( readU16( d, o + 2 ) );
+    int x = designMil( rec.U16( JUNCTION_X_OFF ) );
+    int y = designMil( rec.U16( JUNCTION_Y_OFF ) );
 
     if( x % 50 != 0 || y % 50 != 0 )
         return false;
@@ -2406,6 +2451,7 @@ static bool isJunctionRecord( const std::vector<uint8_t>& d, size_t o, int aPage
 
 void PADS_SCH_BINARY_READER::decodeJunctions( const std::vector<uint8_t>& d )
 {
+    BINARY_CURSOR cur( d );
     int pageWidth = 0;
     int pageHeight = 0;
     pageExtent( d, pageWidth, pageHeight );
@@ -2414,7 +2460,7 @@ void PADS_SCH_BINARY_READER::decodeJunctions( const std::vector<uint8_t>& d )
 
     while( i + JUNCTION_STRIDE <= streamLimit( d ) )
     {
-        if( !isJunctionRecord( d, i, pageWidth, pageHeight ) )
+        if( !isJunctionRecord( cur, i, pageWidth, pageHeight ) )
         {
             ++i;
             continue;
@@ -2427,11 +2473,12 @@ void PADS_SCH_BINARY_READER::decodeJunctions( const std::vector<uint8_t>& d )
 
         int runSheet = sheetIndexForOffset( i );
 
-        while( j + JUNCTION_STRIDE <= d.size() && isJunctionRecord( d, j, pageWidth, pageHeight ) )
+        while( j + JUNCTION_STRIDE <= d.size() && isJunctionRecord( cur, j, pageWidth, pageHeight ) )
         {
+            SDB_RECORD rec( cur, j );
             JUNCTION jct;
-            jct.x_mils = designMil( readU16( d, j ) );
-            jct.y_mils = designMil( readU16( d, j + 2 ) );
+            jct.x_mils = designMil( rec.U16( JUNCTION_X_OFF ) );
+            jct.y_mils = designMil( rec.U16( JUNCTION_Y_OFF ) );
             jct.sheetIndex = runSheet;
             run.push_back( jct );
             j += JUNCTION_STRIDE;
@@ -2455,31 +2502,46 @@ void PADS_SCH_BINARY_READER::decodeJunctions( const std::vector<uint8_t>& d )
 // +0x14).  Joining them per sheet places a net label at each off-page position.
 // ---------------------------------------------------------------------------
 static constexpr size_t NET_STRIDE = 88;
+static constexpr int    NET_NAME_OFF = 0x10;     // NUL-terminated net name
+static constexpr int    NET_SENTINEL_OFF = 0x48; // u32 == 0xFFFFFFFF record sentinel
 static constexpr size_t SEG_STRIDE = 40;
+static constexpr int    SEG_MARKER_OFF = 0x0c;   // u16 0x02fd / 0x03fd
+static constexpr int    SEG_NETIDX_OFF = 0x1a;   // u16 net-table ordinal
+static constexpr int    SEG_END0_OFF = 0x1e;     // u16 endpoint ref
+static constexpr int    SEG_END1_OFF = 0x20;     // u16 endpoint ref
 static constexpr size_t OFFPAGE_STRIDE = 0x20;
+static constexpr int    OFFPAGE_X_OFF = 0;       // u16 page-biased X
+static constexpr int    OFFPAGE_Y_OFF = 2;       // u16 page-biased Y
+static constexpr int    OFFPAGE_FLAG_OFF = 0x08; // u8 kind flag (0xff bus / 0xfe local)
+static constexpr int    OFFPAGE_HANDLE_BACK = 0x12; // used-decal handle at record-0x12
+static constexpr int    OFFPAGE_SEQ_OFF = 0x14;  // u16 1-based off-page index
 
 
-static bool isNetRecord( const std::vector<uint8_t>& d, size_t o )
+static bool isNetRecord( const BINARY_CURSOR& cur, size_t o )
 {
-    if( o + NET_STRIDE > d.size() )
+    if( !cur.InBounds( o, NET_STRIDE ) )
         return false;
 
-    if( d[o + 0x48] != 0xFF || d[o + 0x49] != 0xFF || d[o + 0x4a] != 0xFF || d[o + 0x4b] != 0xFF )
+    SDB_RECORD rec( cur, o );
+
+    if( rec.U32( NET_SENTINEL_OFF ) != 0xFFFFFFFF )
         return false;
 
-    size_t e = o + 0x10;
+    size_t e = o + NET_NAME_OFF;
 
-    while( e < o + 0x48 && d[e] != 0 )
+    while( e < o + NET_SENTINEL_OFF && cur.U8At( e ) != 0 )
         ++e;
 
-    size_t len = e - ( o + 0x10 );
+    size_t len = e - ( o + NET_NAME_OFF );
 
     if( len == 0 || len > 47 )
         return false;
 
-    for( size_t i = o + 0x10; i < e; ++i )
+    for( size_t i = o + NET_NAME_OFF; i < e; ++i )
     {
-        if( d[i] < 0x20 || d[i] >= 0x7f )
+        uint8_t c = cur.U8At( i );
+
+        if( c < 0x20 || c >= 0x7f )
             return false;
     }
 
@@ -2495,6 +2557,8 @@ static bool isSegmentMarker( uint16_t aMarker )
 
 void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
 {
+    BINARY_CURSOR cur( d );
+
     // 1. Net table = the longest contiguous stride-88 net-record run.
     size_t           netBase = 0;
     size_t           netCount = 0;
@@ -2502,7 +2566,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
 
     for( size_t i = DATA_STREAM_OFFSET; i + NET_STRIDE < streamLimit( d ); )
     {
-        if( !isNetRecord( d, i ) )
+        if( !isNetRecord( cur, i ) )
         {
             ++i;
             continue;
@@ -2510,7 +2574,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
 
         size_t start = i;
 
-        while( start >= DATA_STREAM_OFFSET + NET_STRIDE && isNetRecord( d, start - NET_STRIDE ) )
+        while( start >= DATA_STREAM_OFFSET + NET_STRIDE && isNetRecord( cur, start - NET_STRIDE ) )
             start -= NET_STRIDE;
 
         if( seenNet.count( start ) )
@@ -2523,7 +2587,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
         size_t p = start;
         size_t cnt = 0;
 
-        while( isNetRecord( d, p ) )
+        while( isNetRecord( cur, p ) )
         {
             ++cnt;
             p += NET_STRIDE;
@@ -2554,7 +2618,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
 
     auto netName = [&]( size_t k ) -> std::string
     {
-        return nameAt( d, netBase + NET_STRIDE * k + 0x10, 0x38 );
+        return nameAt( d, netBase + NET_STRIDE * k + NET_NAME_OFF, 0x38 );
     };
 
     // 2. Segment pools -> (sheet, off-page index) -> net name (first segment wins;
@@ -2564,7 +2628,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
 
     for( size_t i = DATA_STREAM_OFFSET; i + SEG_STRIDE < streamLimit( d ); )
     {
-        if( !isSegmentMarker( readU16( d, i + 0x0c ) ) )
+        if( !isSegmentMarker( SDB_RECORD( cur, i ).U16( SEG_MARKER_OFF ) ) )
         {
             ++i;
             continue;
@@ -2573,7 +2637,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
         size_t start = i;
 
         while( start >= DATA_STREAM_OFFSET + SEG_STRIDE
-               && isSegmentMarker( readU16( d, start - SEG_STRIDE + 0x0c ) ) )
+               && isSegmentMarker( SDB_RECORD( cur, start - SEG_STRIDE ).U16( SEG_MARKER_OFF ) ) )
             start -= SEG_STRIDE;
 
         if( seenSeg.count( start ) )
@@ -2585,18 +2649,19 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
         seenSeg.insert( start );
         size_t p = start;
 
-        while( p + SEG_STRIDE <= d.size() && isSegmentMarker( readU16( d, p + 0x0c ) ) )
+        while( p + SEG_STRIDE <= d.size() && isSegmentMarker( SDB_RECORD( cur, p ).U16( SEG_MARKER_OFF ) ) )
         {
-            uint16_t ni = readU16( d, p + 0x1a );
+            SDB_RECORD seg( cur, p );
+            uint16_t   ni = seg.U16( SEG_NETIDX_OFF );
 
             if( ni < netCount )
             {
                 std::string net = netName( ni );
                 int         sheet = sheetIndexForOffset( p );
 
-                for( int off : { 0x1e, 0x20 } )
+                for( int off : { SEG_END0_OFF, SEG_END1_OFF } )
                 {
-                    uint16_t v = readU16( d, p + off );
+                    uint16_t v = seg.U16( off );
 
                     if( ( v >> 12 ) == 2 )
                         offNet.emplace( std::make_pair( sheet, v & 0xfff ), net );
@@ -2638,7 +2703,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
 
     auto offpageKind = [&]( size_t recOff ) -> NETLABEL_KIND
     {
-        uint8_t flag = d[recOff + 0x08];
+        uint8_t flag = SDB_RECORD( cur, recOff ).U8( OFFPAGE_FLAG_OFF );
 
         if( flag == 0xFF )
             return NETLABEL_KIND::BUS;
@@ -2647,9 +2712,9 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
             return NETLABEL_KIND::LOCAL;
 
         // A symbol off-page: off-sheet ref ($OSR group) vs power/ground (any other group).
-        if( recOff >= 0x12 && canonical )
+        if( recOff >= OFFPAGE_HANDLE_BACK && canonical )
         {
-            uint16_t handle = readU16( d, recOff - 0x12 );
+            uint16_t handle = SDB_RECORD( cur, recOff - OFFPAGE_HANDLE_BACK ).U16( 0 );
 
             if( handle >= m_decalBuiltinCount
                 && ( handle - m_decalBuiltinCount ) < canonical->size() )
@@ -2671,11 +2736,12 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
 
     auto coordOk = [&]( size_t o ) -> bool
     {
-        if( o + 4 > d.size() )
+        if( !cur.InBounds( o, 4 ) )
             return false;
 
-        int x = designMil( readU16( d, o ) );
-        int y = designMil( readU16( d, o + 2 ) );
+        SDB_RECORD rec( cur, o );
+        int        x = designMil( rec.U16( OFFPAGE_X_OFF ) );
+        int        y = designMil( rec.U16( OFFPAGE_Y_OFF ) );
 
         return x % 50 == 0 && y % 50 == 0 && x >= 0 && x <= pageWidth && y >= 0 && y <= pageHeight;
     };
@@ -2685,18 +2751,20 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
     for( size_t i = DATA_STREAM_OFFSET; i + OFFPAGE_STRIDE * 2 < streamLimit( d ); )
     {
         if( !coordOk( i ) || !coordOk( i + OFFPAGE_STRIDE )
-            || readU16( d, i + OFFPAGE_STRIDE + 0x14 ) != readU16( d, i + 0x14 ) + 1 )
+            || SDB_RECORD( cur, i + OFFPAGE_STRIDE ).U16( OFFPAGE_SEQ_OFF )
+                       != SDB_RECORD( cur, i ).U16( OFFPAGE_SEQ_OFF ) + 1 )
         {
             ++i;
             continue;
         }
 
         size_t j = i;
-        int    prevSeq = static_cast<int>( readU16( d, i + 0x14 ) ) - 1;
+        int    prevSeq = static_cast<int>( SDB_RECORD( cur, i ).U16( OFFPAGE_SEQ_OFF ) ) - 1;
 
         while( j + OFFPAGE_STRIDE <= d.size() && coordOk( j ) )
         {
-            int seq = readU16( d, j + 0x14 );
+            SDB_RECORD rec( cur, j );
+            int        seq = rec.U16( OFFPAGE_SEQ_OFF );
 
             if( seq != prevSeq + 1 )
                 break;
@@ -2710,8 +2778,8 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
                 emitted.insert( key );
 
                 NET_LABEL lbl;
-                lbl.x_mils = designMil( readU16( d, j ) );
-                lbl.y_mils = designMil( readU16( d, j + 2 ) );
+                lbl.x_mils = designMil( rec.U16( OFFPAGE_X_OFF ) );
+                lbl.y_mils = designMil( rec.U16( OFFPAGE_Y_OFF ) );
                 lbl.netName = it->second;
                 lbl.sheetIndex = sheet;
                 lbl.kind = offpageKind( j );
