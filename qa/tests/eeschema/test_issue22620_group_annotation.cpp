@@ -36,11 +36,16 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <lib_symbol.h>
+#include <refdes_tracker.h>
 #include <sch_group.h>
+#include <sch_reference_list.h>
 #include <sch_screen.h>
+#include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <schematic.h>
 #include <settings/settings_manager.h>
+#include <tools/sch_selection.h>
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
@@ -80,6 +85,9 @@ struct GROUP_ANNOTATION_FIXTURE
     PROJECT* m_project;
     std::vector<wxString> m_tempFiles;
 };
+
+
+std::unordered_set<SCH_SYMBOL*> getInferredSymbols( const SCH_SELECTION& aSelection );
 
 
 BOOST_FIXTURE_TEST_SUITE( Issue22620GroupAnnotation, GROUP_ANNOTATION_FIXTURE )
@@ -192,6 +200,99 @@ BOOST_AUTO_TEST_CASE( TestGroupRunOnChildrenWithNestedGroups )
     BOOST_CHECK( foundSymbols.count( symbol3 ) == 0 ); // symbol3 is not in any group
 
     BOOST_TEST_MESSAGE( "Test passed: RunOnChildren correctly handles nested groups" );
+}
+
+
+/**
+ * Test for issue #23519: design block power symbols should be reannotated even when normal
+ * symbol annotation is skipped.
+ *
+ * This simulates design-block placement with either "Keep Annotations" enabled or automatic
+ * annotation disabled:
+ * 1. an existing power symbol already uses #PWR01
+ * 2. a selected group contains a normal symbol and a colliding power symbol
+ * 3. only the power-only selection pass runs
+ *
+ * The normal symbol keeps its annotation while the power symbol is silently renumbered to the
+ * next available power reference.
+ */
+BOOST_AUTO_TEST_CASE( Issue23519_GroupSelectionReannotatesPowerSymbols )
+{
+    m_schematic->CreateDefaultScreens();
+    m_schematic->Settings().m_refDesTracker = std::make_shared<REFDES_TRACKER>( false );
+
+    std::vector<SCH_SHEET*> topSheets = m_schematic->GetTopLevelSheets();
+    BOOST_REQUIRE( !topSheets.empty() );
+
+    SCH_SHEET*  rootSheet = topSheets[0];
+    SCH_SCREEN* screen = rootSheet->GetScreen();
+    BOOST_REQUIRE( screen != nullptr );
+
+    SCH_SHEET_PATH sheetPath;
+    sheetPath.push_back( rootSheet );
+
+    LIB_SYMBOL powerLib( wxT( "PWR" ), nullptr );
+    powerLib.SetGlobalPower();
+
+    SCH_SYMBOL* existingPowerSymbol =
+            new SCH_SYMBOL( powerLib, powerLib.GetLibId(), &sheetPath, 0, 0, VECTOR2I( -1000000, 0 ) );
+    existingPowerSymbol->SetRef( &sheetPath, wxT( "#PWR01" ) );
+    existingPowerSymbol->SetValueFieldText( wxT( "+3V3" ), &sheetPath );
+    screen->Append( existingPowerSymbol );
+
+    LIB_SYMBOL  normalLib( wxT( "R" ), nullptr );
+    SCH_SYMBOL* normalSymbol = new SCH_SYMBOL( normalLib, normalLib.GetLibId(), &sheetPath, 0, 0, VECTOR2I( 0, 0 ) );
+    normalSymbol->SetRef( &sheetPath, wxT( "R123" ) );
+    normalSymbol->SetValueFieldText( wxT( "10k" ), &sheetPath );
+    screen->Append( normalSymbol );
+
+    SCH_SYMBOL* powerSymbol = new SCH_SYMBOL( powerLib, powerLib.GetLibId(), &sheetPath, 0, 0, VECTOR2I( 1000000, 0 ) );
+    powerSymbol->SetRef( &sheetPath, wxT( "#PWR01" ) );
+    powerSymbol->SetValueFieldText( wxT( "+5V" ), &sheetPath );
+    screen->Append( powerSymbol );
+
+    SCH_GROUP* group = new SCH_GROUP( screen );
+    group->SetName( wxT( "DesignBlock" ) );
+    group->AddItem( normalSymbol );
+    group->AddItem( powerSymbol );
+    screen->Append( group );
+
+    SCH_SELECTION selection( screen );
+    selection.Add( group );
+
+    std::unordered_set<SCH_SYMBOL*> selectedSymbols = getInferredSymbols( selection );
+
+    BOOST_REQUIRE_EQUAL( selectedSymbols.size(), 2 );
+
+    SCH_REFERENCE_LIST           references;
+    SCH_REFERENCE_LIST           allReferences;
+    SCH_MULTI_UNIT_REFERENCE_MAP lockedSymbols;
+
+    // Mirror the design-block placement flow when normal symbol annotation is skipped:
+    // only the power-only selection pass runs.
+    for( SCH_SYMBOL* symbol : selectedSymbols )
+        sheetPath.AppendSymbol( references, symbol, SYMBOL_FILTER_POWER, true );
+
+    SCH_REFERENCE_LIST additionalRefs;
+
+    sheetPath.GetSymbols( allReferences, SYMBOL_FILTER_ALL );
+
+    for( unsigned i = 0; i < allReferences.GetCount(); ++i )
+    {
+        if( !references.Contains( allReferences[i] ) )
+            additionalRefs.AddItem( allReferences[i] );
+    }
+
+    references.RemoveAnnotation();
+    references.SetRefDesTracker( m_schematic->Settings().m_refDesTracker );
+    references.SplitReferences();
+    references.Annotate( false, 0, 0, lockedSymbols, additionalRefs );
+    references.UpdateAnnotation();
+
+    BOOST_CHECK_EQUAL( references.GetCount(), 1u );
+    BOOST_CHECK_EQUAL( normalSymbol->GetRef( &sheetPath ), wxT( "R123" ) );
+    BOOST_CHECK_EQUAL( existingPowerSymbol->GetRef( &sheetPath ), wxT( "#PWR01" ) );
+    BOOST_CHECK_EQUAL( powerSymbol->GetRef( &sheetPath ), wxT( "#PWR02" ) );
 }
 
 
