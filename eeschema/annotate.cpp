@@ -226,11 +226,10 @@ std::unordered_set<SCH_SYMBOL*> getInferredSymbols( const SCH_SELECTION& aSelect
 }
 
 
-void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAnnotateScope,
-                                      ANNOTATE_ORDER_T aSortOption, ANNOTATE_ALGO_T aAlgoOption,
-                                      bool aRecursive, int aStartNumber, bool aResetAnnotation,
-                                      bool aRegroupUnits, bool aRepairTimestamps,
-                                      REPORTER& aReporter )
+void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnnotateScope,
+                                      ANNOTATE_ORDER_T aSortOption, ANNOTATE_ALGO_T aAlgoOption, bool aRecursive,
+                                      int aStartNumber, bool aResetAnnotation, bool aRegroupUnits,
+                                      bool aRepairTimestamps, REPORTER& aReporter, SYMBOL_FILTER aSymbolFilter )
 {
     SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
     SCH_SELECTION&      selection = selTool->GetSelection();
@@ -319,10 +318,10 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
 
         case ANNOTATE_SELECTION:
             for( SCH_SYMBOL* symbol : selectedSymbols )
-                currentSheet.AppendMultiUnitSymbol( lockedSymbols, symbol, SYMBOL_FILTER_NON_POWER );
+                currentSheet.AppendMultiUnitSymbol( lockedSymbols, symbol, aSymbolFilter );
 
             if( aRecursive )
-                selectedSheets.GetMultiUnitSymbols( lockedSymbols, SYMBOL_FILTER_NON_POWER );
+                selectedSheets.GetMultiUnitSymbols( lockedSymbols, aSymbolFilter );
 
             break;
         }
@@ -381,11 +380,10 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
 
     case ANNOTATE_SELECTION:
         for( SCH_SYMBOL* symbol : selectedSymbols )
-            currentSheet.AppendSymbol( references, symbol, SYMBOL_FILTER_NON_POWER, true );
+            currentSheet.AppendSymbol( references, symbol, aSymbolFilter, true );
 
         if( aRecursive )
-            selectedSheets.GetSymbolsWithinPath( references, currentSheet, SYMBOL_FILTER_NON_POWER,
-                                                 true );
+            selectedSheets.GetSymbolsWithinPath( references, currentSheet, aSymbolFilter, true );
 
         break;
     }
@@ -486,11 +484,11 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
 
     // Final control (just in case ... ).
     if( !CheckAnnotate(
-            [ &aReporter ]( ERCE_T , const wxString& aMsg, SCH_REFERENCE* , SCH_REFERENCE* )
-            {
-                aReporter.Report( aMsg, RPT_SEVERITY_ERROR );
-            },
-            aAnnotateScope, aRecursive ) )
+                [&aReporter]( ERCE_T, const wxString& aMsg, SCH_REFERENCE*, SCH_REFERENCE* )
+                {
+                    aReporter.Report( aMsg, RPT_SEVERITY_ERROR );
+                },
+                aAnnotateScope, aRecursive, aSymbolFilter ) )
     {
         aReporter.ReportTail( _( "Annotation complete." ), RPT_SEVERITY_ACTION );
     }
@@ -513,9 +511,8 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
 }
 
 
-int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
-                                   ANNOTATE_SCOPE_T         aAnnotateScope,
-                                   bool                     aRecursive )
+int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler, ANNOTATE_SCOPE_T aAnnotateScope,
+                                   bool aRecursive, SYMBOL_FILTER aSymbolFilter )
 {
     SCH_REFERENCE_LIST  referenceList;
     SCH_SHEET_LIST      sheets = Schematic().Hierarchy();
@@ -557,7 +554,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
         SCH_SELECTION&      selection = selTool->RequestSelection();
 
         for( SCH_SYMBOL* symbol : getInferredSymbols( selection ) )
-            GetCurrentSheet().AppendSymbol( referenceList, symbol, SYMBOL_FILTER_NON_POWER, true );
+            GetCurrentSheet().AppendSymbol( referenceList, symbol, aSymbolFilter, true );
 
         if( aRecursive )
         {
@@ -575,7 +572,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
             }
 
             for( SCH_SHEET_PATH sheet : selectedSheets )
-                sheet.GetSymbols( referenceList, SYMBOL_FILTER_NON_POWER );
+                sheet.GetSymbols( referenceList, aSymbolFilter );
         }
 
         break;

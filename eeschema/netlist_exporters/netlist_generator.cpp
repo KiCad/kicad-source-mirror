@@ -196,12 +196,14 @@ bool SCH_EDIT_FRAME::ReadyToNetlist( const wxString& aAnnotateMessage )
     Schematic().Hierarchy().AnnotatePowerSymbols();
 
     // Symbols must be annotated
-    if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {} ) )
+    if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {},
+                       ANNOTATE_ALL, true, SYMBOL_FILTER_NON_POWER ) )
     {
         // Schematic must be annotated: call Annotate dialog and tell the user why.
         ModalAnnotate( aAnnotateMessage );
 
-        if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {} ) )
+        if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {},
+                           ANNOTATE_ALL, true, SYMBOL_FILTER_NON_POWER ) )
             return false;
     }
 
@@ -237,4 +239,3 @@ void SCH_EDIT_FRAME::sendNetlistToCvpcb()
 
     Kiway().ExpressMail( FRAME_CVPCB, MAIL_EESCHEMA_NETLIST, packet, this );
 }
-

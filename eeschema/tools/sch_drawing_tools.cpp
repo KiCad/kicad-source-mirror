@@ -885,7 +885,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                                                   true /* recursive */,
                                                   schSettings.m_AnnotateStartNum,
                                                   true /* aResetAnnotation */,
-                                                  false, false, reporter );
+                                                  false, false, reporter, SYMBOL_FILTER_NON_POWER );
                     }
 
                     // Annotation will clear selection, so we need to restore it
@@ -3449,7 +3449,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                                               true,   /* reset */
                                               false,  /* regroup */
                                               false,  /* repair */
-                                              reporter );
+                                              reporter, SYMBOL_FILTER_NON_POWER );
                 }
 
                 if( isDrawSheetFromDesignBlock && cfg->m_DesignBlockChooserPanel.place_as_group )

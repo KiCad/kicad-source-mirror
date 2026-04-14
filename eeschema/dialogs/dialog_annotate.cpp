@@ -255,7 +255,7 @@ void DIALOG_ANNOTATE::OnAnnotateClick( wxCommandEvent& event )
 
     m_Parent->AnnotateSymbols( &commit, GetScope(), GetSortOrder(), GetAnnotateAlgo(),
                                m_checkRecursive->GetValue(), GetStartNumber(), resetAnnotation,
-                               regroupUnits, true, reporter );
+                               regroupUnits, true, reporter, SYMBOL_FILTER_NON_POWER );
 
     commit.Push( _( "Annotate" ) );
 

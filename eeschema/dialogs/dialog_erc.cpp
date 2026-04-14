@@ -175,7 +175,10 @@ void DIALOG_ERC::UpdateAnnotationWarning()
     if( m_parent->CheckAnnotate(
                 []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* )
                 {
-                } ) )
+                },
+                ANNOTATE_ALL,
+                true,
+                SYMBOL_FILTER_NON_POWER ) )
     {
         if( !m_infoBar->IsShownOnScreen() )
         {
@@ -525,7 +528,10 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
 
                 SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), aItemA->GetSymbol()->GetPosition() );
                 aItemA->GetSheetPath().LastScreen()->Append( marker );
-            } );
+            },
+            ANNOTATE_ALL,
+            true,
+            SYMBOL_FILTER_NON_POWER );
 
     testErc();
 

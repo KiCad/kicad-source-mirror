@@ -2158,7 +2158,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
                 NULL_REPORTER reporter;
                 m_frame->AnnotateSymbols( &commit, ANNOTATE_SELECTION, annotateOrder, annotateAlgo,
                                           true /* recursive */, annotateStartNum, false, false, false,
-                                          reporter );
+                                          reporter, SYMBOL_FILTER_NON_POWER );
             }
 
             // Annotation clears the selection so re-add the item
