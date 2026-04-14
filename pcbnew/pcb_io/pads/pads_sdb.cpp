@@ -23,10 +23,6 @@
 
 #include "pads_sdb.h"
 
-#include <cstring>
-
-#include <wx/log.h>
-
 #include <ki_exception.h>
 
 namespace PADS_IO
@@ -41,7 +37,7 @@ static constexpr size_t FOOTER_GUID_LEN = 38;
 
 bool PADS_SDB::HasMagic( const std::vector<uint8_t>& aBytes )
 {
-    return aBytes.size() >= 2 && aBytes[0] == MAGIC0 && aBytes[1] == MAGIC1;
+    return HasSdbMagic( aBytes, MAGIC1 );
 }
 
 
@@ -95,18 +91,7 @@ void PADS_SDB::parseHeader()
 
 void PADS_SDB::verifyFooter() const
 {
-    size_t footerStart = m_data.size() - FOOTER_SIZE;
-
-    if( std::memcmp( &m_data[footerStart + 4], FOOTER_GUID, FOOTER_GUID_LEN ) != 0 )
-        THROW_IO_ERROR( "Invalid PADS binary footer GUID" );
-
-    // The stored size-check should equal the offset of the footer; a mismatch is a
-    // corruption hint but not fatal, since every section offset is independent of it.
-    uint32_t stored = m_cursor.U32At( footerStart + 42 );
-    uint32_t expected = static_cast<uint32_t>( footerStart );
-
-    if( stored != expected )
-        wxLogWarning( "PADS binary footer size mismatch: stored=%u, expected=%u", stored, expected );
+    ValidateSdbFooter( m_data, m_data.size() - FOOTER_SIZE, FOOTER_GUID, FOOTER_GUID_LEN );
 }
 
 

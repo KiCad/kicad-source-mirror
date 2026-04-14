@@ -53,7 +53,6 @@
 namespace PADS_SCH_BINARY
 {
 
-static constexpr uint8_t  MAGIC0 = 0x00;
 static constexpr uint8_t  MAGIC1 = 0xFE;
 static constexpr uint16_t VERSION = 0x000D;
 static constexpr size_t   DATA_STREAM_OFFSET = 0x250;
@@ -149,7 +148,9 @@ bool PADS_SCH_BINARY_READER::IsBinarySch( const std::vector<uint8_t>& aData )
     if( aData.size() < DATA_STREAM_OFFSET )
         return false;
 
-    if( aData[0] != MAGIC0 || aData[1] != MAGIC1 )
+    // Shared container magic with the `.pcb` reader; only the second magic byte and
+    // the supported version differ between the two PADS SDB formats.
+    if( !PADS_IO::HasSdbMagic( aData, MAGIC1 ) )
         return false;
 
     return readU16( aData, 2 ) == VERSION;

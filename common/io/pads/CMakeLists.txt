@@ -21,6 +21,7 @@
 
 set( PADS_COMMON_SRCS
     pads_attribute_mapper.cpp
+    pads_binary_utils.cpp
     pads_common.cpp
     pads_unit_converter.cpp
 )

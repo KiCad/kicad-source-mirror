@@ -141,6 +141,34 @@ inline std::string readFixedString( const std::vector<uint8_t>& aData, size_t aO
 
 
 /**
+ * The PADS SDB container magic check shared by the `.pcb` and `.sch` readers: a
+ * leading 0x00 followed by a format-specific second byte (0xFF for the PowerPCB
+ * section container, 0xFE for the Logic pool container). The little-endian version
+ * word at +2 is read and range-checked by the caller, since the supported version
+ * set is format-specific.
+ */
+inline bool HasSdbMagic( const std::vector<uint8_t>& aData, uint8_t aMagic1 )
+{
+    return aData.size() >= 2 && aData[0] == 0x00 && aData[1] == aMagic1;
+}
+
+
+/**
+ * Validate a PADS SDB footer at @p aFooterStart: the 38-char ASCII GUID PADS
+ * writes at @p aFooterStart + 4, then the stored size-check immediately after it.
+ *
+ * Throws IO_ERROR when the buffer is too small or the GUID does not match (the
+ * GUID is the strongest single signal that a file is a PADS binary database). The
+ * size-check (u32 after the GUID) should equal @p aFooterStart; a mismatch is a
+ * corruption hint, not fatal, so it is logged rather than thrown. The second
+ * magic byte and the GUID are the only container fields that differ between the
+ * two PADS SDB formats, so the caller supplies the format's GUID.
+ */
+void ValidateSdbFooter( const std::vector<uint8_t>& aData, size_t aFooterStart, const char* aGuid,
+                        size_t aGuidLen );
+
+
+/**
  * Bounds-checked little-endian read cursor over a PADS binary buffer.
  *
  * One stateful substrate that both the pcbnew and eeschema readers sit on. The
@@ -222,6 +250,43 @@ private:
 
     const std::vector<uint8_t>& m_data;
     size_t                      m_pos = 0;
+};
+
+
+/**
+ * A bounds-checked reader positioned at one record inside a buffer.
+ *
+ * Field reads are by named offset relative to the record base, so a section or
+ * pool reader documents its record layout in one place (named field constants)
+ * instead of threading absolute file offsets. Both PADS SDB readers share it: the
+ * `.pcb` section streams and the `.sch` pool streams are both fixed-stride record
+ * runs once their base is known.
+ *
+ * Holds a reference to the owning cursor; it is a transient view and must not
+ * outlive the buffer the cursor binds.
+ */
+class SDB_RECORD
+{
+public:
+    SDB_RECORD( const BINARY_CURSOR& aCursor, uint32_t aBase ) : m_cursor( aCursor ), m_base( aBase )
+    {
+    }
+
+    uint8_t     U8( uint32_t aOffset ) const { return m_cursor.U8At( m_base + aOffset ); }
+    uint16_t    U16( uint32_t aOffset ) const { return m_cursor.U16At( m_base + aOffset ); }
+    uint32_t    U32( uint32_t aOffset ) const { return m_cursor.U32At( m_base + aOffset ); }
+    int32_t     I32( uint32_t aOffset ) const { return m_cursor.I32At( m_base + aOffset ); }
+    double      F64( uint32_t aOffset ) const { return m_cursor.F64At( m_base + aOffset ); }
+    std::string Str( uint32_t aOffset, size_t aMaxLen ) const
+    {
+        return m_cursor.StringAt( m_base + aOffset, aMaxLen );
+    }
+
+    uint32_t Base() const { return m_base; }
+
+private:
+    const BINARY_CURSOR& m_cursor;
+    uint32_t             m_base;
 };
 
 } // namespace PADS_IO
