@@ -753,6 +753,7 @@ bool BOARD::SetLayerName( PCB_LAYER_ID aLayer, const wxString& aLayerName )
     {
         // If the name is empty, we clear the user name.
         m_layers[aLayer].m_userName.clear();
+        recalcOpposites();
     }
     else
     {

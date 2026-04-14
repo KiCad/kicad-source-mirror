@@ -65,6 +65,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
           m_ShowCourtyardCollisions( true ),
           m_AutoRefillZones( false ),
           m_AllowFreePads( false ),
+          m_ImportKeepKiCadLayerNames( false ),
           m_PnsSettings( nullptr ),
           m_FootprintViewerLibListWidth( 200 ),
           m_FootprintViewerFPListWidth( 300 )
@@ -195,6 +196,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "editing.allow_free_pads",
             &m_AllowFreePads, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "import.keep_kicad_layer_names",
+            &m_ImportKeepKiCadLayerNames, false ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<int>( "editing.rotation_angle",
             [this] () -> int

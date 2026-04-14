@@ -736,6 +736,12 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             return false;
         }
 
+        if( converted && GetPcbNewSettings()->m_ImportKeepKiCadLayerNames )
+        {
+            for( PCB_LAYER_ID layer : loadedBoard->GetEnabledLayers().Seq() )
+                loadedBoard->SetLayerName( layer, wxEmptyString );
+        }
+
         // This fixes a focus issue after the progress reporter is done on GTK.  It shouldn't
         // cause any issues on macOS and Windows.  If it does, it will have to be conditionally
         // compiled.

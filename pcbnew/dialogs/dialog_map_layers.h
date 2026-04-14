@@ -75,6 +75,7 @@ private:
     std::vector<INPUT_LAYER_DESC>    m_input_layers;
     std::vector<wxString>            m_unmatched_layer_names;
     std::map<wxString, PCB_LAYER_ID> m_matched_layers_map;
+
 };
 
 #endif // DIALOG_IMPORTED_LAYERS_H

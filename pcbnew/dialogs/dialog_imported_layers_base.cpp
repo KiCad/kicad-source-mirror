@@ -96,6 +96,11 @@ DIALOG_IMPORTED_LAYERS_BASE::DIALOG_IMPORTED_LAYERS_BASE( wxWindow* parent, wxWi
 
 	bSizerBottom->Add( m_button_automatch, 0, wxALL, 5 );
 
+	m_cbKeepKiCadLayerNames = new wxCheckBox( this, wxID_ANY, _("Keep KiCad layer names"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbKeepKiCadLayerNames->SetToolTip( _("If checked, layers will keep their standard KiCad names instead of being renamed to the imported layer names.") );
+
+	bSizerBottom->Add( m_cbKeepKiCadLayerNames, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
