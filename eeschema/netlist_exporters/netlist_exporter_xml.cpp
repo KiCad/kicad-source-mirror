@@ -29,6 +29,7 @@
 #include <common.h>     // for ExpandTextVars
 #include <sch_base_frame.h>
 #include <sch_group.h>
+#include <sch_sheet.h>
 #include <string_utils.h>
 #include <connection_graph.h>
 #include <pgm_base.h>
@@ -719,6 +720,24 @@ XNODE* NETLIST_EXPORTER_XML::makeGroups()
                     XNODE* xmember;
                     xmembers->AddChild( xmember = node( wxT( "member" ) ) );
                     xmember->AddAttribute( wxT( "uuid" ), member->m_Uuid.AsString() );
+                }
+                else if( member->Type() == SCH_SHEET_T )
+                {
+                    SCH_SHEET_PATH              subSheetPath = sheet;
+                    std::vector<SCH_SHEET_PATH> descendantSheets;
+
+                    subSheetPath.push_back( static_cast<SCH_SHEET*>( member ) );
+                    sheetList.GetSheetsWithinPath( descendantSheets, subSheetPath );
+
+                    for( const SCH_SHEET_PATH& descendantSheet : descendantSheets )
+                    {
+                        for( SCH_ITEM* descendantItem : descendantSheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+                        {
+                            XNODE* xmember;
+                            xmembers->AddChild( xmember = node( wxT( "member" ) ) );
+                            xmember->AddAttribute( wxT( "uuid" ), descendantItem->m_Uuid.AsString() );
+                        }
+                    }
                 }
             }
         }
