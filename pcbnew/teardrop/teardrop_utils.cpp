@@ -1023,6 +1023,51 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
     double projOnTrack = -( intToPad.x * vecT.x + intToPad.y * vecT.y );
     double effectiveDist = std::max( projOnTrack, static_cast<double>( padRadius ) );
     int offset = pcbIUScale.mmToIU( 0.001 );
+
+    // For non-round pads, clamp effectiveDist so pointD stays within the pad outline.
+    // When a track enters an elongated pad at a steep angle, the projection along the
+    // track axis can extend well beyond the narrow side of the pad.
+    if( !IsRound( aOther, layer ) && aOther->Type() == PCB_PAD_T )
+    {
+        PAD* pad = static_cast<PAD*>( aOther );
+        VECTOR2I candidateD = intersection
+                              + VECTOR2I( KiROUND( -vecT.x * ( effectiveDist + offset ) ),
+                                          KiROUND( -vecT.y * ( effectiveDist + offset ) ) );
+
+        if( !pad->HitTest( candidateD, 0, layer ) )
+        {
+            int maxError = m_board->GetDesignSettings().m_MaxError;
+            SHAPE_POLY_SET padPoly;
+            pad->TransformShapeToPolygon( padPoly, layer, 0, maxError, ERROR_INSIDE );
+
+            SHAPE_LINE_CHAIN& padOutline = padPoly.Outline( 0 );
+            padOutline.SetClosed( true );
+
+            // Shoot a ray from just inside the pad at the entry to beyond the candidate point
+            VECTOR2I rayStart = intersection
+                                + VECTOR2I( KiROUND( -vecT.x * offset ),
+                                            KiROUND( -vecT.y * offset ) );
+
+            SHAPE_LINE_CHAIN::INTERSECTIONS hits;
+            padOutline.Intersect( SEG( rayStart, candidateD ), hits );
+
+            if( !hits.empty() )
+            {
+                double maxExitDist = 0;
+
+                for( const SHAPE_LINE_CHAIN::INTERSECTION& hit : hits )
+                {
+                    double d = ( hit.p - intersection ).EuclideanNorm();
+
+                    if( d > maxExitDist )
+                        maxExitDist = d;
+                }
+
+                effectiveDist = std::max( 0.0, maxExitDist - 2.0 * offset );
+            }
+        }
+    }
+
     VECTOR2I pointD = intersection + VECTOR2I( KiROUND( -vecT.x * ( effectiveDist + offset ) ),
                                                KiROUND( -vecT.y * ( effectiveDist + offset ) ) );
 
