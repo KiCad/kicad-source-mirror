@@ -220,8 +220,8 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
     getPcbModulesFromString( aNetlist );
 
     SCH_SHEET_LIST sheets = m_frame->Schematic().Hierarchy();
-    sheets.GetSymbols( m_refs, false );
-    sheets.GetMultiUnitSymbols( m_multiUnitsRefs );
+    sheets.GetSymbols( m_refs, SYMBOL_FILTER_NON_POWER );
+    sheets.GetMultiUnitSymbols( m_multiUnitsRefs, SYMBOL_FILTER_ALL );
 
     getChangeList();
     checkForUnusedSymbols();

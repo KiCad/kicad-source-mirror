@@ -562,24 +562,39 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
 }
 
 
-void SCH_SHEET_PATH::GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
+static bool matchesSymbolFilter( const wxString& aReference, SYMBOL_FILTER aSymbolFilter )
+{
+    bool isPowerSymbol = !aReference.IsEmpty() && aReference[0] == wxT( '#' );
+
+    switch( aSymbolFilter )
+    {
+    case SYMBOL_FILTER_POWER: return isPowerSymbol;
+
+    case SYMBOL_FILTER_ALL: return true;
+
+    case SYMBOL_FILTER_NON_POWER:
+    default: return !isPowerSymbol;
+    }
+}
+
+
+void SCH_SHEET_PATH::GetSymbols( SCH_REFERENCE_LIST& aReferences, SYMBOL_FILTER aSymbolFilter,
                                  bool aForceIncludeOrphanSymbols ) const
 {
     for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-        AppendSymbol( aReferences, symbol, aIncludePowerSymbols, aForceIncludeOrphanSymbols );
+        AppendSymbol( aReferences, symbol, aSymbolFilter, aForceIncludeOrphanSymbols );
     }
 }
 
 
-void SCH_SHEET_PATH::AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_SYMBOL* aSymbol,
-                                   bool aIncludePowerSymbols,
+void SCH_SHEET_PATH::AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_SYMBOL* aSymbol, SYMBOL_FILTER aSymbolFilter,
                                    bool aForceIncludeOrphanSymbols ) const
 {
     // Skip pseudo-symbols, which have a reference starting with #.  This mainly
     // affects power symbols.
-    if( aIncludePowerSymbols || aSymbol->GetRef( this )[0] != wxT( '#' ) )
+    if( matchesSymbolFilter( aSymbol->GetRef( this ), aSymbolFilter ) )
     {
         if( aSymbol->GetLibSymbolRef() || aForceIncludeOrphanSymbols )
         {
@@ -592,24 +607,22 @@ void SCH_SHEET_PATH::AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_SYMBOL* 
 }
 
 
-void SCH_SHEET_PATH::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
-                                          bool aIncludePowerSymbols ) const
+void SCH_SHEET_PATH::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList, SYMBOL_FILTER aSymbolFilter ) const
 {
     for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-        AppendMultiUnitSymbol( aRefList, symbol, aIncludePowerSymbols );
+        AppendMultiUnitSymbol( aRefList, symbol, aSymbolFilter );
     }
 }
 
 
-void SCH_SHEET_PATH::AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
-                                            SCH_SYMBOL* aSymbol,
-                                            bool aIncludePowerSymbols ) const
+void SCH_SHEET_PATH::AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList, SCH_SYMBOL* aSymbol,
+                                            SYMBOL_FILTER aSymbolFilter ) const
 {
     // Skip pseudo-symbols, which have a reference starting with #.  This mainly
     // affects power symbols.
-    if( !aIncludePowerSymbols && aSymbol->GetRef( this )[0] == wxT( '#' ) )
+    if( !matchesSymbolFilter( aSymbol->GetRef( this ), aSymbolFilter ) )
         return;
 
     LIB_SYMBOL* symbol = aSymbol->GetLibSymbolRef().get();
@@ -1344,23 +1357,21 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
 }
 
 
-void SCH_SHEET_LIST::GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
+void SCH_SHEET_LIST::GetSymbols( SCH_REFERENCE_LIST& aReferences, SYMBOL_FILTER aSymbolFilter,
                                  bool aForceIncludeOrphanSymbols ) const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
-        sheet.GetSymbols( aReferences, aIncludePowerSymbols, aForceIncludeOrphanSymbols );
+        sheet.GetSymbols( aReferences, aSymbolFilter, aForceIncludeOrphanSymbols );
 }
 
 
-void SCH_SHEET_LIST::GetSymbolsWithinPath( SCH_REFERENCE_LIST&   aReferences,
-                                           const SCH_SHEET_PATH& aSheetPath,
-                                           bool                  aIncludePowerSymbols,
-                                           bool                  aForceIncludeOrphanSymbols ) const
+void SCH_SHEET_LIST::GetSymbolsWithinPath( SCH_REFERENCE_LIST& aReferences, const SCH_SHEET_PATH& aSheetPath,
+                                           SYMBOL_FILTER aSymbolFilter, bool aForceIncludeOrphanSymbols ) const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
     {
         if( sheet.IsContainedWithin( aSheetPath ) )
-            sheet.GetSymbols( aReferences, aIncludePowerSymbols, aForceIncludeOrphanSymbols );
+            sheet.GetSymbols( aReferences, aSymbolFilter, aForceIncludeOrphanSymbols );
     }
 }
 
@@ -1394,13 +1405,12 @@ std::optional<SCH_SHEET_PATH> SCH_SHEET_LIST::GetSheetPathByKIIDPath( const KIID
 }
 
 
-void SCH_SHEET_LIST::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
-                                          bool aIncludePowerSymbols ) const
+void SCH_SHEET_LIST::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList, SYMBOL_FILTER aSymbolFilter ) const
 {
     for( auto it = begin(); it != end(); ++it )
     {
         SCH_MULTI_UNIT_REFERENCE_MAP tempMap;
-        ( *it ).GetMultiUnitSymbols( tempMap, aIncludePowerSymbols );
+        ( *it ).GetMultiUnitSymbols( tempMap, aSymbolFilter );
 
         for( SCH_MULTI_UNIT_REFERENCE_MAP::value_type& pair : tempMap )
         {

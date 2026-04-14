@@ -197,7 +197,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
         m_job( aJob )
 {
     // Get all symbols from the list of schematic sheets
-    m_parent->Schematic().Hierarchy().GetSymbols( m_symbolsList, false );
+    m_parent->Schematic().Hierarchy().GetSymbols( m_symbolsList, SYMBOL_FILTER_NON_POWER );
 
     m_bRefresh->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
     m_bMenu->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
@@ -2474,7 +2474,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC& aSch, std::vector<S
     std::set<wxString> savedSelection = SaveGridSelection();
 
     SCH_REFERENCE_LIST allRefs;
-    m_parent->Schematic().Hierarchy().GetSymbols( allRefs );
+    m_parent->Schematic().Hierarchy().GetSymbols( allRefs, SYMBOL_FILTER_ALL );
 
     for( SCH_ITEM* item : aSchItem )
     {
@@ -2542,7 +2542,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC& aSch, std::vector
     std::set<wxString> savedSelection = SaveGridSelection();
 
     SCH_REFERENCE_LIST allRefs;
-    m_parent->Schematic().Hierarchy().GetSymbols( allRefs );
+    m_parent->Schematic().Hierarchy().GetSymbols( allRefs, SYMBOL_FILTER_ALL );
 
     for( SCH_ITEM* item : aSchItem )
     {
@@ -2730,7 +2730,7 @@ SCH_REFERENCE_LIST DIALOG_SYMBOL_FIELDS_TABLE::getSheetSymbolReferences( SCH_SHE
                 subSheets.push_back( sheetPath );
                 allSheets.GetSheetsWithinPath( subSheets, sheetPath );
 
-                subSheets.GetSymbolsWithinPath( sheetRefs, sheetPath, false, false );
+                subSheets.GetSymbolsWithinPath( sheetRefs, sheetPath, SYMBOL_FILTER_NON_POWER, false );
                 break;
             }
         }

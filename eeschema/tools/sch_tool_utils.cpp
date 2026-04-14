@@ -150,7 +150,7 @@ std::set<int> GetUnplacedUnitsForSymbol( const SCH_SYMBOL& aSym )
     // Get a list of all references in the schematic
     SCH_SHEET_LIST     hierarchy = schematic->Hierarchy();
     SCH_REFERENCE_LIST existingRefs;
-    hierarchy.GetSymbols( existingRefs );
+    hierarchy.GetSymbols( existingRefs, SYMBOL_FILTER_ALL );
 
     std::set<int> missingUnits;
 
@@ -171,7 +171,7 @@ std::optional<SCH_REFERENCE> FindSymbolByRefAndUnit( const SCHEMATIC& aSchematic
                                                      const wxString& aRef, int aUnit )
 {
     SCH_REFERENCE_LIST refs;
-    aSchematic.Hierarchy().GetSymbols( refs );
+    aSchematic.Hierarchy().GetSymbols( refs, SYMBOL_FILTER_ALL );
 
     for( const SCH_REFERENCE& ref : refs )
     {

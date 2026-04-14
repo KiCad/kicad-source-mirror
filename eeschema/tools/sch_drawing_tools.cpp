@@ -163,7 +163,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
     // Get a list of all references in the schematic to avoid duplicates wherever they're placed
     SCH_REFERENCE_LIST existingRefs;
-    hierarchy.GetSymbols( existingRefs );
+    hierarchy.GetSymbols( existingRefs, SYMBOL_FILTER_ALL );
     existingRefs.SortByReferenceOnly();
 
     if( aEvent.IsAction( &SCH_ACTIONS::placeSymbol ) )
@@ -213,7 +213,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 symbol = nullptr;
 
                 existingRefs.Clear();
-                hierarchy.GetSymbols( existingRefs );
+                hierarchy.GetSymbols( existingRefs, SYMBOL_FILTER_ALL );
                 existingRefs.SortByReferenceOnly();
             };
 

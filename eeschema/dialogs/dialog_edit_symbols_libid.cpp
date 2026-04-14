@@ -398,9 +398,7 @@ void DIALOG_EDIT_SYMBOLS_LIBID::initDlg()
 
     // build the full list of symbols including symbol having no symbol in loaded libs
     // (orphan symbols)
-    GetParent()->Schematic().Hierarchy().GetSymbols( references,
-                                                     true /* include power symbols */,
-                                                     true /* include orphan symbols */ );
+    GetParent()->Schematic().Hierarchy().GetSymbols( references, SYMBOL_FILTER_ALL, true /* include orphan symbols */ );
 
     for( unsigned ii = 0; ii < references.GetCount(); ii++ )
     {

@@ -72,8 +72,8 @@ void TEST_SCH_REFERENCE_LIST_FIXTURE::loadTestCase( wxString aSchematicRelativeP
 
         if( ref.m_IncludeInReannotationList )
         {
-            symbolPath.AppendSymbol( m_refsToReannotate, symbol );
-            symbolPath.AppendMultiUnitSymbol( m_lockedRefs, symbol );
+            symbolPath.AppendSymbol( m_refsToReannotate, symbol, SYMBOL_FILTER_ALL );
+            symbolPath.AppendMultiUnitSymbol( m_lockedRefs, symbol, SYMBOL_FILTER_ALL );
         }
     }
 }
@@ -95,7 +95,7 @@ SCH_REFERENCE_LIST TEST_SCH_REFERENCE_LIST_FIXTURE::getAdditionalRefs()
     // Build List of additional references to pass into Annotate()
     SCH_REFERENCE_LIST allRefs, additionalRefs;
 
-    m_schematic->BuildSheetListSortedByPageNumbers().GetSymbols( allRefs );
+    m_schematic->BuildSheetListSortedByPageNumbers().GetSymbols( allRefs, SYMBOL_FILTER_ALL );
 
     for( size_t i = 0; i < allRefs.GetCount(); ++i )
     {
@@ -316,7 +316,7 @@ BOOST_AUTO_TEST_CASE( ReferenceListDoesNotMutateEmptyValue )
     BOOST_REQUIRE( symbol->GetValue( false, &sheetPath, false ).IsEmpty() );
 
     SCH_REFERENCE_LIST refs;
-    sheetPath.AppendSymbol( refs, symbol );
+    sheetPath.AppendSymbol( refs, symbol, SYMBOL_FILTER_ALL );
 
     BOOST_CHECK( symbol->GetValue( false, &sheetPath, false ).IsEmpty() );
     BOOST_REQUIRE_EQUAL( refs.GetCount(), 1 );
@@ -375,8 +375,8 @@ BOOST_AUTO_TEST_CASE( ReannotateSameValueMultiUnitPreservesGrouping )
 
     for( auto& [uuid, sym] : symbolsByUUID )
     {
-        sheetPath.AppendSymbol( references, sym );
-        sheetPath.AppendMultiUnitSymbol( lockedSymbols, sym );
+        sheetPath.AppendSymbol( references, sym, SYMBOL_FILTER_ALL );
+        sheetPath.AppendMultiUnitSymbol( lockedSymbols, sym, SYMBOL_FILTER_ALL );
     }
 
     BOOST_REQUIRE_EQUAL( references.GetCount(), 6u );

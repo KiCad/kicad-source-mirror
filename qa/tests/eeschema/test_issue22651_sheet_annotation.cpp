@@ -193,7 +193,7 @@ BOOST_AUTO_TEST_CASE( TestSymbolsFoundInNewSheetAfterRefresh )
     // Use GetSymbolsWithinPath to find symbols (as annotation does)
     // Pass true for aForceIncludeOrphanSymbols since test symbols don't have library refs
     SCH_REFERENCE_LIST references;
-    hierarchy.GetSymbolsWithinPath( references, newSheetPath, false, true );
+    hierarchy.GetSymbolsWithinPath( references, newSheetPath, SYMBOL_FILTER_NON_POWER, true );
 
     BOOST_CHECK_EQUAL( references.GetCount(), 2 );
 
@@ -250,7 +250,7 @@ BOOST_AUTO_TEST_CASE( TestSymbolsNotFoundWithoutRefresh )
     BOOST_CHECK_EQUAL( foundSheets.size(), 0 );
 
     SCH_REFERENCE_LIST references;
-    hierarchyBefore.GetSymbolsWithinPath( references, newSheetPath, false, true );
+    hierarchyBefore.GetSymbolsWithinPath( references, newSheetPath, SYMBOL_FILTER_NON_POWER, true );
 
     // The stale hierarchy should NOT find the symbols
     BOOST_CHECK_EQUAL( references.GetCount(), 0 );

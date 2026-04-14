@@ -45,7 +45,6 @@ enum ANNOTATE_SCOPE_T
     ANNOTATE_SELECTION      ///< Annotate the selection
 };
 
-
 /** Schematic annotation order options. */
 enum ANNOTATE_ORDER_T
 {

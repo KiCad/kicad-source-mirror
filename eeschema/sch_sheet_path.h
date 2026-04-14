@@ -41,6 +41,13 @@
 class SCH_SYMBOL;
 class SCH_SHEET;
 
+enum SYMBOL_FILTER
+{
+    SYMBOL_FILTER_NON_POWER,
+    SYMBOL_FILTER_POWER,
+    SYMBOL_FILTER_ALL
+};
+
 /**
  * Object to store and handle common variant information.
  */
@@ -420,25 +427,24 @@ public:
      *
      * @param aReferences List of references to populate.
      * @param aSymbol A symbol to add to aReferences
-     * @param aIncludePowerSymbols set to false to only get normal symbols.
+     * @param aSymbolFilter controls which symbols are included.
      * @param aForceIncludeOrphanSymbols set to true to include symbols having no symbol found
      *                                   in lib.   The normal option is false, and set to true
      *                                   only to build the full list of symbols.
      */
     void AppendSymbol( SCH_REFERENCE_LIST& aReferences, SCH_SYMBOL* aSymbol,
-                       bool aIncludePowerSymbols = true,
-                       bool aForceIncludeOrphanSymbols = false ) const;
+                       SYMBOL_FILTER aSymbolFilter, bool aForceIncludeOrphanSymbols = false ) const;
 
     /**
      * Adds #SCH_REFERENCE object to \a aReferences for each symbol in the sheet.
      *
      * @param aReferences List of references to populate.
-     * @param aIncludePowerSymbols set to false to only get normal symbols.
+     * @param aSymbolFilter controls which symbols are included.
      * @param aForceIncludeOrphanSymbols set to true to include symbols having no symbol found
      *                                   in lib.   The normal option is false, and set to true
      *                                   only to build the full list of symbols.
      */
-    void GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
+    void GetSymbols( SCH_REFERENCE_LIST& aReferences, SYMBOL_FILTER aSymbolFilter,
                      bool aForceIncludeOrphanSymbols = false ) const;
 
     /**
@@ -449,10 +455,10 @@ public:
      *
      * @param aRefList Map of reference designators to reference lists
      * @param aSymbol A symbol to add to aRefList
-     * @param aIncludePowerSymbols Set to false to only get normal symbols.
+     * @param aSymbolFilter controls which symbols are included.
      */
     void AppendMultiUnitSymbol( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList, SCH_SYMBOL* aSymbol,
-                                bool aIncludePowerSymbols = true ) const;
+                                SYMBOL_FILTER aSymbolFilter ) const;
 
     /**
      * Add a #SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
@@ -461,10 +467,10 @@ public:
      * The map key for each element will be the reference designator.
      *
      * @param aRefList Map of reference designators to reference lists
-     * @param aIncludePowerSymbols Set to false to only get normal symbols.
+     * @param aSymbolFilter controls which symbols are included.
      */
-    void GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
-                              bool aIncludePowerSymbols = true ) const;
+    void GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
+                              SYMBOL_FILTER                 aSymbolFilter ) const;
 
     /**
      * Test the SCH_SHEET_PATH file names to check adding the sheet stored in the file
@@ -621,12 +627,12 @@ public:
      * Add a #SCH_REFERENCE object to \a aReferences for each symbol in the list of sheets.
      *
      * @param aReferences List of references to populate.
-     * @param aIncludePowerSymbols Set to false to only get normal symbols.
+     * @param aSymbolFilter controls which symbols are included.
      * @param aForceIncludeOrphanSymbols Set to true to include symbols having no symbol found
      *                                   in lib.   The normal option is false, and set to true
      *                                   only to build the full list of symbols.
      */
-    void GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
+    void GetSymbols( SCH_REFERENCE_LIST& aReferences, SYMBOL_FILTER aSymbolFilter,
                      bool aForceIncludeOrphanSymbols = false ) const;
 
     /**
@@ -635,14 +641,14 @@ public:
      *
      * @param aReferences List of references to populate.
      * @param aSheetPath Path to return symbols from
-     * @param aIncludePowerSymbols Set to false to only get normal symbols.
+     * @param aSymbolFilter controls which symbols are included.
      * @param aForceIncludeOrphanSymbols Set to true to include symbols having no symbol found
      *                                   in lib.   The normal option is false, and set to true
      *                                   only to build the full list of symbols.
      */
     void GetSymbolsWithinPath( SCH_REFERENCE_LIST& aReferences, const SCH_SHEET_PATH& aSheetPath,
-                               bool aIncludePowerSymbols = true,
-                               bool aForceIncludeOrphanSymbols = false ) const;
+                               SYMBOL_FILTER aSymbolFilter,
+                               bool          aForceIncludeOrphanSymbols = false ) const;
 
     /**
      * Add a #SCH_SHEET_PATH object to \a aSheets for each sheet in the list that are
@@ -670,10 +676,10 @@ public:
      * reference designator.
      *
      * @param aRefList Map of reference designators to reference lists
-     * @param aIncludePowerSymbols Set to false to only get normal symbols.
+     * @param aSymbolFilter controls which symbols are included.
      */
-    void GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
-                              bool aIncludePowerSymbols = true ) const;
+    void GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP& aRefList,
+                              SYMBOL_FILTER                 aSymbolFilter ) const;
 
     /**
      * Test every #SCH_SHEET_PATH in this #SCH_SHEET_LIST to verify if adding the sheets stored

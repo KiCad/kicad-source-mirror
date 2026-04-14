@@ -216,7 +216,7 @@ void CollectOtherUnits( const wxString& aRef, int aUnit, const LIB_ID& aLibId,
                         SCH_SHEET_PATH& aSheet, std::vector<SCH_SYMBOL*>* otherUnits )
 {
     SCH_REFERENCE_LIST symbols;
-    aSheet.GetSymbols( symbols );
+    aSheet.GetSymbols( symbols, SYMBOL_FILTER_ALL );
 
     for( unsigned i = 0; i < symbols.GetCount(); i++ )
     {
@@ -230,5 +230,4 @@ void CollectOtherUnits( const wxString& aRef, int aUnit, const LIB_ID& aLibId,
         }
     }
 }
-
 

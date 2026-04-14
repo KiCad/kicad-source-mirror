@@ -41,7 +41,7 @@
 void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 {
     SCH_REFERENCE_LIST references;
-    Schematic().Hierarchy().GetSymbols( references );
+    Schematic().Hierarchy().GetSymbols( references, SYMBOL_FILTER_ALL );
 
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
@@ -306,23 +306,23 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
         switch( aAnnotateScope )
         {
         case ANNOTATE_ALL:
-            sheets.GetMultiUnitSymbols( lockedSymbols );
+            sheets.GetMultiUnitSymbols( lockedSymbols, SYMBOL_FILTER_ALL );
             break;
 
         case ANNOTATE_CURRENT_SHEET:
-            currentSheet.GetMultiUnitSymbols( lockedSymbols );
+            currentSheet.GetMultiUnitSymbols( lockedSymbols, SYMBOL_FILTER_ALL );
 
             if( aRecursive )
-                subSheets.GetMultiUnitSymbols( lockedSymbols );
+                subSheets.GetMultiUnitSymbols( lockedSymbols, SYMBOL_FILTER_ALL );
 
             break;
 
         case ANNOTATE_SELECTION:
             for( SCH_SYMBOL* symbol : selectedSymbols )
-                currentSheet.AppendMultiUnitSymbol( lockedSymbols, symbol );
+                currentSheet.AppendMultiUnitSymbol( lockedSymbols, symbol, SYMBOL_FILTER_NON_POWER );
 
             if( aRecursive )
-                selectedSheets.GetMultiUnitSymbols( lockedSymbols );
+                selectedSheets.GetMultiUnitSymbols( lockedSymbols, SYMBOL_FILTER_NON_POWER );
 
             break;
         }
@@ -368,23 +368,24 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
     switch( aAnnotateScope )
     {
     case ANNOTATE_ALL:
-        sheets.GetSymbols( references );
+        sheets.GetSymbols( references, SYMBOL_FILTER_ALL );
         break;
 
     case ANNOTATE_CURRENT_SHEET:
-        currentSheet.GetSymbols( references );
+        currentSheet.GetSymbols( references, SYMBOL_FILTER_ALL );
 
         if( aRecursive )
-            subSheets.GetSymbolsWithinPath( references, currentSheet, false, true );
+            subSheets.GetSymbolsWithinPath( references, currentSheet, SYMBOL_FILTER_NON_POWER, true );
 
         break;
 
     case ANNOTATE_SELECTION:
         for( SCH_SYMBOL* symbol : selectedSymbols )
-            currentSheet.AppendSymbol( references, symbol, false, true );
+            currentSheet.AppendSymbol( references, symbol, SYMBOL_FILTER_NON_POWER, true );
 
         if( aRecursive )
-            selectedSheets.GetSymbolsWithinPath( references, currentSheet, false, true );
+            selectedSheets.GetSymbolsWithinPath( references, currentSheet, SYMBOL_FILTER_NON_POWER,
+                                                 true );
 
         break;
     }
@@ -403,7 +404,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
     if( aAnnotateScope != ANNOTATE_ALL )
     {
         SCH_REFERENCE_LIST allRefs;
-        sheets.GetSymbols( allRefs );
+        sheets.GetSymbols( allRefs, SYMBOL_FILTER_ALL );
 
         for( size_t i = 0; i < allRefs.GetCount(); i++ )
         {
@@ -517,7 +518,6 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
                                    bool                     aRecursive )
 {
     SCH_REFERENCE_LIST  referenceList;
-    constexpr bool      includePowerSymbols = false;
     SCH_SHEET_LIST      sheets = Schematic().Hierarchy();
     SCH_SHEET_PATH      currentSheet = GetCurrentSheet();
 
@@ -525,11 +525,11 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
     switch( aAnnotateScope )
     {
     case ANNOTATE_ALL:
-        sheets.GetSymbols( referenceList );
+        sheets.GetSymbols( referenceList, SYMBOL_FILTER_ALL );
         break;
 
     case ANNOTATE_CURRENT_SHEET:
-        GetCurrentSheet().GetSymbols( referenceList, includePowerSymbols );
+        GetCurrentSheet().GetSymbols( referenceList, SYMBOL_FILTER_NON_POWER );
 
         if( aRecursive )
         {
@@ -547,7 +547,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
             }
 
             for( SCH_SHEET_PATH sheet : subSheets )
-                sheet.GetSymbols( referenceList, includePowerSymbols );
+                sheet.GetSymbols( referenceList, SYMBOL_FILTER_NON_POWER );
         }
 
         break;
@@ -557,7 +557,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
         SCH_SELECTION&      selection = selTool->RequestSelection();
 
         for( SCH_SYMBOL* symbol : getInferredSymbols( selection ) )
-            GetCurrentSheet().AppendSymbol( referenceList, symbol, false, true );
+            GetCurrentSheet().AppendSymbol( referenceList, symbol, SYMBOL_FILTER_NON_POWER, true );
 
         if( aRecursive )
         {
@@ -575,7 +575,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler,
             }
 
             for( SCH_SHEET_PATH sheet : selectedSheets )
-                sheet.GetSymbols( referenceList, includePowerSymbols );
+                sheet.GetSymbols( referenceList, SYMBOL_FILTER_NON_POWER );
         }
 
         break;

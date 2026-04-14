@@ -217,7 +217,7 @@ void SCHEMATIC::CacheExistingAnnotation()
     SCH_SHEET_LIST     sheets = Hierarchy();
     SCH_REFERENCE_LIST references;
 
-    sheets.GetSymbols( references );
+    sheets.GetSymbols( references, SYMBOL_FILTER_ALL );
 
     for( const SCH_REFERENCE& ref : references )
     {
@@ -235,7 +235,7 @@ bool SCHEMATIC::Contains( const SCH_REFERENCE& aRef ) const
     /// REFDES_TRACKER will need to be extended to track if a reference is currently present in the schematic
     /// as well as the units.  For now, this is relatively fast for reasonably sized schematics
     /// Famous last words...
-    sheets.GetSymbols( references );
+    sheets.GetSymbols( references, SYMBOL_FILTER_ALL );
 
     return std::any_of( references.begin(), references.end(),
                         [&]( const SCH_REFERENCE& ref )
@@ -830,7 +830,7 @@ bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
     if( !refItem )
     {
         SCH_REFERENCE_LIST refs;
-        Hierarchy().GetSymbols( refs );
+        Hierarchy().GetSymbols( refs, SYMBOL_FILTER_ALL );
 
         SCH_SYMBOL*    foundSymbol = nullptr;
         SCH_SHEET_PATH foundPath;
@@ -983,7 +983,7 @@ wxString SCHEMATIC::ConvertRefsToKIIDs( const wxString& aSource ) const
                 wxString           ref = token.BeforeFirst( ':', &remainder );
                 SCH_REFERENCE_LIST references;
 
-                Hierarchy().GetSymbols( references );
+                Hierarchy().GetSymbols( references, SYMBOL_FILTER_ALL );
 
                 for( size_t jj = 0; jj < references.GetCount(); jj++ )
                 {

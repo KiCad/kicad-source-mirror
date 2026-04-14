@@ -235,7 +235,7 @@ void DIALOG_TEXT_PROPERTIES::getContextualTextVars( const wxString& aCrossRef,
         if( schematic )
         {
             SCH_REFERENCE_LIST refs;
-            schematic->Hierarchy().GetSymbols( refs );
+            schematic->Hierarchy().GetSymbols( refs, SYMBOL_FILTER_ALL );
 
             for( int jj = 0; jj < (int) refs.GetCount(); jj++ )
             {

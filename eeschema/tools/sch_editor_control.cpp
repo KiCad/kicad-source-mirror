@@ -668,7 +668,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
     SCH_SHEET_LIST     sheets = m_frame->Schematic().BuildSheetListSortedByPageNumbers();
     SCH_REFERENCE_LIST symbols;
-    sheets.GetSymbols( symbols, savePowerSymbols );
+    sheets.GetSymbols( symbols, savePowerSymbols ? SYMBOL_FILTER_ALL : SYMBOL_FILTER_NON_POWER );
 
     std::map<LIB_ID, LIB_SYMBOL*>              libSymbols;
     std::map<LIB_ID, std::vector<SCH_SYMBOL*>> symbolMap;
@@ -1978,7 +1978,7 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( SCH_SHEET* aSheet, const S
         }
     }
 
-    sheetPath.GetSymbols( aPastedSymbols[aPastePath] );
+    sheetPath.GetSymbols( aPastedSymbols[aPastePath], SYMBOL_FILTER_ALL );
 
     return sheetPath;
 }
@@ -2219,7 +2219,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     // Build symbol list for reannotation of duplicates
     SCH_REFERENCE_LIST existingRefs;
-    hierarchy.GetSymbols( existingRefs );
+    hierarchy.GetSymbols( existingRefs, SYMBOL_FILTER_ALL );
     existingRefs.SortByReferenceOnly();
 
     std::set<wxString> existingRefsSet;
@@ -2912,9 +2912,9 @@ int SCH_EDITOR_CONTROL::IncrementAnnotations( const TOOL_EVENT& aEvent )
         SCH_REFERENCE_LIST references;
 
         if( dlg.m_AllSheets->GetValue() )
-            schematic->Hierarchy().GetSymbols( references );
+            schematic->Hierarchy().GetSymbols( references, SYMBOL_FILTER_ALL );
         else
-            schematic->CurrentSheet().GetSymbols( references );
+            schematic->CurrentSheet().GetSymbols( references, SYMBOL_FILTER_ALL );
 
         references.SplitReferences();
 

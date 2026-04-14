@@ -60,7 +60,7 @@ public:
             m_nets( aSchematic->ConnectionGraph()->GetNetMap() ),
             m_showAllErrors( aShowAllErrors )
     {
-        m_sheetList.GetMultiUnitSymbols( m_refMap, true );
+        m_sheetList.GetMultiUnitSymbols( m_refMap, SYMBOL_FILTER_ALL );
     }
 
     /**
