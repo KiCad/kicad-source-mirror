@@ -1889,6 +1889,110 @@ BOOST_FIXTURE_TEST_CASE( ElongatedPadTeardropContainment, ZONE_FILL_TEST_FIXTURE
 
 
 /**
+ * Teardrop spanning two track segments at an angle should not produce self-intersecting
+ * edges. When a teardrop extends from a via along a short horizontal segment then onto
+ * an angled segment, the polygon must follow the track bend with proper junction
+ * transition points rather than cutting diagonally across the bend.
+ *
+ * Tests both curved and straight edge modes since they use different polygon assembly paths.
+ */
+BOOST_FIXTURE_TEST_CASE( TwoSegmentAngledTeardropNoSelfIntersection, ZONE_FILL_TEST_FIXTURE )
+{
+    auto runVariant = [&]( bool aCurvedEdges )
+    {
+        KI_TEST::LoadBoard( m_settingsManager, "two_segment_teardrop", m_board );
+
+        for( PCB_TRACK* track : m_board->Tracks() )
+        {
+            if( track->Type() == PCB_VIA_T )
+            {
+                static_cast<PCB_VIA*>( track )->SetTeardropCurved( aCurvedEdges );
+                break;
+            }
+        }
+
+        TOOL_MANAGER toolMgr;
+        toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+
+        KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+        toolMgr.RegisterTool( dummyTool );
+
+        BOARD_COMMIT commit( dummyTool );
+        TEARDROP_MANAGER teardropMgr( m_board.get(), &toolMgr );
+        teardropMgr.UpdateTeardrops( commit, nullptr, nullptr, true );
+
+        if( !commit.Empty() )
+            commit.Push( _( "Add teardrops" ), SKIP_UNDO | SKIP_SET_DIRTY );
+
+        int  teardropCount = 0;
+        bool foundSelfIntersection = false;
+
+        for( ZONE* zone : m_board->Zones() )
+        {
+            if( !zone->IsTeardropArea() )
+                continue;
+
+            teardropCount++;
+
+            const SHAPE_POLY_SET* outline = zone->Outline();
+
+            if( !outline || outline->OutlineCount() == 0 )
+                continue;
+
+            const SHAPE_LINE_CHAIN& chain = outline->Outline( 0 );
+            int n = chain.PointCount();
+
+            for( int i = 0; i < n && !foundSelfIntersection; i++ )
+            {
+                SEG segA( chain.CPoint( i ), chain.CPoint( ( i + 1 ) % n ) );
+
+                for( int j = i + 2; j < n; j++ )
+                {
+                    if( i == 0 && j == n - 1 )
+                        continue;
+
+                    SEG segB( chain.CPoint( j ), chain.CPoint( ( j + 1 ) % n ) );
+                    OPT_VECTOR2I hit = segA.Intersect( segB );
+
+                    if( hit.has_value() )
+                    {
+                        BOOST_TEST_MESSAGE( wxString::Format(
+                                "Self-intersection at (%d, %d) between edges %d and %d "
+                                "(curved=%s)",
+                                hit->x, hit->y, i, j,
+                                aCurvedEdges ? "yes" : "no" ) );
+
+                        for( int k = 0; k < n; k++ )
+                        {
+                            BOOST_TEST_MESSAGE( wxString::Format(
+                                    "  pt[%d] = (%d, %d)", k,
+                                    chain.CPoint( k ).x, chain.CPoint( k ).y ) );
+                        }
+
+                        foundSelfIntersection = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        BOOST_CHECK_MESSAGE( teardropCount > 0,
+                             wxString::Format( "Expected at least one teardrop zone "
+                                               "(curved=%s)",
+                                               aCurvedEdges ? "yes" : "no" ) );
+
+        BOOST_CHECK_MESSAGE( !foundSelfIntersection,
+                             wxString::Format( "Teardrop polygon has self-intersecting "
+                                               "edges (curved=%s)",
+                                               aCurvedEdges ? "yes" : "no" ) );
+    };
+
+    runVariant( true );
+    runVariant( false );
+}
+
+
+/**
  * Test for issue 23515: Zone fills have random pieces missing near keepout boundaries.
  *
  * The test board is a reporter-provided v9 board file with stored zone fill from the v9
