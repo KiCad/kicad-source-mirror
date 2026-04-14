@@ -125,9 +125,9 @@ void POOL_DIRECTORY::Parse( const std::vector<uint8_t>& aData )
 
     for( size_t i = 0; i < POOL_COUNT; ++i )
     {
-        size_t base = TABLE_OFFSET + i * DESCRIPTOR_SIZE;
-        usedCount[i] = cursor.U32At( base + USED_COUNT_OFFSET );
-        usedBytes[i] = cursor.U32At( base + USED_BYTES_OFFSET );
+        PADS_IO::SDB_RECORD rec( cursor, TABLE_OFFSET + i * DESCRIPTOR_SIZE );
+        usedCount[i] = rec.U32( USED_COUNT_OFFSET );
+        usedBytes[i] = rec.U32( USED_BYTES_OFFSET );
     }
 
     valid = true;
@@ -186,6 +186,7 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     m_texts.clear();
     m_junctions.clear();
     m_netLabels.clear();
+    m_netTableScanCount = 0;
 
     if( !IsBinarySch( aData ) )
         return false;
@@ -2539,6 +2540,17 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
 
     if( netCount == 0 )
         return;
+
+    // The longest contiguous stride-88 run is the net table; its row count is the
+    // net controller's authoritative object count (pool8.used_count). Prefer the
+    // directory count over the scan's run-length terminator when present, retiring
+    // the heuristic tail; the scan still anchors the table base until the @0x250
+    // block walk lands. m_netTableScanCount preserves the scanned length so a corpus
+    // test can prove the two agree.
+    m_netTableScanCount = netCount;
+
+    if( size_t poolNetCount = m_pools.Count( POOL_DIRECTORY::NETS ) )
+        netCount = poolNetCount;
 
     auto netName = [&]( size_t k ) -> std::string
     {

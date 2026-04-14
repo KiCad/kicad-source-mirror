@@ -65,6 +65,7 @@ struct POOL_DIRECTORY
 
     static constexpr int SHEETS = 3;            ///< pool3.used_count = sheet count.
     static constexpr int DECAL_HANDLE_BASE = 5; ///< pool5.used_count = builtin decal handle base.
+    static constexpr int NETS = 8;              ///< pool8.used_count = net-table row count (stride 88).
 
     /// Read the descriptor table from @p aData.  Leaves @ref valid false (and all
     /// counts zero) when the buffer is too small to hold the table.
@@ -251,6 +252,11 @@ public:
     /// Per-sheet "[N]NAME" names from the pool3 sheet table, in file order.
     const std::vector<std::string>& GetSheetNames() const { return m_sheetNames; }
 
+    /// The net-table row count discovered by the decodeNetLabels scan (the longest
+    /// stride-88 run). Exposed so a corpus test can prove it equals pool8.used_count
+    /// before the heuristic terminator is retired in favour of the authoritative count.
+    size_t GetNetTableScanCount() const { return m_netTableScanCount; }
+
     /**
      * Build the recovered symbols and wires onto @p aRootSheet's screen.
      *
@@ -368,6 +374,7 @@ private:
     std::vector<TEXT_ITEM>               m_texts;          ///< Free-text items, file order.
     std::vector<JUNCTION>                m_junctions;      ///< Tie-dot junctions, all sheets.
     std::vector<NET_LABEL>               m_netLabels;      ///< Off-page / power-port net labels.
+    size_t                               m_netTableScanCount = 0; ///< Longest stride-88 net run.
 };
 
 } // namespace PADS_SCH_BINARY
