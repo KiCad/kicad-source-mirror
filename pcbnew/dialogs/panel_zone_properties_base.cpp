@@ -336,16 +336,16 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_cornerSmoothingChoice->SetSelection( 1 );
 	gbSizerGeneralProps->Add( m_cornerSmoothingChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 2 );
 
-	m_cornerRadiusLabel = new wxStaticText( this, wxID_ANY, _("Chamfer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cornerRadiusLabel = new wxStaticText( this, wxID_ANY, _("Radius:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cornerRadiusLabel->Wrap( -1 );
-	gbSizerGeneralProps->Add( m_cornerRadiusLabel, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
+	gbSizerGeneralProps->Add( m_cornerRadiusLabel, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 10 );
 
 	m_cornerRadiusCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizerGeneralProps->Add( m_cornerRadiusCtrl, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	gbSizerGeneralProps->Add( m_cornerRadiusCtrl, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 	m_cornerRadiusUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cornerRadiusUnits->Wrap( -1 );
-	gbSizerGeneralProps->Add( m_cornerRadiusUnits, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizerGeneralProps->Add( m_cornerRadiusUnits, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 	m_removeIslandsLabel = new wxStaticText( this, wxID_ANY, _("Remove islands:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_removeIslandsLabel->Wrap( -1 );

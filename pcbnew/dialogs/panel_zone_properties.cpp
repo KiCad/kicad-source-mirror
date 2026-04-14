@@ -231,21 +231,16 @@ void PANEL_ZONE_PROPERTIES::OnRemoveIslandsSelection( wxCommandEvent& aEvent )
 
 void PANEL_ZONE_PROPERTIES::OnCornerSmoothingSelection( wxCommandEvent& event )
 {
-    switch( m_cornerSmoothingChoice->GetSelection() )
+    int selection = m_cornerSmoothingChoice->GetSelection();
+
+    if( selection == ZONE_SETTINGS::SMOOTHING_CHAMFER
+            || selection == ZONE_SETTINGS::SMOOTHING_FILLET )
     {
-    case ZONE_SETTINGS::SMOOTHING_CHAMFER:
-        m_cornerRadiusLabel->SetLabel( _( "Chamfer:" ) );
         m_cornerRadius.Show( true );
-        break;
-
-    case ZONE_SETTINGS::SMOOTHING_FILLET:
-        m_cornerRadiusLabel->SetLabel( _( "Fillet:" ) );
-        m_cornerRadius.Show( true );
-        break;
-
-    default:
+    }
+    else
+    {
         m_cornerRadius.Show( false );
-        break;
     }
 
     if( DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( wxGetTopLevelParent( this ) ) )
