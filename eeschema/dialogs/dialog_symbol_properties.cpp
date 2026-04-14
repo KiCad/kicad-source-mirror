@@ -339,6 +339,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     m_fieldsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
     m_fieldsGrid->ShowHideColumns( "0 1 2 3 4 5 6 7" );
     m_fieldsGrid->SetMinSize( wxSize( -1, 160 ) );
+    m_fieldsGrid->OverrideMinSize( 1.0, 1.0 );
     m_shownColumns = m_fieldsGrid->GetShownColumns();
 
     if( m_symbol->GetEmbeddedFiles() )

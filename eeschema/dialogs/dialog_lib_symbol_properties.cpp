@@ -86,6 +86,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
 
     m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_libEntry, { m_embeddedFiles->GetLocalFiles() } );
     m_grid->SetTable( m_fields );
+    m_grid->OverrideMinSize( 1.0, 1.0 );
     m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this, { m_embeddedFiles->GetLocalFiles() },
                                                       [&]( wxCommandEvent& aEvent )
                                                       {

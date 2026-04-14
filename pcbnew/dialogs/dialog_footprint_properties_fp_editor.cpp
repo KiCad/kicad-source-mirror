@@ -202,6 +202,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FO
     SetIcon( icon );
 
     m_itemsGrid->SetTable( m_fields );
+    m_itemsGrid->OverrideMinSize( 1.0, 1.0 );
     m_privateLayersGrid->SetTable( m_privateLayers );
     m_customUserLayersGrid->SetTable( m_customUserLayers );
 
