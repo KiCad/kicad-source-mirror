@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-07 18:58+0300\n"
-"PO-Revision-Date: 2026-04-13 09:09+0000\n"
+"PO-Revision-Date: 2026-04-14 20:41+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -2111,7 +2111,7 @@ msgstr "Änderung von API"
 #: common/api/api_plugin.cpp:60
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr ""
+msgstr "Ungültige Plugin-Konfiguration unter \"%s\": %s"
 
 #: common/api/api_plugin.cpp:80
 #, fuzzy, c-format
@@ -37965,12 +37965,12 @@ msgstr "Anzahl vertikal"
 #: pcbnew/dialogs/dialog_create_array.cpp:436
 #, c-format
 msgid "horizontal delta of zero with %ld objects"
-msgstr ""
+msgstr "horizontales Delta von Null bei %ld Objekten"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:442
 #, c-format
 msgid "vertical delta of zero with %ld objects"
-msgstr ""
+msgstr "vertikales Delta von Null bei %ld Objekten"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:451
 msgid "stagger"
@@ -37983,7 +37983,7 @@ msgstr "Anzahl Löcher"
 #: pcbnew/dialogs/dialog_create_array.cpp:517
 #, c-format
 msgid "angular delta of zero with %ld objects"
-msgstr ""
+msgstr "Winkeldelta von Null bei %ld Objekten"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:564
 msgid "Bad parameters"
