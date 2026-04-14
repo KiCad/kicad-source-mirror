@@ -1788,7 +1788,8 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                                         "([a-zA-Z]*))?" // rangeStr
                                         "$" ) );
 
-    wxCHECK( aPath, false );
+    if( !aPath )
+        return false;
 
     SCHEMATIC* schematic = Schematic();
 
