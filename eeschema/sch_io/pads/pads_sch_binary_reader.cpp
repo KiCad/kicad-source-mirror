@@ -70,14 +70,25 @@ static constexpr int PAGE_BIAS = 99072;
 static constexpr int DEFAULT_PAGE_WIDTH_MIL = 17000;
 static constexpr int DEFAULT_PAGE_HEIGHT_MIL = 11000;
 
-// Part-placement record: stride 136, refdes ASCII at +0, with the placement
-// fields interleaved one block ahead of the refdes.
+// Part-placement record: stride 136, refdes ASCII one block (0x3e) ahead of the
+// record origin "ksy"; the placement fields are ksy-relative. The slot scan keys
+// on the refdes, so the validators below are refdes-relative while the field
+// reads base an SDB_RECORD at ksy = refdes - PART_REFDES_OFF.
 static constexpr size_t PART_STRIDE = 136;
-static constexpr int    PART_X_OFF = -0x3e;  // u16, relative to refdes
-static constexpr int    PART_Y_OFF = -0x3c;  // u16
-static constexpr int    PART_ORI_OFF = -0x3a;// u16 angle in tenths of a degree (900 = 90deg)
+static constexpr size_t PART_REFDES_OFF = 0x3e; // refdes offset from the ksy origin
 
-// MFC object-class word at +0x28: 00 <class-id> marks a part-instance slot.
+static constexpr int PL_X_OFF = 0x00;        // u16 page-biased X
+static constexpr int PL_Y_OFF = 0x02;        // u16 page-biased Y
+static constexpr int PL_REFDES_DX_OFF = 0x08;// refdes field dx (2*i16)
+static constexpr int PL_REFDES_DY_OFF = 0x0a;// refdes field dy (2*i16)
+static constexpr int PL_REFDES_ANGLE_OFF = 0x0c; // refdes field u16 tenths-degree
+static constexpr int PL_ORI_OFF = 0x04;      // u16 angle in tenths of a degree (900 = 90deg)
+static constexpr int PL_PTIDX_OFF = 0x22;    // u16 part-type pool ordinal
+static constexpr int PL_DECAL_OFF = 0x24;    // u16 used-decal handle
+static constexpr int PL_UNIT_OFF = 0x2a;     // u16 0-based gate slot
+static constexpr int PL_FIELDCOUNT_OFF = 0x2e; // u16 post-block field count
+
+// MFC object-class word at +0x28 (refdes-relative): 00 <class-id> marks a part slot.
 static constexpr int                    PART_CLASS_OFF = 0x28;
 static constexpr std::array<uint8_t, 5> PART_CLASS_IDS = { 0x02, 0x06, 0x0A, 0x12, 0x1A };
 
@@ -97,18 +108,6 @@ static constexpr size_t VERTEX_STRIDE = 8;
 static int designMil( uint16_t aRaw )
 {
     return 2 * static_cast<int>( aRaw ) - PAGE_BIAS;
-}
-
-
-static uint16_t readU16( const std::vector<uint8_t>& d, size_t o )
-{
-    return PADS_IO::BINARY_CURSOR( d ).U16At( o );
-}
-
-
-static uint32_t readU32( const std::vector<uint8_t>& d, size_t o )
-{
-    return PADS_IO::BINARY_CURSOR( d ).U32At( o );
 }
 
 
@@ -156,7 +155,7 @@ bool PADS_SCH_BINARY_READER::IsBinarySch( const std::vector<uint8_t>& aData )
     if( !PADS_IO::HasSdbMagic( aData, MAGIC1 ) )
         return false;
 
-    return readU16( aData, 2 ) == VERSION;
+    return BINARY_CURSOR( aData ).U16At( 2 ) == VERSION;
 }
 
 
@@ -375,12 +374,26 @@ int PADS_SCH_BINARY_READER::sheetIndexForOffset( size_t aOffset ) const
 // stride-0x6c name run (per sheet) and BUILTIN = pool5.used_count.
 // ---------------------------------------------------------------------------
 static constexpr size_t DECAL_STRIDE = 0x50;
+static constexpr int    DECAL_CLASS_OFF = 0x29;   // class id 0x06
+static constexpr int    DECAL_CUMVTX_OFF = 0x34;  // u32 cumulative vertex index
+static constexpr size_t DECAL_NAME_LEN = 0x26;
+static constexpr size_t PIECE_STRIDE = 6;
+static constexpr int    PIECE_MARKER_OFF = 1;     // 0x00 closed / 0xff open
+static constexpr int    PIECE_NVERTS_OFF = 2;
+static constexpr int    PIECE_WIDTH_OFF = 4;
+static constexpr size_t DVERT_STRIDE = 6;         // decal vertex: x 2*i16 @+0, y @+2
 static constexpr size_t USED_DECAL_STRIDE = 0x6c;
+static constexpr int    UDECAL_NAME_OFF = 1;      // name after a 1-byte lead
+static constexpr int    UDECAL_COUNT_OFF = 0x2b;  // u8 terminal count
+static constexpr int    UDECAL_CUM_OFF = 0x2d;    // u16 cumulative terminal start
+static constexpr size_t TERMINAL_STRIDE = 26;
+static constexpr int    TERMINAL_X_OFF = 3;       // 2*i16 decal-relative
+static constexpr int    TERMINAL_Y_OFF = 5;
 
 
-static int decalMil( const std::vector<uint8_t>& d, size_t o )
+static int decalMil( const BINARY_CURSOR& cur, size_t o )
 {
-    return 2 * static_cast<int>( static_cast<int16_t>( readU16( d, o ) ) );
+    return 2 * static_cast<int>( static_cast<int16_t>( cur.U16At( o ) ) );
 }
 
 
@@ -409,6 +422,8 @@ static std::string nameAt( const std::vector<uint8_t>& d, size_t o, size_t maxle
 
 void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
 {
+    BINARY_CURSOR cur( d );
+
     // BUILTIN handle base = the decal controller's authoritative object count.
     m_decalBuiltinCount = m_pools.Count( POOL_DIRECTORY::DECAL_HANDLE_BASE );
 
@@ -421,7 +436,8 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
 
     for( size_t i = DATA_STREAM_OFFSET; i + DECAL_STRIDE * 8 < n; ++i )
     {
-        if( d[i + 0x29] != 0x06 || readU32( d, i + 0x34 ) != 0 )
+        if( SDB_RECORD( cur, i ).U8( DECAL_CLASS_OFF ) != 0x06
+            || SDB_RECORD( cur, i ).U32( DECAL_CUMVTX_OFF ) != 0 )
             continue;
 
         uint32_t prev = 0;
@@ -429,10 +445,10 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
 
         for( int k = 0; k < 8; ++k )
         {
-            size_t   rec = i + DECAL_STRIDE * k;
-            uint32_t cv = readU32( d, rec + 0x34 );
+            SDB_RECORD rec = SDB_RECORD( cur, i + DECAL_STRIDE * k );
+            uint32_t   cv = rec.U32( DECAL_CUMVTX_OFF );
 
-            if( d[rec + 0x29] == 0x06 && cv >= prev && cv < 100000 )
+            if( rec.U8( DECAL_CLASS_OFF ) == 0x06 && cv >= prev && cv < 100000 )
             {
                 ++good;
                 prev = cv;
@@ -463,8 +479,8 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
             if( rec + DECAL_STRIDE > n )
                 break;
 
-            uint32_t    cv = readU32( d, rec + 0x34 );
-            std::string nm = nameAt( d, rec, 0x26 );
+            uint32_t    cv = SDB_RECORD( cur, rec ).U32( DECAL_CUMVTX_OFF );
+            std::string nm = nameAt( d, rec, DECAL_NAME_LEN );
 
             if( cv < prev || cv > 100000 || nm.empty() )
                 break;
@@ -480,17 +496,18 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
         size_t                 vcursor = 0;
         size_t                 j = pieceOff;
 
-        while( j + 6 <= n )
+        while( j + PIECE_STRIDE <= n )
         {
-            uint8_t marker = d[j + 1];
-            int     nv = d[j + 2];
+            SDB_RECORD pieceRec( cur, j );
+            uint8_t    marker = pieceRec.U8( PIECE_MARKER_OFF );
+            int        nv = pieceRec.U8( PIECE_NVERTS_OFF );
 
             if( ( marker != 0x00 && marker != 0xFF ) || nv == 0 || nv > 80 )
                 break;
 
-            pieces.push_back( { marker == 0x00, nv, d[j + 4], vcursor } );
+            pieces.push_back( { marker == 0x00, nv, pieceRec.U8( PIECE_WIDTH_OFF ), vcursor } );
             vcursor += static_cast<size_t>( nv );
-            j += 6;
+            j += PIECE_STRIDE;
         }
 
         // Vertex pool follows the piece pool.
@@ -499,12 +516,12 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
 
         for( size_t q = 0; q < vcursor; ++q )
         {
-            size_t o = vertOff + 6 * q;
+            size_t o = vertOff + DVERT_STRIDE * q;
 
-            if( o + 6 > n )
+            if( o + DVERT_STRIDE > n )
                 break;
 
-            verts.emplace_back( decalMil( d, o ), decalMil( d, o + 2 ) );
+            verts.emplace_back( decalMil( cur, o ), decalMil( cur, o + 2 ) );
         }
 
         // Split pieces into decals by the cumulative-vertex ranges.
@@ -569,9 +586,9 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
                 if( rec + USED_DECAL_STRIDE > n )
                     break;
 
-                std::string nm = nameAt( d, rec + 1, 0x20 );
-                int         cnt = d[rec + 0x2b];
-                int         cum = readU16( d, rec + 0x2d );
+                std::string nm = nameAt( d, rec + UDECAL_NAME_OFF, 0x20 );
+                int         cnt = SDB_RECORD( cur, rec ).U8( UDECAL_COUNT_OFF );
+                int         cum = SDB_RECORD( cur, rec ).U16( UDECAL_CUM_OFF );
 
                 // The running cumulative prefix sum (cum == expect) is the table's integrity
                 // invariant; it terminates the run at the first non-record. cnt is a u8 gate
@@ -604,7 +621,7 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
 
                 for( size_t cand = ( nominal >= 2 ? nominal - 2 : 0 ); cand <= nominal + 2; ++cand )
                 {
-                    if( cand + 26 * static_cast<size_t>( total ) > n )
+                    if( cand + TERMINAL_STRIDE * static_cast<size_t>( total ) > n )
                         continue;
 
                     int score = 0;
@@ -619,9 +636,9 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
                         if( !anchor )
                             continue;
 
-                        size_t o = cand + 26 * static_cast<size_t>( r.cum );
+                        size_t o = cand + TERMINAL_STRIDE * static_cast<size_t>( r.cum );
 
-                        if( decalMil( d, o + 3 ) == 0 && decalMil( d, o + 5 ) == 0 )
+                        if( decalMil( cur, o + TERMINAL_X_OFF ) == 0 && decalMil( cur, o + TERMINAL_Y_OFF ) == 0 )
                             ++score;
                     }
 
@@ -642,11 +659,11 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
 
                     for( int t = 0; t < r.count; ++t )
                     {
-                        size_t o = poolBase + 26 * static_cast<size_t>( r.cum + t );
+                        size_t o = poolBase + TERMINAL_STRIDE * static_cast<size_t>( r.cum + t );
 
-                        if( o + 6 <= n )
-                            m_decals[it->second].terminals.emplace_back( decalMil( d, o + 3 ),
-                                                                         decalMil( d, o + 5 ) );
+                        if( o + DVERT_STRIDE <= n )
+                            m_decals[it->second].terminals.emplace_back( decalMil( cur, o + TERMINAL_X_OFF ),
+                                                                         decalMil( cur, o + TERMINAL_Y_OFF ) );
                     }
                 }
 
@@ -1099,6 +1116,8 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
 // part-type recovers its own (or an inherited family member's) values exactly.
 bool PADS_SCH_BINARY_READER::decodeFieldsViaIndex( const std::vector<uint8_t>& d, size_t poolBase )
 {
+    BINARY_CURSOR bcur( d );
+
     auto printable = [&]( size_t o ) { return o < d.size() && d[o] >= 0x20 && d[o] < 0x7f; };
 
     auto readStr = [&]( size_t o, size_t end ) -> std::string
@@ -1217,7 +1236,7 @@ bool PADS_SCH_BINARY_READER::decodeFieldsViaIndex( const std::vector<uint8_t>& d
 
     for( size_t o = aend; o + 8 <= poolBase; ++o )
     {
-        if( nameRels.count( readU32( d, o + 4 ) ) && isClass( readU32( d, o ) ) )
+        if( nameRels.count( SDB_RECORD( bcur, o ).U32( 4 ) ) && isClass( SDB_RECORD( bcur, o ).U32( 0 ) ) )
         {
             tstart = o;
             break;
@@ -1233,7 +1252,7 @@ bool PADS_SCH_BINARY_READER::decodeFieldsViaIndex( const std::vector<uint8_t>& d
 
     for( size_t o = tstart; o + 4 <= poolBase; o += 4 )
     {
-        uint32_t v = readU32( d, o );
+        uint32_t v = SDB_RECORD( bcur, o ).U32( 0 );
 
         if( rel2str.count( v ) || v == 0 )
         {
@@ -1492,10 +1511,7 @@ static bool partTrailerOk( const std::vector<uint8_t>& d, size_t o )
 
 static bool isPartSlot( const std::vector<uint8_t>& d, size_t o )
 {
-    if( o < DATA_STREAM_OFFSET )
-        return false;
-
-    if( static_cast<int>( o ) + PART_X_OFF < 0 )
+    if( o < DATA_STREAM_OFFSET || o < PART_REFDES_OFF )
         return false;
 
     return refdesOk( d, o ) && classTagOk( d, o ) && partTrailerOk( d, o );
@@ -1504,7 +1520,8 @@ static bool isPartSlot( const std::vector<uint8_t>& d, size_t o )
 
 void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
 {
-    size_t n = streamLimit( d );
+    BINARY_CURSOR cur( d );
+    size_t        n = streamLimit( d );
 
     for( size_t i = DATA_STREAM_OFFSET; i + PART_STRIDE < n; ++i )
     {
@@ -1521,34 +1538,35 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
 
         while( p + PART_STRIDE < n && isPartSlot( d, p ) )
         {
-            PLACEMENT pl;
-            size_t    z = p;
+            PLACEMENT  pl;
+            size_t     ksy = p - PART_REFDES_OFF;
+            SDB_RECORD rec( cur, ksy );
+            size_t     z = p;
 
             while( z < p + 40 && d[z] != 0 )
                 ++z;
 
             pl.reference.assign( reinterpret_cast<const char*>( &d[p] ), z - p );
-            pl.x_mils = designMil( readU16( d, p + PART_X_OFF ) );
-            pl.y_mils = designMil( readU16( d, p + PART_Y_OFF ) );
+            pl.x_mils = designMil( rec.U16( PL_X_OFF ) );
+            pl.y_mils = designMil( rec.U16( PL_Y_OFF ) );
 
-            // Inline REF-DES field placement (subrecord at ksy+0x08, ksy = refdes-0x3e):
-            // half-mil deltas page-relative to the symbol origin, u16 tenths-degree angle.
-            pl.refdesPlace.dx_mils = decalMil( d, p - 0x36 );
-            pl.refdesPlace.dy_mils = decalMil( d, p - 0x34 );
-            pl.refdesPlace.orientation_deg = readU16( d, p - 0x32 ) / 10;
+            // Inline REF-DES field placement (subrecord at ksy+0x08): half-mil deltas
+            // page-relative to the symbol origin, u16 tenths-degree angle.
+            pl.refdesPlace.dx_mils = decalMil( cur, ksy + PL_REFDES_DX_OFF );
+            pl.refdesPlace.dy_mils = decalMil( cur, ksy + PL_REFDES_DY_OFF );
+            pl.refdesPlace.orientation_deg = rec.U16( PL_REFDES_ANGLE_OFF ) / 10;
             pl.refdesPlace.visible = true;
             pl.refdesPlace.valid = true;
             // Orientation is a u16 angle in tenths of a degree; the prior 0x84 byte test
             // read only its low byte (0x0384 = 900 = 90deg) and so could not see 180/270.
-            pl.rotation = readU16( d, p + PART_ORI_OFF ) / 10;
+            pl.rotation = rec.U16( PL_ORI_OFF ) / 10;
             pl.sheetIndex = sheetIndexForOffset( p );
 
-            // Bind the gate decal: handle at refdes-0x1a indexes this sheet's
+            // Bind the gate decal: the handle at ksy+0x24 indexes this sheet's
             // used-decal table (base = the built-in handle count).
-            if( p >= 0x1a )
             {
                 const std::vector<std::string>* table = usedDecalTableForOffset( p );
-                uint16_t handle = readU16( d, p - 0x1a );
+                uint16_t handle = rec.U16( PL_DECAL_OFF );
 
                 if( table && handle >= m_decalBuiltinCount )
                 {
@@ -1559,12 +1577,11 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
                 }
             }
 
-            // Bind the part-type (block+4 ordinal into THIS sheet's part-type pool) and its
+            // Bind the part-type (ksy+0x22 ordinal into THIS sheet's part-type pool) and its
             // component attribute fields.  ptidx indexes the placement's own sheet pool, not
             // the global first-sheet pool.
-            if( p >= 0x1c )
             {
-                uint16_t                        ptIdx = readU16( d, p - 0x1c );
+                uint16_t                        ptIdx = rec.U16( PL_PTIDX_OFF );
                 const std::vector<std::string>* pool = partTypePoolForOffset( p );
 
                 if( pool && ptIdx < pool->size() )
@@ -1597,7 +1614,7 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
                 {
                     pl.baseRef = pl.reference.substr( 0, dash );
                     pl.multiUnit = true;
-                    int slot = static_cast<int>( readU16( d, p - 0x14 ) ) + 1;
+                    int slot = static_cast<int>( rec.U16( PL_UNIT_OFF ) ) + 1;
                     pl.unit = ( slot >= 1 && slot <= static_cast<int>( gpIt->second.size() ) ) ? slot : 1;
                 }
             }
@@ -1653,19 +1670,29 @@ void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& 
                                                     const std::vector<size_t>& aRunOffsets )
 {
     static constexpr size_t REC = 24;
+    static constexpr int    FP_DX_OFF = 0x06;     // 2*i16 page-relative dx
+    static constexpr int    FP_DY_OFF = 0x08;     // 2*i16 page-relative dy
+    static constexpr int    FP_ANGLE_OFF = 0x0a;  // u16 tenths-degree
+    static constexpr int    FP_VIS_OFF = 0x13;    // u8 visibility {0,1,3}
+    static constexpr int    FP_HEIGHT_OFF = 0x10; // u16 text height
+    static constexpr int    FP_TERM_OFF = 0x16;   // u16 == 0xFFFF terminator
+
+    BINARY_CURSOR cur( d );
 
     auto isFieldRec = [&]( size_t o ) -> bool
     {
-        if( o + REC > d.size() )
+        if( !cur.InBounds( o, REC ) )
             return false;
+
+        SDB_RECORD rec( cur, o );
 
         for( size_t k = 0; k < 6; ++k )
         {
-            if( d[o + k] != 0 )
+            if( rec.U8( k ) != 0 )
                 return false;
         }
 
-        return readU16( d, o + 0x16 ) == 0xFFFF;
+        return rec.U16( FP_TERM_OFF ) == 0xFFFF;
     };
 
     size_t start = std::string::npos;
@@ -1686,8 +1713,8 @@ void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& 
 
     for( size_t idx = 0; idx < aRunOffsets.size(); ++idx )
     {
-        size_t    ksy = aRunOffsets[idx] - 0x3e;
-        uint16_t  fieldCount = readU16( d, ksy + 0x2e );
+        size_t     ksy = aRunOffsets[idx] - PART_REFDES_OFF;
+        uint16_t   fieldCount = SDB_RECORD( cur, ksy ).U16( PL_FIELDCOUNT_OFF );
         PLACEMENT& pl = m_placements[aRunFirst + idx];
 
         for( uint16_t k = 0; k < fieldCount; ++k )
@@ -1695,7 +1722,8 @@ void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& 
             if( cursor + REC > d.size() )
                 break;
 
-            uint8_t vis = d[cursor + 0x13];
+            SDB_RECORD rec( cur, cursor );
+            uint8_t    vis = rec.U8( FP_VIS_OFF );
 
             // A real field record carries a {0,1,3} visibility code; anything else means the
             // array has run into unrelated data (the 420B edit-log sheet) - stop, never fake.
@@ -1703,10 +1731,10 @@ void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& 
                 break;
 
             FIELD_PLACEMENT fp;
-            fp.dx_mils = decalMil( d, cursor + 0x06 );
-            fp.dy_mils = decalMil( d, cursor + 0x08 );
-            fp.orientation_deg = readU16( d, cursor + 0x0a ) / 10;
-            fp.height_mils = readU16( d, cursor + 0x10 );
+            fp.dx_mils = decalMil( cur, cursor + FP_DX_OFF );
+            fp.dy_mils = decalMil( cur, cursor + FP_DY_OFF );
+            fp.orientation_deg = rec.U16( FP_ANGLE_OFF ) / 10;
+            fp.height_mils = rec.U16( FP_HEIGHT_OFF );
             fp.visible = ( vis != 0 );
             fp.valid = true;
             pl.fieldPlaces.push_back( fp );
@@ -1723,6 +1751,7 @@ void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& 
 
 void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
 {
+    BINARY_CURSOR                cur( d );
     static constexpr size_t      PT_STRIDE = 0x4c;
     static constexpr size_t      PIN_STRIDE = 24;
     static const std::string     TYPES = "USLBTCPGZ";
@@ -1814,8 +1843,8 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
             if( z == rec || ( z < rec + 0x26 && d[z] != 0 ) )
                 break;
 
-            uint32_t f2c = readU32( d, rec + 0x2c );
-            uint32_t f30 = readU32( d, rec + 0x30 );
+            uint32_t f2c = SDB_RECORD( cur, rec ).U32( 0x2c );
+            uint32_t f30 = SDB_RECORD( cur, rec ).U32( 0x30 );
 
             if( ( j && ( f30 < prev30 || f2c < prev2c ) ) || f30 > 1000000 || f2c > 1000000 )
                 break;
@@ -1867,7 +1896,7 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
                 ++z;
 
             pins.push_back( { std::string( reinterpret_cast<const char*>( &d[o + 4] ), z - ( o + 4 ) ),
-                              static_cast<char>( d[o + 21] ), readU32( d, o ) != 0xFFFFFFFF } );
+                              static_cast<char>( d[o + 21] ), SDB_RECORD( cur, o ).U32( 0 ) != 0xFFFFFFFF } );
             o += PIN_STRIDE;
         }
 
