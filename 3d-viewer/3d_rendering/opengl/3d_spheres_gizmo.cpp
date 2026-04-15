@@ -24,6 +24,7 @@
 
 #include <kicad_gl/kiglu.h> // Must be included first
 #include <glm/geometric.hpp>
+#include <limits>
 
 #include "3d_spheres_gizmo.h"
 
@@ -133,60 +134,6 @@ void SPHERES_GIZMO::render3dSpheresGizmo( glm::mat4 aCameraRotationMatrix )
 
     setGizmoMaterial();
 
-    // Intersection test
-    glm::mat4 proj = glm::perspective( glm::radians( fov ), 1.0f, 0.001f, 2.0f * RANGE_SCALE_3D );
-    glm::mat4 invVP = glm::inverse( proj * ViewMatrix );
-
-    glm::vec4 rayStartNDC( m_ndcX, m_ndcY, -1.0f, 1.0f );
-    glm::vec4 rayEndNDC( m_ndcX, m_ndcY, 1.0f, 1.0f );
-
-    glm::vec4 rayStartWorld = invVP * rayStartNDC;
-    rayStartWorld /= rayStartWorld.w;
-
-    glm::vec4 rayEndWorld = invVP * rayEndNDC;
-    rayEndWorld /= rayEndWorld.w;
-
-    glm::vec3 rayOrigin = glm::vec3( rayStartWorld );
-    glm::vec3 rayDirection = glm::normalize( glm::vec3( rayEndWorld - rayStartWorld ) );
-
-    auto intersects =
-            []( const glm::vec3& aRayOrigin, const glm::vec3& aRayDir, const glm::vec3& aSphereCenter, float aRadius )
-    {
-        glm::vec3 L = aSphereCenter - aRayOrigin;
-        float     tca = glm::dot( L, aRayDir );
-        float     d2 = glm::dot( L, L ) - tca * tca;
-        return d2 <= aRadius * aRadius;
-    };
-
-    int clickedIndex = -1;
-    m_selectedGizmoSphere = GizmoSphereSelection::None;
-    for( size_t i = 0; i < m_spheres.size(); ++i )
-    {
-        const auto& sphere = m_spheres[i];
-        if( intersects( rayOrigin, rayDirection, sphere.m_position, sphere.m_radius ) )
-        {
-            clickedIndex = static_cast<int>( i );
-
-            m_selectedGizmoSphere = static_cast<GizmoSphereSelection>( i );
-            break; // only pick the first intersected sphere
-        }
-    }
-
-    // Update colors
-    for( size_t i = 0; i < m_spheres.size(); ++i )
-    {
-        if( static_cast<int>( i ) == clickedIndex )
-        {
-            m_spheres[i].m_color = { 1.0f, 1.0f, 1.0f }; // White
-        }
-        else
-        {
-            m_spheres[i].m_color = m_spheres[i].m_originalColor; // Restore default
-        }
-    }
-
-    // Intersection test done
-
     auto drawBillboardCircle =
             []( const glm::vec3& aCenter, float aRadius, const glm::vec3& aColor,
                 const glm::vec3& aCamRight, const glm::vec3& aCamUp, int aSegments = 64 )
@@ -238,7 +185,8 @@ void SPHERES_GIZMO::render3dSpheresGizmo( glm::mat4 aCameraRotationMatrix )
 
     // View direction (camera looks along negative Z in view space)
     // So we offset a little toward the camera to avoid z-fighting
-    glm::vec3 offset = glm::normalize( -rayDirection ) * 0.02f;
+    glm::vec3 camForward( m_cameraRotationMatrix[0][2], m_cameraRotationMatrix[1][2], m_cameraRotationMatrix[2][2] );
+    glm::vec3 offset = camForward * 0.02f;
 
     glColor4f( 0.0f, 0.0f, 0.0f, 1.0f );
 
@@ -369,4 +317,67 @@ void SPHERES_GIZMO::resetSelectedGizmoSphere()
     m_selectedGizmoSphere = GizmoSphereSelection::None;
     m_ndcX = -1.0f;
     m_ndcY = -1.0f;
+}
+
+
+void SPHERES_GIZMO::updateSelection( glm::mat4 aCameraRotationMatrix )
+{
+    m_cameraRotationMatrix = aCameraRotationMatrix;
+
+    float     fov = 60.0f;
+    glm::mat4 TranslationMatrix = glm::translate( glm::mat4( 1.0f ), SFVEC3F( 0.0f, 0.0f, -( m_arrowSize * 2.75f ) ) );
+    glm::mat4 ViewMatrix = TranslationMatrix * aCameraRotationMatrix;
+
+    glm::mat4 proj = glm::perspective( glm::radians( fov ), 1.0f, 0.001f, 2.0f * RANGE_SCALE_3D );
+    glm::mat4 invVP = glm::inverse( proj * ViewMatrix );
+
+    glm::vec4 rayStartNDC( m_ndcX, m_ndcY, -1.0f, 1.0f );
+    glm::vec4 rayEndNDC( m_ndcX, m_ndcY, 1.0f, 1.0f );
+
+    glm::vec4 rayStartWorld = invVP * rayStartNDC;
+    rayStartWorld /= rayStartWorld.w;
+
+    glm::vec4 rayEndWorld = invVP * rayEndNDC;
+    rayEndWorld /= rayEndWorld.w;
+
+    glm::vec3 rayOrigin = glm::vec3( rayStartWorld );
+    glm::vec3 rayDirection = glm::normalize( glm::vec3( rayEndWorld - rayStartWorld ) );
+
+    auto intersectDist = []( const glm::vec3& aRayOrigin, const glm::vec3& aRayDir, const glm::vec3& aSphereCenter,
+                             float aRadius ) -> float
+    {
+        glm::vec3 L = aSphereCenter - aRayOrigin;
+        float     tca = glm::dot( L, aRayDir );
+        float     d2 = glm::dot( L, L ) - tca * tca;
+
+        if( d2 > aRadius * aRadius )
+            return -1.0f;
+
+        return tca;
+    };
+
+    int   clickedIndex = -1;
+    float closestDist = std::numeric_limits<float>::max();
+    m_selectedGizmoSphere = GizmoSphereSelection::None;
+
+    for( size_t i = 0; i < m_spheres.size(); ++i )
+    {
+        const auto& sphere = m_spheres[i];
+        float       dist = intersectDist( rayOrigin, rayDirection, sphere.m_position, sphere.m_radius );
+
+        if( dist >= 0.0f && dist < closestDist )
+        {
+            closestDist = dist;
+            clickedIndex = static_cast<int>( i );
+            m_selectedGizmoSphere = static_cast<GizmoSphereSelection>( i );
+        }
+    }
+
+    for( size_t i = 0; i < m_spheres.size(); ++i )
+    {
+        if( static_cast<int>( i ) == clickedIndex )
+            m_spheres[i].m_color = { 1.0f, 1.0f, 1.0f };
+        else
+            m_spheres[i].m_color = m_spheres[i].m_originalColor;
+    }
 }

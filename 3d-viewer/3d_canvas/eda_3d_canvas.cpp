@@ -1146,6 +1146,7 @@ void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent& event )
     int scaledMouseY = static_cast<int>( static_cast<float>( logicalH - event.GetY() ) * scaleY );
 
     m_3d_render_opengl->handleGizmoMouseInput( scaledMouseX, scaledMouseY );
+    m_3d_render_opengl->updateGizmoSelection( m_camera.GetRotationMatrix() );
     Refresh();
 }
 

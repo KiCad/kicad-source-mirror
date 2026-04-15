@@ -201,6 +201,12 @@ void RENDER_3D_OPENGL::handleGizmoMouseInput( int mouseX, int mouseY )
 }
 
 
+void RENDER_3D_OPENGL::updateGizmoSelection( glm::mat4 aCameraRotationMatrix )
+{
+    m_spheres_gizmo->updateSelection( aCameraRotationMatrix );
+}
+
+
 void RENDER_3D_OPENGL::setupMaterials()
 {
     m_materials = {};

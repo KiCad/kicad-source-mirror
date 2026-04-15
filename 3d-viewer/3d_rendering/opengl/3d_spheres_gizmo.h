@@ -45,6 +45,8 @@ public:
 
     void handleMouseInput( int aMouseX, int aMouseY );
 
+    void updateSelection( glm::mat4 aCameraRotationMatrix );
+
     /**
      * @enum GizmoSphereSelection
      * @brief Enum to indicate which sphere (direction) is selected.
@@ -93,6 +95,8 @@ private:
     // Define sphere positions
     const float m_arrowSize = RANGE_SCALE_3D * 0.20f;
     const float m_sphereRadius = 0.05f * RANGE_SCALE_3D;
+
+    glm::mat4 m_cameraRotationMatrix = glm::mat4( 1.0f );
 
     /**
      * @brief List of all directional gizmo spheres.

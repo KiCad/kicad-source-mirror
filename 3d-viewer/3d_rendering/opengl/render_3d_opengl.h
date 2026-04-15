@@ -76,7 +76,9 @@ public:
      * Load footprint models if they are not already loaded, i.e. if m_3dModelMap is empty
      */
     void Load3dModelsIfNeeded();
+
     void                                handleGizmoMouseInput( int mouseX, int mouseY );
+    void                                updateGizmoSelection( glm::mat4 aCameraRotationMatrix );
     void                                setGizmoViewport( int x, int y, int width, int height );
     std::tuple<int, int, int, int>      getGizmoViewport() const;
     SPHERES_GIZMO::GizmoSphereSelection getSelectedGizmoSphere() const;
