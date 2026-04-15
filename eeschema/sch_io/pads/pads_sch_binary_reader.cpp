@@ -364,10 +364,23 @@ int PADS_SCH_BINARY_READER::sheetIndexForOffset( size_t aOffset ) const
 // CAE DECALS (gate-symbol geometry library) + placement->decal binding
 //
 // Geometry library: a stride-0x50 record table (name@+0, class 0x06@+0x29,
-// cumulative-VERTEX u32@+0x34), followed by a stride-6 piece pool (marker@+1 =
-// 0xff open / 0x00 closed, nverts@+2, linewidth@+4) and a stride-6 vertex pool
-// (x=2*i16, y=2*i16, decal-relative).  A decal's vertices are the pool slice
-// [cumVtx[i], cumVtx[i+1]); its pieces are those whose vertices fall in that slice.
+// cumulative-PIN u32@+0x30, cumulative-VERTEX u32@+0x34), followed by a stride-6
+// piece pool (marker@+1 = 0xff open / 0x00 closed, nverts@+2, linewidth@+4) and a
+// stride-6 vertex pool (x=2*i16, y=2*i16, decal-relative).  A decal's vertices are
+// the pool slice [cumVtx[i], cumVtx[i+1]); its pieces are those whose vertices fall
+// in that slice.
+//
+// The library is NOT a pool (its count matches no directory used_count and no
+// sibling table); it is a serialized block in the object interior with no local
+// header and a free-text attribute heap as its immediate predecessor, so it cannot
+// be anchored arithmetically.  It is, however, structurally SANDWICHED between two
+// blocks the reader already locates by signature: the first per-sheet CAE
+// signature (its lower bound) and the $OSR_SYMS part-type pool (its upper bound).
+// Within that window exactly one record satisfies class 0x06 @+0x29 with both
+// cumulative prefix sums (pin @+0x30, vertex @+0x34) zero and a printable name --
+// the table head.  The window does the locating; the tag/zero-prefix only validate.
+// A whole-file scan is unsafe: 4 corpus files carry an earlier zero-prefix 0x06
+// coincidence outside the window, and the largest carries 49.
 //
 // Binding: each placement carries a u16 decal handle at refdes-0x1a; the decal
 // name is used_decal_table[handle - BUILTIN], where the used-decal table is a
@@ -375,8 +388,16 @@ int PADS_SCH_BINARY_READER::sheetIndexForOffset( size_t aOffset ) const
 // ---------------------------------------------------------------------------
 static constexpr size_t DECAL_STRIDE = 0x50;
 static constexpr int    DECAL_CLASS_OFF = 0x29;   // class id 0x06
+static constexpr int    DECAL_CUMPIN_OFF = 0x30;  // u32 cumulative pin index
 static constexpr int    DECAL_CUMVTX_OFF = 0x34;  // u32 cumulative vertex index
 static constexpr size_t DECAL_NAME_LEN = 0x26;
+
+// Structural window bounds reused from sibling decoders: the per-sheet CAE view
+// record (decodeSheets) is the lower bound; the part-type pool header (decodeFields)
+// is the upper bound.  The decal library always falls strictly between them.
+static const std::array<uint8_t, 8> DECAL_LOWER_SIGNATURE = { 0x80, 0x00, 0x00, 0x00,
+                                                              0x30, 0x00, 0x00, 0x00 };
+static constexpr char DECAL_UPPER_ANCHOR[] = "$OSR_SYMS";
 static constexpr size_t PIECE_STRIDE = 6;
 static constexpr int    PIECE_MARKER_OFF = 1;     // 0x00 closed / 0xff open
 static constexpr int    PIECE_NVERTS_OFF = 2;
@@ -429,43 +450,55 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
 
     size_t n = streamLimit( d );
 
-    // --- Geometry library: find the decal-record table base (a run of >= 8 records
-    // with 0x06@+0x29 and cumVertex@+0x34 monotone non-decreasing from 0). ---
-    size_t base = 0;
-    bool   found = false;
+    // --- Geometry library: locate the decal-record table head structurally, by the
+    // window between the first per-sheet CAE signature and the $OSR_SYMS part-type
+    // pool.  Both anchors are the same ones decodeSheets / decodeFields already use. ---
+    // If either anchor is absent the window is undefined; bail rather than fall back to a broad
+    // whole-stream scan that could bind the wrong table.
+    size_t windowLo = std::string::npos;
 
-    for( size_t i = DATA_STREAM_OFFSET; i + DECAL_STRIDE * 8 < n; ++i )
+    for( size_t i = DATA_STREAM_OFFSET; i + DECAL_LOWER_SIGNATURE.size() <= n; ++i )
     {
-        if( SDB_RECORD( cur, i ).U8( DECAL_CLASS_OFF ) != 0x06
-            || SDB_RECORD( cur, i ).U32( DECAL_CUMVTX_OFF ) != 0 )
-            continue;
-
-        uint32_t prev = 0;
-        int      good = 0;
-
-        for( int k = 0; k < 8; ++k )
+        if( std::equal( DECAL_LOWER_SIGNATURE.begin(), DECAL_LOWER_SIGNATURE.end(), &d[i] ) )
         {
-            SDB_RECORD rec = SDB_RECORD( cur, i + DECAL_STRIDE * k );
-            uint32_t   cv = rec.U32( DECAL_CUMVTX_OFF );
-
-            if( rec.U8( DECAL_CLASS_OFF ) == 0x06 && cv >= prev && cv < 100000 )
-            {
-                ++good;
-                prev = cv;
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        if( good >= 8 )
-        {
-            base = i;
-            found = true;
+            windowLo = i;
             break;
         }
     }
+
+    size_t windowHi = std::string::npos;
+
+    for( size_t i = DATA_STREAM_OFFSET; i + DECAL_STRIDE <= n; ++i )
+    {
+        if( nameAt( d, i, DECAL_NAME_LEN ) == DECAL_UPPER_ANCHOR )
+        {
+            windowHi = i;
+            break;
+        }
+    }
+
+    if( windowLo == std::string::npos || windowHi == std::string::npos || windowLo >= windowHi )
+        return;
+
+    // The table head is the in-window record with class 0x06, both cumulative prefix sums zero,
+    // and a printable name.  The window guarantees this is unique, so require EXACTLY one match;
+    // an ambiguous file then fails closed instead of binding to the wrong table.
+    size_t base = 0;
+    size_t candidates = 0;
+
+    for( size_t i = windowLo; i + DECAL_STRIDE <= windowHi; ++i )
+    {
+        SDB_RECORD rec( cur, i );
+
+        if( rec.U8( DECAL_CLASS_OFF ) == 0x06 && rec.U32( DECAL_CUMPIN_OFF ) == 0
+            && rec.U32( DECAL_CUMVTX_OFF ) == 0 && !nameAt( d, i, DECAL_NAME_LEN ).empty() )
+        {
+            if( candidates++ == 0 )
+                base = i;
+        }
+    }
+
+    bool found = ( candidates == 1 );
 
     if( found )
     {
@@ -1857,47 +1890,65 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
         if( recs.size() < 4 )
             continue;
 
-        size_t pp = base + PT_STRIDE * ( recs.size() + 1 );
-        size_t scanEnd = std::min( pp + 0x2000, d.size() );
-        size_t start = std::string::npos;
+        // The stride-12 GATE descriptor pool sits immediately after the part-type pool, with
+        // the pin pool following it.  Advance at stride 12 from the gate base to the first pin
+        // record to locate the pin-pool base structurally; the prior pp + 0x2000 scan window
+        // could clip the pin run of a part-type with more than ~341 pins (det-specs/sch_pins.md).
+        size_t gatebase = base + PT_STRIDE * recs.size();
+        size_t start = gatebase;
 
-        for( size_t o = pp; o + PIN_STRIDE < scanEnd; ++o )
-        {
-            if( isPinRec( o ) )
-            {
-                start = o;
-                break;
-            }
-        }
+        while( start + PIN_STRIDE <= d.size() && !isPinRec( start ) )
+            start += 12;
 
-        if( start == std::string::npos )
+        if( start + PIN_STRIDE > d.size() )
             continue;
 
-        // The stride-12 GATE descriptor pool sits between the part-type pool and the pin
-        // pool; byte 8 of each record is that gate's pin count, indexed by the part-type
-        // record's +0x2c cumulative gate cursor.
+        // Byte 8 of each stride-12 gate record is that gate's pin count; their sum is the
+        // exact pin-pool length, replacing the 0xFFFF-terminator-driven run length.  Multi-pin
+        // group sub-records carry a zero count, so the sum is robust to either gate encoding.
         std::vector<uint8_t> gateNpins;
+        size_t               npins = 0;
 
-        for( size_t go = base + PT_STRIDE * recs.size(); go + 12 <= start; go += 12 )
+        for( size_t go = gatebase; go + 12 <= start; go += 12 )
+        {
             gateNpins.push_back( d[go + 8] );
+            npins += d[go + 8];
+        }
 
         struct PINREC { std::string number; char type; bool named; };
         std::vector<PINREC> pins;
         size_t              o = start;
 
-        while( o + PIN_STRIDE <= d.size() )
+        auto readPin = [&]( size_t aOff )
         {
-            if( isNameRun( o, 6 ) || !isPinRec( o ) )
-                break;
+            size_t z = aOff + 4;
 
-            size_t z = o + 4;
-
-            while( z < o + 0x14 && d[z] != 0 )
+            while( z < aOff + 0x14 && d[z] != 0 )
                 ++z;
 
-            pins.push_back( { std::string( reinterpret_cast<const char*>( &d[o + 4] ), z - ( o + 4 ) ),
-                              static_cast<char>( d[o + 21] ), SDB_RECORD( cur, o ).U32( 0 ) != 0xFFFFFFFF } );
-            o += PIN_STRIDE;
+            pins.push_back( { std::string( reinterpret_cast<const char*>( &d[aOff + 4] ), z - ( aOff + 4 ) ),
+                              static_cast<char>( d[aOff + 21] ),
+                              SDB_RECORD( cur, aOff ).U32( 0 ) != 0xFFFFFFFF } );
+        };
+
+        // Count-driven read: npins (the gate-pool sum) is the authoritative run length.
+        for( size_t i = 0; i < npins && o + PIN_STRIDE <= d.size() && isPinRec( o ); ++i, o += PIN_STRIDE )
+            readPin( o );
+
+        // The structural count is byte-exact on the corpus, so the loop reads exactly npins
+        // records. If a malformed pool stops it short, fall back to the 0xFFFF-terminator walk
+        // rather than emit a truncated, mis-bound pin set (which would shift the per-part-type
+        // pin slices computed from the +0x30 cumulative index below).
+        if( pins.size() != npins )
+        {
+            pins.clear();
+            o = start;
+
+            while( o + PIN_STRIDE <= d.size() && !isNameRun( o, 6 ) && isPinRec( o ) )
+            {
+                readPin( o );
+                o += PIN_STRIDE;
+            }
         }
 
         int    want = 0;
@@ -2588,12 +2639,15 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
 {
     BINARY_CURSOR cur( d );
 
-    // 1. Net table = the longest contiguous stride-88 net-record run.
-    size_t           netBase = 0;
-    size_t           netCount = 0;
-    std::set<size_t> seenNet;
+    size_t netCount = m_pools.Count( POOL_DIRECTORY::NETS );
 
-    for( size_t i = DATA_STREAM_OFFSET; i + NET_STRIDE < streamLimit( d ); )
+    if( netCount == 0 )
+        return;
+
+    size_t netBase = 0;
+    bool   haveBase = false;
+
+    for( size_t i = DATA_STREAM_OFFSET; i + NET_STRIDE <= streamLimit( d ); )
     {
         if( !isNetRecord( cur, i ) )
         {
@@ -2606,13 +2660,6 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
         while( start >= DATA_STREAM_OFFSET + NET_STRIDE && isNetRecord( cur, start - NET_STRIDE ) )
             start -= NET_STRIDE;
 
-        if( seenNet.count( start ) )
-        {
-            i += NET_STRIDE;
-            continue;
-        }
-
-        seenNet.insert( start );
         size_t p = start;
         size_t cnt = 0;
 
@@ -2622,28 +2669,22 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
             p += NET_STRIDE;
         }
 
-        if( cnt > netCount )
+        if( cnt == netCount )
         {
-            netCount = cnt;
             netBase = start;
+            haveBase = true;
+            break;
         }
 
         i = p;
     }
 
-    if( netCount == 0 )
+    if( !haveBase )
         return;
 
-    // The longest contiguous stride-88 run is the net table; its row count is the
-    // net controller's authoritative object count (pool8.used_count). Prefer the
-    // directory count over the scan's run-length terminator when present, retiring
-    // the heuristic tail; the scan still anchors the table base until the @0x250
-    // block walk lands. m_netTableScanCount preserves the scanned length so a corpus
-    // test can prove the two agree.
+    // The validated run length matches the directory count by construction; a corpus
+    // test asserts the two agree on every file.
     m_netTableScanCount = netCount;
-
-    if( size_t poolNetCount = m_pools.Count( POOL_DIRECTORY::NETS ) )
-        netCount = poolNetCount;
 
     auto netName = [&]( size_t k ) -> std::string
     {

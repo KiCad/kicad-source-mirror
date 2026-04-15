@@ -1233,10 +1233,10 @@ BOOST_AUTO_TEST_CASE( PinStubOrientationFromDecalGeometry )
 
 BOOST_AUTO_TEST_CASE( ExternalNetTableCountMatchesPoolDirectory )
 {
-    // The net table is the longest contiguous stride-88 run; its row count is the
-    // net controller's authoritative object count, pool8.used_count (154 / 38 / 485).
-    // Proving the scan agrees with the directory lets decodeNetLabels read exactly
-    // pool8.used_count rows instead of relying on the run-length terminator.
+    // decodeNetLabels locates the net table structurally: pool8.used_count is the
+    // authoritative row count (154 / 38 / 485) and the base is the unique contiguous
+    // stride-88 run whose length equals that count, with the 0xFFFFFFFF row sentinel
+    // validating each row. The validated run length must equal the directory count.
 }
 
 

@@ -374,7 +374,7 @@ private:
     std::vector<TEXT_ITEM>               m_texts;          ///< Free-text items, file order.
     std::vector<JUNCTION>                m_junctions;      ///< Tie-dot junctions, all sheets.
     std::vector<NET_LABEL>               m_netLabels;      ///< Off-page / power-port net labels.
-    size_t                               m_netTableScanCount = 0; ///< Longest stride-88 net run.
+    size_t                               m_netTableScanCount = 0; ///< Validated stride-88 net run length (== pool8.used_count).
 };
 
 } // namespace PADS_SCH_BINARY
