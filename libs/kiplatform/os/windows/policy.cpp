@@ -93,7 +93,7 @@ KIPLATFORM::POLICY::PBOOL KIPLATFORM::POLICY::GetPolicyBool( const wxString& aKe
 }
 
 
-std::uint32_t KIPLATFORM::POLICY::GetPolicyEnumUInt( const wxString& aKey )
+std::optional<std::uint32_t> KIPLATFORM::POLICY::GetPolicyEnumUInt( const wxString& aKey )
 {
     wxString  key = aKey;
     std::unique_ptr<wxRegKey> keyToUse( GetPolicyRegKey( key ) );
@@ -107,5 +107,5 @@ std::uint32_t KIPLATFORM::POLICY::GetPolicyEnumUInt( const wxString& aKey )
         }
     }
 
-    return 0;
+    return std::nullopt;
 }

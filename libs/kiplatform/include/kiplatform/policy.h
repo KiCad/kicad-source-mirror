@@ -23,6 +23,7 @@
 #define KIPLATFORM_POLICY_H_
 
 #include <cstdint>
+#include <optional>
 
 class wxString;
 
@@ -37,13 +38,18 @@ namespace KIPLATFORM
             NOT_CONFIGURED
         };
 
-        PBOOL         GetPolicyBool( const wxString& aKey );
-        std::uint32_t GetPolicyEnumUInt( const wxString& aKey );
+        PBOOL                        GetPolicyBool( const wxString& aKey );
+        std::optional<std::uint32_t> GetPolicyEnumUInt( const wxString& aKey );
 
         template <typename T>
-        T GetPolicyEnum( const wxString& aKey )
+        std::optional<T> GetPolicyEnum( const wxString& aKey )
         {
-            return static_cast<T>( GetPolicyEnumUInt( aKey ) );
+            std::optional<std::uint32_t> val = GetPolicyEnumUInt( aKey );
+
+            if( val )
+                return static_cast<T>( *val );
+
+            return std::nullopt;
         }
     }
 }
