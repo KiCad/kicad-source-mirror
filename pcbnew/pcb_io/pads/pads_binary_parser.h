@@ -59,6 +59,8 @@ enum class SECTION : int
     PourTokensB    = 53,
     PourTokensC    = 54,
     Vias           = 60,   // route-junction / via records (64 B)
+    Clusters       = 68,   // part-cluster (*CLUSTER*) controller (60 B/rec)
+    LayerTable     = 69,   // ODBLayer physical-stackup table (152 B/rec)
 };
 
 /**

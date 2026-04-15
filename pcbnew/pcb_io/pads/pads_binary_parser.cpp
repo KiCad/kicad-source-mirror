@@ -341,123 +341,49 @@ void BINARY_PARSER::parsePartPlacements()
 
 void BINARY_PARSER::parseClusters()
 {
-    // The cluster table is a run of 60-byte records appended in the directory-covered
-    // tail of the late route-coord section (sec64 or sec69 depending on layout). Each
-    // record carries:
-    //   +0  char[16] NAME (NUL-padded)
-    //   +16 i32 XLOC raw   (design = raw - origin, BASIC = 1/38100 mil)
-    //   +20 i32 YLOC raw
-    //   +28 i32 ATTRIBUTE  (.asc ATTRIBUTE in the low 16 bits)
-    // Records are in .asc *CLUSTER* order, so a record's 1-based ordinal IS the CLSTID
-    // that the sec22 +108 field references.
-    //
-    // The cluster NAME also appears as a decoy NUL-separated run in the sec8 string
-    // pool, but that copy has garbage at +16/+20, so a valid-RAW-coord test rejects it.
-    // The old 96-byte placement layout has no room for the +108 CLSTID, so old-format
-    // boards carry no recoverable clusters; nothing is emitted for them.
-    if( isOldFormat() || m_partClusterId.empty() )
+    if( isOldFormat() )
         return;
 
-    static constexpr size_t  REC_SIZE = 60;
-    static constexpr int64_t MAX_COORD_DEVIATION = 1000000000; // ~660mm from origin
+    const SDB_SECTION* sec68 = getSection( SECTION::Clusters );
 
-    // A candidate record's name is a printable, NUL-terminated, non-empty string
-    // (readFixedString already rejects any non-printable byte) and its +16/+20 raw coords
-    // fall within a sane design-coordinate window around the origin. The coord window alone
-    // is too loose (a stray single-char string with a mid-range coord clears it), so also
-    // require the record's structural constants: +24 PARENTID == 0, +32 flag == 1, +36 == 0.
-    // These hold on every genuine cluster record (MC4 v2027, LCORE_3_1 v2026) and reject
-    // both the sec8 string-pool decoy and the 60-byte-early garbage record that otherwise
-    // shifts the whole table by one ordinal.
-    // Cluster record field offsets (60-byte stride): name, raw x/y coords, the parent id
-    // and the two structural constants that reject string-pool and pre-table garbage.
-    static constexpr int CLUSTER_NAME_OFF = 0;
-    static constexpr int CLUSTER_X_OFF = 16;
-    static constexpr int CLUSTER_Y_OFF = 20;
-    static constexpr int CLUSTER_PARENT_OFF = 24;
-    static constexpr int CLUSTER_FLAG_OFF = 32;
-    static constexpr int CLUSTER_PAD_OFF = 36;
+    if( !sec68 || sec68->count == 0 || sec68->perItem != 60 )
+        return;
 
-    auto isValidRecord = [&]( size_t aOff ) -> bool
+    static constexpr size_t  REC_SIZE     = 60;
+    static constexpr size_t  LAYER_STRIDE = 152;
+    static const uint8_t     TOP_FRAME[12] = { 0, 0, 0, 0, 1, 0, 0, 0, 'T', 'o', 'p', 0 };
+
+    auto match = std::search( m_data.begin(), m_data.end(), TOP_FRAME, TOP_FRAME + 12 );
+
+    if( match == m_data.end() )
+        return;
+
+    // The anchor must be unambiguous. It is corpus-proven 0/1 per file, but never trust a
+    // second occurrence: a duplicate means this heuristic-free locator is unsafe, so bail.
+    if( std::search( match + 1, m_data.end(), TOP_FRAME, TOP_FRAME + 12 ) != m_data.end() )
+        return;
+
+    size_t matchOff = static_cast<size_t>( match - m_data.begin() );
+
+    // Compute the base with division rather than multiplication so a malformed count cannot
+    // overflow/underflow: sec69_rec0 = match - 152, then require count*60 <= sec69_rec0.
+    if( matchOff < LAYER_STRIDE )
+        return;
+
+    size_t sec69Rec0 = matchOff - LAYER_STRIDE;
+
+    if( sec68->count > sec69Rec0 / REC_SIZE )
+        return;
+
+    size_t base = sec69Rec0 - static_cast<size_t>( sec68->count ) * REC_SIZE;
+
+    for( uint32_t i = 0; i < sec68->count; ++i )
     {
-        if( aOff + REC_SIZE > m_data.size() )
-            return false;
-
-        SDB_RECORD rec = m_sdb.RecordAt( aOff );
-
-        if( rec.Str( CLUSTER_NAME_OFF, 16 ).empty() )
-            return false;
-
-        if( rec.I32( CLUSTER_PARENT_OFF ) != 0 || rec.I32( CLUSTER_FLAG_OFF ) != 1
-            || rec.I32( CLUSTER_PAD_OFF ) != 0 )
-            return false;
-
-        int64_t dx = static_cast<int64_t>( rec.I32( CLUSTER_X_OFF ) ) - m_originX;
-        int64_t dy = static_cast<int64_t>( rec.I32( CLUSTER_Y_OFF ) ) - m_originY;
-
-        return std::llabs( dx ) <= MAX_COORD_DEVIATION && std::llabs( dy ) <= MAX_COORD_DEVIATION;
-    };
-
-    // Read the contiguous 60-byte run starting at aStart into out; stop at the first
-    // record that fails the name/coord test. Returns the number of records read.
-    auto readRun = [&]( size_t aStart, std::vector<PART_CLUSTER>& aOut ) -> size_t
-    {
-        aOut.clear();
-
-        for( size_t off = aStart; isValidRecord( off ); off += REC_SIZE )
-        {
-            PART_CLUSTER cluster;
-            cluster.name = m_sdb.RecordAt( off ).Str( CLUSTER_NAME_OFF, 16 );
-            cluster.id = static_cast<int>( aOut.size() ) + 1;
-            aOut.push_back( std::move( cluster ) );
-        }
-
-        return aOut.size();
-    };
-
-    // The highest CLSTID referenced by sec22 +108 is the minimum table length we must
-    // recover. A run shorter than that is the sec8 decoy or an unrelated table.
-    int maxClstId = 0;
-
-    for( const auto& [partIdx, clstid] : m_partClusterId )
-        maxClstId = std::max( maxClstId, clstid );
-
-    // Scan the route-coord section tails first, then fall back to the whole file. Pick
-    // the first run that covers every referenced CLSTID, validating the start by the
-    // name/coord test so the sec8 decoy (garbage +16/+20) is skipped.
-    std::vector<std::pair<size_t, size_t>> scanRanges;
-
-    for( int secIdx : { 64, 69 } )
-    {
-        const SDB_SECTION* entry = getSection( secIdx );
-
-        if( entry && entry->totalBytes >= REC_SIZE )
-        {
-            size_t secStart = entry->dataOffset;
-            size_t secEnd = static_cast<size_t>( entry->dataOffset ) + entry->totalBytes;
-
-            if( secEnd <= m_data.size() )
-                scanRanges.emplace_back( secStart, secEnd );
-        }
-    }
-
-    scanRanges.emplace_back( 0, m_data.size() );
-
-    for( const auto& [scanStart, scanEnd] : scanRanges )
-    {
-        for( size_t off = scanStart; off + REC_SIZE <= scanEnd; ++off )
-        {
-            if( !isValidRecord( off ) )
-                continue;
-
-            std::vector<PART_CLUSTER> run;
-
-            if( readRun( off, run ) >= static_cast<size_t>( maxClstId ) )
-            {
-                m_clusters = std::move( run );
-                return;
-            }
-        }
+        SDB_RECORD   rec = m_sdb.RecordAt( base + i * REC_SIZE );
+        PART_CLUSTER cluster;
+        cluster.name = rec.Str( 0, 16 );
+        cluster.id = static_cast<int>( i ) + 1;   // ordinal == CLSTID
+        m_clusters.push_back( std::move( cluster ) );
     }
 }
 
@@ -466,6 +392,13 @@ void BINARY_PARSER::parseSection19Parts()
 {
     // Part records can be embedded in sections other than section 22.
     // Scan sections 19 (design_rules) and 21 (board_outline) for FEFF-delimited part records.
+    //
+    // NOTE: this 0xFEFF marker walk is bounded to the sec19/sec21 directory ranges (not a
+    // whole-file scan). A purely structural locator was attempted (det-specs/sec19_placements.md:
+    // anchor at sec22.dataOffset, walk back at 112 stride) but the omitted-placement set is not
+    // confined to the contiguous block before sec22 - real pad-contributing parts live elsewhere
+    // in the sec19/sec21 region - so it regressed PadCountExact_MC4/Ems4 and the v2021 placement
+    // tests. The marker walk remains until that model is completed; see the plan's follow-ups.
     const PLACEMENT_LAYOUT& layout = placementLayout( m_version );
     bool                    isOld = isOldFormat();
 
@@ -2654,9 +2587,11 @@ void BINARY_PARSER::parseNetClasses()
 
 void BINARY_PARSER::parseDiffPairs()
 {
-    constexpr size_t OBJECT_SIZE  = 864;
-    constexpr size_t FF_RUN_MIN   = 200;
-    constexpr double F64_INHERIT  = -1.0;
+    constexpr size_t  OBJECT_SIZE = 864;
+    constexpr size_t  FF_TAIL_OFF = 604;             // 0xFF allocator free-fill begins here
+    constexpr size_t  FF_TAIL_MIN = 200;             // tail validator: >=200 0xFF bytes
+    constexpr double  MAX_LENGTH  = 17068800000.0;   // DIF_PAIR MAX_LENGTH default (seed marker)
+    constexpr double  F64_INHERIT = -1.0;
     constexpr int32_t I32_INHERIT = -1;
 
     const SDB_SECTION* sec49 = getSection( SECTION::ClearanceRules );
@@ -2667,72 +2602,70 @@ void BINARY_PARSER::parseDiffPairs()
     if( sec49->End() > m_data.size() )
         return;
 
-    const size_t poolSize = sec49->totalBytes;
     const size_t poolBase = sec49->dataOffset;
+    const size_t poolSize = sec49->totalBytes;
 
     if( poolSize < OBJECT_SIZE )
         return;
 
-    // The serialized DIF_PAIR objects are packed back-to-back as a contiguous run of 864-byte
-    // records, and the LAST one before any allocator gap is trailed by a >=200-byte 0xFF
-    // free-fill run. The +8 word is NOT a usable discriminator (it is 1 for the first object
-    // group, 17 for later groups), so the validity test is that BOTH +12/+16 member-net
-    // self-pointers resolve through m_netSelfPtrToName. Locate the run by the trailing fill
-    // (object_end == fill_start, i.e. object_start == fill_start - 864), then walk backward and
-    // forward in 864-byte strides while the self-pointers resolve.
-    auto objectResolves = [&]( size_t aObjStart ) -> bool
+    // The serialized DIF_PAIR objects are a packed 864-byte-stride array that MAY split across
+    // several arena (malloc) chunks. There is no count word and no in-file handle->offset index
+    // (reattack_carchive_objectgraph.md), so resolution is a within-file value JOIN: an object's
+    // +12/+16 member-net handles equal a sec23 net record's +184 self-handle (m_netSelfPtrToName),
+    // which is bijective per file. A record is a DIF_PAIR iff both handles resolve, its +32
+    // MAX_LENGTH is the default or a sane override, and its tail carries the >=200-byte 0xFF
+    // free-fill (a per-record VALIDATOR, never the locator). The prior "last 0xFF run minus 864"
+    // anchor only caught the final chunk and silently dropped pairs (e.g. 42->3 on a UZCB board),
+    // so locate every chunk by seeding on the MAX_LENGTH marker and extending 864-stride both
+    // ways. See det-specs/diffpairs.md.
+    auto looksDp = [&]( size_t aStart ) -> bool
     {
-        if( aObjStart < poolBase || aObjStart + OBJECT_SIZE > poolBase + poolSize )
+        if( aStart < poolBase || aStart + OBJECT_SIZE > poolBase + poolSize )
             return false;
 
-        return m_netSelfPtrToName.count( m_sdb.RecordAt( aObjStart ).U32( 12 ) )
-               && m_netSelfPtrToName.count( m_sdb.RecordAt( aObjStart ).U32( 16 ) );
+        SDB_RECORD obj = m_sdb.RecordAt( aStart );
+
+        if( !m_netSelfPtrToName.count( obj.U32( 12 ) ) || !m_netSelfPtrToName.count( obj.U32( 16 ) ) )
+            return false;
+
+        double maxLen = obj.F64( 32 );
+
+        if( maxLen != MAX_LENGTH && !( maxLen > 0.0 && maxLen < 1e15 ) )
+            return false;
+
+        size_t fillBytes = 0;
+
+        for( size_t k = aStart + FF_TAIL_OFF; k < aStart + OBJECT_SIZE; ++k )
+            fillBytes += ( m_data[k] == 0xFF ) ? 1 : 0;
+
+        return fillBytes >= FF_TAIL_MIN;
     };
 
-    size_t anchor = 0;
-    bool   haveAnchor = false;
+    // Seeds carry the unambiguous MAX_LENGTH default (0 false positives across 132 clean v2027
+    // boards); from each, extend in both directions at 864 stride so override pairs (whose +32
+    // is off the default but still pass looksDp) are recovered. The objects are byte-aligned to
+    // their arena chunk, not the pool, so the seed search is per-byte.
+    std::set<size_t> found;
 
-    for( size_t i = 0; i < poolSize && !haveAnchor; )
+    for( size_t i = 0; i + OBJECT_SIZE <= poolSize; ++i )
     {
-        if( m_data[poolBase + i] != 0xFF )
-        {
-            ++i;
-            continue;
-        }
+        size_t st = poolBase + i;
 
-        size_t runStart = i;
-
-        while( i < poolSize && m_data[poolBase + i] == 0xFF )
-            ++i;
-
-        size_t runEnd = i;
-
-        if( runEnd - runStart < FF_RUN_MIN || runEnd < OBJECT_SIZE )
+        if( m_sdb.RecordAt( st ).F64( 32 ) != MAX_LENGTH || !looksDp( st ) )
             continue;
 
-        // The packed object's own trailing free-fill occupies its last bytes, so the object
-        // that ends at this run boundary starts one object width back from the run END (the
-        // 0xFF fill of consecutive objects merges into one run; run_END is the boundary of the
-        // last object before the gap). Rebase the relative run index to an absolute offset.
-        size_t objStart = poolBase + ( runEnd - OBJECT_SIZE );
+        size_t start = st;
 
-        if( objectResolves( objStart ) )
-        {
-            anchor = objStart;
-            haveAnchor = true;
-        }
+        while( start >= poolBase + OBJECT_SIZE && looksDp( start - OBJECT_SIZE ) )
+            start -= OBJECT_SIZE;
+
+        for( size_t o = start; looksDp( o ); o += OBJECT_SIZE )
+            found.insert( o );
     }
-
-    if( !haveAnchor )
-        return;
-
-    // Rewind to the first object of the contiguous run.
-    while( anchor >= poolBase + OBJECT_SIZE && objectResolves( anchor - OBJECT_SIZE ) )
-        anchor -= OBJECT_SIZE;
 
     std::set<std::pair<std::string, std::string>> seen;
 
-    for( size_t objStart = anchor; objectResolves( objStart ); objStart += OBJECT_SIZE )
+    for( size_t objStart : found )
     {
         SDB_RECORD         obj = m_sdb.RecordAt( objStart );
         const std::string& nameA = m_netSelfPtrToName.at( obj.U32( 12 ) );
