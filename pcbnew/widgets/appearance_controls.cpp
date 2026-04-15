@@ -1397,6 +1397,9 @@ void APPEARANCE_CONTROLS::setVisibleObjects( GAL_SET aLayers )
             // but only some, only set visiblity if the layer is handled by the APPEARANCE_CONTROLS
             GAL_LAYER_ID gal_ly = GAL_LAYER_ID( i ) + GAL_LAYER_ID_START;
 
+            if( gal_ly == LAYER_RATSNEST )
+                continue;
+
             for( const APPEARANCE_SETTING& s_setting : s_objectSettings )
             {
                 // See if this gal layer is handled
