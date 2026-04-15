@@ -723,6 +723,8 @@ void EDA_SHAPE::UpdateHatching() const
         return;
     }
 
+    shapeBuffer.ClearArcs();
+
     // Clear cached hatching only after all validation passes.
     // This prevents flickering when early returns would otherwise leave empty hatching.
     hatching().RemoveAllContours();
