@@ -474,6 +474,9 @@ void PANEL_SYMBOL_CHOOSER::OnDetailsCharHook( wxKeyEvent& e )
 void PANEL_SYMBOL_CHOOSER::SetPreselect( const LIB_ID& aPreselect )
 {
     m_adapter->SetPreselectNode( aPreselect, 0 );
+
+    if( m_tree && aPreselect.IsValid() )
+        m_tree->SelectLibId( aPreselect );
 }
 
 

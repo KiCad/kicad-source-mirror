@@ -290,6 +290,9 @@ void PANEL_FOOTPRINT_CHOOSER::FinishSetup()
 void PANEL_FOOTPRINT_CHOOSER::SetPreselect( const LIB_ID& aPreselect )
 {
     m_adapter->SetPreselectNode( aPreselect, 0 );
+
+    if( m_tree && aPreselect.IsValid() )
+        m_tree->SelectLibId( aPreselect );
 }
 
 
