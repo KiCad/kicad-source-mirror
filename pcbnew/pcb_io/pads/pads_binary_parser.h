@@ -199,14 +199,6 @@ private:
     // placement layout but its decal chain is unverified, so it is not enabled.
     bool isV2021PadChain() const { return m_version == 0x2021; }
 
-    // Low-level readers
-    uint8_t  readU8( size_t aOffset ) const;
-    uint16_t readU16( size_t aOffset ) const;
-    uint32_t readU32( size_t aOffset ) const;
-    int32_t  readI32( size_t aOffset ) const;
-    double   readF64( size_t aOffset ) const;
-    std::string readFixedString( size_t aOffset, size_t aMaxLen ) const;
-
     // Section lookup over the parsed SDB directory. The SECTION overload forwards to the
     // int form so a constant section reads by role; the int form serves the few callers
     // that iterate a computed directory index. Records are read through m_sdb.Record /

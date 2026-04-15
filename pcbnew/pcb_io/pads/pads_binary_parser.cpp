@@ -198,42 +198,6 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
 }
 
 
-uint8_t BINARY_PARSER::readU8( size_t aOffset ) const
-{
-    return m_cursor.U8At( aOffset );
-}
-
-
-uint16_t BINARY_PARSER::readU16( size_t aOffset ) const
-{
-    return m_cursor.U16At( aOffset );
-}
-
-
-uint32_t BINARY_PARSER::readU32( size_t aOffset ) const
-{
-    return m_cursor.U32At( aOffset );
-}
-
-
-int32_t BINARY_PARSER::readI32( size_t aOffset ) const
-{
-    return m_cursor.I32At( aOffset );
-}
-
-
-double BINARY_PARSER::readF64( size_t aOffset ) const
-{
-    return m_cursor.F64At( aOffset );
-}
-
-
-std::string BINARY_PARSER::readFixedString( size_t aOffset, size_t aMaxLen ) const
-{
-    return m_cursor.StringAt( aOffset, aMaxLen );
-}
-
-
 const SDB_SECTION* BINARY_PARSER::getSection( int aIndex ) const
 {
     return m_sdb.Section( aIndex );
@@ -405,19 +369,31 @@ void BINARY_PARSER::parseClusters()
     // These hold on every genuine cluster record (MC4 v2027, LCORE_3_1 v2026) and reject
     // both the sec8 string-pool decoy and the 60-byte-early garbage record that otherwise
     // shifts the whole table by one ordinal.
+    // Cluster record field offsets (60-byte stride): name, raw x/y coords, the parent id
+    // and the two structural constants that reject string-pool and pre-table garbage.
+    static constexpr int CLUSTER_NAME_OFF = 0;
+    static constexpr int CLUSTER_X_OFF = 16;
+    static constexpr int CLUSTER_Y_OFF = 20;
+    static constexpr int CLUSTER_PARENT_OFF = 24;
+    static constexpr int CLUSTER_FLAG_OFF = 32;
+    static constexpr int CLUSTER_PAD_OFF = 36;
+
     auto isValidRecord = [&]( size_t aOff ) -> bool
     {
         if( aOff + REC_SIZE > m_data.size() )
             return false;
 
-        if( readFixedString( aOff, 16 ).empty() )
+        SDB_RECORD rec = m_sdb.RecordAt( aOff );
+
+        if( rec.Str( CLUSTER_NAME_OFF, 16 ).empty() )
             return false;
 
-        if( readI32( aOff + 24 ) != 0 || readI32( aOff + 32 ) != 1 || readI32( aOff + 36 ) != 0 )
+        if( rec.I32( CLUSTER_PARENT_OFF ) != 0 || rec.I32( CLUSTER_FLAG_OFF ) != 1
+            || rec.I32( CLUSTER_PAD_OFF ) != 0 )
             return false;
 
-        int64_t dx = static_cast<int64_t>( readI32( aOff + 16 ) ) - m_originX;
-        int64_t dy = static_cast<int64_t>( readI32( aOff + 20 ) ) - m_originY;
+        int64_t dx = static_cast<int64_t>( rec.I32( CLUSTER_X_OFF ) ) - m_originX;
+        int64_t dy = static_cast<int64_t>( rec.I32( CLUSTER_Y_OFF ) ) - m_originY;
 
         return std::llabs( dx ) <= MAX_COORD_DEVIATION && std::llabs( dy ) <= MAX_COORD_DEVIATION;
     };
@@ -431,7 +407,7 @@ void BINARY_PARSER::parseClusters()
         for( size_t off = aStart; isValidRecord( off ); off += REC_SIZE )
         {
             PART_CLUSTER cluster;
-            cluster.name = readFixedString( off, 16 );
+            cluster.name = m_sdb.RecordAt( off ).Str( CLUSTER_NAME_OFF, 16 );
             cluster.id = static_cast<int>( aOut.size() ) + 1;
             aOut.push_back( std::move( cluster ) );
         }
@@ -547,7 +523,7 @@ void BINARY_PARSER::parseSection19Parts()
             if( !m_cursor.InBounds( base, fieldSpan ) )
                 continue;
 
-            std::string refDes = readFixedString( base + layout.nameOff, 16 );
+            std::string refDes = m_sdb.RecordAt( base ).Str( layout.nameOff, 16 );
 
             if( refDes.empty() || !std::isalnum( static_cast<unsigned char>( refDes[0] ) ) )
                 continue;
@@ -562,8 +538,9 @@ void BINARY_PARSER::parseSection19Parts()
 
                 if( base >= OLD_REC_SIZE )
                 {
-                    size_t leadBase = base - OLD_REC_SIZE;
-                    std::string leadRef = readFixedString( leadBase + layout.nameOff, 16 );
+                    size_t      leadBase = base - OLD_REC_SIZE;
+                    SDB_RECORD  leadRec = m_sdb.RecordAt( leadBase );
+                    std::string leadRef = leadRec.Str( layout.nameOff, 16 );
 
                     if( m_cursor.InBounds( leadBase, fieldSpan ) && !leadRef.empty()
                         && std::isalnum( static_cast<unsigned char>( leadRef[0] ) )
@@ -571,18 +548,18 @@ void BINARY_PARSER::parseSection19Parts()
                     {
                         PART lead;
                         lead.name = leadRef;
-                        lead.location.x = toBasicCoordX( readI32( leadBase + layout.xOff ) );
+                        lead.location.x = toBasicCoordX( leadRec.I32( layout.xOff ) );
                         lead.location.y = layout.yOff
-                                ? toBasicCoordY( readI32( leadBase + *layout.yOff ) ) : 0;
-                        lead.rotation = toBasicAngle( readI32( leadBase + layout.angleOff ) );
-                        lead.bottom_layer = readU8( leadBase + layout.nameOff + 28 ) != 0;
+                                ? toBasicCoordY( leadRec.I32( *layout.yOff ) ) : 0;
+                        lead.rotation = toBasicAngle( leadRec.I32( layout.angleOff ) );
+                        lead.bottom_layer = leadRec.U8( layout.nameOff + 28 ) != 0;
                         lead.units = "M";
 
                         // Decal index for the leading block is in this first block's @+56.
                         size_t leadField = base + 56;
 
                         if( m_cursor.InBounds( leadField, 4 ) )
-                            m_partDecalIndex[m_parts.size()] = readU32( leadField );
+                            m_partDecalIndex[m_parts.size()] = m_sdb.RecordAt( leadField ).U32( 0 );
 
                         m_parts.push_back( lead );
                         existingRefs.insert( leadRef );
@@ -593,16 +570,17 @@ void BINARY_PARSER::parseSection19Parts()
             if( existingRefs.count( refDes ) )
                 continue;
 
-            int32_t x = readI32( base + layout.xOff );
-            int32_t y = layout.yOff ? readI32( base + *layout.yOff ) : 0;
-            int32_t angleRaw = readI32( base + layout.angleOff );
+            SDB_RECORD partRec = m_sdb.RecordAt( base );
+            int32_t    x = partRec.I32( layout.xOff );
+            int32_t    y = layout.yOff ? partRec.I32( *layout.yOff ) : 0;
+            int32_t    angleRaw = partRec.I32( layout.angleOff );
 
             PART part;
             part.name = refDes;
             part.location.x = toBasicCoordX( x );
             part.location.y = toBasicCoordY( y );
             part.rotation = toBasicAngle( angleRaw );
-            part.bottom_layer = readU8( base + layout.nameOff + 28 ) != 0;
+            part.bottom_layer = partRec.U8( layout.nameOff + 28 ) != 0;
             part.units = "M";
 
             // These section 19/21 placements are the parts omitted from section 22
@@ -624,7 +602,7 @@ void BINARY_PARSER::parseSection19Parts()
                 if( m_cursor.InBounds( nextMarker, 2 ) && m_data[nextMarker] == 0xFE
                     && m_data[nextMarker + 1] == 0xFF && m_cursor.InBounds( nextField, 4 ) )
                 {
-                    m_partTypeIndex[m_parts.size()] = readU32( nextField );
+                    m_partTypeIndex[m_parts.size()] = m_sdb.RecordAt( nextField ).U32( 0 );
                 }
             }
 
@@ -641,7 +619,7 @@ void BINARY_PARSER::parseSection19Parts()
                 if( m_cursor.InBounds( nextMarker, 2 ) && m_data[nextMarker] == 0xFE
                     && m_data[nextMarker + 1] == 0xFF && m_cursor.InBounds( nextField, 4 ) )
                 {
-                    m_partDecalIndex[m_parts.size()] = readU32( nextField );
+                    m_partDecalIndex[m_parts.size()] = m_sdb.RecordAt( nextField ).U32( 0 );
                 }
             }
 
@@ -1211,7 +1189,9 @@ void BINARY_PARSER::parsePerPinPadstacks()
         if( recOff + TERM_SIZE > end )
             break;
 
-        if( readI32( recOff + 24 ) != 0 || readI32( recOff + 28 ) != 0 || readI32( recOff + 32 ) != 0 )
+        SDB_RECORD rec = m_sdb.RecordAt( recOff );
+
+        if( rec.I32( 24 ) != 0 || rec.I32( 28 ) != 0 || rec.I32( 32 ) != 0 )
         {
             pairBase = recOff;
             break;
@@ -1225,8 +1205,9 @@ void BINARY_PARSER::parsePerPinPadstacks()
 
     for( size_t off = pairBase; off + 8 <= m_data.size(); off += 8 )
     {
-        int32_t pin = readI32( off );
-        int32_t ref = readI32( off + 4 );
+        SDB_RECORD rec = m_sdb.RecordAt( off );
+        int32_t    pin = rec.I32( 0 );
+        int32_t    ref = rec.I32( 4 );
 
         if( pin < 0 || pin > 20000 || ref < 0 || ref > 20000 )
             break;
@@ -1252,10 +1233,12 @@ void BINARY_PARSER::parsePerPinPadstacks()
     {
         size_t off = static_cast<size_t>( sec14->dataOffset ) + k * DESC_SIZE;
 
-        if( off + DESC_SIZE > m_data.size() || readU16( off + DESC_SENTINEL_OFF ) != 0xFFFE )
+        SDB_RECORD desc = m_sdb.RecordAt( off );
+
+        if( off + DESC_SIZE > m_data.size() || desc.U16( DESC_SENTINEL_OFF ) != 0xFFFE )
             continue;
 
-        std::string name = readFixedString( off + DESC_NAME_OFF, 41 );
+        std::string name = desc.Str( DESC_NAME_OFF, 41 );
 
         if( name.empty() )
             continue;
@@ -1266,8 +1249,8 @@ void BINARY_PARSER::parsePerPinPadstacks()
             continue;
 
         descriptorDecals.insert( name );
-        applyPadstackPairs( decalIt->second, pairs, readI32( off + DESC_START_OFF ),
-                            readI32( off + DESC_COUNT_OFF ) );
+        applyPadstackPairs( decalIt->second, pairs, desc.I32( DESC_START_OFF ),
+                            desc.I32( DESC_COUNT_OFF ) );
     }
 
     // The de-duplicated library decals (high-volume passives, library connectors) carry no
@@ -1290,10 +1273,12 @@ void BINARY_PARSER::parsePerPinPadstacks()
 
     for( size_t off = sec13->dataOffset; off + LIB_START_OFF + 4 <= sec13End; off += 4 )
     {
-        if( readI32( off + LIB_MARKER_OFF ) != LIB_MARKER )
+        SDB_RECORD lib = m_sdb.RecordAt( off );
+
+        if( lib.I32( LIB_MARKER_OFF ) != LIB_MARKER )
             continue;
 
-        std::string name = readFixedString( off, 40 );
+        std::string name = lib.Str( 0, 40 );
 
         if( name.empty() || descriptorDecals.count( name ) )
             continue;
@@ -1304,7 +1289,7 @@ void BINARY_PARSER::parsePerPinPadstacks()
         if( decalIt == m_decals.end() || countIt == m_decalStackCount.end() )
             continue;
 
-        applyPadstackPairs( decalIt->second, pairs, readI32( off + LIB_START_OFF ),
+        applyPadstackPairs( decalIt->second, pairs, lib.I32( LIB_START_OFF ),
                             countIt->second );
     }
 }
@@ -1345,6 +1330,11 @@ void BINARY_PARSER::parseBoardOutlineDrwOrigin()
     // is needed to convert section 11 vertices from DRW-relative to binary
     // absolute coordinates.
     static constexpr int LINE_ITEM_SIZE = 112;
+    static constexpr int LINE_FLAGS_OFF = 0;
+    static constexpr int LINE_SENTINEL_OFF = 4;
+    static constexpr int LINE_NAME_OFF = 44;
+    static constexpr int LINE_DRWX_OFF = 88;
+    static constexpr int LINE_DRWY_OFF = 92;
 
     const SDB_SECTION* entry9 = getSection( SECTION::StringPool );
 
@@ -1355,18 +1345,19 @@ void BINARY_PARSER::parseBoardOutlineDrwOrigin()
 
     for( size_t pos = entry9->dataOffset; pos + LINE_ITEM_SIZE <= scanEnd; ++pos )
     {
-        uint32_t flags = readU32( pos );
-        uint32_t sentinel = readU32( pos + 4 );
+        SDB_RECORD rec = m_sdb.RecordAt( pos );
+        uint32_t   flags = rec.U32( LINE_FLAGS_OFF );
+        uint32_t   sentinel = rec.U32( LINE_SENTINEL_OFF );
 
         if( ( flags != 0xFFFE && flags != 0xFFFF ) || sentinel != 0xFFFFFFFF )
             continue;
 
-        std::string name = readFixedString( pos + 44, 12 );
+        std::string name = rec.Str( LINE_NAME_OFF, 12 );
 
         if( name.size() >= 4 && name.substr( 0, 3 ) == "DRW" )
         {
-            m_boardDrwOriginX = readI32( pos + 88 );
-            m_boardDrwOriginY = readI32( pos + 92 );
+            m_boardDrwOriginX = rec.I32( LINE_DRWX_OFF );
+            m_boardDrwOriginY = rec.I32( LINE_DRWY_OFF );
             m_boardDrwOriginFound = true;
             return;
         }
@@ -1409,7 +1400,7 @@ void BINARY_PARSER::parseBoardOutline()
 
     for( size_t pos = secEnd - 12; pos >= secStart && pos < secEnd; pos -= 12 )
     {
-        if( readU32( pos + 8 ) == 0xFFFFFFFF )
+        if( m_sdb.RecordAt( pos ).U32( 8 ) == 0xFFFFFFFF )
             vtxStart = pos;
         else
             break;
@@ -1448,13 +1439,14 @@ void BINARY_PARSER::parseBoardOutline()
 
     for( size_t pos = vtxStart; pos + 12 <= secEnd; pos += 12 )
     {
-        uint32_t sentinel = readU32( pos + 8 );
+        SDB_RECORD rec = m_sdb.RecordAt( pos );
+        uint32_t   sentinel = rec.U32( 8 );
 
         if( sentinel != 0xFFFFFFFF )
             break;
 
-        int32_t rawX = readI32( pos );
-        int32_t rawY = readI32( pos + 4 );
+        int32_t rawX = rec.I32( 0 );
+        int32_t rawY = rec.I32( 4 );
 
         // Convert from DRW-relative to binary absolute by adding the DRW origin
         int32_t absX = rawX;
@@ -1559,12 +1551,13 @@ bool BINARY_PARSER::parseArcBoardOutline()
 
             for( size_t i = 0; i < nArcs && ok; ++i )
             {
-                size_t rec = off + i * ARC_REC;
-                double xmin = readI32( rec );
-                double ymin = readI32( rec + 4 );
-                double xmax = readI32( rec + 8 );
-                double ymax = readI32( rec + 12 );
-                double rx = ( xmax - xmin ) / 2.0;
+                size_t     rec = off + i * ARC_REC;
+                SDB_RECORD r = m_sdb.RecordAt( rec );
+                double     xmin = r.I32( 0 );
+                double     ymin = r.I32( 4 );
+                double     xmax = r.I32( 8 );
+                double     ymax = r.I32( 12 );
+                double     rx = ( xmax - xmin ) / 2.0;
                 double ry = ( ymax - ymin ) / 2.0;
 
                 // A circle box is square and non-degenerate.
@@ -1614,24 +1607,25 @@ bool BINARY_PARSER::parseArcBoardOutline()
 
         for( size_t pos = start; pos + 112 <= end && pos + 112 <= m_data.size(); )
         {
-            uint16_t marker = readU16( pos );
+            SDB_RECORD rec = m_sdb.RecordAt( pos );
+            uint16_t   marker = rec.U16( 0 );
 
-            if( ( marker == 0xFFFE || marker == 0xFFFF ) && readU16( pos + 2 ) == 0 )
+            if( ( marker == 0xFFFE || marker == 0xFFFF ) && rec.U16( 2 ) == 0 )
             {
-                std::string name = readFixedString( pos + 44, 12 );
+                std::string name = rec.Str( 44, 12 );
 
                 if( name.size() >= 3 && name.compare( 0, 3, "DRW" ) == 0 )
                 {
                     DrawingItem item;
-                    item.originX = readI32( pos + 88 );
-                    item.originY = readI32( pos + 92 );
-                    item.localMinX = (int64_t) readI32( pos + 96 ) - item.originX;
-                    item.localMinY = (int64_t) readI32( pos + 100 ) - item.originY;
-                    item.localMaxX = (int64_t) readI32( pos + 104 ) - item.originX;
-                    item.localMaxY = (int64_t) readI32( pos + 108 ) - item.originY;
+                    item.originX = rec.I32( 88 );
+                    item.originY = rec.I32( 92 );
+                    item.localMinX = (int64_t) rec.I32( 96 ) - item.originX;
+                    item.localMinY = (int64_t) rec.I32( 100 ) - item.originY;
+                    item.localMaxX = (int64_t) rec.I32( 104 ) - item.originX;
+                    item.localMaxY = (int64_t) rec.I32( 108 ) - item.originY;
                     item.span = std::max( item.localMaxX - item.localMinX,
                                           item.localMaxY - item.localMinY );
-                    item.preferred = readU32( pos + 84 ) == 0x00004D00;
+                    item.preferred = rec.U32( 84 ) == 0x00004D00;
                     items.push_back( item );
                     pos += 112;
                     continue;
@@ -1711,7 +1705,8 @@ bool BINARY_PARSER::parseArcBoardOutline()
 
             for( size_t p = off; p + VTX <= end && (int) verts.size() < MAX_CORNERS; p += VTX )
             {
-                Vertex v{ readI32( p ), readI32( p + 4 ), readI32( p + 8 ) };
+                SDB_RECORD r = m_sdb.RecordAt( p );
+                Vertex     v{ r.I32( 0 ), r.I32( 4 ), r.I32( 8 ) };
 
                 if( verts.size() >= 3 && verts.front().x == v.x && verts.front().y == v.y )
                 {
@@ -1878,12 +1873,13 @@ bool BINARY_PARSER::parseArcBoardOutline()
 
         if( i > 0 && isArcStart[i - 1] )
         {
-            size_t rec = best.arcTableOffset + arcRecOf[i - 1] * ARC_REC;
-            double xmin = readI32( rec );
-            double ymin = readI32( rec + 4 );
-            double xmax = readI32( rec + 8 );
-            double ymax = readI32( rec + 12 );
-            double cxLocal = ( xmin + xmax ) / 2.0;
+            size_t     rec = best.arcTableOffset + arcRecOf[i - 1] * ARC_REC;
+            SDB_RECORD r = m_sdb.RecordAt( rec );
+            double     xmin = r.I32( 0 );
+            double     ymin = r.I32( 4 );
+            double     xmax = r.I32( 8 );
+            double     ymax = r.I32( 12 );
+            double     cxLocal = ( xmin + xmax ) / 2.0;
             double cyLocal = ( ymin + ymax ) / 2.0;
             double radius = ( xmax - xmin ) / 2.0;
 
@@ -2459,18 +2455,20 @@ void BINARY_PARSER::parseNetClasses()
 
     for( size_t off = 0; off + 24 <= m_data.size(); ++off )
     {
-        if( readU32( off + 4 ) != 0x42 )
+        SDB_RECORD rec = m_sdb.RecordAt( off );
+
+        if( rec.U32( 4 ) != 0x42 )
             continue;
 
-        uint32_t owner = readU32( off + 8 );
+        uint32_t owner = rec.U32( 8 );
 
         if( !ownerSet.count( owner ) )
             continue;
 
-        uint32_t rulePtr = readU32( off );
+        uint32_t rulePtr = rec.U32( 0 );
 
         edges.push_back( { owner, rulePtr & ~0xfffu, rulePtr,
-                           static_cast<int>( readU32( off + 20 ) ), off } );
+                           static_cast<int>( rec.U32( 20 ) ), off } );
     }
 
     if( edges.empty() )
@@ -2492,7 +2490,7 @@ void BINARY_PARSER::parseNetClasses()
 
     for( size_t k = 0; k < owners.size(); ++k )
     {
-        std::string name = readFixedString( nameHead + k * 0x118, 40 );
+        std::string name = m_sdb.RecordAt( nameHead + k * 0x118 ).Str( 0, 40 );
 
         if( name.empty() || !std::isalnum( static_cast<unsigned char>( name[0] ) ) )
             name = "PADS_NetClass_" + std::to_string( k + 1 );
@@ -2587,15 +2585,17 @@ void BINARY_PARSER::parseNetClasses()
 
         for( size_t off = 0; off + 20 + 38 * sizeof( int32_t ) <= m_data.size(); ++off )
         {
-            if( readI32( off ) != 457200 )
+            SDB_RECORD rec = m_sdb.RecordAt( off );
+
+            if( rec.I32( 0 ) != 457200 )
                 continue;
 
-            uint32_t selfPtr = readU32( off + 12 );
+            uint32_t selfPtr = rec.U32( 12 );
 
             if( selfPtr < 0x10000000u || selfPtr >= 0x20000000u )
                 continue;
 
-            if( readI32( off + 8 ) != 1 )
+            if( rec.I32( 8 ) != 1 )
                 continue;
 
             ValueRec v{};
@@ -2604,7 +2604,7 @@ void BINARY_PARSER::parseNetClasses()
 
             for( int i = 0; i < 38; ++i )
             {
-                v.core[i] = readI32( off + 20 + sizeof( int32_t ) * i );
+                v.core[i] = rec.I32( 20 + sizeof( int32_t ) * i );
 
                 if( v.core[i] != 0 )
                     anyNonZero = true;
@@ -2685,8 +2685,8 @@ void BINARY_PARSER::parseDiffPairs()
         if( aObjStart < poolBase || aObjStart + OBJECT_SIZE > poolBase + poolSize )
             return false;
 
-        return m_netSelfPtrToName.count( readU32( aObjStart + 12 ) )
-               && m_netSelfPtrToName.count( readU32( aObjStart + 16 ) );
+        return m_netSelfPtrToName.count( m_sdb.RecordAt( aObjStart ).U32( 12 ) )
+               && m_netSelfPtrToName.count( m_sdb.RecordAt( aObjStart ).U32( 16 ) );
     };
 
     size_t anchor = 0;
@@ -2734,17 +2734,18 @@ void BINARY_PARSER::parseDiffPairs()
 
     for( size_t objStart = anchor; objectResolves( objStart ); objStart += OBJECT_SIZE )
     {
-        const std::string& nameA = m_netSelfPtrToName.at( readU32( objStart + 12 ) );
-        const std::string& nameB = m_netSelfPtrToName.at( readU32( objStart + 16 ) );
+        SDB_RECORD         obj = m_sdb.RecordAt( objStart );
+        const std::string& nameA = m_netSelfPtrToName.at( obj.U32( 12 ) );
+        const std::string& nameB = m_netSelfPtrToName.at( obj.U32( 16 ) );
 
         if( !seen.insert( { nameA, nameB } ).second )
             continue;
 
-        double  gapOverride = readF64( objStart + 56 );
-        double  gap = ( gapOverride != F64_INHERIT ) ? gapOverride : readF64( objStart + 40 );
-        int32_t w600 = readI32( objStart + 600 );
+        double  gapOverride = obj.F64( 56 );
+        double  gap = ( gapOverride != F64_INHERIT ) ? gapOverride : obj.F64( 40 );
+        int32_t w600 = obj.I32( 600 );
         double  width = ( w600 != I32_INHERIT ) ? static_cast<double>( w600 )
-                                                : static_cast<double>( readI32( objStart + 592 ) );
+                                                : static_cast<double>( obj.I32( 592 ) );
 
         DIFF_PAIR_DEF dp;
         dp.name = nameA + "_" + nameB;
@@ -2818,23 +2819,25 @@ void BINARY_PARSER::parseTextRecords()
 
     for( size_t o = lo; o + 144 <= hi; ++o )
     {
-        if( readU32( o + 72 + 28 ) != 0x49000000 )
+        SDB_RECORD rec = m_sdb.RecordAt( o );
+
+        if( rec.U32( 72 + 28 ) != 0x49000000 )
             continue;
 
-        if( readU32( o + 72 + 12 ) != 0 )
+        if( rec.U32( 72 + 12 ) != 0 )
             continue;
 
-        uint32_t layerWord = readU32( o + 72 + 24 );
+        uint32_t layerWord = rec.U32( 72 + 24 );
 
         if( ( ( layerWord >> 16 ) & 0xFFFF ) != 0x0020 )
             continue;
 
-        if( readI32( o + 36 ) <= 0 || readI32( o + 40 ) <= 0 )
+        if( rec.I32( 36 ) <= 0 || rec.I32( 40 ) <= 0 )
             continue;
 
         TextCand c;
         c.geomBase  = o;
-        c.strOffset = readU32( o + 72 + 8 );
+        c.strOffset = rec.U32( 72 + 8 );
         c.layer     = static_cast<uint8_t>( layerWord & 0xFF );
         cands.push_back( c );
     }
@@ -2902,16 +2905,17 @@ void BINARY_PARSER::parseTextRecords()
             || !cStringStartAt( soff ) )
             continue;
 
-        std::string content = readFixedString( soff, poolHi - soff );
+        std::string content = m_sdb.RecordAt( soff ).Str( 0, poolHi - soff );
 
         if( content.empty() )
             continue;
 
-        int32_t height    = readI32( c.geomBase + 36 );
-        int32_t linewidth = readI32( c.geomBase + 40 );
-        int32_t x         = readI32( c.geomBase + 44 );
-        int32_t y         = readI32( c.geomBase + 48 );
-        int32_t angleRaw  = readI32( c.geomBase + 52 );
+        SDB_RECORD geom = m_sdb.RecordAt( c.geomBase );
+        int32_t    height    = geom.I32( 36 );
+        int32_t    linewidth = geom.I32( 40 );
+        int32_t    x         = geom.I32( 44 );
+        int32_t    y         = geom.I32( 48 );
+        int32_t    angleRaw  = geom.I32( 52 );
 
         TEXT text;
         text.content    = content;
@@ -3340,13 +3344,14 @@ void BINARY_PARSER::buildOwnerRuns()
     // heap tail) so the marker walk does not bind garbage runs.
     auto isOwnerRecord = [&]( size_t aOff ) -> bool
     {
-        uint16_t marker = readU16( aOff );
-        uint16_t hi = readU16( aOff + 2 );
+        SDB_RECORD rec = m_sdb.RecordAt( aOff );
+        uint16_t   marker = rec.U16( 0 );
+        uint16_t   hi = rec.U16( 2 );
 
         if( ( marker != 0xFFFE && marker != 0xFFFF ) || hi != 0 )
             return false;
 
-        std::string name = readFixedString( aOff + 44, 44 );
+        std::string name = rec.Str( 44, 44 );
 
         if( name.size() < 2 )
             return false;
@@ -3357,8 +3362,8 @@ void BINARY_PARSER::buildOwnerRuns()
                 return false;
         }
 
-        int32_t vertexStart = readI32( aOff + 12 );
-        int32_t pieceCount = readI32( aOff + 24 );
+        int32_t vertexStart = rec.I32( 12 );
+        int32_t pieceCount = rec.I32( 24 );
 
         return vertexStart >= 0 && vertexStart < ( 1 << 24 ) && pieceCount >= 0
                && pieceCount < ( 1 << 16 );
@@ -3366,11 +3371,12 @@ void BINARY_PARSER::buildOwnerRuns()
 
     auto readRun = [&]( size_t aOff ) -> OWNER_RUN
     {
-        OWNER_RUN run;
-        run.pieceStart = readI32( aOff + 8 );
-        run.vertexStart = readI32( aOff + 12 );
-        run.arcStart = readI32( aOff + 16 );
-        run.pieceCount = readI32( aOff + 24 );
+        SDB_RECORD rec = m_sdb.RecordAt( aOff );
+        OWNER_RUN  run;
+        run.pieceStart = rec.I32( 8 );
+        run.vertexStart = rec.I32( 12 );
+        run.arcStart = rec.I32( 16 );
+        run.pieceCount = rec.I32( 24 );
         return run;
     };
 
@@ -3388,7 +3394,7 @@ void BINARY_PARSER::buildOwnerRuns()
     {
         if( isOwnerRecord( off ) )
         {
-            std::string name = readFixedString( off + 44, 44 );
+            std::string name = m_sdb.RecordAt( off ).Str( 44, 44 );
 
             if( havePrev && !m_ownerRuns.count( prevName ) )
                 m_ownerRuns.emplace( prevName, readRun( off ) );
@@ -3673,10 +3679,11 @@ void BINARY_PARSER::parseCopperPours()
             if( tablePos + 8 > sec49->dataOffset + poolSize )
                 return;
 
-            PourMeta meta;
-            meta.width     = readI32( tablePos );
-            meta.pieceType = readU8( tablePos + 4 );
-            meta.layer     = readU8( tablePos + 5 );
+            SDB_RECORD metaRec = m_sdb.RecordAt( tablePos );
+            PourMeta   meta;
+            meta.width     = metaRec.I32( 0 );
+            meta.pieceType = metaRec.U8( 4 );
+            meta.layer     = metaRec.U8( 5 );
             pourMeta[p]    = meta;
             tablePos += 8;
 
@@ -3685,7 +3692,7 @@ void BINARY_PARSER::parseCopperPours()
                 if( tablePos + 8 > sec49->dataOffset + poolSize )
                     return;
 
-                vtxCounts[p + 1] = readU32( tablePos );
+                vtxCounts[p + 1] = m_sdb.RecordAt( tablePos ).U32( 0 );
                 tablePos += 8;
             }
         }
@@ -3709,8 +3716,9 @@ void BINARY_PARSER::parseCopperPours()
 
             for( uint32_t v = 0; v < nVtx; ++v )
             {
-                int32_t x = readI32( vtxPos );
-                int32_t y = readI32( vtxPos + 4 );
+                SDB_RECORD vtx = m_sdb.RecordAt( vtxPos );
+                int32_t    x = vtx.I32( 0 );
+                int32_t    y = vtx.I32( 4 );
 
                 pour.points.emplace_back( toBasicCoordX( x ), toBasicCoordY( y ) );
                 vtxPos += 8;
@@ -3926,8 +3934,9 @@ void BINARY_PARSER::parseCopperPours()
 
         for( uint32_t v = 0; v < nVtx; ++v )
         {
-            int32_t x = readI32( vtxPos );
-            int32_t y = readI32( vtxPos + 4 );
+            SDB_RECORD vtx = m_sdb.RecordAt( vtxPos );
+            int32_t    x = vtx.I32( 0 );
+            int32_t    y = vtx.I32( 4 );
 
             pour.points.emplace_back( toBasicCoordX( x ), toBasicCoordY( y ) );
             vtxPos += 8;
@@ -3974,14 +3983,15 @@ void BINARY_PARSER::parseLayerStackup()
     {
         size_t rec = recordBase + k * REC_SIZE;
 
+        SDB_RECORD layerRec = m_sdb.RecordAt( rec );
         LAYER_INFO info;
         info.number = static_cast<int>( k );
-        info.name = readFixedString( rec, NAME_LEN );
+        info.name = layerRec.Str( 0, NAME_LEN );
 
-        int32_t routingDir = readI32( rec + OFF_ROUT );
+        int32_t routingDir = layerRec.I32( OFF_ROUT );
 
-        info.layer_thickness   = static_cast<double>( readI32( rec + OFF_LAYTH ) );
-        info.copper_thickness  = static_cast<double>( readI32( rec + OFF_COPTH ) );
+        info.layer_thickness   = static_cast<double>( layerRec.I32( OFF_LAYTH ) );
+        info.copper_thickness  = static_cast<double>( layerRec.I32( OFF_COPTH ) );
 
         float dielectric = 0.0f;
         std::memcpy( &dielectric, &m_data[rec + OFF_DIEL], sizeof( float ) );
