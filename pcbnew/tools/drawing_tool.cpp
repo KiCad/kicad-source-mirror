@@ -636,6 +636,7 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
     VECTOR2I             cursorPos = getViewControls()->GetCursorPosition();
     PCB_SELECTION_TOOL*  selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     BOARD_COMMIT         commit( m_frame );
+    SCOPED_DRAW_MODE     scopedDrawMode( m_mode, MODE::IMAGE );
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
@@ -920,7 +921,8 @@ int DRAWING_TOOL::PlacePoint( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
-    POINT_PLACER placer( *this, *frame() );
+    POINT_PLACER     placer( *this, *frame() );
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::MD_POINT );
 
     doInteractiveItemPlacement( aEvent, &placer, _( "Place point" ), IPO_REPEAT | IPO_SINGLE_CLICK );
 
@@ -1191,6 +1193,7 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
     PCB_TABLE*                   table = nullptr;
     const BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
     BOARD_COMMIT                 commit( m_frame );
+    SCOPED_DRAW_MODE             scopedDrawMode( m_mode, MODE::TABLE );
     PCB_GRID_HELPER              grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
 
     // We might be running as the same shape in another co-routine.  Make sure that one
@@ -1428,6 +1431,7 @@ int DRAWING_TOOL::DrawBarcode( const TOOL_EVENT& aEvent )
 
     PCB_BARCODE*                 barcode = nullptr;
     BOARD_COMMIT                 commit( m_frame );
+    SCOPED_DRAW_MODE             scopedDrawMode( m_mode, MODE::BARCODE );
     PCB_GRID_HELPER              grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
     const BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
 

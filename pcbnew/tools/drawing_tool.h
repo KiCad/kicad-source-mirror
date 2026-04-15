@@ -76,14 +76,16 @@ public:
         IMAGE,
         TEXT,
         ANCHOR,
-        MD_POINT,           // Do not use POINT: it collide with a Windows header define
+        MD_POINT, // Do not use POINT: it collide with a Windows header define
         DXF,
         DIMENSION,
         KEEPOUT,
         ZONE,
         GRAPHIC_POLYGON,
         VIA,
-        TUNING
+        TUNING,
+        TABLE,
+        BARCODE
     };
 
     /**
