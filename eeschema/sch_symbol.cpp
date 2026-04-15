@@ -110,6 +110,7 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId, const S
     m_excludedFromSim = m_part->GetExcludedFromSim();
     m_excludedFromBOM = m_part->GetExcludedFromBOM();
     m_excludedFromBoard = m_part->GetExcludedFromBoard();
+    m_excludedFromPosFiles = m_part->GetExcludedFromPosFiles();
 }
 
 
@@ -1438,6 +1439,7 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
     bool updateValue = true;
     bool updateExclFromBOM = true;
     bool updateExclFromBoard = true;
+    bool updateExclFromPosFiles = true;
     bool updateDNP = true;
     bool updateOtherFields = true;
     bool updatePins = true;
@@ -1447,12 +1449,13 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
         updateValue = aProperty->Name() == _HKI( "Value" );
         updateExclFromBoard = aProperty->Name() == _HKI( "Exclude From Board" );
         updateExclFromBOM = aProperty->Name() == _HKI( "Exclude From Bill of Materials" );
+        updateExclFromPosFiles = aProperty->Name() == _HKI( "Exclude From Position Files" );
         updateDNP = aProperty->Name() == _HKI( "Do not Populate" );
         updateOtherFields = false;
         updatePins = false;
     }
 
-    if( !updateValue && !updateExclFromBOM && !updateExclFromBoard && !updateDNP && !updateOtherFields && !updatePins )
+    if( !updateValue && !updateExclFromBOM && !updateExclFromBoard && !updateExclFromPosFiles && !updateDNP && !updateOtherFields && !updatePins )
     {
         return;
     }
@@ -1525,6 +1528,9 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
 
                 if( updateExclFromBoard )
                     otherUnit->SetExcludedFromBoard( m_excludedFromBoard );
+
+                if( updateExclFromPosFiles )
+                    otherUnit->SetExcludedFromPosFiles( m_excludedFromPosFiles );
 
                 if( updateDNP )
                     otherUnit->SetDNP( GetDNP( &aSourceSheet, aVariantName ), &sheet, aVariantName );
@@ -1730,6 +1736,7 @@ void SCH_SYMBOL::swapData( SCH_ITEM* aItem )
     std::swap( m_excludedFromBOM, symbol->m_excludedFromBOM );
     std::swap( m_DNP, symbol->m_DNP );
     std::swap( m_excludedFromBoard, symbol->m_excludedFromBoard );
+    std::swap( m_excludedFromPosFiles, symbol->m_excludedFromPosFiles );
 
     std::swap( m_instances, symbol->m_instances );
     std::swap( m_schLibSymbolName, symbol->m_schLibSymbolName );
@@ -3744,6 +3751,9 @@ bool SCH_SYMBOL::operator==( const SCH_ITEM& aOther ) const
         return false;
 
     if( m_excludedFromBoard != symbol.m_excludedFromBoard )
+        return false;
+
+    if( m_excludedFromPosFiles != symbol.m_excludedFromPosFiles )
         return false;
 
     if( m_schLibSymbolName != symbol.m_schLibSymbolName )
