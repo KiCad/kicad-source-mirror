@@ -3602,7 +3602,7 @@ const std::vector<SEG> SHAPE_POLY_SET::GenerateHatchLines( const std::vector<dou
                 VECTOR2I mid( ( candidate.A.x + candidate.B.x ) / 2, ( candidate.A.y + candidate.B.y ) / 2 );
 
                 // Check if segment is inside the polygon by checking its middle point
-                if( containsSingle( mid, 0, 1, true ) )
+                if( Contains( mid, -1, 1, true ) )
                 {
                     int dx = p2.x - p1.x;
 
