@@ -38,6 +38,8 @@
 #include <wx/string.h>
 #include <wx/window.h>
 
+class PROGRESS_REPORTER;
+
 
 /**
  * Data produced by a registered saver on the UI thread, consumed by the background commit thread.
@@ -123,7 +125,7 @@ public:
 
     /** Enforce total size limit by rebuilding trimmed history keeping newest commits whose
      *  cumulative unique blob sizes fit within limit. */
-    bool EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxBytes );
+    bool EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxBytes, PROGRESS_REPORTER* aReporter = nullptr );
 
     /** Return true if the autosave data is newer than the last manual save. */
     bool HeadNewerThanLastSave( const wxString& aProjectPath );

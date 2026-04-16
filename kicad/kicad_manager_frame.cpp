@@ -39,6 +39,7 @@
 #include <dialogs/panel_jobset.h>
 #include <dialogs/dialog_edit_cfg.h>
 #include <local_history.h>
+#include <widgets/wx_progress_reporters.h>
 #include <wx/msgdlg.h>
 #include <eda_base_frame.h>
 #include <executable_names.h>
@@ -805,7 +806,10 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
             unsigned long long int limit = Pgm().GetCommonSettings()->m_Backup.limit_total_size;
 
             if( limit > 0 )
-                Kiway().LocalHistory().EnforceSizeLimit( Prj().GetProjectPath(), (size_t) limit );
+            {
+                WX_PROGRESS_REPORTER reporter( this, _( "Local History" ), 3, PR_NO_ABORT );
+                Kiway().LocalHistory().EnforceSizeLimit( Prj().GetProjectPath(), (size_t) limit, &reporter );
+            }
         }
 
         // Unregister the project saver before unloading the project to prevent
