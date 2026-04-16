@@ -400,7 +400,14 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                 EESCHEMA_SETTINGS*    cfg = m_frame->eeconfig();
 
-                if( !libSymbol->IsLocalPower() && cfg->m_Drawing.new_power_symbols == POWER_SYMBOLS::LOCAL )
+                // Only convert between power symbol types. Regular (non-power) symbols must
+                // never be promoted to power symbols just because the default is set to
+                // Global or Local. The preference's Default option means "follow the symbol
+                // definition" and any conversion only applies to symbols that are already
+                // power symbols.
+                if( libSymbol->IsPower()
+                    && !libSymbol->IsLocalPower()
+                    && cfg->m_Drawing.new_power_symbols == POWER_SYMBOLS::LOCAL )
                 {
                     libSymbol->SetLocalPower();
                     wxString keywords = libSymbol->GetKeyWords();
@@ -420,7 +427,8 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                         libSymbol->SetDescription( desc );
                     }
                 }
-                else if( !libSymbol->IsGlobalPower()
+                else if( libSymbol->IsPower()
+                         && !libSymbol->IsGlobalPower()
                          && cfg->m_Drawing.new_power_symbols == POWER_SYMBOLS::GLOBAL )
                 {
                     // We do not currently have local power symbols in the KiCad library, so
