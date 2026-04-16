@@ -36,10 +36,7 @@ namespace PADS_SCH
 {
 
 /**
- * Builder class to convert PADS symbol definitions to KiCad LIB_SYMBOL objects.
- *
- * This class handles the conversion of parsed PADS symbol definitions (graphics and pins)
- * to KiCad's embedded symbol format for schematic import.
+ * Builds KiCad LIB_SYMBOL objects from parsed PADS symbol definitions.
  */
 class PADS_SCH_SYMBOL_BUILDER
 {
@@ -48,150 +45,80 @@ public:
     ~PADS_SCH_SYMBOL_BUILDER();
 
     /**
-     * Build a KiCad LIB_SYMBOL from a PADS symbol definition.
-     *
-     * @param aSymbolDef The parsed PADS symbol definition.
-     * @return A new LIB_SYMBOL object. Caller takes ownership.
+     * Build a KiCad LIB_SYMBOL from a PADS symbol definition. Caller takes ownership.
      */
     LIB_SYMBOL* BuildSymbol( const SYMBOL_DEF& aSymbolDef );
 
     /**
-     * Get or create a symbol for the given definition.
-     *
-     * If the symbol has already been created, returns a pointer to the existing symbol.
-     * Otherwise creates a new symbol and caches it.
-     *
-     * @param aSymbolDef The parsed PADS symbol definition.
-     * @return Pointer to the symbol (owned by this builder).
+     * Return the cached symbol for the given definition, building and caching it if needed.
+     * The returned pointer is owned by this builder.
      */
     LIB_SYMBOL* GetOrCreateSymbol( const SYMBOL_DEF& aSymbolDef );
 
-    /**
-     * Check if a symbol with the given name already exists.
-     */
     bool HasSymbol( const std::string& aName ) const;
 
-    /**
-     * Get a cached symbol by name.
-     *
-     * @param aName Symbol name.
-     * @return Pointer to the symbol, or nullptr if not found.
-     */
     LIB_SYMBOL* GetSymbol( const std::string& aName ) const;
 
-    /**
-     * Check if a symbol name indicates a power symbol.
-     *
-     * @param aName Symbol name to check.
-     * @return True if the name matches common power symbol patterns.
-     */
     static bool IsPowerSymbol( const std::string& aName );
 
     /**
-     * Get KiCad power library symbol ID for a PADS power symbol.
-     *
-     * @param aPadsName PADS symbol name.
-     * @return LIB_ID for the KiCad power library symbol, or nullopt if no mapping.
+     * Map a PADS power symbol name to a KiCad power library LIB_ID, or nullopt if unmapped.
      */
     static std::optional<LIB_ID> GetKiCadPowerSymbolId( const std::string& aPadsName );
 
     /**
-     * Build a power symbol using hard-coded KiCad-standard graphics.
-     *
-     * @param aKiCadName KiCad power symbol name (e.g. "GND", "VCC", "VEE").
-     * @return A new LIB_SYMBOL with power graphics, or nullptr if the name is unrecognized.
-     *         Caller takes ownership.
+     * Build a power symbol using hard-coded KiCad-standard graphics, or nullptr if the name
+     * is unrecognized. Caller takes ownership.
      */
     LIB_SYMBOL* BuildKiCadPowerSymbol( const std::string& aKiCadName );
 
     /**
-     * Map a PADS special_variant to a power symbol style name.
-     *
-     * Uses the variant's decal_name pattern (RAIL, ARROW, BUBBLE) and pin_type
-     * to determine the appropriate KiCad power symbol style.
-     *
-     * @param aDecalName Variant decal name (e.g. "+RAIL", "AGND", "+BUBBLE").
-     * @param aPinType   Variant pin type ("G" for ground, "P" for power).
-     * @return Internal style name for BuildKiCadPowerSymbol(), or empty if unrecognized.
+     * Map a PADS special_variant decal name and pin type to a power symbol style name for
+     * BuildKiCadPowerSymbol(), or empty if unrecognized.
      */
     static std::string GetPowerStyleFromVariant( const std::string& aDecalName,
                                                  const std::string& aPinType );
 
     /**
-     * Build a composite multi-unit LIB_SYMBOL from a multi-gate PARTTYPE.
-     *
-     * Each gate becomes a separate unit with its own graphics, pins, and text.
-     * Pin numbers/names/types are taken from the GATE_DEF pin list rather than
-     * from the CAEDECAL SYMBOL_DEF, which only has placeholder pin data.
-     *
-     * @param aPartType  The multi-gate PARTTYPE definition.
-     * @param aSymbolDefs All parsed CAEDECAL definitions for decal lookup.
-     * @return A new multi-unit LIB_SYMBOL. Caller takes ownership.
+     * Build a composite multi-unit symbol from a multi-gate PARTTYPE. Pin numbers, names and
+     * types come from the GATE_DEF pin list because the decal carries only placeholder pin
+     * data. Caller takes ownership.
      */
     LIB_SYMBOL* BuildMultiUnitSymbol( const PARTTYPE_DEF& aPartType,
                                        const std::vector<SYMBOL_DEF>& aSymbolDefs );
 
     /**
-     * Get or create a multi-unit symbol for the given PARTTYPE.
-     *
-     * Cached by PARTTYPE name so that all instances of the same multi-gate part
-     * share one composite LIB_SYMBOL.
+     * Return the cached multi-unit symbol for the PARTTYPE, building it if needed, so all
+     * instances of the same multi-gate part share one symbol.
      */
     LIB_SYMBOL* GetOrCreateMultiUnitSymbol( const PARTTYPE_DEF& aPartType,
                                              const std::vector<SYMBOL_DEF>& aSymbolDefs );
 
     /**
-     * Get or create a single-gate symbol with PARTTYPE-specific pin remapping.
-     *
-     * Since mergePartTypeData() no longer mutates shared SYMBOL_DEF pins,
-     * this method applies pin number/name/type overrides from GATE_DEF::pins
-     * at build time. Cached by PARTTYPE name to keep separate symbols when
-     * multiple PARTTYPEs share the same CAEDECAL.
+     * Return a single-gate symbol with PARTTYPE pin overrides applied at build time. Cached
+     * by PARTTYPE so distinct PARTTYPEs sharing one decal stay separate.
      */
     LIB_SYMBOL* GetOrCreatePartTypeSymbol( const PARTTYPE_DEF& aPartType,
                                             const SYMBOL_DEF& aSymbolDef );
 
     /**
-     * Get or create a single-pin connector symbol with a specific pin number.
-     *
-     * PADS connectors use one CAEDECAL symbol for all pin placements, but each
-     * placement represents a different pin number. This creates a variant with
-     * the correct pin number for each connector pin placement.
-     *
-     * @param aPartType   The connector PARTTYPE definition.
-     * @param aSymbolDef  The CAEDECAL symbol definition with graphics.
-     * @param aPinNumber  The pin number string for this connector pin (e.g. "15").
-     * @return Pointer to the symbol (owned by this builder).
+     * Return a connector symbol variant carrying a specific pin number, since PADS connectors
+     * reuse one decal across every pin placement.
      */
     LIB_SYMBOL* GetOrCreateConnectorPinSymbol( const PARTTYPE_DEF& aPartType,
                                                 const SYMBOL_DEF&   aSymbolDef,
                                                 const std::string&  aPinNumber );
 
     /**
-     * Build a multi-unit connector symbol where each unit represents one pin.
-     *
-     * PADS connectors place each pin individually on the schematic. This creates
-     * a multi-unit KiCad symbol where each unit has the connector decal graphics
-     * and one pin with the correct pin number, allowing all placements to share
-     * one reference designator.
-     *
-     * @param aPartType    The connector PARTTYPE definition.
-     * @param aSymbolDef   The CAEDECAL symbol definition with per-pin graphics.
-     * @param aPinNumbers  Ordered list of pin numbers (one unit per pin).
-     * @return A new multi-unit LIB_SYMBOL. Caller takes ownership.
+     * Build a multi-unit connector symbol with one unit per pin, letting all of a connector's
+     * individually placed pins share one reference designator. Caller takes ownership.
      */
     LIB_SYMBOL* BuildMultiUnitConnectorSymbol( const PARTTYPE_DEF&            aPartType,
                                                 const SYMBOL_DEF&              aSymbolDef,
                                                 const std::vector<std::string>& aPinNumbers );
 
     /**
-     * Get or create a multi-unit connector symbol, cached by base reference.
-     *
-     * @param aPartType    The connector PARTTYPE definition.
-     * @param aSymbolDef   The CAEDECAL symbol definition with per-pin graphics.
-     * @param aPinNumbers  Ordered list of pin numbers.
-     * @param aCacheKey    Unique key for caching (e.g. PARTTYPE name + base ref).
-     * @return Pointer to the symbol (owned by this builder).
+     * Return the cached multi-unit connector symbol, building it if needed.
      */
     LIB_SYMBOL* GetOrCreateMultiUnitConnectorSymbol(
             const PARTTYPE_DEF&             aPartType,
@@ -200,40 +127,24 @@ public:
             const std::string&              aCacheKey );
 
     /**
-     * Add hidden power pins from PARTTYPE SIGPIN entries to an existing symbol.
-     *
-     * Each SIGPIN becomes an invisible PT_POWER_IN pin at position (0,0).
-     * Duplicate pin numbers are skipped.
+     * Add hidden PT_POWER_IN pins from PARTTYPE SIGPIN entries, skipping duplicate numbers.
      */
     void AddHiddenPowerPins( LIB_SYMBOL* aSymbol,
                              const std::vector<PARTTYPE_DEF::SIGPIN>& aSigpins );
 
 private:
-    /**
-     * Convert PADS coordinate to KiCad internal units.
-     */
     int toKiCadUnits( double aPadsValue ) const;
 
     /**
-     * Create a SCH_SHAPE from a PADS graphic element.
-     * Returns nullptr for mixed line/arc paths (use createShapes instead).
+     * Create a SCH_SHAPE from a PADS graphic element. Returns nullptr for mixed line/arc
+     * paths, which must go through createShapes() instead.
      */
     SCH_SHAPE* createShape( const SYMBOL_GRAPHIC& aGraphic );
 
-    /**
-     * Create one or more SCH_SHAPEs from a PADS graphic element.
-     * Handles mixed line/arc paths by emitting individual line and arc shapes.
-     */
     std::vector<SCH_SHAPE*> createShapes( const SYMBOL_GRAPHIC& aGraphic );
 
-    /**
-     * Create a SCH_PIN from a PADS pin definition.
-     */
     SCH_PIN* createPin( const SYMBOL_PIN& aPin, LIB_SYMBOL* aParent );
 
-    /**
-     * Map PADS pin type to KiCad electrical type.
-     */
     int mapPinType( PIN_TYPE aPadsType );
 
     const PARAMETERS& m_params;

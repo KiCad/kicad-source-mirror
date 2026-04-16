@@ -35,12 +35,9 @@ class FOOTPRINT;
 namespace PADS_IO { class BINARY_PARSER; struct ARC_POINT; }
 
 /**
- * PCB I/O plugin for importing PADS binary .pcb files.
- *
- * This plugin reads the native binary format used by PADS Layout, which is
- * distinct from the ASCII export format handled by PCB_IO_PADS. The binary
- * parser populates the same intermediate PADS_IO structs, and this wrapper
- * converts them to KiCad objects using the same patterns as the ASCII importer.
+ * PCB I/O plugin for importing the native PADS Layout binary .pcb format, distinct from
+ * the ASCII format handled by PCB_IO_PADS. The binary parser populates the same PADS_IO
+ * structs, which this wrapper converts to KiCad objects like the ASCII importer does.
  */
 class PCB_IO_PADS_BINARY : public PCB_IO, public LAYER_MAPPABLE_PLUGIN
 {
@@ -71,9 +68,8 @@ private:
     void loadNets();
     void loadFootprints();
 
-    // Group footprints into PADS part clusters (.asc *CLUSTER* groups). Builds one
-    // PCB_GROUP per cluster from the parser's cluster table and adds each footprint to
-    // the group named by its part's CLSTID. Must run after loadFootprints().
+    /// Build one PCB_GROUP per PADS part cluster and add each footprint to the group named
+    /// by its part's CLSTID. Must run after loadFootprints().
     void loadClusterGroups();
 
     void loadBoardOutline();
@@ -86,16 +82,15 @@ private:
     void loadKeepouts();
     void loadDimensions();
 
-    // Emit a (version 1) .kicad_dru beside the imported board carrying one clearance rule per
-    // differential pair with a gap. Mirrors PCB_IO_PADS::generateDrcRules.
+    /// Emit a .kicad_dru beside the board carrying one clearance rule per differential pair
+    /// with a gap.
     void generateDrcRules( const wxString& aFileName );
     void reportStatistics();
     void clearLoadingState();
 
-    // Persistent state
     std::map<wxString, PCB_LAYER_ID>   m_layerMap;
 
-    // Loading state
+    // Valid only during LoadBoard, cleared by clearLoadingState().
     BOARD*                              m_loadBoard = nullptr;
     const PADS_IO::BINARY_PARSER*      m_parser = nullptr;
     PADS_UNIT_CONVERTER                 m_unitConverter;
@@ -106,7 +101,7 @@ private:
     double                              m_originY = 0.0;
     std::map<std::string, std::string>  m_pinToNetMap;
 
-    // Footprint built for each parser part index, populated by loadFootprints() and
-    // consumed by loadClusterGroups() to resolve part-index-keyed cluster membership.
+    // One footprint per parser part index, so loadClusterGroups() can resolve the
+    // part-index-keyed cluster membership to a footprint.
     std::vector<FOOTPRINT*>             m_partFootprints;
 };

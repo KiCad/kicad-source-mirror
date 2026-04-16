@@ -70,10 +70,9 @@ static constexpr int PAGE_BIAS = 99072;
 static constexpr int DEFAULT_PAGE_WIDTH_MIL = 17000;
 static constexpr int DEFAULT_PAGE_HEIGHT_MIL = 11000;
 
-// Part-placement record: stride 136, refdes ASCII one block (0x3e) ahead of the
-// record origin "ksy"; the placement fields are ksy-relative. The slot scan keys
-// on the refdes, so the validators below are refdes-relative while the field
-// reads base an SDB_RECORD at ksy = refdes - PART_REFDES_OFF.
+// Part-placement record: stride 136, refdes ASCII 0x3e ahead of the record origin "ksy"; the
+// placement fields are ksy-relative.  The slot scan keys on the refdes, so the validators below
+// are refdes-relative while the field reads base an SDB_RECORD at ksy = refdes - PART_REFDES_OFF.
 static constexpr size_t PART_STRIDE = 136;
 static constexpr size_t PART_REFDES_OFF = 0x3e; // refdes offset from the ksy origin
 
@@ -88,12 +87,12 @@ static constexpr int PL_DECAL_OFF = 0x24;    // u16 used-decal handle
 static constexpr int PL_UNIT_OFF = 0x2a;     // u16 0-based gate slot
 static constexpr int PL_FIELDCOUNT_OFF = 0x2e; // u16 post-block field count
 
-// MFC object-class word at +0x28 (refdes-relative): 00 <class-id> marks a part slot.
+// Object-class word at +0x28 (refdes-relative): 00 <class-id> marks a part slot.
 static constexpr int                    PART_CLASS_OFF = 0x28;
 static constexpr std::array<uint8_t, 5> PART_CLASS_IDS = { 0x02, 0x06, 0x0A, 0x12, 0x1A };
 
-// Connection split-header pool: stride-40 records, marker FD (active) / FC at
-// byte +1, vertex count at +2, cumulative next-start index (u32le) at +0x0b.
+// Connection split-header pool: stride-40 records, marker FD (active) / FC at byte +1, vertex
+// count at +2, cumulative next-start index (u32le) at +0x0b.
 static constexpr size_t  SPLIT_STRIDE = 40;
 static constexpr int     SPLIT_MARKER_OFF = 0x01;
 static constexpr int     SPLIT_NVERTS_OFF = 0x02;
@@ -150,8 +149,8 @@ bool PADS_SCH_BINARY_READER::IsBinarySch( const std::vector<uint8_t>& aData )
     if( aData.size() < DATA_STREAM_OFFSET )
         return false;
 
-    // Shared container magic with the `.pcb` reader; only the second magic byte and
-    // the supported version differ between the two PADS SDB formats.
+    // Shared container magic with the `.pcb` reader; only the second magic byte and the version
+    // differ between the two PADS SDB formats.
     if( !PADS_IO::HasSdbMagic( aData, MAGIC1 ) )
         return false;
 
@@ -193,8 +192,7 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     if( !IsBinarySch( aData ) )
         return false;
 
-    // Read the SDB pool directory once; the decoders take their authoritative
-    // object counts from it instead of rediscovering them from payload scans.
+    // The decoders take their object counts from the pool directory.
     m_pools.Parse( aData );
 
     pageExtent( aData, m_pageWidthMils, m_pageHeightMils );
@@ -216,20 +214,17 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
 // ---------------------------------------------------------------------------
 // SHEETS
 //
-// The authoritative per-sheet partition is the pool3 sheet table: a contiguous
-// stride-48 array (count == pool3.used_count) whose records carry the absolute
-// start offset of each sheet's object block (+0x00), its byte length (+0x04), a
-// 0xFFFF marker (+0x0a) and the "[N]NAME" sheet name (+0x0c).  The ranges
-// [A_k, A_{k+1}) tile the object stream with zero gaps.  The per-sheet CAE view
-// record (signature 80 00 00 00 30 00 00 00) sits exactly 664 bytes into each
-// block (A_k + 664), so it is a worse boundary -- it leaks each block's leading
-// text/wires into the previous sheet.  We anchor the table on the first validated
-// signature minus 664.  Sheets ARE named, and file order is NOT active-first.
+// The per-sheet partition is the sheet table: a contiguous stride-48 array (count == sheet pool
+// count) whose records carry the absolute start offset of each sheet's object block (+0x00), its
+// byte length (+0x04), a 0xFFFF marker (+0x0a) and the "[N]NAME" sheet name (+0x0c).  The block
+// ranges tile the object stream with zero gaps.  The per-sheet CAE view record (signature
+// 80 00 00 00 30 00 00 00) sits 664 bytes into each block, so the table is anchored on the first
+// validated signature minus 664.  Sheets are named, and file order is not active-first.
 // ---------------------------------------------------------------------------
 static const std::array<uint8_t, 8> SHEET_SIGNATURE = { 0x80, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00 };
 static constexpr uint32_t SHEET_SIG_TO_BLOCK = 664;  // block_off_A = signature - 664
 static constexpr int      SHEET_SIG_SCALE_OFF = 8;   // f32 SCALE, in [1,60]
-static constexpr int      SHEET_SIG_HEAPPTR_OFF = 12;// heap ptr, high byte >= 0xC0
+static constexpr int      SHEET_SIG_HEAPPTR_OFF = 12;// handle word, high byte >= 0xC0
 static constexpr size_t   SHEET_TABLE_STRIDE = 48;
 static constexpr int      SHEET_REC_START_OFF = 0;   // u32 block start offset
 static constexpr int      SHEET_REC_LEN_OFF = 4;     // u32 block byte length
@@ -239,7 +234,6 @@ static constexpr int      SHEET_REC_NAME_OFF = 0x0c; // "[N]NAME"
 
 void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
 {
-    // The sheet count is the sheet controller's authoritative object count.
     size_t sheetCount = m_pools.Count( POOL_DIRECTORY::SHEETS );
 
     if( sheetCount == 0 || sheetCount > 4096 )
@@ -247,8 +241,8 @@ void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
 
     BINARY_CURSOR cur( d );
 
-    // The first VALID per-sheet CAE signature: SCALE f32 in [1,60] at +8, and a
-    // heap pointer (high byte >= 0xC0) at +12, rejecting stray byte coincidences.
+    // The first valid per-sheet CAE signature: SCALE f32 in [1,60] at +8 and a handle word with
+    // high byte >= 0xC0 at +12, rejecting stray byte coincidences.
     size_t firstSig = 0;
     bool   haveSig = false;
 
@@ -309,9 +303,8 @@ void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
         {
             m_sheetOffsets.push_back( offs[k] );
 
-            // Each sheet record carries its block byte-length at +4; the blocks tile
-            // [start, start+length) contiguously, so the highest end is the end of the
-            // schematic SDB payload (the embedded OLE preview region follows it).
+            // The blocks tile [start, start+length) contiguously, so the highest end is the end
+            // of the schematic SDB payload (the embedded preview region follows it).
             size_t   recBase = o + k * SHEET_TABLE_STRIDE;
             uint32_t blockLen = SDB_RECORD( cur, recBase ).U32( SHEET_REC_LEN_OFF );
             size_t   blockEnd = static_cast<size_t>( offs[k] ) + blockLen;
@@ -363,28 +356,22 @@ int PADS_SCH_BINARY_READER::sheetIndexForOffset( size_t aOffset ) const
 // ---------------------------------------------------------------------------
 // CAE DECALS (gate-symbol geometry library) + placement->decal binding
 //
-// Geometry library: a stride-0x50 record table (name@+0, class 0x06@+0x29,
-// cumulative-PIN u32@+0x30, cumulative-VERTEX u32@+0x34), followed by a stride-6
-// piece pool (marker@+1 = 0xff open / 0x00 closed, nverts@+2, linewidth@+4) and a
-// stride-6 vertex pool (x=2*i16, y=2*i16, decal-relative).  A decal's vertices are
-// the pool slice [cumVtx[i], cumVtx[i+1]); its pieces are those whose vertices fall
-// in that slice.
+// Geometry library: a stride-0x50 record table (name@+0, class 0x06@+0x29, cumulative-PIN
+// u32@+0x30, cumulative-VERTEX u32@+0x34), followed by a stride-6 piece pool (marker@+1 = 0xff
+// open / 0x00 closed, nverts@+2, linewidth@+4) and a stride-6 vertex pool (x=2*i16, y=2*i16,
+// decal-relative).  A decal's vertices are the pool slice [cumVtx[i], cumVtx[i+1]); its pieces are
+// those whose vertices fall in that slice.
 //
-// The library is NOT a pool (its count matches no directory used_count and no
-// sibling table); it is a serialized block in the object interior with no local
-// header and a free-text attribute heap as its immediate predecessor, so it cannot
-// be anchored arithmetically.  It is, however, structurally SANDWICHED between two
-// blocks the reader already locates by signature: the first per-sheet CAE
-// signature (its lower bound) and the $OSR_SYMS part-type pool (its upper bound).
-// Within that window exactly one record satisfies class 0x06 @+0x29 with both
-// cumulative prefix sums (pin @+0x30, vertex @+0x34) zero and a printable name --
-// the table head.  The window does the locating; the tag/zero-prefix only validate.
-// A whole-file scan is unsafe: 4 corpus files carry an earlier zero-prefix 0x06
-// coincidence outside the window, and the largest carries 49.
+// The library is not a pool and has no local header, so it cannot be anchored arithmetically.  It
+// sits between two blocks located by signature: the first per-sheet CAE signature (lower bound)
+// and the $OSR_SYMS part-type pool (upper bound).  Within that window exactly one record has class
+// 0x06 @+0x29 with both cumulative prefix sums (pin @+0x30, vertex @+0x34) zero and a printable
+// name, which is the table head; requiring uniqueness within the window rejects the stray
+// zero-prefix 0x06 records that occur elsewhere in the stream.
 //
-// Binding: each placement carries a u16 decal handle at refdes-0x1a; the decal
-// name is used_decal_table[handle - BUILTIN], where the used-decal table is a
-// stride-0x6c name run (per sheet) and BUILTIN = pool5.used_count.
+// Binding: each placement carries a u16 decal handle at refdes-0x1a; the decal name is
+// used_decal_table[handle - BUILTIN], where the used-decal table is a per-sheet stride-0x6c name
+// run and BUILTIN is the builtin decal count.
 // ---------------------------------------------------------------------------
 static constexpr size_t DECAL_STRIDE = 0x50;
 static constexpr int    DECAL_CLASS_OFF = 0x29;   // class id 0x06
@@ -392,9 +379,8 @@ static constexpr int    DECAL_CUMPIN_OFF = 0x30;  // u32 cumulative pin index
 static constexpr int    DECAL_CUMVTX_OFF = 0x34;  // u32 cumulative vertex index
 static constexpr size_t DECAL_NAME_LEN = 0x26;
 
-// Structural window bounds reused from sibling decoders: the per-sheet CAE view
-// record (decodeSheets) is the lower bound; the part-type pool header (decodeFields)
-// is the upper bound.  The decal library always falls strictly between them.
+// Window bounds: the per-sheet CAE view record is the lower bound and the part-type pool header
+// the upper bound; the decal library falls strictly between them.
 static const std::array<uint8_t, 8> DECAL_LOWER_SIGNATURE = { 0x80, 0x00, 0x00, 0x00,
                                                               0x30, 0x00, 0x00, 0x00 };
 static constexpr char DECAL_UPPER_ANCHOR[] = "$OSR_SYMS";
@@ -445,16 +431,13 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
 {
     BINARY_CURSOR cur( d );
 
-    // BUILTIN handle base = the decal controller's authoritative object count.
     m_decalBuiltinCount = m_pools.Count( POOL_DIRECTORY::DECAL_HANDLE_BASE );
 
     size_t n = streamLimit( d );
 
-    // --- Geometry library: locate the decal-record table head structurally, by the
-    // window between the first per-sheet CAE signature and the $OSR_SYMS part-type
-    // pool.  Both anchors are the same ones decodeSheets / decodeFields already use. ---
-    // If either anchor is absent the window is undefined; bail rather than fall back to a broad
-    // whole-stream scan that could bind the wrong table.
+    // Locate the decal-record table head by the window between the first per-sheet CAE signature
+    // and the $OSR_SYMS part-type pool.  If either anchor is absent the window is undefined; bail
+    // rather than scan the whole stream and risk binding the wrong table.
     size_t windowLo = std::string::npos;
 
     for( size_t i = DATA_STREAM_OFFSET; i + DECAL_LOWER_SIGNATURE.size() <= n; ++i )
@@ -481,8 +464,8 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
         return;
 
     // The table head is the in-window record with class 0x06, both cumulative prefix sums zero,
-    // and a printable name.  The window guarantees this is unique, so require EXACTLY one match;
-    // an ambiguous file then fails closed instead of binding to the wrong table.
+    // and a printable name.  Require exactly one match so an ambiguous file fails closed instead
+    // of binding to the wrong table.
     size_t base = 0;
     size_t candidates = 0;
 
@@ -595,10 +578,10 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
         }
     }
 
-    // --- Used-decal tables (stride 0x6c, a 1-byte lead precedes the name), one per
-    // sheet, plus the stride-26 pin terminal pool that immediately follows each.
-    // Per record: name@+1, terminal count@+0x2b, cumulative-terminal start@+0x2d (a
-    // running prefix sum).  Terminal: X = 2*i16@+3, Y = 2*i16@+5 (decal-relative). ---
+    // Used-decal tables (stride 0x6c, a 1-byte lead precedes the name), one per sheet, plus the
+    // stride-26 pin terminal pool that immediately follows each.  Per record: name@+1, terminal
+    // count@+0x2b, cumulative-terminal start@+0x2d (a running prefix sum).  Terminal: X = 2*i16@+3,
+    // Y = 2*i16@+5 (decal-relative).
     struct UREC { std::string name; int count; int cum; };
     size_t i = DATA_STREAM_OFFSET;
 
@@ -624,10 +607,9 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
                 int         cum = SDB_RECORD( cur, rec ).U16( UDECAL_CUM_OFF );
 
                 // The running cumulative prefix sum (cum == expect) is the table's integrity
-                // invariant; it terminates the run at the first non-record. cnt is a u8 gate
-                // terminal count with no cap - a large-pin gate (e.g. a 73-pin FPGA bank)
-                // must not truncate the table, or every placement past it falls off and binds
-                // to nothing on that sheet.
+                // invariant and terminates the run at the first non-record.  cnt is a u8 terminal
+                // count left uncapped so a large-pin gate does not truncate the table and drop
+                // every placement past it on that sheet.
                 if( nm.empty() || cum != expect )
                     break;
 
@@ -745,14 +727,12 @@ const std::vector<std::string>* PADS_SCH_BINARY_READER::partTypePoolForOffset( s
 // ---------------------------------------------------------------------------
 // COMPONENT FIELDS (per-part-type user attributes)
 //
-// The part-type pool ($OSR_SYMS/$GND_SYMS/$PWR_SYMS header, stride 0x4c) names
-// every part-type; a placement's part-type is pool[u16 @ (refdes-0x1c)].  The
-// attribute pool (after the global *FIELDS* block) is a flat tagged stream where
-// the control byte before each printable string is 0x00 (a KEY or a part-type
-// HEADER) or 0x01 (the VALUE of the preceding key).  A header is the part-type
-// whose next string is a known attribute key.  Values accumulate per part-type;
-// "repeat-lock" stops a block at the first repeated key (the sub-record divider)
-// so cross-record bleed does not corrupt the values.
+// The part-type pool ($OSR_SYMS/$GND_SYMS/$PWR_SYMS header, stride 0x4c) names every part-type; a
+// placement's part-type is pool[u16 @ (refdes-0x1c)].  The attribute pool is a flat tagged stream
+// where the control byte before each printable string is 0x00 (a key or a part-type header) or
+// 0x01 (the value of the preceding key).  A header is the part-type whose next string is a known
+// attribute key.  Values accumulate per part-type; a block stops at the first repeated key (the
+// sub-record divider) so cross-record bleed does not corrupt the values.
 // ---------------------------------------------------------------------------
 static const std::set<std::string> FIELD_ATTR_KEYS = {
     "DESCRIPTION", "MFR1", "MFR1 P/N", "MFR2", "MFR2 P/N", "MFR3", "MFR3 P/N",
@@ -799,10 +779,9 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
 {
     static constexpr size_t PT_STRIDE = 0x4c;
 
-    // 1. Part-type pools.  Each schematic sheet carries its own stride-0x4c pool anchored
-    // on the $OSR_SYMS/$GND_SYMS/$PWR_SYMS header; a placement's ptidx is the ordinal into
-    // the pool of ITS sheet (resolved per sheet in decodePlacements).  Binding every
-    // placement to only the first sheet's pool dropped every ptidx past that pool's size.
+    // Part-type pools.  Each sheet carries its own stride-0x4c pool anchored on the
+    // $OSR_SYMS/$GND_SYMS/$PWR_SYMS header; a placement's part-type ordinal indexes the pool of
+    // its own sheet (resolved per sheet in decodePlacements).
     for( size_t i = DATA_STREAM_OFFSET; i + 2 * PT_STRIDE + 16 < streamLimit( d ); ++i )
     {
         if( nameAt( d, i, 0x26 ) != "$OSR_SYMS"
@@ -830,8 +809,7 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
     if( m_partTypePools.empty() )
         return;
 
-    // The union of every sheet pool (sheet-0 first, so ordinals 0/1/2 stay the symbol
-    // groups) keys the field index below.
+    // The union of every sheet pool, sheet-0 first so ordinals 0/1/2 stay the symbol groups.
     std::set<std::string> seen;
 
     for( const std::pair<size_t, std::vector<std::string>>& pool : m_partTypePools )
@@ -845,22 +823,17 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
 
     size_t ptBase = m_partTypePools.front().first;
 
-    // 2. Preferred path: the u32 offset-index table (compaction-saved files) gives
-    // each part-type its exact key instances -> 100% precision + recall.
+    // Preferred path: the u32 offset-index table gives each part-type its exact key instances.
     if( decodeFieldsViaIndex( d, ptBase ) )
         return;
 
-    // 3. Fallback (edit-log files with no consolidated index): the head resolved-
-    // attribute stream right after the title-block *FIELDS*.  It is a flat tagged
-    // key/value run grouped into per-part-type blocks; an edit/compaction append
-    // re-emits whole field groups, so the stream is split into SUB-RECORDS (a
-    // repeated key, or a part-type-name token, opens a new one) and each sub-record
-    // is bound to its part-type by its own 'WDI P/N' value (the canonical identity),
-    // else the name token that opened it.  This recovers the design-controlled
-    // fields (DESCRIPTION, VALUE, PCB DECAL, ...) for every named+WDI-bound part-
-    // type; the manufacturer fields read stale on edit-log saves and are not
-    // corrected here (their resolved value is only serialized via the offset-index
-    // table consumed by the compaction path above).
+    // Fallback when there is no consolidated index: the resolved-attribute stream after the
+    // title-block *FIELDS*.  It is a flat tagged key/value run grouped into per-part-type blocks;
+    // because an append re-emits whole field groups, the stream is split into sub-records (a
+    // repeated key, or a part-type-name token, opens a new one) and each sub-record is bound to
+    // its part-type by its own 'WDI P/N' value, else the name token that opened it.  This recovers
+    // the design-controlled fields for every named+WDI-bound part-type; the manufacturer fields
+    // can read stale here and are only corrected via the offset-index path above.
     std::set<std::string> ptNameSet;
 
     for( const std::string& nm : m_partTypeNames )
@@ -1032,15 +1005,12 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
         }
     }
 
-    // Fabrication-free recall fallbacks for the edit-log head path (the compaction
-    // index path returns above and never reaches here):
-    //   (a) fill an EMPTY VALUE/Tolerance/Voltage Rating from the part-type's OWN
-    //       DESCRIPTION CSV (RES/CAP positional schema) -- the description is the
-    //       part-type's own serialized attribute, so this fabricates nothing.  Power
-    //       is deliberately NOT parsed (a RES description's power token is itself
-    //       sometimes stale vs the export).
-    //   (b) a self-referential SMD test-point decal (TP_SMD_*) resolves to its own
-    //       name; gated to TP_SMD_ so it can never touch a through-hole test point.
+    // Recall fallbacks for the fallback path only.  (a) Fill an empty VALUE/Tolerance/Voltage
+    // Rating from the part-type's own DESCRIPTION CSV (RES/CAP positional schema), which is the
+    // part-type's own attribute so nothing is fabricated; Power is deliberately not parsed because
+    // a RES description's power token can itself be stale.  (b) A self-referential SMD test-point
+    // decal (TP_SMD_*) resolves to its own name; gated to TP_SMD_ so it never touches a
+    // through-hole test point.
     for( std::pair<const std::string, std::vector<std::pair<std::string, std::string>>>& pt :
          m_partTypeFields )
     {
@@ -1141,12 +1111,11 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
 }
 
 
-// The flat attribute pool is only string STORAGE; in a compaction-saved file the
-// part-type -> attribute association is a separate u32 offset-index table after
-// the gate/pin table.  Each record is [class_off][name_off] key_off..., offsets
-// relative to the attribute area start (the first part-type-name string).  Each
-// key's value is the 0x01-tagged string following that exact key instance, so a
-// part-type recovers its own (or an inherited family member's) values exactly.
+// The flat attribute pool is only string storage; the part-type -> attribute association is a
+// separate u32 offset-index table after the gate/pin table.  Each record is
+// [class_off][name_off] key_off..., offsets relative to the attribute area start (the first
+// part-type-name string).  Each key's value is the 0x01-tagged string following that exact key
+// instance, so a part-type recovers its own (or an inherited family member's) values exactly.
 bool PADS_SCH_BINARY_READER::decodeFieldsViaIndex( const std::vector<uint8_t>& d, size_t poolBase )
 {
     BINARY_CURSOR bcur( d );
@@ -1402,9 +1371,8 @@ bool PADS_SCH_BINARY_READER::decodeFieldsViaIndex( const std::vector<uint8_t>& d
 // ---------------------------------------------------------------------------
 // PAGE SIZE
 //
-// The sheet size is stored symbolically as WDITBSIZE<X> (X = A..E).  Only the
-// B page (17000 x 11000 mil) appears in the corpus; map the token to its
-// physical extent, used as a structural in-page bound for vertices.
+// The sheet size is stored symbolically as WDITBSIZE<X> (X = A..E); map the token to its physical
+// extent, also used as an in-page bound for vertices.
 // ---------------------------------------------------------------------------
 static void pageExtent( const std::vector<uint8_t>& d, int& aWidth, int& aHeight )
 {
@@ -1456,10 +1424,9 @@ static void pageExtent( const std::vector<uint8_t>& d, int& aWidth, int& aHeight
 // ---------------------------------------------------------------------------
 // PART PLACEMENT
 //
-// Part-instance records are fixed stride-136 slots grouped as one run per
-// non-empty sheet, in sheet order.  Each slot carries a NUL-padded refdes
-// buffer, the MFC class tag at +0x28, and the serialized text-style trailer
-// immediately before the refdes.  X/Y/orientation decode from the
+// Part-instance records are fixed stride-136 slots grouped as one run per non-empty sheet, in
+// sheet order.  Each slot carries a NUL-padded refdes buffer, the class tag at +0x28, and the
+// serialized text-style trailer immediately before the refdes.  X/Y/orientation decode from the
 // refdes-relative placement fields.
 // ---------------------------------------------------------------------------
 static bool refdesOk( const std::vector<uint8_t>& d, size_t o )
@@ -1590,8 +1557,8 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
             pl.refdesPlace.orientation_deg = rec.U16( PL_REFDES_ANGLE_OFF ) / 10;
             pl.refdesPlace.visible = true;
             pl.refdesPlace.valid = true;
-            // Orientation is a u16 angle in tenths of a degree; the prior 0x84 byte test
-            // read only its low byte (0x0384 = 900 = 90deg) and so could not see 180/270.
+            // Orientation is a u16 angle in tenths of a degree (the full word is needed to see
+            // 180/270, not just its low byte).
             pl.rotation = rec.U16( PL_ORI_OFF ) / 10;
             pl.sheetIndex = sheetIndexForOffset( p );
 
@@ -1611,8 +1578,7 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
             }
 
             // Bind the part-type (ksy+0x22 ordinal into THIS sheet's part-type pool) and its
-            // component attribute fields.  ptidx indexes the placement's own sheet pool, not
-            // the global first-sheet pool.
+            // component attribute fields.
             {
                 uint16_t                        ptIdx = rec.U16( PL_PTIDX_OFF );
                 const std::vector<std::string>* pool = partTypePoolForOffset( p );
@@ -1790,8 +1756,8 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
     static const std::string     TYPES = "USLBTCPGZ";
 
     // A stride-24 pin record: type letter @+21, ASCII pin number @+4 (NUL-terminated), a u32
-    // named-flag @+0 (0xFFFFFFFF = unnamed).  The strict zero tail is intentionally NOT
-    // required so the handle-bearing variant (a live heap handle in bytes 22/23) still reads.
+    // named-flag @+0 (0xFFFFFFFF = unnamed).  A zero tail is not required so the handle-bearing
+    // variant (a handle in bytes 22/23) still reads.
     auto isPinRec = [&]( size_t o ) -> bool
     {
         if( o + PIN_STRIDE > d.size() || TYPES.find( static_cast<char>( d[o + 21] ) ) == std::string::npos )
@@ -1854,8 +1820,8 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
     {
         size_t base = pool.first;
 
-        // Re-walk the pool record run reading the +0x30 pin cursor (and the +0x2c gate cursor
-        // as the monotone guard), stopping where either wraps - the junk boundary record.
+        // Walk the pool record run reading the +0x30 pin cursor (and the +0x2c gate cursor as a
+        // monotone guard), stopping where either wraps at the boundary record.
         struct POOLREC { std::string name; uint32_t f2c; uint32_t f30; };
         std::vector<POOLREC> recs;
         uint32_t             prev30 = 0;
@@ -1890,10 +1856,10 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
         if( recs.size() < 4 )
             continue;
 
-        // The stride-12 GATE descriptor pool sits immediately after the part-type pool, with
-        // the pin pool following it.  Advance at stride 12 from the gate base to the first pin
-        // record to locate the pin-pool base structurally; the prior pp + 0x2000 scan window
-        // could clip the pin run of a part-type with more than ~341 pins (det-specs/sch_pins.md).
+        // The stride-12 gate descriptor pool sits immediately after the part-type pool, with the
+        // pin pool following it.  Advance at stride 12 from the gate base to the first pin record
+        // to locate the pin-pool base, which has no fixed distance bound (a part-type can carry
+        // hundreds of pins).
         size_t gatebase = base + PT_STRIDE * recs.size();
         size_t start = gatebase;
 
@@ -1903,9 +1869,9 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
         if( start + PIN_STRIDE > d.size() )
             continue;
 
-        // Byte 8 of each stride-12 gate record is that gate's pin count; their sum is the
-        // exact pin-pool length, replacing the 0xFFFF-terminator-driven run length.  Multi-pin
-        // group sub-records carry a zero count, so the sum is robust to either gate encoding.
+        // Byte 8 of each stride-12 gate record is that gate's pin count; their sum is the exact
+        // pin-pool length.  Multi-pin group sub-records carry a zero count, so the sum is robust
+        // to either gate encoding.
         std::vector<uint8_t> gateNpins;
         size_t               npins = 0;
 
@@ -1931,14 +1897,13 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
                               SDB_RECORD( cur, aOff ).U32( 0 ) != 0xFFFFFFFF } );
         };
 
-        // Count-driven read: npins (the gate-pool sum) is the authoritative run length.
+        // npins (the gate-pool sum) is the run length.
         for( size_t i = 0; i < npins && o + PIN_STRIDE <= d.size() && isPinRec( o ); ++i, o += PIN_STRIDE )
             readPin( o );
 
-        // The structural count is byte-exact on the corpus, so the loop reads exactly npins
-        // records. If a malformed pool stops it short, fall back to the 0xFFFF-terminator walk
-        // rather than emit a truncated, mis-bound pin set (which would shift the per-part-type
-        // pin slices computed from the +0x30 cumulative index below).
+        // If a malformed pool stops the count-driven read short, fall back to the
+        // 0xFFFF-terminator walk rather than emit a truncated, mis-bound pin set, which would
+        // shift the per-part-type pin slices computed from the +0x30 cumulative index below.
         if( pins.size() != npins )
         {
             pins.clear();
@@ -2050,10 +2015,9 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
 //
 // Wire vertices live in a flat pool of 8-byte records:
 //     00 00 00  Xlo Xhi  Ylo Yhi  T      (X,Y = design = 2*u16 - 99072)
-// Each per-sheet pool is preceded by a stride-40 split-header run whose
-// cumulative-index chain tiles the pool exactly into connection polylines; the
-// explicit gap slices between cumulative jumps are bus geometry.  Runs appear
-// in sheet order (file order, not active-first; see decodeSheets).
+// Each per-sheet pool is preceded by a stride-40 split-header run whose cumulative-index chain
+// tiles the pool into connection polylines; the gap slices between cumulative jumps are bus
+// geometry.  Runs appear in sheet order (file order, not active-first).
 // ---------------------------------------------------------------------------
 static constexpr int VERTEX_X_OFF = 3;       // u16 page-biased X (after 3 zero bytes)
 static constexpr int VERTEX_Y_OFF = 5;       // u16 page-biased Y
@@ -2252,12 +2216,11 @@ void PADS_SCH_BINARY_READER::decodeWires( const std::vector<uint8_t>& d )
 // ---------------------------------------------------------------------------
 // FREE TEXT
 //
-// Free-text items are fixed 32-byte records anchored on the duplicated counter
-// at +12 == +14, carrying position, orientation, justification, height and
-// linewidth inline plus the string length at +8 and a string-pool cursor at
-// +28.  The string CONTENT lives in a shared NUL-delimited pool interleaved with
-// component-attribute strings, so it is recovered by an ordered length-matched
-// walk anchored on the pool whose matched offsets best track the +28 cursor.
+// Free-text items are fixed 32-byte records anchored on the duplicated counter at +12 == +14,
+// carrying position, orientation, justification, height and linewidth inline plus the string
+// length at +8 and a string-pool cursor at +28.  The string content lives in a shared
+// NUL-delimited pool interleaved with component-attribute strings, so it is recovered by an
+// ordered length-matched walk anchored on the pool whose matched offsets best track the +28 cursor.
 // ---------------------------------------------------------------------------
 static constexpr size_t TEXT_STRIDE = 32;
 static constexpr int    TEXT_X_OFF = 0;      // u16 page-biased X
@@ -2489,11 +2452,9 @@ void PADS_SCH_BINARY_READER::decodeTexts( const std::vector<uint8_t>& d )
 // ---------------------------------------------------------------------------
 // JUNCTIONS (PADS tie-dots)
 //
-// Tie-dots are fixed 12-byte records: X (u16) and Y (u16) in the page-biased
-// half-mil encoding, a net-index word at +4, and a constant 0xfc marker at +6
-// with a zero tail at +7..+11.  PADS stores one contiguous run per sheet; the
-// runs appear in sheet order (file order, not active-first), so every run
-// is a tie-dot array and all are collected.
+// Tie-dots are fixed 12-byte records: X (u16) and Y (u16) in the page-biased half-mil encoding, a
+// net-index word at +4, and a constant 0xfc marker at +6 with a zero tail at +7..+11.  One
+// contiguous run per sheet, in sheet order; every run is collected.
 // ---------------------------------------------------------------------------
 static constexpr size_t   JUNCTION_STRIDE = 12;
 static constexpr int      JUNCTION_X_OFF = 0;       // u16 page-biased X
@@ -2575,11 +2536,10 @@ void PADS_SCH_BINARY_READER::decodeJunctions( const std::vector<uint8_t>& d )
 // ---------------------------------------------------------------------------
 // NET LABELS (off-page refs / power ports)
 //
-// Each connection segment (stride 40, marker 0x02fd/0x03fd @+0x0c) carries the
-// net's ordinal into the 88-byte net table at +0x1a and two endpoint refs at
-// +0x1e/+0x20 whose high nibble 2 means "off-page ref O<idx>".  The off-page
-// symbols live in a stride-0x20 array (X@+0, Y@+2 page-biased; 1-based index at
-// +0x14).  Joining them per sheet places a net label at each off-page position.
+// Each connection segment (stride 40, marker 0x02fd/0x03fd @+0x0c) carries the net's ordinal into
+// the 88-byte net table at +0x1a and two endpoint refs at +0x1e/+0x20 whose high nibble 2 means
+// "off-page ref O<idx>".  The off-page symbols live in a stride-0x20 array (X@+0, Y@+2 page-biased;
+// 1-based index at +0x14).  Joining them per sheet places a net label at each off-page position.
 // ---------------------------------------------------------------------------
 static constexpr size_t NET_STRIDE = 88;
 static constexpr int    NET_NAME_OFF = 0x10;     // NUL-terminated net name
@@ -2639,6 +2599,11 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
 {
     BINARY_CURSOR cur( d );
 
+    // Net table: the pool directory gives the count (pool8.used_count) and the 88-byte stride
+    // (used_bytes / used_count; item_size is the 4-byte alloc granule, not the stride).  The base
+    // is not stored in the file, so it is recovered as the start of the unique contiguous stride-88
+    // net-record run whose length equals the directory count; the 0xFFFFFFFF row sentinel only
+    // validates.  No other run reaches that length, so the count gate is unambiguous.
     size_t netCount = m_pools.Count( POOL_DIRECTORY::NETS );
 
     if( netCount == 0 )
@@ -2682,8 +2647,6 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
     if( !haveBase )
         return;
 
-    // The validated run length matches the directory count by construction; a corpus
-    // test asserts the two agree on every file.
     m_netTableScanCount = netCount;
 
     auto netName = [&]( size_t k ) -> std::string
@@ -2691,8 +2654,8 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
         return nameAt( d, netBase + NET_STRIDE * k + NET_NAME_OFF, 0x38 );
     };
 
-    // 2. Segment pools -> (sheet, off-page index) -> net name (first segment wins;
-    // all referencing segments agree).
+    // Segment pools -> (sheet, off-page index) -> net name (first segment wins; all referencing
+    // segments agree).
     std::map<std::pair<int, int>, std::string> offNet;
     std::set<size_t>                           seenSeg;
 
@@ -2744,11 +2707,10 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
         i = p;
     }
 
-    // The symbol-group of an off-page is read from its used-decal handle (interleaved one
-    // slot back at record-0x12), indexed into the CANONICAL group table: the used-decal
-    // table whose leading entries are the full $OSR_* off-sheet-reference orientation set.
-    // Per-sheet tables that drop $OSR variants shift every handle, so the nearest table is
-    // wrong here; the canonical (most-$OSR-leading) table is the design-global group block.
+    // The symbol-group of an off-page is read from its used-decal handle (one slot back at
+    // record-0x12), indexed into the canonical group table.  Per-sheet tables that drop $OSR
+    // variants shift every handle, so the canonical (most-$OSR-leading) table is used as the
+    // design-global group block.
     const std::vector<std::string>* canonical = nullptr;
     size_t                          bestOsr = 0;
 
@@ -2799,7 +2761,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
         return NETLABEL_KIND::GLOBAL;
     };
 
-    // 3. Off-page arrays -> emit a label per decoded (sheet, index).
+    // Off-page arrays -> emit a label per decoded (sheet, index).
     int pageWidth = 0;
     int pageHeight = 0;
     pageExtent( d, pageWidth, pageHeight );
@@ -3430,9 +3392,9 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
     }
 
     // --- NET LABELS (off-page refs / power ports) ---
-    // The recovered kind selects the faithful KiCad element: a net-name port (@TERM) is a
-    // sheet-local label, a power/ground port is a global-power symbol, and an off-sheet/bus
-    // reference is a global label (current behaviour).
+    // The recovered kind selects the KiCad element: a net-name port (@TERM) is a sheet-local
+    // label, a power/ground port is a global-power symbol, and an off-sheet/bus reference is a
+    // global label.
     for( const NET_LABEL& lbl : m_netLabels )
     {
         if( !onSheet( lbl.sheetIndex ) )

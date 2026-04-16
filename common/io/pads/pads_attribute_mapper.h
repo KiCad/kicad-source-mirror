@@ -24,12 +24,8 @@
 #include <string>
 
 /**
- * Maps PADS attribute names to KiCad field names.
- *
- * PADS uses different attribute names than KiCad for standard fields.
- * This class provides mapping from PADS names to KiCad-compatible names,
- * and identifies which attributes correspond to standard KiCad fields
- * (Reference, Value, Footprint) versus custom user fields.
+ * Maps PADS attribute names to KiCad field names and identifies which attributes
+ * are standard KiCad fields (Reference, Value, Footprint) versus custom fields.
  */
 class PADS_ATTRIBUTE_MAPPER
 {
@@ -37,68 +33,30 @@ public:
     PADS_ATTRIBUTE_MAPPER();
 
     /**
-     * Get the KiCad field name for a PADS attribute.
-     *
-     * For known PADS attributes (like "Ref.Des.", "Part Type"), returns
-     * the corresponding KiCad field name. For unknown attributes, returns
-     * the original name unchanged.
-     *
-     * @param aPadsAttr The PADS attribute name.
-     * @return The corresponding KiCad field name.
+     * Get the KiCad field name for a PADS attribute, or the original name
+     * unchanged when no mapping exists.
      */
     std::string GetKiCadFieldName( const std::string& aPadsAttr ) const;
 
     /**
-     * Check if a PADS attribute maps to a standard KiCad field.
-     *
-     * Standard fields are Reference, Value, and Footprint. These are
-     * handled specially in KiCad and exist on every footprint.
-     *
-     * @param aPadsAttr The PADS attribute name.
-     * @return True if this is a standard field (Reference, Value, Footprint).
+     * Check if a PADS attribute maps to a standard KiCad field (Reference, Value,
+     * or Footprint).
      */
     bool IsStandardField( const std::string& aPadsAttr ) const;
 
-    /**
-     * Check if a PADS attribute maps to the Reference field.
-     *
-     * @param aPadsAttr The PADS attribute name.
-     * @return True if this maps to the Reference field.
-     */
     bool IsReferenceField( const std::string& aPadsAttr ) const;
 
-    /**
-     * Check if a PADS attribute maps to the Value field.
-     *
-     * @param aPadsAttr The PADS attribute name.
-     * @return True if this maps to the Value field.
-     */
     bool IsValueField( const std::string& aPadsAttr ) const;
 
-    /**
-     * Check if a PADS attribute maps to the Footprint field.
-     *
-     * @param aPadsAttr The PADS attribute name.
-     * @return True if this maps to the Footprint field.
-     */
     bool IsFootprintField( const std::string& aPadsAttr ) const;
 
     /**
      * Add or override a custom attribute mapping.
-     *
-     * @param aPadsAttr The PADS attribute name.
-     * @param aKiCadField The KiCad field name to map to.
      */
     void AddMapping( const std::string& aPadsAttr, const std::string& aKiCadField );
 
-    /**
-     * Get all custom mappings.
-     *
-     * @return Map of PADS attribute names to KiCad field names.
-     */
     const std::map<std::string, std::string>& GetMappings() const { return m_customMappings; }
 
-    // Standard KiCad field names
     static constexpr const char* FIELD_REFERENCE = "Reference";
     static constexpr const char* FIELD_VALUE = "Value";
     static constexpr const char* FIELD_FOOTPRINT = "Footprint";

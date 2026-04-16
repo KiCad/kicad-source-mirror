@@ -30,8 +30,7 @@
 
 
 /**
- * PADS layer types. These represent the functional categories of layers
- * in PADS designs, independent of specific layer numbers.
+ * Functional categories of PADS layers, independent of specific layer numbers.
  */
 enum class PADS_LAYER_TYPE
 {
@@ -53,15 +52,12 @@ enum class PADS_LAYER_TYPE
 };
 
 
-/**
- * Information about a single PADS layer.
- */
 struct PADS_LAYER_INFO
 {
-    int             padsLayerNum;   ///< PADS layer number
-    std::string     name;           ///< Layer name as it appears in PADS file
-    PADS_LAYER_TYPE type;           ///< Categorized layer type
-    bool            required;       ///< Whether this layer must be mapped
+    int             padsLayerNum;
+    std::string     name;
+    PADS_LAYER_TYPE type;
+    bool            required;
 };
 
 
@@ -83,85 +79,34 @@ class PADS_LAYER_MAPPER
 public:
     PADS_LAYER_MAPPER();
 
-    /**
-     * Set the total number of copper layers in the PADS design.
-     *
-     * @param aLayerCount Total copper layers (e.g., 2 for a 2-layer board)
-     */
     void SetCopperLayerCount( int aLayerCount );
 
-    /**
-     * Get the current copper layer count.
-     */
     int GetCopperLayerCount() const { return m_copperLayerCount; }
 
-    /**
-     * Parse a PADS layer number and return its type.
-     *
-     * @param aPadsLayer The PADS layer number
-     * @return The layer type (COPPER_TOP, COPPER_INNER, etc.)
-     */
     PADS_LAYER_TYPE GetLayerType( int aPadsLayer ) const;
 
-    /**
-     * Parse a PADS layer name and return its type.
-     *
-     * Recognizes common PADS layer names like "Silkscreen Top",
-     * "Solder Mask Top", etc.
-     *
-     * @param aLayerName The PADS layer name
-     * @return The layer type
-     */
     PADS_LAYER_TYPE ParseLayerName( const std::string& aLayerName ) const;
 
     /**
-     * Get the suggested KiCad layer for a PADS layer.
-     *
-     * @param aPadsLayer The PADS layer number
-     * @param aType Optional override for the layer type (if known)
-     * @return The suggested KiCad layer ID
+     * Suggested KiCad layer for a PADS layer. @p aType overrides the type derived from
+     * the layer number when known.
      */
     PCB_LAYER_ID GetAutoMapLayer( int aPadsLayer,
                                    PADS_LAYER_TYPE aType = PADS_LAYER_TYPE::UNKNOWN ) const;
 
-    /**
-     * Get the permitted KiCad layers for a given PADS layer type.
-     *
-     * @param aType The PADS layer type
-     * @return Set of permitted KiCad layers
-     */
     LSET GetPermittedLayers( PADS_LAYER_TYPE aType ) const;
 
-    /**
-     * Build a vector of INPUT_LAYER_DESC from parsed PADS layer information.
-     *
-     * This is used to populate the layer mapping dialog.
-     *
-     * @param aLayerInfos Vector of parsed layer information
-     * @return Vector of INPUT_LAYER_DESC for layer mapping dialog
-     */
     std::vector<INPUT_LAYER_DESC> BuildInputLayerDescriptions(
             const std::vector<PADS_LAYER_INFO>& aLayerInfos ) const;
 
-    /**
-     * Add or update a layer name to type mapping.
-     *
-     * @param aName The PADS layer name
-     * @param aType The layer type it represents
-     */
     void AddLayerNameMapping( const std::string& aName, PADS_LAYER_TYPE aType );
 
-    /**
-     * Convert a layer type to a human-readable string.
-     */
     static std::string LayerTypeToString( PADS_LAYER_TYPE aType );
 
-    // Well-known PADS layer numbers
-    static constexpr int LAYER_PAD_STACK_TOP = -2;     ///< Pad stack: Top copper
-    static constexpr int LAYER_PAD_STACK_BOTTOM = -1;  ///< Pad stack: Bottom copper
-    static constexpr int LAYER_PAD_STACK_INNER = 0;    ///< Pad stack: Inner copper
+    static constexpr int LAYER_PAD_STACK_TOP = -2;
+    static constexpr int LAYER_PAD_STACK_BOTTOM = -1;
+    static constexpr int LAYER_PAD_STACK_INNER = 0;
 
-    // Common PADS layer number ranges
     static constexpr int LAYER_DRILL_DRAWING = 18;
     static constexpr int LAYER_DIMENSIONS = 19;
     static constexpr int LAYER_PLACEMENT_OUTLINE = 20;

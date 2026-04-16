@@ -38,11 +38,8 @@
 namespace PADS_IO
 {
 
-// Section 4 pad-shape codes. Validated against the ASC PARTDECAL pad shapes and by
-// the finger-geometry invariant: codes 0 (OF) and 1 (RF) carry a non-zero finLength
-// (size B) in 100% of records on every v0x2021..v0x2027 board, while 2 (R) and 3 (S)
-// never do. Code 4 occurs on no board; the earlier {1:RF,2:R,3:S,4:OF} map left code 0
-// unmapped, so every oblong (OF) pad was silently imported as round.
+// Section 4 pad-shape codes. The finger shapes 0 (OF) and 1 (RF) carry a non-zero finLength
+// (size B); the round 2 (R) and square 3 (S) never do.
 static const std::map<uint8_t, std::string> PAD_SHAPE_NAMES = {
     { 0x00, "OF" },
     { 0x01, "RF" },
@@ -51,11 +48,9 @@ static const std::map<uint8_t, std::string> PAD_SHAPE_NAMES = {
 };
 
 
-// Per-version field layout for the part-placement records read by both
-// parsePartPlacements (section 22) and parseSection19Parts (sections 19/21). The
-// old format (v0x2021/0x2022) and the newer dialects place the same fields at
-// different offsets; selecting one descriptor keeps the offset block in a single
-// place instead of re-declaring it at each scanner.
+// Per-version field layout for the part-placement records. The old format (v0x2021/0x2022)
+// and the newer dialects place the same fields at different offsets; one descriptor keeps the
+// offset block in a single place instead of re-declaring it at each scanner.
 struct PLACEMENT_LAYOUT
 {
     int                nameOff = 0;           // refdes string
@@ -70,12 +65,10 @@ struct PLACEMENT_LAYOUT
 
 static const PLACEMENT_LAYOUT& placementLayout( uint16_t aVersion )
 {
-    // v0x2021 and v0x2022 share the old offset block; only v0x2021 enables the
-    // verified direct decal-index pad chain. The placement record is structurally
-    // identical to the new dialect (refdes, then X at +16, Y at +20, angle at +24,
-    // side at +28); the old framing simply anchors refdes at +76 instead of +44, so
-    // X/Y/angle/side land at +92/+96/+100/+104. Validated 5/5 against the MAIS_FC
-    // (v0x2021) ASC oracle and cross-checked by the inside-bbox invariant on 2FOC-001.
+    // v0x2021 and v0x2022 share the old offset block; only v0x2021 enables the direct
+    // decal-index pad chain. The record is structurally identical to the new dialect (refdes,
+    // then X/Y/angle/side following), but the old framing anchors refdes at +76 instead of
+    // +44, so X/Y/angle/side land at +92/+96/+100/+104.
     static constexpr PLACEMENT_LAYOUT v2021{ .nameOff = 76, .xOff = 92, .yOff = 96, .angleOff = 100,
                                              .feffOff = 28, .scanStride = 96, .v2021PadChain = true };
     static constexpr PLACEMENT_LAYOUT vOld{ .nameOff = 76, .xOff = 92, .yOff = 96, .angleOff = 100,
@@ -93,9 +86,8 @@ static const PLACEMENT_LAYOUT& placementLayout( uint16_t aVersion )
 }
 
 
-// Per-version field layout for the section-4 padstack records read by
-// parsePadStacks. As with the placements, the old and new dialects carry the
-// same geometry fields at different offsets.
+// Per-version field layout for the section-4 padstack records. As with the placements, the old
+// and new dialects carry the same geometry fields at different offsets.
 struct PADSTACK_LAYOUT
 {
     int padWidthOff = 0;
@@ -137,7 +129,6 @@ bool BINARY_PARSER::IsBinaryPadsFile( const wxString& aFileName )
     if( file.gcount() < 4 )
         return false;
 
-    // Magic bytes: 0x00 0xFF
     if( header[0] != 0x00 || header[1] != 0xFF )
         return false;
 
@@ -154,8 +145,6 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     if( !PADS_IO::ReadFileToBuffer( aFileName, bytes ) )
         THROW_IO_ERROR( "Cannot open or read file" );
 
-    // The SDB owns the bytes and decodes the file container: header, directory and the
-    // coordinate origin. The section readers below read its directory through getSection.
     m_sdb.Load( std::move( bytes ) );
 
     m_version     = m_sdb.Version();
@@ -191,7 +180,6 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     parseLayerStackup();
     linkPartsToDecals();
 
-    // Filter out parts with empty ref des
     m_parts.erase( std::remove_if( m_parts.begin(), m_parts.end(),
                                    []( const PART& p ) { return p.name.empty(); } ),
                    m_parts.end() );
@@ -233,13 +221,11 @@ void BINARY_PARSER::parseBoardSetup()
         return;
 
     // A directory that declares a section larger than the file must not abort the import;
-    // skip gracefully and fall back to the default layer count, as every other reader does.
+    // skip gracefully and fall back to the default layer count.
     if( setup->End() > m_data.size() )
         return;
 
-    // The board-setup section holds u32 parameters at fixed word offsets; word 4 is the
-    // maximum layer count. The coordinate origin (also in this section) is already read
-    // by the SDB and applied in Parse().
+    // Word 4 of the fixed u32 parameter block is the maximum layer count.
     uint32_t maxLayer = m_sdb.RecordAt( setup->dataOffset ).U32( 16 );
 
     if( maxLayer >= 1 && maxLayer <= 64 )
@@ -247,9 +233,8 @@ void BINARY_PARSER::parseBoardSetup()
     else
         m_parameters.layer_count = 2;
 
-    // Binary coordinates are in BASIC units (1 BASIC = 1/38100 mil).
-    // Set MILS for the display unit; actual coordinate handling uses BASIC mode
-    // in the wrapper via SetBasicUnitsMode(true).
+    // Binary coordinates are BASIC units (1/38100 mil). MILS is only the display unit;
+    // coordinate handling uses BASIC mode in the wrapper via SetBasicUnitsMode(true).
     m_parameters.units = UNIT_TYPE::MILS;
 }
 
@@ -268,17 +253,15 @@ void BINARY_PARSER::parsePartPlacements()
     bool                    isOld = isOldFormat();
     uint32_t                recSize = entry->perItem;
 
-    // Highest byte touched by a record: refdes..+16, X/Y/angle, and the side flag at
-    // nameOff+28. The old framing reads to nameOff+29 (104..105), past its 96 B stride.
+    // The old framing reads the side flag at nameOff+28, past its 96 B stride.
     size_t fieldSpan = std::max<size_t>( recSize, static_cast<size_t>( layout.nameOff ) + 29 );
 
     for( uint32_t i = 0; i < entry->count; ++i )
     {
         size_t off = static_cast<size_t>( i ) * recSize;
 
-        // fieldSpan covers the full record (it is max(recSize, ...)), so this single guard
-        // also rejects a directory whose perItem is smaller than the fields we read, keeping
-        // a count/size-skewed file from pulling bytes beyond the record into a placement.
+        // fieldSpan covers the full record, so this guard also rejects a directory whose
+        // perItem is smaller than the fields we read.
         if( off + fieldSpan > entry->totalBytes )
             break;
 
@@ -295,14 +278,13 @@ void BINARY_PARSER::parsePartPlacements()
         part.location.y = toBasicCoordY( layout.yOff ? rec.I32( *layout.yOff ) : 0 );
         part.rotation = toBasicAngle( rec.I32( layout.angleOff ) );
 
-        // Side flag is the i32 at nameOff+28 in both dialects (new: +72, old: +104);
-        // bit 0 set marks a mirrored (bottom-side) placement.
+        // Side flag is the i32 at nameOff+28 in both dialects; bit 0 marks a bottom-side
+        // placement.
         part.bottom_layer = rec.U8( layout.nameOff + 28 ) != 0;
         part.units = "M";
 
-        // The placement's parttype index lives in the NEXT physical sec22 record's
-        // @+4 field (a verified +1 block-interleave lag). Record it so linkPartsToDecals
-        // can resolve the parttype-definition table and, from there, the decal name.
+        // The parttype index lives in the NEXT physical record's @+4 field (a +1 block-
+        // interleave lag); linkPartsToDecals resolves it to the decal name.
         if( !isOld && i + 1 < entry->count )
         {
             size_t nextOff = ( static_cast<size_t>( i ) + 1 ) * recSize;
@@ -311,8 +293,7 @@ void BINARY_PARSER::parsePartPlacements()
                 m_partTypeIndex[m_parts.size()] = m_sdb.Record( *entry, i + 1, recSize ).U32( 4 );
         }
 
-        // v0x2021 has no parttype layer; the decal index is selected directly from the
-        // NEXT 96 B placement record's @+56 field (the same +1 block-interleave lag).
+        // v0x2021 has no parttype layer; the decal index is the NEXT record's @+56 field.
         if( layout.v2021PadChain && i + 1 < entry->count )
         {
             size_t nextOff = ( static_cast<size_t>( i ) + 1 ) * recSize;
@@ -321,10 +302,8 @@ void BINARY_PARSER::parsePartPlacements()
                 m_partDecalIndex[m_parts.size()] = m_sdb.Record( *entry, i + 1, recSize ).U32( 56 );
         }
 
-        // Cluster (.asc *CLUSTER*) membership is the i32 at nameOff+64 (=+108) of this
-        // placement record, present only in the new 112-byte layout. It is the 1-based
-        // CLSTID into the cluster table; -1 means the part is in no cluster. Record it
-        // under the new part's index before the push, mirroring m_partTypeIndex above.
+        // Cluster membership is the 1-based CLSTID at nameOff+64 (=+108), present only in the
+        // new 112-byte layout; -1 means the part is in no cluster.
         if( !isOld && layout.nameOff == 44
             && off + static_cast<size_t>( layout.nameOff ) + 68 <= entry->totalBytes )
         {
@@ -341,6 +320,17 @@ void BINARY_PARSER::parsePartPlacements()
 
 void BINARY_PARSER::parseClusters()
 {
+    // A part cluster is a fixed 60-byte record, name@+0 (char[16], NUL-padded), in cluster
+    // order, so a record's 1-based ordinal IS the CLSTID the +108 field references. Membership
+    // is captured during parsePartPlacements. The old 96-byte placement layout has no room for
+    // the +108 CLSTID, so old-format boards carry no clusters.
+    //
+    // Count and stride are directory reads from the sec68 cluster-controller entry. The base is
+    // NOT a directory offset: the late heap sections' physical position is a running read cursor
+    // the 16-byte directory cannot reproduce. sec68 abuts the sec69 layer table, so the table is
+    // located by a structural anchor: layer record 1 is always the "Top" copper layer, framed
+    // [u32 0][u32 1][char[16] "Top"]. That 12-byte pattern is unique per file, and
+    // cluster_base = sec69_rec0 - sec68.count*60.
     if( isOldFormat() )
         return;
 
@@ -358,15 +348,13 @@ void BINARY_PARSER::parseClusters()
     if( match == m_data.end() )
         return;
 
-    // The anchor must be unambiguous. It is corpus-proven 0/1 per file, but never trust a
-    // second occurrence: a duplicate means this heuristic-free locator is unsafe, so bail.
+    // A second occurrence makes the locator ambiguous, so bail rather than guess.
     if( std::search( match + 1, m_data.end(), TOP_FRAME, TOP_FRAME + 12 ) != m_data.end() )
         return;
 
     size_t matchOff = static_cast<size_t>( match - m_data.begin() );
 
-    // Compute the base with division rather than multiplication so a malformed count cannot
-    // overflow/underflow: sec69_rec0 = match - 152, then require count*60 <= sec69_rec0.
+    // Use division rather than multiplication so a malformed count cannot overflow.
     if( matchOff < LAYER_STRIDE )
         return;
 
@@ -382,7 +370,7 @@ void BINARY_PARSER::parseClusters()
         SDB_RECORD   rec = m_sdb.RecordAt( base + i * REC_SIZE );
         PART_CLUSTER cluster;
         cluster.name = rec.Str( 0, 16 );
-        cluster.id = static_cast<int>( i ) + 1;   // ordinal == CLSTID
+        cluster.id = static_cast<int>( i ) + 1;
         m_clusters.push_back( std::move( cluster ) );
     }
 }
@@ -390,35 +378,31 @@ void BINARY_PARSER::parseClusters()
 
 void BINARY_PARSER::parseSection19Parts()
 {
-    // Recover the parts OMITTED from section 22 (connectors, mounting/tooling holes, test
-    // points, fiducials, a few passives). They are a physically contiguous run of full
-    // placement records in the tail of the sec19/sec21 region - but the run is NOT always
-    // adjacent to sec22.dataOffset (0-12 gap/sentinel records can sit between it and sec22),
-    // and the per-record marker bytes (i32@+0, 0xFEFF@feffOff) are non-uniform across
-    // test-points/fiducials/edge-fingers, so they cannot gate the walk.
+    // Recover the parts omitted from section 22 (connectors, mounting/tooling holes, test
+    // points, fiducials, a few passives). They are a contiguous run of full placement records
+    // in the tail of the sec19/sec21 region, but the run is not always adjacent to
+    // sec22.dataOffset (0-12 gap/sentinel records can sit between), and the per-record marker
+    // bytes are non-uniform across test-points/fiducials/edge-fingers, so they cannot gate the
+    // walk.
     //
-    // Locate the run by an asymmetric gap-tolerant back-walk from sec22.dataOffset that SCORES
+    // Locate the run by an asymmetric gap-tolerant back-walk from sec22.dataOffset that scores
     // each stride-aligned window. The decisive discriminator is the coordinate pair: a real
-    // placement has BOTH |X| and |Y| in design range; every gap/sentinel/ASCII-as-coord
-    // phantom fails it. The 0xFEFF and i32@+0 bytes are weak hints (+1), never gates. The walk
-    // tolerates leading gap records to FIND the block but stops at the first non-member once it
-    // starts (the block is internally contiguous). Validated on 178 new-format + v2021 boards,
-    // 0 drops / 0 phantoms, against 40 paired .asc; see det-specs/sec19_robust.md. v2017/2019/
-    // 2022 record field offsets are unresolved, so the scorer matches nothing and safely emits
-    // no omitted parts for them.
+    // placement has both |X| and |Y| in design range; every gap/sentinel/phantom fails it. The
+    // 0xFEFF and i32@+0 bytes are weak hints, never gates. The walk tolerates leading gap
+    // records to find the block but stops at the first non-member once it starts. v2017/2019/
+    // 2022 record field offsets are unresolved, so the scorer matches nothing for them.
     const PLACEMENT_LAYOUT& layout = placementLayout( m_version );
     const bool              isOld = isOldFormat();
 
-    // OLD FORMAT (v2017-2022): keep the proven bounded 0xFEFF section scan (handled below). The
-    // scored new-format locator recovers old-format part placements too, but not yet the v2021
-    // decal-index +1 lag (e.g. CON6 on J4), so the validated scan stays for the old dialects.
+    // The scored new-format locator recovers old-format placements too, but not the v2021
+    // decal-index +1 lag, so the old dialects keep the bounded 0xFEFF scan below.
     if( isOld )
     {
         parseSection19PartsOld();
         return;
     }
 
-    const size_t       stride = 112;                 // new-format placement record stride
+    const size_t       stride = 112;
     const int          sideOff = layout.nameOff + 28;
 
     const SDB_SECTION* sec22 = getSection( SECTION::Placements );
@@ -431,9 +415,8 @@ void BINARY_PARSER::parseSection19Parts()
     static constexpr int32_t ORI_UNIT      = 40500000;   // 0.5 degree (PADS stores deg * 9e6)
     static constexpr int     SCORE_PLACEMENT = 8;
 
-    // Score a stride-aligned window: a real placement scores >= 8 (refdes 4 + coords 5 + side 1
-    // + angle 1); gap/sentinel/phantom records score <= 2. The 0xFEFF and i32@+0 hints add at
-    // most +1 each and never gate.
+    // A real placement scores >= 8 (refdes 4 + coords 5 + side 1 + angle 1); gap/sentinel/
+    // phantom records score <= 2. The 0xFEFF and i32@+0 hints add at most +1 each.
     auto score = [&]( size_t aBase ) -> int
     {
         if( !m_cursor.InBounds( aBase, stride ) )
@@ -471,8 +454,7 @@ void BINARY_PARSER::parseSection19Parts()
         return s;
     };
 
-    // Asymmetric gap-tolerant back-walk: skip up to 12 trailing gap records to FIND the block,
-    // then stop at the first non-member once it starts.
+    // Skip up to 12 trailing gap records to find the block, then stop at the first non-member.
     std::vector<size_t> bases;
     bool                started = false;
     int                 preGap = 0;
@@ -500,7 +482,7 @@ void BINARY_PARSER::parseSection19Parts()
         }
     }
 
-    std::reverse( bases.begin(), bases.end() );   // restore file order
+    std::reverse( bases.begin(), bases.end() );
 
     std::unordered_set<std::string> existingRefs;
 
@@ -523,10 +505,9 @@ void BINARY_PARSER::parseSection19Parts()
         part.bottom_layer = rec.U8( sideOff ) != 0;
         part.units = "M";
 
-        // The +1 block-interleave lag: parttype index (new) / decal index (v2021) lives in the
-        // NEXT physical record. Trust it only when that record is itself a placement (another
-        // block element, or sec22's first record) so a gap record above the block cannot supply
-        // a bogus index.
+        // The parttype index (new) / decal index (v2021) lives in the NEXT physical record (the
+        // +1 lag). Trust it only when that record is itself a placement so a gap record above
+        // the block cannot supply a bogus index.
         size_t next = base + stride;
         bool   nextIsPlacement = ( next == sec22->dataOffset ) || ( score( next ) >= SCORE_PLACEMENT );
 
@@ -543,11 +524,9 @@ void BINARY_PARSER::parseSection19Parts()
 
 void BINARY_PARSER::parseSection19PartsOld()
 {
-    // Old-format (v0x2017-2022) omitted placements: a bounded 0xFEFF marker walk over the
-    // sec19/sec21 directory ranges (NOT a whole-file scan). Kept for the old dialects because
-    // the scored new-format locator in parseSection19Parts does not yet resolve the v2021
-    // decal-index +1 lag. v2021 carries its placements as a contiguous 96 B run whose first
-    // (anchor) block has no 0xFEFF marker, handled as a one-shot leading-block recovery.
+    // Old-format omitted placements via a bounded 0xFEFF marker walk over the sec19/sec21
+    // ranges. v2021 carries its placements as a contiguous 96 B run whose first (anchor) block
+    // has no 0xFEFF marker, handled as a one-shot leading-block recovery.
     const PLACEMENT_LAYOUT& layout = placementLayout( m_version );
 
     static constexpr int OLD_REC_SIZE = 96;
@@ -594,7 +573,7 @@ void BINARY_PARSER::parseSection19PartsOld()
                 continue;
 
             // Emit the leading (anchor) block once, only after the first genuine placement is
-            // confirmed. Its decal index is in this first marked block's @+56 (the +1 lag).
+            // confirmed. Its decal index is in this first marked block's @+56.
             if( !oldLeadingHandled )
             {
                 oldLeadingHandled = true;
@@ -642,8 +621,8 @@ void BINARY_PARSER::parseSection19PartsOld()
             part.bottom_layer = partRec.U8( layout.nameOff + 28 ) != 0;
             part.units = "M";
 
-            // The decal index follows the +1 block lag, in the NEXT 96 B block's @+56. Gate on
-            // that block's own 0xFEFF marker so trailing section data cannot supply a bogus index.
+            // The decal index is in the NEXT 96 B block's @+56. Gate on that block's own 0xFEFF
+            // marker so trailing section data cannot supply a bogus index.
             if( layout.v2021PadChain )
             {
                 size_t nextMarker = markerBase + OLD_REC_SIZE;
@@ -676,8 +655,8 @@ void BINARY_PARSER::parsePadStacks()
     const PADSTACK_LAYOUT& layout = padstackLayout( isOldFormat() );
     uint32_t               recSize = entry->perItem;
 
-    // Read one 0xFE-marked padstack record's default (layer 0) geometry. For finger pads
-    // (RF, OF, RC) finLength is the second dimension; round (R) and square (S) use sizeA.
+    // Read one padstack record's default (layer 0) geometry. For finger pads (RF, OF, RC)
+    // finLength is the second dimension; round (R) and square (S) reuse sizeA.
     auto readLayer = [&]( uint32_t aBase ) -> PAD_STACK_LAYER
     {
         SDB_RECORD  rec = m_sdb.RecordAt( aBase );
@@ -709,8 +688,7 @@ void BINARY_PARSER::parsePadStacks()
         return psl;
     };
 
-    // We store pad stacks indexed by their position in section 4.
-    // Part decals reference these by index.
+    // Pad stacks are indexed by their position in section 4; part decals reference them by index.
     for( uint32_t i = 0; i < entry->count; ++i )
     {
         if( ( i + 1 ) * recSize > entry->totalBytes )
@@ -718,18 +696,16 @@ void BINARY_PARSER::parsePadStacks()
 
         uint32_t base = entry->dataOffset + i * recSize;
 
-        // Only process valid pad definitions (marker == 0xFE)
         if( m_sdb.RecordAt( base ).U8( layout.markerOff ) != 0xFE )
             continue;
 
         m_padStackCache[static_cast<int>( i )].push_back( readLayer( base ) );
     }
 
-    // The section directory points partway into the padstack table: a run of de-duplicated
-    // library padstacks precedes section-4 dataOffset and the directory never indexes it.
-    // Recover the true pool start by walking back over the contiguous 0xFE / shape<=3
-    // records, then read the full pool 0-based from there. The per-pin (pin, ref) pairs in
-    // the section-15 tail index this extended pool (see parsePerPinPadstacks).
+    // The directory points partway into the padstack table: a run of de-duplicated library
+    // padstacks precedes section-4 dataOffset and the directory never indexes it. Recover the
+    // true pool start by walking back over the contiguous 0xFE / shape<=3 records, then read the
+    // full pool 0-based; the section-15 tail (pin, ref) pairs index this extended pool.
     uint32_t head = 0;
 
     while( entry->dataOffset >= ( head + 1 ) * recSize )
@@ -760,8 +736,7 @@ void BINARY_PARSER::parsePadStacks()
         m_padStackPool[i].push_back( readLayer( base ) );
     }
 
-    // Extract default via dimensions from the pad stack cache.
-    // Via pad stacks have drill > 0. Exclude JMPVIA entries (drill > 1400000).
+    // Via pad stacks have drill > 0; exclude JMPVIA entries (drill > 1400000).
     std::map<std::pair<double, double>, int> viaDimCounts;
 
     for( const auto& [idx, layers] : m_padStackCache )
@@ -789,16 +764,13 @@ void BINARY_PARSER::parsePadStacks()
 
 void BINARY_PARSER::parseDecalNameTable()
 {
-    // The complete decal-name table sits in a fixed-size header immediately before
-    // section 14, at sec14.dataOffset - 1188 (constant across v0x2025/26/27). Each
-    // record is 112 bytes with the decal NAME at +0, a 0xFFFE sentinel at +64 and the
-    // terminal count at +72. Unlike section 10 this table includes vias, connectors and
-    // mounting holes, and is indexed directly (base 0) by a parttype's decal_index. The
-    // first record is always JMPVIA_AAAAA, which is used as an anchor sanity check.
-    //
-    // The +72 field is the structural per-decal terminal count for the complete library,
-    // the same in-record field the v0x2021 dialect carries. We harvest it into
-    // m_decalTerminalCount so passives without a section 14 descriptor get exact pad counts.
+    // The complete decal-name table sits in a fixed-size header immediately before section 14,
+    // at sec14.dataOffset - 1188. Each record is 112 bytes with the decal NAME at +0, a 0xFFFE
+    // sentinel at +64 and the terminal count at +72. Unlike section 10 this table includes vias,
+    // connectors and mounting holes, and is indexed directly (base 0) by a parttype's
+    // decal_index. The first record is always JMPVIA_AAAAA, used as an anchor sanity check. The
+    // +72 count is harvested into m_decalTerminalCount so passives without a section 14
+    // descriptor get exact pad counts.
     if( isOldFormat() )
     {
         parseDecalNameTableOld();
@@ -864,14 +836,11 @@ void BINARY_PARSER::parseDecalNameTable()
 
 void BINARY_PARSER::parseDecalNameTableOld()
 {
-    // The v0x2021 dialect stores no 224 B parttype-definition layer and no 1188-byte
-    // sec14 header. Its complete decal-name table is a run of 100-byte records anchored
-    // at the JMPVIA_AAAAA signature in the section 12 tail, each record carrying:
-    //   NAME  @ +0   (null-terminated)
-    //   0xFFFE sentinel @ +64   (terminates the table on the first non-matching record)
-    //   terminal count @ +72   (a direct in-record field, verified exact vs the .asc)
-    // The table is located by signature rather than a fixed offset because the v0x2021
-    // section framing differs from the newer dialects.
+    // v0x2021 stores no parttype-definition layer and no 1188-byte sec14 header. Its complete
+    // decal-name table is a run of 100-byte records anchored at the JMPVIA_AAAAA signature in
+    // the section 12 tail, each carrying NAME @ +0 (null-terminated), a 0xFFFE sentinel @ +64
+    // that terminates the table, and a terminal count @ +72. Located by signature rather than a
+    // fixed offset because the v0x2021 section framing differs from the newer dialects.
     if( !isV2021PadChain() )
         return;
 
@@ -881,9 +850,8 @@ void BINARY_PARSER::parseDecalNameTableOld()
     static const std::array<uint8_t, 12> SIGNATURE = { 'J', 'M', 'P', 'V', 'I', 'A',
                                                        '_', 'A', 'A', 'A', 'A', 'A' };
 
-    // Try every signature occurrence: the table is the first one whose 100-byte run
-    // validates (record 0 == JMPVIA_AAAAA with a 0xFFFE sentinel). This guards against
-    // an earlier stray occurrence of the string elsewhere in the file.
+    // The table is the first signature occurrence whose 100-byte run validates (record 0 ==
+    // JMPVIA_AAAAA with a 0xFFFE sentinel), guarding against a stray earlier occurrence.
     for( auto it = std::search( m_data.begin(), m_data.end(), SIGNATURE.begin(), SIGNATURE.end() );
          it != m_data.end();
          it = std::search( it + 1, m_data.end(), SIGNATURE.begin(), SIGNATURE.end() ) )
@@ -929,10 +897,9 @@ void BINARY_PARSER::parseDecalNameTableOld()
 
 void BINARY_PARSER::parsePartTypeTable()
 {
-    // The parttype-definition table sits in a fixed-size header immediately before
-    // section 17, at sec17.dataOffset - 1232 (constant across v0x2025/26/27). Each
-    // record is 224 bytes; the decal_index (an index into m_decalNameTable) is at
-    // payload +96. A placement's parttype index (sec22[k+1].@+4) selects a record here.
+    // The parttype-definition table sits in a fixed-size header immediately before section 17,
+    // at sec17.dataOffset - 1232. Each record is 224 bytes; the decal_index (into
+    // m_decalNameTable) is at payload +96. A placement's parttype index selects a record here.
     if( isOldFormat() )
         return;
 
@@ -984,7 +951,7 @@ void BINARY_PARSER::parsePartDecals()
 
         SDB_RECORD rec = m_sdb.Record( *entry, i, recSize );
 
-        // The decal NAME and (new format only) a unit flag: 0x4D 'M' = metric, else inch.
+        // New format carries a unit flag at +76: 0x4D 'M' = metric, else inch.
         std::string name = isNew ? rec.Str( 44, 32 ) : rec.Str( 28, 32 );
 
         if( name.empty() )
@@ -997,9 +964,8 @@ void BINARY_PARSER::parsePartDecals()
         m_decals[name] = decal;
     }
 
-    // Register every name from the complete decal-name table (sec14 header). It
-    // covers connectors, mounting holes and vias that section 10 omits, so a placed
-    // part whose decal lives only there still resolves to a known decal.
+    // Register every name from the complete decal-name table, which covers connectors, mounting
+    // holes and vias that section 10 omits, so a part whose decal lives only there resolves.
     for( const std::string& name : m_decalNameTable )
     {
         if( name.empty() || m_decals.count( name ) )
@@ -1017,39 +983,23 @@ void BINARY_PARSER::parsePartDecals()
 
 void BINARY_PARSER::parseTerminals()
 {
-    // Multi-terminal decals (ICs, connectors, multi-pin parts) carry a descriptor in
-    // section 14. Each descriptor is a 112-byte record with a 0xFFFE sentinel at +108
-    // and the decal name at +44. Two fields drive terminal extraction:
-    //   +0  (i32)  start index of this decal's terminals in the section 15 pool
-    //   next record's @+4 (i32)  terminal count for this decal  (a +1 record lag)
-    //
-    // Section 15 is a flat pool of 36-byte terminal records, one per terminal across
-    // all decals, with the terminal X/Y at +0/+4. A descriptor's start index selects
-    // its run within that pool.
-    //
-    // Decals without a section 14 descriptor (passives, simple two-pad parts) get their
-    // terminal count from m_decalTerminalCount (the sec14 lagged-record stream). Their
-    // exact per-terminal positions are not separately indexed, so we synthesize a
-    // placeholder layout of the correct count rather than fabricate a wrong index into
-    // the shared pool.
     if( isOldFormat() )
     {
         parseTerminalsOld();
         return;
     }
 
-    // Terminal positions for EVERY decal come from an explicit per-decal cursor (the +68
-    // field of the decal-name header table, captured in m_decalTerminalStart) indexing a
-    // unified terminal stream S = POOL33 ++ SEC15:
-    //   POOL33 = the fixed 33-record (36 B each) de-dup pool in the sec14 trailer, holding
-    //            the terminals of the high-volume passives that are de-duplicated out of
-    //            section 15. Always exactly 33 records at (sec14.count-11)*112 + 44.
+    // Terminal positions for every decal come from an explicit per-decal cursor (the +68 field
+    // of the decal-name header table, in m_decalTerminalStart) indexing a unified terminal
+    // stream POOL33 ++ SEC15:
+    //   POOL33 = the fixed 33-record (36 B each) de-dup pool in the sec14 trailer, holding the
+    //            terminals of high-volume passives de-duplicated out of section 15. Always
+    //            exactly 33 records at (sec14.count-11)*112 + 44.
     //   SEC15  = the section-15 geometry pool (36 B records, x@+0/y@+4), zero-tail terminated.
-    // A decal's terminals are the window S[start .. start+count): start < 33 selects the
-    // de-dup pool, start >= 33 selects SEC15[start-33]. Coordinates are decal-LOCAL. The
-    // start cursor is stored (not derivable from counts) because the pool de-duplicates
-    // geometrically identical decals onto shared windows. This supersedes the section-14
-    // descriptor walk (which mis-keyed the passives) and the old (0,0) placeholder.
+    // A decal's terminals are stream[start .. start+count): start < 33 selects the de-dup pool,
+    // start >= 33 selects SEC15[start-33]. Coordinates are decal-local. The start cursor is
+    // stored rather than derived from counts because the pool de-duplicates geometrically
+    // identical decals onto shared windows.
     static constexpr int TERM_SIZE = 36;
     static constexpr int POOL_SIZE = 33;
 
@@ -1125,8 +1075,8 @@ void BINARY_PARSER::parseTerminals()
         }
     }
 
-    // Any decal still without terminals (a count-only entry whose +68 cursor is absent)
-    // falls back to the count-correct placeholder layout.
+    // Any decal still without terminals (a count-only entry whose +68 cursor is absent) falls
+    // back to the count-correct placeholder layout.
     synthesizePlaceholderTerminals();
     assignDefaultPadStacks();
     parsePerPinPadstacks();
@@ -1135,11 +1085,9 @@ void BINARY_PARSER::parseTerminals()
 
 void BINARY_PARSER::parseTerminalsOld()
 {
-    // v0x2021 carries the per-decal terminal count directly in the JMPVIA-anchored
-    // decal-name table (record +72), harvested into m_decalTerminalCount. Per-terminal
-    // positions are not separately indexed in this dialect, so synthesize a placeholder
-    // layout of the correct count rather than fabricate wrong positions. Decals with no
-    // recorded count get no terminals, which yields a footprint with no fabricated pads.
+    // v0x2021 carries the per-decal terminal count in the decal-name table (record +72), but no
+    // per-terminal positions, so synthesize a placeholder layout of the correct count. Decals
+    // with no recorded count get no terminals.
     synthesizePlaceholderTerminals();
     assignDefaultPadStacks();
 }
@@ -1176,8 +1124,7 @@ void BINARY_PARSER::synthesizePlaceholderTerminals()
 
 void BINARY_PARSER::assignDefaultPadStacks()
 {
-    // The binary format stores all pad stacks in section 4; the decal references them by
-    // convention with pad stack 0 the default for all terminals.
+    // By convention pad stack 0 is the default for all of a decal's terminals.
     for( auto& [name, decal] : m_decals )
     {
         if( decal.terminals.empty() )
@@ -1191,15 +1138,10 @@ void BINARY_PARSER::assignDefaultPadStacks()
 
 void BINARY_PARSER::parsePerPinPadstacks()
 {
-    // The per-pin padstack assignment is serialized in stable design data, not the volatile
-    // object-graph heap snapshot. A flat pool of (pin, ref) pairs follows the terminal
-    // records in section 15; the section-14 descriptor table slices it per decal. Each ref
-    // is a direct index into the extended pad-stack pool. A (0, ref) pair sets the decal
-    // default; a (pin>0, ref) pair overrides that one terminal. This recovers per-pin pad
-    // geometry that the convention-based default (pad stack 0 everywhere) cannot express.
-    //
-    // Decals without a section-14 descriptor (the de-duplicated high-volume passives) keep
-    // the convention default rather than a fabricated geometry.
+    // A flat pool of (pin, ref) pairs follows the terminal records in section 15; the section-14
+    // descriptor table slices it per decal. Each ref indexes the extended pad-stack pool. A
+    // (0, ref) pair sets the decal default; a (pin>0, ref) pair overrides that one terminal.
+    // Decals without a section-14 descriptor keep the convention default.
     if( isOldFormat() || m_padStackPool.empty() )
         return;
 
@@ -1209,8 +1151,8 @@ void BINARY_PARSER::parsePerPinPadstacks()
     if( !sec14 || !sec15 || sec15->perItem != 36 )
         return;
 
-    // The (pin, ref) pair pool begins at the first section-15 record whose +24/+28/+32 tail
-    // is non-zero, the same boundary parseTerminals uses to end the terminal-geometry block.
+    // The (pin, ref) pair pool begins at the first section-15 record whose +24/+28/+32 tail is
+    // non-zero, the same boundary parseTerminals uses to end the terminal-geometry block.
     static constexpr size_t TERM_SIZE = 36;
     size_t end = static_cast<size_t>( sec15->dataOffset ) + sec15->totalBytes;
     size_t pairBase = end;
@@ -1251,9 +1193,9 @@ void BINARY_PARSER::parsePerPinPadstacks()
     if( pairs.empty() )
         return;
 
-    // The section-14 descriptor table is the section data itself (distinct from the -1188
-    // header used for terminal positions): 112-byte records with a 0xFFFE sentinel at +108,
-    // the decal NAME at +44, the pair count at +20 and the pair-pool start cursor at +88.
+    // The section-14 descriptor table is the section data itself, distinct from the -1188 header
+    // used for terminal positions: 112-byte records with a 0xFFFE sentinel at +108, the decal
+    // NAME at +44, the pair count at +20 and the pair-pool start cursor at +88.
     static constexpr size_t DESC_SIZE = 112;
     static constexpr size_t DESC_COUNT_OFF = 20;
     static constexpr size_t DESC_NAME_OFF = 44;
@@ -1286,12 +1228,10 @@ void BINARY_PARSER::parsePerPinPadstacks()
                             desc.I32( DESC_COUNT_OFF ) );
     }
 
-    // The de-duplicated library decals (high-volume passives, library connectors) carry no
-    // section-14 descriptor. Their pair-pool start cursor lives in a trailing section-13
-    // table of 112-byte records, each tagged with a 0x4D00 marker at +40 and the decal NAME
-    // at +0; the start cursor is the i32 at +44. The slice length is the decal's pad-stack
-    // count from the -1188 header (m_decalStackCount). They resolve through the same pair
-    // pool and pad-stack pool as the descriptor decals.
+    // The de-duplicated library decals carry no section-14 descriptor. Their pair-pool start
+    // cursor lives in a trailing section-13 table of 112-byte records, each tagged with a 0x4D00
+    // marker at +40 and the decal NAME at +0; the start cursor is the i32 at +44. The slice
+    // length is the decal's pad-stack count from m_decalStackCount.
     static constexpr int32_t LIB_MARKER = 0x4D00;
     static constexpr size_t  LIB_STRIDE = 112;
     static constexpr size_t  LIB_MARKER_OFF = 40;
@@ -1351,17 +1291,10 @@ void BINARY_PARSER::applyPadstackPairs( PART_DECAL&                             
 
 void BINARY_PARSER::parseBoardOutlineDrwOrigin()
 {
-    // Section 9 has a dual structure: text string pool followed by 112-byte
-    // LINE item records. Each record has the format:
-    //   @0:  u32 flags (0xFFFE or 0xFFFF)
-    //   @4:  u32 sentinel (0xFFFFFFFF)
-    //   @44: DRW/PAD name string (12 bytes, null-terminated)
-    //   @88: i32 DRW absolute X origin
-    //   @92: i32 DRW absolute Y origin
-    //
-    // The first DRW-named record is the BOARD outline. Its absolute origin
-    // is needed to convert section 11 vertices from DRW-relative to binary
-    // absolute coordinates.
+    // Section 9 is a text string pool followed by 112-byte LINE item records: u32 flags @0
+    // (0xFFFE or 0xFFFF), u32 sentinel @4 (0xFFFFFFFF), name @44 (12 bytes, null-terminated),
+    // and the DRW absolute X/Y origin at @88/@92. The first DRW-named record is the board
+    // outline, whose origin converts section 11 vertices from DRW-relative to binary absolute.
     static constexpr int LINE_ITEM_SIZE = 112;
     static constexpr int LINE_FLAGS_OFF = 0;
     static constexpr int LINE_SENTINEL_OFF = 4;
@@ -1402,20 +1335,14 @@ void BINARY_PARSER::parseBoardOutlineDrwOrigin()
 
 void BINARY_PARSER::parseBoardOutline()
 {
-    // Board outline vertices are embedded at the end of section 11 as
-    // 12-byte triplets [i32 X, i32 Y, u32 0xFFFFFFFF]. The vertex region
-    // occupies the tail of section 11, after the 20-byte piece descriptors.
-    // Since count * perItem may equal totalBytes exactly (no mathematical
-    // tail gap), we scan backward from the section end to find the vertex
-    // region boundary.
+    // Board outline vertices are 12-byte triplets [i32 X, i32 Y, u32 0xFFFFFFFF] in the tail of
+    // section 11, after the 20-byte piece descriptors. count * perItem may equal totalBytes
+    // exactly, so the vertex region boundary is found by scanning backward from the section end.
+    // Coordinates are DRW-relative and need the section 9 origin added to reach binary absolute.
     //
-    // Coordinates are DRW-relative. The DRW absolute origin from section 9
-    // must be added to convert them to binary absolute coordinates that the
-    // converter expects.
-    // Arc-laden outlines (e.g. rounded board edges) are not stored as the simple
-    // section 11 vertex tail. Try the arc-aware decoder first; it only succeeds when
-    // a genuine arc board outline is present and self-validates, so it never displaces
-    // a correct rectilinear result.
+    // Arc-laden outlines are not stored as the simple section 11 vertex tail. Try the arc-aware
+    // decoder first; it self-validates and only succeeds on a genuine arc outline, so it never
+    // displaces a correct rectilinear result.
     if( parseArcBoardOutline() )
         return;
 
@@ -1427,7 +1354,6 @@ void BINARY_PARSER::parseBoardOutline()
     size_t secStart = entry11->dataOffset;
     size_t secEnd   = entry11->dataOffset + entry11->totalBytes;
 
-    // Scan backward in 12-byte steps to find where the vertex region starts.
     // Each vertex has 0xFFFFFFFF at @8; piece descriptors have 0 at @8.
     size_t vtxStart = secEnd;
 
@@ -1442,16 +1368,13 @@ void BINARY_PARSER::parseBoardOutline()
     if( vtxStart >= secEnd )
         return;
 
-    // Only extract the first closed polygon as the board outline.
-    // The vertex region may contain additional line item vertices.
+    // Only the first closed polygon is the board outline; the vertex region may hold others.
     POLYLINE outline;
     outline.layer  = 1;
     outline.width  = 0.0;
     outline.closed = true;
 
-    // A board outline encloses area; a degenerate run that collapses to a line or point
-    // is a stray graphic, not the outline. Shipping it would be worse than shipping
-    // nothing, so this unvalidated tail-scan fallback drops non-2D results.
+    // A board outline encloses area; a run that collapses to a line or point is a stray graphic.
     auto isAreaOutline = []( const POLYLINE& aOutline ) -> bool
     {
         double minX = std::numeric_limits<double>::max();
@@ -1481,7 +1404,6 @@ void BINARY_PARSER::parseBoardOutline()
         int32_t rawX = rec.I32( 0 );
         int32_t rawY = rec.I32( 4 );
 
-        // Convert from DRW-relative to binary absolute by adding the DRW origin
         int32_t absX = rawX;
         int32_t absY = rawY;
 
@@ -1515,25 +1437,18 @@ void BINARY_PARSER::parseBoardOutline()
 
 bool BINARY_PARSER::parseArcBoardOutline()
 {
-    // PADS stores graphic pieces (board outline, keepouts, copper-area decals) as
-    // closed runs of 12-byte vertex triplets [i32 X, i32 Y, i32 attr] in sections
-    // 10..12. attr == -1 marks a plain corner; attr == 0,1,2,... is the ordinal of an
-    // arc corner into a parallel 20-byte arc-parameter table located geometrically by
-    // findArcTable. A run may be purely rectilinear (no arcs) or arc-laden.
+    // PADS stores graphic pieces as closed runs of 12-byte vertex triplets [i32 X, i32 Y, i32
+    // attr] in sections 10..12. attr == -1 marks a plain corner; attr == 0,1,2,... is the
+    // ordinal of an arc corner into a parallel 20-byte arc-parameter table located by
+    // findArcTable. A run may be purely rectilinear or arc-laden.
     //
-    // There is no in-band board-vs-decal tag on the vertex run itself, so picking the
-    // single board-outline run by "largest closed run" mis-fires on boards that carry
-    // bigger decals or split the outline across pieces. Instead, every closed run is
-    // matched against the drawing-item index in sections 8..10. Each DRW item there
-    // carries its own origin and absolute bounding box; the board outline's run extent
-    // equals exactly one item's local (origin-relative) bbox. A run is only accepted
-    // when it matches an item bbox within a tight tolerance, and the owning item also
-    // supplies the absolute origin. When nothing matches confidently the function
-    // returns false and the caller falls back to the rectilinear tail decoder, so a
-    // dubious run is never shipped as the outline.
-    //
-    // All thresholds below are structural (binary geometry sanity), not learned from
-    // any ASCII reference.
+    // There is no in-band board-vs-decal tag on the vertex run, so "largest closed run"
+    // mis-fires on boards that carry bigger decals or split the outline across pieces. Instead,
+    // every closed run is matched against the drawing-item index in sections 8..10. Each DRW
+    // item carries its own origin and absolute bbox; the board outline's run extent equals
+    // exactly one item's local bbox. A run is accepted only when it matches an item bbox within
+    // a tight tolerance, and the owning item supplies the absolute origin. When nothing matches
+    // the caller falls back to the rectilinear tail decoder, so a dubious run is never shipped.
     constexpr size_t VTX = 12;
     constexpr size_t ARC_REC = 20;
     constexpr int    MAX_CORNERS = 256;
@@ -1593,7 +1508,7 @@ bool BINARY_PARSER::parseArcBoardOutline()
                 double     rx = ( xmax - xmin ) / 2.0;
                 double ry = ( ymax - ymin ) / 2.0;
 
-                // A circle box is square and non-degenerate.
+                // An arc box is square and non-degenerate.
                 if( rx < 1.0 || std::abs( rx - ry ) > 2.0 )
                 {
                     ok = false;
@@ -1620,12 +1535,10 @@ bool BINARY_PARSER::parseArcBoardOutline()
         return -1;
     };
 
-    // Build the drawing-item index from the 112-byte DRW records in sections 8..10.
-    // Each record stores an absolute origin at +88/+92 and an absolute bbox at
-    // +96..+108; the bbox is stored origin-relative here so it can be compared
-    // directly against a run's local vertex extent. The +84 type word distinguishes
-    // the board outline item (0x00004D00) from other DRW pieces, used only as a tie
-    // break when several items match a run equally well.
+    // Build the drawing-item index from the 112-byte DRW records in sections 8..10. Each record
+    // stores an absolute origin at +88/+92 and an absolute bbox at +96..+108, made origin-
+    // relative here so it compares directly against a run's local vertex extent. The +84 type
+    // word marks the board outline item (0x00004D00), used only as a tie break.
     auto collectDrawingItems = [&]() -> std::vector<DrawingItem>
     {
         std::vector<DrawingItem> items;
@@ -1783,17 +1696,15 @@ bool BINARY_PARSER::parseArcBoardOutline()
             int64_t runH = (int64_t) maxY - minY;
             int64_t span = std::max( runW, runH );
 
-            // Reject degenerate sub-micron runs and absurd coordinate noise before the
-            // more expensive arc-table and item-bbox checks. A board outline encloses
-            // area, so a run that collapses to a line in either axis is a stray graphic
-            // (dimension, centerline) rather than the outline. The upper bound is only an
-            // overflow guard (3.3 m, far past any real PCB); the DRW-bbox match below is
-            // the real size check.
+            // Reject degenerate sub-micron runs and absurd coordinate noise before the more
+            // expensive arc-table and item-bbox checks. A run that collapses to a line in either
+            // axis is a stray graphic. The upper bound is only an overflow guard (3.3 m); the
+            // DRW-bbox match below is the real size check.
             if( span < 1000000 || span > 5000000000LL || runW <= 0 || runH <= 0 )
                 continue;
 
-            // Matched DRW records also include closed title-strip and dimension pieces.
-            // Those are valid graphics but much thinner than an importable board area.
+            // Matched DRW records also include closed title-strip and dimension pieces, which
+            // are valid graphics but much thinner than an importable board area.
             if( (double) span / (double) std::min( runW, runH ) > 12.0 )
                 continue;
 
@@ -1807,10 +1718,8 @@ bool BINARY_PARSER::parseArcBoardOutline()
                     continue;
             }
 
-            // Accept this run only when its extent coincides with a drawing item's
-            // bbox. The tolerance absorbs arc bulge beyond the chord vertices and
-            // rounding; it is far smaller than the gap between any real piece and an
-            // unrelated coordinate run.
+            // Accept this run only when its extent coincides with a drawing item's bbox. The
+            // tolerance absorbs arc bulge beyond the chord vertices and rounding.
             for( const DrawingItem& item : drawingItems )
             {
                 int64_t err = std::abs( item.localMinX - minX )
@@ -1831,10 +1740,8 @@ bool BINARY_PARSER::parseArcBoardOutline()
                     centerDist = std::hypot( cx - placeCenterX, cy - placeCenterY );
                 }
 
-                // Among matching runs prefer the explicit board-outline item type, then
-                // the larger owning DRW item, then the larger run, then the tighter fit.
-                // The owner bbox and vertices share the same local coordinate frame, so
-                // this stays independent of still-incomplete unrelated streams. Placement
+                // Among matching runs prefer the explicit board-outline item type, then the
+                // larger owning DRW item, then the larger run, then the tighter fit. Placement
                 // center is only a final duplicate-owner tie-break when its span is sane.
                 bool replace = !haveBest;
 
@@ -1873,8 +1780,7 @@ bool BINARY_PARSER::parseArcBoardOutline()
         }
     }
 
-    // No run matched a drawing item closely enough; let the caller try its fallback
-    // rather than ship a guessed outline.
+    // No run matched a drawing item closely enough; let the caller try its fallback.
     if( !haveBest || !best.haveOwner )
         return false;
 
@@ -1899,8 +1805,7 @@ bool BINARY_PARSER::parseArcBoardOutline()
         const Vertex& v = best.verts[i];
 
         // Vertices are local to the owning item; add the item origin to reach the binary
-        // absolute frame that the converter expects (it subtracts the design origin once
-        // in scaleCoord, exactly as it does for placements and the rectilinear fallback).
+        // absolute frame the converter expects (it subtracts the design origin once downstream).
         double absX = static_cast<double>( v.x ) + best.owner.originX;
         double absY = static_cast<double>( v.y ) + best.owner.originY;
 
@@ -1955,8 +1860,7 @@ bool BINARY_PARSER::isValidNetName( const std::string& aName ) const
     if( aName.empty() )
         return false;
 
-    // PADS stores an internal sentinel net that holds unassigned copper/obstacles.
-    // It is not a real signal and the ASCII export omits it, so drop it to match.
+    // An internal sentinel net holding unassigned copper/obstacles, not a real signal.
     if( aName == "___Unassigned_Obstacles_" )
         return false;
 
@@ -1978,10 +1882,8 @@ void BINARY_PARSER::parseNetNames()
 
     if( !isOldFormat() )
     {
-        // Section 23 net record (424 B): the net NAME plus the two object pointers that
-        // drive net-class membership (the class owner, shared by every member) and the
-        // diff-pair join (the net's own self-pointer, value-equal to a sec49 DIF_PAIR's
-        // +12/+16 member fields).
+        // Section 23 net record (424 B): the net NAME plus the net-class owner pointer (shared
+        // by every member) and the net's own self-pointer (the diff-pair join key).
         constexpr uint32_t NET_RECORD_SIZE = 424;
         constexpr uint32_t NET_NAME        = 116;
         constexpr uint32_t NET_NAME_LEN    = 48;
@@ -2017,9 +1919,9 @@ void BINARY_PARSER::parseNetNames()
             }
         }
 
-        // Section 22 (placements) fills in power/ground nets: each 112-byte record may
-        // carry up to three net names at +28/+52/+76 (24 chars), each preceded by a
-        // 4-byte net index that must look like a real index (small or the 0xFFFF.. sentinel).
+        // Placements fill in power/ground nets: each record may carry up to three net names at
+        // +28/+52/+76 (24 chars), each preceded by a 4-byte net index that must look real (small
+        // or the 0xFFFF.. sentinel).
         constexpr uint32_t PLACEMENT_RECORD_SIZE = 112;
         const SDB_SECTION* entry22 = getSection( SECTION::Placements );
 
@@ -2055,20 +1957,10 @@ void BINARY_PARSER::parseNetNames()
     }
     else
     {
-        // Old format net index table
-        //
-        // Route vertices in v0x2021 reference nets by a dense 0-based index stored
-        // at sec60 @28 byte[1]. The master list is built from two sources in order:
-        //
-        //   1. sec19 "design rule" net-name records (FFFFFFFF-delimited, with the net
-        //      name at a fixed +24 offset from the delimiter). These nets get the
-        //      lowest indices.
-        //
-        //   2. sec22 + sec23 nets, sorted ascending by their stored net ID field
-        //      (sec22 @8 or @56 depending on which record half, sec23 @8). These
-        //      are appended after the sec19 nets.
-
-        // Phase 1: collect sec19 net names in file order
+        // Route vertices in v0x2021 reference nets by a dense 0-based index. The master list is
+        // built in two phases: sec19 net-name records (FFFFFFFF-delimited, name at +24) take the
+        // lowest indices, then sec22 + sec23 nets sorted ascending by their stored net ID are
+        // appended.
         std::vector<std::string> sec19Nets;
         const SDB_SECTION*          entry19 = getSection( SECTION::PartPins );
 
@@ -2078,10 +1970,8 @@ void BINARY_PARSER::parseNetNames()
             {
                 size_t sec19Size = entry19->totalBytes;
 
-                // Sec19 net-rule records live in the tail of the section at 144-byte
-                // intervals, each preceded by FFFFFFFF. The u32 at +4 is zero for net
-                // records (non-zero for menu items and component refs), and the net
-                // name string starts at +24.
+                // Sec19 net-rule records are FFFFFFFF-delimited; the u32 at +4 is zero for net
+                // records (non-zero for menu items and component refs), and the name is at +24.
                 for( size_t pos = 0; pos + 28 < sec19Size; ++pos )
                 {
                     SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( entry19->dataOffset + pos ) );
@@ -2114,7 +2004,6 @@ void BINARY_PARSER::parseNetNames()
             }
         }
 
-        // Phase 2: collect sec22 + sec23 nets with their stored IDs
         struct IndexedNet
         {
             uint32_t    storedIdx;
@@ -2123,8 +2012,8 @@ void BINARY_PARSER::parseNetNames()
 
         std::vector<IndexedNet> indexedNets;
 
-        // Old-format placement record (96 B): up to two net names at +12/+60, each
-        // preceded by a 4-byte stored net index.
+        // Old-format placement record (96 B): up to two net names at +12/+60, each preceded by a
+        // 4-byte stored net index.
         constexpr uint32_t OLD_PLACEMENT_SIZE = 96;
         const SDB_SECTION* entry22 = getSection( SECTION::Placements );
 
@@ -2186,7 +2075,7 @@ void BINARY_PARSER::parseNetNames()
                        return a.storedIdx < b.storedIdx;
                    } );
 
-        // Phase 3: build the dense net index table and emit NET objects
+        // Build the dense net index table and emit NET objects.
         uint32_t denseIdx = 0;
 
         for( const auto& name : sec19Nets )
@@ -2212,8 +2101,7 @@ void BINARY_PARSER::parseNetNames()
 
 void BINARY_PARSER::parseMetadataRegion()
 {
-    // The SDB locates the origin from section 1; only fall back to the
-    // DFT_CONFIGURATION scan when that did not yield one.
+    // Only fall back to the DFT_CONFIGURATION scan when the SDB did not yield an origin.
     if( m_originFound )
         return;
 
@@ -2243,7 +2131,6 @@ void BINARY_PARSER::parseMetadataRegion()
 
 void BINARY_PARSER::parseDftConfig( size_t aStart, size_t aEnd )
 {
-    // Search for "DFT_CONFIGURATION\0" marker
     static const char DFT_MARKER[] = "DFT_CONFIGURATION";
     size_t markerLen = std::strlen( DFT_MARKER );
 
@@ -2254,7 +2141,6 @@ void BINARY_PARSER::parseDftConfig( size_t aStart, size_t aEnd )
         {
             size_t configStart = pos + markerLen + 1;
 
-            // Skip PARENT markers and null bytes
             while( configStart < aEnd )
             {
                 if( m_data[configStart] == 0 )
@@ -2276,7 +2162,7 @@ void BINARY_PARSER::parseDftConfig( size_t aStart, size_t aEnd )
             if( configStart >= aEnd )
                 return;
 
-            // Detect format by checking for '.' padding in the first 16 bytes
+            // Dot padding in the first 16 bytes distinguishes the two value formats.
             std::map<std::string, std::string> config;
             bool hasDot = false;
 
@@ -2330,7 +2216,7 @@ BINARY_PARSER::parseDftDotPadded( size_t aPos, size_t aEnd ) const
 
     while( aPos + 16 <= aEnd )
     {
-        // Keys are 16-byte fields padded with ASCII '.' (0x2E)
+        // Keys are 16-byte fields padded with ASCII '.' (0x2E).
         bool validKey = true;
 
         for( size_t i = aPos; i < aPos + 16; ++i )
@@ -2347,7 +2233,6 @@ BINARY_PARSER::parseDftDotPadded( size_t aPos, size_t aEnd ) const
         if( !validKey )
             break;
 
-        // Extract key by stripping null bytes and dot padding
         std::string key;
 
         for( size_t i = aPos; i < aPos + 16; ++i )
@@ -2363,11 +2248,9 @@ BINARY_PARSER::parseDftDotPadded( size_t aPos, size_t aEnd ) const
 
         aPos += 16;
 
-        // Skip optional null separator
         if( aPos < aEnd && m_data[aPos] == 0 )
             ++aPos;
 
-        // Read null-terminated value
         size_t valStart = aPos;
 
         while( aPos < aEnd && m_data[aPos] != 0 )
@@ -2383,7 +2266,6 @@ BINARY_PARSER::parseDftDotPadded( size_t aPos, size_t aEnd ) const
         if( aPos < aEnd )
             ++aPos;
 
-        // Skip PARENT markers
         if( aPos + 7 <= aEnd
             && std::memcmp( &m_data[aPos], "PARENT\0", 7 ) == 0 )
         {
@@ -2402,7 +2284,6 @@ BINARY_PARSER::parseDftNullSeparated( size_t aPos, size_t aEnd ) const
 
     while( aPos < aEnd )
     {
-        // Find null-terminated key
         size_t keyStart = aPos;
 
         while( aPos < aEnd && m_data[aPos] != 0 )
@@ -2411,7 +2292,6 @@ BINARY_PARSER::parseDftNullSeparated( size_t aPos, size_t aEnd ) const
         if( aPos == keyStart )
             break;
 
-        // Validate key is printable ASCII
         bool validKey = true;
 
         for( size_t i = keyStart; i < aPos; ++i )
@@ -2428,14 +2308,12 @@ BINARY_PARSER::parseDftNullSeparated( size_t aPos, size_t aEnd ) const
 
         std::string key( reinterpret_cast<const char*>( &m_data[keyStart] ), aPos - keyStart );
 
-        // Skip null terminator
         if( aPos < aEnd )
             ++aPos;
 
         if( key == "PARENT" )
             continue;
 
-        // Read null-terminated value
         size_t valStart = aPos;
 
         while( aPos < aEnd && m_data[aPos] != 0 )
@@ -2460,7 +2338,7 @@ void BINARY_PARSER::parseNetClasses()
     if( m_netClassOwner.empty() || m_data.size() < 24 )
         return;
 
-    // Distinct net-class owner pointers, ascending == net-class declaration order.
+    // Distinct net-class owner pointers; ascending order is net-class declaration order.
     std::set<uint32_t> ownerSet;
 
     for( const auto& [name, owner] : m_netClassOwner )
@@ -2472,14 +2350,13 @@ void BINARY_PARSER::parseNetClasses()
     for( size_t k = 0; k < owners.size(); ++k )
         ownerOrdinal[owners[k]] = k;
 
-    // Scan the trailing arena for the type-66 rule table: 24-byte records with tag 0x42
-    // at +4 and a net-class owner pointer at +8 (== a net's +188). Each record carries
-    // the rule-detail page at +0 (which selects the rule kind) and the layer at +20.
+    // The type-66 rule table is 24-byte records with tag 0x42 at +4 and a net-class owner
+    // pointer at +8 (== a net's +188), a rule-detail page at +0 and a layer at +20.
     struct EdgeRec
     {
         uint32_t owner;
         uint32_t page;     // rulePtr & ~0xfff, selects the rule kind
-        uint32_t rulePtr;  // full rule-value-object pointer (+0); declaration order within a page
+        uint32_t rulePtr;  // full rule-value-object pointer; declaration order within a page
         int      layer;
         size_t   off;
     };
@@ -2507,9 +2384,9 @@ void BINARY_PARSER::parseNetClasses()
     if( edges.empty() )
         return;
 
-    // The 0x118-stride NET_CLASS name records sit just before the rule table; anchor off
-    // the first rule record: name_head = first_edge - num_classes*0x118 - 0x50 (a blind
-    // 0x118 ASCII scan false-positives on silkscreen text, so use this structural anchor).
+    // The 0x118-stride NET_CLASS name records sit just before the rule table, anchored off the
+    // first rule record: name_head = first_edge - num_classes*0x118 - 0x50. A blind 0x118 ASCII
+    // scan false-positives on silkscreen text, so this structural anchor is used instead.
     size_t firstEdge = edges.front().off;
 
     for( const EdgeRec& e : edges )
@@ -2587,12 +2464,10 @@ void BINARY_PARSER::parseNetClasses()
                 m_netClasses[it->second].ruleLayers.push_back( e.layer );
         }
 
-        // Per-class rule VALUES (clearance, track width, via clearance). The clearance-page
-        // edge's full +0 pointer is the rule-value-object's declaration ordinal; the value
-        // records live in a separate arena keyed by their own self-pointer at +12, with no
-        // pointer chain between the two (independent malloc bases). The arenas are emitted in
-        // the same declaration order, so the join is positional: the i-th layer-0 clearance
-        // edge pairs with the i-th layer-0 (discriminator 1) value record.
+        // The clearance-page edge's +0 pointer is the rule-value-object's declaration ordinal;
+        // the value records live in a separate arena keyed by their own self-pointer at +12,
+        // with no pointer chain between the two. Both arenas are emitted in the same declaration
+        // order, so the i-th layer-0 clearance edge pairs positionally with the i-th value record.
         std::vector<const EdgeRec*> layer0Edges;
 
         for( const EdgeRec& e : edges )
@@ -2604,10 +2479,9 @@ void BINARY_PARSER::parseNetClasses()
         std::sort( layer0Edges.begin(), layer0Edges.end(),
                    []( const EdgeRec* a, const EdgeRec* b ) { return a->rulePtr < b->rulePtr; } );
 
-        // File-wide scan for the 457200 marker (== 12 mil, the TRACK_TO_TRACK schema default and
-        // a VALUE, not a delimiter). The value arena sits in a broader MFC blob just outside the
-        // sec49 directory byte-range, so the scan must cover the whole file. Discriminator 1 is a
-        // layer-0 NET_CLASS rule; the int32[38] core begins at marker+20.
+        // The value arena sits in a broader MFC blob outside the sec49 directory byte-range, so
+        // the scan covers the whole file, seeded on the 457200 marker (12 mil, the TRACK_TO_TRACK
+        // default value). Discriminator 1 is a layer-0 rule; the int32[38] core begins at +20.
         struct ValueRec
         {
             uint32_t selfPtr;
@@ -2651,7 +2525,7 @@ void BINARY_PARSER::parseNetClasses()
                    []( const ValueRec& a, const ValueRec& b ) { return a.selfPtr < b.selfPtr; } );
 
         // Equal counts are required for a sound positional join; otherwise leave values unset so
-        // membership still ships (correct-or-silent).
+        // membership still ships.
         if( !layer0Edges.empty() && layer0Edges.size() == values.size() )
         {
             for( size_t i = 0; i < layer0Edges.size(); ++i )
@@ -2674,7 +2548,7 @@ void BINARY_PARSER::parseNetClasses()
         }
     }
 
-    // Deterministic ordering for reproducible output.
+    // Sort for reproducible output.
     for( NETCLASS_DEF& nc : m_netClasses )
     {
         std::sort( nc.nets.begin(), nc.nets.end() );
@@ -2689,8 +2563,8 @@ void BINARY_PARSER::parseDiffPairs()
 {
     constexpr size_t  OBJECT_SIZE = 864;
     constexpr size_t  FF_TAIL_OFF = 604;             // 0xFF allocator free-fill begins here
-    constexpr size_t  FF_TAIL_MIN = 200;             // tail validator: >=200 0xFF bytes
-    constexpr double  MAX_LENGTH  = 17068800000.0;   // DIF_PAIR MAX_LENGTH default (seed marker)
+    constexpr size_t  FF_TAIL_MIN = 200;             // require >=200 0xFF tail bytes
+    constexpr double  MAX_LENGTH  = 17068800000.0;   // DIF_PAIR MAX_LENGTH default, the seed marker
     constexpr double  F64_INHERIT = -1.0;
     constexpr int32_t I32_INHERIT = -1;
 
@@ -2708,16 +2582,13 @@ void BINARY_PARSER::parseDiffPairs()
     if( poolSize < OBJECT_SIZE )
         return;
 
-    // The serialized DIF_PAIR objects are a packed 864-byte-stride array that MAY split across
-    // several arena (malloc) chunks. There is no count word and no in-file handle->offset index
-    // (reattack_carchive_objectgraph.md), so resolution is a within-file value JOIN: an object's
-    // +12/+16 member-net handles equal a sec23 net record's +184 self-handle (m_netSelfPtrToName),
-    // which is bijective per file. A record is a DIF_PAIR iff both handles resolve, its +32
-    // MAX_LENGTH is the default or a sane override, and its tail carries the >=200-byte 0xFF
-    // free-fill (a per-record VALIDATOR, never the locator). The prior "last 0xFF run minus 864"
-    // anchor only caught the final chunk and silently dropped pairs (e.g. 42->3 on a UZCB board),
-    // so locate every chunk by seeding on the MAX_LENGTH marker and extending 864-stride both
-    // ways. See det-specs/diffpairs.md.
+    // The serialized DIF_PAIR objects are a packed 864-byte-stride array that may split across
+    // several arena chunks. There is no count word and no in-file handle->offset index, so
+    // resolution is a within-file value join: an object's +12/+16 member-net handles equal a net
+    // record's +184 self-handle (m_netSelfPtrToName), which is bijective per file. A record is a
+    // DIF_PAIR iff both handles resolve, its +32 MAX_LENGTH is the default or a sane override, and
+    // its tail carries the >=200-byte 0xFF free-fill (a per-record validator, not the locator).
+    // Each chunk is located by seeding on the MAX_LENGTH marker and extending 864-stride both ways.
     auto looksDp = [&]( size_t aStart ) -> bool
     {
         if( aStart < poolBase || aStart + OBJECT_SIZE > poolBase + poolSize )
@@ -2741,10 +2612,9 @@ void BINARY_PARSER::parseDiffPairs()
         return fillBytes >= FF_TAIL_MIN;
     };
 
-    // Seeds carry the unambiguous MAX_LENGTH default (0 false positives across 132 clean v2027
-    // boards); from each, extend in both directions at 864 stride so override pairs (whose +32
-    // is off the default but still pass looksDp) are recovered. The objects are byte-aligned to
-    // their arena chunk, not the pool, so the seed search is per-byte.
+    // Seeds carry the MAX_LENGTH default; from each, extend in both directions at 864 stride so
+    // override pairs (whose +32 is off the default but still pass looksDp) are recovered. The
+    // objects are byte-aligned to their arena chunk, not the pool, so the seed search is per-byte.
     std::set<size_t> found;
 
     for( size_t i = 0; i + OBJECT_SIZE <= poolSize; ++i )
@@ -2794,24 +2664,16 @@ void BINARY_PARSER::parseDiffPairs()
 
 void BINARY_PARSER::parseTextRecords()
 {
-    // Free-text items live in a 72-byte text-header stream that the container
-    // directory splits across sections 5 and 8, sharing one packed C-string pool
-    // near the top of section 8. Two structural quirks drove this layout:
+    // Free-text items live in a 72-byte text-header stream split across sections 5 and 8,
+    // sharing one packed C-string pool near the top of section 8. The legend/title-block half
+    // sits in section 5's tail and the marker/fiducial half in section 8, so the scan covers the
+    // combined range [sec5.dataOffset .. sec8.end]. Metadata lags geometry by one record slot:
+    // text K's geometry is in record K (height@36, width@40, X@44, Y@48, all RAW = design +
+    // origin) but its metadata (string offset@8, layer word@24, object tag@28) is in record K+1.
     //
-    //   1. The legend / title-block half of the stream sits in section 5's tail,
-    //      the marker / fiducial half in section 8, so the scan must cover the
-    //      combined byte range [sec5.dataOffset .. sec8.end].
-    //   2. Metadata lags geometry by one record slot. Text K's GEOMETRY is in
-    //      record K (height@36, width@40, X@44, Y@48, all RAW = design + origin),
-    //      but its METADATA (string offset@8, layer word@24, object tag@28) is in
-    //      record K+1. Reading record K's own @8 yields text K-1's string, which
-    //      lands mid-string and produces fragment cascades.
-    //
-    // Discriminator (version-stable across 0x2025/0x2026/0x2027, validated string
-    // and coordinate exact against the ASCII export): record K is a genuine text
-    // item iff record K+1 has tag@28 == 0x49000000 and (word@24 >> 16) == 0x0020
-    // (the high half marks a TEXT object, the low byte is the layer), and record K
-    // has positive height and width.
+    // Record K is a genuine text item iff record K+1 has tag@28 == 0x49000000 and
+    // (word@24 >> 16) == 0x0020 (the high half marks a TEXT object, the low byte is the layer),
+    // and record K has positive height and width.
     const SDB_SECTION* s8 = getSection( SECTION::FreeText );
 
     if( !s8 || s8->totalBytes == 0 || s8->perItem < 72 )
@@ -2825,13 +2687,10 @@ void BINARY_PARSER::parseTextRecords()
     if( hi < lo + 144 || hi > m_data.size() )
         return;
 
-    // The packed C-string pool starts near the top of section 8 but spills past its
-    // end into section 9, a contiguous per-item-1 byte blob that the directory lays
-    // down immediately after section 8. String resolution and pool-base calibration
-    // must run against this extended upper bound or the legend / note strings whose
-    // bytes cross the sec8/sec9 boundary get truncated. Require section 9 to be the
-    // byte blob (perItem 1) directly after section 8 and bound the extension with
-    // subtraction to avoid wrap.
+    // The C-string pool spills past section 8's end into section 9, a per-item-1 byte blob laid
+    // down immediately after it. String resolution must run against this extended upper bound or
+    // strings crossing the sec8/sec9 boundary get truncated. Require section 9 to be the byte
+    // blob directly after section 8 and bound the extension with subtraction to avoid wrap.
     size_t          poolHi = hi;
     const SDB_SECTION* s9     = getSection( SECTION::StringPool );
 
@@ -2878,10 +2737,10 @@ void BINARY_PARSER::parseTextRecords()
     if( cands.empty() )
         return;
 
-    // The string pool is in insertion order, not record order, so each text must
-    // be resolved through its own string offset. The pool base is not on a clean
-    // boundary; calibrate it within a window near the end of the header region by
-    // choosing the base that lands the most string offsets on a C-string start.
+    // The string pool is in insertion order, so each text resolves through its own string
+    // offset. The pool base is not on a clean boundary; calibrate it within a window near the
+    // end of the header region by choosing the base that lands the most offsets on a C-string
+    // start.
     auto cStringStartAt = [this, poolHi]( size_t aAbs ) -> bool
     {
         if( aAbs >= poolHi )
@@ -2931,9 +2790,8 @@ void BINARY_PARSER::parseTextRecords()
     {
         size_t soff = poolBase + c.strOffset;
 
-        // Only emit candidates that resolve to a real C-string inside the pool.
-        // readFixedString clamps merely to the buffer end, so without this guard a
-        // false candidate could read printable bytes out of a neighbouring section.
+        // Str clamps only to the buffer end, so without this guard a false candidate could read
+        // printable bytes out of a neighbouring section.
         if( soff < lo || soff >= poolHi || ( soff != poolBase && m_data[soff - 1] != 0 )
             || !cStringStartAt( soff ) )
             continue;
@@ -2964,12 +2822,10 @@ void BINARY_PARSER::parseTextRecords()
 }
 
 
-// Per-version field layout for the section-60 via records decoded by
-// parseRouteVertices. Only v0x2021/0x2022 (old), v0x2025 and v0x2026 carry a
-// recoverable via encoding; every other version selects no layout and emits no
-// vias. The three encodings share one body (raw X/Y read, Y-flip about the
-// origin, deviation guard, optional de-dup, optional net attribution) and differ
-// only in the marker predicate, the field offsets, and the record-size gate.
+// Per-version field layout for the section-60 via records. Only v0x2021/0x2022 (old), v0x2025
+// and v0x2026 carry a recoverable via encoding; every other version selects no layout and emits
+// no vias. The three encodings share one body and differ only in the marker predicate, the
+// field offsets, and the record-size gate.
 struct VIA_SEC60_LAYOUT
 {
     int                xOff = 0;             // raw via X
@@ -3016,8 +2872,7 @@ static bool matchVia2026( const BINARY_CURSOR& aCur, size_t aBase )
 
 static const VIA_SEC60_LAYOUT* via60Layout( uint16_t aVersion )
 {
-    // Only the fields that differ from the defaults are listed, so each dialect's
-    // distinguishing offsets and flags read at a glance.
+    // Only the fields that differ from the defaults are listed.
     static const VIA_SEC60_LAYOUT vOld{ .xOff = 1, .yOff = 5, .netIndexOff = 29,
                                         .matchesMarker = &matchViaOld };
     static const VIA_SEC60_LAYOUT v2025{ .xOff = 23, .yOff = 27, .dedup = true, .minRecSize = 64,
@@ -3041,7 +2896,14 @@ static const VIA_SEC60_LAYOUT* via60Layout( uint16_t aVersion )
 
 void BINARY_PARSER::parseRouteVertices()
 {
-
+    // PADS routed copper tracks are intentionally not imported. A route's ordered per-net
+    // polyline and per-segment track geometry are not serialized to the flat binary: the
+    // per-cell X-vs-Y orientation and per-connection segment ordering are live heap pointers the
+    // editor resolves at runtime and never writes to file. Any emitted track geometry would be
+    // fabricated, and would invent phantom tracks on unrouted boards.
+    //
+    // Vias, by contrast, are exact structural anchors. Section 60 carries explicit via records
+    // whose raw coordinates decode deterministically, so we emit those, grouped onto their nets.
     struct ViaLocation
     {
         int32_t     x = 0;
@@ -3070,8 +2932,6 @@ void BINARY_PARSER::parseRouteVertices()
 
     if( gateOk )
     {
-        // The deviation guard is symmetric about the origin, so it is evaluated on the raw
-        // Y (rawY - originY) regardless of the Y-flip applied to the stored coordinate.
         size_t                                end = entry60->dataOffset + entry60->totalBytes;
         size_t                                need = layout->boundSize ? layout->boundSize : r60;
         std::set<std::pair<int32_t, int32_t>> seenVias;
@@ -3091,9 +2951,9 @@ void BINARY_PARSER::parseRouteVertices()
             int32_t    rawY = rec.I32( layout->yOff );
             int32_t    vy   = static_cast<int32_t>( 2LL * m_originY - rawY );
 
-            // Per-version: the old/0x2026 arms guarded the narrowed vy, 0x2025 the raw Y.
-            // They share a magnitude only while 2*originY - rawY stays in int32_t range,
-            // so reproduce each arm's source exactly rather than rely on that.
+            // The deviation guard is symmetric about the origin, but old/0x2026 guard the
+            // narrowed vy while 0x2025 guards the raw Y; these match only while 2*originY - rawY
+            // stays in int32_t range, so each arm is reproduced exactly.
             int64_t dx = static_cast<int64_t>( vx ) - m_originX;
             int64_t dy = layout->guardUsesRawY ? ( static_cast<int64_t>( rawY ) - m_originY )
                                                : ( static_cast<int64_t>( vy ) - m_originY );
@@ -3126,7 +2986,7 @@ void BINARY_PARSER::parseRouteVertices()
     if( viaLocations.empty() )
         return;
 
-    // Group vias by net name, then emit a ROUTE per net carrying only its vias.
+    // Emit a ROUTE per net carrying only its vias.
     std::map<std::string, std::vector<const ViaLocation*>> netVias;
 
     for( const auto& via : viaLocations )
@@ -3199,11 +3059,9 @@ void BINARY_PARSER::parseCopperShapes()
         std::vector<VECTOR2I> loop;
         size_t minEdges = v2026LineCopper ? 4 : 5;
 
-        // Fetch the owner's polygon structurally from its vertexStart cursor, then gate it
-        // on the owner's recorded bbox. The structural slice resolves which sec12 loop
-        // belongs to this owner; the bbox-equality gate is the filled-copper classifier,
-        // since the grid classification is broader than filled copper (a stroked LINES item
-        // records a pen-expanded bbox that no longer equals its vertex extent).
+        // The structural slice resolves which sec12 loop belongs to this owner; the
+        // bbox-equality gate is the filled-copper classifier, since a stroked LINES item records
+        // a pen-expanded bbox that no longer equals its vertex extent.
         if( !fetchOwnerLoop( name, MAX_COPPER_SHAPE_EDGES, loop ) || loop.size() < minEdges )
             continue;
 
@@ -3266,19 +3124,16 @@ void BINARY_PARSER::parseDimensions()
     if( !sec10 || sec10->perItem < 112 || m_ownerRuns.empty() )
         return;
 
-    // A dimension's leader geometry is the sec12 vertex run of its DIM* DRW owner, laid out
-    // in ASC sub-piece order: BASPNT1(2v) BASPNT2(2v) ARWLN1(2v) ARWHD1(4v) ARWLN2(2v)
-    // ARWHD2(4v) EXTLN1(2v) EXTLN2(2v). The measurement endpoints are the two BASPNT first
-    // points (run rows 0 and 2); the crossbar is the ARWLN1 first point (run row 4). The
-    // vertices are absolute DESIGN coords (no owner-origin shift), the same space as every
-    // other parser geometry output.
+    // A dimension's leader geometry is the sec12 vertex run of its DIM* DRW owner, laid out in
+    // sub-piece order: BASPNT1(2v) BASPNT2(2v) ARWLN1(2v) ARWHD1(4v) ARWLN2(2v) ARWHD2(4v)
+    // EXTLN1(2v) EXTLN2(2v). The measurement endpoints are the two BASPNT first points (run rows
+    // 0 and 2); the crossbar is the ARWLN1 first point (run row 4). The vertices are absolute
+    // design coords (no owner-origin shift).
     //
     // The value-label text lives in a sec8 record bound to the dimension only by anchor
-    // proximity, and that bind is not reliable on boards whose title-block notes share the
-    // dimension layer and overlap the leader extent. Following the correct-or-silent rule
-    // we emit only the exact geometry and leave the override text empty, so KiCad recomputes
-    // the displayed value from start/end. That computed value equals the PADS value exactly
-    // (e.g. a 90000000 BASIC span renders as 60.00 mm, matching the ASC "60.00mm").
+    // proximity, which is unreliable when title-block notes share the dimension layer and
+    // overlap the leader extent. We emit only the exact geometry and leave the override text
+    // empty, so KiCad recomputes the displayed value from start/end (which equals the PADS value).
     for( uint32_t rec = 0; rec < sec10->count; ++rec )
     {
         std::string name = m_sdb.Record( *sec10, rec, sec10->perItem ).Str( 44, 24 );
@@ -3312,8 +3167,8 @@ void BINARY_PARSER::parseDimensions()
         dim.points.push_back( pt1 );
         dim.points.push_back( pt2 );
 
-        // Horizontal vs vertical from the larger BASPNT delta, mirroring the ASCII parser.
-        // crossbar_pos is the ARWLN1 first point projected onto the measured axis.
+        // Horizontal vs vertical from the larger BASPNT delta; crossbar_pos is the ARWLN1 first
+        // point projected onto the measured axis.
         dim.is_horizontal = std::abs( bp2x - bp1x ) > std::abs( bp2y - bp1y );
         dim.crossbar_pos = dim.is_horizontal ? toBasicCoordY( arwy ) : toBasicCoordX( arwx );
 
@@ -3335,9 +3190,8 @@ void BINARY_PARSER::computeSec12Base()
     int32_t directoryRows = static_cast<int32_t>( sec12->totalBytes / 12 );
     int32_t cleanRows = 0;
 
-    // The clean prefix is the contiguous run of valid 12-byte vertex records before the
-    // per-save heap tail. A record is clean while its attr is -1 (plain corner) or a
-    // small arc-table ordinal; the tail is reached when attr becomes coordinate-scale.
+    // A record is clean while its attr is -1 (plain corner) or a small arc-table ordinal; the
+    // per-save heap tail begins when attr becomes coordinate-scale.
     for( int32_t j = 0; j < directoryRows; ++j )
     {
         int32_t attr = m_sdb.Record( *sec12, static_cast<uint32_t>( j ), 12 ).I32( 8 );
@@ -3371,10 +3225,9 @@ void BINARY_PARSER::buildOwnerRuns()
     if( start >= end )
         return;
 
-    // A genuine 112-byte owner record carries a 0xFFFE/0xFFFF marker, a >=2-char ASCII
-    // name at +44, and a cursor triple in range. The cursor guard rejects coincidental
-    // heap markers (1-char names with wild cursors, e.g. the metric-flag byte in the
-    // heap tail) so the marker walk does not bind garbage runs.
+    // A genuine 112-byte owner record carries a 0xFFFE/0xFFFF marker, a >=2-char ASCII name at
+    // +44, and a cursor triple in range. The cursor guard rejects coincidental heap markers so
+    // the marker walk does not bind garbage runs.
     auto isOwnerRecord = [&]( size_t aOff ) -> bool
     {
         SDB_RECORD rec = m_sdb.RecordAt( aOff );
@@ -3413,11 +3266,10 @@ void BINARY_PARSER::buildOwnerRuns()
         return run;
     };
 
-    // Marker-walk the 112-byte owner records. The run cursors are read from the FOLLOWING
-    // accepted record (the one-record lag), so we remember the previous record's name and
-    // offset and bind it when the next record is found. The LAST owner has no successor in
-    // the named list; its cursors are carried by the next physical 112-byte record (the
-    // trailing terminator/seed slot), so we bind it from that record after the walk.
+    // The run cursors are read from the FOLLOWING accepted record (the one-record lag), so the
+    // previous record's name and offset are remembered and bound when the next record is found.
+    // The last owner has no successor in the named list; its cursors are carried by the next
+    // physical 112-byte record (the trailing terminator slot), bound after the walk.
     std::string prevName;
     size_t      prevOff = 0;
     bool        havePrev = false;
@@ -3570,9 +3422,8 @@ void BINARY_PARSER::parseKeepouts()
         KEEPOUT keepout;
         keepout.type = KEEPOUT_TYPE::ALL;
 
-        // Polygon keepouts come from the structural owner -> sec12 vertex slice. The owner's
-        // vertexStart cursor anchors a contiguous run in sec12 that closes back to its first
-        // vertex. Vertices are DESIGN coordinates; add the DRW raw origin to get RAW.
+        // The owner's vertexStart cursor anchors a contiguous run in sec12 that closes back to
+        // its first vertex. Vertices are design coordinates; add the DRW raw origin to get RAW.
         std::vector<VECTOR2I> structuralLoop;
 
         if( fetchOwnerLoop( owner.name, MAX_KEEP_OUT_VERTICES, structuralLoop ) )
@@ -3588,9 +3439,8 @@ void BINARY_PARSER::parseKeepouts()
             continue;
         }
 
-        // A circle keepout has a degenerate (2-point) sec12 run, so the structural slice
-        // does not close. Its geometry is the owner record's own +96..+108 bbox, a square:
-        // center = bbox midpoint, radius = (xmax - xmin) / 2.
+        // A circle keepout has a degenerate (2-point) sec12 run that does not close. Its geometry
+        // is the owner record's +96..+108 bbox: center = midpoint, radius = (xmax - xmin) / 2.
         int64_t spanX = owner.maxX - owner.minX;
         int64_t spanY = owner.maxY - owner.minY;
 
@@ -3618,17 +3468,11 @@ void BINARY_PARSER::parseKeepouts()
 
 void BINARY_PARSER::parseCopperPours()
 {
-    // Two formats exist depending on file version:
-    //
-    // Simple format (v0x2021, v0x2026): POR headers and vertex data are embedded
-    // in sec49's byte pool with FFFFFFFF delimiters, a trailing piece table, and
-    // vertex coordinates appended at the end.
-    //
-    // Complex format (v0x2025, v0x2027): POR records reside in sec52 (88-byte
-    // records with cumulative vertex counts), per-pour layer and width metadata
-    // lives in a table at the tail of sec53, and all POR vertex coordinates are
-    // stored contiguously in sec54 after its piece metadata block.
-
+    // Two formats exist depending on file version. The simple format (v0x2021, v0x2026) embeds
+    // POR headers and vertex data in sec49's byte pool with FFFFFFFF delimiters, a trailing piece
+    // table, and vertex coordinates appended at the end. The complex format (v0x2025, v0x2027)
+    // puts POR records in sec52, per-pour layer/width metadata in a table at the tail of sec53,
+    // and all vertex coordinates contiguously in sec54 after its piece metadata block.
     struct PourHeader
     {
         size_t      offset   = 0;
@@ -3639,7 +3483,6 @@ void BINARY_PARSER::parseCopperPours()
     std::vector<PourHeader> porHeaders;
     bool                    simpleFormat = false;
 
-    // Try sec49 simple format first
     const SDB_SECTION* sec49 = getSection( SECTION::ClearanceRules );
 
     if( sec49 && sec49->totalBytes > 0 && sec49->End() <= m_data.size() )
@@ -3650,7 +3493,7 @@ void BINARY_PARSER::parseCopperPours()
         {
             SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( sec49->dataOffset + i ) );
 
-            // A pour header starts on a 0xFFFFFFFF delimiter, then marker==1 and sig 0x80.
+            // A pour header is a 0xFFFFFFFF delimiter, then marker==1, sig 0x80 and a POR name.
             if( rec.U32( 0 ) != 0xFFFFFFFF )
             {
                 i++;
@@ -3763,9 +3606,6 @@ void BINARY_PARSER::parseCopperPours()
         return;
     }
 
-    // Complex format: sec52 has POR records, sec53 has per-pour metadata table,
-    // sec54 has piece metadata followed by vertex data.
-
     const SDB_SECTION* sec52 = getSection( SECTION::PourTokensA );
     const SDB_SECTION* sec53 = getSection( SECTION::PourTokensB );
     const SDB_SECTION* sec54 = getSection( SECTION::PourTokensC );
@@ -3782,14 +3622,12 @@ void BINARY_PARSER::parseCopperPours()
         return;
     }
 
-    // Byte-stream scans over the three pour-token sections; the pointers index the SDB
-    // bytes at each section's payload offset.
     const uint8_t* sec52Data = m_data.data() + sec52->dataOffset;
     const uint8_t* sec53Data = m_data.data() + sec53->dataOffset;
     const uint8_t* sec54Data = m_data.data() + sec54->dataOffset;
 
-    // Scan sec52 byte stream for POR records identified by FFFFFFFF + u32(marker) +
-    // u8(0x80) + u8(flag) + "POR..." name. Extract cumulative vertex counts at FF+32.
+    // POR records are FFFFFFFF + u32(marker) + u8(0x80) + u8(flag) + "POR..." name; the
+    // cumulative vertex count is at FF+32.
     for( size_t i = 0; i + 36 < sec52->totalBytes; ++i )
     {
         if( sec52Data[i] != 0xFF || sec52Data[i + 1] != 0xFF
@@ -3822,21 +3660,16 @@ void BINARY_PARSER::parseCopperPours()
 
     size_t numPours = porHeaders.size();
 
-    // Derive per-pour vertex counts from the cumulative values in sec52.
-    // porHeaders[i].vtxCount is the running total through pour i.
+    // porHeaders[i].vtxCount is the running total through pour i; difference to per-pour counts.
     std::vector<uint32_t> vtxCounts( numPours );
     vtxCounts[0] = porHeaders[0].vtxCount;
 
     for( size_t p = 1; p < numPours; ++p )
         vtxCounts[p] = porHeaders[p].vtxCount - porHeaders[p - 1].vtxCount;
 
-    // Locate the per-pour metadata table at the tail of sec53.
-    // sec53 begins with FFFFFFFF-delimited ANP records. After the last one, a
-    // table of 16-byte entries follows. Each entry carries the layer for the
-    // corresponding POR pour at byte 0 and the next pour's width at bytes 11-14.
-    // The first pour's width comes from the 16 bytes immediately preceding the table.
-
-    // Find the last FFFFFFFF delimiter in sec53
+    // sec53 begins with FFFFFFFF-delimited ANP records, then a table of 16-byte entries. Each
+    // entry carries the layer for its POR pour at byte 0 and the NEXT pour's width at bytes
+    // 11-14; the first pour's width comes from the 16 bytes immediately preceding the table.
     size_t lastFF53 = 0;
     bool   foundFF  = false;
 
@@ -3856,16 +3689,14 @@ void BINARY_PARSER::parseCopperPours()
     if( !foundFF )
         return;
 
-    // The last FFFFFFFF record is 41 bytes: FFFFFFFF(4) + marker(4) + sig(1) +
-    // flag(1) + name(16) + separator(1) + tail(14). The table starts immediately
-    // after this record.
+    // The last FFFFFFFF record is 41 bytes: FFFFFFFF(4) + marker(4) + sig(1) + flag(1) +
+    // name(16) + separator(1) + tail(14). The table starts immediately after it.
     static constexpr size_t LAST_FF_RECORD_SIZE = 41;
     size_t metaTableStart = lastFF53 + LAST_FF_RECORD_SIZE;
 
     if( metaTableStart + numPours * 16 > sec53->totalBytes )
         return;
 
-    // The 16 bytes just before the table carry the first pour's width (bytes 11-14)
     size_t preTableStart = metaTableStart - 16;
 
     struct PourMeta
@@ -3882,16 +3713,15 @@ void BINARY_PARSER::parseCopperPours()
 
         pourMeta[p].layer = sec53Data[recOff];
 
-        // Width for pour p is stored in the previous 16-byte entry (bytes 11-14).
-        // For the first pour, the previous entry is the pre-table block.
+        // Width for pour p is in the previous 16-byte entry (bytes 11-14); for the first pour,
+        // the previous entry is the pre-table block.
         size_t widthSrc = ( p == 0 ) ? preTableStart : metaTableStart + ( p - 1 ) * 16;
         pourMeta[p].width =
                 m_sdb.RecordAt( static_cast<uint32_t>( sec53->dataOffset + widthSrc ) ).I32( 11 );
     }
 
-    // Locate POR vertex data in sec54. The section begins with 16-byte piece
-    // metadata records (byte 0 in {0x32, 0x33, 0x34}) followed by 4 padding bytes
-    // and then contiguous vertex coordinates. The scan may include one extra
+    // sec54 begins with 16-byte piece metadata records (byte 0 in {0x32, 0x33, 0x34}) followed
+    // by 4 padding bytes and then contiguous vertex coordinates. The scan may include one extra
     // false-positive record, so the vertex start is computed as scan_end - 12.
     size_t metaScanEnd = 0;
 
@@ -3908,7 +3738,7 @@ void BINARY_PARSER::parseCopperPours()
         metaScanEnd = pos + 16;
     }
 
-    // v0x2025 has a 3-byte header before piece metadata, shifting the scan start
+    // v0x2025 has a 3-byte header before piece metadata, shifting the scan start.
     if( m_version == 0x2025 )
     {
         if( sec54Data[0] != 0x32 && sec54Data[0] != 0x33 && sec54Data[0] != 0x34 )
@@ -3933,18 +3763,16 @@ void BINARY_PARSER::parseCopperPours()
     if( metaScanEnd < 12 )
         return;
 
-    // The last scanned "record" is typically a false positive (vertex data that
-    // happens to start with a valid piece-type byte). Back up by 12 bytes to get
-    // the true vertex start (which accounts for the 4-byte padding after real
-    // metadata, landing 12 bytes before the scan's end position).
+    // The last scanned record is typically a false positive (vertex data that happens to start
+    // with a valid piece-type byte). Backing up 12 bytes accounts for the 4-byte padding after
+    // real metadata.
     size_t vtxStart = metaScanEnd - 12;
 
-    // Sanity check: total POR vertex bytes must fit within sec54
     uint32_t totalPorVtx = porHeaders.back().vtxCount;
 
     if( vtxStart + static_cast<size_t>( totalPorVtx ) * 8 > sec54->totalBytes )
     {
-        // Fall back to scan_end + 4 in case the last metadata record was genuine
+        // Fall back in case the last metadata record was genuine.
         vtxStart = metaScanEnd + 4;
 
         if( vtxStart + static_cast<size_t>( totalPorVtx ) * 8 > sec54->totalBytes )
@@ -3985,8 +3813,8 @@ void BINARY_PARSER::parseLayerStackup()
     m_layerInfos.clear();
 
     // The sec69 layout (name@+0, routing_dir@+32, layer_thickness@+52, copper_thickness@+56,
-    // dielectric f32@+60, usage@+148; 31 records of 152 bytes) is verified on v0x2027 only.
-    // Older dialects keep the synthesized fallback in GetLayerInfos().
+    // dielectric f32@+60; 31 records of 152 bytes) is verified on v0x2027 only. Older dialects
+    // keep the synthesized fallback in GetLayerInfos().
     if( m_version != 0x2027 )
         return;
 
@@ -4000,8 +3828,8 @@ void BINARY_PARSER::parseLayerStackup()
 
     static const std::string ANCHOR = "(All layers)";
 
-    // Locate the single "(All layers)" occurrence. This anchors the first record; the
-    // directory data_offset is stale and overflows the indexed region on large boards.
+    // The "(All layers)" string anchors the first record; the directory data_offset overflows
+    // the indexed region on large boards.
     auto it = std::search( m_data.begin(), m_data.end(), ANCHOR.begin(), ANCHOR.end() );
 
     if( it == m_data.end() )
@@ -4030,12 +3858,11 @@ void BINARY_PARSER::parseLayerStackup()
         std::memcpy( &dielectric, &m_data[rec + OFF_DIEL], sizeof( float ) );
         info.dielectric_constant = static_cast<double>( dielectric );
 
-        // A real copper layer carries a non-zero COPPER_THICKNESS; the count of these equals
-        // the ASC MAXIMUMLAYER on every corpus file (4/4/12). The usage==1 enum is NOT a
-        // reliable copper signal on its own: the "(All layers)" pseudo-layer also reads
-        // usage==1, and a routed outer layer can read usage==0 (BR350460A's Bottom), so a
-        // usage-only test both over- and under-counts. COPPER_THICKNESS is the stable
-        // discriminator that includes Bottom and excludes the pseudo-layer and doc layers.
+        // A real copper layer carries a non-zero COPPER_THICKNESS. The usage==1 enum is not a
+        // reliable copper signal on its own: the "(All layers)" pseudo-layer also reads usage==1,
+        // and a routed outer layer can read usage==0, so a usage-only test both over- and
+        // under-counts. COPPER_THICKNESS includes Bottom and excludes the pseudo-layer and doc
+        // layers.
         info.is_copper = ( info.copper_thickness > 0.0 );
         info.required  = info.is_copper;
 
@@ -4052,8 +3879,8 @@ void BINARY_PARSER::parseLayerStackup()
         m_layerInfos.push_back( std::move( info ) );
     }
 
-    // The leading "(All layers)" aggregate is a pseudo-layer, never a real copper layer.
-    // It always carries usage==1, so demote it explicitly to avoid an extra copper entry.
+    // The leading "(All layers)" aggregate is a pseudo-layer that always carries usage==1;
+    // demote it explicitly to avoid an extra copper entry.
     if( !m_layerInfos.empty() && m_layerInfos.front().name == ANCHOR )
     {
         m_layerInfos.front().is_copper = false;
@@ -4065,9 +3892,9 @@ void BINARY_PARSER::parseLayerStackup()
 
 std::vector<LAYER_INFO> BINARY_PARSER::GetLayerInfos() const
 {
-    // When the sec69 stackup table was decoded, renumber its active copper layers 1..N in
-    // table order and append the standard non-copper technical layers (which sec69 names by
-    // documentation subtype rather than the canonical PADS numbers the importer maps).
+    // When the sec69 stackup table was decoded, renumber its active copper layers 1..N in table
+    // order and append the standard non-copper technical layers, which sec69 names by
+    // documentation subtype rather than the canonical PADS numbers the importer maps.
     if( !m_layerInfos.empty() )
     {
         std::vector<LAYER_INFO> infos;
@@ -4135,7 +3962,6 @@ std::vector<LAYER_INFO> BINARY_PARSER::GetLayerInfos() const
     }
 
     // Standard PADS non-copper layers follow well-known numbering conventions.
-    // These enable proper layer mapping for text, graphics, and mask layers.
     struct NonCopperDef
     {
         int                 number;
@@ -4176,9 +4002,8 @@ void BINARY_PARSER::linkPartsToDecals()
 
     if( isOldFormat() )
     {
-        // v0x2021 has no parttype-definition layer. The placement's decal is the direct
-        // index captured in m_partDecalIndex (the NEXT 96 B placement record's @+56),
-        // resolved against the JMPVIA-anchored decal-name table.
+        // v0x2021 has no parttype-definition layer. The placement's decal is the direct index in
+        // m_partDecalIndex, resolved against the decal-name table.
         if( m_partDecalIndex.empty() || m_decalNameTable.empty() )
             return;
 
@@ -4208,14 +4033,10 @@ void BINARY_PARSER::linkPartsToDecals()
         return;
     }
 
-    // Deterministic placement -> decal chain (verified across v0x2025/26/27):
-    //   parttype index I = the NEXT section 22 record's @+4 (a +1 block-interleave lag,
-    //                      captured in m_partTypeIndex during parsePartPlacements)
-    //   decal_index      = m_partTypeDecalIndex[I]  (parttype-definition table, payload +96)
-    //   decal NAME       = m_decalNameTable[decal_index]  (complete decal-name table)
-    //
-    // The decal-name table covers connectors and mounting holes that section 10 lacks,
-    // so this resolves the full placed set rather than just the section 10 subset.
+    // Placement -> decal chain: parttype index I from m_partTypeIndex, then
+    // m_partTypeDecalIndex[I] for the decal_index, then m_decalNameTable[decal_index] for the
+    // name. The decal-name table covers connectors and mounting holes section 10 lacks, so this
+    // resolves the full placed set.
     if( m_partTypeDecalIndex.empty() || m_decalNameTable.empty() )
         return;
 

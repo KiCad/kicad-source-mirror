@@ -55,46 +55,35 @@ public:
                       const std::map<std::string, UTF8>* aProperties, PROJECT* aProject ) override;
 
     /**
-     * Return the automapped layers.
-     *
-     * The callback needs to have the context of the current board so it can
-     * correctly determine copper layer mapping. Thus, it is not static and is
-     * expected to be bound to an instance of PCB_IO_PADS.
-     *
-     * @param aInputLayerDescriptionVector the input layer descriptions from the PADS file
-     * @return Auto-mapped layers
+     * Return the automapped layers. Non-static because copper layer mapping depends on the
+     * current board, so the callback is bound to a PCB_IO_PADS instance.
      */
     std::map<wxString, PCB_LAYER_ID> DefaultLayerMappingCallback(
             const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector );
 
 private:
-    // LoadBoard helper methods -- each handles one logical section of the import
     int         scaleSize( double aVal ) const;
     int         scaleCoord( double aVal, bool aIsX ) const;
 
-    /// Resolve a PADS decal/part UNITS letter to a nm-per-unit scale factor.
-    /// Returns 0.0 to indicate the file's primary unit (use scaleSize) should
-    /// be used. The PADS letter convention is counterintuitive: `I` = Imperial
-    /// (mils, not real inches), `M` = Metric (mm, not mils).
+    /// Resolve a PADS decal/part UNITS letter to a nm-per-unit scale factor, or 0.0 to use
+    /// the file's primary unit. The PADS letters are counterintuitive: `I` is Imperial
+    /// (mils, not inches), `M` is Metric (mm, not mils).
     double      decalUnitScale( const std::string& aUnits ) const;
     PCB_LAYER_ID getMappedLayer( int aPadsLayer ) const;
     void        ensureNet( const std::string& aNetName );
 
-    /// Interpolate arc segments from an ARC_POINT vector into polyline
-    /// vertices on a SHAPE_LINE_CHAIN. Full-circle entries become
-    /// 36-segment polygons.
+    /// Append ARC_POINT vertices to a chain, expanding full-circle entries to 36-segment
+    /// polygons.
     void appendArcPoints( SHAPE_LINE_CHAIN& aChain,
                           const std::vector<PADS_IO::ARC_POINT>& aPts );
 
-    /// Configure a PCB_SHAPE as an arc from two consecutive PADS points
-    /// using board-level scaleCoord. Handles the Y-axis winding fix.
+    /// Configure a PCB_SHAPE as an arc from two consecutive PADS points, applying the
+    /// Y-axis winding fix.
     void setPcbShapeArc( PCB_SHAPE* aShape, const PADS_IO::ARC_POINT& aPrev,
                          const PADS_IO::ARC_POINT& aCurr );
 
-    /// Build a SHAPE_ARC from two consecutive PADS points using the
-    /// midpoint approach. Computes the arc midpoint in PADS coordinate
-    /// space before the Y-axis flip so the 3-point constructor gets
-    /// the correct winding.
+    /// Build a SHAPE_ARC from two consecutive PADS points. The midpoint is computed in PADS
+    /// space before the Y-axis flip so the 3-point constructor gets the correct winding.
     SHAPE_ARC makeMidpointArc( const PADS_IO::ARC_POINT& aPrev,
                                const PADS_IO::ARC_POINT& aCurr, int aWidth );
 
@@ -116,10 +105,9 @@ private:
     void        reportStatistics();
     void        clearLoadingState();
 
-    // Persistent state
     std::map<wxString, PCB_LAYER_ID>            m_layer_map;      ///< PADS layer names to KiCad layers
 
-    // Loading state -- valid only during LoadBoard, cleared by clearLoadingState()
+    // Valid only during LoadBoard, cleared by clearLoadingState().
     BOARD*                                      m_loadBoard = nullptr;
     const PADS_IO::PARSER*                      m_parser = nullptr;
     PADS_UNIT_CONVERTER                         m_unitConverter;

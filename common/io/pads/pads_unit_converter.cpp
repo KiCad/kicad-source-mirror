@@ -55,7 +55,6 @@ void PADS_UNIT_CONVERTER::SetBasicUnitsScale( double aScale )
 
 bool PADS_UNIT_CONVERTER::ParseFileHeader( const std::string& aHeader )
 {
-    // Look for BASIC indicator in header like "!PADS-POWERPCB-V9.0-BASIC!"
     if( aHeader.find( "BASIC" ) != std::string::npos ||
         aHeader.find( "basic" ) != std::string::npos )
     {
@@ -63,7 +62,6 @@ bool PADS_UNIT_CONVERTER::ParseFileHeader( const std::string& aHeader )
         return true;
     }
 
-    // Look for explicit unit type indicators
     if( aHeader.find( "MILS" ) != std::string::npos ||
         aHeader.find( "mils" ) != std::string::npos )
     {
@@ -97,28 +95,26 @@ std::optional<PADS_UNIT_TYPE> PADS_UNIT_CONVERTER::ParseUnitCode( const std::str
     if( aUnitCode.empty() )
         return std::nullopt;
 
-    // "M" and "D" (default) both mean MILS
+    // "D" is the PADS default code and means MILS.
     if( aUnitCode == "M" || aUnitCode == "m" || aUnitCode == "D" || aUnitCode == "d" ||
         aUnitCode == "MILS" || aUnitCode == "mils" || aUnitCode == "MIL" || aUnitCode == "mil" )
     {
         return PADS_UNIT_TYPE::MILS;
     }
 
-    // "MM" means METRIC (millimeters)
     if( aUnitCode == "MM" || aUnitCode == "mm" ||
         aUnitCode == "METRIC" || aUnitCode == "metric" )
     {
         return PADS_UNIT_TYPE::METRIC;
     }
 
-    // "I" means INCHES
     if( aUnitCode == "I" || aUnitCode == "i" ||
         aUnitCode == "INCHES" || aUnitCode == "inches" || aUnitCode == "INCH" || aUnitCode == "inch" )
     {
         return PADS_UNIT_TYPE::INCHES;
     }
 
-    // "N" means no override
+    // "N" means no override.
     if( aUnitCode == "N" || aUnitCode == "n" )
         return std::nullopt;
 
@@ -157,7 +153,6 @@ void PADS_UNIT_CONVERTER::updateScaleFactor()
         return;
     }
 
-    // Use override if present, otherwise use base unit type
     PADS_UNIT_TYPE effectiveType = m_unitOverrideStack.empty()
                                            ? m_unitType
                                            : m_unitOverrideStack.back();

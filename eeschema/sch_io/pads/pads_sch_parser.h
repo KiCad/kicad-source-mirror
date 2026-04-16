@@ -57,9 +57,6 @@ struct SHEET_SIZE
 };
 
 
-/**
- * General schematic parameters from *SCH* and *FIELDS* sections.
- */
 struct PARAMETERS
 {
     UNIT_TYPE   units = UNIT_TYPE::MILS;
@@ -71,7 +68,6 @@ struct PARAMETERS
     double      text_size = 60.0;
     double      line_width = 1.0;
 
-    // Additional *SCH* parameters
     int         cur_sheet = 0;
     int         conn_width = 0;
     int         bus_width = 0;
@@ -94,7 +90,6 @@ struct PARAMETERS
     std::string font_mode;
     std::string default_font;
 
-    // All user fields from *FIELDS*, keyed by field name
     std::map<std::string, std::string> fields;
 };
 
@@ -119,8 +114,8 @@ struct ARC_DATA
 
 struct GRAPHIC_POINT
 {
-    POINT                     coord;
-    std::optional<ARC_DATA>   arc;
+    POINT                   coord;
+    std::optional<ARC_DATA> arc;
 };
 
 
@@ -138,9 +133,6 @@ enum class PIN_TYPE
 };
 
 
-/**
- * Pin T/P line pair from CAEDECAL.
- */
 struct SYMBOL_PIN
 {
     std::string name;
@@ -152,7 +144,6 @@ struct SYMBOL_PIN
     bool        inverted = false;
     bool        clock = false;
 
-    // T-line fields
     int         side = 0;
     int         pn_h = 0;
     int         pn_w = 0;
@@ -164,14 +155,13 @@ struct SYMBOL_PIN
     int         pl_just = 0;
     std::string pin_decal_name;
 
-    // P-line fields
-    POINT       pn_offset;
-    int         pn_off_angle = 0;
-    int         pn_off_just = 0;
-    POINT       pl_offset;
-    int         pl_off_angle = 0;
-    int         pl_off_just = 0;
-    int         p_flags = 0;
+    POINT pn_offset;
+    int   pn_off_angle = 0;
+    int   pn_off_just = 0;
+    POINT pl_offset;
+    int   pl_off_angle = 0;
+    int   pl_off_just = 0;
+    int   p_flags = 0;
 };
 
 
@@ -185,9 +175,6 @@ enum class GRAPHIC_TYPE
 };
 
 
-/**
- * Graphic primitive from CAEDECAL or LINES sections (OPEN, CLOSED, CIRCLE, COPCLS).
- */
 struct SYMBOL_GRAPHIC
 {
     GRAPHIC_TYPE               type = GRAPHIC_TYPE::LINE;
@@ -216,9 +203,6 @@ struct SYMBOL_TEXT
 };
 
 
-/**
- * Attribute label pair from CAEDECAL or PART entries.
- */
 struct CAEDECAL_ATTR
 {
     POINT       position;
@@ -232,11 +216,6 @@ struct CAEDECAL_ATTR
 };
 
 
-/**
- * Symbol definition from *CAEDECAL* section.
- *
- * Contains graphic primitives and pin definitions for a reusable schematic symbol.
- */
 struct SYMBOL_DEF
 {
     std::string                 name;
@@ -247,23 +226,22 @@ struct SYMBOL_DEF
     std::vector<SYMBOL_GRAPHIC> graphics;
     std::vector<SYMBOL_TEXT>    texts;
 
-    // Full CAEDECAL header fields
-    int                         f1 = 0;
-    int                         f2 = 0;
-    int                         height = 0;
-    int                         width = 0;
-    int                         h2 = 0;
-    int                         w2 = 0;
-    int                         num_attrs = 0;
-    int                         num_pieces = 0;
-    int                         has_polarity = 0;
-    int                         num_pins = 0;
-    int                         pin_origin_code = 0;
-    int                         is_pin_decal = 0;
+    int f1 = 0;
+    int f2 = 0;
+    int height = 0;
+    int width = 0;
+    int h2 = 0;
+    int w2 = 0;
+    int num_attrs = 0;
+    int num_pieces = 0;
+    int has_polarity = 0;
+    int num_pins = 0;
+    int pin_origin_code = 0;
+    int is_pin_decal = 0;
 
-    std::string                 font1;
-    std::string                 font2;
-    std::vector<CAEDECAL_ATTR>  attrs;
+    std::string                font1;
+    std::string                font2;
+    std::vector<CAEDECAL_ATTR> attrs;
 };
 
 
@@ -284,9 +262,6 @@ struct PART_ATTRIBUTE
 };
 
 
-/**
- * Part instance from *PART* section.
- */
 struct PART_PLACEMENT
 {
     std::string                 reference;
@@ -300,23 +275,20 @@ struct PART_PLACEMENT
     int                         gate_number = 1;
     std::vector<PART_ATTRIBUTE> attributes;
 
-    // Full *PART* header fields
-    int                         h1 = 0;
-    int                         w1 = 0;
-    int                         h2 = 0;
-    int                         w2 = 0;
-    int                         num_attrs = 0;
-    int                         num_displayed_values = 0;
-    int                         num_pins = 0;
-    int                         gate_index = 0;
-    int                         pin_origin_code = 0;
-    std::string                 font1;
-    std::string                 font2;
+    int         h1 = 0;
+    int         w1 = 0;
+    int         h2 = 0;
+    int         w2 = 0;
+    int         num_attrs = 0;
+    int         num_displayed_values = 0;
+    int         num_pins = 0;
+    int         gate_index = 0;
+    int         pin_origin_code = 0;
+    std::string font1;
+    std::string font2;
 
-    // Attribute value overrides parsed from "name" value lines
     std::map<std::string, std::string> attr_overrides;
 
-    // Pin override lines (zero-based index -> formatting)
     struct PIN_OVERRIDE
     {
         int height = 0;
@@ -325,7 +297,7 @@ struct PART_PLACEMENT
         int justification = 0;
     };
 
-    std::vector<PIN_OVERRIDE>   pin_overrides;
+    std::vector<PIN_OVERRIDE> pin_overrides;
 };
 
 
@@ -334,11 +306,10 @@ struct PART_PLACEMENT
  */
 struct WIRE_SEGMENT
 {
-    POINT              start;
-    POINT              end;
-    int                sheet_number = 1;
+    POINT start;
+    POINT end;
+    int   sheet_number = 1;
 
-    // Real format fields
     std::string        endpoint_a;
     std::string        endpoint_b;
     int                vertex_count = 0;
@@ -355,24 +326,18 @@ struct PIN_CONNECTION
 };
 
 
-/**
- * Signal (net) definition from CONNECTION and SIGNAL sections.
- */
 struct SCH_SIGNAL
 {
     std::string                 name;
     std::vector<WIRE_SEGMENT>   wires;
     std::vector<PIN_CONNECTION> connections;
 
-    int                         flags1 = 0;
-    int                         flags2 = 0;
-    std::string                 function;
+    int         flags1 = 0;
+    int         flags2 = 0;
+    std::string function;
 };
 
 
-/**
- * Off-page reference from *OFFPAGE REFS* section.
- */
 struct OFF_PAGE_CONNECTOR
 {
     std::string signal_name;
@@ -396,9 +361,6 @@ struct SHEET_DEF
 };
 
 
-/**
- * Sheet header from *SHT* section.
- */
 struct SHEET_HEADER
 {
     int         sheet_num = 0;
@@ -408,9 +370,6 @@ struct SHEET_HEADER
 };
 
 
-/**
- * Junction dot from *TIEDOTS* section.
- */
 struct TIED_DOT
 {
     int   id = 0;
@@ -419,9 +378,6 @@ struct TIED_DOT
 };
 
 
-/**
- * Free text item from *TEXT* section.
- */
 struct TEXT_ITEM
 {
     POINT       position;
@@ -436,9 +392,6 @@ struct TEXT_ITEM
 };
 
 
-/**
- * Graphical line/shape item from *LINES* section.
- */
 struct LINES_ITEM
 {
     std::string                 name;
@@ -451,9 +404,6 @@ struct LINES_ITEM
 };
 
 
-/**
- * Net name label from *NETNAMES* section.
- */
 struct NETNAME_LABEL
 {
     std::string net_name;
@@ -473,9 +423,6 @@ struct NETNAME_LABEL
 };
 
 
-/**
- * Pin definition within a PARTTYPE GATE.
- */
 struct PARTTYPE_PIN
 {
     std::string pin_id;
@@ -485,36 +432,29 @@ struct PARTTYPE_PIN
 };
 
 
-/**
- * Gate definition within a PARTTYPE.
- */
 struct GATE_DEF
 {
-    int                         num_decal_variants = 0;
-    int                         num_pins = 0;
-    int                         swap_flag = 0;
-    std::vector<std::string>    decal_names;
-    std::vector<PARTTYPE_PIN>   pins;
+    int                       num_decal_variants = 0;
+    int                       num_pins = 0;
+    int                       swap_flag = 0;
+    std::vector<std::string>  decal_names;
+    std::vector<PARTTYPE_PIN> pins;
 };
 
 
-/**
- * Part type definition from *PARTTYPE* section.
- */
 struct PARTTYPE_DEF
 {
-    std::string                  name;
-    std::string                  category;
-    int                          num_physical = 0;
-    int                          num_sigpins = 0;
-    int                          unused = 0;
-    int                          num_swap_groups = 0;
-    std::string                  timestamp;
+    std::string name;
+    std::string category;
+    int         num_physical = 0;
+    int         num_sigpins = 0;
+    int         unused = 0;
+    int         num_swap_groups = 0;
+    std::string timestamp;
 
-    std::vector<GATE_DEF>        gates;
+    std::vector<GATE_DEF> gates;
 
-    // For special symbols ($GND_SYMS, $PWR_SYMS, $OSR_SYMS)
-    std::string                  special_keyword;
+    std::string special_keyword;
 
     struct SPECIAL_VARIANT
     {
@@ -525,28 +465,22 @@ struct PARTTYPE_DEF
 
     std::vector<SPECIAL_VARIANT> special_variants;
 
-    // For CONN-based connectors
-    bool                         is_connector = false;
+    bool is_connector = false;
 
-    // SIGPIN entries (hidden power pins)
     struct SIGPIN
     {
         std::string pin_number;
         std::string net_name;
     };
 
-    std::vector<SIGPIN>          sigpins;
+    std::vector<SIGPIN> sigpins;
 
-    // Swap group lines
-    std::vector<std::string>     swap_lines;
+    std::vector<std::string> swap_lines;
 };
 
 
 /**
- * Parser for PADS Logic schematic design export files.
- *
- * Handles the *PADS-LOGIC-V9.0* ASCII export format with global sections
- * (*SCH*, *CAM*, *MISC*, *FIELDS*) followed by per-sheet sections.
+ * Parser for PADS Logic ASCII schematic export files.
  */
 class PADS_SCH_PARSER
 {
@@ -563,34 +497,34 @@ public:
     static PIN_TYPE ParsePinTypeChar( char aTypeChar );
 
     const FILE_HEADER& GetHeader() const { return m_header; }
-    const PARAMETERS& GetParameters() const { return m_parameters; }
+    const PARAMETERS&  GetParameters() const { return m_parameters; }
 
     const std::vector<SYMBOL_DEF>& GetSymbolDefs() const { return m_symbolDefs; }
-    const SYMBOL_DEF* GetSymbolDef( const std::string& aName ) const;
+    const SYMBOL_DEF*              GetSymbolDef( const std::string& aName ) const;
 
     const std::vector<PART_PLACEMENT>& GetPartPlacements() const { return m_partPlacements; }
-    const PART_PLACEMENT* GetPartPlacement( const std::string& aReference ) const;
+    const PART_PLACEMENT*              GetPartPlacement( const std::string& aReference ) const;
 
     const std::vector<SCH_SIGNAL>& GetSignals() const { return m_signals; }
-    const SCH_SIGNAL* GetSignal( const std::string& aName ) const;
+    const SCH_SIGNAL*              GetSignal( const std::string& aName ) const;
 
     std::string GetVersion() const { return m_header.version; }
-    bool IsValid() const { return m_header.valid; }
+    bool        IsValid() const { return m_header.valid; }
 
-    int GetSheetCount() const;
+    int           GetSheetCount() const;
     std::set<int> GetSheetNumbers() const;
 
     const std::vector<OFF_PAGE_CONNECTOR>& GetOffPageConnectors() const { return m_offPageConnectors; }
 
-    std::vector<SCH_SIGNAL> GetSignalsOnSheet( int aSheetNumber ) const;
+    std::vector<SCH_SIGNAL>     GetSignalsOnSheet( int aSheetNumber ) const;
     std::vector<PART_PLACEMENT> GetPartsOnSheet( int aSheetNumber ) const;
 
     const std::map<std::string, PARTTYPE_DEF>& GetPartTypes() const { return m_partTypes; }
-    const std::vector<TIED_DOT>& GetTiedDots() const { return m_tiedDots; }
-    const std::vector<SHEET_HEADER>& GetSheetHeaders() const { return m_sheetHeaders; }
-    const std::vector<TEXT_ITEM>& GetTextItems() const { return m_textItems; }
-    const std::vector<LINES_ITEM>& GetLinesItems() const { return m_linesItems; }
-    const std::vector<NETNAME_LABEL>& GetNetNameLabels() const { return m_netNameLabels; }
+    const std::vector<TIED_DOT>&               GetTiedDots() const { return m_tiedDots; }
+    const std::vector<SHEET_HEADER>&           GetSheetHeaders() const { return m_sheetHeaders; }
+    const std::vector<TEXT_ITEM>&              GetTextItems() const { return m_textItems; }
+    const std::vector<LINES_ITEM>&             GetLinesItems() const { return m_linesItems; }
+    const std::vector<NETNAME_LABEL>&          GetNetNameLabels() const { return m_netNameLabels; }
 
 private:
     bool parseHeader( const std::string& aLine );
@@ -620,25 +554,24 @@ private:
 
     PIN_TYPE parsePinType( const std::string& aTypeStr );
 
-    bool isSectionMarker( const std::string& aLine ) const;
+    bool        isSectionMarker( const std::string& aLine ) const;
     std::string extractSectionName( const std::string& aLine ) const;
 
-    REPORTER*                               m_reporter;
-    FILE_HEADER                             m_header;
-    PARAMETERS                              m_parameters;
-    std::vector<SYMBOL_DEF>                 m_symbolDefs;
-    std::vector<PART_PLACEMENT>             m_partPlacements;
-    std::vector<SCH_SIGNAL>                 m_signals;
-    std::vector<OFF_PAGE_CONNECTOR>         m_offPageConnectors;
-    int                                     m_lineNumber;
-    int                                     m_currentSheet;
-    std::map<std::string, PARTTYPE_DEF>     m_partTypes;
-    std::vector<TIED_DOT>                   m_tiedDots;
-    std::vector<SHEET_HEADER>               m_sheetHeaders;
-    std::vector<TEXT_ITEM>                  m_textItems;
-    std::vector<LINES_ITEM>                 m_linesItems;
-    std::vector<NETNAME_LABEL>              m_netNameLabels;
+    REPORTER*                           m_reporter;
+    FILE_HEADER                         m_header;
+    PARAMETERS                          m_parameters;
+    std::vector<SYMBOL_DEF>             m_symbolDefs;
+    std::vector<PART_PLACEMENT>         m_partPlacements;
+    std::vector<SCH_SIGNAL>             m_signals;
+    std::vector<OFF_PAGE_CONNECTOR>     m_offPageConnectors;
+    int                                 m_lineNumber;
+    int                                 m_currentSheet;
+    std::map<std::string, PARTTYPE_DEF> m_partTypes;
+    std::vector<TIED_DOT>               m_tiedDots;
+    std::vector<SHEET_HEADER>           m_sheetHeaders;
+    std::vector<TEXT_ITEM>              m_textItems;
+    std::vector<LINES_ITEM>             m_linesItems;
+    std::vector<NETNAME_LABEL>          m_netNameLabels;
 };
 
 } // namespace PADS_SCH
-

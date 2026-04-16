@@ -25,162 +25,82 @@
 #include <string>
 #include <vector>
 
-/**
- * Unit types supported by PADS file formats.
- */
 enum class PADS_UNIT_TYPE
 {
-    MILS,       ///< Thousandths of an inch (1 mil = 0.001 inch)
+    MILS,       ///< Thousandths of an inch
     METRIC,     ///< Millimeters
-    INCHES      ///< Inches
+    INCHES
 };
 
 /**
- * Converts PADS file format units to KiCad internal units (nanometers).
- *
- * PADS files can use different unit systems: MILS, METRIC (mm), or INCHES.
- * Additionally, files can use BASIC units which are internal database units.
- * This class handles conversion from any of these to KiCad's internal
- * nanometer representation.
+ * Converts PADS file units (MILS, METRIC, INCHES, or internal BASIC database
+ * units) to KiCad internal units (nanometers).
  */
 class PADS_UNIT_CONVERTER
 {
 public:
     PADS_UNIT_CONVERTER();
 
-    /**
-     * Set the base units for conversion.
-     *
-     * @param aUnitType The unit type used in the PADS file.
-     */
     void SetBaseUnits( PADS_UNIT_TYPE aUnitType );
 
-    /**
-     * Get the current unit type.
-     *
-     * @return The currently configured unit type.
-     */
     PADS_UNIT_TYPE GetUnitType() const { return m_unitType; }
 
     /**
-     * Enable or disable BASIC units mode.
-     *
-     * BASIC units are PADS internal database units at 1/38100 mil resolution.
-     * When enabled, coordinate values are interpreted as BASIC units regardless
-     * of the base unit type.
-     *
-     * @param aEnabled True to enable BASIC units mode.
+     * Enable or disable BASIC units mode. BASIC units are PADS internal database
+     * units at 1/38100 mil resolution, interpreted regardless of the base unit
+     * type.
      */
     void SetBasicUnitsMode( bool aEnabled );
 
-    /**
-     * Check if BASIC units mode is enabled.
-     *
-     * @return True if BASIC units mode is enabled.
-     */
     bool IsBasicUnitsMode() const { return m_basicUnitsMode; }
 
     /**
-     * Set a custom scale for BASIC units.
-     *
-     * Some PADS files may use non-standard BASIC unit scales. The default
-     * scale is MILS_TO_NM / 38100.0 (1/38100 mil per unit).
-     *
-     * @param aScale The scale factor in nanometers per BASIC unit.
+     * Set a custom scale for BASIC units, in nanometers per BASIC unit. The
+     * default is MILS_TO_NM / 38100.0.
      */
     void SetBasicUnitsScale( double aScale );
 
-    /**
-     * Get the current BASIC units scale.
-     *
-     * @return The scale factor in nanometers per BASIC unit.
-     */
     double GetBasicUnitsScale() const { return m_basicUnitsScale; }
 
     /**
-     * Parse a PADS file header string and configure units accordingly.
-     *
-     * Detects BASIC mode from header strings like "!PADS-POWERPCB-V9.0-BASIC!"
-     * and unit types from strings like "!PADS-POWERPCB-V9.5-MILS!".
-     *
-     * @param aHeader The file header string to parse.
-     * @return True if the header was successfully parsed and units configured.
+     * Parse a PADS file header string and configure units accordingly. Returns
+     * true if a unit type or BASIC mode was recognized.
      */
     bool ParseFileHeader( const std::string& aHeader );
 
     /**
-     * Parse a PADS unit code and return the corresponding unit type.
-     *
-     * PADS uses short codes in parts and decals to specify local unit overrides:
-     * - "M" = MILS
-     * - "MM" = METRIC (millimeters)
-     * - "I" = INCHES
-     * - "D" = MILS (default)
-     * - "N" = No override (returns empty optional)
-     *
-     * @param aUnitCode The unit code string to parse.
-     * @return The corresponding unit type, or empty optional if code is invalid
-     *         or indicates no override.
+     * Parse a PADS unit override code ("M"/"D" mils, "MM" metric, "I" inches),
+     * returning an empty optional for "N" (no override) or an invalid code.
      */
     static std::optional<PADS_UNIT_TYPE> ParseUnitCode( const std::string& aUnitCode );
 
     /**
-     * Push a unit override onto the stack.
-     *
-     * PADS parts and decals can specify their own units that temporarily
-     * override the file's base units. This pushes an override onto the
-     * stack, affecting all subsequent conversions until popped.
-     *
-     * @param aUnitCode The unit code string (e.g., "M", "MM", "I").
-     * @return True if a valid override was pushed, false if code was invalid
-     *         or indicated no override.
+     * Push a unit override onto the stack, temporarily overriding the base units
+     * for subsequent conversions until popped. Returns false for an invalid or
+     * no-override code.
      */
     bool PushUnitOverride( const std::string& aUnitCode );
 
     /**
-     * Pop the most recent unit override from the stack.
-     *
-     * Removes the most recent override, reverting to the previous unit
-     * setting (either another override or the base units).
+     * Pop the most recent unit override, reverting to the previous setting.
      */
     void PopUnitOverride();
 
-    /**
-     * Check if any unit overrides are currently active.
-     *
-     * @return True if one or more overrides are on the stack.
-     */
     bool HasUnitOverride() const { return !m_unitOverrideStack.empty(); }
 
-    /**
-     * Get the current override depth.
-     *
-     * @return The number of overrides currently on the stack.
-     */
     size_t GetOverrideDepth() const { return m_unitOverrideStack.size(); }
 
     /**
-     * Convert a coordinate value to nanometers.
-     *
-     * This is the primary conversion function for positional values.
-     *
-     * @param aValue The value in PADS file units.
-     * @return The value in nanometers (KiCad internal units).
+     * Convert a coordinate value in PADS file units to nanometers.
      */
     int64_t ToNanometers( double aValue ) const;
 
     /**
-     * Convert a size value to nanometers.
-     *
-     * Size values (widths, heights, radii) use the same conversion as
-     * coordinates but may have different rounding behavior in the future.
-     *
-     * @param aValue The size value in PADS file units.
-     * @return The size in nanometers (KiCad internal units).
+     * Convert a size value (width, height, radius) in PADS file units to
+     * nanometers.
      */
     int64_t ToNanometersSize( double aValue ) const;
 
-    // Conversion constants
     static constexpr double MILS_TO_NM = 25400.0;           // 1 mil = 25.4 um = 25400 nm
     static constexpr double MM_TO_NM = 1000000.0;           // 1 mm = 1,000,000 nm
     static constexpr double INCHES_TO_NM = 25400000.0;      // 1 inch = 25.4 mm = 25,400,000 nm

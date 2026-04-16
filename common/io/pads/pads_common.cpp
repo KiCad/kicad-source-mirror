@@ -35,19 +35,14 @@ namespace PADS_COMMON
 
 KIID GenerateDeterministicUuid( const std::string& aIdentifier )
 {
-    // Use FNV-1a hash algorithm to generate a 128-bit hash from the identifier string.
-    // This produces deterministic output for the same input, enabling cross-probe
-    // linking between schematic and PCB imports.
-
-    // FNV-1a parameters for 64-bit
+    // 64-bit FNV-1a parameters.
     const uint64_t FNV_PRIME = 0x00000100000001B3ULL;
     const uint64_t FNV_OFFSET = 0xcbf29ce484222325ULL;
 
-    // Hash the identifier twice with different salts to get 128 bits
+    // Hash the identifier twice with different salts to fill 128 bits.
     uint64_t hash1 = FNV_OFFSET;
     uint64_t hash2 = FNV_OFFSET;
 
-    // First hash with "PADS1:" prefix
     std::string salt1 = "PADS1:" + aIdentifier;
 
     for( char c : salt1 )
@@ -56,7 +51,6 @@ KIID GenerateDeterministicUuid( const std::string& aIdentifier )
         hash1 *= FNV_PRIME;
     }
 
-    // Second hash with "PADS2:" prefix
     std::string salt2 = "PADS2:" + aIdentifier;
 
     for( char c : salt2 )
@@ -65,30 +59,26 @@ KIID GenerateDeterministicUuid( const std::string& aIdentifier )
         hash2 *= FNV_PRIME;
     }
 
-    // Format as UUID string (xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx)
-    // Version 4 UUID format with deterministic values
+    // Emit a version-4 UUID (xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx) from the hashes.
     std::ostringstream ss;
     ss << std::hex << std::setfill( '0' );
 
-    // First 8 hex chars from hash1
     ss << std::setw( 8 ) << ( hash1 >> 32 );
     ss << '-';
 
-    // Next 4 hex chars from hash1
     ss << std::setw( 4 ) << ( ( hash1 >> 16 ) & 0xFFFF );
     ss << '-';
 
-    // Version 4 UUID: set version bits
+    // Force the version-4 nibble.
     uint16_t version = ( ( hash1 & 0xFFFF ) & 0x0FFF ) | 0x4000;
     ss << std::setw( 4 ) << version;
     ss << '-';
 
-    // Variant bits: set to 10xx (RFC 4122 variant)
+    // Force the RFC 4122 10xx variant bits.
     uint16_t variant = ( ( hash2 >> 48 ) & 0x3FFF ) | 0x8000;
     ss << std::setw( 4 ) << variant;
     ss << '-';
 
-    // Last 12 hex chars from hash2
     ss << std::setw( 12 ) << ( hash2 & 0xFFFFFFFFFFFFULL );
 
     return KIID( ss.str() );
@@ -107,24 +97,16 @@ PADS_FILE_TYPE DetectPadsFileType( const wxString& aFilePath )
     if( !std::getline( file, line ) )
         return PADS_FILE_TYPE::UNKNOWN;
 
-    // PADS PowerPCB (PCB) files start with *PADS-POWERPCB or !PADS-POWERPCB,
-    // optionally followed by a version and code page suffix before the
-    // closing asterisk.
+    // The header tag may carry a version and code page suffix, so match the
+    // prefix only and anchor at position 0 to require it at the line start.
     if( line.rfind( "*PADS-POWERPCB", 0 ) == 0
         || line.rfind( "!PADS-POWERPCB", 0 ) == 0 )
         return PADS_FILE_TYPE::PCB_ASCII;
 
-    // PADS Router PCB files start with *PADS2000 or !PADS2000, with an
-    // optional version suffix.
     if( line.rfind( "*PADS2000", 0 ) == 0
         || line.rfind( "!PADS2000", 0 ) == 0 )
         return PADS_FILE_TYPE::PCB_ASCII;
 
-    // PADS Logic schematic files start with *PADS-POWERLOGIC or !PADS-POWERLOGIC.
-    // The header tag may include a version and code page suffix before the
-    // closing asterisk (e.g. *PADS-POWERLOGIC-V9.5* or *PADS-LOGIC-V9.0-CP1250*),
-    // so match the prefix only. Anchor at position 0 to avoid matching the
-    // token anywhere other than the start of the header line.
     if( line.rfind( "*PADS-POWERLOGIC", 0 ) == 0
         || line.rfind( "!PADS-POWERLOGIC", 0 ) == 0 )
         return PADS_FILE_TYPE::SCHEMATIC_ASCII;
@@ -151,7 +133,6 @@ RELATED_FILES FindRelatedPadsFiles( const wxString& aFilePath )
     if( sourceType == PADS_FILE_TYPE::UNKNOWN )
         return result;
 
-    // Set the source file in the appropriate field
     if( sourceType == PADS_FILE_TYPE::PCB_ASCII )
         result.pcbFile = aFilePath;
     else if( sourceType == PADS_FILE_TYPE::SCHEMATIC_ASCII )
@@ -160,13 +141,11 @@ RELATED_FILES FindRelatedPadsFiles( const wxString& aFilePath )
     wxString sourceDir = sourceFn.GetPath();
     wxString sourceBase = sourceFn.GetName();
 
-    // Get list of potential related files in the same directory
     wxDir dir( sourceDir );
 
     if( !dir.IsOpened() )
         return result;
 
-    // Common PADS file extensions to check
     static const std::vector<wxString> extensions = { wxS( "asc" ), wxS( "ASC" ), wxS( "txt" ),
                                                       wxS( "TXT" ) };
 
@@ -178,14 +157,12 @@ RELATED_FILES FindRelatedPadsFiles( const wxString& aFilePath )
         wxFileName candidateFn( sourceDir, filename );
         wxString candidatePath = candidateFn.GetFullPath();
 
-        // Skip the source file itself
         if( candidatePath == aFilePath )
         {
             cont = dir.GetNext( &filename );
             continue;
         }
 
-        // Check if this file matches any of our extensions
         wxString ext = candidateFn.GetExt().Lower();
         bool validExt = false;
 
@@ -204,12 +181,10 @@ RELATED_FILES FindRelatedPadsFiles( const wxString& aFilePath )
             continue;
         }
 
-        // Prioritize files with matching base names
         bool matchingBase = ( candidateFn.GetName() == sourceBase );
 
         PADS_FILE_TYPE candidateType = DetectPadsFileType( candidatePath );
 
-        // If we imported PCB, look for schematic
         if( sourceType == PADS_FILE_TYPE::PCB_ASCII
             && candidateType == PADS_FILE_TYPE::SCHEMATIC_ASCII )
         {
@@ -217,7 +192,7 @@ RELATED_FILES FindRelatedPadsFiles( const wxString& aFilePath )
             {
                 result.schematicFile = candidatePath;
 
-                // If we found a matching base name, stop looking
+                // A matching base name is the best possible match, so stop here.
                 if( matchingBase )
                 {
                     cont = dir.GetNext( &filename );
@@ -225,7 +200,6 @@ RELATED_FILES FindRelatedPadsFiles( const wxString& aFilePath )
                 }
             }
         }
-        // If we imported schematic, look for PCB
         else if( sourceType == PADS_FILE_TYPE::SCHEMATIC_ASCII
                  && candidateType == PADS_FILE_TYPE::PCB_ASCII )
         {
@@ -233,7 +207,7 @@ RELATED_FILES FindRelatedPadsFiles( const wxString& aFilePath )
             {
                 result.pcbFile = candidatePath;
 
-                // If we found a matching base name, stop looking
+                // A matching base name is the best possible match, so stop here.
                 if( matchingBase )
                 {
                     cont = dir.GetNext( &filename );

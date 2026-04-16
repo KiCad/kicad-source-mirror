@@ -42,18 +42,11 @@ namespace PADS_SCH_BINARY
 /**
  * The SDB pool directory of a PADS Logic binary `.sch`.
  *
- * A `.sch` is a serialized PADS SDB database, the same container family as the
- * `.pcb`: a header, a fixed directory of controller descriptors, the serialized
- * controller payloads, and a footer GUID.  The directory is 20 descriptors of 28
- * bytes each at file offset 0x20 (so the payload stream begins at 0x250, exactly
- * past the table).  Each descriptor's `used_count` (+8) is the authoritative
- * object count for that controller and `used_bytes` (+12) its serialized extent,
- * giving `element_stride = used_bytes / used_count`.
- *
- * Reading the directory turns the per-pool object count into a deterministic
- * value rather than something a payload scan has to rediscover from a heuristic
- * terminator.  Pool roles are stable across the v0x000D corpus; only the two the
- * decode consumes directly are named here.
+ * The container is a header, a fixed directory of 20 controller descriptors (28 bytes each at
+ * file offset 0x20, so the payload stream begins at 0x250), the serialized payloads, and a footer
+ * GUID.  Each descriptor's used_count (+8) is the object count for that controller and used_bytes
+ * (+12) its serialized extent, giving element_stride = used_bytes / used_count.  Only the pools
+ * the decode consumes directly are named below.
  */
 struct POOL_DIRECTORY
 {
@@ -63,15 +56,15 @@ struct POOL_DIRECTORY
     static constexpr unsigned USED_COUNT_OFFSET = 8;
     static constexpr unsigned USED_BYTES_OFFSET = 12;
 
-    static constexpr int SHEETS = 3;            ///< pool3.used_count = sheet count.
-    static constexpr int DECAL_HANDLE_BASE = 5; ///< pool5.used_count = builtin decal handle base.
-    static constexpr int NETS = 8;              ///< pool8.used_count = net-table row count (stride 88).
+    static constexpr int SHEETS = 3;            ///< Sheet count.
+    static constexpr int DECAL_HANDLE_BASE = 5; ///< Builtin decal handle base.
+    static constexpr int NETS = 8;              ///< Net-table row count (stride 88).
 
     /// Read the descriptor table from @p aData.  Leaves @ref valid false (and all
     /// counts zero) when the buffer is too small to hold the table.
     void Parse( const std::vector<uint8_t>& aData );
 
-    /// Authoritative object count of controller @p aPool, or 0 when out of range.
+    /// Object count of controller @p aPool, or 0 when out of range.
     uint32_t Count( int aPool ) const;
 
     std::array<uint32_t, POOL_COUNT> usedCount{};
@@ -79,7 +72,6 @@ struct POOL_DIRECTORY
     bool                             valid = false;
 };
 
-/// One placed schematic symbol recovered from the binary .sch part array.
 /// Placement of one component text field (refdes/value/user) relative to the symbol origin.
 struct FIELD_PLACEMENT
 {
@@ -189,31 +181,13 @@ struct TEXT_ITEM
 };
 
 /**
- * Reader for the proprietary PADS Logic binary .sch format (magic 00 FE,
- * version 0x000D).
+ * Reader for the PADS Logic binary .sch format (magic 00 FE, version 0x000D).
  *
- * eeschema's primary PADS path is the PADS-LOGIC ASCII export; this reader
- * adds a path for the binary .sch.  The decode is driven entirely by the
- * serialized record structure:
- *
- *   - SYMBOLS  the stride-136 part-instance records, one run per sheet, framed
- *              by the MFC class tag and the text-style trailer; recovered as a
- *              generic placeholder symbol at the stored page position and
- *              orientation (the placement->parttype->graphic link is a runtime
- *              heap pointer and is not in the file, so the real symbol graphic
- *              cannot be recovered)
- *   - WIRES    the 8-byte vertex pools tiled by the stride-40 split-header
- *              cumulative-index chain, emitted as SCH_LINE wires; the explicit
- *              gap slices between cumulative jumps are bus polylines
- *   - TEXT     the 32-byte free-text records (position, orientation,
- *              justification, height, linewidth), with string content recovered
- *              by an ordered length-matched walk of the shared string pool
- *   - JUNCTIONS the 12-byte tie-dot records (one run per sheet, marker 0xfc),
- *              emitted as SCH_JUNCTION
- *
- * The placement->parttype->graphic link (the real symbol body) is recovered
- * through the part-type and used-decal pools rather than the 136-byte record;
- * that binding is decoded separately.
+ * The decode is driven by the serialized record structure: stride-136 part-instance records
+ * (symbols), the 8-byte vertex pools tiled by the stride-40 split-header chain (wires, with the
+ * gap slices as buses), the 32-byte free-text records, and the 12-byte tie-dot records
+ * (junctions).  A symbol's body geometry is bound through the part-type and used-decal pools, not
+ * the 136-byte record.
  */
 class PADS_SCH_BINARY_READER
 {
@@ -252,9 +226,7 @@ public:
     /// Per-sheet "[N]NAME" names from the pool3 sheet table, in file order.
     const std::vector<std::string>& GetSheetNames() const { return m_sheetNames; }
 
-    /// The net-table row count discovered by the decodeNetLabels scan (the longest
-    /// stride-88 run). Exposed so a corpus test can prove it equals pool8.used_count
-    /// before the heuristic terminator is retired in favour of the authoritative count.
+    /// The net-table row count (the contiguous stride-88 run length), exposed for test coverage.
     size_t GetNetTableScanCount() const { return m_netTableScanCount; }
 
     /**
@@ -271,17 +243,15 @@ private:
     /// block boundaries.
     int sheetIndexForOffset( size_t aOffset ) const;
 
-    /// Upper bound for the object scans: the end of the schematic SDB payload (the
-    /// last sheet block's end, from the p3 sheet table) so the embedded OLE preview
-    /// blobs that follow are never scanned.  Falls back to the buffer size when the
-    /// sheet table was not located.
+    /// Upper bound for the object scans: the end of the schematic SDB payload (the highest sheet
+    /// block end) so the trailing embedded preview blobs are never scanned.  Falls back to the
+    /// buffer size when the sheet table was not located.
     size_t streamLimit( const std::vector<uint8_t>& aData ) const;
 
     /// Decode the part-type pool and the per-part-type component attribute pool.
     void decodeFields( const std::vector<uint8_t>& aData );
 
-    /// Decode component fields via the u32 offset-index table (present in
-    /// compaction-saved files; exact).  Returns true if a genuine index was used.
+    /// Decode component fields via the u32 offset-index table.  Returns true if an index was used.
     bool decodeFieldsViaIndex( const std::vector<uint8_t>& aData, size_t aPoolBase );
 
     /// Decode the CAE-decal geometry library + pin terminals, and locate the
@@ -320,17 +290,15 @@ private:
     int appendSheetContent( SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aPath, int aSheetIndex,
                             int aPageHeightIU ) const;
 
-    /// The SDB pool directory, parsed once at the top of Parse().  Supplies the
-    /// authoritative per-controller object counts the decoders rely on.
+    /// The SDB pool directory, parsed once at the top of Parse(), supplying per-controller counts.
     POOL_DIRECTORY                       m_pools;
 
     /// Start file offset of each per-sheet object block, from the pool3 sheet table
     /// (empty for a single-sheet design).
     std::vector<size_t>                  m_sheetOffsets;
 
-    /// End of the schematic SDB payload = the highest sheet-block end (start+length)
-    /// from the p3 sheet table; 0 when the table was not located.  Everything past it
-    /// is the embedded OLE preview region, which the object scans must not read.
+    /// End of the schematic SDB payload (highest sheet-block end); 0 when the sheet table was not
+    /// located.  Everything past it is the embedded preview region the object scans must not read.
     size_t                               m_streamEnd = 0;
 
     /// Per-sheet display name ("[N]NAME") from the sheet table, parallel to m_sheetOffsets.
@@ -348,19 +316,17 @@ private:
     std::vector<std::pair<size_t, std::vector<std::string>>> m_usedDecalTables;
     size_t                               m_decalBuiltinCount = 0; ///< pool5.used_count (handle base).
 
-    /// Part-type pool names (block+4 ordinal indexes this) and per-part-type fields.
+    /// Union of all sheet part-type pool names.
     std::vector<std::string>             m_partTypeNames;
 
-    // Per-sheet part-type pools (file offset -> stride-0x4c name list). A placement's
-    // ptidx indexes the pool of its OWN sheet; m_partTypeNames is the union of all pools.
+    // Per-sheet part-type pools (file offset -> stride-0x4c name list). A placement's part-type
+    // ordinal indexes the pool of its OWN sheet; m_partTypeNames is the union of all pools.
     std::vector<std::pair<size_t, std::vector<std::string>>> m_partTypePools;
 
-    // Part-type name -> its ordered pins (number, name, electrical type). Decoded from the
-    // per-sheet stride-24 pin pool; used to label symbol pins instead of bare numbers.
+    // Part-type name -> its ordered pins (number, name, electrical type).
     std::map<std::string, std::vector<PIN_INFO>> m_partTypePins;
 
-    // Part-type name -> its pins split per gate (the stride-12 gate pool boundaries). Drives
-    // multi-unit symbol reconstruction: gate g's pins go on LIB_SYMBOL unit g+1.
+    // Part-type name -> its pins split per gate; gate g's pins go on LIB_SYMBOL unit g+1.
     std::map<std::string, std::vector<std::vector<PIN_INFO>>> m_partTypeGatePins;
 
     std::map<std::string, std::vector<std::pair<std::string, std::string>>> m_partTypeFields;
@@ -374,7 +340,7 @@ private:
     std::vector<TEXT_ITEM>               m_texts;          ///< Free-text items, file order.
     std::vector<JUNCTION>                m_junctions;      ///< Tie-dot junctions, all sheets.
     std::vector<NET_LABEL>               m_netLabels;      ///< Off-page / power-port net labels.
-    size_t                               m_netTableScanCount = 0; ///< Validated stride-88 net run length (== pool8.used_count).
+    size_t                               m_netTableScanCount = 0; ///< Stride-88 net run length.
 };
 
 } // namespace PADS_SCH_BINARY

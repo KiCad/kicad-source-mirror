@@ -100,9 +100,8 @@ bool PCB_IO_PADS_BINARY::CanReadBoard( const wxString& aFileName ) const
 
 bool PCB_IO_PADS_BINARY::CanReadLibrary( const wxString& aFileName ) const
 {
-    // The .pcb extension is shared with other tools, so content-check the magic
-    // rather than trusting the extension alone (a non-PADS .pcb must not be
-    // mis-identified as a PADS library).
+    // The .pcb extension is shared with other tools, so a non-PADS .pcb must not be
+    // mis-identified; content-check the magic rather than trusting the extension.
     if( !PCB_IO::CanReadLibrary( aFileName ) )
         return false;
 
@@ -262,8 +261,8 @@ void PCB_IO_PADS_BINARY::loadBoardSetup()
 
     m_loadBoard->SetCopperLayerCount( copperLayerCount );
 
-    // Build the board stackup from the sec69 physical-layer table when it carries meaningful
-    // thickness/dielectric data. This mirrors the proven ASCII path (pcb_io_pads.cpp ~L2943).
+    // Build the stackup only when the physical-layer table carries real thickness/dielectric
+    // data.
     {
         BOARD_DESIGN_SETTINGS& bds = m_loadBoard->GetDesignSettings();
 
@@ -345,15 +344,15 @@ void PCB_IO_PADS_BINARY::loadBoardSetup()
         }
     }
 
-    // Binary files always use BASIC units
+    // Binary files always use BASIC units.
     m_unitConverter.SetBasicUnitsMode( true );
     m_scaleFactor = PADS_UNIT_CONVERTER::BASIC_TO_NM;
 
     m_originX = m_parser->GetParameters().origin.x;
     m_originY = m_parser->GetParameters().origin.y;
 
-    // Fall back to board outline center only when the parser found no DFT origin.
-    // The DFT origin produces exact coordinate matches; overriding it shifts all parts.
+    // Fall back to the board-outline center only when there is no DFT origin; the DFT origin
+    // gives exact coordinates and overriding it would shift all parts.
     if( m_originX == 0.0 && m_originY == 0.0 )
     {
         const auto& boardOutlines = m_parser->GetBoardOutlines();
@@ -393,9 +392,8 @@ void PCB_IO_PADS_BINARY::loadNets()
     for( const auto& padsNet : nets )
         ensureNet( padsNet.name );
 
-    // Net classes: one KiCad NETCLASS per PADS net class, with its member nets. Membership
-    // is deterministic (section-23 +188 owner-pointer grouping). Empty on boards that carry
-    // no net classes (e.g. the v0x2021 dialect), so this is a no-op there.
+    // One KiCad NETCLASS per PADS net class, with its member nets. Empty on boards with no
+    // net classes (such as the v0x2021 dialect), where this is a no-op.
     const std::vector<PADS_IO::NETCLASS_DEF>& netClasses = m_parser->GetNetClasses();
     const std::vector<PADS_IO::DIFF_PAIR_DEF>& diffPairs = m_parser->GetDiffPairs();
 
@@ -415,10 +413,8 @@ void PCB_IO_PADS_BINARY::loadNets()
         {
             std::shared_ptr<NETCLASS> kicadClass = std::make_shared<NETCLASS>( className );
 
-            // Per-class rule values are positionally joined from the layer-0 clearance record
-            // (BASIC units). Track width maps to the recommended width; min/max are advisory and
-            // KiCad's single-clearance netclass carries only the one clearance. Mirrors the ASCII
-            // importer (pcb_io_pads.cpp ~L2851).
+            // KiCad's netclass carries one clearance and one track width; the PADS min/max
+            // values are advisory and dropped.
             if( nc.hasRuleValues )
             {
                 if( nc.clearance > 0 )
@@ -436,9 +432,7 @@ void PCB_IO_PADS_BINARY::loadNets()
                                                      { className } );
     }
 
-    // Differential pairs become one DiffPair_<name> net class each, mirroring the ASCII
-    // importer (pcb_io_pads.cpp loadDesignSettings). Gap/width are BASIC units; scaleSize
-    // applies the GOLDEN-RULE 1/38100 mil conversion.
+    // Each differential pair becomes one DiffPair_<name> net class.
     for( const PADS_IO::DIFF_PAIR_DEF& dp : diffPairs )
     {
         if( dp.name.empty() )
@@ -614,7 +608,7 @@ void PCB_IO_PADS_BINARY::loadFootprints()
                 }
                 else
                 {
-                    // 60 mil default pad (38100 basic units = 1 mil)
+                    // 38100 basic units = 1 mil; default 60 mil pad.
                     int defaultPad = scaleSize( 60.0 * 38100.0 );
                     pad->SetSize( F_Cu, VECTOR2I( defaultPad, defaultPad ) );
                     pad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
@@ -641,10 +635,7 @@ void PCB_IO_PADS_BINARY::loadClusterGroups()
     if( clusters.empty() )
         return;
 
-    // One PCB_GROUP per cluster, keyed by the 1-based CLSTID the sec22 +108 membership
-    // field references. Mirrors the ASCII reuse-block grouping (pcb_io_pads.cpp:1191-1209)
-    // and the ASCII cluster build (pcb_io_pads.cpp:1824-1827), but uses PADS part-cluster
-    // membership rather than the ASCII net-cluster path.
+    // One PCB_GROUP per cluster, keyed by the 1-based CLSTID the membership field references.
     std::map<int, PCB_GROUP*> clusterGroups;
 
     for( const PADS_IO::PART_CLUSTER& cluster : clusters )
@@ -655,8 +646,8 @@ void PCB_IO_PADS_BINARY::loadClusterGroups()
         clusterGroups[cluster.id] = group;
     }
 
-    // m_partFootprints holds the footprint built for each m_parts index, so the parser's
-    // part-index-keyed membership map resolves directly to a footprint.
+    // m_partFootprints is indexed by part index, so the part-index-keyed membership map
+    // resolves directly to a footprint.
     const std::map<size_t, int>& partClusterIds = m_parser->GetPartClusterIds();
 
     for( size_t i = 0; i < m_partFootprints.size(); ++i )
@@ -679,10 +670,9 @@ void PCB_IO_PADS_BINARY::setBoardOutlineArc( PCB_SHAPE* aShape, const PADS_IO::A
 {
     aShape->SetShape( SHAPE_T::ARC );
 
-    // The arc midpoint resolves the start/end/center ambiguity (minor vs major arc)
-    // unambiguously, which a bare center+start+end cannot for shallow arcs. Sample the
-    // PADS center/radius/angles at the sweep midpoint, then let SetArcGeometry handle
-    // the Y-axis flip via scaleCoord just like the endpoints.
+    // A start/end/center triple is ambiguous (minor vs major arc) for shallow arcs, so
+    // sample a midpoint at the sweep midpoint and pass start/mid/end; scaleCoord applies the
+    // Y-axis flip uniformly.
     double midAngle = ( aCurr.arc.start_angle + aCurr.arc.delta_angle / 2.0 ) * M_PI / 180.0;
     double midX = aCurr.arc.cx + aCurr.arc.radius * std::cos( midAngle );
     double midY = aCurr.arc.cy + aCurr.arc.radius * std::sin( midAngle );
@@ -801,8 +791,7 @@ void PCB_IO_PADS_BINARY::loadTracksAndVias()
 
             PCB_LAYER_ID track_layer = getMappedLayer( track_def.layer );
 
-            // Binary routes with layer 0 default to F_Cu since the binary
-            // format's layer field mapping is not yet fully decoded.
+            // Unattached routes on layer 0 default to F_Cu.
             if( !IsCopperLayer( track_layer ) )
             {
                 if( route.net_name.empty() && track_def.layer == 0 )
@@ -825,7 +814,7 @@ void PCB_IO_PADS_BINARY::loadTracksAndVias()
             int track_width = scaleSize( track_def.width );
 
             if( track_width <= 0 )
-                track_width = scaleSize( 10.0 * 38100.0 );  // 10 mil default
+                track_width = scaleSize( 10.0 * 38100.0 );  // 10 mil; 38100 basic units = 1 mil
 
             for( size_t i = 0; i < track_def.points.size() - 1; ++i )
             {
@@ -894,7 +883,7 @@ void PCB_IO_PADS_BINARY::loadTracksAndVias()
             double viaSize  = m_parser->GetDefaultViaSize();
             double viaDrill = m_parser->GetDefaultViaDrill();
 
-            // 38100 basic units = 1 mil; default 24 mil via, 12 mil drill
+            // 38100 basic units = 1 mil; default 24 mil via, 12 mil drill.
             via->SetWidth( scaleSize( viaSize > 0 ? viaSize : 24.0 * 38100.0 ) );
             via->SetDrill( scaleSize( viaDrill > 0 ? viaDrill : 12.0 * 38100.0 ) );
             via->SetLayerPair( F_Cu, B_Cu );
@@ -979,9 +968,8 @@ void PCB_IO_PADS_BINARY::loadCopperShapes()
 
         PCB_LAYER_ID layer = getMappedLayer( copper.layer );
 
-        // A filled COPPER area is meaningful only on a copper layer; an unmapped or
-        // non-copper mapping falls back to F.Cu rather than placing a copper zone on,
-        // say, a silkscreen layer.
+        // A filled COPPER area belongs only on a copper layer, so an unmapped or non-copper
+        // mapping falls back to F.Cu.
         if( layer == UNDEFINED_LAYER || !IsCopperLayer( layer ) )
         {
             if( m_reporter )
@@ -1200,10 +1188,8 @@ void PCB_IO_PADS_BINARY::loadKeepouts()
 
 void PCB_IO_PADS_BINARY::loadDimensions()
 {
-    // Mirrors PCB_IO_PADS::loadDimensions (pcb_io_pads.cpp) field-for-field, differing only in
-    // the binary scaleCoord/scaleSize that apply the per-axis origin and BASIC-unit factor. The
-    // binary parser leaves the override text empty, so KiCad recomputes the displayed value from
-    // the exact start/end geometry.
+    // The parser leaves the override text empty, so KiCad recomputes the displayed value from
+    // the start/end geometry.
     const auto& dimensions = m_parser->GetDimensions();
 
     for( const auto& dim : dimensions )
@@ -1216,8 +1202,8 @@ void PCB_IO_PADS_BINARY::loadDimensions()
         VECTOR2I start( scaleCoord( dim.points[0].x, true ), scaleCoord( dim.points[0].y, false ) );
         VECTOR2I end( scaleCoord( dim.points[1].x, true ), scaleCoord( dim.points[1].y, false ) );
 
-        // PADS horizontal/vertical dimensions measure only the X or Y projection, so project the
-        // end point onto the measured axis to keep the PCB_DIM_ALIGNED line square.
+        // PADS horizontal/vertical dimensions measure only the X or Y projection, so project
+        // the end onto the measured axis to keep the PCB_DIM_ALIGNED line square.
         if( dim.is_horizontal )
             end.y = start.y;
         else

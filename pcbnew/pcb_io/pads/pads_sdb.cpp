@@ -28,9 +28,8 @@
 namespace PADS_IO
 {
 
-// The fixed GUID PADS writes into every binary footer (38 chars, no terminator
-// compared); its presence is the strongest single check that a file is a PADS
-// binary database.
+// The fixed GUID PADS writes into every binary footer; its presence is the
+// strongest single check that a file is a PADS binary database.
 static const char       FOOTER_GUID[] = "{2FE18320-6448-11d1-A412-000000000000}";
 static constexpr size_t FOOTER_GUID_LEN = 38;
 
@@ -103,9 +102,9 @@ void PADS_SDB::parseDirectory()
     if( HEADER_SIZE + dirSize > m_data.size() )
         THROW_IO_ERROR( "File too small for the PADS section directory" );
 
-    // Section payloads follow the directory contiguously; each section's offset is the
-    // running total of the preceding payload sizes. Section 0 is a pre-sizing header
-    // with no payload region of its own, so payload accumulation starts at section 1.
+    // Section payloads follow the directory contiguously; each offset is the running total
+    // of preceding payload sizes. Section 0 has no payload of its own, so accumulation
+    // starts at section 1.
     uint32_t payloadOffset = static_cast<uint32_t>( HEADER_SIZE + dirSize );
 
     m_sections.clear();
@@ -151,14 +150,7 @@ void PADS_SDB::locateOrigin()
     if( !setup || setup->totalBytes < 68 || setup->End() > m_data.size() )
         return;
 
-    // The per-axis origin is the i32 pair at section-1 offset +60/+64 on the supported
-    // v0x2025..v0x2027 boards and the v0x2021 boards exercised by the importer.
-    //
-    // A more general "SCALE-anchored" locator (the i32 pair immediately after the f32
-    // SCALE field) is known to be correct for v0x2024 and the view-array section-1
-    // variant where this fixed offset is wrong, but it false-positives on boards whose
-    // true origin is (0, 0); adopting it needs its own route-coordinate validation, so
-    // it is deferred rather than risk shifting coordinates on the boards that work today.
+    // The per-axis origin is the i32 pair at section-1 offset +60/+64.
     m_coords.m_originX = m_cursor.I32At( setup->dataOffset + 60 );
     m_coords.m_originY = m_cursor.I32At( setup->dataOffset + 64 );
     m_coords.m_found = true;

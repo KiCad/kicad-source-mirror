@@ -28,7 +28,7 @@
 PADS_LAYER_MAPPER::PADS_LAYER_MAPPER() :
     m_copperLayerCount( 2 )
 {
-    // Initialize standard PADS layer name mappings (case-insensitive)
+    // Keys are normalized to lower case; ParseLayerName lower-cases before lookup.
     m_layerNameMap["silkscreen top"] = PADS_LAYER_TYPE::SILKSCREEN_TOP;
     m_layerNameMap["silk top"] = PADS_LAYER_TYPE::SILKSCREEN_TOP;
     m_layerNameMap["sst"] = PADS_LAYER_TYPE::SILKSCREEN_TOP;
@@ -108,7 +108,6 @@ std::string PADS_LAYER_MAPPER::normalizeLayerName( const std::string& aName ) co
 
 PADS_LAYER_TYPE PADS_LAYER_MAPPER::GetLayerType( int aPadsLayer ) const
 {
-    // Pad stack special values
     if( aPadsLayer == LAYER_PAD_STACK_TOP )
         return PADS_LAYER_TYPE::COPPER_TOP;
 
@@ -128,7 +127,6 @@ PADS_LAYER_TYPE PADS_LAYER_MAPPER::GetLayerType( int aPadsLayer ) const
     if( aPadsLayer > 1 && aPadsLayer < m_copperLayerCount )
         return PADS_LAYER_TYPE::COPPER_INNER;
 
-    // Non-copper layers by number
     if( aPadsLayer == LAYER_DRILL_DRAWING )
         return PADS_LAYER_TYPE::DRILL_DRAWING;
 
@@ -172,7 +170,6 @@ PADS_LAYER_TYPE PADS_LAYER_MAPPER::ParseLayerName( const std::string& aLayerName
     if( it != m_layerNameMap.end() )
         return it->second;
 
-    // Check for copper layer naming patterns like "Layer 1", "Inner 1", etc.
     if( normalized.find( "top" ) != std::string::npos ||
         normalized.find( "layer 1" ) != std::string::npos ||
         normalized == "1" )
@@ -199,8 +196,7 @@ PADS_LAYER_TYPE PADS_LAYER_MAPPER::ParseLayerName( const std::string& aLayerName
 
 PCB_LAYER_ID PADS_LAYER_MAPPER::mapInnerCopperLayer( int aPadsLayer ) const
 {
-    // PADS inner layers are numbered 2 through (m_copperLayerCount - 1)
-    // KiCad inner layers are In1_Cu, In2_Cu, etc. with IDs spaced by 2
+    // PADS inner layers run 2..(count-1); KiCad In*_Cu IDs are spaced by 2.
     int innerIndex = aPadsLayer - 2;
 
     if( innerIndex < 0 )
@@ -215,7 +211,6 @@ PCB_LAYER_ID PADS_LAYER_MAPPER::mapInnerCopperLayer( int aPadsLayer ) const
 
 PCB_LAYER_ID PADS_LAYER_MAPPER::GetAutoMapLayer( int aPadsLayer, PADS_LAYER_TYPE aType ) const
 {
-    // If type is not provided, determine it from layer number
     if( aType == PADS_LAYER_TYPE::UNKNOWN )
         aType = GetLayerType( aPadsLayer );
 

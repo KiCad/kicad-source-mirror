@@ -40,11 +40,8 @@ namespace PADS_IO
 {
 
 /**
- * Little-endian byte assembly for the PADS binary readers.
- *
- * These accessors hold the only copy of the shift expressions shared by the
- * pcbnew and eeschema importers. They do no bounds checking; callers that need
- * a bounds-checked policy wrap them.
+ * Little-endian byte assembly with no bounds checking. Callers that need a
+ * bounds-checked policy wrap these.
  */
 inline uint8_t getU8( const std::vector<uint8_t>& aData, size_t aOffset )
 {
@@ -89,7 +86,7 @@ inline double getF64LE( const std::vector<uint8_t>& aData, size_t aOffset )
 
 
 /**
- * Slurp an entire file into @p aOut. Returns false on open error or short read.
+ * Read an entire file into @p aOut. Returns false on open error or short read.
  */
 inline bool ReadFileToBuffer( const wxString& aFileName, std::vector<uint8_t>& aOut )
 {
@@ -114,7 +111,7 @@ inline bool ReadFileToBuffer( const wxString& aFileName, std::vector<uint8_t>& a
 /**
  * Read a NUL-terminated fixed-width field starting at @p aOffset, scanning at
  * most @p aMaxLen bytes. Returns an empty string when the field contains any
- * non-printable byte; trailing spaces are trimmed via StrPurge.
+ * non-printable byte; trailing spaces are trimmed.
  */
 inline std::string readFixedString( const std::vector<uint8_t>& aData, size_t aOffset, size_t aMaxLen )
 {
@@ -141,11 +138,9 @@ inline std::string readFixedString( const std::vector<uint8_t>& aData, size_t aO
 
 
 /**
- * The PADS SDB container magic check shared by the `.pcb` and `.sch` readers: a
- * leading 0x00 followed by a format-specific second byte (0xFF for the PowerPCB
- * section container, 0xFE for the Logic pool container). The little-endian version
- * word at +2 is read and range-checked by the caller, since the supported version
- * set is format-specific.
+ * Check the PADS SDB container magic, a leading 0x00 followed by a
+ * format-specific second byte. The version word at +2 is range-checked by the
+ * caller because the supported version set differs per format.
  */
 inline bool HasSdbMagic( const std::vector<uint8_t>& aData, uint8_t aMagic1 )
 {
@@ -154,15 +149,13 @@ inline bool HasSdbMagic( const std::vector<uint8_t>& aData, uint8_t aMagic1 )
 
 
 /**
- * Validate a PADS SDB footer at @p aFooterStart: the 38-char ASCII GUID PADS
- * writes at @p aFooterStart + 4, then the stored size-check immediately after it.
+ * Validate a PADS SDB footer at @p aFooterStart, the ASCII GUID at
+ * @p aFooterStart + 4 followed by the stored size-check.
  *
- * Throws IO_ERROR when the buffer is too small or the GUID does not match (the
- * GUID is the strongest single signal that a file is a PADS binary database). The
+ * Throws IO_ERROR when the buffer is too small or the GUID does not match. The
  * size-check (u32 after the GUID) should equal @p aFooterStart; a mismatch is a
- * corruption hint, not fatal, so it is logged rather than thrown. The second
- * magic byte and the GUID are the only container fields that differ between the
- * two PADS SDB formats, so the caller supplies the format's GUID.
+ * corruption hint, not fatal, so it is logged rather than thrown. The GUID
+ * differs per format, so the caller supplies it.
  */
 void ValidateSdbFooter( const std::vector<uint8_t>& aData, size_t aFooterStart, const char* aGuid,
                         size_t aGuidLen );
@@ -171,14 +164,12 @@ void ValidateSdbFooter( const std::vector<uint8_t>& aData, size_t aFooterStart, 
 /**
  * Bounds-checked little-endian read cursor over a PADS binary buffer.
  *
- * One stateful substrate that both the pcbnew and eeschema readers sit on. The
- * random-access @c *At accessors throw IO_ERROR on an out-of-range read rather
- * than indexing past the buffer, so the byte-assembly and the bounds policy live
- * in exactly one place. The sequential reads advance an internal position for the
- * rare in-order scan; the PADS decoders read almost entirely by absolute offset.
+ * The random-access @c *At accessors throw IO_ERROR on an out-of-range read
+ * rather than indexing past the buffer. The sequential reads advance an internal
+ * position; the decoders read almost entirely by absolute offset.
  *
- * The cursor holds a reference to the caller's buffer; that buffer must outlive
- * the cursor (typically both are members of the same reader).
+ * The cursor holds a reference to the caller's buffer, which must outlive the
+ * cursor.
  */
 class BINARY_CURSOR
 {
@@ -197,7 +188,6 @@ public:
         return aOffset <= m_data.size() && aCount <= m_data.size() - aOffset;
     }
 
-    // Random-access, bounds-checked. Throw IO_ERROR out of range; do not advance.
     uint8_t U8At( size_t aOffset ) const
     {
         check( aOffset, 1 );
@@ -224,15 +214,14 @@ public:
         return getF64LE( m_data, aOffset );
     }
 
-    // Unlike the numeric accessors this does NOT throw out of range: readFixedString
-    // already clamps aMaxLen to the available bytes and returns empty past EOF, so a
-    // short field abutting a section or file boundary still reads cleanly.
+    // Unlike the numeric accessors this does not throw out of range; aMaxLen is
+    // clamped to the available bytes and the read returns empty past EOF, so a
+    // short field abutting a boundary still reads cleanly.
     std::string StringAt( size_t aOffset, size_t aMaxLen ) const
     {
         return readFixedString( m_data, aOffset, aMaxLen );
     }
 
-    // Sequential, advance the internal position.
     uint8_t  U8() { uint8_t v = U8At( m_pos ); m_pos += 1; return v; }
     uint16_t U16() { uint16_t v = U16At( m_pos ); m_pos += 2; return v; }
     uint32_t U32() { uint32_t v = U32At( m_pos ); m_pos += 4; return v; }
@@ -256,11 +245,8 @@ private:
 /**
  * A bounds-checked reader positioned at one record inside a buffer.
  *
- * Field reads are by named offset relative to the record base, so a section or
- * pool reader documents its record layout in one place (named field constants)
- * instead of threading absolute file offsets. Both PADS SDB readers share it: the
- * `.pcb` section streams and the `.sch` pool streams are both fixed-stride record
- * runs once their base is known.
+ * Field reads are by offset relative to the record base, so a reader can express
+ * its record layout with named field constants instead of absolute file offsets.
  *
  * Holds a reference to the owning cursor; it is a transient view and must not
  * outlive the buffer the cursor binds.

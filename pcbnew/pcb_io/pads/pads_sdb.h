@@ -35,9 +35,9 @@ namespace PADS_IO
 
 /**
  * The PADS PowerPCB `.pcb` file is a serialized snapshot of PADS' in-memory SDB
- * (System DataBase) object store, not an ad-hoc record blob. This module models
- * that database so the section readers above it can speak in database terms
- * (sections, records, design coordinates) instead of raw file offsets.
+ * (System DataBase) object store. This module models that database so callers can
+ * speak in database terms (sections, records, design coordinates) instead of raw
+ * file offsets.
  *
  * File anatomy:
  *   [Header]    10 B  magic 00 FF, version u16 @ +2.
@@ -51,10 +51,9 @@ namespace PADS_IO
 /**
  * One directory section: a single database controller's serialized record stream.
  *
- * @c count is the controller's declared record count and @c totalBytes its payload
- * size; @c perItem is the nominal fixed stride (totalBytes/count) when both are
- * non-zero. @c dataOffset is the absolute file offset of the payload, accumulated
- * across preceding sections.
+ * @c perItem is the nominal fixed stride (totalBytes/count) when both are non-zero.
+ * @c dataOffset is the absolute file offset of the payload, accumulated across
+ * preceding sections.
  */
 struct SDB_SECTION
 {
@@ -71,11 +70,8 @@ struct SDB_SECTION
 /**
  * The per-axis coordinate origin and the design <-> raw transform.
  *
- * Every coordinate in a PADS file is stored in BASIC units (1/38100 mil) biased
- * by a per-axis origin, so a stored value is @c design + @c origin and a design
- * value is @c raw - @c origin. The origin is read from the section-1 i32 pair at
- * +60/+64 (see PADS_SDB::locateOrigin for the version coverage and the known
- * SCALE-anchored generalization).
+ * Every coordinate in a PADS file is stored in BASIC units (1/38100 mil) biased by
+ * a per-axis origin, so a design value is @c raw - @c origin.
  */
 class SDB_COORDS
 {
@@ -97,10 +93,9 @@ private:
 
 /**
  * The parsed container of a PADS `.pcb` file: header, the section directory, and
- * the coordinate system. Owns the file bytes and the bounds-checked read cursor
- * the section readers use.
+ * the coordinate system. Owns the file bytes and the bounds-checked read cursor.
  *
- * Non-copyable: the read cursor binds a reference to the owned byte buffer, so a
+ * Non-copyable because the cursor binds a reference to the owned byte buffer, so a
  * copy would leave the clone's cursor pointing at the source's bytes.
  */
 class PADS_SDB
@@ -117,11 +112,9 @@ public:
      */
     void Load( std::vector<uint8_t> aBytes );
 
-    /// True if the first two bytes match the PADS binary magic (cheap pre-check).
+    /// True if the first two bytes match the PADS binary magic.
     static bool HasMagic( const std::vector<uint8_t>& aBytes );
 
-    /// The set of PADS binary container versions this decoder understands. The header
-    /// validation and the file-type probe share it so the supported set has one home.
     static bool IsSupportedVersion( uint16_t aVersion );
 
     uint16_t                    Version() const { return m_version; }
@@ -134,15 +127,15 @@ public:
     const SDB_SECTION* Section( int aIndex ) const;
 
     /// A reader for record @p aIndex of @p aSection, treating the section as a run of
-    /// fixed-stride @p aStride records. The caller is responsible for staying within
-    /// the section; the field reads remain bounds-checked against the file.
+    /// fixed-stride @p aStride records. The caller must stay within the section; field
+    /// reads remain bounds-checked against the file.
     SDB_RECORD Record( const SDB_SECTION& aSection, uint32_t aIndex, uint32_t aStride ) const
     {
         return SDB_RECORD( m_cursor, aSection.dataOffset + aIndex * aStride );
     }
 
-    /// A reader positioned at an absolute file offset, for the readers that walk a pool
-    /// or a byte region rather than a section's fixed-stride records.
+    /// A reader positioned at an absolute file offset, for walking a pool or byte region
+    /// rather than a section's fixed-stride records.
     SDB_RECORD RecordAt( uint32_t aBase ) const { return SDB_RECORD( m_cursor, aBase ); }
 
 private:

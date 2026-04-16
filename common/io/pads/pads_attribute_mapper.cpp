@@ -25,35 +25,29 @@
 
 PADS_ATTRIBUTE_MAPPER::PADS_ATTRIBUTE_MAPPER()
 {
-    // Standard PADS attribute mappings to KiCad fields
-    // Reference designator variations
     m_standardMappings["ref.des."] = FIELD_REFERENCE;
     m_standardMappings["ref des"] = FIELD_REFERENCE;
     m_standardMappings["ref-des"] = FIELD_REFERENCE;
     m_standardMappings["refdes"] = FIELD_REFERENCE;
     m_standardMappings["reference"] = FIELD_REFERENCE;
 
-    // Value/Part type variations
     m_standardMappings["part type"] = FIELD_VALUE;
     m_standardMappings["part-type"] = FIELD_VALUE;
     m_standardMappings["parttype"] = FIELD_VALUE;
     m_standardMappings["value"] = FIELD_VALUE;
     m_standardMappings["part_type"] = FIELD_VALUE;
 
-    // Footprint/Decal variations
     m_standardMappings["pcb decal"] = FIELD_FOOTPRINT;
     m_standardMappings["pcb_decal"] = FIELD_FOOTPRINT;
     m_standardMappings["decal"] = FIELD_FOOTPRINT;
     m_standardMappings["footprint"] = FIELD_FOOTPRINT;
     m_standardMappings["pattern"] = FIELD_FOOTPRINT;
 
-    // Datasheet variations
     m_standardMappings["datasheet"] = FIELD_DATASHEET;
     m_standardMappings["data sheet"] = FIELD_DATASHEET;
     m_standardMappings["spec"] = FIELD_DATASHEET;
     m_standardMappings["specification"] = FIELD_DATASHEET;
 
-    // MPN (Manufacturer Part Number) variations
     m_standardMappings["part number"] = FIELD_MPN;
     m_standardMappings["part_number"] = FIELD_MPN;
     m_standardMappings["partnumber"] = FIELD_MPN;
@@ -62,7 +56,6 @@ PADS_ATTRIBUTE_MAPPER::PADS_ATTRIBUTE_MAPPER()
     m_standardMappings["mfr part number"] = FIELD_MPN;
     m_standardMappings["mfr_part_number"] = FIELD_MPN;
 
-    // Manufacturer variations
     m_standardMappings["manufacturer"] = FIELD_MANUFACTURER;
     m_standardMappings["mfr"] = FIELD_MANUFACTURER;
     m_standardMappings["mfg"] = FIELD_MANUFACTURER;
@@ -88,19 +81,17 @@ std::string PADS_ATTRIBUTE_MAPPER::GetKiCadFieldName( const std::string& aPadsAt
 {
     std::string normalized = normalizeAttrName( aPadsAttr );
 
-    // Check custom mappings first (they take precedence)
+    // Custom mappings take precedence over the standard ones.
     auto customIt = m_customMappings.find( normalized );
 
     if( customIt != m_customMappings.end() )
         return customIt->second;
 
-    // Then check standard mappings
     auto standardIt = m_standardMappings.find( normalized );
 
     if( standardIt != m_standardMappings.end() )
         return standardIt->second;
 
-    // Return original name if no mapping exists
     return aPadsAttr;
 }
 
