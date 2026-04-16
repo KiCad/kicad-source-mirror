@@ -1212,6 +1212,28 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         m_gal->SetIsFill( true );
 
         m_gal->DrawCircle( center, radius );
+
+        // Draw backdrill indicators (semi-circles extending into the hole) on top of the
+        // hole wall so they remain visible regardless of layer rendering order
+        if( !m_pcbSettings.IsPrinting() )
+        {
+            std::optional<int> secDrill = aVia->GetSecondaryDrillSize();
+            std::optional<int> terDrill = aVia->GetTertiaryDrillSize();
+
+            if( secDrill.value_or( 0 ) > 0 )
+            {
+                drawBackdrillIndicator( aVia, center, *secDrill,
+                                        aVia->GetSecondaryDrillStartLayer(),
+                                        aVia->GetSecondaryDrillEndLayer() );
+            }
+
+            if( terDrill.value_or( 0 ) > 0 )
+            {
+                drawBackdrillIndicator( aVia, center, *terDrill,
+                                        aVia->GetTertiaryDrillStartLayer(),
+                                        aVia->GetTertiaryDrillEndLayer() );
+            }
+        }
     }
     else if( aLayer == LAYER_VIA_HOLES )
     {
@@ -1280,28 +1302,6 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
 
         if( draw )
             m_gal->DrawCircle( center, radius );
-
-        // Draw backdrill indicators (semi-circles extending into the hole)
-        // Drawn on copper layer so they appear above the annular ring
-        if( !m_pcbSettings.IsPrinting() && draw )
-        {
-            std::optional<int> secDrill = aVia->GetSecondaryDrillSize();
-            std::optional<int> terDrill = aVia->GetTertiaryDrillSize();
-
-            if( secDrill.value_or( 0 ) > 0 )
-            {
-                drawBackdrillIndicator( aVia, center, *secDrill,
-                                        aVia->GetSecondaryDrillStartLayer(),
-                                        aVia->GetSecondaryDrillEndLayer() );
-            }
-
-            if( terDrill.value_or( 0 ) > 0 )
-            {
-                drawBackdrillIndicator( aVia, center, *terDrill,
-                                        aVia->GetTertiaryDrillStartLayer(),
-                                        aVia->GetTertiaryDrillEndLayer() );
-            }
-        }
 
         // Draw post-machining indicator if this layer is post-machined
         if( !m_pcbSettings.IsPrinting() && draw )
@@ -1568,6 +1568,29 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         }
 
         m_gal->SetMinLineWidth( 1.0 );
+
+        // Draw backdrill indicators on top of the hole wall so they remain visible
+        // regardless of layer rendering order
+        if( !m_pcbSettings.IsPrinting() && aPad->GetDrillSizeX() > 0 )
+        {
+            VECTOR2I holePos = slot->GetSeg().A;
+            VECTOR2I secDrill = aPad->GetSecondaryDrillSize();
+            VECTOR2I terDrill = aPad->GetTertiaryDrillSize();
+
+            if( secDrill.x > 0 )
+            {
+                drawBackdrillIndicator( aPad, holePos, secDrill.x,
+                                        aPad->GetSecondaryDrillStartLayer(),
+                                        aPad->GetSecondaryDrillEndLayer() );
+            }
+
+            if( terDrill.x > 0 )
+            {
+                drawBackdrillIndicator( aPad, holePos, terDrill.x,
+                                        aPad->GetTertiaryDrillStartLayer(),
+                                        aPad->GetTertiaryDrillEndLayer() );
+            }
+        }
 
         return;
     }
@@ -1885,28 +1908,6 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             m_gal->DrawPolygon( polySet );
         }
 
-        // Draw backdrill indicators (semi-circles extending into the hole)
-        // Drawn on copper layer so they appear above the annular ring
-        if( !m_pcbSettings.IsPrinting() && aPad->GetDrillSizeX() > 0 )
-        {
-            VECTOR2D holePos = aPad->GetPosition() + aPad->GetOffset( pcbLayer );
-            VECTOR2I secDrill = aPad->GetSecondaryDrillSize();
-            VECTOR2I terDrill = aPad->GetTertiaryDrillSize();
-
-            if( secDrill.x > 0 )
-            {
-                drawBackdrillIndicator( aPad, holePos, secDrill.x,
-                                        aPad->GetSecondaryDrillStartLayer(),
-                                        aPad->GetSecondaryDrillEndLayer() );
-            }
-
-            if( terDrill.x > 0 )
-            {
-                drawBackdrillIndicator( aPad, holePos, terDrill.x,
-                                        aPad->GetTertiaryDrillStartLayer(),
-                                        aPad->GetTertiaryDrillEndLayer() );
-            }
-        }
     }
 
     if( !m_pcbSettings.IsPrinting() && IsCopperLayer( pcbLayer ) && aPad->GetDrillSizeX() > 0 )
