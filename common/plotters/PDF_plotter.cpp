@@ -1842,7 +1842,7 @@ void PDF_PLOTTER::endPlotEmitResources()
         wxString js = R"JS(
 function ShM(aEntries) {
     var aParams = [];
-    for (var i in aEntries) {
+    for (var i = 0; i < aEntries.length; ++i) {
         aParams.push({
             cName: aEntries[i][0],
             cReturn: aEntries[i][1]
