@@ -212,6 +212,10 @@ private:
     void parseBoardSetup();
     void parsePartPlacements();
     void parseSection19Parts();
+
+    // Old-format (v0x2017-2022) omitted-placement recovery: the bounded 0xFEFF section scan,
+    // kept because the scored new-format locator does not yet resolve the v2021 decal-index lag.
+    void parseSection19PartsOld();
     void parsePadStacks();
     void parsePartDecals();
     void parseDecalNameTable();

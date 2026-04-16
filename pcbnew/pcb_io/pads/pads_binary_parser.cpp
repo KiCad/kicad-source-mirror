@@ -390,24 +390,166 @@ void BINARY_PARSER::parseClusters()
 
 void BINARY_PARSER::parseSection19Parts()
 {
-    // Part records can be embedded in sections other than section 22.
-    // Scan sections 19 (design_rules) and 21 (board_outline) for FEFF-delimited part records.
+    // Recover the parts OMITTED from section 22 (connectors, mounting/tooling holes, test
+    // points, fiducials, a few passives). They are a physically contiguous run of full
+    // placement records in the tail of the sec19/sec21 region - but the run is NOT always
+    // adjacent to sec22.dataOffset (0-12 gap/sentinel records can sit between it and sec22),
+    // and the per-record marker bytes (i32@+0, 0xFEFF@feffOff) are non-uniform across
+    // test-points/fiducials/edge-fingers, so they cannot gate the walk.
     //
-    // NOTE: this 0xFEFF marker walk is bounded to the sec19/sec21 directory ranges (not a
-    // whole-file scan). A purely structural locator was attempted (det-specs/sec19_placements.md:
-    // anchor at sec22.dataOffset, walk back at 112 stride) but the omitted-placement set is not
-    // confined to the contiguous block before sec22 - real pad-contributing parts live elsewhere
-    // in the sec19/sec21 region - so it regressed PadCountExact_MC4/Ems4 and the v2021 placement
-    // tests. The marker walk remains until that model is completed; see the plan's follow-ups.
+    // Locate the run by an asymmetric gap-tolerant back-walk from sec22.dataOffset that SCORES
+    // each stride-aligned window. The decisive discriminator is the coordinate pair: a real
+    // placement has BOTH |X| and |Y| in design range; every gap/sentinel/ASCII-as-coord
+    // phantom fails it. The 0xFEFF and i32@+0 bytes are weak hints (+1), never gates. The walk
+    // tolerates leading gap records to FIND the block but stops at the first non-member once it
+    // starts (the block is internally contiguous). Validated on 178 new-format + v2021 boards,
+    // 0 drops / 0 phantoms, against 40 paired .asc; see det-specs/sec19_robust.md. v2017/2019/
+    // 2022 record field offsets are unresolved, so the scorer matches nothing and safely emits
+    // no omitted parts for them.
     const PLACEMENT_LAYOUT& layout = placementLayout( m_version );
-    bool                    isOld = isOldFormat();
+    const bool              isOld = isOldFormat();
 
-    // The 0xFEFF marker sits at layout.feffOff, but the placement record actually spans
-    // the full block. Bounds must cover every field we read (the refdes at nameOff..+16
-    // and, for v0x2021, the whole 96-byte block plus its +1-lag successor), not just the
-    // marker, so a trailing or stray marker near a section end cannot fabricate a part
-    // from adjacent-section bytes. The side flag at nameOff+28 pushes the old framing to
-    // nameOff+29 (105), one int past its 96 B stride.
+    // OLD FORMAT (v2017-2022): keep the proven bounded 0xFEFF section scan (handled below). The
+    // scored new-format locator recovers old-format part placements too, but not yet the v2021
+    // decal-index +1 lag (e.g. CON6 on J4), so the validated scan stays for the old dialects.
+    if( isOld )
+    {
+        parseSection19PartsOld();
+        return;
+    }
+
+    const size_t       stride = 112;                 // new-format placement record stride
+    const int          sideOff = layout.nameOff + 28;
+
+    const SDB_SECTION* sec22 = getSection( SECTION::Placements );
+
+    if( !sec22 || sec22->dataOffset < stride )
+        return;
+
+    static constexpr int64_t COORD_MIN     = 100000;
+    static constexpr int64_t COORD_ABS_MAX = 1500000000;
+    static constexpr int32_t ORI_UNIT      = 40500000;   // 0.5 degree (PADS stores deg * 9e6)
+    static constexpr int     SCORE_PLACEMENT = 8;
+
+    // Score a stride-aligned window: a real placement scores >= 8 (refdes 4 + coords 5 + side 1
+    // + angle 1); gap/sentinel/phantom records score <= 2. The 0xFEFF and i32@+0 hints add at
+    // most +1 each and never gate.
+    auto score = [&]( size_t aBase ) -> int
+    {
+        if( !m_cursor.InBounds( aBase, stride ) )
+            return -999;
+
+        SDB_RECORD  rec = m_sdb.RecordAt( aBase );
+        std::string ref = rec.Str( layout.nameOff, 16 );
+        int         s = ( !ref.empty() && std::isalnum( static_cast<unsigned char>( ref[0] ) ) ) ? 4 : -4;
+
+        int64_t x = std::llabs( static_cast<int64_t>( rec.I32( layout.xOff ) ) );
+        int64_t y = std::llabs( static_cast<int64_t>( layout.yOff ? rec.I32( *layout.yOff ) : 0 ) );
+        s += ( x >= COORD_MIN && x < COORD_ABS_MAX && y >= COORD_MIN && y < COORD_ABS_MAX ) ? 5 : -5;
+
+        int32_t side = rec.I32( sideOff );
+        s += ( side == 0 || side == 1 ) ? 1 : -1;
+
+        int32_t ori = rec.I32( layout.angleOff );
+        bool    angOk = ( ori == 0 );
+
+        if( !angOk && ori > 0 && ori <= 700000000 )
+        {
+            int32_t r = ori % ORI_UNIT;
+            angOk = ( r <= 200000 || ( ORI_UNIT - r ) <= 200000 );
+        }
+
+        s += angOk ? 1 : -1;
+
+        if( m_cursor.InBounds( aBase + layout.feffOff, 2 ) && m_data[aBase + layout.feffOff] == 0xFE
+            && m_data[aBase + layout.feffOff + 1] == 0xFF )
+            s += 1;
+
+        if( !isOld && rec.I32( 0 ) == 0 )
+            s += 1;
+
+        return s;
+    };
+
+    // Asymmetric gap-tolerant back-walk: skip up to 12 trailing gap records to FIND the block,
+    // then stop at the first non-member once it starts.
+    std::vector<size_t> bases;
+    bool                started = false;
+    int                 preGap = 0;
+
+    for( int k = 1; k <= 60; ++k )
+    {
+        if( sec22->dataOffset < static_cast<size_t>( k ) * stride )
+            break;
+
+        size_t base = sec22->dataOffset - static_cast<size_t>( k ) * stride;
+
+        if( score( base ) >= SCORE_PLACEMENT )
+        {
+            bases.push_back( base );
+            started = true;
+        }
+        else if( !started )
+        {
+            if( ++preGap > 12 )
+                break;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    std::reverse( bases.begin(), bases.end() );   // restore file order
+
+    std::unordered_set<std::string> existingRefs;
+
+    for( const PART& p : m_parts )
+        existingRefs.insert( p.name );
+
+    for( size_t base : bases )
+    {
+        SDB_RECORD  rec = m_sdb.RecordAt( base );
+        std::string refDes = rec.Str( layout.nameOff, 16 );
+
+        if( refDes.empty() || existingRefs.count( refDes ) )
+            continue;
+
+        PART part;
+        part.name = refDes;
+        part.location.x = toBasicCoordX( rec.I32( layout.xOff ) );
+        part.location.y = layout.yOff ? toBasicCoordY( rec.I32( *layout.yOff ) ) : 0;
+        part.rotation = toBasicAngle( rec.I32( layout.angleOff ) );
+        part.bottom_layer = rec.U8( sideOff ) != 0;
+        part.units = "M";
+
+        // The +1 block-interleave lag: parttype index (new) / decal index (v2021) lives in the
+        // NEXT physical record. Trust it only when that record is itself a placement (another
+        // block element, or sec22's first record) so a gap record above the block cannot supply
+        // a bogus index.
+        size_t next = base + stride;
+        bool   nextIsPlacement = ( next == sec22->dataOffset ) || ( score( next ) >= SCORE_PLACEMENT );
+
+        if( nextIsPlacement && !isOld && m_cursor.InBounds( next + 4, 4 ) )
+            m_partTypeIndex[m_parts.size()] = m_sdb.RecordAt( next + 4 ).U32( 0 );
+        else if( nextIsPlacement && layout.v2021PadChain && m_cursor.InBounds( next + 56, 4 ) )
+            m_partDecalIndex[m_parts.size()] = m_sdb.RecordAt( next + 56 ).U32( 0 );
+
+        m_parts.push_back( std::move( part ) );
+        existingRefs.insert( refDes );
+    }
+}
+
+
+void BINARY_PARSER::parseSection19PartsOld()
+{
+    // Old-format (v0x2017-2022) omitted placements: a bounded 0xFEFF marker walk over the
+    // sec19/sec21 directory ranges (NOT a whole-file scan). Kept for the old dialects because
+    // the scored new-format locator in parseSection19Parts does not yet resolve the v2021
+    // decal-index +1 lag. v2021 carries its placements as a contiguous 96 B run whose first
+    // (anchor) block has no 0xFEFF marker, handled as a one-shot leading-block recovery.
+    const PLACEMENT_LAYOUT& layout = placementLayout( m_version );
+
     static constexpr int OLD_REC_SIZE = 96;
     int    recSize = layout.scanStride;
     size_t fieldSpan = std::max<size_t>( recSize, static_cast<size_t>( layout.nameOff ) + 29 );
@@ -429,12 +571,6 @@ void BINARY_PARSER::parseSection19Parts()
 
         uint32_t size = entry->totalBytes;
 
-        // v0x2021 lays its placements as a contiguous 96 B run; every block carries an
-        // 0xFEFF marker at +28 except the first (anchor) block. The FEFF scan therefore
-        // misses that leading block, so emit it once from the block immediately before
-        // the first marker found. Its decal index follows the +1 lag like the rest, in
-        // the first FEFF block's @+56. (v0x2022 shares the layout but its decal chain is
-        // unverified, so the leading-block recovery is restricted to v0x2021.)
         bool oldLeadingHandled = !layout.v2021PadChain;
 
         for( size_t pos = 0; pos + 1 < size; ++pos )
@@ -449,10 +585,6 @@ void BINARY_PARSER::parseSection19Parts()
 
             size_t base = markerBase - static_cast<size_t>( layout.feffOff );
 
-            // Section payloads are contiguous, so a genuine placement whose marker sits near
-            // the nominal section end legitimately reads its trailing fields from the bytes
-            // that follow (see the SectionBoundaryPlacement regression). Bound the read to the
-            // file, not the section; the alphanumeric-refdes filter below rejects stray markers.
             if( !m_cursor.InBounds( base, fieldSpan ) )
                 continue;
 
@@ -461,10 +593,8 @@ void BINARY_PARSER::parseSection19Parts()
             if( refDes.empty() || !std::isalnum( static_cast<unsigned char>( refDes[0] ) ) )
                 continue;
 
-            // Emit the leading (anchor) block only after the FIRST genuine placement
-            // block is confirmed, so a stray earlier 0xFEFF cannot fabricate a lead part
-            // or consume the one-shot recovery before the real anchor is reached. The
-            // anchor's decal index is in this first real block's @+56 (the +1 lag).
+            // Emit the leading (anchor) block once, only after the first genuine placement is
+            // confirmed. Its decal index is in this first marked block's @+56 (the +1 lag).
             if( !oldLeadingHandled )
             {
                 oldLeadingHandled = true;
@@ -488,7 +618,6 @@ void BINARY_PARSER::parseSection19Parts()
                         lead.bottom_layer = leadRec.U8( layout.nameOff + 28 ) != 0;
                         lead.units = "M";
 
-                        // Decal index for the leading block is in this first block's @+56.
                         size_t leadField = base + 56;
 
                         if( m_cursor.InBounds( leadField, 4 ) )
@@ -504,46 +633,17 @@ void BINARY_PARSER::parseSection19Parts()
                 continue;
 
             SDB_RECORD partRec = m_sdb.RecordAt( base );
-            int32_t    x = partRec.I32( layout.xOff );
-            int32_t    y = layout.yOff ? partRec.I32( *layout.yOff ) : 0;
-            int32_t    angleRaw = partRec.I32( layout.angleOff );
 
             PART part;
             part.name = refDes;
-            part.location.x = toBasicCoordX( x );
-            part.location.y = toBasicCoordY( y );
-            part.rotation = toBasicAngle( angleRaw );
+            part.location.x = toBasicCoordX( partRec.I32( layout.xOff ) );
+            part.location.y = layout.yOff ? toBasicCoordY( partRec.I32( *layout.yOff ) ) : 0;
+            part.rotation = toBasicAngle( partRec.I32( layout.angleOff ) );
             part.bottom_layer = partRec.U8( layout.nameOff + 28 ) != 0;
             part.units = "M";
 
-            // These section 19/21 placements are the parts omitted from section 22
-            // (connectors, mounting holes and a few passives). Their parttype index
-            // follows the same +1 block-interleave lag as section 22: it lives in the
-            // NEXT physical 112-byte record's @+4 field (this record start + 116).
-            // Recording it lets linkPartsToDecals resolve the decal name for these
-            // placements, which carry pads that the section 22 set alone misses.
-            //
-            // Require the next record's own 0xFEFF marker to actually be present before
-            // trusting the lagged index, so heterogeneous trailing section data cannot
-            // supply a bogus in-range parttype index that mis-assigns a decal.
-            if( !isOld )
-            {
-                static constexpr int FEFF_REC_SIZE = 112;
-                size_t nextMarker = markerBase + FEFF_REC_SIZE;
-                size_t nextField = base + FEFF_REC_SIZE + 4;
-
-                if( m_cursor.InBounds( nextMarker, 2 ) && m_data[nextMarker] == 0xFE
-                    && m_data[nextMarker + 1] == 0xFF && m_cursor.InBounds( nextField, 4 ) )
-                {
-                    m_partTypeIndex[m_parts.size()] = m_sdb.RecordAt( nextField ).U32( 0 );
-                }
-            }
-
-            // v0x2021 places its connectors and mounting holes in 96 B blocks here
-            // (section 22 holds none on those boards). The decal index follows the same
-            // +1 block lag, in the NEXT 96 B block's @+56 (this record start + 96 + 56).
-            // Gate on the next block's own 0xFEFF marker so trailing section data cannot
-            // supply a bogus in-range decal index.
+            // The decal index follows the +1 block lag, in the NEXT 96 B block's @+56. Gate on
+            // that block's own 0xFEFF marker so trailing section data cannot supply a bogus index.
             if( layout.v2021PadChain )
             {
                 size_t nextMarker = markerBase + OLD_REC_SIZE;
