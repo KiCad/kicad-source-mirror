@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-07 18:58+0300\n"
+"POT-Creation-Date: 2026-04-16 19:04+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -14549,6 +14549,9 @@ msgstr "(Deleted Item)"
 msgid "Hierarchical Sheet Pin '%s'"
 msgstr "Hierarchical Sheet Pin '%s'"
 
+msgid "Exclude From Position Files"
+msgstr "Exclude From Position Files"
+
 msgid "Power symbol"
 msgstr "Power symbol"
 
@@ -14586,9 +14589,6 @@ msgstr "Library Link"
 
 msgid "Library Description"
 msgstr "Library Description"
-
-msgid "Exclude From Position Files"
-msgstr "Exclude From Position Files"
 
 #, c-format
 msgid "%d Column Table"
@@ -32492,12 +32492,6 @@ msgstr "Zone Hatched Fill Offsets"
 msgid "Default Properties for New Zones"
 msgstr "Default Properties for New Zones"
 
-msgid "Chamfer:"
-msgstr "Chamfer:"
-
-msgid "Fillet:"
-msgstr "Fillet:"
-
 msgid "Thermal spoke width cannot be smaller than the minimum width."
 msgstr "Thermal spoke width cannot be smaller than the minimum width."
 
@@ -32566,6 +32560,9 @@ msgstr "Hatch offset overrides:"
 
 msgid "Hatched Fill"
 msgstr "Hatched Fill"
+
+msgid "Radius:"
+msgstr "Radius:"
 
 msgid "Remove islands:"
 msgstr "Remove islands:"
@@ -39852,9 +39849,6 @@ msgstr "At least two straight track segments must be selected."
 msgid "Fillet Tracks"
 msgstr "Fillet Tracks"
 
-msgid "Radius:"
-msgstr "Radius:"
-
 msgid "Unable to fillet the selected track segments."
 msgstr "Unable to fillet the selected track segments."
 
@@ -42986,6 +42980,12 @@ msgstr "Process could not be created"
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "Could not create user scripting path %s."
+
+#~ msgid "Chamfer:"
+#~ msgstr "Chamfer:"
+
+#~ msgid "Fillet:"
+#~ msgstr "Fillet:"
 
 #, c-format
 #~ msgid "View %zu load message(s)"
