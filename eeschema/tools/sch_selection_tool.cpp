@@ -1642,6 +1642,12 @@ bool SCH_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere,
         if( SCH_BASE_FRAME* frame = dynamic_cast<SCH_BASE_FRAME*>( m_frame ) )
             frame->HighlightSelectionFilter( rejected );
 
+        if( !aAdd && !aSubtract && !aExclusiveOr && m_selection.GetSize() > 0 )
+        {
+            ClearSelection( true /*quiet mode*/ );
+            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+        }
+
         return false;
     }
 
