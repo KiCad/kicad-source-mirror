@@ -181,27 +181,31 @@ struct TOOL_MANAGER::TOOL_STATE
             stateStack.pop();
             return true;
         }
-        else
-        {
-            cofunc = nullptr;
-            return false;
-        }
+
+        resetRuntimeState();
+        return false;
     }
 
 private:
     /// Stack preserving previous states of a TOOL.
     std::stack<std::unique_ptr<TOOL_STATE>> stateStack;
 
-    /// Restores the initial state.
-    void clear()
+    /// Resets runtime-only state that must not leak across tool activations.
+    void resetRuntimeState()
     {
-        idle               = true;
+        cofunc             = nullptr;
         shutdown           = false;
         pendingWait        = false;
         pendingContextMenu = false;
-        cofunc             = nullptr;
         contextMenu        = nullptr;
         contextMenuTrigger = CMENU_OFF;
+    }
+
+    /// Restores the initial state.
+    void clear()
+    {
+        idle = true;
+        resetRuntimeState();
         vcSettings.Reset();
         transitions.clear();
     }
