@@ -1421,6 +1421,8 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
     git_odb_free( odb );
     git_repository_free( newRepo );
 
+    lock.ReleaseRepository();
+
     // Replace old history dir with trimmed one
     wxString backupOld = hist + wxS("_old");
     wxRenameFile( hist, backupOld );

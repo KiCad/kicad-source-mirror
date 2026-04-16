@@ -134,6 +134,11 @@ public:
      */
     static bool BreakStaleLock( const wxString& aProjectPath );
 
+    /**
+     * Release git repository and index handles early, but keep the file lock.
+     */
+    void ReleaseRepository();
+
 private:
     wxString                      m_projectPath;
     wxString                      m_historyPath;

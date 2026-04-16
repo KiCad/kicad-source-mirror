@@ -285,3 +285,21 @@ bool HISTORY_LOCK_MANAGER::BreakStaleLock( const wxString& aProjectPath )
 
     return result;
 }
+
+
+void HISTORY_LOCK_MANAGER::ReleaseRepository()
+{
+    if( m_indexOwned && m_index )
+    {
+        git_index_free( m_index );
+        m_index = nullptr;
+        m_indexOwned = false;
+    }
+
+    if( m_repoOwned && m_repo )
+    {
+        git_repository_free( m_repo );
+        m_repo = nullptr;
+        m_repoOwned = false;
+    }
+}
