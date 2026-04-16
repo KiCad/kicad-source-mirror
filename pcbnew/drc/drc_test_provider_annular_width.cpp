@@ -173,7 +173,18 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                     }
                 }
 
-                if( !handled || !sameNumPads.empty() )
+                std::vector<const PAD*> overlappingSameNumPads;
+
+                for( const PAD* p : sameNumPads )
+                {
+                    if( p->IsOnLayer( aLayer )
+                            && pad->GetBoundingBox().Intersects( p->GetBoundingBox() ) )
+                    {
+                        overlappingSameNumPads.push_back( p );
+                    }
+                }
+
+                if( !handled || !overlappingSameNumPads.empty() )
                 {
                     // Slow (but general purpose) method.
                     SHAPE_POLY_SET padOutline;
