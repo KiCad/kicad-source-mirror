@@ -1943,6 +1943,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseBoardStackup()
     int dielectric_idx = 1;     // the index of dielectric layers
     BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
 
+    // Remove existing stack or we end up just appending to the existing stackup
+    stackup.RemoveAll();
+
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( CurTok() != T_LEFT )
@@ -2471,7 +2474,10 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
         switch( token )
         {
         case T_stackup:
-            parseBoardStackup();
+            if( m_preserveDestinationStackup )
+                skipCurrent();
+            else
+                parseBoardStackup();
             break;
 
         case T_last_trace_width:    // not used now
@@ -2852,7 +2858,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 
     // Set up a default stackup in case the file doesn't define one, and now we know
     // the enabled layers
-    if( ! m_board->GetDesignSettings().m_HasStackup )
+    if( !m_preserveDestinationStackup && !m_board->GetDesignSettings().m_HasStackup )
     {
         BOARD_STACKUP& stackup = bds.GetStackupDescriptor();
         stackup.RemoveAll();

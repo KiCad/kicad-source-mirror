@@ -90,6 +90,7 @@
 #include <widgets/pcb_design_block_pane.h>
 #include <widgets/wx_progress_reporters.h>
 #include <widgets/wx_infobar.h>
+#include <pcb_io/pcb_io.h>
 #include <wx/hyperlink.h>
 
 
@@ -1979,6 +1980,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
 
         props["page_width"] = std::to_string( editFrame->GetPageSizeIU().x );
         props["page_height"] = std::to_string( editFrame->GetPageSizeIU().y );
+        props[PCB_IO_LOAD_PROPERTIES::APPEND_PRESERVE_DESTINATION_STACKUP] = "";
 
         pi.SetQueryUserCallback(
                 [&]( wxString aTitle, int aIcon, wxString aMessage, wxString aAction ) -> bool
@@ -2052,6 +2054,7 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
     enabledLayers |= initialEnabledLayers;
     brd->SetEnabledLayers( enabledLayers );
     brd->SetVisibleLayers( enabledLayers );
+    brd->GetDesignSettings().GetStackupDescriptor().SynchronizeWithBoard( &brd->GetDesignSettings() );
 
     int ret = 0;
 

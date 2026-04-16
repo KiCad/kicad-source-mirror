@@ -38,6 +38,15 @@ class FOOTPRINT;
 class PROJECT;
 class PROGRESS_REPORTER;
 
+// MIKE WILLIAMS TODO: convert all of the other stringly-typed IO plugin properties to use constants
+namespace PCB_IO_LOAD_PROPERTIES
+{
+// Used to control whether the stackup of the board passed into the IO plugin is preserved or not.
+// It will NOT keep the stackup from being changed in all cases, as a copper layer increase may require
+// the stackup to grow
+inline constexpr char APPEND_PRESERVE_DESTINATION_STACKUP[] = "append_preserve_destination_stackup";
+}
+
 /**
  * A base class that #BOARD loading and saving plugins should derive from.
  *

@@ -184,4 +184,95 @@ BOOST_AUTO_TEST_CASE( Issue23625_CorruptedStackupCapped )
 }
 
 
+/**
+ * Verify that append-board preserves the destination stackup while still
+ * growing it to match a source board with more copper layers.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23752
+ */
+BOOST_AUTO_TEST_CASE( Issue23752_AppendBoardPreservesStackupAndGrowsToSixCopperLayers )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir();
+
+    // four layer board
+    std::string destinationPath = dataPath + "issue3812.kicad_pcb";
+    // six layer board
+    std::string                 sourcePath = dataPath + "issue18142.kicad_pcb";
+    std::map<std::string, UTF8> props;
+
+    // basically, make sure that we start with a four layer board, append a six layer
+    // board like this is a design block apply-layout with six layers, and make
+    // sure we end up with a six layer board and a six layer stackup and not a
+    // ten layer board
+    //
+    // we also need to test the stackup properties are preserved, because the increase
+    // in copper layers should cause a stackup growth from from four to six layers,
+    // but not replace the stackup with the source board's stackup, which has different properties (e.g. finish type)
+    props[PCB_IO_LOAD_PROPERTIES::APPEND_PRESERVE_DESTINATION_STACKUP] = "";
+
+    auto countCopperLayers = []( const BOARD_STACKUP& aStackup )
+    {
+        int copperLayerCount = 0;
+
+        for( BOARD_STACKUP_ITEM* item : aStackup.GetList() )
+        {
+            if( item->GetType() == BS_ITEM_TYPE_COPPER )
+                ++copperLayerCount;
+        }
+
+        return copperLayerCount;
+    };
+
+    auto findFirstDielectric = []( const BOARD_STACKUP& aStackup ) -> const BOARD_STACKUP_ITEM*
+    {
+        for( BOARD_STACKUP_ITEM* item : aStackup.GetList() )
+        {
+            if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+                return item;
+        }
+
+        return nullptr;
+    };
+
+    std::unique_ptr<BOARD> testBoard = std::make_unique<BOARD>();
+
+    kicadPlugin.LoadBoard( destinationPath, testBoard.get() );
+
+    const BOARD_STACKUP&      initialStackup = testBoard->GetDesignSettings().GetStackupDescriptor();
+    const BOARD_STACKUP_ITEM* initialFirstDielectric = findFirstDielectric( initialStackup );
+    const int  initialCopperLayerCount = testBoard->GetCopperLayerCount();
+    const LSET initialEnabledLayers = testBoard->GetEnabledLayers();
+    const wxString            initialFinishType = initialStackup.m_FinishType;
+
+    BOOST_REQUIRE_EQUAL( initialCopperLayerCount, 4 );
+    BOOST_REQUIRE_EQUAL( countCopperLayers( initialStackup ), 4 );
+    BOOST_REQUIRE( initialFirstDielectric );
+    BOOST_REQUIRE_EQUAL( initialFinishType, wxS( "ENIG" ) );
+    const wxString initialFirstDielectricMaterial = initialFirstDielectric->GetMaterial();
+    const int      initialFirstDielectricThickness = initialFirstDielectric->GetThickness();
+
+    kicadPlugin.LoadBoard( sourcePath, testBoard.get(), &props );
+
+    const int appendedCopperLayerCount = testBoard->GetCopperLayerCount();
+
+    if( appendedCopperLayerCount > initialCopperLayerCount )
+        testBoard->SetCopperLayerCount( appendedCopperLayerCount );
+
+    LSET enabledLayers = testBoard->GetEnabledLayers();
+    enabledLayers |= initialEnabledLayers;
+    testBoard->SetEnabledLayers( enabledLayers );
+    testBoard->GetDesignSettings().GetStackupDescriptor().SynchronizeWithBoard( &testBoard->GetDesignSettings() );
+
+    const BOARD_STACKUP&      finalStackup = testBoard->GetDesignSettings().GetStackupDescriptor();
+    const BOARD_STACKUP_ITEM* finalFirstDielectric = findFirstDielectric( finalStackup );
+
+    BOOST_CHECK_EQUAL( testBoard->GetCopperLayerCount(), 6 );
+    BOOST_CHECK_EQUAL( countCopperLayers( finalStackup ), 6 );
+    BOOST_REQUIRE( finalFirstDielectric );
+    BOOST_CHECK_EQUAL( finalStackup.m_FinishType, initialFinishType );
+    BOOST_CHECK_EQUAL( finalFirstDielectric->GetMaterial(), initialFirstDielectricMaterial );
+    BOOST_CHECK_EQUAL( finalFirstDielectric->GetThickness(), initialFirstDielectricThickness );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

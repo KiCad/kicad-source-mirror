@@ -3148,8 +3148,11 @@ BOARD* PCB_IO_KICAD_SEXPR::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe,
 {
     init( aProperties );
 
-    PCB_IO_KICAD_SEXPR_PARSER parser( &aReader, aAppendToMe, m_queryUserCallback,
-                                      aProgressReporter, aLineCount );
+    bool preserveDestinationStackup =
+            aProperties && aProperties->contains( PCB_IO_LOAD_PROPERTIES::APPEND_PRESERVE_DESTINATION_STACKUP );
+
+    PCB_IO_KICAD_SEXPR_PARSER parser( &aReader, aAppendToMe, m_queryUserCallback, aProgressReporter, aLineCount,
+                                      preserveDestinationStackup );
     BOARD* board;
 
     try
