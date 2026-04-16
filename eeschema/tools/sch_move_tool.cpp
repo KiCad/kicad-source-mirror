@@ -345,7 +345,11 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
                 for( auto& [label, info] : m_specialCaseLabels )
                 {
                     if( info.attachedLine == bendLine || info.attachedLine == foundLine )
+                    {
                         info.attachedLine = line;
+                        info.originalLineStart = line->GetStartPoint();
+                        info.originalLineEnd = line->GetEndPoint();
+                    }
                 }
 
                 m_lineConnectionCache[line] = m_lineConnectionCache[bendLine];
@@ -439,8 +443,19 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
             {
                 SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( candidate );
 
-                if( label && m_specialCaseLabels.count( label ) )
+                if( !label || !m_specialCaseLabels.count( label ) )
+                    continue;
+
+                if( label->GetPosition() == selectedEnd )
+                {
+                    m_specialCaseLabels[label].trackMovingEnd = true;
+                }
+                else
+                {
                     m_specialCaseLabels[label].attachedLine = a;
+                    m_specialCaseLabels[label].originalLineStart = a->GetStartPoint();
+                    m_specialCaseLabels[label].originalLineEnd = a->GetEndPoint();
+                }
             }
 
             // We just broke off of the existing items, so replace all of them with our new end
@@ -1526,10 +1541,32 @@ void SCH_MOVE_TOOL::performItemMove( SCH_SELECTION& aSelection, const VECTOR2I& 
         // on the line. The label moves by splitDelta for each part of the split move, but the
         // line endpoints may not follow splitDelta due to orthogonal drag or sheet pin constraints,
         // which can put the label off the line.
-        for( const auto& [label, info] : m_specialCaseLabels )
+        for( auto& [label, info] : m_specialCaseLabels )
         {
             if( !label || !info.attachedLine )
                 continue;
+
+            if( info.trackMovingEnd )
+            {
+                label->Move( splitDelta );
+
+                VECTOR2I start = info.attachedLine->GetStartPoint();
+                VECTOR2I end = info.attachedLine->GetEndPoint();
+
+                if( info.attachedLine->GetLength() > 0
+                    && info.attachedLine->HitTest( info.originalLabelPos, 1 )
+                    && info.originalLabelPos != start
+                    && info.originalLabelPos != end )
+                {
+                    info.trackMovingEnd = false;
+                    label->SetPosition( info.originalLabelPos );
+                    info.originalLineStart = start;
+                    info.originalLineEnd = end;
+                }
+
+                updateItem( label, false );
+                continue;
+            }
 
             VECTOR2I start = info.attachedLine->GetStartPoint();
             VECTOR2I end = info.attachedLine->GetEndPoint();
@@ -1537,7 +1574,6 @@ void SCH_MOVE_TOOL::performItemMove( SCH_SELECTION& aSelection, const VECTOR2I& 
             VECTOR2I deltaEnd = end - info.originalLineEnd;
 
             // TODO: this could be improved by positioning the label based on the new line geometry,
-            // including line angle changes, grid snapping, and line length changes when orthogonal
             // bends are involved.
             //
             // For now, special casing the equal delta case and using splitDelta should work in most
@@ -1548,30 +1584,22 @@ void SCH_MOVE_TOOL::performItemMove( SCH_SELECTION& aSelection, const VECTOR2I& 
             }
             else
             {
-                label->Move( splitDelta );
+                bool     startDrags = info.attachedLine->HasFlag( STARTPOINT );
+                VECTOR2I fixedEndDelta = startDrags ? deltaEnd : deltaStart;
+
+                label->SetPosition( info.originalLabelPos + fixedEndDelta );
 
                 // If the line shrank while dragging, keep the label on the line,
                 // otherwise the label can drift off the end of the line, and change connectivity
-                if( !info.attachedLine->HitTest( label->GetPosition(), 1 ) && info.attachedLine->IsOrthogonal() )
+                if( !info.attachedLine->HitTest( label->GetPosition(), 1 ) )
                 {
-                    VECTOR2I pos = label->GetPosition();
+                    SEG seg( start, end );
+                    label->SetPosition( seg.NearestPoint( label->GetPosition() ) );
 
-                    if( start.x == end.x )
-                    {
-                        int minY = std::min( start.y, end.y );
-                        int maxY = std::max( start.y, end.y );
-                        pos.x = start.x;
-                        pos.y = std::clamp( pos.y, minY, maxY );
-                    }
-                    else if( start.y == end.y )
-                    {
-                        int minX = std::min( start.x, end.x );
-                        int maxX = std::max( start.x, end.x );
-                        pos.y = start.y;
-                        pos.x = std::clamp( pos.x, minX, maxX );
-                    }
+                    VECTOR2I movingEnd = startDrags ? start : end;
 
-                    label->SetPosition( pos );
+                    if( label->GetPosition() == movingEnd )
+                        info.trackMovingEnd = true;
                 }
             }
 
