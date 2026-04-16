@@ -47,7 +47,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-15 19:16+0300\n"
-"PO-Revision-Date: 2026-04-15 16:10+0000\n"
+"PO-Revision-Date: 2026-04-17 02:08+0000\n"
 "Last-Translator: Yao Zi <me@ziyao.cc>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -9253,15 +9253,15 @@ msgstr "读取库表时发生意外错误"
 
 #: common/local_history.cpp:1123
 msgid "Compacting local history..."
-msgstr ""
+msgstr "正在压缩本地历史..."
 
 #: common/local_history.cpp:1320
 msgid "Trimming local history..."
-msgstr ""
+msgstr "正在修剪本地历史..."
 
 #: common/local_history.cpp:1413
 msgid "Compacting trimmed history..."
-msgstr ""
+msgstr "正在压缩修剪过的历史..."
 
 #: common/local_history.cpp:1699
 msgid ""
@@ -9777,7 +9777,7 @@ msgstr ""
 #: common/remote_provider_models.cpp:109
 #, c-format
 msgid "Remote provider manifest failed schema validation: %s"
-msgstr ""
+msgstr "远程数据源元数据格式验证失败：%s"
 
 #: common/remote_provider_models.cpp:147
 #, c-format
@@ -15552,7 +15552,7 @@ msgstr "配置下载的远程库的存储位置和命名方式。"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:70
 msgid "Providers"
-msgstr ""
+msgstr "远程数据源"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:78
 msgid "Add / Update"
@@ -17874,7 +17874,7 @@ msgstr "允许不受约束的引脚交换"
 msgid ""
 "Allows swapping symbol pins' positions. May cause invalid design changes; "
 "use with caution."
-msgstr ""
+msgstr "允许交换符号的引脚位置。可能会导致无效的设计更改；请小心使用。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:85
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
@@ -17905,6 +17905,10 @@ msgid ""
 "Global will convert new power symbols to global power symbols.\n"
 "Local will convert new power symbols to a local power symbols."
 msgstr ""
+"为新的电源符号指定类型。\n"
+"指定“默认”将会遵循符号中的定义。\n"
+"指定“全局”将会将新的电源符号转换为全局电源符号。\n"
+"指定“局部”将会将将新的电源符号转换为局部电源符号。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:152
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:210
@@ -19741,7 +19745,7 @@ msgstr "面板"
 #: eeschema/menubar.cpp:192
 msgid ""
 "Search signed-in remote symbol providers and download verified libraries."
-msgstr ""
+msgstr "搜索需登录的远程符号数据源并下载需验证的符号库。"
 
 #: eeschema/menubar.cpp:326
 msgid "Variants"
@@ -19875,7 +19879,7 @@ msgstr "写入网表文件时发生错误： %s"
 #: eeschema/netlist_exporters/netlist_exporter_pads.cpp:124
 #, c-format
 msgid "Formatting error writing netlist: %s"
-msgstr ""
+msgstr "写入网表时出现格式化错误：%s"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:534
 #, c-format
@@ -20100,7 +20104,7 @@ msgstr "数据手册 URL："
 
 #: eeschema/remote_symbol_download_manager.cpp:49
 msgid "Remote asset URL origin must match the selected provider."
-msgstr ""
+msgstr "远程资源的 URL 必须与选择的远程数据源同源。"
 
 #: eeschema/remote_symbol_download_manager.cpp:66
 #, fuzzy, c-format
@@ -20109,11 +20113,11 @@ msgstr "无法读取 '%s'。"
 
 #: eeschema/remote_symbol_download_manager.cpp:124
 msgid "Remote asset manifest declared an invalid size."
-msgstr ""
+msgstr "远程数据元数据声明的大小无效。"
 
 #: eeschema/remote_symbol_download_manager.cpp:130
 msgid "Remote asset manifest must declare sha256 for URL-based downloads."
-msgstr ""
+msgstr "远程数据的元数据必须为从 URL 下载的资源定义 sha256 校验和。"
 
 #: eeschema/remote_symbol_download_manager.cpp:139
 msgid "Remote asset exceeds the provider download limit."
@@ -20122,15 +20126,15 @@ msgstr ""
 #: eeschema/remote_symbol_download_manager.cpp:150
 #, c-format
 msgid "Remote download failed with HTTP %d."
-msgstr ""
+msgstr "从远端下载时出现错误，HTTP %d。"
 
 #: eeschema/remote_symbol_download_manager.cpp:156
 msgid "Remote asset content type did not match the manifest."
-msgstr ""
+msgstr "远程数据的内容类型与元数据中的描述不匹配。"
 
 #: eeschema/remote_symbol_download_manager.cpp:162
 msgid "Remote asset size did not match the manifest."
-msgstr ""
+msgstr "远程数据的大小与元数据中的描述不匹配。"
 
 #: eeschema/remote_symbol_download_manager.cpp:168
 msgid "Remote asset exceeds the remaining download limit."
@@ -20138,7 +20142,7 @@ msgstr ""
 
 #: eeschema/remote_symbol_download_manager.cpp:174
 msgid "Remote asset digest did not match the manifest."
-msgstr ""
+msgstr "远程数据的校验和与元数据中的描述不匹配。"
 
 #: eeschema/remote_symbol_import_job.cpp:44
 #, fuzzy
@@ -20153,7 +20157,7 @@ msgstr "在符号库表中未找到符号 %s。"
 #: eeschema/remote_symbol_import_job.cpp:62
 #, c-format
 msgid "Downloaded symbol payload did not include expected symbol '%s'."
-msgstr ""
+msgstr "下载的符号内容不包含期望的符号 ‘%s’。"
 
 #: eeschema/remote_symbol_import_job.cpp:96
 #: eeschema/remote_symbol_import_utils.cpp:114
@@ -21050,7 +21054,7 @@ msgstr " 您是否在找‘%s’？"
 msgid ""
 "Symbol version mismatch for '%s' (%s): schematic has symversion %s, library "
 "symbol has symversion %s."
-msgstr ""
+msgstr "‘%s’ （%s）的符号版本不匹配：原理图中符号版本为 %s，符号库中为 %s。"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4088
 #, c-format
