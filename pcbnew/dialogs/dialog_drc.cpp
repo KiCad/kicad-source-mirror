@@ -558,22 +558,33 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
     {
         principalLayer = UNDEFINED_LAYER;
 
-        if( a || b || c || d )
-            violationLayers = LSET::AllLayersMask();
-
-        // Try to initialize principalLayer to a valid layer.  Note that some markers have
-        // a layer set to UNDEFINED_LAYER, so we may need to keep looking.
-
-        for( BOARD_ITEM* it: { a, b, c, d } )
+        // The marker's layer is set by the test provider
+        if( auto* marker = dynamic_cast<PCB_MARKER*>( rc_item->GetParent() ) )
         {
-            if( !it )
-                continue;
+            PCB_LAYER_ID markerLayer = marker->GetLayer();
 
-            LSET layersList = getActiveLayers( it );
-            violationLayers &= layersList;
+            if( markerLayer > UNDEFINED_LAYER )
+                principalLayer = markerLayer;
+        }
 
-            if( principalLayer <= UNDEFINED_LAYER && layersList.count() )
-                principalLayer = layersList.Seq().front();
+        // Fall back to intersecting the contributing items layer sets.
+        if( principalLayer <= UNDEFINED_LAYER )
+        {
+            if( a || b || c || d )
+                violationLayers = LSET::AllLayersMask();
+
+            for( BOARD_ITEM* it: { a, b, c, d } )
+            {
+                if( !it )
+                    continue;
+
+                LSET layersList = getActiveLayers( it );
+                violationLayers &= layersList;
+
+                if( principalLayer <= UNDEFINED_LAYER && layersList.count() )
+                    principalLayer = layersList.Seq().front();
+
+            }
         }
     }
 
