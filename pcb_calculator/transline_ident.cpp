@@ -159,7 +159,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case CPW_TYPE:          // coplanar waveguide
-        m_TLine           = new COPLANAR();
+        m_TLine           = new COPLANAR_UI();
         m_BitmapName      = BITMAPS::cpw;
         m_HasPrmSelection = true;
 
@@ -194,7 +194,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case GROUNDED_CPW_TYPE:      // grounded coplanar waveguide
-        m_TLine           = new GROUNDEDCOPLANAR();
+        m_TLine           = new GROUNDEDCOPLANAR_UI();
         m_BitmapName      = BITMAPS::cpw_back;
         m_HasPrmSelection = true;
 

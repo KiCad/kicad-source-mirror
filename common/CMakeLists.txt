@@ -709,6 +709,7 @@ set ( COMMON_TRANSLINE_CALCULATION_SRCS
     transline_calculations/stripline.cpp
     transline_calculations/coupled_stripline.cpp
     transline_calculations/coax.cpp
+    transline_calculations/coplanar.cpp
     )
 
 set( COMMON_IMPORT_GFX_SRCS

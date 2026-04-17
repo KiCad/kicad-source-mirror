@@ -73,6 +73,12 @@ enum class TRANSLINE_PARAMETERS : int
     ATTEN_DILECTRIC_EVEN, // The even mode attenuation of the dilectric
     ATTEN_DILECTRIC_ODD,  // The odd mode attenuation of the dilectric
     Z_DIFF,               // The differential impedance
+
+    // Coplanar waveguide back-metal flag.  A value of 0.0 means ungrounded CPW; a value of 1.0
+    // means grounded (CBCPW).  Exposed as a parameter rather than a C++ member so a single
+    // COPLANAR class can drive both UI entry points without ad-hoc subclassing.
+    CPW_BACKMETAL,
+
     EXTRAS_COUNT
 };
 
