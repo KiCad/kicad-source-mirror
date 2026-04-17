@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-15 19:16+0300\n"
-"PO-Revision-Date: 2026-04-12 05:09+0000\n"
+"PO-Revision-Date: 2026-04-17 12:22+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -6296,19 +6296,16 @@ msgid "Graphics error"
 msgstr "Błąd grafiki"
 
 #: common/draw_panel_gal.cpp:236 common/draw_panel_gal.cpp:240
-#, fuzzy
 msgid "Graphics error during recovery"
-msgstr "Błąd grafiki"
+msgstr "Błąd grafiki podczas odzyskiwania"
 
 #: common/draw_panel_gal.cpp:241
-#, fuzzy
 msgid "Unknown exception during backend switch"
-msgstr "Wystąpił wyjątek OCC podczas budowania postaci: %s"
+msgstr "Nieznany wyjątek podczas przełączania zaplecza"
 
 #: common/draw_panel_gal.cpp:416
-#, fuzzy
 msgid "Unknown exception"
-msgstr "Nieznana metoda czyszczenia"
+msgstr "Nieznany wyjątek"
 
 #: common/draw_panel_gal.cpp:619
 msgid "Could not use OpenGL"
@@ -9376,15 +9373,15 @@ msgstr "Wystąpił nieoczekiwany błąd podczas odczytu tabeli bibliotek"
 
 #: common/local_history.cpp:1123
 msgid "Compacting local history..."
-msgstr ""
+msgstr "Kompaktowanie lokalnej historii..."
 
 #: common/local_history.cpp:1320
 msgid "Trimming local history..."
-msgstr ""
+msgstr "Przycinanie lokalnej historii..."
 
 #: common/local_history.cpp:1413
 msgid "Compacting trimmed history..."
-msgstr ""
+msgstr "Kompaktowanie przyciętej lokalnej historii..."
 
 #: common/local_history.cpp:1699
 msgid ""
@@ -30149,35 +30146,33 @@ msgid "Fail on any parse warnings or errors"
 msgstr "Przerwij w przypadku błędów lub ostrzeżeń parsowania"
 
 #: kicad/cli/command_gerber_convert_png.cpp:80
-#, fuzzy
 msgid "Units for viewport parameters, options: mm, inch, mils (default: mm)"
-msgstr "Jednostki wyjściowe, opcje: mm, in, mils (domyślnie: mm)"
+msgstr ""
+"Jednostki parametrów obszaru widoku, opcje: mm, in, mils (domyślnie: mm)"
 
 #: kicad/cli/command_gerber_convert_png.cpp:86
-#, fuzzy
 msgid "Viewport origin X"
-msgstr "Nazwa widoku:"
+msgstr "Punkt bazowy X widoku"
 
 #: kicad/cli/command_gerber_convert_png.cpp:92
-#, fuzzy
 msgid "Viewport origin Y"
-msgstr "Nazwa widoku:"
+msgstr "Punkt bazowy Y widoku"
 
 #: kicad/cli/command_gerber_convert_png.cpp:98
 msgid "Viewport width (enables viewport mode)"
-msgstr ""
+msgstr "Szerokość obszaru widoku (włącza tryb obszaru widoku)"
 
 #: kicad/cli/command_gerber_convert_png.cpp:104
 msgid "Viewport height (enables viewport mode)"
-msgstr ""
+msgstr "Wysokość obszaru widoku (włącza tryb obszaru widoku)"
 
 #: kicad/cli/command_gerber_convert_png.cpp:109
 msgid "Foreground color as hex (e.g., '#FFFFFF')"
-msgstr ""
+msgstr "Kolor pierwszego planu w formacie szesnastkowym (np. '#FFFFFF')"
 
 #: kicad/cli/command_gerber_convert_png.cpp:114
 msgid "Background color as hex (e.g., '#000000')"
-msgstr ""
+msgstr "Kolor tła w formacie szesnastkowym (np. '#000000')"
 
 #: kicad/cli/command_gerber_convert_png.cpp:147
 #: kicad/cli/command_gerber_info.cpp:100
@@ -30188,7 +30183,7 @@ msgstr "Nieprawidłowa liczba jednostek: %s\n"
 #: kicad/cli/command_gerber_convert_png.cpp:158
 msgid ""
 "Error: both --window-width and --window-height must be specified together\n"
-msgstr ""
+msgstr "Błąd: zarówno --window-width oraz --window-height muszą być określone\n"
 
 #: kicad/cli/command_gerber_diff.cpp:47
 msgid "Compare two Gerber or Excellon files and show differences"
@@ -30232,6 +30227,8 @@ msgstr "Tolerancja w nm dla porównań ułamkowych (domyślnie: 0)"
 msgid ""
 "Skip bounding-box origin alignment; catches absolute-placement regressions"
 msgstr ""
+"Pomiń wyrównanie początku pola ograniczającego; wychwytuje regresje "
+"położenia absolutnego"
 
 #: kicad/cli/command_gerber_diff.cpp:124 kicad/cli/command_gerber_info.cpp:80
 #, c-format
@@ -41477,15 +41474,16 @@ msgstr ""
 "w programie KiCad."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:99
-#, fuzzy
 msgid "Keep KiCad layer names"
-msgstr "Zachowaj warstwy zewnętrzne"
+msgstr "Zachowaj nazwy warstw KiCad"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:100
 msgid ""
 "If checked, layers will keep their standard KiCad names instead of being "
 "renamed to the imported layer names."
 msgstr ""
+"Jeśli zaznaczysz tę opcję, warstwy zachowają swoje standardowe nazwy KiCad "
+"zamiast zostać przemianowane na zaimportowane nazwy warstw."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:67
 msgid "Edit Mapping of Imported Layers"
@@ -42429,9 +42427,8 @@ msgstr "Obróbka otworów"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1112
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:530
-#, fuzzy
 msgid "Front:"
-msgstr "Górna"
+msgstr "Górna:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1116
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1159
@@ -42449,14 +42446,13 @@ msgstr "Pogłębienie"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1155
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:577
-#, fuzzy
 msgid "Back:"
-msgstr "Dolna"
+msgstr "Dolna:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1197
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1284 pcbnew/pcb_track.cpp:3179
 msgid "Backdrill"
-msgstr "Owiert odwrotny"
+msgstr "Wiercenie wsteczne"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1199
 msgid "Top & bottom"
@@ -42464,9 +42460,8 @@ msgstr "Góra i dół"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1213
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:461
-#, fuzzy
 msgid "Front backdrill must-cut:"
-msgstr "Górny owiert odwrotny musi przeciąć:"
+msgstr "Wiercenie wsteczne musi przecinać:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1215
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1220
@@ -42474,21 +42469,20 @@ msgstr "Górny owiert odwrotny musi przeciąć:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1253
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:498
 msgid "The backdrill must pass through this layer"
-msgstr "Górny owiert odwrotny musi być przeprowadzony przez tą warstwę"
+msgstr "Górne wiercenie wsteczne musi być przeprowadzone przez tą warstwę"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1224
 msgid "Top backdrill size:"
-msgstr "Rozmiar górnego owiertu odwrotnego:"
+msgstr "Rozmiar górnego wiercenia wstecznego:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1246
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:493
-#, fuzzy
 msgid "Back backdrill must-cut:"
-msgstr "Górny owiert odwrotny musi przeciąć:"
+msgstr "Górne wiercenie wsteczne musi przecinać:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1257
 msgid "Bottom backdrill size:"
-msgstr "Rozmiar dolnego owiertu odwrotnego:"
+msgstr "Rozmiar dolnego wiercenia wstecznego:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1421
 msgid "Preview pad in sketch mode"
@@ -43790,14 +43784,12 @@ msgid "Both"
 msgstr "Obie"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
-#, fuzzy
 msgid "Front backdrill size:"
-msgstr "Rozmiar górnego owiertu odwrotnego:"
+msgstr "Rozmiar górnego wiercenia wstecznego:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:476
-#, fuzzy
 msgid "Back backdrill size:"
-msgstr "Rozmiar górnego owiertu odwrotnego:"
+msgstr "Rozmiar dolnego wiercenia wstecznego:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:511
 msgid "Hole Post-machining"
@@ -44436,31 +44428,28 @@ msgstr "Błąd przy dodawaniu modelu 3D"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:212
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:143
-#, fuzzy
 msgid "Courtyard layer"
-msgstr "Pola zajętości zachodzą na siebie"
+msgstr "Warstwa pola zajętości"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:213
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:143
-#, fuzzy
 msgid "Fabrication layer"
-msgstr "Właściwość produkcyjna"
+msgstr "Warstwa produkcyjna"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:261
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:888
-#, fuzzy
 msgid "Component height must be greater than zero."
-msgstr "Grubość linii musi być większa niż zero."
+msgstr "Wysokość komponenetu musi być większa niż zero."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:261
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:271
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:86
 msgid "Extruded 3D Body"
-msgstr ""
+msgstr "Wyciągnięte ciało 3D"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:271
 msgid "Standoff height must be less than the overall height."
-msgstr ""
+msgstr "Wysokość odstępu musi być mniejsza niż wysokość całkowita."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:671
 msgid "No filename entered"
@@ -44478,92 +44467,77 @@ msgstr "Nie można otworzyć pliku"
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:901
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:938
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:961
-#, fuzzy
 msgid "Export Extruded Body"
-msgstr "Eksportuj ciało płytki"
+msgstr "Eksportuj wyciągnięte ciało"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:901
 msgid "No extrusion outline could be generated for this footprint."
 msgstr ""
+"Nie udało się wygenerować żadnego wyciągniętego konturu dla tego footprintu."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:908
-#, fuzzy
 msgid "Export Extruded 3D Body"
-msgstr "Eksportuj ciało płytki"
+msgstr "Eksportuj wyciągnięte ciało 3D"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:909
-#, fuzzy
 msgid "GLB files"
-msgstr "Pliki SVG"
+msgstr "Pliki GLB"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:910
-#, fuzzy
 msgid "BREP files"
-msgstr "Pliki STEP"
+msgstr "Pliki BREP"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:938
-#, fuzzy
 msgid "Failed to create extruded body geometry."
-msgstr "Nie można utworzyć folderu wyjściowego\n"
+msgstr "Nie udało się utworzyć wyciągnięcia geometrii bryły."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:961
-#, fuzzy
 msgid "Failed to write file."
-msgstr "Nie można zapisywać do pliku '%s'."
+msgstr "Nie można zapisać pliku."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:45
 msgid "3D Model(s)"
 msgstr "Modele 3D"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:92
-#, fuzzy
 msgid "Enable extruded 3D model for this footprint"
-msgstr "Wyklucz modele 3D komponentów"
+msgstr "Aktywuj wyciągnięty model 3D dla tego footprintu"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:101
-#, fuzzy
 msgid "Show extruded 3D model"
-msgstr "Pokaż nieokreślone modele 3D"
+msgstr "Pokaż wyciągnięte modele 3D"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:113
-#, fuzzy
 msgid "Overall height:"
-msgstr "Wysokość komórki"
+msgstr "Wysokość całkowita:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:126
-#, fuzzy
 msgid "Standoff height:"
-msgstr "Wysokość tekstu:"
+msgstr "Wysokość odstępu:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:139
-#, fuzzy
 msgid "Extrusion source:"
-msgstr "Błąd wyrażenia"
+msgstr "Źródło wyciągnięcia:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:168
-#, fuzzy
 msgid "Material:"
-msgstr "Materiał"
+msgstr "Materiał:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:172
-#, fuzzy
 msgid "Plastic"
-msgstr "Tryb realistyczny"
+msgstr "Plastik"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:172
-#, fuzzy
 msgid "Matte"
-msgstr "Wzorzec"
+msgstr "Matowy"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:172
-#, fuzzy
 msgid "Metal"
-msgstr "Metadane"
+msgstr "Metalowy"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:182
-#, fuzzy
 msgid "Export generated 3D model"
-msgstr "Eksportuj model 3D"
+msgstr "Eksportuj wygenerowany model 3D"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names.cpp:292
 #, c-format
@@ -49487,21 +49461,21 @@ msgstr ""
 "Błąd OpenCASCADE: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:664
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add extruded body for %s.\n"
 "OpenCASCADE error: %s\n"
 msgstr ""
-"Nie można dodać modelu 3D dla %s. \n"
+"Nie można dodać wyciągnięcia dla %s. \n"
 "Błąd OpenCASCADE: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:679
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not add extruded pins for %s.\n"
 "OpenCASCADE error: %s\n"
 msgstr ""
-"Nie można dodać modelu 3D dla %s. \n"
+"Nie można dodać wyciągniętych pinów dla %s. \n"
 "Błąd OpenCASCADE: %s\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1284
