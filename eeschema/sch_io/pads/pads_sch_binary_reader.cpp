@@ -396,7 +396,7 @@ static constexpr int    TERMINAL_X_OFF = 3;       // 2*i16 decal-relative
 static constexpr int    TERMINAL_Y_OFF = 5;
 
 
-static int decalMil( const BINARY_CURSOR& cur, size_t o )
+static int signedHalfMil( const BINARY_CURSOR& cur, size_t o )
 {
     return 2 * static_cast<int>( static_cast<int16_t>( cur.U16At( o ) ) );
 }
@@ -535,7 +535,7 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
             if( o + DVERT_STRIDE > n )
                 break;
 
-            verts.emplace_back( decalMil( cur, o ), decalMil( cur, o + 2 ) );
+            verts.emplace_back( signedHalfMil( cur, o ), signedHalfMil( cur, o + 2 ) );
         }
 
         // Split pieces into decals by the cumulative-vertex ranges.
@@ -651,7 +651,7 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
 
                         size_t o = cand + TERMINAL_STRIDE * static_cast<size_t>( r.cum );
 
-                        if( decalMil( cur, o + TERMINAL_X_OFF ) == 0 && decalMil( cur, o + TERMINAL_Y_OFF ) == 0 )
+                        if( signedHalfMil( cur, o + TERMINAL_X_OFF ) == 0 && signedHalfMil( cur, o + TERMINAL_Y_OFF ) == 0 )
                             ++score;
                     }
 
@@ -675,8 +675,8 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
                         size_t o = poolBase + TERMINAL_STRIDE * static_cast<size_t>( r.cum + t );
 
                         if( o + DVERT_STRIDE <= n )
-                            m_decals[it->second].terminals.emplace_back( decalMil( cur, o + TERMINAL_X_OFF ),
-                                                                         decalMil( cur, o + TERMINAL_Y_OFF ) );
+                            m_decals[it->second].terminals.emplace_back( signedHalfMil( cur, o + TERMINAL_X_OFF ),
+                                                                         signedHalfMil( cur, o + TERMINAL_Y_OFF ) );
                     }
                 }
 
@@ -1550,8 +1550,8 @@ void PADS_SCH_BINARY_READER::decodePlacements( const std::vector<uint8_t>& d )
 
             // Inline REF-DES field placement (subrecord at ksy+0x08): half-mil deltas
             // page-relative to the symbol origin, u16 tenths-degree angle.
-            pl.refdesPlace.dx_mils = decalMil( cur, ksy + PL_REFDES_DX_OFF );
-            pl.refdesPlace.dy_mils = decalMil( cur, ksy + PL_REFDES_DY_OFF );
+            pl.refdesPlace.dx_mils = signedHalfMil( cur, ksy + PL_REFDES_DX_OFF );
+            pl.refdesPlace.dy_mils = signedHalfMil( cur, ksy + PL_REFDES_DY_OFF );
             pl.refdesPlace.orientation_deg = rec.U16( PL_REFDES_ANGLE_OFF ) / 10;
             pl.refdesPlace.visible = true;
             pl.refdesPlace.valid = true;
@@ -1728,8 +1728,8 @@ void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& 
                 break;
 
             FIELD_PLACEMENT fp;
-            fp.dx_mils = decalMil( cur, cursor + FP_DX_OFF );
-            fp.dy_mils = decalMil( cur, cursor + FP_DY_OFF );
+            fp.dx_mils = signedHalfMil( cur, cursor + FP_DX_OFF );
+            fp.dy_mils = signedHalfMil( cur, cursor + FP_DY_OFF );
             fp.orientation_deg = rec.U16( FP_ANGLE_OFF ) / 10;
             fp.height_mils = rec.U16( FP_HEIGHT_OFF );
             fp.visible = ( vis != 0 );

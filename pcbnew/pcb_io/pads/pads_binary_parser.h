@@ -197,11 +197,11 @@ private:
 
     void parseBoardSetup();
     void parsePartPlacements();
-    void parseSection19Parts();
+    void recoverOmittedPlacements();
 
     // Old-format (v0x2017-2022) omitted-placement recovery via a bounded 0xFEFF section scan;
     // the scored new-format locator does not resolve the v2021 decal-index lag.
-    void parseSection19PartsOld();
+    void recoverOmittedPlacementsOld();
 
     // Build a PART from a placement record's refdes and its coordinate, rotation and side fields.
     PART makePlacementPart( const SDB_RECORD& aRec, int aXOff, std::optional<int> aYOff,

@@ -51,7 +51,7 @@ namespace PADS_IO
 /**
  * One directory section: a single database controller's serialized record stream.
  *
- * @c perItem is the nominal fixed stride (totalBytes/count) when both are non-zero.
+ * @c stride is the nominal fixed stride (totalBytes/count) when both are non-zero.
  * @c dataOffset is the absolute file offset of the payload, accumulated across
  * preceding sections.
  */
@@ -61,7 +61,7 @@ struct SDB_SECTION
     uint32_t count = 0;
     uint32_t totalBytes = 0;
     uint32_t dataOffset = 0;
-    uint32_t perItem = 0;
+    uint32_t stride = 0;
 
     bool     IsEmpty() const { return totalBytes == 0; }
     uint32_t End() const { return dataOffset + totalBytes; }

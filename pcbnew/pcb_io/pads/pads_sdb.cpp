@@ -124,7 +124,7 @@ void PADS_SDB::parseDirectory()
             section.dataOffset = payloadOffset;
 
             if( section.count > 0 && section.totalBytes > 0 )
-                section.perItem = section.totalBytes / section.count;
+                section.stride = section.totalBytes / section.count;
 
             payloadOffset += section.totalBytes;
         }

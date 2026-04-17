@@ -159,7 +159,7 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     parseMetadataRegion();
     parsePartPlacements();
     parseClusters();
-    parseSection19Parts();
+    recoverOmittedPlacements();
     parsePadStacks();
     parseDecalNameTable();
     parsePartTypeTable();
@@ -259,7 +259,7 @@ void BINARY_PARSER::parsePartPlacements()
 {
     const SDB_SECTION* entry = getSection( SECTION::Placements );
 
-    if( !entry || entry->count == 0 || entry->perItem == 0 )
+    if( !entry || entry->count == 0 || entry->stride == 0 )
         return;
 
     if( entry->End() > m_data.size() )
@@ -267,7 +267,7 @@ void BINARY_PARSER::parsePartPlacements()
 
     const PLACEMENT_LAYOUT& layout = placementLayout( m_version );
     bool                    isOld = isOldFormat();
-    uint32_t                recSize = entry->perItem;
+    uint32_t                recSize = entry->stride;
 
     // The old framing reads the side flag at nameOff+28, past its 96 B stride.
     size_t fieldSpan = std::max<size_t>( recSize, static_cast<size_t>( layout.nameOff ) + 29 );
@@ -277,7 +277,7 @@ void BINARY_PARSER::parsePartPlacements()
         size_t off = static_cast<size_t>( i ) * recSize;
 
         // fieldSpan covers the full record, so this guard also rejects a directory whose
-        // perItem is smaller than the fields we read.
+        // stride is smaller than the fields we read.
         if( off + fieldSpan > entry->totalBytes )
             break;
 
@@ -343,7 +343,7 @@ void BINARY_PARSER::parseClusters()
 
     const SDB_SECTION* sec68 = getSection( SECTION::Clusters );
 
-    if( !sec68 || sec68->count == 0 || sec68->perItem != 60 )
+    if( !sec68 || sec68->count == 0 || sec68->stride != 60 )
         return;
 
     static constexpr size_t  REC_SIZE     = 60;
@@ -393,7 +393,7 @@ void BINARY_PARSER::parseClusters()
 }
 
 
-void BINARY_PARSER::parseSection19Parts()
+void BINARY_PARSER::recoverOmittedPlacements()
 {
     // Recover the parts omitted from section 22 (connectors, mounting/tooling holes, test
     // points, fiducials, a few passives). They are a contiguous run of full placement records
@@ -415,7 +415,7 @@ void BINARY_PARSER::parseSection19Parts()
     // decal-index +1 lag, so the old dialects keep the bounded 0xFEFF scan below.
     if( isOld )
     {
-        parseSection19PartsOld();
+        recoverOmittedPlacementsOld();
         return;
     }
 
@@ -532,7 +532,7 @@ void BINARY_PARSER::parseSection19Parts()
 }
 
 
-void BINARY_PARSER::parseSection19PartsOld()
+void BINARY_PARSER::recoverOmittedPlacementsOld()
 {
     // Old-format omitted placements via a bounded 0xFEFF marker walk over the sec19/sec21
     // ranges. v2021 carries its placements as a contiguous 96 B run whose first (anchor) block
@@ -645,14 +645,14 @@ void BINARY_PARSER::parsePadStacks()
 {
     const SDB_SECTION* entry = getSection( SECTION::PadStacks );
 
-    if( !entry || entry->count == 0 || entry->perItem == 0 )
+    if( !entry || entry->count == 0 || entry->stride == 0 )
         return;
 
     if( entry->End() > m_data.size() )
         return;
 
     const PADSTACK_LAYOUT& layout = padstackLayout( isOldFormat() );
-    uint32_t               recSize = entry->perItem;
+    uint32_t               recSize = entry->stride;
 
     // Read one padstack record's default (layer 0) geometry. For finger pads (RF, OF, RC)
     // finLength is the second dimension; round (R) and square (S) reuse sizeA.
@@ -934,14 +934,14 @@ void BINARY_PARSER::parsePartDecals()
 {
     const SDB_SECTION* entry = getSection( SECTION::DrwItems );
 
-    if( !entry || entry->count == 0 || entry->perItem == 0 )
+    if( !entry || entry->count == 0 || entry->stride == 0 )
         return;
 
     if( entry->End() > m_data.size() )
         return;
 
     bool     isNew = !isOldFormat();
-    uint32_t recSize = entry->perItem;
+    uint32_t recSize = entry->stride;
 
     for( uint32_t i = 0; i < entry->count; ++i )
     {
@@ -1029,7 +1029,7 @@ void BINARY_PARSER::parseTerminals()
 
     const SDB_SECTION* sec15 = getSection( SECTION::TerminalPool );
 
-    if( sec15 && sec15->totalBytes > 0 && sec15->perItem == TERM_SIZE )
+    if( sec15 && sec15->totalBytes > 0 && sec15->stride == TERM_SIZE )
     {
         for( uint32_t i = 0; i < sec15->count; ++i )
         {
@@ -1147,7 +1147,7 @@ void BINARY_PARSER::parsePerPinPadstacks()
     const SDB_SECTION* sec14 = getSection( SECTION::DecalHeader );
     const SDB_SECTION* sec15 = getSection( SECTION::TerminalPool );
 
-    if( !sec14 || !sec15 || sec15->perItem != 36 )
+    if( !sec14 || !sec15 || sec15->stride != 36 )
         return;
 
     // The (pin, ref) pair pool begins at the first section-15 record whose +24/+28/+32 tail is
@@ -1335,7 +1335,7 @@ void BINARY_PARSER::parseBoardOutlineDrwOrigin()
 void BINARY_PARSER::parseBoardOutline()
 {
     // Board outline vertices are 12-byte triplets [i32 X, i32 Y, u32 0xFFFFFFFF] in the tail of
-    // section 11, after the 20-byte piece descriptors. count * perItem may equal totalBytes
+    // section 11, after the 20-byte piece descriptors. count * stride may equal totalBytes
     // exactly, so the vertex region boundary is found by scanning backward from the section end.
     // Coordinates are DRW-relative and need the section 9 origin added to reach binary absolute.
     //
@@ -1891,7 +1891,7 @@ void BINARY_PARSER::parseNetNames()
 
         const SDB_SECTION* nets = getSection( SECTION::Nets );
 
-        if( nets && nets->count > 0 && nets->perItem == NET_RECORD_SIZE )
+        if( nets && nets->count > 0 && nets->stride == NET_RECORD_SIZE )
         {
             for( uint32_t i = 0; i < nets->count; ++i )
             {
@@ -1924,7 +1924,7 @@ void BINARY_PARSER::parseNetNames()
         constexpr uint32_t PLACEMENT_RECORD_SIZE = 112;
         const SDB_SECTION* entry22 = getSection( SECTION::Placements );
 
-        if( entry22 && entry22->count > 0 && entry22->perItem == PLACEMENT_RECORD_SIZE )
+        if( entry22 && entry22->count > 0 && entry22->stride == PLACEMENT_RECORD_SIZE )
         {
             for( uint32_t i = 0; i < entry22->count; ++i )
             {
@@ -2016,7 +2016,7 @@ void BINARY_PARSER::parseNetNames()
         constexpr uint32_t OLD_PLACEMENT_SIZE = 96;
         const SDB_SECTION* entry22 = getSection( SECTION::Placements );
 
-        if( entry22 && entry22->count > 0 && entry22->perItem == OLD_PLACEMENT_SIZE )
+        if( entry22 && entry22->count > 0 && entry22->stride == OLD_PLACEMENT_SIZE )
         {
             for( uint32_t i = 0; i < entry22->count; ++i )
             {
@@ -2048,7 +2048,7 @@ void BINARY_PARSER::parseNetNames()
         constexpr uint32_t OLD_NET_SIZE = 144;
         const SDB_SECTION* entry23 = getSection( SECTION::Nets );
 
-        if( entry23 && entry23->count > 0 && entry23->perItem == OLD_NET_SIZE )
+        if( entry23 && entry23->count > 0 && entry23->stride == OLD_NET_SIZE )
         {
             for( uint32_t i = 0; i < entry23->count; ++i )
             {
@@ -2678,7 +2678,7 @@ void BINARY_PARSER::parseTextRecords()
     // and record K has positive height and width.
     const SDB_SECTION* s8 = getSection( SECTION::FreeText );
 
-    if( !s8 || s8->totalBytes == 0 || s8->perItem < 72 )
+    if( !s8 || s8->totalBytes == 0 || s8->stride < 72 )
         return;
 
     const SDB_SECTION* s5 = getSection( SECTION::PadShapes );
@@ -2696,7 +2696,7 @@ void BINARY_PARSER::parseTextRecords()
     size_t          poolHi = hi;
     const SDB_SECTION* s9     = getSection( SECTION::StringPool );
 
-    if( s9 && s9->totalBytes > 0 && s9->perItem == 1 && s9->dataOffset == hi
+    if( s9 && s9->totalBytes > 0 && s9->stride == 1 && s9->dataOffset == hi
         && s9->dataOffset <= m_data.size() && s9->totalBytes <= m_data.size() - s9->dataOffset )
     {
         poolHi = s9->dataOffset + s9->totalBytes;
@@ -2835,7 +2835,7 @@ struct VIA_SEC60_LAYOUT
     std::optional<int> netIndexOff = std::nullopt; // dense net-index byte; old dialect only
     bool               dedup = false;        // collapse repeated coordinates (new dialects only)
     uint32_t           minRecSize = 0;       // 0 = no record-size gate
-    bool               exactRecSize = false; // require perItem == minRecSize (else >=)
+    bool               exactRecSize = false; // require stride == minRecSize (else >=)
     uint32_t           boundSize = 0;        // bytes that must be present per record (0 = use stride)
     bool               guardUsesRawY = false;// deviation guard on rawY (true) vs the narrowed vy
     bool ( *matchesMarker )( const BINARY_CURSOR&, size_t aBase ) = nullptr;
@@ -2917,11 +2917,11 @@ void BINARY_PARSER::parseRouteVertices()
 
     const SDB_SECTION* entry60 = getSection( SECTION::Vias );
 
-    if( !entry60 || entry60->count == 0 || entry60->perItem == 0 || entry60->End() > m_data.size() )
+    if( !entry60 || entry60->count == 0 || entry60->stride == 0 || entry60->End() > m_data.size() )
         return;
 
     uint32_t n60 = entry60->count;
-    uint32_t r60 = entry60->perItem;
+    uint32_t r60 = entry60->stride;
 
     static constexpr int64_t MAX_COORD_DEVIATION = 1000000000; // ~660mm from origin
 
@@ -3018,8 +3018,8 @@ void BINARY_PARSER::parseCopperShapes()
     const SDB_SECTION* sec11 = getSection( SECTION::GraphicPieces );
     const SDB_SECTION* sec12 = getSection( SECTION::Vertices );
 
-    if( !sec10 || !sec11 || !sec12 || sec10->perItem < 112
-        || sec11->perItem < 20 || sec12->perItem < 12 )
+    if( !sec10 || !sec11 || !sec12 || sec10->stride < 112
+        || sec11->stride < 20 || sec12->stride < 12 )
     {
         return;
     }
@@ -3028,7 +3028,7 @@ void BINARY_PARSER::parseCopperShapes()
 
     for( uint32_t rec = 0; rec < sec10->count; ++rec )
     {
-        SDB_RECORD hdr = m_sdb.Record( *sec10, rec, sec10->perItem );
+        SDB_RECORD hdr = m_sdb.Record( *sec10, rec, sec10->stride );
 
         uint32_t flag6 = hdr.U32( 24 );
         uint32_t flag7 = hdr.U32( 28 );
@@ -3096,7 +3096,7 @@ void BINARY_PARSER::parseCopperShapes()
         }
         else
         {
-            SDB_RECORD gfx = m_sdb.Record( *sec11, sec11Index, sec11->perItem );
+            SDB_RECORD gfx = m_sdb.Record( *sec11, sec11Index, sec11->stride );
             uint8_t    sideByte = gfx.U8( 0 );
             int32_t    layerHint = gfx.I32( 16 );
             copper.width = static_cast<double>( gfx.I32( 12 ) );
@@ -3123,7 +3123,7 @@ void BINARY_PARSER::parseDimensions()
 {
     const SDB_SECTION* sec10 = getSection( SECTION::DrwItems );
 
-    if( !sec10 || sec10->perItem < 112 || m_ownerRuns.empty() )
+    if( !sec10 || sec10->stride < 112 || m_ownerRuns.empty() )
         return;
 
     // A dimension's leader geometry is the sec12 vertex run of its DIM* DRW owner, laid out in
@@ -3138,7 +3138,7 @@ void BINARY_PARSER::parseDimensions()
     // empty, so KiCad recomputes the displayed value from start/end (which equals the PADS value).
     for( uint32_t rec = 0; rec < sec10->count; ++rec )
     {
-        std::string name = m_sdb.Record( *sec10, rec, sec10->perItem ).Str( 44, 24 );
+        std::string name = m_sdb.Record( *sec10, rec, sec10->stride ).Str( 44, 24 );
 
         if( name.size() < 4 || name.substr( 0, 3 ) != "DIM" )
             continue;
@@ -3186,7 +3186,7 @@ void BINARY_PARSER::computeSec12Base()
 
     const SDB_SECTION* sec12 = getSection( SECTION::Vertices );
 
-    if( !sec12 || sec12->perItem < 12 || sec12->totalBytes == 0 )
+    if( !sec12 || sec12->stride < 12 || sec12->totalBytes == 0 )
         return;
 
     int32_t directoryRows = static_cast<int32_t>( sec12->totalBytes / 12 );
@@ -3369,7 +3369,7 @@ void BINARY_PARSER::parseKeepouts()
     const SDB_SECTION* sec10 = getSection( SECTION::DrwItems );
     const SDB_SECTION* sec12 = getSection( SECTION::Vertices );
 
-    if( !sec10 || !sec12 || sec10->perItem < 112 || sec12->perItem < 12 )
+    if( !sec10 || !sec12 || sec10->stride < 112 || sec12->stride < 12 )
         return;
 
     struct Owner
@@ -3387,7 +3387,7 @@ void BINARY_PARSER::parseKeepouts()
 
     for( uint32_t rec = 0; rec < sec10->count; ++rec )
     {
-        SDB_RECORD hdr = m_sdb.Record( *sec10, rec, sec10->perItem );
+        SDB_RECORD hdr = m_sdb.Record( *sec10, rec, sec10->stride );
 
         if( hdr.U32( 84 ) != 0 || hdr.U32( 24 ) != 1 )
             continue;
