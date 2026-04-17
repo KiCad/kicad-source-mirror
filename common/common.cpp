@@ -261,7 +261,10 @@ wxString ExpandTextVars( const wxString& aSource, const std::function<bool( wxSt
                     // Also evaluate math expressions after expanding variables
                     if( token.Contains( wxT( "@{" ) ) )
                     {
-                        static EXPRESSION_EVALUATOR evaluator;
+                        // Must not be static. ExpandTextVars runs on parallel workers
+                        // (e.g. CONNECTION_GRAPH) and a shared evaluator races on its
+                        // internal error collector.
+                        EXPRESSION_EVALUATOR evaluator;
                         token = evaluator.Evaluate( token );
                     }
                 }
@@ -300,7 +303,10 @@ wxString ResolveTextVars( const wxString& aSource, const std::function<bool( wxS
     wxString  text = aSource;
     const int maxDepth = ADVANCED_CFG::GetCfg().m_ResolveTextRecursionDepth;
 
-    static EXPRESSION_EVALUATOR evaluator;
+    // Must not be static. ResolveTextVars runs on parallel workers (e.g.
+    // CONNECTION_GRAPH) and a shared evaluator races on its internal error
+    // collector.
+    EXPRESSION_EVALUATOR evaluator;
 
     while( ( text.Contains( wxT( "${" ) ) || text.Contains( wxT( "@{" ) ) ) && ++aDepth <= maxDepth )
     {

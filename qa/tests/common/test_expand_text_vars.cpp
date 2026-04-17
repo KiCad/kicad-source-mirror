@@ -20,7 +20,10 @@
 
 #define BOOST_TEST_NO_MAIN
 #include <boost/test/unit_test.hpp>
+#include <atomic>
 #include <filesystem>
+#include <thread>
+#include <vector>
 #include <common.h>
 #include <env_paths.h>
 #include <pgm_base.h>
@@ -281,5 +284,88 @@ BOOST_AUTO_TEST_CASE( RoundTripPreservesAbsolutePath )
                     normalized, expandedFn.GetFullPath(), originalFn.GetFullPath() ) );
 }
 
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+/**
+ * Regression test for KiCad GitLab issue #23962.
+ *
+ * ResolveTextVars and ExpandTextVars used a function-local static EXPRESSION_EVALUATOR
+ * shared across all threads. CONNECTION_GRAPH evaluates schematic labels in parallel
+ * via a thread pool and label text may contain @{...} expressions, which caused the
+ * shared evaluator's internal ERROR_COLLECTOR vector to be mutated concurrently, leading
+ * to heap corruption and a segfault inside std::vector::clear.
+ *
+ * This test hammers ResolveTextVars from many threads to make the race observable,
+ * primarily under TSan. It also serves as a smoke test that no thread crashes.
+ */
+BOOST_AUTO_TEST_SUITE( TextVarExpressionEvaluatorConcurrency )
+
+BOOST_AUTO_TEST_CASE( ParallelResolveTextVarsWithMathExpressions )
+{
+    std::function<bool( wxString* )> resolver = []( wxString* token ) -> bool
+    {
+        if( *token == wxT( "#" ) )
+        {
+            *token = wxT( "3" );
+            return true;
+        }
+
+        if( *token == wxT( "ROW" ) )
+        {
+            *token = wxT( "4" );
+            return true;
+        }
+
+        return false;
+    };
+
+    const std::vector<wxString> inputs = {
+        wxT( "Out@{(${#}-2)*8+0}" ),
+        wxT( "Net_@{${ROW}*2+1}" ),
+        wxT( "@{(2-2)*8+0}" ),
+        wxT( "${ROW}:@{${ROW}*${ROW}}" ),
+        wxT( "plain_label_no_expr" ),
+        wxT( "@{1+1}_@{2+2}_@{3+3}" ),
+    };
+
+    const unsigned int numThreads = std::max( 4u, std::thread::hardware_concurrency() );
+    const int          iterations = 2000;
+
+    std::atomic<bool>        failed{ false };
+    std::atomic<int>         totalRuns{ 0 };
+    std::vector<std::thread> threads;
+    threads.reserve( numThreads );
+
+    for( unsigned int t = 0; t < numThreads; ++t )
+    {
+        threads.emplace_back(
+                [&, t]()
+                {
+                    try
+                    {
+                        for( int i = 0; i < iterations; ++i )
+                        {
+                            const wxString& src = inputs[( t + i ) % inputs.size()];
+                            int             depth = 0;
+                            wxString        result = ResolveTextVars( src, &resolver, depth );
+                            (void) result;
+                            totalRuns.fetch_add( 1, std::memory_order_relaxed );
+                        }
+                    }
+                    catch( ... )
+                    {
+                        failed.store( true, std::memory_order_relaxed );
+                    }
+                } );
+    }
+
+    for( auto& th : threads )
+        th.join();
+
+    BOOST_CHECK( !failed.load() );
+    BOOST_CHECK_EQUAL( totalRuns.load(), static_cast<int>( numThreads ) * iterations );
+}
 
 BOOST_AUTO_TEST_SUITE_END()

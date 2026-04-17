@@ -625,7 +625,10 @@ void EDA_TEXT::cacheShownText()
 
 wxString EDA_TEXT::EvaluateText( const wxString& aText ) const
 {
-    static EXPRESSION_EVALUATOR evaluator;
+    // Must not be static. EvaluateText runs on parallel workers (e.g.
+    // CONNECTION_GRAPH resolving label text) and a shared evaluator races on
+    // its internal error collector.
+    EXPRESSION_EVALUATOR evaluator;
 
     return evaluator.Evaluate( aText );
 }

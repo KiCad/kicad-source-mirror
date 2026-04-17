@@ -218,10 +218,13 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 
     wxString retv = ExpandTextVars( aTextbase, &wsResolver, m_flags );
 
-    static EXPRESSION_EVALUATOR evaluator;
-
     if( retv.Contains( wxS( "@{" ) ) )
+    {
+        // Must not be static. Painting can run on parallel workers and a shared
+        // evaluator races on its internal error collector.
+        EXPRESSION_EVALUATOR evaluator;
         retv = evaluator.Evaluate( retv );
+    }
 
     return retv;
 }
