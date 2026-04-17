@@ -1901,10 +1901,11 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
         for( size_t i = 0; i < npins && o + PIN_STRIDE <= d.size() && isPinRec( o ); ++i, o += PIN_STRIDE )
             readPin( o );
 
-        // If a malformed pool stops the count-driven read short, fall back to the
-        // 0xFFFF-terminator walk rather than emit a truncated, mis-bound pin set, which would
-        // shift the per-part-type pin slices computed from the +0x30 cumulative index below.
-        if( pins.size() != npins )
+        // If a malformed pool stops the count-driven read short, or the gate sum is zero while a
+        // pin record exists at the run start, fall back to the 0xFFFF-terminator walk rather than
+        // emit a truncated or empty pin set, which would shift the per-part-type pin slices
+        // computed from the +0x30 cumulative index below.
+        if( pins.size() != npins || npins == 0 )
         {
             pins.clear();
             o = start;
@@ -2611,6 +2612,8 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
 
     size_t netBase = 0;
     bool   haveBase = false;
+    size_t bestBase = 0;
+    size_t bestCnt = 0;
 
     for( size_t i = DATA_STREAM_OFFSET; i + NET_STRIDE <= streamLimit( d ); )
     {
@@ -2634,6 +2637,12 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
             p += NET_STRIDE;
         }
 
+        if( cnt > bestCnt )
+        {
+            bestCnt = cnt;
+            bestBase = start;
+        }
+
         if( cnt == netCount )
         {
             netBase = start;
@@ -2644,10 +2653,18 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
         i = p;
     }
 
+    // Anchor on the run whose length matches the directory count; if none does, fall back to the
+    // longest run that still spans the count and read exactly netCount records from it, so a single
+    // stray adjacent record does not drop every label.
     if( !haveBase )
-        return;
+    {
+        if( bestCnt < netCount )
+            return;
 
-    m_netTableScanCount = netCount;
+        netBase = bestBase;
+    }
+
+    m_netTableScanCount = bestCnt;
 
     auto netName = [&]( size_t k ) -> std::string
     {

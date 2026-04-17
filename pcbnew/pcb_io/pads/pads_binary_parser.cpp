@@ -367,9 +367,19 @@ void BINARY_PARSER::parseClusters()
 
     for( uint32_t i = 0; i < sec68->count; ++i )
     {
-        SDB_RECORD   rec = m_sdb.RecordAt( base + i * REC_SIZE );
+        SDB_RECORD  rec = m_sdb.RecordAt( base + i * REC_SIZE );
+        std::string name = rec.Str( 0, 16 );
+
+        // A misaligned base would read non-cluster bytes; a printable name plus the record's
+        // constant fields confirm the run, so emit nothing rather than fabricate empty groups.
+        if( name.empty() || rec.I32( 24 ) != 0 || rec.I32( 32 ) != 1 || rec.I32( 36 ) != 0 )
+        {
+            m_clusters.clear();
+            return;
+        }
+
         PART_CLUSTER cluster;
-        cluster.name = rec.Str( 0, 16 );
+        cluster.name = std::move( name );
         cluster.id = static_cast<int>( i ) + 1;
         m_clusters.push_back( std::move( cluster ) );
     }
@@ -448,18 +458,19 @@ void BINARY_PARSER::parseSection19Parts()
             && m_data[aBase + layout.feffOff + 1] == 0xFF )
             s += 1;
 
-        if( !isOld && rec.I32( 0 ) == 0 )
+        if( rec.I32( 0 ) == 0 )
             s += 1;
 
         return s;
     };
 
     // Skip up to 12 trailing gap records to find the block, then stop at the first non-member.
+    // The cap only backstops a runaway walk; the block ends at the first gap once it has started.
     std::vector<size_t> bases;
     bool                started = false;
     int                 preGap = 0;
 
-    for( int k = 1; k <= 60; ++k )
+    for( int k = 1; k <= 512; ++k )
     {
         if( sec22->dataOffset < static_cast<size_t>( k ) * stride )
             break;
@@ -509,12 +520,9 @@ void BINARY_PARSER::parseSection19Parts()
         // +1 lag). Trust it only when that record is itself a placement so a gap record above
         // the block cannot supply a bogus index.
         size_t next = base + stride;
-        bool   nextIsPlacement = ( next == sec22->dataOffset ) || ( score( next ) >= SCORE_PLACEMENT );
 
-        if( nextIsPlacement && !isOld && m_cursor.InBounds( next + 4, 4 ) )
+        if( score( next ) >= SCORE_PLACEMENT && m_cursor.InBounds( next + 4, 4 ) )
             m_partTypeIndex[m_parts.size()] = m_sdb.RecordAt( next + 4 ).U32( 0 );
-        else if( nextIsPlacement && layout.v2021PadChain && m_cursor.InBounds( next + 56, 4 ) )
-            m_partDecalIndex[m_parts.size()] = m_sdb.RecordAt( next + 56 ).U32( 0 );
 
         m_parts.push_back( std::move( part ) );
         existingRefs.insert( refDes );
@@ -2622,6 +2630,9 @@ void BINARY_PARSER::parseDiffPairs()
         size_t st = poolBase + i;
 
         if( m_sdb.RecordAt( st ).F64( 32 ) != MAX_LENGTH || !looksDp( st ) )
+            continue;
+
+        if( found.count( st ) )   // already recovered while walking an earlier seed's chunk
             continue;
 
         size_t start = st;
