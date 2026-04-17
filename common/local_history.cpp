@@ -124,6 +124,8 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
         return true;
     }
 
+    Init( aProjectPath ); 
+
     wxLogTrace( traceAutoSave, wxS("[history] RunRegisteredSaversAndCommit start project='%s' title='%s' savers=%zu"),
                 aProjectPath, aTitle, m_savers.size() );
 
@@ -653,6 +655,9 @@ bool LOCAL_HISTORY::CommitSnapshot( const std::vector<wxString>& aFiles, const w
         return true;
 
     wxString        proj = wxFileName( aFiles[0] ).GetPath();
+
+    Init( proj );
+
     wxString        hist = historyPath( proj );
 
     // Acquire locks using hybrid locking strategy
@@ -739,6 +744,9 @@ bool LOCAL_HISTORY::HistoryExists( const wxString& aProjectPath )
 
 bool LOCAL_HISTORY::TagSave( const wxString& aProjectPath, const wxString& aFileType )
 {
+    if( !Pgm().GetCommonSettings()->m_Backup.enabled )
+        return true;
+
     HISTORY_LOCK_MANAGER lock( aProjectPath );
 
     if( !lock.IsLocked() )
@@ -845,6 +853,9 @@ bool LOCAL_HISTORY::HeadNewerThanLastSave( const wxString& aProjectPath )
 bool LOCAL_HISTORY::CommitDuplicateOfLastSave( const wxString& aProjectPath, const wxString& aFileType,
                                                const wxString& aMessage )
 {
+    if( !Pgm().GetCommonSettings()->m_Backup.enabled )
+        return true;
+
     HISTORY_LOCK_MANAGER lock( aProjectPath );
 
     if( !lock.IsLocked() )
