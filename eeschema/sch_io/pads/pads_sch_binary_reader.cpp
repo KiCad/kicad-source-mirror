@@ -379,10 +379,8 @@ static constexpr int    DECAL_CUMPIN_OFF = 0x30;  // u32 cumulative pin index
 static constexpr int    DECAL_CUMVTX_OFF = 0x34;  // u32 cumulative vertex index
 static constexpr size_t DECAL_NAME_LEN = 0x26;
 
-// Window bounds: the per-sheet CAE view record is the lower bound and the part-type pool header
-// the upper bound; the decal library falls strictly between them.
-static const std::array<uint8_t, 8> DECAL_LOWER_SIGNATURE = { 0x80, 0x00, 0x00, 0x00,
-                                                              0x30, 0x00, 0x00, 0x00 };
+// Window bounds: the per-sheet CAE view record (its signature) is the lower bound and the
+// part-type pool header the upper bound; the decal library falls strictly between them.
 static constexpr char DECAL_UPPER_ANCHOR[] = "$OSR_SYMS";
 static constexpr size_t PIECE_STRIDE = 6;
 static constexpr int    PIECE_MARKER_OFF = 1;     // 0x00 closed / 0xff open
@@ -440,9 +438,9 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
     // rather than scan the whole stream and risk binding the wrong table.
     size_t windowLo = std::string::npos;
 
-    for( size_t i = DATA_STREAM_OFFSET; i + DECAL_LOWER_SIGNATURE.size() <= n; ++i )
+    for( size_t i = DATA_STREAM_OFFSET; i + SHEET_SIGNATURE.size() <= n; ++i )
     {
-        if( std::equal( DECAL_LOWER_SIGNATURE.begin(), DECAL_LOWER_SIGNATURE.end(), &d[i] ) )
+        if( std::equal( SHEET_SIGNATURE.begin(), SHEET_SIGNATURE.end(), &d[i] ) )
         {
             windowLo = i;
             break;

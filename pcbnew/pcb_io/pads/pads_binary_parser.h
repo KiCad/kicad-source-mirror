@@ -24,6 +24,7 @@
 #include <map>
 #include <set>
 #include <cstdint>
+#include <optional>
 
 #include <math/vector2d.h>
 #include <wx/string.h>
@@ -201,6 +202,10 @@ private:
     // Old-format (v0x2017-2022) omitted-placement recovery via a bounded 0xFEFF section scan;
     // the scored new-format locator does not resolve the v2021 decal-index lag.
     void parseSection19PartsOld();
+
+    // Build a PART from a placement record's refdes and its coordinate, rotation and side fields.
+    PART makePlacementPart( const SDB_RECORD& aRec, int aXOff, std::optional<int> aYOff,
+                            int aAngleOff, int aNameOff, const std::string& aRefDes ) const;
     void parsePadStacks();
     void parsePartDecals();
     void parseDecalNameTable();

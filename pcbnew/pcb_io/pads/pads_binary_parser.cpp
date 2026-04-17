@@ -239,6 +239,22 @@ void BINARY_PARSER::parseBoardSetup()
 }
 
 
+PART BINARY_PARSER::makePlacementPart( const SDB_RECORD& aRec, int aXOff, std::optional<int> aYOff,
+                                      int aAngleOff, int aNameOff, const std::string& aRefDes ) const
+{
+    PART part;
+    part.name = aRefDes;
+    part.location.x = toBasicCoordX( aRec.I32( aXOff ) );
+    part.location.y = aYOff ? toBasicCoordY( aRec.I32( *aYOff ) ) : 0;
+    part.rotation = toBasicAngle( aRec.I32( aAngleOff ) );
+
+    // The side flag is the word at nameOff+28 in both dialects; bit 0 marks a bottom placement.
+    part.bottom_layer = aRec.U8( aNameOff + 28 ) != 0;
+    part.units = "M";
+    return part;
+}
+
+
 void BINARY_PARSER::parsePartPlacements()
 {
     const SDB_SECTION* entry = getSection( SECTION::Placements );
@@ -271,17 +287,8 @@ void BINARY_PARSER::parsePartPlacements()
         if( refDes.empty() || !std::isalnum( static_cast<unsigned char>( refDes[0] ) ) )
             continue;
 
-        // Coordinates are kept raw here; the origin is applied downstream by the IO layer.
-        PART part;
-        part.name = refDes;
-        part.location.x = toBasicCoordX( rec.I32( layout.xOff ) );
-        part.location.y = toBasicCoordY( layout.yOff ? rec.I32( *layout.yOff ) : 0 );
-        part.rotation = toBasicAngle( rec.I32( layout.angleOff ) );
-
-        // Side flag is the i32 at nameOff+28 in both dialects; bit 0 marks a bottom-side
-        // placement.
-        part.bottom_layer = rec.U8( layout.nameOff + 28 ) != 0;
-        part.units = "M";
+        PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
+                                       layout.nameOff, refDes );
 
         // The parttype index lives in the NEXT physical record's @+4 field (a +1 block-
         // interleave lag); linkPartsToDecals resolves it to the decal name.
@@ -508,13 +515,8 @@ void BINARY_PARSER::parseSection19Parts()
         if( refDes.empty() || existingRefs.count( refDes ) )
             continue;
 
-        PART part;
-        part.name = refDes;
-        part.location.x = toBasicCoordX( rec.I32( layout.xOff ) );
-        part.location.y = layout.yOff ? toBasicCoordY( rec.I32( *layout.yOff ) ) : 0;
-        part.rotation = toBasicAngle( rec.I32( layout.angleOff ) );
-        part.bottom_layer = rec.U8( sideOff ) != 0;
-        part.units = "M";
+        PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
+                                       layout.nameOff, refDes );
 
         // The parttype index (new) / decal index (v2021) lives in the NEXT physical record (the
         // +1 lag). Trust it only when that record is itself a placement so a gap record above
@@ -596,14 +598,8 @@ void BINARY_PARSER::parseSection19PartsOld()
                         && std::isalnum( static_cast<unsigned char>( leadRef[0] ) )
                         && !existingRefs.count( leadRef ) )
                     {
-                        PART lead;
-                        lead.name = leadRef;
-                        lead.location.x = toBasicCoordX( leadRec.I32( layout.xOff ) );
-                        lead.location.y = layout.yOff
-                                ? toBasicCoordY( leadRec.I32( *layout.yOff ) ) : 0;
-                        lead.rotation = toBasicAngle( leadRec.I32( layout.angleOff ) );
-                        lead.bottom_layer = leadRec.U8( layout.nameOff + 28 ) != 0;
-                        lead.units = "M";
+                        PART lead = makePlacementPart( leadRec, layout.xOff, layout.yOff,
+                                                       layout.angleOff, layout.nameOff, leadRef );
 
                         size_t leadField = base + 56;
 
@@ -621,13 +617,8 @@ void BINARY_PARSER::parseSection19PartsOld()
 
             SDB_RECORD partRec = m_sdb.RecordAt( base );
 
-            PART part;
-            part.name = refDes;
-            part.location.x = toBasicCoordX( partRec.I32( layout.xOff ) );
-            part.location.y = layout.yOff ? toBasicCoordY( partRec.I32( *layout.yOff ) ) : 0;
-            part.rotation = toBasicAngle( partRec.I32( layout.angleOff ) );
-            part.bottom_layer = partRec.U8( layout.nameOff + 28 ) != 0;
-            part.units = "M";
+            PART part = makePlacementPart( partRec, layout.xOff, layout.yOff, layout.angleOff,
+                                           layout.nameOff, refDes );
 
             // The decal index is in the NEXT 96 B block's @+56. Gate on that block's own 0xFEFF
             // marker so trailing section data cannot supply a bogus index.
