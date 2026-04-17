@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-15 19:16+0300\n"
-"PO-Revision-Date: 2026-04-06 18:09+0000\n"
+"PO-Revision-Date: 2026-04-17 19:24+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ru/>\n"
@@ -35,7 +35,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2105,52 +2105,51 @@ msgstr "Изменение из API"
 #: common/api/api_plugin.cpp:58
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr ""
+msgstr "неверная конфигурация плагина в '%s': %s"
 
 #: common/api/api_plugin.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "Неверное имя вывода"
+msgstr "неверный runtime плагина: %s"
 
 #: common/api/api_plugin.cpp:105
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "Не удалось получить доступ к конфигурации репозитория"
+msgstr "не удалось прочитать файл конфигурации плагина"
 
 #: common/api/api_plugin.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "plugin configuration file error: %s"
-msgstr "Ошибка конфигурации"
+msgstr "ошибка файла конфигурации плагина: %s"
 
 #: common/api/api_plugin.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "missing or invalid required keys: %s"
-msgstr "Отсутствует или недопустимо значение Temperature Range."
+msgstr "отсутствуют или неверны обязательные ключи: %s"
 
 #: common/api/api_plugin.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "identifier '%s' is invalid"
-msgstr "Неверный идентификатор библиотеки символов '%s'."
+msgstr "неверный идентификатор '%s'"
 
 #: common/api/api_plugin.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "actions section is invalid: %s"
-msgstr "Подключение к базе данных не удалось: %s"
+msgstr "неверная секция actions: %s"
 
 #: common/api/api_plugin_manager.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s': %s"
-msgstr "Параметры плагина"
+msgstr "Действие плагина '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s': %s"
-msgstr "Плагины (%d)"
+msgstr "Плагин '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "exited with code %d"
-msgstr "Процесс завершился неудачей с кодом %d"
+msgstr "завершился с кодом %d"
 
 #: common/api/api_plugin_manager.cpp:335
 #, fuzzy
@@ -2159,46 +2158,42 @@ msgstr "Требуется выбор слоя."
 
 #: common/api/api_plugin_manager.cpp:369 common/api/api_plugin_manager.cpp:779
 #: common/api/api_plugin_manager.cpp:863
-#, fuzzy
 msgid "missing plugin environment"
-msgstr "Пересоздать среду плагинов"
+msgstr "отсутствует среда плагинов"
 
 #: common/api/api_plugin_manager.cpp:378
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' could not be read"
-msgstr "Не удалось создать файл '%s'."
+msgstr "точка входа '%s' не может быть прочитана"
 
 #: common/api/api_plugin_manager.cpp:446
-#, fuzzy
 msgid "process could not be created"
-msgstr "Не удалось создать процесс"
+msgstr "не удалось создать процесс"
 
 #: common/api/api_plugin_manager.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' is not executable"
-msgstr "Каталог '%s' недоступен для записи."
+msgstr "точка входа '%s' не является исполняемым файлом"
 
 #: common/api/api_plugin_manager.cpp:571
-#, fuzzy
 msgid "could not launch plugin"
-msgstr "Не удалось загрузить Мастер посад. мест"
+msgstr "не удалось запустить плагин"
 
 #: common/api/api_plugin_manager.cpp:749 common/api/api_plugin_manager.cpp:831
 #: common/api/api_plugin_manager.cpp:921
-#, fuzzy, c-format
+#, c-format
 msgid "error code %d"
-msgstr "Код ошибки: %d"
+msgstr "код ошибки %d"
 
 #: common/api/api_plugin_manager.cpp:751 common/api/api_plugin_manager.cpp:833
 #: common/api/api_plugin_manager.cpp:923
-#, fuzzy, c-format
+#, c-format
 msgid "could not create plugin environment: %s"
-msgstr "Пересоздать среду плагинов"
+msgstr "не удалось создать среду плагинов: %s"
 
 #: common/api/api_plugin_manager.cpp:872
-#, fuzzy
 msgid "requirements.txt could not be read"
-msgstr "Не удалось создать процесс"
+msgstr "не удалось прочитать requirements.txt"
 
 #: common/api/python_manager.cpp:138
 msgid "Process could not be created"
@@ -11605,14 +11600,13 @@ msgid "View load messages"
 msgstr "Просмотр сообщений загрузки"
 
 #: common/widgets/kistatusbar.cpp:509
-#, fuzzy, c-format
+#, c-format
 msgid "View %zu message(s)"
-msgstr "Просмотр %zu сообщений загрузки"
+msgstr "Просмотр %zu сообщений"
 
 #: common/widgets/kistatusbar.cpp:522
-#, fuzzy
 msgid "View messages"
-msgstr "Просмотр сообщений загрузки"
+msgstr "Просмотр сообщений"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
@@ -13520,9 +13514,8 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "Установить уровень Ошибка для нарушений '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:782 eeschema/dialogs/dialog_erc.cpp:789
-#, fuzzy
 msgid "Violation severities can also be edited in Schematic Setup"
-msgstr "Уровни нарушений можно также править в диалоге Параметры схемы..."
+msgstr "Уровни нарушений можно также править в Параметры схемы"
 
 #: eeschema/dialogs/dialog_erc.cpp:787 pcbnew/dialogs/dialog_drc.cpp:793
 #, c-format
@@ -13544,9 +13537,8 @@ msgstr "Править карту конфликтов выводов..."
 
 #: eeschema/dialogs/dialog_erc.cpp:803 eeschema/dialogs/dialog_erc.cpp:809
 #: eeschema/dialogs/dialog_erc.cpp:816
-#, fuzzy
 msgid "Open the Schematic Setup dialog"
-msgstr "Открыть диалоговое окно Параметры схемы..."
+msgstr "Открыть диалог Параметры схемы..."
 
 #: eeschema/dialogs/dialog_erc.cpp:808 pcbnew/dialogs/dialog_drc.cpp:805
 msgid "Edit violation severities..."
@@ -17251,15 +17243,14 @@ msgid "Copy Design Variant"
 msgstr "Копировать вариант дизайна"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2947
-#, fuzzy
 msgid "Cannot edit the default variant description."
-msgstr "Невозможно удалить вариант по умолчанию."
+msgstr "Невозможно изменить описание варианта по умолчанию."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2955
 #: eeschema/sch_edit_frame.cpp:3055
-#, fuzzy, c-format
+#, c-format
 msgid "Edit Description for '%s'"
-msgstr "Править описание задания"
+msgstr "Править описание для '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -19518,7 +19509,7 @@ msgid ""
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
 "'%s' не является файлом схемы KiCad.\n"
-"Используйте Файл -> Импорт для импорта схем из других САПР."
+"Используйте Файл -> Импорт -> Схема из другой САПР..."
 
 #: eeschema/files-io.cpp:354 eeschema/picksymbol.cpp:127
 msgid "Root"
@@ -20632,9 +20623,8 @@ msgid "Resolved Netclass"
 msgstr "Разрешенный класс цепи"
 
 #: eeschema/sch_bus_entry.cpp:652 eeschema/sch_line.cpp:1286
-#, fuzzy
 msgid "Wire Style"
-msgstr "Стиль линии"
+msgstr "Стиль проводника"
 
 #: eeschema/sch_connection.cpp:455
 msgid "Connection Name"
@@ -20792,19 +20782,16 @@ msgid "Find in Net Inspector"
 msgstr "Найти в инспекторе цепей"
 
 #: eeschema/sch_edit_frame.cpp:3037
-#, fuzzy
 msgid "No design variants to edit."
-msgstr "Добавить новый вариант проекта на схему."
+msgstr "Нет вариантов дизайна для правки."
 
 #: eeschema/sch_edit_frame.cpp:3041
-#, fuzzy
 msgid "Select variant to edit description:"
-msgstr "Выберите имя варианта для удаления:"
+msgstr "Выберите вариант для правки описания:"
 
 #: eeschema/sch_edit_frame.cpp:3042
-#, fuzzy
 msgid "Edit Variant Description"
-msgstr "Править описание задания"
+msgstr "Править описание варианта"
 
 #: eeschema/sch_edit_frame.cpp:3102
 msgid "Select variant name to remove:"
@@ -26407,9 +26394,8 @@ msgid "Import 2D drawing file"
 msgstr "Импорт файл двумерного чертежа"
 
 #: eeschema/tools/sch_actions.cpp:1233
-#, fuzzy
 msgid "Import Non-KiCad Schematic..."
-msgstr "Схема из другой САПР..."
+msgstr "Импорт схемы из другой САПР..."
 
 #: eeschema/tools/sch_actions.cpp:1234
 msgid ""
@@ -26928,14 +26914,12 @@ msgid "Remove an existing design variant from the schematic."
 msgstr "Удалить существующий вариант проекта из схемы."
 
 #: eeschema/tools/sch_actions.cpp:1808
-#, fuzzy
 msgid "Edit Variant Description..."
-msgstr "Править описание задания"
+msgstr "Править описание варианта..."
 
 #: eeschema/tools/sch_actions.cpp:1809
-#, fuzzy
 msgid "Edit the description of an existing design variant."
-msgstr "Редактировать файл плагина в текстовом редакторе"
+msgstr "Править описание существующего варианта дизайна."
 
 #: eeschema/tools/sch_align_tool.cpp:64
 msgid "Align"
@@ -30459,7 +30443,7 @@ msgstr "Без форматной рамки"
 
 #: kicad/cli/command_pcb_import.cpp:40
 msgid "Import a non-KiCad PCB file to KiCad format"
-msgstr "Импортировать файл не-KiCad платы в формат KiCad"
+msgstr "Импортировать файл платы из другой САПР в формат KiCad"
 
 #: kicad/cli/command_pcb_import.cpp:44
 msgid ""
@@ -37557,12 +37541,12 @@ msgstr "кол-во по верт."
 #: pcbnew/dialogs/dialog_create_array.cpp:436
 #, c-format
 msgid "horizontal delta of zero with %ld objects"
-msgstr ""
+msgstr "горизонтальная дельта равна нулю с %ld объектами"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:442
 #, c-format
 msgid "vertical delta of zero with %ld objects"
-msgstr ""
+msgstr "вертикальная дельта равна нулю с %ld объектами"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:451
 msgid "stagger"
@@ -37575,7 +37559,7 @@ msgstr "кол-во точек"
 #: pcbnew/dialogs/dialog_create_array.cpp:517
 #, c-format
 msgid "angular delta of zero with %ld objects"
-msgstr ""
+msgstr "угловая дельта равна нулю с %ld объектами"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:564
 msgid "Bad parameters"
@@ -38260,14 +38244,12 @@ msgid "They will be excluded from the %s list"
 msgstr "Они будут исключены из списка %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:788 pcbnew/dialogs/dialog_drc.cpp:795
-#, fuzzy
 msgid "Violation severities can also be edited in Board Setup"
-msgstr "Уровень нарушений можно также редактировать в диалоге Параметры платы"
+msgstr "Уровень нарушений можно также править в Параметры платы"
 
 #: pcbnew/dialogs/dialog_drc.cpp:806
-#, fuzzy
 msgid "Open the Board Setup dialog"
-msgstr "Открыть диалоговое окно параметров платы"
+msgstr "Открыть диалог Параметры платы"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1110
 #, c-format
@@ -47543,9 +47525,8 @@ msgid "Checking copper zone clearances..."
 msgstr "Проверка зазоров зон меди..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:178
-#, fuzzy
 msgid "Checking teardrop clearances..."
-msgstr "Проверка зазоров конт. пл..."
+msgstr "Проверка зазоров каплевидных переходов..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:293
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:584
@@ -51032,35 +51013,32 @@ msgstr ""
 
 #: pcbnew/pad.cpp:2848
 msgid "('fiducial' pads are normally plated)"
-msgstr ""
+msgstr "(конт. пл. 'fiducial' обычно с финишным покрытием)"
 
 #: pcbnew/pad.cpp:2852
 msgid "('testpoint' pads are normally plated)"
-msgstr ""
+msgstr "(конт. пл. 'testpoint' обычно с финишным покрытием)"
 
 #: pcbnew/pad.cpp:2855
 msgid "('heatsink' pads are normally plated)"
-msgstr ""
+msgstr "(конт. пл. 'heatsink' обычно с финишным покрытием)"
 
 #: pcbnew/pad.cpp:2858
-#, fuzzy
 msgid "('castellated' pads are normally PTH)"
-msgstr ""
-"(только PTH конт. пл. могут иметь свойство 'периферийное полуотверстие')"
+msgstr "(конт. пл. 'castellated' обычно с металлизацией (PTH))"
 
 #: pcbnew/pad.cpp:2861
 msgid "('BGA' property is for SMD pads)"
 msgstr "(только контактные площадки SMD могут быть обозначены как BGA)"
 
 #: pcbnew/pad.cpp:2864
-#, fuzzy
 msgid "('mechanical' pads are normally PTH)"
-msgstr "(механическое свойство предназначено только для PTH конт. пл.)"
+msgstr "(конт. пл. 'mechanical' обычно с металлизацией (PTH))"
 
 #: pcbnew/pad.cpp:2869
-#, fuzzy
 msgid "('press-fit' pads are normally PTH with round holes)"
-msgstr "(механическое свойство предназначено только для PTH конт. пл.)"
+msgstr ""
+"(конт. пл. 'press-fit' обычно с металлизацией (PTH) с круглыми отверстиями)"
 
 #: pcbnew/pad.cpp:2886
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
@@ -52520,9 +52498,9 @@ msgstr ""
 "Пропускается полигон, так как слой Eagle '%s' (%d) не связан со слоем KiCad."
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1572
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): less than 3 vertices"
-msgstr "Пропуск полигона на слое '%s' (%d): количество контуров не равно 1"
+msgstr "Пропуск полигона на слое '%s' (%d): меньше чем 3 вершины"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1618
 #, c-format
@@ -54066,12 +54044,11 @@ msgstr "Не закупорено"
 
 #: pcbnew/pcb_track.cpp:2904
 msgid "Capped"
-msgstr ""
+msgstr "Закрыто металлиз."
 
 #: pcbnew/pcb_track.cpp:2905
-#, fuzzy
 msgid "Not capped"
-msgstr "Не подключено"
+msgstr "Не закрыто металлиз."
 
 #: pcbnew/pcb_track.cpp:2911
 msgid "Not filled"
@@ -54123,7 +54100,7 @@ msgstr "Закупорка снизу"
 
 #: pcbnew/pcb_track.cpp:3211
 msgid "Capping"
-msgstr ""
+msgstr "Закрытие металлиз."
 
 #: pcbnew/pcb_track.cpp:3213
 msgid "Filling"
@@ -57066,9 +57043,8 @@ msgstr ""
 "сохранённый редактором плат"
 
 #: pcbnew/tools/pcb_actions.cpp:1215
-#, fuzzy
 msgid "Import Non-KiCad Board File..."
-msgstr "Импорт файла платы (не KiCad)"
+msgstr "Импорт файла платы из другой САПР..."
 
 #: pcbnew/tools/pcb_actions.cpp:1216
 msgid "Import board file from other applications"
@@ -58642,9 +58618,8 @@ msgid "Type VI-a (filled and tented bottom)"
 msgstr "Тип VI-a (заполнение и тентирование снизу)"
 
 #: pcbnew/via_protection_ui_mixin.h:135
-#, fuzzy
 msgid "Type VII (filled and capped)"
-msgstr "Тип VII (заполнение и колпачок)"
+msgstr "Тип VII (заполнение и закрытие металлиз.)"
 
 #: pcbnew/widgets/appearance_controls.cpp:337
 msgid "Show tracks"
