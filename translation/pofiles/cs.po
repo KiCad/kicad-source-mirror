@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-17 15:22+0300\n"
-"PO-Revision-Date: 2026-04-17 12:21+0000\n"
+"PO-Revision-Date: 2026-04-17 19:24+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
 "Language: cs\n"
@@ -43040,7 +43040,7 @@ msgstr "Aktuální deska bude ztracena a tuto operaci nelze vrátiti. Pokračova
 
 #: pcbnew/initpcb.cpp:120 pcbnew/tools/footprint_editor_control.cpp:247
 msgid "The current footprint has been modified.  Save changes?"
-msgstr "Aktuální pouzdro bylo upraveno.  Uložit změny?"
+msgstr "Otevřené pouzdro bylo upraveno.  Uložit změny?"
 
 #: pcbnew/kicad_clipboard.cpp:549
 msgid "Clipboard content is not KiCad compatible"
