@@ -3355,6 +3355,105 @@ SCH_NETCHAIN* CONNECTION_GRAPH::FindPotentialNetChainBetweenPins( SCH_PIN* aPinA
     return nullptr;
 }
 
+bool CONNECTION_GRAPH::DeleteCommittedNetChain( const wxString& aName )
+{
+    if( aName.IsEmpty() )
+        return false;
+
+    auto it = std::find_if( m_signals.begin(), m_signals.end(),
+                            [&]( const std::unique_ptr<SCH_NETCHAIN>& aChain )
+                            {
+                                return aChain && aChain->GetName() == aName;
+                            } );
+
+    if( it == m_signals.end() )
+        return false;
+
+    // Drop the chain marker from every member symbol so a future
+    // RebuildSignals() doesn't re-promote them under the same name.
+    for( SCH_SYMBOL* sym : (*it)->GetSymbols() )
+    {
+        if( sym )
+            sym->SetSignalName( wxEmptyString );
+    }
+
+    m_signals.erase( it );
+
+    // Drop orphaned overrides keyed on this name.
+    m_signalNetClassOverrides.erase( aName );
+    m_signalColorOverrides.erase( aName );
+
+    return true;
+}
+
+
+bool CONNECTION_GRAPH::RenameCommittedNetChain( const wxString& aOld, const wxString& aNew )
+{
+    if( aOld.IsEmpty() || aNew.IsEmpty() || aOld == aNew )
+        return false;
+
+    auto findByName = [&]( const wxString& aName ) -> SCH_NETCHAIN*
+    {
+        for( const std::unique_ptr<SCH_NETCHAIN>& chain : m_signals )
+        {
+            if( chain && chain->GetName() == aName )
+                return chain.get();
+        }
+
+        return nullptr;
+    };
+
+    SCH_NETCHAIN* existing = findByName( aOld );
+
+    if( !existing )
+        return false;
+
+    // Reject collisions: if some other committed chain already owns aNew, don't
+    // silently merge them.
+    if( findByName( aNew ) )
+        return false;
+
+    existing->SetName( aNew );
+
+    for( SCH_SYMBOL* sym : existing->GetSymbols() )
+    {
+        if( sym )
+            sym->SetSignalName( aNew );
+    }
+
+    auto rekey = []( std::map<wxString, wxString>& aMap, const wxString& aOldKey,
+                     const wxString& aNewKey )
+    {
+        auto it = aMap.find( aOldKey );
+
+        if( it != aMap.end() )
+        {
+            wxString val = std::move( it->second );
+            aMap.erase( it );
+            aMap[aNewKey] = std::move( val );
+        }
+    };
+
+    auto rekeyColor = []( std::map<wxString, COLOR4D>& aMap, const wxString& aOldKey,
+                          const wxString& aNewKey )
+    {
+        auto it = aMap.find( aOldKey );
+
+        if( it != aMap.end() )
+        {
+            COLOR4D val = it->second;
+            aMap.erase( it );
+            aMap[aNewKey] = val;
+        }
+    };
+
+    rekey( m_signalNetClassOverrides, aOld, aNew );
+    rekeyColor( m_signalColorOverrides, aOld, aNew );
+
+    return true;
+}
+
+
 SCH_NETCHAIN* CONNECTION_GRAPH::CreateNetChainFromPotential( SCH_NETCHAIN* aPotential, const wxString& aName )
 {
     if( !aPotential )

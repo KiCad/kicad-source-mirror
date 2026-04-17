@@ -55,6 +55,7 @@ protected:
     size_t                    m_bomPresetsPage;
     size_t                    m_pinMapPage;
     size_t                    m_busesPage;
+    size_t                    m_netChainsPage;
     size_t                    m_textVarsPage;
     size_t                    m_severitiesPage;
     size_t                    m_netclassesPage;

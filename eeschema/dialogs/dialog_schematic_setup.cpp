@@ -25,6 +25,7 @@
 #include <dialogs/panel_setup_netclasses.h>
 #include <dialogs/panel_setup_severities.h>
 #include <dialogs/panel_setup_buses.h>
+#include "panel_setup_net_chains.h"
 #include <panel_eeschema_annotation_options.h>
 #include <panel_setup_formatting.h>
 #include <panel_setup_pinmap.h>
@@ -124,6 +125,13 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
             {
                 return new PANEL_SETUP_BUSES( aParent, m_frame );
             }, _( "Bus Alias Definitions" ) );
+
+    m_netChainsPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_NET_CHAINS( aParent, m_frame );
+            }, _( "Net Chains" ) );
 
     m_textVarsPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(

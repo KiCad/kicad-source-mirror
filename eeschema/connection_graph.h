@@ -859,6 +859,24 @@ public:
     /** Return user-created (committed) net chains (legacy accessor retained under signals API). */
     const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetSignals() const { return m_signals; }
 
+    /**
+     * Delete a committed net chain by name.  Also clears any orphaned override
+     * map entries (m_signalNetClassOverrides / m_signalColorOverrides) and
+     * resets the SetSignalName marker on every member symbol so the chain is
+     * not reapplied on the next RebuildSignals() pass.
+     *
+     * @return true if a chain with that name was found and removed.
+     */
+    bool DeleteCommittedNetChain( const wxString& aName );
+
+    /**
+     * Rename a committed net chain.  Re-keys override map entries from the old
+     * name to the new one, and updates every member symbol's signal-name
+     * marker.  Returns false when the new name is empty, the old chain does
+     * not exist, or another chain already uses the new name.
+     */
+    bool RenameCommittedNetChain( const wxString& aOld, const wxString& aNew );
+
     // Net Chain link API (formerly KiLink) -------------------------------
     std::optional<wxString> GetNetChainName( const KIID& aSource, const KIID& aTarget ) const;
     void AddNetChain( const KIID& aSource, const KIID& aTarget, const wxString& aName );

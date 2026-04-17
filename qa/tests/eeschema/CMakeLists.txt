@@ -168,6 +168,7 @@ set( QA_EESCHEMA_SRCS
     signals/test_signals_remove.cpp
     signals/test_signals_branching.cpp
     signals/test_signals_class_color.cpp
+    signals/test_net_chain_remove_rename.cpp
 )
 
 if( WIN32 )
