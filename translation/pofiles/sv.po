@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 11:18-0700\n"
+"POT-Creation-Date: 2026-04-17 15:22+0300\n"
 "PO-Revision-Date: 2026-03-19 17:29+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v9/sv/>\n"
@@ -1488,7 +1488,7 @@ msgid "Image Converter"
 msgstr "Bildkonverterare"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "KiCad bildkonverterare"
 
@@ -1972,7 +1972,8 @@ msgstr "Det går inte att skapa utmatningskatalogen '%s'."
 
 #: common/common.cpp:708
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr "Det här operativsystemet stöds inte längre av KiCad och dess beroenden."
+msgstr ""
+"Det här operativsystemet stöds inte längre av KiCad och dess beroenden."
 
 #: common/common.cpp:710
 msgid "Unsupported Operating System"
@@ -2104,7 +2105,7 @@ msgstr "Läser in designblock..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2950,14 +2951,12 @@ msgstr "Projektnamn"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1638
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "Kretsschema"
 
@@ -4310,7 +4309,8 @@ msgstr "Automatisk"
 #: common/dialogs/panel_common_settings_base.cpp:201
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
-msgstr "Välj ljusa eller mörka ikoner automatiskt baserat på systemets färgtema"
+msgstr ""
+"Välj ljusa eller mörka ikoner automatiskt baserat på systemets färgtema"
 
 #: common/dialogs/panel_common_settings_base.cpp:211
 msgid "Toolbar icon size:"
@@ -5133,8 +5133,8 @@ msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
 msgstr ""
-"Denna skala resulterar i en bild som är mycket stor (%.1f mm eller %.2f tum)"
-". Är du säker?"
+"Denna skala resulterar i en bild som är mycket stor (%.1f mm eller %.2f "
+"tum). Är du säker?"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
 msgid "Scale:"
@@ -8451,10 +8451,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Saknade enheter för '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1174
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Typkonflikt mellan '%s' och %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1180
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Typkonflikt mellan %lf och '%s'"
 
@@ -9443,7 +9445,8 @@ msgstr "Visa rutnät i redigeringsfönstrets bakgrund"
 
 #: common/tool/actions.cpp:926
 msgid "Enables item-specific grids that override the current grid"
-msgstr "Aktiverar objektspecifika rutnät som åsidosätter det nuvarande rutnätet"
+msgstr ""
+"Aktiverar objektspecifika rutnät som åsidosätter det nuvarande rutnätet"
 
 #: common/tool/actions.cpp:933
 msgid "Edit grid definitions"
@@ -11055,7 +11058,7 @@ msgstr ""
 "%s\n"
 "hittades inte. Skriptet är inte tillgängligt."
 
-#: eeschema/connection_graph.cpp:3409
+#: eeschema/connection_graph.cpp:3412
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -11063,21 +11066,21 @@ msgstr ""
 "Både %s och %s är kopplade till samma objekt; %s kommer att användas i "
 "nätlistan"
 
-#: eeschema/connection_graph.cpp:3647
+#: eeschema/connection_graph.cpp:3650
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "Nät %s är grafiskt anslutet till buss %s men ingår inte i den bussen"
 
-#: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3955 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "Ej ansluten ledningsändpunkt"
 
-#: eeschema/connection_graph.cpp:3977
+#: eeschema/connection_graph.cpp:3980
 msgid "Unconnected wire to bus entry"
 msgstr "Ej ansluten ledningsanslutning på buss"
 
-#: eeschema/connection_graph.cpp:4310
+#: eeschema/connection_graph.cpp:4313
 #, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
@@ -11086,13 +11089,13 @@ msgstr ""
 "Hierarkisk etikett \"%s\" i rotarket kan inte anslutas till icke existerande "
 "överordnat ark"
 
-#: eeschema/connection_graph.cpp:4375
+#: eeschema/connection_graph.cpp:4378
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Arkstift %s har ingen matchande hierarkisk etikett inuti kretsschemaarket"
 
-#: eeschema/connection_graph.cpp:4392
+#: eeschema/connection_graph.cpp:4395
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -11513,8 +11516,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -11599,8 +11602,8 @@ msgstr ""
 "vara:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "Om det önskade skriptet för att generera en CSV-komponentlista i Linux är: `/"
@@ -12326,8 +12329,8 @@ msgstr "Spara alla effektförluster"
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
-"Skriv direktiv för att spara effektförlusterna för alla objekt (.probe p"
-"(<objekt>))"
+"Skriv direktiv för att spara effektförlusterna för alla objekt (.probe "
+"p(<objekt>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:387
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
@@ -15351,7 +15354,6 @@ msgid "Code"
 msgstr "Kod"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Spara {} i värdefält som \"{}\""
 
@@ -15979,8 +15981,8 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
-"Ogiltig destination för hyperlänk. Vänligen mata in endera en giltig URL "
-"(t.ex. file:// eller http(s)://) eller \"#<sidnummer>\" för att skapa en "
+"Ogiltig destination för hyperlänk. Vänligen mata in endera en giltig URL (t."
+"ex. file:// eller http(s)://) eller \"#<sidnummer>\" för att skapa en "
 "hyperlänk till en sida i detta kretsschema."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:591
@@ -18592,7 +18594,8 @@ msgstr "Det gick inte att spara räddningsbiblioteket %s."
 
 #: eeschema/project_rescue.cpp:893
 msgid "Error occurred saving project specific symbol library table."
-msgstr "Ett fel inträffade när projektspecifik symbolbibliotekstabell sparades."
+msgstr ""
+"Ett fel inträffade när projektspecifik symbolbibliotekstabell sparades."
 
 #: eeschema/project_sch.cpp:113 pcbnew/board_connected_item.cpp:169
 msgid "Not Found"
@@ -18755,7 +18758,8 @@ msgstr "Öppna kretsschema"
 
 #: eeschema/sch_edit_frame.cpp:1463
 msgid "Assigning footprints requires a fully annotated schematic."
-msgstr "Tilldelning av fotavtryck kräver ett fullständigt numrerat kretsschema."
+msgstr ""
+"Tilldelning av fotavtryck kräver ett fullständigt numrerat kretsschema."
 
 #: eeschema/sch_edit_frame.cpp:1490
 msgid "Could not open CvPcb"
@@ -20340,8 +20344,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20392,9 +20396,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -20441,9 +20445,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{överbalk}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>överbalk</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>överbalk</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -20464,8 +20468,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> av symbol <i>refdes</i></samp>"
-"</td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> av symbol <i>refdes</i></"
+"samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -20480,9 +20484,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Buss definition</th>\n"
-"        <th>"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
-"th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resulterande nät</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20533,9 +20536,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -21184,8 +21187,8 @@ msgstr "Det gick inte att skapa temporär utmatningsfil"
 
 #: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
 "Kibis stöder inte ännu DUT-värden. https://ibis.org/summits/nov16a/chen.pdf"
 
@@ -25608,7 +25611,7 @@ msgid "Clear Recent Job Files"
 msgstr "Rensa senaste jobbfiler"
 
 #: gerbview/gerbview_frame.cpp:90
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad Gerber-visare"
 
@@ -26049,7 +26052,8 @@ msgstr "Ändra Render Color för"
 #: pcbnew/widgets/appearance_controls.cpp:2500
 msgid ""
 "Left double click or middle click for color change, right click for menu"
-msgstr "Vänster dubbelklicka eller mittklick för färgbyte, högerklicka för meny"
+msgstr ""
+"Vänster dubbelklicka eller mittklick för färgbyte, högerklicka för meny"
 
 #: gerbview/widgets/layer_widget.cpp:351
 msgid "Enable this for visibility"
@@ -26430,8 +26434,8 @@ msgstr "Ogiltigt format specificerat\n"
 msgid ""
 "Comma separated list of untranslated layer names to include such as F.Cu,B.Cu"
 msgstr ""
-"Kommaseparerad lista av icke översatta namn på lager att inkludera, så som "
-"F.Cu,B.Cu"
+"Kommaseparerad lista av icke översatta namn på lager att inkludera, så som F."
+"Cu,B.Cu"
 
 #: kicad/cli/command_pcb_export_base.cpp:48
 msgid ""
@@ -26646,7 +26650,8 @@ msgstr "Skapa unika stiftnamn"
 #: kicad/cli/command_pcb_export_gencad.cpp:46
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:136
 msgid "Generate a new shape for each footprint instance (do not reuse shapes)"
-msgstr "Skapa en ny form för varje fotavtrycksinstans (använd inte former igen)"
+msgstr ""
+"Skapa en ny form för varje fotavtrycksinstans (använd inte former igen)"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:50
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:137
@@ -29941,8 +29946,8 @@ msgstr ""
 "Täckande skikt och ingjutning tillåter minskade isolations- och krypavstånd. "
 "Detta stöds inte av kalkylatorn.\n"
 "\n"
-"Ett täckande skikt som lätt kan delaminera under produktens livstid (som "
-"t.ex. lödmask) skall inte beaktas för reduktion."
+"Ett täckande skikt som lätt kan delaminera under produktens livstid (som t."
+"ex. lödmask) skall inte beaktas för reduktion."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:254
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:197
@@ -31022,8 +31027,8 @@ msgstr ""
 "\n"
 "Beräkningsverktyget uppskattar energin som behövs för att hetta upp "
 "ledaren<br>\n"
-"till smältpunkten, såväl som energin som behövs för tillståndsförändring.<br>"
-"\n"
+"till smältpunkten, såväl som energin som behövs för tillståndsförändring."
+"<br>\n"
 "Denna energi jämförs sedan med den i ledarresistansen avgivna energin."
 
 #: pcb_calculator/galvanic_corrosion_help.h:2
@@ -31047,8 +31052,8 @@ msgstr ""
 "kontakt med varandra under vissa förhållanden.<br>\n"
 "Anoden i ett elektrokemiskt par oxideras och fräts bort, medan katoden får "
 "upplösta metaller pläterad på sig men förblir skyddad.<br>\n"
-"Ett positivt tal visar att raden är anodisk (-) och kolumnen är katodisk (+)"
-", kalla och varma färger indikerar också raders potential.<br>\n"
+"Ett positivt tal visar att raden är anodisk (-) och kolumnen är katodisk "
+"(+), kalla och varma färger indikerar också raders potential.<br>\n"
 "EN 50310 föreslår en potentialdifferens under 300mV. Känd praxis använder "
 "sig av en tredje gränssnittsmetall mellan huvudparet (t.ex. plätering av typ "
 "ENIG).<br>\n"
@@ -31076,8 +31081,8 @@ msgstr ""
 "\n"
 "Emellertid täcks vissa fall inte av denna kalkylator:\n"
 "\n"
-"- För frekvenser över 30kHz är den dielektriska förmågan försämrad. IEC60664-"
-"4 behandlar dessa fall.\n"
+"- För frekvenser över 30kHz är den dielektriska förmågan försämrad. "
+"IEC60664-4 behandlar dessa fall.\n"
 "- Om täckande skikt eller ingjutning används för att skydda mot "
 "nedsmutsning, och alla villkor specificerade i IEC60664-3 uppfylls, kan "
 "isolations- och krypavstånd reduceras. Lödmask anses vanligen inte som "
@@ -31245,8 +31250,8 @@ msgstr ""
 "mil (10 mm).\n"
 "\n"
 "Formeln, från IPC 2221, är\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "där:<br>\n"
 "___I___ är maximal ström i A<br>\n"
 "___&Delta;T___ är temperaturhöjning över omgivningstemperatur i &deg;C<br>\n"
@@ -32321,8 +32326,8 @@ msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"<br/>Det finns %i typer av referensbeteckningar i bruk<br/>"
-"**********************************************************<br/>"
+"<br/>Det finns %i typer av referensbeteckningar i bruk<br/"
+">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:452
 #, c-format
@@ -32368,8 +32373,8 @@ msgid ""
 "<br/>PCB has %d empty or invalid reference designations.<br/>Recommend "
 "running DRC with 'Test for parity between PCB and schematic' checked.\n"
 msgstr ""
-"<br/>Mönsterkortet har %d tomma eller ogiltiga referensbeteckningar.<br/>"
-"Designregelkontroll med alternativet 'Kontrollera att mönsterkort och "
+"<br/>Mönsterkortet har %d tomma eller ogiltiga referensbeteckningar.<br/"
+">Designregelkontroll med alternativet 'Kontrollera att mönsterkort och "
 "kretsschema överensstämmer' ikryssat rekommenderas.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:523
@@ -33400,15 +33405,30 @@ msgstr "horisontell räkning"
 msgid "vertical count"
 msgstr "vertikal räkning"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:425
+#: pcbnew/dialogs/dialog_create_array.cpp:422
+#, c-format
+msgid "horizontal delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:428
+#, c-format
+msgid "vertical delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:437
 msgid "stagger"
 msgstr "sprida"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:481
+#: pcbnew/dialogs/dialog_create_array.cpp:493
 msgid "point count"
 msgstr "poängräkning"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:528
+#: pcbnew/dialogs/dialog_create_array.cpp:500
+#, c-format
+msgid "angular delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:546
 msgid "Bad parameters"
 msgstr "Felaktiga parametrar"
 
@@ -36356,7 +36376,8 @@ msgstr "Använda referensbeteckningar för att matcha symboler och fotavtryck.\n
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:246
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
-msgstr "Använda t-stämplar (unika ID) för att matcha symboler och fotavtryck.\n"
+msgstr ""
+"Använda t-stämplar (unika ID) för att matcha symboler och fotavtryck.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:26
 msgid "Netlist file:"
@@ -39954,9 +39975,9 @@ msgid ""
 msgstr ""
 "### Dokumentation\n"
 "\n"
-"För den fullständiga dokumentationen se [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules)."
+"För den fullständiga dokumentationen se [https://docs.kicad.org](https://go."
+"kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -40020,8 +40041,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
@@ -40190,178 +40211,174 @@ msgid ""
 msgstr ""
 "### Begränsningar\n"
 "\n"
-"| Begränsningstyp           | Argumenttyp"
-"                                                                                                           "
-"| Beskrivning"
-"                                                                                                                                                                                                                                                                                                                                                                                                                                            "
+"| Begränsningstyp           | "
+"Argumenttyp                                                                                                           "
+"| "
+"Beskrivning                                                                                                                                                                                                                                                                                                                                                                                                                                            "
 "|\n"
-"|---------------------------"
-"|-----------------------------------------------------------------------------------------------------------------------"
-"|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                           "
+"| Kontrollerar bredden på ringformade ringar på vias."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                "
 "|\n"
-"| `annular_width`           | min/opt/max"
-"                                                                                                           "
-"| Kontrollerar bredden på ringformade ringar på vias.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
+"| Kontrollerar det givna uttrycket."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
-"| `assertion`               | \"&lt;expression>"
-"\"                                                                                                     "
-"| Kontrollerar det givna uttrycket.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                  "
-"|\n"
-"| `clearance`               | min"
-"                                                                                                                   "
+"| `clearance`               | "
+"min                                                                                                                   "
 "| Anger det **elektriska** avståndet mellan kopparobjekt i olika nät. (Se "
-"`physical_clearance` om du vill ange avstånd mellan objekt oavsett nät.)<br>"
-"<br>För att tillåta kopparobjekt att överlappa (kollidera), skapa en "
-"`clearance`(avstånds)-begränsning med `min`-värdet mindre än noll (till "
-"exempel `-1`).<br>"
-"                                                                                                                                    "
+"`physical_clearance` om du vill ange avstånd mellan objekt oavsett "
+"nät.)<br><br>För att tillåta kopparobjekt att överlappa (kollidera), skapa "
+"en `clearance`(avstånds)-begränsning med `min`-värdet mindre än noll (till "
+"exempel `-1`)."
+"<br>                                                                                                                                    "
 "|\n"
-"| `courtyard_clearance`     | min"
-"                                                                                                                   "
+"| `courtyard_clearance`     | "
+"min                                                                                                                   "
 "| Kontrollerar avståndet mellan gårdsplaner och genererar ett fel om två "
 "gårdsplaner är närmare varandra än `min`-avståndet. Om ett gårdsplan inte "
-"har en gårdsplansform genereras inga fel från denna begränsning.<br>"
-"                                                                                                                                                                                                                                  "
+"har en gårdsplansform genereras inga fel från denna begränsning."
+"<br>                                                                                                                                                                                                                                  "
 "|\n"
-"| `creepage`                | min"
-"                                                                                                                   "
-"| Anger krypavståndet mellan kopparföremål i olika nät.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                              "
+"| `creepage`                | "
+"min                                                                                                                   "
+"| Anger krypavståndet mellan kopparföremål i olika nät."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                              "
 "|\n"
-"| `diff_pair_gap`           | min/opt/max"
-"                                                                                                           "
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                           "
 "| Kontrollerar avståndet mellan kopplade spår i ett differentialpar. "
 "Kopplade spår är segment som är parallella med varandra. Differentialparets "
 "avstånd testas inte på frikopplade delar av ett differentialpar (till "
-"exempel fanout från en komponent).<br>"
-"                                                                                                                                                                                            "
+"exempel fanout från en komponent)."
+"<br>                                                                                                                                                                                            "
 "|\n"
-"| `diff_pair_uncoupled`     | max"
-"                                                                                                                   "
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                   "
 "| Kontrollerar avståndet som ett differentiellt parspår dirigeras okopplat "
 "från det andra polaritetsspåret i paret (till exempel där paret sprider sig "
 "ut från en komponent, eller blir okopplat för att passera runt ett annat "
-"objekt, såsom en via).<br>"
-"                                                                                                                                                                                               "
+"objekt, såsom en via)."
+"<br>                                                                                                                                                                                               "
 "|\n"
-"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>"
-"`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>"
-"`footprint`<br> | Ange en eller flera objekttyper som ska förbjudas, "
-"separerade med mellanslag. Till exempel `(constraint disallow track)` eller `"
-"(constraint disallow track via pad)`. Om ett objekt av den här typen matchar "
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| Ange en eller flera objekttyper som ska förbjudas, separerade med "
+"mellanslag. Till exempel `(constraint disallow track)` eller `(constraint "
+"disallow track via pad)`. Om ett objekt av den här typen matchar "
 "regelvillkoret skapas ett DRC-fel.<br><br>Denna begränsning är i huvudsak "
 "densamma som ett område för att hålla ute-reglerna, men kan användas för att "
-"skapa mer specifika begränsningar för att hålla ute-reglerna.<br>"
-"                 |\n"
-"| `edge_clearance`          | min/opt/max"
-"                                                                                                           "
+"skapa mer specifika begränsningar för att hålla ute-reglerna."
+"<br>                 |\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                           "
 "| Kontrollerar avståndet mellan objekt och skivans kant.<br><br>Detta kan "
 "också betraktas som \"milling tolerance\"(frästolerans) eftersom skivans "
-"kant kommer att inkludera alla grafiska objekt på lagret `Edge.Cuts`"
-"(kantskärningar) samt eventuella *ovala* hål i plattan. (Se "
-"`physical_hole_clearance` för borrtoleransen.)<br>"
-"                                                                                                                      "
+"kant kommer att inkludera alla grafiska objekt på lagret `Edge."
+"Cuts`(kantskärningar) samt eventuella *ovala* hål i plattan. (Se "
+"`physical_hole_clearance` för "
+"borrtoleransen.)<br>                                                                                                                      "
 "|\n"
-"| `length`                  | min/max"
-"                                                                                                               "
+"| `length`                  | min/"
+"max                                                                                                               "
 "| Kontrollerar den totala routade längden för de nät som matchar "
 "regelvillkoret och genererar ett fel för varje nät som är under `min`-värdet "
-"(om det anges) eller över `max`-värdet (om det anges) för begränsningen.<br>"
-"                                                                                                                                                                                                                               "
+"(om det anges) eller över `max`-värdet (om det anges) för begränsningen."
+"<br>                                                                                                                                                                                                                               "
 "|\n"
-"| `hole`                    | min/max"
-"                                                                                                               "
+"| `hole`                    | min/"
+"max                                                                                                               "
 "| Kontrollerar storleken (diametern) på ett borrat hål i en dyna eller via. "
 "För ovala hål testas den mindre (mindre) diametern mot `min`-värdet (om det "
 "anges) och den större (större) diametern testas mot `max`-värdet (om det "
-"anges).<br>"
-"                                                                                                                                                                                                             "
+"anges)."
+"<br>                                                                                                                                                                                                             "
 "|\n"
-"| `hole_clearance`          | min"
-"                                                                                                                   "
+"| `hole_clearance`          | "
+"min                                                                                                                   "
 "| Kontrollerar spelet mellan ett borrat hål i en dyna eller via och "
 "kopparföremål på ett annat nät. Spelet mäts från hålets diameter, inte dess "
-"centrum.<br>"
-"                                                                                                                                                                                                                                                                                             "
+"centrum."
+"<br>                                                                                                                                                                                                                                                                                             "
 "|\n"
-"| `hole_to_hole`            | min"
-"                                                                                                                   "
+"| `hole_to_hole`            | "
+"min                                                                                                                   "
 "| Kontrollerar spelet mellan mekaniskt borrade hål i plattor och vias. "
-"Spelet mäts mellan hålens diametrar, inte mellan deras mittpunkter.<br><br>"
-"Denna begränsning är enbart för att skydda borrkronor. Spelet mellan "
+"Spelet mäts mellan hålens diametrar, inte mellan deras mittpunkter."
+"<br><br>Denna begränsning är enbart för att skydda borrkronor. Spelet mellan "
 "**laserborrade** (mikrovias) och andra icke-mekaniskt borrade hål "
 "kontrolleras inte, inte heller mellan **frästa** (ovala) och andra icke-"
 "mekaniskt borrade hål.<br> |\n"
-"| `physical_clearance`      | min"
-"                                                                                                                   "
+"| `physical_clearance`      | "
+"min                                                                                                                   "
 "| Checks the clearance between two objects on a given layer (including non-"
 "copper layers).<br><br>While this can perform more general-purpose checks "
-"than `clearance`, it is much slower.  Use `clearance` where possible.<br>"
-"                                                                                                                                                                                                                           "
+"than `clearance`, it is much slower.  Use `clearance` where possible."
+"<br>                                                                                                                                                                                                                           "
 "|\n"
-"| `physical_hole_clearance` | min"
-"                                                                                                                   "
+"| `physical_hole_clearance` | "
+"min                                                                                                                   "
 "| Kontrollerar spelet mellan ett borrat hål i en dyna eller via och ett "
 "annat objekt, oavsett nät. Spelet mäts från hålets diameter, inte dess "
 "centrum.<br><br>Detta kan också betraktas som \"borrtolerans\" eftersom det "
 "bara inkluderar **runda** hål (se `edge_clearance`(kantspel) för "
-"frästoleransen).<br>"
-"                                                                                                                                           "
+"frästoleransen)."
+"<br>                                                                                                                                           "
 "|\n"
-"| `silk_clearance`          | min/opt/max"
-"                                                                                                           "
-"| Kontrollerar avståndet mellan objekt på silkscreen-lager och andra "
-"objekt.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                         "
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                           "
+"| Kontrollerar avståndet mellan objekt på silkscreen-lager och andra objekt."
+"<br>                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `skew`                    | max"
-"                                                                                                                   "
+"| `skew`                    | "
+"max                                                                                                                   "
 "| Kontrollerar den totala snedvridningen för de nät som matchar "
 "regelvillkoret, det vill säga skillnaden mellan längden på varje nät och "
 "medelvärdet av alla längder på varje nät som matchas av regeln. Om det "
 "absoluta värdet av skillnaden mellan det medelvärdet och längden på något "
-"nät är över begränsningsvärdet `max` genereras ett fel.<br>"
-"                                                                                                    "
+"nät är över begränsningsvärdet `max` genereras ett fel."
+"<br>                                                                                                    "
 "|\n"
-"| `thermal_relief_gap`      | min"
-"                                                                                                                   "
+"| `thermal_relief_gap`      | "
+"min                                                                                                                   "
 "| Anger bredden på mellanrummet mellan en dyna och en zon med en termisk "
-"avlastningsanslutning..<br>"
-"                                                                                                                                                                                                                                                                                                                                                     "
+"avlastningsanslutning.."
+"<br>                                                                                                                                                                                                                                                                                                                                                     "
 "|\n"
-"| `thermal_spoke_width`     | opt"
-"                                                                                                                   "
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                   "
 "| Anger bredden på ekrarna som förbinder en dyna med en zon med en termisk "
-"avlastningsanslutning.<br>"
-"                                                                                                                                                                                                                                                                                                                                                    "
+"avlastningsanslutning."
+"<br>                                                                                                                                                                                                                                                                                                                                                    "
 "|\n"
-"| `track_width`             | min/opt/max"
-"                                                                                                           "
+"| `track_width`             | min/opt/"
+"max                                                                                                           "
 "| Kontrollerar vinkeln mellan två anslutna spårsegment. Ett fel genereras "
 "för varje anslutet par med en vinkel under `min`-värdet (om angivet) eller "
-"över `max`-värdet (om angivet).<br>"
-"                                                                                                                                                                                                                                                                 "
+"över `max`-värdet (om angivet)."
+"<br>                                                                                                                                                                                                                                                                 "
 "|\n"
-"| `track_segment_length`    | min/max"
-"                                                                                                               "
+"| `track_segment_length`    | min/"
+"max                                                                                                               "
 "| Kontrollerar längden på spår- och bågsegment. Ett fel genereras för varje "
 "segment som har en längd under `min`-värdet (om angivet) eller över `max`-"
-"värdet (om angivet).<br>"
-"                                                                                                                                                                                                                                                                           "
+"värdet (om angivet)."
+"<br>                                                                                                                                                                                                                                                                           "
 "|\n"
-"| `via_count`               | max"
-"                                                                                                                   "
+"| `via_count`               | "
+"max                                                                                                                   "
 "| Räknar antalet vias på varje nät som matchas av regelvillkoret. Om det "
 "antalet överstiger begränsningens `max`-värde på något matchat nät genereras "
-"ett fel för det nätet.<br>"
-"                                                                                                                                                                                                                                                                         "
+"ett fel för det nätet."
+"<br>                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
-"`none`                                                                                "
-"| Anger anslutningen som ska göras mellan en zon och en pad.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                         "
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
+"| Anger anslutningen som ska göras mellan en zon och en pad."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
 "\n"
 "\n"
@@ -40513,8 +40530,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -40805,13 +40822,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -40948,13 +40965,13 @@ msgstr ""
 "\n"
 "    (rule \"Avstånd mellan vior i olika nät\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Frigång mellan lödytor i olika nät\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Frigång mellan viahål och ledare\"\n"
@@ -41067,8 +41084,8 @@ msgstr ""
 "laserborrning \n"
 "    # av mikrovior.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
-"\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
+"'Micro'\")\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -41177,7 +41194,8 @@ msgstr "mönsterkortsinställningarnas begränsningar för anvisningstryck"
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup constraints silk text height"
-msgstr "mönsterkortsinställningarnas begränsning för texthöjd i anvisningstryck"
+msgstr ""
+"mönsterkortsinställningarnas begränsning för texthöjd i anvisningstryck"
 
 #: pcbnew/drc/drc_engine.cpp:204
 msgid "board setup constraints silk text thickness"
@@ -44239,7 +44257,8 @@ msgstr "Uppdaterade %s fotavtrycksfilter till '%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:697
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "Lägg till tillverkningsattribut 'exkludera från komponentlista' för %s."
+msgstr ""
+"Lägg till tillverkningsattribut 'exkludera från komponentlista' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:702
 #, c-format
@@ -44249,7 +44268,8 @@ msgstr "Ta bort tillverkningsattribut 'exkludera från komponentlista' för %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:713
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "Lade till tillverkningsattribut 'exkludera från komponentlista' för %s."
+msgstr ""
+"Lade till tillverkningsattribut 'exkludera från komponentlista' för %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:719
 #, c-format
@@ -44384,8 +44404,8 @@ msgstr "Bearbetar symbol '%s: %s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Varning: %s fotavtryck '%s' saknar ett biblioteksnamn. Använd fullständigt "
 "'Bibliotek:Fotavtryck'-format för att undvika återkommande "
@@ -46870,7 +46890,8 @@ msgstr "Lösenord för <b>inloggning</b> till någon speciell biblioteksserver."
 #: pcbnew/pcb_io/pcb_io.cpp:196
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
-msgstr "Ange pythonmodulen som implementerar funktionerna PCB_IO::Footprint*()."
+msgstr ""
+"Ange pythonmodulen som implementerar funktionerna PCB_IO::Footprint*()."
 
 #: pcbnew/pcb_layer_box_selector.cpp:74
 msgid "(not activated)"
@@ -47085,7 +47106,8 @@ msgstr "Footprint har ingen bakgård."
 #: pcbnew/pcbexpr_functions.cpp:662
 #, c-format
 msgid "Missing rule-area argument (A, B, or rule-area name) to %s."
-msgstr "Saknat argument för regelområde (A, B eller regelområdets namn) för %s."
+msgstr ""
+"Saknat argument för regelområde (A, B eller regelområdets namn) för %s."
 
 #: pcbnew/pcbexpr_functions.cpp:877
 #, c-format
@@ -47476,7 +47498,8 @@ msgstr "Placera Microvia"
 
 #: pcbnew/router/router_tool.cpp:141
 msgid "Adds a microvia at the end of currently routed track."
-msgstr "Lägger till en mikrovia i slutet av den ledare som dras för närvarande."
+msgstr ""
+"Lägger till en mikrovia i slutet av den ledare som dras för närvarande."
 
 #: pcbnew/router/router_tool.cpp:151
 msgid "Select Layer and Place Through Via..."
@@ -47936,7 +47959,8 @@ msgstr "Inga mönsterkortsproblem hittades."
 
 #: pcbnew/tools/board_editor_control.cpp:647
 msgid "Updating PCB requires a fully annotated schematic."
-msgstr "Uppdatering av mönsterkort kräver att schemat är fullständigt numrerat."
+msgstr ""
+"Uppdatering av mönsterkort kräver att schemat är fullständigt numrerat."
 
 #: pcbnew/tools/board_editor_control.cpp:661
 msgid ""
@@ -50765,7 +50789,8 @@ msgstr "Försök avsluta"
 
 #: pcbnew/tools/pcb_actions.cpp:2389
 msgid "Attempts to complete current route to nearest ratsnest end."
-msgstr "Försöker göra klart nuvarande ledardragning till närmaste nätlinjeända."
+msgstr ""
+"Försöker göra klart nuvarande ledardragning till närmaste nätlinjeända."
 
 #: pcbnew/tools/pcb_actions.cpp:2396
 msgid "Route Selected"
@@ -52321,101 +52346,93 @@ msgstr "Termiska avlastningar för genompläterade hål (PTH)"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] inläsning misslyckades: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmapp;Konverterare;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "Bitmapp till Komponent-konverterare"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Skapa en komponent från en bitmap-bild för användning med KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad kretsschemaredigerare (fristående)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "Kretsschemaredigerare"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Fristående kretsschemaredigerare för KiCad kretsscheman"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "Eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "Gerberfil-visare"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "Visa Gerberfiler"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;Mönsterkort;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "Projekthanterare;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "EDA-svit"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Svit av verktyg för schema- och kretskortsdesign"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "KiCad Beräkningsverktyg"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "Mönsterkort;Beräkningsverktyg;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "KiCad Beräkningsverktyg"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr "Kalkylator för elektronikrelaterade beräkningar"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;Mönsterkort;Krets;Layout;Design;Redigerare;Fotavtryck;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad mönsterkortsredigerare (fristående)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "Mönsterkortsredigerare"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Fristående mönsterkortsredigerare för KiCad-mönsterkort"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "En EDA-svit för schema- och kretskortsdesign"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-msgid "Circuit board"
-msgstr "Mönsterkort"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -52472,6 +52489,12 @@ msgstr "KiCad Kretsschemasymbol"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad-ritningsark"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Mönsterkort"
 
 #~ msgid "Command"
 #~ msgstr "Kommando"
@@ -55845,8 +55868,8 @@ msgstr "KiCad-ritningsark"
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
-#~ "\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A."
+#~ "enclosedByArea('Shield*')\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -55978,13 +56001,13 @@ msgstr "KiCad-ritningsark"
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -56068,9 +56091,8 @@ msgstr "KiCad-ritningsark"
 #~ "\n"
 #~ "### Documentation\n"
 #~ "\n"
-#~ "For the full documentation see [https://docs.kicad.org](https://"
-#~ "docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
-#~ "pcbnew.html#custom_design_rules)."
+#~ "For the full documentation see [https://docs.kicad.org](https://docs."
+#~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 #~ msgstr ""
 #~ "### Toppnivåsatser\n"
 #~ "\n"
@@ -56316,13 +56338,13 @@ msgstr "KiCad-ritningsark"
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -57689,8 +57711,8 @@ msgstr "KiCad-ritningsark"
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
-#~ "\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A."
+#~ "enclosedByArea('Shield*')\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -57810,13 +57832,13 @@ msgstr "KiCad-ritningsark"
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -58142,13 +58164,13 @@ msgstr "KiCad-ritningsark"
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -58565,8 +58587,8 @@ msgstr "KiCad-ritningsark"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -58756,8 +58778,8 @@ msgstr "KiCad-ritningsark"
 #~ "\n"
 #~ "På Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "Ovanstående exempel förutsätter att 'xsltproc' är installerad på din "

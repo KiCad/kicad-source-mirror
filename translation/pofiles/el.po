@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 11:18-0700\n"
+"POT-Creation-Date: 2026-04-17 15:22+0300\n"
 "PO-Revision-Date: 2026-03-19 17:28+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v9/el/>\n"
@@ -571,7 +571,8 @@ msgstr "Εμφάνιση Πλαίσιου Οριοθέτησης Μοντέλω�
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:324
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "Εμφάνιση πλαισίων οριοθέτησης 3Δ μοντέλων σε απόδοση πραγματικού χρόνου"
+msgstr ""
+"Εμφάνιση πλαισίων οριοθέτησης 3Δ μοντέλων σε απόδοση πραγματικού χρόνου"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:331
 msgid "Show 3D Axis"
@@ -1491,7 +1492,7 @@ msgid "Image Converter"
 msgstr "Μετατροπέας εικόνας"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "Μετατροπέας Εικόνας Kicad"
 
@@ -2114,7 +2115,7 @@ msgstr "Φόρτωση αρχείων..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2977,14 +2978,12 @@ msgstr "Όνομα Έργου"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1638
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "Σχηματικό"
 
@@ -3411,7 +3410,8 @@ msgstr "Ανάθεση μοναδικών προσδιορισμών αναφο�
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr "Διατήρηση της υπάρχουσας ονοματοδοσίας, ακόμα και αν υπάρχουν διπλότυπα"
+msgstr ""
+"Διατήρηση της υπάρχουσας ονοματοδοσίας, ακόμα και αν υπάρχουν διπλότυπα"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
@@ -6940,8 +6940,8 @@ msgstr ""
 #: common/env_vars.cpp:105
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
 msgstr ""
-"Η βασική διαδρομή των 3Δ σχημάτων των αποτυπωμάτων συστήματος (φάκελοι "
-".3Dshapes)."
+"Η βασική διαδρομή των 3Δ σχημάτων των αποτυπωμάτων συστήματος "
+"(φάκελοι .3Dshapes)."
 
 #: common/env_vars.cpp:107
 msgid "The base path of the locally installed symbol libraries."
@@ -6977,8 +6977,8 @@ msgstr ""
 "Ορίζεται εσωτερικά από το KiCad (δεν μπορεί να αλλαχθεί) και περιέχει την "
 "απόλυτη διαδρομή του τρέχοντος φορτωμένου έργου. Αυτή η μεταβλητή "
 "περιβάλλοντος μπορεί να χρησιμοποιηθεί για να οριστούν αρχεία και διαδρομές "
-"σε σχέση με τη διαδρομή του τρέχοντος φορτωμένου έργου. Για παράδειγμα το $"
-"{KIPRJMOD}/libs/footprints.pretty μπορεί να οριστεί ως ένας φάκελος που "
+"σε σχέση με τη διαδρομή του τρέχοντος φορτωμένου έργου. Για παράδειγμα το "
+"${KIPRJMOD}/libs/footprints.pretty μπορεί να οριστεί ως ένας φάκελος που "
 "περιέχει μία σχετική με το έργο βιβλιοθήκη αποτυπωμάτων, με το όνομα "
 "footprints.pretty."
 
@@ -8521,10 +8521,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Λείπουν μονάδες για '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1174
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Αναντιστοιχία τύπου μεταξύ '%s' και %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1180
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Αναντιστοιχία τύπου μεταξύ %lf και '%s'"
 
@@ -9822,7 +9824,8 @@ msgstr "Εξαγωγή ενσωματωμένου αρχείου"
 
 #: common/tool/common_control.cpp:203
 msgid "Can not switch to project manager in stand-alone mode."
-msgstr "Αδυναμία εναλλαγής στον διαχειριστή έργου κατά την αυτόνομη λειτουργία."
+msgstr ""
+"Αδυναμία εναλλαγής στον διαχειριστή έργου κατά την αυτόνομη λειτουργία."
 
 #: common/tool/common_control.cpp:245
 #, c-format
@@ -11141,7 +11144,7 @@ msgstr ""
 "%s\n"
 "δεν βρέθηκε. Το σενάριο δεν είναι διαθέσιμο."
 
-#: eeschema/connection_graph.cpp:3409
+#: eeschema/connection_graph.cpp:3412
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -11149,21 +11152,22 @@ msgstr ""
 "%s και %s συνδέονται αμφότερα στα ίδια αντικείμενα; Το %s επιλέχθηκε ως η "
 "ετικέτα που θα μείνει στη λίστα δικτύων"
 
-#: eeschema/connection_graph.cpp:3647
+#: eeschema/connection_graph.cpp:3650
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
-msgstr "Το δίκτυο %s συνδέεται γραφικά με το δίαυλο %s αλλά δεν είναι μέλος του"
+msgstr ""
+"Το δίκτυο %s συνδέεται γραφικά με το δίαυλο %s αλλά δεν είναι μέλος του"
 
-#: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3955 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "Μη συνδεδεμένο άκρο σύρματος"
 
-#: eeschema/connection_graph.cpp:3977
+#: eeschema/connection_graph.cpp:3980
 msgid "Unconnected wire to bus entry"
 msgstr "Μη συνδεδεμένο σύρμα σε είσοδο διαύλου"
 
-#: eeschema/connection_graph.cpp:4310
+#: eeschema/connection_graph.cpp:4313
 #, fuzzy, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
@@ -11172,14 +11176,14 @@ msgstr ""
 "Η ιεραρχική ετικέτα %s δεν έχει pin φύλλου που να ταιριάζει με το γονικό "
 "φύλλο"
 
-#: eeschema/connection_graph.cpp:4375
+#: eeschema/connection_graph.cpp:4378
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Ο ακροδέκτης %s του φύλλου δεν έχει ιεραρχική ετικέτα εντός του φύλλου που "
 "να ταιριάζει"
 
-#: eeschema/connection_graph.cpp:4392
+#: eeschema/connection_graph.cpp:4395
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -11602,8 +11606,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -11685,12 +11689,13 @@ msgstr ""
 "εξόδου>\n"
 "```\n"
 "\n"
-"Σε Windows, αν το επιθυμητό πρόγραμμα δημιουργίας CSV BOM είναι το `C:\\U"
-"sers\\username\\kicad\\my_python_script.py`, η γραμμή της εντολής θα είναι:\n"
+"Σε Windows, αν το επιθυμητό πρόγραμμα δημιουργίας CSV BOM είναι το `C:"
+"\\Users\\username\\kicad\\my_python_script.py`, η γραμμή της εντολής θα "
+"είναι:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "αντίστοιχα σε Linux, με επιθυμητό πρόγραμμα δημιουργίας CSV BOM το `/home/"
@@ -11865,7 +11870,8 @@ msgstr "Αφαίρεση πεδίων που δεν υπάρχουν στο σύ
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:62
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:108
 msgid "Removes fields that do not occur in the original library symbols"
-msgstr "Αφαίρεση πεδίων που δεν εμφανίζονται στα αρχικά σύμβολα της βιβλιοθήκης"
+msgstr ""
+"Αφαίρεση πεδίων που δεν εμφανίζονται στα αρχικά σύμβολα της βιβλιοθήκης"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:131
 msgid "Reset fields if empty in library symbol"
@@ -12422,8 +12428,8 @@ msgstr "Αποθήκευση κάθε καταναλισκόμενης ισχύ�
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
-"Εισαγωγή οδηγίας αποθήκευσης καταναλισκόμενων ισχύων όλων των αντικειμένων "
-"(.probe p(<item>))"
+"Εισαγωγή οδηγίας αποθήκευσης καταναλισκόμενων ισχύων όλων των αντικειμένων (."
+"probe p(<item>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:387
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
@@ -15468,7 +15474,6 @@ msgid "Code"
 msgstr "Κώδικας"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Αποθήκευση {} στο πεδίο Τιμή σαν \"{}\""
 
@@ -16153,7 +16158,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
-msgstr "Ενημέρωση αναφορών των συμβόλων που έχουν αλλάξει στον επεξεργαστή PCB."
+msgstr ""
+"Ενημέρωση αναφορών των συμβόλων που έχουν αλλάξει στον επεξεργαστή PCB."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
 msgid "Footprint assignments"
@@ -16169,7 +16175,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
-msgstr "Ενημέρωση τιμών συμβόλων που έχουν αντικατασταθεί στον επεξεργαστή PCB."
+msgstr ""
+"Ενημέρωση τιμών συμβόλων που έχουν αντικατασταθεί στον επεξεργαστή PCB."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
 msgid "Net names"
@@ -16285,7 +16292,8 @@ msgstr "Διαμεταξύ αναζήτηση"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:43
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "Επιλογή/επισήμανση αντικειμένων που αντιστοιχούν στο επιλεγμένο από PCB"
+msgstr ""
+"Επιλογή/επισήμανση αντικειμένων που αντιστοιχούν στο επιλεγμένο από PCB"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:45
 msgid "Highlight symbols corresponding to selected footprints"
@@ -17453,7 +17461,8 @@ msgstr ""
 #: eeschema/erc/erc.cpp:1524
 #, c-format
 msgid "The current configuration does not include the symbol library '%s'"
-msgstr "Η τρέχουσα παραμετροποίηση δεν περιλαμβάνει τη βιβλιοθήκη συμβόλου '%s'"
+msgstr ""
+"Η τρέχουσα παραμετροποίηση δεν περιλαμβάνει τη βιβλιοθήκη συμβόλου '%s'"
 
 #: eeschema/erc/erc.cpp:1539
 #, fuzzy, c-format
@@ -17508,7 +17517,8 @@ msgstr "Το αποτύπωμα '%s'δεν βρέθηκε στη βιβλιοθ�
 #: eeschema/erc/erc.cpp:1753
 #, fuzzy, c-format
 msgid "Assigned footprint (%s) doesn't match footprint filters (%s)."
-msgstr "%s αποτύπωμα (%s) δεν ταιριάζει με αυτό που δόθηκε από το σύμβολο (%s)."
+msgstr ""
+"%s αποτύπωμα (%s) δεν ταιριάζει με αυτό που δόθηκε από το σύμβολο (%s)."
 
 #: eeschema/erc/erc.cpp:1915
 msgid "Checking sheet names..."
@@ -18112,7 +18122,8 @@ msgstr "Δεν έγινε επαναφορά στα παρακάτω αυτόμ�
 
 #: eeschema/files-io.cpp:1636
 msgid "Manual recovery will be required to restore the file(s) above."
-msgstr "Απαιτείται μη αυτόματη ανάκτηση για την επαναφορά των παραπάνω αρχείων."
+msgstr ""
+"Απαιτείται μη αυτόματη ανάκτηση για την επαναφορά των παραπάνω αρχείων."
 
 #: eeschema/files-io.cpp:1645
 #, c-format
@@ -18542,8 +18553,8 @@ msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
 msgstr ""
-"Σφάλμα ανάλυσης μοντέλου '%s', λανθασμένος αριθμός κόμβων '?' στο "
-"Sim.NodesFormat σε σχέση με τις συνδέσεις"
+"Σφάλμα ανάλυσης μοντέλου '%s', λανθασμένος αριθμός κόμβων '?' στο Sim."
+"NodesFormat σε σχέση με τις συνδέσεις"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:580
 #, c-format
@@ -19089,7 +19100,8 @@ msgstr "Αγνώστου στυλ θύρα τροφοδοσίας εισήχθη
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:698
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr "Το σύμβολο τροφοδοσίας δημιουργεί μια καθολική ετικέτα με το όνομα '%s'"
+msgstr ""
+"Το σύμβολο τροφοδοσίας δημιουργεί μια καθολική ετικέτα με το όνομα '%s'"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4065
 #, c-format
@@ -19300,8 +19312,8 @@ msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
 msgstr ""
-"Το σύμβολο τεκμηρίωσης «%s» αναφέρεται στο αναγνωριστικό ορισμού συμβόλων «%s"
-"» που δεν υπάρχει στη βιβλιοθήκη. Το σύμβολο δεν φορτώθηκε."
+"Το σύμβολο τεκμηρίωσης «%s» αναφέρεται στο αναγνωριστικό ορισμού συμβόλων "
+"«%s» που δεν υπάρχει στη βιβλιοθήκη. Το σύμβολο δεν φορτώθηκε."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1586
 msgid "Text Variables could not be set as there is no project attached."
@@ -20171,7 +20183,8 @@ msgstr "Περιοχή κανόνων σχηματικού"
 #: eeschema/sch_screen.cpp:695 eeschema/sch_screen.cpp:787
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr "Ορισμός σχηματικού συμβόλου '%s %s' αναγνωριστικού βιβλιοθήκης σε '%s'."
+msgstr ""
+"Ορισμός σχηματικού συμβόλου '%s %s' αναγνωριστικού βιβλιοθήκης σε '%s'."
 
 #: eeschema/sch_screen.cpp:711
 #, c-format
@@ -20515,8 +20528,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20567,9 +20580,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -20616,9 +20629,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -20655,9 +20668,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Ορισμοί Διαύλων</th>\n"
-"        <th>"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
-"th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Δίκτυα ως Αποτέλεσμα</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20708,9 +20720,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -20718,8 +20730,8 @@ msgstr ""
 "</table>\n"
 "<p></p>\n"
 "<p></p>\n"
-"<i>Να σημειωθεί ότι η σήμανση έχεις προτεραιότητα έναντι των ορισμών "
-"διαύλων.</i>\n"
+"<i>Να σημειωθεί ότι η σήμανση έχεις προτεραιότητα έναντι των ορισμών διαύλων."
+"</i>\n"
 "\n"
 
 #: eeschema/sch_textbox.cpp:547 pcbnew/pcb_textbox.cpp:485
@@ -21362,8 +21374,8 @@ msgstr "Αποτυχία δημιουργίας προσωρινού αρχεί�
 
 #: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
 "Το Kibis δεν υποστηρίζει ακόμη DUT τιμές. https://ibis.org/summits/nov16a/"
 "chen.pdf"
@@ -22133,12 +22145,13 @@ msgstr "<b>Ένα σύμβολο τροφοδοσίας πρέπει να έχε
 #: eeschema/symbol_checker.cpp:222
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
 msgstr ""
-"<b>Σύμβολο Θύρας Τροφοδοσίας δεν πρέπει να έχει αντίστοιχο DeMorgan</b><br>"
-"<br>"
+"<b>Σύμβολο Θύρας Τροφοδοσίας δεν πρέπει να έχει αντίστοιχο DeMorgan</"
+"b><br><br>"
 
 #: eeschema/symbol_checker.cpp:228
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr "<b>Η θύρα τροφοδοσίας θα πρέπει να έχει μόνο έναν ακροδέκτη</b><br><br>"
+msgstr ""
+"<b>Η θύρα τροφοδοσίας θα πρέπει να έχει μόνο έναν ακροδέκτη</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:237
 msgid ""
@@ -22171,8 +22184,8 @@ msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of %s body style."
 msgstr ""
-"Πληροφορίες: <b>Κρυφός ακροδέκτης τροφοδοσίας %s</b> %s στη θέση <b>(%s, %s)"
-"</b> στη μονάδα %c από %s τύπου σώματος."
+"Πληροφορίες: <b>Κρυφός ακροδέκτης τροφοδοσίας %s</b> %s στη θέση <b>(%s, "
+"%s)</b> στη μονάδα %c από %s τύπου σώματος."
 
 #: eeschema/symbol_checker.cpp:293
 #, c-format
@@ -25839,7 +25852,7 @@ msgid "Clear Recent Job Files"
 msgstr "Διαγραφή Πρόσφατων Αρχείων Εργασιών"
 
 #: gerbview/gerbview_frame.cpp:90
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "Πρόγραμμα Προβολής Αρχείων Gerber"
 
@@ -29942,8 +29955,8 @@ msgid ""
 msgstr ""
 "OVC I: Εξοπλισμός χωρίς άμεση σύνδεση με την παροχή ρεύματος\n"
 "\n"
-"OVC II: Εξοπλισμός που καταναλώνει ενέργεια από τη μόνιμη εγκατάσταση. "
-"(π.χ.: συσκευές, φορητά εργαλεία, οικιακά φορτία). Το OVCIII ισχύει εάν "
+"OVC II: Εξοπλισμός που καταναλώνει ενέργεια από τη μόνιμη εγκατάσταση. (π."
+"χ.: συσκευές, φορητά εργαλεία, οικιακά φορτία). Το OVCIII ισχύει εάν "
 "υπάρχουν απαιτήσεις αξιοπιστίας και διαθεσιμότητας\n"
 "\n"
 "OVC III : Εξοπλισμός σε μόνιμη εγκατάσταση με απαιτήσεις αξιοπιστίας και "
@@ -31290,8 +31303,8 @@ msgstr ""
 "Θετικός αριθμός υποδεικνύει ότι η γραμμή είναι ανοδική (-) και η στήλη "
 "καθοδική (+), θερμή και ψυχρή απόχρωση δείχνει το δυναμικό της γραμμής.<br>\n"
 "Το EN 50310 προτείνει διαφορά κάτω από 300mV. Γνωστές πρακτικές κάνουν χρήση "
-"τρίτου μετάλλου ανάμεσα στο κύριο ζεύγος(πχ επιφάνεια με φινίρισμα ENIG).<br>"
-"\n"
+"τρίτου μετάλλου ανάμεσα στο κύριο ζεύγος(πχ επιφάνεια με φινίρισμα ENIG)."
+"<br>\n"
 "Επιλεγμένα κελιά φαίνονται με το προεπιλεγμένο χρώμα του συστήματος κατά την "
 "επανασχεδίαση γραφικών του πίνακα.\n"
 
@@ -31482,16 +31495,16 @@ msgstr ""
 "\n"
 "Η τιμή ελέγχου εμφανίζεται με έντονη γραφή.\n"
 "\n"
-"Οι υπολογισμοί ισχύουν για ρεύματα έως 35 A (εξωτερικά) ή 17,5 A (εσωτερικά)"
-", αύξηση θερμοκρασίας έως 100 °C και πλάτη έως 400 mils (10 mm).\n"
+"Οι υπολογισμοί ισχύουν για ρεύματα έως 35 A (εξωτερικά) ή 17,5 A "
+"(εσωτερικά), αύξηση θερμοκρασίας έως 100 °C και πλάτη έως 400 mils (10 mm).\n"
 "\n"
 "Ο τύπος, από το IPC 2221, είναι\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "όπου:<br>\n"
 "___I___ είναι το μέγιστο ρεύμα σε A<br>\n"
-"___&Delta;T___ είναι η αύξηση θερμοκρασίας πάνω από το περιβάλλον σε "
-"&deg;C<br>\n"
+"___&Delta;T___ είναι η αύξηση θερμοκρασίας πάνω από το περιβάλλον σε &deg;"
+"C<br>\n"
 "___W___ είναι το πλάτος σε mils<br>\n"
 "___H___ είναι το πάχος (ύψος) σε mils<br>\n"
 "___K___ είναι 0,024 για εσωτερικούς διαδρόμους ή 0,048 για εξωτερικούς "
@@ -31783,7 +31796,8 @@ msgstr "Zodd"
 
 #: pcb_calculator/transline_ident.cpp:345
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
-msgstr "Ζυγή εμπέδηση (οι γραμμές οδηγούνται από αντίθετες (διαφορικές) τάσεις)"
+msgstr ""
+"Ζυγή εμπέδηση (οι γραμμές οδηγούνται από αντίθετες (διαφορικές) τάσεις)"
 
 #: pcb_calculator/transline_ident.cpp:365
 msgid "Distance between strip and top metal"
@@ -33671,15 +33685,30 @@ msgstr "πλήθος οριζόντια"
 msgid "vertical count"
 msgstr "πλήθος κατακόρυφα"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:425
+#: pcbnew/dialogs/dialog_create_array.cpp:422
+#, c-format
+msgid "horizontal delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:428
+#, c-format
+msgid "vertical delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:437
 msgid "stagger"
 msgstr "κλιμάκωση"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:481
+#: pcbnew/dialogs/dialog_create_array.cpp:493
 msgid "point count"
 msgstr "πλήθος σημείων"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:528
+#: pcbnew/dialogs/dialog_create_array.cpp:500
+#, c-format
+msgid "angular delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:546
 msgid "Bad parameters"
 msgstr "Προβληματικές παράμετροι"
 
@@ -38789,7 +38818,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:590
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr "Η αλλαγή του δικτύου θα ενημερώσει επίσης %lu συνδεδεμένες έδρες σε %s."
+msgstr ""
+"Η αλλαγή του δικτύου θα ενημερώσει επίσης %lu συνδεδεμένες έδρες σε %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:596
 msgid "Change Nets"
@@ -39442,7 +39472,8 @@ msgstr "Εμφάνιση όλων των πεδίων όταν επιλεγεί 
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:130
 msgid "Select/highlight objects corresponding to schematic selection"
-msgstr "Επιλογή/επισήμανση αντίστοιχων αντικειμένων στον Επεξεργαστή Σχηματικού"
+msgstr ""
+"Επιλογή/επισήμανση αντίστοιχων αντικειμένων στον Επεξεργαστή Σχηματικού"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:132
 msgid "Highlight footprints corresponding to selected symbols"
@@ -40316,9 +40347,8 @@ msgid ""
 msgstr ""
 "### Τεκμηρίωση\n"
 "\n"
-"Για την πλήρη τεκμηρίωση δείτε [https://docs.kicad.org](https://"
-"docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules)."
+"Για την πλήρη τεκμηρίωση δείτε [https://docs.kicad.org](https://docs.kicad."
+"org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -40382,8 +40412,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
@@ -40552,172 +40582,168 @@ msgid ""
 msgstr ""
 "### Περιορισμοί\n"
 "\n"
-"| Τύπος Περιορισμού           | Τύπος Παραμέτρου"
-"                                                                                                          "
-"| Περιγραφή"
-"                                                                                                                                                                                                                                                                                                                                                                                                                                             "
+"| Τύπος Περιορισμού           | Τύπος "
+"Παραμέτρου                                                                                                          "
+"| "
+"Περιγραφή                                                                                                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
-"|---------------------------"
-"|------------------------------------------------------------------------------------------------------------------------"
-"|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                            "
+"| Ελέγχει το μέγεθος του δακτυλίου στις διελεύσεις."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `annular_width`           | min/opt/max"
-"                                                                                                            "
-"| Ελέγχει το μέγεθος του δακτυλίου στις διελεύσεις.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                          "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
+"| Ελέγχει τη δεδομένη έκφραση."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
-"| `assertion`               | \"&lt;expression>"
-"\"                                                                                                     "
-"| Ελέγχει τη δεδομένη έκφραση.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                  "
-"|\n"
-"| `clearance`               | min"
-"                                                                                                                    "
+"| `clearance`               | "
+"min                                                                                                                    "
 "| Καθορίζει το **ηλεκτρικό** διάκενο μεταξύ χάλκινων αντικειμένων "
 "διαφορετικών δικτύων.  (Δείτε `physical_clearance` εάν θέλετε να "
-"προσδιορίσετε την απόσταση μεταξύ αντικειμένων ανεξάρτητα από κάποιο δίκτυο.)"
-"<br><br>Για να επιτρέψτε σε χάλκινα αντικείμενα να επικαλύπτονται (σύγκρουση)"
-", δημιουργήστε έναν περιορισμό `clearance` με την τιμή `min` μικρότερη από "
-"το μηδέν (για παράδειγμα, `-1`).<br>"
-"                                                                                                                      "
+"προσδιορίσετε την απόσταση μεταξύ αντικειμένων ανεξάρτητα από κάποιο "
+"δίκτυο.)<br><br>Για να επιτρέψτε σε χάλκινα αντικείμενα να επικαλύπτονται "
+"(σύγκρουση), δημιουργήστε έναν περιορισμό `clearance` με την τιμή `min` "
+"μικρότερη από το μηδέν (για παράδειγμα, `-1`)."
+"<br>                                                                                                                      "
 "|\n"
-"| `courtyard_clearance`     | min"
-"                                                                                                                    "
+"| `courtyard_clearance`     | "
+"min                                                                                                                    "
 "| Ελέγχει το διάκενο μεταξύ της περιοχής του αποτυπώματος και δημιουργεί "
 "σφάλμα εάν δύο από αυτά είναι πιο κοντά από την απόσταση `min`.  Εάν ένα "
 "αποτύπωμα δεν έχει σχήμα περιοχής, δεν θα δημιουργηθούν σφάλματα από αυτόν "
-"τον περιορισμό.<br>"
-"                                                                                                                                                                                                               "
+"τον περιορισμό."
+"<br>                                                                                                                                                                                                               "
 "|\n"
-"| `diff_pair_gap`           | min/opt/max"
-"                                                                                                            "
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                            "
 "| Ελέγχει το κενό μεταξύ των συζευγμένων διαδρόμων σε ένα διαφορικό ζεύγος.  "
 "Τα συζευγμένα κομμάτια είναι τμήματα που είναι παράλληλα μεταξύ τους.  Το "
 "διάκενο διαφορικού ζεύγους δεν ελέγχεται σε μη συζευγμένα τμήματα ενός "
-"διαφορικού ζεύγους (για παράδειγμα, το fanout από ένα στοιχείο).<br>"
-"                                                                                                                                                                                           "
+"διαφορικού ζεύγους (για παράδειγμα, το fanout από ένα στοιχείο)."
+"<br>                                                                                                                                                                                           "
 "|\n"
-"| `diff_pair_uncoupled`     | max"
-"                                                                                                                    "
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                    "
 "| Ελέγχει την απόσταση που ένας διάδρομος διαφορικού ζεύγους δρομολογείται "
 "μη συζευγμένος από το άλλο κομμάτι πολικότητας του ζεύγους(για παράδειγμα, "
 "όταν το ζεύγος βγαίνει από ένα στοιχείο ή αποσυνδέεται για να περάσει γύρω "
-"από ένα άλλο αντικείμενο, όπως μια διέλευση).<br>"
-"                                                                                                                                                                                                         "
+"από ένα άλλο αντικείμενο, όπως μια διέλευση)."
+"<br>                                                                                                                                                                                                         "
 "|\n"
-"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>"
-"`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>"
-"`footprint`<br> | Καθορίστε έναν ή περισσότερους τύπους αντικειμένων προς "
-"απαγόρευση, διαχωρισμένους με κενά.  Για παράδειγμα, `(constraint disallow "
-"track)` ή `(constraint disallow track via pad)`.  Εάν ένα αντικείμενο αυτού "
-"του τύπου ταιριάζει με τη συνθήκη κανόνα, θα δημιουργηθεί ένα σφάλμα ΕΚΣ.<br>"
-"<br>Αυτός ο περιορισμός είναι ουσιαστικά ο ίδιος με μια περιοχή κανόνων, "
-"αλλά μπορεί να χρησιμοποιηθεί για τη δημιουργία πιο συγκεκριμένων "
-"περιορισμών αποκλεισμού.<br>"
-"                                                                   |\n"
-"| `edge_clearance`          | min/opt/max"
-"                                                                                                            "
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| Καθορίστε έναν ή περισσότερους τύπους αντικειμένων προς απαγόρευση, "
+"διαχωρισμένους με κενά.  Για παράδειγμα, `(constraint disallow track)` ή "
+"`(constraint disallow track via pad)`.  Εάν ένα αντικείμενο αυτού του τύπου "
+"ταιριάζει με τη συνθήκη κανόνα, θα δημιουργηθεί ένα σφάλμα ΕΚΣ.<br><br>Αυτός "
+"ο περιορισμός είναι ουσιαστικά ο ίδιος με μια περιοχή κανόνων, αλλά μπορεί "
+"να χρησιμοποιηθεί για τη δημιουργία πιο συγκεκριμένων περιορισμών "
+"αποκλεισμού."
+"<br>                                                                   |\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                            "
 "| Έλεγχος διακένου μεταξύ αντικειμένων και ορίου πλακέτας.<br><br>Αυτό "
 "μπορεί να ερμηνευτεί σαν την \"ανοχή φρέζας\" καθώς η άκρη της πλακέτας θα "
 "περιλαμβάνει όλα τα γραφικά στοιχεία από το `Edge.Cuts` επίπεδο καθώς και "
 "κάθε *οβάλ* οπές έδρας.  (Δείτε `physical_hole_clearance` για την ανοχή "
-"διάτρησης.)<br>"
-"                                                                                                                                                    "
+"διάτρησης.)<br>                                                                                                                                                    "
 "|\n"
-"| `length`                  | min/max"
-"                                                                                                                "
+"| `length`                  | min/"
+"max                                                                                                                "
 "| Ελέγχει το συνολικό μήκος δρομολόγησης για δίκτυα που ταιριάζουν με την "
 "συνθήκη του κανόνα του περιορισμού και δημιουργεί σφάλμα για κάθε δίκτυο που "
-"είναι κάτω του `min` (αν καθοριστεί) ή άνω του `max` (αν καθοριστεί)<br>"
-"                                                                                                                                                                                                                               "
+"είναι κάτω του `min` (αν καθοριστεί) ή άνω του `max` (αν "
+"καθοριστεί)<br>                                                                                                                                                                                                                               "
 "|\n"
-"| `hole`                    | min/max"
-"                                                                                                                "
+"| `hole`                    | min/"
+"max                                                                                                                "
 "| Ελέγχει το μέγεθος (διάμετρο) οπής διάτρησης σε έδρα ή διέλευση.  Για οβάλ "
 "οπές, η μικρότερη (μικρή) διάμετρος θα ελεγθεί έναντι του`min` (αν "
 "καθοριστεί) και η μεγαλύτερη (μεγάλη)  διάμετρος θα ελεγθεί έναντι του`max` "
-"(αν καθοριστεί).<br>"
-"                                                                                                                                                                                            "
+"(αν καθοριστεί)."
+"<br>                                                                                                                                                                                            "
 "|\n"
-"| `hole_clearance`          | min"
-"                                                                                                                    "
+"| `hole_clearance`          | "
+"min                                                                                                                    "
 "| Ελέγχει το διάκενο μεταξύ διαμπερούς οπής σε έδρα ή διέλευση και χάλκινων "
 "αντικειμένων σε διαφορετικό δίκτυο.  Το διάκενο προσμετράται από τη διάμετρο "
-"της οπής, όχι το κέντρο.<br>"
-"                                                                                                                                                                                                                                                                        "
+"της οπής, όχι το κέντρο."
+"<br>                                                                                                                                                                                                                                                                        "
 "|\n"
-"| `hole_to_hole`            | min"
-"                                                                                                                    "
+"| `hole_to_hole`            | "
+"min                                                                                                                    "
 "| Ελέγχει το διάκενο μεταξύ μηχανολογικών διαμπερών οπών σε έδρες ή "
 "διελεύσεις.  Το διάκενο προσμετράται από τις διαμέτρους των οπών, όχι τα "
 "κέντρα τους.<br><br>Αυτός ο περιορισμός είναι αποκλειστικά για την προστασία "
 "των τρυπανιών.  Το διάκενο μεταξύ **διατρήσεων-λέιζερ** (μικρο-διελεύσεις) "
 "και άλλων μη μηχανολογικών τρυπημένων οπών δεν ελέγχεται, ούτε το διάκενο "
-"μεταξύ **φρέζας** (οβάλ-σχήμα) και άλλων μη μηχανολογικών τρυπημένων "
-"οπών.<br> |\n"
-"| `physical_clearance`      | min"
-"                                                                                                                    "
+"μεταξύ **φρέζας** (οβάλ-σχήμα) και άλλων μη μηχανολογικών τρυπημένων οπών."
+"<br> |\n"
+"| `physical_clearance`      | "
+"min                                                                                                                    "
 "| Ελέγχει το διάκενο μεταξύ αντικειμένων σε δεδομένο επίπεδο "
 "(συμπεριλαμβανομένων μη χάλκινων επιπέδων).<br><br>Ενώ μπορεί να εκτελέσει "
 "περισσότερους ελέγχους γενικής χρήσης από το `clearance`, είναι πιο αργό.  "
-"Προτιμάται η χρήση `clearance` όπου ταιριάζει.<br>"
-"                                                                                                                                                                                                                            "
+"Προτιμάται η χρήση `clearance` όπου ταιριάζει."
+"<br>                                                                                                                                                                                                                            "
 "|\n"
-"| `physical_hole_clearance` | min"
-"                                                                                                                    "
+"| `physical_hole_clearance` | "
+"min                                                                                                                    "
 "| Ελέγχει το διάκενο μεταξύ διαμπερούς οπής σε έδρα ή διέλευση και σε άλλο "
 "αντικείμενο, ανεξαρτήτως δικτύου. Το διάκενο προσμετράται από τη διάμετρο "
 "της οπής, όχι το κέντρο.<br><br>Όπως η \"ανοχή διάτρησης\" μιας και "
 "περιλαμβάνει μόνο **στρογγυλές** οπές (Δείτε `edge_clearance` για την ανοχή "
-"φρέζας).<br>"
-"                                                                                                                    "
+"φρέζας)."
+"<br>                                                                                                                    "
 "|\n"
-"| `silk_clearance`          | min/opt/max"
-"                                                                                                            "
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                            "
 "| Ελέγχει το διάκενο μεταξύ αντικειμένων σε επίπεδα μεταξοτυπίας και άλλων "
-"αντικειμένων.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                        "
+"αντικειμένων."
+"<br>                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
-"| `skew`                    | max"
-"                                                                                                                    "
+"| `skew`                    | "
+"max                                                                                                                    "
 "| Ελέγχει τη συνολική απόκλιση δικτύων που ταιριάζουν με τη συνθήκη του "
 "κανόνα, δηλαδή τη διαφορά μεταξύ του μήκους κάθε δικτύου και του μέσου όρου "
 "όλου του μήκους κάθε δικτύου που αντιστοιχεί στον κανόνα.  Εάν η απόλυτη "
 "τιμή της διαφοράς μεταξύ αυτού του μέσου όρου και του μήκους οποιουδήποτε "
 "δικτύου είναι πάνω από την τιμή 'max' του περιορισμού, θα δημιουργηθεί "
-"σφάλμα.<br>"
-"                                                                                   "
+"σφάλμα."
+"<br>                                                                                   "
 "|\n"
-"| `thermal_relief_gap`      | min"
-"                                                                                                                    "
+"| `thermal_relief_gap`      | "
+"min                                                                                                                    "
 "| Καθορίζει το πλάτος κένου μεταξύ έδρας και ζώνης με σύνδεση θερμικής "
-"ανακούφισης.<br>"
-"                                                                                                                                                                                                                                                                                                                                                           "
+"ανακούφισης."
+"<br>                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
-"| `thermal_spoke_width`     | opt"
-"                                                                                                                    "
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                    "
 "| Καθορίζει το πλάτος των ακτίνων που συνδέουν έδρα με ζώνη με σύνδεση "
-"θερμικής ανακούφισης.<br>"
-"                                                                                                                                                                                                                                                                                                                                                      "
+"θερμικής ανακούφισης."
+"<br>                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
-"| `track_width`             | min/opt/max"
-"                                                                                                            "
+"| `track_width`             | min/opt/"
+"max                                                                                                            "
 "| Ελέγχει το πλάτος των τμημάτων διαδρόμου και τόξου.  Θα δημιουργηθεί ένα "
 "σφάλμα για κάθε τμήμα που έχει πλάτος κάτω από την τιμή \"min\" (αν έχει "
-"καθοριστεί) ή πάνω από την τιμή \"max\" (αν έχει καθοριστεί).<br>"
-"                                                                                                                                                                                                                                                             "
+"καθοριστεί) ή πάνω από την τιμή \"max\" (αν έχει καθοριστεί)."
+"<br>                                                                                                                                                                                                                                                             "
 "|\n"
-"| `via_count`               | max"
-"                                                                                                                    "
+"| `via_count`               | "
+"max                                                                                                                    "
 "| Μετρά τον πλήθος των διελεύσεων κάθε δικτύου που αντιστοιχεί στην συνθήκη "
 "του κανόνα.  Εάν ο αριθμός υπερβαίνει τον περιορισμό \"max\" σε οποιοδήποτε "
-"αντιστοιχισμένο δίκτυο, θα δημιουργηθεί ένα σφάλμα για το δίκτυο αυτό.<br>"
-"                                                                                                                                                                                                                                                               "
+"αντιστοιχισμένο δίκτυο, θα δημιουργηθεί ένα σφάλμα για το δίκτυο αυτό."
+"<br>                                                                                                                                                                                                                                                               "
 "|\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
-"`none`                                                                                 "
-"| Καθορίζει τη σύνδεση μεταξύ ζώνης και έδρας.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                       "
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
+"| Καθορίζει τη σύνδεση μεταξύ ζώνης και έδρας."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "\n"
 "\n"
@@ -40871,17 +40897,17 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
 "### Ιδιότητες\n"
 "\n"
 "Πολλές ιδιότητες αντικειμένων είναι διαθέσιμες για δοκιμή σε εκφράσεις "
-"προσαρμοσμένων κανόνων. Δείτε την πλήρη τεκμηρίωση στο [https://"
-"docs.kicad.org](https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) για την πλήρη λίστα.\n"
+"προσαρμοσμένων κανόνων. Δείτε την πλήρη τεκμηρίωση στο [https://docs.kicad."
+"org](https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) για την πλήρη λίστα.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -41058,8 +41084,8 @@ msgstr ""
 "    A.inDiffPair('<net_name>')\n"
 "Αληθές αν το `A` έχεο δίκτυο που είναι μέλος του ορισμένου διαφορικού "
 "ζεύγους.\n"
-"`<net_name>` είναι το βασικό όνομα του ζεύγους.  Για παράδειγμα, `inDiffPair"
-"('/CLK')`\n"
+"`<net_name>` είναι το βασικό όνομα του ζεύγους.  Για παράδειγμα, "
+"`inDiffPair('/CLK')`\n"
 "ταιριάζει με τα δίκτυα `/CLK_P` και `/CLK_N`.\n"
 "<br><br>\n"
 "\n"
@@ -41123,13 +41149,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -41266,13 +41292,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -41753,7 +41779,8 @@ msgstr "Εφαρμόστηκε άνευ όρων κανόνας."
 
 #: pcbnew/drc/drc_engine.cpp:1322
 msgid "Unconditional rule applied; overrides previous constraints."
-msgstr "Εφαρμογή κανόνα άνευ όρων; παρακάμπτει τους προηγούμενους περιορισμούς."
+msgstr ""
+"Εφαρμογή κανόνα άνευ όρων; παρακάμπτει τους προηγούμενους περιορισμούς."
 
 #: pcbnew/drc/drc_engine.cpp:1336 pcbnew/drc/drc_engine.cpp:1705
 #, c-format
@@ -42759,8 +42786,8 @@ msgstr "(%s μέγιστο μήκος: %s- πραγματικό: %s)"
 #, c-format
 msgid "(%s min skew %s; actual %s; target net length %s (from %s); actual %s)"
 msgstr ""
-"(%s ελάχιστη λοξοδρόμηση %s· πραγματική %s· μήκος στόχου δικτύου %s (από %s)"
-"· πραγματικό %s)"
+"(%s ελάχιστη λοξοδρόμηση %s· πραγματική %s· μήκος στόχου δικτύου %s (από "
+"%s)· πραγματικό %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:184
 #, c-format
@@ -42854,7 +42881,8 @@ msgstr "Αποτύπωμα %s τιμή (%s) δεν ταιριάζει με τι�
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
 #, fuzzy, c-format
 msgid "%s doesn't match footprint given by symbol (%s)."
-msgstr "%s αποτύπωμα (%s) δεν ταιριάζει με αυτό που δόθηκε από το σύμβολο (%s)."
+msgstr ""
+"%s αποτύπωμα (%s) δεν ταιριάζει με αυτό που δόθηκε από το σύμβολο (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:177
 #, fuzzy, c-format
@@ -42874,8 +42902,8 @@ msgstr "Net που λείπει από το pad δίνεται από το σχ�
 #, c-format
 msgid "Pad net (%s) doesn't match net given by schematic (%s)."
 msgstr ""
-"Το net του pad (%s) δεν ταιριάζει με το net που δίνεται από το σχηματικό (%s)"
-"."
+"Το net του pad (%s) δεν ταιριάζει με το net που δίνεται από το σχηματικό "
+"(%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:285
 #, c-format
@@ -43404,8 +43432,8 @@ msgid ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 "Εάν οι ζώνες αυτής της πλακέτας ξαναγεμιστούν, θα χρησιμοποιηθεί η ρύθμιση "
-"Διάκενο Άκρης Χαλκού (βλ. Ρύθμιση Πλακέτας > Κανόνες Σχεδίασης > Περιορισμοί)"
-".\n"
+"Διάκενο Άκρης Χαλκού (βλ. Ρύθμιση Πλακέτας > Κανόνες Σχεδίασης > "
+"Περιορισμοί).\n"
 " Αυτό μπορεί να οδηγήσει σε διαφορετικά γεμίσματα από προηγούμενες εκδόσεις "
 "KiCad που χρησιμοποιούσαν το πάχος γραμμής του ορίου πλακέτας στο επίπεδο "
 "Edge Cuts."
@@ -43709,8 +43737,8 @@ msgstr ""
 "Δεν επιτρέπεται η εγγραφή/αλλαγή βιβλιοθηκών παλαιού τύπου (αρχεία .mod) \n"
 "Αποθηκεύστε την τρέχουσα βιβλιοθήκη στη νέα μορφή .pretty\n"
 "και ανανεώστε τον κατάλογο βιβλιοθήκης αποτυπωμάτων\n"
-"για να αποθηκεύσετε το αποτύπωμα (αρχείο .kicad) στον φάκελο βιβλιοθήκης "
-".pretty"
+"για να αποθηκεύσετε το αποτύπωμα (αρχείο .kicad) στον φάκελο βιβλιοθήκης ."
+"pretty"
 
 #: pcbnew/footprint_libraries_utils.cpp:70
 msgid ""
@@ -44716,8 +44744,8 @@ msgstr "Επεξεργασία συμβόλου '%s:%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Προειδοποίηση: το αποτύπωμα %s '%s' δεν έχει όνομα βιβλιοθήκης. "
 "Χρησιμοποιήστε τη μορφή 'Βιβλιοθήκη:Αποτύπωμα' για να αποφύγετε "
@@ -44785,7 +44813,8 @@ msgstr "Αδυναμία ανάλυσης χρονικής σφραγίδας σ
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:124
 msgid "Cannot parse footprint name in symbol section of netlist."
-msgstr "Αδυναμία ανάλυσης ονόματος αποτυπώματος στα σύμβολα της λίστας δικτύων."
+msgstr ""
+"Αδυναμία ανάλυσης ονόματος αποτυπώματος στα σύμβολα της λίστας δικτύων."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:138
 msgid "Cannot parse reference designator in symbol section of netlist."
@@ -45114,7 +45143,8 @@ msgstr "(το δέλτα τραπεζίου είναι πολύ μεγάλο)"
 
 #: pcbnew/pad.cpp:2529
 msgid "(custom pad shape must resolve to a single polygon)"
-msgstr "(το προσαρμοσμένο σχήμα έδρας πρέπει να επιλύεται σε ένα μόνο πολύγωνο)"
+msgstr ""
+"(το προσαρμοσμένο σχήμα έδρας πρέπει να επιλύεται σε ένα μόνο πολύγωνο)"
 
 #: pcbnew/pad.cpp:2733
 msgid "Edge connector"
@@ -45466,8 +45496,8 @@ msgid ""
 "Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
 msgstr ""
 "Αυτό το αρχείο δεν φαίνεται να είναι σε έγκυρη μορφή PCB Binary Version 6.0. "
-"Στο Altium Designer, φροντίστε να αποθηκεύσετε ως \"PCB Binary Files "
-"(*.PcbDoc)\"."
+"Στο Altium Designer, φροντίστε να αποθηκεύσετε ως \"PCB Binary Files (*."
+"PcbDoc)\"."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:559
 #, c-format
@@ -45883,8 +45913,8 @@ msgid ""
 "and the schematic. "
 msgstr ""
 "Το επιλεγμένο αρχείο δείχνει ότι τα nets ενδέχεται να μην είναι "
-"συγχρονισμένα με το σχηματικό. Συνιστάται να εκτελέσετε μια διαδικασία «"
-"Ευθυγράμμιση Nets» στο CADSTAR και να επαναλάβετε την εισαγωγή, για να "
+"συγχρονισμένα με το σχηματικό. Συνιστάται να εκτελέσετε μια διαδικασία "
+"«Ευθυγράμμιση Nets» στο CADSTAR και να επαναλάβετε την εισαγωγή, για να "
 "αποφύγετε ασυνέπειες μεταξύ του PCB και του σχηματικού. "
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:131
@@ -46142,8 +46172,8 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
-"Το πρότυπο CADSTAR «%s» έχει μη μηδενική τιμή καθορισμένηγια τη ρύθμιση «"
-"Sliver Width». Δεν υπάρχει αντίστοιχη ρύθμιση στο KiCad, επομένως αγνοήθηκε."
+"Το πρότυπο CADSTAR «%s» έχει μη μηδενική τιμή καθορισμένηγια τη ρύθμιση "
+"«Sliver Width». Δεν υπάρχει αντίστοιχη ρύθμιση στο KiCad, επομένως αγνοήθηκε."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1990
 #, c-format
@@ -46363,8 +46393,8 @@ msgstr "Δεν υπάρχει πακέτο '%s' στη βιβλιοθήκη '%s'
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
-"Αγνόηση ενός πολυγώνου αφού δεν ήταν χαρτογραφημένο το επίπεδο Eagle «%s» "
-"(%d)"
+"Αγνόηση ενός πολυγώνου αφού δεν ήταν χαρτογραφημένο το επίπεδο Eagle "
+"«%s» (%d)"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1607
 #, c-format
@@ -47252,8 +47282,8 @@ msgstr "Κωδικός για <b>είσοδο</b> σε κάποιον ειδικ
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
 msgstr ""
-"Εισάγετε το πρόγραμμα python που υλοποιεί τις συναρτήσεις PCB_IO::Footprint*"
-"() ."
+"Εισάγετε το πρόγραμμα python που υλοποιεί τις συναρτήσεις PCB_IO::"
+"Footprint*() ."
 
 #: pcbnew/pcb_layer_box_selector.cpp:74
 msgid "(not activated)"
@@ -47857,7 +47887,8 @@ msgstr "Τοποθέτηση Μίκρο-διέλευσης"
 
 #: pcbnew/router/router_tool.cpp:141
 msgid "Adds a microvia at the end of currently routed track."
-msgstr "Προσθέτει μια μίκρο-διέλευση στο τέλος του διαδρόμου που δρομολογείται."
+msgstr ""
+"Προσθέτει μια μίκρο-διέλευση στο τέλος του διαδρόμου που δρομολογείται."
 
 #: pcbnew/router/router_tool.cpp:151
 msgid "Select Layer and Place Through Via..."
@@ -48363,7 +48394,8 @@ msgstr "Ανεπαρκής επικάλυψη ζωνών για συγχώνευ
 
 #: pcbnew/tools/board_editor_control.cpp:1383
 msgid "Some zone netcodes did not match and were not merged."
-msgstr "Δεν έγινε συγχώνευση λόγω αναντιστοιχίας κωδικών δικτύων κάποιων ζωνών."
+msgstr ""
+"Δεν έγινε συγχώνευση λόγω αναντιστοιχίας κωδικών δικτύων κάποιων ζωνών."
 
 #: pcbnew/tools/board_editor_control.cpp:1389
 msgid "Some zone priorities did not match and were not merged."
@@ -48774,7 +48806,8 @@ msgstr ""
 #: pcbnew/tools/board_inspection_tool.cpp:1424
 #, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
-msgstr "Επίλυση περιορισμών μεγέθους οπής: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
+msgstr ""
+"Επίλυση περιορισμών μεγέθους οπής: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1443
 #, c-format
@@ -52777,102 +52810,94 @@ msgstr "θερμικές εκτονώσεις για PTH"
 msgid "[INFO] load failed: %s"
 msgstr "[ΠΛΗΡΟΦΟΡΙΑ] η φόρτωση απέτυχε: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Converter;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "Μετατροπή Εξαρτήματος σε Component"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Δημιουργία εξαρτήματος από bitmap για χρήση στο KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "Επεξεργαστής Σχηματικού KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "Χρώμα σύρματος σχηματικού"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Αυτόνομος επεξεργαστής σχηματικού για σχηματικά KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "Eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "Πρόγραμμα Προβολής Αρχείων Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "Προβολή αρχείων Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "Projectmanager;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "Σουίτα EDA"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Σουίτα εργαλείων για σχηματικό σχεδιασμό και διάταξη πλακέτας"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Υπολογιστής PCB KiCad"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "PCB;Calculator;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "Υπολογιστής PCB"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr ""
 "Αριθμομηχανή για διάφορους υπολογισμούς σχετιζόμενους με την ηλεκτρονική"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Επεξεργαστής Σχεδίασης PCB"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "Επεξεργαστής Σχεδίασης PCB"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Αυτόνομος επεξεργαστής κυκλωμάτων για πλακέτες KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Περί του σχεδιαστή πλακέτας τυπωμένων κυκλωμάτων Pcbnew"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-msgid "Circuit board"
-msgstr "Πλακέτα κυκλωμάτων"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -52931,6 +52956,12 @@ msgstr "Σύμβολο Σχηματικού KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "Φύλλα Σχεδίασης KiCad"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Πλακέτα κυκλωμάτων"
 
 #~ msgid "Command"
 #~ msgstr "Εντολή"
@@ -56218,8 +56249,8 @@ msgstr "Φύλλα Σχεδίασης KiCad"
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
-#~ "\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A."
+#~ "enclosedByArea('Shield*')\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -56351,13 +56382,13 @@ msgstr "Φύλλα Σχεδίασης KiCad"
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -56441,9 +56472,8 @@ msgstr "Φύλλα Σχεδίασης KiCad"
 #~ "\n"
 #~ "### Documentation\n"
 #~ "\n"
-#~ "For the full documentation see [https://docs.kicad.org](https://"
-#~ "docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
-#~ "pcbnew.html#custom_design_rules)."
+#~ "For the full documentation see [https://docs.kicad.org](https://docs."
+#~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 #~ msgstr ""
 #~ "### Κανόνες ανώτατου επιπέδου\n"
 #~ "\n"
@@ -56562,8 +56592,8 @@ msgstr "Φύλλα Σχεδίασης KiCad"
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
-#~ "\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A."
+#~ "enclosedByArea('Shield*')\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -56694,13 +56724,13 @@ msgstr "Φύλλα Σχεδίασης KiCad"
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -57471,8 +57501,8 @@ msgstr "Φύλλα Σχεδίασης KiCad"
 #~ "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() "
 #~ "functions."
 #~ msgstr ""
-#~ "Εισάγετε το σύμβολο python που υλοποιεί τις συναρτήσεις "
-#~ "SCH_PLUGIN::Symbol*() ."
+#~ "Εισάγετε το σύμβολο python που υλοποιεί τις συναρτήσεις SCH_PLUGIN::"
+#~ "Symbol*() ."
 
 #~ msgid "Gerber (experimental)"
 #~ msgstr "Gerber (πειραματικό)"
@@ -58158,8 +58188,8 @@ msgstr "Φύλλα Σχεδίασης KiCad"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -58272,15 +58302,15 @@ msgstr "Φύλλα Σχεδίασης KiCad"
 #~ "Στα Windows η γραμμή εντολών είναι η ακόλουθη.\n"
 #~ "\n"
 #~ "\"\n"
-#~ "f: /kicad/bin/xsltproc.exe -o \"% O\" f: /kicad/bin/plugins/"
-#~ "myconverter.xsl \"% I\"\n"
+#~ "f: /kicad/bin/xsltproc.exe -o \"% O\" f: /kicad/bin/plugins/myconverter."
+#~ "xsl \"% I\"\n"
 #~ "\"\n"
 #~ "\n"
 #~ "Στο Linux η εντολή γίνεται ως εξής.\n"
 #~ "\n"
 #~ "\"\n"
-#~ "xsltproc -o \"% O\" / usr / local / kicad / bin / plugins / "
-#~ "myconverter .xsl \"% I\"\n"
+#~ "xsltproc -o \"% O\" / usr / local / kicad / bin / plugins / myconverter ."
+#~ "xsl \"% I\"\n"
 #~ "\"\n"
 #~ "όπου «myconverter.xsl» είναι το φύλλο στυλ που εφαρμόζετε.\n"
 #~ "\n"
@@ -62330,8 +62360,8 @@ msgstr "Φύλλα Σχεδίασης KiCad"
 
 #~ msgid "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer"
 #~ msgstr ""
-#~ "Το μη υποστηριζόμενο επίπεδο Eagle '%s' (%d) μετατράπηκε σε στρώμα "
-#~ "Dwgs.User"
+#~ "Το μη υποστηριζόμενο επίπεδο Eagle '%s' (%d) μετατράπηκε σε στρώμα Dwgs."
+#~ "User"
 
 #~ msgid "unknown graphic type: %d"
 #~ msgstr "άγνωστος τύπος γραφικού: %d"
@@ -65724,17 +65754,17 @@ msgstr "Φύλλα Σχεδίασης KiCad"
 #~ msgid ""
 #~ "DXF only:\n"
 #~ "Check to plot all layers in polygon mode.\n"
-#~ "Uncheck to plot in sketch mode layers that don't support polygons "
-#~ "(*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
+#~ "Uncheck to plot in sketch mode layers that don't support polygons (*."
+#~ "SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
 #~ "and plot in polygon mode other layers (*.Cu, *.Adhes, *.Paste, *.Mask)"
 #~ msgstr ""
 #~ "Μόνο DXF:\n"
 #~ "Επιλέξτε το για σχεδίαση όλων των επιπέδων σε πολυγωνική λειτουργία.\n"
 #~ "Αποεπιλέξτε για να σχεδιάσετε σε λειτουργία περιγραμμάτων όσα επίπεδα δεν "
-#~ "υποστηρίζουν πολύγωνα (* .SilkS, * _User, Edge.Cuts, Margin, * .CrtYd, "
-#~ "* .Fab)\n"
-#~ "και σχεδίαση των υπόλοιπων επιπέδων σε πολυγωνική λειτουργία (* .Cu, "
-#~ "* .Adhes, * .Paste, * .Mask)"
+#~ "υποστηρίζουν πολύγωνα (* .SilkS, * _User, Edge.Cuts, Margin, * .CrtYd, * ."
+#~ "Fab)\n"
+#~ "και σχεδίαση των υπόλοιπων επιπέδων σε πολυγωνική λειτουργία (* .Cu, * ."
+#~ "Adhes, * .Paste, * .Mask)"
 
 #~ msgid "Legacy Toolset Routing Options"
 #~ msgstr "Επιλογές Δρομολόγησης Παλαιότερου Τύπου"
@@ -69276,8 +69306,8 @@ msgstr "Φύλλα Σχεδίασης KiCad"
 
 #~ msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
 #~ msgstr ""
-#~ "Αρχεία KiCad τυπωμένης πλακέτας κυκλώματος s-expr (*.kicad_pcb)|"
-#~ "*.kicad_pcb"
+#~ "Αρχεία KiCad τυπωμένης πλακέτας κυκλώματος s-expr (*.kicad_pcb)|*."
+#~ "kicad_pcb"
 
 #~ msgid "Component-footprint link file (*.cmp)|*cmp"
 #~ msgstr "Αρχείο σύνδεσης εξαρτήματος-αποτυπώματος (*.cmp)|*cmp"

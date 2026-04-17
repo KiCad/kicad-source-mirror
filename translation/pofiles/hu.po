@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 11:18-0700\n"
+"POT-Creation-Date: 2026-04-17 15:22+0300\n"
 "PO-Revision-Date: 2026-04-15 16:10+0000\n"
 "Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v9/hu/>\n"
@@ -1291,7 +1291,8 @@ msgstr "Tükröződések:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:86
 msgid "Number of rays that will be cast to evaluate a reflection point"
-msgstr "A tükröződési pont értékeléséhez a fény irányába vetített sugarak száma"
+msgstr ""
+"A tükröződési pont értékeléséhez a fény irányába vetített sugarak száma"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:94
 msgid ""
@@ -1480,7 +1481,7 @@ msgid "Image Converter"
 msgstr "Kép konvertáló"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "KiCad kép konvertáló"
 
@@ -2098,7 +2099,7 @@ msgstr "Gerber fájlok betöltése..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2387,7 +2388,8 @@ msgstr "Licensz"
 
 #: common/dialog_about/dialog_about.cpp:268
 msgid "Could not open clipboard to write version information."
-msgstr "Nem sikerült megnyitni a vágólapot a verzióinformációk beillesztéséhez."
+msgstr ""
+"Nem sikerült megnyitni a vágólapot a verzióinformációk beillesztéséhez."
 
 #: common/dialog_about/dialog_about.cpp:269
 msgid "Clipboard Error"
@@ -2950,14 +2952,12 @@ msgstr "Projekt név"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1638
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "NYÁK"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "Kapcsolási rajz"
 
@@ -3627,7 +3627,8 @@ msgstr "Egyedi:"
 #: common/dialogs/dialog_print_generic_base.cpp:77
 #, fuzzy
 msgid "Set X scale adjust for exact scale plotting"
-msgstr "X tengely irányú méretezés megadása a méretpontos nyomat létrehozásához"
+msgstr ""
+"X tengely irányú méretezés megadása a méretpontos nyomat létrehozásához"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
 msgid "Info text"
@@ -4255,7 +4256,8 @@ msgstr "A változtatás a szerkesztő újraindítása után lép életbe."
 
 #: common/dialogs/panel_common_settings_base.cpp:164
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr "A fókusz az egeret követi a kapcsolási rajz és a PCB szerkesztők között"
+msgstr ""
+"A fókusz az egeret követi a kapcsolási rajz és a PCB szerkesztők között"
 
 #: common/dialogs/panel_common_settings_base.cpp:165
 msgid ""
@@ -5362,7 +5364,8 @@ msgstr "Mozgatás vízszintesen balra/jobbra"
 #: common/dialogs/panel_mouse_settings_base.cpp:305
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
-msgstr "A vászon balra-jobbra mozgatása az érintőpadon balra-jobbra görgetéskor"
+msgstr ""
+"A vászon balra-jobbra mozgatása az érintőpadon balra-jobbra görgetéskor"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:315
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:135
@@ -6934,8 +6937,8 @@ msgstr ""
 "KiCad által belsőleg definiált (nem szerkeszthető), az aktuálisan betöltött "
 "projekt fájl abszolút elérési útvonalára mutat. Ez a környezeti változó "
 "lehetővé teszi elérési útvonalak relatív megadását, például egy "
-"projektspecifikus lábkiosztás-könyvtár \"${KIPRJMOD}/libs/"
-"footprints.pretty\"-ként definiálható."
+"projektspecifikus lábkiosztás-könyvtár \"${KIPRJMOD}/libs/footprints."
+"pretty\"-ként definiálható."
 
 #: common/env_vars.cpp:123
 #, fuzzy
@@ -8477,10 +8480,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Hiányzó mértékegység: '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1174
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Össze nem illő típusok: \"%s\" és %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1180
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Össze nem illő típusok: %lf és \"%s\""
 
@@ -11091,7 +11096,7 @@ msgstr ""
 "szkript fájl nem található.\n"
 "A szkript nem elérhető."
 
-#: eeschema/connection_graph.cpp:3409
+#: eeschema/connection_graph.cpp:3412
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -11099,21 +11104,21 @@ msgstr ""
 "A(z) %s és %s ugyanazokhoz az elemekhez van csatolva; a netlistában %s lesz "
 "használva"
 
-#: eeschema/connection_graph.cpp:3647
+#: eeschema/connection_graph.cpp:3650
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "A vezeték%s grafikusan kapcsolódik a %s buszhoz, de nem tagja annak"
 
-#: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3955 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "Nem csatlakoztatott vezeték végpont"
 
-#: eeschema/connection_graph.cpp:3977
+#: eeschema/connection_graph.cpp:3980
 msgid "Unconnected wire to bus entry"
 msgstr "Csatlakoztatlan vezeték a buszbelépőhöz"
 
-#: eeschema/connection_graph.cpp:4310
+#: eeschema/connection_graph.cpp:4313
 #, fuzzy, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
@@ -11122,13 +11127,13 @@ msgstr ""
 "A(z) \"%s\" hierarchikus címke nincs összeköttetésben egy lapon belüli "
 "címkével."
 
-#: eeschema/connection_graph.cpp:4375
+#: eeschema/connection_graph.cpp:4378
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "A(z) %s lapláb nem rendelkezik megfelelő hierarchikus címkesel a lapon belül"
 
-#: eeschema/connection_graph.cpp:4392
+#: eeschema/connection_graph.cpp:4395
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "A(z) %s hierarchikus címkenek nincs megfelelő lapláb a szülőlapon"
@@ -11554,8 +11559,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -11863,7 +11868,8 @@ msgstr "Gyorsítótár időkorlátja:"
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
 msgid "Time in seconds that database queries will be cached for"
-msgstr "Az adatbázis-lekérdezések gyorsítótárazásának időtartama másodpercekben"
+msgstr ""
+"Az adatbázis-lekérdezések gyorsítótárazásának időtartama másodpercekben"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
 msgid "Database Library Settings"
@@ -11961,8 +11967,8 @@ msgid ""
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Ha egyes rajzjelek árván maradnak (a hivatkozott rajzjel sehol sem található)"
-",\n"
+"Ha egyes rajzjelek árván maradnak (a hivatkozott rajzjel sehol sem "
+"található),\n"
 "próbáljon meg azonos nevű jelöltet keresni a betöltött rajzjel könyvtárakban."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:63
@@ -12287,8 +12293,8 @@ msgstr "Összes teljesítmény disszipáció mentése"
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
-"Direktívák írása az összes elem teljesítményleadásának mentéséhez (.probe p"
-"(<item>))"
+"Direktívák írása az összes elem teljesítményleadásának mentéséhez (.probe "
+"p(<item>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:387
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
@@ -12407,8 +12413,8 @@ msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
-"Az ívközi referenciaok láthatóságát globálisan a kapcsolási rajz "
-"beállításai > általános > formázás menüből lehet beállítani"
+"Az ívközi referenciaok láthatóságát globálisan a kapcsolási rajz beállításai "
+"> általános > formázás menüből lehet beállítani"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:85
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:133
@@ -13812,7 +13818,8 @@ msgstr "Szinkronizált lábak mód.  Az új láb minden egységhez hozzáadódik
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:456
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
-msgstr "Szinkronizált lábak mód.  A többi egységben az egyező lábak frissülnek."
+msgstr ""
+"Szinkronizált lábak mód.  A többi egységben az egyező lábak frissülnek."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin &name:"
@@ -14490,7 +14497,8 @@ msgstr "Kijelölt elem(ek) átfordítása"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:141
 msgid "Clear colors to use Schematic Editor colors."
-msgstr "Törölje a színeket a kapcsolásirajz-szerkesztő színeinek használatához."
+msgstr ""
+"Törölje a színeket a kapcsolásirajz-szerkesztő színeinek használatához."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:158 pcbnew/zone.cpp:2052
 msgid "Fill Style"
@@ -15325,7 +15333,6 @@ msgid "Code"
 msgstr "Kód"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "A(z) {} mentése az Érték mezőbe \"{}\" értékként"
 
@@ -17229,7 +17236,8 @@ msgstr "Feloldatlan szöveges változó a rajzlapon"
 #: eeschema/erc/erc.cpp:461
 #, fuzzy, c-format
 msgid "Bus alias %s has conflicting definitions on %s and %s"
-msgstr "A(z) \"%s\" busz megnevezés több lapon is ellentmondóan van definiálva:"
+msgstr ""
+"A(z) \"%s\" busz megnevezés több lapon is ellentmondóan van definiálva:"
 
 #: eeschema/erc/erc.cpp:526
 #, c-format
@@ -18200,7 +18208,8 @@ msgstr "Váratlan kivétel történt."
 #: eeschema/libarch.cpp:101
 #, fuzzy, c-format
 msgid "Symbol %s not found in any library or cache."
-msgstr "A(z) %s rajzjel semelyik könyvtárban vagy gyorsítótárban sem található."
+msgstr ""
+"A(z) %s rajzjel semelyik könyvtárban vagy gyorsítótárban sem található."
 
 #: eeschema/libarch.cpp:117
 #, fuzzy, c-format
@@ -19253,8 +19262,8 @@ msgstr ""
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
-"Nem sikerült betölteni az adatbázis könyvtárat: nem sikerült csatlakozni a"
-"(z) %s adatbázishoz (%s)"
+"Nem sikerült betölteni az adatbázis könyvtárat: nem sikerült csatlakozni "
+"a(z) %s adatbázishoz (%s)"
 
 #: eeschema/sch_io/database/sch_io_database.h:51
 msgid "KiCad database library files"
@@ -19324,7 +19333,8 @@ msgstr "Nem találtunk érvényes kapcsolási rajz fájlt \"%s\"-ban"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:500
 #, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr "Hiba a(z) \"%s\" rajzjel \"%s\" könyvtárból történő betöltése során: %s"
+msgstr ""
+"Hiba a(z) \"%s\" rajzjel \"%s\" könyvtárból történő betöltése során: %s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:421
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:426
@@ -20370,8 +20380,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20422,9 +20432,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -20471,9 +20481,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -20494,8 +20504,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></samp>"
-"</td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
+"samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -20510,9 +20520,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Busz Definiciók</th>\n"
-"        <th>"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
-"th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Eredmény</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20563,9 +20572,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -21219,8 +21228,8 @@ msgstr "Hiba az ideiglenes kimeneti fájl létrehozása közben"
 
 #: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
 "A Kibis egyelőre nem támogatja a DUT értékeket. https://ibis.org/summits/"
 "nov16a/chen.pdf"
@@ -24408,7 +24417,8 @@ msgstr "\"%s\" busz megnevezés tagjai"
 #: eeschema/tools/sch_editor_control.cpp:1727 pcbnew/tools/pcb_control.cpp:1072
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr "Egy hosszú szöveg beillesztése nagyon lassú lehet.  Szeretné folytatni?"
+msgstr ""
+"Egy hosszú szöveg beillesztése nagyon lassú lehet.  Szeretné folytatni?"
 
 #: eeschema/tools/sch_editor_control.cpp:1849
 #, c-format
@@ -24484,7 +24494,8 @@ msgstr "Rajzjel-figyelmeztetések"
 
 #: eeschema/tools/sch_inspection_tool.cpp:358
 msgid "Select a symbol to diff against its library equivalent."
-msgstr "Válasszon rajzjelet a könyvtári megfelelőjével való összehasonlításhoz."
+msgstr ""
+"Válasszon rajzjelet a könyvtári megfelelőjével való összehasonlításhoz."
 
 #: eeschema/tools/sch_inspection_tool.cpp:379
 #, c-format
@@ -25678,7 +25689,7 @@ msgid "Clear Recent Job Files"
 msgstr "Legutóbbi feladatfájlok törlése"
 
 #: gerbview/gerbview_frame.cpp:90
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad Gerber Megjelenítő"
 
@@ -28302,7 +28313,8 @@ msgstr "A sablon elérési útvonal megnyitható!"
 #: kicad/project_template.cpp:57
 #, fuzzy
 msgid "Couldn't open the meta information directory for this template!"
-msgstr "Nem sikerült megnyitni a meta információs könyvtárat ehhez a sablonhoz!"
+msgstr ""
+"Nem sikerült megnyitni a meta információs könyvtárat ehhez a sablonhoz!"
 
 #: kicad/project_template.cpp:63
 #, fuzzy
@@ -31233,8 +31245,8 @@ msgstr ""
 "- A kívánt érték 0.0025 és 4000 kΩ közötti lehet.\n"
 "- legfeljebb 4 alkatrészből álló megoldásokat közöl.\n"
 "\n"
-"A kért ellenállás érték nem fog szerepelni a megoldásban alkatrészként. <br>"
-"\n"
+"A kért ellenállás érték nem fog szerepelni a megoldásban alkatrészként. "
+"<br>\n"
 "Ezen kívül két további értéket is kizárhatunk, beszerezhetőségi problémák "
 "esetén.\n"
 "\n"
@@ -31283,8 +31295,8 @@ msgstr ""
 "érvényesek.\n"
 "\n"
 "Az IPC 2221-ből származó képlet:\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "ahol:<br>\n"
 "___I___ a maximális áram A-ban<br>\n"
 "___&Delta;T___ a környezeti hőmérsékleten felüli emelkedés &deg;C-ban<br>\n"
@@ -32567,7 +32579,8 @@ msgstr "Alsó előtag:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:245
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:250
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr "Opcionális előtag a forrasztási oldali referencia jelölésekhez (pl. B_)"
+msgstr ""
+"Opcionális előtag a forrasztási oldali referencia jelölésekhez (pl. B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:254
 msgid "Remove front prefix"
@@ -33450,15 +33463,30 @@ msgstr "vízszintes darabszám"
 msgid "vertical count"
 msgstr "függőleges darabszám"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:425
+#: pcbnew/dialogs/dialog_create_array.cpp:422
+#, c-format
+msgid "horizontal delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:428
+#, c-format
+msgid "vertical delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:437
 msgid "stagger"
 msgstr "eltolás"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:481
+#: pcbnew/dialogs/dialog_create_array.cpp:493
 msgid "point count"
 msgstr "pontszám"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:528
+#: pcbnew/dialogs/dialog_create_array.cpp:500
+#, c-format
+msgid "angular delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:546
 msgid "Bad parameters"
 msgstr "Rossz paraméterek"
 
@@ -34938,7 +34966,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:135
 msgid "Use relative paths to model files in board VRML file"
-msgstr "Relatív elérési utak használata a modell fájlokhoz a panel VRML fájlban"
+msgstr ""
+"Relatív elérési utak használata a modell fájlokhoz a panel VRML fájlban"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:136
 msgid "Use paths for model files in board VRML file relative to the VRML file"
@@ -35442,7 +35471,8 @@ msgstr "Alkatrész típusa:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:236
 msgid "Leave values blank to use netclass values."
-msgstr "Hagyja üresen az értékeket a hálózati osztály értékeinek használatához."
+msgstr ""
+"Hagyja üresen az értékeket a hálózati osztály értékeinek használatához."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:248
 msgid ""
@@ -37462,7 +37492,8 @@ msgstr "Forrszem körvonalak a gyártási rétegeken"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:104
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr "Forrszem körvonalak hozzáadása az F.Fab és B.Fab rétegekhez rajzoláskor"
+msgstr ""
+"Forrszem körvonalak hozzáadása az F.Fab és B.Fab rétegekhez rajzoláskor"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:108
 msgid "Include pad numbers"
@@ -37669,8 +37700,8 @@ msgstr ""
 "kimenethez.\n"
 "Ez a szélesség-korrekció a vezetősáv szélességének, valamint a forrszem és "
 "via mérethibáinak kompenzálására szolgál.\n"
-"Az ésszerű szélesség-korrekció értéke [-(MinTrackWidth-1), +"
-"(MinClearanceValue-1)] tartományban kell lennie."
+"Az ésszerű szélesség-korrekció értéke [-(MinTrackWidth-1), "
+"+(MinClearanceValue-1)] tartományban kell lennie."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:318
 msgid "Force A4 output"
@@ -38516,7 +38547,8 @@ msgstr "Keret stílus:"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:547
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr "A módosítások alkalmazása rövidzárlatot okoz a %s és %s hálózat között."
+msgstr ""
+"A módosítások alkalmazása rövidzárlatot okoz a %s és %s hálózat között."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:553
 #, c-format
@@ -40034,9 +40066,9 @@ msgid ""
 msgstr ""
 "### Dokumentáció\n"
 "\n"
-"A teljes dokumentáció elérhető itt: [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules)."
+"A teljes dokumentáció elérhető itt: [https://docs.kicad.org](https://go."
+"kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -40078,8 +40110,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
@@ -40331,8 +40363,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -40487,13 +40519,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -43780,7 +43812,8 @@ msgstr "%s mezők frissítve."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:601
 #, c-format
 msgid "Removed %s footprint fields not in symbol."
-msgstr "%s lábkiosztás-mezők eltávolítva, amelyek nem szerepelnek a rajzjelben."
+msgstr ""
+"%s lábkiosztás-mezők eltávolítva, amelyek nem szerepelnek a rajzjelben."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:637
 #, c-format
@@ -43947,8 +43980,8 @@ msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
 msgstr ""
-"A(z) %s rajzjelnek vannak számozatlan lábai. Ezek a lábak nem párosíthatók a"
-"(z) %s lábkiosztás forrszemeihez."
+"A(z) %s rajzjelnek vannak számozatlan lábai. Ezek a lábak nem párosíthatók "
+"a(z) %s lábkiosztás forrszemeihez."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1259
 #, c-format
@@ -43963,8 +43996,8 @@ msgstr "\"%s:%s\" alkatrész feldolgozása."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Figyelmeztetés: A(z) %s '%s' lábkiosztásból hiányzik a könyvtár neve. Az "
 "ismétlődő frissítési értesítések elkerülése érdekében használja a teljes "
@@ -44064,7 +44097,8 @@ msgstr ""
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:242
 #, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr "Nem található rajzjel %s a lábkiosztás szűrő szakaszában a netlistában."
+msgstr ""
+"Nem található rajzjel %s a lábkiosztás szűrő szakaszában a netlistában."
 
 #: pcbnew/netlist_reader/netlist.cpp:65
 #, c-format
@@ -44858,7 +44892,8 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2548
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr "%d. típusú sokszög alakzat figyelmen kívül hagyva (még nem támogatott)."
+msgstr ""
+"%d. típusú sokszög alakzat figyelmen kívül hagyva (még nem támogatott)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2625
 #, c-format
@@ -44868,9 +44903,9 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "Könyvtár betöltése: \"%s\":\n"
-"A(z) %s lábkiosztásban szaggatott körvonal található az Altium rétegben (%d)"
-", amelynek nincs KiCad ekvivalense. Áthelyeztük az Eco1_Felhasználó KiCad "
-"rétegbe."
+"A(z) %s lábkiosztásban szaggatott körvonal található az Altium rétegben "
+"(%d), amelynek nincs KiCad ekvivalense. Áthelyeztük az Eco1_Felhasználó "
+"KiCad rétegbe."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2639
 #, c-format
@@ -44878,9 +44913,9 @@ msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"A(z) %s lábkiosztásban szaggatott körvonal található az Altium rétegben (%d)"
-", amelynek nincs KiCad ekvivalense. Áthelyeztük az Eco1_Felhasználó KiCad "
-"rétegbe."
+"A(z) %s lábkiosztásban szaggatott körvonal található az Altium rétegben "
+"(%d), amelynek nincs KiCad ekvivalense. Áthelyeztük az Eco1_Felhasználó "
+"KiCad rétegbe."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2682
 #, c-format
@@ -44976,7 +45011,8 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3478
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "A(z) %s lábkiosztás %s forrszeme ismeretlen típusú (%d) lyukat használ."
+msgstr ""
+"A(z) %s lábkiosztás %s forrszeme ismeretlen típusú (%d) lyukat használ."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3543
 #, fuzzy, c-format
@@ -46487,8 +46523,8 @@ msgstr ""
 #: pcbnew/pcb_io/pcb_io.cpp:186
 msgid "User name for <b>login</b> to some special library server."
 msgstr ""
-"Felhasználónév egy különleges könyvtár-kiszolgálóra való <b>"
-"bejelentkezéshez</b>."
+"Felhasználónév egy különleges könyvtár-kiszolgálóra való "
+"<b>bejelentkezéshez</b>."
 
 #: pcbnew/pcb_io/pcb_io.cpp:189
 msgid "Password for <b>login</b> to some special library server."
@@ -46832,7 +46868,8 @@ msgstr "Pozíció adatok kiírva ide: %s.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1738
 msgid "Footprint library path does not exist or is not accessible\n"
-msgstr "A lábkiosztás-könyvtár elérési útvonala nem létezik vagy nem elérhető\n"
+msgstr ""
+"A lábkiosztás-könyvtár elérési útvonala nem létezik vagy nem elérhető\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1778
 msgid "Unable to save library\n"
@@ -48068,7 +48105,8 @@ msgstr "Az elem a jelenlegi helyen engedélyezett."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1542
 msgid "Select a footprint to diff with its library equivalent."
-msgstr "Válasszon lábkiosztást a könyvtárbeli párjával való összehasonlításhoz."
+msgstr ""
+"Válasszon lábkiosztást a könyvtárbeli párjával való összehasonlításhoz."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1560
 msgid "Select a footprint for a footprint associations report."
@@ -48702,7 +48740,8 @@ msgstr ""
 #: pcbnew/tools/pad_tool.cpp:835
 #, c-format
 msgid "Pad Edit Mode.  Press %s to exit."
-msgstr "Forrszem szerkesztési mód.  A kilépéshez nyomja meg a(z) %s billentyűt."
+msgstr ""
+"Forrszem szerkesztési mód.  A kilépéshez nyomja meg a(z) %s billentyűt."
 
 #: pcbnew/tools/pcb_actions.cpp:54
 msgid "Create Polygon from Selection..."
@@ -49238,7 +49277,8 @@ msgstr "Vezetősáv és via tulajdonságok globális szerkesztése az egész pan
 
 #: pcbnew/tools/pcb_actions.cpp:834
 msgid "Edit Text and graphics properties globally across board"
-msgstr "Szöveg és grafikai tulajdonságok globális szerkesztése az egész panelen"
+msgstr ""
+"Szöveg és grafikai tulajdonságok globális szerkesztése az egész panelen"
 
 #: pcbnew/tools/pcb_actions.cpp:840
 msgid "Edit Teardrops..."
@@ -50012,7 +50052,8 @@ msgstr "Lábkiosztás-társítások megjelenítése"
 
 #: pcbnew/tools/pcb_actions.cpp:1873
 msgid "Show footprint library and schematic symbol associations"
-msgstr "Lábkiosztás-könyvtár és kapcsolásirajz-rajzjel társítások megjelenítése"
+msgstr ""
+"Lábkiosztás-könyvtár és kapcsolásirajz-rajzjel társítások megjelenítése"
 
 #: pcbnew/tools/pcb_actions.cpp:1880
 msgid "Geographical Reannotate..."
@@ -50214,7 +50255,8 @@ msgstr "Hálózat összes vezetősávjának kijelölés-törlése"
 
 #: pcbnew/tools/pcb_actions.cpp:2137
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "Törli az azonos hálózathoz tartozó összes vezetősáv és via kijelölését."
+msgstr ""
+"Törli az azonos hálózathoz tartozó összes vezetősáv és via kijelölését."
 
 #: pcbnew/tools/pcb_actions.cpp:2144
 msgid "Select All Unconnected Footprints"
@@ -50504,7 +50546,8 @@ msgstr "Vonszolás (tetszőleges szög)"
 #: pcbnew/tools/pcb_actions.cpp:2447
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
-msgstr "Vezetősáv legközelebbi töréspontjának vonszolása (tetszőleges szögben)."
+msgstr ""
+"Vezetősáv legközelebbi töréspontjának vonszolása (tetszőleges szögben)."
 
 #: pcbnew/tools/pcb_actions.cpp:2457
 msgid "Update All Tuning Patterns"
@@ -52011,102 +52054,94 @@ msgstr "hőkönnyítések PTH-hoz"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] a betöltés sikertelen: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Konverter;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "Bitmap–alkatrész konverter"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Alkatrész létrehozása bitmapból KiCad-hez való használatra"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad Kapcsolási rajz szerkesztő (Önálló)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "Kapcsolási rajz rögzítő eszköz"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Önálló kapcsolási rajz szerkesztő KiCad kapcsolási rajzokhoz"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "Gerber fájl megjelenítő"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "Gerber fájlok megtekintése"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "Projektmenedzser;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "EDA csomag"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
 "Eszközkészlet kapcsolási rajz tervezéséhez és áramköri lap elrendezéséhez"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "KiCad PCB Kalkulátor"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "PCB;Kalkulátor;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "PCB Kalkulátor"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr "Számológép különféle, elektronikával kapcsolatos számításokhoz"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Kapcsolás;Elrendezés;Tervezés;Szerkesztő;Lábkiosztás;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad NYÁK tervező (Önálló)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "PCB elrendezési szerkesztő"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Önálló áramköri lap szerkesztő KiCad panelekhez"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "EDA csomag kapcsolási rajz és áramköri lap tervezéséhez"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-msgid "Circuit board"
-msgstr "Áramköri lap"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -52165,6 +52200,12 @@ msgstr "KiCad kapcsolási rajzjel"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Rajzlap"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Áramköri lap"
 
 #~ msgid "Command"
 #~ msgstr "Parancs"
@@ -56324,8 +56365,8 @@ msgstr "KiCad Rajzlap"
 #~ "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() "
 #~ "functions."
 #~ msgstr ""
-#~ "Adja meg azt a Python szimbólumot, amely implementálja a "
-#~ "SCH_PLUGIN::Symbol*() függvényeket."
+#~ "Adja meg azt a Python szimbólumot, amely implementálja a SCH_PLUGIN::"
+#~ "Symbol*() függvényeket."
 
 #, fuzzy
 #~ msgid "Gerber (experimental)"
@@ -62042,15 +62083,15 @@ msgstr "KiCad Rajzlap"
 #~ msgid ""
 #~ "DXF only:\n"
 #~ "Check to plot all layers in polygon mode.\n"
-#~ "Uncheck to plot in sketch mode layers that don't support polygons "
-#~ "(*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
+#~ "Uncheck to plot in sketch mode layers that don't support polygons (*."
+#~ "SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
 #~ "and plot in polygon mode other layers (*.Cu, *.Adhes, *.Paste, *.Mask)"
 #~ msgstr ""
 #~ "Csak DXF:\n"
 #~ "Jelölje be, ha az összes réteget körvonal (sokszög) módban kívánja "
 #~ "plottolni.\n"
-#~ "Ne jelölje be, ha körvonal (sokszög) módot nem támogató rétegeket "
-#~ "(*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
+#~ "Ne jelölje be, ha körvonal (sokszög) módot nem támogató rétegeket (*."
+#~ "SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
 #~ "vázlat módban, a töbi réteget (*.Cu, *.Adhes, *.Paste, *.Mask) viszont "
 #~ "körvonal (sokszög) módban szeretné plottolni."
 

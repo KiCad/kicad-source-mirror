@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 11:18-0700\n"
+"POT-Creation-Date: 2026-04-17 15:22+0300\n"
 "PO-Revision-Date: 2026-03-19 17:34+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
@@ -1468,7 +1468,7 @@ msgid "Image Converter"
 msgstr "Bildekonverterer"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "KiCad bildekonverterer"
 
@@ -2082,7 +2082,7 @@ msgstr "Laster inn Gerber-filer ..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2928,14 +2928,12 @@ msgstr "Prosjektnavn"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1638
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "Skjematisk"
 
@@ -4216,7 +4214,8 @@ msgstr "Vis rullefelt i redigeringsprogram"
 
 #: common/dialogs/panel_common_settings_base.cpp:160
 msgid "This change takes effect when relaunching the editor."
-msgstr "Denne endringen trer i kraft når redigeringsprogrammet startes på nytt."
+msgstr ""
+"Denne endringen trer i kraft når redigeringsprogrammet startes på nytt."
 
 #: common/dialogs/panel_common_settings_base.cpp:164
 msgid "Focus follows mouse between schematic and PCB editors"
@@ -8420,10 +8419,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Manglende enheter for '%s' | (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1174
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Typefeil mellom '%s' og %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1180
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Typefeil mellom %lf og '%s'"
 
@@ -10814,7 +10815,8 @@ msgstr "Komponent '%s' fotavtrykk '%s' <b>ikke funnet</b> i noe bibliotek.\n"
 #: cvpcb/readwrite_dlgs.cpp:157
 #, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
-msgstr "Komponent '%s' fotavtrykk '%s' ble funnet i <b>flere</b> biblioteker.\n"
+msgstr ""
+"Komponent '%s' fotavtrykk '%s' ble funnet i <b>flere</b> biblioteker.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:170
 msgid "First check your footprint library table entries."
@@ -11015,7 +11017,7 @@ msgstr ""
 "%s\n"
 "ikke funnet. Skript ikke tilgjengelig."
 
-#: eeschema/connection_graph.cpp:3409
+#: eeschema/connection_graph.cpp:3412
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -11023,33 +11025,33 @@ msgstr ""
 "Både %s og %s er festet til de samme elementene; %s vil bli brukt i "
 "nettlisten"
 
-#: eeschema/connection_graph.cpp:3647
+#: eeschema/connection_graph.cpp:3650
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "Net %s er grafisk koblet til buss %s, men er ikke medlem av den bussen"
 
-#: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3955 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "Ikke-tilkoblet ledningsendepunkt"
 
-#: eeschema/connection_graph.cpp:3977
+#: eeschema/connection_graph.cpp:3980
 msgid "Unconnected wire to bus entry"
 msgstr "Ikke-tilkoblet ledning til bussinngang"
 
-#: eeschema/connection_graph.cpp:4310
+#: eeschema/connection_graph.cpp:4313
 #, fuzzy, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr "Arkport %s har ingen samsvarende hierarkisk etikett inne i arket"
 
-#: eeschema/connection_graph.cpp:4375
+#: eeschema/connection_graph.cpp:4378
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Arkpinne %s har ingen samsvarende hierarkisk etikett inne i arket"
 
-#: eeschema/connection_graph.cpp:4392
+#: eeschema/connection_graph.cpp:4395
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -11392,7 +11394,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom_base.cpp:115
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "Tilbakestill listen over BOM-generatorskript til standardinnstillingene"
+msgstr ""
+"Tilbakestill listen over BOM-generatorskript til standardinnstillingene"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Materials"
@@ -11466,8 +11469,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -15214,7 +15217,6 @@ msgid "Code"
 msgstr "Kode"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Lagre {} i verdifelt som \"{}\""
 
@@ -15329,8 +15331,8 @@ msgid ""
 "Cannot make path relative (target volume different from schematic file "
 "volume)!"
 msgstr ""
-"Kan ikke gjøre banen relativ (målvolum er forskjellig fra skjemafilens volum)"
-"!"
+"Kan ikke gjøre banen relativ (målvolum er forskjellig fra skjemafilens "
+"volum)!"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1360
 msgid "Unsaved data"
@@ -20220,8 +20222,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20272,9 +20274,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -20347,8 +20349,8 @@ msgstr ""
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp>${refdes:field}</samp> </td>\n"
 "        <td> </td>\n"
-"        <td> & nbsp; <br> <samp> <i> feltverdi </i> av symbolet <i>refdes</i>"
-"</samp> </td>\n"
+"        <td> & nbsp; <br> <samp> <i> feltverdi </i> av symbolet <i>refdes</"
+"i></samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp>${R3:VALUE}</samp> </td>\n"
@@ -20375,8 +20377,8 @@ msgstr ""
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp>D [0..7 ]</samp> </td>\n"
 "        <td> </td>\n"
-"        <td> & nbsp; <br> <samp> D0, D1, D2, D3, D4, D5, D6, D7 </samp> </td>"
-"\n"
+"        <td> & nbsp; <br> <samp> D0, D1, D2, D3, D4, D5, D6, D7 </samp> </"
+"td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td> <br> </td>\n"
@@ -20397,8 +20399,8 @@ msgstr ""
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp> prefiks {net1 net2 ...} </samp> </td>\n"
 "        <td> </td>\n"
-"        <td> & nbsp; <br> <samp> prefiks.net1, prefix.net2, ... </samp> </td>"
-"\n"
+"        <td> & nbsp; <br> <samp> prefiks.net1, prefix.net2, ... </samp> </"
+"td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td> & nbsp; <br> <samp> USB1 {DP DM} </samp> </td>\n"
@@ -21072,8 +21074,8 @@ msgstr "Feil ved opprettelse av midlertidig utdatafil"
 
 #: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
 "Kibis støtter ikke DUT-verdier ennå. https://ibis.org/summits/nov16a/chen.pdf"
 
@@ -22018,7 +22020,8 @@ msgstr "Administrer symbolbiblioteker"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:924
 #, c-format
 msgid "Symbol %s is a derived symbol. Symbol graphics will not be editable."
-msgstr "Symbol %s er et avledet symbol. Symbolgrafikk vil ikke kunne redigeres."
+msgstr ""
+"Symbol %s er et avledet symbol. Symbolgrafikk vil ikke kunne redigeres."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:953
 msgid "Library is read-only.  Changes cannot be saved to this library."
@@ -24233,7 +24236,8 @@ msgstr "Nett må merkes for å tilordne en nettklasse."
 #: eeschema/tools/sch_editor_control.cpp:1727 pcbnew/tools/pcb_control.cpp:1072
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr "Innliming av en lang tekststreng kan være svært treg. Vil du fortsette?"
+msgstr ""
+"Innliming av en lang tekststreng kan være svært treg. Vil du fortsette?"
 
 #: eeschema/tools/sch_editor_control.cpp:1849
 #, c-format
@@ -25499,7 +25503,7 @@ msgid "Clear Recent Job Files"
 msgstr "Fjern siste jobbfiler"
 
 #: gerbview/gerbview_frame.cpp:90
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad Gerber-viser"
 
@@ -26286,7 +26290,8 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_3d.cpp:182
 msgid "Do not optimize STEP file (enables writing parametric curves)"
-msgstr "Ikke optimaliser STEP-filen (aktiverer skriving av parametriske kurver)"
+msgstr ""
+"Ikke optimaliser STEP-filen (aktiverer skriving av parametriske kurver)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:189
 msgid ""
@@ -26322,8 +26327,8 @@ msgstr "Ugyldig format angitt\n"
 msgid ""
 "Comma separated list of untranslated layer names to include such as F.Cu,B.Cu"
 msgstr ""
-"Kommaseparert liste over uoversatte lagnavn som skal inkluderes, slik som "
-"F.Cu,B.Cu"
+"Kommaseparert liste over uoversatte lagnavn som skal inkluderes, slik som F."
+"Cu,B.Cu"
 
 #: kicad/cli/command_pcb_export_base.cpp:48
 msgid ""
@@ -27633,7 +27638,8 @@ msgstr "Fargetemaer (%d)"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:83
 #, c-format
 msgid "Are you sure you want to update pinned package from version %s to %s?"
-msgstr "Er du sikker på at du vil oppdatere festet pakke fra versjon %s til %s?"
+msgstr ""
+"Er du sikker på at du vil oppdatere festet pakke fra versjon %s til %s?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:86
 msgid "Confirm update"
@@ -29902,8 +29908,8 @@ msgstr ""
 "* B1 - Interne ledere\n"
 "* B2 - Eksterne ledere, ubelagt, havnivå til 3050 m\n"
 "* B3 - Eksterne ledere, ubelagte, over 3050 m\n"
-"* B4 - eksterne ledere, med permanent polymerbelegg (hvilken som helst høyde)"
-"\n"
+"* B4 - eksterne ledere, med permanent polymerbelegg (hvilken som helst "
+"høyde)\n"
 "* A5 - Eksterne ledere, med konform belegg over montering (hvilken som helst "
 "høyde)\n"
 "* A6 - Ledning / avslutning av ekstern komponent, uten belegg\n"
@@ -31065,8 +31071,8 @@ msgstr ""
 "mm).\n"
 "\n"
 "Formelen, fra IPC 2221, er\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "hvor:<br>\n"
 "___I___ er maksimal strøm i A<br>\n"
 "___&Delta;T___ er temperaturøkning over omgivelsene i &deg;C<br>\n"
@@ -33241,15 +33247,30 @@ msgstr "horisontal telling"
 msgid "vertical count"
 msgstr "vertikal telling"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:425
+#: pcbnew/dialogs/dialog_create_array.cpp:422
+#, c-format
+msgid "horizontal delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:428
+#, c-format
+msgid "vertical delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:437
 msgid "stagger"
 msgstr "vakle"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:481
+#: pcbnew/dialogs/dialog_create_array.cpp:493
 msgid "point count"
 msgstr "poengtelling"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:528
+#: pcbnew/dialogs/dialog_create_array.cpp:500
+#, c-format
+msgid "angular delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:546
 msgid "Bad parameters"
 msgstr "Feil parametere!"
 
@@ -35160,8 +35181,8 @@ msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
-"Bibliotekets ID og fotavtrykk-ID som for øyeblikket er tilordnet. Bruk «"
-"Endre fotavtrykk...» for å tilordne et annet fotavtrykk."
+"Bibliotekets ID og fotavtrykk-ID som for øyeblikket er tilordnet. Bruk "
+"«Endre fotavtrykk...» for å tilordne et annet fotavtrykk."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:124
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:116
@@ -36486,7 +36507,8 @@ msgstr "Kopier andre elementer"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:84
 msgid "Copy text, shapes, zones, and other items inside the source rule area"
-msgstr "Kopier tekst, former, soner og andre elementer inne i kilderegelområdet"
+msgstr ""
+"Kopier tekst, former, soner og andre elementer inne i kilderegelområdet"
 
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:88
 #, fuzzy
@@ -37044,7 +37066,8 @@ msgstr ""
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
-msgstr "Negativ klaring betyr areal mindre enn puten (vanlig for limklarering)."
+msgstr ""
+"Negativ klaring betyr areal mindre enn puten (vanlig for limklarering)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:970
 msgid ""
@@ -37419,8 +37442,8 @@ msgstr ""
 "Angi global bredde korreksjon for nøyaktig bredde PostScript utdata.\n"
 "Denne korreksjonen for bredden er ment å kompensere sporbredden og også feil "
 "på pads og vias-størrelser.\n"
-"Den rimelige bredde-korreksjonsverdien må være i området [- (MinTrackWidth-1)"
-", + (MinClearanceValue-1)]."
+"Den rimelige bredde-korreksjonsverdien må være i området [- "
+"(MinTrackWidth-1), + (MinClearanceValue-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:318
 msgid "Force A4 output"
@@ -39756,9 +39779,9 @@ msgid ""
 msgstr ""
 "### Dokumentasjon\n"
 "\n"
-"For den fullstendige dokumentasjonen, se [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules)."
+"For den fullstendige dokumentasjonen, se [https://docs.kicad.org](https://go."
+"kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -39821,8 +39844,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
@@ -40122,8 +40145,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -40131,8 +40154,8 @@ msgstr ""
 "\n"
 "Mange egenskaper for objekter er tilgjengelige for testing i egendefinerte "
 "regeluttrykk. Se den fullstendige dokumentasjonen på [https://docs.kicad.org]"
-"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for den fullstendige listen.\n"
+"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for den fullstendige listen.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -40286,13 +40309,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -43718,8 +43741,8 @@ msgstr "Behandler symbol '%s:%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Advarsel: %s fotavtrykk '%s' mangler biblioteknavn. Bruk det fullstendige "
 "formatet 'Bibliotek:Fotavtrykk' for å unngå gjentatte oppdateringsvarsler."
@@ -44449,8 +44472,8 @@ msgid ""
 "Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
 msgstr ""
 "Denne filen ser ikke ut til å være i et gyldig PCB Binary Version 6.0-"
-"format. I Altium Designer, sørg for å lagre som \"PCB Binary Files (*.PcbDoc)"
-"\"."
+"format. I Altium Designer, sørg for å lagre som \"PCB Binary Files (*."
+"PcbDoc)\"."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:559
 #, c-format
@@ -44790,19 +44813,22 @@ msgstr "Laster tekst..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4279
 #, fuzzy, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
-msgstr "Ignorer strekkode på Altium-laget %d fordi det ikke støttes akkurat nå."
+msgstr ""
+"Ignorer strekkode på Altium-laget %d fordi det ikke støttes akkurat nå."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4301
 #, fuzzy, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr "Ignorer strekkode på Altium-laget %d fordi det ikke støttes akkurat nå."
+msgstr ""
+"Ignorer strekkode på Altium-laget %d fordi det ikke støttes akkurat nå."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4314
 #, fuzzy, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr "Ignorer strekkode på Altium-laget %d fordi det ikke støttes akkurat nå."
+msgstr ""
+"Ignorer strekkode på Altium-laget %d fordi det ikke støttes akkurat nå."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4514
 #, c-format
@@ -45100,8 +45126,8 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
-"CADSTAR-malen «%s» har en verdi som ikke er null definert for innstillingen «"
-"Sliver Width». Det er ingen KiCad-ekvivalent for dette, så denne "
+"CADSTAR-malen «%s» har en verdi som ikke er null definert for innstillingen "
+"«Sliver Width». Det er ingen KiCad-ekvivalent for dette, så denne "
 "innstillingen ble ignorert."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1990
@@ -45112,10 +45138,10 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR-malen '%s' har forskjellige innstillinger for 'Behold Poured "
-"Copper - Disjoint' og 'Behold Poured Copper - Isolated'. KiCad skiller ikke "
-"mellom disse to innstillingene. Innstillingen for løs kobber er brukt som "
-"det minste øyområdet i KiCad Zone."
+"CADSTAR-malen '%s' har forskjellige innstillinger for 'Behold Poured Copper "
+"- Disjoint' og 'Behold Poured Copper - Isolated'. KiCad skiller ikke mellom "
+"disse to innstillingene. Innstillingen for løs kobber er brukt som det "
+"minste øyområdet i KiCad Zone."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2041
 #, c-format
@@ -45138,8 +45164,8 @@ msgid ""
 "will be applied next time the zones are filled."
 msgstr ""
 "CADSTAR-malen '%s' har termiske avlastninger i det opprinnelige designet, "
-"men eikbredden (%.2f mm) er tynnere enn minimumstykkelsen for sonen (%.2f mm)"
-". KiCad krever at minimumstykkelsen for sonen bevares. Derfor har "
+"men eikbredden (%.2f mm) er tynnere enn minimumstykkelsen for sonen (%.2f "
+"mm). KiCad krever at minimumstykkelsen for sonen bevares. Derfor har "
 "minimumstykkelsen blitt brukt som ny eikbredde og vil bli anvendt neste gang "
 "sonene fylles."
 
@@ -45428,7 +45454,8 @@ msgstr "Ukjent FABMASTER-seksjon %s:%s i rad %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:286
 #, c-format
 msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
-msgstr "Ugyldig radstørrelse i J-rad %zu. Forventet 11 elementer, men fant %zu."
+msgstr ""
+"Ugyldig radstørrelse i J-rad %zu. Forventet 11 elementer, men fant %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:309
 msgid "Could not find units value, defaulting to mils."
@@ -45522,7 +45549,8 @@ msgstr "Ugyldig format for record_tag-streng '%s' i rad %zu."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1724
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu."
-msgstr "Ugyldig radstørrelse i rad %zu.  Forventet %zu elementer, men fant %zu."
+msgstr ""
+"Ugyldig radstørrelse i rad %zu.  Forventet %zu elementer, men fant %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1763
 #, c-format
@@ -46144,8 +46172,8 @@ msgid ""
 msgstr ""
 "Den valgte filen inneholder flere fotavtrykk. Kun det første vil bli "
 "importert.\n"
-"For å laste alle fotavtrykk, legg den til som et bibliotek via "
-"Innstillinger -> Administrer fotavtrykksbiblioteker..."
+"For å laste alle fotavtrykk, legg den til som et bibliotek via Innstillinger "
+"-> Administrer fotavtrykksbiblioteker..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -46175,7 +46203,8 @@ msgstr "Passord for <b> pålogging </b> til en spesiell bibliotektjener."
 #: pcbnew/pcb_io/pcb_io.cpp:196
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
-msgstr "Angi python-modulen som implementerer PCB_IO::Footprint*()-funksjonene."
+msgstr ""
+"Angi python-modulen som implementerer PCB_IO::Footprint*()-funksjonene."
 
 #: pcbnew/pcb_layer_box_selector.cpp:74
 msgid "(not activated)"
@@ -46502,7 +46531,8 @@ msgstr "Skrev posisjonsdata til '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1738
 msgid "Footprint library path does not exist or is not accessible\n"
-msgstr "Fotavtrykksbiblioteksstien eksisterer ikke eller er ikke tilgjengelig\n"
+msgstr ""
+"Fotavtrykksbiblioteksstien eksisterer ikke eller er ikke tilgjengelig\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1778
 msgid "Unable to save library\n"
@@ -49279,7 +49309,8 @@ msgstr "Vis nett i rottenettet"
 
 #: pcbnew/tools/pcb_actions.cpp:1297
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
-msgstr "Vis det valgte nettet i rottenettet av ikke-tilkoblede nettlinjer/-buer"
+msgstr ""
+"Vis det valgte nettet i rottenettet av ikke-tilkoblede nettlinjer/-buer"
 
 #: pcbnew/tools/pcb_actions.cpp:1304
 msgid "Switch to Schematic Editor"
@@ -49332,7 +49363,8 @@ msgstr "Vis Ratsnest"
 
 #: pcbnew/tools/pcb_actions.cpp:1368
 msgid "Show lines/arcs representing missing connections on the board"
-msgstr "Vis linjer/buer som representerer manglende tilkoblinger på kretskortet"
+msgstr ""
+"Vis linjer/buer som representerer manglende tilkoblinger på kretskortet"
 
 #: pcbnew/tools/pcb_actions.cpp:1374
 msgid "Curved Ratsnest Lines"
@@ -49345,7 +49377,8 @@ msgstr "Rottenettmodus (3-tilstand)"
 #: pcbnew/tools/pcb_actions.cpp:1382
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
-msgstr "Veksle mellom å vise rottenett for alle lag, bare synlige lag, og ingen"
+msgstr ""
+"Veksle mellom å vise rottenett for alle lag, bare synlige lag, og ingen"
 
 #: pcbnew/tools/pcb_actions.cpp:1387
 msgid "Net Color Mode (3-state)"
@@ -49618,7 +49651,8 @@ msgstr "Klaringsberegning"
 #: pcbnew/tools/pcb_actions.cpp:1852
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
-msgstr "Vis klareringsoppløsning for det aktive laget mellom to valgte objekter"
+msgstr ""
+"Vis klareringsoppløsning for det aktive laget mellom to valgte objekter"
 
 #: pcbnew/tools/pcb_actions.cpp:1858
 msgid "Constraints Resolution"
@@ -51624,101 +51658,93 @@ msgstr "termiske avlastninger for PTH"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] lasting mislyktes: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Konverterer;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "Bitmap to Component Converter"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Opprett en komponent fra et bitmap for bruk med KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad skjemaredaktor (frittstaaende)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "Verktoy for skjemategning"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Frittstaaende skjemaredaktor for KiCad-skjemaer"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "Gerber-filviser"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "Vis Gerber-filer"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "Prosjektstyring;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "EDA-pakke"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Verktoysamling for skjemadesign og kretskortlayout"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "KiCad kretskort-kalkulator"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "PCB;Kalkulator;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "PCB-kalkulator"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr "Kalkulator for diverse elektronikkrelaterte beregninger"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Krets;Layout;Design;Redaktor;Fotavtrykk;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad kretskortredaktor (frittstaaende)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "Kretskortlayoutredaktor"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Frittstaaende kretskortredaktor for KiCad-kretskort"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "En EDA-pakke for skjema- og kretskortdesign"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-msgid "Circuit board"
-msgstr "Kretskort"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -51775,6 +51801,12 @@ msgstr "KiCad-skjemasymbol"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad-tegningsark"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Kretskort"
 
 #~ msgid "Command"
 #~ msgstr "Kommando"
@@ -55469,8 +55501,8 @@ msgstr "KiCad-tegningsark"
 #~ "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() "
 #~ "functions."
 #~ msgstr ""
-#~ "Skriv inn pythonsymbolet som implementerer SCH_PLUGIN :: Symbol * () "
-#~ "-funksjonene."
+#~ "Skriv inn pythonsymbolet som implementerer SCH_PLUGIN :: Symbol * () -"
+#~ "funksjonene."
 
 #, fuzzy
 #~ msgid "Gerber (experimental)"
@@ -56102,8 +56134,8 @@ msgstr "KiCad-tegningsark"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -56212,15 +56244,15 @@ msgstr "KiCad-tegningsark"
 #~ "På Windows er kommandolinjen følgende.\n"
 #~ "\n"
 #~ "``\n"
-#~ "f: /kicad/bin/xsltproc.exe -o \"% O\" f: /kicad/bin/plugins/"
-#~ "myconverter.xsl \"% I\"\n"
+#~ "f: /kicad/bin/xsltproc.exe -o \"% O\" f: /kicad/bin/plugins/myconverter."
+#~ "xsl \"% I\"\n"
 #~ "``\n"
 #~ "\n"
 #~ "På Linux blir kommandoen som følger.\n"
 #~ "\n"
 #~ "``\n"
-#~ "xsltproc -o \"% O\" / usr / local / kicad / bin / plugins / "
-#~ "myconverter .xsl \"% I\"\n"
+#~ "xsltproc -o \"% O\" / usr / local / kicad / bin / plugins / myconverter ."
+#~ "xsl \"% I\"\n"
 #~ "``\n"
 #~ "der `myconverter.xsl` er stilarket du bruker.\n"
 #~ "\n"

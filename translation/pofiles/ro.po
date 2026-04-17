@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 11:18-0700\n"
+"POT-Creation-Date: 2026-04-17 15:22+0300\n"
 "PO-Revision-Date: 2026-03-19 17:29+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v9/ro/>\n"
@@ -1478,7 +1478,7 @@ msgid "Image Converter"
 msgstr "Convertor de imagini"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "Convertor de imagini KiCad"
 
@@ -2098,7 +2098,7 @@ msgstr "Se încarcă fișierele Gerber..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2952,14 +2952,12 @@ msgstr "Numele proiectului"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1638
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "Schemă"
 
@@ -3387,7 +3385,8 @@ msgstr "Alocați indicativ de referință unici simbolurilor lipite"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr "Păstrați indicativele de referință existente, chiar dacă sunt duplicate"
+msgstr ""
+"Păstrați indicativele de referință existente, chiar dacă sunt duplicate"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
@@ -4437,7 +4436,8 @@ msgstr "Sesiune"
 
 #: common/dialogs/panel_common_settings_base.cpp:322
 msgid "Remember open files for next project launch"
-msgstr "Țineți minte fișierele deschise pentru următoarea lansare a proiectului"
+msgstr ""
+"Țineți minte fișierele deschise pentru următoarea lansare a proiectului"
 
 #: common/dialogs/panel_common_settings_base.cpp:324
 msgid ""
@@ -5397,7 +5397,8 @@ msgstr "Gestionare pachete bibliotecă"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:70
 msgid "Automatically add installed libraries to global library table"
-msgstr "Adăugați automat bibliotecile instalate în tabelul global de biblioteci"
+msgstr ""
+"Adăugați automat bibliotecile instalate în tabelul global de biblioteci"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:74
 msgid "Automatically remove uninstalled libraries"
@@ -6881,14 +6882,14 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Calea de bază a bibliotecilor de amprente de sistem instalate local (dosare "
-".pretty)."
+"Calea de bază a bibliotecilor de amprente de sistem instalate local (dosare ."
+"pretty)."
 
 #: common/env_vars.cpp:105
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
 msgstr ""
-"Calea de bază a modelelor 3D asociate amprentelor sistemului (folderele "
-".3Dshapes)."
+"Calea de bază a modelelor 3D asociate amprentelor sistemului "
+"(folderele .3Dshapes)."
 
 #: common/env_vars.cpp:107
 msgid "The base path of the locally installed symbol libraries."
@@ -6926,9 +6927,9 @@ msgstr ""
 "Definit intern de KiCad (nu poate fi editat) și este setat la calea absolută "
 "a fișierului de proiect încărcat în prezent.  Această variabilă de mediu "
 "poate fi utilizată pentru a defini fișiere și căi de acces relative la "
-"proiectul încărcat în mod curent.  De exemplu, ${KIPRJMOD}/libs/"
-"footprints.pretty poate fi definit ca un dosar care conține o bibliotecă de "
-"amprente specifică proiectului numită footprints.pretty."
+"proiectul încărcat în mod curent.  De exemplu, ${KIPRJMOD}/libs/footprints."
+"pretty poate fi definit ca un dosar care conține o bibliotecă de amprente "
+"specifică proiectului numită footprints.pretty."
 
 #: common/env_vars.cpp:123
 msgid "A directory containing system-wide scripts installed with KiCad"
@@ -8474,10 +8475,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unități lipsă pentru \"%s\"| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1174
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Nepotrivire de tip între \"%s\" și %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1180
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Nepotrivire de tip între %lf și \"%s\""
 
@@ -9076,7 +9079,8 @@ msgstr "Selectare coloană(e)"
 
 #: common/tool/actions.cpp:377
 msgid "Select complete column(s) containing the current selected cell(s)"
-msgstr "Selectați coloana(ele) completă(e) care conțin celula(ele) selectată(e)"
+msgstr ""
+"Selectați coloana(ele) completă(e) care conțin celula(ele) selectată(e)"
 
 #: common/tool/actions.cpp:383
 msgid "Select Row(s)"
@@ -9084,7 +9088,8 @@ msgstr "Selectare rând(uri)"
 
 #: common/tool/actions.cpp:384
 msgid "Select complete row(s) containing the current selected cell(s)"
-msgstr "Selectați rândul(urile) complet(e) care conțin celula(ele) selectată(e)"
+msgstr ""
+"Selectați rândul(urile) complet(e) care conțin celula(ele) selectată(e)"
 
 #: common/tool/actions.cpp:390
 msgid "Select Table"
@@ -11077,7 +11082,7 @@ msgstr ""
 "%s\n"
 "nu a fost găsit. Scriptul nu este disponibil."
 
-#: eeschema/connection_graph.cpp:3409
+#: eeschema/connection_graph.cpp:3412
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -11085,7 +11090,7 @@ msgstr ""
 "Atât %s, cât și %s sunt atașate la aceleași elemente; %s va fi folosit în "
 "netlist"
 
-#: eeschema/connection_graph.cpp:3647
+#: eeschema/connection_graph.cpp:3650
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -11093,15 +11098,15 @@ msgstr ""
 "Rețeaua %s este conectată grafic la magistrală %s, dar nu este membră a "
 "acestei magistrale"
 
-#: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3955 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "Punct final al firului neconectat"
 
-#: eeschema/connection_graph.cpp:3977
+#: eeschema/connection_graph.cpp:3980
 msgid "Unconnected wire to bus entry"
 msgstr "Fir neconectat la intrarea de magistrală"
 
-#: eeschema/connection_graph.cpp:4310
+#: eeschema/connection_graph.cpp:4313
 #, fuzzy, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
@@ -11109,14 +11114,14 @@ msgid ""
 msgstr ""
 "Eticheta ierarhică %s nu are niciun pin de foaie corespondent în foaia mamă"
 
-#: eeschema/connection_graph.cpp:4375
+#: eeschema/connection_graph.cpp:4378
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Fișa pin %s nu are nicio etichetă ierarhică corespunzătoare în interiorul "
 "fișei"
 
-#: eeschema/connection_graph.cpp:4392
+#: eeschema/connection_graph.cpp:4395
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -11539,8 +11544,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -11687,7 +11692,8 @@ msgstr "Actualizarea simbolurilor care corespund valorii:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:46
 msgid "Update symbols matching library identifier:"
-msgstr "Actualizarea simbolurilor care corespund identificatorului bibliotecii:"
+msgstr ""
+"Actualizarea simbolurilor care corespund identificatorului bibliotecii:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:79
 msgid "New library identifier:"
@@ -12269,8 +12275,8 @@ msgstr "Salvați toate disipările de putere"
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
-"Scrie directive pentru a salva disiparea de putere a tuturor elementelor "
-"(.probe p(<element>))"
+"Scrie directive pentru a salva disiparea de putere a tuturor elementelor (."
+"probe p(<element>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:387
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
@@ -15303,7 +15309,6 @@ msgid "Code"
 msgstr "Cod"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Salvați {} în câmpul Valoare ca \"{}\""
 
@@ -15814,7 +15819,8 @@ msgstr "Nu s-a putut crea backup folder '%s'.\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:530
 msgid "Some of the project files could not be backed up."
-msgstr "Unele dintre fișierele proiectului nu au putut fi copiate de siguranță."
+msgstr ""
+"Unele dintre fișierele proiectului nu au putut fi copiate de siguranță."
 
 #: eeschema/dialogs/dialog_symbol_remap_base.cpp:30
 #: eeschema/dialogs/dialog_symbol_remap_base.h:54
@@ -17274,7 +17280,8 @@ msgstr "Pinul %s este conectat atât la %s, cât și la %s"
 #: eeschema/erc/erc.cpp:1300
 #, c-format
 msgid "Pin %s on symbol '%s' is connected to different nets: %s and %s"
-msgstr "Pinul %s de pe simbolul '%s' este conectat la rețele diferite: %s și %s"
+msgstr ""
+"Pinul %s de pe simbolul '%s' este conectat la rețele diferite: %s și %s"
 
 #: eeschema/erc/erc.cpp:1524
 #, c-format
@@ -18169,7 +18176,8 @@ msgstr "Excluderea din setările plăcii diferă."
 #: eeschema/libarch.cpp:77
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'."
-msgstr "Nu s-a reușit adăugarea simbolului %s la fișierul de bibliotecă \"%s\"."
+msgstr ""
+"Nu s-a reușit adăugarea simbolului %s la fișierul de bibliotecă \"%s\"."
 
 #: eeschema/libarch.cpp:86
 #, fuzzy
@@ -18198,7 +18206,8 @@ msgstr "Schematică non-KiCad..."
 #: eeschema/menubar.cpp:104
 msgid ""
 "Replace current schematic sheet with one imported from another application"
-msgstr "Înlocuiește foaia de schemă curentă cu una importată din altă aplicație"
+msgstr ""
+"Înlocuiește foaia de schemă curentă cu una importată din altă aplicație"
 
 #: eeschema/menubar.cpp:108
 msgid "Footprint Assignments..."
@@ -18366,8 +18375,8 @@ msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
 msgstr ""
-"Eroare la analiza modelului '%s', număr greșit de noduri '?' în "
-"Sim.NodesFormat comparativ cu conexiunile"
+"Eroare la analiza modelului '%s', număr greșit de noduri '?' în Sim."
+"NodesFormat comparativ cu conexiunile"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:580
 #, c-format
@@ -18868,7 +18877,8 @@ msgstr "Blanket neacceptat momentan."
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4977
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr "Identificator de înregistrare necunoscut sau neașteptat %d găsit în %s."
+msgstr ""
+"Identificator de înregistrare necunoscut sau neașteptat %d găsit în %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1607
 #, c-format
@@ -20326,8 +20336,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20378,9 +20388,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -20427,9 +20437,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -20450,8 +20460,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:câmp}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> <i>de refdes</i> simbol</samp>"
-"</td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> <i>de refdes</i> simbol</"
+"samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -20466,9 +20476,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definiția autobuzului</th>\n"
-"        <th>"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
-"th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Plase rezultate</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20518,10 +20527,10 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp;<sub>"
-"&nbsp;</sub>&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</samp><br><samp>MEM. "
-"D<sub>1</sub>, MEM. D<sub>2</sub>, MEM. Zăvor</samp> </td>\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp;"
+"<sub>&nbsp;</sub>&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u> &nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</samp><br><samp>MEM. D<sub>1</"
+"sub>, MEM. D<sub>2</sub>, MEM. Zăvor</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -21187,8 +21196,8 @@ msgstr "Eroare la crearea fișierului temporar de ieșire"
 
 #: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
 "Kibis nu suportă încă valorile DUT. https://ibis.org/summits/nov16a/chen.pdf"
 
@@ -21365,7 +21374,8 @@ msgstr "Fișier IBIS invalid '%s'"
 #: eeschema/sim/sim_model.cpp:413
 #, c-format
 msgid "No simulation model definition found for symbol '%s'."
-msgstr "Nu s-a găsit nicio definiție de model de simulare pentru simbolul '%s'."
+msgstr ""
+"Nu s-a găsit nicio definiție de model de simulare pentru simbolul '%s'."
 
 #: eeschema/sim/sim_model.cpp:420
 msgid "No simulation model definition found."
@@ -23097,7 +23107,8 @@ msgstr "Plasare următoarea unitate de simbol"
 #: eeschema/tools/sch_actions.cpp:439
 msgid ""
 "Place the next unit of the current symbol that is missing from the schematic"
-msgstr "Plasați următoarea unitate a simbolului curent care lipsește din schemă"
+msgstr ""
+"Plasați următoarea unitate a simbolului curent care lipsește din schemă"
 
 #: eeschema/tools/sch_actions.cpp:449
 msgid "Place Power Symbols"
@@ -25638,7 +25649,7 @@ msgid "Clear Recent Job Files"
 msgstr "Golire fișiere Job recente"
 
 #: gerbview/gerbview_frame.cpp:90
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "Vizualizator Gerber KiCad"
 
@@ -26753,7 +26764,8 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_pdf.cpp:89
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "Tema de culori de utilizat (va folosi implicit setările editorului PCB)"
+msgstr ""
+"Tema de culori de utilizat (va folosi implicit setările editorului PCB)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:109
 msgid "Plot the layers to individual PDF files"
@@ -26835,7 +26847,8 @@ msgstr "Generați ieșiri SVG ale unei liste de straturi date"
 
 #: kicad/cli/command_pcb_export_svg.cpp:57
 msgid "Color theme to use (will default to PCB editor settings)"
-msgstr "Tema de culori de utilizat (va folosi implicit setările editorului PCB)"
+msgstr ""
+"Tema de culori de utilizat (va folosi implicit setările editorului PCB)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:85
 msgid ""
@@ -26922,8 +26935,8 @@ msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
 msgstr ""
-"Setează punctul pivot relativ la centrul plăcii în centimetri, format "
-"'X,Y,Z' de ex.: '-10,2,0'"
+"Setează punctul pivot relativ la centrul plăcii în centimetri, format 'X,Y,"
+"Z' de ex.: '-10,2,0'"
 
 #: kicad/cli/command_pcb_render.cpp:297
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
@@ -26933,14 +26946,14 @@ msgstr ""
 #: kicad/cli/command_pcb_render.cpp:302
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
-"Intensitatea luminii de sus, format 'R,G,B' sau un singur număr, interval: 0-"
-"1"
+"Intensitatea luminii de sus, format 'R,G,B' sau un singur număr, interval: "
+"0-1"
 
 #: kicad/cli/command_pcb_render.cpp:307
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
-"Intensitatea luminii de jos, format 'R,G,B' sau un singur număr, interval: 0-"
-"1"
+"Intensitatea luminii de jos, format 'R,G,B' sau un singur număr, interval: "
+"0-1"
 
 #: kicad/cli/command_pcb_render.cpp:312
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
@@ -27473,7 +27486,8 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:172
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr "Gestionează pachetele descărcabile din depozitele KiCad și ale terților"
+msgstr ""
+"Gestionează pachetele descărcabile din depozitele KiCad și ale terților"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -29220,7 +29234,8 @@ msgstr "Afișare bloc de titlu în modul previzualizare"
 
 #: pagelayout_editor/tools/pl_actions.cpp:114
 msgid "Text placeholders will be replaced with preview data"
-msgstr "Spațiile rezervate pentru text sunt înlocuite cu date de previzualizare"
+msgstr ""
+"Spațiile rezervate pentru text sunt înlocuite cu date de previzualizare"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
 msgid "Show Title Block in Edit Mode"
@@ -29673,7 +29688,8 @@ msgstr "IEC 60664"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:24
 msgid "Insulation for equipment within low-voltage supply systems"
-msgstr "Izolație pentru echipamente din sisteme de alimentare de joasă tensiune"
+msgstr ""
+"Izolație pentru echipamente din sisteme de alimentare de joasă tensiune"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:31
 msgid "Determine the transient impulse voltage to withstand"
@@ -30432,7 +30448,8 @@ msgstr "Iadj:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:258
 msgid "For 3 terminal regulators only, the  Adjust pin current."
-msgstr "Doar pentru regulatoarele cu 3 terminale, curentul pinului de ajustare."
+msgstr ""
+"Doar pentru regulatoarele cu 3 terminale, curentul pinului de ajustare."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:278
 msgid "Overall tolerance:"
@@ -30864,7 +30881,8 @@ msgstr "Reactanță:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:336
 msgid "Inductive reactance for given rise time and calculated inductance"
-msgstr "Reactanța inductivă pentru timpul de urcare dat și inductanța calculată"
+msgstr ""
+"Reactanța inductivă pentru timpul de urcare dat și inductanța calculată"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:355
 msgid "Top view of via"
@@ -33301,15 +33319,30 @@ msgstr "număr orizontal"
 msgid "vertical count"
 msgstr "număr vertical"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:425
+#: pcbnew/dialogs/dialog_create_array.cpp:422
+#, c-format
+msgid "horizontal delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:428
+#, c-format
+msgid "vertical delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:437
 msgid "stagger"
 msgstr "decalare alternată"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:481
+#: pcbnew/dialogs/dialog_create_array.cpp:493
 msgid "point count"
 msgstr "număr de puncte"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:528
+#: pcbnew/dialogs/dialog_create_array.cpp:500
+#, c-format
+msgid "angular delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:546
 msgid "Bad parameters"
 msgstr "Parametri greșiți"
 
@@ -35838,7 +35871,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:144
 msgid ""
 "Tracks which are similar in size to the pad or via do not need teardrops."
-msgstr "Traseele cu dimensiuni similare cu pad-ul sau via nu necesită picături."
+msgstr ""
+"Traseele cu dimensiuni similare cu pad-ul sau via nu necesită picături."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:188
 msgid "(as a percentage of pad/via minor dimension)"
@@ -37004,7 +37038,8 @@ msgstr "Placa conține lacrimi legacy."
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:623
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:451
 msgid "Use Edit > Edit Teardrops to apply automatic teardrops."
-msgstr "Utilizați Editare > Editare picături pentru a aplica picături automate."
+msgstr ""
+"Utilizați Editare > Editare picături pentru a aplica picături automate."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:639
 msgid "Add teardrops on pad's track connections"
@@ -38712,7 +38747,8 @@ msgstr "Permite pad-uri libere"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:104
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
-msgstr "Dacă este bifat, pad-urile pot fi mutate în raport cu restul amprentei."
+msgstr ""
+"Dacă este bifat, pad-urile pot fi mutate în raport cu restul amprentei."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:108
 msgid "Do not prompt for lock overrides for this session"
@@ -38885,7 +38921,8 @@ msgstr "Amprenta \"%s\" nu a fost găsită."
 #, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
-msgstr "Folderul „%s” există deja. Doriți să suprascrieți amprentele existente?"
+msgstr ""
+"Folderul „%s” există deja. Doriți să suprascrieți amprentele existente?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:910
 #, c-format
@@ -39434,7 +39471,8 @@ msgstr "Aplicați valorile implicite ale plăcii textului de amprentă"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:72
 msgid "Apply board defaults to non-copper footprint shapes"
-msgstr "Aplicați valorile implicite ale plăcii formelor non-cupru ale amprentei"
+msgstr ""
+"Aplicați valorile implicite ale plăcii formelor non-cupru ale amprentei"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:87
 #: pcbnew/dialogs/panel_setup_layers.cpp:293
@@ -39801,9 +39839,9 @@ msgid ""
 msgstr ""
 "### Documentație\n"
 "\n"
-"Pentru documentația completă consultați [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules)."
+"Pentru documentația completă consultați [https://docs.kicad.org](https://go."
+"kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -39866,8 +39904,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
@@ -40167,17 +40205,17 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
 "### Proprietăți\n"
 "\n"
 "Multe proprietăți ale obiectelor sunt disponibile pentru testare în expresii "
-"de reguli personalizate. Consultați documentația completă la [https://"
-"docs.kicad.org](https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) pentru lista completă.\n"
+"de reguli personalizate. Consultați documentația completă la [https://docs."
+"kicad.org](https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) pentru lista completă.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -40331,13 +40369,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -40912,7 +40950,8 @@ msgstr "Electric"
 
 #: pcbnew/drc/drc_item.cpp:44
 msgid "Design for Manufacturing"
-msgstr "Deschiderea măștii de lipit interconectează elemente cu rețele diferite"
+msgstr ""
+"Deschiderea măștii de lipit interconectează elemente cu rețele diferite"
 
 #: pcbnew/drc/drc_item.cpp:45
 msgid "Schematic Parity"
@@ -41198,7 +41237,8 @@ msgstr "EROARE: %s%s"
 #: pcbnew/drc/drc_rule_parser.cpp:79
 #, c-format
 msgid "The '%s' keyword has been deprecated.  Please use '%s' instead."
-msgstr "Cuvântul cheie '%s' a fost depreciat. Vă rugăm folosiți '%s' în schimb."
+msgstr ""
+"Cuvântul cheie '%s' a fost depreciat. Vă rugăm folosiți '%s' în schimb."
 
 #: pcbnew/drc/drc_rule_parser.cpp:117 pcbnew/drc/drc_rule_parser.cpp:200
 #: pcbnew/drc/drc_rule_parser.cpp:483
@@ -42751,7 +42791,8 @@ msgstr "Editare Zonă"
 
 #: pcbnew/footprint_editor_utils.cpp:365 pcbnew/footprint_editor_utils.cpp:377
 msgid "Use Manage Footprint Libraries to edit the configuration."
-msgstr "Folosiți Gestionare biblioteci de amprente pentru a edita configurația."
+msgstr ""
+"Folosiți Gestionare biblioteci de amprente pentru a edita configurația."
 
 #: pcbnew/footprint_editor_utils.cpp:366
 msgid "Library not found in footprint library table."
@@ -42772,8 +42813,8 @@ msgid ""
 "and update your footprint lib table\n"
 "to save your footprint (a .kicad_mod file) in the .pretty library folder"
 msgstr ""
-"Nu este permisă scrierea/modificarea bibliotecilor în format vechi (extensia "
-".mod)\n"
+"Nu este permisă scrierea/modificarea bibliotecilor în format vechi "
+"(extensia .mod)\n"
 "Salvați biblioteca curentă în noul format .pretty și actualizează tabelul cu "
 "biblioteci \n"
 "de amprente pentru a salva amprenta (extensie .kicad_mod) \n"
@@ -43775,8 +43816,8 @@ msgstr "Se procesează symbol '%s:%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Avertisment: amprenta %s '%s' nu are un nume de bibliotecă. Utilizați "
 "formatul complet 'Library:Footprint' pentru a evita notificările repetate de "
@@ -44803,7 +44844,8 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3728
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
-msgstr "Pad-ul non-cupru %s este conectat la o rețea, ceea ce nu este acceptat."
+msgstr ""
+"Pad-ul non-cupru %s este conectat la o rețea, ceea ce nu este acceptat."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3739
 #, c-format
@@ -45745,7 +45787,8 @@ msgstr ""
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1387
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr "Componentei \"%s\" îi lipsește referința OEM; intrarea BOM va fi omisă."
+msgstr ""
+"Componentei \"%s\" îi lipsește referința OEM; intrarea BOM va fi omisă."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1491
 msgid "Generating CAD data"
@@ -46102,7 +46145,8 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6663
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
-msgstr "Strat de padstack '%s' invalid în fișierul '%s' la linia %d, offset %d."
+msgstr ""
+"Strat de padstack '%s' invalid în fișierul '%s' la linia %d, offset %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6287
 #, fuzzy, c-format
@@ -47805,7 +47849,8 @@ msgstr "Elementul este permis la locația curentă."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1542
 msgid "Select a footprint to diff with its library equivalent."
-msgstr "Selectați o amprentă pentru a o compara cu echivalentul din bibliotecă."
+msgstr ""
+"Selectați o amprentă pentru a o compara cu echivalentul din bibliotecă."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1560
 msgid "Select a footprint for a footprint associations report."
@@ -48936,7 +48981,8 @@ msgstr "Actualizare Amprente de la Bibliotecă..."
 
 #: pcbnew/tools/pcb_actions.cpp:792
 msgid "Update footprints to include any changes from the library"
-msgstr "Actualizați amprentele pentru a include orice modificări din bibliotecă"
+msgstr ""
+"Actualizați amprentele pentru a include orice modificări din bibliotecă"
 
 #: pcbnew/tools/pcb_actions.cpp:798
 msgid "Remove Unused Pads..."
@@ -49951,7 +49997,8 @@ msgstr "Deselectare toate trasee în rețea"
 
 #: pcbnew/tools/pcb_actions.cpp:2137
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "Deselectează toate traseele și via-urile care aparțin aceleiași rețele."
+msgstr ""
+"Deselectează toate traseele și via-urile care aparțin aceleiași rețele."
 
 #: pcbnew/tools/pcb_actions.cpp:2144
 msgid "Select All Unconnected Footprints"
@@ -51749,103 +51796,95 @@ msgstr "deschideri termice pentru PTH"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] incărcare eșuată: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Convertor;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "Convertor Bitmap în Componentă"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Creați o componenta dintr-un bitmap pentru a o folosi în KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "Editor de scheme KiCad (independent)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "Instrument de captare a schemelor"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editor independent pentru schemele KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "Vizualizator fișiere Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "Vizualizați fișiere Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "Manager de Proiect;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "Suita EDA"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
 "Suită de instrumente pentru proiectarea schemelor și aspectul plăcilor de "
 "circuit"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculator PCB KiCad"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "PCB;Calculator;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "Calculator PCB"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculator pentru diverse calcule legate de electronică"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Circuit;Aspect;Proiectare;Editor;Amprentă;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Editor PCB KiCad (independent)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "Editor de trasare PCB"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Editor independent de plăci de circuit pentru plăcile KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "O suită EDA pentru proiectarea schemelor și plăcilor de circuit"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-msgid "Circuit board"
-msgstr "Circuit imprimat"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -51902,6 +51941,12 @@ msgstr "Simbol schemă KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "Foaie de desen KiCad"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Circuit imprimat"
 
 #~ msgid "Command"
 #~ msgstr "Comandă"
@@ -53926,8 +53971,8 @@ msgstr "Foaie de desen KiCad"
 
 #~ msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
 #~ msgstr ""
-#~ "Este posibil să lipsească un fișier de bibliotecă partajată (.dll "
-#~ "sau .so).\n"
+#~ "Este posibil să lipsească un fișier de bibliotecă partajată (.dll sau ."
+#~ "so).\n"
 
 #~ msgid ""
 #~ "From command line: argv[0]:\n"
@@ -54789,8 +54834,8 @@ msgstr "Foaie de desen KiCad"
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
-#~ "\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A."
+#~ "enclosedByArea('Shield*')\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -54922,13 +54967,13 @@ msgstr "Foaie de desen KiCad"
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -55012,9 +55057,8 @@ msgstr "Foaie de desen KiCad"
 #~ "\n"
 #~ "### Documentation\n"
 #~ "\n"
-#~ "For the full documentation see [https://docs.kicad.org](https://"
-#~ "docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
-#~ "pcbnew.html#custom_design_rules)."
+#~ "For the full documentation see [https://docs.kicad.org](https://docs."
+#~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 #~ msgstr ""
 #~ "### Clauze de nivel superior\n"
 #~ "\n"
@@ -55186,8 +55230,8 @@ msgstr "Foaie de desen KiCad"
 #~ "\n"
 #~ "(regula \"Clearance-ul între tampoane de plase diferite\"  \n"
 #~ "        [clearance-ul constrângerii (min 3.0mm)]\n"
-#~ "        (condiția \"A.Type =='Pad' && B.Type =='Pad' & A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condiția \"A.Type =='Pad' && B.Type =='Pad' & A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "(regula \"Via Hole pentru a urmări Clearance-ul\"  \n"
 #~ "        [hole_clearance de constrângere (min 0,254 mm)]\n"
@@ -56225,8 +56269,8 @@ msgstr "Foaie de desen KiCad"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -56419,8 +56463,8 @@ msgstr "Foaie de desen KiCad"
 #~ "\n"
 #~ "Pe Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "Exemplele de mai sus presupun că `xsltproc` este instalat pe PC-ul "

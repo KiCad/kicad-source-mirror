@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 11:18-0700\n"
+"POT-Creation-Date: 2026-04-17 15:22+0300\n"
 "PO-Revision-Date: 2026-03-20 17:12+0000\n"
 "Last-Translator: Mojca Miklavec Groenhuis <mojca@macports.org>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/kicad/v9/sl/>\n"
@@ -1674,7 +1674,7 @@ msgid "Image Converter"
 msgstr "Pretvorjeno"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 #, fuzzy
 msgid "KiCad Image Converter"
 msgstr "Pretvorjeno"
@@ -2351,7 +2351,7 @@ msgstr "Nalaganje datotek Gerber ..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 #, fuzzy
 msgid "KiCad"
@@ -3284,7 +3284,6 @@ msgstr ""
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1638
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 #, fuzzy
 msgid "PCB"
 msgstr "PCB"
@@ -3292,7 +3291,6 @@ msgstr "PCB"
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 #, fuzzy
 msgid "Schematic"
 msgstr "Shema"
@@ -7723,8 +7721,8 @@ msgstr ""
 "pot trenutno naložene projektne datoteke. To spremenljivko okolja lahko "
 "uporabite za definiranje datotek in poti glede na trenutno naložen projekt. "
 "Na primer, $ {KIPRJMOD} /libs/footprints.pretty lahko definiramo kot mapo, "
-"ki vsebuje za projekt specifično knjižnico odtisov z imenom "
-"footprints.pretty."
+"ki vsebuje za projekt specifično knjižnico odtisov z imenom footprints."
+"pretty."
 
 #: common/env_vars.cpp:123
 #, fuzzy
@@ -9483,12 +9481,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Manjkajoče enote za „%s“ | (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1174
-#, fuzzy
+#, fuzzy, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Glas mora biti večji od vref"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1180
-#, fuzzy
+#, fuzzy, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Glas mora biti večji od vref"
 
@@ -12512,7 +12510,7 @@ msgstr ""
 "%s\n"
 "ni najdena. Skripta ni na voljo."
 
-#: eeschema/connection_graph.cpp:3409
+#: eeschema/connection_graph.cpp:3412
 #, fuzzy, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -12520,36 +12518,36 @@ msgstr ""
 "Tako %s kot %s sta pritrjena na iste predmete; %s bo uporabljen na seznamu "
 "vozlišč"
 
-#: eeschema/connection_graph.cpp:3647
+#: eeschema/connection_graph.cpp:3650
 #, fuzzy, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
 "Vozlišče %s je grafično povezano z vodilom %s, vendar ni član tega vodila"
 
-#: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3955 eeschema/erc/erc_item.cpp:229
 #, fuzzy
 msgid "Unconnected wire endpoint"
 msgstr "Pove¾i"
 
-#: eeschema/connection_graph.cpp:3977
+#: eeschema/connection_graph.cpp:3980
 #, fuzzy
 msgid "Unconnected wire to bus entry"
 msgstr "Pove¾i"
 
-#: eeschema/connection_graph.cpp:4310
+#: eeschema/connection_graph.cpp:4313
 #, fuzzy, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr "Opozorila splošna oznaka %s ni povezana z oznako strani"
 
-#: eeschema/connection_graph.cpp:4375
+#: eeschema/connection_graph.cpp:4378
 #, fuzzy, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Za hierarhični priključek %s manjka oznaka hierarhičnega vozlišča"
 
-#: eeschema/connection_graph.cpp:4392
+#: eeschema/connection_graph.cpp:4395
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Opozorila splošna oznaka %s ni povezana z oznako strani"
@@ -13014,8 +13012,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -15526,7 +15524,8 @@ msgstr "Nadomestno ime priključka"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:360
 #, fuzzy
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr "Nadomestne dodelitve priključkov niso na voljo za De Morganove simbole."
+msgstr ""
+"Nadomestne dodelitve priključkov niso na voljo za De Morganove simbole."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 #, fuzzy
@@ -15576,7 +15575,8 @@ msgstr "Način za sinhronizirano urejanje nožic"
 #: eeschema/dialogs/dialog_pin_properties.cpp:454
 #, fuzzy
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
-msgstr "Način sinhroniziranih priključkov. Nov priključek bo dodan vsem enotam."
+msgstr ""
+"Način sinhroniziranih priključkov. Nov priključek bo dodan vsem enotam."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:456
 #, fuzzy
@@ -17329,7 +17329,6 @@ msgid "Code"
 msgstr "DCode:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr ""
 
@@ -20090,7 +20089,8 @@ msgstr ""
 #: eeschema/files-io.cpp:405
 #, fuzzy
 msgid "Illegal entry found in project file symbol library list."
-msgstr "Na seznamu knjižnice simbolov projektne datoteke najden nezakonit vnos."
+msgstr ""
+"Na seznamu knjižnice simbolov projektne datoteke najden nezakonit vnos."
 
 #: eeschema/files-io.cpp:406
 #, fuzzy
@@ -22924,8 +22924,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -22976,9 +22976,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23854,8 +23854,8 @@ msgstr "Ustvarjanje začasne datoteke »%s« ni uspelo"
 
 #: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
 
 #: eeschema/sim/kibis/kibis.cpp:854
@@ -24238,7 +24238,8 @@ msgstr "AC faza:"
 #, fuzzy
 msgid ""
 "Simulation provided no plots. Please refer to console window for results."
-msgstr "Ta simulacija ne daje nobenih izrisov. Za rezultate glejte okno konzole"
+msgstr ""
+"Ta simulacija ne daje nobenih izrisov. Za rezultate glejte okno konzole"
 
 #: eeschema/sim/simulator_frame.cpp:332
 #, fuzzy
@@ -25565,7 +25566,8 @@ msgstr "Spremeni %s priključek %s oznako vozlišča z '%s' na '%s'."
 #: eeschema/tools/backannotate.cpp:721
 #, fuzzy, c-format
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
-msgstr "Omrežja %s ni mogoče spremeniti v '%s', ker ga poganja napajalni zatič."
+msgstr ""
+"Omrežja %s ni mogoče spremeniti v '%s', ker ga poganja napajalni zatič."
 
 #: eeschema/tools/backannotate.cpp:730
 #, fuzzy, c-format
@@ -28900,7 +28902,7 @@ msgid "Clear Recent Job Files"
 msgstr "Počisti nedavne delovne datoteke"
 
 #: gerbview/gerbview_frame.cpp:90
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 #, fuzzy
 msgid "KiCad Gerber Viewer"
 msgstr "Datoteke Gerber"
@@ -32844,7 +32846,8 @@ msgstr "Dodaj obstoječo datoteko postavitve strani ..."
 #: pagelayout_editor/tools/pl_actions.cpp:90
 #, fuzzy
 msgid "Append an existing drawing sheet file to the current file"
-msgstr "Obstoječi datoteki dodajte obstoječo datoteko zasnove postavitve strani"
+msgstr ""
+"Obstoječi datoteki dodajte obstoječo datoteko zasnove postavitve strani"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
 #, fuzzy
@@ -32935,8 +32938,8 @@ msgstr ""
 "* __a__ dušenje v dB\n"
 "* __L = 10 <sup> a / 20 </sup> __ (izguba)\n"
 "* ___A = (L + 1) / (L - 1) ___ <br> <br>\n"
-"* ___R2 = 2 & radic; (L \\ * Z <sub> v </sub> \\ * Z <sub> ven </sub>) / "
-"(L - 1) ___\n"
+"* ___R2 = 2 & radic; (L \\ * Z <sub> v </sub> \\ * Z <sub> ven </sub>) / (L "
+"- 1) ___\n"
 "* ___R1 = Z <sub> v </sub> \\ * A - R2___\n"
 "* ___R3 = Z <sub> ven </sub> \\ * A - R2___\n"
 
@@ -32983,8 +32986,8 @@ msgstr ""
 "* __a__ dušenje v dB\n"
 "* __L = 10 <sup> a / 20 </sup> __ (izguba)\n"
 "* ___A = (L + 1) / (L - 1) ___ <br> <br>\n"
-"* ___R2 = 2 & radic; (L \\ * Z <sub> v </sub> \\ * Z <sub> ven </sub>) / "
-"(L - 1) ___\n"
+"* ___R2 = 2 & radic; (L \\ * Z <sub> v </sub> \\ * Z <sub> ven </sub>) / (L "
+"- 1) ___\n"
 "* ___R1 = Z <sub> v </sub> \\ * A - R2___\n"
 "* ___R3 = Z <sub> ven </sub> \\ * A - R2___\n"
 
@@ -37141,7 +37144,8 @@ msgstr "Izbrišite skladbe v celoti iz blazinic"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:63
 #, fuzzy
 msgid "Delete tracks that have both start and end positions inside of a pad"
-msgstr "Izbrišite skladbe, ki imajo začetni in končni položaj znotraj blazinice"
+msgstr ""
+"Izbrišite skladbe, ki imajo začetni in končni položaj znotraj blazinice"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:71
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:46
@@ -37639,17 +37643,32 @@ msgstr "vodoravno štetje"
 msgid "vertical count"
 msgstr "navpično štetje"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:425
+#: pcbnew/dialogs/dialog_create_array.cpp:422
+#, c-format
+msgid "horizontal delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:428
+#, c-format
+msgid "vertical delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:437
 #, fuzzy
 msgid "stagger"
 msgstr "zatepanje"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:481
+#: pcbnew/dialogs/dialog_create_array.cpp:493
 #, fuzzy
 msgid "point count"
 msgstr "štetje točk"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:528
+#: pcbnew/dialogs/dialog_create_array.cpp:500
+#, c-format
+msgid "angular delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:546
 #, fuzzy
 msgid "Bad parameters"
 msgstr "Slabi parametri"
@@ -39543,8 +39562,8 @@ msgid ""
 "selection filter."
 msgstr ""
 "Odtis je zaklenjen: ni ga mogoče prosto premikati ali samodejno postaviti in "
-"ga lahko izberete le, če je v izbirnem filtru omogočeno potrditveno polje »"
-"Zaklenjeni elementi«."
+"ga lahko izberete le, če je v izbirnem filtru omogočeno potrditveno polje "
+"»Zaklenjeni elementi«."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:425
 #, fuzzy, c-format
@@ -39856,8 +39875,8 @@ msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
 msgstr ""
-"Trenutno dodeljena ID knjižnice in ID odtisa. Uporabite “Change Footprint "
-"...”, če želite dodeliti drug odtis."
+"Trenutno dodeljena ID knjižnice in ID odtisa. Uporabite “Change "
+"Footprint ...”, če želite dodeliti drug odtis."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:124
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:116
@@ -42999,8 +43018,8 @@ msgid ""
 "filter."
 msgstr ""
 "Odtis je zaklenjen: ni ga mogoče prosto premikati ali samodejno postaviti in "
-"ga lahko izberete le, če je v izbirnem filtru omogočeno potrditveno polje »"
-"Zaklenjeni elementi«."
+"ga lahko izberete le, če je v izbirnem filtru omogočeno potrditveno polje "
+"»Zaklenjeni elementi«."
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:54
 #, fuzzy
@@ -45207,8 +45226,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
@@ -45460,8 +45479,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -45616,13 +45635,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -49405,8 +49424,8 @@ msgstr "Simbol za obdelavo „%s: %s“."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1410
@@ -49491,7 +49510,8 @@ msgstr "Imena zatiča ni mogoče razčleniti v odseku s simboli net na seznamu."
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:194
 #, fuzzy
 msgid "Cannot parse net name in symbol net section of netlist."
-msgstr "Imena omrežja ni mogoče razčleniti v odseku s simboli mreže na seznamu."
+msgstr ""
+"Imena omrežja ni mogoče razčleniti v odseku s simboli mreže na seznamu."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:242
 #, fuzzy, c-format
@@ -49521,7 +49541,8 @@ msgstr "Za simbol \"%s\" ni določen odtis.\n"
 #: pcbnew/netlist_reader/netlist.cpp:221
 #, fuzzy, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
-msgstr "Odtis strani %s je spremenjen: odtis plošče \"%s\", odtis mreže \"%s\"."
+msgstr ""
+"Odtis strani %s je spremenjen: odtis plošče \"%s\", odtis mreže \"%s\"."
 
 #: pcbnew/netlist_reader/netlist.cpp:244
 #, fuzzy, c-format
@@ -49690,7 +49711,8 @@ msgstr ""
 #: pcbnew/pad.cpp:2294
 #, fuzzy
 msgid "('fiducial' property makes no sense on NPTH pads)"
-msgstr "Opozorilo: Fiducialne lastnosti ni mogoče nastaviti na blazinicah NPTH."
+msgstr ""
+"Opozorilo: Fiducialne lastnosti ni mogoče nastaviti na blazinicah NPTH."
 
 #: pcbnew/pad.cpp:2298
 #, fuzzy
@@ -49700,12 +49722,14 @@ msgstr "Opozorilo: Lastnosti testpoint ni mogoče nastaviti na blazinicah NPTH."
 #: pcbnew/pad.cpp:2301
 #, fuzzy
 msgid "('heatsink' property makes no sense of NPTH pads)"
-msgstr "Opozorilo: Lastnosti hladilnika ni mogoče nastaviti na blazinicah NPTH."
+msgstr ""
+"Opozorilo: Lastnosti hladilnika ni mogoče nastaviti na blazinicah NPTH."
 
 #: pcbnew/pad.cpp:2304
 #, fuzzy
 msgid "('castellated' property is for PTH pads)"
-msgstr "Opozorilo: Kastelirano lastnost lahko nastavite samo na blazinicah PTH."
+msgstr ""
+"Opozorilo: Kastelirano lastnost lahko nastavite samo na blazinicah PTH."
 
 #: pcbnew/pad.cpp:2307
 #, fuzzy
@@ -49715,7 +49739,8 @@ msgstr "Opozorilo: Lastnost BGA lahko nastavite samo na blazinice SMD."
 #: pcbnew/pad.cpp:2310
 #, fuzzy
 msgid "('mechanical' property is for PTH pads)"
-msgstr "Opozorilo: Kastelirano lastnost lahko nastavite samo na blazinicah PTH."
+msgstr ""
+"Opozorilo: Kastelirano lastnost lahko nastavite samo na blazinicah PTH."
 
 #: pcbnew/pad.cpp:2326
 #, fuzzy
@@ -55498,7 +55523,8 @@ msgstr "Vrtanje / postavitev izvora datoteke"
 #: pcbnew/tools/pcb_actions.cpp:1153
 #, fuzzy
 msgid "Place origin point for drill files and component placement files"
-msgstr "Postavite izvorno točko za vrtalne datoteke in datoteke položaja odtisa"
+msgstr ""
+"Postavite izvorno točko za vrtalne datoteke in datoteke položaja odtisa"
 
 #: pcbnew/tools/pcb_actions.cpp:1161
 #, fuzzy
@@ -58407,116 +58433,107 @@ msgstr "Toplotni reliefi"
 msgid "[INFO] load failed: %s"
 msgstr "Nalaganje [INFO] ni uspelo: vhodna vrstica je predolga\n"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 #, fuzzy
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "Pretvornik bitnih slik v komponente"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 #, fuzzy
 msgid "Bitmap to Component Converter"
 msgstr "Pretvornik bitnih slik v komponente"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 #, fuzzy
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "Oštevilči shemo"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 #, fuzzy
 msgid "Schematic Capture Tool"
 msgstr "Shematsko polje"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 #, fuzzy
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Uporabite barvno temo Eeschema"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 #, fuzzy
 msgid "eeschema"
 msgstr "Ezhema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 #, fuzzy
 msgid "Gerber File Viewer"
 msgstr "Datoteke Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 #, fuzzy
 msgid "View Gerber files"
 msgstr "Ogled datotek Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #, fuzzy
 msgid "Projectmanager;"
 msgstr "Upravljalnik Projekta"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 #, fuzzy
 msgid "KiCad PCB Calculator"
 msgstr "PCB kalkulator"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 #, fuzzy
 msgid "PCB;Calculator;"
 msgstr "PCB kalkulator"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 #, fuzzy
 msgid "PCB Calculator"
 msgstr "PCB kalkulator"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 #, fuzzy
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "&Urejevalnik ..."
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 #, fuzzy
 msgid "PCB layout editor"
 msgstr "Urejevalnik postavitve strani"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr ""
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-msgid "EDA"
-msgstr ""
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-#, fuzzy
-msgid "Circuit board"
-msgstr "Natisni ploščo"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -58577,6 +58594,10 @@ msgstr "Uredi shematske simbole"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Urejevalnik knjižnic"
+
+#, fuzzy
+#~ msgid "Circuit board"
+#~ msgstr "Natisni ploščo"
 
 #, fuzzy
 #~ msgid "Command"
@@ -63620,8 +63641,8 @@ msgstr "Urejevalnik knjižnic"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -63727,15 +63748,15 @@ msgstr "Urejevalnik knjižnic"
 #~ "V sistemu Windows je ukazna vrstica naslednja.\n"
 #~ "\n"
 #~ "\"\n"
-#~ "f: /kicad/bin/xsltproc.exe -o \"% O\" f: /kicad/bin/plugins/"
-#~ "myconverter.xsl \"% I\"\n"
+#~ "f: /kicad/bin/xsltproc.exe -o \"% O\" f: /kicad/bin/plugins/myconverter."
+#~ "xsl \"% I\"\n"
 #~ "\"\n"
 #~ "\n"
 #~ "V Linuxu ukaz postane naslednji.\n"
 #~ "\n"
 #~ "\"\n"
-#~ "xsltproc -o \"% O\" / usr / local / kicad / bin / plugins / "
-#~ "myconverter .xsl \"% I\"\n"
+#~ "xsltproc -o \"% O\" / usr / local / kicad / bin / plugins / myconverter ."
+#~ "xsl \"% I\"\n"
 #~ "\"\n"
 #~ "kjer je \"myconverter.xsl\" tabela s slogi, ki jo uporabljate.\n"
 #~ "\n"

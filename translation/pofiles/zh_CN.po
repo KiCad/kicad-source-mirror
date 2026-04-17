@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 11:18-0700\n"
+"POT-Creation-Date: 2026-04-17 15:22+0300\n"
 "PO-Revision-Date: 2026-04-17 12:21+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -80,7 +80,8 @@ msgstr "未加载任何封装。"
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
-msgstr "封装缺少外框或外框形状异常 (如外框线条没有闭合)。可用封装检查器分析原因。"
+msgstr ""
+"封装缺少外框或外框形状异常 (如外框线条没有闭合)。可用封装检查器分析原因。"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:1006
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
@@ -1316,7 +1317,8 @@ msgstr "将投射以计算反射点的光线数"
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
-msgstr "一束光线所能穿过的物体数量。(递归深度越大, 效果越好, 特别是在非常透明的板上)"
+msgstr ""
+"一束光线所能穿过的物体数量。(递归深度越大, 效果越好, 特别是在非常透明的板上)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:98
 msgid "Refractions:"
@@ -1494,7 +1496,7 @@ msgid "Image Converter"
 msgstr "图片转换器"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "KiCad 图片转换器"
 
@@ -2104,7 +2106,7 @@ msgstr "加载设计图块..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2593,8 +2595,8 @@ msgid ""
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
 msgstr ""
-"为确保环境变量名称在所有平台上都有效, 名称字段只能使用大写字母, 数字和下划线"
-"。"
+"为确保环境变量名称在所有平台上都有效, 名称字段只能使用大写字母, 数字和下划"
+"线。"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:23
 msgid "Environment Variables"
@@ -2932,14 +2934,12 @@ msgstr "工程名称"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1638
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "原理图"
 
@@ -3383,7 +3383,8 @@ msgstr "特殊粘贴"
 msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
-msgstr "在上面的列表框中选择一个 <b>选项选择</b>, 然后点击 <b>追加所选选项</b> 按钮。"
+msgstr ""
+"在上面的列表框中选择一个 <b>选项选择</b>, 然后点击 <b>追加所选选项</b> 按钮。"
 
 #: common/dialogs/dialog_plugin_options.cpp:53
 #, c-format
@@ -4217,7 +4218,8 @@ msgstr "切换编辑器时焦点跟随鼠标移动"
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
-msgstr "如果将鼠标光标移到原理图或 PCB 编辑器窗口的画布上, 则对应画布会被自动激活。"
+msgstr ""
+"如果将鼠标光标移到原理图或 PCB 编辑器窗口的画布上, 则对应画布会被自动激活。"
 
 #: common/dialogs/panel_common_settings_base.cpp:169
 msgid "Show popup indicator when toggling settings with hotkeys"
@@ -4371,7 +4373,8 @@ msgstr "首次按下快捷键仅选择对应工具"
 msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
-msgstr "如果未选中, 即使未选择快捷键对应的工具, 按下快捷键也将立即执行对应的操作。"
+msgstr ""
+"如果未选中, 即使未选择快捷键对应的工具, 按下快捷键也将立即执行对应的操作。"
 
 #: common/dialogs/panel_common_settings_base.cpp:312
 msgid "Session"
@@ -4482,7 +4485,8 @@ msgstr "最大总备份大小:"
 msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
-msgstr "如果备份文件的总大小超过此限制, 旧的备份将被删除(设置为 0 表示没有限制)"
+msgstr ""
+"如果备份文件的总大小超过此限制, 旧的备份将被删除(设置为 0 表示没有限制)"
 
 #: common/dialogs/panel_common_settings_base.cpp:447
 msgid "MB"
@@ -5365,7 +5369,8 @@ msgstr "KiCad API"
 msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
-msgstr "启用 KiCad API 后, 系统中运行的第三方软件和插件就可以通过 API 连接到 KiCad。"
+msgstr ""
+"启用 KiCad API 后, 系统中运行的第三方软件和插件就可以通过 API 连接到 KiCad。"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27 kicad/pcm/pcm.cpp:781
 msgid "Enable KiCad API"
@@ -8343,10 +8348,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "缺失 '%s' | (%s) 的单位"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1174
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "'%s' 和 %lf 之间类型不匹配"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1180
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf 和 '%s'之间类型不匹配"
 
@@ -10911,39 +10918,39 @@ msgstr ""
 "%s\n"
 "找不到。脚本不可用。"
 
-#: eeschema/connection_graph.cpp:3409
+#: eeschema/connection_graph.cpp:3412
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "%s 和 %s 都连接到同一项上; 将使用 %s 作为网表中的网络名称"
 
-#: eeschema/connection_graph.cpp:3647
+#: eeschema/connection_graph.cpp:3650
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "网络 %s 以图形方式连接到总线 %s, 但不是总线的成员"
 
-#: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3955 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "未连接的连线端点"
 
-#: eeschema/connection_graph.cpp:3977
+#: eeschema/connection_graph.cpp:3980
 msgid "Unconnected wire to bus entry"
 msgstr "导线没有连到总线入口"
 
-#: eeschema/connection_graph.cpp:4310
+#: eeschema/connection_graph.cpp:4313
 #, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr "根图纸中的层次标签 \"%s\" 无法连接到不存在的父图纸"
 
-#: eeschema/connection_graph.cpp:4375
+#: eeschema/connection_graph.cpp:4378
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "图纸引脚 %s 在子图纸内没有匹配的层次标签"
 
-#: eeschema/connection_graph.cpp:4392
+#: eeschema/connection_graph.cpp:4395
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "层次标签 %s 在父图纸内没有匹配的图纸引脚"
@@ -11356,8 +11363,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -11374,8 +11381,8 @@ msgstr ""
 "\n"
 "BOM 工具创建了一个 BOM, 其中列出了设计中的所有元件。\n"
 "\n"
-"该工具使用外部脚本以所需的输出格式生成 BOM。选择不同的脚本会更改 BOM 的格式"
-"。\n"
+"该工具使用外部脚本以所需的输出格式生成 BOM。选择不同的脚本会更改 BOM 的格"
+"式。\n"
 "\n"
 "在原理图编辑器手册中对生成 BOM 有更详细的描述。\n"
 "\n"
@@ -11420,12 +11427,12 @@ msgstr ""
 "python <脚本文件名> <输入文件名> <输出文件名> \n"
 "```\n"
 "\n"
-"在 Windows 上, 如果想要的 CSV BOM 的生成器脚本是 `C:\\Users\\username\\k"
-"icad\\my_python_script.py`, 命令行将是。\n"
+"在 Windows 上, 如果想要的 CSV BOM 的生成器脚本是 `C:"
+"\\Users\\username\\kicad\\my_python_script.py`, 命令行将是。\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "在 Linux 上, 如果想要 的CSV BOM 的生成器脚本是 `/home/username/kicad/"
@@ -12155,7 +12162,8 @@ msgstr "保存所有数字事件 (digital event) 数据"
 msgid ""
 "If not set, write a directive to prevent the saving of digital event data "
 "(esave none)"
-msgstr "如果未设置, 则写入指令 (esave none) 以防止保存数字事件 (digital event) 数据"
+msgstr ""
+"如果未设置, 则写入指令 (esave none) 以防止保存数字事件 (digital event) 数据"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:395
 msgid "Run external simulator command:"
@@ -15131,7 +15139,6 @@ msgid "Code"
 msgstr "代码"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "将数值字段中的 {} 另存为 \"{}\""
 
@@ -16064,7 +16071,8 @@ msgstr "单击没有连线的引脚时自动进行连线"
 msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
-msgstr "启用后, 即使连线工具未处于活动状态, 也可以通过单击没有连线的引脚来开始连线"
+msgstr ""
+"启用后, 即使连线工具未处于活动状态, 也可以通过单击没有连线的引脚来开始连线"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 #: pcbnew/dialogs/panel_edit_options_base.cpp:414
@@ -18684,15 +18692,16 @@ msgstr "符号 %s 中的引脚编号与元件 %s 中定义的引脚编号不一�
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
-msgstr "CADSTAR 设计包含变体, 但在 KiCad 中没有对应的等效项。仅加载主变体 ('%s')。"
+msgstr ""
+"CADSTAR 设计包含变体, 但在 KiCad 中没有对应的等效项。仅加载主变体 ('%s')。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:393
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
 msgstr ""
-"CADSTAR 设计包含组合项目, 但在 KiCad 中没有对应的等效项。所有组合项目已解组合"
-"。"
+"CADSTAR 设计包含组合项目, 但在 KiCad 中没有对应的等效项。所有组合项目已解组"
+"合。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:400
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:160
@@ -18700,8 +18709,8 @@ msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
 msgstr ""
-"CADSTAR 设计包含重用块, 但在 KiCad 中没有对应的等效项。导入时已丢弃重用块信息"
-"。"
+"CADSTAR 设计包含重用块, 但在 KiCad 中没有对应的等效项。导入时已丢弃重用块信"
+"息。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:514
 msgid ""
@@ -18741,7 +18750,8 @@ msgstr ""
 msgid ""
 "The selected file is a CADSTAR symbol library. It does not contain a "
 "schematic design so cannot be imported/opened in this way."
-msgstr "所选文件是 CADSTAR 符号库。它不包含原理图设计, 因此无法以此方式导入/打开。"
+msgstr ""
+"所选文件是 CADSTAR 符号库。它不包含原理图设计, 因此无法以此方式导入/打开。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:604
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
@@ -18778,7 +18788,8 @@ msgstr "符号 '%s' 引用在库中找不到的元件 '%s'。未加载符号"
 msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
-msgstr "符号标识 '%s' 引用库符号 '%s', 在库中找不到。您是否导出了设计的所有项目?"
+msgstr ""
+"符号标识 '%s' 引用库符号 '%s', 在库中找不到。您是否导出了设计的所有项目?"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:854
 #, c-format
@@ -18794,7 +18805,8 @@ msgstr ""
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
-msgstr "符号标识 '%s' 的类型未知。它既不是符号也不是网络电源/符号。该符号未被加载。"
+msgstr ""
+"符号标识 '%s' 的类型未知。它既不是符号也不是网络电源/符号。该符号未被加载。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1013
 #, c-format
@@ -18864,8 +18876,8 @@ msgid ""
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
-"与此 CADSTAR 元件库相关的 CADSTAR 原理图归档 (*.csa)文件的路径。如果没有指"
-"定,则假定它位于相同文件夹中的 'symbol.csa'。"
+"与此 CADSTAR 元件库相关的 CADSTAR 原理图归档 (*.csa)文件的路径。如果没有指定,"
+"则假定它位于相同文件夹中的 'symbol.csa'。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:238
 msgid ""
@@ -18873,8 +18885,8 @@ msgid ""
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
-"与此库中符号相关的封装库的名称。您应该在封装库表中为 CADSTAR PCB Archive "
-"(*.cpa) 文件创建一个单独的条目。如果没有指定, 则假定它为 'cadstarpcblib'。"
+"与此库中符号相关的封装库的名称。您应该在封装库表中为 CADSTAR PCB Archive (*."
+"cpa) 文件创建一个单独的条目。如果没有指定, 则假定它为 'cadstarpcblib'。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:285
 #, c-format
@@ -18913,7 +18925,8 @@ msgstr "KiCad 数据库库文件"
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
-msgstr "'%s' 是 Eagle binary-format 格式文件; 只有 Eagle XML 格式文件才可以被导入。"
+msgstr ""
+"'%s' 是 Eagle binary-format 格式文件; 只有 Eagle XML 格式文件才可以被导入。"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:644
 #, c-format
@@ -19986,8 +19999,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20038,9 +20051,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -20087,8 +20100,8 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp><br> &nbsp;<br><samp>~~</samp> </td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>上划线</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>上划线</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
 "<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20126,9 +20139,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>总线定义</th>\n"
-"        <th>"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
-"th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>合成网络</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20179,9 +20191,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>成员{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>成员.D<sub>1</sub>, 成员.D<sub>2</sub>, 成员.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>成员.D<sub>1</"
+"sub>, 成员.D<sub>2</sub>, 成员.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -20330,8 +20342,8 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"所选原理图中的某些符号库名称在所选原理图工程库表中缺失。这可能破坏符号库引用"
-"。\n"
+"所选原理图中的某些符号库名称在所选原理图工程库表中缺失。这可能破坏符号库引"
+"用。\n"
 "\n"
 "是否要继续?"
 
@@ -20363,8 +20375,8 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "文件名 '%s' 可能会与原理图中已定义的现有文件名发生冲突, 如果您的操作系统支持"
-"不区分大小写的文件名, 抑或是您将此工程复制到这类操作系统中, 则可能会出现问题"
-"。\n"
+"不区分大小写的文件名, 抑或是您将此工程复制到这类操作系统中, 则可能会出现问"
+"题。\n"
 "是否继续?"
 
 #: eeschema/sheet.cpp:780
@@ -20811,8 +20823,8 @@ msgstr "创建临时输出文件时出错"
 
 #: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr "Kibis 尚未支持 DUT 值。https://ibis.org/summits/nov16a/chen.pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:854
@@ -21512,8 +21524,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b>重复的引脚 %s</b> %s 位于<b>(%s, %s)</b>, 与引脚 %s%s 冲突, 后者位于 <b>"
-"(%s, %s)</b>, (%s 的图形样式中)。"
+"<b>重复的引脚 %s</b> %s 位于<b>(%s, %s)</b>, 与引脚 %s%s 冲突, 后者位于 "
+"<b>(%s, %s)</b>, (%s 的图形样式中)。"
 
 #: eeschema/symbol_checker.cpp:93
 #, c-format
@@ -21521,8 +21533,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
-"<b>重复的引脚 %s</b> %s 位于<b>(%s, %s)</b>, 与引脚 %s%s 冲突, 后者位于 <b>"
-"(%s, %s)</b>, (在单元 %s 和 %s (%s) 的图形样式中)。"
+"<b>重复的引脚 %s</b> %s 位于<b>(%s, %s)</b>, 与引脚 %s%s 冲突, 后者位于 "
+"<b>(%s, %s)</b>, (在单元 %s 和 %s (%s) 的图形样式中)。"
 
 #: eeschema/symbol_checker.cpp:113
 #, c-format
@@ -21530,8 +21542,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>重复引脚 %s</b> %s, 位置 <b>(%s, %s)</b>, 和引脚 %s%s 冲突, 后者位于 <b>"
-"(%s,%s)</b>。"
+"<b>重复引脚 %s</b> %s, 位置 <b>(%s, %s)</b>, 和引脚 %s%s 冲突, 后者位于 "
+"<b>(%s,%s)</b>。"
 
 #: eeschema/symbol_checker.cpp:126
 #, c-format
@@ -21539,8 +21551,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b>重复引脚 %s</b> %s, 位置 <b>(%s, %s)</b>, 和引脚 %s%s 冲突, 后者位于 <b>"
-"(%s, %s)</b>, 在单元 %s和 %s 中发生冲突。"
+"<b>重复引脚 %s</b> %s, 位置 <b>(%s, %s)</b>, 和引脚 %s%s 冲突, 后者位于 "
+"<b>(%s, %s)</b>, 在单元 %s和 %s 中发生冲突。"
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
@@ -21551,7 +21563,8 @@ msgstr "<b>警告: 参考位号为空</b><br><br>"
 msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
-msgstr "<b>警告: 参考前缀</b><br>'%s' 结尾的前缀如果保存在符号库中, 可能会产生问题"
+msgstr ""
+"<b>警告: 参考前缀</b><br>'%s' 结尾的前缀如果保存在符号库中, 可能会产生问题"
 
 #: eeschema/symbol_checker.cpp:216
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
@@ -21582,14 +21595,16 @@ msgstr "<b>可疑电源符号</b><br>不需要不可见的电源输入引脚<br>
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
 "style."
-msgstr "信息: <b>隐藏的电源引脚 %s</b>%s, 位于 <b>(%s, %s)</b>, (%s 的图形样式中)。"
+msgstr ""
+"信息: <b>隐藏的电源引脚 %s</b>%s, 位于 <b>(%s, %s)</b>, (%s 的图形样式中)。"
 
 #: eeschema/symbol_checker.cpp:279
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of %s body style."
-msgstr "信息: <b>隐藏的电源引脚 %s</b>%s, 位于 <b>(%s, %s)</b>, (单元 %c (属于 %s))。"
+msgstr ""
+"信息: <b>隐藏的电源引脚 %s</b>%s, 位于 <b>(%s, %s)</b>, (单元 %c (属于 %s))。"
 
 #: eeschema/symbol_checker.cpp:293
 #, c-format
@@ -21600,7 +21615,8 @@ msgstr "信息: <b>隐藏的电源引脚 %s</b> %s, 位于<b>(%s, %s)</b>。"
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr "信息: <b>隐藏的电源引脚 %s</b>%s, 位于 <b>(%s, %s)</b>, 此坐标在单元 %c 中。"
+msgstr ""
+"信息: <b>隐藏的电源引脚 %s</b>%s, 位于 <b>(%s, %s)</b>, 此坐标在单元 %c 中。"
 
 #: eeschema/symbol_checker.cpp:313
 msgid ""
@@ -21610,7 +21626,8 @@ msgstr "(隐藏的电源引脚会将其引脚名称驱动到任何连接的网�
 #: eeschema/symbol_checker.cpp:328
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
-msgstr "<b>未在栅格上的引脚 %s</b>, %s 位于 <b>(%s, %s)</b>, (%s 的图形样式中)。"
+msgstr ""
+"<b>未在栅格上的引脚 %s</b>, %s 位于 <b>(%s, %s)</b>, (%s 的图形样式中)。"
 
 #: eeschema/symbol_checker.cpp:338
 #, c-format
@@ -21618,8 +21635,8 @@ msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
 msgstr ""
-"<b>未在栅格上引脚 %s</b>位于 <b>(%s, %s%s )</b>, (单元 %c (属于%s) 的图形样式"
-"。"
+"<b>未在栅格上引脚 %s</b>位于 <b>(%s, %s%s )</b>, (单元 %c (属于%s) 的图形样"
+"式。"
 
 #: eeschema/symbol_checker.cpp:352
 #, c-format
@@ -22137,7 +22154,8 @@ msgstr "[没有选择库]"
 msgid ""
 "Changes made in this dialog occur immediately, use Undo in each affected "
 "document to undo them"
-msgstr "在此对话框中进行的更改会立即生效, 在每个受影响的文档中使用撤消功能可撤销更改"
+msgstr ""
+"在此对话框中进行的更改会立即生效, 在每个受影响的文档中使用撤消功能可撤销更改"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:45
 #: eeschema/tools/sch_actions.cpp:560 eeschema/tools/sch_actions.cpp:568
@@ -24655,7 +24673,8 @@ msgstr "曝光项目草图"
 msgid ""
 "Display flashed items (items drawn using standard or macro apertures) in "
 "outlines mode"
-msgstr "在外框模式下显示曝光项目 (使用标准光圈或自定义光圈 (宏光圈) 绘制的项目)"
+msgstr ""
+"在外框模式下显示曝光项目 (使用标准光圈或自定义光圈 (宏光圈) 绘制的项目)"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:65
 msgid "Sketch lines"
@@ -25131,7 +25150,7 @@ msgid "Clear Recent Job Files"
 msgstr "清除最近的 Job 文件"
 
 #: gerbview/gerbview_frame.cpp:90
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad Gerber 查看器"
 
@@ -25928,7 +25947,8 @@ msgstr "要包括的英文逗号分隔的原始的层名, 如 F.Cu,B.Cu"
 msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
-msgstr "要包含在所有绘制结果中的层, 要包含的原始层名称, 用英文逗号分隔, 如 F.Cu,B.Cu"
+msgstr ""
+"要包含在所有绘制结果中的层, 要包含的原始层名称, 用英文逗号分隔, 如 F.Cu,B.Cu"
 
 #: kicad/cli/command_pcb_export_drill.cpp:50
 #: pcbnew/dialogs/dialog_gendrill_base.h:89
@@ -26106,7 +26126,8 @@ msgstr "电路板文件不存在或无法访问\n"
 msgid ""
 "This command has deprecated behavior as of KiCad 9.0, the default behavior "
 "of this command will change in a future release."
-msgstr "此命令的行为在 KiCad 9.0 中已被弃用, 未来版本中此命令的默认行为将发生更改。"
+msgstr ""
+"此命令的行为在 KiCad 9.0 中已被弃用, 未来版本中此命令的默认行为将发生更改。"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:178
 #: kicad/cli/command_pcb_export_svg.cpp:189
@@ -26356,7 +26377,8 @@ msgstr "平移摄像机, 格式为 'X,Y,Z', 例如: '3,0,0'"
 msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
-msgstr "以厘米为单位, 设置相对于电路板中心的 Pivot, 格式为 'X,Y,Z', 例如: '-10,2,0'"
+msgstr ""
+"以厘米为单位, 设置相对于电路板中心的 Pivot, 格式为 'X,Y,Z', 例如: '-10,2,0'"
 
 #: kicad/cli/command_pcb_render.cpp:297
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
@@ -30402,11 +30424,11 @@ msgid ""
 "Selected cells shown with the default system's coloring choice after a table "
 "refill.\n"
 msgstr ""
-"该表显示了各种金属和合金之间的电化学电位差异。正数表示行为阳极, 列为阴极"
-"。<br>\n"
+"该表显示了各种金属和合金之间的电化学电位差异。正数表示行为阳极, 列为阴极。"
+"<br>\n"
 "电偶腐蚀会在特定条件下影响接触的不同金属。<br>\n"
-"电化学对的阳极被氧化并被腐蚀掉, 而阴极则被溶解的金属镀在上面, 但仍受到保护"
-"。<br>\n"
+"电化学对的阳极被氧化并被腐蚀掉, 而阴极则被溶解的金属镀在上面, 但仍受到保护。"
+"<br>\n"
 "EN 50310 暗示电压差低于 300mV。已知的做法在主要金属或合金对之间使用第三接触金"
 "属 (即化学金表面光洁度)。<br>\n"
 "重新填充表格后, 所选单元格将显示为系统默认的选区着色。\n"
@@ -30592,8 +30614,8 @@ msgstr ""
 "不超过 400mil (10mm) 的情况。\n"
 "\n"
 "该公式来自 IPC 2221, 具体为:\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "其中: <br>\n"
 "__I__ 为最大电流, 单位为 A (安培)\n"
 "__&Delta;T__ 为环境温度的温升, 单位为 °C (摄氏度)\n"
@@ -31262,7 +31284,8 @@ msgstr "选择要移除的层:"
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
-msgstr "Epsilon R (相对介电常数) 的值不正确 (如果未使用, 则 Epsilon R 必须为正或为空)"
+msgstr ""
+"Epsilon R (相对介电常数) 的值不正确 (如果未使用, 则 Epsilon R 必须为正或为空)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1191
 msgid ""
@@ -31652,8 +31675,8 @@ msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"<br/>有 %i 个参考位号前缀在被使用<br/>"
-"**********************************************************<br/>"
+"<br/>有 %i 个参考位号前缀在被使用<br/"
+">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:452
 #, c-format
@@ -32715,15 +32738,30 @@ msgstr "水平数量"
 msgid "vertical count"
 msgstr "垂直数量"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:425
+#: pcbnew/dialogs/dialog_create_array.cpp:422
+#, c-format
+msgid "horizontal delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:428
+#, c-format
+msgid "vertical delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:437
 msgid "stagger"
 msgstr "交错"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:481
+#: pcbnew/dialogs/dialog_create_array.cpp:493
 msgid "point count"
 msgstr "点数量"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:528
+#: pcbnew/dialogs/dialog_create_array.cpp:500
+#, c-format
+msgid "angular delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:546
 msgid "Bad parameters"
 msgstr "参数不良或丢失"
 
@@ -33913,7 +33951,8 @@ msgstr "导出为复合形状"
 msgid ""
 "Merges all shapes into a single Compound shape. Useful for external software "
 "that does de-duplication based on shape names."
-msgstr "将所有形状合并为一个复合形状。可以便于使用其他软件根据形状名称删除重复数据。"
+msgstr ""
+"将所有形状合并为一个复合形状。可以便于使用其他软件根据形状名称删除重复数据。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:64
 msgid "Export board body"
@@ -34591,7 +34630,8 @@ msgstr "间距重写和设置"
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
-msgstr "当前已经分配了库标识和封装标识。使用 \"替换封装...\" 来分配不同的封装。"
+msgstr ""
+"当前已经分配了库标识和封装标识。使用 \"替换封装...\" 来分配不同的封装。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:124
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:116
@@ -35628,8 +35668,8 @@ msgid ""
 "assigned symbols, or to re-assign footprints to symbols which match their "
 "current references."
 msgstr ""
-"选择是否更新封装位号以匹配其当前关联的符号, 或者重新封装位号分配给匹配的符号"
-"。"
+"选择是否更新封装位号以匹配其当前关联的符号, 或者重新封装位号分配给匹配的符"
+"号。"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:53
 msgid "Delete footprints with no components in netlist"
@@ -35770,7 +35810,8 @@ msgstr "KiCad 层"
 msgid ""
 "All required layers (marked with '*') must be matched. Please click on 'Auto-"
 "Match Layers' to automatically match the remaining layers"
-msgstr "所有必需的层(用'*'标记)必须匹配。请点击\"自动匹配层\", 自动匹配剩余的层"
+msgstr ""
+"所有必需的层(用'*'标记)必须匹配。请点击\"自动匹配层\", 自动匹配剩余的层"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:105
 msgid "Rotate around item anchor"
@@ -36664,7 +36705,8 @@ msgstr "全局阻焊最小宽度/边距未设置为 0。 "
 msgid ""
 "Most board manufacturers expect 0 and use their own constraints for solder "
 "mask minimum width."
-msgstr "大多数电路板制造商期望该值为 0, 并对阻焊层最小宽度使用自己的宽度约束条件。"
+msgstr ""
+"大多数电路板制造商期望该值为 0, 并对阻焊层最小宽度使用自己的宽度约束条件。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:183
 msgid "Board setup"
@@ -38304,7 +38346,8 @@ msgstr "自动刷新 3D 视图"
 msgid ""
 "When enabled, edits to the board will cause the 3D view to refresh (may be "
 "slow with larger boards)"
-msgstr "启用后, 对电路板的编辑将造成 3D 视图刷新 (对于较大的电路板, 刷新速度可能较慢)"
+msgstr ""
+"启用后, 对电路板的编辑将造成 3D 视图刷新 (对于较大的电路板, 刷新速度可能较慢)"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:70
 #: pcbnew/dialogs/panel_pcbnew_action_plugins.cpp:71
@@ -39164,8 +39207,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
@@ -39336,205 +39379,201 @@ msgstr ""
 "\n"
 "\n"
 "\n"
-"| 约束类型                   | 参数类型"
-"                                                                                                                "
-"| 说明"
-"                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
+"| 约束类型                   | 参数类"
+"型                                                                                                                "
+"| 说"
+"明                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
 "|\n"
 "\n"
-"|---------------------------"
-"|-----------------------------------------------------------------------------------------------------------------------"
-"|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                           "
+"| 检查过孔的孔环宽度。"
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
 "\n"
-"| `annular_width`           | min/opt/max"
-"                                                                                                           "
-"| 检查过孔的孔环宽度。<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                                  "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
+"| 检查指定的表达式。"
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                                   "
 "|\n"
 "\n"
-"| `assertion`               | \"&lt;expression>"
-"\"                                                                                                     "
-"| 检查指定的表达式。<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                                   "
-"|\n"
-"\n"
-"| `clearance`               | min"
-"                                                                                                                   "
+"| `clearance`               | "
+"min                                                                                                                   "
 "| 指定不同网络之间铜箔对象的 **电气间距**  (如果希望指定不考虑网络的对象间"
-"距, 请查看 `physical_clearance` 约束类型。)<br><br>若允许铜箔对象重叠 (碰撞)"
-", 可创建 `min` 值小于零 (例如 -1) 的 `clearance` 约束。<br>"
-"                                                                                                                                                                                                        "
+"距, 请查看 `physical_clearance` 约束类型。)<br><br>若允许铜箔对象重叠 (碰"
+"撞), 可创建 `min` 值小于零 (例如 -1) 的 `clearance` 约束。"
+"<br>                                                                                                                                                                                                        "
 "|\n"
 "\n"
-"| `courtyard_clearance`     | min"
-"                                                                                                                   "
+"| `courtyard_clearance`     | "
+"min                                                                                                                   "
 "| 检查封装外框之间的间距, 如果两个外框距离小于 `min` 值, 则生成错误。  如果封"
-"装没有外框形状, 此约束不产生错误。<br>"
-"                                                                                                                                                                                                                                                                                                                          "
+"装没有外框形状, 此约束不产生错误。"
+"<br>                                                                                                                                                                                                                                                                                                                          "
 "|\n"
 "\n"
-"| `creepage`                | min"
-"                                                                                                                   "
-"| 指定不同网络之间铜箔对象的爬电距离<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                      "
+"| `creepage`                | "
+"min                                                                                                                   "
+"| 指定不同网络之间铜箔对象的爬电距离"
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
 "\n"
-"| `diff_pair_gap`           | min/opt/max"
-"                                                                                                           "
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                           "
 "| 检查差分对中耦合走线之间的间隙。  耦合走线指相互平行的走线。  差分对间隙不"
-"检查差分对中未耦合的部分 (例如元件扇出部分)。<br>"
-"                                                                                                                                                                                                                                                                                                                                       "
+"检查差分对中未耦合的部分 (例如元件扇出部分)。"
+"<br>                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "\n"
-"| `diff_pair_uncoupled`     | max"
-"                                                                                                                   "
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                   "
 "| 检查差分对中未耦合部分正负走线之间的最大距离 (例如, 从元件扇出的差分对, 为"
-"了绕过某一物体 (如过孔) 而变得不耦合的部分) <br>"
-"                                                                                                                                                                                                                                                                                                                                                   "
+"了绕过某一物体 (如过孔) 而变得不耦合的部分) "
+"<br>                                                                                                                                                                                                                                                                                                                                                   "
 "|\n"
 "\n"
-"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>"
-"`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>"
-"`footprint`<br> | 指定一个或多个不允许的对象类型, 用空格分隔,  例如, `"
-"(constraint disallow track)` 或 `(constraint disallow track via pad)`。  如果"
-"此类型的对象符合足规则条件, 则会生成 DRC 错误。<br><br>此约束本质上类似于 "
-"keepout 规则, 但可用于创建更具体的 keepout 约束。<br>"
-"                                                                                                                                                                                                            "
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| 指定一个或多个不允许的对象类型, 用空格分隔,  例如, `(constraint disallow "
+"track)` 或 `(constraint disallow track via pad)`。  如果此类型的对象符合足规"
+"则条件, 则会生成 DRC 错误。<br><br>此约束本质上类似于 keepout 规则, 但可用于"
+"创建更具体的 keepout 约束。"
+"<br>                                                                                                                                                                                                            "
 "|\n"
 "\n"
-"| `edge_clearance`          | min/opt/max"
-"                                                                                                           "
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                           "
 "| 检查对象与板边的间距。<br><br>可以理解为 \"铣削公差\", 因为板边缘包括 "
 "`Edge.Cuts` 层上的所有图形项目以及任何 *椭圆形* 焊盘孔。（有关钻孔公差, 参见 "
-"`physical_hole_clearance`）。<br>"
-"                                                                                                                                                                                                                                                                                      "
+"`physical_hole_clearance`）。"
+"<br>                                                                                                                                                                                                                                                                                      "
 "|\n"
 "\n"
-"| `length`                  | min/max"
-"                                                                                                               "
+"| `length`                  | min/"
+"max                                                                                                               "
 "| 检查符合规则条件的网络的总布线长度, 网络布线长度低于 `min` 值 (若有指定) 或"
-"高于 `max` 值 (若有指定), 则会生成错误。<br>"
-"                                                                                                                                                                                                                                                                                                                                         "
+"高于 `max` 值 (若有指定), 则会生成错误。"
+"<br>                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
 "\n"
-"| `hole`                    | min/max"
-"                                                                                                               "
+"| `hole`                    | min/"
+"max                                                                                                               "
 "| 检查焊盘或过孔的钻孔尺寸 (直径)。  对于椭圆形孔, 将检查其较短的直径 (短轴长"
 "度) 是否满足 `min` 值 (若有指定), 较长的直径 (长轴长度) 是否满足 `max` 值 (若"
-"有指定)。<br>"
-"                                                                                                                                                                                                                                                                                                      "
+"有指定)。"
+"<br>                                                                                                                                                                                                                                                                                                      "
 "|\n"
 "\n"
-"| `hole_clearance`          | min"
-"                                                                                                                   "
+"| `hole_clearance`          | "
+"min                                                                                                                   "
 "| 检查焊盘或过孔的钻孔与不同网络的铜箔对象之间的间距。  间距从孔的边缘开始测"
-"量, 而非中心。<br>"
-"                                                                                                                                                                                                                                                                                                                                                                  "
+"量, 而非中心。"
+"<br>                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
 "\n"
-"| `hole_to_hole`            | min"
-"                                                                                                                   "
-"| 检查机械钻孔焊盘和过孔之间的间距。  间距从孔的边缘开始测量, 而非中心。<br>"
-"<br>此约束仅用于保护钻头的安全。  不会检查 **激光钻孔** (微孔) 与其他非机械钻"
-"孔的间距, 也不会检查 **铣削孔** (椭圆形孔) 与其他非机械钻孔之间的间距。<br>"
-"                                                                                                                                                                                                                                                  "
+"| `hole_to_hole`            | "
+"min                                                                                                                   "
+"| 检查机械钻孔焊盘和过孔之间的间距。  间距从孔的边缘开始测量, 而非中心。"
+"<br><br>此约束仅用于保护钻头的安全。  不会检查 **激光钻孔** (微孔) 与其他非机"
+"械钻孔的间距, 也不会检查 **铣削孔** (椭圆形孔) 与其他非机械钻孔之间的间距。"
+"<br>                                                                                                                                                                                                                                                  "
 "|\n"
 "\n"
-"| `physical_clearance`      | min"
-"                                                                                                                   "
+"| `physical_clearance`      | "
+"min                                                                                                                   "
 "| 检查指定层上两个对象之间的间距 (包括非铜层)。<br><br>虽然此检查比 "
-"`clearance` 更通用, 但速度要慢的多。  请优先使用 `clearance`。<br>"
-"                                                                                                                                                                                                                                                                                                                     "
+"`clearance` 更通用, 但速度要慢的多。  请优先使用 `clearance`。"
+"<br>                                                                                                                                                                                                                                                                                                                     "
 "|\n"
 "\n"
-"| `physical_hole_clearance` | min"
-"                                                                                                                   "
+"| `physical_hole_clearance` | "
+"min                                                                                                                   "
 "| 检查焊盘或过孔的钻孔与另一对象之间的间距, 无论是否属于同一网络。 间距从孔的"
-"边缘开始测量, 而非中心。<br><br>可以理解为 \"钻孔公差\", 因为它仅包含 **圆"
-"形** 孔 (有关铣削公差, 参见 `edge_clearance`)。<br>"
-"                                                                                                                                                                                                                                                               "
+"边缘开始测量, 而非中心。<br><br>可以理解为 \"钻孔公差\", 因为它仅包含 **圆形"
+"** 孔 (有关铣削公差, 参见 `edge_clearance`)。"
+"<br>                                                                                                                                                                                                                                                               "
 "|\n"
 "\n"
-"| `silk_clearance`          | min/opt/max"
-"                                                                                                           "
-"| 检查丝印层上的对象与其他对象之间的间距。<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                 "
-"\n"
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                           "
+"| 检查丝印层上的对象与其他对象之间的间距。"
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                 \n"
 "|\n"
 "\n"
-"| `skew`                    | max"
-"                                                                                                                   "
+"| `skew`                    | "
+"max                                                                                                                   "
 "| 检查符合规则条件的网络的总 skew, 即每个网络的长度与所有符合规则条件的网络长"
 "度平均值之间的差值。  如果某个网络与平均长度的差值绝对值超过 `max`, 则会生成"
-"错误。<br>"
-"                                                                                                                                                                                                                                                                                              "
+"错误。"
+"<br>                                                                                                                                                                                                                                                                                              "
 "|\n"
 "\n"
-"<!-- | `solder_mask_expansion`   | opt"
-"                                                                                                                   "
-"| 指定焊盘, 形状和走线的阻焊扩展值。"
-"                                                                                                                                                                                                                                                                                                                                                                                        "
+"<!-- | `solder_mask_expansion`   | "
+"opt                                                                                                                   "
+"| 指定焊盘, 形状和走线的阻焊扩展"
+"值。                                                                                                                                                                                                                                                                                                                                                                                        "
 "| -->\n"
 "\n"
-"<!-- | `solder_paste_abs_margin` | opt"
-"                                                                                                                   "
+"<!-- | `solder_paste_abs_margin` | "
+"opt                                                                                                                   "
 "| 指定焊盘的焊膏绝对间距, 通常为负值, 用于控制焊膏收缩量。<br><br>最终的焊膏"
-"间距为绝对间距加上相对间距。"
-"                                                                                                                                                                                                                                                        "
+"间距为绝对间距加上相对间"
+"距。                                                                                                                                                                                                                                                        "
 "| -->\n"
 "\n"
-"<!-- | `solder_paste_rel_margin` | opt"
-"                                                                                                                   "
+"<!-- | `solder_paste_rel_margin` | "
+"opt                                                                                                                   "
 "| 指定焊盘的焊膏相对间距, 通常为负值, 用于控制锡膏收缩量。<br><br>最终的焊膏"
-"间距为绝对间距加上相对间距。"
-"                                                                                                                                                                                                                                                        "
+"间距为绝对间距加上相对间"
+"距。                                                                                                                                                                                                                                                        "
 "| -->\n"
 "\n"
-"| `thermal_relief_gap`      | min"
-"                                                                                                                   "
-"| 指定焊盘与带有缓释热焊盘 (花焊盘) 的填充区之间的间隙宽度。<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                 "
+"| `thermal_relief_gap`      | "
+"min                                                                                                                   "
+"| 指定焊盘与带有缓释热焊盘 (花焊盘) 的填充区之间的间隙宽度。"
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                 "
 "|\n"
 "\n"
-"| `thermal_spoke_width`     | opt"
-"                                                                                                                   "
-"| 指定焊盘与带有缓释热焊盘 (花焊盘) 的填充区之间的散热引线宽度。<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                              "
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                   "
+"| 指定焊盘与带有缓释热焊盘 (花焊盘) 的填充区之间的散热引线宽度。"
+"<br>                                                                                                                                                                                                                                                                                                                                                                                              "
 "|\n"
 "\n"
-"| `track_width`             | min/opt/max"
-"                                                                                                           "
+"| `track_width`             | min/opt/"
+"max                                                                                                           "
 "| 检查走线和弧形走线的宽度。  如果某段宽度低于 `min` 值 (若有指定) 或高于 "
-"`max` 值 (若有指定), 则会生成错误。<br>"
-"                                                                                                                                                                                                                                                                                                                                                     "
+"`max` 值 (若有指定), 则会生成错误。"
+"<br>                                                                                                                                                                                                                                                                                                                                                     "
 "|\n"
 "\n"
-"| `track_angle`             | min/opt/max"
-"                                                                                                           "
+"| `track_angle`             | min/opt/"
+"max                                                                                                           "
 "| 检查两个连接走线段之间的角度。  如果这对走线的角度低于 `min` 值 (若有指定) "
-"或高于 `max` 值 (若有指定), 则会生成错误。<br>"
-"                                                                                                                                                                                                                                                                                                                                           "
+"或高于 `max` 值 (若有指定), 则会生成错误。"
+"<br>                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
 "\n"
-"| `track_segment_length`    | min/max"
-"                                                                                                               "
+"| `track_segment_length`    | min/"
+"max                                                                                                               "
 "| 检查走线和弧形走线的长度。  如果某段长度低于 `min` 值 (若有指定) 或高于 "
-"`max` 值 (若有指定), 则会生成错误。<br>"
-"                                                                                                                                                                                                                                                                                                                                                     "
+"`max` 值 (若有指定), 则会生成错误。"
+"<br>                                                                                                                                                                                                                                                                                                                                                     "
 "|\n"
 "\n"
-"| `via_count`               | max"
-"                                                                                                                   "
+"| `via_count`               | "
+"max                                                                                                                   "
 "| 计算满足规则条件的每个网络的过孔数量。  如果某网络上的过孔数量超过了 `max` "
-"值, 则为该网络生成错误。<br>"
-"                                                                                                                                                                                                                                                                                                                                                         "
+"值, 则为该网络生成错误。"
+"<br>                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
 "\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
-"`none`                                                                                "
-"| 指定填充区与焊盘之间的连接方式。<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                        "
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
+"| 指定填充区与焊盘之间的连接方式。"
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "\n"
 "\n"
@@ -39684,8 +39723,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -39914,8 +39953,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOfFootprint('<footprint_identifier 封装标识>')\n"
-"若 `A` 是指定封装的成员 (如该封装内定义的焊盘或图形形状), 则返回 True"
-"。`footprint_identifier 封装标识`的指定方式见上文。\n"
+"若 `A` 是指定封装的成员 (如该封装内定义的焊盘或图形形状), 则返回 True。"
+"`footprint_identifier 封装标识`的指定方式见上文。\n"
 "<br><br>\n"
 "\n"
 "    A.memberOfSheet('<sheet_path 图纸路径>')\n"
@@ -39923,8 +39962,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOfSheetOrChildren('<sheet_path 图纸路径>')\n"
-"若 `A` 为指定图纸或其子层次图纸页面的成员，则返回 True。图纸路径可包含通配符"
-"。\n"
+"若 `A` 为指定图纸或其子层次图纸页面的成员，则返回 True。图纸路径可包含通配"
+"符。\n"
 "<br><br>\n"
 "\n"
 
@@ -39951,13 +39990,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -40094,13 +40133,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -40207,8 +40246,8 @@ msgstr ""
 "    # 在已知工厂会机械加工钻出盲孔/埋孔后再进行激光钻微孔的情况下,\n"
 "    # 允许盲孔/埋孔与微孔之间的孔对孔违规\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
-"\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
+"'Micro'\")\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -43500,8 +43539,8 @@ msgstr "正在处理符号 '%s:%s'。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1410
@@ -44063,8 +44102,8 @@ msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
-"读取网表时收到一个错误。请使用 \"帮助->报告错误\" 菜单向 KiCad 团队报告此问题"
-"。"
+"读取网表时收到一个错误。请使用 \"帮助->报告错误\" 菜单向 KiCad 团队报告此问"
+"题。"
 
 #: pcbnew/pcb_edit_frame.cpp:2076
 #, c-format
@@ -44660,7 +44699,8 @@ msgstr ""
 msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
 "elements on this layer have been mapped to KiCad layer '%s'."
-msgstr "CADSTAR 层 '%s' 被假定为工艺层。此层上的所有元素都映射到 KiCad 层 '%s'。"
+msgstr ""
+"CADSTAR 层 '%s' 被假定为工艺层。此层上的所有元素都映射到 KiCad 层 '%s'。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:325
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:349
@@ -44765,8 +44805,8 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
-"测量标注 ID %s 在 CADSTAR 中具有 '外部' 样式。KiCad 尚未支持外部测量标注样式"
-"。软件使用内部测量标注样式导入了该标注对象。"
+"测量标注 ID %s 在 CADSTAR 中具有 '外部' 样式。KiCad 尚未支持外部测量标注样"
+"式。软件使用内部测量标注样式导入了该标注对象。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1549
 #, c-format
@@ -44778,7 +44818,8 @@ msgstr "'意外' 的测量标注类型 (ID %s)。未被导入。"
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr "测量标注 %s 是一个角度测量标注, 但在 KiCad 中没有对应的等效项。对象未被导入。"
+msgstr ""
+"测量标注 %s 是一个角度测量标注, 但在 KiCad 中没有对应的等效项。对象未被导入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1724
 #, c-format
@@ -44795,7 +44836,8 @@ msgstr ""
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
-msgstr "CADSTAR 设计包含 '%s' 区, 但在 KiCad 中没有对应的等效项。不支持纯布置区。"
+msgstr ""
+"CADSTAR 设计包含 '%s' 区, 但在 KiCad 中没有对应的等效项。不支持纯布置区。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1760
 #, c-format
@@ -44852,9 +44894,9 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR 模板 '%s' 具有不同的设置, 用于\"保留覆铜- 不相交\"和\"保留覆铜 - 隔"
-"离\"。KiCad 不区分这两个设置。不相交覆铜的设置已被应用为 KiCad 覆铜区的最小死"
-"铜面积设置。"
+"CADSTAR 模板 '%s' 具有不同的设置, 用于\"保留覆铜- 不相交\"和\"保留覆铜 - 隔离"
+"\"。KiCad 不区分这两个设置。不相交覆铜的设置已被应用为 KiCad 覆铜区的最小死铜"
+"面积设置。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2041
 #, c-format
@@ -44922,7 +44964,8 @@ msgstr "由于未加载任何项目, 因此无法设置文本变量。"
 msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
-msgstr "CADSTAR 设计包含泪滴。这个导入器还不支持它们, 所以设计中的泪滴被忽略了。"
+msgstr ""
+"CADSTAR 设计包含泪滴。这个导入器还不支持它们, 所以设计中的泪滴被忽略了。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2598
 #, c-format
@@ -44940,8 +44983,8 @@ msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
 msgstr ""
-"形状 '%s' 在 CADSTAR 作为 Hatch, 但在 KiCad 中没有对应的等效项。改用实体填充"
-"。"
+"形状 '%s' 在 CADSTAR 作为 Hatch, 但在 KiCad 中没有对应的等效项。改用实体填"
+"充。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3613
 #, c-format
@@ -45000,8 +45043,8 @@ msgid ""
 "Route Code' (which has been imported for all nets)."
 msgstr ""
 "CADSTAR 设计包含关联了\"网络类\"的网络。但在 KiCad 中没有对应的等效项, 因此没"
-"有导入这些元素。注: KiCad 的\"网络类\"版本更接近 CADSTAR 的\"网络路线编码\""
-"(已为所有网络导入)。"
+"有导入这些元素。注: KiCad 的\"网络类\"版本更接近 CADSTAR 的\"网络路线编码"
+"\"(已为所有网络导入)。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:4014
 msgid ""
@@ -48977,7 +49020,8 @@ msgstr "飞线模式 (三态)"
 #: pcbnew/tools/pcb_actions.cpp:1382
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
-msgstr "在显示所有层的飞线, 仅显示可见层的飞线和不显示层飞线三种状态之间循环切换"
+msgstr ""
+"在显示所有层的飞线, 仅显示可见层的飞线和不显示层飞线三种状态之间循环切换"
 
 #: pcbnew/tools/pcb_actions.cpp:1387
 msgid "Net Color Mode (3-state)"
@@ -51216,101 +51260,93 @@ msgstr "用于电镀孔 (PTH) 的缓释热焊盘 (花焊盘)"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] 加载失败: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Converter;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "将位图转换成元件"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "从位图创建用于 KiCad 的元件"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad 原理图编辑器 (独立版)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "原理图捕获工具"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "独立版的 KiCad 原理图编辑器"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "Gerber 查看器"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "查看 Gerber 文件"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "Projectmanager;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "EDA 套件"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "用于原理图设计和电路板布局的工具套件"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "KiCad PCB 计算器"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "PCB;Calculator;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "PCB 计算器"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr "用于各种电子相关计算的计算器"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad PCB 编辑器 (独立版)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "PCB 布局编辑器"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "独立版的 KiCad 电路板编辑器"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "用于原理图和电路板设计的电子设计自动化套件"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-msgid "Circuit board"
-msgstr "电路板"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -51365,6 +51401,12 @@ msgstr "KiCad 原理图符号"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad 图框编辑器"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "电路板"
 
 #~ msgid "Command"
 #~ msgstr "命令"
@@ -54524,8 +54566,8 @@ msgstr "KiCad 图框编辑器"
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
-#~ "\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A."
+#~ "enclosedByArea('Shield*')\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -54657,13 +54699,13 @@ msgstr "KiCad 图框编辑器"
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -54747,9 +54789,8 @@ msgstr "KiCad 图框编辑器"
 #~ "\n"
 #~ "### Documentation\n"
 #~ "\n"
-#~ "For the full documentation see [https://docs.kicad.org](https://"
-#~ "docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
-#~ "pcbnew.html#custom_design_rules)."
+#~ "For the full documentation see [https://docs.kicad.org](https://docs."
+#~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 #~ msgstr ""
 #~ "### Top-level Clauses\n"
 #~ "### 顶层语句\n"
@@ -55055,14 +55096,14 @@ msgstr "KiCad 图框编辑器"
 #~ "    (rule \"Distance between Vias of Different Nets\"  \n"
 #~ "#    (rule \"不同网络的过孔的间距\"  \n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"  \n"
 #~ "#    (rule \"不同网络的焊盘的间距\"  \n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"  \n"
@@ -56503,8 +56544,8 @@ msgstr "KiCad 图框编辑器"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -56586,8 +56627,8 @@ msgstr "KiCad 图框编辑器"
 #~ "\n"
 #~ "## 4.2 - 通过命令行生成网表文件\n"
 #~ "\n"
-#~ "假设我们正在使用程序 `xsltproc.exe` 将样式表应用于中间文件，则 "
-#~ "`xsltproc.exe` 将通过以下命令执行。\n"
+#~ "假设我们正在使用程序 `xsltproc.exe` 将样式表应用于中间文件，则 `xsltproc."
+#~ "exe` 将通过以下命令执行。\n"
 #~ "\n"
 #~ "```\n"
 #~ "xsltproc.exe -o <输出文件名> <样式表文件名> <输入要转换的 XML 文件>\n"
@@ -56666,8 +56707,8 @@ msgstr "KiCad 图框编辑器"
 #~ "\n"
 #~ "在 Linux 上：\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "以上示例假定 `xsltproc` 已安装在 Windows 下的 PC 上和 xsl 文件位于 "
@@ -61809,15 +61850,15 @@ msgstr "KiCad 图框编辑器"
 #~ "Missing disallowed type.|  Expected 'track', 'via', 'micro_via', "
 #~ "'blind_via', 'pad', 'zone', 'text', 'graphic' or 'hole'."
 #~ msgstr ""
-#~ "缺少不允许的类型。| 应为“布线”、“过孔”、“微孔”、“盲孔”、“焊盘”、“区域”、"
-#~ "“文本”、“图形”或“通孔”。"
+#~ "缺少不允许的类型。| 应为“布线”、“过孔”、“微孔”、“盲孔”、“焊盘”、“区"
+#~ "域”、“文本”、“图形”或“通孔”。"
 
 #~ msgid ""
 #~ "Unrecognized item '%s'.|  Expected 'track', 'via', 'micro_via', "
 #~ "'blind_via', 'pad', 'zone', 'text', 'graphic' or 'hole'."
 #~ msgstr ""
-#~ "无法识别的项目 ‘%s’。|应为“布线”、“过孔”、“微孔”、“盲孔”、“焊盘”、“区域”、"
-#~ "“文本”、“图形”或“通孔”。"
+#~ "无法识别的项目 ‘%s’。|应为“布线”、“过孔”、“微孔”、“盲孔”、“焊盘”、“区"
+#~ "域”、“文本”、“图形”或“通孔”。"
 
 #~ msgid ""
 #~ "Unrecognized item '%s'.| Expected 'constraint', 'condition' or 'disallow'."
@@ -63970,14 +64011,14 @@ msgstr "KiCad 图框编辑器"
 #~ msgid ""
 #~ "DXF only:\n"
 #~ "Check to plot all layers in polygon mode.\n"
-#~ "Uncheck to plot in sketch mode layers that don't support polygons "
-#~ "(*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
+#~ "Uncheck to plot in sketch mode layers that don't support polygons (*."
+#~ "SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
 #~ "and plot in polygon mode other layers (*.Cu, *.Adhes, *.Paste, *.Mask)"
 #~ msgstr ""
 #~ "仅限 DXF：\n"
 #~ "勾选以多边形模式绘制所有图层。\n"
-#~ "取消勾选不支持多边形的草图模式图层(*.SilkS, *_User, Edge.Cuts, Margin, "
-#~ "*.CrtYd, *.Fab)\n"
+#~ "取消勾选不支持多边形的草图模式图层(*.SilkS, *_User, Edge.Cuts, Margin, *."
+#~ "CrtYd, *.Fab)\n"
 #~ "并在多边形模式下绘制其他图层 (*.Cu, *.Adhes, *.Paste, *.Mask)"
 
 #~ msgid "Save changes to footprint before closing?"

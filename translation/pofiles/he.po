@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 11:18-0700\n"
+"POT-Creation-Date: 2026-04-17 15:22+0300\n"
 "PO-Revision-Date: 2026-03-20 17:11+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/kicad/v9/he/>\n"
@@ -38,7 +38,8 @@ msgstr "לא נטענה תצורת רכיב."
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
-msgstr "קו מתאר של תצורת רכיב חסר או פגום. הרץ את בודק תצורת הרכיב לבדיקה מלאה."
+msgstr ""
+"קו מתאר של תצורת רכיב חסר או פגום. הרץ את בודק תצורת הרכיב לבדיקה מלאה."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:1006
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
@@ -938,7 +939,8 @@ msgstr "לחץ לחיצה כפולה שמאלית או לחיצה אמצעית �
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:575
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
-msgstr "בטל את הסימון של 'השתמש בצבעי מחסנית שכבות הלוח' כדי לאפשר עריכת צבעים."
+msgstr ""
+"בטל את הסימון של 'השתמש בצבעי מחסנית שכבות הלוח' כדי לאפשר עריכת צבעים."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:630
 #: pcbnew/widgets/appearance_controls.cpp:2251
@@ -1453,7 +1455,7 @@ msgid "Image Converter"
 msgstr "ממיר תמונה"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "ממיר תמונה KiCad"
 
@@ -2063,7 +2065,7 @@ msgstr ""
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2891,14 +2893,12 @@ msgstr "שם הפרויקט"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1638
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "מעגל מודפס"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "סכימה"
 
@@ -4443,8 +4443,8 @@ msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
-"אם הגודל הכולל של קבצי הגיבוי עולה על מגבלה זו, גיבויים ישנים יימחקו (הגדר ל-"
-"0 ללא הגבלה)"
+"אם הגודל הכולל של קבצי הגיבוי עולה על מגבלה זו, גיבויים ישנים יימחקו (הגדר "
+"ל-0 ללא הגבלה)"
 
 #: common/dialogs/panel_common_settings_base.cpp:447
 msgid "MB"
@@ -6770,8 +6770,8 @@ msgstr ""
 "מוגדר פנימית על ידי KiCad (לא ניתן לעריכה) ומוגדר לנתיב המוחלט של קובץ "
 "הפרויקט הטעון כעת. ניתן להשתמש במשתנה סביבה זה להגדרת קבצים ונתיבים יחסיים "
 "לפרויקט הטעון כעת. לדוגמה, ${KIPRJMOD}/libs/footprints.pretty יכול להיות "
-"מוגדר כתיקייה המכילה ספריית תצורות רכיב ספציפית לפרויקט בשם "
-"footprints.pretty."
+"מוגדר כתיקייה המכילה ספריית תצורות רכיב ספציפית לפרויקט בשם footprints."
+"pretty."
 
 #: common/env_vars.cpp:123
 msgid "A directory containing system-wide scripts installed with KiCad"
@@ -8293,10 +8293,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "יחידות חסרות עבור '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1174
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "חוסר התאמת סוג בין '%s' לבין %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1180
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "חוסר התאמת סוג בין %lf לבין '%s'"
 
@@ -10081,7 +10083,8 @@ msgstr "שחזר ברירות מחדל"
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
-msgstr "'%s' כבר מוקצה ל-'%s' במקטע '%s'. האם אתה בטוח שברצונך לשנות את ההקצאה?"
+msgstr ""
+"'%s' כבר מוקצה ל-'%s' במקטע '%s'. האם אתה בטוח שברצונך לשנות את ההקצאה?"
 
 #: common/widgets/widget_hotkey_list.cpp:502
 msgid "Confirm change"
@@ -10662,8 +10665,8 @@ msgid ""
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"חלק מתצורות הרכיבים המשויכות הן רשומות מדור קודם ללא שמות ספרייה. האם תרצה ש-"
-"KiCad ינסה להמיר אותן לפורמט LIB_ID הנדרש החדש? (אם תענה לא, שיוכים אלה "
+"חלק מתצורות הרכיבים המשויכות הן רשומות מדור קודם ללא שמות ספרייה. האם תרצה "
+"ש-KiCad ינסה להמיר אותן לפורמט LIB_ID הנדרש החדש? (אם תענה לא, שיוכים אלה "
 "יימחקו ותצטרך לשייך אותם מחדש ידנית.)"
 
 #: cvpcb/readwrite_dlgs.cpp:150
@@ -10873,39 +10876,39 @@ msgstr ""
 "%s\n"
 "לא נמצא. הסקריפט אינו זמין."
 
-#: eeschema/connection_graph.cpp:3409
+#: eeschema/connection_graph.cpp:3412
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "גם %s וגם %s מחוברים לאותם פריטים; %s ישמש ברשימת הרשתות"
 
-#: eeschema/connection_graph.cpp:3647
+#: eeschema/connection_graph.cpp:3650
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "רשת %s מחוברת גרפית לאפיק %s אך אינה חברה באפיק זה"
 
-#: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3955 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "קצה חוט לא מחובר"
 
-#: eeschema/connection_graph.cpp:3977
+#: eeschema/connection_graph.cpp:3980
 msgid "Unconnected wire to bus entry"
 msgstr "כניסת חוט לאפיק לא מחוברת"
 
-#: eeschema/connection_graph.cpp:4310
+#: eeschema/connection_graph.cpp:4313
 #, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:4375
+#: eeschema/connection_graph.cpp:4378
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "פין גיליון %s ללא תווית היררכית תואמת בתוך הגיליון"
 
-#: eeschema/connection_graph.cpp:4392
+#: eeschema/connection_graph.cpp:4395
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "תווית היררכית %s ללא פין גיליון תואם בגיליון ההורה"
@@ -11320,8 +11323,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -15029,7 +15032,6 @@ msgid "Code"
 msgstr "קוד"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "שמור {} בשדה הערך בתור \"{}\""
 
@@ -19187,7 +19189,8 @@ msgstr "מזהה ספריית סמלים לא חוקי"
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:221
 #, c-format
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
-msgstr "המערכת התעלמה מהקובץ ב-'%s'. נעשה שימוש בקובץ שנמצא קודם ב-'%s' במקומו."
+msgstr ""
+"המערכת התעלמה מהקובץ ב-'%s'. נעשה שימוש בקובץ שנמצא קודם ב-'%s' במקומו."
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:363
 #, c-format
@@ -19902,8 +19905,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -19954,9 +19957,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -20595,8 +20598,8 @@ msgstr "שגיאה ביצירת קובץ פלט זמני"
 
 #: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
 "Kibis אינו תומך בערכי DUT עדיין. https://ibis.org/summits/nov16a/chen.pdf"
 
@@ -21295,8 +21298,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום <b>"
-"(%s, %s)</b> בסגנון גוף %s."
+"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום "
+"<b>(%s, %s)</b> בסגנון גוף %s."
 
 #: eeschema/symbol_checker.cpp:93
 #, c-format
@@ -21304,8 +21307,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
-"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום <b>"
-"(%s, %s)</b> ביחידות %s ו-%s של סגנון גוף %s."
+"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום "
+"<b>(%s, %s)</b> ביחידות %s ו-%s של סגנון גוף %s."
 
 #: eeschema/symbol_checker.cpp:113
 #, c-format
@@ -21313,8 +21316,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום <b>"
-"(%s, %s)</b>."
+"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום "
+"<b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:126
 #, c-format
@@ -21322,8 +21325,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום <b>"
-"(%s, %s)</b> ביחידות %s ו-%s."
+"<b>פין כפול %s</b> %s במיקום <b>(%s, %s)</b> מתנגש עם פין %s%s במיקום "
+"<b>(%s, %s)</b> ביחידות %s ו-%s."
 
 #: eeschema/symbol_checker.cpp:178
 msgid "<b>Warning: reference is empty</b><br><br>"
@@ -21368,7 +21371,8 @@ msgstr ""
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
 "style."
-msgstr "מידע: <b>פין הספקה מוסתר %s</b> %s במיקום <b>(%s, %s)</b> בצורת סמל %s."
+msgstr ""
+"מידע: <b>פין הספקה מוסתר %s</b> %s במיקום <b>(%s, %s)</b> בצורת סמל %s."
 
 #: eeschema/symbol_checker.cpp:279
 #, c-format
@@ -24916,7 +24920,7 @@ msgid "Clear Recent Job Files"
 msgstr "ניקוי קבצי עבודה אחרונים"
 
 #: gerbview/gerbview_frame.cpp:90
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "כלי צפייה בגרבר של KiCad"
 
@@ -25719,8 +25723,8 @@ msgid ""
 "Layers to include on each plot, comma separated list of untranslated layer "
 "names to include such as F.Cu,B.Cu"
 msgstr ""
-"שכבות לכלול בכל שרטוט, רשימת שמות שכבות לא מתורגמים מופרדים בפסיק כגון "
-"F.Cu,B.Cu"
+"שכבות לכלול בכל שרטוט, רשימת שמות שכבות לא מתורגמים מופרדים בפסיק כגון F.Cu,"
+"B.Cu"
 
 #: kicad/cli/command_pcb_export_drill.cpp:50
 #: pcbnew/dialogs/dialog_gendrill_base.h:89
@@ -26665,7 +26669,8 @@ msgstr "הצג כלים לחישוב התנגדות, כושר זרם וכו'"
 msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
-msgstr "ערוך גבולות גיליון שרטוט ותיבות כותרת לשימוש בסכימות ועיצובי מעגל מודפס"
+msgstr ""
+"ערוך גבולות גיליון שרטוט ותיבות כותרת לשימוש בסכימות ועיצובי מעגל מודפס"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:172
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
@@ -30385,8 +30390,8 @@ msgstr ""
 "100 °C, ורוחבים עד 400 מיל (10 מ\"מ).\n"
 "\n"
 "הנוסחה, מתוך IPC 2221, היא\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "כאשר:<br>\n"
 "___I___ הוא הזרם המקסימלי ב-A<br>\n"
 "___&Delta;T___ היא עליית הטמפרטורה מעל הסביבה ב-&deg;C<br>\n"
@@ -32498,15 +32503,30 @@ msgstr "ספירה אופקית"
 msgid "vertical count"
 msgstr "ספירה אנכית"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:425
+#: pcbnew/dialogs/dialog_create_array.cpp:422
+#, c-format
+msgid "horizontal delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:428
+#, c-format
+msgid "vertical delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:437
 msgid "stagger"
 msgstr "הסטה"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:481
+#: pcbnew/dialogs/dialog_create_array.cpp:493
 msgid "point count"
 msgstr "ספירת נקודות"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:528
+#: pcbnew/dialogs/dialog_create_array.cpp:500
+#, c-format
+msgid "angular delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:546
 msgid "Bad parameters"
 msgstr "פרמטרים שגויים"
 
@@ -36572,8 +36592,8 @@ msgid ""
 msgstr ""
 "הגדר תיקון רוחב גלובלי לפלט PostScript ברוחב מדויק.\n"
 "תיקון רוחב זה נועד לפצות על שגיאות ברוחב מוליכים וכן בגודל פדים וקדחי מעבר.\n"
-"ערך תיקון הרוחב הסביר חייב להיות בטווח של [-(MinTrackWidth-1), +"
-"(MinClearanceValue-1)]."
+"ערך תיקון הרוחב הסביר חייב להיות בטווח של [-(MinTrackWidth-1), "
+"+(MinClearanceValue-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:318
 msgid "Force A4 output"
@@ -38916,8 +38936,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
@@ -39217,8 +39237,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -39381,13 +39401,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -42777,11 +42797,11 @@ msgstr "מעבד סמל '%s:%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
-"אזהרה: לתצורת הרכיב '%s' של %s חסר שם ספרייה. השתמש בפורמט המלא "
-"'ספרייה:תצורת רכיב' כדי למנוע התראות עדכון חוזרות."
+"אזהרה: לתצורת הרכיב '%s' של %s חסר שם ספרייה. השתמש בפורמט המלא 'ספרייה:"
+"תצורת רכיב' כדי למנוע התראות עדכון חוזרות."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1410
 #, c-format
@@ -42894,7 +42914,8 @@ msgstr "מזהה תצורת הרכיב '%s' של %s אינו חוקי."
 #, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
-msgstr "תצורת הרכיב '%s' של %s לא נמצאה באף ספרייה בטבלת ספריות תצורות הרכיבים."
+msgstr ""
+"תצורת הרכיב '%s' של %s לא נמצאה באף ספרייה בטבלת ספריות תצורות הרכיבים."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:195
 #, c-format
@@ -43636,8 +43657,8 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "טוען ספרייה '%s':\n"
-"תצורת הרכיב %s מכילה קו מתאר מקווקו בשכבת Altium‏ (%d) ללא שכבה מקבילה ב-"
-"KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
+"תצורת הרכיב %s מכילה קו מתאר מקווקו בשכבת Altium‏ (%d) ללא שכבה מקבילה "
+"ב-KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2639
 #, c-format
@@ -43645,8 +43666,8 @@ msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"תצורת הרכיב %s מכילה קו מתאר מקווקו בשכבת Altium‏ (%d) ללא שכבה מקבילה ב-"
-"KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
+"תצורת הרכיב %s מכילה קו מתאר מקווקו בשכבת Altium‏ (%d) ללא שכבה מקבילה "
+"ב-KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2682
 #, c-format
@@ -43760,8 +43781,8 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "טוען ספרייה '%s':\n"
-"פד לא-נחושתי %s של תצורת הרכיב %s נמצא בשכבת Altium‏ (%d) ללא שכבה מקבילה ב-"
-"KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
+"פד לא-נחושתי %s של תצורת הרכיב %s נמצא בשכבת Altium‏ (%d) ללא שכבה מקבילה "
+"ב-KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3700
 #, c-format
@@ -43769,8 +43790,8 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"פד לא-נחושתי %s של תצורת הרכיב %s נמצא בשכבת Altium‏ (%d) ללא שכבה מקבילה ב-"
-"KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
+"פד לא-נחושתי %s של תצורת הרכיב %s נמצא בשכבת Altium‏ (%d) ללא שכבה מקבילה "
+"ב-KiCad. הוא הועבר לשכבת Eco1_User של KiCad."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3728
 #, c-format
@@ -44056,8 +44077,8 @@ msgid ""
 "areas are not supported in KiCad. Only the supported elements for the area "
 "were imported."
 msgstr ""
-"אזור CADSTAR‏ '%s' מסומן כאזור מיקום ב-CADSTAR. אזורי מיקום אינם נתמכים ב-"
-"KiCad. רק הרכיבים הנתמכים באזור יובאו."
+"אזור CADSTAR‏ '%s' מסומן כאזור מיקום ב-CADSTAR. אזורי מיקום אינם נתמכים "
+"ב-KiCad. רק הרכיבים הנתמכים באזור יובאו."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1733
 #, c-format
@@ -44220,8 +44241,8 @@ msgid ""
 "hatches (crosshatching) 90 degrees apart. The imported hatching is "
 "crosshatched."
 msgstr ""
-"לקוד הקו-קו של CADSTAR‏ '%s' יש %d קווים מוגדרים. KiCad תומך רק ב-2 קווים (קו-"
-"קו מוצלב) ב-90 מעלות הפרש. הקו-קו המיובא הוא מוצלב."
+"לקוד הקו-קו של CADSTAR‏ '%s' יש %d קווים מוגדרים. KiCad תומך רק ב-2 קווים "
+"(קו-קו מוצלב) ב-90 מעלות הפרש. הקו-קו המיובא הוא מוצלב."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3623
 #, c-format
@@ -45052,7 +45073,8 @@ msgstr ""
 msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
-msgstr "לרכיב '%s' יש תווים שאינם ASCII בסמן שלו; הומר ל-'%s' עבור ייצוא ODB++."
+msgstr ""
+"לרכיב '%s' יש תווים שאינם ASCII בסמן שלו; הומר ל-'%s' עבור ייצוא ODB++."
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:86
 #, c-format
@@ -50490,101 +50512,93 @@ msgstr "שחרור תרמי לחורים עוברים מצופים"
 msgid "[INFO] load failed: %s"
 msgstr "[מידע] הטעינה נכשלה: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;תמונת סיביות;ממיר;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "ממיר תמונת סיביות לרכיב"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "צור רכיב מתמונת סיביות לשימוש על ידי KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "עורך סכימות של KiCad (עצמאי)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "כלי שרטוט סכימתי"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "עורך סכימות עצמאי עבור סכימות KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "כלי צפייה בקבצי גרבר"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "צפה בקבצי גרבר"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "מנהל פרויקט;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "חבילת EDA"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "חבילת כלים לעיצוב סכימות ופריסת מעגלים מודפסים"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "מחשבון PCB KiCad"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "מחשבון;PCB;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "מחשבון PCB"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr "מחשבון עבור חישובים אלקטרוניים שונים"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;מעגל מודפס;מעגל;פריסה;עיצוב;עורך;תצורת רכיב;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "עורך מעגלים מודפסים של KiCad (עצמאי)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "עורך מעגלים"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "עורך לוח מעגל מודפס עצמאי עבור לוחות KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "חבילת EDA לעיצוב סכימות ופריסת מעגלים מודפסים"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-msgid "Circuit board"
-msgstr "מעגל מודפס"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -50640,6 +50654,12 @@ msgstr "סמל סכימטי KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "גיליון שרטוט KiCad"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "מעגל מודפס"
 
 #, fuzzy, c-format
 #~ msgid "Output directory '%s' already exists."

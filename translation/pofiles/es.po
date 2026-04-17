@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 11:18-0700\n"
+"POT-Creation-Date: 2026-04-17 15:22+0300\n"
 "PO-Revision-Date: 2026-03-19 17:29+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v9/es/>\n"
@@ -1528,7 +1528,7 @@ msgid "Image Converter"
 msgstr "Conversor de imágenes"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "Conversor de imágenes de KiCad"
 
@@ -2147,7 +2147,7 @@ msgstr "Cargando archivos..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2203,7 +2203,8 @@ msgstr "No se puede eliminar la biblioteca de bloques de diseño «%s»."
 #: common/design_block_io.cpp:339
 #, c-format
 msgid "Design block metadata file '%s' could not be read."
-msgstr "No se ha podido leer el archivo de metadatos del bloque de diseño «%s»."
+msgstr ""
+"No se ha podido leer el archivo de metadatos del bloque de diseño «%s»."
 
 #: common/design_block_io.cpp:355
 msgid "Design block does not have a valid library ID."
@@ -2745,7 +2746,8 @@ msgstr "No se puede crear la tabla global de bibliotecas '%s'."
 #: common/dialogs/dialog_global_design_block_lib_table_config.cpp:124
 #, fuzzy, c-format
 msgid "Error copying global design block library table '%s' to '%s'."
-msgstr "Error al copiar la tabla de bibliotecas de símbolos global '%s' a '%s'."
+msgstr ""
+"Error al copiar la tabla de bibliotecas de símbolos global '%s' a '%s'."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
@@ -2996,14 +2998,12 @@ msgstr "Nombre del proyecto"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1638
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "Esquema"
 
@@ -3461,8 +3461,8 @@ msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
-"Seleccione una <b>Opción</b> en el listado superior, y pulse el botón de <b>"
-"Añadir opción seleccionada</b>."
+"Seleccione una <b>Opción</b> en el listado superior, y pulse el botón de "
+"<b>Añadir opción seleccionada</b>."
 
 #: common/dialogs/dialog_plugin_options.cpp:53
 #, c-format
@@ -6949,8 +6949,8 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"La ruta base de las bibliotecas de huellas instaladas localmente (carpetas "
-".pretty)."
+"La ruta base de las bibliotecas de huellas instaladas localmente (carpetas ."
+"pretty)."
 
 #: common/env_vars.cpp:105
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -6991,8 +6991,8 @@ msgid ""
 msgstr ""
 "Definida internamente por KiCad (no puede editarse) y contiene la ruta "
 "absoluta del proyecto activo. Esta variable de entorno puede utilizarse para "
-"definir archivos y rutas relativas al proyecto activo. Por ejemplo, $"
-"{KIPRJMOD}/libs/footprints.pretty puede definirse como una carpeta que "
+"definir archivos y rutas relativas al proyecto activo. Por ejemplo, "
+"${KIPRJMOD}/libs/footprints.pretty puede definirse como una carpeta que "
 "contiene una biblioteca de huellas específica al proyecto, de nombre "
 "footprints.pretty."
 
@@ -8532,10 +8532,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Faltan las unidades de '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1174
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Error de tipo entre '%s' y %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1180
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Error de tipo entre %lf y '%s'"
 
@@ -9192,7 +9194,8 @@ msgstr "Añadir columna después"
 
 #: common/tool/actions.cpp:419
 msgid "Insert a new table column after the selected cell(s)"
-msgstr "Insertar una nueva columna de tabla después de las celdas seleccionadas"
+msgstr ""
+"Insertar una nueva columna de tabla después de las celdas seleccionadas"
 
 #: common/tool/actions.cpp:425
 msgid "Delete Row(s)"
@@ -11101,7 +11104,8 @@ msgstr "Eliminar anotación"
 #: eeschema/annotate.cpp:278
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr "Se han encontrado %d códigos de tiempo duplicados y se han reemplazado."
+msgstr ""
+"Se han encontrado %d códigos de tiempo duplicados y se han reemplazado."
 
 #: eeschema/annotate.cpp:397
 #, c-format
@@ -11146,7 +11150,7 @@ msgstr ""
 "%s\n"
 "Script no disponible."
 
-#: eeschema/connection_graph.cpp:3409
+#: eeschema/connection_graph.cpp:3412
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -11154,36 +11158,36 @@ msgstr ""
 "Tanto %s como %s están conectados a los mismos elementos; se utilizará %s en "
 "el listado de redes"
 
-#: eeschema/connection_graph.cpp:3647
+#: eeschema/connection_graph.cpp:3650
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
 "La red %s está conectada gráficamente al bus %s pero no a un miembro del bus"
 
-#: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3955 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "Extremo de línea sin conectar"
 
-#: eeschema/connection_graph.cpp:3977
+#: eeschema/connection_graph.cpp:3980
 msgid "Unconnected wire to bus entry"
 msgstr "Línea no conectada a entrada de bus"
 
-#: eeschema/connection_graph.cpp:4310
+#: eeschema/connection_graph.cpp:4313
 #, fuzzy, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr "La etiqueta jerárquica %s no está conectada a la hoja pricipal"
 
-#: eeschema/connection_graph.cpp:4375
+#: eeschema/connection_graph.cpp:4378
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "El puerto de hoja %s no tiene una etiqueta jerárquica correspondiente en la "
 "hoja"
 
-#: eeschema/connection_graph.cpp:4392
+#: eeschema/connection_graph.cpp:4395
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "La etiqueta jerárquica %s no está conectada a la hoja pricipal"
@@ -11604,8 +11608,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -11693,8 +11697,8 @@ msgstr ""
 "sería:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "En Linux, si el script generador deseado para una lista de materiales CSV es "
@@ -12911,7 +12915,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:118
 #, c-format
 msgid "Error copying global symbol library table '%s' to '%s'."
-msgstr "Error al copiar la tabla de bibliotecas de símbolos global '%s' a '%s'."
+msgstr ""
+"Error al copiar la tabla de bibliotecas de símbolos global '%s' a '%s'."
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
@@ -14574,7 +14579,8 @@ msgstr "Datos del esquema"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:147
 msgid "Project is missing or read-only. Settings will not be editable."
-msgstr "Falta el proyecto o es de solo lectura. Los ajustes no serán editables."
+msgstr ""
+"Falta el proyecto o es de solo lectura. Los ajustes no serán editables."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:189
 #, c-format
@@ -14607,7 +14613,8 @@ msgstr "Memoria acabada cargando el esquema '%s'."
 #: eeschema/dialogs/dialog_tablecell_properties.cpp:54
 #: eeschema/dialogs/dialog_text_properties.cpp:72
 msgid "Note: individual item colors overridden in Preferences."
-msgstr "Nota: colores de elementos individuales ignorados por las preferencias."
+msgstr ""
+"Nota: colores de elementos individuales ignorados por las preferencias."
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:374
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:233
@@ -15470,7 +15477,6 @@ msgid "Code"
 msgstr "Código"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Guardar {} en campo de valor como \"{}\""
 
@@ -18541,8 +18547,8 @@ msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
 msgstr ""
-"Error al analizar el modelo '%s', número incorrecto de nodos '?' en "
-"Sim.NodesFormat comparado con las conexiones"
+"Error al analizar el modelo '%s', número incorrecto de nodos '?' en Sim."
+"NodesFormat comparado con las conexiones"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:580
 #, c-format
@@ -19025,8 +19031,8 @@ msgstr ""
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr ""
-"El archivo de almacenamiento no fue completamente analizado (quedan %d bytes)"
-"."
+"El archivo de almacenamiento no fue completamente analizado (quedan %d "
+"bytes)."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1158
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1260
@@ -20528,8 +20534,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20580,9 +20586,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -20626,12 +20632,12 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{barra superior}</samp><br> &nbsp;<br><samp>~"
-"{CLK}</samp></td>\n"
+"        <td> &nbsp;<br><samp>~{barra superior}</samp><br> &nbsp;"
+"<br><samp>~{CLK}</samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>barra superior</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>barra superior</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -20652,8 +20658,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${referencia:campo}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>valoro_de_campo</i> del símbolo <i>"
-"referencia</i></samp></td>\n"
+"        <td>&nbsp;<br><samp><i>valoro_de_campo</i> del símbolo "
+"<i>referencia</i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -20668,9 +20674,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definición de bus</th>\n"
-"        <th>"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
-"th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Redes resultantes</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20721,9 +20726,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -21372,11 +21377,11 @@ msgstr "Error al crear el archivo temporal de salida"
 
 #: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
-"Kibis todavía no soporta valores DUT. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis todavía no soporta valores DUT. https://ibis.org/summits/nov16a/chen."
+"pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:854
 msgid "Model has only one waveform pair, reduced accuracy"
@@ -22224,7 +22229,8 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:352
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%s, %s)</b>."
+msgstr ""
+"<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:360
 #, c-format
@@ -22236,7 +22242,8 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:402
 #, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
-msgstr "<b>Círculo gráfico tiene radio cero</b> en la posición <b>(%s, %s)</b>."
+msgstr ""
+"<b>Círculo gráfico tiene radio cero</b> en la posición <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:414
 #, c-format
@@ -22355,7 +22362,8 @@ msgstr "Crear una copia editable"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:961
 #, c-format
 msgid "Create an editable copy of the symbol or the entire library (%s)?"
-msgstr "¿Crear una copia editable del símbolo o de la biblioteca completa (%s)?"
+msgstr ""
+"¿Crear una copia editable del símbolo o de la biblioteca completa (%s)?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:965
 msgid "Select type of item to save"
@@ -22408,7 +22416,8 @@ msgstr "La configuración actual no incluye la biblioteca de símbolos '%s'."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1547
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1558
 msgid "Use Manage Symbol Libraries to edit the configuration."
-msgstr "Utilice Gestionar bibliotecas de símbolos para editar la configuración."
+msgstr ""
+"Utilice Gestionar bibliotecas de símbolos para editar la configuración."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1548
 msgid "Library not found in symbol library table."
@@ -22643,7 +22652,8 @@ msgstr "Guardar biblioteca «%s» como..."
 #: eeschema/symbol_editor/symbol_editor.cpp:1599
 #, c-format
 msgid "Failed to save changes to symbol library file '%s'."
-msgstr "Fallo al guardar los cambios al archivo de biblioteca de símbolos '%s'."
+msgstr ""
+"Fallo al guardar los cambios al archivo de biblioteca de símbolos '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1601
 msgid "Error Saving Library"
@@ -23957,7 +23967,8 @@ msgstr "Mostrar corrientes de punto de operación"
 
 #: eeschema/tools/sch_actions.cpp:1214
 msgid "Show operating point current data from simulation"
-msgstr "Mostrar datos de corriente de punto de operación desde de la simulación"
+msgstr ""
+"Mostrar datos de corriente de punto de operación desde de la simulación"
 
 #: eeschema/tools/sch_actions.cpp:1219
 msgid "Show Pin Alternate Icons"
@@ -24039,7 +24050,8 @@ msgstr "Entrar en la hoja"
 
 #: eeschema/tools/sch_actions.cpp:1297
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "Muestra los contenidos de la hoja seleccionada en el editor de esquemas"
+msgstr ""
+"Muestra los contenidos de la hoja seleccionada en el editor de esquemas"
 
 #: eeschema/tools/sch_actions.cpp:1305
 msgid "Leave Sheet"
@@ -25837,7 +25849,7 @@ msgid "Clear Recent Job Files"
 msgstr "Limpiar archivos de trabajo recientes"
 
 #: gerbview/gerbview_frame.cpp:90
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "Visor Gerber de KiCad"
 
@@ -25924,7 +25936,8 @@ msgstr "Archivo Gerber inválido: falta el comando de arco G74 o G75"
 #: gerbview/rs274x.cpp:232
 #, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: \"%s\""
-msgstr "RS274X: Formato de comando GERBER no válido '%c' en la línea %d: \"%s\""
+msgstr ""
+"RS274X: Formato de comando GERBER no válido '%c' en la línea %d: \"%s\""
 
 #: gerbview/rs274x.cpp:235
 #, c-format
@@ -26615,7 +26628,8 @@ msgstr "Exportar gráficos de serigrafía como un conjunto de caras planas"
 
 #: kicad/cli/command_pcb_export_3d.cpp:156
 msgid "Export soldermask layers as a set of flat faces"
-msgstr "Exportar capas de máscara de soldadura como un conjunto de caras planas"
+msgstr ""
+"Exportar capas de máscara de soldadura como un conjunto de caras planas"
 
 #: kicad/cli/command_pcb_export_3d.cpp:160
 msgid "Fuse overlapping geometry together"
@@ -26674,8 +26688,8 @@ msgstr "Formato especificado inválido\n"
 msgid ""
 "Comma separated list of untranslated layer names to include such as F.Cu,B.Cu"
 msgstr ""
-"Lista separada por comas de los nombres no traducidos a incluir, ej: "
-"F.Cu,B.Cu"
+"Lista separada por comas de los nombres no traducidos a incluir, ej: F.Cu,B."
+"Cu"
 
 #: kicad/cli/command_pcb_export_base.cpp:48
 msgid ""
@@ -26990,8 +27004,8 @@ msgid ""
 "Valid options: front,back,both. Gerber format only supports \"front\" or "
 "\"back\"."
 msgstr ""
-"Opciones válidas: front,back,both. El formato Gerber solo admite «front» y «"
-"back»."
+"Opciones válidas: front,back,both. El formato Gerber solo admite «front» y "
+"«back»."
 
 #: kicad/cli/command_pcb_export_pos.cpp:54
 msgid "Valid options: ascii,csv,gerber"
@@ -27653,7 +27667,8 @@ msgstr "Editar el esquema del proyecto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:151
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "Editar las bibliotecas de símbolos de esquema globales y/o del proyecto"
+msgstr ""
+"Editar las bibliotecas de símbolos de esquema globales y/o del proyecto"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:154
 msgid "Edit the project PCB design"
@@ -29955,8 +29970,9 @@ msgstr ""
 "OVC I: Equipamiento sin conexión directa con el suministro de red\n"
 "\n"
 "OVC II: Equipamiento de consumo que es alimentado con la instalación "
-"directa. (ej.: electrodomésticos, herramientas portátiles, cargas domésticas)"
-". OVC III aplica si hay requerimientos de fiabilidad y disponibilidad\n"
+"directa. (ej.: electrodomésticos, herramientas portátiles, cargas "
+"domésticas). OVC III aplica si hay requerimientos de fiabilidad y "
+"disponibilidad\n"
 "\n"
 "OVC III: Equipamiento en instalaciones fijas con requerimientos de "
 "fiabilidad y disponibilidad. (ej.: conmutadores eléctricos, equipamientos "
@@ -31278,8 +31294,8 @@ msgstr ""
 "sólo como estimación.\n"
 "\n"
 "La calculadora estima la energía necesaria para calentar el cable<br>\n"
-"a su punto de fusión, así como la energía necesaria para el cambio de "
-"fase.<br>\n"
+"a su punto de fusión, así como la energía necesaria para el cambio de fase."
+"<br>\n"
 "A continuación, esta energía se compara con la disipada por la resistencia "
 "del cable."
 
@@ -31305,8 +31321,8 @@ msgstr ""
 "El ánodo de un par electroquímico se oxida y corroe, mientras que el cátodo "
 "es revestido con metales disueltos pero se mantiene protegido.<br>\n"
 "Un número positivo indica que la fila es anódica (-) y la columna es "
-"catódica (+), tonos fríos y cálidos también indican potenciales de filas.<br>"
-"\n"
+"catódica (+), tonos fríos y cálidos también indican potenciales de filas."
+"<br>\n"
 "EN 50310 sugiere una diferencia de potencial menor a 300mV. Prácticas "
 "conocidas usan un tercer metal como interfaz entre la pareja principal (la "
 "terminación superficial ENIG).<br>\n"
@@ -31503,12 +31519,12 @@ msgstr ""
 "mils (10 mm).\n"
 "\n"
 "La fórmula, de IPC 2221, es\n"
-"<center>___I = K &middot; &Delta;T<sup>0,44</sup> &middot; (W &middot; H)"
-"<sup>0,725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0,44</sup> &middot; (W &middot; "
+"H)<sup>0,725</sup>___</center>\n"
 "donde:<br>\n"
 "___I___ es la corriente máxima en A<br>\n"
-"___&Delta;T___ es la elevación de temperatura sobre la ambiente en &deg;C<br>"
-"\n"
+"___&Delta;T___ es la elevación de temperatura sobre la ambiente en &deg;"
+"C<br>\n"
 "___W___ es el ancho en mils<br>\n"
 "___H___ es el grosor (altura) en mils<br>\n"
 "___K___ es 0,024 para pistas internas o 0,048 para pistas externas\n"
@@ -33247,7 +33263,8 @@ msgstr "Eliminar pistas completamente dentro de pads"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:63
 msgid "Delete tracks that have both start and end positions inside of a pad"
-msgstr "Eliminar pistas que tengan la posición inicial y final dentro de un pad"
+msgstr ""
+"Eliminar pistas que tengan la posición inicial y final dentro de un pad"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:71
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:46
@@ -33681,16 +33698,31 @@ msgstr "posiciones horizontales"
 msgid "vertical count"
 msgstr "posiciones verticales"
 
+#: pcbnew/dialogs/dialog_create_array.cpp:422
+#, c-format
+msgid "horizontal delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:428
+#, c-format
+msgid "vertical delta of zero with %ld objects"
+msgstr ""
+
 # pendiente de contexto
-#: pcbnew/dialogs/dialog_create_array.cpp:425
+#: pcbnew/dialogs/dialog_create_array.cpp:437
 msgid "stagger"
 msgstr "escalonado"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:481
+#: pcbnew/dialogs/dialog_create_array.cpp:493
 msgid "point count"
 msgstr "número de puntos"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:528
+#: pcbnew/dialogs/dialog_create_array.cpp:500
+#, c-format
+msgid "angular delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:546
 msgid "Bad parameters"
 msgstr "Parámetros incorrectos"
 
@@ -34259,7 +34291,8 @@ msgstr "Desfase de línea de extensión:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:414
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:419
 msgid "Gap between the measured points and the start of the extension lines"
-msgstr "Espacio entre los puntos medidos y el inicio de las líneas de extensión"
+msgstr ""
+"Espacio entre los puntos medidos y el inicio de las líneas de extensión"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:427
 msgid "Extension line overshoot:"
@@ -37001,7 +37034,8 @@ msgstr "0.1"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:37
 msgid "Round outwards to grid multiples (when possible)"
-msgstr "Redondear hacia fuera a múltiplos de la cuadrícula (cuando sea posible)"
+msgstr ""
+"Redondear hacia fuera a múltiplos de la cuadrícula (cuando sea posible)"
 
 #: pcbnew/dialogs/dialog_outset_items_base.cpp:39
 msgid "This is only possible for rectangular outsets."
@@ -37902,8 +37936,8 @@ msgstr ""
 "PostScript.\n"
 "Esta corrección del ancho tiene como objeto compensar la anchura de pistas y "
 "errores en el tamaño de pads y vías.\n"
-"El valor de corrección razonable debe estar en el rango de [-(MinTrackWidth-"
-"1), +(MinClearanceValue-1)]."
+"El valor de corrección razonable debe estar en el rango de [-"
+"(MinTrackWidth-1), +(MinClearanceValue-1)]."
 
 # ¿Tamaño A4?
 #: pcbnew/dialogs/dialog_plot_base.cpp:318
@@ -40305,9 +40339,9 @@ msgid ""
 msgstr ""
 "### Documentación\n"
 "\n"
-"Para la documentación completa, consulte [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules)."
+"Para la documentación completa, consulte [https://docs.kicad.org](https://go."
+"kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -40371,8 +40405,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
@@ -40563,172 +40597,169 @@ msgstr ""
 "\n"
 "### Restricciones\n"
 "\n"
-"| Tipo de restricción       | Tipo de argumento"
-"                                                                                                      "
-"| Descripción"
-"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
+"| Tipo de restricción       | Tipo de "
+"argumento                                                                                                      "
+"| "
+"Descripción                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
 "|\n"
-"|---------------------------"
-"|------------------------------------------------------------------------------------------------------------------------"
-"|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+"|---------------------------|------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                            "
+"| Comprueba el ancho de los anillos anulares en las vías."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                                   "
 "|\n"
-"| `annular_width`           | min/opt/max"
-"                                                                                                            "
-"| Comprueba el ancho de los anillos anulares en las vías.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                                   "
-"|\n"
-"| `clearance`               | min"
-"                                                                                                                    "
+"| `clearance`               | "
+"min                                                                                                                    "
 "| Especifica el margen **eléctrico** entre objetos de cobre de redes "
 "distintas. (Vea `physical_clearance` si desea especificar márgenes entre "
 "objetos sin importar sus redes.)<br><br>Para permitir objetos intersecantes "
 "(colisiones), cree una restricción `clearance` con el valor `min` menor a "
-"cero (por ejemplo, `-1`).<br>"
-"                                                                                                                                                               "
+"cero (por ejemplo, `-1`)."
+"<br>                                                                                                                                                               "
 "|\n"
-"| `courtyard_clearance`     | min"
-"                                                                                                                    "
+"| `courtyard_clearance`     | "
+"min                                                                                                                    "
 "| Comprueba el margen entre patios de huellas y genera un error al menos dos "
 "patios son más cercanos que la distancia `min`. Si una huella no tiene una "
-"forma de patio, no se generarán errores por esta restricción.<br>"
-"                                                                                                                                                                                                                                                                       "
+"forma de patio, no se generarán errores por esta restricción."
+"<br>                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `diff_pair_gap`           | min/opt/max"
-"                                                                                                            "
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                            "
 "| Comprueba el espacio entre pistas acopladas en un par diferencial. Las "
 "pistas acopladas son segmentos que son paralelos entre sí. El espacio de par "
 "diferencial no es probado en porciones no acopladas de un par diferencial "
-"(por ejemplo, el fanout de un componente).<br>"
-"                                                                                                                                                                                                                  "
+"(por ejemplo, el fanout de un componente)."
+"<br>                                                                                                                                                                                                                  "
 "|\n"
-"| `diff_pair_uncoupled`     | max"
-"                                                                                                                    "
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                    "
 "| Comprueba la distancia que una pista de par diferencial es enrutada "
 "estando desacoplada de la pista con la otra polaridad en el par (por "
 "ejemplo, cuando el par se esparce hacia afuera de un componente (fanout), o "
-"se desacopla para pasar alrededor de otro objeto como una vía).<br>"
-"                                                                                                                                                                                                      "
+"se desacopla para pasar alrededor de otro objeto como una vía)."
+"<br>                                                                                                                                                                                                      "
 "|\n"
-"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>"
-"`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>"
-"`footprint`<br> | Especifica uno o más tipos de objetos que no serán "
-"permitidos, separados por espacios. Por ejemplo, `(constraint disallow track)"
-"` o `(constraint disallow track via pad)`. Si un objeto de este tipo "
-"coincide con la condición de regla, se creará un error de DRC.<br><br>Esta "
-"restricción es esencialmente lo mismo que un área restringida, pero puede "
-"ser usada para crear áreas restringidas más especificas.<br>"
-"                                                                        |\n"
-"| `edge_clearance`          | min/opt/max"
-"                                                                                                            "
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| Especifica uno o más tipos de objetos que no serán permitidos, separados "
+"por espacios. Por ejemplo, `(constraint disallow track)` o `(constraint "
+"disallow track via pad)`. Si un objeto de este tipo coincide con la "
+"condición de regla, se creará un error de DRC.<br><br>Esta restricción es "
+"esencialmente lo mismo que un área restringida, pero puede ser usada para "
+"crear áreas restringidas más especificas."
+"<br>                                                                        "
+"|\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                            "
 "| Comprueba el margen entre objetos y el borde de la placa.<br><br>También "
 "se puede pensar de esto como la \"tolerancia de ranurado\" ya que el borde "
 "de la placa incluirá todos los elementos gráficos en la capa `Edge.Cuts` y "
 "también cualquier orificio de pad *ovalado*. (Vea `physical_hole_clearance` "
-"para la tolerancia de taladrado).<br>"
-"                                                                                                                                                "
+"para la tolerancia de taladrado)."
+"<br>                                                                                                                                                "
 "|\n"
-"| `length`                  | min/max"
-"                                                                                                                "
+"| `length`                  | min/"
+"max                                                                                                                "
 "| Comprueba la longitud total enrutada para las redes que coinciden con la "
 "condición de la regla y genera un error para cada red que está por debajo "
 "del valor `min` (si fue especificado) o por encima del valor `max` (si fue "
-"especificado) de la restricción.<br>"
-"                                                                                                                                                                                                                            "
+"especificado) de la restricción."
+"<br>                                                                                                                                                                                                                            "
 "|\n"
-"| `hole`                    | min/max"
-"                                                                                                                "
+"| `hole`                    | min/"
+"max                                                                                                                "
 "| Comprueba el tamaño (diámetro) de un orificio taladrado en un pad o vía. "
 "Para orificios ovalados, el diámetro menor será comparado con el valor `min` "
 "(si fue especificado) y el diámetro mayor será comparado con el valor `max` "
-"(si fue especificado).<br>"
-"                                                                                                                                                                                                                                  "
+"(si fue especificado)."
+"<br>                                                                                                                                                                                                                                  "
 "|\n"
-"| `hole_clearance`          | min"
-"                                                                                                                    "
+"| `hole_clearance`          | "
+"min                                                                                                                    "
 "| Comprueba el margen entre un orificio taladrado en un pad o vía y objetos "
 "de cobre en una red distinta. El margen se mide desde el diámetro del "
-"orificio, no su centro.<br>"
-"                                                                                                                                                                                                                                                                                                                   "
+"orificio, no su centro."
+"<br>                                                                                                                                                                                                                                                                                                                   "
 "|\n"
-"| `hole_to_hole`            | min"
-"                                                                                                                    "
+"| `hole_to_hole`            | "
+"min                                                                                                                    "
 "| Comprueba el margen entre orificios taladrados mecánicamente en pads y "
-"vías. El margen se mide desde los diámetros de los orificios, no sus "
-"centros.<br><br>Esta restricción es únicamente para la protección de brocas "
-"de taladro. El margen entre orificios **taladrados por láser** (microvías) y "
+"vías. El margen se mide desde los diámetros de los orificios, no sus centros."
+"<br><br>Esta restricción es únicamente para la protección de brocas de "
+"taladro. El margen entre orificios **taladrados por láser** (microvías) y "
 "otros orificios no taladrados mecánicamente no es comprobado, y tampoco lo "
 "es el margen entre orificios **ranurados** (forma ovalada) y otros orificios "
 "no taladrados mecánicamente.<br> |\n"
-"| `physical_clearance`      | min"
-"                                                                                                                    "
+"| `physical_clearance`      | "
+"min                                                                                                                    "
 "| Comprueba el margen entre dos objetos en una capa dada (incluyendo capas "
 "que no son de cobre).<br><br>Aunque esto pueda realizar comprobaciones de "
 "propósito más general que `clearance`, es mucho más lento. Use `clearance` "
-"cuando sea posible.<br>"
-"                                                                                                                                                                                                                                         "
+"cuando sea posible."
+"<br>                                                                                                                                                                                                                                         "
 "|\n"
-"| `physical_hole_clearance` | min"
-"                                                                                                                    "
+"| `physical_hole_clearance` | "
+"min                                                                                                                    "
 "| Comprueba el margen entre un orificio taladrado en un pad o vía y algún "
 "otro objeto, sin importar su red. El margen se mide desde el diámetro del "
 "orificio, no su centro.<br><br>También se puede pensar de esto como la "
 "\"tolerancia de taladrado\" ya que solo incluye orificios **redondos**. (Vea "
-"`edge_clearance` para la tolerancia de ranurado).<br>"
-"                                                                                                                                     "
+"`edge_clearance` para la tolerancia de ranurado)."
+"<br>                                                                                                                                     "
 "|\n"
-"| `silk_clearance`          | min/opt/max"
-"                                                                                                            "
-"| Comprueba el margen entre objetos en capas de serigrafía y otros "
-"objetos.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                 "
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                            "
+"| Comprueba el margen entre objetos en capas de serigrafía y otros objetos."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                 "
 "|\n"
-"| `skew`                    | max"
-"                                                                                                                    "
+"| `skew`                    | "
+"max                                                                                                                    "
 "| Comprueba la desviación (skew) total para las redes que coincidan con la "
 "condición de regla, es decir, la diferencia entre la longitud de cada red y "
 "el promedio de las longitudes de todas las redes que coinciden. Si el valor "
 "absoluto de la diferencia entre tal promedio y el largo de cualquier red "
-"está por encima del valor de restricción `max`, se generará un error.<br>"
-"                                                                                                           "
+"está por encima del valor de restricción `max`, se generará un error."
+"<br>                                                                                                           "
 "|\n"
-"| `thermal_relief_gap`      | min"
-"                                                                                                                    "
+"| `thermal_relief_gap`      | "
+"min                                                                                                                    "
 "| Especifica el ancho del espacio entre un pad y una zona con una conexión "
-"de alivio térmico.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                               "
+"de alivio térmico."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                               "
 "|\n"
-"| `thermal_spoke_width`     | opt"
-"                                                                                                                    "
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                    "
 "| Especifica el ancho de los radios que conectan un pad a una zona con una "
-"conexión de alivio térmico.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                      "
+"conexión de alivio térmico."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
-"| `track_width`             | min/opt/max"
-"                                                                                                            "
+"| `track_width`             | min/opt/"
+"max                                                                                                            "
 "| Comprueba el ancho de segmentos de pista y arco. Se generará un error por "
 "cada segmento que tenga un ancho menor al valor `min` (si fue especificado) "
-"o mayor al valor `max` (si fue especificado).<br>"
-"                                                                                                                                                                                                                                                                                       "
+"o mayor al valor `max` (si fue especificado)."
+"<br>                                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `via_count`               | max"
-"                                                                                                                    "
+"| `via_count`               | "
+"max                                                                                                                    "
 "| Cuenta el número de vías en cada red que coincide con la condición de "
 "regla. Si tal número excede el valor de restricción `max` en cualquiera de "
-"las redes coincidentes, se generará un error para tal red.<br>"
-"                                                                                                                                                                                                                                                                               "
+"las redes coincidentes, se generará un error para tal red."
+"<br>                                                                                                                                                                                                                                                                               "
 "|\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
-"`none`                                                                                 "
-"| Especifica la conexión a ser realizada entre una zona y un pad.<br>"
-"                                                                                                                                                                                                                                                                                                                                                                                                                           "
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
+"| Especifica la conexión a ser realizada entre una zona y un pad."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
 "\n"
 "\n"
 "### Elementos\n"
 "\n"
 " * `A` &nbsp;&nbsp; _el primer (o único) elemento bajo prueba_\n"
-" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas binarias)"
-"_\n"
+" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas "
+"binarias)_\n"
 " * `L` &nbsp;&nbsp; _la capa actualmente bajo prueba_\n"
 "\n"
 "<br>\n"
@@ -40788,8 +40819,8 @@ msgstr ""
 "\n"
 "### Funciones de expresiones\n"
 "\n"
-"Todos los parámetros de las funciones admiten comodines simples (`*` y `?`)"
-".\n"
+"Todos los parámetros de las funciones admiten comodines simples (`*` y `?"
+"`).\n"
 "<br><br>\n"
 "\n"
 "    A.intersectsCourtyard('<referencia_de_huella>')\n"
@@ -40891,13 +40922,13 @@ msgstr ""
 "\n"
 "    (rule \"Distancia entre vías de redes distintas\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Margen entre pads de redes distintas\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Margen de orificio de vía a pista\"\n"
@@ -40997,9 +41028,8 @@ msgstr ""
 "\n"
 "### Documentación\n"
 "\n"
-"Para la documentación completa vea [https://docs.kicad.org](https://"
-"docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules)."
+"Para la documentación completa vea [https://docs.kicad.org](https://docs."
+"kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_3items.h:2
 msgid ""
@@ -41015,8 +41045,8 @@ msgstr ""
 "### Elementos\n"
 "\n"
 " * `A` &nbsp;&nbsp; _el primer (o único) elemento bajo prueba_\n"
-" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas binarias)"
-"_\n"
+" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas "
+"binarias)_\n"
 " * `L` &nbsp;&nbsp; _la capa actualmente bajo prueba_\n"
 "\n"
 "<br>\n"
@@ -41134,8 +41164,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -41298,13 +41328,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -42253,7 +42283,8 @@ msgstr "Expresión de afirmación faltante."
 
 #: pcbnew/drc/drc_rule_parser.cpp:492
 msgid "within_diff_pairs option invalid for constraint type."
-msgstr "La opción within_diff_pairs no es válida para este tipo de restricción."
+msgstr ""
+"La opción within_diff_pairs no es válida para este tipo de restricción."
 
 #: pcbnew/drc/drc_rule_parser.cpp:511
 msgid "Missing min value."
@@ -43445,7 +43476,8 @@ msgstr "¿Cargar el archivo de recuperación '%s'?"
 #: pcbnew/files.cpp:361
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
-msgstr "Se cerrará la placa actual, ¿guardar cambios a '%s' antes de continuar?"
+msgstr ""
+"Se cerrará la placa actual, ¿guardar cambios a '%s' antes de continuar?"
 
 #: pcbnew/files.cpp:375
 msgid "Current Board will be closed. Continue?"
@@ -43616,7 +43648,8 @@ msgstr "('SMD' esperado; real '%s')"
 #: pcbnew/footprint.cpp:3611
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
-msgstr "(grupo de pads de unión de redes contiene número de pad desconocido %s)"
+msgstr ""
+"(grupo de pads de unión de redes contiene número de pad desconocido %s)"
 
 #: pcbnew/footprint.cpp:3616
 #, c-format
@@ -43760,8 +43793,8 @@ msgstr ""
 "No se permite escribir/modificar bibliotecas de legado (archivos .mod)\n"
 "Por favor, guarde la biblioteca actual en el nuevo formato .pretty\n"
 "y actualice su tabla de bibliotecas de huellas\n"
-"para guardar la huella (un archivo .kicad_mod) en la carpeta de biblioteca "
-".pretty"
+"para guardar la huella (un archivo .kicad_mod) en la carpeta de biblioteca ."
+"pretty"
 
 #: pcbnew/footprint_libraries_utils.cpp:70
 msgid ""
@@ -44517,8 +44550,8 @@ msgstr "No se puede actualizar %s (no se ha encontrado la huella '%s')."
 #, c-format
 msgid "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."
 msgstr ""
-"No se puede cambiar la huella de %s de '%s' a '%s' (la huella está bloqueada)"
-"."
+"No se puede cambiar la huella de %s de '%s' a '%s' (la huella está "
+"bloqueada)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:341
 #, c-format
@@ -44631,7 +44664,8 @@ msgstr ""
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:713
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "Atributo de fabricación 'excluir de la lista de materiales' %s añadido."
+msgstr ""
+"Atributo de fabricación 'excluir de la lista de materiales' %s añadido."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:719
 #, c-format
@@ -44769,8 +44803,8 @@ msgstr "Procesando el símbolo '%s:%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Advertencia: a la huella '%s' de %s le falta el nombre de biblioteca. Use el "
 "formato completo 'Biblioteca:Huella' para evitar notificaciones de "
@@ -45497,7 +45531,8 @@ msgstr "Tipo de información de primitivo extendido desconocido: '%s'."
 #: pcbnew/pcb_io/altium/altium_parser_pcb.cpp:875
 #, c-format
 msgid "Pads6 stream has unexpected length for subrecord 6: %d."
-msgstr "El flujo Pads6 tiene una longitud inesperada para el subregistro 6: %d."
+msgstr ""
+"El flujo Pads6 tiene una longitud inesperada para el subregistro 6: %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:287
 #, fuzzy, c-format
@@ -45524,8 +45559,8 @@ msgid ""
 "Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
 msgstr ""
 "Este archivo no parece estar en un formato válido de PCB Binary Version 6.0. "
-"En Altium Designer, asegúrese de guardar como \"PCB Binary Files (*.PcbDoc)"
-"\"."
+"En Altium Designer, asegúrese de guardar como \"PCB Binary Files (*."
+"PcbDoc)\"."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:559
 #, c-format
@@ -45827,7 +45862,8 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3739
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr "Un pad que no es de cobre %s tiene un orificio, esto no está soportado."
+msgstr ""
+"Un pad que no es de cobre %s tiene un orificio, esto no está soportado."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3749
 #, c-format
@@ -46587,7 +46623,8 @@ msgstr ""
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:663
 #, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
-msgstr "Nombre de forma de pad desconocido '%s' en la capa '%s' en la fila %zu."
+msgstr ""
+"Nombre de forma de pad desconocido '%s' en la capa '%s' en la fila %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:805
 #, c-format
@@ -47283,8 +47320,8 @@ msgid ""
 msgstr ""
 "El archivo seleccionado contiene múltiples huellas. Solo se importará la "
 "primera.\n"
-"Para cargar todas las huellas, añádalo como biblioteca usando "
-"Preferencias -> Gestionar bibliotecas de huellas..."
+"Para cargar todas las huellas, añádalo como biblioteca usando Preferencias -"
+"> Gestionar bibliotecas de huellas..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -47319,8 +47356,8 @@ msgstr "Clave para el <b>login</b> en algún servidor especial de bibliotecas."
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
 msgstr ""
-"Introduzca el módulo de python que implementa las funciones de "
-"PCB_IO::Footprint*()."
+"Introduzca el módulo de python que implementa las funciones de PCB_IO::"
+"Footprint*()."
 
 #: pcbnew/pcb_layer_box_selector.cpp:74
 msgid "(not activated)"
@@ -48185,7 +48222,8 @@ msgstr "Imposible exportar, por favor, corrija e inténtelo de nuevo"
 #: pcbnew/specctra_import_export/specctra_export.cpp:1050
 #, c-format
 msgid "Footprint with value of '%s' has an empty reference designator."
-msgstr "La huella con el valor '%s' tiene un identificador de referencia vacío."
+msgstr ""
+"La huella con el valor '%s' tiene un identificador de referencia vacío."
 
 #: pcbnew/specctra_import_export/specctra_export.cpp:1060
 #, c-format
@@ -48746,7 +48784,8 @@ msgstr "Remplazado por un margen físico mayor desde %s; margen: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:910
 #, c-format
 msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
-msgstr "Remplazado por un margen de orificio físico mayor desde %s; margen: %s."
+msgstr ""
+"Remplazado por un margen de orificio físico mayor desde %s; margen: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:954
 msgid "Items belong to the same net. Min clearance is 0."
@@ -50084,7 +50123,8 @@ msgstr "Dibujar huecos de microondas"
 
 #: pcbnew/tools/pcb_actions.cpp:871
 msgid "Create gap of specified length for microwave applications"
-msgstr "Creación de GAPS de longitud específica (para aplicaciones micro-ondas)"
+msgstr ""
+"Creación de GAPS de longitud específica (para aplicaciones micro-ondas)"
 
 #: pcbnew/tools/pcb_actions.cpp:879
 msgid "Draw Microwave Stubs"
@@ -50372,7 +50412,8 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1196
 msgid "Allow items to be moved and/or resized on the canvas"
-msgstr "Permite que los elementos sean movidos y/o redimensionados en el lienzo"
+msgstr ""
+"Permite que los elementos sean movidos y/o redimensionados en el lienzo"
 
 #: pcbnew/tools/pcb_actions.cpp:1203
 msgid "Group the selected items so that they are treated as a single item"
@@ -50467,8 +50508,8 @@ msgstr "Líneas aéreas locales"
 #: pcbnew/tools/pcb_actions.cpp:1316
 msgid "Toggle ratsnest display of selected item(s)"
 msgstr ""
-"Alterna la visualización de líneas aéreas para los elemento(s) seleccionado"
-"(s)"
+"Alterna la visualización de líneas aéreas para los elemento(s) "
+"seleccionado(s)"
 
 #: pcbnew/tools/pcb_actions.cpp:1332
 msgid "Scripting Console"
@@ -51294,7 +51335,8 @@ msgstr "Cancelar elemento actual"
 
 #: pcbnew/tools/pcb_actions.cpp:2423
 msgid "Skip current item and route next selected item."
-msgstr "Omitir el elemento actual y enrutar el siguiente elemento seleccionado."
+msgstr ""
+"Omitir el elemento actual y enrutar el siguiente elemento seleccionado."
 
 #: pcbnew/tools/pcb_actions.cpp:2429
 msgid ""
@@ -52836,102 +52878,94 @@ msgstr "alivios térmicos para PTH"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] error al cargar: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Mapa de bits;Conversor;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "Conversor de mapas de bits en componentes"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Crear un componente desde un mapa de bits para utilizarlo con KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "Editor de esquemas de KiCad (independiente)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "Herramienta de captura de esquema"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editor de esquemas independiente para esquemas de KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "Visor de archivos Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "Ver archivos Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "Projectmanager;Administrador;Proyecto;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "Suite EDA"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
 "Conjunto de herramientas para el diseño de esquemas y de placas de circuitos"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "Calculadora de placas de KiCad"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "PCB;Placa;Calculadora;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "Calculadora de placas"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculadora para varios cálculos relacionados con la electrónica"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Placa;Circuito;Diseño;Editor;Huella;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Editor de placas de KiCad (independiente)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "Editor de placas"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Editor de placas independiente para placas de KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Una suite EDA para el diseño de esquemas y placas de circuitos"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-msgid "Circuit board"
-msgstr "Placa de circuito impreso"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -52989,6 +53023,12 @@ msgstr "Símbolo esquemático de KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "Hoja de dibujo de KiCad"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Placa de circuito impreso"
 
 #~ msgid "Command"
 #~ msgstr "Orden"
@@ -56303,8 +56343,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
-#~ "\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A."
+#~ "enclosedByArea('Shield*')\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -56436,13 +56476,13 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -56526,9 +56566,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "\n"
 #~ "### Documentation\n"
 #~ "\n"
-#~ "For the full documentation see [https://docs.kicad.org](https://"
-#~ "docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
-#~ "pcbnew.html#custom_design_rules)."
+#~ "For the full documentation see [https://docs.kicad.org](https://docs."
+#~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 #~ msgstr ""
 #~ "### Cláusulas de nivel superior\n"
 #~ "\n"
@@ -56776,13 +56815,13 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"  \n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"  \n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"  \n"
@@ -57569,8 +57608,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() "
 #~ "functions."
 #~ msgstr ""
-#~ "Introduzca el símbolo de python que implementa las funciones "
-#~ "SCH_PLUGIN::Symbol*()."
+#~ "Introduzca el símbolo de python que implementa las funciones SCH_PLUGIN::"
+#~ "Symbol*()."
 
 #~ msgid "Gerber (experimental)"
 #~ msgstr "Gerber (experimental)"
@@ -58274,8 +58313,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -58464,8 +58503,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -65289,8 +65328,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ msgid ""
 #~ "DXF only:\n"
 #~ "Check to plot all layers in polygon mode.\n"
-#~ "Uncheck to plot in sketch mode layers that don't support polygons "
-#~ "(*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
+#~ "Uncheck to plot in sketch mode layers that don't support polygons (*."
+#~ "SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
 #~ "and plot in polygon mode other layers (*.Cu, *.Adhes, *.Paste, *.Mask)"
 #~ msgstr ""
 #~ "Solo DXF:\n"
@@ -66755,8 +66794,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ "Una variable de entorno equivale a una cadena de texto.<br>Se utiliza "
 #~ "principalmente en rutas para hacer KiCad portabe entre plataformas."
 #~ "<br><br>>Si una variable de entorno se define como <b>MYLIBPATH</b> con "
-#~ "un valor <b>e:/kicad_libs</b>, entonces el nombre de una librería <b>$"
-#~ "{MYLIBPATH}/milibreria.lib</b>, se expande a <b>e:/kicad_libs/"
+#~ "un valor <b>e:/kicad_libs</b>, entonces el nombre de una librería "
+#~ "<b>${MYLIBPATH}/milibreria.lib</b>, se expande a <b>e:/kicad_libs/"
 #~ "milibreria.lib</b><br><br><b>Nota:</b><br>Solo los caracteres "
 #~ "<b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> están permitidos en los "
 #~ "nombres de las variables de entorno y el nombre no puede comenzar con una "
@@ -70965,8 +71004,8 @@ msgstr "Hoja de dibujo de KiCad"
 
 #~ msgid "KiCad s-expr printed circuit board files (*.kicad_pcb)|*.kicad_pcb"
 #~ msgstr ""
-#~ "Archivo s-expr de placas de circuito impreso de KiCad (*.kicad_pcb)|"
-#~ "*.kicad_pcb"
+#~ "Archivo s-expr de placas de circuito impreso de KiCad (*.kicad_pcb)|*."
+#~ "kicad_pcb"
 
 #~ msgid "Component-footprint link file (*.cmp)|*cmp"
 #~ msgstr "Archivo de vínculo Componente-Huella (*.cmp)|*cmp"
@@ -71709,8 +71748,8 @@ msgstr "Hoja de dibujo de KiCad"
 #~ msgstr "Trazar líneas en modo contorno"
 
 #~ msgid ""
-#~ "Otherwise plot with sketch lines in layers that don't support polygons "
-#~ "(*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab) and plot in outline "
+#~ "Otherwise plot with sketch lines in layers that don't support polygons (*."
+#~ "SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab) and plot in outline "
 #~ "mode in other layers (*.Cu, *.Adhes, *.Paste, *.Mask)"
 #~ msgstr ""
 #~ "En otro caso trazar con líneas de boceto en capas que no soportan "

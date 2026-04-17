@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 11:18-0700\n"
+"POT-Creation-Date: 2026-04-17 15:22+0300\n"
 "PO-Revision-Date: 2026-03-19 17:28+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/v9/bg/>\n"
@@ -1633,7 +1633,7 @@ msgid "Image Converter"
 msgstr "Преобразувай"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 #, fuzzy
 msgid "KiCad Image Converter"
 msgstr "Преобразувай"
@@ -2293,7 +2293,7 @@ msgstr "Зареди Gerber файл"
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 #, fuzzy
 msgid "KiCad"
@@ -3157,14 +3157,12 @@ msgstr "Проектен файл: "
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1638
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr ""
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "Схема"
 
@@ -9049,12 +9047,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Тест на комп.отп."
 
 #: common/libeval_compiler/libeval_compiler.cpp:1174
-#, fuzzy
+#, fuzzy, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr " Vout трябва да е по-голямо от vref"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1180
-#, fuzzy
+#, fuzzy, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr " Vout трябва да е по-голямо от vref"
 
@@ -11988,41 +11986,41 @@ msgid ""
 "not found. Script not available."
 msgstr ""
 
-#: eeschema/connection_graph.cpp:3409
+#: eeschema/connection_graph.cpp:3412
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:3647
+#: eeschema/connection_graph.cpp:3650
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3955 eeschema/erc/erc_item.cpp:229
 #, fuzzy
 msgid "Unconnected wire endpoint"
 msgstr "Несвързан"
 
-#: eeschema/connection_graph.cpp:3977
+#: eeschema/connection_graph.cpp:3980
 #, fuzzy
 msgid "Unconnected wire to bus entry"
 msgstr "Несвързан"
 
-#: eeschema/connection_graph.cpp:4310
+#: eeschema/connection_graph.cpp:4313
 #, fuzzy, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr "Йерархичен етикет %s не е свързан към листов етикет"
 
-#: eeschema/connection_graph.cpp:4375
+#: eeschema/connection_graph.cpp:4378
 #, fuzzy, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Различие между йерархически обозначения и изводи на листа"
 
-#: eeschema/connection_graph.cpp:4392
+#: eeschema/connection_graph.cpp:4395
 #, fuzzy, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Йерархичен етикет %s не е свързан към листов етикет"
@@ -12469,8 +12467,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -16579,7 +16577,6 @@ msgid "Code"
 msgstr "D-кодове"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr ""
 
@@ -21875,8 +21872,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -21927,9 +21924,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -22631,8 +22628,8 @@ msgstr "Неуспешно създаване на файл"
 
 #: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
 
 #: eeschema/sim/kibis/kibis.cpp:854
@@ -25641,8 +25638,8 @@ msgstr "Запази платка"
 #, fuzzy
 msgid "Save the current set of analysis tabs and settings"
 msgstr ""
-"Прочети текущ файл със списък на веригите и покажи липсващи и екстра "
-"комп.отп."
+"Прочети текущ файл със списък на веригите и покажи липсващи и екстра комп."
+"отп."
 
 #: eeschema/tools/sch_actions.cpp:1495
 #, fuzzy
@@ -27468,7 +27465,7 @@ msgid "Clear Recent Job Files"
 msgstr "Отвори скорошен Gerber файл"
 
 #: gerbview/gerbview_frame.cpp:90
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 #, fuzzy
 msgid "KiCad Gerber Viewer"
 msgstr "Gerber файлове"
@@ -33393,7 +33390,8 @@ msgstr "Фактор на диелектрични загуби"
 msgid ""
 "Electrical resistivity or specific electrical resistance of conductor "
 "(ohm*meter)"
-msgstr "Резустивност, или специфично ел.съпротивление на проводника (Ohm*meter)"
+msgstr ""
+"Резустивност, или специфично ел.съпротивление на проводника (Ohm*meter)"
 
 #: pcb_calculator/transline_ident.cpp:110
 msgid "Frequency of the input signal"
@@ -35706,17 +35704,32 @@ msgstr "хоризонтал"
 msgid "vertical count"
 msgstr "вертикал"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:425
+#: pcbnew/dialogs/dialog_create_array.cpp:422
+#, c-format
+msgid "horizontal delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:428
+#, c-format
+msgid "vertical delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:437
 #, fuzzy
 msgid "stagger"
 msgstr "Промени тип"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:481
+#: pcbnew/dialogs/dialog_create_array.cpp:493
 #, fuzzy
 msgid "point count"
 msgstr "брой вериги ="
 
-#: pcbnew/dialogs/dialog_create_array.cpp:528
+#: pcbnew/dialogs/dialog_create_array.cpp:500
+#, c-format
+msgid "angular delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:546
 #, fuzzy
 msgid "Bad parameters"
 msgstr "Параметри"
@@ -37547,7 +37560,8 @@ msgstr "Изтр. на размер"
 msgid ""
 "Text thickness is too large for the text size.\n"
 "It will be clamped at %s."
-msgstr "Дебелината на шрифта е прекалено голяма за размера. Ще бъде ограничена."
+msgstr ""
+"Дебелината на шрифта е прекалено голяма за размера. Ще бъде ограничена."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:665
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:688
@@ -37864,7 +37878,8 @@ msgstr " Vout трябва да е по-голямо от vref"
 msgid ""
 "The text thickness is too large for the text size.\n"
 "It will be clamped."
-msgstr "Дебелината на шрифта е прекалено голяма за размера. Ще бъде ограничена."
+msgstr ""
+"Дебелината на шрифта е прекалено голяма за размера. Ще бъде ограничена."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
 #, fuzzy
@@ -41836,7 +41851,8 @@ msgstr " Vout трябва да е по-голямо от vref"
 msgid ""
 "%s: Text thickness is too large.\n"
 "It will be truncated to %s"
-msgstr "Дебелината на шрифта е прекалено голяма за размера. Ще бъде ограничена."
+msgstr ""
+"Дебелината на шрифта е прекалено голяма за размера. Ще бъде ограничена."
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults.cpp:260
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:266
@@ -41844,7 +41860,8 @@ msgstr "Дебелината на шрифта е прекалено голям�
 msgid ""
 "%s: Text thickness is too small.\n"
 "It will be truncated to %s"
-msgstr "Дебелината на шрифта е прекалено голяма за размера. Ще бъде ограничена."
+msgstr ""
+"Дебелината на шрифта е прекалено голяма за размера. Ще бъде ограничена."
 
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults.cpp:286
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:294
@@ -42864,8 +42881,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
@@ -43117,8 +43134,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -43273,13 +43290,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -46968,8 +46985,8 @@ msgstr "Компонент %s %s извод %s : Различни вериги"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1410
@@ -55544,101 +55561,101 @@ msgstr "Термично облекчение"
 msgid "[INFO] load failed: %s"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 #, fuzzy
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "Конвертор Bitmap-компонент"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "Конвертор Bitmap-компонент"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 #, fuzzy
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "Опции на схематичния редактор"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 #, fuzzy
 msgid "Schematic Capture Tool"
 msgstr "Схематични файлове"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 #, fuzzy
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Схематични файлове"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 #, fuzzy
 msgid "eeschema"
 msgstr "Експорт към Eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 #, fuzzy
 msgid "Gerber File Viewer"
 msgstr "Gerber файлове"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 #, fuzzy
 msgid "View Gerber files"
 msgstr "Отвори Gerber файл"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 #, fuzzy
 msgid "Projectmanager;"
 msgstr "Проектен файл: "
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 #, fuzzy
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "За дизайнерите на PCBnew"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 #, fuzzy
 msgid "KiCad PCB Calculator"
 msgstr "Pcb калкулатор"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 #, fuzzy
 msgid "PCB;Calculator;"
 msgstr "Pcb калкулатор"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 #, fuzzy
 msgid "PCB Calculator"
 msgstr "Pcb калкулатор"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr ""
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 #, fuzzy
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Редактор на Модул"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 #, fuzzy
 msgid "PCB layout editor"
 msgstr "Редактор изображение"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr ""
 
@@ -55646,15 +55663,6 @@ msgstr ""
 #, fuzzy
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "За дизайнерите на PCBnew"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-msgid "EDA"
-msgstr ""
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-#, fuzzy
-msgid "Circuit board"
-msgstr "Отпечатай платката"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -55715,6 +55723,10 @@ msgstr "Печат на схемата"
 #, fuzzy
 msgid "KiCad Drawing Sheet"
 msgstr "Текстов редактор"
+
+#, fuzzy
+#~ msgid "Circuit board"
+#~ msgstr "Отпечатай платката"
 
 #~ msgid "Command"
 #~ msgstr "Команда"

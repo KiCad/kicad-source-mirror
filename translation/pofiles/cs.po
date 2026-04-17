@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 11:18-0700\n"
+"POT-Creation-Date: 2026-04-17 15:22+0300\n"
 "PO-Revision-Date: 2026-04-17 12:21+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v9/cs/>\n"
@@ -1486,7 +1486,7 @@ msgid "Image Converter"
 msgstr "Převod obrázků"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "KiCad převod obrázků"
 
@@ -1935,7 +1935,8 @@ msgstr "Export do schránky"
 
 #: bitmap2component/bitmap2component.cpp:406
 msgid "No shape in black and white image to convert: no outline created."
-msgstr "Ve černo-bílém obrázku není žádný tvar k převodu: obrys nebyl vytvořen."
+msgstr ""
+"Ve černo-bílém obrázku není žádný tvar k převodu: obrys nebyl vytvořen."
 
 #: common/api/api_handler.cpp:27
 msgid "Modification from API"
@@ -2099,7 +2100,7 @@ msgstr "Načítání návrhových bloků..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2947,14 +2948,12 @@ msgstr "Název projektu"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1638
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "DPS"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "Schéma"
 
@@ -6855,8 +6854,8 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Základní cesta k lokálně instalovanému systému knihoven pouzder (složky "
-".pretty)."
+"Základní cesta k lokálně instalovanému systému knihoven pouzder (složky ."
+"pretty)."
 
 #: common/env_vars.cpp:105
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -6894,8 +6893,8 @@ msgid ""
 msgstr ""
 "Vnitřně definován v KiCadu (nelze editovat) a je nastaven na absolutní cestu "
 "momentálně načteného projektu. Tato proměnná prostředí může být použita k "
-"definování souborů a cest relativně k načtenému projektu. Například $"
-"{KIPRJMOD}/libs/footprints.pretty může být definován jako složka obsahující "
+"definování souborů a cest relativně k načtenému projektu. Například "
+"${KIPRJMOD}/libs/footprints.pretty může být definován jako složka obsahující "
 "knihovnu pouzder s názvem footprints.pretty, použitých v projektu."
 
 #: common/env_vars.cpp:123
@@ -8423,10 +8422,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Chybějící jednotky pro '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1174
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Neshoda typu mezi '%s' a %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1180
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Neshoda typu mezi %lf a '%s'"
 
@@ -10744,8 +10745,8 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"Přiřazení pouzdra ze seznamu sítí schématu a asociačního souboru pouzder "
-"(.cmp) jsou v konfliktu.\n"
+"Přiřazení pouzdra ze seznamu sítí schématu a asociačního souboru pouzder (."
+"cmp) jsou v konfliktu.\n"
 "\n"
 "Zvolte prosím přiřazení."
 
@@ -11015,28 +11016,28 @@ msgstr ""
 "%s\n"
 "nebyl nalezen. Skript není k dispozici."
 
-#: eeschema/connection_graph.cpp:3409
+#: eeschema/connection_graph.cpp:3412
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "%s i %s jsou připojeny ke stejným položkám; %s bude použit v netlistu"
 
-#: eeschema/connection_graph.cpp:3647
+#: eeschema/connection_graph.cpp:3650
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
 "Síť %s je graficky připojena ke sběrnici %s, ale není členem této sběrnice"
 
-#: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3955 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "Nepřipojený konec vodiče"
 
-#: eeschema/connection_graph.cpp:3977
+#: eeschema/connection_graph.cpp:3980
 msgid "Unconnected wire to bus entry"
 msgstr "Nepřipojený drát ke vstupu na sběrnici"
 
-#: eeschema/connection_graph.cpp:4310
+#: eeschema/connection_graph.cpp:4313
 #, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
@@ -11045,12 +11046,12 @@ msgstr ""
 "Hierarchický štítek \"%s\" v kořenovém listu nelze připojit k neexistujícímu "
 "nadřazenému listu"
 
-#: eeschema/connection_graph.cpp:4375
+#: eeschema/connection_graph.cpp:4378
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Vývod listu %s nemá uvnitř listu odpovídající hierarchické označení"
 
-#: eeschema/connection_graph.cpp:4392
+#: eeschema/connection_graph.cpp:4395
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -11468,8 +11469,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -11524,8 +11525,8 @@ msgstr ""
 "\n"
 " * `%I`: absolutní cesta a název souboru průběžného netlistu, který je "
 "vstupem do generátoru BOM\n"
-" * `%O`: absolutní cesta a název souboru výstupního BOM (bez přípony souboru)"
-"\n"
+" * `%O`: absolutní cesta a název souboru výstupního BOM (bez přípony "
+"souboru)\n"
 " * `%B`: základní název souboru výstupního BOM (bez přípony souboru)\n"
 " * `%P`: absolutní cesta k adresáři projektu, bez koncového lomítka\n"
 "\n"
@@ -11545,12 +11546,12 @@ msgstr ""
 "souboru>\n"
 "```\n"
 "\n"
-"V systému Windows, pokud je požadovaný skript generátoru pro BOM CSV `C:\\U"
-"sers\\username\\Kicad\\my_python_script.py`, příkazový řádek by byl:\n"
+"V systému Windows, pokud je požadovaný skript generátoru pro BOM CSV `C:"
+"\\Users\\username\\Kicad\\my_python_script.py`, příkazový řádek by byl:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\jménouživatele\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\jménouživatele\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "Na Linuxu, pokud je požadovaný skript generátoru pro CSV BOM `/home/"
@@ -11953,8 +11954,8 @@ msgid ""
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Pokud jsou některé symboly osamocené (připojený symbol nebyl nikde nalezen)"
-",\n"
+"Pokud jsou některé symboly osamocené (připojený symbol nebyl nikde "
+"nalezen),\n"
 "zkuste najít kandidáta majícího stejné jméno v jedné z načtených knihoven "
 "symbolů."
 
@@ -13741,7 +13742,8 @@ msgstr "Alternativní název vývodu"
 #: eeschema/dialogs/dialog_pin_properties.cpp:207
 #: eeschema/dialogs/dialog_symbol_properties.cpp:360
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr "Pro symboly De Morgan nejsou k dispozici alternativní přiřazení vývodů."
+msgstr ""
+"Pro symboly De Morgan nejsou k dispozici alternativní přiřazení vývodů."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:287
 msgid "Exit sync pins mode"
@@ -14452,7 +14454,8 @@ msgstr "Okraj"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:95
 msgid "Set border width to 0 to use schematic's default line width."
-msgstr "Nastavte šířku ohraničení na 0 pro použití výchozí šířky čáry schématu."
+msgstr ""
+"Nastavte šířku ohraničení na 0 pro použití výchozí šířky čáry schématu."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:115
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:212
@@ -15294,7 +15297,6 @@ msgid "Code"
 msgstr "Kód"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Uložit {} v poli Hodnota jako \"{}\""
 
@@ -17207,7 +17209,8 @@ msgstr "Symbol %s má vstupní vývody na jednotkách %s, které nejsou umístě
 #: eeschema/erc/erc.cpp:673
 #, c-format
 msgid "Symbol %s has bidirectional pins in units %s that are not placed."
-msgstr "Symbol %s má obousměrné vývody na jednotkách %s, které nejsou umístěny."
+msgstr ""
+"Symbol %s má obousměrné vývody na jednotkách %s, které nejsou umístěny."
 
 #: eeschema/erc/erc.cpp:696
 #, c-format
@@ -17446,7 +17449,8 @@ msgstr "Napájecí vývody jsou podobné (liší se pouze velikostí písmen)"
 
 #: eeschema/erc/erc_item.cpp:121
 msgid "Power pin and label are similar (lower/upper case difference only)"
-msgstr "Napájecí vývod a označení jsou podobné (liší se pouze velikostí písmen)"
+msgstr ""
+"Napájecí vývod a označení jsou podobné (liší se pouze velikostí písmen)"
 
 #: eeschema/erc/erc_item.cpp:125
 msgid "Global label only appears once in the schematic"
@@ -18367,7 +18371,8 @@ msgstr "Změnit jednotku"
 #: eeschema/picksymbol.cpp:198
 #, c-format
 msgid "No alternate body style found for symbol '%s' in library '%s'."
-msgstr "Nenalezen žádný alternativní styl těla pro symbol '%s' v knihovně '%s'."
+msgstr ""
+"Nenalezen žádný alternativní styl těla pro symbol '%s' v knihovně '%s'."
 
 #: eeschema/picksymbol.cpp:221 eeschema/tools/sch_edit_tool.cpp:2043
 msgid "Change Body Style"
@@ -19161,7 +19166,8 @@ msgstr ""
 #: eeschema/sch_io/database/sch_io_database.cpp:297
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
-msgstr "Nelze načíst databázovou knihovnu: nelze se připojit k databázi %s (%s)"
+msgstr ""
+"Nelze načíst databázovou knihovnu: nelze se připojit k databázi %s (%s)"
 
 #: eeschema/sch_io/database/sch_io_database.h:51
 msgid "KiCad database library files"
@@ -20256,8 +20262,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20308,9 +20314,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -20357,9 +20363,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
-"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
+"samp><br> <samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -20396,9 +20402,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definice sběrnice</th>\n"
-"        <th>"
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
-"th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Výsledné sítě</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20449,9 +20454,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -20498,7 +20503,8 @@ msgstr ""
 
 #: eeschema/sch_validators.cpp:64
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
-msgstr "Název signálu obsahuje znaky '[' or ']' ale není platný název sběrnice."
+msgstr ""
+"Název signálu obsahuje znaky '[' or ']' ale není platný název sběrnice."
 
 #: eeschema/schematic.cpp:1566
 msgid "Schematic Cleanup"
@@ -21099,8 +21105,8 @@ msgstr "Chyba při vytváření dočasného výstupního souboru"
 
 #: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
 "Kibis zatím nepodporuje hodnoty DUT. https://ibis.org/summits/nov16a/chen.pdf"
 
@@ -21940,7 +21946,8 @@ msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b>."
 #: eeschema/symbol_checker.cpp:360
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr "<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> v jednotce %c."
+msgstr ""
+"<b>Vývod mimo mřížku %s</b> %s na pozici <b>(%s, %s)</b> v jednotce %c."
 
 #: eeschema/symbol_checker.cpp:402
 #, c-format
@@ -22498,7 +22505,8 @@ msgstr ""
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
-msgstr "Přiřadit vybraný vývod listu a hierarchické označení podle názvu vývodu"
+msgstr ""
+"Přiřadit vybraný vývod listu a hierarchické označení podle názvu vývodu"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -25481,7 +25489,7 @@ msgid "Clear Recent Job Files"
 msgstr "Vymazat poslední soubory Job"
 
 #: gerbview/gerbview_frame.cpp:90
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad prohlížeč gerber"
 
@@ -26637,7 +26645,8 @@ msgstr "Zahrnout pouze SMD pouzdra (pouze ascii nebo csv)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:78
 msgid "Exclude all footprints with through-hole pads (ascii or csv only)"
-msgstr "Vyloučit všechna pouzdra s průchozí dírou plošek (pouze ascii nebo csv)"
+msgstr ""
+"Vyloučit všechna pouzdra s průchozí dírou plošek (pouze ascii nebo csv)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:82
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:99
@@ -26752,8 +26761,8 @@ msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
 msgstr ""
-"Nastavit bod otáčení relativně ke středu desky v centimetrech, formát "
-"'X,Y,Z' např.: '-10,2,0'"
+"Nastavit bod otáčení relativně ke středu desky v centimetrech, formát 'X,Y,"
+"Z' např.: '-10,2,0'"
 
 #: kicad/cli/command_pcb_render.cpp:297
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
@@ -31024,8 +31033,8 @@ msgstr ""
 "nárůst teploty až 100 °C a šířky až 400 milů (10 mm).\n"
 "\n"
 "Vzorec dle IPC 2221 je\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "kde:<br>\n"
 "___I___ je maximální proud v A<br>\n"
 "___&Delta;T___ je nárůst teploty nad okolní teplotou v &deg;C<br>\n"
@@ -32090,8 +32099,8 @@ msgid ""
 "<br/>There are %i reference designator prefixes in use<br/"
 ">**********************************************************<br/>"
 msgstr ""
-"<br/>Používají se %i referenční prefixy<br/>"
-"**********************************************************<br/>"
+"<br/>Používají se %i referenční prefixy<br/"
+">**********************************************************<br/>"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:452
 #, c-format
@@ -33164,15 +33173,30 @@ msgstr "počet horizontálně"
 msgid "vertical count"
 msgstr "počet vertikálně"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:425
+#: pcbnew/dialogs/dialog_create_array.cpp:422
+#, c-format
+msgid "horizontal delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:428
+#, c-format
+msgid "vertical delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:437
 msgid "stagger"
 msgstr "prokládání"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:481
+#: pcbnew/dialogs/dialog_create_array.cpp:493
 msgid "point count"
 msgstr "počet bodů"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:528
+#: pcbnew/dialogs/dialog_create_array.cpp:500
+#, c-format
+msgid "angular delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:546
 msgid "Bad parameters"
 msgstr "Špatné parametery"
 
@@ -35247,8 +35271,8 @@ msgstr "Použít relativní cestu?"
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
 msgstr ""
-"Nelze vytvořit relativní cestu (cílový obsah se liší od obsahu souboru desky)"
-"!"
+"Nelze vytvořit relativní cestu (cílový obsah se liší od obsahu souboru "
+"desky)!"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:338
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:447
@@ -37314,8 +37338,8 @@ msgstr ""
 "Nastavit globální korekci šířky pro přesný postscriptový výstup.\n"
 "Tato korekce šířky je určena ke kompenzování šířky spojů a také k chybám "
 "velikosti plošek a prokovů.\n"
-"Vhodná hodnota korekce šířky musí být v rozsahu [-(MinTrackWidth-1), +"
-"(MinClearanceValue-1)]."
+"Vhodná hodnota korekce šířky musí být v rozsahu [-(MinTrackWidth-1), "
+"+(MinClearanceValue-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:318
 msgid "Force A4 output"
@@ -39665,9 +39689,8 @@ msgid ""
 msgstr ""
 "### Dokumentace\n"
 "\n"
-"Úplná dokumentace je uvedena na [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules)."
+"Úplná dokumentace je uvedena na [https://docs.kicad.org](https://go.kicad."
+"org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -39730,8 +39753,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
@@ -40031,8 +40054,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -40040,8 +40063,8 @@ msgstr ""
 "\n"
 "Mnoho vlastností objektů je dostupných pro testování ve výrazech vlastních "
 "pravidel. Úplný seznam naleznete v dokumentaci na [https://docs.kicad.org]"
-"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules).\n"
+"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules).\n"
 "<br><br><br>\n"
 "\n"
 
@@ -40195,13 +40218,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -43615,8 +43638,8 @@ msgstr "Zpracování symbolu '%s:%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Varování: pouzdru %s '%s' chybí název knihovny. Pro zamezení opakovaných "
 "upozornění na aktualizaci použijte formát 'Knihovna:Pouzdro'."
@@ -43735,7 +43758,8 @@ msgstr "%s pouzdro ID '%s' není platné."
 #, c-format
 msgid ""
 "%s footprint '%s' not found in any libraries in the footprint library table."
-msgstr "%s pouzdro '%s' nenalezeno v žádné knihovně v tabulce knihoven pouzder."
+msgstr ""
+"%s pouzdro '%s' nenalezeno v žádné knihovně v tabulce knihoven pouzder."
 
 #: pcbnew/netlist_reader/netlist_reader.cpp:195
 #, c-format
@@ -45206,7 +45230,8 @@ msgstr "Žádný '%s' balíček v knihovně '%s'."
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2350
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
-msgstr "Ignorovat mnohoúhelník, protože vrstva Eagle '%s' (%d) nebyla přiřazena"
+msgstr ""
+"Ignorovat mnohoúhelník, protože vrstva Eagle '%s' (%d) nebyla přiřazena"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1607
 #, c-format
@@ -45337,7 +45362,8 @@ msgstr "Nelze najít sloupec %s."
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2065
 #, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
-msgstr "Neplatná velikost řádku v řádku %zu. Očekáváno %zu prvků, nalezeno %zu."
+msgstr ""
+"Neplatná velikost řádku v řádku %zu. Očekáváno %zu prvků, nalezeno %zu."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:513
 #, c-format
@@ -45595,7 +45621,8 @@ msgstr "Prokov používá nepodporovaný padstack; byl vynechán z dat vrtání.
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2870
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
-msgstr "Ploška používá nepodporovaný padstack; otvor byl vynechán z dat vrtání."
+msgstr ""
+"Ploška používá nepodporovaný padstack; otvor byl vynechán z dat vrtání."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3012
 msgid ""
@@ -45830,7 +45857,8 @@ msgstr "%d není platný počet vrstev"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2812
 #, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr "Duplicitní název Třídy spojů '%s' v souboru '%s' na řádku %d, ofset %d."
+msgstr ""
+"Duplicitní název Třídy spojů '%s' v souboru '%s' na řádku %d, ofset %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3211
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6388
@@ -46033,8 +46061,8 @@ msgid ""
 "Footprint Libraries..."
 msgstr ""
 "Vybraný soubor obsahuje více pouzder. Importováno bude pouze první z nich.\n"
-"Chcete-li načíst všechna pouzdra, přidejte jej jako knihovnu přes "
-"Předvolby -> Spravovat knihovny pouzder..."
+"Chcete-li načíst všechna pouzdra, přidejte jej jako knihovnu přes Předvolby -"
+"> Spravovat knihovny pouzder..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -51489,101 +51517,93 @@ msgstr "teplotní profily pro PTH"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] načtení se nezdařilo: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Konvertor;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "Konvertor bitmapy na součástky"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Vytvořit komponentu z bitmapy pro použití s KiCadem"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad editor schémat (Samostatně)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "Schematický nástroj pro zachycení"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Samostatný editor schémat pro KiCad schémata"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "Prohlížeč gerber souboru"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "Zobrazit soubory Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;DPS;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "Manažer projektu;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "EDA Suite"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Sada nástrojů pro návrh schématu a desek s plošnými spoji"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "KiCad DPS kalkulátor"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "Kalkulátor DPS;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "Kalkulátor DPS"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr "Kalkulačka pro různé výpočty související s elektronikou"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;DPS;Obvod;Rozvržení;Návrh;Editor;Pouzdro;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad DPS editor (Samostatně)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "Editor návrhu DPS"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Samostatný editor desky pro KiCad desky"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "EDA suite pro schémata a návrh desky plošných spojů"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-msgid "Circuit board"
-msgstr "Deska s plošnými spoji"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -51640,6 +51660,12 @@ msgstr "KiCad symbol schématu"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad výkresový list"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Deska s plošnými spoji"
 
 #~ msgid "Command"
 #~ msgstr "Příkaz"
@@ -56225,8 +56251,8 @@ msgstr "KiCad výkresový list"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -56317,8 +56343,8 @@ msgstr "KiCad výkresový list"
 #~ "\n"
 #~ "Jakmile kliknete na tlačítko generovat, stane se toto:\n"
 #~ "\n"
-#~ "1. Eeschema vytvoří přechodný soubor netlistu \\*. Xml, například "
-#~ "`test.xml`.\n"
+#~ "1. Eeschema vytvoří přechodný soubor netlistu \\*. Xml, například `test."
+#~ "xml`.\n"
 #~ "2. Eeschema spustí skript z příkazového řádku a vytvoří finální výstupní "
 #~ "soubor.\n"
 #~ "\n"
@@ -56413,8 +56439,8 @@ msgstr "KiCad výkresový list"
 #~ "\n"
 #~ "V Linuxu:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "Výše uvedené příklady předpokládají, že je ` xsltproc` nainstalován na "
@@ -60229,8 +60255,8 @@ msgstr "KiCad výkresový list"
 
 #~ msgid "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer"
 #~ msgstr ""
-#~ "Nepodporovaná vrstva Eagle '%s' (%d), konvertuji do vrstvy kresby "
-#~ "(Dwgs.User)"
+#~ "Nepodporovaná vrstva Eagle '%s' (%d), konvertuji do vrstvy kresby (Dwgs."
+#~ "User)"
 
 #~ msgid "unknown graphic type: %d"
 #~ msgstr "neznámý grafický typ: %d"
@@ -62854,17 +62880,17 @@ msgstr "KiCad výkresový list"
 #~ msgid ""
 #~ "DXF only:\n"
 #~ "Check to plot all layers in polygon mode.\n"
-#~ "Uncheck to plot in sketch mode layers that don't support polygons "
-#~ "(*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
+#~ "Uncheck to plot in sketch mode layers that don't support polygons (*."
+#~ "SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
 #~ "and plot in polygon mode other layers (*.Cu, *.Adhes, *.Paste, *.Mask)"
 #~ msgstr ""
 #~ "Pouze DXF:\n"
 #~ "Zaškrtněte pro vykreslení všech vrstev v režimu mnohoúhelníků.\n"
 #~ "Zrušte zaškrtnutí pro vykreslení ve vrstvách režimu obrysů, které "
-#~ "nepodporují mnohoúhelníky (*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, "
-#~ "*.Fab)\n"
-#~ "a vykreslení ostatních vrstev v režimu mnohoúhelníků (*.Cu, *.Adhes, "
-#~ "*.Paste, *.Mask)"
+#~ "nepodporují mnohoúhelníky (*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *."
+#~ "Fab)\n"
+#~ "a vykreslení ostatních vrstev v režimu mnohoúhelníků (*.Cu, *.Adhes, *."
+#~ "Paste, *.Mask)"
 
 #~ msgid "Dimension Text Properties"
 #~ msgstr "Vlastnosti rozměru textu"
@@ -64307,16 +64333,16 @@ msgstr "KiCad výkresový list"
 #~ "<b>KIPRJMOD</b> is internally defined by KiCad (cannot be edited) and is "
 #~ "set to the absolute path of the currently loaded project file.  This "
 #~ "environment variable can be used to define files and paths relative to "
-#~ "the currently loaded project.  For instance, ${KIPRJMOD}/libs/"
-#~ "footprints.pretty can be defined as a folder containing a project "
-#~ "specific footprint library named footprints.pretty."
+#~ "the currently loaded project.  For instance, ${KIPRJMOD}/libs/footprints."
+#~ "pretty can be defined as a folder containing a project specific footprint "
+#~ "library named footprints.pretty."
 #~ msgstr ""
 #~ "<b>KIPRJMOD</b> je vnitřně definován v KiCadu (proto nelze editovat) a je "
 #~ "nastaven na absolutní cestu momentálně načteného projektu. Tato proměnná "
 #~ "prostředí může být použita k definování souborů a cest relativně k "
 #~ "načtenému projektu. Např. ${KIPRJMOD}/libs/footprints.pretty může být "
-#~ "definován jako složka obsahující knihovnu pouzder s názvem "
-#~ "footprints.pretty, použitých v projektu."
+#~ "definován jako složka obsahující knihovnu pouzder s názvem footprints."
+#~ "pretty, použitých v projektu."
 
 #~ msgid ""
 #~ "<b>KICAD_TEMPLATE_DIR</b> is required and is the path containing the "
@@ -64355,9 +64381,9 @@ msgstr "KiCad výkresový list"
 #~ "Proměnné prostředí se používá jako náhrada řetěžců.<br>Proměnné prostředí "
 #~ "se primárně používá pro cesty, aby byla zajištěna přenositelnost KiCad "
 #~ "mezi platformami.<br><br>Je-li proměnná prostředí definována jako "
-#~ "<b>MYLIBPATH</b> s hodnotou <b>e:/kicad_libs</b>, název knihovny <b>$"
-#~ "{MYLIBPATH}/mylib.lib</b> je rozšířen do tvaru <b>e:/kicad_libs/"
-#~ "mylib.lib</b><br><br><b>Pozn.:</b><br>V názvech proměnných prostředí jsou "
+#~ "<b>MYLIBPATH</b> s hodnotou <b>e:/kicad_libs</b>, název knihovny "
+#~ "<b>${MYLIBPATH}/mylib.lib</b> je rozšířen do tvaru <b>e:/kicad_libs/mylib."
+#~ "lib</b><br><br><b>Pozn.:</b><br>V názvech proměnných prostředí jsou "
 #~ "dovoleny pouze znaky <b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> a název "
 #~ "proměnné prostředí nesmí začínat číslicí (0-9)."
 
@@ -71878,11 +71904,11 @@ msgstr "KiCad výkresový list"
 #~ msgstr "Okraje desky"
 
 #~ msgid ""
-#~ "Gerber files (.%s .gbr .gbx .lgr .ger .pho)|*."
-#~ "%s;*.gbr;*.gbx;*.lgr;*.ger;*.pho|"
+#~ "Gerber files (.%s .gbr .gbx .lgr .ger .pho)|*.%s;*.gbr;*.gbx;*.lgr;*.ger;"
+#~ "*.pho|"
 #~ msgstr ""
-#~ "Soubory Gerber (.%s .gbr .gbx .lgr .ger .pho)|*."
-#~ "%s;*.gbr;*.gbx;*.lgr;*.ger;*.pho|"
+#~ "Soubory Gerber (.%s .gbr .gbx .lgr .ger .pho)|*.%s;*.gbr;*.gbx;*.lgr;*."
+#~ "ger;*.pho|"
 
 #~ msgid "Copy Block (shift mouse)"
 #~ msgstr "Kopírovat blok (shift + myš)"

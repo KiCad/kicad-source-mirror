@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-13 11:18-0700\n"
+"POT-Creation-Date: 2026-04-17 15:22+0300\n"
 "PO-Revision-Date: 2026-03-19 17:34+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/v9/et/>\n"
@@ -1462,7 +1462,7 @@ msgid "Image Converter"
 msgstr "Pildimuundur"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:155
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "KiCad pildimuundur"
 
@@ -2078,7 +2078,7 @@ msgstr "3D-mudelite laadimine..."
 
 #: common/design_block_io.cpp:47 common/design_block_io.cpp:56
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2906,14 +2906,12 @@ msgstr "Projekti nimi"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1638
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1337 eeschema/sch_plotter.cpp:1060
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Schematic"
 msgstr "Ahelaskeem"
 
@@ -8327,10 +8325,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Puuduvad ühikud '%s' jaoks (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1174
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Tüübi mittevastavus '%s' ja %lf vahel"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1180
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Tüübi mittevastavus %lf ja '%s' vahel"
 
@@ -10789,7 +10789,8 @@ msgstr "Vali järgmine määramata sümbol"
 
 #: cvpcb/tools/cvpcb_actions.cpp:106
 msgid "Select next symbol with no footprint assignment"
-msgstr "Vali järgmine sümbol, millele pole komponendi trükkplaadijälge määratud"
+msgstr ""
+"Vali järgmine sümbol, millele pole komponendi trükkplaadijälge määratud"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
 msgid "Select Previous Unassigned Symbol"
@@ -10911,7 +10912,7 @@ msgstr ""
 "%s\n"
 "ei leitud. Skript ei ole saadaval."
 
-#: eeschema/connection_graph.cpp:3409
+#: eeschema/connection_graph.cpp:3412
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -10919,7 +10920,7 @@ msgstr ""
 "Nii %s kui ka %s on ühendatud samade elementidega; ahelaloendis kasutatakse "
 "%s"
 
-#: eeschema/connection_graph.cpp:3647
+#: eeschema/connection_graph.cpp:3650
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -10927,27 +10928,27 @@ msgstr ""
 "Ühendusniit %s on graafiliselt ühendatud siiniga %s, kuid ei ole selle siini "
 "liige"
 
-#: eeschema/connection_graph.cpp:3952 eeschema/erc/erc_item.cpp:229
+#: eeschema/connection_graph.cpp:3955 eeschema/erc/erc_item.cpp:229
 msgid "Unconnected wire endpoint"
 msgstr "Ühendamata juhtme otspunkt"
 
-#: eeschema/connection_graph.cpp:3977
+#: eeschema/connection_graph.cpp:3980
 msgid "Unconnected wire to bus entry"
 msgstr "Ühendamata juhe siiniühenduse juurde"
 
-#: eeschema/connection_graph.cpp:4310
+#: eeschema/connection_graph.cpp:4313
 #, c-format
 msgid ""
 "Hierarchical label \"%s\" in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
 
-#: eeschema/connection_graph.cpp:4375
+#: eeschema/connection_graph.cpp:4378
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Lehe klemm %s ei vasta ühelegi hierarhilisele sildile lehel"
 
-#: eeschema/connection_graph.cpp:4392
+#: eeschema/connection_graph.cpp:4395
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Hierarhiline silt %s ei vasta ühelegi lehe klemmile vanemlehel"
@@ -11363,8 +11364,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -12086,8 +12087,8 @@ msgstr "Salvesta kõik võimsuskaod"
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
-"Kirjuta direktiivid kõigi elementide võimsuskao salvestamiseks (.probe p"
-"(<item>))"
+"Kirjuta direktiivid kõigi elementide võimsuskao salvestamiseks (.probe "
+"p(<item>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:387
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
@@ -15089,7 +15090,6 @@ msgid "Code"
 msgstr "Kood"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:223
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Salvesta {} välja Väärtus kui \"{}\""
 
@@ -15703,8 +15703,8 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
-"Vigane hüperlingi sihtkoht. Palun sisestage kehtiv URL (nt file:// või http"
-"(s)://) või \"#<lehekülje number>\" ahelaskeemi leheküljele hüperlingi "
+"Vigane hüperlingi sihtkoht. Palun sisestage kehtiv URL (nt file:// või "
+"http(s)://) või \"#<lehekülje number>\" ahelaskeemi leheküljele hüperlingi "
 "loomiseks."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:591
@@ -15837,7 +15837,8 @@ msgstr "Juhtme/siini laius:"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:90
 msgid "Set width to 0 to use netclass's wire/bus widths."
-msgstr "Määrake laiuseks 0, et kasutada ühendusniidiklassi juhtme/siini laiust."
+msgstr ""
+"Määrake laiuseks 0, et kasutada ühendusniidiklassi juhtme/siini laiust."
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:69
 msgid "Wire & Bus Properties"
@@ -17251,7 +17252,8 @@ msgstr "Ühendusniit on graafiliselt ühendatud siiniga, kuid ei ole siini liige
 
 #: eeschema/erc/erc_item.cpp:153
 msgid "Buses are graphically connected but share no bus members"
-msgstr "Siinid on graafiliselt ühendatud, kuid neil pole ühiseid siini liikmeid"
+msgstr ""
+"Siinid on graafiliselt ühendatud, kuid neil pole ühiseid siini liikmeid"
 
 #: eeschema/erc/erc_item.cpp:157
 msgid "Invalid connection between bus and net items"
@@ -20006,8 +20008,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -20058,9 +20060,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -20704,8 +20706,8 @@ msgstr "Viga ajutise väljundfaili loomisel"
 
 #: eeschema/sim/kibis/kibis.cpp:749
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
 "Kibis ei toeta DUT väärtusi veel. https://ibis.org/summits/nov16a/chen.pdf"
 
@@ -22165,7 +22167,8 @@ msgstr "Komponendi trükkplaadijäljele '%s' ei ole sümbolit määratud."
 #: eeschema/tools/backannotate.cpp:245
 #, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
-msgstr "Komponendi trükkplaadijäljed '%s' ja '%s' on lingitud samale sümbolile."
+msgstr ""
+"Komponendi trükkplaadijäljed '%s' ja '%s' on lingitud samale sümbolile."
 
 #: eeschema/tools/backannotate.cpp:311
 #, c-format
@@ -24118,7 +24121,8 @@ msgstr "See asukoht on juba hõivatud teise klemmi poolt, ühikus %d."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:242
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
-msgstr "Selle teate vältimiseks keela valik 'Sünkroniseeritud klemmide režiim'."
+msgstr ""
+"Selle teate vältimiseks keela valik 'Sünkroniseeritud klemmide režiim'."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:243
 msgid "Place Pin Anyway"
@@ -25067,7 +25071,7 @@ msgid "Clear Recent Job Files"
 msgstr "Tühjenda viimati avatud tööfailid"
 
 #: gerbview/gerbview_frame.cpp:90
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad Gerber-vaatur"
 
@@ -26366,7 +26370,8 @@ msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:312
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr "Külgvalguste intensiivsus, vorming 'R,G,B' või üks number, vahemik: 0-1"
+msgstr ""
+"Külgvalguste intensiivsus, vorming 'R,G,B' või üks number, vahemik: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
@@ -26882,7 +26887,8 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:172
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr "Halda allalaaditavaid pakette KiCadi ja kolmandate osapoolte hoidlatest"
+msgstr ""
+"Halda allalaaditavaid pakette KiCadi ja kolmandate osapoolte hoidlatest"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -29187,8 +29193,8 @@ msgid ""
 msgstr ""
 "Siirdeline ülepinge põhjustel:\n"
 "\n"
-"- Atmosfäärilised häiringud, mis kanduvad elektrivõrgu kaudu (nt: pikselöök)"
-"\n"
+"- Atmosfäärilised häiringud, mis kanduvad elektrivõrgu kaudu (nt: "
+"pikselöök)\n"
 "- Koormuse lülitamine elektrivõrgus\n"
 "- Välised ahelad\n"
 "- Sisemine tekitamine\n"
@@ -30434,8 +30440,8 @@ msgstr ""
 "Positiivne arv näitab, et rida on anoodne (-) ja veerg on katoodne (+), "
 "külmad ja soojad värvitoonid näitavad ka ridade potentsiaali.<br>\n"
 "EN 50310 soovitab pinge erinevust alla 300 mV. Levinud praktikad kasutavad "
-"peamise paari vahel kolmandat liidese metalli (nt ENIG pinnaviimistlus).<br>"
-"\n"
+"peamise paari vahel kolmandat liidese metalli (nt ENIG pinnaviimistlus)."
+"<br>\n"
 "Valitud lahtrid kuvatakse süsteemi vaikevärvidega pärast tabeli "
 "uuestäitmist.\n"
 
@@ -30613,8 +30619,8 @@ msgstr ""
 "temperatuuri tõusudele kuni 100 °C ja laiustele kuni 400 milli (10 mm).\n"
 "\n"
 "Valem IPC 2221-st on\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
-"<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
+"H)<sup>0.725</sup>___</center>\n"
 "kus:<br>\n"
 "___I___ on maksimaalne vool amprites<br>\n"
 "___&Delta;T___ on temperatuuri tõus ümbritseva temperatuuri suhtes °C-s<br>\n"
@@ -32748,15 +32754,30 @@ msgstr "horisontaalne arv"
 msgid "vertical count"
 msgstr "vertikaalne arv"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:425
+#: pcbnew/dialogs/dialog_create_array.cpp:422
+#, c-format
+msgid "horizontal delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:428
+#, c-format
+msgid "vertical delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:437
 msgid "stagger"
 msgstr "nihe"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:481
+#: pcbnew/dialogs/dialog_create_array.cpp:493
 msgid "point count"
 msgstr "punktide arv"
 
-#: pcbnew/dialogs/dialog_create_array.cpp:528
+#: pcbnew/dialogs/dialog_create_array.cpp:500
+#, c-format
+msgid "angular delta of zero with %ld objects"
+msgstr ""
+
+#: pcbnew/dialogs/dialog_create_array.cpp:546
 msgid "Bad parameters"
 msgstr "Vigased parameetrid"
 
@@ -33082,7 +33103,8 @@ msgstr "Ühikud:"
 msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
-msgstr "Selle mõõtme ühikud (\"automaatne\" kasutab redaktoris valitud ühikuid)"
+msgstr ""
+"Selle mõõtme ühikud (\"automaatne\" kasutab redaktoris valitud ühikuid)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:137
@@ -34639,8 +34661,8 @@ msgid ""
 "Footprint...\" to assign a different footprint."
 msgstr ""
 "Praegu määratud teegi ID ja komponendi trükkplaadijälje ID. Teise komponendi "
-"trükkplaadijälje määramiseks kasutage \"Muuda komponendi "
-"trükkplaadijälge...\"."
+"trükkplaadijälje määramiseks kasutage \"Muuda komponendi trükkplaadijälge..."
+"\"."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:124
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:116
@@ -34814,7 +34836,8 @@ msgstr "Kasutada suhtelist teed?"
 #: pcbnew/dialogs/dialog_gendrill.cpp:347
 msgid ""
 "Cannot make path relative (target volume different from board file volume)!"
-msgstr "Suhtelist teed ei saa luua (sihtköide erineb trükkplaadifaili köitest)!"
+msgstr ""
+"Suhtelist teed ei saa luua (sihtköide erineb trükkplaadifaili köitest)!"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:338
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:447
@@ -36877,8 +36900,8 @@ msgstr ""
 "Määra globaalne laiuse korrektsioon PostScripti täpseks laiusväljundiks.\n"
 "See laiuse korrektsioon on mõeldud kompenseerima radade laiuse ning samuti "
 "jootepadi ja läbiviikude suuruse vigu.\n"
-"Mõistlik laiuse korrektsiooni väärtus peab olema vahemikus [-(MinRadaLaius-1)"
-", +(MinIsoleervahemik-1)]."
+"Mõistlik laiuse korrektsiooni väärtus peab olema vahemikus [-"
+"(MinRadaLaius-1), +(MinIsoleervahemik-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:318
 msgid "Force A4 output"
@@ -37750,7 +37773,8 @@ msgstr ""
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:590
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr "Ühendusniidi muutmine uuendab ka %lu ühendatud jootepadi väärtusele %s."
+msgstr ""
+"Ühendusniidi muutmine uuendab ka %lu ühendatud jootepadi väärtusele %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:596
 msgid "Change Nets"
@@ -39202,9 +39226,8 @@ msgid ""
 msgstr ""
 "### Dokumentatsioon\n"
 "\n"
-"Täieliku dokumentatsiooni leiate [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules)."
+"Täieliku dokumentatsiooni leiate [https://docs.kicad.org](https://go.kicad."
+"org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -39267,8 +39290,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                         "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
 "|\n"
@@ -39568,8 +39591,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -39577,8 +39600,8 @@ msgstr ""
 "\n"
 "Paljud objektide omadused on saadaval kohandatud reeglite avaldistes "
 "testimiseks. Vaata täielikku dokumentatsiooni [https://docs.kicad.org]"
-"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) täieliku loendi saamiseks.\n"
+"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) täieliku loendi saamiseks.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -39732,13 +39755,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -42902,8 +42925,8 @@ msgstr "%s ei saa uuendada (trükkplaadijälge '%s' ei leitud)."
 #, c-format
 msgid "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."
 msgstr ""
-"Komponendi %s trükkplaadijälge '%s' ei saa muuta trükkplaadijäljeks '%s' "
-"(trükkplaadijälg on lukustatud)."
+"Komponendi %s trükkplaadijälge '%s' ei saa muuta trükkplaadijäljeks "
+"'%s' (trükkplaadijälg on lukustatud)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:341
 #, c-format
@@ -43152,8 +43175,8 @@ msgstr "Sümboli '%s:%s' töötlemine."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1320
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Hoiatus: %s trükkplaadijälje '%s' teegi nimi puudub. Kasutage täisvormi "
 "'Teek:Trükkplaadijälg', et vältida korduvaid uuendusteateid."
@@ -43227,7 +43250,8 @@ msgstr "Väärtust ei saa sõeluda ahelaloendi sümboli sektsioonis."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:185
 msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr "Klemmi nime ei saa sõeluda ahelaloendi sümboli ühendusniidisektsioonis."
+msgstr ""
+"Klemmi nime ei saa sõeluda ahelaloendi sümboli ühendusniidisektsioonis."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:194
 msgid "Cannot parse net name in symbol net section of netlist."
@@ -43880,8 +43904,8 @@ msgid ""
 "Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
 msgstr ""
 "See fail ei paista olevat kehtivas PCB Binary Version 6.0 formaadis. "
-"Veenduge Altium Designeris, et salvestate failina \"PCB Binary Files "
-"(*.PcbDoc)\"."
+"Veenduge Altium Designeris, et salvestate failina \"PCB Binary Files (*."
+"PcbDoc)\"."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:559
 #, c-format
@@ -44096,15 +44120,15 @@ msgid ""
 "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 "Teegi '%s' laadimine:\n"
-"Trükkplaadijälg %s jootepadi %s-l on ruudukujuline ava (ei ole veel toetatud)"
-"."
+"Trükkplaadijälg %s jootepadi %s-l on ruudukujuline ava (ei ole veel "
+"toetatud)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3394
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
-"Trükkplaadijälg %s jootepadi %s-l on ruudukujuline ava (ei ole veel toetatud)"
-"."
+"Trükkplaadijälg %s jootepadi %s-l on ruudukujuline ava (ei ole veel "
+"toetatud)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3429
 #, c-format
@@ -44204,7 +44228,8 @@ msgstr "Laetakse läbiviike..."
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
-msgstr "Läbiviik kihilt %d kihile %d kasutab vaseta kihti, mis ei ole toetatud."
+msgstr ""
+"Läbiviik kihilt %d kihile %d kasutab vaseta kihti, mis ei ole toetatud."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4016
 msgid "Loading tracks..."
@@ -44534,9 +44559,9 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR mallil '%s' on erinevad seadistused valikutele 'Säilita valatud "
-"vask - Ühendamata' ja 'Säilita valatud vask - Isoleeritud'. KiCad ei erista "
-"neid kahte seadistust. Ühendamata vase seadistus on rakendatud KiCad tsooni "
+"CADSTAR mallil '%s' on erinevad seadistused valikutele 'Säilita valatud vask "
+"- Ühendamata' ja 'Säilita valatud vask - Isoleeritud'. KiCad ei erista neid "
+"kahte seadistust. Ühendamata vase seadistus on rakendatud KiCad tsooni "
 "minimaalse saareke alana."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2041
@@ -45497,8 +45522,8 @@ msgid ""
 "Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
 "for ODB++ export."
 msgstr ""
-"Komponendil '%s' on pärast teisendamist mitmetähenduslik tähis; nimetati "
-"ODB++ ekspordi jaoks ümber nimeks '%s'."
+"Komponendil '%s' on pärast teisendamist mitmetähenduslik tähis; nimetati ODB+"
+"+ ekspordi jaoks ümber nimeks '%s'."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:719
 msgid "Failed to add component data"
@@ -46713,7 +46738,8 @@ msgstr "[ühendusniidiklass %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:213
 msgid "Report incomplete: could not compile custom design rules."
-msgstr "Aruanne on puudulik: kohandatud disainireegleid ei saanud kompileerida."
+msgstr ""
+"Aruanne on puudulik: kohandatud disainireegleid ei saanud kompileerida."
 
 #: pcbnew/tools/board_inspection_tool.cpp:390
 msgid "Uncoupled Length"
@@ -47103,7 +47129,8 @@ msgstr "Keeluala lahendus:"
 #: pcbnew/tools/board_inspection_tool.cpp:1478
 #: pcbnew/tools/board_inspection_tool.cpp:1502
 msgid "Report may be incomplete: some footprint courtyards are malformed."
-msgstr "Aruanne võib olla puudulik: mõned trükkplaadijälgede hoovid on vigased."
+msgstr ""
+"Aruanne võib olla puudulik: mõned trükkplaadijälgede hoovid on vigased."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1480
 #: pcbnew/tools/board_inspection_tool.cpp:1504
@@ -48288,7 +48315,8 @@ msgstr "Globaalsed kustutamised..."
 
 #: pcbnew/tools/pcb_actions.cpp:848
 msgid "Delete tracks, footprints and graphic items from board"
-msgstr "Kustuta rajad, trükkplaadijäljed ja graafilised elemendid trükkplaadilt"
+msgstr ""
+"Kustuta rajad, trükkplaadijäljed ja graafilised elemendid trükkplaadilt"
 
 #: pcbnew/tools/pcb_actions.cpp:854
 msgid "Cleanup Tracks & Vias..."
@@ -51016,102 +51044,94 @@ msgstr "soojustõkkekujundid PTH jaoks"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] laadimine ebaõnnestus: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Teisendaja;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "Bittrasterist komponendiks teisendaja"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Loob bittrastrist komponendi KiCadis kasutamiseks"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad ahelaskeemiredaktor (iseseisev)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "Ahelaskeemi jäädvustamise tööriist"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Iseseisev ahelaskeemiredaktor KiCadi ahelaskeemide jaoks"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "Gerber-failide vaatur"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "Kuva Gerber-faile"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "Projektihaldur;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "EDA Suite"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
 "Tööriistakomplekt ahelaskeemide kavandamiseks ja trükkplaatide paigutamiseks"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "KiCad trükkplaadi kalkulaator"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "PCB;Kalkulaator;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "Trükkplaadi kalkulaator"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr "Kalkulaator mitmesuguste elektroonikaga seotud arvutuste jaoks"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Trükkplaat;Paigutus;Disain;Redaktor;Komponent;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad trükkplaadiredaktor (iseseisev)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "Trükkplaadi paigutuse redaktor"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Iseseisev trükkplaadiredaktor KiCadi trükkplaatide jaoks"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "EDA-komplekt ahelaskeemide ja trükkplaatide kavandamiseks"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:39
-msgid "Circuit board"
-msgstr "Trükkplaat"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
@@ -51169,6 +51189,12 @@ msgstr "KiCadi ahelaskeemi sümbol"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "KiCadi joonistusleht"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Trükkplaat"
 
 #, fuzzy
 #~ msgid "Failed to remove Git directory"
