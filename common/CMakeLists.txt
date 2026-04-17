@@ -710,6 +710,7 @@ set ( COMMON_TRANSLINE_CALCULATION_SRCS
     transline_calculations/coupled_stripline.cpp
     transline_calculations/coax.cpp
     transline_calculations/coplanar.cpp
+    transline_calculations/rectwaveguide.cpp
     )
 
 set( COMMON_IMPORT_GFX_SRCS

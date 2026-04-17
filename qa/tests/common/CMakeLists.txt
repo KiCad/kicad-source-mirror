@@ -91,6 +91,7 @@ set( QA_COMMON_SRCS
     transline_calculations/test_coplanar.cpp
     transline_calculations/test_coupled_microstrip.cpp
     transline_calculations/test_coupled_stripline.cpp
+    transline_calculations/test_rectwaveguide.cpp
 
     io/test_csv.cpp
     io/altium/test_altium_parser.cpp

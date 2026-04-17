@@ -1,9 +1,10 @@
 /*
- * rectwaveguide.h - rectangular waveguide  class definition
+ * rectwaveguide.h - rectangular waveguide UI wrapper
  *
  * Copyright (C) 2001 Gopal Narayanan <gopal@astro.umass.edu>
  * Copyright (C) 2005 Stefan Jahn <stefan@lkcc.org>
  * Modified for Kicad: 2015 jean-pierre.charras
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,43 +27,32 @@
 #define __RECTWAVEGUIDE_H
 
 #include "transline/transline.h"
+#include <transline_calculations/rectwaveguide.h>
+
 
 #define PHYS_A_PRM PHYS_WIDTH_PRM
 #define PHYS_B_PRM PHYS_S_PRM
 
-class RECTWAVEGUIDE : public TRANSLINE
+
+/**
+ * UI wrapper for the rectangular waveguide calculator.  Shuttles parameters between the
+ * legacy pcb_calculator UI array and the shared RECTWAVEGUIDE math core, and surfaces the
+ * TE / TM mode strings the core produces as rows 4 and 5 of the results panel.
+ */
+class RECTWAVEGUIDE_UI : public TRANSLINE
 {
 public:
-    RECTWAVEGUIDE();
-
+    RECTWAVEGUIDE_UI();
 
 private:
-    double mur;              // magnetic permeability of substrate
-    double a;                // width of waveguide
-    double b;                // height of waveguide
-    double l;                // length of waveguide
-    double Z0;               // characteristic impedance
-    double Z0EH;             // characteristic impedance of field quantities*/
-    double mur_eff;          // Effective mag. permeability
-    double atten_dielectric; // Loss in dielectric (dB)
-    double atten_cond;       // Loss in conductors (dB)
-    double fc10;             // Cutoff frequency for TE10 mode
+    RECTWAVEGUIDE m_calc;
 
-    double kval_square();
-    double kc_square( int, int );
-    double fc( int, int );
-    double alphac();
-    double alphac_cutoff();
-    double alphad();
-    void   get_rectwaveguide_sub();
-    void   get_rectwaveguide_comp();
-    void   get_rectwaveguide_phys();
-    void   get_rectwaveguide_elec();
-    void   show_results() override;
-    void   calcAnalyze() override;
-    void   calcSynthesize() override;
-    void   showAnalyze() override;
-    void   showSynthesize() override;
+    void getProperties() override;
+    void show_results() override;
+    void showAnalyze() override;
+    void showSynthesize() override;
+    void calcAnalyze() override;
+    void calcSynthesize() override;
 };
 
 #endif // __RECTWAVEGUIDE_H

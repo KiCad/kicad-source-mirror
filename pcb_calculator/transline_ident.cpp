@@ -230,7 +230,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
 
 
     case RECTWAVEGUIDE_TYPE:      // rectangular waveguide
-        m_TLine           = new RECTWAVEGUIDE();
+        m_TLine           = new RECTWAVEGUIDE_UI();
         m_BitmapName      = BITMAPS::rectwaveguide;
         m_HasPrmSelection = true;
 
