@@ -31,6 +31,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <string>
 
 #include "coax.h"
 #include "units.h"
@@ -208,9 +209,6 @@ void COAX::showSynthesize()
  */
 void COAX::show_results()
 {
-    int  m, n;
-    char text[256], txt[256];
-
     m_parameters[LOSS_DIELECTRIC_PRM] = alphad_coax() * m_parameters[PHYS_LEN_PRM];
     m_parameters[LOSS_CONDUCTOR_PRM]  = alphac_coax() * m_parameters[PHYS_LEN_PRM];
 
@@ -218,58 +216,66 @@ void COAX::show_results()
     setResult( 1, m_parameters[LOSS_CONDUCTOR_PRM], "dB" );
     setResult( 2, m_parameters[LOSS_DIELECTRIC_PRM], "dB" );
 
-    n = 1;
-    m_parameters[CUTOFF_FREQUENCY_PRM] =
-            C0
-            / ( M_PI * ( m_parameters[PHYS_DIAM_OUT_PRM] + m_parameters[MUR_PRM] ) / (double) n );
+    // Higher-order mode cutoffs per Pozar, "Microwave Engineering" 4th ed., section 3.5.
+    // TE11 (dominant non-TEM): f_c = 2*c / (pi * sqrt(eps_r) * (Din + Dout))  [eq. 3.183 approx]
+    // TM_0m:                   f_c = m*c / (sqrt(eps_r) * (Dout - Din))       [eq. 3.184]
+    // TE_1m (m>=2):            approx f_c(TE11) + (m-1)*c / (sqrt(eps_r) * (Dout - Din))
+    //
+    // Reference check (air, eps_r=1, Din=1.63 mm, Dout=6.35 mm):
+    //   TE11 ~ 23.9 GHz, TM01 ~ 63.5 GHz
+    // Reference check (RG-401 PTFE, eps_r=2.04, Din=1.63 mm, Dout=6.35 mm):
+    //   TE11 ~ 16.75 GHz, TM01 ~ 44.5 GHz
+    const double epsr   = m_parameters[EPSILONR_PRM];
+    const double Din    = m_parameters[PHYS_DIAM_IN_PRM];
+    const double Dout   = m_parameters[PHYS_DIAM_OUT_PRM];
+    const double freq   = m_parameters[FREQUENCY_PRM];
+    const double sqrtEr = std::sqrt( epsr );
 
-    if( m_parameters[CUTOFF_FREQUENCY_PRM] > m_parameters[FREQUENCY_PRM] )
-    {
-        strcpy( text, "none" );
-    }
-    else
-    {
-        strcpy( text, "H(1,1) " );
-        m = 2;
-        m_parameters[CUTOFF_FREQUENCY_PRM] =
-                C0
-                / ( 2 * ( m_parameters[PHYS_DIAM_OUT_PRM] - m_parameters[MUR_PRM] )
-                        / (double) ( m - 1 ) );
+    const double fc_TE11  = ( 2.0 * C0 ) / ( M_PI * sqrtEr * ( Din + Dout ) );
+    const double fc_TMTE_step = C0 / ( sqrtEr * ( Dout - Din ) );
 
-        while( ( m_parameters[CUTOFF_FREQUENCY_PRM] <= m_parameters[FREQUENCY_PRM] ) && ( m < 10 ) )
+    // Surface TE11 as the representative cutoff for any downstream consumers of this parameter.
+    m_parameters[CUTOFF_FREQUENCY_PRM] = fc_TE11;
+
+    std::string teText;
+
+    if( fc_TE11 <= freq )
+    {
+        teText = "H(1,1) ";
+
+        for( int m = 2; m < 10; ++m )
         {
-            snprintf( txt, sizeof( text ), "H(n,%d) ", m );
-            strcat( text, txt );
-            m++;
-            m_parameters[CUTOFF_FREQUENCY_PRM] =
-                    C0
-                    / ( 2 * ( m_parameters[PHYS_DIAM_OUT_PRM] - m_parameters[MUR_PRM] )
-                            / (double) ( m - 1 ) );
+            const double fc = fc_TE11 + static_cast<double>( m - 1 ) * fc_TMTE_step;
+
+            if( fc > freq )
+                break;
+
+            char buf[32];
+            std::snprintf( buf, sizeof( buf ), "H(1,%d) ", m );
+            teText += buf;
         }
     }
-    setResult( 3, text );
 
-    m = 1;
-    m_parameters[CUTOFF_FREQUENCY_PRM] =
-            C0 / ( 2 * ( m_parameters[PHYS_DIAM_OUT_PRM] - m_parameters[MUR_PRM] ) / (double) m );
-    if( m_parameters[CUTOFF_FREQUENCY_PRM] > m_parameters[FREQUENCY_PRM] )
-    {
-        strcpy( text, "none" );
-    }
-    else
-    {
-        strcpy( text, "" );
+    std::string tmText;
 
-        while( ( m_parameters[CUTOFF_FREQUENCY_PRM] <= m_parameters[FREQUENCY_PRM] ) && ( m < 10 ) )
-        {
-            snprintf( txt, sizeof( text ), "E(n,%d) ", m );
-            strcat( text, txt );
-            m++;
-            m_parameters[CUTOFF_FREQUENCY_PRM] =
-                    C0
-                    / ( 2 * ( m_parameters[PHYS_DIAM_OUT_PRM] - m_parameters[MUR_PRM] )
-                            / (double) m );
-        }
+    for( int m = 1; m < 10; ++m )
+    {
+        const double fc = static_cast<double>( m ) * fc_TMTE_step;
+
+        if( fc > freq )
+            break;
+
+        char buf[32];
+        std::snprintf( buf, sizeof( buf ), "E(0,%d) ", m );
+        tmText += buf;
     }
-    setResult( 4, text );
+
+    if( teText.empty() )
+        teText = "none";
+
+    if( tmText.empty() )
+        tmText = "none";
+
+    setResult( 3, teText.c_str() );
+    setResult( 4, tmText.c_str() );
 }
