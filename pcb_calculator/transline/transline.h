@@ -96,7 +96,6 @@ public:
 
     void         Init();
     virtual void synthesize();
-    virtual void calc() {}
 
     /**
      * Computation for analysis
@@ -132,14 +131,8 @@ public:
 protected:
     double m_parameters[EXTRA_PRMS_COUNT];
 
-    bool   minimizeZ0Error1D( double* );
     double skin_depth();
-    void   ellipke( double, double&, double& );
-    double ellipk( double );
     void   setErrorLevel( PRMS_ID, char );
-
-    /// Calculates the unit propagation delay (in ps/cm) for the given effective dielectric constant
-    static double calcUnitPropagationDelay( double epsilonEff );
 
     /// Converts a TRANSLINE_PARAMETER status to a PCB Calculation status
     static char convertParameterStatusCode( TRANSLINE_STATUS aStatus );
