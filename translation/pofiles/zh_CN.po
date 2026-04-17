@@ -48,7 +48,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-15 19:16+0300\n"
 "PO-Revision-Date: 2026-04-17 02:08+0000\n"
-"Last-Translator: Yao Zi <me@ziyao.cc>\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -417,11 +417,11 @@ msgstr "使用光线追踪渲染当前视图"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Show parts without 3D model"
-msgstr "显示没有3D模型的Part"
+msgstr "显示无 3D 模型的元件"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
 msgid "Display a placeholder for footprints with missing 3D models"
-msgstr "为缺少3D模型的封装显示占位符"
+msgstr "为缺少 3D 模型的封装显示占位内容"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:70
 msgid "Copy 3D image to clipboard"
@@ -2090,12 +2090,12 @@ msgstr "通过 API 修改"
 #: common/api/api_plugin.cpp:58
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr "在 ‘%s’ 无效的插件配置：%s"
+msgstr "无效的插件配置, 位于 '%s': %s"
 
 #: common/api/api_plugin.cpp:73
 #, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "无效的引脚名称：%s"
+msgstr "无效的插件 runtime: %s"
 
 #: common/api/api_plugin.cpp:105
 msgid "could not read plugin configuration file"
@@ -2104,17 +2104,17 @@ msgstr "无法读取插件配置文件"
 #: common/api/api_plugin.cpp:125
 #, c-format
 msgid "plugin configuration file error: %s"
-msgstr "插件配置文件错误：%s"
+msgstr "插件配置文件错误: %s"
 
 #: common/api/api_plugin.cpp:158
 #, c-format
 msgid "missing or invalid required keys: %s"
-msgstr "必选的键值缺失或无效：%s"
+msgstr ""
 
 #: common/api/api_plugin.cpp:167
 #, c-format
 msgid "identifier '%s' is invalid"
-msgstr "标识符 ‘%s’ 无效"
+msgstr "标识符 '%s' 无效"
 
 #: common/api/api_plugin.cpp:194
 #, fuzzy, c-format
@@ -2124,17 +2124,17 @@ msgstr "数据库连接失败: %s"
 #: common/api/api_plugin_manager.cpp:98
 #, c-format
 msgid "Plugin action '%s': %s"
-msgstr "插件操作 ‘%s’：%s"
+msgstr "插件操作 '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:109
 #, c-format
 msgid "Plugin '%s': %s"
-msgstr "插件 ‘%s’：%s"
+msgstr "插件 '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:124
 #, c-format
 msgid "exited with code %d"
-msgstr "以错误代码 %d 退出"
+msgstr "退出, 错误代码 %d"
 
 #: common/api/api_plugin_manager.cpp:335
 msgid "action is not registered"
@@ -2148,7 +2148,7 @@ msgstr "缺少插件运行环境"
 #: common/api/api_plugin_manager.cpp:378
 #, c-format
 msgid "entrypoint '%s' could not be read"
-msgstr "无法读取入口文件 ‘%s’"
+msgstr "无法读取入口文件 '%s'"
 
 #: common/api/api_plugin_manager.cpp:446
 msgid "process could not be created"
@@ -2157,7 +2157,7 @@ msgstr "无法创建进程"
 #: common/api/api_plugin_manager.cpp:490
 #, c-format
 msgid "entrypoint '%s' is not executable"
-msgstr "入口文件 ‘%s’ 不可执行"
+msgstr "入口文件 '%s' 不可执行"
 
 #: common/api/api_plugin_manager.cpp:571
 msgid "could not launch plugin"
@@ -2173,7 +2173,7 @@ msgstr "错误代码 %d"
 #: common/api/api_plugin_manager.cpp:923
 #, c-format
 msgid "could not create plugin environment: %s"
-msgstr "无法创建插件环境：%s"
+msgstr "无法创建插件环境: %s"
 
 #: common/api/api_plugin_manager.cpp:872
 msgid "requirements.txt could not be read"
@@ -3014,7 +3014,7 @@ msgstr "超时"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:69
 msgid "Connection String"
-msgstr "连接字符串(URL)"
+msgstr "连接字符串 (URL)"
 
 #: common/dialogs/dialog_generate_database_connection.cpp:76
 #: common/dialogs/git/dialog_git_repository.cpp:75
@@ -3180,6 +3180,7 @@ msgid "Locked"
 msgstr "锁定"
 
 #: common/dialogs/dialog_group_properties_base.cpp:48
+#, fuzzy
 msgid "Prevents group from being moved on canvas"
 msgstr "防止分组在画布上移动"
 
@@ -3747,6 +3748,7 @@ msgstr "还原"
 #: common/dialogs/dialog_text_entry_base.cpp:20
 #: common/dialogs/dialog_unit_entry_base.cpp:21
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:38
+#, fuzzy
 msgid "MyLabel"
 msgstr "我的标签"
 
@@ -4484,8 +4486,8 @@ msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
-"如果选中，打开工程时会自动启动原理图编辑器和 PCB 编辑器等工具，并加载先前打开"
-"的文件"
+"如果选中，打开工程时会加载先前未关闭文件, 并自动启动原理图编辑器和 PCB 编辑器"
+"等工具"
 
 #: common/dialogs/panel_common_settings_base.cpp:395
 msgid "File history size:"
@@ -4656,7 +4658,7 @@ msgstr "已存在名为 '%s' 的项目。"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:582
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:673
 msgid "One of the nicknames will need to be changed."
-msgstr "需要更改其中一个库的名称。"
+msgstr "其中一项的名称需要更改。"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:764
 #: common/dialogs/panel_embedded_files.cpp:479
@@ -37887,7 +37889,7 @@ msgstr "制造商 P/N:"
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:148
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:156
 msgid "Column containing the manufacturer part number"
-msgstr "包含制造商零件编号的列"
+msgstr "包含制造商元件编号的列"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:152
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:176
@@ -37904,7 +37906,7 @@ msgstr "经销商 P/N:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:180
 msgid "Column containing the distributor part number"
-msgstr "包含经销商零件编号的列"
+msgstr "包含经销商元件编号的列"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:184
 msgid "Distributor:"
