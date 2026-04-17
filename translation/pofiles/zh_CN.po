@@ -41,8 +41,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-13 11:18-0700\n"
-"PO-Revision-Date: 2026-04-15 16:10+0000\n"
-"Last-Translator: Yao Zi <me@ziyao.cc>\n"
+"PO-Revision-Date: 2026-04-17 02:08+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v9/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3655,6 +3655,7 @@ msgstr "检查 PCB 和原理图是否一致"
 #: common/dialogs/dialog_text_entry_base.cpp:32
 #: common/dialogs/dialog_unit_entry_base.cpp:21
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:65
+#, fuzzy
 msgid "MyLabel"
 msgstr "我的标签"
 
@@ -4386,8 +4387,8 @@ msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
-"如果选中，打开工程时会自动启动原理图编辑器和 PCB 编辑器等工具，并加载先前打开"
-"的文件"
+"如果选中，打开工程时会加载先前未关闭文件, 并自动启动原理图编辑器和 PCB 编辑器"
+"等工具"
 
 #: common/dialogs/panel_common_settings_base.cpp:337
 msgid "&Auto save:"
@@ -33656,7 +33657,7 @@ msgstr "制造商 P/N:"
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:137
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
 msgid "Column containing the manufacturer part number"
-msgstr "包含制造商零件编号的列"
+msgstr "包含制造商元件编号的列"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:165
@@ -33673,7 +33674,7 @@ msgstr "经销商 P/N:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:169
 msgid "Column containing the distributor part number"
-msgstr "包含经销商零件编号的列"
+msgstr "包含经销商元件编号的列"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:173
 msgid "Distributor:"
@@ -35558,6 +35559,7 @@ msgid "Group name:"
 msgstr "分组名称:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:41
+#, fuzzy
 msgid "Prevents group from being moved on canvas"
 msgstr "防止分组在画布上移动"
 
