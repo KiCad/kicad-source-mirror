@@ -2245,6 +2245,8 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer )
                     CREEPAGE_TRACK_ENTRY* entry = new CREEPAGE_TRACK_ENTRY();
                     entry->segment = SEG( track->GetStart(), track->GetEnd() );
                     entry->layer = aLayer;
+                    entry->halfWidth = track->GetWidth() / 2;
+                    entry->track = track;
 
                     BOX2I bbox = track->GetBoundingBox();
                     int   minCoords[2] = { bbox.GetX(), bbox.GetY() };
@@ -2521,6 +2523,14 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer )
                         IgnoreForTest.push_back( shape1->GetParent() );
 
                     if( shape2->GetType() == CREEP_SHAPE::TYPE::CIRCLE )
+                        IgnoreForTest.push_back( shape2->GetParent() );
+
+                    // Also ignore each CU shape's own parent for the endpoint-inside-track
+                    // test so we don't reject paths that touch the track's own edge.
+                    if( shape1->IsConductive() )
+                        IgnoreForTest.push_back( shape1->GetParent() );
+
+                    if( shape2->IsConductive() )
                         IgnoreForTest.push_back( shape2->GetParent() );
 
                     bool valid = pc.isValid( m_board, aLayer, m_boardEdge, IgnoreForTest, m_boardOutline,

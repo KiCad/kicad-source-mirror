@@ -196,41 +196,110 @@ BOOST_FIXTURE_TEST_CASE( CreepagePathStartPointIssue23576, DRC_CREEPAGE_PATH_FIX
                     itemB->GetPosition().x / 1e6, itemB->GetPosition().y / 1e6 ) );
         }
 
-        // For tracks, verify that the path shape vertex nearest to the track lies on
-        // its physical edge (at halfWidth from the centerline), not on the centerline.
-        // Path shapes can have inconsistent direction, so check ALL vertices.
-        for( const BOARD_ITEM* item : { itemA, itemB } )
+        // The reported violation position (vi.pos) is m_pathStart — the arrow tip the user
+        // sees. For a track-to-track or pad-to-track violation, this point must lie on the
+        // outer copper boundary of the net, not inside overlapping copper from an adjacent
+        // track/pad that shares an endpoint. We validate two conditions:
+        //
+        //   (a) The point is at least halfWidth from every track's centerline of the same
+        //       net as itemA (or itemB respectively). Less than halfWidth would mean the
+        //       point is strictly inside that track's copper body.
+        //   (b) For the track that the path originates from, the point is at halfWidth
+        //       from its centerline (on the copper edge).
+
+        auto validateOnOuterBoundary =
+                [&]( const BOARD_ITEM* anchor, const VECTOR2I& pt, const char* label )
+                {
+                    if( !anchor || anchor->Type() != PCB_TRACE_T )
+                        return;
+
+                    const PCB_TRACK* anchorTrack = static_cast<const PCB_TRACK*>( anchor );
+                    int              anchorHalfWidth = anchorTrack->GetWidth() / 2;
+                    int              netCode = anchorTrack->GetNetCode();
+                    int              tolerance = 10000; // 10um
+
+                    SEG anchorSeg( anchorTrack->GetStart(), anchorTrack->GetEnd() );
+                    int distToAnchor = anchorSeg.Distance( pt );
+
+                    BOOST_TEST_MESSAGE( wxString::Format(
+                            "  %s at (%.4f, %.4f): dist to anchor centerline=%d (hw=%d)",
+                            label, pt.x / 1e6, pt.y / 1e6, distToAnchor, anchorHalfWidth ) );
+
+                    BOOST_CHECK_MESSAGE(
+                            std::abs( distToAnchor - anchorHalfWidth ) <= tolerance,
+                            wxString::Format( "Violation %zu %s: path endpoint is %d nm from "
+                                              "anchor track centerline, expected %d nm (halfWidth)",
+                                              i, label, distToAnchor, anchorHalfWidth ) );
+
+                    // Ensure the point is not inside any other same-net track's copper body.
+                    for( PCB_TRACK* other : m_board->Tracks() )
+                    {
+                        if( other == anchorTrack )
+                            continue;
+
+                        if( other->GetNetCode() != netCode )
+                            continue;
+
+                        if( !other->IsOnLayer( anchorTrack->GetLayer() ) )
+                            continue;
+
+                        SEG otherSeg( other->GetStart(), other->GetEnd() );
+                        int otherHalfWidth = other->GetWidth() / 2;
+                        int distToOther = otherSeg.Distance( pt );
+
+                        // A point strictly inside another same-net track's copper body
+                        // (distance less than halfWidth by more than tolerance) means the
+                        // creepage path starts at an "interior" point that isn't a physical
+                        // copper edge once adjacent segments are accounted for.
+                        BOOST_CHECK_MESSAGE(
+                                distToOther >= otherHalfWidth - tolerance,
+                                wxString::Format(
+                                        "Violation %zu %s: path endpoint (%.4f, %.4f) is "
+                                        "%d nm inside adjacent same-net track "
+                                        "(%.4f,%.4f)->(%.4f,%.4f) hw=%d. The path starts "
+                                        "at an interior point, not a physical copper edge.",
+                                        i, label,
+                                        pt.x / 1e6, pt.y / 1e6,
+                                        otherHalfWidth - distToOther,
+                                        other->GetStart().x / 1e6,
+                                        other->GetStart().y / 1e6,
+                                        other->GetEnd().x / 1e6,
+                                        other->GetEnd().y / 1e6,
+                                        otherHalfWidth ) );
+                    }
+                };
+
+        validateOnOuterBoundary( itemA, vi.pos, "startPoint" );
+
+        if( itemB && itemB->Type() == PCB_TRACE_T )
         {
-            if( !item || item->Type() != PCB_TRACE_T )
-                continue;
+            const PCB_TRACK* trackB = static_cast<const PCB_TRACK*>( itemB );
+            SEG              segB( trackB->GetStart(), trackB->GetEnd() );
 
-            const PCB_TRACK* track = static_cast<const PCB_TRACK*>( item );
-            SEG              trackSeg( track->GetStart(), track->GetEnd() );
-            int              halfWidth = track->GetWidth() / 2;
-
-            int minDist = std::numeric_limits<int>::max();
+            // The path vertex closest to trackB is taken as the path end point.
+            int      bestDist = std::numeric_limits<int>::max();
+            VECTOR2I endPt;
 
             for( const PCB_SHAPE& s : vi.pathShapes )
             {
-                minDist = std::min( minDist, trackSeg.Distance( s.GetStart() ) );
-                minDist = std::min( minDist, trackSeg.Distance( s.GetEnd() ) );
+                int d = segB.Distance( s.GetStart() );
+
+                if( d < bestDist )
+                {
+                    bestDist = d;
+                    endPt = s.GetStart();
+                }
+
+                d = segB.Distance( s.GetEnd() );
+
+                if( d < bestDist )
+                {
+                    bestDist = d;
+                    endPt = s.GetEnd();
+                }
             }
 
-            BOOST_TEST_MESSAGE( wxString::Format(
-                    "  Track hw=%d closest_vertex=%d start=(%.4f,%.4f) end=(%.4f,%.4f)",
-                    halfWidth, minDist,
-                    track->GetStart().x / 1e6, track->GetStart().y / 1e6,
-                    track->GetEnd().x / 1e6, track->GetEnd().y / 1e6 ) );
-
-            int tolerance = 10000; // 10um
-
-            BOOST_CHECK_MESSAGE(
-                    std::abs( minDist - halfWidth ) <= tolerance,
-                    wxString::Format(
-                            "Violation %zu: closest path vertex is %d nm from track "
-                            "centerline, expected %d nm (halfWidth +/- %d nm tolerance). "
-                            "Path may be starting at track center instead of edge.",
-                            i, minDist, halfWidth, tolerance ) );
+            validateOnOuterBoundary( itemB, endPt, "endPoint" );
         }
     }
 }
