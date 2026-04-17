@@ -87,6 +87,7 @@ set( QA_COMMON_SRCS
 
     libeval/test_numeric_evaluator.cpp
 
+    transline_calculations/test_coupled_microstrip.cpp
     transline_calculations/test_coupled_stripline.cpp
 
     io/test_csv.cpp

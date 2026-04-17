@@ -624,17 +624,26 @@ void COUPLED_MICROSTRIP::line_angle()
 
 void COUPLED_MICROSTRIP::diff_impedance()
 {
-    // Note that differential impedance is exactly twice the odd mode impedance.
+    // Differential impedance of a coupled pair driven in odd mode is exactly twice the
+    // odd-mode characteristic impedance (Pozar, "Microwave Engineering" 4th ed., §7.6).
     // Odd mode is not the same as single-ended impedance, so avoid approximations found
-    // on websites that use static single ended impedance as the starting point
+    // on websites that use static single ended impedance as the starting point.
+    // Read the dispersed Z0_O left by Z0_dispersion() rather than the static Z0_o_0 so
+    // Zdiff tracks frequency above a few GHz where Kirschning-Jansen raises the odd-mode
+    // impedance by several percent.
 
-    Zdiff = 2 * Z0_o_0;
+    Zdiff = 2.0 * GetParameter( TCP::Z0_O );
 }
 
 
 /*
- * Z0_dispersion() - calculate frequency dependency of characteristic
- * impedances
+ * Z0_dispersion() - calculate frequency dependency of characteristic impedances.
+ *
+ * Kirschning & Jansen, "Accurate Wide-Range Design Equations for the Frequency-Dependent
+ * Characteristic of Parallel Coupled Microstrip Lines", IEEE Trans. MTT 32(1):83-90,
+ * Jan. 1984 (errata: MTT 33(3):288, Mar. 1985).  The Q_0..Q_29 closed-form chain below
+ * implements the dispersive even- and odd-mode impedance correction tables from that
+ * paper.
  */
 void COUPLED_MICROSTRIP::Z0_dispersion()
 {
