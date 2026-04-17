@@ -266,7 +266,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case COAX_TYPE:      // coaxial cable
-        m_TLine           = new COAX();
+        m_TLine           = new COAX_UI();
         m_BitmapName      = BITMAPS::coax;
         m_HasPrmSelection = true;
 

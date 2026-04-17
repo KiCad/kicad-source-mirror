@@ -4,6 +4,7 @@
  * Copyright (C) 2001 Gopal Narayanan <gopal@astro.umass.edu>
  * Copyright (C) 2002 Claudio Girardi <claudio.girardi@ieee.org>
  * Copyright (C) 2005, 2006 Stefan Jahn <stefan@lkcc.org>
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,256 +20,107 @@
  * along with this package; see the file COPYING.  If not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street - Fifth Floor,
  * Boston, MA 02110-1301, USA.
- *
  */
-
-
-/*
- * coax.c - Puts up window for microstrip and
- * performs the associated calculations
- */
-#include <cmath>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <string>
 
 #include "coax.h"
+#include "transline.h"
 #include "units.h"
 
-COAX::COAX() : TRANSLINE()
+
+COAX_UI::COAX_UI()
 {
     m_Name = "Coax";
     Init();
 }
 
-double COAX::alphad_coax()
+
+void COAX_UI::getProperties()
 {
-    double ad;
+    TRANSLINE::getProperties();
 
-    ad = ( M_PI / C0 ) * m_parameters[FREQUENCY_PRM] * sqrt( m_parameters[EPSILONR_PRM] )
-         * m_parameters[TAND_PRM];
-    ad = ad * 20.0 / log( 10.0 );
-    return ad;
-}
-
-
-double COAX::alphac_coax()
-{
-    double ac, Rs;
-
-    Rs = sqrt( M_PI * m_parameters[FREQUENCY_PRM] * m_parameters[MURC_PRM] * MU0
-               / m_parameters[SIGMA_PRM] );
-    ac = sqrt( m_parameters[EPSILONR_PRM] )
-         * ( ( ( 1 / m_parameters[PHYS_DIAM_IN_PRM] ) + ( 1 / m_parameters[PHYS_DIAM_OUT_PRM] ) )
-                 / log( m_parameters[PHYS_DIAM_OUT_PRM] / m_parameters[PHYS_DIAM_IN_PRM] ) )
-         * ( Rs / ZF0 );
-    ac = ac * 20.0 / log( 10.0 );
-    return ac;
-}
-
-
-/**
- *  \f$ Z_0 = \frac{Z_{0_{\mathrm{vacuum}}}}{\sqrt{\epsilon_r}}\log_{10}\left( \frac{D_{\mathrm{out}}}{D_{\mathrm{in}}}\right) \f$
- *
- *  \f$ \lambda_g = \frac{c}{f \cdot \sqrt{ \epsilon_r \cdot \mu_r}} \f$
- *
- *  \f$ L_{[\mathrm{rad}]} = \frac{ 2\pi\cdot L_{[\mathrm{m}]}}{\lambda_g} \f$
- * */
-void COAX::calcAnalyze()
-{
-    double lambda_g;
-
-
-    m_parameters[Z0_PRM] =
-            ( ZF0 / 2 / M_PI / sqrt( m_parameters[EPSILONR_PRM] ) )
-            * log( m_parameters[PHYS_DIAM_OUT_PRM] / m_parameters[PHYS_DIAM_IN_PRM] );
-
-    lambda_g = ( C0 / ( m_parameters[FREQUENCY_PRM] ) )
-               / sqrt( m_parameters[EPSILONR_PRM] * m_parameters[MUR_PRM] );
-    /* calculate electrical angle */
-    m_parameters[ANG_L_PRM] =
-            ( 2.0 * M_PI * m_parameters[PHYS_LEN_PRM] ) / lambda_g; /* in radians */
-}
-
-
-/**
- *  \f$ D_{\mathrm{in}} = D_{\mathrm{out}}  \cdot e^{-\frac{Z_0*\sqrt{\epsilon_r}}{2\pi \cdot  Z_{0_{\mathrm{vacuum}}}}} \f$
- *
- *  \f$ D_{\mathrm{out}} = D_{\mathrm{in}}  \cdot e^{ \frac{Z_0*\sqrt{\epsilon_r}}{2\pi \cdot  Z_{0_{\mathrm{vacuum}}}}} \f$
- *
- *  \f$ \lambda_g = \frac{c}{f \cdot \sqrt{ \epsilon_r \cdot \mu_r}} \f$
- *
- *  \f$ L_{[\mathrm{m}]} = \frac{ \lambda_g cdot L_{[\mathrm{m}]}}{2\pi} \f$
- * */
-void COAX::calcSynthesize()
-{
-    double lambda_g;
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::SIGMA, m_parameters[SIGMA_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, m_parameters[SKIN_DEPTH_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, m_parameters[EPSILONR_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::TAND, m_parameters[TAND_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::PHYS_DIAM_IN, m_parameters[PHYS_DIAM_IN_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::PHYS_DIAM_OUT, m_parameters[PHYS_DIAM_OUT_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::PHYS_LEN, m_parameters[PHYS_LEN_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::MUR, m_parameters[MUR_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::MURC, m_parameters[MURC_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, m_parameters[FREQUENCY_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::Z0, m_parameters[Z0_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::ANG_L, m_parameters[ANG_L_PRM] );
 
     if( isSelected( PHYS_DIAM_IN_PRM ) )
-    {
-        /* solve for din */
-        m_parameters[PHYS_DIAM_IN_PRM] =
-                m_parameters[PHYS_DIAM_OUT_PRM]
-                / exp( m_parameters[Z0_PRM] * sqrt( m_parameters[EPSILONR_PRM] ) / ZF0 * 2 * M_PI );
-    }
+        m_calc.SetSynthesizeFor( TRANSLINE_PARAMETERS::PHYS_DIAM_IN );
     else if( isSelected( PHYS_DIAM_OUT_PRM ) )
-    {
-        /* solve for dout */
-        m_parameters[PHYS_DIAM_OUT_PRM] =
-                m_parameters[PHYS_DIAM_IN_PRM]
-                * exp( m_parameters[Z0_PRM] * sqrt( m_parameters[EPSILONR_PRM] ) / ZF0 * 2 * M_PI );
-    }
-
-    lambda_g = ( C0 / ( m_parameters[FREQUENCY_PRM] ) )
-               / sqrt( m_parameters[EPSILONR_PRM] * m_parameters[MUR_PRM] );
-    /* calculate physical length */
-    m_parameters[PHYS_LEN_PRM] = ( lambda_g * m_parameters[ANG_L_PRM] ) / ( 2.0 * M_PI ); /* in m */
+        m_calc.SetSynthesizeFor( TRANSLINE_PARAMETERS::PHYS_DIAM_OUT );
 }
 
 
-void COAX::showAnalyze()
+void COAX_UI::calcAnalyze()
 {
-    setProperty( Z0_PRM, m_parameters[Z0_PRM] );
-    setProperty( ANG_L_PRM, m_parameters[ANG_L_PRM] );
-
-    // Check for errors
-    if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
-        setErrorLevel( Z0_PRM, TRANSLINE_ERROR );
-
-    if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
-        setErrorLevel( ANG_L_PRM, TRANSLINE_ERROR );
-
-    // Find warnings to display - physical parameters
-    if( !std::isfinite( m_parameters[PHYS_DIAM_IN_PRM] ) || m_parameters[PHYS_DIAM_IN_PRM] <= 0.0 )
-        setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_WARNING );
-
-    if( !std::isfinite( m_parameters[PHYS_DIAM_OUT_PRM] )
-            || m_parameters[PHYS_DIAM_OUT_PRM] <= 0.0 )
-    {
-        setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_WARNING );
-    }
-
-    if( m_parameters[PHYS_DIAM_IN_PRM] > m_parameters[PHYS_DIAM_OUT_PRM] )
-    {
-        setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_WARNING );
-        setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_WARNING );
-    }
-
-    if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0.0 )
-        setErrorLevel( PHYS_LEN_PRM, TRANSLINE_WARNING );
+    m_calc.Analyse();
 }
 
-void COAX::showSynthesize()
+
+void COAX_UI::calcSynthesize()
 {
+    m_calc.Synthesize( SYNTHESIZE_OPTS::DEFAULT );
+}
+
+
+void COAX_UI::showAnalyze()
+{
+    std::unordered_map<TRANSLINE_PARAMETERS, std::pair<double, TRANSLINE_STATUS>>& results =
+            m_calc.GetAnalysisResults();
+
+    setProperty( Z0_PRM, results[TRANSLINE_PARAMETERS::Z0].first );
+    setProperty( ANG_L_PRM, results[TRANSLINE_PARAMETERS::ANG_L].first );
+
+    setErrorLevel( Z0_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::Z0].second ) );
+    setErrorLevel( ANG_L_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::ANG_L].second ) );
+    setErrorLevel( PHYS_LEN_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::PHYS_LEN].second ) );
+    setErrorLevel( PHYS_DIAM_IN_PRM,
+                   convertParameterStatusCode( results[TRANSLINE_PARAMETERS::PHYS_DIAM_IN].second ) );
+    setErrorLevel( PHYS_DIAM_OUT_PRM,
+                   convertParameterStatusCode( results[TRANSLINE_PARAMETERS::PHYS_DIAM_OUT].second ) );
+}
+
+
+void COAX_UI::showSynthesize()
+{
+    std::unordered_map<TRANSLINE_PARAMETERS, std::pair<double, TRANSLINE_STATUS>>& results =
+            m_calc.GetSynthesisResults();
+
     if( isSelected( PHYS_DIAM_IN_PRM ) )
-        setProperty( PHYS_DIAM_IN_PRM, m_parameters[PHYS_DIAM_IN_PRM] );
+        setProperty( PHYS_DIAM_IN_PRM, results[TRANSLINE_PARAMETERS::PHYS_DIAM_IN].first );
     else if( isSelected( PHYS_DIAM_OUT_PRM ) )
-        setProperty( PHYS_DIAM_OUT_PRM, m_parameters[PHYS_DIAM_OUT_PRM] );
+        setProperty( PHYS_DIAM_OUT_PRM, results[TRANSLINE_PARAMETERS::PHYS_DIAM_OUT].first );
 
-    setProperty( PHYS_LEN_PRM, m_parameters[PHYS_LEN_PRM] );
+    setProperty( PHYS_LEN_PRM, results[TRANSLINE_PARAMETERS::PHYS_LEN].first );
 
-    // Check for errors
-    if( !std::isfinite( m_parameters[PHYS_DIAM_IN_PRM] ) || m_parameters[PHYS_DIAM_IN_PRM] <= 0.0 )
-    {
-        if( isSelected( PHYS_DIAM_IN_PRM ) )
-            setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_ERROR );
-        else
-            setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_WARNING );
-    }
-
-    if( !std::isfinite( m_parameters[PHYS_DIAM_OUT_PRM] )
-            || m_parameters[PHYS_DIAM_OUT_PRM] <= 0.0 )
-    {
-        if( isSelected( PHYS_DIAM_OUT_PRM ) )
-            setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_ERROR );
-        else
-            setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_WARNING );
-    }
-
-    if( m_parameters[PHYS_DIAM_IN_PRM] > m_parameters[PHYS_DIAM_OUT_PRM] )
-    {
-        if( isSelected( PHYS_DIAM_IN_PRM ) )
-            setErrorLevel( PHYS_DIAM_IN_PRM, TRANSLINE_ERROR );
-        else if( isSelected( PHYS_DIAM_OUT_PRM ) )
-            setErrorLevel( PHYS_DIAM_OUT_PRM, TRANSLINE_ERROR );
-    }
-
-    if( !std::isfinite( m_parameters[PHYS_LEN_PRM] ) || m_parameters[PHYS_LEN_PRM] < 0.0 )
-        setErrorLevel( PHYS_LEN_PRM, TRANSLINE_ERROR );
-
-    // Check for warnings
-    if( !std::isfinite( m_parameters[Z0_PRM] ) || m_parameters[Z0_PRM] < 0 )
-        setErrorLevel( Z0_PRM, TRANSLINE_WARNING );
-
-    if( !std::isfinite( m_parameters[ANG_L_PRM] ) || m_parameters[ANG_L_PRM] < 0 )
-        setErrorLevel( ANG_L_PRM, TRANSLINE_WARNING );
+    setErrorLevel( Z0_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::Z0].second ) );
+    setErrorLevel( ANG_L_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::ANG_L].second ) );
+    setErrorLevel( PHYS_LEN_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::PHYS_LEN].second ) );
+    setErrorLevel( PHYS_DIAM_IN_PRM,
+                   convertParameterStatusCode( results[TRANSLINE_PARAMETERS::PHYS_DIAM_IN].second ) );
+    setErrorLevel( PHYS_DIAM_OUT_PRM,
+                   convertParameterStatusCode( results[TRANSLINE_PARAMETERS::PHYS_DIAM_OUT].second ) );
 }
-/*
- * show_results() - show results
- */
-void COAX::show_results()
+
+
+void COAX_UI::show_results()
 {
-    m_parameters[LOSS_DIELECTRIC_PRM] = alphad_coax() * m_parameters[PHYS_LEN_PRM];
-    m_parameters[LOSS_CONDUCTOR_PRM]  = alphac_coax() * m_parameters[PHYS_LEN_PRM];
+    std::unordered_map<TRANSLINE_PARAMETERS, std::pair<double, TRANSLINE_STATUS>>& results =
+            m_calc.GetAnalysisResults();
 
-    setResult( 0, m_parameters[EPSILONR_PRM], "" );
-    setResult( 1, m_parameters[LOSS_CONDUCTOR_PRM], "dB" );
-    setResult( 2, m_parameters[LOSS_DIELECTRIC_PRM], "dB" );
+    setResult( 0, results[TRANSLINE_PARAMETERS::EPSILONR].first, "" );
+    setResult( 1, results[TRANSLINE_PARAMETERS::LOSS_CONDUCTOR].first, "dB" );
+    setResult( 2, results[TRANSLINE_PARAMETERS::LOSS_DIELECTRIC].first, "dB" );
 
-    // Higher-order mode cutoffs per Pozar, "Microwave Engineering" 4th ed., section 3.5.
-    // TE11 (dominant non-TEM): f_c = 2*c / (pi * sqrt(eps_r) * (Din + Dout))  [eq. 3.183 approx]
-    // TM_0m:                   f_c = m*c / (sqrt(eps_r) * (Dout - Din))       [eq. 3.184]
-    // TE_1m (m>=2):            approx f_c(TE11) + (m-1)*c / (sqrt(eps_r) * (Dout - Din))
-    //
-    // Reference check (air, eps_r=1, Din=1.63 mm, Dout=6.35 mm):
-    //   TE11 ~ 23.9 GHz, TM01 ~ 63.5 GHz
-    // Reference check (RG-401 PTFE, eps_r=2.04, Din=1.63 mm, Dout=6.35 mm):
-    //   TE11 ~ 16.75 GHz, TM01 ~ 44.5 GHz
-    const double epsr   = m_parameters[EPSILONR_PRM];
-    const double Din    = m_parameters[PHYS_DIAM_IN_PRM];
-    const double Dout   = m_parameters[PHYS_DIAM_OUT_PRM];
-    const double freq   = m_parameters[FREQUENCY_PRM];
-    const double sqrtEr = std::sqrt( epsr );
-
-    const double fc_TE11  = ( 2.0 * C0 ) / ( M_PI * sqrtEr * ( Din + Dout ) );
-    const double fc_TMTE_step = C0 / ( sqrtEr * ( Dout - Din ) );
-
-    // Surface TE11 as the representative cutoff for any downstream consumers of this parameter.
-    m_parameters[CUTOFF_FREQUENCY_PRM] = fc_TE11;
-
-    std::string teText;
-
-    if( fc_TE11 <= freq )
-    {
-        teText = "H(1,1) ";
-
-        for( int m = 2; m < 10; ++m )
-        {
-            const double fc = fc_TE11 + static_cast<double>( m - 1 ) * fc_TMTE_step;
-
-            if( fc > freq )
-                break;
-
-            char buf[32];
-            std::snprintf( buf, sizeof( buf ), "H(1,%d) ", m );
-            teText += buf;
-        }
-    }
-
-    std::string tmText;
-
-    for( int m = 1; m < 10; ++m )
-    {
-        const double fc = static_cast<double>( m ) * fc_TMTE_step;
-
-        if( fc > freq )
-            break;
-
-        char buf[32];
-        std::snprintf( buf, sizeof( buf ), "E(0,%d) ", m );
-        tmText += buf;
-    }
+    std::string teText = m_calc.GetTEModes();
+    std::string tmText = m_calc.GetTMModes();
 
     if( teText.empty() )
         teText = "none";

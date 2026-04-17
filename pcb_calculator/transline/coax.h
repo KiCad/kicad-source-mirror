@@ -4,6 +4,7 @@
  * Copyright (C) 2001 Gopal Narayanan <gopal@astro.umass.edu>
  * Copyright (C) 2005 Stefan Jahn <stefan@lkcc.org>
  * Modifications for Kicad: 2015 Jean-Pierre Charras
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,20 +27,23 @@
 #define __COAX_H
 
 #include "transline/transline.h"
+#include <transline_calculations/coax.h>
 
-class COAX : public TRANSLINE
+
+class COAX_UI : public TRANSLINE
 {
 public:
-    COAX();
+    COAX_UI();
 
 private:
-    void   calcAnalyze() override;
-    void   calcSynthesize() override;
-    void   showAnalyze() override;
-    void   showSynthesize() override;
-    double alphad_coax();
-    double alphac_coax();
-    void   show_results() override;
+    COAX m_calc;
+
+    void getProperties() override;
+    void show_results() override;
+    void showAnalyze() override;
+    void showSynthesize() override;
+    void calcAnalyze() override;
+    void calcSynthesize() override;
 };
 
 #endif // __COAX_H
