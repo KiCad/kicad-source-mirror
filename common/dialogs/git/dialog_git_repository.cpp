@@ -268,6 +268,23 @@ void DIALOG_GIT_REPOSITORY::updateURLData()
             setDefaultSSHKey();
         }
     }
+    else
+    {
+        m_fullURL = url;
+
+        // URL without user@ prefix (e.g. "host:path/repo.git")
+        size_t colonPos = url.find( ':' );
+        size_t slashPos = url.find( '/' );
+
+        if( colonPos != wxString::npos && ( slashPos == wxString::npos || colonPos < slashPos ) )
+        {
+            m_ConnType->SetSelection( static_cast<int>( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH ) );
+            setDefaultSSHKey();
+
+            if( m_txtName->GetValue().IsEmpty() )
+                m_txtName->SetValue( get_repo_name( url ) );
+        }
+    }
 }
 
 

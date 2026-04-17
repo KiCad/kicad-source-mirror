@@ -143,7 +143,7 @@ bool LIBGIT_BACKEND::Clone( GIT_CLONE_HANDLER* aHandler )
     if( git_clone( &newRepo, remote.mbc_str(), aHandler->GetClonePath().mbc_str(),
                    &cloneOptions ) != 0 )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Could not clone repository '%s'" ), remote ) );
+        aHandler->AddErrorString( wxString::Format( _( "Could not clone repository '%s' : %s" ), remote, KIGIT_COMMON::GetLastGitError() ) );
         return false;
     }
 
