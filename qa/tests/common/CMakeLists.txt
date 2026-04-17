@@ -87,6 +87,8 @@ set( QA_COMMON_SRCS
 
     libeval/test_numeric_evaluator.cpp
 
+    transline_calculations/test_coupled_stripline.cpp
+
     io/test_csv.cpp
     io/altium/test_altium_parser.cpp
     io/altium/test_altium_parser_utils.cpp

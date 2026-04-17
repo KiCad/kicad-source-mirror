@@ -109,9 +109,12 @@ void C_STRIPLINE::getProperties()
     m_calc.SetParameter( TRANSLINE_PARAMETERS::H, m_parameters[H_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::T, m_parameters[T_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, m_parameters[FREQUENCY_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::MUR, m_parameters[MUR_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::MURC, m_parameters[MURC_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, m_parameters[SKIN_DEPTH_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::SIGMA, m_parameters[SIGMA_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::TAND, m_parameters[TAND_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::ROUGH, m_parameters[ROUGH_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::ANG_L, m_parameters[ANG_L_PRM] );
 }
 

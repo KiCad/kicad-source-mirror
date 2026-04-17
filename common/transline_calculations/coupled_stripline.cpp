@@ -215,6 +215,10 @@ void COUPLED_STRIPLINE::SetAnalysisResults()
     SetAnalysisResult( TCP::UNIT_PROP_DELAY_EVEN, unit_prop_delay_e );
     SetAnalysisResult( TCP::UNIT_PROP_DELAY_ODD, unit_prop_delay_o );
     SetAnalysisResult( TCP::SKIN_DEPTH, GetParameter( TCP::SKIN_DEPTH ) );
+    SetAnalysisResult( TCP::ATTEN_COND_EVEN, GetParameter( TCP::ATTEN_COND_EVEN ) );
+    SetAnalysisResult( TCP::ATTEN_COND_ODD, GetParameter( TCP::ATTEN_COND_ODD ) );
+    SetAnalysisResult( TCP::ATTEN_DILECTRIC_EVEN, GetParameter( TCP::ATTEN_DILECTRIC_EVEN ) );
+    SetAnalysisResult( TCP::ATTEN_DILECTRIC_ODD, GetParameter( TCP::ATTEN_DILECTRIC_ODD ) );
 
     const double Z0_E = GetParameter( TCP::Z0_E );
     const double Z0_O = GetParameter( TCP::Z0_O );
@@ -248,6 +252,10 @@ void COUPLED_STRIPLINE::SetSynthesisResults()
     SetSynthesisResult( TCP::UNIT_PROP_DELAY_EVEN, unit_prop_delay_e );
     SetSynthesisResult( TCP::UNIT_PROP_DELAY_ODD, unit_prop_delay_o );
     SetSynthesisResult( TCP::SKIN_DEPTH, GetParameter( TCP::SKIN_DEPTH ) );
+    SetSynthesisResult( TCP::ATTEN_COND_EVEN, GetParameter( TCP::ATTEN_COND_EVEN ) );
+    SetSynthesisResult( TCP::ATTEN_COND_ODD, GetParameter( TCP::ATTEN_COND_ODD ) );
+    SetSynthesisResult( TCP::ATTEN_DILECTRIC_EVEN, GetParameter( TCP::ATTEN_DILECTRIC_EVEN ) );
+    SetSynthesisResult( TCP::ATTEN_DILECTRIC_ODD, GetParameter( TCP::ATTEN_DILECTRIC_ODD ) );
 
     const double Z0_E = GetParameter( TCP::Z0_E );
     const double Z0_O = GetParameter( TCP::Z0_O );
@@ -349,6 +357,59 @@ void COUPLED_STRIPLINE::calcZ0OddMode( const double t, const double s )
 
 void COUPLED_STRIPLINE::calcLosses()
 {
+    const double length = GetParameter( TCP::PHYS_LEN );
+    const double freq = GetParameter( TCP::FREQUENCY );
+    const double er = GetParameter( TCP::EPSILONR );
+    const double tand = GetParameter( TCP::TAND );
+
+    // Dielectric loss for a homogeneous TEM stripline. The same α_d applies to both even and odd
+    // modes because the dielectric fills the whole cross-section, so εr_eff does not change with
+    // mode excitation. α_d = π · f · √εr · tan δ / c (Np/m). Convert to dB via LOG2DB.
+    // Reference Pozar, "Microwave Engineering" 4th ed., §3.1 homogeneous-TEM loss.
+    const double alpha_d_dB_per_m = TC::LOG2DB * ( M_PI / TC::C0 ) * freq * std::sqrt( er ) * tand;
+    const double atten_d = alpha_d_dB_per_m * length;
+
+    SetParameter( TCP::ATTEN_DILECTRIC_EVEN, atten_d );
+    SetParameter( TCP::ATTEN_DILECTRIC_ODD, atten_d );
+
+    // Conductor loss via the single-stripline incremental-inductance formulation. STRIPLINE::Analyse
+    // calls lineImpedance() twice (strip to top plane, strip to bottom plane) and sums per-unit-length
+    // attenuations into LOSS_CONDUCTOR (already in dB after multiplication by PHYS_LEN). Reuse it
+    // rather than duplicate the incremental-inductance algebra.
+    // Reference Wheeler, "Formulas for the Skin Effect", Proc. IRE 30(9):412-424, Sept. 1942
+    // (incremental-inductance rule).
+    m_striplineCalc.SetParameter( TCP::EPSILONR, er );
+    m_striplineCalc.SetParameter( TCP::T, GetParameter( TCP::T ) );
+    m_striplineCalc.SetParameter( TCP::STRIPLINE_A, GetParameter( TCP::H ) / 2.0 );
+    m_striplineCalc.SetParameter( TCP::H, GetParameter( TCP::H ) );
+    m_striplineCalc.SetParameter( TCP::PHYS_LEN, length );
+    m_striplineCalc.SetParameter( TCP::FREQUENCY, freq );
+    m_striplineCalc.SetParameter( TCP::TAND, 0.0 );
+    m_striplineCalc.SetParameter( TCP::PHYS_WIDTH, GetParameter( TCP::PHYS_WIDTH ) );
+    m_striplineCalc.SetParameter( TCP::ANG_L, 0.0 );
+    m_striplineCalc.SetParameter( TCP::SIGMA, GetParameter( TCP::SIGMA ) );
+    m_striplineCalc.SetParameter( TCP::MURC, GetParameter( TCP::MURC ) );
+    m_striplineCalc.Analyse();
+
+    const double loss_single = m_striplineCalc.GetParameter( TCP::LOSS_CONDUCTOR );
+    const double z0_single = m_striplineCalc.GetParameter( TCP::Z0 );
+    const double z0_e = GetParameter( TCP::Z0_E );
+    const double z0_o = GetParameter( TCP::Z0_O );
+
+    // Scale single-strip conductor attenuation by Z0_single / Z0_mode. The per-unit-length conductor
+    // attenuation in the incremental-inductance model is inversely proportional to Z0 of the mode,
+    // so a line of the same geometry but driven at Z0_mode dissipates loss_single · Z0_single / Z0_mode.
+    double atten_c_e = 0.0;
+    double atten_c_o = 0.0;
+
+    if( z0_e > 0.0 && std::isfinite( z0_e ) )
+        atten_c_e = loss_single * ( z0_single / z0_e );
+
+    if( z0_o > 0.0 && std::isfinite( z0_o ) )
+        atten_c_o = loss_single * ( z0_single / z0_o );
+
+    SetParameter( TCP::ATTEN_COND_EVEN, atten_c_e );
+    SetParameter( TCP::ATTEN_COND_ODD, atten_c_o );
 }
 
 

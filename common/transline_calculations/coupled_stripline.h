@@ -41,7 +41,9 @@ public:
     COUPLED_STRIPLINE() :
             TRANSLINE_CALCULATION_BASE( { TCP::SKIN_DEPTH, TCP::Z0_E, TCP::Z0_O, TCP::Z_DIFF, TCP::PHYS_WIDTH,
                                           TCP::FREQUENCY, TCP::PHYS_LEN, TCP::H, TCP::PHYS_S, TCP::T, TCP::EPSILONR,
-                                          TCP::MURC, TCP::SIGMA, TCP::ANG_L } )
+                                          TCP::MUR, TCP::MURC, TCP::SIGMA, TCP::TAND, TCP::ROUGH, TCP::ANG_L,
+                                          TCP::ATTEN_COND_EVEN, TCP::ATTEN_COND_ODD, TCP::ATTEN_DILECTRIC_EVEN,
+                                          TCP::ATTEN_DILECTRIC_ODD } )
     {
     }
 
