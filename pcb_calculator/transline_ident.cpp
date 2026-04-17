@@ -23,6 +23,7 @@
  */
 #include <wx/intl.h>
 #include <wx/arrstr.h>
+#include <wx/log.h>
 
 #include <kiface_base.h>
 #include <bitmaps.h>
@@ -476,6 +477,45 @@ void TRANSLINE_IDENT::ReadConfig()
 {
     auto cfg = static_cast<PCB_CALCULATOR_SETTINGS*>( Kiface().KifaceSettings() );
     std::string name( m_TLine->m_Name );
+
+    // Recover C_STRIPLINE data that legacy builds wrote under the colliding "Coupled_MicroStrip"
+    // key. Distinguish by the c_microstrip-exclusive parameters H_t and Rough; if absent, the
+    // payload is stripline and belongs to the new key.
+    // TODO remove after KiCad 10.1 (two stable releases)
+    if( name == "Coupled_Stripline" && !cfg->m_TransLine.param_values.count( name ) )
+    {
+        const std::string legacyKey = "Coupled_MicroStrip";
+        auto              legacyValuesIt = cfg->m_TransLine.param_values.find( legacyKey );
+        auto              legacyUnitsIt  = cfg->m_TransLine.param_units.find( legacyKey );
+
+        // Require both maps to have the legacy entry so values and units stay paired; the
+        // downstream lookup asserts that param_units is populated whenever param_values is.
+        if( legacyValuesIt != cfg->m_TransLine.param_values.end()
+            && legacyUnitsIt != cfg->m_TransLine.param_units.end() )
+        {
+            const auto& legacyValues = legacyValuesIt->second;
+            const bool looksLikeCMicrostrip = legacyValues.count( "H_t" ) || legacyValues.count( "Rough" );
+
+            if( !looksLikeCMicrostrip )
+            {
+                cfg->m_TransLine.param_values[name] = legacyValues;
+                cfg->m_TransLine.param_units[name]  = legacyUnitsIt->second;
+
+                // Empty the legacy entry in place so the coupled-microstrip tab falls back to
+                // defaults instead of loading stripline data under its normal key. The outer
+                // map entries must remain because PARAM_MAP holds a raw pointer to the inner
+                // map captured at settings-ctor time; erasing would dangle those pointers.
+                legacyValuesIt->second.clear();
+                legacyUnitsIt->second.clear();
+            }
+            else
+            {
+                wxLogTrace( wxT( "KICAD_TRANSLINE" ),
+                            wxT( "Legacy Coupled_MicroStrip settings look like coupled-microstrip "
+                                 "data; Coupled_Stripline will fall back to defaults." ) );
+            }
+        }
+    }
 
     if( cfg->m_TransLine.param_values.count( name ) )
     {

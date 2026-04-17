@@ -27,7 +27,9 @@
 
 C_STRIPLINE::C_STRIPLINE()
 {
-    m_Name = "Coupled_MicroStrip";
+    // Must not alias C_MICROSTRIP's "Coupled_MicroStrip" key; see migration shim in
+    // TRANSLINE_IDENT::ReadConfig().
+    m_Name = "Coupled_Stripline";
     Init();
 }
 

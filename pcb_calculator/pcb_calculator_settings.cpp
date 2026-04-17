@@ -221,8 +221,9 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
             &m_TrackWidth.int_track_thickness_units, 1 ) );
 
     {
-        const std::array<std::string, 8> transline_names = { "MicroStrip", "CoPlanar", "GrCoPlanar",
-                "RectWaveGuide", "Coax", "Coupled_MicroStrip", "StripLine", "TwistedPair" };
+        const std::array<std::string, 9> transline_names = { "MicroStrip", "CoPlanar", "GrCoPlanar",
+                "RectWaveGuide", "Coax", "Coupled_MicroStrip", "Coupled_Stripline", "StripLine",
+                "TwistedPair" };
 
         for( const auto& name : transline_names )
         {
@@ -372,8 +373,9 @@ bool PCB_CALCULATOR_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
         double   value    = 0;
         int      units    = 0;
 
-        const std::array<std::string, 8> transline_names = { "MicroStrip", "CoPlanar", "GrCoPlanar",
-                "RectWaveGuide", "Coax", "Coupled_MicroStrip", "StripLine", "TwistedPair" };
+        const std::array<std::string, 9> transline_names = { "MicroStrip", "CoPlanar", "GrCoPlanar",
+                "RectWaveGuide", "Coax", "Coupled_MicroStrip", "Coupled_Stripline", "StripLine",
+                "TwistedPair" };
 
         for( const auto& name : transline_names )
         {
