@@ -117,6 +117,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_items_list.cpp
     dialogs/dialog_imported_layers_base.cpp
     dialogs/dialog_map_layers.cpp
+    dialogs/dialog_migrate_3d_models.cpp
+    dialogs/dialog_migrate_3d_models_base.cpp
     dialogs/dialog_rule_area_properties.cpp
     dialogs/dialog_rule_area_properties_base.cpp
     dialogs/dialog_layer_selection_base.cpp

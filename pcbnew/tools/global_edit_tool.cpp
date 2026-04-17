@@ -35,7 +35,9 @@
 #include <dialogs/dialog_unused_pad_layers.h>
 #include <tools/global_edit_tool.h>
 #include <dialogs/dialog_cleanup_graphics.h>
+#include <dialogs/dialog_migrate_3d_models.h>
 #include <board_design_settings.h>
+#include <pcb_edit_frame.h>
 
 
 GLOBAL_EDIT_TOOL::GLOBAL_EDIT_TOOL() :
@@ -289,12 +291,26 @@ int GLOBAL_EDIT_TOOL::ZonesManager( const TOOL_EVENT& aEvent )
 
 
 
+int GLOBAL_EDIT_TOOL::Migrate3DModels( const TOOL_EVENT& /* aEvent */ )
+{
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+
+    if( !editFrame )
+        return 0;
+
+    DIALOG_MIGRATE_3D_MODELS dlg( editFrame );
+    dlg.ShowModal();
+    return 0;
+}
+
+
 void GLOBAL_EDIT_TOOL::setTransitions()
 {
     Go( &GLOBAL_EDIT_TOOL::ExchangeFootprints,   PCB_ACTIONS::updateFootprint.MakeEvent() );
     Go( &GLOBAL_EDIT_TOOL::ExchangeFootprints,   PCB_ACTIONS::updateFootprints.MakeEvent() );
     Go( &GLOBAL_EDIT_TOOL::ExchangeFootprints,   PCB_ACTIONS::changeFootprint.MakeEvent() );
     Go( &GLOBAL_EDIT_TOOL::ExchangeFootprints,   PCB_ACTIONS::changeFootprints.MakeEvent() );
+    Go( &GLOBAL_EDIT_TOOL::Migrate3DModels,      PCB_ACTIONS::migrate3DModels.MakeEvent() );
 
     Go( &GLOBAL_EDIT_TOOL::SwapLayers,           PCB_ACTIONS::swapLayers.MakeEvent() );
 

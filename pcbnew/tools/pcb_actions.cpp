@@ -990,6 +990,13 @@ TOOL_ACTION PCB_ACTIONS::updateFootprints( TOOL_ACTION_ARGS()
         .Tooltip( _( "Update footprints to include any changes from the library" ) )
         .Icon( BITMAPS::refresh ) );
 
+TOOL_ACTION PCB_ACTIONS::migrate3DModels( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.GlobalEdit.migrate3DModels" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Migrate 3D Models..." ) )
+        .Tooltip( _( "Replace obsolete WRL 3D model references with current STEP models" ) )
+        .Icon( BITMAPS::refresh ) );
+
 TOOL_ACTION PCB_ACTIONS::removeUnusedPads( TOOL_ACTION_ARGS()
         .Name( "pcbnew.GlobalEdit.removeUnusedPads" )
         .Scope( AS_GLOBAL )

@@ -376,6 +376,12 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "do_not_show_again.update_check_prompt",
             &m_DoNotShowAgain.update_check_prompt, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "do_not_show_again.migrate_wrl_prompt",
+            &m_DoNotShowAgain.migrate_wrl_prompt, false ) );
+
+    m_params.emplace_back( new PARAM_LIST<wxString>( "system.extra_3d_search_dirs",
+            &m_Extra3DSearchDirs, {} ) );
+
     m_params.emplace_back( new PARAM<bool>( "session.remember_open_files",
             &m_Session.remember_open_files, false ) );
 

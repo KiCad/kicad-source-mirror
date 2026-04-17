@@ -21,6 +21,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 #include <mouse_drag_action.h>
 #include <settings/environment.h>
 #include <settings/json_settings.h>
@@ -151,6 +152,7 @@ public:
         bool scaled_3d_models_warning;
         bool data_collection_prompt;
         bool update_check_prompt;
+        bool migrate_wrl_prompt;
     };
 
     struct PACKAGE_MANAGER
@@ -232,6 +234,10 @@ public:
     PACKAGE_MANAGER   m_PackageManager;
     GIT               m_Git;
     API               m_Api;
+
+    /// Extra directories to search for 3D models, added by the user through
+    /// the 3D model migration dialog.  Persists across sessions.
+    std::vector<wxString> m_Extra3DSearchDirs;
 
     std::unique_ptr<COMMON_SETTINGS_INTERNALS> m_csInternals;
 };

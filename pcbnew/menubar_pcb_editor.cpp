@@ -402,6 +402,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     toolsMenu->AppendSeparator();
     toolsMenu->Add( ACTIONS::showFootprintEditor );
     toolsMenu->Add( PCB_ACTIONS::updateFootprints );
+    toolsMenu->Add( PCB_ACTIONS::migrate3DModels );
 
     //Zones management
     toolsMenu->AppendSeparator();

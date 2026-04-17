@@ -64,6 +64,7 @@ public:
     int CleanupGraphics( const TOOL_EVENT& aEvent );
     int RemoveUnusedPads( const TOOL_EVENT& aEvent );
     int ZonesManager( const TOOL_EVENT& aEvent );
+    int Migrate3DModels( const TOOL_EVENT& aEvent );
 
 private:
     bool swapBoardItem( BOARD_ITEM* aItem, std::map<PCB_LAYER_ID, PCB_LAYER_ID>& aLayerMap );
