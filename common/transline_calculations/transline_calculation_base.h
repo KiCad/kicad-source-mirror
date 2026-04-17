@@ -136,6 +136,17 @@ public:
     /// @returns true if the synthesis converged, otherwise false
     virtual bool Synthesize( SYNTHESIZE_OPTS aOpts ) = 0;
 
+    /**
+     * Hint from UI picking which geometry parameter is the unknown when Synthesize is called.
+     * Coax picks Din or Dout; coupled stripline picks W or S; rectangular waveguide picks
+     * width or height, etc.  Subclasses may override to reject unsupported targets; the
+     * default implementation simply stores the value.
+     */
+    virtual void SetSynthesizeTarget( TRANSLINE_PARAMETERS aTarget ) { m_synthesizeTarget = aTarget; }
+
+    /// Returns the parameter that will be solved for during synthesis
+    TRANSLINE_PARAMETERS GetSynthesizeTarget() const { return m_synthesizeTarget; }
+
 protected:
     /// Initialises the properties used (as inputs or outputs) by the calculation
     void InitProperties( const std::initializer_list<TRANSLINE_PARAMETERS>& aParams );
@@ -226,6 +237,9 @@ protected:
 
     /// The maximum error for Z0 optimisations
     static constexpr double m_maxError{ 0.000001 };
+
+    /// Which geometry parameter is the unknown during synthesis (set by the UI)
+    TRANSLINE_PARAMETERS m_synthesizeTarget{ TRANSLINE_PARAMETERS::UNKNOWN_ID };
 };
 
 #endif //TRANSLINE_CALCULATIONS_TRANSLINE_CALCULATION_BASE_H

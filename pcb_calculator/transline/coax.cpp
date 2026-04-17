@@ -52,9 +52,9 @@ void COAX_UI::getProperties()
     m_calc.SetParameter( TRANSLINE_PARAMETERS::ANG_L, m_parameters[ANG_L_PRM] );
 
     if( isSelected( PHYS_DIAM_IN_PRM ) )
-        m_calc.SetSynthesizeFor( TRANSLINE_PARAMETERS::PHYS_DIAM_IN );
+        m_calc.SetSynthesizeTarget( TRANSLINE_PARAMETERS::PHYS_DIAM_IN );
     else if( isSelected( PHYS_DIAM_OUT_PRM ) )
-        m_calc.SetSynthesizeFor( TRANSLINE_PARAMETERS::PHYS_DIAM_OUT );
+        m_calc.SetSynthesizeTarget( TRANSLINE_PARAMETERS::PHYS_DIAM_OUT );
 }
 
 

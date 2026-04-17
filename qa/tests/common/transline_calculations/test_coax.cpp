@@ -149,7 +149,7 @@ BOOST_AUTO_TEST_CASE( SynthesisRoundTripSolveForDin )
     calc.SetParameter( TCP::ANG_L, M_PI / 2.0 );
     calc.SetParameter( TCP::FREQUENCY, 1.0e9 );
 
-    calc.SetSynthesizeFor( TCP::PHYS_DIAM_IN );
+    calc.SetSynthesizeTarget( TCP::PHYS_DIAM_IN );
     BOOST_TEST( calc.Synthesize( SYNTHESIZE_OPTS::DEFAULT ) );
 
     const double Din_synth = calc.GetParameter( TCP::PHYS_DIAM_IN );

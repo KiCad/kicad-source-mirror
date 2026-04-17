@@ -47,9 +47,9 @@ public:
             TRANSLINE_CALCULATION_BASE( { TCP::SKIN_DEPTH, TCP::EPSILONR, TCP::TAND, TCP::PHYS_DIAM_IN,
                                           TCP::PHYS_DIAM_OUT, TCP::MUR, TCP::MURC, TCP::SIGMA, TCP::FREQUENCY,
                                           TCP::PHYS_LEN, TCP::Z0, TCP::ANG_L, TCP::LOSS_CONDUCTOR,
-                                          TCP::LOSS_DIELECTRIC, TCP::CUTOFF_FREQUENCY } ),
-            m_synthTarget( TCP::PHYS_DIAM_IN )
+                                          TCP::LOSS_DIELECTRIC, TCP::CUTOFF_FREQUENCY } )
     {
+        m_synthesizeTarget = TCP::PHYS_DIAM_IN;
     }
 
     /// Analyse cable geometry parameters to output Z0, electrical length, losses and cutoffs
@@ -63,14 +63,11 @@ public:
      *
      * Accepts PHYS_DIAM_IN or PHYS_DIAM_OUT.  Any other value is ignored.
      */
-    void SetSynthesizeFor( TRANSLINE_PARAMETERS aTarget )
+    void SetSynthesizeTarget( TRANSLINE_PARAMETERS aTarget ) override
     {
         if( aTarget == TCP::PHYS_DIAM_IN || aTarget == TCP::PHYS_DIAM_OUT )
-            m_synthTarget = aTarget;
+            m_synthesizeTarget = aTarget;
     }
-
-    /// Returns the parameter that will be solved for during synthesis
-    TRANSLINE_PARAMETERS GetSynthesizeFor() const { return m_synthTarget; }
 
     /// Returns a UI-friendly string enumerating propagating TE_1m modes at the current frequency
     std::string GetTEModes() const { return m_teModes; }
@@ -93,9 +90,6 @@ private:
 
     /// Populates the TE / TM mode cutoff display strings and CUTOFF_FREQUENCY from current geometry
     void UpdateModeCutoffs();
-
-    /// Parameter that synthesis will solve for (PHYS_DIAM_IN or PHYS_DIAM_OUT)
-    TRANSLINE_PARAMETERS m_synthTarget;
 
     /// Cached TE_1m propagating-modes string produced by UpdateModeCutoffs
     std::string m_teModes;

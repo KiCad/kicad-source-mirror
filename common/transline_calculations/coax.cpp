@@ -153,9 +153,9 @@ bool COAX::Synthesize( const SYNTHESIZE_OPTS /* aOpts */ )
 
     const double k = Z0 * std::sqrt( epsr ) / TC::ZF0 * 2.0 * M_PI;
 
-    if( m_synthTarget == TCP::PHYS_DIAM_IN )
+    if( m_synthesizeTarget == TCP::PHYS_DIAM_IN )
         SetParameter( TCP::PHYS_DIAM_IN, GetParameter( TCP::PHYS_DIAM_OUT ) / std::exp( k ) );
-    else if( m_synthTarget == TCP::PHYS_DIAM_OUT )
+    else if( m_synthesizeTarget == TCP::PHYS_DIAM_OUT )
         SetParameter( TCP::PHYS_DIAM_OUT, GetParameter( TCP::PHYS_DIAM_IN ) * std::exp( k ) );
 
     const double lambda_g = ( TC::C0 / freq ) / std::sqrt( epsr * mur );
@@ -224,10 +224,10 @@ void COAX::SetSynthesisResults()
     const bool Dout_invalid = !std::isfinite( Dout ) || Dout <= 0.0;
     const bool geometry_invalid = Din >= Dout;
 
-    const TRANSLINE_STATUS Din_status = ( m_synthTarget == TCP::PHYS_DIAM_IN )
+    const TRANSLINE_STATUS Din_status = ( m_synthesizeTarget == TCP::PHYS_DIAM_IN )
                                                 ? ( Din_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK )
                                                 : ( Din_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    const TRANSLINE_STATUS Dout_status = ( m_synthTarget == TCP::PHYS_DIAM_OUT )
+    const TRANSLINE_STATUS Dout_status = ( m_synthesizeTarget == TCP::PHYS_DIAM_OUT )
                                                  ? ( Dout_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK )
                                                  : ( Dout_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
 
@@ -235,11 +235,11 @@ void COAX::SetSynthesisResults()
     SetSynthesisResult( TCP::ANG_L, angL, angL_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
     SetSynthesisResult( TCP::PHYS_LEN, len, len_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
     SetSynthesisResult( TCP::PHYS_DIAM_IN, Din,
-                        geometry_invalid ? ( m_synthTarget == TCP::PHYS_DIAM_IN ? TRANSLINE_STATUS::TS_ERROR
+                        geometry_invalid ? ( m_synthesizeTarget == TCP::PHYS_DIAM_IN ? TRANSLINE_STATUS::TS_ERROR
                                                                                 : TRANSLINE_STATUS::WARNING )
                                          : Din_status );
     SetSynthesisResult( TCP::PHYS_DIAM_OUT, Dout,
-                        geometry_invalid ? ( m_synthTarget == TCP::PHYS_DIAM_OUT ? TRANSLINE_STATUS::TS_ERROR
+                        geometry_invalid ? ( m_synthesizeTarget == TCP::PHYS_DIAM_OUT ? TRANSLINE_STATUS::TS_ERROR
                                                                                  : TRANSLINE_STATUS::WARNING )
                                          : Dout_status );
 }
