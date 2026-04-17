@@ -2567,6 +2567,15 @@ void BINARY_PARSER::parseDiffPairs()
     constexpr double  F64_INHERIT = -1.0;
     constexpr int32_t I32_INHERIT = -1;
 
+    // Field offsets within the 864-byte DIF_PAIR object.
+    constexpr size_t  NET_A_HANDLE   = 12;   // member-net A; equals a net record's +184 self-handle
+    constexpr size_t  NET_B_HANDLE   = 16;   // member-net B
+    constexpr size_t  MAX_LENGTH_OFF = 32;   // f64 seed marker
+    constexpr size_t  GAP_INHERIT    = 40;   // f64 gap, used when the override is inherited
+    constexpr size_t  GAP_OVERRIDE   = 56;   // f64 gap override
+    constexpr size_t  WIDTH_INHERIT  = 592;  // i32 width, used when the override is inherited
+    constexpr size_t  WIDTH_OVERRIDE = 600;  // i32 width override
+
     const SDB_SECTION* sec49 = getSection( SECTION::ClearanceRules );
 
     if( !sec49 || sec49->totalBytes == 0 || m_netSelfPtrToName.empty() )
@@ -2595,10 +2604,11 @@ void BINARY_PARSER::parseDiffPairs()
 
         SDB_RECORD obj = m_sdb.RecordAt( aStart );
 
-        if( !m_netSelfPtrToName.count( obj.U32( 12 ) ) || !m_netSelfPtrToName.count( obj.U32( 16 ) ) )
+        if( !m_netSelfPtrToName.count( obj.U32( NET_A_HANDLE ) )
+            || !m_netSelfPtrToName.count( obj.U32( NET_B_HANDLE ) ) )
             return false;
 
-        double maxLen = obj.F64( 32 );
+        double maxLen = obj.F64( MAX_LENGTH_OFF );
 
         if( maxLen != MAX_LENGTH && !( maxLen > 0.0 && maxLen < 1e15 ) )
             return false;
@@ -2620,7 +2630,7 @@ void BINARY_PARSER::parseDiffPairs()
     {
         size_t st = poolBase + i;
 
-        if( m_sdb.RecordAt( st ).F64( 32 ) != MAX_LENGTH || !looksDp( st ) )
+        if( m_sdb.RecordAt( st ).F64( MAX_LENGTH_OFF ) != MAX_LENGTH || !looksDp( st ) )
             continue;
 
         if( found.count( st ) )   // already recovered while walking an earlier seed's chunk
@@ -2640,17 +2650,17 @@ void BINARY_PARSER::parseDiffPairs()
     for( size_t objStart : found )
     {
         SDB_RECORD         obj = m_sdb.RecordAt( objStart );
-        const std::string& nameA = m_netSelfPtrToName.at( obj.U32( 12 ) );
-        const std::string& nameB = m_netSelfPtrToName.at( obj.U32( 16 ) );
+        const std::string& nameA = m_netSelfPtrToName.at( obj.U32( NET_A_HANDLE ) );
+        const std::string& nameB = m_netSelfPtrToName.at( obj.U32( NET_B_HANDLE ) );
 
         if( !seen.insert( { nameA, nameB } ).second )
             continue;
 
-        double  gapOverride = obj.F64( 56 );
-        double  gap = ( gapOverride != F64_INHERIT ) ? gapOverride : obj.F64( 40 );
-        int32_t w600 = obj.I32( 600 );
-        double  width = ( w600 != I32_INHERIT ) ? static_cast<double>( w600 )
-                                                : static_cast<double>( obj.I32( 592 ) );
+        double  gapOverride = obj.F64( GAP_OVERRIDE );
+        double  gap = ( gapOverride != F64_INHERIT ) ? gapOverride : obj.F64( GAP_INHERIT );
+        int32_t widthOverride = obj.I32( WIDTH_OVERRIDE );
+        double  width = ( widthOverride != I32_INHERIT ) ? static_cast<double>( widthOverride )
+                                                         : static_cast<double>( obj.I32( WIDTH_INHERIT ) );
 
         DIFF_PAIR_DEF dp;
         dp.name = nameA + "_" + nameB;
