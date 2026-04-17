@@ -419,7 +419,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         break;
 
     case TWISTEDPAIR_TYPE:      // twisted pair
-        m_TLine           = new TWISTEDPAIR();
+        m_TLine           = new TWISTEDPAIR_UI();
         m_BitmapName      = BITMAPS::twistedpair;
         m_HasPrmSelection = true;
 
