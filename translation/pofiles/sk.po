@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-15 19:16+0300\n"
-"PO-Revision-Date: 2026-04-15 16:10+0000\n"
+"PO-Revision-Date: 2026-04-17 19:24+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -9326,15 +9326,15 @@ msgstr "Pri načítaní tabuľky knižnice nastala neočakávaná chyba"
 
 #: common/local_history.cpp:1123
 msgid "Compacting local history..."
-msgstr ""
+msgstr "Zlučovanie lokálnej histórie..."
 
 #: common/local_history.cpp:1320
 msgid "Trimming local history..."
-msgstr ""
+msgstr "Odstraňovanie starších záznamov histórie..."
 
 #: common/local_history.cpp:1413
 msgid "Compacting trimmed history..."
-msgstr ""
+msgstr "Zlučovanie upravenej histórie…"
 
 #: common/local_history.cpp:1699
 msgid ""
@@ -29949,19 +29949,19 @@ msgstr "Názov zobrazenia:"
 
 #: kicad/cli/command_gerber_convert_png.cpp:98
 msgid "Viewport width (enables viewport mode)"
-msgstr ""
+msgstr "Šírka zobrazenia (povoľuje režim zobrazenia)"
 
 #: kicad/cli/command_gerber_convert_png.cpp:104
 msgid "Viewport height (enables viewport mode)"
-msgstr ""
+msgstr "Výška zobrazenia (povoľuje režim zobrazenia)"
 
 #: kicad/cli/command_gerber_convert_png.cpp:109
 msgid "Foreground color as hex (e.g., '#FFFFFF')"
-msgstr ""
+msgstr "Farba popredia v hexadecimálnom formáte (napr. '#FFFFFF')"
 
 #: kicad/cli/command_gerber_convert_png.cpp:114
 msgid "Background color as hex (e.g., '#000000')"
-msgstr ""
+msgstr "Farba pozadia v hexadecimálnom formáte (napr. '#000000')"
 
 #: kicad/cli/command_gerber_convert_png.cpp:147
 #: kicad/cli/command_gerber_info.cpp:100
@@ -29973,6 +29973,7 @@ msgstr "Neplatné jednotky: %s\n"
 msgid ""
 "Error: both --window-width and --window-height must be specified together\n"
 msgstr ""
+"Chyba: parametre --window-width aj --window-height musia byť zadané spolu\n"
 
 #: kicad/cli/command_gerber_diff.cpp:47
 msgid "Compare two Gerber or Excellon files and show differences"
@@ -30014,6 +30015,8 @@ msgstr "Tolerancia v mm, pre porovnania vo float (predvolené: 0)"
 msgid ""
 "Skip bounding-box origin alignment; catches absolute-placement regressions"
 msgstr ""
+"Preskočiť zarovnanie počiatku ohraničujúceho rámčeka; zachytí regresie "
+"absolútneho umiestnenia"
 
 #: kicad/cli/command_gerber_diff.cpp:124 kicad/cli/command_gerber_info.cpp:80
 #, c-format
@@ -41208,6 +41211,8 @@ msgid ""
 "If checked, layers will keep their standard KiCad names instead of being "
 "renamed to the imported layer names."
 msgstr ""
+"Ak je začiarknuté, vrstvy si ponechajú svoje štandardné KiCad názvy namiesto "
+"toho, aby boli premenované na importované názvy vrstiev."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:67
 msgid "Edit Mapping of Imported Layers"
@@ -44185,9 +44190,8 @@ msgid "Export Extruded Body"
 msgstr "Exportovať telo dosky"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:901
-#, fuzzy
 msgid "No extrusion outline could be generated for this footprint."
-msgstr "Pre toto púzdro je len jedna plôška"
+msgstr "Nebolo možné vygenerovať žiadny obrys extrúzie pre toto puzdro."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:908
 #, fuzzy
@@ -44205,9 +44209,8 @@ msgid "BREP files"
 msgstr "súbory STEP"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:938
-#, fuzzy
 msgid "Failed to create extruded body geometry."
-msgstr "Nepodarilo sa vytvoriť výstupný adresár\n"
+msgstr "Nepodarilo sa vytvoriť geometriu extrudovaného telesa."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:961
 #, fuzzy
