@@ -398,9 +398,13 @@ void TEARDROP_MANAGER::setTeardropPriorities()
         bool operator()(ZONE* a, ZONE* b) const
             {
                 if( a->GetFirstLayer() == b->GetFirstLayer() )
-                    return a->GetOutlineArea() > b->GetOutlineArea();
-
+                {
+                    if( a->GetOutlineArea() != b->GetOutlineArea() )
+                        return a->GetOutlineArea() > b->GetOutlineArea();
+                    return a->m_Uuid < b->m_Uuid;  // stable tiebreak
+                }
                 return a->GetFirstLayer() < b->GetFirstLayer();
+
             }
     } compareLess;
 
