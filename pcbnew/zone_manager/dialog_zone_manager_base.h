@@ -30,7 +30,6 @@ class STD_BITMAP_BUTTON;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/panel.h>
-#include <wx/splitter.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
 
@@ -46,7 +45,6 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 	protected:
 		wxBoxSizer* m_MainBoxSizer;
 		wxBoxSizer* m_sizerTop;
-		wxSplitterWindow* m_splitter;
 		wxPanel* m_listPanel;
 		wxSearchCtrl* m_filterCtrl;
 		wxCheckBox* m_checkName;
@@ -95,12 +93,6 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 		DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Zone Manager"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_ZONE_MANAGER_BASE();
-
-		void m_splitterOnIdle( wxIdleEvent& )
-		{
-			m_splitter->SetSashPosition( 520 );
-			m_splitter->Disconnect( wxEVT_IDLE, wxIdleEventHandler( DIALOG_ZONE_MANAGER_BASE::m_splitterOnIdle ), NULL, this );
-		}
 
 };
 
