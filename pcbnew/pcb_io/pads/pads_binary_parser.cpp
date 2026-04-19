@@ -455,8 +455,8 @@ void BINARY_PARSER::recoverOmittedPlacements()
 
         if( !angOk && ori > 0 && ori <= 700000000 )
         {
-            int32_t r = ori % ORI_UNIT;
-            angOk = ( r <= 200000 || ( ORI_UNIT - r ) <= 200000 );
+            int32_t oriRemainder = ori % ORI_UNIT;
+            angOk = ( oriRemainder <= 200000 || ( ORI_UNIT - oriRemainder ) <= 200000 );
         }
 
         s += angOk ? 1 : -1;
@@ -1520,10 +1520,10 @@ bool BINARY_PARSER::parseArcBoardOutline()
                 const Vertex& s = verts[j];
                 const Vertex& e = verts[( j + 1 ) % verts.size()];
                 double tol = std::max( 3.0, rx * 1e-5 );
-                double ds = std::hypot( s.x - cx, s.y - cy );
-                double de = std::hypot( e.x - cx, e.y - cy );
+                double distStart = std::hypot( s.x - cx, s.y - cy );
+                double distEnd = std::hypot( e.x - cx, e.y - cy );
 
-                if( std::abs( ds - rx ) > tol || std::abs( de - rx ) > tol )
+                if( std::abs( distStart - rx ) > tol || std::abs( distEnd - rx ) > tol )
                     ok = false;
             }
 
@@ -2930,8 +2930,8 @@ void BINARY_PARSER::parseRouteVertices()
     if( !entry60 || entry60->count == 0 || entry60->stride == 0 || entry60->End() > m_data.size() )
         return;
 
-    uint32_t n60 = entry60->count;
-    uint32_t r60 = entry60->stride;
+    uint32_t viaCount = entry60->count;
+    uint32_t viaStride = entry60->stride;
 
     static constexpr int64_t MAX_COORD_DEVIATION = 1000000000; // ~660mm from origin
 
@@ -2940,17 +2940,17 @@ void BINARY_PARSER::parseRouteVertices()
     bool gateOk = layout != nullptr;
 
     if( gateOk && layout->minRecSize > 0 )
-        gateOk = layout->exactRecSize ? ( r60 == layout->minRecSize ) : ( r60 >= layout->minRecSize );
+        gateOk = layout->exactRecSize ? ( viaStride == layout->minRecSize ) : ( viaStride >= layout->minRecSize );
 
     if( gateOk )
     {
         size_t                                end = entry60->dataOffset + entry60->totalBytes;
-        size_t                                need = layout->boundSize ? layout->boundSize : r60;
+        size_t                                need = layout->boundSize ? layout->boundSize : viaStride;
         std::set<std::pair<int32_t, int32_t>> seenVias;
 
-        for( uint32_t vi = 0; vi < n60; ++vi )
+        for( uint32_t vi = 0; vi < viaCount; ++vi )
         {
-            uint32_t base = entry60->dataOffset + vi * r60;
+            uint32_t base = entry60->dataOffset + vi * viaStride;
 
             if( base + need > end )
                 break;
