@@ -25,8 +25,6 @@
 #include <wx/log.h>
 #include <wx/menu.h>
 
-#include <google/protobuf/any.pb.h>
-#include <api/schematic/schematic_types.pb.h>
 #include <advanced_config.h>
 #include <base_units.h>
 #include <common.h> // for ExpandTextVars
@@ -44,6 +42,8 @@
 #include "sim/sim_lib_mgr.h"
 #include <properties/property.h>
 #include <properties/property_mgr.h>
+#include <google/protobuf/any.pb.h>
+#include <api/schematic/schematic_types.pb.h>
 
 static const std::vector<KICAD_T> labelTypes = { SCH_LABEL_LOCATE_ANY_T };
 

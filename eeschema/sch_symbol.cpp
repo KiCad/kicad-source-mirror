@@ -23,7 +23,6 @@
  */
 
 #include <api/api_enums.h>
-#include <api/api_sch_utils.h>
 #include <api/api_utils.h>
 #include <sch_collectors.h>
 #include <sch_commit.h>
@@ -46,6 +45,7 @@
 #include <string_utils.h>
 #include <geometry/geometry_utils.h>
 #include <sch_rule_area.h>
+#include <api/api_sch_utils.h>
 #include <api/schematic/schematic_types.pb.h>
 
 #include <utility>

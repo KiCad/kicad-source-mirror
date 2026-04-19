@@ -26,7 +26,6 @@
 #include <advanced_config.h>
 #include <api/api_enums.h>
 #include <api/api_utils.h>
-#include <api/schematic/schematic_types.pb.h>
 #include <base_units.h>
 #include <pgm_base.h>
 #include <sch_edit_frame.h>
@@ -47,6 +46,7 @@
 #include <markup_parser.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
+#include <api/schematic/schematic_types.pb.h>
 
 
 SCH_TEXTBOX::SCH_TEXTBOX( SCH_LAYER_ID aLayer, int aLineWidth, FILL_T aFillType, const wxString& aText,

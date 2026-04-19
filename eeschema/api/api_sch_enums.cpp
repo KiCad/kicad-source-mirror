@@ -19,7 +19,6 @@
  */
 
 #include <api/api_enums.h>
-#include <api/schematic/schematic_types.pb.h>
 #include <wx/wx.h>
 
 #include <core/typeinfo.h>
@@ -29,6 +28,7 @@
 #include <sch_label.h>
 #include <sch_sheet_pin.h>
 #include <symbol.h>
+#include <api/schematic/schematic_types.pb.h>
 
 using namespace kiapi::schematic;
 
