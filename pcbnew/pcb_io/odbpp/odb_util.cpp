@@ -296,10 +296,7 @@ bool ODB_FILE_WRITER::CloseFile()
         m_ostream.close();
 
         if( !m_ostream.good() )
-        {
             throw std::runtime_error( "close file failed" );
-            return false;
-        }
     }
 
     return true;
