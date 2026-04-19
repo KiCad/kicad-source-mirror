@@ -332,11 +332,19 @@ const wxString NETCLASS::GetName() const
 
     wxASSERT( m_constituents.size() >= 2 );
 
-    wxString name = m_constituents[0]->m_Name;
+    size_t strLen = m_constituents.size() - 1; // Count commas
+
+    for( std::size_t i = 0; i < m_constituents.size(); ++i )
+        strLen += m_constituents[0]->m_Name.length();
+
+    wxString name;
+    name.reserve( strLen );
+
+    name += m_constituents[0]->m_Name;
 
     for( std::size_t i = 1; i < m_constituents.size(); ++i )
     {
-        name += ",";
+        name += wxS( ',' );
         name += m_constituents[i]->m_Name;
     }
 
