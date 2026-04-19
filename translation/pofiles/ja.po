@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-17 15:22+0300\n"
-"PO-Revision-Date: 2026-04-10 23:09+0000\n"
+"PO-Revision-Date: 2026-04-20 09:09+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
 "Language: ja\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -499,7 +499,7 @@ msgstr "3D グリッド 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:254
 msgid "Render Realistic Materials"
-msgstr "リアルな質感で描画"
+msgstr "リアルなマテリアルで描画"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Use all material properties from each 3D model file"
@@ -1133,7 +1133,7 @@ msgstr "メッキされた導体とメッキされていない導体で色を使
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:52
 msgid "Material properties:"
-msgstr "質感:"
+msgstr "マテリアル:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Realistic"
@@ -4428,8 +4428,8 @@ msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
-"チェックした場合、プロジェクトを起動するときに以前開いたファイルで回路図 エ"
-"ディターおよびPCB エディターのツールも起動します"
+"チェックされている場合、プロジェクトを起動するときに以前開いたファイルで回路"
+"図 エディターおよびPCB エディターのツールも起動します"
 
 #: common/dialogs/panel_common_settings_base.cpp:337
 msgid "&Auto save:"
@@ -13788,7 +13788,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:307
 msgid "If checked, this pin will exist in all units."
-msgstr "チェックすると、このピンはすべてのユニットに現れます。"
+msgstr "チェックされている場合、このピンはすべてのユニットに現れます。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:311
 msgid "This symbol only has one unit. This control has no effect."
@@ -32408,7 +32408,7 @@ msgid ""
 "If checked will remove the front side prefix\n"
 "in the front prefix box if present"
 msgstr ""
-"チェックすると、表面のフットプリントの接頭辞が削除されます。\n"
+"チェックされている場合、表面のフットプリントの接頭辞が削除されます。\n"
 "[先頭の接頭辞] が存在する場合は、その前に表示されます"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:259
@@ -32420,7 +32420,7 @@ msgid ""
 "If checked will remove the Back side prefix\n"
 "in the back prefix box if present"
 msgstr ""
-"チェックすると、裏面のフットプリントの接頭辞が削除されます。\n"
+"チェックされている場合、裏面のフットプリントの接頭辞が削除されます。\n"
 "[裏面の接頭辞] が存在する場合は、その前に表示されます"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
@@ -34746,8 +34746,8 @@ msgid ""
 "If checked: copy 3D models to the destination folder\n"
 "If not checked: Embed 3D models in the VRML board file"
 msgstr ""
-"チェックした場合: フットプリントの 3D モデルをフォルダーにコピーする\n"
-"チェックしない場合: VRMLボードファイル内のト3Dモデルを埋め込む"
+"チェックされている場合: フットプリントの 3D モデルをフォルダーにコピーする\n"
+"チェックされていない場合: VRMLボードファイル内のト3Dモデルを埋め込む"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:135
 msgid "Use relative paths to model files in board VRML file"
@@ -38679,7 +38679,7 @@ msgstr "自由なパッドの移動を許可"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:104
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
-msgstr "チェックすると、パッドをフットプリントから移動することができます。"
+msgstr "チェックされている場合、パッドをフットプリントから移動することができます。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:108
 msgid "Do not prompt for lock overrides for this session"
@@ -38779,7 +38779,7 @@ msgstr "ゾーンを自動的に塗り直す"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:430
 msgid "If checked, zones will be re-filled after each edit operation"
-msgstr "チェックすると、編集を行った後にゾーンを塗り直します"
+msgstr "チェックされている場合、編集を行った後にゾーンを塗り直します"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:114
 msgid "Internal Layers"
