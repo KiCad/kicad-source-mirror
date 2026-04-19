@@ -58,14 +58,16 @@ using TCP = TRANSLINE_PARAMETERS;
  **/
 void TWISTEDPAIR::Analyse()
 {
+    UpdateDielectricModel();
+
     const double twist = GetParameter( TCP::TWISTEDPAIR_TWIST );
     const double epsrEnv = GetParameter( TCP::TWISTEDPAIR_EPSILONR_ENV );
-    const double epsr = GetParameter( TCP::EPSILONR );
     const double Din = GetParameter( TCP::PHYS_DIAM_IN );
     const double Dout = GetParameter( TCP::PHYS_DIAM_OUT );
     const double freq = GetParameter( TCP::FREQUENCY );
     const double len = GetParameter( TCP::PHYS_LEN );
-    const double tand = GetParameter( TCP::TAND );
+    const double epsr = GetDispersedEpsilonR( freq );
+    const double tand = GetDispersedTanDelta( freq );
 
     SetParameter( TCP::SKIN_DEPTH, SkinDepth() );
 

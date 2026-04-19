@@ -86,6 +86,10 @@ void TRANSLINE::Init()
     {
         m_parameters[i] = 0;
     }
+
+    // 1 GHz spec defaults to the canonical FR-4 reporting point for Er and tan delta.
+    m_parameters[DIELECTRIC_MODEL_PRM] = 0.0;
+    m_parameters[EPSILONR_SPEC_FREQ_PRM] = 1.0e9;
 }
 
 

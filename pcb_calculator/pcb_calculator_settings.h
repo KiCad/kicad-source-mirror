@@ -138,7 +138,16 @@ public:
 
     struct TRANSMISSION_LINE
     {
-        int type;
+        int type = 0;
+
+        /// Dielectric dispersion model.  0 = CONSTANT (default), 1 = Djordjevic-Sarkar causal.
+        int dielectric_model = 0;
+
+        /// Spec frequency at which EpsilonR and TanD are specified (user-entered text).
+        wxString spec_frequency = wxT( "1" );
+
+        /// UNIT_SELECTOR_FREQUENCY index: 0 = GHz, 1 = MHz, 2 = kHz, 3 = Hz.
+        int spec_frequency_unit = 0;
 
         /// Transline parameters, per transline type
         std::map<std::string, TL_PARAM_MAP> param_values;

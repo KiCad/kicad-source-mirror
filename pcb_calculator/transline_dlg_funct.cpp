@@ -17,6 +17,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <cmath>
+
 #include <wx/choicdlg.h>
 #include <wx/filename.h>
 #include <wx/settings.h>
@@ -332,6 +334,23 @@ void PANEL_TRANSLINE::TransfDlgDataToTranslineParams()
         }
 
         prm->m_NormalizedValue = value;
+    }
+
+    // Panel-level selections are not part of the per-calculator param list and must be
+    // pushed explicitly.
+    if( m_currTransLine )
+    {
+        const int modelSel = m_dielectricModelChoice ? m_dielectricModelChoice->GetSelection() : 0;
+        m_currTransLine->SetExtraParameter( DIELECTRIC_MODEL_PRM, static_cast<double>( modelSel ) );
+
+        if( m_Value_SpecFrequency_Ctrl && m_choiceUnit_SpecFrequency )
+        {
+            const double fSpec = DoubleFromString( m_Value_SpecFrequency_Ctrl->GetValue() )
+                                 * m_choiceUnit_SpecFrequency->GetUnitScale();
+
+            if( std::isfinite( fSpec ) && fSpec > 0.0 )
+                m_currTransLine->SetExtraParameter( EPSILONR_SPEC_FREQ_PRM, fSpec );
+        }
     }
 }
 

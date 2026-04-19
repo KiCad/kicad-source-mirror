@@ -31,6 +31,17 @@ using TCP = TRANSLINE_PARAMETERS;
 
 void COUPLED_MICROSTRIP::Analyse()
 {
+    UpdateDielectricModel();
+
+    const double f = GetParameter( TCP::FREQUENCY );
+    const double rawEpsR = GetParameter( TCP::EPSILONR );
+    const double rawTanD = GetParameter( TCP::TAND );
+
+    // Overlay dispersed values so helpers reading EPSILONR / TAND via GetParameter
+    // pick them up.  Raw inputs are restored before return.
+    SetParameter( TCP::EPSILONR, GetDispersedEpsilonR( f ) );
+    SetParameter( TCP::TAND, GetDispersedTanDelta( f ) );
+
     // Compute thickness corrections
     delta_u_thickness();
 
@@ -54,6 +65,9 @@ void COUPLED_MICROSTRIP::Analyse()
 
     // Calculate diff impedance
     diff_impedance();
+
+    SetParameter( TCP::EPSILONR, rawEpsR );
+    SetParameter( TCP::TAND, rawTanD );
 }
 
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,9 +29,9 @@ class UNIT_SELECTOR_RESISTOR;
 #include <wx/statbmp.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
+#include <wx/choice.h>
 #include <wx/textctrl.h>
 #include <wx/button.h>
-#include <wx/choice.h>
 #include <wx/statbox.h>
 #include <wx/radiobut.h>
 #include <wx/bmpbuttn.h>
@@ -49,6 +49,8 @@ class PANEL_TRANSLINE_BASE : public CALCULATOR_PANEL
 	protected:
 		wxRadioBox* m_TranslineSelection;
 		wxStaticBitmap* m_translineBitmap;
+		wxStaticText* m_dielectricModelLabel;
+		wxChoice* m_dielectricModelChoice;
 		wxStaticText* m_EpsilonR_label;
 		wxTextCtrl* m_Value_EpsilonR;
 		wxButton* m_button_EpsilonR;
@@ -80,6 +82,9 @@ class PANEL_TRANSLINE_BASE : public CALCULATOR_PANEL
 		wxStaticText* m_Frequency_label;
 		wxTextCtrl* m_Value_Frequency_Ctrl;
 		UNIT_SELECTOR_FREQUENCY* m_choiceUnit_Frequency;
+		wxStaticText* m_SpecFrequency_label;
+		wxTextCtrl* m_Value_SpecFrequency_Ctrl;
+		UNIT_SELECTOR_FREQUENCY* m_choiceUnit_SpecFrequency;
 		wxStaticBitmap* m_bmCMicrostripZoddZeven;
 		wxStaticText* m_phys_prm1_label;
 		wxTextCtrl* m_Phys_prm1_Value;
@@ -129,6 +134,7 @@ class PANEL_TRANSLINE_BASE : public CALCULATOR_PANEL
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnTranslineSelection( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDielectricModelChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineEpsilonR_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineTanD_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineRho_Button( wxCommandEvent& event ) { event.Skip(); }

@@ -37,7 +37,8 @@ public:
             TRANSLINE_CALCULATION_BASE( { TCP::EPSILONR, TCP::H_T, TCP::H, TCP::PHYS_WIDTH, TCP::T, TCP::Z0,
                                           TCP::FREQUENCY, TCP::EPSILON_EFF, TCP::SKIN_DEPTH, TCP::SIGMA, TCP::ROUGH,
                                           TCP::TAND, TCP::PHYS_LEN, TCP::MUR, TCP::MURC, TCP::ANG_L,
-                                          TCP::UNIT_PROP_DELAY, TCP::ATTEN_COND, TCP::ATTEN_DILECTRIC } )
+                                          TCP::UNIT_PROP_DELAY, TCP::ATTEN_COND, TCP::ATTEN_DILECTRIC,
+                                          TCP::DIELECTRIC_MODEL_SEL, TCP::EPSILONR_SPEC_FREQ } )
     {
     }
 

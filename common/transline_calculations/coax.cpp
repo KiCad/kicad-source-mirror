@@ -120,13 +120,23 @@ void COAX::UpdateModeCutoffs()
 
 void COAX::Analyse()
 {
+    UpdateDielectricModel();
+
+    const double freq = GetParameter( TCP::FREQUENCY );
+    const double rawEpsR = GetParameter( TCP::EPSILONR );
+    const double rawTanD = GetParameter( TCP::TAND );
+
+    // Overlay dispersed values so helpers reading EPSILONR / TAND via GetParameter
+    // pick them up.  Raw inputs are restored before return.
+    SetParameter( TCP::EPSILONR, GetDispersedEpsilonR( freq ) );
+    SetParameter( TCP::TAND, GetDispersedTanDelta( freq ) );
+
     SetParameter( TCP::SKIN_DEPTH, SkinDepth() );
 
     const double Din = GetParameter( TCP::PHYS_DIAM_IN );
     const double Dout = GetParameter( TCP::PHYS_DIAM_OUT );
     const double epsr = GetParameter( TCP::EPSILONR );
     const double mur = GetParameter( TCP::MUR );
-    const double freq = GetParameter( TCP::FREQUENCY );
     const double len = GetParameter( TCP::PHYS_LEN );
 
     // Coax Z0 = eta*ln(b/a)/(2*pi) with eta = eta_0/sqrt(eps_r) (Pozar eq. 2.32).
@@ -140,16 +150,22 @@ void COAX::Analyse()
     SetParameter( TCP::LOSS_CONDUCTOR, AlphaC() * len );
 
     UpdateModeCutoffs();
+
+    SetParameter( TCP::EPSILONR, rawEpsR );
+    SetParameter( TCP::TAND, rawTanD );
 }
 
 
 bool COAX::Synthesize( const SYNTHESIZE_OPTS /* aOpts */ )
 {
-    const double epsr = GetParameter( TCP::EPSILONR );
+    // Fit the DS model before sizing so the follow-up Analyse() sees the same eps_r.
+    UpdateDielectricModel();
+
     const double mur = GetParameter( TCP::MUR );
     const double freq = GetParameter( TCP::FREQUENCY );
     const double Z0 = GetParameter( TCP::Z0 );
     const double angL = GetParameter( TCP::ANG_L );
+    const double epsr = GetDispersedEpsilonR( freq );
 
     const double k = Z0 * std::sqrt( epsr ) / TC::ZF0 * 2.0 * M_PI;
 

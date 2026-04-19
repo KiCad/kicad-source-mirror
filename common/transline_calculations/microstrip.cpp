@@ -31,6 +31,17 @@ using TCP = TRANSLINE_PARAMETERS;
 
 void MICROSTRIP::Analyse()
 {
+    UpdateDielectricModel();
+
+    const double f = GetParameter( TCP::FREQUENCY );
+    const double rawEpsR = GetParameter( TCP::EPSILONR );
+    const double rawTanD = GetParameter( TCP::TAND );
+
+    // Overlay dispersed values so helpers reading EPSILONR / TAND via GetParameter
+    // pick them up.  Raw inputs are restored before return.
+    SetParameter( TCP::EPSILONR, GetDispersedEpsilonR( f ) );
+    SetParameter( TCP::TAND, GetDispersedTanDelta( f ) );
+
     // Effective permeability
     mur_eff_ms();
 
@@ -45,6 +56,9 @@ void MICROSTRIP::Analyse()
 
     // Calculate losses
     attenuation();
+
+    SetParameter( TCP::EPSILONR, rawEpsR );
+    SetParameter( TCP::TAND, rawTanD );
 }
 
 

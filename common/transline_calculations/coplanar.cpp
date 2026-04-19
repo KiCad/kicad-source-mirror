@@ -30,16 +30,18 @@ using TCP = TRANSLINE_PARAMETERS;
 
 void COPLANAR::Analyse()
 {
+    UpdateDielectricModel();
+
     SetParameter( TCP::SKIN_DEPTH, SkinDepth() );
 
     const double W = GetParameter( TCP::PHYS_WIDTH );
     const double S = GetParameter( TCP::PHYS_S );
     const double H = GetParameter( TCP::H );
     const double T = GetParameter( TCP::T );
-    const double epsr = GetParameter( TCP::EPSILONR );
     const double freq = GetParameter( TCP::FREQUENCY );
+    const double epsr = GetDispersedEpsilonR( freq );
     const double len = GetParameter( TCP::PHYS_LEN );
-    const double tand = GetParameter( TCP::TAND );
+    const double tand = GetDispersedTanDelta( freq );
     const double sigma = GetParameter( TCP::SIGMA );
 
     const bool backMetal = hasBackMetal();

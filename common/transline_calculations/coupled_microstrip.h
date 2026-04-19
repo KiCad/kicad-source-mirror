@@ -59,7 +59,9 @@ public:
                                           TCP::MURC,
                                           TCP::SIGMA,
                                           TCP::ROUGH,
-                                          TCP::TAND } )
+                                          TCP::TAND,
+                                          TCP::DIELECTRIC_MODEL_SEL,
+                                          TCP::EPSILONR_SPEC_FREQ } )
     {
     }
 

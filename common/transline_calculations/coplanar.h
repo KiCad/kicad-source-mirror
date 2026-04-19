@@ -46,7 +46,8 @@ public:
             TRANSLINE_CALCULATION_BASE( { TCP::EPSILONR, TCP::TAND, TCP::SIGMA, TCP::MURC, TCP::PHYS_WIDTH, TCP::PHYS_S,
                                           TCP::H, TCP::T, TCP::PHYS_LEN, TCP::FREQUENCY, TCP::Z0, TCP::ANG_L,
                                           TCP::LOSS_CONDUCTOR, TCP::LOSS_DIELECTRIC, TCP::SKIN_DEPTH, TCP::EPSILON_EFF,
-                                          TCP::UNIT_PROP_DELAY, TCP::CPW_BACKMETAL } )
+                                          TCP::UNIT_PROP_DELAY, TCP::CPW_BACKMETAL,
+                                          TCP::DIELECTRIC_MODEL_SEL, TCP::EPSILONR_SPEC_FREQ } )
     {
         m_synthesizeTarget = TCP::PHYS_WIDTH;
     }

@@ -89,6 +89,9 @@ set( QA_COMMON_SRCS
 
     transline_calculations/test_coax.cpp
     transline_calculations/test_coplanar.cpp
+    transline_calculations/test_dielectric_selector.cpp
+    transline_calculations/test_djordjevic_sarkar.cpp
+    transline_calculations/test_djordjevic_sarkar_integration.cpp
     transline_calculations/test_coupled_microstrip.cpp
     transline_calculations/test_coupled_stripline.cpp
     transline_calculations/test_rectwaveguide.cpp

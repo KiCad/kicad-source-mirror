@@ -47,7 +47,8 @@ public:
             TRANSLINE_CALCULATION_BASE( { TCP::SKIN_DEPTH, TCP::EPSILONR, TCP::TAND, TCP::PHYS_DIAM_IN,
                                           TCP::PHYS_DIAM_OUT, TCP::MUR, TCP::MURC, TCP::SIGMA, TCP::FREQUENCY,
                                           TCP::PHYS_LEN, TCP::Z0, TCP::ANG_L, TCP::LOSS_CONDUCTOR,
-                                          TCP::LOSS_DIELECTRIC, TCP::CUTOFF_FREQUENCY } )
+                                          TCP::LOSS_DIELECTRIC, TCP::CUTOFF_FREQUENCY,
+                                          TCP::DIELECTRIC_MODEL_SEL, TCP::EPSILONR_SPEC_FREQ } )
     {
         m_synthesizeTarget = TCP::PHYS_DIAM_IN;
     }

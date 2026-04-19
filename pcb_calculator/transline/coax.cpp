@@ -41,6 +41,8 @@ void COAX_UI::getProperties()
     m_calc.SetParameter( TRANSLINE_PARAMETERS::SIGMA, m_parameters[SIGMA_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, m_parameters[SKIN_DEPTH_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, m_parameters[EPSILONR_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::DIELECTRIC_MODEL_SEL, m_parameters[DIELECTRIC_MODEL_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR_SPEC_FREQ, m_parameters[EPSILONR_SPEC_FREQ_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::TAND, m_parameters[TAND_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::PHYS_DIAM_IN, m_parameters[PHYS_DIAM_IN_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::PHYS_DIAM_OUT, m_parameters[PHYS_DIAM_OUT_PRM] );

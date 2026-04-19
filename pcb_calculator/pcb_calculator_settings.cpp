@@ -47,6 +47,15 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "translines.type", &m_TransLine.type, 0 ) );
 
+    m_params.emplace_back( new PARAM<int>( "translines.dielectric_model",
+                                           &m_TransLine.dielectric_model, 0 ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "translines.spec_frequency",
+                                                &m_TransLine.spec_frequency, wxT( "1" ) ) );
+
+    m_params.emplace_back( new PARAM<int>( "translines.spec_frequency_unit",
+                                           &m_TransLine.spec_frequency_unit, 0 ) );
+
     m_params.emplace_back( new PARAM<int>( "attenuators.type", &m_Attenuators.type, 0 ) );
 
     const std::array<std::string, 4> att_names = { "att_pi", "att_tee",

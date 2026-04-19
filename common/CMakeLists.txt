@@ -704,6 +704,7 @@ set( COMMON_IO_SRCS
 
 set ( COMMON_TRANSLINE_CALCULATION_SRCS
     transline_calculations/transline_calculation_base.cpp
+    transline_calculations/dielectric_djordjevic_sarkar.cpp
     transline_calculations/microstrip.cpp
     transline_calculations/coupled_microstrip.cpp
     transline_calculations/stripline.cpp

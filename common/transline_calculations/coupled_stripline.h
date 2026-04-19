@@ -43,7 +43,8 @@ public:
                                           TCP::FREQUENCY, TCP::PHYS_LEN, TCP::H, TCP::PHYS_S, TCP::T, TCP::EPSILONR,
                                           TCP::MUR, TCP::MURC, TCP::SIGMA, TCP::TAND, TCP::ROUGH, TCP::ANG_L,
                                           TCP::ATTEN_COND_EVEN, TCP::ATTEN_COND_ODD, TCP::ATTEN_DILECTRIC_EVEN,
-                                          TCP::ATTEN_DILECTRIC_ODD } )
+                                          TCP::ATTEN_DILECTRIC_ODD, TCP::DIELECTRIC_MODEL_SEL,
+                                          TCP::EPSILONR_SPEC_FREQ } )
     {
     }
 

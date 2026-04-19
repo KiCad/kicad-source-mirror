@@ -37,6 +37,17 @@ using TCP = TRANSLINE_PARAMETERS;
 
 void COUPLED_STRIPLINE::Analyse()
 {
+    UpdateDielectricModel();
+
+    const double f = GetParameter( TCP::FREQUENCY );
+    const double rawEpsR = GetParameter( TCP::EPSILONR );
+    const double rawTanD = GetParameter( TCP::TAND );
+
+    // Overlay dispersed values so helpers reading EPSILONR / TAND via GetParameter
+    // pick them up.  Raw inputs are restored before return.
+    SetParameter( TCP::EPSILONR, GetDispersedEpsilonR( f ) );
+    SetParameter( TCP::TAND, GetDispersedTanDelta( f ) );
+
     // Calculate skin depth
     SetParameter( TCP::SKIN_DEPTH, SkinDepth() );
 
@@ -65,6 +76,9 @@ void COUPLED_STRIPLINE::Analyse()
 
     calcLosses();
     calcDielectrics();
+
+    SetParameter( TCP::EPSILONR, rawEpsR );
+    SetParameter( TCP::TAND, rawTanD );
 }
 
 

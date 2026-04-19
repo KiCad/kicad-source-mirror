@@ -74,6 +74,8 @@ enum EXTRA_PRMS_ID
     LOSS_CONDUCTOR_PRM,   // Loss in conductors (dB)
     CUTOFF_FREQUENCY_PRM, // Cutoff frequency for higher order modes
     EPSILON_EFF_PRM,      // Effective dielectric constant
+    DIELECTRIC_MODEL_PRM, // 0 = CONSTANT, 1 = DJORDJEVIC_SARKAR (panel-level selection)
+    EPSILONR_SPEC_FREQ_PRM, // Frequency (Hz) at which EpsilonR/TanD are specified
     EXTRA_PRMS_COUNT,
 };
 
@@ -86,6 +88,9 @@ public:
     const char* m_Name;
     void        setProperty( enum PRMS_ID aPrmId, double aValue );
     double      getProperty( enum PRMS_ID aPrmId );
+
+    /// Setter for panel-level parameters that are shared across every calculator type.
+    void SetExtraParameter( enum EXTRA_PRMS_ID aPrmId, double aValue ) { m_parameters[aPrmId] = aValue; }
 
 
     virtual void getProperties();

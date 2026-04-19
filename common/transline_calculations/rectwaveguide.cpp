@@ -229,10 +229,20 @@ void RECTWAVEGUIDE::UpdateModeStrings()
 
 void RECTWAVEGUIDE::Analyse()
 {
+    UpdateDielectricModel();
+
+    const double freq = GetParameter( TCP::FREQUENCY );
+    const double rawEpsR = GetParameter( TCP::EPSILONR );
+    const double rawTanD = GetParameter( TCP::TAND );
+
+    // Overlay dispersed values so helpers reading EPSILONR / TAND via GetParameter
+    // pick them up.  Raw inputs are restored before return.
+    SetParameter( TCP::EPSILONR, GetDispersedEpsilonR( freq ) );
+    SetParameter( TCP::TAND, GetDispersedTanDelta( freq ) );
+
     SetParameter( TCP::SKIN_DEPTH, SkinDepth() );
     SetParameter( TCP::CUTOFF_FREQUENCY, Fc( 1, 0 ) );
 
-    const double freq = GetParameter( TCP::FREQUENCY );
     const double len = GetParameter( TCP::PHYS_LEN );
     const double k_square = KvalSquare();
     const double kc10_square = KcSquare( 1, 0 );
@@ -266,6 +276,9 @@ void RECTWAVEGUIDE::Analyse()
     }
 
     UpdateModeStrings();
+
+    SetParameter( TCP::EPSILONR, rawEpsR );
+    SetParameter( TCP::TAND, rawTanD );
 }
 
 
@@ -274,11 +287,18 @@ bool RECTWAVEGUIDE::Synthesize( const SYNTHESIZE_OPTS /* aOpts */ )
     // Closed-form inverse of the TE10 Z0 expression.  The narrow dimension b does not
     // appear in either Z0(a) or f_c10(a), so only a is solved for.  Caller supplies b
     // as a free input (typically a / 2 to push TE01 cutoff above the operating band).
-    const double epsr = GetParameter( TCP::EPSILONR );
+    UpdateDielectricModel();
+
     const double mur = GetParameter( TCP::MUR );
     const double freq = GetParameter( TCP::FREQUENCY );
     const double Z0 = GetParameter( TCP::Z0 );
     const double angL = GetParameter( TCP::ANG_L );
+    const double rawEpsR = GetParameter( TCP::EPSILONR );
+    const double rawTanD = GetParameter( TCP::TAND );
+    const double epsr = GetDispersedEpsilonR( freq );
+
+    SetParameter( TCP::EPSILONR, epsr );
+    SetParameter( TCP::TAND, GetDispersedTanDelta( freq ) );
 
     const double eta = TC::ZF0 * std::sqrt( mur / epsr );
 
@@ -317,6 +337,9 @@ bool RECTWAVEGUIDE::Synthesize( const SYNTHESIZE_OPTS /* aOpts */ )
     // for, matching the Synthesize contract used by the other migrated calculators.
     SetParameter( TCP::Z0, Z0 );
     SetParameter( TCP::ANG_L, angL );
+
+    SetParameter( TCP::EPSILONR, rawEpsR );
+    SetParameter( TCP::TAND, rawTanD );
 
     return std::isfinite( GetParameter( TCP::PHYS_WIDTH ) ) && GetParameter( TCP::PHYS_WIDTH ) > 0.0;
 }

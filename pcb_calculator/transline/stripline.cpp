@@ -104,6 +104,8 @@ void STRIPLINE_UI::getProperties()
 
     m_calc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, m_parameters[SKIN_DEPTH_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, m_parameters[EPSILONR_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::DIELECTRIC_MODEL_SEL, m_parameters[DIELECTRIC_MODEL_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR_SPEC_FREQ, m_parameters[EPSILONR_SPEC_FREQ_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::T, m_parameters[T_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::STRIPLINE_A, m_parameters[STRIPLINE_A_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::H, m_parameters[H_PRM] );

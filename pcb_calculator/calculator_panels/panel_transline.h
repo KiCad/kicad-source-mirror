@@ -86,6 +86,9 @@ public:
      */
     void OnTranslineSelection( wxCommandEvent& event ) override;
 
+    /// Called when the user picks a different dielectric-dispersion model.
+    void OnDielectricModelChanged( wxCommandEvent& event ) override;
+
     /**
      * Called when the user clicks the reset button; sets the parameters to their default values.
      */
@@ -136,6 +139,9 @@ public:
      * parameters, converted in normalized units.
      */
     void TransfDlgDataToTranslineParams();
+
+    /// Enables the Spec frequency controls only when Djordjevic-Sarkar is selected.
+    void UpdateSpecFrequencyEnable();
 
 private:
     TRANSLINE*                    m_currTransLine;

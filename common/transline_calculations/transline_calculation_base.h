@@ -22,7 +22,10 @@
 
 
 #include <cmath>
+#include <optional>
 #include <unordered_map>
+
+#include <transline_calculations/dielectric_djordjevic_sarkar.h>
 
 
 /// All possible parameters used (as inputs or outputs) by the transmission line calculations
@@ -79,6 +82,10 @@ enum class TRANSLINE_PARAMETERS : int
     // COPLANAR class can drive both UI entry points without ad-hoc subclassing.
     CPW_BACKMETAL,
 
+    DIELECTRIC_MODEL_SEL, // 0 = CONSTANT, 1 = DJORDJEVIC_SARKAR (double for parameter-map compatibility)
+    EPSILONR_SPEC_FREQ,   // Frequency at which EPSILONR and TAND are specified (Hz).
+                          // Used only when DIELECTRIC_MODEL_SEL == DJORDJEVIC_SARKAR.
+
     EXTRAS_COUNT
 };
 
@@ -89,6 +96,14 @@ enum class SYNTHESIZE_OPTS
     DEFAULT,    // Use the default synthesis options for the calculation
     FIX_WIDTH,  // Fixes the width of a differential pair
     FIX_SPACING // Fixes the spacing of a differential pair
+};
+
+
+/// Frequency-domain model used for the substrate dielectric properties
+enum class DIELECTRIC_MODEL : int
+{
+    CONSTANT,          // Classic behaviour, epsR and tan delta are frequency-independent.
+    DJORDJEVIC_SARKAR, // Causal wideband Debye.  See Djordjevic et al. 2001 IEEE TEMC 43(4).
 };
 
 
@@ -152,6 +167,19 @@ public:
 
     /// Returns the parameter that will be solved for during synthesis
     TRANSLINE_PARAMETERS GetSynthesizeTarget() const { return m_synthesizeTarget; }
+
+    /**
+     * Refit the Djordjevic-Sarkar model from the current parameter map.  Clears the
+     * fitted model when DIELECTRIC_MODEL_SEL is CONSTANT or the spec frequency is
+     * non-positive so the accessors fall through to the raw EPSILONR / TAND values.
+     */
+    void UpdateDielectricModel();
+
+    /// Dispersed permittivity at aF.  Returns raw EPSILONR when the model is inactive.
+    double GetDispersedEpsilonR( double aF ) const;
+
+    /// Dispersed loss tangent at aF.  Returns raw TAND when the model is inactive.
+    double GetDispersedTanDelta( double aF ) const;
 
 protected:
     /// Initialises the properties used (as inputs or outputs) by the calculation
@@ -246,6 +274,9 @@ protected:
 
     /// Which geometry parameter is the unknown during synthesis (set by the UI)
     TRANSLINE_PARAMETERS m_synthesizeTarget{ TRANSLINE_PARAMETERS::UNKNOWN_ID };
+
+    /// Fitted Djordjevic-Sarkar model.  Empty unless DIELECTRIC_MODEL_SEL selects it.
+    std::optional<DIELECTRIC_DJORDJEVIC_SARKAR> m_dsModel;
 };
 
 #endif //TRANSLINE_CALCULATIONS_TRANSLINE_CALCULATION_BASE_H

@@ -24,8 +24,10 @@
 #include <calculator_panels/panel_transline.h>
 #include <pcb_calculator_settings.h>
 #include <widgets/std_bitmap_button.h>
+#include <widgets/unit_selector.h>
 #include <properties/property_mgr.h>
 #include <properties/property.h>
+#include <transline_calculations/transline_calculation_base.h>
 
 
 PANEL_TRANSLINE::PANEL_TRANSLINE( wxWindow* parent, wxWindowID id, const wxPoint& pos,
@@ -48,6 +50,12 @@ PANEL_TRANSLINE::PANEL_TRANSLINE( wxWindow* parent, wxWindowID id, const wxPoint
 
     m_EpsilonR_label->SetLabel( wxT( "εr" ) );
     m_substrate_prm3_labelUnit->SetLabel( wxT( "Ω ∙ m" ) );
+
+    m_dielectricModelChoice->SetToolTip(
+            _( "'Constant': εr and tan δ applied at all frequencies.\n"
+               "'Djordjevic-Sarkar': causal wideband Debye anchored at the spec frequency." ) );
+
+    UpdateSpecFrequencyEnable();
 }
 
 
@@ -74,6 +82,9 @@ void PANEL_TRANSLINE::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
         TransfDlgDataToTranslineParams();
 
     aCfg->m_TransLine.type = m_currTransLineType;
+    aCfg->m_TransLine.dielectric_model = m_dielectricModelChoice->GetSelection();
+    aCfg->m_TransLine.spec_frequency = m_Value_SpecFrequency_Ctrl->GetValue();
+    aCfg->m_TransLine.spec_frequency_unit = m_choiceUnit_SpecFrequency->GetSelection();
 
     for( TRANSLINE_IDENT* transline : m_transline_list )
         transline->WriteConfig();
@@ -83,6 +94,20 @@ void PANEL_TRANSLINE::SaveSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 void PANEL_TRANSLINE::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
     m_currTransLineType = static_cast<TRANSLINE_TYPE_ID>( aCfg->m_TransLine.type );
+
+    int modelSel = aCfg->m_TransLine.dielectric_model;
+
+    if( modelSel < 0 || modelSel > 1 )
+        modelSel = 0;
+
+    m_dielectricModelChoice->SetSelection( modelSel );
+
+    if( !aCfg->m_TransLine.spec_frequency.IsEmpty() )
+        m_Value_SpecFrequency_Ctrl->SetValue( aCfg->m_TransLine.spec_frequency );
+
+    m_choiceUnit_SpecFrequency->SetSelection( aCfg->m_TransLine.spec_frequency_unit );
+
+    UpdateSpecFrequencyEnable();
 
     for( TRANSLINE_IDENT* transline : m_transline_list )
         transline->ReadConfig();
@@ -94,6 +119,22 @@ void PANEL_TRANSLINE::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
     // It also remove a minor cosmetic issue on wxWidgets 3.5 on MSW
     // Called here after the current selected transline bitmaps are enabled/disabled
     GetSizer()->SetSizeHints( this );
+}
+
+
+void PANEL_TRANSLINE::OnDielectricModelChanged( wxCommandEvent& event )
+{
+    UpdateSpecFrequencyEnable();
+}
+
+
+void PANEL_TRANSLINE::UpdateSpecFrequencyEnable()
+{
+    const bool dsActive =
+            m_dielectricModelChoice->GetSelection() == static_cast<int>( DIELECTRIC_MODEL::DJORDJEVIC_SARKAR );
+
+    m_Value_SpecFrequency_Ctrl->Enable( dsActive );
+    m_choiceUnit_SpecFrequency->Enable( dsActive );
 }
 
 

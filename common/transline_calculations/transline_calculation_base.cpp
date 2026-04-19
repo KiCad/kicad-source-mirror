@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <stdexcept>
+#include <utility>
+
 #include <transline_calculations/units.h>
 #include <transline_calculations/transline_calculation_base.h>
 
@@ -156,6 +159,58 @@ double TRANSLINE_CALCULATION_BASE::SkinDepth() const
 double TRANSLINE_CALCULATION_BASE::UnitPropagationDelay( const double aEpsilonEff )
 {
     return std::sqrt( aEpsilonEff ) * ( 1.0e10 / 2.99e8 );
+}
+
+
+void TRANSLINE_CALCULATION_BASE::UpdateDielectricModel()
+{
+    const auto selected = static_cast<int>( GetParameter( TCP::DIELECTRIC_MODEL_SEL ) );
+
+    if( selected != static_cast<int>( DIELECTRIC_MODEL::DJORDJEVIC_SARKAR ) )
+    {
+        m_dsModel.reset();
+        return;
+    }
+
+    const double epsRSpec = GetParameter( TCP::EPSILONR );
+    const double tanDSpec = GetParameter( TCP::TAND );
+    const double fSpec = GetParameter( TCP::EPSILONR_SPEC_FREQ );
+
+    // User-supplied spec frequency must be positive, otherwise fall back to CONSTANT.
+    if( !std::isfinite( fSpec ) || fSpec <= 0.0 )
+    {
+        m_dsModel.reset();
+        return;
+    }
+
+    try
+    {
+        DIELECTRIC_DJORDJEVIC_SARKAR ds;
+        ds.Fit( epsRSpec, tanDSpec, fSpec );
+        m_dsModel.emplace( std::move( ds ) );
+    }
+    catch( const std::invalid_argument& )
+    {
+        m_dsModel.reset();
+    }
+}
+
+
+double TRANSLINE_CALCULATION_BASE::GetDispersedEpsilonR( double aF ) const
+{
+    if( m_dsModel )
+        return m_dsModel->EpsilonRealAt( aF );
+
+    return GetParameter( TCP::EPSILONR );
+}
+
+
+double TRANSLINE_CALCULATION_BASE::GetDispersedTanDelta( double aF ) const
+{
+    if( m_dsModel )
+        return m_dsModel->TanDeltaAt( aF );
+
+    return GetParameter( TCP::TAND );
 }
 
 
