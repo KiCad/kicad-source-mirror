@@ -1386,10 +1386,17 @@ wxString FOOTPRINT::GetFieldValueForVariant( const wxString& aVariantName, const
 
 void FOOTPRINT::ClearAllNets()
 {
-    // Force the ORPHANED dummy net info for all pads.
-    // ORPHANED dummy net does not depend on a board
-    for( PAD* pad : m_pads )
-        pad->SetNetCode( NETINFO_LIST::ORPHANED );
+    // Force the ORPHANED dummy net info on every BOARD_CONNECTED_ITEM descendant so that
+    // operations which read through m_netinfo (e.g. library serialization) cannot chase a
+    // dangling pointer when this footprint has been detached from its original parent board.
+    // ORPHANED dummy net does not depend on a board.
+    RunOnChildren(
+            []( BOARD_ITEM* aItem )
+            {
+                if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
+                    bci->SetNetCode( NETINFO_LIST::ORPHANED, /* aNoAssert */ true );
+            },
+            RECURSE_MODE::RECURSE );
 }
 
 

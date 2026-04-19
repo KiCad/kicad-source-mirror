@@ -22,6 +22,9 @@
  */
 
 #include <filesystem>
+#include <fstream>
+#include <memory>
+#include <sstream>
 #include <string>
 
 #include <pcbnew_utils/board_test_utils.h>
@@ -31,8 +34,12 @@
 #include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 
 #include <board.h>
+#include <board_connected_item.h>
 #include <board_design_settings.h>
 #include <board_stackup_manager/board_stackup.h>
+#include <footprint.h>
+#include <netinfo.h>
+#include <pad.h>
 #include <pcb_shape.h>
 #include <zone.h>
 
@@ -272,6 +279,120 @@ BOOST_AUTO_TEST_CASE( Issue23752_AppendBoardPreservesStackupAndGrowsToSixCopperL
     BOOST_CHECK_EQUAL( finalStackup.m_FinishType, initialFinishType );
     BOOST_CHECK_EQUAL( finalFirstDielectric->GetMaterial(), initialFirstDielectricMaterial );
     BOOST_CHECK_EQUAL( finalFirstDielectric->GetThickness(), initialFirstDielectricThickness );
+}
+
+
+/**
+ * Regression for the footprint-save SIGSEGV observed in KiCad 10.0.0 (introduced by
+ * b335ce6e2c "Don't save netcodes to files", which switched PCB_SHAPE/PCB_TRACK/ZONE
+ * serialization from writing the netcode to writing the netname).  If a footprint's
+ * descendants carry m_netinfo pointers that belong to a different (possibly destroyed)
+ * board, the library serializer reads through those pointers and can SEGV inside
+ * BOARD_CONNECTED_ITEM::GetNetname().
+ *
+ * The library-save path must (a) skip writing (net ...) tokens for pads/shapes/tracks/zones
+ * when CTL_OMIT_PAD_NETS is set (as it is under CTL_FOR_LIBRARY) and (b) orphan every
+ * BOARD_CONNECTED_ITEM descendant on the cloned footprint before serialization, so that
+ * any downstream code reading m_netinfo lands on the board-independent ORPHANED singleton.
+ *
+ * This test exercises the library-save path with a footprint whose pad, copper shape and
+ * copper zone all reference a real net on a locally-built board.  The emitted .kicad_mod
+ * must contain no "(net " tokens, and ClearAllNets() must orphan every connected item.
+ */
+BOOST_AUTO_TEST_CASE( FootprintSave_OmitsNetsOnAllBoardConnectedItems )
+{
+    auto tmpLib = std::filesystem::temp_directory_path() / "qa_fp_save_netinfo.pretty";
+    std::filesystem::remove_all( tmpLib );
+    std::filesystem::create_directories( tmpLib );
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    NETINFO_ITEM* net = new NETINFO_ITEM( board.get(), wxT( "TestNet" ), 1 );
+    board->Add( net );
+
+    FOOTPRINT* fp = new FOOTPRINT( board.get() );
+    board->Add( fp );
+    fp->SetFPID( LIB_ID( wxT( "scratch" ), wxT( "test_fp_save_netinfo" ) ) );
+
+    PAD* pad = new PAD( fp );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+    pad->SetSize( PADSTACK::ALL_LAYERS,
+                  VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+    pad->SetNet( net );
+    fp->Add( pad );
+
+    PCB_SHAPE* shape = new PCB_SHAPE( fp, SHAPE_T::SEGMENT );
+    shape->SetLayer( F_Cu );
+    shape->SetStart( VECTOR2I( 0, 0 ) );
+    shape->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 5 ), 0 ) );
+    shape->SetNet( net );
+    fp->Add( shape );
+
+    ZONE* zone = new ZONE( fp );
+    zone->SetLayer( F_Cu );
+    zone->SetNet( net );
+    fp->Add( zone );
+
+    BOOST_REQUIRE_EQUAL( pad->GetNet(), net );
+    BOOST_REQUIRE_EQUAL( shape->GetNet(), net );
+    BOOST_REQUIRE_EQUAL( zone->GetNet(), net );
+
+    // Save into the scratch library via the public library-save API.  Must not throw.
+    BOOST_REQUIRE_NO_THROW( kicadPlugin.FootprintSave( tmpLib.string(), fp ) );
+
+    auto savedFile = tmpLib / "test_fp_save_netinfo.kicad_mod";
+    BOOST_REQUIRE( std::filesystem::exists( savedFile ) );
+
+    std::ifstream in( savedFile );
+    BOOST_REQUIRE_MESSAGE( in.is_open(),
+                           "Failed to open serialized footprint: " << savedFile.string() );
+
+    std::stringstream ss;
+    ss << in.rdbuf();
+    BOOST_REQUIRE( !in.bad() );
+
+    const std::string contents = ss.str();
+    BOOST_REQUIRE( !contents.empty() );
+
+    BOOST_CHECK_MESSAGE( contents.find( "(net " ) == std::string::npos,
+                         "Saved footprint library file must not contain (net ...) tokens:\n"
+                                 << contents );
+
+    // Verify the second defense directly on the save-path's transient state: clone the
+    // footprint, detach it from its parent board exactly as FootprintSave does, invoke
+    // ClearAllNets(), and assert every BOARD_CONNECTED_ITEM descendant is orphaned.  This
+    // catches a regression where FootprintSave stops calling ClearAllNets() even if the
+    // serializer guards keep the file contents looking correct.
+    std::unique_ptr<FOOTPRINT> detached( static_cast<FOOTPRINT*>( fp->Clone() ) );
+    detached->SetParent( nullptr );
+    detached->SetParentGroup( nullptr );
+    detached->ClearAllNets();
+
+    BOARD_CONNECTED_ITEM* detachedPad = nullptr;
+    BOARD_CONNECTED_ITEM* detachedShape = nullptr;
+    BOARD_CONNECTED_ITEM* detachedZone = nullptr;
+
+    detached->RunOnChildren(
+            [&]( BOARD_ITEM* aItem )
+            {
+                switch( aItem->Type() )
+                {
+                case PCB_PAD_T:   detachedPad   = static_cast<BOARD_CONNECTED_ITEM*>( aItem ); break;
+                case PCB_SHAPE_T: detachedShape = static_cast<BOARD_CONNECTED_ITEM*>( aItem ); break;
+                case PCB_ZONE_T:  detachedZone  = static_cast<BOARD_CONNECTED_ITEM*>( aItem ); break;
+                default: break;
+                }
+            },
+            RECURSE_MODE::RECURSE );
+
+    BOOST_REQUIRE( detachedPad );
+    BOOST_REQUIRE( detachedShape );
+    BOOST_REQUIRE( detachedZone );
+    BOOST_CHECK_EQUAL( detachedPad->GetNet(), NETINFO_LIST::OrphanedItem() );
+    BOOST_CHECK_EQUAL( detachedShape->GetNet(), NETINFO_LIST::OrphanedItem() );
+    BOOST_CHECK_EQUAL( detachedZone->GetNet(), NETINFO_LIST::OrphanedItem() );
+
+    std::filesystem::remove_all( tmpLib );
 }
 
 
