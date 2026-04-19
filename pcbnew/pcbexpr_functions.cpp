@@ -225,8 +225,11 @@ static bool testFootprintSelector( FOOTPRINT* aFp, const wxString& aSelector )
     // logic here, so that people can use text variables to contain references or LIBIDs.
     // (see: https://gitlab.com/kicad/code/kicad/-/issues/11231)
 
+    if( aSelector.IsEmpty() )
+        return false;
+
     // First check if we have a known directive
-    if( aSelector.Upper().StartsWith( wxT( "${CLASS:" ) ) && aSelector.EndsWith( '}' ) )
+    if( aSelector[0] == '$' && aSelector.Last() == '}' && aSelector.Upper().StartsWith( wxT( "${CLASS:" ) ) )
     {
         wxString name = aSelector.Mid( 8, aSelector.Length() - 9 );
 
@@ -239,7 +242,7 @@ static bool testFootprintSelector( FOOTPRINT* aFp, const wxString& aSelector )
     {
         return true;
     }
-    else if( aSelector.Contains( ':' ) && aFp->GetFPIDAsString().Matches( aSelector ) )
+    else if( aSelector.Find( ':' ) != wxNOT_FOUND && aFp->GetFPIDAsString().Matches( aSelector ) )
     {
         return true;
     }
