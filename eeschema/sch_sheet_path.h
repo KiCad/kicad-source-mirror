@@ -755,6 +755,11 @@ public:
     void TrimToPageNumbers( const std::vector<wxString>& aPageInclusions );
 
     /**
+     * @return the next available page number in this hierarchy
+     */
+    wxString GetNextPageNumber() const;
+
+    /**
      * Update all of the symbol instance information using \a aSymbolInstances.
      *
      * @warning Do not call this on anything other than the full hierarchy.

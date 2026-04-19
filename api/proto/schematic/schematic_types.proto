@@ -241,7 +241,11 @@ message SheetSymbol
   bool exclude_from_bom = 12;
   bool exclude_from_board = 13;
   bool dnp = 14;
+
+  // For existing sheets, gives the path to the subsheet instance.  Leave blank for new sheets.
   kiapi.common.types.SheetPath path = 15;
+
+  // Page numbers in KiCad are arbitrary user data and don't have to be numeric
   string page_number = 16;
 }
 

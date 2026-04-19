@@ -22,7 +22,9 @@
 #define KICAD_API_SCH_UTILS_H
 
 #include <memory>
+#include <tl/expected.hpp>
 #include <core/typeinfo.h>
+#include <api/common/envelope.pb.h>
 #include <api/schematic/schematic_types.pb.h>
 
 class EDA_ITEM;
@@ -40,6 +42,6 @@ bool UnpackSymbol( SCH_SYMBOL* aOutput, const kiapi::schematic::types::Schematic
 bool PackSheet( kiapi::schematic::types::SheetSymbol* aOutput, const SCH_SHEET* aInput,
                 const SCH_SHEET_PATH& aPath );
 
-bool UnpackSheet( SCH_SHEET* aOutput, const kiapi::schematic::types::SheetSymbol& aInput );
+tl::expected<bool, kiapi::common::ApiResponseStatus> UnpackSheet( SCH_SHEET* aOutput, const kiapi::schematic::types::SheetSymbol& aInput );
 
 #endif //KICAD_API_SCH_UTILS_H

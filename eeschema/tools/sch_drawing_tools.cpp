@@ -3398,27 +3398,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             SCH_SHEET_LIST hierarchy = m_frame->Schematic().Hierarchy();
             SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
             instance.push_back( sheet );
-            wxString pageNumber;
-
-            // Find the next available page number by checking all existing page numbers
-            std::set<int> usedPageNumbers;
-
-            for( const SCH_SHEET_PATH& path : hierarchy )
-            {
-                wxString existingPageNum = path.GetPageNumber();
-                long pageNum = 0;
-
-                if( existingPageNum.ToLong( &pageNum ) && pageNum > 0 )
-                    usedPageNumbers.insert( static_cast<int>( pageNum ) );
-            }
-
-            // Find the first available number starting from 1
-            int nextAvailable = 1;
-
-            while( usedPageNumbers.count( nextAvailable ) > 0 )
-                nextAvailable++;
-
-            pageNumber.Printf( wxT( "%d" ), nextAvailable );
+            wxString pageNumber = hierarchy.GetNextPageNumber();
             instance.SetPageNumber( pageNumber );
 
             m_view->ClearPreview();

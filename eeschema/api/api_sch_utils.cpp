@@ -46,6 +46,9 @@
 #include <api/api_utils.h>
 
 
+using namespace kiapi::common;
+
+
 std::unique_ptr<EDA_ITEM> CreateItemForType( KICAD_T aType, EDA_ITEM* aContainer )
 {
     SCH_ITEM* parentSchItem = dynamic_cast<SCH_ITEM*>( aContainer );
@@ -73,8 +76,8 @@ std::unique_ptr<EDA_ITEM> CreateItemForType( KICAD_T aType, EDA_ITEM* aContainer
     case LIB_SYMBOL_T:          return std::make_unique<LIB_SYMBOL>( wxEmptyString );
     case SCH_SHEET_T:
     {
-        if( aContainer && aContainer->Type() == SCH_SHEET_T )
-            return std::make_unique<SCH_SHEET>( static_cast<SCH_SHEET*>( aContainer ) );
+        if( aContainer && aContainer->Type() == SCH_SCREEN_T )
+            return std::make_unique<SCH_SHEET>( static_cast<SCH_SCREEN*>( aContainer ) );
 
         return nullptr;
     }
@@ -117,7 +120,7 @@ bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, cons
     if( !any.UnpackTo( aOutput ) )
         return false;
 
-    kiapi::common::PackSheetPath( *aOutput->mutable_path(), path );
+    PackSheetPath( *aOutput->mutable_path(), path );
     aOutput->mutable_reference_field()->mutable_text()->set_text( instance.m_Reference.ToUTF8() );
     aOutput->mutable_unit()->set_unit( instance.m_Unit );
 
@@ -171,7 +174,6 @@ bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, cons
 
 bool UnpackSymbol( SCH_SYMBOL* aOutput, const kiapi::schematic::types::SchematicSymbolInstance& aInput )
 {
-    using namespace kiapi::common;
     using namespace kiapi::common::types;
     using namespace kiapi::schematic::types;
 
@@ -237,36 +239,36 @@ bool PackSheet( kiapi::schematic::types::SheetSymbol* aOutput, const SCH_SHEET* 
     if( !any.UnpackTo( aOutput ) )
         return false;
 
-    kiapi::common::PackSheetPath( *aOutput->mutable_path(), aPath.Path() );
+    PackSheetPath( *aOutput->mutable_path(), aPath.Path() );
     aOutput->set_page_number( aPath.GetPageNumber().ToUTF8() );
 
     return true;
 }
 
 
-bool UnpackSheet( SCH_SHEET* aOutput, const kiapi::schematic::types::SheetSymbol& aInput )
+tl::expected<bool, ApiResponseStatus> UnpackSheet( SCH_SHEET* aOutput, const kiapi::schematic::types::SheetSymbol& aInput )
 {
-    using namespace kiapi::common;
-
     google::protobuf::Any any;
     any.PackFrom( aInput );
 
     if( !aOutput->Deserialize( any ) )
-        return false;
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "could not unpack SCH_SHEET from SheetSymbol in request" );
+        return tl::unexpected( e );
+    }
 
     KIID_PATH instancePath = UnpackSheetPath( aInput.path() );
 
-    if( instancePath.empty() )
-        return false;
+    if( !instancePath.empty() )
+    {
+        SCH_SHEET_INSTANCE instance;
+        instance.m_Path = instancePath;
+        instance.m_PageNumber = wxString::FromUTF8( aInput.page_number() );
 
-    SCH_SHEET_INSTANCE instance;
-    instance.m_Path = instancePath;
-    instance.m_PageNumber = wxString::FromUTF8( aInput.page_number() );
-
-    if( instance.m_PageNumber.IsEmpty() )
-        instance.m_PageNumber = wxS( "#" );
-
-    aOutput->AddInstance( instance );
+        aOutput->AddInstance( instance );
+    }
 
     return true;
 }

@@ -466,7 +466,7 @@ HANDLER_RESULT<std::unique_ptr<EDA_ITEM>> API_HANDLER_SCH::createItemForType( KI
                                           aContainer->GetFriendlyName().ToStdString() ) );
         return tl::unexpected( e );
     }
-    else if( aType == SCH_SHEET_T && !dynamic_cast<SCH_SHEET*>( aContainer ) )
+    else if( aType == SCH_SHEET_T && !dynamic_cast<SCH_SCREEN*>( aContainer ) )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
@@ -527,15 +527,16 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
 
     SCH_SHEET_LIST hierarchy = schematic()->Hierarchy();
     SCH_SCREEN* targetScreen = schematic()->GetCurrentScreen();
-    std::optional<SCH_SHEET_PATH> targetPath;
+    SCH_SHEET_PATH targetPath = m_context->GetCurrentSheet().value_or( *hierarchy.begin() );
 
     if( aHeader.document().has_sheet_path() )
     {
         KIID_PATH kp = UnpackSheetPath( aHeader.document().sheet_path() );
-        targetPath = hierarchy.GetSheetPathByKIIDPath( kp );
-
-        if( targetPath )
-            targetScreen = targetPath->LastScreen();
+        if( std::optional<SCH_SHEET_PATH> path = hierarchy.GetSheetPathByKIIDPath( kp ) )
+        {
+            targetPath = *path;
+            targetScreen = targetPath.LastScreen();
+        }
     }
 
     SCH_COMMIT* commit = static_cast<SCH_COMMIT*>( getCurrentCommit( aClientName ) );
@@ -555,9 +556,6 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
         }
 
         EDA_ITEM* container = targetScreen;
-
-        if( *type == SCH_SHEET_T )
-            container = targetPath ? targetPath->Last() : schematic()->CurrentSheet().Last();
 
         HANDLER_RESULT<std::unique_ptr<EDA_ITEM>> creationResult = createItemForType( *type, container );
 
@@ -581,9 +579,39 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
         }
         else if( *type == SCH_SHEET_T )
         {
-            kiapi::schematic::types::SheetSymbol sheet;
-            unpacked = anyItem.UnpackTo( &sheet )
-                       && UnpackSheet( static_cast<SCH_SHEET*>( item.get() ), sheet );
+            kiapi::schematic::types::SheetSymbol sheetProto;
+            unpacked = anyItem.UnpackTo( &sheetProto );
+
+            if( unpacked )
+            {
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item.get() );
+
+                if( tl::expected<bool, ApiResponseStatus> result = UnpackSheet( sheet, sheetProto );
+                    result.has_value() )
+                {
+                    unpacked = *result;
+                    SCH_SHEET_INSTANCE instance;
+
+                    if( !sheet->GetInstances().empty() )
+                        instance = *sheet->GetInstances().begin();
+
+                    if( instance.m_PageNumber.IsEmpty() )
+                        instance.m_PageNumber = hierarchy.GetNextPageNumber();
+
+                    if( instance.m_Path.empty() )
+                    {
+                        SCH_SHEET_PATH newPath( targetPath );
+                        newPath.push_back( sheet );
+                        instance.m_Path = newPath.Path();
+                    }
+
+                    sheet->AddInstance( instance );
+                }
+                else
+                {
+                    return tl::unexpected( result.error() );
+                }
+            }
         }
         else
         {
@@ -601,15 +629,10 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
         SCH_ITEM* existingItem = nullptr;
         SCH_SHEET_PATH existingPath;
 
-        if( targetPath )
-        {
-            existingItem = targetPath->ResolveItem( item->m_Uuid );
+        existingItem = targetPath.ResolveItem( item->m_Uuid );
 
-            if( existingItem )
-                existingPath = *targetPath;
-        }
-        else
-            existingItem = hierarchy.ResolveItem( item->m_Uuid, &existingPath, true );
+        if( existingItem )
+            existingPath = targetPath;
 
         if( aCreate && existingItem )
         {
@@ -628,7 +651,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
             continue;
         }
 
-        if( !aCreate && targetPath )
+        if( !aCreate )
         {
             SCH_SCREEN* itemScreen = existingPath.LastScreen();
 
@@ -652,16 +675,9 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
             SCH_SHEET_PATH parentPath;
 
             if( aCreate )
-            {
-                if( targetPath )
-                    parentPath = *targetPath;
-                else
-                    parentPath = schematic()->CurrentSheet();
-            }
+                parentPath = targetPath;
             else
-            {
                 parentPath = existingPath;
-            }
 
             wxString destFilePath = parentPath.LastScreen()->GetFileName();
 
@@ -695,26 +711,18 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
                 return tl::unexpected( e );
             }
 
-            if( createdItem->Type() == SCH_SCREEN_T )
-            {
-                // TODO(JE) page number handling from SCH_DRAWING_TOOLS::DrawSheet?
-                schematic()->RefreshHierarchy();
-            }
-
             if( createdItem->Type() == SCH_SYMBOL_T )
             {
-                SCH_SHEET_PATH path = targetPath ? *targetPath : schematic()->CurrentSheet();
                 kiapi::schematic::types::SchematicSymbolInstance symbol;
 
-                if( PackSymbol( &symbol, static_cast<SCH_SYMBOL*>( createdItem ), path ) )
+                if( PackSymbol( &symbol, static_cast<SCH_SYMBOL*>( createdItem ), targetPath ) )
                     newItem.PackFrom( symbol );
             }
             else if( createdItem->Type() == SCH_SHEET_T )
             {
-                SCH_SHEET_PATH path = targetPath ? *targetPath : schematic()->CurrentSheet();
                 kiapi::schematic::types::SheetSymbol sheet;
 
-                if( PackSheet( &sheet, static_cast<SCH_SHEET*>( createdItem ), path ) )
+                if( PackSheet( &sheet, static_cast<SCH_SHEET*>( createdItem ), targetPath ) )
                     newItem.PackFrom( sheet );
             }
             else
