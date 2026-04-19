@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-15 19:16+0300\n"
-"PO-Revision-Date: 2026-04-17 19:24+0000\n"
+"PO-Revision-Date: 2026-04-20 09:10+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
@@ -17280,7 +17280,7 @@ msgstr "Upravit symbol..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:248
 #: eeschema/tools/sch_actions.cpp:1125
 msgid "Edit Library Symbol..."
-msgstr "Upravit symbol knihovny..."
+msgstr "Upravit symbol v knihovně..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:286
 #: eeschema/sch_pin.cpp:1997
