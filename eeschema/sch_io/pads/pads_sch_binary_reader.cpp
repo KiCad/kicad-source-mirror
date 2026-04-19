@@ -1820,10 +1820,10 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
 
         // Walk the pool record run reading the +0x30 pin cursor (and the +0x2c gate cursor as a
         // monotone guard), stopping where either wraps at the boundary record.
-        struct POOLREC { std::string name; uint32_t f2c; uint32_t f30; };
+        struct POOLREC { std::string name; uint32_t cumGateIndex; uint32_t cumPinIndex; };
         std::vector<POOLREC> recs;
-        uint32_t             prev30 = 0;
-        uint32_t             prev2c = 0;
+        uint32_t             prevCumPin = 0;
+        uint32_t             prevCumGate = 0;
 
         for( size_t j = 0;; ++j )
         {
@@ -1840,15 +1840,15 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
             if( z == rec || ( z < rec + 0x26 && d[z] != 0 ) )
                 break;
 
-            uint32_t f2c = SDB_RECORD( cur, rec ).U32( 0x2c );
-            uint32_t f30 = SDB_RECORD( cur, rec ).U32( 0x30 );
+            uint32_t cumGateIndex = SDB_RECORD( cur, rec ).U32( 0x2c );
+            uint32_t cumPinIndex = SDB_RECORD( cur, rec ).U32( 0x30 );
 
-            if( ( j && ( f30 < prev30 || f2c < prev2c ) ) || f30 > 1000000 || f2c > 1000000 )
+            if( ( j && ( cumPinIndex < prevCumPin || cumGateIndex < prevCumGate ) ) || cumPinIndex > 1000000 || cumGateIndex > 1000000 )
                 break;
 
-            recs.push_back( { std::string( reinterpret_cast<const char*>( &d[rec] ), z - rec ), f2c, f30 } );
-            prev30 = f30;
-            prev2c = f2c;
+            recs.push_back( { std::string( reinterpret_cast<const char*>( &d[rec] ), z - rec ), cumGateIndex, cumPinIndex } );
+            prevCumPin = cumPinIndex;
+            prevCumGate = cumGateIndex;
         }
 
         if( recs.size() < 4 )
@@ -1916,7 +1916,7 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
         }
 
         int    want = 0;
-        size_t lastStop = std::min<size_t>( recs.back().f30, pins.size() );
+        size_t lastStop = std::min<size_t>( recs.back().cumPinIndex, pins.size() );
 
         for( size_t i = 0; i < lastStop; ++i )
             want += pins[i].named ? 1 : 0;
@@ -1949,8 +1949,8 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
 
         for( size_t k = 0; k < recs.size(); ++k )
         {
-            size_t sliceStart = recs[k].f30;
-            size_t sliceStop = ( k + 1 < recs.size() ) ? recs[k + 1].f30 : pins.size();
+            size_t sliceStart = recs[k].cumPinIndex;
+            size_t sliceStop = ( k + 1 < recs.size() ) ? recs[k + 1].cumPinIndex : pins.size();
             sliceStop = std::min( sliceStop, pins.size() );
 
             std::vector<PIN_INFO> out;
@@ -1979,8 +1979,8 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
 
             // Split this part-type's flat pin list into its gates for multi-unit symbols.
             std::vector<std::vector<PIN_INFO>> gates;
-            uint32_t                           g0 = recs[k].f2c;
-            uint32_t                           g1 = ( k + 1 < recs.size() ) ? recs[k + 1].f2c
+            uint32_t                           g0 = recs[k].cumGateIndex;
+            uint32_t                           g1 = ( k + 1 < recs.size() ) ? recs[k + 1].cumGateIndex
                                                                            : static_cast<uint32_t>( gateNpins.size() );
             size_t                             gi = 0;
 
