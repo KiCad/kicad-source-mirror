@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-17 15:22+0300\n"
-"PO-Revision-Date: 2026-04-15 16:10+0000\n"
+"PO-Revision-Date: 2026-04-20 09:10+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -3047,7 +3047,7 @@ msgstr "Vybrať cestu k nastaveniam"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:32
 msgid "How would you like to configure KiCad?"
-msgstr "Ako by ste chceli nastaviť KiCad?"
+msgstr "Ako by ste chceli konfigurovať KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:36
 msgid "Import settings from a previous version at:"
@@ -5100,7 +5100,7 @@ msgstr "Importovať kl. skratky..."
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
 msgstr ""
-"Importujte definície klávesových skratiek z externého súboru a nahraďte "
+"Importovať definície klávesových skratiek z externého súboru a nahradiť "
 "súčasné hodnoty"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:196
@@ -5895,11 +5895,11 @@ msgstr "Počet opakovaní"
 
 #: common/drawing_sheet/ds_draw_item.cpp:160
 msgid "Repeat Label Increment"
-msgstr "Opakujte prírastok štítku"
+msgstr "Opakovať prírastok označenia"
 
 #: common/drawing_sheet/ds_draw_item.cpp:166
 msgid "Repeat Position Increment"
-msgstr "Opakujte prírastok polohy"
+msgstr "Opakovať prírastok polohy"
 
 #: common/drawing_sheet/ds_draw_item.cpp:168
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
@@ -7770,7 +7770,7 @@ msgstr "DPS: Export IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:33
 msgid "Export IPC-D-356"
-msgstr "Export IPC-D-356"
+msgstr "Exportovať IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:39
 msgid "Export IPC-D-356 Job Settings"
@@ -7783,7 +7783,7 @@ msgstr "DPS: Export IPC-D-356"
 #: common/jobs/job_export_pcb_odb.cpp:57
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
 msgid "Export ODB++"
-msgstr "Export ODB++"
+msgstr "Exportovať ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:63
 msgid "Export ODB++ Job Settings"
@@ -8778,7 +8778,7 @@ msgstr "Nový..."
 
 #: common/tool/actions.cpp:46
 msgid "Create a new document in the editor"
-msgstr "Vytvorte nový dokument v editore"
+msgstr "Vytvoriť nový dokument v editore"
 
 #: common/tool/actions.cpp:52 eeschema/symbol_editor/symbol_editor.cpp:866
 #: pcbnew/footprint_libraries_utils.cpp:1066
@@ -8787,7 +8787,7 @@ msgstr "Nová knižnica..."
 
 #: common/tool/actions.cpp:53
 msgid "Create a new library folder"
-msgstr "Vytvorte nový priečinok knižnice"
+msgstr "Vytvoriť nový priečinok knižnice"
 
 #: common/tool/actions.cpp:59
 msgid "Add Library..."
@@ -8881,7 +8881,7 @@ msgstr "Vykresliť..."
 
 #: common/tool/actions.cpp:151
 msgid "Close the current editor"
-msgstr "Zatvorte aktuálneho editora"
+msgstr "Zatvoriť aktuálny editor"
 
 #: common/tool/actions.cpp:160
 msgid "Cancel current tool"
@@ -8909,7 +8909,7 @@ msgstr "Vystrihnúť vybrané položky do schránky"
 
 #: common/tool/actions.cpp:226
 msgid "Copy selected item(s) to clipboard"
-msgstr "Skopírujte vybrané položky do schránky"
+msgstr "Skopírovať vybrané položky do schránky"
 
 #: common/tool/actions.cpp:235
 msgid "Copy as Text"
@@ -9824,7 +9824,7 @@ msgstr "Hárok musí mať meno."
 
 #: common/validators.cpp:375 eeschema/dialogs/dialog_sheet_properties.cpp:730
 msgid "A sheet must have a file specified."
-msgstr "Na hárku musí byť uvedený súbor."
+msgstr "Na hárku musí byť zadaný súbor."
 
 #: common/validators.cpp:376
 msgid "The value of the field cannot be empty."
@@ -10339,7 +10339,7 @@ msgstr "KiCad súbory knižnice symbolov"
 
 #: common/wildcards_and_files_ext.cpp:248
 msgid "KiCad project files"
-msgstr "KiCad súbory projektov"
+msgstr "KiCad súbory projektu"
 
 #: common/wildcards_and_files_ext.cpp:254
 msgid "KiCad legacy project files"
@@ -10450,7 +10450,7 @@ msgstr "CSV súbory"
 
 #: common/wildcards_and_files_ext.cpp:420
 msgid "Portable document format files"
-msgstr "Súbory Portable document format"
+msgstr "Portable document format súbory"
 
 #: common/wildcards_and_files_ext.cpp:426
 msgid "PostScript files"
@@ -10458,7 +10458,7 @@ msgstr "PostScript súbory"
 
 #: common/wildcards_and_files_ext.cpp:432
 msgid "Json files"
-msgstr "Json súbory"
+msgstr "Súbory Json"
 
 #: common/wildcards_and_files_ext.cpp:438
 msgid "Report files"
@@ -10519,7 +10519,7 @@ msgstr "DXF súbory"
 #: common/wildcards_and_files_ext.cpp:522
 #: resources/linux/mime/kicad-gerbers.xml.in:22
 msgid "Gerber job file"
-msgstr "Spis práce Gerber"
+msgstr "Súbor úlohy Gerber"
 
 #: common/wildcards_and_files_ext.cpp:528
 msgid "Specctra DSN file"
@@ -11633,7 +11633,7 @@ msgstr "Odstráňte polia, ak nie sú v novom symbole"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
 msgid "Reset fields if empty in new symbol"
-msgstr "Ak sú nové symboly prázdne, vynulujte ich"
+msgstr "Ak sú nové symboly prázdne, vynulovať ich"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:140
 msgid "Update field text"
@@ -11763,7 +11763,7 @@ msgstr "Odstráni polia, ktoré sa nevyskytujú v pôvodných symboloch knižnic
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:131
 msgid "Reset fields if empty in library symbol"
-msgstr "Resetujte polia, ak sú v symbole knižnice prázdne"
+msgstr "Resetovať polia, ak sú v symbole knižnice prázdne"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
@@ -12109,7 +12109,7 @@ msgstr "Zmeniť závažnosť všetkých '%s' porušení na Upozornenie"
 #: eeschema/dialogs/dialog_erc.cpp:721 pcbnew/dialogs/dialog_drc.cpp:779
 #, c-format
 msgid "Ignore all '%s' violations"
-msgstr "Ignorujte všetky porušenia pravidiel '%s'"
+msgstr "Ignorovať všetky porušenia pravidiel '%s'"
 
 #: eeschema/dialogs/dialog_erc.cpp:722 pcbnew/dialogs/dialog_drc.cpp:780
 msgid "Violations will not be checked or reported"
@@ -15462,7 +15462,7 @@ msgstr "Zmeny doteraz neboli uložené. Exportovať neuložené dáta?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1385
 msgid "No output file specified in Export tab."
-msgstr "Názov výstupného súboru nie je špecifikovaný v záložke 'Exportovať'."
+msgstr "Názov výstupného súboru nie je daný v záložke 'Exportovať'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1399
 #, c-format
@@ -18443,7 +18443,7 @@ msgstr "Voľný"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
 msgid "Unspecified"
-msgstr "Nešpecifikovaný"
+msgstr "Nešpecifikované"
 
 #: eeschema/pin_type.cpp:92 eeschema/sch_pin.cpp:2091
 msgid "Power input"
@@ -19666,7 +19666,8 @@ msgid ""
 "Install LTspice or put its library files into %s"
 msgstr ""
 "Nepodarilo sa nájsť symboly LTspice.\n"
-"Nainštalujte LTspice alebo umiestnite jeho súbory knižníc súbory do %s"
+"Je potrebné nainštalovať LTspice alebo umiestniť jeho súbory knižníc súbory "
+"do %s"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
 msgid "LTspice schematic files"
@@ -22399,7 +22400,7 @@ msgstr "Symbol '%s' sa nenašiel v knižnici '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1540
 msgid "No library specified."
-msgstr "Nebol zadaná knižnica."
+msgstr "Nebola zadaná knižnica."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1559
 #, c-format
@@ -22890,7 +22891,7 @@ msgstr "Importovať symbol..."
 
 #: eeschema/tools/sch_actions.cpp:268
 msgid "Import a symbol to the current library"
-msgstr "Importujte symbol do aktuálnej knižnice"
+msgstr "Importovať symbol do aktuálnej knižnice"
 
 #: eeschema/tools/sch_actions.cpp:274
 msgid "Export..."
@@ -22898,7 +22899,7 @@ msgstr "Exportovať..."
 
 #: eeschema/tools/sch_actions.cpp:275
 msgid "Export a symbol to a new library file"
-msgstr "Exportujte symbol do nového súboru knižnice"
+msgstr "Exportovať symbol do nového súboru knižnice"
 
 #: eeschema/tools/sch_actions.cpp:281
 msgid "Update Symbol Fields..."
@@ -22950,7 +22951,7 @@ msgstr "Exportovať zobrazenie ako PNG..."
 
 #: eeschema/tools/sch_actions.cpp:316
 msgid "Create PNG file from the current view"
-msgstr "Vytvorte súbor PNG z aktuálneho zobrazenia"
+msgstr "Vytvoriť PNG súbor z aktuálneho zobrazenia"
 
 #: eeschema/tools/sch_actions.cpp:322
 msgid "Export Symbol as SVG..."
@@ -22958,7 +22959,7 @@ msgstr "Exportovať symbol ako SVG..."
 
 #: eeschema/tools/sch_actions.cpp:323
 msgid "Create SVG file from the current symbol"
-msgstr "Vytvorte súbor SVG z aktuálneho symbolu"
+msgstr "Vytvoriť SVG súbor z aktuálneho symbolu"
 
 #: eeschema/tools/sch_actions.cpp:329
 msgid "Synchronized Pins Mode"
@@ -23531,7 +23532,7 @@ msgstr "Záchrana symbolov..."
 
 #: eeschema/tools/sch_actions.cpp:1064
 msgid "Find old symbols in project and rename/rescue them"
-msgstr "Nájdite v projekte staré symboly a premenujte ich / zachráňte"
+msgstr "Nájsť v projekte staré symboly a premenovať/zachovať ich"
 
 #: eeschema/tools/sch_actions.cpp:1070
 msgid "Remap Legacy Library Symbols..."
@@ -23591,7 +23592,7 @@ msgstr "Exportovať netlist..."
 
 #: eeschema/tools/sch_actions.cpp:1116
 msgid "Export file containing netlist in one of several formats"
-msgstr "Exportujte súbor obsahujúci netlist v jednom z niekoľkých formátov"
+msgstr "Exportovať súbor obsahujúci netlist v jednom z niekoľkých formátov"
 
 #: eeschema/tools/sch_actions.cpp:1122
 msgid "Generate Bill of Materials..."
@@ -24733,11 +24734,11 @@ msgstr "Grafické tvary"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:610
 msgid "No footprint specified"
-msgstr "Nie je určené žiadne puzdro"
+msgstr "Nie je dané žiadne puzdro"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:623
 msgid "Invalid footprint specified"
-msgstr "Zadaná neplatná puzdra"
+msgstr "Zadané neplatné puzdro"
 
 #: eeschema/widgets/sch_properties_panel.cpp:218
 #: pcbnew/widgets/pcb_properties_panel.cpp:277
@@ -25148,7 +25149,7 @@ msgstr "Formát súboru"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:27
 msgid "These parameters are usually specified in files, but not always."
-msgstr "Tieto parametre sú zvyčajne špecifikované v súboroch, ale nie vždy."
+msgstr "Tieto parametre sú zvyčajne dané v súboroch, ale nie vždy."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
 msgid "File Units"
@@ -25184,7 +25185,7 @@ msgstr "Formát súradníc"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:61
 msgid "The coordinates format is not specified in Excellon format."
-msgstr "Formát súradníc nie je určený vo formáte Excellon."
+msgstr "Formát súradníc nie je daný vo formáte Excellon."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:65
 msgid "(The decimal format does not use these settings)"
@@ -25325,11 +25326,11 @@ msgstr "<b>Pamäť sa zaplnila načítavaním:</b> <i>%s</i>"
 
 #: gerbview/files.cpp:53 gerbview/files.cpp:208
 msgid "Gerber files"
-msgstr "Súbory Gerber"
+msgstr "Gerber súbory"
 
 #: gerbview/files.cpp:89
 msgid "Zip files"
-msgstr "Súbory Zip"
+msgstr "Zip Súbory"
 
 #: gerbview/files.cpp:106
 msgid "Job files"
@@ -25590,7 +25591,7 @@ msgstr "Tento súbor úloh používa zastaraný formát. Prosím, znova ju vytvo
 
 #: gerbview/job_file_reader.cpp:192
 msgid "Open Gerber Job File"
-msgstr "Otvoriť súbor Gerber Job"
+msgstr "Otvoriť súbor úlohy Gerber"
 
 #: gerbview/menubar.cpp:68 gerbview/menubar.cpp:75
 msgid "Clear Recent Gerber Files"
@@ -25717,11 +25718,11 @@ msgstr "Otvoriť Excellon vŕtacie súbory na novej vrstve."
 
 #: gerbview/tools/gerbview_actions.cpp:62
 msgid "Open Gerber Job File..."
-msgstr "Otvoriť Gerber Job File..."
+msgstr "Otvoriť súbor úlohy Gerber..."
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Open a Gerber job file and its associated gerber plot files"
-msgstr "Otvoriť súbor úloh Gerber a s ním spojené vykreslené súbory Gerber"
+msgstr "Otvoriť súbor úlohy Gerber a s ním spojené vykreslené súbory Gerber"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Open Zip Archive File..."
@@ -26358,7 +26359,7 @@ msgid ""
 "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default unit "
 "mm)"
 msgstr ""
-"Používateľom definovaný začiatok výstupu, napr. 1x1in, 1x1inch, 25.4x25.4mm "
+"Používateľom daný počiatok výstupu, napr. 1x1in, 1x1inch, 25.4x25.4mm "
 "(predvolená jednotka mm)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:196
@@ -26478,7 +26479,7 @@ msgstr "Zadaný formát mapy je neplatný\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:246
 msgid "Invalid origin mode specified\n"
-msgstr "Zadaný režim začiatku je neplatný\n"
+msgstr "Zadaný režim počiatku je neplatný\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:259
 #: kicad/cli/command_pcb_export_gerber.cpp:148
@@ -27499,7 +27500,7 @@ msgstr "Exportovať GLB (binary GLTF)"
 
 #: kicad/kicad_cli.cpp:123
 msgid "Export STEP"
-msgstr "Export STEP"
+msgstr "Exportovať STEP"
 
 #: kicad/kicad_cli.cpp:124
 msgid "Export BREP"
@@ -28292,7 +28293,7 @@ msgstr "Premenovať súbory..."
 
 #: kicad/project_tree_pane.cpp:970
 msgid "Rename files"
-msgstr "Premenovať súbor"
+msgstr "Premenovať súbory"
 
 #: kicad/project_tree_pane.cpp:980
 msgid "Delete the file and its content"
@@ -28691,7 +28692,7 @@ msgstr "Chyba!"
 
 #: kicad/tools/kicad_manager_control.cpp:787
 msgid "Create (or open) a project to edit a schematic."
-msgstr "Na úpravu schémy vytvorte alebo otvorte projekt."
+msgstr "Na úpravu schémy je potrebné vytvoriť alebo otvoriť projekt."
 
 #: kicad/tools/kicad_manager_control.cpp:792
 msgid "Create (or open) a project to edit a pcb."
@@ -29088,8 +29089,8 @@ msgid ""
 "Simulate page 1 or other pages to show how items\n"
 "which are not on all page are displayed"
 msgstr ""
-"Simulujte stránku 1 alebo iné stránky a ukážte, ako jednotlivé položky\n"
-"ktoré nie sú na všetkých stránkach"
+"Simulovať stranu 1 alebo iné strany, aby sa ukázalo, \n"
+"ako sa zobrazujú položky, ktoré nie sú na celej strane"
 
 #: pagelayout_editor/tools/pl_actions.cpp:69
 msgid "Place Bitmaps"
@@ -29465,7 +29466,7 @@ msgstr "..."
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:106
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:142
 msgid "ohm-meter"
-msgstr "ohm-meter"
+msgstr "ohmeter"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Temperature Coefficient:"
@@ -29543,7 +29544,7 @@ msgstr "DC odpor vodiča"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:234
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:344
 msgid "ohm"
-msgstr "ohm"
+msgstr "ohmov"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:228
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:160
@@ -30184,7 +30185,7 @@ msgstr "Požadovaný odpor:"
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:47
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:58
 msgid "kOhm"
-msgstr "kOhm"
+msgstr "kOhmov"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:40
 msgid "Exclude value 1:"
@@ -32054,7 +32055,7 @@ msgstr "Hliník"
 #: pcbnew/exporters/exporter_vrml.cpp:278
 #: pcbnew/exporters/exporter_vrml.cpp:287
 msgid "Not specified"
-msgstr "Neuvedený"
+msgstr "Nešpecifikované"
 
 #: pcbnew/build_BOM_from_board.cpp:80
 msgid "Cannot export BOM: there are no footprints on the PCB."
@@ -34179,7 +34180,7 @@ msgstr "Aktualizovať puzdrá z knižnice"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:112
 msgid "IPC-2581 Files (*.xml)|*.xml"
-msgstr "Súbory IPC-2581 (*.xml)|*.xml"
+msgstr "IPC-2581 súbory (*.xml)|*.xml"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:113
 msgid "IPC-2581 Compressed Files (*.zip)|*.zip"
@@ -34252,7 +34253,7 @@ msgstr "Komprimovať výstup"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:90
 msgid "Compress output into 'zip' file"
-msgstr "Zkomprimujte výstup do súboru 'zip'"
+msgstr "Skomprimovať výstup do 'zip' súboru"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:108
 msgid "BOM Columns"
@@ -34356,7 +34357,7 @@ msgstr "Ignorovať komponenty s príznakom 'neosadzovať'"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:245
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:127
 msgid "Ignore 'Unspecified' components"
-msgstr "Ignorovať 'Nešpecifikované' súčiastky"
+msgstr "Ignorovať 'Nešpecifikované' komponenty"
 
 #: pcbnew/dialogs/dialog_export_idf_base.h:62
 msgid "Export IDFv3"
@@ -34364,11 +34365,11 @@ msgstr "Exportovať IDFv3"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:109
 msgid "zip files"
-msgstr "súbory zip"
+msgstr "zip súbory"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:111
 msgid "tgz files"
-msgstr "súbory tgz"
+msgstr "tgz súbory"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:123
 msgid "Export ODB++ File"
@@ -34463,27 +34464,27 @@ msgstr "STEP export zlyhal!  Uložte dosku s plošnými spojmi a skúste to znov
 
 #: pcbnew/dialogs/dialog_export_step.cpp:455
 msgid "STEP files"
-msgstr "súbory STEP"
+msgstr "STEP súbory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:457
 msgid "Binary glTF files"
-msgstr "Binárne súbory glTF"
+msgstr "Binárne glTF súbory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:459
 msgid "XAO files"
-msgstr "súbory XAO"
+msgstr "XAO súbory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:461
 msgid "BREP (OCCT) files"
-msgstr "Súbory BREP (OCCT)"
+msgstr "BREP (OCCT) súbory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:463
 msgid "PLY files"
-msgstr "súbory PLY"
+msgstr "PLY súbory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:465
 msgid "STL files"
-msgstr "súbory STL"
+msgstr "STL súbory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:473
 msgid "3D Model Output File"
@@ -34794,7 +34795,7 @@ msgstr "0,1 palca"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:130
 msgid "Copy 3D model files to 3D model path"
-msgstr "Skopírujte súbory 3D modelu do cesty 3D modelu"
+msgstr "Skopírovať súbory 3D modelu do cesty 3D modelu"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:131
 msgid ""
@@ -35044,7 +35045,7 @@ msgstr "Typ puzdra:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
 #: pcbnew/footprint.cpp:1402
 msgid "Through hole"
-msgstr "THD"
+msgstr "Priechodzí otvor"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:192
@@ -35737,7 +35738,7 @@ msgstr "Nastaviť teardropy na predvolené hodnoty pre tvar"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:113
 msgid "Set teardrops to specified values:"
-msgstr "Nastaviť teardropy na zadané hodnoty:"
+msgstr "Nastaviť teardropy na dané hodnoty:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:117
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:127
@@ -35747,7 +35748,7 @@ msgstr "Pridať teardropy s predvolenými hodnotami pre tvar"
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:118
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:136
 msgid "Add teardrops with specified values:"
-msgstr "Pridať teardropy so zadanými hodnotami:"
+msgstr "Pridať teardropy s danými hodnotami:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:171
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:173
@@ -36110,7 +36111,7 @@ msgstr "Knižničné prepojenie nadradeného puzdra:"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:124
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
 msgid "Set to specified values:"
-msgstr "Nastaviť na zadané hodnoty:"
+msgstr "Nastaviť na dané hodnoty:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:152
 msgid "Visible  (fields only)"
@@ -36305,7 +36306,7 @@ msgstr "Odstrániť puzdrá bez komponentov v netliste"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:56
 msgid "Replace footprints with those specified in netlist"
-msgstr "Nahradiť puzdrá za tie, ktoré sú uvedené v netliste"
+msgstr "Nahradiť puzdrá za tie, ktoré sú dané v netliste"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
 msgid "Delete/replace footprints even if locked"
@@ -36727,7 +36728,7 @@ msgstr "Typ plôšky:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:2731
 msgid "Through-hole"
-msgstr "THD"
+msgstr "Priechodzí otvor"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39
 msgid "Edge Connector"
@@ -37389,14 +37390,14 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:210
 msgid "Generate Gerber job file"
-msgstr "Generovať súbor úloh Gerber"
+msgstr "Generovať súbor úlohy Gerber"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:212
 msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
-"Generovať súbor Gerber úloh, ktorý obsahuje informácie o doske\n"
+"Generovať súbor úlohy Gerber, ktorý obsahuje informácie o doske\n"
 "a zoznam generovaných Gerber súborov"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:216
@@ -37450,8 +37451,8 @@ msgid ""
 "Disable aperture macros in Gerber files\n"
 "Use *only* for broken Gerber viewers."
 msgstr ""
-"Zakážte clonové makra v súboroch Gerber\n"
-"Použiť * iba * pre zlomených divákov Gerber."
+"Zakázať makrá apertúr v Gerber súboroch\n"
+"Použiť * iba * pre slabšie Gerber prehliadače."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:251
 msgid "Default pen size:"
@@ -38643,7 +38644,7 @@ msgstr "Aktualizovať puzdra"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:41
 msgid "Replace footprints with those specified by symbols"
-msgstr "Nahradiť puzdrá za puzdrá špecifikované symbolmi"
+msgstr "Nahradiť puzdrá za puzdrá dané symbolmi"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
 msgid ""
@@ -39852,7 +39853,7 @@ msgstr "Pravidlá DRC"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:77
 msgid "Check rule syntax"
-msgstr "Skontrolujte syntax pravidla"
+msgstr "Skontrolovať syntax pravidla"
 
 #: pcbnew/dialogs/panel_setup_rules_help_10documentation.h:2
 msgid ""
@@ -42950,7 +42951,7 @@ msgstr "Otvoriť súbor dosky"
 
 #: pcbnew/files.cpp:179
 msgid "Import Non KiCad Board File"
-msgstr "Importujte súbor dosiek iných ako KiCad"
+msgstr "Importovať súbor dosky z iného ako KiCad formátu"
 
 #: pcbnew/files.cpp:220
 msgid "Save Board File As"
@@ -43130,7 +43131,7 @@ msgstr "puzdro: %s"
 #: pcbnew/footprint.cpp:3387
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr "(očakávané 'THD'; aktuálne '%s')"
+msgstr "(očakávané 'Priechodzí otvor'; aktuálne '%s')"
 
 #: pcbnew/footprint.cpp:3390
 #, c-format
@@ -43433,7 +43434,7 @@ msgstr "Vybrať nasledujúcu stránku s parametrami"
 
 #: pcbnew/footprint_wizard_frame.cpp:612
 msgid "Export footprint to editor"
-msgstr "Exportujte puzdro do editora"
+msgstr "Exportovať puzdro do editora"
 
 #: pcbnew/footprint_wizard_frame_functions.cpp:87
 msgid "no wizard selected"
@@ -43714,7 +43715,7 @@ msgstr "Zobraziť ako &PNG..."
 
 #: pcbnew/menubar_footprint_editor.cpp:79
 msgid "Create a PNG file from the current view"
-msgstr "Vytvorte súbor PNG z aktuálneho zobrazenia"
+msgstr "Vytvoriť PNG súbor z aktuálneho zobrazenia"
 
 #: pcbnew/menubar_footprint_editor.cpp:144 pcbnew/menubar_pcb_editor.cpp:254
 msgid "&Drawing Mode"
@@ -43759,7 +43760,7 @@ msgstr "Pilník Non-KiCad Board..."
 
 #: pcbnew/menubar_pcb_editor.cpp:118
 msgid "Import board file from other applications"
-msgstr "Importujte súbor dosky z iných aplikácií"
+msgstr "Importovať súbor dosky z iných aplikácií"
 
 #: pcbnew/menubar_pcb_editor.cpp:129
 msgid "Specctra DSN..."
@@ -43771,7 +43772,7 @@ msgstr "GenCAD..."
 
 #: pcbnew/menubar_pcb_editor.cpp:130
 msgid "Export GenCAD board representation"
-msgstr "Exportujte zastúpenie rady GenCAD"
+msgstr "Exportovať GenCAD reprezentáciu dosky"
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "VRML..."
@@ -43779,7 +43780,7 @@ msgstr "VRML..."
 
 #: pcbnew/menubar_pcb_editor.cpp:132
 msgid "Export VRML 3D board representation"
-msgstr "Exportujte 3D reprezentáciu VRML"
+msgstr "Exportovať VRML 3D reprezentáciu dosky"
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "IDFv3..."
@@ -43787,7 +43788,7 @@ msgstr "IDFv3..."
 
 #: pcbnew/menubar_pcb_editor.cpp:134
 msgid "Export IDF 3D board representation"
-msgstr "Exportujte reprezentáciu 3D dosky IDF"
+msgstr "Exportovať IDF 3D reprezentáciu dosky"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP / GLB / BREP / XAO / PLY / STL..."
@@ -45371,11 +45372,11 @@ msgstr "Načítavanie štvoruholníkov..."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:38
 msgid "Altium Circuit Maker PCB files"
-msgstr "Súbory Altium Circuit Maker DPS"
+msgstr "Altium Circuit Maker PCB súbory"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_studio.h:37
 msgid "Altium Circuit Studio PCB files"
-msgstr "Súbory Altium Circuit Studio DPS"
+msgstr "Altium Circuit Studio PCB súbory"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:306
 #, c-format
@@ -45389,7 +45390,7 @@ msgstr "Puzdro '%s' sa nenašlo v '%s'."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:44
 msgid "Altium Designer PCB files"
-msgstr "Súbory Altium Designer DPS"
+msgstr "Altium Designer DPS súbory"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:49
 msgid "Altium PCB Library or Integrated Library"
@@ -45397,7 +45398,7 @@ msgstr "Altium DPS knižnica alebo Integrovaná knižnica"
 
 #: pcbnew/pcb_io/altium/pcb_io_solidworks.h:32
 msgid "Solidworks PCB files"
-msgstr "Súbory Solidworks PCB"
+msgstr "Solidworks PCB súbory"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:91
 msgid ""
@@ -46160,7 +46161,7 @@ msgstr "Nebolo možné načítať súbor "
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.h:38
 msgid "Fabmaster PCB files"
-msgstr "Súbory Fabmaster PCB"
+msgstr "Fabmaster PCB súbory"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:94
 #, c-format
@@ -46701,7 +46702,7 @@ msgstr "Nepodarilo sa nájsť viaStyleDef %s."
 
 #: pcbnew/pcb_io/pcad/pcb_io_pcad.h:44
 msgid "P-Cad 200x ASCII PCB files"
-msgstr "Súbory DPS P-Cad 200x ASCII"
+msgstr "P-Cad 200x ASCII PCB súbory"
 
 #: pcbnew/pcb_io/pcb_io.cpp:115
 msgid ""
@@ -47262,7 +47263,7 @@ msgid ""
 "This zone cannot be handled by the router.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"Túto zónu nemôže spracovať router.\n"
+"Túto zónu nemôže router spracovať.\n"
 "Prosím, skontrolujte či nejde o samopretínajúci sa mnohouholník."
 
 #: pcbnew/router/pns_kicad_iface.cpp:2250
@@ -47427,7 +47428,7 @@ msgstr "Zadať vlastné veľkosti spojov a prekovov"
 
 #: pcbnew/router/router_tool.cpp:266
 msgid "Track netclass width"
-msgstr "Sledujte šírku netclass"
+msgstr "Šírka spoja z triedy spojov"
 
 #: pcbnew/router/router_tool.cpp:268
 #, c-format
@@ -48732,7 +48733,7 @@ msgid ""
 "radius."
 msgstr ""
 "Niektoré ostré vnútorné rohy (dogbone) sú príliš úzke na to, aby sa do nich "
-"zmestila fréza so zadaným polomerom."
+"zmestila fréza s daným polomerom."
 
 #: pcbnew/tools/item_modification_routine.cpp:291
 msgid " Consider enabling the 'Add Slots' option."
@@ -49117,7 +49118,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:412
 msgid "Close the in progress outline"
-msgstr "Zatvorte prebiehajúci obrys"
+msgstr "Zatvoriť rozpracovaný obrys"
 
 #: pcbnew/tools/pcb_actions.cpp:421
 msgid "Show the design rules checker window"
@@ -49157,7 +49158,7 @@ msgstr "Kópia s referenciou"
 
 #: pcbnew/tools/pcb_actions.cpp:485
 msgid "Copy selected item(s) to clipboard with a specified starting point"
-msgstr "Skopírujte vybrané položky do schránky s určeným východiskovým bodom"
+msgstr "Skopírovať vybrané položky do schránky s daným východiskovým bodom"
 
 #: pcbnew/tools/pcb_actions.cpp:494
 msgid "Duplicate and Increment"
@@ -49312,7 +49313,7 @@ msgstr "Nová puzdra"
 
 #: pcbnew/tools/pcb_actions.cpp:699
 msgid "Create a new, empty footprint"
-msgstr "Vytvorte novú, prázdnu puzdro"
+msgstr "Vytvoriť nové, prázdne puzdro"
 
 #: pcbnew/tools/pcb_actions.cpp:705
 msgid "Create Footprint..."
@@ -49320,7 +49321,7 @@ msgstr "Vytvoriť puzdro..."
 
 #: pcbnew/tools/pcb_actions.cpp:706
 msgid "Create a new footprint using the Footprint Wizard"
-msgstr "Vytvorte novú puzdro pomocou Sprievodcu puzdrom"
+msgstr "Vytvoriť nové puzdro pomocou Sprievodcu"
 
 #: pcbnew/tools/pcb_actions.cpp:712
 msgid "Edit Footprint"
@@ -49476,7 +49477,7 @@ msgstr "Kresliť mikrovlnné medzery"
 
 #: pcbnew/tools/pcb_actions.cpp:871
 msgid "Create gap of specified length for microwave applications"
-msgstr "Vytvorte medzeru určenej dĺžky pre mikrovlnné aplikácie"
+msgstr "Vytvoriť medzeru danej dĺžky pre mikrovlnné aplikácie"
 
 #: pcbnew/tools/pcb_actions.cpp:879
 msgid "Draw Microwave Stubs"
@@ -49484,7 +49485,7 @@ msgstr "Kresliť mikrovlnné pahýle"
 
 #: pcbnew/tools/pcb_actions.cpp:880
 msgid "Create stub of specified length for microwave applications"
-msgstr "Vytvorte pahýľ špecifikovanej dĺžky pre mikrovlnné aplikácie"
+msgstr "Vytvoriť pahýľ danej dĺžky pre mikrovlnné aplikácie"
 
 #: pcbnew/tools/pcb_actions.cpp:888
 msgid "Draw Microwave Arc Stubs"
@@ -49492,7 +49493,7 @@ msgstr "Kresliť mikrovlnné oblúkové pahýle"
 
 #: pcbnew/tools/pcb_actions.cpp:889
 msgid "Create stub (arc) of specified size for microwave applications"
-msgstr "Vytvorte pahýľ (oblúk) určenej veľkosti pre mikrovlnné aplikácie"
+msgstr "Vytvoriť pahýľ (oblúk) danej veľkosti pre mikrovlnné aplikácie"
 
 #: pcbnew/tools/pcb_actions.cpp:897
 msgid "Draw Microwave Polygonal Shapes"
@@ -49500,7 +49501,7 @@ msgstr "Kresliť mikrovlnný mnohouholníkové tvary"
 
 #: pcbnew/tools/pcb_actions.cpp:898
 msgid "Create a microwave polygonal shape from a list of vertices"
-msgstr "Vytvorte mikrovlnný polygonálny tvar zo zoznamu vrcholov"
+msgstr "Vytvoriť mikrovlnný mnohouholníkový tvar zo zoznamu vrcholov"
 
 #: pcbnew/tools/pcb_actions.cpp:906
 msgid "Draw Microwave Lines"
@@ -49508,7 +49509,7 @@ msgstr "Kresliť mikrovlnné vedenia"
 
 #: pcbnew/tools/pcb_actions.cpp:907
 msgid "Create line of specified length for microwave applications"
-msgstr "Vytvorte riadok určenej dĺžky pre mikrovlnné aplikácie"
+msgstr "Vytvoriť čiaru danej dĺžky pre mikrovlnné aplikácie"
 
 #: pcbnew/tools/pcb_actions.cpp:917
 msgid "Copy Pad Properties to Default"
@@ -49616,7 +49617,7 @@ msgstr "Exportovať Specctra DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:1017
 msgid "Export Specctra DSN routing info"
-msgstr "Exportujte smerovacie informácie Specctra DSN"
+msgstr "Exportovať informácie routra Specctra DSN"
 
 #: pcbnew/tools/pcb_actions.cpp:1023
 msgid "Gerbers (.gbr)..."
@@ -49628,7 +49629,7 @@ msgstr "Generovať Gerber súbory pre výrobu"
 
 #: pcbnew/tools/pcb_actions.cpp:1030
 msgid "Drill Files (.drl)..."
-msgstr "Vŕtať súbory (.drl)..."
+msgstr "Vŕtacie súbory (.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1031
 msgid "Generate Excellon drill file(s)"
@@ -51067,7 +51068,7 @@ msgstr "Puzdra späť"
 
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show footprints that are on board's back"
-msgstr "Ukážte puzdra, ktoré sú na zadnej strane dosky"
+msgstr "Zobraziť puzdrá, ktoré sú na zadnej strane dosky"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "Show unconnected nets as a ratsnest"
@@ -51099,7 +51100,7 @@ msgstr "Porušenia DRC, ktoré boli jednotlivo vylúčené"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Show footprint and text origins as a cross"
-msgstr "Ukážte puzdro a pôvod textu ako krížik"
+msgstr "Zobraziť puzdro a počiatok textu ako krížik"
 
 #: pcbnew/widgets/appearance_controls.cpp:349
 msgid "Locked Item Shadow"
@@ -51695,8 +51696,8 @@ msgid ""
 "The current color theme is read-only.  Create a new theme in Preferences to "
 "enable color editing."
 msgstr ""
-"Aktuálna farebná téma je len na čítanie.  Pre úpravy farieb, vytvorte novú "
-"tému v nastaveniach."
+"Aktuálna farebná téma je len na čítanie.  Pre úpravy farieb je potrebné "
+"vytvoriť novú tému v nastaveniach."
 
 #: pcbnew/widgets/appearance_controls_base.cpp:71
 msgid "Show the Net Inspector"
@@ -51704,11 +51705,11 @@ msgstr "Zobraziť inšpektora spojov"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:123
 msgid "Configure net classes"
-msgstr "Nakonfigurujte triedy sietí"
+msgstr "Konfigurovať triedy spojov"
 
 #: pcbnew/widgets/filedlg_hook_save_project.h:36
 msgid "Create a new project for this board"
-msgstr "Vytvorte nový projekt pre túto nástenku"
+msgstr "Vytvoriť nový projekt pre túto dosku"
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:35
 msgid "Omit extra information"
@@ -52213,7 +52214,7 @@ msgstr "Prehliadač Gerber súborov"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
-msgstr "Zobraziť súbory Gerber"
+msgstr "Zobraziť Gerber súbory"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
