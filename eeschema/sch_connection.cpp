@@ -274,11 +274,26 @@ void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
     // Handle vector bus members: make sure local names are preserved where possible
     const std::vector<std::shared_ptr<SCH_CONNECTION>>& otherMembers = aOther.Members();
 
+    auto cloneMember =
+        [&]( const SCH_CONNECTION& aSrc ) -> std::shared_ptr<SCH_CONNECTION>
+        {
+            auto copy = std::make_shared<SCH_CONNECTION>( m_parent, m_sheet );
+            copy->SetGraph( m_graph );
+            copy->Clone( aSrc );
+
+            copy->m_vector_index = aSrc.m_vector_index;
+
+            return copy;
+        };
+
     if( m_type == CONNECTION_TYPE::BUS && aOther.Type() == CONNECTION_TYPE::BUS )
     {
         if( m_members.empty() )
         {
-            m_members = otherMembers;
+            m_members.reserve( otherMembers.size() );
+
+            for( const std::shared_ptr<SCH_CONNECTION>& src : otherMembers )
+                m_members.push_back( cloneMember( *src ) );
         }
         else
         {
@@ -292,7 +307,10 @@ void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
     {
         if( m_members.empty() )
         {
-            m_members = otherMembers;
+            m_members.reserve( otherMembers.size() );
+
+            for( const std::shared_ptr<SCH_CONNECTION>& src : otherMembers )
+                m_members.push_back( cloneMember( *src ) );
         }
         else
         {
