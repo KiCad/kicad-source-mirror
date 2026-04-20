@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-15 19:16+0300\n"
-"PO-Revision-Date: 2026-04-15 16:10+0000\n"
+"PO-Revision-Date: 2026-04-20 19:33+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -2132,9 +2132,8 @@ msgid "invalid plugin runtime: %s"
 msgstr "Ungültiger Pinname"
 
 #: common/api/api_plugin.cpp:105
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "Konnte Repository-Konfiguration nicht abrufen"
+msgstr "Konnte Plugin-Konfigurationsdatei nicht laden"
 
 #: common/api/api_plugin.cpp:125
 #, c-format
@@ -2152,9 +2151,9 @@ msgid "identifier '%s' is invalid"
 msgstr "Bezeichner \"%s\" ist ungültig"
 
 #: common/api/api_plugin.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "actions section is invalid: %s"
-msgstr "Datenbankverbindung fehlgeschlagen: %s"
+msgstr "Abschnitt \"Aktionen\" ist ungültig: %s"
 
 #: common/api/api_plugin_manager.cpp:98
 #, c-format
@@ -2167,9 +2166,9 @@ msgid "Plugin '%s': %s"
 msgstr "Plugin \"%s\": %s"
 
 #: common/api/api_plugin_manager.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "exited with code %d"
-msgstr "Prozess mit Rückgabewert %d fehlgeschlagen"
+msgstr "Mit Rückgabewert %d fehlgeschlagen"
 
 #: common/api/api_plugin_manager.cpp:335
 msgid "action is not registered"
@@ -2177,9 +2176,8 @@ msgstr "Aktion ist nicht registriert."
 
 #: common/api/api_plugin_manager.cpp:369 common/api/api_plugin_manager.cpp:779
 #: common/api/api_plugin_manager.cpp:863
-#, fuzzy
 msgid "missing plugin environment"
-msgstr "Plugin-Umgebung neu erstellen"
+msgstr "Fehlende Pluginumgebung"
 
 #: common/api/api_plugin_manager.cpp:378
 #, c-format
@@ -2187,7 +2185,6 @@ msgid "entrypoint '%s' could not be read"
 msgstr "Einstiegspunkt \"%s\" konnte nicht gelesen werden"
 
 #: common/api/api_plugin_manager.cpp:446
-#, fuzzy
 msgid "process could not be created"
 msgstr "Prozess konnte nicht erstellt werden"
 
@@ -2197,9 +2194,8 @@ msgid "entrypoint '%s' is not executable"
 msgstr "Einstiegspunkt \"%s\" ist nicht ausführbar"
 
 #: common/api/api_plugin_manager.cpp:571
-#, fuzzy
 msgid "could not launch plugin"
-msgstr "Konnte den Footprintassistent \"%s\" nicht starten"
+msgstr "Konnte Plugin nicht starten"
 
 #: common/api/api_plugin_manager.cpp:749 common/api/api_plugin_manager.cpp:831
 #: common/api/api_plugin_manager.cpp:921
@@ -13604,11 +13600,10 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "Ändern des Schweregrads auf Fehler für alle \"%s\" Verstöße"
 
 #: eeschema/dialogs/dialog_erc.cpp:782 eeschema/dialogs/dialog_erc.cpp:789
-#, fuzzy
 msgid "Violation severities can also be edited in Schematic Setup"
 msgstr ""
-"Schweregrade für Verstöße können auch im Dialog \"Schaltplan einrichten ..."
-"\" bearbeitet werden"
+"Schweregrade für Verstöße können auch in \"Schaltplan einrichten ...\" "
+"bearbeitet werden"
 
 #: eeschema/dialogs/dialog_erc.cpp:787 pcbnew/dialogs/dialog_drc.cpp:793
 #, c-format
@@ -13630,7 +13625,6 @@ msgstr "Pin-zu-Pin-Konfliktmatrix bearbeiten ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:803 eeschema/dialogs/dialog_erc.cpp:809
 #: eeschema/dialogs/dialog_erc.cpp:816
-#, fuzzy
 msgid "Open the Schematic Setup dialog"
 msgstr "Den Dialog \"Schaltplan einrichten ...\" öffnen"
 
@@ -20954,9 +20948,8 @@ msgid "Find in Net Inspector"
 msgstr "Im Netzinspektor finden"
 
 #: eeschema/sch_edit_frame.cpp:3037
-#, fuzzy
 msgid "No design variants to edit."
-msgstr "Neue Designvariante zum Schaltplan hinzufügen."
+msgstr "Keine Designvarianten zum Bearbeiten vorhanden."
 
 #: eeschema/sch_edit_frame.cpp:3041
 msgid "Select variant to edit description:"
@@ -38999,16 +38992,14 @@ msgid "They will be excluded from the %s list"
 msgstr "Sie werden von der %s Liste ausgeschlossen"
 
 #: pcbnew/dialogs/dialog_drc.cpp:788 pcbnew/dialogs/dialog_drc.cpp:795
-#, fuzzy
 msgid "Violation severities can also be edited in Board Setup"
 msgstr ""
-"Schweregrade für Verstöße können auch im Dialog \"Platinenkonfiguration ..."
-"\" bearbeitet werden"
+"Schweregrade für Verstöße können auch in \"Platinenkonfiguration ...\" "
+"bearbeitet werden"
 
 #: pcbnew/dialogs/dialog_drc.cpp:806
-#, fuzzy
 msgid "Open the Board Setup dialog"
-msgstr "\"Platinenkonfiguration ...\"-Dialog anzeigen"
+msgstr "Den Dialog \"Platinenkonfiguration ...\" öffnen"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1110
 #, c-format
