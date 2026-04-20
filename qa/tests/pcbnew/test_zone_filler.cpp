@@ -1993,6 +1993,236 @@ BOOST_FIXTURE_TEST_CASE( TwoSegmentAngledTeardropNoSelfIntersection, ZONE_FILL_T
 
 
 /**
+ * Regression for issue 23916: Sharp spikes/protrusions generated during teardrop edit.
+ *
+ * Original symptom: a track whose centerline grazed a round via tangentially, with a short
+ * first segment extended onto a second segment, produced pointD (the apex behind the via)
+ * along a direction that was mostly perpendicular to the radius. pointD was projected
+ * outside the via circle, producing a sharp copper spike on the back side of the pad.
+ *
+ * Root-cause fix: segments that emerge from the via copper by less than their own width are
+ * treated as effectively fully covered and no longer anchor a teardrop. The grazing sliver
+ * is not a credible entry; the teardrop that would have been built on it is also the one
+ * that mis-orients along the tangent and produces the spike, so rejecting it at the
+ * candidate filter removes the class of spikes entirely for round pads/vias.
+ *
+ * Also verifies that when a teardrop is created, no polygon vertex sits beyond a reasonable
+ * envelope on the back side of the via (defense-in-depth against any residual spike, e.g.
+ * for non-round pads where the geometry clamp in computeTeardropPolygon is still load-bearing).
+ */
+BOOST_FIXTURE_TEST_CASE( OffCenterTwoSegmentTeardropNoSpike, ZONE_FILL_TEST_FIXTURE )
+{
+    auto runVariant = [&]( bool aCurvedEdges )
+    {
+        KI_TEST::LoadBoard( m_settingsManager, "teardrop_offcenter_two_segment", m_board );
+
+        VECTOR2I viaPos;
+        int      viaRadius = 0;
+
+        for( PCB_TRACK* track : m_board->Tracks() )
+        {
+            if( track->Type() == PCB_VIA_T )
+            {
+                PCB_VIA* via = static_cast<PCB_VIA*>( track );
+                via->SetTeardropCurved( aCurvedEdges );
+                viaPos = via->GetPosition();
+                viaRadius = via->GetWidth( PADSTACK::ALL_LAYERS ) / 2;
+                break;
+            }
+        }
+
+        BOOST_REQUIRE( viaRadius > 0 );
+
+        TOOL_MANAGER toolMgr;
+        toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+
+        KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+        toolMgr.RegisterTool( dummyTool );
+
+        BOARD_COMMIT commit( dummyTool );
+        TEARDROP_MANAGER teardropMgr( m_board.get(), &toolMgr );
+        teardropMgr.UpdateTeardrops( commit, nullptr, nullptr, true );
+
+        if( !commit.Empty() )
+            commit.Push( _( "Add teardrops" ), SKIP_UNDO | SKIP_SET_DIRTY );
+
+        // The crafted board's first segment emerges from the via by ~10 um on a 100 um
+        // track width; the emerging-length filter rejects it and no teardrop is built.
+        const double maxBackSideDist = viaRadius * 1.2;
+        int      teardropCount = 0;
+        int      spikingPoints = 0;
+        VECTOR2I worstPoint;
+        double   worstDistance = 0.0;
+
+        for( ZONE* zone : m_board->Zones() )
+        {
+            if( !zone->IsTeardropArea() )
+                continue;
+
+            teardropCount++;
+
+            const SHAPE_POLY_SET* outline = zone->Outline();
+
+            if( !outline || outline->OutlineCount() == 0 )
+                continue;
+
+            const SHAPE_LINE_CHAIN& chain = outline->Outline( 0 );
+
+            for( int i = 0; i < chain.PointCount(); i++ )
+            {
+                const VECTOR2I& pt = chain.CPoint( i );
+                VECTOR2I        rel = pt - viaPos;
+
+                // Only consider points on the back side (opposite the track entry).
+                if( rel.x >= 0 )
+                    continue;
+
+                double dist = rel.EuclideanNorm();
+
+                if( dist > maxBackSideDist )
+                {
+                    spikingPoints++;
+
+                    if( dist > worstDistance )
+                    {
+                        worstDistance = dist;
+                        worstPoint = pt;
+                    }
+                }
+            }
+        }
+
+        BOOST_CHECK_MESSAGE( teardropCount == 0,
+                             wxString::Format( "Expected no teardrop on grazing-entry "
+                                               "track (emergence below track width), got "
+                                               "%d (curved=%s)",
+                                               teardropCount,
+                                               aCurvedEdges ? "yes" : "no" ) );
+
+        BOOST_CHECK_MESSAGE( spikingPoints == 0,
+                             wxString::Format( "Found %d teardrop polygon vertex/vertices "
+                                               "outside the expected envelope (worst at "
+                                               "(%d, %d), %f mm from via center; curved=%s)",
+                                               spikingPoints,
+                                               worstPoint.x, worstPoint.y,
+                                               worstDistance / pcbIUScale.IU_PER_MM,
+                                               aCurvedEdges ? "yes" : "no" ) );
+    };
+
+    runVariant( true );
+    runVariant( false );
+}
+
+
+/**
+ * A via with many tracks radiating out, several of which share a junction that lies
+ * inside the via copper (the junction is covered, but the tracks on each side emerge
+ * from the via independently). Every emerging track must produce a well-formed
+ * teardrop zone, and no teardrop polygon may self-intersect.
+ *
+ * Historical failure mode: when two tracks share a junction inside the via, the
+ * teardrop built for each of them can wrap back on itself because the first-segment
+ * direction used to orient the apex does not match the track's real entry direction
+ * at the pad edge.
+ */
+BOOST_FIXTURE_TEST_CASE( MultiTrackSharedInsideJunctionNoSelfIntersection,
+                         ZONE_FILL_TEST_FIXTURE )
+{
+    auto runVariant = [&]( bool aCurvedEdges )
+    {
+        KI_TEST::LoadBoard( m_settingsManager, "teardrop_multi_inside_via", m_board );
+
+        for( PCB_TRACK* track : m_board->Tracks() )
+        {
+            if( track->Type() == PCB_VIA_T )
+            {
+                static_cast<PCB_VIA*>( track )->SetTeardropCurved( aCurvedEdges );
+                break;
+            }
+        }
+
+        TOOL_MANAGER toolMgr;
+        toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+
+        KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+        toolMgr.RegisterTool( dummyTool );
+
+        BOARD_COMMIT commit( dummyTool );
+        TEARDROP_MANAGER teardropMgr( m_board.get(), &toolMgr );
+        teardropMgr.UpdateTeardrops( commit, nullptr, nullptr, true );
+
+        if( !commit.Empty() )
+            commit.Push( _( "Add teardrops" ), SKIP_UNDO | SKIP_SET_DIRTY );
+
+        int      teardropCount = 0;
+        int      selfIntersectingCount = 0;
+        VECTOR2I worstPoint;
+
+        for( ZONE* zone : m_board->Zones() )
+        {
+            if( !zone->IsTeardropArea() )
+                continue;
+
+            teardropCount++;
+
+            const SHAPE_POLY_SET* outline = zone->Outline();
+
+            if( !outline || outline->OutlineCount() == 0 )
+                continue;
+
+            const SHAPE_LINE_CHAIN& chain = outline->Outline( 0 );
+            int                     n = chain.PointCount();
+            bool                    intersected = false;
+
+            for( int i = 0; i < n && !intersected; i++ )
+            {
+                SEG segA( chain.CPoint( i ), chain.CPoint( ( i + 1 ) % n ) );
+
+                for( int j = i + 2; j < n; j++ )
+                {
+                    if( i == 0 && j == n - 1 )
+                        continue;
+
+                    SEG          segB( chain.CPoint( j ), chain.CPoint( ( j + 1 ) % n ) );
+                    OPT_VECTOR2I hit = segA.Intersect( segB );
+
+                    if( hit.has_value() )
+                    {
+                        BOOST_TEST_MESSAGE( wxString::Format(
+                                "Teardrop polygon self-intersection at (%d, %d) "
+                                "between edges %d and %d (curved=%s)",
+                                hit->x, hit->y, i, j, aCurvedEdges ? "yes" : "no" ) );
+
+                        worstPoint = hit.value();
+                        intersected = true;
+                        break;
+                    }
+                }
+            }
+
+            if( intersected )
+                selfIntersectingCount++;
+        }
+
+        BOOST_CHECK_MESSAGE( teardropCount > 0,
+                             wxString::Format( "Expected at least one teardrop zone "
+                                               "(curved=%s)",
+                                               aCurvedEdges ? "yes" : "no" ) );
+
+        BOOST_CHECK_MESSAGE( selfIntersectingCount == 0,
+                             wxString::Format( "%d of %d teardrop polygon(s) self-intersect "
+                                               "(worst at (%d, %d); curved=%s)",
+                                               selfIntersectingCount, teardropCount,
+                                               worstPoint.x, worstPoint.y,
+                                               aCurvedEdges ? "yes" : "no" ) );
+    };
+
+    runVariant( true );
+    runVariant( false );
+}
+
+
+/**
  * Test for issue 23515: Zone fills have random pieces missing near keepout boundaries.
  *
  * The test board is a reporter-provided v9 board file with stored zone fill from the v9

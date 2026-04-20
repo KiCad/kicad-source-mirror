@@ -137,6 +137,16 @@ private:
     bool areItemsInSameZone( BOARD_ITEM* aPadOrVia, PCB_TRACK* aTrack) const;
 
     /**
+     * Return the length of the portion of aTrack that lies outside aOther's copper shape
+     * on aLayer. A track that only grazes a pad or via edge tangentially emerges by much
+     * less than its width and is not a credible teardrop anchor: using it misorients the
+     * teardrop axis along the grazing sliver instead of the track's real entry direction.
+     * Returns 0 if the track is fully covered or does not intersect the outline.
+     */
+    int computeEmergingTrackLength( PCB_TRACK* aTrack, BOARD_ITEM* aOther,
+                                    PCB_LAYER_ID aLayer ) const;
+
+    /**
      * Compute the curve part points for teardrops connected to a round shape
      * The Bezier curve control points are optimized for a round pad/via shape,
      * and do not give a good curve shape for other pad shapes
