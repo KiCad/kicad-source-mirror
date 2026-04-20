@@ -44,6 +44,9 @@ namespace PADS_IO
 constexpr uint16_t SDB_RECORD_SENTINEL = 0xFFFE;
 constexpr uint32_t SDB_FIELD_UNSET = 0xFFFFFFFF;
 
+// PADS BASIC coordinate units per mil (one BASIC unit is 1/38100 mil).
+constexpr double SDB_BASIC_PER_MIL = 38100.0;
+
 /**
  * Little-endian byte assembly with no bounds checking. Callers that need a
  * bounds-checked policy wrap these.

@@ -429,7 +429,7 @@ void BINARY_PARSER::recoverOmittedPlacements()
 
     static constexpr int64_t COORD_MIN     = 100000;
     static constexpr int64_t COORD_ABS_MAX = 1500000000;
-    static constexpr int32_t ORI_UNIT      = 40500000;   // 0.5 degree (PADS stores deg * 9e6)
+    static constexpr int32_t ORI_HALF_DEGREE      = 40500000;   // 0.5 degree (PADS stores deg * 9e6)
     static constexpr int     SCORE_PLACEMENT = 8;
 
     // A real placement scores >= 8 (refdes 4 + coords 5 + side 1 + angle 1); gap/sentinel/
@@ -455,8 +455,8 @@ void BINARY_PARSER::recoverOmittedPlacements()
 
         if( !angOk && ori > 0 && ori <= 700000000 )
         {
-            int32_t oriRemainder = ori % ORI_UNIT;
-            angOk = ( oriRemainder <= 200000 || ( ORI_UNIT - oriRemainder ) <= 200000 );
+            int32_t oriRemainder = ori % ORI_HALF_DEGREE;
+            angOk = ( oriRemainder <= 200000 || ( ORI_HALF_DEGREE - oriRemainder ) <= 200000 );
         }
 
         s += angOk ? 1 : -1;

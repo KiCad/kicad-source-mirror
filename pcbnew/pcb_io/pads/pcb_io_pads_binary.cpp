@@ -609,7 +609,7 @@ void PCB_IO_PADS_BINARY::loadFootprints()
                 else
                 {
                     // 38100 basic units = 1 mil; default 60 mil pad.
-                    int defaultPad = scaleSize( 60.0 * 38100.0 );
+                    int defaultPad = scaleSize( 60.0 * PADS_IO::SDB_BASIC_PER_MIL );
                     pad->SetSize( F_Cu, VECTOR2I( defaultPad, defaultPad ) );
                     pad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
                     pad->SetAttribute( PAD_ATTRIB::PTH );
@@ -814,7 +814,7 @@ void PCB_IO_PADS_BINARY::loadTracksAndVias()
             int track_width = scaleSize( track_def.width );
 
             if( track_width <= 0 )
-                track_width = scaleSize( 10.0 * 38100.0 );  // 10 mil; 38100 basic units = 1 mil
+                track_width = scaleSize( 10.0 * PADS_IO::SDB_BASIC_PER_MIL );  // 10 mil; 38100 basic units = 1 mil
 
             for( size_t i = 0; i < track_def.points.size() - 1; ++i )
             {
@@ -884,8 +884,8 @@ void PCB_IO_PADS_BINARY::loadTracksAndVias()
             double viaDrill = m_parser->GetDefaultViaDrill();
 
             // 38100 basic units = 1 mil; default 24 mil via, 12 mil drill.
-            via->SetWidth( scaleSize( viaSize > 0 ? viaSize : 24.0 * 38100.0 ) );
-            via->SetDrill( scaleSize( viaDrill > 0 ? viaDrill : 12.0 * 38100.0 ) );
+            via->SetWidth( scaleSize( viaSize > 0 ? viaSize : 24.0 * PADS_IO::SDB_BASIC_PER_MIL ) );
+            via->SetDrill( scaleSize( viaDrill > 0 ? viaDrill : 12.0 * PADS_IO::SDB_BASIC_PER_MIL ) );
             via->SetLayerPair( F_Cu, B_Cu );
             via->SetViaType( VIATYPE::THROUGH );
             m_loadBoard->Add( via );
