@@ -1332,4 +1332,31 @@ BOOST_AUTO_TEST_CASE( CollideNearlyFlatArcDoesNotOverflow )
 }
 
 
+/**
+ * Three near-coincident points must not fabricate a multi-metre circumcircle.
+ *
+ *   (arc (start 135.674 84.576744)
+ *        (mid   135.673999 84.576744)
+ *        (end   135.673998 84.576744) ...)
+ *
+ * Previously CalcArcCenter() slope-epsilon fallback for colinear inputs
+ * produced a centre ~2 m away and a radius ~2 m, and the PNS drag preview
+ * drew a board-spanning ghost circle through the three coincident points.
+ */
+BOOST_AUTO_TEST_CASE( DegenerateArcCoincidentPoints )
+{
+    SHAPE_ARC arc( VECTOR2I( 135674000, 84576744 ),
+                   VECTOR2I( 135673999, 84576744 ),
+                   VECTOR2I( 135673998, 84576744 ),
+                   100000 );
+
+    BOOST_CHECK_LT( arc.GetRadius(), 10.0 );
+
+    SHAPE_LINE_CHAIN poly = arc.ConvertToPolyline();
+    BOOST_CHECK_LT( poly.BBox().GetWidth(),  1000 );  // < 1 µm
+    BOOST_CHECK_LT( poly.BBox().GetHeight(), 1000 );
+    BOOST_CHECK_LT( arc.GetLength(),         1000.0 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
