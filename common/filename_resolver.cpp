@@ -328,10 +328,24 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName, const wxStri
             bool   useBrace = aFileName.StartsWith( "${" );
             size_t aliasEnd = aFileName.find( useBrace ? '}' : ')' );
 
-            if( aliasEnd != wxString::npos )
+            // Require a non-empty variable name (aliasEnd > 2) so ${} / $() fall through.
+            if( aliasEnd != wxString::npos && aliasEnd > 2 )
             {
                 wxString alias = aFileName.substr( 2, aliasEnd - 2 );
-                wxString relpath = aFileName.substr( aliasEnd + 2 ); // skip }/ or )/
+
+                // Skip the separator if present
+                size_t relStart = aliasEnd + 1;
+
+                if( relStart < aFileName.length()
+                    && ( aFileName[relStart] == '/' || aFileName[relStart] == '\\' ) )
+                {
+                    relStart++;
+                }
+
+                wxString relpath;
+
+                if( relStart < aFileName.length() )
+                    relpath = aFileName.substr( relStart );
 
                 for( const SEARCH_PATH& path : m_paths )
                 {
