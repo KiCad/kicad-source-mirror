@@ -51,6 +51,7 @@ PANEL_ZONE_PROPERTIES::PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME*
         PANEL_ZONE_PROPERTIES_BASE( aParent ),
         m_frame( aFrame ),
         m_zonesSettingsBag( aZonesSettingsBag ),
+        m_zone( nullptr ),
         m_outlineHatchPitch( aFrame, m_stBorderHatchPitchText, m_outlineHatchPitchCtrl, m_outlineHatchUnits ),
         m_cornerRadius( aFrame, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits ),
         m_clearance( aFrame, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits ),
@@ -264,7 +265,8 @@ void PANEL_ZONE_PROPERTIES::OnZoneNameChanged( wxCommandEvent& aEvent )
 
 void PANEL_ZONE_PROPERTIES::onNetSelector( wxCommandEvent& aEvent )
 {
-    if( !m_netSelector->IsShown() )
+    // There is nothing to do if there is no zone selected which can happen when there are no zones on the board.
+    if( !m_netSelector || !m_netSelector->IsShown() )
         return;
 
     updateInfoBar();
@@ -272,7 +274,7 @@ void PANEL_ZONE_PROPERTIES::onNetSelector( wxCommandEvent& aEvent )
     // Zones with no net never have islands removed
     if( m_netSelector->GetSelectedNetcode() == INVALID_NET_CODE )
     {
-        if( m_cbRemoveIslands->IsEnabled() )
+        if( m_cbRemoveIslands && m_cbRemoveIslands->IsEnabled() && m_settings )
             m_settings->SetIslandRemovalMode( (ISLAND_REMOVAL_MODE) m_cbRemoveIslands->GetSelection() );
 
         m_cbRemoveIslands->SetSelection( 1 );
@@ -281,17 +283,22 @@ void PANEL_ZONE_PROPERTIES::onNetSelector( wxCommandEvent& aEvent )
     }
     else if( !m_cbRemoveIslands->IsEnabled() )
     {
-        m_cbRemoveIslands->SetSelection( static_cast<int>( m_settings->GetIslandRemovalMode() ) );
+        if( m_cbRemoveIslands && m_settings )
+            m_cbRemoveIslands->SetSelection( static_cast<int>( m_settings->GetIslandRemovalMode() ) );
+
         m_removeIslandsLabel->Enable( true );
         m_cbRemoveIslands->Enable( true );
     }
 
     // Propagate all the way out so that the MODEL_ZONES_OVERVIEW can pick it up
-    m_settings->m_Netcode = m_netSelector->GetSelectedNetcode();
-    m_zonesSettingsBag.GetZoneSettings( m_zone )->m_Netcode = m_settings->m_Netcode;
+    if( m_settings )
+        m_settings->m_Netcode = m_netSelector->GetSelectedNetcode();
 
-    if( m_zone )
+    if( m_settings && m_zone )
+    {
+        m_zonesSettingsBag.GetZoneSettings( m_zone )->m_Netcode = m_settings->m_Netcode;
         m_zone->SetNetCode( m_settings->m_Netcode, true );
+    }
 
     wxCommandEvent* evt = new wxCommandEvent( EVT_ZONE_NET_UPDATE );
     wxQueueEvent( m_parent, evt );
