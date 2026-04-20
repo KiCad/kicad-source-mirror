@@ -5,13 +5,14 @@
 # Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2025, 2026.
 # "rsr.private" <rsr.private@gmail.com>, 2025, 2026.
 # Rafael Serrano <rsr.openware@gmail.com>, 2026.
+# Rafael Serrano <rsr.private@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-15 19:16+0300\n"
-"PO-Revision-Date: 2026-03-19 00:23+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-04-20 09:10+0000\n"
+"Last-Translator: Rafael Serrano <rsr.private@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
 "source/ca/>\n"
 "Language: ca\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -36,7 +37,7 @@ msgstr ""
 #: common/properties/pg_editors.cpp:643
 #: common/widgets/grid_text_button_helpers.cpp:255
 msgid "All Files"
-msgstr "Tots els Fitxers"
+msgstr "Tots els fitxers"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:343
 msgid "Build board outline"
@@ -74,12 +75,12 @@ msgstr "Crea zones"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1320
 msgid "Build Tech layers"
-msgstr "Construeix Capes Tècniques"
+msgstr "Construeix capes tècniques"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1397
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "Construeix Capa Tècnica %d"
+msgstr "Construeix capa tècnica %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1679
 msgid "Simplifying copper layer polygons"
@@ -392,7 +393,7 @@ msgstr "Mostra els pads al mode de delimitació"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
 msgid "Display a placeholder for footprints with missing 3D models"
-msgstr ""
+msgstr "Mostra la ubicació de les empremtes si falten els models 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:70
 msgid "Copy 3D image to clipboard"
@@ -1842,7 +1843,7 @@ msgstr "No s'ha pogut crear el fitxer «%s»."
 
 #: bitmap2component/bitmap2cmp_frame.cpp:480
 msgid "Create PostScript File"
-msgstr "Crea un Fitxer Postscript"
+msgstr "Crea un fitxer Postscript"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:515
 msgid "Create Symbol Library"
@@ -1994,7 +1995,7 @@ msgstr "Negatiu"
 #: bitmap2component/bitmap2cmp_panel_base.cpp:159
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:56
 msgid "Output Format"
-msgstr "Format de Sortida"
+msgstr "Format de sortida"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:166
 msgid "Symbol (.kicad_sym file)"
@@ -2064,7 +2065,7 @@ msgstr "Fulla de Dibuix (fitxer .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
 msgid "Export to File..."
-msgstr "Exporta a un Fitxer..."
+msgstr "Exporta a fitxer..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
