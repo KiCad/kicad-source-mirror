@@ -24,6 +24,8 @@
 #include <transline_calculations/transline_calculation_base.h>
 #include <transline_calculations/stripline.h>
 
+#include <utility>
+
 /*
  * This implements the calculations described in:
  *
@@ -31,6 +33,10 @@
  *    Professional Group on Microwave Theory and Techniques, vol. 2, no. 2, pp. 52-57, July 1954
  * [2] S. B. Cohn, "Shielded Coupled-Strip Transmission Line," in IRE Transactions on Microwave Theory and Techniques,
  *    vol. 3, no. 5, pp. 29-38, October 1955
+ * [3] B. C. Wadell, "Transmission Line Design Handbook," Artech House, Norwood, MA, 1991.  Sec. 3.6.3
+ *    "Off-Center Stripline" (Eqs. 3.6.3.21 - 3.6.3.23) gives the image-method plus three-term
+ *    correction for a single strip offset between two ground planes; applied here per mode to the
+ *    Reference [2] coupled-stripline solver.
  */
 
 class COUPLED_STRIPLINE : public TRANSLINE_CALCULATION_BASE
@@ -42,9 +48,9 @@ public:
             TRANSLINE_CALCULATION_BASE( { TCP::SKIN_DEPTH, TCP::Z0_E, TCP::Z0_O, TCP::Z_DIFF, TCP::PHYS_WIDTH,
                                           TCP::FREQUENCY, TCP::PHYS_LEN, TCP::H, TCP::PHYS_S, TCP::T, TCP::EPSILONR,
                                           TCP::MUR, TCP::MURC, TCP::SIGMA, TCP::TAND, TCP::ROUGH, TCP::ANG_L,
-                                          TCP::ATTEN_COND_EVEN, TCP::ATTEN_COND_ODD, TCP::ATTEN_DILECTRIC_EVEN,
-                                          TCP::ATTEN_DILECTRIC_ODD, TCP::DIELECTRIC_MODEL_SEL,
-                                          TCP::EPSILONR_SPEC_FREQ } )
+                                          TCP::STRIPLINE_A, TCP::ATTEN_COND_EVEN, TCP::ATTEN_COND_ODD,
+                                          TCP::ATTEN_DILECTRIC_EVEN, TCP::ATTEN_DILECTRIC_ODD,
+                                          TCP::DIELECTRIC_MODEL_SEL, TCP::EPSILONR_SPEC_FREQ } )
     {
     }
 
@@ -72,6 +78,38 @@ private:
 
     /// Calculates zero-thickness coupled strip impedances
     void calcZeroThicknessCoupledImpedances( double h, double w, double s, double er );
+
+    /// Returns true when the strip plane offset a is effectively at the centre (a = h/2 within
+    /// numerical tolerance).  When a <= 0 is treated as unset and maps to centred.
+    bool isCenteredOffset( double a, double h ) const;
+
+    /// Returns true when the offset a is far enough from each ground plane that the Reference [1]
+    /// finite-thickness fringe formula is well defined on both virtual centred striplines produced
+    /// by the Reference [3] Eq. 3.6.3.22 image split (i.e. t/2 < a < h - t/2).
+    bool isOffsetWithinFiniteThicknessLimits( double a, double h, double t ) const;
+
+    /// Offset-aware wrapper around calcZeroThicknessCoupledImpedances built on Reference [3] Sec.
+    /// 3.6.3 (off-center stripline).  For centred cases it calls the base function once; otherwise
+    /// Eq. 3.6.3.22 combines two virtual centred striplines at plate spacings 2a and 2(h - a) via
+    /// parallel admittance, then Eq. 3.6.3.23 applies the three-term correction that restores the
+    /// image-method result to within ~2 percent of numerical reference.  Wadell derives the
+    /// correction for a single strip; we apply it per even / odd mode, which preserves the
+    /// centred limit (the position factor vanishes at a = h/2) while improving accuracy away from
+    /// it.
+    void calcOffsetZeroThicknessCoupledImpedances( double h, double a, double w, double s, double t, double er );
+
+    /// Applies the Reference [3] Eq. 3.6.3.23 correction to an image-method impedance.  The
+    /// position factor |0.5 - a/h|^2.2 is zero at a = h/2 (centred) and grows with offset; the
+    /// width factor ((t + w) / h)^2.9 scales with strip proximity.  The correction is fit to
+    /// single-ended data with a claimed ~2 percent accuracy for 0.2 < a/h < 0.8 and t/h < 0.2;
+    /// used per mode here with the corresponding mode impedance.
+    double applyOffsetCorrection( double aZImage, double aOffset, double aPlateSpacing, double aWidth,
+                                  double aThickness, double aEr ) const;
+
+    /// Runs the centred finite-thickness pipeline for a single Reference [3] virtual stripline of
+    /// plate spacing aVirtualH.  Returns the (Z0e, Z0o) pair seen at that plate spacing so the
+    /// caller can combine the two halves via Eq. 3.6.3.22.
+    std::pair<double, double> calcOffsetVirtualBranch( double aVirtualH, double w, double s, double t, double er );
 
     /// Calculates even mode Z0
     void calcZ0EvenMode();

@@ -370,6 +370,12 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Messages.Add( _( "Differential Impedance (Zd):" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM, "H", "H", _( "Height of substrate" ), 0.2, true ) );
+        // Zero default keeps the math layer on the centred fast path so existing designs that
+        // never touched 'a' remain bit-identical to the pre-offset behaviour.
+        AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, STRIPLINE_A_PRM, "a", "a",
+                                   _( "Distance from track to closest ground plane "
+                                      "(default: centered)" ),
+                                   0.0, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM, "T", "T", _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, MURC_PRM, "mu rel C",
                                    wxString::Format( wxT( "μ(%s)" ), _( "conductor" ) ),

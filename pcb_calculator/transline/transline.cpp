@@ -193,6 +193,30 @@ void TRANSLINE::checkProperties()
         setErrorLevel( H_T_PRM, TRANSLINE_WARNING );
     }
 
+    // Wadell Sec. 3.6.3 (off-center stripline) claims +/-2 percent accuracy only when the strip
+    // plane sits inside 0.2 < a/h < 0.8 and the strip-thickness ratio t/h stays below 0.2.  Flag
+    // STRIPLINE_A_PRM and T_PRM when we leave that regime so the UI can warn that the offset
+    // correction is extrapolating outside its fit range.
+    if( std::isfinite( m_parameters[STRIPLINE_A_PRM] )
+            && m_parameters[STRIPLINE_A_PRM] > 0
+            && std::isfinite( m_parameters[H_PRM] )
+            && m_parameters[H_PRM] > 0 )
+    {
+        const double aRatio = m_parameters[STRIPLINE_A_PRM] / m_parameters[H_PRM];
+
+        if( aRatio < 0.2 || aRatio > 0.8 )
+            setErrorLevel( STRIPLINE_A_PRM, TRANSLINE_WARNING );
+    }
+
+    if( std::isfinite( m_parameters[T_PRM] )
+            && m_parameters[T_PRM] > 0
+            && std::isfinite( m_parameters[H_PRM] )
+            && m_parameters[H_PRM] > 0
+            && ( m_parameters[T_PRM] / m_parameters[H_PRM] ) > 0.2 )
+    {
+        setErrorLevel( T_PRM, TRANSLINE_WARNING );
+    }
+
     // How can we check ROUGH_PRM ?
 
     if( !std::isfinite( m_parameters[MUR_PRM] ) || m_parameters[MUR_PRM] < 0 )

@@ -24,11 +24,18 @@
  *    Professional Group on Microwave Theory and Techniques, vol. 2, no. 2, pp. 52-57, July 1954
  * [2] S. B. Cohn, "Shielded Coupled-Strip Transmission Line," in IRE Transactions on Microwave Theory and Techniques,
  *    vol. 3, no. 5, pp. 29-38, October 1955
+ * [3] B. C. Wadell, "Transmission Line Design Handbook," Artech House, Norwood, MA, 1991.  Sec. 3.6.3
+ *    "Off-Center Stripline" (Eqs. 3.6.3.21 - 3.6.3.23) gives the image-method plus three-term
+ *    correction for a single strip offset between two ground planes; applied here per mode to the
+ *    Reference [2] coupled-stripline solver.
  */
 
 #include <transline_calculations/coupled_stripline.h>
 #include <transline_calculations/units.h>
 #include <transline_calculations/units_scales.h>
+
+#include <limits>
+#include <utility>
 
 
 namespace TC = TRANSLINE_CALCULATIONS;
@@ -56,9 +63,15 @@ void COUPLED_STRIPLINE::Analyse()
     double       t = GetParameter( TCP::T );
     double       s = GetParameter( TCP::PHYS_S );
     double       h = GetParameter( TCP::H );
+    double       a = GetParameter( TCP::STRIPLINE_A );
     const double er = GetParameter( TCP::EPSILONR );
 
-    calcZeroThicknessCoupledImpedances( h, w, s, er );
+    // A non-positive value means STRIPLINE_A was never written by the UI; default to the centred
+    // case so existing callers keep the exact pre-offset behaviour.
+    if( a <= 0.0 )
+        a = h / 2.0;
+
+    calcOffsetZeroThicknessCoupledImpedances( h, a, w, s, t, er );
 
     // We've got the impedances now for an infinitely thin line
     if( t == 0.0 )
@@ -66,12 +79,53 @@ void COUPLED_STRIPLINE::Analyse()
         SetParameter( TCP::Z0_E, Z0_e_w_h_0_s_h );
         SetParameter( TCP::Z0_O, Z0_o_w_h_0_s_h );
     }
-    else
+    else if( isCenteredOffset( a, h ) )
     {
         calcSingleStripImpedances();
         calcFringeCapacitances( h, t, er );
         calcZ0EvenMode();
         calcZ0OddMode( t, s );
+    }
+    else if( !isOffsetWithinFiniteThicknessLimits( a, h, t ) )
+    {
+        // The Reference [1] finite-thickness fringe correction (Eq. 2) requires t < h on each
+        // virtual plate spacing.  After the Reference [3] Eq. 3.6.3.22 image split the spacings
+        // are 2a and 2(h - a), so the safe range is t/2 < a < h - t/2.  Outside it the fringe
+        // formula divides by zero or takes log of a non-positive, producing NaN.  Surface the
+        // failure as TS_ERROR via the NaN-driven status path rather than returning silently
+        // bogus impedances.
+        const double nan = std::numeric_limits<double>::quiet_NaN();
+        SetParameter( TCP::Z0_E, nan );
+        SetParameter( TCP::Z0_O, nan );
+        SetParameter( TCP::Z_DIFF, nan );
+    }
+    else
+    {
+        // Reference [3] Eq. 3.6.3.22 image-method: combine two virtual centred finite-thickness
+        // striplines at plate spacings 2a and 2(h - a) via parallel admittance.  Each branch runs
+        // the centred-style fringe-capacitance correction internally.  Reference [3] Eq. 3.6.3.23
+        // then applies the three-term correction that recovers ~2 percent agreement with rigorous
+        // numerical solutions; we apply it per mode.  H is swapped around each inner pass because
+        // the helpers read TCP::H directly.
+        const auto [z0e_1, z0o_1] = calcOffsetVirtualBranch( 2.0 * a, w, s, t, er );
+        const auto [z0e_2, z0o_2] = calcOffsetVirtualBranch( 2.0 * ( h - a ), w, s, t, er );
+
+        SetParameter( TCP::H, h );
+
+        const double z0e_image = 2.0 / ( 1.0 / z0e_1 + 1.0 / z0e_2 );
+        const double z0o_image = 2.0 / ( 1.0 / z0o_1 + 1.0 / z0o_2 );
+
+        const double z0e = applyOffsetCorrection( z0e_image, a, h, w, t, er );
+        const double z0o = applyOffsetCorrection( z0o_image, a, h, w, t, er );
+
+        SetParameter( TCP::Z0_E, z0e );
+        SetParameter( TCP::Z0_O, z0o );
+        SetParameter( TCP::Z_DIFF, 2.0 * z0o );
+
+        // Restore the offset zero-thickness impedances in the member variables so downstream
+        // consumers (e.g. diagnostics) see the corrected values rather than the last virtual
+        // branch's output.
+        calcOffsetZeroThicknessCoupledImpedances( h, a, w, s, t, er );
     }
 
     calcLosses();
@@ -320,6 +374,100 @@ void COUPLED_STRIPLINE::calcZeroThicknessCoupledImpedances( const double h, cons
                      * ( EllipticIntegral( k_e_p ).first / EllipticIntegral( k_e ).first );
     Z0_o_w_h_0_s_h = ( TC::ZF0 / ( 4.0 * std::sqrt( er ) ) )
                      * ( EllipticIntegral( k_o_p ).first / EllipticIntegral( k_o ).first );
+}
+
+
+bool COUPLED_STRIPLINE::isCenteredOffset( const double a, const double h ) const
+{
+    // Tight relative tolerance so the centred fast path is taken only when the UI genuinely meant
+    // "centred" and any physically meaningful offset routes through the image-method branch.
+    return std::fabs( a - h / 2.0 ) <= h * 1e-9;
+}
+
+
+bool COUPLED_STRIPLINE::isOffsetWithinFiniteThicknessLimits( const double a, const double h,
+                                                             const double t ) const
+{
+    // Reference [3] splits the asymmetric stripline into two virtual symmetric striplines with
+    // plate spacings 2a and 2(h - a).  The Reference [1] finite-thickness fringe formula
+    // (Eq. 2) needs t < h on each, so the strip plane must sit strictly inside (t/2, h - t/2).
+    // Reject zero and negative t-clearances rather than letting the fringe formula produce NaN.
+    return ( a > 0.5 * t ) && ( a < h - 0.5 * t );
+}
+
+
+std::pair<double, double> COUPLED_STRIPLINE::calcOffsetVirtualBranch( const double aVirtualH, const double w,
+                                                                      const double s, const double t,
+                                                                      const double er )
+{
+    SetParameter( TCP::H, aVirtualH );
+    calcZeroThicknessCoupledImpedances( aVirtualH, w, s, er );
+    calcSingleStripImpedances();
+    calcFringeCapacitances( aVirtualH, t, er );
+    calcZ0EvenMode();
+    calcZ0OddMode( t, s );
+
+    return { GetParameter( TCP::Z0_E ), GetParameter( TCP::Z0_O ) };
+}
+
+
+void COUPLED_STRIPLINE::calcOffsetZeroThicknessCoupledImpedances( const double h, const double a, const double w,
+                                                                  const double s, const double t, const double er )
+{
+    // Centred short-circuit so the default-input path is bit-identical to the pre-offset code.
+    if( isCenteredOffset( a, h ) )
+    {
+        calcZeroThicknessCoupledImpedances( h, w, s, er );
+        return;
+    }
+
+    // Reference [3] Eq. 3.6.3.22 image-method: represent the offset-strip geometry as the parallel
+    // combination of two virtual centred striplines at plate spacings 2a and 2(h - a).  Each
+    // virtual stripline carries half the total capacitance-to-ground per unit length, so the
+    // combined Y = (Y1 + Y2) / 2 collapses to Y_centred at a = h/2 and writes the correct 1/Z
+    // offset elsewhere.
+    calcZeroThicknessCoupledImpedances( 2.0 * a, w, s, er );
+    const double z0e_1 = Z0_e_w_h_0_s_h;
+    const double z0o_1 = Z0_o_w_h_0_s_h;
+
+    calcZeroThicknessCoupledImpedances( 2.0 * ( h - a ), w, s, er );
+    const double z0e_2 = Z0_e_w_h_0_s_h;
+    const double z0o_2 = Z0_o_w_h_0_s_h;
+
+    const double z0e_image = 2.0 / ( 1.0 / z0e_1 + 1.0 / z0e_2 );
+    const double z0o_image = 2.0 / ( 1.0 / z0o_1 + 1.0 / z0o_2 );
+
+    // Reference [3] Eq. 3.6.3.23 three-term correction.  Zero thickness (t = 0) still carries the
+    // (t + w)^2.9 width factor so the correction is driven purely by strip width when no
+    // finite-thickness branch is active.  Reduces to zero at a = h/2 so the centred call above
+    // stays bit-exact.
+    Z0_e_w_h_0_s_h = applyOffsetCorrection( z0e_image, a, h, w, t, er );
+    Z0_o_w_h_0_s_h = applyOffsetCorrection( z0o_image, a, h, w, t, er );
+}
+
+
+double COUPLED_STRIPLINE::applyOffsetCorrection( const double aZImage, const double aOffset,
+                                                 const double aPlateSpacing, const double aWidth,
+                                                 const double aThickness, const double aEr ) const
+{
+    // Reference [3] Eq. 3.6.3.23:
+    //   delta_Z_air = (0.26 * pi / 8) * Z_air^2 * |0.5 - h1 / h|^2.2 * ((t + w) / h)^2.9
+    //   Z = (1 / sqrt(er)) * (Z_air - delta_Z_air)
+    //
+    // Wadell's derivation is in air; express in dielectric space via Z_air = sqrt(er) * Z.
+    // Substituting and factoring out Z_image:
+    //   Z_corrected = Z_image * (1 - (0.26 * pi / 8) * sqrt(er) * Z_image * |0.5 - a/h|^2.2
+    //                                 * ((t + w) / h)^2.9)
+    //
+    // The position factor uses a/h (strip centreline as a fraction of total stack), so |0.5 - a/h|
+    // is the offset fraction from the centre.  Absolute value handles strips above or below centre
+    // symmetrically; the 2.2 exponent ensures a smooth zero at a = h/2.
+    const double position = std::fabs( 0.5 - aOffset / aPlateSpacing );
+    const double positionFactor = std::pow( position, 2.2 );
+    const double widthFactor = std::pow( ( aThickness + aWidth ) / aPlateSpacing, 2.9 );
+    const double correction = ( 0.26 * M_PI / 8.0 ) * std::sqrt( aEr ) * aZImage * positionFactor * widthFactor;
+
+    return aZImage * ( 1.0 - correction );
 }
 
 

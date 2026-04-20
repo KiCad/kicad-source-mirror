@@ -109,6 +109,7 @@ void C_STRIPLINE::getProperties()
     m_calc.SetParameter( TRANSLINE_PARAMETERS::PHYS_LEN, m_parameters[PHYS_LEN_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::PHYS_S, m_parameters[PHYS_S_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::H, m_parameters[H_PRM] );
+    m_calc.SetParameter( TRANSLINE_PARAMETERS::STRIPLINE_A, m_parameters[STRIPLINE_A_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::T, m_parameters[T_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, m_parameters[FREQUENCY_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::MUR, m_parameters[MUR_PRM] );
