@@ -368,6 +368,18 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
 
 const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd )
 {
+    // Degenerate-input guard
+    constexpr double kCoincidentTolSq = 10.0;
+
+    double smSq = ( aStart - aMid ).SquaredEuclideanNorm();
+    double meSq = ( aMid - aEnd ).SquaredEuclideanNorm();
+
+    if( smSq < kCoincidentTolSq && meSq < kCoincidentTolSq )
+    {
+        return VECTOR2D( ( aStart.x + aMid.x + aEnd.x ) / 3.0,
+                         ( aStart.y + aMid.y + aEnd.y ) / 3.0 );
+    }
+
     VECTOR2D center;
 
     double yDelta_21 = aMid.y - aStart.y;
