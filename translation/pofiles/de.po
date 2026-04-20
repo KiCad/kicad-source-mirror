@@ -30,15 +30,15 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-17 15:22+0300\n"
-"PO-Revision-Date: 2026-04-09 11:09+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2026-04-20 19:33+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -33703,12 +33703,12 @@ msgstr "Anzahl vertikal"
 #: pcbnew/dialogs/dialog_create_array.cpp:422
 #, c-format
 msgid "horizontal delta of zero with %ld objects"
-msgstr ""
+msgstr "horizontales Delta von Null bei %ld Objekten"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:428
 #, c-format
 msgid "vertical delta of zero with %ld objects"
-msgstr ""
+msgstr "vertikales Delta von Null bei %ld Objekten"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:437
 msgid "stagger"
@@ -33721,7 +33721,7 @@ msgstr "Anzahl Löcher"
 #: pcbnew/dialogs/dialog_create_array.cpp:500
 #, c-format
 msgid "angular delta of zero with %ld objects"
-msgstr ""
+msgstr "Winkeldelta von Null bei %ld Objekten"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:546
 msgid "Bad parameters"
