@@ -204,6 +204,31 @@ BOOST_AUTO_TEST_CASE( OffsetMonotonicInA )
 }
 
 
+// Z_comm is by definition Z0e / 2 and the coupling coefficient k_c must equal the algebraic
+// (Z0e - Z0o) / (Z0e + Z0o).  Both get dropped into the result map alongside Z0e / Z0o so the
+// UI can read them back without re-deriving; this test pins the identity so future refactors
+// cannot silently desync the cached values from Z0e / Z0o.
+BOOST_AUTO_TEST_CASE( ZcommAndKcDerivedFromZ0Modes )
+{
+    const Geometry g = Geometry1();
+    COUPLED_STRIPLINE calc = MakeCalc( g, -1.0 );
+    calc.Analyse();
+
+    const double z0e = calc.GetParameter( TCP::Z0_E );
+    const double z0o = calc.GetParameter( TCP::Z0_O );
+    const double zcomm = calc.GetParameter( TCP::Z_COMM );
+    const double kc = calc.GetParameter( TCP::COUPLING_K );
+
+    BOOST_TEST( zcomm == 0.5 * z0e, boost::test_tools::tolerance( 1e-12 ) );
+    BOOST_TEST( kc == ( z0e - z0o ) / ( z0e + z0o ), boost::test_tools::tolerance( 1e-12 ) );
+    BOOST_TEST( kc > 0.0 );
+    BOOST_TEST( kc < 1.0 );
+
+    BOOST_TEST_MESSAGE( "Geometry1 centred: Z0e=" << z0e << " Z0o=" << z0o
+                        << " Zcomm=" << zcomm << " k_c=" << kc );
+}
+
+
 // Synthesis must keep working against the centred model.  Synthesize(FIX_SPACING) drives Z0_O to
 // target, so we pick Z0_O = Zdiff_target/2, solve for W, re-Analyse, and check Zdiff.
 BOOST_AUTO_TEST_CASE( SynthesisRoundTripCentered )
@@ -241,6 +266,86 @@ BOOST_AUTO_TEST_CASE( OffsetBelowFiniteThicknessLimitYieldsError )
     auto& results = calc.GetAnalysisResults();
     BOOST_TEST( ( results[TCP::Z0_E].second == TRANSLINE_STATUS::TS_ERROR ) );
     BOOST_TEST( ( results[TCP::Z0_O].second == TRANSLINE_STATUS::TS_ERROR ) );
+}
+
+
+// Synthesize from a differential/common-mode target pair.  With FROM_ZDIFF_ZCOMM the math
+// layer translates (Z_DIFF, Z_COMM) into (Z0_E, Z0_O) and runs the joint 2-D solver, so both
+// the analysed Z_DIFF and Z_COMM must land on the requested targets.
+BOOST_AUTO_TEST_CASE( SynthesisFromZdiffZcomm )
+{
+    const Geometry g = Geometry1();
+    COUPLED_STRIPLINE calc = MakeCalc( g, -1.0 );
+
+    const double zdiffTarget = 92.0;
+    const double zcommTarget = 34.0;
+    calc.SetParameter( TCP::Z_DIFF, zdiffTarget );
+    calc.SetParameter( TCP::Z_COMM, zcommTarget );
+
+    const bool ok = calc.Synthesize( SYNTHESIZE_OPTS::FROM_ZDIFF_ZCOMM );
+    BOOST_REQUIRE( ok );
+
+    calc.Analyse();
+    const double zdiff = calc.GetParameter( TCP::Z_DIFF );
+    const double zcomm = calc.GetParameter( TCP::Z_COMM );
+    BOOST_TEST( zdiff == zdiffTarget, boost::test_tools::tolerance( 0.01 ) );
+    BOOST_TEST( zcomm == zcommTarget, boost::test_tools::tolerance( 0.01 ) );
+}
+
+
+// 1-D synthesis modes (FIX_WIDTH / FIX_SPACING) only optimise Z0_O so they cannot honour a
+// Z_COMM target.  Verify that requesting FROM_ZDIFF_ZCOMM via those modes is rejected, and
+// that supplying Z_DIFF / Z_COMM under a 1-D mode does NOT silently override Z0_E / Z0_O.
+BOOST_AUTO_TEST_CASE( ZdiffZcommIgnoredOutsideOptIn )
+{
+    const Geometry g = Geometry1();
+    COUPLED_STRIPLINE calc = MakeCalc( g, -1.0 );
+
+    // Stale Z_DIFF / Z_COMM in the parameter map (e.g. left over from a prior Analyse).
+    calc.SetParameter( TCP::Z_DIFF, 200.0 );
+    calc.SetParameter( TCP::Z_COMM, 5.0 );
+
+    // Caller-supplied Z0_O target via FIX_SPACING must be respected, not overwritten.
+    const double z0oTarget = 43.59;
+    calc.SetParameter( TCP::Z0_O, z0oTarget );
+
+    BOOST_REQUIRE( calc.Synthesize( SYNTHESIZE_OPTS::FIX_SPACING ) );
+
+    calc.Analyse();
+    const double z0o = calc.GetParameter( TCP::Z0_O );
+    BOOST_TEST( z0o == z0oTarget, boost::test_tools::tolerance( 0.01 ) );
+}
+
+
+// Stale-target guard.  Analyse() populates Z_DIFF and Z_COMM as outputs; a subsequent
+// Synthesize() call with new Z0_E / Z0_O targets must use the new targets, not silently
+// re-translate the stale Analyse outputs back into Z0_E / Z0_O.
+BOOST_AUTO_TEST_CASE( SynthesisDoesNotReuseStaleAnalyseOutputs )
+{
+    const Geometry g = Geometry1();
+    COUPLED_STRIPLINE calc = MakeCalc( g, -1.0 );
+
+    calc.Analyse();
+    const double staleZdiff = calc.GetParameter( TCP::Z_DIFF );
+    const double staleZcomm = calc.GetParameter( TCP::Z_COMM );
+    BOOST_TEST( staleZdiff > 0.0 );
+    BOOST_TEST( staleZcomm > 0.0 );
+
+    // Pick fresh mode targets that are clearly distinct from the analysed snapshot.
+    const double z0eTarget = 70.0;
+    const double z0oTarget = 35.0;
+    calc.SetParameter( TCP::Z0_E, z0eTarget );
+    calc.SetParameter( TCP::Z0_O, z0oTarget );
+
+    // Default mode means the joint 2-D solver; Z_DIFF / Z_COMM in the parameter map are
+    // residual outputs from Analyse() and must not be consumed as targets.
+    BOOST_REQUIRE( calc.Synthesize( SYNTHESIZE_OPTS::DEFAULT ) );
+
+    calc.Analyse();
+    const double z0e = calc.GetParameter( TCP::Z0_E );
+    const double z0o = calc.GetParameter( TCP::Z0_O );
+    BOOST_TEST( z0e == z0eTarget, boost::test_tools::tolerance( 0.02 ) );
+    BOOST_TEST( z0o == z0oTarget, boost::test_tools::tolerance( 0.02 ) );
 }
 
 

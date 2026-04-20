@@ -131,6 +131,19 @@ void COUPLED_STRIPLINE::Analyse()
     calcLosses();
     calcDielectrics();
 
+    // Expose the two derived coupled-line figures-of-merit.  Z_comm = Z0e / 2 follows from
+    // Pozar "Microwave Engineering" 4th ed. Sec. 7.6 Eqs. 7.68-7.69 (two Z0e lines in parallel
+    // at equal voltage); k_c = (Z0e - Z0o) / (Z0e + Z0o) is Pozar Eq. 7.81.
+    const double z0e = GetParameter( TCP::Z0_E );
+    const double z0o = GetParameter( TCP::Z0_O );
+
+    SetParameter( TCP::Z_COMM, 0.5 * z0e );
+
+    if( ( z0e + z0o ) > 0.0 )
+        SetParameter( TCP::COUPLING_K, ( z0e - z0o ) / ( z0e + z0o ) );
+    else
+        SetParameter( TCP::COUPLING_K, 0.0 );
+
     SetParameter( TCP::EPSILONR, rawEpsR );
     SetParameter( TCP::TAND, rawTanD );
 }
@@ -138,6 +151,22 @@ void COUPLED_STRIPLINE::Analyse()
 
 bool COUPLED_STRIPLINE::Synthesize( const SYNTHESIZE_OPTS aOpts )
 {
+    // Opt-in (Z_diff, Z_comm) target translation.  The 1-D fix-W / fix-S paths only optimise
+    // Z0_O so they cannot honour Z_comm; reject the option there.  When selected, translate
+    // via Z_diff = 2 * Z0_O and Z_comm = Z0_E / 2 (Pozar "Microwave Engineering" 4th ed.
+    // Sec. 7.6 Eqs. 7.68-7.71) and fall through to the joint 2-D solver below.
+    if( aOpts == SYNTHESIZE_OPTS::FROM_ZDIFF_ZCOMM )
+    {
+        const double zDiffTarget = GetParameter( TCP::Z_DIFF );
+        const double zCommTarget = GetParameter( TCP::Z_COMM );
+
+        if( !( zDiffTarget > 0.0 ) || !( zCommTarget > 0.0 ) )
+            return false;
+
+        SetParameter( TCP::Z0_O, 0.5 * zDiffTarget );
+        SetParameter( TCP::Z0_E, 2.0 * zCommTarget );
+    }
+
     if( aOpts == SYNTHESIZE_OPTS::FIX_WIDTH )
         return MinimiseZ0Error1D( TCP::PHYS_S, TCP::Z0_O, false );
 
@@ -276,77 +305,66 @@ bool COUPLED_STRIPLINE::Synthesize( const SYNTHESIZE_OPTS aOpts )
 }
 
 
+void COUPLED_STRIPLINE::publishResults( const ResultSink aSink, const TRANSLINE_STATUS aImpedanceFailure,
+                                        const TRANSLINE_STATUS aGeometryFailure )
+{
+    auto write = [this, aSink]( const TRANSLINE_PARAMETERS aParam, const double aValue,
+                                const TRANSLINE_STATUS aStatus )
+    {
+        if( aSink == ResultSink::ANALYSIS )
+            SetAnalysisResult( aParam, aValue, aStatus );
+        else
+            SetSynthesisResult( aParam, aValue, aStatus );
+    };
+
+    auto writeOk = [&write]( const TRANSLINE_PARAMETERS aParam, const double aValue )
+    {
+        write( aParam, aValue, TRANSLINE_STATUS::OK );
+    };
+
+    auto writeChecked = [&write]( const TRANSLINE_PARAMETERS aParam, const double aValue, const bool aPositive,
+                                  const TRANSLINE_STATUS aFailureStatus )
+    {
+        const bool invalid = !std::isfinite( aValue ) || ( aPositive ? aValue <= 0.0 : aValue < 0.0 );
+        write( aParam, aValue, invalid ? aFailureStatus : TRANSLINE_STATUS::OK );
+    };
+
+    writeOk( TCP::EPSILON_EFF_EVEN, e_eff_e );
+    writeOk( TCP::EPSILON_EFF_ODD, e_eff_o );
+    writeOk( TCP::UNIT_PROP_DELAY_EVEN, unit_prop_delay_e );
+    writeOk( TCP::UNIT_PROP_DELAY_ODD, unit_prop_delay_o );
+    writeOk( TCP::SKIN_DEPTH, GetParameter( TCP::SKIN_DEPTH ) );
+    writeOk( TCP::ATTEN_COND_EVEN, GetParameter( TCP::ATTEN_COND_EVEN ) );
+    writeOk( TCP::ATTEN_COND_ODD, GetParameter( TCP::ATTEN_COND_ODD ) );
+    writeOk( TCP::ATTEN_DILECTRIC_EVEN, GetParameter( TCP::ATTEN_DILECTRIC_EVEN ) );
+    writeOk( TCP::ATTEN_DILECTRIC_ODD, GetParameter( TCP::ATTEN_DILECTRIC_ODD ) );
+
+    writeChecked( TCP::Z0_E, GetParameter( TCP::Z0_E ), true, aImpedanceFailure );
+    writeChecked( TCP::Z0_O, GetParameter( TCP::Z0_O ), true, aImpedanceFailure );
+    writeChecked( TCP::Z_DIFF, GetParameter( TCP::Z_DIFF ), true, aImpedanceFailure );
+    writeOk( TCP::Z_COMM, GetParameter( TCP::Z_COMM ) );
+    writeOk( TCP::COUPLING_K, GetParameter( TCP::COUPLING_K ) );
+    writeChecked( TCP::ANG_L, ang_l, false, aImpedanceFailure );
+    writeChecked( TCP::PHYS_WIDTH, GetParameter( TCP::PHYS_WIDTH ), true, aGeometryFailure );
+    writeChecked( TCP::PHYS_LEN, GetParameter( TCP::PHYS_LEN ), false, aGeometryFailure );
+    writeChecked( TCP::PHYS_S, GetParameter( TCP::PHYS_S ), true, aGeometryFailure );
+}
+
+
 void COUPLED_STRIPLINE::SetAnalysisResults()
 {
-    SetAnalysisResult( TCP::EPSILON_EFF_EVEN, e_eff_e );
-    SetAnalysisResult( TCP::EPSILON_EFF_ODD, e_eff_o );
-    SetAnalysisResult( TCP::UNIT_PROP_DELAY_EVEN, unit_prop_delay_e );
-    SetAnalysisResult( TCP::UNIT_PROP_DELAY_ODD, unit_prop_delay_o );
-    SetAnalysisResult( TCP::SKIN_DEPTH, GetParameter( TCP::SKIN_DEPTH ) );
-    SetAnalysisResult( TCP::ATTEN_COND_EVEN, GetParameter( TCP::ATTEN_COND_EVEN ) );
-    SetAnalysisResult( TCP::ATTEN_COND_ODD, GetParameter( TCP::ATTEN_COND_ODD ) );
-    SetAnalysisResult( TCP::ATTEN_DILECTRIC_EVEN, GetParameter( TCP::ATTEN_DILECTRIC_EVEN ) );
-    SetAnalysisResult( TCP::ATTEN_DILECTRIC_ODD, GetParameter( TCP::ATTEN_DILECTRIC_ODD ) );
-
-    const double Z0_E = GetParameter( TCP::Z0_E );
-    const double Z0_O = GetParameter( TCP::Z0_O );
-    const double Z_DIFF = GetParameter( TCP::Z_DIFF );
-    const double W = GetParameter( TCP::PHYS_WIDTH );
-    const double L = GetParameter( TCP::PHYS_LEN );
-    const double S = GetParameter( TCP::PHYS_S );
-
-    const bool Z0_E_invalid = !std::isfinite( Z0_E ) || Z0_E <= 0;
-    const bool Z0_O_invalid = !std::isfinite( Z0_O ) || Z0_O <= 0;
-    const bool Z_DIFF_invalid = !std::isfinite( Z_DIFF ) || Z_DIFF <= 0;
-    const bool ANG_L_invalid = !std::isfinite( ang_l ) || ang_l < 0;
-    const bool W_invalid = !std::isfinite( W ) || W <= 0;
-    const bool L_invalid = !std::isfinite( L ) || L < 0;
-    const bool S_invalid = !std::isfinite( S ) || S <= 0;
-
-    SetAnalysisResult( TCP::Z0_E, Z0_E, Z0_E_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::Z0_O, Z0_O, Z0_O_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::Z_DIFF, Z_DIFF, Z_DIFF_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::ANG_L, ang_l, ANG_L_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::PHYS_WIDTH, W, W_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::PHYS_LEN, L, L_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::PHYS_S, S, S_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
+    // Analysis treats invalid mode impedances as hard errors and invalid geometry as a warning,
+    // since the user supplied geometry directly and the math layer simply could not produce a
+    // physically meaningful Z out of it.
+    publishResults( ResultSink::ANALYSIS, TRANSLINE_STATUS::TS_ERROR, TRANSLINE_STATUS::WARNING );
 }
 
 
 void COUPLED_STRIPLINE::SetSynthesisResults()
 {
-    SetSynthesisResult( TCP::EPSILON_EFF_EVEN, e_eff_e );
-    SetSynthesisResult( TCP::EPSILON_EFF_ODD, e_eff_o );
-    SetSynthesisResult( TCP::UNIT_PROP_DELAY_EVEN, unit_prop_delay_e );
-    SetSynthesisResult( TCP::UNIT_PROP_DELAY_ODD, unit_prop_delay_o );
-    SetSynthesisResult( TCP::SKIN_DEPTH, GetParameter( TCP::SKIN_DEPTH ) );
-    SetSynthesisResult( TCP::ATTEN_COND_EVEN, GetParameter( TCP::ATTEN_COND_EVEN ) );
-    SetSynthesisResult( TCP::ATTEN_COND_ODD, GetParameter( TCP::ATTEN_COND_ODD ) );
-    SetSynthesisResult( TCP::ATTEN_DILECTRIC_EVEN, GetParameter( TCP::ATTEN_DILECTRIC_EVEN ) );
-    SetSynthesisResult( TCP::ATTEN_DILECTRIC_ODD, GetParameter( TCP::ATTEN_DILECTRIC_ODD ) );
-
-    const double Z0_E = GetParameter( TCP::Z0_E );
-    const double Z0_O = GetParameter( TCP::Z0_O );
-    const double Z_DIFF = GetParameter( TCP::Z_DIFF );
-    const double W = GetParameter( TCP::PHYS_WIDTH );
-    const double L = GetParameter( TCP::PHYS_LEN );
-    const double S = GetParameter( TCP::PHYS_S );
-
-    const bool Z0_E_invalid = !std::isfinite( Z0_E ) || Z0_E <= 0;
-    const bool Z0_O_invalid = !std::isfinite( Z0_O ) || Z0_O <= 0;
-    const bool Z_DIFF_invalid = !std::isfinite( Z_DIFF ) || Z_DIFF <= 0;
-    const bool ANG_L_invalid = !std::isfinite( ang_l ) || ang_l < 0;
-    const bool W_invalid = !std::isfinite( W ) || W <= 0;
-    const bool L_invalid = !std::isfinite( L ) || L < 0;
-    const bool S_invalid = !std::isfinite( S ) || S <= 0;
-
-    SetSynthesisResult( TCP::Z0_E, Z0_E, Z0_E_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    SetSynthesisResult( TCP::Z0_O, Z0_O, Z0_O_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    SetSynthesisResult( TCP::Z_DIFF, Z_DIFF, Z_DIFF_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    SetSynthesisResult( TCP::ANG_L, ang_l, ANG_L_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    SetSynthesisResult( TCP::PHYS_WIDTH, W, W_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
-    SetSynthesisResult( TCP::PHYS_LEN, L, L_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
-    SetSynthesisResult( TCP::PHYS_S, S, S_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
+    // Synthesis flips the severity: geometry is the solver output so a non-finite W / L / S is
+    // a hard error, while the user-supplied target impedances are demoted to warnings.
+    publishResults( ResultSink::SYNTHESIS, TRANSLINE_STATUS::WARNING, TRANSLINE_STATUS::TS_ERROR );
 }
 
 

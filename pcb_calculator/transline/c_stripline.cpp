@@ -61,6 +61,8 @@ void C_STRIPLINE::showAnalyze()
     setResult( 3, results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY_ODD].first, "ps/cm" );
     setResult( 4, results[TRANSLINE_PARAMETERS::SKIN_DEPTH].first / UNIT_MICRON, "µm" );
     setResult( 5, results[TRANSLINE_PARAMETERS::Z_DIFF].first, "Ω" );
+    setResult( 6, results[TRANSLINE_PARAMETERS::Z_COMM].first, "Ω" );
+    setResult( 7, results[TRANSLINE_PARAMETERS::COUPLING_K].first, "" );
 
     setErrorLevel( Z0_E_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::Z0_E].second ) );
     setErrorLevel( Z0_O_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::Z0_O].second ) );
@@ -86,6 +88,8 @@ void C_STRIPLINE::showSynthesize()
     setResult( 3, results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY_ODD].first, "ps/cm" );
     setResult( 4, results[TRANSLINE_PARAMETERS::SKIN_DEPTH].first / UNIT_MICRON, "µm" );
     setResult( 5, results[TRANSLINE_PARAMETERS::Z_DIFF].first, "Ω" );
+    setResult( 6, results[TRANSLINE_PARAMETERS::Z_COMM].first, "Ω" );
+    setResult( 7, results[TRANSLINE_PARAMETERS::COUPLING_K].first, "" );
 
     setErrorLevel( Z0_E_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::Z0_E].second ) );
     setErrorLevel( Z0_O_PRM, convertParameterStatusCode( results[TRANSLINE_PARAMETERS::Z0_O].second ) );
@@ -100,6 +104,9 @@ void C_STRIPLINE::getProperties()
 {
     TRANSLINE::getProperties();
 
+    // TODO expose Z_DIFF and Z_COMM as alternative synthesis inputs once the panel framework
+    // gains a toggle between (Z0_E, Z0_O) and (Z_DIFF, Z_COMM) target modes.  The math layer
+    // honours that mode when Synthesize() is called with SYNTHESIZE_OPTS::FROM_ZDIFF_ZCOMM.
     m_calc.SetParameter( TRANSLINE_PARAMETERS::Z0_E, m_parameters[Z0_E_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::Z0_O, m_parameters[Z0_O_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, m_parameters[EPSILONR_PRM] );

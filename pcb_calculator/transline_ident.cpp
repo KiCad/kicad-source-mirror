@@ -368,6 +368,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         m_Messages.Add( _( "Unit propagation delay (odd):" ) );
         m_Messages.Add( _( "Skin depth:" ) );
         m_Messages.Add( _( "Differential Impedance (Zd):" ) );
+        m_Messages.Add( _( "Common-mode Impedance (Zcomm):" ) );
+        m_Messages.Add( _( "Coupling coefficient (kc):" ) );
 
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM, "H", "H", _( "Height of substrate" ), 0.2, true ) );
         // Zero default keeps the math layer on the centred fast path so existing designs that

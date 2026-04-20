@@ -45,11 +45,11 @@ class COUPLED_STRIPLINE : public TRANSLINE_CALCULATION_BASE
 
 public:
     COUPLED_STRIPLINE() :
-            TRANSLINE_CALCULATION_BASE( { TCP::SKIN_DEPTH, TCP::Z0_E, TCP::Z0_O, TCP::Z_DIFF, TCP::PHYS_WIDTH,
-                                          TCP::FREQUENCY, TCP::PHYS_LEN, TCP::H, TCP::PHYS_S, TCP::T, TCP::EPSILONR,
-                                          TCP::MUR, TCP::MURC, TCP::SIGMA, TCP::TAND, TCP::ROUGH, TCP::ANG_L,
-                                          TCP::STRIPLINE_A, TCP::ATTEN_COND_EVEN, TCP::ATTEN_COND_ODD,
-                                          TCP::ATTEN_DILECTRIC_EVEN, TCP::ATTEN_DILECTRIC_ODD,
+            TRANSLINE_CALCULATION_BASE( { TCP::SKIN_DEPTH, TCP::Z0_E, TCP::Z0_O, TCP::Z_DIFF, TCP::Z_COMM,
+                                          TCP::COUPLING_K, TCP::PHYS_WIDTH, TCP::FREQUENCY, TCP::PHYS_LEN, TCP::H,
+                                          TCP::PHYS_S, TCP::T, TCP::EPSILONR, TCP::MUR, TCP::MURC, TCP::SIGMA,
+                                          TCP::TAND, TCP::ROUGH, TCP::ANG_L, TCP::STRIPLINE_A, TCP::ATTEN_COND_EVEN,
+                                          TCP::ATTEN_COND_ODD, TCP::ATTEN_DILECTRIC_EVEN, TCP::ATTEN_DILECTRIC_ODD,
                                           TCP::DIELECTRIC_MODEL_SEL, TCP::EPSILONR_SPEC_FREQ } )
     {
     }
@@ -66,6 +66,18 @@ private:
 
     /// Sets the output values and status following synthesis
     void SetSynthesisResults() override;
+
+    /// Identifies which result map publishResults() should populate.
+    enum class ResultSink
+    {
+        ANALYSIS,
+        SYNTHESIS
+    };
+
+    /// Shared body of SetAnalysisResults / SetSynthesisResults.  The status-severity arguments
+    /// flip between the two callers so that bad mode impedances are an error during analysis but
+    /// only a warning during synthesis (and vice versa for geometry).
+    void publishResults( ResultSink aSink, TRANSLINE_STATUS aImpedanceFailure, TRANSLINE_STATUS aGeometryFailure );
 
     /// Calculates the impedance of a finite-width single strip
     double calcZ0SymmetricStripline();

@@ -77,6 +77,16 @@ enum class TRANSLINE_PARAMETERS : int
     ATTEN_DILECTRIC_ODD,  // The odd mode attenuation of the dilectric
     Z_DIFF,               // The differential impedance
 
+    // Common-mode characteristic impedance for a symmetric coupled line, Z_comm = Z0e / 2.
+    // The two strips driven at equal potential present Z0e to ground in parallel.  Derived
+    // from Pozar, "Microwave Engineering" 4th ed., Sec. 7.6 Eqs. 7.68-7.69.
+    Z_COMM,
+
+    // Coupling coefficient k_c = (Z0e - Z0o) / (Z0e + Z0o).  Dimensionless, bounded in
+    // [0, 1) for physically realisable passive geometries.  Pozar, "Microwave Engineering"
+    // 4th ed., Sec. 7.6 Eq. 7.81 (voltage coupling coefficient C).
+    COUPLING_K,
+
     // Coplanar waveguide back-metal flag.  A value of 0.0 means ungrounded CPW; a value of 1.0
     // means grounded (CBCPW).  Exposed as a parameter rather than a C++ member so a single
     // COPLANAR class can drive both UI entry points without ad-hoc subclassing.
@@ -93,9 +103,12 @@ enum class TRANSLINE_PARAMETERS : int
 /// Options for specifying synthesis inputs, targets, or strategies
 enum class SYNTHESIZE_OPTS
 {
-    DEFAULT,    // Use the default synthesis options for the calculation
-    FIX_WIDTH,  // Fixes the width of a differential pair
-    FIX_SPACING // Fixes the spacing of a differential pair
+    DEFAULT,           // Use the default synthesis options for the calculation
+    FIX_WIDTH,         // Fixes the width of a differential pair
+    FIX_SPACING,       // Fixes the spacing of a differential pair
+    FROM_ZDIFF_ZCOMM   // Read Z_DIFF / Z_COMM as the design target instead of Z0_E / Z0_O.
+                       // Translates to (Z0_E, Z0_O) and runs the DEFAULT 2-D solver.  Only
+                       // honoured by calculators that can jointly optimise both modes.
 };
 
 
