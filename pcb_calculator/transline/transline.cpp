@@ -182,6 +182,17 @@ void TRANSLINE::checkProperties()
     if( !std::isfinite( m_parameters[H_T_PRM] ) || m_parameters[H_T_PRM] <= 0 )
         setErrorLevel( H_T_PRM, TRANSLINE_WARNING );
 
+    // March (1981) cover correction breaks down when the air gap is smaller than
+    // roughly one conductor thickness plus 10 percent of the substrate height.
+    if( std::isfinite( m_parameters[H_T_PRM] )
+            && m_parameters[H_T_PRM] > 0
+            && std::isfinite( m_parameters[H_PRM] )
+            && m_parameters[H_PRM] > 0
+            && m_parameters[H_T_PRM] < ( m_parameters[T_PRM] + 0.1 * m_parameters[H_PRM] ) )
+    {
+        setErrorLevel( H_T_PRM, TRANSLINE_WARNING );
+    }
+
     // How can we check ROUGH_PRM ?
 
     if( !std::isfinite( m_parameters[MUR_PRM] ) || m_parameters[MUR_PRM] < 0 )

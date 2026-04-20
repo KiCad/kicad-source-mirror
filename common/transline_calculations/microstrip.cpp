@@ -209,6 +209,9 @@ double MICROSTRIP::Z0_homogeneous( double u )
 
 double MICROSTRIP::delta_Z0_cover( double u, double h2h )
 {
+    // S. March, "Microstrip Packaging: Watch the Last Step," Microwaves, vol. 20, no. 12,
+    // pp. 83-94, Dec. 1981.  P and Q are empirical fits to the Z0 reduction produced by a
+    // parallel top ground plane at normalised air gap h2h = (cover_height - h) / h.
     const double h2hp1 = 1.0 + h2h;
     const double P = 270.0 * ( 1.0 - tanh( 1.192 + 0.706 * sqrt( h2hp1 ) - 1.389 / h2hp1 ) );
     const double Q = 1.0109 - atanh( ( 0.012 * u + 0.177 * u * u - 0.027 * u * u * u ) / ( h2hp1 * h2hp1 ) );
@@ -229,6 +232,9 @@ double MICROSTRIP::filling_factor( double u, double e_r )
 
 double MICROSTRIP::delta_q_cover( double h2h )
 {
+    // S. March, "Microstrip Packaging: Watch the Last Step," Microwaves, vol. 20, no. 12,
+    // pp. 83-94, Dec. 1981.  Reduction to the filling factor q caused by the cover; the
+    // tanh form tracks the Z0 correction above and collapses to unity as the cover retreats.
     return tanh( 1.043 + 0.121 * h2h - 1.164 / h2h );
 }
 
@@ -350,7 +356,7 @@ void MICROSTRIP::microstrip_Z0()
 
     /* characteristic impedance, corrected for thickness, cover */
     /*   and non-homogeneous material */
-    SetParameter( TCP::Z0, Z0_h_r / sqrt( e_r_eff_t ) );
+    SetParameter( TCP::Z0, ( Z0_h_r - delta_Z0_cover( u, h2h ) ) / sqrt( e_r_eff_t ) );
 
     w_eff = u * GetParameter( TCP::H );
     er_eff_0 = e_r_eff;

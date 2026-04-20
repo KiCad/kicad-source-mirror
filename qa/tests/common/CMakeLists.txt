@@ -94,6 +94,7 @@ set( QA_COMMON_SRCS
     transline_calculations/test_djordjevic_sarkar_integration.cpp
     transline_calculations/test_coupled_microstrip.cpp
     transline_calculations/test_coupled_stripline.cpp
+    transline_calculations/test_microstrip_cover.cpp
     transline_calculations/test_rectwaveguide.cpp
     transline_calculations/test_transline_roundtrip.cpp
     transline_calculations/test_twistedpair.cpp
