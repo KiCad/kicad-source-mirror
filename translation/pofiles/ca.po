@@ -6,15 +6,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-17 15:22+0300\n"
-"PO-Revision-Date: 2026-03-19 17:29+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-04-20 09:10+0000\n"
+"Last-Translator: Rafael Serrano <rsr.private@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v9/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -30,7 +30,7 @@ msgstr ""
 #: common/dialogs/panel_embedded_files.cpp:381
 #: common/widgets/grid_text_button_helpers.cpp:375
 msgid "All Files"
-msgstr "Tots els Fitxers"
+msgstr "Tots els fitxers"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:334
 msgid "Build board outline"
@@ -69,12 +69,12 @@ msgstr "Crea zones"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:870
 msgid "Build Tech layers"
-msgstr "Construeix Capes Tècniques"
+msgstr "Construeix capes tècniques"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:947
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "Construeix Capa Tècnica %d"
+msgstr "Construeix capa tècnica %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1208
 msgid "Simplifying copper layer polygons"
@@ -1534,7 +1534,7 @@ msgstr "No s'ha pogut crear el fitxer «%s»."
 
 #: bitmap2component/bitmap2cmp_frame.cpp:476
 msgid "Create PostScript File"
-msgstr "Crea un Fitxer Postscript"
+msgstr "Crea un fitxer Postscript"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:509
 msgid "Create Symbol Library"
@@ -1861,7 +1861,7 @@ msgstr "Negatiu"
 #: bitmap2component/bitmap2cmp_panel_base.cpp:159
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:44
 msgid "Output Format"
-msgstr "Format de Sortida"
+msgstr "Format de sortida"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:166
 msgid "Symbol (.kicad_sym file)"
@@ -1930,7 +1930,7 @@ msgstr "Fulla de Dibuix (fitxer .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
 msgid "Export to File..."
-msgstr "Exporta a un Fitxer..."
+msgstr "Exporta a fitxer..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
