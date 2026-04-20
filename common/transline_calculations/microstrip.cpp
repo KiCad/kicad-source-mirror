@@ -216,6 +216,12 @@ double MICROSTRIP::delta_Z0_cover( double u, double h2h )
     // W/h <= 1 and P * Q for W/h >= 1; the sqrt(u - 1) factor in Q collapses to zero at
     // u = 1 so the two branches agree there and a single expression handles both cases.
     // Validity: 0.05 <= W/h <= 20, h'/h > 1, per GBB.
+    //
+    // GBB attributes Eq. (2.128) to March (EuMC 1981).  Wadell, "Transmission Line Design
+    // Handbook", Artech House 1991, Sec. 3.5.8 Eqs. (3.5.8.5)-(3.5.8.7) reproduces the
+    // older Bahl 1978 P/Q with different coefficients; Wan 1995 (Int. J. MMCAE 5(6), p. 399,
+    // Fig. 6) shows Bahl's Z0 deviates from rigorous numerical data while March's tracks it
+    // well, so we use March's form as reproduced by GBB.
     const double h2hp1 = 1.0 + h2h;
     const double P = 270.0 * ( 1.0 - tanh( 0.28 + 1.2 * sqrt( h2h ) ) );
 
@@ -244,10 +250,13 @@ double MICROSTRIP::filling_factor( double u, double e_r )
 
 double MICROSTRIP::delta_q_cover( double h2h )
 {
-    // Garg, Bahl, Bozzi, "Microstrip Lines and Slotlines", 4th ed., Artech House 2024,
-    // Sec. 2.4 "Effect of Enclosure", filling-factor correction q_c, the unnumbered
-    // equation following Eq. (2.131).  q_c tracks the filling-factor reduction from the
-    // cover and collapses to unity as the cover retreats.
+    // Wadell, "Transmission Line Design Handbook", Artech House 1991, Sec. 3.5.8 "Covered
+    // Microstrip Line", Eq. (3.5.8.15).  Wadell attributes this q_c form to March 1981
+    // (EuMC, "Empirical Formulas for the Impedance and Effective Dielectric Constant of
+    // Covered Microstrip...", pp. 671-676) as a modification of Bahl 1978's original
+    // filling-factor treatment.  Wan 1995 (Int. J. MMCAE 5(6), p. 399, Fig. 6) finds
+    // March's eps_eff less accurate than Bahl's; Bahl's unmodified form has not been
+    // located in a citable secondary source.
     return tanh( 1.043 + 0.121 * h2h - 1.164 / h2h );
 }
 
