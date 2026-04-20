@@ -36,6 +36,9 @@
 #include <wx/menu.h>
 #include <widgets/ui_common.h>
 
+#include <algorithm>
+#include <set>
+
 // Simple IDs for the split button menu
 enum
 {
@@ -326,13 +329,29 @@ bool PANEL_TOOLBAR_CUSTOMIZATION::TransferDataFromWindow()
     if( currentTb.has_value() )
         m_toolbars[m_currentToolbar] = currentTb.value();
 
+    std::set<std::string> seenControls;
+
+    for( auto& [loc, config] : m_toolbars )
+    {
+        auto& items = config.m_toolbarItems;
+
+        items.erase( std::remove_if( items.begin(), items.end(),
+                    [&]( const TOOLBAR_ITEM& item )
+                    {
+                        if( item.m_Type != TOOLBAR_ITEM_TYPE::CONTROL )
+                            return false;
+
+                        return !seenControls.insert( item.m_ControlName ).second;
+                    } ),
+                    items.end() );
+    }
+
     // Write the shadow toolbars with changes back to the app toolbar settings
     for( const auto& [loc, config] : m_toolbars )
         m_appTbSettings->SetStoredToolbarConfig( loc, config );
 
     return true;
 }
-
 
 std::optional<TOOLBAR_CONFIGURATION> PANEL_TOOLBAR_CUSTOMIZATION::parseToolbarTree()
 {
@@ -867,6 +886,12 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onBtnAddAction( wxCommandEvent& event )
     TOOL_ACTION*             action = entry.action;
     ACTION_TOOLBAR_CONTROL*  control = entry.control;
 
+    if( control )
+    {
+        removeControlFromOtherToolbars( control->GetName() );
+        removeControlFromCurrentTree( control->GetName() );
+    }
+
     // Build the item to add
     TOOLBAR_TREE_ITEM_DATA* toolTreeItem = new TOOLBAR_TREE_ITEM_DATA( action ? TOOLBAR_ITEM_TYPE::TOOL
                                                                               : TOOLBAR_ITEM_TYPE::CONTROL );
@@ -1028,4 +1053,55 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onListItemActivated( wxListEvent& event )
 {
     wxCommandEvent dummy;
     onBtnAddAction( dummy );
+}
+
+
+void PANEL_TOOLBAR_CUSTOMIZATION::removeControlFromOtherToolbars( const std::string& aControlName )
+{
+    for( auto& [loc, config] : m_toolbars )
+    {
+        if( loc == m_currentToolbar )
+            continue;
+
+        auto& items = config.m_toolbarItems;
+
+        items.erase( std::remove_if( items.begin(), items.end(),
+                    [&]( const TOOLBAR_ITEM& item )
+                    {
+                        return item.m_Type == TOOLBAR_ITEM_TYPE::CONTROL
+                                && item.m_ControlName == aControlName;
+                    } ),
+                    items.end() );
+    }
+}
+
+
+void PANEL_TOOLBAR_CUSTOMIZATION::removeControlFromCurrentTree( const std::string& aControlName )
+{
+    wxTreeItemId rootId = m_toolbarTree->GetRootItem();
+
+    if( !rootId.IsOk() )
+        return;
+
+    std::vector<wxTreeItemId> toDelete;
+    wxTreeItemIdValue         cookie;
+
+    for( wxTreeItemId id = m_toolbarTree->GetFirstChild( rootId, cookie );
+        id.IsOk();
+        id = m_toolbarTree->GetNextChild( rootId, cookie ) )
+    {
+        TOOLBAR_TREE_ITEM_DATA* data =
+                dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( m_toolbarTree->GetItemData( id ) );
+
+        if( data
+            && data->GetType() == TOOLBAR_ITEM_TYPE::CONTROL
+            && data->GetControl()
+            && data->GetControl()->GetName() == aControlName )
+        {
+            toDelete.push_back( id );
+        }
+    }
+
+    for( const wxTreeItemId& id : toDelete )
+        m_toolbarTree->Delete( id );
 }
