@@ -173,6 +173,77 @@ bool TEARDROP_MANAGER::areItemsInSameZone( BOARD_ITEM* aPadOrVia, PCB_TRACK* aTr
 }
 
 
+int TEARDROP_MANAGER::computeEmergingTrackLength( PCB_TRACK* aTrack, BOARD_ITEM* aOther,
+                                                  PCB_LAYER_ID aLayer ) const
+{
+    VECTOR2I start = aTrack->GetStart();
+    VECTOR2I end = aTrack->GetEnd();
+    bool     startInside = aOther->HitTest( start, 0 );
+    bool     endInside = aOther->HitTest( end, 0 );
+
+    if( startInside && endInside )
+        return 0;
+
+    // Fully outside: caller handles crossing geometry separately; report full length so
+    // the emergence filter never rejects those.
+    if( !startInside && !endInside )
+        return KiROUND( SEG( start, end ).Length() );
+
+    // Exactly one endpoint inside: normalize so start is outside, end is inside.
+    if( startInside )
+        std::swap( start, end );
+
+    int            maxError = m_board->GetDesignSettings().m_MaxError;
+    int            radius = GetWidth( aOther, aLayer ) / 2;
+    SHAPE_POLY_SET shapebuffer;
+
+    if( IsRound( aOther, aLayer ) )
+    {
+        TransformCircleToPolygon( shapebuffer, aOther->GetPosition(), radius, maxError,
+                                  ERROR_INSIDE, 16 );
+    }
+    else
+    {
+        wxCHECK_MSG( aOther->Type() == PCB_PAD_T, 0, wxT( "Expected non-round item to be PAD" ) );
+        static_cast<PAD*>( aOther )->TransformShapeToPolygon( shapebuffer, aLayer, 0, maxError,
+                                                              ERROR_INSIDE );
+    }
+
+    SHAPE_LINE_CHAIN& outline = shapebuffer.Outline( 0 );
+    outline.SetClosed( true );
+
+    SHAPE_LINE_CHAIN::INTERSECTIONS pts;
+    int                             pt_count = 0;
+
+    if( aTrack->Type() == PCB_ARC_T )
+    {
+        SHAPE_ARC arc( aTrack->GetStart(), static_cast<PCB_ARC*>( aTrack )->GetMid(),
+                       aTrack->GetEnd(), aTrack->GetWidth() );
+        SHAPE_LINE_CHAIN poly = arc.ConvertToPolyline( maxError );
+        pt_count = outline.Intersect( poly, pts );
+    }
+    else
+    {
+        pt_count = outline.Intersect( SEG( start, end ), pts );
+    }
+
+    if( pt_count < 1 )
+        return 0;
+
+    double minDist = std::numeric_limits<double>::max();
+
+    for( const SHAPE_LINE_CHAIN::INTERSECTION& hit : pts )
+    {
+        double d = ( hit.p - start ).EuclideanNorm();
+
+        if( d < minDist )
+            minDist = d;
+    }
+
+    return KiROUND( minDist );
+}
+
+
 PCB_TRACK* TEARDROP_MANAGER::findTouchingTrack( EDA_ITEM_FLAGS& aMatchType, PCB_TRACK* aTrackRef,
                                                 const VECTOR2I& aEndPoint ) const
 {
@@ -1114,6 +1185,34 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
             }
         }
     }
+    else
+    {
+        // For round pads/vias, clamp effectiveDist so pointD stays inside the pad circle.
+        // The minimum-of-padRadius floor used for projOnTrack overshoots the pad when the
+        // teardrop axis (vecVia) is not radial: e.g. a two-segment teardrop where the first
+        // segment grazes the pad tangentially produces a projection close to zero, but the
+        // floor still pushes pointD outward by padRadius along -vecVia, creating a spike.
+        // Solve for the far intersection of the ray (intersection, -vecVia) with the pad
+        // circle and use that as the upper bound.
+        double R = static_cast<double>( padRadius );
+        double cx = intToPad.x;  // (aOtherPos - intersection)
+        double cy = intToPad.y;
+        double distCenterSq = cx * cx + cy * cy;
+
+        // Quadratic for ||intersection + (-vecVia)*t - aOtherPos||^2 = R^2
+        // expands to t^2 - 2*projOnTrack*t + (distCenterSq - R^2) = 0.
+        // The far root is projOnTrack + sqrt(projOnTrack^2 - (distCenterSq - R^2)).
+        double disc = projOnTrack * projOnTrack - ( distCenterSq - R * R );
+
+        if( disc >= 0 )
+        {
+            double farEdge = projOnTrack + std::sqrt( disc );
+            double maxAllowed = std::max( 0.0, farEdge - 2.0 * offset );
+
+            if( effectiveDist > maxAllowed )
+                effectiveDist = maxAllowed;
+        }
+    }
 
     VECTOR2I pointD = intersection + VECTOR2I( KiROUND( -vecVia.x * ( effectiveDist + offset ) ),
                                                KiROUND( -vecVia.y * ( effectiveDist + offset ) ) );
@@ -1238,8 +1337,15 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
                             return VECTOR2I( KiROUND( p2.x ), KiROUND( p2.y ) );
                         };
 
-                    pts[2] = findCircleLineIntersection( symHalfWidth );
-                    pts[4] = findCircleLineIntersection( -symHalfWidth );
+                    // pointA is offset in +perpVia from the track axis, pointB in -perpVia
+                    // (see the VECTOR2I pointA/pointB construction above). pts[2] is C,
+                    // which lies adjacent to pointB in the teardrop walk A->B->C->D->E->A,
+                    // so it must sit on pointB's (-perpVia) side. Likewise pts[4] is E,
+                    // adjacent to pointA on the +perpVia side. Assigning the opposite signs
+                    // folds the polygon into a bowtie and produces self-intersecting edges
+                    // whenever the track is off-center enough to trigger this branch.
+                    pts[2] = findCircleLineIntersection( -symHalfWidth );
+                    pts[4] = findCircleLineIntersection( symHalfWidth );
                 }
             }
         }

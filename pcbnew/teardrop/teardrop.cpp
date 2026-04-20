@@ -293,6 +293,16 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
             if( startHitsPad && endHitsPad )
                 continue;
 
+            // Only count segments that substantively emerge from the pad copper. A track
+            // whose centerline grazes the pad edge exits by less than its own width; such a
+            // segment is effectively covered and using it mis-orients the teardrop axis
+            // along the tangent instead of the track's real entry direction.
+            if( startHitsPad != endHitsPad
+                && computeEmergingTrackLength( track, pad, track->GetLayer() ) < track->GetWidth() )
+            {
+                continue;
+            }
+
             // Skip case where pad and the track are within a copper zone with the same net
             // (and the pad can be connected to the zone)
             if( !tdParams.m_TdOnPadsInZones && areItemsInSameZone( pad, track ) )
@@ -342,6 +352,14 @@ void TEARDROP_MANAGER::UpdateTeardrops( BOARD_COMMIT& aCommit,
             if( startHitsVia && endHitsVia )
                 continue;
 
+            // Only count segments that substantively emerge from the via copper. A track
+            // that grazes the via edge tangentially emerges by less than its own width and
+            // should not anchor a teardrop: its direction misrepresents the real track entry.
+            if( startHitsVia != endHitsVia
+                && computeEmergingTrackLength( track, via, track->GetLayer() ) < track->GetWidth() )
+            {
+                continue;
+            }
 
             tryCreateTrackTeardrop( aCommit, tdParams, TEARDROP_MANAGER::TD_TYPE_PADVIA, track, via,
                                     via->GetPosition() );
