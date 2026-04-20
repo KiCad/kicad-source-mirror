@@ -368,16 +368,17 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
 
 const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd )
 {
-    // Degenerate-input guard
-    constexpr double kCoincidentTolSq = 10.0;
+    // If the three input points are clustered within a 10 IU bounding box, no
+    // meaningful circumcircle exists so return the centroid
+    constexpr double kCoincidentRadius = 5.0;
 
-    double smSq = ( aStart - aMid ).SquaredEuclideanNorm();
-    double meSq = ( aMid - aEnd ).SquaredEuclideanNorm();
+    auto [minX, maxX] = std::minmax( { aStart.x, aMid.x, aEnd.x } );
+    auto [minY, maxY] = std::minmax( { aStart.y, aMid.y, aEnd.y } );
 
-    if( smSq < kCoincidentTolSq && meSq < kCoincidentTolSq )
+    if( maxX - minX < kCoincidentRadius && maxY - minY < kCoincidentRadius )
     {
         return VECTOR2D( ( aStart.x + aMid.x + aEnd.x ) / 3.0,
-                         ( aStart.y + aMid.y + aEnd.y ) / 3.0 );
+                        ( aStart.y + aMid.y + aEnd.y ) / 3.0 );
     }
 
     VECTOR2D center;
