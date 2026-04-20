@@ -60,6 +60,10 @@ public:
     /// Synthesis track geometry parameters to match given Z0
     bool Synthesize( SYNTHESIZE_OPTS aOpts ) override;
 
+    /// Returns true when the strip plane offset a is effectively at the centre (a = h/2 within
+    /// numerical tolerance).  When a <= 0 is treated as unset and maps to centred.
+    static bool IsCenteredOffset( double a, double h );
+
 private:
     /// Sets the output values and status following analysis
     void SetAnalysisResults() override;
@@ -91,14 +95,10 @@ private:
     /// Calculates zero-thickness coupled strip impedances
     void calcZeroThicknessCoupledImpedances( double h, double w, double s, double er );
 
-    /// Returns true when the strip plane offset a is effectively at the centre (a = h/2 within
-    /// numerical tolerance).  When a <= 0 is treated as unset and maps to centred.
-    bool isCenteredOffset( double a, double h ) const;
-
     /// Returns true when the offset a is far enough from each ground plane that the Reference [1]
     /// finite-thickness fringe formula is well defined on both virtual centred striplines produced
     /// by the Reference [3] Eq. 3.6.3.22 image split (i.e. t/2 < a < h - t/2).
-    bool isOffsetWithinFiniteThicknessLimits( double a, double h, double t ) const;
+    static bool isOffsetWithinFiniteThicknessLimits( double a, double h, double t );
 
     /// Offset-aware wrapper around calcZeroThicknessCoupledImpedances built on Reference [3] Sec.
     /// 3.6.3 (off-center stripline).  For centred cases it calls the base function once; otherwise
@@ -115,8 +115,8 @@ private:
     /// width factor ((t + w) / h)^2.9 scales with strip proximity.  The correction is fit to
     /// single-ended data with a claimed ~2 percent accuracy for 0.2 < a/h < 0.8 and t/h < 0.2;
     /// used per mode here with the corresponding mode impedance.
-    double applyOffsetCorrection( double aZImage, double aOffset, double aPlateSpacing, double aWidth,
-                                  double aThickness, double aEr ) const;
+    static double applyOffsetCorrection( double aZImage, double aOffset, double aPlateSpacing, double aWidth,
+                                         double aThickness, double aEr );
 
     /// Runs the centred finite-thickness pipeline for a single Reference [3] virtual stripline of
     /// plate spacing aVirtualH.  Returns the (Z0e, Z0o) pair seen at that plate spacing so the

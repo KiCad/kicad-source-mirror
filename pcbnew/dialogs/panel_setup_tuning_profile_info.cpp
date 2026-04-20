@@ -1318,6 +1318,22 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow,
     m_coupledStriplineCalc.SetParameter(
             TRANSLINE_PARAMETERS::H, boardParameters.TopDielectricLayerThickness + boardParameters.SignalLayerThickness
                                              + boardParameters.BottomDielectricLayerThickness );
+
+    // Set the offset top dielectric layer thickness if required
+    if( COUPLED_STRIPLINE::IsCenteredOffset( boardParameters.TopDielectricLayerThickness,
+                                             boardParameters.TopDielectricLayerThickness
+                                                     + boardParameters.BottomDielectricLayerThickness ) )
+    {
+        // Keep calculation on the symmetric fast path
+        m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::STRIPLINE_A, 0.0 );
+    }
+    else
+    {
+        // Use the asymmetric calculation path
+        m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::STRIPLINE_A,
+                                             boardParameters.TopDielectricLayerThickness );
+    }
+
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, boardParameters.DielectricConstant );
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, calculateSkinDepth( 1.0, 1.0, 1.0 / RHO ) );
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_LEN, 1.0 );

@@ -79,7 +79,7 @@ void COUPLED_STRIPLINE::Analyse()
         SetParameter( TCP::Z0_E, Z0_e_w_h_0_s_h );
         SetParameter( TCP::Z0_O, Z0_o_w_h_0_s_h );
     }
-    else if( isCenteredOffset( a, h ) )
+    else if( IsCenteredOffset( a, h ) )
     {
         calcSingleStripImpedances();
         calcFringeCapacitances( h, t, er );
@@ -395,7 +395,7 @@ void COUPLED_STRIPLINE::calcZeroThicknessCoupledImpedances( const double h, cons
 }
 
 
-bool COUPLED_STRIPLINE::isCenteredOffset( const double a, const double h ) const
+bool COUPLED_STRIPLINE::IsCenteredOffset( const double a, const double h )
 {
     // Tight relative tolerance so the centred fast path is taken only when the UI genuinely meant
     // "centred" and any physically meaningful offset routes through the image-method branch.
@@ -403,8 +403,7 @@ bool COUPLED_STRIPLINE::isCenteredOffset( const double a, const double h ) const
 }
 
 
-bool COUPLED_STRIPLINE::isOffsetWithinFiniteThicknessLimits( const double a, const double h,
-                                                             const double t ) const
+bool COUPLED_STRIPLINE::isOffsetWithinFiniteThicknessLimits( const double a, const double h, const double t )
 {
     // Reference [3] splits the asymmetric stripline into two virtual symmetric striplines with
     // plate spacings 2a and 2(h - a).  The Reference [1] finite-thickness fringe formula
@@ -433,7 +432,7 @@ void COUPLED_STRIPLINE::calcOffsetZeroThicknessCoupledImpedances( const double h
                                                                   const double s, const double t, const double er )
 {
     // Centred short-circuit so the default-input path is bit-identical to the pre-offset code.
-    if( isCenteredOffset( a, h ) )
+    if( IsCenteredOffset( a, h ) )
     {
         calcZeroThicknessCoupledImpedances( h, w, s, er );
         return;
@@ -464,9 +463,8 @@ void COUPLED_STRIPLINE::calcOffsetZeroThicknessCoupledImpedances( const double h
 }
 
 
-double COUPLED_STRIPLINE::applyOffsetCorrection( const double aZImage, const double aOffset,
-                                                 const double aPlateSpacing, const double aWidth,
-                                                 const double aThickness, const double aEr ) const
+double COUPLED_STRIPLINE::applyOffsetCorrection( const double aZImage, const double aOffset, const double aPlateSpacing,
+                                                 const double aWidth, const double aThickness, const double aEr )
 {
     // Reference [3] Eq. 3.6.3.23:
     //   delta_Z_air = (0.26 * pi / 8) * Z_air^2 * |0.5 - h1 / h|^2.2 * ((t + w) / h)^2.9
