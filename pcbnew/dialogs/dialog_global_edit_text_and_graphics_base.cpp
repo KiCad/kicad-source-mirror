@@ -6,6 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "pcb_layer_box_selector.h"
+#include "widgets/bitmap_button.h"
 #include "widgets/font_choice.h"
 
 #include "dialog_global_edit_text_and_graphics_base.h"
@@ -248,9 +249,20 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_ThicknessCtrl = new wxTextCtrl( m_specifiedValues, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_ThicknessCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+
 	m_ThicknessUnit = new wxStaticText( m_specifiedValues, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThicknessUnit->Wrap( -1 );
-	fgSizer1->Add( m_ThicknessUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	bSizer4->Add( m_ThicknessUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_autoTextThickness = new BITMAP_BUTTON( m_specifiedValues, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|wxBORDER_NONE );
+	m_autoTextThickness->SetToolTip( _("Adjust the text thickness") );
+
+	bSizer4->Add( m_autoTextThickness, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+
+	fgSizer1->Add( bSizer4, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizer1->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 20 );
@@ -340,9 +352,14 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	m_LayerCtrl->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
 	m_visible->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
 	m_fontCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onFontSelected ), NULL, this );
+	m_bold->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onTextSize ), NULL, this );
 	m_bold->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
+	m_SizeXCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onTextSize ), NULL, this );
 	m_italic->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
+	m_SizeYCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onTextSize ), NULL, this );
 	m_keepUpright->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
+	m_autoTextThickness->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onAutoTextThickness ), NULL, this );
+	m_autoTextThickness->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
 	m_setToLayerDefaults->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onActionButtonChange ), NULL, this );
 	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnSizeNetclassGrid ), NULL, this );
 }
@@ -360,9 +377,14 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS
 	m_LayerCtrl->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
 	m_visible->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
 	m_fontCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onFontSelected ), NULL, this );
+	m_bold->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onTextSize ), NULL, this );
 	m_bold->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
+	m_SizeXCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onTextSize ), NULL, this );
 	m_italic->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
+	m_SizeYCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onTextSize ), NULL, this );
 	m_keepUpright->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
+	m_autoTextThickness->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onAutoTextThickness ), NULL, this );
+	m_autoTextThickness->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onSpecifiedValueUpdateUI ), NULL, this );
 	m_setToLayerDefaults->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::onActionButtonChange ), NULL, this );
 	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnSizeNetclassGrid ), NULL, this );
 
