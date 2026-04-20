@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class BITMAP_BUTTON;
 class FONT_CHOICE;
 class PCB_LAYER_BOX_SELECTOR;
 
@@ -27,9 +28,13 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/radiobut.h>
 #include <wx/stattext.h>
 #include <wx/choice.h>
+#include <wx/bmpbuttn.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/button.h>
 #include <wx/panel.h>
 #include <wx/grid.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -80,6 +85,7 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxStaticText* m_ThicknessLabel;
 		wxTextCtrl* m_ThicknessCtrl;
 		wxStaticText* m_ThicknessUnit;
+		BITMAP_BUTTON* m_autoTextThickness;
 		wxCheckBox* m_centerOnFP;
 		wxRadioButton* m_setToLayerDefaults;
 		wxGrid* m_grid;
@@ -96,6 +102,8 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		virtual void onActionButtonChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSpecifiedValueUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onFontSelected( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onTextSize( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onAutoTextThickness( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeNetclassGrid( wxSizeEvent& event ) { event.Skip(); }
 
 

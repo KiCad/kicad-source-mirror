@@ -37,6 +37,9 @@
 #include <pcb_text.h>
 #include <widgets/unit_binder.h>
 #include <widgets/font_choice.h>
+#include <widgets/bitmap_button.h>
+#include <bitmaps.h>
+#include <gr_text.h>
 #include <tool/tool_manager.h>
 #include <tools/global_edit_tool.h>
 #include <tools/footprint_editor_control.h>
@@ -80,6 +83,8 @@ protected:
     void onActionButtonChange( wxCommandEvent& event ) override;
     void onSpecifiedValueUpdateUI( wxUpdateUIEvent& event ) override;
     void onDimensionItemCheckbox( wxCommandEvent& aEvent ) override;
+    void onAutoTextThickness( wxCommandEvent& aEvent ) override;
+    void onTextSize( wxCommandEvent& aEvent ) override;
 
     void OnLayerFilterSelect( wxCommandEvent& event ) override
     {
@@ -144,6 +149,9 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_
     m_fontCtrl->SetHasIndeterminateChoice();
     m_fontCtrl->RefreshFonts();
 
+    m_autoTextThickness->SetIsCheckButton();
+    m_autoTextThickness->SetBitmap( KiBitmapBundle( BITMAPS::edit_cmp_symb_links ) );
+
     m_layerFilter->SetBoardFrame( m_parent );
     m_layerFilter->SetLayersHotkeys( false );
     m_layerFilter->Resync();
@@ -193,6 +201,8 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
     m_textWidth.SetValue( INDETERMINATE_ACTION );
     m_textHeight.SetValue( INDETERMINATE_ACTION );
     m_thickness.SetValue( INDETERMINATE_ACTION );
+    m_autoTextThickness->Check( false );
+    m_thickness.Enable( true );
     m_bold->Set3StateValue( wxCHK_UNDETERMINED );
     m_italic->Set3StateValue( wxCHK_UNDETERMINED );
     m_keepUpright->Set3StateValue( wxCHK_UNDETERMINED );
@@ -285,7 +295,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::onActionButtonChange( wxCommandEvent&
     m_lineWidth.Enable( enable );
     m_textWidth.Enable( enable );
     m_textHeight.Enable( enable );
-    m_thickness.Enable( enable );
+    m_thickness.Enable( enable && !m_autoTextThickness->IsChecked() );
 
     m_fontLabel->Enable( enable );
     m_fontCtrl->Enable( enable );
@@ -313,6 +323,44 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::onDimensionItemCheckbox( wxCommandEve
 }
 
 
+void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::onAutoTextThickness( wxCommandEvent& aEvent )
+{
+    if( aEvent.IsChecked() )
+    {
+        m_autoTextThickness->Check( true );
+
+        wxCommandEvent dummy;
+        onTextSize( dummy );
+
+        if( m_textWidth.IsIndeterminate() || m_textHeight.IsIndeterminate() )
+            m_thickness.SetValue( _( "(auto)" ) );
+
+        m_thickness.Enable( false );
+    }
+    else
+    {
+        m_thickness.Enable( true );
+        m_thickness.SetValue( INDETERMINATE_ACTION );
+    }
+}
+
+
+void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::onTextSize( wxCommandEvent& aEvent )
+{
+    if( !m_autoTextThickness->IsChecked() )
+        return;
+
+    if( m_textWidth.IsIndeterminate() || m_textHeight.IsIndeterminate() )
+        return;
+
+    int  size = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
+    bool bold = ( m_bold->Get3StateValue() == wxCHK_CHECKED );
+
+    m_thickness.SetValue( bold ? GetPenSizeForBold( size )
+                                : GetPenSizeForNormal( size ) );
+}
+
+
 void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, BOARD_ITEM* aItem )
 {
     aCommit.Modify( aItem );
@@ -337,7 +385,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
             if( !m_textHeight.IsIndeterminate() )
                 text->SetTextSize( VECTOR2I( text->GetTextSize().x, m_textHeight.GetIntValue() ) );
 
-            if( !m_thickness.IsIndeterminate() )
+            if( m_autoTextThickness->IsChecked() )
+                text->SetAutoThickness( true );
+            else if( !m_thickness.IsIndeterminate() )
                 text->SetTextThickness( m_thickness.GetIntValue() );
 
             // Must be after SetTextSize()
