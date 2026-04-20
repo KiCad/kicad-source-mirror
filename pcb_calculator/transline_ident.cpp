@@ -130,9 +130,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    "H", "H", _( "Height of substrate" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_T_PRM,
                                    "H_t", "H(top)",
-                                   _( "Height from substrate top to grounded cover. Leave large (default) "
-                                      "or blank for no cover. Reference: March, 'Microstrip packaging: "
-                                      "Watch the last step', Microwaves, Dec 1981." ),
+                                   _( "Height from substrate top to grounded cover. Leave at the large "
+                                      "default value for no cover." ),
                                    1e20, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    "T", "T",
@@ -326,9 +325,8 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
                                    "H", "H", _( "Height of substrate" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_T_PRM,
                                    "H_t", "H_t",
-                                   _( "Height from substrate top to grounded cover. Leave large (default) "
-                                      "or blank for no cover. Reference: March, 'Microstrip packaging: "
-                                      "Watch the last step', Microwaves, Dec 1981." ),
+                                   _( "Height from substrate top to grounded cover. Leave at the large "
+                                      "default value for no cover." ),
                                    1e20, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    "T", "T", _( "Strip thickness" ), 0.035, true ) );

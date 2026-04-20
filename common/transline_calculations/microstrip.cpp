@@ -21,6 +21,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <algorithm>
+
 #include <transline_calculations/microstrip.h>
 #include <transline_calculations/units.h>
 
@@ -209,12 +211,22 @@ double MICROSTRIP::Z0_homogeneous( double u )
 
 double MICROSTRIP::delta_Z0_cover( double u, double h2h )
 {
-    // S. March, "Microstrip Packaging: Watch the Last Step," Microwaves, vol. 20, no. 12,
-    // pp. 83-94, Dec. 1981.  P and Q are empirical fits to the Z0 reduction produced by a
-    // parallel top ground plane at normalised air gap h2h = (cover_height - h) / h.
+    // Garg, Bahl, Bozzi, "Microstrip Lines and Slotlines", 4th ed., Artech House 2024,
+    // Sec. 2.4 "Effect of Enclosure", Eqs. (2.128a) and (2.128b).  P alone applies for
+    // W/h <= 1 and P * Q for W/h >= 1; the sqrt(u - 1) factor in Q collapses to zero at
+    // u = 1 so the two branches agree there and a single expression handles both cases.
+    // Validity: 0.05 <= W/h <= 20, h'/h > 1, per GBB.
     const double h2hp1 = 1.0 + h2h;
-    const double P = 270.0 * ( 1.0 - tanh( 1.192 + 0.706 * sqrt( h2hp1 ) - 1.389 / h2hp1 ) );
-    const double Q = 1.0109 - atanh( ( 0.012 * u + 0.177 * u * u - 0.027 * u * u * u ) / ( h2hp1 * h2hp1 ) );
+    const double P = 270.0 * ( 1.0 - tanh( 0.28 + 1.2 * sqrt( h2h ) ) );
+
+    // Outside GBB's validity range the Q numerator saturates atanh (wide trace, low
+    // cover); fall back to the P-only branch so Z0 stays finite.
+    const double qArg = ( 0.48 * sqrt( std::max( 0.0, u - 1.0 ) ) ) / ( h2hp1 * h2hp1 );
+
+    if( qArg >= 1.0 )
+        return P;
+
+    const double Q = 1.0 - atanh( qArg );
     return P * Q;
 }
 
@@ -232,9 +244,10 @@ double MICROSTRIP::filling_factor( double u, double e_r )
 
 double MICROSTRIP::delta_q_cover( double h2h )
 {
-    // S. March, "Microstrip Packaging: Watch the Last Step," Microwaves, vol. 20, no. 12,
-    // pp. 83-94, Dec. 1981.  Reduction to the filling factor q caused by the cover; the
-    // tanh form tracks the Z0 correction above and collapses to unity as the cover retreats.
+    // Garg, Bahl, Bozzi, "Microstrip Lines and Slotlines", 4th ed., Artech House 2024,
+    // Sec. 2.4 "Effect of Enclosure", filling-factor correction q_c, the unnumbered
+    // equation following Eq. (2.131).  q_c tracks the filling-factor reduction from the
+    // cover and collapses to unity as the cover retreats.
     return tanh( 1.043 + 0.121 * h2h - 1.164 / h2h );
 }
 
