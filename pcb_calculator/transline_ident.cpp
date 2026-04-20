@@ -90,6 +90,11 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
     m_TLine = nullptr;                      // The TRANSLINE itself
     m_HasPrmSelection = false;              // true if selection of parameters must be enabled in dialog menu
 
+    // Same H_t tooltip text is used for the microstrip and coupled-microstrip blocks below.
+    const wxString coverHeightToolTip =
+            _( "Height from substrate top to grounded cover. Leave at the large default value "
+               "for no cover." );
+
     // Add common prms:
     // Default values are for FR4
     AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, EPSILONR_PRM,
@@ -129,10 +134,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM,
                                    "H", "H", _( "Height of substrate" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_T_PRM,
-                                   "H_t", "H(top)",
-                                   _( "Height from substrate top to grounded cover. Leave at the large "
-                                      "default value for no cover." ),
-                                   1e20, true ) );
+                                   "H_t", "H(top)", coverHeightToolTip, 1e20, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    "T", "T",
                                    _( "Strip thickness" ), 0.035, true ) );
@@ -324,10 +326,7 @@ TRANSLINE_IDENT::TRANSLINE_IDENT( enum TRANSLINE_TYPE_ID aType )
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_PRM,
                                    "H", "H", _( "Height of substrate" ), 0.2, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, H_T_PRM,
-                                   "H_t", "H_t",
-                                   _( "Height from substrate top to grounded cover. Leave at the large "
-                                      "default value for no cover." ),
-                                   1e20, true ) );
+                                   "H_t", "H_t", coverHeightToolTip, 1e20, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, T_PRM,
                                    "T", "T", _( "Strip thickness" ), 0.035, true ) );
         AddPrm( new TRANSLINE_PRM( PRM_TYPE_SUBS, ROUGH_PRM,

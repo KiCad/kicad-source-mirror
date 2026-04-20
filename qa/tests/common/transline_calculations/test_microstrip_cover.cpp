@@ -28,8 +28,10 @@
 #include <transline_calculations/microstrip.h>
 #include <transline_calculations/transline_calculation_base.h>
 #include <transline_calculations/units.h>
+#include <transline_calculations/units_scales.h>
 
 
+namespace TC = TRANSLINE_CALCULATIONS;
 using TCP = TRANSLINE_PARAMETERS;
 
 
@@ -42,12 +44,11 @@ namespace
 // match the static values computed directly from the closed-form expressions.
 constexpr double FIXTURE_EPS_R = 4.4;
 constexpr double FIXTURE_TAND = 0.02;
-constexpr double FIXTURE_H = 1.0e-3;
-constexpr double FIXTURE_W = 1.875e-3;
-constexpr double FIXTURE_T = 35.0e-6;
-constexpr double FIXTURE_FREQ = 1.0e6;
-constexpr double FIXTURE_RHO = 1.72e-8;
-constexpr double FIXTURE_SIGMA = 1.0 / FIXTURE_RHO;
+constexpr double FIXTURE_H = 1.0 * TC::UNIT_MM;
+constexpr double FIXTURE_W = 1.875 * TC::UNIT_MM;
+constexpr double FIXTURE_T = 35.0 * TC::UNIT_MICRON;
+constexpr double FIXTURE_FREQ = 1.0 * TC::UNIT_MHZ;
+constexpr double FIXTURE_SIGMA = 5.8e7;
 constexpr double OPEN_COVER = 1.0e20;
 
 
@@ -65,7 +66,7 @@ MICROSTRIP MakeFixture( double aHTop )
     calc.SetParameter( TCP::SIGMA, FIXTURE_SIGMA );
     calc.SetParameter( TCP::ROUGH, 0.0 );
     calc.SetParameter( TCP::FREQUENCY, FIXTURE_FREQ );
-    calc.SetParameter( TCP::PHYS_LEN, 100.0e-3 );
+    calc.SetParameter( TCP::PHYS_LEN, 100.0 * TC::UNIT_MM );
     return calc;
 }
 
@@ -133,7 +134,7 @@ BOOST_AUTO_TEST_CASE( CoverAt10HIsAsymptoticallyOpen )
 // the regime where GBB's P is non-negligible; at h'/h >= 10 the P correction is below
 // 0.1 percent of Z0 and rides the floor of the independent filling-factor fit's accuracy,
 // so we do not assert strict ordering between open and 10h.
-BOOST_AUTO_TEST_CASE( DispersionMonotonicInH_T )
+BOOST_AUTO_TEST_CASE( Z0MonotonicInH_T )
 {
     MICROSTRIP twoH = MakeFixture( 2.0 * FIXTURE_H );
     twoH.Analyse();
