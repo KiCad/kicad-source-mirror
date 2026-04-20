@@ -613,6 +613,18 @@ void EDA_BASE_FRAME::RecreateToolbars()
 
     wxASSERT( m_toolbarSettings );
 
+    if( m_tbRight )
+        m_tbRight->ClearToolbar();
+
+    if( m_tbLeft )
+        m_tbLeft->ClearToolbar();
+
+    if( m_tbTopMain )
+        m_tbTopMain->ClearToolbar();
+
+    if( m_tbTopAux )
+        m_tbTopAux->ClearToolbar();
+
     std::optional<TOOLBAR_CONFIGURATION> tbConfig;
 
     // Drawing tools (typically on right edge of window)
