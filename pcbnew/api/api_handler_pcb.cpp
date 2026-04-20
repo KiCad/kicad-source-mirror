@@ -27,6 +27,7 @@
 #include <api/api_enums.h>
 #include <api/board_context.h>
 #include <api/api_utils.h>
+#include <base_screen.h>
 #include <board_commit.h>
 #include <board_connected_item.h>
 #include <board_design_settings.h>
@@ -160,34 +161,37 @@ API_HANDLER_PCB::API_HANDLER_PCB( std::shared_ptr<BOARD_CONTEXT> aContext,
     registerHandler<InjectDrcError, InjectDrcErrorResponse>(
             &API_HANDLER_PCB::handleInjectDrcError );
 
-        registerHandler<RunBoardJobExport3D, types::RunJobResponse>(
+    registerHandler<RunBoardJobExport3D, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExport3D );
-        registerHandler<RunBoardJobExportRender, types::RunJobResponse>(
+    registerHandler<RunBoardJobExportRender, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportRender );
-        registerHandler<RunBoardJobExportSvg, types::RunJobResponse>(
+    registerHandler<RunBoardJobExportSvg, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportSvg );
-        registerHandler<RunBoardJobExportDxf, types::RunJobResponse>(
+    registerHandler<RunBoardJobExportDxf, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportDxf );
-        registerHandler<RunBoardJobExportPdf, types::RunJobResponse>(
+    registerHandler<RunBoardJobExportPdf, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportPdf );
-        registerHandler<RunBoardJobExportPs, types::RunJobResponse>(
+    registerHandler<RunBoardJobExportPs, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportPs );
-        registerHandler<RunBoardJobExportGerbers, types::RunJobResponse>(
+    registerHandler<RunBoardJobExportGerbers, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportGerbers );
-        registerHandler<RunBoardJobExportDrill, types::RunJobResponse>(
+    registerHandler<RunBoardJobExportDrill, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportDrill );
-        registerHandler<RunBoardJobExportPosition, types::RunJobResponse>(
+    registerHandler<RunBoardJobExportPosition, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportPosition );
-        registerHandler<RunBoardJobExportGencad, types::RunJobResponse>(
+    registerHandler<RunBoardJobExportGencad, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportGencad );
-        registerHandler<RunBoardJobExportIpc2581, types::RunJobResponse>(
+    registerHandler<RunBoardJobExportIpc2581, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportIpc2581 );
-        registerHandler<RunBoardJobExportIpcD356, types::RunJobResponse>(
+    registerHandler<RunBoardJobExportIpcD356, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportIpcD356 );
-        registerHandler<RunBoardJobExportODB, types::RunJobResponse>(
+    registerHandler<RunBoardJobExportODB, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportODB );
-        registerHandler<RunBoardJobExportStats, types::RunJobResponse>(
+    registerHandler<RunBoardJobExportStats, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportStats );
+
+    registerHandler<GetPageSettings, types::PageSettings>( &API_HANDLER_PCB::handleGetPageSettings );
+    registerHandler<SetPageSettings, types::PageSettings>( &API_HANDLER_PCB::handleSetPageSettings );
 }
 
 
@@ -2016,10 +2020,39 @@ std::optional<TITLE_BLOCK*> API_HANDLER_PCB::getTitleBlock()
 }
 
 
+std::optional<PAGE_INFO> API_HANDLER_PCB::getPageSettings()
+{
+    return context()->GetBoard()->GetPageSettings();
+}
+
+
+bool API_HANDLER_PCB::setPageSettings( const PAGE_INFO& aPageInfo )
+{
+    context()->GetBoard()->SetPageSettings( aPageInfo );
+    return true;
+}
+
+
+wxString API_HANDLER_PCB::getDrawingSheetFileName()
+{
+    return BASE_SCREEN::m_DrawingSheetFileName;
+}
+
+
+void API_HANDLER_PCB::setDrawingSheetFileName( const wxString& aFileName )
+{
+    BASE_SCREEN::m_DrawingSheetFileName = aFileName;
+
+    if( frame() )
+        frame()->LoadDrawingSheet();
+}
+
+
 void API_HANDLER_PCB::onModified()
 {
     if( frame() )
     {
+        frame()->Refresh();
         frame()->OnModify();
         frame()->UpdateUserInterface();
     }

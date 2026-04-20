@@ -72,6 +72,14 @@ protected:
 
     std::optional<TITLE_BLOCK*> getTitleBlock() override;
 
+    std::optional<PAGE_INFO> getPageSettings() override;
+
+    bool setPageSettings( const PAGE_INFO& aPageInfo ) override;
+
+    wxString getDrawingSheetFileName() override;
+
+    void setDrawingSheetFileName( const wxString& aFileName ) override;
+
     void onModified() override;
 
 private:

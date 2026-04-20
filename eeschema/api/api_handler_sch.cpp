@@ -24,6 +24,7 @@
 #include <api/api_utils.h>
 #include <api/sch_context.h>
 #include <magic_enum.hpp>
+#include <base_screen.h>
 #include <jobs/job_export_sch_bom.h>
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_plot.h>
@@ -127,6 +128,8 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
     registerHandler<RunSchematicJobExportBOM, types::RunJobResponse>(
             &API_HANDLER_SCH::handleRunSchematicJobExportBOM );
     registerHandler<GetSchematicHierarchy, SchematicHierarchyResponse>( &API_HANDLER_SCH::handleGetSchematicHierarchy );
+    registerHandler<GetPageSettings, types::PageSettings>( &API_HANDLER_SCH::handleGetPageSettings );
+    registerHandler<SetPageSettings, types::PageSettings>( &API_HANDLER_SCH::handleSetPageSettings );
 }
 
 
@@ -821,10 +824,44 @@ std::optional<TITLE_BLOCK*> API_HANDLER_SCH::getTitleBlock()
 }
 
 
+std::optional<PAGE_INFO> API_HANDLER_SCH::getPageSettings()
+{
+    wxCHECK( m_context->GetCurrentSheet(), std::nullopt );
+    return m_context->GetCurrentSheet()->LastScreen()->GetPageSettings();
+}
+
+
+bool API_HANDLER_SCH::setPageSettings( const PAGE_INFO& aPageInfo )
+{
+    wxCHECK( m_context->GetCurrentSheet(), false );
+    m_context->GetCurrentSheet()->LastScreen()->SetPageSettings( aPageInfo );
+    return true;
+}
+
+
+wxString API_HANDLER_SCH::getDrawingSheetFileName()
+{
+    return BASE_SCREEN::m_DrawingSheetFileName;
+}
+
+
+void API_HANDLER_SCH::setDrawingSheetFileName( const wxString& aFileName )
+{
+    BASE_SCREEN::m_DrawingSheetFileName = aFileName;
+    schematic()->Settings().m_SchDrawingSheetFileName = aFileName;
+
+    if( m_frame )
+        m_frame->LoadDrawingSheet();
+}
+
+
 void API_HANDLER_SCH::onModified()
 {
     if( m_frame )
+    {
+        m_frame->Refresh();
         m_frame->OnModify();
+    }
 }
 
 

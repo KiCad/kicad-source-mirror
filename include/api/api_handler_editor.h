@@ -26,6 +26,7 @@
 #include <commit.h>
 #include <google/protobuf/empty.pb.h>
 #include <kiid.h>
+#include <page_info.h>
 
 using namespace kiapi::common;
 using kiapi::common::types::DocumentSpecifier;
@@ -84,6 +85,12 @@ protected:
     HANDLER_RESULT<google::protobuf::Empty> handleSetTitleBlockInfo(
             const HANDLER_CONTEXT<commands::SetTitleBlockInfo>& aCtx );
 
+    HANDLER_RESULT<types::PageSettings> handleGetPageSettings(
+            const HANDLER_CONTEXT<commands::GetPageSettings>& aCtx );
+
+    HANDLER_RESULT<types::PageSettings> handleSetPageSettings(
+            const HANDLER_CONTEXT<commands::SetPageSettings>& aCtx );
+
     /**
      * Override this to create an appropriate COMMIT subclass for the frame in question
      * @return a new COMMIT, bound to the editor frame
@@ -115,6 +122,14 @@ protected:
     static std::vector<KICAD_T> parseRequestedItemTypes( const google::protobuf::RepeatedField<int>& aTypes );
 
     virtual std::optional<TITLE_BLOCK*> getTitleBlock() { return std::nullopt; }
+
+    virtual std::optional<PAGE_INFO> getPageSettings() { return std::nullopt; }
+
+    virtual bool setPageSettings( const PAGE_INFO& aPageInfo ) { return false; }
+
+    virtual wxString getDrawingSheetFileName() { return wxEmptyString; }
+
+    virtual void setDrawingSheetFileName( const wxString& aFileName ) {}
 
     virtual void onModified() {}
 

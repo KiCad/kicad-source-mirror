@@ -19,6 +19,7 @@
 
 #include <api/api_enums.h>
 #include <import_export.h>
+#include <api/common/types/base_types.pb.h>
 #include <api/common/types/enums.pb.h>
 #include <api/board/board.pb.h>
 #include <api/board/board_types.pb.h>
@@ -31,6 +32,7 @@
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_plot.h>
 #include <layer_ids.h>
+#include <page_info.h>
 #include <pin_type.h>
 #include <stroke_params.h>
 #include <widgets/report_severity.h>
@@ -699,5 +701,63 @@ SEVERITY FromProtoEnum( types::RuleSeverity aValue )
     case types::RuleSeverity::RS_UNKNOWN:
     default:
         return RPT_SEVERITY_UNDEFINED;
+    }
+}
+
+
+template<>
+PAGE_SIZE_TYPE FromProtoEnum( types::PageSize aValue )
+{
+    switch( aValue )
+    {
+    case types::PageSize::PS_A5:         return PAGE_SIZE_TYPE::A5;
+    case types::PageSize::PS_A4:         return PAGE_SIZE_TYPE::A4;
+    case types::PageSize::PS_A3:         return PAGE_SIZE_TYPE::A3;
+    case types::PageSize::PS_A2:         return PAGE_SIZE_TYPE::A2;
+    case types::PageSize::PS_A1:         return PAGE_SIZE_TYPE::A1;
+    case types::PageSize::PS_A0:         return PAGE_SIZE_TYPE::A0;
+    case types::PageSize::PS_ANSI_A:     return PAGE_SIZE_TYPE::A;
+    case types::PageSize::PS_ANSI_B:     return PAGE_SIZE_TYPE::B;
+    case types::PageSize::PS_ANSI_C:     return PAGE_SIZE_TYPE::C;
+    case types::PageSize::PS_ANSI_D:     return PAGE_SIZE_TYPE::D;
+    case types::PageSize::PS_ANSI_E:     return PAGE_SIZE_TYPE::E;
+    case types::PageSize::PS_GERBER:     return PAGE_SIZE_TYPE::GERBER;
+    case types::PageSize::PS_US_LETTER:  return PAGE_SIZE_TYPE::USLetter;
+    case types::PageSize::PS_US_LEGAL:   return PAGE_SIZE_TYPE::USLegal;
+    case types::PageSize::PS_US_LEDGER:  return PAGE_SIZE_TYPE::USLedger;
+    case types::PageSize::PS_USER:       return PAGE_SIZE_TYPE::User;
+
+    case types::PageSize::PS_UNKNOWN:
+    default:
+        wxCHECK_MSG( false, PAGE_SIZE_TYPE::A3,
+                     "Unhandled case in FromProtoEnum<types::PageSize>" );
+    }
+}
+
+
+template<>
+types::PageSize ToProtoEnum( PAGE_SIZE_TYPE aValue )
+{
+    switch( aValue )
+    {
+    case PAGE_SIZE_TYPE::A5:        return types::PageSize::PS_A5;
+    case PAGE_SIZE_TYPE::A4:        return types::PageSize::PS_A4;
+    case PAGE_SIZE_TYPE::A3:        return types::PageSize::PS_A3;
+    case PAGE_SIZE_TYPE::A2:        return types::PageSize::PS_A2;
+    case PAGE_SIZE_TYPE::A1:        return types::PageSize::PS_A1;
+    case PAGE_SIZE_TYPE::A0:        return types::PageSize::PS_A0;
+    case PAGE_SIZE_TYPE::A:         return types::PageSize::PS_ANSI_A;
+    case PAGE_SIZE_TYPE::B:         return types::PageSize::PS_ANSI_B;
+    case PAGE_SIZE_TYPE::C:         return types::PageSize::PS_ANSI_C;
+    case PAGE_SIZE_TYPE::D:         return types::PageSize::PS_ANSI_D;
+    case PAGE_SIZE_TYPE::E:         return types::PageSize::PS_ANSI_E;
+    case PAGE_SIZE_TYPE::GERBER:    return types::PageSize::PS_GERBER;
+    case PAGE_SIZE_TYPE::USLetter: return types::PageSize::PS_US_LETTER;
+    case PAGE_SIZE_TYPE::USLegal:   return types::PageSize::PS_US_LEGAL;
+    case PAGE_SIZE_TYPE::USLedger:  return types::PageSize::PS_US_LEDGER;
+    case PAGE_SIZE_TYPE::User:      return types::PageSize::PS_USER;
+    default:
+        wxCHECK_MSG( false, types::PageSize::PS_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<PAGE_SIZE_TYPE>" );
     }
 }

@@ -412,6 +412,19 @@ message SetTitleBlockInfo
   kiapi.common.types.TitleBlockInfo title_block = 2;
 }
 
+// returns common.types.PageSettings
+message GetPageSettings
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+}
+
+message SetPageSettings
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  kiapi.common.types.PageSettings page_settings = 2;
+}
+
 message SaveDocumentToString
 {
   kiapi.common.types.DocumentSpecifier document = 1;

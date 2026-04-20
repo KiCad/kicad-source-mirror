@@ -519,3 +519,45 @@ message MinOptMax
   optional int32 opt = 2;
   optional int32 max = 3;
 }
+
+enum PageSize
+{
+  PS_UNKNOWN = 0;
+  PS_A5 = 1;
+  PS_A4 = 2;
+  PS_A3 = 3;
+  PS_A2 = 4;
+  PS_A1 = 5;
+  PS_A0 = 6;
+  PS_ANSI_A = 7;   // ANSI A (8.5 x 11 in)
+  PS_ANSI_B = 8;   // ANSI B (11 x 17 in)
+  PS_ANSI_C = 9;   // ANSI C (17 x 22 in)
+  PS_ANSI_D = 10;  // ANSI D (22 x 34 in)
+  PS_ANSI_E = 11;  // ANSI E (34 x 44 in)
+  PS_GERBER = 12;  // 32 x 32 in
+  PS_US_LETTER = 13;
+  PS_US_LEGAL = 14;
+  PS_US_LEDGER = 15;
+  PS_USER = 16;
+}
+
+enum PageOrientation
+{
+  PO_UNKNOWN = 0;
+  PO_LANDSCAPE = 1;
+  PO_PORTRAIT = 2;
+}
+
+message PageSettings
+{
+  PageSize page_size = 1;
+
+  // Relevant only when page_size == PS_USER
+  Vector2 user_page_size = 2;
+
+  PageOrientation orientation = 4;
+
+  // Path to a .kicad_wks drawing sheet file.
+  // Empty string means the default (built-in) drawing sheet is used.
+  string drawing_sheet = 5;
+}
