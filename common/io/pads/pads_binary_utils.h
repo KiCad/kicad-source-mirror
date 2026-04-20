@@ -39,6 +39,11 @@
 namespace PADS_IO
 {
 
+// A live SDB record header carries the FE FF (little-endian 0xFFFE) sentinel; an all-ones 32-bit
+// field is a free/unset slot.
+constexpr uint16_t SDB_RECORD_SENTINEL = 0xFFFE;
+constexpr uint32_t SDB_FIELD_UNSET = 0xFFFFFFFF;
+
 /**
  * Little-endian byte assembly with no bounds checking. Callers that need a
  * bounds-checked policy wrap these.

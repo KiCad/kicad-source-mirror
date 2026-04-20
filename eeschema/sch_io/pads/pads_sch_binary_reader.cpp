@@ -55,6 +55,7 @@ namespace PADS_SCH_BINARY
 
 using PADS_IO::BINARY_CURSOR;
 using PADS_IO::SDB_RECORD;
+using PADS_IO::SDB_FIELD_UNSET;
 
 static constexpr uint8_t  MAGIC1 = 0xFE;
 static constexpr uint16_t VERSION = 0x000D;
@@ -1892,7 +1893,7 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
 
             pins.push_back( { std::string( reinterpret_cast<const char*>( &d[aOff + 4] ), z - ( aOff + 4 ) ),
                               static_cast<char>( d[aOff + 21] ),
-                              SDB_RECORD( cur, aOff ).U32( 0 ) != 0xFFFFFFFF } );
+                              SDB_RECORD( cur, aOff ).U32( 0 ) != SDB_FIELD_UNSET } );
         };
 
         // npins (the gate-pool sum) is the run length.
@@ -2542,7 +2543,7 @@ void PADS_SCH_BINARY_READER::decodeJunctions( const std::vector<uint8_t>& d )
 // ---------------------------------------------------------------------------
 static constexpr size_t NET_STRIDE = 88;
 static constexpr int    NET_NAME_OFF = 0x10;     // NUL-terminated net name
-static constexpr int    NET_SENTINEL_OFF = 0x48; // u32 == 0xFFFFFFFF record sentinel
+static constexpr int    NET_SENTINEL_OFF = 0x48; // u32 == SDB_FIELD_UNSET record sentinel
 static constexpr size_t SEG_STRIDE = 40;
 static constexpr int    SEG_MARKER_OFF = 0x0c;   // u16 0x02fd / 0x03fd
 static constexpr int    SEG_NETIDX_OFF = 0x1a;   // u16 net-table ordinal
@@ -2563,7 +2564,7 @@ static bool isNetRecord( const BINARY_CURSOR& cur, size_t o )
 
     SDB_RECORD rec( cur, o );
 
-    if( rec.U32( NET_SENTINEL_OFF ) != 0xFFFFFFFF )
+    if( rec.U32( NET_SENTINEL_OFF ) != SDB_FIELD_UNSET )
         return false;
 
     size_t e = o + NET_NAME_OFF;

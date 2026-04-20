@@ -805,7 +805,7 @@ void BINARY_PARSER::parseDecalNameTable()
         uint32_t   off = start + k * REC_SIZE;
         SDB_RECORD rec = m_sdb.RecordAt( off );
 
-        if( off + REC_SIZE > m_data.size() || rec.U16( SENTINEL_OFFSET ) != 0xFFFE )
+        if( off + REC_SIZE > m_data.size() || rec.U16( SENTINEL_OFFSET ) != SDB_RECORD_SENTINEL )
         {
             m_decalNameTable.emplace_back();
             continue;
@@ -869,7 +869,7 @@ void BINARY_PARSER::parseDecalNameTableOld()
 
             SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( off ) );
 
-            if( rec.U16( SENTINEL_OFFSET ) != 0xFFFE )
+            if( rec.U16( SENTINEL_OFFSET ) != SDB_RECORD_SENTINEL )
                 break;
 
             std::string name = rec.Str( 0, 40 );
@@ -1209,7 +1209,7 @@ void BINARY_PARSER::parsePerPinPadstacks()
 
         SDB_RECORD desc = m_sdb.RecordAt( off );
 
-        if( off + DESC_SIZE > m_data.size() || desc.U16( DESC_SENTINEL_OFF ) != 0xFFFE )
+        if( off + DESC_SIZE > m_data.size() || desc.U16( DESC_SENTINEL_OFF ) != SDB_RECORD_SENTINEL )
             continue;
 
         std::string name = desc.Str( DESC_NAME_OFF, 41 );
@@ -1314,7 +1314,7 @@ void BINARY_PARSER::parseBoardOutlineDrwOrigin()
         uint32_t   flags = rec.U32( LINE_FLAGS_OFF );
         uint32_t   sentinel = rec.U32( LINE_SENTINEL_OFF );
 
-        if( ( flags != 0xFFFE && flags != 0xFFFF ) || sentinel != 0xFFFFFFFF )
+        if( ( flags != SDB_RECORD_SENTINEL && flags != 0xFFFF ) || sentinel != SDB_FIELD_UNSET )
             continue;
 
         std::string name = rec.Str( LINE_NAME_OFF, 12 );
@@ -1358,7 +1358,7 @@ void BINARY_PARSER::parseBoardOutline()
 
     for( size_t pos = secEnd - 12; pos >= secStart && pos < secEnd; pos -= 12 )
     {
-        if( m_sdb.RecordAt( pos ).U32( 8 ) == 0xFFFFFFFF )
+        if( m_sdb.RecordAt( pos ).U32( 8 ) == SDB_FIELD_UNSET )
             vtxStart = pos;
         else
             break;
@@ -1397,7 +1397,7 @@ void BINARY_PARSER::parseBoardOutline()
         SDB_RECORD rec = m_sdb.RecordAt( pos );
         uint32_t   sentinel = rec.U32( 8 );
 
-        if( sentinel != 0xFFFFFFFF )
+        if( sentinel != SDB_FIELD_UNSET )
             break;
 
         int32_t rawX = rec.I32( 0 );
@@ -1555,7 +1555,7 @@ bool BINARY_PARSER::parseArcBoardOutline()
             SDB_RECORD rec = m_sdb.RecordAt( pos );
             uint16_t   marker = rec.U16( 0 );
 
-            if( ( marker == 0xFFFE || marker == 0xFFFF ) && rec.U16( 2 ) == 0 )
+            if( ( marker == SDB_RECORD_SENTINEL || marker == 0xFFFF ) && rec.U16( 2 ) == 0 )
             {
                 std::string name = rec.Str( 44, 12 );
 
@@ -1975,7 +1975,7 @@ void BINARY_PARSER::parseNetNames()
                 {
                     SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( entry19->dataOffset + pos ) );
 
-                    if( rec.U32( 0 ) != 0xFFFFFFFF )
+                    if( rec.U32( 0 ) != SDB_FIELD_UNSET )
                         continue;
 
                     if( rec.U32( 4 ) != 0 )
@@ -3246,7 +3246,7 @@ void BINARY_PARSER::buildOwnerRuns()
         uint16_t   marker = rec.U16( 0 );
         uint16_t   hi = rec.U16( 2 );
 
-        if( ( marker != 0xFFFE && marker != 0xFFFF ) || hi != 0 )
+        if( ( marker != SDB_RECORD_SENTINEL && marker != 0xFFFF ) || hi != 0 )
             return false;
 
         std::string name = rec.Str( 44, 44 );
@@ -3506,7 +3506,7 @@ void BINARY_PARSER::parseCopperPours()
             SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( sec49->dataOffset + i ) );
 
             // A pour header is a 0xFFFFFFFF delimiter, then marker==1, sig 0x80 and a POR name.
-            if( rec.U32( 0 ) != 0xFFFFFFFF )
+            if( rec.U32( 0 ) != SDB_FIELD_UNSET )
             {
                 i++;
                 continue;
