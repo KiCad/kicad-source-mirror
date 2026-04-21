@@ -29,6 +29,7 @@
 #include <wx/log.h>
 #include <wx/filename.h>
 #include <wx/filedlg.h>
+#include <wx/hyperlink.h>
 #include <wx/socket.h>
 #include <wx/wupdlock.h>
 
@@ -1903,22 +1904,45 @@ void PCB_EDIT_FRAME::OnBoardLoaded()
 
     // Migrate obsolete WRL 3D model references to current STEP models.  Only
     // runs in the GUI: CLI and scripting load paths must not mutate board
-    // state on load, and must never block on a modal dialog.  The STEP
-    // exporter does its own WRL->STEP substitution at export time via the
-    // --subst-models flag, and the 3D cache quietly falls back to sibling
-    // STEP files for missing WRLs in headless contexts.
+    // state on load.  The STEP exporter does its own WRL->STEP substitution at
+    // export time via the --subst-models flag, and the 3D cache quietly falls
+    // back to sibling STEP files for missing WRLs in headless contexts.
     if( Pgm().IsGUI() )
     {
         // Silently replace references whose filename uniquely identifies a
-        // STEP sibling.  Leaves ambiguous cases for the dialog below.
+        // STEP sibling.  Leaves ambiguous cases for the infobar below.
         DIALOG_MIGRATE_3D_MODELS::AutoMigrateByFilename( this );
 
-        if( COMMON_SETTINGS* commonSettings = Pgm().GetCommonSettings();
-            commonSettings && !commonSettings->m_DoNotShowAgain.migrate_wrl_prompt
-            && DIALOG_MIGRATE_3D_MODELS::BoardHasUnresolvedWrlReferences( this ) )
+        const int unresolved = DIALOG_MIGRATE_3D_MODELS::CountUnresolvedWrlReferences( this );
+
+        if( unresolved > 0 )
         {
-            DIALOG_MIGRATE_3D_MODELS dlg( this );
-            dlg.ShowModal();
+            wxString msg = wxString::Format( wxPLURAL( "%d WRL 3D model could not be matched "
+                                                       "to an equivalent STEP model.",
+                                                       "%d WRL 3D models could not be matched "
+                                                       "to equivalent STEP models.",
+                                                       unresolved ),
+                                             unresolved );
+
+            wxHyperlinkCtrl* link = new wxHyperlinkCtrl( m_infoBar, wxID_ANY, _( "Show options" ),
+                                                         wxEmptyString );
+
+            link->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& )>(
+                    [this]( wxHyperlinkEvent& )
+                    {
+                        DIALOG_MIGRATE_3D_MODELS dlg( this );
+                        dlg.ShowModal();
+
+                        // Dismiss the infobar if nothing remains to resolve;
+                        // otherwise leave it so the user can try again.
+                        if( DIALOG_MIGRATE_3D_MODELS::CountUnresolvedWrlReferences( this ) == 0 )
+                            m_infoBar->Dismiss();
+                    } ) );
+
+            m_infoBar->RemoveAllButtons();
+            m_infoBar->AddButton( link );
+            m_infoBar->AddCloseButton();
+            m_infoBar->ShowMessage( msg, wxICON_INFORMATION );
         }
     }
 
