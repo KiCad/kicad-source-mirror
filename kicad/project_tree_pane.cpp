@@ -649,15 +649,13 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
 {
     std::lock_guard<std::mutex> lock1( m_gitStatusMutex );
     std::lock_guard<std::mutex> lock2( m_gitTreeCacheMutex );
-    thread_pool& tp = GetKiCadThreadPool();
-
-    while( tp.get_tasks_running() )
-    {
-        tp.wait_for( std::chrono::milliseconds( 250 ) );
-    }
 
     m_gitStatusTimer.Stop();
     m_gitSyncTimer.Stop();
+
+    if( m_TreeProject && m_TreeProject->GitCommon() )
+        m_TreeProject->GitCommon()->SetCancelled( true );
+
     m_gitTreeCache.clear();
     m_gitStatusIcons.clear();
 
@@ -1679,35 +1677,78 @@ void PROJECT_TREE_PANE::EmptyTreePrj()
 
     m_TreeProject->DeleteAllItems();
 
-    // Remove the git repository when the project is unloaded
     if( m_TreeProject->GetGitRepo() )
     {
-        m_TreeProject->GitCommon()->SetCancelled( true );
+        KIGIT_COMMON* common = m_TreeProject->GitCommon();
+        common->SetCancelled( true );
 
-        // We need to lock the mutex to ensure that no other thread is using the git repository
-        std::unique_lock<std::mutex> lock( m_TreeProject->GitCommon()->m_gitActionMutex, std::try_to_lock );
+        std::unique_lock<std::mutex> lock( common->m_gitActionMutex, std::try_to_lock );
 
-        if( !lock.owns_lock() )
+        constexpr auto kGraceMs = std::chrono::seconds( 2 );
+        auto           graceEnd = std::chrono::steady_clock::now() + kGraceMs;
+
+        while( !lock.owns_lock() && std::chrono::steady_clock::now() < graceEnd )
         {
-            // Block until any in-flight Git actions complete, showing a pulsing progress dialog
-            {
-                wxProgressDialog progress( _( "Please wait" ), _( "Waiting for Git operations to finish..." ),
-                                           100, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH );
+            if( lock.try_lock() )
+                break;
+            std::this_thread::sleep_for( std::chrono::milliseconds( 50 ) );
+        }
 
-                // Keep trying to acquire the lock, pulsing the dialog every 100 ms
-                while ( !lock.try_lock() )
+        constexpr auto kCheckInterval = std::chrono::seconds( 30 );
+        bool           userAbandoned  = false;
+
+        while( !lock.owns_lock() && !userAbandoned )
+        {
+            auto intervalEnd = std::chrono::steady_clock::now() + kCheckInterval;
+
+            {
+                wxProgressDialog progress( _( "Please wait" ),
+                                           _( "Closing project..." ),
+                                           100, this,
+                                           wxPD_APP_MODAL | wxPD_SMOOTH );
+
+                while( !lock.try_lock()
+                       && std::chrono::steady_clock::now() < intervalEnd )
                 {
                     progress.Pulse();
-                    std::this_thread::sleep_for( std::chrono::milliseconds(100) );
-                    // allow UI events to process so dialog remains responsive
+                    std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
                     wxYield();
                 }
             }
+
+            if( lock.owns_lock() )
+                break;
+
+            wxMessageDialog ask( this,
+                                 _( "A Git operation is still running.\n"
+                                    "Keep waiting, or abandon?" ),
+                                 _( "Git Operation Delayed" ),
+                                 wxYES_NO | wxICON_QUESTION );
+            ask.SetYesNoLabels( _( "Keep Waiting" ), _( "Abandon" ) );
+
+            if( ask.ShowModal() == wxID_NO )
+                userAbandoned = true;
         }
 
-        git_repository* repo = m_TreeProject->GetGitRepo();
-        KIGIT::PROJECT_GIT_UTILS::RemoveVCS( repo );
-        m_TreeProject->SetGitRepo( nullptr );
+        if( userAbandoned )
+        {
+            git_repository*               orphan    = m_TreeProject->GetGitRepo();
+            std::unique_ptr<KIGIT_COMMON> oldCommon = m_TreeProject->TakeGitCommon();
+            m_TreeProject->SetGitRepo( nullptr );
+
+            std::thread(
+                [orphan, old = std::move( oldCommon )]() mutable
+                {
+                    std::lock_guard<std::mutex> g( old->m_gitActionMutex );
+                    git_repository_free( orphan );
+                } ).detach();
+        }
+        else
+        {
+            git_repository* repo = m_TreeProject->GetGitRepo();
+            KIGIT::PROJECT_GIT_UTILS::RemoveVCS( repo );
+            m_TreeProject->SetGitRepo( nullptr );
+        }
     }
 }
 
