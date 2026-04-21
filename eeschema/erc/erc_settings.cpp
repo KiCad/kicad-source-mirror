@@ -330,10 +330,16 @@ struct CompareMarkers
     {
         wxCHECK( item1 && item2, false );
 
-        if( item1->GetPosition() == item2->GetPosition() )
+        const VECTOR2I& p1 = item1->GetPosition();
+        const VECTOR2I& p2 = item2->GetPosition();
+
+        if( p1 == p2 )
             return item1->SerializeToString() < item2->SerializeToString();
 
-        return item1->GetPosition() < item2->GetPosition();
+        // VECTOR2::operator< orders by squared magnitude, which is not a strict
+        // weak ordering: mirrored points like (a, b) and (b, a) compare equal
+        // and collide in the std::set below, silently dropping one marker.
+        return p1.x < p2.x || ( p1.x == p2.x && p1.y < p2.y );
     }
 };
 
