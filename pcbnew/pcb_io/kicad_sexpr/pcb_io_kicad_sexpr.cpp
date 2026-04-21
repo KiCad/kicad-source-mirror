@@ -2447,15 +2447,26 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GROUP* aGroup ) const
 {
     wxArrayString memberIds;
 
+    // Validate member pointers against the board cache to avoid use-after-free on dangling
+    // pointers (e.g. when a group held a reference to a deleted item).  This validation only
+    // applies when the group itself is part of m_board; for groups created off-board (e.g. a
+    // DeepClone() used by the clipboard) the cache contains the originals, not our clones, so
+    // skip the validation in that case and trust the member pointers.
+    bool                                validateAgainstBoard = false;
+    std::unordered_set<const EDA_ITEM*> validPtrs;
+
     if( m_board )
     {
         const auto& cache = m_board->GetItemByIdCache();
 
-        std::unordered_set<const EDA_ITEM*> validPtrs;
-
         for( const auto& [uuid, item] : cache )
             validPtrs.insert( item );
 
+        validateAgainstBoard = validPtrs.count( aGroup ) > 0;
+    }
+
+    if( validateAgainstBoard )
+    {
         for( EDA_ITEM* member : aGroup->GetItems() )
         {
             if( validPtrs.count( member ) )
