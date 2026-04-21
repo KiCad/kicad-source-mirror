@@ -36,6 +36,7 @@
 #include "3d_cache.h"
 #include "3d_info.h"
 #include "3d_plugin_manager.h"
+#include "model_substitution_helpers.h"
 #include "sg/scenegraph.h"
 #include "plugins/3dapi/ifsg_api.h"
 
@@ -151,10 +152,41 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, const wxString& aBasePa
 
     if( full3Dpath.empty() )
     {
-        // the model cannot be found; we cannot proceed
-        wxLogTrace( MASK_3D_CACHE, wxT( "%s:%s:%d\n * [3D model] could not find model '%s'\n" ),
-                    __FILE__, __FUNCTION__, __LINE__, aModelFile );
-        return nullptr;
+        // In CLI / scripting contexts, transparently substitute a matching
+        // STEP model for a missing WRL reference so renders and exports
+        // don't silently lose geometry.  The GUI handles this via the
+        // DIALOG_MIGRATE_3D_MODELS load-time auto-migration, so we skip the
+        // fallback there to avoid masking user-visible "missing" state.
+        if( !Pgm().IsGUI() && MODEL_SUBSTITUTION::IsWrlExtension( aModelFile ) )
+        {
+            std::lock_guard<std::mutex> catLock( m_substCatalogMutex );
+
+            if( !m_substCatalogBuilt )
+            {
+                const wxString projectPath =
+                        m_project ? m_project->GetProjectPath() : wxString();
+                m_substCatalog.Build( projectPath, m_FNResolver );
+                m_substCatalogBuilt = true;
+            }
+
+            const wxString subst = m_substCatalog.FindMatchFor( aModelFile );
+
+            if( !subst.IsEmpty() )
+            {
+                wxLogTrace( MASK_3D_CACHE,
+                            wxT( "%s:%s:%d\n * [3D model] substituting '%s' -> '%s'\n" ),
+                            __FILE__, __FUNCTION__, __LINE__, aModelFile, subst );
+                full3Dpath = subst;
+            }
+        }
+
+        if( full3Dpath.empty() )
+        {
+            // the model cannot be found; we cannot proceed
+            wxLogTrace( MASK_3D_CACHE, wxT( "%s:%s:%d\n * [3D model] could not find model '%s'\n" ),
+                        __FILE__, __FUNCTION__, __LINE__, aModelFile );
+            return nullptr;
+        }
     }
 
     // check cache if file is already loaded

@@ -60,6 +60,13 @@ public:
     /// the project's FILENAME_RESOLVER cannot resolve.
     static bool BoardHasUnresolvedWrlReferences( PCB_EDIT_FRAME* aFrame );
 
+    /// Silently rewrite unresolvable `.wrl`/`.wrz` references to STEP files
+    /// whose filename stem matches in the standard 3D search paths.  Uses
+    /// BOARD_COMMIT so the change is undoable and marks the board dirty.
+    /// Intended for the GUI load path; has no UI and opens no dialog.
+    /// Returns the number of FP_3DMODEL entries rewritten.
+    static int AutoMigrateByFilename( PCB_EDIT_FRAME* aFrame );
+
 protected:
     void OnMissingSelected( wxListEvent& event ) override;
     void OnCandidateSelected( wxListEvent& event ) override;

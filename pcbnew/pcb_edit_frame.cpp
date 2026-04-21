@@ -1901,15 +1901,25 @@ void PCB_EDIT_FRAME::OnBoardLoaded()
 
     GetBoard()->InitializeClearanceCache();
 
-    // Offer to migrate obsolete WRL 3D model references to current STEP models.
-    // Shown only when unresolvable WRL paths are present and the user hasn't
-    // opted out of the prompt; the Tools menu exposes the dialog on demand.
-    if( COMMON_SETTINGS* commonSettings = Pgm().GetCommonSettings();
-        commonSettings && !commonSettings->m_DoNotShowAgain.migrate_wrl_prompt
-        && DIALOG_MIGRATE_3D_MODELS::BoardHasUnresolvedWrlReferences( this ) )
+    // Migrate obsolete WRL 3D model references to current STEP models.  Only
+    // runs in the GUI: CLI and scripting load paths must not mutate board
+    // state on load, and must never block on a modal dialog.  The STEP
+    // exporter does its own WRL->STEP substitution at export time via the
+    // --subst-models flag, and the 3D cache quietly falls back to sibling
+    // STEP files for missing WRLs in headless contexts.
+    if( Pgm().IsGUI() )
     {
-        DIALOG_MIGRATE_3D_MODELS dlg( this );
-        dlg.ShowModal();
+        // Silently replace references whose filename uniquely identifies a
+        // STEP sibling.  Leaves ambiguous cases for the dialog below.
+        DIALOG_MIGRATE_3D_MODELS::AutoMigrateByFilename( this );
+
+        if( COMMON_SETTINGS* commonSettings = Pgm().GetCommonSettings();
+            commonSettings && !commonSettings->m_DoNotShowAgain.migrate_wrl_prompt
+            && DIALOG_MIGRATE_3D_MODELS::BoardHasUnresolvedWrlReferences( this ) )
+        {
+            DIALOG_MIGRATE_3D_MODELS dlg( this );
+            dlg.ShowModal();
+        }
     }
 
     UpdateTitle();

@@ -42,6 +42,7 @@
 #include <settings/settings_manager.h>
 
 #include <3d_cache/3d_cache.h>
+#include <3d_cache/model_substitution_helpers.h>
 #include <3d_model_viewer/eda_3d_model_viewer.h>
 #include <common_ogl/ogl_attr_list.h>
 #include <filename_resolver.h>
@@ -294,12 +295,7 @@ bool DIALOG_MIGRATE_3D_MODELS::BoardHasUnresolvedWrlReferences( PCB_EDIT_FRAME* 
         {
             const wxString& fn = model.m_Filename;
 
-            if( fn.IsEmpty() )
-                continue;
-
-            const wxString ext = fn.AfterLast( '.' ).Lower();
-
-            if( ext != wxS( "wrl" ) && ext != wxS( "wrz" ) )
+            if( fn.IsEmpty() || !MODEL_SUBSTITUTION::IsWrlExtension( fn ) )
                 continue;
 
             if( resolver->ResolvePath( fn, projectPath, {} ).IsEmpty() )
@@ -308,6 +304,94 @@ bool DIALOG_MIGRATE_3D_MODELS::BoardHasUnresolvedWrlReferences( PCB_EDIT_FRAME* 
     }
 
     return false;
+}
+
+
+int DIALOG_MIGRATE_3D_MODELS::AutoMigrateByFilename( PCB_EDIT_FRAME* aFrame )
+{
+    if( !aFrame )
+        return 0;
+
+    BOARD*             board    = aFrame->GetBoard();
+    FILENAME_RESOLVER* resolver = PROJECT_PCB::Get3DFilenameResolver( &aFrame->Prj() );
+
+    if( !board || !resolver )
+        return 0;
+
+    const wxString projectPath = aFrame->Prj().GetProjectPath();
+
+    MODEL_SUBSTITUTION::STEP_CATALOG catalog;
+    bool                             catalogBuilt = false;
+
+    std::map<wxString, wxString> replacements;
+    std::unordered_set<wxString> seen;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        for( const FP_3DMODEL& model : fp->Models() )
+        {
+            const wxString& fn = model.m_Filename;
+
+            if( fn.IsEmpty() || !MODEL_SUBSTITUTION::IsWrlExtension( fn ) )
+                continue;
+
+            if( !seen.insert( fn ).second )
+                continue;
+
+            if( !resolver->ResolvePath( fn, projectPath, {} ).IsEmpty() )
+                continue;
+
+            if( !catalogBuilt )
+            {
+                catalog.Build( projectPath, resolver );
+                catalogBuilt = true;
+            }
+
+            const wxString match = catalog.FindMatchFor( fn );
+
+            if( match.IsEmpty() )
+                continue;
+
+            const wxString shortened = resolver->ShortenPath( match );
+
+            // ShortenPath returning empty would blank the footprint reference;
+            // fall back to the absolute path in that edge case.
+            replacements[fn] = shortened.IsEmpty() ? match : shortened;
+        }
+    }
+
+    if( replacements.empty() )
+        return 0;
+
+    BOARD_COMMIT commit( aFrame );
+    int          rewritten = 0;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        bool changedThisFp = false;
+
+        for( FP_3DMODEL& model : fp->Models() )
+        {
+            auto it = replacements.find( model.m_Filename );
+
+            if( it == replacements.end() )
+                continue;
+
+            if( !changedThisFp )
+            {
+                commit.Modify( fp );
+                changedThisFp = true;
+            }
+
+            model.m_Filename = it->second;
+            ++rewritten;
+        }
+    }
+
+    if( rewritten > 0 )
+        commit.Push( _( "Auto-migrate 3D model references" ) );
+
+    return rewritten;
 }
 
 
@@ -328,12 +412,7 @@ void DIALOG_MIGRATE_3D_MODELS::collectMissingModels()
         {
             const wxString& fn = model.m_Filename;
 
-            if( fn.IsEmpty() )
-                continue;
-
-            const wxString ext = fn.AfterLast( '.' ).Lower();
-
-            if( ext != wxS( "wrl" ) && ext != wxS( "wrz" ) )
+            if( fn.IsEmpty() || !MODEL_SUBSTITUTION::IsWrlExtension( fn ) )
                 continue;
 
             if( seen.count( fn ) )
