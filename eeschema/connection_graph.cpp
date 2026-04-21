@@ -45,7 +45,7 @@
 #include <sch_pin.h>
 #include <sch_rule_area.h>
 #include <wx/log.h>
-#include <sch_signal.h>
+#include <sch_netchain.h>
 #include <sch_label.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
@@ -2843,24 +2843,24 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
         }
     }
 
-    RebuildSignals();
+    RebuildNetChains();
 }
 
-void CONNECTION_GRAPH::RebuildSignals()
+void CONNECTION_GRAPH::RebuildNetChains()
 {
     try
     {
-        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: begin (items=%zu, schematic=%p)",
+        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: begin (items=%zu, schematic=%p)",
                     m_items.size(), (void*) m_schematic );
-        // Clear only potential signals; leave committed signals intact.
+        // Clear only potential net chains; leave committed net chains intact.
         m_potentialNetChains.clear();
 
         if( !m_schematic )
         {
-            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: no schematic" );
+            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: no schematic" );
             return;
         }
-    std::map<wxString, SCH_NETCHAIN*> netToSignal; // will be populated after chain extraction
+    std::map<wxString, SCH_NETCHAIN*> netToNetChain; // will be populated after chain extraction
 
         // Collect all screens from the cached sheet list so we can operate globally rather than
         // only on the current sheet.  (m_sheetList is populated during Recalculate()).
@@ -2872,22 +2872,22 @@ void CONNECTION_GRAPH::RebuildSignals()
                 allScreens.push_back( sc );
         }
 
-        // Clear any previous signal names on all symbols across all sheets so we can repopulate.
+        // Clear any previous chain names on all symbols across all sheets so we can repopulate.
         for( SCH_SCREEN* sc : allScreens )
         {
             for( SCH_ITEM* item : sc->Items().OfType( SCH_SYMBOL_T ) )
-                static_cast<SCH_SYMBOL*>( item )->SetSignalName( wxEmptyString );
+                static_cast<SCH_SYMBOL*>( item )->SetNetChainName( wxEmptyString );
         }
-        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: screens=%zu (global build)", allScreens.size() );
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: debug start passes (pre-pass signals=%zu)", m_signals.size() );
+        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: screens=%zu (global build)", allScreens.size() );
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: debug start passes (pre-pass chains=%zu)", m_committedNetChains.size() );
 
     // (Removed legacy findWire heuristic; global symbol-based connectivity no longer relies on
     // scanning parallel wires for 2-pin passthrough components.)
 
-    // Build signals by scanning eligible 2-pin symbols on every sheet, using the original
+    // Build net chains by scanning eligible 2-pin symbols on every sheet, using the original
     // parallel-wire passthrough heuristic. This is effectively the old pass 1 but repeated for
     // each screen, giving global coverage while preserving expected grouping semantics.
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: pass 1 (per-sheet 2-pin symbols)" );
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: pass 1 (per-sheet 2-pin symbols)" );
 
     auto getSubgraphNet = [&]( SCH_PIN* aPin ) -> wxString
     {
@@ -2905,7 +2905,7 @@ void CONNECTION_GRAPH::RebuildSignals()
     struct BRIDGE_EDGE { wxString a; wxString b; SCH_SYMBOL* sym; };
     std::vector<BRIDGE_EDGE> bridgeEdges; bridgeEdges.reserve( 256 );
 
-    // Collect only bridge edges (2-pin pass-through symbols) without forming signals yet.
+    // Collect only bridge edges (2-pin pass-through symbols) without forming chains yet.
     for( const SCH_SHEET_PATH& sheetPath : m_sheetList )
     {
         SCH_SCREEN* sc = sheetPath.LastScreen();
@@ -2971,7 +2971,7 @@ void CONNECTION_GRAPH::RebuildSignals()
     }
 
     // Mark power subgraphs first using full connectivity prior to passive bridging.
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: pass 1.5 (power marking)" );
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: pass 1.5 (power marking)" );
     std::set<long> powerSubgraphs; // subgraph codes containing at least one power-class pin
     std::map<wxString,long> netToCode; // map net (subgraph) name to code for filtering
     for( const SCH_SHEET_PATH& sheetPath : m_sheetList )
@@ -3000,7 +3000,7 @@ void CONNECTION_GRAPH::RebuildSignals()
             }
         }
     }
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: powerSubgraphs size=%zu", powerSubgraphs.size() );
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: powerSubgraphs size=%zu", powerSubgraphs.size() );
 
     struct EDGE { wxString other; SCH_SYMBOL* sym; };
     std::map<wxString, std::vector<EDGE>> adjacency; // filtered adjacency
@@ -3029,7 +3029,7 @@ void CONNECTION_GRAPH::RebuildSignals()
         for( const auto& kv : adjacency )
             degree[kv.first] = (int) kv.second.size();
 
-        // If very small adjacency (<=2 nets) don't risk pruning away valid small signals
+        // If very small adjacency (<=2 nets) don't risk pruning away valid small chains
         if( adjacency.size() <= 2 )
         {
             powerAdjacentNets.clear(); // ignore any incidental marking
@@ -3065,7 +3065,7 @@ void CONNECTION_GRAPH::RebuildSignals()
         }
     if( !removed.empty() )
         {
-            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: pruned %zu power-adjacent leaf nets", removed.size() );
+            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: pruned %zu power-adjacent leaf nets", removed.size() );
             // Rebuild adjacency without removed nets
             std::map<wxString,std::vector<EDGE>> newAdj;
             for( const auto& kv : adjacency )
@@ -3085,7 +3085,7 @@ void CONNECTION_GRAPH::RebuildSignals()
     // (degree 1 whose neighbor has degree >2). This satisfies legacy test expecting longest branch kept.
     {
         // First, discover connected components over current adjacency.
-        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: targeted stub pruning start (adj=%zu)", adjacency.size() );
+        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: targeted stub pruning start (adj=%zu)", adjacency.size() );
         std::map<wxString,std::vector<EDGE>> snapshot = adjacency; // read-only snapshot
         std::set<wxString> seen;
         std::set<wxString> globalPrune;
@@ -3134,7 +3134,7 @@ void CONNECTION_GRAPH::RebuildSignals()
                 }
             }
             adjacency.swap( newAdj );
-            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: pruned %zu targeted stub nets", globalPrune.size() );
+            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: pruned %zu targeted stub nets", globalPrune.size() );
         }
     }
 
@@ -3184,13 +3184,13 @@ void CONNECTION_GRAPH::RebuildSignals()
             m_potentialNetChains.push_back( std::move( sig ) );
         }
     }
-    // Build netToSignal map for potential signals
-    netToSignal.clear();
+    // Build netToNetChain map for potential net chains
+    netToNetChain.clear();
     for( const auto& sigUP : m_potentialNetChains )
-        if( sigUP ) for( const wxString& n : sigUP->GetNets() ) netToSignal[n] = sigUP.get();
+        if( sigUP ) for( const wxString& n : sigUP->GetNets() ) netToNetChain[n] = sigUP.get();
 
-    // Debug: enumerate signals and their nets prior to label-based naming.
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: pre-label potentialSignals=%zu", m_potentialNetChains.size() );
+    // Debug: enumerate chains and their nets prior to label-based naming.
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: pre-label potentialNetChains=%zu", m_potentialNetChains.size() );
     for( const auto& sigUP : m_potentialNetChains )
     {
         if( !sigUP ) continue;
@@ -3210,7 +3210,7 @@ void CONNECTION_GRAPH::RebuildSignals()
             }
             ++count;
         }
-        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "  signal %p name='%s' nets=%zu [%s]", (void*) sigUP.get(),
+        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "  chain %p name='%s' nets=%zu [%s]", (void*) sigUP.get(),
                     sigUP->GetName(), sigUP->GetNets().size(), netsStr );
     }
 
@@ -3227,7 +3227,7 @@ void CONNECTION_GRAPH::RebuildSignals()
             net = sg->GetNetName();
 
         // Defensive: guard against pathological names
-        if( !net.IsEmpty() && net.Length() < 2048 && netToSignal.count( net ) )
+        if( !net.IsEmpty() && net.Length() < 2048 && netToNetChain.count( net ) )
         {
             wxString name = label->GetText();
             if( name.Length() > 512 )
@@ -3235,23 +3235,23 @@ void CONNECTION_GRAPH::RebuildSignals()
             if( name.StartsWith( wxS( "/" ) ) )
                 name = name.Mid( 1 );
 
-            netToSignal[net]->SetName( name );
+            netToNetChain[net]->SetName( name );
         }
     }
 
     int idx = 1;
 
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: pass 3 (default naming)" );
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: pass 3 (default naming)" );
     for( std::unique_ptr<SCH_NETCHAIN>& sig : m_potentialNetChains )
     {
         if( sig->GetName().IsEmpty() )
         {
-            sig->SetName( wxString::Format( wxT( "Signal%d" ), idx ) );
+            sig->SetName( wxString::Format( wxT( "NetChain%d" ), idx ) );
             idx++;
         }
     }
 
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: pass 4 (terminal pins)" );
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: pass 4 (terminal pins)" );
     for( std::unique_ptr<SCH_NETCHAIN>& sig : m_potentialNetChains )
     {
         std::vector<SCH_PIN*> pins;
@@ -3294,38 +3294,38 @@ void CONNECTION_GRAPH::RebuildSignals()
 
         sig->SetTerminalPins( a, b );
 
-        if( m_signalTerminalOverrides.count( sig->GetName() ) )
+        if( m_netChainTerminalOverrides.count( sig->GetName() ) )
         {
-            auto ov = m_signalTerminalOverrides[sig->GetName()];
+            auto ov = m_netChainTerminalOverrides[sig->GetName()];
             sig->SetTerminalPins( ov.first, ov.second );
         }
     }
 
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: pass 5 (apply symbol names)" );
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: pass 5 (apply symbol names)" );
     for( auto& sigUP : m_potentialNetChains )
     {
         SCH_NETCHAIN* sig = sigUP.get();
         for( SCH_SYMBOL* sym : sig->GetSymbols() )
         {
             if( sym )
-                sym->SetSignalName( sig->GetName() );
+                sym->SetNetChainName( sig->GetName() );
         }
     wxString netsStr;
     for( const wxString& n : sig->GetNets() ) { netsStr += n + wxS(" "); }
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "FinalSignal %p nets(%zu): %s", (void*) sig, sig->GetNets().size(), netsStr );
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "FinalChain %p nets(%zu): %s", (void*) sig, sig->GetNets().size(), netsStr );
     }
 
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: built %zu potential net chains", m_potentialNetChains.size() );
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: built %zu potential net chains", m_potentialNetChains.size() );
     }
     catch( const std::exception& e )
     {
-        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: exception: %s", e.what() );
+        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: exception: %s", e.what() );
     m_potentialNetChains.clear();
         return;
     }
     catch( ... )
     {
-        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildSignals: unknown exception" );
+        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: unknown exception" );
     m_potentialNetChains.clear();
         return;
     }
@@ -3360,28 +3360,28 @@ bool CONNECTION_GRAPH::DeleteCommittedNetChain( const wxString& aName )
     if( aName.IsEmpty() )
         return false;
 
-    auto it = std::find_if( m_signals.begin(), m_signals.end(),
+    auto it = std::find_if( m_committedNetChains.begin(), m_committedNetChains.end(),
                             [&]( const std::unique_ptr<SCH_NETCHAIN>& aChain )
                             {
                                 return aChain && aChain->GetName() == aName;
                             } );
 
-    if( it == m_signals.end() )
+    if( it == m_committedNetChains.end() )
         return false;
 
     // Drop the chain marker from every member symbol so a future
-    // RebuildSignals() doesn't re-promote them under the same name.
+    // RebuildNetChains() doesn't re-promote them under the same name.
     for( SCH_SYMBOL* sym : (*it)->GetSymbols() )
     {
         if( sym )
-            sym->SetSignalName( wxEmptyString );
+            sym->SetNetChainName( wxEmptyString );
     }
 
-    m_signals.erase( it );
+    m_committedNetChains.erase( it );
 
     // Drop orphaned overrides keyed on this name.
-    m_signalNetClassOverrides.erase( aName );
-    m_signalColorOverrides.erase( aName );
+    m_netChainNetClassOverrides.erase( aName );
+    m_netChainColorOverrides.erase( aName );
 
     return true;
 }
@@ -3394,7 +3394,7 @@ bool CONNECTION_GRAPH::RenameCommittedNetChain( const wxString& aOld, const wxSt
 
     auto findByName = [&]( const wxString& aName ) -> SCH_NETCHAIN*
     {
-        for( const std::unique_ptr<SCH_NETCHAIN>& chain : m_signals )
+        for( const std::unique_ptr<SCH_NETCHAIN>& chain : m_committedNetChains )
         {
             if( chain && chain->GetName() == aName )
                 return chain.get();
@@ -3418,7 +3418,7 @@ bool CONNECTION_GRAPH::RenameCommittedNetChain( const wxString& aOld, const wxSt
     for( SCH_SYMBOL* sym : existing->GetSymbols() )
     {
         if( sym )
-            sym->SetSignalName( aNew );
+            sym->SetNetChainName( aNew );
     }
 
     auto rekey = []( std::map<wxString, wxString>& aMap, const wxString& aOldKey,
@@ -3447,8 +3447,8 @@ bool CONNECTION_GRAPH::RenameCommittedNetChain( const wxString& aOld, const wxSt
         }
     };
 
-    rekey( m_signalNetClassOverrides, aOld, aNew );
-    rekeyColor( m_signalColorOverrides, aOld, aNew );
+    rekey( m_netChainNetClassOverrides, aOld, aNew );
+    rekeyColor( m_netChainColorOverrides, aOld, aNew );
 
     return true;
 }
@@ -3466,82 +3466,82 @@ SCH_NETCHAIN* CONNECTION_GRAPH::CreateNetChainFromPotential( SCH_NETCHAIN* aPote
     sig->SetName( aName );
 
     // Apply any parsed netclass override for this chain name.
-    auto ncIt = m_signalNetClassOverrides.find( aName );
+    auto ncIt = m_netChainNetClassOverrides.find( aName );
 
-    if( ncIt != m_signalNetClassOverrides.end() )
+    if( ncIt != m_netChainNetClassOverrides.end() )
         sig->SetNetClass( ncIt->second );
 
     // Apply any parsed colour override for this chain name.
-    auto colIt = m_signalColorOverrides.find( aName );
+    auto colIt = m_netChainColorOverrides.find( aName );
 
-    if( colIt != m_signalColorOverrides.end() )
+    if( colIt != m_netChainColorOverrides.end() )
         sig->SetColor( colIt->second );
 
     // Apply name to symbols now
     for( SCH_SYMBOL* sym : sig->GetSymbols() )
-        if( sym ) sym->SetSignalName( sig->GetName() );
+        if( sym ) sym->SetNetChainName( sig->GetName() );
     SCH_NETCHAIN* raw = sig.get();
-    m_signals.push_back( std::move( sig ) ); // committed from potential net chain
+    m_committedNetChains.push_back( std::move( sig ) ); // committed from potential net chain
     return raw;
 }
 
 
-SCH_NETCHAIN* CONNECTION_GRAPH::GetSignalForNet( const wxString& aNet )
+SCH_NETCHAIN* CONNECTION_GRAPH::GetNetChainForNet( const wxString& aNet )
 {
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "CONNECTION_GRAPH::GetSignalForNet(%s)", aNet );
-    for( std::unique_ptr<SCH_NETCHAIN>& sig : m_signals )
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "CONNECTION_GRAPH::GetNetChainForNet(%s)", aNet );
+    for( std::unique_ptr<SCH_NETCHAIN>& sig : m_committedNetChains )
     {
         if( sig->GetNets().count( aNet ) )
         {
-            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "GetSignalForNet: found signal '%s'", sig->GetName() );
+            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "GetNetChainForNet: found chain '%s'", sig->GetName() );
             return sig.get();
         }
     }
 
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "GetSignalForNet: no signal found" );
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "GetNetChainForNet: no chain found" );
     return nullptr;
 }
 
 
-SCH_NETCHAIN* CONNECTION_GRAPH::GetSignalByName( const wxString& aName )
+SCH_NETCHAIN* CONNECTION_GRAPH::GetNetChainByName( const wxString& aName )
 {
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "CONNECTION_GRAPH::GetSignalByName(%s)", aName );
-    for( std::unique_ptr<SCH_NETCHAIN>& sig : m_signals )
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "CONNECTION_GRAPH::GetNetChainByName(%s)", aName );
+    for( std::unique_ptr<SCH_NETCHAIN>& sig : m_committedNetChains )
     {
         if( sig->GetName() == aName )
         {
-            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "GetSignalByName: found" );
+            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "GetNetChainByName: found" );
             return sig.get();
         }
     }
 
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "GetSignalByName: not found" );
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "GetNetChainByName: not found" );
     return nullptr;
 }
 
 
-void CONNECTION_GRAPH::ReplaceSignalTerminalPin( const wxString& aSignal, const KIID& aPrev,
+void CONNECTION_GRAPH::ReplaceNetChainTerminalPin( const wxString& aNetChain, const KIID& aPrev,
                                                 const KIID& aNew )
 {
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ReplaceSignalTerminalPin: signal='%s' prev=%s new=%s",
-                aSignal, aPrev.AsString(), aNew.AsString() );
-    if( SCH_NETCHAIN* sig = GetSignalByName( aSignal ) )
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ReplaceNetChainTerminalPin: chain='%s' prev=%s new=%s",
+                aNetChain, aPrev.AsString(), aNew.AsString() );
+    if( SCH_NETCHAIN* sig = GetNetChainByName( aNetChain ) )
     {
         sig->ReplaceTerminalPin( aPrev, aNew );
-        m_signalTerminalOverrides[aSignal] = std::make_pair( sig->GetTerminalPinA(),
+        m_netChainTerminalOverrides[aNetChain] = std::make_pair( sig->GetTerminalPinA(),
                                                              sig->GetTerminalPinB() );
-        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ReplaceSignalTerminalPin: updated overrides to (%s,%s)",
+        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ReplaceNetChainTerminalPin: updated overrides to (%s,%s)",
                     sig->GetTerminalPinA().AsString(), sig->GetTerminalPinB().AsString() );
     }
 }
 
 
-void CONNECTION_GRAPH::SetSignalTerminalOverrides( const std::map<wxString,
+void CONNECTION_GRAPH::SetNetChainTerminalOverrides( const std::map<wxString,
                                                 std::pair<KIID, KIID>>& aOverrides )
 {
-    m_signalTerminalOverrides = aOverrides;
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "SetSignalTerminalOverrides: count=%zu",
-                m_signalTerminalOverrides.size() );
+    m_netChainTerminalOverrides = aOverrides;
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "SetNetChainTerminalOverrides: count=%zu",
+                m_netChainTerminalOverrides.size() );
 }
 
 
@@ -5254,7 +5254,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 
             // A local label that connects to other subgraphs with
             // hierarchical connections on the same sheet (through bus
-            // parents or net-name neighbors) is routing signals and should
+            // parents or net-name neighbors) is routing aggregated nets and should
             // not be flagged even without local component pins.
             if( allPins == 0
                 || ( type == SCH_LABEL_T && localPins == 0 && allPins > 1

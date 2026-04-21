@@ -322,9 +322,9 @@ public:
         return m_highlightedConn;
     }
 
-    const wxString& GetHighlightedSignal() const
+    const wxString& GetHighlightedNetChain() const
     {
-        return m_highlightedSignal;
+        return m_highlightedNetChain;
     }
 
     void SetHighlightedConnection( const wxString& aConnection,
@@ -332,11 +332,11 @@ public:
 
     void DirtyHighlightedConnection() { m_highlightedConnChanged = true; }
 
-    void SetHighlightedSignal( const wxString& aSignal )
+    void SetHighlightedNetChain( const wxString& aNetChain )
     {
-        m_highlightedSignal = aSignal;
+        m_highlightedNetChain = aNetChain;
         if( m_schematic )
-            m_schematic->SetHighlightedSignal( aSignal );
+            m_schematic->SetHighlightedNetChain( aNetChain );
     }
 
     /**
@@ -1071,7 +1071,7 @@ private:
 
     SCHEMATIC*                  m_schematic;          ///< The currently loaded schematic
     wxString                    m_highlightedConn;    ///< The highlighted net or bus or empty string.
-    wxString                    m_highlightedSignal;
+    wxString                    m_highlightedNetChain;
 
     wxPageSetupDialogData       m_pageSetupData;
     std::vector<std::unique_ptr<SCH_ITEM>> m_items_to_repeat;  ///< For the repeat-last-item cmd

@@ -1217,9 +1217,8 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             parseNETINFO_ITEM();
             break;
 
-        case T_signals:
         case T_net_chains:
-            parseSIGNALS_SECTION();
+            parseNET_CHAINS_SECTION();
             break;
 
         case T_net_class:
@@ -3150,18 +3149,18 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseNETINFO_ITEM()
     }
 }
 
-// Parse the (signals ...) aggregation block providing signal names, member nets and optional terminal pads.
-void PCB_IO_KICAD_SEXPR_PARSER::parseSIGNALS_SECTION()
+// Parse the (net_chains ...) aggregation block providing chain names, member nets and optional terminal pads.
+void PCB_IO_KICAD_SEXPR_PARSER::parseNET_CHAINS_SECTION()
 {
-    // Tokens inside section: (signal (name <str>) (members (member (net <code>))...) (terminal_pad <uuid>) (terminal_pad <uuid>))
+    // Tokens inside section: (net_chain (name <str>) (members (member (net <code>))...) (terminal_pad <uuid>) (terminal_pad <uuid>))
     for( T token = NextTok(); token != T_EOF; token = NextTok() )
     {
         if( token == T_RIGHT )
-            break; // end of (signals ...)
+            break; // end of (net_chains ...)
         else if( token == T_LEFT )
             token = NextTok();
 
-        if( token != T_signal && token != T_net_chain )
+        if( token != T_net_chain )
         {
             skipCurrent();
             continue;
@@ -3176,7 +3175,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSIGNALS_SECTION()
         for( T t = NextTok(); t != T_EOF; t = NextTok() )
         {
             if( t == T_RIGHT )
-                break; // end signal
+                break; // end chain
             else if( t == T_LEFT )
                 t = NextTok();
 
@@ -3271,7 +3270,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSIGNALS_SECTION()
 
         for( NETINFO_ITEM* net : resolvedNets )
         {
-            net->SetSignal( name );
+            net->SetNetChain( name );
 
             for( int i = 0; i < padCount && i < 2; ++i )
             {

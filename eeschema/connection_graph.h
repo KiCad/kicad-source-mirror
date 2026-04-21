@@ -33,7 +33,7 @@
 #include <gal/color4d.h>
 #include <sch_connection.h>
 #include <sch_item.h>
-#include <sch_signal.h>
+#include <sch_netchain.h>
 #include <wx/treectrl.h>
 #include <wx/string.h>
 #include <advanced_config.h>
@@ -445,36 +445,36 @@ public:
 
     const NET_MAP& GetNetMap() const { return m_net_code_to_subgraphs_map; }
 
-    // (Deprecated accessor moved to potential signals section; retained later.)
+    // (Deprecated accessor moved to potential net chains section; retained later.)
 
-    SCH_NETCHAIN* GetSignalForNet( const wxString& aNet );
-    SCH_NETCHAIN* GetSignalByName( const wxString& aName );
-    void ReplaceSignalTerminalPin( const wxString& aSignal, const KIID& aPrev, const KIID& aNew );
-    void SetSignalTerminalOverrides( const std::map<wxString, std::pair<KIID, KIID>>& aOverrides );
+    SCH_NETCHAIN* GetNetChainForNet( const wxString& aNet );
+    SCH_NETCHAIN* GetNetChainByName( const wxString& aName );
+    void ReplaceNetChainTerminalPin( const wxString& aNetChain, const KIID& aPrev, const KIID& aNew );
+    void SetNetChainTerminalOverrides( const std::map<wxString, std::pair<KIID, KIID>>& aOverrides );
 
     /**
      * Stash per-net-chain netclass overrides read from the schematic file.  These are
-     * consumed by RebuildSignals when committed chains are named: if a chain matches
+     * consumed by RebuildNetChains when committed chains are named: if a chain matches
      * one of the keys, its netclass override is set from the value.
      */
-    void SetSignalNetClassOverrides( const std::map<wxString, wxString>& aOverrides )
+    void SetNetChainNetClassOverrides( const std::map<wxString, wxString>& aOverrides )
     {
-        m_signalNetClassOverrides = aOverrides;
+        m_netChainNetClassOverrides = aOverrides;
     }
 
-    const std::map<wxString, wxString>& GetSignalNetClassOverrides() const
+    const std::map<wxString, wxString>& GetNetChainNetClassOverrides() const
     {
-        return m_signalNetClassOverrides;
+        return m_netChainNetClassOverrides;
     }
 
-    void SetSignalColorOverrides( const std::map<wxString, COLOR4D>& aOverrides )
+    void SetNetChainColorOverrides( const std::map<wxString, COLOR4D>& aOverrides )
     {
-        m_signalColorOverrides = aOverrides;
+        m_netChainColorOverrides = aOverrides;
     }
 
-    const std::map<wxString, COLOR4D>& GetSignalColorOverrides() const
+    const std::map<wxString, COLOR4D>& GetNetChainColorOverrides() const
     {
-        return m_signalColorOverrides;
+        return m_netChainColorOverrides;
     }
 
     /**
@@ -840,13 +840,13 @@ private:
      */
     size_t hasPins( const CONNECTION_SUBGRAPH* aLocSubgraph );
 
-    void RebuildSignals();
+    void RebuildNetChains();
 
     // Potential net chain (inferred) API -------------------------------
 public:
     /**
-     * Potential net chains are inferred groupings produced by RebuildSignals() but not
-     * yet user-committed. Existing m_signals now represents only user-created connectivity groups.
+     * Potential net chains are inferred groupings produced by RebuildNetChains() but not
+     * yet user-committed. Existing m_committedNetChains now represents only user-created connectivity groups.
      */
     const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetPotentialNetChains() const { return m_potentialNetChains; }
 
@@ -856,14 +856,14 @@ public:
     /** Promote a potential net chain to an actual user net chain with the provided name. */
     SCH_NETCHAIN* CreateNetChainFromPotential( SCH_NETCHAIN* aPotential, const wxString& aName );
 
-    /** Return user-created (committed) net chains (legacy accessor retained under signals API). */
-    const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetSignals() const { return m_signals; }
+    /** Return user-created (committed) net chains (legacy accessor retained under net-chain API). */
+    const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetCommittedNetChains() const { return m_committedNetChains; }
 
     /**
      * Delete a committed net chain by name.  Also clears any orphaned override
-     * map entries (m_signalNetClassOverrides / m_signalColorOverrides) and
-     * resets the SetSignalName marker on every member symbol so the chain is
-     * not reapplied on the next RebuildSignals() pass.
+     * map entries (m_netChainNetClassOverrides / m_netChainColorOverrides) and
+     * resets the SetNetChainName marker on every member symbol so the chain is
+     * not reapplied on the next RebuildNetChains() pass.
      *
      * @return true if a chain with that name was found and removed.
      */
@@ -871,7 +871,7 @@ public:
 
     /**
      * Rename a committed net chain.  Re-keys override map entries from the old
-     * name to the new one, and updates every member symbol's signal-name
+     * name to the new one, and updates every member symbol's net-chain name
      * marker.  Returns false when the new name is empty, the old chain does
      * not exist, or another chain already uses the new name.
      */
@@ -918,12 +918,12 @@ private:
 
     NET_MAP m_net_code_to_subgraphs_map;
 
-    std::vector<std::unique_ptr<SCH_NETCHAIN>> m_signals;
+    std::vector<std::unique_ptr<SCH_NETCHAIN>> m_committedNetChains;
     std::vector<std::unique_ptr<SCH_NETCHAIN>> m_potentialNetChains; ///< last built potential (uncommitted) net chains
     std::map<std::pair<KIID, KIID>, wxString> m_netChains;
-    std::map<wxString, std::pair<KIID, KIID>> m_signalTerminalOverrides;
-    std::map<wxString, wxString>              m_signalNetClassOverrides;
-    std::map<wxString, COLOR4D>               m_signalColorOverrides;
+    std::map<wxString, std::pair<KIID, KIID>> m_netChainTerminalOverrides;
+    std::map<wxString, wxString>              m_netChainNetClassOverrides;
+    std::map<wxString, COLOR4D>               m_netChainColorOverrides;
 
     int m_last_net_code;
 

@@ -24,7 +24,7 @@
 
 #include <connection_graph.h>
 #include <schematic.h>
-#include <sch_signal.h>
+#include <sch_netchain.h>
 #include <sch_sheet.h>
 #include <settings/settings_manager.h>
 #include <locale_io.h>
@@ -42,11 +42,11 @@ struct NETCHAIN_RENAME_FIXTURE
 // Promote a potential, then rename + delete it via the Phase 8.1 APIs.
 // Validates that:
 //  * RenameCommittedNetChain rekeys the override maps and rejects collisions.
-//  * DeleteCommittedNetChain removes from m_signals and clears overrides.
+//  * DeleteCommittedNetChain removes from m_committedNetChains and clears overrides.
 BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE )
 {
     LOCALE_IO dummy;
-    KI_TEST::LoadSchematic( m_settingsManager, wxString( "signals_four_nets" ), m_schematic );
+    KI_TEST::LoadSchematic( m_settingsManager, wxString( "net_chains_four_nets" ), m_schematic );
 
     CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
     BOOST_REQUIRE( graph );
@@ -61,8 +61,8 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE
     std::map<wxString, KIGFX::COLOR4D> colors;
     classes[wxT( "FIRST" )] = wxT( "DDR_DATA" );
     colors[wxT( "FIRST" )]  = KIGFX::COLOR4D( 0.1, 0.2, 0.3, 1.0 );
-    graph->SetSignalNetClassOverrides( classes );
-    graph->SetSignalColorOverrides( colors );
+    graph->SetNetChainNetClassOverrides( classes );
+    graph->SetNetChainColorOverrides( colors );
 
     SCH_NETCHAIN* committed =
             graph->CreateNetChainFromPotential( potentials.front().get(), wxT( "FIRST" ) );
@@ -94,12 +94,12 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE
 
     // The override maps must follow the rename: old key gone, new key carries
     // the previous values.
-    const auto& nccOverrides = graph->GetSignalNetClassOverrides();
+    const auto& nccOverrides = graph->GetNetChainNetClassOverrides();
     BOOST_CHECK( nccOverrides.find( wxT( "FIRST" ) ) == nccOverrides.end() );
     BOOST_CHECK( nccOverrides.find( wxT( "RENAMED" ) ) != nccOverrides.end() );
     BOOST_CHECK_EQUAL( nccOverrides.at( wxT( "RENAMED" ) ), wxT( "DDR_DATA" ) );
 
-    const auto& colOverrides = graph->GetSignalColorOverrides();
+    const auto& colOverrides = graph->GetNetChainColorOverrides();
     BOOST_CHECK( colOverrides.find( wxT( "FIRST" ) ) == colOverrides.end() );
     BOOST_CHECK( colOverrides.find( wxT( "RENAMED" ) ) != colOverrides.end() );
 
@@ -111,10 +111,10 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE
     BOOST_CHECK( graph->DeleteCommittedNetChain( wxT( "RENAMED" ) ) );
 
     {
-        const auto& signals = graph->GetSignals();
+        const auto& netChains = graph->GetCommittedNetChains();
         bool        found   = false;
 
-        for( const std::unique_ptr<SCH_NETCHAIN>& s : signals )
+        for( const std::unique_ptr<SCH_NETCHAIN>& s : netChains )
         {
             if( s && s->GetName() == wxT( "RENAMED" ) )
                 found = true;
@@ -123,8 +123,8 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE
         BOOST_CHECK( !found );
     }
 
-    BOOST_CHECK( graph->GetSignalNetClassOverrides().find( wxT( "RENAMED" ) )
-                 == graph->GetSignalNetClassOverrides().end() );
-    BOOST_CHECK( graph->GetSignalColorOverrides().find( wxT( "RENAMED" ) )
-                 == graph->GetSignalColorOverrides().end() );
+    BOOST_CHECK( graph->GetNetChainNetClassOverrides().find( wxT( "RENAMED" ) )
+                 == graph->GetNetChainNetClassOverrides().end() );
+    BOOST_CHECK( graph->GetNetChainColorOverrides().find( wxT( "RENAMED" ) )
+                 == graph->GetNetChainColorOverrides().end() );
 }

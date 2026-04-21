@@ -121,22 +121,22 @@ public:
      */
     const std::vector<wxString>& GetParseWarnings() const { return m_parseWarnings; }
 
-    // Access parsed signal terminal overrides for consumers after ParseSchematic.
-    const std::map<wxString, std::pair<KIID, KIID>>& GetSignalTerminals() const
+    // Access parsed net-chain terminal overrides for consumers after ParseSchematic.
+    const std::map<wxString, std::pair<KIID, KIID>>& GetNetChainTerminals() const
     {
-        return m_signalTerminals;
+        return m_netChainTerminals;
     }
 
     // Access parsed per-chain netclass overrides (chain name -> netclass name).
-    const std::map<wxString, wxString>& GetSignalNetClasses() const
+    const std::map<wxString, wxString>& GetNetChainNetClasses() const
     {
-        return m_signalNetClasses;
+        return m_netChainNetClasses;
     }
 
     // Access parsed per-chain colour overrides (chain name -> RGBA).
-    const std::map<wxString, COLOR4D>& GetSignalColors() const
+    const std::map<wxString, COLOR4D>& GetNetChainColors() const
     {
-        return m_signalColors;
+        return m_netChainColors;
     }
 
 private:
@@ -282,7 +282,7 @@ private:
     SCH_TABLECELL* parseSchTableCell();
     SCH_TABLE* parseSchTable();
     void parseBusAlias( SCH_SCREEN* aScreen );
-    void parseSchSignal();
+    void parseSchNetChain();
 
     void resolveGroups( SCH_SCREEN* aParent );
 
@@ -324,9 +324,9 @@ private:
 
     std::vector<wxString>   m_parseWarnings;    ///< Non-fatal warnings collected during parsing
 
-    std::map<wxString, std::pair<KIID, KIID>> m_signalTerminals;
-    std::map<wxString, wxString>              m_signalNetClasses;
-    std::map<wxString, COLOR4D>               m_signalColors;
+    std::map<wxString, std::pair<KIID, KIID>> m_netChainTerminals;
+    std::map<wxString, wxString>              m_netChainNetClasses;
+    std::map<wxString, COLOR4D>               m_netChainColors;
 };
 
 #endif    // SCH_IO_KICAD_SEXPR_PARSER_H_

@@ -1097,15 +1097,15 @@ TOOL_ACTION SCH_ACTIONS::highlightNetTool( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::net_highlight_schematic )
         .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION SCH_ACTIONS::highlightSignal( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.highlightSignal" )
+TOOL_ACTION SCH_ACTIONS::highlightNetChain( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.highlightNetChain" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Highlight Net Chain" ) )
         .Tooltip( _( "Highlight the net chain under the cursor" ) )
         .Icon( BITMAPS::net_highlight_schematic ) );
 
-TOOL_ACTION SCH_ACTIONS::removeFromSignal( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.removeFromSignal" )
+TOOL_ACTION SCH_ACTIONS::removeFromNetChain( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.removeFromNetChain" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Remove from Net Chain" ) )
         .Tooltip( _( "Remove the selected net from its net chain by disabling propagation on the bridging component(s)" ) ) );
@@ -1115,14 +1115,14 @@ TOOL_ACTION SCH_ACTIONS::replaceTerminalPin( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Replace Terminal Pin" ) ) );
 
-TOOL_ACTION SCH_ACTIONS::nameSignal( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.nameSignal" )
+TOOL_ACTION SCH_ACTIONS::nameNetChain( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.nameNetChain" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Name Net Chain" ) )
         .Tooltip( _( "Assign a name to the net chain" ) ) );
 
-TOOL_ACTION SCH_ACTIONS::createSignalBetweenPins( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.createSignalBetweenPins" )
+TOOL_ACTION SCH_ACTIONS::createNetChainBetweenPins( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.createNetChainBetweenPins" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Create Net Chain Between Pins" ) )
         .Tooltip( _( "Create a new net chain connecting the two selected pins" ) ) );

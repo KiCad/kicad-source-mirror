@@ -30,7 +30,7 @@
 #include <kiway_mail.h>
 #include <eda_dde.h>
 #include <connection_graph.h>
-#include <sch_signal.h>
+#include <sch_netchain.h>
 #include <sch_sheet.h>
 #include <sch_symbol.h>
 #include <sch_reference_list.h>
@@ -242,10 +242,10 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         // highlight so the schematic mirrors what the PCB editor is doing.
         if( CONNECTION_GRAPH* graph = Schematic().ConnectionGraph() )
         {
-            if( SCH_NETCHAIN* chain = graph->GetSignalForNet( m_highlightedConn ) )
-                SetHighlightedSignal( chain->GetName() );
+            if( SCH_NETCHAIN* chain = graph->GetNetChainForNet( m_highlightedConn ) )
+                SetHighlightedNetChain( chain->GetName() );
             else
-                SetHighlightedSignal( wxEmptyString );
+                SetHighlightedNetChain( wxEmptyString );
         }
 
         GetToolManager()->RunAction( SCH_ACTIONS::updateNetHighlighting );

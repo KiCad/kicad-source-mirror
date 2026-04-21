@@ -2922,17 +2922,17 @@ bool PNS_KICAD_IFACE_BASE::GetSignalAggregate( PNS::NET_HANDLE aNetP, PNS::NET_H
 
     auto* netP = static_cast<NETINFO_ITEM*>( aNetP );
     auto* netN = static_cast<NETINFO_ITEM*>( aNetN );
-    wxString sig = netP->GetSignal();
-    if( sig.IsEmpty() || sig != netN->GetSignal() )
+    wxString sig = netP->GetNetChain();
+    if( sig.IsEmpty() || sig != netN->GetNetChain() )
         return false;
 
     long long repLengthP = 0; // representative length of first net (used for span correction)
-    std::vector<VECTOR2I> signalPadCenters;
+    std::vector<VECTOR2I> chainPadCenters;
 
-    // Collect other nets in same signal
+    // Collect other nets in same chain
     for( NETINFO_ITEM* net : m_board->GetNetInfo() )
     {
-        if( net->GetSignal() != sig )
+        if( net->GetNetChain() != sig )
             continue;
         bool isPrimary = ( net->GetNetCode() == netP->GetNetCode() );
         bool isSecondary = ( net->GetNetCode() == netN->GetNetCode() );
@@ -2940,8 +2940,8 @@ bool PNS_KICAD_IFACE_BASE::GetSignalAggregate( PNS::NET_HANDLE aNetP, PNS::NET_H
         // Accumulate terminal pad centers for overall span measurement
         PAD* term0 = net->GetTerminalPad( 0 );
         PAD* term1 = net->GetTerminalPad( 1 );
-        if( term0 ) signalPadCenters.push_back( term0->GetCenter() );
-        if( term1 ) signalPadCenters.push_back( term1->GetCenter() );
+        if( term0 ) chainPadCenters.push_back( term0->GetCenter() );
+        if( term1 ) chainPadCenters.push_back( term1->GetCenter() );
 
         if( isPrimary || isSecondary )
         {
@@ -3025,15 +3025,15 @@ bool PNS_KICAD_IFACE_BASE::GetSignalAggregate( PNS::NET_HANDLE aNetP, PNS::NET_H
     }
 
     // If called with the same net for P & N (used by tests to mean "aggregate all others")
-    // attempt to close any residual gap between the combined lengths and the full span of the signal.
-    if( netP == netN && signalPadCenters.size() >= 2 )
+    // attempt to close any residual gap between the combined lengths and the full span of the chain.
+    if( netP == netN && chainPadCenters.size() >= 2 )
     {
         long long maxSpan = 0;
-        for( size_t i = 0; i < signalPadCenters.size(); ++i )
+        for( size_t i = 0; i < chainPadCenters.size(); ++i )
         {
-            for( size_t j = i + 1; j < signalPadCenters.size(); ++j )
+            for( size_t j = i + 1; j < chainPadCenters.size(); ++j )
             {
-                VECTOR2I d = signalPadCenters[i] - signalPadCenters[j];
+                VECTOR2I d = chainPadCenters[i] - chainPadCenters[j];
                 long long dist = static_cast<long long>( d.EuclideanNorm() );
                 if( dist > maxSpan )
                     maxSpan = dist;

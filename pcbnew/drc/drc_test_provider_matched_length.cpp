@@ -353,7 +353,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 if( !reportProgress( ii++, count, progressDelta ) )
                     return false;
 
-                for( DRC_CONSTRAINT_T jj : { LENGTH_CONSTRAINT, SIGNAL_LENGTH_CONSTRAINT,
+                for( DRC_CONSTRAINT_T jj : { LENGTH_CONSTRAINT, NET_CHAIN_LENGTH_CONSTRAINT,
                                              NET_CHAIN_STUB_LENGTH_CONSTRAINT,
                                              NET_CHAIN_RETURN_PATH_CONSTRAINT,
                                              SKEW_CONSTRAINT, VIA_COUNT_CONSTRAINT } )
@@ -484,12 +484,12 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 }
             }
 
-            // Check both net-level and signal-level length constraints
+            // Check both net-level and net-chain-level length constraints
             std::optional<DRC_CONSTRAINT> lengthConstraint = rule->FindConstraint( LENGTH_CONSTRAINT );
-            std::optional<DRC_CONSTRAINT> signalLengthConstraint = rule->FindConstraint( SIGNAL_LENGTH_CONSTRAINT );
+            std::optional<DRC_CONSTRAINT> netChainLengthConstraint = rule->FindConstraint( NET_CHAIN_LENGTH_CONSTRAINT );
 
-            if( signalLengthConstraint && signalLengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
-                checkLengths( *signalLengthConstraint, matchedConnections );
+            if( netChainLengthConstraint && netChainLengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
+                checkLengths( *netChainLengthConstraint, matchedConnections );
             else if( lengthConstraint && lengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
                 checkLengths( *lengthConstraint, matchedConnections );
 
@@ -547,7 +547,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                             NETINFO_ITEM* netInfo =
                                     m_board->GetNetInfo().GetNetItem( conn.netcode );
 
-                            if( !netInfo || netInfo->GetSignal().IsEmpty() )
+                            if( !netInfo || netInfo->GetNetChain().IsEmpty() )
                                 continue;
 
                             std::shared_ptr<DRC_ITEM> item =
@@ -555,7 +555,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                             item->SetErrorMessage( wxString::Format(
                                     _( "Net chain '%s' has no copper zone on reference "
                                        "layer '%s' (net '%s')." ),
-                                    netInfo->GetSignal(),
+                                    netInfo->GetNetChain(),
                                     refLayerName,
                                     netInfo->GetNetname() ) );
                             item->SetViolatingRule( rule );
@@ -579,7 +579,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 {
                     NETINFO_ITEM* netInfo = m_board->GetNetInfo().GetNetItem( conn.netcode );
 
-                    if( !netInfo || netInfo->GetSignal().IsEmpty() )
+                    if( !netInfo || netInfo->GetNetChain().IsEmpty() )
                         continue;
 
                     // Look up every net in this chain and check whether *this* net
@@ -588,7 +588,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
                     for( NETINFO_ITEM* candidate : m_board->GetNetInfo() )
                     {
-                        if( !candidate || candidate->GetSignal() != netInfo->GetSignal() )
+                        if( !candidate || candidate->GetNetChain() != netInfo->GetNetChain() )
                             continue;
 
                         if( candidate == netInfo )
@@ -615,7 +615,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                                 _( "Stub length (%s) out of range for net chain '%s' on net "
                                    "'%s'." ),
                                 MessageTextFromValue( conn.totalRoute ),
-                                netInfo->GetSignal(),
+                                netInfo->GetNetChain(),
                                 netInfo->GetNetname() );
                         item->SetErrorMessage( msg );
                         item->SetViolatingRule( rule );

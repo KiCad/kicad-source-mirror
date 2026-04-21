@@ -165,7 +165,6 @@ void KICAD_NETLIST_PARSER::Parse()
 
             break;
 
-        case T_signals:
         case T_net_chains:
             while( ( token = NextTok() ) != T_EOF )
             {
@@ -174,8 +173,8 @@ void KICAD_NETLIST_PARSER::Parse()
                 else if( token == T_LEFT )
                     token = NextTok();
 
-                if( token == T_signal || token == T_net_chain )
-                    parseSignal();
+                if( token == T_net_chain )
+                    parseNetChain();
             }
 
             break;
@@ -1008,7 +1007,7 @@ void KICAD_NETLIST_PARSER::parseVariant()
 }
 
 
-void KICAD_NETLIST_PARSER::parseSignal()
+void KICAD_NETLIST_PARSER::parseNetChain()
 {
     wxString                                   name;
     wxString                                   netClass;
@@ -1125,7 +1124,7 @@ void KICAD_NETLIST_PARSER::parseSignal()
     }
 
     for( const wxString& netName : members )
-        m_netlist->SetNetSignal( netName, name );
+        m_netlist->SetNetChainFor( netName, name );
 
     for( const auto& term : terminals )
         m_netlist->AddSignalTerminalPin( name, term.first, term.second );

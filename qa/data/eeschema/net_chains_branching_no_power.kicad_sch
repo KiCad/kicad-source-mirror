@@ -2708,19 +2708,19 @@
 			)
 		)
 	)
-	(signal "Signal1"
+	(net_chain "Signal1"
 		(uuid "605e5401-cbcc-4f20-9148-b7b3bd8eecbe")
 		(uuid "a878e86a-9b21-4559-9e74-a7a0e383034e")
 	)
-	(signal "Signal2"
+	(net_chain "Signal2"
 		(uuid "455639a5-e1fa-4c22-8e10-615cde47e41e")
 		(uuid "6bc85de1-a620-4650-aaec-867d703c750c")
 	)
-	(signal "Signal3"
+	(net_chain "Signal3"
 		(uuid "f12020a5-4566-460f-b5a8-89d8332ea8ea")
 		(uuid "cc0397d4-0984-4477-badd-78f9573f7e3c")
 	)
-	(signal "Signal4"
+	(net_chain "Signal4"
 		(uuid "4f3d60b2-f584-45a5-b527-feb464a6dcb0")
 		(uuid "38b618af-ab67-4690-a84e-e06727afc4aa")
 	)

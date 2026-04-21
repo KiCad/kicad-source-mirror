@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "pns_signal_utils.h"
+#include "pns_netchain_utils.h"
 
 #include <board.h>
 #include <netinfo.h>
@@ -53,15 +53,15 @@ static void accumulateNet( BOARD* aBoard, int aNetCode, long long& aLen, long lo
     }
 }
 
-long long ComputeExtraSignalLength( BOARD* aBoard, const wxString& aSignal, const std::set<int>& aExclude )
+long long ComputeExtraSignalLength( BOARD* aBoard, const wxString& aNetChain, const std::set<int>& aExclude )
 {
     long long total = 0;
-    if( !aBoard || aSignal.IsEmpty() )
+    if( !aBoard || aNetChain.IsEmpty() )
         return total;
 
     for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
     {
-        if( net->GetSignal() != aSignal )
+        if( net->GetNetChain() != aNetChain )
             continue;
         if( aExclude.count( net->GetNetCode() ) )
             continue;
@@ -71,15 +71,15 @@ long long ComputeExtraSignalLength( BOARD* aBoard, const wxString& aSignal, cons
     return total;
 }
 
-long long ComputeExtraSignalDelay( BOARD* aBoard, const wxString& aSignal, const std::set<int>& aExclude )
+long long ComputeExtraSignalDelay( BOARD* aBoard, const wxString& aNetChain, const std::set<int>& aExclude )
 {
     long long totalDelay = 0;
-    if( !aBoard || aSignal.IsEmpty() )
+    if( !aBoard || aNetChain.IsEmpty() )
         return totalDelay;
 
     for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
     {
-        if( net->GetSignal() != aSignal )
+        if( net->GetNetChain() != aNetChain )
             continue;
         if( aExclude.count( net->GetNetCode() ) )
             continue;

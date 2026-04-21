@@ -28,15 +28,15 @@
        (constraint thermal_spoke_width (min 0.5mm))
        (condition "A.hasNetclass('HV')"))
 
-    # Total routed length across every net in signal SIG_A
+    # Total routed length across every net in chain SIG_A
     (rule sig_group_length
-       (constraint signal_length (min 40mm) (max 60mm))
-       (condition "A.Net.Signal == 'SIG_A'") )
+       (constraint net_chain_length (min 40mm) (max 60mm))
+       (condition "A.Net.NetChain == 'SIG_A'") )
 
-    # Total propagation delay across every net in signal CLK_GRP
+    # Total propagation delay across every net in chain CLK_GRP
     (rule sig_group_delay
-       (constraint signal_length (min 180ps) (max 220ps) (time_domain yes))
-       (condition "A.Net.Signal == 'CLK_GRP'") )
+       (constraint net_chain_length (min 180ps) (max 220ps) (time_domain yes))
+       (condition "A.Net.NetChain == 'CLK_GRP'") )
 
     # --- Net chain rules: multi-net signals through series passives ---
 

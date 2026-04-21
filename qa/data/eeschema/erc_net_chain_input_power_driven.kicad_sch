@@ -2,7 +2,7 @@
 	(version 20250904)
 	(generator "eeschema")
 	(generator_version "9.99")
-	(uuid "4daf6ccb-9a37-44a0-bb66-d9bcd0e8fa25")
+	(uuid "4b4054a5-3d16-4add-856b-8e9bdcb8c9d3")
 	(paper "A4")
 	(lib_symbols
 		(symbol "Connector:TestPoint"
@@ -96,6 +96,94 @@
 					(at 0 0 90)
 					(length 2.54)
 					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Custom:OUTDRV"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "X2"
+				(at -2.67 -1.2701 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify right)
+				)
+			)
+			(property "Value" "INSINK"
+				(at -2.67 1.2699 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify right)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "OUTDRV_0_1"
+				(rectangle
+					(start -1.27 1.5)
+					(end 1.27 -1.5)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "OUTDRV_1_1"
+				(pin power_in line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name ""
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -238,6 +326,124 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "OUTDRV_1"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "X1"
+				(at 0 6.35 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "OUTDRV"
+				(at 0 3.81 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "OUTDRV_1_0_1"
+				(rectangle
+					(start -1.27 1.5)
+					(end 1.27 -1.5)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "OUTDRV_1_1_1"
+				(pin power_out line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(junction
+		(at 90.17 87.63)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "0393a41a-045d-4d01-ba87-f20d664d09fd")
+	)
+	(junction
+		(at 143.51 87.63)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6ab0b5f4-3652-461e-a658-01313775b68e")
+	)
+	(wire
+		(pts
+			(xy 82.55 87.63) (xy 90.17 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "01010101-0101-0101-0101-010101010101")
+	)
+	(wire
+		(pts
+			(xy 143.51 87.63) (xy 148.59 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "02020202-0202-0202-0202-020202020202")
 	)
 	(wire
 		(pts
@@ -247,7 +453,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "87a3bdc8-9760-4a7c-a3e1-5346c425838a")
+		(uuid "87a3bdc8-9760-4a7c-a3e1-5346c4258389")
 	)
 	(wire
 		(pts
@@ -257,7 +463,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b19bbbe4-dd23-4dcf-af3c-3f999138c3e2")
+		(uuid "b19bbbe4-dd23-4dcf-af3c-3f999138c3e1")
 	)
 	(wire
 		(pts
@@ -277,17 +483,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "dac2292f-80d9-4d71-9522-9d42b0647535")
-	)
-	(label "SIG"
-		(at 113.03 87.63 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify bottom)
-		)
-		(uuid "f7b6b3b2-1a2b-4c71-9b1f-111111111111")
+		(uuid "dac2292f-80d9-4d71-9522-9d42b0647534")
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
@@ -298,23 +494,22 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "0eacd368-755a-4cd6-b491-a21d39f1651b")
+		(fields_autoplaced yes)
+		(uuid "0eacd368-755a-4cd6-b491-a21d39f1651a")
 		(property "Reference" "TP1"
-			(at 87.63 83.0579 0)
+			(at 90.17 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 87.63 85.5979 0)
+			(at 90.17 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
 			)
 		)
 		(property "Footprint" ""
@@ -348,8 +543,8 @@
 			(uuid "bff9f6c6-e9c4-49c9-8788-6c2b070b8b14")
 		)
 		(instances
-			(project "signals_four_nets_labeled"
-				(path "/4daf6ccb-9a37-44a0-bb66-d9bcd0e8fa25"
+			(project "erc_signal_pin_to_pin"
+				(path "/4b4054a5-3d16-4add-856b-8e9bdcb8c9d3"
 					(reference "TP1")
 					(unit 1)
 				)
@@ -366,7 +561,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "2f6c74be-d987-41da-a913-52d49c05625e")
+		(uuid "2f6c74be-d987-41da-a913-52d49c05625f")
 		(property "Reference" "R2"
 			(at 116.84 81.28 90)
 			(effects
@@ -417,9 +612,73 @@
 			(uuid "e464f1fe-0e84-45bd-ae2c-50fcb1cb3610")
 		)
 		(instances
-			(project "signals_four_nets_labeled"
-				(path "/4daf6ccb-9a37-44a0-bb66-d9bcd0e8fa25"
+			(project "erc_signal_pin_to_pin"
+				(path "/4b4054a5-3d16-4add-856b-8e9bdcb8c9d3"
 					(reference "R2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_name "OUTDRV_1")
+		(lib_id "Custom:OUTDRV")
+		(at 78.74 87.63 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "aaaaaaaa-1111-2222-3333-444444444444")
+		(property "Reference" "X1"
+			(at 78.74 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "OUTDRV"
+			(at 78.74 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 78.74 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 78.74 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 78.74 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "bbbbbbbb-1111-2222-3333-444444444444")
+		)
+		(instances
+			(project "erc_signal_pin_to_pin"
+				(path "/4b4054a5-3d16-4add-856b-8e9bdcb8c9d3"
+					(reference "X1")
 					(unit 1)
 				)
 			)
@@ -435,7 +694,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "adde02ec-4dd4-48ff-b65f-294c07612e4d")
+		(uuid "adde02ec-4dd4-48ff-b65f-294c07612e4c")
 		(property "Reference" "R1"
 			(at 101.6 81.28 90)
 			(effects
@@ -486,9 +745,74 @@
 			(uuid "e464f1fe-0e84-45bd-ae2c-50fcb1cb3611")
 		)
 		(instances
-			(project "signals_four_nets_labeled"
-				(path "/4daf6ccb-9a37-44a0-bb66-d9bcd0e8fa25"
+			(project "erc_signal_pin_to_pin"
+				(path "/4b4054a5-3d16-4add-856b-8e9bdcb8c9d3"
 					(reference "R1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Custom:OUTDRV")
+		(at 152.4 87.63 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "cccccccc-1111-2222-3333-444444444444")
+		(property "Reference" "X2"
+			(at 155.07 86.3599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "INSINK"
+			(at 155.07 88.8999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 152.4 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 152.4 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 152.4 87.63 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "dddddddd-1111-2222-3333-444444444444")
+		)
+		(instances
+			(project "erc_signal_pin_to_pin"
+				(path "/4b4054a5-3d16-4add-856b-8e9bdcb8c9d3"
+					(reference "X2")
 					(unit 1)
 				)
 			)
@@ -504,7 +828,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "f046ba67-f3e8-40e1-889d-2a11f948e46e")
+		(uuid "f046ba67-f3e8-40e1-889d-2a11f948e46d")
 		(property "Reference" "R3"
 			(at 132.08 81.28 90)
 			(effects
@@ -555,8 +879,8 @@
 			(uuid "e464f1fe-0e84-45bd-ae2c-50fcb1cb3612")
 		)
 		(instances
-			(project "signals_four_nets_labeled"
-				(path "/4daf6ccb-9a37-44a0-bb66-d9bcd0e8fa25"
+			(project "erc_signal_pin_to_pin"
+				(path "/4b4054a5-3d16-4add-856b-8e9bdcb8c9d3"
 					(reference "R3")
 					(unit 1)
 				)
@@ -573,23 +897,21 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "f4d98c1e-3271-4f09-ae1d-27d941d849a4")
+		(uuid "f4d98c1e-3271-4f09-ae1d-27d941d849a3")
 		(property "Reference" "TP2"
-			(at 146.05 83.0579 0)
+			(at 143.51 78.74 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 146.05 85.5979 0)
+			(at 143.51 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" ""
@@ -623,17 +945,17 @@
 			(uuid "bff9f6c6-e9c4-49c9-8788-6c2b070b8b15")
 		)
 		(instances
-			(project "signals_four_nets_labeled"
-				(path "/4daf6ccb-9a37-44a0-bb66-d9bcd0e8fa25"
+			(project "erc_signal_pin_to_pin"
+				(path "/4b4054a5-3d16-4add-856b-8e9bdcb8c9d3"
 					(reference "TP2")
 					(unit 1)
 				)
 			)
 		)
 	)
-	(signal "SIG"
-		(uuid "bff9f6c6-e9c4-49c9-8788-6c2b070b8b14")
-		(uuid "bff9f6c6-e9c4-49c9-8788-6c2b070b8b15")
+	(net_chain "Signal1"
+		(uuid "bbbbbbbb-1111-2222-3333-444444444445")
+		(uuid "dddddddd-1111-2222-3333-444444444445")
 	)
 	(sheet_instances
 		(path "/"

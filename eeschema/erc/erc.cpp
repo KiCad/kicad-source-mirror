@@ -985,7 +985,7 @@ int ERC_TESTER::TestPinToPin()
     int errors = 0;
 
     // Map each net name to the pins (with sheet context) found on that net so we can later
-    // perform cross-net compatibility checks for grouped signals.
+    // perform cross-net compatibility checks for grouped net chains.
     std::unordered_map<wxString, std::vector<ERC_SCH_PIN_CONTEXT>> netToPins;
 
     for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : m_nets )
@@ -1207,15 +1207,15 @@ int ERC_TESTER::TestPinToPin()
             int err_code = ispowerNet ? ERCE_POWERPIN_NOT_DRIVEN : ERCE_PIN_NOT_DRIVEN;
 
             // NEW: For power nets, before reporting a not-driven error, look across the
-            // grouped signal (multi-net chain formed via passives) to see if there is a
-            // power driver pin on any other net in the same signal. If so, suppress the
-            // error because the signal as a whole is driven.
-            bool suppressForSignalDriver = false;
+            // net chain (multi-net chain formed via passives) to see if there is a
+            // power driver pin on any other net in the same chain. If so, suppress the
+            // error because the net chain as a whole is driven.
+            bool suppressForNetChainDriver = false;
 
             if( ispowerNet && m_schematic && m_schematic->ConnectionGraph() )
             {
                 const wxString& thisNetName = net.first.Name;
-                const auto& signals = m_schematic->ConnectionGraph()->GetSignals();
+                const auto& netChains = m_schematic->ConnectionGraph()->GetCommittedNetChains();
 
                 auto netHasPowerDriver = [&]( const wxString& aNetName ) -> bool
                 {
@@ -1244,7 +1244,7 @@ int ERC_TESTER::TestPinToPin()
                     return false;
                 };
 
-                for( const auto& sig : signals )
+                for( const auto& sig : netChains )
                 {
                     if( !sig )
                         continue;
@@ -1255,7 +1255,7 @@ int ERC_TESTER::TestPinToPin()
                     if( !containsThisNet )
                         continue;
 
-                    // Look for a different net in this signal that has a power driver.
+                    // Look for a different net in this chain that has a power driver.
                     for( const wxString& otherNet : sigNets )
                     {
                         if( otherNet == thisNetName )
@@ -1263,16 +1263,16 @@ int ERC_TESTER::TestPinToPin()
 
                         if( netHasPowerDriver( otherNet ) )
                         {
-                            suppressForSignalDriver = true;
+                            suppressForNetChainDriver = true;
                             break;
                         }
                     }
 
-                    break; // examined the containing signal
+                    break; // examined the containing chain
                 }
             }
 
-            if( !suppressForSignalDriver && m_settings.IsTestEnabled( err_code ) )
+            if( !suppressForNetChainDriver && m_settings.IsTestEnabled( err_code ) )
             {
                 std::vector<ERC_SCH_PIN_CONTEXT*> pinsToMark;
 
@@ -1307,28 +1307,28 @@ int ERC_TESTER::TestPinToPin()
         }
     }
 
-    // --- Additional signal-level checking ---
-    // If a pin participates in a grouped signal (spanning multiple nets via passives), ensure
-    // that all other pins reachable through that signal are electrically compatible even if
+    // --- Additional net-chain-level checking ---
+    // If a pin participates in a grouped net chain (spanning multiple nets via passives), ensure
+    // that all other pins reachable through that chain are electrically compatible even if
     // they reside on different nets.
     // We only consider pairs on DIFFERENT nets here to avoid duplicating existing net-level
     // mismatches already reported above.
     if( m_schematic && m_schematic->ConnectionGraph() )
     {
-        auto& signals = m_schematic->ConnectionGraph()->GetSignals();
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ERC TestPinToPin: cross-signal phase start signals=%zu", signals.size() );
+        auto& netChains = m_schematic->ConnectionGraph()->GetCommittedNetChains();
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ERC TestPinToPin: cross-chain phase start chains=%zu", netChains.size() );
 
-        for( const auto& sig : signals )
+        for( const auto& sig : netChains )
         {
             if( !sig )
                 continue;
 
-            const wxString sigName = sig->GetName();
+            const wxString chainName = sig->GetName();
             const auto& sigNets = sig->GetNets();
 
-            // Collect all pin contexts across the nets in this signal.
-            std::vector<ERC_SCH_PIN_CONTEXT> signalPins;
-            signalPins.reserve( sigNets.size() * 4 );
+            // Collect all pin contexts across the nets in this chain.
+            std::vector<ERC_SCH_PIN_CONTEXT> netChainPins;
+            netChainPins.reserve( sigNets.size() * 4 );
 
             for( const wxString& n : sigNets )
             {
@@ -1336,17 +1336,17 @@ int ERC_TESTER::TestPinToPin()
                 if( it != netToPins.end() )
                 {
                     const auto& vec = it->second;
-                    signalPins.insert( signalPins.end(), vec.begin(), vec.end() );
+                    netChainPins.insert( netChainPins.end(), vec.begin(), vec.end() );
                 }
             }
 
-            if( signalPins.size() < 2 )
+            if( netChainPins.size() < 2 )
                 continue; // nothing to compare
 
-            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ERC TestPinToPin: signal '%s' nets=%zu collectedPins=%zu", TO_UTF8( sigName ), sigNets.size(), signalPins.size() );
+            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ERC TestPinToPin: chain '%s' nets=%zu collectedPins=%zu", TO_UTF8( chainName ), sigNets.size(), netChainPins.size() );
 
             // For deterministic behavior, sort by reference/pin number similar to earlier pass.
-            std::sort( signalPins.begin(), signalPins.end(),
+            std::sort( netChainPins.begin(), netChainPins.end(),
                        []( const ERC_SCH_PIN_CONTEXT& lhs, const ERC_SCH_PIN_CONTEXT& rhs )
                        {
                            int ret = StrNumCmp( lhs.Pin()->GetParentSymbol()->GetRef( &lhs.Sheet() ),
@@ -1364,25 +1364,25 @@ int ERC_TESTER::TestPinToPin()
                 for( const auto& ctx : netEntry.second )
                     pinNet[ ctx.Pin() ] = netEntry.first;
 
-            for( size_t i = 0; i < signalPins.size(); ++i )
+            for( size_t i = 0; i < netChainPins.size(); ++i )
             {
-                SCH_PIN* aPin = signalPins[i].Pin();
+                SCH_PIN* aPin = netChainPins[i].Pin();
                 ELECTRICAL_PINTYPE aType = aPin->GetType();
                 const wxString& aNet = pinNet[aPin];
-                wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ERC TestPinToPin: iter a=%s net=%s type=%d", TO_UTF8( aPin->GetParentSymbol()->GetRef( &signalPins[i].Sheet() ) ), TO_UTF8( aNet ), (int) aType );
+                wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ERC TestPinToPin: iter a=%s net=%s type=%d", TO_UTF8( aPin->GetParentSymbol()->GetRef( &netChainPins[i].Sheet() ) ), TO_UTF8( aNet ), (int) aType );
 
-                for( size_t j = i + 1; j < signalPins.size(); ++j )
+                for( size_t j = i + 1; j < netChainPins.size(); ++j )
                 {
-                    SCH_PIN* bPin = signalPins[j].Pin();
+                    SCH_PIN* bPin = netChainPins[j].Pin();
                     const wxString& bNet = pinNet[bPin];
 
                     if( aNet == bNet )
                         continue; // already handled at net-level
 
                     wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ERC TestPinToPin: pair %s(%s)-%s(%s)",
-                                TO_UTF8( aPin->GetParentSymbol()->GetRef( &signalPins[i].Sheet() ) ),
+                                TO_UTF8( aPin->GetParentSymbol()->GetRef( &netChainPins[i].Sheet() ) ),
                                 TO_UTF8( aNet ),
-                                TO_UTF8( bPin->GetParentSymbol()->GetRef( &signalPins[j].Sheet() ) ),
+                                TO_UTF8( bPin->GetParentSymbol()->GetRef( &netChainPins[j].Sheet() ) ),
                                 TO_UTF8( bNet ) );
 
                     ELECTRICAL_PINTYPE bType = bPin->GetType();
@@ -1395,15 +1395,15 @@ int ERC_TESTER::TestPinToPin()
                                                           : ERCE_PIN_TO_PIN_ERROR );
 
                         ercItem->SetItems( aPin, bPin );
-                        ercItem->SetSheetSpecificPath( signalPins[i].Sheet() );
-                        ercItem->SetItemsSheetPaths( signalPins[i].Sheet(), signalPins[j].Sheet() );
+                        ercItem->SetSheetSpecificPath( netChainPins[i].Sheet() );
+                        ercItem->SetItemsSheetPaths( netChainPins[i].Sheet(), netChainPins[j].Sheet() );
                         ercItem->SetErrorMessage( wxString::Format(
-                                _( "Pins of type %s and %s are connected via signal %s" ),
+                                _( "Pins of type %s and %s are connected via net chain %s" ),
                                 ElectricalPinTypeGetText( aType ),
-                                ElectricalPinTypeGetText( bType ), sigName ) );
+                                ElectricalPinTypeGetText( bType ), chainName ) );
 
                         SCH_MARKER* marker = new SCH_MARKER( std::move( ercItem ), aPin->GetPosition() );
-                        signalPins[i].Sheet().LastScreen()->Append( marker );
+                        netChainPins[i].Sheet().LastScreen()->Append( marker );
                         errors++;
                     }
                 }

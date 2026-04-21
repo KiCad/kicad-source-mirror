@@ -48,7 +48,7 @@
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_symbol.h>
-#include <sch_signal.h>
+#include <sch_netchain.h>
 #include <sch_edit_frame.h>          // SYM_ORIENT_XXX
 #include <sch_field.h>
 #include <sch_group.h>
@@ -3063,9 +3063,8 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
             screen->Append( parseSchText() );
             break;
 
-        case T_signal:
         case T_net_chain:
-            parseSchSignal();
+            parseSchNetChain();
             break;
 
         case T_text_box:
@@ -5449,7 +5448,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseBusAlias( SCH_SCREEN* aScreen )
 }
 
 
-void SCH_IO_KICAD_SEXPR_PARSER::parseSchSignal()
+void SCH_IO_KICAD_SEXPR_PARSER::parseSchNetChain()
 {
     // (net_chain "name" (uuid "...") (uuid "...") [(net_class "classname")])
     NeedSYMBOL();
@@ -5511,13 +5510,13 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchSignal()
         }
     }
 
-    m_signalTerminals[name] = std::make_pair( a, b );
+    m_netChainTerminals[name] = std::make_pair( a, b );
 
     if( !netClass.IsEmpty() )
-        m_signalNetClasses[name] = netClass;
+        m_netChainNetClasses[name] = netClass;
 
     if( color != KIGFX::COLOR4D::UNSPECIFIED )
-        m_signalColors[name] = color;
+        m_netChainColors[name] = color;
 }
 
 

@@ -2126,8 +2126,8 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                     }
                     else
                     {
-                        wxString signalName = spiceRef + wxS( ":" ) + modelPin.get().modelPinName;
-                        *token = schematic->GetOperatingPoint( signalName, precision, range );
+                        wxString netChainName = spiceRef + wxS( ":" ) + modelPin.get().modelPinName;
+                        *token = schematic->GetOperatingPoint( netChainName, precision, range );
                     }
 
                     return true;

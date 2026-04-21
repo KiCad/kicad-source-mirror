@@ -132,8 +132,8 @@ enum DRAG_MODE
                                                      const NETCLASS* aNetClass ) = 0;
     virtual PCB_LAYER_ID GetBoardLayerFromPNSLayer( int aLayer ) const = 0;
     virtual int GetPNSLayerFromBoardLayer( PCB_LAYER_ID aLayer ) const = 0;
-    // Compute aggregate extra length/delay for other nets sharing the same signal as the two
-    // provided nets (if both belong to the same non-empty signal). Returns true if aggregation
+    // Compute aggregate extra length/delay for other nets sharing the same chain as the two
+    // provided nets (if both belong to the same non-empty chain). Returns true if aggregation
     // was performed. extraLength/extraDelay exclude the two nets themselves.
     virtual bool GetSignalAggregate( NET_HANDLE aNetP, NET_HANDLE aNetN,
                                      long long& aExtraLength, long long& aExtraDelay ) const = 0;

@@ -42,7 +42,7 @@ struct SIGNALS_REMOVE_TEST_FIXTURE
 BOOST_FIXTURE_TEST_CASE( RemoveFromSignal_DisablesPropagationAndSplitsGroup, SIGNALS_REMOVE_TEST_FIXTURE )
 {
     LOCALE_IO dummy;
-    KI_TEST::LoadSchematic( m_settingsManager, wxString( "signals_four_nets" ), m_schematic );
+    KI_TEST::LoadSchematic( m_settingsManager, wxString( "net_chains_four_nets" ), m_schematic );
 
     SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
     CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();

@@ -28,7 +28,7 @@
 
 #include <connection_graph.h>
 #include <sch_edit_frame.h>
-#include <sch_signal.h>
+#include <sch_netchain.h>
 #include <schematic.h>
 
 #include <netclass.h>
@@ -110,7 +110,7 @@ void PANEL_SETUP_NET_CHAINS::loadFromModel()
         chainToClass = ns->GetNetChainClasses();
 
     // Committed chains.
-    for( const std::unique_ptr<SCH_NETCHAIN>& chain : graph->GetSignals() )
+    for( const std::unique_ptr<SCH_NETCHAIN>& chain : graph->GetCommittedNetChains() )
     {
         if( !chain )
             continue;

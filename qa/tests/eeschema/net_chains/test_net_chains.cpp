@@ -40,14 +40,14 @@ struct SIGNALS_TEST_FIXTURE
 BOOST_FIXTURE_TEST_CASE( RebuildSignals_GroupsFourNetsIntoOneSignal, SIGNALS_TEST_FIXTURE )
 {
     LOCALE_IO dummy;
-    KI_TEST::LoadSchematic( m_settingsManager, wxString( "signals_four_nets" ), m_schematic );
+    KI_TEST::LoadSchematic( m_settingsManager, wxString( "net_chains_four_nets" ), m_schematic );
     SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
     CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
     graph->Recalculate( sheets, /*aUnconditional=*/true );
 
-    const auto& signals = graph->GetPotentialNetChains();
+    const auto& netChains = graph->GetPotentialNetChains();
     bool foundFourNetSignal = false;
-    for( const auto& sig : signals )
+    for( const auto& sig : netChains )
     {
         if( sig && sig->GetNets().size() == 4 )
         {
@@ -63,14 +63,14 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_GroupsFourNetsIntoOneSignal, SIGNALS_TES
 BOOST_FIXTURE_TEST_CASE( RebuildSignals_RespectsSignalLabelAndKeepsGrouping, SIGNALS_TEST_FIXTURE )
 {
     LOCALE_IO dummy;
-    KI_TEST::LoadSchematic( m_settingsManager, wxString( "signals_four_nets_labeled" ), m_schematic );
+    KI_TEST::LoadSchematic( m_settingsManager, wxString( "net_chains_four_nets_labeled" ), m_schematic );
     SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
     CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
     graph->Recalculate( sheets, /*aUnconditional=*/true );
 
-    const auto& signals = graph->GetPotentialNetChains();
+    const auto& netChains = graph->GetPotentialNetChains();
     bool foundLabeled = false;
-    for( const auto& sig : signals )
+    for( const auto& sig : netChains )
     {
         if( !sig )
             continue;
@@ -93,14 +93,14 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_RespectsSignalLabelAndKeepsGrouping, SIG
 BOOST_FIXTURE_TEST_CASE( RebuildSignals_WithPullupBranch_ExcludesPowerBranch, SIGNALS_TEST_FIXTURE )
 {
     LOCALE_IO dummy;
-    KI_TEST::LoadSchematic( m_settingsManager, wxString( "signals_with_pullup" ), m_schematic );
+    KI_TEST::LoadSchematic( m_settingsManager, wxString( "net_chains_with_pullup" ), m_schematic );
     SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
     CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
     graph->Recalculate( sheets, /*aUnconditional=*/true );
 
-    const auto& signals = graph->GetPotentialNetChains();
+    const auto& netChains = graph->GetPotentialNetChains();
     bool mainSignalExcludesVCC = false;
-    for( const auto& sig : signals )
+    for( const auto& sig : netChains )
     {
         if( !sig )
             continue;
@@ -133,14 +133,14 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_WithPullupBranch_ExcludesPowerBranch, SI
 BOOST_FIXTURE_TEST_CASE( RebuildSignals_WithBypassCap_ExcludesPowerBranch, SIGNALS_TEST_FIXTURE )
 {
     LOCALE_IO dummy;
-    KI_TEST::LoadSchematic( m_settingsManager, wxString( "signals_with_bypass" ), m_schematic );
+    KI_TEST::LoadSchematic( m_settingsManager, wxString( "net_chains_with_bypass" ), m_schematic );
     SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
     CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
     graph->Recalculate( sheets, /*aUnconditional=*/true );
 
-    const auto& signals = graph->GetPotentialNetChains();
+    const auto& netChains = graph->GetPotentialNetChains();
     bool mainSignalExcludesGND = false;
-    for( const auto& sig : signals )
+    for( const auto& sig : netChains )
     {
         if( !sig )
             continue;

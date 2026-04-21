@@ -185,34 +185,34 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 
 void NETINFO_LIST::buildListOfNets()
 {
-    // Preserve any parsed signal names and terminal pad UUIDs before clearing. The GUI load
+    // Preserve any parsed net-chain names and terminal pad UUIDs before clearing. The GUI load
     // path calls BuildListOfNets() after the board file is parsed (see files.cpp) which was
-    // unintentionally wiping the m_signal field set by the (signals ...) section.  Cache and
-    // restore them so persisted signals survive the rebuild.
-    std::unordered_map<int, wxString> preservedSignals;
+    // unintentionally wiping the m_netChain field set by the (net_chains ...) section.  Cache and
+    // restore them so persisted chains survive the rebuild.
+    std::unordered_map<int, wxString> preservedNetChains;
     std::unordered_map<int, KIID>     preservedPad0;
     std::unordered_map<int, KIID>     preservedPad1;
 
-    preservedSignals.reserve( GetNetCount() );
+    preservedNetChains.reserve( GetNetCount() );
     preservedPad0.reserve( GetNetCount() );
     preservedPad1.reserve( GetNetCount() );
 
     for( NETINFO_ITEM* net : *this )
     {
-        preservedSignals[ net->GetNetCode() ] = net->GetSignal();
+        preservedNetChains[ net->GetNetCode() ] = net->GetNetChain();
         preservedPad0[ net->GetNetCode() ]    = net->GetTerminalPadUuid( 0 );
         preservedPad1[ net->GetNetCode() ]    = net->GetTerminalPadUuid( 1 );
     }
 
-    // Restore the initial state of NETINFO_ITEMs (except signals & terminal pad UUIDs which we reapply)
+    // Restore the initial state of NETINFO_ITEMs (except chains & terminal pad UUIDs which we reapply)
     for( NETINFO_ITEM* net : *this )
         net->Clear();
 
     for( NETINFO_ITEM* net : *this )
     {
-        auto it = preservedSignals.find( net->GetNetCode() );
-        if( it != preservedSignals.end() )
-            net->SetSignal( it->second );
+        auto it = preservedNetChains.find( net->GetNetCode() );
+        if( it != preservedNetChains.end() )
+            net->SetNetChain( it->second );
 
         auto ip0 = preservedPad0.find( net->GetNetCode() );
         if( ip0 != preservedPad0.end() )

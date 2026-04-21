@@ -84,17 +84,17 @@ protected:
     wxString        m_minText;
     wxString        m_maxText;
     bool            m_isTimeDomain;
-    wxString        m_scopeLine; // Displays tuning scope (net vs signal + name)
+    wxString        m_scopeLine; // Displays tuning scope (net vs chain + name)
     // New dual-line values
     wxString        m_netValue;       // e.g. "Net: 42.2877mm"
-    wxString        m_signalValue;    // e.g. "Signal: 103.6837mm"
+    wxString        m_chainValue;    // e.g. "Chain: 103.6837mm"
     bool            m_hasSignalValue = false;
 public:
     void SetScopeLine( const wxString& aLine ) { m_scopeLine = aLine; }
     void SetNetAndSignalValues( const wxString& aNetVal, const wxString& aSignalVal, bool aHasSignal )
     {
         m_netValue = aNetVal;
-        m_signalValue = aSignalVal;
+        m_chainValue = aSignalVal;
         m_hasSignalValue = aHasSignal;
     }
 };
@@ -585,9 +585,9 @@ protected:
 
     bool                  m_updateSideFromEnd;
 
-    // Bridging cache (pad-to-pad gaps across 2-net series components in a signal)
+    // Bridging cache (pad-to-pad gaps across 2-net series components in a chain)
 public:
-    long long GetCachedBridgingLength( BOARD* aBoard, const wxString& aSignal, double* aDelayPsOut );
+    long long GetCachedBridgingLength( BOARD* aBoard, const wxString& aNetChain, double* aDelayPsOut );
 
 private:
     long long    m_cachedBridgingLen;

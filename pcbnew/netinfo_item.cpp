@@ -50,7 +50,7 @@ NETINFO_ITEM::NETINFO_ITEM( BOARD* aParent, const wxString& aNetName, int aNetCo
         m_netname( aNetName ),
         m_shortNetname( m_netname.AfterLast( '/' ) ),
         m_displayNetname( UnescapeString( m_shortNetname ) ),
-        m_signal(),
+        m_netChain(),
         m_isCurrent( true )
 {
     m_parent = aParent;
@@ -77,7 +77,7 @@ void NETINFO_ITEM::Clear()
 {
     wxCHECK( m_parent, /* void */ );
     m_netClass = m_parent->GetDesignSettings().m_NetSettings->GetDefaultNetclass();
-    m_signal.clear();
+    m_netChain.clear();
     m_terminalPads[0] = nullptr;
     m_terminalPads[1] = nullptr;
     m_terminalPadUuids[0] = niluuid;

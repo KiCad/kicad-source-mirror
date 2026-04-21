@@ -3171,7 +3171,7 @@
 			)
 		)
 	)
-	(signal "SS_TX-"
+	(net_chain "SS_TX-"
 		(uuid "faef9724-1201-45a2-8edc-0e71777792ec")
 		(uuid "41de6265-51b4-460d-b749-fc6500dae77c")
 	)

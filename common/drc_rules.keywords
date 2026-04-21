@@ -30,7 +30,6 @@ length
 net_chain_length
 return_path
 stub_length
-signal_length
 max
 mechanical_clearance
 mechanical_hole_clearance

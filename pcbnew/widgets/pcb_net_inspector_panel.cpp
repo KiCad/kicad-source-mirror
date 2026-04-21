@@ -161,7 +161,7 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_SIGNAL].display_name, m_columns[COLUMN_SIGNAL],
+            m_netsList->AppendTextColumn( m_columns[COLUMN_NET_CHAIN].display_name, m_columns[COLUMN_NET_CHAIN],
                                           wxDATAVIEW_CELL_INERT, -1, wxALIGN_LEFT,
                                           wxDATAVIEW_COL_RESIZABLE|wxDATAVIEW_COL_REORDERABLE|wxDATAVIEW_COL_SORTABLE );
         },
@@ -179,8 +179,8 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
         },
         [&]()
         {
-            m_netsList->AppendTextColumn( m_columns[COLUMN_SIGNAL_LENGTH].display_name,
-                                          m_columns[COLUMN_SIGNAL_LENGTH], wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
+            m_netsList->AppendTextColumn( m_columns[COLUMN_NET_CHAIN_LENGTH].display_name,
+                                          m_columns[COLUMN_NET_CHAIN_LENGTH], wxDATAVIEW_CELL_INERT, -1, wxALIGN_CENTER,
                                           wxDATAVIEW_COL_RESIZABLE|wxDATAVIEW_COL_REORDERABLE|wxDATAVIEW_COL_SORTABLE );
         },
         [&]()
@@ -472,7 +472,7 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( const bool rebuildColumns )
     m_showZeroPadNets = cfg->show_zero_pad_nets;
     m_showTimeDomainDetails = cfg->show_time_domain_details;
     m_groupByNetclass = cfg->group_by_netclass;
-    m_groupBySignal = cfg->group_by_signal;
+    m_groupByNetChain = cfg->group_by_net_chain;
     m_groupByConstraint = cfg->group_by_constraint;
 
     // Attempt to keep any expanded groups open
@@ -771,8 +771,8 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
                     if( m_showTimeDomainDetails )
                         new_item->SetLayerWireDelays( *lengthDetails.LayerDelays );
 
-                    new_item->SetSignalName( foundNets[i]->GetSignal() );
-                    new_item->SetSignalLength( lengthDetails.TotalLength() );
+                    new_item->SetNetChainName( foundNets[i]->GetNetChain() );
+                    new_item->SetNetChainLength( lengthDetails.TotalLength() );
 
                     std::scoped_lock lock( resultsMutex );
                     results.emplace_back( std::move( new_item ) );
@@ -781,40 +781,40 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
 
     resultsFuture.get();
 
-    std::map<wxString, int64_t> signalLengths;
+    std::map<wxString, int64_t> netChainLengths;
 
     for( const std::unique_ptr<LIST_ITEM>& item : results )
     {
-        if( !item->GetSignalName().IsEmpty() )
-            signalLengths[item->GetSignalName()] += item->GetTotalLength();
+        if( !item->GetNetChainName().IsEmpty() )
+            netChainLengths[item->GetNetChainName()] += item->GetTotalLength();
     }
 
     for( FOOTPRINT* fp : m_board->Footprints() )
     {
-        std::vector<PAD*> signalPads;
+        std::vector<PAD*> chainPads;
 
         for( PAD* pad : fp->Pads() )
         {
-            if( pad->GetNet() && !pad->GetNet()->GetSignal().IsEmpty() )
-                signalPads.push_back( pad );
+            if( pad->GetNet() && !pad->GetNet()->GetNetChain().IsEmpty() )
+                chainPads.push_back( pad );
         }
 
-        for( size_t i = 0; i < signalPads.size(); ++i )
+        for( size_t i = 0; i < chainPads.size(); ++i )
         {
-            for( size_t j = i + 1; j < signalPads.size(); ++j )
+            for( size_t j = i + 1; j < chainPads.size(); ++j )
             {
-                NETINFO_ITEM* netA = signalPads[i]->GetNet();
-                NETINFO_ITEM* netB = signalPads[j]->GetNet();
+                NETINFO_ITEM* netA = chainPads[i]->GetNet();
+                NETINFO_ITEM* netB = chainPads[j]->GetNet();
 
-                if( netA->GetSignal() == netB->GetSignal()
+                if( netA->GetNetChain() == netB->GetNetChain()
                         && netA->GetNetCode() != netB->GetNetCode() )
                 {
-                    VECTOR2I p1 = signalPads[i]->GetPosition();
-                    VECTOR2I p2 = signalPads[j]->GetPosition();
+                    VECTOR2I p1 = chainPads[i]->GetPosition();
+                    VECTOR2I p2 = chainPads[j]->GetPosition();
                     int64_t dx = p1.x - p2.x;
                     int64_t dy = p1.y - p2.y;
                     int64_t dist = KiROUND( std::hypot( (double) dx, (double) dy ) );
-                    signalLengths[netA->GetSignal()] += dist;
+                    netChainLengths[netA->GetNetChain()] += dist;
                 }
             }
         }
@@ -822,8 +822,8 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
 
     for( std::unique_ptr<LIST_ITEM>& item : results )
     {
-        if( !item->GetSignalName().IsEmpty() )
-            item->SetSignalLength( signalLengths[item->GetSignalName()] );
+        if( !item->GetNetChainName().IsEmpty() )
+            item->SetNetChainLength( netChainLengths[item->GetNetChainName()] );
     }
 
     return results;
@@ -1033,8 +1033,8 @@ void PCB_NET_INSPECTOR_PANEL::updateNets( const std::vector<NETINFO_ITEM*>& aNet
             curListItem->SetViaLength( newListItem->GetViaLength() );
             curListItem->SetViaDelay( newListItem->GetViaDelay() );
             curListItem->SetLayerWireLengths( newListItem->GetLayerWireLengths() );
-            curListItem->SetSignalName( newListItem->GetSignalName() );
-            curListItem->SetSignalLength( newListItem->GetSignalLength() );
+            curListItem->SetNetChainName( newListItem->GetNetChainName() );
+            curListItem->SetNetChainLength( newListItem->GetNetChainLength() );
 
             if( m_showTimeDomainDetails )
                 curListItem->SetLayerWireDelays( newListItem->GetLayerWireDelays() );
@@ -1337,11 +1337,11 @@ void PCB_NET_INSPECTOR_PANEL::OnConfigButton( wxCommandEvent& event )
     menu.Append( groupNetclass );
     groupNetclass->Check( m_groupByNetclass );
 
-    wxMenuItem* groupSignal = new wxMenuItem( &menu, ID_GROUP_BY_SIGNAL,
+    wxMenuItem* groupSignal = new wxMenuItem( &menu, ID_GROUP_BY_NET_CHAIN,
                                               _( "Group by Net Chain" ),
                                               wxEmptyString, wxITEM_CHECK );
     menu.Append( groupSignal );
-    groupSignal->Check( m_groupBySignal );
+    groupSignal->Check( m_groupByNetChain );
 
     menu.AppendSeparator();
 
@@ -1456,8 +1456,8 @@ void PCB_NET_INSPECTOR_PANEL::onContextMenuSelection( wxCommandEvent& event )
         m_groupByNetclass = !m_groupByNetclass;
         break;
 
-    case ID_GROUP_BY_SIGNAL:
-        m_groupBySignal = !m_groupBySignal;
+    case ID_GROUP_BY_NET_CHAIN:
+        m_groupByNetChain = !m_groupByNetChain;
         break;
 
     case ID_FILTER_BY_NET_NAME:
@@ -1948,7 +1948,7 @@ void PCB_NET_INSPECTOR_PANEL::SaveSettings()
     cfg.filter_by_net_name = m_filterByNetName;
     cfg.filter_by_netclass = m_filterByNetclass;
     cfg.group_by_netclass = m_groupByNetclass;
-    cfg.group_by_signal = m_groupBySignal;
+    cfg.group_by_net_chain = m_groupByNetChain;
     cfg.group_by_constraint = m_groupByConstraint;
     cfg.show_zero_pad_nets = m_showZeroPadNets;
     cfg.show_unconnected_nets = m_showUnconnectedNets;

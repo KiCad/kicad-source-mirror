@@ -1108,7 +1108,7 @@ public:
 
     PAD* FindPadByUuid( const KIID& aUuid ) const;
 
-    void ReplaceSignalTerminalPad( const wxString& aSignal, const KIID& aPrev, const KIID& aNew );
+    void ReplaceNetChainTerminalPad( const wxString& aNetChain, const KIID& aPrev, const KIID& aNew );
 
     /// Per-net-chain colour override (empty COLOR4D::UNSPECIFIED = no override).
     /// Populated from the netlist at update-from-schematic time and consumed by

@@ -30,7 +30,7 @@
 #include <bitmap_base.h>
 #include <connection_graph.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <sch_signal.h>
+#include <sch_netchain.h>
 #include <callback_gal.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
@@ -1686,9 +1686,9 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
     if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> elecTypeInfo = cache.GetPinElectricalTypeInfo( shadowWidth ) )
         drawTextInfo( *elecTypeInfo, getColorForLayer( LAYER_PRIVATE_NOTES ) );
 
-    if( aPin->IsBrightened() && m_schematic && !m_schematic->GetHighlightedSignal().IsEmpty() )
+    if( aPin->IsBrightened() && m_schematic && !m_schematic->GetHighlightedNetChain().IsEmpty() )
     {
-        if( SCH_NETCHAIN* sig = m_schematic->ConnectionGraph()->GetSignalByName( m_schematic->GetHighlightedSignal() ) )
+        if( SCH_NETCHAIN* sig = m_schematic->ConnectionGraph()->GetNetChainByName( m_schematic->GetHighlightedNetChain() ) )
         {
             if( sig->GetTerminalPinA() == aPin->m_Uuid || sig->GetTerminalPinB() == aPin->m_Uuid )
             {
@@ -1860,16 +1860,16 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     // and the chain has a colour override, tint the wire in that colour so the
     // highlighted chain is immediately visible.
     if( drawingWires && !drawingShadows && m_schematic
-        && !m_schematic->GetHighlightedSignal().IsEmpty() )
+        && !m_schematic->GetHighlightedNetChain().IsEmpty() )
     {
         SCH_CONNECTION* conn = !aLine->IsConnectivityDirty() ? aLine->Connection() : nullptr;
 
         if( conn && !conn->Name().IsEmpty() )
         {
             if( SCH_NETCHAIN* chain =
-                        m_schematic->ConnectionGraph()->GetSignalForNet( conn->Name() ) )
+                        m_schematic->ConnectionGraph()->GetNetChainForNet( conn->Name() ) )
             {
-                if( chain->GetName() == m_schematic->GetHighlightedSignal()
+                if( chain->GetName() == m_schematic->GetHighlightedNetChain()
                     && chain->GetColor() != COLOR4D::UNSPECIFIED )
                 {
                     color = chain->GetColor().WithAlpha( color.a );

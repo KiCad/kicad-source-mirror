@@ -36,8 +36,6 @@ net_chain
 net_chain_class
 net_chains
 net_class
-signal
-signals
 node
 num
 part

@@ -223,8 +223,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                                             &m_NetInspectorPanel.filter_by_netclass, true ) );
     m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.group_by_netclass",
                                             &m_NetInspectorPanel.group_by_netclass, false ) );
-    m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.group_by_signal",
-                                            &m_NetInspectorPanel.group_by_signal, false ) );
+    m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.group_by_net_chain",
+                                            &m_NetInspectorPanel.group_by_net_chain, false ) );
     m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.group_by_constraint",
                                             &m_NetInspectorPanel.group_by_constraint, false ) );
     m_params.emplace_back( new PARAM_LIST<wxString>( "net_inspector_panel.custom_group_rules",

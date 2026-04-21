@@ -671,8 +671,8 @@ void DP_MEANDER_PLACER::calculateTimeDomainTargets()
     // If this is a time domain tuning, calculate the target length for the desired total delay
     if( m_settings.m_isTimeDomain )
     {
-        const int64_t curDelaySignal = origPathDelay();
-        const int64_t curDelayPair = curDelaySignal - m_settings.m_signalExtraDelay; // subtract other nets
+        const int64_t curDelayChain = origPathDelay();
+        const int64_t curDelayPair = curDelayChain - m_settings.m_signalExtraDelay; // subtract other nets
 
         bool useSignalTarget = ( m_settings.m_targetSignalLengthDelay.Opt() != MEANDER_SETTINGS::DELAY_UNCONSTRAINED );
         const MINOPTMAX<long long int>& targetDelaySet = useSignalTarget ? m_settings.m_targetSignalLengthDelay
@@ -689,7 +689,7 @@ void DP_MEANDER_PLACER::calculateTimeDomainTargets()
             desiredDelayMax = std::max<int64_t>( desiredDelayOpt, desiredDelayMax - m_settings.m_signalExtraDelay );
         }
 
-        const int64_t curDelay = useSignalTarget ? curDelayPair : curDelaySignal;
+        const int64_t curDelay = useSignalTarget ? curDelayPair : curDelayChain;
 
         const int64_t delayDifferenceOpt = desiredDelayOpt - curDelay;
 

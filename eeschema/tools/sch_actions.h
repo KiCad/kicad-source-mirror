@@ -320,11 +320,11 @@ public:
     static TOOL_ACTION clearHighlight;
     static TOOL_ACTION updateNetHighlighting;
     static TOOL_ACTION highlightNetTool;
-    static TOOL_ACTION highlightSignal;
-    static TOOL_ACTION removeFromSignal;
+    static TOOL_ACTION highlightNetChain;
+    static TOOL_ACTION removeFromNetChain;
     static TOOL_ACTION replaceTerminalPin;
-    static TOOL_ACTION nameSignal;
-    static TOOL_ACTION createSignalBetweenPins;
+    static TOOL_ACTION nameNetChain;
+    static TOOL_ACTION createNetChainBetweenPins;
     static TOOL_ACTION linkComponents;
     static TOOL_ACTION showNetNavigator;
 

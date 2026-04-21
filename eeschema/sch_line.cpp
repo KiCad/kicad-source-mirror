@@ -34,7 +34,7 @@
 #include <sch_edit_frame.h>
 #include <settings/color_settings.h>
 #include <connection_graph.h>
-#include <sch_signal.h>
+#include <sch_netchain.h>
 #include <schematic.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
@@ -1023,7 +1023,7 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
             if( SCHEMATIC* schematic = Schematic() )
             {
-                if( SCH_NETCHAIN* chain = schematic->ConnectionGraph()->GetSignalForNet( conn->Name() ) )
+                if( SCH_NETCHAIN* chain = schematic->ConnectionGraph()->GetNetChainForNet( conn->Name() ) )
                     aList.emplace_back( _( "Net Chain" ), UnescapeString( chain->GetName() ) );
             }
         }

@@ -61,8 +61,8 @@ BOOST_AUTO_TEST_CASE( SignalTerminalPadsRoundTrip )
     NETINFO_ITEM* n1 = new NETINFO_ITEM( board.get(), wxS( "Net-(1)" ), 1 ); board->Add( n1 );
     NETINFO_ITEM* n2 = new NETINFO_ITEM( board.get(), wxS( "Net-(2)" ), 2 ); board->Add( n2 );
 
-    n1->SetSignal( wxS( "SIG_A" ) );
-    n2->SetSignal( wxS( "SIG_A" ) );
+    n1->SetNetChain( wxS( "SIG_A" ) );
+    n2->SetNetChain( wxS( "SIG_A" ) );
 
     // Assign pads to nets for resolver (only first pad of each footprint for simplicity)
     p1a->SetNet( n1 );
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE( SignalTerminalPadsRoundTrip )
     PCB_TRACK* t1 = new PCB_TRACK( board.get() ); t1->SetNetCode( 1 ); t1->SetStart( p1a->GetPosition() ); t1->SetEnd( p2a->GetPosition() ); board->Add( t1 );
     PCB_TRACK* t2 = new PCB_TRACK( board.get() ); t2->SetNetCode( 2 ); t2->SetStart( p1a->GetPosition() ); t2->SetEnd( p2a->GetPosition() ); board->Add( t2 );
 
-    auto tmpFile = std::filesystem::temp_directory_path() / "signal_terminal_pads_roundtrip.kicad_pcb";
+    auto tmpFile = std::filesystem::temp_directory_path() / "net_chain_terminal_pads_roundtrip.kicad_pcb";
     plugin.SaveBoard( tmpFile.string(), board.get() );
 
     std::unique_ptr<BOARD> loaded = std::make_unique<BOARD>();
@@ -95,8 +95,8 @@ BOOST_AUTO_TEST_CASE( SignalTerminalPadsRoundTrip )
 
     BOOST_REQUIRE( ln1 );
     BOOST_REQUIRE( ln2 );
-    BOOST_CHECK_EQUAL( ln1->GetSignal(), wxS( "SIG_A" ) );
-    BOOST_CHECK_EQUAL( ln2->GetSignal(), wxS( "SIG_A" ) );
+    BOOST_CHECK_EQUAL( ln1->GetNetChain(), wxS( "SIG_A" ) );
+    BOOST_CHECK_EQUAL( ln2->GetNetChain(), wxS( "SIG_A" ) );
 
     // Both nets should have terminal pad UUIDs resolved
     BOOST_REQUIRE( ln1->GetTerminalPad( 0 ) );
@@ -133,18 +133,18 @@ BOOST_AUTO_TEST_CASE( SingleNetSignalNamePersists )
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
     // Single net with explicit signal name, no terminal pads
     NETINFO_ITEM* n1 = new NETINFO_ITEM( board.get(), wxS( "Net-(X)" ), 1 ); board->Add( n1 );
-    n1->SetSignal( wxS( "CLK_REF" ) );
+    n1->SetNetChain( wxS( "CLK_REF" ) );
     // Add trivial track so net is serialized
     PCB_TRACK* t = new PCB_TRACK( board.get() ); t->SetNetCode( 1 ); t->SetStart( VECTOR2I(0,0) ); t->SetEnd( VECTOR2I(1000000,0) ); board->Add( t );
 
-    auto tmpFile = std::filesystem::temp_directory_path() / "single_net_signal_roundtrip.kicad_pcb";
+    auto tmpFile = std::filesystem::temp_directory_path() / "single_net_chain_roundtrip.kicad_pcb";
     plugin.SaveBoard( tmpFile.string(), board.get() );
 
     std::unique_ptr<BOARD> loaded = std::make_unique<BOARD>();
     plugin.LoadBoard( tmpFile.string(), loaded.get() );
     NETINFO_ITEM* ln1 = loaded->FindNet( 1 );
     BOOST_REQUIRE( ln1 );
-    BOOST_CHECK_EQUAL( ln1->GetSignal(), wxS( "CLK_REF" ) );
+    BOOST_CHECK_EQUAL( ln1->GetNetChain(), wxS( "CLK_REF" ) );
 }
 
 BOOST_AUTO_TEST_CASE( SignalsSurviveBuildListOfNets )
@@ -158,7 +158,7 @@ BOOST_AUTO_TEST_CASE( SignalsSurviveBuildListOfNets )
     NETINFO_ITEM* n4 = new NETINFO_ITEM( board.get(), wxS( "Net-(R3-Pad2)" ), 4 ); board->Add( n4 );
 
     for( NETINFO_ITEM* n : { n1, n2, n3, n4 } )
-        n->SetSignal( wxS( "Signal1" ) );
+        n->SetNetChain( wxS( "Signal1" ) );
 
     // Add trivial tracks so that each net is considered used and serialized
     int x = 0;
@@ -172,7 +172,7 @@ BOOST_AUTO_TEST_CASE( SignalsSurviveBuildListOfNets )
         x += 2000000;
     }
 
-    auto tmpFile = std::filesystem::temp_directory_path() / "signals_survive_buildlist.kicad_pcb";
+    auto tmpFile = std::filesystem::temp_directory_path() / "net_chains_survive_buildlist.kicad_pcb";
     plugin.SaveBoard( tmpFile.string(), board.get() );
 
     std::unique_ptr<BOARD> loaded = std::make_unique<BOARD>();
@@ -186,7 +186,7 @@ BOOST_AUTO_TEST_CASE( SignalsSurviveBuildListOfNets )
     std::set<wxString> seenNames;
     for( NETINFO_ITEM* net : loaded->GetNetInfo() )
     {
-        if( net->GetSignal() == wxS( "Signal1" ) )
+        if( net->GetNetChain() == wxS( "Signal1" ) )
         {
             signalCount++;
             seenNames.insert( net->GetNetname() );

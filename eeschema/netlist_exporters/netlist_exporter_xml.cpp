@@ -101,7 +101,7 @@ XNODE* NETLIST_EXPORTER_XML::makeRoot( unsigned aCtl )
     if( aCtl & GNL_NETS )
     {
         xroot->AddChild( makeListOfNets( aCtl ) );
-        xroot->AddChild( makeSignals() );
+        xroot->AddChild( makeNetChains() );
     }
 
     return xroot;
@@ -1308,21 +1308,21 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
     return xnets;
 }
 
-XNODE* NETLIST_EXPORTER_XML::makeSignals()
+XNODE* NETLIST_EXPORTER_XML::makeNetChains()
 {
-    XNODE* xsignals = node( wxT( "net_chains" ) );
+    XNODE* xchains = node( wxT( "net_chains" ) );
 
-    for( const std::unique_ptr<SCH_NETCHAIN>& signal : m_schematic->ConnectionGraph()->GetSignals() )
+    for( const std::unique_ptr<SCH_NETCHAIN>& chain : m_schematic->ConnectionGraph()->GetCommittedNetChains() )
     {
-        if( !signal )
+        if( !chain )
             continue;
 
-        XNODE* xsignal;
-        xsignals->AddChild( xsignal = node( wxT( "net_chain" ) ) );
-        xsignal->AddAttribute( wxT( "name" ), signal->GetName() );
+        XNODE* xchain;
+        xchains->AddChild( xchain = node( wxT( "net_chain" ) ) );
+        xchain->AddAttribute( wxT( "name" ), chain->GetName() );
 
-        if( !signal->GetNetClass().IsEmpty() )
-            xsignal->AddAttribute( wxT( "net_class" ), signal->GetNetClass() );
+        if( !chain->GetNetClass().IsEmpty() )
+            xchain->AddAttribute( wxT( "net_class" ), chain->GetNetClass() );
 
         // Carry the chain's class assignment (from project's NET_SETTINGS) so
         // that downstream consumers of the netlist can see chain hierarchy
@@ -1334,17 +1334,17 @@ XNODE* NETLIST_EXPORTER_XML::makeSignals()
 
             if( ns )
             {
-                wxString className = ns->GetNetChainClass( signal->GetName() );
+                wxString className = ns->GetNetChainClass( chain->GetName() );
 
                 if( !className.IsEmpty() )
-                    xsignal->AddAttribute( wxT( "net_chain_class" ), className );
+                    xchain->AddAttribute( wxT( "net_chain_class" ), className );
             }
         }
 
-        if( signal->GetColor() != COLOR4D::UNSPECIFIED )
+        if( chain->GetColor() != COLOR4D::UNSPECIFIED )
         {
-            const COLOR4D& c = signal->GetColor();
-            xsignal->AddAttribute( wxT( "color" ),
+            const COLOR4D& c = chain->GetColor();
+            xchain->AddAttribute( wxT( "color" ),
                                    wxString::Format( wxT( "#%02X%02X%02X%02X" ),
                                                      (int) std::clamp( KiROUND( c.r * 255.0 ), 0, 255 ),
                                                      (int) std::clamp( KiROUND( c.g * 255.0 ), 0, 255 ),
@@ -1353,9 +1353,9 @@ XNODE* NETLIST_EXPORTER_XML::makeSignals()
         }
 
         XNODE* xmembers;
-        xsignal->AddChild( xmembers = node( wxT( "members" ) ) );
+        xchain->AddChild( xmembers = node( wxT( "members" ) ) );
 
-        for( const wxString& net : signal->GetNets() )
+        for( const wxString& net : chain->GetNets() )
         {
             XNODE* xmember;
             xmembers->AddChild( xmember = node( wxT( "member" ) ) );
@@ -1363,7 +1363,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSignals()
         }
     }
 
-    return xsignals;
+    return xchains;
 }
 
 

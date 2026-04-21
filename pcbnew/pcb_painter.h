@@ -142,9 +142,9 @@ public:
     std::set<int>& GetHiddenNets() { return m_hiddenNets; }
     const std::set<int>& GetHiddenNets() const { return m_hiddenNets; }
 
-    // Signal highlight support (grouped nets).  Empty when no signal highlight active.
-    const wxString& GetHighlightedSignal() const { return m_highlightedSignal; }
-    void SetHighlightedSignal( const wxString& aSignal ) { m_highlightedSignal = aSignal; }
+    // Net chain highlight support (grouped nets).  Empty when no chain highlight active.
+    const wxString& GetHighlightedNetChain() const { return m_highlightedNetChain; }
+    void SetHighlightedNetChain( const wxString& aNetChain ) { m_highlightedNetChain = aNetChain; }
 
 public:
     bool               m_ForcePadSketchModeOn;
@@ -179,7 +179,7 @@ protected:
     double m_imageOpacity;     ///< Opacity override for user images
     double m_filledShapeOpacity;     ///< Opacity override for graphic shapes
 
-    wxString m_highlightedSignal;    ///< Active highlighted signal name (if any)
+    wxString m_highlightedNetChain;    ///< Active highlighted chain name (if any)
 };
 
 

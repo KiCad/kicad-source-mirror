@@ -139,7 +139,7 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     int64_t delayP = m_padToDieDelayP + lineDelay( m_tunedPathP, m_startPad_p, m_endPad_p );
     int64_t delayN = m_padToDieDelayN + lineDelay( m_tunedPathN, m_startPad_n, m_endPad_n );
 
-    // Query interface for aggregate signal contribution (other nets in same signal)
+    // Query interface for aggregate chain contribution (other nets in same chain)
     long long int extraSignalLen = 0;
     long long int extraSignalDelay = 0;
     Router()->GetInterface()->GetSignalAggregate( m_originPair.NetP(), m_originPair.NetN(),
@@ -188,7 +188,7 @@ int64_t MEANDER_SKEW_PLACER::origPathDelay() const
 
 long long int MEANDER_SKEW_PLACER::CurrentSkew() const
 {
-    return m_lastLength - m_coupledLength; // Includes aggregate signal contribution if applicable
+    return m_lastLength - m_coupledLength; // Includes aggregate chain contribution if applicable
 }
 
 

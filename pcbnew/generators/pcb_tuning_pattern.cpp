@@ -83,8 +83,8 @@
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
-// (Removed previous toggleable signal/net tuning scope. We now always display per-net
-// values and, when the net belongs to a signal, aggregated signal values concurrently.)
+// (Removed previous toggleable chain/net tuning scope. We now always display per-net
+// values and, when the net belongs to a chain, aggregated chain values concurrently.)
 
 TUNING_STATUS_VIEW_ITEM::TUNING_STATUS_VIEW_ITEM( PCB_BASE_EDIT_FRAME* aFrame ) :
         EDA_ITEM( NOT_USED ), // Never added to anything - just a preview
@@ -271,7 +271,7 @@ void TUNING_STATUS_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     textPos.x += glyphWidth * 7 + margin.x;
     font->Draw( gal, m_maxText, textPos, textAttrs, fontMetrics );
 
-    // Optional Signal value line
+    // Optional Chain value line
     if( m_hasSignalValue )
     {
         textPos = GetPosition() + offset;
@@ -279,7 +279,7 @@ void TUNING_STATUS_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             textPos.y += KiROUND( headerDims.LinePitch * 1.1 );
         textPos.y += KiROUND( headerDims.LinePitch * 2.3 ); // one extra line below net line
         gal->SetStrokeColor( normal );
-        font->Draw( gal, m_signalValue, textPos, textAttrs, KIFONT::METRICS::Default() );
+        font->Draw( gal, m_chainValue, textPos, textAttrs, KIFONT::METRICS::Default() );
         textPos.x += glyphWidth * 14 + margin.x;
         font->Draw( gal, m_minText, textPos, textAttrs, fontMetrics );
         textPos.x += glyphWidth * 7 + margin.x;
@@ -386,9 +386,9 @@ static std::string sideToString( const PNS::MEANDER_SIDE aValue )
 }
 
 // Simple cache invalidation heuristic for bridging distances:
-// Recompute if signal name changed, board UUID changed, or total pad count on the board changed.
+// Recompute if chain name changed, board UUID changed, or total pad count on the board changed.
 // (Pad count change is a low-cost proxy for edits that might affect bridging.)
-long long PCB_TUNING_PATTERN::GetCachedBridgingLength( BOARD* aBoard, const wxString& aSignal,
+long long PCB_TUNING_PATTERN::GetCachedBridgingLength( BOARD* aBoard, const wxString& aNetChain,
                                                        double* aDelayPsOut )
 {
     if( !aBoard )
@@ -398,7 +398,7 @@ long long PCB_TUNING_PATTERN::GetCachedBridgingLength( BOARD* aBoard, const wxSt
     for( FOOTPRINT* fp : aBoard->Footprints() )
         padCount += fp->Pads().size();
 
-    bool invalid = ( aSignal != m_cachedBridgingSignal )
+    bool invalid = ( aNetChain != m_cachedBridgingSignal )
                    || ( aBoard != m_cachedBridgingBoardPtr )
                    || ( padCount != m_cachedBridgingPadCount );
 
@@ -413,7 +413,7 @@ long long PCB_TUNING_PATTERN::GetCachedBridgingLength( BOARD* aBoard, const wxSt
                 NETINFO_ITEM* pn = pad->GetNet();
                 if( !pn )
                     continue;
-                if( pn->GetSignal() != aSignal )
+                if( pn->GetNetChain() != aNetChain )
                     continue;
                 netsInFp.emplace( pn->GetNetCode(), pad );
                 if( netsInFp.size() > 2 )
@@ -443,7 +443,7 @@ long long PCB_TUNING_PATTERN::GetCachedBridgingLength( BOARD* aBoard, const wxSt
                 if( PCB_TRACK* tr = dynamic_cast<PCB_TRACK*>( bi ) )
                 {
                     NETINFO_ITEM* ninfo = tr->GetNet();
-                    if( ninfo && ninfo->GetSignal() == aSignal )
+                    if( ninfo && ninfo->GetNetChain() == aNetChain )
                     {
                         int dummyCount; double tLen, padDieLen, tDelay, padDieDelay;
                         std::tie( dummyCount, tLen, padDieLen, tDelay, padDieDelay ) = aBoard->GetTrackLength( *tr );
@@ -458,7 +458,7 @@ long long PCB_TUNING_PATTERN::GetCachedBridgingLength( BOARD* aBoard, const wxSt
 
         m_cachedBridgingLen = len;
         m_cachedBridgingDelayPs = totalDelayPs;
-        m_cachedBridgingSignal = aSignal;
+        m_cachedBridgingSignal = aNetChain;
     m_cachedBridgingBoardPtr = aBoard;
         m_cachedBridgingPadCount = padCount;
     }
@@ -569,8 +569,8 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
 
     if( aMode == SINGLE || aMode == DIFF_PAIR )
     {
-        // Prefer signal-level constraint if present for nets that are part of a signal
-        constraint = bds.m_DRCEngine->EvalRules( SIGNAL_LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
+        // Prefer chain-level constraint if present for nets that are part of a chain
+        constraint = bds.m_DRCEngine->EvalRules( NET_CHAIN_LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
 
         if( constraint.IsNull() || constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
             constraint = bds.m_DRCEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
@@ -579,7 +579,7 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
         {
             if( constraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
             {
-                if( constraint.m_Type == SIGNAL_LENGTH_CONSTRAINT )
+                if( constraint.m_Type == NET_CHAIN_LENGTH_CONSTRAINT )
                 {
                     pattern->m_settings.SetTargetSignalLengthDelay( constraint.GetValue() );
                     pattern->m_settings.SetTargetLengthDelay( MINOPTMAX<int>() );
@@ -1998,8 +1998,8 @@ void PCB_TUNING_PATTERN::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
         }
         else
         {
-            // Prefer signal-level constraint if net is part of a signal
-            constraint = drcEngine->EvalRules( SIGNAL_LENGTH_CONSTRAINT, startItem, nullptr, GetLayer() );
+            // Prefer chain-level constraint if net is part of a chain
+            constraint = drcEngine->EvalRules( NET_CHAIN_LENGTH_CONSTRAINT, startItem, nullptr, GetLayer() );
 
             if( ( constraint.IsNull() || constraint.GetSeverity() == RPT_SEVERITY_IGNORE ) )
                 constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, startItem, nullptr, GetLayer() );
@@ -2061,26 +2061,26 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
 
         TUNING_STATUS_VIEW_ITEM* statusItem = new TUNING_STATUS_VIEW_ITEM( aFrame );
 
-    // Build first line: "Net-(R1-Pad2) | Signal: Signal1" OR just net if no signal
+    // Build first line: "Net-(R1-Pad2) | Chain: Chain1" OR just net if no chain
     wxString scopeLine;
         BOARD* board = GetBoard();
         wxString netName = m_lastNetName;
-        wxString signalName;
+        wxString netChainName;
         if( board && !netName.IsEmpty() )
         {
             for( NETINFO_ITEM* net : board->GetNetInfo() )
             {
                 if( UnescapeString( net->GetNetname() ) == netName )
                 {
-                    signalName = net->GetSignal();
+                    netChainName = net->GetNetChain();
                     break;
                 }
             }
         }
         if( !netName.IsEmpty() )
         {
-            if( !signalName.IsEmpty() )
-                scopeLine = wxString::Format( _( "%s | %s" ), netName, signalName );
+            if( !netChainName.IsEmpty() )
+                scopeLine = wxString::Format( _( "%s | %s" ), netName, netChainName );
             else
                 scopeLine = netName;
         }
@@ -2138,10 +2138,10 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
         wxString netStr = wxString::Format( _( "Net: %s" ),
                             aFrame->MessageTextFromValue( netVal, true, unitType ) );
 
-        // Aggregate signal length if available
+        // Aggregate chain length if available
         wxString sigStr;
         bool hasSignal = false;
-        if( !signalName.IsEmpty() )
+        if( !netChainName.IsEmpty() )
         {
             long long extraLen = 0;
             long long extraDelay = 0;
@@ -2158,13 +2158,13 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
                         sigVal += netVal; // add current net's routed contribution
 
                         // Bridging length: distance across 2-net series components (e.g. resistors) connecting
-                        // adjacent nets in the same signal which are not represented by copper tracks. Without
-                        // this, the on-screen Signal value under-reports the QA validated span by the sum of
+                        // adjacent nets in the same chain which are not represented by copper tracks. Without
+                        // this, the on-screen Chain value under-reports the QA validated span by the sum of
                         // these pad-to-pad gaps.
                         if( board )
                         {
                             double delayPs = 0.0;
-                            long long bridging = GetCachedBridgingLength( board, signalName, &delayPs );
+                            long long bridging = GetCachedBridgingLength( board, netChainName, &delayPs );
                             if( bridging > 0 )
                             {
                                 if( m_settings.m_isTimeDomain )
@@ -2174,7 +2174,7 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
                             }
                         }
 
-                        sigStr = wxString::Format( _( "Signal: %s" ),
+                        sigStr = wxString::Format( _( "Chain: %s" ),
                                     aFrame->MessageTextFromValue( sigVal, true, unitType ) );
                         hasSignal = true;
                     }
@@ -2249,9 +2249,9 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
     aList.emplace_back( _( "Layer" ), LayerMaskDescribe() );
 
-    // Show signal name if available
-    if( primaryNet && !primaryNet->GetSignal().IsEmpty() )
-        aList.emplace_back( _( "Net Chain" ), primaryNet->GetSignal() );
+    // Show chain name if available
+    if( primaryNet && !primaryNet->GetNetChain().IsEmpty() )
+        aList.emplace_back( _( "Net Chain" ), primaryNet->GetNetChain() );
 
     if( width && !mixedWidth )
         aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( width ) );
@@ -2324,10 +2324,10 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
             aList.emplace_back( _( "Full Delay" ), msg );
         }
 
-        // If part of a signal, display aggregate full signal length/delay (with bridging like overlay).
-        if( primaryNet && !primaryNet->GetSignal().IsEmpty() )
+        // If part of a chain, display aggregate full chain length/delay (with bridging like overlay).
+        if( primaryNet && !primaryNet->GetNetChain().IsEmpty() )
         {
-            wxString sigName = primaryNet->GetSignal();
+            wxString chainName = primaryNet->GetNetChain();
             double   totalOtherLen = 0.0;
             double   totalOtherDelay = 0.0;
             BOARD*   boardPtr = board;
@@ -2335,7 +2335,7 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
             {
                 for( NETINFO_ITEM* other : boardPtr->GetNetInfo() )
                 {
-                    if( other->GetSignal() != sigName || other == primaryNet )
+                    if( other->GetNetChain() != chainName || other == primaryNet )
                         continue;
 
                     // Representative track length for this other net
@@ -2359,20 +2359,20 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
                 }
             }
 
-            // Bridging contribution (pad-to-pad gaps in 2-net series components of the signal)
+            // Bridging contribution (pad-to-pad gaps in 2-net series components of the chain)
             if( trackDelay == 0.0 )
             {
                 double delayPsDummy = 0.0; // not used in length mode
-                long long bridging = GetCachedBridgingLength( boardPtr, sigName, &delayPsDummy );
-                aList.emplace_back( _( "Signal Full Length" ),
+                long long bridging = GetCachedBridgingLength( boardPtr, chainName, &delayPsDummy );
+                aList.emplace_back( _( "Net Chain Full Length" ),
                                      aFrame->MessageTextFromValue( ( trackLen + lenPadToDie ) + totalOtherLen
                                                                    + (double) bridging ) );
             }
             else
             {
                 double bridgingDelayPs = 0.0;
-                GetCachedBridgingLength( boardPtr, sigName, &bridgingDelayPs );
-                aList.emplace_back( _( "Signal Full Delay" ),
+                GetCachedBridgingLength( boardPtr, chainName, &bridgingDelayPs );
+                aList.emplace_back( _( "Net Chain Full Delay" ),
                                      aFrame->MessageTextFromValue( ( trackDelay + delayPadToDie ) + totalOtherDelay
                                                                    + bridgingDelayPs,
                                                                    true, EDA_DATA_TYPE::TIME ) );
@@ -2404,8 +2404,8 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     }
     else
     {
-        // Prefer signal-level constraint if available
-        constraint = drcEngine->EvalRules( SIGNAL_LENGTH_CONSTRAINT, primaryItem, coupledItem, m_layer );
+        // Prefer chain-level constraint if available
+        constraint = drcEngine->EvalRules( NET_CHAIN_LENGTH_CONSTRAINT, primaryItem, coupledItem, m_layer );
 
         if( constraint.IsNull() || constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
             constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, primaryItem, coupledItem, m_layer );
@@ -2668,20 +2668,20 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                     m_tuningPattern = PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame,
                                                                      m_pickerItem, mode );
 
-                    // Cache length and delay of other nets in same signal (if any) for display/performance.
+                    // Cache length and delay of other nets in same chain (if any) for display/performance.
                     if( board )
                     {
                         NETINFO_ITEM* curNet = board->FindNet( m_pickerItem->GetNetCode() );
                         if( curNet )
                         {
-                            wxString sigName = curNet->GetSignal();
-                            if( !sigName.IsEmpty() )
+                            wxString chainName = curNet->GetNetChain();
+                            if( !chainName.IsEmpty() )
                             {
                                 double extraLen = 0.0;
                                 double extraDelay = 0.0;
                                 for( NETINFO_ITEM* other : board->GetNetInfo() )
                                 {
-                                    if( other == curNet || other->GetSignal() != sigName )
+                                    if( other == curNet || other->GetNetChain() != chainName )
                                         continue;
                                     const PCB_TRACK* repTrack = nullptr;
                                     for( BOARD_ITEM* bi : board->Tracks() )

@@ -859,8 +859,8 @@ public:
         m_passthroughMode = aEnable ? PASSTHROUGH_MODE::FORCE : PASSTHROUGH_MODE::BLOCK;
     }
 
-    const wxString& GetSignalName() const { return m_signalName; }
-    void SetSignalName( const wxString& aName ) { m_signalName = aName; }
+    const wxString& GetNetChainName() const { return m_signalName; }
+    void SetNetChainName( const wxString& aName ) { m_signalName = aName; }
 
     std::vector<VECTOR2I> GetConnectionPoints() const override;
 

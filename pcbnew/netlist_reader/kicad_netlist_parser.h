@@ -82,7 +82,7 @@ private:
      */
     void parseGroup();
 
-    void parseSignal();
+    void parseNetChain();
 
     /**
      * Parse a variant section

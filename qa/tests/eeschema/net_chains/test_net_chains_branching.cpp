@@ -65,10 +65,10 @@ struct BRANCH_TEST_PARAM
 
 // Table describing the four core branching scenarios previously expressed as individual tests.
 static const BRANCH_TEST_PARAM BRANCH_PARAMS[] = {
-    { "signals_branching_longer",     1, 4, BRANCH_EXTRA_CHECK::NONE },
-    { "signals_branching_no_power",   2, 4, BRANCH_EXTRA_CHECK::AVOID_GND },
-    { "signals_branching_named",      1, 2, BRANCH_EXTRA_CHECK::NONE },
-    { "signals_branching_named2",     2, 2, BRANCH_EXTRA_CHECK::NET_TAIL_EQUAL }
+    { "net_chains_branching_longer",     1, 4, BRANCH_EXTRA_CHECK::NONE },
+    { "net_chains_branching_no_power",   2, 4, BRANCH_EXTRA_CHECK::AVOID_GND },
+    { "net_chains_branching_named",      1, 2, BRANCH_EXTRA_CHECK::NONE },
+    { "net_chains_branching_named2",     2, 2, BRANCH_EXTRA_CHECK::NET_TAIL_EQUAL }
 };
 
 BOOST_FIXTURE_TEST_CASE( SignalBuilder_BranchingVariants, SIGNALS_BRANCH_TEST_FIXTURE )
@@ -84,7 +84,7 @@ BOOST_FIXTURE_TEST_CASE( SignalBuilder_BranchingVariants, SIGNALS_BRANCH_TEST_FI
             size_t count = 0;
             size_t maxNets = 0;
 
-            // Use potential signals (auto-inferred, not yet user-created).
+            // Use potential net chains (auto-inferred, not yet user-created).
             for( const auto& sig : m_schematic->ConnectionGraph()->GetPotentialNetChains() )
             {
                 if( !sig )

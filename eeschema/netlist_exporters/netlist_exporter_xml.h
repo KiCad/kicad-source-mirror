@@ -132,7 +132,7 @@ protected:
      */
     XNODE* makeListOfNets( unsigned aCtl );
 
-    XNODE* makeSignals();
+    XNODE* makeNetChains();
 
     /**
      * Fill out an XML node with a list of used libraries and returns it.

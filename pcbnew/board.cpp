@@ -2721,13 +2721,13 @@ PAD* BOARD::FindPadByUuid( const KIID& aUuid ) const
 }
 
 
-void BOARD::ReplaceSignalTerminalPad( const wxString& aSignal, const KIID& aPrev, const KIID& aNew )
+void BOARD::ReplaceNetChainTerminalPad( const wxString& aNetChain, const KIID& aPrev, const KIID& aNew )
 {
     PAD* newPad = FindPadByUuid( aNew );
 
     for( NETINFO_ITEM* net : m_NetInfo )
     {
-        if( net->GetSignal() == aSignal )
+        if( net->GetNetChain() == aNetChain )
         {
             for( int i = 0; i < 2; ++i )
             {

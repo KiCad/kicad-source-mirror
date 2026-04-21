@@ -24,7 +24,7 @@
 
 #include <connection_graph.h>
 #include <schematic.h>
-#include <sch_signal.h>
+#include <sch_netchain.h>
 #include <sch_sheet.h>
 #include <settings/settings_manager.h>
 #include <locale_io.h>
@@ -45,7 +45,7 @@ struct SIGNALS_CLASS_COLOR_FIXTURE
 BOOST_FIXTURE_TEST_CASE( NetChain_ApplyClassAndColorOverrides, SIGNALS_CLASS_COLOR_FIXTURE )
 {
     LOCALE_IO dummy;
-    KI_TEST::LoadSchematic( m_settingsManager, wxString( "signals_four_nets" ),
+    KI_TEST::LoadSchematic( m_settingsManager, wxString( "net_chains_four_nets" ),
                             m_schematic );
 
     CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
@@ -59,8 +59,8 @@ BOOST_FIXTURE_TEST_CASE( NetChain_ApplyClassAndColorOverrides, SIGNALS_CLASS_COL
     classes[wxT( "MY_CHAIN" )] = wxT( "DDR_DATA" );
     colors[wxT( "MY_CHAIN" )]  = KIGFX::COLOR4D( 1.0, 0.5, 0.25, 1.0 );
 
-    graph->SetSignalNetClassOverrides( classes );
-    graph->SetSignalColorOverrides( colors );
+    graph->SetNetChainNetClassOverrides( classes );
+    graph->SetNetChainColorOverrides( colors );
 
     // Promote the first detected potential chain so it gets a name we control.
     const auto& potentials = graph->GetPotentialNetChains();
@@ -91,7 +91,7 @@ BOOST_FIXTURE_TEST_CASE( NetChain_ApplyClassAndColorOverrides, SIGNALS_CLASS_COL
 BOOST_FIXTURE_TEST_CASE( NetChain_NoOverrideStaysDefault, SIGNALS_CLASS_COLOR_FIXTURE )
 {
     LOCALE_IO dummy;
-    KI_TEST::LoadSchematic( m_settingsManager, wxString( "signals_four_nets" ),
+    KI_TEST::LoadSchematic( m_settingsManager, wxString( "net_chains_four_nets" ),
                             m_schematic );
 
     CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
@@ -100,8 +100,8 @@ BOOST_FIXTURE_TEST_CASE( NetChain_NoOverrideStaysDefault, SIGNALS_CLASS_COLOR_FI
     graph->Recalculate( m_schematic->BuildSheetListSortedByPageNumbers(), true );
 
     // Make sure the override maps are empty.
-    graph->SetSignalNetClassOverrides( {} );
-    graph->SetSignalColorOverrides( {} );
+    graph->SetNetChainNetClassOverrides( {} );
+    graph->SetNetChainColorOverrides( {} );
 
     const auto& potentials = graph->GetPotentialNetChains();
     BOOST_REQUIRE( !potentials.empty() );

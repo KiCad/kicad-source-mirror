@@ -2440,11 +2440,11 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         m_board->GetConnectivity()->RefreshNetcodeMap( m_board );
 
         for( NETINFO_ITEM* net : m_board->GetNetInfo() )
-            net->SetSignal( aNetlist.GetNetSignal( net->GetNetname() ) );
+            net->SetNetChain( aNetlist.GetNetChainFor( net->GetNetname() ) );
 
         // Net chains may specify a display colour override; lift that into the
         // board-side lookup so the PCB painter can use it when highlighting.
-        for( const auto& [chain, colorStr] : aNetlist.GetSignalColors() )
+        for( const auto& [chain, colorStr] : aNetlist.GetNetChainColors() )
         {
             if( !colorStr.IsEmpty() )
             {
@@ -2471,7 +2471,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
         // Net chains may specify a netclass that applies to every member net.
         // Push that assignment into the board's netclass map before resyncing.
-        const std::map<wxString, wxString>& chainClasses = aNetlist.GetSignalNetClasses();
+        const std::map<wxString, wxString>& chainClasses = aNetlist.GetNetChainNetClasses();
 
         if( !chainClasses.empty() )
         {
@@ -2479,7 +2479,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
             for( NETINFO_ITEM* net : m_board->GetNetInfo() )
             {
-                const wxString& chainName = net->GetSignal();
+                const wxString& chainName = net->GetNetChain();
 
                 if( chainName.IsEmpty() )
                     continue;
@@ -2496,7 +2496,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             m_board->SynchronizeNetsAndNetClasses( true );
         }
 
-        for( const auto& sig : aNetlist.GetSignalTerminalPins() )
+        for( const auto& sig : aNetlist.GetNetChainTerminalPins() )
         {
             PAD* pads[2] = { nullptr, nullptr };
 
@@ -2532,7 +2532,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
             for( NETINFO_ITEM* net : m_board->GetNetInfo() )
             {
-                if( net->GetSignal() == sig.first )
+                if( net->GetNetChain() == sig.first )
                 {
                     net->SetTerminalPad( 0, pads[0] );
                     net->SetTerminalPad( 1, pads[1] );

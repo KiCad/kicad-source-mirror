@@ -55,7 +55,7 @@
 #include <sch_rule_area.h>
 #include <sch_screen.h>
 #include <sch_shape.h>
-#include <sch_signal.h>
+#include <sch_netchain.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_symbol.h>
@@ -339,9 +339,9 @@ void SCH_IO_KICAD_SEXPR::loadFile( const wxString& aFileName, SCH_SHEET* aSheet 
 
     if( m_schematic && m_schematic->ConnectionGraph() )
     {
-        m_schematic->ConnectionGraph()->SetSignalTerminalOverrides( parser.GetSignalTerminals() );
-        m_schematic->ConnectionGraph()->SetSignalNetClassOverrides( parser.GetSignalNetClasses() );
-        m_schematic->ConnectionGraph()->SetSignalColorOverrides( parser.GetSignalColors() );
+        m_schematic->ConnectionGraph()->SetNetChainTerminalOverrides( parser.GetNetChainTerminals() );
+        m_schematic->ConnectionGraph()->SetNetChainNetClassOverrides( parser.GetNetChainNetClasses() );
+        m_schematic->ConnectionGraph()->SetNetChainColorOverrides( parser.GetNetChainColors() );
     }
 }
 
@@ -356,9 +356,9 @@ void SCH_IO_KICAD_SEXPR::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, i
 
     if( m_schematic && m_schematic->ConnectionGraph() )
     {
-        m_schematic->ConnectionGraph()->SetSignalTerminalOverrides( parser.GetSignalTerminals() );
-        m_schematic->ConnectionGraph()->SetSignalNetClassOverrides( parser.GetSignalNetClasses() );
-        m_schematic->ConnectionGraph()->SetSignalColorOverrides( parser.GetSignalColors() );
+        m_schematic->ConnectionGraph()->SetNetChainTerminalOverrides( parser.GetNetChainTerminals() );
+        m_schematic->ConnectionGraph()->SetNetChainNetClassOverrides( parser.GetNetChainNetClasses() );
+        m_schematic->ConnectionGraph()->SetNetChainColorOverrides( parser.GetNetChainColors() );
     }
 }
 
@@ -535,7 +535,7 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
         }
     }
 
-    for( const auto& sigPtr : m_schematic->ConnectionGraph()->GetSignals() )
+    for( const auto& sigPtr : m_schematic->ConnectionGraph()->GetCommittedNetChains() )
     {
         if( !sigPtr )
             continue;

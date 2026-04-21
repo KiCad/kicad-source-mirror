@@ -1605,8 +1605,8 @@ TOOL_ACTION PCB_ACTIONS::highlightNetSelection( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::net_highlight )
         .Parameter<int>( 0 ) );
 
-TOOL_ACTION PCB_ACTIONS::highlightSignal( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.EditorControl.highlightSignal" )
+TOOL_ACTION PCB_ACTIONS::highlightNetChain( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.EditorControl.highlightNetChain" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Highlight Net Chain" ) )
         .Tooltip( _( "Highlight every net in the net chain" ) )

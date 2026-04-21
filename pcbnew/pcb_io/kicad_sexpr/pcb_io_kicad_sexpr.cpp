@@ -847,8 +847,8 @@ void PCB_IO_KICAD_SEXPR::format( const BOARD* aBoard ) const
     for( BOARD_ITEM* gen : sorted_generators )
         Format( gen );
 
-    // After writing all items, write the aggregated signals section (if any)
-    struct SIG_INFO
+    // After writing all items, write the aggregated net chains section (if any)
+    struct CHAIN_INFO
     {
         std::vector<NETINFO_ITEM*> nets;
         PAD* pads[2] = { nullptr, nullptr };
@@ -860,22 +860,22 @@ void PCB_IO_KICAD_SEXPR::format( const BOARD* aBoard ) const
         return ValueStringCompare( a, b ) < 0;
     };
 
-    std::map<wxString, SIG_INFO, decltype( cmp )> signals( cmp );
+    std::map<wxString, CHAIN_INFO, decltype( cmp )> chains( cmp );
 
     for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
     {
         if( !net )
             continue;
 
-        if( net->GetSignal().IsEmpty() && !net->GetTerminalPad( 0 ) && !net->GetTerminalPad( 1 ) )
+        if( net->GetNetChain().IsEmpty() && !net->GetTerminalPad( 0 ) && !net->GetTerminalPad( 1 ) )
             continue; // nothing to aggregate
 
-        wxString sigName = net->GetSignal();
+        wxString chainName = net->GetNetChain();
 
-        if( sigName.IsEmpty() && ( net->GetTerminalPad( 0 ) || net->GetTerminalPad( 1 ) ) )
-            sigName = net->GetNetname(); // synthetic name for unnamed terminal association
+        if( chainName.IsEmpty() && ( net->GetTerminalPad( 0 ) || net->GetTerminalPad( 1 ) ) )
+            chainName = net->GetNetname(); // synthetic name for unnamed terminal association
 
-        SIG_INFO& info = signals[sigName];
+        CHAIN_INFO& info = chains[chainName];
         info.nets.push_back( net );
         for( int i = 0; i < 2; ++i )
         {
@@ -885,22 +885,22 @@ void PCB_IO_KICAD_SEXPR::format( const BOARD* aBoard ) const
     }
 
     size_t count = 0;
-    for( const auto& kv : signals )
+    for( const auto& kv : chains )
     {
-        const SIG_INFO& si = kv.second;
-        const wxString& sigName = kv.first;
-        // Persist if: multi-net OR terminal pads OR explicit (non-empty) signal name
-        if( si.nets.size() > 1 || si.pads[0] || si.pads[1] || !sigName.IsEmpty() )
+        const CHAIN_INFO& si = kv.second;
+        const wxString& chainName = kv.first;
+        // Persist if: multi-net OR terminal pads OR explicit (non-empty) chain name
+        if( si.nets.size() > 1 || si.pads[0] || si.pads[1] || !chainName.IsEmpty() )
             ++count;
     }
 
     if( count )
     {
         m_out->Print( "(net_chains" );
-        for( const auto& kv : signals )
+        for( const auto& kv : chains )
         {
             const wxString& name = kv.first;
-            const SIG_INFO& si = kv.second;
+            const CHAIN_INFO& si = kv.second;
 
             if( si.nets.size() == 1 && !si.pads[0] && !si.pads[1] && name.IsEmpty() )
                 continue;

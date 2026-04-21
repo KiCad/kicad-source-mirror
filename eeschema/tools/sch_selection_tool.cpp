@@ -32,7 +32,7 @@
 #include <sch_selection_tool.h>
 #include <sch_base_frame.h>
 #include <connection_graph.h>
-#include <sch_signal.h>
+#include <sch_netchain.h>
 #include <eeschema_id.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
@@ -202,7 +202,7 @@ protected:
         if( !graph )
             return;
 
-        if( SCH_NETCHAIN* sig = graph->GetSignalForNet( pin->Connection()->Name() ) )
+        if( SCH_NETCHAIN* sig = graph->GetNetChainForNet( pin->Connection()->Name() ) )
         {
             m_oldA = sig->GetTerminalPinA();
             m_oldB = sig->GetTerminalPinB();
@@ -245,7 +245,7 @@ private:
 
 // Forward declaration of helper used inside KILINKS_MENU::update
 class KILINKS_MENU;
-static bool addCreateSignalBetweenPinsIfApplicable( KILINKS_MENU* aMenu, SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSel );
+static bool addCreateNetChainBetweenPinsIfApplicable( KILINKS_MENU* aMenu, SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSel );
 
 class KILINKS_MENU : public ACTION_MENU
 {
@@ -314,9 +314,9 @@ protected:
 
         // Determine context flags
         bool singlePin = sel.GetSize() == 1 && pinFrom( 0 ) && pinFrom( 0 )->Connection();
-        bool inSignal  = false; // at least one selected item participates in a committed signal
-        bool canName   = false; // we can rename a signal (single pin with committed signal)
-        bool canRemove = false; // we can remove an item from its signal
+        bool inSignal  = false; // at least one selected item participates in a committed chain
+        bool canName   = false; // we can rename a chain (single pin with committed chain)
+        bool canRemove = false; // we can remove an item from its chain
 
         // Evaluate selection items
         for( size_t i = 0; i < sel.GetSize(); ++i )
@@ -329,53 +329,53 @@ protected:
             }
 
             wxString netName = p->Connection()->Name();
-            bool hasSignal = graph->GetSignalForNet( netName );
+            bool hasSignal = graph->GetNetChainForNet( netName );
             wxLogTrace( "KICAD_KILINKS_MENU", "[KiLinksMenu] sel[%zu]: pin uuid=%s net=%s committedSignal=%d", i,
                         p->m_Uuid.AsString(), netName, hasSignal );
-            if( graph->GetSignalForNet( p->Connection()->Name() ) )
+            if( graph->GetNetChainForNet( p->Connection()->Name() ) )
             {
                 inSignal = true;
-                canRemove = true; // current remove handler works on a pin in a signal
+                canRemove = true; // current remove handler works on a pin in a chain
                 if( sel.GetSize() == 1 )
-                    canName = true; // nameSignal expects single pin selected
+                    canName = true; // nameNetChain expects single pin selected
             }
         }
 
         wxLogTrace( "KICAD_KILINKS_MENU", "[KiLinksMenu] flags: singlePin=%d inSignal=%d canName=%d canRemove=%d", singlePin, inSignal, canName, canRemove );
 
-        // highlightSignal action: only if we have a committed signal context
+        // highlightNetChain action: only if we have a committed chain context
         if( inSignal )
         {
-            Add( SCH_ACTIONS::highlightSignal );
-            wxLogTrace( "KICAD_KILINKS_MENU", "[KiLinksMenu] added highlightSignal" );
+            Add( SCH_ACTIONS::highlightNetChain );
+            wxLogTrace( "KICAD_KILINKS_MENU", "[KiLinksMenu] added highlightNetChain" );
         }
 
-        // removeFromSignal action
+        // removeFromNetChain action
         if( canRemove )
         {
-            Add( SCH_ACTIONS::removeFromSignal );
-            wxLogTrace( "KICAD_KILINKS_MENU", "[KiLinksMenu] added removeFromSignal" );
+            Add( SCH_ACTIONS::removeFromNetChain );
+            wxLogTrace( "KICAD_KILINKS_MENU", "[KiLinksMenu] added removeFromNetChain" );
         }
 
-        // Replace terminal pin submenu only when a single pin belonging to a signal is selected
+        // Replace terminal pin submenu only when a single pin belonging to a chain is selected
         if( singlePin && inSignal )
         {
             Add( m_replaceMenu );
             wxLogTrace( "KICAD_KILINKS_MENU", "[KiLinksMenu] added replaceTerminalPin submenu" );
         }
 
-        // nameSignal action
+        // nameNetChain action
         if( canName )
         {
-            Add( SCH_ACTIONS::nameSignal );
-            wxLogTrace( "KICAD_KILINKS_MENU", "[KiLinksMenu] added nameSignal" );
+            Add( SCH_ACTIONS::nameNetChain );
+            wxLogTrace( "KICAD_KILINKS_MENU", "[KiLinksMenu] added nameNetChain" );
         }
 
-        // createSignalBetweenPins: two pins selected, share potential (uncommitted) signal
+        // createNetChainBetweenPins: two pins selected, share potential (uncommitted) chain
         if( sel.GetSize() == 2 )
         {
-            bool added = addCreateSignalBetweenPinsIfApplicable( this, frame, sel );
-            wxLogTrace( "KICAD_KILINKS_MENU", "[KiLinksMenu] createSignalBetweenPins attempted added=%d", added );
+            bool added = addCreateNetChainBetweenPinsIfApplicable( this, frame, sel );
+            wxLogTrace( "KICAD_KILINKS_MENU", "[KiLinksMenu] createNetChainBetweenPins attempted added=%d", added );
         }
 
         // If nothing ended up enabled, leave a placeholder disabled item to make it
@@ -383,7 +383,7 @@ protected:
         // actions for the current selection.
         if( !HasEnabledItems() )
         {
-            wxMenuItem* placeholder = Append( wxID_ANY, _( "(No signal actions)" ) );
+            wxMenuItem* placeholder = Append( wxID_ANY, _( "(No net chain actions)" ) );
             placeholder->Enable( false );
         }
     }
@@ -392,8 +392,8 @@ private:
     REPLACE_TERMINAL_PIN_MENU* m_replaceMenu;
 };
 
-// Extend signals menu dynamically with createSignalBetweenPins when two pins are selected
-static bool addCreateSignalBetweenPinsIfApplicable( KILINKS_MENU* aMenu, SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSel )
+// Extend net-chains menu dynamically with createNetChainBetweenPins when two pins are selected
+static bool addCreateNetChainBetweenPinsIfApplicable( KILINKS_MENU* aMenu, SCH_EDIT_FRAME* aFrame, const SCH_SELECTION& aSel )
 {
     if( aSel.GetSize() != 2 )
         return false;
@@ -407,10 +407,10 @@ static bool addCreateSignalBetweenPinsIfApplicable( KILINKS_MENU* aMenu, SCH_EDI
 
     if( graph->FindPotentialNetChainBetweenPins( pa, pb ) )
     {
-        wxString label = wxString::Format( _( "Create Signal between %s:%s and %s:%s" ),
+        wxString label = wxString::Format( _( "Create Net Chain between %s:%s and %s:%s" ),
                                            pa->GetParentSymbol()->GetRef( &aFrame->GetCurrentSheet() ), pa->GetNumber(),
                                            pb->GetParentSymbol()->GetRef( &aFrame->GetCurrentSheet() ), pb->GetNumber() );
-        aMenu->Add( SCH_ACTIONS::createSignalBetweenPins )->SetItemLabel( label );
+        aMenu->Add( SCH_ACTIONS::createNetChainBetweenPins )->SetItemLabel( label );
         return true;
     }
     return false;
@@ -638,11 +638,11 @@ bool SCH_SELECTION_TOOL::Init()
     {
 // Allow the KiLinks... submenu for any selection consisting solely of pins (one or more).
 // Previously this was restricted to exactly one pin, which prevented showing the menu
-// (and thus the "Create Signal between ..." action) when exactly two pins were selected.
+// (and thus the "Create Net Chain between ..." action) when exactly two pins were selected.
     return aSel.GetSize() >= 1 && aSel.OnlyContains( { SCH_PIN_T } );
     };
 
-    // Also expose KiLinks menu when right-clicking a single wire or bus that belongs to a signal
+    // Also expose KiLinks menu when right-clicking a single wire or bus that belongs to a chain
     SELECTION_CONDITION wireOrBusInSignal = []( const SELECTION& aSel )
     {
         if( aSel.GetSize() != 1 )

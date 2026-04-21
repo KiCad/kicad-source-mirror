@@ -130,22 +130,22 @@ void MEANDER_PLACER::calculateTimeDomainTargets()
     // If this is a time domain tuning, calculate the target length for the desired total delay
     if( m_settings.m_isTimeDomain )
     {
-        // curDelaySignal includes other nets (signal aggregate). curDelayNet excludes extras.
-        const int64_t curDelaySignal = origPathDelay();
-        const int64_t curDelayNet = curDelaySignal - m_settings.m_signalExtraDelay;
+        // curDelayChain includes other nets (chain aggregate). curDelayNet excludes extras.
+        const int64_t curDelayChain = origPathDelay();
+        const int64_t curDelayNet = curDelayChain - m_settings.m_signalExtraDelay;
 
-        // Prefer signal-level target if explicitly set (i.e. not unconstrained and differs from net target)
+        // Prefer chain-level target if explicitly set (i.e. not unconstrained and differs from net target)
         bool useSignalTarget = ( m_settings.m_targetSignalLengthDelay.Opt() != MEANDER_SETTINGS::DELAY_UNCONSTRAINED );
 
         const MINOPTMAX<long long int>& targetDelaySet = useSignalTarget ? m_settings.m_targetSignalLengthDelay
                                                                          : m_settings.m_targetLengthDelay;
 
-        // Desired overall signal delay values
+        // Desired overall chain delay values
         int64_t desiredDelayMin = targetDelaySet.Min();
         int64_t desiredDelayOpt = targetDelaySet.Opt();
         int64_t desiredDelayMax = targetDelaySet.Max();
 
-        // If using signal target, convert desired overall signal delay into desired per-net contribution
+        // If using chain target, convert desired overall chain delay into desired per-net contribution
         if( useSignalTarget )
         {
             desiredDelayMin = std::max<int64_t>( 0, desiredDelayMin - m_settings.m_signalExtraDelay );
@@ -153,8 +153,8 @@ void MEANDER_PLACER::calculateTimeDomainTargets()
             desiredDelayMax = std::max<int64_t>( desiredDelayOpt, desiredDelayMax - m_settings.m_signalExtraDelay );
         }
 
-        // Current delay basis for comparison (per-net when using signal target else aggregate)
-        const int64_t curDelay = useSignalTarget ? curDelayNet : curDelaySignal;
+        // Current delay basis for comparison (per-net when using chain target else aggregate)
+        const int64_t curDelay = useSignalTarget ? curDelayNet : curDelayChain;
 
         const int64_t delayDifferenceOpt = desiredDelayOpt - curDelay;
 

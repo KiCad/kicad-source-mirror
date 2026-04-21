@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE( SignalAggregateMatchesPadSpacing )
 {
     PCB_IO_KICAD_SEXPR plugin;
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-    auto tmpFile = std::filesystem::temp_directory_path() / "signal_total_length_sexpr.kicad_pcb";
+    auto tmpFile = std::filesystem::temp_directory_path() / "net_chain_total_length_sexpr.kicad_pcb";
     {
         std::ofstream ofs( tmpFile );
         ofs << BOARD_TEXT;
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE( SignalAggregateMatchesPadSpacing )
 
     // Assign signal name
     for( NETINFO_ITEM* net : board->GetNetInfo() )
-        if( net->GetNetCode() > 0 ) net->SetSignal( wxS("Signal1") );
+        if( net->GetNetCode() > 0 ) net->SetNetChain( wxS("Signal1") );
 
     // Map net -> two pads (terminal pads) using pad net codes
     std::map<int, std::vector<PAD*>> netPads;

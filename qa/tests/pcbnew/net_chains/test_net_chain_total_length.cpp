@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE( SignalAggregatePlusNetEqualsPadSpacing )
     NETINFO_ITEM* n2 = new NETINFO_ITEM( board.get(), wxS("N2"), 2 ); board->Add( n2 );
     NETINFO_ITEM* n3 = new NETINFO_ITEM( board.get(), wxS("N3"), 3 ); board->Add( n3 );
     NETINFO_ITEM* n4 = new NETINFO_ITEM( board.get(), wxS("N4"), 4 ); board->Add( n4 );
-    for( NETINFO_ITEM* n : { n1, n2, n3, n4 } ) n->SetSignal( wxS("Signal1") );
+    for( NETINFO_ITEM* n : { n1, n2, n3, n4 } ) n->SetNetChain( wxS("Signal1") );
 
     auto addSeg = [&]( NETINFO_ITEM* net, double x1mm, double x2mm )
     {

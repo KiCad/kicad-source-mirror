@@ -151,7 +151,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             // If the incoming net belongs to a net chain, promote the single-net
             // highlight into a multi-net highlight covering every chain member so
             // the PCB mirrors the chain highlight happening on the schematic side.
-            const wxString& chainName = netinfo->GetSignal();
+            const wxString& chainName = netinfo->GetNetChain();
 
             if( !chainName.IsEmpty() )
             {
@@ -164,7 +164,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
                     if( !candidate || candidate == netinfo )
                         continue;
 
-                    if( candidate->GetSignal() == chainName )
+                    if( candidate->GetNetChain() == chainName )
                     {
                         pcb->SetHighLightNet( candidate->GetNetCode(), true );
                         renderSettings->SetHighlight( true, candidate->GetNetCode(), true );
@@ -172,7 +172,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
                 }
 
                 if( auto* pcbRender = dynamic_cast<KIGFX::PCB_RENDER_SETTINGS*>( renderSettings ) )
-                    pcbRender->SetHighlightedSignal( chainName );
+                    pcbRender->SetHighlightedNetChain( chainName );
 
                 netcode = -1;
             }

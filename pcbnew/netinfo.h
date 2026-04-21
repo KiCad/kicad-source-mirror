@@ -112,8 +112,8 @@ public:
      */
     const wxString& GetDisplayNetname() const { return m_displayNetname; }
 
-    const wxString& GetSignal() const { return m_signal; }
-    void SetSignal( const wxString& aSignal ) { m_signal = aSignal; }
+    const wxString& GetNetChain() const { return m_netChain; }
+    void SetNetChain( const wxString& aNetChain ) { m_netChain = aNetChain; }
 
     PAD* GetTerminalPad( int aIndex ) const { return m_terminalPads[aIndex]; }
     void SetTerminalPad( int aIndex, PAD* aPad ) { m_terminalPads[aIndex] = aPad; }
@@ -182,7 +182,7 @@ private:
                                   ///< The NETINFO_LIST is repsonsible for the management of when
                                   ///< these need to be updated/disambiguated.
 
-    wxString    m_signal;
+    wxString    m_netChain;
 
     PAD*        m_terminalPads[2];
     KIID        m_terminalPadUuids[2];

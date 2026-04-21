@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE( ExtraSignalLengthExcludedSet )
     NETINFO_ITEM* nA = new NETINFO_ITEM( &board, wxS("AUX"), 3 ); board.Add( nA );
 
     for( NETINFO_ITEM* n : { nP, nN, nA } )
-        n->SetSignal( wxS("SIG_CLK") );
+        n->SetNetChain( wxS("SIG_CLK") );
 
     // Add one track per net of varying lengths
     auto addTrack = [&]( int netCode, int x1, int x2 )

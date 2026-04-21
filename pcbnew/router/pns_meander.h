@@ -109,12 +109,12 @@ public:
     ///< Length PadToDie.
     int m_lenPadToDie;
 
-    ///< Additional pre-existing length contributed by other nets in the same logical signal
-    ///< (used when signal-level tuning mode is active). Stored in internal units.
+    ///< Additional pre-existing length contributed by other nets in the same logical chain
+    ///< (used when chain-level tuning mode is active). Stored in internal units.
     long long int m_signalExtraLength;
 
-    ///< Additional pre-existing delay contributed by other nets in the same logical signal
-    ///< (used when signal-level tuning mode is active and in time-domain tuning). Stored in internal
+    ///< Additional pre-existing delay contributed by other nets in the same logical chain
+    ///< (used when chain-level tuning mode is active and in time-domain tuning). Stored in internal
     ///< time internal units (ps * IU_PER_PS).
     long long int m_signalExtraDelay;
 
@@ -124,7 +124,7 @@ public:
     ///< Desired propagation delay of the tuned line
     MINOPTMAX<long long int> m_targetLengthDelay;
 
-    ///< Desired overall signal propagation delay (sum of this net's tuned delay + other nets in signal).
+    ///< Desired overall chain propagation delay (sum of this net's tuned delay + other nets in chain).
     MINOPTMAX<long long int> m_targetSignalLengthDelay;
 
     ///< Target skew value for diff pair de-skewing.

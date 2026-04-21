@@ -1239,7 +1239,7 @@ static void isCoupledDiffPairFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
                 if( context->GetConstraint() == DRC_CONSTRAINT_T::DIFF_PAIR_GAP_CONSTRAINT
                         || context->GetConstraint() == DRC_CONSTRAINT_T::LENGTH_CONSTRAINT
-                        || context->GetConstraint() == DRC_CONSTRAINT_T::SIGNAL_LENGTH_CONSTRAINT
+                        || context->GetConstraint() == DRC_CONSTRAINT_T::NET_CHAIN_LENGTH_CONSTRAINT
                         || context->GetConstraint() == DRC_CONSTRAINT_T::SKEW_CONSTRAINT )
                 {
                     // DRC engine evaluates these only in the context of a diffpair, but doesn't
@@ -1347,7 +1347,7 @@ static void inNetChainFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( !netinfo )
                     return 0.0;
 
-                const wxString& chainName = netinfo->GetSignal();
+                const wxString& chainName = netinfo->GetNetChain();
 
                 if( chainName.IsEmpty() )
                     return 0.0;
@@ -1380,7 +1380,7 @@ static void hasNetChainFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 NETINFO_ITEM* netinfo =
                         static_cast<BOARD_CONNECTED_ITEM*>( item )->GetNet();
 
-                return ( netinfo && !netinfo->GetSignal().IsEmpty() ) ? 1.0 : 0.0;
+                return ( netinfo && !netinfo->GetNetChain().IsEmpty() ) ? 1.0 : 0.0;
             } );
 }
 
@@ -1419,7 +1419,7 @@ static void inNetChainClassFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( !netinfo )
                     return 0.0;
 
-                const wxString& chainName = netinfo->GetSignal();
+                const wxString& chainName = netinfo->GetNetChain();
 
                 if( chainName.IsEmpty() )
                     return 0.0;

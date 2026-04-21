@@ -27,7 +27,7 @@ text formatting when saved.
 
 `net_chain_length` vs `length`:
 
-When a net belongs to a chain and both constraints match, `net_chain_length` checks the sum of every member net and `length` is ignored.  Nets that don't belong to a chain still see `length`.  `signal_length` remains accepted as a legacy synonym.
+When a net belongs to a chain and both constraints match, `net_chain_length` checks the sum of every member net and `length` is ignored.  Nets that don't belong to a chain still see `length`.
 
 Time-domain targets:
 

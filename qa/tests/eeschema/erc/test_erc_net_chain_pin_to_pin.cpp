@@ -23,14 +23,14 @@ BOOST_AUTO_TEST_SUITE( ERCSignal )
 BOOST_FIXTURE_TEST_CASE( ERCSignalPinToPin, ERC_SIGNAL_TEST_FIXTURE )
 {
     LOCALE_IO dummy;
-    KI_TEST::LoadSchematic( m_settingsManager, wxString( "erc_signal_pin_to_pin" ), m_schematic );
+    KI_TEST::LoadSchematic( m_settingsManager, wxString( "erc_net_chain_pin_to_pin" ), m_schematic );
 
     ERC_SETTINGS& settings = m_schematic->ErcSettings();
     settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
     settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
     // Ensure signals are constructed before ERC tests.
     m_schematic->ConnectionGraph()->Recalculate( m_schematic->BuildSheetListSortedByPageNumbers(), true );
-    // Manually promote all potential signals
+    // Manually promote all potential net chains
     {
         CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
         int idx = 1;
@@ -70,14 +70,14 @@ BOOST_FIXTURE_TEST_CASE( ERCSignalPinToPin, ERC_SIGNAL_TEST_FIXTURE )
         auto* graph = m_schematic->ConnectionGraph();
         // Ensure signals are rebuilt explicitly in case RunERC did not force it
         graph->Recalculate( m_schematic->BuildSheetListSortedByPageNumbers(), true );
-        const auto& signals = graph->GetSignals();
+        const auto& netChains = graph->GetCommittedNetChains();
         std::ostringstream oss;
         oss << "DEBUG Pin-to-Pin mismatch failure: expected=" << expectedMismatches
             << " got=" << mismatchCount << " totalItems=" << provider.GetCount()
-            << " signals=" << signals.size() << "\n";
-        for( size_t si = 0; si < signals.size(); ++si )
+            << " chains=" << netChains.size() << "\n";
+        for( size_t si = 0; si < netChains.size(); ++si )
         {
-            const auto& sig = signals[si];
+            const auto& sig = netChains[si];
             if( !sig ) continue;
             oss << "  Signal[" << si << "] name='" << sig->GetName() << "' nets={";
             for( const auto& n : sig->GetNets() ) oss << n << ",";
@@ -123,13 +123,13 @@ BOOST_FIXTURE_TEST_CASE( ERCSignalPinToPin, ERC_SIGNAL_TEST_FIXTURE )
 BOOST_FIXTURE_TEST_CASE( ERCSignalPowerInputDrivenAcrossSignal, ERC_SIGNAL_TEST_FIXTURE )
 {
     LOCALE_IO dummy;
-    KI_TEST::LoadSchematic( m_settingsManager, wxString( "erc_signal_input_power_driven" ), m_schematic );
+    KI_TEST::LoadSchematic( m_settingsManager, wxString( "erc_net_chain_input_power_driven" ), m_schematic );
 
     ERC_SETTINGS& settings = m_schematic->ErcSettings();
     settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
     settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
     m_schematic->ConnectionGraph()->Recalculate( m_schematic->BuildSheetListSortedByPageNumbers(), true );
-    // Promote potential signals prior to ERC.
+    // Promote potential net chains prior to ERC.
     {
         CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
         int idx = 1;

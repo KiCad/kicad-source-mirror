@@ -264,7 +264,7 @@ private:
     bool m_showZeroPadNets = false;
     bool m_showUnconnectedNets = false;
     bool m_groupByNetclass = false;
-    bool m_groupBySignal = false;
+    bool m_groupByNetChain = false;
     bool m_groupByConstraint = false;
     bool m_showTimeDomainDetails = false;
 
@@ -308,10 +308,10 @@ private:
     enum
     {
         COLUMN_NAME = 0,
-        COLUMN_SIGNAL,
+        COLUMN_NET_CHAIN,
         COLUMN_NETCLASS,
         COLUMN_TOTAL_LENGTH,
-        COLUMN_SIGNAL_LENGTH,
+        COLUMN_NET_CHAIN_LENGTH,
         COLUMN_VIA_COUNT,
         COLUMN_VIA_LENGTH,
         COLUMN_BOARD_LENGTH,
@@ -329,7 +329,7 @@ private:
         ID_ADD_GROUP,
         ID_GROUP_BY_CONSTRAINT,
         ID_GROUP_BY_NETCLASS,
-        ID_GROUP_BY_SIGNAL,
+        ID_GROUP_BY_NET_CHAIN,
         ID_FILTER_BY_NET_NAME,
         ID_FILTER_BY_NETCLASS,
         ID_REMOVE_SELECTED_GROUP,

@@ -351,76 +351,76 @@ public:
      */
     void AddGroup( NETLIST_GROUP* aGroup );
 
-    void SetNetSignal( const wxString& aNet, const wxString& aSignal )
+    void SetNetChainFor( const wxString& aNet, const wxString& aNetChain )
     {
-        m_netSignals[aNet] = aSignal;
+        m_netSignals[aNet] = aNetChain;
     }
 
-    void AddSignalTerminalPin( const wxString& aSignal, const wxString& aRef, const wxString& aPin )
+    void AddSignalTerminalPin( const wxString& aNetChain, const wxString& aRef, const wxString& aPin )
     {
-        m_signalTerminals[aSignal].emplace_back( aRef, aPin );
+        m_netChainTerminals[aNetChain].emplace_back( aRef, aPin );
     }
 
-    const std::vector<std::pair<wxString, wxString>>& GetSignalTerminals( const wxString& aSignal ) const
+    const std::vector<std::pair<wxString, wxString>>& GetNetChainTerminals( const wxString& aNetChain ) const
     {
         static const std::vector<std::pair<wxString, wxString>> empty;
-        auto it = m_signalTerminals.find( aSignal );
-        return it != m_signalTerminals.end() ? it->second : empty;
+        auto it = m_netChainTerminals.find( aNetChain );
+        return it != m_netChainTerminals.end() ? it->second : empty;
     }
 
-    const std::map<wxString, std::vector<std::pair<wxString, wxString>>>& GetSignalTerminalPins() const
+    const std::map<wxString, std::vector<std::pair<wxString, wxString>>>& GetNetChainTerminalPins() const
     {
-        return m_signalTerminals;
+        return m_netChainTerminals;
     }
 
-    wxString GetNetSignal( const wxString& aNet ) const
+    wxString GetNetChainFor( const wxString& aNet ) const
     {
         auto it = m_netSignals.find( aNet );
         return it != m_netSignals.end() ? it->second : wxString();
     }
 
-    void SetSignalNetClass( const wxString& aSignal, const wxString& aNetClass )
+    void SetSignalNetClass( const wxString& aNetChain, const wxString& aNetClass )
     {
-        m_signalNetClasses[aSignal] = aNetClass;
+        m_netChainNetClasses[aNetChain] = aNetClass;
     }
 
-    wxString GetSignalNetClass( const wxString& aSignal ) const
+    wxString GetSignalNetClass( const wxString& aNetChain ) const
     {
-        auto it = m_signalNetClasses.find( aSignal );
-        return it != m_signalNetClasses.end() ? it->second : wxString();
+        auto it = m_netChainNetClasses.find( aNetChain );
+        return it != m_netChainNetClasses.end() ? it->second : wxString();
     }
 
-    const std::map<wxString, wxString>& GetSignalNetClasses() const
+    const std::map<wxString, wxString>& GetNetChainNetClasses() const
     {
-        return m_signalNetClasses;
+        return m_netChainNetClasses;
     }
 
     /// Stored as a #RRGGBB or #RRGGBBAA string; empty means "no override".
-    void SetSignalColor( const wxString& aSignal, const wxString& aColor )
+    void SetSignalColor( const wxString& aNetChain, const wxString& aColor )
     {
-        m_signalColors[aSignal] = aColor;
+        m_netChainColors[aNetChain] = aColor;
     }
 
-    wxString GetSignalColor( const wxString& aSignal ) const
+    wxString GetSignalColor( const wxString& aNetChain ) const
     {
-        auto it = m_signalColors.find( aSignal );
-        return it != m_signalColors.end() ? it->second : wxString();
+        auto it = m_netChainColors.find( aNetChain );
+        return it != m_netChainColors.end() ? it->second : wxString();
     }
 
-    const std::map<wxString, wxString>& GetSignalColors() const
+    const std::map<wxString, wxString>& GetNetChainColors() const
     {
-        return m_signalColors;
+        return m_netChainColors;
     }
 
     /// Net chain class assignment carried through the netlist for downstream tools.
-    void SetSignalChainClass( const wxString& aSignal, const wxString& aClass )
+    void SetSignalChainClass( const wxString& aNetChain, const wxString& aClass )
     {
-        m_signalChainClasses[aSignal] = aClass;
+        m_signalChainClasses[aNetChain] = aClass;
     }
 
-    wxString GetSignalChainClass( const wxString& aSignal ) const
+    wxString GetSignalChainClass( const wxString& aNetChain ) const
     {
-        auto it = m_signalChainClasses.find( aSignal );
+        auto it = m_signalChainClasses.find( aNetChain );
         return it != m_signalChainClasses.end() ? it->second : wxString();
     }
 
@@ -564,9 +564,9 @@ private:
     COMPONENTS m_components;          // Components found in the netlist.
     NETLIST_GROUPS m_groups;          // Groups found in the netlist.
     std::map<wxString, wxString> m_netSignals;
-    std::map<wxString, std::vector<std::pair<wxString, wxString>>> m_signalTerminals;
-    std::map<wxString, wxString> m_signalNetClasses;
-    std::map<wxString, wxString> m_signalColors;
+    std::map<wxString, std::vector<std::pair<wxString, wxString>>> m_netChainTerminals;
+    std::map<wxString, wxString> m_netChainNetClasses;
+    std::map<wxString, wxString> m_netChainColors;
     std::map<wxString, wxString> m_signalChainClasses;
 
     std::vector<wxString>            m_variantNames;         // Variant names in order.

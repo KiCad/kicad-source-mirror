@@ -40,13 +40,13 @@ namespace PNS {
  * Each contributing net is represented by the first track found with a matching net code; its
  * full length (including pad-to-die) is taken from BOARD::GetTrackLength.
  */
-long long ComputeExtraSignalLength( BOARD* aBoard, const wxString& aSignal, const std::set<int>& aExclude );
+long long ComputeExtraSignalLength( BOARD* aBoard, const wxString& aNetChain, const std::set<int>& aExclude );
 
 /**
  * Compute the aggregate routed delay (ps internal units) for all nets in a signal excluding
  * any in aExclude (time-domain only contributes delay values when available).
  */
-long long ComputeExtraSignalDelay( BOARD* aBoard, const wxString& aSignal, const std::set<int>& aExclude );
+long long ComputeExtraSignalDelay( BOARD* aBoard, const wxString& aNetChain, const std::set<int>& aExclude );
 
 }
 

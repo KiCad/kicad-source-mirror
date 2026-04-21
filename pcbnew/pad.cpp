@@ -1908,7 +1908,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 
         if( NETINFO_ITEM* netInfo = GetNet() )
         {
-            const wxString& chainName = netInfo->GetSignal();
+            const wxString& chainName = netInfo->GetNetChain();
 
             if( !chainName.IsEmpty() )
                 aList.emplace_back( _( "Net Chain" ), UnescapeString( chainName ) );

@@ -147,7 +147,7 @@ protected:
 
         NETINFO_ITEM* net = pad->GetNet();
 
-        if( !net || net->GetSignal().IsEmpty() )
+        if( !net || net->GetNetChain().IsEmpty() )
             return;
 
         PAD* oldA = net->GetTerminalPad( 0 );
@@ -192,19 +192,19 @@ private:
     KIID m_new;
 };
 
-class SIGNALS_MENU : public ACTION_MENU
+class NET_CHAINS_MENU : public ACTION_MENU
 {
 public:
-    SIGNALS_MENU() : ACTION_MENU( true )
+    NET_CHAINS_MENU() : ACTION_MENU( true )
     {
-        SetTitle( _( "Signals..." ) );
+        SetTitle( _( "Net Chains..." ) );
         m_replaceMenu = new REPLACE_TERMINAL_PAD_MENU();
-        Add( PCB_ACTIONS::highlightSignal );
+        Add( PCB_ACTIONS::highlightNetChain );
     Add( m_replaceMenu );
     }
 
 protected:
-    ACTION_MENU* create() const override { return new SIGNALS_MENU(); }
+    ACTION_MENU* create() const override { return new NET_CHAINS_MENU(); }
 
 private:
     REPLACE_TERMINAL_PAD_MENU* m_replaceMenu;
@@ -269,9 +269,9 @@ bool PCB_SELECTION_TOOL::Init()
     selectMenu->SetTool( this );
     m_menu->RegisterSubMenu( selectMenu );
 
-    std::shared_ptr<SIGNALS_MENU> signalsMenu = std::make_shared<SIGNALS_MENU>();
-    signalsMenu->SetTool( this );
-    m_menu->RegisterSubMenu( signalsMenu );
+    std::shared_ptr<NET_CHAINS_MENU> netChainsMenu = std::make_shared<NET_CHAINS_MENU>();
+    netChainsMenu->SetTool( this );
+    m_menu->RegisterSubMenu( netChainsMenu );
 
     static const std::vector<KICAD_T> tableCellTypes = { PCB_TABLECELL_T };
 
@@ -316,7 +316,7 @@ bool PCB_SELECTION_TOOL::Init()
     if( frame && frame->IsType( FRAME_PCB_EDITOR ) )
     {
         menu.AddMenu( selectMenu.get(), SELECTION_CONDITIONS::NotEmpty  );
-    menu.AddMenu( signalsMenu.get(), netItemSelection );
+    menu.AddMenu( netChainsMenu.get(), netItemSelection );
         menu.AddSeparator( 1000 );
     }
 
@@ -2657,7 +2657,7 @@ int PCB_SELECTION_TOOL::selectNetChain( const TOOL_EVENT& aEvent )
         if( !netInfo )
             continue;
 
-        const wxString& chainName = netInfo->GetSignal();
+        const wxString& chainName = netInfo->GetNetChain();
 
         if( chainName.IsEmpty() )
         {
@@ -2668,7 +2668,7 @@ int PCB_SELECTION_TOOL::selectNetChain( const TOOL_EVENT& aEvent )
 
         for( NETINFO_ITEM* candidate : board()->GetNetInfo() )
         {
-            if( candidate && candidate->GetSignal() == chainName )
+            if( candidate && candidate->GetNetChain() == chainName )
                 SelectAllItemsOnNet( candidate->GetNetCode(), true );
         }
     }

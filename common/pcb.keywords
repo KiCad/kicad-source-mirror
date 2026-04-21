@@ -255,7 +255,6 @@ net_class
 net_name
 net_tie_pad_groups
 nets
-signals
 no
 no_connects
 none
@@ -448,5 +447,4 @@ zones
 depth
 net_chain
 net_chains
-signal
 terminal_pad
