@@ -310,6 +310,10 @@ double ReadDouble( char*& text, bool aSkipSeparator = true )
 {
     double ret;
 
+    // Skip spaces at the beginning of string: they are here not an operand separator
+    while( isspace( *text ) )
+        text++;
+
     // For strtod, a string starting by 0X or 0x is a valid number in hexadecimal or octal.
     // However, 'X'  is a separator in Gerber strings with numbers.
     // We need to detect that
@@ -321,13 +325,12 @@ double ReadDouble( char*& text, bool aSkipSeparator = true )
     else
     {
         wxString line( text );
-        line.Trim( false );
 
         // Warning: in locales using ',' as separator, wxString::ToCDouble accept both '.' and ','
         // as separator (wxWidgets 3.2.6 bug?, look fixed in 3.2.8). So because ',' is used also
         // to separe 2 operands in Gerber strings, remove the first ',' that is a operand separator,
         // not a float separator
-        line.Replace(","," ", false);
+        line.Replace( ",", " ", false );
         line.ToCDouble( &ret );
         // Find the end of the float number. The float number contains only chars
         // "0123456789." but can start by a '+' or '-' char.
