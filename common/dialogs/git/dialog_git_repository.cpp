@@ -92,21 +92,25 @@ DIALOG_GIT_REPOSITORY::~DIALOG_GIT_REPOSITORY()
 
 bool DIALOG_GIT_REPOSITORY::extractClipboardData()
 {
-    if( wxTheClipboard->Open() && wxTheClipboard->IsSupported( wxDF_TEXT ) )
+    wxClipboardLocker lock;
+    if( !lock )
+        return false;
+
+    if( !wxTheClipboard->IsSupported( wxDF_TEXT ) )
+        return false;
+
+    wxTextDataObject textData;
+    if( !wxTheClipboard->GetData( textData ) )
+        return false;
+
+    wxString clipboardText = textData.GetText();
+    if( clipboardText.empty() )
+        return false;
+
+    if( std::get<0>( isValidHTTPS( clipboardText ) )
+        || std::get<0>( isValidSSH( clipboardText ) ) )
     {
-        wxString clipboardText;
-        wxTextDataObject textData;
-
-        if( wxTheClipboard->GetData( textData ) && !( clipboardText = textData.GetText() ).empty() )
-        {
-            if( std::get<0>( isValidHTTPS( clipboardText ) )
-                || std::get<0>( isValidSSH( clipboardText ) ) )
-            {
-                m_txtURL->SetValue( clipboardText );
-            }
-        }
-
-        wxTheClipboard->Close();
+        m_txtURL->SetValue( clipboardText );
     }
 
     return false;
