@@ -30,11 +30,13 @@
 #define CACHE_3D_H
 
 #include "3d_info.h"
+#include "model_substitution_helpers.h"
 #include <core/typeinfo.h>
 #include "string_utils.h"
 #include <hash_128.h>
 #include <list>
 #include <map>
+#include <mutex>
 #include "plugins/3dapi/c3dmodel.h"
 #include <project.h>
 #include <wx/string.h>
@@ -190,7 +192,14 @@ private:
 
     PROJECT*            m_project;
     wxString            m_CacheDir;
-    wxString            m_ConfigDir;       ///< base configuration path for 3D items.
+    wxString            m_ConfigDir; ///< base configuration path for 3D items.
+
+    /// Lazy STEP-catalog used by the headless resolver fallback in load().
+    /// Built on first missing WRL and reused for the lifetime of the cache to
+    /// avoid re-walking the 3D library tree for every missed lookup.
+    mutable std::mutex                       m_substCatalogMutex;
+    mutable bool                             m_substCatalogBuilt = false;
+    mutable MODEL_SUBSTITUTION::STEP_CATALOG m_substCatalog;
 };
 
 #endif  // CACHE_3D_H
