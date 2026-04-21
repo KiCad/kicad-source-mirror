@@ -240,9 +240,9 @@ bool GetExtrusionOutline( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aOutline,
 
     bool isBack = aFootprint->IsFlipped();
 
-    if( isBack && ( extLayer == F_CrtYd || extLayer == F_Fab ) )
+    if( isBack && ( extLayer == F_CrtYd || extLayer == F_Fab || extLayer == F_SilkS ) )
         extLayer = FlipLayer( extLayer );
-    else if( !isBack && ( extLayer == B_CrtYd || extLayer == B_Fab ) )
+    else if( !isBack && ( extLayer == B_CrtYd || extLayer == B_Fab || extLayer == B_SilkS ) )
         extLayer = FlipLayer( extLayer );
 
     if( extLayer != UNDEFINED_LAYER )
@@ -259,6 +259,11 @@ bool GetExtrusionOutline( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aOutline,
             }
         }
         else if( extLayer == F_Fab || extLayer == B_Fab )
+        {
+            if( buildFilledPolygonFromShapes( aFootprint, extLayer, aOutline ) )
+                return true;
+        }
+        else if( extLayer == F_SilkS || extLayer == B_SilkS )
         {
             if( buildFilledPolygonFromShapes( aFootprint, extLayer, aOutline ) )
                 return true;
@@ -288,7 +293,17 @@ bool GetExtrusionOutline( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aOutline,
     if( buildFilledPolygonFromShapes( aFootprint, fabLayer, aOutline ) )
         return true;
 
-    wxLogTrace( wxT( "KI_TRACE_3D_RENDER" ), wxT( "Extrusion: fab layer outline failed for '%s', trying pad bbox" ),
+    wxLogTrace( wxT( "KI_TRACE_3D_RENDER" ),
+                wxT( "Extrusion: fab layer outline failed for '%s', trying silkscreen" ),
+                aFootprint->GetReference() );
+
+    PCB_LAYER_ID silkLayer = isBack ? B_SilkS : F_SilkS;
+
+    if( buildFilledPolygonFromShapes( aFootprint, silkLayer, aOutline ) )
+        return true;
+
+    wxLogTrace( wxT( "KI_TRACE_3D_RENDER" ),
+                wxT( "Extrusion: silkscreen outline failed for '%s', trying pad bbox" ),
                 aFootprint->GetReference() );
 
     BOX2I padBox = CalcPlaceholderLocalBox( aFootprint );

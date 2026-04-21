@@ -140,7 +140,7 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 	m_extrusionLayerLabel->Wrap( -1 );
 	fgSizer1->Add( m_extrusionLayerLabel, 0, wxALL, 5 );
 
-	wxString m_extrusionLayerChoiceChoices[] = { _("Auto"), _("Courtyard layer"), _("Fabrication layer") };
+	wxString m_extrusionLayerChoiceChoices[] = { _("Auto"), _("Courtyard layer"), _("Fabrication layer"), _("Silkscreen layer") };
 	int m_extrusionLayerChoiceNChoices = sizeof( m_extrusionLayerChoiceChoices ) / sizeof( wxString );
 	m_extrusionLayerChoice = new wxChoice( m_extrusionSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_extrusionLayerChoiceNChoices, m_extrusionLayerChoiceChoices, 0 );
 	m_extrusionLayerChoice->SetSelection( 0 );

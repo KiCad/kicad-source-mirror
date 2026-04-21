@@ -205,12 +205,13 @@ bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataToWindow()
     m_standoffHeightCtrl->SetValue(
             wxString::Format( wxT( "%.4f" ), body ? pcbIUScale.IUTomm( body->m_standoff ) : 0.0 ) );
 
-    m_extrusionLayers = { UNDEFINED_LAYER, F_CrtYd, F_Fab };
+    m_extrusionLayers = { UNDEFINED_LAYER, F_CrtYd, F_Fab, F_SilkS };
 
     m_extrusionLayerChoice->Clear();
     m_extrusionLayerChoice->Append( _( "Auto" ) );
     m_extrusionLayerChoice->Append( _( "Courtyard layer" ) );
     m_extrusionLayerChoice->Append( _( "Fabrication layer" ) );
+    m_extrusionLayerChoice->Append( _( "Silkscreen layer" ) );
 
     PCB_LAYER_ID layer = body ? body->m_layer : UNDEFINED_LAYER;
     int          selection = 0; // Auto
