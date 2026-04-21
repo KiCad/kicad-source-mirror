@@ -63,6 +63,13 @@ public:
 
     KIGIT_COMMON* GitCommon() const             { return m_gitCommon.get(); }
 
+    std::unique_ptr<KIGIT_COMMON> TakeGitCommon()
+    {
+        auto old = std::move( m_gitCommon );
+        m_gitCommon = std::make_unique<KIGIT_COMMON>( nullptr );
+        return old;
+    }
+
 private:
     /* overridden sort function */
     int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 ) override;
