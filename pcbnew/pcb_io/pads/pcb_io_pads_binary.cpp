@@ -394,7 +394,7 @@ void PCB_IO_PADS_BINARY::loadNets()
 
     // One KiCad NETCLASS per PADS net class, with its member nets. Empty on boards with no
     // net classes (such as the v0x2021 dialect), where this is a no-op.
-    const std::vector<PADS_IO::NETCLASS_DEF>& netClasses = m_parser->GetNetClasses();
+    const std::vector<PADS_IO::BIN_NET_CLASS_DEF>& netClasses = m_parser->GetNetClasses();
     const std::vector<PADS_IO::DIFF_PAIR_DEF>& diffPairs = m_parser->GetDiffPairs();
 
     if( netClasses.empty() && diffPairs.empty() )
@@ -402,7 +402,7 @@ void PCB_IO_PADS_BINARY::loadNets()
 
     std::shared_ptr<NET_SETTINGS> netSettings = m_loadBoard->GetDesignSettings().m_NetSettings;
 
-    for( const PADS_IO::NETCLASS_DEF& nc : netClasses )
+    for( const PADS_IO::BIN_NET_CLASS_DEF& nc : netClasses )
     {
         if( nc.name.empty() || nc.nets.empty() )
             continue;

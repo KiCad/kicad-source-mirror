@@ -2535,7 +2535,7 @@ void BINARY_PARSER::parseNetClasses()
                     continue;
 
                 const int32_t* core = values[i].core;
-                NETCLASS_DEF&  nc = m_netClasses[it->second];
+                BIN_NET_CLASS_DEF&  nc = m_netClasses[it->second];
 
                 nc.clearance     = core[0];
                 nc.viaClearance  = core[2];
@@ -2548,7 +2548,7 @@ void BINARY_PARSER::parseNetClasses()
     }
 
     // Sort for reproducible output.
-    for( NETCLASS_DEF& nc : m_netClasses )
+    for( BIN_NET_CLASS_DEF& nc : m_netClasses )
     {
         std::sort( nc.nets.begin(), nc.nets.end() );
         std::sort( nc.ruleLayers.begin(), nc.ruleLayers.end() );

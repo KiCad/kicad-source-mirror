@@ -76,7 +76,7 @@ enum class SECTION : int
  * of a class. Class names and per-class clearance-rule layers come from the type-66 rule
  * table (24 B records, tag 0x42 @ +4, net-class pointer @ +8, layer @ +20).
  */
-struct NETCLASS_DEF
+struct BIN_NET_CLASS_DEF
 {
     std::string              name;
     std::vector<std::string> nets;
@@ -137,7 +137,7 @@ public:
     const PARAMETERS& GetParameters() const { return m_parameters; }
     const std::vector<PART>& GetParts() const { return m_parts; }
     const std::vector<NET>& GetNets() const { return m_nets; }
-    const std::vector<NETCLASS_DEF>& GetNetClasses() const { return m_netClasses; }
+    const std::vector<BIN_NET_CLASS_DEF>& GetNetClasses() const { return m_netClasses; }
     const std::vector<DIFF_PAIR_DEF>& GetDiffPairs() const { return m_diffPairs; }
     const std::vector<ROUTE>& GetRoutes() const { return m_routes; }
     const std::vector<TEXT>& GetTexts() const { return m_texts; }
@@ -385,7 +385,7 @@ private:
     // Nets sharing a value are one class.
     std::map<std::string, uint32_t> m_netClassOwner;
 
-    std::vector<NETCLASS_DEF> m_netClasses;
+    std::vector<BIN_NET_CLASS_DEF> m_netClasses;
 
     // Net self-pointer (record +184) -> net name. The join key that resolves a sec49 DIF_PAIR
     // object's +12/+16 member-net pointers to names.
