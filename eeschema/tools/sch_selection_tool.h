@@ -232,7 +232,15 @@ protected:
 private:
     OPT_TOOL_EVENT autostartEvent( TOOL_EVENT* aEvent, EE_GRID_HELPER& aGrid, SCH_ITEM* aItem );
 
-    std::set<SCH_ITEM*> expandConnectionWithGraph( const SCH_SELECTION& aItems );
+    enum class STOP_CONDITION
+    {
+        STOP_AT_JUNCTION,   ///< Stop at the first junction, label, or pin reached
+        STOP_AT_PIN,        ///< Walk through junctions and labels but stop at pins
+        STOP_NEVER          ///< Walk the entire connected sub-net
+    };
+
+    std::set<SCH_ITEM*> expandConnectionWithGraph( const SCH_SELECTION& aItems,
+                                                   STOP_CONDITION aStopCondition );
     std::set<SCH_ITEM*> expandConnectionGraphically( const SCH_SELECTION& aItems );
 
     /**
