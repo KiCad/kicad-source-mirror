@@ -211,16 +211,29 @@ std::tuple<bool,wxString, wxString> DIALOG_GIT_REPOSITORY::isValidSSH( const wxS
 
 static wxString get_repo_name( wxString& aRepoAddr )
 {
-    wxString retval;
-    size_t last_slash = aRepoAddr.find_last_of( '/' );
-    bool ends_with_dot_git = aRepoAddr.EndsWith( ".git" );
+    wxString addr = aRepoAddr;
 
-    if( ends_with_dot_git )
-        retval = aRepoAddr.substr( last_slash + 1, aRepoAddr.size() - last_slash - 5 );
-    else
-        retval = aRepoAddr.substr( last_slash + 1, aRepoAddr.size() - last_slash );
+    // Strip GitHub/GitLab web-UI path suffixes so that pasting a browser URL
+    // (e.g. .../repo/tree/master, .../repo/blob/main/README.md, .../repo/pulls)
+    // still gives the repository name rather than a branch/page name.
+    static wxRegEx webSuffix(
+        R"((/-)?/(tree|blob|commits?|raw|releases|tags|branches|pulls|pull|issues|merge_requests|wiki|actions)/.*$)",
+        wxRE_ADVANCED );
 
-    return retval;
+    webSuffix.ReplaceAll( &addr, wxEmptyString );
+
+    while( addr.EndsWith( "/" ) )
+        addr.RemoveLast();
+
+    if( addr.EndsWith( ".git" ) )
+        addr.RemoveLast( 4 );
+
+    size_t last_slash = addr.find_last_of( '/' );
+
+    if( last_slash == wxString::npos )
+        return addr;
+
+    return addr.substr( last_slash + 1 );
 }
 
 
@@ -251,8 +264,7 @@ void DIALOG_GIT_REPOSITORY::updateURLData()
             SetPassword( password );
             m_txtURL->SetValue( repoAddress );
 
-            if( m_txtName->GetValue().IsEmpty() )
-                m_txtName->SetValue( get_repo_name( repoAddress ) );
+            m_txtName->SetValue( get_repo_name( repoAddress ) );
         }
     }
     else if( url.Contains( "ssh://" ) || url.Contains( "git@" ) )
@@ -266,8 +278,7 @@ void DIALOG_GIT_REPOSITORY::updateURLData()
             m_txtUsername->SetValue( username );
             m_txtURL->SetValue( repoAddress );
 
-            if( m_txtName->GetValue().IsEmpty() )
-                m_txtName->SetValue( get_repo_name( repoAddress ) );
+            m_txtName->SetValue( get_repo_name( repoAddress ) );
 
             setDefaultSSHKey();
         }
@@ -285,8 +296,7 @@ void DIALOG_GIT_REPOSITORY::updateURLData()
             m_ConnType->SetSelection( static_cast<int>( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH ) );
             setDefaultSSHKey();
 
-            if( m_txtName->GetValue().IsEmpty() )
-                m_txtName->SetValue( get_repo_name( url ) );
+            m_txtName->SetValue( get_repo_name( url ) );
         }
     }
 }
@@ -415,9 +425,11 @@ void DIALOG_GIT_REPOSITORY::OnOKClick( wxCommandEvent& event )
     if( m_txtURL->GetValue().IsEmpty() )
     {
         DisplayErrorMessage( this, _( "Missing information" ),
-                             _( "Please enter a URL for the repository" ) );
+                            _( "Please enter a URL for the repository" ) );
         return;
     }
+
+    updateURLData();
 
     EndModal( wxID_OK );
 }
