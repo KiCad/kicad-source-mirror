@@ -2547,7 +2547,12 @@ void SCH_EDIT_FRAME::SetHighlightedConnection( const wxString& aConnection,
     m_highlightedConn = aConnection;
 
     if( refreshNetNavigator )
+    {
         RefreshNetNavigator( aSelection );
+
+        if( m_hierarchy )
+            m_hierarchy->UpdateNetHighlight( aConnection );
+    }
 }
 
 
