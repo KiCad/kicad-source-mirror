@@ -32,7 +32,9 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <font/font.h>
 #include <footprint.h>
+#include <hash.h>
 #include <hash_eda.h>
+#include <padstack.h>
 #include <pad.h>
 #include <pcb_dimension.h>
 #include <pcb_field.h>
@@ -62,6 +64,51 @@
  * @ingroup trace_env_vars
  */
 static const wxChar traceIpc2581[] = wxT( "KICAD_IPC_2581" );
+
+
+// Extend the padstack identity with secondary/tertiary drill (backdrill) and
+// post-machining data so pads/vias with identical geometry but different
+// backdrill configuration do not collapse onto the same padstack entry.
+static void mixBackdrillIntoPadstackHash( size_t& aHash, const PADSTACK& aPadstack )
+{
+    auto mixDrill = [&]( const PADSTACK::DRILL_PROPS& aDrill )
+    {
+        hash_combine( aHash, static_cast<int>( aDrill.start ),
+                      static_cast<int>( aDrill.end ), aDrill.size.x, aDrill.size.y,
+                      static_cast<int>( aDrill.shape ), aDrill.is_capped.has_value(),
+                      aDrill.is_capped.value_or( false ), aDrill.is_filled.has_value(),
+                      aDrill.is_filled.value_or( false ) );
+    };
+
+    auto mixPostMachining = [&]( const PADSTACK::POST_MACHINING_PROPS& aPost )
+    {
+        hash_combine( aHash, aPost.mode.has_value(),
+                      static_cast<int>(
+                              aPost.mode.value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN ) ),
+                      aPost.size, aPost.depth, aPost.angle );
+    };
+
+    mixDrill( aPadstack.SecondaryDrill() );
+    mixDrill( aPadstack.TertiaryDrill() );
+    mixPostMachining( aPadstack.FrontPostMachining() );
+    mixPostMachining( aPadstack.BackPostMachining() );
+}
+
+
+static size_t ipcPadstackHash( const PCB_VIA* aVia )
+{
+    size_t hash = hash_fp_item( aVia, 0 );
+    mixBackdrillIntoPadstackHash( hash, aVia->Padstack() );
+    return hash;
+}
+
+
+static size_t ipcPadstackHash( const PAD* aPad )
+{
+    size_t hash = hash_fp_item( aPad, 0 );
+    mixBackdrillIntoPadstackHash( hash, aPad->Padstack() );
+    return hash;
+}
 
 
 /**
@@ -2321,7 +2368,7 @@ void PCB_IO_IPC2581::addVia( wxXmlNode* aContentNode, const PCB_VIA* aVia, PCB_L
 
 void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
 {
-    size_t hash = hash_fp_item( aPad, 0 );
+    size_t hash = ipcPadstackHash( aPad );
     wxString name = wxString::Format( "PADSTACK_%zu", m_padstack_dict.size() + 1 );
     auto [ th_pair, success ] = m_padstack_dict.emplace( hash, name );
 
@@ -2390,7 +2437,7 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
 
 void PCB_IO_IPC2581::addPadStack( wxXmlNode* aContentNode, const PCB_VIA* aVia )
 {
-    size_t hash = hash_fp_item( aVia, 0 );
+    size_t hash = ipcPadstackHash( aVia );
     wxString name = wxString::Format( "PADSTACK_%zu", m_padstack_dict.size() + 1 );
     auto [ via_pair, success ] = m_padstack_dict.emplace( hash, name );
 
@@ -2471,11 +2518,15 @@ void PCB_IO_IPC2581::ensureBackdrillSpecs( const wxString& aPadstackName, const 
         return;
 
     const PADSTACK::DRILL_PROPS& secondary = aPadstack.SecondaryDrill();
+    const PADSTACK::DRILL_PROPS& tertiary = aPadstack.TertiaryDrill();
 
-    if( secondary.start == UNDEFINED_LAYER || secondary.end == UNDEFINED_LAYER )
-        return;
+    auto hasBackdrill = []( const PADSTACK::DRILL_PROPS& aDrill )
+    {
+        return aDrill.start != UNDEFINED_LAYER && aDrill.end != UNDEFINED_LAYER
+                && ( aDrill.size.x > 0 || aDrill.size.y > 0 );
+    };
 
-    if( secondary.size.x <= 0 && secondary.size.y <= 0 )
+    if( !hasBackdrill( secondary ) && !hasBackdrill( tertiary ) )
         return;
 
     if( !m_cad_header_node )
@@ -2486,8 +2537,17 @@ void PCB_IO_IPC2581::ensureBackdrillSpecs( const wxString& aPadstackName, const 
         return m_layer_name_map.find( aLayer ) != m_layer_name_map.end();
     };
 
-    if( !layerHasRef( secondary.start ) || !layerHasRef( secondary.end ) )
+    if( hasBackdrill( secondary )
+            && ( !layerHasRef( secondary.start ) || !layerHasRef( secondary.end ) ) )
+    {
         return;
+    }
+
+    if( hasBackdrill( tertiary )
+            && ( !layerHasRef( tertiary.start ) || !layerHasRef( tertiary.end ) ) )
+    {
+        return;
+    }
 
     BOARD_DESIGN_SETTINGS& dsnSettings = m_board->GetDesignSettings();
     BOARD_STACKUP&         stackup = dsnSettings.GetStackupDescriptor();
@@ -2542,12 +2602,15 @@ void PCB_IO_IPC2581::ensureBackdrillSpecs( const wxString& aPadstackName, const 
     wxString primarySpec = createSpec( primary, wxString::Format( wxT( "BD_%dA" ), specIndex ) );
 
     wxString secondarySpec = createSpec( secondary, wxString::Format( wxT( "BD_%dB" ), specIndex ) );
+    wxString tertiarySpec = createSpec( tertiary, wxString::Format( wxT( "BD_%dC" ), specIndex ) );
 
-    if( primarySpec.IsEmpty() && secondarySpec.IsEmpty() )
+    if( primarySpec.IsEmpty() && secondarySpec.IsEmpty() && tertiarySpec.IsEmpty() )
         return;
 
     m_backdrill_spec_index = specIndex;
-    m_padstack_backdrill_specs.emplace( aPadstackName, std::make_pair( primarySpec, secondarySpec ) );
+    m_padstack_backdrill_specs.emplace( aPadstackName,
+                                        std::array<wxString, 3>{ primarySpec, secondarySpec,
+                                                                 tertiarySpec } );
 }
 
 
@@ -2568,8 +2631,8 @@ void PCB_IO_IPC2581::addBackdrillSpecRefs( wxXmlNode* aHoleNode, const wxString&
         m_backdrill_spec_used.insert( aSpecName );
     };
 
-    addRef( it->second.first );
-    addRef( it->second.second );
+    for( const wxString& specName : it->second )
+        addRef( specName );
 }
 
 
@@ -3420,7 +3483,7 @@ void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
             if( item->Type() == PCB_VIA_T )
             {
                 PCB_VIA* via = static_cast<PCB_VIA*>( item );
-                auto it = m_padstack_dict.find( hash_fp_item( via, 0 ) );
+                auto it = m_padstack_dict.find( ipcPadstackHash( via ) );
 
                 if( it == m_padstack_dict.end() )
                 {
@@ -3447,7 +3510,7 @@ void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
             else if( item->Type() == PCB_PAD_T )
             {
                 PAD* pad = static_cast<PAD*>( item );
-                auto it = m_padstack_dict.find( hash_fp_item( pad, 0 ) );
+                auto it = m_padstack_dict.find( ipcPadstackHash( pad ) );
 
                 if( it == m_padstack_dict.end() )
                 {

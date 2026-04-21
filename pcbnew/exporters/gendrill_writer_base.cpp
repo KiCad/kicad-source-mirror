@@ -106,80 +106,88 @@ void GENDRILL_WRITER_BASE::buildHolesList( const DRILL_SPAN& aSpan, bool aGenera
 
             if( aSpan.m_IsBackdrill )
             {
-                const PADSTACK::DRILL_PROPS& secondary = via->Padstack().SecondaryDrill();
-
-                if( secondary.start == UNDEFINED_LAYER || secondary.end == UNDEFINED_LAYER )
-                    continue;
-
-                DRILL_LAYER_PAIR secondaryPair( std::min( secondary.start, secondary.end ),
-                                                std::max( secondary.start, secondary.end ) );
-
-                if( secondaryPair != aSpan.Pair() )
-                    continue;
-
-                if( secondary.start != aSpan.DrillStartLayer()
-                        || secondary.end != aSpan.DrillEndLayer() )
+                auto tryEmitBackdrill = [&]( const PADSTACK::DRILL_PROPS& aDrill ) -> bool
                 {
-                    continue;
-                }
+                    if( aDrill.start == UNDEFINED_LAYER || aDrill.end == UNDEFINED_LAYER )
+                        return false;
 
-                if( secondary.size.x <= 0 && secondary.size.y <= 0 )
-                    continue;
+                    DRILL_LAYER_PAIR drillPair( std::min( aDrill.start, aDrill.end ),
+                                                std::max( aDrill.start, aDrill.end ) );
 
-                new_hole = HOLE_INFO();
-                new_hole.m_ItemParent = via;
-                new_hole.m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_VIA_BACKDRILL;
-                new_hole.m_Tool_Reference = -1;
-                new_hole.m_Hole_Orient = ANGLE_0;
-                new_hole.m_Hole_NotPlated = true;
-                new_hole.m_Hole_Shape = 0;
-                new_hole.m_Hole_Pos = via->GetStart();
-                new_hole.m_Hole_Top_Layer = aSpan.TopLayer();
-                new_hole.m_Hole_Bottom_Layer = aSpan.BottomLayer();
+                    if( drillPair != aSpan.Pair() )
+                        return false;
 
-                int diameter = secondary.size.x;
+                    if( aDrill.start != aSpan.DrillStartLayer()
+                            || aDrill.end != aSpan.DrillEndLayer() )
+                    {
+                        return false;
+                    }
 
-                if( secondary.size.y > 0 )
-                    diameter = ( diameter > 0 ) ? std::min( diameter, secondary.size.y )
-                                                : secondary.size.y;
+                    if( aDrill.size.x <= 0 && aDrill.size.y <= 0 )
+                        return false;
 
-                new_hole.m_Hole_Diameter = diameter;
-                new_hole.m_Hole_Size = secondary.size;
+                    HOLE_INFO hole;
+                    hole.m_ItemParent = via;
+                    hole.m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_VIA_BACKDRILL;
+                    hole.m_Tool_Reference = -1;
+                    hole.m_Hole_Orient = ANGLE_0;
+                    hole.m_Hole_NotPlated = true;
+                    hole.m_Hole_Shape = 0;
+                    hole.m_Hole_Pos = via->GetStart();
+                    hole.m_Hole_Top_Layer = aSpan.TopLayer();
+                    hole.m_Hole_Bottom_Layer = aSpan.BottomLayer();
 
-                if( secondary.shape != PAD_DRILL_SHAPE::CIRCLE
-                        && secondary.size.x != secondary.size.y )
-                {
-                    new_hole.m_Hole_Shape = 1;
-                }
+                    int diameter = aDrill.size.x;
 
-                new_hole.m_Hole_Filled = secondary.is_filled.value_or( false );
-                new_hole.m_Hole_Capped = secondary.is_capped.value_or( false );
-                new_hole.m_Hole_Top_Covered = via->Padstack().IsCovered( new_hole.m_Hole_Top_Layer )
-                                                    .value_or( false );
-                new_hole.m_Hole_Bot_Covered = via->Padstack().IsCovered( new_hole.m_Hole_Bottom_Layer )
-                                                    .value_or( false );
-                new_hole.m_Hole_Top_Plugged = via->Padstack().IsPlugged( new_hole.m_Hole_Top_Layer )
-                                                    .value_or( false );
-                new_hole.m_Hole_Bot_Plugged = via->Padstack().IsPlugged( new_hole.m_Hole_Bottom_Layer )
-                                                    .value_or( false );
-                new_hole.m_Hole_Top_Tented = via->Padstack().IsTented( new_hole.m_Hole_Top_Layer )
-                                                    .value_or( false );
-                new_hole.m_Hole_Bot_Tented = via->Padstack().IsTented( new_hole.m_Hole_Bottom_Layer )
-                                                    .value_or( false );
-                new_hole.m_IsBackdrill = true;
-                new_hole.m_FrontPostMachining = PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
-                new_hole.m_FrontPostMachiningSize = 0;
-                new_hole.m_FrontPostMachiningDepth = 0;
-                new_hole.m_FrontPostMachiningAngle = 0;
-                new_hole.m_BackPostMachining = PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
-                new_hole.m_BackPostMachiningSize = 0;
-                new_hole.m_BackPostMachiningDepth = 0;
-                new_hole.m_BackPostMachiningAngle = 0;
-                new_hole.m_DrillStart = secondary.start;
-                new_hole.m_DrillEnd = secondary.end;
-                new_hole.m_StubLength = computeStubLength( secondary.start, secondary.end );
+                    if( aDrill.size.y > 0 )
+                        diameter = ( diameter > 0 ) ? std::min( diameter, aDrill.size.y )
+                                                    : aDrill.size.y;
 
-                m_holeListBuffer.push_back( new_hole );
+                    hole.m_Hole_Diameter = diameter;
+                    hole.m_Hole_Size = aDrill.size;
+
+                    if( aDrill.shape != PAD_DRILL_SHAPE::CIRCLE
+                            && aDrill.size.x != aDrill.size.y )
+                    {
+                        hole.m_Hole_Shape = 1;
+                    }
+
+                    hole.m_Hole_Filled = aDrill.is_filled.value_or( false );
+                    hole.m_Hole_Capped = aDrill.is_capped.value_or( false );
+                    hole.m_Hole_Top_Covered = via->Padstack().IsCovered( hole.m_Hole_Top_Layer )
+                                                     .value_or( false );
+                    hole.m_Hole_Bot_Covered = via->Padstack().IsCovered( hole.m_Hole_Bottom_Layer )
+                                                     .value_or( false );
+                    hole.m_Hole_Top_Plugged = via->Padstack().IsPlugged( hole.m_Hole_Top_Layer )
+                                                     .value_or( false );
+                    hole.m_Hole_Bot_Plugged = via->Padstack().IsPlugged( hole.m_Hole_Bottom_Layer )
+                                                     .value_or( false );
+                    hole.m_Hole_Top_Tented = via->Padstack().IsTented( hole.m_Hole_Top_Layer )
+                                                     .value_or( false );
+                    hole.m_Hole_Bot_Tented = via->Padstack().IsTented( hole.m_Hole_Bottom_Layer )
+                                                     .value_or( false );
+                    hole.m_IsBackdrill = true;
+                    hole.m_FrontPostMachining = PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
+                    hole.m_FrontPostMachiningSize = 0;
+                    hole.m_FrontPostMachiningDepth = 0;
+                    hole.m_FrontPostMachiningAngle = 0;
+                    hole.m_BackPostMachining = PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
+                    hole.m_BackPostMachiningSize = 0;
+                    hole.m_BackPostMachiningDepth = 0;
+                    hole.m_BackPostMachiningAngle = 0;
+                    hole.m_DrillStart = aDrill.start;
+                    hole.m_DrillEnd = aDrill.end;
+                    hole.m_StubLength = computeStubLength( aDrill.start, aDrill.end );
+
+                    m_holeListBuffer.push_back( hole );
+                    return true;
+                };
+
+                // A via may carry two independent backdrill operations (front-side and
+                // back-side), stored as secondary and tertiary drill props. Emit whichever
+                // one matches this span.
+                tryEmitBackdrill( via->Padstack().SecondaryDrill() );
+                tryEmitBackdrill( via->Padstack().TertiaryDrill() );
                 continue;
             }
 
@@ -391,15 +399,19 @@ std::vector<DRILL_SPAN> GENDRILL_WRITER_BASE::getUniqueLayerPairs() const
         if( DRILL_LAYER_PAIR( top_layer, bottom_layer ) != DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
             unique.emplace( top_layer, bottom_layer, false, false );
 
-        const PADSTACK::DRILL_PROPS& secondary = via->Padstack().SecondaryDrill();
+        auto addBackdrillSpan = [&]( const PADSTACK::DRILL_PROPS& aDrill )
+        {
+            if( aDrill.start == UNDEFINED_LAYER || aDrill.end == UNDEFINED_LAYER )
+                return;
 
-        if( secondary.start == UNDEFINED_LAYER || secondary.end == UNDEFINED_LAYER )
-            continue;
+            if( aDrill.size.x <= 0 && aDrill.size.y <= 0 )
+                return;
 
-        if( secondary.size.x <= 0 && secondary.size.y <= 0 )
-            continue;
+            unique.emplace( aDrill.start, aDrill.end, true, false );
+        };
 
-        unique.emplace( secondary.start, secondary.end, true, false );
+        addBackdrillSpan( via->Padstack().SecondaryDrill() );
+        addBackdrillSpan( via->Padstack().TertiaryDrill() );
     }
 
     std::vector<DRILL_SPAN> ret;

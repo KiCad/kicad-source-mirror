@@ -181,6 +181,111 @@ BOOST_AUTO_TEST_CASE( BackdrillCamOutputs )
 }
 
 
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23914
+// Only front-side (secondary) backdrill holes were exported; back-side (tertiary)
+// backdrill operations never produced a drill file.
+BOOST_AUTO_TEST_CASE( FrontAndBackBackdrillCamOutputs )
+{
+    wxFileName tempDir = MakeTempDir();
+    wxFileName boardFile( tempDir.GetFullPath(), wxT( "backdrill_pair_board.kicad_pcb" ) );
+
+    BOARD board;
+    board.SetCopperLayerCount( 6 );
+    board.SetFileName( boardFile.GetFullPath() );
+
+    auto topVia = new PCB_VIA( &board );
+    topVia->SetPosition( VECTOR2I( 0, 0 ) );
+    topVia->SetLayerPair( F_Cu, B_Cu );
+    topVia->SetDrill( pcbIUScale.mmToIU( 0.30 ) );
+    topVia->SetWidth( pcbIUScale.mmToIU( 0.60 ) );
+    topVia->SetSecondaryDrillSize( pcbIUScale.mmToIU( 0.40 ) );
+    topVia->SetSecondaryDrillStartLayer( F_Cu );
+    topVia->SetSecondaryDrillEndLayer( In1_Cu );
+    board.Add( topVia );
+
+    auto bottomVia = new PCB_VIA( &board );
+    bottomVia->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 5.0 ), 0 ) );
+    bottomVia->SetLayerPair( F_Cu, B_Cu );
+    bottomVia->SetDrill( pcbIUScale.mmToIU( 0.30 ) );
+    bottomVia->SetWidth( pcbIUScale.mmToIU( 0.60 ) );
+    bottomVia->SetTertiaryDrillSize( pcbIUScale.mmToIU( 0.40 ) );
+    bottomVia->SetTertiaryDrillStartLayer( B_Cu );
+    bottomVia->SetTertiaryDrillEndLayer( In3_Cu );
+    board.Add( bottomVia );
+
+    EXCELLON_WRITER excellon( &board );
+    excellon.SetOptions( false, false, VECTOR2I( 0, 0 ), false );
+    excellon.SetFormat( true );
+    BOOST_REQUIRE( excellon.CreateDrillandMapFilesSet( tempDir.GetFullPath(), true, false,
+                                                       nullptr ) );
+
+    wxFileName topBackdrillFile( tempDir.GetFullPath(),
+                                 wxT( "backdrill_pair_board_Backdrills_Drill_1_2.drl" ) );
+    BOOST_CHECK_MESSAGE( topBackdrillFile.FileExists(),
+                         "Front-side backdrill drill file should be produced" );
+
+    // Start=B_Cu (UI index 6) drilled toward In3_Cu (UI index 4) in a 6-layer board
+    wxFileName bottomBackdrillFile( tempDir.GetFullPath(),
+                                    wxT( "backdrill_pair_board_Backdrills_Drill_6_4.drl" ) );
+    BOOST_CHECK_MESSAGE( bottomBackdrillFile.FileExists(),
+                         "Back-side (tertiary) backdrill drill file should be produced" );
+
+    if( bottomBackdrillFile.FileExists() )
+    {
+        wxFFile stream( bottomBackdrillFile.GetFullPath(), wxT( "rb" ) );
+        wxString contents;
+        BOOST_REQUIRE( stream.ReadAll( &contents ) );
+        BOOST_CHECK( contents.Contains( wxT( "; Backdrill" ) ) );
+        stream.Close();
+    }
+
+    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// Stronger coverage for https://gitlab.com/kicad/code/kicad/-/issues/23914
+// A single via can carry both a front-side (secondary) and a back-side
+// (tertiary) backdrill. Both drill files must be produced.
+BOOST_AUTO_TEST_CASE( DualBackdrillSameViaCamOutputs )
+{
+    wxFileName tempDir = MakeTempDir();
+    wxFileName boardFile( tempDir.GetFullPath(), wxT( "dual_backdrill_board.kicad_pcb" ) );
+
+    BOARD board;
+    board.SetCopperLayerCount( 6 );
+    board.SetFileName( boardFile.GetFullPath() );
+
+    auto via = new PCB_VIA( &board );
+    via->SetPosition( VECTOR2I( 0, 0 ) );
+    via->SetLayerPair( F_Cu, B_Cu );
+    via->SetDrill( pcbIUScale.mmToIU( 0.30 ) );
+    via->SetWidth( pcbIUScale.mmToIU( 0.60 ) );
+    via->SetSecondaryDrillSize( pcbIUScale.mmToIU( 0.40 ) );
+    via->SetSecondaryDrillStartLayer( F_Cu );
+    via->SetSecondaryDrillEndLayer( In1_Cu );
+    via->SetTertiaryDrillSize( pcbIUScale.mmToIU( 0.40 ) );
+    via->SetTertiaryDrillStartLayer( B_Cu );
+    via->SetTertiaryDrillEndLayer( In3_Cu );
+    board.Add( via );
+
+    EXCELLON_WRITER excellon( &board );
+    excellon.SetOptions( false, false, VECTOR2I( 0, 0 ), false );
+    excellon.SetFormat( true );
+    BOOST_REQUIRE( excellon.CreateDrillandMapFilesSet( tempDir.GetFullPath(), true, false,
+                                                       nullptr ) );
+
+    wxFileName topBackdrillFile( tempDir.GetFullPath(),
+                                 wxT( "dual_backdrill_board_Backdrills_Drill_1_2.drl" ) );
+    BOOST_CHECK( topBackdrillFile.FileExists() );
+
+    wxFileName bottomBackdrillFile( tempDir.GetFullPath(),
+                                    wxT( "dual_backdrill_board_Backdrills_Drill_6_4.drl" ) );
+    BOOST_CHECK( bottomBackdrillFile.FileExists() );
+
+    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+}
+
+
 // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23451
 // GERBER_WRITER::SetFormat() precision was not passed to the plotter; output always used 4.6.
 BOOST_AUTO_TEST_CASE( GerberDrillPrecision )
