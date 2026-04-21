@@ -2962,7 +2962,7 @@ int SCH_SELECTION_TOOL::SelectNode( const TOOL_EVENT& aEvent )
 
 std::set<SCH_ITEM*>
 SCH_SELECTION_TOOL::expandConnectionWithGraph( const SCH_SELECTION& aItems,
-                                               EXPAND_STOP_CONDITION aStopCondition )
+                                               STOP_CONDITION aStopCondition )
 {
     SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
@@ -2978,9 +2978,7 @@ SCH_SELECTION_TOOL::expandConnectionWithGraph( const SCH_SELECTION& aItems,
     SCH_SHEET_PATH&        currentSheet = editFrame->GetCurrentSheet();
     std::vector<SCH_ITEM*> startItems;
     std::set<SCH_ITEM*>    added;
-    bool                   startedFromSymbol = false;
 
-    // Build the list of starting items for the connection graph traversal
     for( auto item : aItems )
     {
         if( !item->IsSCH_ITEM() )
@@ -2988,11 +2986,8 @@ SCH_SELECTION_TOOL::expandConnectionWithGraph( const SCH_SELECTION& aItems,
 
         SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item );
 
-        // If we're a symbol, start from all its pins
         if( schItem->Type() == SCH_SYMBOL_T )
         {
-            startedFromSymbol = true;
-
             for( SCH_PIN* pin : static_cast<SCH_SYMBOL*>( schItem )->GetPins( &currentSheet ) )
             {
                 if( pin )
@@ -3021,37 +3016,30 @@ SCH_SELECTION_TOOL::expandConnectionWithGraph( const SCH_SELECTION& aItems,
         }
     }
 
-    auto isPinPoint = [&]( const VECTOR2I& aPoint ) -> bool
+    // Cache every pin position on the sheet so endpoint tests are O(log n) lookups instead of
+    // an R-tree query plus a full pin iteration per call.
+    std::set<VECTOR2I> pinPositions;
+
+    for( SCH_ITEM* it : screen->Items().OfType( SCH_SYMBOL_T ) )
     {
-        for( SCH_ITEM* it : screen->Items().Overlapping( SCH_SYMBOL_T, aPoint ) )
+        for( SCH_PIN* pin : static_cast<SCH_SYMBOL*>( it )->GetPins( &currentSheet ) )
         {
-            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( it );
-
-            for( SCH_PIN* pin : symbol->GetPins( &currentSheet ) )
-            {
-                if( pin && pin->GetPosition() == aPoint )
-                    return true;
-            }
+            if( pin )
+                pinPositions.insert( pin->GetPosition() );
         }
+    }
 
-        return false;
-    };
-
-    // A "stop point" is a wire endpoint where traversal should not continue per the selected
-    // stop condition. The PCB editor uses the same staged approach for Ctrl+4: junction first,
-    // then pin, then unbounded.
     auto isStopPoint = [&]( const VECTOR2I& aPoint ) -> bool
     {
-        if( aStopCondition == EXPAND_STOP_CONDITION::STOP_NEVER )
+        if( aStopCondition == STOP_CONDITION::STOP_NEVER )
             return false;
 
-        if( isPinPoint( aPoint ) )
+        if( pinPositions.count( aPoint ) )
             return true;
 
-        if( aStopCondition == EXPAND_STOP_CONDITION::STOP_AT_PIN )
+        if( aStopCondition == STOP_CONDITION::STOP_AT_PIN )
             return false;
 
-        // STOP_AT_JUNCTION also halts at any branching point or label.
         if( screen->IsJunction( aPoint ) || screen->IsExplicitJunction( aPoint ) )
             return true;
 
@@ -3078,14 +3066,11 @@ SCH_SELECTION_TOOL::expandConnectionWithGraph( const SCH_SELECTION& aItems,
         return false;
     };
 
-    // Endpoints of an item that are eligible "doors" for traversal. Only line/wire/bus items have
-    // distinct endpoints; everything else is treated as an unbounded connector node.
-    auto getTraversalPoints = []( SCH_ITEM* aItem ) -> std::vector<VECTOR2I>
+    // STOP_AT_JUNCTION refuses to pull a symbol into the selection unless the user already had
+    // a symbol selected; later passes accept every reachable symbol.
+    auto shouldPullInSymbol = [&]()
     {
-        if( SCH_LINE* line = dynamic_cast<SCH_LINE*>( aItem ) )
-            return { line->GetStartPoint(), line->GetEndPoint() };
-
-        return {};
+        return aStopCondition != STOP_CONDITION::STOP_AT_JUNCTION || !startSymbols.empty();
     };
 
     std::deque<SCH_ITEM*>         queue;
@@ -3112,27 +3097,19 @@ SCH_SELECTION_TOOL::expandConnectionWithGraph( const SCH_SELECTION& aItems,
         {
             SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( pin->GetParent() );
 
-            // STOP_AT_JUNCTION never pulls the symbol in; only later passes do (or when the user
-            // started the expansion from a symbol selection).
-            bool acceptSymbol = ( aStopCondition != EXPAND_STOP_CONDITION::STOP_AT_JUNCTION )
-                                || startedFromSymbol
-                                || ( symbol && startSymbols.count( symbol ) );
-
-            if( acceptSymbol && symbol && Selectable( symbol ) && itemPassesFilter( symbol, nullptr )
-                && !symbol->IsSelected() )
+            if( shouldPullInSymbol() && symbol && Selectable( symbol )
+                && itemPassesFilter( symbol, nullptr ) && !symbol->IsSelected() )
             {
                 added.insert( symbol );
             }
         }
 
-        // Determine which endpoints of this item are open for further traversal.
-        std::vector<VECTOR2I> traversalPoints = getTraversalPoints( item );
-        bool                  hasEndpoints = !traversalPoints.empty();
+        SCH_LINE*             line = dynamic_cast<SCH_LINE*>( item );
         std::vector<VECTOR2I> openPoints;
 
-        if( hasEndpoints )
+        if( line && aStopCondition != STOP_CONDITION::STOP_NEVER )
         {
-            for( const VECTOR2I& pt : traversalPoints )
+            for( const VECTOR2I& pt : { line->GetStartPoint(), line->GetEndPoint() } )
             {
                 if( !isStopPoint( pt ) )
                     openPoints.push_back( pt );
@@ -3149,11 +3126,8 @@ SCH_SELECTION_TOOL::expandConnectionWithGraph( const SCH_SELECTION& aItems,
             if( neighbor->Type() == SCH_SYMBOL_T )
             {
                 SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( neighbor );
-                bool        acceptSymbol = ( aStopCondition != EXPAND_STOP_CONDITION::STOP_AT_JUNCTION )
-                                           || startedFromSymbol
-                                           || startSymbols.count( symbol );
 
-                if( acceptSymbol && Selectable( symbol ) && itemPassesFilter( symbol, nullptr )
+                if( shouldPullInSymbol() && Selectable( symbol ) && itemPassesFilter( symbol, nullptr )
                     && !symbol->IsSelected() )
                 {
                     added.insert( symbol );
@@ -3162,10 +3136,8 @@ SCH_SELECTION_TOOL::expandConnectionWithGraph( const SCH_SELECTION& aItems,
                 continue;
             }
 
-            // For wires/lines whose endpoints are blocked by the stop condition we only follow
-            // neighbors that share an "open" endpoint. Non-line items have no distinct endpoints
-            // we can gate on, so we always follow them.
-            if( hasEndpoints && aStopCondition != EXPAND_STOP_CONDITION::STOP_NEVER )
+            // Wires gate traversal on open endpoints; items without distinct endpoints always flow.
+            if( line && aStopCondition != STOP_CONDITION::STOP_NEVER )
             {
                 bool sharesOpenPoint = false;
 
@@ -3250,9 +3222,8 @@ int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
             connectableSelection.Add( item );
     }
 
-    // Track items already in the selection so we can decide whether a given expansion stage
-    // actually grew the selection. Repeated Ctrl+4 then walks to the next stop condition,
-    // matching the behavior of PCBNew's "Select/Expand Connection".
+    // Repeated Ctrl+4 must advance to the next stop condition if the current stage did not pull
+    // in any items beyond what was already selected, matching PCBNew's "Select/Expand Connection".
     std::unordered_set<const SCH_ITEM*> originalConnectableSet;
 
     for( EDA_ITEM* selItem : connectableSelection.GetItems() )
@@ -3265,22 +3236,17 @@ int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 
     if( !connectableSelection.Empty() )
     {
-        for( EXPAND_STOP_CONDITION stop : { EXPAND_STOP_CONDITION::STOP_AT_JUNCTION,
-                                            EXPAND_STOP_CONDITION::STOP_AT_PIN,
-                                            EXPAND_STOP_CONDITION::STOP_NEVER } )
+        for( STOP_CONDITION stop : { STOP_CONDITION::STOP_AT_JUNCTION,
+                                     STOP_CONDITION::STOP_AT_PIN,
+                                     STOP_CONDITION::STOP_NEVER } )
         {
             graphAdded = expandConnectionWithGraph( connectableSelection, stop );
 
-            bool grew = false;
-
-            for( SCH_ITEM* candidate : graphAdded )
-            {
-                if( !originalConnectableSet.count( candidate ) )
-                {
-                    grew = true;
-                    break;
-                }
-            }
+            bool grew = std::any_of( graphAdded.begin(), graphAdded.end(),
+                                     [&]( const SCH_ITEM* c )
+                                     {
+                                         return !originalConnectableSet.count( c );
+                                     } );
 
             if( grew )
                 break;
