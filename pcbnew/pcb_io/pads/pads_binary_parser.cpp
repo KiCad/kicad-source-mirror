@@ -3902,6 +3902,43 @@ void BINARY_PARSER::parseLayerStackup()
 }
 
 
+namespace
+{
+struct NON_COPPER_LAYER_DEF
+{
+    int                 number;
+    const char*         name;
+    PADS_LAYER_FUNCTION type;
+};
+
+// Standard PADS non-copper technical layers follow well-known numbering conventions.
+const NON_COPPER_LAYER_DEF STANDARD_NON_COPPER[] = {
+    { 21, "Assembly Top",       PADS_LAYER_FUNCTION::ASSEMBLY },
+    { 22, "Assembly Bottom",    PADS_LAYER_FUNCTION::ASSEMBLY },
+    { 25, "Solder Mask Top",    PADS_LAYER_FUNCTION::SOLDER_MASK },
+    { 26, "Silkscreen Top",     PADS_LAYER_FUNCTION::SILK_SCREEN },
+    { 27, "Silkscreen Bottom",  PADS_LAYER_FUNCTION::SILK_SCREEN },
+    { 28, "Solder Mask Bottom", PADS_LAYER_FUNCTION::SOLDER_MASK },
+    { 29, "Paste Mask Top",     PADS_LAYER_FUNCTION::PASTE_MASK },
+    { 30, "Paste Mask Bottom",  PADS_LAYER_FUNCTION::PASTE_MASK },
+};
+
+void appendStandardNonCopperLayers( std::vector<LAYER_INFO>& aInfos )
+{
+    for( const NON_COPPER_LAYER_DEF& def : STANDARD_NON_COPPER )
+    {
+        LAYER_INFO info;
+        info.number = def.number;
+        info.name = def.name;
+        info.is_copper = false;
+        info.required = false;
+        info.layer_type = def.type;
+        aInfos.push_back( info );
+    }
+}
+} // namespace
+
+
 std::vector<LAYER_INFO> BINARY_PARSER::GetLayerInfos() const
 {
     // When the sec69 stackup table was decoded, renumber its active copper layers 1..N in table
@@ -3925,35 +3962,7 @@ std::vector<LAYER_INFO> BINARY_PARSER::GetLayerInfos() const
 
         if( copperNum > 0 )
         {
-            struct NonCopperDef
-            {
-                int                 number;
-                const char*         name;
-                PADS_LAYER_FUNCTION type;
-            };
-
-            static const NonCopperDef nonCopperLayers[] = {
-                { 21, "Assembly Top",       PADS_LAYER_FUNCTION::ASSEMBLY },
-                { 22, "Assembly Bottom",    PADS_LAYER_FUNCTION::ASSEMBLY },
-                { 25, "Solder Mask Top",    PADS_LAYER_FUNCTION::SOLDER_MASK },
-                { 26, "Silkscreen Top",     PADS_LAYER_FUNCTION::SILK_SCREEN },
-                { 27, "Silkscreen Bottom",  PADS_LAYER_FUNCTION::SILK_SCREEN },
-                { 28, "Solder Mask Bottom", PADS_LAYER_FUNCTION::SOLDER_MASK },
-                { 29, "Paste Mask Top",     PADS_LAYER_FUNCTION::PASTE_MASK },
-                { 30, "Paste Mask Bottom",  PADS_LAYER_FUNCTION::PASTE_MASK },
-            };
-
-            for( const auto& def : nonCopperLayers )
-            {
-                LAYER_INFO info;
-                info.number = def.number;
-                info.name = def.name;
-                info.is_copper = false;
-                info.required = false;
-                info.layer_type = def.type;
-                infos.push_back( info );
-            }
-
+            appendStandardNonCopperLayers( infos );
             return infos;
         }
     }
@@ -3973,36 +3982,7 @@ std::vector<LAYER_INFO> BINARY_PARSER::GetLayerInfos() const
         infos.push_back( info );
     }
 
-    // Standard PADS non-copper layers follow well-known numbering conventions.
-    struct NonCopperDef
-    {
-        int                 number;
-        const char*         name;
-        PADS_LAYER_FUNCTION type;
-    };
-
-    static const NonCopperDef nonCopperLayers[] = {
-        { 21, "Assembly Top",       PADS_LAYER_FUNCTION::ASSEMBLY },
-        { 22, "Assembly Bottom",    PADS_LAYER_FUNCTION::ASSEMBLY },
-        { 25, "Solder Mask Top",    PADS_LAYER_FUNCTION::SOLDER_MASK },
-        { 26, "Silkscreen Top",     PADS_LAYER_FUNCTION::SILK_SCREEN },
-        { 27, "Silkscreen Bottom",  PADS_LAYER_FUNCTION::SILK_SCREEN },
-        { 28, "Solder Mask Bottom", PADS_LAYER_FUNCTION::SOLDER_MASK },
-        { 29, "Paste Mask Top",     PADS_LAYER_FUNCTION::PASTE_MASK },
-        { 30, "Paste Mask Bottom",  PADS_LAYER_FUNCTION::PASTE_MASK },
-    };
-
-    for( const auto& def : nonCopperLayers )
-    {
-        LAYER_INFO info;
-        info.number = def.number;
-        info.name = def.name;
-        info.is_copper = false;
-        info.required = false;
-        info.layer_type = def.type;
-        infos.push_back( info );
-    }
-
+    appendStandardNonCopperLayers( infos );
     return infos;
 }
 
