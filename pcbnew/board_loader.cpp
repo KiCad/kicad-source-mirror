@@ -26,6 +26,7 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <drc/drc_engine.h>
 #include <filename_resolver.h>
+#include <ki_exception.h>
 #include <pcb_marker.h>
 #include <pgm_base.h>
 #include <project.h>
@@ -34,6 +35,7 @@
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/image.h>
+#include <wx/log.h>
 
 
 std::unique_ptr<BOARD> BOARD_LOADER::Load( const wxString& aFileName,
@@ -167,9 +169,17 @@ bool BOARD_LOADER::SaveBoard( wxString& aFileName, BOARD* aBoard, PCB_IO_MGR::PC
     {
         PCB_IO_MGR::Save( aFormat, aFileName, aBoard, nullptr );
     }
-    catch( ... )
+    catch( const IO_ERROR& ioe )
     {
+        wxLogError( _( "Cannot save board '%s': %s" ), aFileName, ioe.What() );
         return false;
+    }
+    catch( const std::exception& e )
+    {
+        // Rethrow so std::bad_alloc and similar aren't silently turned into a false return.
+        wxLogError( _( "Unexpected error saving board '%s': %s" ), aFileName,
+                    wxString::FromUTF8( e.what() ) );
+        throw;
     }
 
     return true;

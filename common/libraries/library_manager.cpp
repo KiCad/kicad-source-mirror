@@ -426,6 +426,7 @@ bool LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE aType, bool aPopulat
     {
         PRETTIFIED_FILE_OUTPUTFORMATTER formatter( fn.GetFullPath(), KICAD_FORMAT::FORMAT_MODE::LIBRARY_TABLE );
         table.Format( &formatter );
+        formatter.Finish();
     }
     catch( IO_ERROR& e )
     {

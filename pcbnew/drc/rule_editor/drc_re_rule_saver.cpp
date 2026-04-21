@@ -24,9 +24,9 @@
 #include "drc_re_rule_saver.h"
 
 #include <board.h>
+#include <kiplatform/io.h>
 #include <lset.h>
 #include <string_utils.h>
-#include <wx/ffile.h>
 
 #include <drc_rules_lexer.h>
 
@@ -61,16 +61,10 @@ bool DRC_RULE_SAVER::SaveFile( const wxString&                               aPa
                                 const std::vector<DRC_RE_LOADED_PANEL_ENTRY>& aEntries,
                                 const BOARD*                                  aBoard )
 {
-    wxFFile file( aPath, "w" );
+    wxString    content = GenerateRulesText( aEntries, aBoard );
+    std::string utf8 = std::string( content.mb_str( wxConvUTF8 ) );
 
-    if( !file.IsOpened() )
-        return false;
-
-    wxString content = GenerateRulesText( aEntries, aBoard );
-    file.Write( content );
-    file.Close();
-
-    return true;
+    return KIPLATFORM::IO::AtomicWriteFile( aPath, utf8.data(), utf8.size() );
 }
 
 

@@ -23,6 +23,7 @@
 
 #include "drc_rule_editor_utils.h"
 #include "drc_re_numeric_constraint_types.h"
+#include <kiplatform/io.h>
 #include <reporter.h>
 #include <component_classes/component_class_assignment_rule.h>
 #include <drc/drc_rule_parser.h>
@@ -750,12 +751,7 @@ bool DRC_RULE_EDITOR_UTILS::SaveRules( const wxString& aFilename,
                                        const std::vector<std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA>>& aRules,
                                        const BOARD* aBoard )
 {
-    wxFFile file( aFilename, "w" );
-
-    if( !file.IsOpened() )
-        return false;
-
-    file.Write( "(version 1)\n" );
+    wxString content = wxT( "(version 1)\n" );
 
     for( const auto& data : aRules )
     {
@@ -781,12 +777,11 @@ bool DRC_RULE_EDITOR_UTILS::SaveRules( const wxString& aFilename,
             ctx.layerClause = layerStr;
         }
 
-        wxString ruleText = data->GenerateRule( ctx );
-        file.Write( ruleText + "\n" );
+        content += data->GenerateRule( ctx ) + wxT( "\n" );
     }
 
-    file.Close();
-    return true;
+    std::string utf8 = std::string( content.mb_str( wxConvUTF8 ) );
+    return KIPLATFORM::IO::AtomicWriteFile( aFilename, utf8.data(), utf8.size() );
 }
 
 

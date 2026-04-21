@@ -24,6 +24,7 @@
 #include <utility>
 #include <sstream>
 
+#include <kiplatform/io.h>
 #include <locale_io.h>
 #include <gal/color4d.h>
 #include <settings/json_settings.h>
@@ -360,18 +361,27 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
 
     m_modified = false;
 
-    // If we migrated, clean up the legacy file (with no extension)
+    // If we migrated, clean up the legacy file (with no extension). Save the migrated
+    // contents FIRST so that if the save fails we still have the legacy file on disk to
+    // fall back to -- otherwise a crash mid-migration leaves the user with neither copy.
     if( m_writeFile && ( legacy_migrated || migrated ) )
     {
-        if( legacy_migrated && m_deleteLegacyAfterMigration && !wxRemoveFile( path.GetFullPath() ) )
-        {
-            wxLogTrace( traceSettings, wxT( "Warning: could not remove legacy file %s" ),
-                        path.GetFullPath() );
-        }
-
-        // And write-out immediately so that we don't lose data if the program later crashes.
         if( m_deleteLegacyAfterMigration )
-            SaveToFile( aDirectory, true );
+        {
+            bool savedMigrated = SaveToFile( aDirectory, true );
+
+            if( savedMigrated && legacy_migrated && !wxRemoveFile( path.GetFullPath() ) )
+            {
+                wxLogTrace( traceSettings, wxT( "Warning: could not remove legacy file %s" ),
+                            path.GetFullPath() );
+            }
+            else if( !savedMigrated )
+            {
+                wxLogTrace( traceSettings,
+                            wxT( "Migrated save of %s failed; leaving legacy file intact" ),
+                            GetFullFilename() );
+            }
+        }
     }
 
     return success;
@@ -515,12 +525,14 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
         std::stringstream buffer;
         buffer << std::setw( 2 ) << toSave << std::endl;
 
-        wxFFileOutputStream fileStream( path.GetFullPath(), "wb" );
+        std::string  payload = buffer.str();
+        wxString     writeError;
 
-        if( !fileStream.IsOk()
-                || !fileStream.WriteAll( buffer.str().c_str(), buffer.str().size() ) )
+        if( !KIPLATFORM::IO::AtomicWriteFile( path.GetFullPath(), payload.data(), payload.size(),
+                                              &writeError ) )
         {
-            wxLogTrace( traceSettings, wxT( "Warning: could not save %s" ), GetFullFilename() );
+            wxLogTrace( traceSettings, wxT( "Warning: could not save %s: %s" ), GetFullFilename(),
+                        writeError );
             success = false;
         }
     }

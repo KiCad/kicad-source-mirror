@@ -24,6 +24,7 @@
 #include <bitmaps.h>
 #include <common.h>
 #include <confirm.h>
+#include <kiplatform/io.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/paged_dialog.h>
 #include <pcb_edit_frame.h>
@@ -905,13 +906,20 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
 
     wxString rulesFilepath = m_frame->GetDesignRulesPath();
 
+    wxString    content = m_textEditor->GetText();
+    std::string utf8 = std::string( content.mb_str( wxConvUTF8 ) );
+    wxString    writeError;
+
+    if( !KIPLATFORM::IO::AtomicWriteFile( rulesFilepath, utf8.data(), utf8.size(), &writeError ) )
+    {
+        wxLogError( _( "Cannot save design rules to '%s': %s" ), rulesFilepath, writeError );
+        return false;
+    }
+
     try
     {
-        if( m_textEditor->SaveFile( rulesFilepath ) )
-        {
-            m_frame->GetBoard()->GetDesignSettings().m_DRCEngine->InitEngine( rulesFilepath );
-            return true;
-        }
+        m_frame->GetBoard()->GetDesignSettings().m_DRCEngine->InitEngine( rulesFilepath );
+        return true;
     }
     catch( PARSE_ERROR& )
     {
@@ -919,8 +927,6 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
         // saved them so we can allow an exit.
         return true;
     }
-
-    return false;
 }
 
 

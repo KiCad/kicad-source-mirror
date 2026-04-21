@@ -24,7 +24,10 @@
 #include <wx/string.h>
 #include <wx/filename.h>
 
+#include <cerrno>
 #include <climits>
+#include <cstdio>
+#include <cstring>
 #include <dirent.h>
 #include <fcntl.h>
 #include <fnmatch.h>
@@ -86,6 +89,22 @@ bool KIPLATFORM::IO::MakeWriteable( const wxString& aFilePath )
     }
     return false;
 }
+
+
+KIPLATFORM::IO::TARGET_ATTRS KIPLATFORM::IO::CaptureTargetAttributes( const wxString& )
+{
+    // POSIX rename(2) preserves the target directory entry's inode metadata for the new
+    // file, and DuplicatePermissions(target, temp) carries mode bits across the rename.
+    // No attributes above mode need to be snapshotted here.
+    return TARGET_ATTRS{};
+}
+
+
+bool KIPLATFORM::IO::ApplyTargetAttributes( const wxString&, const TARGET_ATTRS& )
+{
+    return true;
+}
+
 
 bool KIPLATFORM::IO::IsFileHidden( const wxString& aFileName )
 {
@@ -157,6 +176,23 @@ long long KIPLATFORM::IO::TimestampDir( const wxString& aDirPath, const wxString
     }
 
     return timestamp;
+}
+
+
+bool KIPLATFORM::IO::FlushToDisk( FILE* aFp )
+{
+    if( !aFp )
+        return false;
+
+    if( std::fflush( aFp ) != 0 )
+        return false;
+
+    int fd = fileno( aFp );
+
+    if( fd < 0 )
+        return false;
+
+    return fsync( fd ) == 0;
 }
 
 

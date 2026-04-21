@@ -3463,9 +3463,9 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
 
     if( it != m_cache->GetFootprints().end() )
     {
-        wxLogTrace( traceKicadPcbPlugin, wxT( "Removing footprint file '%s'." ), fullPath );
+        // Save() below writes atomically via sibling temp + rename, so no pre-delete.
+        wxLogTrace( traceKicadPcbPlugin, wxT( "Replacing footprint file '%s'." ), fullPath );
         m_cache->GetFootprints().erase( footprintName );
-        wxRemoveFile( fullPath );
     }
 
     // I need my own copy for the cache
