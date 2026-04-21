@@ -314,14 +314,22 @@ void ODB_MATRIX_ENTITY::AddDrillMatrixLayer()
             ODB_DRILL_SPAN platedSpan( via->TopLayer(), via->BottomLayer(), false, false );
             drill_layers[platedSpan].push_back( via );
 
-            const PADSTACK::DRILL_PROPS& secondary = via->Padstack().SecondaryDrill();
+            std::set<ODB_DRILL_SPAN> addedBackdrillSpans;
 
-            if( secondary.start != UNDEFINED_LAYER && secondary.end != UNDEFINED_LAYER
-                    && ( secondary.size.x > 0 || secondary.size.y > 0 ) )
+            auto addBackdrillSpan = [&]( const PADSTACK::DRILL_PROPS& aDrill )
             {
-                ODB_DRILL_SPAN backSpan( secondary.start, secondary.end, true, true );
-                drill_layers[backSpan].push_back( via );
-            }
+                if( aDrill.start != UNDEFINED_LAYER && aDrill.end != UNDEFINED_LAYER
+                        && ( aDrill.size.x > 0 || aDrill.size.y > 0 ) )
+                {
+                    ODB_DRILL_SPAN backSpan( aDrill.start, aDrill.end, true, true );
+
+                    if( addedBackdrillSpans.insert( backSpan ).second )
+                        drill_layers[backSpan].push_back( via );
+                }
+            };
+
+            addBackdrillSpan( via->Padstack().SecondaryDrill() );
+            addBackdrillSpan( via->Padstack().TertiaryDrill() );
         }
     }
 
@@ -856,14 +864,31 @@ void ODB_LAYER_ENTITY::InitDrillData()
 
                     if( isBackdrillLayer )
                     {
-                        const PADSTACK::DRILL_PROPS& secondary = via->Padstack().SecondaryDrill();
-
-                        int diameter = secondary.size.x;
-
-                        if( secondary.size.y > 0 )
+                        auto drillMatches = [&]( const PADSTACK::DRILL_PROPS& aDrill )
                         {
-                            diameter = ( diameter > 0 ) ? std::min( diameter, secondary.size.y )
-                                                        : secondary.size.y;
+                            return aDrill.start == matchedSpan->m_StartLayer
+                                    && aDrill.end == matchedSpan->m_EndLayer
+                                    && ( aDrill.size.x > 0 || aDrill.size.y > 0 );
+                        };
+
+                        const PADSTACK::DRILL_PROPS& secondary = via->Padstack().SecondaryDrill();
+                        const PADSTACK::DRILL_PROPS& tertiary  = via->Padstack().TertiaryDrill();
+
+                        const PADSTACK::DRILL_PROPS* drill = nullptr;
+
+                        if( drillMatches( secondary ) )
+                            drill = &secondary;
+                        else if( drillMatches( tertiary ) )
+                            drill = &tertiary;
+                        else
+                            continue;
+
+                        int diameter = drill->size.x;
+
+                        if( drill->size.y > 0 )
+                        {
+                            diameter = ( diameter > 0 ) ? std::min( diameter, drill->size.y )
+                                                        : drill->size.y;
                         }
 
                         if( diameter <= 0 )
