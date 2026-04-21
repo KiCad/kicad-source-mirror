@@ -1,0 +1,9 @@
+(version 1)
+
+(rule "Hole to copper clearance except within J1"
+    (constraint hole_clearance (min 0.15mm))
+    (condition "A.Reference == 'J1' && B.Reference == 'J1'"))
+
+(rule "Standard edge clearance for everything except J1"
+    (constraint edge_clearance (min 0.2mm))
+    (condition "A.Reference == 'J1'"))
