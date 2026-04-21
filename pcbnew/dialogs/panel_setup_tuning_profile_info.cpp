@@ -62,6 +62,8 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::initPanel()
     m_name->SetMinSize( wxSize( x, -1 ) );
     m_targetImpedance->GetTextExtent( "XXXXXXXXX", &x, &y );
     m_targetImpedance->SetMinSize( wxSize( x, -1 ) );
+    GetTextExtent( "GHZ XXXX", &x, &y );
+    m_frequencyUnits->SetMinSize( wxSize( x, -1 ) );
 
     m_viaPropagationUnits.SetValue( 0 );
 
@@ -164,7 +166,32 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::LoadProfile( const TUNING_PROFILE& aProfil
     onChangeProfileType( aProfile.m_Type );
     m_targetImpedance->SetValue( wxString::FromDouble( aProfile.m_TargetImpedance ) );
     m_enableDelayTuning->SetValue( aProfile.m_EnableTimeDomainTuning );
+    m_modelSolderMask->SetValue( aProfile.m_ModelSolderMask );
     m_viaPropagationUnits.SetValue( aProfile.m_ViaPropagationDelay );
+
+    double frequency = aProfile.m_Frequency;
+
+    if( frequency >= 1e9 )
+    {
+        frequency /= 1e9;
+        m_frequencyUnits->SetSelection( 3 );
+    }
+    else if( frequency >= 1e6 )
+    {
+        frequency /= 1e6;
+        m_frequencyUnits->SetSelection( 2 );
+    }
+    else if( frequency >= 1e3 )
+    {
+        frequency /= 1e3;
+        m_frequencyUnits->SetSelection( 1 );
+    }
+    else
+    {
+        m_frequencyUnits->SetSelection( 0 );
+    }
+
+    m_frequency->SetValue( wxString::FromDouble( frequency ) );
 
     for( const auto& entry : aProfile.m_TrackPropagationEntries )
     {
@@ -213,14 +240,17 @@ TUNING_PROFILE PANEL_SETUP_TUNING_PROFILE_INFO::GetProfile() const
     profile.m_ProfileName = m_name->GetValue();
     profile.m_Type = static_cast<TUNING_PROFILE::PROFILE_TYPE>( m_type->GetSelection() );
     profile.m_EnableTimeDomainTuning = m_enableDelayTuning->GetValue();
+    profile.m_ModelSolderMask = m_modelSolderMask->GetValue();
     profile.m_ViaPropagationDelay = m_viaPropagationUnits.GetIntValue();
 
-    double targetImpedance;
+    double targetImpedance = 0.0;
 
     if( m_targetImpedance->GetValue().ToDouble( &targetImpedance ) )
         profile.m_TargetImpedance = targetImpedance;
     else
         profile.m_TargetImpedance = 0.0;
+
+    profile.m_Frequency = getFrequency();
 
     for( int row = 0; row < m_trackPropagationGrid->GetNumberRows(); row++ )
     {
@@ -666,8 +696,31 @@ PANEL_SETUP_TUNING_PROFILE_INFO::DIELECTRIC_INFO PANEL_SETUP_TUNING_PROFILE_INFO
         for( int subLayerIdx = 0; subLayerIdx < layer->GetSublayersCount(); ++subLayerIdx )
         {
             totalHeight += aIuScale.IUTomm( layer->GetThickness( subLayerIdx ) );
-            e_r += layer->GetEpsilonR( subLayerIdx ) * aIuScale.IUTomm( layer->GetThickness( subLayerIdx ) );
-            lossTangent += layer->GetLossTangent( subLayerIdx ) * aIuScale.IUTomm( layer->GetThickness( subLayerIdx ) );
+
+            // Correct for dielectric frequency-dependent model if required
+            double       e_r_layer = layer->GetEpsilonR( subLayerIdx );
+            double       l_t_layer = layer->GetLossTangent( subLayerIdx );
+            const double spec_freq = layer->GetSpecFreq( subLayerIdx );
+            const double target_freq = getFrequency();
+
+            if( layer->GetDielectricModel( subLayerIdx ) == DIELECTRIC_MODEL::DJORDJEVIC_SARKAR
+                && std::isfinite( spec_freq ) && spec_freq > 0.0 )
+            {
+                try
+                {
+                    DIELECTRIC_DJORDJEVIC_SARKAR ds;
+                    ds.Fit( e_r_layer, l_t_layer, spec_freq );
+                    e_r_layer = ds.EpsilonRealAt( target_freq );
+                    l_t_layer = ds.TanDeltaAt( target_freq );
+                }
+                catch( const std::invalid_argument& )
+                {
+                    // Ignore
+                }
+            }
+
+            e_r += e_r_layer * aIuScale.IUTomm( layer->GetThickness( subLayerIdx ) );
+            lossTangent += l_t_layer * aIuScale.IUTomm( layer->GetThickness( subLayerIdx ) );
         }
     }
 
@@ -696,6 +749,31 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::getDielectricLayers( const std::vector<BOA
 
         aDielectricLayerStackupIds.push_back( i );
     }
+}
+
+
+PANEL_SETUP_TUNING_PROFILE_INFO::DIELECTRIC_INFO
+PANEL_SETUP_TUNING_PROFILE_INFO::getSolderMaskParameters( const std::vector<BOARD_STACKUP_ITEM*>& aStackupLayerList,
+                                                          const EDA_IU_SCALE& aScale, PCB_LAYER_ID aSignalLayerId )
+{
+    PCB_LAYER_ID maskLayerId = UNDEFINED_LAYER;
+
+    if( aSignalLayerId == F_Cu )
+        maskLayerId = F_Mask;
+    else if( aSignalLayerId == B_Cu )
+        maskLayerId = B_Mask;
+    else
+        return { 0.0, 0.0, 0.0 };
+
+    const int layerIdx = getStackupLayerId( aStackupLayerList, maskLayerId );
+
+    if( layerIdx < 0 )
+        return { 0.0, 0.0, 0.0 };
+
+    const BOARD_STACKUP_ITEM* layer = aStackupLayerList.at( layerIdx );
+    const double              thickness = aScale.IUTomm( layer->GetThickness() ) / 1000.0;
+
+    return { thickness, layer->GetEpsilonR(), layer->GetLossTangent() };
 }
 
 
@@ -917,8 +995,18 @@ PANEL_SETUP_TUNING_PROFILE_INFO::getMicrostripBoardParameters( const int aRow, c
     if( dielectricInfo.Height <= 0.0 )
         return { {}, CALCULATION_RESULT{ _( "Dielectric height must be greater than 0" ) } };
 
-    CALCULATION_BOARD_PARAMETERS boardParameters{ dielectricInfo.E_r, dielectricInfo.Height, 0.0, signalLayerThickness,
-                                                  dielectricInfo.Loss_Tangent };
+    // Get solder mask parameters
+    const DIELECTRIC_INFO solderMaskInfo = getSolderMaskParameters( stackupLayerList, aScale, signalLayer );
+
+    CALCULATION_BOARD_PARAMETERS boardParameters{ signalLayer,
+                                                  dielectricInfo.E_r,
+                                                  dielectricInfo.Height,
+                                                  0.0,
+                                                  signalLayerThickness,
+                                                  dielectricInfo.Loss_Tangent,
+                                                  solderMaskInfo.E_r,
+                                                  solderMaskInfo.Height,
+                                                  solderMaskInfo.Loss_Tangent };
     CALCULATION_RESULT           result;
     result.OK = true;
 
@@ -998,9 +1086,10 @@ PANEL_SETUP_TUNING_PROFILE_INFO::getStriplineBoardParameters( const int aRow, co
     if( topDielectricInfo.Height <= 0.0 && bottomDielectricInfo.Height <= 0.0 )
         return { {}, CALCULATION_RESULT{ _( "Dielectric heights must be greater than 0" ) } };
 
-    CALCULATION_BOARD_PARAMETERS boardParameters{ allDielectricInfo.E_r, topDielectricInfo.Height,
-                                                  bottomDielectricInfo.Height, signalLayerThickness,
-                                                  allDielectricInfo.Loss_Tangent };
+    CALCULATION_BOARD_PARAMETERS boardParameters{
+        signalLayer,          allDielectricInfo.E_r,         topDielectricInfo.Height, bottomDielectricInfo.Height,
+        signalLayerThickness, allDielectricInfo.Loss_Tangent
+    };
     CALCULATION_RESULT           result;
     result.OK = true;
 
@@ -1038,22 +1127,35 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleMicrostrip( const int aRow, Calc
         m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_WIDTH, width );
     }
 
+    const double frequency = getFrequency();
+
     // Run the synthesis or analysis
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::SIGMA, 1.0 / RHO );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::EPSILON_EFF, 1.0 );
-    m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, calculateSkinDepth( 1.0, 1.0, 1.0 / RHO ) );
+    m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, calculateSkinDepth( frequency, 1.0, 1.0 / RHO ) );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, boardParameters.DielectricConstant );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::H_T, 1e+20 );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::H, boardParameters.TopDielectricLayerThickness );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::T, boardParameters.SignalLayerThickness );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::Z0, targetZ );
-    m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, 1000000000.0 );
+    m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, frequency );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::ROUGH, 0 );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::TAND, boardParameters.LossTangent );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_LEN, 10 );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::MUR, 1 );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::MURC, 1 );
     m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::ANG_L, 1 );
+
+    // Add solder mask parameters if required
+    if( m_modelSolderMask->GetValue() )
+    {
+        m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::SOLDERMASK_PRESENT, 1.0 );
+        m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::SOLDERMASK_THICKNESS,
+                                       boardParameters.SolderMaskThickness );
+        m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::SOLDERMASK_EPSILONR,
+                                       boardParameters.SolderMaskDielectricConstant );
+        m_microstripCalc.SetParameter( TRANSLINE_PARAMETERS::SOLDERMASK_TAND, boardParameters.SolderMaskLossTangent );
+    }
 
     if( aCalculationType == CalculationType::WIDTH )
         m_microstripCalc.Synthesize( SYNTHESIZE_OPTS::DEFAULT );
@@ -1124,7 +1226,7 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateSingleStripline( const int aRow, Calcu
                                                                    + boardParameters.BottomDielectricLayerThickness );
     m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::Z0, targetZ );
     m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_LEN, 1.0 );
-    m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, 1000000000.0 );
+    m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, getFrequency() );
     m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::TAND, boardParameters.LossTangent );
     m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::ANG_L, 1.0 );
     m_striplineCalc.SetParameter( TRANSLINE_PARAMETERS::SIGMA, 1.0 / RHO );
@@ -1217,13 +1319,25 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialMicrostrip( const int aRow
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::H, boardParameters.TopDielectricLayerThickness );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::T, boardParameters.SignalLayerThickness );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::H_T, 1e+20 );
-    m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, 1000000000.0 );
+    m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, getFrequency() );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::MURC, 1 );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, calculateSkinDepth( 1.0, 1.0, 1.0 / RHO ) );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::SIGMA, 1.0 / RHO );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::ROUGH, 0 );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::TAND, boardParameters.LossTangent );
     m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::ANG_L, 1 );
+
+    // Add solder mask parameters if required
+    if( m_modelSolderMask->GetValue() )
+    {
+        m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::SOLDERMASK_PRESENT, 1.0 );
+        m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::SOLDERMASK_THICKNESS,
+                                              boardParameters.SolderMaskThickness );
+        m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::SOLDERMASK_EPSILONR,
+                                              boardParameters.SolderMaskDielectricConstant );
+        m_coupledMicrostripCalc.SetParameter( TRANSLINE_PARAMETERS::SOLDERMASK_TAND,
+                                              boardParameters.SolderMaskLossTangent );
+    }
 
     switch( aCalculationType )
     {
@@ -1344,7 +1458,7 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow,
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, boardParameters.DielectricConstant );
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::SKIN_DEPTH, calculateSkinDepth( 1.0, 1.0, 1.0 / RHO ) );
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_LEN, 1.0 );
-    m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, 1000000000.0 );
+    m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::FREQUENCY, getFrequency() );
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::ANG_L, 1.0 );
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::SIGMA, 1.0 / RHO );
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::MURC, 1 );
@@ -1382,4 +1496,28 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow,
             iuScale, EDA_UNITS::PS_PER_CM, results[TRANSLINE_PARAMETERS::UNIT_PROP_DELAY_ODD].first ) );
 
     return CALCULATION_RESULT{ calcWidth, calcGap, propDelay };
+}
+
+
+double PANEL_SETUP_TUNING_PROFILE_INFO::getFrequency() const
+{
+    double frequency = 0.0;
+    m_frequency->GetValue().ToDouble( &frequency );
+
+    switch( m_frequencyUnits->GetSelection() )
+    {
+    case 1: // kHz
+        frequency *= 1e3;
+        break;
+    case 2: // MHz
+        frequency *= 1e6;
+        break;
+    case 3: // GHz
+        frequency *= 1e9;
+        break;
+    default: // Hz
+        break;
+    }
+
+    return frequency;
 }

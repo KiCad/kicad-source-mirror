@@ -48,41 +48,47 @@ class PANEL_SETUP_BOARD_FINISH;
 // row by row
 struct BOARD_STACKUP_ROW_UI_ITEM
 {
-    BOARD_STACKUP_ITEM* m_Item;         // The BOARD_STACKUP_ITEM managed by this BOARD_STACKUP_ROW_UI_ITEM
-    int             m_SubItem;          // For multilayer dielectric, the index in sublayer list.
-                                        // Must be >= 0 and < m_Item sublayer count. Used only for dielectic
-                                        // 0 is the base list of parameters (always existing)
-    int             m_Row;              // The row number in the parent grid
-    bool            m_isEnabled;        // True if the row is in board
-                                        // false if not (this row is not shown on the panel)
-    wxStaticBitmap* m_Icon;             // Color icon in first column (column 1)
-    wxStaticText*   m_LayerName;        // string shown in column 2
-    wxControl*      m_LayerTypeCtrl;    // control shown in column 3
-    wxControl*      m_MaterialCtrl;     // control shown in column 4, with m_MaterialButt
-    wxButton*       m_MaterialButt;     // control shown in column 4, with m_MaterialCtrl
-    wxControl*      m_ThicknessCtrl;    // control shown in column 5
-    wxControl*      m_ThicknessLockCtrl;// control shown in column 6
-    wxControl*      m_ColorCtrl;        // control shown in column 7
-    wxControl*      m_EpsilonCtrl;      // control shown in column 8
-    wxControl*      m_LossTgCtrl;       // control shown in column 9
+    BOARD_STACKUP_ITEM* m_Item;            // The BOARD_STACKUP_ITEM managed by this BOARD_STACKUP_ROW_UI_ITEM
+    int                 m_SubItem;         // For multilayer dielectric, the index in sublayer list.
+                                           // Must be >= 0 and < m_Item sublayer count. Used only for dielectic
+                                           // 0 is the base list of parameters (always existing)
+    int  m_Row;                            // The row number in the parent grid
+    bool m_isEnabled;                      // True if the row is in board
+                                           // false if not (this row is not shown on the panel)
+    wxStaticBitmap* m_Icon;                // Color icon in first column (column 1)
+    wxStaticText*   m_LayerName;           // string shown in column 2
+    wxControl*      m_LayerTypeCtrl;       // control shown in column 3
+    wxControl*      m_MaterialCtrl;        // control shown in column 4, with m_MaterialButt
+    wxButton*       m_MaterialButt;        // control shown in column 4, with m_MaterialCtrl
+    wxControl*      m_ThicknessCtrl;       // control shown in column 5
+    wxControl*      m_ThicknessLockCtrl;   // control shown in column 6
+    wxControl*      m_ColorCtrl;           // control shown in column 7
+    wxControl*      m_EpsilonCtrl;         // control shown in column 8
+    wxControl*      m_LossTgCtrl;          // control shown in column 9
+    wxControl*      m_SpecFreqCtrl;        // control shown in column 10
+    wxControl*      m_SpecFreqUnitsCtrl;   // control shown in column 11
+    wxControl*      m_DielectricModelCtrl; // control shown in column 12
 
-    COLOR4D         m_UserColor;        // User-specified color (if any)
+    COLOR4D m_UserColor; // User-specified color (if any)
 
     BOARD_STACKUP_ROW_UI_ITEM( BOARD_STACKUP_ITEM* aItem, int aSubItem, int aRow ) :
-        m_Item( aItem ),
-        m_SubItem( aSubItem ),
-        m_Row( aRow ),
-        m_isEnabled( false ),
-        m_Icon( nullptr ),
-        m_LayerName( nullptr ),
-        m_LayerTypeCtrl( nullptr ),
-        m_MaterialCtrl( nullptr ),
-        m_MaterialButt( nullptr ),
-        m_ThicknessCtrl( nullptr ),
-        m_ThicknessLockCtrl( nullptr ),
-        m_ColorCtrl( nullptr ),
-        m_EpsilonCtrl( nullptr ),
-        m_LossTgCtrl( nullptr )
+            m_Item( aItem ),
+            m_SubItem( aSubItem ),
+            m_Row( aRow ),
+            m_isEnabled( false ),
+            m_Icon( nullptr ),
+            m_LayerName( nullptr ),
+            m_LayerTypeCtrl( nullptr ),
+            m_MaterialCtrl( nullptr ),
+            m_MaterialButt( nullptr ),
+            m_ThicknessCtrl( nullptr ),
+            m_ThicknessLockCtrl( nullptr ),
+            m_ColorCtrl( nullptr ),
+            m_EpsilonCtrl( nullptr ),
+            m_LossTgCtrl( nullptr ),
+            m_SpecFreqCtrl( nullptr ),
+            m_SpecFreqUnitsCtrl( nullptr ),
+            m_DielectricModelCtrl( nullptr )
     {}
 };
 
@@ -228,6 +234,30 @@ private:
      */
     void disconnectEvents();
 
+    /**
+     * The choices available for spec freq units
+     */
+    static wxString m_specFreqChoices[4];
+
+    /**
+     * The choices available for dielectric frequency-dependency model
+     */
+    static wxString m_dielecticModelChoices[2];
+
+    /// Describes the displayed units for a normalised frequency
+    enum class FREQ_UNITS : int
+    {
+        HZ = 0,
+        KHZ,
+        MHZ,
+        GHZ
+    };
+
+    /**
+     * Normalises a frequency in Hz to a value and a units multiplier
+     */
+    static std::pair<double, FREQ_UNITS> normaliseFrequency( double aFreq );
+
 private:
     BOARD_STACKUP       m_stackup;
     PANEL_SETUP_LAYERS* m_panelLayers;      // The associated PANEL_SETUP_LAYERS, to know enabled
@@ -252,6 +282,8 @@ private:
     EDA_UNITS               m_lastUnits;
     wxSize                  m_numericTextCtrlSize;  // Best size for wxTextCtrls with units
     wxSize                  m_numericFieldsSize;    // Best size for wxTextCtrls without units
+    wxSize                  m_unitsFieldsSize;      // Best size for wxChoice units selection
+    wxSize                  m_modelFieldSize;       // Best size for dielectric model selection
     wxArrayString           m_core_prepreg_choice;  // Used to display the option list in dialog
     wxSize                  m_colorSwatchesSize;    // Size of swatches in the wxBitmapComboBox.
     wxSize                  m_colorIconsSize;       // Size of swatches in the grid (left column)

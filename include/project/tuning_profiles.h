@@ -153,7 +153,9 @@ struct TUNING_PROFILE
     wxString                                           m_ProfileName;
     PROFILE_TYPE                                       m_Type;
     double                                             m_TargetImpedance;
+    double                                             m_Frequency;
     bool                                               m_EnableTimeDomainTuning;
+    bool                                               m_ModelSolderMask;
     std::vector<DELAY_PROFILE_TRACK_PROPAGATION_ENTRY> m_TrackPropagationEntries;
     int                                                m_ViaPropagationDelay;
     std::vector<DELAY_PROFILE_VIA_OVERRIDE_ENTRY>      m_ViaOverrides;
@@ -172,7 +174,13 @@ struct TUNING_PROFILE
         if( m_TargetImpedance != aOther.m_TargetImpedance )
             return false;
 
+        if( m_Frequency != aOther.m_Frequency )
+            return false;
+
         if( m_EnableTimeDomainTuning != aOther.m_EnableTimeDomainTuning )
+            return false;
+
+        if( m_ModelSolderMask != aOther.m_ModelSolderMask )
             return false;
 
         if( m_TrackPropagationEntries != aOther.m_TrackPropagationEntries )
@@ -212,6 +220,8 @@ public:
     TUNING_PROFILE& GetTuningProfile( wxString aProfileName );
 
 private:
+    bool migrateSchema0to1();
+
     std::vector<TUNING_PROFILE> m_tuningProfiles;
 
     TUNING_PROFILE m_nullDelayProfile;

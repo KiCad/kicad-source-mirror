@@ -22,7 +22,7 @@ PANEL_SETUP_TUNING_PROFILE_INFO_BASE::PANEL_SETUP_TUNING_PROFILE_INFO_BASE( wxWi
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
 
 	wxFlexGridSizer* fgSizer2;
-	fgSizer2 = new wxFlexGridSizer( 1, 9, 0, 0 );
+	fgSizer2 = new wxFlexGridSizer( 2, 9, 0, 0 );
 	fgSizer2->AddGrowableCol( 2 );
 	fgSizer2->AddGrowableCol( 5 );
 	fgSizer2->SetFlexibleDirection( wxHORIZONTAL );
@@ -53,7 +53,7 @@ PANEL_SETUP_TUNING_PROFILE_INFO_BASE::PANEL_SETUP_TUNING_PROFILE_INFO_BASE( wxWi
 
 	m_targetImpedanceLabel = new wxStaticText( this, wxID_ANY, _("Target impedance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_targetImpedanceLabel->Wrap( -1 );
-	fgSizer2->Add( m_targetImpedanceLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer2->Add( m_targetImpedanceLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_targetImpedance = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
@@ -71,6 +71,45 @@ PANEL_SETUP_TUNING_PROFILE_INFO_BASE::PANEL_SETUP_TUNING_PROFILE_INFO_BASE( wxWi
 	fgSizer2->Add( m_ohmsLabel, 0, wxALL|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
+	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_targetFrequencyLabel = new wxStaticText( this, wxID_ANY, _("Frequency:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_targetFrequencyLabel->Wrap( -1 );
+	fgSizer2->Add( m_targetFrequencyLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
+
+	m_frequency = new wxTextCtrl( this, wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
+	#ifdef __WXGTK__
+	if ( !m_frequency->HasFlag( wxTE_MULTILINE ) )
+	{
+	m_frequency->SetMaxLength( 15 );
+	}
+	#else
+	m_frequency->SetMaxLength( 15 );
+	#endif
+	fgSizer2->Add( m_frequency, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxTOP, 5 );
+
+	wxString m_frequencyUnitsChoices[] = { _("Hz"), _("kHz"), _("MHz"), _("GHz") };
+	int m_frequencyUnitsNChoices = sizeof( m_frequencyUnitsChoices ) / sizeof( wxString );
+	m_frequencyUnits = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_frequencyUnitsNChoices, m_frequencyUnitsChoices, 0 );
+	m_frequencyUnits->SetSelection( 3 );
+	fgSizer2->Add( m_frequencyUnits, 0, wxALL, 5 );
+
+
 	fgSizer1->Add( fgSizer2, 1, wxEXPAND, 5 );
 
 	wxGridBagSizer* gbSizer1;
@@ -82,8 +121,15 @@ PANEL_SETUP_TUNING_PROFILE_INFO_BASE::PANEL_SETUP_TUNING_PROFILE_INFO_BASE( wxWi
 	m_enableDelayTuning->SetValue(true);
 	gbSizer1->Add( m_enableDelayTuning, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
+
+	gbSizer1->Add( 0, 0, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+
+	m_modelSolderMask = new wxCheckBox( this, wxID_ANY, _("Model Solder Mask"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_modelSolderMask->SetValue(true);
+	gbSizer1->Add( m_modelSolderMask, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	gbSizer1->Add( m_staticline1, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxEXPAND | wxALL, 5 );
+	gbSizer1->Add( m_staticline1, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxEXPAND | wxALL, 5 );
 
 
 	gbSizer1->AddGrowableCol( 0 );

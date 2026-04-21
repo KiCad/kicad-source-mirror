@@ -83,6 +83,7 @@ component_class
 component_classes
 connect
 connect_pads
+constant
 copperpour
 copper_finish
 crossbar
@@ -106,11 +107,13 @@ description
 die_delay
 die_length
 dielectric_constraints
+dielectric_model
 dimension
 diff_pair_width
 diff_pair_gap
 dimension_precision
 dimension_units
+djordjevic_sarkar
 dnp
 drawings
 drill
@@ -345,6 +348,7 @@ solder_paste_margin_ratio
 solder_paste_ratio
 solid
 span
+spec_frequency
 stackup
 start
 start_angle

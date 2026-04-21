@@ -2073,6 +2073,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseBoardStackup()
         bool has_next_sublayer = true;
         int sublayer_idx = 0;       // the index of dielectric sub layers
                                     // sublayer 0 is always existing (main sublayer)
+        wxString specFreqUnits;
+        wxString dielectricModel;
 
         while( has_next_sublayer )
         {
@@ -2131,6 +2133,33 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseBoardStackup()
                     case T_loss_tangent:
                         NextTok();
                         item->SetLossTangent( parseDouble(), sublayer_idx );
+                        NeedRIGHT();
+                        break;
+
+                    case T_spec_frequency:
+                        NextTok();
+                        item->SetSpecFreq( parseDouble(), sublayer_idx );
+                        NeedRIGHT();
+                        break;
+
+                    case T_dielectric_model:
+                        token = NextTok();
+
+                        switch( token )
+                        {
+                        case T_constant:
+                            item->SetDielectricModel( DIELECTRIC_MODEL::CONSTANT, sublayer_idx );
+                            break;
+
+                        case T_djordjevic_sarkar:
+                            item->SetDielectricModel( DIELECTRIC_MODEL::DJORDJEVIC_SARKAR, sublayer_idx );
+                            break;
+
+                        default:
+                            Expecting( "constant or djordjevic_sarkar" );
+                            break;
+                        }
+
                         NeedRIGHT();
                         break;
 

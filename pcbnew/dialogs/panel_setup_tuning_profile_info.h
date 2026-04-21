@@ -133,11 +133,17 @@ private:
 
     struct CALCULATION_BOARD_PARAMETERS
     {
+        PCB_LAYER_ID SignalLayer{ PCB_LAYER_ID::UNDEFINED_LAYER };
         double DielectricConstant{ 0 };
         double TopDielectricLayerThickness{ 0 };
         double BottomDielectricLayerThickness{ 0 };
         double SignalLayerThickness{ 0 };
         double LossTangent{ 0 };
+
+        // Solder mask data
+        double SolderMaskDielectricConstant{ 0 };
+        double SolderMaskThickness{ 0 };
+        double SolderMaskLossTangent{ 0 };
     };
 
     /// Initialises all controls on the panel
@@ -193,7 +199,7 @@ private:
      *
      * @returns DIELECTRIC_INFO contining calculated values
      */
-    static DIELECTRIC_INFO
+    DIELECTRIC_INFO
     calculateAverageDielectricConstants( const std::vector<BOARD_STACKUP_ITEM*>& aStackupLayerList,
                                          const std::vector<int>&                 dielectricLayerStackupIds,
                                          const EDA_IU_SCALE&                     aIuScale );
@@ -201,6 +207,10 @@ private:
     /// Gets the dielectric layers for dielectrics between the two given copper layer IDs
     void getDielectricLayers( const std::vector<BOARD_STACKUP_ITEM*>& aStackupLayerList, int aSignalLayerId,
                               int aReferenceLayerId, std::vector<int>& aDielectricLayerStackupIds );
+
+    /// Gets the dielectric information for the solder mask covering a given signallayer
+    static DIELECTRIC_INFO getSolderMaskParameters( const std::vector<BOARD_STACKUP_ITEM*>& aStackupLayerList,
+                                                    const EDA_IU_SCALE& aScale, PCB_LAYER_ID aSignalLayerId );
 
     /// Gets the target impedance for the profile
     double getTargetImpedance() const;
@@ -210,6 +220,9 @@ private:
 
     /// Sets the panel display for the given tuning type
     void onChangeProfileType( TUNING_PROFILE::PROFILE_TYPE aType ) const;
+
+    /// Gets the target frequency in Hz
+    double getFrequency() const;
 
     /// The parent setup panel
     PANEL_SETUP_TUNING_PROFILES* m_parentPanel;

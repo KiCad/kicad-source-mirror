@@ -31,6 +31,7 @@
 #include <layer_ids.h>
 #include <lset.h>
 #include <api/serializable.h>
+#include "transline_calculations/transline_calculation_base.h"
 
 class BOARD;
 class BOARD_DESIGN_SETTINGS;
@@ -67,8 +68,12 @@ class DIELECTRIC_PRMS
 {
 public:
     DIELECTRIC_PRMS() :
-        m_Thickness(0), m_ThicknessLocked( false ),
-        m_EpsilonR( 1.0 ), m_LossTangent( 0.0 )
+            m_Thickness( 0 ),
+            m_ThicknessLocked( false ),
+            m_EpsilonR( 1.0 ),
+            m_LossTangent( 0.0 ),
+            m_SpecFreq( 0.0 ),
+            m_DielectricModel( DIELECTRIC_MODEL::CONSTANT )
     {}
 
     bool operator==( const DIELECTRIC_PRMS& aOther ) const;
@@ -77,13 +82,15 @@ public:
 private:
     friend class BOARD_STACKUP_ITEM;
 
-    wxString m_Material;    /// type of material (for dielectric and solder mask)
-    int m_Thickness;        /// the physical layer thickness in internal units
-    bool m_ThicknessLocked; /// true for dielectric layers with a fixed thickness
-                            /// (for impedance controlled purposes), unused for other layers
-    double m_EpsilonR;      /// For dielectric (and solder mask) the dielectric constant
-    double m_LossTangent;   /// For dielectric (and solder mask) the dielectric loss
-    wxString m_Color;       /// mainly for silkscreen and solder mask
+    wxString m_Material;                /// type of material (for dielectric and solder mask)
+    int      m_Thickness;               /// the physical layer thickness in internal units
+    bool     m_ThicknessLocked;         /// true for dielectric layers with a fixed thickness
+                                        /// (for impedance controlled purposes), unused for other layers
+    double           m_EpsilonR;        /// For dielectric (and solder mask) the dielectric constant
+    double           m_LossTangent;     /// For dielectric (and solder mask) the dielectric loss
+    double           m_SpecFreq;        /// For dielectric the frequency (Hz) at which E_R is specified
+    DIELECTRIC_MODEL m_DielectricModel; /// For dielectric the dielectric frequency correction model
+    wxString         m_Color;           /// mainly for silkscreen and solder mask
 };
 
 
@@ -123,6 +130,10 @@ public:
     /// @return true if the layer has a meaningfully Dielectric Loss parameter
     /// namely dielectric layers: dielectric and solder mask
     bool HasLossTangentValue() const;
+
+    /// @return true if the layer has a meaningful specified frequency parameter
+    /// namely dielectric layers: dielectric and solder mask
+    bool HasSpecFreqValue() const;
 
     /// @return true if the material is specified
     bool HasMaterialValue( int aDielectricSubLayer = 0 ) const;
@@ -169,6 +180,8 @@ public:
     bool IsThicknessLocked( int aDielectricSubLayer = 0 ) const;
     double GetEpsilonR( int aDielectricSubLayer = 0 ) const;
     double GetLossTangent( int aDielectricSubLayer = 0 ) const;
+    double GetSpecFreq( int aDielectricSubLayer = 0 ) const;
+    DIELECTRIC_MODEL GetDielectricModel( int aDielectricSubLayer = 0 ) const;
     wxString GetMaterial( int aDielectricSubLayer = 0 ) const;
 
     // Setters:
@@ -183,6 +196,8 @@ public:
     void SetThicknessLocked( bool aLocked, int aDielectricSubLayer = 0 );
     void SetEpsilonR( double aEpsilon, int aDielectricSubLayer = 0 );
     void SetLossTangent( double aTg, int aDielectricSubLayer = 0 );
+    void SetSpecFreq( double aSpecFreq, int aDielectricSubLayer = 0 );
+    void SetDielectricModel( DIELECTRIC_MODEL aModel, int aDielectricSubLayer = 0 );
     void SetMaterial( const wxString& aName, int aDielectricSubLayer = 0 );
 
 private:

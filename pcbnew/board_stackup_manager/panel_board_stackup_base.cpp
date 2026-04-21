@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -68,8 +68,8 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxVERTICAL );
 
-	m_fgGridSizer = new wxFlexGridSizer( 0, 9, 0, 4 );
-	m_fgGridSizer->SetFlexibleDirection( wxHORIZONTAL );
+    m_fgGridSizer = new wxFlexGridSizer( 0, 12, 0, 4 );
+    m_fgGridSizer->SetFlexibleDirection( wxHORIZONTAL );
 	m_fgGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_staticTextLayer = new wxStaticText( m_scGridWin, wxID_ANY, _("Layer"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
@@ -107,8 +107,25 @@ PANEL_SETUP_BOARD_STACKUP_BASE::PANEL_SETUP_BOARD_STACKUP_BASE( wxWindow* parent
 	m_staticTextLossTg->Wrap( -1 );
 	m_fgGridSizer->Add( m_staticTextLossTg, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL, 2 );
 
+    m_staticTextSpecFreq =
+            new wxStaticText( m_scGridWin, wxID_ANY, _( "Spec Freq" ), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+    m_staticTextSpecFreq->Wrap( -1 );
+    m_fgGridSizer->Add( m_staticTextSpecFreq, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxBOTTOM | wxLEFT | wxTOP, 2 );
 
-	bMargins->Add( m_fgGridSizer, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+    m_staticTextSpecFreqUnits =
+            new wxStaticText( m_scGridWin, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
+    m_staticTextSpecFreqUnits->Wrap( -1 );
+    m_fgGridSizer->Add( m_staticTextSpecFreqUnits, 0, wxALL, 2 );
+
+    m_staticTextDielectricModel = new wxStaticText( m_scGridWin, wxID_ANY, _( "Dielectric Model" ), wxDefaultPosition,
+                                                    wxDefaultSize, wxALIGN_LEFT );
+    m_staticTextDielectricModel->Wrap( -1 );
+    m_fgGridSizer->Add( m_staticTextDielectricModel, 0,
+                        wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxBOTTOM | wxLEFT | wxTOP, 2 );
+
+
+    bMargins->Add( m_fgGridSizer, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	m_scGridWin->SetSizer( bMargins );

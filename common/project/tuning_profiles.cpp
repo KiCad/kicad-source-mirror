@@ -22,11 +22,14 @@
 #include <lset.h>
 #include <netclass.h>
 #include <project/tuning_profiles.h>
+
+#include "settings/json_settings_internals.h"
+
 #include <nlohmann/json.hpp>
 #include <settings/parameters.h>
 
 
-constexpr int tuningParametersSchemaVersion = 0;
+constexpr int tuningParametersSchemaVersion = 1;
 
 TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPath ) :
         NESTED_SETTINGS( "tuning_profiles", tuningParametersSchemaVersion, aParent, aPath, false )
@@ -96,6 +99,8 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
         const nlohmann::json item_json = { { "profile_name", item.m_ProfileName.ToUTF8() },
                                            { "type", static_cast<int>( item.m_Type ) },
                                            { "target_impedance", item.m_TargetImpedance },
+                                           { "frequency", item.m_Frequency },
+                                           { "model_solder_mask", item.m_ModelSolderMask },
                                            { "enable_time_domain_tuning", item.m_EnableTimeDomainTuning },
                                            { "layer_entries", layer_entries },
                                            { "via_prop_delay", item.m_ViaPropagationDelay },
@@ -109,6 +114,8 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
         const wxString                     profileName = entry["profile_name"];
         const TUNING_PROFILE::PROFILE_TYPE profileType = static_cast<TUNING_PROFILE::PROFILE_TYPE>( entry["type"] );
         const double                       targetImpedance = entry["target_impedance"];
+        const double                       frequency = entry["frequency"];
+        const bool                         modelSolderMask = entry["model_solder_mask"];
         const bool                         enableTimeDomainTuning = entry["enable_time_domain_tuning"];
         const int                          viaPropDelay = entry["via_prop_delay"];
         std::vector<DELAY_PROFILE_TRACK_PROPAGATION_ENTRY>            trackEntries;
@@ -152,7 +159,9 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
         TUNING_PROFILE item{ profileName,
                              profileType,
                              targetImpedance,
+                             frequency,
                              enableTimeDomainTuning,
+                             modelSolderMask,
                              std::move( trackEntries ),
                              viaPropDelay,
                              std::move( viaOverrides ),
@@ -188,6 +197,25 @@ TUNING_PROFILES::TUNING_PROFILES( JSON_SETTINGS* aParent, const std::string& aPa
                 }
             },
             {} ) );
+
+    registerMigration( 0, 1, std::bind( &TUNING_PROFILES::migrateSchema0to1, this ) );
+}
+
+
+bool TUNING_PROFILES::migrateSchema0to1()
+{
+    // Add frequency and model solder mask fields to tuning profiles
+    if( m_internals->contains( "tuning_profiles_impedance_geometric" )
+        && m_internals->At( "tuning_profiles_impedance_geometric" ).is_array() )
+    {
+        for( auto& profile : m_internals->At( "tuning_profiles_impedance_geometric" ).items() )
+        {
+            profile.value()["frequency"] = 1e9;
+            profile.value()["model_solder_mask"] = false;
+        }
+    }
+
+    return true;
 }
 
 

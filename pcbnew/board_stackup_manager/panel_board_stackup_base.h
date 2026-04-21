@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,7 +32,6 @@ class WX_PANEL;
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SETUP_BOARD_STACKUP_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -58,7 +57,10 @@ class PANEL_SETUP_BOARD_STACKUP_BASE : public wxPanel
 		wxStaticText* m_staticTextColor;
 		wxStaticText* m_staticTextEpsilonR;
 		wxStaticText* m_staticTextLossTg;
-		wxStaticText* m_staticTextCT;
+        wxStaticText*     m_staticTextSpecFreq;
+        wxStaticText*     m_staticTextSpecFreqUnits;
+        wxStaticText*     m_staticTextDielectricModel;
+        wxStaticText* m_staticTextCT;
 		wxTextCtrl* m_tcCTValue;
 		wxButton* m_buttonAdjust;
 		wxButton* m_buttonExport;
