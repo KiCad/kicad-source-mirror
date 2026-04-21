@@ -56,6 +56,21 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "translines.spec_frequency_unit",
                                            &m_TransLine.spec_frequency_unit, 0 ) );
 
+    m_params.emplace_back( new PARAM<int>( "translines.soldermask_present",
+                                           &m_TransLine.soldermask_present, 0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "translines.soldermask_thickness",
+                                              &m_TransLine.soldermask_thickness, 20.0e-6 ) );
+
+    m_params.emplace_back( new PARAM<double>( "translines.soldermask_epsilonr",
+                                              &m_TransLine.soldermask_epsilonr, 3.5 ) );
+
+    m_params.emplace_back( new PARAM<double>( "translines.soldermask_tand",
+                                              &m_TransLine.soldermask_tand, 0.025 ) );
+
+    m_params.emplace_back( new PARAM<int>( "translines.soldermask_fills_gaps",
+                                           &m_TransLine.soldermask_fills_gaps, 1 ) );
+
     m_params.emplace_back( new PARAM<int>( "attenuators.type", &m_Attenuators.type, 0 ) );
 
     const std::array<std::string, 4> att_names = { "att_pi", "att_tee",

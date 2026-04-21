@@ -113,6 +113,25 @@ void PANEL_TRANSLINE::TranslineTypeSelection( enum TRANSLINE_TYPE_ID aType )
     m_bmCMicrostripZoddZeven->Show( aType == C_MICROSTRIP_TYPE || aType == C_STRIPLINE_TYPE );
     m_bmCMicrostripZoddZeven->SetBitmap( KiBitmapBundle( BITMAPS::microstrip_zodd_zeven ) );
 
+    // Soldermask correction applies to microstrip, coupled microstrip, CPW, and CBCPW.
+    // Stripline, coax, waveguide, and twistedpair have no exposed top surface to coat,
+    // so hide the whole group.  Fills-gaps is CPW-only.
+    const bool maskEligible = ( aType == MICROSTRIP_TYPE ) || ( aType == C_MICROSTRIP_TYPE )
+                              || ( aType == CPW_TYPE ) || ( aType == GROUNDED_CPW_TYPE );
+    const bool cpwFamily = ( aType == CPW_TYPE ) || ( aType == GROUNDED_CPW_TYPE );
+
+    m_soldermaskPresentCheck->Show( maskEligible );
+    m_soldermaskThicknessLabel->Show( maskEligible );
+    m_soldermaskThicknessValue->Show( maskEligible );
+    m_soldermaskThicknessUnit->Show( maskEligible );
+    m_soldermaskEpsilonRLabel->Show( maskEligible );
+    m_soldermaskEpsilonRValue->Show( maskEligible );
+    m_soldermaskTanDLabel->Show( maskEligible );
+    m_soldermaskTanDValue->Show( maskEligible );
+    m_soldermaskFillsGapsCheck->Show( maskEligible && cpwFamily );
+
+    updateSoldermaskEnables();
+
     TRANSLINE_IDENT* tr_ident = m_transline_list[m_currTransLineType];
     m_currTransLine = tr_ident->m_TLine;
 
@@ -351,6 +370,29 @@ void PANEL_TRANSLINE::TransfDlgDataToTranslineParams()
             if( std::isfinite( fSpec ) && fSpec > 0.0 )
                 m_currTransLine->SetExtraParameter( EPSILONR_SPEC_FREQ_PRM, fSpec );
         }
+
+        // Soldermask panel values.  Thickness is entered in micrometres; convert to metres to
+        // match the math backend.  If the checkbox is off, SOLDERMASK_PRESENT = 0 forces a
+        // bit-identical result regardless of the other mask fields.
+        const double present = m_soldermaskPresentCheck->GetValue() ? 1.0 : 0.0;
+        m_currTransLine->SetExtraParameter( SOLDERMASK_PRESENT_PRM, present );
+
+        // DoubleFromString handles "20 um" suffixes, comma decimal separators, and 1e3
+        // notation; on parse failure it returns NaN.  Push the NaN through so the
+        // backend / checkProperties surfaces the bad input instead of silently retaining
+        // the previously-valid value (which would let the UI text and analysis state
+        // diverge).
+        const double thicknessUm = DoubleFromString( m_soldermaskThicknessValue->GetValue() );
+        m_currTransLine->SetExtraParameter( SOLDERMASK_THICKNESS_PRM, thicknessUm * 1.0e-6 );
+
+        const double epsR = DoubleFromString( m_soldermaskEpsilonRValue->GetValue() );
+        m_currTransLine->SetExtraParameter( SOLDERMASK_EPSILONR_PRM, epsR );
+
+        const double tand = DoubleFromString( m_soldermaskTanDValue->GetValue() );
+        m_currTransLine->SetExtraParameter( SOLDERMASK_TAND_PRM, tand );
+
+        const double fillsGaps = m_soldermaskFillsGapsCheck->GetValue() ? 1.0 : 0.0;
+        m_currTransLine->SetExtraParameter( SOLDERMASK_FILLS_GAPS_PRM, fillsGaps );
     }
 }
 

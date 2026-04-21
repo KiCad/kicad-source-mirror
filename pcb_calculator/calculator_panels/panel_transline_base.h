@@ -30,7 +30,9 @@ class UNIT_SELECTOR_RESISTOR;
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/choice.h>
+#include <wx/checkbox.h>
 #include <wx/textctrl.h>
+#include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/statbox.h>
 #include <wx/radiobut.h>
@@ -51,6 +53,18 @@ class PANEL_TRANSLINE_BASE : public CALCULATOR_PANEL
 		wxStaticBitmap* m_translineBitmap;
 		wxStaticText* m_dielectricModelLabel;
 		wxChoice* m_dielectricModelChoice;
+		wxCheckBox* m_soldermaskPresentCheck;
+		wxCheckBox* m_soldermaskFillsGapsCheck;
+		wxStaticText* m_soldermaskThicknessLabel;
+		wxTextCtrl* m_soldermaskThicknessValue;
+		wxStaticText* m_soldermaskThicknessUnit;
+		wxStaticText* m_soldermaskEpsilonRLabel;
+		wxTextCtrl* m_soldermaskEpsilonRValue;
+		wxStaticText* m_soldermaskTanDLabel;
+		wxTextCtrl* m_soldermaskTanDValue;
+		wxStaticLine* m_staticline1;
+		wxStaticLine* m_staticline2;
+		wxStaticLine* m_staticline3;
 		wxStaticText* m_EpsilonR_label;
 		wxTextCtrl* m_Value_EpsilonR;
 		wxButton* m_button_EpsilonR;
@@ -135,6 +149,7 @@ class PANEL_TRANSLINE_BASE : public CALCULATOR_PANEL
 		// Virtual event handlers, override them in your derived class
 		virtual void OnTranslineSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDielectricModelChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSoldermaskChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineEpsilonR_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineTanD_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineRho_Button( wxCommandEvent& event ) { event.Skip(); }

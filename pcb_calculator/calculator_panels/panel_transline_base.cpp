@@ -57,15 +57,68 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 
 	sbSubstrateBoxSizer->Add( bSizerDielectricModel, 0, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 
+	wxBoxSizer* bSizerSoldermaskRow1;
+	bSizerSoldermaskRow1 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_soldermaskPresentCheck = new wxCheckBox( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("Soldermask present"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerSoldermaskRow1->Add( m_soldermaskPresentCheck, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+	m_soldermaskFillsGapsCheck = new wxCheckBox( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("Mask fills gaps"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_soldermaskFillsGapsCheck->SetValue(true);
+	bSizerSoldermaskRow1->Add( m_soldermaskFillsGapsCheck, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+
+
+	sbSubstrateBoxSizer->Add( bSizerSoldermaskRow1, 0, wxEXPAND|wxTOP|wxBOTTOM, 3 );
+
 	wxFlexGridSizer* fgSizerSubstPrms;
-	fgSizerSubstPrms = new wxFlexGridSizer( 9, 3, 3, 0 );
+	fgSizerSubstPrms = new wxFlexGridSizer( 13, 3, 3, 0 );
 	fgSizerSubstPrms->AddGrowableCol( 1 );
 	fgSizerSubstPrms->SetFlexibleDirection( wxBOTH );
 	fgSizerSubstPrms->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
+	m_soldermaskThicknessLabel = new wxStaticText( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("Mask thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_soldermaskThicknessLabel->Wrap( -1 );
+	fgSizerSubstPrms->Add( m_soldermaskThicknessLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_soldermaskThicknessValue = new wxTextCtrl( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerSubstPrms->Add( m_soldermaskThicknessValue, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	m_soldermaskThicknessUnit = new wxStaticText( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("µm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_soldermaskThicknessUnit->Wrap( -1 );
+	fgSizerSubstPrms->Add( m_soldermaskThicknessUnit, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_soldermaskEpsilonRLabel = new wxStaticText( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("Mask εr:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_soldermaskEpsilonRLabel->Wrap( -1 );
+	fgSizerSubstPrms->Add( m_soldermaskEpsilonRLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_soldermaskEpsilonRValue = new wxTextCtrl( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerSubstPrms->Add( m_soldermaskEpsilonRValue, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+
+	fgSizerSubstPrms->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_soldermaskTanDLabel = new wxStaticText( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("Mask tan δ:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_soldermaskTanDLabel->Wrap( -1 );
+	fgSizerSubstPrms->Add( m_soldermaskTanDLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+
+	m_soldermaskTanDValue = new wxTextCtrl( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerSubstPrms->Add( m_soldermaskTanDValue, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+
+	fgSizerSubstPrms->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_staticline1 = new wxStaticLine( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgSizerSubstPrms->Add( m_staticline1, 0, wxBOTTOM|wxEXPAND|wxTOP, 0 );
+
+	m_staticline2 = new wxStaticLine( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgSizerSubstPrms->Add( m_staticline2, 0, wxEXPAND | wxALL, 0 );
+
+	m_staticline3 = new wxStaticLine( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgSizerSubstPrms->Add( m_staticline3, 0, wxEXPAND | wxALL, 0 );
+
 	m_EpsilonR_label = new wxStaticText( sbSubstrateBoxSizer->GetStaticBox(), wxID_ANY, _("Er:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_EpsilonR_label->Wrap( -1 );
-	fgSizerSubstPrms->Add( m_EpsilonR_label, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerSubstPrms->Add( m_EpsilonR_label, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 5 );
 
 	wxBoxSizer* bSizer441;
 	bSizer441 = new wxBoxSizer( wxHORIZONTAL );
@@ -77,7 +130,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	bSizer441->Add( m_button_EpsilonR, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	fgSizerSubstPrms->Add( bSizer441, 1, wxEXPAND, 5 );
+	fgSizerSubstPrms->Add( bSizer441, 1, wxEXPAND|wxTOP, 5 );
 
 
 	fgSizerSubstPrms->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -511,6 +564,8 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	// Connect Events
 	m_TranslineSelection->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineSelection ), NULL, this );
 	m_dielectricModelChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnDielectricModelChanged ), NULL, this );
+	m_soldermaskPresentCheck->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnSoldermaskChanged ), NULL, this );
+	m_soldermaskFillsGapsCheck->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnSoldermaskChanged ), NULL, this );
 	m_button_EpsilonR->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineEpsilonR_Button ), NULL, this );
 	m_button_TanD->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineTanD_Button ), NULL, this );
 	m_button_Rho->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineRho_Button ), NULL, this );
@@ -526,6 +581,8 @@ PANEL_TRANSLINE_BASE::~PANEL_TRANSLINE_BASE()
 	// Disconnect Events
 	m_TranslineSelection->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineSelection ), NULL, this );
 	m_dielectricModelChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnDielectricModelChanged ), NULL, this );
+	m_soldermaskPresentCheck->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnSoldermaskChanged ), NULL, this );
+	m_soldermaskFillsGapsCheck->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnSoldermaskChanged ), NULL, this );
 	m_button_EpsilonR->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineEpsilonR_Button ), NULL, this );
 	m_button_TanD->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineTanD_Button ), NULL, this );
 	m_button_Rho->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineRho_Button ), NULL, this );

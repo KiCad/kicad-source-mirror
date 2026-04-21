@@ -149,6 +149,26 @@ public:
         /// UNIT_SELECTOR_FREQUENCY index: 0 = GHz, 1 = MHz, 2 = kHz, 3 = Hz.
         int spec_frequency_unit = 0;
 
+        /// Soldermask / LPI overlay correction.  0 = disabled (default; math stays
+        /// bit-identical to the pre-mask baseline), 1 = Wan and Hoorfar 2000 / Svacina
+        /// 1992 filling factor applied with Bahl and Stuchly 1980 air-replacement
+        /// decomposition.
+        int soldermask_present = 0;
+
+        /// Cured mask thickness in metres.  20 um is typical for modern green LPI.
+        double soldermask_thickness = 20.0e-6;
+
+        /// Mask relative permittivity.  3.5 is representative of green LPI.
+        double soldermask_epsilonr = 3.5;
+
+        /// Mask loss tangent.  0.025 is the nominal LPI value; high-grade solder resist
+        /// products quote 0.02 - 0.035.
+        double soldermask_tand = 0.025;
+
+        /// CPW / CBCPW only.  1 = mask fills the coplanar slots (standard LPI process),
+        /// 0 = selective mask that covers only the traces.
+        int soldermask_fills_gaps = 1;
+
         /// Transline parameters, per transline type
         std::map<std::string, TL_PARAM_MAP> param_values;
 

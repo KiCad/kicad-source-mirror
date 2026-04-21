@@ -90,6 +90,15 @@ void TRANSLINE::Init()
     // 1 GHz spec defaults to the canonical FR-4 reporting point for Er and tan delta.
     m_parameters[DIELECTRIC_MODEL_PRM] = 0.0;
     m_parameters[EPSILONR_SPEC_FREQ_PRM] = 1.0e9;
+
+    // Soldermask defaults.  SOLDERMASK_PRESENT = 0 keeps the math path bit-identical to
+    // the un-coated baseline.  Thickness 20 um, er 3.5, tan d 0.025 match a typical green
+    // LPI; fills-gaps defaults on because standard LPI processes flood the CPW slots.
+    m_parameters[SOLDERMASK_PRESENT_PRM] = 0.0;
+    m_parameters[SOLDERMASK_THICKNESS_PRM] = 20.0e-6;
+    m_parameters[SOLDERMASK_EPSILONR_PRM] = 3.5;
+    m_parameters[SOLDERMASK_TAND_PRM] = 0.025;
+    m_parameters[SOLDERMASK_FILLS_GAPS_PRM] = 1.0;
 }
 
 
@@ -298,4 +307,19 @@ char TRANSLINE::convertParameterStatusCode( TRANSLINE_STATUS aStatus )
     }
 
     return TRANSLINE_OK;
+}
+
+
+void TRANSLINE::pushSoldermaskParameters( TRANSLINE_CALCULATION_BASE& aCalc,
+                                          bool aIncludeFillsGaps ) const
+{
+    using TCP = TRANSLINE_PARAMETERS;
+
+    aCalc.SetParameter( TCP::SOLDERMASK_PRESENT, m_parameters[SOLDERMASK_PRESENT_PRM] );
+    aCalc.SetParameter( TCP::SOLDERMASK_THICKNESS, m_parameters[SOLDERMASK_THICKNESS_PRM] );
+    aCalc.SetParameter( TCP::SOLDERMASK_EPSILONR, m_parameters[SOLDERMASK_EPSILONR_PRM] );
+    aCalc.SetParameter( TCP::SOLDERMASK_TAND, m_parameters[SOLDERMASK_TAND_PRM] );
+
+    if( aIncludeFillsGaps )
+        aCalc.SetParameter( TCP::SOLDERMASK_FILLS_GAPS, m_parameters[SOLDERMASK_FILLS_GAPS_PRM] );
 }

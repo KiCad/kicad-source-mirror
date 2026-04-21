@@ -102,6 +102,7 @@ void MICROSTRIP_UI::getProperties()
     m_calc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, m_parameters[EPSILONR_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::DIELECTRIC_MODEL_SEL, m_parameters[DIELECTRIC_MODEL_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR_SPEC_FREQ, m_parameters[EPSILONR_SPEC_FREQ_PRM] );
+    pushSoldermaskParameters( m_calc );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::H_T, m_parameters[H_T_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::H, m_parameters[H_PRM] );
     m_calc.SetParameter( TRANSLINE_PARAMETERS::PHYS_WIDTH, m_parameters[PHYS_WIDTH_PRM] );

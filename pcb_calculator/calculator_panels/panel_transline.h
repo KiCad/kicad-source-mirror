@@ -90,6 +90,13 @@ public:
     void OnDielectricModelChanged( wxCommandEvent& event ) override;
 
     /**
+     * Called when the user toggles the soldermask checkboxes.  Updates the enable state of the
+     * mask entry fields so the user sees immediately that disabling the checkbox freezes the
+     * per-mask inputs.
+     */
+    void OnSoldermaskChanged( wxCommandEvent& event ) override;
+
+    /**
      * Called when the user clicks the reset button; sets the parameters to their default values.
      */
     void OnTransLineResetButtonClick( wxCommandEvent& event ) override;
@@ -144,6 +151,13 @@ public:
     void UpdateSpecFrequencyEnable();
 
 private:
+    /**
+     * Apply the enabled state for the soldermask row based on the present checkbox and the
+     * current calculator type.  CPW / CBCPW show the fills-gaps checkbox; everything else
+     * hides it.  Stripline, coax, waveguide, and twistedpair hide the entire group.
+     */
+    void updateSoldermaskEnables();
+
     TRANSLINE*                    m_currTransLine;
     std::vector<TRANSLINE_IDENT*> m_transline_list;
 
