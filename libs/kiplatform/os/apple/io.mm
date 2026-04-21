@@ -25,7 +25,10 @@
 #include <wx/string.h>
 #include <wx/filename.h>
 
+#include <cerrno>
 #include <climits>
+#include <cstdio>
+#include <cstring>
 #include <dirent.h>
 #include <fcntl.h>
 #include <fnmatch.h>
@@ -99,8 +102,8 @@ bool KIPLATFORM::IO::MakeWriteable( const wxString& aFilePath )
     unsigned short currentPerms = [permissions unsignedShortValue];
     unsigned short newPerms = currentPerms | 0200;
     
-    if( [fileManager setAttributes:@{NSFilePosixPermissions: @(newPerms)} 
-                        ofItemAtPath:path 
+    if( [fileManager setAttributes:@{NSFilePosixPermissions: @(newPerms)}
+                        ofItemAtPath:path
                                error:&error] )
     {
         return true;
@@ -111,6 +114,22 @@ bool KIPLATFORM::IO::MakeWriteable( const wxString& aFilePath )
         return false;
     }
 }
+
+
+KIPLATFORM::IO::TARGET_ATTRS KIPLATFORM::IO::CaptureTargetAttributes( const wxString& )
+{
+    // macOS rename(2) preserves the target directory entry's metadata for the new file,
+    // and DuplicatePermissions(target, temp) carries NSFilePosixPermissions across the
+    // rename. No attributes above mode need to be snapshotted here.
+    return TARGET_ATTRS{};
+}
+
+
+bool KIPLATFORM::IO::ApplyTargetAttributes( const wxString&, const TARGET_ATTRS& )
+{
+    return true;
+}
+
 
 bool KIPLATFORM::IO::IsFileHidden( const wxString& aFileName )
 {
@@ -182,6 +201,29 @@ long long KIPLATFORM::IO::TimestampDir( const wxString& aDirPath, const wxString
     }
 
     return timestamp;
+}
+
+
+bool KIPLATFORM::IO::FlushToDisk( FILE* aFp )
+{
+    if( !aFp )
+        return false;
+
+    if( std::fflush( aFp ) != 0 )
+        return false;
+
+    int fd = fileno( aFp );
+
+    if( fd < 0 )
+        return false;
+
+    // F_FULLFSYNC flushes the drive's own write cache on APFS/HFS+. Plain fsync on macOS
+    // only commits to the OS buffer cache, which is insufficient for crash durability.
+    // Fall back to fsync if F_FULLFSYNC is not supported (remote volumes, some FUSE).
+    if( fcntl( fd, F_FULLFSYNC ) == 0 )
+        return true;
+
+    return fsync( fd ) == 0;
 }
 
 

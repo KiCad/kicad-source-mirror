@@ -121,6 +121,151 @@ namespace IO
      * @return Hash value that changes when any matching file is modified
      */
     long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec );
+
+    /**
+     * Flushes user-space buffers for @p aFp and forces the kernel/filesystem to commit
+     * the file's data blocks to stable storage.
+     *
+     * POSIX uses fflush + fsync. macOS uses fflush + fcntl F_FULLFSYNC, which is stronger
+     * than fsync on APFS/HFS+ (the kernel flushes the drive's own write cache). Windows
+     * uses fflush + FlushFileBuffers.
+     *
+     * @param aFp open FILE*; must remain open across the call.
+     * @return true if every layer reported success.
+     */
+    bool FlushToDisk( FILE* aFp );
+
+    /**
+     * Forces a directory entry's metadata to stable storage. Without this, a rename()
+     * that successfully returns can still be lost on power loss because the directory
+     * inode isn't yet committed to the journal.
+     *
+     * POSIX opens the directory read-only and calls fsync on its fd. Windows returns
+     * true without action since NTFS metadata journaling handles this automatically.
+     *
+     * @param aDirPath directory containing the files just renamed.
+     * @return true on success or on platforms where the call is a no-op.
+     */
+    bool FlushDirectory( const wxString& aDirPath );
+
+    /**
+     * Atomically replaces @p aDst with @p aSrc. Both paths must live on the same
+     * filesystem; cross-device renames are not atomic.
+     *
+     * POSIX uses rename(2), which is atomic w.r.t. concurrent opens. Windows uses
+     * MoveFileExW with MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH and falls
+     * back to ReplaceFileW for cases (antivirus, indexer, share-locked) that reject
+     * MoveFileEx. A brief retry loop absorbs transient ERROR_SHARING_VIOLATION and
+     * ERROR_ACCESS_DENIED on Windows.
+     *
+     * On success @p aSrc no longer exists; on failure it is left in place so the
+     * caller can clean up.
+     *
+     * @param aSrc     source path, typically a sibling temp file of aDst.
+     * @param aDst     destination path.
+     * @param aError   optional out-parameter populated with a human-readable message.
+     * @return true if the rename committed atomically.
+     */
+    bool AtomicRename( const wxString& aSrc, const wxString& aDst, wxString* aError = nullptr );
+
+    /**
+     * Returns a unique sibling path of @p aTargetPath suitable as an atomic-save temp
+     * file. The sibling lives in the same directory so rename() stays atomic. Uniqueness
+     * is provided by process pid plus a process-wide atomic counter.
+     */
+    wxString MakeSiblingTempPath( const wxString& aTargetPath );
+
+    /**
+     * Opens a fresh sibling temp file next to @p aTargetPath with exclusive-create
+     * semantics (POSIX O_CREAT|O_EXCL, Windows CREATE_NEW). A pre-existing file at the
+     * chosen temp path is never opened or truncated; if the candidate is taken the
+     * helper retries with a new counter value.
+     *
+     * The returned FILE* is opened with @p aMode ("wb" typically). On success
+     * @p aTempPathOut receives the path actually created. On failure the FILE* is
+     * nullptr and @p aError (if provided) holds a human-readable message.
+     *
+     * Callers own the FILE* and must fclose/remove the temp file as appropriate.
+     */
+    FILE* OpenUniqueSiblingTempFile( const wxString& aTargetPath, const wxString& aMode,
+                                     wxString* aTempPathOut, wxString* aError = nullptr );
+
+    /**
+     * If @p aPath is a symlink on POSIX, returns the canonical path of its referent so
+     * atomic-save operations replace the underlying file rather than the link itself.
+     * On Windows and when @p aPath is not a symlink (or does not yet exist) the input
+     * is returned unchanged.
+     */
+    wxString ResolveSymlinkTarget( const wxString& aPath );
+
+    /**
+     * Opaque snapshot of filesystem attributes that MakeWriteable may alter and that the
+     * atomic rename sequence does not preserve by itself. On Windows this holds the
+     * FILE_ATTRIBUTE_READONLY / FILE_ATTRIBUTE_HIDDEN bits (which SetFileSecurity does
+     * not carry). On POSIX this is an uncaptured placeholder since DuplicatePermissions
+     * + rename already preserve mode.
+     */
+    struct TARGET_ATTRS
+    {
+        std::uint32_t value    = 0;
+        bool          captured = false;
+    };
+
+    /**
+     * Captures attributes of an existing @p aPath that must survive an atomic rename.
+     * Windows reads GetFileAttributesW and stores READONLY/HIDDEN bits. POSIX returns
+     * an uncaptured snapshot. Call before any mutation of the target (MakeWriteable).
+     */
+    TARGET_ATTRS CaptureTargetAttributes( const wxString& aPath );
+
+    /**
+     * Re-applies attributes previously captured by @ref CaptureTargetAttributes.
+     *
+     * Safe to call on either the happy path (restores HIDDEN/READONLY bits to the new
+     * file produced by the rename, which DuplicatePermissions would not have carried) or
+     * the failure path (rolls back a MakeWriteable mutation on the original target).
+     *
+     * @return true if the attributes were re-applied or the snapshot is a no-op; false
+     *         only if the OS rejected the attribute change.
+     */
+    bool ApplyTargetAttributes( const wxString& aPath, const TARGET_ATTRS& aAttrs );
+
+    /**
+     * Completes an atomic save. Assumes @p aTempPath has been fully written, fsynced,
+     * and closed. Clears any read-only/hidden attributes on an existing @p aTargetPath,
+     * duplicates its permissions onto the temp file, atomically renames @p aTempPath
+     * onto @p aTargetPath, and fsyncs the containing directory so the rename itself is
+     * durable across power loss.
+     *
+     * On failure @p aTempPath is left in place for the caller to clean up.
+     *
+     * @param aTempPath   already-closed source temp file.
+     * @param aTargetPath final destination path.
+     * @param aError      optional human-readable failure message.
+     * @return true on durable commit.
+     */
+    bool CommitTempFile( const wxString& aTempPath, const wxString& aTargetPath,
+                         wxString* aError = nullptr );
+
+    /**
+     * Writes @p aData to @p aTargetPath via a sibling temp file, fsyncs the data and
+     * directory, and atomically replaces the target. A crash or power loss at any
+     * point leaves @p aTargetPath either byte-identical to its prior contents or
+     * byte-identical to @p aData -- never truncated or partially written.
+     *
+     * If @p aTargetPath already exists its permissions are duplicated onto the
+     * replacement, and any read-only/hidden attributes are cleared first so cloud
+     * sync services don't block the rename.
+     *
+     * @param aTargetPath final destination path.
+     * @param aData       pointer to bytes to write.
+     * @param aSize       number of bytes in aData.
+     * @param aError      optional out-parameter populated with a human-readable
+     *                    message on failure.
+     * @return true on durable commit of aData to aTargetPath.
+     */
+    bool AtomicWriteFile( const wxString& aTargetPath, const void* aData, size_t aSize,
+                          wxString* aError = nullptr );
 } // namespace IO
 } // namespace KIPLATFORM
 
