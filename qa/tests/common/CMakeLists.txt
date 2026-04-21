@@ -98,6 +98,7 @@ set( QA_COMMON_SRCS
     transline_calculations/test_coupled_stripline_offset.cpp
     transline_calculations/test_microstrip_cover.cpp
     transline_calculations/test_rectwaveguide.cpp
+    transline_calculations/test_soldermask.cpp
     transline_calculations/test_transline_roundtrip.cpp
     transline_calculations/test_twistedpair.cpp
 

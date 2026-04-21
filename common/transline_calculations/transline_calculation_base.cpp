@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <algorithm>
 #include <stdexcept>
 #include <utility>
 
@@ -211,6 +212,128 @@ double TRANSLINE_CALCULATION_BASE::GetDispersedTanDelta( double aF ) const
         return m_dsModel->TanDeltaAt( aF );
 
     return GetParameter( TCP::TAND );
+}
+
+
+double TRANSLINE_CALCULATION_BASE::WanHoorfarQ2( double aU, double aHBarTop )
+{
+    // Wan-Hoorfar 2000 eq. (4): Hammerstad-style effective strip width for wide strips.
+    const double wBarEff = aU + ( 2.0 / M_PI ) * std::log( 17.08 * ( 0.5 * aU + 0.92 ) );
+
+    // Wan-Hoorfar eq. (5): v-bar parametrising the field contraction above the strip as
+    // the boundary h_2 moves up.  Clamps to 1 as h_2 -> infinity, 0 as h_2 -> h.
+    const double denom = wBarEff * M_PI - 4.0;
+
+    if( denom <= 0.0 || !std::isfinite( denom ) )
+        return 0.0;
+
+    const double vBar = ( 2.0 / M_PI ) * std::atan( ( 2.0 * M_PI / denom ) * ( aHBarTop - 1.0 ) );
+    const double halfPi = 0.5 * M_PI * vBar;
+
+    if( aU >= 1.0 )
+    {
+        // Wide strip.  q_1 from eq (2) and q_2 from the improved eq (12).  With n = 3 this
+        // reduces to q_2 = 1 - q_1 - correction, i.e. the fraction of the total field that
+        // lies between h and h_2.  The full sum-form collapses here because we only need q_2.
+        const double q1 = 1.0 - std::log( wBarEff * M_PI - 1.0 ) / ( 2.0 * wBarEff );
+        const double inner = 2.0 * wBarEff * std::cos( halfPi ) / ( 2.0 * aHBarTop - 1.0 + vBar )
+                             + std::sin( halfPi );
+
+        if( inner <= 0.0 || !std::isfinite( inner ) )
+            return 0.0;
+
+        const double correction = ( 1.0 - vBar ) / ( 2.0 * wBarEff ) * std::log( inner );
+        return std::max( 0.0, 1.0 - q1 - correction );
+    }
+
+    // Narrow strip.  Wan-Hoorfar eq (6), (7), (8), (13).  b_j is the strip-geometry
+    // constant; the arccos term encodes the same field-capture geometry as the wide-strip
+    // branch but fit against the narrow-strip conformal mapping.
+    const double logEighth = std::log( 0.125 * aU );
+
+    if( !std::isfinite( logEighth ) || logEighth == 0.0 )
+        return 0.0;
+
+    const double q1 = 0.5 + 0.9 / ( M_PI * logEighth );
+    const double bj = ( aHBarTop + 1.0 ) / ( aHBarTop + 0.25 * aU - 1.0 );
+
+    if( bj <= 0.0 || !std::isfinite( bj ) )
+        return 0.0;
+
+    const double acosArg = std::sqrt( bj / aHBarTop ) * ( aHBarTop - 1.0 + 0.125 * aU );
+
+    if( acosArg < -1.0 || acosArg > 1.0 )
+        return 0.0;
+
+    const double correction = ( std::log( bj ) * std::acos( acosArg ) ) / ( 4.0 * logEighth );
+    return std::max( 0.0, 1.0 - q1 - correction );
+}
+
+
+std::pair<double, double>
+TRANSLINE_CALCULATION_BASE::ApplySoldermaskCorrection( double aEpsEffUncoated, double aTanDeltaSubstrate,
+                                                       double aEpsRSubstrate, double aWOverH,
+                                                       double /*aF*/ ) const
+{
+    // Bit-identical no-op paths.  Any single missing ingredient disables the correction.
+    if( GetParameter( TCP::SOLDERMASK_PRESENT ) < 0.5 )
+        return { aEpsEffUncoated, aTanDeltaSubstrate };
+
+    const double C = GetParameter( TCP::SOLDERMASK_THICKNESS );
+    const double h = GetParameter( TCP::H );
+
+    if( C <= 0.0 || h <= 0.0 || !std::isfinite( C ) || !std::isfinite( h ) )
+        return { aEpsEffUncoated, aTanDeltaSubstrate };
+
+    const double epsMask = GetParameter( TCP::SOLDERMASK_EPSILONR );
+    const double tanDMask = GetParameter( TCP::SOLDERMASK_TAND );
+
+    // Reject non-physical mask material parameters.  eps_r < 1 violates causality, NaN/inf
+    // would propagate into Z0 / loss outputs, and a negative tan delta would drive
+    // ATTEN_DILECTRIC negative (a "dielectric gain" energy-conservation violation).
+    if( !std::isfinite( epsMask ) || epsMask <= 1.0 )
+        return { aEpsEffUncoated, aTanDeltaSubstrate };
+
+    if( !std::isfinite( tanDMask ) || tanDMask < 0.0 )
+        return { aEpsEffUncoated, aTanDeltaSubstrate };
+
+    if( aEpsRSubstrate <= 1.0 || !std::isfinite( aEpsRSubstrate ) )
+        return { aEpsEffUncoated, aTanDeltaSubstrate };
+
+    // Delta q_mask: fraction of the un-coated air region above the trace that the mask
+    // displaces.  Subtracting the h_2 = h baseline cancels a non-zero offset in Svacina's
+    // formula so the correction vanishes smoothly at C = 0.
+    const double deltaQ = GetSoldermaskDeltaQ( aWOverH, C / h );
+
+    if( deltaQ <= 0.0 )
+        return { aEpsEffUncoated, aTanDeltaSubstrate };
+
+    // Air-replacement decomposition (Bahl and Stuchly 1980, "Analysis of a Microstrip
+    // Covered with a Lossy Dielectric", IEEE MTT-28 (2), eq. 22 in the d -> infinity
+    // limit).  The mask displaces AIR, not substrate, so
+    //     eps_eff_coated = eps_eff_uncoated + Delta q_mask * (eps_mask - 1).
+    const double epsEffCoated = aEpsEffUncoated + deltaQ * ( epsMask - 1.0 );
+
+    // q_sub from the standard filling-factor identity for a two-layer microstrip; held
+    // fixed when the mask is added on top because the substrate field distribution does
+    // not change at leading order.
+    const double qSub = std::clamp( ( aEpsEffUncoated - 1.0 ) / ( aEpsRSubstrate - 1.0 ), 0.0, 1.0 );
+
+    // Cap Delta q_mask so the residual air fraction stays non-negative.  Saturates when
+    // the subclass factor overshoots (e.g. an empirical CPW model driven by a very thick
+    // mask) and prevents dielectric loss from being synthesised out of nowhere.
+    const double deltaQCapped = std::min( deltaQ, std::max( 0.0, 1.0 - qSub ) );
+
+    double tanDCoated = aTanDeltaSubstrate;
+
+    if( epsEffCoated > 0.0 )
+    {
+        tanDCoated = ( qSub * aEpsRSubstrate * aTanDeltaSubstrate
+                       + deltaQCapped * epsMask * tanDMask )
+                     / epsEffCoated;
+    }
+
+    return { epsEffCoated, tanDCoated };
 }
 
 

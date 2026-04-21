@@ -50,11 +50,36 @@ void MICROSTRIP::Analyse()
     // Static impedance
     microstrip_Z0();
 
+    // Apply the soldermask cover correction to the static er_eff and Z0 before dispersion
+    // and losses consume them.  Uses the Wan-Hoorfar 2000 / Svacina 1992 three-layer
+    // filling factor with Bahl-Stuchly 1980 air-replacement decomposition.  When the mask
+    // is disabled or the thickness is zero this is a bit-identical no-op path.  Z0 scales
+    // as 1/sqrt(eps_eff) for a given homogeneous equivalent, so rescaling by
+    // sqrt(uncoated/coated) keeps the physics consistent.
+    const double erEffUncoated = er_eff_0;
+    const double dispersedEpsR = GetParameter( TCP::EPSILONR );
+    const double dispersedTanD = GetParameter( TCP::TAND );
+    const double uOverH = GetParameter( TCP::PHYS_WIDTH ) / GetParameter( TCP::H );
+
+    const auto [ erEffCoated, tanDCoated ] =
+            ApplySoldermaskCorrection( erEffUncoated, dispersedTanD, dispersedEpsR, uOverH, f );
+
+    if( erEffCoated != erEffUncoated )
+    {
+        er_eff_0 = erEffCoated;
+        Z0_0 *= std::sqrt( erEffUncoated / erEffCoated );
+        SetParameter( TCP::Z0, Z0_0 );
+    }
+
     // Calculate freq dependence of er and Z0
     dispersion();
 
     // Calculate electrical lengths
     line_angle();
+
+    // Swap the mask-blended tan delta in so dielectric_losses picks it up through the
+    // parameter map; restore the dispersed substrate value immediately after attenuation.
+    SetParameter( TCP::TAND, tanDCoated );
 
     // Calculate losses
     attenuation();

@@ -51,11 +51,43 @@ void COUPLED_MICROSTRIP::Analyse()
     // Impedances for even- and odd-mode
     Z0_even_odd();
 
+    // Apply the soldermask cover correction to both modes before dispersion and loss
+    // consume the static quantities.  Same Wan-Hoorfar 2000 Delta q factor as microstrip;
+    // the even/odd split is preserved because each mode's static eps_eff picks up its own
+    // correction.  Z0 for each mode scales by sqrt(uncoated/coated) so the homogeneous
+    // reference impedance remains consistent with the new eps_eff.
+    const double dispersedEpsR = GetParameter( TCP::EPSILONR );
+    const double dispersedTanD = GetParameter( TCP::TAND );
+    const double uOverH = GetParameter( TCP::PHYS_WIDTH ) / GetParameter( TCP::H );
+
+    const auto [ erEvenCoated, tanDEvenCoated ] =
+            ApplySoldermaskCorrection( er_eff_e_0, dispersedTanD, dispersedEpsR, uOverH, f );
+    const auto [ erOddCoated, tanDOddCoated ] =
+            ApplySoldermaskCorrection( er_eff_o_0, dispersedTanD, dispersedEpsR, uOverH, f );
+
+    if( erEvenCoated != er_eff_e_0 )
+    {
+        Z0_e_0 *= std::sqrt( er_eff_e_0 / erEvenCoated );
+        er_eff_e_0 = erEvenCoated;
+    }
+
+    if( erOddCoated != er_eff_o_0 )
+    {
+        Z0_o_0 *= std::sqrt( er_eff_o_0 / erOddCoated );
+        er_eff_o_0 = erOddCoated;
+    }
+
     // Calculate freq dependence of er_eff_e, er_eff_o
     er_eff_freq();
 
     // Calculate frequency  dependence of Z0e, Z0o */
     Z0_dispersion();
+
+    // Swap in the mask-blended tan delta for losses.  Even and odd modes differ only by
+    // eps_eff, which has already been corrected, so using the odd-mode blended value for
+    // both is a second-order refinement; average them to avoid biasing either mode.
+    const double tanDBlended = 0.5 * ( tanDEvenCoated + tanDOddCoated );
+    SetParameter( TCP::TAND, tanDBlended );
 
     // Calculate losses
     attenuation();

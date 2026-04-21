@@ -25,6 +25,8 @@
 #define TRANSLINE_CALCULATIONS_MICROSTRIP_H
 
 
+#include <algorithm>
+
 #include <transline_calculations/transline_calculation_base.h>
 
 
@@ -38,7 +40,9 @@ public:
                                           TCP::FREQUENCY, TCP::EPSILON_EFF, TCP::SKIN_DEPTH, TCP::SIGMA, TCP::ROUGH,
                                           TCP::TAND, TCP::PHYS_LEN, TCP::MUR, TCP::MURC, TCP::ANG_L,
                                           TCP::UNIT_PROP_DELAY, TCP::ATTEN_COND, TCP::ATTEN_DILECTRIC,
-                                          TCP::DIELECTRIC_MODEL_SEL, TCP::EPSILONR_SPEC_FREQ } )
+                                          TCP::DIELECTRIC_MODEL_SEL, TCP::EPSILONR_SPEC_FREQ,
+                                          TCP::SOLDERMASK_PRESENT, TCP::SOLDERMASK_THICKNESS,
+                                          TCP::SOLDERMASK_EPSILONR, TCP::SOLDERMASK_TAND } )
     {
     }
 
@@ -49,6 +53,20 @@ public:
 
     /// Synthesis track geometry parameters to match given Z0
     bool Synthesize( SYNTHESIZE_OPTS aOpts ) override;
+
+    /// Microstrip soldermask incremental filling factor.  Wan-Hoorfar 2000 improved
+    /// Svacina 1992 q_2 evaluated between h_2 = h (no mask) and h_2 = h + C (mask on top
+    /// of substrate).  Subtracting the C = 0 baseline cancels the formula's non-zero
+    /// offset at h_2 = h so the correction is continuous at the no-mask limit.
+    double GetSoldermaskDeltaQ( double aWOverH, double aCOverH ) const override
+    {
+        if( aWOverH <= 0.0 || aCOverH <= 0.0 )
+            return 0.0;
+
+        const double q2Coated = WanHoorfarQ2( aWOverH, 1.0 + aCOverH );
+        const double q2Base = WanHoorfarQ2( aWOverH, 1.0 );
+        return std::max( 0.0, q2Coated - q2Base );
+    }
 
 private:
     /// Sets the output values and status following analysis

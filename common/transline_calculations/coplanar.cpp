@@ -20,12 +20,50 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <algorithm>
+
 #include <transline_calculations/coplanar.h>
 #include <transline_calculations/units.h>
 
 
 namespace TC = TRANSLINE_CALCULATIONS;
 using TCP = TRANSLINE_PARAMETERS;
+
+
+double COPLANAR::GetSoldermaskDeltaQ( double aWOverH, double aCOverH ) const
+{
+    if( aWOverH <= 0.0 || aCOverH <= 0.0 )
+        return 0.0;
+
+    // Start from the microstrip incremental filling factor (Wan-Hoorfar 2000 improvement
+    // on Svacina 1992).  CPW shares the above-substrate geometry with microstrip but
+    // only half of the total field lies in the upper half-space in the symmetric case
+    // with no back metal, so the capturable fraction is half that of microstrip.  This
+    // is a first-order empirical adaptation: a rigorous treatment would extend
+    // Ghione-Naldi conformal mapping to include the overlay, which is not attempted
+    // here.
+    const double q2Coated = WanHoorfarQ2( aWOverH, 1.0 + aCOverH );
+    const double q2Base = WanHoorfarQ2( aWOverH, 1.0 );
+    const double microstripDelta = std::max( 0.0, q2Coated - q2Base );
+
+    const bool fillsGaps = GetParameter( TCP::SOLDERMASK_FILLS_GAPS ) >= 0.5;
+    const bool backMetal = hasBackMetal();
+
+    // Upper half-space factor.  A symmetric CPW stores roughly half its capacitance in
+    // the upper half-space above the substrate; a back-metal-backed CPW shifts more of
+    // the capacitance to the substrate side so the upper-half share is smaller.
+    const double halfSpace = backMetal ? 0.25 : 0.5;
+
+    // Slot-coverage factor.  With the slots mask-filled the whole upper-half fringe sees
+    // mask; with the slots air-filled the mask covers only the conductor strips and
+    // captures a smaller share of the fringe energy.  0.4 is a coarse estimate of the
+    // conductor-to-structure area ratio for typical 50 ohm CPW geometries and matches
+    // the ordering in Bogatin 2018 Ch 7 that gaps-filled produces a larger Z0 drop than
+    // gaps-air on identical geometry.
+    const double slotCoverage = fillsGaps ? 1.0 : 0.4;
+
+    return halfSpace * slotCoverage * microstripDelta;
+}
 
 
 void COPLANAR::Analyse()
@@ -41,7 +79,7 @@ void COPLANAR::Analyse()
     const double freq = GetParameter( TCP::FREQUENCY );
     const double epsr = GetDispersedEpsilonR( freq );
     const double len = GetParameter( TCP::PHYS_LEN );
-    const double tand = GetDispersedTanDelta( freq );
+    const double tand_substrate = GetDispersedTanDelta( freq );
     const double sigma = GetParameter( TCP::SIGMA );
 
     const bool backMetal = hasBackMetal();
@@ -108,6 +146,22 @@ void COPLANAR::Analyse()
         er0 = er0 - ( 0.7 * ( er0 - 1.0 ) * T / S ) / ( q1 + ( 0.7 * T / S ) );
     }
 
+    // Apply the soldermask cover correction to the static er0 and scale the Z0
+    // pre-factor so Z0 = zl_factor / sr_er_f remains self-consistent after dispersion.
+    // SOLDERMASK_PRESENT == 0, zero thickness, and zero filling-factor each take the
+    // no-op path out of ApplySoldermaskCorrection so the un-coated results are unchanged.
+    double tand_eff = tand_substrate;
+    const double uOverH = ( H > 0.0 ) ? ( W / H ) : 0.0;
+    const auto [ er0_coated, tand_coated ] =
+            ApplySoldermaskCorrection( er0, tand_substrate, epsr, uOverH, freq );
+
+    if( er0_coated != er0 )
+    {
+        zl_factor *= std::sqrt( er0 / er0_coated );
+        er0 = er0_coated;
+        tand_eff = tand_coated;
+    }
+
     const double sr_er = std::sqrt( epsr );
     const double sr_er0 = std::sqrt( er0 );
 
@@ -141,7 +195,7 @@ void COPLANAR::Analyse()
     }
 
     const double ac_factor = ac / ( 4.0 * TC::ZF0 * kk1 * kpk1 * ( 1.0 - k1 * k1 ) );
-    const double ad_factor = ( epsr / ( epsr - 1.0 ) ) * tand * M_PI / TC::C0;
+    const double ad_factor = ( epsr / ( epsr - 1.0 ) ) * tand_eff * M_PI / TC::C0;
 
     // Effective-permittivity dispersion from Gevorgian, Martinsson, Deleniv, Kollberg, Vendik,
     // "Simple and accurate dispersion expression for the effective dielectric constant of

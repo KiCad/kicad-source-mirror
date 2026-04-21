@@ -47,7 +47,10 @@ public:
                                           TCP::H, TCP::T, TCP::PHYS_LEN, TCP::FREQUENCY, TCP::Z0, TCP::ANG_L,
                                           TCP::LOSS_CONDUCTOR, TCP::LOSS_DIELECTRIC, TCP::SKIN_DEPTH, TCP::EPSILON_EFF,
                                           TCP::UNIT_PROP_DELAY, TCP::CPW_BACKMETAL,
-                                          TCP::DIELECTRIC_MODEL_SEL, TCP::EPSILONR_SPEC_FREQ } )
+                                          TCP::DIELECTRIC_MODEL_SEL, TCP::EPSILONR_SPEC_FREQ,
+                                          TCP::SOLDERMASK_PRESENT, TCP::SOLDERMASK_THICKNESS,
+                                          TCP::SOLDERMASK_EPSILONR, TCP::SOLDERMASK_TAND,
+                                          TCP::SOLDERMASK_FILLS_GAPS } )
     {
         m_synthesizeTarget = TCP::PHYS_WIDTH;
     }
@@ -57,6 +60,19 @@ public:
 
     /// Synthesize the unknown geometry parameter to match the Z0 target.
     bool Synthesize( SYNTHESIZE_OPTS aOpts ) override;
+
+    /**
+     * Coplanar waveguide soldermask filling factor.
+     *
+     * CPW without back metal and mask filling the slots: g = 0.5 (mask occupies the top
+     * half of the coplanar slot; substrate + air share the bottom half via q2/q1).  CPW
+     * with mask over traces only (gaps left air-filled): fall back to the microstrip
+     * Hammerstad weight because the effective upper cover is the mask layer above the
+     * strip plus unperturbed air over the slots.  CBCPW: Wadell practical approximation
+     * g_cbcpw = 0.5 (g_cpw + g_microstrip) blends the ground-backed confinement toward
+     * the microstrip limit.
+     */
+    double GetSoldermaskDeltaQ( double aWOverH, double aCOverH ) const override;
 
     /**
      * Choose which geometry parameter will be solved for during synthesis.
