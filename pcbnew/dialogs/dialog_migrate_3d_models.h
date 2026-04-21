@@ -28,9 +28,14 @@
 #include <wx/listctrl.h>
 
 #include <dialogs/dialog_migrate_3d_models_base.h>
+#include <3d_canvas/board_adapter.h>
+#include <3d_rendering/track_ball.h>
+#include <math/vector3.h>
 
 class PCB_EDIT_FRAME;
-class EDA_3D_MODEL_VIEWER;
+class BOARD;
+class FOOTPRINT;
+class EDA_3D_CANVAS;
 
 
 /**
@@ -59,6 +64,10 @@ public:
     /// at least one footprint model references a `.wrl`/`.wrz` file that
     /// the project's FILENAME_RESOLVER cannot resolve.
     static bool BoardHasUnresolvedWrlReferences( PCB_EDIT_FRAME* aFrame );
+
+    /// Count of unique unresolvable `.wrl`/`.wrz` references on the board
+    /// (deduplicated by filename).  Intended for the post-load infobar label.
+    static int CountUnresolvedWrlReferences( PCB_EDIT_FRAME* aFrame );
 
     /// Silently rewrite unresolvable `.wrl`/`.wrz` references to STEP files
     /// whose filename stem matches in the standard 3D search paths.  Uses
@@ -98,7 +107,15 @@ private:
     void populateMissingList();
     void rankAllCandidates();
     std::vector<MATCH_CANDIDATE> rankCandidatesFor( const wxString& aWrlFilename ) const;
-    void showPreview( const wxString& aAbsPath );
+
+    /// Set up the throwaway board/footprint that the preview canvas renders.
+    void initPreviewBoard();
+
+    /// Replace the preview's footprint and model list to reflect the current
+    /// missing-list selection + candidate choice.  Pass -1 for aCandAbsPath.IsEmpty()
+    /// (or an empty path) to render the representative footprint with no 3D
+    /// model attached.
+    void showPreview( int aMissingIndex, const wxString& aCandAbsPath );
     void populateCandidatesList( int aMissingIndex );
 
     /// Apply bold styling to the missing-list row iff no replacement is
@@ -111,11 +128,37 @@ private:
     void applyInitialSizeCaps();
 
     PCB_EDIT_FRAME*              m_frame;
-    EDA_3D_MODEL_VIEWER*         m_modelViewer;
+
+    /// Preview pipeline.  We host the footprint on a throwaway board so the
+    /// canvas renders it on FR4 with pads/silk in place, the same way the
+    /// footprint properties 3D preview panel does.
+    BOARD*                       m_dummyBoard;
+    FOOTPRINT*                   m_dummyFootprint;   ///< Owned by m_dummyBoard
+    BOARD_ADAPTER                m_boardAdapter;
+    TRACK_BALL                   m_trackBallCamera;
+    EDA_3D_CANVAS*               m_previewPane;
+
+    /// Transform data captured from the first FP_3DMODEL entry that referenced
+    /// each missing WRL filename, so candidate replacements sit at the same
+    /// position the original WRL would have occupied.
+    struct MISSING_XFORM
+    {
+        VECTOR3D m_scale    { 1, 1, 1 };
+        VECTOR3D m_rotation { 0, 0, 0 };
+        VECTOR3D m_offset   { 0, 0, 0 };
+        double   m_opacity  = 1.0;
+    };
 
     /// Unique WRL filenames (as stored in FP_3DMODEL::m_Filename, i.e. with
     /// `${VAR}` still present) that the resolver could not locate.
     std::vector<wxString>                        m_missing;
+    /// Source FP_3DMODEL transform per missing filename, used when building
+    /// the candidate model for preview.
+    std::vector<MISSING_XFORM>                   m_missingXform;
+    /// Representative footprint per missing filename.  Non-owning pointer into
+    /// the real board; used as the template for m_dummyFootprint when the
+    /// corresponding row is selected in the missing-list.
+    std::vector<const FOOTPRINT*>                m_missingRepFp;
     /// Ranked candidates per missing filename, keyed by index into m_missing.
     std::vector<std::vector<MATCH_CANDIDATE>>          m_candidatesPerMissing;
     /// Which candidate index the user has selected for each missing entry.

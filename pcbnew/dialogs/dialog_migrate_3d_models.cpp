@@ -33,7 +33,10 @@
 
 #include <board.h>
 #include <board_commit.h>
+#include <board_design_settings.h>
+#include <board_stackup_manager/board_stackup.h>
 #include <footprint.h>
+#include <lset.h>
 #include <pcb_edit_frame.h>
 #include <pgm_base.h>
 #include <project.h>
@@ -43,8 +46,9 @@
 
 #include <3d_cache/3d_cache.h>
 #include <3d_cache/model_substitution_helpers.h>
-#include <3d_model_viewer/eda_3d_model_viewer.h>
+#include <3d_canvas/eda_3d_canvas.h>
 #include <common_ogl/ogl_attr_list.h>
+#include <3d_viewer/eda_3d_viewer_settings.h>
 #include <filename_resolver.h>
 
 
@@ -163,7 +167,11 @@ wxString parentDirFromFilename( const wxString& aFilename )
 DIALOG_MIGRATE_3D_MODELS::DIALOG_MIGRATE_3D_MODELS( PCB_EDIT_FRAME* aFrame ) :
         DIALOG_MIGRATE_3D_MODELS_BASE( aFrame ),
         m_frame( aFrame ),
-        m_modelViewer( nullptr )
+        m_dummyBoard( nullptr ),
+        m_dummyFootprint( nullptr ),
+        m_boardAdapter(),
+        m_trackBallCamera( 2 * RANGE_SCALE_3D ),
+        m_previewPane( nullptr )
 {
     // Single column spanning the full list-control width; wxLC_REPORT needs
     // at least one column to show anything, wxLC_NO_HEADER hides the header.
@@ -192,17 +200,14 @@ DIALOG_MIGRATE_3D_MODELS::DIALOG_MIGRATE_3D_MODELS( PCB_EDIT_FRAME* aFrame ) :
                 aEvt.Skip();
             } );
 
-    // Embed the 3D model preview canvas in the placeholder panel created by
-    // the generated base class.  Same pattern as PANEL_FP_PROPERTIES_3D_MODEL.
-    S3D_CACHE* cache = PROJECT_PCB::Get3DCacheManager( &m_frame->Prj() );
-    m_modelViewer = new EDA_3D_MODEL_VIEWER( m_previewPanel,
-            OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ), cache );
-    m_previewPanel->GetSizer()->Add( m_modelViewer, 1, wxEXPAND, 0 );
-    m_previewPanel->Layout();
-
     collectMissingModels();
     buildCatalog();
     rankAllCandidates();
+
+    // Build the throwaway board + footprint and the 3D canvas.  Must happen
+    // after collectMissingModels() so we can size the preview using whichever
+    // representative footprint is first shown.
+    initPreviewBoard();
 
     // Auto-select the top real (non-"keep existing") candidate for every
     // missing row so the user sees a sensible default without having to
@@ -273,7 +278,11 @@ void DIALOG_MIGRATE_3D_MODELS::applyInitialSizeCaps()
 }
 
 
-DIALOG_MIGRATE_3D_MODELS::~DIALOG_MIGRATE_3D_MODELS() = default;
+DIALOG_MIGRATE_3D_MODELS::~DIALOG_MIGRATE_3D_MODELS()
+{
+    delete m_previewPane;
+    delete m_dummyBoard;   // owns m_dummyFootprint
+}
 
 
 bool DIALOG_MIGRATE_3D_MODELS::BoardHasUnresolvedWrlReferences( PCB_EDIT_FRAME* aFrame )
@@ -304,6 +313,41 @@ bool DIALOG_MIGRATE_3D_MODELS::BoardHasUnresolvedWrlReferences( PCB_EDIT_FRAME* 
     }
 
     return false;
+}
+
+
+int DIALOG_MIGRATE_3D_MODELS::CountUnresolvedWrlReferences( PCB_EDIT_FRAME* aFrame )
+{
+    if( !aFrame )
+        return 0;
+
+    BOARD*             board    = aFrame->GetBoard();
+    FILENAME_RESOLVER* resolver = PROJECT_PCB::Get3DFilenameResolver( &aFrame->Prj() );
+
+    if( !board || !resolver )
+        return 0;
+
+    const wxString               projectPath = aFrame->Prj().GetProjectPath();
+    std::unordered_set<wxString> unique;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        for( const FP_3DMODEL& model : fp->Models() )
+        {
+            const wxString& fn = model.m_Filename;
+
+            if( fn.IsEmpty() || !MODEL_SUBSTITUTION::IsWrlExtension( fn ) )
+                continue;
+
+            if( unique.count( fn ) )
+                continue;
+
+            if( resolver->ResolvePath( fn, projectPath, {} ).IsEmpty() )
+                unique.insert( fn );
+        }
+    }
+
+    return static_cast<int>( unique.size() );
 }
 
 
@@ -404,7 +448,16 @@ void DIALOG_MIGRATE_3D_MODELS::collectMissingModels()
         return;
 
     const wxString projectPath = m_frame->Prj().GetProjectPath();
-    std::unordered_set<wxString> seen;
+
+    // Accumulate into a map keyed by WRL filename so we can sort afterwards
+    // while still tracking the representative footprint and transform captured
+    // from the first FP_3DMODEL that referenced it.
+    struct ENTRY
+    {
+        const FOOTPRINT* m_fp = nullptr;
+        MISSING_XFORM    m_xform;
+    };
+    std::map<wxString, ENTRY> byName;
 
     for( FOOTPRINT* fp : board->Footprints() )
     {
@@ -415,22 +468,34 @@ void DIALOG_MIGRATE_3D_MODELS::collectMissingModels()
             if( fn.IsEmpty() || !MODEL_SUBSTITUTION::IsWrlExtension( fn ) )
                 continue;
 
-            if( seen.count( fn ) )
+            if( byName.count( fn ) )
                 continue;
 
             // Mirror the resolver invocation used by the 3D viewer: empty
             // return means "not found on disk via any search path".
-            wxString resolved = resolver->ResolvePath( fn, projectPath, {} );
+            if( !resolver->ResolvePath( fn, projectPath, {} ).IsEmpty() )
+                continue;
 
-            if( resolved.IsEmpty() )
-            {
-                seen.insert( fn );
-                m_missing.push_back( fn );
-            }
+            ENTRY& e = byName[fn];
+            e.m_fp = fp;
+            e.m_xform.m_scale    = model.m_Scale;
+            e.m_xform.m_rotation = model.m_Rotation;
+            e.m_xform.m_offset   = model.m_Offset;
+            e.m_xform.m_opacity  = model.m_Opacity;
         }
     }
 
-    std::sort( m_missing.begin(), m_missing.end() );
+    m_missing.reserve( byName.size() );
+    m_missingRepFp.reserve( byName.size() );
+    m_missingXform.reserve( byName.size() );
+
+    for( const auto& [fn, entry] : byName )
+    {
+        m_missing.push_back( fn );
+        m_missingRepFp.push_back( entry.m_fp );
+        m_missingXform.push_back( entry.m_xform );
+    }
+
     m_selectedPerMissing.assign( m_missing.size(), -1 );
     m_candidatesPerMissing.resize( m_missing.size() );
 }
@@ -652,29 +717,105 @@ void DIALOG_MIGRATE_3D_MODELS::populateCandidatesList( int aMissingIndex )
     {
         m_candidatesList->SetItemState( sel, wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED,
                                         wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED );
-        showPreview( cands[sel].m_absPath );
+        showPreview( aMissingIndex, cands[sel].m_absPath );
     }
     else if( !cands.empty() )
     {
         // No committed choice yet (only the "keep existing" row is available).
-        // Highlight the top row for visual continuity but leave the preview
-        // empty — there's no real candidate to show.
+        // Highlight the top row for visual continuity; the preview still shows
+        // the footprint on the dummy board so the user sees the landing pad
+        // even when no replacement has been chosen.
         m_candidatesList->SetItemState( 0, wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED,
                                         wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED );
-        showPreview( cands.front().m_absPath );
+        showPreview( aMissingIndex, cands.front().m_absPath );
     }
 }
 
 
-void DIALOG_MIGRATE_3D_MODELS::showPreview( const wxString& aAbsPath )
+void DIALOG_MIGRATE_3D_MODELS::initPreviewBoard()
 {
-    if( !m_modelViewer )
+    m_dummyBoard = new BOARD();
+    m_dummyBoard->SetProject( &m_frame->Prj(), true );
+    m_dummyBoard->SetEmbeddedFilesDelegate( m_frame->GetBoard() );
+    m_dummyBoard->SetBoardUse( BOARD_USE::FPHOLDER );
+
+    BOARD_DESIGN_SETTINGS&       dummyBds   = m_dummyBoard->GetDesignSettings();
+    const BOARD_DESIGN_SETTINGS& parentBds  = m_frame->GetDesignSettings();
+    dummyBds.SetBoardThickness( parentBds.GetBoardThickness() );
+    dummyBds.SetEnabledLayers( LSET::FrontMask() | LSET::BackMask() );
+
+    BOARD_STACKUP& stackup = dummyBds.GetStackupDescriptor();
+    stackup.RemoveAll();
+    stackup.BuildDefaultStackupList( &dummyBds, 2 );
+
+    m_boardAdapter.SetBoard( m_dummyBoard );
+    m_boardAdapter.m_IsBoardView = false;
+    m_boardAdapter.m_IsPreviewer = true;
+
+    m_previewPane = new EDA_3D_CANVAS( m_previewPanel,
+            OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ), m_boardAdapter,
+            m_trackBallCamera, PROJECT_PCB::Get3DCacheManager( &m_frame->Prj() ) );
+
+    m_previewPanel->GetSizer()->Add( m_previewPane, 1, wxEXPAND, 0 );
+    m_previewPanel->Layout();
+}
+
+
+void DIALOG_MIGRATE_3D_MODELS::showPreview( int aMissingIndex, const wxString& aCandAbsPath )
+{
+    if( !m_previewPane || !m_dummyBoard )
         return;
 
-    if( aAbsPath.IsEmpty() )
-        m_modelViewer->Clear3DModel();
-    else
-        m_modelViewer->Set3DModel( aAbsPath );
+    // Swap out whatever footprint is currently on the dummy board.  Cloning
+    // the representative footprint each time is cheap and avoids lingering
+    // state (pads, silk, ...) from previously-selected rows.
+    if( m_dummyFootprint )
+    {
+        m_dummyBoard->Remove( m_dummyFootprint );
+        delete m_dummyFootprint;
+        m_dummyFootprint = nullptr;
+    }
+
+    const FOOTPRINT* repFp = nullptr;
+
+    if( aMissingIndex >= 0 && aMissingIndex < static_cast<int>( m_missingRepFp.size() ) )
+        repFp = m_missingRepFp[aMissingIndex];
+
+    if( repFp )
+    {
+        m_dummyFootprint = new FOOTPRINT( *repFp );
+        m_dummyFootprint->SetParentGroup( nullptr );
+
+        // Normalize orientation the same way the footprint-properties preview
+        // does so the model lands face-up regardless of how the real footprint
+        // is placed on the user's board.
+        if( m_dummyFootprint->IsFlipped() )
+            m_dummyFootprint->Flip( m_dummyFootprint->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
+
+        m_dummyFootprint->SetOrientation( ANGLE_0 );
+
+        // Replace the 3D model list with just the candidate (if any), carrying
+        // over the transform captured from the original WRL entry so the user
+        // sees the candidate sitting in the same spot the WRL would have.
+        m_dummyFootprint->Models().clear();
+
+        if( !aCandAbsPath.IsEmpty() )
+        {
+            FP_3DMODEL replacement;
+            replacement.m_Filename = aCandAbsPath;
+            replacement.m_Scale    = m_missingXform[aMissingIndex].m_scale;
+            replacement.m_Rotation = m_missingXform[aMissingIndex].m_rotation;
+            replacement.m_Offset   = m_missingXform[aMissingIndex].m_offset;
+            replacement.m_Opacity  = m_missingXform[aMissingIndex].m_opacity;
+            replacement.m_Show     = true;
+            m_dummyFootprint->Models().push_back( replacement );
+        }
+
+        m_dummyBoard->Add( m_dummyFootprint );
+    }
+
+    m_previewPane->ReloadRequest();
+    m_previewPane->Request_refresh();
 }
 
 
@@ -713,7 +854,7 @@ void DIALOG_MIGRATE_3D_MODELS::OnCandidateSelected( wxListEvent& aEvent )
     // existing", so the visual cue tracks the actual selection state.
     updateMissingItemStyle( missingIdx );
 
-    showPreview( c.m_absPath );
+    showPreview( missingIdx, c.m_absPath );
 }
 
 
@@ -886,12 +1027,6 @@ void DIALOG_MIGRATE_3D_MODELS::OnReplaceClick( wxCommandEvent& )
     if( replacements.empty() )
     {
         // User clicked Replace without choosing anything; treat as Keep.
-        if( m_doNotShowAgain->IsChecked() )
-        {
-            if( COMMON_SETTINGS* s = Pgm().GetCommonSettings() )
-                s->m_DoNotShowAgain.migrate_wrl_prompt = true;
-        }
-
         EndModal( wxID_CANCEL );
         return;
     }
@@ -922,25 +1057,11 @@ void DIALOG_MIGRATE_3D_MODELS::OnReplaceClick( wxCommandEvent& )
 
     commit.Push( _( "Migrate 3D model references" ) );
 
-    // Respect the user's "do not show again" choice regardless of whether
-    // they replaced any models on this particular board.
-    if( m_doNotShowAgain->IsChecked() )
-    {
-        if( COMMON_SETTINGS* s = Pgm().GetCommonSettings() )
-            s->m_DoNotShowAgain.migrate_wrl_prompt = true;
-    }
-
     EndModal( wxID_OK );
 }
 
 
 void DIALOG_MIGRATE_3D_MODELS::OnKeepClick( wxCommandEvent& )
 {
-    if( m_doNotShowAgain->IsChecked() )
-    {
-        if( COMMON_SETTINGS* s = Pgm().GetCommonSettings() )
-            s->m_DoNotShowAgain.migrate_wrl_prompt = true;
-    }
-
     EndModal( wxID_CANCEL );
 }

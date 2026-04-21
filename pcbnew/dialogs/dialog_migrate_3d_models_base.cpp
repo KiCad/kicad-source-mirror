@@ -99,9 +99,6 @@ DIALOG_MIGRATE_3D_MODELS_BASE::DIALOG_MIGRATE_3D_MODELS_BASE( wxWindow* parent, 
 	wxBoxSizer* bSizerBottom;
 	bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
 
-	m_doNotShowAgain = new wxCheckBox( this, wxID_ANY, _("Do not show this again"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerBottom->Add( m_doNotShowAgain, 0, wxALIGN_CENTER_VERTICAL|wxALL, 6 );
-
 
 	bSizerBottom->Add( 0, 0, 1, wxEXPAND, 0 );
 

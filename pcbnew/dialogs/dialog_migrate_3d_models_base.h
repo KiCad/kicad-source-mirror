@@ -25,7 +25,6 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/splitter.h>
-#include <wx/checkbox.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -52,7 +51,6 @@ class DIALOG_MIGRATE_3D_MODELS_BASE : public DIALOG_SHIM
 		wxButton* m_openFileButton;
 		wxPanel* m_previewPanel;
 		wxStaticText* m_previewLabel;
-		wxCheckBox* m_doNotShowAgain;
 		wxButton* m_replaceButton;
 		wxButton* m_keepButton;
 
