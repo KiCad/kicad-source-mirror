@@ -410,6 +410,23 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 
     if( it == m_matchingTypes.end() )
     {
+        // If the property isn't defined on the item itself but is defined on its parent
+        // footprint (e.g. Reference, Value), resolve against the parent so that conditions
+        // like "A.Reference == 'J1'" match pads and graphics belonging to J1.
+        if( FOOTPRINT* parentFp = item->GetParentFootprint() )
+        {
+            auto parentIt = m_matchingTypes.find( TYPE_HASH( *parentFp ) );
+
+            if( parentIt != m_matchingTypes.end() )
+            {
+                item = parentFp;
+                it = parentIt;
+            }
+        }
+    }
+
+    if( it == m_matchingTypes.end() )
+    {
         // Don't force user to type "A.Type == 'via' && A.Via_Type == 'buried'" when the
         // simpler "A.Via_Type == 'buried'" is perfectly clear.  Instead, return an undefined
         // value when the property doesn't appear on a particular object.
@@ -506,7 +523,15 @@ LIBEVAL::VALUE* PCBEXPR_COMPONENT_CLASS_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
 {
     BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( GetObject( aCtx ) );
 
-    if( !item || item->Type() != PCB_FOOTPRINT_T )
+    if( !item )
+        return new LIBEVAL::VALUE();
+
+    // Resolve component class via the parent footprint so that conditions like
+    // "A.ComponentClass == 'X'" match pads and graphics inside the footprint.
+    if( item->Type() != PCB_FOOTPRINT_T )
+        item = item->GetParentFootprint();
+
+    if( !item )
         return new LIBEVAL::VALUE();
 
     return new PCBEXPR_COMPONENT_CLASS_VALUE( item );
