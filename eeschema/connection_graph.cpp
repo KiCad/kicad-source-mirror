@@ -3344,6 +3344,41 @@ SCH_CONNECTION* CONNECTION_GRAPH::matchBusMember( SCH_CONNECTION* aBusConnection
                 break;
             }
         }
+
+        if( !match && aSearch->VectorIndex() >= 0 )
+        {
+            int flatIdx = 0;
+
+            for( const std::shared_ptr<SCH_CONNECTION>& c : aBusConnection->Members() )
+            {
+                if( c->Type() == CONNECTION_TYPE::BUS )
+                {
+                    for( const std::shared_ptr<SCH_CONNECTION>& bus_member : c->Members() )
+                    {
+                        if( flatIdx == aSearch->VectorIndex() )
+                        {
+                            match = bus_member.get();
+                            break;
+                        }
+
+                        flatIdx++;
+                    }
+                }
+                else
+                {
+                    if( flatIdx == aSearch->VectorIndex() )
+                    {
+                        match = c.get();
+                        break;
+                    }
+
+                    flatIdx++;
+                }
+
+                if( match )
+                    break;
+            }
+        }
     }
 
     return match;
