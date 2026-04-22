@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-17 15:22+0300\n"
-"PO-Revision-Date: 2026-04-20 19:33+0000\n"
+"PO-Revision-Date: 2026-04-23 03:03+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v9/de/>\n"
 "Language: de\n"
@@ -30515,7 +30515,7 @@ msgstr "Schwellwertspannung:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:88
 msgid "Material names:"
-msgstr "Material:"
+msgstr "Materialnamen:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:92
 msgid "Chemical symbols"
