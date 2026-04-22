@@ -1570,6 +1570,24 @@ VECTOR2I PAD::ShapePos( PCB_LAYER_ID aLayer ) const
 }
 
 
+void PAD::SwapShapePositions( PAD* aLhs, PAD* aRhs )
+{
+    wxCHECK( aLhs && aRhs, /* void */ );
+
+    VECTOR2I lhsShapePos = aLhs->ShapePos( PADSTACK::ALL_LAYERS );
+    VECTOR2I rhsShapePos = aRhs->ShapePos( PADSTACK::ALL_LAYERS );
+
+    VECTOR2I lhsOffset = aLhs->GetOffset( PADSTACK::ALL_LAYERS );
+    VECTOR2I rhsOffset = aRhs->GetOffset( PADSTACK::ALL_LAYERS );
+
+    RotatePoint( lhsOffset, aLhs->GetOrientation() );
+    RotatePoint( rhsOffset, aRhs->GetOrientation() );
+
+    aLhs->SetPosition( rhsShapePos - lhsOffset );
+    aRhs->SetPosition( lhsShapePos - rhsOffset );
+}
+
+
 bool PAD::IsOnCopperLayer() const
 {
     if( GetAttribute() == PAD_ATTRIB::NPTH )
