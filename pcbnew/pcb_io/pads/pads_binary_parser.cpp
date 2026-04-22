@@ -110,6 +110,30 @@ static const PADSTACK_LAYOUT& padstackLayout( bool aIsOld )
 }
 
 
+// The 112-byte header shared by the LINES/DRW owner and item records. Several decoders read the
+// same fields (origin, bounding box, run cursors, name, classifier word); one descriptor keeps
+// their offsets in a single place. The +24 word has two record-role-dependent meanings, both
+// named here: CLASS_WORD in the copper/keepout headers and PIECE_COUNT in the owner-run cursor.
+namespace DRW_ITEM
+{
+constexpr size_t SIZE         = 112;
+constexpr int    PIECE_START  = 8;
+constexpr int    VERTEX_START = 12;
+constexpr int    ARC_START    = 16;
+constexpr int    CLASS_WORD   = 24;
+constexpr int    PIECE_COUNT  = 24;
+constexpr int    SUBTYPE_WORD = 28;
+constexpr int    NAME         = 44;
+constexpr int    TYPE_TAG     = 84;
+constexpr int    ORIGIN_X     = 88;
+constexpr int    ORIGIN_Y     = 92;
+constexpr int    BBOX_MIN_X   = 96;
+constexpr int    BBOX_MIN_Y   = 100;
+constexpr int    BBOX_MAX_X   = 104;
+constexpr int    BBOX_MAX_Y   = 108;
+} // namespace DRW_ITEM
+
+
 BINARY_PARSER::BINARY_PARSER() = default;
 
 
@@ -1294,21 +1318,17 @@ void BINARY_PARSER::parseBoardOutlineDrwOrigin()
     // (0xFFFE or 0xFFFF), u32 sentinel @4 (0xFFFFFFFF), name @44 (12 bytes, null-terminated),
     // and the DRW absolute X/Y origin at @88/@92. The first DRW-named record is the board
     // outline, whose origin converts section 11 vertices from DRW-relative to binary absolute.
-    static constexpr int LINE_ITEM_SIZE = 112;
     static constexpr int LINE_FLAGS_OFF = 0;
     static constexpr int LINE_SENTINEL_OFF = 4;
-    static constexpr int LINE_NAME_OFF = 44;
-    static constexpr int LINE_DRWX_OFF = 88;
-    static constexpr int LINE_DRWY_OFF = 92;
 
     const SDB_SECTION* entry9 = getSection( SECTION::StringPool );
 
-    if( !entry9 || entry9->totalBytes < LINE_ITEM_SIZE )
+    if( !entry9 || entry9->totalBytes < DRW_ITEM::SIZE )
         return;
 
     size_t scanEnd = entry9->dataOffset + entry9->totalBytes;
 
-    for( size_t pos = entry9->dataOffset; pos + LINE_ITEM_SIZE <= scanEnd; ++pos )
+    for( size_t pos = entry9->dataOffset; pos + DRW_ITEM::SIZE <= scanEnd; ++pos )
     {
         SDB_RECORD rec = m_sdb.RecordAt( pos );
         uint32_t   flags = rec.U32( LINE_FLAGS_OFF );
@@ -1317,17 +1337,17 @@ void BINARY_PARSER::parseBoardOutlineDrwOrigin()
         if( ( flags != SDB_RECORD_SENTINEL && flags != 0xFFFF ) || sentinel != SDB_FIELD_UNSET )
             continue;
 
-        std::string name = rec.Str( LINE_NAME_OFF, 12 );
+        std::string name = rec.Str( DRW_ITEM::NAME, 12 );
 
         if( name.size() >= 4 && name.substr( 0, 3 ) == "DRW" )
         {
-            m_boardDrwOriginX = rec.I32( LINE_DRWX_OFF );
-            m_boardDrwOriginY = rec.I32( LINE_DRWY_OFF );
+            m_boardDrwOriginX = rec.I32( DRW_ITEM::ORIGIN_X );
+            m_boardDrwOriginY = rec.I32( DRW_ITEM::ORIGIN_Y );
             m_boardDrwOriginFound = true;
             return;
         }
 
-        pos += LINE_ITEM_SIZE - 1;
+        pos += DRW_ITEM::SIZE - 1;
     }
 }
 
@@ -1557,22 +1577,22 @@ bool BINARY_PARSER::parseArcBoardOutline()
 
             if( ( marker == SDB_RECORD_SENTINEL || marker == 0xFFFF ) && rec.U16( 2 ) == 0 )
             {
-                std::string name = rec.Str( 44, 12 );
+                std::string name = rec.Str( DRW_ITEM::NAME, 12 );
 
                 if( name.size() >= 3 && name.compare( 0, 3, "DRW" ) == 0 )
                 {
                     DrawingItem item;
-                    item.originX = rec.I32( 88 );
-                    item.originY = rec.I32( 92 );
-                    item.localMinX = (int64_t) rec.I32( 96 ) - item.originX;
-                    item.localMinY = (int64_t) rec.I32( 100 ) - item.originY;
-                    item.localMaxX = (int64_t) rec.I32( 104 ) - item.originX;
-                    item.localMaxY = (int64_t) rec.I32( 108 ) - item.originY;
+                    item.originX = rec.I32( DRW_ITEM::ORIGIN_X );
+                    item.originY = rec.I32( DRW_ITEM::ORIGIN_Y );
+                    item.localMinX = (int64_t) rec.I32( DRW_ITEM::BBOX_MIN_X ) - item.originX;
+                    item.localMinY = (int64_t) rec.I32( DRW_ITEM::BBOX_MIN_Y ) - item.originY;
+                    item.localMaxX = (int64_t) rec.I32( DRW_ITEM::BBOX_MAX_X ) - item.originX;
+                    item.localMaxY = (int64_t) rec.I32( DRW_ITEM::BBOX_MAX_Y ) - item.originY;
                     item.span = std::max( item.localMaxX - item.localMinX,
                                           item.localMaxY - item.localMinY );
-                    item.preferred = rec.U32( 84 ) == 0x00004D00;
+                    item.preferred = rec.U32( DRW_ITEM::TYPE_TAG ) == 0x00004D00;
                     items.push_back( item );
-                    pos += 112;
+                    pos += DRW_ITEM::SIZE;
                     continue;
                 }
             }
@@ -3070,9 +3090,9 @@ void BINARY_PARSER::parseCopperShapes()
     {
         SDB_RECORD hdr = m_sdb.Record( *sec10, rec, sec10->stride );
 
-        uint32_t flag6 = hdr.U32( 24 );
-        uint32_t flag7 = hdr.U32( 28 );
-        uint32_t blockTag = hdr.U32( 84 );
+        uint32_t flag6 = hdr.U32( DRW_ITEM::CLASS_WORD );
+        uint32_t flag7 = hdr.U32( DRW_ITEM::SUBTYPE_WORD );
+        uint32_t blockTag = hdr.U32( DRW_ITEM::TYPE_TAG );
         bool legacyCopper = ( blockTag == 0x00004900 && flag6 == 1 && flag7 != 3 );
         bool v2026LineCopper = ( m_version == 0x2026 && blockTag == 0x00004D00
                                  && flag6 == 7 && flag7 == 0 );
@@ -3080,23 +3100,23 @@ void BINARY_PARSER::parseCopperShapes()
         if( !legacyCopper && !v2026LineCopper )
             continue;
 
-        std::string name = hdr.Str( 44, 24 );
+        std::string name = hdr.Str( DRW_ITEM::NAME, 24 );
 
         if( name.size() < 4 || name.substr( 0, 3 ) != "DRW" )
             continue;
 
-        uint32_t sec11Index = hdr.U32( 8 );
+        uint32_t sec11Index = hdr.U32( DRW_ITEM::PIECE_START );
 
         if( legacyCopper && sec11Index >= sec11->count )
             continue;
 
-        int32_t originX = hdr.I32( 88 );
-        int32_t originY = hdr.I32( 92 );
+        int32_t originX = hdr.I32( DRW_ITEM::ORIGIN_X );
+        int32_t originY = hdr.I32( DRW_ITEM::ORIGIN_Y );
 
-        int64_t localMinX = static_cast<int64_t>( hdr.I32( 96 ) ) - originX;
-        int64_t localMinY = static_cast<int64_t>( hdr.I32( 100 ) ) - originY;
-        int64_t localMaxX = static_cast<int64_t>( hdr.I32( 104 ) ) - originX;
-        int64_t localMaxY = static_cast<int64_t>( hdr.I32( 108 ) ) - originY;
+        int64_t localMinX = static_cast<int64_t>( hdr.I32( DRW_ITEM::BBOX_MIN_X ) ) - originX;
+        int64_t localMinY = static_cast<int64_t>( hdr.I32( DRW_ITEM::BBOX_MIN_Y ) ) - originY;
+        int64_t localMaxX = static_cast<int64_t>( hdr.I32( DRW_ITEM::BBOX_MAX_X ) ) - originX;
+        int64_t localMaxY = static_cast<int64_t>( hdr.I32( DRW_ITEM::BBOX_MAX_Y ) ) - originY;
 
         std::vector<VECTOR2I> loop;
         size_t minEdges = v2026LineCopper ? 4 : 5;
@@ -3279,7 +3299,7 @@ void BINARY_PARSER::buildOwnerRuns()
         if( ( marker != SDB_RECORD_SENTINEL && marker != 0xFFFF ) || hi != 0 )
             return false;
 
-        std::string name = rec.Str( 44, 44 );
+        std::string name = rec.Str( DRW_ITEM::NAME, 44 );
 
         if( name.size() < 2 )
             return false;
@@ -3290,8 +3310,8 @@ void BINARY_PARSER::buildOwnerRuns()
                 return false;
         }
 
-        int32_t vertexStart = rec.I32( 12 );
-        int32_t pieceCount = rec.I32( 24 );
+        int32_t vertexStart = rec.I32( DRW_ITEM::VERTEX_START );
+        int32_t pieceCount = rec.I32( DRW_ITEM::PIECE_COUNT );
 
         return vertexStart >= 0 && vertexStart < ( 1 << 24 ) && pieceCount >= 0
                && pieceCount < ( 1 << 16 );
@@ -3301,10 +3321,10 @@ void BINARY_PARSER::buildOwnerRuns()
     {
         SDB_RECORD rec = m_sdb.RecordAt( aOff );
         OWNER_RUN  run;
-        run.pieceStart = rec.I32( 8 );
-        run.vertexStart = rec.I32( 12 );
-        run.arcStart = rec.I32( 16 );
-        run.pieceCount = rec.I32( 24 );
+        run.pieceStart = rec.I32( DRW_ITEM::PIECE_START );
+        run.vertexStart = rec.I32( DRW_ITEM::VERTEX_START );
+        run.arcStart = rec.I32( DRW_ITEM::ARC_START );
+        run.pieceCount = rec.I32( DRW_ITEM::PIECE_COUNT );
         return run;
     };
 
@@ -3317,11 +3337,11 @@ void BINARY_PARSER::buildOwnerRuns()
     bool        havePrev = false;
     size_t      off = start;
 
-    while( off + 112 <= end )
+    while( off + DRW_ITEM::SIZE <= end )
     {
         if( isOwnerRecord( off ) )
         {
-            std::string name = m_sdb.RecordAt( off ).Str( 44, 44 );
+            std::string name = m_sdb.RecordAt( off ).Str( DRW_ITEM::NAME, 44 );
 
             if( havePrev && !m_ownerRuns.count( prevName ) )
                 m_ownerRuns.emplace( prevName, readRun( off ) );
@@ -3329,7 +3349,7 @@ void BINARY_PARSER::buildOwnerRuns()
             prevName = std::move( name );
             prevOff = off;
             havePrev = true;
-            off += 112;
+            off += DRW_ITEM::SIZE;
             continue;
         }
 
@@ -3338,9 +3358,9 @@ void BINARY_PARSER::buildOwnerRuns()
 
     if( havePrev && !m_ownerRuns.count( prevName ) )
     {
-        size_t tailOff = prevOff + 112;
+        size_t tailOff = prevOff + DRW_ITEM::SIZE;
 
-        if( tailOff + 112 <= m_data.size() )
+        if( tailOff + DRW_ITEM::SIZE <= m_data.size() )
             m_ownerRuns.emplace( prevName, readRun( tailOff ) );
     }
 }
@@ -3429,27 +3449,27 @@ void BINARY_PARSER::parseKeepouts()
     {
         SDB_RECORD hdr = m_sdb.Record( *sec10, rec, sec10->stride );
 
-        if( hdr.U32( 84 ) != 0 || hdr.U32( 24 ) != 1 )
+        if( hdr.U32( DRW_ITEM::TYPE_TAG ) != 0 || hdr.U32( DRW_ITEM::CLASS_WORD ) != 1 )
             continue;
 
-        uint32_t typeBucket = hdr.U32( 28 );
+        uint32_t typeBucket = hdr.U32( DRW_ITEM::SUBTYPE_WORD );
 
         if( typeBucket != 1 && typeBucket != 10 )
             continue;
 
-        std::string name = hdr.Str( 44, 24 );
+        std::string name = hdr.Str( DRW_ITEM::NAME, 24 );
 
         if( name.size() < 4 || name.substr( 0, 3 ) != "DRW" )
             continue;
 
         Owner owner;
         owner.name = std::move( name );
-        owner.originX = hdr.I32( 88 );
-        owner.originY = hdr.I32( 92 );
-        owner.minX = static_cast<int64_t>( hdr.I32( 96 ) ) - owner.originX;
-        owner.minY = static_cast<int64_t>( hdr.I32( 100 ) ) - owner.originY;
-        owner.maxX = static_cast<int64_t>( hdr.I32( 104 ) ) - owner.originX;
-        owner.maxY = static_cast<int64_t>( hdr.I32( 108 ) ) - owner.originY;
+        owner.originX = hdr.I32( DRW_ITEM::ORIGIN_X );
+        owner.originY = hdr.I32( DRW_ITEM::ORIGIN_Y );
+        owner.minX = static_cast<int64_t>( hdr.I32( DRW_ITEM::BBOX_MIN_X ) ) - owner.originX;
+        owner.minY = static_cast<int64_t>( hdr.I32( DRW_ITEM::BBOX_MIN_Y ) ) - owner.originY;
+        owner.maxX = static_cast<int64_t>( hdr.I32( DRW_ITEM::BBOX_MAX_X ) ) - owner.originX;
+        owner.maxY = static_cast<int64_t>( hdr.I32( DRW_ITEM::BBOX_MAX_Y ) ) - owner.originY;
 
         owners.push_back( std::move( owner ) );
     }
