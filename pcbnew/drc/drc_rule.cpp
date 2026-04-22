@@ -34,6 +34,7 @@
 DRC_RULE::DRC_RULE() :
         m_Unary( false ),
         m_ImplicitItemId( 0 ),
+        m_ImplicitItem( nullptr ),
         m_LayerCondition( LSET::AllLayersMask() ),
         m_Condition( nullptr ),
         m_Severity( RPT_SEVERITY_UNDEFINED ),
@@ -45,6 +46,7 @@ DRC_RULE::DRC_RULE() :
 DRC_RULE::DRC_RULE( const wxString& aName ) :
         m_Unary( false ),
         m_ImplicitItemId( 0 ),
+        m_ImplicitItem( nullptr ),
         m_Name( aName ),
         m_LayerCondition( LSET::AllLayersMask() ),
         m_Condition( nullptr ),
