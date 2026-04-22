@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <unordered_map>
+
 #include <common.h>
 #include <board.h>
 #include <pcb_board_outline.h>
@@ -143,6 +145,22 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                                   silkTree.size(),
                                   targetTree.size() ) );
 
+    // Cache the board-outline bounding box and per-subshape collision results so that each
+    // subshape is only tested against the outline once during the visitor sweep.  Without
+    // caching, QueryCollidingPairs invokes the visitor O(silk * target) times and the outline
+    // Collide (which walks the outline's triangulation) was dominating DRC runtime on boards
+    // with many silkscreen/mask polygons (see issue 24007).
+    PCB_BOARD_OUTLINE* boardOutline = m_board->BoardOutline();
+    BOX2I              outlineBBox;
+
+    if( boardOutline && !boardOutline->HasOutline() )
+        boardOutline = nullptr;
+
+    if( boardOutline )
+        outlineBBox = boardOutline->GetOutline().BBoxFromCaches();
+
+    std::unordered_map<const SHAPE*, bool> outlineCollisionCache;
+
     const std::vector<DRC_RTREE::LAYER_PAIR> layerPairs =
     {
         DRC_RTREE::LAYER_PAIR( F_SilkS, F_SilkS ),
@@ -198,12 +216,31 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                     }
                 }
 
-                if( PCB_BOARD_OUTLINE* boardOutline = m_board->BoardOutline() )
+                if( boardOutline )
                 {
-                    if( !testItem->GetBoundingBox().Intersects( boardOutline->GetOutline().BBoxFromCaches() ) )
+                    if( !testItem->GetBoundingBox().Intersects( outlineBBox ) )
                         return true;
 
-                    if( !testShape->Collide( &boardOutline->GetOutline() ) )
+                    // Only cache for shapes owned by the R-tree (stable pointers).  Hole
+                    // shapes are freshly created per visitor call via shared_ptr, so their
+                    // raw addresses cannot be safely used as cache keys.
+                    bool collidesOutline;
+
+                    if( testShape == aTestItemShape->shape )
+                    {
+                        auto [it, inserted] = outlineCollisionCache.try_emplace( testShape, false );
+
+                        if( inserted )
+                            it->second = testShape->Collide( &boardOutline->GetOutline() );
+
+                        collidesOutline = it->second;
+                    }
+                    else
+                    {
+                        collidesOutline = testShape->Collide( &boardOutline->GetOutline() );
+                    }
+
+                    if( !collidesOutline )
                         return true;
                 }
 
