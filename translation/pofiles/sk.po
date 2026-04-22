@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-17 15:22+0300\n"
-"PO-Revision-Date: 2026-04-20 09:10+0000\n"
+"PO-Revision-Date: 2026-04-23 03:03+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v9/sk/>\n"
 "Language: sk\n"
@@ -41552,7 +41552,7 @@ msgstr "Mikro prekov je mimo rozsah"
 
 #: pcbnew/drc/drc_item.cpp:157
 msgid "Courtyards overlap"
-msgstr "Prekrytie blízkeho okolia"
+msgstr "Prekrytie montážnej oblasti"
 
 #: pcbnew/drc/drc_item.cpp:161
 msgid "Footprint has no courtyard defined"
@@ -50160,7 +50160,7 @@ msgstr "Prepínať medzi predvoľbami párov vrstiev"
 
 #: pcbnew/tools/pcb_actions.cpp:1845
 msgid "Show Board Statistics"
-msgstr "Zobraziť štatistiku tabule"
+msgstr "Zobraziť štatistiku dosky"
 
 #: pcbnew/tools/pcb_actions.cpp:1846
 msgid "Shows board statistics"
