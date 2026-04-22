@@ -157,6 +157,10 @@ wxString JOB::GetFullOutputPath( PROJECT* aProject ) const
 void JOB::SetConfiguredOutputPath( const wxString& aPath )
 {
     m_outputPath = aPath;
+
+    // A newly configured path must take precedence over any transient working path left over
+    // from a prior run that fell back to a generated filename.
+    m_workingOutputPath.clear();
 }
 
 
