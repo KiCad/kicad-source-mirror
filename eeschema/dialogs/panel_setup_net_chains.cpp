@@ -294,6 +294,8 @@ void PANEL_SETUP_NET_CHAINS::rebuildChainsGrid()
                 m_chainsGrid->SetReadOnly( r, c, true );
         }
     }
+
+    updateMembersDetail( selectedChainRow() );
 }
 
 
@@ -714,6 +716,43 @@ void PANEL_SETUP_NET_CHAINS::OnDeleteChainClicked( wxCommandEvent& )
     row.deletePending = true;
     rebuildChainsGrid();
     rebuildClassesGrid();
+}
+
+
+void PANEL_SETUP_NET_CHAINS::OnChainGridSelectionChanged( wxGridEvent& aEvent )
+{
+    updateMembersDetail( aEvent.GetRow() );
+    aEvent.Skip();
+}
+
+
+void PANEL_SETUP_NET_CHAINS::updateMembersDetail( int aRow )
+{
+    m_membersListBox->Clear();
+
+    if( aRow < 0 || aRow >= static_cast<int>( m_chainRows.size() ) )
+    {
+        m_membersLabel->SetLabel( _( "Member Nets" ) );
+        return;
+    }
+
+    const CHAIN_ROW& row = m_chainRows[aRow];
+
+    wxString label = row.newName.IsEmpty()
+                         ? wxString::Format( _( "Member Nets (%zu)" ), row.memberNets.size() )
+                         : wxString::Format( _( "Member Nets \u2014 %s (%zu)" ), row.newName,
+                                             row.memberNets.size() );
+
+    m_membersLabel->SetLabel( label );
+
+    wxArrayString sorted;
+    sorted.reserve( row.memberNets.size() );
+
+    for( const wxString& net : row.memberNets )
+        sorted.Add( net );
+
+    sorted.Sort();
+    m_membersListBox->Append( sorted );
 }
 
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,13 +29,22 @@ PANEL_SETUP_NET_CHAINS_BASE::PANEL_SETUP_NET_CHAINS_BASE( wxWindow* parent, wxWi
 
 	bChainsTab->Add( 0, 3, 0, wxEXPAND, 5 );
 
-	m_chainsGrid = new WX_GRID( m_chainsTab, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_chainsSplitter = new wxSplitterWindow( m_chainsTab, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_LIVE_UPDATE );
+	m_chainsSplitter->SetSashGravity( 0.7 );
+	m_chainsSplitter->Connect( wxEVT_IDLE, wxIdleEventHandler( PANEL_SETUP_NET_CHAINS_BASE::m_chainsSplitterOnIdle ), NULL, this );
+	m_chainsSplitter->SetMinimumPaneSize( 80 );
+
+	m_chainsGridPanel = new wxPanel( m_chainsSplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bGridSizer;
+	bGridSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_chainsGrid = new WX_GRID( m_chainsGridPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
 	m_chainsGrid->CreateGrid( 0, 6 );
 	m_chainsGrid->EnableEditing( true );
 	m_chainsGrid->EnableGridLines( true );
-	m_chainsGrid->EnableDragGridSize( false );
+	m_chainsGrid->EnableDragGridSize( true );
 	m_chainsGrid->SetMargins( 0, 0 );
 
 	// Columns
@@ -65,9 +74,31 @@ PANEL_SETUP_NET_CHAINS_BASE::PANEL_SETUP_NET_CHAINS_BASE( wxWindow* parent, wxWi
 
 	// Cell Defaults
 	m_chainsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	m_chainsGrid->SetMinSize( wxSize( -1,240 ) );
+	m_chainsGrid->SetMinSize( wxSize( -1,160 ) );
 
-	bChainsTab->Add( m_chainsGrid, 1, wxEXPAND|wxLEFT|wxRIGHT, 8 );
+	bGridSizer->Add( m_chainsGrid, 1, wxEXPAND, 0 );
+
+
+	m_chainsGridPanel->SetSizer( bGridSizer );
+	m_chainsGridPanel->Layout();
+	bGridSizer->Fit( m_chainsGridPanel );
+	m_membersPanel = new wxPanel( m_chainsSplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bMembersSizer;
+	bMembersSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_membersLabel = new wxStaticText( m_membersPanel, wxID_ANY, _("Member Nets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_membersLabel->Wrap( -1 );
+	bMembersSizer->Add( m_membersLabel, 0, wxLEFT|wxTOP, 5 );
+
+	m_membersListBox = new wxListBox( m_membersPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE );
+	bMembersSizer->Add( m_membersListBox, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_membersPanel->SetSizer( bMembersSizer );
+	m_membersPanel->Layout();
+	bMembersSizer->Fit( m_membersPanel );
+	m_chainsSplitter->SplitHorizontally( m_chainsGridPanel, m_membersPanel, -120 );
+	bChainsTab->Add( m_chainsSplitter, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bChainsButtons;
 	bChainsButtons = new wxBoxSizer( wxHORIZONTAL );
@@ -176,6 +207,7 @@ PANEL_SETUP_NET_CHAINS_BASE::PANEL_SETUP_NET_CHAINS_BASE( wxWindow* parent, wxWi
 	outerSizer->Fit( this );
 
 	// Connect Events
+	m_chainsGrid->Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnChainGridSelectionChanged ), NULL, this );
 	m_promoteButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnPromoteClicked ), NULL, this );
 	m_deleteChainButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnDeleteChainClicked ), NULL, this );
 	m_refreshButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnRefreshClicked ), NULL, this );
@@ -187,6 +219,7 @@ PANEL_SETUP_NET_CHAINS_BASE::PANEL_SETUP_NET_CHAINS_BASE( wxWindow* parent, wxWi
 PANEL_SETUP_NET_CHAINS_BASE::~PANEL_SETUP_NET_CHAINS_BASE()
 {
 	// Disconnect Events
+	m_chainsGrid->Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnChainGridSelectionChanged ), NULL, this );
 	m_promoteButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnPromoteClicked ), NULL, this );
 	m_deleteChainButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnDeleteChainClicked ), NULL, this );
 	m_refreshButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnRefreshClicked ), NULL, this );

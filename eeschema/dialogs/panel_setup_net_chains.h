@@ -70,6 +70,7 @@ protected:
     void OnPromoteClicked( wxCommandEvent& aEvent ) override;
     void OnDeleteChainClicked( wxCommandEvent& aEvent ) override;
     void OnRefreshClicked( wxCommandEvent& aEvent ) override;
+    void OnChainGridSelectionChanged( wxGridEvent& aEvent ) override;
     void OnClassAddClicked( wxCommandEvent& aEvent ) override;
     void OnClassRenameClicked( wxCommandEvent& aEvent ) override;
     void OnClassDeleteClicked( wxCommandEvent& aEvent ) override;
@@ -126,6 +127,7 @@ private:
     bool isReservedChainName( const wxString& aName ) const;
     bool nameInChainGridAlready( const wxString& aName, int aExceptRow ) const;
     bool nameInClassGridAlready( const wxString& aName, int aExceptRow ) const;
+    void updateMembersDetail( int aRow );
 
     SCH_EDIT_FRAME* m_frame;
 
