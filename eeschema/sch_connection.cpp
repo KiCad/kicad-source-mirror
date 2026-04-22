@@ -248,6 +248,8 @@ void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
 
     // Note: m_local_sheet is not cloned
     m_name   = aOther.m_name;
+
+    CONNECTION_TYPE origType = m_type;
     m_type   = aOther.m_type;
 
     // Note: m_local_name is not cloned if not set yet
@@ -286,7 +288,7 @@ void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
             return copy;
         };
 
-    if( m_type == CONNECTION_TYPE::BUS && aOther.Type() == CONNECTION_TYPE::BUS )
+    if( origType == CONNECTION_TYPE::BUS && aOther.Type() == CONNECTION_TYPE::BUS )
     {
         if( m_members.empty() )
         {
@@ -303,7 +305,7 @@ void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
                 m_members[i]->Clone( *otherMembers[i] );
         }
     }
-    else if( m_type == CONNECTION_TYPE::BUS_GROUP && aOther.Type() == CONNECTION_TYPE::BUS_GROUP )
+    else if( origType == CONNECTION_TYPE::BUS_GROUP && aOther.Type() == CONNECTION_TYPE::BUS_GROUP )
     {
         if( m_members.empty() )
         {
@@ -327,6 +329,14 @@ void SCH_CONNECTION::Clone( const SCH_CONNECTION& aOther )
                     member->Clone( **it );
             }
         }
+    }
+    else if( aOther.IsBus() )
+    {
+        m_members.clear();
+        m_members.reserve( otherMembers.size() );
+
+        for( const std::shared_ptr<SCH_CONNECTION>& src : otherMembers )
+            m_members.push_back( cloneMember( *src ) );
     }
 
     m_type = aOther.Type();
