@@ -141,6 +141,7 @@ public:
 public:
     bool                        m_Unary;
     KIID                        m_ImplicitItemId;
+    BOARD_ITEM*                 m_ImplicitItem;
     wxString                    m_Name;
     wxString                    m_LayerSource;
     LSET                        m_LayerCondition;

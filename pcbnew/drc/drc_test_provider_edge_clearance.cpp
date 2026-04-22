@@ -28,6 +28,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <zone.h>
 #include <geometry/seg.h>
 #include <geometry/shape_segment.h>
 #include <drc/drc_engine.h>
@@ -407,6 +408,13 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
 
                 if( isInvisibleText( item ) )
                     return true;        // Continue with other items
+
+                if( item->Type() == PCB_ZONE_T )
+                {
+                    // Rule areas have no copper and are purely logical -- skip edge clearance.
+                    if( static_cast<ZONE*>( item )->GetIsRuleArea() )
+                        return true;
+                }
 
                 if( item->Type() == PCB_PAD_T )
                 {

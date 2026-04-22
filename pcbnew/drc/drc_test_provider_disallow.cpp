@@ -81,14 +81,16 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
             {
                 ZONE* zone = static_cast<ZONE*>( item );
 
-                if( zone->GetIsRuleArea() && zone->GetDoNotAllowZoneFills() )
+                if( zone->GetIsRuleArea() )
                 {
-                    antiCopperKeepouts.push_back( zone );
-                }
-                else if( zone->GetIsRuleArea() && zone->GetDoNotAllowTracks() )
-                {
-                    for( PCB_LAYER_ID layer : zone->GetLayerSet() )
-                        antiTrackKeepouts->Insert( zone, layer );
+                    if( zone->GetDoNotAllowZoneFills() )
+                        antiCopperKeepouts.push_back( zone );
+
+                    if( zone->GetDoNotAllowTracks() )
+                    {
+                        for( PCB_LAYER_ID layer : zone->GetLayerSet() )
+                            antiTrackKeepouts->Insert( zone, layer );
+                    }
                 }
                 else if( zone->IsOnCopperLayer() )
                 {
@@ -225,29 +227,6 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 }
             };
 
-    auto checkDisallow =
-            [&]( BOARD_ITEM* item )
-            {
-                DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, item,
-                                                                    nullptr, UNDEFINED_LAYER );
-
-                if( constraint.m_DisallowFlags && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
-                {
-                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
-                    PCB_LAYER_ID              layer = item->GetLayerSet().ExtractLayer();
-
-                    // Implicit rules reported in checkAntiTrackKeepout
-                    if( constraint.GetParentRule()->IsImplicit() )
-                        return;
-
-                    drcItem->SetErrorDetail( wxString::Format( wxS( "(%s)" ), constraint.GetName() ) );
-                    drcItem->SetItems( item );
-                    drcItem->SetViolatingRule( constraint.GetParentRule() );
-
-                    reportViolation( drcItem, item->GetPosition(), layer );
-                }
-            };
-
     forEachGeometryItem( {}, LSET::AllLayersMask(),
             [&]( BOARD_ITEM* item ) -> bool
             {
@@ -284,12 +263,83 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                                 board->m_DRCMaxPhysicalClearance );
                     }
 
-                    checkDisallow( item );
+                    // Tracks and arcs against keepout areas that disallow tracks are already
+                    // reported above via antiTrackKeepouts (which collides every crossing, not
+                    // just one per rule match).  Skip the track/arc case for implicit keepout
+                    // rules here to avoid duplicate markers, but still let EvalRules produce
+                    // markers for all other item types against implicit keepout rules.
+                    bool isTrackOrArc = ( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T );
 
+                    auto reportDisallow =
+                            [&]( const DRC_CONSTRAINT& aConstraint )
+                            {
+                                DRC_RULE* rule = aConstraint.GetParentRule();
+
+                                if( !rule )
+                                    return;
+
+                                if( isTrackOrArc && rule->IsImplicit() )
+                                    return;
+
+                                std::shared_ptr<DRC_ITEM> drcItem =
+                                        DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
+                                PCB_LAYER_ID layer = item->GetLayerSet().ExtractLayer();
+                                VECTOR2I     pos = item->GetPosition();
+
+                                // Provide a better location for keepout area collisions by
+                                // snapping to where the item actually crosses the keepout outline.
+                                // Use the cached BOARD_ITEM* rather than a UUID lookup, since
+                                // ResolveItem mutates an unsynchronized cache and this lambda
+                                // runs inside the parallel DRC worker pool.
+                                if( rule->IsImplicit() )
+                                {
+                                    if( ZONE* keepout = dynamic_cast<ZONE*>( rule->m_ImplicitItem ) )
+                                    {
+                                        std::shared_ptr<SHAPE> shape =
+                                                item->GetEffectiveShape( layer );
+                                        int dummyActual;
+
+                                        keepout->Outline()->Collide( shape.get(),
+                                                                     board->m_DRCMaxClearance,
+                                                                     &dummyActual, &pos );
+                                    }
+                                }
+
+                                drcItem->SetErrorDetail(
+                                        wxString::Format( wxS( "(%s)" ), aConstraint.GetName() ) );
+                                drcItem->SetItems( item );
+                                drcItem->SetViolatingRule( rule );
+                                reportViolation( drcItem, pos, layer );
+                            };
+
+                    DRC_CONSTRAINT constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT,
+                                                                        item, nullptr,
+                                                                        UNDEFINED_LAYER );
+
+                    if( constraint.m_DisallowFlags
+                        && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
+                    {
+                        reportDisallow( constraint );
+                    }
+
+                    // N.B. HOLE_PROXY is set/cleared on the item's flags for
+                    // EvalRules to distinguish hole-specific disallow constraints.
+                    // This is a non-atomic read-modify-write on m_flags, so this
+                    // provider must run with each item processed by only one thread
+                    // at a time (guaranteed by submit_loop's work partitioning).
                     if( item->HasHole() )
                     {
                         item->SetFlags( HOLE_PROXY );
-                        checkDisallow( item );
+
+                        constraint = m_drcEngine->EvalRules( DISALLOW_CONSTRAINT, item,
+                                                             nullptr, UNDEFINED_LAYER );
+
+                        if( constraint.m_DisallowFlags
+                            && constraint.GetSeverity() != RPT_SEVERITY_IGNORE )
+                        {
+                            reportDisallow( constraint );
+                        }
+
                         item->ClearFlags( HOLE_PROXY );
                     }
                 }

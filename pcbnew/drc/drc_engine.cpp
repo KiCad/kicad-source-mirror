@@ -620,6 +620,7 @@ void DRC_ENGINE::loadImplicitRules()
                 }
 
                 rule->m_ImplicitItemId = zone->m_Uuid;
+                rule->m_ImplicitItem = zone;
 
                 rule->m_Condition = new DRC_RULE_CONDITION( wxString::Format( wxT( "A.intersectsArea('%s')" ),
                                                                               zone->m_Uuid.AsString() ) );
