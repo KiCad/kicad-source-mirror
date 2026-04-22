@@ -787,6 +787,15 @@ public:
     VECTOR2I ShapePos( PCB_LAYER_ID aLayer ) const;
 
     /**
+     * Swap the visible shape positions of two pads, preserving each pad's own shape offset.
+     *
+     * Using SetPosition() directly would swap anchor (hole) positions, which leaves each pad's
+     * copper shape displaced by its own offset after the swap.  This helper computes the new
+     * anchor for each pad so the visible shape centers (ShapePos) are exchanged.
+     */
+    static void SwapShapePositions( PAD* aLhs, PAD* aRhs );
+
+    /**
      * Has meaning only for rounded rectangle pads.
      *
      * Set the ratio between the smaller X or Y size and the rounded corner radius.

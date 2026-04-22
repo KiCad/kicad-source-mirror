@@ -35,6 +35,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/geometry_utils.h>
 #include <pad.h>
+#include <padstack.h>
 #include <pcb_group.h>
 #include <pcb_generator.h>
 #include <pcb_edit_frame.h>
@@ -155,6 +156,20 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 
         BOARD_ITEM* a = static_cast<BOARD_ITEM*>( edaItemA );
         BOARD_ITEM* b = static_cast<BOARD_ITEM*>( edaItemB );
+
+        // Pads may have a copper shape offset from the anchor/hole, so swap visible shape
+        // centers rather than anchor positions.  See PAD::SwapShapePositions.
+        if( a->Type() == PCB_PAD_T && b->Type() == PCB_PAD_T )
+        {
+            PAD::SwapShapePositions( static_cast<PAD*>( a ), static_cast<PAD*>( b ) );
+
+            PCB_LAYER_ID aLayer = a->GetLayer(), bLayer = b->GetLayer();
+            std::swap( aLayer, bLayer );
+            a->SetLayer( aLayer );
+            b->SetLayer( bLayer );
+
+            continue;
+        }
 
         // Swap X,Y position
         VECTOR2I aPos = a->GetPosition(), bPos = b->GetPosition();
