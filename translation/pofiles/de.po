@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-15 19:16+0300\n"
-"PO-Revision-Date: 2026-04-20 19:33+0000\n"
+"PO-Revision-Date: 2026-04-23 03:03+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -2127,9 +2127,9 @@ msgid "invalid plugin configuration at '%s': %s"
 msgstr "Ungültige Plugin-Konfiguration unter \"%s\": %s"
 
 #: common/api/api_plugin.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "Ungültiger Pinname"
+msgstr "Ungültige ausführbare Datei: %s"
 
 #: common/api/api_plugin.cpp:105
 msgid "could not read plugin configuration file"
@@ -2172,7 +2172,7 @@ msgstr "Mit Rückgabewert %d fehlgeschlagen"
 
 #: common/api/api_plugin_manager.cpp:335
 msgid "action is not registered"
-msgstr "Aktion ist nicht registriert."
+msgstr "Aktion ist nicht registriert"
 
 #: common/api/api_plugin_manager.cpp:369 common/api/api_plugin_manager.cpp:779
 #: common/api/api_plugin_manager.cpp:863
@@ -6349,9 +6349,8 @@ msgid "Graphics error during recovery"
 msgstr "Grafikfehler"
 
 #: common/draw_panel_gal.cpp:241
-#, fuzzy
 msgid "Unknown exception during backend switch"
-msgstr "OCC-Exception beim Erzeugen von Fläche: %s"
+msgstr "Unbekannte Ausnahme während des Backendwechsels"
 
 #: common/draw_panel_gal.cpp:416
 #, fuzzy
@@ -9440,15 +9439,15 @@ msgstr "Unerwarteter Fehler beim Schreiben der Bibliothekstabelle"
 
 #: common/local_history.cpp:1123
 msgid "Compacting local history..."
-msgstr ""
+msgstr "Fasse lokalen Verlauf zusammen..."
 
 #: common/local_history.cpp:1320
 msgid "Trimming local history..."
-msgstr ""
+msgstr "Kürze lokalen Verlauf..."
 
 #: common/local_history.cpp:1413
 msgid "Compacting trimmed history..."
-msgstr ""
+msgstr "Fasse gekürzten lokalen Verlauf zusammen..."
 
 #: common/local_history.cpp:1699
 msgid ""
@@ -30323,26 +30322,24 @@ msgid "Units for viewport parameters, options: mm, inch, mils (default: mm)"
 msgstr "Ausgabeeinheiten, Optionen: mm, inch, mils (Standard: mm)"
 
 #: kicad/cli/command_gerber_convert_png.cpp:86
-#, fuzzy
 msgid "Viewport origin X"
-msgstr "Name der Ansicht:"
+msgstr "Ansichtsursprung X"
 
 #: kicad/cli/command_gerber_convert_png.cpp:92
-#, fuzzy
 msgid "Viewport origin Y"
-msgstr "Name der Ansicht:"
+msgstr "Ansichtsursprung Y"
 
 #: kicad/cli/command_gerber_convert_png.cpp:98
 msgid "Viewport width (enables viewport mode)"
-msgstr ""
+msgstr "Ansichtsbreite (aktiviert Ansichtsmodus)"
 
 #: kicad/cli/command_gerber_convert_png.cpp:104
 msgid "Viewport height (enables viewport mode)"
-msgstr ""
+msgstr "Ansichtshöhe (aktiviert Ansichtsmodus)"
 
 #: kicad/cli/command_gerber_convert_png.cpp:109
 msgid "Foreground color as hex (e.g., '#FFFFFF')"
-msgstr ""
+msgstr "Vordergrundfarbe in hex (z.B. \"#FFFFFF\")"
 
 #: kicad/cli/command_gerber_convert_png.cpp:114
 #, fuzzy
@@ -30359,6 +30356,7 @@ msgstr "Ungültige Einheiten: %s\n"
 msgid ""
 "Error: both --window-width and --window-height must be specified together\n"
 msgstr ""
+"Fehler: --window-width und --window-height müssen zusammen verwendet werden\n"
 
 #: kicad/cli/command_gerber_diff.cpp:47
 msgid "Compare two Gerber or Excellon files and show differences"
@@ -30400,6 +30398,8 @@ msgstr "Toleranz in nm für Gleitkommazahl-Vergleiche (Standard: 0)"
 msgid ""
 "Skip bounding-box origin alignment; catches absolute-placement regressions"
 msgstr ""
+"Ausrichtung am Ursprung der Begrenzungsbox überspringen; erkennt "
+"Regressionen bei absoluter Platzierung"
 
 #: kicad/cli/command_gerber_diff.cpp:124 kicad/cli/command_gerber_info.cpp:80
 #, c-format
@@ -34959,7 +34959,7 @@ msgstr "Schwellwertspannung:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:88
 msgid "Material names:"
-msgstr "Material:"
+msgstr "Materialnamen:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:92
 msgid "Chemical symbols"
@@ -41713,6 +41713,8 @@ msgid ""
 "If checked, layers will keep their standard KiCad names instead of being "
 "renamed to the imported layer names."
 msgstr ""
+"Wenn aktiviert, behalten Ebenen ihre KiCad-Standardnamen bei, anstatt in "
+"Namen importierter Ebenen umbenannt zu werden."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:67
 msgid "Edit Mapping of Imported Layers"
@@ -42659,9 +42661,8 @@ msgstr "Loch-Nachbearbeitung"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1112
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:530
-#, fuzzy
 msgid "Front:"
-msgstr "Vorderseite"
+msgstr "Vorderseite:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1116
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1159
@@ -42679,9 +42680,8 @@ msgstr "Flachsenkung"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1155
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:577
-#, fuzzy
 msgid "Back:"
-msgstr "Rückseite"
+msgstr "Rückseite:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1197
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1284 pcbnew/pcb_track.cpp:3179
@@ -44693,11 +44693,11 @@ msgstr "Linienbreite muss größer als Null sein."
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:271
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:86
 msgid "Extruded 3D Body"
-msgstr ""
+msgstr "Extrudierter 3D-Körper"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:271
 msgid "Standoff height must be less than the overall height."
-msgstr ""
+msgstr "Der Abstand muss kleiner als die Gesamthöhe sein."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:671
 msgid "No filename entered"
@@ -44740,9 +44740,8 @@ msgid "BREP files"
 msgstr "STEP-Dateien"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:938
-#, fuzzy
 msgid "Failed to create extruded body geometry."
-msgstr "Ausgabeverzeichnis konnte nicht erstellt werden\n"
+msgstr "Konnte Geometrie für extrudierten Körper nicht erstellen."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:961
 #, fuzzy
@@ -44754,9 +44753,8 @@ msgid "3D Model(s)"
 msgstr "3D-Modelle"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:92
-#, fuzzy
 msgid "Enable extruded 3D model for this footprint"
-msgstr "Nur ein Pad für diesen Footprint."
+msgstr "Für diesen Footprint extrudierte 3D-Körper aktivieren"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:101
 #, fuzzy
@@ -44764,9 +44762,8 @@ msgid "Show extruded 3D model"
 msgstr "3D-Modelle von unbestimmten Bauteilen anzeigen"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:113
-#, fuzzy
 msgid "Overall height:"
-msgstr "Zellhöhe"
+msgstr "Gesamthöhe:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:126
 #, fuzzy
@@ -44774,14 +44771,12 @@ msgid "Standoff height:"
 msgstr "Texthöhe:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:139
-#, fuzzy
 msgid "Extrusion source:"
-msgstr "Fehler in Ausdruck"
+msgstr "Extrusionsquelle:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:168
-#, fuzzy
 msgid "Material:"
-msgstr "Material"
+msgstr "Material:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:172
 #, fuzzy
