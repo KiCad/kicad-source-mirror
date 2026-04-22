@@ -2422,8 +2422,46 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
                 adj_d -= ctm_b * tilt;
             }
 
+            // Realign the Type3 stroke text with where GAL would have drawn the same glyphs.
+            // PDF_PLOTTER::Text() derives its anchor from StringBoundaryLimits, which inflates
+            // the stroke-font bounding box by 3*thickness and does not account for the
+            // m_PDFStrokeFontYOffset baked into every Type3 glyph.  Both issues together shift
+            // the text off its anchor by an amount that depends on the caller's pen width.
+            // The corrections below are the difference between the anchor-relative position
+            // FONT::getLinePositions computes (+yOffsetEm to cancel the glyph yOffset) and
+            // what PDF_PLOTTER::Text already applied.
+            const double yOffsetEm = ADVANCED_CFG::GetCfg().m_PDFStrokeFontYOffset;
+            const double thicknessDev = userToDeviceSize( (double) aWidth );
+            double deltaDev = 0.0;
+
+            switch( aV_justify )
+            {
+            case GR_TEXT_V_ALIGN_TOP:
+                deltaDev = yOffsetEm * fontSize - 3.0 * thicknessDev;
+                break;
+
+            case GR_TEXT_V_ALIGN_CENTER:
+                deltaDev = ( yOffsetEm - 0.085 ) * fontSize - 1.5 * thicknessDev;
+                break;
+
+            case GR_TEXT_V_ALIGN_BOTTOM:
+                deltaDev = ( yOffsetEm - 0.17 ) * fontSize;
+                break;
+
+            case GR_TEXT_V_ALIGN_INDETERMINATE:
+                break;
+            }
+
+            // Shift the text-matrix origin along the text's local Y axis, which is the
+            // (adj_c, adj_d) column of the text matrix.  Using adj_c/adj_d rather than a raw
+            // sin/cos of aOrient keeps the correction aligned with the rendered glyph Y axis
+            // after italic shear has been applied.  Positive deltaDev moves pos downward in
+            // IU (+Y down) -> upward in glyph-local Y -> subtract from the origin.
+            const double adj_ctm_e = ctm_e - deltaDev * adj_c;
+            const double adj_ctm_f = ctm_f - deltaDev * adj_d;
+
             fmt::print( m_workFile, "q {:f} {:f} {:f} {:f} {:f} {:f} cm BT {} Tr {} Tz ",
-                        ctm_a, ctm_b, adj_c, adj_d, ctm_e, ctm_f,
+                        ctm_a, ctm_b, adj_c, adj_d, adj_ctm_e, adj_ctm_f,
                         0, // render_mode
                         encodeDoubleForPlotter( wideningFactor * 100 ) );
 
