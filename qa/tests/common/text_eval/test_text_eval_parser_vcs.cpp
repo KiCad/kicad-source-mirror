@@ -31,9 +31,12 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <text_eval/text_eval_wrapper.h>
+#include <text_eval/text_eval_vcs.h>
 #include <git/git_backend.h>
 #include <git/libgit_backend.h>
 #include <git2.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 
 #include <chrono>
 #include <fstream>
@@ -86,7 +89,9 @@ struct VCS_TEST_FIXTURE
         delete m_backend;
     }
 
-    bool repoReady() const { return m_repoReady; }
+    bool            repoReady() const { return m_repoReady; }
+    const wxString& tempDir() const { return m_tempDir; }
+    const wxString& originalDir() const { return m_originalDir; }
 
 private:
     bool initRepo()
@@ -431,6 +436,144 @@ BOOST_AUTO_TEST_CASE( VcsMixedExpressions )
         BOOST_CHECK( !evaluator.HasErrors() );
         BOOST_CHECK( !result.IsEmpty() );
     }
+}
+
+/**
+ * Regression test for issue #23959: kicad-cli does not properly expand VCS functions.
+ *
+ * When the process working directory is not inside the project's git repository (the
+ * typical kicad-cli situation), repo-scoped VCS queries must still resolve correctly
+ * via TEXT_EVAL_VCS::SetContextPath.
+ */
+BOOST_AUTO_TEST_CASE( VcsContextPathOverride )
+{
+    BOOST_TEST_REQUIRE( repoReady() );
+
+    // Move the process cwd somewhere that is definitely not a git repo, mirroring the
+    // kicad-cli situation where the user runs the binary from an arbitrary directory.
+    wxString scratchDir = wxFileName::GetTempDir() + wxFileName::GetPathSeparator()
+                          + wxString::Format( "kicad_vcs_cli_%ld", wxGetProcessId() );
+
+    wxFileName::Mkdir( scratchDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+    wxSetWorkingDirectory( scratchDir );
+
+    auto cleanupCwd = [&]()
+    {
+        wxSetWorkingDirectory( tempDir() );
+
+        if( wxFileName::DirExists( scratchDir ) )
+            wxFileName::Rmdir( scratchDir, wxPATH_RMDIR_RECURSIVE );
+    };
+
+    try
+    {
+        // Without the context path override, vcsidentifier() falls back to cwd and reports
+        // the "not in a repository" sentinel.
+        EXPRESSION_EVALUATOR evaluator;
+        auto                 noContext = evaluator.Evaluate( "@{vcsidentifier(7)}" );
+        BOOST_CHECK_EQUAL( noContext.ToStdString(), std::string( "<unknown>" ) );
+
+        // With the override in place, the same expression resolves from the repo anchored
+        // at m_tempDir regardless of cwd.
+        {
+            TEXT_EVAL_VCS::CONTEXT_PATH_SCOPE scope( tempDir() );
+
+            auto hash = evaluator.Evaluate( "@{vcsidentifier(7)}" );
+            BOOST_CHECK( !evaluator.HasErrors() );
+            BOOST_CHECK_EQUAL( hash.Length(), 7 );
+
+            std::regex hexPattern( "^[0-9a-f]+$" );
+            BOOST_CHECK( std::regex_match( hash.ToStdString(), hexPattern ) );
+
+            auto branch = evaluator.Evaluate( "@{vcsbranch()}" );
+            BOOST_CHECK( !evaluator.HasErrors() );
+            BOOST_CHECK( !branch.IsEmpty() );
+            BOOST_CHECK( branch != wxS( "<unknown>" ) );
+
+            auto author = evaluator.Evaluate( "@{vcsauthor()}" );
+            BOOST_CHECK_EQUAL( author, TEST_AUTHOR_NAME );
+        }
+
+        // After the scope ends the override must be cleared and behavior returns to the
+        // cwd-based fallback.
+        auto afterScope = evaluator.Evaluate( "@{vcsidentifier(7)}" );
+        BOOST_CHECK_EQUAL( afterScope.ToStdString(), std::string( "<unknown>" ) );
+    }
+    catch( ... )
+    {
+        cleanupCwd();
+        throw;
+    }
+
+    cleanupCwd();
+}
+
+/**
+ * Integration test for issue #23959: verify the production wiring in
+ * SETTINGS_MANAGER::LoadProject / UnloadProject sets and clears the VCS context
+ * correctly, so a kicad-cli-style invocation (cwd outside the repo) resolves VCS
+ * functions against the loaded project directory.
+ */
+BOOST_AUTO_TEST_CASE( VcsContextPathSetByLoadProject )
+{
+    BOOST_TEST_REQUIRE( repoReady() );
+
+    wxString scratchDir = wxFileName::GetTempDir() + wxFileName::GetPathSeparator()
+                          + wxString::Format( "kicad_vcs_loadproject_%ld", wxGetProcessId() );
+
+    wxFileName::Mkdir( scratchDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+    wxSetWorkingDirectory( scratchDir );
+
+    // Drop a minimal .kicad_pro inside the git fixture so SETTINGS_MANAGER has something
+    // real to load. The content does not matter for VCS resolution.
+    wxString projectFile = tempDir() + wxFileName::GetPathSeparator()
+                           + wxT( "issue23959.kicad_pro" );
+
+    {
+        std::ofstream f( projectFile.ToStdString() );
+        f << "{ \"meta\": { \"filename\": \"issue23959.kicad_pro\", \"version\": 3 } }";
+    }
+
+    auto cleanup = [&]()
+    {
+        wxRemoveFile( projectFile );
+        wxSetWorkingDirectory( tempDir() );
+
+        if( wxFileName::DirExists( scratchDir ) )
+            wxFileName::Rmdir( scratchDir, wxPATH_RMDIR_RECURSIVE );
+    };
+
+    try
+    {
+        // Baseline: with cwd outside the repo and no project loaded, lookups fail.
+        EXPRESSION_EVALUATOR evaluator;
+        auto                 baseline = evaluator.Evaluate( "@{vcsidentifier(7)}" );
+        BOOST_CHECK_EQUAL( baseline.ToStdString(), std::string( "<unknown>" ) );
+
+        BOOST_REQUIRE( Pgm().GetSettingsManager().LoadProject( projectFile, true ) );
+
+        // LoadProject must anchor VCS lookups to the project dir even though cwd is elsewhere.
+        auto loaded = evaluator.Evaluate( "@{vcsidentifier(7)}" );
+        BOOST_CHECK( !evaluator.HasErrors() );
+        BOOST_CHECK_EQUAL( loaded.Length(), 7 );
+
+        std::regex hexPattern( "^[0-9a-f]+$" );
+        BOOST_CHECK( std::regex_match( loaded.ToStdString(), hexPattern ) );
+
+        Pgm().GetSettingsManager().UnloadProject( &Pgm().GetSettingsManager().Prj(), false );
+
+        // UnloadProject must clear the context so lookups fall back to cwd, which is
+        // outside the repo, reproducing the sentinel state.
+        auto afterUnload = evaluator.Evaluate( "@{vcsidentifier(7)}" );
+        BOOST_CHECK_EQUAL( afterUnload.ToStdString(), std::string( "<unknown>" ) );
+    }
+    catch( ... )
+    {
+        cleanup();
+        throw;
+    }
+
+    cleanup();
 }
 
 BOOST_AUTO_TEST_SUITE_END()

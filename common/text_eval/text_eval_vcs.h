@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <kicommon.h>
+#include <wx/string.h>
 #include <string>
 #include <cstdint>
 
@@ -119,5 +121,47 @@ int64_t GetCommitTimestamp( const std::string& aPath = "." );
  * @return Timestamp as string (to be formatted by caller), or empty string if not available.
  */
 std::string GetCommitDate( const std::string& aPath = "." );
+
+/**
+ * Set the filesystem path used as the repository-discovery starting point for repo-scoped
+ * VCS queries (functions that would otherwise use current working directory).
+ *
+ * The context is stored per-thread. Passing an empty string clears the override, causing
+ * VCS queries to fall back to the process current working directory.
+ *
+ * This is primarily used so non-GUI entry points (for example kicad-cli job handlers) can
+ * anchor VCS lookups to the loaded project directory without touching the process cwd.
+ *
+ * Pass an absolute path. Relative paths are resolved by libgit2 against the process cwd,
+ * which is precisely what this override is meant to bypass.
+ *
+ * @param aPath Absolute filesystem path (directory or file inside the project), or empty
+ *              to clear the override.
+ */
+KICOMMON_API void SetContextPath( const wxString& aPath );
+
+/**
+ * Return the current context path for repo-scoped VCS queries.
+ *
+ * @return The path previously passed to SetContextPath(), or "." if no override is active.
+ */
+KICOMMON_API wxString GetContextPath();
+
+/**
+ * RAII helper that sets the VCS context path on construction and restores the previous
+ * value on destruction. Nests correctly across multiple scopes on the same thread.
+ */
+class KICOMMON_API CONTEXT_PATH_SCOPE
+{
+public:
+    explicit CONTEXT_PATH_SCOPE( const wxString& aPath );
+    ~CONTEXT_PATH_SCOPE();
+
+    CONTEXT_PATH_SCOPE( const CONTEXT_PATH_SCOPE& ) = delete;
+    CONTEXT_PATH_SCOPE& operator=( const CONTEXT_PATH_SCOPE& ) = delete;
+
+private:
+    wxString m_previous;
+};
 
 } // namespace TEXT_EVAL_VCS

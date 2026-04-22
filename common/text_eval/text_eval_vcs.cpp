@@ -22,21 +22,67 @@
 #include <git/git_backend.h>
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
+#include <string_utils.h>
 #include <wx/string.h>
 #include <wx/arrstr.h> // REQUIRED for wxString vector export on MSVC
 #include <map>
 
 namespace TEXT_EVAL_VCS
 {
+// Per-thread override that anchors repo-scoped queries to a specific path (for example the
+// loaded project directory). When empty, repo discovery falls back to the process cwd.
+namespace
+{
+    thread_local wxString tl_contextPath;
+}
+
+
+void SetContextPath( const wxString& aPath )
+{
+    tl_contextPath = aPath;
+}
+
+
+wxString GetContextPath()
+{
+    return tl_contextPath.IsEmpty() ? wxString( wxT( "." ) ) : tl_contextPath;
+}
+
+
+CONTEXT_PATH_SCOPE::CONTEXT_PATH_SCOPE( const wxString& aPath ) :
+        m_previous( tl_contextPath )
+{
+    tl_contextPath = aPath;
+}
+
+
+CONTEXT_PATH_SCOPE::~CONTEXT_PATH_SCOPE()
+{
+    tl_contextPath = m_previous;
+}
+
+
 // Private implementation details
 namespace
 {
+    // Resolve the effective path for repo discovery. Inputs of "." are replaced with the
+    // current context path (which itself falls back to ".").
+    wxString ResolveEffectivePath( const std::string& aPath )
+    {
+        if( aPath.empty() || aPath == "." )
+            return GetContextPath();
+
+        return wxString::FromUTF8( aPath );
+    }
+
+
     git_repository* OpenRepo( const std::string& aPath )
     {
         if( !GetGitBackend() )
             return nullptr;
 
-        return KIGIT::PROJECT_GIT_UTILS::GetRepositoryForFile( aPath.c_str() );
+        const wxString effective = ResolveEffectivePath( aPath );
+        return KIGIT::PROJECT_GIT_UTILS::GetRepositoryForFile( TO_UTF8( effective ) );
     }
 
     void CloseRepo( git_repository* aRepo )

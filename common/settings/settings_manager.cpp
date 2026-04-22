@@ -47,6 +47,7 @@
 #include <settings/common_settings.h>
 #include <settings/json_settings_internals.h>
 #include <settings/settings_manager.h>
+#include <text_eval/text_eval_vcs.h>
 #include <wildcards_and_files_ext.h>
 #include <env_vars.h>
 #include <libraries/library_manager.h>
@@ -1021,6 +1022,24 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
         // set the cwd but don't impact kicad-cli
         if( !projectPath.GetPath().IsEmpty() && wxTheApp && wxTheApp->IsGUI() )
             wxSetWorkingDirectory( projectPath.GetPath() );
+
+        // Anchor text_eval VCS lookups to the project directory. The GUI relies on cwd,
+        // which is deliberately left untouched for kicad-cli; an explicit context is
+        // required so repo-scoped queries resolve correctly from either entry point.
+        // Force an absolute path because libgit2 resolves relative paths against the
+        // process cwd, which is what we are working around. Clear the context for an
+        // empty/null project load so VCS queries fall back to cwd rather than locking
+        // onto whatever directory happens to be current.
+        if( projectPath.GetPath().IsEmpty() )
+        {
+            TEXT_EVAL_VCS::SetContextPath( wxString() );
+        }
+        else
+        {
+            wxFileName vcsContext( projectPath );
+            vcsContext.MakeAbsolute();
+            TEXT_EVAL_VCS::SetContextPath( vcsContext.GetPath() );
+        }
     }
 
     bool success = loadProjectFile( *project );
@@ -1107,6 +1126,9 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
 
         // Remove the reference in the environment to the previous project
         wxSetEnv( PROJECT_VAR_NAME, wxS( "" ) );
+
+        // Drop the VCS context so lingering text_eval queries don't probe a stale project dir.
+        TEXT_EVAL_VCS::SetContextPath( wxString() );
 
 #ifdef _WIN32
         // On Windows, processes hold a handle to their current working directory, preventing
