@@ -24,6 +24,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <board.h>
+#include <pcb_shape.h>
 #include <pcbnew/exporters/gendrill_excellon_writer.h>
 #include <pcbnew/exporters/gendrill_gerber_writer.h>
 #include <pcbnew/pcb_io/odbpp/pcb_io_odbpp.h>
@@ -37,6 +38,7 @@
 #include <wx/dir.h>
 #include <wx/ffile.h>
 #include <wx/filename.h>
+#include <wx/tokenzr.h>
 #include <wx/utils.h>
 
 
@@ -405,5 +407,71 @@ BOOST_AUTO_TEST_CASE( DrillReportWithTools )
     BOOST_CHECK( reportContents.Contains( wxT( "0.300mm" ) ) );
     reportStream.Close();
 
+    wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24014
+// A non-filled PCB_SHAPE rectangle on F.SilkS was emitted as a donut_rc symbol with a
+// corner radius smaller than half the line width.  Many ODB++ viewers reject the
+// resulting degenerate symbol, so the outline appeared to be missing.  The exporter now
+// emits the four outline edges as line features, matching how a rectangle built from
+// individual line segments is exported.
+BOOST_AUTO_TEST_CASE( OdbPpUnfilledRectangleOnSilk )
+{
+    wxFileName tempDir = MakeTempDir();
+    wxFileName boardFile( tempDir.GetFullPath(), wxT( "silk_rect_board.kicad_pcb" ) );
+
+    BOARD board;
+    board.SetCopperLayerCount( 2 );
+    board.SetFileName( boardFile.GetFullPath() );
+
+    // Non-filled rectangle on F.SilkS
+    PCB_SHAPE* rect = new PCB_SHAPE( &board, SHAPE_T::RECTANGLE );
+    rect->SetStart( VECTOR2I( pcbIUScale.mmToIU( 10.0 ), pcbIUScale.mmToIU( 10.0 ) ) );
+    rect->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 30.0 ), pcbIUScale.mmToIU( 20.0 ) ) );
+    rect->SetLayer( F_SilkS );
+    rect->SetFilled( false );
+    rect->SetWidth( pcbIUScale.mmToIU( 0.15 ) );
+    board.Add( rect );
+
+    wxFileName odbRoot( tempDir.GetFullPath(), wxEmptyString );
+    odbRoot.AppendDir( wxT( "odb_out" ) );
+    BOOST_REQUIRE( odbRoot.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    PCB_IO_ODBPP                odbExporter;
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["sigfig"] = "4";
+    BOOST_REQUIRE_NO_THROW( odbExporter.SaveBoard( odbRoot.GetFullPath(), &board, &props ) );
+
+    wxFileName silkFeatures( odbRoot.GetFullPath(), wxT( "features" ) );
+    silkFeatures.AppendDir( wxT( "steps" ) );
+    silkFeatures.AppendDir( wxT( "pcb" ) );
+    silkFeatures.AppendDir( wxT( "layers" ) );
+    silkFeatures.AppendDir( wxT( "f.silkscreen" ) );
+    BOOST_REQUIRE( silkFeatures.FileExists() );
+
+    wxFFile silkStream( silkFeatures.GetFullPath(), wxT( "rb" ) );
+    wxString silkContents;
+    BOOST_REQUIRE( silkStream.ReadAll( &silkContents ) );
+    silkStream.Close();
+
+    // Four ODB++ line ("L ...") features describe the rectangle outline.
+    int lineCount = 0;
+    wxStringTokenizer lines( silkContents, wxT( "\n" ) );
+
+    while( lines.HasMoreTokens() )
+    {
+        if( lines.GetNextToken().StartsWith( wxT( "L " ) ) )
+            lineCount++;
+    }
+
+    BOOST_CHECK_EQUAL( lineCount, 4 );
+
+    // The degenerate donut_rc symbol should not appear anymore.
+    BOOST_CHECK( !silkContents.Contains( wxT( "donut_rc" ) ) );
+
+    wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
     wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
 }
