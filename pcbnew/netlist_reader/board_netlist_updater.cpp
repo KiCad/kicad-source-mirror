@@ -2180,7 +2180,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             }
         }
 
-        if( !baseFootprint && hasBaseFpid )
+        if( !baseFootprint && ( hasBaseFpid || expectedFpids.empty() ) )
             baseFootprint = addNewFootprint( component, baseFpid );
 
         if( baseFootprint )
