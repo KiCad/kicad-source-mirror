@@ -223,7 +223,9 @@ public:
     void SetTempOutputDirectory( const wxString& aBase );
 
     /**
-     * Sets the configured output path for the job, this path is always saved to file
+     * Sets the configured output path for the job, this path is always saved to file.
+     * Any transient working output path is cleared so the new configured path takes precedence
+     * on the next call to GetFullOutputPath().
      */
     void SetConfiguredOutputPath( const wxString& aPath );
 

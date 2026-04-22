@@ -1283,7 +1283,9 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
         else
             fn.SetExt( FILEEXT::ReportFileExtension );
 
-        ercJob->SetConfiguredOutputPath( fn.GetFullName() );
+        // Use a transient working path so an empty configured output filename isn't persisted
+        // back into the jobset file. Mirrors the PCB DRC handler.
+        ercJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
     wxString outPath = ercJob->GetFullOutputPath( &sch->Project() );
