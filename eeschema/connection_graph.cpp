@@ -3044,11 +3044,22 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
                     // the names differ, check if the neighbor's current name still matches
                     // a member of this bus. If it does, the neighbor was updated by a different
                     // member of this same bus and we should preserve that (determinism).
-                    // If it doesn't match any member, the bus member was renamed and we should update.
-                    SCH_CONNECTION temp( nullptr, neighbor->m_sheet );
-                    temp.ConfigureFromLabel( neighbor_name );
+                    // If it doesn't match any member, the bus member was renamed and we should
+                    // update. We compare by name rather than VectorIndex because non-bus
+                    // connections (e.g., "GND" from power pin propagation) have a default
+                    // VectorIndex of 0 that falsely matches the first bus member.
+                    bool alreadyUpdatedByBusMember = false;
 
-                    if( matchBusMember( parent, &temp ) )
+                    for( const auto& m : parent->Members() )
+                    {
+                        if( m->Name() == neighbor_name )
+                        {
+                            alreadyUpdatedByBusMember = true;
+                            break;
+                        }
+                    }
+
+                    if( alreadyUpdatedByBusMember )
                         continue;
                 }
 
