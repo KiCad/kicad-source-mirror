@@ -2351,10 +2351,18 @@ void BINARY_PARSER::parseNetClasses()
 
     // The type-66 rule table is 24-byte records with tag 0x42 at +4 and a net-class owner
     // pointer at +8 (== a net's +188), a rule-detail page at +0 and a layer at +20.
+    constexpr size_t   EDGE_SIZE      = 24;
+    constexpr size_t   EDGE_RULE_PTR  = 0;
+    constexpr size_t   EDGE_TAG       = 4;
+    constexpr uint32_t EDGE_TAG_VALUE = 0x42;
+    constexpr size_t   EDGE_OWNER     = 8;
+    constexpr size_t   EDGE_LAYER     = 20;
+    constexpr uint32_t RULE_PAGE_MASK = ~0xfffu;
+
     struct EdgeRec
     {
         uint32_t owner;
-        uint32_t page;     // rulePtr & ~0xfff, selects the rule kind
+        uint32_t page;     // rulePtr & RULE_PAGE_MASK, selects the rule kind
         uint32_t rulePtr;  // full rule-value-object pointer; declaration order within a page
         int      layer;
         size_t   off;
@@ -2362,36 +2370,40 @@ void BINARY_PARSER::parseNetClasses()
 
     std::vector<EdgeRec> edges;
 
-    for( size_t off = 0; off + 24 <= m_data.size(); ++off )
+    for( size_t off = 0; off + EDGE_SIZE <= m_data.size(); ++off )
     {
         SDB_RECORD rec = m_sdb.RecordAt( off );
 
-        if( rec.U32( 4 ) != 0x42 )
+        if( rec.U32( EDGE_TAG ) != EDGE_TAG_VALUE )
             continue;
 
-        uint32_t owner = rec.U32( 8 );
+        uint32_t owner = rec.U32( EDGE_OWNER );
 
         if( !ownerSet.count( owner ) )
             continue;
 
-        uint32_t rulePtr = rec.U32( 0 );
+        uint32_t rulePtr = rec.U32( EDGE_RULE_PTR );
 
-        edges.push_back( { owner, rulePtr & ~0xfffu, rulePtr,
-                           static_cast<int>( rec.U32( 20 ) ), off } );
+        edges.push_back( { owner, rulePtr & RULE_PAGE_MASK, rulePtr,
+                           static_cast<int>( rec.U32( EDGE_LAYER ) ), off } );
     }
 
     if( edges.empty() )
         return;
 
-    // The 0x118-stride NET_CLASS name records sit just before the rule table, anchored off the
-    // first rule record: name_head = first_edge - num_classes*0x118 - 0x50. A blind 0x118 ASCII
-    // scan false-positives on silkscreen text, so this structural anchor is used instead.
+    // The NET_CLASS name records sit just before the rule table, anchored off the first rule
+    // record: name_head = first_edge - num_classes*NAME_STRIDE - NAME_HEAD_PAD. A blind stride
+    // ASCII scan false-positives on silkscreen text, so this structural anchor is used instead.
+    constexpr size_t NAME_STRIDE   = 0x118;
+    constexpr size_t NAME_HEAD_PAD = 0x50;
+    constexpr size_t NAME_LEN      = 40;
+
     size_t firstEdge = edges.front().off;
 
     for( const EdgeRec& e : edges )
         firstEdge = std::min( firstEdge, e.off );
 
-    size_t headSpan = owners.size() * 0x118 + 0x50;
+    size_t headSpan = owners.size() * NAME_STRIDE + NAME_HEAD_PAD;
     size_t nameHead = ( firstEdge >= headSpan ) ? firstEdge - headSpan : 0;
 
     m_netClasses.clear();
@@ -2399,7 +2411,7 @@ void BINARY_PARSER::parseNetClasses()
 
     for( size_t k = 0; k < owners.size(); ++k )
     {
-        std::string name = m_sdb.RecordAt( nameHead + k * 0x118 ).Str( 0, 40 );
+        std::string name = m_sdb.RecordAt( nameHead + k * NAME_STRIDE ).Str( 0, NAME_LEN );
 
         if( name.empty() || !std::isalnum( static_cast<unsigned char>( name[0] ) ) )
             name = "PADS_NetClass_" + std::to_string( k + 1 );
@@ -2479,38 +2491,49 @@ void BINARY_PARSER::parseNetClasses()
                    []( const EdgeRec* a, const EdgeRec* b ) { return a->rulePtr < b->rulePtr; } );
 
         // The value arena sits in a broader MFC blob outside the sec49 directory byte-range, so
-        // the scan covers the whole file, seeded on the 457200 marker (12 mil, the TRACK_TO_TRACK
-        // default value). Discriminator 1 is a layer-0 rule; the int32[38] core begins at +20.
+        // the scan covers the whole file, seeded on the marker value (12 mil, the TRACK_TO_TRACK
+        // default). Discriminator 1 is a layer-0 rule; the int32 core begins at +20.
+        constexpr int      VALUE_MARKER        = 457200;
+        constexpr size_t   VALUE_MARKER_OFF    = 0;
+        constexpr size_t   VALUE_DISCRIM_OFF   = 8;
+        constexpr int      VALUE_DISCRIM_LAYER0 = 1;
+        constexpr size_t   VALUE_SELF_PTR_OFF  = 12;
+        constexpr uint32_t VALUE_HANDLE_MIN    = 0x10000000u;
+        constexpr uint32_t VALUE_HANDLE_END    = 0x20000000u;
+        constexpr size_t   VALUE_CORE_OFF      = 20;
+        constexpr int      VALUE_CORE_COUNT    = 38;
+
         struct ValueRec
         {
             uint32_t selfPtr;
-            int32_t  core[38];
+            int32_t  core[VALUE_CORE_COUNT];
         };
 
         std::vector<ValueRec> values;
 
-        for( size_t off = 0; off + 20 + 38 * sizeof( int32_t ) <= m_data.size(); ++off )
+        for( size_t off = 0;
+             off + VALUE_CORE_OFF + VALUE_CORE_COUNT * sizeof( int32_t ) <= m_data.size(); ++off )
         {
             SDB_RECORD rec = m_sdb.RecordAt( off );
 
-            if( rec.I32( 0 ) != 457200 )
+            if( rec.I32( VALUE_MARKER_OFF ) != VALUE_MARKER )
                 continue;
 
-            uint32_t selfPtr = rec.U32( 12 );
+            uint32_t selfPtr = rec.U32( VALUE_SELF_PTR_OFF );
 
-            if( selfPtr < 0x10000000u || selfPtr >= 0x20000000u )
+            if( selfPtr < VALUE_HANDLE_MIN || selfPtr >= VALUE_HANDLE_END )
                 continue;
 
-            if( rec.I32( 8 ) != 1 )
+            if( rec.I32( VALUE_DISCRIM_OFF ) != VALUE_DISCRIM_LAYER0 )
                 continue;
 
             ValueRec v{};
             v.selfPtr = selfPtr;
             bool anyNonZero = false;
 
-            for( int i = 0; i < 38; ++i )
+            for( int i = 0; i < VALUE_CORE_COUNT; ++i )
             {
-                v.core[i] = rec.I32( 20 + sizeof( int32_t ) * i );
+                v.core[i] = rec.I32( VALUE_CORE_OFF + sizeof( int32_t ) * i );
 
                 if( v.core[i] != 0 )
                     anyNonZero = true;
@@ -2534,14 +2557,21 @@ void BINARY_PARSER::parseNetClasses()
                 if( it == ownerOrdinal.end() )
                     continue;
 
-                const int32_t* core = values[i].core;
-                BIN_NET_CLASS_DEF&  nc = m_netClasses[it->second];
+                // Field positions within the int32 rule-value core.
+                constexpr int CORE_CLEARANCE      = 0;
+                constexpr int CORE_VIA_CLEARANCE  = 2;
+                constexpr int CORE_MIN_TRACK      = 33;
+                constexpr int CORE_TRACK          = 34;
+                constexpr int CORE_MAX_TRACK      = 35;
 
-                nc.clearance     = core[0];
-                nc.viaClearance  = core[2];
-                nc.minTrackWidth = core[33];
-                nc.trackWidth    = core[34];
-                nc.maxTrackWidth = core[35];
+                const int32_t*     core = values[i].core;
+                BIN_NET_CLASS_DEF& nc   = m_netClasses[it->second];
+
+                nc.clearance     = core[CORE_CLEARANCE];
+                nc.viaClearance  = core[CORE_VIA_CLEARANCE];
+                nc.minTrackWidth = core[CORE_MIN_TRACK];
+                nc.trackWidth    = core[CORE_TRACK];
+                nc.maxTrackWidth = core[CORE_MAX_TRACK];
                 nc.hasRuleValues = true;
             }
         }
