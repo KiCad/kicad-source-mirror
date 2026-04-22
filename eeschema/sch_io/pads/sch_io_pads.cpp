@@ -22,6 +22,8 @@
 #include <sch_io/pads/pads_sch_symbol_builder.h>
 #include <sch_io/pads/pads_sch_schematic_builder.h>
 
+#include <libraries/symbol_library_adapter.h>
+
 #include <lib_symbol.h>
 #include <page_info.h>
 #include <sch_junction.h>
@@ -50,6 +52,7 @@
 #include <fstream>
 #include <map>
 #include <set>
+#include <wx/filename.h>
 #include <wx/log.h>
 
 
@@ -1368,6 +1371,199 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
     m_errorMessages.clear();
 
     return rootSheet;
+}
+
+
+void SCH_IO_PADS::EnumerateSymbolLib( wxArrayString&                     aSymbolNameList,
+                                      const wxString&                    aLibraryPath,
+                                      const std::map<std::string, UTF8>* aProperties )
+{
+    ensureLoadedLibrary( aLibraryPath );
+
+    bool powerSymbolsOnly = aProperties
+                            && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly );
+
+    for( const auto& [name, symbol] : m_librarySymbols )
+    {
+        if( powerSymbolsOnly && !symbol->IsPower() )
+            continue;
+
+        aSymbolNameList.Add( name );
+    }
+}
+
+
+void SCH_IO_PADS::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>&          aSymbolList,
+                                      const wxString&                    aLibraryPath,
+                                      const std::map<std::string, UTF8>* aProperties )
+{
+    ensureLoadedLibrary( aLibraryPath );
+
+    bool powerSymbolsOnly = aProperties
+                            && aProperties->contains( SYMBOL_LIBRARY_ADAPTER::PropPowerSymsOnly );
+
+    for( const auto& [name, symbol] : m_librarySymbols )
+    {
+        if( powerSymbolsOnly && !symbol->IsPower() )
+            continue;
+
+        aSymbolList.push_back( symbol.get() );
+    }
+}
+
+
+LIB_SYMBOL* SCH_IO_PADS::LoadSymbol( const wxString& aLibraryPath, const wxString& aPartName,
+                                     const std::map<std::string, UTF8>* aProperties )
+{
+    ensureLoadedLibrary( aLibraryPath );
+
+    auto it = m_librarySymbols.find( aPartName );
+
+    if( it != m_librarySymbols.end() )
+        return it->second.get();
+
+    return nullptr;
+}
+
+
+long long SCH_IO_PADS::getLibraryTimestamp( const wxString& aLibraryPath ) const
+{
+    wxFileName fn( aLibraryPath );
+
+    if( fn.IsFileReadable() && fn.GetModificationTime().IsValid() )
+        return fn.GetModificationTime().GetValue().GetValue();
+
+    return 0;
+}
+
+
+void SCH_IO_PADS::ensureLoadedLibrary( const wxString& aLibraryPath )
+{
+    long long timestamp = getLibraryTimestamp( aLibraryPath );
+
+    if( m_libraryCacheValid && aLibraryPath == m_cachedLibraryPath
+        && timestamp == m_cachedLibraryTimestamp )
+    {
+        return;
+    }
+
+    m_librarySymbols.clear();
+    m_libraryCacheValid = false;
+    m_cachedLibraryPath = aLibraryPath;
+    m_cachedLibraryTimestamp = timestamp;
+
+    if( !checkFileHeader( aLibraryPath ) )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "'%s' is not a PADS Logic ASCII file." ),
+                                          aLibraryPath ) );
+    }
+
+    LOCALE_IO setlocale;
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+    std::string               filename( aLibraryPath.ToUTF8() );
+
+    if( !parser.Parse( filename ) )
+    {
+        THROW_IO_ERROR(
+                wxString::Format( _( "Failed to parse PADS Logic file '%s'." ), aLibraryPath ) );
+    }
+
+    const PADS_SCH::PARAMETERS&       params = parser.GetParameters();
+    PADS_SCH::PADS_SCH_SYMBOL_BUILDER symbolBuilder( params );
+
+    std::set<std::string> referencedDecals;
+
+    // Build a LIB_SYMBOL per PARTTYPE: multi-gate parts become multi-unit symbols,
+    // single-gate parts apply PARTTYPE pin overrides to the CAEDECAL graphics,
+    // and power/ground special variants are skipped (they map to KiCad power lib).
+    for( const auto& [ptName, ptDef] : parser.GetPartTypes() )
+    {
+        if( !ptDef.special_keyword.empty() && ptDef.special_keyword != "OFF" )
+            continue;
+
+        LIB_SYMBOL* built = nullptr;
+        wxString    libName = wxString::FromUTF8( ptDef.name );
+
+        if( ptDef.gates.size() > 1 )
+        {
+            built = symbolBuilder.BuildMultiUnitSymbol( ptDef, parser.GetSymbolDefs() );
+
+            for( const PADS_SCH::GATE_DEF& gate : ptDef.gates )
+            {
+                for( const std::string& decalName : gate.decal_names )
+                    referencedDecals.insert( decalName );
+            }
+        }
+        else if( !ptDef.gates.empty() )
+        {
+            const PADS_SCH::GATE_DEF& gate = ptDef.gates[0];
+            std::string               decalName;
+
+            if( !gate.decal_names.empty() )
+                decalName = gate.decal_names[0];
+
+            const PADS_SCH::SYMBOL_DEF* symDef = parser.GetSymbolDef( decalName );
+
+            if( symDef && ptDef.is_connector && !gate.pins.empty() )
+            {
+                // Connectors declare one CAEDECAL shared by every pin. Build a
+                // multi-unit library symbol so each PARTTYPE pin is representable
+                // without assuming a particular schematic placement grouping.
+                std::vector<std::string> pinNumbers;
+                pinNumbers.reserve( gate.pins.size() );
+
+                for( const PADS_SCH::PARTTYPE_PIN& pin : gate.pins )
+                    pinNumbers.push_back( pin.pin_id );
+
+                built = symbolBuilder.BuildMultiUnitConnectorSymbol( ptDef, *symDef, pinNumbers );
+                referencedDecals.insert( decalName );
+            }
+            else if( symDef )
+            {
+                // GetOrCreatePartTypeSymbol caches inside the builder and returns a
+                // non-owning pointer; clone it so the library owns its own copy.
+                LIB_SYMBOL* cached = symbolBuilder.GetOrCreatePartTypeSymbol( ptDef, *symDef );
+
+                if( cached )
+                    built = new LIB_SYMBOL( *cached );
+
+                referencedDecals.insert( decalName );
+            }
+        }
+
+        if( !built )
+            continue;
+
+        built->SetName( libName );
+
+        if( !ptDef.sigpins.empty() )
+            symbolBuilder.AddHiddenPowerPins( built, ptDef.sigpins );
+
+        m_librarySymbols[libName] = std::unique_ptr<LIB_SYMBOL>( built );
+    }
+
+    // Also expose any CAEDECAL entries that no PARTTYPE referenced, so the user
+    // still sees orphan decal graphics that ship with the PADS library.
+    for( const PADS_SCH::SYMBOL_DEF& symDef : parser.GetSymbolDefs() )
+    {
+        if( referencedDecals.count( symDef.name ) )
+            continue;
+
+        wxString libName = wxString::FromUTF8( symDef.name );
+
+        if( libName.IsEmpty() || m_librarySymbols.count( libName ) )
+            continue;
+
+        LIB_SYMBOL* built = symbolBuilder.BuildSymbol( symDef );
+
+        if( !built )
+            continue;
+
+        m_librarySymbols[libName] = std::unique_ptr<LIB_SYMBOL>( built );
+    }
+
+    m_libraryCacheValid = true;
 }
 
 

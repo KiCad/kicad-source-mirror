@@ -23,6 +23,8 @@
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
 
+#include <map>
+#include <memory>
 #include <unordered_map>
 
 class SCH_SCREEN;
@@ -61,6 +63,17 @@ public:
                                   SCH_SHEET*             aAppendToMe = nullptr,
                                   const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
+    void EnumerateSymbolLib( wxArrayString& aSymbolNameList, const wxString& aLibraryPath,
+                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+
+    void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList, const wxString& aLibraryPath,
+                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+
+    LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aPartName,
+                            const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
+
 private:
     /**
      * Check if the file header indicates a PADS Logic schematic file.
@@ -70,7 +83,20 @@ private:
      */
     bool checkFileHeader( const wxString& aFileName ) const;
 
+    /**
+     * Parse the PADS Logic ASCII file and populate the library symbol cache.
+     * Re-parses only when the file path changes or the on-disk timestamp differs.
+     */
+    void ensureLoadedLibrary( const wxString& aLibraryPath );
+
+    long long getLibraryTimestamp( const wxString& aLibraryPath ) const;
+
     std::unordered_map<wxString, SEVERITY> m_errorMessages;
+
+    wxString                                            m_cachedLibraryPath;
+    long long                                           m_cachedLibraryTimestamp = 0;
+    bool                                                m_libraryCacheValid = false;
+    std::map<wxString, std::unique_ptr<LIB_SYMBOL>>     m_librarySymbols;
 };
 
 #endif // SCH_IO_PADS_H_

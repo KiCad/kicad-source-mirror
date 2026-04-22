@@ -20,6 +20,7 @@
 #include <boost/test/unit_test.hpp>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <lib_symbol.h>
 #include <schematic.h>
 #include <sch_io/pads/sch_io_pads.h>
 #include <sch_io/sch_io_mgr.h>
@@ -136,6 +137,112 @@ BOOST_AUTO_TEST_CASE( MultiGateImport )
     // Both references should be "U1" (not "U1-A" or "U1-B")
     BOOST_CHECK_EQUAL( u1Symbols[0]->GetRef( &rootPath ), wxT( "U1" ) );
     BOOST_CHECK_EQUAL( u1Symbols[1]->GetRef( &rootPath ), wxT( "U1" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( CanReadLibrary )
+{
+    SCH_IO_PADS plugin;
+
+    wxString padsFile = wxString::FromUTF8(
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
+
+    BOOST_CHECK( plugin.CanReadLibrary( padsFile ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( EnumerateSymbolLib_NamesFromSchematic )
+{
+    SCH_IO_PADS plugin;
+
+    wxString padsFile = wxString::FromUTF8(
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
+
+    wxArrayString names;
+    BOOST_CHECK_NO_THROW( plugin.EnumerateSymbolLib( names, padsFile ) );
+    BOOST_CHECK_GT( names.GetCount(), 0u );
+}
+
+
+BOOST_AUTO_TEST_CASE( EnumerateSymbolLib_ReturnsLibSymbols )
+{
+    SCH_IO_PADS plugin;
+
+    wxString padsFile = wxString::FromUTF8(
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
+
+    std::vector<LIB_SYMBOL*> symbols;
+    BOOST_CHECK_NO_THROW( plugin.EnumerateSymbolLib( symbols, padsFile ) );
+    BOOST_CHECK_GT( symbols.size(), 0u );
+
+    for( LIB_SYMBOL* sym : symbols )
+        BOOST_REQUIRE( sym != nullptr );
+}
+
+
+BOOST_AUTO_TEST_CASE( LoadSymbol_ByName )
+{
+    SCH_IO_PADS plugin;
+
+    wxString padsFile = wxString::FromUTF8(
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
+
+    wxArrayString names;
+    plugin.EnumerateSymbolLib( names, padsFile );
+
+    BOOST_REQUIRE_GT( names.GetCount(), 0u );
+
+    LIB_SYMBOL* sym = plugin.LoadSymbol( padsFile, names.Item( 0 ) );
+    BOOST_REQUIRE( sym != nullptr );
+    BOOST_CHECK_EQUAL( sym->GetName(), names.Item( 0 ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( LoadSymbol_UnknownReturnsNull )
+{
+    SCH_IO_PADS plugin;
+
+    wxString padsFile = wxString::FromUTF8(
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
+
+    LIB_SYMBOL* sym = plugin.LoadSymbol( padsFile, wxT( "NO_SUCH_SYMBOL_12345" ) );
+    BOOST_CHECK( sym == nullptr );
+}
+
+
+BOOST_AUTO_TEST_CASE( MultiGatePartTypeBecomesMultiUnitLibSymbol )
+{
+    SCH_IO_PADS plugin;
+
+    wxString padsFile = wxString::FromUTF8(
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/multigate_schematic.txt" );
+
+    std::vector<LIB_SYMBOL*> symbols;
+    BOOST_CHECK_NO_THROW( plugin.EnumerateSymbolLib( symbols, padsFile ) );
+
+    bool foundMultiUnit = false;
+
+    for( LIB_SYMBOL* sym : symbols )
+    {
+        if( sym && sym->GetUnitCount() > 1 )
+        {
+            foundMultiUnit = true;
+            break;
+        }
+    }
+
+    BOOST_CHECK( foundMultiUnit );
+}
+
+
+BOOST_AUTO_TEST_CASE( IsLibraryNotWritable )
+{
+    SCH_IO_PADS plugin;
+
+    wxString padsFile = wxString::FromUTF8(
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
+
+    BOOST_CHECK( !plugin.IsLibraryWritable( padsFile ) );
 }
 
 
