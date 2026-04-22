@@ -240,16 +240,19 @@ bool KIPLATFORM::IO::CommitTempFile( const wxString& aTempPath, const wxString& 
     }
 
     wxFileName dst( aTargetPath );
+    wxString   dirPath = dst.GetPath();
 
-    if( !FlushDirectory( dst.GetPath() ) )
+    // A bare filename has no directory component; fall back to CWD so the dir fsync
+    // lands on the filesystem that actually holds the file.
+    if( dirPath.IsEmpty() )
+        dirPath = wxT( "." );
+
+    if( !FlushDirectory( dirPath ) )
     {
         // The rename has already committed, but without a dir fsync it may not survive
         // power loss. Report so callers can warn the user; the file itself is present.
         if( aError )
-        {
-            *aError = wxString::Format( wxT( "Cannot flush directory '%s' to disk" ),
-                                        dst.GetPath() );
-        }
+            *aError = wxString::Format( wxT( "Cannot flush directory '%s' to disk" ), dirPath );
 
         return false;
     }
@@ -292,6 +295,9 @@ bool KIPLATFORM::IO::AtomicWriteFile( const wxString& aTargetPath, const void* a
 
     if( !CommitTempFile( tempPath, target, aError ) )
     {
+        // CommitTempFile can fail after a successful rename (e.g. dir fsync error),
+        // in which case tempPath no longer exists. Suppress the expected log noise.
+        wxLogNull logNoise;
         wxRemoveFile( tempPath );
         return false;
     }
