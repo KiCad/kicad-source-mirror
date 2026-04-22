@@ -106,24 +106,27 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
 
     case SHAPE_T::RECTANGLE:
     {
-        int      width = std::abs( aShape.GetRectangleWidth() ) + stroke_width;
-        int      height = std::abs( aShape.GetRectangleHeight() ) + stroke_width;
-        wxString rad = ODB::SymDouble2String( ( stroke_width / 2.0 ) );
-        VECTOR2I center = ODB::GetShapePosition( aShape );
-
+        // ODB++ donut_rc symbols degenerate when the corner radius is smaller than half the
+        // line width, and some viewers drop the feature entirely.  Emit the rectangle as a
+        // filled pad for the fill (if any) plus four line segments for the stroke, matching
+        // how a rectangle drawn with the line tool is exported.
         if( aShape.IsSolidFill() )
         {
+            int      width = std::abs( aShape.GetRectangleWidth() );
+            int      height = std::abs( aShape.GetRectangleHeight() );
+            VECTOR2I center = ODB::GetShapePosition( aShape );
+
             AddFeature<ODB_PAD>( ODB::AddXY( center ),
-                                 AddRoundRectSymbol( ODB::SymDouble2String( width ),
-                                                     ODB::SymDouble2String( height ), rad ) );
+                                 AddRectSymbol( ODB::SymDouble2String( width ),
+                                                ODB::SymDouble2String( height ) ) );
         }
-        else
+
+        if( stroke_width > 0 )
         {
-            AddFeature<ODB_PAD>( ODB::AddXY( center ),
-                                 AddRoundRectDonutSymbol( ODB::SymDouble2String( width ),
-                                                          ODB::SymDouble2String( height ),
-                                                          ODB::SymDouble2String( stroke_width ),
-                                                          rad ) );
+            std::vector<VECTOR2I> corners = aShape.GetRectCorners();
+
+            for( size_t ii = 0; ii < corners.size(); ++ii )
+                AddFeatureLine( corners[ii], corners[( ii + 1 ) % corners.size()], stroke_width );
         }
 
         break;
