@@ -5603,6 +5603,10 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                             {
                                 body.m_layer = UNDEFINED_LAYER;
                             }
+                            else if( layerName == wxT( "pad_bbox" ) )
+                            {
+                                body.m_layer = UNSELECTED_LAYER;
+                            }
                             else
                             {
                                 int layer = LSET::NameToLayer( layerName );

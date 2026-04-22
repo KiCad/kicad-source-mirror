@@ -1505,7 +1505,9 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
         m_out->Print( "(overall_height %s)", formatInternalUnits( body->m_height ).c_str() );
         m_out->Print( "(body_pcb_gap %s)", formatInternalUnits( body->m_standoff ).c_str() );
 
-        if( body->m_layer != UNDEFINED_LAYER )
+        if( body->m_layer == UNSELECTED_LAYER )
+            m_out->Print( "(layer pad_bbox)" );
+        else if( body->m_layer != UNDEFINED_LAYER )
             m_out->Print( "(layer %s)", m_out->Quotew( LSET::Name( body->m_layer ) ).c_str() );
         else
             m_out->Print( "(layer auto)" );
