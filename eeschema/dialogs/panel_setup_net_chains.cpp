@@ -132,12 +132,34 @@ void PANEL_SETUP_NET_CHAINS::loadFromModel()
         m_chainRows.push_back( std::move( row ) );
     }
 
-    // Potential chains.
+    // Potential chains — skip any whose nets already belong to a committed chain.
+    std::set<wxString> committedNets;
+
+    for( const CHAIN_ROW& cr : m_chainRows )
+    {
+        for( const wxString& net : cr.memberNets )
+            committedNets.insert( net );
+    }
+
     int potentialIdx = 0;
 
     for( const std::unique_ptr<SCH_NETCHAIN>& chain : graph->GetPotentialNetChains() )
     {
         if( !chain )
+            continue;
+
+        bool alreadyCommitted = false;
+
+        for( const wxString& net : chain->GetNets() )
+        {
+            if( committedNets.count( net ) )
+            {
+                alreadyCommitted = true;
+                break;
+            }
+        }
+
+        if( alreadyCommitted )
             continue;
 
         CHAIN_ROW row;
