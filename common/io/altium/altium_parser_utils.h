@@ -44,5 +44,17 @@ wxString AltiumPcbSpecialStringsToKiCadStrings( const wxString&                 
                                                 const std::map<wxString, wxString>& aOverrides );
 
 wxString AltiumPinNamesToKiCad( wxString& aString );
+
+/**
+ * Convert an Altium pin designator string to the equivalent KiCad pin number.
+ *
+ * Altium represents a pin that electrically ties multiple physical pads by placing all
+ * designators in a single comma-separated string (e.g. "1,2,3" or "1, 2, 3").  KiCad
+ * represents the same construct with stacked-pin bracket notation (e.g. "[1,2,3]").  The
+ * input string is always stripped of surrounding whitespace; if it contains no comma it
+ * is returned after that trim.
+ */
+wxString AltiumPinDesignatorToKiCad( const wxString& aDesignator );
+
 VECTOR2I AltiumGetEllipticalPos( double aMajor, double aMinor, double aAngleRadians );
 #endif //ALTIUM_PARSER_UTILS_H
