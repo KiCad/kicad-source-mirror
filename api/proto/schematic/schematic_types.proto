@@ -435,3 +435,17 @@ message SheetInstance
 
   repeated SheetInstance children = 5;
 }
+
+message SchematicNetSheetContents
+{
+  kiapi.common.types.SheetPath path = 1;
+
+  repeated kiapi.common.types.KIID items = 2;
+}
+
+message SchematicNet
+{
+  string name = 1;
+
+  repeated SchematicNetSheetContents sheets = 2;
+}

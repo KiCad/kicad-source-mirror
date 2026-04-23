@@ -115,6 +115,9 @@ private:
     void packSheetInstance( kiapi::schematic::types::SheetInstance* aInstance, SCH_SHEET_PATH& aPath,
                             SCH_SHEET* aSheet );
 
+    HANDLER_RESULT<kiapi::schematic::types::SchematicNetlistResponse>
+    handleGetSchematicNetlist( const HANDLER_CONTEXT<kiapi::schematic::types::GetSchematicNetlist>& aCtx );
+
     SCHEMATIC* schematic() const;
 
     void filterValidSchTypes( std::set<KICAD_T>& aTypeList );

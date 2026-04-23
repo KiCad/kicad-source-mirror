@@ -31,6 +31,7 @@
 #include <kiway.h>
 #include <sch_field.h>
 #include <sch_group.h>
+#include <connection_graph.h>
 #include <sch_commit.h>
 #include <sch_edit_frame.h>
 #include <sch_label.h>
@@ -130,6 +131,7 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
     registerHandler<GetSchematicHierarchy, SchematicHierarchyResponse>( &API_HANDLER_SCH::handleGetSchematicHierarchy );
     registerHandler<GetPageSettings, types::PageSettings>( &API_HANDLER_SCH::handleGetPageSettings );
     registerHandler<SetPageSettings, types::PageSettings>( &API_HANDLER_SCH::handleSetPageSettings );
+    registerHandler<GetSchematicNetlist, SchematicNetlistResponse>( &API_HANDLER_SCH::handleGetSchematicNetlist );
 }
 
 
@@ -1217,6 +1219,78 @@ HANDLER_RESULT<kiapi::schematic::types::SchematicHierarchyResponse> API_HANDLER_
     {
         kiapi::schematic::types::SheetInstance* instance = response.add_top_level_sheets();
         packSheetInstance( instance, path, topSheet );
+    }
+
+    return response;
+}
+
+
+HANDLER_RESULT<kiapi::schematic::types::SchematicNetlistResponse>
+API_HANDLER_SCH::handleGetSchematicNetlist( const HANDLER_CONTEXT<kiapi::schematic::types::GetSchematicNetlist>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    std::vector<KICAD_T> types = parseRequestedItemTypes( aCtx.Request.types() );
+    const bool filterByType = aCtx.Request.types_size() > 0;
+
+    if( filterByType && types.empty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "none of the requested types are valid for a Schematic object" );
+        return tl::unexpected( e );
+    }
+
+    std::set<KICAD_T> typeFilter( types.begin(), types.end() );
+
+    CONNECTION_GRAPH* connectionGraph = schematic()->ConnectionGraph();
+
+    if( !connectionGraph )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "schematic has no connection graph" );
+        return tl::unexpected( e );
+    }
+
+    kiapi::schematic::types::SchematicNetlistResponse response;
+    response.mutable_document()->CopyFrom( aCtx.Request.document() );
+
+    for( const auto& [key, subgraphList] : connectionGraph->GetNetMap() )
+    {
+        if( subgraphList.empty() )
+            continue;
+
+        CONNECTION_SUBGRAPH* firstSubgraph = subgraphList[0];
+
+        if( firstSubgraph->GetDriverConnection() && firstSubgraph->GetDriverConnection()->IsBus() )
+            continue;
+
+        if( firstSubgraph->GetDriverPriority() < CONNECTION_SUBGRAPH::PRIORITY::PIN )
+            continue;
+
+        kiapi::schematic::types::SchematicNet* net = response.add_nets();
+        net->set_name( key.Name.ToUTF8() );
+
+        for( CONNECTION_SUBGRAPH* subGraph : subgraphList )
+        {
+            kiapi::schematic::types::SchematicNetSheetContents* sheetContents = net->add_sheets();
+            PackSheetPath( *sheetContents->mutable_path(), subGraph->GetSheet().Path() );
+
+            for( SCH_ITEM* item : subGraph->GetItems() )
+            {
+                if( filterByType && !typeFilter.contains( item->Type() ) )
+                    continue;
+
+                sheetContents->add_items()->set_value( item->m_Uuid.AsStdString() );
+            }
+        }
     }
 
     return response;

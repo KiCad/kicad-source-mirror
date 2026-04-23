@@ -22,6 +22,7 @@ syntax = "proto3";
 package kiapi.schematic.types;
 
 import "common/types/base_types.proto";
+import "common/types/enums.proto";
 import "schematic/schematic_types.proto";
 
 
@@ -36,4 +37,23 @@ message SchematicHierarchyResponse
   kiapi.common.types.DocumentSpecifier document = 1;
 
   repeated SheetInstance top_level_sheets = 2;
+}
+
+// Returns SchematicNetlistResponse
+message GetSchematicNetlist
+{
+  // Type must be DT_SCHEMATIC and only the project is considered
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  // Optional filter for types of items to return in SchematicNetSheetContents items fields.
+  // If not specified, all types will be returned.  Only connectable schematic items are valid
+  // here (pins, labels, wires, etc).
+  repeated kiapi.common.types.KiCadObjectType types = 2;
+}
+
+message SchematicNetlistResponse
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  repeated SchematicNet nets = 2;
 }
