@@ -84,7 +84,6 @@
 #include <Standard_Version.hxx>
 #include <TCollection_ExtendedString.hxx>
 #include <TDocStd_Document.hxx>
-#include <TDocStd_XLinkTool.hxx>
 #include <TDataStd_Name.hxx>
 #include <TDataStd_TreeNode.hxx>
 #include <TDF_ChildIterator.hxx>
@@ -100,6 +99,7 @@
 #include <XCAFDoc_VisMaterialTool.hxx>
 #include <XCAFDoc_Area.hxx>
 #include <XCAFDoc_Centroid.hxx>
+#include <XCAFDoc_Editor.hxx>
 #include <XCAFDoc_Location.hxx>
 #include <XCAFDoc_Volume.hxx>
 #include "kicad3d_info.h"
@@ -1769,6 +1769,15 @@ bool STEP_PCB_MODEL::AddComponent( const wxString& aBaseName, const wxString& aF
     TDataStd_Name::Set( llabel, refdes );
 
     KICAD3D_INFO::Set( llabel, KICAD3D_MODEL_TYPE::COMPONENT, aRefDes.utf8_string() );
+
+    // Rebuild compound shapes for all assemblies so that the newly added component
+    // contributes to its parent's aggregate TopoDS_Shape.  This is required when the
+    // transferred sub-model was synthesized from a source label tree (via
+    // XCAFDoc_Editor::Extract), because Extract leaves the assembly shape as an empty
+    // compound until UpdateAssemblies is invoked.  Without this the downstream writers
+    // (STEPCAFControl_Writer, RWGltf_CafWriter, RWObj_CafWriter) see no geometry for
+    // the added component.
+    m_assy->UpdateAssemblies();
 
     return true;
 }
@@ -3724,197 +3733,30 @@ bool STEP_PCB_MODEL::readVRML( Handle( TDocStd_Document ) & doc, const char* fna
 }
 
 
-void STEP_PCB_MODEL::transferColors( Handle( XCAFDoc_ShapeTool )& aSrcShapeTool,
-                                     Handle( XCAFDoc_ColorTool )& aSrcColorTool,
-                                     Handle( XCAFDoc_ShapeTool )& aDstShapeTool,
-                                     Handle( XCAFDoc_ColorTool )& aDstColorTool )
-{
-    // Get all shapes from the source document
-    TDF_LabelSequence srcLabels;
-    aSrcShapeTool->GetShapes( srcLabels );
-
-    for( Standard_Integer i = 1; i <= srcLabels.Length(); i++ )
-    {
-        TDF_Label srcLabel = srcLabels.Value( i );
-        TopoDS_Shape srcShape = aSrcShapeTool->GetShape( srcLabel );
-
-        if( srcShape.IsNull() )
-            continue;
-
-        // Try to find the same shape in the destination document
-        TDF_Label dstLabel;
-
-        if( !aDstShapeTool->Search( srcShape, dstLabel, Standard_True, Standard_True, Standard_False ) )
-            continue;
-
-        // Transfer surface color
-        Quantity_ColorRGBA surfColor;
-
-        if( aSrcColorTool->GetColor( srcLabel, XCAFDoc_ColorSurf, surfColor ) )
-            aDstColorTool->SetColor( dstLabel, surfColor, XCAFDoc_ColorSurf );
-
-        // Transfer curve color
-        Quantity_ColorRGBA curvColor;
-
-        if( aSrcColorTool->GetColor( srcLabel, XCAFDoc_ColorCurv, curvColor ) )
-            aDstColorTool->SetColor( dstLabel, curvColor, XCAFDoc_ColorCurv );
-
-        // Transfer generic color
-        Quantity_ColorRGBA genColor;
-
-        if( aSrcColorTool->GetColor( srcLabel, XCAFDoc_ColorGen, genColor ) )
-            aDstColorTool->SetColor( dstLabel, genColor, XCAFDoc_ColorGen );
-
-        // Also check for colors on individual faces
-        if( aSrcShapeTool->IsSimpleShape( srcLabel ) )
-        {
-            TopoDS_Shape shape = aSrcShapeTool->GetShape( srcLabel );
-
-            for( TopExp_Explorer exp( shape, TopAbs_FACE ); exp.More(); exp.Next() )
-            {
-                TopoDS_Face face = TopoDS::Face( exp.Current() );
-                Quantity_ColorRGBA faceColor;
-
-                if( aSrcColorTool->GetColor( face, XCAFDoc_ColorSurf, faceColor ) )
-                    aDstColorTool->SetColor( face, faceColor, XCAFDoc_ColorSurf );
-                else if( aSrcColorTool->GetColor( face, XCAFDoc_ColorGen, faceColor ) )
-                    aDstColorTool->SetColor( face, faceColor, XCAFDoc_ColorGen );
-            }
-        }
-    }
-
-    // Also iterate through subshapes and components recursively
-    TDF_LabelSequence srcFreeShapes;
-    aSrcShapeTool->GetFreeShapes( srcFreeShapes );
-
-    std::function<void( const TDF_Label& )> transferColorsRecursive = [&]( const TDF_Label& aLabel )
-    {
-        TopoDS_Shape shape = aSrcShapeTool->GetShape( aLabel );
-
-        if( shape.IsNull() )
-            return;
-
-        // Find this shape in destination
-        TDF_Label dstLabel;
-
-        if( aDstShapeTool->Search( shape, dstLabel, Standard_True, Standard_True, Standard_False ) )
-        {
-            Quantity_ColorRGBA color;
-
-            if( aSrcColorTool->GetColor( aLabel, XCAFDoc_ColorSurf, color ) )
-                aDstColorTool->SetColor( dstLabel, color, XCAFDoc_ColorSurf );
-
-            if( aSrcColorTool->GetColor( aLabel, XCAFDoc_ColorCurv, color ) )
-                aDstColorTool->SetColor( dstLabel, color, XCAFDoc_ColorCurv );
-
-            if( aSrcColorTool->GetColor( aLabel, XCAFDoc_ColorGen, color ) )
-                aDstColorTool->SetColor( dstLabel, color, XCAFDoc_ColorGen );
-        }
-
-        // Process children
-        for( TDF_ChildIterator it( aLabel ); it.More(); it.Next() )
-            transferColorsRecursive( it.Value() );
-
-        // Process components if this is an assembly
-        if( aSrcShapeTool->IsAssembly( aLabel ) )
-        {
-            TDF_LabelSequence components;
-            aSrcShapeTool->GetComponents( aLabel, components );
-
-            for( Standard_Integer j = 1; j <= components.Length(); j++ )
-            {
-                TDF_Label compLabel = components.Value( j );
-                TDF_Label refLabel;
-
-                if( aSrcShapeTool->GetReferredShape( compLabel, refLabel ) )
-                    transferColorsRecursive( refLabel );
-            }
-        }
-    };
-
-    for( Standard_Integer i = 1; i <= srcFreeShapes.Length(); i++ )
-        transferColorsRecursive( srcFreeShapes.Value( i ) );
-}
-
-
 TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document ) & source,
                                          Handle( TDocStd_Document ) & dest, const VECTOR3D& aScale )
 {
-    // transfer data from Source into a top level component of Dest
-    // s_assy = shape tool for the source
     Handle( XCAFDoc_ShapeTool ) s_assy = XCAFDoc_DocumentTool::ShapeTool( source->Main() );
-    Handle( XCAFDoc_ColorTool ) s_color = XCAFDoc_DocumentTool::ColorTool( source->Main() );
 
-    // retrieve all free shapes within the assembly
     TDF_LabelSequence frshapes;
     s_assy->GetFreeShapes( frshapes );
 
-    // d_assy = shape tool for the destination
     Handle( XCAFDoc_ShapeTool ) d_assy = XCAFDoc_DocumentTool::ShapeTool( dest->Main() );
-    Handle( XCAFDoc_ColorTool ) d_color = XCAFDoc_DocumentTool::ColorTool( dest->Main() );
 
-    // create a new shape within the destination and set the assembly tool to point to it
+    // Create a new top-level assembly in the destination and clone the source's free shapes
+    // into it with XCAFDoc_Editor::Extract.  Extract rebuilds the XDE label tree by walking
+    // the component reference graph, so it preserves colors, names and sub-assembly structure
+    // even when the source root does not directly own the part labels (as is the case with
+    // default KiCad 3D models produced by CadQuery).  It is also immune to the
+    // "not self-contained" restriction of TDocStd_XLinkTool::Copy, so Fusion 360 STEP files
+    // with linked components work as well.
     TDF_Label d_targetLabel = d_assy->NewShape();
 
-    auto copyLabel = [&]( TDF_Label& d_label, const TDF_Label& s_label ) -> bool
+    if( !XCAFDoc_Editor::Extract( frshapes, d_targetLabel, Standard_False ) )
     {
-        // TDocStd_XLinkTool::Copy requires the source to be "self-contained", meaning it has
-        // no external references. Some STEP files (e.g. from Fusion 360 with linked components)
-        // may contain internal references that violate this constraint. In such cases, we fall
-        // back to extracting just the geometric shape without the full XDE document structure.
-        if( TDF_Tool::IsSelfContained( s_label ) )
-        {
-            TDocStd_XLinkTool link;
-            link.Copy( d_label, s_label );
-            return true;
-        }
-        else
-        {
-            // The source label is not self-contained. Extract the shape directly.
-            TopoDS_Shape shape = s_assy->GetShape( s_label );
-
-            if( shape.IsNull() )
-                return false;
-
-            // Add the shape directly without the XDE structure. This loses some metadata
-            // like colors and names, but allows the model to be successfully transferred.
-            d_assy->SetShape( d_label, shape );
-
-            m_reporter->Report( wxT( "Model contains non-self-contained data; some metadata may be lost." ),
-                                RPT_SEVERITY_INFO );
-            return true;
-        }
-    };
-
-    if( frshapes.Size() == 1 )
-    {
-        if( !copyLabel( d_targetLabel, frshapes.First() ) )
-        {
-            m_reporter->Report( wxT( "Failed to transfer model." ), RPT_SEVERITY_ERROR );
-            return TDF_Label();
-        }
+        m_reporter->Report( wxT( "Failed to transfer model." ), RPT_SEVERITY_ERROR );
+        return TDF_Label();
     }
-    else
-    {
-        // Rare case with multiple free shapes
-        for( TDF_Label& s_shapeLabel : frshapes )
-        {
-            TDF_Label d_component = d_assy->NewShape();
-
-            if( !copyLabel( d_component, s_shapeLabel ) )
-            {
-                m_reporter->Report( wxT( "Failed to transfer model component." ), RPT_SEVERITY_ERROR );
-                return TDF_Label();
-            }
-
-            d_assy->AddComponent( d_targetLabel, d_component, TopLoc_Location() );
-        }
-    }
-
-    // Transfer colors from source to destination document
-    // This is necessary because TDocStd_XLinkTool::Copy may not properly transfer
-    // color associations which are stored separately in the ColorTool section
-    transferColors( s_assy, s_color, d_assy, d_color );
 
     if( aScale.x != 1.0 || aScale.y != 1.0 || aScale.z != 1.0 )
         rescaleShapes( d_targetLabel, gp_XYZ( aScale.x, aScale.y, aScale.z ) );
