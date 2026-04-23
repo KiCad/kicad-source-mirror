@@ -1,0 +1,58 @@
+[IBIS Ver]      4.1
+[File name]     ibis_v4_1_series_pin_mapping.ibs
+[File Rev]      1.0
+[Date]          22/04/2026
+[Source]        Artificial data for KiCad QA (issue #23568)
+[Notes]         Covers the [Series Pin Mapping] keyword added in IBIS 4.1
+[Disclaimer]    This is NOT a valid component
+
+[Component]     SeriesSwitchDevice
+[Manufacturer]  KiCad
+
+[Package]
+R_pkg           50m             40m             60m
+L_pkg           2n              NA              NA
+C_pkg           10p             NA              NA
+
+[Pin]   signal_name     model_name      R_pin   L_pin   C_pin
+  1     IN_A            Input           55m      NA      0.2p
+  2     OUT_A           Input           55m      NA      0.2p
+  3     IN_B            Input           55m      NA      0.2p
+  4     OUT_B           Input           55m      NA      0.2p
+
+|
+| [Series Pin Mapping] was introduced in IBIS 4.1. It associates pairs of
+| component pins with a series-element model; KiCad must accept the keyword
+| without aborting the parse even when it does not yet simulate the model.
+|
+[Series Pin Mapping]
+|  pin_1   pin_2   model_name
+   1       2       series_switch
+   3       4       series_switch
+
+[Model]         Input
+Model_type      Input
+Polarity        Non-Inverting
+Enable          Active-High
+Vinl = 0.8V
+Vinh = 2.0V
+C_comp          1.0pF          0.5pF          2.0pF
+
+[Voltage range]         5.0V            4.5V            5.5V
+
+[GND_clamp]
+|
+|  Voltage   I(typ)    I(min)    I(max)
+|
+   -5.0V    -50.0m     NA        NA
+   0.0V      0         NA        NA
+   5.0V      0         NA        NA
+[POWER_clamp]
+|
+|  Voltage   I(typ)    I(min)    I(max)
+|
+   -5.0V     50.0m     NA        NA
+   0.0V      0         NA        NA
+   5.0V      0         NA        NA
+
+[END]

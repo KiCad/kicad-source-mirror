@@ -275,6 +275,25 @@ public:
     std::vector<IbisDiffPinEntry> m_entries;
 };
 
+
+/** @brief One row of a [Series Pin Mapping] table (IBIS 4.1+). */
+class IbisComponentSeriesPinMapping : public IBIS_INPUT
+{
+public:
+    IbisComponentSeriesPinMapping( REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter )
+    {};
+
+    virtual ~IbisComponentSeriesPinMapping()
+    {};
+
+    std::string m_pin1;
+    std::string m_pin2;
+    std::string m_modelName;
+    std::string m_functionTableGroup;
+};
+
+
 class IbisComponent : public IBIS_INPUT
 {
 public:
@@ -287,15 +306,16 @@ public:
     virtual ~IbisComponent()
     {};
 
-    std::string                             m_name = "";
-    std::string                             m_manufacturer = "";
-    IbisComponentPackage                    m_package;
-    std::vector<IbisComponentPin>           m_pins;
-    std::vector<IbisComponentPinMapping>    m_pinMappings;
-    std::string                             m_packageModel;
-    std::string                             m_busLabel;
-    std::string                             m_dieSupplyPads;
-    IbisDiffPin                             m_diffPin;
+    std::string                                    m_name = "";
+    std::string                                    m_manufacturer = "";
+    IbisComponentPackage                           m_package;
+    std::vector<IbisComponentPin>                  m_pins;
+    std::vector<IbisComponentPinMapping>           m_pinMappings;
+    std::string                                    m_packageModel;
+    std::string                                    m_busLabel;
+    std::string                                    m_dieSupplyPads;
+    IbisDiffPin                                    m_diffPin;
+    std::vector<IbisComponentSeriesPinMapping>     m_seriesPinMappings;
 
     bool Check() override;
 };
@@ -715,6 +735,7 @@ enum class IBIS_PARSER_CONTINUE
     COMPONENT_PACKAGE,
     COMPONENT_PINMAPPING,
     COMPONENT_DIFFPIN,
+    COMPONENT_SERIES_PIN_MAPPING,
     COMPONENT_DIESUPPLYPADS,
     COMPONENT_PIN,
     MATRIX,
@@ -927,6 +948,7 @@ private:
     bool readPin();
     bool readPinMapping();
     bool readDiffPin();
+    bool readSeriesPinMapping();
     bool readModelSelector();
     bool readModel();
     bool readSubmodel();
