@@ -339,9 +339,17 @@ void SCH_IO_KICAD_SEXPR::loadFile( const wxString& aFileName, SCH_SHEET* aSheet 
 
     if( m_schematic && m_schematic->ConnectionGraph() )
     {
-        m_schematic->ConnectionGraph()->SetNetChainTerminalOverrides( parser.GetNetChainTerminals() );
         m_schematic->ConnectionGraph()->SetNetChainNetClassOverrides( parser.GetNetChainNetClasses() );
         m_schematic->ConnectionGraph()->SetNetChainColorOverrides( parser.GetNetChainColors() );
+
+        std::map<wxString, CONNECTION_GRAPH::CHAIN_TERMINAL_REFS> termRefs;
+
+        for( const auto& [name, terms] : parser.GetNetChainTerminalRefs() )
+        {
+            termRefs[name] = { { terms.first.ref, terms.first.pin }, { terms.second.ref, terms.second.pin } };
+        }
+
+        m_schematic->ConnectionGraph()->SetNetChainTerminalRefOverrides( termRefs );
     }
 }
 
@@ -356,9 +364,17 @@ void SCH_IO_KICAD_SEXPR::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, i
 
     if( m_schematic && m_schematic->ConnectionGraph() )
     {
-        m_schematic->ConnectionGraph()->SetNetChainTerminalOverrides( parser.GetNetChainTerminals() );
         m_schematic->ConnectionGraph()->SetNetChainNetClassOverrides( parser.GetNetChainNetClasses() );
         m_schematic->ConnectionGraph()->SetNetChainColorOverrides( parser.GetNetChainColors() );
+
+        std::map<wxString, CONNECTION_GRAPH::CHAIN_TERMINAL_REFS> termRefs;
+
+        for( const auto& [name, terms] : parser.GetNetChainTerminalRefs() )
+        {
+            termRefs[name] = { { terms.first.ref, terms.first.pin }, { terms.second.ref, terms.second.pin } };
+        }
+
+        m_schematic->ConnectionGraph()->SetNetChainTerminalRefOverrides( termRefs );
     }
 }
 
@@ -541,9 +557,15 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
             continue;
 
         const SCH_NETCHAIN& sig = *sigPtr;
-        m_out->Print( "(net_chain %s ", m_out->Quotew( sig.GetName() ).c_str() );
-        KICAD_FORMAT::FormatUuid( m_out, sig.GetTerminalPinA() );
-        KICAD_FORMAT::FormatUuid( m_out, sig.GetTerminalPinB() );
+        m_out->Print( "(net_chain %s", m_out->Quotew( sig.GetName() ).c_str() );
+
+        wxASSERT_MSG( !sig.GetTerminalRef( 0 ).IsEmpty() && !sig.GetTerminalRef( 1 ).IsEmpty(),
+                      wxT( "Net chain missing terminal refs" ) );
+
+        m_out->Print( " (from %s %s)", m_out->Quotew( sig.GetTerminalRef( 0 ) ).c_str(),
+                      m_out->Quotew( sig.GetTerminalPinNum( 0 ) ).c_str() );
+        m_out->Print( " (to %s %s)", m_out->Quotew( sig.GetTerminalRef( 1 ) ).c_str(),
+                      m_out->Quotew( sig.GetTerminalPinNum( 1 ) ).c_str() );
 
         if( !sig.GetNetClass().IsEmpty() )
             m_out->Print( " (net_class %s)", m_out->Quotew( sig.GetNetClass() ).c_str() );

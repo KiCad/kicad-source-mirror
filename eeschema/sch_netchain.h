@@ -86,11 +86,24 @@ public:
     void SetColor( const KIGFX::COLOR4D& aColor ) { m_color = aColor; }
     const KIGFX::COLOR4D& GetColor() const { return m_color; }
 
+    void SetTerminalRefs( const wxString& aRefA, const wxString& aPinA, const wxString& aRefB, const wxString& aPinB )
+    {
+        m_terminalRef[0] = aRefA;
+        m_terminalPinNum[0] = aPinA;
+        m_terminalRef[1] = aRefB;
+        m_terminalPinNum[1] = aPinB;
+    }
+
+    const wxString& GetTerminalRef( int aIdx ) const { return m_terminalRef[aIdx]; }
+    const wxString& GetTerminalPinNum( int aIdx ) const { return m_terminalPinNum[aIdx]; }
+
 private:
     wxString                       m_name;
     std::set<wxString>             m_nets;
     std::set<class SCH_SYMBOL*>    m_symbols;
     KIID                           m_terminalPins[2];
+    wxString                       m_terminalRef[2];
+    wxString                       m_terminalPinNum[2];
     wxString                       m_netClass;
     KIGFX::COLOR4D                 m_color = KIGFX::COLOR4D::UNSPECIFIED;
 };

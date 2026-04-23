@@ -162,8 +162,9 @@ sheet
 sheet_instances
 show_name
 size
+from
 net_chain
-signal
+to
 span
 start
 start_angle

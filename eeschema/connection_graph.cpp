@@ -3254,45 +3254,60 @@ void CONNECTION_GRAPH::RebuildNetChains()
     wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: pass 4 (terminal pins)" );
     for( std::unique_ptr<SCH_NETCHAIN>& sig : m_potentialNetChains )
     {
-        std::vector<SCH_PIN*> pins;
+        struct PIN_INFO
+        {
+            SCH_PIN*              pin;
+            SCH_SYMBOL*           sym;
+            const SCH_SHEET_PATH* sheet;
+        };
+        std::vector<PIN_INFO> pins;
+
         for( const SCH_SHEET_PATH& sheetPath : m_sheetList )
         {
             SCH_SCREEN* sc = sheetPath.LastScreen(); if( !sc ) continue;
             for( SCH_ITEM* item : sc->Items().OfType( SCH_SYMBOL_T ) )
             {
                 SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
-                std::vector<SCH_PIN*> sp = sym->GetPins( &sheetPath );
-                for( SCH_PIN* p : sp )
+                for( SCH_PIN* p : sym->GetPins( &sheetPath ) )
                 {
                     wxString net = getSubgraphNet( p );
-                    if( sig->GetNets().count( net ) ) pins.push_back( p );
+                    if( sig->GetNets().count( net ) )
+                        pins.push_back( { p, sym, &sheetPath } );
                 }
             }
         }
 
         long best = -1;
-        KIID a;
-        KIID b;
+        KIID   a, b;
+        size_t bestI = 0, bestJ = 0;
 
         for( size_t i = 0; i < pins.size(); ++i )
         {
             for( size_t j = i + 1; j < pins.size(); ++j )
             {
-                VECTOR2I pa = pins[i]->GetPosition();
-                VECTOR2I pb = pins[j]->GetPosition();
+                VECTOR2I pa = pins[i].pin->GetPosition();
+                VECTOR2I pb = pins[j].pin->GetPosition();
                 long d = (long) ( pa.x - pb.x ) * ( pa.x - pb.x )
                        + (long) ( pa.y - pb.y ) * ( pa.y - pb.y );
 
                 if( d > best )
                 {
                     best = d;
-                    a = pins[i]->m_Uuid;
-                    b = pins[j]->m_Uuid;
+                    a = pins[i].pin->m_Uuid;
+                    b = pins[j].pin->m_Uuid;
+                    bestI = i;
+                    bestJ = j;
                 }
             }
         }
 
         sig->SetTerminalPins( a, b );
+
+        if( best >= 0 && bestI < pins.size() && bestJ < pins.size() )
+        {
+            sig->SetTerminalRefs( pins[bestI].sym->GetRef( pins[bestI].sheet ), pins[bestI].pin->GetNumber(),
+                                  pins[bestJ].sym->GetRef( pins[bestJ].sheet ), pins[bestJ].pin->GetNumber() );
+        }
 
         if( m_netChainTerminalOverrides.count( sig->GetName() ) )
         {
@@ -3316,6 +3331,68 @@ void CONNECTION_GRAPH::RebuildNetChains()
     }
 
     wxLogTrace( "KICAD_SCH_HIGHLIGHT", "RebuildNetChains: built %zu potential net chains", m_potentialNetChains.size() );
+
+    // Restore committed chains from file.
+    // Priority 1: match by terminal ref+pin (survives net renames)
+    // Priority 2: match by saved net names (survives component renames)
+    {
+        std::set<wxString> alreadyCommitted;
+
+        for( const auto& chain : m_committedNetChains )
+        {
+            if( chain )
+                alreadyCommitted.insert( chain->GetName() );
+        }
+
+        // Build ref+pin → net lookup from current schematic
+        std::map<std::pair<wxString, wxString>, wxString> refPinToNet;
+
+        for( const SCH_SHEET_PATH& sp : m_sheetList )
+        {
+            SCH_SCREEN* sc = sp.LastScreen();
+
+            if( !sc )
+                continue;
+
+            for( SCH_ITEM* item : sc->Items().OfType( SCH_SYMBOL_T ) )
+            {
+                SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
+                wxString    ref = sym->GetRef( &sp );
+
+                for( SCH_PIN* pin : sym->GetPins( &sp ) )
+                {
+                    if( CONNECTION_SUBGRAPH* sg = GetSubgraphForItem( pin ) )
+                    {
+                        wxString net = sg->GetNetName();
+
+                        if( !net.IsEmpty() )
+                            refPinToNet[{ ref, pin->GetNumber() }] = net;
+                    }
+                }
+            }
+        }
+
+        for( const auto& [chainName, termRefs] : m_netChainTerminalRefOverrides )
+        {
+            if( alreadyCommitted.count( chainName ) )
+                continue;
+
+            auto itFrom = refPinToNet.find( { termRefs.first.ref, termRefs.first.pin } );
+
+            if( itFrom != refPinToNet.end() )
+            {
+                for( const auto& pot : m_potentialNetChains )
+                {
+                    if( pot && pot->GetNets().count( itFrom->second ) )
+                    {
+                        CreateNetChainFromPotential( pot.get(), chainName );
+                        alreadyCommitted.insert( chainName );
+                        break;
+                    }
+                }
+            }
+        }
+    }
     }
     catch( const std::exception& e )
     {
@@ -3464,6 +3541,9 @@ SCH_NETCHAIN* CONNECTION_GRAPH::CreateNetChainFromPotential( SCH_NETCHAIN* aPote
     for( SCH_SYMBOL* sym : aPotential->GetSymbols() )
         sig->AddSymbol( sym );
     sig->SetName( aName );
+    sig->SetTerminalPins( aPotential->GetTerminalPinA(), aPotential->GetTerminalPinB() );
+    sig->SetTerminalRefs( aPotential->GetTerminalRef( 0 ), aPotential->GetTerminalPinNum( 0 ),
+                          aPotential->GetTerminalRef( 1 ), aPotential->GetTerminalPinNum( 1 ) );
 
     // Apply any parsed netclass override for this chain name.
     auto ncIt = m_netChainNetClassOverrides.find( aName );

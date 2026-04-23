@@ -121,12 +121,6 @@ public:
      */
     const std::vector<wxString>& GetParseWarnings() const { return m_parseWarnings; }
 
-    // Access parsed net-chain terminal overrides for consumers after ParseSchematic.
-    const std::map<wxString, std::pair<KIID, KIID>>& GetNetChainTerminals() const
-    {
-        return m_netChainTerminals;
-    }
-
     // Access parsed per-chain netclass overrides (chain name -> netclass name).
     const std::map<wxString, wxString>& GetNetChainNetClasses() const
     {
@@ -138,6 +132,15 @@ public:
     {
         return m_netChainColors;
     }
+
+    struct CHAIN_TERMINAL
+    {
+        wxString ref;
+        wxString pin;
+    };
+    using CHAIN_TERMINALS = std::pair<CHAIN_TERMINAL, CHAIN_TERMINAL>;
+
+    const std::map<wxString, CHAIN_TERMINALS>& GetNetChainTerminalRefs() const { return m_netChainTerminalRefs; }
 
 private:
     // Group membership info refers to other Uuids in the file.
@@ -324,9 +327,9 @@ private:
 
     std::vector<wxString>   m_parseWarnings;    ///< Non-fatal warnings collected during parsing
 
-    std::map<wxString, std::pair<KIID, KIID>> m_netChainTerminals;
     std::map<wxString, wxString>              m_netChainNetClasses;
     std::map<wxString, COLOR4D>               m_netChainColors;
+    std::map<wxString, CHAIN_TERMINALS>       m_netChainTerminalRefs;
 };
 
 #endif    // SCH_IO_KICAD_SEXPR_PARSER_H_

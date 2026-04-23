@@ -467,6 +467,18 @@ public:
         return m_netChainNetClassOverrides;
     }
 
+    struct CHAIN_TERMINAL_REF
+    {
+        wxString ref;
+        wxString pin;
+    };
+    using CHAIN_TERMINAL_REFS = std::pair<CHAIN_TERMINAL_REF, CHAIN_TERMINAL_REF>;
+
+    void SetNetChainTerminalRefOverrides( const std::map<wxString, CHAIN_TERMINAL_REFS>& aRefs )
+    {
+        m_netChainTerminalRefOverrides = aRefs;
+    }
+
     void SetNetChainColorOverrides( const std::map<wxString, COLOR4D>& aOverrides )
     {
         m_netChainColorOverrides = aOverrides;
@@ -924,6 +936,7 @@ private:
     std::map<wxString, std::pair<KIID, KIID>> m_netChainTerminalOverrides;
     std::map<wxString, wxString>              m_netChainNetClassOverrides;
     std::map<wxString, COLOR4D>               m_netChainColorOverrides;
+    std::map<wxString, CHAIN_TERMINAL_REFS>    m_netChainTerminalRefOverrides;
 
     int m_last_net_code;
 

@@ -5450,35 +5450,37 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseBusAlias( SCH_SCREEN* aScreen )
 
 void SCH_IO_KICAD_SEXPR_PARSER::parseSchNetChain()
 {
-    // (net_chain "name" (uuid "...") (uuid "...") [(net_class "classname")])
+    // (net_chain "name" [(from "ref" "pin")] [(to "ref" "pin")]
+    //   [(net_class "...")] [(color R G B A)] [(nets "n1" "n2" ...)])
     NeedSYMBOL();
     wxString name = FromUTF8();
 
-    // First terminal
-    NeedLEFT();
-    if( NextTok() != T_uuid )
-        Expecting( "uuid" );
-    NeedSYMBOL();
-    KIID a = parseKIID();
-    NeedRIGHT();
-
-    // Second terminal
-    NeedLEFT();
-    if( NextTok() != T_uuid )
-        Expecting( "uuid" );
-    NeedSYMBOL();
-    KIID b = parseKIID();
-    NeedRIGHT();
-
     wxString netClass;
     COLOR4D  color = COLOR4D::UNSPECIFIED;
+    wxString fromRef, fromPin, toRef, toPin;
 
     for( T tok = NextTok(); tok != T_RIGHT; tok = NextTok() )
     {
         if( tok == T_LEFT )
             tok = NextTok();
 
-        if( tok == T_net_class )
+        if( tok == T_from )
+        {
+            NeedSYMBOLorNUMBER();
+            fromRef = From_UTF8( CurText() );
+            NeedSYMBOLorNUMBER();
+            fromPin = From_UTF8( CurText() );
+            NeedRIGHT();
+        }
+        else if( tok == T_to )
+        {
+            NeedSYMBOLorNUMBER();
+            toRef = From_UTF8( CurText() );
+            NeedSYMBOLorNUMBER();
+            toPin = From_UTF8( CurText() );
+            NeedRIGHT();
+        }
+        else if( tok == T_net_class )
         {
             NeedSYMBOLorNUMBER();
             netClass = FromUTF8();
@@ -5495,13 +5497,16 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchNetChain()
         }
         else
         {
-            // Skip an unknown subsection; walk to its matching RIGHT.
+            // Skip unknown subsections
             int depth = 1;
+
             while( depth > 0 )
             {
                 T inner = NextTok();
+
                 if( inner == T_EOF )
                     break;
+
                 if( inner == T_LEFT )
                     ++depth;
                 else if( inner == T_RIGHT )
@@ -5510,7 +5515,10 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchNetChain()
         }
     }
 
-    m_netChainTerminals[name] = std::make_pair( a, b );
+    if( !fromRef.IsEmpty() && !toRef.IsEmpty() )
+    {
+        m_netChainTerminalRefs[name] = { { fromRef, fromPin }, { toRef, toPin } };
+    }
 
     if( !netClass.IsEmpty() )
         m_netChainNetClasses[name] = netClass;

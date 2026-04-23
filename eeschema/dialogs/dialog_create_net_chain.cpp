@@ -67,11 +67,6 @@ DIALOG_CREATE_NET_CHAIN::DIALOG_CREATE_NET_CHAIN( SCH_EDIT_FRAME* aParent, const
     if( !aToRef.IsEmpty() )
         m_toComponent->SetValue( aToRef );
 
-    // Intercept the OK button for multi-create: create chain and stay open
-    m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED );
-    m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-                           wxCommandEventHandler( DIALOG_CREATE_NET_CHAIN::OnCreateClicked ), nullptr, this );
-
     SetupStandardButtons();
 
     // Rename buttons after SetupStandardButtons() which resets labels
@@ -105,19 +100,21 @@ bool DIALOG_CREATE_NET_CHAIN::TransferDataToWindow()
 }
 
 
-void DIALOG_CREATE_NET_CHAIN::OnCreateClicked( wxCommandEvent& aEvent )
+bool DIALOG_CREATE_NET_CHAIN::TransferDataFromWindow()
 {
-    if( validateAndCreate() )
-    {
-        // Stay open — refresh the grid so the created chain disappears from potentials
-        loadPotentials();
-        rebuildGrid();
+    if( !validateAndCreate() )
+        return false;
 
-        m_nameInput->Clear();
+    // Refresh the grid so the created chain disappears from potentials
+    loadPotentials();
+    rebuildGrid();
+    m_nameInput->Clear();
 
-        m_headerLabel->SetLabel(
-                wxString::Format( _( "Chain created (%d total). Select another or close." ), m_createdCount ) );
-    }
+    m_headerLabel->SetLabel(
+            wxString::Format( _( "Chain created (%d total). Select another or close." ), m_createdCount ) );
+
+    // Return false to keep the dialog open for multi-create
+    return false;
 }
 
 
@@ -181,7 +178,6 @@ bool DIALOG_CREATE_NET_CHAIN::validateAndCreate()
 
     if( prow.livePtr )
     {
-        // Normal path: promote a potential chain
         SCH_NETCHAIN* committed = graph->CreateNetChainFromPotential( prow.livePtr, name );
 
         if( !committed )
@@ -192,7 +188,6 @@ bool DIALOG_CREATE_NET_CHAIN::validateAndCreate()
     }
     else
     {
-        // Force-create path: create from UUID pair
         graph->AddNetChain( prow.forceFromUuid, prow.forceToUuid, name );
     }
 

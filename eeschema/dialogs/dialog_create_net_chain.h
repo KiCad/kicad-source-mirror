@@ -41,9 +41,7 @@ public:
     ~DIALOG_CREATE_NET_CHAIN() override;
 
     bool TransferDataToWindow() override;
-
-    /// Overridden to do nothing — we handle Create via OnCreateClicked.
-    bool TransferDataFromWindow() override { return true; }
+    bool TransferDataFromWindow() override;
 
 protected:
     void OnChainSelected( wxGridEvent& aEvent ) override;
@@ -71,8 +69,6 @@ private:
     void populateComponentCombos();
     void highlightChainNets( const std::set<wxString>& aNets );
     int  selectedRow() const;
-
-    void OnCreateClicked( wxCommandEvent& aEvent );
 
     bool validateAndCreate();
 
