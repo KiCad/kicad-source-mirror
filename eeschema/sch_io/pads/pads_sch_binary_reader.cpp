@@ -2599,7 +2599,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
 {
     BINARY_CURSOR cur( d );
 
-    // Net table: the pool directory gives the count (pool8.used_count) and the 88-byte stride
+    // Net table: the pool directory gives the count (NETS used_count) and the 88-byte stride
     // (used_bytes / used_count; item_size is the 4-byte alloc granule, not the stride).  The base
     // is not stored in the file, so it is recovered as the start of the unique contiguous stride-88
     // net-record run whose length equals the directory count; the 0xFFFFFFFF row sentinel only

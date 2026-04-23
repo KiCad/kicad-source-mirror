@@ -56,9 +56,12 @@ struct POOL_DIRECTORY
     static constexpr unsigned USED_COUNT_OFFSET = 8;
     static constexpr unsigned USED_BYTES_OFFSET = 12;
 
+    static constexpr int FIELDS = 0;            ///< Built-in border/title-block field descriptors.
     static constexpr int SHEETS = 3;            ///< Sheet count.
     static constexpr int DECAL_HANDLE_BASE = 5; ///< Builtin decal handle base.
     static constexpr int NETS = 8;              ///< Net-table row count (stride 88).
+    static constexpr int LIBRARY = 12;          ///< Decal/part-type library (located by window,
+                                                ///< not read through this count).
 
     /// Read the descriptor table from @p aData.  Leaves @ref valid false (and all
     /// counts zero) when the buffer is too small to hold the table.
@@ -223,7 +226,7 @@ public:
     int GetPageWidthMils() const { return m_pageWidthMils; }
     int GetPageHeightMils() const { return m_pageHeightMils; }
 
-    /// Per-sheet "[N]NAME" names from the pool3 sheet table, in file order.
+    /// Per-sheet "[N]NAME" names from the SHEETS pool table, in file order.
     const std::vector<std::string>& GetSheetNames() const { return m_sheetNames; }
 
     /// The net-table row count (the contiguous stride-88 run length), exposed for test coverage.
@@ -293,7 +296,7 @@ private:
     /// The SDB pool directory, parsed once at the top of Parse(), supplying per-controller counts.
     POOL_DIRECTORY                       m_pools;
 
-    /// Start file offset of each per-sheet object block, from the pool3 sheet table
+    /// Start file offset of each per-sheet object block, from the SHEETS pool table
     /// (empty for a single-sheet design).
     std::vector<size_t>                  m_sheetOffsets;
 
@@ -314,7 +317,7 @@ private:
 
     /// Per-sheet used-decal name tables: (file offset, ordered decal names).
     std::vector<std::pair<size_t, std::vector<std::string>>> m_usedDecalTables;
-    size_t                               m_decalBuiltinCount = 0; ///< pool5.used_count (handle base).
+    size_t                               m_decalBuiltinCount = 0; ///< DECAL_HANDLE_BASE used_count.
 
     /// Union of all sheet part-type pool names.
     std::vector<std::string>             m_partTypeNames;
