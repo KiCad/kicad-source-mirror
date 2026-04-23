@@ -40,7 +40,7 @@
 #include <dialogs/dialog_update_from_pcb.h>
 #include <dialogs/hotkey_cycle_popup.h>
 #include <dialogs/dialog_increment_annotations_base.h>
-#include <dialogs/dialog_link_components.h>
+#include <dialogs/dialog_create_net_chain.h>
 #include <project_rescue.h>
 #include <erc/erc.h>
 #include <invoke_sch_dialog.h>
@@ -1963,64 +1963,45 @@ int SCH_EDITOR_CONTROL::CreateNetChainBetweenPins( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDITOR_CONTROL::LinkComponents( const TOOL_EVENT& aEvent )
+int SCH_EDITOR_CONTROL::ShowCreateNetChain( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    auto& selection = selTool->GetSelection();
-
-    std::vector<SCH_SYMBOL*> symbols;
-    for( EDA_ITEM* item : selection )
-    {
-        SCH_SYMBOL* sym = dynamic_cast<SCH_SYMBOL*>( static_cast<SCH_ITEM*>( item ) );
-        if( sym )
-            symbols.push_back( sym );
-    }
-
-    std::vector<SCH_SYMBOL*> sources;
-    std::vector<SCH_SYMBOL*> targets;
-
-    if( symbols.empty() )
-    {
-        // Invoked from the main menu with no selection: open the dialog unseeded.
-        // The dialog already loads all schematic symbols into its source/target lists.
-    }
-    else if( symbols.size() == 1 )
-    {
-        sources.push_back( symbols[0] );
-    }
-    else if( symbols.size() == 2 )
-    {
-        sources.push_back( symbols[0] );
-        targets.push_back( symbols[1] );
-    }
-    else
-    {
-        sources = symbols;
-    }
-
     SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
-    DIALOG_LINK_COMPONENTS dlg( editFrame, sources, targets );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return 0;
-
-    const std::vector<KILINK_ROW>& rows = dlg.SelectedLinks();
 
     CONNECTION_GRAPH* graph = editFrame->Schematic().ConnectionGraph();
 
-    if( !graph )
-        return 0;
-
-    for( const KILINK_ROW& row : rows )
+    if( graph && graph->GetPotentialNetChains().empty() )
     {
-        if( row.selected )
-            graph->AddNetChain( row.source->m_Uuid, row.target->m_Uuid, row.name );
-        else if( row.existing )
-            graph->RemoveNetChain( row.source->m_Uuid, row.target->m_Uuid );
+        SCH_SHEET_LIST sheets = editFrame->Schematic().Hierarchy();
+        graph->Recalculate( sheets, true );
     }
+
+    // Pre-seed From/To from current selection
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    wxString            fromRef, toRef;
+
+    if( selTool )
+    {
+        std::vector<SCH_SYMBOL*> symbols;
+
+        for( EDA_ITEM* item : selTool->GetSelection() )
+        {
+            if( SCH_SYMBOL* sym = dynamic_cast<SCH_SYMBOL*>( static_cast<SCH_ITEM*>( item ) ) )
+                symbols.push_back( sym );
+        }
+
+        if( symbols.size() >= 1 )
+            fromRef = symbols[0]->GetRef( &editFrame->GetCurrentSheet() );
+
+        if( symbols.size() >= 2 )
+            toRef = symbols[1]->GetRef( &editFrame->GetCurrentSheet() );
+    }
+
+    DIALOG_CREATE_NET_CHAIN dlg( editFrame, fromRef, toRef );
+    dlg.ShowModal();
 
     return 0;
 }
+
 
 int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
 {
@@ -3951,7 +3932,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
 
     Go( &SCH_EDITOR_CONTROL::HighlightNet,            SCH_ACTIONS::highlightNet.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::CreateNetChainBetweenPins, SCH_ACTIONS::createNetChainBetweenPins.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::LinkComponents, SCH_ACTIONS::linkComponents.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ShowCreateNetChain, SCH_ACTIONS::createNetChain.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ClearHighlight,          SCH_ACTIONS::clearHighlight.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::HighlightNetCursor,      SCH_ACTIONS::highlightNetTool.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::HighlightNetChain,         SCH_ACTIONS::highlightNetChain.MakeEvent() );

@@ -300,8 +300,8 @@ protected:
 
         if( sel.OnlyContains( { SCH_SYMBOL_T } ) )
         {
-            Add( SCH_ACTIONS::linkComponents );
-            wxLogTrace( "KICAD_KILINKS_MENU", "[KiLinksMenu] added linkComponents" );
+            Add( SCH_ACTIONS::createNetChain );
+            wxLogTrace( "KICAD_KILINKS_MENU", "[KiLinksMenu] added createNetChain" );
             return;
         }
 

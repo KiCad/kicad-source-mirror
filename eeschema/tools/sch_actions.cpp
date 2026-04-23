@@ -1127,11 +1127,11 @@ TOOL_ACTION SCH_ACTIONS::createNetChainBetweenPins( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Create Net Chain Between Pins" ) )
         .Tooltip( _( "Create a new net chain connecting the two selected pins" ) ) );
 
-TOOL_ACTION SCH_ACTIONS::linkComponents( TOOL_ACTION_ARGS()
-        .Name( "eeschema.EditorControl.linkComponents" )
+TOOL_ACTION SCH_ACTIONS::createNetChain( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.createNetChain" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Net Chains..." ) )
-        .Tooltip( _( "Create and manage net chains linking components through series passives" ) ) );
+        .FriendlyName( _( "Create Net Chain..." ) )
+        .Tooltip( _( "Detect signal paths through passives and create a named net chain" ) ) );
 
 TOOL_ACTION SCH_ACTIONS::showNetNavigator( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.showNetNavigator" )

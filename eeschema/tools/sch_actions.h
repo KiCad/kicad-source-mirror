@@ -325,7 +325,7 @@ public:
     static TOOL_ACTION replaceTerminalPin;
     static TOOL_ACTION nameNetChain;
     static TOOL_ACTION createNetChainBetweenPins;
-    static TOOL_ACTION linkComponents;
+    static TOOL_ACTION createNetChain;
     static TOOL_ACTION showNetNavigator;
 
     // Drag and drop

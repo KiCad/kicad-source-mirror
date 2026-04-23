@@ -109,7 +109,7 @@ public:
     int NameNetChain( const TOOL_EVENT& aEvent );
     int CreateNetChainBetweenPins( const TOOL_EVENT& aEvent );
 
-    int LinkComponents( const TOOL_EVENT& aEvent );
+    int ShowCreateNetChain( const TOOL_EVENT& aEvent );
 
     int AssignNetclass( const TOOL_EVENT& aEvent );
     int FindNetInInspector( const TOOL_EVENT& aEvent );
