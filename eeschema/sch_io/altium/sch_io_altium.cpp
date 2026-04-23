@@ -1912,7 +1912,7 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
     }
 
     pin->SetName( AltiumPinNamesToKiCad( elem.name ) );
-    pin->SetNumber( elem.designator );
+    pin->SetNumber( AltiumPinDesignatorToKiCad( elem.designator ) );
     pin->SetLength( elem.pinlength );
 
     if( elem.hidden )

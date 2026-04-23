@@ -28,6 +28,7 @@
 #include <lib_id.h>
 #include <trigo.h>
 #include <math/util.h>
+#include <wx/arrstr.h>
 
 LIB_ID AltiumToKiCadLibID( const wxString& aLibName, const wxString& aLibReference )
 {
@@ -243,6 +244,36 @@ wxString AltiumPinNamesToKiCad( wxString& aString )
         return "~{" + rest + "}";
 
     return AltiumPropertyToKiCadString( aString );
+}
+
+
+wxString AltiumPinDesignatorToKiCad( const wxString& aDesignator )
+{
+    wxString designator = aDesignator;
+    designator.Trim( true ).Trim( false );
+
+    if( !designator.Contains( wxT( "," ) ) )
+        return designator;
+
+    // Rebuild as KiCad stacked notation "[a,b,c]".  If trimming collapses the list to a
+    // single token, emit the bare token so well-formed single designators never get wrapped.
+    wxArrayString cleaned;
+
+    for( wxString token : wxSplit( designator, ',', '\0' ) )
+    {
+        token.Trim( true ).Trim( false );
+
+        if( !token.IsEmpty() )
+            cleaned.Add( token );
+    }
+
+    if( cleaned.IsEmpty() )
+        return designator;
+
+    if( cleaned.GetCount() == 1 )
+        return cleaned[0];
+
+    return wxT( "[" ) + wxJoin( cleaned, ',', '\0' ) + wxT( "]" );
 }
 
 

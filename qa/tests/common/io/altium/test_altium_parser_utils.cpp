@@ -214,4 +214,52 @@ BOOST_DATA_TEST_CASE( AltiumPcbSpecialStringsToKiCadStringsProperties,
     BOOST_CHECK_EQUAL( result, data.exp_result );
 }
 
+struct PIN_DESIGNATOR_CASE
+{
+    wxString input;
+    wxString expected;
+};
+
+std::ostream& operator<<( std::ostream& strm, PIN_DESIGNATOR_CASE const& data )
+{
+    return strm << "[" << data.input << " -> " << data.expected << "]";
+}
+
+// Verifies GitLab issue 23709 handling: Altium encodes pins tied to multiple physical
+// pads as a comma-separated designator string; KiCad expects stacked-pin bracket notation.
+static const std::vector<PIN_DESIGNATOR_CASE> pin_designator_cases = {
+    // Single-designator inputs return after whitespace trim only
+    { wxT( "" ), wxT( "" ) },
+    { wxT( "1" ), wxT( "1" ) },
+    { wxT( "A1" ), wxT( "A1" ) },
+    { wxT( "GND" ), wxT( "GND" ) },
+    { wxT( " 1 " ), wxT( "1" ) },
+    { wxT( "  A1 " ), wxT( "A1" ) },
+
+    // Basic multi-designator conversion
+    { wxT( "1,2" ), wxT( "[1,2]" ) },
+    { wxT( "1,2,3" ), wxT( "[1,2,3]" ) },
+    { wxT( "A1,A2,A3" ), wxT( "[A1,A2,A3]" ) },
+
+    // Whitespace around tokens is trimmed
+    { wxT( "1, 2, 3" ), wxT( "[1,2,3]" ) },
+    { wxT( " 1 , 2 , 3 " ), wxT( "[1,2,3]" ) },
+
+    // Stray empty tokens (trailing comma, duplicate comma) are dropped
+    { wxT( "1,2," ), wxT( "[1,2]" ) },
+    { wxT( "1,,2" ), wxT( "[1,2]" ) },
+
+    // Degenerate inputs collapse back to a single bare token or to the original
+    { wxT( "1," ), wxT( "1" ) },
+    { wxT( "," ), wxT( "," ) },
+};
+
+
+BOOST_DATA_TEST_CASE( AltiumPinDesignatorToKiCadProperties,
+                      boost::unit_test::data::make( pin_designator_cases ),
+                      data )
+{
+    BOOST_CHECK_EQUAL( AltiumPinDesignatorToKiCad( data.input ), data.expected );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
