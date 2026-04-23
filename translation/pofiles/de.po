@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-15 19:16+0300\n"
-"PO-Revision-Date: 2026-04-23 03:03+0000\n"
+"PO-Revision-Date: 2026-04-23 23:24+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -6344,18 +6344,16 @@ msgid "Graphics error"
 msgstr "Grafikfehler"
 
 #: common/draw_panel_gal.cpp:236 common/draw_panel_gal.cpp:240
-#, fuzzy
 msgid "Graphics error during recovery"
-msgstr "Grafikfehler"
+msgstr "Grafikfehler während Wiederherstellung"
 
 #: common/draw_panel_gal.cpp:241
 msgid "Unknown exception during backend switch"
 msgstr "Unbekannte Ausnahme während des Backendwechsels"
 
 #: common/draw_panel_gal.cpp:416
-#, fuzzy
 msgid "Unknown exception"
-msgstr "Unbekannte Bereinigungsaktion"
+msgstr "Unbekannte Ausnahme"
 
 #: common/draw_panel_gal.cpp:619
 msgid "Could not use OpenGL"
@@ -8705,32 +8703,27 @@ msgstr "Gerber: Diff"
 
 #: common/jobs/job_gerber_export_png.cpp:52
 msgid "Gerber Export PNG"
-msgstr "Gerber-Export PNG"
+msgstr "Gerber Export PNG"
 
 #: common/jobs/job_gerber_export_png.cpp:58
-#, fuzzy
 msgid "Gerber Export PNG Job Settings"
-msgstr "HPGL-Auftragseinstellungen exportieren"
+msgstr "Gerber Export PNG-Auftragseinstellungen"
 
 #: common/jobs/job_gerber_export_png.cpp:62
-#, fuzzy
 msgid "Gerber: Export PNG"
-msgstr "PCB Gerber-Export"
+msgstr "Gerber: Export PNG"
 
 #: common/jobs/job_gerber_info.cpp:39
-#, fuzzy
 msgid "Gerber Info"
-msgstr "Gerber-Datei"
+msgstr "Gerber Info"
 
 #: common/jobs/job_gerber_info.cpp:45
-#, fuzzy
 msgid "Gerber Info Job Settings"
-msgstr "Gerberdateien-Export-Auftragseinstellungen"
+msgstr "Gerber Info-Auftragseinstellungen"
 
 #: common/jobs/job_gerber_info.cpp:49
-#, fuzzy
 msgid "Gerber: Info"
-msgstr "Gerber-Datei"
+msgstr "Gerber: Info"
 
 #: common/jobs/job_pcb_drc.cpp:42
 msgid "Perform DRC"
@@ -30317,9 +30310,9 @@ msgid "Fail on any parse warnings or errors"
 msgstr "Warnungen/Fehler beim Parsen führen zum Abbruch"
 
 #: kicad/cli/command_gerber_convert_png.cpp:80
-#, fuzzy
 msgid "Units for viewport parameters, options: mm, inch, mils (default: mm)"
-msgstr "Ausgabeeinheiten, Optionen: mm, inch, mils (Standard: mm)"
+msgstr ""
+"Einheiten für Ansichtsparameter, Optionen: mm, inch, mils (Standard: mm)"
 
 #: kicad/cli/command_gerber_convert_png.cpp:86
 msgid "Viewport origin X"
@@ -30342,9 +30335,8 @@ msgid "Foreground color as hex (e.g., '#FFFFFF')"
 msgstr "Vordergrundfarbe in hex (z.B. \"#FFFFFF\")"
 
 #: kicad/cli/command_gerber_convert_png.cpp:114
-#, fuzzy
 msgid "Background color as hex (e.g., '#000000')"
-msgstr "Hintergrundfarbe (nur Blätter)"
+msgstr "Hintergrundfarbe in hex (z.B. \"#000000\")"
 
 #: kicad/cli/command_gerber_convert_png.cpp:147
 #: kicad/cli/command_gerber_info.cpp:100
@@ -41704,9 +41696,8 @@ msgstr ""
 "abgleichen."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:99
-#, fuzzy
 msgid "Keep KiCad layer names"
-msgstr "&Behalte äußere Lagen"
+msgstr "Behalte KiCad Lagennamen"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:100
 msgid ""
@@ -42694,7 +42685,6 @@ msgstr "Oben & unten"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1213
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:461
-#, fuzzy
 msgid "Front backdrill must-cut:"
 msgstr "Obers. Backdrill-Ziellage:"
 
@@ -42712,9 +42702,8 @@ msgstr "Obers. Backdrillgröße:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1246
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:493
-#, fuzzy
 msgid "Back backdrill must-cut:"
-msgstr "Obers. Backdrill-Ziellage:"
+msgstr "Unters. Backdrill-Ziellage:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1257
 msgid "Bottom backdrill size:"
@@ -44020,14 +44009,12 @@ msgid "Both"
 msgstr "Beide"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:444
-#, fuzzy
 msgid "Front backdrill size:"
 msgstr "Obers. Backdrillgröße:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:476
-#, fuzzy
 msgid "Back backdrill size:"
-msgstr "Obers. Backdrillgröße:"
+msgstr "Unters. Backdrillgröße:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:511
 msgid "Hole Post-machining"
@@ -44673,21 +44660,18 @@ msgstr "Fehler beim Hinzufügen des 3D-Modells"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:212
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:143
-#, fuzzy
 msgid "Courtyard layer"
-msgstr "Abstandsflächenüberschneidung"
+msgstr "Abstandsflächen-Lage"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:213
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:143
-#, fuzzy
 msgid "Fabrication layer"
-msgstr "Fertigungseigenschaften"
+msgstr "Fertigungs-Lage"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:261
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:888
-#, fuzzy
 msgid "Component height must be greater than zero."
-msgstr "Linienbreite muss größer als Null sein."
+msgstr "Bauteilhöhe muss größer als Null sein."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:261
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:271
@@ -44715,9 +44699,8 @@ msgstr "Kann Datei nicht öffnen"
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:901
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:938
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:961
-#, fuzzy
 msgid "Export Extruded Body"
-msgstr "Platinenkörper exportieren"
+msgstr "Extrudierten Köroer exportieren"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:901
 #, fuzzy
