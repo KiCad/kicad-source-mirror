@@ -1843,6 +1843,12 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
             if( group->m_Uuid == aID )
                 return CacheAndReturnItemById( aID, group );
         }
+
+        for( PCB_POINT* point : footprint->Points() )
+        {
+            if( point->m_Uuid == aID )
+                return CacheAndReturnItemById( aID, point );
+        }
     }
 
     for( ZONE* zone : Zones() )
