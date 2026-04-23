@@ -41,27 +41,25 @@ PANEL_SETUP_NET_CHAINS_BASE::PANEL_SETUP_NET_CHAINS_BASE( wxWindow* parent, wxWi
 	m_chainsGrid = new WX_GRID( m_chainsGridPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_chainsGrid->CreateGrid( 0, 6 );
+	m_chainsGrid->CreateGrid( 0, 5 );
 	m_chainsGrid->EnableEditing( true );
 	m_chainsGrid->EnableGridLines( true );
 	m_chainsGrid->EnableDragGridSize( true );
 	m_chainsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_chainsGrid->SetColSize( 0, 80 );
-	m_chainsGrid->SetColSize( 1, 160 );
-	m_chainsGrid->SetColSize( 2, 200 );
+	m_chainsGrid->SetColSize( 0, 160 );
+	m_chainsGrid->SetColSize( 1, 200 );
+	m_chainsGrid->SetColSize( 2, 140 );
 	m_chainsGrid->SetColSize( 3, 140 );
-	m_chainsGrid->SetColSize( 4, 140 );
-	m_chainsGrid->SetColSize( 5, 60 );
+	m_chainsGrid->SetColSize( 4, 60 );
 	m_chainsGrid->EnableDragColMove( false );
 	m_chainsGrid->EnableDragColSize( true );
-	m_chainsGrid->SetColLabelValue( 0, _("Status") );
-	m_chainsGrid->SetColLabelValue( 1, _("Name") );
-	m_chainsGrid->SetColLabelValue( 2, _("Members") );
-	m_chainsGrid->SetColLabelValue( 3, _("Net Chain Class") );
-	m_chainsGrid->SetColLabelValue( 4, _("Net Class") );
-	m_chainsGrid->SetColLabelValue( 5, _("Colour") );
+	m_chainsGrid->SetColLabelValue( 0, _("Name") );
+	m_chainsGrid->SetColLabelValue( 1, _("Members") );
+	m_chainsGrid->SetColLabelValue( 2, _("Net Chain Class") );
+	m_chainsGrid->SetColLabelValue( 3, _("Net Class") );
+	m_chainsGrid->SetColLabelValue( 4, _("Colour") );
 	m_chainsGrid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_chainsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
@@ -103,23 +101,10 @@ PANEL_SETUP_NET_CHAINS_BASE::PANEL_SETUP_NET_CHAINS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bChainsButtons;
 	bChainsButtons = new wxBoxSizer( wxHORIZONTAL );
 
-	m_promoteButton = new STD_BITMAP_BUTTON( m_chainsTab, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_promoteButton->SetToolTip( _("Promote selected potential net chain (assign a name)") );
-
-	bChainsButtons->Add( m_promoteButton, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
-
 	m_deleteChainButton = new STD_BITMAP_BUTTON( m_chainsTab, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_deleteChainButton->SetToolTip( _("Delete the selected committed net chain") );
 
 	bChainsButtons->Add( m_deleteChainButton, 0, wxBOTTOM|wxRIGHT, 5 );
-
-
-	bChainsButtons->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_refreshButton = new STD_BITMAP_BUTTON( m_chainsTab, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_refreshButton->SetToolTip( _("Re-detect potential net chains from the schematic") );
-
-	bChainsButtons->Add( m_refreshButton, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
 	bChainsTab->Add( bChainsButtons, 0, wxEXPAND|wxTOP, 3 );
@@ -208,9 +193,7 @@ PANEL_SETUP_NET_CHAINS_BASE::PANEL_SETUP_NET_CHAINS_BASE( wxWindow* parent, wxWi
 
 	// Connect Events
 	m_chainsGrid->Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnChainGridSelectionChanged ), NULL, this );
-	m_promoteButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnPromoteClicked ), NULL, this );
 	m_deleteChainButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnDeleteChainClicked ), NULL, this );
-	m_refreshButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnRefreshClicked ), NULL, this );
 	m_addClassButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnClassAddClicked ), NULL, this );
 	m_renameClassButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnClassRenameClicked ), NULL, this );
 	m_deleteClassButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnClassDeleteClicked ), NULL, this );
@@ -220,9 +203,7 @@ PANEL_SETUP_NET_CHAINS_BASE::~PANEL_SETUP_NET_CHAINS_BASE()
 {
 	// Disconnect Events
 	m_chainsGrid->Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnChainGridSelectionChanged ), NULL, this );
-	m_promoteButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnPromoteClicked ), NULL, this );
 	m_deleteChainButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnDeleteChainClicked ), NULL, this );
-	m_refreshButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnRefreshClicked ), NULL, this );
 	m_addClassButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnClassAddClicked ), NULL, this );
 	m_renameClassButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnClassRenameClicked ), NULL, this );
 	m_deleteClassButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NET_CHAINS_BASE::OnClassDeleteClicked ), NULL, this );

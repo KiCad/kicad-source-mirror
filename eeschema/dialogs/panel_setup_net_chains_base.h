@@ -50,9 +50,7 @@ class PANEL_SETUP_NET_CHAINS_BASE : public wxPanel
 		wxPanel* m_membersPanel;
 		wxStaticText* m_membersLabel;
 		wxListBox* m_membersListBox;
-		STD_BITMAP_BUTTON* m_promoteButton;
 		STD_BITMAP_BUTTON* m_deleteChainButton;
-		STD_BITMAP_BUTTON* m_refreshButton;
 		wxPanel* m_classesTab;
 		wxStaticText* m_classesHeader;
 		WX_GRID* m_classesGrid;
@@ -62,9 +60,7 @@ class PANEL_SETUP_NET_CHAINS_BASE : public wxPanel
 
 		// Virtual event handlers, override them in your derived class
 		virtual void OnChainGridSelectionChanged( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnPromoteClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteChainClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRefreshClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnClassAddClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnClassRenameClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnClassDeleteClicked( wxCommandEvent& event ) { event.Skip(); }

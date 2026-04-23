@@ -52,30 +52,21 @@ PANEL_SETUP_NET_CHAINS::PANEL_SETUP_NET_CHAINS( wxWindow* aParent, SCH_EDIT_FRAM
         PANEL_SETUP_NET_CHAINS_BASE( aParent ),
         m_frame( aFrame )
 {
-    // Hook the colour-cell renderer/editor onto the chains grid colour column.
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetRenderer( new GRID_CELL_COLOR_RENDERER( PAGED_DIALOG::GetDialog( this ) ) );
     attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( PAGED_DIALOG::GetDialog( this ),
                                                    m_chainsGrid ) );
     m_chainsGrid->SetColAttr( COL_COLOUR, attr );
 
-    // Status and Members columns are read-only.
     wxGridCellAttr* roAttr = new wxGridCellAttr;
     roAttr->SetReadOnly( true );
-    m_chainsGrid->SetColAttr( COL_STATUS, roAttr );
+    m_chainsGrid->SetColAttr( COL_MEMBERS, roAttr );
 
     wxGridCellAttr* roAttr2 = new wxGridCellAttr;
     roAttr2->SetReadOnly( true );
-    m_chainsGrid->SetColAttr( COL_MEMBERS, roAttr2 );
+    m_classesGrid->SetColAttr( CLASS_COL_MEMBERS, roAttr2 );
 
-    // Members column on the Classes grid is read-only.
-    wxGridCellAttr* roAttr3 = new wxGridCellAttr;
-    roAttr3->SetReadOnly( true );
-    m_classesGrid->SetColAttr( CLASS_COL_MEMBERS, roAttr3 );
-
-    m_promoteButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_deleteChainButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
-    m_refreshButton->SetBitmap( KiBitmapBundle( BITMAPS::refresh ) );
     m_addClassButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_renameClassButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
     m_deleteClassButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
@@ -91,7 +82,6 @@ void PANEL_SETUP_NET_CHAINS::loadFromModel()
 {
     m_chainRows.clear();
     m_classRows.clear();
-    m_potentialAutoNames.clear();
 
     if( !m_frame )
         return;
@@ -101,22 +91,18 @@ void PANEL_SETUP_NET_CHAINS::loadFromModel()
     if( !graph )
         return;
 
-    // Pull the per-project chain-class map first so the chain rows can
-    // pre-populate their chain-class cell.
     std::shared_ptr<NET_SETTINGS> ns = m_frame->Prj().GetProjectFile().NetSettings();
     std::map<wxString, wxString>  chainToClass;
 
     if( ns )
         chainToClass = ns->GetNetChainClasses();
 
-    // Committed chains.
     for( const std::unique_ptr<SCH_NETCHAIN>& chain : graph->GetCommittedNetChains() )
     {
         if( !chain )
             continue;
 
         CHAIN_ROW row;
-        row.isPotential = false;
         row.origName    = chain->GetName();
         row.newName     = row.origName;
         row.newColor    = chain->GetColor();
@@ -130,58 +116,6 @@ void PANEL_SETUP_NET_CHAINS::loadFromModel()
             row.newChainClass = it->second;
 
         m_chainRows.push_back( std::move( row ) );
-    }
-
-    // Potential chains — skip any whose nets already belong to a committed chain.
-    std::set<wxString> committedNets;
-
-    for( const CHAIN_ROW& cr : m_chainRows )
-    {
-        for( const wxString& net : cr.memberNets )
-            committedNets.insert( net );
-    }
-
-    int potentialIdx = 0;
-
-    for( const std::unique_ptr<SCH_NETCHAIN>& chain : graph->GetPotentialNetChains() )
-    {
-        if( !chain )
-            continue;
-
-        bool alreadyCommitted = false;
-
-        for( const wxString& net : chain->GetNets() )
-        {
-            if( committedNets.count( net ) )
-            {
-                alreadyCommitted = true;
-                break;
-            }
-        }
-
-        if( alreadyCommitted )
-            continue;
-
-        CHAIN_ROW row;
-        row.isPotential = true;
-        row.origName    = wxEmptyString;     // never committed
-        row.newName     = wxEmptyString;
-        row.livePtr     = chain.get();
-        row.memberNets  = chain->GetNets();
-
-        // Suggest a name from the longest member-net name; the user can edit
-        // the cell or just accept it before promoting.
-        wxString suggestion;
-
-        for( const wxString& net : row.memberNets )
-        {
-            if( net.length() > suggestion.length() )
-                suggestion = net;
-        }
-
-        m_potentialAutoNames[(int) m_chainRows.size()] = suggestion;
-        m_chainRows.push_back( std::move( row ) );
-        ++potentialIdx;
     }
 
     // Distinct class names from the chain->class map.
@@ -250,23 +184,15 @@ void PANEL_SETUP_NET_CHAINS::rebuildChainsGrid()
     refreshNetClassDropdownChoices();
     refreshChainClassDropdownChoices();
 
-    int committedCount = 0;
-    int potentialCount = 0;
+    int activeCount = 0;
 
     for( const CHAIN_ROW& row : m_chainRows )
     {
-        if( row.deletePending )
-            continue;
-
-        if( row.isPotential && !row.promotePending )
-            ++potentialCount;
-        else
-            ++committedCount;
+        if( !row.deletePending )
+            ++activeCount;
     }
 
-    m_chainsHeader->SetLabel( wxString::Format( _( "%d net chain(s) — %d committed, %d potential" ),
-                                                committedCount + potentialCount,
-                                                committedCount, potentialCount ) );
+    m_chainsHeader->SetLabel( wxString::Format( _( "%d net chain(s)" ), activeCount ) );
 
     m_chainsGrid->AppendRows( static_cast<int>( m_chainRows.size() ) );
 
@@ -275,41 +201,15 @@ void PANEL_SETUP_NET_CHAINS::rebuildChainsGrid()
         const CHAIN_ROW& row = m_chainRows[i];
         int              r   = static_cast<int>( i );
 
-        m_chainsGrid->SetCellValue( r, COL_STATUS,
-                                    ( row.isPotential && !row.promotePending )
-                                            ? c_statusPotential : c_statusCommitted );
-
         m_chainsGrid->SetCellValue( r, COL_NAME, row.newName );
-
-        // Members display: "<n> nets: a, b, c…" with full list in tooltip
-        wxString memberSummary = wxString::Format( _( "%zu nets" ), row.memberNets.size() );
-        wxString memberTooltip;
-        bool     first = true;
-
-        for( const wxString& n : row.memberNets )
-        {
-            if( !first )
-                memberTooltip += wxT( ", " );
-
-            memberTooltip += n;
-            first = false;
-        }
-
-        m_chainsGrid->SetCellValue( r, COL_MEMBERS, memberSummary );
-        // Per-cell tooltips aren't supported across our wxGrid version, so the
-        // summary string carries the count; the full member list lives in the
-        // model and can be surfaced via a future right-click "Show members"
-        // action.  (memberTooltip is intentionally unused for now.)
-        (void) memberTooltip;
-
+        m_chainsGrid->SetCellValue( r, COL_MEMBERS,
+                                    wxString::Format( _( "%zu nets" ), row.memberNets.size() ) );
         m_chainsGrid->SetCellValue( r, COL_CHAIN_CLASS, row.newChainClass );
         m_chainsGrid->SetCellValue( r, COL_NET_CLASS, row.newNetClass );
 
         if( row.newColor != KIGFX::COLOR4D::UNSPECIFIED )
             m_chainsGrid->SetCellValue( r, COL_COLOUR, row.newColor.ToCSSString() );
 
-        // Potential rows: name column is editable (so the user can supply a
-        // promote name); other rows: name editable too; deletePending: grey out.
         if( row.deletePending )
         {
             for( int c = 0; c < m_chainsGrid->GetNumberCols(); ++c )
@@ -393,9 +293,6 @@ bool PANEL_SETUP_NET_CHAINS::Validate()
         else
             m_chainRows[i].newColor = KIGFX::COLOR4D( colorStr );
 
-        // Promoted potentials need a non-empty name.
-        if( m_chainRows[i].isPotential && !m_chainRows[i].newName.IsEmpty() )
-            m_chainRows[i].promotePending = true;
     }
 
     for( size_t i = 0; i < m_classRows.size(); ++i )
@@ -412,7 +309,7 @@ bool PANEL_SETUP_NET_CHAINS::Validate()
         if( row.deletePending )
             continue;
 
-        if( !row.isPotential && row.newName.IsEmpty() )
+        if( row.newName.IsEmpty() )
         {
             wxMessageBox( wxString::Format( _( "Net chain on row %zu cannot have an empty name." ),
                                             i + 1 ),
@@ -479,28 +376,10 @@ bool PANEL_SETUP_NET_CHAINS::ApplyEdits()
 
     std::shared_ptr<NET_SETTINGS> ns = m_frame->Prj().GetProjectFile().NetSettings();
 
-    // Step 1 — promote potentials so the rest of the steps can find their
-    // newly-committed live pointer.
+    // Apply renames on chains whose name changed.
     for( CHAIN_ROW& row : m_chainRows )
     {
-        if( !row.isPotential || row.deletePending || !row.promotePending )
-            continue;
-
-        SCH_NETCHAIN* committed =
-                graph->CreateNetChainFromPotential( row.livePtr, row.newName );
-
-        if( committed )
-        {
-            row.livePtr     = committed;
-            row.isPotential = false;
-            row.origName    = row.newName;
-        }
-    }
-
-    // Step 2 — apply renames on committed chains whose name changed.
-    for( CHAIN_ROW& row : m_chainRows )
-    {
-        if( row.isPotential || row.deletePending )
+        if( row.deletePending )
             continue;
 
         if( !row.origName.IsEmpty() && row.origName != row.newName )
@@ -523,33 +402,32 @@ bool PANEL_SETUP_NET_CHAINS::ApplyEdits()
         }
     }
 
-    // Step 3 — colour and netclass override edits on committed chains.
+    // Apply colour and netclass override edits.
     for( CHAIN_ROW& row : m_chainRows )
     {
-        if( row.isPotential || row.deletePending || !row.livePtr )
+        if( row.deletePending || !row.livePtr )
             continue;
 
         row.livePtr->SetColor( row.newColor );
         row.livePtr->SetNetClass( row.newNetClass );
     }
 
-    // Step 4 — chain-class assignments into NET_SETTINGS.
+    // Chain-class assignments into NET_SETTINGS.
     if( ns )
     {
         for( const CHAIN_ROW& row : m_chainRows )
         {
-            if( row.isPotential || row.deletePending )
+            if( row.deletePending )
                 continue;
 
             ns->SetNetChainClass( row.newName, row.newChainClass );
         }
     }
 
-    // Step 5 — deletions of committed chains.  Done last so renames above
-    // don't see ghost rows.
+    // Deletions — done last so renames above don't see ghost rows.
     for( CHAIN_ROW& row : m_chainRows )
     {
-        if( !row.deletePending || row.isPotential )
+        if( !row.deletePending )
             continue;
 
         if( !row.origName.IsEmpty() && graph->DeleteCommittedNetChain( row.origName ) )
@@ -673,50 +551,6 @@ bool PANEL_SETUP_NET_CHAINS::nameInClassGridAlready( const wxString& aName, int 
 }
 
 
-void PANEL_SETUP_NET_CHAINS::OnPromoteClicked( wxCommandEvent& )
-{
-    int r = selectedChainRow();
-
-    if( r < 0 || r >= static_cast<int>( m_chainRows.size() ) )
-        return;
-
-    CHAIN_ROW& row = m_chainRows[r];
-
-    if( !row.isPotential || row.promotePending )
-        return;
-
-    wxString suggested = row.newName;
-
-    if( suggested.IsEmpty() )
-    {
-        auto it = m_potentialAutoNames.find( r );
-
-        if( it != m_potentialAutoNames.end() )
-            suggested = it->second;
-    }
-
-    wxTextEntryDialog dlg( this, _( "Net chain name:" ), _( "Promote Net Chain" ),
-                           suggested );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
-
-    wxString name = dlg.GetValue();
-
-    if( name.IsEmpty() || isReservedChainName( name ) || nameInChainGridAlready( name, r ) )
-    {
-        wxMessageBox( _( "That name is reserved or already in use." ),
-                      _( "Promote Net Chain" ), wxOK | wxICON_ERROR, this );
-        return;
-    }
-
-    row.newName        = name;
-    row.promotePending = true;
-
-    rebuildChainsGrid();
-}
-
-
 void PANEL_SETUP_NET_CHAINS::OnDeleteChainClicked( wxCommandEvent& )
 {
     int r = selectedChainRow();
@@ -725,9 +559,6 @@ void PANEL_SETUP_NET_CHAINS::OnDeleteChainClicked( wxCommandEvent& )
         return;
 
     CHAIN_ROW& row = m_chainRows[r];
-
-    if( row.isPotential )
-        return; // potentials can't be deleted, only ignored
 
     if( wxMessageBox( wxString::Format( _( "Delete net chain '%s'?" ), row.newName ),
                       _( "Delete Net Chain" ), wxYES_NO | wxICON_QUESTION, this ) != wxYES )
@@ -775,23 +606,6 @@ void PANEL_SETUP_NET_CHAINS::updateMembersDetail( int aRow )
 
     sorted.Sort();
     m_membersListBox->Append( sorted );
-}
-
-
-void PANEL_SETUP_NET_CHAINS::OnRefreshClicked( wxCommandEvent& )
-{
-    if( !m_frame )
-        return;
-
-    CONNECTION_GRAPH* graph = m_frame->Schematic().ConnectionGraph();
-
-    if( !graph )
-        return;
-
-    graph->Recalculate( m_frame->Schematic().BuildSheetListSortedByPageNumbers(), true );
-    loadFromModel();
-    rebuildChainsGrid();
-    rebuildClassesGrid();
 }
 
 
