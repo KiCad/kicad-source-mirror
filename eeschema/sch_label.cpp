@@ -928,8 +928,14 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
     {
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
 
+        // aPath is expected to be either the sheet pin's owner-screen path (parent sheet as
+        // Last()) or the already-extended path whose Last() is the owning sheet itself.
+        // Only push the owner sheet when it isn't already at the end; a double-push produces
+        // a nonsense path and breaks lookups keyed on the instance (e.g. ${#} page number).
         SCH_SHEET_PATH path = *aPath;
-        path.push_back( sheet );
+
+        if( path.Last() != sheet )
+            path.push_back( sheet );
 
         if( sheet->ResolveTextVar( &path, token, aDepth + 1 ) )
             return true;
