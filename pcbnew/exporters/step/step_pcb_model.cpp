@@ -1698,7 +1698,7 @@ bool STEP_PCB_MODEL::AddExtrudedBody( const SHAPE_POLY_SET& aOutline, bool aBott
         zBot = boardSurfaceZ - aHeight;
 
     m_extruded_bodies.push_back( { {}, {}, aRefDes, aColor, aMaterial } );
-    return MakeShapes( m_extruded_bodies.back().bodyShapes, aOutline, false, bodyThickness, zBot, aOrigin );
+    return MakeShapes( m_extruded_bodies.back().bodyShapes, aOutline, m_simplifyShapes, bodyThickness, zBot, aOrigin );
 }
 
 
@@ -1748,7 +1748,7 @@ bool STEP_PCB_MODEL::AddExtrudedPins( const FOOTPRINT* aFootprint, bool aBottom,
     if( m_extruded_bodies.empty() )
         return false;
 
-    return MakeShapes( m_extruded_bodies.back().pinShapes, pinPoly, false, pinHeight, pinZBot, aOrigin );
+    return MakeShapes( m_extruded_bodies.back().pinShapes, pinPoly, m_simplifyShapes, pinHeight, pinZBot, aOrigin );
 }
 
 
