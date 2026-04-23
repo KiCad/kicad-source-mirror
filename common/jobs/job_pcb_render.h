@@ -53,6 +53,7 @@ public:
     wxString GetSettingsDialogTitle() const override;
 
     wxString m_filename;
+    wxString m_variant;
 
     // Do not rename enum values as they are used for CLI args
     enum class QUALITY

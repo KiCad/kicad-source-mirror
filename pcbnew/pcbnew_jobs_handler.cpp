@@ -721,6 +721,9 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    if( !aRenderJob->m_variant.IsEmpty() )
+        brd->SetCurrentVariant( aRenderJob->m_variant );
+
     if( aRenderJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
