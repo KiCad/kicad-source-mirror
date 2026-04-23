@@ -148,12 +148,7 @@ class PG_NET_SELECTOR_EDITOR : public wxPGEditor
 public:
     static const wxString EDITOR_NAME;
 
-    PG_NET_SELECTOR_EDITOR( PCB_BASE_EDIT_FRAME* aFrame ) :
-            m_frame( aFrame )
-    {
-    }
-
-    void UpdateFrame( PCB_BASE_EDIT_FRAME* aFrame ) { m_frame = aFrame; }
+    PG_NET_SELECTOR_EDITOR() = default;
 
     wxString GetName() const override { return EDITOR_NAME; }
 
@@ -162,8 +157,20 @@ public:
     {
         NET_SELECTOR* editor = new NET_SELECTOR( aGrid->GetPanel(), wxID_ANY, aPos, aSize, 0 );
 
-        if( BOARD* board = m_frame->GetBoard() )
-            editor->SetNetInfo( &board->GetNetInfo() );
+        // wxPropertyGrid registers editors globally and the same PG_NET_SELECTOR_EDITOR
+        // instance is reused by every PCB_PROPERTIES_PANEL (board editor, footprint editor).
+        // Resolve the owning panel -- and therefore the live frame and board -- from the
+        // grid at use time instead of caching frame state on the editor.  This avoids
+        // cross-frame state corruption and nullptr derefs when one panel is destroyed while
+        // another is still live.
+        if( PCB_PROPERTIES_PANEL* panel = dynamic_cast<PCB_PROPERTIES_PANEL*>( aGrid->GetParent() ) )
+        {
+            if( PCB_BASE_EDIT_FRAME* frame = panel->GetFrame() )
+            {
+                if( BOARD* board = frame->GetBoard() )
+                    editor->SetNetInfo( &board->GetNetInfo() );
+            }
+        }
 
         editor->SetIndeterminateString( INDETERMINATE_STATE );
         UpdateControl( aProperty, editor );
@@ -210,9 +217,6 @@ public:
     {
         return false;
     }
-
-private:
-    PCB_BASE_EDIT_FRAME* m_frame;
 };
 
 
@@ -275,13 +279,12 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRA
 
     if( it == wxPGGlobalVars->m_mapEditorClasses.end() )
     {
-        PG_NET_SELECTOR_EDITOR* netEditor = new PG_NET_SELECTOR_EDITOR( m_frame );
+        PG_NET_SELECTOR_EDITOR* netEditor = new PG_NET_SELECTOR_EDITOR();
         m_netSelectorEditorInstance = static_cast<PG_NET_SELECTOR_EDITOR*>( wxPropertyGrid::RegisterEditorClass( netEditor ) );
     }
     else
     {
         m_netSelectorEditorInstance = static_cast<PG_NET_SELECTOR_EDITOR*>( it->second );
-        m_netSelectorEditorInstance->UpdateFrame( m_frame );
     }
 
     it = wxPGGlobalVars->m_mapEditorClasses.find( PG_FPID_EDITOR::BuildEditorName( m_frame ) );
@@ -321,7 +324,10 @@ PCB_PROPERTIES_PANEL::~PCB_PROPERTIES_PANEL()
     m_unitEditorInstance->UpdateFrame( nullptr );
     m_fpEditorInstance->UpdateFrame( nullptr );
     m_urlEditorInstance->UpdateFrame( nullptr );
-    m_netSelectorEditorInstance->UpdateFrame( nullptr );
+
+    // Note: the shared PG_NET_SELECTOR_EDITOR does not cache frame state; it resolves the
+    // owning panel from the property grid on each CreateControls call, so no teardown is
+    // needed here.
 }
 
 
