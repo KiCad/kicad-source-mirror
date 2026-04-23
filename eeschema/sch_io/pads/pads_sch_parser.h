@@ -44,6 +44,7 @@ struct FILE_HEADER
 {
     std::string product;
     std::string version;
+    std::string codepage;
     std::string description;
     bool        valid = false;
 };

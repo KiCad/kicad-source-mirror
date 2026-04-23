@@ -140,6 +140,26 @@ BOOST_AUTO_TEST_CASE( MultiGateImport )
 }
 
 
+BOOST_AUTO_TEST_CASE( Issue23420_HeaderWithCodePageSuffix )
+{
+    // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23420
+    // PADS Logic schematics exported with a code page suffix in the header
+    // (e.g. *PADS-LOGIC-V9.0-CP1250*) must be detected and parsed.
+    SCH_IO_PADS plugin;
+
+    wxString padsFile = wxString::FromUTF8(
+            KI_TEST::GetEeschemaTestDataDir()
+            + "/plugins/pads/issue23420_codepage_schematic.txt" );
+
+    BOOST_CHECK( plugin.CanReadSchematicFile( padsFile ) );
+
+    SCH_SHEET* rootSheet = plugin.LoadSchematicFile( padsFile, &m_schematic );
+
+    BOOST_REQUIRE( rootSheet );
+    BOOST_REQUIRE( rootSheet->GetScreen() );
+}
+
+
 BOOST_AUTO_TEST_CASE( CanReadLibrary )
 {
     SCH_IO_PADS plugin;
