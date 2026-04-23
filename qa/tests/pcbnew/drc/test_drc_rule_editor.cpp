@@ -1618,6 +1618,92 @@ BOOST_AUTO_TEST_CASE( RuleSaverLoadSaveRoundTrip )
     BOOST_CHECK_EQUAL( reloadedEntries[0].panelType, entries[0].panelType );
 }
 
+BOOST_AUTO_TEST_CASE( RuleSaverPreservesQuotedNameWithSpaces )
+{
+    // Issue 23852: editing a rule named like "Annular width: LEDs" must not rewrite
+    // the name to Annular_width__LEDs.  Names with whitespace or other characters
+    // that require quoting must be emitted as a quoted string and round-trip intact.
+    const wxString originalName = wxS( "Annular width: LEDs" );
+
+    DRC_RE_LOADED_PANEL_ENTRY entry;
+    entry.panelType = MINIMUM_CLEARANCE;
+    entry.ruleName = originalName;
+    entry.wasEdited = true;
+
+    auto numericData = std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>();
+    numericData->SetRuleName( originalName );
+    numericData->SetConstraintCode( "annular_width" );
+    numericData->SetNumericInputValue( 0.085 );
+    entry.constraintData = numericData;
+
+    DRC_RULE_SAVER saver;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = { entry };
+    wxString result = saver.GenerateRulesText( entries, nullptr );
+
+    // The saver must emit the name in quotes, not mangle it with underscores.
+    BOOST_CHECK( result.Contains( wxS( "\"Annular width: LEDs\"" ) ) );
+    BOOST_CHECK( !result.Contains( wxS( "Annular_width__LEDs" ) ) );
+
+    // Reload the saved text and verify the rule name survives unchanged.
+    DRC_RULE_LOADER loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> reloaded = loader.LoadFromString( result );
+
+    BOOST_REQUIRE_EQUAL( reloaded.size(), 1 );
+    BOOST_CHECK_EQUAL( reloaded[0].ruleName, originalName );
+}
+
+
+BOOST_AUTO_TEST_CASE( RuleSaverPreservesBareSymbolNameUnquoted )
+{
+    // A bare symbol rule name should still be emitted without quotes.
+    DRC_RE_LOADED_PANEL_ENTRY entry;
+    entry.panelType = MINIMUM_CLEARANCE;
+    entry.ruleName = wxS( "My_Bare_Rule-1.0" );
+    entry.wasEdited = true;
+
+    auto numericData = std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>();
+    numericData->SetRuleName( entry.ruleName );
+    numericData->SetConstraintCode( "clearance" );
+    numericData->SetNumericInputValue( 0.2 );
+    entry.constraintData = numericData;
+
+    DRC_RULE_SAVER saver;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = { entry };
+    wxString result = saver.GenerateRulesText( entries, nullptr );
+
+    BOOST_CHECK( result.Contains( wxS( "(rule My_Bare_Rule-1.0\n" ) ) );
+    BOOST_CHECK( !result.Contains( wxS( "\"My_Bare_Rule-1.0\"" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( RuleSaverQuotesNameStartingWithDigit )
+{
+    // Names starting with a digit must be quoted so S-expression parsers treat them
+    // as a symbol rather than a numeric literal.
+    DRC_RE_LOADED_PANEL_ENTRY entry;
+    entry.panelType = MINIMUM_CLEARANCE;
+    entry.ruleName = wxS( "3.3V_Power" );
+    entry.wasEdited = true;
+
+    auto numericData = std::make_shared<DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA>();
+    numericData->SetRuleName( entry.ruleName );
+    numericData->SetConstraintCode( "clearance" );
+    numericData->SetNumericInputValue( 0.2 );
+    entry.constraintData = numericData;
+
+    DRC_RULE_SAVER saver;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = { entry };
+    wxString result = saver.GenerateRulesText( entries, nullptr );
+
+    BOOST_CHECK( result.Contains( wxS( "\"3.3V_Power\"" ) ) );
+
+    DRC_RULE_LOADER loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> reloaded = loader.LoadFromString( result );
+    BOOST_REQUIRE_EQUAL( reloaded.size(), 1 );
+    BOOST_CHECK_EQUAL( reloaded[0].ruleName, "3.3V_Power" );
+}
+
+
 BOOST_AUTO_TEST_CASE( RuleSaverDiffPairRule )
 {
     // Test: Diff pair rule generation
