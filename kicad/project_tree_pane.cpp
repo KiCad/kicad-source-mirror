@@ -653,7 +653,7 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
     m_gitStatusTimer.Stop();
     m_gitSyncTimer.Stop();
 
-    if( m_TreeProject && m_TreeProject->GitCommon() )
+    if( m_TreeProject && m_TreeProject->GetGitRepo() )
         m_TreeProject->GitCommon()->SetCancelled( true );
 
     m_gitTreeCache.clear();
