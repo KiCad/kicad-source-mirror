@@ -134,6 +134,15 @@ constexpr int    BBOX_MAX_Y   = 108;
 } // namespace DRW_ITEM
 
 
+// Block-class tags carried at DRW_ITEM::TYPE_TAG. 0x4D00 also marks the board-outline item and
+// is the library decal marker elsewhere.
+namespace DRW_TAG
+{
+constexpr uint32_t COPPER_FILL = 0x00004900;  // filled copper region
+constexpr uint32_t LINE_ITEM   = 0x00004D00;  // line/outline item (board outline, v2026 line copper)
+} // namespace DRW_TAG
+
+
 BINARY_PARSER::BINARY_PARSER() = default;
 
 
@@ -1590,7 +1599,7 @@ bool BINARY_PARSER::parseArcBoardOutline()
                     item.localMaxY = (int64_t) rec.I32( DRW_ITEM::BBOX_MAX_Y ) - item.originY;
                     item.span = std::max( item.localMaxX - item.localMinX,
                                           item.localMaxY - item.localMinY );
-                    item.preferred = rec.U32( DRW_ITEM::TYPE_TAG ) == 0x00004D00;
+                    item.preferred = rec.U32( DRW_ITEM::TYPE_TAG ) == DRW_TAG::LINE_ITEM;
                     items.push_back( item );
                     pos += DRW_ITEM::SIZE;
                     continue;
@@ -3090,12 +3099,20 @@ void BINARY_PARSER::parseCopperShapes()
     {
         SDB_RECORD hdr = m_sdb.Record( *sec10, rec, sec10->stride );
 
-        uint32_t flag6 = hdr.U32( DRW_ITEM::CLASS_WORD );
-        uint32_t flag7 = hdr.U32( DRW_ITEM::SUBTYPE_WORD );
+        // class 1 = filled copper region, 7 = v2026 line-drawn copper; subtype 3 is the
+        // copper-pour variant, decoded separately, so it is excluded here.
+        constexpr uint32_t CLASS_FILLED       = 1;
+        constexpr uint32_t CLASS_LINE         = 7;
+        constexpr uint32_t SUBTYPE_POUR       = 3;
+        constexpr uint32_t SUBTYPE_PLAIN_LINE = 0;
+
+        uint32_t classWord = hdr.U32( DRW_ITEM::CLASS_WORD );
+        uint32_t subtypeWord = hdr.U32( DRW_ITEM::SUBTYPE_WORD );
         uint32_t blockTag = hdr.U32( DRW_ITEM::TYPE_TAG );
-        bool legacyCopper = ( blockTag == 0x00004900 && flag6 == 1 && flag7 != 3 );
-        bool v2026LineCopper = ( m_version == 0x2026 && blockTag == 0x00004D00
-                                 && flag6 == 7 && flag7 == 0 );
+        bool legacyCopper = ( blockTag == DRW_TAG::COPPER_FILL && classWord == CLASS_FILLED
+                              && subtypeWord != SUBTYPE_POUR );
+        bool v2026LineCopper = ( m_version == 0x2026 && blockTag == DRW_TAG::LINE_ITEM
+                                 && classWord == CLASS_LINE && subtypeWord == SUBTYPE_PLAIN_LINE );
 
         if( !legacyCopper && !v2026LineCopper )
             continue;
@@ -3449,12 +3466,18 @@ void BINARY_PARSER::parseKeepouts()
     {
         SDB_RECORD hdr = m_sdb.Record( *sec10, rec, sec10->stride );
 
-        if( hdr.U32( DRW_ITEM::TYPE_TAG ) != 0 || hdr.U32( DRW_ITEM::CLASS_WORD ) != 1 )
+        // Keepouts share the filled-region class with copper but carry no block tag; subtype
+        // buckets 1 and 10 are the two keepout variants, both mapped to KEEPOUT_TYPE::ALL below.
+        constexpr uint32_t CLASS_FILLED        = 1;
+        constexpr uint32_t SUBTYPE_KEEPOUT_A   = 1;
+        constexpr uint32_t SUBTYPE_KEEPOUT_B   = 10;
+
+        if( hdr.U32( DRW_ITEM::TYPE_TAG ) != 0 || hdr.U32( DRW_ITEM::CLASS_WORD ) != CLASS_FILLED )
             continue;
 
         uint32_t typeBucket = hdr.U32( DRW_ITEM::SUBTYPE_WORD );
 
-        if( typeBucket != 1 && typeBucket != 10 )
+        if( typeBucket != SUBTYPE_KEEPOUT_A && typeBucket != SUBTYPE_KEEPOUT_B )
             continue;
 
         std::string name = hdr.Str( DRW_ITEM::NAME, 24 );
