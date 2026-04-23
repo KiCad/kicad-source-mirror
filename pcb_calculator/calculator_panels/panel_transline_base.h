@@ -10,7 +10,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class STD_BITMAP_BUTTON;
 class UNIT_SELECTOR_ANGLE;
 class UNIT_SELECTOR_FREQUENCY;
 class UNIT_SELECTOR_LEN;
@@ -36,7 +35,6 @@ class UNIT_SELECTOR_RESISTOR;
 #include <wx/button.h>
 #include <wx/statbox.h>
 #include <wx/radiobut.h>
-#include <wx/bmpbuttn.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -112,9 +110,7 @@ class PANEL_TRANSLINE_BASE : public CALCULATOR_PANEL
 		wxTextCtrl* m_Phys_prm3_Value;
 		UNIT_SELECTOR_LEN* m_choiceUnit_Param3;
 		wxButton* m_AnalyseButton;
-		STD_BITMAP_BUTTON* m_bpButtonAnalyze;
 		wxButton* m_SynthetizeButton;
-		STD_BITMAP_BUTTON* m_bpButtonSynthetize;
 		wxStaticText* m_elec_prm1_label;
 		wxTextCtrl* m_Elec_prm1_Value;
 		UNIT_SELECTOR_RESISTOR* m_choiceUnit_ElecPrm1;

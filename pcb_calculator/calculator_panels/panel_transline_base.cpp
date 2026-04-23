@@ -5,7 +5,6 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "widgets/std_bitmap_button.h"
 #include "widgets/unit_selector.h"
 
 #include "panel_transline_base.h"
@@ -380,17 +379,11 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	m_AnalyseButton = new wxButton( this, wxID_ANY, _("Analyze"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_AnalyseButton, 0, wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_bpButtonAnalyze = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerButtons->Add( m_bpButtonAnalyze, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
-
 
 	bSizerButtons->Add( 30, 0, 1, wxEXPAND, 5 );
 
 	m_SynthetizeButton = new wxButton( this, wxID_ANY, _("Synthesize"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_SynthetizeButton, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
-
-	m_bpButtonSynthetize = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizerButtons->Add( m_bpButtonSynthetize, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	btranslineButtonsSizer->Add( bSizerButtons, 0, wxLEFT, 5 );
@@ -570,9 +563,7 @@ PANEL_TRANSLINE_BASE::PANEL_TRANSLINE_BASE( wxWindow* parent, wxWindowID id, con
 	m_button_TanD->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineTanD_Button ), NULL, this );
 	m_button_Rho->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineRho_Button ), NULL, this );
 	m_AnalyseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineAnalyse ), NULL, this );
-	m_bpButtonAnalyze->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineAnalyse ), NULL, this );
 	m_SynthetizeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineSynthetize ), NULL, this );
-	m_bpButtonSynthetize->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineSynthetize ), NULL, this );
 	m_buttonTransLineReset->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTransLineResetButtonClick ), NULL, this );
 }
 
@@ -587,9 +578,7 @@ PANEL_TRANSLINE_BASE::~PANEL_TRANSLINE_BASE()
 	m_button_TanD->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineTanD_Button ), NULL, this );
 	m_button_Rho->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineRho_Button ), NULL, this );
 	m_AnalyseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineAnalyse ), NULL, this );
-	m_bpButtonAnalyze->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineAnalyse ), NULL, this );
 	m_SynthetizeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineSynthetize ), NULL, this );
-	m_bpButtonSynthetize->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTranslineSynthetize ), NULL, this );
 	m_buttonTransLineReset->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_TRANSLINE_BASE::OnTransLineResetButtonClick ), NULL, this );
 
 }
