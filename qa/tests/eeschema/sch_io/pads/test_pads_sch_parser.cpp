@@ -77,6 +77,37 @@ BOOST_AUTO_TEST_CASE( ParseHeader_LogicFormat )
 }
 
 
+BOOST_AUTO_TEST_CASE( CheckFileHeader_LogicWithCodePageSuffix )
+{
+    // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23420
+    // PADS exporters may include the ANSI code page as a suffix in the header
+    // (e.g. *PADS-LOGIC-V9.0-CP1250*). Detection must still succeed.
+    std::string testFile =
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23420_codepage_schematic.txt";
+
+    BOOST_CHECK( PADS_SCH::PADS_SCH_PARSER::CheckFileHeader( testFile ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ParseHeader_LogicWithCodePageSuffix )
+{
+    // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23420
+    std::string testFile =
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23420_codepage_schematic.txt";
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+
+    BOOST_REQUIRE( parser.Parse( testFile ) );
+    BOOST_CHECK( parser.IsValid() );
+
+    const auto& header = parser.GetHeader();
+
+    BOOST_CHECK_EQUAL( header.product, "PADS-LOGIC" );
+    BOOST_CHECK_EQUAL( header.version, "V9.0" );
+    BOOST_CHECK_EQUAL( header.codepage, "CP1250" );
+}
+
+
 BOOST_AUTO_TEST_CASE( ParseHeader_PowerLogicFormat )
 {
     std::string testFile = KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/powerlogic_schematic.txt";

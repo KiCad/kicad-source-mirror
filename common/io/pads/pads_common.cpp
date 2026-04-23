@@ -107,23 +107,30 @@ PADS_FILE_TYPE DetectPadsFileType( const wxString& aFilePath )
     if( !std::getline( file, line ) )
         return PADS_FILE_TYPE::UNKNOWN;
 
-    // PADS PowerPCB (PCB) files start with *PADS-POWERPCB* or !PADS-POWERPCB*
-    if( line.find( "*PADS-POWERPCB*" ) != std::string::npos
-        || line.find( "!PADS-POWERPCB" ) != std::string::npos )
+    // PADS PowerPCB (PCB) files start with *PADS-POWERPCB or !PADS-POWERPCB,
+    // optionally followed by a version and code page suffix before the
+    // closing asterisk.
+    if( line.rfind( "*PADS-POWERPCB", 0 ) == 0
+        || line.rfind( "!PADS-POWERPCB", 0 ) == 0 )
         return PADS_FILE_TYPE::PCB_ASCII;
 
-    // PADS Router PCB files start with *PADS2000* or !PADS2000*
-    if( line.find( "*PADS2000*" ) != std::string::npos
-        || line.find( "!PADS2000" ) != std::string::npos )
+    // PADS Router PCB files start with *PADS2000 or !PADS2000, with an
+    // optional version suffix.
+    if( line.rfind( "*PADS2000", 0 ) == 0
+        || line.rfind( "!PADS2000", 0 ) == 0 )
         return PADS_FILE_TYPE::PCB_ASCII;
 
-    // PADS Logic schematic files start with *PADS-POWERLOGIC* or !PADS-POWERLOGIC*
-    if( line.find( "*PADS-POWERLOGIC*" ) != std::string::npos
-        || line.find( "!PADS-POWERLOGIC" ) != std::string::npos )
+    // PADS Logic schematic files start with *PADS-POWERLOGIC or !PADS-POWERLOGIC.
+    // The header tag may include a version and code page suffix before the
+    // closing asterisk (e.g. *PADS-POWERLOGIC-V9.5* or *PADS-LOGIC-V9.0-CP1250*),
+    // so match the prefix only. Anchor at position 0 to avoid matching the
+    // token anywhere other than the start of the header line.
+    if( line.rfind( "*PADS-POWERLOGIC", 0 ) == 0
+        || line.rfind( "!PADS-POWERLOGIC", 0 ) == 0 )
         return PADS_FILE_TYPE::SCHEMATIC_ASCII;
 
-    if( line.find( "*PADS-LOGIC*" ) != std::string::npos
-        || line.find( "!PADS-LOGIC" ) != std::string::npos )
+    if( line.rfind( "*PADS-LOGIC", 0 ) == 0
+        || line.rfind( "!PADS-LOGIC", 0 ) == 0 )
         return PADS_FILE_TYPE::SCHEMATIC_ASCII;
 
     return PADS_FILE_TYPE::UNKNOWN;

@@ -259,6 +259,22 @@ BOOST_AUTO_TEST_CASE( DetectPadsFileType_Unknown )
 }
 
 
+BOOST_AUTO_TEST_CASE( DetectPadsFileType_SchematicWithCodePageSuffix )
+{
+    // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23420
+    // Headers with a code-page suffix such as *PADS-LOGIC-V9.0-CP1250* must
+    // be recognized as PADS schematic files.
+    wxString testFile = wxString::FromUTF8(
+            KI_TEST::GetEeschemaTestDataDir()
+            + "/plugins/pads/issue23420_codepage_schematic.txt" );
+
+    auto type = PADS_COMMON::DetectPadsFileType( testFile );
+
+    BOOST_CHECK_EQUAL( static_cast<int>( type ),
+                       static_cast<int>( PADS_COMMON::PADS_FILE_TYPE::SCHEMATIC_ASCII ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( FindRelatedPadsFiles_NonExistent )
 {
     auto related = PADS_COMMON::FindRelatedPadsFiles( wxS( "/nonexistent/file.asc" ) );
