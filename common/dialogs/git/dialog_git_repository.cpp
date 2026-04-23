@@ -285,7 +285,8 @@ void DIALOG_GIT_REPOSITORY::updateURLData()
     }
     else
     {
-        m_fullURL = url;
+        if( m_fullURL.IsEmpty() )
+            m_fullURL = url;
 
         // URL without user@ prefix (e.g. "host:path/repo.git")
         size_t colonPos = url.find( ':' );
@@ -428,8 +429,6 @@ void DIALOG_GIT_REPOSITORY::OnOKClick( wxCommandEvent& event )
                             _( "Please enter a URL for the repository" ) );
         return;
     }
-
-    updateURLData();
 
     EndModal( wxID_OK );
 }
