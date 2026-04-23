@@ -2536,6 +2536,10 @@ bool IbisParser::parseComponent( std::string& aKeyword )
     {
         status &= readDiffPin();
     }
+    else if( compareIbisWord( aKeyword.c_str(), "Series_Pin_Mapping" ) )
+    {
+        status &= readSeriesPinMapping();
+    }
     /*
     // Not supported yet
     else if( aKeyword == "Die_Supply_Pads" )
@@ -2800,6 +2804,46 @@ bool IbisParser::readDiffPin()
 }
 
 
+bool IbisParser::readSeriesPinMapping()
+{
+    // IBIS 4.1+ [Series Pin Mapping] row: pin_1 pin_2 model_name [function_table_group].
+    // Rows with fewer than three columns are tolerated with a warning so that an
+    // unusual layout does not abort parsing of the whole file.
+
+    bool status = true;
+
+    std::vector<std::string> fields;
+    status &= readTableLine( fields );
+
+    if( m_continue == IBIS_PARSER_CONTINUE::NONE )
+    {
+        m_continue = IBIS_PARSER_CONTINUE::COMPONENT_SERIES_PIN_MAPPING;
+    }
+    else if( !fields.empty() )
+    {
+        IbisComponentSeriesPinMapping mapping( m_Reporter );
+
+        if( fields.size() >= 3 )
+        {
+            mapping.m_pin1 = fields.at( 0 );
+            mapping.m_pin2 = fields.at( 1 );
+            mapping.m_modelName = fields.at( 2 );
+
+            if( fields.size() > 3 )
+                mapping.m_functionTableGroup = fields.at( 3 );
+
+            m_currentComponent->m_seriesPinMappings.push_back( mapping );
+        }
+        else
+        {
+            Report( _( "Wrong number of columns for series pin mapping." ), RPT_SEVERITY_WARNING );
+        }
+    }
+
+    return status;
+}
+
+
 bool IbisParser::readIVtableEntry( IVtable& aDest )
 {
     bool status = true;
@@ -3009,6 +3053,9 @@ bool IbisParser::onNewLine()
             break;
         case IBIS_PARSER_CONTINUE::COMPONENT_DIFFPIN:
             status &= readDiffPin();
+            break;
+        case IBIS_PARSER_CONTINUE::COMPONENT_SERIES_PIN_MAPPING:
+            status &= readSeriesPinMapping();
             break;
         case IBIS_PARSER_CONTINUE::MODELSELECTOR:
             status &= readModelSelector();

@@ -561,4 +561,29 @@ BOOST_AUTO_TEST_CASE( Load_v5_1, * boost::unit_test::tolerance( 1e-15 ) )
     BOOST_TEST( model->m_submodels[0].m_POWERClamp.m_entries[3].I.value[2] == -15.26e-3 );
 }
 
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23568
+// The [Series Pin Mapping] keyword was added in IBIS 4.1. Before this fix,
+// encountering it inside a [Component] section produced the fatal parse error
+// "Unknown keyword in COMPONENT context: series_pin_mapping".
+BOOST_AUTO_TEST_CASE( Load_v4_1_SeriesPinMapping )
+{
+    WX_STRING_REPORTER reporter;
+
+    std::string path = GetLibraryPath( "ibis_v4_1_series_pin_mapping" );
+    KIBIS       top( path, &reporter );
+
+    BOOST_TEST_INFO( "Parsed: " << path );
+    BOOST_TEST_INFO( "Reported: " << reporter.GetMessages() );
+
+    BOOST_TEST( top.m_valid );
+    BOOST_TEST( !reporter.HasMessageOfSeverity( RPT_SEVERITY_ERROR ) );
+
+    KIBIS_COMPONENT* comp = top.GetComponent( "SeriesSwitchDevice" );
+
+    BOOST_REQUIRE( comp != nullptr );
+    BOOST_TEST( comp->m_name == "SeriesSwitchDevice" );
+    BOOST_TEST( comp->m_pins.size() == 4 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
