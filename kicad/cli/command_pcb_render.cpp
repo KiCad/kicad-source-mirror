@@ -215,6 +215,7 @@ CLI::PCB_RENDER_COMMAND::PCB_RENDER_COMMAND() : COMMAND( "render" )
 {
     addCommonArgs( true, true, IO_TYPE::FILE, IO_TYPE::FILE );
     addDefineArg();
+    addVariantsArg();
 
     m_argParser.add_description(
             UTF8STDSTR( _( "Renders the PCB in 3D view to PNG or JPEG image" ) ) );
@@ -331,6 +332,9 @@ int CLI::PCB_RENDER_COMMAND::doPerform( KIWAY& aKiway )
     renderJob->SetConfiguredOutputPath( m_argOutput );
     renderJob->m_filename = m_argInput;
     renderJob->SetVarOverrides( m_argDefineVars );
+
+    if( !m_argVariantNames.empty() )
+        renderJob->m_variant = m_argVariantNames.front();
 
     renderJob->m_appearancePreset = m_argParser.get<std::string>( ARG_PRESET );
 
