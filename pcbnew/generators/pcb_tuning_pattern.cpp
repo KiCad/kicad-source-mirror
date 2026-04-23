@@ -121,12 +121,32 @@ void TUNING_STATUS_VIEW_ITEM::SetMinMax( const double aMin, const double aMax )
 }
 
 
+void TUNING_STATUS_VIEW_ITEM::SetChainMinMax( const double aMin, const double aMax )
+{
+    const EDA_DATA_TYPE unitType = m_isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
+
+    m_chainMin = aMin;
+    m_chainMinText = m_frame->MessageTextFromValue( m_chainMin, false, unitType );
+    m_chainMax = aMax;
+    m_chainMaxText = m_frame->MessageTextFromValue( m_chainMax, false, unitType );
+}
+
+
 void TUNING_STATUS_VIEW_ITEM::ClearMinMax()
 {
     m_min = 0.0;
     m_minText = wxT( "---" );
     m_max = std::numeric_limits<double>::max();
     m_maxText = wxT( "---" );
+}
+
+
+void TUNING_STATUS_VIEW_ITEM::ClearChainMinMax()
+{
+    m_chainMin = 0.0;
+    m_chainMinText = wxT( "---" );
+    m_chainMax = std::numeric_limits<double>::max();
+    m_chainMaxText = wxT( "---" );
 }
 
 
@@ -184,7 +204,7 @@ void TUNING_STATUS_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     int valueLines = 1 + ( m_hasSignalValue ? 1 : 0 );
     int totalHeaderLines = scopeLines + 1;
     int totalLines = totalHeaderLines + valueLines;
-    VECTOR2I size( glyphWidth * 30 + margin.x * 2,
+    VECTOR2I size( glyphWidth * 38 + margin.x * 2,
                    headerDims.GlyphSize.y * totalLines + textDims.GlyphSize.y * valueLines );
     VECTOR2I offset( margin.x * 2, -( size.y + margin.y * 2 ) );
 
@@ -247,7 +267,7 @@ void TUNING_STATUS_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     // Line 2: header labels (current length  min  max)
     font->Draw( gal, m_currentLabel, textPos, textAttrs, KIFONT::METRICS::Default() );
-    textPos.x += glyphWidth * 14 + margin.x; // more space for header wording
+    textPos.x += glyphWidth * 18 + margin.x;
     font->Draw( gal, _( "min" ), textPos, textAttrs, fontMetrics );
     textPos.x += glyphWidth * 7 + margin.x;
     font->Draw( gal, _( "max" ), textPos, textAttrs, fontMetrics );
@@ -266,24 +286,24 @@ void TUNING_STATUS_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     font->Draw( gal, m_netValue, textPos, textAttrs, KIFONT::METRICS::Default() );
 
     // Draw min / max columns for net line
-    textPos.x += glyphWidth * 14 + margin.x;
+    textPos.x += glyphWidth * 18 + margin.x;
     font->Draw( gal, m_minText, textPos, textAttrs, fontMetrics );
     textPos.x += glyphWidth * 7 + margin.x;
     font->Draw( gal, m_maxText, textPos, textAttrs, fontMetrics );
 
-    // Optional Chain value line
+    // Optional Chain value line with its own min/max
     if( m_hasSignalValue )
     {
         textPos = GetPosition() + offset;
         if( scopeLines )
             textPos.y += KiROUND( headerDims.LinePitch * 1.1 );
-        textPos.y += KiROUND( headerDims.LinePitch * 2.3 ); // one extra line below net line
+        textPos.y += KiROUND( headerDims.LinePitch * 2.3 );
         gal->SetStrokeColor( normal );
         font->Draw( gal, m_chainValue, textPos, textAttrs, KIFONT::METRICS::Default() );
-        textPos.x += glyphWidth * 14 + margin.x;
-        font->Draw( gal, m_minText, textPos, textAttrs, fontMetrics );
+        textPos.x += glyphWidth * 18 + margin.x;
+        font->Draw( gal, m_chainMinText, textPos, textAttrs, fontMetrics );
         textPos.x += glyphWidth * 7 + margin.x;
-        font->Draw( gal, m_maxText, textPos, textAttrs, fontMetrics );
+        font->Draw( gal, m_chainMaxText, textPos, textAttrs, fontMetrics );
     }
 
     gal->Restore();
@@ -2220,6 +2240,52 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
                                            static_cast<double>( m_settings.m_targetLength.Max() ) );
                 }
             }
+        }
+
+        // Set chain-level min/max from raw chain constraint
+        if( !netChainName.IsEmpty() && board && board->GetDesignSettings().m_DRCEngine )
+        {
+            // Find a track on this net to evaluate the rule against
+            PCB_TRACK* repTrack = nullptr;
+
+            for( BOARD_ITEM* bi : board->Tracks() )
+            {
+                if( PCB_TRACK* tr = dynamic_cast<PCB_TRACK*>( bi ) )
+                {
+                    NETINFO_ITEM* ni = tr->GetNet();
+
+                    if( ni && ni->GetNetChain() == netChainName )
+                    {
+                        repTrack = tr;
+                        break;
+                    }
+                }
+            }
+
+            if( repTrack )
+            {
+                DRC_CONSTRAINT chainC = board->GetDesignSettings().m_DRCEngine->EvalRules(
+                        NET_CHAIN_LENGTH_CONSTRAINT, repTrack, nullptr, repTrack->GetLayer() );
+
+                if( !chainC.IsNull() && chainC.GetSeverity() != RPT_SEVERITY_IGNORE )
+                {
+                    statusItem->SetChainMinMax(
+                            static_cast<double>( chainC.GetValue().Min() ),
+                            static_cast<double>( chainC.GetValue().Max() ) );
+                }
+                else
+                {
+                    statusItem->ClearChainMinMax();
+                }
+            }
+            else
+            {
+                statusItem->ClearChainMinMax();
+            }
+        }
+        else
+        {
+            statusItem->ClearChainMinMax();
         }
 
         statusItem->SetIsTimeDomain( m_settings.m_isTimeDomain );

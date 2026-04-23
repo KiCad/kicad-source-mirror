@@ -60,8 +60,10 @@ public:
     void     SetPosition( const VECTOR2I& aPos ) override;
 
     void SetMinMax( const double aMin, const double aMax );
+    void SetChainMinMax( const double aMin, const double aMax );
 
     void ClearMinMax();
+    void ClearChainMinMax();
 
     void SetCurrent( const double aCurrent, const wxString& aLabel );
 
@@ -83,11 +85,14 @@ protected:
     wxString        m_currentText;    // (unused now for dual-line layout but kept for compatibility)
     wxString        m_minText;
     wxString        m_maxText;
+    double          m_chainMin = 0.0;
+    double          m_chainMax = 0.0;
+    wxString        m_chainMinText;
+    wxString        m_chainMaxText;
     bool            m_isTimeDomain;
-    wxString        m_scopeLine; // Displays tuning scope (net vs chain + name)
-    // New dual-line values
-    wxString        m_netValue;       // e.g. "Net: 42.2877mm"
-    wxString        m_chainValue;    // e.g. "Chain: 103.6837mm"
+    wxString        m_scopeLine;
+    wxString        m_netValue;
+    wxString        m_chainValue;
     bool            m_hasSignalValue = false;
 public:
     void SetScopeLine( const wxString& aLine ) { m_scopeLine = aLine; }
