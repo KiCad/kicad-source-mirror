@@ -48,6 +48,8 @@ public:
 
     void AfterCommit() override;
 
+    PCB_BASE_EDIT_FRAME* GetFrame() const { return m_frame; }
+
 protected:
     void rebuildProperties( const SELECTION& aSelection ) override;
     wxPGProperty* createPGProperty( const PROPERTY_BASE* aProperty ) const override;
