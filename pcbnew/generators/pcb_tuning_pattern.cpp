@@ -569,36 +569,137 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
 
     if( aMode == SINGLE || aMode == DIFF_PAIR )
     {
-        // Prefer chain-level constraint if present for nets that are part of a chain
-        constraint = bds.m_DRCEngine->EvalRules( NET_CHAIN_LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
+        DRC_CONSTRAINT chainConstraint =
+                bds.m_DRCEngine->EvalRules( NET_CHAIN_LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
 
-        if( constraint.IsNull() || constraint.GetSeverity() == RPT_SEVERITY_IGNORE )
-            constraint = bds.m_DRCEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
+        DRC_CONSTRAINT netConstraint = bds.m_DRCEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
 
-        if( !constraint.IsNull() )
+        // Compute effective per-net target from both constraints
+        MINOPTMAX<int> effectiveTarget;
+        bool           hasConstraint = false;
+        bool           isTimeDomain = false;
+
+        // Start with per-net constraint as baseline
+        if( !netConstraint.IsNull() && netConstraint.GetSeverity() != RPT_SEVERITY_IGNORE )
         {
-            if( constraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
+            effectiveTarget = netConstraint.GetValue();
+            isTimeDomain = netConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
+            hasConstraint = true;
+        }
+
+        // Apply chain constraint: compute remaining budget for this net
+        if( !chainConstraint.IsNull() && chainConstraint.GetSeverity() != RPT_SEVERITY_IGNORE )
+        {
+            NETINFO_ITEM* netInfo = static_cast<BOARD_CONNECTED_ITEM*>( aStartItem )->GetNet();
+            wxString      chainName = netInfo ? netInfo->GetNetChain() : wxString();
+
+            if( !chainName.IsEmpty() )
             {
-                if( constraint.m_Type == NET_CHAIN_LENGTH_CONSTRAINT )
+                // Sum other nets' lengths + bridging through series components
+                double otherLen = 0.0;
+
+                for( NETINFO_ITEM* other : board->GetNetInfo() )
                 {
-                    pattern->m_settings.SetTargetSignalLengthDelay( constraint.GetValue() );
-                    pattern->m_settings.SetTargetLengthDelay( MINOPTMAX<int>() );
+                    if( !other || other == netInfo || other->GetNetChain() != chainName )
+                        continue;
+
+                    for( BOARD_ITEM* bi : board->Tracks() )
+                    {
+                        if( PCB_TRACK* tr = dynamic_cast<PCB_TRACK*>( bi ) )
+                        {
+                            if( tr->GetNetCode() == other->GetNetCode() )
+                            {
+                                int    c = 0;
+                                double tLen = 0, pdLen = 0, tDel = 0, pdDel = 0;
+                                std::tie( c, tLen, pdLen, tDel, pdDel ) = board->GetTrackLength( *tr );
+                                otherLen += tLen + pdLen;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Add bridging through series component footprints
+                for( FOOTPRINT* fp : board->Footprints() )
+                {
+                    std::map<int, PAD*> netsInFp;
+
+                    for( PAD* pad : fp->Pads() )
+                    {
+                        NETINFO_ITEM* pn = pad->GetNet();
+
+                        if( !pn || pn->GetNetChain() != chainName )
+                            continue;
+
+                        netsInFp.emplace( pn->GetNetCode(), pad );
+
+                        if( netsInFp.size() > 2 )
+                        {
+                            netsInFp.clear();
+                            break;
+                        }
+                    }
+
+                    if( netsInFp.size() == 2 )
+                    {
+                        auto fpIt = netsInFp.begin();
+                        PAD* p1 = fpIt->second;
+                        ++fpIt;
+                        PAD* p2 = fpIt->second;
+                        otherLen += ( p1->GetCenter() - p2->GetCenter() ).EuclideanNorm();
+                    }
+                }
+
+                MINOPTMAX<int> chainTarget = chainConstraint.GetValue();
+                MINOPTMAX<int> budget;
+
+                if( chainTarget.HasMax() )
+                    budget.SetMax( chainTarget.Max() - static_cast<int>( otherLen ) );
+
+                if( chainTarget.HasMin() )
+                    budget.SetMin( std::max( 0, chainTarget.Min() - static_cast<int>( otherLen ) ) );
+
+                // Take the tighter of net constraint and chain budget
+                if( hasConstraint )
+                {
+                    if( budget.HasMax() && effectiveTarget.HasMax() )
+                        effectiveTarget.SetMax( std::min( effectiveTarget.Max(), budget.Max() ) );
+                    else if( budget.HasMax() )
+                        effectiveTarget.SetMax( budget.Max() );
+
+                    if( budget.HasMin() && effectiveTarget.HasMin() )
+                        effectiveTarget.SetMin( std::max( effectiveTarget.Min(), budget.Min() ) );
+                    else if( budget.HasMin() )
+                        effectiveTarget.SetMin( budget.Min() );
                 }
                 else
                 {
-                    pattern->m_settings.SetTargetLengthDelay( constraint.GetValue() );
-                    pattern->m_settings.SetTargetSignalLengthDelay( MINOPTMAX<int>() );
+                    effectiveTarget = budget;
                 }
+
+                isTimeDomain = chainConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
+                hasConstraint = true;
+            }
+        }
+
+        if( hasConstraint )
+        {
+            constraint = netConstraint.IsNull() ? chainConstraint : netConstraint;
+
+            if( isTimeDomain )
+            {
+                pattern->m_settings.SetTargetLengthDelay( effectiveTarget );
                 pattern->m_settings.SetTargetLength( MINOPTMAX<int>() );
                 pattern->m_settings.m_isTimeDomain = true;
             }
             else
             {
+                pattern->m_settings.SetTargetLength( effectiveTarget );
                 pattern->m_settings.SetTargetLengthDelay( MINOPTMAX<int>() );
-                pattern->m_settings.SetTargetSignalLengthDelay( MINOPTMAX<int>() );
-                pattern->m_settings.SetTargetLength( constraint.GetValue() );
                 pattern->m_settings.m_isTimeDomain = false;
             }
+
+            pattern->m_settings.SetTargetSignalLengthDelay( MINOPTMAX<int>() );
         }
         else if( aStartItem->GetEffectiveNetClass()->HasTuningProfile() )
         {
@@ -2498,20 +2599,21 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
     m_preview.Clear();
     m_view->Add( &m_preview );
 
-    auto applyCommonSettings =
-            [&]( PCB_TUNING_PATTERN* aPattern )
-            {
-                const auto& origTargetLength = aPattern->GetSettings().m_targetLength;
-                const auto& origTargetSkew   = aPattern->GetSettings().m_targetSkew;
+    auto applyCommonSettings = [&]( PCB_TUNING_PATTERN* aPattern )
+    {
+        const auto origTargetLength = aPattern->GetSettings().m_targetLength;
+        const auto origTargetLengthDelay = aPattern->GetSettings().m_targetLengthDelay;
+        const auto origTargetSkew = aPattern->GetSettings().m_targetSkew;
+        const bool origIsTimeDomain = aPattern->GetSettings().m_isTimeDomain;
 
-                aPattern->GetSettings() = meanderSettings;
+        aPattern->GetSettings() = meanderSettings;
 
-                if( meanderSettings.m_targetLength.IsNull() )
-                    aPattern->GetSettings().m_targetLength = origTargetLength;
-
-                if( meanderSettings.m_targetSkew.IsNull() )
-                    aPattern->GetSettings().m_targetSkew = origTargetSkew;
-            };
+        // Always preserve DRC-evaluated targets
+        aPattern->GetSettings().m_targetLength = origTargetLength;
+        aPattern->GetSettings().m_targetLengthDelay = origTargetLengthDelay;
+        aPattern->GetSettings().m_targetSkew = origTargetSkew;
+        aPattern->GetSettings().m_isTimeDomain = origIsTimeDomain;
+    };
 
     auto updateHoverStatus =
             [&]()

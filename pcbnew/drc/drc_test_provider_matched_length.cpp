@@ -20,6 +20,8 @@
 #include <common.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <footprint.h>
+#include <pad.h>
 #include <zone.h>
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
@@ -489,9 +491,96 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             std::optional<DRC_CONSTRAINT> netChainLengthConstraint = rule->FindConstraint( NET_CHAIN_LENGTH_CONSTRAINT );
 
             if( netChainLengthConstraint && netChainLengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
-                checkLengths( *netChainLengthConstraint, matchedConnections );
+            {
+                // Aggregate per-net connections into per-chain totals
+                std::map<wxString, CONNECTION> chainAgg;
+
+                for( const CONNECTION& conn : matchedConnections )
+                {
+                    if( !conn.netinfo )
+                        continue;
+
+                    wxString chainName = conn.netinfo->GetNetChain();
+
+                    if( chainName.IsEmpty() )
+                        continue;
+
+                    auto it = chainAgg.find( chainName );
+
+                    if( it == chainAgg.end() )
+                    {
+                        CONNECTION agg = conn;
+                        agg.netname = chainName;
+                        chainAgg[chainName] = agg;
+                    }
+                    else
+                    {
+                        CONNECTION& agg = it->second;
+                        agg.total += conn.total;
+                        agg.totalDelay += conn.totalDelay;
+                        agg.totalRoute += conn.totalRoute;
+                        agg.totalRouteDelay += conn.totalRouteDelay;
+                        agg.totalVia += conn.totalVia;
+                        agg.totalViaDelay += conn.totalViaDelay;
+                        agg.totalPadToDie += conn.totalPadToDie;
+                        agg.totalPadToDieDelay += conn.totalPadToDieDelay;
+                        agg.viaCount += conn.viaCount;
+                        agg.items.insert( conn.items.begin(), conn.items.end() );
+                    }
+                }
+
+                // Add bridging length: pad-to-pad distance through series components
+                for( auto& [chainName, agg] : chainAgg )
+                {
+                    double bridging = 0.0;
+
+                    for( FOOTPRINT* fp : m_board->Footprints() )
+                    {
+                        std::map<int, PAD*> netsInFp;
+
+                        for( PAD* pad : fp->Pads() )
+                        {
+                            NETINFO_ITEM* pn = pad->GetNet();
+
+                            if( !pn || pn->GetNetChain() != chainName )
+                                continue;
+
+                            netsInFp.emplace( pn->GetNetCode(), pad );
+
+                            if( netsInFp.size() > 2 )
+                            {
+                                netsInFp.clear();
+                                break;
+                            }
+                        }
+
+                        if( netsInFp.size() == 2 )
+                        {
+                            auto fpIt = netsInFp.begin();
+                            PAD* p1 = fpIt->second;
+                            ++fpIt;
+                            PAD*     p2 = fpIt->second;
+                            VECTOR2I delta = p1->GetCenter() - p2->GetCenter();
+                            bridging += delta.EuclideanNorm();
+                        }
+                    }
+
+                    agg.total += bridging;
+                    agg.totalRoute += bridging;
+                }
+
+                std::vector<CONNECTION> chainConnections;
+                chainConnections.reserve( chainAgg.size() );
+
+                for( auto& [name, agg] : chainAgg )
+                    chainConnections.push_back( std::move( agg ) );
+
+                checkLengths( *netChainLengthConstraint, chainConnections );
+            }
             else if( lengthConstraint && lengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
+            {
                 checkLengths( *lengthConstraint, matchedConnections );
+            }
 
             std::optional<DRC_CONSTRAINT> skewConstraint = rule->FindConstraint( SKEW_CONSTRAINT );
 
