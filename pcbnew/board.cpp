@@ -1866,7 +1866,7 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
         for( PCB_POINT* point : footprint->Points() )
         {
             if( point->m_Uuid == aID )
-                return CacheAndReturnItemById( aID, point );
+                return cacheAndReturn( point );
         }
     }
 
