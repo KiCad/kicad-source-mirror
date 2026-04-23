@@ -27,6 +27,7 @@
 #include <io/kicad/kicad_io_utils.h>
 #include <lockfile.h>
 #include <settings/common_settings.h>
+#include <settings/settings_manager.h>
 #include <pgm_base.h>
 #include <thread_pool.h>
 #include <trace_helpers.h>
@@ -1634,12 +1635,27 @@ void collectFilesInDirectory( const wxString& aRootPath, const wxString& aSearch
 
 
 /**
+ * Top-level project entries that must survive a restore unchanged: git/history metadata, the
+ * transient restore staging directories, and the per-project zip backup directory produced by
+ * SETTINGS_MANAGER::BackupProject (named "<projectname>-backups").
+ */
+bool isRestoreProtectedEntry( const wxString& aName )
+{
+    return aName == wxS( ".history" )
+           || aName == wxS( ".git" )
+           || aName == wxS( "_restore_backup" )
+           || aName == wxS( "_restore_temp" )
+           || aName.EndsWith( PROJECT_BACKUPS_DIR_SUFFIX );
+}
+
+
+/**
  * Check if a file should be excluded from backup (and thus not deleted during restore).
  */
 bool shouldExcludeFromBackup( const wxString& aFilename )
 {
     // Files explicitly excluded from backup should not be deleted during restore
-    return aFilename == wxS( "fp-info-cache" );
+    return aFilename == wxS( "fp-info-cache" ) || isRestoreProtectedEntry( aFilename );
 }
 
 
@@ -1661,9 +1677,9 @@ void findFilesToDelete( const wxString& aProjectPath, const std::set<wxString>& 
 
         while( cont )
         {
-            // Skip special directories
-            if( filename == wxS(".history") || filename == wxS(".git") ||
-                filename == wxS("_restore_backup") || filename == wxS("_restore_temp") )
+            // Protected entries only exist at the top level; skipping here also prevents
+            // recursion into them.
+            if( relativeBase.IsEmpty() && isRestoreProtectedEntry( filename ) )
             {
                 cont = dir.GetNext( &filename );
                 continue;
@@ -1770,8 +1786,9 @@ bool backupCurrentFiles( const wxString& aProjectPath, const wxString& aBackupPa
 
     while( cont )
     {
-        if( filename != wxS( ".history" ) && filename != wxS( ".git" ) &&
-            filename != wxS( "_restore_backup" ) && filename != wxS( "_restore_temp" ) )
+        // _restore_backup is deleted unconditionally after a successful restore, so protected
+        // entries (especially the zip-backups folder) must never be moved into it.
+        if( !isRestoreProtectedEntry( filename ) )
         {
             // If keepAllFiles is true, only backup files that will be overwritten
             bool shouldBackup = !aKeepAllFiles;
