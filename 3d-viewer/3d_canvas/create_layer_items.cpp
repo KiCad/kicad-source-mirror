@@ -1472,15 +1472,11 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 }
             }
 
-            // Add footprints tech layers - objects
-            const bool     isPasteLayer = ( layer == F_Paste || layer == B_Paste );
-            const wxString currentVariant = m_board->GetCurrentVariant();
-
+            // Add footprints tech layers - objects.  Paste, mask, silk and fab belong to the
+            // board fabrication outputs and render for every footprint, matching the gerber
+            // plotters.  DNP affects only the 3D model, handled by IsFootprintShown().
             for( FOOTPRINT* footprint : m_board->Footprints() )
             {
-                // Skip paste layers for footprints that are DNP in the current variant
-                bool skipForVariantDNP = isPasteLayer && footprint->GetDNPForVariant( currentVariant );
-
                 if( layer == F_SilkS || layer == B_SilkS )
                 {
                     int linewidth = m_board->GetDesignSettings().m_LineThickness[ LAYER_CLASS_SILK ];
@@ -1493,13 +1489,12 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                         buildPadOutlineAsSegments( pad, layer, layerContainer, linewidth );
                     }
                 }
-                else if( !skipForVariantDNP )
+                else
                 {
                     addPads( footprint, layerContainer, layer );
                 }
 
-                if( !skipForVariantDNP )
-                    addFootprintShapes( footprint, layerContainer, layer, visibilityFlags );
+                addFootprintShapes( footprint, layerContainer, layer, visibilityFlags );
             }
 
             // Draw non copper zones
