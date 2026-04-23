@@ -488,9 +488,11 @@ VECTOR2D PNG_PLOTTER::userToDeviceCoordinates( const VECTOR2I& aCoordinate )
     if( m_plotMirror )
         pos.x = m_width - pos.x;
 
-    // Flip Y axis (screen coordinates have Y increasing downward)
-    pos.y = m_height - pos.y;
-
+    // Input is already in Y-down screen convention (matching Cairo): gerbview
+    // passes GERBER_DRAW_ITEM::GetABPosition() output which, for non-mirrored
+    // B-axis files, already negates gerber-native Y so Y grows downward to the
+    // image. No additional flip is needed here, and adding one would
+    // double-invert and produce vertically flipped PNGs (issue 24048).
     return pos;
 }
 
