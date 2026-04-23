@@ -637,4 +637,39 @@ BOOST_AUTO_TEST_CASE( ContentBomRef )
 }
 
 
+/**
+ * Test that knockout text with holes emits schema-valid XML (Issue #23968)
+ *
+ * Knockout text renders as a filled polygon with each glyph contour becoming
+ * a separate outline. The IPC-2581 FeaturesType allows only one Feature child,
+ * so when a knockout text produces more than one Contour it must be wrapped
+ * in a UserSpecial (which itself is a Feature that may contain any number
+ * of child Features).
+ *
+ * test_copper_graphics.kicad_pcb contains a knockout text "Otherwise" on
+ * B.Cu, whose 'O' glyph produces two contours (outer and inner), which
+ * reproduces the multi-contour case.
+ */
+BOOST_AUTO_TEST_CASE( KnockoutTextMultiContour_Issue23968 )
+{
+    std::unique_ptr<BOARD> board = LoadBoard( "test_copper_graphics.kicad_pcb" );
+    BOOST_REQUIRE( board );
+
+    for( char version : { 'B', 'C' } )
+    {
+        BOOST_TEST_CONTEXT( "Version " << version )
+        {
+            wxString errorMsg;
+            bool valid = ExportAndValidate( board.get(), version, errorMsg );
+
+            BOOST_CHECK_MESSAGE( valid,
+                    wxString::Format( "Knockout text export should be schema-valid "
+                                      "(version %c): %s", version, errorMsg ) );
+        }
+
+        m_ipc2581Plugin = PCB_IO_IPC2581();
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -765,8 +765,25 @@ void PCB_IO_IPC2581::addKnockoutText( wxXmlNode* aContentNode, PCB_TEXT* aText )
     aText->TransformTextToPolySet( finalPoly, 0, ARC_HIGH_DEF, ERROR_INSIDE );
     finalPoly.Fracture();
 
-    for( int ii = 0; ii < finalPoly.OutlineCount(); ++ii )
-        addContourNode( aContentNode, finalPoly, ii );
+    const int outlineCount = finalPoly.OutlineCount();
+
+    if( outlineCount == 0 )
+        return;
+
+    // The IPC-2581 schema allows only one top-level Feature under Features/Marking,
+    // so wrap multiple glyph contours in a UserSpecial (a UserPrimitive Feature that
+    // may contain any number of child Features).
+
+    if( outlineCount == 1 )
+    {
+        addContourNode( aContentNode, finalPoly, 0 );
+        return;
+    }
+
+    wxXmlNode* special_node = appendNode( aContentNode, "UserSpecial" );
+
+    for( int ii = 0; ii < outlineCount; ++ii )
+        addContourNode( special_node, finalPoly, ii );
 }
 
 
