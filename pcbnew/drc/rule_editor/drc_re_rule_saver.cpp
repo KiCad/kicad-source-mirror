@@ -311,7 +311,7 @@ wxString DRC_RULE_SAVER::generateMergedRuleText(
 
     // Build the merged rule
     wxString rule;
-    rule << wxS( "(rule " ) << DRC_RE_BASE_CONSTRAINT_DATA::sanitizeRuleName( ctx.ruleName )
+    rule << wxS( "(rule " ) << DRC_RE_BASE_CONSTRAINT_DATA::formatRuleName( ctx.ruleName )
          << wxS( "\n" );
 
     if( !ctx.layerClause.IsEmpty() )

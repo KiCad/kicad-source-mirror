@@ -132,38 +132,40 @@ public:
     }
 
     /**
-     * Sanitize a rule name for use in S-expression output.
-     * Replaces spaces and invalid characters with underscores.
+     * Format a rule name for use in S-expression output while preserving the exact
+     * name the user chose.  If the name is a bare symbol (non-empty, alphanumeric
+     * plus `_`, `-` or `.`, and not starting with a digit) it is emitted unquoted;
+     * otherwise it is emitted as a double-quoted string with embedded quotes
+     * escaped via the standard CTX_QUOTED_STR encoding.
      */
-    static wxString sanitizeRuleName( const wxString& aRuleName )
+    static wxString formatRuleName( const wxString& aRuleName )
     {
         if( aRuleName.IsEmpty() )
-            return wxString( wxS( "rule" ) );
+            return wxString( wxS( "\"\"" ) );
 
-        wxString result;
-        result.reserve( aRuleName.length() );
+        bool needsQuoting = false;
 
-        for( wxUniChar c : aRuleName )
+        if( wxIsdigit( *aRuleName.begin() ) )
         {
-            if( wxIsspace( c ) )
+            needsQuoting = true;
+        }
+        else
+        {
+            for( wxUniChar c : aRuleName )
             {
-                result.append( '_' );
-            }
-            else if( wxIsalnum( c ) || c == '_' || c == '-' || c == '.' )
-            {
-                result.append( c );
-            }
-            else
-            {
-                result.append( '_' );
+                if( !( wxIsalnum( c ) || c == '_' || c == '-' || c == '.' ) )
+                {
+                    needsQuoting = true;
+                    break;
+                }
             }
         }
 
-        // Avoid names starting with a digit which S-expression parsers treat specially.
-        if( !result.empty() && wxIsdigit( *result.begin() ) )
-            result.insert( 0, "_" );
+        if( !needsQuoting )
+            return aRuleName;
 
-        return result;
+        wxString escaped = EscapeString( aRuleName, CTX_QUOTED_STR );
+        return wxString( wxS( "\"" ) ) + escaped + wxS( "\"" );
     }
 
 protected:
@@ -198,7 +200,7 @@ protected:
                         const std::vector<wxString>& aConstraintClauses ) const
     {
         wxString rule;
-        rule << wxS( "(rule " ) << sanitizeRuleName( aContext.ruleName ) << wxS( "\n" );
+        rule << wxS( "(rule " ) << formatRuleName( aContext.ruleName ) << wxS( "\n" );
 
         if( !aContext.comment.IsEmpty() )
         {
