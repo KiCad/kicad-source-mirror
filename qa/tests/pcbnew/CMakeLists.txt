@@ -118,6 +118,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_creepage_issue23364.cpp
     drc/test_drc_creepage_issue23389.cpp
     drc/test_drc_creepage_issue23576.cpp
+    drc/test_drc_creepage_issue23658.cpp
     drc/test_drc_physical_clearance.cpp
     drc/test_drc_rule_editor.cpp
     drc/test_drc_bitmap_overlay_panel.cpp
