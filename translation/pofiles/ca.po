@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-16 19:04+0300\n"
 "PO-Revision-Date: 2026-04-24 17:13+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Rafael Serrano <rsr.private@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/v10/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -35,7 +35,7 @@ msgstr ""
 #: common/properties/pg_editors.cpp:643
 #: common/widgets/grid_text_button_helpers.cpp:255
 msgid "All Files"
-msgstr "Tots els Fitxers"
+msgstr "Tots els fitxers"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:343
 msgid "Build board outline"
@@ -73,12 +73,12 @@ msgstr "Crea zones"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1320
 msgid "Build Tech layers"
-msgstr "Construeix Capes Tècniques"
+msgstr "Construeix capes tècniques"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1397
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "Construeix Capa Tècnica %d"
+msgstr "Construeix capa tècnica %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1679
 msgid "Simplifying copper layer polygons"
@@ -1829,7 +1829,7 @@ msgstr "No s'ha pogut crear el fitxer «%s»."
 
 #: bitmap2component/bitmap2cmp_frame.cpp:480
 msgid "Create PostScript File"
-msgstr "Crea un Fitxer Postscript"
+msgstr "Crea un fitxer Postscript"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:515
 msgid "Create Symbol Library"
@@ -1981,7 +1981,7 @@ msgstr "Negatiu"
 #: bitmap2component/bitmap2cmp_panel_base.cpp:159
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:56
 msgid "Output Format"
-msgstr "Format de Sortida"
+msgstr "Format de sortida"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:166
 msgid "Symbol (.kicad_sym file)"
@@ -2051,7 +2051,7 @@ msgstr "Fulla de Dibuix (fitxer .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
 msgid "Export to File..."
-msgstr "Exporta a un Fitxer..."
+msgstr "Exporta a fitxer..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
