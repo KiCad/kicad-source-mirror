@@ -8,16 +8,15 @@ msgstr ""
 "Project-Id-Version: KiCad 6.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-16 19:04+0300\n"
-"PO-Revision-Date: 2026-03-18 20:46+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/master-"
-"source/lv/>\n"
+"PO-Revision-Date: 2026-04-24 16:35+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/v10/lv/>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:396
@@ -5527,8 +5526,7 @@ msgstr "KiCad API nav iespējots; ārējie Python spraudņi nebūs pieejami"
 msgid ""
 "No valid Python interpreter chosen; external Python plugins will not be "
 "available"
-msgstr ""
-"Nav izvēlēts derīgs Python tulks; ārējie Python spraudņi nebūs pieejami"
+msgstr "Nav izvēlēts derīgs Python tulks; ārējie Python spraudņi nebūs pieejami"
 
 #: common/dialogs/panel_plugin_settings.cpp:146
 #, c-format
@@ -15967,8 +15965,7 @@ msgstr "Shēmas dati"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:154
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:98
 msgid "Project is missing or read-only. Settings will not be editable."
-msgstr ""
-"Projekts nav atrasts vai ir tikai lasāms. Iestatījumi nebūs rediģējami."
+msgstr "Projekts nav atrasts vai ir tikai lasāms. Iestatījumi nebūs rediģējami."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:191
 #, c-format
@@ -19283,8 +19280,7 @@ msgstr "Sakne"
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
-msgstr ""
-"Visu shēmu nevarēja ielādēt. Ielādējot hierarhiskās lapas radās kļūdas."
+msgstr "Visu shēmu nevarēja ielādēt. Ielādējot hierarhiskās lapas radās kļūdas."
 
 #: eeschema/files-io.cpp:383 eeschema/files-io.cpp:392
 #: eeschema/files-io.cpp:1562 eeschema/sheet.cpp:472
@@ -20996,8 +20992,8 @@ msgid ""
 "same folder."
 msgstr ""
 "Ceļš uz CADSTAR shēmas arhīva (*.csa) failu, kas saistīts ar šo CADSTAR "
-"komponentu bibliotēku. Ja nav norādīts, tiek pieņemts, ka tas ir 'symbol."
-"csa' tajā pašā mapē."
+"komponentu bibliotēku. Ja nav norādīts, tiek pieņemts, ka tas ir "
+"'symbol.csa' tajā pašā mapē."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:232
 msgid ""
@@ -22694,9 +22690,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -22717,8 +22713,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></samp>"
+"</td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -22780,8 +22776,8 @@ msgstr ""
 "        <td>&nbsp;<br><samp>1</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Conditional text display</samp></td>\n"
 "    </tr>\n"
@@ -22793,8 +22789,8 @@ msgstr ""
 "samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Numeric comparisons work too</samp></td>\n"
 "    </tr>\n"
@@ -22819,8 +22815,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:SHORT_REFERENCE(pin)}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>Reference without unit letter for pin</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>Reference without unit letter for pin</samp></td>"
+"\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${J1:SHORT_REFERENCE(3)}</samp></td>\n"
@@ -22871,8 +22867,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:PIN_ALT_LIST(pin)}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>All alternate pin functions (excludes base "
-"name)</samp></td>\n"
+"        <td>&nbsp;<br><samp>All alternate pin functions (excludes base name)"
+"</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${U1:PIN_ALT_LIST(5)}</samp></td>\n"
@@ -22976,8 +22972,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Kopnes definīcija</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
 "        <th>Iegūtie tīkli</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23028,9 +23025,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23044,11 +23041,10 @@ msgstr ""
 "Daudzierastu simboliem funkcijas kā <samp>NET_NAME(pin)</samp> darbojas pat "
 "ja izvads atrodas citā vienībā nekā pašreizējā lapā.</p>\n"
 "<p><b>Tabulas šūnu atsauces:</b> Funkcija <samp>CELL()</samp> darbojas tikai "
-"tabulas šūnās. Izmantojiet <samp>${CELL(\"A0\")}</samp> vai "
-"<samp>${CELL(row, col)}</samp> lai atsauktos uz citām šūnām tajā pašā "
-"tabulā. Rindas un kolonnas numuri ir 0-bāzēti (A0 ir pirmā rinda, pirmā "
-"kolonna). CELL atgriež novērtēto/attēloto vērtību, nevis neapstrādātu šūnas "
-"tekstu.</p>\n"
+"tabulas šūnās. Izmantojiet <samp>${CELL(\"A0\")}</samp> vai <samp>${CELL"
+"(row, col)}</samp> lai atsauktos uz citām šūnām tajā pašā tabulā. Rindas un "
+"kolonnas numuri ir 0-bāzēti (A0 ir pirmā rinda, pirmā kolonna). CELL atgriež "
+"novērtēto/attēloto vērtību, nevis neapstrādātu šūnas tekstu.</p>\n"
 "<p><b>Ligzdotas mainīgās:</b> Mainīgās var saturēt citas mainīgās. Iekšējās "
 "mainīgās tiek izvērstas pirmās. Maksimālais ligzdošanas dziļums: 6 līmeņi.</"
 "p>\n"
@@ -25032,8 +25028,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_editor.cpp:937
 #, c-format
 msgid "Symbol '%s' cannot replace another symbol '%s' that it descends from"
-msgstr ""
-"Simbols '%s' nevar aizstāt citu simbolu '%s', no kura tas ir atvasināts"
+msgstr "Simbols '%s' nevar aizstāt citu simbolu '%s', no kura tas ir atvasināts"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:947
 #, c-format
@@ -26310,8 +26305,7 @@ msgstr "Izvērst sakrauto izvadu"
 
 #: eeschema/tools/sch_actions.cpp:1010
 msgid "Convert a pin with stacked notation to multiple individual pins"
-msgstr ""
-"Konvertēt izvadu ar sakrautā notāciju uz vairākiem atsevišķiem izvadiem"
+msgstr "Konvertēt izvadu ar sakrautā notāciju uz vairākiem atsevišķiem izvadiem"
 
 #: eeschema/tools/sch_actions.cpp:1016
 msgid "Break"
@@ -26508,8 +26502,7 @@ msgstr "Cita ne-KiCad shēma..."
 #: eeschema/tools/sch_actions.cpp:1213
 msgid ""
 "Replace current schematic sheet with one imported from another application"
-msgstr ""
-"Aizstāt pašreizējo shēmas lapu ar importētu no citas lietojumprogrammas"
+msgstr "Aizstāt pašreizējo shēmas lapu ar importētu no citas lietojumprogrammas"
 
 #: eeschema/tools/sch_actions.cpp:1219
 msgid "Switch to PCB Editor"
@@ -27297,8 +27290,8 @@ msgid ""
 "Pin swaps are disabled for symbols used by multiple sheet instances (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
-"Izvadu maiņa ir atspējota simboliem, ko izmanto vairākas lapas instances "
-"(%s). Dublējiet lapu, lai rediģētu izvadus neatkarīgi."
+"Izvadu maiņa ir atspējota simboliem, ko izmanto vairākas lapas instances (%s)"
+". Dublējiet lapu, lai rediģētu izvadus neatkarīgi."
 
 #: eeschema/tools/sch_edit_tool.cpp:1810
 msgid ""
@@ -27724,8 +27717,7 @@ msgstr "Rediģēt izvadus"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1190
 msgid "At least two pins are needed to convert to stacked pins"
-msgstr ""
-"Lai pārveidotu par sakrautiem izvadiem, nepieciešami vismaz divi izvadi"
+msgstr "Lai pārveidotu par sakrautiem izvadiem, nepieciešami vismaz divi izvadi"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1200
 msgid "All pins must be at the same location"
@@ -29595,8 +29587,7 @@ msgstr "Izvades fails vai direktorijs"
 msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
-msgstr ""
-"Ceļš uz zīmēšanas lapu; tas ignorē jebkuru esošu projekta definētu lapu"
+msgstr "Ceļš uz zīmēšanas lapu; tas ignorē jebkuru esošu projekta definētu lapu"
 
 #: kicad/cli/command.cpp:220
 msgid ""
@@ -30246,8 +30237,7 @@ msgstr "Derīgās opcijas: ascii, csv, gerber"
 
 #: kicad/cli/command_pcb_export_pos.cpp:60
 msgid "Output units; ascii or csv format only; valid options: in, mm"
-msgstr ""
-"Izvades vienības; tikai ascii vai csv formātam; derīgās opcijas: in, mm"
+msgstr "Izvades vienības; tikai ascii vai csv formātam; derīgās opcijas: in, mm"
 
 #: kicad/cli/command_pcb_export_pos.cpp:64
 msgid ""
@@ -33912,8 +33902,8 @@ msgstr ""
 "*  B1 - Iekšējie vadītāji\n"
 "*  B2 - Ārējie vadītāji, neapklāti, jūras līmenis līdz 3050 m\n"
 "*  B3 - Ārējie vadītāji, neapklāti, virs 3050 m\n"
-"*  B4 - Ārējie vadītāji, ar pastāvīgu polimēra pārklājumu (jebkurā "
-"augstumā)\n"
+"*  B4 - Ārējie vadītāji, ar pastāvīgu polimēra pārklājumu (jebkurā augstumā)"
+"\n"
 "*  A5 - Ārējie vadītāji, ar konformalā pārklājumu virs montāžas (jebkurā "
 "augstumā)\n"
 "*  A6 - Ārējo komponentu izvadi/savienojumi, neapklāti\n"
@@ -34957,8 +34947,8 @@ msgstr ""
 "Positīvs skaitlis norāda, ka rinda ir anodiska (-) un kolonna ir katodiska "
 "(+), aukstās un siltās krāsu toņas arī norāda rindu potenciālu.<br>\n"
 "EN 50310 iesaka sprieguma starpību zem 300 mV. Zināmajā praksē izmanto trešo "
-"starpmontāžas metālu starp galveno pāri (piemēram, ENIG virsmas apstrādi)."
-"<br>\n"
+"starpmontāžas metālu starp galveno pāri (piemēram, ENIG virsmas apstrādi)"
+".<br>\n"
 "Atlasītās šūnas rādītas ar noklusējuma sistēmas krāsu pēc tabulas "
 "atjaunināšanas.\n"
 
@@ -36505,8 +36495,7 @@ msgstr ""
 #: pcbnew/connectivity/topo_match.cpp:247
 #, c-format
 msgid "Pad %s of %s has inconsistent net mapping in candidate %s."
-msgstr ""
-"Kontaktlaukumam %s no %s ir nekonsekvents tīkla kartējums kandidātā %s."
+msgstr "Kontaktlaukumam %s no %s ir nekonsekvents tīkla kartējums kandidātā %s."
 
 #: pcbnew/connectivity/topo_match.cpp:355
 msgid "No compatible component found in the target area."
@@ -39838,8 +39827,7 @@ msgstr "Izvades fails:"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:65
 msgid "Enter a filename if you do not want to use default file names"
-msgstr ""
-"Ievadiet faila nosaukumu, ja nevēlaties izmantot noklusējuma nosaukumus"
+msgstr "Ievadiet faila nosaukumu, ja nevēlaties izmantot noklusējuma nosaukumus"
 
 #: pcbnew/dialogs/dialog_gendrill.cpp:338
 #, c-format
@@ -41127,8 +41115,7 @@ msgstr "Kontaktlaukuma rekvizīti"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:191
 msgid "Default Pad Properties for Add Pad Tool"
-msgstr ""
-"Noklusējuma kontaktlaukuma rekvizīti kontaktlaukuma pievienošanas rīkam"
+msgstr "Noklusējuma kontaktlaukuma rekvizīti kontaktlaukuma pievienošanas rīkam"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:233
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1030
@@ -42006,8 +41993,8 @@ msgstr ""
 "Iestatīt globālo platuma korekciju precīzam PostScript izvades platumam.\n"
 "Šī platuma korekcija ir paredzēta, lai kompensētu celiņu platuma, kā arī "
 "kontaktlaukumu un pāreju izmēra kļūdas.\n"
-"Saprātīgai platuma korekcijas vērtībai jābūt diapazonā [-"
-"(MinCeliņaPlatums-1), +(MinAtstarpesVērtība-1)]."
+"Saprātīgai platuma korekcijas vērtībai jābūt diapazonā [-(MinCeliņaPlatums-1)"
+", +(MinAtstarpesVērtība-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:324
 msgid "Force A4 output"
@@ -43247,8 +43234,7 @@ msgstr "Lapas nosaukums:"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Use via color for normal through hole padstacks"
-msgstr ""
-"Izmantot pārejas krāsu parastiem caurejošiem kontaktlaukumu komplektiem"
+msgstr "Izmantot pārejas krāsu parastiem caurejošiem kontaktlaukumu komplektiem"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:47
 msgid "Clearance Outlines"
@@ -44007,8 +43993,7 @@ msgstr "Saglabāt tekstu izlīdzinātu"
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:70
 msgid "When checked, dimension text will be kept aligned with dimension lines"
-msgstr ""
-"Ja atzīmēts, izmēra teksts tiks saglabāts izlīdzināts ar izmēra līnijām"
+msgstr "Ja atzīmēts, izmēra teksts tiks saglabāts izlīdzināts ar izmēra līnijām"
 
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:82
 msgid "How many digits of precision to show"
@@ -50749,15 +50734,15 @@ msgid ""
 "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 "Ielādē bibliotēku '%s':\n"
-"Korpusa %s kontaktlaukumam %s ir kvadrātveida caurums (vēl netiek "
-"atbalstīts)."
+"Korpusa %s kontaktlaukumam %s ir kvadrātveida caurums (vēl netiek atbalstīts)"
+"."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3618
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
-"Korpusa %s kontaktlaukumam %s ir kvadrātveida caurums (vēl netiek "
-"atbalstīts)."
+"Korpusa %s kontaktlaukumam %s ir kvadrātveida caurums (vēl netiek atbalstīts)"
+"."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3653
 #, c-format
@@ -51520,8 +51505,8 @@ msgstr "Nederīgs kontaktlaukuma izmērs rindā %zu."
 #, c-format
 msgid "Expecting pad offset values but found %s:%s in row %zu."
 msgstr ""
-"Paredzētas kontaktlaukuma nobīdes vērtības, bet rindā %3$zu atrasts %1$s:"
-"%2$s."
+"Paredzētas kontaktlaukuma nobīdes vērtības, bet rindā %3$zu atrasts "
+"%1$s:%2$s."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:642
 #, c-format
@@ -51749,8 +51734,7 @@ msgstr "Plates kontūra ir nederīga vai trūkst. Lūdzu, palaidiet DRC."
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3209
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
-msgstr ""
-"Konstatēti dublēti korpusu rādītāji; IPC-2581 izvade var būt nepareiza."
+msgstr "Konstatēti dublēti korpusu rādītāji; IPC-2581 izvade var būt nepareiza."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3391
 #, c-format
@@ -52676,9 +52660,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -52863,8 +52847,8 @@ msgstr ""
 "        <td>&nbsp;<br><samp>1</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Nosacījuma teksta attēlojums</samp></td>\n"
 "    </tr>\n"
@@ -53445,8 +53429,7 @@ msgstr "Skriptošanas inicializācija"
 #, c-format
 msgid ""
 "Failed second phase initializing Python module '%s', through Python C API."
-msgstr ""
-"Neizdevās otrajā fāzē inicializēt Python moduli '%s' caur Python C API."
+msgstr "Neizdevās otrajā fāzē inicializēt Python moduli '%s' caur Python C API."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:221
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:238
@@ -55685,8 +55668,7 @@ msgstr "Pārslēgt celiņu uz iepriekšējo aktīvo vara slāni"
 
 #: pcbnew/tools/pcb_actions.cpp:755
 msgid "Adds arcs tangent to the selected straight track segments"
-msgstr ""
-"Pievieno lokus, kas pieskaras izvēlētajiem taisnajiem celiņa segmentiem"
+msgstr "Pievieno lokus, kas pieskaras izvēlētajiem taisnajiem celiņa segmentiem"
 
 #: pcbnew/tools/pcb_actions.cpp:760
 msgid "Fillet Lines..."
@@ -57141,8 +57123,7 @@ msgstr "Izlaiž pašreizējo elementu un maršrutē nākamo izvēlēto elementu.
 #: pcbnew/tools/pcb_actions.cpp:2684
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
-msgstr ""
-"Sadala celiņa segmentu divos segmentos, kas savienoti kursora pozīcijā."
+msgstr "Sadala celiņa segmentu divos segmentos, kas savienoti kursora pozīcijā."
 
 #: pcbnew/tools/pcb_actions.cpp:2692
 msgid "Drag 45 Degree Mode"
@@ -57303,8 +57284,7 @@ msgstr "Dizaina blokam %s nav plates faila."
 
 #: pcbnew/tools/pcb_control.cpp:1580
 msgid "Design block placement failed - no footprints were placed."
-msgstr ""
-"Dizaina bloka novietošana neizdevās — netika novietots neviens korpuss."
+msgstr "Dizaina bloka novietošana neizdevās — netika novietots neviens korpuss."
 
 #: pcbnew/tools/pcb_control.cpp:1615
 #, c-format
