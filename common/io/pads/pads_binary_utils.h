@@ -25,6 +25,7 @@
 #define PADS_BINARY_UTILS_H_
 
 #include <algorithm>
+#include <array>
 #include <cstdint>
 #include <cstring>
 #include <fstream>
@@ -90,6 +91,48 @@ inline double getF64LE( const std::vector<uint8_t>& aData, size_t aOffset )
     std::memcpy( &value, &bits, sizeof( value ) );
 
     return value;
+}
+
+
+/// Returned by findSignature when the signature does not occur.
+constexpr size_t SIGNATURE_NOT_FOUND = static_cast<size_t>( -1 );
+
+/**
+ * First offset >= @p aFrom at which the non-empty signature @p aSig (length @p aSigLen) matches in
+ * @p aData, or @ref SIGNATURE_NOT_FOUND when it does not occur. An empty signature is unsupported
+ * and yields @ref SIGNATURE_NOT_FOUND. Callers apply their own bounds for any fields trailing the
+ * matched signature.
+ */
+inline size_t findSignature( const std::vector<uint8_t>& aData, const uint8_t* aSig, size_t aSigLen,
+                             size_t aFrom = 0 )
+{
+    if( aSigLen == 0 || aData.size() < aSigLen || aFrom > aData.size() - aSigLen )
+        return SIGNATURE_NOT_FOUND;
+
+    auto it = std::search( aData.begin() + static_cast<std::ptrdiff_t>( aFrom ), aData.end(), aSig,
+                           aSig + aSigLen );
+
+    return it == aData.end() ? SIGNATURE_NOT_FOUND : static_cast<size_t>( it - aData.begin() );
+}
+
+
+/// Overload for the fixed-size std::array signatures the SCH reader uses.
+template <size_t N>
+inline size_t findSignature( const std::vector<uint8_t>& aData, const std::array<uint8_t, N>& aSig,
+                             size_t aFrom = 0 )
+{
+    return findSignature( aData, aSig.data(), N, aFrom );
+}
+
+
+/// True iff @p aSig occurs exactly once in @p aData (the uniqueness gate some anchors require).
+inline bool signatureIsUnique( const std::vector<uint8_t>& aData, const uint8_t* aSig,
+                               size_t aSigLen )
+{
+    size_t first = findSignature( aData, aSig, aSigLen );
+
+    return first != SIGNATURE_NOT_FOUND
+           && findSignature( aData, aSig, aSigLen, first + 1 ) == SIGNATURE_NOT_FOUND;
 }
 
 

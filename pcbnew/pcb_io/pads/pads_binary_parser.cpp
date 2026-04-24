@@ -383,16 +383,11 @@ void BINARY_PARSER::parseClusters()
     static constexpr size_t  LAYER_STRIDE = 152;
     static const uint8_t     TOP_FRAME[12] = { 0, 0, 0, 0, 1, 0, 0, 0, 'T', 'o', 'p', 0 };
 
-    auto match = std::search( m_data.begin(), m_data.end(), TOP_FRAME, TOP_FRAME + 12 );
-
-    if( match == m_data.end() )
-        return;
-
     // A second occurrence makes the locator ambiguous, so bail rather than guess.
-    if( std::search( match + 1, m_data.end(), TOP_FRAME, TOP_FRAME + 12 ) != m_data.end() )
+    if( !signatureIsUnique( m_data, TOP_FRAME, sizeof( TOP_FRAME ) ) )
         return;
 
-    size_t matchOff = static_cast<size_t>( match - m_data.begin() );
+    size_t matchOff = findSignature( m_data, TOP_FRAME, sizeof( TOP_FRAME ) );
 
     // Use division rather than multiplication so a malformed count cannot overflow.
     if( matchOff < LAYER_STRIDE )
@@ -884,12 +879,9 @@ void BINARY_PARSER::parseDecalNameTableOld()
 
     // The table is the first signature occurrence whose 100-byte run validates (record 0 ==
     // JMPVIA_AAAAA with a 0xFFFE sentinel), guarding against a stray earlier occurrence.
-    for( auto it = std::search( m_data.begin(), m_data.end(), SIGNATURE.begin(), SIGNATURE.end() );
-         it != m_data.end();
-         it = std::search( it + 1, m_data.end(), SIGNATURE.begin(), SIGNATURE.end() ) )
+    for( size_t start = findSignature( m_data, SIGNATURE ); start != SIGNATURE_NOT_FOUND;
+         start = findSignature( m_data, SIGNATURE, start + 1 ) )
     {
-        size_t start = static_cast<size_t>( std::distance( m_data.begin(), it ) );
-
         std::vector<std::string>        table;
         std::map<std::string, uint32_t> counts;
 
@@ -3915,12 +3907,11 @@ void BINARY_PARSER::parseLayerStackup()
 
     // The "(All layers)" string anchors the first record; the directory data_offset overflows
     // the indexed region on large boards.
-    auto it = std::search( m_data.begin(), m_data.end(), ANCHOR.begin(), ANCHOR.end() );
+    size_t recordBase = findSignature( m_data, reinterpret_cast<const uint8_t*>( ANCHOR.data() ),
+                                       ANCHOR.size() );
 
-    if( it == m_data.end() )
+    if( recordBase == SIGNATURE_NOT_FOUND )
         return;
-
-    size_t recordBase = static_cast<size_t>( it - m_data.begin() );
 
     if( !m_cursor.InBounds( recordBase, REC_COUNT * REC_SIZE ) )
         return;

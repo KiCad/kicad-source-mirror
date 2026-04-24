@@ -56,6 +56,8 @@ namespace PADS_SCH_BINARY
 using PADS_IO::BINARY_CURSOR;
 using PADS_IO::SDB_RECORD;
 using PADS_IO::SDB_FIELD_UNSET;
+using PADS_IO::findSignature;
+using PADS_IO::SIGNATURE_NOT_FOUND;
 
 static constexpr uint8_t  MAGIC1 = 0xFE;
 static constexpr uint16_t VERSION = 0x000D;
@@ -247,11 +249,10 @@ void PADS_SCH_BINARY_READER::decodeSheets( const std::vector<uint8_t>& d )
     size_t firstSig = 0;
     bool   haveSig = false;
 
-    for( size_t i = DATA_STREAM_OFFSET; i + SHEET_SIGNATURE.size() + 8 <= d.size(); ++i )
+    for( size_t i = findSignature( d, SHEET_SIGNATURE, DATA_STREAM_OFFSET );
+         i != SIGNATURE_NOT_FOUND && i + SHEET_SIGNATURE.size() + 8 <= d.size();
+         i = findSignature( d, SHEET_SIGNATURE, i + 1 ) )
     {
-        if( !std::equal( SHEET_SIGNATURE.begin(), SHEET_SIGNATURE.end(), &d[i] ) )
-            continue;
-
         SDB_RECORD sig( cur, i );
         uint32_t   scaleBits = sig.U32( SHEET_SIG_SCALE_OFF );
         float      scale = 0.0f;
@@ -437,16 +438,11 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
     // Locate the decal-record table head by the window between the first per-sheet CAE signature
     // and the $OSR_SYMS part-type pool.  If either anchor is absent the window is undefined; bail
     // rather than scan the whole stream and risk binding the wrong table.
-    size_t windowLo = std::string::npos;
+    size_t windowLo = findSignature( d, SHEET_SIGNATURE, DATA_STREAM_OFFSET );
 
-    for( size_t i = DATA_STREAM_OFFSET; i + SHEET_SIGNATURE.size() <= n; ++i )
-    {
-        if( std::equal( SHEET_SIGNATURE.begin(), SHEET_SIGNATURE.end(), &d[i] ) )
-        {
-            windowLo = i;
-            break;
-        }
-    }
+    // findSignature scans the whole buffer; hold the original stream-limit bound.
+    if( windowLo != SIGNATURE_NOT_FOUND && windowLo + SHEET_SIGNATURE.size() > n )
+        windowLo = std::string::npos;
 
     size_t windowHi = std::string::npos;
 
@@ -1401,39 +1397,34 @@ static void pageExtent( const std::vector<uint8_t>& d, int& aWidth, int& aHeight
     if( d.size() < sizeof( token ) + 1 )
         return;
 
-    for( size_t i = 0; i + sizeof( token ) < d.size(); ++i )
+    size_t i = findSignature( d, token, sizeof( token ) );
+
+    if( i == SIGNATURE_NOT_FOUND || i + sizeof( token ) >= d.size() )
+        return;
+
+    switch( d[i + sizeof( token )] )
     {
-        if( std::equal( std::begin( token ), std::end( token ), &d[i] ) )
-        {
-            uint8_t size = d[i + sizeof( token )];
-
-            switch( size )
-            {
-            case 'A':
-                aWidth = 11000;
-                aHeight = 8500;
-                break;
-            case 'B':
-                aWidth = 17000;
-                aHeight = 11000;
-                break;
-            case 'C':
-                aWidth = 22000;
-                aHeight = 17000;
-                break;
-            case 'D':
-                aWidth = 34000;
-                aHeight = 22000;
-                break;
-            case 'E':
-                aWidth = 44000;
-                aHeight = 34000;
-                break;
-            default: break;
-            }
-
-            return;
-        }
+    case 'A':
+        aWidth = 11000;
+        aHeight = 8500;
+        break;
+    case 'B':
+        aWidth = 17000;
+        aHeight = 11000;
+        break;
+    case 'C':
+        aWidth = 22000;
+        aHeight = 17000;
+        break;
+    case 'D':
+        aWidth = 34000;
+        aHeight = 22000;
+        break;
+    case 'E':
+        aWidth = 44000;
+        aHeight = 34000;
+        break;
+    default: break;
     }
 }
 
