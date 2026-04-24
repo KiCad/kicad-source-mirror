@@ -107,6 +107,13 @@ public:
 
     void Cleanup();
 
+    /**
+     * Drop every cached reference into the currently-attached SCHEMATIC's
+     * TEXT_VAR_TRACKER: unregister the invalidate listener and unhook the
+     * drawing-sheet proxy.  Must run before the owning SCHEMATIC is freed.
+     */
+    void DetachTextVarTracker();
+
     void DisplaySheet( const SCH_SCREEN* aScreen );
     void DisplaySymbol( LIB_SYMBOL* aSymbol );
 

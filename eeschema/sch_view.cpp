@@ -56,8 +56,21 @@ SCH_VIEW::SCH_VIEW( SCH_BASE_FRAME* aFrame ) :
 
 SCH_VIEW::~SCH_VIEW()
 {
+    DetachTextVarTracker();
+}
+
+
+void SCH_VIEW::DetachTextVarTracker()
+{
+    if( m_drawingSheet )
+        m_drawingSheet->AttachToTracker( nullptr );
+
     if( m_textVarListenerTracker && m_textVarListenerHandle != TEXT_VAR_TRACKER::INVALID_LISTENER )
+    {
         m_textVarListenerTracker->RemoveInvalidateListener( m_textVarListenerHandle );
+        m_textVarListenerHandle = TEXT_VAR_TRACKER::INVALID_LISTENER;
+        m_textVarListenerTracker = nullptr;
+    }
 }
 
 

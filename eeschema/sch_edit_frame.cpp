@@ -598,6 +598,10 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     if( m_schematic )
         m_schematic->RemoveAllListeners();
 
+    // Canvas outlives m_schematic; detach tracker consumers before delete.
+    if( GetCanvas() && GetCanvas()->GetView() )
+        GetCanvas()->GetView()->DetachTextVarTracker();
+
     // Delete all items not in draw list before deleting schematic
     // to avoid dangling pointers stored in these items
     ClearUndoRedoList();
@@ -3003,7 +3007,13 @@ void SCH_EDIT_FRAME::SetSchematic( SCHEMATIC* aSchematic )
     wxCHECK( aSchematic, /* void */ );
 
     if( m_schematic )
+    {
         m_schematic->SetProject( nullptr );
+
+        // Detach before the outgoing schematic (and its tracker) is freed.
+        if( GetCanvas() && GetCanvas()->GetView() )
+            GetCanvas()->GetView()->DetachTextVarTracker();
+    }
 
     aSchematic->SetProject( &Prj() );
     delete m_schematic;

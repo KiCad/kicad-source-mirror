@@ -826,6 +826,13 @@ public:
     std::size_t             m_textVarListenerHandle = 0;
     class TEXT_VAR_TRACKER* m_textVarListenerTracker = nullptr;
 
+    /**
+     * Drop every cached reference into the current BOARD's text-var tracker.
+     * Must run before the BOARD is freed (SetBoard replacement or frame
+     * teardown).
+     */
+    void detachTextVarTracker();
+
     void StartCrossProbeFlash( const std::vector<BOARD_ITEM*>& aItems );
     void OnCrossProbeFlashTimer( wxTimerEvent& aEvent );
     void UpdateProperties() override;

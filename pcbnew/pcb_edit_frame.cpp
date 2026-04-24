@@ -765,11 +765,9 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
-    // Remove our invalidation listener from whichever tracker it was
-    // installed on — not from GetBoard()'s current tracker, which may have
-    // been swapped out by a project reload between install time and now.
-    if( m_textVarListenerTracker && m_textVarListenerHandle != TEXT_VAR_TRACKER::INVALID_LISTENER )
-        m_textVarListenerTracker->RemoveInvalidateListener( m_textVarListenerHandle );
+    // PCB_BASE_FRAME's dtor deletes m_pcb; canvas children outlive it.  Drop
+    // every cached TEXT_VAR_TRACKER* before the tracker is freed.
+    detachTextVarTracker();
 
     if( ADVANCED_CFG::GetCfg().m_ShowEventCounters )
     {
@@ -807,11 +805,32 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 }
 
 
+void PCB_EDIT_FRAME::detachTextVarTracker()
+{
+    if( GetCanvas() )
+    {
+        if( DS_PROXY_VIEW_ITEM* sheet = GetCanvas()->GetDrawingSheet() )
+            sheet->AttachToTracker( nullptr );
+    }
+
+    if( m_textVarListenerTracker && m_textVarListenerHandle != TEXT_VAR_TRACKER::INVALID_LISTENER )
+    {
+        m_textVarListenerTracker->RemoveInvalidateListener( m_textVarListenerHandle );
+        m_textVarListenerHandle = TEXT_VAR_TRACKER::INVALID_LISTENER;
+        m_textVarListenerTracker = nullptr;
+    }
+}
+
+
 void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard, bool aBuildConnectivity,
                                PROGRESS_REPORTER* aReporter )
 {
+    // PCB_BASE_FRAME::SetBoard deletes m_pcb; detach tracker consumers first.
     if( m_pcb )
+    {
+        detachTextVarTracker();
         m_pcb->ClearProject();
+    }
 
     PCB_BASE_EDIT_FRAME::SetBoard( aBoard, aReporter );
 
