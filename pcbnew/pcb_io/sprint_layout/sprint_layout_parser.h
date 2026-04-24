@@ -72,6 +72,14 @@ enum THT_SHAPE
     THT_SHAPE_CIRCLE = 1,
     THT_SHAPE_OCT    = 2,
     THT_SHAPE_SQUARE = 3,
+
+    THT_SHAPE_H_ROUND = 4,
+    THT_SHAPE_H_CHAMFER = 5,
+    THT_SHAPE_H_RECT = 6,
+
+    THT_SHAPE_V_ROUND = 7,
+    THT_SHAPE_V_CHAMFER = 8,
+    THT_SHAPE_V_RECT = 9,
 };
 
 struct POINT

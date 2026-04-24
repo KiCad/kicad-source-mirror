@@ -744,8 +744,28 @@ void SPRINT_LAYOUT_PARSER::addPadToBoard(
         int outerDia = sprintToKicadCoord( aObj.outer * 2.0f );
         int drillDia = sprintToKicadCoord( aObj.inner * 2.0f );
 
-        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( outerDia, outerDia ) );
-        pad->SetDrillSize( VECTOR2I( drillDia, drillDia ) );
+        VECTOR2I padSize( outerDia, outerDia );
+        VECTOR2I drillSize( drillDia, drillDia );
+
+        switch( aObj.tht_shape )
+        {
+        case SPRINT_LAYOUT::THT_SHAPE_H_ROUND:
+        case SPRINT_LAYOUT::THT_SHAPE_H_CHAMFER:
+        case SPRINT_LAYOUT::THT_SHAPE_H_RECT: 
+            padSize.x *= 2;
+            break;
+
+        case SPRINT_LAYOUT::THT_SHAPE_V_ROUND:
+        case SPRINT_LAYOUT::THT_SHAPE_V_CHAMFER:
+        case SPRINT_LAYOUT::THT_SHAPE_V_RECT: 
+            padSize.y *= 2;
+            break;
+
+        default: break;
+        }
+
+        pad->SetSize( PADSTACK::ALL_LAYERS, padSize );
+        pad->SetDrillSize( drillSize );
 
         switch( aObj.tht_shape )
         {
@@ -753,7 +773,14 @@ void SPRINT_LAYOUT_PARSER::addPadToBoard(
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
             break;
 
+        case SPRINT_LAYOUT::THT_SHAPE_H_ROUND:
+        case SPRINT_LAYOUT::THT_SHAPE_V_ROUND:
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
+            break;
+
         case SPRINT_LAYOUT::THT_SHAPE_OCT:
+        case SPRINT_LAYOUT::THT_SHAPE_H_CHAMFER:
+        case SPRINT_LAYOUT::THT_SHAPE_V_CHAMFER:
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CHAMFERED_RECT );
             pad->SetChamferRectRatio( PADSTACK::ALL_LAYERS, 0.25 );
             pad->SetChamferPositions( PADSTACK::ALL_LAYERS,
@@ -761,6 +788,8 @@ void SPRINT_LAYOUT_PARSER::addPadToBoard(
             break;
 
         case SPRINT_LAYOUT::THT_SHAPE_SQUARE:
+        case SPRINT_LAYOUT::THT_SHAPE_H_RECT:
+        case SPRINT_LAYOUT::THT_SHAPE_V_RECT:
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
             break;
 
