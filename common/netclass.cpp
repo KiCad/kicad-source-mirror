@@ -335,7 +335,7 @@ const wxString NETCLASS::GetName() const
     size_t strLen = m_constituents.size() - 1; // Count commas
 
     for( std::size_t i = 0; i < m_constituents.size(); ++i )
-        strLen += m_constituents[0]->m_Name.length();
+        strLen += m_constituents[i]->m_Name.length();
 
     wxString name;
     name.reserve( strLen );
