@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-16 19:04+0300\n"
-"PO-Revision-Date: 2026-04-24 15:11+0000\n"
-"Last-Translator: EdizonTN <edizontn@gmail.com>\n"
+"PO-Revision-Date: 2026-04-24 15:14+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -7373,8 +7373,8 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Základní cesta k lokálne inštalovanému systému knižníc puzdier (priečinky ."
-"pretty)."
+"Základní cesta k lokálne inštalovanému systému knižníc puzdier (priečinky "
+".pretty)."
 
 #: common/env_vars.cpp:114
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -8289,8 +8289,8 @@ msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
 msgstr ""
-"Súbor '%s' zrejme nie je platný súbor projektu EasyEDA (JLCEDA). project."
-"json alebo device.json nebol nájdený."
+"Súbor '%s' zrejme nie je platný súbor projektu EasyEDA (JLCEDA). "
+"project.json alebo device.json nebol nájdený."
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:220
 #, c-format
@@ -9278,8 +9278,8 @@ msgid ""
 "files that are not present in the restored commit."
 msgstr ""
 "Výberom možnosti „Zachovať všetky súbory“ sa obnoví vybraný commit, ale "
-"zachovajú sa všetky existujúce súbory v adresári projektu. Výberom možnosti "
-"„Pokračovať“ sa vymažú súbory, ktoré sa v obnovenom commite nenachádzajú."
+"zachovajú sa všetky existujúce súbory v adresári projektu. Výberom možnosti „"
+"Pokračovať“ sa vymažú súbory, ktoré sa v obnovenom commite nenachádzajú."
 
 #: common/local_history.cpp:1843
 msgid "Cannot restore - the following files are open by another user:"
@@ -9746,8 +9746,7 @@ msgstr "Nepodarilo sa spracovať OAuth metadáta: %s"
 
 #: common/remote_provider_models.cpp:50
 msgid "OAuth metadata must include authorization_endpoint and token_endpoint."
-msgstr ""
-"Metadáta OAuth musia obsahovať authorization_endpoint a token_endpoint."
+msgstr "Metadáta OAuth musia obsahovať authorization_endpoint a token_endpoint."
 
 #: common/remote_provider_models.cpp:55
 msgid "authorization_endpoint"
@@ -11599,8 +11598,7 @@ msgstr "Nastaviť klávesovú skratku"
 #: common/widgets/widget_hotkey_list.cpp:383
 #, c-format
 msgid "'%s' is a reserved hotkey in KiCad and cannot be assigned."
-msgstr ""
-"'%s' je v KiCad-e rezervovaná klávesová skratka a nemôže byť priradená."
+msgstr "'%s' je v KiCad-e rezervovaná klávesová skratka a nemôže byť priradená."
 
 #: common/widgets/widget_hotkey_list.cpp:447
 msgid "Edit..."
@@ -11993,8 +11991,7 @@ msgstr "Našlo sa %lu ekvivalent puzdier/symbolov."
 msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
-msgstr ""
-"Súčiastka %s: puzdro %s sa nenašlo v žiadnej knižnici puzdier projektu."
+msgstr "Súčiastka %s: puzdro %s sa nenašlo v žiadnej knižnici puzdier projektu."
 
 #: cvpcb/auto_associate.cpp:300
 msgid "CvPcb Warning"
@@ -13573,8 +13570,8 @@ msgstr "Uložiť všetky stratové výkony"
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
-"Napísať direktívy na uloženie stratových výkonov všetkých položiek (.probe "
-"p(<item>))"
+"Napísať direktívy na uloženie stratových výkonov všetkých položiek (.probe p"
+"(<item>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:369
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
@@ -17367,8 +17364,7 @@ msgstr "Mapovanie tabuľky knižnice symbolov je dokončené!"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:353
 #, c-format
 msgid "Cannot create project remap back up folder '%s'."
-msgstr ""
-"Nie je možné vytvoriť záložný priečinok '%s' pre premapovanie projektu."
+msgstr "Nie je možné vytvoriť záložný priečinok '%s' pre premapovanie projektu."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:356
 #: eeschema/dialogs/dialog_symbol_remap.cpp:529
@@ -19208,8 +19204,7 @@ msgstr "Spoj je graficky pripojený k zbernici, ale nie je člen zbernice"
 
 #: eeschema/erc/erc_item.cpp:153
 msgid "Buses are graphically connected but share no bus members"
-msgstr ""
-"Zbernice sú graficky prepojené, ale nezdieľajú žiadnych členov zbernice"
+msgstr "Zbernice sú graficky prepojené, ale nezdieľajú žiadnych členov zbernice"
 
 #: eeschema/erc/erc_item.cpp:157
 msgid "Invalid connection between bus and net items"
@@ -22063,8 +22058,7 @@ msgstr "Neosadzovať"
 #: eeschema/sch_screen.cpp:743 eeschema/sch_screen.cpp:845
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr ""
-"Nastaviť knižničný identifikátor schematického symbolu '%s %s' na '%s'."
+msgstr "Nastaviť knižničný identifikátor schematického symbolu '%s %s' na '%s'."
 
 #: eeschema/sch_screen.cpp:759
 #, c-format
@@ -22783,9 +22777,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{negácia}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>negácia</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>negácia</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -22869,8 +22863,8 @@ msgstr ""
 "        <td>&nbsp;<br><samp>1</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(podmienka, true_val, false_val)}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(podmienka, true_val, false_val)}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Zobrazenie podmieneného textu</samp></td>\n"
 "    </tr>\n"
@@ -22878,12 +22872,12 @@ msgstr ""
 "        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"TOP\", "
 "\"BOTTOM\")}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>TOP</samp> (na prednej vrstve) alebo "
-"<samp>BOTTOM</samp></td>\n"
+"        <td>&nbsp;<br><samp>TOP</samp> (na prednej vrstve) alebo <samp>"
+"BOTTOM</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Taktiež funguje číselné porovnanie</samp></td>\n"
 "    </tr>\n"
@@ -22909,8 +22903,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:SHORT_REFERENCE(vývod)}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>Referencia bez písmena jednotky pre vývod</"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp>Referencia bez písmena jednotky pre vývod</samp>"
+"</td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${J1:SHORT_REFERENCE(3)}</samp></td>\n"
@@ -23026,8 +23020,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${J1:REFERENCE(@{${ROW}+2})}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>J1B</samp> (ak ROW=0, vývod 2 v jednotke B)</"
-"td>\n"
+"        <td>&nbsp;<br><samp>J1B</samp> (ak ROW=0, vývod 2 v jednotke B)</td>"
+"\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${J1:NET_NAME(${COL})}</samp></td>\n"
@@ -23071,8 +23065,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Definíca zbernice</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
 "        <th>Výsledné spoje</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23123,9 +23118,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23136,15 +23131,14 @@ msgstr ""
 "<i>Všimnite si, že označenie má prednosť pred definíciami zbernice.</i>\n"
 "<p></p>\n"
 "<p><b>Funkcie vývodu:</b> Automaticky nájdite správne umiestnenie jednotky. "
-"V prípade symbolov s viacerými jednotkami fungujú funkcie ako "
-"<samp>NET_NAME(vývod)</samp>, aj keď je vývod v inej jednotke, než je tá na "
-"aktuálnom hárku.</p>\n"
+"V prípade symbolov s viacerými jednotkami fungujú funkcie ako <samp>NET_NAME"
+"(vývod)</samp>, aj keď je vývod v inej jednotke, než je tá na aktuálnom "
+"hárku.</p>\n"
 "<p><b>Odkazy na bunky tabuľky:</b> Funkcia <samp>CELL()</samp> funguje iba v "
-"bunkách tabuľky. Použite <samp>${CELL(\"A0\")}</samp> alebo "
-"<samp>${CELL(riadok, stĺpec)}</samp> na odkazovanie na iné bunky v tej istej "
-"tabuľke. Čísla riadkov a stĺpcov začínajú od 0 (A0 je prvý riadok, prvý "
-"stĺpec). CELL vráti vyhodnotenú/zobrazenú hodnotu, nie nespracovaný text "
-"bunky.</p>\n"
+"bunkách tabuľky. Použite <samp>${CELL(\"A0\")}</samp> alebo <samp>${CELL"
+"(riadok, stĺpec)}</samp> na odkazovanie na iné bunky v tej istej tabuľke. "
+"Čísla riadkov a stĺpcov začínajú od 0 (A0 je prvý riadok, prvý stĺpec). CELL "
+"vráti vyhodnotenú/zobrazenú hodnotu, nie nespracovaný text bunky.</p>\n"
 "<p><b>Vnorené premenné:</b> Premenné môžu obsahovať ďalšie premenné. Najprv "
 "sa vyhodnotia vnútorné premenné. Maximálna hĺbka vnorenia: 6 úrovní.</p>\n"
 "<p><b>Chybové správy:</b></p>\n"
@@ -23197,8 +23191,7 @@ msgstr "Názov signálu obsahuje '{' a '}', ale nie je platný názov zbernice"
 
 #: eeschema/sch_validators.cpp:64
 msgid "Signal name contains '[' or ']' but is not a valid bus name."
-msgstr ""
-"Názov signálu obsahuje '[' alebo ']', ale nie je platný názov zbernice."
+msgstr "Názov signálu obsahuje '[' alebo ']', ale nie je platný názov zbernice."
 
 #: eeschema/schematic.cpp:2021
 msgid "Schematic Cleanup"
@@ -25634,8 +25627,7 @@ msgstr "Zmeniť %s vývod %s spoja označený z '%s' na '%s'."
 #: eeschema/tools/backannotate.cpp:1426
 #, c-format
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
-msgstr ""
-"Spoj %s nemôže byť zmenený na %s, pretože je riadený napájacím vývodom."
+msgstr "Spoj %s nemôže byť zmenený na %s, pretože je riadený napájacím vývodom."
 
 #: eeschema/tools/backannotate.cpp:1472
 #, c-format
@@ -26607,8 +26599,7 @@ msgstr "Importovať schému inú ako KiCad..."
 #: eeschema/tools/sch_actions.cpp:1213
 msgid ""
 "Replace current schematic sheet with one imported from another application"
-msgstr ""
-"Nahraďte aktuálny schematický list listom importovaným z inej aplikácie"
+msgstr "Nahraďte aktuálny schematický list listom importovaným z inej aplikácie"
 
 #: eeschema/tools/sch_actions.cpp:1219
 msgid "Switch to PCB Editor"
@@ -29863,8 +29854,8 @@ msgid ""
 "Output file format, options: step, stepz, brep, xao, glb (binary glTF), ply, "
 "stl"
 msgstr ""
-"Formát výstupného súboru, možnosti: step, stepz, brep, xao, glb (binary "
-"glTF), ply, stl"
+"Formát výstupného súboru, možnosti: step, stepz, brep, xao, glb (binary glTF)"
+", ply, stl"
 
 #: kicad/cli/command_pcb_export_3d.cpp:84
 msgid "Overwrite output file"
@@ -29959,8 +29950,7 @@ msgstr "Zakázať extra hrúbku plôšok (plôšky budú mať normálnu hrúbku)
 
 #: kicad/cli/command_pcb_export_3d.cpp:176
 msgid "Minimum distance between points to treat them as separate ones"
-msgstr ""
-"Minimálna vzdialenosť medzi bodmi, pri ktorej sa považujú za samostatné"
+msgstr "Minimálna vzdialenosť medzi bodmi, pri ktorej sa považujú za samostatné"
 
 #: kicad/cli/command_pcb_export_3d.cpp:182
 msgid "Only include copper items belonging to nets matching this wildcard"
@@ -30558,8 +30548,8 @@ msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
 msgstr ""
-"Nastaviť bod otáčania relatívne k stredu dosky v centimetroch, formát 'X,Y,"
-"Z' napr.: '-10,2,0'"
+"Nastaviť bod otáčania relatívne k stredu dosky v centimetroch, formát "
+"'X,Y,Z' napr.: '-10,2,0'"
 
 #: kicad/cli/command_pcb_render.cpp:297
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
@@ -30567,13 +30557,11 @@ msgstr "Otočiť dosku, formát 'X,Y,Z' napr.: '-45,0,45' pre izometrický pohľ
 
 #: kicad/cli/command_pcb_render.cpp:302
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
-"Intenzita horného svetla, formát 'R,G,B' alebo jedno číslo, rozsah: 0-1"
+msgstr "Intenzita horného svetla, formát 'R,G,B' alebo jedno číslo, rozsah: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:307
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
-"Intenzita dolného svetla, formát 'R,G,B' alebo jedno číslo, rozsah: 0-1"
+msgstr "Intenzita dolného svetla, formát 'R,G,B' alebo jedno číslo, rozsah: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:312
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
@@ -31538,8 +31526,8 @@ msgid ""
 msgstr ""
 "Toto sa môže stať, ak sa vaša predchádzajúca relácia neočakávane skončila.\n"
 "\n"
-"Vyberte možnosť „Obnoviť“, ak chcete obnoviť tieto zmeny, alebo možnosť "
-"„Zahodiť“, ak chcete zachovať aktuálne uložené súbory."
+"Vyberte možnosť „Obnoviť“, ak chcete obnoviť tieto zmeny, alebo možnosť „"
+"Zahodiť“, ak chcete zachovať aktuálne uložené súbory."
 
 #: kicad/kicad_manager_frame.cpp:1141
 msgid "Edit File in Text Editor"
@@ -35045,8 +35033,8 @@ msgstr ""
 "Kladné číslo znamená, že riadok je anodický (-) a stĺpec je katodický (+); "
 "studené a teplé farebné odtiene tiež naznačujú potenciál riadkov.<br>\n"
 "EN 50310 odporúča rozdiel napätia pod 300 mV. Zavedené postupy využívajú "
-"tretí rozhraniový kov medzi hlavným párom (napr. povrchová úprava ENIG)."
-"<br>\n"
+"tretí rozhraniový kov medzi hlavným párom (napr. povrchová úprava ENIG).<br>"
+"\n"
 "Vybrané bunky sú zobrazené s predvoleným systémovým farebným výberom po "
 "obnovení tabuľky.\n"
 
@@ -41622,8 +41610,7 @@ msgstr "Doska obsahuje teardropy staršej verzie."
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:652
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:633
 msgid "Use Edit > Edit Teardrops to apply automatic teardrops."
-msgstr ""
-"Použite Upraviť > Upraviť teardropy na automatické použitie teardropov."
+msgstr "Použite Upraviť > Upraviť teardropy na automatické použitie teardropov."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:668
 msgid "Add teardrops on pad's track connections"
@@ -42094,8 +42081,8 @@ msgstr ""
 "Nastaviť globálnu korekciu šírky pre presnú šírku PostScriptového výstupu.\n"
 "Táto korekcia šírky je určená na kompenzáciu šírky spojov a tiež chýb "
 "veľkosti plôšok a prekovov.\n"
-"Primeraná hodnota korekcie šírky musí byť v rozsahu [-(MinTrackWidth-1), "
-"+(MinClearanceValue-1)]."
+"Primeraná hodnota korekcie šírky musí byť v rozsahu [-(MinTrackWidth-1), +"
+"(MinClearanceValue-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:324
 msgid "Force A4 output"
@@ -43651,8 +43638,7 @@ msgstr "Tabuľky knižníc puzdier"
 #, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
-msgstr ""
-"Priečinok '%s' už existuje. Chcete prepísať niektoré existujúce puzdrá?"
+msgstr "Priečinok '%s' už existuje. Chcete prepísať niektoré existujúce puzdrá?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:580
 #, c-format
@@ -45270,8 +45256,8 @@ msgstr ""
 "\n"
 "Mnohé vlastnosti objektov sú dostupné na testovanie vo výrazoch vlastných "
 "pravidiel. Úplný zoznam nájdete v dokumentácii na [https://docs.kicad.org]"
-"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules).\n"
+"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules).\n"
 "<br><br><br>\n"
 "\n"
 
@@ -48799,8 +48785,8 @@ msgstr "Nepodarilo sa pridať hranu segmentu (%d %d) -> (%d %d)"
 msgid ""
 "Failed to add arc curve from (%d %d), arc p0 (%d %d), mid (%d %d), p1 (%d %d)"
 msgstr ""
-"Nepodarilo sa pridať krivku oblúka z (%d %d), oblúk p0 (%d %d), stred (%d "
-"%d), p1 (%d %d)"
+"Nepodarilo sa pridať krivku oblúka z (%d %d), oblúk p0 (%d %d), stred (%d %d)"
+", p1 (%d %d)"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:2162
 #, c-format
@@ -48936,8 +48922,7 @@ msgstr "Nebolo možné preniesť údaje modelu zo súboru '%s'."
 #: pcbnew/exporters/step/step_pcb_model.cpp:4197
 #, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr ""
-"Žiadna platná zostava DPS; nie je možné vytvoriť výstupný súbor '%s'.\n"
+msgstr "Žiadna platná zostava DPS; nie je možné vytvoriť výstupný súbor '%s'.\n"
 
 #: pcbnew/files.cpp:162
 msgid "All KiCad Board Files"
@@ -52872,8 +52857,7 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7783
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
-msgstr ""
-"Neplatná vrstva v padstacku '%s' v súbore '%s' na riadku %d, offset %d."
+msgstr "Neplatná vrstva v padstacku '%s' v súbore '%s' na riadku %d, offset %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8434
 msgid ""
@@ -54471,8 +54455,7 @@ msgstr "Umiestniť slepý/vnorený prekov"
 
 #: pcbnew/router/router_tool.cpp:160
 msgid "Adds a blind or buried via at the end of currently routed track."
-msgstr ""
-"Na konci aktuálne routovaného spoja pridá slepý alebo pochovaný prekov."
+msgstr "Na konci aktuálne routovaného spoja pridá slepý alebo pochovaný prekov."
 
 #: pcbnew/router/router_tool.cpp:170
 msgid "Place Microvia"
@@ -58139,8 +58122,7 @@ msgstr "Návrhový blok %s nemá súbor pre dosku."
 
 #: pcbnew/tools/pcb_control.cpp:1580
 msgid "Design block placement failed - no footprints were placed."
-msgstr ""
-"Umiestnenie návrhového bloku zlyhalo – neboli umiestnené žiadne puzdra."
+msgstr "Umiestnenie návrhového bloku zlyhalo – neboli umiestnené žiadne puzdra."
 
 #: pcbnew/tools/pcb_control.cpp:1615
 #, c-format
@@ -58733,8 +58715,7 @@ msgstr "Vybrať kedy sa majú zobraziť farby spoja a triedy spojov"
 #: pcbnew/widgets/appearance_controls.cpp:730
 #: pcbnew/widgets/appearance_controls.cpp:2674
 msgid "Net and netclass colors are shown on all copper items"
-msgstr ""
-"Farby spoja a triedy spojov sú zobrazené na všetkých medených položkách"
+msgstr "Farby spoja a triedy spojov sú zobrazené na všetkých medených položkách"
 
 #: pcbnew/widgets/appearance_controls.cpp:738
 #: pcbnew/widgets/appearance_controls.cpp:2677
