@@ -29,7 +29,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-16 19:04+0300\n"
 "PO-Revision-Date: 2026-04-24 17:06+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v10/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -12781,7 +12781,7 @@ msgstr "Změnit symboly odpovídající referenci schématu:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:61
 msgid "Change symbols matching value:"
-msgstr "Změnit symboly odpovídající hodnotě:"
+msgstr "Změnit symboly s odpovídající hodnotou:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:62
 msgid "Change symbols matching library identifier:"
@@ -12909,7 +12909,7 @@ msgstr "Aktualizovat symboly odpovídající referenci schématu:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:40
 msgid "Update symbols matching value:"
-msgstr "Aktualizovat symboly odpovídající hodnotě:"
+msgstr "Aktualizovat symboly s odpovídající hodnotou:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:46
 msgid "Update symbols matching library identifier:"
@@ -17183,7 +17183,7 @@ msgstr "Upravit symbol..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:248
 #: eeschema/tools/sch_actions.cpp:1104
 msgid "Edit Library Symbol..."
-msgstr "Upravit symbol knihovny..."
+msgstr "Upravit symbol v knihovně..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:286
 #: eeschema/sch_pin.cpp:1982
@@ -27051,13 +27051,13 @@ msgstr "Opakovat prvek"
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1009
 #, c-format
 msgid "Edit %s Field"
-msgstr "Upravit %s pole"
+msgstr "Upravit pole %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:2324
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1011
 #, c-format
 msgid "Edit '%s' Field"
-msgstr "Upravit '%s' pole"
+msgstr "Upravit pole '%s'"
 
 #: eeschema/tools/sch_edit_tool.cpp:2770
 msgid "Edit Sheet Properties"
@@ -37853,7 +37853,7 @@ msgstr "Změnit pouzdra v souladu s referencí schématu:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:71
 msgid "Change footprints matching value:"
-msgstr "Změnit pouzdra s touto hodnotou:"
+msgstr "Změnit pouzdra s hodnotou:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:72
 msgid "Change footprints with library id:"
@@ -37938,7 +37938,7 @@ msgstr "Aktualizujte pouzdra v souladu s referencí schématu:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:39
 msgid "Update footprints matching value:"
-msgstr "Aktualizovat pouzdra podle hodnoty:"
+msgstr "Aktualizovat pouzdra s hodnotou:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:45
 msgid "Update footprints with library id:"
@@ -49250,7 +49250,7 @@ msgstr "Aktuální deska bude ztracena a tuto operaci nelze vrátiti. Pokračova
 
 #: pcbnew/initpcb.cpp:120 pcbnew/tools/footprint_editor_control.cpp:254
 msgid "The current footprint has been modified.  Save changes?"
-msgstr "Aktuální pouzdro bylo upraveno.  Uložit změny?"
+msgstr "Otevřené pouzdro bylo upraveno.  Uložit změny?"
 
 #: pcbnew/kicad_clipboard.cpp:546
 msgid "Clipboard content is not KiCad compatible"
