@@ -205,7 +205,17 @@ void SCH_EDIT_FRAME::saveProjectSettings()
         if( success && layoutfn.IsOk() && !layoutfn.FileExists() && layoutfn.HasName() )
         {
             if( layoutfn.DirExists() && layoutfn.IsDirWritable() )
-                DS_DATA_MODEL::GetTheInstance().Save( layoutfn.GetFullPath() );
+            {
+                try
+                {
+                    DS_DATA_MODEL::GetTheInstance().Save( layoutfn.GetFullPath() );
+                }
+                catch( const IO_ERROR& ioe )
+                {
+                    wxLogError( _( "Failed to save drawing sheet '%s': %s" ),
+                                layoutfn.GetFullPath(), ioe.What() );
+                }
+            }
         }
     }
 

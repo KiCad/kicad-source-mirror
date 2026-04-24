@@ -375,6 +375,7 @@ void SCH_IO_KICAD_SEXPR::SaveSchematicFile( const wxString& aFileName, SCH_SHEET
 
     PRETTIFIED_FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
     FormatSchematicToFormatter( &formatter, aSheet, aSchematic, aProperties );
+    formatter.Finish();
 
     if( aSheet->GetScreen() )
         aSheet->GetScreen()->SetFileExists( true );

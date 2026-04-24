@@ -135,6 +135,7 @@ void FP_CACHE::Save( FOOTPRINT* aFootprintFilter )
 
             m_owner->SetOutputFormatter( &formatter );
             m_owner->Format( footprint.get() );
+            formatter.Finish();
         }
 
         m_cache_timestamp += fn.GetTimestamp();

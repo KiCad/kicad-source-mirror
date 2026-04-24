@@ -725,9 +725,18 @@ int BOARD_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
         netlist.AddComponent( component );
     }
 
-    FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
+    try
+    {
+        FILE_OUTPUTFORMATTER formatter( fn.GetFullPath() );
 
-    netlist.Format( "pcb_netlist", &formatter, 0, noh->GetNetlistOptions() );
+        netlist.Format( "pcb_netlist", &formatter, 0, noh->GetNetlistOptions() );
+        formatter.Finish();
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        DisplayErrorMessage( m_frame, wxString::Format( _( "Failed to export netlist to '%s': %s" ),
+                                                        fn.GetFullPath(), ioe.What() ) );
+    }
 
     return 0;
 }

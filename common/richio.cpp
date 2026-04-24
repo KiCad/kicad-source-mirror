@@ -589,9 +589,11 @@ void discardTempFile( FILE*& aFp, const wxString& aTempPath )
 
 // Shared destructor body for the atomic-commit formatters. Throwing from a destructor
 // while another exception is in flight calls std::terminate, so during stack unwinding
-// we discard the temp and let the original exception propagate. Otherwise we best-effort
-// commit (callers relied on the prior destructor-commits-automatically semantics) but log
-// rather than swallowing errors silently.
+// we discard the temp and let the original exception propagate. When no exception is in
+// flight we fall back to a best-effort commit for callers that have not been migrated to
+// explicit Finish() yet. Explicit Finish() is the contract for anything that cares about
+// data-loss detection; destructor-path failures are surfaced as wxLogError because we
+// cannot throw safely from here.
 template <typename FinishFn>
 void finalizeFormatter( FILE*& aFp, const wxString& aTempPath, const wxString& aFilename,
                         bool aCommitted, FinishFn aFinish )
@@ -611,8 +613,9 @@ void finalizeFormatter( FILE*& aFp, const wxString& aTempPath, const wxString& a
     }
     catch( const std::exception& e )
     {
-        wxLogError( _( "Failed to commit save of '%s': %s" ), aFilename,
-                    wxString::FromUTF8( e.what() ) );
+        wxLogError( _( "Failed to commit save of '%s': %s. "
+                       "The file on disk has not been modified." ),
+                    aFilename, wxString::FromUTF8( e.what() ) );
         discardTempFile( aFp, aTempPath );
     }
 }

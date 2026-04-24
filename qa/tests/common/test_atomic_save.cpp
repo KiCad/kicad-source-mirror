@@ -19,6 +19,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <drawing_sheet/ds_data_model.h>
+#include <ki_exception.h>
 #include <kiplatform/io.h>
 #include <richio.h>
 
@@ -227,6 +229,100 @@ BOOST_AUTO_TEST_CASE( AtomicWriteFile_OverwritePreservesOriginalOnFailure )
     BOOST_REQUIRE_EQUAL( readFileContents( target ), original );
 
     wxRemoveFile( target );
+}
+
+
+BOOST_AUTO_TEST_CASE( PrettifiedFormatter_ExplicitFinishThrowsOnCommitFailure )
+{
+    // Target path is a pre-existing directory so rename() fails with EISDIR during commit.
+    wxString target = makeTempTargetPath( wxT( "commitfail-explicit" ) );
+
+    BOOST_REQUIRE( wxFileName::Mkdir( target, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    bool threw = false;
+
+    try
+    {
+        PRETTIFIED_FILE_OUTPUTFORMATTER f( target );
+        f.Print( 0, "(doomed save)\n" );
+        f.Finish();
+    }
+    catch( const IO_ERROR& )
+    {
+        threw = true;
+    }
+
+    BOOST_REQUIRE_MESSAGE( threw, "Finish() must throw IO_ERROR when atomic commit fails" );
+    BOOST_REQUIRE( wxFileName::DirExists( target ) );
+    BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
+
+    wxFileName::Rmdir( target );
+}
+
+
+BOOST_AUTO_TEST_CASE( FileFormatter_ExplicitFinishThrowsOnCommitFailure )
+{
+    wxString target = makeTempTargetPath( wxT( "commitfail-stream" ) );
+
+    BOOST_REQUIRE( wxFileName::Mkdir( target, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    bool threw = false;
+
+    try
+    {
+        FILE_OUTPUTFORMATTER f( target );
+        f.Print( 0, "doomed streaming save\n" );
+        f.Finish();
+    }
+    catch( const IO_ERROR& )
+    {
+        threw = true;
+    }
+
+    BOOST_REQUIRE_MESSAGE( threw, "Finish() must throw IO_ERROR when atomic commit fails" );
+    BOOST_REQUIRE( wxFileName::DirExists( target ) );
+    BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
+
+    wxFileName::Rmdir( target );
+}
+
+
+BOOST_AUTO_TEST_CASE( DrawingSheetSave_PropagatesCommitFailure )
+{
+    // Regression for the DS_DATA_MODEL_FILEIO refactor: the drawing-sheet writer must
+    // propagate commit failures instead of swallowing them in a constructor catch.
+    DS_DATA_MODEL& model = DS_DATA_MODEL::GetTheInstance();
+    model.SetEmptyLayout();
+
+    wxString target = makeTempTargetPath( wxT( "wks-commitfail" ) );
+    BOOST_REQUIRE( wxFileName::Mkdir( target, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    BOOST_REQUIRE_THROW( model.Save( target ), IO_ERROR );
+    BOOST_REQUIRE( wxFileName::DirExists( target ) );
+    BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
+
+    wxFileName::Rmdir( target );
+}
+
+
+BOOST_AUTO_TEST_CASE( PrettifiedFormatter_DestructorCommitFailureLeavesTargetIntact )
+{
+    // Legacy callers without explicit Finish() must still leave the target untouched
+    // on commit failure. A destructor cannot throw during unwinding, so we can only
+    // assert the on-disk state.
+    wxString target = makeTempTargetPath( wxT( "commitfail-implicit" ) );
+
+    BOOST_REQUIRE( wxFileName::Mkdir( target, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    {
+        PRETTIFIED_FILE_OUTPUTFORMATTER f( target );
+        f.Print( 0, "(implicit doomed)\n" );
+    }
+
+    BOOST_REQUIRE( wxFileName::DirExists( target ) );
+    BOOST_REQUIRE_EQUAL( countSiblingTemps( target ), 0u );
+
+    wxFileName::Rmdir( target );
 }
 
 

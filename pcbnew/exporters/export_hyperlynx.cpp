@@ -675,6 +675,8 @@ bool HYPERLYNX_EXPORTER::Run()
         writeDevices();
         writePadStacks();
         writeNets();
+
+        m_out->Finish();
     }
     catch( IO_ERROR& )
     {

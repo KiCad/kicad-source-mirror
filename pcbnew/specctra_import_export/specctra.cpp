@@ -3712,6 +3712,7 @@ void SPECCTRA_DB::ExportPCB( const wxString& aFilename, bool aNameChange )
             m_pcb->m_pcbname = TO_UTF8( aFilename );
 
         m_pcb->Format( &formatter, 0 );
+        formatter.Finish();
     }
 }
 
@@ -3723,6 +3724,7 @@ void SPECCTRA_DB::ExportSESSION( const wxString& aFilename )
         FILE_OUTPUTFORMATTER formatter( aFilename, wxT( "wt" ), m_quote_char[0] );
 
         m_session->Format( &formatter, 0 );
+        formatter.Finish();
     }
 }
 

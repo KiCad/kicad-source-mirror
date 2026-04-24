@@ -76,8 +76,19 @@ NETLIST_EXPORTER_SPICE::NETLIST_EXPORTER_SPICE( SCHEMATIC* aSchematic ) :
 bool NETLIST_EXPORTER_SPICE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
                                            REPORTER& aReporter )
 {
-    FILE_OUTPUTFORMATTER formatter( aOutFileName, wxT( "wt" ), '\'' );
-    return DoWriteNetlist( wxEmptyString, aNetlistOptions, formatter, aReporter );
+    try
+    {
+        FILE_OUTPUTFORMATTER formatter( aOutFileName, wxT( "wt" ), '\'' );
+        bool result = DoWriteNetlist( wxEmptyString, aNetlistOptions, formatter, aReporter );
+        formatter.Finish();
+
+        return result;
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        aReporter.Report( ioe.What(), RPT_SEVERITY_ERROR );
+        return false;
+    }
 }
 
 
