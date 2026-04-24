@@ -34,6 +34,7 @@
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
 #include <geometry/roundrect.h>
+#include <geometry/shape_ellipse.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_utils.h>
 #include <gr_text.h>
@@ -2060,6 +2061,17 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
                     break;
                 }
 
+                case SHAPE_T::ELLIPSE:
+                    m_gal->DrawEllipse( shape->GetEllipseCenter(), shape->GetEllipseMajorRadius(),
+                                        shape->GetEllipseMinorRadius(), shape->GetEllipseRotation() );
+                    break;
+
+                case SHAPE_T::ELLIPSE_ARC:
+                    m_gal->DrawEllipseArc( shape->GetEllipseCenter(), shape->GetEllipseMajorRadius(),
+                                           shape->GetEllipseMinorRadius(), shape->GetEllipseRotation(),
+                                           shape->GetEllipseStartAngle(), shape->GetEllipseEndAngle() );
+                    break;
+
                 default:
                     UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
                 }
@@ -2162,19 +2174,39 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
             }
             else
             {
-                std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
+                std::vector<SHAPE*> shapes;
+
+                // For ellipses pass the SHAPE_ELLIPSE directly so the dash pattern is
+                // continuous around the curve.  Otherwise MakeEffectiveShapes returns
+                // many SHAPE_SEGMENTs and STROKE_PARAMS restarts the pattern on each.
+                if( aShape->GetShape() == SHAPE_T::ELLIPSE )
+                {
+                    shapes.push_back( new SHAPE_ELLIPSE( aShape->GetEllipseCenter(), aShape->GetEllipseMajorRadius(),
+                                                         aShape->GetEllipseMinorRadius(),
+                                                         aShape->GetEllipseRotation() ) );
+                }
+                else if( aShape->GetShape() == SHAPE_T::ELLIPSE_ARC )
+                {
+                    shapes.push_back( new SHAPE_ELLIPSE( aShape->GetEllipseCenter(), aShape->GetEllipseMajorRadius(),
+                                                         aShape->GetEllipseMinorRadius(), aShape->GetEllipseRotation(),
+                                                         aShape->GetEllipseStartAngle(),
+                                                         aShape->GetEllipseEndAngle() ) );
+                }
+                else
+                {
+                    shapes = aShape->MakeEffectiveShapes( true );
+                }
 
                 for( SHAPE* shape : shapes )
                 {
                     STROKE_PARAMS::Stroke( shape, lineStyle, KiROUND( lineWidth ), &m_schSettings,
-                            [this]( const VECTOR2I& a, const VECTOR2I& b )
-                            {
-                                // DrawLine has problem with 0 length lines so enforce minimum
-                                if( a == b )
-                                    m_gal->DrawLine( a+1, b );
-                                else
-                                    m_gal->DrawLine( a, b );
-                            } );
+                                           [this]( const VECTOR2I& a, const VECTOR2I& b )
+                                           {
+                                               if( a == b )
+                                                   m_gal->DrawLine( a + 1, b );
+                                               else
+                                                   m_gal->DrawLine( a, b );
+                                           } );
                 }
 
                 for( SHAPE* shape : shapes )

@@ -1227,6 +1227,8 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
         case T_gr_poly:
         case T_gr_circle:
         case T_gr_rect:
+        case T_gr_ellipse:
+        case T_gr_ellipse_arc:
             item = parsePCB_SHAPE( m_board );
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
@@ -3200,12 +3202,13 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseNETCLASS()
 
 PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
 {
-    wxCHECK_MSG( CurTok() == T_fp_arc || CurTok() == T_fp_circle || CurTok() == T_fp_curve ||
-                 CurTok() == T_fp_rect || CurTok() == T_fp_line || CurTok() == T_fp_poly ||
-                 CurTok() == T_gr_arc || CurTok() == T_gr_circle || CurTok() == T_gr_curve ||
-                 CurTok() == T_gr_rect || CurTok() == T_gr_bbox || CurTok() == T_gr_line ||
-                 CurTok() == T_gr_poly || CurTok() == T_gr_vector, nullptr,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_SHAPE." ) );
+    wxCHECK_MSG( CurTok() == T_fp_arc || CurTok() == T_fp_circle || CurTok() == T_fp_curve || CurTok() == T_fp_rect
+                         || CurTok() == T_fp_line || CurTok() == T_fp_poly || CurTok() == T_fp_ellipse
+                         || CurTok() == T_fp_ellipse_arc || CurTok() == T_gr_arc || CurTok() == T_gr_circle
+                         || CurTok() == T_gr_curve || CurTok() == T_gr_rect || CurTok() == T_gr_bbox
+                         || CurTok() == T_gr_line || CurTok() == T_gr_poly || CurTok() == T_gr_vector
+                         || CurTok() == T_gr_ellipse || CurTok() == T_gr_ellipse_arc,
+                 nullptr, wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_SHAPE." ) );
 
     T                          token;
     VECTOR2I                   pt;
@@ -3475,15 +3478,22 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
         break;
     }
 
+    case T_gr_ellipse:
+    case T_fp_ellipse: shape->SetShape( SHAPE_T::ELLIPSE ); break;
+
+    case T_gr_ellipse_arc:
+    case T_fp_ellipse_arc: shape->SetShape( SHAPE_T::ELLIPSE_ARC ); break;
+
     default:
         if( aParent && aParent->Type() == PCB_FOOTPRINT_T )
         {
-            Expecting( "fp_arc, fp_circle, fp_curve, fp_line, fp_poly or fp_rect" );
+            Expecting( "fp_arc, fp_circle, fp_curve, fp_ellipse, fp_ellipse_arc, "
+                       "fp_line, fp_poly or fp_rect" );
         }
         else
         {
-            Expecting( "gr_arc, gr_circle, gr_curve, gr_vector, gr_line, gr_poly, gr_rect or "
-                       "gr_bbox" );
+            Expecting( "gr_arc, gr_circle, gr_curve, gr_ellipse, gr_ellipse_arc, "
+                       "gr_vector, gr_line, gr_poly, gr_rect or gr_bbox" );
         }
     }
 
@@ -3586,9 +3596,42 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
             parseNet( shape.get() );
             break;
 
+        case T_center:
+            pt.x = parseBoardUnits( "X coordinate" );
+            pt.y = parseBoardUnits( "Y coordinate" );
+            shape->SetEllipseCenter( pt );
+            NeedRIGHT();
+            break;
+
+        case T_major_radius:
+            shape->SetEllipseMajorRadius( parseBoardUnits( "major radius" ) );
+            NeedRIGHT();
+            break;
+
+        case T_minor_radius:
+            shape->SetEllipseMinorRadius( parseBoardUnits( "minor radius" ) );
+            NeedRIGHT();
+            break;
+
+        case T_rotation_angle:
+            shape->SetEllipseRotation( EDA_ANGLE( parseDouble( "rotation angle" ), DEGREES_T ) );
+            NeedRIGHT();
+            break;
+
+        case T_start_angle:
+            shape->SetEllipseStartAngle( EDA_ANGLE( parseDouble( "start angle" ), DEGREES_T ) );
+            NeedRIGHT();
+            break;
+
+        case T_end_angle:
+            shape->SetEllipseEndAngle( EDA_ANGLE( parseDouble( "end angle" ), DEGREES_T ) );
+            NeedRIGHT();
+            break;
+
         default:
             Expecting( "layer, width, fill, tstamp, uuid, locked, net, status, "
-                       "or solder_mask_margin" );
+                       "solder_mask_margin, center, major_radius, minor_radius, "
+                       "rotation_angle, start_angle, or end_angle" );
         }
     }
 
@@ -5514,6 +5557,8 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
         case T_fp_rect:
         case T_fp_line:
         case T_fp_poly:
+        case T_fp_ellipse:
+        case T_fp_ellipse_arc:
         {
             PCB_SHAPE* shape = parsePCB_SHAPE( footprint.get() );
             footprint->Add( shape, ADD_MODE::APPEND, true );

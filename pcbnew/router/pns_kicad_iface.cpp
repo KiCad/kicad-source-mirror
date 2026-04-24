@@ -54,6 +54,8 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_arc.h>
 #include <geometry/shape_simple.h>
+#include <geometry/shape_line_chain.h>
+#include <geometry/shape_ellipse.h>
 
 #include <drc/drc_rule.h>
 #include <drc/drc_engine.h>
@@ -1265,7 +1267,7 @@ public:
     ~PNS_PCBNEW_DEBUG_DECORATOR()
     {
         PNS_PCBNEW_DEBUG_DECORATOR::Clear();
-        
+
         for ( PNS::ITEM* item : m_clonedItems )
         {
             delete item;

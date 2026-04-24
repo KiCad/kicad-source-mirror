@@ -312,6 +312,34 @@ public:
                             const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
                             const IMPORTED_STROKE& aStroke ) = 0;
 
+    /**
+     * Create an object representing a closed ellipse.
+     *
+     * @param aCenter is the ellipse center expressed in mm.
+     * @param aMajorRadius is the semi-major radius expressed in mm.
+     * @param aMinorRadius is the semi-minor radius expressed in mm.
+     * @param aRotation is the rotation of the major axis from +X (CCW).
+     * @param aStroke is the shape stroke parameters.
+     */
+    virtual void AddEllipse( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius,
+                             const EDA_ANGLE& aRotation, const IMPORTED_STROKE& aStroke, bool aFilled,
+                             const COLOR4D& aFillColor = COLOR4D::UNSPECIFIED ) = 0;
+
+    /**
+     * Create an object representing an elliptical arc.
+     *
+     * @param aCenter is the ellipse center expressed in mm.
+     * @param aMajorRadius is the semi-major radius expressed in mm.
+     * @param aMinorRadius is the semi-minor radius expressed in mm.
+     * @param aRotation is the rotation of the major axis from +X (CCW).
+     * @param aStartAngle is the parametric angle (CCW from major axis) of the arc start.
+     * @param aEndAngle is the parametric angle (CCW from major axis) of the arc end.
+     * @param aStroke is the shape stroke parameters.
+     */
+    virtual void AddEllipseArc( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius,
+                                const EDA_ANGLE& aRotation, const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle,
+                                const IMPORTED_STROKE& aStroke ) = 0;
+
 protected:
     /// Add an item to the imported shapes list.
     void addItem( std::unique_ptr<EDA_ITEM> aItem );

@@ -44,16 +44,17 @@ class SHAPE_POLY_SET;
 
 enum SHAPE_TYPE
 {
-    SH_RECT = 0,         ///< axis-aligned rectangle
-    SH_SEGMENT,          ///< line segment
-    SH_LINE_CHAIN,       ///< line chain (polyline)
-    SH_CIRCLE,           ///< circle
-    SH_SIMPLE,           ///< simple polygon
-    SH_POLY_SET,         ///< set of polygons (with holes, etc.)
-    SH_COMPOUND,         ///< compound shape, consisting of multiple simple shapes
-    SH_ARC,              ///< circular arc
-    SH_NULL,             ///< empty shape (no shape...),
-    SH_POLY_SET_TRIANGLE ///< a single triangle belonging to a POLY_SET triangulation
+    SH_RECT = 0,          ///< axis-aligned rectangle
+    SH_SEGMENT,           ///< line segment
+    SH_LINE_CHAIN,        ///< line chain (polyline)
+    SH_CIRCLE,            ///< circle
+    SH_SIMPLE,            ///< simple polygon
+    SH_POLY_SET,          ///< set of polygons (with holes, etc.)
+    SH_COMPOUND,          ///< compound shape, consisting of multiple simple shapes
+    SH_ARC,               ///< circular arc
+    SH_NULL,              ///< empty shape (no shape...),
+    SH_POLY_SET_TRIANGLE, ///< a single triangle belonging to a POLY_SET triangulation
+    SH_ELLIPSE            ///< ellipse or elliptical arc
 };
 
 static inline wxString SHAPE_TYPE_asString( SHAPE_TYPE a )
@@ -70,6 +71,7 @@ static inline wxString SHAPE_TYPE_asString( SHAPE_TYPE a )
     case SH_ARC:               return wxT( "SH_ARC" );
     case SH_NULL:              return wxT( "SH_NULL" );
     case SH_POLY_SET_TRIANGLE: return wxT( "SH_POLY_SET_TRIANGLE" );
+    case SH_ELLIPSE: return wxT( "SH_ELLIPSE" );
     }
 
     return wxEmptyString;  // Just to quiet GCC.

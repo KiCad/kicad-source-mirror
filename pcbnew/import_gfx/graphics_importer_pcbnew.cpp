@@ -216,3 +216,44 @@ void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D
         addItem( std::move( spline ) );
     }
 }
+
+
+void GRAPHICS_IMPORTER_PCBNEW::AddEllipse( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius,
+                                           const EDA_ANGLE& aRotation, const IMPORTED_STROKE& aStroke, bool aFilled,
+                                           const COLOR4D& aFillColor )
+{
+    std::unique_ptr<PCB_SHAPE> ellipse = std::make_unique<PCB_SHAPE>( m_parent );
+    ellipse->SetShape( SHAPE_T::ELLIPSE );
+    ellipse->SetLayer( GetLayer() );
+    ellipse->SetStroke( MapStrokeParams( aStroke ) );
+    ellipse->SetFilled( aFilled );
+
+    VECTOR2I center = MapCoordinate( aCenter );
+    ellipse->SetEllipseCenter( center );
+    ellipse->SetEllipseMajorRadius( KiROUND( aMajorRadius * ImportScalingFactor().x ) );
+    ellipse->SetEllipseMinorRadius( KiROUND( aMinorRadius * ImportScalingFactor().y ) );
+    ellipse->SetEllipseRotation( aRotation );
+
+    addItem( std::move( ellipse ) );
+}
+
+
+void GRAPHICS_IMPORTER_PCBNEW::AddEllipseArc( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius,
+                                              const EDA_ANGLE& aRotation, const EDA_ANGLE& aStartAngle,
+                                              const EDA_ANGLE& aEndAngle, const IMPORTED_STROKE& aStroke )
+{
+    std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>( m_parent );
+    arc->SetShape( SHAPE_T::ELLIPSE_ARC );
+    arc->SetLayer( GetLayer() );
+    arc->SetStroke( MapStrokeParams( aStroke ) );
+
+    VECTOR2I center = MapCoordinate( aCenter );
+    arc->SetEllipseCenter( center );
+    arc->SetEllipseMajorRadius( KiROUND( aMajorRadius * ImportScalingFactor().x ) );
+    arc->SetEllipseMinorRadius( KiROUND( aMinorRadius * ImportScalingFactor().y ) );
+    arc->SetEllipseRotation( aRotation );
+    arc->SetEllipseStartAngle( aStartAngle );
+    arc->SetEllipseEndAngle( aEndAngle );
+
+    addItem( std::move( arc ) );
+}

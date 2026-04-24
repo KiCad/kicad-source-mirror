@@ -464,6 +464,31 @@ void CheckLibSymbolGraphics( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessag
         case SHAPE_T::BEZIER:
             break;
 
+        case SHAPE_T::ELLIPSE:
+        case SHAPE_T::ELLIPSE_ARC:
+            if( shape->GetEllipseMajorRadius() <= 0 || shape->GetEllipseMinorRadius() <= 0 )
+            {
+                msg.Printf( _( "<b>Graphic ellipse has null or negative radii</b> at location "
+                               "<b>(%s, %s)</b>." ),
+                            aUnitsProvider->MessageTextFromValue( shape->GetPosition().x ),
+                            aUnitsProvider->MessageTextFromValue( -shape->GetPosition().y ) );
+                msg += wxT( "<br>" );
+                aMessages.push_back( msg );
+            }
+
+            if( shape->GetShape() == SHAPE_T::ELLIPSE_ARC
+                && shape->GetEllipseStartAngle() == shape->GetEllipseEndAngle() )
+            {
+                msg.Printf( _( "<b>Graphic elliptical arc has zero sweep</b> at location "
+                               "<b>(%s, %s)</b>." ),
+                            aUnitsProvider->MessageTextFromValue( shape->GetPosition().x ),
+                            aUnitsProvider->MessageTextFromValue( -shape->GetPosition().y ) );
+                msg += wxT( "<br>" );
+                aMessages.push_back( msg );
+            }
+            break;
+
+
         default:
             UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
         }

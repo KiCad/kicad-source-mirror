@@ -190,6 +190,30 @@ public:
                                  double aWidth, double aMaxError ){};
 
     /**
+     * Draw a closed ellipse.
+     *
+     * @param aCenterPoint  center of the ellipse.
+     * @param aMajorRadius  major semi-axis length.
+     * @param aMinorRadius  minor semi-axis length.
+     * @param aRotation     rotation of the major axis from world X, CCW.
+     */
+    virtual void DrawEllipse( const VECTOR2D& aCenterPoint, double aMajorRadius, double aMinorRadius,
+                              const EDA_ANGLE& aRotation );
+
+    /**
+     * Draw an elliptical arc in world coordinates.
+     *
+     * @param aCenterPoint  center of the parent ellipse.
+     * @param aMajorRadius  major semi-axis length.
+     * @param aMinorRadius  minor semi-axis length.
+     * @param aRotation     rotation of the major axis from world X, CCW.
+     * @param aStartAngle   sweep start angle in the ellipse local frame, CCW.
+     * @param aEndAngle     sweep end angle in the ellipse local frame, CCW.
+     */
+    virtual void DrawEllipseArc( const VECTOR2D& aCenterPoint, double aMajorRadius, double aMinorRadius,
+                                 const EDA_ANGLE& aRotation, const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle );
+
+    /**
      * Draw a rectangle.
      *
      * @param aStartPoint   is the start point of the rectangle.

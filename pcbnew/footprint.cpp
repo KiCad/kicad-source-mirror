@@ -4407,6 +4407,32 @@ bool FOOTPRINT::cmp_drawings::operator()( const BOARD_ITEM* itemA, const BOARD_I
                 }
             }
         }
+        else if( dwgA->GetShape() == SHAPE_T::ELLIPSE || dwgA->GetShape() == SHAPE_T::ELLIPSE_ARC )
+        {
+            if( std::optional<bool> cmp = cmp_points_opt( dwgA->GetEllipseCenter(), dwgB->GetEllipseCenter() ) )
+                return *cmp;
+
+            if( dwgA->GetEllipseMajorRadius() != dwgB->GetEllipseMajorRadius() )
+                return dwgA->GetEllipseMajorRadius() < dwgB->GetEllipseMajorRadius();
+
+            if( dwgA->GetEllipseMinorRadius() != dwgB->GetEllipseMinorRadius() )
+                return dwgA->GetEllipseMinorRadius() < dwgB->GetEllipseMinorRadius();
+
+            if( dwgA->GetEllipseRotation().AsTenthsOfADegree() != dwgB->GetEllipseRotation().AsTenthsOfADegree() )
+                return dwgA->GetEllipseRotation().AsTenthsOfADegree() < dwgB->GetEllipseRotation().AsTenthsOfADegree();
+
+            if( dwgA->GetShape() == SHAPE_T::ELLIPSE_ARC )
+            {
+                if( dwgA->GetEllipseStartAngle().AsTenthsOfADegree()
+                    != dwgB->GetEllipseStartAngle().AsTenthsOfADegree() )
+                    return dwgA->GetEllipseStartAngle().AsTenthsOfADegree()
+                           < dwgB->GetEllipseStartAngle().AsTenthsOfADegree();
+
+                if( dwgA->GetEllipseEndAngle().AsTenthsOfADegree() != dwgB->GetEllipseEndAngle().AsTenthsOfADegree() )
+                    return dwgA->GetEllipseEndAngle().AsTenthsOfADegree()
+                           < dwgB->GetEllipseEndAngle().AsTenthsOfADegree();
+            }
+        }
 
         if( dwgA->GetWidth() != dwgB->GetWidth() )
             return dwgA->GetWidth() < dwgB->GetWidth();

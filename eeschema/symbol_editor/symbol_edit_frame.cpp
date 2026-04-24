@@ -615,6 +615,8 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( SCH_ACTIONS::drawSymbolTextBox,  EDIT_TOOL( SCH_ACTIONS::drawSymbolTextBox ) );
     mgr->SetConditions( SCH_ACTIONS::drawRectangle,      EDIT_TOOL( SCH_ACTIONS::drawRectangle ) );
     mgr->SetConditions( SCH_ACTIONS::drawCircle,         EDIT_TOOL( SCH_ACTIONS::drawCircle ) );
+    mgr->SetConditions( SCH_ACTIONS::drawEllipse, EDIT_TOOL( SCH_ACTIONS::drawEllipse ) );
+    mgr->SetConditions( SCH_ACTIONS::drawEllipseArc, EDIT_TOOL( SCH_ACTIONS::drawEllipseArc ) );
     mgr->SetConditions( SCH_ACTIONS::drawArc,            EDIT_TOOL( SCH_ACTIONS::drawArc ) );
     mgr->SetConditions( SCH_ACTIONS::drawBezier,         EDIT_TOOL( SCH_ACTIONS::drawBezier ) );
     mgr->SetConditions( SCH_ACTIONS::drawSymbolLines,    EDIT_TOOL( SCH_ACTIONS::drawSymbolLines ) );

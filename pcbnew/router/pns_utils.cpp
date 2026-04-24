@@ -28,6 +28,9 @@
 
 #include <geometry/shape_arc.h>
 #include <geometry/shape_segment.h>
+#include <geometry/shape_ellipse.h>
+#include <geometry/shape_simple.h>
+#include <geometry/shape_poly_set.h>
 #include <math/box2.h>
 
 #include <cmath>
@@ -516,6 +519,15 @@ const SHAPE_LINE_CHAIN BuildHullForPrimitiveShape( const SHAPE* aShape, int aCle
 
         return ConvexHull( *convex, cl );
     }
+
+    case SH_ELLIPSE:
+    {
+        const SHAPE_ELLIPSE* ellipse = static_cast<const SHAPE_ELLIPSE*>( aShape );
+        const BOX2I          bbox = ellipse->BBox();
+
+        return OctagonalHull( bbox.GetPosition(), bbox.GetSize(), cl, 0 );
+    }
+
     default:
     {
         wxFAIL_MSG( wxString::Format( wxT( "Unsupported hull shape: %d (%s)." ),

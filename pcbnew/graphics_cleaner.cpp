@@ -103,6 +103,9 @@ bool GRAPHICS_CLEANER::isNullShape( PCB_SHAPE* aShape )
     case SHAPE_T::CIRCLE:
         return aShape->GetRadius() == 0;
 
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC: return aShape->GetEllipseMajorRadius() == 0 || aShape->GetEllipseMinorRadius() == 0;
+
     case SHAPE_T::POLY:
         return aShape->GetPointCount() == 0;
 
@@ -154,6 +157,16 @@ bool GRAPHICS_CLEANER::areEquivalent( PCB_SHAPE* aShape1, PCB_SHAPE* aShape2 )
                 && equivalent( aShape1->GetEnd(), aShape2->GetEnd(), m_epsilon )
                 && equivalent( aShape1->GetBezierC1(), aShape2->GetBezierC1(), m_epsilon )
                 && equivalent( aShape1->GetBezierC2(), aShape2->GetBezierC2(), m_epsilon );
+
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+        return equivalent( aShape1->GetEllipseCenter(), aShape2->GetEllipseCenter(), m_epsilon )
+               && aShape1->GetEllipseMajorRadius() == aShape2->GetEllipseMajorRadius()
+               && aShape1->GetEllipseMinorRadius() == aShape2->GetEllipseMinorRadius()
+               && aShape1->GetEllipseRotation() == aShape2->GetEllipseRotation()
+               && ( aShape1->GetShape() != SHAPE_T::ELLIPSE_ARC
+                    || ( aShape1->GetEllipseStartAngle() == aShape2->GetEllipseStartAngle()
+                         && aShape1->GetEllipseEndAngle() == aShape2->GetEllipseEndAngle() ) );
 
     default:
         wxFAIL_MSG( wxT( "GRAPHICS_CLEANER::areEquivalent unimplemented for " )

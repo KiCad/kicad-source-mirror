@@ -22,18 +22,20 @@
 
 #include <math/vector2d.h>
 #include <geometry/eda_angle.h>
+#include <core/mirror.h>
 
-/**
- * This class was created to handle importing ellipses from other file formats that support them
- * natively.  The storage format and API may need to be refactored before this is used as part of a
- * potential future native KiCad ellipse.
- */
+/// Plain ellipse / elliptical-arc data. Used by SHAPE_ELLIPSE, by EDA_SHAPE's
+/// native ellipse storage, and by importers that need to round-trip ellipses.
 
 template <typename NumericType>
 class ELLIPSE
 {
 public:
-    ELLIPSE() = default;
+    ELLIPSE() :
+            MajorRadius( 0 ),
+            MinorRadius( 0 )
+    {
+    }
 
     /**
      * Constructs an ellipse or elliptical arc.  The ellipse sweeps from aStartAngle to aEndAngle
@@ -63,6 +65,11 @@ public:
      */
     ELLIPSE( const VECTOR2<NumericType>& aCenter, const VECTOR2<NumericType>& aMajor, double aRatio,
              EDA_ANGLE aStartAngle = ANGLE_0, EDA_ANGLE aEndAngle = FULL_CIRCLE );
+
+    /**
+     * Mirror the ellipse along a horizontal or vertical axis passing through aRef.
+     */
+    void Mirror( const VECTOR2<NumericType>& aRef, FLIP_DIRECTION aFlipDirection );
 
     VECTOR2<NumericType> Center;
     NumericType MajorRadius;

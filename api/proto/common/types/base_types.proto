@@ -407,6 +407,24 @@ message GraphicBezierAttributes
   kiapi.common.types.Vector2  end      = 4;
 }
 
+message GraphicEllipseAttributes
+{
+  kiapi.common.types.Vector2  center       = 1;
+  kiapi.common.types.Distance major_radius = 2;
+  kiapi.common.types.Distance minor_radius = 3;
+  kiapi.common.types.Angle    rotation     = 4;
+}
+
+message GraphicEllipseArcAttributes
+{
+  kiapi.common.types.Vector2  center       = 1;
+  kiapi.common.types.Distance major_radius = 2;
+  kiapi.common.types.Distance minor_radius = 3;
+  kiapi.common.types.Angle    rotation     = 4;
+  kiapi.common.types.Angle    start_angle  = 5;
+  kiapi.common.types.Angle    end_angle    = 6;
+}
+
 message GraphicShape
 {
   // Reserved for future use; base EDA_SHAPE doesn't have an ID or locked state right now
@@ -415,12 +433,14 @@ message GraphicShape
   GraphicAttributes attributes = 3;
 
   oneof geometry {
-    GraphicSegmentAttributes     segment    = 4;
-    GraphicRectangleAttributes   rectangle  = 5;
-    GraphicArcAttributes         arc        = 6;
-    GraphicCircleAttributes      circle     = 7;
-    PolySet                      polygon    = 8;
-    GraphicBezierAttributes      bezier     = 9;
+    GraphicSegmentAttributes     segment      = 4;
+    GraphicRectangleAttributes   rectangle    = 5;
+    GraphicArcAttributes         arc          = 6;
+    GraphicCircleAttributes      circle       = 7;
+    PolySet                      polygon      = 8;
+    GraphicBezierAttributes      bezier       = 9;
+    GraphicEllipseAttributes     ellipse      = 10;
+    GraphicEllipseArcAttributes  ellipse_arc  = 11;
   }
 }
 

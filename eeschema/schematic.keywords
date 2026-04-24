@@ -44,9 +44,12 @@ dot
 duplicate_pin_numbers_are_jumpers
 edge_clock_high
 effects
+ellipse
+ellipse_arc
 embedded_fonts
 embedded_files
 end
+end_angle
 extends
 external
 exclude_from_sim
@@ -97,9 +100,11 @@ line
 line_spacing
 local
 locked
+major_radius
 margins
 members
 mid
+minor_radius
 mirror
 name
 netclass_flag
@@ -143,6 +148,7 @@ required
 rev
 reverse_hatch
 right
+rotation_angle
 round
 rows
 row_heights
@@ -156,6 +162,7 @@ show_name
 size
 span
 start
+start_angle
 stroke
 symbol
 symbol_instances

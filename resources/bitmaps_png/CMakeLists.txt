@@ -175,6 +175,8 @@ set( BMAPS_MID
     add_corner
     add_dashed_line
     add_document
+    add_ellipse
+    add_ellipse_arc
     add_glabel
     add_graphical_segments
     add_graphical_polygon

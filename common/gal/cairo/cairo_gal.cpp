@@ -449,6 +449,78 @@ void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadiu
 }
 
 
+void CAIRO_GAL_BASE::DrawEllipse( const VECTOR2D& aCenterPoint, double aMajorRadius, double aMinorRadius,
+                                  const EDA_ANGLE& aRotation )
+{
+    syncLineWidth();
+
+    VECTOR2D c = roundp( xform( aCenterPoint ) );
+    double   a = ::roundp( xform( aMajorRadius ) );
+    double   b = ::roundp( xform( aMinorRadius ) );
+    double   rotation = angle_xform( aRotation.AsRadians() );
+
+    cairo_set_line_width( m_currentContext, std::min( 2.0 * std::min( a, b ), m_lineWidthInPixels ) );
+
+    cairo_save( m_currentContext );
+
+    cairo_translate( m_currentContext, c.x, c.y );
+    cairo_rotate( m_currentContext, rotation );
+    cairo_scale( m_currentContext, a, b );
+
+    cairo_new_sub_path( m_currentContext );
+    cairo_arc( m_currentContext, 0.0, 0.0, 1.0, 0.0, 2.0 * M_PI );
+    cairo_close_path( m_currentContext );
+
+    cairo_restore( m_currentContext );
+
+    flushPath();
+
+    m_isElementAdded = true;
+}
+
+
+void CAIRO_GAL_BASE::DrawEllipseArc( const VECTOR2D& aCenterPoint, double aMajorRadius, double aMinorRadius,
+                                     const EDA_ANGLE& aRotation, const EDA_ANGLE& aStartAngle,
+                                     const EDA_ANGLE& aEndAngle )
+{
+    syncLineWidth();
+
+    VECTOR2D c = roundp( xform( aCenterPoint ) );
+    double   a = ::roundp( xform( aMajorRadius ) );
+    double   b = ::roundp( xform( aMinorRadius ) );
+    double   rotation = angle_xform( aRotation.AsRadians() );
+
+    double startAngle = aStartAngle.AsRadians();
+    double endAngle = aEndAngle.AsRadians();
+    arc_angles_xform_and_normalize( startAngle, endAngle );
+
+    cairo_set_line_width( m_currentContext, m_lineWidthInPixels );
+
+    cairo_save( m_currentContext );
+
+    cairo_translate( m_currentContext, c.x, c.y );
+    cairo_rotate( m_currentContext, rotation );
+    cairo_scale( m_currentContext, a, b );
+
+    cairo_new_sub_path( m_currentContext );
+
+    // For filled arcs, draw as a pie slice
+    if( m_isFillEnabled )
+        cairo_move_to( m_currentContext, 0.0, 0.0 );
+
+    cairo_arc( m_currentContext, 0.0, 0.0, 1.0, startAngle, endAngle );
+
+    if( m_isFillEnabled )
+        cairo_close_path( m_currentContext );
+
+    cairo_restore( m_currentContext );
+
+    flushPath();
+
+    m_isElementAdded = true;
+}
+
+
 void CAIRO_GAL_BASE::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
     // Calculate the diagonal points

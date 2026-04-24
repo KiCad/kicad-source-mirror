@@ -2471,12 +2471,10 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            item->SetPosition( cursorPos );
-
-            // Not placed yet, so pass a nullptr screen reference
-            item->AutoplaceFields( nullptr, AUTOPLACE_AUTO );
-
-            updatePreview();
+            item->CalcEdit( cursorPos );
+            m_view->ClearPreview();
+            m_view->AddToPreview( item->Clone() );
+            m_frame->SetMsgPanel( item );
         }
         else if( item && evt->IsAction( &ACTIONS::doDelete ) )
         {
@@ -2762,6 +2760,37 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             item->CalcEdit( cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
+
+            if( type == SHAPE_T::ELLIPSE_ARC && item->GetEllipseMajorRadius() > 100
+                && item->GetEllipseMinorRadius() > 100 )
+            {
+                const VECTOR2I  center = item->GetEllipseCenter();
+                const double    a = item->GetEllipseMajorRadius();
+                const double    b = item->GetEllipseMinorRadius();
+                const EDA_ANGLE rot = item->GetEllipseRotation();
+                const double    cosRot = rot.Cos();
+                const double    sinRot = rot.Sin();
+
+                const double dx = cursorPos.x - center.x;
+                const double dy = cursorPos.y - center.y;
+                const double lx = dx * cosRot + dy * sinRot;
+                const double ly = -dx * sinRot + dy * cosRot;
+
+                const EDA_ANGLE t( std::atan2( ly / b, lx / a ), RADIANS_T );
+                const double    px = a * t.Cos();
+                const double    py = b * t.Sin();
+
+                VECTOR2I markerPos =
+                        center + VECTOR2I( KiROUND( px * cosRot - py * sinRot ), KiROUND( px * sinRot + py * cosRot ) );
+
+                SCH_SHAPE* dot = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_NOTES );
+                int        radius = schIUScale.MilsToIU( 20 );
+                dot->SetStart( markerPos );
+                dot->SetEnd( markerPos + VECTOR2I( radius, 0 ) );
+                dot->SetFillMode( FILL_T::FILLED_SHAPE );
+                m_view->AddToPreview( dot );
+            }
+
             m_frame->SetMsgPanel( item );
         }
         else if( evt->IsDblClick( BUT_LEFT ) && !item )
@@ -3934,6 +3963,8 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,         SCH_ACTIONS::placeSchematicText.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawRectangle.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawCircle.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawEllipse.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawEllipseArc.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawArc.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawBezier.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,             SCH_ACTIONS::drawTextBox.MakeEvent() );

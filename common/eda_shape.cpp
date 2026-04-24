@@ -33,6 +33,8 @@
 #include <eda_draw_frame.h>
 #include <geometry/shape_arc.h>
 #include <geometry/shape_circle.h>
+#include <geometry/shape_ellipse.h>
+#include <geometry/shape_line_chain.h>
 #include <geometry/shape_simple.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
@@ -141,6 +143,23 @@ EDA_SHAPE::EDA_SHAPE( const SHAPE& aShape ) :
         break;
     }
 
+    case SH_ELLIPSE:
+    {
+        auto ellipse = static_cast<const SHAPE_ELLIPSE&>( aShape );
+        m_shape = ellipse.IsArc() ? SHAPE_T::ELLIPSE_ARC : SHAPE_T::ELLIPSE;
+        SetEllipseCenter( ellipse.GetCenter() );
+        SetEllipseMajorRadius( ellipse.GetMajorRadius() );
+        SetEllipseMinorRadius( ellipse.GetMinorRadius() );
+        SetEllipseRotation( ellipse.GetRotation() );
+
+        if( ellipse.IsArc() )
+        {
+            SetEllipseStartAngle( ellipse.GetStartAngle() );
+            SetEllipseEndAngle( ellipse.GetEndAngle() );
+        }
+        break;
+    }
+
     // currently unhandled
     case SH_POLY_SET:
     case SH_COMPOUND:
@@ -170,6 +189,7 @@ EDA_SHAPE::EDA_SHAPE( const EDA_SHAPE& aOther ) :
         m_bezierC1( aOther.m_bezierC1 ),
         m_bezierC2( aOther.m_bezierC2 ),
         m_bezierPoints( aOther.m_bezierPoints ),
+        m_ellipse( aOther.m_ellipse ),
         m_editState( aOther.m_editState ),
         m_proxyItem( aOther.m_proxyItem )
 {
@@ -200,6 +220,7 @@ EDA_SHAPE& EDA_SHAPE::operator=( const EDA_SHAPE& aOther )
     m_bezierC1 = aOther.m_bezierC1;
     m_bezierC2 = aOther.m_bezierC2;
     m_bezierPoints = aOther.m_bezierPoints;
+    m_ellipse = aOther.m_ellipse;
     if( aOther.m_poly )
         m_poly = std::make_unique<SHAPE_POLY_SET>( *aOther.m_poly );
     else
@@ -285,6 +306,28 @@ void EDA_SHAPE::Serialize( google::protobuf::Any &aContainer, const EDA_IU_SCALE
         PackVector2( *bezier->mutable_control1(), GetBezierC1(), aScale );
         PackVector2( *bezier->mutable_control2(), GetBezierC2(), aScale );
         PackVector2( *bezier->mutable_end(), GetEnd(), aScale );
+        break;
+    }
+
+    case SHAPE_T::ELLIPSE:
+    {
+        types::GraphicEllipseAttributes* ellipse = shape.mutable_ellipse();
+        PackVector2( *ellipse->mutable_center(), GetEllipseCenter(), aScale );
+        PackDistance( *ellipse->mutable_major_radius(), GetEllipseMajorRadius(), aScale );
+        PackDistance( *ellipse->mutable_minor_radius(), GetEllipseMinorRadius(), aScale );
+        ellipse->mutable_rotation()->set_value_degrees( GetEllipseRotation().AsDegrees() );
+        break;
+    }
+
+    case SHAPE_T::ELLIPSE_ARC:
+    {
+        types::GraphicEllipseArcAttributes* arc = shape.mutable_ellipse_arc();
+        PackVector2( *arc->mutable_center(), GetEllipseCenter(), aScale );
+        PackDistance( *arc->mutable_major_radius(), GetEllipseMajorRadius(), aScale );
+        PackDistance( *arc->mutable_minor_radius(), GetEllipseMinorRadius(), aScale );
+        arc->mutable_rotation()->set_value_degrees( GetEllipseRotation().AsDegrees() );
+        arc->mutable_start_angle()->set_value_degrees( GetEllipseStartAngle().AsDegrees() );
+        arc->mutable_end_angle()->set_value_degrees( GetEllipseEndAngle().AsDegrees() );
         break;
     }
 
@@ -383,6 +426,24 @@ bool EDA_SHAPE::Deserialize( const google::protobuf::Any &aContainer, const EDA_
         SetEnd( UnpackVector2( shape.bezier().end(), aScale ) );
         RebuildBezierToSegmentsPointsList( getMaxError() );
     }
+    else if( shape.has_ellipse() )
+    {
+        SetShape( SHAPE_T::ELLIPSE );
+        SetEllipseCenter( UnpackVector2( shape.ellipse().center(), aScale ) );
+        SetEllipseMajorRadius( UnpackDistance( shape.ellipse().major_radius(), aScale ) );
+        SetEllipseMinorRadius( UnpackDistance( shape.ellipse().minor_radius(), aScale ) );
+        SetEllipseRotation( EDA_ANGLE( shape.ellipse().rotation().value_degrees(), DEGREES_T ) );
+    }
+    else if( shape.has_ellipse_arc() )
+    {
+        SetShape( SHAPE_T::ELLIPSE_ARC );
+        SetEllipseCenter( UnpackVector2( shape.ellipse_arc().center(), aScale ) );
+        SetEllipseMajorRadius( UnpackDistance( shape.ellipse_arc().major_radius(), aScale ) );
+        SetEllipseMinorRadius( UnpackDistance( shape.ellipse_arc().minor_radius(), aScale ) );
+        SetEllipseRotation( EDA_ANGLE( shape.ellipse_arc().rotation().value_degrees(), DEGREES_T ) );
+        SetEllipseStartAngle( EDA_ANGLE( shape.ellipse_arc().start_angle().value_degrees(), DEGREES_T ) );
+        SetEllipseEndAngle( EDA_ANGLE( shape.ellipse_arc().end_angle().value_degrees(), DEGREES_T ) );
+    }
 
     return true;
 }
@@ -403,13 +464,15 @@ wxString EDA_SHAPE::ShowShape() const
     {
         switch( m_shape )
         {
-        case SHAPE_T::SEGMENT:   return _( "Line" );
+        case SHAPE_T::SEGMENT: return _( "Line" );
         case SHAPE_T::RECTANGLE: return _( "Rect" );
-        case SHAPE_T::ARC:       return _( "Arc" );
-        case SHAPE_T::CIRCLE:    return _( "Circle" );
-        case SHAPE_T::BEZIER:    return _( "Bezier Curve" );
-        case SHAPE_T::POLY:      return _( "Polygon" );
-        default:                 return wxT( "??" );
+        case SHAPE_T::ARC: return _( "Arc" );
+        case SHAPE_T::CIRCLE: return _( "Circle" );
+        case SHAPE_T::BEZIER: return _( "Bezier Curve" );
+        case SHAPE_T::POLY: return _( "Polygon" );
+        case SHAPE_T::ELLIPSE: return _( "Ellipse" );
+        case SHAPE_T::ELLIPSE_ARC: return _( "Elliptical Arc" );
+        default: return wxT( "??" );
         }
     }
 }
@@ -425,6 +488,8 @@ wxString EDA_SHAPE::SHAPE_T_asString() const
     case SHAPE_T::CIRCLE:    return wxS( "S_CIRCLE" );
     case SHAPE_T::POLY:      return wxS( "S_POLYGON" );
     case SHAPE_T::BEZIER:    return wxS( "S_CURVE" );
+    case SHAPE_T::ELLIPSE: return wxS( "S_ELLIPSE" );
+    case SHAPE_T::ELLIPSE_ARC: return wxS( "S_ELLIPSE_ARC" );
     case SHAPE_T::UNDEFINED: return wxS( "UNDEFINED" );
     }
 
@@ -440,7 +505,7 @@ void EDA_SHAPE::setPosition( const VECTOR2I& aPos )
 
 VECTOR2I EDA_SHAPE::getPosition() const
 {
-    if( m_shape == SHAPE_T::ARC )
+    if( m_shape == SHAPE_T::ARC || m_shape == SHAPE_T::ELLIPSE || m_shape == SHAPE_T::ELLIPSE_ARC )
         return getCenter();
     else if( m_shape == SHAPE_T::POLY )
         return GetPolyShape().CVertex( 0 );
@@ -472,6 +537,9 @@ double EDA_SHAPE::GetLength() const
 
     case SHAPE_T::ARC:
         return GetRadius() * GetArcAngle().AsRadians();
+
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC: return buildShapeEllipse().GetLength();
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
@@ -582,11 +650,11 @@ bool EDA_SHAPE::IsClosed() const
     {
     case SHAPE_T::CIRCLE:
     case SHAPE_T::RECTANGLE:
-        return true;
+    case SHAPE_T::ELLIPSE: return true;
 
     case SHAPE_T::ARC:
     case SHAPE_T::SEGMENT:
-        return false;
+    case SHAPE_T::ELLIPSE_ARC: return false;
 
     case SHAPE_T::POLY:
         if( GetPolyShape().IsEmpty() )
@@ -707,7 +775,7 @@ void EDA_SHAPE::UpdateHatching() const
     case SHAPE_T::ARC:
     case SHAPE_T::SEGMENT:
     case SHAPE_T::BEZIER:
-        return;
+    case SHAPE_T::ELLIPSE_ARC: return;
 
     case SHAPE_T::RECTANGLE:
         {
@@ -726,6 +794,16 @@ void EDA_SHAPE::UpdateHatching() const
 
         shapeBuffer = GetPolyShape().CloneDropTriangulation();
         break;
+
+    case SHAPE_T::ELLIPSE:
+    {
+        // Hatching only applies to closed, fillable shapes.
+        SHAPE_ELLIPSE    e = buildShapeEllipse();
+        SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( getMaxError() );
+        chain.SetClosed( true );
+        shapeBuffer.AddOutline( chain );
+        break;
+    }
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
@@ -864,6 +942,13 @@ void EDA_SHAPE::move( const VECTOR2I& aMoveVector )
 
         break;
 
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+        m_ellipse.Center += aMoveVector;
+        m_start += aMoveVector;
+        m_end += aMoveVector;
+        break;
+
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         break;
@@ -934,6 +1019,14 @@ void EDA_SHAPE::scale( double aScale )
         RebuildBezierToSegmentsPointsList( getMaxError() );
         break;
 
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+        scalePt( m_ellipse.Center );
+        m_ellipse.MajorRadius = KiROUND( std::abs( m_ellipse.MajorRadius * aScale ) );
+        m_ellipse.MinorRadius = KiROUND( std::abs( m_ellipse.MinorRadius * aScale ) );
+        recalcEllipseArcEndpoints();
+        break;
+
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         break;
@@ -995,6 +1088,18 @@ void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
         break;
 
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+        RotatePoint( m_ellipse.Center, aRotCentre, aAngle );
+
+        // Ellipse rotation is the CCW angle of the major axis in standard math
+        // coordinates (Y-up).  RotatePoint uses KiCad's Y-down screen convention,
+        // so a positive aAngle rotates visually CCW on screen but corresponds to
+        // a negative rotation in the math frame.  Hence -= rather than +=.
+        m_ellipse.Rotation -= aAngle;
+        recalcEllipseArcEndpoints();
+        break;
+
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         break;
@@ -1040,6 +1145,12 @@ void EDA_SHAPE::flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         RebuildBezierToSegmentsPointsList( getMaxError() );
         break;
 
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+        m_ellipse.Mirror( aCentre, aFlipDirection );
+        recalcEllipseArcEndpoints();
+        break;
+
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         break;
@@ -1076,6 +1187,55 @@ const std::vector<VECTOR2I> EDA_SHAPE::buildBezierToSegmentsPointsList( int aMax
 }
 
 
+SHAPE_ELLIPSE EDA_SHAPE::buildShapeEllipse() const
+{
+    if( m_shape == SHAPE_T::ELLIPSE_ARC )
+        return SHAPE_ELLIPSE( m_ellipse.Center, m_ellipse.MajorRadius, m_ellipse.MinorRadius, m_ellipse.Rotation,
+                              m_ellipse.StartAngle, m_ellipse.EndAngle );
+
+    return SHAPE_ELLIPSE( m_ellipse.Center, m_ellipse.MajorRadius, m_ellipse.MinorRadius, m_ellipse.Rotation );
+}
+
+
+void EDA_SHAPE::recalcEllipseArcEndpoints()
+{
+    if( m_editState != 0 )
+        return;
+
+    if( m_shape == SHAPE_T::ELLIPSE )
+    {
+        const double phi = m_ellipse.Rotation.AsRadians();
+        m_start = m_ellipse.Center;
+        m_end = m_start
+                + VECTOR2I( KiROUND( m_ellipse.MajorRadius * std::cos( phi ) ),
+                            KiROUND( m_ellipse.MajorRadius * std::sin( phi ) ) );
+        return;
+    }
+
+    if( m_shape != SHAPE_T::ELLIPSE_ARC )
+        return;
+
+    m_arcCenter = m_ellipse.Center;
+
+    const double   a = m_ellipse.MajorRadius;
+    const double   b = m_ellipse.MinorRadius;
+    const double   phi = m_ellipse.Rotation.AsRadians();
+    const double   cosPhi = std::cos( phi );
+    const double   sinPhi = std::sin( phi );
+    const VECTOR2I c = m_ellipse.Center;
+
+    auto eval = [&]( double theta ) -> VECTOR2I
+    {
+        const double lx = a * std::cos( theta );
+        const double ly = b * std::sin( theta );
+        return c + VECTOR2I( KiROUND( lx * cosPhi - ly * sinPhi ), KiROUND( lx * sinPhi + ly * cosPhi ) );
+    };
+
+    m_start = eval( m_ellipse.StartAngle.AsRadians() );
+    m_end = eval( m_ellipse.EndAngle.AsRadians() );
+}
+
+
 VECTOR2I EDA_SHAPE::getCenter() const
 {
     switch( m_shape )
@@ -1095,6 +1255,9 @@ VECTOR2I EDA_SHAPE::getCenter() const
     case SHAPE_T::BEZIER:
         return getBoundingBox().Centre();
 
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC: return m_ellipse.Center;
+
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         return VECTOR2I();
@@ -1113,6 +1276,13 @@ void EDA_SHAPE::SetCenter( const VECTOR2I& aCenter )
     case SHAPE_T::CIRCLE:
         m_start = aCenter;
         m_hatchingDirty = true;
+        break;
+
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+        m_ellipse.Center = aCenter;
+        m_hatchingDirty = true;
+        recalcEllipseArcEndpoints();
         break;
 
     default:
@@ -1283,13 +1453,15 @@ wxString EDA_SHAPE::getFriendlyName() const
     {
         switch( m_shape )
         {
-        case SHAPE_T::CIRCLE:    return _( "Circle" );
-        case SHAPE_T::ARC:       return _( "Arc" );
-        case SHAPE_T::BEZIER:    return _( "Curve" );
-        case SHAPE_T::POLY:      return _( "Polygon" );
+        case SHAPE_T::CIRCLE: return _( "Circle" );
+        case SHAPE_T::ARC: return _( "Arc" );
+        case SHAPE_T::BEZIER: return _( "Curve" );
+        case SHAPE_T::POLY: return _( "Polygon" );
         case SHAPE_T::RECTANGLE: return _( "Rectangle" );
-        case SHAPE_T::SEGMENT:   return _( "Segment" );
-        default:                 return _( "Unrecognized" );
+        case SHAPE_T::SEGMENT: return _( "Segment" );
+        case SHAPE_T::ELLIPSE: return _( "Ellipse" );
+        case SHAPE_T::ELLIPSE_ARC: return _( "Elliptical Arc" );
+        default: return _( "Unrecognized" );
         }
     }
 }
@@ -1319,6 +1491,22 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
     case SHAPE_T::BEZIER:
         aList.emplace_back( _( "Length" ), aFrame->MessageTextFromValue( GetLength() ) );
+        break;
+
+    case SHAPE_T::ELLIPSE:
+        aList.emplace_back( _( "Length" ), aFrame->MessageTextFromValue( GetLength() ) );
+        aList.emplace_back( _( "Major Radius" ), aFrame->MessageTextFromValue( GetEllipseMajorRadius() ) );
+        aList.emplace_back( _( "Minor Radius" ), aFrame->MessageTextFromValue( GetEllipseMinorRadius() ) );
+        aList.emplace_back( _( "Rotation" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( GetEllipseRotation() ) );
+        break;
+
+    case SHAPE_T::ELLIPSE_ARC:
+        aList.emplace_back( _( "Length" ), aFrame->MessageTextFromValue( GetLength() ) );
+        aList.emplace_back( _( "Major Radius" ), aFrame->MessageTextFromValue( GetEllipseMajorRadius() ) );
+        aList.emplace_back( _( "Minor Radius" ), aFrame->MessageTextFromValue( GetEllipseMinorRadius() ) );
+        aList.emplace_back( _( "Rotation" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( GetEllipseRotation() ) );
+        aList.emplace_back( _( "Start Angle" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( GetEllipseStartAngle() ) );
+        aList.emplace_back( _( "End Angle" ), EDA_UNIT_UTILS::UI::MessageTextFromValue( GetEllipseEndAngle() ) );
         break;
 
     case SHAPE_T::POLY:
@@ -1375,6 +1563,9 @@ const BOX2I EDA_SHAPE::getBoundingBox() const
     case SHAPE_T::ARC:
         computeArcBBox( bbox );
         break;
+
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC: bbox = buildShapeEllipse().BBox( 0 ); break;
 
     case SHAPE_T::POLY:
         if( GetPolyShape().IsEmpty() )
@@ -1561,6 +1752,32 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
             return false;
         }
+
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+    {
+        SHAPE_ELLIPSE e = buildShapeEllipse();
+
+        const double maxdistSq = maxdist * maxdist;
+
+        if( m_shape == SHAPE_T::ELLIPSE && IsFilledForHitTesting() )
+        {
+            // Filled closed ellipse
+            if( static_cast<double>( e.SquaredDistance( aPosition, false ) ) <= maxdistSq )
+                return true;
+        }
+        else
+        {
+            // Unfilled ring or arc
+            if( static_cast<double>( e.SquaredDistance( aPosition, true ) ) <= maxdistSq )
+                return true;
+        }
+
+        if( IsHatchedFill() && GetHatching().Collide( aPosition, maxdist ) )
+            return true;
+
+        return false;
+    }
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
@@ -1756,6 +1973,25 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 
             return false;
         }
+
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+    {
+        if( aContained )
+            return arect.Contains( bbox );
+
+        if( !arect.Intersects( bbox ) )
+            return false;
+
+        SHAPE_ELLIPSE e = buildShapeEllipse();
+
+        const int              tessError = std::max( 1, aAccuracy / 2 );
+        const SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( tessError );
+
+        // Account for the width of the line
+        arect.Inflate( GetWidth() / 2 );
+        return checkOutline( chain );
+    }
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
@@ -2090,6 +2326,34 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
     }
         break;
 
+        case SHAPE_T::ELLIPSE:
+        case SHAPE_T::ELLIPSE_ARC:
+        {
+            if( solidFill && m_shape == SHAPE_T::ELLIPSE )
+            {
+                // Filled closed ellipse: emit a SHAPE_SIMPLE for the filled interior.
+                SHAPE_ELLIPSE         e = buildShapeEllipse();
+                SHAPE_LINE_CHAIN      chain = e.ConvertToPolyline( getMaxError() );
+                std::vector<VECTOR2I> pts;
+
+                for( int ii = 0; ii < chain.PointCount(); ++ii )
+                    pts.emplace_back( chain.CPoint( ii ) );
+
+                effectiveShapes.emplace_back( new SHAPE_SIMPLE( pts ) );
+            }
+
+            if( width > 0 || !solidFill )
+            {
+                SHAPE_ELLIPSE    e = buildShapeEllipse();
+                SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( getMaxError() );
+
+                for( int ii = 0; ii < chain.SegmentCount(); ++ii )
+                    effectiveShapes.emplace_back( new SHAPE_SEGMENT( chain.CSegment( ii ), width ) );
+            }
+
+            break;
+        }
+
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         break;
@@ -2188,6 +2452,30 @@ void EDA_SHAPE::beginEdit( const VECTOR2I& aPosition )
         GetPolyShape().Outline( 0 ).Append( aPosition, true );
         break;
 
+    case SHAPE_T::ELLIPSE:
+        // m_start holds the first bbox corner and calcEdit derives the ellipse from it.
+        m_editState = 1;
+        SetStart( aPosition );
+        SetEnd( aPosition );
+        SetEllipseCenter( aPosition );
+        SetEllipseMajorRadius( 1 );
+        SetEllipseMinorRadius( 1 );
+        SetEllipseRotation( ANGLE_0 );
+        break;
+
+    case SHAPE_T::ELLIPSE_ARC:
+        // State 1: drag bbox. States 2-3: pick start then end angle.
+        SetStart( aPosition );
+        SetEnd( aPosition );
+        SetEllipseCenter( aPosition );
+        SetEllipseMajorRadius( 1 );
+        SetEllipseMinorRadius( 1 );
+        SetEllipseRotation( ANGLE_0 );
+        SetEllipseStartAngle( ANGLE_0 );
+        SetEllipseEndAngle( ANGLE_360 );
+        m_editState = 1;
+        break;
+
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
@@ -2202,9 +2490,16 @@ bool EDA_SHAPE::continueEdit( const VECTOR2I& aPosition )
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
     case SHAPE_T::RECTANGLE:
-        return false;
+    case SHAPE_T::ELLIPSE: return false;
 
     case SHAPE_T::BEZIER:
+        if( m_editState == 3 )
+            return false;
+
+        m_editState++;
+        return true;
+
+    case SHAPE_T::ELLIPSE_ARC:
         if( m_editState == 3 )
             return false;
 
@@ -2385,6 +2680,125 @@ void EDA_SHAPE::calcEdit( const VECTOR2I& aPosition )
                                               aPosition );
         break;
 
+    case SHAPE_T::ELLIPSE:
+    {
+        const VECTOR2I firstCorner = GetStart();
+        const VECTOR2I secondCorner = aPosition;
+        const VECTOR2I center = ( firstCorner + secondCorner ) / 2;
+        const int      halfW = std::abs( secondCorner.x - firstCorner.x ) / 2;
+        const int      halfH = std::abs( secondCorner.y - firstCorner.y ) / 2;
+
+        int       majorRadius;
+        int       minorRadius;
+        EDA_ANGLE rotation;
+
+        if( halfW >= halfH )
+        {
+            majorRadius = std::max( halfW, 1 );
+            minorRadius = std::max( halfH, 1 );
+            rotation = ANGLE_0;
+        }
+        else
+        {
+            majorRadius = std::max( halfH, 1 );
+            minorRadius = std::max( halfW, 1 );
+            rotation = ANGLE_90;
+        }
+
+        SetEllipseCenter( center );
+        SetEllipseMajorRadius( majorRadius );
+        SetEllipseMinorRadius( minorRadius );
+        SetEllipseRotation( rotation );
+        SetEnd( aPosition );
+        break;
+    }
+
+    case SHAPE_T::ELLIPSE_ARC:
+    {
+        switch( m_editState )
+        {
+        case 0:
+        case 1:
+        {
+            // Bbox
+            const VECTOR2I firstCorner = GetStart();
+            const VECTOR2I secondCorner = aPosition;
+            const VECTOR2I center = ( firstCorner + secondCorner ) / 2;
+            const int      halfW = std::abs( secondCorner.x - firstCorner.x ) / 2;
+            const int      halfH = std::abs( secondCorner.y - firstCorner.y ) / 2;
+
+            int       majorRadius;
+            int       minorRadius;
+            EDA_ANGLE rotation;
+
+            if( halfW >= halfH )
+            {
+                majorRadius = std::max( halfW, 1 );
+                minorRadius = std::max( halfH, 1 );
+                rotation = ANGLE_0;
+            }
+            else
+            {
+                majorRadius = std::max( halfH, 1 );
+                minorRadius = std::max( halfW, 1 );
+                rotation = ANGLE_90;
+            }
+
+            SetEllipseCenter( center );
+            SetEllipseMajorRadius( majorRadius );
+            SetEllipseMinorRadius( minorRadius );
+            SetEllipseRotation( rotation );
+            SetEnd( aPosition );
+
+            // Keep the preview rendering as a full closed ellipse during bbox build.
+            SetEllipseStartAngle( ANGLE_0 );
+            SetEllipseEndAngle( ANGLE_360 );
+
+            break;
+        }
+
+        case 2:
+        case 3:
+        {
+            // Project cursor onto the parametric form (a * cos t, b * sin t) to get t.
+            const VECTOR2I  center = m_ellipse.Center;
+            const double    a = std::max( 1, m_ellipse.MajorRadius );
+            const double    b = std::max( 1, m_ellipse.MinorRadius );
+            const EDA_ANGLE rotation = m_ellipse.Rotation;
+
+            const double dx = aPosition.x - center.x;
+            const double dy = aPosition.y - center.y;
+
+            const double cosRot = rotation.Cos();
+            const double sinRot = rotation.Sin();
+            const double lx = dx * cosRot + dy * sinRot;
+            const double ly = -dx * sinRot + dy * cosRot;
+
+            const EDA_ANGLE paramAngle( std::atan2( ly / b, lx / a ), RADIANS_T );
+
+            if( m_editState == 2 )
+            {
+                SetEllipseStartAngle( paramAngle );
+                SetEllipseEndAngle( paramAngle + ANGLE_360 );
+            }
+            else
+            {
+                // Force end > start
+                EDA_ANGLE cursorAngle = paramAngle;
+
+                while( cursorAngle <= m_ellipse.StartAngle )
+                    cursorAngle = cursorAngle + ANGLE_360;
+
+                SetEllipseEndAngle( cursorAngle );
+            }
+
+            break;
+        }
+        }
+
+        break;
+    }
+
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
     }
@@ -2399,7 +2813,12 @@ void EDA_SHAPE::endEdit( bool aClosed )
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
     case SHAPE_T::RECTANGLE:
-    case SHAPE_T::BEZIER:
+    case SHAPE_T::BEZIER: break;
+
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+        m_editState = 0;
+        recalcEllipseArcEndpoints();
         break;
 
     case SHAPE_T::POLY:
@@ -2444,6 +2863,7 @@ void EDA_SHAPE::SwapShape( EDA_SHAPE* aImage )
     SWAPITEM( m_bezierC2 );
     SWAPITEM( m_bezierPoints );
     SWAPITEM( m_poly );
+    SWAPITEM( m_ellipse );
     SWAPITEM( m_cornerRadius );
     SWAPITEM( m_fill );
     SWAPITEM( m_fillColor );
@@ -2480,6 +2900,19 @@ int EDA_SHAPE::Compare( const EDA_SHAPE* aOther ) const
     {
         TEST_PT( m_bezierC1, aOther->m_bezierC1 );
         TEST_PT( m_bezierC2, aOther->m_bezierC2 );
+    }
+    else if( m_shape == SHAPE_T::ELLIPSE || m_shape == SHAPE_T::ELLIPSE_ARC )
+    {
+        TEST_PT( m_ellipse.Center, aOther->m_ellipse.Center );
+        TEST_E( m_ellipse.MajorRadius, aOther->m_ellipse.MajorRadius );
+        TEST_E( m_ellipse.MinorRadius, aOther->m_ellipse.MinorRadius );
+        TEST_E( m_ellipse.Rotation.AsTenthsOfADegree(), aOther->m_ellipse.Rotation.AsTenthsOfADegree() );
+
+        if( m_shape == SHAPE_T::ELLIPSE_ARC )
+        {
+            TEST_E( m_ellipse.StartAngle.AsTenthsOfADegree(), aOther->m_ellipse.StartAngle.AsTenthsOfADegree() );
+            TEST_E( m_ellipse.EndAngle.AsTenthsOfADegree(), aOther->m_ellipse.EndAngle.AsTenthsOfADegree() );
+        }
     }
     else if( m_shape == SHAPE_T::POLY )
     {
@@ -2660,6 +3093,47 @@ void EDA_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance
         break;
     }
 
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+    {
+        SHAPE_ELLIPSE e = buildShapeEllipse();
+
+        SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( aError );
+
+        if( solidFill && m_shape == SHAPE_T::ELLIPSE )
+        {
+            // Filled closed ellipse, build the outline, inflate for stroke width.
+            SHAPE_POLY_SET tmp;
+            tmp.NewOutline();
+
+            for( int ii = 0; ii < chain.PointCount(); ++ii )
+                tmp.Append( chain.CPoint( ii ) );
+
+            if( width > 0 )
+            {
+                int inflate = width / 2;
+
+                if( aErrorLoc == ERROR_OUTSIDE )
+                    inflate += aError;
+
+                tmp.Inflate( inflate, CORNER_STRATEGY::ROUND_ALL_CORNERS, aError );
+            }
+
+            aBuffer.Append( tmp );
+        }
+        else
+        {
+            // stroke each tessellated segment as an oval.
+            for( int ii = 0; ii < chain.SegmentCount(); ++ii )
+            {
+                const SEG& seg = chain.CSegment( ii );
+                TransformOvalToPolygon( aBuffer, seg.A, seg.B, width, aError, aErrorLoc );
+            }
+        }
+
+        break;
+    }
+
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         break;
@@ -2767,6 +3241,30 @@ bool EDA_SHAPE::operator==( const EDA_SHAPE& aOther ) const
 
         break;
 
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+        if( m_ellipse.Center != aOther.m_ellipse.Center )
+            return false;
+
+        if( m_ellipse.MajorRadius != aOther.m_ellipse.MajorRadius )
+            return false;
+        if( m_ellipse.MinorRadius != aOther.m_ellipse.MinorRadius )
+            return false;
+
+        if( m_ellipse.Rotation != aOther.m_ellipse.Rotation )
+            return false;
+
+        if( m_shape == SHAPE_T::ELLIPSE_ARC )
+        {
+            if( m_ellipse.StartAngle != aOther.m_ellipse.StartAngle )
+                return false;
+
+            if( m_ellipse.EndAngle != aOther.m_ellipse.EndAngle )
+                return false;
+        }
+
+        break;
+
     default:
         return false;
     }
@@ -2863,12 +3361,14 @@ static struct EDA_SHAPE_DESC
     EDA_SHAPE_DESC()
     {
         ENUM_MAP<SHAPE_T>::Instance()
-                    .Map( SHAPE_T::SEGMENT,   _HKI( "Segment" ) )
-                    .Map( SHAPE_T::RECTANGLE, _HKI( "Rectangle" ) )
-                    .Map( SHAPE_T::ARC,       _HKI( "Arc" ) )
-                    .Map( SHAPE_T::CIRCLE,    _HKI( "Circle" ) )
-                    .Map( SHAPE_T::POLY,      _HKI( "Polygon" ) )
-                    .Map( SHAPE_T::BEZIER,    _HKI( "Bezier" ) );
+                .Map( SHAPE_T::SEGMENT, _HKI( "Segment" ) )
+                .Map( SHAPE_T::RECTANGLE, _HKI( "Rectangle" ) )
+                .Map( SHAPE_T::ARC, _HKI( "Arc" ) )
+                .Map( SHAPE_T::CIRCLE, _HKI( "Circle" ) )
+                .Map( SHAPE_T::POLY, _HKI( "Polygon" ) )
+                .Map( SHAPE_T::BEZIER, _HKI( "Bezier" ) )
+                .Map( SHAPE_T::ELLIPSE, _HKI( "Ellipse" ) )
+                .Map( SHAPE_T::ELLIPSE_ARC, _HKI( "Elliptical Arc" ) );
 
         ENUM_MAP<LINE_STYLE>& lineStyleEnum = ENUM_MAP<LINE_STYLE>::Instance();
 
@@ -2924,6 +3424,24 @@ static struct EDA_SHAPE_DESC
 
                     return false;
                 };
+
+        auto isEllipseOrEllipseArc = []( INSPECTABLE* aItem ) -> bool
+        {
+            if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+            {
+                return shape->GetShape() == SHAPE_T::ELLIPSE || shape->GetShape() == SHAPE_T::ELLIPSE_ARC;
+            }
+
+            return false;
+        };
+
+        auto isEllipseArc = []( INSPECTABLE* aItem ) -> bool
+        {
+            if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                return shape->GetShape() == SHAPE_T::ELLIPSE_ARC;
+
+            return false;
+        };
 
         const wxString shapeProps = _HKI( "Shape Properties" );
 
@@ -3012,6 +3530,36 @@ static struct EDA_SHAPE_DESC
                                    return std::nullopt;
                                } );
 
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Major Radius" ), &EDA_SHAPE::SetEllipseMajorRadius,
+                                                           &EDA_SHAPE::GetEllipseMajorRadius, PROPERTY_DISPLAY::PT_SIZE,
+                                                           ORIGIN_TRANSFORMS::NOT_A_COORD ),
+                             shapeProps )
+                .SetAvailableFunc( isEllipseOrEllipseArc );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Minor Radius" ), &EDA_SHAPE::SetEllipseMinorRadius,
+                                                           &EDA_SHAPE::GetEllipseMinorRadius, PROPERTY_DISPLAY::PT_SIZE,
+                                                           ORIGIN_TRANSFORMS::NOT_A_COORD ),
+                             shapeProps )
+                .SetAvailableFunc( isEllipseOrEllipseArc );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, EDA_ANGLE>(
+                                     _HKI( "Ellipse Rotation" ), &EDA_SHAPE::SetEllipseRotation,
+                                     &EDA_SHAPE::GetEllipseRotation, PROPERTY_DISPLAY::PT_DECIDEGREE ),
+                             shapeProps )
+                .SetAvailableFunc( isEllipseOrEllipseArc );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, EDA_ANGLE>(
+                                     _HKI( "Arc Start Angle" ), &EDA_SHAPE::SetEllipseStartAngle,
+                                     &EDA_SHAPE::GetEllipseStartAngle, PROPERTY_DISPLAY::PT_DECIDEGREE ),
+                             shapeProps )
+                .SetAvailableFunc( isEllipseArc );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, EDA_ANGLE>(
+                                     _HKI( "Arc End Angle" ), &EDA_SHAPE::SetEllipseEndAngle,
+                                     &EDA_SHAPE::GetEllipseEndAngle, PROPERTY_DISPLAY::PT_DECIDEGREE ),
+                             shapeProps )
+                .SetAvailableFunc( isEllipseArc );
+
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Line Width" ),
                     &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::PT_SIZE ),
                     shapeProps );
@@ -3057,7 +3605,7 @@ static struct EDA_SHAPE_DESC
                         case SHAPE_T::RECTANGLE:
                         case SHAPE_T::CIRCLE:
                         case SHAPE_T::BEZIER:
-                            return true;
+                        case SHAPE_T::ELLIPSE: return true;
 
                         default:
                             return false;

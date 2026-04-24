@@ -75,4 +75,12 @@ extern void formatPoly( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aPolyLine, bool 
                         bool aInvertY, const KIID& aUuid = niluuid,
                         bool aLocked = false );
 
+extern void formatEllipse( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aEllipse, bool aIsPrivate,
+                           const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor, bool aInvertY,
+                           const KIID& aUuid = niluuid, bool aLocked = false );
+
+extern void formatEllipseArc( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aEllipseArc, bool aIsPrivate,
+                              const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor, bool aInvertY,
+                              const KIID& aUuid = niluuid, bool aLocked = false );
+
 #endif    // SCH_IO_KICAD_SEXPR_COMMON_H_

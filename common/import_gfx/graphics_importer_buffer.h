@@ -353,6 +353,128 @@ private:
 };
 
 
+class IMPORTED_ELLIPSE : public IMPORTED_SHAPE
+{
+public:
+    IMPORTED_ELLIPSE( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius, const EDA_ANGLE& aRotation,
+                      const IMPORTED_STROKE& aStroke, bool aFilled, const COLOR4D& aFillColor ) :
+            m_center( aCenter ),
+            m_majorRadius( aMajorRadius ),
+            m_minorRadius( aMinorRadius ),
+            m_rotation( aRotation ),
+            m_stroke( aStroke ),
+            m_filled( aFilled ),
+            m_fillColor( aFillColor )
+    {
+    }
+
+    void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
+    {
+        aImporter.AddEllipse( m_center, m_majorRadius, m_minorRadius, m_rotation, m_stroke, m_filled, m_fillColor );
+    }
+
+    virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
+    {
+        return std::make_unique<IMPORTED_ELLIPSE>( *this );
+    }
+
+    void Transform( const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation ) override
+    {
+        m_center = aTransform * m_center + aTranslation;
+
+        // Transform a unit major-axis vector to capture rotation+scale; no shear support.
+        VECTOR2D majorVec( m_majorRadius * m_rotation.Cos(), m_majorRadius * m_rotation.Sin() );
+        VECTOR2D minorVec( -m_minorRadius * m_rotation.Sin(), m_minorRadius * m_rotation.Cos() );
+
+        majorVec = aTransform * majorVec;
+        minorVec = aTransform * minorVec;
+
+        m_majorRadius = majorVec.EuclideanNorm();
+        m_minorRadius = minorVec.EuclideanNorm();
+        m_rotation = EDA_ANGLE( majorVec );
+    }
+
+    BOX2D GetBoundingBox() const override
+    {
+        BOX2D    box;
+        VECTOR2D extent( std::max( m_majorRadius, m_minorRadius ), std::max( m_majorRadius, m_minorRadius ) );
+        box.Merge( m_center - extent );
+        box.Merge( m_center + extent );
+        return box;
+    }
+
+private:
+    VECTOR2D        m_center;
+    double          m_majorRadius;
+    double          m_minorRadius;
+    EDA_ANGLE       m_rotation;
+    IMPORTED_STROKE m_stroke;
+    bool            m_filled;
+    COLOR4D         m_fillColor;
+};
+
+
+class IMPORTED_ELLIPSE_ARC : public IMPORTED_SHAPE
+{
+public:
+    IMPORTED_ELLIPSE_ARC( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius, const EDA_ANGLE& aRotation,
+                          const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle, const IMPORTED_STROKE& aStroke ) :
+            m_center( aCenter ),
+            m_majorRadius( aMajorRadius ),
+            m_minorRadius( aMinorRadius ),
+            m_rotation( aRotation ),
+            m_startAngle( aStartAngle ),
+            m_endAngle( aEndAngle ),
+            m_stroke( aStroke )
+    {
+    }
+
+    void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
+    {
+        aImporter.AddEllipseArc( m_center, m_majorRadius, m_minorRadius, m_rotation, m_startAngle, m_endAngle,
+                                 m_stroke );
+    }
+
+    virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
+    {
+        return std::make_unique<IMPORTED_ELLIPSE_ARC>( *this );
+    }
+
+    void Transform( const MATRIX3x3D& aTransform, const VECTOR2D& aTranslation ) override
+    {
+        m_center = aTransform * m_center + aTranslation;
+
+        VECTOR2D majorVec( m_majorRadius * m_rotation.Cos(), m_majorRadius * m_rotation.Sin() );
+        VECTOR2D minorVec( -m_minorRadius * m_rotation.Sin(), m_minorRadius * m_rotation.Cos() );
+
+        majorVec = aTransform * majorVec;
+        minorVec = aTransform * minorVec;
+
+        m_majorRadius = majorVec.EuclideanNorm();
+        m_minorRadius = minorVec.EuclideanNorm();
+        m_rotation = EDA_ANGLE( majorVec );
+    }
+
+    BOX2D GetBoundingBox() const override
+    {
+        BOX2D    box;
+        VECTOR2D extent( std::max( m_majorRadius, m_minorRadius ), std::max( m_majorRadius, m_minorRadius ) );
+        box.Merge( m_center - extent );
+        box.Merge( m_center + extent );
+        return box;
+    }
+
+private:
+    VECTOR2D        m_center;
+    double          m_majorRadius;
+    double          m_minorRadius;
+    EDA_ANGLE       m_rotation;
+    EDA_ANGLE       m_startAngle;
+    EDA_ANGLE       m_endAngle;
+    IMPORTED_STROKE m_stroke;
+};
+
+
 class GRAPHICS_IMPORTER_BUFFER : public GRAPHICS_IMPORTER
 {
 public:
@@ -376,6 +498,14 @@ public:
     void AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
                     const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
                     const IMPORTED_STROKE& aStroke ) override;
+
+    void AddEllipse( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius, const EDA_ANGLE& aRotation,
+                     const IMPORTED_STROKE& aStroke, bool aFilled,
+                     const COLOR4D& aFillColor = COLOR4D::UNSPECIFIED ) override;
+
+    void AddEllipseArc( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius, const EDA_ANGLE& aRotation,
+                        const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle,
+                        const IMPORTED_STROKE& aStroke ) override;
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter );
     void AddShape( std::unique_ptr<IMPORTED_SHAPE>& aShape );

@@ -196,6 +196,8 @@ public:
     static TOOL_ACTION drawPolygon;
     static TOOL_ACTION drawRectangle;
     static TOOL_ACTION drawCircle;
+    static TOOL_ACTION drawEllipse;
+    static TOOL_ACTION drawEllipseArc;
     static TOOL_ACTION drawArc;
     static TOOL_ACTION drawBezier;
     static TOOL_ACTION placePoint;

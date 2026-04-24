@@ -44,6 +44,7 @@
 #include <footprint_edit_frame.h>
 #include <geometry/roundrect.h>
 #include <geometry/shape_compound.h>
+#include <geometry/shape_ellipse.h>
 #include <pcb_edit_frame.h>
 #include <pcb_shape.h>
 #include <pcb_track.h>
@@ -280,9 +281,8 @@ bool CONVERT_TOOL::Init()
                                                        PCB_VIA_T };
     static const std::vector<KICAD_T> toTrackTypes = { PCB_SHAPE_LOCATE_SEGMENT_T,
                                                        PCB_SHAPE_LOCATE_ARC_T };
-    static const std::vector<KICAD_T> polyTypes =   { PCB_ZONE_T,
-                                                      PCB_SHAPE_LOCATE_POLY_T,
-                                                      PCB_SHAPE_LOCATE_RECT_T };
+    static const std::vector<KICAD_T> polyTypes = { PCB_ZONE_T, PCB_SHAPE_LOCATE_POLY_T, PCB_SHAPE_LOCATE_RECT_T,
+                                                    PCB_SHAPE_LOCATE_ELLIPSE_T, PCB_SHAPE_LOCATE_ELLIPSE_ARC_T };
     static const std::vector<KICAD_T> outsetTypes = { PCB_PAD_T, PCB_SHAPE_T };
 
     auto shapes          = S_C::OnlyTypes( shapeTypes ) && P_S_C::SameLayer();
@@ -1194,6 +1194,24 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
             case SHAPE_T::POLY:
                 processPolySet( graphic->GetPolyShape(), itemWidth );
                 break;
+
+            case SHAPE_T::ELLIPSE:
+            case SHAPE_T::ELLIPSE_ARC:
+            {
+                SHAPE_ELLIPSE e =
+                        graphic->GetShape() == SHAPE_T::ELLIPSE_ARC
+                                ? SHAPE_ELLIPSE( graphic->GetEllipseCenter(), graphic->GetEllipseMajorRadius(),
+                                                 graphic->GetEllipseMinorRadius(), graphic->GetEllipseRotation(),
+                                                 graphic->GetEllipseStartAngle(), graphic->GetEllipseEndAngle() )
+                                : SHAPE_ELLIPSE( graphic->GetEllipseCenter(), graphic->GetEllipseMajorRadius(),
+                                                 graphic->GetEllipseMinorRadius(), graphic->GetEllipseRotation() );
+
+                SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( graphic->GetMaxError() );
+                SHAPE_POLY_SET   poly;
+                poly.AddOutline( chain );
+                processPolySet( poly, itemWidth );
+                break;
+            }
 
             default:
                 wxFAIL_MSG( wxT( "Unhandled graphic shape type in PolyToLines" ) );

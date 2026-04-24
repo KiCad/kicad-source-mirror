@@ -127,6 +127,7 @@ embedded_fonts
 embedded_files
 enabled
 end
+end_angle
 epsilon_r
 exclude_from_pos_files
 exclude_from_bom
@@ -154,6 +155,8 @@ footprints
 fp_arc
 fp_circle
 fp_curve
+fp_ellipse
+fp_ellipse_arc
 fp_line
 fp_poly
 fp_rect
@@ -173,6 +176,8 @@ gr_arc
 gr_bbox
 gr_circle
 gr_curve
+gr_ellipse
+gr_ellipse_arc
 gr_line
 gr_poly
 gr_rect
@@ -222,6 +227,7 @@ line_spacing
 links
 locked
 loss_tangent
+major_radius
 margins
 max_error
 max_length
@@ -230,6 +236,7 @@ material
 members
 micro
 mid
+minor_radius
 min_thickness
 mirror
 mod_edge_width
@@ -313,6 +320,7 @@ render_cache
 reverse_hatch
 right
 rotate
+rotation_angle
 roundrect
 roundrect_rratio
 rows
@@ -339,6 +347,7 @@ solid
 span
 stackup
 start
+start_angle
 start_end_only
 status
 stroke

@@ -136,6 +136,157 @@ void EDA_SEGMENT_POINT_EDIT_BEHAVIOR::UpdateItem( const EDIT_POINT& aEditedPoint
 }
 
 
+VECTOR2I EDA_ELLIPSE_POINT_EDIT_BEHAVIOR::evaluateAt( const EDA_ANGLE& aTheta ) const
+{
+    const VECTOR2I  center = m_ellipse.GetEllipseCenter();
+    const double    a = m_ellipse.GetEllipseMajorRadius();
+    const double    b = m_ellipse.GetEllipseMinorRadius();
+    const EDA_ANGLE rotation = m_ellipse.GetEllipseRotation();
+
+    const double cosTheta = aTheta.Cos();
+    const double sinTheta = aTheta.Sin();
+    const double cosRot = rotation.Cos();
+    const double sinRot = rotation.Sin();
+
+    const double lx = a * cosTheta;
+    const double ly = b * sinTheta;
+
+    return center + VECTOR2I( KiROUND( lx * cosRot - ly * sinRot ), KiROUND( lx * sinRot + ly * cosRot ) );
+}
+
+
+EDA_ANGLE EDA_ELLIPSE_POINT_EDIT_BEHAVIOR::parametricAngleOf( const VECTOR2I& aWorldPt ) const
+{
+    const VECTOR2I  center = m_ellipse.GetEllipseCenter();
+    const double    a = std::max( 1, m_ellipse.GetEllipseMajorRadius() );
+    const double    b = std::max( 1, m_ellipse.GetEllipseMinorRadius() );
+    const EDA_ANGLE rotation = m_ellipse.GetEllipseRotation();
+
+    const double dx = aWorldPt.x - center.x;
+    const double dy = aWorldPt.y - center.y;
+
+    const double cosRot = rotation.Cos();
+    const double sinRot = rotation.Sin();
+    const double lx = dx * cosRot + dy * sinRot;
+    const double ly = -dx * sinRot + dy * cosRot;
+
+    return EDA_ANGLE( atan2( ly / b, lx / a ), RADIANS_T );
+}
+
+
+void EDA_ELLIPSE_POINT_EDIT_BEHAVIOR::MakePoints( EDIT_POINTS& aPoints )
+{
+    const VECTOR2I  center = m_ellipse.GetEllipseCenter();
+    const int       a = m_ellipse.GetEllipseMajorRadius();
+    const int       b = m_ellipse.GetEllipseMinorRadius();
+    const EDA_ANGLE rotation = m_ellipse.GetEllipseRotation();
+
+    const double cosRot = rotation.Cos();
+    const double sinRot = rotation.Sin();
+
+    aPoints.AddPoint( center );
+    aPoints.AddPoint( center + VECTOR2I( KiROUND( a * cosRot ), KiROUND( a * sinRot ) ) );
+    aPoints.AddPoint( center + VECTOR2I( KiROUND( -b * sinRot ), KiROUND( b * cosRot ) ) );
+
+    if( m_ellipse.GetShape() == SHAPE_T::ELLIPSE_ARC )
+    {
+        aPoints.AddPoint( evaluateAt( m_ellipse.GetEllipseStartAngle() ) );
+        aPoints.AddPoint( evaluateAt( m_ellipse.GetEllipseEndAngle() ) );
+    }
+}
+
+
+bool EDA_ELLIPSE_POINT_EDIT_BEHAVIOR::UpdatePoints( EDIT_POINTS& aPoints )
+{
+    const bool   isArc = ( m_ellipse.GetShape() == SHAPE_T::ELLIPSE_ARC );
+    const size_t expected = isArc ? ELLIPSE_ARC_POINTS : ELLIPSE_CLOSED_POINTS;
+
+    wxCHECK( aPoints.PointsSize() == expected, false );
+
+    const VECTOR2I  center = m_ellipse.GetEllipseCenter();
+    const int       a = m_ellipse.GetEllipseMajorRadius();
+    const int       b = m_ellipse.GetEllipseMinorRadius();
+    const EDA_ANGLE rotation = m_ellipse.GetEllipseRotation();
+
+    const double cosRot = rotation.Cos();
+    const double sinRot = rotation.Sin();
+
+    aPoints.Point( ELLIPSE_CENTER ).SetPosition( center );
+    aPoints.Point( ELLIPSE_MAJOR_END ).SetPosition( center + VECTOR2I( KiROUND( a * cosRot ), KiROUND( a * sinRot ) ) );
+    aPoints.Point( ELLIPSE_MINOR_END )
+            .SetPosition( center + VECTOR2I( KiROUND( -b * sinRot ), KiROUND( b * cosRot ) ) );
+
+    if( isArc )
+    {
+        aPoints.Point( ELLIPSE_ARC_START ).SetPosition( evaluateAt( m_ellipse.GetEllipseStartAngle() ) );
+        aPoints.Point( ELLIPSE_ARC_END ).SetPosition( evaluateAt( m_ellipse.GetEllipseEndAngle() ) );
+    }
+
+    return true;
+}
+
+
+void EDA_ELLIPSE_POINT_EDIT_BEHAVIOR::UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                                                  std::vector<EDA_ITEM*>& aUpdatedItems )
+{
+    const bool   isArc = ( m_ellipse.GetShape() == SHAPE_T::ELLIPSE_ARC );
+    const size_t expected = isArc ? ELLIPSE_ARC_POINTS : ELLIPSE_CLOSED_POINTS;
+
+    CHECK_POINT_COUNT( aPoints, expected );
+
+    if( isModified( aEditedPoint, aPoints.Point( ELLIPSE_CENTER ) ) )
+    {
+        m_ellipse.SetEllipseCenter( aPoints.Point( ELLIPSE_CENTER ).GetPosition() );
+    }
+    else if( isModified( aEditedPoint, aPoints.Point( ELLIPSE_MAJOR_END ) ) )
+    {
+        const VECTOR2I center = m_ellipse.GetEllipseCenter();
+        const VECTOR2I v = aPoints.Point( ELLIPSE_MAJOR_END ).GetPosition() - center;
+        const double   len = std::sqrt( double( v.x ) * v.x + double( v.y ) * v.y );
+
+        m_ellipse.SetEllipseMajorRadius( std::max( 1, KiROUND( len ) ) );
+        m_ellipse.SetEllipseRotation( EDA_ANGLE( std::atan2( (double) v.y, (double) v.x ), RADIANS_T ) );
+    }
+    else if( isModified( aEditedPoint, aPoints.Point( ELLIPSE_MINOR_END ) ) )
+    {
+        const VECTOR2I  center = m_ellipse.GetEllipseCenter();
+        const VECTOR2I  v = aPoints.Point( ELLIPSE_MINOR_END ).GetPosition() - center;
+        const EDA_ANGLE rotation = m_ellipse.GetEllipseRotation();
+
+        // Absolute value so dragging past the rotation axis keeps radius positive.
+        const double proj = -v.x * rotation.Sin() + v.y * rotation.Cos();
+
+        m_ellipse.SetEllipseMinorRadius( std::max( 1, KiROUND( std::abs( proj ) ) ) );
+    }
+    else if( isArc && isModified( aEditedPoint, aPoints.Point( ELLIPSE_ARC_START ) ) )
+    {
+        EDA_ANGLE rawAngle = parametricAngleOf( aPoints.Point( ELLIPSE_ARC_START ).GetPosition() );
+        EDA_ANGLE prevStart = m_ellipse.GetEllipseStartAngle();
+        EDA_ANGLE sweep = m_ellipse.GetEllipseEndAngle() - prevStart;
+
+        while( ( rawAngle - prevStart ).AsDegrees() > 180.0 )
+            rawAngle = rawAngle - ANGLE_360;
+        while( ( prevStart - rawAngle ).AsDegrees() > 180.0 )
+            rawAngle = rawAngle + ANGLE_360;
+
+        m_ellipse.SetEllipseStartAngle( rawAngle );
+        m_ellipse.SetEllipseEndAngle( rawAngle + sweep );
+    }
+    else if( isArc && isModified( aEditedPoint, aPoints.Point( ELLIPSE_ARC_END ) ) )
+    {
+        EDA_ANGLE rawAngle = parametricAngleOf( aPoints.Point( ELLIPSE_ARC_END ).GetPosition() );
+        EDA_ANGLE prevEnd = m_ellipse.GetEllipseEndAngle();
+
+        while( ( rawAngle - prevEnd ).AsDegrees() > 180.0 )
+            rawAngle = rawAngle - ANGLE_360;
+        while( ( prevEnd - rawAngle ).AsDegrees() > 180.0 )
+            rawAngle = rawAngle + ANGLE_360;
+
+        m_ellipse.SetEllipseEndAngle( rawAngle );
+    }
+}
+
+
 OPT_VECTOR2I EDA_SEGMENT_POINT_EDIT_BEHAVIOR::Get45DegreeConstrainer( const EDIT_POINT& aEditedPoint,
                                                                       EDIT_POINTS&      aPoints ) const
 {

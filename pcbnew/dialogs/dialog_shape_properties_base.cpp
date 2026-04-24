@@ -195,6 +195,38 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_bezier->Layout();
 	bSizer4->Fit( m_bezier );
 	m_notebookShapeDefs->AddPage( m_bezier, _("Bezier Control Points"), false );
+	m_ellipse = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer101;
+	bSizer101 = new wxBoxSizer( wxVERTICAL );
+
+	m_gbsEllipse = new wxGridBagSizer( 4, 5 );
+	m_gbsEllipse->SetFlexibleDirection( wxBOTH );
+	m_gbsEllipse->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bSizer101->Add( m_gbsEllipse, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_ellipse->SetSizer( bSizer101 );
+	m_ellipse->Layout();
+	bSizer101->Fit( m_ellipse );
+	m_notebookShapeDefs->AddPage( m_ellipse, _("Ellipse"), false );
+	m_ellipseArc = new wxPanel( m_notebookShapeDefs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer1011;
+	bSizer1011 = new wxBoxSizer( wxVERTICAL );
+
+	m_gbsEllipseArc = new wxGridBagSizer( 4, 5 );
+	m_gbsEllipseArc->SetFlexibleDirection( wxBOTH );
+	m_gbsEllipseArc->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+
+	bSizer1011->Add( m_gbsEllipseArc, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_ellipseArc->SetSizer( bSizer1011 );
+	m_ellipseArc->Layout();
+	bSizer1011->Fit( m_ellipseArc );
+	m_notebookShapeDefs->AddPage( m_ellipseArc, _("Elliptical Arc"), false );
 
 	bMainSizer->Add( m_notebookShapeDefs, 0, wxEXPAND | wxALL, 5 );
 

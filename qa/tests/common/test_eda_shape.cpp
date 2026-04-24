@@ -206,4 +206,80 @@ BOOST_AUTO_TEST_CASE( PolygonBehaviorSurvivesAssignment )
     BOOST_CHECK( behavior.UpdatePoints( points ) );
 }
 
+
+BOOST_AUTO_TEST_CASE( EllipseBasicAccessors )
+{
+    // Construct a closed ellipse EDA_SHAPE and round-trip every accessor.
+    EDA_SHAPE_MOCK e( SHAPE_T::ELLIPSE );
+    e.SetEllipseCenter( VECTOR2I( 100, 200 ) );
+    e.SetEllipseMajorRadius( 500 );
+    e.SetEllipseMinorRadius( 300 );
+    e.SetEllipseRotation( EDA_ANGLE( 30.0, DEGREES_T ) );
+
+    BOOST_CHECK( e.GetShape() == SHAPE_T::ELLIPSE );
+    BOOST_CHECK_EQUAL( e.GetEllipseCenter().x, 100 );
+    BOOST_CHECK_EQUAL( e.GetEllipseCenter().y, 200 );
+    BOOST_CHECK_EQUAL( e.GetEllipseMajorRadius(), 500 );
+    BOOST_CHECK_EQUAL( e.GetEllipseMinorRadius(), 300 );
+    BOOST_CHECK_CLOSE( e.GetEllipseRotation().AsDegrees(), 30.0, 1e-6 );
+
+    // Closed ellipse reports itself as a closed shape.
+    BOOST_CHECK( e.IsClosed() );
+}
+
+
+BOOST_AUTO_TEST_CASE( EllipseArcIsOpenCurve )
+{
+    // Elliptical arcs are open
+    // IsClosed() must return false.
+    EDA_SHAPE_MOCK arc( SHAPE_T::ELLIPSE_ARC );
+    arc.SetEllipseCenter( VECTOR2I( 0, 0 ) );
+    arc.SetEllipseMajorRadius( 500 );
+    arc.SetEllipseMinorRadius( 300 );
+    arc.SetEllipseRotation( EDA_ANGLE( 0.0, DEGREES_T ) );
+    arc.SetEllipseStartAngle( EDA_ANGLE( 0.0, DEGREES_T ) );
+    arc.SetEllipseEndAngle( EDA_ANGLE( 180.0, DEGREES_T ) );
+
+    BOOST_CHECK( arc.GetShape() == SHAPE_T::ELLIPSE_ARC );
+    BOOST_CHECK( !arc.IsClosed() );
+
+    // Start/end angles round trip through the accessors.
+    BOOST_CHECK_CLOSE( arc.GetEllipseStartAngle().AsDegrees(), 0.0, 1e-6 );
+    BOOST_CHECK_CLOSE( arc.GetEllipseEndAngle().AsDegrees(), 180.0, 1e-6 );
+}
+
+
+BOOST_AUTO_TEST_CASE( EllipsePerimeterForCircleCase )
+{
+    // An ellipse with MajorRadius == MinorRadius is a circle.
+    // Ramanujan's approximation returns 2πr for this case.
+    EDA_SHAPE_MOCK e( SHAPE_T::ELLIPSE );
+    e.SetEllipseCenter( VECTOR2I( 0, 0 ) );
+    e.SetEllipseMajorRadius( 1000 );
+    e.SetEllipseMinorRadius( 1000 );
+    e.SetEllipseRotation( EDA_ANGLE( 0.0, DEGREES_T ) );
+
+    const double expected = 2.0 * M_PI * 1000.0;
+    BOOST_CHECK_CLOSE( e.GetLength(), expected, 1e-6 );
+}
+
+
+BOOST_AUTO_TEST_CASE( EllipseMakeEffectiveShapesNonEmpty )
+{
+    // MakeEffectiveShapes converts the ellipse into primitive shapes that DRC
+    // the router, and exporters consume. Verify it returns at least one shape
+
+    EDA_SHAPE_MOCK e( SHAPE_T::ELLIPSE );
+    e.SetEllipseCenter( VECTOR2I( 0, 0 ) );
+    e.SetEllipseMajorRadius( 500 );
+    e.SetEllipseMinorRadius( 300 );
+    e.SetEllipseRotation( EDA_ANGLE( 0.0, DEGREES_T ) );
+
+    std::vector<SHAPE*> shapes = e.MakeEffectiveShapes();
+    BOOST_CHECK( !shapes.empty() );
+
+    for( SHAPE* s : shapes )
+        delete s;
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -94,6 +94,8 @@ public:
     static TOOL_ACTION drawTable;
     static TOOL_ACTION drawRectangle;
     static TOOL_ACTION drawCircle;
+    static TOOL_ACTION drawEllipse;
+    static TOOL_ACTION drawEllipseArc;
     static TOOL_ACTION drawArc;
     static TOOL_ACTION drawBezier;
     static TOOL_ACTION drawLines;

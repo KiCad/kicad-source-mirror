@@ -1053,6 +1053,26 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape ) const
                       formatInternalUnits( aShape->GetEnd(), parentFP ).c_str() );
         break;
 
+    case SHAPE_T::ELLIPSE:
+        m_out->Print( "(%s_ellipse (center %s) (major_radius %s) (minor_radius %s) "
+                      "(rotation_angle %s)",
+                      prefix.c_str(), formatInternalUnits( aShape->GetEllipseCenter(), parentFP ).c_str(),
+                      formatInternalUnits( aShape->GetEllipseMajorRadius() ).c_str(),
+                      formatInternalUnits( aShape->GetEllipseMinorRadius() ).c_str(),
+                      EDA_UNIT_UTILS::FormatAngle( aShape->GetEllipseRotation() ).c_str() );
+        break;
+
+    case SHAPE_T::ELLIPSE_ARC:
+        m_out->Print( "(%s_ellipse_arc (center %s) (major_radius %s) (minor_radius %s) "
+                      "(rotation_angle %s) (start_angle %s) (end_angle %s)",
+                      prefix.c_str(), formatInternalUnits( aShape->GetEllipseCenter(), parentFP ).c_str(),
+                      formatInternalUnits( aShape->GetEllipseMajorRadius() ).c_str(),
+                      formatInternalUnits( aShape->GetEllipseMinorRadius() ).c_str(),
+                      EDA_UNIT_UTILS::FormatAngle( aShape->GetEllipseRotation() ).c_str(),
+                      EDA_UNIT_UTILS::FormatAngle( aShape->GetEllipseStartAngle() ).c_str(),
+                      EDA_UNIT_UTILS::FormatAngle( aShape->GetEllipseEndAngle() ).c_str() );
+        break;
+
     default:
         UNIMPLEMENTED_FOR( aShape->SHAPE_T_asString() );
         return;
@@ -1061,9 +1081,8 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape ) const
     aShape->GetStroke().Format( m_out, pcbIUScale );
 
     // The filled flag represents if a solid fill is present on circles, rectangles and polygons
-    if( ( aShape->GetShape() == SHAPE_T::POLY )
-        || ( aShape->GetShape() == SHAPE_T::RECTANGLE )
-        || ( aShape->GetShape() == SHAPE_T::CIRCLE ) )
+    if( ( aShape->GetShape() == SHAPE_T::POLY ) || ( aShape->GetShape() == SHAPE_T::RECTANGLE )
+        || ( aShape->GetShape() == SHAPE_T::CIRCLE ) || ( aShape->GetShape() == SHAPE_T::ELLIPSE ) )
     {
         switch( aShape->GetFillMode() )
         {

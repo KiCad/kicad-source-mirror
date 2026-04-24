@@ -30,6 +30,9 @@
 #include <gal/definitions.h>
 #include <font/font.h>
 
+#include <geometry/shape_ellipse.h>
+#include <geometry/shape_line_chain.h>
+
 #include <math/util.h>      // for KiROUND
 
 #include <cmath>
@@ -106,6 +109,30 @@ void GAL::OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& aOptions )
     updatedGalDisplayOptions( aOptions );
 
     // there is no refresh to do at this level
+}
+
+
+void GAL::DrawEllipse( const VECTOR2D& aCenterPoint, double aMajorRadius, double aMinorRadius,
+                       const EDA_ANGLE& aRotation )
+{
+    const VECTOR2I intCenter( KiROUND( aCenterPoint.x ), KiROUND( aCenterPoint.y ) );
+
+    SHAPE_ELLIPSE e( intCenter, KiROUND( aMajorRadius ), KiROUND( aMinorRadius ), aRotation );
+
+    SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( std::max( 1, KiROUND( aMajorRadius / 500.0 ) ) );
+    DrawPolyline( chain );
+}
+
+
+void GAL::DrawEllipseArc( const VECTOR2D& aCenterPoint, double aMajorRadius, double aMinorRadius,
+                          const EDA_ANGLE& aRotation, const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle )
+{
+    const VECTOR2I intCenter( KiROUND( aCenterPoint.x ), KiROUND( aCenterPoint.y ) );
+
+    SHAPE_ELLIPSE e( intCenter, KiROUND( aMajorRadius ), KiROUND( aMinorRadius ), aRotation, aStartAngle, aEndAngle );
+
+    SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( std::max( 1, KiROUND( aMajorRadius / 500.0 ) ) );
+    DrawPolyline( chain );
 }
 
 

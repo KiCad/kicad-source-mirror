@@ -2014,6 +2014,11 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
                                                                                  shape->GetMaxError() );
             break;
 
+        case SHAPE_T::ELLIPSE:
+        case SHAPE_T::ELLIPSE_ARC:
+            m_editorBehavior = std::make_unique<EDA_ELLIPSE_POINT_EDIT_BEHAVIOR>( *shape );
+            break;
+
         default:        // suppress warnings
             break;
         }

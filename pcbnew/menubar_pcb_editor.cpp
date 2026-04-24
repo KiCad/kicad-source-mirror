@@ -305,6 +305,8 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->Add( PCB_ACTIONS::drawArc );
     placeMenu->Add( PCB_ACTIONS::drawRectangle );
     placeMenu->Add( PCB_ACTIONS::drawCircle );
+    placeMenu->Add( PCB_ACTIONS::drawEllipse );
+    placeMenu->Add( PCB_ACTIONS::drawEllipseArc );
     placeMenu->Add( PCB_ACTIONS::drawPolygon );
     placeMenu->Add( PCB_ACTIONS::drawBezier );
     placeMenu->Add( PCB_ACTIONS::placeReferenceImage );

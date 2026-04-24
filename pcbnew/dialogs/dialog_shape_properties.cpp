@@ -640,6 +640,168 @@ public:
 };
 
 
+/**
+ * Syncer for SHAPE_T::ELLIPSE. Exposes center, major/minor radii and rotation.
+ */
+class ELLIPSE_GEOM_SYNCER : public GEOM_SYNCER
+{
+public:
+    enum CTRL_IDX
+    {
+        CENTER_X = 0,
+        CENTER_Y,
+        MAJOR_RADIUS,
+        MINOR_RADIUS,
+        ROTATION,
+
+        NUM_CTRLS,
+    };
+
+    ELLIPSE_GEOM_SYNCER( PCB_SHAPE& aShape, std::vector<BOUND_CONTROL>& aBoundCtrls ) :
+            GEOM_SYNCER( aShape, aBoundCtrls )
+    {
+        wxASSERT( aBoundCtrls.size() == NUM_CTRLS );
+        wxASSERT( GetShape().GetShape() == SHAPE_T::ELLIPSE );
+
+        BindCtrls( CENTER_X, ROTATION,
+                   [this]()
+                   {
+                       OnChange();
+                   } );
+    }
+
+    bool Validate( wxArrayString& aErrs ) const override
+    {
+        if( GetIntValue( MAJOR_RADIUS ) <= 0 )
+        {
+            aErrs.push_back( _( "Major radius must be greater than 0" ) );
+            return false;
+        }
+
+        if( GetIntValue( MINOR_RADIUS ) <= 0 )
+        {
+            aErrs.push_back( _( "Minor radius must be greater than 0" ) );
+            return false;
+        }
+
+        return true;
+    }
+
+    void updateAll() override
+    {
+        const VECTOR2I  center = GetShape().GetEllipseCenter();
+        const int       major = GetShape().GetEllipseMajorRadius();
+        const int       minor = GetShape().GetEllipseMinorRadius();
+        const EDA_ANGLE rotation = GetShape().GetEllipseRotation();
+
+        ChangeValue( CENTER_X, center.x );
+        ChangeValue( CENTER_Y, center.y );
+        ChangeValue( MAJOR_RADIUS, major );
+        ChangeValue( MINOR_RADIUS, minor );
+        ChangeAngleValue( ROTATION, rotation );
+    }
+
+    void OnChange()
+    {
+        const VECTOR2I  center{ GetIntValue( CENTER_X ), GetIntValue( CENTER_Y ) };
+        const int       major = GetIntValue( MAJOR_RADIUS );
+        const int       minor = GetIntValue( MINOR_RADIUS );
+        const EDA_ANGLE rotation = GetAngleValue( ROTATION );
+
+        GetShape().SetEllipseCenter( center );
+        GetShape().SetEllipseMajorRadius( std::max( 1, major ) );
+        GetShape().SetEllipseMinorRadius( std::max( 1, minor ) );
+        GetShape().SetEllipseRotation( rotation );
+    }
+};
+
+
+/**
+ * Syncer for SHAPE_T::ELLIPSE_ARC. Like ELLIPSE_GEOM_SYNCER plus start/end angles.
+ */
+class ELLIPSE_ARC_GEOM_SYNCER : public GEOM_SYNCER
+{
+public:
+    enum CTRL_IDX
+    {
+        CENTER_X = 0,
+        CENTER_Y,
+        MAJOR_RADIUS,
+        MINOR_RADIUS,
+        ROTATION,
+        START_ANGLE,
+        END_ANGLE,
+
+        NUM_CTRLS,
+    };
+
+    ELLIPSE_ARC_GEOM_SYNCER( PCB_SHAPE& aShape, std::vector<BOUND_CONTROL>& aBoundCtrls ) :
+            GEOM_SYNCER( aShape, aBoundCtrls )
+    {
+        wxASSERT( aBoundCtrls.size() == NUM_CTRLS );
+        wxASSERT( GetShape().GetShape() == SHAPE_T::ELLIPSE_ARC );
+
+        BindCtrls( CENTER_X, END_ANGLE,
+                   [this]()
+                   {
+                       OnChange();
+                   } );
+    }
+
+    bool Validate( wxArrayString& aErrs ) const override
+    {
+        if( GetIntValue( MAJOR_RADIUS ) <= 0 )
+        {
+            aErrs.push_back( _( "Major radius must be greater than 0" ) );
+            return false;
+        }
+
+        if( GetIntValue( MINOR_RADIUS ) <= 0 )
+        {
+            aErrs.push_back( _( "Minor radius must be greater than 0" ) );
+            return false;
+        }
+
+        return true;
+    }
+
+    void updateAll() override
+    {
+        const VECTOR2I  center = GetShape().GetEllipseCenter();
+        const int       major = GetShape().GetEllipseMajorRadius();
+        const int       minor = GetShape().GetEllipseMinorRadius();
+        const EDA_ANGLE rotation = GetShape().GetEllipseRotation();
+        const EDA_ANGLE start = GetShape().GetEllipseStartAngle();
+        const EDA_ANGLE end = GetShape().GetEllipseEndAngle();
+
+        ChangeValue( CENTER_X, center.x );
+        ChangeValue( CENTER_Y, center.y );
+        ChangeValue( MAJOR_RADIUS, major );
+        ChangeValue( MINOR_RADIUS, minor );
+        ChangeAngleValue( ROTATION, rotation );
+        ChangeAngleValue( START_ANGLE, start );
+        ChangeAngleValue( END_ANGLE, end );
+    }
+
+    void OnChange()
+    {
+        const VECTOR2I  center{ GetIntValue( CENTER_X ), GetIntValue( CENTER_Y ) };
+        const int       major = GetIntValue( MAJOR_RADIUS );
+        const int       minor = GetIntValue( MINOR_RADIUS );
+        const EDA_ANGLE rotation = GetAngleValue( ROTATION );
+        const EDA_ANGLE start = GetAngleValue( START_ANGLE );
+        const EDA_ANGLE end = GetAngleValue( END_ANGLE );
+
+        GetShape().SetEllipseCenter( center );
+        GetShape().SetEllipseMajorRadius( std::max( 1, major ) );
+        GetShape().SetEllipseMinorRadius( std::max( 1, minor ) );
+        GetShape().SetEllipseRotation( rotation );
+        GetShape().SetEllipseStartAngle( start );
+        GetShape().SetEllipseEndAngle( end );
+    }
+};
+
+
 class BEZIER_GEOM_SYNCER : public GEOM_SYNCER
 {
 public:
@@ -971,6 +1133,44 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         m_cornerRadius.Show( false );
         break;
 
+    case SHAPE_T::ELLIPSE:
+        AddXYPointToSizer( *aParent, *m_gbsEllipse, 0, 0, _( "Center" ), false, m_boundCtrls );
+        AddFieldToSizer( *aParent, *m_gbsEllipse, 3, 0, _( "Major Radius" ), ORIGIN_TRANSFORMS::NOT_A_COORD, false,
+                         m_boundCtrls );
+        AddFieldToSizer( *aParent, *m_gbsEllipse, 4, 0, _( "Minor Radius" ), ORIGIN_TRANSFORMS::NOT_A_COORD, false,
+                         m_boundCtrls );
+        AddFieldToSizer( *aParent, *m_gbsEllipse, 5, 0, _( "Rotation" ), ORIGIN_TRANSFORMS::NOT_A_COORD, true,
+                         m_boundCtrls );
+
+        m_geomSync = std::make_unique<ELLIPSE_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
+
+        showPage( *m_gbsEllipse, true );
+
+        m_cbRoundRect->Show( false );
+        m_cornerRadius.Show( false );
+        break;
+
+    case SHAPE_T::ELLIPSE_ARC:
+        AddXYPointToSizer( *aParent, *m_gbsEllipseArc, 0, 0, _( "Center" ), false, m_boundCtrls );
+        AddFieldToSizer( *aParent, *m_gbsEllipseArc, 3, 0, _( "Major Radius" ), ORIGIN_TRANSFORMS::NOT_A_COORD, false,
+                         m_boundCtrls );
+        AddFieldToSizer( *aParent, *m_gbsEllipseArc, 4, 0, _( "Minor Radius" ), ORIGIN_TRANSFORMS::NOT_A_COORD, false,
+                         m_boundCtrls );
+        AddFieldToSizer( *aParent, *m_gbsEllipseArc, 5, 0, _( "Rotation" ), ORIGIN_TRANSFORMS::NOT_A_COORD, true,
+                         m_boundCtrls );
+        AddFieldToSizer( *aParent, *m_gbsEllipseArc, 6, 0, _( "Start Angle" ), ORIGIN_TRANSFORMS::NOT_A_COORD, true,
+                         m_boundCtrls );
+        AddFieldToSizer( *aParent, *m_gbsEllipseArc, 7, 0, _( "End Angle" ), ORIGIN_TRANSFORMS::NOT_A_COORD, true,
+                         m_boundCtrls );
+
+        m_geomSync = std::make_unique<ELLIPSE_ARC_GEOM_SYNCER>( m_workingCopy, m_boundCtrls );
+
+        showPage( *m_gbsEllipseArc, true );
+
+        m_cbRoundRect->Show( false );
+        m_cornerRadius.Show( false );
+        break;
+
     case SHAPE_T::UNDEFINED:
         wxFAIL_MSG( "Undefined shape" );
         break;
@@ -1031,9 +1231,8 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
         m_netSelector->Hide();
     }
 
-    if( m_item->GetShape() == SHAPE_T::ARC
-        || m_item->GetShape() == SHAPE_T::SEGMENT
-        || m_item->GetShape() == SHAPE_T::BEZIER )
+    if( m_item->GetShape() == SHAPE_T::ARC || m_item->GetShape() == SHAPE_T::SEGMENT
+        || m_item->GetShape() == SHAPE_T::BEZIER || m_item->GetShape() == SHAPE_T::ELLIPSE_ARC )
     {
         m_fillLabel->Show( false );
         m_fillCtrl->Show( false );
@@ -1282,6 +1481,18 @@ bool DIALOG_SHAPE_PROPERTIES::Validate()
     case SHAPE_T::BEZIER:
         if( m_fillCtrl->GetSelection() != UI_FILL_MODE::SOLID && m_thickness.GetValue() <= 0 )
             errors.Add( _( "Line width must be greater than zero for an unfilled curve." ) );
+
+        break;
+
+    case SHAPE_T::ELLIPSE:
+        if( m_fillCtrl->GetSelection() != UI_FILL_MODE::SOLID && m_thickness.GetValue() <= 0 )
+            errors.Add( _( "Line width must be greater than zero for an unfilled ellipse." ) );
+
+        break;
+
+    case SHAPE_T::ELLIPSE_ARC:
+        if( m_thickness.GetValue() <= 0 )
+            errors.Add( _( "Line width must be greater than zero." ) );
 
         break;
 

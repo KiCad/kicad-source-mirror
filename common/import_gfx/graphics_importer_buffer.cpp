@@ -90,6 +90,24 @@ void GRAPHICS_IMPORTER_BUFFER::AddSpline( const VECTOR2D& aStart, const VECTOR2D
 }
 
 
+void GRAPHICS_IMPORTER_BUFFER::AddEllipse( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius,
+                                           const EDA_ANGLE& aRotation, const IMPORTED_STROKE& aStroke, bool aFilled,
+                                           const COLOR4D& aFillColor )
+{
+    m_shapes.push_back( make_shape<IMPORTED_ELLIPSE>( aCenter, aMajorRadius, aMinorRadius, aRotation, aStroke, aFilled,
+                                                      aFillColor ) );
+}
+
+
+void GRAPHICS_IMPORTER_BUFFER::AddEllipseArc( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius,
+                                              const EDA_ANGLE& aRotation, const EDA_ANGLE& aStartAngle,
+                                              const EDA_ANGLE& aEndAngle, const IMPORTED_STROKE& aStroke )
+{
+    m_shapes.push_back( make_shape<IMPORTED_ELLIPSE_ARC>( aCenter, aMajorRadius, aMinorRadius, aRotation, aStartAngle,
+                                                          aEndAngle, aStroke ) );
+}
+
+
 void GRAPHICS_IMPORTER_BUFFER::AddShape( std::unique_ptr<IMPORTED_SHAPE>& aShape )
 {
     m_shapes.push_back( std::move( aShape ) );

@@ -61,6 +61,7 @@ set( QA_PCBNEW_SRCS
     test_footprint_rescue_layer.cpp
     test_fp_lib_load_save.cpp
     test_io_mgr.cpp
+    test_ellipse_roundtrip.cpp
     test_lset.cpp
     test_meander_corner_radius.cpp
     test_pns_basics.cpp

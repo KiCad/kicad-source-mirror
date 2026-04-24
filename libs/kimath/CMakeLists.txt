@@ -31,6 +31,7 @@ set( KIMATH_SRCS
     src/geometry/shape_arc.cpp
     src/geometry/shape_collisions.cpp
     src/geometry/shape_compound.cpp
+    src/geometry/shape_ellipse.cpp
     src/geometry/shape_file_io.cpp
     src/geometry/shape_line_chain.cpp
     src/geometry/shape_nearest_points.cpp

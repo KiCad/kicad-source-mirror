@@ -60,6 +60,17 @@ public:
                     const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
                     const IMPORTED_STROKE& aStroke ) override {}
 
+    void AddEllipse( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius, const EDA_ANGLE& aRotation,
+                     const IMPORTED_STROKE& aStroke, bool aFilled, const COLOR4D& aFillColor ) override
+    {
+    }
+
+    void AddEllipseArc( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius, const EDA_ANGLE& aRotation,
+                        const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle,
+                        const IMPORTED_STROKE& aStroke ) override
+    {
+    }
+
     std::vector<std::pair<VECTOR2D, VECTOR2D>> m_lines;
 };
 

@@ -50,6 +50,7 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_segment.h>
+#include <geometry/shape_ellipse.h>
 
 #include <wx/log.h>
 #include <wx/numformatter.h>
@@ -569,8 +570,8 @@ void PCB_IO_IPC2581::addLocationNode( wxXmlNode* aNode, const PCB_SHAPE& aShape 
         break;
     // Both KiCad and IPC2581 use the center of the circle
     case SHAPE_T::CIRCLE:
-        pos = aShape.GetPosition();
-        break;
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC: pos = aShape.GetPosition(); break;
 
     // KiCad uses the exact points on the board, so we want the reference location to be 0,0
     case SHAPE_T::POLY:
@@ -1382,6 +1383,77 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape,
             addLineDesc( line_node, aShape.GetStroke().GetWidth(),
                          aShape.GetStroke().GetLineStyle(), true );
         }
+
+        break;
+    }
+
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+    {
+        // Tessellate to a polyline
+        const bool isArc = ( aShape.GetShape() == SHAPE_T::ELLIPSE_ARC );
+
+        SHAPE_ELLIPSE e = isArc ? SHAPE_ELLIPSE( aShape.GetEllipseCenter(), aShape.GetEllipseMajorRadius(),
+                                                 aShape.GetEllipseMinorRadius(), aShape.GetEllipseRotation(),
+                                                 aShape.GetEllipseStartAngle(), aShape.GetEllipseEndAngle() )
+                                : SHAPE_ELLIPSE( aShape.GetEllipseCenter(), aShape.GetEllipseMajorRadius(),
+                                                 aShape.GetEllipseMinorRadius(), aShape.GetEllipseRotation() );
+
+        SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( aShape.GetMaxError() );
+
+        if( aInline )
+        {
+            int        stroke_width = aShape.GetStroke().GetWidth();
+            LINE_STYLE dash = aShape.GetStroke().GetLineStyle();
+
+            if( chain.PointCount() < 2 )
+                break;
+
+            wxXmlNode*                   polyline_node = appendNode( aContentNode, "Polyline" );
+            const std::vector<VECTOR2I>& pts = chain.CPoints();
+
+            wxXmlNode* begin_node = appendNode( polyline_node, "PolyBegin" );
+            addXY( begin_node, pts[0] );
+
+            for( size_t jj = 1; jj < pts.size(); ++jj )
+            {
+                wxXmlNode* step_node = appendNode( polyline_node, "PolyStepSegment" );
+                addXY( step_node, pts[jj] );
+            }
+
+            // Close closed ellipses (not arcs).
+            if( !isArc && pts.size() > 2 && pts.front() != pts.back() )
+            {
+                wxXmlNode* close_node = appendNode( polyline_node, "PolyStepSegment" );
+                addXY( close_node, pts[0] );
+            }
+
+            if( stroke_width > 0 )
+                addLineDesc( polyline_node, stroke_width, dash, true );
+
+            break;
+        }
+
+        name = wxString::Format( "UPOLY_%zu", m_user_shape_dict.size() + 1 );
+        m_user_shape_dict.emplace( hash, name );
+
+        wxXmlNode* entry_node = appendNode( m_shape_user_node, "EntryUser" );
+        addAttribute( entry_node, "id", name );
+        wxXmlNode* special_node = appendNode( entry_node, "UserSpecial" );
+
+        SHAPE_POLY_SET poly_set;
+        poly_set.NewOutline();
+        for( const VECTOR2I& pt : chain.CPoints() )
+            poly_set.Append( pt );
+
+        if( aShape.GetFillMode() != FILL_T::NO_FILL && !isArc )
+        {
+            // IPC2581 does not allow strokes on filled elements
+            addContourNode( special_node, poly_set, 0, FILL_T::FILLED_SHAPE, 0, LINE_STYLE::SOLID );
+        }
+
+        addContourNode( special_node, poly_set, 0, FILL_T::NO_FILL, aShape.GetStroke().GetWidth(),
+                        aShape.GetStroke().GetLineStyle() );
 
         break;
     }

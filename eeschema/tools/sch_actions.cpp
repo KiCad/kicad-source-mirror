@@ -697,6 +697,24 @@ TOOL_ACTION SCH_ACTIONS::drawCircle( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( SHAPE_T::CIRCLE ) );
 
+TOOL_ACTION SCH_ACTIONS::drawEllipse( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.drawEllipse" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Draw Ellipses" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::add_ellipse )
+        .Flags( AF_ACTIVATE )
+        .Parameter( SHAPE_T::ELLIPSE ) );
+
+TOOL_ACTION SCH_ACTIONS::drawEllipseArc( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.drawEllipseArc" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Draw Elliptical Arcs" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::add_ellipse_arc )
+        .Flags( AF_ACTIVATE )
+        .Parameter( SHAPE_T::ELLIPSE_ARC ) );
+
 TOOL_ACTION SCH_ACTIONS::drawArc( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.drawArc" )
         .Scope( AS_GLOBAL )

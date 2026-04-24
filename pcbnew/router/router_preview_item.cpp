@@ -29,6 +29,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_simple.h>
+#include <geometry/shape_ellipse.h>
 #include <pcb_painter.h>
 #include <trigo.h>
 
@@ -468,6 +469,42 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
         gal->SetFillColor( m_color );
         gal->SetLineWidth( w );
         gal->DrawArc( arc->GetCenter(), arc->GetRadius(), start_angle, angle );
+        break;
+    }
+
+    case SH_ELLIPSE:
+    {
+        const SHAPE_ELLIPSE* ellipse = static_cast<const SHAPE_ELLIPSE*>( aShape );
+        const VECTOR2I       center = ellipse->GetCenter();
+        const int            major = ellipse->GetMajorRadius();
+        const int            minor = ellipse->GetMinorRadius();
+        const EDA_ANGLE      rotation = ellipse->GetRotation();
+        const bool           isArc = ellipse->IsArc();
+        const int            w = std::max( 1, ellipse->GetWidth() );
+
+        gal->SetIsFill( false );
+        gal->SetIsStroke( true );
+
+        if( showClearance && m_clearance > 0 )
+        {
+            gal->SetLineWidth( w + 2 * m_clearance );
+
+            if( isArc )
+                gal->DrawEllipseArc( center, major, minor, rotation, ellipse->GetStartAngle(), ellipse->GetEndAngle() );
+            else
+                gal->DrawEllipse( center, major, minor, rotation );
+        }
+
+        gal->SetLayerDepth( m_depth );
+        gal->SetStrokeColor( m_color );
+        gal->SetFillColor( m_color );
+        gal->SetLineWidth( w );
+
+        if( isArc )
+            gal->DrawEllipseArc( center, major, minor, rotation, ellipse->GetStartAngle(), ellipse->GetEndAngle() );
+        else
+            gal->DrawEllipse( center, major, minor, rotation );
+
         break;
     }
 

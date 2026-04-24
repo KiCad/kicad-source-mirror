@@ -58,7 +58,8 @@
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250829  // Rounded Rectangles
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250901  // Stacked Pin notation
 //#define SEXPR_SYMBOL_LIB_FILE_VERSION  20250925  // Bus alias in Project File
-#define SEXPR_SYMBOL_LIB_FILE_VERSION 20251024 // Updated properties formatting (do_not_autoplace, show_name)
+//#define SEXPR_SYMBOL_LIB_FILE_VERSION 20251024 // Updated properties formatting (do_not_autoplace, show_name)
+#define SEXPR_SYMBOL_LIB_FILE_VERSION 20260508 // Native ellipse primitive
 
 /**
  * Schematic file version.
@@ -136,4 +137,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20251028  // Updated properties formatting (do_not_autoplace, show_name)
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20260101  // PCB variants
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20260306  // Variant in_bom semantics corrected
-#define SEXPR_SCHEMATIC_FILE_VERSION 20260326  // Locking properties
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20260326  // Locking properties
+#define SEXPR_SCHEMATIC_FILE_VERSION 20260508 // Native ellipse primitive

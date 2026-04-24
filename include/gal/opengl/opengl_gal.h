@@ -147,6 +147,15 @@ public:
     void DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, const EDA_ANGLE& aStartAngle,
                          const EDA_ANGLE& aAngle, double aWidth, double aMaxError ) override;
 
+    /// @copydoc GAL::DrawEllipse()
+    void DrawEllipse( const VECTOR2D& aCenterPoint, double aMajorRadius, double aMinorRadius,
+                      const EDA_ANGLE& aRotation ) override;
+
+    /// @copydoc GAL::DrawEllipseArc()
+    void DrawEllipseArc( const VECTOR2D& aCenterPoint, double aMajorRadius, double aMinorRadius,
+                         const EDA_ANGLE& aRotation, const EDA_ANGLE& aStartAngle,
+                         const EDA_ANGLE& aEndAngle ) override;
+
     /// @copydoc GAL::DrawRectangle()
     void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
 

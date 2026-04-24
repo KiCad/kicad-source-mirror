@@ -101,6 +101,8 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_TOOLBAR_SETTINGS::DefaultToolba
               .AppendAction( SCH_ACTIONS::drawSymbolTextBox )
               .AppendAction( SCH_ACTIONS::drawRectangle )
               .AppendAction( SCH_ACTIONS::drawCircle )
+              .AppendAction( SCH_ACTIONS::drawEllipse )
+              .AppendAction( SCH_ACTIONS::drawEllipseArc )
               .AppendAction( SCH_ACTIONS::drawArc )
               .AppendAction( SCH_ACTIONS::drawBezier )
               .AppendAction( SCH_ACTIONS::drawSymbolLines )

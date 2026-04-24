@@ -80,34 +80,34 @@ enum KICAD_T
     SCREEN_T, ///< not really an item, used to identify a screen
 
     // Items in pcb
-    PCB_FOOTPRINT_T,         ///< class FOOTPRINT, a footprint
-    PCB_PAD_T,               ///< class PAD, a pad in a footprint
-    PCB_SHAPE_T,             ///< class PCB_SHAPE, a segment not on copper layers
-    PCB_REFERENCE_IMAGE_T,   ///< class PCB_REFERENCE_IMAGE, bitmap on a layer
-    PCB_FIELD_T,             ///< class PCB_FIELD, text associated with a footprint property
-    PCB_GENERATOR_T,         ///< class PCB_GENERATOR, generator on a layer
-    PCB_TEXT_T,              ///< class PCB_TEXT, text on a layer
-    PCB_TEXTBOX_T,           ///< class PCB_TEXTBOX, wrapped text on a layer
-    PCB_TABLE_T,             ///< class PCB_TABLE, table of PCB_TABLECELLs
-    PCB_TABLECELL_T,         ///< class PCB_TABLECELL, PCB_TEXTBOX for use in tables
-    PCB_TRACE_T,             ///< class PCB_TRACK, a track segment (segment on a copper layer)
-    PCB_VIA_T,               ///< class PCB_VIA, a via (like a track segment on a copper layer)
-    PCB_ARC_T,               ///< class PCB_ARC, an arc track segment on a copper layer
-    PCB_MARKER_T,            ///< class PCB_MARKER, a marker used to show something
-    PCB_DIMENSION_T,         ///< class PCB_DIMENSION_BASE: abstract dimension meta-type
-    PCB_BARCODE_T,           ///< class PCB_BARCODE, a barcode (graphic item)
-    PCB_DIM_ALIGNED_T,       ///< class PCB_DIM_ALIGNED, a linear dimension (graphic item)
-    PCB_DIM_LEADER_T,        ///< class PCB_DIM_LEADER, a leader dimension (graphic item)
-    PCB_DIM_CENTER_T,        ///< class PCB_DIM_CENTER, a center point marking (graphic item)
-    PCB_DIM_RADIAL_T,        ///< class PCB_DIM_RADIAL, a radius or diameter dimension
-    PCB_DIM_ORTHOGONAL_T,    ///< class PCB_DIM_ORTHOGONAL, a linear dimension constrained to x/y
-    PCB_TARGET_T,            ///< class PCB_TARGET, a target (graphic item)
-    PCB_ZONE_T,              ///< class ZONE, a copper pour area
-    PCB_ITEM_LIST_T,         ///< class BOARD_ITEM_LIST, a list of board items
-    PCB_NETINFO_T,           ///< class NETINFO_ITEM, a description of a net
-    PCB_GROUP_T,             ///< class PCB_GROUP, a set of BOARD_ITEMs
-    PCB_BOARD_OUTLINE_T,     ///< class PCB_BOARD_OUTLINE_T, a pcb board outline item
-    PCB_POINT_T,             ///< class PCB_POINT, a 0-dimensional point
+    PCB_FOOTPRINT_T,       ///< class FOOTPRINT, a footprint
+    PCB_PAD_T,             ///< class PAD, a pad in a footprint
+    PCB_SHAPE_T,           ///< class PCB_SHAPE, a segment not on copper layers
+    PCB_REFERENCE_IMAGE_T, ///< class PCB_REFERENCE_IMAGE, bitmap on a layer
+    PCB_FIELD_T,           ///< class PCB_FIELD, text associated with a footprint property
+    PCB_GENERATOR_T,       ///< class PCB_GENERATOR, generator on a layer
+    PCB_TEXT_T,            ///< class PCB_TEXT, text on a layer
+    PCB_TEXTBOX_T,         ///< class PCB_TEXTBOX, wrapped text on a layer
+    PCB_TABLE_T,           ///< class PCB_TABLE, table of PCB_TABLECELLs
+    PCB_TABLECELL_T,       ///< class PCB_TABLECELL, PCB_TEXTBOX for use in tables
+    PCB_TRACE_T,           ///< class PCB_TRACK, a track segment (segment on a copper layer)
+    PCB_VIA_T,             ///< class PCB_VIA, a via (like a track segment on a copper layer)
+    PCB_ARC_T,             ///< class PCB_ARC, an arc track segment on a copper layer
+    PCB_MARKER_T,          ///< class PCB_MARKER, a marker used to show something
+    PCB_DIMENSION_T,       ///< class PCB_DIMENSION_BASE: abstract dimension meta-type
+    PCB_BARCODE_T,         ///< class PCB_BARCODE, a barcode (graphic item)
+    PCB_DIM_ALIGNED_T,     ///< class PCB_DIM_ALIGNED, a linear dimension (graphic item)
+    PCB_DIM_LEADER_T,      ///< class PCB_DIM_LEADER, a leader dimension (graphic item)
+    PCB_DIM_CENTER_T,      ///< class PCB_DIM_CENTER, a center point marking (graphic item)
+    PCB_DIM_RADIAL_T,      ///< class PCB_DIM_RADIAL, a radius or diameter dimension
+    PCB_DIM_ORTHOGONAL_T,  ///< class PCB_DIM_ORTHOGONAL, a linear dimension constrained to x/y
+    PCB_TARGET_T,          ///< class PCB_TARGET, a target (graphic item)
+    PCB_ZONE_T,            ///< class ZONE, a copper pour area
+    PCB_ITEM_LIST_T,       ///< class BOARD_ITEM_LIST, a list of board items
+    PCB_NETINFO_T,         ///< class NETINFO_ITEM, a description of a net
+    PCB_GROUP_T,           ///< class PCB_GROUP, a set of BOARD_ITEMs
+    PCB_BOARD_OUTLINE_T,   ///< class PCB_BOARD_OUTLINE_T, a pcb board outline item
+    PCB_POINT_T,           ///< class PCB_POINT, a 0-dimensional point
 
     // Be prudent with these types:
     // they should be used only to locate a specific field type among PCB_FIELD_Ts
@@ -137,6 +137,8 @@ enum KICAD_T
     PCB_SHAPE_LOCATE_ARC_T,
     PCB_SHAPE_LOCATE_POLY_T,
     PCB_SHAPE_LOCATE_BEZIER_T,
+    PCB_SHAPE_LOCATE_ELLIPSE_T,
+    PCB_SHAPE_LOCATE_ELLIPSE_ARC_T,
 
     /*
      * Draw items in library symbol.
@@ -288,7 +290,8 @@ constexpr KICAD_T BaseType( const KICAD_T aType )
     case PCB_SHAPE_LOCATE_ARC_T:
     case PCB_SHAPE_LOCATE_POLY_T:
     case PCB_SHAPE_LOCATE_BEZIER_T:
-        return PCB_SHAPE_T;
+    case PCB_SHAPE_LOCATE_ELLIPSE_T:
+    case PCB_SHAPE_LOCATE_ELLIPSE_ARC_T: return PCB_SHAPE_T;
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_CENTER_T:
@@ -352,6 +355,8 @@ constexpr bool IsInstantiableType( const KICAD_T aType )
     case PCB_SHAPE_LOCATE_ARC_T:
     case PCB_SHAPE_LOCATE_POLY_T:
     case PCB_SHAPE_LOCATE_BEZIER_T:
+    case PCB_SHAPE_LOCATE_ELLIPSE_T:
+    case PCB_SHAPE_LOCATE_ELLIPSE_ARC_T:
 
     case PCB_DIMENSION_T:
 
@@ -475,6 +480,8 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_SHAPE_LOCATE_ARC_T:
     case PCB_SHAPE_LOCATE_POLY_T:
     case PCB_SHAPE_LOCATE_BEZIER_T:
+    case PCB_SHAPE_LOCATE_ELLIPSE_T:
+    case PCB_SHAPE_LOCATE_ELLIPSE_ARC_T:
     case PCB_BOARD_OUTLINE_T:
         return true;
 

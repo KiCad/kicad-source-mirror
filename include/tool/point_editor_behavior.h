@@ -340,6 +340,58 @@ private:
 };
 
 
+/**                                                                                                                   
+ * Edit behavior for ELLIPSE and ELLIPSE_ARC shapes.                                                                  
+ *                                                                               
+ * Closed ellipse: 3 handles (center, major-axis endpoint, minor-axis endpoint).                                      
+ * Elliptical arc: 5 handles (the above + arc start + arc end).                  
+ *                                                                                                                    
+ * Drag semantics:                             
+ *  - Center: translate the whole ellipse.                                                                            
+ *  - Major-end: set major radius + rotation (rotation follows the drag vector's world angle).                        
+ *  - Minor-end: set minor radius only (rotation preserved; drag is projected onto the minor axis).
+ *  - Arc start/end: set the respective parametric angles.                                                            
+ */
+class EDA_ELLIPSE_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    EDA_ELLIPSE_POINT_EDIT_BEHAVIOR( EDA_SHAPE& aEllipse ) :
+            m_ellipse( aEllipse )
+    {
+        wxASSERT( aEllipse.GetShape() == SHAPE_T::ELLIPSE || aEllipse.GetShape() == SHAPE_T::ELLIPSE_ARC );
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override;
+
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override;
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override;
+
+protected:
+    enum ELLIPSE_POINTS
+    {
+        ELLIPSE_CENTER = 0,
+        ELLIPSE_MAJOR_END,
+        ELLIPSE_MINOR_END,
+        ELLIPSE_ARC_START, // only for ELLIPSE_ARC
+        ELLIPSE_ARC_END,   // only for ELLIPSE_ARC
+
+        ELLIPSE_CLOSED_POINTS = 3,
+        ELLIPSE_ARC_POINTS = 5,
+    };
+
+private:
+    EDA_SHAPE& m_ellipse;
+
+    /// World-space point on the ellipse at the given parametric angle.
+    VECTOR2I evaluateAt( const EDA_ANGLE& aTheta ) const;
+
+    /// Inverse: the parametric angle of a world-space point relative to this ellipse.
+    EDA_ANGLE parametricAngleOf( const VECTOR2I& aWorldPt ) const;
+};
+
+
 /**
  * "Standard" table-cell editing behavior.
  *

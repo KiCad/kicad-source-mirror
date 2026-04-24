@@ -969,6 +969,8 @@ void SCH_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
             m_editBehavior = std::make_unique<EDA_BEZIER_POINT_EDIT_BEHAVIOR>( *shape, maxError );
             break;
         }
+        case SHAPE_T::ELLIPSE:
+        case SHAPE_T::ELLIPSE_ARC: m_editBehavior = std::make_unique<EDA_ELLIPSE_POINT_EDIT_BEHAVIOR>( *shape ); break;
         default:
             UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
         }

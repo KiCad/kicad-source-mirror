@@ -160,6 +160,10 @@ bool PCB_SHAPE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
             sametype = m_shape == SHAPE_T::POLY;
         else if( scanType == PCB_SHAPE_LOCATE_BEZIER_T )
             sametype = m_shape == SHAPE_T::BEZIER;
+        else if( scanType == PCB_SHAPE_LOCATE_ELLIPSE_T )
+            sametype = m_shape == SHAPE_T::ELLIPSE;
+        else if( scanType == PCB_SHAPE_LOCATE_ELLIPSE_ARC_T )
+            sametype = m_shape == SHAPE_T::ELLIPSE_ARC;
 
         if( sametype )
             return true;
@@ -309,6 +313,52 @@ std::vector<VECTOR2I> PCB_SHAPE::GetConnectionPoints() const
             ret.emplace_back( pt );
 
         break;
+
+    case SHAPE_T::ELLIPSE:
+    {
+        // +/- major and +/- minor axis endpoints.
+        const double   phi = GetEllipseRotation().AsRadians();
+        const double   cosPhi = std::cos( phi );
+        const double   sinPhi = std::sin( phi );
+        const int      a = GetEllipseMajorRadius();
+        const int      b = GetEllipseMinorRadius();
+        const VECTOR2I c = GetEllipseCenter();
+
+        ret.emplace_back( c + VECTOR2I( KiROUND( a * cosPhi ), KiROUND( a * sinPhi ) ) );
+        ret.emplace_back( c + VECTOR2I( KiROUND( -a * cosPhi ), KiROUND( -a * sinPhi ) ) );
+        ret.emplace_back( c + VECTOR2I( KiROUND( -b * sinPhi ), KiROUND( b * cosPhi ) ) );
+        ret.emplace_back( c + VECTOR2I( KiROUND( b * sinPhi ), KiROUND( -b * cosPhi ) ) );
+        break;
+    }
+
+    case SHAPE_T::ELLIPSE_ARC:
+    {
+        // Start, end, and midpoint of the arc curve.
+        const double   a = GetEllipseMajorRadius();
+        const double   b = GetEllipseMinorRadius();
+        const double   phi = GetEllipseRotation().AsRadians();
+        const double   cosPhi = std::cos( phi );
+        const double   sinPhi = std::sin( phi );
+        const VECTOR2I c = GetEllipseCenter();
+
+        auto eval = [&]( double theta ) -> VECTOR2I
+        {
+            const double lx = a * std::cos( theta );
+            const double ly = b * std::sin( theta );
+            return c + VECTOR2I( KiROUND( lx * cosPhi - ly * sinPhi ), KiROUND( lx * sinPhi + ly * cosPhi ) );
+        };
+
+        double thetaStart = GetEllipseStartAngle().AsRadians();
+        double thetaEnd = GetEllipseEndAngle().AsRadians();
+
+        if( thetaEnd < thetaStart )
+            thetaEnd += 2.0 * M_PI;
+
+        ret.emplace_back( eval( thetaStart ) );
+        ret.emplace_back( eval( thetaEnd ) );
+        ret.emplace_back( eval( 0.5 * ( thetaStart + thetaEnd ) ) );
+        break;
+    }
 
     case SHAPE_T::UNDEFINED:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
@@ -976,39 +1026,39 @@ static struct PCB_SHAPE_DESC
 
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ), layerProperty );
 
-        // Only polygons have meaningful Position properties.
-        // On other shapes, these are duplicates of the Start properties.
-        auto isPolygon =
-                []( INSPECTABLE* aItem ) -> bool
-                {
-                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
-                        return shape->GetShape() == SHAPE_T::POLY;
+        // Polygons and ellipses have Position properties (first vertex / center).
+        auto isPolygonOrEllipse = []( INSPECTABLE* aItem ) -> bool
+        {
+            if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+            {
+                const SHAPE_T t = shape->GetShape();
+                return t == SHAPE_T::POLY || t == SHAPE_T::ELLIPSE || t == SHAPE_T::ELLIPSE_ARC;
+            }
+            return false;
+        };
 
-                    return false;
-                };
-
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ),
-                                      _HKI( "Position X" ), isPolygon );
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ),
-                                      _HKI( "Position Y" ), isPolygon );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ),
+                                      isPolygonOrEllipse );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ),
+                                      isPolygonOrEllipse );
 
         propMgr.Mask( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Color" ) );
         propMgr.Mask( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Fill Color" ) );
 
-        // BEZIER curves are not closed shapes, and fill is not supported in board editor,
-        // only in schematic editor.
-        // So disable Fill option for Bezier curves
-        auto isNotBezier =
-                []( INSPECTABLE* aItem ) -> bool
-                {
-                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
-                        return shape->GetShape() != SHAPE_T::BEZIER;
+        // BEZIER curves and ELLIPTICAL_ARC are not closed shapes, and fill
+        // is not supported in board editor, only in schematic editor.
+        auto isNotBezierOrEllipseArc = []( INSPECTABLE* aItem ) -> bool
+        {
+            if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+            {
+                const SHAPE_T t = shape->GetShape();
+                return t != SHAPE_T::BEZIER && t != SHAPE_T::ELLIPSE_ARC;
+            }
+            return true;
+        };
 
-                    return true;
-                };
-
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
-                                      _HKI( "Fill" ), isNotBezier );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Fill" ),
+                                      isNotBezierOrEllipseArc );
 
         auto isCircle =
                 []( INSPECTABLE* aItem ) -> bool
@@ -1019,23 +1069,24 @@ static struct PCB_SHAPE_DESC
                     return false;
                 };
 
-        auto isNotCircle =
-                []( INSPECTABLE* aItem ) -> bool
-                {
-                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
-                        return shape->GetShape() != SHAPE_T::CIRCLE;
+        auto isNotCircleOrEllipse = []( INSPECTABLE* aItem ) -> bool
+        {
+            if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
+            {
+                const SHAPE_T t = shape->GetShape();
+                return t != SHAPE_T::CIRCLE && t != SHAPE_T::ELLIPSE && t != SHAPE_T::ELLIPSE_ARC;
+            }
+            return true;
+        };
 
-                    return true;
-                };
-
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
-                                      _HKI( "Start X" ), isNotCircle );
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
-                                      _HKI( "Start Y" ), isNotCircle );
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
-                                      _HKI( "End X" ), isNotCircle );
-        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
-                                      _HKI( "End Y" ), isNotCircle );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Start X" ),
+                                      isNotCircleOrEllipse );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Start Y" ),
+                                      isNotCircleOrEllipse );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "End X" ),
+                                      isNotCircleOrEllipse );
+        propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "End Y" ),
+                                      isNotCircleOrEllipse );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),
                                       _HKI( "Center X" ), isCircle );
         propMgr.OverrideAvailability( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ),

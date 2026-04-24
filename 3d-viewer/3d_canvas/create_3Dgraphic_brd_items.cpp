@@ -51,6 +51,7 @@
 #include <geometry/roundrect.h>
 #include <geometry/shape_rect.h>
 #include <geometry/shape_simple.h>
+#include <geometry/shape_ellipse.h>
 #include <utility>
 #include <vector>
 #include <wx/log.h>
@@ -483,6 +484,21 @@ void BOARD_ADAPTER::createPadWithMargin( const PAD* aPad, CONTAINER_2D_BASE* aCo
                 break;
             }
 
+            case SH_ELLIPSE:
+            {
+                const SHAPE_ELLIPSE* ellipse = static_cast<const SHAPE_ELLIPSE*>( shape );
+                SHAPE_LINE_CHAIN     l = ellipse->ConvertToPolyline( aPad->GetMaxError() );
+                const int            width = ellipse->GetWidth();
+
+                for( int i = 0; i < l.SegmentCount(); i++ )
+                {
+                    addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( l.Segment( i ).A ), TO_SFVEC2F( l.Segment( i ).B ),
+                                         TO_3DU( width + clearance.x * 2 ), *aPad );
+                }
+
+                break;
+            }
+
             default:
                 UNIMPLEMENTED_FOR( SHAPE_TYPE_asString( shape->Type() ) );
                 break;
@@ -810,6 +826,29 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
                 addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( pts[pts.size() - 1] ), TO_SFVEC2F( pts[0] ), linewidth3DU,
                                      *aOwner );
             }
+            break;
+        }
+
+        case SHAPE_T::ELLIPSE:
+        case SHAPE_T::ELLIPSE_ARC:
+        {
+            SHAPE_POLY_SET polyList;
+
+            aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, aShape->GetMaxError(), ERROR_INSIDE );
+
+            polyList.Simplify();
+
+            if( polyList.IsEmpty() )
+                break;
+
+            if( margin != 0 )
+            {
+                CORNER_STRATEGY cornerStr =
+                        margin >= 0 ? CORNER_STRATEGY::ROUND_ALL_CORNERS : CORNER_STRATEGY::ALLOW_ACUTE_CORNERS;
+                polyList.Inflate( margin, cornerStr, aShape->GetMaxError() );
+            }
+
+            ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
             break;
         }
 

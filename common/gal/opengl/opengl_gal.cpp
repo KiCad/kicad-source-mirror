@@ -1248,6 +1248,179 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
 }
 
 
+void OPENGL_GAL::DrawEllipse( const VECTOR2D& aCenterPoint, double aMajorRadius, double aMinorRadius,
+                              const EDA_ANGLE& aRotation )
+{
+    if( aMajorRadius <= 0 || aMinorRadius <= 0 )
+        return;
+
+    const double alphaIncrement = calcAngleStep( aMajorRadius );
+    const double cosPhi = std::cos( aRotation.AsRadians() );
+    const double sinPhi = std::sin( aRotation.AsRadians() );
+
+    auto eval = [&]( double theta ) -> VECTOR2D
+    {
+        const double lx = aMajorRadius * std::cos( theta );
+        const double ly = aMinorRadius * std::sin( theta );
+        return VECTOR2D( lx * cosPhi - ly * sinPhi, lx * sinPhi + ly * cosPhi );
+    };
+
+    Save();
+    m_currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );
+
+    if( m_isFillEnabled )
+    {
+        m_currentManager->Color( m_fillColor.r, m_fillColor.g, m_fillColor.b, m_fillColor.a );
+        m_currentManager->Shader( SHADER_NONE );
+
+        // Triangle fan from origin out to the ellipse boundary
+        double alpha;
+        for( alpha = 0.0; ( alpha + alphaIncrement ) < 2.0 * M_PI; )
+        {
+            const VECTOR2D p1 = eval( alpha );
+            alpha += alphaIncrement;
+            const VECTOR2D p2 = eval( alpha );
+
+            m_currentManager->Reserve( 3 );
+            m_currentManager->Vertex( 0.0, 0.0, m_layerDepth );
+            m_currentManager->Vertex( p1.x, p1.y, m_layerDepth );
+            m_currentManager->Vertex( p2.x, p2.y, m_layerDepth );
+        }
+
+        // Last wedge back to the start.
+        const VECTOR2D p1 = eval( alpha );
+        const VECTOR2D p2 = eval( 0.0 );
+
+        m_currentManager->Reserve( 3 );
+        m_currentManager->Vertex( 0.0, 0.0, m_layerDepth );
+        m_currentManager->Vertex( p1.x, p1.y, m_layerDepth );
+        m_currentManager->Vertex( p2.x, p2.y, m_layerDepth );
+    }
+
+    if( m_isStrokeEnabled )
+    {
+        m_currentManager->Color( m_strokeColor.r, m_strokeColor.g, m_strokeColor.b, m_strokeColor.a );
+
+        // Count quads for reservation.
+        unsigned int lineCount = 0;
+        double       countAlpha;
+
+        for( countAlpha = alphaIncrement; countAlpha < 2.0 * M_PI; countAlpha += alphaIncrement )
+            lineCount++;
+
+        lineCount++; // closing segment back to alpha = 0
+
+        reserveLineQuads( lineCount );
+
+        VECTOR2D p = eval( 0.0 );
+        double   alpha;
+
+        for( alpha = alphaIncrement; alpha < 2.0 * M_PI; alpha += alphaIncrement )
+        {
+            const VECTOR2D p_next = eval( alpha );
+            drawLineQuad( p, p_next, false );
+            p = p_next;
+        }
+
+        // Closing segment
+        drawLineQuad( p, eval( 0.0 ), false );
+    }
+
+    Restore();
+}
+
+
+void OPENGL_GAL::DrawEllipseArc( const VECTOR2D& aCenterPoint, double aMajorRadius, double aMinorRadius,
+                                 const EDA_ANGLE& aRotation, const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle )
+{
+    if( aMajorRadius <= 0 || aMinorRadius <= 0 )
+        return;
+
+    double startAngle = aStartAngle.AsRadians();
+    double endAngle = aEndAngle.AsRadians();
+    normalize( startAngle, endAngle );
+
+    const double alphaIncrement = calcAngleStep( aMajorRadius );
+    const double cosPhi = std::cos( aRotation.AsRadians() );
+    const double sinPhi = std::sin( aRotation.AsRadians() );
+
+    auto eval = [&]( double theta ) -> VECTOR2D
+    {
+        const double lx = aMajorRadius * std::cos( theta );
+        const double ly = aMinorRadius * std::sin( theta );
+        return VECTOR2D( lx * cosPhi - ly * sinPhi, lx * sinPhi + ly * cosPhi );
+    };
+
+    Save();
+    m_currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );
+
+    if( m_isFillEnabled )
+    {
+        m_currentManager->Color( m_fillColor.r, m_fillColor.g, m_fillColor.b, m_fillColor.a );
+        m_currentManager->Shader( SHADER_NONE );
+
+        // Pie slice fan from origin out to the arc curve.
+        double alpha;
+
+        for( alpha = startAngle; ( alpha + alphaIncrement ) < endAngle; )
+        {
+            const VECTOR2D p1 = eval( alpha );
+            alpha += alphaIncrement;
+            const VECTOR2D p2 = eval( alpha );
+
+            m_currentManager->Reserve( 3 );
+            m_currentManager->Vertex( 0.0, 0.0, m_layerDepth );
+            m_currentManager->Vertex( p1.x, p1.y, m_layerDepth );
+            m_currentManager->Vertex( p2.x, p2.y, m_layerDepth );
+        }
+
+        // Last wedge to endAngle.
+        const VECTOR2D p1 = eval( alpha );
+        const VECTOR2D p2 = eval( endAngle );
+
+        m_currentManager->Reserve( 3 );
+        m_currentManager->Vertex( 0.0, 0.0, m_layerDepth );
+        m_currentManager->Vertex( p1.x, p1.y, m_layerDepth );
+        m_currentManager->Vertex( p2.x, p2.y, m_layerDepth );
+    }
+
+    if( m_isStrokeEnabled )
+    {
+        m_currentManager->Color( m_strokeColor.r, m_strokeColor.g, m_strokeColor.b, m_strokeColor.a );
+
+        unsigned int lineCount = 0;
+        double       countAlpha;
+
+        for( countAlpha = startAngle + alphaIncrement; countAlpha <= endAngle; countAlpha += alphaIncrement )
+            lineCount++;
+
+        if( countAlpha != endAngle )
+            lineCount++; // trailing partial segment
+
+        reserveLineQuads( lineCount );
+
+        VECTOR2D p = eval( startAngle );
+        double   alpha;
+
+        for( alpha = startAngle + alphaIncrement; alpha <= endAngle; alpha += alphaIncrement )
+        {
+            const VECTOR2D p_next = eval( alpha );
+            drawLineQuad( p, p_next, false );
+            p = p_next;
+        }
+
+        // Trailing partial segment, if any
+        if( alpha != endAngle )
+        {
+            const VECTOR2D p_last = eval( endAngle );
+            drawLineQuad( p, p_last, false );
+        }
+    }
+
+    Restore();
+}
+
+
 void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
     // Compute the diagonal points of the rectangle

@@ -645,6 +645,12 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveSymbolDrawItem( SCH_ITEM* aItem, OUTPUTFO
             formatPoly( &aFormatter, shape, isPrivate, stroke, fillMode, fillColor, true );
             break;
 
+        case SHAPE_T::ELLIPSE: formatEllipse( &aFormatter, shape, isPrivate, stroke, fillMode, fillColor, true ); break;
+
+        case SHAPE_T::ELLIPSE_ARC:
+            formatEllipseArc( &aFormatter, shape, isPrivate, stroke, fillMode, fillColor, true );
+            break;
+
         default:
             UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
         }

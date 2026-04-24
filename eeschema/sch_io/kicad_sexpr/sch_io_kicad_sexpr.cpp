@@ -1364,6 +1364,16 @@ void SCH_IO_KICAD_SEXPR::saveShape( SCH_SHAPE* aShape )
                     aShape->GetFillColor(), false, aShape->m_Uuid, writeLocked );
         break;
 
+    case SHAPE_T::ELLIPSE:
+        formatEllipse( m_out, aShape, false, aShape->GetStroke(), aShape->GetFillMode(), aShape->GetFillColor(), false,
+                       aShape->m_Uuid, writeLocked );
+        break;
+
+    case SHAPE_T::ELLIPSE_ARC:
+        formatEllipseArc( m_out, aShape, false, aShape->GetStroke(), aShape->GetFillMode(), aShape->GetFillColor(),
+                          false, aShape->m_Uuid, writeLocked );
+        break;
+
     default:
         UNIMPLEMENTED_FOR( aShape->SHAPE_T_asString() );
     }

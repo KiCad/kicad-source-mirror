@@ -668,19 +668,24 @@ void DXF_IMPORT_PLUGIN::addEllipse( const DL_EllipseData& aData )
 
     // TODO: testcases for negative extrusion vector; handle it here
 
-    std::vector<BEZIER<double>> splines;
-    ELLIPSE<double> ellipse( center, major, aData.ratio, startAngle, endAngle );
-
-    TransformEllipseToBeziers( ellipse, splines );
-
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
                                                            : &m_internalImporter;
 
-    for( const BEZIER<double>& b : splines )
-        bufferToUse->AddSpline( b.Start, b.C1, b.C2, b.End, lineWidth );
+    double    majorRadius = major.EuclideanNorm();
+    double    minorRadius = majorRadius * aData.ratio;
+    EDA_ANGLE rotation( major );
+
+    if( startAngle == endAngle || std::abs( ( endAngle - startAngle ).AsDegrees() - 360.0 ) < 1e-9 )
+    {
+        bufferToUse->AddEllipse( center, majorRadius, minorRadius, rotation, lineWidth, false /* aFilled */ );
+    }
+    else
+    {
+        bufferToUse->AddEllipseArc( center, majorRadius, minorRadius, rotation, startAngle, endAngle, lineWidth );
+    }
 
     // Naive bounding
     updateImageLimits( center + major );

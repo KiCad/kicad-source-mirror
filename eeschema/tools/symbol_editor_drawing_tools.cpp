@@ -894,6 +894,8 @@ void SYMBOL_EDITOR_DRAWING_TOOLS::setTransitions()
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,     SCH_ACTIONS::placeSymbolText.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawRectangle.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawCircle.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawEllipse.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawEllipseArc.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawArc.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawBezier.MakeEvent() );
     Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,         SCH_ACTIONS::drawSymbolLines.MakeEvent() );

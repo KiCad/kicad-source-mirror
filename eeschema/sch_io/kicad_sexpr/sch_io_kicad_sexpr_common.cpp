@@ -22,7 +22,7 @@
 #include <schematic_lexer.h>
 #include "sch_io_kicad_sexpr_common.h"
 #include <string_utils.h>
-
+#include <eda_units.h>
 
 using namespace TSCHEMATIC_T;
 
@@ -344,6 +344,55 @@ void formatPoly( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aPolyLine, bool aIsPriv
     }
 
     aFormatter->Print( ")" );  // Closes pts token
+
+    aStroke.Format( aFormatter, schIUScale );
+    formatFill( aFormatter, aFillMode, aFillColor );
+
+    if( aUuid != niluuid )
+        aFormatter->Print( "(uuid %s)", aFormatter->Quotew( aUuid.AsString() ).c_str() );
+
+    if( aLocked )
+        KICAD_FORMAT::FormatBool( aFormatter, "locked", true );
+
+    aFormatter->Print( ")" );
+}
+
+
+void formatEllipse( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aEllipse, bool aIsPrivate, const STROKE_PARAMS& aStroke,
+                    FILL_T aFillMode, const COLOR4D& aFillColor, bool aInvertY, const KIID& aUuid, bool aLocked )
+{
+    aFormatter->Print( "(ellipse %s (center %s) (major_radius %s) (minor_radius %s) "
+                       "(rotation_angle %s)",
+                       aIsPrivate ? "private" : "", formatIU( aEllipse->GetEllipseCenter(), aInvertY ).c_str(),
+                       formatIU( aEllipse->GetEllipseMajorRadius() ).c_str(),
+                       formatIU( aEllipse->GetEllipseMinorRadius() ).c_str(),
+                       EDA_UNIT_UTILS::FormatAngle( aEllipse->GetEllipseRotation() ).c_str() );
+
+    aStroke.Format( aFormatter, schIUScale );
+    formatFill( aFormatter, aFillMode, aFillColor );
+
+    if( aUuid != niluuid )
+        aFormatter->Print( "(uuid %s)", aFormatter->Quotew( aUuid.AsString() ).c_str() );
+
+    if( aLocked )
+        KICAD_FORMAT::FormatBool( aFormatter, "locked", true );
+
+    aFormatter->Print( ")" );
+}
+
+
+void formatEllipseArc( OUTPUTFORMATTER* aFormatter, EDA_SHAPE* aEllipseArc, bool aIsPrivate,
+                       const STROKE_PARAMS& aStroke, FILL_T aFillMode, const COLOR4D& aFillColor, bool aInvertY,
+                       const KIID& aUuid, bool aLocked )
+{
+    aFormatter->Print( "(ellipse_arc %s (center %s) (major_radius %s) (minor_radius %s) "
+                       "(rotation_angle %s) (start_angle %s) (end_angle %s)",
+                       aIsPrivate ? "private" : "", formatIU( aEllipseArc->GetEllipseCenter(), aInvertY ).c_str(),
+                       formatIU( aEllipseArc->GetEllipseMajorRadius() ).c_str(),
+                       formatIU( aEllipseArc->GetEllipseMinorRadius() ).c_str(),
+                       EDA_UNIT_UTILS::FormatAngle( aEllipseArc->GetEllipseRotation() ).c_str(),
+                       EDA_UNIT_UTILS::FormatAngle( aEllipseArc->GetEllipseStartAngle() ).c_str(),
+                       EDA_UNIT_UTILS::FormatAngle( aEllipseArc->GetEllipseEndAngle() ).c_str() );
 
     aStroke.Format( aFormatter, schIUScale );
     formatFill( aFormatter, aFillMode, aFillColor );

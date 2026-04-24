@@ -247,6 +247,19 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
         if( shape->GetShape() == SHAPE_T::ARC || shape->GetShape() == SHAPE_T::CIRCLE )
             hash_combine( ret, shape->GetRadius() );
 
+        if( shape->GetShape() == SHAPE_T::ELLIPSE || shape->GetShape() == SHAPE_T::ELLIPSE_ARC )
+        {
+            hash_combine( ret, shape->GetEllipseMajorRadius() );
+            hash_combine( ret, shape->GetEllipseMinorRadius() );
+            hash_combine( ret, shape->GetEllipseRotation().AsDegrees() );
+
+            if( shape->GetShape() == SHAPE_T::ELLIPSE_ARC )
+            {
+                hash_combine( ret, shape->GetEllipseStartAngle().AsDegrees() );
+                hash_combine( ret, shape->GetEllipseEndAngle().AsDegrees() );
+            }
+        }
+
         if( aFlags & HASH_POS )
         {
             std::vector<VECTOR2I> points;
@@ -259,6 +272,11 @@ size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
 
             if( shape->GetShape() == SHAPE_T::ARC )
                 points.push_back( shape->GetArcMid() );
+
+            if( shape->GetShape() == SHAPE_T::ELLIPSE || shape->GetShape() == SHAPE_T::ELLIPSE_ARC )
+            {
+                points.push_back( shape->GetEllipseCenter() );
+            }
 
             FOOTPRINT* parentFP = shape->GetParentFootprint();
 

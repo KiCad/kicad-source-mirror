@@ -350,7 +350,8 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                             case SHAPE_T::RECTANGLE:
                             case SHAPE_T::SEGMENT:
                             case SHAPE_T::CIRCLE:
-                                break;
+                            case SHAPE_T::ELLIPSE:
+                            case SHAPE_T::ELLIPSE_ARC: break;
 
                             default:
                                 UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );

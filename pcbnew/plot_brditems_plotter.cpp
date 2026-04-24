@@ -27,6 +27,7 @@
 
 #include <geometry/seg.h>                     // for SEG
 #include <geometry/shape_circle.h>
+#include <geometry/shape_ellipse.h>
 #include <geometry/shape_line_chain.h>        // for SHAPE_LINE_CHAIN
 #include <geometry/shape_poly_set.h>          // for SHAPE_POLY_SET, SHAPE_P...
 #include <geometry/shape_rect.h>
@@ -1138,6 +1139,37 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                         m_plotter->PlotPoly( poly.COutline( 0 ), fill_mode, thickness, getMetadata() );
                     }
                 }
+            }
+
+            break;
+        }
+
+        case SHAPE_T::ELLIPSE:
+        case SHAPE_T::ELLIPSE_ARC:
+        {
+            const bool isClosed = ( aShape->GetShape() == SHAPE_T::ELLIPSE );
+
+            SHAPE_ELLIPSE e = isClosed ? SHAPE_ELLIPSE( aShape->GetEllipseCenter(), aShape->GetEllipseMajorRadius(),
+                                                        aShape->GetEllipseMinorRadius(), aShape->GetEllipseRotation() )
+                                       : SHAPE_ELLIPSE( aShape->GetEllipseCenter(), aShape->GetEllipseMajorRadius(),
+                                                        aShape->GetEllipseMinorRadius(), aShape->GetEllipseRotation(),
+                                                        aShape->GetEllipseStartAngle(), aShape->GetEllipseEndAngle() );
+
+            SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( aShape->GetMaxError() );
+
+            if( isClosed )
+                chain.SetClosed( true );
+
+            FILL_T fill = ( isClosed && isSolidFill ) ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
+
+            if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER && isClosed )
+            {
+                GERBER_PLOTTER* gbr_plotter = static_cast<GERBER_PLOTTER*>( m_plotter );
+                gbr_plotter->PlotPolyAsRegion( chain, fill, thickness, &gbr_metadata );
+            }
+            else
+            {
+                m_plotter->PlotPoly( chain, fill, thickness, getMetadata() );
             }
 
             break;

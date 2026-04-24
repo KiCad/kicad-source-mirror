@@ -289,6 +289,12 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
                 constructionDrawables.push_back( shape.GetCenter() );
                 break;
             }
+            case SHAPE_T::ELLIPSE:
+            case SHAPE_T::ELLIPSE_ARC:
+            {
+                constructionDrawables.push_back( shape.GetEllipseCenter() );
+                break;
+            }
             default:
                 // This shape doesn't have any construction geometry to draw
                 break;
@@ -1529,6 +1535,31 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
                     }
 
                     addAnchor( lc.NearestPoint( aRefPos ), OUTLINE, aItem );
+                    break;
+                }
+
+                case SHAPE_T::ELLIPSE:
+                {
+                    VECTOR2I  center = shape->GetEllipseCenter();
+                    int       majorR = shape->GetEllipseMajorRadius();
+                    int       minorR = shape->GetEllipseMinorRadius();
+                    EDA_ANGLE rot = shape->GetEllipseRotation();
+                    VECTOR2I  majorEnd( KiROUND( majorR * rot.Cos() ), KiROUND( majorR * rot.Sin() ) );
+                    VECTOR2I  minorEnd( KiROUND( -minorR * rot.Sin() ), KiROUND( minorR * rot.Cos() ) );
+
+                    addAnchor( center, ORIGIN | SNAPPABLE, shape, POINT_TYPE::PT_CENTER );
+                    addAnchor( center + majorEnd, OUTLINE | SNAPPABLE, shape, POINT_TYPE::PT_QUADRANT );
+                    addAnchor( center - majorEnd, OUTLINE | SNAPPABLE, shape, POINT_TYPE::PT_QUADRANT );
+                    addAnchor( center + minorEnd, OUTLINE | SNAPPABLE, shape, POINT_TYPE::PT_QUADRANT );
+                    addAnchor( center - minorEnd, OUTLINE | SNAPPABLE, shape, POINT_TYPE::PT_QUADRANT );
+                    break;
+                }
+
+                case SHAPE_T::ELLIPSE_ARC:
+                {
+                    addAnchor( shape->GetStart(), CORNER | SNAPPABLE, shape, POINT_TYPE::PT_END );
+                    addAnchor( shape->GetEnd(), CORNER | SNAPPABLE, shape, POINT_TYPE::PT_END );
+                    addAnchor( shape->GetEllipseCenter(), ORIGIN | SNAPPABLE, shape, POINT_TYPE::PT_CENTER );
                     break;
                 }
 

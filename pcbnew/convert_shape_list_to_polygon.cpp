@@ -38,6 +38,7 @@
 #include <geometry/shape_poly_set.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/roundrect.h>
+#include <geometry/shape_ellipse.h>
 #include <convert_shape_list_to_polygon.h>
 #include <board.h>
 #include <board_design_settings.h>
@@ -260,6 +261,23 @@ static void processClosedShape( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
         aContour.SetClosed( true );
         break;
     }
+    case SHAPE_T::ELLIPSE:
+    {
+        // Tessellate the ellipse outline and append it as a closed contour.
+        SHAPE_ELLIPSE e( aShape->GetEllipseCenter(), aShape->GetEllipseMajorRadius(), aShape->GetEllipseMinorRadius(),
+                         aShape->GetEllipseRotation() );
+
+        SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( aErrorMax );
+
+        for( int ii = 0; ii < chain.PointCount(); ++ii )
+            aContour.Append( chain.CPoint( ii ) );
+
+        aContour.SetClosed( true );
+
+        for( int ii = 1; ii < aContour.PointCount(); ++ii )
+            aShapeOwners[std::make_pair( aContour.CPoint( ii - 1 ), aContour.CPoint( ii ) )] = aShape;
+        break;
+    }
     default:
         break;
     }
@@ -363,6 +381,44 @@ static void processShapeSegment( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
         }
 
         aPrevPt = nextPt;
+        break;
+    }
+    case SHAPE_T::ELLIPSE_ARC:
+    {
+        VECTOR2I pstart = aShape->GetStart();
+        VECTOR2I pend = aShape->GetEnd();
+        bool     reverse = false;
+
+        if( !close_enough( aPrevPt, pstart, aChainingEpsilon ) )
+        {
+            if( !close_enough( aPrevPt, pend, aChainingEpsilon ) )
+                return;
+
+            reverse = true;
+            std::swap( pstart, pend );
+        }
+
+        SHAPE_ELLIPSE e( aShape->GetEllipseCenter(), aShape->GetEllipseMajorRadius(), aShape->GetEllipseMinorRadius(),
+                         aShape->GetEllipseRotation(), aShape->GetEllipseStartAngle(), aShape->GetEllipseEndAngle() );
+
+        SHAPE_LINE_CHAIN arcChain = e.ConvertToPolyline( aErrorMax );
+
+        if( reverse )
+            arcChain = arcChain.Reverse();
+
+        for( int ii = 0; ii < arcChain.PointCount(); ++ii )
+        {
+            const VECTOR2I& pt = arcChain.CPoint( ii );
+
+            if( pt == aPrevPt )
+                continue;
+
+            aContour.Append( pt );
+            aShapeOwners[std::make_pair( aPrevPt, pt )] = aShape;
+            aPrevPt = pt;
+        }
+
+        aPrevPt = pend;
         break;
     }
     default:
@@ -792,9 +848,9 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
         SHAPE_LINE_CHAIN& currContour = contours.back();
         currContour.SetWidth( graphic->GetWidth() );
 
-        // Handle closed shapes (circles, rects, polygons)
+        // Handle closed shapes (circles, rects, polygons, ellipses)
         if( graphic->GetShape() == SHAPE_T::POLY || graphic->GetShape() == SHAPE_T::CIRCLE
-            || graphic->GetShape() == SHAPE_T::RECTANGLE )
+            || graphic->GetShape() == SHAPE_T::RECTANGLE || graphic->GetShape() == SHAPE_T::ELLIPSE )
         {
             processClosedShape( graphic, currContour, shapeOwners, aErrorMax, aAllowUseArcsInPolygons );
         }
@@ -1137,6 +1193,27 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
         case SHAPE_T::BEZIER:
             break;
 
+        case SHAPE_T::ELLIPSE:
+        case SHAPE_T::ELLIPSE_ARC:
+        {
+            const int major = shape->GetEllipseMajorRadius();
+            const int minor = shape->GetEllipseMinorRadius();
+
+            if( major <= min_dist || minor <= min_dist )
+            {
+                success = false;
+
+                if( aErrorHandler )
+                {
+                    ( *aErrorHandler )( wxString::Format( _( "(ellipse has null or very small "
+                                                             "radii: major=%d nm, minor=%d nm)" ),
+                                                          major, minor ),
+                                        shape, nullptr, shape->GetEllipseCenter() );
+                }
+            }
+            break;
+        }
+
         default:
             UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
             return false;
@@ -1151,7 +1228,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
     for( PCB_SHAPE* shape : shapeList )
     {
         if( shape->GetShape() == SHAPE_T::POLY || shape->GetShape() == SHAPE_T::CIRCLE
-            || shape->GetShape() == SHAPE_T::RECTANGLE )
+            || shape->GetShape() == SHAPE_T::RECTANGLE || shape->GetShape() == SHAPE_T::ELLIPSE )
         {
             SHAPE_LINE_CHAIN                                    contour;
             std::map<std::pair<VECTOR2I, VECTOR2I>, PCB_SHAPE*> shapeOwners;
@@ -1160,7 +1237,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
             closedContours.emplace_back( shape, std::move( contour ) );
         }
         else if( shape->GetShape() == SHAPE_T::SEGMENT || shape->GetShape() == SHAPE_T::ARC
-                 || shape->GetShape() == SHAPE_T::BEZIER )
+                 || shape->GetShape() == SHAPE_T::BEZIER || shape->GetShape() == SHAPE_T::ELLIPSE_ARC )
         {
             openShapes.insert( shape );
         }

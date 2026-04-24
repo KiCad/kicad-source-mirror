@@ -47,5 +47,34 @@ ELLIPSE<NumericType>::ELLIPSE( const VECTOR2<NumericType>& aCenter,
     Rotation = EDA_ANGLE( std::atan2( aMajor.y, aMajor.x ), RADIANS_T );
 }
 
+
+template <typename NumericType>
+void ELLIPSE<NumericType>::Mirror( const VECTOR2<NumericType>& aRef, FLIP_DIRECTION aFlipDirection )
+{
+    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+        Center.x = 2 * aRef.x - Center.x;
+    else
+        Center.y = 2 * aRef.y - Center.y;
+
+    Rotation = -Rotation;
+
+    const EDA_ANGLE oldStart = StartAngle;
+    const EDA_ANGLE oldEnd = EndAngle;
+
+    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+    {
+        // theta' = pi - theta  ->  [s, e]  ->  [pi - e, pi - s]
+        StartAngle = ANGLE_180 - oldEnd;
+        EndAngle = ANGLE_180 - oldStart;
+    }
+    else
+    {
+        // theta' = -theta  ->  [s, e]  ->  [-e, -s]
+        StartAngle = -oldEnd;
+        EndAngle = -oldStart;
+    }
+}
+
+
 template class ELLIPSE<double>;
 template class ELLIPSE<int>;

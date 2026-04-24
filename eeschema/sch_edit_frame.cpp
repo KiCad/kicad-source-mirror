@@ -977,6 +977,8 @@ void SCH_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( SCH_ACTIONS::drawSheetFromDesignBlock );
     CURRENT_TOOL( SCH_ACTIONS::drawRectangle );
     CURRENT_TOOL( SCH_ACTIONS::drawCircle );
+    CURRENT_TOOL( SCH_ACTIONS::drawEllipse );
+    CURRENT_TOOL( SCH_ACTIONS::drawEllipseArc );
     CURRENT_TOOL( SCH_ACTIONS::drawArc );
     CURRENT_TOOL( SCH_ACTIONS::drawBezier );
     CURRENT_TOOL( SCH_ACTIONS::drawLines );

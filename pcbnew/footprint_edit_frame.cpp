@@ -1464,6 +1464,8 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawLine );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawRectangle );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawCircle );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawEllipse );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::drawEllipseArc );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawArc );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawPolygon );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawBezier );

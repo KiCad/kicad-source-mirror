@@ -71,6 +71,7 @@
 #include <geometry/shape_simple.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_arc.h>
+#include <geometry/shape_ellipse.h>
 #include <stroke_params.h>
 #include <bezier_curves.h>
 #include <kiface_base.h>
@@ -2334,6 +2335,59 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
             break;
 
+        case SHAPE_T::ELLIPSE:
+        {
+            const VECTOR2D   center( aShape->GetEllipseCenter() );
+            const int        majorR = aShape->GetEllipseMajorRadius();
+            const int        minorR = aShape->GetEllipseMinorRadius();
+            const EDA_ANGLE& rot = aShape->GetEllipseRotation();
+
+            if( outline_mode )
+            {
+                m_gal->DrawEllipse( center, majorR - thickness / 2, minorR - thickness / 2, rot );
+                m_gal->DrawEllipse( center, majorR + thickness / 2, minorR + thickness / 2, rot );
+            }
+            else
+            {
+                m_gal->SetIsFill( aShape->IsSolidFill() );
+                m_gal->SetIsStroke( lineStyle == LINE_STYLE::SOLID && thickness > 0 );
+                m_gal->SetLineWidth( thickness );
+
+                if( lineStyle == LINE_STYLE::SOLID && thickness > 0 )
+                    m_gal->DrawEllipse( center, majorR, minorR, rot );
+                else if( isSolidFill )
+                    m_gal->DrawEllipse( center, majorR, minorR, rot );
+            }
+
+            break;
+        }
+
+        case SHAPE_T::ELLIPSE_ARC:
+        {
+            const VECTOR2D   center( aShape->GetEllipseCenter() );
+            const int        majorR = aShape->GetEllipseMajorRadius();
+            const int        minorR = aShape->GetEllipseMinorRadius();
+            const EDA_ANGLE& rot = aShape->GetEllipseRotation();
+            const EDA_ANGLE& start = aShape->GetEllipseStartAngle();
+            const EDA_ANGLE& end = aShape->GetEllipseEndAngle();
+
+            if( outline_mode )
+            {
+                m_gal->DrawEllipseArc( center, majorR - thickness / 2, minorR - thickness / 2, rot, start, end );
+                m_gal->DrawEllipseArc( center, majorR + thickness / 2, minorR + thickness / 2, rot, start, end );
+            }
+            else if( lineStyle == LINE_STYLE::SOLID )
+            {
+                // no interior fill for arcs
+                m_gal->SetIsFill( false );
+                m_gal->SetIsStroke( thickness > 0 );
+                m_gal->SetLineWidth( thickness );
+                m_gal->DrawEllipseArc( center, majorR, minorR, rot, start, end );
+            }
+
+            break;
+        }
+
         case SHAPE_T::UNDEFINED:
             break;
         }
@@ -2347,7 +2401,25 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             m_gal->SetIsStroke( false );
         }
 
-        std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
+        std::vector<SHAPE*> shapes;
+
+        // For ellipses, use SHAPE_ELLIPSE directly so STROKE_PARAMS::Stroke can
+        // distribute dashes uniformly by arc length instead of per-tessellation-segment.
+        if( aShape->GetShape() == SHAPE_T::ELLIPSE )
+        {
+            shapes.push_back( new SHAPE_ELLIPSE( aShape->GetEllipseCenter(), aShape->GetEllipseMajorRadius(),
+                                                 aShape->GetEllipseMinorRadius(), aShape->GetEllipseRotation() ) );
+        }
+        else if( aShape->GetShape() == SHAPE_T::ELLIPSE_ARC )
+        {
+            shapes.push_back( new SHAPE_ELLIPSE( aShape->GetEllipseCenter(), aShape->GetEllipseMajorRadius(),
+                                                 aShape->GetEllipseMinorRadius(), aShape->GetEllipseRotation(),
+                                                 aShape->GetEllipseStartAngle(), aShape->GetEllipseEndAngle() ) );
+        }
+        else
+        {
+            shapes = aShape->MakeEffectiveShapes( true );
+        }
 
         for( SHAPE* shape : shapes )
         {

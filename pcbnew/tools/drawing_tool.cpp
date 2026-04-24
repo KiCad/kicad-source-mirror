@@ -471,49 +471,30 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
 
 int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 {
-    if( m_isFootprintEditor && !m_frame->GetModel() )
-        return 0;
+    return runSimpleShapeDraw( aEvent, SHAPE_T::CIRCLE, MODE::CIRCLE, _( "Draw Circle" ),
+                               [this]( const TOOL_EVENT& e, PCB_SHAPE** s, std::optional<VECTOR2D> sp )
+                               {
+                                   return drawShape( e, s, sp, nullptr );
+                               } );
+}
 
-    if( m_inDrawingTool )
-        return 0;
 
-    REENTRANCY_GUARD guard( &m_inDrawingTool );
+int DRAWING_TOOL::DrawEllipse( const TOOL_EVENT& aEvent )
+{
+    return runSimpleShapeDraw( aEvent, SHAPE_T::ELLIPSE, MODE::ELLIPSE, _( "Draw Ellipse" ),
+                               [this]( const TOOL_EVENT& e, PCB_SHAPE** s, std::optional<VECTOR2D> sp )
+                               {
+                                   return drawShape( e, s, sp, nullptr );
+                               } );
+}
 
-    BOARD_ITEM*             parent = m_frame->GetModel();
-    PCB_SHAPE*              circle = new PCB_SHAPE( parent );
-    BOARD_COMMIT            commit( m_frame );
-    SCOPED_DRAW_MODE        scopedDrawMode( m_mode, MODE::CIRCLE );
-    std::optional<VECTOR2D> startingPoint;
-
-    circle->SetShape( SHAPE_T::CIRCLE );
-    circle->SetFilled( false );
-    circle->SetFlags( IS_NEW );
-
-    if( aEvent.HasPosition() )
-        startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
-
-    m_frame->PushTool( aEvent );
-    Activate();
-
-    while( drawShape( aEvent, &circle, startingPoint, nullptr ) )
-    {
-        if( circle )
-        {
-            commit.Add( circle );
-            commit.Push( _( "Draw Circle" ) );
-
-            m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, circle );
-        }
-
-        circle = new PCB_SHAPE( parent );
-        circle->SetShape( SHAPE_T::CIRCLE );
-        circle->SetFilled( false );
-        circle->SetFlags( IS_NEW );
-
-        startingPoint = std::nullopt;
-    }
-
-    return 0;
+int DRAWING_TOOL::DrawEllipseArc( const TOOL_EVENT& aEvent )
+{
+    return runSimpleShapeDraw( aEvent, SHAPE_T::ELLIPSE_ARC, MODE::ELLIPSE_ARC, _( "Draw Elliptical Arc" ),
+                               [this]( const TOOL_EVENT& e, PCB_SHAPE** s, std::optional<VECTOR2D> sp )
+                               {
+                                   return drawShape( e, s, sp, nullptr );
+                               } );
 }
 
 
@@ -2338,13 +2319,71 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 }
 
 
-/**
- * Update a #PCB_SHAPE from the current state of a #TWO_POINT_GEOMETRY_MANAGER.
- */
-static void updateSegmentFromGeometryMgr( const KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER& aMgr,
-                                          PCB_SHAPE* aGraphic )
+static VECTOR2I evalEllipsePoint( const PCB_SHAPE* aGraphic, const VECTOR2I& aCursorPos )
 {
-    if( !aMgr.IsReset() )
+    const VECTOR2I  center = aGraphic->GetEllipseCenter();
+    const double    a = std::max( 1, aGraphic->GetEllipseMajorRadius() );
+    const double    b = std::max( 1, aGraphic->GetEllipseMinorRadius() );
+    const EDA_ANGLE rot = aGraphic->GetEllipseRotation();
+    const double    cosRot = rot.Cos();
+    const double    sinRot = rot.Sin();
+
+    const double dx = aCursorPos.x - center.x;
+    const double dy = aCursorPos.y - center.y;
+    const double lx = dx * cosRot + dy * sinRot;
+    const double ly = -dx * sinRot + dy * cosRot;
+
+    const EDA_ANGLE t( std::atan2( ly / b, lx / a ), RADIANS_T );
+    const double    px = a * t.Cos();
+    const double    py = b * t.Sin();
+
+    return center + VECTOR2I( KiROUND( px * cosRot - py * sinRot ), KiROUND( px * sinRot + py * cosRot ) );
+}
+
+
+static void updateSegmentFromGeometryMgr( const KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER& aMgr, PCB_SHAPE* aGraphic )
+{
+    if( aMgr.IsReset() )
+        return;
+
+    if( aGraphic->GetShape() == SHAPE_T::ELLIPSE || aGraphic->GetShape() == SHAPE_T::ELLIPSE_ARC )
+    {
+        const VECTOR2I origin = aMgr.GetOrigin();
+        const VECTOR2I end = aMgr.GetEnd();
+        const VECTOR2I center = ( origin + end ) / 2;
+        const int      halfW = std::abs( end.x - origin.x ) / 2;
+        const int      halfH = std::abs( end.y - origin.y ) / 2;
+
+        int       majorRadius;
+        int       minorRadius;
+        EDA_ANGLE rotation;
+
+        if( halfW >= halfH )
+        {
+            majorRadius = std::max( halfW, 1 );
+            minorRadius = std::max( halfH, 1 );
+            rotation = ANGLE_0;
+        }
+        else
+        {
+            majorRadius = std::max( halfH, 1 );
+            minorRadius = std::max( halfW, 1 );
+            rotation = ANGLE_90;
+        }
+
+        aGraphic->SetStart( origin );
+        aGraphic->SetEllipseCenter( center );
+        aGraphic->SetEllipseMajorRadius( majorRadius );
+        aGraphic->SetEllipseMinorRadius( minorRadius );
+        aGraphic->SetEllipseRotation( rotation );
+
+        if( aGraphic->GetShape() == SHAPE_T::ELLIPSE_ARC )
+        {
+            aGraphic->SetEllipseStartAngle( ANGLE_0 );
+            aGraphic->SetEllipseEndAngle( ANGLE_360 );
+        }
+    }
+    else
     {
         aGraphic->SetStart( aMgr.GetOrigin() );
         aGraphic->SetEnd( aMgr.GetEnd() );
@@ -2358,8 +2397,8 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 {
     SHAPE_T shape = ( *aGraphic )->GetShape();
 
-    // Only three shapes are currently supported
-    wxASSERT( shape == SHAPE_T::SEGMENT || shape == SHAPE_T::CIRCLE || shape == SHAPE_T::RECTANGLE );
+    wxASSERT( shape == SHAPE_T::SEGMENT || shape == SHAPE_T::CIRCLE || shape == SHAPE_T::RECTANGLE
+              || shape == SHAPE_T::ELLIPSE || shape == SHAPE_T::ELLIPSE_ARC );
 
     const BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
     EDA_UNITS                    userUnits = m_frame->GetUserUnits();
@@ -2391,7 +2430,9 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 
     // drawing assistant overlay
     // TODO: workaround because EDA_SHAPE_TYPE_T is not visible from commons.
-    KIGFX::PREVIEW::GEOM_SHAPE geomShape( static_cast<KIGFX::PREVIEW::GEOM_SHAPE>( shape ) );
+    KIGFX::PREVIEW::GEOM_SHAPE          geomShape = ( shape == SHAPE_T::ELLIPSE || shape == SHAPE_T::ELLIPSE_ARC )
+                                                            ? KIGFX::PREVIEW::GEOM_SHAPE::RECT
+                                                            : static_cast<KIGFX::PREVIEW::GEOM_SHAPE>( shape );
     KIGFX::PREVIEW::TWO_POINT_ASSISTANT twoPointAsst( twoPointMgr, pcbIUScale, userUnits, geomShape );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
@@ -2399,10 +2440,12 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     m_view->Add( &m_preview );
     m_view->Add( &twoPointAsst );
 
-    bool     started = false;
-    bool     cancelled = false;
-    bool     isLocalOriginSet = ( m_frame->GetScreen()->m_LocalOrigin != VECTOR2D( 0, 0 ) );
-    VECTOR2I cursorPos = m_controls->GetMousePosition();
+    bool       started = false;
+    bool       cancelled = false;
+    bool       multiPhase = false;
+    PCB_SHAPE* marker = nullptr;
+    bool       isLocalOriginSet = ( m_frame->GetScreen()->m_LocalOrigin != VECTOR2D( 0, 0 ) );
+    VECTOR2I   cursorPos = m_controls->GetMousePosition();
 
     auto setCursor =
             [&]()
@@ -2417,6 +2460,9 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 m_view->Update( &m_preview );
                 delete graphic;
                 graphic = nullptr;
+
+                delete marker;
+                marker = nullptr;
 
                 if( !isLocalOriginSet )
                     m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
@@ -2445,7 +2491,8 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 
         // Drawing rectangles and circles ignore the snap behavior by default, but constrains
         // when the modifier key is pressed
-        if( shape == SHAPE_T::RECTANGLE || shape == SHAPE_T::CIRCLE)
+        if( shape == SHAPE_T::RECTANGLE || shape == SHAPE_T::CIRCLE || shape == SHAPE_T::ELLIPSE
+            || shape == SHAPE_T::ELLIPSE_ARC )
         {
             if( evt->Modifier( MD_CTRL ) )
                 angleSnap = LEADER_MODE::DEG45;
@@ -2594,70 +2641,131 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 
                 updateSegmentFromGeometryMgr( twoPointMgr, graphic );
 
+                if( shape == SHAPE_T::ELLIPSE_ARC )
+                    graphic->SetEditState( 1 );
+
                 started = true;
+            }
+            else if( multiPhase )
+            {
+                if( !graphic->ContinueEdit( cursorPos ) )
+                {
+                    // Multi-phase shape is complete
+                    if( marker )
+                    {
+                        m_preview.Remove( marker );
+                        delete marker;
+                        marker = nullptr;
+                    }
+
+                    graphic->EndEdit();
+                    graphic->ClearEditFlags();
+                    graphic->SetFlags( IS_NEW );
+                    m_preview.Clear();
+                    break;
+                }
             }
             else
             {
-                PCB_SHAPE* snapItem = dynamic_cast<PCB_SHAPE*>( grid.GetSnapped() );
-
-                if( shape == SHAPE_T::SEGMENT && snapItem && graphic->GetLength() > 0 )
+                // Check if the shape needs more clicks
+                if( graphic->ContinueEdit( cursorPos ) )
                 {
-                    // User has clicked on the end of an existing segment, closing a path
-                    BOARD_COMMIT commit( m_frame );
-
-                    commit.Add( graphic );
-                    commit.Push( _( "Draw Line" ) );
-                    m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, graphic );
-
-                    graphic = nullptr;
+                    multiPhase = true;
+                    m_view->Remove( &twoPointAsst );
+                    m_view->Update( &m_preview );
                 }
-                else if( twoPointMgr.IsEmpty() || evt->IsDblClick( BUT_LEFT ) )
+                else
                 {
-                    // User has clicked twice in the same spot, meaning we're finished
-                    delete graphic;
-                    graphic = nullptr;
-                }
+                    PCB_SHAPE* snapItem = dynamic_cast<PCB_SHAPE*>( grid.GetSnapped() );
 
-                m_preview.Clear();
-                twoPointMgr.Reset();
-                break;
+                    if( shape == SHAPE_T::SEGMENT && snapItem && graphic->GetLength() > 0 )
+                    {
+                        // User has clicked on the end of an existing segment, closing a path
+                        BOARD_COMMIT commit( m_frame );
+
+                        commit.Add( graphic );
+                        commit.Push( _( "Draw Line" ) );
+                        m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, graphic );
+
+                        graphic = nullptr;
+                    }
+                    else if( twoPointMgr.IsEmpty() || evt->IsDblClick( BUT_LEFT ) )
+                    {
+                        // User has clicked twice in the same spot, meaning we're finished
+                        delete graphic;
+                        graphic = nullptr;
+                    }
+
+                    m_preview.Clear();
+                    twoPointMgr.Reset();
+                    break;
+                }
             }
 
             twoPointMgr.SetEnd( GetClampedCoords( cursorPos ) );
         }
         else if( evt->IsMotion() )
         {
-            VECTOR2I clampedCursorPos = cursorPos;
-
-            if( shape == SHAPE_T::CIRCLE || shape == SHAPE_T::ARC )
-                clampedCursorPos = getClampedRadiusEnd( twoPointMgr.GetOrigin(), cursorPos );
-            else
-                clampedCursorPos = getClampedDifferenceEnd( twoPointMgr.GetOrigin(), cursorPos );
-
-            // constrained lines
-            if( started && angleSnap != LEADER_MODE::DIRECT )
+            if( multiPhase )
             {
-                const VECTOR2I lineVector( clampedCursorPos - VECTOR2I( twoPointMgr.GetOrigin() ) );
+                graphic->CalcEdit( GetClampedCoords( cursorPos ) );
 
-                VECTOR2I newEnd;
-                if( angleSnap == LEADER_MODE::DEG90 )
-                    newEnd = GetVectorSnapped90( lineVector );
+                if( shape == SHAPE_T::ELLIPSE_ARC )
+                {
+                    VECTOR2I markerPos = evalEllipsePoint( graphic, cursorPos );
+
+                    if( !marker )
+                    {
+                        marker = new PCB_SHAPE( static_cast<BOARD_ITEM*>( m_frame->GetModel() ) );
+                        marker->SetShape( SHAPE_T::CIRCLE );
+                        marker->SetFilled( true );
+                        marker->SetLayer( m_layer );
+                        marker->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+                        m_preview.Add( marker );
+                    }
+
+                    int radius = KiROUND( m_view->ToWorld( 4 ) );
+                    marker->SetStart( markerPos );
+                    marker->SetEnd( markerPos + VECTOR2I( radius, 0 ) );
+                }
+
+                m_view->Update( &m_preview );
+                frame()->SetMsgPanel( graphic );
+            }
+            else
+            {
+                VECTOR2I clampedCursorPos = cursorPos;
+
+                if( shape == SHAPE_T::CIRCLE || shape == SHAPE_T::ARC )
+                    clampedCursorPos = getClampedRadiusEnd( twoPointMgr.GetOrigin(), cursorPos );
                 else
-                    newEnd = GetVectorSnapped45( lineVector, ( shape == SHAPE_T::RECTANGLE ) );
+                    clampedCursorPos = getClampedDifferenceEnd( twoPointMgr.GetOrigin(), cursorPos );
 
-                m_controls->ForceCursorPosition( true, VECTOR2I( twoPointMgr.GetEnd() ) );
-                twoPointMgr.SetEnd( twoPointMgr.GetOrigin() + newEnd );
-                twoPointMgr.SetAngleSnap( angleSnap );
-            }
-            else
-            {
-                twoPointMgr.SetEnd( clampedCursorPos );
-                twoPointMgr.SetAngleSnap( LEADER_MODE::DIRECT );
-            }
+                // constrained lines
+                if( started && angleSnap != LEADER_MODE::DIRECT )
+                {
+                    const VECTOR2I lineVector( clampedCursorPos - VECTOR2I( twoPointMgr.GetOrigin() ) );
 
-            updateSegmentFromGeometryMgr( twoPointMgr, graphic );
-            m_view->Update( &m_preview );
-            m_view->Update( &twoPointAsst );
+                    VECTOR2I newEnd;
+                    if( angleSnap == LEADER_MODE::DEG90 )
+                        newEnd = GetVectorSnapped90( lineVector );
+                    else
+                        newEnd = GetVectorSnapped45( lineVector, ( shape == SHAPE_T::RECTANGLE ) );
+
+                    m_controls->ForceCursorPosition( true, VECTOR2I( twoPointMgr.GetEnd() ) );
+                    twoPointMgr.SetEnd( twoPointMgr.GetOrigin() + newEnd );
+                    twoPointMgr.SetAngleSnap( angleSnap );
+                }
+                else
+                {
+                    twoPointMgr.SetEnd( clampedCursorPos );
+                    twoPointMgr.SetAngleSnap( LEADER_MODE::DIRECT );
+                }
+
+                updateSegmentFromGeometryMgr( twoPointMgr, graphic );
+                m_view->Update( &m_preview );
+                m_view->Update( &twoPointAsst );
+            }
         }
         else if( started && (   evt->IsAction( &PCB_ACTIONS::doDelete )
                              || evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) ) )
@@ -2739,7 +2847,9 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
     if( !isLocalOriginSet ) // reset the relative coordinate if it was not set before
         m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
 
-    m_view->Remove( &twoPointAsst );
+    if( !multiPhase )
+        m_view->Remove( &twoPointAsst );
+
     m_view->Remove( &m_preview );
 
     if( selection().Empty() )
@@ -4392,6 +4502,57 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 }
 
 
+int DRAWING_TOOL::runSimpleShapeDraw(
+        const TOOL_EVENT& aEvent, SHAPE_T aShapeType, MODE aMode, const wxString& aCommitLabel,
+        std::function<bool( const TOOL_EVENT&, PCB_SHAPE**, std::optional<VECTOR2D> )> aDrawer )
+{
+    if( m_isFootprintEditor && !m_frame->GetModel() )
+        return 0;
+
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+
+    BOARD_ITEM*             parent = m_frame->GetModel();
+    BOARD_COMMIT            commit( m_frame );
+    SCOPED_DRAW_MODE        scopedDrawMode( m_mode, aMode );
+    std::optional<VECTOR2D> startingPoint;
+
+    auto makeShape = [&]()
+    {
+        PCB_SHAPE* s = new PCB_SHAPE( parent );
+        s->SetShape( aShapeType );
+        s->SetFilled( false );
+        s->SetFlags( IS_NEW );
+        return s;
+    };
+
+    PCB_SHAPE* shape = makeShape();
+
+    if( aEvent.HasPosition() )
+        startingPoint = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
+
+    m_frame->PushTool( aEvent );
+    Activate();
+
+    while( aDrawer( aEvent, &shape, startingPoint ) )
+    {
+        if( shape )
+        {
+            commit.Add( shape );
+            commit.Push( aCommitLabel );
+            m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, shape );
+        }
+
+        shape = makeShape();
+        startingPoint = std::nullopt;
+    }
+
+    return 0;
+}
+
+
 const unsigned int DRAWING_TOOL::WIDTH_STEP = pcbIUScale.mmToIU( 0.1 );
 
 
@@ -4402,6 +4563,8 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawPolygon.MakeEvent() );
     Go( &DRAWING_TOOL::DrawRectangle,         PCB_ACTIONS::drawRectangle.MakeEvent() );
     Go( &DRAWING_TOOL::DrawCircle,            PCB_ACTIONS::drawCircle.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawEllipse,           PCB_ACTIONS::drawEllipse.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawEllipseArc,        PCB_ACTIONS::drawEllipseArc.MakeEvent() );
     Go( &DRAWING_TOOL::DrawArc,               PCB_ACTIONS::drawArc.MakeEvent() );
     Go( &DRAWING_TOOL::DrawBezier,            PCB_ACTIONS::drawBezier.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawAlignedDimension.MakeEvent() );

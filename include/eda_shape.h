@@ -27,8 +27,10 @@
 #include <memory>
 
 #include <core/mirror.h>
+#include <geometry/ellipse.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/approximation.h>
+#include <geometry/shape_ellipse.h>
 #include <properties/property.h>
 #include <stroke_params.h>
 #include <trigo.h>
@@ -46,11 +48,13 @@ enum class SHAPE_T : int
 {
     UNDEFINED = -1,
     SEGMENT = 0,
-    RECTANGLE,      ///< Use RECTANGLE instead of RECT to avoid collision in a Windows header.
+    RECTANGLE, ///< Use RECTANGLE instead of RECT to avoid collision in a Windows header.
     ARC,
     CIRCLE,
     POLY,
-    BEZIER
+    BEZIER,
+    ELLIPSE,
+    ELLIPSE_ARC
 };
 
 
@@ -273,6 +277,65 @@ public:
 
     void            SetBezierC2( const VECTOR2I& aPt ) { m_bezierC2 = aPt; }
     const VECTOR2I& GetBezierC2() const { return m_bezierC2; }
+
+    void SetEllipseCenter( const VECTOR2I& aPt )
+    {
+        m_ellipse.Center = aPt;
+        m_hatchingDirty = true;
+        recalcEllipseArcEndpoints();
+    }
+
+    const VECTOR2I& GetEllipseCenter() const { return m_ellipse.Center; }
+
+    void SetEllipseMajorRadius( int aR )
+    {
+        m_ellipse.MajorRadius = aR;
+        m_hatchingDirty = true;
+        recalcEllipseArcEndpoints();
+    }
+
+    int GetEllipseMajorRadius() const { return m_ellipse.MajorRadius; }
+
+    void SetEllipseMinorRadius( int aR )
+    {
+        m_ellipse.MinorRadius = aR;
+        m_hatchingDirty = true;
+        recalcEllipseArcEndpoints();
+    }
+
+    int GetEllipseMinorRadius() const { return m_ellipse.MinorRadius; }
+
+    void SetEllipseRotation( const EDA_ANGLE& aA )
+    {
+        m_ellipse.Rotation = aA;
+        m_hatchingDirty = true;
+        recalcEllipseArcEndpoints();
+    }
+
+    EDA_ANGLE GetEllipseRotation() const { return m_ellipse.Rotation; }
+
+    // Meaningful only when m_shape == SHAPE_T::ELLIPSE_ARC.
+    void SetEllipseStartAngle( const EDA_ANGLE& aA )
+    {
+        m_ellipse.StartAngle = aA;
+        m_hatchingDirty = true;
+        recalcEllipseArcEndpoints();
+    }
+
+    EDA_ANGLE GetEllipseStartAngle() const { return m_ellipse.StartAngle; }
+
+    void SetEllipseEndAngle( const EDA_ANGLE& aA )
+    {
+        m_ellipse.EndAngle = aA;
+        m_hatchingDirty = true;
+        recalcEllipseArcEndpoints();
+    }
+
+    EDA_ANGLE GetEllipseEndAngle() const { return m_ellipse.EndAngle; }
+
+    /// Direct read-only access to the underlying ellipse payload. Useful for copying
+    /// into a SHAPE_ELLIPSE when building effective collision shapes.
+    const ELLIPSE<int>& GetEllipse() const { return m_ellipse; }
 
     VECTOR2I getCenter() const;
     void     SetCenter( const VECTOR2I& aCenter );
@@ -507,6 +570,12 @@ protected:
     std::vector<SHAPE*> makeEffectiveShapes( bool aEdgeOnly, bool aLineChainOnly = false,
                                              bool aHittesting = false ) const;
 
+    SHAPE_ELLIPSE buildShapeEllipse() const;
+
+    /// When m_shape == ELLIPSE_ARC, recompute m_start/m_end from m_ellipse.
+    /// No-op for other shapes.
+    void recalcEllipseArcEndpoints();
+
     virtual int getMaxError() const { return 100; }
 
     // non-const for PCB_SHAPE
@@ -537,6 +606,7 @@ protected:
     VECTOR2I               m_bezierC2;          // Bezier Control Point 2
 
     std::vector<VECTOR2I>  m_bezierPoints;
+    ELLIPSE<int>                            m_ellipse;  // Used only for ELLIPSE / ELLIPSE_ARC
     mutable std::unique_ptr<SHAPE_POLY_SET> m_poly;     // Stores the S_POLYGON shape
 
     int                    m_editState;

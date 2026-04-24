@@ -218,9 +218,13 @@ private:
 
     SCH_FIELD* parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol );
 
+    void parseEllipseBody( SCH_SHAPE* aShape, bool aIsArc, bool aIsSchematic, TSCHEMATIC_T::T aFirstTok );
+
     SCH_SHAPE* parseSymbolArc();
     SCH_SHAPE* parseSymbolBezier();
     SCH_SHAPE* parseSymbolCircle();
+    SCH_SHAPE*   parseSymbolEllipse();
+    SCH_SHAPE*   parseSymbolEllipseArc();
     SCH_PIN* parseSymbolPin();
     SCH_SHAPE* parseSymbolPolyLine();
     SCH_SHAPE* parseSymbolRectangle();
@@ -247,6 +251,8 @@ private:
     SCH_SHAPE* parseSchPolyLine();
     SCH_SHAPE* parseSchArc();
     SCH_SHAPE* parseSchCircle();
+    SCH_SHAPE*          parseSchEllipse();
+    SCH_SHAPE*          parseSchEllipseArc();
     SCH_SHAPE* parseSchRectangle();
     SCH_SHAPE* parseSchBezier();
     SCH_RULE_AREA* parseSchRuleArea();

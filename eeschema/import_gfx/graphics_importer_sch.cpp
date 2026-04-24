@@ -216,3 +216,39 @@ void GRAPHICS_IMPORTER_SCH::AddSpline( const VECTOR2D& aStart, const VECTOR2D& a
             addItem( std::move( spline ) );
     }
 }
+
+
+void GRAPHICS_IMPORTER_SCH::AddEllipse( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius,
+                                        const EDA_ANGLE& aRotation, const IMPORTED_STROKE& aStroke, bool aFilled,
+                                        const COLOR4D& aFillColor )
+{
+    std::unique_ptr<SCH_SHAPE> ellipse = std::make_unique<SCH_SHAPE>( SHAPE_T::ELLIPSE );
+    ellipse->SetStroke( MapStrokeParams( aStroke ) );
+    ellipse->SetFilled( aFilled );
+    ellipse->SetFillColor( aFillColor );
+
+    ellipse->SetEllipseCenter( MapCoordinate( aCenter ) );
+    ellipse->SetEllipseMajorRadius( KiROUND( aMajorRadius * ImportScalingFactor().x ) );
+    ellipse->SetEllipseMinorRadius( KiROUND( aMinorRadius * ImportScalingFactor().y ) );
+    ellipse->SetEllipseRotation( aRotation );
+
+    addItem( std::move( ellipse ) );
+}
+
+
+void GRAPHICS_IMPORTER_SCH::AddEllipseArc( const VECTOR2D& aCenter, double aMajorRadius, double aMinorRadius,
+                                           const EDA_ANGLE& aRotation, const EDA_ANGLE& aStartAngle,
+                                           const EDA_ANGLE& aEndAngle, const IMPORTED_STROKE& aStroke )
+{
+    std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ELLIPSE_ARC );
+    arc->SetStroke( MapStrokeParams( aStroke ) );
+
+    arc->SetEllipseCenter( MapCoordinate( aCenter ) );
+    arc->SetEllipseMajorRadius( KiROUND( aMajorRadius * ImportScalingFactor().x ) );
+    arc->SetEllipseMinorRadius( KiROUND( aMinorRadius * ImportScalingFactor().y ) );
+    arc->SetEllipseRotation( aRotation );
+    arc->SetEllipseStartAngle( aStartAngle );
+    arc->SetEllipseEndAngle( aEndAngle );
+
+    addItem( std::move( arc ) );
+}

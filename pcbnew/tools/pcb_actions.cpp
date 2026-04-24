@@ -141,6 +141,24 @@ TOOL_ACTION PCB_ACTIONS::drawCircle( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::add_circle )
         .Flags( AF_ACTIVATE ) );
 
+TOOL_ACTION PCB_ACTIONS::drawEllipse( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.ellipse" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Draw Ellipse" ) )
+        .Tooltip( _( "Draw an ellipse" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::add_ellipse )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION PCB_ACTIONS::drawEllipseArc( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.ellipseArc" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Draw Elliptical Arcs" ) )
+        .Tooltip( _( "Draw an elliptical arc" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::add_ellipse_arc )
+        .Flags( AF_ACTIVATE ) );
+
 TOOL_ACTION PCB_ACTIONS::drawArc( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.arc" )
         .Scope( AS_GLOBAL )

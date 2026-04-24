@@ -116,6 +116,8 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_EDIT_TOOLBAR_SETTINGS::DefaultToo
                       } )
               .AppendAction( PCB_ACTIONS::drawRectangle )
               .AppendAction( PCB_ACTIONS::drawCircle )
+              .AppendAction( PCB_ACTIONS::drawEllipse ) 
+              .AppendAction( PCB_ACTIONS::drawEllipseArc )
               .AppendAction( PCB_ACTIONS::drawPolygon )
               .AppendAction( PCB_ACTIONS::drawBezier )
               .AppendAction( PCB_ACTIONS::placeReferenceImage )

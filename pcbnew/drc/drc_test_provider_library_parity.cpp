@@ -215,6 +215,20 @@ bool primitiveNeedsUpdate( const std::shared_ptr<PCB_SHAPE>& a,
         TEST_PT( a->GetBezierC2(), b->GetBezierC2(), "" );
         break;
 
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+        TEST_PT( a->GetEllipseCenter(), b->GetEllipseCenter(), "" );
+        TEST( a->GetEllipseMajorRadius(), b->GetEllipseMajorRadius(), "" );
+        TEST( a->GetEllipseMinorRadius(), b->GetEllipseMinorRadius(), "" );
+        TEST( a->GetEllipseRotation(), b->GetEllipseRotation(), "" );
+
+        if( a->GetShape() == SHAPE_T::ELLIPSE_ARC )
+        {
+            TEST( a->GetEllipseStartAngle(), b->GetEllipseStartAngle(), "" );
+            TEST( a->GetEllipseEndAngle(), b->GetEllipseEndAngle(), "" );
+        }
+        break;
+
     case SHAPE_T::POLY:
     {
         TEST( a->GetPolyShape().TotalVertices(), b->GetPolyShape().TotalVertices(), "" );
@@ -562,6 +576,20 @@ bool shapeNeedsUpdate( const PCB_SHAPE& curr_shape, const PCB_SHAPE& ref_shape )
         TEST_PT( curr_shape.GetBezierC2(), ref_shape.GetBezierC2(), "" );
         break;
 
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+        TEST_PT( curr_shape.GetEllipseCenter(), ref_shape.GetEllipseCenter(), "" );
+        TEST( curr_shape.GetEllipseMajorRadius(), ref_shape.GetEllipseMajorRadius(), "" );
+        TEST( curr_shape.GetEllipseMinorRadius(), ref_shape.GetEllipseMinorRadius(), "" );
+        TEST( curr_shape.GetEllipseRotation(), ref_shape.GetEllipseRotation(), "" );
+
+        if( curr_shape.GetShape() == SHAPE_T::ELLIPSE_ARC )
+        {
+            TEST( curr_shape.GetEllipseStartAngle(), ref_shape.GetEllipseStartAngle(), "" );
+            TEST( curr_shape.GetEllipseEndAngle(), ref_shape.GetEllipseEndAngle(), "" );
+        }
+        break;
+
     case SHAPE_T::POLY:
     {
         TEST( curr_shape.GetPolyShape().TotalVertices(), ref_shape.GetPolyShape().TotalVertices(), "" );
@@ -625,9 +653,8 @@ bool zoneNeedsUpdate( const ZONE* a, const ZONE* b, REPORTER* aReporter )
     // Kind of annoying footprint pads use both in1_cu and have an stackup mode setting
     bool innerLayerExpansionAllowed = b->GetLayerSet().Contains( In1_Cu );
 
-    if( !boardLayersMatchWithInnerLayerExpansion( a->GetLayerSet(), 
-                                                 getBoardNormalizedLayerSet( b, a->GetBoard() ),
-                                                 innerLayerExpansionAllowed ) )
+    if( !boardLayersMatchWithInnerLayerExpansion( a->GetLayerSet(), getBoardNormalizedLayerSet( b, a->GetBoard() ),
+                                                  innerLayerExpansionAllowed ) )
     {
         diff = true;
 

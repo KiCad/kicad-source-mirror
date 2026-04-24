@@ -36,6 +36,9 @@
 #include "board.h"
 #include "board_design_settings.h"
 #include "geometry/eda_angle.h"
+#include "geometry/shape_ellipse.h"
+#include "geometry/shape_line_chain.h"
+#include "geometry/shape_poly_set.h"
 #include "odb_eda_data.h"
 #include "pcb_io_odbpp.h"
 #include <callback_gal.h>
@@ -219,6 +222,56 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
     case SHAPE_T::SEGMENT:
         AddFeatureLine( aShape.GetStart(), aShape.GetEnd(), stroke_width );
         break;
+
+    case SHAPE_T::ELLIPSE:
+    {
+        int maxError = m_board->GetDesignSettings().m_MaxError;
+
+        SHAPE_ELLIPSE e( aShape.GetEllipseCenter(), aShape.GetEllipseMajorRadius(), aShape.GetEllipseMinorRadius(),
+                         aShape.GetEllipseRotation() );
+
+        SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( maxError );
+        chain.SetClosed( true );
+
+        if( aShape.IsSolidFill() )
+        {
+            SHAPE_POLY_SET poly_set;
+            poly_set.AddOutline( chain );
+            poly_set.Fracture();
+
+            for( int ii = 0; ii < poly_set.OutlineCount(); ++ii )
+                AddContour( poly_set, ii, FILL_T::FILLED_SHAPE );
+        }
+
+        if( stroke_width > 0 )
+        {
+            for( int ii = 0; ii < chain.SegmentCount(); ++ii )
+            {
+                const SEG& seg = chain.CSegment( ii );
+                AddFeatureLine( seg.A, seg.B, stroke_width );
+            }
+        }
+
+        break;
+    }
+
+    case SHAPE_T::ELLIPSE_ARC:
+    {
+        int maxError = m_board->GetDesignSettings().m_MaxError;
+
+        SHAPE_ELLIPSE e( aShape.GetEllipseCenter(), aShape.GetEllipseMajorRadius(), aShape.GetEllipseMinorRadius(),
+                         aShape.GetEllipseRotation(), aShape.GetEllipseStartAngle(), aShape.GetEllipseEndAngle() );
+
+        SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( maxError );
+
+        for( int ii = 0; ii < chain.SegmentCount(); ++ii )
+        {
+            const SEG& seg = chain.CSegment( ii );
+            AddFeatureLine( seg.A, seg.B, stroke_width );
+        }
+
+        break;
+    }
 
     default:
         wxLogError( wxT( "Unknown shape when adding ODB++ layer feature" ) );

@@ -137,6 +137,8 @@ std::optional<TOOLBAR_CONFIGURATION> SCH_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
               .AppendAction( SCH_ACTIONS::drawTable )
               .AppendAction( SCH_ACTIONS::drawRectangle )
               .AppendAction( SCH_ACTIONS::drawCircle )
+              .AppendAction( SCH_ACTIONS::drawEllipse )
+              .AppendAction( SCH_ACTIONS::drawEllipseArc )
               .AppendAction( SCH_ACTIONS::drawArc )
               .AppendAction( SCH_ACTIONS::drawBezier )
               .AppendAction( SCH_ACTIONS::drawLines )

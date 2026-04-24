@@ -68,6 +68,10 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxGridBagSizer* m_gbsCircleCenterPoint;
 		wxPanel* m_bezier;
 		wxGridBagSizer* m_gbsBezier;
+		wxPanel* m_ellipse;
+		wxGridBagSizer* m_gbsEllipse;
+		wxPanel* m_ellipseArc;
+		wxGridBagSizer* m_gbsEllipseArc;
 		wxCheckBox* m_locked;
 		wxCheckBox* m_cbRoundRect;
 		wxStaticText* m_cornerRadiusLabel;
