@@ -27,6 +27,7 @@
 #include <io.h>
 #include <stdexcept>
 #include <string>
+#include <vector>
 #include <windows.h>
 #include <shlwapi.h>
 #include <winternl.h>
@@ -113,47 +114,28 @@ FILE* KIPLATFORM::IO::SeqFOpen( const wxString& aPath, const wxString& aMode )
 
 bool KIPLATFORM::IO::DuplicatePermissions( const wxString &aSrc, const wxString &aDest )
 {
-    bool retval = false;
+    // Only copy the DACL. Copying OWNER/GROUP would require SE_RESTORE_NAME when the
+    // target is owned by a different principal (common for files under ProgramData or
+    // on network shares), turning ACL preservation into a hard failure. The temp file
+    // is created by the current user, so leaving owner as the current user is correct.
+    const SECURITY_INFORMATION secInfo = DACL_SECURITY_INFORMATION;
+
+    // Size-probe call: required buffer size is returned via dwSize. By API contract this
+    // call fails with ERROR_INSUFFICIENT_BUFFER; the previous implementation wrapped it
+    // in an if() and therefore never executed the body, silently returning false on every
+    // save and surfacing as "Cannot copy permissions" once atomic save made the failure
+    // fatal.
     DWORD dwSize = 0;
+    GetFileSecurityW( aSrc.wc_str(), secInfo, nullptr, 0, &dwSize );
 
-    // Retrieve the security descriptor from the source file
-    if( GetFileSecurity( aSrc.wc_str(),
-            OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
-            NULL, 0, &dwSize ) )
-    {
-        #ifdef __MINGW32__
-        // pSD is used as PSECURITY_DESCRIPTOR, aka void* pointer
-        // it create an annoying warning on gcc with "delete[] pSD;" :
-        // "warning: deleting 'PSECURITY_DESCRIPTOR' {aka 'void*'} is undefined"
-        // so use a BYTE* pointer (do not cast it to a void pointer)
-        BYTE* pSD = new BYTE[dwSize];
-        #else
-        PSECURITY_DESCRIPTOR pSD = static_cast<PSECURITY_DESCRIPTOR>( new BYTE[dwSize] );
-        #endif
+    if( dwSize == 0 || GetLastError() != ERROR_INSUFFICIENT_BUFFER )
+        return false;
 
-        if( !pSD )
-            return false;
+    std::vector<BYTE> sdBuffer( dwSize );
+    PSECURITY_DESCRIPTOR pSD = static_cast<PSECURITY_DESCRIPTOR>( sdBuffer.data() );
 
-        if( !GetFileSecurity( aSrc.wc_str(),
-                OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION
-                        | DACL_SECURITY_INFORMATION, pSD, dwSize, &dwSize ) )
-        {
-            delete[] pSD;
-            return false;
-        }
-
-        // Assign the retrieved security descriptor to the destination file
-        if( SetFileSecurity( aDest.wc_str(),
-                OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION
-                        | DACL_SECURITY_INFORMATION, pSD ) )
-        {
-            retval = true;
-        }
-
-        delete[] pSD;
-    }
-
-    return retval;
+    return GetFileSecurityW( aSrc.wc_str(), secInfo, pSD, dwSize, &dwSize )
+           && SetFileSecurityW( aDest.wc_str(), secInfo, pSD );
 }
 
 bool KIPLATFORM::IO::MakeWriteable( const wxString& aFilePath )
