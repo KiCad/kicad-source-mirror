@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-15 19:16+0300\n"
+"POT-Creation-Date: 2026-04-24 17:36+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1419,6 +1419,10 @@ msgstr "Schematic file '%s' could not be saved as design block at '%s'."
 #, c-format
 msgid "Board file '%s' could not be saved as design block at '%s'."
 msgstr "Board file '%s' could not be saved as design block at '%s'."
+
+#, c-format
+msgid "Cannot save design block metadata '%s': %s"
+msgstr "Cannot save design block metadata '%s': %s"
 
 #, c-format
 msgid "Design block metadata file '%s' could not be saved."
@@ -4548,8 +4552,8 @@ msgid "Could not create directory '%s'"
 msgstr "Could not create directory '%s'"
 
 #, c-format
-msgid "Could not clone repository '%s'"
-msgstr "Could not clone repository '%s'"
+msgid "Could not clone repository '%s' : %s"
+msgstr "Could not clone repository '%s' : %s"
 
 #, c-format
 msgid "Failed to get repository index: %s"
@@ -6042,6 +6046,18 @@ msgstr "Maximum line length exceeded"
 
 msgid "Line length exceeded"
 msgstr "Line length exceeded"
+
+#, c-format
+msgid "Cannot flush '%s' to disk: %s"
+msgstr "Cannot flush '%s' to disk: %s"
+
+#, c-format
+msgid "Failed to commit save of '%s': %s"
+msgstr "Failed to commit save of '%s': %s"
+
+#, c-format
+msgid "Write failed to '%s': %s"
+msgstr "Write failed to '%s': %s"
 
 msgid "Default Editing"
 msgstr "Default Editing"
@@ -7894,11 +7910,14 @@ msgstr "Annotated %s as %s."
 msgid "Annotation complete."
 msgstr "Annotation complete."
 
-msgid "Added items via API"
-msgstr "Added items via API"
-
 msgid "Created items via API"
 msgstr "Created items via API"
+
+msgid "Modified items via API"
+msgstr "Modified items via API"
+
+msgid "Deleted items via API"
+msgstr "Deleted items via API"
 
 #, c-format
 msgid ""
@@ -14286,6 +14305,14 @@ msgstr ""
 msgid "LTspice schematic files"
 msgstr "LTspice schematic files"
 
+#, c-format
+msgid "'%s' is not a PADS Logic ASCII file."
+msgstr "'%s' is not a PADS Logic ASCII file."
+
+#, c-format
+msgid "Failed to parse PADS Logic file '%s'."
+msgstr "Failed to parse PADS Logic file '%s'."
+
 msgid "PADS Logic schematic files"
 msgstr "PADS Logic schematic files"
 
@@ -14600,6 +14627,9 @@ msgstr "(Deleted Item)"
 msgid "Hierarchical Sheet Pin '%s'"
 msgstr "Hierarchical Sheet Pin '%s'"
 
+msgid "Exclude From Position Files"
+msgstr "Exclude From Position Files"
+
 msgid "Power symbol"
 msgstr "Power symbol"
 
@@ -14637,9 +14667,6 @@ msgstr "Library Link"
 
 msgid "Library Description"
 msgstr "Library Description"
-
-msgid "Exclude From Position Files"
-msgstr "Exclude From Position Files"
 
 #, c-format
 msgid "%d Column Table"
@@ -16128,6 +16155,9 @@ msgstr "Incorrect diff pin name"
 
 msgid "Incorrect inv_pin name"
 msgstr "Incorrect inv_pin name"
+
+msgid "Wrong number of columns for series pin mapping."
+msgstr "Wrong number of columns for series pin mapping."
 
 msgid "Internal error detected, a waveform should exist"
 msgstr "Internal error detected, a waveform should exist"
@@ -22477,8 +22507,24 @@ msgstr "Local path: monitoring folder changes"
 msgid "Please wait"
 msgstr "Please wait"
 
-msgid "Waiting for Git operations to finish..."
-msgstr "Waiting for Git operations to finish..."
+msgid "Closing project..."
+msgstr "Closing project..."
+
+msgid ""
+"A Git operation is still running.\n"
+"Keep waiting, or abandon?"
+msgstr ""
+"A Git operation is still running.\n"
+"Keep waiting, or abandon?"
+
+msgid "Git Operation Delayed"
+msgstr "Git Operation Delayed"
+
+msgid "Keep Waiting"
+msgstr "Keep Waiting"
+
+msgid "Abandon"
+msgstr "Abandon"
 
 msgid "The selected directory is already a Git project."
 msgstr "The selected directory is already a Git project."
@@ -24123,6 +24169,44 @@ msgstr "W"
 msgid "Internal Layer Tracks"
 msgstr "Internal Layer Tracks"
 
+msgid ""
+"'Constant': εr and tan δ applied at all frequencies.\n"
+"'Djordjevic-Sarkar': causal wideband Debye anchored at the spec frequency."
+msgstr ""
+"'Constant': εr and tan δ applied at all frequencies.\n"
+"'Djordjevic-Sarkar': causal wideband Debye anchored at the spec frequency."
+
+msgid ""
+"Enable solder resist / LPI overlay correction.  Affects εeff, Z0, and "
+"dielectric loss for microstrip, coupled microstrip, CPW, and CBCPW."
+msgstr ""
+"Enable solder resist / LPI overlay correction.  Affects εeff, Z0, and "
+"dielectric loss for microstrip, coupled microstrip, CPW, and CBCPW."
+
+msgid ""
+"Cured mask thickness.  Typical LPI is 15-30 um; set to 0 or uncheck to "
+"disable."
+msgstr ""
+"Cured mask thickness.  Typical LPI is 15-30 um; set to 0 or uncheck to "
+"disable."
+
+msgid ""
+"Mask relative permittivity.  Default 3.5 for standard green LPI.  Range "
+"3.3-3.8 for typical resins."
+msgstr ""
+"Mask relative permittivity.  Default 3.5 for standard green LPI.  Range "
+"3.3-3.8 for typical resins."
+
+msgid "Mask loss tangent.  Default 0.025 for LPI."
+msgstr "Mask loss tangent.  Default 0.025 for LPI."
+
+msgid ""
+"Enable when the mask fills the CPW slots (standard LPI process).\n"
+"Disable for selective mask that covers only the traces."
+msgstr ""
+"Enable when the mask fills the CPW slots (standard LPI process).\n"
+"Disable for selective mask that covers only the traces."
+
 msgid "Microstrip Line"
 msgstr "Microstrip Line"
 
@@ -24155,6 +24239,33 @@ msgstr "Transmission Line Type"
 
 msgid "Substrate Parameters"
 msgstr "Substrate Parameters"
+
+msgid "Dielectric model:"
+msgstr "Dielectric model:"
+
+msgid "Constant (εr, tan δ)"
+msgstr "Constant (εr, tan δ)"
+
+msgid "Djordjevic-Sarkar causal"
+msgstr "Djordjevic-Sarkar causal"
+
+msgid "Soldermask present"
+msgstr "Soldermask present"
+
+msgid "Mask fills gaps"
+msgstr "Mask fills gaps"
+
+msgid "Mask thickness:"
+msgstr "Mask thickness:"
+
+msgid "µm"
+msgstr "µm"
+
+msgid "Mask εr:"
+msgstr "Mask εr:"
+
+msgid "Mask tan δ:"
+msgstr "Mask tan δ:"
 
 msgid "Er:"
 msgstr "Er:"
@@ -24191,6 +24302,9 @@ msgstr "Component Parameters"
 
 msgid "Frequency:"
 msgstr "Frequency:"
+
+msgid "Spec frequency:"
+msgstr "Spec frequency:"
 
 msgid "Physical Parameters"
 msgstr "Physical Parameters"
@@ -24645,6 +24759,13 @@ msgstr "Dielectric Loss Factor"
 msgid "Specific Resistance"
 msgstr "Specific Resistance"
 
+msgid ""
+"Height from substrate top to grounded cover. Leave at the large default "
+"value for no cover."
+msgstr ""
+"Height from substrate top to grounded cover. Leave at the large default "
+"value for no cover."
+
 msgid "Substrate relative permittivity (dielectric constant)"
 msgstr "Substrate relative permittivity (dielectric constant)"
 
@@ -24679,9 +24800,6 @@ msgstr "Skin depth:"
 
 msgid "Height of substrate"
 msgstr "Height of substrate"
-
-msgid "Height of box top"
-msgstr "Height of box top"
 
 msgid "Strip thickness"
 msgstr "Strip thickness"
@@ -24796,6 +24914,15 @@ msgstr "Zodd"
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
 msgstr "Odd mode impedance (lines driven by opposite (differential) voltages)"
 
+msgid "Common-mode Impedance (Zcomm):"
+msgstr "Common-mode Impedance (Zcomm):"
+
+msgid "Coupling coefficient (kc):"
+msgstr "Coupling coefficient (kc):"
+
+msgid "Distance from track to closest ground plane (default: centered)"
+msgstr "Distance from track to closest ground plane (default: centered)"
+
 msgid "Distance between strip and top metal"
 msgstr "Distance between strip and top metal"
 
@@ -24858,12 +24985,6 @@ msgstr "km/h"
 
 msgid "mi/h"
 msgstr "mi/h"
-
-msgid "Modified items via API"
-msgstr "Modified items via API"
-
-msgid "Deleted items via API"
-msgstr "Deleted items via API"
 
 msgid "Autoplacing components..."
 msgstr "Autoplacing components…"
@@ -24955,6 +25076,14 @@ msgstr "and others"
 
 msgid "no layers"
 msgstr "no layers"
+
+#, c-format
+msgid "Cannot save board '%s': %s"
+msgstr "Cannot save board '%s': %s"
+
+#, c-format
+msgid "Unexpected error saving board '%s': %s"
+msgstr "Unexpected error saving board '%s': %s"
 
 #, c-format
 msgid "Dielectric %d"
@@ -28242,6 +28371,9 @@ msgstr "Set to layer and dimension default values:"
 msgid "Set to layer default values:"
 msgstr "Set to layer default values:"
 
+msgid "(auto)"
+msgstr "(auto)"
+
 msgid "PCB graphic items"
 msgstr "PCB graphic items"
 
@@ -28283,6 +28415,9 @@ msgstr "Visible  (fields only)"
 
 msgid "Keep upright"
 msgstr "Keep upright"
+
+msgid "Adjust the text thickness"
+msgstr "Adjust the text thickness"
 
 msgid "Center on footprint"
 msgstr "Center on footprint"
@@ -28507,6 +28642,52 @@ msgid ""
 msgstr ""
 "All required layers (marked with '*') must be matched. Please click 'Auto-"
 "Match Layers' to automatically match the remaining layers"
+
+msgid "Auto-migrate 3D model references"
+msgstr "Auto-migrate 3D model references"
+
+msgid "(keep existing reference)"
+msgstr "(keep existing reference)"
+
+msgid "Add 3D Model Search Directory"
+msgstr "Add 3D Model Search Directory"
+
+msgid "Select 3D Model File"
+msgstr "Select 3D Model File"
+
+msgid "user-selected"
+msgstr "user-selected"
+
+msgid "Migrate 3D model references"
+msgstr "Migrate 3D model references"
+
+msgid ""
+"This board references 3D models that are no longer present on your system.\n"
+"Select replacements below, or keep the existing references unchanged."
+msgstr ""
+"This board references 3D models that are no longer present on your system.\n"
+"Select replacements below, or keep the existing references unchanged."
+
+msgid "Missing 3D model references:"
+msgstr "Missing 3D model references:"
+
+msgid "Potential replacements:"
+msgstr "Potential replacements:"
+
+msgid "Add Search Directory..."
+msgstr "Add Search Directory..."
+
+msgid "Open External File..."
+msgstr "Open External File..."
+
+msgid "Replace Models"
+msgstr "Replace Models"
+
+msgid "Keep Existing"
+msgstr "Keep Existing"
+
+msgid "Migrate 3D Models"
+msgstr "Migrate 3D Models"
 
 msgid "Rotate around item anchor"
 msgstr "Rotate around item anchor"
@@ -29969,9 +30150,6 @@ msgstr "To layer:"
 msgid "Swap Layers"
 msgstr "Swap Layers"
 
-msgid "Adjust the text thickness"
-msgstr "Adjust the text thickness"
-
 msgid "Edit Alignment Target"
 msgstr "Edit Alignment Target"
 
@@ -30568,6 +30746,12 @@ msgstr "Courtyard layer"
 
 msgid "Fabrication layer"
 msgstr "Fabrication layer"
+
+msgid "Silkscreen layer"
+msgstr "Silkscreen layer"
+
+msgid "Pin bounding box"
+msgstr "Pin bounding box"
 
 msgid "Component height must be greater than zero."
 msgstr "Component height must be greater than zero."
@@ -31262,6 +31446,10 @@ msgstr "Rule '%s' references undefined layer(s): %s."
 
 msgid "Design rules cannot be added without a project"
 msgstr "Design rules cannot be added without a project"
+
+#, c-format
+msgid "Cannot save design rules to '%s': %s"
+msgstr "Cannot save design rules to '%s': %s"
 
 msgid "DRC Rules"
 msgstr "DRC Rules"
@@ -36601,6 +36789,15 @@ msgstr "Export netlist used to update schematics"
 msgid "New PCB file is unsaved"
 msgstr "New PCB file is unsaved"
 
+#, c-format
+msgid "%d WRL 3D model could not be matched to an equivalent STEP model."
+msgid_plural "%d WRL 3D models could not be matched to equivalent STEP models."
+msgstr[0] "%d WRL 3D model could not be matched to an equivalent STEP model."
+msgstr[1] "%d WRL 3D models could not be matched to equivalent STEP models."
+
+msgid "Show options"
+msgstr "Show options"
+
 msgid "Board file is read only."
 msgstr "Board file is read only."
 
@@ -41059,6 +41256,12 @@ msgstr "Update Footprints from Library..."
 msgid "Update footprints to include any changes from the library"
 msgstr "Update footprints to include any changes from the library"
 
+msgid "Migrate 3D Models..."
+msgstr "Migrate 3D Models..."
+
+msgid "Replace obsolete WRL 3D model references with current STEP models"
+msgstr "Replace obsolete WRL 3D model references with current STEP models"
+
 msgid "Remove Unused Pads..."
 msgstr "Remove Unused Pads..."
 
@@ -43386,6 +43589,19 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid "Could not clone repository '%s'"
+#~ msgstr "Could not clone repository '%s'"
+
+#~ msgid "Added items via API"
+#~ msgstr "Added items via API"
+
+#~ msgid "Waiting for Git operations to finish..."
+#~ msgstr "Waiting for Git operations to finish..."
+
+#~ msgid "Height of box top"
+#~ msgstr "Height of box top"
 
 #~ msgid "Top backdrill must-cut:"
 #~ msgstr "Top backdrill must-cut:"
