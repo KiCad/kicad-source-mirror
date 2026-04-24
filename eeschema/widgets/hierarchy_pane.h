@@ -102,6 +102,8 @@ public:
      */
     void UpdateLabelsHierarchyTree();
 
+    void UpdateNetHighlight( const wxString& aNetName );
+
     /**
      * Returns a list of sheet paths for nodes that are currently collapsed.
      */
@@ -160,6 +162,7 @@ private:
 
     bool            m_events_bound;
     std::set<wxString> m_collapsedPaths;
+    wxString           m_highlightedNet;
 };
 
 #endif // HIERARCHY_PANE_H

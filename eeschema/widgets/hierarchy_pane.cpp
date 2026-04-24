@@ -26,6 +26,10 @@
 #include <bitmaps.h>
 #include <sch_edit_frame.h>
 #include <sch_commit.h>
+#include <connection_graph.h>
+#include <schematic.h>
+#include <gal/color4d.h>
+#include <layer_ids.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
 #include <hierarchy_pane.h>
@@ -360,6 +364,9 @@ void HIERARCHY_PANE::UpdateHierarchyTree( bool aClear )
 
     collapseNodes( projectRoot );
     m_collapsedPaths = std::move( collapsedNodes );
+
+    if( !m_highlightedNet.IsEmpty() )
+        UpdateNetHighlight( m_highlightedNet );
 
     if( eventsWereBound )
     {
@@ -827,6 +834,58 @@ wxString HIERARCHY_PANE::getRootString()
 wxString HIERARCHY_PANE::formatPageString( const wxString& aName, const wxString& aPage )
 {
     return aName + wxT( " " ) + wxString::Format( _( "(page %s)" ), aPage );
+}
+
+
+void HIERARCHY_PANE::UpdateNetHighlight( const wxString& aNetName )
+{
+    m_highlightedNet = aNetName;
+
+    KIGFX::COLOR4D netColor = m_frame->GetRenderSettings()->GetLayerColor( LAYER_BRIGHTENED );
+    const wxColour markBG = netColor.ToColour();
+    const wxColour markText = netColor.GetBrightness() > 0.5 ? *wxBLACK : *wxWHITE;
+
+    std::set<wxString> sheetsWithNet;
+
+    if( !aNetName.IsEmpty() && m_frame->Schematic().IsValid() )
+    {
+        CONNECTION_GRAPH* graph = m_frame->Schematic().ConnectionGraph();
+
+        if( graph )
+        {
+            for( const CONNECTION_SUBGRAPH* sg : graph->GetAllSubgraphs( aNetName ) )
+            {
+                if( sg && sg->GetSheet().Last() )
+                    sheetsWithNet.insert( sg->GetSheet().PathAsString() );
+            }
+        }
+    }
+
+    std::function<void( const wxTreeItemId& )> recurse = [&]( const wxTreeItemId& id )
+    {
+        wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
+
+        TREE_ITEM_DATA* data = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
+
+        if( data )
+        {
+            bool mark = sheetsWithNet.count( data->m_SheetPath.PathAsString() ) > 0;
+            m_tree->SetItemBackgroundColour( id, mark ? markBG : wxNullColour );
+            m_tree->SetItemTextColour( id, mark ? markText : wxNullColour );
+        }
+
+        wxTreeItemIdValue cookie;
+        wxTreeItemId      child = m_tree->GetFirstChild( id, cookie );
+
+        while( child.IsOk() )
+        {
+            recurse( child );
+            child = m_tree->GetNextChild( id, cookie );
+        }
+    };
+
+    if( m_tree->GetRootItem().IsOk() )
+        recurse( m_tree->GetRootItem() );
 }
 
 void HIERARCHY_PANE::setIdenticalSheetsHighlighted( const SCH_SHEET_PATH& path, bool highLighted )
