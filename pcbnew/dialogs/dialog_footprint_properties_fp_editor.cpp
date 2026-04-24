@@ -557,34 +557,6 @@ LSET DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::getCustomLayersFromControls() const
 }
 
 
-static LSET GetAllUsedFootprintLayers( const FOOTPRINT& aFootprint )
-{
-    LSET usedLayers{};
-    aFootprint.RunOnChildren(
-            [&]( BOARD_ITEM* aSubItem )
-            {
-                wxCHECK2( aSubItem, /*void*/ );
-
-                switch( aSubItem->Type() )
-                {
-                case PCB_ZONE_T:
-                {
-                    ZONE& zone = static_cast<ZONE&>( *aSubItem );
-                    usedLayers |= zone.GetLayerSet();
-                    break;
-                }
-                default:
-                {
-                    usedLayers.set( aSubItem->GetLayer() );
-                    break;
-                }
-                }
-            },
-            RECURSE_MODE::RECURSE );
-    return usedLayers;
-}
-
-
 bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
 {
     if( !m_itemsGrid->CommitPendingChanges() )
@@ -677,20 +649,16 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
             m_frame->SyncLibraryTree( true );
     }
 
-    // See if there is an object in the footprint that uses a layer that is not in that list
-    LSET usedLayers = GetAllUsedFootprintLayers( *m_footprint );
+    // Check that the user isn't trying to remove a layer that is used by the footprint.
+    LSET orphanLayers = LAYER_UTILS::GetOrphanedFootprintLayers( *m_footprint,
+                                                                 getCustomLayersFromControls() );
 
-    // Check that the user isn't trying to remove a layer that is used by the footprint
-    usedLayers &= ~getCustomLayersFromControls();
-    usedLayers &= ~LSET::AllTechMask();
-    usedLayers &= ~LSET::UserMask();
-
-    if( usedLayers.any() )
+    if( orphanLayers.any() )
     {
         m_delayedErrorMessage =
                 wxString::Format( _( "You are trying to remove layers that are used by the footprint: %s.\n"
                                      "Please remove the objects that use these layers first." ),
-                                  LAYER_UTILS::AccumulateNames( usedLayers, m_frame->GetBoard() ) );
+                                  LAYER_UTILS::AccumulateNames( orphanLayers, m_frame->GetBoard() ) );
         m_delayedFocusGrid = m_customUserLayersGrid;
         m_delayedFocusColumn = 0;
         m_delayedFocusRow = 0;

@@ -38,3 +38,38 @@ wxString LAYER_UTILS::AccumulateNames( const LSEQ& aLayers, const BOARD* aBoard 
 
     return result;
 }
+
+
+LSET LAYER_UTILS::GetAllFootprintLayers( const FOOTPRINT& aFootprint )
+{
+    LSET usedLayers{};
+
+    aFootprint.RunOnChildren(
+            [&]( BOARD_ITEM* aSubItem )
+            {
+                wxCHECK2( aSubItem, /*void*/ );
+                usedLayers |= aSubItem->GetLayerSet();
+            },
+            RECURSE_MODE::RECURSE );
+
+    return usedLayers;
+}
+
+
+LSET LAYER_UTILS::GetOrphanedFootprintLayers( const FOOTPRINT& aFootprint,
+                                              const LSET&      aCustomUserLayers )
+{
+    LSET usedLayers = GetAllFootprintLayers( aFootprint );
+
+    usedLayers &= ~aCustomUserLayers;
+    usedLayers &= ~LSET::AllTechMask();
+    usedLayers &= ~LSET::UserMask();
+
+    // Rescue is a pseudo-layer used as a fallback for items referencing unknown layer
+    // names at load time. It is not exposed in any layer-selection UI, so the user has no
+    // way to "keep" it. Items on Rescue are an orphan state that predates any Footprint
+    // Properties edit and are surfaced through library-parity DRC instead.
+    usedLayers.reset( Rescue );
+
+    return usedLayers;
+}

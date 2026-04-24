@@ -26,6 +26,7 @@
 #include <wx/string.h>
 
 #include <board.h>
+#include <footprint.h>
 #include <lseq.h>
 #include <lset.h>
 
@@ -57,5 +58,22 @@ inline wxString AccumulateNames( const LSET& aLayers, const BOARD* aBoard )
 {
     return AccumulateNames( aLayers.UIOrder(), aBoard );
 }
+
+/**
+ * Return the union of layers referenced by every item inside the footprint (including
+ * graphic items, pads, zones, fields, and nested groups).
+ */
+LSET GetAllFootprintLayers( const FOOTPRINT& aFootprint );
+
+/**
+ * Compute the set of footprint-used layers that would be orphaned if the footprint's
+ * allowed layer set is restricted to aCustomUserLayers (plus the tech and user masks).
+ *
+ * The Rescue pseudo-layer is intentionally excluded. It is an internal fallback for
+ * items referencing unknown layer names at load time and is not surfaced in any
+ * layer-selection UI. Orphans on Rescue must be addressed through the library-parity
+ * DRC, not by blocking edits in the Footprint Properties dialog.
+ */
+LSET GetOrphanedFootprintLayers( const FOOTPRINT& aFootprint, const LSET& aCustomUserLayers );
 
 } // namespace LAYER_UTILS
