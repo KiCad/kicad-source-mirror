@@ -350,4 +350,92 @@ BOOST_AUTO_TEST_CASE( SynthesisDoesNotReuseStaleAnalyseOutputs )
 
 
 
+// Matches the geometry the tuning profile panel forwards to COUPLED_STRIPLINE: total plate
+// spacing H = Top + Signal + Bottom, strip midplane at A = Top + Signal/2.  Asserts the
+// midplane convention by pinning the solver against its two physical invariants: (1) a
+// symmetric stack (Top == Bottom) must reproduce the centred result, and (2) swapping Top
+// and Bottom must leave the impedances unchanged because the geometry is mirror-identical.
+namespace
+{
+Impedances AnalyseStack( double topDielectric, double signal, double bottomDielectric )
+{
+    Geometry g = Geometry1();
+    g.b = topDielectric + signal + bottomDielectric;
+    g.t = signal;
+
+    const double striplineA = topDielectric + 0.5 * signal;
+
+    COUPLED_STRIPLINE calc = MakeCalc( g, striplineA );
+    return Run( calc );
+}
+} // namespace
+
+
+// Symmetric-stackup invariant.  Top == Bottom with a finite-thickness signal layer must land
+// back on the centred path.  Before the midplane fix this used A = Top (numerator) against a
+// denominator Top + Bottom (missing Signal), so the centred short-circuit never fired and a
+// finite-thickness-layer stack got routed through the asymmetric branch — wrong even when
+// physically centred.  With A = Top + Signal/2 against full H the equality is exact.
+BOOST_AUTO_TEST_CASE( TuningProfileSymmetricStackMatchesCentered )
+{
+    const double dielectric = 5.0 * TC::UNIT_MIL;
+    const double signal = 0.7 * TC::UNIT_MIL;
+
+    const Impedances zStack = AnalyseStack( dielectric, signal, dielectric );
+
+    Geometry g = Geometry1();
+    g.b = 2.0 * dielectric + signal;
+    g.t = signal;
+    COUPLED_STRIPLINE centered = MakeCalc( g, -1.0 );
+    const Impedances zCentered = Run( centered );
+
+    BOOST_TEST( zStack.z0e == zCentered.z0e, boost::test_tools::tolerance( 1e-9 ) );
+    BOOST_TEST( zStack.z0o == zCentered.z0o, boost::test_tools::tolerance( 1e-9 ) );
+    BOOST_TEST( zStack.zdiff == zCentered.zdiff, boost::test_tools::tolerance( 1e-9 ) );
+}
+
+
+// Mirror symmetry.  Swapping Top and Bottom dielectric thicknesses is a geometric reflection
+// about the strip midplane and must leave Z0e / Z0o / Zdiff bit-identical.  Before the fix
+// the panel's IsCenteredOffset denominator excluded Signal, so the centred fast path could
+// trigger for Top == Bottom but never for the swapped pair under some numerical conditions;
+// here we exercise asymmetric geometry where both paths route through the image method.
+BOOST_AUTO_TEST_CASE( TuningProfileTopBottomSwapSymmetry )
+{
+    const double top = 4.0 * TC::UNIT_MIL;
+    const double bottom = 10.0 * TC::UNIT_MIL;
+    const double signal = 0.7 * TC::UNIT_MIL;
+
+    const Impedances zOriginal = AnalyseStack( top, signal, bottom );
+    const Impedances zSwapped = AnalyseStack( bottom, signal, top );
+
+    BOOST_TEST( zOriginal.z0e == zSwapped.z0e, boost::test_tools::tolerance( 1e-9 ) );
+    BOOST_TEST( zOriginal.z0o == zSwapped.z0o, boost::test_tools::tolerance( 1e-9 ) );
+    BOOST_TEST( zOriginal.zdiff == zSwapped.zdiff, boost::test_tools::tolerance( 1e-9 ) );
+}
+
+
+// Zero-thickness signal layer.  When T = 0 the midplane collapses onto Top so A = Top exactly,
+// matching the pre-fix formula.  This pins that the new expression reduces to the old one in
+// the thin-strip limit and regressions that break either path will surface here.
+BOOST_AUTO_TEST_CASE( TuningProfileZeroThicknessSignalMatchesTopDielectric )
+{
+    const double top = 6.0 * TC::UNIT_MIL;
+    const double bottom = 14.0 * TC::UNIT_MIL;
+
+    Geometry g = Geometry1();
+    g.b = top + bottom;
+    g.t = 0.0;
+
+    COUPLED_STRIPLINE calcMidplane = MakeCalc( g, top + 0.5 * 0.0 );
+    const Impedances zMidplane = Run( calcMidplane );
+
+    COUPLED_STRIPLINE calcTop = MakeCalc( g, top );
+    const Impedances zTop = Run( calcTop );
+
+    BOOST_TEST( zMidplane.z0e == zTop.z0e, boost::test_tools::tolerance( 1e-12 ) );
+    BOOST_TEST( zMidplane.z0o == zTop.z0o, boost::test_tools::tolerance( 1e-12 ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -1315,14 +1315,22 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow,
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_WIDTH, width );
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::PHYS_S, gap );
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::T, boardParameters.SignalLayerThickness );
-    m_coupledStriplineCalc.SetParameter(
-            TRANSLINE_PARAMETERS::H, boardParameters.TopDielectricLayerThickness + boardParameters.SignalLayerThickness
-                                             + boardParameters.BottomDielectricLayerThickness );
+
+    const double totalH = boardParameters.TopDielectricLayerThickness + boardParameters.SignalLayerThickness
+                          + boardParameters.BottomDielectricLayerThickness;
+
+    // COUPLED_STRIPLINE::Analyse reads STRIPLINE_A as the strip midplane distance from the bottom
+    // ground (see isOffsetWithinFiniteThicknessLimits requiring t/2 < a < h - t/2).  For a finite-
+    // thickness signal layer the midplane is Top + T/2, not Top.  Using Top as A would feed the
+    // image-method solver inconsistent virtual plate spacings that do not reduce to the centred
+    // result even when Top == Bottom.
+    const double striplineA = boardParameters.TopDielectricLayerThickness
+                              + 0.5 * boardParameters.SignalLayerThickness;
+
+    m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::H, totalH );
 
     // Set the offset top dielectric layer thickness if required
-    if( COUPLED_STRIPLINE::IsCenteredOffset( boardParameters.TopDielectricLayerThickness,
-                                             boardParameters.TopDielectricLayerThickness
-                                                     + boardParameters.BottomDielectricLayerThickness ) )
+    if( COUPLED_STRIPLINE::IsCenteredOffset( striplineA, totalH ) )
     {
         // Keep calculation on the symmetric fast path
         m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::STRIPLINE_A, 0.0 );
@@ -1330,8 +1338,7 @@ PANEL_SETUP_TUNING_PROFILE_INFO::calculateDifferentialStripline( const int aRow,
     else
     {
         // Use the asymmetric calculation path
-        m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::STRIPLINE_A,
-                                             boardParameters.TopDielectricLayerThickness );
+        m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::STRIPLINE_A, striplineA );
     }
 
     m_coupledStriplineCalc.SetParameter( TRANSLINE_PARAMETERS::EPSILONR, boardParameters.DielectricConstant );
