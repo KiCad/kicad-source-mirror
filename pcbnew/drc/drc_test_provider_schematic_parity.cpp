@@ -292,7 +292,9 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
                 else if( pcb_netname != sch_net.GetNetName()
                          && !( pcb_netname.starts_with(
                                  wxT( "unconnected-" ) )
-                                 && pcb_netname.starts_with( sch_net.GetNetName() ) ) )
+                                 && pcb_netname.starts_with( sch_net.GetNetName() ) )
+                         && !( pad->IsNoConnectPad()
+                                 && pcb_netname.starts_with( sch_net.GetNetName() + wxT( "_" ) ) ))
                 {
                     wxString msg;
                     msg.Printf( _( "Pad net (%s) doesn't match net given by schematic (%s)" ),
