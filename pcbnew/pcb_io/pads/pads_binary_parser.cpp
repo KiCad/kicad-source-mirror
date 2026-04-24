@@ -143,6 +143,14 @@ constexpr uint32_t LINE_ITEM   = 0x00004D00;  // line/outline item (board outlin
 } // namespace DRW_TAG
 
 
+// A reference designator is plausible when it is non-empty and starts with an alphanumeric (a
+// numeric lead is legal, so this is isalnum, not isalpha).
+static bool refdesFirstCharOk( const std::string& aRef )
+{
+    return !aRef.empty() && std::isalnum( static_cast<unsigned char>( aRef[0] ) );
+}
+
+
 BINARY_PARSER::BINARY_PARSER() = default;
 
 
@@ -317,7 +325,7 @@ void BINARY_PARSER::parsePartPlacements()
         SDB_RECORD  rec    = m_sdb.Record( *entry, i, recSize );
         std::string refDes = rec.Str( layout.nameOff, 16 );
 
-        if( refDes.empty() || !std::isalnum( static_cast<unsigned char>( refDes[0] ) ) )
+        if( !refdesFirstCharOk( refDes ) )
             continue;
 
         PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
@@ -469,7 +477,7 @@ void BINARY_PARSER::recoverOmittedPlacements()
 
         SDB_RECORD  rec = m_sdb.RecordAt( aBase );
         std::string ref = rec.Str( layout.nameOff, 16 );
-        int         s = ( !ref.empty() && std::isalnum( static_cast<unsigned char>( ref[0] ) ) ) ? 4 : -4;
+        int         s = refdesFirstCharOk( ref ) ? 4 : -4;
 
         int64_t x = std::llabs( static_cast<int64_t>( rec.I32( layout.xOff ) ) );
         int64_t y = std::llabs( static_cast<int64_t>( layout.yOff ? rec.I32( *layout.yOff ) : 0 ) );
@@ -607,7 +615,7 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
 
             std::string refDes = m_sdb.RecordAt( base ).Str( layout.nameOff, 16 );
 
-            if( refDes.empty() || !std::isalnum( static_cast<unsigned char>( refDes[0] ) ) )
+            if( !refdesFirstCharOk( refDes ) )
                 continue;
 
             // Emit the leading (anchor) block once, only after the first genuine placement is
@@ -622,8 +630,7 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
                     SDB_RECORD  leadRec = m_sdb.RecordAt( leadBase );
                     std::string leadRef = leadRec.Str( layout.nameOff, 16 );
 
-                    if( m_cursor.InBounds( leadBase, fieldSpan ) && !leadRef.empty()
-                        && std::isalnum( static_cast<unsigned char>( leadRef[0] ) )
+                    if( m_cursor.InBounds( leadBase, fieldSpan ) && refdesFirstCharOk( leadRef )
                         && !existingRefs.count( leadRef ) )
                     {
                         PART lead = makePlacementPart( leadRec, layout.xOff, layout.yOff,
