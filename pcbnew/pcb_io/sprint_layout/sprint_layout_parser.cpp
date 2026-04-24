@@ -1134,6 +1134,8 @@ void SPRINT_LAYOUT_PARSER::addTextToBoard( BOARD* aBoard,
     PCB_TEXT* text = new PCB_TEXT( aBoard );
     text->SetLayer( layer );
     text->SetText( convertString( aObj.text ) );
+    text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+    text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
 
     VECTOR2I pos = sprintToKicadPos( aObj.x, aObj.y );
     text->SetPosition( pos );
