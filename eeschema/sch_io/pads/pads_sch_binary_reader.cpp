@@ -733,6 +733,26 @@ const std::vector<std::string>* PADS_SCH_BINARY_READER::partTypePoolForOffset( s
 // attribute key.  Values accumulate per part-type; a block stops at the first repeated key (the
 // sub-record divider) so cross-record bleed does not corrupt the values.
 // ---------------------------------------------------------------------------
+
+// Part-type pool record: stride 0x4c, name at +0 (max 0x26 bytes), with the cumulative gate and
+// pin prefix-sum cursors at +0x2c and +0x30.
+static constexpr size_t PART_TYPE_STRIDE       = 0x4c;
+static constexpr size_t PART_TYPE_NAME_LEN     = 0x26;
+static constexpr size_t PART_TYPE_CUM_GATE_OFF = 0x2c;
+static constexpr size_t PART_TYPE_CUM_PIN_OFF  = 0x30;
+
+// Pin terminal record: stride 24, the pin number string at +4 and the electrical-type char at +21.
+static constexpr size_t PIN_STRIDE     = 24;
+static constexpr size_t PIN_NUMBER_OFF = 4;
+static constexpr size_t PIN_TYPE_OFF   = 21;
+
+// Gate descriptor record: stride 12, the gate's pin count at +8.
+static constexpr size_t GATE_DESC_STRIDE = 12;
+static constexpr size_t GATE_NPINS_OFF   = 8;
+
+// Component field-placement record stride.
+static constexpr size_t FIELD_PLACE_STRIDE = 24;
+
 static const std::set<std::string> FIELD_ATTR_KEYS = {
     "DESCRIPTION", "MFR1", "MFR1 P/N", "MFR2", "MFR2 P/N", "MFR3", "MFR3 P/N",
     "MFR P/N", "VALUE", "Value", "Tolerance", "Voltage Rating", "Power",
@@ -776,23 +796,21 @@ static std::vector<TAGGED_STR> walkTaggedStrings( const std::vector<uint8_t>& d,
 
 void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
 {
-    static constexpr size_t PT_STRIDE = 0x4c;
-
     // Part-type pools.  Each sheet carries its own stride-0x4c pool anchored on the
     // $OSR_SYMS/$GND_SYMS/$PWR_SYMS header; a placement's part-type ordinal indexes the pool of
     // its own sheet (resolved per sheet in decodePlacements).
-    for( size_t i = DATA_STREAM_OFFSET; i + 2 * PT_STRIDE + 16 < streamLimit( d ); ++i )
+    for( size_t i = DATA_STREAM_OFFSET; i + 2 * PART_TYPE_STRIDE + 16 < streamLimit( d ); ++i )
     {
-        if( nameAt( d, i, 0x26 ) != "$OSR_SYMS"
-            || nameAt( d, i + PT_STRIDE, 0x26 ) != "$GND_SYMS"
-            || nameAt( d, i + 2 * PT_STRIDE, 0x26 ) != "$PWR_SYMS" )
+        if( nameAt( d, i, PART_TYPE_NAME_LEN ) != "$OSR_SYMS"
+            || nameAt( d, i + PART_TYPE_STRIDE, PART_TYPE_NAME_LEN ) != "$GND_SYMS"
+            || nameAt( d, i + 2 * PART_TYPE_STRIDE, PART_TYPE_NAME_LEN ) != "$PWR_SYMS" )
             continue;
 
         std::vector<std::string> names;
 
         for( size_t j = 0; j < 64; ++j )
         {
-            std::string nm = nameAt( d, i + PT_STRIDE * j, 0x26 );
+            std::string nm = nameAt( d, i + PART_TYPE_STRIDE * j, PART_TYPE_NAME_LEN );
 
             // Stop at the pool terminator: an empty record, or the trailing 1-char
             // sentinel ('i'/'d') that is not a $-group name.
@@ -1667,7 +1685,6 @@ void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& 
                                                     size_t aRunFirst,
                                                     const std::vector<size_t>& aRunOffsets )
 {
-    static constexpr size_t REC = 24;
     static constexpr int    FP_DX_OFF = 0x06;     // 2*i16 page-relative dx
     static constexpr int    FP_DY_OFF = 0x08;     // 2*i16 page-relative dy
     static constexpr int    FP_ANGLE_OFF = 0x0a;  // u16 tenths-degree
@@ -1679,7 +1696,7 @@ void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& 
 
     auto isFieldRec = [&]( size_t o ) -> bool
     {
-        if( !cur.InBounds( o, REC ) )
+        if( !cur.InBounds( o, FIELD_PLACE_STRIDE ) )
             return false;
 
         SDB_RECORD rec( cur, o );
@@ -1695,9 +1712,9 @@ void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& 
 
     size_t start = std::string::npos;
 
-    for( size_t o = aBlockEnd; o + REC <= d.size() && o < aBlockEnd + 0x4000; ++o )
+    for( size_t o = aBlockEnd; o + FIELD_PLACE_STRIDE <= d.size() && o < aBlockEnd + 0x4000; ++o )
     {
-        if( isFieldRec( o ) && !( o >= REC && isFieldRec( o - REC ) ) )
+        if( isFieldRec( o ) && !( o >= FIELD_PLACE_STRIDE && isFieldRec( o - FIELD_PLACE_STRIDE ) ) )
         {
             start = o;
             break;
@@ -1717,7 +1734,7 @@ void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& 
 
         for( uint16_t k = 0; k < fieldCount; ++k )
         {
-            if( cursor + REC > d.size() )
+            if( cursor + FIELD_PLACE_STRIDE > d.size() )
                 break;
 
             SDB_RECORD rec( cur, cursor );
@@ -1737,7 +1754,7 @@ void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& 
             fp.valid = true;
             pl.fieldPlaces.push_back( fp );
 
-            cursor += REC;
+            cursor += FIELD_PLACE_STRIDE;
         }
 
         // The inline REF-DES record carries no text height; share the part's field height.
@@ -1750,8 +1767,6 @@ void PADS_SCH_BINARY_READER::assignFieldPlacements( const std::vector<uint8_t>& 
 void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
 {
     BINARY_CURSOR                cur( d );
-    static constexpr size_t      PT_STRIDE = 0x4c;
-    static constexpr size_t      PIN_STRIDE = 24;
     static const std::string     TYPES = "USLBTCPGZ";
 
     // A stride-24 pin record: type letter @+21, ASCII pin number @+4 (NUL-terminated), a u32
@@ -1759,15 +1774,16 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
     // variant (a handle in bytes 22/23) still reads.
     auto isPinRec = [&]( size_t o ) -> bool
     {
-        if( o + PIN_STRIDE > d.size() || TYPES.find( static_cast<char>( d[o + 21] ) ) == std::string::npos )
+        if( o + PIN_STRIDE > d.size()
+            || TYPES.find( static_cast<char>( d[o + PIN_TYPE_OFF] ) ) == std::string::npos )
             return false;
 
-        uint8_t c = d[o + 4];
+        uint8_t c = d[o + PIN_NUMBER_OFF];
 
         if( !( ( c >= '0' && c <= '9' ) || ( c >= 'A' && c <= 'Z' ) ) )
             return false;
 
-        size_t z = o + 4;
+        size_t z = o + PIN_NUMBER_OFF;
 
         while( z < o + 0x14 && d[z] != 0 )
         {
@@ -1777,7 +1793,7 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
             ++z;
         }
 
-        return z > o + 4 && z < o + 0x14;
+        return z > o + PIN_NUMBER_OFF && z < o + 0x14;
     };
 
     // A name-pool token: a printable run (first char non-space) up to 24 bytes, NUL-terminated.
@@ -1828,21 +1844,22 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
 
         for( size_t j = 0;; ++j )
         {
-            size_t rec = base + PT_STRIDE * j;
+            size_t rec = base + PART_TYPE_STRIDE * j;
 
-            if( rec + PT_STRIDE > d.size() )
+            if( rec + PART_TYPE_STRIDE > d.size() )
                 break;
 
             size_t z = rec;
 
-            while( z < rec + 0x26 && z < d.size() && d[z] != 0 && d[z] >= 0x20 && d[z] < 0x7f )
+            while( z < rec + PART_TYPE_NAME_LEN && z < d.size() && d[z] != 0 && d[z] >= 0x20
+                   && d[z] < 0x7f )
                 ++z;
 
-            if( z == rec || ( z < rec + 0x26 && d[z] != 0 ) )
+            if( z == rec || ( z < rec + PART_TYPE_NAME_LEN && d[z] != 0 ) )
                 break;
 
-            uint32_t cumGateIndex = SDB_RECORD( cur, rec ).U32( 0x2c );
-            uint32_t cumPinIndex = SDB_RECORD( cur, rec ).U32( 0x30 );
+            uint32_t cumGateIndex = SDB_RECORD( cur, rec ).U32( PART_TYPE_CUM_GATE_OFF );
+            uint32_t cumPinIndex = SDB_RECORD( cur, rec ).U32( PART_TYPE_CUM_PIN_OFF );
 
             if( ( j && ( cumPinIndex < prevCumPin || cumGateIndex < prevCumGate ) ) || cumPinIndex > 1000000 || cumGateIndex > 1000000 )
                 break;
@@ -1859,11 +1876,11 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
         // pin pool following it.  Advance at stride 12 from the gate base to the first pin record
         // to locate the pin-pool base, which has no fixed distance bound (a part-type can carry
         // hundreds of pins).
-        size_t gatebase = base + PT_STRIDE * recs.size();
+        size_t gatebase = base + PART_TYPE_STRIDE * recs.size();
         size_t start = gatebase;
 
         while( start + PIN_STRIDE <= d.size() && !isPinRec( start ) )
-            start += 12;
+            start += GATE_DESC_STRIDE;
 
         if( start + PIN_STRIDE > d.size() )
             continue;
@@ -1874,10 +1891,10 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
         std::vector<uint8_t> gateNpins;
         size_t               npins = 0;
 
-        for( size_t go = gatebase; go + 12 <= start; go += 12 )
+        for( size_t go = gatebase; go + GATE_DESC_STRIDE <= start; go += GATE_DESC_STRIDE )
         {
-            gateNpins.push_back( d[go + 8] );
-            npins += d[go + 8];
+            gateNpins.push_back( d[go + GATE_NPINS_OFF] );
+            npins += d[go + GATE_NPINS_OFF];
         }
 
         struct PINREC { std::string number; char type; bool named; };
@@ -1886,13 +1903,14 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
 
         auto readPin = [&]( size_t aOff )
         {
-            size_t z = aOff + 4;
+            size_t z = aOff + PIN_NUMBER_OFF;
 
             while( z < aOff + 0x14 && d[z] != 0 )
                 ++z;
 
-            pins.push_back( { std::string( reinterpret_cast<const char*>( &d[aOff + 4] ), z - ( aOff + 4 ) ),
-                              static_cast<char>( d[aOff + 21] ),
+            pins.push_back( { std::string( reinterpret_cast<const char*>( &d[aOff + PIN_NUMBER_OFF] ),
+                                           z - ( aOff + PIN_NUMBER_OFF ) ),
+                              static_cast<char>( d[aOff + PIN_TYPE_OFF] ),
                               SDB_RECORD( cur, aOff ).U32( 0 ) != SDB_FIELD_UNSET } );
         };
 
