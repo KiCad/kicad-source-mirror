@@ -1514,6 +1514,7 @@ void SCH_IO_KICAD_LEGACY::SaveSchematicFile( const wxString& aFileName, SCH_SHEE
     m_out = &formatter;     // no ownership
 
     Format( aSheet );
+    formatter.Finish();
 
     aSheet->GetScreen()->SetFileExists( true );
 }
