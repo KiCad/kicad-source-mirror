@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-16 19:04+0300\n"
-"PO-Revision-Date: 2026-04-15 16:10+0000\n"
-"Last-Translator: Sárkány Lőrinc <lsarkany@gmail.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v10/hu/"
-">\n"
+"PO-Revision-Date: 2026-04-24 15:58+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v10/hu/>"
+"\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1593,8 +1593,7 @@ msgstr "Tükröződések:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:89
 msgid "Number of rays that will be cast to evaluate a reflection point"
-msgstr ""
-"A tükröződési pont értékeléséhez a fény irányába vetített sugarak száma"
+msgstr "A tükröződési pont értékeléséhez a fény irányába vetített sugarak száma"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:97
 msgid ""
@@ -2611,8 +2610,7 @@ msgstr "Licensz"
 
 #: common/dialog_about/dialog_about.cpp:258
 msgid "Could not open clipboard to write version information."
-msgstr ""
-"Nem sikerült megnyitni a vágólapot a verzióinformációk beillesztéséhez."
+msgstr "Nem sikerült megnyitni a vágólapot a verzióinformációk beillesztéséhez."
 
 #: common/dialog_about/dialog_about.cpp:259
 msgid "Clipboard Error"
@@ -4308,8 +4306,7 @@ msgstr "A változtatás a szerkesztő újraindítása után lép életbe."
 
 #: common/dialogs/panel_common_settings_base.cpp:179
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
-"A fókusz az egeret követi a kapcsolási rajz és a PCB szerkesztők között"
+msgstr "A fókusz az egeret követi a kapcsolási rajz és a PCB szerkesztők között"
 
 #: common/dialogs/panel_common_settings_base.cpp:180
 msgid ""
@@ -5489,8 +5486,7 @@ msgstr "Mozgatás vízszintesen balra/jobbra"
 #: common/dialogs/panel_mouse_settings_base.cpp:318
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
-msgstr ""
-"A vászon balra-jobbra mozgatása az érintőpadon balra-jobbra görgetéskor"
+msgstr "A vászon balra-jobbra mozgatása az érintőpadon balra-jobbra görgetéskor"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:328
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:135
@@ -7442,8 +7438,8 @@ msgstr ""
 "KiCad által belsőleg definiált (nem szerkeszthető), az aktuálisan betöltött "
 "projekt fájl abszolút elérési útvonalára mutat. Ez a környezeti változó "
 "lehetővé teszi elérési útvonalak relatív megadását, például egy "
-"projektspecifikus lábkiosztás-könyvtár \"${KIPRJMOD}/libs/footprints."
-"pretty\"-ként definiálható."
+"projektspecifikus lábkiosztás-könyvtár \"${KIPRJMOD}/libs/"
+"footprints.pretty\"-ként definiálható."
 
 #: common/env_vars.cpp:135
 msgid "A directory containing system-wide scripts installed with KiCad."
@@ -9411,8 +9407,7 @@ msgstr ""
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:244
 #, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr ""
-"Nem található rajzjel %s a lábkiosztás szűrő szakaszában a netlistában."
+msgstr "Nem található rajzjel %s a lábkiosztás szűrő szakaszában a netlistában."
 
 #: common/netlist_reader/netlist_reader.cpp:189
 #: pcbnew/netlist_reader/netlist_reader.cpp:195
@@ -9738,8 +9733,7 @@ msgstr "A(z) '%s' távoli szolgáltató metaadatainak sémája nem olvasható."
 #: common/remote_provider_metadata.cpp:64
 #, c-format
 msgid "Remote provider metadata failed schema validation: %s"
-msgstr ""
-"A távoli szolgáltató metaadatai nem teljesítik a séma érvényesítést: %s"
+msgstr "A távoli szolgáltató metaadatai nem teljesítik a séma érvényesítést: %s"
 
 #: common/remote_provider_metadata.cpp:124
 #, c-format
@@ -10479,8 +10473,7 @@ msgstr "Táblázat exportálása CSV-be..."
 
 #: common/tool/actions.cpp:579
 msgid "Export table contents to CSV file with resolved text variables"
-msgstr ""
-"Táblázat tartalmának exportálása CSV fájlba feloldott szövegváltozókkal"
+msgstr "Táblázat tartalmának exportálása CSV fájlba feloldott szövegváltozókkal"
 
 #: common/tool/actions.cpp:590
 msgid "Keep Arc Center, Adjust Radius"
@@ -10510,8 +10503,7 @@ msgstr "Körív sugarának és középpontjának megtartása, szög igazítása"
 
 #: common/tool/actions.cpp:605
 msgid "Switch arc editing mode to maintaining radius when endpoint are moved"
-msgstr ""
-"Körív szerkesztési mód váltása: sugár megtartása végpontok mozgatásakor"
+msgstr "Körív szerkesztési mód váltása: sugár megtartása végpontok mozgatásakor"
 
 #: common/tool/actions.cpp:612
 msgid "Cycle Arc Editing Mode"
@@ -12892,12 +12884,12 @@ msgstr ""
 "python <szkript fájlneve> <bemeneti fájlnév> <kimeneti fájlnév>\n"
 "```\n"
 "\n"
-"Windows rendszeren, ha a kívánt generátor szkript egy CSV BOM-hoz a `C:"
-"\\Users\\username\\kicad\\my_python_script.py`, a parancssor:\n"
+"Windows rendszeren, ha a kívánt generátor szkript egy CSV BOM-hoz a `C:\\U"
+"sers\\username\\kicad\\my_python_script.py`, a parancssor:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "Linux rendszeren, ha a kívánt generátor szkript egy CSV BOM-hoz a `/home/"
@@ -13202,8 +13194,7 @@ msgstr "Gyorsítótár időkorlátja:"
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
 msgid "Time in seconds that database queries will be cached for"
-msgstr ""
-"Az adatbázis-lekérdezések gyorsítótárazásának időtartama másodpercekben"
+msgstr "Az adatbázis-lekérdezések gyorsítótárazásának időtartama másodpercekben"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
 msgid "Database Library Settings"
@@ -13267,8 +13258,8 @@ msgid ""
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Ha egyes rajzjelek árván maradnak (a hivatkozott rajzjel sehol sem "
-"található),\n"
+"Ha egyes rajzjelek árván maradnak (a hivatkozott rajzjel sehol sem található)"
+",\n"
 "próbáljon meg azonos nevű jelöltet keresni a betöltött rajzjel könyvtárakban."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:63
@@ -13623,8 +13614,8 @@ msgstr "Összes teljesítmény disszipáció mentése"
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
-"Direktívák írása az összes elem teljesítményleadásának mentéséhez (.probe "
-"p(<item>))"
+"Direktívák írása az összes elem teljesítményleadásának mentéséhez (.probe p"
+"(<item>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:369
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
@@ -13739,8 +13730,8 @@ msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
 msgstr ""
-"Az ívközi referenciaok láthatóságát globálisan a kapcsolási rajz beállításai "
-"> általános > formázás menüből lehet beállítani"
+"Az ívközi referenciaok láthatóságát globálisan a kapcsolási rajz "
+"beállításai > általános > formázás menüből lehet beállítani"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:85
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:56
@@ -14514,8 +14505,8 @@ msgid ""
 "The value '%s' can't be converted to boolean correctly, it has been "
 "interpreted as 'False'"
 msgstr ""
-"A(z) '%s' értéket nem sikerült helyesen logikai értékké konvertálni, "
-"'False' (hamis) értékként lett értelmezve"
+"A(z) '%s' értéket nem sikerült helyesen logikai értékké konvertálni, 'False' "
+"(hamis) értékként lett értelmezve"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1016
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1574
@@ -15402,8 +15393,7 @@ msgstr "Szinkronizált lábak mód.  Az új láb minden egységhez hozzáadódik
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:435
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
-msgstr ""
-"Szinkronizált lábak mód.  A többi egységben az egyező lábak frissülnek."
+msgstr "Szinkronizált lábak mód.  A többi egységben az egyező lábak frissülnek."
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:44
 msgid "Pin &name:"
@@ -16176,8 +16166,7 @@ msgstr "Kitöltés:"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:172
 msgid "Clear colors to use Schematic Editor colors."
-msgstr ""
-"Törölje a színeket a kapcsolásirajz-szerkesztő színeinek használatához."
+msgstr "Törölje a színeket a kapcsolásirajz-szerkesztő színeinek használatához."
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:189 pcbnew/zone.cpp:2054
 msgid "Fill Style"
@@ -21213,8 +21202,8 @@ msgstr ""
 #, c-format
 msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr ""
-"Nem sikerült betölteni az adatbázis könyvtárat: nem sikerült csatlakozni "
-"a(z) %s adatbázishoz (%s)"
+"Nem sikerült betölteni az adatbázis könyvtárat: nem sikerült csatlakozni a"
+"(z) %s adatbázishoz (%s)"
 
 #: eeschema/sch_io/database/sch_io_database.h:52
 msgid "KiCad database library files"
@@ -21284,8 +21273,7 @@ msgstr "Nem találtunk érvényes kapcsolási rajz fájlt \"%s\"-ban"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:501
 #, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr ""
-"Hiba a(z) \"%s\" rajzjel \"%s\" könyvtárból történő betöltése során: %s"
+msgstr "Hiba a(z) \"%s\" rajzjel \"%s\" könyvtárból történő betöltése során: %s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:422
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:427
@@ -21382,8 +21370,8 @@ msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s."
 msgstr ""
-"A(z) %s HTTP könyvtár beállítási fájl %s verziójú API-t használ, a KiCad "
-"a(z) %s verziót igényli."
+"A(z) %s HTTP könyvtár beállítási fájl %s verziójú API-t használ, a KiCad a"
+"(z) %s verziót igényli."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:233
 #, c-format
@@ -21567,8 +21555,7 @@ msgstr ""
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:104
 msgid "The library cannot be saved until these errors are fixed manually."
-msgstr ""
-"A könyvtár nem menthető, amíg ezeket a hibákat manuálisan nem javítják."
+msgstr "A könyvtár nem menthető, amíg ezeket a hibákat manuálisan nem javítják."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:187
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:361
@@ -24313,8 +24300,7 @@ msgstr "Hiba a(z) '%s' SPICE könyvtár elemzésekor: %s"
 #: eeschema/sim/spice_model_parser.cpp:215
 #, c-format
 msgid "Could not find parent model '%s' for \"A Kind Of\" model '%s'"
-msgstr ""
-"Nem található a(z) '%s' szülőmodell a(z) \"%s\" \"A kind of\" modellhez"
+msgstr "Nem található a(z) '%s' szülőmodell a(z) \"%s\" \"A kind of\" modellhez"
 
 #: eeschema/sim/spice_simulator.cpp:57
 msgid "DC Operating Point"
@@ -27137,8 +27123,8 @@ msgid ""
 "Pin swaps are disabled for symbols used by multiple sheet instances (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
-"A lábcserék le vannak tiltva több lappéldány által használt rajzjelekhez "
-"(%s). Másolja le a lapot a lábak független szerkesztéséhez."
+"A lábcserék le vannak tiltva több lappéldány által használt rajzjelekhez (%s)"
+". Másolja le a lapot a lábak független szerkesztéséhez."
 
 #: eeschema/tools/sch_edit_tool.cpp:1810
 msgid ""
@@ -27267,8 +27253,7 @@ msgstr "Nincs kijelölt csatlakoztatott hálózat."
 #: eeschema/tools/sch_editor_control.cpp:2095 pcbnew/tools/pcb_control.cpp:1188
 msgid ""
 "Pasting a long text text string may be very slow.  Do you want to continue?"
-msgstr ""
-"Egy hosszú szöveg beillesztése nagyon lassú lehet.  Szeretné folytatni?"
+msgstr "Egy hosszú szöveg beillesztése nagyon lassú lehet.  Szeretné folytatni?"
 
 #: eeschema/tools/sch_editor_control.cpp:2150 pcbnew/tools/pcb_control.cpp:1153
 msgid "Paste Cells"
@@ -27334,8 +27319,7 @@ msgstr "Rajzjel-figyelmeztetések"
 
 #: eeschema/tools/sch_inspection_tool.cpp:332
 msgid "Select a symbol to diff against its library equivalent."
-msgstr ""
-"Válasszon rajzjelet a könyvtári megfelelőjével való összehasonlításhoz."
+msgstr "Válasszon rajzjelet a könyvtári megfelelőjével való összehasonlításhoz."
 
 #: eeschema/tools/sch_inspection_tool.cpp:354
 #, c-format
@@ -27804,8 +27788,7 @@ msgstr "Hiányzó munkamenet-azonosító."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:843
 msgid "Session identifier did not match the active provider session."
-msgstr ""
-"A munkamenet-azonosító nem egyezik az aktív szolgáltató munkamenetével."
+msgstr "A munkamenet-azonosító nem egyezik az aktív szolgáltató munkamenetével."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:931
 msgid "No remote provider is currently selected."
@@ -29415,8 +29398,8 @@ msgid ""
 "When specifying multiple variants, the output path must contain ${VARIANT} "
 "to generate separate output files for each variant.\n"
 msgstr ""
-"Több variáns megadásakor a kimeneti útvonalnak tartalmaznia kell a "
-"${VARIANT} elemet, hogy minden variánshoz külön kimeneti fájl jöjjön létre.\n"
+"Több variáns megadásakor a kimeneti útvonalnak tartalmaznia kell a $"
+"{VARIANT} elemet, hogy minden variánshoz külön kimeneti fájl jöjjön létre.\n"
 
 #: kicad/cli/command.cpp:144
 msgid "Input file"
@@ -29799,8 +29782,7 @@ msgstr "Érvényes beállítások: absolute, plot"
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
 msgid "Valid options are: decimal, suppressleading, suppresstrailing, keep."
-msgstr ""
-"Érvényes beállítások: decimal, suppressleading, suppresstrailing, keep."
+msgstr "Érvényes beállítások: decimal, suppressleading, suppresstrailing, keep."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
 msgid "Valid options are: route, alternate."
@@ -31421,8 +31403,7 @@ msgstr "PADS projekt..."
 
 #: kicad/menubar.cpp:150
 msgid "Import PADS Logic schematic and PADS ASCII PCB (*.asc, *.txt)"
-msgstr ""
-"PADS Logic kapcsolási rajz és PADS ASCII PCB importálása (*.asc, *.txt)"
+msgstr "PADS Logic kapcsolási rajz és PADS ASCII PCB importálása (*.asc, *.txt)"
 
 #: kicad/menubar.cpp:153
 msgid "gEDA / Lepton EDA Project..."
@@ -34987,8 +34968,8 @@ msgstr ""
 "- A kívánt érték 0.0025 és 4000 kΩ közötti lehet.\n"
 "- legfeljebb 4 alkatrészből álló megoldásokat közöl.\n"
 "\n"
-"A kért ellenállás érték nem fog szerepelni a megoldásban alkatrészként. "
-"<br>\n"
+"A kért ellenállás érték nem fog szerepelni a megoldásban alkatrészként. <br>"
+"\n"
 "Ezen kívül két további értéket is kizárhatunk, beszerezhetőségi problémák "
 "esetén.\n"
 "\n"
@@ -35037,8 +35018,8 @@ msgstr ""
 "érvényesek.\n"
 "\n"
 "Az IPC 2221-ből származó képlet:\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
+"<sup>0.725</sup>___</center>\n"
 "ahol:<br>\n"
 "___I___ a maximális áram A-ban<br>\n"
 "___&Delta;T___ a környezeti hőmérsékleten felüli emelkedés &deg;C-ban<br>\n"
@@ -36394,8 +36375,8 @@ msgstr ""
 #, c-format
 msgid "Pad %s of %s has inconsistent net mapping in candidate %s."
 msgstr ""
-"A(z) %s alkatrész %s forrszeme inkonzisztens hálózat-hozzárendelést mutat "
-"a(z) %s jelöltben."
+"A(z) %s alkatrész %s forrszeme inkonzisztens hálózat-hozzárendelést mutat a"
+"(z) %s jelöltben."
 
 #: pcbnew/connectivity/topo_match.cpp:355
 msgid "No compatible component found in the target area."
@@ -36821,8 +36802,7 @@ msgstr "Alsó előtag:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:263
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:268
 msgid "Optional prefix for solder side reference designations (e.g. B_)"
-msgstr ""
-"Opcionális előtag a forrasztási oldali referencia jelölésekhez (pl. B_)"
+msgstr "Opcionális előtag a forrasztási oldali referencia jelölésekhez (pl. B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:272
 msgid "Remove front prefix"
@@ -37971,8 +37951,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc.cpp:288
 msgid "Highlight corresponding items on canvas when selected in the DRC list"
-msgstr ""
-"A megfelelő elemek kiemelése a vásznon, ha a DRC listában van kijelölve"
+msgstr "A megfelelő elemek kiemelése a vásznon, ha a DRC listában van kijelölve"
 
 #: pcbnew/dialogs/dialog_drc.cpp:377
 msgid "DRC incomplete: could not compile custom design rules."
@@ -38876,8 +38855,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:131
 msgid "Use relative paths to model files in board VRML file"
-msgstr ""
-"Relatív elérési utak használata a modell fájlokhoz a panel VRML fájlban"
+msgstr "Relatív elérési utak használata a modell fájlokhoz a panel VRML fájlban"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:132
 msgid "Use paths for model files in board VRML file relative to the VRML file"
@@ -39400,8 +39378,7 @@ msgstr "Privát rétegek"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:329
 msgid "Leave values blank to use netclass values."
-msgstr ""
-"Hagyja üresen az értékeket a hálózati osztály értékeinek használatához."
+msgstr "Hagyja üresen az értékeket a hálózati osztály értékeinek használatához."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:341
 msgid ""
@@ -41734,8 +41711,7 @@ msgstr "Forrszem körvonalak a gyártási rétegeken"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:138
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
-msgstr ""
-"Forrszem körvonalak hozzáadása az F.Fab és B.Fab rétegekhez rajzoláskor"
+msgstr "Forrszem körvonalak hozzáadása az F.Fab és B.Fab rétegekhez rajzoláskor"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:142
 msgid "Include pad numbers"
@@ -41927,8 +41903,8 @@ msgstr ""
 "kimenethez.\n"
 "Ez a szélesség-korrekció a vezetősáv szélességének, valamint a forrszem és "
 "via mérethibáinak kompenzálására szolgál.\n"
-"Az ésszerű szélesség-korrekció értéke [-(MinTrackWidth-1), "
-"+(MinClearanceValue-1)] tartományban kell lennie."
+"Az ésszerű szélesség-korrekció értéke [-(MinTrackWidth-1), +"
+"(MinClearanceValue-1)] tartományban kell lennie."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:324
 msgid "Force A4 output"
@@ -42730,8 +42706,7 @@ msgstr "Keret stílus:"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:914
 #, c-format
 msgid "Applying these changes will short net %s with %s."
-msgstr ""
-"A módosítások alkalmazása rövidzárlatot okoz a %s és %s hálózat között."
+msgstr "A módosítások alkalmazása rövidzárlatot okoz a %s és %s hálózat között."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:920
 #, c-format
@@ -44357,9 +44332,9 @@ msgid ""
 msgstr ""
 "### Dokumentáció\n"
 "\n"
-"A teljes dokumentáció elérhető itt: [https://docs.kicad.org](https://go."
-"kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules)."
+"A teljes dokumentáció elérhető itt: [https://docs.kicad.org](https://"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -49289,8 +49264,7 @@ msgstr "%s mezők frissítve."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:642
 #, c-format
 msgid "Removed %s footprint fields not in symbol."
-msgstr ""
-"%s lábkiosztás-mezők eltávolítva, amelyek nem szerepelnek a rajzjelben."
+msgstr "%s lábkiosztás-mezők eltávolítva, amelyek nem szerepelnek a rajzjelben."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:679
 #, c-format
@@ -49648,8 +49622,8 @@ msgid ""
 "Symbol %s has pins with no number.  These pins can not be matched to pads in "
 "%s."
 msgstr ""
-"A(z) %s rajzjelnek vannak számozatlan lábai. Ezek a lábak nem párosíthatók "
-"a(z) %s lábkiosztás forrszemeihez."
+"A(z) %s rajzjelnek vannak számozatlan lábai. Ezek a lábak nem párosíthatók a"
+"(z) %s lábkiosztás forrszemeihez."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1940
 #, c-format
@@ -50682,8 +50656,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2769
 #, c-format
 msgid "Ignored polygon shape of kind %d (not yet supported)."
-msgstr ""
-"%d. típusú sokszög alakzat figyelmen kívül hagyva (még nem támogatott)."
+msgstr "%d. típusú sokszög alakzat figyelmen kívül hagyva (még nem támogatott)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2846
 #, c-format
@@ -50693,9 +50666,9 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "Könyvtár betöltése: \"%s\":\n"
-"A(z) %s lábkiosztásban szaggatott körvonal található az Altium rétegben "
-"(%d), amelynek nincs KiCad ekvivalense. Áthelyeztük az Eco1_Felhasználó "
-"KiCad rétegbe."
+"A(z) %s lábkiosztásban szaggatott körvonal található az Altium rétegben (%d)"
+", amelynek nincs KiCad ekvivalense. Áthelyeztük az Eco1_Felhasználó KiCad "
+"rétegbe."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2860
 #, c-format
@@ -50703,9 +50676,9 @@ msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"A(z) %s lábkiosztásban szaggatott körvonal található az Altium rétegben "
-"(%d), amelynek nincs KiCad ekvivalense. Áthelyeztük az Eco1_Felhasználó "
-"KiCad rétegbe."
+"A(z) %s lábkiosztásban szaggatott körvonal található az Altium rétegben (%d)"
+", amelynek nincs KiCad ekvivalense. Áthelyeztük az Eco1_Felhasználó KiCad "
+"rétegbe."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2903
 #, c-format
@@ -50802,8 +50775,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3702
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr ""
-"A(z) %s lábkiosztás %s forrszeme ismeretlen típusú (%d) lyukat használ."
+msgstr "A(z) %s lábkiosztás %s forrszeme ismeretlen típusú (%d) lyukat használ."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3767
 #, c-format
@@ -50817,8 +50789,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3780
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad shape."
-msgstr ""
-"A(z) %s lábkiosztás %s forrszeme ismeretlen forrszem-alakzatot használ."
+msgstr "A(z) %s lábkiosztás %s forrszeme ismeretlen forrszem-alakzatot használ."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3882
 #, c-format
@@ -52307,8 +52278,8 @@ msgstr ""
 #: pcbnew/pcb_io/pcb_io.cpp:186
 msgid "User name for <b>login</b> to some special library server."
 msgstr ""
-"Felhasználónév egy különleges könyvtár-kiszolgálóra való "
-"<b>bejelentkezéshez</b>."
+"Felhasználónév egy különleges könyvtár-kiszolgálóra való <b>"
+"bejelentkezéshez</b>."
 
 #: pcbnew/pcb_io/pcb_io.cpp:189
 msgid "Password for <b>login</b> to some special library server."
@@ -52750,9 +52721,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -52937,8 +52908,8 @@ msgstr ""
 "        <td>&nbsp;<br><samp>1</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Feltételes szövegmegjelenítés</samp></td>\n"
 "    </tr>\n"
@@ -52950,8 +52921,8 @@ msgstr ""
 "samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Numerikus összehasonlítások is működnek</samp></"
 "td>\n"
@@ -53004,8 +52975,8 @@ msgstr ""
 "</table>\n"
 "<p></p>\n"
 "<p></p>\n"
-"<i>Megjegyzés: a jelölés elsőbbséget élvez a változó-kiterjesztéssel szemben."
-"</i>\n"
+"<i>Megjegyzés: a jelölés elsőbbséget élvez a változó-kiterjesztéssel "
+"szemben.</i>\n"
 "<p></p>\n"
 "<p><b>Lábkiosztás-kereszthivatkozások:</b> más lábkiosztások "
 "referenciamezőire és forrszemeire hivatkozás a <samp>${refdes:field}</samp> "
@@ -53434,8 +53405,7 @@ msgstr "Pozíció adatok kiírva ide: %s.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2074
 msgid "Footprint library path does not exist or is not accessible\n"
-msgstr ""
-"A lábkiosztás-könyvtár elérési útvonala nem létezik vagy nem elérhető\n"
+msgstr "A lábkiosztás-könyvtár elérési útvonala nem létezik vagy nem elérhető\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2114
 msgid "Unable to save library\n"
@@ -54571,13 +54541,11 @@ msgstr "Válassza ki az első elemet a szigetelési távolság meghatározásáh
 
 #: pcbnew/tools/board_inspection_tool.cpp:929
 msgid "Select second item for clearance resolution..."
-msgstr ""
-"Válassza ki a második elemet a szigetelési távolság meghatározásához..."
+msgstr "Válassza ki a második elemet a szigetelési távolság meghatározásához..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:939
 msgid "Select two different items for clearance resolution."
-msgstr ""
-"Válasszon két különböző elemet a szigetelési távolság meghatározásához."
+msgstr "Válasszon két különböző elemet a szigetelési távolság meghatározásához."
 
 #: pcbnew/tools/board_inspection_tool.cpp:962
 #: pcbnew/tools/board_inspection_tool.cpp:975
@@ -54808,8 +54776,7 @@ msgstr "Az elem a jelenlegi helyen engedélyezett."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1833
 msgid "Select a footprint to diff with its library equivalent."
-msgstr ""
-"Válasszon lábkiosztást a könyvtárbeli párjával való összehasonlításhoz."
+msgstr "Válasszon lábkiosztást a könyvtárbeli párjával való összehasonlításhoz."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1851
 msgid "Select a footprint for a footprint associations report."
@@ -55443,8 +55410,7 @@ msgstr ""
 #: pcbnew/tools/pad_tool.cpp:795
 #, c-format
 msgid "Pad Edit Mode.  Press %s to exit."
-msgstr ""
-"Forrszem szerkesztési mód.  A kilépéshez nyomja meg a(z) %s billentyűt."
+msgstr "Forrszem szerkesztési mód.  A kilépéshez nyomja meg a(z) %s billentyűt."
 
 #: pcbnew/tools/pcb_actions.cpp:56
 msgid "Create Polygon from Selection..."
@@ -55795,13 +55761,11 @@ msgstr "Kijelölt elem(ek) tükrözése az X tengelyre"
 
 #: pcbnew/tools/pcb_actions.cpp:704
 msgid "Swap nets between two selected pads and their connected copper"
-msgstr ""
-"Hálózatok cseréje két kijelölt forrszem és a csatlakoztatott réz között"
+msgstr "Hálózatok cseréje két kijelölt forrszem és a csatlakoztatott réz között"
 
 #: pcbnew/tools/pcb_actions.cpp:711
 msgid "Swap nets between gates of a footprint and their connected copper"
-msgstr ""
-"Hálózatok cseréje egy lábkiosztás kapui és a csatlakoztatott réz között"
+msgstr "Hálózatok cseréje egy lábkiosztás kapui és a csatlakoztatott réz között"
 
 #: pcbnew/tools/pcb_actions.cpp:719
 msgid "Pack and Move Footprints"
@@ -56072,8 +56036,7 @@ msgstr "Vezetősáv és via tulajdonságok globális szerkesztése az egész pan
 
 #: pcbnew/tools/pcb_actions.cpp:1032
 msgid "Edit Text and graphics properties globally across board"
-msgstr ""
-"Szöveg és grafikai tulajdonságok globális szerkesztése az egész panelen"
+msgstr "Szöveg és grafikai tulajdonságok globális szerkesztése az egész panelen"
 
 #: pcbnew/tools/pcb_actions.cpp:1038
 msgid "Edit Teardrops..."
@@ -56907,8 +56870,7 @@ msgstr "Lábkiosztás-társítások megjelenítése"
 
 #: pcbnew/tools/pcb_actions.cpp:2182
 msgid "Show footprint library and schematic symbol associations"
-msgstr ""
-"Lábkiosztás-könyvtár és kapcsolásirajz-rajzjel társítások megjelenítése"
+msgstr "Lábkiosztás-könyvtár és kapcsolásirajz-rajzjel társítások megjelenítése"
 
 #: pcbnew/tools/pcb_actions.cpp:2189
 msgid "Geographical Reannotate..."
@@ -57053,8 +57015,7 @@ msgstr "Hálózat összes vezetősávjának kijelölés-törlése"
 
 #: pcbnew/tools/pcb_actions.cpp:2387
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr ""
-"Törli az azonos hálózathoz tartozó összes vezetősáv és via kijelölését."
+msgstr "Törli az azonos hálózathoz tartozó összes vezetősáv és via kijelölését."
 
 #: pcbnew/tools/pcb_actions.cpp:2394
 msgid "Select All Unconnected Footprints"
@@ -57344,8 +57305,7 @@ msgstr "Vonszolás (tetszőleges szög)"
 #: pcbnew/tools/pcb_actions.cpp:2702
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
-msgstr ""
-"Vezetősáv legközelebbi töréspontjának vonszolása (tetszőleges szögben)."
+msgstr "Vezetősáv legközelebbi töréspontjának vonszolása (tetszőleges szögben)."
 
 #: pcbnew/tools/pcb_actions.cpp:2712
 msgid "Update All Tuning Patterns"
