@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-17 15:22+0300\n"
+"POT-Creation-Date: 2026-04-24 17:37+0300\n"
 "PO-Revision-Date: 2026-04-20 09:09+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v9/ja/>\n"
@@ -38679,7 +38679,8 @@ msgstr "自由なパッドの移動を許可"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:104
 msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
-msgstr "チェックされている場合、パッドをフットプリントから移動することができます。"
+msgstr ""
+"チェックされている場合、パッドをフットプリントから移動することができます。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:108
 msgid "Do not prompt for lock overrides for this session"
