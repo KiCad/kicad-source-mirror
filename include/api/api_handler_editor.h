@@ -23,6 +23,7 @@
 
 #include <api/api_handler.h>
 #include <api/common/commands/editor_commands.pb.h>
+#include <base_units.h>
 #include <commit.h>
 #include <google/protobuf/empty.pb.h>
 #include <kiid.h>
@@ -106,6 +107,13 @@ protected:
      * @return true if the given document is valid for this editor and is currently open
      */
     virtual tl::expected<bool, ApiResponseStatus> validateDocumentInternal( const DocumentSpecifier& aDocument ) const = 0;
+
+    /**
+     * Returns the internal-unit scale that the concrete editor uses. API wire coordinates
+     * are always in nanometers, so this scale drives conversion to the editor's native IU.
+     * Defaults to pcbIUScale; schematic-like editors must override.
+     */
+    virtual const EDA_IU_SCALE& getIuScale() const { return pcbIUScale; }
 
     virtual HANDLER_RESULT<ItemRequestStatus> handleCreateUpdateItemsInternal( bool aCreate,
         const std::string& aClientName,

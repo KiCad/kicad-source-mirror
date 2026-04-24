@@ -366,7 +366,11 @@ HANDLER_RESULT<HitTestResponse> API_HANDLER_EDITOR::handleHitTest(
         return tl::unexpected( e );
     }
 
-    if( ( *item )->HitTest( UnpackVector2( aCtx.Request.position() ), aCtx.Request.tolerance() ) )
+    const EDA_IU_SCALE& scale = getIuScale();
+    VECTOR2I posIu = UnpackVector2( aCtx.Request.position(), scale );
+    int toleranceIu = scale.NmToIU( aCtx.Request.tolerance() );
+
+    if( ( *item )->HitTest( posIu, toleranceIu ) )
         response.set_result( HitTestResult::HTR_HIT );
     else
         response.set_result( HitTestResult::HTR_NO_HIT );

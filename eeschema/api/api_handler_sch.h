@@ -50,6 +50,8 @@ protected:
         return kiapi::common::types::DOCTYPE_SCHEMATIC;
     }
 
+    const EDA_IU_SCALE& getIuScale() const override { return schIUScale; }
+
     tl::expected<bool, ApiResponseStatus> validateDocumentInternal( const DocumentSpecifier& aDocument ) const override;
 
     std::optional<SCH_ITEM*> getItemById( const KIID& aId, SCH_SHEET_PATH* aPathOut = nullptr ) const;
