@@ -1145,7 +1145,8 @@ void SPRINT_LAYOUT_PARSER::addTextToBoard( BOARD* aBoard,
     if( height <= 0 )
         height = pcbIUScale.mmToIU( 1.0 );
 
-    text->SetTextSize( VECTOR2I( height, height ) );
+    double widthScale = 0.5 + 0.5 * aObj.line_width;
+    text->SetTextSize( VECTOR2I( height * widthScale, height ) );
 
     double thicknessScale = 0.06 + 0.05 * aObj.inner;
     int    thickness = height * thicknessScale;
