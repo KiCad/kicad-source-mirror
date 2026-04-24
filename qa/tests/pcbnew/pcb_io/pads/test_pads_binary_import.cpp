@@ -26,6 +26,7 @@
 #include <pcb_io/pads/pads_binary_parser.h>
 #include <pcb_io/pads/pads_sdb.h>
 #include <io/pads/pads_binary_utils.h>
+#include <io/pads/pads_common.h>
 #include <layer_ids.h>
 #include <padstack.h>
 #include <board.h>
@@ -1525,6 +1526,41 @@ BOOST_AUTO_TEST_CASE( StructuralZoneVertices )
             }
         }
     }
+}
+
+
+// PADS name fields use a legacy 8-bit code page, so a high byte must survive the fixed-string read
+// and decode through ConvertText. Rejecting it blanks the whole field, and the same board then
+// imports with names from .asc and without them from .pcb.
+BOOST_AUTO_TEST_CASE( FixedStringKeepsHighBytes )
+{
+    // "Res" with a CP1252 e-acute in the middle
+    std::vector<uint8_t> field = { 'R', 0xE9, 's', 0 };
+
+    std::string raw = PADS_IO::readFixedString( field, 0, 4 );
+
+    BOOST_REQUIRE_EQUAL( raw.size(), 3u );
+    BOOST_CHECK_EQUAL( static_cast<unsigned>( static_cast<uint8_t>( raw[1] ) ), 0xE9u );
+    BOOST_CHECK_EQUAL( PADS_COMMON::ConvertText( raw ), wxString::FromUTF8( "R\xC3\xA9s" ) );
+
+    // Net names reach the board through the inverted-name wrapper, so it has to decode as well
+    BOOST_CHECK_EQUAL( PADS_COMMON::ConvertInvertedNetName( raw ), wxString::FromUTF8( "R\xC3\xA9s" ) );
+    BOOST_CHECK_EQUAL( PADS_COMMON::ConvertInvertedNetName( "/" + raw ),
+                       wxString::FromUTF8( "~{R\xC3\xA9s}" ) );
+}
+
+
+// A control byte still invalidates the field, and only trailing spaces are trimmed. StrPurge also
+// stripped leading whitespace, which the documented contract does not allow.
+BOOST_AUTO_TEST_CASE( FixedStringRejectsControlAndKeepsLeadingSpace )
+{
+    std::vector<uint8_t> control = { 'A', 0x01, 'B', 0 };
+
+    BOOST_CHECK( PADS_IO::readFixedString( control, 0, 4 ).empty() );
+
+    std::vector<uint8_t> padded = { ' ', ' ', 'N', 'E', 'T', ' ', ' ', 0 };
+
+    BOOST_CHECK_EQUAL( PADS_IO::readFixedString( padded, 0, 8 ), std::string( "  NET" ) );
 }
 
 

@@ -22,6 +22,8 @@
 #include <algorithm>
 #include <cctype>
 
+#include <io/pads/pads_common.h>
+
 #include <wx/string.h>
 
 
@@ -316,7 +318,7 @@ std::vector<INPUT_LAYER_DESC> PADS_LAYER_MAPPER::BuildInputLayerDescriptions(
     {
         INPUT_LAYER_DESC desc;
 
-        desc.Name = wxString::FromUTF8( info.name );
+        desc.Name = PADS_COMMON::ConvertText( info.name );
         desc.PermittedLayers = GetPermittedLayers( info.type );
         desc.AutoMapLayer = GetAutoMapLayer( info.padsLayerNum, info.type );
         desc.Required = info.required;

@@ -266,9 +266,9 @@ wxString ConvertInvertedNetName( const std::string& aNetName )
         return wxString();
 
     if( aNetName[0] == '/' )
-        return wxT( "~{" ) + wxString::FromUTF8( aNetName.substr( 1 ) ) + wxT( "}" );
+        return wxT( "~{" ) + ConvertText( aNetName.substr( 1 ) ) + wxT( "}" );
 
-    return wxString::FromUTF8( aNetName );
+    return ConvertText( aNetName );
 }
 
 

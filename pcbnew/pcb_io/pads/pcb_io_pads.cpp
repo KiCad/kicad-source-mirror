@@ -2526,7 +2526,7 @@ PCB_LAYER_ID PCB_IO_PADS::getMappedLayer( int aPadsLayer ) const
     {
         if( info.padsLayerNum == aPadsLayer )
         {
-            auto it = m_layer_map.find( wxString::FromUTF8( info.name ) );
+            auto it = m_layer_map.find( PADS_COMMON::ConvertText( info.name ) );
 
             if( it != m_layer_map.end() && it->second != UNDEFINED_LAYER )
                 return it->second;

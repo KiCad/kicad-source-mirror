@@ -161,30 +161,46 @@ inline bool ReadFileToBuffer( const wxString& aFileName, std::vector<uint8_t>& a
 
 /**
  * Read a NUL-terminated fixed-width field starting at @p aOffset, scanning at
- * most @p aMaxLen bytes. Returns an empty string when the field contains any
- * non-printable byte; trailing spaces are trimmed.
+ * most @p aMaxLen bytes, WITHOUT trimming. Returns an empty string when the
+ * field contains a control byte. High bytes are kept because PADS names use a
+ * legacy 8-bit code page; decode them with PADS_COMMON::ConvertText. Use this
+ * where the field is compared byte-for-byte; use @ref readFixedString to trim.
  */
-inline std::string readFixedString( const std::vector<uint8_t>& aData, size_t aOffset, size_t aMaxLen )
+inline std::string readFixedStringRaw( const std::vector<uint8_t>& aData, size_t aOffset,
+                                       size_t aMaxLen )
 {
     if( aOffset >= aData.size() )
         return {};
 
     size_t         available = std::min( aMaxLen, aData.size() - aOffset );
     const uint8_t* start = &aData[aOffset];
-    const uint8_t* end = start + available;
 
-    const uint8_t* null_pos = std::find( start, end, 0 );
+    const uint8_t* null_pos = std::find( start, start + available, 0 );
     size_t         len = static_cast<size_t>( null_pos - start );
 
     for( size_t i = 0; i < len; ++i )
     {
-        if( start[i] < 0x20 || start[i] >= 0x7F )
+        if( start[i] < 0x20 || start[i] == 0x7F )
             return {};
     }
 
-    std::string result( reinterpret_cast<const char*>( start ), len );
+    return std::string( reinterpret_cast<const char*>( start ), len );
+}
 
-    return std::string( StrPurge( result.data() ) );
+
+/**
+ * As @ref readFixedStringRaw, then trim trailing spaces.
+ */
+inline std::string readFixedString( const std::vector<uint8_t>& aData, size_t aOffset, size_t aMaxLen )
+{
+    std::string raw = readFixedStringRaw( aData, aOffset, aMaxLen );
+
+    // Trimmed here rather than through StrPurge, which also strips leading whitespace and walks
+    // one before the start on an empty string
+    while( !raw.empty() && raw.back() == ' ' )
+        raw.pop_back();
+
+    return raw;
 }
 
 
@@ -273,6 +289,12 @@ public:
         return readFixedString( m_data, aOffset, aMaxLen );
     }
 
+    // As StringAt but without trailing-space trimming.
+    std::string StringRawAt( size_t aOffset, size_t aMaxLen ) const
+    {
+        return readFixedStringRaw( m_data, aOffset, aMaxLen );
+    }
+
     uint8_t  U8() { uint8_t v = U8At( m_pos ); m_pos += 1; return v; }
     uint16_t U16() { uint16_t v = U16At( m_pos ); m_pos += 2; return v; }
     uint32_t U32() { uint32_t v = U32At( m_pos ); m_pos += 4; return v; }
@@ -317,6 +339,12 @@ public:
     std::string Str( size_t aOffset, size_t aMaxLen ) const
     {
         return m_cursor.StringAt( m_base + aOffset, aMaxLen );
+    }
+
+    // As Str but without trailing-space trimming.
+    std::string StrRaw( size_t aOffset, size_t aMaxLen ) const
+    {
+        return m_cursor.StringRawAt( m_base + aOffset, aMaxLen );
     }
 
     size_t Base() const { return m_base; }

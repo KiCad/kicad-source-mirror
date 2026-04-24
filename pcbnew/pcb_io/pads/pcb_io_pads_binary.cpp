@@ -407,7 +407,7 @@ void PCB_IO_PADS_BINARY::loadNets()
         if( nc.name.empty() || nc.nets.empty() )
             continue;
 
-        wxString className = wxString::FromUTF8( nc.name );
+        wxString className = PADS_COMMON::ConvertText( nc.name );
 
         if( !netSettings->HasNetclass( className ) )
         {
@@ -438,7 +438,7 @@ void PCB_IO_PADS_BINARY::loadNets()
         if( dp.name.empty() )
             continue;
 
-        wxString dpClassName = wxString::Format( wxT( "DiffPair_%s" ), wxString::FromUTF8( dp.name ) );
+        wxString dpClassName = wxString::Format( wxT( "DiffPair_%s" ), PADS_COMMON::ConvertText( dp.name ) );
         std::shared_ptr<NETCLASS> dpNetclass = std::make_shared<NETCLASS>( dpClassName );
 
         if( dp.gap > 0 )
@@ -471,7 +471,7 @@ void PCB_IO_PADS_BINARY::loadFootprints()
     for( const auto& padsPart : parts )
     {
         FOOTPRINT* footprint = new FOOTPRINT( m_loadBoard );
-        footprint->SetReference( padsPart.name );
+        footprint->SetReference( PADS_COMMON::ConvertText( padsPart.name ) );
 
         KIID symbolUuid = PADS_COMMON::GenerateDeterministicUuid( padsPart.name );
         KIID_PATH path;
@@ -483,12 +483,12 @@ void PCB_IO_PADS_BINARY::loadFootprints()
         LIB_ID fpid;
 
         if( !decalName.empty() )
-            fpid.SetLibItemName( wxString::FromUTF8( decalName ) );
+            fpid.SetLibItemName( PADS_COMMON::ConvertText( decalName ) );
         else
-            fpid.SetLibItemName( wxString::FromUTF8( padsPart.name ) );
+            fpid.SetLibItemName( PADS_COMMON::ConvertText( padsPart.name ) );
 
         footprint->SetFPID( fpid );
-        footprint->SetValue( padsPart.decal );
+        footprint->SetValue( PADS_COMMON::ConvertText( padsPart.decal ) );
 
         footprint->SetPosition( VECTOR2I( scaleCoord( padsPart.location.x, true ),
                                            scaleCoord( padsPart.location.y, false ) ) );
@@ -519,7 +519,7 @@ void PCB_IO_PADS_BINARY::loadFootprints()
                 PAD* pad = new PAD( footprint );
                 footprint->Add( pad );
 
-                pad->SetNumber( term.name );
+                pad->SetNumber( PADS_COMMON::ConvertText( term.name ) );
 
                 VECTOR2I padPos( scaleSize( term.x ), -scaleSize( term.y ) );
                 RotatePoint( padPos, partOrient );
@@ -641,7 +641,7 @@ void PCB_IO_PADS_BINARY::loadClusterGroups()
     for( const PADS_IO::PART_CLUSTER& cluster : clusters )
     {
         PCB_GROUP* group = new PCB_GROUP( m_loadBoard );
-        group->SetName( wxString::FromUTF8( cluster.name ) );
+        group->SetName( PADS_COMMON::ConvertText( cluster.name ) );
         m_loadBoard->Add( group );
         clusterGroups[cluster.id] = group;
     }
@@ -915,7 +915,7 @@ void PCB_IO_PADS_BINARY::loadTexts()
         }
 
         PCB_TEXT* text = new PCB_TEXT( m_loadBoard );
-        text->SetText( pads_text.content );
+        text->SetText( PADS_COMMON::ConvertText( pads_text.content ) );
 
         int scaledSize = scaleSize( pads_text.height );
         int charHeight =
@@ -1058,7 +1058,8 @@ void PCB_IO_PADS_BINARY::loadZones()
             zone->SetDoNotAllowVias( false );
             zone->SetDoNotAllowPads( false );
             zone->SetDoNotAllowFootprints( false );
-            zone->SetZoneName( wxString::Format( wxT( "Cutout_%s" ), pour_def.owner_pour ) );
+            zone->SetZoneName( wxString::Format( wxT( "Cutout_%s" ),
+                                                 PADS_COMMON::ConvertText( pour_def.owner_pour ) ) );
         }
         else
         {
@@ -1246,7 +1247,7 @@ void PCB_IO_PADS_BINARY::loadDimensions()
         if( !dim.text.empty() )
         {
             dimension->SetOverrideTextEnabled( true );
-            dimension->SetOverrideText( wxString::FromUTF8( dim.text ) );
+            dimension->SetOverrideText( PADS_COMMON::ConvertText( dim.text ) );
         }
 
         dimension->SetLineThickness( scaleSize( 5.0 ) );
@@ -1314,7 +1315,7 @@ void PCB_IO_PADS_BINARY::generateDrcRules( const wxString& aFileName )
         if( dp.name.empty() || ( dp.gap <= 0 && dp.width <= 0 ) )
             continue;
 
-        wxString ruleName = wxString::Format( wxT( "DiffPair_%s" ), wxString::FromUTF8( dp.name ) );
+        wxString ruleName = wxString::Format( wxT( "DiffPair_%s" ), PADS_COMMON::ConvertText( dp.name ) );
 
         if( dp.gap > 0 && !dp.positive_net.empty() && !dp.negative_net.empty() )
         {
@@ -1452,7 +1453,7 @@ PCB_LAYER_ID PCB_IO_PADS_BINARY::getMappedLayer( int aPadsLayer ) const
     {
         if( info.padsLayerNum == aPadsLayer )
         {
-            auto it = m_layerMap.find( wxString::FromUTF8( info.name ) );
+            auto it = m_layerMap.find( PADS_COMMON::ConvertText( info.name ) );
 
             if( it != m_layerMap.end() && it->second != UNDEFINED_LAYER )
                 return it->second;

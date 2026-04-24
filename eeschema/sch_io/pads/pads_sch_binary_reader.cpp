@@ -20,6 +20,7 @@
 #include <sch_io/pads/pads_sch_binary_reader.h>
 
 #include <io/pads/pads_binary_utils.h>
+#include <io/pads/pads_common.h>
 
 #include <lib_id.h>
 #include <lib_symbol.h>
@@ -406,24 +407,7 @@ static int signedHalfMil( const BINARY_CURSOR& cur, size_t o )
 
 static std::string nameAt( const std::vector<uint8_t>& d, size_t o, size_t maxlen )
 {
-    if( o + 1 > d.size() )
-        return std::string();
-
-    size_t end = o;
-
-    while( end < d.size() && end < o + maxlen && d[end] != 0 )
-        ++end;
-
-    if( end == o )
-        return std::string();
-
-    for( size_t i = o; i < end; ++i )
-    {
-        if( d[i] < 0x20 || d[i] >= 0x7f )
-            return std::string();
-    }
-
-    return std::string( reinterpret_cast<const char*>( &d[o] ), end - o );
+    return PADS_IO::readFixedStringRaw( d, o, maxlen );
 }
 
 
@@ -2999,10 +2983,10 @@ static void addGateUnit( LIB_SYMBOL* aLib, const PADS_SCH_BINARY::DECAL* aDecal,
             if( label )
             {
                 const PIN_INFO& info = aGatePins[ti];
-                pin->SetNumber( wxString::FromUTF8( info.number ) );
+                pin->SetNumber( PADS_COMMON::ConvertText( info.number ) );
 
                 if( !info.name.empty() )
-                    pin->SetName( wxString::FromUTF8( info.name ) );
+                    pin->SetName( PADS_COMMON::ConvertText( info.name ) );
 
                 pin->SetType( pinTypeFromLetter( info.type ) );
             }
@@ -3028,10 +3012,10 @@ static void addGateUnit( LIB_SYMBOL* aLib, const PADS_SCH_BINARY::DECAL* aDecal,
             SCH_PIN* pin = new SCH_PIN( aLib );
             pin->SetPosition( VECTOR2I( 0, schIUScale.MilsToIU( y ) ) );
             y -= 100;
-            pin->SetNumber( wxString::FromUTF8( info.number ) );
+            pin->SetNumber( PADS_COMMON::ConvertText( info.number ) );
 
             if( !info.name.empty() )
-                pin->SetName( wxString::FromUTF8( info.name ) );
+                pin->SetName( PADS_COMMON::ConvertText( info.name ) );
 
             pin->SetType( pinTypeFromLetter( info.type ) );
             pin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
@@ -3054,7 +3038,7 @@ std::unique_ptr<LIB_SYMBOL> PADS_SCH_BINARY_READER::buildMultiUnitLib( const std
     const std::vector<std::vector<PIN_INFO>>& slices = git->second;
     int                                       ngates = static_cast<int>( slices.size() );
 
-    auto lib = std::make_unique<LIB_SYMBOL>( wxString::FromUTF8( aBase ) );
+    auto lib = std::make_unique<LIB_SYMBOL>( PADS_COMMON::ConvertText( aBase ) );
     lib->SetUnitCount( ngates, false );
     lib->LockUnits( true );
 
@@ -3114,8 +3098,8 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
         // the symbol identity + body, or a generic placeholder when the decal is unbound.
         auto    decalIt = m_decalIndex.find( pl.decalName );
         bool    haveDecal = !pl.decalName.empty() && decalIt != m_decalIndex.end();
-        wxString name = haveDecal ? wxString::FromUTF8( pl.decalName )
-                                  : wxString::Format( wxT( "PADS_%s" ), wxString::FromUTF8( pl.reference ) );
+        wxString name = haveDecal ? PADS_COMMON::ConvertText( pl.decalName )
+                                  : wxString::Format( wxT( "PADS_%s" ), PADS_COMMON::ConvertText( pl.reference ) );
 
         std::unique_ptr<LIB_SYMBOL> libSym;
         bool                        multiUnitBuilt = false;
@@ -3126,7 +3110,7 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
 
             if( libSym )
             {
-                name = wxString::FromUTF8( pl.baseRef );
+                name = PADS_COMMON::ConvertText( pl.baseRef );
                 multiUnitBuilt = true;
             }
         }
@@ -3214,10 +3198,10 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
                 if( ptPins )
                 {
                     const PIN_INFO& info = ( *ptPins )[ti];
-                    pin->SetNumber( wxString::FromUTF8( info.number ) );
+                    pin->SetNumber( PADS_COMMON::ConvertText( info.number ) );
 
                     if( !info.name.empty() )
-                        pin->SetName( wxString::FromUTF8( info.name ) );
+                        pin->SetName( PADS_COMMON::ConvertText( info.name ) );
 
                     pin->SetType( pinTypeFromLetter( info.type ) );
                 }
@@ -3252,8 +3236,8 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
         default:  symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_0 );   break;
         }
 
-        wxString symRef = multiUnitBuilt ? wxString::FromUTF8( pl.baseRef )
-                                         : wxString::FromUTF8( pl.reference );
+        wxString symRef = multiUnitBuilt ? PADS_COMMON::ConvertText( pl.baseRef )
+                                         : PADS_COMMON::ConvertText( pl.reference );
         int      symUnit = multiUnitBuilt ? pl.unit : 1;
 
         symbol->SetUnit( symUnit );
@@ -3301,7 +3285,7 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
             if( f.first == "VALUE" || f.first == "Value" )
             {
                 SCH_FIELD* value = symbol->GetField( FIELD_T::VALUE );
-                value->SetText( wxString::FromUTF8( f.second ) );
+                value->SetText( PADS_COMMON::ConvertText( f.second ) );
 
                 if( fp )
                     applyPlace( value, *fp );
@@ -3309,8 +3293,8 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
                 continue;
             }
 
-            SCH_FIELD field( symbol.get(), FIELD_T::USER, wxString::FromUTF8( f.first ) );
-            field.SetText( wxString::FromUTF8( f.second ) );
+            SCH_FIELD field( symbol.get(), FIELD_T::USER, PADS_COMMON::ConvertText( f.first ) );
+            field.SetText( PADS_COMMON::ConvertText( f.second ) );
 
             if( fp )
             {
@@ -3330,7 +3314,7 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
         SCH_FIELD* valueField = symbol->GetField( FIELD_T::VALUE );
 
         if( valueField->GetText().IsEmpty() && !pl.partType.empty() )
-            valueField->SetText( wxString::FromUTF8( pl.partType ) );
+            valueField->SetText( PADS_COMMON::ConvertText( pl.partType ) );
 
         aScreen->Append( symbol.release() );
         ++appended;
@@ -3390,7 +3374,7 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
 
         SCH_TEXT* text = new SCH_TEXT( VECTOR2I( schIUScale.MilsToIU( txt.x_mils ),
                                                  milToY( txt.y_mils ) ),
-                                       wxString::FromUTF8( txt.text ) );
+                                       PADS_COMMON::ConvertText( txt.text ) );
 
         text->SetTextHeight( schIUScale.MilsToIU( txt.height_mils ) );
         text->SetTextWidth( schIUScale.MilsToIU( txt.height_mils ) );
@@ -3426,7 +3410,7 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
             continue;
 
         VECTOR2I pos( schIUScale.MilsToIU( lbl.x_mils ), milToY( lbl.y_mils ) );
-        wxString net = wxString::FromUTF8( lbl.netName );
+        wxString net = PADS_COMMON::ConvertText( lbl.netName );
 
         if( lbl.kind == NETLABEL_KIND::LOCAL )
         {
@@ -3514,7 +3498,7 @@ int PADS_SCH_BINARY_READER::BuildSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
         childScreen->SetPageSettings( pageInfo );
 
         wxString sheetName = ( s < m_sheetNames.size() && !m_sheetNames[s].empty() )
-                                     ? wxString::FromUTF8( m_sheetNames[s] )
+                                     ? PADS_COMMON::ConvertText( m_sheetNames[s] )
                                      : wxString::Format( _( "Sheet %zu" ), s + 1 );
         child->GetField( FIELD_T::SHEET_NAME )->SetText( sheetName );
         child->GetField( FIELD_T::SHEET_FILENAME )
