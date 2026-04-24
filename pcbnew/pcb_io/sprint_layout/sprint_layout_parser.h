@@ -179,6 +179,7 @@ private:
     PCB_LAYER_ID mapLayer( uint8_t aSprintLayer ) const;
     int          sprintToKicadCoord( float aValue ) const;
     VECTOR2I     sprintToKicadPos( float aX, float aY ) const;
+    wxString     convertString( const std::string& aStr ) const;
 
     void addPadToBoard( BOARD* aBoard, const SPRINT_LAYOUT::OBJECT& aObj,
                         std::map<uint16_t, FOOTPRINT*>& aComponentMap,

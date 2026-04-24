@@ -42,6 +42,8 @@
 #include <wx/filename.h>
 #include <wx/wfstream.h>
 #include <wx/log.h>
+#include <wx/strconv.h>
+#include <wx/fontenc.h>
 
 #include <algorithm>
 #include <cmath>
@@ -471,6 +473,22 @@ VECTOR2I SPRINT_LAYOUT_PARSER::sprintToKicadPos( float aX, float aY ) const
 }
 
 
+wxString SPRINT_LAYOUT_PARSER::convertString( const std::string& aStr ) const
+{
+    static wxCSConv convCP1251( wxFONTENCODING_CP1251 );
+
+    if( aStr.empty() )
+        return wxEmptyString;
+
+    wxString ret = wxString::FromUTF8( aStr );
+
+    if( ret.empty() && convCP1251.IsOk() )
+        ret = wxString( aStr.c_str(), convCP1251 );
+
+    return ret;
+}
+
+
 BOARD* SPRINT_LAYOUT_PARSER::CreateBoard(
         std::map<wxString, std::unique_ptr<FOOTPRINT>>& aFootprintMap, size_t aBoardIndex )
 {
@@ -510,12 +528,16 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard(
             if( componentMap.find( obj.component_id ) == componentMap.end() )
             {
                 FOOTPRINT* fp = new FOOTPRINT( board.get() );
-                fp->SetReference( wxString::FromUTF8( obj.text ) );
-                fp->SetValue( wxString::FromUTF8( obj.component.comment ) );
+                fp->SetReference( convertString( obj.text ) );
+
+                if( !obj.component.comment.empty() )
+                {
+                    fp->SetValue( convertString( obj.component.comment ) );
+                }
 
                 if( !obj.component.package.empty() )
                 {
-                    fp->SetLibDescription( wxString::FromUTF8( obj.component.package ) );
+                    fp->SetLibDescription( convertString( obj.component.package ) );
                 }
 
                 double rotDeg = obj.component.rotation;
@@ -532,7 +554,7 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard(
                 board->Add( fp );
 
                 wxString fpKey = wxString::Format( wxS( "SprintLayout_%s" ),
-                                                   wxString::FromUTF8( obj.text ) );
+                                                   convertString( obj.text ) );
                 FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( fp->Clone() );
                 fpCopy->SetParent( nullptr );
                 aFootprintMap[fpKey] = std::unique_ptr<FOOTPRINT>( fpCopy );
@@ -812,7 +834,7 @@ void SPRINT_LAYOUT_PARSER::addPadToBoard(
     // Set net name
     if( !aObj.net_name.empty() )
     {
-        wxString netName = wxString::FromUTF8( aObj.net_name );
+        wxString netName = convertString( aObj.net_name );
         NETINFO_ITEM* net = aBoard->FindNet( netName );
 
         if( !net )
@@ -937,7 +959,7 @@ void SPRINT_LAYOUT_PARSER::addPolyToBoard(
 
         if( !aObj.net_name.empty() )
         {
-            wxString netName = wxString::FromUTF8( aObj.net_name );
+            wxString netName = convertString( aObj.net_name );
             NETINFO_ITEM* net = aBoard->FindNet( netName );
 
             if( !net )
@@ -1110,7 +1132,7 @@ void SPRINT_LAYOUT_PARSER::addTextToBoard( BOARD* aBoard,
 
     PCB_TEXT* text = new PCB_TEXT( aBoard );
     text->SetLayer( layer );
-    text->SetText( wxString::FromUTF8( aObj.text ) );
+    text->SetText( convertString( aObj.text ) );
 
     VECTOR2I pos = sprintToKicadPos( aObj.x, aObj.y );
     text->SetPosition( pos );
