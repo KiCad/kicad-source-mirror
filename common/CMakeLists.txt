@@ -253,6 +253,7 @@ set( KICOMMON_SRCS
     build_version.cpp
     cli_progress_reporter.cpp
     common.cpp
+    text_var_dependency.cpp
     config_params.cpp
     confirm.cpp
     dialog_shim.cpp
@@ -960,6 +961,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/teardrop/teardrop_parameters.cpp     #needed by board_design_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/router/pns_meander.cpp               #needed by board_design_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/board_text_var_adapter.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/component_classes/component_class.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/component_classes/component_class_assignment_rule.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/component_classes/component_class_cache_proxy.cpp

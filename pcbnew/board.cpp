@@ -42,6 +42,7 @@
 #include <connectivity/connectivity_data.h>
 #include <convert_shape_list_to_polygon.h>
 #include <footprint.h>
+#include <board_text_var_adapter.h>
 #include <font/outline_font.h>
 #include <length_delay_calculation/length_delay_calculation.h>
 #include <lset.h>
@@ -157,6 +158,13 @@ BOARD::BOARD() :
     // Set flag bits on these that will only be cleared if these are loaded from a legacy file
     m_LegacyVisibleLayers.reset().set( Rescue );
     m_LegacyVisibleItems.reset().set( GAL_LAYER_INDEX( GAL_LAYER_ID_BITMASK_END ) );
+
+    // Install the text-variable dependency adapter as a listener so subsequent
+    // BOARD_COMMIT pushes and undo/redo events reach the tracker. No items
+    // exist yet — RebuildIndex is invoked after load by callers that bypass
+    // per-item notifications.
+    m_textVarAdapter = std::make_unique<BOARD_TEXT_VAR_ADAPTER>( *this );
+    AddListener( m_textVarAdapter.get() );
 }
 
 
@@ -2728,18 +2736,27 @@ static wxString FindVariantNameCaseInsensitive( const std::vector<wxString>& aNa
 
 void BOARD::SetCurrentVariant( const wxString& aVariant )
 {
+    const wxString previous = m_currentVariant;
+
     if( aVariant.IsEmpty() || aVariant.CmpNoCase( GetDefaultVariantName() ) == 0 )
     {
         m_currentVariant.Clear();
-        return;
+    }
+    else
+    {
+        wxString actualName = FindVariantNameCaseInsensitive( m_variantNames, aVariant );
+
+        if( actualName.IsEmpty() )
+            m_currentVariant.Clear();
+        else
+            m_currentVariant = actualName;
     }
 
-    wxString actualName = FindVariantNameCaseInsensitive( m_variantNames, aVariant );
-
-    if( actualName.IsEmpty() )
-        m_currentVariant.Clear();
-    else
-        m_currentVariant = actualName;
+    // Variant overrides on footprint fields change `${REFDES:FIELD}` resolution,
+    // so every cross-ref dependent must repaint on switch. Skip the fan-out if
+    // the active variant did not actually change (e.g. redundant UI callback).
+    if( previous != m_currentVariant && m_textVarAdapter )
+        m_textVarAdapter->Tracker().InvalidateVariantScoped();
 }
 
 

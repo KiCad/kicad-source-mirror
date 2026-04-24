@@ -38,6 +38,7 @@
 #include <gr_text.h>
 #include <string_utils.h> // for UnescapeString
 #include <text_eval/text_eval_wrapper.h>
+#include <common.h>
 #include <math/util.h> // for KiROUND
 #include <math/vector2d.h>
 #include <core/kicad_algo.h>
@@ -106,16 +107,7 @@ EDA_TEXT::EDA_TEXT( const EDA_IU_SCALE& aIuScale, const wxString& aText ) :
     SetTextSize( VECTOR2I( EDA_UNIT_UTILS::Mils2IU( m_IuScale, DEFAULT_SIZE_TEXT ),
                            EDA_UNIT_UTILS::Mils2IU( m_IuScale, DEFAULT_SIZE_TEXT ) ) );
 
-    if( m_text.IsEmpty() )
-    {
-        m_shown_text = wxEmptyString;
-        m_shown_text_has_text_var_refs = false;
-    }
-    else
-    {
-        m_shown_text = UnescapeString( m_text );
-        m_shown_text_has_text_var_refs = m_shown_text.Contains( wxT( "${" ) );
-    }
+    cacheShownText();
 }
 
 
@@ -125,6 +117,7 @@ EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
     m_text = aText.m_text;
     m_shown_text = aText.m_shown_text;
     m_shown_text_has_text_var_refs = aText.m_shown_text_has_text_var_refs;
+    m_text_var_refs = aText.m_text_var_refs;
 
     m_attributes = aText.m_attributes;
     m_pos = aText.m_pos;
@@ -154,6 +147,7 @@ EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
     m_text = aText.m_text;
     m_shown_text = aText.m_shown_text;
     m_shown_text_has_text_var_refs = aText.m_shown_text_has_text_var_refs;
+    m_text_var_refs = aText.m_text_var_refs;
 
     m_attributes = aText.m_attributes;
     m_pos = aText.m_pos;
@@ -451,6 +445,7 @@ void EDA_TEXT::SwapText( EDA_TEXT& aTradingPartner )
 {
     std::swap( m_text, aTradingPartner.m_text );
     cacheShownText();
+    aTradingPartner.cacheShownText();
 }
 
 
@@ -621,8 +616,7 @@ void EDA_TEXT::Offset( const VECTOR2I& aOffset )
 void EDA_TEXT::Empty()
 {
     m_text.Empty();
-    ClearRenderCache();
-    ClearBoundingBoxCache();
+    cacheShownText();
 }
 
 
@@ -639,8 +633,22 @@ void EDA_TEXT::cacheShownText()
         m_shown_text_has_text_var_refs = m_shown_text.Contains( wxT( "${" ) ) || m_shown_text.Contains( wxT( "@{" ) );
     }
 
+    // Extract against raw m_text so backslash-escaped ${...} literals do not
+    // fabricate dependency edges. Eager population keeps the read path
+    // lock-free for concurrent workers.
+    if( m_text.IsEmpty() )
+        m_text_var_refs.clear();
+    else
+        m_text_var_refs = ExtractTextVarReferences( m_text );
+
     ClearRenderCache();
     ClearBoundingBoxCache();
+}
+
+
+const std::vector<TEXT_VAR_REF_KEY>& EDA_TEXT::GetTextVarReferences() const
+{
+    return m_text_var_refs;
 }
 
 

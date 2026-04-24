@@ -33,6 +33,7 @@
 #include <font/glyph.h>
 #include <font/text_attributes.h>
 #include <api/serializable.h>
+#include <text_var_dependency.h>
 
 
 class OUTPUTFORMATTER;
@@ -130,6 +131,15 @@ public:
      * Indicates the ShownText has text var references which need to be processed.
      */
     bool HasTextVars() const { return m_shown_text_has_text_var_refs; }
+
+    /**
+     * Return the set of `${...}` references extracted from the source text.
+     *
+     * The result is cached lazily and invalidated on SetText/CopyText/Replace. Consumers
+     * (the reactive dependency tracker) may call this at high frequency on items that
+     * rarely change; the cache avoids repeat lexing.
+     */
+    const std::vector<TEXT_VAR_REF_KEY>& GetTextVarReferences() const;
 
     virtual void SetText( const wxString& aText );
 
@@ -474,7 +484,13 @@ protected:
 private:
     wxString         m_text;
     wxString         m_shown_text;           // Cache of unescaped text for efficient access
-    bool             m_shown_text_has_text_var_refs;
+    bool             m_shown_text_has_text_var_refs = false;
+
+    // Populated eagerly in cacheShownText() so reads from concurrent workers
+    // (connection graph, API server, painters) see immutable storage without a
+    // lock. Extracted from raw m_text (not m_shown_text) so backslash-escaped
+    // ${...} literals do not fabricate dependency edges.
+    std::vector<TEXT_VAR_REF_KEY> m_text_var_refs;
 
     std::reference_wrapper<const EDA_IU_SCALE>          m_IuScale;
 

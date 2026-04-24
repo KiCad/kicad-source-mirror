@@ -28,6 +28,8 @@
 
 #include <eda_item.h>
 #include <eda_units.h>
+#include <functional>
+#include <vector>
 
 class BOARD;
 class PAGE_INFO;
@@ -38,6 +40,8 @@ class DS_DRAW_ITEM_RECT;
 class DS_DRAW_ITEM_TEXT;
 class DS_DRAW_ITEM_BITMAP;
 class DS_DRAW_ITEM_LIST;
+class TEXT_VAR_TRACKER;
+struct TEXT_VAR_REF_KEY;
 
 namespace KIGFX
 {
@@ -133,6 +137,33 @@ public:
 
     bool HitTestDrawingSheetItems( KIGFX::VIEW* aView, const VECTOR2I& aPosition );
 
+    /**
+     * Walk the current drawing-sheet definition and collect every `${...}`
+     * reference encountered in its text items. Used by reactive integrations
+     * (BOARD / SCHEMATIC text-var trackers) to register the proxy as a single
+     * dependent covering the whole title block — any source change fans out
+     * to one repaint rather than per-text-item.
+     */
+    std::vector<TEXT_VAR_REF_KEY> CollectTextVarKeys() const;
+
+    /**
+     * Register this proxy with @p aTracker as a dependent on every
+     * title-block source variable its current template references. The
+     * proxy retains a pointer to @p aTracker and unregisters automatically
+     * in its destructor.
+     *
+     * Callers are responsible for attaching a single long-lived invalidate
+     * listener to @p aTracker that routes per-proxy invalidations (e.g.,
+     * look up the canvas's current drawing sheet and call VIEW::Update on
+     * it). This avoids listener accumulation when the proxy is replaced on
+     * page-setup changes.
+     *
+     * Passing @p aTracker as nullptr detaches.
+     */
+    void AttachToTracker( TEXT_VAR_TRACKER* aTracker );
+
+    ~DS_PROXY_VIEW_ITEM() override;
+
 protected:
     void buildDrawList( KIGFX::VIEW* aView, const std::map<wxString, wxString>* aProperties,
                         DS_DRAW_ITEM_LIST* aDrawList ) const;
@@ -162,6 +193,10 @@ protected:
 
     /// Layer that is used for page border color
     int                 m_pageBorderColorLayer;
+
+    /// Tracker this proxy is currently registered with (null if detached).
+    /// Used by the destructor to unregister cleanly.
+    TEXT_VAR_TRACKER*   m_attachedTracker = nullptr;
 };
 
 #endif /* DS_PROXY_VIEW_ITEM_H */

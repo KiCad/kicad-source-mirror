@@ -1665,6 +1665,14 @@ private:
 
     std::unique_ptr<COMPONENT_CLASS_MANAGER>  m_componentClassManager;
     std::unique_ptr<LENGTH_DELAY_CALCULATION> m_lengthDelayCalc;
+
+    // Reactive text-variable dependency adapter. Installed as a listener
+    // during BOARD construction; destructor order ensures it outlives no
+    // listener calls.
+    std::unique_ptr<class BOARD_TEXT_VAR_ADAPTER> m_textVarAdapter;
+
+public:
+    BOARD_TEXT_VAR_ADAPTER* GetTextVarAdapter() const { return m_textVarAdapter.get(); }
 };
 
 

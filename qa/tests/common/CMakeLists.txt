@@ -45,6 +45,8 @@ set( QA_COMMON_SRCS
     test_eda_text.cpp
     test_embedded_file_compress.cpp
     test_expand_text_vars.cpp
+    test_text_var_dependency.cpp
+    test_drawing_sheet_reactive.cpp
     test_file_history.cpp
     test_filename_resolver.cpp
     test_hotkey_store.cpp

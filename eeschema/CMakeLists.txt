@@ -430,6 +430,7 @@ set( EESCHEMA_SRCS
     sch_validators.cpp
     sch_view.cpp
     schematic.cpp
+    schematic_text_var_adapter.cpp
     schematic_settings.cpp
     schematic_undo_redo.cpp
     sheet.cpp

@@ -38,6 +38,7 @@
 #include <project/project_file.h>
 #include <refdes_tracker.h>
 #include <schematic.h>
+#include <schematic_text_var_adapter.h>
 #include <sch_bus_entry.h>
 #include <sch_commit.h>
 #include <sch_junction.h>
@@ -77,6 +78,11 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
     m_IsSchematicExists = true;
 
     SetProject( aPrj );
+
+    // Install the text-variable dependency adapter before any sheets load so
+    // add-notifications reach the tracker.
+    m_textVarAdapter = std::make_unique<SCHEMATIC_TEXT_VAR_ADAPTER>( *this );
+    AddListener( m_textVarAdapter.get() );
 
     PROPERTY_MANAGER::Instance().RegisterListener(
             TYPE_HASH( SCH_FIELD ),
@@ -2235,6 +2241,12 @@ void SCHEMATIC::SetCurrentVariant( const wxString& aVariantName )
                 item->ClearCaches();
         }
     }
+
+    // Variant-driven cross-ref / local-field value changes require a
+    // reactive fan-out so dependent text items repaint without waiting for
+    // an unrelated edit to nudge the view.
+    if( m_textVarAdapter )
+        m_textVarAdapter->Tracker().InvalidateVariantScoped();
 }
 
 

@@ -23,14 +23,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
+#include <common.h>
 #include <layer_ids.h>
 #include <page_info.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_data_item.h>
+#include <drawing_sheet/ds_data_model.h>
 #include <drawing_sheet/ds_painter.h>
+#include <eda_text.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <project.h>
+#include <text_var_dependency.h>
 #include <view/view.h>
 
 using namespace KIGFX;
@@ -155,6 +160,77 @@ std::vector<int> DS_PROXY_VIEW_ITEM::ViewGetLayers() const
 {
     std::vector<int> layer{ LAYER_DRAWINGSHEET };
     return layer;
+}
+
+
+std::vector<TEXT_VAR_REF_KEY> DS_PROXY_VIEW_ITEM::CollectTextVarKeys() const
+{
+    // Scan the drawing-sheet *template* data model, not the resolved draw
+    // list: SyncDrawItems expands `${...}` against the current title block
+    // before populating DS_DRAW_ITEM_TEXT, so the references are lost by the
+    // time we'd see draw items. The template's m_TextBase preserves them.
+    std::vector<TEXT_VAR_REF_KEY> keys;
+
+    for( DS_DATA_ITEM* item : DS_DATA_MODEL::GetTheInstance().GetItems() )
+    {
+        if( item->GetType() != DS_DATA_ITEM::DS_TEXT )
+            continue;
+
+        const DS_DATA_ITEM_TEXT* textItem = static_cast<const DS_DATA_ITEM_TEXT*>( item );
+        std::vector<TEXT_VAR_REF_KEY> itemKeys = ExtractTextVarReferences( textItem->m_TextBase );
+
+        for( const TEXT_VAR_REF_KEY& ref : itemKeys )
+        {
+            if( ref.IsTrackable() )
+                keys.push_back( ref );
+        }
+    }
+
+    // De-duplicate — the same ${REVISION} reference may appear on multiple
+    // draw items; a single registration per unique key is enough.
+    std::sort( keys.begin(), keys.end(),
+               []( const TEXT_VAR_REF_KEY& a, const TEXT_VAR_REF_KEY& b )
+               {
+                   if( a.kind != b.kind )
+                       return static_cast<int>( a.kind ) < static_cast<int>( b.kind );
+
+                   if( a.primary != b.primary )
+                       return a.primary < b.primary;
+
+                   return a.secondary < b.secondary;
+               } );
+
+    keys.erase( std::unique( keys.begin(), keys.end() ), keys.end() );
+
+    return keys;
+}
+
+
+void DS_PROXY_VIEW_ITEM::AttachToTracker( TEXT_VAR_TRACKER* aTracker )
+{
+    // Detach path: unregister from any previously attached tracker.
+    if( !aTracker )
+    {
+        if( m_attachedTracker )
+            m_attachedTracker->UnregisterItem( this );
+
+        m_attachedTracker = nullptr;
+        return;
+    }
+
+    // Re-attach to a different tracker: unregister from the old one first.
+    if( m_attachedTracker && m_attachedTracker != aTracker )
+        m_attachedTracker->UnregisterItem( this );
+
+    m_attachedTracker = aTracker;
+    aTracker->RegisterItem( this, CollectTextVarKeys() );
+}
+
+
+DS_PROXY_VIEW_ITEM::~DS_PROXY_VIEW_ITEM()
+{
+    if( m_attachedTracker )
+        m_attachedTracker->UnregisterItem( this );
 }
 
 

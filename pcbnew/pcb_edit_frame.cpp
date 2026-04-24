@@ -69,6 +69,9 @@
 #include <pcb_track.h>
 #include <layer_pairs.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
+#include <board_text_var_adapter.h>
+#include <text_var_dependency.h>
+#include <view/view.h>
 #include <wildcards_and_files_ext.h>
 #include <functional>
 #include <pcb_barcode.h>
@@ -762,6 +765,12 @@ void PCB_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
 
 PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 {
+    // Remove our invalidation listener from whichever tracker it was
+    // installed on — not from GetBoard()'s current tracker, which may have
+    // been swapped out by a project reload between install time and now.
+    if( m_textVarListenerTracker && m_textVarListenerHandle != TEXT_VAR_TRACKER::INVALID_LISTENER )
+        m_textVarListenerTracker->RemoveInvalidateListener( m_textVarListenerHandle );
+
     if( ADVANCED_CFG::GetCfg().m_ShowEventCounters )
     {
         // Stop the timer during destruction early to avoid potential event race conditions (that
@@ -905,6 +914,55 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 
     // PCB_DRAW_PANEL_GAL takes ownership of the drawing-sheet
     GetCanvas()->SetDrawingSheet( drawingSheet );
+
+    // Reactive title-block repaint: register the proxy with the BOARD's
+    // text-var tracker so source changes fan out to a repaint. The one-time
+    // listener installation is idempotent; calling AddInvalidateListener
+    // here each time would accumulate stale listeners across SetPageSettings
+    // calls, which is why the listener check below is guarded.
+    if( BOARD* board = GetBoard() )
+    {
+        if( BOARD_TEXT_VAR_ADAPTER* adapter = board->GetTextVarAdapter() )
+        {
+            TEXT_VAR_TRACKER* tracker = &adapter->Tracker();
+
+            drawingSheet->AttachToTracker( tracker );
+
+            // Project reload / board swap can point GetBoard() at a new
+            // tracker; detach from the previous one first so we don't leak
+            // a stale lambda that still captures `this`.
+            if( m_textVarListenerTracker != tracker
+                && m_textVarListenerHandle != TEXT_VAR_TRACKER::INVALID_LISTENER )
+            {
+                m_textVarListenerTracker->RemoveInvalidateListener( m_textVarListenerHandle );
+                m_textVarListenerHandle = TEXT_VAR_TRACKER::INVALID_LISTENER;
+                m_textVarListenerTracker = nullptr;
+            }
+
+            if( m_textVarListenerHandle == TEXT_VAR_TRACKER::INVALID_LISTENER )
+            {
+                KIGFX::VIEW* view = GetCanvas()->GetView();
+                m_textVarListenerTracker = tracker;
+                m_textVarListenerHandle = tracker->AddInvalidateListener(
+                        [this, view]( EDA_ITEM* aDep, const TEXT_VAR_REF_KEY& )
+                        {
+                            if( !aDep )
+                                return;
+
+                            DS_PROXY_VIEW_ITEM* current = GetCanvas()->GetDrawingSheet();
+
+                            if( aDep == current )
+                            {
+                                view->Update( current, KIGFX::REPAINT );
+                                return;
+                            }
+
+                            if( aDep->IsBOARD_ITEM() )
+                                view->Update( aDep, KIGFX::REPAINT );
+                        } );
+            }
+        }
+    }
 }
 
 
@@ -1633,6 +1691,11 @@ void PCB_EDIT_FRAME::ShowBoardSetupDialog( const wxString& aInitialPage, wxWindo
 
         Prj().IncrementTextVarsTicker();
         Prj().IncrementNetclassesTicker();
+
+        // CROSS_REF keys deliberately excluded — those are driven by per-item
+        // BOARD_COMMIT changes.
+        if( BOARD_TEXT_VAR_ADAPTER* adapter = GetBoard()->GetTextVarAdapter() )
+            adapter->Tracker().InvalidateProjectScoped();
 
         PCBNEW_SETTINGS* settings = GetPcbNewSettings();
         static LSET      maskAndPasteLayers = LSET( { F_Mask, F_Paste, B_Mask, B_Paste } );

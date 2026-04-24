@@ -35,10 +35,13 @@
 #include <kicommon.h>
 #include <functional>
 #include <memory>
+#include <vector>
 
 #include <wx/fileconf.h>
 #include <wx/string.h>
 #include <wx/process.h>
+
+#include <text_var_dependency.h>
 
 class PROJECT;
 class SEARCH_STACK;
@@ -99,6 +102,16 @@ KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const std::functi
                                       int aFlags = 0, int aDepth = 0 );
 
 KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject, int aFlags = 0 );
+
+/**
+ * Lex-scan @p aSource and return every `${...}` reference that appears, without
+ * resolving. Nested references are captured at every nesting level.
+ *
+ * Used by the reactive dependency tracker to register edges on SetText without
+ * needing a resolver context. Escape sequences (`\${...}`) are skipped. `@{...}`
+ * math expressions are walked so that nested `${...}` inside them is captured.
+ */
+KICOMMON_API std::vector<TEXT_VAR_REF_KEY> ExtractTextVarReferences( const wxString& aSource );
 
 /**
  * Multi-pass text variable expansion and math expression evaluation.

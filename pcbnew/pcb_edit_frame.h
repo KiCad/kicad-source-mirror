@@ -818,6 +818,14 @@ public:
 
     bool      m_ProbingSchToPcb;         // Recursion guard when synchronizing selection from schematic
 
+    /// Reactive text-var invalidation listener state. The handle alone is
+    /// ambiguous across board/project swaps — the tracker it belongs to must
+    /// be remembered so the destructor (and tracker-change detection)
+    /// removes from the correct tracker, not whatever GetBoard() points at
+    /// post-swap. Handle == 0 means not installed.
+    std::size_t             m_textVarListenerHandle = 0;
+    class TEXT_VAR_TRACKER* m_textVarListenerTracker = nullptr;
+
     void StartCrossProbeFlash( const std::vector<BOARD_ITEM*>& aItems );
     void OnCrossProbeFlashTimer( wxTimerEvent& aEvent );
     void UpdateProperties() override;

@@ -37,6 +37,8 @@ class LIB_SYMBOL;
 class SCH_PIN;
 class SCH_BASE_FRAME;
 class DS_PROXY_VIEW_ITEM;
+class SCHEMATIC_TEXT_VAR_ADAPTER;
+class TEXT_VAR_TRACKER;
 
 
 // Eeschema 100nm as the internal units
@@ -124,6 +126,13 @@ private:
                                 // to know the sheet path name when drawing the drawing sheet
 
     std::unique_ptr<DS_PROXY_VIEW_ITEM> m_drawingSheet;
+
+    /// Reactive invalidation listener state. The tracker pointer is the
+    /// authoritative owner (schematics can be swapped between views on
+    /// re-open); remove through that pointer rather than re-resolving the
+    /// adapter through any current schematic reference.
+    std::size_t       m_textVarListenerHandle = 0;
+    TEXT_VAR_TRACKER* m_textVarListenerTracker = nullptr;
 };
 
 }; // namespace

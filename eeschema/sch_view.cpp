@@ -35,6 +35,8 @@
 #include <layer_ids.h>
 #include <sch_screen.h>
 #include <schematic.h>
+#include <schematic_text_var_adapter.h>
+#include <text_var_dependency.h>
 #include <sch_base_frame.h>
 #include <sch_edit_frame.h>
 #include <string_utils.h>
@@ -54,6 +56,8 @@ SCH_VIEW::SCH_VIEW( SCH_BASE_FRAME* aFrame ) :
 
 SCH_VIEW::~SCH_VIEW()
 {
+    if( m_textVarListenerTracker && m_textVarListenerHandle != TEXT_VAR_TRACKER::INVALID_LISTENER )
+        m_textVarListenerTracker->RemoveInvalidateListener( m_textVarListenerHandle );
 }
 
 
@@ -146,6 +150,48 @@ void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
     }
 
     Add( m_drawingSheet.get() );
+
+    // Reactive title-block repaint: register this proxy with the schematic's
+    // text-var tracker. The listener that routes invalidations to VIEW::Update
+    // is installed lazily here too; it outlives individual proxy instances
+    // since it re-reads the current drawing sheet on every fire.
+    if( aScreen->Schematic() )
+    {
+        if( SCHEMATIC_TEXT_VAR_ADAPTER* adapter = aScreen->Schematic()->GetTextVarAdapter() )
+        {
+            m_drawingSheet->AttachToTracker( &adapter->Tracker() );
+
+            TEXT_VAR_TRACKER* tracker = &adapter->Tracker();
+
+            if( m_textVarListenerTracker != tracker
+                && m_textVarListenerHandle != TEXT_VAR_TRACKER::INVALID_LISTENER )
+            {
+                m_textVarListenerTracker->RemoveInvalidateListener( m_textVarListenerHandle );
+                m_textVarListenerHandle = TEXT_VAR_TRACKER::INVALID_LISTENER;
+                m_textVarListenerTracker = nullptr;
+            }
+
+            if( m_textVarListenerHandle == TEXT_VAR_TRACKER::INVALID_LISTENER )
+            {
+                m_textVarListenerTracker = tracker;
+                m_textVarListenerHandle = tracker->AddInvalidateListener(
+                        [this]( EDA_ITEM* aDep, const TEXT_VAR_REF_KEY& )
+                        {
+                            if( !aDep )
+                                return;
+
+                            if( m_drawingSheet && aDep == m_drawingSheet.get() )
+                            {
+                                Update( m_drawingSheet.get(), KIGFX::REPAINT );
+                                return;
+                            }
+
+                            if( aDep->IsSCH_ITEM() )
+                                Update( aDep, KIGFX::REPAINT );
+                        } );
+            }
+        }
+    }
 
     InitPreview();
 
