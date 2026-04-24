@@ -21,16 +21,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-16 19:04+0300\n"
-"PO-Revision-Date: 2026-03-19 00:23+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2026-04-24 17:10+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v10/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -11046,8 +11045,7 @@ msgstr "Hallinnoi suunnittelulohkokirjastoja..."
 
 #: common/tool/actions.cpp:1382
 msgid "Edit the global and project design block library lists"
-msgstr ""
-"Muokkaa globaaleja ja projektin suunnittelulohkokirjastojen luetteloita"
+msgstr "Muokkaa globaaleja ja projektin suunnittelulohkokirjastojen luetteloita"
 
 #: common/tool/actions.cpp:1388
 msgid "Getting Started with KiCad"
@@ -12247,8 +12245,7 @@ msgstr ""
 #: cvpcb/readwrite_dlgs.cpp:154
 #, c-format
 msgid "Component '%s' footprint '%s' was found in <b>multiple</b> libraries.\n"
-msgstr ""
-"Komponentin '%s' jalanjälki '%s' löytyi <b> useasta </b> kirjastosta.\n"
+msgstr "Komponentin '%s' jalanjälki '%s' löytyi <b> useasta </b> kirjastosta.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:167
 msgid "First check your footprint library table entries."
@@ -12889,12 +12886,12 @@ msgstr ""
 "nimi>\n"
 "```\n"
 "\n"
-"Jos Windowsissa haluttu CSV-luettelon generaattorikomentosarja on `C:"
-"\\Users\\username\\kicad\\my_python_script.py', komentorivi olisi:\n"
+"Jos Windowsissa haluttu CSV-luettelon generaattorikomentosarja on `C:\\U"
+"sers\\username\\kicad\\my_python_script.py', komentorivi olisi:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\käyttäjänimi\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\käyttäjänimi\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "Jos Linuxissa haluttu generaattoriskripti CSV-luettelolle on `/home/username/"
@@ -13261,8 +13258,8 @@ msgid ""
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Jos jotkut komponentit ovat hylättyjä (linkitettyä symbolia ei löydy "
-"mistään),\n"
+"Jos jotkut komponentit ovat hylättyjä (linkitettyä symbolia ei löydy mistään)"
+",\n"
 "yritä löytää ehdokas, jolla on sama nimi, yhdestä ladatusta "
 "symbolikirjastosta."
 
@@ -13618,8 +13615,8 @@ msgstr "Tallenna kaikki tehohäviöt"
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
-"Kirjoita käskyjä säästääksesi kaikkien kohteiden virrankulutusta (.probe "
-"p(<kohde>))"
+"Kirjoita käskyjä säästääksesi kaikkien kohteiden virrankulutusta (.probe p"
+"(<kohde>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:369
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
@@ -17518,8 +17515,7 @@ msgstr "Symbolikirjastotaulukon kartoitus on valmis!"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:353
 #, c-format
 msgid "Cannot create project remap back up folder '%s'."
-msgstr ""
-"Projektin uudelleenmuodostettua varmuuskopiokansiota '%s' Ei voi luoda."
+msgstr "Projektin uudelleenmuodostettua varmuuskopiokansiota '%s' Ei voi luoda."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:356
 #: eeschema/dialogs/dialog_symbol_remap.cpp:529
@@ -20239,8 +20235,8 @@ msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
 msgstr ""
-"Virhe jäsennettäessä mallia '%s', väärä määrä solmuja '?' Sim."
-"NodesFormatissa verrattuna yhteyksiin"
+"Virhe jäsennettäessä mallia '%s', väärä määrä solmuja '?' "
+"Sim.NodesFormatissa verrattuna yhteyksiin"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:660
 #, c-format
@@ -20994,8 +20990,7 @@ msgstr "Tuntematon tai odottamaton tietuetunnus %d löydetty kohteesta %s."
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1755
 #, fuzzy, c-format
 msgid "Symbol '%s' in sheet '%s' at index %d replaced with symbol \"%s\"."
-msgstr ""
-"Symboli \"%s\" arkissa \"%s\" indeksissä %d korvattu symbolilla \"%s\"."
+msgstr "Symboli \"%s\" arkissa \"%s\" indeksissä %d korvattu symbolilla \"%s\"."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1944
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4115
@@ -21361,8 +21356,7 @@ msgstr ""
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
-msgstr ""
-"Virheellinen anturapinokerros '%s' tiedossa '%s' rivillä %d, offset %d."
+msgstr "Virheellinen anturapinokerros '%s' tiedossa '%s' rivillä %d, offset %d."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1071
 #, c-format
@@ -23849,8 +23843,7 @@ msgstr "Virhe luotaessa väliaikaista tulostetiedostoa"
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
-msgstr ""
-"Kibis ei vielä tue DUT-arvoja. https://ibis.org/summits/nov16a/chen.pdf"
+msgstr "Kibis ei vielä tue DUT-arvoja. https://ibis.org/summits/nov16a/chen.pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:956
 msgid "Model has only one waveform pair, reduced accuracy"
@@ -25424,8 +25417,7 @@ msgstr "Muuta %s \"Älä sijoita\" kohteesta \"%s\" > \"%s\"."
 #: eeschema/tools/backannotate.cpp:878
 #, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
-msgstr ""
-"Muuta %s \"Poissulje materiaaliluettelosta\" kohteesta \"%s\" > \"%s\"."
+msgstr "Muuta %s \"Poissulje materiaaliluettelosta\" kohteesta \"%s\" > \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:909
 #, c-format
@@ -26531,8 +26523,7 @@ msgstr "Vie Netlist ..."
 
 #: eeschema/tools/sch_actions.cpp:1227
 msgid "Export file containing netlist in one of several formats"
-msgstr ""
-"Vie tiedosto, joka sisältää netlist-tiedoston yhdessä useista muodoista"
+msgstr "Vie tiedosto, joka sisältää netlist-tiedoston yhdessä useista muodoista"
 
 #: eeschema/tools/sch_actions.cpp:1233
 msgid "Generate Bill of Materials..."
@@ -27470,8 +27461,7 @@ msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:2855
 msgid "Symbols with broken library symbol links cannot be edited."
-msgstr ""
-"Symboleja, joissa on rikkinäiset kirjastosymbolilinkit, ei voi muokata."
+msgstr "Symboleja, joissa on rikkinäiset kirjastosymbolilinkit, ei voi muokata."
 
 #: eeschema/tools/sch_editor_control.cpp:2942
 msgid "Increment Annotations"
@@ -28896,8 +28886,7 @@ msgstr "Tiedostoa ei löytynyt:"
 #: gerbview/files.cpp:305
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr ""
-"<b> Gerber-työtiedostoa ei voi ladata juontotiedostona </b> <i> %s </i>"
+msgstr "<b> Gerber-työtiedostoa ei voi ladata juontotiedostona </b> <i> %s </i>"
 
 #: gerbview/files.cpp:318
 #, fuzzy
@@ -29140,8 +29129,7 @@ msgstr "Virheellinen Gerber-tiedosto: puuttuu G74- tai G75-kaarikomento"
 #: gerbview/rs274x.cpp:232
 #, fuzzy, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: '%s'"
-msgstr ""
-"RS274X: Virheellinen GERBER-muotoinen komento \"%c\" rivillä %d: \"%s\""
+msgstr "RS274X: Virheellinen GERBER-muotoinen komento \"%c\" rivillä %d: \"%s\""
 
 #: gerbview/rs274x.cpp:235
 #, fuzzy, c-format
@@ -29813,8 +29801,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_drc.cpp:91
 msgid "Return a nonzero exit code if DRC violations exist"
-msgstr ""
-"Palauta nollasta poikkeava poistumiskoodi, jos DRC-rikkomuksia esiintyy"
+msgstr "Palauta nollasta poikkeava poistumiskoodi, jos DRC-rikkomuksia esiintyy"
 
 #: kicad/cli/command_pcb_drc.cpp:95
 #, fuzzy
@@ -30311,8 +30298,7 @@ msgstr "Peilaa piirilevy (hyödyllinen, kun yritetään näyttää pohjakerroksi
 #: kicad/cli/command_pcb_export_pdf.cpp:88
 #: kicad/cli/command_pcb_export_ps.cpp:92
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr ""
-"Käytettävä väriteema (Asettaa teeman piirilevyeditorin vakioasetuksiin)"
+msgstr "Käytettävä väriteema (Asettaa teeman piirilevyeditorin vakioasetuksiin)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:104
 msgid "Plot the layers to individual PDF files"
@@ -30349,8 +30335,8 @@ msgstr "Hyväksytyt vaihtoehdot: ascii,csv,gerber"
 #, fuzzy
 msgid "Output units; ascii or csv format only; valid options: in, mm"
 msgstr ""
-"Tulostusyksiköt; vain ascii- tai csv-muodossa; hyväksytyt vaihtoehdot: tuuma,"
-"mm"
+"Tulostusyksiköt; vain ascii- tai csv-muodossa; hyväksytyt vaihtoehdot: "
+"tuuma,mm"
 
 #: kicad/cli/command_pcb_export_pos.cpp:64
 msgid ""
@@ -30589,8 +30575,7 @@ msgstr "Pohjavalon voimakkuus, muoto 'R,G,B' tai yksittäinen numero, alue: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:312
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
-"Sivuvalojen voimakkuus, muoto 'R,G,B' tai yksittäinen numero, alue: 0-1"
+msgstr "Sivuvalojen voimakkuus, muoto 'R,G,B' tai yksittäinen numero, alue: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
@@ -30696,8 +30681,7 @@ msgstr ""
 
 #: kicad/cli/command_sch_erc.cpp:78
 msgid "Return a nonzero exit code if ERC violations exist"
-msgstr ""
-"Palauta nollasta poikkeava poistumiskoodi, jos ERC-rikkomuksia esiintyy"
+msgstr "Palauta nollasta poikkeava poistumiskoodi, jos ERC-rikkomuksia esiintyy"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
@@ -33773,8 +33757,8 @@ msgid ""
 "is a standard 1.2/50µs wave"
 msgstr ""
 "Nimellisjännitetteen ja ylijänniteluokan mukaan, laitteen tulisi kestää tän "
-"jännitearvon eristyksen rikkoutumatta. Tämä impulssijännite on standardi "
-"1,2/50 µs aalto"
+"jännitearvon eristyksen rikkoutumatta. Tämä impulssijännite on standardi 1,2/"
+"50 µs aalto"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
@@ -34096,8 +34080,8 @@ msgstr ""
 "* B1 - Sisäiset johtimet\n"
 "* B2 - Ulkoiset johtimet, päällystämättömät, merenpinta 3050 metriin saakka\n"
 "* B3 - Ulkoiset johtimet, päällystämättömät, yli 3050 m\n"
-"* B4 - Ulkoiset johtimet, pysyvällä polymeeripinnoitteella (kaikki "
-"korkeudet)\n"
+"* B4 - Ulkoiset johtimet, pysyvällä polymeeripinnoitteella (kaikki korkeudet)"
+"\n"
 "* A5 - Ulkoiset johtimet, konformisella pinnoitteella kokoonpanon päällä "
 "(mikä tahansa korkeus)\n"
 "* A6 - Ulkoisen osan johto / pääte, päällystämätön\n"
@@ -35148,8 +35132,8 @@ msgstr ""
 "kosketuksessa ja tietyissä olosuhteissa.<br>\n"
 "Sähkökemiallisen parin anodi hapettuu ja syö pois, kun taas katodi "
 "pinnoittaa liuenneita metalleja, mutta pysyy suojattuna.<br>\n"
-"Positiivinen luku osoittaa, että rivi on anodinen (-) ja sarake katodinen "
-"(+), kylmät ja lämpimät värisävyt osoittavat myös rivien potentiaalin.<br>\n"
+"Positiivinen luku osoittaa, että rivi on anodinen (-) ja sarake katodinen (+)"
+", kylmät ja lämpimät värisävyt osoittavat myös rivien potentiaalin.<br>\n"
 "EN 50310 ehdottaa jännite-eroa alle 300 mV. Tunnetut käytännöt käyttävät "
 "kolmatta rajapintametallia pääparin välissä (eli ENIG-pintakäsittely).<br>\n"
 "Valitut solut näytetään oletusjärjestelmän värivalinnalla taulukon täytön "
@@ -35177,8 +35161,8 @@ msgstr ""
 "\n"
 "Tämä laskin ei kuitenkaan kata joitakin tapauksia:\n"
 "\n"
-"- Yli 30 kHz:n taajuuksilla dielektriset suorituskyvyt heikkenevät. "
-"IEC60664-4 kattaa nämä tapaukset\n"
+"- Yli 30 kHz:n taajuuksilla dielektriset suorituskyvyt heikkenevät. IEC60664-"
+"4 kattaa nämä tapaukset\n"
 "- Käytettäessä muodonmukaista pinnoitetta tai ruukkua saasteilta "
 "suojaamiseksi, jos kaikki IEC60664-3:n määrittämät ehdot täyttyvät, välys- "
 "ja ryömintäetäisyyksiä voidaan pienentää. Juotosmaskia ei yleensä pidetä "
@@ -35348,8 +35332,8 @@ msgstr ""
 "K)<sup>0,725</sup>___</center>\n"
 "missä:<br>\n"
 "___I___ on suurin virta A<br>\n"
-"___&Delta;T___ on lämpötilan nousu ympäristön lämpötilan yläpuolelle &deg;"
-"C<br>\n"
+"___&Delta;T___ on lämpötilan nousu ympäristön lämpötilan yläpuolelle "
+"&deg;C<br>\n"
 "___W___ on leveys mil<br>\n"
 "___H___ on paksuus (korkeus) mil<br>\n"
 "___K___ on 0,024 sisäisille kappaleille tai 0,048 ulkoisille kappaleille\n"
@@ -37510,8 +37494,7 @@ msgstr "Poista johtimet kokonaan anturoiden sisältä"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:63
 msgid "Delete tracks that have both start and end positions inside of a pad"
-msgstr ""
-"Poista johtimet joissa on sekä alku, että loppusijainti anturan sisällä"
+msgstr "Poista johtimet joissa on sekä alku, että loppusijainti anturan sisällä"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:83
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:58
@@ -40888,8 +40871,7 @@ msgstr "Netlist-tiedosto:"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 msgid "Link footprints using component tstamps (unique ids)"
-msgstr ""
-"Linkitä jalanjäljet komponenttimerkkien avulla (yksilölliset tunnukset)"
+msgstr "Linkitä jalanjäljet komponenttimerkkien avulla (yksilölliset tunnukset)"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 msgid "Link footprints using reference designators"
@@ -43001,8 +42983,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1272
 msgid "Line width must be greater than zero for an unfilled polygon."
-msgstr ""
-"Täyttämättömän polygonin viivan leveyden on oltava suurempi kuin nolla."
+msgstr "Täyttämättömän polygonin viivan leveyden on oltava suurempi kuin nolla."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1284
 msgid "Line width must be greater than zero for an unfilled curve."
@@ -44692,8 +44673,7 @@ msgstr ""
 msgid ""
 "If no specifications are provided, setting these values to zero is "
 "recommended."
-msgstr ""
-"Jos mitään arvoa ei ole annettu, asettaminen nollaksi on suositeltavaa."
+msgstr "Jos mitään arvoa ei ole annettu, asettaminen nollaksi on suositeltavaa."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:46
 msgid "Solder Mask Settings"
@@ -44841,8 +44821,8 @@ msgstr ""
 "### Dokumentaatio\n"
 "\n"
 "Täydelliset asiakirjat ovat osoitteessa [https://docs.kicad.org](https://"
-"docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules)."
+"docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -45242,9 +45222,9 @@ msgstr ""
 "### Ominaisuudet\n"
 "\n"
 "Monet objektien ominaisuudet ovat testattavissa mukautetuissa "
-"sääntölausekkeissa. Katso täydellinen luettelo osoitteesta [https://docs."
-"kicad.org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules).\n"
+"sääntölausekkeissa. Katso täydellinen luettelo osoitteesta [https://"
+"docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules).\n"
 "<br><br><br>\n"
 "\n"
 
@@ -48711,8 +48691,8 @@ msgid ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 "Jos tämän levyn vyöhykkeet täytetään uudelleen, käytetään Copper Edge "
-"Clearance-asetusta (katso Levyn asetukset > Suunnittelusäännöt > "
-"Rajoitukset).\n"
+"Clearance-asetusta (katso Levyn asetukset > Suunnittelusäännöt > Rajoitukset)"
+".\n"
 " Tämä voi johtaa erilaisiin täytöihin kuin edellisissä KiCad-versioissa, "
 "jotka käyttivät reunaleikkauskerroksen levyn rajan viivanpaksuuksia."
 
@@ -49476,8 +49456,7 @@ msgstr ""
 #: pcbnew/initpcb.cpp:49
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
-msgstr ""
-"Nykyinen hallitus menetetään, eikä tätä toimintoa voida kumota. Jatkaa?"
+msgstr "Nykyinen hallitus menetetään, eikä tätä toimintoa voida kumota. Jatkaa?"
 
 #: pcbnew/initpcb.cpp:120 pcbnew/tools/footprint_editor_control.cpp:254
 msgid "The current footprint has been modified.  Save changes?"
@@ -51282,15 +51261,15 @@ msgid ""
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
 msgstr ""
 "Virhe ladattaessa kirjastoa '%s':\n"
-"Jalanjälki %s sisältää polygonin muodon, jonka tyyppi on %d (ei vielä "
-"tuettu)."
+"Jalanjälki %s sisältää polygonin muodon, jonka tyyppi on %d (ei vielä tuettu)"
+"."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2916
 #, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
 msgstr ""
-"Jalanjälki %s sisältää polygonin muodon, jonka tyyppi on %d (ei vielä "
-"tuettu)."
+"Jalanjälki %s sisältää polygonin muodon, jonka tyyppi on %d (ei vielä tuettu)"
+"."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3071
 msgid "Loading zone fills..."
@@ -51426,8 +51405,7 @@ msgstr "Ei-kuparianturassa %s on reikä, jota ei tueta."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3974
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
-msgstr ""
-"Ei-kupariantura %s käyttää monimutkaista anturapinoa (ei vielä tuettu)."
+msgstr "Ei-kupariantura %s käyttää monimutkaista anturapinoa (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4121
 #, fuzzy, c-format
@@ -52680,8 +52658,7 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:7783
 #, c-format
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
-msgstr ""
-"Virheellinen anturapinokerros '%s' tiedossa '%s' rivillä %d, offset %d."
+msgstr "Virheellinen anturapinokerros '%s' tiedossa '%s' rivillä %d, offset %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8434
 msgid ""
@@ -56155,8 +56132,7 @@ msgstr "Lisää pyöristetyt kulmat valittuihin viivoihin"
 
 #: pcbnew/tools/pcb_actions.cpp:781
 msgid "Simplify polygon outlines, removing superfluous points"
-msgstr ""
-"Yksinkertaista monikulmion ääriviivoja poistamalla tarpeettomat pisteet"
+msgstr "Yksinkertaista monikulmion ääriviivoja poistamalla tarpeettomat pisteet"
 
 #: pcbnew/tools/pcb_actions.cpp:786
 #, fuzzy
@@ -56762,8 +56738,7 @@ msgstr "Pora/Sijoitustiedoston alkupiste"
 
 #: pcbnew/tools/pcb_actions.cpp:1433
 msgid "Place origin point for drill files and component placement files"
-msgstr ""
-"Aseta poraustiedostojen ja komponenttien sijoitustiedostojen lähtöpiste"
+msgstr "Aseta poraustiedostojen ja komponenttien sijoitustiedostojen lähtöpiste"
 
 #: pcbnew/tools/pcb_actions.cpp:1441
 msgid "Reset Drill Origin"
@@ -57230,8 +57205,7 @@ msgstr "Korjaa Jalanjälki"
 
 #: pcbnew/tools/pcb_actions.cpp:2205
 msgid "Run various diagnostics and attempt to repair footprint"
-msgstr ""
-"Suorita erilaisia diagnostiikkamäärityksiä ja yritä korjata jalanjälkeä"
+msgstr "Suorita erilaisia diagnostiikkamäärityksiä ja yritä korjata jalanjälkeä"
 
 #: pcbnew/tools/pcb_actions.cpp:2256
 msgid "Distribute Horizontally by Centers"
