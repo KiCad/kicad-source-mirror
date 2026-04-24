@@ -52,6 +52,8 @@
 
 #include <core/profile.h>
 
+#include <wx/display.h>
+
 #include <pgm_base.h>
 #include <confirm.h>
 
@@ -484,13 +486,30 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
     wxLongLong delta = now - m_lastRepaintEnd;
     bool galInitialized = m_gal && m_gal->IsInitialized();
 
+    // wxGetLocalTimeMillis is wall clock, so an NTP correction or manual
+    // clock change can make delta negative. Treat that as "long enough".
+    if( delta < 0 )
+        delta = 0;
+
     // When vsync is available the driver throttles SwapBuffers, so we only need
     // a small guard to avoid queueing work faster than the GPU can consume it.
-    // Without vsync, enforce a 60 FPS ceiling to prevent saturating the GPU.
+    // Without vsync, cap the render rate at the monitor refresh rate so the
+    // GPU is not saturated producing frames that will never be shown.
     int minPeriodMs = 3;
 
     if( galInitialized && m_gal->GetSwapInterval() == 0 )
-        minPeriodMs = 16;
+    {
+        // wxDisplay reports 0 on headless, some virtualized, and a few driver
+        // combinations. Clamp to a plausible monitor range before trusting it
+        // and fall back to 60 Hz otherwise.
+        int refreshHz = 60;
+        int reported = wxDisplay( this ).GetCurrentMode().refresh;
+
+        if( reported >= 24 && reported <= 1000 )
+            refreshHz = reported;
+
+        minPeriodMs = 1000 / refreshHz;
+    }
 
     if( delta >= minPeriodMs )
     {
@@ -499,7 +518,7 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
     }
     else if( !m_refreshTimer.IsRunning() )
     {
-        m_refreshTimer.StartOnce( ( minPeriodMs - delta ).GetValue() );
+        m_refreshTimer.StartOnce( static_cast<int>( ( minPeriodMs - delta ).GetValue() ) );
     }
 }
 
