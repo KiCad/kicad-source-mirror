@@ -695,6 +695,7 @@ void SPRINT_LAYOUT_PARSER::addPadToBoard(
         fp = new FOOTPRINT( aBoard );
         fp->SetReference( wxString::Format( wxS( "PAD%d" ),
                 static_cast<int>( aBoard->Footprints().size() ) ) );
+        fp->Reference().SetVisible( false );
         fp->SetLayer( F_Cu );
         aBoard->Add( fp );
     }
