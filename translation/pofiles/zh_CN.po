@@ -47,7 +47,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-16 19:04+0300\n"
 "PO-Revision-Date: 2026-04-24 16:59+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"Last-Translator: Yao Zi <me@ziyao.cc>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -9691,8 +9691,7 @@ msgstr "无法解析远程数据源清单: %s"
 msgid ""
 "%s must use HTTPS unless allow_insecure_localhost is enabled for a loopback "
 "URL."
-msgstr ""
-"除非 allow_insecure_localhost 在回环 URL 上被启用，否则 %s 必须使用 HTTPS"
+msgstr "除非 allow_insecure_localhost 在回环 URL 上被启用，否则 %s 必须使用 HTTPS"
 
 #: common/richio.cpp:59 eeschema/tools/sch_drawing_tools.cpp:3211
 #, c-format
@@ -15448,7 +15447,7 @@ msgstr "配置下载的远程库的存储位置和命名方式。"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:70
 msgid "Providers"
-msgstr ""
+msgstr "远程数据源"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:78
 msgid "Add / Update"
@@ -23394,8 +23393,7 @@ msgstr "无法加载 ngspice 共享库。请检查是否正确安装和配置。
 msgid ""
 "Simulation terminated by ngspice. This may be caused by insufficient memory "
 "or an internal error. The simulator will be reset."
-msgstr ""
-"ngspice 终止了仿真。这可能是由内存不足或者内部错误造成的。仿真器将重置。"
+msgstr "ngspice 终止了仿真。这可能是由内存不足或者内部错误造成的。仿真器将重置。"
 
 #: eeschema/sim/sim_lib_mgr.cpp:109 eeschema/sim/sim_lib_mgr.cpp:162
 #, c-format
