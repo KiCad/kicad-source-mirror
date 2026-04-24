@@ -115,10 +115,10 @@ public:
                                                             SCH_PIN_T,
                                                             SCH_TEXT_T };
 
-        const ACTIONS::INCREMENT param = { 1, 0 };
+        ACTIONS::INCREMENT param = { 1, 0 };
 
         if( aEvent.HasParameter() )
-            aEvent.Parameter<ACTIONS::INCREMENT>();
+            param = aEvent.Parameter<ACTIONS::INCREMENT>();
 
         SCH_SELECTION& selection = m_selectionTool->RequestSelection( incrementable );
 

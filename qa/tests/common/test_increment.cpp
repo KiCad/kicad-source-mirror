@@ -79,6 +79,11 @@ BOOST_AUTO_TEST_CASE( BasicCase )
         // Dashes skipped
         { "A-1", 1, 0, "A-2" },
         { "A-1", 1, 1, "B-1" },
+        // Mixed alphabetic+numeric string behavior
+        { "A12", 1, 0, "A13" },
+        { "A12", -1, 0, "A11" },
+        { "A12", 1, 1, "B12" },
+        { "A12", -1, 1, "nullopt" },
     };
 
     STRING_INCREMENTER incrementer;
