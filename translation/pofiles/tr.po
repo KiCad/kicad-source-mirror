@@ -38,7 +38,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-16 19:04+0300\n"
 "PO-Revision-Date: 2026-04-24 15:33+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v10/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -2077,95 +2077,90 @@ msgstr "API'den yapılan değişiklik"
 #: common/api/api_plugin.cpp:60
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr ""
+msgstr "'%s' konumunda geçersiz eklenti yapılandırması: %s"
 
 #: common/api/api_plugin.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "Geçersiz pin adı"
+msgstr "geçersiz eklenti çalışma zamanı: %s"
 
 #: common/api/api_plugin.cpp:112
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "Depo yapılandırmasına erişilemedi"
+msgstr "eklenti yapılandırma dosyası okunamadı"
 
 #: common/api/api_plugin.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "plugin configuration file error: %s"
-msgstr "Yapılandırma Hatası"
+msgstr "eklenti yapılandırma dosyası hatası: %s"
 
 #: common/api/api_plugin.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "missing or invalid required keys: %s"
-msgstr "Sıcaklık Aralığı değeri eksik veya geçersiz."
+msgstr "eksik veya geçersiz gerekli anahtarlar: %s"
 
 #: common/api/api_plugin.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "identifier '%s' is invalid"
-msgstr "Sembol kütüphane tanımlayıcısı %s geçerli değil."
+msgstr "'%s' tanımlayıcısı geçersiz"
 
 #: common/api/api_plugin.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "actions section is invalid: %s"
-msgstr "Veritabanı bağlantısı başarısız: %s"
+msgstr "eylemler bölümü geçersiz: %s"
 
 #: common/api/api_plugin_manager.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s': %s"
-msgstr "Eklenti Seçenekleri"
+msgstr "Eklenti eylemi '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s': %s"
-msgstr "Eklentiler (%d)"
+msgstr "Eklenti '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "exited with code %d"
-msgstr "İşlem %d çıkış koduyla başarısız oldu"
+msgstr "%d koduyla çıkıldı"
 
 #: common/api/api_plugin_manager.cpp:351 common/api/api_plugin_manager.cpp:691
 #: common/api/api_plugin_manager.cpp:775
-#, fuzzy
 msgid "missing plugin environment"
-msgstr "Eklenti Ortamını Yeniden Oluştur"
+msgstr "eklenti ortamı eksik"
 
 #: common/api/api_plugin_manager.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' could not be read"
-msgstr "Dosya '%s' oluşturulamadı."
+msgstr "giriş noktası '%s' okunamadı"
 
 #: common/api/api_plugin_manager.cpp:407
-#, fuzzy
 msgid "process could not be created"
-msgstr "İşlem oluşturulamadı"
+msgstr "işlem oluşturulamadı"
 
 #: common/api/api_plugin_manager.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' is not executable"
-msgstr "Dizin '%s' yazılabilir değil."
+msgstr "giriş noktası '%s' çalıştırılabilir değil"
 
 #: common/api/api_plugin_manager.cpp:500
-#, fuzzy
 msgid "could not launch plugin"
-msgstr "OpenGL kullanılamadı"
+msgstr "eklenti başlatılamadı"
 
 #: common/api/api_plugin_manager.cpp:661 common/api/api_plugin_manager.cpp:743
 #: common/api/api_plugin_manager.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "error code %d"
-msgstr "Hata kodu: %d"
+msgstr "hata kodu %d"
 
 #: common/api/api_plugin_manager.cpp:663 common/api/api_plugin_manager.cpp:745
 #: common/api/api_plugin_manager.cpp:835
-#, fuzzy, c-format
+#, c-format
 msgid "could not create plugin environment: %s"
-msgstr "Eklenti Ortamını Yeniden Oluştur"
+msgstr "eklenti ortamı oluşturulamadı: %s"
 
 #: common/api/api_plugin_manager.cpp:784
-#, fuzzy
 msgid "requirements.txt could not be read"
-msgstr "İşlem oluşturulamadı"
+msgstr "requirements.txt okunamadı"
 
 #: common/background_jobs_monitor.cpp:98
 msgid "Background Jobs"
@@ -4458,9 +4453,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "Yüksek kontrast modu karartma faktörü:"
 
 #: common/dialogs/panel_common_settings_base.cpp:298
-#, fuzzy
 msgid "App theme:"
-msgstr "Temayı kullan:"
+msgstr "Uygulama teması:"
 
 #: common/dialogs/panel_common_settings_base.cpp:330
 msgid "Scaling"
@@ -5996,9 +5990,8 @@ msgid "How would you like KiCad to create them?"
 msgstr "KiCad'in bunları nasıl oluşturmasını istersiniz?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
-#, fuzzy
 msgid "Start with the built-in KiCad libraries"
-msgstr "KiCad'in yerleşik kütüphaneleriyle başlayın (önerilir)"
+msgstr "Yerleşik KiCad kütüphaneleriyle başla"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
 msgid "Import tables from the previous version"
@@ -6015,15 +6008,16 @@ msgstr ""
 "oluşturulacaktır."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:53
-#, fuzzy
 msgid "Migrate built-in libraries to the latest version (recommended)"
-msgstr "KiCad'in yerleşik kütüphaneleriyle başlayın (önerilir)"
+msgstr "Yerleşik kütüphaneleri en son sürüme geçir (önerilir)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:55
 msgid ""
 "When enabled, KiCad will replace any existing references to built-in "
 "libraries with references to the latest version"
 msgstr ""
+"Etkinleştirildiğinde, KiCad yerleşik kütüphanelere yapılan mevcut tüm "
+"referansları en son sürüme yapılan referanslarla değiştirir"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:62
 msgid "Start with no libraries"
@@ -6169,9 +6163,8 @@ msgid "Insert Group"
 msgstr "Grup ekle"
 
 #: common/dialogs/panel_toolbar_customization.cpp:173
-#, fuzzy
 msgid "Filter actions"
-msgstr "Filtre Ayarları"
+msgstr "Eylemleri filtrele"
 
 #: common/dialogs/panel_toolbar_customization.cpp:449
 #: common/dialogs/panel_toolbar_customization.cpp:774
@@ -11448,14 +11441,13 @@ msgid "View load messages"
 msgstr "Yükleme mesajlarını görüntüle"
 
 #: common/widgets/kistatusbar.cpp:509
-#, fuzzy, c-format
+#, c-format
 msgid "View %zu message(s)"
-msgstr "Mesaj(lar)ı yüklemek için %zu 'i görüntüle"
+msgstr "%zu mesajı görüntüle"
 
 #: common/widgets/kistatusbar.cpp:522
-#, fuzzy
 msgid "View messages"
-msgstr "Yükleme mesajlarını görüntüle"
+msgstr "Mesajları görüntüle"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
@@ -13370,10 +13362,8 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "Tüm '%s' ihlallerinin önem derecesini Hata olarak değiştir"
 
 #: eeschema/dialogs/dialog_erc.cpp:782 eeschema/dialogs/dialog_erc.cpp:789
-#, fuzzy
 msgid "Violation severities can also be edited in Schematic Setup"
-msgstr ""
-"İhlal şiddetleri ayrıca Şematik Ayarları... penceresinde de düzenlenebilir"
+msgstr "İhlal şiddetleri ayrıca Şematik Kurulumu'nda da düzenlenebilir"
 
 #: eeschema/dialogs/dialog_erc.cpp:787 pcbnew/dialogs/dialog_drc.cpp:804
 #, c-format
@@ -13395,9 +13385,8 @@ msgstr "Pin pin'e çakışma haritasını düzenle..."
 
 #: eeschema/dialogs/dialog_erc.cpp:803 eeschema/dialogs/dialog_erc.cpp:809
 #: eeschema/dialogs/dialog_erc.cpp:816
-#, fuzzy
 msgid "Open the Schematic Setup dialog"
-msgstr "Şematik Kurulum... iletişim kutusunu aç"
+msgstr "Şematik Kurulumu iletişim kutusunu aç"
 
 #: eeschema/dialogs/dialog_erc.cpp:808 pcbnew/dialogs/dialog_drc.cpp:816
 msgid "Edit violation severities..."
@@ -17104,15 +17093,14 @@ msgid "Copy Design Variant"
 msgstr "Tasarım Değişkenini Kopyala"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2947
-#, fuzzy
 msgid "Cannot edit the default variant description."
-msgstr "Varsayılan değişken silinemez."
+msgstr "Varsayılan değişken açıklaması düzenlenemez."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2955
 #: eeschema/sch_edit_frame.cpp:3056
-#, fuzzy, c-format
+#, c-format
 msgid "Edit Description for '%s'"
-msgstr "İş Tanımını Düzenle"
+msgstr "'%s' için Açıklamayı Düzenle"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -20487,9 +20475,8 @@ msgid "Resolved Netclass"
 msgstr "Çözümlenmiş Ağ Sınıfı"
 
 #: eeschema/sch_bus_entry.cpp:652 eeschema/sch_line.cpp:1286
-#, fuzzy
 msgid "Wire Style"
-msgstr "Çizgi Stili"
+msgstr "Tel Stili"
 
 #: eeschema/sch_connection.cpp:455
 msgid "Connection Name"
@@ -20647,19 +20634,16 @@ msgid "Find in Net Inspector"
 msgstr "Ağ Denetleyicisinde Bul"
 
 #: eeschema/sch_edit_frame.cpp:3038
-#, fuzzy
 msgid "No design variants to edit."
-msgstr "Şematiğe yeni tasarım değişkeni ekle."
+msgstr "Düzenlenecek tasarım değişkeni yok."
 
 #: eeschema/sch_edit_frame.cpp:3042
-#, fuzzy
 msgid "Select variant to edit description:"
-msgstr "Kaldırılacak değişken adını seçin:"
+msgstr "Açıklamayı düzenlemek için değişken seçin:"
 
 #: eeschema/sch_edit_frame.cpp:3043
-#, fuzzy
 msgid "Edit Variant Description"
-msgstr "İş Tanımını Düzenle"
+msgstr "Değişken Açıklamasını Düzenle"
 
 #: eeschema/sch_edit_frame.cpp:3103
 msgid "Select variant name to remove:"
@@ -24149,13 +24133,12 @@ msgstr ""
 "Ngspice paylaşımlı kütüphanesi yüklenemedi. Lütfen kurulumunuzu kontrol edin."
 
 #: eeschema/sim/ngspice.cpp:779
-#, fuzzy
 msgid ""
 "Simulation terminated by ngspice. This may be caused by insufficient memory "
 "or an internal error. The simulator will be reset."
 msgstr ""
-"Simülasyon çöktü (%s). Bu genellikle ngspice'deki bir hata veya geçersiz bir "
-"ağ listesinden kaynaklanır. Simülatör sıfırlanacaktır."
+"Simülasyon ngspice tarafından sonlandırıldı. Bu, yetersiz bellek veya dahili "
+"bir hatadan kaynaklanıyor olabilir. Simülatör sıfırlanacak."
 
 #: eeschema/sim/sim_lib_mgr.cpp:109 eeschema/sim/sim_lib_mgr.cpp:162
 #, c-format
@@ -26626,9 +26609,8 @@ msgid "Import 2D drawing file"
 msgstr "2D çizim dosyasını içe aktar"
 
 #: eeschema/tools/sch_actions.cpp:1212
-#, fuzzy
 msgid "Import Non-KiCad Schematic..."
-msgstr "KiCad Olmayan Şematik..."
+msgstr "KiCad Dışı Şematik İçe Aktar..."
 
 #: eeschema/tools/sch_actions.cpp:1213
 msgid ""
@@ -27140,14 +27122,12 @@ msgid "Remove an existing design variant from the schematic."
 msgstr "Şematikten mevcut bir tasarım değişkenini kaldır."
 
 #: eeschema/tools/sch_actions.cpp:1787
-#, fuzzy
 msgid "Edit Variant Description..."
-msgstr "İş Tanımını Düzenle"
+msgstr "Değişken Açıklamasını Düzenle..."
 
 #: eeschema/tools/sch_actions.cpp:1788
-#, fuzzy
 msgid "Edit the description of an existing design variant."
-msgstr "Metin düzenleyicide komut dosyası düzenleme"
+msgstr "Mevcut bir tasarım değişkeninin açıklamasını düzenleyin."
 
 #: eeschema/tools/sch_align_tool.cpp:64
 msgid "Align"
@@ -29737,7 +29717,6 @@ msgstr ""
 "'--define-var key=value' veya '-D key=value' biçiminde kullanın"
 
 #: kicad/cli/command.cpp:235
-#, fuzzy
 msgid ""
 "The variant name(s) to output, can be used multiple times to specify "
 "multiple variants.\n"
@@ -29745,11 +29724,11 @@ msgid ""
 "generate separate files for each variant.\n"
 "When no --variant argument is provided, the default variant is output."
 msgstr ""
-"Çıktı olarak verilecek varyant adları, birden fazla varyant belirtmek için "
+"Çıktısı alınacak değişken ad(lar)ı, birden fazla değişken belirtmek için "
 "birden çok kez kullanılabilir.\n"
-"Birden fazla varyant belirtirken, her varyant için ayrı dosyalar oluşturmak "
-"üzere çıktı yolunda ${VARIANT} ifadesini kullanın.\n"
-"Varyant argümanı belirtilmediğinde varsayılan varyant çıktı olarak verilir."
+"Birden fazla değişken belirtirken, her değişken için ayrı dosyalar "
+"oluşturmak üzere çıktı yolunda ${VARIANT} kullanın.\n"
+"--variant argümanı sağlanmadığında, varsayılan değişkenin çıktısı alınır."
 
 #: kicad/cli/command.h:32
 msgid "Shows help message and exits"
@@ -37568,12 +37547,12 @@ msgstr "dikey sayım"
 #: pcbnew/dialogs/dialog_create_array.cpp:436
 #, c-format
 msgid "horizontal delta of zero with %ld objects"
-msgstr ""
+msgstr "%ld nesne ile sıfır yatay delta"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:442
 #, c-format
 msgid "vertical delta of zero with %ld objects"
-msgstr ""
+msgstr "%ld nesne ile sıfır dikey delta"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:451
 msgid "stagger"
@@ -37586,7 +37565,7 @@ msgstr "nokta sayısı"
 #: pcbnew/dialogs/dialog_create_array.cpp:517
 #, c-format
 msgid "angular delta of zero with %ld objects"
-msgstr ""
+msgstr "%ld nesne ile sıfır açısal delta"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:564
 msgid "Bad parameters"
@@ -38273,15 +38252,12 @@ msgid "They will be excluded from the %s list"
 msgstr "Onlar %s listesinden hariç tutulacaktır"
 
 #: pcbnew/dialogs/dialog_drc.cpp:799 pcbnew/dialogs/dialog_drc.cpp:806
-#, fuzzy
 msgid "Violation severities can also be edited in Board Setup"
-msgstr ""
-"İhlal ciddiyetleri, Kart Ayarları... iletişim kutusunda da düzenlenebilir"
+msgstr "İhlal şiddetleri ayrıca Kart Kurulumu'nda da düzenlenebilir"
 
 #: pcbnew/dialogs/dialog_drc.cpp:817
-#, fuzzy
 msgid "Open the Board Setup dialog"
-msgstr "Kart Kurulumu... penceresini aç"
+msgstr "Kart Kurulumu iletişim kutusunu aç"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1121
 #, c-format
@@ -44645,7 +44621,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
-#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -44910,214 +44885,271 @@ msgid ""
 msgstr ""
 "### Kısıtlamalar\n"
 "\n"
-"| Kısıtlama türü            | Argüman "
-"türü                                                                                                         "
-"| "
-"Açıklama                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+"| Kısıtlama türü            | Argüman türü"
+"                                                                                                          "
+"| Açıklama"
+"                                                                                                                                                                                                                                                                                                                                                                                                                                                "
 "|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/"
-"max                                                                                                           "
-"| Via'lardaki halka genişliğini denetler."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                            "
+"|---------------------------"
+"|-----------------------------------------------------------------------------------------------------------------------"
+"|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
 "|\n"
-"| `assertion`               | \"&lt;"
-"ifade>\"                                                                                                          "
-"| Verilen ifadeyi denetler."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                     "
+"| `annular_width`           | min/max"
+"                                                                                                               "
+"| Via'lardaki halka (annular ring) genişliklerini kontrol eder.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                       "
+"|\n"
+"| `assertion`               | \"&lt;expression>"
+"\"                                                                                                     "
+"| Verilen ifadeyi kontrol eder.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "| `bridged_mask`            "
 "|                                                                                                                       "
-"| Bakır nesneler arasındaki lehim maskesi köprülerini denetler.  Bu "
-"kısıtlama min/opt/max değeri almaz.  Bir önem derecesi maddesiyle birlikte, "
-"çeşitli koşullarda lehim maskesi köprülemeye izin vermek veya yasaklamak "
-"için kullanılabilir."
-"<br>                                                                                                                                                                                                          "
+"| Bakır öğeler arasındaki lehim maskesi köprülerini kontrol eder.  Bu "
+"kısıtlama min/opt/max değeri almaz.  Bir severity (önem) hükmüyle birlikte "
+"kullanıldığında, çeşitli koşullarda lehim maskesi köprülenmesine izin vermek "
+"veya yasaklamak için kullanılabilir.<br>"
+"                                                                                                                                                                                    "
 "|\n"
-"| `clearance`               | "
-"min                                                                                                                   "
-"| Farklı netlerdeki bakır nesneler arasındaki **elektriksel** boşluğu "
-"belirtir.  (Netten bağımsız olarak nesneler arasındaki boşluğu belirtmek "
-"için `physical_clearance` bölümüne bakın.)<br><br>Bakır nesnelerin "
-"örtüşmesine (çakışmasına) izin vermek için `min` değeri sıfırdan küçük "
-"(örneğin `-1`) olan bir `clearance` kısıtlaması oluşturun."
-"<br>                                                                                                 "
+"| `clearance`               | min"
+"                                                                                                                   "
+"| Farklı netlerdeki bakır nesneler arasındaki **elektriksel** açıklığı "
+"belirtir.  (Netten bağımsız nesneler arası açıklık belirtmek için "
+"`physical_clearance` bölümüne bakın.)<br><br>Bakır nesnelerin üst üste "
+"binmesine (çakışmasına) izin vermek için, `min` değeri sıfırdan küçük (örn. "
+"`-1`) bir `clearance` kısıtlaması oluşturun.<br>"
+"                                                                                                              "
 "|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                   "
-"| Bileşen koruma alanları (courtyard) arasındaki boşluğu denetler; herhangi "
-"iki koruma alanı `min` mesafesinden yakınsa hata üretir.  Bir bileşende "
-"koruma alanı şekli yoksa bu kısıtlamadan hata üretilmez."
-"<br>                                                                                                                                                                                                                                        "
+"| `connection_width`        | min"
+"                                                                                                                   "
+"| Pedler ile bölgeler (zones) arasındaki bağlantıların genişliğini kontrol "
+"eder.  `min` değerinden daha dar olan her ped bağlantısı için bir hata "
+"üretilir.<br>"
+"                                                                                                                                                                           "
 "|\n"
-"| `creepage`                | "
-"min                                                                                                                   "
-"| Farklı netlerdeki bakır nesneler arasındaki yüzey kaçak mesafesini "
-"belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                                                       "
+"| `courtyard_clearance`     | min"
+"                                                                                                                   "
+"| Ayak izi avluları (courtyard) arasındaki açıklığı kontrol eder ve herhangi "
+"iki avlu `min` mesafesinden daha yakınsa hata üretir.  Bir ayak izinin avlu "
+"şekli yoksa, bu kısıtlamadan hata üretilmez.<br>"
+"                                                                                                                                                                                                                                                 "
 "|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                           "
-"| Diferansiyel çift içindeki eşleşmiş izler arasındaki boşluğu denetler.  "
-"Eşleşmiş izler, birbirine paralel olan segmentlerdir.  Diferansiyel çift "
-"boşluğu, çiftin eşleşmemiş bölümlerinde (örneğin bileşenden çıkış fanout'u) "
-"test edilmez."
-"<br>                                                                                                                                                                                                        "
+"| `creepage`                | min"
+"                                                                                                                   "
+"| Farklı netlerdeki bakır nesneler arasındaki yüzey kaçak (creepage) "
+"mesafesini belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                   "
-"| Bir diferansiyel çift izinin, çiftteki diğer polarite izinden bağımsız "
-"olarak yönlendirildiği mesafeyi denetler (örneğin çiftin bileşenden çıkış "
-"yaptığı veya bir via gibi başka bir nesneyi aşmak için bağının koptuğu "
-"yerler)."
-"<br>                                                                                                                                                                                                                   "
+"| `diff_pair_gap`           | min/opt/max"
+"                                                                                                           "
+"| Bir diferansiyel çiftteki paralel yollar arasındaki boşluğu kontrol eder.  "
+"`opt` ayarı, etkileşimli yönlendiricinin yeni diferansiyel çiftler "
+"yerleştirirken kullandığı değerdir.  Bir diferansiyel çiftteki yollar arası "
+"boşluk `min` ve `max` ayarları dışına çıkarsa hata üretilir.  Diferansiyel "
+"çiftin paralel olmayan kısımları (örn. bir bileşenden yapılan fan-out) için "
+"boşluk test edilmez.<br>"
+"                                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`through_via`<br>`blind_via`<br>`buried_via`<br>`micro_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| İzin verilmeyecek bir veya daha fazla nesne türünü boşlukla ayırarak "
-"belirtin.  Örneğin `(constraint disallow track)` veya `(constraint disallow "
-"track via pad)`.  Bu türdeki bir nesne kural koşuluyla eşleşirse DRC hatası "
-"oluşturulur.<br><br>Bu kısıtlama özünde bir yasak alan kuralıyla aynıdır; "
-"ancak daha özel yasak alan kısıtlamaları oluşturmak için kullanılabilir."
-"<br>                                                                   |\n"
-"| `edge_clearance`          | min/opt/"
-"max                                                                                                           "
-"| Nesneler ile kart kenarı arasındaki boşluğu denetler.<br><br>Bu aynı "
-"zamanda \"frezeleme toleransı\" olarak da düşünülebilir; zira kart kenarı "
-"`Edge.Cuts` katmanındaki tüm grafik öğeleri ve *oval* pad deliklerini "
-"kapsar.  (Delme toleransı için `physical_hole_clearance` bölümüne "
-"bakın.)<br>                                                                                                                                                      "
+"| `diff_pair_uncoupled`     | max"
+"                                                                                                                   "
+"| Bir diferansiyel çift yolunun, çiftteki diğer polariteli yoldan eşleşmemiş "
+"(uncoupled) olarak yönlendirildiği mesafeyi kontrol eder (örn. çiftin bir "
+"bileşenden fan-out yaptığı ya da via gibi bir nesnenin etrafından geçmek "
+"için eşleşmeden çıktığı yerler).<br>"
+"                                                                                                                                                                                      "
 "|\n"
-"| `length`                  | min/"
-"max                                                                                                               "
-"| Kural koşuluyla eşleşen netlerin toplam yönlendirme uzunluğunu denetler; "
-"`min` değerinin (belirtilmişse) altında veya `max` değerinin (belirtilmişse) "
-"üzerinde olan her net için hata üretir."
-"<br>                                                                                                                                                                                                                                                      "
+"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>"
+"`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>"
+"`footprint`<br> | Yasaklanacak bir veya daha fazla nesne türünü, aralarına "
+"boşluk koyarak belirtin.  Örneğin, `(constraint disallow track)` ya da `"
+"(constraint disallow track via pad)`.  Bu türden bir nesne kural koşuluyla "
+"eşleşirse bir DRC hatası oluşturulur.<br><br>Bu kısıtlama esasen bir keepout "
+"(yasak bölge) kural alanıyla aynıdır, ancak daha belirli yasak bölge "
+"kısıtlamaları oluşturmak için kullanılabilir.<br>"
+"                                         |\n"
+"| `edge_clearance`          | min"
+"                                                                                                                   "
+"| Nesneler ile kart kenarı arasındaki açıklığı kontrol eder.<br><br>Kart "
+"kenarı `Edge.Cuts` katmanındaki tüm grafik öğelerini ve tüm *oval* ped "
+"deliklerini içerdiğinden bu, ``frezeleme toleransı`` olarak da "
+"düşünülebilir.  (Delme toleransı için `physical_hole_clearance` bölümüne "
+"bakın.)<br>"
+"                                                                                                                                                       "
 "|\n"
-"| `hole`                    | min/"
-"max                                                                                                               "
-"| Pad veya via'daki delme deliğinin boyutunu (çapını) denetler.  Oval "
-"delikler için küçük (minör) çap `min` değeriyle (belirtilmişse), büyük "
-"(majör) çap `max` değeriyle (belirtilmişse) karşılaştırılır."
-"<br>                                                                                                                                                                                                                                           "
+"| `hole_clearance`          | min"
+"                                                                                                                   "
+"| Bir ped veya via üzerindeki delinmiş delik ile farklı netteki bakır "
+"nesneler arasındaki açıklığı kontrol eder.  Açıklık, deliğin merkezinden "
+"değil çapından itibaren ölçülür.<br>"
+"                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                   "
-"| Pad veya via'daki delme deliği ile farklı bir netteki bakır nesneler "
-"arasındaki boşluğu denetler.  Boşluk, delik merkezinden değil çapından "
-"ölçülür."
-"<br>                                                                                                                                                                                                                                                                                              "
+"| `hole_size`               | min/opt/max"
+"                                                                                                           "
+"| Bir ped veya via üzerindeki delinmiş deliğin boyutunu (çapını) kontrol "
+"eder.  Oval delikler için küçük (minör) çap `min` değerine (belirtilmişse), "
+"büyük (majör) çap ise `max` değerine (belirtilmişse) göre test edilir.  "
+"`opt` değeri, etkileşimli yönlendirici tarafından kural koşuluyla eşleşen "
+"netler için varsayılan via delik boyutu olarak kullanılır.<br>"
+"                                                                                     "
 "|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                   "
-"| Pad ve via'lardaki mekanik olarak delinmiş delikler arasındaki boşluğu "
-"denetler.  Boşluk, deliklerin merkezleri arasında değil çapları arasında "
-"ölçülür.<br><br>Bu kısıtlama yalnızca matkap uçlarının korunması içindir.  "
-"**Lazerle delinmiş** (mikro-via) ve mekanik olmayan diğer delikler "
-"arasındaki boşluk denetlenmez; **frezelenmiş** (oval şekilli) ve mekanik "
-"olmayan diğer delikler arasındaki boşluk da denetlenmez.<br> |\n"
-"| `physical_clearance`      | "
-"min                                                                                                                   "
-"| Belirli bir katmandaki (bakır dışı katmanlar dahil) iki nesne arasındaki "
-"boşluğu denetler.<br><br>`clearance`'a kıyasla daha genel amaçlı denetimler "
-"yapabilse de çok daha yavaştır.  Mümkün olduğunca `clearance` kullanın."
-"<br>                                                                                                                                                                                                                      "
+"| `hole_to_hole`            | min"
+"                                                                                                                   "
+"| Ped ve via'lardaki mekanik delinmiş delikler arasındaki açıklığı kontrol "
+"eder.  Açıklık, deliklerin çapları arasında ölçülür (merkezleri değil).<br>"
+"<br>Yalnızca matkap ucu korumasına yöneliktir.  **Lazerle delinmiş** "
+"(microvia) ve **frezelenmiş** (oval) delikler ile diğer mekanik olmayan "
+"delikler arasındaki açıklık kontrol edilmez.<br>"
+"                                                                                                       "
 "|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                   "
-"| Pad veya via'daki delme deliği ile netten bağımsız olarak başka bir nesne "
-"arasındaki boşluğu denetler. Boşluk, delik merkezinden değil çapından "
-"ölçülür.<br><br>Bu aynı zamanda \"delme toleransı\" olarak da düşünülebilir; "
-"yalnızca **yuvarlak** delikleri kapsar (frezeleme toleransı için "
-"`edge_clearance` bölümüne bakın)."
-"<br>                                                                                                                    "
+"| `length`                  | min/opt/max"
+"                                                                                                           "
+"| Kural koşuluyla eşleşen netler için toplam yönlendirilmiş uzunluğu kontrol "
+"eder ve kısıtlamanın `min` değerinin (belirtilmişse) altında ya da `max` "
+"değerinin (belirtilmişse) üstünde kalan her net için hata üretir.<br>`opt` "
+"değeri, kural koşuluyla eşleşen netler için uzunluk ayarlama (tuning) "
+"aracının kullandığı hedef uzunluğu belirler.<br>"
+"                                                                                                   "
 "|\n"
-"| `silk_clearance`          | min/opt/"
-"max                                                                                                           "
-"| Serigrafi katmanlarındaki nesneler ile diğer nesneler arasındaki boşluğu "
-"denetler."
-"<br>                                                                                                                                                                                                                                                                                                                                                                "
+"| `min_resolved_spokes`     | `0`<br>`1`<br>`2`<br>`3`<br>`4`<br>"
+"                                                                                   "
+"| Bir pede yapılan toplam bağlantı (spoke / konuşma) sayısını kontrol eder.  "
+"Belirtilen sayıdan daha az konuşmaya sahip her ped için hata üretilir.<br>"
+"                                                                                                                                                                                   "
 "|\n"
-"| `skew`                    | "
-"max                                                                                                                   "
-"| Kural koşuluyla eşleşen netlerin toplam sapmasını denetler; yani her netin "
-"uzunluğu ile kuralla eşleşen tüm netlerin ortalama uzunluğu arasındaki farkı "
-"hesaplar.  Herhangi bir netin ortalamayla arasındaki farkın mutlak değeri "
-"kısıtlamanın `max` değerini aşarsa hata üretilir."
-"<br>                                                                                                                                                               "
+"| `physical_clearance`      | min"
+"                                                                                                                   "
+"| Belirli bir katmandaki (bakır olmayan katmanlar dahil) iki nesne "
+"arasındaki açıklığı kontrol eder.<br><br>Bu kontrol `clearance`'a göre daha "
+"genel amaçlı olsa da çok daha yavaştır.  Mümkün olduğunda `clearance` "
+"kullanın.<br>"
+"                                                                                                                                                                                                                        "
 "|\n"
-"| `solder_mask_expansion`   | "
-"opt                                                                                                                   "
-"| Pad'ler, şekiller ve izler için lehim maskesi genişlemesini belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                                                               "
+"| `physical_hole_clearance` | min"
+"                                                                                                                   "
+"| Nete bakılmaksızın bir ped veya via üzerindeki delinmiş delik ile başka "
+"bir nesne arasındaki açıklığı kontrol eder. Açıklık, deliğin merkezinden "
+"değil çapından itibaren ölçülür.<br><br>Yalnızca **yuvarlak** delikleri "
+"kapsadığından bu, ``delme toleransı`` olarak da düşünülebilir (frezeleme "
+"toleransı için `edge_clearance` bölümüne bakın).<br>"
+"                                                                                                  "
 "|\n"
-"| `solder_paste_abs_margin` | "
-"opt                                                                                                                   "
-"| Pad'ler için mutlak lehim macunu boşluğunu belirtir.  Genellikle macunu "
-"içe çekmek için negatif.<br><br>Son lehim macunu boşluğu mutlak boşluk artı "
-"göreli boşluk olacaktır."
-"<br>                                                                                                                                                                                                                                                                        "
+"| `silk_clearance`          | min"
+"                                                                                                                   "
+"| İpek baskı (silkscreen) katmanlarındaki nesneler ile diğer nesneler "
+"arasındaki açıklığı kontrol eder.<br>"
+"                                                                                                                                                                                                                                                                                                                                               "
 "|\n"
-"| `solder_paste_rel_margin` | "
-"opt                                                                                                                   "
-"| Pad'ler için göreli lehim macunu boşluğunu belirtir.  Genellikle macunu "
-"içe çekmek için negatif.<br><br>Son lehim macunu boşluğu mutlak boşluk artı "
-"göreli boşluk olacaktır."
-"<br>                                                                                                                                                                                                                                                                        "
+"| `skew`                    | min/opt/max/within\\_diff\\_pairs"
+"                                                                                       "
+"| Kural koşuluyla eşleşen netler için toplam skew'i, yani her netin uzunluğu "
+"ile kuralla eşleşen en uzun netin uzunluğu arasındaki farkı kontrol eder.  "
+"En uzun net ile herhangi bir net arasındaki fark, kısıtlamanın `max` "
+"değerinin üzerindeyse hata üretilir.<br>Bu kısıtlama ayrıca, kural koşuluyla "
+"eşleşen netler için skew ayarlama aracının kullandığı bir hedef skew değeri "
+"belirler.  Hedef skew, belirtilmişse `opt` değeri; belirtilmemişse `min` "
+"değeridir.  Hiçbiri belirtilmemişse hedef skew `0`'dır.<br>"
+"`within_diff_pairs` seçeneği belirtilirse skew, kuralla eşleşen her "
+"diferansiyel çift için ayrı ayrı test edilir.  `within_diff_pairs` "
+"belirtilmezse skew, eşleşen tüm netler için birlikte test edilir (örn. bir "
+"veri yolu için skew ayarlama).<br>"
+"                                                                                                                                           "
 "|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                   "
-"| Termal relief bağlantısına sahip bir pad ile zone arasındaki boşluk "
-"genişliğini belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                                         "
+"| `solder_mask_expansion`   | opt"
+"                                                                                                                   "
+"| Pedler, şekiller ve yollar için lehim maskesi genişlemesini (expansion) "
+"belirtir.                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                   "
-"| Termal relief bağlantısına sahip bir pad'i zone'a bağlayan ispitlerin "
-"genişliğini belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                                       "
+"| `solder_paste_abs_margin` | opt"
+"                                                                                                                   "
+"| Pedler için mutlak lehim pastası açıklığını belirtir.  Pasta alanını içeri "
+"çekmek için genellikle negatif olur.<br><br>Nihai lehim pastası açıklığı, "
+"mutlak açıklık ile göreli açıklığın toplamı "
+"olacaktır.                                                                                                                                                                                                                                              "
 "|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                           "
-"| İz ve yay segmentlerinin genişliğini denetler.  `min` değerinin "
-"(belirtilmişse) altında veya `max` değerinin (belirtilmişse) üzerinde "
-"genişliğe sahip her segment için hata üretilir."
-"<br>                                                                                                                                                                                                                                                             "
+"| `solder_paste_rel_margin` | opt"
+"                                                                                                                   "
+"| Pedler için göreli lehim pastası açıklığını belirtir.  Pasta alanını içeri "
+"çekmek için genellikle negatif olur.<br><br>Nihai lehim pastası açıklığı, "
+"mutlak açıklık ile göreli açıklığın toplamı "
+"olacaktır.                                                                                                                                                                                                                                              "
 "|\n"
-"| `track_angle`             | min/opt/"
-"max                                                                                                           "
-"| Birbirine bağlı iki iz segmenti arasındaki açıyı denetler.  Açısı `min` "
-"değerinin (belirtilmişse) altında veya `max` değerinin (belirtilmişse) "
-"üzerinde olan her bağlı çift için hata üretilir."
-"<br>                                                                                                                                                                                                                                                  "
+"| `text_height`             | min/max"
+"                                                                                                               "
+"| Metin kutuları dahil olmak üzere metinlerin yüksekliğini kontrol eder.  "
+"Yüksekliği `min` değerinin (belirtilmişse) altında ya da `max` değerinin "
+"(belirtilmişse) üstünde olan her metin öğesi için hata üretilir.<br>"
+"                                                                                                                                                                                                                                   "
 "|\n"
-"| `track_segment_length`    | min/"
-"max                                                                                                               "
-"| İz ve yay segmentlerinin uzunluğunu denetler.  Uzunluğu `min` değerinin "
-"(belirtilmişse) altında veya `max` değerinin (belirtilmişse) üzerinde olan "
-"her segment için hata üretilir."
-"<br>                                                                                                                                                                                                                                                               "
+"| `text_thickness`          | min/max"
+"                                                                                                               "
+"| Metin kutuları dahil olmak üzere metinlerin kalınlığını kontrol eder.  "
+"Kalınlığı `min` değerinin (belirtilmişse) altında ya da `max` değerinin "
+"(belirtilmişse) üstünde olan her metin öğesi için hata üretilir.<br>"
+"                                                                                                                                                                                                                                     "
 "|\n"
-"| `via_count`               | "
-"max                                                                                                                   "
-"| Kural koşuluyla eşleşen her netteki via sayısını sayar.  Bu sayı eşleşen "
-"herhangi bir nette kısıtlamanın `max` değerini aşarsa o net için hata "
-"üretilir."
-"<br>                                                                                                                                                                                                                                                                                         "
+"| `thermal_relief_gap`      | min"
+"                                                                                                                   "
+"| Termal rahatlatma (thermal-relief) bağlantısıyla bağlanan bir ped ile "
+"bölge arasındaki boşluğun genişliğini belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                               "
+"|\n"
+"| `thermal_spoke_width`     | opt"
+"                                                                                                                   "
+"| Termal rahatlatma bağlantısıyla bir pedi bir bölgeye bağlayan konuşmaların "
+"(spoke) genişliğini belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                            "
+"|\n"
+"| `track_angle`             | min/max"
+"                                                                                                               "
+"| Birbirine bağlı iki yol parçası arasındaki açıyı kontrol eder.  Açısı "
+"`min` değerinin (belirtilmişse) altında ya da `max` değerinin "
+"(belirtilmişse) üstünde olan her bağlı çift için hata üretilir.<br>"
+"                                                                                                                                                                                                                                                 "
+"|\n"
+"| `track_segment_length`    | min/max"
+"                                                                                                               "
+"| Yol ve yay parçalarının uzunluğunu kontrol eder.  Uzunluğu `min` değerinin "
+"(belirtilmişse) altında ya da `max` değerinin (belirtilmişse) üstünde olan "
+"her parça için hata üretilir.<br>"
+"                                                                                                                                                                                                                                                                 "
+"|\n"
+"| `track_width`             | min/opt/max"
+"                                                                                                           "
+"| Yol ve yay parçalarının genişliğini kontrol eder.  Genişliği `min` "
+"değerinin (belirtilmişse) altında ya da `max` değerinin (belirtilmişse) "
+"üstünde olan her parça için hata üretilir.  `opt` değeri, etkileşimli "
+"yönlendirici tarafından kural koşuluyla eşleşen netler için varsayılan yol "
+"genişliği olarak kullanılır.<br>"
+"                                                                                                                            "
+"|\n"
+"| `via_count`               | min/max"
+"                                                                                                               "
+"| Kural koşuluyla eşleşen her netteki via sayısını sayar.  `min` değerinden "
+"(belirtilmişse) daha az ya da `max` değerinden (belirtilmişse) daha fazla "
+"via içeren her net için hata üretilir.<br>"
+"                                                                                                                                                                                                                                                          "
 "|\n"
 "| `via_dangling`            "
 "|                                                                                                                       "
-"| Bağlantısız veya yalnızca bir katmanda bağlı via'ları denetler.  Bu "
-"kısıtlama min/opt/max değeri almaz.  Bir önem derecesi maddesiyle birlikte, "
-"çeşitli koşullarda sallanan via'lara izin vermek veya yasaklamak için "
-"kullanılabilir."
-"<br>                                                                                                                                                                                                                 "
+"| Bağlı olmayan veya yalnızca tek bir katmanda bağlı olan via'ları kontrol "
+"eder.  Bu kısıtlama min/opt/max değeri almaz.  Bir severity (önem) hükmüyle "
+"birlikte kullanıldığında, çeşitli koşullarda sarkan via'lara izin vermek "
+"veya yasaklamak için kullanılabilir.<br>"
+"                                                                                                                                                                                  "
 "|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
-"| Zone ile pad arasında kurulacak bağlantı türünü belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                         "
+"| `via_diameter`            | min/opt/max"
+"                                                                                                           "
+"| Via'ların çapını kontrol eder.  Çapı `min` değerinin (belirtilmişse) "
+"altında ya da `max` değerinin (belirtilmişse) üstünde olan her via için hata "
+"üretilir.  `opt` değeri, etkileşimli yönlendirici tarafından kural koşuluyla "
+"eşleşen netler için varsayılan via çapı olarak kullanılır.<br>"
+"                                                                                                                                                           "
+"|\n"
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
+"`none`                                                                                "
+"| Bir bölge ile bir ped arasında yapılacak bağlantıyı belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "\n"
 "\n"
@@ -47306,9 +47338,8 @@ msgid "Checking copper zone clearances..."
 msgstr "Bakır bölge boşlukları kontrol ediliyor..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:177
-#, fuzzy
 msgid "Checking teardrop clearances..."
-msgstr "Ped boşlukları kontrol ediliyor..."
+msgstr "Damlacık açıklıkları kontrol ediliyor..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:292
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:583
@@ -52205,10 +52236,10 @@ msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "Eagle katmanı '%s' (%d) haritalanmadığı için bir poligon yok sayılıyor"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1572
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): less than 3 vertices"
 msgstr ""
-"Katman '%s' (%d) üzerindeki bir çokgen atlanıyor: dış hat sayısı 1 değil"
+"Katman '%s' (%d) üzerindeki bir çokgen atlanıyor: 3'ten az köşe noktası var"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1618
 #, c-format
@@ -56991,9 +57022,8 @@ msgstr ""
 "kurtarma dosyasını al"
 
 #: pcbnew/tools/pcb_actions.cpp:1208
-#, fuzzy
 msgid "Import Non-KiCad Board File..."
-msgstr "KiCad Olmayan Kart Dosyasını İçe Aktar"
+msgstr "KiCad Dışı Kart Dosyası İçe Aktar..."
 
 #: pcbnew/tools/pcb_actions.cpp:1209
 msgid "Import board file from other applications"
