@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-15 19:16+0300\n"
-"PO-Revision-Date: 2026-04-05 09:09+0000\n"
+"PO-Revision-Date: 2026-04-24 14:34+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ka/>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:396
@@ -2067,9 +2067,9 @@ msgid "invalid plugin configuration at '%s': %s"
 msgstr ""
 
 #: common/api/api_plugin.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "არასწორი საკონტაქტო ღერო სახელი"
+msgstr "არასწორი დამატების გაშვების გარემო: %s"
 
 #: common/api/api_plugin.cpp:105
 #, fuzzy
@@ -2077,19 +2077,19 @@ msgid "could not read plugin configuration file"
 msgstr "რეპოზიტორიის კონფიგურაციის წვდომა ვერ მოხერხდა"
 
 #: common/api/api_plugin.cpp:125
-#, fuzzy, c-format
+#, c-format
 msgid "plugin configuration file error: %s"
-msgstr "კონფიგურაციის შეცდომა"
+msgstr "დამატების კონფიგურაციის ფაილის შეცდომა: %s"
 
 #: common/api/api_plugin.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "missing or invalid required keys: %s"
-msgstr "ტემპერატურის დიაპაზონის მნიშვნელობა აკლია ან არასწორია."
+msgstr "არარსებული, ან არასწორი აუცილებელი გასაღებები: %s"
 
 #: common/api/api_plugin.cpp:167
-#, fuzzy, c-format
+#, c-format
 msgid "identifier '%s' is invalid"
-msgstr "სიმბოლოს ბიბლიოთეკის იდენტიფიკატორი %s არასწორია."
+msgstr "იდენტიფიკატორი '%s' არასწორია"
 
 #: common/api/api_plugin.cpp:194
 #, fuzzy, c-format
@@ -2097,14 +2097,14 @@ msgid "actions section is invalid: %s"
 msgstr "მონაცემთა ბაზა კავშირი ვერ მოხერხდა: %s"
 
 #: common/api/api_plugin_manager.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s': %s"
-msgstr "დამატების პარამეტრები"
+msgstr "დამატების ქმედება '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s': %s"
-msgstr "დამატებები (%d)"
+msgstr "დამატება '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:124
 #, fuzzy, c-format
@@ -2112,9 +2112,8 @@ msgid "exited with code %d"
 msgstr "პროცესი ვერ შესრულდა, გასვლის კოდი %d"
 
 #: common/api/api_plugin_manager.cpp:335
-#, fuzzy
 msgid "action is not registered"
-msgstr "ფენის არჩევა აუცილებელია."
+msgstr "ქმედება რეგისტრირებული არაა"
 
 #: common/api/api_plugin_manager.cpp:369 common/api/api_plugin_manager.cpp:779
 #: common/api/api_plugin_manager.cpp:863
@@ -2123,9 +2122,9 @@ msgid "missing plugin environment"
 msgstr "მოდულის გარემოს ხელახალი შექმნა"
 
 #: common/api/api_plugin_manager.cpp:378
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' could not be read"
-msgstr "ფაილი '%s' ვერ შეიქმნა."
+msgstr "შესვლის წერტილის '%s' წაკითხვა შეუძლებელია"
 
 #: common/api/api_plugin_manager.cpp:446
 #, fuzzy
@@ -2133,14 +2132,13 @@ msgid "process could not be created"
 msgstr "პროცესის შექმნა ვერ მოხერხდა"
 
 #: common/api/api_plugin_manager.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' is not executable"
-msgstr "დირექტორია '%s' ჩაწერადი არ არის."
+msgstr "შესვლის წერტილი '%s' შესრულებადი არაა"
 
 #: common/api/api_plugin_manager.cpp:571
-#, fuzzy
 msgid "could not launch plugin"
-msgstr "ვერ გავუშვი ნაკვალევის ოსტატი '%s'"
+msgstr "დამატების გაშვება შეუძლებელია"
 
 #: common/api/api_plugin_manager.cpp:749 common/api/api_plugin_manager.cpp:831
 #: common/api/api_plugin_manager.cpp:921
@@ -2150,9 +2148,9 @@ msgstr "შეცდომა კოდი: %d"
 
 #: common/api/api_plugin_manager.cpp:751 common/api/api_plugin_manager.cpp:833
 #: common/api/api_plugin_manager.cpp:923
-#, fuzzy, c-format
+#, c-format
 msgid "could not create plugin environment: %s"
-msgstr "მოდულის გარემოს ხელახალი შექმნა"
+msgstr "დამატების გარემოს შექმნა შეუძლებელია: %s"
 
 #: common/api/api_plugin_manager.cpp:872
 #, fuzzy
@@ -6260,9 +6258,8 @@ msgid "Graphics error during recovery"
 msgstr "გრაფიკის შეცდომა"
 
 #: common/draw_panel_gal.cpp:241
-#, fuzzy
 msgid "Unknown exception during backend switch"
-msgstr "OCC გამონაკლისი ზედაპირის აგებისას: %s"
+msgstr "უცნობი გამონაკლისი უკანაბოლოს გადართვისას"
 
 #: common/draw_panel_gal.cpp:416
 #, fuzzy
@@ -17190,9 +17187,9 @@ msgstr "ნაგულისხმევი ვარიანტის წა�
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2955
 #: eeschema/sch_edit_frame.cpp:3055
-#, fuzzy, c-format
+#, c-format
 msgid "Edit Description for '%s'"
-msgstr "დავალების აღწერის ჩასწორება"
+msgstr "აღწერის ჩასწორება '%s'-ისთვის"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:79
 msgid "Add a new field"
@@ -27285,14 +27282,12 @@ msgid "Remove an existing design variant from the schematic."
 msgstr "არსებული საპროექტო ვარიანტის ამოღება სქემიდან."
 
 #: eeschema/tools/sch_actions.cpp:1808
-#, fuzzy
 msgid "Edit Variant Description..."
-msgstr "დავალების აღწერის ჩასწორება"
+msgstr "ვარიანტის აღწერის ჩასწორება..."
 
 #: eeschema/tools/sch_actions.cpp:1809
-#, fuzzy
 msgid "Edit the description of an existing design variant."
-msgstr "სკრიპტის ფაილის რედაქტირება ტექსტურ რედაქტორში"
+msgstr "არსებული დიზაინის ვარიანტის აღწერის ჩასწორება."
 
 #: eeschema/tools/sch_align_tool.cpp:64
 msgid "Align"
@@ -29999,14 +29994,12 @@ msgid "Units for viewport parameters, options: mm, inch, mils (default: mm)"
 msgstr "გამოტანის ერთეულები, სწორი ვარიანტებია: mm, in"
 
 #: kicad/cli/command_gerber_convert_png.cpp:86
-#, fuzzy
 msgid "Viewport origin X"
-msgstr "ხედის სახელი:"
+msgstr "ხედის წერტილის წყაროს X"
 
 #: kicad/cli/command_gerber_convert_png.cpp:92
-#, fuzzy
 msgid "Viewport origin Y"
-msgstr "ხედის სახელი:"
+msgstr "ხედის წერტილის წყაროს Y"
 
 #: kicad/cli/command_gerber_convert_png.cpp:98
 msgid "Viewport width (enables viewport mode)"
@@ -30026,9 +30019,9 @@ msgstr ""
 
 #: kicad/cli/command_gerber_convert_png.cpp:147
 #: kicad/cli/command_gerber_info.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid units: %s\n"
-msgstr "მითითებულია არასწორი ერთეულები\n"
+msgstr "არასწორი ერთეულები: %s\n"
 
 #: kicad/cli/command_gerber_convert_png.cpp:158
 msgid ""
@@ -39618,14 +39611,12 @@ msgid "Find by Properties"
 msgstr "საკონტაქტო ღეროს თვისებები"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:60
-#, fuzzy
 msgid "Property"
-msgstr "თვისებები"
+msgstr "თვისება"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:62
-#, fuzzy
 msgid "Match"
-msgstr "დაშტრიხვა"
+msgstr "დამთხვევა"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:492
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:24
@@ -39634,24 +39625,21 @@ msgstr "ელემენტები მონიშნული არაა"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:668
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:778
-#, fuzzy
 msgid "Ignored"
-msgstr "იგნორი"
+msgstr "გამოტოვებულია"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:668
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:734
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:780
-#, fuzzy
 msgid "Matching"
-msgstr "ქეშირება"
+msgstr "ემთხვევა"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:668
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:677
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:736
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:782
-#, fuzzy
 msgid "Different"
-msgstr "დიფერენციალური"
+msgstr "განსხვავებული"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:901
 #, c-format
@@ -39692,9 +39680,8 @@ msgid "From Selection"
 msgstr "მონიშვნის ტრანსფორმაცია"
 
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:70
-#, fuzzy
 msgid "Expression"
-msgstr "რეგულარული გამოსახულება"
+msgstr "გამოსახულება"
 
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:121
 #: pcbnew/drc/rule_editor/drc_re_custom_rule_panel.cpp:51
@@ -39708,7 +39695,7 @@ msgstr "შექმნა მონიშნულიდან"
 
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:136
 msgid "Query"
-msgstr ""
+msgstr "მოთხოვნა"
 
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:143
 #, fuzzy
@@ -42291,9 +42278,8 @@ msgstr "ნახვრეტის დამუშავებისშემ�
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1112
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:530
-#, fuzzy
 msgid "Front:"
-msgstr "წინა"
+msgstr "წინა:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1116
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1159
@@ -42311,9 +42297,8 @@ msgstr "ცილინდრული საღრუვი"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1155
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:577
-#, fuzzy
 msgid "Back:"
-msgstr "უკან"
+msgstr "უკანa:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1197
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1284 pcbnew/pcb_track.cpp:3179
@@ -44362,9 +44347,8 @@ msgid "BREP files"
 msgstr "STEP ფაილები"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:938
-#, fuzzy
 msgid "Failed to create extruded body geometry."
-msgstr "გამოტანს საქაღალდის შექმნა ჩავარდა\n"
+msgstr "გამოწნეხის სხეულის გეომეტრიის შექმნა ჩავარდა."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:961
 #, fuzzy
@@ -44386,9 +44370,8 @@ msgid "Show extruded 3D model"
 msgstr "განუსაზღვრელი 3D მოდელების ჩვენება"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:113
-#, fuzzy
 msgid "Overall height:"
-msgstr "უჯრედის სიმაღლე"
+msgstr "ჯამური სიმაღლე:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:126
 #, fuzzy
@@ -44396,29 +44379,24 @@ msgid "Standoff height:"
 msgstr "ტექსტის სიმაღლე:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:139
-#, fuzzy
 msgid "Extrusion source:"
-msgstr "გატანის შეცდომა"
+msgstr "გამოწნეხვის წყარო:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:168
-#, fuzzy
 msgid "Material:"
-msgstr "მასალა"
+msgstr "მასალა:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:172
-#, fuzzy
 msgid "Plastic"
-msgstr "რეალისტური"
+msgstr "მოქნილი"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:172
-#, fuzzy
 msgid "Matte"
-msgstr "ნიმუში"
+msgstr "მქრქალი"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:172
-#, fuzzy
 msgid "Metal"
-msgstr "მეტამონაცემები"
+msgstr "ლითონი"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:182
 #, fuzzy
@@ -57775,9 +57753,8 @@ msgstr ""
 "ფაილის აღდგენა"
 
 #: pcbnew/tools/pcb_actions.cpp:1215
-#, fuzzy
 msgid "Import Non-KiCad Board File..."
-msgstr "არა-KiCad დაფის ფაილის შემოტანა"
+msgstr "არა-KiCad დაფის ფაილის შემოტანა..."
 
 #: pcbnew/tools/pcb_actions.cpp:1216
 msgid "Import board file from other applications"
@@ -57988,12 +57965,11 @@ msgstr "ნაგავში გადატანა"
 
 #: pcbnew/tools/pcb_actions.cpp:1434
 msgid "Raise"
-msgstr ""
+msgstr "აწევა"
 
 #: pcbnew/tools/pcb_actions.cpp:1440
-#, fuzzy
 msgid "Lower"
-msgstr "კვება"
+msgstr "ჩამოწევა"
 
 #: pcbnew/tools/pcb_actions.cpp:1446
 #, fuzzy
