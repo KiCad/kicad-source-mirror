@@ -30,21 +30,6 @@
 #include <sim/spice_generator.h>
 
 
-namespace SIM_MODEL_SOURCE_GRAMMAR
-{
-    using namespace SIM_MODEL_SERIALIZER_GRAMMAR;
-
-    struct pwlSep : plus<space> {};
-    struct pwlValues : seq<opt<number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>>,
-                           star<pwlSep,
-                                number<SIM_VALUE::TYPE_FLOAT, NOTATION::SI>>> {};
-    struct pwlValuesGrammar : must<opt<sep>,
-                                   pwlValues,
-                                   opt<sep>,
-                                   tao::pegtl::eof> {};
-}
-
-
 class SPICE_GENERATOR_SOURCE : public SPICE_GENERATOR
 {
 public:
