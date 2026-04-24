@@ -1140,14 +1140,15 @@ void SPRINT_LAYOUT_PARSER::addTextToBoard( BOARD* aBoard,
     VECTOR2I pos = sprintToKicadPos( aObj.x, aObj.y );
     text->SetPosition( pos );
 
-    int height = sprintToKicadCoord( aObj.outer );
+    int height = sprintToKicadCoord( aObj.outer ) * 0.8;
 
     if( height <= 0 )
         height = pcbIUScale.mmToIU( 1.0 );
 
     text->SetTextSize( VECTOR2I( height, height ) );
 
-    int thickness = sprintToKicadCoord( aObj.inner );
+    double thicknessScale = 0.06 + 0.05 * aObj.inner;
+    int    thickness = height * thicknessScale;
 
     if( thickness <= 0 )
         thickness = std::max( 1, height / 8 );
