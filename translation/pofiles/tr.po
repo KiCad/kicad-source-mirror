@@ -37,16 +37,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-16 19:04+0300\n"
-"PO-Revision-Date: 2026-03-19 00:23+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2026-04-24 15:33+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v10/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:396
@@ -612,8 +611,7 @@ msgstr "Model Sınırlama Kutusunu Göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:360
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr ""
-"3B modellerin sınırlayıcı kutularını gerçek zamanlı oluşturucuda göster"
+msgstr "3B modellerin sınırlayıcı kutularını gerçek zamanlı oluşturucuda göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:367
 msgid "Show 3D Navigator"
@@ -3458,8 +3456,8 @@ msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
-"Yukarıdaki liste kutusundan bir <b>Seçenek Seçimi</b> seçin ve ardından "
-"<b>Seçili Seçeneği Ekle</b> düğmesine tıklayın."
+"Yukarıdaki liste kutusundan bir <b>Seçenek Seçimi</b> seçin ve ardından <b>"
+"Seçili Seçeneği Ekle</b> düğmesine tıklayın."
 
 #: common/dialogs/dialog_plugin_options.cpp:53
 #, c-format
@@ -5705,8 +5703,7 @@ msgstr "Çizgi-Nokta-Nokta"
 
 #: common/dialogs/panel_setup_netclasses.cpp:181
 msgid "Set color to transparent to use layer default color."
-msgstr ""
-"Katman varsayılan rengini kullanmak için rengi şeffaf olarak ayarlayın."
+msgstr "Katman varsayılan rengini kullanmak için rengi şeffaf olarak ayarlayın."
 
 #: common/dialogs/panel_setup_netclasses.cpp:402
 msgid ""
@@ -7439,9 +7436,9 @@ msgstr ""
 "KiCad tarafından dahili olarak tanımlanır (düzenlenemez) ve şu anda yüklü "
 "olan proje dosyasının mutlak yoluna ayarlanır.  Bu ortam değişkeni, şu anda "
 "yüklü olan projeye göre dosyaları ve yolları tanımlamak için "
-"kullanılabilir.  Örneğin, ${KIPRJMOD}/libs/footprints.pretty, footprints."
-"pretty adlı projeye özgü ayak izi kütüphanesi içeren bir klasör olarak "
-"tanımlanabilir."
+"kullanılabilir.  Örneğin, ${KIPRJMOD}/libs/footprints.pretty, "
+"footprints.pretty adlı projeye özgü ayak izi kütüphanesi içeren bir klasör "
+"olarak tanımlanabilir."
 
 #: common/env_vars.cpp:135
 msgid "A directory containing system-wide scripts installed with KiCad."
@@ -9372,8 +9369,7 @@ msgstr "Ağ listesinin sembol bölümündeki ayak izi adı ayrıştırılamıyor
 #: common/netlist_reader/legacy_netlist_reader.cpp:139
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:140
 msgid "Cannot parse reference designator in symbol section of netlist."
-msgstr ""
-"Ağ listesinin sembol bölümündeki referans tanımlayıcı ayrıştırılamıyor."
+msgstr "Ağ listesinin sembol bölümündeki referans tanımlayıcı ayrıştırılamıyor."
 
 #: common/netlist_reader/legacy_netlist_reader.cpp:149
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:150
@@ -10659,8 +10655,7 @@ msgstr "Son Yakınlaştırmayı Tekrarla"
 
 #: common/tool/actions.cpp:837 common/widgets/mathplot.cpp:1413
 msgid "Return zoom to level prior to last zoom undo"
-msgstr ""
-"Yakınlaştırmayı son yakınlaştırmadan önceki seviyeye döndürmeyi geri al"
+msgstr "Yakınlaştırmayı son yakınlaştırmadan önceki seviyeye döndürmeyi geri al"
 
 #: common/tool/actions.cpp:852
 msgid "Pan to Center Selected Objects"
@@ -10907,8 +10902,7 @@ msgstr "Etkin Olmayan Katman Görünümü Modu (3 durumlu)"
 
 #: common/tool/actions.cpp:1215
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
-msgstr ""
-"Normal, soluk ve gizli arasında etkin olmayan katmanları döngüye ekleme"
+msgstr "Normal, soluk ve gizli arasında etkin olmayan katmanları döngüye ekleme"
 
 #: common/tool/actions.cpp:1221
 msgid "Draw Bounding Boxes"
@@ -11596,8 +11590,7 @@ msgstr "%s, %s'den küçük olmalıdır."
 
 #: common/widgets/widget_hotkey_list.cpp:104
 msgid "Press a new hotkey, or press Esc to cancel..."
-msgstr ""
-"Yeni bir kısayol tuşuna basın veya iptal etmek için Esc tuşuna basın..."
+msgstr "Yeni bir kısayol tuşuna basın veya iptal etmek için Esc tuşuna basın..."
 
 #: common/widgets/widget_hotkey_list.cpp:115
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:28
@@ -12867,13 +12860,12 @@ msgstr ""
 "python <betik_dosya_adı> <girdi_dosya_adı> <çıktı_dosya_adı>\n"
 "```\n"
 "\n"
-"Windows'ta, bir CSV BOM'u için istenen oluşturucu betiği `C:"
-"\\Users\\username\\kicad\\my_python_script.py` ise, komut satırı şöyle "
-"olacaktır:\n"
+"Windows'ta, bir CSV BOM'u için istenen oluşturucu betiği `C:\\Users\\u"
+"sername\\kicad\\my_python_script.py` ise, komut satırı şöyle olacaktır:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "Linux'ta, bir CSV BOM'u için istenen oluşturucu betiği `/home/username/kicad/"
@@ -13326,8 +13318,8 @@ msgstr "%d sembol(ler) numaralanmış olmalı. <br><br>"
 #: eeschema/dialogs/dialog_erc.cpp:546
 msgid "-------- ERC cancelled by user.<br><br>"
 msgstr ""
-"-------- Elektriksel Kural Kontrolü kullanıcı tarafından iptal edildi. "
-"<br><br>"
+"-------- Elektriksel Kural Kontrolü kullanıcı tarafından iptal edildi. <br>"
+"<br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:548 pcbnew/dialogs/dialog_drc.cpp:428
 msgid "Done.<br><br>"
@@ -13597,8 +13589,8 @@ msgstr "Tüm güç tüketimlerini kaydet"
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
-"Tüm ögelerin güç dağıtımını kaydetmek için yönergeler yazın (.probe "
-"p(<item>))"
+"Tüm ögelerin güç dağıtımını kaydetmek için yönergeler yazın (.probe p"
+"(<item>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:369
 #: eeschema/dialogs/dialog_sim_command_base.cpp:656
@@ -15800,8 +15792,8 @@ msgid ""
 msgstr ""
 "Bu şema, şemayı kırabilecek eski sembol kütüphaneleri kullanılarak "
 "yapılmıştır..  Sbazı sembollerin farklı bir sembol adına bağlanması "
-"gerekebilir.  Bazı sembollerin yeni bir kütüphaneye "
-"\"kurtarılması\" (kopyalanması ve yeniden adlandırılması) gerekebilir.\n"
+"gerekebilir.  Bazı sembollerin yeni bir kütüphaneye \"kurtarılması\" "
+"(kopyalanması ve yeniden adlandırılması) gerekebilir.\n"
 "\n"
 "Projeyi güncellemek için aşağıdaki değişiklikler önerilir."
 
@@ -18957,8 +18949,7 @@ msgstr "%s sembolünde yerleştirilmemiş %s birimleri var"
 #: eeschema/erc/erc.cpp:684
 #, c-format
 msgid "Symbol %s has input power pins in units %s that are not placed"
-msgstr ""
-"%s sembolünün, %s birimlerinde yerleştirilmemiş giriş güç bacakları var"
+msgstr "%s sembolünün, %s birimlerinde yerleştirilmemiş giriş güç bacakları var"
 
 #: eeschema/erc/erc.cpp:690
 #, c-format
@@ -21148,8 +21139,7 @@ msgstr "Veritabanı tablosu %s okunurken hata oluştu: %s"
 #: eeschema/sch_io/database/sch_io_database.cpp:289
 #, c-format
 msgid "Could not load database library: settings file %s missing or invalid"
-msgstr ""
-"Veritabanı kütüphanesi yüklenemedi: %s ayar dosyası eksik veya geçersiz"
+msgstr "Veritabanı kütüphanesi yüklenemedi: %s ayar dosyası eksik veya geçersiz"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:330
 #, c-format
@@ -21332,8 +21322,7 @@ msgstr "HTTP kütüphane ayarları dosyası %s'nin kök URL'si eksik."
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:242
 #, c-format
 msgid "HTTP library settings file %s has invalid library type."
-msgstr ""
-"HTTP kütüphane ayarları dosyası %s geçersiz bir kütüphane türüne sahip."
+msgstr "HTTP kütüphane ayarları dosyası %s geçersiz bir kütüphane türüne sahip."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:283
 #, c-format
@@ -22092,8 +22081,7 @@ msgstr "Yerleştirme"
 #: eeschema/sch_screen.cpp:743 eeschema/sch_screen.cpp:845
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr ""
-"Şematik sembol '%s %s' kütüphane tanımlayıcısı '%s' olarak ayarlanıyor."
+msgstr "Şematik sembol '%s %s' kütüphane tanımlayıcısı '%s' olarak ayarlanıyor."
 
 #: eeschema/sch_screen.cpp:759
 #, c-format
@@ -22812,9 +22800,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{üst çizgi}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>üst çizgi</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>üst çizgi</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -22898,8 +22886,8 @@ msgstr ""
 "        <td>&nbsp;<br><samp>1</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Koşullu metin görüntüleme</samp></td>\n"
 "    </tr>\n"
@@ -22907,12 +22895,12 @@ msgstr ""
 "        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"TOP\", "
 "\"BOTTOM\")}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>TOP</samp> (ön katmanda) veya <samp>BOTTOM</"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp>TOP</samp> (ön katmanda) veya <samp>BOTTOM</samp>"
+"</td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Sayısal karşılaştırmalar da çalışır</samp></td>\n"
 "    </tr>\n"
@@ -22989,8 +22977,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:PIN_ALT_LIST(pin)}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>Tüm alternatif pin fonksiyonları (temel ad "
-"hariç)</samp></td>\n"
+"        <td>&nbsp;<br><samp>Tüm alternatif pin fonksiyonları (temel ad hariç)"
+"</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${U1:PIN_ALT_LIST(5)}</samp></td>\n"
@@ -23094,8 +23082,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Tanımı</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
 "        <th>Sonuç Netler</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23146,9 +23135,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23164,9 +23153,9 @@ msgstr ""
 "<p><b>Tablo Hücre Referansları:</b> <samp>CELL()</samp> fonksiyonu yalnızca "
 "tablo hücrelerinde çalışır. Aynı tablodaki diğer hürelere başvurmak için "
 "<samp>${CELL(\"A0\")}</samp> veya <samp>${CELL(satır, sütun)}</samp> "
-"kullanın. Satır ve sütun numaraları 0 tabanlıdır (A0 ilk satır, ilk "
-"sütundur). CELL, ham hücre metnini değil hesaplanmış/görüntülenen değeri "
-"döndürür.</p>\n"
+"kullanın. Satır ve sütun numaraları 0 tabanlıdır (A0 ilk satır, ilk sütundur)"
+". CELL, ham hücre metnini değil hesaplanmış/görüntülenen değeri döndürür.</p>"
+"\n"
 "<p><b>İç İçe Değişkenler:</b> Değişkenler başka değişkenler içerebilir. İç "
 "değişkenler önce genişletilir. Maksimum iç içe derinlik: 6 seviye.</p>\n"
 "<p><b>Hata Mesajları:</b></p>\n"
@@ -24782,8 +24771,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
-"\"<b>Yinelenen pin %s</b> %s <b>(%s, %s)</b> konumu, %s%s piniyle <b>(%s, "
-"%s)</b> konumu, %s ve %s birimleri, %s gövde stili çakışıyor."
+"\"<b>Yinelenen pin %s</b> %s <b>(%s, %s)</b> konumu, %s%s piniyle <b>(%s, %s)"
+"</b> konumu, %s ve %s birimleri, %s gövde stili çakışıyor."
 
 #: eeschema/symbol_checker.cpp:158
 #, c-format
@@ -24867,8 +24856,7 @@ msgstr "Bilgi: <b>Gizli güç pini %s</b> %s konumunda <b>(%s, %s)</b>."
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr ""
-"Bilgi: <b>Gizli güç pini %s</b> %s konumunda <b>(%s,%s)</b> in unit %c."
+msgstr "Bilgi: <b>Gizli güç pini %s</b> %s konumunda <b>(%s,%s)</b> in unit %c."
 
 #: eeschema/symbol_checker.cpp:352
 msgid ""
@@ -25047,8 +25035,7 @@ msgstr "Geçerli yapılandırma, '%s' sembol kütüphanesini içermiyor."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1712
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1723
 msgid "Use Manage Symbol Libraries to edit the configuration."
-msgstr ""
-"Yapılandırmayı düzenlemek için Sembol Kütüphanelerini Yönet'i kullanın."
+msgstr "Yapılandırmayı düzenlemek için Sembol Kütüphanelerini Yönet'i kullanın."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1713
 msgid "Library not found in symbol library table."
@@ -27894,8 +27881,7 @@ msgstr "Pin Özelliklerini Düzenle"
 #: eeschema/tools/symbol_editor_pin_tool.cpp:230
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
-msgstr ""
-"Bu konum zaten%d birimindeki başka bir pim tarafından işgal edilmiştir."
+msgstr "Bu konum zaten%d birimindeki başka bir pim tarafından işgal edilmiştir."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:234
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
@@ -29907,16 +29893,15 @@ msgstr "Geçersiz rapor biçimi\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
-msgstr ""
-"Dışa aktarma yardımcı programları (Gerber, delme, konum dosyaları, vb.)"
+msgstr "Dışa aktarma yardımcı programları (Gerber, delme, konum dosyaları, vb.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:79
 msgid ""
 "Output file format, options: step, stepz, brep, xao, glb (binary glTF), ply, "
 "stl"
 msgstr ""
-"Çıktı dosyası formatı, seçenekler: step, stepz, brep, xao, glb (binary "
-"glTF), ply, stl"
+"Çıktı dosyası formatı, seçenekler: step, stepz, brep, xao, glb (binary glTF)"
+", ply, stl"
 
 #: kicad/cli/command_pcb_export_3d.cpp:84
 msgid "Overwrite output file"
@@ -30088,8 +30073,7 @@ msgstr "Geçerli seçenekler: mutlak, çizim"
 
 #: kicad/cli/command_pcb_export_drill.cpp:66
 msgid "Valid options are: decimal, suppressleading, suppresstrailing, keep."
-msgstr ""
-"Geçerli seçenekler: ondalık, baştakini kaldır, sondakini kaldır, sakla."
+msgstr "Geçerli seçenekler: ondalık, baştakini kaldır, sondakini kaldır, sakla."
 
 #: kicad/cli/command_pcb_export_drill.cpp:71
 msgid "Valid options are: route, alternate."
@@ -30615,8 +30599,8 @@ msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
 msgstr ""
-"Dönme noktasını kart merkezine göre santimetre cinsinden ayarla, format 'X,Y,"
-"Z', örneğin: '-10,2,0'"
+"Dönme noktasını kart merkezine göre santimetre cinsinden ayarla, format "
+"'X,Y,Z', örneğin: '-10,2,0'"
 
 #: kicad/cli/command_pcb_render.cpp:297
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
@@ -30633,8 +30617,7 @@ msgstr "Alt ışık yoğunluğu, format: 'R,G,B' veya tek bir sayı, aralık: 0-
 
 #: kicad/cli/command_pcb_render.cpp:312
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
-msgstr ""
-"Yan ışıkların yoğunluğu, format: ‘R,G,B’ veya tek bir sayı, aralık: 0-1"
+msgstr "Yan ışıkların yoğunluğu, format: ‘R,G,B’ veya tek bir sayı, aralık: 0-1"
 
 #: kicad/cli/command_pcb_render.cpp:317
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
@@ -31303,8 +31286,7 @@ msgstr "Kart Katman Dizilimleri"
 
 #: kicad/dialogs/template_default_html.h:258
 msgid "Layer configurations optimized for common manufacturing processes."
-msgstr ""
-"Yaygın üretim süreçleri için optimize edilmiş katman konfigürasyonları."
+msgstr "Yaygın üretim süreçleri için optimize edilmiş katman konfigürasyonları."
 
 #: kicad/dialogs/template_default_html.h:265
 msgid ""
@@ -32582,8 +32564,7 @@ msgstr "Gerber çıktı dosyalarını ön izle"
 
 #: kicad/tools/kicad_manager_actions.cpp:160
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr ""
-"Bit eşlem görüntülerini şematik veya Baskı Devre bileşenlerine dönüştür"
+msgstr "Bit eşlem görüntülerini şematik veya Baskı Devre bileşenlerine dönüştür"
 
 #: kicad/tools/kicad_manager_actions.cpp:179
 msgid "Edit drawing sheet borders and title block"
@@ -33269,8 +33250,8 @@ msgstr ""
 "___K = V<sub>G</sub>/V<sub>Ç</sub> = 10<sup>a/20</sup>___<br>\n"
 "___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>giriş</sub> &middot; "
-"Z<sub>çıkış</sub> / L)___<br>\n"
+"___R2 = (L&minus;1) / 2&middot;&radic;(Z<sub>giriş</sub> &middot; Z<sub>"
+"çıkış</sub> / L)___<br>\n"
 "___R1 = 1 / (A/Z<sub>giriş</sub> &minus; 1/R2)___<br>\n"
 "___R3 = 1 / (A/Z<sub>çıkış</sub> &minus; 1/R2)___\n"
 
@@ -33846,8 +33827,8 @@ msgstr ""
 "Temel: Tehlikeli-canlı parçaların yalıtımı.\n"
 "\n"
 "Güçlendirilmiş: Çift yalıtıma eşdeğer bir koruma derecesi sağlayan tek "
-"yalıtım. (bunlardan birinin arızalanması durumunda iki ayrı temel "
-"yalıtımdır)."
+"yalıtım. (bunlardan birinin arızalanması durumunda iki ayrı temel yalıtımdır)"
+"."
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Functional"
@@ -34101,8 +34082,7 @@ msgstr "E1,E3,E6,E12"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:231
 msgid "Current calculation is underestimated due to long fusing time."
-msgstr ""
-"Uzun kaynaştırma süresi nedeniyle mevcut hesaplama hafife alınmaktadır."
+msgstr "Uzun kaynaştırma süresi nedeniyle mevcut hesaplama hafife alınmaktadır."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:31
 msgid "Ambient temperature:"
@@ -35128,8 +35108,8 @@ msgstr ""
 "Bir elektrokimyasal çiftin anodu oksitlenir ve aşınır, katoda ise üzerine "
 "eritilmiş metaller kaplanır ancak korunur.<br>\n"
 "Pozitif bir sayı, sıranın anodik (-) ve kolonun katodik (+) olduğunu "
-"gösterir, soğuk ve sıcak renk tonları da sıraların potansiyelini gösterir."
-"<br>\n"
+"gösterir, soğuk ve sıcak renk tonları da sıraların potansiyelini "
+"gösterir.<br>\n"
 "EN 50310, 300 mV'un altında bir voltaj farkı önermektedir. Bilinen "
 "uygulamalar, ana çift (yani ENIG yüzey kaplaması) arasında üçüncü bir arayüz "
 "metali kullanır.<br>\n"
@@ -35326,8 +35306,8 @@ msgstr ""
 "olan genişlikler için geçerlidir.\n"
 "\n"
 "IPC 2221'den alınan formül şöyledir:\n"
-"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
-"H)<sup>0.725</sup>___</center>\n"
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; H)"
+"<sup>0.725</sup>___</center>\n"
 "Burada:<br>\n"
 "___I___: A cinsinden maksimum akım<br>\n"
 "___&Delta;T___: °C cinsinden ortam sıcaklığına göre sıcaklık artışı<br>\n"
@@ -35640,8 +35620,7 @@ msgstr "Zoran"
 #: pcb_calculator/transline_ident.cpp:345
 #: pcb_calculator/transline_ident.cpp:379
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
-msgstr ""
-"Tek mod empedansı (zıt (diferansiyel) voltajlarla tahrik edilen hatlar)"
+msgstr "Tek mod empedansı (zıt (diferansiyel) voltajlarla tahrik edilen hatlar)"
 
 #: pcb_calculator/transline_ident.cpp:399
 msgid "Distance between strip and top metal"
@@ -36790,8 +36769,7 @@ msgstr "Nakavt"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:59
 msgid "If checked, the barcode will be inverted with a margin around it"
-msgstr ""
-"İşaretlenirse, barkod ters çevrilir ve etrafında bir kenar boşluğu olur"
+msgstr "İşaretlenirse, barkod ters çevrilir ve etrafında bir kenar boşluğu olur"
 
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:63
 msgid "Show text"
@@ -37409,8 +37387,7 @@ msgstr "Farklı ağları birbirine bağlayan &yolları sil"
 msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
-msgstr ""
-"farklı ağlara ait düğümleri bağlayan yol parçalarını kaldır kısa devre)"
+msgstr "farklı ağlara ait düğümleri bağlayan yol parçalarını kaldır kısa devre)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
 msgid "&Delete redundant vias"
@@ -39006,8 +38983,7 @@ msgstr "Ağ filtresi (joker karakterleri destekler):"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:163
 msgid ""
 "Only copper items belonging to nets matching this filter will be exported."
-msgstr ""
-"Yalnızca bu filtreyle eşleşen ağlara ait bakır ögeler dışa aktarılacak."
+msgstr "Yalnızca bu filtreyle eşleşen ağlara ait bakır ögeler dışa aktarılacak."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:177
 msgid "Coordinates"
@@ -42657,8 +42633,7 @@ msgstr "Kenar yumuşatma"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:112
 msgid "Screen space ambient occlusions and global illumination reflections"
-msgstr ""
-"Ekran alanı ortam gölgelemesi ve küresel aydınlatma yansımaları (yavaş)"
+msgstr "Ekran alanı ortam gölgelemesi ve küresel aydınlatma yansımaları (yavaş)"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:123
 msgid "View"
@@ -42847,8 +42822,7 @@ msgstr "Köşe yarıçapı, küçük kenarın yarısından küçük veya ona eş
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1272
 msgid "Line width must be greater than zero for an unfilled polygon."
-msgstr ""
-"Doldurulmamış bir çokgen için çizgi genişliği sıfırdan büyük olmalıdır."
+msgstr "Doldurulmamış bir çokgen için çizgi genişliği sıfırdan büyük olmalıdır."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1284
 msgid "Line width must be greater than zero for an unfilled curve."
@@ -43689,8 +43663,7 @@ msgstr "Otomatik olarak yeniden doldurma bölgeleri"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:443
 msgid "If checked, zones will be re-filled after each edit operation"
-msgstr ""
-"İşaretliyse, her düzenleme işleminden sonra bölgeler yeniden doldurulur"
+msgstr "İşaretliyse, her düzenleme işleminden sonra bölgeler yeniden doldurulur"
 
 #: pcbnew/dialogs/panel_fp_editor_color_settings.cpp:112
 msgid "Internal Layers"
@@ -45517,8 +45490,8 @@ msgid ""
 msgstr ""
 "### İfade Fonksiyonları\n"
 "\n"
-"Tüm fonksiyon parametreleri basit joker karakterleri destekler (`*` ve `?"
-"`).\n"
+"Tüm fonksiyon parametreleri basit joker karakterleri destekler (`*` ve `?`)"
+".\n"
 "\n"
 "\n"
 "```\n"
@@ -45619,8 +45592,8 @@ msgstr ""
 "> 1. `*` ve `?` joker karakterlerini içerebilen bir referans tanımlayıcısı\n"
 "> 2. `LibName:FootprintName` gibi bir footprint kütüphane tanımlayıcısı. Bu "
 "durumda,\n"
-"   kütüphane tanımlayıcısı, kütüphane adını footprint adından ayırmak için `:"
-"` karakterini\n"
+"   kütüphane tanımlayıcısı, kütüphane adını footprint adından ayırmak için "
+"`:` karakterini\n"
 "   içermelidir ve her iki ad da joker karakterler içerebilir.\n"
 "> 3. `${Class:ClassName}` biçiminde bir bileşen sınıfı.  `Class` anahtar "
 "sözcüğü büyük/küçük\n"
@@ -45874,13 +45847,13 @@ msgstr ""
 "\n"
 "    (rule \"Farklı Netlerdeki Via'lar Arasındaki Mesafe\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Farklı Netlerdeki Pad'ler Arasındaki Boşluk\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Deliği ile İz Arasındaki Boşluk\"\n"
@@ -45991,8 +45964,8 @@ msgstr ""
 "delecekse.\n"
 "    # \n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -49450,8 +49423,7 @@ msgstr "Ayak izlerini kütüphaneye aktar:"
 
 #: pcbnew/footprint_libraries_utils.cpp:659
 msgid "Update board footprints to link to exported footprints"
-msgstr ""
-"Kart ayak izlerini dışa aktarılmış ayak izlerine bağlamak için güncelle"
+msgstr "Kart ayak izlerini dışa aktarılmış ayak izlerine bağlamak için güncelle"
 
 #: pcbnew/footprint_libraries_utils.cpp:859
 #: pcbnew/footprint_viewer_frame.cpp:742
@@ -50804,8 +50776,7 @@ msgstr "(SMD pedinin bakır ve maske katmanları kartın farklı yüzeylerindedi
 
 #: pcbnew/pad.cpp:2911 pcbnew/pad.cpp:2924
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
-msgstr ""
-"(Yüzey Montaj pedin bakır ve pasta katmanları kartın farklı yüzlerinde)"
+msgstr "(Yüzey Montaj pedin bakır ve pasta katmanları kartın farklı yüzlerinde)"
 
 #: pcbnew/pad.cpp:2930
 msgid "(SMD pad has no outer layers)"
@@ -51929,8 +51900,7 @@ msgstr "Grup tanımlarında grup kimliği %s bulunamadı."
 #, c-format
 msgid ""
 "Unable to find sub group %s in the group map (parent group ID=%s, Name=%s)."
-msgstr ""
-"Grup haritasında %s alt grubu bulunamadı (üst grup kimliği=%s, Adı=%s)."
+msgstr "Grup haritasında %s alt grubu bulunamadı (üst grup kimliği=%s, Adı=%s)."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1456
 #, c-format
@@ -53561,9 +53531,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>üstçizgi</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>üstçizgi</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -53748,8 +53718,8 @@ msgstr ""
 "        <td>&nbsp;<br><samp>1</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Koşullu metin gösterimi</samp></td>\n"
 "    </tr>\n"
@@ -53757,12 +53727,12 @@ msgstr ""
 "        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"TOP\", "
 "\"BOTTOM\")}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>TOP</samp> (ön katmanda) veya <samp>BOTTOM</"
-"samp></td>\n"
+"        <td>&nbsp;<br><samp>TOP</samp> (ön katmanda) veya <samp>BOTTOM</samp>"
+"</td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>Sayısal karşılaştırmalar da çalışır</samp></td>\n"
 "    </tr>\n"
@@ -53813,8 +53783,8 @@ msgstr ""
 "</table>\n"
 "<p></p>\n"
 "<p></p>\n"
-"<i>İşaretlemenin değişken genişletmeye göre önceliği olduğunu unutmayın.</"
-"i>\n"
+"<i>İşaretlemenin değişken genişletmeye göre önceliği olduğunu unutmayın.</i>"
+"\n"
 "<p></p>\n"
 "<p><b>Ayak İzi Çapraz Referansları:</b> Diğer ayak izlerindeki alanlara ve "
 "pedlere <samp>${refdes:field}</samp> veya <samp>${refdes:function(pad)}</"
@@ -54446,8 +54416,7 @@ msgstr ""
 #: pcbnew/router/pns_diff_pair_placer.cpp:598
 #, c-format
 msgid "Can't find a suitable starting point for coupled net \"%s\"."
-msgstr ""
-"Birleştirilmiş net \"%s\" için uygun bir başlangıç noktası bulunamıyor."
+msgstr "Birleştirilmiş net \"%s\" için uygun bir başlangıç noktası bulunamıyor."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:91
 #: pcbnew/router/pns_meander_placer.cpp:70
@@ -55428,8 +55397,8 @@ msgstr "Bölge boşluğu: %s."
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
 msgstr ""
-"%s adresindeki daha büyük fiziksel açıklık tarafından geçersiz kılınmıştır ;"
-"açıklık: %s."
+"%s adresindeki daha büyük fiziksel açıklık tarafından geçersiz kılınmıştır "
+";açıklık: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1135
 #, c-format
@@ -56815,8 +56784,7 @@ msgstr "Kütüphaneden Ayak İzlerini Güncelle..."
 
 #: pcbnew/tools/pcb_actions.cpp:990
 msgid "Update footprints to include any changes from the library"
-msgstr ""
-"Kütüphanedeki değişiklikleri içerecek şekilde ayak izlerini güncelleyin"
+msgstr "Kütüphanedeki değişiklikleri içerecek şekilde ayak izlerini güncelleyin"
 
 #: pcbnew/tools/pcb_actions.cpp:996
 msgid "Remove Unused Pads..."
@@ -57175,8 +57143,7 @@ msgstr "Ayak İzi İlişkilendirme (.cmp) Dosyasını Dışa Aktar..."
 
 #: pcbnew/tools/pcb_actions.cpp:1336
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
-msgstr ""
-"Şematik arka açıklama için ayak izi ilişki dosyasını (*.cmp) dışa aktar"
+msgstr "Şematik arka açıklama için ayak izi ilişki dosyasını (*.cmp) dışa aktar"
 
 #: pcbnew/tools/pcb_actions.cpp:1348
 msgid "Collect And Embed 3D Models"
