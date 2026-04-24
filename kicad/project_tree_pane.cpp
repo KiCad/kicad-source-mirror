@@ -1736,12 +1736,39 @@ void PROJECT_TREE_PANE::EmptyTreePrj()
             std::unique_ptr<KIGIT_COMMON> oldCommon = m_TreeProject->TakeGitCommon();
             m_TreeProject->SetGitRepo( nullptr );
 
-            std::thread(
-                [orphan, old = std::move( oldCommon )]() mutable
-                {
-                    std::lock_guard<std::mutex> g( old->m_gitActionMutex );
-                    git_repository_free( orphan );
-                } ).detach();
+            // Register the cleanup thread with the orphan registry so the
+            // shutdown path can wait for it before tearing down libgit2.
+            // Cancellation has already been requested via SetCancelled() above,
+            // and progress_cb/transfer_progress_cb honour it so long-running
+            // fetches will exit with GIT_EUSER as soon as they hit a callback.
+
+            GIT_BACKEND* backend = GetGitBackend();
+            wxString     projectDir = oldCommon ? oldCommon->GetProjectDir() : wxString();
+
+            auto cleanup = [orphan, old = std::move( oldCommon )]() mutable
+                           {
+                               std::lock_guard<std::mutex> g( old->m_gitActionMutex );
+                               git_repository_free( orphan );
+                           };
+
+            bool registered = false;
+
+            if( backend )
+            {
+                std::string label = "abandon close " + projectDir.ToStdString();
+                registered = backend->OrphanRegistry().Register( label, std::move( cleanup ) );
+            }
+
+            if( !registered )
+            {
+                // Either no backend is available, or the registry has already
+                // entered shutdown.  Fall back to freeing synchronously so the
+                // repository handle is not leaked; this blocks on the git
+                // action mutex but is safe because libgit2 shutdown is gated
+                // on the same registry.
+
+                cleanup();
+            }
         }
         else
         {

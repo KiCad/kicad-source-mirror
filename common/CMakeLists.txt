@@ -121,6 +121,7 @@ set( KICOMMON_SRCS
     git/kicad_git_common.cpp
     git/kicad_git_errors.cpp
     git/git_backend.cpp
+    git/kigit_orphan_registry.cpp
     git/libgit_backend.cpp
 
     # Jobs

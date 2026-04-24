@@ -87,6 +87,32 @@ void LIBGIT_BACKEND::Init()
 
 void LIBGIT_BACKEND::Shutdown()
 {
+    // Wait for any abandoned git cleanup threads to finish before tearing
+    // down libgit2.  A worker still inside libgit2 (for example, blocked on
+    // recv() under git_remote_fetch) would otherwise race teardown and
+    // invoke undefined behaviour.  Five seconds is long enough to cover a
+    // transport error timeout but short enough to avoid a perceptibly slow
+    // exit when the remote is truly unreachable.
+
+    constexpr auto kOrphanJoinTimeout = std::chrono::seconds( 5 );
+    size_t         stuck = m_orphanRegistry.JoinAll( kOrphanJoinTimeout );
+
+    if( stuck > 0 )
+    {
+        wxLogTrace( traceGit,
+                    "LIBGIT_BACKEND::Shutdown(): %zu orphan git thread(s) "
+                    "did not finish within %lld ms; skipping libgit2 shutdown",
+                    stuck,
+                    static_cast<long long>( kOrphanJoinTimeout.count() ) );
+
+        // A stuck worker is still executing inside libgit2.  Calling
+        // git_libgit2_shutdown() now would free state the worker is actively
+        // reading.  Leave libgit2 initialised and let the OS reclaim
+        // resources when the process exits.
+
+        return;
+    }
+
     git_libgit2_shutdown();
 }
 
