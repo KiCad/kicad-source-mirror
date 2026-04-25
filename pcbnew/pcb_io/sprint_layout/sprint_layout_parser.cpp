@@ -1213,6 +1213,7 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
     text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
     text->SetKeepUpright( false );
+    text->SetVisible( aObj.filled != 0 );
 
     VECTOR2I pos = sprintToKicadPos( aObj.x, aObj.y );
     text->SetTextPos( pos );
@@ -1232,7 +1233,7 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
         thickness = std::max( 1, height / 8 );
 
     text->SetTextThickness( thickness );
-    text->SetTextAngle( EDA_ANGLE( aObj.rotation, DEGREES_T ) );
+    text->SetTextAngle( EDA_ANGLE( -aObj.rotation, DEGREES_T ) );
 
     if( aObj.mirror != 0 )
         text->SetMirrored( true );
