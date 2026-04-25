@@ -179,6 +179,7 @@ private:
     std::string readFixedString( size_t aMaxLen );
     std::string readVarString();
     void        skip( size_t aBytes );
+    void        seek( int aBytes );
 
     void parseBoardHeader( SPRINT_LAYOUT::BOARD_DATA& aBoard );
     void parseObject( SPRINT_LAYOUT::OBJECT& aObject, bool aIsTextChild = false );

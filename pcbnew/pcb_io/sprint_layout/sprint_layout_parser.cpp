@@ -180,6 +180,17 @@ void SPRINT_LAYOUT_PARSER::skip( size_t aBytes )
 }
 
 
+void SPRINT_LAYOUT_PARSER::seek( int aBytes )
+{
+    const uint8_t* seekTo = m_pos + aBytes;
+
+    if( seekTo > m_end || seekTo < m_start )
+        THROW_IO_ERROR( _( "Unexpected seek in Sprint Layout file" ) );
+
+    m_pos = seekTo;
+}
+
+
 // ============================================================================
 // Parsing
 // ============================================================================
@@ -310,17 +321,6 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
 {
     aObj.type = readUint8();
 
-    // Type 0 entries are deleted objects with zeroed type bytes. The original
-    // application has no special case for type 0 either -- its signed group-count
-    // loop and broad exception handler mask the parse failures. The 117-byte fixed
-    // size (1 type + 116 data) was validated against ku14194revb.lay6 (10 type-0
-    // objects, 0 bytes remaining).
-    if( aObj.type == 0 )
-    {
-        skip( 116 );
-        return;
-    }
-
     if( aObj.type != SPRINT_LAYOUT::OBJ_THT_PAD && aObj.type != SPRINT_LAYOUT::OBJ_POLY
         && aObj.type != SPRINT_LAYOUT::OBJ_CIRCLE && aObj.type != SPRINT_LAYOUT::OBJ_LINE
         && aObj.type != SPRINT_LAYOUT::OBJ_TEXT && aObj.type != SPRINT_LAYOUT::OBJ_SMD_PAD )
@@ -414,12 +414,23 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
     if( pointCount > MAX_POINTS )
         THROW_IO_ERROR( _( "Too many points in Sprint Layout object" ) );
 
-    aObj.points.resize( pointCount );
-
     for( uint32_t i = 0; i < pointCount; i++ )
     {
-        aObj.points[i].x = readFloat();
-        aObj.points[i].y = readFloat();
+        SPRINT_LAYOUT::POINT pt;
+
+        pt.x = readFloat();
+        pt.y = readFloat();
+
+        if( pt.x == 0.0f || std::isnormal( pt.x ) )
+        {
+            aObj.points.emplace_back( pt );
+        }
+        else
+        {
+            // ku14194revb.lay6 has polygons where pointCount is 5 but only 4 points are valid.
+            // seek back so that the next object type is read correctly, and ignore invalid points.
+            seek( -8 );
+        }
     }
 }
 
