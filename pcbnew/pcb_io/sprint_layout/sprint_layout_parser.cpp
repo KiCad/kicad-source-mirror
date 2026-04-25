@@ -28,6 +28,7 @@
 #include "sprint_layout_parser.h"
 
 #include <board.h>
+#include <board_item_container.h>
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <netinfo.h>
@@ -495,8 +496,8 @@ wxString SPRINT_LAYOUT_PARSER::convertString( const std::string& aStr ) const
 }
 
 
-BOARD* SPRINT_LAYOUT_PARSER::CreateBoard(
-        std::map<wxString, std::unique_ptr<FOOTPRINT>>& aFootprintMap, size_t aBoardIndex )
+BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOOTPRINT>>& aFootprintMap,
+                                          size_t                                          aBoardIndex )
 {
     if( aBoardIndex >= m_fileData.boards.size() )
         return nullptr;
@@ -521,82 +522,117 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard(
     else
         board->SetCopperLayerCount( 2 );
 
-    // Maps component_id to FOOTPRINT for grouping pads into components
+    // Maps component_id to FOOTPRINT for grouping component-owned objects
     std::map<uint16_t, FOOTPRINT*> componentMap;
     std::vector<std::vector<VECTOR2I>> outlineSegments;
 
-    // First pass: create footprints for all component IDs referenced by text objects
+    auto getOrCreateComponentFootprint = [&]( const SPRINT_LAYOUT::OBJECT& aObj ) -> FOOTPRINT*
+    {
+        if( aObj.component_id == 0 )
+            return nullptr;
+
+        auto it = componentMap.find( aObj.component_id );
+
+        if( it != componentMap.end() )
+            return it->second;
+
+        FOOTPRINT* fp = new FOOTPRINT( board.get() );
+
+        if( aObj.type == SPRINT_LAYOUT::OBJ_TEXT && !aObj.text.empty() )
+        {
+            fp->SetReference( convertString( aObj.text ) );
+        }
+        else
+        {
+            fp->SetReference( wxString::Format( wxS( "U%d" ), aObj.component_id ) );
+
+            for( PCB_FIELD* fd : fp->GetFields() )
+                fd->SetVisible( false );
+        }
+
+        if( aObj.type == SPRINT_LAYOUT::OBJ_TEXT && aObj.component.valid )
+        {
+            if( !aObj.component.comment.empty() )
+                fp->SetValue( convertString( aObj.component.comment ) );
+            else if( !aObj.net_name.empty() )
+                fp->SetValue( convertString( aObj.net_name ) );
+
+            if( !aObj.component.package.empty() )
+                fp->SetLibDescription( convertString( aObj.component.package ) );
+
+            fp->SetOrientationDegrees( aObj.component.rotation );
+        }
+
+        PCB_LAYER_ID layer = mapLayer( aObj.layer );
+        fp->SetLayer( ( layer == B_Cu || layer == B_SilkS ) ? B_Cu : F_Cu );
+
+        componentMap[aObj.component_id] = fp;
+        board->Add( fp );
+        return fp;
+    };
+
+    // First pass: create footprints from component text records where available
     for( const auto& obj : boardData.objects )
     {
-        if( obj.type == SPRINT_LAYOUT::OBJ_TEXT && obj.component_id > 0
-            && obj.component.valid )
-        {
-            if( componentMap.find( obj.component_id ) == componentMap.end() )
-            {
-                FOOTPRINT* fp = new FOOTPRINT( board.get() );
-                fp->SetReference( convertString( obj.text ) );
-
-                if( !obj.component.comment.empty() )
-                {
-                    fp->SetValue( convertString( obj.component.comment ) );
-                }
-
-                if( !obj.component.package.empty() )
-                {
-                    fp->SetLibDescription( convertString( obj.component.package ) );
-                }
-
-                double rotDeg = obj.component.rotation;
-                fp->SetOrientationDegrees( rotDeg );
-
-                PCB_LAYER_ID layer = mapLayer( obj.layer );
-
-                if( layer == B_Cu || layer == B_SilkS )
-                    fp->SetLayer( B_Cu );
-                else
-                    fp->SetLayer( F_Cu );
-
-                componentMap[obj.component_id] = fp;
-                board->Add( fp );
-
-                wxString fpKey = wxString::Format( wxS( "SprintLayout_%s" ),
-                                                   convertString( obj.text ) );
-                FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( fp->Clone() );
-                fpCopy->SetParent( nullptr );
-                aFootprintMap[fpKey] = std::unique_ptr<FOOTPRINT>( fpCopy );
-            }
-        }
+        if( obj.type == SPRINT_LAYOUT::OBJ_TEXT && obj.component_id > 0 && obj.component.valid )
+            getOrCreateComponentFootprint( obj );
     }
 
-    // Second pass: process all objects
+    // Second pass: process all objects in board/footprint context
     for( const auto& obj : boardData.objects )
     {
+        BOARD_ITEM_CONTAINER* container = board.get();
+
+        if( FOOTPRINT* fp = getOrCreateComponentFootprint( obj ) )
+            container = fp;
+
         switch( obj.type )
         {
         case SPRINT_LAYOUT::OBJ_THT_PAD:
         case SPRINT_LAYOUT::OBJ_SMD_PAD:
-            addPadToBoard( board.get(), obj, componentMap, aFootprintMap );
+            processPad( container, obj );
             break;
 
         case SPRINT_LAYOUT::OBJ_LINE:
-            addLineToBoard( board.get(), obj, outlineSegments );
+            processLine( container, obj, outlineSegments );
             break;
 
         case SPRINT_LAYOUT::OBJ_POLY:
-            addPolyToBoard( board.get(), obj, outlineSegments );
+            processPoly( container, obj, outlineSegments );
             break;
 
         case SPRINT_LAYOUT::OBJ_CIRCLE:
-            addCircleToBoard( board.get(), obj, outlineSegments );
+            processCircle( container, obj, outlineSegments );
             break;
 
         case SPRINT_LAYOUT::OBJ_TEXT:
-            addTextToBoard( board.get(), obj );
+            processText( container, obj );
             break;
 
         default:
             break;
         }
+    }
+
+    // Re-anchor footprints after all elements are added.
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        BOX2I fpBbox = fp->GetBoundingHull().BBox();
+
+        VECTOR2I anchor = fpBbox.GetCenter();
+        fp->SetPosition( anchor );
+
+        VECTOR2I anchorShift( -anchor.x, -anchor.y );
+        RotatePoint( anchorShift, fp->GetOrientation() );
+        fp->MoveAnchorPosition( anchorShift );
+    }
+
+    for( const auto& [ componentId, fp ] : componentMap )
+    {
+        wxString fpKey = wxString::Format( wxS( "SprintLayout_%s" ), fp->GetReference() );
+        FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( fp->Clone() );
+        fpCopy->SetParent( nullptr );
+        aFootprintMap[fpKey] = std::unique_ptr<FOOTPRINT>( fpCopy );
     }
 
     buildOutline( board.get(), outlineSegments, boardData );
@@ -669,41 +705,20 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard(
 }
 
 
-void SPRINT_LAYOUT_PARSER::addPadToBoard(
-        BOARD* aBoard, const SPRINT_LAYOUT::OBJECT& aObj,
-        std::map<uint16_t, FOOTPRINT*>& aComponentMap,
-        std::map<wxString, std::unique_ptr<FOOTPRINT>>& aFootprintMap )
+void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj )
 {
-    FOOTPRINT* fp = nullptr;
+    BOARD* board = aContainer ? aContainer->GetBoard() : nullptr;
+    FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aContainer );
 
-    // Find or create the parent footprint
-    if( aObj.component_id > 0 )
-    {
-        auto it = aComponentMap.find( aObj.component_id );
-
-        if( it != aComponentMap.end() )
-        {
-            fp = it->second;
-        }
-        else
-        {
-            // Create an anonymous footprint for this component
-            fp = new FOOTPRINT( aBoard );
-            fp->SetReference( wxString::Format( wxS( "U%d" ), aObj.component_id ) );
-            fp->SetLayer( F_Cu );
-            aComponentMap[aObj.component_id] = fp;
-            aBoard->Add( fp );
-        }
-    }
-    else
+    if( !fp )
     {
         // Standalone pad without a component gets its own footprint
-        fp = new FOOTPRINT( aBoard );
+        fp = new FOOTPRINT( board );
         fp->SetReference( wxString::Format( wxS( "PAD%d" ),
-                static_cast<int>( aBoard->Footprints().size() ) ) );
+                          static_cast<int>( board->Footprints().size() ) ) );
         fp->Reference().SetVisible( false );
         fp->SetLayer( F_Cu );
-        aBoard->Add( fp );
+        aContainer->Add( fp );
     }
 
     PAD* pad = new PAD( fp );
@@ -735,17 +750,29 @@ void SPRINT_LAYOUT_PARSER::addPadToBoard(
 
     pad->SetPosition( pos );
 
-    if( fp->Pads().empty() )
-        fp->SetPosition( pos );
-
     if( aObj.type == SPRINT_LAYOUT::OBJ_THT_PAD )
     {
-        if( aObj.plated == 0 )
-            pad->SetAttribute( PAD_ATTRIB::NPTH );
-        else
-            pad->SetAttribute( PAD_ATTRIB::PTH );
+        PCB_LAYER_ID padLayer = mapLayer( aObj.layer );
 
-        pad->SetLayerSet( PAD::PTHMask() );
+        if( aObj.plated == 0 )
+        {
+            pad->SetAttribute( PAD_ATTRIB::NPTH );
+            
+            if( padLayer == B_Cu || padLayer == B_SilkS )
+            {
+                pad->SetLayerSet( LSET( { B_Cu, B_Mask } ) );
+                fp->SetLayer( B_Cu );
+            }
+            else
+            {
+                pad->SetLayerSet( LSET( { F_Cu, F_Mask } ) );
+            }
+        }
+        else
+        {
+            pad->SetAttribute( PAD_ATTRIB::PTH );
+            pad->SetLayerSet( PAD::PTHMask() );
+        }
 
         int outerDia = sprintToKicadCoord( aObj.outer * 2.0f );
         int drillDia = sprintToKicadCoord( aObj.inner * 2.0f );
@@ -871,12 +898,12 @@ void SPRINT_LAYOUT_PARSER::addPadToBoard(
     if( !aObj.net_name.empty() )
     {
         wxString netName = convertString( aObj.net_name );
-        NETINFO_ITEM* net = aBoard->FindNet( netName );
+        NETINFO_ITEM* net = board->FindNet( netName );
 
         if( !net )
         {
-            net = new NETINFO_ITEM( aBoard, netName );
-            aBoard->Add( net );
+            net = new NETINFO_ITEM( board, netName );
+            board->Add( net );
         }
 
         pad->SetNet( net );
@@ -889,9 +916,8 @@ void SPRINT_LAYOUT_PARSER::addPadToBoard(
 }
 
 
-void SPRINT_LAYOUT_PARSER::addLineToBoard(
-        BOARD* aBoard, const SPRINT_LAYOUT::OBJECT& aObj,
-        std::vector<std::vector<VECTOR2I>>& aOutlineSegments )
+void SPRINT_LAYOUT_PARSER::processLine( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
+                                        std::vector<std::vector<VECTOR2I>>& aOutlineSegments )
 {
     if( aObj.points.size() < 2 )
         return;
@@ -916,24 +942,24 @@ void SPRINT_LAYOUT_PARSER::addLineToBoard(
 
     for( size_t i = 0; i + 1 < aObj.points.size(); i++ )
     {
-        PCB_SHAPE* shape = new PCB_SHAPE( aBoard );
+        PCB_SHAPE* shape = new PCB_SHAPE( aContainer );
         shape->SetShape( SHAPE_T::SEGMENT );
         shape->SetLayer( layer );
         shape->SetWidth( width );
         shape->SetStart( sprintToKicadPos( aObj.points[i].x, aObj.points[i].y ) );
         shape->SetEnd( sprintToKicadPos( aObj.points[i + 1].x, aObj.points[i + 1].y ) );
-        aBoard->Add( shape );
+        aContainer->Add( shape );
     }
 }
 
 
-void SPRINT_LAYOUT_PARSER::addPolyToBoard(
-        BOARD* aBoard, const SPRINT_LAYOUT::OBJECT& aObj,
-        std::vector<std::vector<VECTOR2I>>& aOutlineSegments )
+void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
+                                        std::vector<std::vector<VECTOR2I>>& aOutlineSegments )
 {
     if( aObj.points.size() < 2 )
         return;
 
+    BOARD* board = aContainer ? aContainer->GetBoard() : nullptr;
     PCB_LAYER_ID layer = mapLayer( aObj.layer );
 
     if( layer == Edge_Cuts )
@@ -953,7 +979,7 @@ void SPRINT_LAYOUT_PARSER::addPolyToBoard(
     if( isCutout && LSET::AllCuMask().Contains( layer ) && aObj.points.size() >= 3 )
     {
         // Cutout area for ground plane exclusion -> rule area (keepout zone)
-        ZONE* zone = new ZONE( aBoard );
+        ZONE* zone = new ZONE( aContainer );
         zone->SetLayer( layer );
         zone->SetIsRuleArea( true );
         zone->SetDoNotAllowZoneFills( true );
@@ -972,12 +998,12 @@ void SPRINT_LAYOUT_PARSER::addPolyToBoard(
         }
 
         zone->AddPolygon( outline.COutline( 0 ) );
-        aBoard->Add( zone );
+        aContainer->Add( zone );
     }
     else if( isFilled && LSET::AllCuMask().Contains( layer ) && aObj.points.size() >= 3 )
     {
         // Filled polygon on copper -> ZONE
-        ZONE* zone = new ZONE( aBoard );
+        ZONE* zone = new ZONE( aContainer );
         zone->SetLayer( layer );
         zone->SetIsRuleArea( false );
         zone->SetDoNotAllowZoneFills( false );
@@ -996,23 +1022,23 @@ void SPRINT_LAYOUT_PARSER::addPolyToBoard(
         if( !aObj.net_name.empty() )
         {
             wxString netName = convertString( aObj.net_name );
-            NETINFO_ITEM* net = aBoard->FindNet( netName );
+            NETINFO_ITEM* net = board->FindNet( netName );
 
             if( !net )
             {
-                net = new NETINFO_ITEM( aBoard, netName );
-                aBoard->Add( net );
+                net = new NETINFO_ITEM( board, netName );
+                board->Add( net );
             }
 
             zone->SetNet( net );
         }
 
-        aBoard->Add( zone );
+        aContainer->Add( zone );
     }
     else if( isFilled && aObj.points.size() >= 3 )
     {
         // Filled polygon on non-copper layer -> filled PCB_SHAPE
-        PCB_SHAPE* shape = new PCB_SHAPE( aBoard );
+        PCB_SHAPE* shape = new PCB_SHAPE( aContainer );
         shape->SetShape( SHAPE_T::POLY );
         shape->SetFilled( true );
         shape->SetLayer( layer );
@@ -1028,7 +1054,7 @@ void SPRINT_LAYOUT_PARSER::addPolyToBoard(
         }
 
         shape->SetPolyShape( polySet );
-        aBoard->Add( shape );
+        aContainer->Add( shape );
     }
     else
     {
@@ -1040,21 +1066,20 @@ void SPRINT_LAYOUT_PARSER::addPolyToBoard(
 
         for( size_t i = 0; i + 1 < aObj.points.size(); i++ )
         {
-            PCB_SHAPE* shape = new PCB_SHAPE( aBoard );
+            PCB_SHAPE* shape = new PCB_SHAPE( aContainer );
             shape->SetShape( SHAPE_T::SEGMENT );
             shape->SetLayer( layer );
             shape->SetWidth( width );
             shape->SetStart( sprintToKicadPos( aObj.points[i].x, aObj.points[i].y ) );
             shape->SetEnd( sprintToKicadPos( aObj.points[i + 1].x, aObj.points[i + 1].y ) );
-            aBoard->Add( shape );
+            aContainer->Add( shape );
         }
     }
 }
 
 
-void SPRINT_LAYOUT_PARSER::addCircleToBoard(
-        BOARD* aBoard, const SPRINT_LAYOUT::OBJECT& aObj,
-        std::vector<std::vector<VECTOR2I>>& aOutlineSegments )
+void SPRINT_LAYOUT_PARSER::processCircle( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
+                                          std::vector<std::vector<VECTOR2I>>& aOutlineSegments )
 {
     PCB_LAYER_ID layer = mapLayer( aObj.layer );
     VECTOR2I center = sprintToKicadPos( aObj.x, aObj.y );
@@ -1116,7 +1141,7 @@ void SPRINT_LAYOUT_PARSER::addCircleToBoard(
         return;
     }
 
-    PCB_SHAPE* shape = new PCB_SHAPE( aBoard );
+    PCB_SHAPE* shape = new PCB_SHAPE( aContainer );
     shape->SetLayer( layer );
     shape->SetWidth( width );
 
@@ -1147,18 +1172,16 @@ void SPRINT_LAYOUT_PARSER::addCircleToBoard(
         shape->SetArcAngleAndEnd( EDA_ANGLE( arcAngle, DEGREES_T ), true );
     }
 
-    aBoard->Add( shape );
+    aContainer->Add( shape );
 }
 
 
-void SPRINT_LAYOUT_PARSER::addTextToBoard( BOARD* aBoard,
-                                           const SPRINT_LAYOUT::OBJECT& aObj )
+void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj )
 {
-    if( aObj.text.empty() )
-        return;
+    FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aContainer );
 
-    // Skip component reference/value text that's already on the footprint
-    if( aObj.component_id > 0 )
+    // Skip component reference/value text only when it is not attached to a footprint.
+    if( aObj.component_id > 0 && !fp )
         return;
 
     PCB_LAYER_ID layer = mapLayer( aObj.layer );
@@ -1166,14 +1189,33 @@ void SPRINT_LAYOUT_PARSER::addTextToBoard( BOARD* aBoard,
     if( layer == Edge_Cuts )
         return;
 
-    PCB_TEXT* text = new PCB_TEXT( aBoard );
+    PCB_TEXT* text = nullptr;
+    bool      add = false;
+
+    if( fp && aObj.tht_shape > 0 && aObj.tht_shape <= 2 )
+    {
+        if( aObj.tht_shape == 1 )
+            text = &fp->Reference();
+        else if( aObj.tht_shape == 2 )
+            text = &fp->Value();
+    }
+    else
+    {
+        if( aObj.text.empty() )
+            return;
+
+        text = new PCB_TEXT( aContainer );
+        add = true;
+    }
+
     text->SetLayer( layer );
     text->SetText( convertString( aObj.text ) );
     text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+    text->SetKeepUpright( false );
 
     VECTOR2I pos = sprintToKicadPos( aObj.x, aObj.y );
-    text->SetPosition( pos );
+    text->SetTextPos( pos );
 
     int height = sprintToKicadCoord( aObj.outer ) * 0.8;
 
@@ -1190,23 +1232,18 @@ void SPRINT_LAYOUT_PARSER::addTextToBoard( BOARD* aBoard,
         thickness = std::max( 1, height / 8 );
 
     text->SetTextThickness( thickness );
-
-    if( aObj.rotation != 0 )
-    {
-        double angleDeg = static_cast<double>( aObj.rotation ) / 1000.0;
-        text->SetTextAngle( EDA_ANGLE( angleDeg, DEGREES_T ) );
-    }
+    text->SetTextAngle( EDA_ANGLE( aObj.rotation, DEGREES_T ) );
 
     if( aObj.mirror != 0 )
         text->SetMirrored( true );
 
-    aBoard->Add( text );
+    if( add )
+        aContainer->Add( text );
 }
 
 
-void SPRINT_LAYOUT_PARSER::buildOutline(
-        BOARD* aBoard, std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
-        const SPRINT_LAYOUT::BOARD_DATA& aBoardData )
+void SPRINT_LAYOUT_PARSER::buildOutline( BOARD* aBoard, std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
+                                         const SPRINT_LAYOUT::BOARD_DATA& aBoardData )
 {
     // Try to join outline segments into closed polygons
     // Similar to OpenBoardView's outline_order_segments algorithm

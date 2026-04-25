@@ -38,6 +38,7 @@
 #include <math/vector2d.h>
 
 class BOARD;
+class BOARD_ITEM_CONTAINER;
 class FOOTPRINT;
 class PAD;
 class PCB_SHAPE;
@@ -189,23 +190,20 @@ private:
     VECTOR2I     sprintToKicadPos( float aX, float aY ) const;
     wxString     convertString( const std::string& aStr ) const;
 
-    void addPadToBoard( BOARD* aBoard, const SPRINT_LAYOUT::OBJECT& aObj,
-                        std::map<uint16_t, FOOTPRINT*>& aComponentMap,
-                        std::map<wxString, std::unique_ptr<FOOTPRINT>>& aFootprintMap );
+    void processPad( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj );
 
-    void addCircleToBoard( BOARD* aBoard, const SPRINT_LAYOUT::OBJECT& aObj,
-                           std::vector<std::vector<VECTOR2I>>& aOutlineSegments );
+    void processCircle( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
+                        std::vector<std::vector<VECTOR2I>>& aOutlineSegments );
 
-    void addLineToBoard( BOARD* aBoard, const SPRINT_LAYOUT::OBJECT& aObj,
-                         std::vector<std::vector<VECTOR2I>>& aOutlineSegments );
+    void processLine( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
+                      std::vector<std::vector<VECTOR2I>>& aOutlineSegments );
 
-    void addPolyToBoard( BOARD* aBoard, const SPRINT_LAYOUT::OBJECT& aObj,
-                         std::vector<std::vector<VECTOR2I>>& aOutlineSegments );
+    void processPoly( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
+                      std::vector<std::vector<VECTOR2I>>& aOutlineSegments );
 
-    void addTextToBoard( BOARD* aBoard, const SPRINT_LAYOUT::OBJECT& aObj );
+    void processText( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj );
 
-    void buildOutline( BOARD* aBoard,
-                       std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
+    void buildOutline( BOARD* aBoard, std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
                        const SPRINT_LAYOUT::BOARD_DATA& aBoardData );
 
     SPRINT_LAYOUT::FILE_DATA    m_fileData;
