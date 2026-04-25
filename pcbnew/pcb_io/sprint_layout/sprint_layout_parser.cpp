@@ -553,9 +553,7 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
         if( aObj.type == SPRINT_LAYOUT::OBJ_TEXT && aObj.component.valid )
         {
             if( !aObj.component.comment.empty() )
-                fp->SetValue( convertString( aObj.component.comment ) );
-            else if( !aObj.net_name.empty() )
-                fp->SetValue( convertString( aObj.net_name ) );
+                fp->GetField( FIELD_T::DESCRIPTION )->SetText( convertString( aObj.component.comment ) );
 
             if( !aObj.component.package.empty() )
                 fp->SetLibDescription( convertString( aObj.component.package ) );
