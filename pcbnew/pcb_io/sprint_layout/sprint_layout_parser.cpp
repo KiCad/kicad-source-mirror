@@ -455,9 +455,15 @@ PCB_LAYER_ID SPRINT_LAYOUT_PARSER::mapLayer( uint8_t aSprintLayer ) const
 
 int SPRINT_LAYOUT_PARSER::sprintToKicadCoord( float aValue ) const
 {
-    // Sprint Layout uses 1/10000 mm, KiCad uses nanometers (1 nm = 1e-6 mm)
-    // 1/10000 mm = 100 nm
-    double nm = static_cast<double>( aValue ) * 100.0;
+    // Sprint Layout 6 uses 1/10000 mm
+    // Older versions seem to use 1/100 mm
+    // KiCad uses nanometers (1 nm = 1e-6 mm)
+    double nm;
+
+    if( m_fileData.version >= 6 )
+        nm = static_cast<double>( aValue ) * 100.0; // 100 nm
+    else
+        nm = static_cast<double>( aValue ) * 10000.0; // 10 um
 
     if( nm > std::numeric_limits<int>::max() || nm < std::numeric_limits<int>::min() )
         THROW_IO_ERROR( _( "Coordinate value out of range in Sprint Layout file" ) );
