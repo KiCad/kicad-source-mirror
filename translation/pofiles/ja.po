@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-16 19:04+0300\n"
-"PO-Revision-Date: 2026-04-24 17:31+0000\n"
+"PO-Revision-Date: 2026-04-26 01:50+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -588,11 +588,11 @@ msgstr "'未実装(DNP)' に設定されている場合でも 3D モデルを表
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:359
 msgid "Show Model Bounding Boxes"
-msgstr "モデルをバウンディング ボックスで表示"
+msgstr "モデルを境界ボックスで表示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:360
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "リアルタイム レンダラーでモデルのバウンディング ボックスを表示"
+msgstr "リアルタイム レンダラーでモデルの境界ボックスを表示"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:367
 msgid "Show 3D Navigator"
@@ -882,7 +882,7 @@ msgstr "未実装(DNP)が指定されたモデル"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
 msgid "Model Bounding Boxes"
-msgstr "モデルのバウンディング ボックス"
+msgstr "モデルの境界ボックス"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:125 common/layer_id.cpp:126
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -1482,7 +1482,7 @@ msgstr "レンダリング オプション"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
-msgstr "モデルのバウンディング ボックスを表示"
+msgstr "モデルの境界ボックスを表示"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
 msgid "Show copper and tech layers thickness (slow)"
@@ -10875,7 +10875,7 @@ msgstr "非アクティブのレイヤーの表示を標準、ぼかし、非表
 
 #: common/tool/actions.cpp:1221
 msgid "Draw Bounding Boxes"
-msgstr "バウンディング ボックスを描画"
+msgstr "境界ボックスを描画"
 
 #: common/tool/actions.cpp:1228 pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
@@ -34519,11 +34519,11 @@ msgstr "内層配線"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Microstrip Line"
-msgstr "マイクロストリップライン"
+msgstr "マイクロストリップ線路"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:24
 msgid "Coupled Microstrip Line"
-msgstr "カップルド マイクロストリップライン"
+msgstr "マイクロストリップ結合線路"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:25
 msgid "Stripline"
