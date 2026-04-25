@@ -1233,7 +1233,7 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
     text->SetTextThickness( thickness );
     text->SetTextAngle( EDA_ANGLE( -aObj.rotation, DEGREES_T ) );
 
-    if( aObj.mirror != 0 )
+    if( aObj.mirror != 0 || aObj.thermal_width != 0 )
         text->SetMirrored( true );
 
     if( add )
