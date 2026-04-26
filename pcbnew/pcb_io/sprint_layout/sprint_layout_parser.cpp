@@ -674,12 +674,12 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
         ZONE* zone = new ZONE( board.get() );
         zone->SetLayer( gp.layer );
         zone->SetIsRuleArea( false );
-        zone->SetZoneName( wxString::Format( wxS( "GND_PLANE_%s" ),
-                                              board->GetLayerName( gp.layer ) ) );
+        zone->SetZoneName( wxString::Format( wxS( "GND_PLANE_%s" ), board->GetLayerName( gp.layer ) ) );
         zone->SetLocalClearance( std::optional<int>( pcbIUScale.mmToIU( 0.3 ) ) );
         zone->SetThermalReliefGap( pcbIUScale.mmToIU( 0.5 ) );
         zone->SetThermalReliefSpokeWidth( pcbIUScale.mmToIU( 0.5 ) );
         zone->SetAssignedPriority( 0 );
+        zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
 
         SHAPE_POLY_SET outline;
         outline.NewOutline();
