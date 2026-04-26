@@ -490,8 +490,7 @@ void PCB_IO_PADS_BINARY::loadFootprints()
         footprint->SetFPID( fpid );
         footprint->SetValue( PADS_COMMON::ConvertText( padsPart.decal ) );
 
-        footprint->SetPosition( VECTOR2I( scaleCoord( padsPart.location.x, true ),
-                                           scaleCoord( padsPart.location.y, false ) ) );
+        footprint->SetPosition( scalePoint( padsPart.location.x, padsPart.location.y ) );
         footprint->SetOrientation( EDA_ANGLE( padsPart.rotation, DEGREES_T ) );
         footprint->SetLayer( F_Cu );
 
@@ -677,9 +676,9 @@ void PCB_IO_PADS_BINARY::setBoardOutlineArc( PCB_SHAPE* aShape, const PADS_IO::A
     double midX = aCurr.arc.cx + aCurr.arc.radius * std::cos( midAngle );
     double midY = aCurr.arc.cy + aCurr.arc.radius * std::sin( midAngle );
 
-    VECTOR2I start( scaleCoord( aPrev.x, true ), scaleCoord( aPrev.y, false ) );
-    VECTOR2I mid( scaleCoord( midX, true ), scaleCoord( midY, false ) );
-    VECTOR2I end( scaleCoord( aCurr.x, true ), scaleCoord( aCurr.y, false ) );
+    VECTOR2I start = scalePoint( aPrev.x, aPrev.y );
+    VECTOR2I mid = scalePoint( midX, midY );
+    VECTOR2I end = scalePoint( aCurr.x, aCurr.y );
 
     aShape->SetArcGeometry( start, mid, end );
 }
@@ -711,10 +710,8 @@ void PCB_IO_PADS_BINARY::loadBoardOutline()
             else
             {
                 shape->SetShape( SHAPE_T::SEGMENT );
-                shape->SetStart( VECTOR2I( scaleCoord( p1.x, true ),
-                                           scaleCoord( p1.y, false ) ) );
-                shape->SetEnd( VECTOR2I( scaleCoord( p2.x, true ),
-                                         scaleCoord( p2.y, false ) ) );
+                shape->SetStart( scalePoint( p1.x, p1.y ) );
+                shape->SetEnd( scalePoint( p2.x, p2.y ) );
             }
 
             shape->SetWidth( scaleSize( polyline.width ) );
@@ -741,10 +738,8 @@ void PCB_IO_PADS_BINARY::loadBoardOutline()
                 else
                 {
                     shape->SetShape( SHAPE_T::SEGMENT );
-                    shape->SetStart( VECTOR2I( scaleCoord( pLast.x, true ),
-                                               scaleCoord( pLast.y, false ) ) );
-                    shape->SetEnd( VECTOR2I( scaleCoord( pFirst.x, true ),
-                                             scaleCoord( pFirst.y, false ) ) );
+                    shape->SetStart( scalePoint( pLast.x, pLast.y ) );
+                    shape->SetEnd( scalePoint( pFirst.x, pFirst.y ) );
                 }
 
                 shape->SetWidth( scaleSize( polyline.width ) );
@@ -821,16 +816,15 @@ void PCB_IO_PADS_BINARY::loadTracksAndVias()
                 const PADS_IO::ARC_POINT& p1 = track_def.points[i];
                 const PADS_IO::ARC_POINT& p2 = track_def.points[i + 1];
 
-                VECTOR2I start( scaleCoord( p1.x, true ), scaleCoord( p1.y, false ) );
-                VECTOR2I end( scaleCoord( p2.x, true ), scaleCoord( p2.y, false ) );
+                VECTOR2I start = scalePoint( p1.x, p1.y );
+                VECTOR2I end = scalePoint( p2.x, p2.y );
 
                 if( ( start - end ).EuclideanNorm() < 1000 )
                     continue;
 
                 if( p2.is_arc )
                 {
-                    VECTOR2I center( scaleCoord( p2.arc.cx, true ),
-                                     scaleCoord( p2.arc.cy, false ) );
+                    VECTOR2I center = scalePoint( p2.arc.cx, p2.arc.cy );
 
                     bool clockwise = ( p2.arc.delta_angle < 0 );
 
@@ -865,8 +859,7 @@ void PCB_IO_PADS_BINARY::loadTracksAndVias()
 
         for( const auto& via_def : route.vias )
         {
-            VECTOR2I pos( scaleCoord( via_def.location.x, true ),
-                          scaleCoord( via_def.location.y, false ) );
+            VECTOR2I pos = scalePoint( via_def.location.x, via_def.location.y );
 
             if( placedThroughVias.count( std::make_pair( pos.x, pos.y ) ) )
                 continue;
@@ -930,8 +923,7 @@ void PCB_IO_PADS_BINARY::loadTexts()
         EDA_ANGLE textAngle( pads_text.rotation, DEGREES_T );
         text->SetTextAngle( textAngle );
 
-        VECTOR2I pos( scaleCoord( pads_text.location.x, true ),
-                      scaleCoord( pads_text.location.y, false ) );
+        VECTOR2I pos = scalePoint( pads_text.location.x, pads_text.location.y );
         VECTOR2I textShift( -ADVANCED_CFG::GetCfg().m_PadsTextAnchorOffsetNm, 0 );
         RotatePoint( textShift, textAngle );
         text->SetPosition( pos + textShift );
@@ -990,7 +982,7 @@ void PCB_IO_PADS_BINARY::loadCopperShapes()
         SHAPE_LINE_CHAIN outline;
 
         for( const PADS_IO::ARC_POINT& pt : copper.outline )
-            outline.Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
+            outline.Append( scalePoint( pt.x, pt.y ) );
 
         outline.SetClosed( true );
         zone->Outline()->AddOutline( outline );
@@ -1041,7 +1033,7 @@ void PCB_IO_PADS_BINARY::loadZones()
 
         for( const auto& pt : pour_def.points )
         {
-            zone->Outline()->Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
+            zone->Outline()->Append( scalePoint( pt.x, pt.y ) );
         }
 
         if( zone->GetNumCorners() == 0 )
@@ -1166,7 +1158,7 @@ void PCB_IO_PADS_BINARY::loadKeepouts()
         SHAPE_LINE_CHAIN koChain;
 
         for( const PADS_IO::ARC_POINT& pt : ko.outline )
-            koChain.Append( scaleCoord( pt.x, true ), scaleCoord( pt.y, false ) );
+            koChain.Append( scalePoint( pt.x, pt.y ) );
 
         if( ko.outline.size() > 2 )
         {
@@ -1174,7 +1166,7 @@ void PCB_IO_PADS_BINARY::loadKeepouts()
             const PADS_IO::ARC_POINT& last = ko.outline.back();
 
             if( std::abs( first.x - last.x ) > 0.001 || std::abs( first.y - last.y ) > 0.001 )
-                koChain.Append( scaleCoord( first.x, true ), scaleCoord( first.y, false ) );
+                koChain.Append( scalePoint( first.x, first.y ) );
         }
 
         koChain.SetClosed( true );
@@ -1200,8 +1192,8 @@ void PCB_IO_PADS_BINARY::loadDimensions()
 
         PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_loadBoard, PCB_DIM_ALIGNED_T );
 
-        VECTOR2I start( scaleCoord( dim.points[0].x, true ), scaleCoord( dim.points[0].y, false ) );
-        VECTOR2I end( scaleCoord( dim.points[1].x, true ), scaleCoord( dim.points[1].y, false ) );
+        VECTOR2I start = scalePoint( dim.points[0].x, dim.points[0].y );
+        VECTOR2I end = scalePoint( dim.points[1].x, dim.points[1].y );
 
         // PADS horizontal/vertical dimensions measure only the X or Y projection, so project
         // the end onto the measured axis to keep the PCB_DIM_ALIGNED line square.
@@ -1444,6 +1436,12 @@ int PCB_IO_PADS_BINARY::scaleCoord( double aVal, bool aIsX ) const
     return static_cast<int>( std::clamp( result,
                                          static_cast<long long>( std::numeric_limits<int>::min() ),
                                          static_cast<long long>( std::numeric_limits<int>::max() ) ) );
+}
+
+
+VECTOR2I PCB_IO_PADS_BINARY::scalePoint( double aX, double aY ) const
+{
+    return VECTOR2I( scaleCoord( aX, true ), scaleCoord( aY, false ) );
 }
 
 

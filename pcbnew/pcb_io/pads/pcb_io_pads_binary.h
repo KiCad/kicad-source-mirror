@@ -22,6 +22,7 @@
 #include <pcb_io/pcb_io.h>
 #include <pcb_io/common/plugin_common_layer_mapping.h>
 #include <io/pads/pads_unit_converter.h>
+#include <math/vector2d.h>
 #include "pads_layer_mapper.h"
 
 #include <map>
@@ -61,6 +62,9 @@ public:
 private:
     int          scaleSize( double aVal ) const;
     int          scaleCoord( double aVal, bool aIsX ) const;
+
+    /// Scale a board point to a KiCad position, applying the per-axis origin and the Y-flip.
+    VECTOR2I     scalePoint( double aX, double aY ) const;
     PCB_LAYER_ID getMappedLayer( int aPadsLayer ) const;
     void         ensureNet( const std::string& aNetName );
 
