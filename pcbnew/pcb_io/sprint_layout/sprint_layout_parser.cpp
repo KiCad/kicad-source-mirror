@@ -534,7 +534,7 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
         board->SetCopperLayerCount( 2 );
 
     // Maps component_id to FOOTPRINT for grouping component-owned objects
-    std::map<uint16_t, FOOTPRINT*> componentMap;
+    std::map<uint16_t, FOOTPRINT*>     componentMap;
     std::vector<std::vector<VECTOR2I>> outlineSegments;
 
     auto getOrCreateComponentFootprint = [&]( const SPRINT_LAYOUT::OBJECT& aObj ) -> FOOTPRINT*
@@ -716,15 +716,16 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
 
 void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj )
 {
-    BOARD* board = aContainer ? aContainer->GetBoard() : nullptr;
+    BOARD*     board = aContainer ? aContainer->GetBoard() : nullptr;
     FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aContainer );
+    bool       standaloneFp = false;
 
     if( !fp )
     {
         // Standalone pad without a component gets its own footprint
+        standaloneFp = true;
         fp = new FOOTPRINT( board );
-        fp->SetReference( wxString::Format( wxS( "PAD%d" ),
-                          static_cast<int>( board->Footprints().size() ) ) );
+        fp->SetReference( wxString::Format( wxS( "PAD%d" ), static_cast<int>( board->Footprints().size() ) ) );
         fp->Reference().SetVisible( false );
         fp->SetLayer( F_Cu );
         aContainer->Add( fp );
@@ -736,9 +737,12 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
     // position (depends on the Sprint Layout version that created the file).
     // The points array always stores absolute coordinates, so derive the pad
     // center from the points when available.
-    VECTOR2I pos;
+    // The rotation field for pads (both TH and SMD) is unknown, so detect 
+    // the pad angle from the points when possible.
+    VECTOR2I  ptsCenter;
+    EDA_ANGLE ptsAngle;
 
-    if( aObj.type == SPRINT_LAYOUT::OBJ_SMD_PAD && !aObj.points.empty() )
+    if( !aObj.points.empty() )
     {
         double cx = 0, cy = 0;
 
@@ -750,14 +754,27 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
 
         cx /= static_cast<double>( aObj.points.size() );
         cy /= static_cast<double>( aObj.points.size() );
-        pos = sprintToKicadPos( static_cast<float>( cx ), static_cast<float>( cy ) );
-    }
-    else
-    {
-        pos = sprintToKicadPos( aObj.x, aObj.y );
-    }
+        ptsCenter = sprintToKicadPos( static_cast<float>( cx ), static_cast<float>( cy ) );
 
-    pad->SetPosition( pos );
+        std::vector<VECTOR2I> pts;
+
+        for( const SPRINT_LAYOUT::POINT& pt : aObj.points )
+            pts.emplace_back( sprintToKicadPos( pt.x, pt.y ) );
+
+        if( pts.size() == 2 || pts.size() == 4 ) // Oval, circle or rectangular pads
+        {
+            ptsAngle = EDA_ANGLE( pts[1] - pts[0] );
+        }
+        else if( pts.size() == 8 ) // Octagonal pads
+        {
+            ptsAngle = EDA_ANGLE( pts[2] - pts[1] );
+        }
+        else
+        {
+            wxFAIL_MSG( wxString::Format( "Unknown pad type %d shape %d with %zu points", int( aObj.type ),
+                                          int( aObj.tht_shape ), aObj.points.size() ) );
+        }
+    }
 
     if( aObj.type == SPRINT_LAYOUT::OBJ_THT_PAD )
     {
@@ -851,6 +868,11 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
             pad->SetLocalZoneConnection( ZONE_CONNECTION::NONE );
         else
             pad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );
+
+        VECTOR2I padPos = sprintToKicadPos( aObj.x, aObj.y );
+
+        pad->SetPosition( padPos );
+        pad->Rotate( padPos, -ptsAngle );
     }
     else
     {
@@ -861,25 +883,29 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
         if( padLayer == B_Cu || padLayer == B_SilkS )
         {
             pad->SetLayerSet( LSET( { B_Cu, B_Paste, B_Mask } ) );
-            fp->SetLayer( B_Cu );
+
+            if( standaloneFp )
+                fp->SetLayer( B_Cu );
         }
         else
         {
-            pad->SetLayerSet( PAD::SMDMask() );
+            pad->SetLayerSet( LSET( { F_Cu, F_Paste, F_Mask } ) );
         }
-
-        int width = sprintToKicadCoord( aObj.outer * 2.0f );
-        int height = sprintToKicadCoord( aObj.inner * 2.0f );
-
-        if( height <= 0 )
-            height = width;
-
-        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( width, height ) );
 
         if( aObj.tht_shape == SPRINT_LAYOUT::THT_SHAPE_CIRCLE )
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
         else
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+
+        int width = sprintToKicadCoord( aObj.outer );
+        int height = sprintToKicadCoord( aObj.inner );
+
+        if( height <= 0 )
+            height = width;
+
+        pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( width, height ) );
+        pad->SetPosition( ptsCenter );
+        pad->Rotate( ptsCenter, -ptsAngle );
     }
 
     // Solder mask: soldermask==0 means no mask opening (pad is tented/covered)
@@ -918,8 +944,7 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
         pad->SetNet( net );
     }
 
-    pad->SetNumber( wxString::Format( wxS( "%d" ),
-                                       static_cast<int>( fp->Pads().size() + 1 ) ) );
+    pad->SetNumber( wxString::Format( wxS( "%d" ), static_cast<int>( fp->Pads().size() + 1 ) ) );
 
     fp->Add( pad );
 }
@@ -985,6 +1010,11 @@ void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const 
     bool isFilled = ( aObj.filled != 0 );
     bool isCutout = ( aObj.keepout != 0 );
 
+    int width = sprintToKicadCoord( static_cast<float>( aObj.line_width ) );
+
+    if( width < 0 )
+        width = pcbIUScale.mmToIU( 0.25 );
+
     if( isCutout && LSET::AllCuMask().Contains( layer ) && aObj.points.size() >= 3 )
     {
         // Cutout area for ground plane exclusion -> rule area (keepout zone)
@@ -1009,49 +1039,14 @@ void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const 
         zone->AddPolygon( outline.COutline( 0 ) );
         aContainer->Add( zone );
     }
-    else if( isFilled && LSET::AllCuMask().Contains( layer ) && aObj.points.size() >= 3 )
-    {
-        // Filled polygon on copper -> ZONE
-        ZONE* zone = new ZONE( aContainer );
-        zone->SetLayer( layer );
-        zone->SetIsRuleArea( false );
-        zone->SetDoNotAllowZoneFills( false );
-
-        SHAPE_POLY_SET outline;
-        outline.NewOutline();
-
-        for( const auto& pt : aObj.points )
-        {
-            VECTOR2I pos = sprintToKicadPos( pt.x, pt.y );
-            outline.Append( pos.x, pos.y );
-        }
-
-        zone->AddPolygon( outline.COutline( 0 ) );
-
-        if( !aObj.net_name.empty() )
-        {
-            wxString netName = convertString( aObj.net_name );
-            NETINFO_ITEM* net = board->FindNet( netName );
-
-            if( !net )
-            {
-                net = new NETINFO_ITEM( board, netName );
-                board->Add( net );
-            }
-
-            zone->SetNet( net );
-        }
-
-        aContainer->Add( zone );
-    }
-    else if( isFilled && aObj.points.size() >= 3 )
+    else if( aObj.points.size() >= 3 )
     {
         // Filled polygon on non-copper layer -> filled PCB_SHAPE
         PCB_SHAPE* shape = new PCB_SHAPE( aContainer );
         shape->SetShape( SHAPE_T::POLY );
         shape->SetFilled( true );
         shape->SetLayer( layer );
-        shape->SetWidth( 0 );
+        shape->SetWidth( width );
 
         SHAPE_POLY_SET polySet;
         polySet.NewOutline();
@@ -1063,26 +1058,22 @@ void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const 
         }
 
         shape->SetPolyShape( polySet );
-        aContainer->Add( shape );
-    }
-    else
-    {
-        // Unfilled polygon -> PCB_SHAPE polyline segments
-        int width = sprintToKicadCoord( static_cast<float>( aObj.line_width ) );
 
-        if( width <= 0 )
-            width = pcbIUScale.mmToIU( 0.25 );
-
-        for( size_t i = 0; i + 1 < aObj.points.size(); i++ )
+        if( !aObj.net_name.empty() )
         {
-            PCB_SHAPE* shape = new PCB_SHAPE( aContainer );
-            shape->SetShape( SHAPE_T::SEGMENT );
-            shape->SetLayer( layer );
-            shape->SetWidth( width );
-            shape->SetStart( sprintToKicadPos( aObj.points[i].x, aObj.points[i].y ) );
-            shape->SetEnd( sprintToKicadPos( aObj.points[i + 1].x, aObj.points[i + 1].y ) );
-            aContainer->Add( shape );
+            wxString      netName = convertString( aObj.net_name );
+            NETINFO_ITEM* net = board->FindNet( netName );
+
+            if( !net )
+            {
+                net = new NETINFO_ITEM( board, netName );
+                board->Add( net );
+            }
+
+            shape->SetNet( net );
         }
+
+        aContainer->Add( shape );
     }
 }
 
