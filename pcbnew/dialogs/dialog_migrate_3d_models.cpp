@@ -752,6 +752,12 @@ void DIALOG_MIGRATE_3D_MODELS::initPreviewBoard()
     m_boardAdapter.m_IsBoardView = false;
     m_boardAdapter.m_IsPreviewer = true;
 
+    // EDA_3D_CANVAS::DoRePaint unconditionally dereferences m_boardAdapter.m_Cfg,
+    // so wire it up before the canvas is constructed.  Without this the very
+    // first paint crashes with a null deref at m_Render.engine.
+    if( EDA_3D_VIEWER_SETTINGS* cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) )
+        m_boardAdapter.m_Cfg = cfg;
+
     m_previewPane = new EDA_3D_CANVAS( m_previewPanel,
             OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ), m_boardAdapter,
             m_trackBallCamera, PROJECT_PCB::Get3DCacheManager( &m_frame->Prj() ) );
