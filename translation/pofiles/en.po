@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-16 19:04+0300\n"
+"POT-Creation-Date: 2026-04-26 04:51+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -4527,8 +4527,8 @@ msgid "Could not create directory '%s'"
 msgstr "Could not create directory '%s'"
 
 #, c-format
-msgid "Could not clone repository '%s'"
-msgstr "Could not clone repository '%s'"
+msgid "Could not clone repository '%s' : %s"
+msgstr "Could not clone repository '%s' : %s"
 
 #, c-format
 msgid "Failed to get repository index: %s"
@@ -5583,6 +5583,15 @@ msgstr "Syntax error at line %zu, column %zu"
 
 msgid "An unexpected error occurred while reading library table"
 msgstr "An unexpected error occurred while reading library table"
+
+msgid "Compacting local history..."
+msgstr "Compacting local history..."
+
+msgid "Trimming local history..."
+msgstr "Trimming local history..."
+
+msgid "Compacting trimmed history..."
+msgstr "Compacting trimmed history..."
 
 msgid ""
 "The following files will be deleted when restoring this commit:\n"
@@ -14235,6 +14244,14 @@ msgstr ""
 msgid "LTspice schematic files"
 msgstr "LTspice schematic files"
 
+#, c-format
+msgid "'%s' is not a PADS Logic ASCII file."
+msgstr "'%s' is not a PADS Logic ASCII file."
+
+#, c-format
+msgid "Failed to parse PADS Logic file '%s'."
+msgstr "Failed to parse PADS Logic file '%s'."
+
 msgid "PADS Logic schematic files"
 msgstr "PADS Logic schematic files"
 
@@ -22278,8 +22295,24 @@ msgstr "Local path: monitoring folder changes"
 msgid "Please wait"
 msgstr "Please wait"
 
-msgid "Waiting for Git operations to finish..."
-msgstr "Waiting for Git operations to finish..."
+msgid "Closing project..."
+msgstr "Closing project..."
+
+msgid ""
+"A Git operation is still running.\n"
+"Keep waiting, or abandon?"
+msgstr ""
+"A Git operation is still running.\n"
+"Keep waiting, or abandon?"
+
+msgid "Git Operation Delayed"
+msgstr "Git Operation Delayed"
+
+msgid "Keep Waiting"
+msgstr "Keep Waiting"
+
+msgid "Abandon"
+msgstr "Abandon"
 
 msgid "The selected directory is already a Git project."
 msgstr "The selected directory is already a Git project."
@@ -26625,6 +26658,9 @@ msgstr "Compress output"
 msgid "Compress output into 'zip' file"
 msgstr "Compress output into 'zip' file"
 
+msgid "BOM Columns"
+msgstr "BOM Columns"
+
 msgid "BOM revision:"
 msgstr "BOM revision:"
 
@@ -26634,9 +26670,6 @@ msgid ""
 msgstr ""
 "Revision string for the BOM section. Auto-populated from schematic title "
 "block revision"
-
-msgid "BOM Columns"
-msgstr "BOM Columns"
 
 msgid "Internal ID:"
 msgstr "Internal ID:"
@@ -27967,6 +28000,9 @@ msgstr "Set to layer and dimension default values:"
 msgid "Set to layer default values:"
 msgstr "Set to layer default values:"
 
+msgid "(auto)"
+msgstr "(auto)"
+
 msgid "PCB graphic items"
 msgstr "PCB graphic items"
 
@@ -28008,6 +28044,9 @@ msgstr "Visible  (fields only)"
 
 msgid "Keep upright"
 msgstr "Keep upright"
+
+msgid "Adjust the text thickness"
+msgstr "Adjust the text thickness"
 
 msgid "Center on footprint"
 msgstr "Center on footprint"
@@ -28222,6 +28261,52 @@ msgid ""
 msgstr ""
 "All required layers (marked with '*') must be matched. Please click 'Auto-"
 "Match Layers' to automatically match the remaining layers"
+
+msgid "Auto-migrate 3D model references"
+msgstr "Auto-migrate 3D model references"
+
+msgid "(keep existing reference)"
+msgstr "(keep existing reference)"
+
+msgid "Add 3D Model Search Directory"
+msgstr "Add 3D Model Search Directory"
+
+msgid "Select 3D Model File"
+msgstr "Select 3D Model File"
+
+msgid "user-selected"
+msgstr "user-selected"
+
+msgid "Migrate 3D model references"
+msgstr "Migrate 3D model references"
+
+msgid ""
+"This board references 3D models that are no longer present on your system.\n"
+"Select replacements below, or keep the existing references unchanged."
+msgstr ""
+"This board references 3D models that are no longer present on your system.\n"
+"Select replacements below, or keep the existing references unchanged."
+
+msgid "Missing 3D model references:"
+msgstr "Missing 3D model references:"
+
+msgid "Potential replacements:"
+msgstr "Potential replacements:"
+
+msgid "Add Search Directory..."
+msgstr "Add Search Directory..."
+
+msgid "Open External File..."
+msgstr "Open External File..."
+
+msgid "Replace Models"
+msgstr "Replace Models"
+
+msgid "Keep Existing"
+msgstr "Keep Existing"
+
+msgid "Migrate 3D Models"
+msgstr "Migrate 3D Models"
 
 msgid "Rotate around item anchor"
 msgstr "Rotate around item anchor"
@@ -29656,9 +29741,6 @@ msgstr "To layer:"
 
 msgid "Swap Layers"
 msgstr "Swap Layers"
-
-msgid "Adjust the text thickness"
-msgstr "Adjust the text thickness"
 
 msgid "Edit Alignment Target"
 msgstr "Edit Alignment Target"
@@ -36193,6 +36275,15 @@ msgstr "Export netlist used to update schematics"
 msgid "New PCB file is unsaved"
 msgstr "New PCB file is unsaved"
 
+#, c-format
+msgid "%d WRL 3D model could not be matched to an equivalent STEP model."
+msgid_plural "%d WRL 3D models could not be matched to equivalent STEP models."
+msgstr[0] "%d WRL 3D model could not be matched to an equivalent STEP model."
+msgstr[1] "%d WRL 3D models could not be matched to equivalent STEP models."
+
+msgid "Show options"
+msgstr "Show options"
+
 msgid "Board file is read only."
 msgstr "Board file is read only."
 
@@ -40632,6 +40723,12 @@ msgstr "Update Footprints from Library..."
 msgid "Update footprints to include any changes from the library"
 msgstr "Update footprints to include any changes from the library"
 
+msgid "Migrate 3D Models..."
+msgstr "Migrate 3D Models..."
+
+msgid "Replace obsolete WRL 3D model references with current STEP models"
+msgstr "Replace obsolete WRL 3D model references with current STEP models"
+
 msgid "Remove Unused Pads..."
 msgstr "Remove Unused Pads..."
 
@@ -42980,6 +43077,13 @@ msgstr "Process could not be created"
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "Could not create user scripting path %s."
+
+#, c-format
+#~ msgid "Could not clone repository '%s'"
+#~ msgstr "Could not clone repository '%s'"
+
+#~ msgid "Waiting for Git operations to finish..."
+#~ msgstr "Waiting for Git operations to finish..."
 
 #~ msgid "Chamfer:"
 #~ msgstr "Chamfer:"
