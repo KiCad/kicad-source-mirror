@@ -23,6 +23,7 @@
 #include <board_commit.h>
 #include <board_text_var_adapter.h>
 #include <footprint.h>
+#include <netinfo.h>
 #include <pcb_field.h>
 #include <pcb_text.h>
 #include <pcbnew_utils/board_test_utils.h>
@@ -205,6 +206,28 @@ BOOST_AUTO_TEST_CASE( VariantSwitchFiresCrossRefInvalidation )
     invalidations.clear();
     board.SetCurrentVariant( wxT( "HighPrecision" ) );
     BOOST_CHECK( invalidations.empty() );
+}
+
+
+/**
+ * Regression for issue 24100. Pasting items into a real BOARD calls RemoveAll on
+ * the temporary clipboard board, which deletes its NETINFO_ITEMs via
+ * NETINFO_LIST::clear() before FinalizeBulkRemove fires the listener
+ * notifications. BOARD_TEXT_VAR_ADAPTER::unregisterItem then dereferences the
+ * dangling pointers via dynamic_cast, segfaulting.
+ */
+BOOST_AUTO_TEST_CASE( RemoveAllNetInfoDoesNotUseDeletedPointers )
+{
+    BOARD board;
+
+    // Seed the board with an extra net so RemoveAll has real items to remove.
+    NETINFO_ITEM* net = new NETINFO_ITEM( &board, wxT( "net-1" ), 1 );
+    board.Add( net );
+
+    // Default RemoveAll() includes PCB_NETINFO_T. Listeners (including the
+    // BOARD_TEXT_VAR_ADAPTER installed in the BOARD constructor) must not see
+    // dangling pointers.
+    BOOST_CHECK_NO_THROW( board.RemoveAll() );
 }
 
 

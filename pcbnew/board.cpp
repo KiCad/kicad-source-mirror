@@ -1489,7 +1489,8 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 
 void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
 {
-    std::vector<BOARD_ITEM*> removed;
+    std::vector<BOARD_ITEM*>   removed;
+    std::vector<NETINFO_ITEM*> removedNets;
 
     for( const KICAD_T& type : aTypes )
     {
@@ -1497,9 +1498,14 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
         {
         case PCB_NETINFO_T:
             for( NETINFO_ITEM* item : m_NetInfo )
+            {
                 removed.emplace_back( item );
+                removedNets.emplace_back( item );
+            }
 
-            m_NetInfo.clear();
+            // Listeners must observe live pointers during FinalizeBulkRemove;
+            // free after notification (issue 24100).
+            m_NetInfo.detachAll();
             break;
 
         case PCB_MARKER_T:
@@ -1568,6 +1574,9 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
     IncrementTimeStamp();
 
     FinalizeBulkRemove( removed );
+
+    for( NETINFO_ITEM* item : removedNets )
+        delete item;
 }
 
 

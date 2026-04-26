@@ -59,6 +59,12 @@ void NETINFO_LIST::clear()
     for( it = m_netNames.begin(), itEnd = m_netNames.end(); it != itEnd; ++it )
         delete it->second;
 
+    detachAll();
+}
+
+
+void NETINFO_LIST::detachAll()
+{
     m_netNames.clear();
     m_netCodes.clear();
     m_newNetCode = 0;

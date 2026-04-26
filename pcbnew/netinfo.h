@@ -330,6 +330,16 @@ private:
     void clear();
 
     /**
+     * Drop all entries from the lookup maps without freeing the items.
+     *
+     * Used when ownership of the contained NETINFO_ITEMs is being transferred
+     * to a caller that will free them after some intermediate operation (for
+     * example, after dispatching listener notifications that need live
+     * pointers).
+     */
+    void detachAll();
+
+    /**
      * Rebuild the list of NETINFO_ITEMs
      *
      * The list is sorted by names.
