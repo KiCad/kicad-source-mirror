@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-26 04:51+0300\n"
-"PO-Revision-Date: 2026-04-24 15:18+0000\n"
+"PO-Revision-Date: 2026-04-26 04:39+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/v10/ka/>\n"
 "Language: ka\n"
@@ -2060,9 +2060,8 @@ msgid "invalid plugin runtime: %s"
 msgstr "არასწორი დამატების გაშვების გარემო: %s"
 
 #: common/api/api_plugin.cpp:112
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "რეპოზიტორიის კონფიგურაციის წვდომა ვერ მოხერხდა"
+msgstr "დამატების კონფიგურაციის ფაილის წაკითხვა შეუძლებელია"
 
 #: common/api/api_plugin.cpp:132
 #, c-format
@@ -2080,9 +2079,9 @@ msgid "identifier '%s' is invalid"
 msgstr "იდენტიფიკატორი '%s' არასწორია"
 
 #: common/api/api_plugin.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "actions section is invalid: %s"
-msgstr "მონაცემთა ბაზა კავშირი ვერ მოხერხდა: %s"
+msgstr "ქმედებების სექცია არასწორია: %s"
 
 #: common/api/api_plugin_manager.cpp:98
 #, c-format
@@ -2095,15 +2094,14 @@ msgid "Plugin '%s': %s"
 msgstr "დამატება '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "exited with code %d"
-msgstr "პროცესი ვერ შესრულდა, გასვლის კოდი %d"
+msgstr "გავიდა კოდით %d"
 
 #: common/api/api_plugin_manager.cpp:351 common/api/api_plugin_manager.cpp:691
 #: common/api/api_plugin_manager.cpp:775
-#, fuzzy
 msgid "missing plugin environment"
-msgstr "მოდულის გარემოს ხელახალი შექმნა"
+msgstr "ნაკლული დამატების გარემო"
 
 #: common/api/api_plugin_manager.cpp:360
 #, c-format
@@ -2111,9 +2109,8 @@ msgid "entrypoint '%s' could not be read"
 msgstr "შესვლის წერტილის '%s' წაკითხვა შეუძლებელია"
 
 #: common/api/api_plugin_manager.cpp:407
-#, fuzzy
 msgid "process could not be created"
-msgstr "პროცესის შექმნა ვერ მოხერხდა"
+msgstr "პროცესის შექმნა შეუძლებელია"
 
 #: common/api/api_plugin_manager.cpp:452
 #, c-format
@@ -7711,9 +7708,9 @@ msgid "Could not create directory '%s'"
 msgstr "ვერ მოხერხდა შექმნა საქაღალდე '%s'"
 
 #: common/git/libgit_backend.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s' : %s"
-msgstr "ვერ მოხერხდა საცავის დაკლონვა '%s'"
+msgstr "ვერ მოხერხდა საცავის '%s' დაკლონვა: %s"
 
 #: common/git/libgit_backend.cpp:171
 #, c-format
@@ -21787,9 +21784,9 @@ msgid "'%s' is not a PADS Logic ASCII file."
 msgstr "'%s' არ არის სწორი SPICE მნიშვნელობა."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1469
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS Logic file '%s'."
-msgstr "წაკითხვის შეცდომა ფაილისთვის '%s'."
+msgstr "PADS ლოგიკის ფაილის '%s' დამუშავება ჩავარდა."
 
 #: eeschema/sch_io/pads/sch_io_pads.h:49
 msgid "PADS Logic schematic files"
@@ -32501,9 +32498,8 @@ msgid ""
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:1725
-#, fuzzy
 msgid "Git Operation Delayed"
-msgstr "ერთეულოვანი გავრცელების დაყოვნება:"
+msgstr "Git-ის ოპერაცია დაყოვნებულია"
 
 #: kicad/project_tree_pane.cpp:1727
 #, fuzzy
@@ -41028,9 +41024,8 @@ msgid "user-selected"
 msgstr "სალტე არ არის მონიშნული"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1058
-#, fuzzy
 msgid "Migrate 3D model references"
-msgstr "ჩარჩოს მითითებების ბეჭდვა."
+msgstr "3D მოდელის მიმართვების მიგრაცია"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:19
 msgid ""
@@ -41039,14 +41034,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:31
-#, fuzzy
 msgid "Missing 3D model references:"
-msgstr "ჩარჩოს მითითებების ბეჭდვა."
+msgstr "ნაკლული 3D მოდელის მითითება:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:54
-#, fuzzy
 msgid "Potential replacements:"
-msgstr "კომპონენტის მოთავსება"
+msgstr "პოტენციური ჩანაცვლებები:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
 #, fuzzy
