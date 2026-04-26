@@ -761,11 +761,18 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
         for( const SPRINT_LAYOUT::POINT& pt : aObj.points )
             pts.emplace_back( sprintToKicadPos( pt.x, pt.y ) );
 
-        if( pts.size() == 2 || pts.size() == 4 ) // Oval, circle or rectangular pads
+        if( pts.size() == 2 ) // Oval or circle
+        {
+            ptsAngle = EDA_ANGLE( pts[1] - pts[0] );
+
+            if( aObj.type == SPRINT_LAYOUT::OBJ_THT_PAD && aObj.tht_shape == SPRINT_LAYOUT::THT_SHAPE_V_ROUND )
+                ptsAngle -= ANGLE_90;
+        }
+        else if( pts.size() == 4 ) // Rectangular
         {
             ptsAngle = EDA_ANGLE( pts[1] - pts[0] );
         }
-        else if( pts.size() == 8 ) // Octagonal pads
+        else if( pts.size() == 8 ) // Octagonal
         {
             ptsAngle = EDA_ANGLE( pts[2] - pts[1] );
         }
@@ -774,6 +781,8 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
             wxFAIL_MSG( wxString::Format( "Unknown pad type %d shape %d with %zu points", int( aObj.type ),
                                           int( aObj.tht_shape ), aObj.points.size() ) );
         }
+
+        ptsAngle.Round( 2 );
     }
 
     PCB_LAYER_ID padLayer = mapLayer( aObj.layer );
