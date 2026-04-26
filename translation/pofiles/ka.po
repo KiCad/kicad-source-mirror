@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-24 17:36+0300\n"
-"PO-Revision-Date: 2026-04-24 14:34+0000\n"
+"PO-Revision-Date: 2026-04-26 04:39+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ka/>\n"
@@ -2072,9 +2072,8 @@ msgid "invalid plugin runtime: %s"
 msgstr "არასწორი დამატების გაშვების გარემო: %s"
 
 #: common/api/api_plugin.cpp:105
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "რეპოზიტორიის კონფიგურაციის წვდომა ვერ მოხერხდა"
+msgstr "დამატების კონფიგურაციის ფაილის წაკითხვა შეუძლებელია"
 
 #: common/api/api_plugin.cpp:125
 #, c-format
@@ -2092,9 +2091,9 @@ msgid "identifier '%s' is invalid"
 msgstr "იდენტიფიკატორი '%s' არასწორია"
 
 #: common/api/api_plugin.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "actions section is invalid: %s"
-msgstr "მონაცემთა ბაზა კავშირი ვერ მოხერხდა: %s"
+msgstr "ქმედებების სექცია არასწორია: %s"
 
 #: common/api/api_plugin_manager.cpp:98
 #, c-format
@@ -2107,9 +2106,9 @@ msgid "Plugin '%s': %s"
 msgstr "დამატება '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "exited with code %d"
-msgstr "პროცესი ვერ შესრულდა, გასვლის კოდი %d"
+msgstr "გავიდა კოდით %d"
 
 #: common/api/api_plugin_manager.cpp:335
 msgid "action is not registered"
@@ -2117,9 +2116,8 @@ msgstr "ქმედება რეგისტრირებული არ�
 
 #: common/api/api_plugin_manager.cpp:369 common/api/api_plugin_manager.cpp:779
 #: common/api/api_plugin_manager.cpp:863
-#, fuzzy
 msgid "missing plugin environment"
-msgstr "მოდულის გარემოს ხელახალი შექმნა"
+msgstr "ნაკლული დამატების გარემო"
 
 #: common/api/api_plugin_manager.cpp:378
 #, c-format
@@ -2127,9 +2125,8 @@ msgid "entrypoint '%s' could not be read"
 msgstr "შესვლის წერტილის '%s' წაკითხვა შეუძლებელია"
 
 #: common/api/api_plugin_manager.cpp:446
-#, fuzzy
 msgid "process could not be created"
-msgstr "პროცესის შექმნა ვერ მოხერხდა"
+msgstr "პროცესის შექმნა შეუძლებელია"
 
 #: common/api/api_plugin_manager.cpp:490
 #, c-format
@@ -2401,9 +2398,9 @@ msgid "Board file '%s' could not be saved as design block at '%s'."
 msgstr "დაფის ფაილის '%s' შენახვა შეუძლებელია დიზაინის ბლოკით '%s'-სთან."
 
 #: common/design_block_io.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save design block metadata '%s': %s"
-msgstr "დიზაინის ბლოკის ბიბლიოთეკის ფაილის '%s' შენახვა ჩავარდა."
+msgstr "დიზაინის ბლოკის მეტამონაცემების '%s' შენახვა ჩავარდა: %s"
 
 #: common/design_block_io.cpp:488
 #, c-format
@@ -7756,9 +7753,9 @@ msgid "Could not create directory '%s'"
 msgstr "ვერ მოხერხდა შექმნა საქაღალდე '%s'"
 
 #: common/git/libgit_backend.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s' : %s"
-msgstr "ვერ მოხერხდა საცავის დაკლონვა '%s'"
+msgstr "ვერ მოხერხდა საცავის '%s' დაკლონვა: %s"
 
 #: common/git/libgit_backend.cpp:171
 #, c-format
@@ -9925,9 +9922,9 @@ msgid "Line length exceeded"
 msgstr "სტრიქონის სიგრძე გადაჭარბებულია"
 
 #: common/richio.cpp:560
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot flush '%s' to disk: %s"
-msgstr "ვერ მოხერხდა '%s'-ის ნაგავში გადატანა."
+msgstr "'%s'-დისკზე ჩაწერა შეუძლებელია: %s"
 
 #: common/richio.cpp:614
 #, fuzzy, c-format
@@ -9935,9 +9932,9 @@ msgid "Failed to commit save of '%s': %s"
 msgstr "გვერდის '%s' ჩატვირთვა ჩავარდა: %s"
 
 #: common/richio.cpp:718
-#, fuzzy, c-format
+#, c-format
 msgid "Write failed to '%s': %s"
-msgstr "ბაზის შეცვლის დაწყება ჩავარდა: %s"
+msgstr "'%s'-ში ჩაწერა ჩავარდა: %s"
 
 #: common/settings/bom_settings.cpp:126
 msgid "Default Editing"
@@ -21894,9 +21891,9 @@ msgid "'%s' is not a PADS Logic ASCII file."
 msgstr "'%s' არ არის სწორი SPICE მნიშვნელობა."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1469
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS Logic file '%s'."
-msgstr "დამუშავების შეცდომა Splrint-ის განლაგების ფაილში '%s'"
+msgstr "PADS ლოგიკის ფაილის '%s' დამუშავება ჩავარდა."
 
 #: eeschema/sch_io/pads/sch_io_pads.h:49
 msgid "PADS Logic schematic files"
@@ -32818,9 +32815,8 @@ msgid ""
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:1725
-#, fuzzy
 msgid "Git Operation Delayed"
-msgstr "ერთეულოვანი გავრცელების დაყოვნება:"
+msgstr "Git-ის ოპერაცია დაყოვნებულია"
 
 #: kicad/project_tree_pane.cpp:1727
 #, fuzzy
@@ -41573,9 +41569,8 @@ msgid "user-selected"
 msgstr "სალტე არ არის მონიშნული"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1067
-#, fuzzy
 msgid "Migrate 3D model references"
-msgstr "ჩარჩოს მითითებების ბეჭდვა."
+msgstr "3D მოდელის მიმართვების მიგრაცია"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:19
 msgid ""
@@ -41584,14 +41579,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:31
-#, fuzzy
 msgid "Missing 3D model references:"
-msgstr "ჩარჩოს მითითებების ბეჭდვა."
+msgstr "ნაკლული 3D მოდელის მითითება:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:54
-#, fuzzy
 msgid "Potential replacements:"
-msgstr "კომპონენტის მოთავსება"
+msgstr "პოტენციური ჩანაცვლებები:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
 #, fuzzy
@@ -45454,12 +45447,9 @@ msgid "Design rules cannot be added without a project"
 msgstr "პროექტირების წესების დამატება პროექტის გარეშე შეუძლებელია"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:915
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save design rules to '%s': %s"
-msgstr ""
-"წესში '%s' ვალიდაციის შეცდომების გამო შენახვა ვერ მოხერხდა:\n"
-"\n"
-"%s"
+msgstr "დიზაინის წესების '%s-ში შენახვა შეუძლებელია: %s"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
 msgid "DRC Rules"
