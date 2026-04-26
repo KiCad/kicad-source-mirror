@@ -387,7 +387,10 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 
                 // Grid has to be redrawn only when the NONCACHED target is redrawn
                 if( m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
+                {
+                    prepareGridSources();
                     m_gal->DrawGrid();
+                }
 
                 cntRedraw.Start();
                 m_view->Redraw();

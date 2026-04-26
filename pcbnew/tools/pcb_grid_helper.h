@@ -62,6 +62,8 @@ public:
     using GRID_HELPER::Align;
     using GRID_HELPER::AlignGrid;
 
+    VECTOR2I Align( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const override;
+
     VECTOR2I AlignToSegment ( const VECTOR2I& aPoint, const SEG& aSeg );
 
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, std::vector<BOARD_ITEM*>& aItem,

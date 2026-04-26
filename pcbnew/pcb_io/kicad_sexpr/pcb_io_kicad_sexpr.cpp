@@ -42,6 +42,7 @@
 #include <pad.h>
 #include <pcb_dimension.h>
 #include <pcb_generator.h>
+#include <pcb_griditem.h>
 #include <pcb_group.h>
 #include <constraints/pcb_constraint.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
@@ -386,6 +387,8 @@ void PCB_IO_KICAD_SEXPR::Format( const BOARD_ITEM* aItem ) const
     case PCB_TARGET_T:
         format( static_cast<const PCB_TARGET*>( aItem ) );
         break;
+
+    case PCB_GRIDITEM_T: format( static_cast<const PCB_GRIDITEM*>( aItem ) ); break;
 
     case PCB_FOOTPRINT_T:
         format( static_cast<const FOOTPRINT*>( aItem ) );
@@ -1297,6 +1300,52 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TARGET* aTarget ) const
     formatLayer( aTarget->GetLayer() );
     KICAD_FORMAT::FormatUuid( m_out, aTarget->m_Uuid );
     m_out->Print( ")" );
+}
+
+
+void PCB_IO_KICAD_SEXPR::format( const PCB_GRIDITEM* aGridItem ) const
+{
+    const bool polar = aGridItem->GetGridItemType() == PCB_GRIDITEM_TYPE::POLAR;
+
+    // Grid type (polar/xy) must be emitted before extent/spacing: those tokens change
+    // meaning based on the type (y component = angle for polar, length for cartesian).
+    m_out->Print( "(grid_item %s (at %s)", polar ? "polar" : "xy",
+                  formatInternalUnits( aGridItem->GetPosition() ).c_str() );
+
+    if( polar )
+    {
+        // Polar y components are angles; use FormatAngle, not formatInternalUnits.
+        m_out->Print( " (extent %s %s) (spacing %s %s)", formatInternalUnits( aGridItem->GetRadiusExtent() ).c_str(),
+                      EDA_UNIT_UTILS::FormatAngle( aGridItem->GetPhiExtent() ).c_str(),
+                      formatInternalUnits( aGridItem->GetRadiusSpacing() ).c_str(),
+                      EDA_UNIT_UTILS::FormatAngle( aGridItem->GetPhiSpacing() ).c_str() );
+    }
+    else
+    {
+        m_out->Print( " (extent %s) (spacing %s)", formatInternalUnits( aGridItem->GetExtent() ).c_str(),
+                      formatInternalUnits( aGridItem->GetSpacing() ).c_str() );
+    }
+
+    if( !aGridItem->GetOrientation().IsZero() )
+    {
+        m_out->Print( " (angle %s)", EDA_UNIT_UTILS::FormatAngle( aGridItem->GetOrientation() ).c_str() );
+    }
+
+    // Priority is always set
+    m_out->Print( " (priority %u)", aGridItem->GetAssignedPriority() );
+
+    if( aGridItem->GetTickInterval() > 0 )
+        m_out->Print( " (tick_interval %u)", aGridItem->GetTickInterval() );
+
+    const PCB_GRIDITEM_AFFECTS& aff = aGridItem->Affects();
+    m_out->Print( " (affects (cursor %s) (routing %s) (placement %s))", aff.cursor ? "yes" : "no",
+                  aff.routing ? "yes" : "no", aff.placement ? "yes" : "no" );
+
+    if( aGridItem->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, "locked", true );
+
+    KICAD_FORMAT::FormatUuid( m_out, aGridItem->m_Uuid );
+    m_out->Print( ")\n" );
 }
 
 

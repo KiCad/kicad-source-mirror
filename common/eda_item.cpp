@@ -465,6 +465,7 @@ static struct EDA_ITEM_DESC
             .Map( PCB_NETINFO_T,           _HKI( "NetInfo" ) )
             .Map( PCB_GROUP_T,             _HKI( "Group" ) )
             .Map( PCB_BARCODE_T,           _HKI( "Barcode" ) )
+            .Map( PCB_GRIDITEM_T,          _HKI( "GridItem" ) )
 
             .Map( SCH_MARKER_T,            _HKI( "Marker" ) )
             .Map( SCH_JUNCTION_T,          _HKI( "Junction" ) )

@@ -267,6 +267,12 @@ public:
 
     std::unique_ptr<PROF_COUNTER> m_PaintEventCounter;
 
+    /**
+     * Hook for subclasses to push per-frame grid sources onto the GAL.
+     * Called from DoRePaint just before GAL::DrawGrid.
+     */
+    virtual void prepareGridSources() {}
+
 protected:
     virtual void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );

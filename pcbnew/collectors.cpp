@@ -26,6 +26,7 @@
 #include <pad.h>
 #include <pcb_track.h>
 #include <pcb_marker.h>
+#include <pcb_griditem.h>
 #include <pcb_dimension.h>
 #include <zone.h>
 #include <pcb_shape.h>
@@ -59,6 +60,7 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::AllBoardItems = {
     PCB_POINT_T,            // in m_points
     PCB_GENERATOR_T,        // in m_generators
     PCB_BARCODE_T,          // in m_drawings
+    PCB_GRIDITEM_T,         // in m_drawings
 };
 
 
@@ -83,7 +85,8 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::BoardLevelItems = {
     PCB_GROUP_T,
     PCB_ZONE_T,
     PCB_GENERATOR_T,
-    PCB_BARCODE_T
+    PCB_BARCODE_T,
+    PCB_GRIDITEM_T
 };
 
 
@@ -155,6 +158,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
     bool                pad_through = false;
     PCB_VIA*            via         = nullptr;
     PCB_MARKER*         marker      = nullptr;
+    PCB_GRIDITEM*       gridItem    = nullptr;
     ZONE*               zone        = nullptr;
     PCB_FIELD*          field       = nullptr;
     PCB_TEXT*           text        = nullptr;
@@ -244,6 +248,11 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
 
     case PCB_POINT_T:
         boardItem = static_cast<BOARD_ITEM*>( aTestItem );
+        break;
+
+    case PCB_GRIDITEM_T:
+        gridItem  = static_cast<PCB_GRIDITEM*>( aTestItem );
+        boardItem = gridItem;
         break;
 
     case PCB_FIELD_T:
@@ -356,6 +365,16 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
     {
         // Groups are not sensitive to the layer ... ?
         if( group->HitTest( m_refPos ) )
+            Append( aTestItem );
+
+        return INSPECT_RESULT::CONTINUE;
+    }
+
+    if( gridItem )
+    {
+        // Grid items live on every layer; their visibility is controlled by the LAYER_GRIDITEMS
+        // element, not by the per-copper-layer visibility set.
+        if( gridItem->HitTest( m_refPos, m_Guide->Accuracy() ) )
             Append( aTestItem );
 
         return INSPECT_RESULT::CONTINUE;

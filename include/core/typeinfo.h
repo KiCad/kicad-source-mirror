@@ -236,6 +236,7 @@ enum KICAD_T
     PCB_SHAPE_LOCATE_ELLIPSE_T,
     PCB_SHAPE_LOCATE_ELLIPSE_ARC_T,
     PCB_CONSTRAINT_T,      ///< class PCB_CONSTRAINT, a geometric constraint between board items
+    PCB_GRIDITEM_T,
 
     // End value
     MAX_STRUCT_TYPE_ID
@@ -464,6 +465,7 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_NETINFO_T:
     case PCB_GROUP_T:
     case PCB_GENERATOR_T:
+    case PCB_GRIDITEM_T:
 
     case PCB_FIELD_LOCATE_REFERENCE_T:
     case PCB_FIELD_LOCATE_VALUE_T:

@@ -543,6 +543,25 @@ private:
     void drawBitmapOverbar( double aLength, double aHeight, bool aReserve = true );
 
     /**
+     * Render m_gridSources priority-descending; each writes its coverage into
+     * the stencil so lower-priority sources skip that area.  DrawGrid pushes
+     * the global grid as a priority-0 entry for the call so both paths share
+     * this routine.
+     */
+    void drawGridSources();
+
+    /**
+     * Fill a source's coverage region into the current color/stencil state.
+     */
+    void drawGridCoverageShape( const GRID_SOURCE& aSrc );
+
+    /**
+     * @return the visible screen area expressed in aSrc's frame (relative to its
+     *         origin and counter-rotated by its orientation).
+     */
+    BOX2D gridScreenBBox( const GRID_SOURCE& aSrc ) const;
+
+    /**
      * Compute a size of text drawn using bitmap font with current text setting applied.
      *
      * @param aText is the text to be drawn.

@@ -416,6 +416,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             case PCB_TARGET_T:
             case PCB_POINT_T:
             case PCB_ZONE_T:
+            case PCB_GRIDITEM_T:
             case PCB_FOOTPRINT_T:
             case PCB_GROUP_T:
                 if( view )

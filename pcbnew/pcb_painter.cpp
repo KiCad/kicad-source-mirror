@@ -43,6 +43,7 @@
 #include <pcb_barcode.h>
 #include <pcb_target.h>
 #include <pcb_board_outline.h>
+#include <pcb_griditem.h>
 
 #include <layer_ids.h>
 #include <lset.h>
@@ -766,6 +767,8 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     case PCB_POINT_T:
         draw( static_cast<const PCB_POINT*>( item ), aLayer );
         break;
+
+    case PCB_GRIDITEM_T: draw( static_cast<const PCB_GRIDITEM*>( item ), aLayer ); break;
 
     case PCB_MARKER_T:
         draw( static_cast<const PCB_MARKER*>( item ), aLayer );
@@ -3367,6 +3370,76 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
     {
         strokeText( resolvedText, aDimension->GetTextPos(), attrs, aDimension->GetFontMetrics() );
     }
+}
+
+
+void PCB_PAINTER::draw( const PCB_GRIDITEM* aGridItem, int aLayer )
+{
+    // Grid content (lines/dots/crosses) is rendered by the GAL backend through
+    // GRID_SOURCE (see PCB_DRAW_PANEL_GAL::prepareGridSources).  Only selection
+    // decorations - outline and centre marker - live here, on LAYER_ANCHOR.
+    // The item is also registered on m_layer for VIEW::Query (selection); skip
+    // those passes.
+    if( aLayer != LAYER_ANCHOR )
+        return;
+
+    if( !aGridItem->IsSelected() )
+        return;
+
+    m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+    m_gal->SetStrokeColor( aGridItem->GetColor() );
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+
+    m_gal->Save();
+    m_gal->Translate( VECTOR2D( aGridItem->GetPosition() ) );
+    // GAL::Rotate is math-convention; grid orientation is screen-convention - negate.
+    m_gal->Rotate( -aGridItem->GetOrientation().AsRadians() );
+
+    switch( aGridItem->GetGridItemType() )
+    {
+    case PCB_GRIDITEM_TYPE::POLAR:
+    {
+        // hairline outline at the maximum radius, only over the active phi range
+        const int    radius = aGridItem->GetRadiusExtent();
+        const double phiMax = aGridItem->GetPhiExtent().AsRadians();
+        m_gal->DrawArc( VECTOR2D( 0, 0 ), radius, EDA_ANGLE( 0, RADIANS_T ), EDA_ANGLE( phiMax, RADIANS_T ) );
+
+        // bounding "pie" radials when phi is less than full circle
+        if( phiMax + 1e-9 < 2 * M_PI )
+        {
+            m_gal->DrawLine( VECTOR2D( 0, 0 ), VECTOR2D( radius, 0 ) );
+            m_gal->DrawLine( VECTOR2D( 0, 0 ), VECTOR2D( radius * std::cos( phiMax ), radius * std::sin( phiMax ) ) );
+        }
+        break;
+    }
+
+    case PCB_GRIDITEM_TYPE::CARTESIAN:
+    {
+        // hairline outline rectangle centred on the grid origin
+        const VECTOR2I extent = aGridItem->GetExtent();
+        m_gal->DrawLine( VECTOR2D( -extent.x, -extent.y ), VECTOR2D( extent.x, -extent.y ) );
+        m_gal->DrawLine( VECTOR2D( extent.x, -extent.y ), VECTOR2D( extent.x, extent.y ) );
+        m_gal->DrawLine( VECTOR2D( extent.x, extent.y ), VECTOR2D( -extent.x, extent.y ) );
+        m_gal->DrawLine( VECTOR2D( -extent.x, extent.y ), VECTOR2D( -extent.x, -extent.y ) );
+        break;
+    }
+
+    default: wxFAIL_MSG( wxT( "draw(PCB_GRIDITEM*): unhandled PCB_GRIDITEM_TYPE" ) ); break;
+    }
+
+    // Centre marker: screen-pixel-sized '+' cross in the LAYER_ANCHOR color, same
+    // convention FOOTPRINT uses for its anchor (see draw(FOOTPRINT*)).
+    const double  anchorSize = 5.0 / m_gal->GetWorldScale();
+    const double  anchorThickness = 1.0 / m_gal->GetWorldScale();
+    const COLOR4D anchorColor = m_pcbSettings.GetColor( aGridItem, LAYER_ANCHOR );
+
+    m_gal->SetStrokeColor( anchorColor );
+    m_gal->SetLineWidth( anchorThickness );
+    m_gal->DrawLine( VECTOR2D( -anchorSize, 0 ), VECTOR2D( anchorSize, 0 ) );
+    m_gal->DrawLine( VECTOR2D( 0, -anchorSize ), VECTOR2D( 0, anchorSize ) );
+
+    m_gal->Restore();
 }
 
 

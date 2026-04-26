@@ -1823,6 +1823,7 @@ void CAIRO_GAL::onSetNativeCursor( wxSetCursorEvent& aEvent )
 
 void CAIRO_GAL_BASE::DrawGrid()
 {
+    // TODO: GRID_SOURCE rendering is not implemented on Cairo yet.
     SetTarget( TARGET_NONCACHED );
 
     // Draw the grid

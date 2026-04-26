@@ -20,6 +20,7 @@ set( KIMATH_SRCS
     src/geometry/convex_hull.cpp
     src/geometry/direction_45.cpp
     src/geometry/geometry_utils.cpp
+    src/geometry/grid_geometry.cpp
     src/geometry/half_line.cpp
     src/geometry/intersection.cpp
     src/geometry/line.cpp

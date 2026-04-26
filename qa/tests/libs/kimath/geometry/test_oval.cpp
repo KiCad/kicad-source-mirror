@@ -145,7 +145,7 @@ BOOST_AUTO_TEST_CASE( SimpleOval45Degrees )
     const OVAL_POINTS_TEST_CASE testcase
     {
         {
-            SEG{ GetRotated( { -1500, 0 }, ANGLE_45 ), GetRotated( { 1500, 0 }, ANGLE_45 ) },
+            SEG{ GetRotated( VECTOR2I{ -1500, 0 }, ANGLE_45 ), GetRotated( VECTOR2I{ 1500, 0 }, ANGLE_45 ) },
             1000,
         },
         {

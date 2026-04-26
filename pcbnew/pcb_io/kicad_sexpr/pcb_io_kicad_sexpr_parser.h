@@ -66,6 +66,7 @@ class FOOTPRINT;
 class PCB_GROUP;
 class PCB_POINT;
 class PCB_TARGET;
+class PCB_GRIDITEM;
 class PCB_VIA;
 class ZONE;
 struct ZONE_LAYER_PROPERTIES;
@@ -277,18 +278,19 @@ private:
 
     void        parsePadstack( PAD* aPad );
 
-    PCB_ARC*    parseARC();
-    PCB_TRACK*  parsePCB_TRACK();
-    PCB_VIA*    parsePCB_VIA();
-    void        parseViastack( PCB_VIA* aVia );
-    ZONE*       parseZONE( BOARD_ITEM_CONTAINER* aParent );
-    PCB_TARGET* parsePCB_TARGET();
-    PCB_POINT*  parsePCB_POINT();
-    BOARD*      parseBOARD();
-    void        parseGROUP_members( GROUP_INFO& aGroupInfo );
-    void        parseGROUP( BOARD_ITEM* aParent );
-    void        parseCONSTRAINT( BOARD_ITEM* aParent );
-    void        parseGENERATOR( BOARD_ITEM* aParent );
+    PCB_ARC*      parseARC();
+    PCB_TRACK*    parsePCB_TRACK();
+    PCB_VIA*      parsePCB_VIA();
+    void          parseViastack( PCB_VIA* aVia );
+    ZONE*         parseZONE( BOARD_ITEM_CONTAINER* aParent );
+    PCB_TARGET*   parsePCB_TARGET();
+    PCB_POINT*    parsePCB_POINT();
+    PCB_GRIDITEM* parsePCB_GRIDITEM();
+    BOARD*        parseBOARD();
+    void          parseGROUP_members( GROUP_INFO& aGroupInfo );
+    void          parseGROUP( BOARD_ITEM* aParent );
+    void          parseCONSTRAINT( BOARD_ITEM* aParent );
+    void          parseGENERATOR( BOARD_ITEM* aParent );
 
     // Parse a board, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
     BOARD*      parseBOARD_unchecked();

@@ -48,6 +48,7 @@
 #include <pcb_generator.h>
 #include <pcb_point.h>
 #include <pcb_target.h>
+#include <pcb_griditem.h>
 #include <pcb_track.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
@@ -1344,6 +1345,12 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
 
         case T_point:
             item = parsePCB_POINT();
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
+            bulkAddedItems.push_back( item );
+            break;
+
+        case T_grid_item:
+            item = parsePCB_GRIDITEM();
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
@@ -9558,6 +9565,132 @@ PCB_TARGET* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TARGET()
     }
 
     return target.release();
+}
+
+
+PCB_GRIDITEM* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_GRIDITEM()
+{
+    wxCHECK_MSG( CurTok() == T_grid_item, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PCB_GRIDITEM." ) );
+
+    VECTOR2I pt;
+    T        token;
+
+    std::unique_ptr<PCB_GRIDITEM> griditem = std::make_unique<PCB_GRIDITEM>( nullptr );
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token == T_LEFT )
+            token = NextTok();
+
+        switch( token )
+        {
+        case T_xy: griditem->SetGridItemType( PCB_GRIDITEM_TYPE::CARTESIAN ); break;
+
+        case T_polar: griditem->SetGridItemType( PCB_GRIDITEM_TYPE::POLAR ); break;
+
+        case T_at:
+            pt.x = parseBoardUnits( "grid_item x position" );
+            pt.y = parseBoardUnits( "grid_item y position" );
+            griditem->SetPosition( pt );
+            NeedRIGHT();
+            break;
+
+        case T_spacing:
+            // Writer emits the grid type before extent/spacing, so the type is set here.
+            // Polar y is an angle; cartesian y is a length.
+            if( griditem->GetGridItemType() == PCB_GRIDITEM_TYPE::POLAR )
+            {
+                griditem->SetRadiusSpacing( parseBoardUnits( "grid_item radius spacing" ) );
+                griditem->SetPhiSpacingDegrees( parseDouble( "grid_item phi spacing" ) );
+            }
+            else
+            {
+                pt.x = parseBoardUnits( "grid_item x spacing" );
+                pt.y = parseBoardUnits( "grid_item y spacing" );
+                griditem->SetSpacing( pt );
+            }
+            NeedRIGHT();
+            break;
+
+        case T_extent:
+            if( griditem->GetGridItemType() == PCB_GRIDITEM_TYPE::POLAR )
+            {
+                griditem->SetRadiusExtent( parseBoardUnits( "grid_item radius extent" ) );
+                griditem->SetPhiExtentDegrees( parseDouble( "grid_item phi extent" ) );
+            }
+            else
+            {
+                pt.x = parseBoardUnits( "grid_item x extent" );
+                pt.y = parseBoardUnits( "grid_item y extent" );
+                griditem->SetExtent( pt );
+            }
+            NeedRIGHT();
+            break;
+
+        case T_angle:
+            griditem->SetOrientationDegrees( parseDouble( "grid_item orientation" ) );
+            NeedRIGHT();
+            break;
+
+        case T_priority:
+            griditem->SetAssignedPriority( static_cast<unsigned>( parseInt( "grid_item priority" ) ) );
+            NeedRIGHT();
+            break;
+
+        case T_tick_interval:
+            griditem->SetTickInterval( static_cast<unsigned>( parseInt( "grid_item tick_interval" ) ) );
+            NeedRIGHT();
+            break;
+
+        case T_affects:
+        {
+            // (affects (cursor yes|no) (routing yes|no) (placement yes|no))
+            PCB_GRIDITEM_AFFECTS aff;
+            aff.SetAll( false );
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( "cursor, routing or placement" );
+
+                token = NextTok();
+                bool* target = nullptr;
+
+                switch( token )
+                {
+                case T_cursor: target = &aff.cursor; break;
+                case T_routing: target = &aff.routing; break;
+                case T_placement: target = &aff.placement; break;
+                default: Expecting( "cursor, routing or placement" );
+                }
+
+                *target = parseBool();
+                NeedRIGHT();
+            }
+
+            griditem->Affects() = aff;
+            break;
+        }
+
+        case T_locked:
+            griditem->SetLocked( parseBool() );
+            NeedRIGHT();
+            break;
+
+        case T_uuid:
+            NextTok();
+            const_cast<KIID&>( griditem->m_Uuid ) = CurStrToKIID();
+            NeedRIGHT();
+            break;
+
+        default:
+            Expecting( "xy, polar, at, spacing, extent, angle, priority, tick_interval, "
+                       "affects, locked or uuid" );
+        }
+    }
+
+    return griditem.release();
 }
 
 

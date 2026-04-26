@@ -38,6 +38,7 @@
 #include <pcb_barcode.h>
 #include <pcb_reference_image.h>
 #include <pcb_track.h>
+#include <pcb_griditem.h>
 #include <zone.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/intersection.h>
@@ -145,6 +146,13 @@ std::optional<int64_t> FindSquareDistanceToItem( const BOARD_ITEM& item, const V
 
     const VECTOR2I nearestPt = GetNearestPoint( *nearable, aPos );
     return nearestPt.SquaredDistance( aPos );
+}
+
+
+VECTOR2I SnapToGridItem( const PCB_GRIDITEM* aItem, const VECTOR2I& aWorld )
+{
+    const VECTOR2D snapped = aItem->AsGridGeometry().Snap( VECTOR2D( aWorld ) );
+    return VECTOR2I( KiROUND( snapped.x ), KiROUND( snapped.y ) );
 }
 
 } // namespace
@@ -350,6 +358,64 @@ void PCB_GRID_HELPER::AddConstructionItems( std::vector<BOARD_ITEM*> aItems, boo
     //  Let the manager handle it
     getSnapManager().GetConstructionManager().ProposeConstructionItems( std::move( constructionItemsBatch ),
                                                                         aIsPersistent );
+}
+
+
+VECTOR2I PCB_GRID_HELPER::Align( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid ) const
+{
+    if( !canUseGrid() )
+        return GRID_HELPER::Align( aPoint, aGrid );
+
+    BOARD* board = static_cast<BOARD*>( m_toolMgr->GetModel() );
+
+    // Priority + coverage-area resolution for the active CURSOR grid lives in
+    // FindActiveGridAt; if one covers aPoint, snap exclusively to that grid.
+    if( PCB_GRIDITEM* active = FindActiveGridAt( *board, aPoint, PCB_GRIDITEM_ROLE::CURSOR ) )
+        return SnapToGridItem( active, aPoint );
+
+    // No active grid covers aPoint - fall back to the display grid, but let any
+    // nearby CURSOR-role grid contribute snap candidates within snapRange.
+    const VECTOR2I gridAligned = GRID_HELPER::Align( aPoint, aGrid );
+
+    const int   snapSize = 25;
+    double      snapScreen = m_toolMgr->GetView()->ToWorld( snapSize );
+    int         snapRange = KiROUND( std::min( snapScreen, GetVisibleGrid().x ) );
+    SEG::ecoord bestDist = SEG::Square( snapRange );
+    VECTOR2I    best = gridAligned;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( item->Type() != PCB_GRIDITEM_T )
+            continue;
+
+        PCB_GRIDITEM* grid = static_cast<PCB_GRIDITEM*>( item );
+
+        if( !grid->Affects().cursor )
+            continue;
+
+        if( grid->IsSelected() )
+        {
+            continue;
+        }
+
+        BOX2I bbox = grid->GetBoundingBox();
+        bbox.Inflate( snapRange );
+
+        if( !bbox.Contains( aPoint ) )
+            continue;
+
+        const VECTOR2I candidate = SnapToGridItem( grid, aPoint );
+
+        const SEG::ecoord dist = ( candidate - aPoint ).SquaredEuclideanNorm();
+
+        if( dist < bestDist )
+        {
+            bestDist = dist;
+            best = candidate;
+        }
+    }
+
+    return best;
 }
 
 
@@ -2163,6 +2229,41 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
     case PCB_TARGET_T:
         addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem, POINT_TYPE::PT_CENTER );
         break;
+
+    case PCB_GRIDITEM_T:
+    {
+        // Edit handles only - grid intersections are rendered by the GAL and not
+        // emitted as anchors (would flood the snap pool).
+        PCB_GRIDITEM*   griditem = static_cast<PCB_GRIDITEM*>( aItem );
+        const VECTOR2I  position = griditem->GetPosition();
+        const EDA_ANGLE orient = griditem->GetOrientation();
+
+        addAnchor( position, ORIGIN | CORNER | SNAPPABLE, griditem, POINT_TYPE::PT_CENTER );
+
+        const auto pushHandle = [&]( VECTOR2I aLocal )
+        {
+            RotatePoint( aLocal, orient );
+            addAnchor( position + aLocal, CORNER | SNAPPABLE, griditem );
+        };
+
+        if( griditem->GetGridItemType() == PCB_GRIDITEM_TYPE::POLAR )
+        {
+            const int    r = griditem->GetRadiusExtent();
+            const double phi = griditem->GetPhiExtent().AsRadians();
+            pushHandle( VECTOR2I( r, 0 ) );
+            pushHandle( VECTOR2I( KiROUND( r * std::cos( phi ) ), KiROUND( r * std::sin( phi ) ) ) );
+            pushHandle( VECTOR2I( KiROUND( r * std::cos( phi / 2.0 ) ), KiROUND( r * std::sin( phi / 2.0 ) ) ) );
+        }
+        else
+        {
+            const VECTOR2I e = griditem->GetExtent();
+            pushHandle( VECTOR2I( -e.x, -e.y ) );
+            pushHandle( VECTOR2I( e.x, -e.y ) );
+            pushHandle( VECTOR2I( e.x, e.y ) );
+            pushHandle( VECTOR2I( -e.x, e.y ) );
+        }
+        break;
+    }
 
     case PCB_POINT_T:
         if( aSelectionFilter && !aSelectionFilter->points )

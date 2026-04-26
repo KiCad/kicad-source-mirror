@@ -36,6 +36,7 @@
 #include <pcb_generator.h>
 #include <pcb_marker.h>
 #include <pcb_point.h>
+#include <pcb_griditem.h>
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
 #include <ratsnest/ratsnest_data.h>
@@ -341,6 +342,50 @@ void PCB_DRAW_PANEL_GAL::UpdateColors()
     m_gal->SetGridColor( cs->GetColor( LAYER_GRID ) );
     m_gal->SetAxesColor( cs->GetColor( LAYER_GRID_AXES ) );
     m_gal->SetCursorColor( cs->GetColor( LAYER_CURSOR ) );
+}
+
+
+void PCB_DRAW_PANEL_GAL::prepareGridSources()
+{
+    std::vector<KIGFX::GRID_SOURCE> sources;
+
+    BOARD* board = nullptr;
+
+    if( PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() ) )
+        board = frame->GetBoard();
+
+    if( !board )
+    {
+        m_gal->SetGridSources( std::move( sources ) );
+        return;
+    }
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( item->Type() != PCB_GRIDITEM_T )
+            continue;
+
+        PCB_GRIDITEM* grid = static_cast<PCB_GRIDITEM*>( item );
+
+        // Priority 0 is the background grid's; a grid item must never sink behind it.
+        wxASSERT( grid->GetAssignedPriority() > 0 );
+
+        KIGFX::GRID_SOURCE src;
+        static_cast<GRID_GEOMETRY&>( src ) = grid->AsGridGeometry();
+
+        // Pitch is a loop step in the renderer; the spacing setters keep it positive.
+        wxASSERT( src.pitch.x > 0.0 && src.pitch.y > 0.0 );
+
+        src.tick = grid->GetTickInterval();
+        src.highlighted = grid->IsSelected();
+        src.snapCursor = grid->Affects().cursor && !grid->IsSelected();
+        src.color = m_gal->GetGridColor(); // inherit display color
+        src.style = m_gal->GetGridStyle(); // inherit display style
+
+        sources.push_back( src );
+    }
+
+    m_gal->SetGridSources( std::move( sources ) );
 }
 
 

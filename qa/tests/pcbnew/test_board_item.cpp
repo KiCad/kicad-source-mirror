@@ -42,6 +42,7 @@
 #include <pcb_point.h>
 #include <pcb_target.h>
 #include <pcb_group.h>
+#include <pcb_griditem.h>
 #include <pcb_board_outline.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
@@ -123,6 +124,7 @@ public:
         case PCB_DIM_ORTHOGONAL_T:    return new PCB_DIM_ORTHOGONAL( &m_board );
         case PCB_TARGET_T:            return new PCB_TARGET( &m_board );
         case PCB_POINT_T:             return new PCB_POINT( &m_board );
+        case PCB_GRIDITEM_T:          return new PCB_GRIDITEM( &m_board );
 
         case PCB_ZONE_T:
         {

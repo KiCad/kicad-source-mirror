@@ -67,6 +67,11 @@ public:
      */
     void UpdateColors();
 
+    /**
+     * Push a GRID_SOURCE for every PCB_GRIDITEM on the board to the GAL.
+     */
+    void prepareGridSources() override;
+
     ///< @copydoc EDA_DRAW_PANEL_GAL::SetHighContrastLayer()
     virtual void SetHighContrastLayer( int aLayer ) override
     {

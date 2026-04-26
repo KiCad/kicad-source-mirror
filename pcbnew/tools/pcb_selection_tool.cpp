@@ -4141,6 +4141,12 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         break;
 
+    case PCB_GRIDITEM_T:
+        if( !view()->IsLayerVisible( LAYER_GRID ) )
+            return false;
+
+        break;
+
     // These are not selectable
     case PCB_NETINFO_T:
     case PCB_CONSTRAINT_T:   // geometry-free, never rendered or hit-tested (#2329)
