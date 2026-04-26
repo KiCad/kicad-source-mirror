@@ -1267,7 +1267,7 @@ int SCH_EDITOR_CONTROL::HighlightNetChain( const TOOL_EVENT& aEvent )
         // Cross-probe the chain's member nets to the PCB so the chain highlights there too.
         // The PCB side interprets the first member as the net to highlight; in a chain-aware
         // PCB build, all members will be included in a single highlight event.
-        if( CONNECTION_GRAPH* graph = editFrame->Schematic().ConnectionGraph() )
+        if( graph )
         {
             if( SCH_NETCHAIN* chain = graph->GetNetChainByName( netChainName ) )
             {
