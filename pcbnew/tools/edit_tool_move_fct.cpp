@@ -1246,9 +1246,9 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     {
                         item->Move( movement );
 
-                        // Images are on non-cached layers and will not be updated automatically in the overlay, so
-                        // explicitly tell the view they've moved.
-                        if( item->Type() == PCB_REFERENCE_IMAGE_T )
+                        // Images and grid items are on non-cached layers and will not be updated automatically in
+                        // the overlay, so explicitly tell the view they've moved.
+                        if( item->Type() == PCB_REFERENCE_IMAGE_T || item->Type() == PCB_GRIDITEM_T )
                             view()->Update( item, KIGFX::GEOMETRY );
                     }
 

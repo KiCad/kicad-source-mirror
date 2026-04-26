@@ -83,6 +83,7 @@
 #include <pcb_tablecell.h>
 #include <pcb_track.h>
 #include <pcb_dimension.h>
+#include <pcb_griditem.h>
 #include <constraints/board_constraint_adapter.h>
 #include <constraints/constraint_builder.h>
 #include <constraints/pcb_constraint.h>
@@ -2531,6 +2532,143 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 }
 
 
+int DRAWING_TOOL::PlaceGridItem( const TOOL_EVENT& aEvent )
+{
+    if( !m_frame->GetModel() )
+        return 0;
+
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+
+    enum GRIDITEM_STEPS
+    {
+        SET_CENTER = 0,
+        SET_EXTENT
+    };
+
+    SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ANCHOR );
+    PCB_GRID_HELPER  grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    int              step = SET_CENTER;
+
+    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+    m_frame->PushTool( aEvent );
+
+    auto setCursor = [&]()
+    {
+        m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::BULLSEYE );
+    };
+
+    Activate();
+    // Must be done after Activate() so that it gets set into the correct context
+    m_controls->ShowCursor( true );
+    m_controls->SetAutoPan( true );
+    m_controls->CaptureCursor( false );
+    m_controls->ForceCursorPosition( false );
+    // Set initial cursor
+    setCursor();
+
+    BOARD*        board = getModel<BOARD>();
+    PCB_GRIDITEM* griditem = nullptr;
+
+    auto sizeToCursor = [&]( const VECTOR2I& aCursor )
+    {
+        VECTOR2I  v = aCursor - griditem->GetPosition();
+        const int len = KiROUND( v.EuclideanNorm() );
+
+        griditem->SetOrientation( -EDA_ANGLE( VECTOR2D( v ) ) );
+        griditem->SetExtent( VECTOR2I( len, len ) );
+    };
+
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        setCursor();
+
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+        VECTOR2I cursorPos =
+                grid.ResolveSnap( m_controls->GetMousePosition(), LSET::AllLayersMask() ).position;
+        m_controls->ForceCursorPosition( true, cursorPos );
+
+        if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        {
+            if( step == SET_CENTER )
+            {
+                // Only items on the board are picked up trough a GRID_SOURCE
+                // SetSelected highlights the grid and avoids snapping to itself
+                griditem = new PCB_GRIDITEM( board );
+                griditem->SetPosition( cursorPos );
+                griditem->SetExtent( VECTOR2I( 0, 0 ) );
+                griditem->SetSelected();
+
+                board->Add( griditem );
+                view()->Add( griditem );
+
+                step = SET_EXTENT;
+            }
+            else
+            {
+                sizeToCursor( cursorPos );
+                griditem->ClearSelected();
+
+                // Remove the item from the board to add it properly through a commit again
+                view()->Remove( griditem );
+                board->Remove( griditem );
+
+                BOARD_COMMIT commit( m_frame );
+                commit.Add( griditem );
+                commit.Push( _( "Place a local grid item" ) );
+
+                griditem = nullptr;
+                step = SET_CENTER;
+            }
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu->ShowContextMenu( selection() );
+        }
+        else if( evt->IsCancelInteractive() || evt->IsActivate() || ( griditem && evt->IsAction( &ACTIONS::undo ) ) )
+        {
+            bool restart = griditem && !evt->IsActivate();
+
+            if( griditem )
+            {
+                view()->Remove( griditem );
+                board->Remove( griditem );
+                delete griditem;
+                griditem = nullptr;
+            }
+
+            if( restart )
+            {
+                step = SET_CENTER;
+            }
+            else
+            {
+                m_frame->PopTool( aEvent );
+                break;
+            }
+        }
+        else if( griditem && evt->IsMotion() )
+        {
+            sizeToCursor( cursorPos );
+            view()->Update( griditem );
+        }
+        else
+        {
+            evt->SetPassEvent();
+        }
+    }
+
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    m_controls->ForceCursorPosition( false );
+
+    return 0;
+}
+
+
 static VECTOR2I evalEllipsePoint( const PCB_SHAPE* aGraphic, const VECTOR2I& aCursorPos )
 {
     const VECTOR2I  center = aGraphic->GetEllipseCenter();
@@ -4528,5 +4666,6 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneSingleTrack.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneDiffPair.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneSkew.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceGridItem,         PCB_ACTIONS::placeGridItem.MakeEvent() );
     // clang-format on
 }

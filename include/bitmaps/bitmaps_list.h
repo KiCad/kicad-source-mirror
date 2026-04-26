@@ -53,6 +53,7 @@ enum class BITMAPS : unsigned int
     add_ellipse_arc,
     add_gerber,
     add_glabel,
+    add_grid_item,
     add_graphical_polygon,
     add_graphical_segments,
     add_hierar_pin,

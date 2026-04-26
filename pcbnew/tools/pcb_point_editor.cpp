@@ -52,6 +52,7 @@ using namespace std::placeholders;
 #include <pcb_group.h>
 #include <pcb_dimension.h>
 #include <pcb_barcode.h>
+#include <pcb_griditem.h>
 #include <pcb_textbox.h>
 #include <pcb_tablecell.h>
 #include <pcb_table.h>
@@ -813,6 +814,190 @@ public:
 
 private:
     PCB_BARCODE& m_barcode;
+};
+
+
+class PCB_GRIDITEM_POINT_EDIT_BEHAVIOR : public POINT_EDIT_BEHAVIOR
+{
+public:
+    PCB_GRIDITEM_POINT_EDIT_BEHAVIOR( PCB_GRIDITEM& aGridItem ) :
+            m_gridItem( aGridItem )
+    {
+    }
+
+    void MakePoints( EDIT_POINTS& aPoints ) override
+    {
+        // Index 0: centre (drag = translate).
+        aPoints.AddPoint( m_gridItem.GetPosition() );
+
+        switch( m_gridItem.GetGridItemType() )
+        {
+        case PCB_GRIDITEM_TYPE::POLAR:
+            aPoints.AddPoint( toWorld( radiusEndLocal() ) );
+            aPoints.AddPoint( toWorld( arcEndLocal() ) );
+            aPoints.AddPoint( toWorld( arcMidLocal() ) );
+            break;
+
+        case PCB_GRIDITEM_TYPE::CARTESIAN:
+            aPoints.AddPoint( toWorld( cornerLocal( 0, 0 ) ) );
+            aPoints.AddPoint( toWorld( cornerLocal( 1, 0 ) ) );
+            aPoints.AddPoint( toWorld( cornerLocal( 1, 1 ) ) );
+            aPoints.AddPoint( toWorld( cornerLocal( 0, 1 ) ) );
+            break;
+
+        default: wxFAIL_MSG( wxT( "MakePoints: unhandled PCB_GRIDITEM_TYPE" ) ); break;
+        }
+    }
+
+    bool UpdatePoints( EDIT_POINTS& aPoints ) override
+    {
+        switch( m_gridItem.GetGridItemType() )
+        {
+        case PCB_GRIDITEM_TYPE::POLAR:
+            if( aPoints.PointsSize() != 4 )
+                return false;
+
+            aPoints.Point( 0 ).SetPosition( m_gridItem.GetPosition() );
+            aPoints.Point( 1 ).SetPosition( toWorld( radiusEndLocal() ) );
+            aPoints.Point( 2 ).SetPosition( toWorld( arcEndLocal() ) );
+            aPoints.Point( 3 ).SetPosition( toWorld( arcMidLocal() ) );
+            return true;
+
+        case PCB_GRIDITEM_TYPE::CARTESIAN:
+            if( aPoints.PointsSize() != 5 )
+                return false;
+
+            aPoints.Point( 0 ).SetPosition( m_gridItem.GetPosition() );
+            aPoints.Point( 1 ).SetPosition( toWorld( cornerLocal( 0, 0 ) ) );
+            aPoints.Point( 2 ).SetPosition( toWorld( cornerLocal( 1, 0 ) ) );
+            aPoints.Point( 3 ).SetPosition( toWorld( cornerLocal( 1, 1 ) ) );
+            aPoints.Point( 4 ).SetPosition( toWorld( cornerLocal( 0, 1 ) ) );
+            return true;
+
+        default: wxFAIL_MSG( wxT( "UpdatePoints: unhandled PCB_GRIDITEM_TYPE" ) ); return false;
+        }
+    }
+
+    void UpdateItem( const EDIT_POINT& aEditedPoint, EDIT_POINTS& aPoints, COMMIT& aCommit,
+                     std::vector<EDA_ITEM*>& aUpdatedItems ) override
+    {
+        // Centre handle: translate the whole grid.
+        if( isModified( aEditedPoint, aPoints.Point( 0 ) ) )
+        {
+            m_gridItem.SetPosition( aEditedPoint.GetPosition() );
+            return;
+        }
+
+        const VECTOR2I local = toLocal( aEditedPoint.GetPosition() );
+
+        switch( m_gridItem.GetGridItemType() )
+        {
+        case PCB_GRIDITEM_TYPE::POLAR:
+        {
+            // World offset from grid centre.
+            const VECTOR2I worldOff = aEditedPoint.GetPosition() - m_gridItem.GetPosition();
+            const double   dragAngle = std::atan2( worldOff.y, worldOff.x );
+            const int      newRadius = std::max( 1, KiROUND( std::hypot( worldOff.x, worldOff.y ) ) );
+            const double   orientOld = m_gridItem.GetOrientation().AsRadians();
+            const double   phiMaxOld = m_gridItem.GetPhiExtent().AsRadians();
+
+            // KiCad screen rotation: a local point at phi lands at world math-angle
+            // (phi - orient).  Each handle drag pins exactly one endpoint and follows
+            // the (already-snapped) cursor; the unmoved endpoint stays put.
+            const auto wrap2pi = []( double a )
+            {
+                while( a < 0 )
+                    a += 2 * M_PI;
+                while( a >= 2 * M_PI )
+                    a -= 2 * M_PI;
+                return a;
+            };
+
+            if( isModified( aEditedPoint, aPoints.Point( 1 ) ) ) // radius end (phi=0)
+            {
+                // phi=0 follows the cursor; the phi=phiMax end stays at world angle
+                // (phiMaxOld - orientOld).
+                const double newOrient = -dragAngle;
+                const double newPhiMax = wrap2pi( phiMaxOld - orientOld - dragAngle );
+
+                m_gridItem.SetOrientation( EDA_ANGLE( newOrient, RADIANS_T ) );
+                m_gridItem.SetPhiExtentDegrees( newPhiMax * 180.0 / M_PI );
+            }
+            else if( isModified( aEditedPoint, aPoints.Point( 2 ) ) ) // arc end (phi=phiMax)
+            {
+                // phi=phiMax follows the cursor; the phi=0 end (orient direction) stays.
+                const double newPhiMax = wrap2pi( dragAngle + orientOld );
+
+                m_gridItem.SetPhiExtentDegrees( newPhiMax * 180.0 / M_PI );
+            }
+            else if( isModified( aEditedPoint, aPoints.Point( 3 ) ) ) // arc mid (bisector)
+            {
+                // Bisector follows the cursor; phiMax unchanged (whole wedge rotates).
+                const double newOrient = phiMaxOld / 2.0 - dragAngle;
+
+                m_gridItem.SetOrientation( EDA_ANGLE( newOrient, RADIANS_T ) );
+            }
+
+            m_gridItem.SetRadiusExtent( newRadius );
+            break;
+        }
+
+        case PCB_GRIDITEM_TYPE::CARTESIAN:
+        {
+            // Dragging a corner resizes symmetrically about the centre.
+            const int newHalfX = std::max( 1, std::abs( local.x ) );
+            const int newHalfY = std::max( 1, std::abs( local.y ) );
+
+            // SetExtent takes size/2 directly, bypassing the property panel's
+            // total-width 2x / /2 accessor dance.
+            m_gridItem.SetExtent( VECTOR2I( newHalfX, newHalfY ) );
+            break;
+        }
+
+        default: wxFAIL_MSG( wxT( "UpdateItem: unhandled PCB_GRIDITEM_TYPE" ) ); break;
+        }
+    }
+
+private:
+    VECTOR2I toLocal( const VECTOR2I& aWorld ) const
+    {
+        VECTOR2I local = aWorld - m_gridItem.GetPosition();
+        RotatePoint( local, -m_gridItem.GetOrientation() );
+        return local;
+    }
+
+    VECTOR2I toWorld( const VECTOR2I& aLocal ) const
+    {
+        VECTOR2I world = aLocal;
+        RotatePoint( world, m_gridItem.GetOrientation() );
+        return m_gridItem.GetPosition() + world;
+    }
+
+    // aX / aY in {0, 1}: 0 = negative half, 1 = positive half.
+    VECTOR2I cornerLocal( int aX, int aY ) const
+    {
+        const int sx = ( aX == 0 ) ? -1 : +1;
+        const int sy = ( aY == 0 ) ? -1 : +1;
+        return VECTOR2I( sx * m_gridItem.GetExtent().x, sy * m_gridItem.GetExtent().y );
+    }
+
+    VECTOR2I radiusEndLocal() const { return VECTOR2I( m_gridItem.GetRadiusExtent(), 0 ); }
+
+    VECTOR2I arcEndLocal() const
+    {
+        const double phi = m_gridItem.GetPhiExtent().AsRadians();
+        const int    r = m_gridItem.GetRadiusExtent();
+        return VECTOR2I( KiROUND( r * std::cos( phi ) ), KiROUND( r * std::sin( phi ) ) );
+    }
+
+    VECTOR2I arcMidLocal() const
+    {
+        const double phi = m_gridItem.GetPhiExtent().AsRadians() / 2.0;
+        const int    r = m_gridItem.GetRadiusExtent();
+        return VECTOR2I( KiROUND( r * std::cos( phi ) ), KiROUND( r * std::sin( phi ) ) );
+    }
+
+    PCB_GRIDITEM& m_gridItem;
 };
 
 
@@ -2046,6 +2231,12 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
     {
         PCB_BARCODE& barcode = static_cast<PCB_BARCODE&>( *aItem );
         m_editorBehavior = std::make_unique<BARCODE_POINT_EDIT_BEHAVIOR>( barcode );
+        break;
+    }
+    case PCB_GRIDITEM_T:
+    {
+        PCB_GRIDITEM& grid = static_cast<PCB_GRIDITEM&>( *aItem );
+        m_editorBehavior = std::make_unique<PCB_GRIDITEM_POINT_EDIT_BEHAVIOR>( grid );
         break;
     }
     case PCB_TEXTBOX_T:

@@ -3318,6 +3318,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             case PCB_DIM_RADIAL_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
+            case PCB_GRIDITEM_T:
                 if( m_isFootprintEditor )
                     dupe_item = parentFootprint->DuplicateItem( true, &commit, orig_item );
                 else

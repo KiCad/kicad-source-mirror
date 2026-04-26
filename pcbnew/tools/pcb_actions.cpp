@@ -3157,6 +3157,15 @@ TOOL_ACTION PCB_ACTIONS::showDiffPhaseSkew( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::tune_diff_pair_skew_legend ) );
 
 
+/// Grid Item
+TOOL_ACTION PCB_ACTIONS::placeGridItem( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.GridItem.place" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Place Grid Item" ) )
+        .Tooltip( _( "Adds a grid item to the board" ) )
+        .Icon( BITMAPS::add_grid_item ) );
+
+
 const TOOL_EVENT& PCB_EVENTS::SnappingModeChangedByKeyEvent()
 {
     static TOOL_EVENT event = TOOL_EVENT( TC_MESSAGE, TA_ACTION,

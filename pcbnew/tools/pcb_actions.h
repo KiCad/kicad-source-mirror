@@ -679,6 +679,9 @@ public:
 
     /// Display of phase skew between differential pair tracks
     static TOOL_ACTION showDiffPhaseSkew;
+
+    /// Grid Item
+    static TOOL_ACTION placeGridItem;
 };
 
 class PCB_EVENTS

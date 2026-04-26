@@ -3485,6 +3485,9 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
         else
             return aFilterOptions.includeItemsOnTechLayers;
 
+    case PCB_GRIDITEM_T:
+        return aFilterOptions.includeItemsOnTechLayers;
+
     case PCB_FIELD_T:
     case PCB_TEXT_T:
     case PCB_TEXTBOX_T:
@@ -3746,6 +3749,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
         break;
 
     case PCB_BARCODE_T:
+    case PCB_GRIDITEM_T:
     default:
         if( !m_filter.otherItems )
         {

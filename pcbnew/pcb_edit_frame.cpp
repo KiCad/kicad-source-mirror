@@ -1484,6 +1484,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drillOrigin );
     CURRENT_EDIT_TOOL( ACTIONS::gridSetOrigin );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::createArray );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::placeGridItem );
 
     CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintCoincident );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::addConstraintPointOnLine );

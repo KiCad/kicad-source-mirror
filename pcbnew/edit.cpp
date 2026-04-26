@@ -130,6 +130,10 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         ShowTargetOptionsDialog( static_cast<PCB_TARGET*>( aItem ) );
         break;
 
+    case PCB_GRIDITEM_T:
+        // TODO: Add Custom Dialog
+        break;
+
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_CENTER_T:
     case PCB_DIM_RADIAL_T:

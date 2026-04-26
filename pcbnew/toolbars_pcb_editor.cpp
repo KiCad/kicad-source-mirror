@@ -314,6 +314,7 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
                             .AddAction( ACTIONS::gridSetOrigin )
                             .AddAction( PCB_ACTIONS::drillOrigin ) )
                             .AppendAction( PCB_ACTIONS::placePoint )
+              .AppendAction( PCB_ACTIONS::placeGridItem )
               .AppendAction( ACTIONS::measureTool );
 
         break;
