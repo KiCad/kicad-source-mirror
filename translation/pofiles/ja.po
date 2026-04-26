@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-26 04:51+0300\n"
-"PO-Revision-Date: 2026-04-26 12:42+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2026-04-27 22:09+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -9250,11 +9250,11 @@ msgstr "ローカル履歴を圧縮しています..."
 
 #: common/local_history.cpp:1332
 msgid "Trimming local history..."
-msgstr ""
+msgstr "ローカル履歴をトリミング..."
 
 #: common/local_history.cpp:1425
 msgid "Compacting trimmed history..."
-msgstr ""
+msgstr "トリミング履歴を圧縮..."
 
 #: common/local_history.cpp:1728
 msgid ""
@@ -21754,14 +21754,14 @@ msgid "LTspice schematic files"
 msgstr "LTspice 回路図ファイル"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1457
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a PADS Logic ASCII file."
-msgstr "'%s' は有効な SPICE の値ではありません。"
+msgstr "'%s' は PADS Logic アスキーファイルではありません。"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1469
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS Logic file '%s'."
-msgstr "ファイル '%s' の読み込みに失敗しました。"
+msgstr "PADS Logicファイル '%s' の解釈に失敗しました。"
 
 #: eeschema/sch_io/pads/sch_io_pads.h:49
 msgid "PADS Logic schematic files"
@@ -32418,30 +32418,28 @@ msgid "Please wait"
 msgstr "お待ちください"
 
 #: kicad/project_tree_pane.cpp:1706
-#, fuzzy
 msgid "Closing project..."
-msgstr "プロジェクトをコミット..."
+msgstr "プロジェクトを終了中..."
 
 #: kicad/project_tree_pane.cpp:1723
 msgid ""
 "A Git operation is still running.\n"
 "Keep waiting, or abandon?"
 msgstr ""
+"Git操作がまだ実行中です。\n"
+"このままお待ちいただくか、それともGit操作を中止しますか？"
 
 #: kicad/project_tree_pane.cpp:1725
-#, fuzzy
 msgid "Git Operation Delayed"
-msgstr "ユニット伝播遅延:"
+msgstr "Git操作で遅延中"
 
 #: kicad/project_tree_pane.cpp:1727
-#, fuzzy
 msgid "Keep Waiting"
-msgstr "アノテーションをキープ"
+msgstr "このまま待つ"
 
 #: kicad/project_tree_pane.cpp:1727
-#, fuzzy
 msgid "Abandon"
-msgstr "ランダム"
+msgstr "Git操作を諦める"
 
 #: kicad/project_tree_pane.cpp:1803
 msgid "The selected directory is already a Git project."
@@ -40492,7 +40490,7 @@ msgstr "レイヤーのデフォルト値に設定:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:336
 msgid "(auto)"
-msgstr ""
+msgstr "(自動)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "PCB graphic items"
@@ -40856,73 +40854,63 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:436
 msgid "Auto-migrate 3D model references"
-msgstr ""
+msgstr "自動で3Dモデル 参照の移行"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:662
-#, fuzzy
 msgid "(keep existing reference)"
-msgstr "既存のリファレンス指定子を保持する"
+msgstr "(既存の参照を保持する)"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:863
-#, fuzzy
 msgid "Add 3D Model Search Directory"
-msgstr "ディレクトリー削除 (&D)"
+msgstr "3Dモデル検索ディレクトリを追加"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:957
-#, fuzzy
 msgid "Select 3D Model File"
-msgstr "3D モデルを選択"
+msgstr "3D モデルファイルを選択"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:974
-#, fuzzy
 msgid "user-selected"
-msgstr "バス未選択"
+msgstr "ユーザーが選択した"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1058
-#, fuzzy
 msgid "Migrate 3D model references"
-msgstr "フレーム リファレンスを印刷する。"
+msgstr "3Dモデル参照の移行"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:19
 msgid ""
 "This board references 3D models that are no longer present on your system.\n"
 "Select replacements below, or keep the existing references unchanged."
 msgstr ""
+"この基板にはあなたのシステムに存在しない3Dモデルを参照設定しています。\n"
+"以下の代替モデルを選択するか、既存の参照設定をそのまま使用してください。"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:31
-#, fuzzy
 msgid "Missing 3D model references:"
-msgstr "フレーム リファレンスを印刷する。"
+msgstr "3Dモデル参照が不足しています:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:54
-#, fuzzy
 msgid "Potential replacements:"
-msgstr "コンポーネント配置"
+msgstr "代替候補:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
-#, fuzzy
 msgid "Add Search Directory..."
-msgstr "新規ディレクトリ..."
+msgstr "検索ディレクトリ追加..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:67
-#, fuzzy
 msgid "Open External File..."
-msgstr "ローカル ファイルを開く (&O)..."
+msgstr "外部ファイルを開く..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:105
-#, fuzzy
 msgid "Replace Models"
-msgstr "すべて置換"
+msgstr "モデルを置換"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:108
-#, fuzzy
 msgid "Keep Existing"
-msgstr "既存を利用"
+msgstr "既存を維持"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.h:68
-#, fuzzy
 msgid "Migrate 3D Models"
-msgstr "3D モデルを更新"
+msgstr "3D モデルを移行"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:96
 msgid "Rotate around item anchor"
@@ -51207,12 +51195,11 @@ msgstr "新しい基板ファイルは保存されていません"
 #, c-format
 msgid "%d WRL 3D model could not be matched to an equivalent STEP model."
 msgid_plural "%d WRL 3D models could not be matched to equivalent STEP models."
-msgstr[0] ""
+msgstr[0] "%d 個のWRL 3Dモデルが、同等のSTEPモデルとマッチングできませんでした。"
 
 #: pcbnew/pcb_edit_frame.cpp:1958
-#, fuzzy
 msgid "Show options"
-msgstr "その他オプション"
+msgstr "オプション表示"
 
 #: pcbnew/pcb_edit_frame.cpp:1986
 msgid "Board file is read only."
@@ -56832,13 +56819,12 @@ msgid "Update footprints to include any changes from the library"
 msgstr "すべての変更を適用するためにライブラリからフットプリントを更新"
 
 #: pcbnew/tools/pcb_actions.cpp:996
-#, fuzzy
 msgid "Migrate 3D Models..."
-msgstr "3D モデルを読み込み中..."
+msgstr "3D モデルを移行中..."
 
 #: pcbnew/tools/pcb_actions.cpp:997
 msgid "Replace obsolete WRL 3D model references with current STEP models"
-msgstr ""
+msgstr "旧式のWRL 3Dモデル参照を最新のSTEPモデルに置換する"
 
 #: pcbnew/tools/pcb_actions.cpp:1003
 msgid "Remove Unused Pads..."
@@ -59801,7 +59787,7 @@ msgstr "サーマルリリーフ"
 
 #: pcbnew/zones.h:64
 msgid "solid"
-msgstr "実線"
+msgstr "パッドは銅で覆われている"
 
 #: pcbnew/zones.h:65
 msgid "thermal reliefs for PTH"
