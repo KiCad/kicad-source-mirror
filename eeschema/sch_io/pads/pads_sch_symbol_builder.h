@@ -30,6 +30,7 @@
 class LIB_SYMBOL;
 class SCH_SHAPE;
 class SCH_PIN;
+class SCH_TEXT;
 class SCHEMATIC;
 
 namespace PADS_SCH
@@ -144,6 +145,10 @@ private:
     std::vector<SCH_SHAPE*> createShapes( const SYMBOL_GRAPHIC& aGraphic );
 
     SCH_PIN* createPin( const SYMBOL_PIN& aPin, LIB_SYMBOL* aParent );
+
+    /// Build the configured SCH_TEXT for one symbol text field, or nullptr when its content is
+    /// empty. A non-zero @p aUnit binds the text to that body unit.
+    SCH_TEXT* createSymbolText( const SYMBOL_TEXT& aText, int aUnit = 0 );
 
     int mapPinType( PIN_TYPE aPadsType );
 

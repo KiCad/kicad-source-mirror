@@ -83,25 +83,8 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildSymbol( const SYMBOL_DEF& aSymbolDef )
     // Add embedded text labels
     for( const SYMBOL_TEXT& text : aSymbolDef.texts )
     {
-        if( text.content.empty() )
-            continue;
-
-        SCH_TEXT* schText = new SCH_TEXT( VECTOR2I( toKiCadUnits( text.position.x ),
-                                                    -toKiCadUnits( text.position.y ) ),
-                                          wxString::FromUTF8( text.content ), LAYER_DEVICE );
-
-        if( text.size > 0.0 )
-        {
-            int scaledSize = toKiCadUnits( text.size );
-            int charHeight = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
-            int charWidth = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
-            schText->SetTextSize( VECTOR2I( charWidth, charHeight ) );
-        }
-
-        if( text.rotation != 0.0 )
-            schText->SetTextAngleDegrees( text.rotation );
-
-        libSymbol->AddDrawItem( schText );
+        if( SCH_TEXT* schText = createSymbolText( text ) )
+            libSymbol->AddDrawItem( schText );
     }
 
     libSymbol->SetShowPinNumbers( false );
@@ -195,26 +178,8 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitSymbol( const PARTTYPE_DEF& a
         // Add embedded text labels for this unit
         for( const SYMBOL_TEXT& text : symDef.texts )
         {
-            if( text.content.empty() )
-                continue;
-
-            SCH_TEXT* schText = new SCH_TEXT( VECTOR2I( toKiCadUnits( text.position.x ),
-                                                        -toKiCadUnits( text.position.y ) ),
-                                              wxString::FromUTF8( text.content ), LAYER_DEVICE );
-
-            if( text.size > 0.0 )
-            {
-                int scaledSize = toKiCadUnits( text.size );
-                int charHeight = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
-                int charWidth = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
-                schText->SetTextSize( VECTOR2I( charWidth, charHeight ) );
-            }
-
-            if( text.rotation != 0.0 )
-                schText->SetTextAngleDegrees( text.rotation );
-
-            schText->SetUnit( unit );
-            libSymbol->AddDrawItem( schText );
+            if( SCH_TEXT* schText = createSymbolText( text, unit ) )
+                libSymbol->AddDrawItem( schText );
         }
     }
 
@@ -292,25 +257,8 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreatePartTypeSymbol( const PARTTYPE_D
 
     for( const SYMBOL_TEXT& text : aSymbolDef.texts )
     {
-        if( text.content.empty() )
-            continue;
-
-        SCH_TEXT* schText = new SCH_TEXT( VECTOR2I( toKiCadUnits( text.position.x ),
-                                                    -toKiCadUnits( text.position.y ) ),
-                                          wxString::FromUTF8( text.content ), LAYER_DEVICE );
-
-        if( text.size > 0.0 )
-        {
-            int scaledSize = toKiCadUnits( text.size );
-            int charHeight = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
-            int charWidth = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
-            schText->SetTextSize( VECTOR2I( charWidth, charHeight ) );
-        }
-
-        if( text.rotation != 0.0 )
-            schText->SetTextAngleDegrees( text.rotation );
-
-        libSymbol->AddDrawItem( schText );
+        if( SCH_TEXT* schText = createSymbolText( text ) )
+            libSymbol->AddDrawItem( schText );
     }
 
     // Show pin names/numbers if any gate pin has an explicit name
@@ -379,25 +327,8 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreateConnectorPinSymbol( const PARTTY
 
     for( const SYMBOL_TEXT& text : aSymbolDef.texts )
     {
-        if( text.content.empty() )
-            continue;
-
-        SCH_TEXT* schText = new SCH_TEXT( VECTOR2I( toKiCadUnits( text.position.x ),
-                                                    -toKiCadUnits( text.position.y ) ),
-                                          wxString::FromUTF8( text.content ), LAYER_DEVICE );
-
-        if( text.size > 0.0 )
-        {
-            int scaledSize = toKiCadUnits( text.size );
-            int charHeight = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
-            int charWidth = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
-            schText->SetTextSize( VECTOR2I( charWidth, charHeight ) );
-        }
-
-        if( text.rotation != 0.0 )
-            schText->SetTextAngleDegrees( text.rotation );
-
-        libSymbol->AddDrawItem( schText );
+        if( SCH_TEXT* schText = createSymbolText( text ) )
+            libSymbol->AddDrawItem( schText );
     }
 
     libSymbol->SetShowPinNumbers( false );
@@ -470,26 +401,8 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::BuildMultiUnitConnectorSymbol( const PARTTY
 
         for( const SYMBOL_TEXT& text : aSymbolDef.texts )
         {
-            if( text.content.empty() )
-                continue;
-
-            SCH_TEXT* schText = new SCH_TEXT( VECTOR2I( toKiCadUnits( text.position.x ),
-                                                        -toKiCadUnits( text.position.y ) ),
-                                              wxString::FromUTF8( text.content ), LAYER_DEVICE );
-
-            if( text.size > 0.0 )
-            {
-                int scaledSize = toKiCadUnits( text.size );
-                int charHeight = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
-                int charWidth = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
-                schText->SetTextSize( VECTOR2I( charWidth, charHeight ) );
-            }
-
-            if( text.rotation != 0.0 )
-                schText->SetTextAngleDegrees( text.rotation );
-
-            schText->SetUnit( unit );
-            libSymbol->AddDrawItem( schText );
+            if( SCH_TEXT* schText = createSymbolText( text, unit ) )
+                libSymbol->AddDrawItem( schText );
         }
     }
 
@@ -740,6 +653,33 @@ std::vector<SCH_SHAPE*> PADS_SCH_SYMBOL_BUILDER::createShapes( const SYMBOL_GRAP
     }
 
     return result;
+}
+
+
+SCH_TEXT* PADS_SCH_SYMBOL_BUILDER::createSymbolText( const SYMBOL_TEXT& aText, int aUnit )
+{
+    if( aText.content.empty() )
+        return nullptr;
+
+    SCH_TEXT* schText = new SCH_TEXT(
+            VECTOR2I( toKiCadUnits( aText.position.x ), -toKiCadUnits( aText.position.y ) ),
+            wxString::FromUTF8( aText.content ), LAYER_DEVICE );
+
+    if( aText.size > 0.0 )
+    {
+        int scaledSize = toKiCadUnits( aText.size );
+        int charHeight = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextHeightScale );
+        int charWidth = static_cast<int>( scaledSize * ADVANCED_CFG::GetCfg().m_PadsSchTextWidthScale );
+        schText->SetTextSize( VECTOR2I( charWidth, charHeight ) );
+    }
+
+    if( aText.rotation != 0.0 )
+        schText->SetTextAngleDegrees( aText.rotation );
+
+    if( aUnit != 0 )
+        schText->SetUnit( aUnit );
+
+    return schText;
 }
 
 
