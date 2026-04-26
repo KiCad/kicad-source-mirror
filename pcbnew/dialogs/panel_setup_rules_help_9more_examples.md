@@ -127,11 +127,11 @@
         (condition "A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y"))
 
 
-    # Allow blind/buried to micro-via hole-to-hole violations when it is known that
-    # the fab will mechanically drill blind/buried via holes -before- laser drilling 
+    # Allow blind to micro-via hole-to-hole violations when it is known that
+    # the fab will mechanically drill blind via holes -before- laser drilling
     # micro-vias.
     (rule hole_to_hole_uvia_exclusion
-        (condition "A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'")
+        (condition "A.Via_Type == 'Blind' && B.Via_Type == 'Micro'")
         (constraint hole_to_hole)
         (severity ignore))
 
