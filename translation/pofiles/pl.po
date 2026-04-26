@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-24 17:36+0300\n"
-"PO-Revision-Date: 2026-04-17 12:22+0000\n"
+"PO-Revision-Date: 2026-04-26 12:42+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -2431,9 +2431,9 @@ msgstr ""
 "'%s'."
 
 #: common/design_block_io.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save design block metadata '%s': %s"
-msgstr "Nie można było zapisać pliku biblioteki bloków projektowych '%s'."
+msgstr "Nie można zapisać metadanych bloku projektowego '%s':%s"
 
 #: common/design_block_io.cpp:488
 #, c-format
@@ -7797,9 +7797,9 @@ msgid "Could not create directory '%s'"
 msgstr "Nie można utworzyć folderu '%s'"
 
 #: common/git/libgit_backend.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s' : %s"
-msgstr "Nie można sklonować repozytorium '%s'"
+msgstr "Nie można sklonować repozytorium '%s' : %s"
 
 #: common/git/libgit_backend.cpp:171
 #, c-format
@@ -9953,9 +9953,9 @@ msgid "Line length exceeded"
 msgstr "Przekroczona długość linii"
 
 #: common/richio.cpp:560
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot flush '%s' to disk: %s"
-msgstr "Nie można przenieść '%s' do kosza."
+msgstr "Nie można przelać '%s' na dysk: %s"
 
 #: common/richio.cpp:614
 #, fuzzy, c-format
@@ -9963,9 +9963,9 @@ msgid "Failed to commit save of '%s': %s"
 msgstr "Nie można załadować strony '%s':%s"
 
 #: common/richio.cpp:718
-#, fuzzy, c-format
+#, c-format
 msgid "Write failed to '%s': %s"
-msgstr "Nie udało się uruchomić rebase: %s"
+msgstr "Nie udało się zapisać do '%s':%s"
 
 #: common/settings/bom_settings.cpp:126
 msgid "Default Editing"
@@ -22010,9 +22010,9 @@ msgid "'%s' is not a PADS Logic ASCII file."
 msgstr "'%s' to nie jest poprawna wartość programu SPICE."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1469
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS Logic file '%s'."
-msgstr "Nie można było przetworzyć pliku Sprint Layout '%s'"
+msgstr "Nie można było przetworzyć pliku PADS Logic '%s'."
 
 #: eeschema/sch_io/pads/sch_io_pads.h:49
 msgid "PADS Logic schematic files"
@@ -32981,11 +32981,12 @@ msgid ""
 "A Git operation is still running.\n"
 "Keep waiting, or abandon?"
 msgstr ""
+"Nadal działają operacje git.\n"
+"Zaczekać czy porzucić?"
 
 #: kicad/project_tree_pane.cpp:1725
-#, fuzzy
 msgid "Git Operation Delayed"
-msgstr "Opóźnienie propagacji jednostki:"
+msgstr "Operacja Git opóźniona"
 
 #: kicad/project_tree_pane.cpp:1727
 #, fuzzy
@@ -35230,28 +35231,37 @@ msgid ""
 "'Constant': εr and tan δ applied at all frequencies.\n"
 "'Djordjevic-Sarkar': causal wideband Debye anchored at the spec frequency."
 msgstr ""
+"'Stała': εr i tangens δ zastosowane dla wszystkich częstotliwości.\n"
+"'Djordjevic-Sarkar': przyczynowy szerokopasmowy Debye ustalony na "
+"specyficznej częstotliwości."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:65
 msgid ""
 "Enable solder resist / LPI overlay correction.  Affects εeff, Z0, and "
 "dielectric loss for microstrip, coupled microstrip, CPW, and CBCPW."
 msgstr ""
+"Włącz soldermaskę/korektę nakładki LPI.  Wpływa na εeff, Z0 i stratę "
+"dielektryczną dla mikropasków, mikropasków sprzężonych, CPW i CBCPW."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:69
 msgid ""
 "Cured mask thickness.  Typical LPI is 15-30 um; set to 0 or uncheck to "
 "disable."
 msgstr ""
+"Grubość utwardzonej maski.  Typowa wartość LPI wynosi 15–30 µm; ustaw na 0 "
+"lub odznacz, by wyłączyć."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:74
 msgid ""
 "Mask relative permittivity.  Default 3.5 for standard green LPI.  Range "
 "3.3-3.8 for typical resins."
 msgstr ""
+"Względna przenikalność elektryczna maski.  Domyślnie 3.5 dla standardowego "
+"zielonego LPI. Zakres 3.3–3.8 dla typowych żywic."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:79
 msgid "Mask loss tangent.  Default 0.025 for LPI."
-msgstr ""
+msgstr "Tangens strat maski.  Domyślna wartość dla LPI to 0.025."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:83
 msgid ""
@@ -41724,9 +41734,8 @@ msgid "user-selected"
 msgstr "Nie zaznaczono magistrali"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1067
-#, fuzzy
 msgid "Migrate 3D model references"
-msgstr "Drukuje zewnętrzną ramkę z polami odniesienia."
+msgstr "Migracja odnośników modeli 3D"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:19
 msgid ""
@@ -41735,14 +41744,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:31
-#, fuzzy
 msgid "Missing 3D model references:"
-msgstr "Drukuje zewnętrzną ramkę z polami odniesienia."
+msgstr "Braki odniesień modeli 3D:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:54
-#, fuzzy
 msgid "Potential replacements:"
-msgstr "Pliki położeń komponentów"
+msgstr "Potencjalne zamienniki:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
 #, fuzzy
@@ -44676,9 +44683,8 @@ msgstr "Prześwit opisów"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:215
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:143
-#, fuzzy
 msgid "Pin bounding box"
-msgstr "z: %g; bryła brzegowa: %s\n"
+msgstr "Przypnij pole ograniczające"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:263
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:890
@@ -45595,12 +45601,9 @@ msgid "Design rules cannot be added without a project"
 msgstr "Reguły projektowe nie mogą być dodane jeśli nie ma projektu"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:915
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save design rules to '%s': %s"
-msgstr ""
-"Nie można zapisać z powodu błędów walidacji reguły '%s':\n"
-"\n"
-"%s"
+msgstr "Nie można zapisać reguł projektowych do '%s':%s"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
 msgid "DRC Rules"
