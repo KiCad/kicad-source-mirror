@@ -776,32 +776,32 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
         }
     }
 
+    PCB_LAYER_ID padLayer = mapLayer( aObj.layer );
+
     if( aObj.type == SPRINT_LAYOUT::OBJ_THT_PAD )
     {
-        PCB_LAYER_ID padLayer = mapLayer( aObj.layer );
+        int outerDia = sprintToKicadCoord( aObj.outer * 2.0f );
+        int drillDia = sprintToKicadCoord( aObj.inner * 2.0f );
 
         if( aObj.plated == 0 )
         {
-            pad->SetAttribute( PAD_ATTRIB::NPTH );
-            
-            if( padLayer == B_Cu || padLayer == B_SilkS )
-            {
-                pad->SetLayerSet( LSET( { B_Cu, B_Mask } ) );
-                fp->SetLayer( B_Cu );
-            }
-            else
-            {
+            pad->SetAttribute( drillDia > 0 ? PAD_ATTRIB ::NPTH : PAD_ATTRIB::SMD );
+
+            if( padLayer == F_Cu )
                 pad->SetLayerSet( LSET( { F_Cu, F_Mask } ) );
-            }
+            else if( padLayer == B_Cu )
+                pad->SetLayerSet( LSET( { B_Cu, B_Mask } ) );
+            else
+                pad->SetLayerSet( LSET( { padLayer } ) );
+
+            if( standaloneFp && IsBackLayer( padLayer ) )
+                fp->SetLayer( B_Cu );
         }
         else
         {
             pad->SetAttribute( PAD_ATTRIB::PTH );
             pad->SetLayerSet( PAD::PTHMask() );
         }
-
-        int outerDia = sprintToKicadCoord( aObj.outer * 2.0f );
-        int drillDia = sprintToKicadCoord( aObj.inner * 2.0f );
 
         VECTOR2I padSize( outerDia, outerDia );
         VECTOR2I drillSize( drillDia, drillDia );
@@ -878,19 +878,15 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
     {
         pad->SetAttribute( PAD_ATTRIB::SMD );
 
-        PCB_LAYER_ID padLayer = mapLayer( aObj.layer );
-
-        if( padLayer == B_Cu || padLayer == B_SilkS )
-        {
-            pad->SetLayerSet( LSET( { B_Cu, B_Paste, B_Mask } ) );
-
-            if( standaloneFp )
-                fp->SetLayer( B_Cu );
-        }
-        else
-        {
+        if( padLayer == F_Cu )
             pad->SetLayerSet( LSET( { F_Cu, F_Paste, F_Mask } ) );
-        }
+        else if( padLayer == B_Cu )
+            pad->SetLayerSet( LSET( { B_Cu, B_Paste, B_Mask } ) );
+        else
+            pad->SetLayerSet( LSET( { padLayer } ) );
+
+        if( standaloneFp && IsBackLayer( padLayer ) )
+            fp->SetLayer( B_Cu );
 
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
 
@@ -1232,8 +1228,13 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
     text->SetTextThickness( thickness );
     text->SetTextAngle( EDA_ANGLE( -aObj.rotation, DEGREES_T ) );
 
-    if( aObj.mirror != 0 || aObj.thermal_width != 0 )
-        text->SetMirrored( true );
+    bool mirrorH = aObj.thermal_width != 0;
+    bool mirrorV = aObj.mirror != 0;
+
+    text->SetMirrored( mirrorH ^ mirrorV );
+
+    if( mirrorV )
+        text->Rotate( text->GetTextPos(), ANGLE_180 );
 
     if( add )
         aContainer->Add( text );
