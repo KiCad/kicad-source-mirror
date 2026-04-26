@@ -892,10 +892,7 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
             pad->SetLayerSet( LSET( { F_Cu, F_Paste, F_Mask } ) );
         }
 
-        if( aObj.tht_shape == SPRINT_LAYOUT::THT_SHAPE_CIRCLE )
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-        else
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+        pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
 
         int width = sprintToKicadCoord( aObj.outer );
         int height = sprintToKicadCoord( aObj.inner );
