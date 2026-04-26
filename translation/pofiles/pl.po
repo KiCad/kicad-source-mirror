@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-26 04:51+0300\n"
-"PO-Revision-Date: 2026-04-24 15:26+0000\n"
-"Last-Translator: Jan Sobków <sobkow.jan@gmail.com>\n"
+"PO-Revision-Date: 2026-04-26 12:42+0000\n"
+"Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -7753,9 +7753,9 @@ msgid "Could not create directory '%s'"
 msgstr "Nie można utworzyć folderu '%s'"
 
 #: common/git/libgit_backend.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s' : %s"
-msgstr "Nie można sklonować repozytorium '%s'"
+msgstr "Nie można sklonować repozytorium '%s' : %s"
 
 #: common/git/libgit_backend.cpp:171
 #, c-format
@@ -21913,9 +21913,9 @@ msgid "'%s' is not a PADS Logic ASCII file."
 msgstr "'%s' to nie jest poprawna wartość programu SPICE."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1469
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS Logic file '%s'."
-msgstr "Nie można odczytać pliku '%s'."
+msgstr "Nie można było przetworzyć pliku PADS Logic '%s'."
 
 #: eeschema/sch_io/pads/sch_io_pads.h:49
 msgid "PADS Logic schematic files"
@@ -32671,11 +32671,12 @@ msgid ""
 "A Git operation is still running.\n"
 "Keep waiting, or abandon?"
 msgstr ""
+"Nadal działają operacje git.\n"
+"Zaczekać czy porzucić?"
 
 #: kicad/project_tree_pane.cpp:1725
-#, fuzzy
 msgid "Git Operation Delayed"
-msgstr "Opóźnienie propagacji jednostki:"
+msgstr "Operacja Git opóźniona"
 
 #: kicad/project_tree_pane.cpp:1727
 #, fuzzy
@@ -41194,9 +41195,8 @@ msgid "user-selected"
 msgstr "Nie zaznaczono magistrali"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1058
-#, fuzzy
 msgid "Migrate 3D model references"
-msgstr "Drukuje zewnętrzną ramkę z polami odniesienia."
+msgstr "Migracja odnośników modeli 3D"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:19
 msgid ""
@@ -41205,14 +41205,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:31
-#, fuzzy
 msgid "Missing 3D model references:"
-msgstr "Drukuje zewnętrzną ramkę z polami odniesienia."
+msgstr "Braki odniesień modeli 3D:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:54
-#, fuzzy
 msgid "Potential replacements:"
-msgstr "Pliki położeń komponentów"
+msgstr "Potencjalne zamienniki:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
 #, fuzzy
