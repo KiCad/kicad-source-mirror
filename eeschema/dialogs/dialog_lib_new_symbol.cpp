@@ -100,20 +100,27 @@ DIALOG_LIB_NEW_SYMBOL::~DIALOG_LIB_NEW_SYMBOL()
 
 bool DIALOG_LIB_NEW_SYMBOL::TransferDataToWindow()
 {
-    wxCommandEvent dummyEvent;
-
     if( !m_inheritFromSymbolName.IsEmpty() )
     {
         m_comboInheritanceSelect->SetSelectedString( UnescapeString( m_inheritFromSymbolName ) );
         m_textName->ChangeValue( UnescapeString( getDerivativeName( m_inheritFromSymbolName ) ) );
-
-        // Trigger the event handler to show/hide the info bar message.
-        onParentSymbolSelect( dummyEvent );
-        onCheckTransferUserFields( dummyEvent );
     }
 
-    // Trigger the event handler to handle power boxes
-    onPowerCheckBox( dummyEvent );
+    CallAfter(
+            [&]()
+            {
+                /* The combo box `m_comboInheritanceSelect` must first process an update event before the string can be read again.
+                 * The CallAfter() method ensures that the string is available when onParentSymbolSelect() reads it again.
+                 */
+                wxCommandEvent dummyEvent;
+
+                // Trigger the event handler to show/hide the info bar message.
+                onParentSymbolSelect( dummyEvent );
+                onCheckTransferUserFields( dummyEvent );
+
+                // Trigger the event handler to handle power boxes
+                onPowerCheckBox( dummyEvent );
+            } );
 
     return true;
 }
@@ -148,6 +155,9 @@ void DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect( wxCommandEvent& aEvent )
     }
 
     syncControls( !parent.IsEmpty() );
+
+    /* The banner changes the size of the dialog box, so it needs to be adjusted. */
+    Fit();
 }
 
 
