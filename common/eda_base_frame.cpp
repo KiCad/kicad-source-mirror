@@ -955,6 +955,24 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
             m_framePos = wxDefaultPosition;
             wxLogTrace( traceDisplayLocation, wxS( "Resetting to default position" ) );
         }
+
+        // Clamp the saved size to the current display, in case the window was sized for a
+        // larger external monitor that is no longer attached.
+        if( m_frameSize.x > clientSize.width )
+        {
+            wxLogTrace( traceDisplayLocation,
+                        wxS( "Clamping window width %d to display width %d" ),
+                        m_frameSize.x, clientSize.width );
+            m_frameSize.x = clientSize.width;
+        }
+
+        if( m_frameSize.y > clientSize.height )
+        {
+            wxLogTrace( traceDisplayLocation,
+                        wxS( "Clamping window height %d to display height %d" ),
+                        m_frameSize.y, clientSize.height );
+            m_frameSize.y = clientSize.height;
+        }
     }
 
     wxLogTrace( traceDisplayLocation, wxS( "Final window position (%d, %d) with size (%d, %d)" ),
