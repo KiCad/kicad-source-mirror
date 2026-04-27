@@ -162,6 +162,9 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
         m_tunedPath = m_tunedPathN;
     }
 
+    m_baselineLength = origPathLength();
+    m_baselineDelay = m_settings.m_isTimeDomain ? origPathDelay() : 0;
+
     calculateTimeDomainTargets();
 
     return true;

@@ -65,6 +65,11 @@ public:
      */
     virtual int64_t TuningDelayResult() const { return 0; };
 
+    bool HasBaseline() const { return m_baselineLength != 0 || m_baselineDelay != 0; }
+
+    long long int TuningLengthDelta() const { return TuningLengthResult() - m_baselineLength; }
+    int64_t TuningDelayDelta() const { return TuningDelayResult() - m_baselineDelay; }
+
     /**
      * Return the tuning status (too short, too long, etc.) of the trace(s) being tuned.
      */
@@ -141,6 +146,10 @@ protected:
      * @return
      */
     int64_t lineDelay( const ITEM_SET& aLine, const SOLID* aStartPad, const SOLID* aEndPad ) const;
+
+    ///< Original path length/delay captured at Start().
+    long long int m_baselineLength = 0;
+    int64_t       m_baselineDelay = 0;
 
     ///< Pointer to world to search colliding items.
     NODE* m_world;

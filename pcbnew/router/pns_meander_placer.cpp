@@ -105,6 +105,9 @@ bool MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     const BOARD_CONNECTED_ITEM* conItem = static_cast<BOARD_CONNECTED_ITEM*>( aStartItem->GetSourceItem() );
     m_netClass = conItem->GetEffectiveNetClass();
 
+    m_baselineLength = origPathLength();
+    m_baselineDelay = m_settings.m_isTimeDomain ? origPathDelay() : 0;
+
     calculateTimeDomainTargets();
 
     return true;
@@ -180,10 +183,54 @@ void MEANDER_PLACER::calculateTimeDomainTargets()
 
 bool MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 {
+    // Recompute aggregate length/delay of other chain nets from the live board state.
+    long long extraLen = 0;
+    long long extraDelay = 0;
+    const std::vector<NET_HANDLE> nets = CurrentNets();
+
+    if( !nets.empty() )
+    {
+        NET_HANDLE h = nets[0];
+        Router()->GetInterface()->GetSignalAggregate( h, h, extraLen, extraDelay );
+    }
+
+    // m_signalExtraDelay is needed for calculateTimeDomainTargets().
+    m_settings.m_signalExtraDelay = extraDelay;
+
+    // Derive per-net budget from chain target, accounting for stubs not in the PNS path.
+    // Take the tighter of chain budget and existing per-net constraint (from EditStart).
+    if( m_settings.m_targetSignalLength.Opt() != MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
+    {
+        long long tunedNetBoardLen = 0;
+
+        if( !nets.empty() )
+            tunedNetBoardLen = Router()->GetInterface()->GetNetBoardLength( nets[0] );
+
+        long long unmeasured = std::max( 0LL, tunedNetBoardLen - m_baselineLength );
+        long long otherLen = extraLen + unmeasured;
+
+        long long budgetMin = std::max( 0LL, m_settings.m_targetSignalLength.Min() - otherLen );
+        long long budgetOpt = std::max( 0LL, m_settings.m_targetSignalLength.Opt() - otherLen );
+        long long budgetMax = std::max( budgetOpt, m_settings.m_targetSignalLength.Max() - otherLen );
+
+        if( m_settings.m_targetLength.Opt() == MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
+        {
+            m_settings.m_targetLength.SetMin( budgetMin );
+            m_settings.m_targetLength.SetOpt( budgetOpt );
+            m_settings.m_targetLength.SetMax( budgetMax );
+        }
+        else
+        {
+            m_settings.m_targetLength.SetMin( std::max( m_settings.m_targetLength.Min(), budgetMin ) );
+            m_settings.m_targetLength.SetOpt( std::min( m_settings.m_targetLength.Opt(), budgetOpt ) );
+            m_settings.m_targetLength.SetMax( std::min( m_settings.m_targetLength.Max(), budgetMax ) );
+        }
+    }
+
     calculateTimeDomainTargets();
 
     return doMove( aP, aEndItem, m_settings.m_targetLength.Opt(), m_settings.m_targetLength.Min(),
-                   m_settings.m_targetLength.Max() );
+                    m_settings.m_targetLength.Max() );
 }
 
 

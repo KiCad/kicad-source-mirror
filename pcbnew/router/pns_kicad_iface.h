@@ -104,6 +104,7 @@ public:
     int GetPNSLayerFromBoardLayer( PCB_LAYER_ID aLayer ) const override;
     bool GetSignalAggregate( PNS::NET_HANDLE aNetP, PNS::NET_HANDLE aNetN,
                              long long& aExtraLength, long long& aExtraDelay ) const override;
+    long long GetNetBoardLength( PNS::NET_HANDLE aNet ) const override;
 
     void SetStartLayerFromPCBNew( PCB_LAYER_ID aLayer );
     void SetStartLayerFromPNS( int aLayer ) { m_startLayer = aLayer; }

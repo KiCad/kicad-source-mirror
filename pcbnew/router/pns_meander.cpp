@@ -48,6 +48,7 @@ MEANDER_SETTINGS::MEANDER_SETTINGS()
     m_spacing = 600000;
     SetTargetLength( LENGTH_UNCONSTRAINED );
     SetTargetLengthDelay( DELAY_UNCONSTRAINED );
+    SetTargetSignalLength( LENGTH_UNCONSTRAINED );
     SetTargetSignalLengthDelay( DELAY_UNCONSTRAINED );
     SetTargetSkew( 0 );
     SetTargetSkewDelay( 0 );
@@ -135,6 +136,36 @@ void MEANDER_SETTINGS::SetTargetSignalLengthDelay( long long int aOpt )
         m_targetSignalLengthDelay.SetMax( aOpt + DEFAULT_DELAY_TOLERANCE );
     }
 }
+
+
+void MEANDER_SETTINGS::SetTargetSignalLength( long long int aOpt )
+{
+    m_targetSignalLength.SetOpt( aOpt );
+
+    if( aOpt == PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
+    {
+        m_targetSignalLength.SetMin( 0 );
+        m_targetSignalLength.SetMax( aOpt );
+    }
+    else
+    {
+        m_targetSignalLength.SetMin( aOpt - DEFAULT_LENGTH_TOLERANCE );
+        m_targetSignalLength.SetMax( aOpt + DEFAULT_LENGTH_TOLERANCE );
+    }
+}
+
+
+void MEANDER_SETTINGS::SetTargetSignalLength( const MINOPTMAX<int>& aConstraint )
+{
+    SetTargetSignalLength( aConstraint.Opt() );
+
+    if( aConstraint.HasMin() )
+        m_targetSignalLength.SetMin( aConstraint.Min() );
+
+    if( aConstraint.HasMax() )
+        m_targetSignalLength.SetMax( aConstraint.Max() );
+}
+
 
 void MEANDER_SETTINGS::SetTargetSignalLengthDelay( const MINOPTMAX<int>& aConstraint )
 {

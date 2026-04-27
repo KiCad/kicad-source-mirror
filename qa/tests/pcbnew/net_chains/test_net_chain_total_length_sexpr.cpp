@@ -90,6 +90,7 @@ BOOST_AUTO_TEST_CASE( SignalAggregateMatchesPadSpacing )
         ofs << BOARD_TEXT;
     }
     plugin.LoadBoard( tmpFile.string(), board.get() );
+    board->BuildConnectivity();
 
     // Assign signal name
     for( NETINFO_ITEM* net : board->GetNetInfo() )
@@ -135,15 +136,56 @@ BOOST_AUTO_TEST_CASE( SignalAggregateMatchesPadSpacing )
 	BOOST_CHECK( net1Span > 0 );
 	BOOST_CHECK( net1TrackLen >= net1Span ); // jog increases physical path
 
-	// Validate span-based total equals pad spacing target
-	long long totalSpan = net1Span + extraLen;
-	long long expected = 30 * MM; // 30 mm pad spacing
-	long long tol = 1000; // 0.001 mm tolerance
-	BOOST_CHECK_MESSAGE( llabs( totalSpan - expected ) <= tol,
-		"SpanTotal=" << totalSpan << " expected=" << expected << " net1Span=" << net1Span << " extra=" << extraLen << " trackLen=" << net1TrackLen );
+	// Chain layout: TP2(0,0) — net1 — R1 — net2 — R2 — net3 — R3 — net4 — TP1(30,0)
+	//
+	// Copper per net (tracks + jog segments):
+	//   net1: 8.000 + 0.283 = 8.283 mm
+	//   net2: 5.705 + 0.014 = 5.719 mm
+	//   net3: 3.495 + 0.014 = 3.509 mm
+	//   net4: 7.850 + 0.354 = 8.204 mm
+	//   Total copper: 25.715 mm
+	//
+	// Bridging through resistors (pad-to-pad, not copper):
+	//   R1: 1.65 mm, R2: 1.65 mm, R3: 1.65 mm = 4.95 mm
+	//
+	// Full chain: 25.715 + 4.95 = 30.665 mm
+	//
+	// GetSignalAggregate returns copper only (no bridging).
+	// extraLen = net2 + net3 + net4 copper = ~17.432 mm
+	long long totalCopper = net1TrackLen + extraLen;
+	long long expectedCopper = 25 * MM;
+	long long padSpacing = 30 * MM;
+	BOOST_CHECK_MESSAGE( totalCopper >= expectedCopper,
+		"RoutedTotal=" << totalCopper << " expected>=" << expectedCopper
+		<< " net1Track=" << net1TrackLen << " extra=" << extraLen );
+	BOOST_CHECK( totalCopper < padSpacing ); // copper alone is less than pad spacing
 
-	// Also ensure using actual routed length does not undershoot expected (it may exceed due to wiggles)
-	BOOST_CHECK( ( net1TrackLen + extraLen ) >= expected );
+	// Compute bridging: pad-to-pad distance through each 2-net series component
+	long long bridging = 0;
+	for( FOOTPRINT* fp : board->Footprints() )
+	{
+		std::map<int, PAD*> chainPads;
+		for( PAD* pad : fp->Pads() )
+		{
+			NETINFO_ITEM* pn = pad->GetNet();
+			if( pn && !pn->GetNetChain().IsEmpty() )
+				chainPads.emplace( pn->GetNetCode(), pad );
+		}
+		if( chainPads.size() == 2 )
+		{
+			auto it = chainPads.begin();
+			PAD* p1 = it->second; ++it; PAD* p2 = it->second;
+			bridging += ( p1->GetCenter() - p2->GetCenter() ).EuclideanNorm();
+		}
+	}
+	BOOST_CHECK( bridging > 0 );
+
+	// Full chain length (copper + bridging) must cover the pad spacing
+	long long fullChain = totalCopper + bridging;
+	long long tol = 1 * MM;
+	BOOST_CHECK_MESSAGE( fullChain >= padSpacing && fullChain < padSpacing + tol,
+		"FullChain=" << fullChain << " padSpacing=" << padSpacing
+		<< " copper=" << totalCopper << " bridging=" << bridging );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

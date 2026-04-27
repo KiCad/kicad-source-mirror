@@ -2913,7 +2913,7 @@ int PNS_KICAD_IFACE_BASE::GetPNSLayerFromBoardLayer( PCB_LAYER_ID aLayer ) const
 }
 
 bool PNS_KICAD_IFACE_BASE::GetSignalAggregate( PNS::NET_HANDLE aNetP, PNS::NET_HANDLE aNetN,
-                                               long long& aExtraLength, long long& aExtraDelay ) const
+                                                long long& aExtraLength, long long& aExtraDelay ) const
 {
     aExtraLength = 0;
     aExtraDelay = 0;
@@ -2926,63 +2926,34 @@ bool PNS_KICAD_IFACE_BASE::GetSignalAggregate( PNS::NET_HANDLE aNetP, PNS::NET_H
     if( sig.IsEmpty() || sig != netN->GetNetChain() )
         return false;
 
-    long long repLengthP = 0; // representative length of first net (used for span correction)
-    std::vector<VECTOR2I> chainPadCenters;
+    // Build the set of net codes to exclude (the nets the caller is already accounting for).
+    std::set<int> exclude;
+    exclude.insert( netP->GetNetCode() );
+    if( netP != netN )
+        exclude.insert( netN->GetNetCode() );
 
-    // Collect other nets in same chain
+    // Sum routed length/delay of every other net in the chain.
     for( NETINFO_ITEM* net : m_board->GetNetInfo() )
     {
         if( net->GetNetChain() != sig )
             continue;
-        bool isPrimary = ( net->GetNetCode() == netP->GetNetCode() );
-        bool isSecondary = ( net->GetNetCode() == netN->GetNetCode() );
-
-        // Accumulate terminal pad centers for overall span measurement
-        PAD* term0 = net->GetTerminalPad( 0 );
-        PAD* term1 = net->GetTerminalPad( 1 );
-        if( term0 ) chainPadCenters.push_back( term0->GetCenter() );
-        if( term1 ) chainPadCenters.push_back( term1->GetCenter() );
-
-        if( isPrimary || isSecondary )
-        {
-            // We'll compute rep length for primary for later span correction, but skip adding to extra aggregate
-            if( isPrimary )
-            {
-                // Project primary net length as straight-line span between min/max track endpoints (ignores local wiggles)
-                bool havePoint = false;
-                long long minX = 0, maxX = 0;
-                for( BOARD_ITEM* bi : m_board->Tracks() )
-                {
-                    if( auto tr = dynamic_cast<PCB_TRACK*>( bi ) )
-                    {
-                        if( tr->GetNetCode() == net->GetNetCode() )
-                        {
-                            long long sx = tr->GetStart().x; long long ex = tr->GetEnd().x;
-                            if( !havePoint ) { minX = std::min( sx, ex ); maxX = std::max( sx, ex ); havePoint = true; }
-                            else { minX = std::min( minX, std::min( sx, ex ) ); maxX = std::max( maxX, std::max( sx, ex ) ); }
-                        }
-                    }
-                }
-                if( havePoint )
-                    repLengthP = maxX - minX;
-                else if( term0 && term1 )
-                {
-                    VECTOR2I d = term0->GetCenter() - term1->GetCenter();
-                    repLengthP = static_cast<long long>( d.EuclideanNorm() );
-                }
-            }
+        if( exclude.count( net->GetNetCode() ) )
             continue;
-        }
 
-        // representative track for length & delay
         PCB_TRACK* rep = nullptr;
+
         for( BOARD_ITEM* bi : m_board->Tracks() )
         {
             if( auto tr = dynamic_cast<PCB_TRACK*>( bi ) )
             {
-                if( tr->GetNetCode() == net->GetNetCode() ) { rep = tr; break; }
+                if( tr->GetNetCode() == net->GetNetCode() )
+                {
+                    rep = tr;
+                    break;
+                }
             }
         }
+
         if( rep )
         {
             int count = 0; double trk = 0, pad = 0, tDelay = 0, padDelay = 0;
@@ -2991,58 +2962,6 @@ bool PNS_KICAD_IFACE_BASE::GetSignalAggregate( PNS::NET_HANDLE aNetP, PNS::NET_H
             if( tDelay > 0.0 || padDelay > 0.0 )
                 aExtraDelay += static_cast<long long>( tDelay + padDelay );
         }
-        else
-        {
-            // No routed track yet; approximate with straight-line distance between terminal pads
-            PAD* padA = net->GetTerminalPad( 0 );
-            PAD* padB = net->GetTerminalPad( 1 );
-            if( padA && padB )
-            {
-                VECTOR2I delta = padA->GetCenter() - padB->GetCenter();
-                long long dist = static_cast<long long>( delta.EuclideanNorm() );
-                aExtraLength += dist;
-            }
-        }
-
-        // Always add pad-to-pad terminal distance if both pads exist and rep track length underestimates it
-        PAD* pad0 = net->GetTerminalPad( 0 );
-        PAD* pad1 = net->GetTerminalPad( 1 );
-        if( pad0 && pad1 )
-        {
-            VECTOR2I delta = pad0->GetCenter() - pad1->GetCenter();
-            long long baseDist = static_cast<long long>( delta.EuclideanNorm() );
-            // If we already added representative track length smaller than straight-line pad distance, adjust
-            if( rep )
-            {
-                // Estimate length we added for this net as trk+pad (last values). Recompute quickly.
-                int count = 0; double trk = 0, pad = 0, tDelay = 0, padDelay = 0;
-                std::tie( count, trk, pad, tDelay, padDelay ) = m_board->GetTrackLength( *rep );
-                long long added = static_cast<long long>( trk + pad );
-                if( added < baseDist )
-                    aExtraLength += ( baseDist - added );
-            }
-        }
-    }
-
-    // If called with the same net for P & N (used by tests to mean "aggregate all others")
-    // attempt to close any residual gap between the combined lengths and the full span of the chain.
-    if( netP == netN && chainPadCenters.size() >= 2 )
-    {
-        long long maxSpan = 0;
-        for( size_t i = 0; i < chainPadCenters.size(); ++i )
-        {
-            for( size_t j = i + 1; j < chainPadCenters.size(); ++j )
-            {
-                VECTOR2I d = chainPadCenters[i] - chainPadCenters[j];
-                long long dist = static_cast<long long>( d.EuclideanNorm() );
-                if( dist > maxSpan )
-                    maxSpan = dist;
-            }
-        }
-
-        long long combined = repLengthP + aExtraLength;
-        if( maxSpan > combined )
-            aExtraLength += ( maxSpan - combined );
     }
 
     return aExtraLength > 0 || aExtraDelay > 0;
@@ -3052,6 +2971,30 @@ bool PNS_KICAD_IFACE::GetSignalAggregate( PNS::NET_HANDLE aNetP, PNS::NET_HANDLE
                                           long long& aExtraLength, long long& aExtraDelay ) const
 {
     return PNS_KICAD_IFACE_BASE::GetSignalAggregate( aNetP, aNetN, aExtraLength, aExtraDelay );
+}
+
+
+long long PNS_KICAD_IFACE_BASE::GetNetBoardLength( PNS::NET_HANDLE aNet ) const
+{
+    if( !m_board || !aNet )
+        return 0;
+
+    auto* ni = static_cast<NETINFO_ITEM*>( aNet );
+
+    for( BOARD_ITEM* bi : m_board->Tracks() )
+    {
+        if( auto tr = dynamic_cast<PCB_TRACK*>( bi ) )
+        {
+            if( tr->GetNetCode() == ni->GetNetCode() )
+            {
+                int count = 0; double trk = 0, pad = 0, tDelay = 0, padDelay = 0;
+                std::tie( count, trk, pad, tDelay, padDelay ) = m_board->GetTrackLength( *tr );
+                return static_cast<long long>( trk + pad );
+            }
+        }
+    }
+
+    return 0;
 }
 
 

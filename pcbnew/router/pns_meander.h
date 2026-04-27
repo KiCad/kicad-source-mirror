@@ -82,6 +82,9 @@ public:
     void SetTargetLength( long long int aOpt );
     void SetTargetLength( const MINOPTMAX<int>& aConstraint );
 
+    void SetTargetSignalLength( long long int aOpt );
+    void SetTargetSignalLength( const MINOPTMAX<int>& aConstraint );
+
     void SetTargetLengthDelay( long long int aOpt );
     void SetTargetLengthDelay( const MINOPTMAX<int>& aConstraint );
 
@@ -124,7 +127,10 @@ public:
     ///< Desired propagation delay of the tuned line
     MINOPTMAX<long long int> m_targetLengthDelay;
 
-    ///< Desired overall chain propagation delay (sum of this net's tuned delay + other nets in chain).
+    ///< Desired chain length (copper-only, bridging subtracted).
+    MINOPTMAX<long long int> m_targetSignalLength;
+
+    ///< Desired overall chain propagation delay.
     MINOPTMAX<long long int> m_targetSignalLengthDelay;
 
     ///< Target skew value for diff pair de-skewing.
