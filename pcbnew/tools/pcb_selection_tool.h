@@ -225,6 +225,13 @@ public:
     void FilterCollectorForLockedItems( GENERAL_COLLECTOR& aCollector );
 
     /**
+     * If the most recent FilterCollectorForLockedItems call removed at least one item,
+     * show an InfoBar warning prompting the user to enable Override Locks.  No-op
+     * otherwise.
+     */
+    void ReportFilteredLockedItems();
+
+    /**
      * In general we don't want to select both a parent and any of it's children.  This includes
      * both footprints and their items, and groups and their members.
      */
@@ -494,6 +501,8 @@ private:
     KIGFX::VIEW_GROUP        m_enteredGroupOverlay;  // Overlay for the entered group's frame.
 
     SELECTION_MODE           m_selectionMode;        // Current selection mode
+
+    bool                     m_lockedItemsFiltered;
 
     /// Private state (opaque pointer/compilation firewall)
     class PRIV;

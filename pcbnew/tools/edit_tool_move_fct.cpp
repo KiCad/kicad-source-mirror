@@ -839,8 +839,14 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
-    if( m_dragging || selection.Empty() )
+    if( m_dragging )
         return false;
+
+    if( selection.Empty() )
+    {
+        m_selectionTool->ReportFilteredLockedItems();
+        return false;
+    }
 
     TOOL_EVENT pushedEvent = aEvent;
     editFrame->PushTool( aEvent );

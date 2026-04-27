@@ -1017,7 +1017,10 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
             } );
 
     if( selection.Empty() )
+    {
+        m_selectionTool->ReportFilteredLockedItems();
         return 0;
+    }
 
     if( selection.Size() == 1 && selection.Front()->Type() == PCB_ARC_T )
     {
@@ -3159,6 +3162,13 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( PCB_ACTIONS::selectConnection );
 
         selectionCopy = m_selectionTool->GetSelection();
+
+        if( selectionCopy.Empty() )
+        {
+            m_selectionTool->ReportFilteredLockedItems();
+            editFrame->PopTool( aEvent );
+            return 0;
+        }
     }
 
     DeleteItems( selectionCopy, isCut );
