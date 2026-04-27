@@ -246,6 +246,7 @@ void DIALOG_CREATE_NET_CHAIN::OnRefreshClicked( wxCommandEvent& aEvent )
 
     if( graph )
     {
+        m_rows.clear();
         graph->Recalculate( m_frame->Schematic().BuildSheetListSortedByPageNumbers(), true );
         populateComponentCombos();
         loadPotentials();
