@@ -979,14 +979,9 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                         VECTOR2I adjPos( schIUScale.MilsToIU( KiROUND( adj.x ) ),
                                          pageHeightIU - schIUScale.MilsToIU( KiROUND( adj.y ) ) );
 
-                        int dx = adjPos.x - pos.x;
-                        int dy = adjPos.y - pos.y;
-                        SPIN_STYLE orient = SPIN_STYLE::RIGHT;
-
-                        if( std::abs( dx ) >= std::abs( dy ) )
-                            orient = ( dx > 0 ) ? SPIN_STYLE::LEFT : SPIN_STYLE::RIGHT;
-                        else
-                            orient = ( dy > 0 ) ? SPIN_STYLE::UP : SPIN_STYLE::BOTTOM;
+                        SPIN_STYLE orient =
+                                PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER::computeLabelOrientation( pos,
+                                                                                              adjPos );
 
                         wxString labelText = wxString::FromUTF8( wire.endpoint_a );
                         SCH_LABEL* label = new SCH_LABEL( pos, labelText );
@@ -1017,14 +1012,9 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
                         VECTOR2I adjPos( schIUScale.MilsToIU( KiROUND( adj.x ) ),
                                          pageHeightIU - schIUScale.MilsToIU( KiROUND( adj.y ) ) );
 
-                        int dx = adjPos.x - pos.x;
-                        int dy = adjPos.y - pos.y;
-                        SPIN_STYLE orient = SPIN_STYLE::RIGHT;
-
-                        if( std::abs( dx ) >= std::abs( dy ) )
-                            orient = ( dx > 0 ) ? SPIN_STYLE::LEFT : SPIN_STYLE::RIGHT;
-                        else
-                            orient = ( dy > 0 ) ? SPIN_STYLE::UP : SPIN_STYLE::BOTTOM;
+                        SPIN_STYLE orient =
+                                PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER::computeLabelOrientation( pos,
+                                                                                              adjPos );
 
                         wxString labelText = wxString::FromUTF8( wire.endpoint_b );
                         SCH_LABEL* label = new SCH_LABEL( pos, labelText );

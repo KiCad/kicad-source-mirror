@@ -146,6 +146,12 @@ public:
     static bool IsGlobalSignal( const std::string& aSignalName,
                                 const std::set<int>& aSheetNumbers );
 
+    /**
+     * Orient a label opposite to the wire direction at its position so it clears the wire.
+     */
+    static SPIN_STYLE computeLabelOrientation( const VECTOR2I& aLabelPos,
+                                               const VECTOR2I& aAdjacentPos );
+
 private:
     int toKiCadUnits( double aPadsValue ) const;
 
@@ -160,12 +166,6 @@ private:
     std::vector<VECTOR2I> findJunctionPoints( const std::vector<SCH_SIGNAL>& aSignals );
 
     VECTOR2I chooseLabelPosition( const SCH_SIGNAL& aSignal );
-
-    /**
-     * Orient a label opposite to the wire direction at its position so it clears the wire.
-     */
-    SPIN_STYLE computeLabelOrientation( const VECTOR2I& aLabelPos,
-                                        const VECTOR2I& aAdjacentPos );
 
     /**
      * Convert a PADS net name to a KiCad label, mapping a "/" prefix to a "~{}" overbar.
