@@ -3393,6 +3393,19 @@ void CONNECTION_GRAPH::RebuildNetChains()
             }
         }
     }
+
+    // Committed chain names take priority over potential chain names set by pass 5.
+    for( const auto& chain : m_committedNetChains )
+    {
+        if( chain )
+        {
+            for( SCH_SYMBOL* sym : chain->GetSymbols() )
+            {
+                if( sym )
+                    sym->SetNetChainName( chain->GetName() );
+            }
+        }
+    }
     }
     catch( const std::exception& e )
     {

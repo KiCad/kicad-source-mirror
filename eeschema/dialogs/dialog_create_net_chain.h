@@ -76,6 +76,7 @@ private:
     std::vector<POTENTIAL_ROW> m_rows;
     std::vector<int>           m_filteredIndices; ///< indices into m_rows shown in grid
     int                        m_createdCount = 0;
+    bool                       m_rebuilding = false;
 };
 
 #endif // DIALOG_CREATE_NET_CHAIN_H

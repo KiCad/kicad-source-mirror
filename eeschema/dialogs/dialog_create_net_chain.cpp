@@ -105,10 +105,11 @@ bool DIALOG_CREATE_NET_CHAIN::TransferDataFromWindow()
     if( !validateAndCreate() )
         return false;
 
-    // Refresh the grid so the created chain disappears from potentials
+    // Refresh grid, then notify (OnModify may trigger recalculation).
     loadPotentials();
     rebuildGrid();
     m_nameInput->Clear();
+    m_frame->OnModify();
 
     m_headerLabel->SetLabel(
             wxString::Format( _( "Chain created (%d total). Select another or close." ), m_createdCount ) );
@@ -192,13 +193,18 @@ bool DIALOG_CREATE_NET_CHAIN::validateAndCreate()
     }
 
     m_createdCount++;
-    m_frame->OnModify();
     return true;
 }
 
 
 void DIALOG_CREATE_NET_CHAIN::OnChainSelected( wxGridEvent& aEvent )
 {
+    if( m_rebuilding )
+    {
+        aEvent.Skip();
+        return;
+    }
+
     int gridRow = aEvent.GetRow();
 
     // Map grid row to m_rows index through filter
@@ -544,10 +550,15 @@ void DIALOG_CREATE_NET_CHAIN::OnFilterChanged( wxCommandEvent& aEvent )
     // Sync any edited names back before rebuilding
     for( size_t gi = 0; gi < m_filteredIndices.size(); ++gi )
     {
-        wxString edited = m_chainsGrid->GetCellValue( static_cast<int>( gi ), 0 );
+        int dataIdx = m_filteredIndices[gi];
 
-        if( !edited.IsEmpty() )
-            m_rows[m_filteredIndices[gi]].suggestedName = edited;
+        if( dataIdx >= 0 && dataIdx < static_cast<int>( m_rows.size() ) )
+        {
+            wxString edited = m_chainsGrid->GetCellValue( static_cast<int>( gi ), 0 );
+
+            if( !edited.IsEmpty() )
+                m_rows[dataIdx].suggestedName = edited;
+        }
     }
 
     rebuildGrid();
@@ -556,17 +567,21 @@ void DIALOG_CREATE_NET_CHAIN::OnFilterChanged( wxCommandEvent& aEvent )
 
 void DIALOG_CREATE_NET_CHAIN::rebuildGrid()
 {
+    m_rebuilding = true;
+
     // Sync any edited names back from the grid before clearing it
     for( size_t gi = 0; gi < m_filteredIndices.size(); ++gi )
     {
         int gridRow = static_cast<int>( gi );
+        int dataIdx = m_filteredIndices[gi];
 
-        if( gridRow < m_chainsGrid->GetNumberRows() )
+        if( gridRow < m_chainsGrid->GetNumberRows()
+                && dataIdx >= 0 && dataIdx < static_cast<int>( m_rows.size() ) )
         {
             wxString edited = m_chainsGrid->GetCellValue( gridRow, 0 );
 
             if( !edited.IsEmpty() )
-                m_rows[m_filteredIndices[gi]].suggestedName = edited;
+                m_rows[dataIdx].suggestedName = edited;
         }
     }
 
@@ -643,6 +658,8 @@ void DIALOG_CREATE_NET_CHAIN::rebuildGrid()
     m_membersListBox->Clear();
     m_membersLabel->SetLabel( _( "Member Nets" ) );
     m_nameInput->Clear();
+
+    m_rebuilding = false;
 }
 
 
