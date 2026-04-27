@@ -196,16 +196,23 @@ bool PADS_SCH_BINARY_READER::Parse( const std::vector<uint8_t>& aData )
     if( !IsBinarySch( aData ) )
         return false;
 
-    // The decoders take their object counts from the pool directory.
+    // The decoders take their object counts from the pool directory, so it parses first.
     m_pools.Parse( aData );
 
     pageExtent( aData, m_pageWidthMils, m_pageHeightMils );
 
+    // Sheet partition and the symbol library, in producer-before-consumer order. decodeFields
+    // fills the part-type pools that decodePinNames walks; decodeDecals fills the builtin-decal
+    // count and used-decal tables that both decodePlacements and decodeNetLabels read;
+    // decodePlacements then binds each placement's fields (decodeFields) and gate pins
+    // (decodePinNames).
     decodeSheets( aData );
     decodeDecals( aData );
     decodeFields( aData );
     decodePinNames( aData );
     decodePlacements( aData );
+
+    // Wire, text, junction and net-label geometry.
     decodeWires( aData );
     decodeTexts( aData );
     decodeJunctions( aData );

@@ -143,12 +143,17 @@ BOARD* PCB_IO_PADS_BINARY::LoadBoard( const wxString& aFileName, BOARD* aAppendT
             m_progressReporter->BeginPhase( 1 );
 
         loadBoardSetup();
+
+        // Nets are created before the geometry that references them; loadTracksAndVias resolves
+        // each track and via net against this table.
         loadNets();
 
         if( m_progressReporter )
             m_progressReporter->BeginPhase( 2 );
 
         loadFootprints();
+
+        // Cluster groups reference the footprints loadFootprints just added, so they follow it.
         loadClusterGroups();
         loadBoardOutline();
         loadTracksAndVias();

@@ -196,20 +196,35 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     m_parameters.origin.x = static_cast<double>( m_originX );
     m_parameters.origin.y = static_cast<double>( m_originY );
 
+    // The call order below is load-bearing; the dependency edges noted at each group fix it.
+
+    // Container state loads the version, origin and parameter block.
     parseBoardSetup();
     parseMetadataRegion();
+
+    // Part placements, the part-cluster groups, and the recovery pass that adds omitted placements.
     parsePartPlacements();
     parseClusters();
     recoverOmittedPlacements();
+
+    // Padstacks and the decal / part-type tables that linkPartsToDecals joins at the end.
     parsePadStacks();
     parseDecalNameTable();
     parsePartTypeTable();
     parsePartDecals();
+
+    // The outline origin must resolve before the outline, whose vertices are DRW-origin-relative.
     parseBoardOutlineDrwOrigin();
     parseBoardOutline();
+
+    // Net names first; the net-class and diff-pair passes key off the net records they produce.
     parseNetNames();
     parseNetClasses();
     parseDiffPairs();
+
+    // Structural geometry. computeSec12Base and buildOwnerRuns establish the sec12 vertex base and
+    // the owner-run cursors that the keepout, copper-shape and dimension decoders walk (the first
+    // two through fetchOwnerLoop).
     parseTextRecords();
     parseRouteVertices();
     computeSec12Base();
@@ -219,6 +234,8 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     parseCopperPours();
     parseDimensions();
     parseLayerStackup();
+
+    // Link each placement to its decal now that both the parts and the decals exist.
     linkPartsToDecals();
 
     m_parts.erase( std::remove_if( m_parts.begin(), m_parts.end(),
