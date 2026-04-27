@@ -3472,6 +3472,7 @@ bool CONNECTION_GRAPH::DeleteCommittedNetChain( const wxString& aName )
     // Drop orphaned overrides keyed on this name.
     m_netChainNetClassOverrides.erase( aName );
     m_netChainColorOverrides.erase( aName );
+    m_netChainTerminalRefOverrides.erase( aName );
 
     return true;
 }

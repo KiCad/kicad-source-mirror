@@ -117,6 +117,7 @@ private:
     SCH_EDIT_FRAME* m_frame;
 
     std::vector<CHAIN_ROW> m_chainRows;
+    std::vector<int>       m_gridToChainIdx;
     std::vector<CLASS_ROW> m_classRows;
 };
 

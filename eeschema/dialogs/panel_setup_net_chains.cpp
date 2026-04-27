@@ -194,12 +194,19 @@ void PANEL_SETUP_NET_CHAINS::rebuildChainsGrid()
 
     m_chainsHeader->SetLabel( wxString::Format( _( "%d net chain(s)" ), activeCount ) );
 
-    m_chainsGrid->AppendRows( static_cast<int>( m_chainRows.size() ) );
+    m_gridToChainIdx.clear();
 
     for( size_t i = 0; i < m_chainRows.size(); ++i )
     {
-        const CHAIN_ROW& row = m_chainRows[i];
-        int              r   = static_cast<int>( i );
+        if( !m_chainRows[i].deletePending )
+            m_gridToChainIdx.push_back( static_cast<int>( i ) );
+    }
+
+    m_chainsGrid->AppendRows( static_cast<int>( m_gridToChainIdx.size() ) );
+
+    for( int r = 0; r < static_cast<int>( m_gridToChainIdx.size() ); ++r )
+    {
+        const CHAIN_ROW& row = m_chainRows[m_gridToChainIdx[r]];
 
         m_chainsGrid->SetCellValue( r, COL_NAME, row.newName );
         m_chainsGrid->SetCellValue( r, COL_MEMBERS,
@@ -209,15 +216,12 @@ void PANEL_SETUP_NET_CHAINS::rebuildChainsGrid()
 
         if( row.newColor != KIGFX::COLOR4D::UNSPECIFIED )
             m_chainsGrid->SetCellValue( r, COL_COLOUR, row.newColor.ToCSSString() );
-
-        if( row.deletePending )
-        {
-            for( int c = 0; c < m_chainsGrid->GetNumberCols(); ++c )
-                m_chainsGrid->SetReadOnly( r, c, true );
-        }
     }
 
-    updateMembersDetail( selectedChainRow() );
+    int sel = selectedChainRow();
+    int dataIdx = ( sel >= 0 && sel < static_cast<int>( m_gridToChainIdx.size() ) )
+                          ? m_gridToChainIdx[sel] : -1;
+    updateMembersDetail( dataIdx );
 }
 
 
@@ -278,21 +282,20 @@ bool PANEL_SETUP_NET_CHAINS::Validate()
 
     // Sync grid cell values back into the buffered rows so validation works
     // against what the user actually sees.
-    for( size_t i = 0; i < m_chainRows.size(); ++i )
+    for( int gr = 0; gr < static_cast<int>( m_gridToChainIdx.size() ); ++gr )
     {
-        m_chainRows[i].newName = m_chainsGrid->GetCellValue( static_cast<int>( i ), COL_NAME );
-        m_chainRows[i].newChainClass =
-                m_chainsGrid->GetCellValue( static_cast<int>( i ), COL_CHAIN_CLASS );
-        m_chainRows[i].newNetClass =
-                m_chainsGrid->GetCellValue( static_cast<int>( i ), COL_NET_CLASS );
+        CHAIN_ROW& row = m_chainRows[m_gridToChainIdx[gr]];
 
-        wxString colorStr = m_chainsGrid->GetCellValue( static_cast<int>( i ), COL_COLOUR );
+        row.newName = m_chainsGrid->GetCellValue( gr, COL_NAME );
+        row.newChainClass = m_chainsGrid->GetCellValue( gr, COL_CHAIN_CLASS );
+        row.newNetClass = m_chainsGrid->GetCellValue( gr, COL_NET_CLASS );
+
+        wxString colorStr = m_chainsGrid->GetCellValue( gr, COL_COLOUR );
 
         if( colorStr.IsEmpty() )
-            m_chainRows[i].newColor = KIGFX::COLOR4D::UNSPECIFIED;
+            row.newColor = KIGFX::COLOR4D::UNSPECIFIED;
         else
-            m_chainRows[i].newColor = KIGFX::COLOR4D( colorStr );
-
+            row.newColor = KIGFX::COLOR4D( colorStr );
     }
 
     for( size_t i = 0; i < m_classRows.size(); ++i )
@@ -553,12 +556,12 @@ bool PANEL_SETUP_NET_CHAINS::nameInClassGridAlready( const wxString& aName, int 
 
 void PANEL_SETUP_NET_CHAINS::OnDeleteChainClicked( wxCommandEvent& )
 {
-    int r = selectedChainRow();
+    int gridRow = selectedChainRow();
 
-    if( r < 0 || r >= static_cast<int>( m_chainRows.size() ) )
+    if( gridRow < 0 || gridRow >= static_cast<int>( m_gridToChainIdx.size() ) )
         return;
 
-    CHAIN_ROW& row = m_chainRows[r];
+    CHAIN_ROW& row = m_chainRows[m_gridToChainIdx[gridRow]];
 
     if( wxMessageBox( wxString::Format( _( "Delete net chain '%s'?" ), row.newName ),
                       _( "Delete Net Chain" ), wxYES_NO | wxICON_QUESTION, this ) != wxYES )
@@ -574,7 +577,10 @@ void PANEL_SETUP_NET_CHAINS::OnDeleteChainClicked( wxCommandEvent& )
 
 void PANEL_SETUP_NET_CHAINS::OnChainGridSelectionChanged( wxGridEvent& aEvent )
 {
-    updateMembersDetail( aEvent.GetRow() );
+    int gridRow = aEvent.GetRow();
+    int dataIdx = ( gridRow >= 0 && gridRow < static_cast<int>( m_gridToChainIdx.size() ) )
+                          ? m_gridToChainIdx[gridRow] : -1;
+    updateMembersDetail( dataIdx );
     aEvent.Skip();
 }
 

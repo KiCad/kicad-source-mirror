@@ -107,6 +107,7 @@ bool DIALOG_CREATE_NET_CHAIN::TransferDataFromWindow()
 
     // Refresh grid, then notify (OnModify may trigger recalculation).
     loadPotentials();
+    m_filteredIndices.clear();
     rebuildGrid();
     m_nameInput->Clear();
     m_frame->OnModify();
