@@ -3277,9 +3277,9 @@ void CONNECTION_GRAPH::RebuildNetChains()
             }
         }
 
-        long best = -1;
-        KIID   a, b;
-        size_t bestI = 0, bestJ = 0;
+        int64_t best = -1;
+        KIID    a, b;
+        size_t  bestI = 0, bestJ = 0;
 
         for( size_t i = 0; i < pins.size(); ++i )
         {
@@ -3287,8 +3287,9 @@ void CONNECTION_GRAPH::RebuildNetChains()
             {
                 VECTOR2I pa = pins[i].pin->GetPosition();
                 VECTOR2I pb = pins[j].pin->GetPosition();
-                long d = (long) ( pa.x - pb.x ) * ( pa.x - pb.x )
-                       + (long) ( pa.y - pb.y ) * ( pa.y - pb.y );
+                int64_t dx = pa.x - pb.x;
+                int64_t dy = pa.y - pb.y;
+                int64_t d = dx * dx + dy * dy;
 
                 if( d > best )
                 {
