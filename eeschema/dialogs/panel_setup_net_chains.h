@@ -109,7 +109,6 @@ private:
     int  selectedChainRow() const;
     int  selectedClassRow() const;
 
-    bool isReservedChainName( const wxString& aName ) const;
     bool nameInChainGridAlready( const wxString& aName, int aExceptRow ) const;
     bool nameInClassGridAlready( const wxString& aName, int aExceptRow ) const;
     void updateMembersDetail( int aRow );

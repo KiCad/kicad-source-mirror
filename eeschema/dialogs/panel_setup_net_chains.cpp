@@ -70,6 +70,23 @@ PANEL_SETUP_NET_CHAINS::PANEL_SETUP_NET_CHAINS( wxWindow* aParent, SCH_EDIT_FRAM
     m_addClassButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_renameClassButton->SetBitmap( KiBitmapBundle( BITMAPS::small_edit ) );
     m_deleteClassButton->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+
+    m_chainsGrid->Bind( wxEVT_GRID_CELL_CHANGED,
+            [this]( wxGridEvent& evt )
+            {
+                if( evt.GetCol() == COL_NAME )
+                {
+                    wxString val = m_chainsGrid->GetCellValue( evt.GetRow(), COL_NAME );
+
+                    if( !SCH_NETCHAIN::IsValidName( val ) )
+                    {
+                        wxMessageBox( wxString::Format(
+                                              _( "Name '%s' contains invalid characters." ), val ),
+                                      _( "Net Chains" ), wxOK | wxICON_ERROR, this );
+                        m_chainsGrid->SetCellValue( evt.GetRow(), COL_NAME, evt.GetString() );
+                    }
+                }
+            } );
 }
 
 
@@ -320,7 +337,15 @@ bool PANEL_SETUP_NET_CHAINS::Validate()
             return false;
         }
 
-        if( !row.newName.IsEmpty() && nameInChainGridAlready( row.newName, static_cast<int>( i ) ) )
+        if( !SCH_NETCHAIN::IsValidName( row.newName ) )
+        {
+            wxMessageBox( wxString::Format( _( "Net chain name '%s' contains invalid characters." ),
+                                            row.newName ),
+                          _( "Net Chains" ), wxOK | wxICON_ERROR, this );
+            return false;
+        }
+
+        if( nameInChainGridAlready( row.newName, static_cast<int>( i ) ) )
         {
             wxMessageBox( wxString::Format( _( "Duplicate net chain name '%s' on row %zu." ),
                                             row.newName, i + 1 ),
@@ -502,20 +527,6 @@ int PANEL_SETUP_NET_CHAINS::selectedClassRow() const
 }
 
 
-bool PANEL_SETUP_NET_CHAINS::isReservedChainName( const wxString& aName ) const
-{
-    if( aName.IsEmpty() )
-        return false;
-
-    // Reject characters that the file format / DRC scope syntax can't carry.
-    for( wxUniChar c : aName )
-    {
-        if( c == '"' || c == '\'' || c == '(' || c == ')' || c == ' ' )
-            return true;
-    }
-
-    return false;
-}
 
 
 bool PANEL_SETUP_NET_CHAINS::nameInChainGridAlready( const wxString& aName, int aExceptRow ) const

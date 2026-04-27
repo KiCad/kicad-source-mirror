@@ -38,6 +38,18 @@ public:
     void SetName( const wxString& aName ) { m_name = aName; }
     const wxString& GetName() const { return m_name; }
 
+    static bool IsValidName( const wxString& aName )
+    {
+        if( aName.IsEmpty() )
+            return false;
+
+        for( wxUniChar c : aName )
+            if( c == '"' || c == '\'' || c == '(' || c == ')' || c == ' ' )
+                return false;
+
+        return true;
+    }
+
     void AddNet( const wxString& aNet ) { m_nets.insert( aNet ); }
     void RemoveNet( const wxString& aNet ) { m_nets.erase( aNet ); }
     void ReplaceNets( const std::set<wxString>& aNew ) { m_nets = aNew; }

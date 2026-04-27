@@ -73,6 +73,13 @@ DIALOG_CREATE_NET_CHAIN::DIALOG_CREATE_NET_CHAIN( SCH_EDIT_FRAME* aParent, const
     m_sdbSizerOK->SetLabel( _( "Create" ) );
     m_sdbSizerCancel->SetLabel( _( "Close" ) );
 
+    m_chainsGrid->Bind( wxEVT_GRID_CELL_CHANGED,
+            [this]( wxGridEvent& evt )
+            {
+                if( evt.GetCol() == 0 )
+                    m_nameInput->SetValue( m_chainsGrid->GetCellValue( evt.GetRow(), 0 ) );
+            } );
+
     loadPotentials();
     rebuildGrid();
 
@@ -151,14 +158,11 @@ bool DIALOG_CREATE_NET_CHAIN::validateAndCreate()
         return false;
     }
 
-    for( wxUniChar c : name )
+    if( !SCH_NETCHAIN::IsValidName( name ) )
     {
-        if( c == '"' || c == '\'' || c == '(' || c == ')' || c == ' ' )
-        {
-            wxMessageBox( _( "Chain name cannot contain spaces, quotes, or parentheses." ), _( "Create Net Chain" ),
-                          wxOK | wxICON_ERROR, this );
-            return false;
-        }
+        wxMessageBox( _( "Chain name cannot contain spaces, quotes, or parentheses." ),
+                      _( "Create Net Chain" ), wxOK | wxICON_ERROR, this );
+        return false;
     }
 
     CONNECTION_GRAPH* graph = m_frame->Schematic().ConnectionGraph();
@@ -224,6 +228,7 @@ void DIALOG_CREATE_NET_CHAIN::OnChainSelected( wxGridEvent& aEvent )
             m_rows[dataIdx].suggestedName = editedName;
 
         m_nameInput->SetValue( m_rows[dataIdx].suggestedName );
+
         highlightChainNets( m_rows[dataIdx].memberNets );
     }
     else
