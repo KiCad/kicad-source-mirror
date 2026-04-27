@@ -195,6 +195,7 @@ PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
         m_frame( NULL ),
         m_enteredGroup( NULL ),
         m_nonModifiedCursor( KICURSOR::ARROW ),
+        m_lockedItemsFiltered( false ),
         m_priv( nullptr )
 {
 }
@@ -240,6 +241,7 @@ PCB_SELECTION& PCB_SELECTION_TOOL::GetSelection()
 
 PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter )
 {
+    m_lockedItemsFiltered = false;
     return m_selection;
 }
 

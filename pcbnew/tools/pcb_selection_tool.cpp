@@ -122,6 +122,7 @@ PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
         m_nonModifiedCursor( KICURSOR::ARROW ),
         m_enteredGroup( nullptr ),
         m_selectionMode( SELECTION_MODE::INSIDE_RECTANGLE ),
+        m_lockedItemsFiltered( false ),
         m_priv( std::make_unique<PRIV>() )
 {
     m_filter.lockedItems = false;
@@ -652,6 +653,7 @@ PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCl
 {
     bool selectionEmpty = m_selection.Empty();
     m_selection.SetIsHover( selectionEmpty );
+    m_lockedItemsFiltered = false;
 
     if( selectionEmpty )
     {
@@ -4256,8 +4258,21 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
 }
 
 
+void PCB_SELECTION_TOOL::ReportFilteredLockedItems()
+{
+    if( m_lockedItemsFiltered && m_frame )
+    {
+        m_frame->ShowInfoBarWarning( _( "Selection contains locked items. "
+                                        "Enable 'Override locks' to operate on them." ),
+                                     true );
+    }
+}
+
+
 void PCB_SELECTION_TOOL::FilterCollectorForLockedItems( GENERAL_COLLECTOR& aCollector )
 {
+    m_lockedItemsFiltered = false;
+
     if( m_frame && m_frame->IsType( FRAME_PCB_EDITOR ) && !m_frame->GetOverrideLocks() )
     {
         // Iterate from the back so we don't have to worry about removals.
@@ -4275,7 +4290,10 @@ void PCB_SELECTION_TOOL::FilterCollectorForLockedItems( GENERAL_COLLECTOR& aColl
                     RECURSE_MODE::RECURSE );
 
             if( item->IsLocked() || lockedDescendant )
+            {
                 aCollector.Remove( item );
+                m_lockedItemsFiltered = true;
+            }
         }
     }
 }
