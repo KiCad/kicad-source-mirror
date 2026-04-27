@@ -894,6 +894,18 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
     {
         wxLogTrace( traceLibWatch, "Restarting debounce timer" );
         m_watcherDebounceTimer.StartOnce( 3000 );
+        return;
+    }
+
+    // If the frame is currently disabled then a quasi-modal/modal dialog is open on top
+    // of it (for example the symbol properties dialog).  Reloading the library now would
+    // delete the LIB_SYMBOL the dialog is editing and crash on dialog close.  Defer the
+    // reload until the dialog is dismissed.
+    if( !IsEnabled() )
+    {
+        wxLogTrace( traceLibWatch, "Frame disabled (dialog open); restarting debounce timer" );
+        m_watcherDebounceTimer.StartOnce( 1000 );
+        return;
     }
 
     wxLogTrace( traceLibWatch, "OnSymChangeDebounceTimer" );
