@@ -388,8 +388,8 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
         for( uint32_t i = 0; i < childCount; i++ )
             parseObject( aObj.text_children[i], true );
 
-        // Component data follows for text objects that define a component
-        if( aObj.tht_shape == 1 )
+        // In v6, component data follows for text objects that define a component
+        if( m_fileData.version >= 6 && aObj.tht_shape == 1 )
         {
             aObj.component.valid = true;
             aObj.component.off_x = readFloat();
