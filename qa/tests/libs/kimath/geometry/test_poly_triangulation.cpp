@@ -959,4 +959,60 @@ BOOST_AUTO_TEST_CASE( ParallelPartitionTriangulation )
     }
 }
 
+/**
+ * Regression test for issue #24059: infinite loop in eliminateHoles()
+ * when filterPoints() removes the vertex used as its loop sentinel.
+ *
+ * The hole's leftmost vertex coincides with an outer ring vertex (a zero-length bridge).
+ * After split(), the two bridge copies (b2 and a2)
+ * are adjacent and coordinate-equal.  filterPoints(b2, a2) then tries to
+ * remove a2, which is the loop sentinel. This caused an infinite loop.
+ */
+BOOST_AUTO_TEST_CASE( Issue24059_HoleEliminationSentinelRemoval )
+{
+    SHAPE_LINE_CHAIN outer;
+    outer.Append( 0, 0 );
+    outer.Append( 10000, 0 );
+    outer.Append( 10000, 10000 );
+    outer.Append( 0, 10000 );
+    outer.SetClosed( true );
+
+    SHAPE_LINE_CHAIN hole;
+    hole.Append( 0, 0 );
+    hole.Append( 1000, 1000 );
+    hole.Append( 0, 2000 );
+    hole.SetClosed( true );
+
+    SHAPE_POLY_SET::POLYGON polygon;
+    polygon.push_back( outer );
+    polygon.push_back( hole );
+
+    TRIANGULATION_TEST_FIXTURE fixture;
+    auto triangulator = fixture.CreateTriangulator();
+
+    std::atomic<bool> finished( false );
+    bool result = false;
+
+    std::thread worker( [&]()
+    {
+        result = triangulator->TesselatePolygon( polygon, nullptr );
+        finished.store( true );
+    } );
+
+    worker.detach();
+
+    auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds( 5 );
+
+    while( !finished.load() && std::chrono::steady_clock::now() < deadline )
+        std::this_thread::sleep_for( std::chrono::milliseconds( 50 ) );
+
+    BOOST_CHECK_MESSAGE( finished.load(), "TesselatePolygon hung (issue #24059)" );
+
+    if( finished.load() )
+    {
+        BOOST_TEST( result );
+        BOOST_TEST( fixture.GetResult().GetTriangleCount() > 0 );
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END()
