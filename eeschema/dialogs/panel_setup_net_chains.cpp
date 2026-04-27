@@ -704,7 +704,7 @@ void PANEL_SETUP_NET_CHAINS::OnClassDeleteClicked( wxCommandEvent& )
     // Strip the class label from any chain row that referenced it.
     for( CHAIN_ROW& chainRow : m_chainRows )
     {
-        if( chainRow.newChainClass == row.origName )
+        if( chainRow.newChainClass == row.newName )
             chainRow.newChainClass = wxEmptyString;
     }
 
