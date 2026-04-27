@@ -890,8 +890,10 @@ private:
             if( bridge )
             {
                 VERTEX* bridgeReverse = bridge->split( hi.leftmost );
-                filterPoints( aOuterRing, aOuterRing->next );
-                filterPoints( bridgeReverse, bridgeReverse->next );
+                VERTEX* convergeTo = bridgeReverse->next;
+                filterPoints( bridgeReverse, convergeTo );
+                VERTEX* outerEnd = aOuterRing->next;
+                filterPoints( aOuterRing, outerEnd );
             }
             else
             {
@@ -906,7 +908,7 @@ private:
     /**
      * Remove consecutive duplicate vertices from the linked list.
      */
-    void filterPoints( VERTEX* aStart, VERTEX* aEnd = nullptr )
+    void filterPoints( VERTEX* aStart, VERTEX*& aEnd )
     {
         if( !aStart )
             return;
@@ -915,27 +917,27 @@ private:
             aEnd = aStart;
 
         VERTEX* p = aStart;
-        bool    again;
 
         do
         {
-            again = false;
-
             if( *p == *p->next )
             {
-                p->next->remove();
+                VERTEX* toRemove = p;
+
+                if( toRemove == aEnd )
+                    aEnd = p->prev;
+
+                p = p->prev;
+                toRemove->remove();
 
                 if( p == p->next )
                     return;
-
-                p = p->prev;
-                again = true;
             }
             else
             {
                 p = p->next;
             }
-        } while( again || p != aEnd );
+        } while( p != aEnd );
     }
 
     /**
