@@ -145,6 +145,60 @@ void EDIT_TOOL::Reset( RESET_REASON aReason )
 }
 
 
+static std::shared_ptr<CONDITIONAL_MENU> makeMirrorRotateMenu( TOOL_INTERACTIVE* aTool )
+{
+    auto menu = std::make_shared<CONDITIONAL_MENU>( aTool );
+
+    menu->SetIcon( BITMAPS::special_tools );
+    menu->SetUntranslatedTitle( _HKI( "Mirror / Rotate" ) );
+
+    auto canMirror = []( const SELECTION& aSelection )
+    {
+        if( SELECTION_CONDITIONS::OnlyTypes( padTypes )( aSelection ) )
+        {
+            return false;
+        }
+
+        if( SELECTION_CONDITIONS::HasTypes( groupTypes )( aSelection ) )
+            return true;
+
+        return SELECTION_CONDITIONS::HasTypes( EDIT_TOOL::MirrorableItems )( aSelection );
+    };
+
+    menu->AddItem( PCB_ACTIONS::rotateCcw, SELECTION_CONDITIONS::NotEmpty );
+    menu->AddItem( PCB_ACTIONS::rotateCw, SELECTION_CONDITIONS::NotEmpty );
+    menu->AddItem( PCB_ACTIONS::mirrorH, canMirror );
+    menu->AddItem( PCB_ACTIONS::mirrorV, canMirror );
+
+    return menu;
+}
+
+
+static std::shared_ptr<CONDITIONAL_MENU> makeRoutingToolsMenu( TOOL_INTERACTIVE* aTool )
+{
+    auto menu = std::make_shared<CONDITIONAL_MENU>( aTool );
+
+    menu->SetIcon( BITMAPS::special_tools );
+    menu->SetUntranslatedTitle( _HKI( "Routing" ) );
+
+    auto notMovingCondition = []( const SELECTION& aSelection )
+    {
+        return aSelection.Empty() || !aSelection.Front()->IsMoving();
+    };
+
+    const SELECTION_CONDITION isRoutable =
+            SELECTION_CONDITIONS::NotEmpty && SELECTION_CONDITIONS::HasTypes( routableTypes ) && notMovingCondition;
+
+    menu->AddItem( PCB_ACTIONS::routerRouteSelected, isRoutable );
+    menu->AddItem( PCB_ACTIONS::routerRouteSelectedFromEnd, isRoutable );
+    menu->AddItem( PCB_ACTIONS::unrouteSelected, isRoutable );
+    menu->AddItem( PCB_ACTIONS::unrouteSegment, isRoutable );
+    menu->AddItem( PCB_ACTIONS::routerAutorouteSelected, isRoutable );
+
+    return menu;
+}
+
+
 static std::shared_ptr<CONDITIONAL_MENU> makePositioningToolsMenu( TOOL_INTERACTIVE* aTool )
 {
     auto menu = std::make_shared<CONDITIONAL_MENU>( aTool );
@@ -158,6 +212,8 @@ static std::shared_ptr<CONDITIONAL_MENU> makePositioningToolsMenu( TOOL_INTERACT
     };
 
     menu->AddItem( PCB_ACTIONS::moveExact, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu->AddItem( PCB_ACTIONS::moveWithReference, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+    menu->AddItem( PCB_ACTIONS::moveIndividually, SELECTION_CONDITIONS::MoreThan( 1 ) && notMovingCondition );
     menu->AddItem( PCB_ACTIONS::positionRelative, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
     menu->AddItem( PCB_ACTIONS::interactiveOffsetTool, SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
     return menu;
@@ -499,8 +555,14 @@ bool EDIT_TOOL::Init()
     // Find the selection tool, so they can cooperate
     m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
+    std::shared_ptr<CONDITIONAL_MENU> routingSubMenu = makeRoutingToolsMenu( this );
+    m_selectionTool->GetToolMenu().RegisterSubMenu( routingSubMenu );
+
     std::shared_ptr<CONDITIONAL_MENU> positioningToolsSubMenu = makePositioningToolsMenu( this );
     m_selectionTool->GetToolMenu().RegisterSubMenu( positioningToolsSubMenu );
+
+    std::shared_ptr<CONDITIONAL_MENU> mirrorRotateSubMenu = makeMirrorRotateMenu( this );
+    m_selectionTool->GetToolMenu().RegisterSubMenu( mirrorRotateSubMenu );
 
     std::shared_ptr<CONDITIONAL_MENU> shapeModificationSubMenu = makeShapeModificationMenu( this );
     m_selectionTool->GetToolMenu().RegisterSubMenu( shapeModificationSubMenu );
@@ -668,40 +730,37 @@ bool EDIT_TOOL::Init()
     CONDITIONAL_MENU& menu = m_selectionTool->GetToolMenu().GetMenu();
 
     // clang-format off
-    menu.AddItem( PCB_ACTIONS::move,                    SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-    menu.AddItem( PCB_ACTIONS::moveWithReference,       SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
-    menu.AddItem( PCB_ACTIONS::moveIndividually,        SELECTION_CONDITIONS::MoreThan( 1 ) && notMovingCondition );
-
-    menu.AddItem( PCB_ACTIONS::routerRouteSelected,        isRoutable );
-    menu.AddItem( PCB_ACTIONS::routerRouteSelectedFromEnd, isRoutable );
-    menu.AddItem( PCB_ACTIONS::unrouteSelected,            isRoutable );
-    menu.AddItem( PCB_ACTIONS::unrouteSegment,             isRoutable );
-    menu.AddItem( PCB_ACTIONS::routerAutorouteSelected,    isRoutable );
+    menu.AddItem( ACTIONS::selectAll,             noItemsCondition );
+    menu.AddItem( ACTIONS::unselectAll,           noItemsCondition );
+    menu.AddSeparator();
 
     menu.AddItem( PCB_ACTIONS::skip,              isSkippable );
-    menu.AddItem( PCB_ACTIONS::breakTrack,        SELECTION_CONDITIONS::Count( 1 )
-                                                      && SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
+    menu.AddItem( PCB_ACTIONS::move,                    SELECTION_CONDITIONS::NotEmpty && notMovingCondition );
+
     menu.AddItem( PCB_ACTIONS::drag45Degree,      SELECTION_CONDITIONS::Count( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems ) );
     menu.AddItem( PCB_ACTIONS::dragFreeAngle,     SELECTION_CONDITIONS::Count( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::DraggableItems )
                                                       && !SELECTION_CONDITIONS::OnlyTypes( footprintTypes ) );
-    menu.AddItem( PCB_ACTIONS::filletTracks,      SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
-
-    menu.AddItem( PCB_ACTIONS::rotateCcw,         SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::rotateCw,          SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::flip,              SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::mirrorH,           canMirror );
-    menu.AddItem( PCB_ACTIONS::mirrorV,           canMirror );
+
     menu.AddItem( PCB_ACTIONS::swap,              SELECTION_CONDITIONS::MoreThan( 1 ) );
     menu.AddItem( PCB_ACTIONS::swapPadNets,       SELECTION_CONDITIONS::MoreThan( 1 )
                                                       && SELECTION_CONDITIONS::OnlyTypes( padTypes ) );
     menu.AddItem( PCB_ACTIONS::swapGateNets,      gateSwapMultipleUnitsOnOneFootprint );
     menu.AddMenu( gateSwapSubMenu.get(),          gateSwapSingleUnitOnOneFootprint );
+
+    menu.AddSeparator();
+
+    menu.AddItem( PCB_ACTIONS::breakTrack,        SELECTION_CONDITIONS::Count( 1 )
+                                                      && SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
+
+    menu.AddItem( PCB_ACTIONS::filletTracks,      SELECTION_CONDITIONS::OnlyTypes( trackTypes ) );
+
+    menu.AddSeparator();
+
     menu.AddItem( PCB_ACTIONS::packAndMoveFootprints, SELECTION_CONDITIONS::MoreThan( 1 )
                                                       && SELECTION_CONDITIONS::HasType( PCB_FOOTPRINT_T ) );
-
-    menu.AddItem( PCB_ACTIONS::properties,        propertiesCondition );
 
     menu.AddItem( PCB_ACTIONS::assignNetClass,    SELECTION_CONDITIONS::OnlyTypes( connectedTypes )
                                                       && !inFootprintEditor );
@@ -717,6 +776,8 @@ bool EDIT_TOOL::Init()
 
     // Add the submenu for the special tools: modfiers and positioning tools
     menu.AddSeparator( 100 );
+    menu.AddMenu( routingSubMenu.get(), isRoutable, 100 );
+    menu.AddMenu( mirrorRotateSubMenu.get(), canMirror, 100 );
     menu.AddMenu( shapeModificationSubMenu.get(), shapeModificationCondition, 100 );
     menu.AddMenu( positioningToolsSubMenu.get(),  positioningToolsCondition, 100 );
 
@@ -733,9 +794,8 @@ bool EDIT_TOOL::Init()
     menu.AddItem( ACTIONS::duplicate,             SELECTION_CONDITIONS::NotEmpty, 150 );
     menu.AddItem( ACTIONS::doDelete,              SELECTION_CONDITIONS::NotEmpty, 150 );
 
-    menu.AddSeparator( 150 );
-    menu.AddItem( ACTIONS::selectAll,             noItemsCondition, 150 );
-    menu.AddItem( ACTIONS::unselectAll,           noItemsCondition, 150 );
+    menu.AddSeparator( 2000 );
+    menu.AddItem( PCB_ACTIONS::properties,        propertiesCondition, 2000 );
     // clang-format on
 
     return true;
