@@ -31,6 +31,7 @@
 
 class SCHEMATIC;
 class SCH_REFERENCE;
+class SCH_REFERENCE_LIST;
 class SCH_SYMBOL;
 class SCH_PIN;
 class SCHEMATIC;
@@ -44,6 +45,24 @@ wxString GetSelectedItemsAsText( const SELECTION& aSel );
  * Get a list of unplaced (i.e. not in schamtic) unit numbers for a symbol.
  */
 std::set<int> GetUnplacedUnitsForSymbol( const SCH_SYMBOL& aSym );
+
+/**
+ * Decide whether \a aUnit of an unannotated multi-unit symbol is already placed.
+ *
+ * Pre-annotation references all share the same "U?" form regardless of which library symbol
+ * they originate from, so two different multi-unit parts that share a reference prefix would
+ * otherwise be collapsed into one logical component. This helper restricts the occupancy check
+ * to references whose backing symbol shares \a aLibId and reference designator \a aRef.
+ *
+ * @param aRefs        Pre-built reference list of every symbol on the sheet.
+ * @param aRef         Unitless reference designator of the candidate (typically "U?").
+ * @param aLibId       LIB_ID of the candidate symbol; identifies the underlying library part.
+ * @param aUnit        Unit number being tested.
+ *
+ * @return true when an existing same-LIB_ID, same-reference symbol already occupies aUnit.
+ */
+bool IsUnannotatedUnitOccupied( const SCH_REFERENCE_LIST& aRefs, const wxString& aRef,
+                                const LIB_ID& aLibId, int aUnit );
 
 /**
  * Find a symbol by reference and unit.

@@ -138,6 +138,29 @@ wxString GetSelectedItemsAsText( const SELECTION& aSel )
 }
 
 
+bool IsUnannotatedUnitOccupied( const SCH_REFERENCE_LIST& aRefs, const wxString& aRef,
+                                const LIB_ID& aLibId, int aUnit )
+{
+    for( size_t i = 0; i < aRefs.GetCount(); ++i )
+    {
+        const SCH_REFERENCE& ref = aRefs[i];
+
+        if( ref.GetUnit() != aUnit )
+            continue;
+
+        if( ref.GetRef() != aRef )
+            continue;
+
+        SCH_SYMBOL* refSym = ref.GetSymbol();
+
+        if( refSym && refSym->GetLibId() == aLibId )
+            return true;
+    }
+
+    return false;
+}
+
+
 std::set<int> GetUnplacedUnitsForSymbol( const SCH_SYMBOL& aSym )
 {
     SCHEMATIC const* schematic = aSym.Schematic();
@@ -146,6 +169,13 @@ std::set<int> GetUnplacedUnitsForSymbol( const SCH_SYMBOL& aSym )
         return {};
 
     const wxString symRefDes = aSym.GetRef( &schematic->CurrentSheet(), false );
+
+    // Pre-annotation references all share the same "U?" form regardless of which library symbol
+    // they came from, so an unannotated AD8620 and an unannotated OPA1664 would otherwise be
+    // collapsed into one logical part. Match library identity as a tie-breaker when the
+    // reference is still unannotated.
+    const bool       refIsUnannotated = !symRefDes.IsEmpty() && symRefDes.Last() == '?';
+    const LIB_ID&    symLibId = aSym.GetLibId();
 
     // Get a list of all references in the schematic
     SCH_SHEET_LIST     hierarchy = schematic->Hierarchy();
@@ -159,8 +189,13 @@ std::set<int> GetUnplacedUnitsForSymbol( const SCH_SYMBOL& aSym )
 
     for( const SCH_REFERENCE& ref : existingRefs )
     {
-        if( symRefDes == ref.GetRef() )
-            missingUnits.erase( ref.GetUnit() );
+        if( symRefDes != ref.GetRef() )
+            continue;
+
+        if( refIsUnannotated && ref.GetSymbol() && ref.GetSymbol()->GetLibId() != symLibId )
+            continue;
+
+        missingUnits.erase( ref.GetUnit() );
     }
 
     return missingUnits;
