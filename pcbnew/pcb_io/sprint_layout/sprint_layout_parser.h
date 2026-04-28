@@ -203,18 +203,25 @@ private:
     VECTOR2I     sprintToKicadPos( float aX, float aY ) const;
     wxString     convertString( const std::string& aStr ) const;
 
-    NETINFO_ITEM* resolveItemNet( BOARD* aBoard, const SPRINT_LAYOUT::OBJECT& aObj, NETINFO_ITEM* aGndPlaneNet ) const;
+    bool          layerHasGroundPlane( PCB_LAYER_ID aLayer, const uint8_t aGroundPlane[7] ) const;
 
-    void processPad( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj, NETINFO_ITEM* aGndPlaneNet );
+    NETINFO_ITEM* resolveItemNet( BOARD* aBoard, const SPRINT_LAYOUT::OBJECT& aObj, PCB_LAYER_ID aLayer,
+                                  const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet ) const;
+
+    void processPad( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
+                     const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet );
 
     void processCircle( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
-                        std::vector<std::vector<VECTOR2I>>& aOutlineSegments, NETINFO_ITEM* aGndPlaneNet );
+                        std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
+                        const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet );
 
     void processLine( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
-                      std::vector<std::vector<VECTOR2I>>& aOutlineSegments, NETINFO_ITEM* aGndPlaneNet );
+                      std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
+                      const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet );
 
     void processPoly( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
-                      std::vector<std::vector<VECTOR2I>>& aOutlineSegments, NETINFO_ITEM* aGndPlaneNet );
+                      std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
+                      const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet );
 
     void processText( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj );
 

@@ -551,14 +551,32 @@ wxString SPRINT_LAYOUT_PARSER::convertString( const std::string& aStr ) const
 }
 
 
+bool SPRINT_LAYOUT_PARSER::layerHasGroundPlane( PCB_LAYER_ID aLayer, const uint8_t aGroundPlane[7] ) const
+{
+    // Ground plane index map mirrors CreateBoard()'s groundPlaneMap
+    switch( aLayer )
+    {
+    case F_Cu:   return aGroundPlane[0] != 0;
+    case B_Cu:   return aGroundPlane[2] != 0;
+    case In1_Cu: return aGroundPlane[4] != 0;
+    case In2_Cu: return aGroundPlane[5] != 0;
+    default:     return false;
+    }
+}
+
+
 NETINFO_ITEM* SPRINT_LAYOUT_PARSER::resolveItemNet( BOARD* aBoard, const SPRINT_LAYOUT::OBJECT& aObj,
+                                                    PCB_LAYER_ID aLayer, const uint8_t aGroundPlane[7],
                                                     NETINFO_ITEM* aGndPlaneNet ) const
 {
     if( !aBoard )
         return nullptr;
 
-    if( aObj.clearance == 0 && aGndPlaneNet != nullptr )
+    if( aObj.clearance == 0 && aGndPlaneNet != nullptr && aObj.net_name.empty()
+        && layerHasGroundPlane( aLayer, aGroundPlane ) )
+    {
         return aGndPlaneNet;
+    }
 
     if( !aObj.net_name.empty() )
     {
@@ -726,19 +744,19 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
         {
         case SPRINT_LAYOUT::OBJ_THT_PAD:
         case SPRINT_LAYOUT::OBJ_SMD_PAD:
-            processPad( container, obj, gndPlaneNet );
+            processPad( container, obj, boardData.ground_plane, gndPlaneNet );
             break;
 
         case SPRINT_LAYOUT::OBJ_LINE:
-            processLine( container, obj, outlineSegments, gndPlaneNet );
+            processLine( container, obj, outlineSegments, boardData.ground_plane, gndPlaneNet );
             break;
 
         case SPRINT_LAYOUT::OBJ_POLY:
-            processPoly( container, obj, outlineSegments, gndPlaneNet );
+            processPoly( container, obj, outlineSegments, boardData.ground_plane, gndPlaneNet );
             break;
 
         case SPRINT_LAYOUT::OBJ_CIRCLE:
-            processCircle( container, obj, outlineSegments, gndPlaneNet );
+            processCircle( container, obj, outlineSegments, boardData.ground_plane, gndPlaneNet );
             break;
 
         case SPRINT_LAYOUT::OBJ_TEXT:
@@ -865,7 +883,7 @@ FOOTPRINT* SPRINT_LAYOUT_PARSER::CreateFootprint()
 
 
 void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
-                                       NETINFO_ITEM* aGndPlaneNet )
+                                       const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet )
 {
     BOARD*     board = aContainer ? aContainer->GetBoard() : nullptr;
     FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aContainer );
@@ -1082,8 +1100,25 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
         pad->SetLocalThermalSpokeWidthOverride( std::optional<int>( spokeWidth ) );
     }
 
-    // Set net name
-    if( NETINFO_ITEM* net = resolveItemNet( board, aObj, aGndPlaneNet ) )
+    // Set net name. Plated THT pads span all copper layers, so accept the GND
+    // default when any configured ground-plane layer is enabled; SMD and NPTH
+    // pads only qualify on their own layer.
+    PCB_LAYER_ID netLayer = padLayer;
+
+    if( aObj.type == SPRINT_LAYOUT::OBJ_THT_PAD && aObj.plated != 0
+        && !layerHasGroundPlane( padLayer, aGroundPlane ) )
+    {
+        if( aGroundPlane[0] )
+            netLayer = F_Cu;
+        else if( aGroundPlane[2] )
+            netLayer = B_Cu;
+        else if( aGroundPlane[4] )
+            netLayer = In1_Cu;
+        else if( aGroundPlane[5] )
+            netLayer = In2_Cu;
+    }
+
+    if( NETINFO_ITEM* net = resolveItemNet( board, aObj, netLayer, aGroundPlane, aGndPlaneNet ) )
         pad->SetNet( net );
 
     pad->SetNumber( wxString::Format( wxS( "%d" ), static_cast<int>( fp->Pads().size() + 1 ) ) );
@@ -1094,7 +1129,7 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
 
 void SPRINT_LAYOUT_PARSER::processLine( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
                                         std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
-                                        NETINFO_ITEM* aGndPlaneNet )
+                                        const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet )
 {
     if( aObj.points.size() < 2 )
         return;
@@ -1130,7 +1165,7 @@ void SPRINT_LAYOUT_PARSER::processLine( BOARD_ITEM_CONTAINER* aContainer, const 
         // TODO: Can't detect clearance reliably yet
         //if( IsCopperLayer( layer ) )
         //{
-        //    if( NETINFO_ITEM* net = resolveItemNet( board, aObj, aGndPlaneNet ) )
+        //    if( NETINFO_ITEM* net = resolveItemNet( board, aObj, layer, aGroundPlane, aGndPlaneNet ) )
         //        shape->SetNet( net );
         //}
 
@@ -1141,7 +1176,7 @@ void SPRINT_LAYOUT_PARSER::processLine( BOARD_ITEM_CONTAINER* aContainer, const 
 
 void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
                                         std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
-                                        NETINFO_ITEM* aGndPlaneNet )
+                                        const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet )
 {
     if( aObj.points.size() < 2 )
         return;
@@ -1214,7 +1249,7 @@ void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const 
 
         shape->SetPolyShape( polySet );
 
-        if( NETINFO_ITEM* net = resolveItemNet( board, aObj, aGndPlaneNet ) )
+        if( NETINFO_ITEM* net = resolveItemNet( board, aObj, layer, aGroundPlane, aGndPlaneNet ) )
             shape->SetNet( net );
 
         aContainer->Add( shape );
@@ -1224,7 +1259,7 @@ void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const 
 
 void SPRINT_LAYOUT_PARSER::processCircle( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
                                           std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
-                                          NETINFO_ITEM* aGndPlaneNet )
+                                          const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet )
 {
     //BOARD* board = aContainer ? aContainer->GetBoard() : nullptr;
     PCB_LAYER_ID layer = mapLayer( aObj.layer );
@@ -1321,7 +1356,7 @@ void SPRINT_LAYOUT_PARSER::processCircle( BOARD_ITEM_CONTAINER* aContainer, cons
     // TODO: Can't detect clearance reliably yet
     //if( IsCopperLayer( layer ) )
     //{
-    //    if( NETINFO_ITEM* net = resolveItemNet( board, aObj, aGndPlaneNet ) )
+    //    if( NETINFO_ITEM* net = resolveItemNet( board, aObj, layer, aGroundPlane, aGndPlaneNet ) )
     //        shape->SetNet( net );
     //}
 
