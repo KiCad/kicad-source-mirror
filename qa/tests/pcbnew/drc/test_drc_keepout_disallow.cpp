@@ -119,3 +119,56 @@ BOOST_FIXTURE_TEST_CASE( DRCKeepoutDisallowViasAndTracks, DRC_KEEPOUT_TEST_FIXTU
             BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
     }
 }
+
+
+// Regression test: a track outside a no-tracks keepout must not be flagged
+// when board->m_DRCMaxClearance is large.  The antiTrackKeepouts Collide()
+// call previously used m_DRCMaxClearance as the collision distance, silently
+// inflating every keepout boundary by whatever the largest clearance on the
+// board happened to be.
+//
+// Board layout:
+//   - Keepout rule area (no tracks): (130,60)-(140,90) on F.Cu
+//   - Track segment at x=144.018 — 4 mm outside the keepout right edge
+//   - Copper zone with 20 mm local clearance at (176,55)-(196,95)
+//   - physical_clearance rule of 20 mm in .kicad_dru to widen R-tree search
+//
+// The track is outside the keepout so no violation should be reported.
+BOOST_FIXTURE_TEST_CASE( DRCKeepoutNoClearanceInflation, DRC_KEEPOUT_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "keepout_no_clearance/keepout_no_clearance", m_board );
+
+    std::vector<DRC_ITEM>  violations;
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    bds.m_DRCSeverities[DRCE_INVALID_OUTLINE] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[DRCE_UNCONNECTED_ITEMS] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[DRCE_LIB_FOOTPRINT_ISSUES] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[DRCE_LIB_FOOTPRINT_MISMATCH] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[DRCE_COPPER_SLIVER] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[DRCE_STARVED_THERMAL] = SEVERITY::RPT_SEVERITY_IGNORE;
+    bds.m_DRCSeverities[DRCE_ALLOWED_ITEMS] = SEVERITY::RPT_SEVERITY_ERROR;
+
+    bds.m_DRCEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I& aPos, int aLayer,
+                 const std::function<void( PCB_MARKER* )>& aPathGenerator )
+            {
+                if( aItem->GetErrorCode() == DRCE_ALLOWED_ITEMS )
+                    violations.push_back( *aItem );
+            } );
+
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );
+
+    if( !violations.empty() )
+    {
+        UNITS_PROVIDER            unitsProvider( pcbIUScale, EDA_UNITS::MM );
+        std::map<KIID, EDA_ITEM*> itemMap;
+        m_board->FillItemMap( itemMap );
+
+        for( const DRC_ITEM& item : violations )
+            BOOST_TEST_MESSAGE( item.ShowReport( &unitsProvider, RPT_SEVERITY_ERROR, itemMap ) );
+    }
+
+    BOOST_CHECK_MESSAGE( violations.empty(),
+                         "Expected no keepout violations for track outside keepout, got " << violations.size() );
+}
