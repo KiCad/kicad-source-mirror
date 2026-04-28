@@ -909,11 +909,14 @@ void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
             reporter->Report( _( "Loading Design Block Libraries" ) );
             adapter->AsyncLoad();
 
+            bool aborted = false;
+
             while( true )
             {
                 if( m_libraryPreloadAbort.load() )
                 {
                     m_libraryPreloadAbort.store( false );
+                    aborted = true;
                     break;
                 }
 
@@ -939,7 +942,14 @@ void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
                     break;
             }
 
-            adapter->BlockUntilLoaded();
+            // AbortAsyncLoad() sets the adapter's worker abort flag and then blocks,
+            // so workers exit at their next checkpoint. BlockUntilLoaded() alone just
+            // waits for each future to complete naturally, which can hang indefinitely
+            // if a worker is stuck on a stalled network or filesystem operation.
+            if( aborted )
+                adapter->AbortAsyncLoad();
+            else
+                adapter->BlockUntilLoaded();
 
             Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
             m_libraryPreloadBackgroundJob.reset();

@@ -236,6 +236,12 @@ bool PLUGIN_CONTENT_MANAGER::DownloadToStream( const wxString& aUrl, std::ostrea
     curl.SetFollowRedirects( true );
     curl.SetTransferCallback( callback, 250000L );
 
+    // Bound stalled transfers without capping total time. DownloadToStream is shared
+    // by metadata fetches and large package/resource downloads, so a fixed total
+    // timeout would abort legitimate long downloads on slow links. Abort only if the
+    // transfer rate stays below 100 B/s for 30 seconds.
+    curl.SetStallTimeout( 100L, 30L );
+
     if( !aAccept.empty() )
         curl.SetHeader( "Accept", aAccept );
 

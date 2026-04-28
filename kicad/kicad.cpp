@@ -407,6 +407,11 @@ int PGM_KICAD::OnPgmRun()
 
 void PGM_KICAD::OnPgmExit()
 {
+    // Signal all background library preloads to abort before waiting for the thread pool.
+    // The design block preload runs on the global thread pool and checks this flag; without
+    // setting it here the pool wait below can block for up to 120 seconds.
+    m_libraryPreloadAbort.store( true );
+
     // Abort and wait on any background jobs
     GetKiCadThreadPool().purge();
     GetKiCadThreadPool().wait();
