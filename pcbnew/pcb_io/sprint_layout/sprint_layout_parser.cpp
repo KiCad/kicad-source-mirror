@@ -933,7 +933,7 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
                                           int( aObj.tht_shape ), aObj.points.size() ) );
         }
 
-        ptsAngle.Round( 2 );
+        ptsAngle = ptsAngle.Round( 2 );
     }
 
     PCB_LAYER_ID padLayer = mapLayer( aObj.layer );
