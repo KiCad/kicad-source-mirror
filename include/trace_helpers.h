@@ -38,6 +38,10 @@
 #include <stdarg.h>
 #include <map>
 
+#ifdef KICAD_GAL_PROFILE
+#include <core/profile.h>
+#endif
+
 /**
  * @defgroup trace_env_vars Trace Environment Variables
  *
@@ -363,5 +367,10 @@ extern KICOMMON_API wxString dump( const wxKeyEvent& aEvent );
  */
 extern KICOMMON_API wxString dump( const wxArrayString& aArray );
 
+
+#ifdef KICAD_GAL_PROFILE
+extern KICOMMON_API LATENCY_PROBE latencyProbeZoomToRender;
+extern KICOMMON_API LATENCY_PROBE latencyProbeRepaintToMotion;
+#endif
 
 #endif    // _TRACE_HELPERS_H_

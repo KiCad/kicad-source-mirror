@@ -38,6 +38,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cstdint>
+#include <vector>
 
 /**
  * A small class to help profiling.
@@ -76,6 +77,7 @@ public:
      */
     void Start()
     {
+        m_started = true;
         m_running = true;
         m_starttime = CLOCK::now();
         m_lasttime = m_starttime;
@@ -163,6 +165,12 @@ public:
         if( !m_name.empty() )
             retv = m_name + ": ";
 
+        if( !m_started )
+        {
+            retv += "none";
+            return retv;
+        }
+
         std::stringstream time;
 
         if( cnt < 1e3 )
@@ -179,9 +187,12 @@ public:
         return retv;
     }
 
+    const std::string& GetName() const { return m_name; }
+
 private:
     std::string m_name;     // a string printed in message
     bool m_running;
+    bool m_started;
 
     using CLOCK = std::chrono::high_resolution_clock;
     using TIME_POINT = std::chrono::time_point<CLOCK>;
@@ -286,6 +297,64 @@ public:
 private:
     std::string        m_name;
     std::atomic_ullong m_count;
+};
+
+class LATENCY_PROBE
+{
+    public:
+        using CLOCK = std::chrono::high_resolution_clock;
+        using TIME_POINT = std::chrono::time_point<CLOCK>;
+
+        struct CHECKPOINT
+        {
+            std::string name;
+            TIME_POINT timestamp;
+            bool isTimer = false;
+            double timerDelta = 0;
+        };
+
+        LATENCY_PROBE( const std::string& aName, int aStages = 8 ) : 
+            m_name( aName )
+        {
+            m_checkpoints.reserve( aStages );
+        }
+
+        void Reset()
+        {
+            m_start = CLOCK::now();
+            m_checkpoints.clear();
+        }
+
+        void Checkpoint( const std::string& aName )
+        {
+            CHECKPOINT chk;
+            chk.name = aName;
+            chk.timestamp = CLOCK::now();
+            m_checkpoints.push_back( chk );
+        }
+
+        void AddTimer( PROF_TIMER& aTimer )
+        {
+            CHECKPOINT chk;
+            chk.name = aTimer.GetName();
+            chk.isTimer = true;
+            chk.timerDelta = aTimer.msecs();
+            m_checkpoints.push_back( chk );
+        }
+
+        std::string to_string();
+
+        double delta_ms( TIME_POINT a, TIME_POINT b )
+        {
+            using DUR_MS = std::chrono::duration<double, std::milli>;
+            return static_cast<DUR_MS>( a - b ).count();
+        }
+    
+    private:
+        
+        TIME_POINT m_start;
+        std::string m_name;
+        std::vector<CHECKPOINT> m_checkpoints;
 };
 
 #endif  // TPROFILE_H

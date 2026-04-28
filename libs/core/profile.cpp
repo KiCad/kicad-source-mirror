@@ -25,6 +25,9 @@
 
 #include <config.h>
 #include <cstdint>
+#include <string>
+#include <sstream>
+#include <core/profile.h>
 
 #if defined( _WIN32 )
 
@@ -71,3 +74,27 @@ int64_t GetRunningMicroSecs()
 }
 
 #endif
+
+
+std::string LATENCY_PROBE::to_string() 
+{
+    std::stringstream ss;
+    TIME_POINT prev = m_start;
+    ss << "Probe stats for" << m_name << std::endl;
+    for (auto cp : m_checkpoints)
+    {
+        if( cp.isTimer )
+            ss << "tmr: " << std::left << std::setw(30) << cp.name << std::fixed << std::setprecision(3) << cp.timerDelta << std::endl;
+        else
+        {
+            ss << "chp: "<< std::left << std::setw(30) << cp.name;
+            ss << "since last : " << std::fixed << std::setprecision(3) << delta_ms( cp.timestamp, prev ) << " ";
+            ss << "accumulated: " << std::fixed << std::setprecision(3) << delta_ms( cp.timestamp, m_start ) << std::endl;
+
+            prev = cp.timestamp;
+        }
+    }
+
+    return ss.str();
+}
+
