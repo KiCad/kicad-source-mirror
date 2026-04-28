@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <functional>
 #include <cstring>
 #include <fstream>
 #include <string>
@@ -133,6 +134,38 @@ inline bool signatureIsUnique( const std::vector<uint8_t>& aData, const uint8_t*
 
     return first != SIGNATURE_NOT_FOUND
            && findSignature( aData, aSig, aSigLen, first + 1 ) == SIGNATURE_NOT_FOUND;
+}
+
+
+/// A contiguous stride-N record run: its base offset and member count.
+struct STRIDE_RUN
+{
+    size_t base = 0;
+    size_t count = 0;
+};
+
+
+/**
+ * From a hit anywhere inside a stride-@p aStride record run, back up to the run's first member
+ * (staying at or above @p aLo) then count the contiguous members forward (staying within @p aHi).
+ *
+ * Pure geometry; @p aIsMember decides membership at a candidate offset. The caller keeps whatever
+ * it does with each member (dedup, read, emit). Returns the run base and member count.
+ */
+inline STRIDE_RUN extendStrideRun( size_t aHit, size_t aStride, size_t aLo, size_t aHi,
+                                   const std::function<bool( size_t )>& aIsMember )
+{
+    size_t base = aHit;
+
+    while( base >= aLo + aStride && aIsMember( base - aStride ) )
+        base -= aStride;
+
+    size_t count = 0;
+
+    while( base + ( count + 1 ) * aStride <= aHi && aIsMember( base + count * aStride ) )
+        ++count;
+
+    return { base, count };
 }
 
 

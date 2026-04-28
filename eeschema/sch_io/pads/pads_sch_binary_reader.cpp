@@ -59,6 +59,8 @@ using PADS_IO::SDB_RECORD;
 using PADS_IO::SDB_FIELD_UNSET;
 using PADS_IO::findSignature;
 using PADS_IO::SIGNATURE_NOT_FOUND;
+using PADS_IO::STRIDE_RUN;
+using PADS_IO::extendStrideRun;
 
 static constexpr uint8_t  MAGIC1 = 0xFE;
 static constexpr uint16_t VERSION = 0x000D;
@@ -2683,23 +2685,22 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
             continue;
         }
 
-        size_t start = i;
+        auto isSegMember = [&]( size_t o )
+        { return isSegmentMarker( SDB_RECORD( cur, o ).U16( SEG_MARKER_OFF ) ); };
 
-        while( start >= DATA_STREAM_OFFSET + SEG_STRIDE
-               && isSegmentMarker( SDB_RECORD( cur, start - SEG_STRIDE ).U16( SEG_MARKER_OFF ) ) )
-            start -= SEG_STRIDE;
+        STRIDE_RUN run = extendStrideRun( i, SEG_STRIDE, DATA_STREAM_OFFSET, d.size(), isSegMember );
 
-        if( seenSeg.count( start ) )
+        if( seenSeg.count( run.base ) )
         {
             i += SEG_STRIDE;
             continue;
         }
 
-        seenSeg.insert( start );
-        size_t p = start;
+        seenSeg.insert( run.base );
 
-        while( p + SEG_STRIDE <= d.size() && isSegmentMarker( SDB_RECORD( cur, p ).U16( SEG_MARKER_OFF ) ) )
+        for( size_t k = 0; k < run.count; ++k )
         {
+            size_t     p = run.base + k * SEG_STRIDE;
             SDB_RECORD seg( cur, p );
             uint16_t   ni = seg.U16( SEG_NETIDX_OFF );
 
@@ -2716,11 +2717,9 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
                         offNet.emplace( std::make_pair( sheet, v & 0xfff ), net );
                 }
             }
-
-            p += SEG_STRIDE;
         }
 
-        i = p;
+        i = run.base + run.count * SEG_STRIDE;
     }
 
     // The symbol-group of an off-page is read from its used-decal handle (one slot back at
