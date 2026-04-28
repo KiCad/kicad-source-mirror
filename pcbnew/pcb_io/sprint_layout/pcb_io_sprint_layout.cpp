@@ -45,21 +45,29 @@ PCB_IO_SPRINT_LAYOUT::PCB_IO_SPRINT_LAYOUT() :
 void PCB_IO_SPRINT_LAYOUT::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                                                bool aBestEfforts, const std::map<std::string, UTF8>* aProperties )
 {
-    if( !wxDir::Exists( aLibraryPath ) )
-        return;
+    wxFileName libFn( aLibraryPath );
 
-    wxArrayString files;
-    wxDir::GetAllFiles( aLibraryPath, &files, wxEmptyString, wxDIR_FILES | wxDIR_DIRS );
-
-    for( const wxString& filePath : files )
+    if( libFn.FileExists() && libFn.GetExt().Upper() == wxS( "LMK" ) )
     {
-        wxFileName file( filePath );
+        aFootprintNames.Add( libFn.GetName() );
+        return;
+    }
 
-        if( file.GetExt().Upper() != wxS( "LMK" ) )
-            continue;
+    if( wxDir::Exists( aLibraryPath ) )
+    {
+        wxArrayString files;
+        wxDir::GetAllFiles( aLibraryPath, &files, wxEmptyString, wxDIR_FILES | wxDIR_DIRS );
 
-        file.MakeRelativeTo( aLibraryPath );
-        aFootprintNames.Add( file.GetFullPath().BeforeLast( '.' ) );
+        for( const wxString& filePath : files )
+        {
+            wxFileName file( filePath );
+
+            if( file.GetExt().Upper() != wxS( "LMK" ) )
+                continue;
+
+            file.MakeRelativeTo( aLibraryPath );
+            aFootprintNames.Add( file.GetFullPath().BeforeLast( '.' ) );
+        }
     }
 }
 
@@ -67,17 +75,27 @@ void PCB_IO_SPRINT_LAYOUT::FootprintEnumerate( wxArrayString& aFootprintNames, c
 FOOTPRINT* PCB_IO_SPRINT_LAYOUT::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                                                 bool aKeepUUID, const std::map<std::string, UTF8>* aProperties )
 {
-    if( !wxDir::Exists( aLibraryPath ) )
-        return nullptr;
+    wxFileName libFn( aLibraryPath );
+    wxFileName lmkPath;
 
-    wxFileName lmkPath( aLibraryPath + wxFileName::GetPathSeparator() + aFootprintName + wxS( ".LMK" ) );
-
-    if( !lmkPath.FileExists() )
+    if( libFn.FileExists() && libFn.GetExt().Upper() == wxS( "LMK" ) )
     {
-        lmkPath.SetExt( "lmk" );
+        lmkPath = libFn;
+    }
+    else
+    {
+        if( !wxDir::Exists( aLibraryPath ) )
+            return nullptr;
+
+        lmkPath = wxFileName( aLibraryPath + wxFileName::GetPathSeparator() + aFootprintName + wxS( ".LMK" ) );
 
         if( !lmkPath.FileExists() )
-            return nullptr;
+        {
+            lmkPath.SetExt( "lmk" );
+
+            if( !lmkPath.FileExists() )
+                return nullptr;
+        }
     }
 
     SPRINT_LAYOUT_PARSER parser;
