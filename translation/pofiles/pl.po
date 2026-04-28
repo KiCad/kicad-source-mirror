@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-26 04:51+0300\n"
-"PO-Revision-Date: 2026-04-26 12:42+0000\n"
+"PO-Revision-Date: 2026-04-28 15:20+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
@@ -9290,15 +9290,15 @@ msgstr "Wystąpił nieoczekiwany błąd podczas odczytu tabeli bibliotek"
 
 #: common/local_history.cpp:1135
 msgid "Compacting local history..."
-msgstr ""
+msgstr "Kompaktowanie historii lokalnej..."
 
 #: common/local_history.cpp:1332
 msgid "Trimming local history..."
-msgstr ""
+msgstr "Obcinanie historii lokalnej..."
 
 #: common/local_history.cpp:1425
 msgid "Compacting trimmed history..."
-msgstr ""
+msgstr "Kompaktowanie obciętej historii..."
 
 #: common/local_history.cpp:1728
 msgid ""
@@ -21908,9 +21908,9 @@ msgid "LTspice schematic files"
 msgstr "Pliki schematu programu LTSpice"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1457
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a PADS Logic ASCII file."
-msgstr "'%s' to nie jest poprawna wartość programu SPICE."
+msgstr "'%s' to nie jest plik PADS Logic ASCII."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1469
 #, c-format
@@ -32662,9 +32662,8 @@ msgid "Please wait"
 msgstr "Proszę czekać"
 
 #: kicad/project_tree_pane.cpp:1706
-#, fuzzy
 msgid "Closing project..."
-msgstr "Wprowadź projekt..."
+msgstr "Zamykam projekt..."
 
 #: kicad/project_tree_pane.cpp:1723
 msgid ""
@@ -32679,14 +32678,12 @@ msgid "Git Operation Delayed"
 msgstr "Operacja Git opóźniona"
 
 #: kicad/project_tree_pane.cpp:1727
-#, fuzzy
 msgid "Keep Waiting"
-msgstr "Pozostaw numerację"
+msgstr "Zaczekaj"
 
 #: kicad/project_tree_pane.cpp:1727
-#, fuzzy
 msgid "Abandon"
-msgstr "Losowy"
+msgstr "Zrezygnuj"
 
 #: kicad/project_tree_pane.cpp:1803
 msgid "The selected directory is already a Git project."
@@ -37805,12 +37802,12 @@ msgstr "liczba pionowo"
 #: pcbnew/dialogs/dialog_create_array.cpp:436
 #, c-format
 msgid "horizontal delta of zero with %ld objects"
-msgstr "pozioma delta zera z obiektami %ld"
+msgstr "pozioma delta zera z %ld obiektami"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:442
 #, c-format
 msgid "vertical delta of zero with %ld objects"
-msgstr "pinowa delta zera z obiektami %ld"
+msgstr "pionowa delta zera z %ld obiektami"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:451
 msgid "stagger"
@@ -37823,7 +37820,7 @@ msgstr "liczba wyprowadzeń"
 #: pcbnew/dialogs/dialog_create_array.cpp:517
 #, c-format
 msgid "angular delta of zero with %ld objects"
-msgstr "kątowa delta zera z obiektami %ld"
+msgstr "kątowa delta zera z %ld obiektami"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:564
 msgid "Bad parameters"
@@ -40802,7 +40799,7 @@ msgstr "Ustaw do wartości domyślnych warstwy:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:336
 msgid "(auto)"
-msgstr ""
+msgstr "(automatycznie)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "PCB graphic items"
@@ -41173,26 +41170,23 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:436
 msgid "Auto-migrate 3D model references"
-msgstr ""
+msgstr "Automatyczna migracja odnośników modeli 3D"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:662
-#, fuzzy
 msgid "(keep existing reference)"
-msgstr "Zachowaj istniejące oznaczenia"
+msgstr "(zachowaj istniejące oznaczenia)"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:863
 msgid "Add 3D Model Search Directory"
-msgstr ""
+msgstr "Dodaj folder przeszukiwania modeli 3D"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:957
-#, fuzzy
 msgid "Select 3D Model File"
-msgstr "Wybierz model 3D"
+msgstr "Wybierz plik modelu 3D"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:974
-#, fuzzy
 msgid "user-selected"
-msgstr "Nie zaznaczono magistrali"
+msgstr "zaznaczone przez użytkownika"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1058
 msgid "Migrate 3D model references"
@@ -41203,6 +41197,8 @@ msgid ""
 "This board references 3D models that are no longer present on your system.\n"
 "Select replacements below, or keep the existing references unchanged."
 msgstr ""
+"Ta tablica odwołuje się do modeli 3D, których nie ma już w Twoim systemie.\n"
+"Wybierz zamienniki poniżej lub zachowaj istniejące odniesienia bez zmian."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:31
 msgid "Missing 3D model references:"
@@ -41213,29 +41209,24 @@ msgid "Potential replacements:"
 msgstr "Potencjalne zamienniki:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
-#, fuzzy
 msgid "Add Search Directory..."
-msgstr "Nowy folder..."
+msgstr "Dodaj folder wyszukiwania..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:67
-#, fuzzy
 msgid "Open External File..."
-msgstr "Otwórz plik(i) wierceń Excellon..."
+msgstr "Otwórz plik zewnętrzny..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:105
-#, fuzzy
 msgid "Replace Models"
-msgstr "Zamień wszystkie"
+msgstr "Zamień modele"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:108
-#, fuzzy
 msgid "Keep Existing"
-msgstr "Ponownie użyj istniejących"
+msgstr "Zachowaj istniejące"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.h:68
-#, fuzzy
 msgid "Migrate 3D Models"
-msgstr "Uaktualnij modele 3D"
+msgstr "Migruj modele 3D"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:96
 msgid "Rotate around item anchor"
@@ -51612,14 +51603,13 @@ msgstr "Nowy plik PCB nie został zapisany"
 #, c-format
 msgid "%d WRL 3D model could not be matched to an equivalent STEP model."
 msgid_plural "%d WRL 3D models could not be matched to equivalent STEP models."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d modelu 3D WRL nie udało się dopasować do równoważnego modelu STEP."
+msgstr[1] "%d modele 3D WRL nie udało się dopasować do równoważnego modelu STEP."
+msgstr[2] "%d modeli 3D WRL nie udało się dopasować do równoważnego modelu STEP."
 
 #: pcbnew/pcb_edit_frame.cpp:1958
-#, fuzzy
 msgid "Show options"
-msgstr "Pozostałe opcje"
+msgstr "Pokaż opcje"
 
 #: pcbnew/pcb_edit_frame.cpp:1986
 msgid "Board file is read only."
@@ -57310,13 +57300,12 @@ msgid "Update footprints to include any changes from the library"
 msgstr "Uaktualnia footprinty by dołączyć wszystkie zmiany w bibliotece"
 
 #: pcbnew/tools/pcb_actions.cpp:996
-#, fuzzy
 msgid "Migrate 3D Models..."
-msgstr "Ładowanie modeli 3D..."
+msgstr "Migrowanie modeli 3D..."
 
 #: pcbnew/tools/pcb_actions.cpp:997
 msgid "Replace obsolete WRL 3D model references with current STEP models"
-msgstr ""
+msgstr "Zastąp przestarzałe odniesienia do modeli WRL 3D obecnymi modelami STEP"
 
 #: pcbnew/tools/pcb_actions.cpp:1003
 msgid "Remove Unused Pads..."
