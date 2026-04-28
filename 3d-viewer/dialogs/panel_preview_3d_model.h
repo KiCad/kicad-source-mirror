@@ -216,6 +216,8 @@ private:
 
     void onModify();
 
+    void syncLocalEmbeddedFiles();
+
 private:
     PCB_BASE_FRAME*          m_parentFrame;
     EDA_3D_CANVAS*           m_previewPane;
@@ -231,6 +233,7 @@ private:
     int                      m_selected;            /// Index into m_parentInfoList
 
     EDA_UNITS                m_userUnits;
+    EMBEDDED_FILES*          m_localEmbeddedFiles = nullptr;
 
     /// The 3d viewer Render initial settings (must be saved and restored)
     EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS          m_initialRender;
