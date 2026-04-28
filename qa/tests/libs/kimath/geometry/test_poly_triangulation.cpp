@@ -1015,4 +1015,91 @@ BOOST_AUTO_TEST_CASE( Issue24059_HoleEliminationSentinelRemoval )
     }
 }
 
+/**
+ * Regression test for issue #24121: loading a custom drawing sheet whose
+ * outline-font glyphs contain tiny holes (small details on letters such as
+ * 'B', 'P', 'O') crashed in eliminateHoles().
+ *
+ * Root cause: when a hole's points all collapsed below the triangulation
+ * simplification distance, createRing() would self-remove the surviving
+ * vertex via the duplicate-tail cleanup, leaving the caller with a vertex
+ * whose next/prev pointers were null.  The hole-ring acceptance check
+ * (holeRing->next != holeRing) silently passed nullptr through, and
+ * eliminateHoles() then dereferenced p->next == nullptr.
+ *
+ * The fix tightens the cleanup in createRing() (do not self-remove a
+ * single-vertex ring) and tightens the acceptance check
+ * (holeRing->prev != holeRing->next) so degenerate holes never reach
+ * eliminateHoles().
+ */
+BOOST_AUTO_TEST_CASE( Issue24121_DegenerateHoleAllDuplicates )
+{
+    SHAPE_LINE_CHAIN outer;
+    outer.Append( 0, 0 );
+    outer.Append( 10000, 0 );
+    outer.Append( 10000, 10000 );
+    outer.Append( 0, 10000 );
+    outer.SetClosed( true );
+
+    // Hole with all coincident points: simplification leaves one vertex, then the
+    // duplicate-tail cleanup formerly self-removed it and produced a nullptr-next
+    // ring that crashed eliminateHoles().
+    SHAPE_LINE_CHAIN hole;
+    hole.Append( 5000, 5000 );
+    hole.Append( 5000, 5000 );
+    hole.Append( 5000, 5000 );
+    hole.Append( 5000, 5000 );
+    hole.SetClosed( true );
+
+    SHAPE_POLY_SET::POLYGON polygon;
+    polygon.push_back( outer );
+    polygon.push_back( hole );
+
+    TRIANGULATION_TEST_FIXTURE fixture;
+    auto triangulator = fixture.CreateTriangulator();
+
+    bool result = triangulator->TesselatePolygon( polygon, nullptr );
+
+    BOOST_TEST( result );
+    BOOST_TEST( fixture.GetResult().GetTriangleCount() > 0 );
+}
+
+/**
+ * Companion regression for #24121: hole vertices spaced below the
+ * simplification level (50 internal units by default) all collapse during
+ * createRing(), reproducing the same degenerate state via a more font-like
+ * point cloud rather than literal duplicates.
+ */
+BOOST_AUTO_TEST_CASE( Issue24121_DegenerateHoleBelowSimplification )
+{
+    SHAPE_LINE_CHAIN outer;
+    outer.Append( 0, 0 );
+    outer.Append( 10000, 0 );
+    outer.Append( 10000, 10000 );
+    outer.Append( 0, 10000 );
+    outer.SetClosed( true );
+
+    // All four points lie within a 4-unit box, well below the default 50-unit
+    // simplification threshold, so addVertex() in createRing() collapses them
+    // to a single vertex.
+    SHAPE_LINE_CHAIN tinyHole;
+    tinyHole.Append( 5000, 5000 );
+    tinyHole.Append( 5002, 5000 );
+    tinyHole.Append( 5002, 5002 );
+    tinyHole.Append( 5000, 5002 );
+    tinyHole.SetClosed( true );
+
+    SHAPE_POLY_SET::POLYGON polygon;
+    polygon.push_back( outer );
+    polygon.push_back( tinyHole );
+
+    TRIANGULATION_TEST_FIXTURE fixture;
+    auto triangulator = fixture.CreateTriangulator();
+
+    bool result = triangulator->TesselatePolygon( polygon, nullptr );
+
+    BOOST_TEST( result );
+    BOOST_TEST( fixture.GetResult().GetTriangleCount() > 0 );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
