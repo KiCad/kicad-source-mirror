@@ -217,8 +217,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 int                    dummyActual;
                 VECTOR2I               pos;
 
-                if( keepout->Outline()->Collide( shape.get(), board->m_DRCMaxClearance,
-                                                 &dummyActual, &pos ) )
+                if( keepout->Outline()->Collide( shape.get(), 0, &dummyActual, &pos ) )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
 
@@ -299,9 +298,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                                                 item->GetEffectiveShape( layer );
                                         int dummyActual;
 
-                                        keepout->Outline()->Collide( shape.get(),
-                                                                     board->m_DRCMaxClearance,
-                                                                     &dummyActual, &pos );
+                                        keepout->Outline()->Collide( shape.get(), 0, &dummyActual, &pos );
                                     }
                                 }
 
