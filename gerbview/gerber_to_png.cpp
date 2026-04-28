@@ -28,6 +28,7 @@
 #include <plotters/plotter_png.h>
 #include <geometry/shape_poly_set.h>
 #include <base_units.h>
+#include <trigo.h>
 #include <cmath>
 #include <wx/filename.h>
 
@@ -136,7 +137,30 @@ void RenderItem( GERBER_DRAW_ITEM* aItem, PNG_PLOTTER& aPlotter, const KIGFX::CO
     }
     else if( aItem->m_ShapeType == GBR_ARC )
     {
-        aItem->ConvertSegmentToPolygon( &itemPoly );
+        const int arcError = gerbIUScale.mmToIU( 0.005 );
+
+        if( aItem->m_Start == aItem->m_End )
+        {
+            int radius = KiROUND( aItem->m_Start.Distance( aItem->m_ArcCentre ) );
+            TransformRingToPolygon( itemPoly, aItem->m_ArcCentre, radius, aItem->m_Size.x,
+                                    arcError, ERROR_INSIDE );
+        }
+        else
+        {
+            double startAngle = atan2( static_cast<double>( aItem->m_Start.y - aItem->m_ArcCentre.y ),
+                                       static_cast<double>( aItem->m_Start.x - aItem->m_ArcCentre.x ) );
+            double endAngle = atan2( static_cast<double>( aItem->m_End.y - aItem->m_ArcCentre.y ),
+                                     static_cast<double>( aItem->m_End.x - aItem->m_ArcCentre.x ) );
+
+            if( startAngle > endAngle )
+                endAngle += 2.0 * M_PI;
+
+            VECTOR2I mid = GetRotated( aItem->m_Start, aItem->m_ArcCentre,
+                                       -EDA_ANGLE( ( endAngle - startAngle ) / 2.0, RADIANS_T ) );
+
+            TransformArcToPolygon( itemPoly, aItem->m_Start, mid, aItem->m_End, aItem->m_Size.x,
+                                   arcError, ERROR_INSIDE );
+        }
     }
     else if( aItem->m_Flashed )
     {
