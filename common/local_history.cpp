@@ -60,6 +60,27 @@ static wxString historyPath( const wxString& aProjectPath )
     return p.GetPath();
 }
 
+
+static bool commitSnapshotForProject( const wxString& aProjectPath, const std::vector<wxString>& aFiles,
+                                      const wxString& aTitle );
+
+
+// Local history is project-scoped. When pcbnew or eeschema is launched
+// standalone without a project, save paths can land anywhere on the
+// filesystem (e.g. /tmp), and walking those directories to feed libgit2
+// would be catastrophic.
+static bool isProjectDirectory( const wxString& aProjectPath )
+{
+    if( aProjectPath.IsEmpty() || !wxDirExists( aProjectPath ) )
+        return false;
+
+    wxDir    dir( aProjectPath );
+    wxString name;
+
+    return dir.IsOpened()
+           && dir.GetFirst( &name, wxS( "*." ) + FILEEXT::ProjectFileExtension, wxDIR_FILES );
+}
+
 LOCAL_HISTORY::LOCAL_HISTORY()
 {
 }
@@ -125,7 +146,10 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
         return true;
     }
 
-    Init( aProjectPath ); 
+    if( !isProjectDirectory( aProjectPath ) )
+        return false;
+
+    Init( aProjectPath );
 
     wxLogTrace( traceAutoSave, wxS("[history] RunRegisteredSaversAndCommit start project='%s' title='%s' savers=%zu"),
                 aProjectPath, aTitle, m_savers.size() );
@@ -364,7 +388,7 @@ bool LOCAL_HISTORY::CommitPending()
 
 bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
 {
-    if( aProjectPath.IsEmpty() )
+    if( !isProjectDirectory( aProjectPath ) )
         return false;
 
     if( !Pgm().GetCommonSettings()->m_Backup.enabled )
@@ -486,7 +510,7 @@ bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
                 vec.push_back( files[i] );
 
             wxLogTrace( traceAutoSave, wxS( "[history] Init: Creating initial snapshot with %zu files" ), vec.size() );
-            CommitSnapshot( vec, wxS( "Initial snapshot" ) );
+            commitSnapshotForProject( aProjectPath, vec, wxS( "Initial snapshot" ) );
 
             // Tag the initial snapshot as saved so HeadNewerThanLastSave() doesn't
             // incorrectly offer to restore when the project is first opened
@@ -650,31 +674,40 @@ static SNAPSHOT_COMMIT_RESULT commitSnapshotWithLock( git_repository* repo, git_
 }
 
 
+// Internal entry point used when the project root is already known. The public
+// CommitSnapshot() derives the project from aFiles[0], which is unsafe when the
+// caller has collected files recursively (the first entry can live in a subdirectory).
+static bool commitSnapshotForProject( const wxString& aProjectPath, const std::vector<wxString>& aFiles,
+                                      const wxString& aTitle )
+{
+    wxString hist = historyPath( aProjectPath );
+
+    HISTORY_LOCK_MANAGER lock( aProjectPath );
+
+    if( !lock.IsLocked() )
+    {
+        wxLogTrace( traceAutoSave, wxS( "[history] commitSnapshotForProject failed to acquire lock: %s" ),
+                    lock.GetLockError() );
+        return false;
+    }
+
+    return commitSnapshotWithLock( lock.GetRepository(), lock.GetIndex(), hist, aProjectPath, aFiles, aTitle )
+           == SNAPSHOT_COMMIT_RESULT::Committed;
+}
+
+
 bool LOCAL_HISTORY::CommitSnapshot( const std::vector<wxString>& aFiles, const wxString& aTitle )
 {
     if( aFiles.empty() || !Pgm().GetCommonSettings()->m_Backup.enabled )
         return true;
 
-    wxString        proj = wxFileName( aFiles[0] ).GetPath();
+    wxString proj = wxFileName( aFiles[0] ).GetPath();
+
+    if( !isProjectDirectory( proj ) )
+        return false;
 
     Init( proj );
-
-    wxString        hist = historyPath( proj );
-
-    // Acquire locks using hybrid locking strategy
-    HISTORY_LOCK_MANAGER lock( proj );
-
-    if( !lock.IsLocked() )
-    {
-        wxLogTrace( traceAutoSave, wxS("[history] CommitSnapshot failed to acquire lock: %s"),
-                   lock.GetLockError() );
-        return false;
-    }
-
-    git_repository* repo = lock.GetRepository();
-    git_index* index = lock.GetIndex();
-
-    return commitSnapshotWithLock( repo, index, hist, proj, aFiles, aTitle ) == SNAPSHOT_COMMIT_RESULT::Committed;
+    return commitSnapshotForProject( proj, aFiles, aTitle );
 }
 
 
@@ -729,13 +762,17 @@ static void collectProjectFiles( const wxString& aProjectPath, std::vector<wxStr
 
 bool LOCAL_HISTORY::CommitFullProjectSnapshot( const wxString& aProjectPath, const wxString& aTitle )
 {
+    if( !isProjectDirectory( aProjectPath ) || !Pgm().GetCommonSettings()->m_Backup.enabled )
+        return false;
+
     std::vector<wxString> files;
     collectProjectFiles( aProjectPath, files );
 
     if( files.empty() )
         return false;
 
-    return CommitSnapshot( files, aTitle );
+    Init( aProjectPath );
+    return commitSnapshotForProject( aProjectPath, files, aTitle );
 }
 
 bool LOCAL_HISTORY::HistoryExists( const wxString& aProjectPath )
@@ -747,6 +784,9 @@ bool LOCAL_HISTORY::TagSave( const wxString& aProjectPath, const wxString& aFile
 {
     if( !Pgm().GetCommonSettings()->m_Backup.enabled )
         return true;
+
+    if( !isProjectDirectory( aProjectPath ) )
+        return false;
 
     HISTORY_LOCK_MANAGER lock( aProjectPath );
 
@@ -856,6 +896,9 @@ bool LOCAL_HISTORY::CommitDuplicateOfLastSave( const wxString& aProjectPath, con
 {
     if( !Pgm().GetCommonSettings()->m_Backup.enabled )
         return true;
+
+    if( !isProjectDirectory( aProjectPath ) )
+        return false;
 
     HISTORY_LOCK_MANAGER lock( aProjectPath );
 
