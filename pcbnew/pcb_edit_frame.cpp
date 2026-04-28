@@ -2181,7 +2181,11 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
     if( !activeLayers.test( GetActiveLayer() ) )
         SetActiveLayer( activeLayers.Seq().front() );
 
-    m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
+    // The layer selector lives on the top auxiliary toolbar. Users can remove every
+    // entry from that toolbar via Preferences, in which case the control is destroyed
+    // and m_SelLayerBox is null. Avoid dereferencing it here.
+    if( m_SelLayerBox )
+        m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
 
     ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
