@@ -277,6 +277,10 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
     if( Pgm().GetCommonSettings()->m_Appearance.show_scrollbars )
         m_viewControls->UpdateScrollbars();
 
+#ifdef KICAD_GAL_PROFILE
+    latencyProbeZoomToRender.Checkpoint("do-repaint-start");
+#endif
+
     SCOPED_SET_RESET<bool> drawing( m_drawing, true );
 
     ( *m_PaintEventCounter )++;
@@ -286,11 +290,11 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
     KIGFX::RENDER_SETTINGS* settings =
             static_cast<KIGFX::RENDER_SETTINGS*>( m_painter->GetSettings() );
 
-    PROF_TIMER cntUpd("view-upd-items");
-    PROF_TIMER cntTotal("view-total");
-    PROF_TIMER cntCtx("view-context-create");
-    PROF_TIMER cntCtxDestroy("view-context-destroy");
-    PROF_TIMER cntRedraw("view-redraw-rects");
+    PROF_TIMER cntUpd("view-upd-items", false);
+    PROF_TIMER cntTotal("view-total", false);
+    PROF_TIMER cntCtx("view-context-create", false);
+    PROF_TIMER cntCtxDestroy("view-context-destroy", false);
+    PROF_TIMER cntRedraw("view-redraw-rects", false);
 
     bool isDirty = false;
 
@@ -395,11 +399,20 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 
             m_gal->DrawCursor( cursorPos );
 
+	    #ifdef KICAD_GAL_PROFILE
+	    latencyProbeZoomToRender.Checkpoint("do-repaint-pre-ctx-destroy");
+	    #endif
+
+
             cntCtxDestroy.Start();
         }
 
         // ctx goes out of scope here so destructor would be called
         cntCtxDestroy.Stop();
+
+#ifdef KICAD_GAL_PROFILE
+    	latencyProbeZoomToRender.Checkpoint("do-repaint-ctx-done");
+#endif
 
         // OpenGL frame completed successfully, allow future recovery attempts
         m_glRecoveryAttempted = false;
@@ -431,6 +444,12 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
     }
 
     m_lastRepaintEnd = wxGetLocalTimeMillis();
+
+#ifdef KICAD_GAL_PROFILE
+    wxLogTrace( traceGalProfile, "%s", latencyProbeZoomToRender.to_string() );
+    latencyProbeRepaintToMotion.Reset();
+    latencyProbeRepaintToMotion.Checkpoint("repaint-done");
+#endif    
 
     return true;
 }

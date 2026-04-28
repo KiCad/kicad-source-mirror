@@ -46,6 +46,7 @@
 
 #ifdef KICAD_GAL_PROFILE
 #include <wx/log.h>
+#include <trace_helpers.h>
 #endif
 
 namespace KIGFX {
@@ -1257,7 +1258,8 @@ void VIEW::ClearTargets()
 void VIEW::Redraw()
 {
 #ifdef KICAD_GAL_PROFILE
-    PROF_TIMER totalRealTime;
+    PROF_TIMER totalRealTime("view-redraw-total");
+    latencyProbeZoomToRender.Checkpoint("view-redraw-start");
 #endif /* KICAD_GAL_PROFILE */
 
     VECTOR2D screenSize = m_gal->GetScreenPixelSize();
@@ -1275,6 +1277,9 @@ void VIEW::Redraw()
 #ifdef KICAD_GAL_PROFILE
     totalRealTime.Stop();
     wxLogTrace( traceGalProfile, wxS( "VIEW::Redraw(): %.1f ms" ), totalRealTime.msecs() );
+    latencyProbeZoomToRender.AddTimer( totalRealTime );
+    latencyProbeZoomToRender.Checkpoint("view-redraw-end");
+    
 #endif /* KICAD_GAL_PROFILE */
 }
 
@@ -1556,6 +1561,10 @@ void VIEW::UpdateItems()
 {
     if( !m_gal->IsVisible() || !m_gal->IsInitialized() )
         return;
+
+#ifdef KICAD_GAL_PROFILE
+    latencyProbeZoomToRender.Checkpoint("view-update-items");
+#endif
 
     if( !m_hasPendingItemUpdates )
         return;

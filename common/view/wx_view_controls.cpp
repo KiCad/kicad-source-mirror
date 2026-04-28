@@ -48,6 +48,10 @@
 #define USE_MOUSE_CAPTURE
 #endif
 
+#ifdef KICAD_GAL_PROFILE
+#include <trace_helpers.h>
+#endif
+
 using namespace KIGFX;
 
 const wxEventType WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE = wxNewEventType();
@@ -217,6 +221,12 @@ void WX_VIEW_CONTROLS::LoadSettings()
 
 void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 {
+#ifdef KICAD_GAL_PROFILE
+    latencyProbeRepaintToMotion.Checkpoint("motion-event");
+    wxLogTrace( traceGalProfile, "%s", latencyProbeRepaintToMotion.to_string() );
+    latencyProbeZoomToRender.Reset();
+#endif
+
     ( *m_MotionEventCounter )++;
 
     // Because Weston sends a motion event to previous location after warping the pointer
@@ -336,6 +346,9 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
                 VECTOR2D d = m_dragStartPoint - mousePos;
                 m_dragStartPoint = mousePos;
                 VECTOR2D delta = m_view->ToWorld( d, false );
+#ifdef KICAD_GAL_PROFILE
+                latencyProbeZoomToRender.Checkpoint("mouse-mb-pan");
+#endif
                 m_view->SetCenter( m_view->GetCenter() + delta );
                 aEvent.StopPropagation();
             }
@@ -420,6 +433,10 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     const double wheelPanSpeed = 0.001;
     const int    axis = aEvent.GetWheelAxis();
 
+#ifdef KICAD_GAL_PROFILE
+    latencyProbeZoomToRender.Reset();
+#endif
+
     // Native horizontal wheel events (from mice with tilt wheels, side-button scroll combos, or
     // touchpads) are always handled as horizontal pan. The m_horizontalPan setting only controls
     // whether a keyboard modifier can convert vertical scroll into horizontal pan.
@@ -467,6 +484,10 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
             const double zoomScale = m_zoomController->GetScaleForRotation( rotation );
 
             wxLogTrace( traceGalProfile, "Zoom: %.5f",  m_view->GetScale() * zoomScale );
+
+#ifdef KICAD_GAL_PROFILE
+            latencyProbeZoomToRender.Checkpoint("mouse-wheel-zoom");
+#endif
 
             if( IsCursorWarpingEnabled() )
             {

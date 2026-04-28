@@ -74,6 +74,11 @@ const wxChar* const traceLibraries = wxT( "KICAD_LIBRARIES" );
 const wxChar* const traceSchMove = wxT( "KICAD_SCH_MOVE" );
 const wxChar* const traceSymbolInheritance = wxT( "KICAD_SYMBOL_INHERITANCE" );
 
+#ifdef KICAD_GAL_PROFILE
+LATENCY_PROBE latencyProbeZoomToRender( "zoom-to-render", 16 );
+LATENCY_PROBE latencyProbeRepaintToMotion( "repaint-to-motion", 16 );
+#endif
+
 wxString dump( const wxArrayString& aArray )
 {
     wxString tmp;
