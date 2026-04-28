@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-24 17:36+0300\n"
-"PO-Revision-Date: 2026-04-23 23:24+0000\n"
+"PO-Revision-Date: 2026-04-28 15:19+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -2465,9 +2465,9 @@ msgstr ""
 "werden."
 
 #: common/design_block_io.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save design block metadata '%s': %s"
-msgstr "Fehler beim Speichern der Designblock-Bibliotheksdatei \"%s\"."
+msgstr "Konnte Designblock-Metadaten \"%s\" nicht speichern: %s"
 
 #: common/design_block_io.cpp:488
 #, c-format
@@ -10021,9 +10021,9 @@ msgid "Line length exceeded"
 msgstr "Zeilenlänge überschritten"
 
 #: common/richio.cpp:560
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot flush '%s' to disk: %s"
-msgstr "\"%s\" kann nicht in den Papierkorb verschoben werden."
+msgstr "Kann \"%s\" nicht auf Festplnatte geschrieben werden: %s"
 
 #: common/richio.cpp:614
 #, fuzzy, c-format
@@ -22120,9 +22120,9 @@ msgid "'%s' is not a PADS Logic ASCII file."
 msgstr "\"%s\" ist kein gültiger SPICE-Wert."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1469
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS Logic file '%s'."
-msgstr "Fehler beim Parsen der Sprint Layout-Datei \"%s\""
+msgstr "Fehler beim Parsen der PADS  Logic-Datei \"%s\"."
 
 #: eeschema/sch_io/pads/sch_io_pads.h:49
 msgid "PADS Logic schematic files"
@@ -33163,9 +33163,8 @@ msgid ""
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:1725
-#, fuzzy
 msgid "Git Operation Delayed"
-msgstr "Einheit-Durchlaufverzögerung:"
+msgstr "Git-Operation verzögert"
 
 #: kicad/project_tree_pane.cpp:1727
 #, fuzzy
@@ -41945,9 +41944,8 @@ msgid "user-selected"
 msgstr "Kein Bus ausgewählt"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1067
-#, fuzzy
 msgid "Migrate 3D model references"
-msgstr "Druckt die Seitenreferenzen."
+msgstr "3D-Modellreferenzen migrieren"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:19
 msgid ""
@@ -41956,14 +41954,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:31
-#, fuzzy
 msgid "Missing 3D model references:"
-msgstr "Druckt die Seitenreferenzen."
+msgstr "3D-Modellreferenzen fehlen:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:54
-#, fuzzy
 msgid "Potential replacements:"
-msgstr "Bauteilplatzierung"
+msgstr "Möglicher Ersatz:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
 #, fuzzy
@@ -44908,9 +44904,8 @@ msgstr "Bestückungsdruck-Freiraum"
 # Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:215
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:143
-#, fuzzy
 msgid "Pin bounding box"
-msgstr "z: %g; Begrenzungsrahmen: %s\n"
+msgstr "Pin-Begrenzungsrahmen"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:263
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:890
