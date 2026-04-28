@@ -632,7 +632,7 @@ BOOST_AUTO_TEST_CASE( MultiBoardFileHasFiveBoards )
                            + "/io/sprint_layout/mmjoy2-74hc165.lay6";
 
     SPRINT_LAYOUT_PARSER parser;
-    BOOST_REQUIRE( parser.Parse( dataPath ) );
+    BOOST_REQUIRE( parser.ParseBoard( dataPath ) );
 
     const auto& fileData = parser.GetFileData();
     BOOST_CHECK_EQUAL( fileData.boards.size(), 5 );
@@ -645,7 +645,7 @@ BOOST_AUTO_TEST_CASE( MultiBoardSelectByIndex )
                            + "/io/sprint_layout/mmjoy2-74hc165.lay6";
 
     SPRINT_LAYOUT_PARSER parser;
-    BOOST_REQUIRE( parser.Parse( dataPath ) );
+    BOOST_REQUIRE( parser.ParseBoard( dataPath ) );
 
     const auto& fileData = parser.GetFileData();
     BOOST_REQUIRE( fileData.boards.size() == 5 );
