@@ -38,6 +38,7 @@
 #include <sch_file_versions.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <wx/ffile.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 
@@ -395,6 +396,73 @@ BOOST_AUTO_TEST_CASE( TestLoadLegacyHierarchicalSchematic )
     BOOST_CHECK( wxFileExists( saveFile ) );
 
     BOOST_TEST_MESSAGE( "Save successful!" );
+}
+
+
+/**
+ * Regression: embedded worksheet files were dropped on save for hierarchical schematics
+ * because the (embedded_files) block was gated on SCH_SHEET::HasRootInstance().  Embedded
+ * files are schematic-level data and must round-trip regardless of which top-level sheet
+ * happens to carry the empty-path instance.
+ */
+BOOST_AUTO_TEST_CASE( TestEmbeddedFilesPersistedInHierarchy )
+{
+    m_schematic->CreateDefaultScreens();
+
+    std::vector<SCH_SHEET*> topSheets = m_schematic->GetTopLevelSheets();
+    BOOST_REQUIRE( !topSheets.empty() );
+
+    SCH_SHEET*  topSheet  = topSheets[0];
+    SCH_SCREEN* topScreen = topSheet->GetScreen();
+    BOOST_REQUIRE( topScreen );
+
+    SCH_SHEET*  subSheet  = new SCH_SHEET( m_schematic.get() );
+    SCH_SCREEN* subScreen = new SCH_SCREEN( m_schematic.get() );
+    subSheet->SetName( "SubSheet" );
+    subSheet->SetScreen( subScreen );
+    subSheet->SetFileName( "subsheet.kicad_sch" );
+    subScreen->SetFileName( "subsheet.kicad_sch" );
+    topScreen->Append( subSheet );
+
+    m_schematic->RefreshHierarchy();
+
+    // Drive the same code path Page Settings uses: write a real .kicad_wks and embed it via
+    // the file-based AddFile overload, which handles type detection, compression, and encoding.
+    wxString wksPath = GetTempFileName( "embed_wks" );
+    wksPath += ".kicad_wks";
+    m_tempFiles.push_back( wksPath );
+
+    {
+        wxFFile wksFile( wksPath, "wb" );
+        BOOST_REQUIRE( wksFile.IsOpened() );
+        const wxString wksBody = wxT( "(kicad_wks)" );
+        BOOST_REQUIRE( wksFile.Write( wksBody ) );
+    }
+
+    BOOST_REQUIRE( m_schematic->GetEmbeddedFiles()->AddFile( wxFileName( wksPath ), false )
+                   != nullptr );
+    BOOST_REQUIRE( !m_schematic->GetEmbeddedFiles()->IsEmpty() );
+
+    wxString topFileName = GetTempFileName( "embed_main" );
+    topFileName += ".kicad_sch";
+    m_tempFiles.push_back( topFileName );
+
+    SCH_IO_KICAD_SEXPR io;
+    BOOST_CHECK_NO_THROW( io.SaveSchematicFile( topFileName, topSheet, m_schematic.get() ) );
+    BOOST_REQUIRE( wxFileExists( topFileName ) );
+
+    wxFFile  readback( topFileName, "rb" );
+    wxString contents;
+    BOOST_REQUIRE( readback.IsOpened() && readback.ReadAll( &contents ) );
+
+    const wxString embeddedName = wxFileName( wksPath ).GetFullName();
+
+    BOOST_CHECK_MESSAGE( contents.Contains( "embedded_files" ),
+                         "Top-level sheet file is missing (embedded_files) block" );
+    BOOST_CHECK_MESSAGE( contents.Contains( embeddedName ),
+                         "Top-level sheet file is missing the embedded worksheet entry" );
+    BOOST_CHECK_MESSAGE( contents.Contains( "(type worksheet)" ),
+                         "Top-level sheet file is missing (type worksheet) marker" );
 }
 
 

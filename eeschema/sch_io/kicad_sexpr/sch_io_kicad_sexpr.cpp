@@ -524,10 +524,16 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
 
         instances.emplace_back( aSheet->GetRootInstance() );
         saveInstances( instances );
+    }
 
+    // Embedded fonts and files belong to the schematic, not to any individual sheet, so they
+    // must round-trip independently of per-sheet root-instance bookkeeping (which can legitimately
+    // be missing for some top-level sheets in flat hierarchies).  Anchor the write to the
+    // schematic's first top-level sheet so a single, predictable file owns the data.
+    if( m_schematic->GetTopLevelSheet( 0 ) == aSheet )
+    {
         KICAD_FORMAT::FormatBool( m_out, "embedded_fonts", m_schematic->GetAreFontsEmbedded() );
 
-        // Save any embedded files
         if( !m_schematic->GetEmbeddedFiles()->IsEmpty() )
             m_schematic->WriteEmbeddedFiles( *m_out, true );
     }
