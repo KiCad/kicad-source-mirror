@@ -74,6 +74,14 @@ wxString FindKicadFile( const wxString& shortname )
     if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
     {
         wxFileName buildDir( Pgm().GetExecutablePath(), shortname );
+
+#ifdef __WXMAC__
+        if( !buildDir.GetDirs().IsEmpty()
+            && buildDir.GetDirs().Last().Lower().EndsWith( wxT( ".app" ) ) )
+        {
+            buildDir.RemoveLastDir();
+        }
+#endif
         buildDir.RemoveLastDir();
 #ifndef __WXMSW__
         buildDir.AppendDir( shortname );
@@ -86,6 +94,12 @@ wxString FindKicadFile( const wxString& shortname )
             buildDir.RemoveLastDir();
             buildDir.AppendDir( "pagelayout_editor" );
         }
+
+#ifdef __WXMAC__
+        buildDir.AppendDir( shortname + wxT( ".app" ) );
+        buildDir.AppendDir( wxT( "Contents" ) );
+        buildDir.AppendDir( wxT( "MacOS" ) );
+#endif
 
         if( wxFileExists( buildDir.GetFullPath() ) )
             return buildDir.GetFullPath();
