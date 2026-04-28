@@ -35,7 +35,6 @@
 #include <remote_provider_utils.h>
 #include <sch_edit_frame.h>
 #include <string_utils.h>
-#include <sch_io/sch_io_mgr.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
@@ -157,74 +156,6 @@ wxString PANEL_REMOTE_SYMBOL::sanitizeForScript( const std::string& aJson ) cons
     script.Replace( "\\", "\\\\" );
     script.Replace( "'", "\\'" );
     return script;
-}
-
-
-std::unique_ptr<LIB_SYMBOL> PANEL_REMOTE_SYMBOL::loadSymbolFromPayload( const std::vector<uint8_t>& aPayload,
-                                                                        const wxString& aLibItemName,
-                                                                        wxString& aError ) const
-{
-    if( aPayload.empty() )
-    {
-        aError = _( "Symbol payload was empty." );
-        return nullptr;
-    }
-
-    wxString tempPath = wxFileName::CreateTempFileName( wxS( "remote_symbol" ) );
-
-    if( tempPath.IsEmpty() )
-    {
-        aError = _( "Unable to create a temporary file for the symbol payload." );
-        return nullptr;
-    }
-
-    wxFileName tempFile( tempPath );
-    wxFFile    file( tempFile.GetFullPath(), wxS( "wb" ) );
-
-    if( !file.IsOpened() )
-    {
-        aError = _( "Unable to create a temporary file for the symbol payload." );
-        wxRemoveFile( tempFile.GetFullPath() );
-        return nullptr;
-    }
-
-    if( file.Write( aPayload.data(), aPayload.size() ) != aPayload.size() )
-    {
-        aError = _( "Failed to write the temporary symbol payload." );
-        file.Close();
-        wxRemoveFile( tempFile.GetFullPath() );
-        return nullptr;
-    }
-
-    file.Close();
-
-    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-
-    if( !plugin )
-    {
-        aError = _( "Unable to access the KiCad symbol plugin." );
-        wxRemoveFile( tempFile.GetFullPath() );
-        return nullptr;
-    }
-
-    std::unique_ptr<LIB_SYMBOL> symbol;
-
-    try
-    {
-        LIB_SYMBOL* loaded = plugin->LoadSymbol( tempFile.GetFullPath(), aLibItemName );
-
-        if( loaded )
-            symbol = std::make_unique<LIB_SYMBOL>( *loaded );
-        else
-            aError = _( "Symbol payload did not include the expected symbol." );
-    }
-    catch( const IO_ERROR& e )
-    {
-        aError = wxString::Format( _( "Unable to decode the symbol payload: %s" ), e.What() );
-    }
-
-    wxRemoveFile( tempFile.GetFullPath() );
-    return symbol;
 }
 
 
@@ -1061,7 +992,8 @@ void PANEL_REMOTE_SYMBOL::handleRpcMessage( const nlohmann::json& aMessage )
 
 bool PANEL_REMOTE_SYMBOL::receiveSymbol( const nlohmann::json& aParams,
                                          const std::vector<uint8_t>& aPayload,
-                                         wxString& aError )
+                                         wxString& aError,
+                                         const std::vector<LIB_ID>& aFootprintLinks )
 {
     const wxString mode = RemoteProviderJsonString( aParams, "mode" );
     const bool placeAfterDownload = mode.IsSameAs( wxS( "PLACE" ), false );
@@ -1129,7 +1061,8 @@ bool PANEL_REMOTE_SYMBOL::receiveSymbol( const nlohmann::json& aParams,
         return false;
     }
 
-    std::unique_ptr<LIB_SYMBOL> downloadedSymbol = loadSymbolFromPayload( aPayload, libItemName, aError );
+    std::unique_ptr<LIB_SYMBOL> downloadedSymbol =
+            LoadRemoteSymbolFromPayload( aPayload, libItemName, aError );
 
     if( !downloadedSymbol )
         return false;
@@ -1139,6 +1072,8 @@ bool PANEL_REMOTE_SYMBOL::receiveSymbol( const nlohmann::json& aParams,
     savedId.SetLibNickname( nickname );
     savedId.SetLibItemName( libItemName );
     downloadedSymbol->SetLibId( savedId );
+
+    ApplyFootprintLinks( *downloadedSymbol, aFootprintLinks );
 
     if( adapter->SaveSymbol( nickname, downloadedSymbol.get(), true ) != SYMBOL_LIBRARY_ADAPTER::SAVE_OK )
     {
@@ -1190,6 +1125,17 @@ bool PANEL_REMOTE_SYMBOL::receiveComponent( const nlohmann::json& aParams,
 
     const wxString libraryName = RemoteProviderJsonString( aParams, "library" );
 
+    struct PreparedEntry
+    {
+        std::string          type;
+        nlohmann::json       params;
+        std::vector<uint8_t> content;
+    };
+
+    std::vector<PreparedEntry> footprints;
+    std::vector<PreparedEntry> others;     // 3D models, SPICE
+    std::vector<PreparedEntry> symbols;
+
     for( const nlohmann::json& entry : components )
     {
         if( !entry.is_object() )
@@ -1224,7 +1170,7 @@ bool PANEL_REMOTE_SYMBOL::receiveComponent( const nlohmann::json& aParams,
                 return false;
         }
 
-        wxString entryName = wxString::FromUTF8( entry.value( "name", "" ) );
+        wxString       entryName = wxString::FromUTF8( entry.value( "name", "" ) );
         nlohmann::json entryParams = nlohmann::json::object();
 
         if( !libraryName.IsEmpty() )
@@ -1233,31 +1179,33 @@ bool PANEL_REMOTE_SYMBOL::receiveComponent( const nlohmann::json& aParams,
         if( !entryName.IsEmpty() )
             entryParams["name"] = entryName.ToStdString();
 
-        bool ok = false;
-
         if( entryType == "symbol" )
         {
             entryParams["content_type"] = "KICAD_SYMBOL_V1";
             entryParams["mode"] = aPlaceSymbol ? "PLACE" : "SAVE";
-            ok = receiveSymbol( entryParams, content, aError );
+            symbols.push_back( { std::move( entryType ), std::move( entryParams ),
+                                 std::move( content ) } );
         }
         else if( entryType == "footprint" )
         {
             entryParams["content_type"] = "KICAD_FOOTPRINT_V1";
             entryParams["mode"] = "SAVE";
-            ok = receiveFootprint( entryParams, content, aError );
+            footprints.push_back( { std::move( entryType ), std::move( entryParams ),
+                                    std::move( content ) } );
         }
         else if( entryType == "3dmodel" )
         {
             entryParams["content_type"] = "KICAD_3D_MODEL_STEP";
             entryParams["mode"] = "SAVE";
-            ok = receive3DModel( entryParams, content, aError );
+            others.push_back( { std::move( entryType ), std::move( entryParams ),
+                                std::move( content ) } );
         }
         else if( entryType == "spice" )
         {
             entryParams["content_type"] = "KICAD_SPICE_MODEL_V1";
             entryParams["mode"] = "SAVE";
-            ok = receiveSPICEModel( entryParams, content, aError );
+            others.push_back( { std::move( entryType ), std::move( entryParams ),
+                                std::move( content ) } );
         }
         else
         {
@@ -1265,8 +1213,38 @@ bool PANEL_REMOTE_SYMBOL::receiveComponent( const nlohmann::json& aParams,
                                        wxString::FromUTF8( entryType.c_str() ) );
             return false;
         }
+    }
+
+    // Process footprints first so that any subsequent symbol's Footprint field references
+    // a LIB_ID that already resolves on disk and in the footprint library table.
+    std::vector<LIB_ID> footprintLinks;
+
+    for( const PreparedEntry& entry : footprints )
+    {
+        LIB_ID resolvedId;
+
+        if( !receiveFootprint( entry.params, entry.content, aError, &resolvedId ) )
+            return false;
+
+        footprintLinks.push_back( resolvedId );
+    }
+
+    for( const PreparedEntry& entry : others )
+    {
+        bool ok = false;
+
+        if( entry.type == "3dmodel" )
+            ok = receive3DModel( entry.params, entry.content, aError );
+        else
+            ok = receiveSPICEModel( entry.params, entry.content, aError );
 
         if( !ok )
+            return false;
+    }
+
+    for( const PreparedEntry& entry : symbols )
+    {
+        if( !receiveSymbol( entry.params, entry.content, aError, footprintLinks ) )
             return false;
     }
 
@@ -1276,7 +1254,7 @@ bool PANEL_REMOTE_SYMBOL::receiveComponent( const nlohmann::json& aParams,
 
 bool PANEL_REMOTE_SYMBOL::receiveFootprint( const nlohmann::json& aParams,
                                             const std::vector<uint8_t>& aPayload,
-                                            wxString& aError )
+                                            wxString& aError, LIB_ID* aOutLibId )
 {
     if( !RemoteProviderJsonString( aParams, "content_type" ).IsSameAs( wxS( "KICAD_FOOTPRINT_V1" ), false ) )
     {
@@ -1293,24 +1271,30 @@ bool PANEL_REMOTE_SYMBOL::receiveFootprint( const nlohmann::json& aParams,
     fpRoot.AppendDir( wxS( "footprints" ) );
     fpRoot.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
 
-    wxString footprintName = SanitizeRemoteFileComponent( RemoteProviderJsonString( aParams, "name" ), wxS( "footprint" ) );
+    const wxString rawName = RemoteProviderJsonString( aParams, "name" );
     wxString libraryName = RemoteProviderJsonString( aParams, "library" );
 
     if( libraryName.IsEmpty() )
         libraryName = wxS( "footprints" );
 
-    const wxString libNickname = RemoteLibraryPrefix() + wxS( "_" )
-                                 + SanitizeRemoteFileComponent( libraryName, wxS( "footprints" ), true );
+    // The LIB_ID's item name is the footprint name without the .kicad_mod suffix.
+    // Build it via the same helper used elsewhere so the local LIB_ID we expose to
+    // callers always matches the nickname under which the footprint is registered.
+    const LIB_ID resolvedId = BuildRemoteLibId( libraryName, rawName );
+    const wxString libNickname = resolvedId.GetUniStringLibNickname();
+    const wxString fpItemName  = resolvedId.GetUniStringLibItemName();
 
     wxFileName libDir = fpRoot;
     libDir.AppendDir( libNickname + wxS( ".pretty" ) );
     libDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
 
-    if( !footprintName.Lower().EndsWith( wxS( ".kicad_mod" ) ) )
-        footprintName += wxS( ".kicad_mod" );
+    wxString fileName = fpItemName;
+
+    if( !fileName.Lower().EndsWith( wxS( ".kicad_mod" ) ) )
+        fileName += wxS( ".kicad_mod" );
 
     wxFileName outFile( libDir );
-    outFile.SetFullName( footprintName );
+    outFile.SetFullName( fileName );
 
     if( !WriteRemoteBinaryFile( outFile, aPayload, aError ) )
         return false;
@@ -1334,6 +1318,10 @@ bool PANEL_REMOTE_SYMBOL::receiveFootprint( const nlohmann::json& aParams,
     LIBRARY_MANAGER& libMgr = Pgm().GetLibraryManager();
     libMgr.ReloadLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, libNickname, scope );
     libMgr.LoadLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, libNickname );
+
+    if( aOutLibId )
+        *aOutLibId = resolvedId;
+
     return true;
 }
 

@@ -25,6 +25,7 @@
 #include <vector>
 
 #include <kiid.h>
+#include <lib_id.h>
 #include <oauth/oauth_loopback_server.h>
 #include <oauth/oauth_session.h>
 #include <oauth/secure_token_store.h>
@@ -99,9 +100,10 @@ private:
     bool receiveComponent( const nlohmann::json& aParams, const std::vector<uint8_t>& aPayload,
                            bool aPlaceSymbol, wxString& aError );
     bool receiveFootprint( const nlohmann::json& aParams, const std::vector<uint8_t>& aPayload,
-                           wxString& aError );
+                           wxString& aError, LIB_ID* aOutLibId = nullptr );
     bool receiveSymbol( const nlohmann::json& aParams, const std::vector<uint8_t>& aPayload,
-                        wxString& aError );
+                        wxString& aError,
+                        const std::vector<LIB_ID>& aFootprintLinks = {} );
     bool receive3DModel( const nlohmann::json& aParams, const std::vector<uint8_t>& aPayload,
                          wxString& aError );
     bool receiveSPICEModel( const nlohmann::json& aParams, const std::vector<uint8_t>& aPayload,
@@ -113,9 +115,6 @@ private:
                               wxString& aError ) const;
     bool decompressIfNeeded( const std::string& aCompression, const std::vector<uint8_t>& aInput,
                              std::vector<uint8_t>& aOutput, wxString& aError ) const;
-    std::unique_ptr<LIB_SYMBOL> loadSymbolFromPayload( const std::vector<uint8_t>& aPayload,
-                                                       const wxString& aLibItemName,
-                                                       wxString& aError ) const;
 private:
     SCH_EDIT_FRAME*                          m_frame;
     wxChoice*                                m_dataSourceChoice;

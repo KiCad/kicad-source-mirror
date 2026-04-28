@@ -21,11 +21,15 @@
 #define REMOTE_SYMBOL_IMPORT_UTILS_H
 
 #include <cstdint>
+#include <memory>
 #include <vector>
+
+#include <lib_id.h>
 
 #include <wx/filename.h>
 #include <wx/string.h>
 
+class LIB_SYMBOL;
 class SCH_EDIT_FRAME;
 enum class LIBRARY_TABLE_TYPE;
 
@@ -68,5 +72,36 @@ bool EnsureRemoteLibraryEntry( LIBRARY_TABLE_TYPE aTableType, const wxFileName& 
  */
 bool PlaceRemoteDownloadedSymbol( SCH_EDIT_FRAME* aFrame, const wxString& aNickname,
                                   const wxString& aLibItemName, wxString& aError );
+
+/**
+ * Deserialize a remote-downloaded symbol payload into a LIB_SYMBOL.
+ *
+ * The payload is expected to be a complete kicad_symbol_lib s-expression. The named
+ * symbol is extracted via the SCH_KICAD plugin and returned as an owned copy.
+ */
+std::unique_ptr<LIB_SYMBOL> LoadRemoteSymbolFromPayload( const std::vector<uint8_t>& aPayload,
+                                                        const wxString& aLibItemName,
+                                                        wxString& aError );
+
+/**
+ * Build the local LIB_ID for a remote-downloaded library item.
+ *
+ * The caller is responsible for resolving any fallbacks before calling. The library
+ * nickname is constructed as <RemoteLibraryPrefix()>_<sanitized aResolvedLibrary>; the
+ * item name is the sanitized aResolvedItemName.
+ */
+LIB_ID BuildRemoteLibId( const wxString& aResolvedLibrary, const wxString& aResolvedItemName );
+
+/**
+ * Apply a list of footprint LIB_IDs to a symbol about to be saved.
+ *
+ * The first LIB_ID is written to the symbol's Footprint field as a fully-qualified
+ * <nickname>:<itemName> string (overwriting any previous value). Remaining LIB_IDs are
+ * appended to the symbol's footprint filter list as bare item names (filters are globs
+ * over footprint name only and would not match colon-qualified strings).
+ *
+ * If aLinks is empty, the symbol is left untouched.
+ */
+void ApplyFootprintLinks( LIB_SYMBOL& aSymbol, const std::vector<LIB_ID>& aLinks );
 
 #endif // REMOTE_SYMBOL_IMPORT_UTILS_H
