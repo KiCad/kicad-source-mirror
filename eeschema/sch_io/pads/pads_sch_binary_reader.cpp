@@ -611,7 +611,7 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
                 for( const UREC& r : recs )
                     names.push_back( r.name );
 
-                m_usedDecalTables.emplace_back( i, std::move( names ) );
+                m_usedDecalTables.push_back( { i, std::move( names ) } );
 
                 // The terminal pool follows the table; snap the base +/-2 so the
                 // single-terminal power/$OSR decals read their (0,0) origin.
@@ -684,8 +684,8 @@ const std::vector<std::string>* PADS_SCH_BINARY_READER::usedDecalTableForOffset(
 
     for( const auto& tbl : m_usedDecalTables )
     {
-        if( tbl.first <= aOffset )
-            best = &tbl.second;
+        if( tbl.offset <= aOffset )
+            best = &tbl.names;
         else
             break;
     }
@@ -698,10 +698,10 @@ const std::vector<std::string>* PADS_SCH_BINARY_READER::partTypePoolForOffset( s
 {
     const std::vector<std::string>* best = nullptr;
 
-    for( const std::pair<size_t, std::vector<std::string>>& pool : m_partTypePools )
+    for( const NAME_TABLE& pool : m_partTypePools )
     {
-        if( pool.first <= aOffset )
-            best = &pool.second;
+        if( pool.offset <= aOffset )
+            best = &pool.names;
         else
             break;
     }
@@ -807,7 +807,7 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
             names.push_back( nm );
         }
 
-        m_partTypePools.emplace_back( i, std::move( names ) );
+        m_partTypePools.push_back( { i, std::move( names ) } );
     }
 
     if( m_partTypePools.empty() )
@@ -816,16 +816,16 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
     // The union of every sheet pool, sheet-0 first so ordinals 0/1/2 stay the symbol groups.
     std::set<std::string> seen;
 
-    for( const std::pair<size_t, std::vector<std::string>>& pool : m_partTypePools )
+    for( const NAME_TABLE& pool : m_partTypePools )
     {
-        for( const std::string& nm : pool.second )
+        for( const std::string& nm : pool.names )
         {
             if( seen.insert( nm ).second )
                 m_partTypeNames.push_back( nm );
         }
     }
 
-    size_t ptBase = m_partTypePools.front().first;
+    size_t ptBase = m_partTypePools.front().offset;
 
     // Preferred path: the u32 offset-index table gives each part-type its exact key instances.
     if( decodeFieldsViaIndex( d, ptBase ) )
@@ -1813,9 +1813,9 @@ void PADS_SCH_BINARY_READER::decodePinNames( const std::vector<uint8_t>& d )
         return false;
     };
 
-    for( const std::pair<size_t, std::vector<std::string>>& pool : m_partTypePools )
+    for( const NAME_TABLE& pool : m_partTypePools )
     {
-        size_t base = pool.first;
+        size_t base = pool.offset;
 
         // Walk the pool record run reading the +0x30 pin cursor (and the +0x2c gate cursor as a
         // monotone guard), stopping where either wraps at the boundary record.
@@ -2734,7 +2734,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
     {
         size_t osr = 0;
 
-        for( const std::string& nm : tbl.second )
+        for( const std::string& nm : tbl.names )
         {
             if( nm.rfind( "$OSR", 0 ) == 0 )
                 ++osr;
@@ -2745,7 +2745,7 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
         if( osr > bestOsr )
         {
             bestOsr = osr;
-            canonical = &tbl.second;
+            canonical = &tbl.names;
         }
     }
 

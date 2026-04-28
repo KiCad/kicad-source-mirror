@@ -183,6 +183,14 @@ struct TEXT_ITEM
     int         sheetIndex = 0;      ///< Owning PADS sheet (0-based).
 };
 
+/// A name table anchored at a file offset (a per-sheet used-decal table or part-type pool); an
+/// ordinal indexes into @ref names.
+struct NAME_TABLE
+{
+    size_t                   offset = 0; ///< File offset of the table head.
+    std::vector<std::string> names;      ///< Ordered names; the ordinal indexes this list.
+};
+
 /**
  * Reader for the PADS Logic binary .sch format (magic 00 FE, version 0x000D).
  *
@@ -326,7 +334,7 @@ private:
     std::map<std::string, size_t>        m_decalIndex;
 
     /// Per-sheet used-decal name tables: (file offset, ordered decal names).
-    std::vector<std::pair<size_t, std::vector<std::string>>> m_usedDecalTables;
+    std::vector<NAME_TABLE>              m_usedDecalTables;
     size_t                               m_decalBuiltinCount = 0; ///< DECAL_HANDLE_BASE used_count.
 
     // produced by decodeFields
@@ -336,7 +344,7 @@ private:
 
     // Per-sheet part-type pools (file offset -> stride-0x4c name list). A placement's part-type
     // ordinal indexes the pool of its OWN sheet; m_partTypeNames is the union of all pools.
-    std::vector<std::pair<size_t, std::vector<std::string>>> m_partTypePools;
+    std::vector<NAME_TABLE>              m_partTypePools;
 
     /// Part-type name -> its component attribute fields (key, value).
     std::map<std::string, std::vector<std::pair<std::string, std::string>>> m_partTypeFields;
