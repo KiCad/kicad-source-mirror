@@ -362,6 +362,20 @@ bool KICAD_CURL_EASY::SetConnectTimeout( long aTimeoutSecs )
 }
 
 
+bool KICAD_CURL_EASY::SetTimeout( long aTimeoutSecs )
+{
+    return setOption( CURLOPT_TIMEOUT, aTimeoutSecs ) == CURLE_OK;
+}
+
+
+bool KICAD_CURL_EASY::SetStallTimeout( long aMinBytesPerSec, long aDurationSecs )
+{
+    bool ok = setOption( CURLOPT_LOW_SPEED_LIMIT, aMinBytesPerSec ) == CURLE_OK;
+    ok &= setOption( CURLOPT_LOW_SPEED_TIME, aDurationSecs ) == CURLE_OK;
+    return ok;
+}
+
+
 int KICAD_CURL_EASY::GetTransferTotal( uint64_t& aDownloadedBytes ) const
 {
 #if LIBCURL_VERSION_NUM >= 0x073700 // 7.55.0
