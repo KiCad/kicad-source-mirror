@@ -21,11 +21,14 @@
 
 #include <common.h>
 #include <eeschema_settings.h>
+#include <io/io_mgr.h>
 #include <lib_symbol.h>
 #include <libraries/library_manager.h>
 #include <pgm_base.h>
 #include <remote_provider_settings.h>
 #include <sch_edit_frame.h>
+#include <sch_io/sch_io.h>
+#include <sch_io/sch_io_mgr.h>
 #include <sch_symbol.h>
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
@@ -242,4 +245,106 @@ bool PlaceRemoteDownloadedSymbol( SCH_EDIT_FRAME* aFrame, const wxString& aNickn
     toolMgr->PostAction( SCH_ACTIONS::placeSymbol,
                          SCH_ACTIONS::PLACE_SYMBOL_PARAMS{ symbol, true } );
     return true;
+}
+
+
+std::unique_ptr<LIB_SYMBOL> LoadRemoteSymbolFromPayload( const std::vector<uint8_t>& aPayload,
+                                                        const wxString& aLibItemName,
+                                                        wxString& aError )
+{
+    if( aPayload.empty() )
+    {
+        aError = _( "Symbol payload was empty." );
+        return nullptr;
+    }
+
+    wxString tempPath = wxFileName::CreateTempFileName( wxS( "remote_symbol" ) );
+
+    if( tempPath.IsEmpty() )
+    {
+        aError = _( "Unable to create a temporary file for the symbol payload." );
+        return nullptr;
+    }
+
+    wxFileName tempFile( tempPath );
+    wxFFile    file( tempFile.GetFullPath(), wxS( "wb" ) );
+
+    if( !file.IsOpened() )
+    {
+        aError = _( "Unable to create a temporary file for the symbol payload." );
+        wxRemoveFile( tempFile.GetFullPath() );
+        return nullptr;
+    }
+
+    if( file.Write( aPayload.data(), aPayload.size() ) != aPayload.size() )
+    {
+        aError = _( "Failed to write the temporary symbol payload." );
+        file.Close();
+        wxRemoveFile( tempFile.GetFullPath() );
+        return nullptr;
+    }
+
+    file.Close();
+
+    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+
+    if( !plugin )
+    {
+        aError = _( "Unable to access the KiCad symbol plugin." );
+        wxRemoveFile( tempFile.GetFullPath() );
+        return nullptr;
+    }
+
+    std::unique_ptr<LIB_SYMBOL> symbol;
+
+    try
+    {
+        LIB_SYMBOL* loaded = plugin->LoadSymbol( tempFile.GetFullPath(), aLibItemName );
+
+        if( loaded )
+            symbol = std::make_unique<LIB_SYMBOL>( *loaded );
+        else
+            aError = _( "Symbol payload did not include the expected symbol." );
+    }
+    catch( const IO_ERROR& e )
+    {
+        aError = wxString::Format( _( "Unable to decode the symbol payload: %s" ), e.What() );
+    }
+
+    wxRemoveFile( tempFile.GetFullPath() );
+    return symbol;
+}
+
+
+LIB_ID BuildRemoteLibId( const wxString& aResolvedLibrary, const wxString& aResolvedItemName )
+{
+    const wxString nickname =
+            RemoteLibraryPrefix() + wxS( "_" )
+            + SanitizeRemoteFileComponent( aResolvedLibrary, wxS( "footprints" ), true );
+
+    const wxString itemName = SanitizeRemoteFileComponent( aResolvedItemName, wxS( "footprint" ) );
+
+    LIB_ID id;
+    id.SetLibNickname( nickname );
+    id.SetLibItemName( itemName );
+    return id;
+}
+
+
+void ApplyFootprintLinks( LIB_SYMBOL& aSymbol, const std::vector<LIB_ID>& aLinks )
+{
+    if( aLinks.empty() )
+        return;
+
+    aSymbol.SetFootprintProp( aLinks.front().GetUniStringLibId() );
+
+    if( aLinks.size() == 1 )
+        return;
+
+    wxArrayString filters = aSymbol.GetFPFilters();
+
+    for( size_t i = 1; i < aLinks.size(); ++i )
+        filters.Add( aLinks[i].GetUniStringLibItemName() );
+
+    aSymbol.SetFPFilters( filters );
 }

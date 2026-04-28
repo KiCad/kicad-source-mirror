@@ -22,11 +22,19 @@
 #include "remote_symbol_import_utils.h"
 
 #include <eeschema_settings.h>
-#include <string_view>
+#include <io/io_mgr.h>
+#include <lib_id.h>
+#include <lib_symbol.h>
 #include <libraries/library_manager.h>
+#include <libraries/symbol_library_adapter.h>
 #include <pgm_base.h>
+#include <project_sch.h>
 #include <remote_symbol_download_manager.h>
+#include <sch_edit_frame.h>
+#include <sch_io/sch_io.h>
+#include <sch_io/sch_io_mgr.h>
 #include <settings/settings_manager.h>
+#include <string_view>
 
 #include <wx/intl.h>
 
@@ -106,102 +114,101 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
     const bool addToGlobal = settings->m_RemoteSymbol.add_to_global_table;
     const bool strictLibraryTables = m_frame != nullptr;
     const wxString prefix = RemoteLibraryPrefix();
-    bool importedSymbol = false;
+    const LIBRARY_TABLE_SCOPE scope =
+            addToGlobal ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT;
+    bool     importedSymbol = false;
     wxString placedNickname;
     wxString placedSymbolName;
 
-    for( const REMOTE_PROVIDER_PART_ASSET& asset : aManifest.assets )
-    {
-        REMOTE_SYMBOL_FETCHED_ASSET fetched;
+    // Sort asset indices: footprints first, then 3D/SPICE, then symbols. The symbol's
+    // Footprint field references a LIB_ID that must already exist on disk and (when
+    // running interactive) be registered in the footprint library table by the time the
+    // symbol file is written, otherwise CvPcb / placement-time resolution misses it.
+    std::vector<size_t> footprintIdx, otherIdx, symbolIdx;
 
-        if( !downloader().DownloadAndVerify( aProvider, asset, remainingBudget, fetched, aError ) )
+    for( size_t i = 0; i < aManifest.assets.size(); ++i )
+    {
+        const wxString& type = aManifest.assets[i].asset_type;
+
+        if( type == wxS( "footprint" ) )
+            footprintIdx.push_back( i );
+        else if( type == wxS( "symbol" ) )
+            symbolIdx.push_back( i );
+        else
+            otherIdx.push_back( i );
+    }
+
+    std::vector<LIB_ID> footprintLinks;
+
+    auto downloadAsset = [&]( size_t i, REMOTE_SYMBOL_FETCHED_ASSET& fetched ) -> bool
+    {
+        if( !downloader().DownloadAndVerify( aProvider, aManifest.assets[i], remainingBudget,
+                                             fetched, aError ) )
             return false;
 
-        remainingBudget -= asset.size_bytes;
+        remainingBudget -= aManifest.assets[i].size_bytes;
+        return true;
+    };
 
-        if( asset.asset_type == wxS( "symbol" ) )
+    // --- Footprints ---
+    for( size_t i : footprintIdx )
+    {
+        const REMOTE_PROVIDER_PART_ASSET& asset = aManifest.assets[i];
+        REMOTE_SYMBOL_FETCHED_ASSET       fetched;
+
+        if( !downloadAsset( i, fetched ) )
+            return false;
+
+        wxFileName fpRoot = baseDir;
+        fpRoot.AppendDir( wxS( "footprints" ) );
+
+        // Resolve logical names with the same fallbacks the original code used.
+        const wxString resolvedLib =
+                asset.target_library.IsEmpty() ? asset.name : asset.target_library;
+        const wxString resolvedName =
+                asset.target_name.IsEmpty() ? asset.name : asset.target_name;
+
+        const LIB_ID    fpLibId = BuildRemoteLibId( resolvedLib, resolvedName );
+        const wxString  nickname = fpLibId.GetUniStringLibNickname();
+
+        wxFileName libDir = fpRoot;
+        libDir.AppendDir( nickname + wxS( ".pretty" ) );
+
+        wxString fileName = fpLibId.GetUniStringLibItemName();
+
+        if( !fileName.Lower().EndsWith( wxS( ".kicad_mod" ) ) )
+            fileName += wxS( ".kicad_mod" );
+
+        wxFileName outFile( libDir );
+        outFile.SetFullName( fileName );
+
+        if( !WriteRemoteBinaryFile( outFile, fetched.payload, aError ) )
+            return false;
+
+        if( strictLibraryTables )
         {
-            wxFileName symbolDir = baseDir;
-            symbolDir.AppendDir( wxS( "symbols" ) );
-
-            const wxString libraryName = SanitizeRemoteFileComponent(
-                    asset.target_library.IsEmpty() ? aContext.library_name : asset.target_library,
-                    wxS( "symbols" ), true );
-            const wxString symbolName =
-                    asset.target_name.IsEmpty() ? aContext.symbol_name : asset.target_name;
-            const wxString nickname = prefix + wxS( "_" ) + libraryName;
-
-            wxFileName outFile( symbolDir );
-            outFile.SetFullName( nickname + wxS( ".kicad_sym" ) );
-
-            if( !validateSymbolPayload( fetched.payload, symbolName, aError ) )
+            if( !EnsureRemoteLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, libDir, nickname,
+                                           addToGlobal, true, aError ) )
                 return false;
 
-            if( !WriteRemoteBinaryFile( outFile, fetched.payload, aError ) )
-                return false;
-
-            if( strictLibraryTables )
-            {
-                if( !EnsureRemoteLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, outFile, nickname,
-                                               addToGlobal, true, aError ) )
-                    return false;
-
-                LIBRARY_MANAGER& libMgr = Pgm().GetLibraryManager();
-                const LIBRARY_TABLE_SCOPE scope =
-                        addToGlobal ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT;
-
-                libMgr.ReloadLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, nickname, scope );
-
-                // Force the library to LOADED state so GetLibSymbol and the symbol chooser
-                // can see the new symbol immediately. ReloadLibraryEntry leaves it in LOADING.
-                libMgr.LoadLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, nickname );
-            }
-
-            importedSymbol = true;
-            placedNickname = nickname;
-            placedSymbolName = symbolName;
+            LIBRARY_MANAGER& libMgr = Pgm().GetLibraryManager();
+            libMgr.ReloadLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, nickname, scope );
+            libMgr.LoadLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, nickname );
         }
-        else if( asset.asset_type == wxS( "footprint" ) )
-        {
-            wxFileName fpRoot = baseDir;
-            fpRoot.AppendDir( wxS( "footprints" ) );
 
-            const wxString libraryName = SanitizeRemoteFileComponent(
-                    asset.target_library.IsEmpty() ? asset.name : asset.target_library,
-                    wxS( "footprints" ), true );
-            const wxString nickname = prefix + wxS( "_" ) + libraryName;
+        footprintLinks.push_back( fpLibId );
+    }
 
-            wxFileName libDir = fpRoot;
-            libDir.AppendDir( nickname + wxS( ".pretty" ) );
+    // --- 3D models, SPICE ---
+    for( size_t i : otherIdx )
+    {
+        const REMOTE_PROVIDER_PART_ASSET& asset = aManifest.assets[i];
+        REMOTE_SYMBOL_FETCHED_ASSET       fetched;
 
-            wxString fileName = SanitizeRemoteFileComponent(
-                    asset.target_name.IsEmpty() ? asset.name : asset.target_name,
-                    wxS( "footprint" ) );
+        if( !downloadAsset( i, fetched ) )
+            return false;
 
-            if( !fileName.Lower().EndsWith( wxS( ".kicad_mod" ) ) )
-                fileName += wxS( ".kicad_mod" );
-
-            wxFileName outFile( libDir );
-            outFile.SetFullName( fileName );
-
-            if( !WriteRemoteBinaryFile( outFile, fetched.payload, aError ) )
-                return false;
-
-            if( strictLibraryTables )
-            {
-                if( !EnsureRemoteLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, libDir, nickname,
-                                               addToGlobal, true, aError ) )
-                    return false;
-
-                LIBRARY_MANAGER& libMgr = Pgm().GetLibraryManager();
-                const LIBRARY_TABLE_SCOPE scope =
-                        addToGlobal ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT;
-
-                libMgr.ReloadLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, nickname, scope );
-                libMgr.LoadLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, nickname );
-            }
-        }
-        else if( asset.asset_type == wxS( "3dmodel" ) )
+        if( asset.asset_type == wxS( "3dmodel" ) )
         {
             wxFileName modelDir = baseDir;
             modelDir.AppendDir( prefix + wxS( "_3d" ) );
@@ -234,6 +241,110 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
             if( !WriteRemoteBinaryFile( outFile, fetched.payload, aError ) )
                 return false;
         }
+    }
+
+    // --- Symbols ---
+    for( size_t i : symbolIdx )
+    {
+        const REMOTE_PROVIDER_PART_ASSET& asset = aManifest.assets[i];
+        REMOTE_SYMBOL_FETCHED_ASSET       fetched;
+
+        if( !downloadAsset( i, fetched ) )
+            return false;
+
+        wxFileName symbolDir = baseDir;
+        symbolDir.AppendDir( wxS( "symbols" ) );
+
+        const wxString libraryName = SanitizeRemoteFileComponent(
+                asset.target_library.IsEmpty() ? aContext.library_name : asset.target_library,
+                wxS( "symbols" ), true );
+        const wxString symbolName =
+                asset.target_name.IsEmpty() ? aContext.symbol_name : asset.target_name;
+        const wxString nickname = prefix + wxS( "_" ) + libraryName;
+
+        wxFileName outFile( symbolDir );
+        outFile.SetFullName( nickname + wxS( ".kicad_sym" ) );
+
+        if( !validateSymbolPayload( fetched.payload, symbolName, aError ) )
+            return false;
+
+        // Deserialize → mutate → save so the persisted symbol's Footprint field is
+        // already pointing at the local LIB_IDs of the bundle's footprints.
+        std::unique_ptr<LIB_SYMBOL> loaded =
+                LoadRemoteSymbolFromPayload( fetched.payload, symbolName, aError );
+
+        if( !loaded )
+            return false;
+
+        loaded->SetName( symbolName );
+        LIB_ID savedId;
+        savedId.SetLibNickname( nickname );
+        savedId.SetLibItemName( symbolName );
+        loaded->SetLibId( savedId );
+
+        ApplyFootprintLinks( *loaded, footprintLinks );
+
+        symbolDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+
+        if( strictLibraryTables )
+        {
+            if( !EnsureRemoteLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, outFile, nickname,
+                                           addToGlobal, true, aError ) )
+                return false;
+
+            SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
+
+            if( !adapter
+                || adapter->SaveSymbol( nickname, loaded.get(), true )
+                           != SYMBOL_LIBRARY_ADAPTER::SAVE_OK )
+            {
+                aError = _( "Unable to save the downloaded symbol." );
+                return false;
+            }
+
+            (void) loaded.release();   // ownership transferred to library cache
+
+            LIBRARY_MANAGER& libMgr = Pgm().GetLibraryManager();
+            libMgr.ReloadLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, nickname, scope );
+            libMgr.LoadLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, nickname );
+        }
+        else
+        {
+            // Headless: write the raw payload to disk so the SCH plugin's library cache
+            // has an existing file to load, then re-save through the plugin to replace
+            // the symbol entry with the mutated (link-applied) copy. When there are no
+            // links to apply, the raw payload on disk is already correct and we skip
+            // the second save.
+            if( !WriteRemoteBinaryFile( outFile, fetched.payload, aError ) )
+                return false;
+
+            if( !footprintLinks.empty() )
+            {
+                try
+                {
+                    IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+
+                    if( !plugin )
+                    {
+                        aError = _( "Unable to access the KiCad symbol plugin." );
+                        return false;
+                    }
+
+                    plugin->SaveSymbol( outFile.GetFullPath(), loaded.get() );
+                    (void) loaded.release();   // ownership transferred to plugin's cache
+                }
+                catch( const IO_ERROR& e )
+                {
+                    aError = wxString::Format( _( "Unable to save the downloaded symbol: %s" ),
+                                               e.What() );
+                    return false;
+                }
+            }
+        }
+
+        importedSymbol = true;
+        placedNickname = nickname;
+        placedSymbolName = symbolName;
     }
 
     if( aPlaceSymbol )
