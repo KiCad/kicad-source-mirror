@@ -60,6 +60,8 @@
 #include <kiplatform/environment.h>
 
 #include <git2.h>
+#include <git/git_backend.h>
+#include <git/libgit_backend.h>
 #include <thread_pool.h>
 
 #include <libraries/library_manager.h>
@@ -108,7 +110,13 @@ static struct PGM_SINGLE_TOP : public PGM_BASE
         // Destroy everything in PGM_BASE, especially wxSingleInstanceCheckerImpl
         // earlier than wxApp and earlier than static destruction would.
         PGM_BASE::Destroy();
-        git_libgit2_shutdown();
+
+        if( GIT_BACKEND* backend = GetGitBackend() )
+        {
+            backend->Shutdown();
+            delete backend;
+            SetGitBackend( nullptr );
+        }
     }
 
     void MacOpenFile( const wxString& aFileName )   override
@@ -346,10 +354,11 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     }
 #endif
 
-    // Initialize the git library before trying to initialize individual programs
-    int gitInit = git_libgit2_init();
+    // Initialize the git backend before trying to initialize individual programs
+    SetGitBackend( new LIBGIT_BACKEND() );
+    GetGitBackend()->Init();
 
-    if( gitInit < 0 )
+    if( !GetGitBackend()->IsLibraryAvailable() )
     {
         const git_error* err = git_error_last();
         wxString         msg = wxS( "Failed to initialize git library" );
