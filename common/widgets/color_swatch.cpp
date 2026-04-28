@@ -313,14 +313,9 @@ void COLOR_SWATCH::GetNewSwatchColor()
     {
         COLOR4D newColor = dialog.GetColor();
 
-        if( newColor != COLOR4D::UNSPECIFIED || m_default == COLOR4D::UNSPECIFIED )
-        {
-            m_color = newColor;
-
-            m_swatch->SetBitmap( makeBitmap() );
-
-            sendSwatchChangeEvent( *this );
-        }
+        m_color = newColor;
+        m_swatch->SetBitmap( makeBitmap() );
+        sendSwatchChangeEvent( *this );
     }
 }
 
