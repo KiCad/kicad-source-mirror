@@ -2401,7 +2401,7 @@ double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
     const BOARD*         board = GetBoard();
 
     // Meta control for hiding all pads
-    if( !aView->IsLayerVisible( LAYER_PADS ) )
+    if( !aView->IsLayerVisibleCached( LAYER_PADS ) )
         return LOD_HIDE;
 
     // Handle Render tab switches

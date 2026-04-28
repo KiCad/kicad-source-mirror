@@ -35,7 +35,7 @@
 
 #include <math/box2.h>
 #include <gal/definitions.h>
-
+#include <base_set.h>
 #include <view/view_overlay.h>
 
 namespace KIGFX
@@ -428,7 +428,7 @@ public:
      *
      * @param aLayer true if the layer is visible, false otherwise.
      */
-    inline bool IsLayerVisible( int aLayer ) const
+    bool IsLayerVisible( int aLayer ) const
     {
         auto it = m_layers.find( aLayer );
 
@@ -436,6 +436,11 @@ public:
             return false;
 
         return it->second.visible;
+    }
+
+    inline bool IsLayerVisibleCached( int aLayer ) const
+    {
+        return m_layerVisibilityCache[ aLayer ];
     }
 
     /**
@@ -870,6 +875,8 @@ protected:
     /// Check if every layer required by the aLayerId layer is enabled.
     bool areRequiredLayersEnabled( int aLayerId ) const;
 
+    void syncLayerVisibilityCache();
+
     // Function objects that need to access VIEW/VIEW_ITEM private/protected members
     struct CLEAR_LAYER_CACHE_VISITOR;
     struct RECACHE_ITEM_VISITOR;
@@ -905,6 +912,8 @@ protected:
 
     bool                               m_mirrorX;
     bool                               m_mirrorY;
+    BASE_SET                           m_layerVisibilityCache;
+    BASE_SET                           m_layerCachedFlagCache;
 
     /// PAINTER contains information how do draw items.
     PAINTER* m_painter;

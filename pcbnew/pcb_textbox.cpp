@@ -412,7 +412,7 @@ double PCB_TEXTBOX::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         // Hide shadow if the main layer is not shown
-        if( !aView->IsLayerVisible( m_layer ) )
+        if( !aView->IsLayerVisibleCached( m_layer ) )
             return LOD_HIDE;
 
         // Hide shadow on dimmed tracks

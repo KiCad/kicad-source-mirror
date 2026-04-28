@@ -358,7 +358,7 @@ std::vector<int> PCB_GROUP::ViewGetLayers() const
 
 double PCB_GROUP::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
-    if( aView->IsLayerVisible( LAYER_ANCHOR ) )
+    if( aView->IsLayerVisibleCached( LAYER_ANCHOR ) )
         return LOD_SHOW;
 
     return LOD_HIDE;

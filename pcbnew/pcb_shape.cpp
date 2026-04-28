@@ -638,7 +638,7 @@ double PCB_SHAPE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         // Hide shadow if the main layer is not shown
-        if( !aView->IsLayerVisible( m_layer ) )
+        if( !aView->IsLayerVisibleCached( m_layer ) )
             return LOD_HIDE;
 
         // Hide shadow on dimmed tracks
@@ -651,10 +651,10 @@ double PCB_SHAPE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 
     if( FOOTPRINT* parent = GetParentFootprint() )
     {
-        if( parent->GetLayer() == F_Cu && !aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
+        if( parent->GetLayer() == F_Cu && !aView->IsLayerVisibleCached( LAYER_FOOTPRINTS_FR ) )
             return LOD_HIDE;
 
-        if( parent->GetLayer() == B_Cu && !aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
+        if( parent->GetLayer() == B_Cu && !aView->IsLayerVisibleCached( LAYER_FOOTPRINTS_BK ) )
             return LOD_HIDE;
     }
 

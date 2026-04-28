@@ -2093,7 +2093,7 @@ double PCB_TRACK::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
     PCB_PAINTER*         painter = static_cast<PCB_PAINTER*>( aView->GetPainter() );
     PCB_RENDER_SETTINGS* renderSettings = painter->GetSettings();
 
-    if( !aView->IsLayerVisible( LAYER_TRACKS ) )
+    if( !aView->IsLayerVisibleCached( LAYER_TRACKS ) )
         return LOD_HIDE;
 
     if( IsNetnameLayer( aLayer ) )
@@ -2131,7 +2131,7 @@ double PCB_TRACK::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
     {
         // Hide shadow if the main layer is not shown
-        if( !aView->IsLayerVisible( m_layer ) )
+        if( !aView->IsLayerVisibleCached( m_layer ) )
             return LOD_HIDE;
 
         // Hide shadow on dimmed tracks
@@ -2213,7 +2213,7 @@ double PCB_VIA::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
     const BOARD*         board = GetBoard();
 
     // Meta control for hiding all vias
-    if( !aView->IsLayerVisible( LAYER_VIAS ) )
+    if( !aView->IsLayerVisibleCached( LAYER_VIAS ) )
         return LOD_HIDE;
 
     // In high contrast mode don't show vias that don't cross the high-contrast layer

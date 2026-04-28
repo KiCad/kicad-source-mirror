@@ -249,7 +249,9 @@ VIEW::VIEW() :
     m_useDrawPriority( false ),
     m_nextDrawPriority( 0 ),
     m_reverseDrawOrder( false ),
-    m_hasPendingItemUpdates( false )
+    m_hasPendingItemUpdates( false ),
+    m_layerVisibilityCache( VIEW_MAX_LAYERS ),
+    m_layerCachedFlagCache( VIEW_MAX_LAYERS )
 {
     // Set m_boundary to define the max area size. The default area size
     // is defined here as the max value of a int.
@@ -1080,6 +1082,9 @@ struct VIEW::DRAW_ITEM_VISITOR
 
 void VIEW::redrawRect( const BOX2I& aRect )
 {
+
+    syncLayerVisibilityCache();
+
     for( VIEW_LAYER* l : m_orderedLayers )
     {
         if( l->visible && IsTargetDirty( l->target ) && areRequiredLayersEnabled( l->id ) )
@@ -1128,7 +1133,7 @@ void VIEW::draw( VIEW_ITEM* aItem, int aLayer, bool aImmediate )
     if( !viewData )
         return;
 
-    if( IsCached( aLayer ) && !aImmediate )
+    if( m_layerCachedFlagCache[ aLayer ] && !aImmediate )
     {
         // Draw using cached information or create one
         int group = viewData->getGroup( aLayer );
@@ -1879,6 +1884,14 @@ void VIEW::ShowPreview( bool aShow )
    SetVisible( m_preview.get(), aShow );
 }
 
+void VIEW::syncLayerVisibilityCache()
+{
+    for( const auto& layer : m_layers )
+    {
+        m_layerVisibilityCache[ layer.first ] = layer.second.visible;
+        m_layerCachedFlagCache[ layer.first ] = (layer.second.target == TARGET_CACHED);
+    }
+}
 
 } // namespace KIGFX
 
