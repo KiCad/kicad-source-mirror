@@ -1151,12 +1151,14 @@ void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const 
 
     if( layer == Edge_Cuts )
     {
-        std::vector<VECTOR2I> segment;
+        std::vector<VECTOR2I> points;
 
         for( const auto& pt : aObj.points )
-            segment.push_back( sprintToKicadPos( pt.x, pt.y ) );
+            points.push_back( sprintToKicadPos( pt.x, pt.y ) );
 
-        aOutlineSegments.push_back( std::move( segment ) );
+        points.push_back( points[0] );
+
+        aOutlineSegments.push_back( std::move( points ) );
         return;
     }
 
