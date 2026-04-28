@@ -82,16 +82,23 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FOOTPRINT_LIBRARY_ADAPTER* aLibs )
 
         try
         {
-            // Remove the library if it no longer exists or it exists in both the global and the
-            // project library but the project library entry is disabled.
-            if( !m_libs->HasLibrary( name, true )
-                || m_libs->HasLibrary( name, true ) != m_libs->HasLibrary( name, false ) )
+            // Check the table row directly
+            std::optional<LIBRARY_TABLE_ROW*> optRow    = m_libs->GetRow( name );
+            std::optional<LIB_STATUS>         libStatus = m_libs->GetLibraryStatus( name );
+
+            bool loadFailed = libStatus.has_value()
+                            && libStatus->load_status == LOAD_STATUS::LOAD_ERROR;
+
+            if( !optRow.has_value()
+                || ( *optRow )->Disabled()
+                || ( *optRow )->Hidden()
+                || loadFailed )
             {
                 it = deleteLibrary( it );
                 continue;
             }
 
-            updateLibrary( *(LIB_TREE_NODE_LIBRARY*) it->get() );
+            updateLibrary( *static_cast<LIB_TREE_NODE_LIBRARY*>( it->get() ) );
         }
         catch( ... )
         {
@@ -108,28 +115,31 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FOOTPRINT_LIBRARY_ADAPTER* aLibs )
     PROJECT_FILE&    project = m_frame->Prj().GetProjectFile();
     size_t           count = m_libMap.size();
 
-    for( const wxString& libName : m_libs->GetLibraryNames() )
+    for( const auto& [libName, status] : m_libs->GetLibraryStatuses() )
     {
-        if( m_libMap.count( libName ) == 0 )
-        {
-            if( std::optional<wxString> optDesc = PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() )->
-                    GetLibraryDescription( libName ) )
-            {
-                bool pinned = alg::contains( cfg->m_Session.pinned_fp_libs, libName )
-                                || alg::contains( project.m_PinnedFootprintLibs, libName );
+        if( status.load_status != LOAD_STATUS::LOADED || status.error )
+            continue;
 
-                std::vector<FOOTPRINT*> footprints = m_libs->GetFootprints( libName, true );
-                std::vector<LIB_TREE_ITEM*> treeItems;
-                treeItems.reserve( footprints.size() );
+        if( m_libMap.count( libName ) != 0 )
+            continue;
 
-                for( FOOTPRINT* fp : footprints )
-                    treeItems.push_back( fp );
+        std::optional<LIBRARY_TABLE_ROW*> optRow = m_libs->GetRow( libName );
 
-                DoAddLibrary( libName, *optDesc, treeItems, pinned, true );
+        if( !optRow.has_value() || ( *optRow )->Disabled() || ( *optRow )->Hidden() )
+            continue;
 
-                m_libMap.insert( libName );
-            }
-        }
+        bool pinned = alg::contains( cfg->m_Session.pinned_fp_libs, libName )
+                        || alg::contains( project.m_PinnedFootprintLibs, libName );
+
+        std::vector<FOOTPRINT*> footprints = m_libs->GetFootprints( libName, true );
+        std::vector<LIB_TREE_ITEM*> treeItems;
+        treeItems.reserve( footprints.size() );
+
+        for( FOOTPRINT* fp : footprints )
+            treeItems.push_back( fp );
+
+        DoAddLibrary( libName, ( *optRow )->Description(), treeItems, pinned, true );
+        m_libMap.insert( libName );
     }
 
     if( m_libMap.size() > count )
