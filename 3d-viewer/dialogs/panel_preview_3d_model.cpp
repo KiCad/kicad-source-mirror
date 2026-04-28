@@ -739,6 +739,8 @@ void PANEL_PREVIEW_3D_MODEL::UpdateDummyFootprint( bool aReloadRequired )
             m_dummyFootprint->Models().push_back( model );
     }
 
+    syncLocalEmbeddedFiles();
+
     if( m_extrudedBody && !m_dummyFootprint->HasExtrudedBody() )
         m_extrudedBody = nullptr;
 
@@ -751,7 +753,23 @@ void PANEL_PREVIEW_3D_MODEL::UpdateDummyFootprint( bool aReloadRequired )
 
 void PANEL_PREVIEW_3D_MODEL::SetEmbeddedFilesDelegate( EMBEDDED_FILES* aDelegate )
 {
-    m_dummyBoard->SetEmbeddedFilesDelegate( aDelegate );
+    m_localEmbeddedFiles = aDelegate;
+    syncLocalEmbeddedFiles();
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::syncLocalEmbeddedFiles()
+{
+    m_dummyFootprint->ClearEmbeddedFiles();
+
+    if( m_localEmbeddedFiles )
+    {
+        for( const auto& [name, file] : m_localEmbeddedFiles->EmbeddedFileMap() )
+        {
+            m_dummyFootprint->AddFile(
+                    new EMBEDDED_FILES::EMBEDDED_FILE( *file ) );
+        }
+    }
 }
 
 

@@ -218,6 +218,8 @@ private:
     }
 
     void onModify();
+    
+    void syncLocalEmbeddedFiles();
 
 private:
     PCB_BASE_FRAME*          m_parentFrame;
@@ -235,6 +237,7 @@ private:
 
     EDA_UNITS                m_userUnits;
     EXTRUDED_3D_BODY*        m_extrudedBody = nullptr;
+    EMBEDDED_FILES*          m_localEmbeddedFiles = nullptr;
 
     /// The 3d viewer Render initial settings (must be saved and restored)
     EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS          m_initialRender;
