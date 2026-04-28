@@ -839,6 +839,7 @@ FOOTPRINT* SPRINT_LAYOUT_PARSER::CreateFootprint()
     fp->Value().SetVisible( true );
 
     std::vector<std::vector<VECTOR2I>> outlineSegments;
+    uint8_t                            groundPlane[7] = {};
 
     for( const auto& obj : boardData.objects )
     {
@@ -848,19 +849,19 @@ FOOTPRINT* SPRINT_LAYOUT_PARSER::CreateFootprint()
         {
         case SPRINT_LAYOUT::OBJ_THT_PAD:
         case SPRINT_LAYOUT::OBJ_SMD_PAD:
-            processPad( container, obj, nullptr );
+            processPad( container, obj, groundPlane, nullptr );
             break;
 
         case SPRINT_LAYOUT::OBJ_LINE:
-            processLine( container, obj, outlineSegments, nullptr );
+            processLine( container, obj, outlineSegments, groundPlane, nullptr );
             break;
 
         case SPRINT_LAYOUT::OBJ_POLY:
-            processPoly( container, obj, outlineSegments, nullptr );
+            processPoly( container, obj, outlineSegments, groundPlane, nullptr );
             break;
 
         case SPRINT_LAYOUT::OBJ_CIRCLE:
-            processCircle( container, obj, outlineSegments, nullptr );
+            processCircle( container, obj, outlineSegments, groundPlane, nullptr );
             break;
 
         case SPRINT_LAYOUT::OBJ_TEXT:
