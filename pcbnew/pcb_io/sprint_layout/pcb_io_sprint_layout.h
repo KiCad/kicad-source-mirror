@@ -49,23 +49,33 @@ public:
         return IO_BASE::IO_FILE_DESC( _HKI( "Sprint Layout board file" ), { "lay6", "lay" } );
     }
 
+
+    //const IO_BASE::IO_FILE_DESC GetLibraryFileDesc() const override
+    //{
+    //    return IO_BASE::IO_FILE_DESC( _HKI( "Sprint Layout macro file" ), { "lmk" } );
+    //}
+
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( wxEmptyString, {} );
+        return IO_BASE::IO_FILE_DESC( _HKI( "Sprint Layout macro library" ), {}, { "lmk" }, false );
     }
+
+    void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath, bool aBestEfforts,
+                             const std::map<std::string, UTF8>* aProperties = nullptr ) override;
+
+    FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName, bool aKeepUUID = false,
+                              const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     bool CanReadBoard( const wxString& aFileName ) const override;
 
     BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                      const std::map<std::string, UTF8>* aProperties = nullptr,
-                      PROJECT* aProject = nullptr ) override;
+                      const std::map<std::string, UTF8>* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
 
     std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
 
-    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override
-    {
-        return 0;
-    }
+    long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override { return 0; }
+
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
     PCB_IO_SPRINT_LAYOUT();
     ~PCB_IO_SPRINT_LAYOUT() override;

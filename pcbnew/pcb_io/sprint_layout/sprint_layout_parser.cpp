@@ -195,7 +195,73 @@ void SPRINT_LAYOUT_PARSER::seek( int aBytes )
 // Parsing
 // ============================================================================
 
-bool SPRINT_LAYOUT_PARSER::Parse( const wxString& aFileName )
+
+bool SPRINT_LAYOUT_PARSER::ParseBoard( const wxString& aFileName )
+{
+    parseFileStart( aFileName );
+
+    uint32_t numBoards = readUint32();
+
+    if( numBoards == 0 || numBoards > 100 )
+        THROW_IO_ERROR( _( "Invalid board count in Sprint Layout file" ) );
+
+    m_fileData.boards.resize( numBoards );
+
+    for( uint32_t b = 0; b < numBoards; b++ )
+    {
+        SPRINT_LAYOUT::BOARD_DATA& boardData = m_fileData.boards[b];
+        parseBoardHeader( boardData );
+
+        uint32_t numObjects = readUint32();
+
+        if( numObjects > MAX_OBJECTS )
+            THROW_IO_ERROR( _( "Too many objects in Sprint Layout board" ) );
+
+        boardData.objects.resize( numObjects );
+
+        for( uint32_t i = 0; i < numObjects; i++ )
+            parseObject( boardData.objects[i] );
+
+        uint32_t numConnections = 0;
+
+        for( auto& obj : boardData.objects )
+        {
+            if( obj.type == SPRINT_LAYOUT::OBJ_THT_PAD || obj.type == SPRINT_LAYOUT::OBJ_SMD_PAD )
+                numConnections++;
+        }
+
+        // Read connection records (one per pad object)
+        for( uint32_t c = 0; c < numConnections; c++ )
+        {
+            uint32_t connCount = readUint32();
+
+            // Skip the connection data for now
+            skip( connCount * sizeof( uint32_t ) );
+        }
+    }
+
+    parseTrailer();
+
+    return true;
+}
+
+
+bool SPRINT_LAYOUT_PARSER::ParseMacroFile( const wxString& aFileName )
+{
+    // Parse the macro data into BOARD_DATA
+    SPRINT_LAYOUT::BOARD_DATA data;
+    data.name = wxFileNameFromPath( aFileName ).BeforeLast( '.' );
+
+    parseFileStart( aFileName );
+    parseObjectsList( data );
+
+    m_fileData.boards = { data };
+
+    return true;
+}
+
+
+void SPRINT_LAYOUT_PARSER::parseFileStart( const wxString& aFileName )
 {
     wxFFileInputStream stream( aFileName );
 
@@ -226,38 +292,12 @@ bool SPRINT_LAYOUT_PARSER::Parse( const wxString& aFileName )
     if( m_fileData.version > 6 || magic1 != 0x33 || magic2 != 0xAA || magic3 != 0xFF )
         THROW_IO_ERROR( _( "Invalid Sprint Layout file header" ) );
 
-    uint32_t numBoards = readUint32();
-
-    if( numBoards == 0 || numBoards > 100 )
-        THROW_IO_ERROR( _( "Invalid board count in Sprint Layout file" ) );
-
-    m_fileData.boards.resize( numBoards );
-
-    for( uint32_t b = 0; b < numBoards; b++ )
+    if( m_fileData.version < 5 )
     {
-        parseBoardHeader( m_fileData.boards[b] );
-
-        uint32_t numConnections = 0;
-
-        for( auto& obj : m_fileData.boards[b].objects )
-        {
-            if( obj.type == SPRINT_LAYOUT::OBJ_THT_PAD || obj.type == SPRINT_LAYOUT::OBJ_SMD_PAD )
-                numConnections++;
-        }
-
-        // Read connection records (one per pad object)
-        for( uint32_t c = 0; c < numConnections; c++ )
-        {
-            uint32_t connCount = readUint32();
-
-            // Skip the connection data for now
-            skip( connCount * sizeof( uint32_t ) );
-        }
+        THROW_IO_ERROR( wxString::Format( _( "Current file appears to be generated in Sprint Layout %d. Only version 5 "
+                                             "and 6 files are supported. " ),
+                                          m_fileData.version ) );
     }
-
-    parseTrailer();
-
-    return true;
 }
 
 
@@ -304,11 +344,15 @@ void SPRINT_LAYOUT_PARSER::parseBoardHeader( SPRINT_LAYOUT::BOARD_DATA& aBoard )
     aBoard.center_y = readInt32();
 
     aBoard.is_multilayer = readUint8();
+}
 
+
+void SPRINT_LAYOUT_PARSER::parseObjectsList( SPRINT_LAYOUT::BOARD_DATA& aBoard )
+{
     uint32_t numObjects = readUint32();
 
     if( numObjects > MAX_OBJECTS )
-        THROW_IO_ERROR( _( "Too many objects in Sprint Layout board" ) );
+        THROW_IO_ERROR( _( "Too many objects in Sprint Layout file" ) );
 
     aBoard.objects.resize( numObjects );
 
@@ -751,6 +795,75 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
 }
 
 
+FOOTPRINT* SPRINT_LAYOUT_PARSER::CreateFootprint()
+{
+    if( m_fileData.boards.empty() )
+        return nullptr;
+
+    const SPRINT_LAYOUT::BOARD_DATA& boardData = m_fileData.boards[0];
+
+    std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( nullptr );
+
+    wxString fpName = convertString( boardData.name );
+
+    fp->SetFPID( LIB_ID( wxEmptyString, fpName ) );
+    fp->SetReference( wxT( "REF**" ) );
+    fp->SetValue( fpName );
+    fp->Reference().SetVisible( true );
+    fp->Value().SetVisible( true );
+
+    std::vector<std::vector<VECTOR2I>> outlineSegments;
+
+    for( const auto& obj : boardData.objects )
+    {
+        BOARD_ITEM_CONTAINER* container = fp.get();
+
+        switch( obj.type )
+        {
+        case SPRINT_LAYOUT::OBJ_THT_PAD:
+        case SPRINT_LAYOUT::OBJ_SMD_PAD:
+            processPad( container, obj, nullptr );
+            break;
+
+        case SPRINT_LAYOUT::OBJ_LINE:
+            processLine( container, obj, outlineSegments, nullptr );
+            break;
+
+        case SPRINT_LAYOUT::OBJ_POLY:
+            processPoly( container, obj, outlineSegments, nullptr );
+            break;
+
+        case SPRINT_LAYOUT::OBJ_CIRCLE:
+            processCircle( container, obj, outlineSegments, nullptr );
+            break;
+
+        case SPRINT_LAYOUT::OBJ_TEXT:
+            processText( container, obj );
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    fp->AutoPositionFields();
+
+    // Generate basic courtyard rectangle
+    BOX2I bbox = fp->GetBoundingHull().BBox();
+    bbox.Inflate( pcbIUScale.mmToIU( 0.25 ) ); // Default courtyard clearance
+
+    std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( fp.get(), SHAPE_T::RECTANGLE );
+    shape->SetWidth( pcbIUScale.mmToIU( DEFAULT_COURTYARD_WIDTH ) );
+    shape->SetLayer( F_CrtYd );
+    shape->SetStart( bbox.GetOrigin() );
+    shape->SetEnd( bbox.GetEnd() );
+
+    fp->Add( shape.release(), ADD_MODE::APPEND );
+
+    return fp.release();
+}
+
+
 void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
                                        NETINFO_ITEM* aGndPlaneNet )
 {
@@ -986,7 +1099,7 @@ void SPRINT_LAYOUT_PARSER::processLine( BOARD_ITEM_CONTAINER* aContainer, const 
     if( aObj.points.size() < 2 )
         return;
 
-    BOARD* board = aContainer ? aContainer->GetBoard() : nullptr;
+    //BOARD* board = aContainer ? aContainer->GetBoard() : nullptr;
     PCB_LAYER_ID layer = mapLayer( aObj.layer );
 
     if( layer == Edge_Cuts )
@@ -1047,7 +1160,7 @@ void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const 
         return;
     }
 
-    bool isFilled = ( aObj.filled != 0 );
+    //bool isFilled = ( aObj.filled != 0 );
     bool isCutout = ( aObj.keepout != 0 );
 
     int width = sprintToKicadCoord( static_cast<float>( aObj.line_width ) );
@@ -1111,7 +1224,7 @@ void SPRINT_LAYOUT_PARSER::processCircle( BOARD_ITEM_CONTAINER* aContainer, cons
                                           std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
                                           NETINFO_ITEM* aGndPlaneNet )
 {
-    BOARD* board = aContainer ? aContainer->GetBoard() : nullptr;
+    //BOARD* board = aContainer ? aContainer->GetBoard() : nullptr;
     PCB_LAYER_ID layer = mapLayer( aObj.layer );
     VECTOR2I center = sprintToKicadPos( aObj.x, aObj.y );
     float radius = ( aObj.outer + aObj.inner ) / 2.0f;

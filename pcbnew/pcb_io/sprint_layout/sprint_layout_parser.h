@@ -164,10 +164,17 @@ public:
     SPRINT_LAYOUT_PARSER();
     ~SPRINT_LAYOUT_PARSER();
 
-    bool Parse( const wxString& aFileName );
+    // Parse full Sprint Layout board files (.lay6 / .lay) into internal file data
+    bool ParseBoard( const wxString& aFileName );
 
-    BOARD* CreateBoard( std::map<wxString, std::unique_ptr<FOOTPRINT>>& aFootprintMap,
-                         size_t aBoardIndex = 0 );
+    // Parse a macro (LMK) file with objects in BOARD_DATA with index 0
+    bool ParseMacroFile( const wxString& aFileName );
+
+    // Create a BOARD from BOARD_DATA at the given index, and populate the provided footprint map with any footprints found in the file.
+    BOARD* CreateBoard( std::map<wxString, std::unique_ptr<FOOTPRINT>>& aFootprintMap, size_t aBoardIndex = 0 );
+
+    // Create a single FOOTPRINT from the board at index 0
+    FOOTPRINT* CreateFootprint();
 
     const SPRINT_LAYOUT::FILE_DATA& GetFileData() const { return m_fileData; }
 
@@ -184,7 +191,9 @@ private:
     void        skip( size_t aBytes );
     void        seek( int aBytes );
 
+    void parseFileStart( const wxString& aFileName );
     void parseBoardHeader( SPRINT_LAYOUT::BOARD_DATA& aBoard );
+    void parseObjectsList( SPRINT_LAYOUT::BOARD_DATA& aBoard );
     void parseObject( SPRINT_LAYOUT::OBJECT& aObject, bool aIsTextChild = false );
     void parseTrailer();
 
