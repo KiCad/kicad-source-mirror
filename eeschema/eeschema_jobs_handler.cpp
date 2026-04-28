@@ -342,6 +342,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     case SCH_PLOT_FORMAT::PDF:    format = PLOT_FORMAT::PDF;    break;
     case SCH_PLOT_FORMAT::SVG:    format = PLOT_FORMAT::SVG;    break;
     case SCH_PLOT_FORMAT::POST:   format = PLOT_FORMAT::POST;   break;
+    case SCH_PLOT_FORMAT::PNG:    format = PLOT_FORMAT::PNG;    break;
     case SCH_PLOT_FORMAT::HPGL:   /* no longer supported */     break;
     }
 
@@ -401,6 +402,13 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     // Always export dxf in mm by kicad-cli (similar to Pcbnew)
     plotOpts.m_DXF_File_Unit = DXF_UNITS::MM;
+
+    if( aPlotJob->m_plotFormat == SCH_PLOT_FORMAT::PNG )
+    {
+        JOB_EXPORT_SCH_PLOT_PNG* pngJob = static_cast<JOB_EXPORT_SCH_PLOT_PNG*>( aPlotJob );
+        plotOpts.m_pngDPI = pngJob->m_dpi;
+        plotOpts.m_pngAntialias = pngJob->m_antialias;
+    }
 
     schPlotter->Plot( format, plotOpts, renderSettings.get(), m_reporter );
 

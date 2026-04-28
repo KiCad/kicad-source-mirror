@@ -25,6 +25,7 @@
 #include "font/kicad_font_name.h"
 #include "jobs/job_export_sch_plot.h"
 #include <layer_ids.h>
+#include <plotters/plotter_png.h>
 #include <wx/crt.h>
 #include <string_utils.h>
 
@@ -39,6 +40,8 @@
 #define ARG_EXCLUDE_PDF_METADATA "--exclude-pdf-metadata"
 #define ARG_FONT_NAME "--default-font"
 #define ARG_DRAW_HOP_OVER "--draw-hop-over"
+#define ARG_DPI "--dpi"
+#define ARG_NO_ANTIALIAS "--no-antialias"
 
 #define DEPRECATED_ARG_HPGL_PEN_SIZE "--pen-size"
 #define DEPRECATED_ARG_HPGL_ORIGIN "--origin"
@@ -94,10 +97,25 @@ CLI::SCH_EXPORT_PLOT_COMMAND::SCH_EXPORT_PLOT_COMMAND( const std::string& aName,
 
     if( aPlotFormat == SCH_PLOT_FORMAT::PDF
             || aPlotFormat == SCH_PLOT_FORMAT::POST
-            || aPlotFormat == SCH_PLOT_FORMAT::SVG )
+            || aPlotFormat == SCH_PLOT_FORMAT::SVG
+            || aPlotFormat == SCH_PLOT_FORMAT::PNG )
     {
         m_argParser.add_argument( "-n", ARG_NO_BACKGROUND_COLOR )
                 .help( UTF8STDSTR( _( "Avoid setting a background color (regardless of theme)" ) ) )
+                .flag();
+    }
+
+    if( aPlotFormat == SCH_PLOT_FORMAT::PNG )
+    {
+        m_argParser.add_argument( ARG_DPI )
+                .help( UTF8STDSTR( wxString::Format( _( "Resolution in dots per inch (default %d)" ),
+                                                     DEFAULT_PNG_DPI ) ) )
+                .scan<'i', int>()
+                .default_value( DEFAULT_PNG_DPI )
+                .metavar( "DPI" );
+
+        m_argParser.add_argument( ARG_NO_ANTIALIAS )
+                .help( UTF8STDSTR( _( "Disable anti-aliasing" ) ) )
                 .flag();
     }
 
@@ -155,6 +173,7 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
     case SCH_PLOT_FORMAT::DXF:  plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_DXF>();        break;
     case SCH_PLOT_FORMAT::SVG:  plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_SVG>();        break;
     case SCH_PLOT_FORMAT::POST: plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_PS>();         break;
+    case SCH_PLOT_FORMAT::PNG:  plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_PNG>();        break;
     case SCH_PLOT_FORMAT::HPGL: /* no longer supported */                                     break;
     }
 
@@ -168,7 +187,8 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
 
     if( m_plotFormat == SCH_PLOT_FORMAT::PDF
             || m_plotFormat == SCH_PLOT_FORMAT::POST
-            || m_plotFormat == SCH_PLOT_FORMAT::SVG )
+            || m_plotFormat == SCH_PLOT_FORMAT::SVG
+            || m_plotFormat == SCH_PLOT_FORMAT::PNG )
     {
         plotJob->m_useBackgroundColor = !m_argParser.get<bool>( ARG_NO_BACKGROUND_COLOR );
     }
@@ -190,6 +210,21 @@ int CLI::SCH_EXPORT_PLOT_COMMAND::doPerform( KIWAY& aKiway )
         plotJob->m_PDFPropertyPopups = !m_argParser.get<bool>( ARG_EXCLUDE_PDF_PROPERTY_POPUPS );
         plotJob->m_PDFHierarchicalLinks = !m_argParser.get<bool>( ARG_EXCLUDE_PDF_HIERARCHICAL_LINKS );
         plotJob->m_PDFMetadata = !m_argParser.get<bool>( ARG_EXCLUDE_PDF_METADATA );
+    }
+
+    if( m_plotFormat == SCH_PLOT_FORMAT::PNG )
+    {
+        JOB_EXPORT_SCH_PLOT_PNG* pngJob = static_cast<JOB_EXPORT_SCH_PLOT_PNG*>( plotJob.get() );
+        int                      dpi = m_argParser.get<int>( ARG_DPI );
+
+        if( dpi < MIN_PNG_DPI || dpi > MAX_PNG_DPI )
+        {
+            wxFprintf( stderr, _( "DPI must be between %d and %d\n" ), MIN_PNG_DPI, MAX_PNG_DPI );
+            return EXIT_CODES::ERR_ARGS;
+        }
+
+        pngJob->m_dpi = dpi;
+        pngJob->m_antialias = !m_argParser.get<bool>( ARG_NO_ANTIALIAS );
     }
 
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, plotJob.get() );

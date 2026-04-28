@@ -27,6 +27,7 @@
 #include <plotters/plotter_dxf.h>
 #include <plotters/plotters_pslike.h>
 #include <plotters/plotter_gerber.h>
+#include <plotters/plotter_png.h>
 #include <drawing_sheet/ds_data_item.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <string_utils.h>
@@ -43,6 +44,7 @@ wxString GetDefaultPlotExtension( PLOT_FORMAT aFormat )
     case PLOT_FORMAT::PDF:    return PDF_PLOTTER::GetDefaultFileExtension();
     case PLOT_FORMAT::GERBER: return GERBER_PLOTTER::GetDefaultFileExtension();
     case PLOT_FORMAT::SVG:    return SVG_PLOTTER::GetDefaultFileExtension();
+    case PLOT_FORMAT::PNG:    return PNG_PLOTTER::GetDefaultFileExtension();
     default:    wxFAIL;       return wxEmptyString;
     }
 }

@@ -34,6 +34,7 @@
 #include <sch_render_settings.h>
 #include <sch_sheet_path.h>
 #include <plotters/plotter.h>
+#include <plotters/plotter_png.h>
 
 class SCH_EDIT_FRAME;
 class PLOTTER;
@@ -73,6 +74,9 @@ struct SCH_PLOT_OPTS
     // has meaning only with DXF plotter: set DXF units in DXF file
     DXF_UNITS      m_DXF_File_Unit;
 
+    int            m_pngDPI;
+    bool           m_pngAntialias;
+
     SCH_PLOT_OPTS() :
         m_plotAll( true ),
         m_plotDrawingSheet( true ),
@@ -86,7 +90,9 @@ struct SCH_PLOT_OPTS
         m_theme(),
         m_outputDirectory(),
         m_outputFile(),
-        m_DXF_File_Unit( DXF_UNITS::INCH )
+        m_DXF_File_Unit( DXF_UNITS::INCH ),
+        m_pngDPI( DEFAULT_PNG_DPI ),
+        m_pngAntialias( true )
     {
 
     }
@@ -164,6 +170,12 @@ protected:
     void createSVGFiles( const SCH_PLOT_OPTS& aPlotOpts, SCH_RENDER_SETTINGS* aRenderSettings,
                          REPORTER* aReporter );
     bool plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScreen,
+                          RENDER_SETTINGS* aRenderSettings, const SCH_PLOT_OPTS& aPlotOpts );
+
+    // PNG
+    void createPNGFiles( const SCH_PLOT_OPTS& aPlotOpts, SCH_RENDER_SETTINGS* aRenderSettings,
+                         REPORTER* aReporter );
+    bool plotOneSheetPNG( const wxString& aFileName, SCH_SCREEN* aScreen,
                           RENDER_SETTINGS* aRenderSettings, const SCH_PLOT_OPTS& aPlotOpts );
 
     /**

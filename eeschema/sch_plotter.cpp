@@ -28,6 +28,7 @@
 #include <common.h>
 #include <sch_plotter.h>
 #include <plotters/plotter_dxf.h>
+#include <plotters/plotter_png.h>
 #include <plotters/plotters_pslike.h>
 
 #include <pgm_base.h>
@@ -674,6 +675,183 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
 }
 
 
+void SCH_PLOTTER::createPNGFiles( const SCH_PLOT_OPTS& aPlotOpts,
+                                  SCH_RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
+{
+    wxString       msg;
+    SCH_SHEET_PATH oldsheetpath = m_schematic->CurrentSheet();
+    SCH_SHEET_LIST sheetList;
+
+    if( aPlotOpts.m_plotAll )
+    {
+        sheetList.BuildSheetList( &m_schematic->Root(), true );
+        sheetList.SortByPageNumbers();
+
+        if( aPlotOpts.m_plotPages.size() > 0 )
+            sheetList.TrimToPageNumbers( aPlotOpts.m_plotPages );
+    }
+    else
+    {
+        sheetList.push_back( m_schematic->CurrentSheet() );
+    }
+
+    for( unsigned i = 0; i < sheetList.size(); i++ )
+    {
+        SCH_SCREEN* screen;
+
+        m_schematic->SetCurrentSheet( sheetList[i] );
+        m_schematic->CurrentSheet().UpdateAllScreenReferences();
+        m_schematic->SetSheetNumberAndCount();
+
+        screen = m_schematic->CurrentSheet().LastScreen();
+
+        try
+        {
+            wxString fname = m_schematic->GetUniqueFilenameForCurrentSheet();
+
+            fname.Replace( "/", "_" );
+            fname.Replace( "\\", "_" );
+
+            wxString   ext = PNG_PLOTTER::GetDefaultFileExtension();
+            wxFileName plotFileName = createPlotFileName( aPlotOpts, fname, ext, aReporter );
+
+            m_lastOutputFilePath = plotFileName.GetFullPath();
+            m_outputFilePaths.push_back( m_lastOutputFilePath );
+
+            if( !plotFileName.IsOk() )
+                return;
+
+            bool success = plotOneSheetPNG( plotFileName.GetFullPath(), screen, aRenderSettings,
+                                            aPlotOpts );
+
+            if( aReporter )
+            {
+                if( !success )
+                {
+                    msg.Printf( _( "Failed to create file '%s'." ), plotFileName.GetFullPath() );
+                    aReporter->Report( msg, RPT_SEVERITY_ERROR );
+                }
+                else
+                {
+                    msg.Printf( _( "Plotted to '%s'." ), plotFileName.GetFullPath() );
+                    aReporter->Report( msg, RPT_SEVERITY_ACTION );
+                }
+            }
+        }
+        catch( const IO_ERROR& e )
+        {
+            if( aReporter )
+            {
+                msg.Printf( wxT( "PNG Plotter exception: %s" ), e.What() );
+                aReporter->Report( msg, RPT_SEVERITY_ERROR );
+            }
+
+            break;
+        }
+    }
+
+    if( aReporter )
+        aReporter->ReportTail( _( "Done." ), RPT_SEVERITY_INFO );
+
+    restoreEnvironment( nullptr, oldsheetpath );
+}
+
+
+bool SCH_PLOTTER::plotOneSheetPNG( const wxString& aFileName, SCH_SCREEN* aScreen,
+                                   RENDER_SETTINGS* aRenderSettings,
+                                   const SCH_PLOT_OPTS& aPlotOpts )
+{
+    PAGE_INFO        plotPage;
+    const PAGE_INFO& actualPage = aScreen->GetPageSettings();
+
+    switch( aPlotOpts.m_pageSizeSelect )
+    {
+    case PAGE_SIZE_A:
+        plotPage.SetType( wxT( "A" ) );
+        plotPage.SetPortrait( actualPage.IsPortrait() );
+        break;
+
+    case PAGE_SIZE_A4:
+        plotPage.SetType( wxT( "A4" ) );
+        plotPage.SetPortrait( actualPage.IsPortrait() );
+        break;
+
+    case PAGE_SIZE_AUTO:
+    default:
+        plotPage = actualPage;
+        break;
+    }
+
+    int dpi = std::clamp( aPlotOpts.m_pngDPI, MIN_PNG_DPI, MAX_PNG_DPI );
+
+    int pixelW = KiROUND( static_cast<double>( plotPage.GetWidthMils() ) * dpi / 1000.0 );
+    int pixelH = KiROUND( static_cast<double>( plotPage.GetHeightMils() ) * dpi / 1000.0 );
+
+    PNG_PLOTTER* plotter = new PNG_PLOTTER();
+
+    plotter->SetPixelSize( pixelW, pixelH );
+    plotter->SetResolution( dpi );
+    plotter->SetAntialias( aPlotOpts.m_pngAntialias );
+
+    // Schematic IU is Y-down (matches Cairo); leave SetYAxisReversed at its default of false.
+    // pcbnew sets it true because PCB IU is Y-up. Do not copy that wiring here.
+
+    plotter->SetRenderSettings( aRenderSettings );
+    plotter->SetPageSettings( plotPage );
+    plotter->SetColorMode( !aPlotOpts.m_blackAndWhite );
+
+    VECTOR2I plot_offset;
+    double   scalex = (double) plotPage.GetWidthMils() / actualPage.GetWidthMils();
+    double   scaley = (double) plotPage.GetHeightMils() / actualPage.GetHeightMils();
+    double   scale = std::min( scalex, scaley );
+
+    plotter->SetViewport( plot_offset, schIUScale.IU_PER_MILS / 10, scale, false );
+    plotter->SetCreator( wxT( "Eeschema-PNG" ) );
+
+    if( !plotter->OpenFile( aFileName ) )
+    {
+        delete plotter;
+        return false;
+    }
+
+    plotter->StartPlot( m_schematic->CurrentSheet().GetPageNumber() );
+
+    if( aPlotOpts.m_useBackgroundColor && plotter->GetColorMode() )
+    {
+        plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
+
+        VECTOR2I end( actualPage.GetWidthIU( schIUScale.IU_PER_MILS ),
+                      actualPage.GetHeightIU( schIUScale.IU_PER_MILS ) );
+
+        plotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0, 0 );
+    }
+
+    if( aPlotOpts.m_plotDrawingSheet )
+    {
+        wxString sheetName = m_schematic->CurrentSheet().Last()->GetName();
+        wxString sheetPath = m_schematic->CurrentSheet().PathHumanReadable();
+        COLOR4D  color = plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_DRAWINGSHEET );
+
+        SCHEMATIC* sch = aScreen->Schematic();
+        wxString   variantName = sch->GetCurrentVariant();
+        wxString   variantDesc = sch->GetVariantDescription( variantName );
+
+        PlotDrawingSheet( plotter, &sch->Project(), aScreen->GetTitleBlock(), actualPage,
+                          sch->GetProperties(), aScreen->GetPageNumber(), aScreen->GetPageCount(),
+                          sheetName, sheetPath, aScreen->GetFileName(),
+                          plotter->GetColorMode() ? color : COLOR4D::BLACK,
+                          aScreen->GetVirtualPageNumber() == 1, variantName, variantDesc );
+    }
+
+    aScreen->Plot( plotter, aPlotOpts );
+
+    bool success = plotter->EndPlot();
+    delete plotter;
+
+    return success;
+}
+
+
 void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_OPTS& aPlotOpts,
                                   SCH_RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
 {
@@ -897,6 +1075,7 @@ void SCH_PLOTTER::Plot( PLOT_FORMAT aPlotFormat, const SCH_PLOT_OPTS& aPlotOpts,
     case PLOT_FORMAT::DXF:  createDXFFiles( aPlotOpts, aRenderSettings, aReporter );  break;
     case PLOT_FORMAT::PDF:  createPDFFile( aPlotOpts, aRenderSettings, aReporter );   break;
     case PLOT_FORMAT::SVG:  createSVGFiles( aPlotOpts, aRenderSettings, aReporter );  break;
+    case PLOT_FORMAT::PNG:  createPNGFiles( aPlotOpts, aRenderSettings, aReporter );  break;
     case PLOT_FORMAT::HPGL: /* no longer supported */                                 break;
     }
 

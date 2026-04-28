@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,6 +32,7 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
 #include <wx/statbox.h>
+#include <wx/spinctrl.h>
 #include <wx/panel.h>
 #include <wx/dialog.h>
 
@@ -68,6 +69,10 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxStaticBoxSizer* m_SizerDxfOption;
 		wxStaticText* m_staticTextDXF;
 		wxChoice* m_DXF_plotUnits;
+		wxStaticBoxSizer* m_sizerPNGOptions;
+		wxStaticText* pngDPILabel;
+		wxSpinCtrl* m_pngDPI;
+		wxCheckBox* m_pngAntialias;
 		wxStaticBoxSizer* m_otherOptions;
 		wxCheckBox* m_openFileAfterPlot;
 		WX_HTML_REPORT_PANEL* m_MessagesBox;

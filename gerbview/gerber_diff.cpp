@@ -241,22 +241,22 @@ bool RenderDiffToPng( const GERBER_DIFF_RESULT& aResult, const wxString& aOutput
     GERBER_PLOTTER_VIEWPORT vp = CalculatePlotterViewport( bbox, aOptions.dpi, aOptions.width, aOptions.height );
 
     PNG_PLOTTER plotter;
+    plotter.SetColorMode( true );
     plotter.SetPixelSize( vp.width, vp.height );
     plotter.SetResolution( aOptions.dpi );
     plotter.SetAntialias( aOptions.antialias );
     plotter.SetBackgroundColor( aOptions.colorBackground );
     plotter.SetViewport( vp.offset, vp.iuPerDecimil, vp.plotScale, false );
+    plotter.OpenFile( aOutputPath );
 
     if( !plotter.StartPlot( wxEmptyString ) )
         return false;
 
     // Render in order: overlap first, then additions, then removals
-    // This ensures removals (red) are most visible on top
+    // so removals (red) are most visible on top.
     RenderPolySet( plotter, aResult.overlap, aOptions.colorOverlap );
     RenderPolySet( plotter, aResult.additions, aOptions.colorAdditions );
     RenderPolySet( plotter, aResult.removals, aOptions.colorRemovals );
 
-    plotter.EndPlot();
-
-    return plotter.SaveFile( aOutputPath );
+    return plotter.EndPlot();
 }

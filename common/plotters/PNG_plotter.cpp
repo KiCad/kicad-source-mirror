@@ -21,6 +21,7 @@
 #include <geometry/shape_poly_set.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <trigo.h>
+#include <wx/image.h>
 
 #include <cmath>
 
@@ -28,13 +29,15 @@
 PNG_PLOTTER::PNG_PLOTTER() :
         m_surface( nullptr ),
         m_context( nullptr ),
-        m_dpi( 300 ),
+        m_dpi( DEFAULT_PNG_DPI ),
         m_width( 0 ),
         m_height( 0 ),
         m_antialias( false ),
         m_backgroundColor( COLOR4D( 0, 0, 0, 0 ) ),
         m_currentColor( COLOR4D::BLACK )
 {
+    // The base class destructor calls fclose() on m_outputFile; ours is unused.
+    m_outputFile = nullptr;
 }
 
 
@@ -54,12 +57,25 @@ PNG_PLOTTER::~PNG_PLOTTER()
 }
 
 
+bool PNG_PLOTTER::OpenFile( const wxString& aFullFilename )
+{
+    // The cairo surface accumulates draws in memory; the file is written in EndPlot.
+    m_filename = aFullFilename;
+    m_outputFile = nullptr;
+    return true;
+}
+
+
 bool PNG_PLOTTER::StartPlot( const wxString& aPageNumber )
 {
-    if( m_width <= 0 || m_height <= 0 )
+    // Cairo image surfaces are limited to INT16_MAX in either dimension. Beyond that, surface
+    // creation returns CAIRO_STATUS_INVALID_SIZE. Reject up front rather than risking a silent
+    // multi-gigabyte allocation that fails late.
+    constexpr int MAX_PNG_DIMENSION = 32767;
+
+    if( m_width <= 0 || m_height <= 0 || m_width > MAX_PNG_DIMENSION || m_height > MAX_PNG_DIMENSION )
         return false;
 
-    // Clean up any existing surface
     if( m_context )
     {
         cairo_destroy( m_context );
@@ -72,7 +88,6 @@ bool PNG_PLOTTER::StartPlot( const wxString& aPageNumber )
         m_surface = nullptr;
     }
 
-    // Create Cairo image surface with ARGB32 format for transparency support
     m_surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, m_width, m_height );
 
     if( cairo_surface_status( m_surface ) != CAIRO_STATUS_SUCCESS )
@@ -93,13 +108,8 @@ bool PNG_PLOTTER::StartPlot( const wxString& aPageNumber )
         return false;
     }
 
-    // Configure anti-aliasing
-    if( m_antialias )
-        cairo_set_antialias( m_context, CAIRO_ANTIALIAS_DEFAULT );
-    else
-        cairo_set_antialias( m_context, CAIRO_ANTIALIAS_NONE );
+    cairo_set_antialias( m_context, m_antialias ? CAIRO_ANTIALIAS_DEFAULT : CAIRO_ANTIALIAS_NONE );
 
-    // Fill with background color if specified (non-transparent)
     if( m_backgroundColor.a > 0 )
     {
         cairo_set_source_rgba( m_context, m_backgroundColor.r, m_backgroundColor.g, m_backgroundColor.b,
@@ -107,9 +117,15 @@ bool PNG_PLOTTER::StartPlot( const wxString& aPageNumber )
         cairo_paint( m_context );
     }
 
-    // Set default line properties
     cairo_set_line_cap( m_context, CAIRO_LINE_CAP_ROUND );
     cairo_set_line_join( m_context, CAIRO_LINE_JOIN_ROUND );
+
+    // Force the SetColor / SetCurrentLineWidth caches to miss on the first call so the new
+    // Cairo context picks up the requested state (the background paint above set the source
+    // colour to m_backgroundColor, so caching "BLACK" from a previous plot would skip the
+    // necessary cairo_set_source_rgba).
+    m_currentColor = COLOR4D::UNSPECIFIED;
+    m_currentPenWidth = -1;
 
     return true;
 }
@@ -120,8 +136,14 @@ bool PNG_PLOTTER::EndPlot()
     if( !m_context )
         return false;
 
-    // Flush any pending drawing operations
     cairo_surface_flush( m_surface );
+
+    // Two valid usage patterns: OpenFile()+StartPlot()+EndPlot() writes to m_filename here,
+    // while StartPlot()+EndPlot()+SaveFile() leaves rendering in the surface for an explicit
+    // save. Tearing down the surface in EndPlot would break the second pattern. Cleanup
+    // happens at the next StartPlot or in the destructor.
+    if( !m_filename.IsEmpty() )
+        return SaveFile( m_filename );
 
     return true;
 }
@@ -140,6 +162,9 @@ bool PNG_PLOTTER::SaveFile( const wxString& aPath )
 
 void PNG_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 {
+    if( aWidth == m_currentPenWidth )
+        return;
+
     m_currentPenWidth = aWidth;
 
     if( m_context )
@@ -152,12 +177,36 @@ void PNG_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 
 void PNG_PLOTTER::SetColor( const COLOR4D& aColor )
 {
-    m_currentColor = aColor;
+    COLOR4D effective;
+
+    if( m_colorMode )
+    {
+        effective = aColor;
+
+        if( m_negativeMode )
+        {
+            effective.r = 1.0 - effective.r;
+            effective.g = 1.0 - effective.g;
+            effective.b = 1.0 - effective.b;
+        }
+    }
+    else
+    {
+        double k = ( aColor == COLOR4D::WHITE ) ? 1.0 : 0.0;
+
+        if( m_negativeMode )
+            k = 1.0 - k;
+
+        effective = COLOR4D( k, k, k, 1.0 );
+    }
+
+    if( effective == m_currentColor )
+        return;
+
+    m_currentColor = effective;
 
     if( m_context )
-    {
-        cairo_set_source_rgba( m_context, aColor.r, aColor.g, aColor.b, aColor.a );
-    }
+        cairo_set_source_rgba( m_context, effective.r, effective.g, effective.b, effective.a );
 }
 
 
@@ -173,8 +222,55 @@ void PNG_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
     if( !m_context )
         return;
 
-    // For now, only solid lines are supported in the basic implementation
-    cairo_set_dash( m_context, nullptr, 0, 0 );
+    if( aLineStyle == LINE_STYLE::SOLID || aLineStyle == LINE_STYLE::DEFAULT )
+    {
+        cairo_set_dash( m_context, nullptr, 0, 0 );
+        return;
+    }
+
+    // Dash patterns are in device units (pixels), scaled by line width
+    double base = std::max( 1.0, userToDeviceSize( static_cast<double>( aLineWidth ) ) );
+    double dash[6];
+    int    num_dashes = 0;
+
+    switch( aLineStyle )
+    {
+    case LINE_STYLE::DASH:
+        dash[0] = 4.0 * base;
+        dash[1] = 2.0 * base;
+        num_dashes = 2;
+        break;
+
+    case LINE_STYLE::DOT:
+        dash[0] = 1.0 * base;
+        dash[1] = 2.0 * base;
+        num_dashes = 2;
+        break;
+
+    case LINE_STYLE::DASHDOT:
+        dash[0] = 4.0 * base;
+        dash[1] = 2.0 * base;
+        dash[2] = 1.0 * base;
+        dash[3] = 2.0 * base;
+        num_dashes = 4;
+        break;
+
+    case LINE_STYLE::DASHDOTDOT:
+        dash[0] = 4.0 * base;
+        dash[1] = 2.0 * base;
+        dash[2] = 1.0 * base;
+        dash[3] = 2.0 * base;
+        dash[4] = 1.0 * base;
+        dash[5] = 2.0 * base;
+        num_dashes = 6;
+        break;
+
+    default:
+        cairo_set_dash( m_context, nullptr, 0, 0 );
+        return;
+    }
+
+    cairo_set_dash( m_context, dash, num_dashes, 0 );
 }
 
 
@@ -185,8 +281,7 @@ void PNG_PLOTTER::SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil, d
     m_plotScale = aScale;
     m_plotMirror = aMirror;
 
-    // Calculate device scale factor
-    // DPI defines pixels per inch, and there are 10000 decimils per inch
+    // 10000 decimils per inch; m_dpi pixels per inch.
     m_iuPerDeviceUnit = m_IUsPerDecimil * 10000.0 / m_dpi;
 }
 
@@ -245,12 +340,9 @@ void PNG_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle, co
     VECTOR2D center = userToDeviceCoordinates( VECTOR2I( aCenter.x, aCenter.y ) );
     double   deviceRadius = userToDeviceSize( aRadius );
 
-    // Cairo uses radians, angles measured from positive X axis
-    // KiCad angles are in degrees/decidegrees, positive is counter-clockwise
     double startRad = aStartAngle.AsRadians();
     double endRad = ( aStartAngle + aAngle ).AsRadians();
 
-    // Cairo draws arcs counter-clockwise from start to end angle
     if( aAngle.AsDegrees() < 0 )
         cairo_arc_negative( m_context, center.x, center.y, deviceRadius, startRad, endRad );
     else
@@ -283,16 +375,22 @@ void PNG_PLOTTER::PenTo( const VECTOR2I& aPos, char aPlume )
         break;
 
     case 'D':
-        if( m_penState == 'U' )
-            cairo_move_to( m_context, m_penLastpos.x, m_penLastpos.y );
+        if( m_penState == 'Z' )
+            cairo_move_to( m_context, pos.x, pos.y );
+        else
+            cairo_line_to( m_context, pos.x, pos.y );
 
-        cairo_line_to( m_context, pos.x, pos.y );
         m_penState = 'D';
         break;
 
     case 'Z':
-        cairo_stroke( m_context );
-        m_penState = 'Z';
+        if( m_penState != 'Z' )
+        {
+            cairo_stroke( m_context );
+            m_penState = 'Z';
+            m_penLastpos.x = -1;
+            m_penLastpos.y = -1;
+        }
         break;
     }
 
@@ -314,7 +412,6 @@ void PNG_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
         cairo_line_to( m_context, pt.x, pt.y );
     }
 
-    // Close the path for filled polygons
     if( aFill != FILL_T::NO_FILL )
     {
         cairo_close_path( m_context );
@@ -328,6 +425,89 @@ void PNG_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
 }
 
 
+void PNG_PLOTTER::PlotImage( const wxImage& aImage, const VECTOR2I& aPos, double aScaleFactor )
+{
+    if( !m_context || !aImage.IsOk() )
+        return;
+
+    int imgW = aImage.GetWidth();
+    int imgH = aImage.GetHeight();
+
+    if( imgW == 0 || imgH == 0 )
+        return;
+
+    // wxImage stores RGB data; convert to Cairo's premultiplied native-endian ARGB32.
+    cairo_surface_t* imgSurface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, imgW, imgH );
+
+    if( cairo_surface_status( imgSurface ) != CAIRO_STATUS_SUCCESS )
+    {
+        cairo_surface_destroy( imgSurface );
+        return;
+    }
+
+    const unsigned char* srcData = aImage.GetData();
+    const unsigned char* alphaData = aImage.HasAlpha() ? aImage.GetAlpha() : nullptr;
+    unsigned char*       dstBytes = cairo_image_surface_get_data( imgSurface );
+    int                  dstStride = cairo_image_surface_get_stride( imgSurface );
+
+    for( int y = 0; y < imgH; y++ )
+    {
+        const unsigned char* srcRow = srcData + y * imgW * 3;
+        const unsigned char* alphaRow = alphaData ? alphaData + y * imgW : nullptr;
+        uint32_t*            dstRow = reinterpret_cast<uint32_t*>( dstBytes + y * dstStride );
+
+        if( !alphaRow )
+        {
+            for( int x = 0; x < imgW; x++ )
+            {
+                uint32_t r = srcRow[x * 3 + 0];
+                uint32_t g = srcRow[x * 3 + 1];
+                uint32_t b = srcRow[x * 3 + 2];
+                dstRow[x] = ( 0xFFu << 24 ) | ( r << 16 ) | ( g << 8 ) | b;
+            }
+        }
+        else
+        {
+            for( int x = 0; x < imgW; x++ )
+            {
+                uint32_t r = srcRow[x * 3 + 0];
+                uint32_t g = srcRow[x * 3 + 1];
+                uint32_t b = srcRow[x * 3 + 2];
+                uint32_t a = alphaRow[x];
+
+                if( a < 255 )
+                {
+                    r = ( r * a + 127 ) / 255;
+                    g = ( g * a + 127 ) / 255;
+                    b = ( b * a + 127 ) / 255;
+                }
+
+                dstRow[x] = ( a << 24 ) | ( r << 16 ) | ( g << 8 ) | b;
+            }
+        }
+    }
+
+    cairo_surface_mark_dirty( imgSurface );
+
+    VECTOR2D pos = userToDeviceCoordinates( aPos );
+    double   drawW = userToDeviceSize( static_cast<double>( imgW ) * aScaleFactor );
+    double   drawH = userToDeviceSize( static_cast<double>( imgH ) * aScaleFactor );
+
+    // aPos is the image centre; adjust to top-left for Cairo
+    pos.x -= drawW / 2.0;
+    pos.y -= drawH / 2.0;
+
+    cairo_save( m_context );
+    cairo_translate( m_context, pos.x, pos.y );
+    cairo_scale( m_context, drawW / imgW, drawH / imgH );
+    cairo_set_source_surface( m_context, imgSurface, 0, 0 );
+    cairo_paint( m_context );
+    cairo_restore( m_context );
+
+    cairo_surface_destroy( imgSurface );
+}
+
+
 void PNG_PLOTTER::FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter, void* aData )
 {
     Circle( aPadPos, aDiameter, FILL_T::FILLED_SHAPE, 0 );
@@ -337,14 +517,12 @@ void PNG_PLOTTER::FlashPadCircle( const VECTOR2I& aPadPos, int aDiameter, void* 
 void PNG_PLOTTER::FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize, const EDA_ANGLE& aPadOrient,
                                 void* aData )
 {
-    // For simplicity, render oval as a thick line between two semicircle centers
-    // with round end caps (which is what an oval pad is)
+    // An oval is a thick segment between two semicircle centres with round end caps.
     int width = std::min( aSize.x, aSize.y );
     int len = std::max( aSize.x, aSize.y ) - width;
 
     if( len == 0 )
     {
-        // It's actually a circle
         FlashPadCircle( aPadPos, width, aData );
         return;
     }
@@ -362,7 +540,6 @@ void PNG_PLOTTER::FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize, 
         delta.y = len / 2;
     }
 
-    // Rotate delta by pad orientation
     RotatePoint( delta, aPadOrient );
 
     VECTOR2I start = aPadPos - delta;
@@ -375,7 +552,6 @@ void PNG_PLOTTER::FlashPadOval( const VECTOR2I& aPadPos, const VECTOR2I& aSize, 
 void PNG_PLOTTER::FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize, const EDA_ANGLE& aPadOrient,
                                 void* aData )
 {
-    // For rotated rectangles, compute the 4 corners and draw as polygon
     std::vector<VECTOR2I> corners;
 
     int dx = aSize.x / 2;
@@ -399,7 +575,6 @@ void PNG_PLOTTER::FlashPadRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize, 
 void PNG_PLOTTER::FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize, int aCornerRadius,
                                      const EDA_ANGLE& aOrient, void* aData )
 {
-    // Generate rounded rectangle polygon and draw it
     SHAPE_POLY_SET outline;
     TransformRoundChamferedRectToPolygon( outline, aPadPos, aSize, aOrient, aCornerRadius, 0.0, 0, 0,
                                           GetPlotterArcHighDef(), ERROR_INSIDE );
@@ -476,23 +651,19 @@ VECTOR2D PNG_PLOTTER::userToDeviceCoordinates( const VECTOR2I& aCoordinate )
 {
     VECTOR2D pos( aCoordinate.x, aCoordinate.y );
 
-    // Apply offset
     pos.x -= m_plotOffset.x;
     pos.y -= m_plotOffset.y;
 
-    // Apply scale
     pos.x = pos.x * m_plotScale / m_iuPerDeviceUnit;
     pos.y = pos.y * m_plotScale / m_iuPerDeviceUnit;
 
-    // Handle mirroring
     if( m_plotMirror )
         pos.x = m_width - pos.x;
 
-    // Input is already in Y-down screen convention (matching Cairo): gerbview
-    // passes GERBER_DRAW_ITEM::GetABPosition() output which, for non-mirrored
-    // B-axis files, already negates gerber-native Y so Y grows downward to the
-    // image. No additional flip is needed here, and adding one would
-    // double-invert and produce vertically flipped PNGs (issue 24048).
+    // pcbnew is Y-up, Cairo is Y-down; gerbview already emits Y-down so the caller decides.
+    if( m_yaxisReversed )
+        pos.y = m_height - pos.y;
+
     return pos;
 }
 

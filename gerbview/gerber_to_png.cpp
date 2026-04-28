@@ -278,13 +278,14 @@ bool RenderGerberToPng( const wxString& aInputPath, const wxString& aOutputPath,
     GERBER_PLOTTER_VIEWPORT vp = CalculatePlotterViewport( bbox, aOptions.dpi, reqWidth, reqHeight );
 
     PNG_PLOTTER plotter;
+    plotter.SetColorMode( true );
     plotter.SetPixelSize( vp.width, vp.height );
     plotter.SetResolution( aOptions.dpi );
     plotter.SetAntialias( aOptions.antialias );
     plotter.SetBackgroundColor( aOptions.backgroundColor );
     plotter.SetViewport( vp.offset, vp.iuPerDecimil, vp.plotScale, false );
+    plotter.OpenFile( aOutputPath );
 
-    // Start plotting
     if( !plotter.StartPlot( wxEmptyString ) )
     {
         if( aErrorMsg )
@@ -313,10 +314,7 @@ bool RenderGerberToPng( const wxString& aInputPath, const wxString& aOutputPath,
         }
     }
 
-    plotter.EndPlot();
-
-    // Save the file
-    if( !plotter.SaveFile( aOutputPath ) )
+    if( !plotter.EndPlot() )
     {
         if( aErrorMsg )
             *aErrorMsg = wxString::Format( wxS( "Failed to save PNG file: %s" ), aOutputPath );

@@ -139,6 +139,7 @@ set( KICOMMON_SRCS
     jobs/job_export_pcb_ipcd356.cpp
     jobs/job_export_pcb_odb.cpp
     jobs/job_export_pcb_pdf.cpp
+    jobs/job_export_pcb_png.cpp
     jobs/job_export_pcb_stats.cpp
     jobs/job_export_pcb_plot.cpp
     jobs/job_export_pcb_pos.cpp

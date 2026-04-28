@@ -157,6 +157,11 @@ public:
     void        SetSvgFitPageToBoard( int aSvgFitPageToBoard ) { m_svgFitPageToBoard = aSvgFitPageToBoard; }
     bool        GetSvgFitPagetoBoard() const { return m_svgFitPageToBoard; }
 
+    void        SetPngDPI( int aDPI ) { m_pngDPI = aDPI; }
+    int         GetPngDPI() const { return m_pngDPI; }
+    void        SetPngAntialias( bool aFlag ) { m_pngAntialias = aFlag; }
+    bool        GetPngAntialias() const { return m_pngAntialias; }
+
     void        SetBlackAndWhite( bool blackAndWhite ) { m_blackAndWhite = blackAndWhite; }
     bool        GetBlackAndWhite() const { return m_blackAndWhite; }
 
@@ -264,6 +269,8 @@ private:
     /// Precision of coordinates in SVG: accepted 3 - 6; 6 is the internal resolution of Pcbnew
     unsigned   m_svgPrecision;
     bool        m_svgFitPageToBoard;
+    int         m_pngDPI;
+    bool        m_pngAntialias;
 
     bool       m_useAuxOrigin;          ///< Plot gerbers using auxiliary (drill) origin instead
                                         ///<   of absolute coordinates

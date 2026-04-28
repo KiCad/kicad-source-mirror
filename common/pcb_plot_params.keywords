@@ -35,6 +35,8 @@ plotinvisibletext
 plotpadnumbers
 plotreference
 plotvalue
+pngantialias
+pngdpi
 psa4output
 pscolor
 psnegative

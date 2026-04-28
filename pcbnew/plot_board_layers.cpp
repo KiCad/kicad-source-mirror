@@ -42,6 +42,7 @@
 #include <plotters/plotter.h>
 #include <plotters/plotter_dxf.h>
 #include <plotters/plotter_gerber.h>
+#include <plotters/plotter_png.h>
 #include <plotters/plotters_pslike.h>
 #include <pcb_painter.h>
 #include <gbr_metadata.h>
@@ -1322,6 +1323,24 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
     case PLOT_FORMAT::SVG:
         plotter = new SVG_PLOTTER();
         break;
+
+    case PLOT_FORMAT::PNG:
+    {
+        PNG_PLOTTER* pngPlotter = new PNG_PLOTTER();
+
+        PAGE_INFO pageInfo = aBoard->GetPageSettings();
+        VECTOR2D  sizeIU = pageInfo.GetSizeIU( pcbIUScale.IU_PER_MILS );
+        int       dpi = aPlotOpts->GetPngDPI();
+        double    iuPerInch = pcbIUScale.IU_PER_MILS * 1000.0;
+
+        pngPlotter->SetPixelSize( KiROUND( sizeIU.x * dpi / iuPerInch ),
+                                  KiROUND( sizeIU.y * dpi / iuPerInch ) );
+        pngPlotter->SetResolution( dpi );
+        pngPlotter->SetAntialias( aPlotOpts->GetPngAntialias() );
+        pngPlotter->SetYAxisReversed( true );
+        plotter = pngPlotter;
+        break;
+    }
 
     default:
         wxASSERT( false );

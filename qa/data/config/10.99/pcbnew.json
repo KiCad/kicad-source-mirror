@@ -441,6 +441,9 @@
     "highlight_factor": 0.5,
     "select_factor": 0.75
   },
+  "import": {
+    "keep_kicad_layer_names": false
+  },
   "lib_tree": {
     "column_widths": null,
     "columns": [],

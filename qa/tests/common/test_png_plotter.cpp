@@ -64,6 +64,7 @@ BOOST_AUTO_TEST_CASE( DrawRect )
     PNG_PLOTTER plotter;
     plotter.SetPixelSize( 100, 100 );
     plotter.SetResolution( 100 );
+    plotter.SetColorMode( true );
 
     plotter.StartPlot( wxEmptyString );
     plotter.SetColor( KIGFX::COLOR4D( 1.0, 0.0, 0.0, 1.0 ) ); // Red

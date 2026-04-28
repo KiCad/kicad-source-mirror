@@ -65,6 +65,7 @@
 #include "cli/command_pcb_export_ipcd356.h"
 #include "cli/command_pcb_export_odb.h"
 #include "cli/command_pcb_export_pdf.h"
+#include "cli/command_pcb_export_png.h"
 #include "cli/command_pcb_export_pos.h"
 #include "cli/command_pcb_export_ps.h"
 #include "cli/command_pcb_export_stats.h"
@@ -163,6 +164,7 @@ static CLI::PCB_EXPORT_3D_COMMAND        exportPcb3DPDFCmd{ "3dpdf", UTF8STDSTR(
                                                      JOB_EXPORT_PCB_3D::FORMAT::PDF };
 static CLI::PCB_EXPORT_SVG_COMMAND       exportPcbSvgCmd{};
 static CLI::PCB_EXPORT_PDF_COMMAND       exportPcbPdfCmd{};
+static CLI::PCB_EXPORT_PNG_COMMAND       exportPcbPngCmd{};
 static CLI::PCB_EXPORT_POS_COMMAND       exportPcbPosCmd{};
 static CLI::PCB_EXPORT_PS_COMMAND        exportPcbPsCmd{};
 static CLI::PCB_EXPORT_STATS_COMMAND     exportPcbStatsCmd{};
@@ -189,6 +191,8 @@ static CLI::SCH_EXPORT_PLOT_COMMAND exportSchPdfCmd{ "pdf", UTF8STDSTR( _( "Expo
 static CLI::SCH_EXPORT_PLOT_COMMAND exportSchPostscriptCmd{ "ps", UTF8STDSTR( _( "Export PS" ) ), SCH_PLOT_FORMAT::POST,
                                                             CLI::COMMAND::IO_TYPE::DIRECTORY };
 static CLI::SCH_EXPORT_PLOT_COMMAND exportSchSvgCmd{ "svg", UTF8STDSTR( _( "Export SVG" ) ), SCH_PLOT_FORMAT::SVG,
+                                                     CLI::COMMAND::IO_TYPE::DIRECTORY };
+static CLI::SCH_EXPORT_PLOT_COMMAND exportSchPngCmd{ "png", UTF8STDSTR( _( "Export PNG" ) ), SCH_PLOT_FORMAT::PNG,
                                                      CLI::COMMAND::IO_TYPE::DIRECTORY };
 static CLI::FP_COMMAND              fpCmd{};
 static CLI::FP_EXPORT_COMMAND       fpExportCmd{};
@@ -259,6 +263,7 @@ static std::vector<COMMAND_ENTRY> commandStack = {
                     &exportPcbIpcD356Cmd,
                     &exportPcbOdbCmd,
                     &exportPcbPdfCmd,
+                    &exportPcbPngCmd,
                     &exportPcbPosCmd,
                     &exportPcbPsCmd,
                     &exportPcbStatsCmd,
@@ -291,6 +296,7 @@ static std::vector<COMMAND_ENTRY> commandStack = {
                     &exportSchHpglCmd,
                     &exportSchNetlistCmd,
                     &exportSchPdfCmd,
+                    &exportSchPngCmd,
                     &exportSchPostscriptCmd,
                     &exportSchBomCmd,
                     &exportSchPythonBomCmd,

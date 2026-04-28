@@ -70,7 +70,8 @@ enum class PLOT_FORMAT
     DXF,
     PDF,
     SVG,
-    LAST_FORMAT = SVG
+    PNG,
+    LAST_FORMAT = PNG
 };
 
 /**

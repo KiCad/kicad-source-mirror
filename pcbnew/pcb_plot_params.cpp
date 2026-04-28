@@ -29,6 +29,7 @@
 #include <pcb_plot_params.h>
 #include <pcb_plot_params_parser.h>
 #include <plotters/plotter.h>
+#include <plotters/plotter_png.h>
 #include <io/kicad/kicad_io_utils.h>
 #include <settings/color_settings.h>
 #include <lseq.h>
@@ -69,6 +70,8 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     // we used 0.1mils for SVG step before, but nm precision is more accurate, so we use nm
     m_svgPrecision               = SVG_PRECISION_DEFAULT;
     m_svgFitPageToBoard          = false;
+    m_pngDPI                     = DEFAULT_PNG_DPI;
+    m_pngAntialias               = true;
     m_plotDrawingSheet           = false;
     m_DXFPlotMode                = FILLED;
     m_DXFPolygonMode             = true;
@@ -169,6 +172,10 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter ) const
     // SVG options
     aFormatter->Print( "(svgprecision %d)", m_svgPrecision );
 
+    // PNG options
+    aFormatter->Print( "(pngdpi %d)", m_pngDPI );
+    KICAD_FORMAT::FormatBool( aFormatter, "pngantialias", m_pngAntialias );
+
     KICAD_FORMAT::FormatBool( aFormatter, "plotframeref", m_plotDrawingSheet );
     aFormatter->Print( "(mode %d)", GetDXFPlotMode() == SKETCH ? 2 : 1 );
     KICAD_FORMAT::FormatBool( aFormatter, "useauxorigin", m_useAuxOrigin );
@@ -268,6 +275,12 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
     }
 
     if( m_svgPrecision != aPcbPlotParams.m_svgPrecision )
+        return false;
+
+    if( m_pngDPI != aPcbPlotParams.m_pngDPI )
+        return false;
+
+    if( m_pngAntialias != aPcbPlotParams.m_pngAntialias )
         return false;
 
     if( m_format != PLOT_FORMAT::POST )
@@ -679,6 +692,14 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
 
         case T_svgprecision:
             aPcbPlotParams->m_svgPrecision = parseInt( SVG_PRECISION_MIN, SVG_PRECISION_MAX );
+            break;
+
+        case T_pngdpi:
+            aPcbPlotParams->m_pngDPI = parseInt( MIN_PNG_DPI, MAX_PNG_DPI );
+            break;
+
+        case T_pngantialias:
+            aPcbPlotParams->m_pngAntialias = parseBool();
             break;
 
         case T_svguseinch:

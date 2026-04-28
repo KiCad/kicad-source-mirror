@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,7 +38,7 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	wxBoxSizer* bFormatSizer;
 	bFormatSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxString m_plotFormatOptChoices[] = { _("Gerber"), _("Postscript"), _("SVG"), _("DXF"), _("PDF") };
+	wxString m_plotFormatOptChoices[] = { _("Gerber"), _("Postscript"), _("SVG"), _("DXF"), _("PDF"), _("PNG") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 0 );
 	m_plotFormatOpt->SetSelection( 0 );
@@ -447,6 +447,30 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 
 	m_PlotOptionsSizer->Add( m_PDFOptionsSizer, 1, wxALL|wxEXPAND, 5 );
+
+	m_pngOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("PNG Options") ), wxHORIZONTAL );
+
+	wxGridBagSizer* gbSizerPng;
+	gbSizerPng = new wxGridBagSizer( 5, 0 );
+	gbSizerPng->SetFlexibleDirection( wxBOTH );
+	gbSizerPng->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	pngDPILabel = new wxStaticText( m_pngOptionsSizer->GetStaticBox(), wxID_ANY, _("DPI:"), wxDefaultPosition, wxDefaultSize, 0 );
+	pngDPILabel->Wrap( -1 );
+	gbSizerPng->Add( pngDPILabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_pngDPI = new wxSpinCtrl( m_pngOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 72, 2400, 300 );
+	gbSizerPng->Add( m_pngDPI, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_pngAntialias = new wxCheckBox( m_pngOptionsSizer->GetStaticBox(), wxID_ANY, _("Anti-alias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pngAntialias->SetValue(true);
+	gbSizerPng->Add( m_pngAntialias, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	m_pngOptionsSizer->Add( gbSizerPng, 1, wxEXPAND|wxBOTTOM, 5 );
+
+
+	m_PlotOptionsSizer->Add( m_pngOptionsSizer, 0, wxALL|wxEXPAND, 5 );
 
 
 	bmiddleSizer->Add( m_PlotOptionsSizer, 0, 0, 6 );

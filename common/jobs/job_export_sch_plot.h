@@ -40,7 +40,8 @@ enum class SCH_PLOT_FORMAT
     POST,
     DXF,
     PDF,
-    SVG
+    SVG,
+    PNG
 };
 
 
@@ -115,6 +116,18 @@ class KICOMMON_API JOB_EXPORT_SCH_PLOT_HPGL : public JOB_EXPORT_SCH_PLOT
 public:
     JOB_EXPORT_SCH_PLOT_HPGL();
     wxString GetDefaultDescription() const override;
+};
+
+
+class KICOMMON_API JOB_EXPORT_SCH_PLOT_PNG : public JOB_EXPORT_SCH_PLOT
+{
+public:
+    JOB_EXPORT_SCH_PLOT_PNG();
+    wxString GetDefaultDescription() const override;
+    wxString GetSettingsDialogTitle() const override;
+
+    int  m_dpi;
+    bool m_antialias;
 };
 
 #endif

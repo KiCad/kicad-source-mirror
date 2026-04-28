@@ -50,6 +50,7 @@
 #include <jobs/job_export_pcb_dxf.h>
 #include <jobs/job_export_pcb_gencad.h>
 #include <jobs/job_export_pcb_pdf.h>
+#include <jobs/job_export_pcb_png.h>
 #include <jobs/job_export_pcb_pos.h>
 #include <jobs/job_export_pcb_ps.h>
 #include <jobs/job_export_pcb_stats.h>
@@ -215,6 +216,19 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   wxCHECK( pdfJob && editFrame, false );
 
                   DIALOG_PLOT dlg( editFrame, aParent, pdfJob );
+                  return dlg.ShowModal() == wxID_OK;
+              } );
+    Register( "png", std::bind( &PCBNEW_JOBS_HANDLER::JobExportPng, this, std::placeholders::_1 ),
+              [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  JOB_EXPORT_PCB_PNG* pngJob = dynamic_cast<JOB_EXPORT_PCB_PNG*>( job );
+
+                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
+                                                                                             false ) );
+
+                  wxCHECK( pngJob && editFrame, false );
+
+                  DIALOG_PLOT dlg( editFrame, aParent, pngJob );
                   return dlg.ShowModal() == wxID_OK;
               } );
     Register( "ps", std::bind( &PCBNEW_JOBS_HANDLER::JobExportPs, this, std::placeholders::_1 ),
@@ -1253,6 +1267,81 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     if( !pcbPlotter.Plot( outPath, pdfJob->m_plotLayerSequence,
                           pdfJob->m_plotOnAllLayersSequence, false, outputIsSingle,
                           layerName, sheetName, sheetPath, &outputPaths ) )
+    {
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    for( const wxString& outputPath : outputPaths )
+        aJob->AddOutput( outputPath );
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportPng( JOB* aJob )
+{
+    JOB_EXPORT_PCB_PNG* pngJob = dynamic_cast<JOB_EXPORT_PCB_PNG*>( aJob );
+
+    if( pngJob == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    BOARD* brd = getBoard( pngJob->m_filename );
+
+    if( !brd )
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    if( !pngJob->m_variant.IsEmpty() )
+        brd->SetCurrentVariant( pngJob->m_variant );
+
+    TOOL_MANAGER* toolManager = getToolManager( brd );
+
+    if( pngJob->m_checkZonesBeforePlot )
+    {
+        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
+            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
+
+        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
+    }
+
+    if( pngJob->m_argLayers )
+        pngJob->m_plotLayerSequence = convertLayerArg( pngJob->m_argLayers.value(), brd );
+
+    if( pngJob->m_argCommonLayers )
+        pngJob->m_plotOnAllLayersSequence = convertLayerArg( pngJob->m_argCommonLayers.value(), brd );
+
+    if( pngJob->m_plotLayerSequence.size() < 1 )
+    {
+        m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    if( pngJob->GetConfiguredOutputPath().IsEmpty() )
+    {
+        wxFileName fn = brd->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::PNG ) );
+
+        pngJob->SetWorkingOutputPath( fn.GetFullName() );
+    }
+
+    wxString outPath = resolveJobOutputPath( pngJob, brd, &pngJob->m_drawingSheet );
+
+    PCB_PLOT_PARAMS plotOpts;
+    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, pngJob, *m_reporter );
+
+    PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
+
+    if( !PATHS::EnsurePathExists( outPath, false ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    std::vector<wxString> outputPaths;
+
+    if( !pcbPlotter.Plot( outPath, pngJob->m_plotLayerSequence,
+                          pngJob->m_plotOnAllLayersSequence, false, false,
+                          std::nullopt, std::nullopt, std::nullopt, &outputPaths ) )
     {
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -51,7 +51,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 	m_optionsSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	wxString m_plotFormatOptChoices[] = { _("Postscript"), _("PDF"), _("SVG"), _("DXF") };
+	wxString m_plotFormatOptChoices[] = { _("Postscript"), _("PDF"), _("SVG"), _("DXF"), _("PNG") };
 	int m_plotFormatOptNChoices = sizeof( m_plotFormatOptChoices ) / sizeof( wxString );
 	m_plotFormatOpt = new wxRadioBox( this, wxID_ANY, _("Output Format"), wxDefaultPosition, wxDefaultSize, m_plotFormatOptNChoices, m_plotFormatOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_plotFormatOpt->SetSelection( 1 );
@@ -173,6 +173,30 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 
 
 	bOptionsRight->Add( m_SizerDxfOption, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+	m_sizerPNGOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("PNG Options") ), wxHORIZONTAL );
+
+	wxGridBagSizer* gbSizerPng;
+	gbSizerPng = new wxGridBagSizer( 5, 0 );
+	gbSizerPng->SetFlexibleDirection( wxBOTH );
+	gbSizerPng->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	pngDPILabel = new wxStaticText( m_sizerPNGOptions->GetStaticBox(), wxID_ANY, _("DPI:"), wxDefaultPosition, wxDefaultSize, 0 );
+	pngDPILabel->Wrap( -1 );
+	gbSizerPng->Add( pngDPILabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_pngDPI = new wxSpinCtrl( m_sizerPNGOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 72, 2400, 300 );
+	gbSizerPng->Add( m_pngDPI, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+	m_pngAntialias = new wxCheckBox( m_sizerPNGOptions->GetStaticBox(), wxID_ANY, _("Anti-alias"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pngAntialias->SetValue(true);
+	gbSizerPng->Add( m_pngAntialias, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+
+
+	m_sizerPNGOptions->Add( gbSizerPng, 1, wxEXPAND|wxBOTTOM, 5 );
+
+
+	bOptionsRight->Add( m_sizerPNGOptions, 0, wxALL|wxEXPAND, 5 );
 
 	m_otherOptions = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Other Options") ), wxVERTICAL );
 

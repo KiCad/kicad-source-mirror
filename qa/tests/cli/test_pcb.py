@@ -99,6 +99,58 @@ def test_pcb_export_svg( kitest: KiTestFixture,
                                               diff_handler=kitest.add_attachment )
 
 
+@pytest.mark.parametrize("test_file,layers_to_test",
+                         [
+                            (
+                                "cli/artwork_generation_regressions/ZoneFill-4.0.7.kicad_pcb",
+                                ["F.Cu","B.Cu"]
+                            ),
+                            (   "cli/artwork_generation_regressions/ZoneFill-Legacy.brd",
+                                ["F.Cu","B.Cu"]
+                            )
+                         ])
+def test_pcb_export_png( kitest: KiTestFixture,
+                         test_file: str,
+                         layers_to_test: List[str] ):
+
+    input_file = kitest.get_data_file_path( test_file )
+
+    for layer_name in layers_to_test:
+        output_dir = kitest.get_output_path( "cli/export_png/{}/{}/".format(
+                input_file.stem, layer_name.replace( ".", "_" ) ) )
+
+        if output_dir.exists():
+            import shutil
+            shutil.rmtree( output_dir )
+
+        output_dir.mkdir( parents=True, exist_ok=True )
+
+        command = [utils.kicad_cli(), "pcb", "export", "png", "--dpi", "300",
+                   "--black-and-white", "--layers", layer_name,
+                   "-o", str(output_dir), str(input_file)]
+
+        stdout, stderr, exitcode = utils.run_and_capture( command )
+        # Don't assert stderr (legacy fills will have errors)
+        assert exitcode == 0
+        assert stdout is not None
+
+        png_files = list( output_dir.glob( "*.png" ) )
+        assert len( png_files ) == 1, \
+            "Expected 1 PNG file in output dir, found {}".format( len( png_files ) )
+
+        generated_png_path = png_files[0]
+        kitest.add_attachment( generated_png_path )
+
+        # Verify the filename contains the board stem
+        assert generated_png_path.stem.startswith( input_file.stem ), \
+            "Unexpected output filename: {}".format( generated_png_path.name )
+
+        assert not utils.image_is_blank( str( generated_png_path ) )
+
+        # FIXME: add golden/reference PNG comparison using utils.images_are_equal()
+        # for regression testing (see test_pcb_export_svg for the pattern)
+
+
 @pytest.mark.skipif(not utils.is_gerbview_available(), reason="Requires gerbview kiface (kicad-cli gerber)")
 @pytest.mark.parametrize("test_file,layers_to_test,max_diff_percent",
                          [

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -124,6 +124,10 @@ class DIALOG_PLOT_BASE : public DIALOG_SHIM
 		wxCheckBox* m_pdfSingle;
 		wxStaticText* m_pdfBackgroundColorText;
 		COLOR_SWATCH* m_pdfBackgroundColorSwatch;
+		wxStaticBoxSizer* m_pngOptionsSizer;
+		wxStaticText* pngDPILabel;
+		wxSpinCtrl* m_pngDPI;
+		wxCheckBox* m_pngAntialias;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxBoxSizer* m_sizerButtons;
 		wxButton* m_buttonDRC;

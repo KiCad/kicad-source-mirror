@@ -67,6 +67,7 @@ set( KICAD_CLI_SRCS
     cli/command_pcb_export_ipcd356.cpp
     cli/command_pcb_export_odb.cpp
     cli/command_pcb_export_pdf.cpp
+    cli/command_pcb_export_png.cpp
     cli/command_pcb_export_pos.cpp
     cli/command_pcb_export_ps.cpp
     cli/command_pcb_export_stats.cpp
