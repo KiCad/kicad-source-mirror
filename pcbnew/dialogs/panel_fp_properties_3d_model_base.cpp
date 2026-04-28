@@ -18,7 +18,7 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 	bSizerMain3D = new wxBoxSizer( wxVERTICAL );
 
 	m_splitter1 = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
-	m_splitter1->SetSashGravity( 0.5 );
+	m_splitter1->SetSashGravity( 0.85 );
 	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::m_splitter1OnIdle ), NULL, this );
 	m_splitter1->SetMinimumPaneSize( 300 );
 
@@ -206,7 +206,7 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 	m_lowerPanel->SetSizer( m_LowerSizer3D );
 	m_lowerPanel->Layout();
 	m_LowerSizer3D->Fit( m_lowerPanel );
-	m_splitter1->SplitHorizontally( m_upperPanel, m_lowerPanel, 400 );
+	m_splitter1->SplitHorizontally( m_upperPanel, m_lowerPanel, 300 );
 	bSizerMain3D->Add( m_splitter1, 0, wxEXPAND, 5 );
 
 

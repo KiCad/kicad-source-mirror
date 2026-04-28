@@ -242,6 +242,11 @@ bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataToWindow()
     updateExtrusionControls();
     updateExtrusionPreview();
 
+    Layout();
+
+    if( GetSizer() )
+        GetSizer()->Fit( this );
+
     return true;
 }
 

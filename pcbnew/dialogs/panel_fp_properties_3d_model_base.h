@@ -90,7 +90,7 @@ class PANEL_FP_PROPERTIES_3D_MODEL_BASE : public wxPanel
 
 		void m_splitter1OnIdle( wxIdleEvent& )
 		{
-			m_splitter1->SetSashPosition( 400 );
+			m_splitter1->SetSashPosition( 300 );
 			m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::m_splitter1OnIdle ), NULL, this );
 		}
 
