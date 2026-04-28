@@ -1142,9 +1142,14 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     UpdateTitle();
     UpdateStatusBar();
 
-    // Capture entire project state for PCB save events.
-    Kiway().LocalHistory().CommitFullProjectSnapshot( pcbFileName.GetPath(), wxS( "PCB Save" ) );
-    Kiway().LocalHistory().TagSave( pcbFileName.GetPath(), wxS( "pcb" ) );
+    // Capture entire project state for PCB save events. Skip when running standalone
+    // without a project loaded - the save path can land anywhere on the filesystem and
+    // there is no project context for a snapshot to live under.
+    if( !Prj().IsNullProject() )
+    {
+        Kiway().LocalHistory().CommitFullProjectSnapshot( pcbFileName.GetPath(), wxS( "PCB Save" ) );
+        Kiway().LocalHistory().TagSave( pcbFileName.GetPath(), wxS( "pcb" ) );
+    }
 
     if( m_autoSaveTimer )
         m_autoSaveTimer->Stop();
