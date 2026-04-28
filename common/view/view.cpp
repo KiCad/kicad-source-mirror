@@ -1087,6 +1087,9 @@ void VIEW::redrawRect( const BOX2I& aRect )
 
     for( VIEW_LAYER* l : m_orderedLayers )
     {
+        if( l->items->IsEmpty() )
+            continue;
+
         if( l->visible && IsTargetDirty( l->target ) && areRequiredLayersEnabled( l->id ) )
         {
             DRAW_ITEM_VISITOR drawFunc( this, l->id, m_useDrawPriority, m_reverseDrawOrder );

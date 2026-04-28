@@ -145,6 +145,8 @@ public:
         m_tree.BulkLoad( entries );
     }
 
+    bool IsEmpty() const { return m_tree.empty(); }
+
 private:
     KIRTREE::DYNAMIC_RTREE<VIEW_ITEM*, int, 2> m_tree;
 };
