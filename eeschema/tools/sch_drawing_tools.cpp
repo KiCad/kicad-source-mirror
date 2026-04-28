@@ -489,8 +489,32 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                     if( placeAllUnits )
                     {
+                        // For unannotated references all U?-prefix symbols share the same ref
+                        // string regardless of the library symbol they originate from. Only
+                        // consider units already used by THIS library symbol when stepping
+                        // through units, so different multi-unit parts that share a reference
+                        // prefix do not collide pre-annotation.
+                        const wxString currentRefStr = currentReference.GetRef();
+                        const bool     isUnannotated = !currentRefStr.IsEmpty()
+                                                       && currentRefStr.Last() == '?';
+                        const LIB_ID   symLibId = symbol->GetLibId();
+
+                        auto unitOccupied =
+                                [&]( int aUnit ) -> bool
+                                {
+                                    if( !isUnannotated )
+                                    {
+                                        SCH_REFERENCE candidate = currentReference;
+                                        candidate.SetUnit( aUnit );
+                                        return schematic.Contains( candidate );
+                                    }
+
+                                    return IsUnannotatedUnitOccupied( existingRefs, currentRefStr,
+                                                                      symLibId, aUnit );
+                                };
+
                         while( currentReference.GetUnit() <= symbol->GetUnitCount()
-                               && schematic.Contains( currentReference ) )
+                               && unitOccupied( currentReference.GetUnit() ) )
                         {
                             currentReference.SetUnit( currentReference.GetUnit() + 1 );
                         }
