@@ -33,6 +33,8 @@
 
 #include <kicommon.h>
 
+class PROJECT;
+
 void ConvertMarkdown2Html( const wxString& aMarkdownInput, wxString& aHtmlOutput );
 
 /**
@@ -475,6 +477,20 @@ KICOMMON_API wxString  From_UTF8( const char* cstring );
  * @return the normalized string.
  */
 KICOMMON_API wxString NormalizeFileUri( const wxString& aFileUri );
+
+/**
+ * Convert a file path to a file:// URI.
+ *
+ * Detects local file paths (absolute, relative, UNC, or containing KiCad
+ * variables) and prepends the appropriate file:// scheme.  Only converts
+ * when the resolved path points to an existing file or directory.
+ * Strings that already have a URI scheme are returned unchanged.
+ *
+ * @param aPath     a file path or URI string.
+ * @param aProject  optional project for variable resolution and relative path handling.
+ * @return file:// URI if input is a path to an existing file, otherwise unchanged.
+ */
+KICOMMON_API wxString ConvertPathToFileUri( const wxString& aPath, const PROJECT* aProject = nullptr );
 
 /**
  * Expand stacked pin notation like [1,2,3], [1-4], [A1-A4], or [AA1-AA3,AB4,CD12-CD14]

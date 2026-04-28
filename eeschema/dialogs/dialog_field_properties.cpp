@@ -630,6 +630,13 @@ void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aFiel
     // convert any text variable cross-references to their UUIDs
     m_text = aField->Schematic()->ConvertRefsToKIIDs( m_text );
 
+    {
+        SCH_BASE_FRAME* parentFrame = GetParent();
+
+        if( parentFrame )
+            m_text = ConvertPathToFileUri( m_text, &parentFrame->Prj() );
+    }
+
     if( aField->Schematic() )
     {
         sheetPath = aField->Schematic()->CurrentSheet();

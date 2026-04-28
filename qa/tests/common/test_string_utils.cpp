@@ -115,4 +115,39 @@ BOOST_AUTO_TEST_CASE( ReplaceIllegalFileNameChars_WxString_ReplacementChar )
     BOOST_TEST( name == "a_bad_name_file" );
 }
 
+BOOST_AUTO_TEST_CASE( ConvertPathToFileUri_UnixAbsolutePath )
+{
+    // /tmp exists on all Unix CI machines
+    BOOST_TEST( ConvertPathToFileUri( wxS( "/tmp" ), nullptr ) == wxString( "file:///tmp" ) );
+}
+
+BOOST_AUTO_TEST_CASE( ConvertPathToFileUri_AlreadyHasScheme )
+{
+    BOOST_TEST( ConvertPathToFileUri( wxS( "https://example.com" ), nullptr ) == wxString( "https://example.com" ) );
+    BOOST_TEST( ConvertPathToFileUri( wxS( "file:///path" ), nullptr ) == wxString( "file:///path" ) );
+}
+
+BOOST_AUTO_TEST_CASE( ConvertPathToFileUri_Empty )
+{
+    BOOST_TEST( ConvertPathToFileUri( wxEmptyString, nullptr ) == wxString( "" ) );
+}
+
+BOOST_AUTO_TEST_CASE( ConvertPathToFileUri_Tilde )
+{
+    BOOST_TEST( ConvertPathToFileUri( wxS( "~" ), nullptr ) == wxString( "~" ) );
+}
+
+BOOST_AUTO_TEST_CASE( ConvertPathToFileUri_NonexistentPath )
+{
+    BOOST_TEST( ConvertPathToFileUri( wxS( "/nonexistent/file.pdf" ), nullptr )
+                == wxString( "/nonexistent/file.pdf" ) );
+}
+
+BOOST_AUTO_TEST_CASE( ConvertPathToFileUri_PlainText )
+{
+    // Non-path strings should pass through unchanged
+    BOOST_TEST( ConvertPathToFileUri( wxS( "LM358" ), nullptr ) == wxString( "LM358" ) );
+    BOOST_TEST( ConvertPathToFileUri( wxS( "100nF" ), nullptr ) == wxString( "100nF" ) );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
