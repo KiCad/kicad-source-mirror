@@ -293,8 +293,14 @@ private:
     int appendSheetContent( SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aPath, int aSheetIndex,
                             int aPageHeightIU ) const;
 
+    // Members below are grouped by the decoder that fills them.
+
+    // produced by Parse() (pool directory)
+
     /// The SDB pool directory, parsed once at the top of Parse(), supplying per-controller counts.
     POOL_DIRECTORY                       m_pools;
+
+    // produced by decodeSheets
 
     /// Start file offset of each per-sheet object block, from the SHEETS pool table
     /// (empty for a single-sheet design).
@@ -307,9 +313,13 @@ private:
     /// Per-sheet display name ("[N]NAME") from the sheet table, parallel to m_sheetOffsets.
     std::vector<std::string>             m_sheetNames;
 
+    // produced by pageExtent
+
     /// Decoded WDITBSIZE page extent in mils (B = 17000 x 11000 when unspecified).
     int                                  m_pageWidthMils = 17000;
     int                                  m_pageHeightMils = 11000;
+
+    // produced by decodeDecals
 
     /// CAE-decal geometry library, indexed by name via m_decalIndex.
     std::vector<DECAL>                   m_decals;
@@ -319,6 +329,8 @@ private:
     std::vector<std::pair<size_t, std::vector<std::string>>> m_usedDecalTables;
     size_t                               m_decalBuiltinCount = 0; ///< DECAL_HANDLE_BASE used_count.
 
+    // produced by decodeFields
+
     /// Union of all sheet part-type pool names.
     std::vector<std::string>             m_partTypeNames;
 
@@ -326,20 +338,31 @@ private:
     // ordinal indexes the pool of its OWN sheet; m_partTypeNames is the union of all pools.
     std::vector<std::pair<size_t, std::vector<std::string>>> m_partTypePools;
 
+    /// Part-type name -> its component attribute fields (key, value).
+    std::map<std::string, std::vector<std::pair<std::string, std::string>>> m_partTypeFields;
+
+    // produced by decodePinNames
+
     // Part-type name -> its ordered pins (number, name, electrical type).
     std::map<std::string, std::vector<PIN_INFO>> m_partTypePins;
 
     // Part-type name -> its pins split per gate; gate g's pins go on LIB_SYMBOL unit g+1.
     std::map<std::string, std::vector<std::vector<PIN_INFO>>> m_partTypeGatePins;
 
-    std::map<std::string, std::vector<std::pair<std::string, std::string>>> m_partTypeFields;
+    // produced by decodePlacements
 
     std::vector<PLACEMENT>               m_placements;
+
+    // produced by decodeWires
+
     std::vector<WIRE_VERTEX>             m_wireVertices;   ///< Flat pool, file order.
     std::vector<std::vector<WIRE_VERTEX>> m_wirePolylines; ///< Per-connection polylines.
     std::vector<std::vector<WIRE_VERTEX>> m_busPolylines;  ///< Bus polylines (split-run gaps).
     std::vector<int>                     m_wirePolylineSheets; ///< Sheet index per wire polyline.
     std::vector<int>                     m_busPolylineSheets;  ///< Sheet index per bus polyline.
+
+    // produced by decodeTexts / decodeJunctions / decodeNetLabels
+
     std::vector<TEXT_ITEM>               m_texts;          ///< Free-text items, file order.
     std::vector<JUNCTION>                m_junctions;      ///< Tie-dot junctions, all sheets.
     std::vector<NET_LABEL>               m_netLabels;      ///< Off-page / power-port net labels.
