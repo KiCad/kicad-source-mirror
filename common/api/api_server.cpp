@@ -203,7 +203,7 @@ std::string KICAD_API_SERVER::SocketPath() const
 
 void KICAD_API_SERVER::onApiRequest( std::string* aRequest )
 {
-    if( !m_readyToReply )
+    if( !m_readyToReply.load( std::memory_order_acquire ) )
     {
         ApiResponse notHandled;
         notHandled.mutable_status()->set_status( ApiStatusCode::AS_NOT_READY );

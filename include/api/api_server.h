@@ -21,6 +21,7 @@
 #ifndef KICAD_API_SERVER_H
 #define KICAD_API_SERVER_H
 
+#include <atomic>
 #include <memory>
 #include <set>
 #include <string>
@@ -65,7 +66,10 @@ public:
 
     void DeregisterHandler( API_HANDLER* aHandler );
 
-    void SetReadyToReply( bool aReady = true ) { m_readyToReply = aReady; }
+    void SetReadyToReply( bool aReady = true )
+    {
+        m_readyToReply.store( aReady, std::memory_order_release );
+    }
 
     void SetSocketPath( const wxString& aSocketPath )
     {
@@ -103,7 +107,7 @@ private:
 
     std::string m_token;
 
-    bool m_readyToReply;
+    std::atomic<bool> m_readyToReply;
 
     wxString m_socketPathOverride;
 
