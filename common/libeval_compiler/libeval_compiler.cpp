@@ -1156,7 +1156,20 @@ void UOP::Exec( CONTEXT* ctx )
     }
 
     case TR_UOP_PUSH_VALUE:
-        ctx->Push( m_value.get() );
+        // String literals contain a wxString whose internal mb_str cache is mutated by
+        // ToUTF8/utf8_str. DRC evaluates compiled rules from many threads concurrently,
+        // so push a per-thread copy to avoid racing on that cache.
+        if( m_value && m_value->GetType() == VT_STRING )
+        {
+            VALUE* copy = ctx->AllocValue();
+            copy->Set( *m_value );
+            ctx->Push( copy );
+        }
+        else
+        {
+            ctx->Push( m_value.get() );
+        }
+
         return;
 
     case TR_OP_METHOD_CALL:
