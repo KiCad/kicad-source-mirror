@@ -459,7 +459,8 @@ wxString GetGeneratedFieldDisplayName( const wxString& aSource )
 
 bool IsGeneratedField( const wxString& aSource )
 {
-    static wxRegEx expr( wxS( "^\\$\\{\\w*\\}$" ) );
+    // Per-thread regex.  Callers include parallel ERC/connection-graph workers.
+    thread_local wxRegEx expr( wxS( "^\\$\\{\\w*\\}$" ) );
     return expr.Matches( aSource );
 }
 

@@ -777,10 +777,12 @@ void SCH_LABEL_BASE::GetContextualTextVars( wxArrayString* aVars ) const
 
 bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, int aDepth ) const
 {
-    static wxRegEx operatingPoint( wxT( "^"
-                                        "OP"
-                                        "(.([0-9])?([a-zA-Z]*))?"
-                                        "$" ) );
+    // Per-thread regex.  CONNECTION_GRAPH::resolveAllDrivers calls this from worker
+    // threads, and wxRegEx::Matches is not safe to call concurrently on one instance.
+    thread_local wxRegEx operatingPoint( wxT( "^"
+                                              "OP"
+                                              "(.([0-9])?([a-zA-Z]*))?"
+                                              "$" ) );
 
     wxCHECK( aPath, false );
 

@@ -2030,12 +2030,14 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
 bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
                                  const wxString& aVariantName, int aDepth ) const
 {
-    static wxRegEx operatingPoint( wxT( "^"
-                                        "OP"
-                                        "(:[^.]*)?"     // pin
-                                        "(.([0-9])?"    // precisionStr
-                                        "([a-zA-Z]*))?" // rangeStr
-                                        "$" ) );
+    // Per-thread regex.  CONNECTION_GRAPH::resolveAllDrivers calls this from worker
+    // threads, and wxRegEx::Matches is not safe to call concurrently on one instance.
+    thread_local wxRegEx operatingPoint( wxT( "^"
+                                              "OP"
+                                              "(:[^.]*)?"     // pin
+                                              "(.([0-9])?"    // precisionStr
+                                              "([a-zA-Z]*))?" // rangeStr
+                                              "$" ) );
 
     if( !aPath )
         return false;
