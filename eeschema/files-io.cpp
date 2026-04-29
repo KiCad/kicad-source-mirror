@@ -210,6 +210,11 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             Prj().SetReadOnly();
     }
 
+    // Crash-recovery: when zip-format autosave is active, look for autosave files newer
+    // than the saved schematic and offer to recover them before any sheet is loaded.
+    if( !is_new )
+        CheckForAutosaveFiles( wx_filename.GetPath() );
+
     // Start a new schematic object now that we sorted out our project
     std::unique_ptr<SCHEMATIC> newSchematic = std::make_unique<SCHEMATIC>( &Prj() );
 
@@ -1067,6 +1072,15 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
         {
             Kiway().LocalHistory().CommitFullProjectSnapshot( schematicFileName.GetPath(), wxS( "SCH Save" ) );
             Kiway().LocalHistory().TagSave( schematicFileName.GetPath(), wxS( "sch" ) );
+
+            // Drop the autosave file for the sheet we just persisted.  Scope to that
+            // single source so other dirty sheets (and any open PCB) keep their
+            // autosaves until they are saved themselves; otherwise a Save All across
+            // editors would lose recovery data for files this save did not write.
+            // CommitFullProjectSnapshot/TagSave above are no-ops when format is ZIP, and
+            // RemoveAutosaveFiles is conversely a no-op in INCREMENTAL mode.
+            Kiway().LocalHistory().RemoveAutosaveFiles( schematicFileName.GetPath(),
+                                                        { schematicFileName.GetFullPath() } );
         }
 
         if( m_autoSaveTimer )

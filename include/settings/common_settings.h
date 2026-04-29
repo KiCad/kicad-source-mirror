@@ -42,6 +42,18 @@ enum class APP_THEME
     AUTO
 };
 
+enum class BACKUP_FORMAT
+{
+    INCREMENTAL = 0,    ///< Git-based local history (default)
+    ZIP         = 1     ///< Zip archive snapshots; autosave uses recovery files
+};
+
+enum class BACKUP_LOCATION
+{
+    PROJECT_DIR = 0,    ///< Inside the project directory (default)
+    USER_DIR    = 1     ///< Under the KiCad user data directory
+};
+
 class KICOMMON_API COMMON_SETTINGS : public JSON_SETTINGS
 {
 public:
@@ -63,11 +75,13 @@ public:
 
     struct AUTO_BACKUP
     {
-        bool   enabled;            ///< Automatically back up the project when files are saved
-        bool   backup_on_autosave; ///< Trigger a backup on autosave
-        int    limit_total_files;  ///< Maximum number of backup archives to retain
-        int    limit_daily_files;  ///< Maximum files to keep per day, 0 for unlimited
-        int    min_interval;       ///< Minimum time, in seconds, between subsequent backups
+        bool            enabled;            ///< Automatically back up the project when files are saved
+        BACKUP_FORMAT   format;             ///< Backup format (incremental git history vs zip archives)
+        BACKUP_LOCATION location;           ///< Where backups, history, and autosave files live
+        bool            backup_on_autosave; ///< Trigger a backup on autosave
+        int             limit_total_files;  ///< Maximum number of backup archives to retain
+        int             limit_daily_files;  ///< Maximum files to keep per day, 0 for unlimited
+        int             min_interval;       ///< Minimum time, in seconds, between subsequent backups
 
         /// Maximum total size of backups (bytes), 0 for unlimited
         unsigned long long limit_total_size;
@@ -207,6 +221,7 @@ private:
     bool migrateSchema2to3();
     bool migrateSchema3to4();
     bool migrateSchema4to5();
+    bool migrateSchema5to6();
 
     struct LEGACY_3D_SEARCH_PATH
     {

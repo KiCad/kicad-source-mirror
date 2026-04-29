@@ -34,6 +34,7 @@ set( QA_COMMON_SRCS
 
     test_array_axis.cpp
     test_atomic_save.cpp
+    test_backup_settings.cpp
     test_base_set.cpp
     test_bitmap_base.cpp
     test_clipboard.cpp

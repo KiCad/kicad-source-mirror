@@ -1025,10 +1025,6 @@ private:
      */
     void mapExistingAnnotation( std::map<wxString, wxString>& aMap );
 
-    bool updateAutoSaveFile();
-
-    const wxString& getAutoSaveFileName() const;
-
     wxWindow* createHighlightedNetNavigator();
 
     void onNetNavigatorFilterChanged( wxCommandEvent& aEvent );

@@ -680,6 +680,18 @@ protected:
      */
     virtual bool doAutoSave();
 
+    /**
+     * Check for autosave files newer than their source files for the given project.
+     * If found, prompt the user; on confirmation, copy the autosave content over the
+     * source files so the subsequent open gets the recovered data.
+     *
+     * Only meaningful when BACKUP_FORMAT::ZIP is selected -- in INCREMENTAL mode the
+     * user recovers via the Local History restore dialog instead.
+     *
+     * @param aProjectPath path to the project directory.
+     */
+    void CheckForAutosaveFiles( const wxString& aProjectPath );
+
     virtual bool canCloseWindow( wxCloseEvent& aCloseEvent ) { return true; }
     virtual void doCloseWindow() { }
 

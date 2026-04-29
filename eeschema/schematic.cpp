@@ -2387,15 +2387,9 @@ void SCHEMATIC::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY
         return;
     }
 
-    // Ensure project path has trailing separator for StartsWith tests & Mid calculations.
     if( !projPath.EndsWith( wxFILE_SEP_PATH ) )
         projPath += wxFILE_SEP_PATH;
 
-    wxFileName historyRoot( projPath, wxEmptyString );
-    historyRoot.AppendDir( wxS( ".history" ) );
-    wxString historyRootPath = historyRoot.GetPath();
-
-    // Iterate full schematic hierarchy (all sheets & their screens).
     SCH_SHEET_LIST sheetList = Hierarchy();
 
     SCH_IO_KICAD_SEXPR pi;
@@ -2416,29 +2410,14 @@ void SCHEMATIC::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY
         wxFileName abs = m_project->AbsolutePath( screen->GetFileName() );
 
         if( !abs.IsOk() )
-            continue; // no filename
+            continue;
 
         wxString absPath = abs.GetFullPath();
 
         if( absPath.IsEmpty() || !absPath.StartsWith( projPath ) )
-            continue; // external / unsaved subsheet
+            continue;
 
         wxString rel = absPath.Mid( projPath.length() );
-
-        // Destination mirrors project-relative path under .history
-        wxFileName dst( rel );
-
-        if( dst.IsRelative() )
-            dst.MakeAbsolute( historyRootPath );
-        else
-            dst.SetPath( historyRootPath );
-
-        // Ensure destination directory exists on UI thread
-        wxFileName dstDir( dst );
-        dstDir.SetFullName( wxEmptyString );
-
-        if( !dstDir.DirExists() )
-            wxFileName::Mkdir( dstDir.GetPath(), 0777, wxPATH_MKDIR_FULL );
 
         try
         {
@@ -2446,19 +2425,20 @@ void SCHEMATIC::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY
             pi.FormatSchematicToFormatter( &formatter, sheet, this );
 
             HISTORY_FILE_DATA entry;
-            entry.path = dst.GetFullPath();
+            entry.relativePath = rel;
             entry.content = std::move( formatter.MutableString() );
             entry.prettify = true;
             entry.formatMode = mode;
             aFileData.push_back( std::move( entry ) );
 
-            wxLogTrace( traceAutoSave, wxS( "[history] sch saver serialized %zu bytes for '%s' -> '%s'" ),
-                        aFileData.back().content.size(), absPath, dst.GetFullPath() );
+            wxLogTrace( traceAutoSave,
+                        wxS( "[history] sch saver serialized %zu bytes for '%s' -> '%s'" ),
+                        aFileData.back().content.size(), absPath, rel );
         }
         catch( const IO_ERROR& ioe )
         {
-            wxLogTrace( traceAutoSave, wxS( "[history] sch saver serialize failed for '%s': %s" ), absPath,
-                        wxString::FromUTF8( ioe.What() ) );
+            wxLogTrace( traceAutoSave, wxS( "[history] sch saver serialize failed for '%s': %s" ),
+                        absPath, wxString::FromUTF8( ioe.What() ) );
         }
     }
 }

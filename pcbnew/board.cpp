@@ -3967,18 +3967,6 @@ void BOARD::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY_FIL
 
     wxString rel = boardPath.Mid( projPath.length() );
 
-    // Build destination path inside .history mirror.
-    wxFileName historyRoot( projPath, wxEmptyString );
-    historyRoot.AppendDir( wxS( ".history" ) );
-    wxFileName dst( historyRoot.GetPath(), rel );
-
-    // Ensure destination directories exist on the UI thread so the background task can write.
-    wxFileName dstDir( dst );
-    dstDir.SetFullName( wxEmptyString );
-
-    if( !dstDir.DirExists() )
-        wxFileName::Mkdir( dstDir.GetPath(), 0777, wxPATH_MKDIR_FULL );
-
     try
     {
         PCB_IO_KICAD_SEXPR pi;
@@ -3987,7 +3975,7 @@ void BOARD::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY_FIL
         pi.FormatBoardToFormatter( &formatter, this, nullptr );
 
         HISTORY_FILE_DATA entry;
-        entry.path = dst.GetFullPath();
+        entry.relativePath = rel;
         entry.content = std::move( formatter.MutableString() );
         entry.prettify = true;
 
@@ -3997,7 +3985,7 @@ void BOARD::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY_FIL
         aFileData.push_back( std::move( entry ) );
 
         wxLogTrace( traceAutoSave, wxS( "[history] pcb saver serialized %zu bytes for '%s'" ),
-                    aFileData.back().content.size(), dst.GetFullPath() );
+                    aFileData.back().content.size(), rel );
     }
     catch( const IO_ERROR& ioe )
     {

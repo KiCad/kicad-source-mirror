@@ -611,6 +611,11 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         Prj().SetReadOnly( !pro.Exists() && !converted );
     }
 
+    // Crash-recovery: when zip-format autosave is active, look for autosave files newer than
+    // the saved board and offer to recover them before the load happens.
+    if( !is_new )
+        CheckForAutosaveFiles( wx_filename.GetPath() );
+
     if( is_new )
     {
         // Link the existing blank board to the new project
@@ -1149,6 +1154,13 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     {
         Kiway().LocalHistory().CommitFullProjectSnapshot( pcbFileName.GetPath(), wxS( "PCB Save" ) );
         Kiway().LocalHistory().TagSave( pcbFileName.GetPath(), wxS( "pcb" ) );
+
+        // Drop the autosave file for the board we just persisted.  Scope to the PCB
+        // source so a concurrent open eeschema does not lose recovery data for an
+        // unsaved schematic sheet.  CommitFullProjectSnapshot/TagSave above no-op when
+        // format is ZIP; this call is conversely a no-op in INCREMENTAL mode.
+        Kiway().LocalHistory().RemoveAutosaveFiles( pcbFileName.GetPath(),
+                                                    { pcbFileName.GetFullPath() } );
     }
 
     if( m_autoSaveTimer )

@@ -413,15 +413,72 @@ void EDA_BASE_FRAME::onAutoSaveTimer( wxTimerEvent& aEvent )
 }
 
 
+void EDA_BASE_FRAME::CheckForAutosaveFiles( const wxString& aProjectPath )
+{
+    COMMON_SETTINGS* cs = Pgm().GetCommonSettings();
+
+    if( cs->m_Backup.format != BACKUP_FORMAT::ZIP )
+        return;
+
+    auto stale = Kiway().LocalHistory().FindStaleAutosaveFiles( aProjectPath );
+
+    if( stale.empty() )
+        return;
+
+    wxString fileList;
+
+    for( const auto& [autosavePath, srcPath] : stale )
+        fileList << wxS( "    " ) << wxFileName( srcPath ).GetFullName() << wxS( "\n" );
+
+    wxString msg = wxString::Format( _( "Auto-saved file(s) exist that are newer than the saved "
+                                        "project files:\n\n%s\nRecover the auto-saved data?" ),
+                                     fileList );
+
+    int answer = wxMessageBox( msg, _( "Auto-Save Recovery" ), wxYES_NO | wxICON_QUESTION, this );
+
+    if( answer == wxYES )
+    {
+        for( const auto& [autosavePath, srcPath] : stale )
+        {
+            if( !wxCopyFile( autosavePath, srcPath, true ) )
+            {
+                wxLogError( _( "Failed to recover auto-saved file '%s'." ), srcPath );
+                continue;
+            }
+
+            wxRemoveFile( autosavePath );
+        }
+    }
+    else
+    {
+        // User declined; clear the autosave files so we don't re-prompt next time.
+        Kiway().LocalHistory().RemoveAutosaveFiles( aProjectPath );
+    }
+}
+
+
 bool EDA_BASE_FRAME::doAutoSave()
 {
     m_autoSaveRequired = false;
     m_autoSavePending = false;
 
-    // Use registered saver callbacks to snapshot editor state into .history and only commit
-    // if there are material changes.
-    if( !Prj().IsReadOnly() )
-        Kiway().LocalHistory().RunRegisteredSaversAndCommit( Prj().GetProjectPath(), wxS( "Autosave" ) );
+    COMMON_SETTINGS* cs = Pgm().GetCommonSettings();
+
+    // Incremental and zip-autosave both write outside the project tree when the user
+    // selects USER_DIR, so a read-only project is fine in that mode.  Only when the
+    // chosen location is the project directory does the project tree need to be writable.
+    if( cs->m_Backup.location == BACKUP_LOCATION::PROJECT_DIR && Prj().IsReadOnly() )
+        return true;
+
+    if( cs->m_Backup.format == BACKUP_FORMAT::INCREMENTAL )
+    {
+        Kiway().LocalHistory().RunRegisteredSaversAndCommit( Prj().GetProjectPath(),
+                                                             wxS( "Autosave" ) );
+    }
+    else
+    {
+        Kiway().LocalHistory().RunRegisteredSaversAsAutosaveFiles( Prj().GetProjectPath() );
+    }
 
     return true;
 }

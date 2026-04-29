@@ -16,7 +16,9 @@
   },
   "auto_backup": {
     "enabled": true,
-    "limit_total_size": 104857600
+    "format": 0,
+    "limit_total_size": 104857600,
+    "location": 0
   },
   "dialog": {
     "controls": {}
@@ -24,6 +26,7 @@
   "do_not_show_again": {
     "data_collection_prompt": false,
     "env_var_overwrite_warning": false,
+    "migrate_wrl_prompt": false,
     "scaled_3d_models_warning": false,
     "update_check_prompt": false,
     "zone_fill_warning": false
@@ -66,7 +69,7 @@
     "zoom_speed_auto": true
   },
   "meta": {
-    "version": 5
+    "version": 6
   },
   "package_manager": {
     "sash_pos": 380
@@ -87,6 +90,7 @@
   },
   "system": {
     "clear_3d_cache_interval": 30,
+    "extra_3d_search_dirs": [],
     "file_explorer": "",
     "file_history_size": 9,
     "language": "Default",

@@ -339,6 +339,13 @@ public:
     PROJECT* GetProject( const wxString& aFullPath ) const;
 
     /**
+     * Return the active project iff its path matches @p aProjectPath, else nullptr.
+     * Lets backup/history helpers feed the right PROJECT* into per-project path
+     * resolvers without falling back to Prj() for an unrelated project.
+     */
+    PROJECT* GetProjectForPath( const wxString& aProjectPath ) const;
+
+    /**
      * @return a list of open projects.
      */
     std::vector<wxString> GetOpenProjects() const;
@@ -377,6 +384,42 @@ public:
      * @return the full path to where project backups should be stored.
      */
     wxString GetProjectBackupsPath() const;
+
+    /**
+     * Resolve the backup root directory for a project, honoring the active
+     * BACKUP_LOCATION preference.  PROJECT_DIR yields the legacy
+     * "<projectpath>/<name>-backups/" path; USER_DIR yields a per-project
+     * subdirectory under the user data path keyed by SHA-256 of the project
+     * full path so identically-named projects do not collide.
+     *
+     * @param aProject is the project whose backup root to resolve, or nullptr to use Prj().
+     * @return absolute directory path with a trailing separator.
+     */
+    wxString GetBackupRootForProject( const PROJECT* aProject = nullptr ) const;
+
+    /**
+     * Resolve the local-history (.history) storage directory for a project.
+     * PROJECT_DIR yields "<projectpath>/.history/"; USER_DIR yields a per-project
+     * subdirectory under the user data path.
+     */
+    wxString GetLocalHistoryDirForProject( const PROJECT* aProject = nullptr ) const;
+
+    /**
+     * Resolve the local-history directory for a project given by its on-disk path.
+     * In PROJECT_DIR mode the supplied path is used verbatim (so callers can target
+     * a project that is not the active one); in USER_DIR mode the keying defers to
+     * #GetLocalHistoryDirForProject when @p aProjectPath matches the active project.
+     */
+    wxString GetLocalHistoryDirForPath( const wxString& aProjectPath ) const;
+
+    /**
+     * Resolve the autosave-files root for a project.  In PROJECT_DIR mode this is
+     * the project directory itself (autosave files are written as siblings with
+     * a "_autosave-" prefix in the filename).  In USER_DIR mode it is a
+     * per-project subdirectory under the user data path that mirrors the
+     * project tree.
+     */
+    wxString GetAutosaveRootForProject( const PROJECT* aProject = nullptr ) const;
 
     /**
      * Create a backup archive of the current project.
@@ -464,6 +507,18 @@ private:
     COLOR_SETTINGS* registerColorSettings( const wxString& aFilename, bool aAbsolutePath = false );
 
     void loadAllColorSettings();
+
+    /**
+     * Build "<projectname>-<sha256prefix>" suffix used to disambiguate per-project
+     * subdirectories under the user data path.  Returns an empty string if the
+     * project is null or has no full name yet (e.g., a fresh standalone editor).
+     */
+    static wxString projectKeySuffix( const PROJECT* aProject );
+
+    /**
+     * Pick the project to resolve a backup path against, falling back to Prj().
+     */
+    const PROJECT& resolveProject( const PROJECT* aProject ) const;
 
     /**
      * Register a #PROJECT_FILE and attempt to load it from disk.

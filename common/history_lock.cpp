@@ -24,6 +24,8 @@
 #include <history_lock.h>
 #include <lockfile.h>
 #include <advanced_config.h>
+#include <pgm_base.h>
+#include <settings/settings_manager.h>
 #include <wx/filename.h>
 #include <wx/filefn.h>
 #include <wx/log.h>
@@ -36,9 +38,7 @@
 
 static wxString historyPath( const wxString& aProjectPath )
 {
-    wxFileName p( aProjectPath, wxEmptyString );
-    p.AppendDir( wxS( ".history" ) );
-    return p.GetPath();
+    return Pgm().GetSettingsManager().GetLocalHistoryDirForPath( aProjectPath );
 }
 
 
