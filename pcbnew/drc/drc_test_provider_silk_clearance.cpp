@@ -292,7 +292,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                     if( minClearance > 0 )
                     {
                         drcItem->SetErrorDetail( formatMsg( _( "(%s clearance %s; actual %s)" ),
-                                                            constraint.GetParentRule()->m_Name,
+                                                            constraint.GetName(),
                                                             minClearance,
                                                             actual ) );
                     }
