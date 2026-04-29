@@ -78,7 +78,7 @@ static bool isProjectDirectory( const wxString& aProjectPath )
     wxString name;
 
     return dir.IsOpened()
-           && dir.GetFirst( &name, wxS( "*." ) + FILEEXT::ProjectFileExtension, wxDIR_FILES );
+           && dir.GetFirst( &name, wxString( wxS( "*." ) ) + FILEEXT::ProjectFileExtension, wxDIR_FILES ); 
 }
 
 LOCAL_HISTORY::LOCAL_HISTORY()
