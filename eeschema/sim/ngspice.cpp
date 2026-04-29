@@ -330,7 +330,16 @@ bool NGSPICE::LoadNetlist( const std::string& aNetlist )
     lines.push_back( nullptr ); // sentinel, as requested in ngSpice_Circ description
 
     Command( "remcirc" );
+
+    // ngspice 46+ stopped substituting "gnd" with node 0 inside subcircuits when a PSpice
+    // compatibility mode is active. The mode flag is sampled once when the netlist is parsed,
+    // so clear it across the parse and restore it afterwards. The runtime PSpice features
+    // (.probe handling, etc.) are not gated on compat mode at parse time and continue to work.
+    Command( "unset ngbehavior" );
     bool success = !m_ngSpice_Circ( lines.data() );
+
+    if( Settings() )
+        updateNgspiceSettings();
 
     for( char* line : lines )
         free( line );
