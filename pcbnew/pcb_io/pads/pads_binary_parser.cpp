@@ -1925,223 +1925,233 @@ bool BINARY_PARSER::isValidNetName( const std::string& aName ) const
 
 void BINARY_PARSER::parseNetNames()
 {
+    if( !isOldFormat() )
+        parseNetNamesNew();
+    else
+        parseNetNamesOld();
+}
+
+
+void BINARY_PARSER::parseNetNamesNew()
+{
     std::unordered_set<std::string> existing;
 
-    if( !isOldFormat() )
+    // Section 23 net record (424 B): the net NAME plus the net-class owner pointer (shared
+    // by every member) and the net's own self-pointer (the diff-pair join key).
+    constexpr uint32_t NET_RECORD_SIZE = 424;
+    constexpr uint32_t NET_NAME        = 116;
+    constexpr uint32_t NET_NAME_LEN    = 48;
+    constexpr uint32_t NET_SELF_PTR    = 184;
+    constexpr uint32_t NET_CLASS_PTR   = 188;
+
+    const SDB_SECTION* nets = getSection( SECTION::Nets );
+
+    if( nets && nets->count > 0 && nets->stride == NET_RECORD_SIZE )
     {
-        // Section 23 net record (424 B): the net NAME plus the net-class owner pointer (shared
-        // by every member) and the net's own self-pointer (the diff-pair join key).
-        constexpr uint32_t NET_RECORD_SIZE = 424;
-        constexpr uint32_t NET_NAME        = 116;
-        constexpr uint32_t NET_NAME_LEN    = 48;
-        constexpr uint32_t NET_SELF_PTR    = 184;
-        constexpr uint32_t NET_CLASS_PTR   = 188;
-
-        const SDB_SECTION* nets = getSection( SECTION::Nets );
-
-        if( nets && nets->count > 0 && nets->stride == NET_RECORD_SIZE )
+        for( uint32_t i = 0; i < nets->count; ++i )
         {
-            for( uint32_t i = 0; i < nets->count; ++i )
-            {
-                if( ( i + 1 ) * NET_RECORD_SIZE > nets->totalBytes )
-                    break;
+            if( ( i + 1 ) * NET_RECORD_SIZE > nets->totalBytes )
+                break;
 
-                SDB_RECORD  rec  = m_sdb.Record( *nets, i, NET_RECORD_SIZE );
-                std::string name = rec.Str( NET_NAME, NET_NAME_LEN );
+            SDB_RECORD  rec  = m_sdb.Record( *nets, i, NET_RECORD_SIZE );
+            std::string name = rec.Str( NET_NAME, NET_NAME_LEN );
 
-                if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
-                    continue;
-
-                NET net;
-                net.name = name;
-                m_nets.push_back( net );
-                existing.insert( name );
-                m_sec23IndexToNet[i] = name;
-
-                if( uint32_t owner = rec.U32( NET_CLASS_PTR ) )
-                    m_netClassOwner[name] = owner;
-
-                if( uint32_t selfPtr = rec.U32( NET_SELF_PTR ) )
-                    m_netSelfPtrToName[selfPtr] = name;
-            }
-        }
-
-        // Placements fill in power/ground nets: each record may carry up to three net names at
-        // +28/+52/+76 (24 chars), each preceded by a 4-byte net index that must look real (small
-        // or the 0xFFFF.. sentinel).
-        constexpr uint32_t PLACEMENT_RECORD_SIZE = 112;
-        const SDB_SECTION* entry22 = getSection( SECTION::Placements );
-
-        if( entry22 && entry22->count > 0 && entry22->stride == PLACEMENT_RECORD_SIZE )
-        {
-            for( uint32_t i = 0; i < entry22->count; ++i )
-            {
-                if( ( i + 1 ) * PLACEMENT_RECORD_SIZE > entry22->totalBytes )
-                    break;
-
-                SDB_RECORD rec = m_sdb.Record( *entry22, i, PLACEMENT_RECORD_SIZE );
-
-                for( uint32_t nameOff : { 28u, 52u, 76u } )
-                {
-                    std::string name = rec.Str( nameOff, 24 );
-
-                    if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
-                        continue;
-
-                    uint32_t netIdx = rec.U32( nameOff - 4 );
-
-                    if( netIdx < 100000 || netIdx >= 0xFFFF0000 )
-                    {
-                        NET net;
-                        net.name = name;
-                        m_nets.push_back( net );
-                        existing.insert( name );
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    else
-    {
-        // Route vertices in v0x2021 reference nets by a dense 0-based index. The master list is
-        // built in two phases: sec19 net-name records (FFFFFFFF-delimited, name at +24) take the
-        // lowest indices, then sec22 + sec23 nets sorted ascending by their stored net ID are
-        // appended.
-        std::vector<std::string> sec19Nets;
-        const SDB_SECTION*          entry19 = getSection( SECTION::PartPins );
-
-        if( entry19 && entry19->count > 0 )
-        {
-            if( entry19->End() <= m_data.size() )
-            {
-                size_t sec19Size = entry19->totalBytes;
-
-                // Sec19 net-rule records are FFFFFFFF-delimited; the u32 at +4 is zero for net
-                // records (non-zero for menu items and component refs), and the name is at +24.
-                for( size_t pos = 0; pos + 28 < sec19Size; ++pos )
-                {
-                    SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( entry19->dataOffset + pos ) );
-
-                    if( rec.U32( 0 ) != SDB_FIELD_UNSET )
-                        continue;
-
-                    if( rec.U32( 4 ) != 0 )
-                    {
-                        pos += 3;
-                        continue;
-                    }
-
-                    if( pos + 72 > sec19Size )
-                    {
-                        pos += 3;
-                        continue;
-                    }
-
-                    std::string name = rec.Str( 24, 48 );
-
-                    if( !name.empty() && isValidNetName( name ) && !existing.count( name ) )
-                    {
-                        sec19Nets.push_back( name );
-                        existing.insert( name );
-                    }
-
-                    pos += 3;
-                }
-            }
-        }
-
-        struct IndexedNet
-        {
-            uint32_t    storedIdx;
-            std::string name;
-        };
-
-        std::vector<IndexedNet> indexedNets;
-
-        // Old-format placement record (96 B): up to two net names at +12/+60, each preceded by a
-        // 4-byte stored net index.
-        constexpr uint32_t OLD_PLACEMENT_SIZE = 96;
-        const SDB_SECTION* entry22 = getSection( SECTION::Placements );
-
-        if( entry22 && entry22->count > 0 && entry22->stride == OLD_PLACEMENT_SIZE )
-        {
-            for( uint32_t i = 0; i < entry22->count; ++i )
-            {
-                if( ( i + 1 ) * OLD_PLACEMENT_SIZE > entry22->totalBytes )
-                    break;
-
-                SDB_RECORD rec = m_sdb.Record( *entry22, i, OLD_PLACEMENT_SIZE );
-
-                for( uint32_t nameOff : { 12u, 60u } )
-                {
-                    std::string name = rec.Str( nameOff, 48 );
-
-                    if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
-                        continue;
-
-                    uint32_t netIdx = rec.U32( nameOff - 4 );
-
-                    if( netIdx < 100000 )
-                    {
-                        indexedNets.push_back( { netIdx, name } );
-                        existing.insert( name );
-                        break;
-                    }
-                }
-            }
-        }
-
-        // Old-format net record (144 B): stored net index at +8, name at +12.
-        constexpr uint32_t OLD_NET_SIZE = 144;
-        const SDB_SECTION* entry23 = getSection( SECTION::Nets );
-
-        if( entry23 && entry23->count > 0 && entry23->stride == OLD_NET_SIZE )
-        {
-            for( uint32_t i = 0; i < entry23->count; ++i )
-            {
-                if( ( i + 1 ) * OLD_NET_SIZE > entry23->totalBytes )
-                    break;
-
-                SDB_RECORD  rec    = m_sdb.Record( *entry23, i, OLD_NET_SIZE );
-                uint32_t    netIdx = rec.U32( 8 );
-                std::string name   = rec.Str( 12, 48 );
-
-                if( !name.empty() && isValidNetName( name ) && netIdx < 100000
-                    && !existing.count( name ) )
-                {
-                    indexedNets.push_back( { netIdx, name } );
-                    existing.insert( name );
-                }
-            }
-        }
-
-        std::sort( indexedNets.begin(), indexedNets.end(),
-                   []( const IndexedNet& a, const IndexedNet& b )
-                   {
-                       return a.storedIdx < b.storedIdx;
-                   } );
-
-        // Build the dense net index table and emit NET objects.
-        uint32_t denseIdx = 0;
-
-        for( const auto& name : sec19Nets )
-        {
-            m_sec23IndexToNet[denseIdx++] = name;
+            if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
+                continue;
 
             NET net;
             net.name = name;
             m_nets.push_back( net );
-        }
+            existing.insert( name );
+            m_sec23IndexToNet[i] = name;
 
-        for( const auto& entry : indexedNets )
+            if( uint32_t owner = rec.U32( NET_CLASS_PTR ) )
+                m_netClassOwner[name] = owner;
+
+            if( uint32_t selfPtr = rec.U32( NET_SELF_PTR ) )
+                m_netSelfPtrToName[selfPtr] = name;
+        }
+    }
+
+    // Placements fill in power/ground nets: each record may carry up to three net names at
+    // +28/+52/+76 (24 chars), each preceded by a 4-byte net index that must look real (small
+    // or the 0xFFFF.. sentinel).
+    constexpr uint32_t PLACEMENT_RECORD_SIZE = 112;
+    const SDB_SECTION* entry22 = getSection( SECTION::Placements );
+
+    if( entry22 && entry22->count > 0 && entry22->stride == PLACEMENT_RECORD_SIZE )
+    {
+        for( uint32_t i = 0; i < entry22->count; ++i )
         {
-            m_sec23IndexToNet[denseIdx++] = entry.name;
+            if( ( i + 1 ) * PLACEMENT_RECORD_SIZE > entry22->totalBytes )
+                break;
 
-            NET net;
-            net.name = entry.name;
-            m_nets.push_back( net );
+            SDB_RECORD rec = m_sdb.Record( *entry22, i, PLACEMENT_RECORD_SIZE );
+
+            for( uint32_t nameOff : { 28u, 52u, 76u } )
+            {
+                std::string name = rec.Str( nameOff, 24 );
+
+                if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
+                    continue;
+
+                uint32_t netIdx = rec.U32( nameOff - 4 );
+
+                if( netIdx < 100000 || netIdx >= 0xFFFF0000 )
+                {
+                    NET net;
+                    net.name = name;
+                    m_nets.push_back( net );
+                    existing.insert( name );
+                    break;
+                }
+            }
         }
+    }
+}
+
+
+void BINARY_PARSER::parseNetNamesOld()
+{
+    std::unordered_set<std::string> existing;
+
+    // Route vertices in v0x2021 reference nets by a dense 0-based index. The master list is
+    // built in two phases: sec19 net-name records (FFFFFFFF-delimited, name at +24) take the
+    // lowest indices, then sec22 + sec23 nets sorted ascending by their stored net ID are
+    // appended.
+    std::vector<std::string> sec19Nets;
+    const SDB_SECTION*          entry19 = getSection( SECTION::PartPins );
+
+    if( entry19 && entry19->count > 0 )
+    {
+        if( entry19->End() <= m_data.size() )
+        {
+            size_t sec19Size = entry19->totalBytes;
+
+            // Sec19 net-rule records are FFFFFFFF-delimited; the u32 at +4 is zero for net
+            // records (non-zero for menu items and component refs), and the name is at +24.
+            for( size_t pos = 0; pos + 28 < sec19Size; ++pos )
+            {
+                SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( entry19->dataOffset + pos ) );
+
+                if( rec.U32( 0 ) != SDB_FIELD_UNSET )
+                    continue;
+
+                if( rec.U32( 4 ) != 0 )
+                {
+                    pos += 3;
+                    continue;
+                }
+
+                if( pos + 72 > sec19Size )
+                {
+                    pos += 3;
+                    continue;
+                }
+
+                std::string name = rec.Str( 24, 48 );
+
+                if( !name.empty() && isValidNetName( name ) && !existing.count( name ) )
+                {
+                    sec19Nets.push_back( name );
+                    existing.insert( name );
+                }
+
+                pos += 3;
+            }
+        }
+    }
+
+    struct IndexedNet
+    {
+        uint32_t    storedIdx;
+        std::string name;
+    };
+
+    std::vector<IndexedNet> indexedNets;
+
+    // Old-format placement record (96 B): up to two net names at +12/+60, each preceded by a
+    // 4-byte stored net index.
+    constexpr uint32_t OLD_PLACEMENT_SIZE = 96;
+    const SDB_SECTION* entry22 = getSection( SECTION::Placements );
+
+    if( entry22 && entry22->count > 0 && entry22->stride == OLD_PLACEMENT_SIZE )
+    {
+        for( uint32_t i = 0; i < entry22->count; ++i )
+        {
+            if( ( i + 1 ) * OLD_PLACEMENT_SIZE > entry22->totalBytes )
+                break;
+
+            SDB_RECORD rec = m_sdb.Record( *entry22, i, OLD_PLACEMENT_SIZE );
+
+            for( uint32_t nameOff : { 12u, 60u } )
+            {
+                std::string name = rec.Str( nameOff, 48 );
+
+                if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
+                    continue;
+
+                uint32_t netIdx = rec.U32( nameOff - 4 );
+
+                if( netIdx < 100000 )
+                {
+                    indexedNets.push_back( { netIdx, name } );
+                    existing.insert( name );
+                    break;
+                }
+            }
+        }
+    }
+
+    // Old-format net record (144 B): stored net index at +8, name at +12.
+    constexpr uint32_t OLD_NET_SIZE = 144;
+    const SDB_SECTION* entry23 = getSection( SECTION::Nets );
+
+    if( entry23 && entry23->count > 0 && entry23->stride == OLD_NET_SIZE )
+    {
+        for( uint32_t i = 0; i < entry23->count; ++i )
+        {
+            if( ( i + 1 ) * OLD_NET_SIZE > entry23->totalBytes )
+                break;
+
+            SDB_RECORD  rec    = m_sdb.Record( *entry23, i, OLD_NET_SIZE );
+            uint32_t    netIdx = rec.U32( 8 );
+            std::string name   = rec.Str( 12, 48 );
+
+            if( !name.empty() && isValidNetName( name ) && netIdx < 100000
+                && !existing.count( name ) )
+            {
+                indexedNets.push_back( { netIdx, name } );
+                existing.insert( name );
+            }
+        }
+    }
+
+    std::sort( indexedNets.begin(), indexedNets.end(),
+               []( const IndexedNet& a, const IndexedNet& b )
+               {
+                   return a.storedIdx < b.storedIdx;
+               } );
+
+    // Build the dense net index table and emit NET objects.
+    uint32_t denseIdx = 0;
+
+    for( const auto& name : sec19Nets )
+    {
+        m_sec23IndexToNet[denseIdx++] = name;
+
+        NET net;
+        net.name = name;
+        m_nets.push_back( net );
+    }
+
+    for( const auto& entry : indexedNets )
+    {
+        m_sec23IndexToNet[denseIdx++] = entry.name;
+
+        NET net;
+        net.name = entry.name;
+        m_nets.push_back( net );
     }
 }
 

@@ -215,6 +215,8 @@ private:
     void parseBoardOutline();
     bool parseArcBoardOutline();
     void parseNetNames();
+    void parseNetNamesNew();
+    void parseNetNamesOld();
 
     // Recover part clusters. Membership itself is captured during parsePartPlacements into
     // m_partClusterId; a record's 1-based ordinal is the CLSTID that sec22 +108 references.
