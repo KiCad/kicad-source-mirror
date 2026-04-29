@@ -75,6 +75,11 @@ public:
     {
         using namespace boost::unit_test;
 
+        // Detach the reporter before m_reporter destructs.  SetReporter blocks
+        // until any in-flight bg callback that holds the reporter has returned.
+        if( m_simulator )
+            m_simulator->SetReporter( nullptr );
+
         test_case::id_t id = framework::current_test_case().p_id;
         test_results    results = results_collector.results( id );
 
@@ -145,6 +150,12 @@ public:
             } while( ngspice->IsRunning() );
         }
 
+        // Detach the reporter while we read m_log on the main thread.  m_ngSpice_Running
+        // can return false while a cbSendChar callback is still in flight, and that
+        // callback writes to *m_log.  SetReporter(nullptr) blocks until the in-flight
+        // call returns.
+        ngspice->SetReporter( nullptr );
+
         // Test if ngspice cannot run a simulation (missing code models).
         // in this case the log contains "MIF-ERROR" and/or "Error: circuit not parsed"
         // when the simulation is not run the spice command "linearize" crashes.
@@ -154,6 +165,11 @@ public:
         BOOST_CHECK( !mif_error );
 
         bool err_found = m_log->Find( wxT( "Error: circuit not parsed" ) ) != wxNOT_FOUND;
+
+        // Re-attach so the rest of the foreground ngspice->Command calls below feed
+        // their output back into the log.  These run on the main thread, so the
+        // cbSendChar callback fires synchronously and there's no concurrent reader.
+        ngspice->SetReporter( m_reporter.get() );
 
         BOOST_TEST_INFO( "Cannot run ngspice. test skipped. Install error?" );
         BOOST_CHECK( !err_found );

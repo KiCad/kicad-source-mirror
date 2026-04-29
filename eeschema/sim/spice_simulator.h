@@ -87,9 +87,12 @@ public:
      * The reporter is accessed from ngspice background threads via atomic snapshot.
      * Callers must ensure the reporter outlives any running simulation, or call
      * SetReporter(nullptr) and stop the simulation before destroying the reporter.
+     * SetReporter blocks until any in-flight reporter callback has returned, so the
+     * caller can safely destroy the reporter once SetReporter(nullptr) has returned.
      */
     virtual void SetReporter( SIMULATOR_REPORTER* aReporter )
     {
+        std::lock_guard<std::mutex> lock( m_reporterMutex );
         m_reporter.store( aReporter, std::memory_order_release );
     }
 
@@ -190,6 +193,11 @@ public:
 protected:
     ///< Reporter object to receive simulation log (not owned, accessed from BG threads).
     std::atomic<SIMULATOR_REPORTER*> m_reporter;
+
+    ///< Held by BG threads while invoking the reporter and by SetReporter while
+    ///< swapping the pointer, so SetReporter(nullptr) can serve as a barrier
+    ///< before the caller destroys the reporter.
+    std::mutex m_reporterMutex;
 
     ///< We don't own this.  We are just borrowing it from the #SCHEMATIC_SETTINGS.
     std::shared_ptr<SPICE_SETTINGS> m_settings;
