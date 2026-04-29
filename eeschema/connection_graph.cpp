@@ -2623,8 +2623,11 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
         }
     }
 
-    auto updateItemConnectionsTask =
-            [&]( CONNECTION_SUBGRAPH* subgraph ) -> size_t
+    // Phase 1: write each subgraph's items' connections.  Items can be referenced from
+    // other subgraphs (via labels), so phase 2 below has to wait for every phase 1 task
+    // to complete before reading anything through label->Connection().
+    auto propagateConnectionsTask =
+            [&]( CONNECTION_SUBGRAPH* subgraph )
             {
                 // Make sure weakly-driven single-pin nets get the unconnected_ prefix
                 if( !subgraph->m_strong_driver
@@ -2639,54 +2642,53 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
                 subgraph->m_dirty = false;
                 subgraph->UpdateItemConnections();
-
-                // No other processing to do on buses
-                if( subgraph->m_driver_connection->IsBus() )
-                    return 0;
-
-                // As a visual aid, we can check sheet pins that are driven by themselves to see
-                // if they should be promoted to buses
-                if( subgraph->m_driver && subgraph->m_driver->Type() == SCH_SHEET_PIN_T )
-                {
-                    SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( subgraph->m_driver );
-
-                    if( SCH_SHEET* sheet = pin->GetParent() )
-                    {
-                        wxString    pinText = pin->GetShownText( false );
-                        SCH_SCREEN* screen  = sheet->GetScreen();
-
-                        for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
-                        {
-                            SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
-
-                            if( label->GetShownText( &subgraph->m_sheet, false ) == pinText )
-                            {
-                                SCH_SHEET_PATH path = subgraph->m_sheet;
-                                path.push_back( sheet );
-
-                                SCH_CONNECTION* parent_conn = label->Connection( &path );
-
-                                if( parent_conn && parent_conn->IsBus() )
-                                    subgraph->m_driver_connection->SetType( CONNECTION_TYPE::BUS );
-
-                                break;
-                            }
-                        }
-
-                        if( subgraph->m_driver_connection->IsBus() )
-                            return 0;
-                    }
-                }
-
-                return 1;
             };
 
-    auto results2 = tp.submit_loop( 0, m_driver_subgraphs.size(),
+    auto results1 = tp.submit_loop( 0, m_driver_subgraphs.size(),
                             [&]( const int ii )
                             {
-                                updateItemConnectionsTask( m_driver_subgraphs[ii] );
+                                propagateConnectionsTask( m_driver_subgraphs[ii] );
                             } );
-    results2.wait();
+    results1.wait();
+
+    // Phase 2: promote sheet-pin subgraphs to buses based on the matching child-sheet
+    // hier label.  This reads other subgraphs' connections via label->Connection() and
+    // also writes subgraph->m_driver_connection->SetType, so it has to be serial.
+    for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
+    {
+        if( subgraph->m_driver_connection->IsBus() )
+            continue;
+
+        if( !subgraph->m_driver || subgraph->m_driver->Type() != SCH_SHEET_PIN_T )
+            continue;
+
+        SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( subgraph->m_driver );
+        SCH_SHEET*     sheet = pin->GetParent();
+
+        if( !sheet )
+            continue;
+
+        wxString    pinText = pin->GetShownText( false );
+        SCH_SCREEN* screen  = sheet->GetScreen();
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_HIER_LABEL_T ) )
+        {
+            SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
+
+            if( label->GetShownText( &subgraph->m_sheet, false ) == pinText )
+            {
+                SCH_SHEET_PATH path = subgraph->m_sheet;
+                path.push_back( sheet );
+
+                SCH_CONNECTION* parent_conn = label->Connection( &path );
+
+                if( parent_conn && parent_conn->IsBus() )
+                    subgraph->m_driver_connection->SetType( CONNECTION_TYPE::BUS );
+
+                break;
+            }
+        }
+    }
 
     m_net_code_to_subgraphs_map.clear();
     m_net_name_to_subgraphs_map.clear();
