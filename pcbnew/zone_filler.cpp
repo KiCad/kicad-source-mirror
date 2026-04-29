@@ -3682,10 +3682,13 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     // Build holes
     SHAPE_POLY_SET holes;
 
-    auto& defaultOffsets = m_board->GetDesignSettings().m_ZoneLayerProperties;
-    auto& localOffsets = aZone->LayerProperties();
+    const auto& defaultOffsets = m_board->GetDesignSettings().m_ZoneLayerProperties;
+    const auto& localOffsets = aZone->LayerProperties();
 
-    VECTOR2I offset = defaultOffsets[aLayer].hatching_offset.value_or( VECTOR2I() );
+    VECTOR2I offset;
+
+    if( auto it = defaultOffsets.find( aLayer ); it != defaultOffsets.end() )
+        offset = it->second.hatching_offset.value_or( VECTOR2I() );
 
     if( localOffsets.contains( aLayer ) && localOffsets.at( aLayer ).hatching_offset.has_value() )
         offset = localOffsets.at( aLayer ).hatching_offset.value();
