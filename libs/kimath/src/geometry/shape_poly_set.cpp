@@ -2462,6 +2462,8 @@ bool SHAPE_POLY_SET::Collide( const SHAPE* aShape, int aClearance, int* aActual,
 
     const_cast<SHAPE_POLY_SET*>( this )->CacheTriangulation();
 
+    std::shared_lock<std::shared_mutex> readLock( m_triangulationMutex );
+
     int      actual = INT_MAX;
     VECTOR2I location;
 
@@ -3095,7 +3097,7 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aSimplify,
                                          std::vector<std::unique_ptr<TRIANGULATED_POLYGON>>* aHintData,
                                          const TASK_SUBMITTER& aSubmitter )
 {
-    std::unique_lock<std::mutex> lock( m_triangulationMutex );
+    std::unique_lock<std::shared_mutex> lock( m_triangulationMutex );
 
     if( m_triangulationValid && m_hashValid )
     {
