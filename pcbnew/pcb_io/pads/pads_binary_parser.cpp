@@ -757,16 +757,19 @@ void BINARY_PARSER::parsePadStacks()
     // padstacks precedes section-4 dataOffset and the directory never indexes it. Recover the
     // true pool start by walking back over the contiguous 0xFE / shape<=3 records, then read the
     // full pool 0-based; the section-15 tail (pin, ref) pairs index this extended pool.
+    auto isPoolMember = [&]( size_t aOff )
+    {
+        SDB_RECORD rec = m_sdb.RecordAt( aOff );
+        return rec.U8( layout.markerOff ) == 0xFE && rec.U8( layout.shapeOff ) <= 3;
+    };
+
     uint32_t head = 0;
 
-    while( entry->dataOffset >= ( head + 1 ) * recSize )
+    if( entry->dataOffset >= recSize && isPoolMember( entry->dataOffset - recSize ) )
     {
-        SDB_RECORD rec = m_sdb.RecordAt( entry->dataOffset - ( head + 1 ) * recSize );
-
-        if( rec.U8( layout.markerOff ) != 0xFE || rec.U8( layout.shapeOff ) > 3 )
-            break;
-
-        ++head;
+        STRIDE_RUN run = extendStrideRun( entry->dataOffset - recSize, recSize, 0,
+                                          entry->dataOffset, isPoolMember );
+        head = static_cast<uint32_t>( run.count );
     }
 
     uint32_t poolStart = entry->dataOffset - head * recSize;
@@ -2711,13 +2714,10 @@ void BINARY_PARSER::parseDiffPairs()
         if( found.count( st ) )   // already recovered while walking an earlier seed's chunk
             continue;
 
-        size_t start = st;
+        STRIDE_RUN run = extendStrideRun( st, OBJECT_SIZE, poolBase, poolBase + poolSize, looksDp );
 
-        while( start >= poolBase + OBJECT_SIZE && looksDp( start - OBJECT_SIZE ) )
-            start -= OBJECT_SIZE;
-
-        for( size_t o = start; looksDp( o ); o += OBJECT_SIZE )
-            found.insert( o );
+        for( size_t k = 0; k < run.count; ++k )
+            found.insert( run.base + k * OBJECT_SIZE );
     }
 
     std::set<std::pair<std::string, std::string>> seen;
