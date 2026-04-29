@@ -89,6 +89,14 @@ BOOST_FIXTURE_TEST_CASE( ERCRuleAreaItemDeletion, ERC_RULE_AREA_TEST_FIXTURE )
 
     rootScreen->Append( clonedSymbol );
 
+    // ERC_TESTER::RunTests only forces a connection graph rebuild when given an edit
+    // frame (production goes through SCH_EDIT_FRAME::RecalculateConnections).  The
+    // headless test path doesn't, so the connection graph still holds raw pointers
+    // to the deleted symbol's pins.  Force the rebuild here to match what production
+    // does after a delete/append cycle.
+    SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+    m_schematic->ConnectionGraph()->Recalculate( sheets, true );
+
     // Second ERC run should not crash. Before the fix, the rule area still held
     // a pointer to the deleted symbol and would crash when clearing caches.
     BOOST_CHECK_NO_THROW( tester.RunTests( nullptr, nullptr, nullptr, &m_schematic->Project(), nullptr ) );
