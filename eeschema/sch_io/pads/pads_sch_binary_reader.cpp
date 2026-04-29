@@ -2509,28 +2509,30 @@ void PADS_SCH_BINARY_READER::decodeJunctions( const std::vector<uint8_t>& d )
             continue;
         }
 
-        // A run must hold at least two tie-dots to distinguish it from a stray
-        // 0xfc-marked record; collect every record of the run.
-        size_t j = i;
-        std::vector<JUNCTION> run;
+        // A run must hold at least two tie-dots to distinguish it from a stray 0xfc-marked
+        // record; collect every record of the run. Passing aLo = i disables the back-up so the
+        // scan stays forward-only, as before.
+        auto isJctMember = [&]( size_t o )
+        { return isJunctionRecord( cur, o, pageWidth, pageHeight ); };
+
+        STRIDE_RUN run = extendStrideRun( i, JUNCTION_STRIDE, i, d.size(), isJctMember );
 
         int runSheet = sheetIndexForOffset( i );
 
-        while( j + JUNCTION_STRIDE <= d.size() && isJunctionRecord( cur, j, pageWidth, pageHeight ) )
+        if( run.count >= 2 )
         {
-            SDB_RECORD rec( cur, j );
-            JUNCTION jct;
-            jct.x_mils = designMil( rec.U16( JUNCTION_X_OFF ) );
-            jct.y_mils = designMil( rec.U16( JUNCTION_Y_OFF ) );
-            jct.sheetIndex = runSheet;
-            run.push_back( jct );
-            j += JUNCTION_STRIDE;
+            for( size_t k = 0; k < run.count; ++k )
+            {
+                SDB_RECORD rec( cur, run.base + k * JUNCTION_STRIDE );
+                JUNCTION   jct;
+                jct.x_mils = designMil( rec.U16( JUNCTION_X_OFF ) );
+                jct.y_mils = designMil( rec.U16( JUNCTION_Y_OFF ) );
+                jct.sheetIndex = runSheet;
+                m_junctions.push_back( jct );
+            }
         }
 
-        if( run.size() >= 2 )
-            m_junctions.insert( m_junctions.end(), run.begin(), run.end() );
-
-        i = j;
+        i = run.base + run.count * JUNCTION_STRIDE;
     }
 }
 
@@ -2616,6 +2618,8 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
     size_t bestBase = 0;
     size_t bestCnt = 0;
 
+    auto isNetMember = [&]( size_t o ) { return isNetRecord( cur, o ); };
+
     for( size_t i = DATA_STREAM_OFFSET; i + NET_STRIDE <= streamLimit( d ); )
     {
         if( !isNetRecord( cur, i ) )
@@ -2624,34 +2628,22 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
             continue;
         }
 
-        size_t start = i;
+        STRIDE_RUN r = extendStrideRun( i, NET_STRIDE, DATA_STREAM_OFFSET, d.size(), isNetMember );
 
-        while( start >= DATA_STREAM_OFFSET + NET_STRIDE && isNetRecord( cur, start - NET_STRIDE ) )
-            start -= NET_STRIDE;
-
-        size_t p = start;
-        size_t cnt = 0;
-
-        while( isNetRecord( cur, p ) )
+        if( r.count > bestCnt )
         {
-            ++cnt;
-            p += NET_STRIDE;
+            bestCnt = r.count;
+            bestBase = r.base;
         }
 
-        if( cnt > bestCnt )
+        if( r.count == netCount )
         {
-            bestCnt = cnt;
-            bestBase = start;
-        }
-
-        if( cnt == netCount )
-        {
-            netBase = start;
+            netBase = r.base;
             haveBase = true;
             break;
         }
 
-        i = p;
+        i = r.base + r.count * NET_STRIDE;
     }
 
     // Anchor on the run whose length matches the directory count; if none does, fall back to the
