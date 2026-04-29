@@ -65,6 +65,7 @@ BOOST_AUTO_TEST_CASE( JoinAllTimesOutOnStuckWork )
     std::condition_variable releaseCv;
     bool                    release = false;
     std::atomic<bool>       workerEntered{ false };
+    std::atomic<bool>       workerFinished{ false };
 
     registry.Register(
             "stuck",
@@ -74,6 +75,9 @@ BOOST_AUTO_TEST_CASE( JoinAllTimesOutOnStuckWork )
 
                 std::unique_lock<std::mutex> lock( releaseMutex );
                 releaseCv.wait( lock, [&]() { return release; } );
+                lock.unlock();
+
+                workerFinished.store( true, std::memory_order_release );
             } );
 
     // Wait until the worker is actually running so we're exercising the
@@ -100,10 +104,15 @@ BOOST_AUTO_TEST_CASE( JoinAllTimesOutOnStuckWork )
 
     releaseCv.notify_all();
 
-    // Give the detached worker a chance to finish before the test ends.
+    // Wait for the detached worker to actually return before this test
+    // function exits.  Otherwise the worker is still touching releaseMutex,
+    // releaseCv and release on the stack while the next test reuses that
+    // memory.
 
-    std::this_thread::sleep_for( std::chrono::milliseconds( 50 ) );
+    for( int i = 0; i < 1000 && !workerFinished.load( std::memory_order_acquire ); ++i )
+        std::this_thread::sleep_for( std::chrono::milliseconds( 5 ) );
 
+    BOOST_CHECK( workerFinished.load() );
     BOOST_CHECK_EQUAL( registry.TrackedCount(), 0u );
 }
 
@@ -125,9 +134,14 @@ BOOST_AUTO_TEST_CASE( DestructorDetachesOutstandingThreads )
                 {
                     workerEntered.store( true, std::memory_order_release );
 
-                    std::unique_lock<std::mutex> lock( releaseMutex );
-                    releaseCv.wait( lock, [&]() { return release; } );
+                    {
+                        std::unique_lock<std::mutex> lock( releaseMutex );
+                        releaseCv.wait( lock, [&]() { return release; } );
+                    }
 
+                    // Set workerFinished after the unique_lock has destructed so the
+                    // test waiting on workerFinished cannot return while we're still
+                    // touching releaseMutex on the test's stack.
                     workerFinished.store( true, std::memory_order_release );
                 } );
 
@@ -146,9 +160,11 @@ BOOST_AUTO_TEST_CASE( DestructorDetachesOutstandingThreads )
 
     releaseCv.notify_all();
 
-    // Poll briefly for worker completion so a slow CI host doesn't flake.
+    // Wait for the detached worker to actually finish.  Under sanitizer slowdown
+    // this can take a noticeable fraction of a second; the loop is generous
+    // enough to keep the test from leaking the worker into the next test.
 
-    for( int i = 0; i < 200 && !workerFinished.load( std::memory_order_acquire ); ++i )
+    for( int i = 0; i < 1000 && !workerFinished.load( std::memory_order_acquire ); ++i )
         std::this_thread::sleep_for( std::chrono::milliseconds( 5 ) );
 
     BOOST_CHECK( workerFinished.load() );
