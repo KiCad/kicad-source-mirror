@@ -309,11 +309,14 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler )
 
     PushResult result = PushResult::Success;
 
+    wxString    remoteName = common->GetRemoteNameOrDefault();
+    std::string remoteNameUtf8 = remoteName.utf8_string();
     git_remote* remote = nullptr;
 
-    if( git_remote_lookup( &remote, aHandler->GetRepo(), "origin" ) != 0 )
+    if( git_remote_lookup( &remote, aHandler->GetRepo(), remoteNameUtf8.c_str() ) != 0 )
     {
-        aHandler->AddErrorString( _( "Could not lookup remote" ) );
+        aHandler->AddErrorString( wxString::Format( _( "Could not lookup remote '%s'" ),
+                                                    remoteName ) );
         return PushResult::Error;
     }
 
@@ -781,12 +784,16 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
         return false;
     }
 
+    wxString    remoteName = aHandler->GetCommon()->GetRemoteNameOrDefault();
+    std::string remoteNameUtf8 = remoteName.utf8_string();
     git_remote* remote = nullptr;
 
-    if( git_remote_lookup( &remote, aHandler->GetRepo(), "origin" ) != 0 )
+    if( git_remote_lookup( &remote, aHandler->GetRepo(), remoteNameUtf8.c_str() ) != 0 )
     {
-        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Failed to lookup remote 'origin'" );
-        aHandler->AddErrorString( wxString::Format( _( "Could not lookup remote '%s'" ), "origin" ) );
+        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Failed to lookup remote '%s'",
+                    remoteName );
+        aHandler->AddErrorString( wxString::Format( _( "Could not lookup remote '%s'" ),
+                                                    remoteName ) );
         return false;
     }
 
@@ -807,8 +814,8 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
     {
         wxString errorMsg = KIGIT_COMMON::GetLastGitError();
         wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Failed to connect to remote: %s", errorMsg );
-        aHandler->AddErrorString( wxString::Format( _( "Could not connect to remote '%s': %s" ), "origin",
-                                                    errorMsg ) );
+        aHandler->AddErrorString( wxString::Format( _( "Could not connect to remote '%s': %s" ),
+                                                    remoteName, errorMsg ) );
         return false;
     }
 
@@ -820,8 +827,8 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
     {
         wxString errorMsg = KIGIT_COMMON::GetLastGitError();
         wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Failed to fetch from remote: %s", errorMsg );
-        aHandler->AddErrorString( wxString::Format( _( "Could not fetch data from remote '%s': %s" ), "origin",
-                                                    errorMsg ) );
+        aHandler->AddErrorString( wxString::Format( _( "Could not fetch data from remote '%s': %s" ),
+                                                    remoteName, errorMsg ) );
         return false;
     }
 

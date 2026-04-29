@@ -806,14 +806,6 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
 
     std::vector<PROJECT_TREE_ITEM*> selection = GetSelectedData();
     KIGIT_COMMON* git = m_TreeProject->GitCommon();
-    wxFileName prj_dir( Prj().GetProjectPath(), wxEmptyString );
-    wxFileName git_dir( git->GetGitRootDirectory(), wxEmptyString );
-    prj_dir.Normalize( wxPATH_NORM_ABSOLUTE | wxPATH_NORM_CASE | wxPATH_NORM_DOTS
-                       | wxPATH_NORM_ENV_VARS | wxPATH_NORM_TILDE );
-    git_dir.Normalize( wxPATH_NORM_ABSOLUTE | wxPATH_NORM_CASE | wxPATH_NORM_DOTS
-                       | wxPATH_NORM_ENV_VARS | wxPATH_NORM_TILDE );
-    wxString  prj_name = prj_dir.GetFullPath();
-    wxString  git_name = git_dir.GetFullPath();
 
     bool can_switch_to_project = true;
     bool can_create_new_directory = true;
@@ -827,8 +819,9 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     bool vcs_can_commit  = hasChangedFiles();
     bool vcs_can_init    = !vcs_has_repo;
     bool gitIntegrationDisabled = Prj().GetLocalSettings().m_GitIntegrationDisabled;
-    // Allow toggling if: repo exists in project, OR integration is disabled (to re-enable it)
-    bool vcs_can_remove = ( vcs_has_repo && git_name.StartsWith( prj_name ) ) || gitIntegrationDisabled;
+    // Disable/Enable is a per-project preference toggle, so it's available whenever we
+    // detected a repository for this project or integration is currently disabled.
+    bool vcs_can_remove = vcs_has_repo || gitIntegrationDisabled;
     bool vcs_can_fetch   = vcs_has_repo && git->HasPushAndPullRemote();
     bool vcs_can_push    = vcs_can_fetch && git->HasLocalCommits();
     bool vcs_can_pull    = vcs_can_fetch;

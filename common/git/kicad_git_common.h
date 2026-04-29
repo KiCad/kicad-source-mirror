@@ -118,6 +118,10 @@ public:
 
     wxString GetRemotename() const;
 
+    /// Returns GetRemotename() when non-empty, otherwise "origin".  Centralizes the
+    /// fallback policy used by push/pull/fetch paths.
+    wxString GetRemoteNameOrDefault() const;
+
     /**
      * Set the project directory path, preserving any symlinks in the path.
      * This is used to ensure git status paths match the paths used in the project tree.
