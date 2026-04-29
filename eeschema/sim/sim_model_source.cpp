@@ -205,6 +205,23 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
                     args.append( argStr + " " );
             }
 
+            // ngspice 46+ changed the PULSE PER default from TSTOP to TR+TF+PW, which turns a
+            // single-shot pulse into a continuous pulse train. When the user has not provided
+            // PER or NP, force a single pulse by appending PER=0 (lets ngspice apply its
+            // internal default) and NP=1.
+            if( m_model.GetType() == SIM_MODEL::TYPE::V_PULSE
+                || m_model.GetType() == SIM_MODEL::TYPE::I_PULSE )
+            {
+                const SIM_MODEL::PARAM* perParam = m_model.FindParam( "per" );
+                const SIM_MODEL::PARAM* npParam  = m_model.FindParam( "np" );
+
+                bool perSet = perParam && SIM_VALUE::ToSpice( perParam->value ) != "";
+                bool npSet  = npParam  && SIM_VALUE::ToSpice( npParam->value ) != "";
+
+                if( !perSet && !npSet )
+                    args.append( "0 1 " );
+            }
+
             break;
         }
 
