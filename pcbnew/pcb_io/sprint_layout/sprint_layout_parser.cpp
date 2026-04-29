@@ -33,6 +33,7 @@
 #include <footprint.h>
 #include <netinfo.h>
 #include <pad.h>
+#include <pcb_group.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <zone.h>
@@ -357,7 +358,7 @@ void SPRINT_LAYOUT_PARSER::parseObjectsList( SPRINT_LAYOUT::BOARD_DATA& aBoard )
     aBoard.objects.resize( numObjects );
 
     for( uint32_t i = 0; i < numObjects; i++ )
-        parseObject( aBoard.objects[i] );
+        parseObject( aBoard.objects[i], false );
 }
 
 
@@ -608,7 +609,7 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
     const SPRINT_LAYOUT::BOARD_DATA& boardData = m_fileData.boards[aBoardIndex];
     bool hasInnerLayers = false;
 
-    for( const auto& obj : boardData.objects )
+    for( const SPRINT_LAYOUT::OBJECT& obj : boardData.objects )
     {
         if( obj.layer == SPRINT_LAYOUT::LAYER_I1 || obj.layer == SPRINT_LAYOUT::LAYER_I2 )
         {
@@ -734,47 +735,53 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
     };
 
     // First pass: create footprints from component text records where available
-    for( const auto& obj : boardData.objects )
+    for( const SPRINT_LAYOUT::OBJECT& obj : boardData.objects )
     {
         if( obj.type == SPRINT_LAYOUT::OBJ_TEXT && obj.component_id > 0 && obj.component.valid )
             getOrCreateComponentFootprint( obj );
     }
 
+    std::map<uint32_t, std::set<BOARD_ITEM*>> gidToItems;
+
     // Second pass: process all objects in board/footprint context
-    for( const auto& obj : boardData.objects )
+    for( const SPRINT_LAYOUT::OBJECT& obj : boardData.objects )
     {
         BOARD_ITEM_CONTAINER* container = board.get();
 
         if( FOOTPRINT* fp = getOrCreateComponentFootprint( obj ) )
             container = fp;
 
+        // clang-format off
         switch( obj.type )
         {
         case SPRINT_LAYOUT::OBJ_THT_PAD:
         case SPRINT_LAYOUT::OBJ_SMD_PAD:
-            processPad( container, obj, boardData.ground_plane, gndPlaneNet );
+            processPad( container, obj, boardData.ground_plane, gndPlaneNet, gidToItems );
             break;
 
         case SPRINT_LAYOUT::OBJ_LINE:
-            processLine( container, obj, outlineSegments, boardData.ground_plane, gndPlaneNet );
+            processLine( container, obj, outlineSegments, boardData.ground_plane, gndPlaneNet, gidToItems );
             break;
 
         case SPRINT_LAYOUT::OBJ_POLY:
-            processPoly( container, obj, outlineSegments, boardData.ground_plane, gndPlaneNet );
+            processPoly( container, obj, outlineSegments, boardData.ground_plane, gndPlaneNet, gidToItems );
             break;
 
         case SPRINT_LAYOUT::OBJ_CIRCLE:
-            processCircle( container, obj, outlineSegments, boardData.ground_plane, gndPlaneNet );
+            processCircle( container, obj, outlineSegments, boardData.ground_plane, gndPlaneNet, gidToItems );
             break;
 
         case SPRINT_LAYOUT::OBJ_TEXT:
-            processText( container, obj );
+            processText( container, obj, gidToItems );
             break;
 
         default:
             break;
         }
+        // clang-format on
     }
+
+    resolveGroups( board.get(), gidToItems );
 
     // Re-anchor footprints after all elements are added.
     for( FOOTPRINT* fp : board->Footprints() )
@@ -789,9 +796,10 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
         fp->MoveAnchorPosition( anchorShift );
     }
 
-    for( const auto& [ componentId, fp ] : componentMap )
+    // Fill the footprint map
+    for( const auto& [componentId, fp] : componentMap )
     {
-        wxString fpKey = wxString::Format( wxS( "SprintLayout_%s" ), fp->GetReference() );
+        wxString   fpKey = wxString::Format( wxS( "SprintLayout_%s" ), fp->GetReference() );
         FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( fp->Clone() );
         fpCopy->SetParent( nullptr );
         aFootprintMap[fpKey] = std::unique_ptr<FOOTPRINT>( fpCopy );
@@ -838,40 +846,45 @@ FOOTPRINT* SPRINT_LAYOUT_PARSER::CreateFootprint()
     fp->Reference().SetVisible( true );
     fp->Value().SetVisible( true );
 
-    std::vector<std::vector<VECTOR2I>> outlineSegments;
-    uint8_t                            groundPlane[7] = {};
+    std::vector<std::vector<VECTOR2I>>        outlineSegments;
+    uint8_t                                   groundPlane[7] = {};
+    std::map<uint32_t, std::set<BOARD_ITEM*>> gidToItems;
 
-    for( const auto& obj : boardData.objects )
+    for( const SPRINT_LAYOUT::OBJECT& obj : boardData.objects )
     {
         BOARD_ITEM_CONTAINER* container = fp.get();
-
+        
+        // clang-format off
         switch( obj.type )
         {
         case SPRINT_LAYOUT::OBJ_THT_PAD:
         case SPRINT_LAYOUT::OBJ_SMD_PAD:
-            processPad( container, obj, groundPlane, nullptr );
+            processPad( container, obj, groundPlane, nullptr, gidToItems );
             break;
 
         case SPRINT_LAYOUT::OBJ_LINE:
-            processLine( container, obj, outlineSegments, groundPlane, nullptr );
+            processLine( container, obj, outlineSegments, groundPlane, nullptr, gidToItems );
             break;
 
         case SPRINT_LAYOUT::OBJ_POLY:
-            processPoly( container, obj, outlineSegments, groundPlane, nullptr );
+            processPoly( container, obj, outlineSegments, groundPlane, nullptr, gidToItems );
             break;
 
         case SPRINT_LAYOUT::OBJ_CIRCLE:
-            processCircle( container, obj, outlineSegments, groundPlane, nullptr );
+            processCircle( container, obj, outlineSegments, groundPlane, nullptr, gidToItems );
             break;
 
         case SPRINT_LAYOUT::OBJ_TEXT:
-            processText( container, obj );
+            processText( container, obj, gidToItems );
             break;
 
         default:
             break;
         }
+        // clang-format on
     }
+
+    resolveGroups( fp.get(), gidToItems );
 
     fp->AutoPositionFields();
 
@@ -892,7 +905,8 @@ FOOTPRINT* SPRINT_LAYOUT_PARSER::CreateFootprint()
 
 
 void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
-                                       const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet )
+                                       const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet,
+                                       std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems )
 {
     BOARD*     board = aContainer ? aContainer->GetBoard() : nullptr;
     FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aContainer );
@@ -915,7 +929,7 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
     // position (depends on the Sprint Layout version that created the file).
     // The points array always stores absolute coordinates, so derive the pad
     // center from the points when available.
-    // The rotation field for pads (both TH and SMD) is unknown, so detect 
+    // The rotation field for pads (both TH and SMD) is unknown, so detect
     // the pad angle from the points when possible.
     VECTOR2I  ptsCenter;
     EDA_ANGLE ptsAngle;
@@ -1133,12 +1147,25 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
     pad->SetNumber( wxString::Format( wxS( "%d" ), static_cast<int>( fp->Pads().size() + 1 ) ) );
 
     fp->Add( pad );
+
+    if( standaloneFp )
+    {
+        for( PCB_FIELD* fd : fp->GetFields() )
+            fd->SetTextPos( pad->GetPosition() );
+
+        processItemGroups( fp, aObj, aGidToItems );
+    }
+    else
+    {
+        processItemGroups( pad, aObj, aGidToItems );
+    }
 }
 
 
 void SPRINT_LAYOUT_PARSER::processLine( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
                                         std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
-                                        const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet )
+                                        const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet,
+                                        std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems )
 {
     if( aObj.points.size() < 2 )
         return;
@@ -1179,18 +1206,20 @@ void SPRINT_LAYOUT_PARSER::processLine( BOARD_ITEM_CONTAINER* aContainer, const 
         //}
 
         aContainer->Add( shape );
+        processItemGroups( shape, aObj, aGidToItems );
     }
 }
 
 
 void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
                                         std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
-                                        const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet )
+                                        const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet,
+                                        std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems )
 {
     if( aObj.points.size() < 2 )
         return;
 
-    BOARD* board = aContainer ? aContainer->GetBoard() : nullptr;
+    BOARD*       board = aContainer ? aContainer->GetBoard() : nullptr;
     PCB_LAYER_ID layer = mapLayer( aObj.layer );
 
     if( layer == Edge_Cuts )
@@ -1237,6 +1266,7 @@ void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const 
 
         zone->AddPolygon( outline.COutline( 0 ) );
         aContainer->Add( zone );
+        processItemGroups( zone, aObj, aGidToItems );
     }
     else if( aObj.points.size() >= 3 )
     {
@@ -1262,13 +1292,15 @@ void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const 
             shape->SetNet( net );
 
         aContainer->Add( shape );
+        processItemGroups( shape, aObj, aGidToItems );
     }
 }
 
 
 void SPRINT_LAYOUT_PARSER::processCircle( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
                                           std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
-                                          const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet )
+                                          const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet,
+                                          std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems )
 {
     //BOARD* board = aContainer ? aContainer->GetBoard() : nullptr;
     PCB_LAYER_ID layer = mapLayer( aObj.layer );
@@ -1370,10 +1402,12 @@ void SPRINT_LAYOUT_PARSER::processCircle( BOARD_ITEM_CONTAINER* aContainer, cons
     //}
 
     aContainer->Add( shape );
+    processItemGroups( shape, aObj, aGidToItems );
 }
 
 
-void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj )
+void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
+                                        std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems )
 {
     FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aContainer );
 
@@ -1441,7 +1475,69 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
         text->Rotate( text->GetTextPos(), ANGLE_180 );
 
     if( add )
+    {
         aContainer->Add( text );
+        processItemGroups( text, aObj, aGidToItems );
+    }
+}
+
+
+void SPRINT_LAYOUT_PARSER::processItemGroups( BOARD_ITEM* aItem, const SPRINT_LAYOUT::OBJECT& aObj,
+                                              std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems )
+{
+    for( uint32_t gid : aObj.groups )
+        aGidToItems[gid].insert( aItem );
+}
+
+
+void SPRINT_LAYOUT_PARSER::resolveGroups( BOARD_ITEM_CONTAINER*                      aContainer,
+                                          std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems )
+{
+    std::map<uint32_t, PCB_GROUP*> gidGroupMap;
+    std::vector<uint32_t>          gidAscBySize;
+
+    for( const auto& [gid, _] : aGidToItems )
+    {
+        PCB_GROUP* group = new PCB_GROUP( aContainer );
+
+        gidGroupMap[gid] = group;
+        gidAscBySize.push_back( gid );
+
+        if( aContainer )
+            aContainer->Add( group );
+    }
+
+    // Process groups in ascending member-count order (tie-break by group id) so smaller
+    // groups attach first and larger groups can adopt them, producing stable nesting.
+    std::sort( gidAscBySize.begin(), gidAscBySize.end(),
+               [&]( uint32_t gidA, uint32_t gidB )
+               {
+                   size_t sa = aGidToItems.at( gidA ).size();
+                   size_t sb = aGidToItems.at( gidB ).size();
+
+                   if( sa != sb )
+                       return sa < sb;
+
+                   return gidA < gidB;
+               } );
+
+    for( uint32_t gid : gidAscBySize )
+    {
+        PCB_GROUP* grp = gidGroupMap[gid];
+
+        for( BOARD_ITEM* item : aGidToItems[gid] )
+        {
+            if( PCB_GROUP* itemGroup = static_cast<PCB_GROUP*>( item->GetParentGroup() ) )
+            {
+                if( itemGroup != grp )
+                    grp->AddItem( itemGroup );
+            }
+            else
+            {
+                grp->AddItem( item );
+            }
+        }
+    }
 }
 
 

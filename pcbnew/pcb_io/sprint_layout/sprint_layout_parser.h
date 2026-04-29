@@ -33,6 +33,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 
 #include <layer_ids.h>
 #include <math/vector2d.h>
@@ -44,6 +45,7 @@ class NETINFO_ITEM;
 class PAD;
 class PCB_SHAPE;
 class PCB_TEXT;
+class BOARD_ITEM;
 
 namespace SPRINT_LAYOUT
 {
@@ -208,25 +210,31 @@ private:
     NETINFO_ITEM* resolveItemNet( BOARD* aBoard, const SPRINT_LAYOUT::OBJECT& aObj, PCB_LAYER_ID aLayer,
                                   const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet ) const;
 
-    void processPad( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
-                     const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet );
+    void processPad( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj, const uint8_t aGroundPlane[7],
+                     NETINFO_ITEM* aGndPlaneNet, std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems );
 
     void processCircle( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
-                        std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
-                        const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet );
+                        std::vector<std::vector<VECTOR2I>>& aOutlineSegments, const uint8_t aGroundPlane[7],
+                        NETINFO_ITEM* aGndPlaneNet, std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems );
 
     void processLine( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
-                      std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
-                      const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet );
+                      std::vector<std::vector<VECTOR2I>>& aOutlineSegments, const uint8_t aGroundPlane[7],
+                      NETINFO_ITEM* aGndPlaneNet, std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems );
 
     void processPoly( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
-                      std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
-                      const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet );
+                      std::vector<std::vector<VECTOR2I>>& aOutlineSegments, const uint8_t aGroundPlane[7],
+                      NETINFO_ITEM* aGndPlaneNet, std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems );
 
-    void processText( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj );
+    void processText( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
+                      std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems );
+
+    void processItemGroups( BOARD_ITEM* aItem, const SPRINT_LAYOUT::OBJECT& aObj,
+                            std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems );
 
     void buildOutline( BOARD* aBoard, std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
                        const SPRINT_LAYOUT::BOARD_DATA& aBoardData );
+
+    void resolveGroups( BOARD_ITEM_CONTAINER* aContainer, std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems );
 
     SPRINT_LAYOUT::FILE_DATA    m_fileData;
     const uint8_t*              m_pos = nullptr;
