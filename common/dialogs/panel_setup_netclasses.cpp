@@ -700,7 +700,7 @@ void PANEL_SETUP_NETCLASSES::OnNetclassGridMouseEvent( wxMouseEvent& aEvent )
         switch( col )
         {
         case GRID_CLEARANCE:        tip = _( "Minimum copper clearance" );      break;
-        case GRID_TRACKSIZE:        tip = _( "Minimum track width" );           break;
+        case GRID_TRACKSIZE:        tip = _( "Optimum track width" );           break;
         case GRID_VIASIZE:          tip = _( "Via pad diameter" );              break;
         case GRID_VIADRILL:         tip = _( "Via plated hole diameter" );      break;
         case GRID_uVIASIZE:         tip = _( "Microvia pad diameter" );         break;
