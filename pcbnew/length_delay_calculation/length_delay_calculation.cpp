@@ -330,7 +330,7 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
         {
             const auto [layerStart, layerEnd] = item.GetLayers();
             int64_t viaHeight = StackupHeight( layerStart, layerEnd );
-            details.ViaLength += viaHeight;
+            details.ViaLength += static_cast<int>( viaHeight );
             details.NumVias += 1;
             processedVias++;
 
@@ -341,7 +341,7 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
         else if( item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::PAD )
         {
             int64_t padToDie = item.GetPad()->GetPadToDieLength();
-            details.PadToDieLength += padToDie;
+            details.PadToDieLength += static_cast<int>( padToDie );
             details.NumPads += 1;
             processedPads++;
 
