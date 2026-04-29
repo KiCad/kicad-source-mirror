@@ -320,28 +320,15 @@ SIM_MODEL_NGSPICE::MODEL_TYPE SIM_MODEL_NGSPICE::getModelType() const
 }
 
 
-static std::mutex                              s_ModelInfoMapMutex;
-static std::unique_ptr<NGSPICE_MODEL_INFO_MAP> s_ModelInfoMap;
-
 const SIM_MODEL_NGSPICE::MODEL_INFO& SIM_MODEL_NGSPICE::ModelInfo( MODEL_TYPE aType )
 {
-    // Because spice netlisting has paralleizing, and we can encounter a first init of
-    // s_ModelInfoMap as a result
-    // Note, we could just init this at the static variable declaration above
-    // or do away with making it a unique_ptr altogether and static decl the map directly
-    // but its a real big boi if you look at what it will contain
-    // so lets avoid pulling it to memory if a user isn't simming
-    if( !s_ModelInfoMap )
-    {
-        std::lock_guard<std::mutex> lock( s_ModelInfoMapMutex );
+    // Lazy first-touch init.  Spice library parsing parallelizes via the thread pool,
+    // so multiple threads can race to construct this; rely on the C++11 thread-safe
+    // function-local static instead of a hand-rolled double-checked unique_ptr.
+    // The map is large, so we still want lazy init when the user never sims.
+    static const NGSPICE_MODEL_INFO_MAP s_ModelInfoMap;
 
-        // Someone else may have filled it in while we were waiting for the lock, so
-        // check it again.
-        if( !s_ModelInfoMap )
-            s_ModelInfoMap = std::make_unique<NGSPICE_MODEL_INFO_MAP>();
-    }
-
-    return s_ModelInfoMap->modelInfos.at( aType );
+    return s_ModelInfoMap.modelInfos.at( aType );
 }
 
 
