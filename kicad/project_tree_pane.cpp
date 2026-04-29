@@ -1814,6 +1814,17 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 
     m_gitLastError = GIT_ERROR_NONE;
 
+    m_TreeProject->GitCommon()->SetCancelled( false );
+
+    const char* canonicalWorkDir = git_repository_workdir( initHandler.GetRepo() );
+
+    if( canonicalWorkDir )
+    {
+        wxString symlinkWorkDir = KIGIT::PROJECT_GIT_UTILS::ComputeSymlinkPreservingWorkDir(
+                dir, wxString::FromUTF8( canonicalWorkDir ) );
+        m_TreeProject->GitCommon()->SetProjectDir( symlinkWorkDir );
+    }
+
     DIALOG_GIT_REPOSITORY dlg( topLevelParent, initHandler.GetRepo() );
     dlg.SetTitle( _( "Set default remote" ) );
     dlg.SetSkipButtonLabel( _( "Skip" ) );
