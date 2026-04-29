@@ -831,25 +831,43 @@ int BOARD_STACKUP::GetLayerDistance( PCB_LAYER_ID aFirstLayer, PCB_LAYER_ID aSec
 
     int total = 0;
     bool start = false;
+    bool half = false;
 
-    for( BOARD_STACKUP_ITEM* item : m_list )
+    for( const BOARD_STACKUP_ITEM* item : m_list )
     {
         // Will be UNDEFINED_LAYER for dielectrics
-        PCB_LAYER_ID layer = item->GetBrdLayerId();
+        const PCB_LAYER_ID layer = item->GetBrdLayerId();
 
         if( layer != UNDEFINED_LAYER && !IsCopperLayer( layer ) )
             continue;   // Silk/mask layer
 
         // Reached the start copper layer?  Start counting the next dielectric after it
         if( !start && ( layer != UNDEFINED_LAYER && layer == aFirstLayer ) )
+        {
             start = true;
+
+            // Only count half of each internal copper layer
+            if( aFirstLayer != F_Cu && aFirstLayer != B_Cu )
+                half = true;
+        }
         else if( !start )
             continue;
 
+        // Reached the stop copper layer?  we're done
+        if( start && ( layer != UNDEFINED_LAYER && layer == aSecondLayer ) )
+        {
+            // Only count half of each internal copper layer
+            if( aSecondLayer != F_Cu && aSecondLayer != B_Cu )
+                half = true;
+        }
+
         for( int sublayer = 0; sublayer < item->GetSublayersCount(); sublayer++ )
         {
-            total += item->GetThickness( sublayer );
+            const int subThickness = item->GetThickness( sublayer );
+            total += half ? ( subThickness / 2 ) : subThickness;
         }
+
+        half = false;
 
         if( layer != UNDEFINED_LAYER && layer == aSecondLayer )
             break;

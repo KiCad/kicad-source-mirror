@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20250318)
+	(version 20260306)
 	(generator "eeschema")
-	(generator_version "9.99")
+	(generator_version "10.0")
 	(uuid "a4e4d485-017a-4720-8992-147a6425c6a8")
 	(paper "A4")
 	(lib_symbols
@@ -15,9 +15,12 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
+			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
 			(property "Reference" "R"
 				(at 2.032 0 90)
+				(show_name no)
+				(do_not_autoplace no)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -26,6 +29,8 @@
 			)
 			(property "Value" "R"
 				(at 0 0 90)
+				(show_name no)
+				(do_not_autoplace no)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -34,6 +39,8 @@
 			)
 			(property "Footprint" ""
 				(at -1.778 0 90)
+				(show_name no)
+				(do_not_autoplace no)
 				(hide yes)
 				(effects
 					(font
@@ -43,6 +50,8 @@
 			)
 			(property "Datasheet" ""
 				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(hide yes)
 				(effects
 					(font
@@ -52,6 +61,8 @@
 			)
 			(property "Description" "Resistor"
 				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(hide yes)
 				(effects
 					(font
@@ -61,6 +72,8 @@
 			)
 			(property "ki_keywords" "R res resistor"
 				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(hide yes)
 				(effects
 					(font
@@ -70,6 +83,8 @@
 			)
 			(property "ki_fp_filters" "R_*"
 				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
 				(hide yes)
 				(effects
 					(font
@@ -152,6 +167,10 @@
 		(uuid "51135b82-884e-4428-82d4-5690e94f0d7a")
 	)
 	(no_connect
+		(at 143.51 78.74)
+		(uuid "59de42db-c9da-441b-bc7f-525d8f4f3992")
+	)
+	(no_connect
 		(at 69.85 78.74)
 		(uuid "67619533-0698-44e3-b112-788ee12817d2")
 	)
@@ -164,8 +183,16 @@
 		(uuid "a28bb316-a7d2-4d88-8069-0ea77c7346a3")
 	)
 	(no_connect
+		(at 109.22 78.74)
+		(uuid "c02abee9-e3a9-4a10-ad30-02e2ac1302b8")
+	)
+	(no_connect
 		(at 109.22 45.72)
 		(uuid "d18c3e5a-6060-4d28-96b6-3d46f8911911")
+	)
+	(no_connect
+		(at 109.22 95.25)
+		(uuid "e7f964ba-26ee-4990-94ff-5fa70f0f98fa")
 	)
 	(no_connect
 		(at 69.85 62.23)
@@ -179,6 +206,10 @@
 		(at 104.14 95.25)
 		(uuid "fdad69da-3897-4b91-980b-abedc2adec51")
 	)
+	(no_connect
+		(at 143.51 95.25)
+		(uuid "fecf2dd5-2c55-43f6-8f2e-92187efa6790")
+	)
 	(wire
 		(pts
 			(xy 77.47 95.25) (xy 96.52 95.25)
@@ -191,6 +222,16 @@
 	)
 	(wire
 		(pts
+			(xy 116.84 78.74) (xy 135.89 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2eb0a33f-0f66-4609-ae60-292829a5ad08")
+	)
+	(wire
+		(pts
 			(xy 116.84 62.23) (xy 135.89 62.23)
 		)
 		(stroke
@@ -198,6 +239,16 @@
 			(type default)
 		)
 		(uuid "32e1327f-91c3-4857-8f12-162dea49b44f")
+	)
+	(wire
+		(pts
+			(xy 116.84 95.25) (xy 135.89 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3c97767f-42b6-4aed-aca6-226e3bdfd210")
 	)
 	(wire
 		(pts
@@ -240,6 +291,10 @@
 		(uuid "e2eaf332-20d3-42a6-b0e8-b93dc409d912")
 	)
 	(rule_area
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(polyline
 			(pts
 				(xy 78.74 99.06) (xy 95.25 99.06) (xy 95.25 87.63) (xy 78.74 87.63)
@@ -251,10 +306,14 @@
 			(fill
 				(type none)
 			)
-			(uuid 00eecfca-4355-468a-8f8a-0a09cb29f99a)
+			(uuid "00eecfca-4355-468a-8f8a-0a09cb29f99a")
 		)
 	)
 	(rule_area
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(polyline
 			(pts
 				(xy 118.11 66.04) (xy 134.62 66.04) (xy 134.62 54.61) (xy 118.11 54.61)
@@ -266,10 +325,52 @@
 			(fill
 				(type none)
 			)
-			(uuid 32da8b36-cb1f-4a9a-85d8-d1afdc4898aa)
+			(uuid "32da8b36-cb1f-4a9a-85d8-d1afdc4898aa")
 		)
 	)
 	(rule_area
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(polyline
+			(pts
+				(xy 118.11 99.06) (xy 134.62 99.06) (xy 134.62 87.63) (xy 118.11 87.63)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid "4208e910-0135-4211-a5cf-2722af9e2bee")
+		)
+	)
+	(rule_area
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(polyline
+			(pts
+				(xy 118.11 82.55) (xy 134.62 82.55) (xy 134.62 71.12) (xy 118.11 71.12)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid "9303907b-c55f-4b6d-8f00-9ec2362a3109")
+		)
+	)
+	(rule_area
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(polyline
 			(pts
 				(xy 118.11 49.53) (xy 134.62 49.53) (xy 134.62 38.1) (xy 118.11 38.1)
@@ -281,10 +382,14 @@
 			(fill
 				(type none)
 			)
-			(uuid a24add76-7dfd-4444-9dda-fcc7d11e90f7)
+			(uuid "a24add76-7dfd-4444-9dda-fcc7d11e90f7")
 		)
 	)
 	(rule_area
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(polyline
 			(pts
 				(xy 78.74 49.53) (xy 95.25 49.53) (xy 95.25 38.1) (xy 78.74 38.1)
@@ -296,10 +401,14 @@
 			(fill
 				(type none)
 			)
-			(uuid a65fbffa-06a0-4827-99ce-ea7b4a63e94a)
+			(uuid "a65fbffa-06a0-4827-99ce-ea7b4a63e94a")
 		)
 	)
 	(rule_area
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(polyline
 			(pts
 				(xy 78.74 66.04) (xy 95.25 66.04) (xy 95.25 54.61) (xy 78.74 54.61)
@@ -311,10 +420,14 @@
 			(fill
 				(type none)
 			)
-			(uuid c1e370d6-2d8f-4805-a267-0c31677d862e)
+			(uuid "c1e370d6-2d8f-4805-a267-0c31677d862e")
 		)
 	)
 	(rule_area
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(polyline
 			(pts
 				(xy 78.74 82.55) (xy 95.25 82.55) (xy 95.25 71.12) (xy 78.74 71.12)
@@ -326,7 +439,77 @@
 			(fill
 				(type none)
 			)
-			(uuid fc51baa0-4911-4162-81ad-46922827a963)
+			(uuid "fc51baa0-4911-4162-81ad-46922827a963")
+		)
+	)
+	(netclass_flag ""
+		(length 2.54)
+		(shape round)
+		(at 119.38 87.63 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "04cc1305-52b6-47e2-ada0-f82969d404c9")
+		(property "Net Class" "CASE_8"
+			(at 120.0785 85.09 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Component Class" ""
+			(at -50.8 44.45 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
+		)
+	)
+	(netclass_flag ""
+		(length 2.54)
+		(shape round)
+		(at 119.38 71.12 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1139a29f-8967-44bd-a4ac-9d8116e52307")
+		(property "Net Class" "CASE_7"
+			(at 120.0785 68.58 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Component Class" ""
+			(at -50.8 27.94 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+			)
 		)
 	)
 	(netclass_flag ""
@@ -343,6 +526,8 @@
 		(uuid "24bca6e4-43ea-406f-9cb9-237e61748b1b")
 		(property "Net Class" "CASE_5"
 			(at 120.0785 35.56 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -352,6 +537,8 @@
 		)
 		(property "Component Class" ""
 			(at -50.8 -5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -374,6 +561,8 @@
 		(uuid "510a234c-fa16-4f57-9a7b-932bd9eed9d1")
 		(property "Net Class" "CASE_3"
 			(at 80.7085 68.58 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -383,6 +572,8 @@
 		)
 		(property "Component Class" ""
 			(at -90.17 27.94 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -405,6 +596,8 @@
 		(uuid "57e685ae-a5cc-4c0f-a270-0fcd84286c66")
 		(property "Net Class" "CASE_2"
 			(at 80.7085 52.07 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -414,6 +607,8 @@
 		)
 		(property "Component Class" ""
 			(at -90.17 11.43 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -436,6 +631,8 @@
 		(uuid "baaa924c-8b71-44bb-8f27-cb582d094be5")
 		(property "Net Class" "CASE_6"
 			(at 120.0785 52.07 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -445,6 +642,8 @@
 		)
 		(property "Component Class" ""
 			(at -50.8 11.43 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -467,6 +666,8 @@
 		(uuid "df406bef-0003-4530-b436-69c587aee978")
 		(property "Net Class" "CASE_4"
 			(at 80.7085 85.09 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -476,6 +677,8 @@
 		)
 		(property "Component Class" ""
 			(at -90.17 44.45 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -498,6 +701,8 @@
 		(uuid "e9f323da-b3f0-4995-8219-1d41cd955bc5")
 		(property "Net Class" "CASE_1"
 			(at 80.7085 35.56 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -507,6 +712,8 @@
 		)
 		(property "Component Class" ""
 			(at -90.17 -5.08 0)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -519,14 +726,18 @@
 		(lib_id "Device:R")
 		(at 113.03 62.23 90)
 		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
+		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "01b8b62f-a02d-47b6-913f-ba6e4cec9d42")
 		(property "Reference" "R11"
 			(at 113.03 55.88 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -535,6 +746,8 @@
 		)
 		(property "Value" "R"
 			(at 113.03 58.42 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -544,6 +757,8 @@
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 113.03 64.008 90)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -553,6 +768,8 @@
 		(property "Datasheet" ""
 			(at 113.03 62.23 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -562,6 +779,8 @@
 		(property "Description" "Resistor"
 			(at 113.03 62.23 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -587,14 +806,18 @@
 		(lib_id "Device:R")
 		(at 73.66 62.23 90)
 		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
+		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "03b93256-daf2-4509-b2e3-b35dbd891ffa")
 		(property "Reference" "R3"
 			(at 73.66 55.88 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -603,6 +826,8 @@
 		)
 		(property "Value" "R"
 			(at 73.66 58.42 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -612,6 +837,8 @@
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 73.66 64.008 90)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -621,6 +848,8 @@
 		(property "Datasheet" ""
 			(at 73.66 62.23 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -630,6 +859,8 @@
 		(property "Description" "Resistor"
 			(at 73.66 62.23 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -653,16 +884,100 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 73.66 95.25 90)
+		(at 113.03 78.74 90)
 		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "4127196c-6033-41b2-88bd-258cc8cdc893")
+		(property "Reference" "R13"
+			(at 113.03 72.39 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 113.03 74.93 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+			(at 113.03 80.518 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 113.03 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 113.03 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "661e90fa-9823-417d-9150-0b82539efde7")
+		)
+		(pin "2"
+			(uuid "64f74ccc-884f-4d33-9bb8-4535b72c9d1d")
+		)
+		(instances
+			(project "length_calculations"
+				(path "/a4e4d485-017a-4720-8992-147a6425c6a8"
+					(reference "R13")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 73.66 95.25 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "56b08867-b16e-43c2-b207-b7d60b64724b")
 		(property "Reference" "R7"
 			(at 73.66 88.9 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -671,6 +986,8 @@
 		)
 		(property "Value" "R"
 			(at 73.66 91.44 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -680,6 +997,8 @@
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 73.66 97.028 90)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -689,6 +1008,8 @@
 		(property "Datasheet" ""
 			(at 73.66 95.25 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -698,6 +1019,8 @@
 		(property "Description" "Resistor"
 			(at 73.66 95.25 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -723,14 +1046,18 @@
 		(lib_id "Device:R")
 		(at 100.33 78.74 90)
 		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
+		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5bf2c0f9-3408-444a-b15c-da38a88dabb2")
 		(property "Reference" "R6"
 			(at 100.33 72.39 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -739,6 +1066,8 @@
 		)
 		(property "Value" "R"
 			(at 100.33 74.93 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -748,6 +1077,8 @@
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 100.33 80.518 90)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -757,6 +1088,8 @@
 		(property "Datasheet" ""
 			(at 100.33 78.74 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -766,6 +1099,8 @@
 		(property "Description" "Resistor"
 			(at 100.33 78.74 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -789,16 +1124,180 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 139.7 45.72 90)
+		(at 113.03 95.25 90)
 		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7428e6ea-61b5-4864-bdeb-8bbd883c4d90")
+		(property "Reference" "R15"
+			(at 113.03 88.9 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 113.03 91.44 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+			(at 113.03 97.028 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 113.03 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 113.03 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "0aa89729-5238-42a7-979c-a420f1e72d03")
+		)
+		(pin "2"
+			(uuid "f88d7b1a-ecb0-4bbb-a904-b0c9e5f28a93")
+		)
+		(instances
+			(project "length_calculations"
+				(path "/a4e4d485-017a-4720-8992-147a6425c6a8"
+					(reference "R15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 139.7 78.74 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "765059d5-5eee-42c8-9412-84645bb9f653")
+		(property "Reference" "R14"
+			(at 139.7 72.39 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 139.7 74.93 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+			(at 139.7 80.518 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 139.7 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 139.7 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "cebcf4d7-65aa-4b2c-a906-4c8d12298dc8")
+		)
+		(pin "2"
+			(uuid "483c657c-f488-477c-a1b6-82ec3eb528dd")
+		)
+		(instances
+			(project "length_calculations"
+				(path "/a4e4d485-017a-4720-8992-147a6425c6a8"
+					(reference "R14")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 139.7 45.72 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "79448150-99a5-4c94-ac27-52492ec93915")
 		(property "Reference" "R10"
 			(at 139.7 39.37 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -807,6 +1306,8 @@
 		)
 		(property "Value" "R"
 			(at 139.7 41.91 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -816,6 +1317,8 @@
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 139.7 47.498 90)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -825,6 +1328,8 @@
 		(property "Datasheet" ""
 			(at 139.7 45.72 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -834,6 +1339,8 @@
 		(property "Description" "Resistor"
 			(at 139.7 45.72 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -859,14 +1366,18 @@
 		(lib_id "Device:R")
 		(at 100.33 95.25 90)
 		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
+		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7a67fd78-6ba4-466b-84ae-f8b310434b7d")
 		(property "Reference" "R8"
 			(at 100.33 88.9 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -875,6 +1386,8 @@
 		)
 		(property "Value" "R"
 			(at 100.33 91.44 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -884,6 +1397,8 @@
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 100.33 97.028 90)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -893,6 +1408,8 @@
 		(property "Datasheet" ""
 			(at 100.33 95.25 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -902,6 +1419,8 @@
 		(property "Description" "Resistor"
 			(at 100.33 95.25 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -927,14 +1446,18 @@
 		(lib_id "Device:R")
 		(at 139.7 62.23 90)
 		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
+		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "83cf7517-0908-4f43-8186-847b43fc6fe2")
 		(property "Reference" "R12"
 			(at 139.7 55.88 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -943,6 +1466,8 @@
 		)
 		(property "Value" "R"
 			(at 139.7 58.42 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -952,6 +1477,8 @@
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 139.7 64.008 90)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -961,6 +1488,8 @@
 		(property "Datasheet" ""
 			(at 139.7 62.23 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -970,6 +1499,8 @@
 		(property "Description" "Resistor"
 			(at 139.7 62.23 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -993,16 +1524,100 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 113.03 45.72 90)
+		(at 139.7 95.25 90)
 		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "84c138f0-e441-41c9-8a50-d95db19e602c")
+		(property "Reference" "R16"
+			(at 139.7 88.9 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "R"
+			(at 139.7 91.44 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+			(at 139.7 97.028 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 139.7 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor"
+			(at 139.7 95.25 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ac317b36-2ec8-4302-a14d-e880ba59169a")
+		)
+		(pin "2"
+			(uuid "5ac02ef6-7e3d-48b4-b6a9-5b5df753907f")
+		)
+		(instances
+			(project "length_calculations"
+				(path "/a4e4d485-017a-4720-8992-147a6425c6a8"
+					(reference "R16")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 113.03 45.72 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "aca834eb-a675-4f4a-90b9-621f18ee31f2")
 		(property "Reference" "R9"
 			(at 113.03 39.37 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1011,6 +1626,8 @@
 		)
 		(property "Value" "R"
 			(at 113.03 41.91 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1020,6 +1637,8 @@
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 113.03 47.498 90)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1029,6 +1648,8 @@
 		(property "Datasheet" ""
 			(at 113.03 45.72 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1038,6 +1659,8 @@
 		(property "Description" "Resistor"
 			(at 113.03 45.72 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1063,14 +1686,18 @@
 		(lib_id "Device:R")
 		(at 100.33 62.23 90)
 		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
+		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b145e0b0-6859-4129-abbc-9f01a0e7b6db")
 		(property "Reference" "R4"
 			(at 100.33 55.88 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1079,6 +1706,8 @@
 		)
 		(property "Value" "R"
 			(at 100.33 58.42 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1088,6 +1717,8 @@
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 100.33 64.008 90)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1097,6 +1728,8 @@
 		(property "Datasheet" ""
 			(at 100.33 62.23 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1106,6 +1739,8 @@
 		(property "Description" "Resistor"
 			(at 100.33 62.23 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1131,14 +1766,18 @@
 		(lib_id "Device:R")
 		(at 100.33 45.72 90)
 		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
+		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b49ae0c1-db1a-41f4-8250-37c8a4120d6a")
 		(property "Reference" "R2"
 			(at 100.33 39.37 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1147,6 +1786,8 @@
 		)
 		(property "Value" "R"
 			(at 100.33 41.91 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1156,6 +1797,8 @@
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 100.33 47.498 90)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1165,6 +1808,8 @@
 		(property "Datasheet" ""
 			(at 100.33 45.72 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1174,6 +1819,8 @@
 		(property "Description" "Resistor"
 			(at 100.33 45.72 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1199,14 +1846,18 @@
 		(lib_id "Device:R")
 		(at 73.66 78.74 90)
 		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
+		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d757d628-b3f5-4761-8175-3953ab6a18f0")
 		(property "Reference" "R5"
 			(at 73.66 72.39 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1215,6 +1866,8 @@
 		)
 		(property "Value" "R"
 			(at 73.66 74.93 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1224,6 +1877,8 @@
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 73.66 80.518 90)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1233,6 +1888,8 @@
 		(property "Datasheet" ""
 			(at 73.66 78.74 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1242,6 +1899,8 @@
 		(property "Description" "Resistor"
 			(at 73.66 78.74 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1267,14 +1926,18 @@
 		(lib_id "Device:R")
 		(at 73.66 45.72 90)
 		(unit 1)
+		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
+		(in_pos_files yes)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d813b923-8c78-4eb2-9135-15fe3af259c1")
 		(property "Reference" "R1"
 			(at 73.66 39.37 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1283,6 +1946,8 @@
 		)
 		(property "Value" "R"
 			(at 73.66 41.91 90)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1292,6 +1957,8 @@
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
 			(at 73.66 47.498 90)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1301,6 +1968,8 @@
 		(property "Datasheet" ""
 			(at 73.66 45.72 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1310,6 +1979,8 @@
 		(property "Description" "Resistor"
 			(at 73.66 45.72 0)
 			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
