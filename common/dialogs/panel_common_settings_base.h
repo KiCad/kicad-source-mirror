@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -106,6 +106,10 @@ class PANEL_COMMON_SETTINGS_BASE : public RESETTABLE_PANEL
 		wxStaticText* m_staticText25;
 		wxStaticLine* m_staticline4;
 		wxCheckBox* m_cbBackupEnabled;
+		wxStaticText* m_staticTextBackupFormat;
+		wxChoice* m_choiceBackupFormat;
+		wxStaticText* m_staticTextBackupLocation;
+		wxChoice* m_choiceBackupLocation;
 		wxStaticText* m_staticText16;
 		wxSpinCtrl* m_backupLimitTotalSize;
 		wxStaticText* m_staticText17;

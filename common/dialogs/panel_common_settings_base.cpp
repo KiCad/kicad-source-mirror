@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -430,18 +430,42 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 
 	gbSizer3->Add( m_cbBackupEnabled, wxGBPosition( 0, 0 ), wxGBSpan( 1, 3 ), wxBOTTOM|wxRIGHT, 5 );
 
+	m_staticTextBackupFormat = new wxStaticText( this, wxID_ANY, _("Format:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBackupFormat->Wrap( -1 );
+	gbSizer3->Add( m_staticTextBackupFormat, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 3 );
+
+	wxString m_choiceBackupFormatChoices[] = { _("Incremental"), _("Zip archive") };
+	int m_choiceBackupFormatNChoices = sizeof( m_choiceBackupFormatChoices ) / sizeof( wxString );
+	m_choiceBackupFormat = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceBackupFormatNChoices, m_choiceBackupFormatChoices, 0 );
+	m_choiceBackupFormat->SetSelection( 0 );
+	m_choiceBackupFormat->SetToolTip( _("Incremental: maintain a hidden .history git repository with continuous changes.\nZip: create timestamped zip archives on save; autosave uses recovery files.") );
+
+	gbSizer3->Add( m_choiceBackupFormat, wxGBPosition( 1, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 3 );
+
+	m_staticTextBackupLocation = new wxStaticText( this, wxID_ANY, _("Location:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBackupLocation->Wrap( -1 );
+	gbSizer3->Add( m_staticTextBackupLocation, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 3 );
+
+	wxString m_choiceBackupLocationChoices[] = { _("Project directory"), _("User data directory") };
+	int m_choiceBackupLocationNChoices = sizeof( m_choiceBackupLocationChoices ) / sizeof( wxString );
+	m_choiceBackupLocation = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceBackupLocationNChoices, m_choiceBackupLocationChoices, 0 );
+	m_choiceBackupLocation->SetSelection( 0 );
+	m_choiceBackupLocation->SetToolTip( _("Project: store backups and autosave files inside the project directory.\nUser: store them in your KiCad user data directory.") );
+
+	gbSizer3->Add( m_choiceBackupLocation, wxGBPosition( 2, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 3 );
+
 	m_staticText16 = new wxStaticText( this, wxID_ANY, _("Maximum total backup size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16->Wrap( -1 );
 	m_staticText16->SetToolTip( _("If the total size of backup files grows above this limit, old backups will be deleted (set to 0 for no limit)") );
 
-	gbSizer3->Add( m_staticText16, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 3 );
+	gbSizer3->Add( m_staticText16, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 3 );
 
 	m_backupLimitTotalSize = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 1000, 0 );
-	gbSizer3->Add( m_backupLimitTotalSize, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 3 );
+	gbSizer3->Add( m_backupLimitTotalSize, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 3 );
 
 	m_staticText17 = new wxStaticText( this, wxID_ANY, _("MB"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText17->Wrap( -1 );
-	gbSizer3->Add( m_staticText17, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
+	gbSizer3->Add( m_staticText17, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
 
 
 	gbSizer3->AddGrowableCol( 1 );

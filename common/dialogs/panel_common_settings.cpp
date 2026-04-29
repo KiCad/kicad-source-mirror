@@ -233,6 +233,21 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     commonSettings->m_Backup.enabled             = m_cbBackupEnabled->GetValue();
     commonSettings->m_Backup.limit_total_size    = m_backupLimitTotalSize->GetValue() * 1024ULL * 1024ULL;
 
+    // The radio-box choice order is constructed to match these enum values; if the enum
+    // is reordered in common_settings.h the ternaries below silently flip without these.
+    static_assert( static_cast<int>( BACKUP_FORMAT::INCREMENTAL ) == 0 );
+    static_assert( static_cast<int>( BACKUP_FORMAT::ZIP ) == 1 );
+    static_assert( static_cast<int>( BACKUP_LOCATION::PROJECT_DIR ) == 0 );
+    static_assert( static_cast<int>( BACKUP_LOCATION::USER_DIR ) == 1 );
+
+    commonSettings->m_Backup.format = ( m_choiceBackupFormat->GetSelection() == 0 )
+                                              ? BACKUP_FORMAT::INCREMENTAL
+                                              : BACKUP_FORMAT::ZIP;
+
+    commonSettings->m_Backup.location = ( m_choiceBackupLocation->GetSelection() == 0 )
+                                                ? BACKUP_LOCATION::PROJECT_DIR
+                                                : BACKUP_LOCATION::USER_DIR;
+
     commonSettings->m_Session.remember_open_files = m_cbRememberOpenFiles->GetValue();
 
     Pgm().SetTextEditor( m_textEditorPath->GetValue());
@@ -324,6 +339,12 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
 
     m_cbBackupEnabled->SetValue( aSettings.m_Backup.enabled );
     m_backupLimitTotalSize->SetValue( aSettings.m_Backup.limit_total_size / ( 1024 * 1024 ) );
+
+    m_choiceBackupFormat->SetSelection(
+            aSettings.m_Backup.format == BACKUP_FORMAT::INCREMENTAL ? 0 : 1 );
+
+    m_choiceBackupLocation->SetSelection(
+            aSettings.m_Backup.location == BACKUP_LOCATION::PROJECT_DIR ? 0 : 1 );
 
     m_showScrollbars->SetValue( aSettings.m_Appearance.show_scrollbars );
 }

@@ -24,6 +24,7 @@
 #include <local_history.h>
 #include <dialogs/dialog_restore_local_history.h>
 #include <history_lock.h>
+#include <paths.h>
 #include <io/kicad/kicad_io_utils.h>
 #include <lockfile.h>
 #include <settings/common_settings.h>
@@ -34,6 +35,7 @@
 #include <wildcards_and_files_ext.h>
 #include <confirm.h>
 #include <progress_reporter.h>
+
 
 #include <git2.h>
 #include <wx/filename.h>
@@ -53,16 +55,113 @@
 #include <functional>
 #include <cstring>
 
+// Resolve the local-history storage directory for @p aProjectPath, honoring the
 static wxString historyPath( const wxString& aProjectPath )
 {
-    wxFileName p( aProjectPath, wxEmptyString );
-    p.AppendDir( wxS( ".history" ) );
-    return p.GetPath();
+    return Pgm().GetSettingsManager().GetLocalHistoryDirForPath( aProjectPath );
+}
+
+
+// Join a saver-supplied relative path with the on-disk storage root for the
+// active backup format and location.  Forward slashes in @p aRelativePath are
+// preserved so libgit2 paths remain platform-neutral.
+static wxString joinHistoryDestination( const wxString& aHistoryRoot,
+                                        const wxString& aRelativePath )
+{
+    wxFileName fn( aRelativePath );
+
+    if( fn.IsAbsolute() )
+        return fn.GetFullPath();  // Defensive: should not happen with the new contract.
+
+    // Prepend the history root while preserving any subdirectories supplied by the saver
+    // (e.g. hierarchical sheet "sub/sheet.kicad_sch" must land at
+    // "<root>/sub/sheet.kicad_sch", not "<root>/sheet.kicad_sch").
+    wxArrayString dirs = fn.GetDirs();
+
+    wxFileName dst;
+    dst.AssignDir( aHistoryRoot );
+
+    for( const wxString& d : dirs )
+        dst.AppendDir( d );
+
+    dst.SetFullName( fn.GetFullName() );
+    return dst.GetFullPath();
+}
+
+
+static const wxString AUTOSAVE_PREFIX = wxS( "_autosave-" );
+
+
+// Resolve the autosave-file destination for a given relative path.  In PROJECT_DIR
+// mode the file lives next to the original (or under the same subdir for nested
+// schematic sheets) with an "_autosave-" prefix on the basename.  In USER_DIR mode
+// the file mirrors the project tree under the user data root with no name munging
+// -- the per-project hash subdirectory already isolates autosave content.
+static wxString resolveAutosaveDestination( const wxString& aAutosaveRoot,
+                                            const wxString& aRelativePath,
+                                            BACKUP_LOCATION aLocation )
+{
+    wxFileName rel( aRelativePath );
+    wxFileName dst;
+    dst.AssignDir( aAutosaveRoot );
+
+    for( const wxString& d : rel.GetDirs() )
+        dst.AppendDir( d );
+
+    if( aLocation == BACKUP_LOCATION::PROJECT_DIR )
+        dst.SetFullName( AUTOSAVE_PREFIX + rel.GetFullName() );
+    else
+        dst.SetFullName( rel.GetFullName() );
+
+    return dst.GetFullPath();
+}
+
+
+// Compute the source-file path that an autosave destination corresponds to.
+// In PROJECT_DIR mode the source is the same directory minus the "_autosave-"
+// prefix.  In USER_DIR mode the source is the original under the project tree.
+static wxString sourceForAutosaveFile( const wxString& aAutosavePath,
+                                       const wxString& aProjectPath,
+                                       const wxString& aAutosaveRoot,
+                                       BACKUP_LOCATION aLocation )
+{
+    wxFileName autosave( aAutosavePath );
+
+    if( aLocation == BACKUP_LOCATION::PROJECT_DIR )
+    {
+        wxString name = autosave.GetFullName();
+
+        if( !name.StartsWith( AUTOSAVE_PREFIX ) )
+            return wxEmptyString;
+
+        autosave.SetFullName( name.Mid( AUTOSAVE_PREFIX.length() ) );
+        return autosave.GetFullPath();
+    }
+
+    if( !aAutosavePath.StartsWith( aAutosaveRoot ) )
+        return wxEmptyString;
+
+    wxString rel = aAutosavePath.Mid( aAutosaveRoot.length() );
+    wxFileName projFn( aProjectPath, wxEmptyString );
+
+    return projFn.GetPathWithSep() + rel;
 }
 
 
 static bool commitSnapshotForProject( const wxString& aProjectPath, const std::vector<wxString>& aFiles,
                                       const wxString& aTitle );
+
+
+// Single point of control: incremental git history is active only when the user
+// has selected BACKUP_FORMAT::INCREMENTAL.  In zip mode we leave any pre-existing
+// .history dormant on disk and skip all write/commit operations so we do not
+// keep extending a history the user has switched off.  Read-only paths
+// (HistoryExists, RestoreCommit, ShowRestoreDialog) intentionally bypass this
+// gate so users can still browse dormant history after switching back.
+static bool formatUsesIncrementalHistory()
+{
+    return Pgm().GetCommonSettings()->m_Backup.format == BACKUP_FORMAT::INCREMENTAL;
+}
 
 
 // Local history is project-scoped. When pcbnew or eeschema is launched
@@ -146,6 +245,12 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
         return true;
     }
 
+    if( !formatUsesIncrementalHistory() )
+    {
+        wxLogTrace( traceAutoSave, wxS("[history] Backup format is ZIP; skipping git commit" ) );
+        return true;
+    }
+
     if( !isProjectDirectory( aProjectPath ) )
         return false;
 
@@ -178,17 +283,16 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
                     saverObject, fileData.size() - before, fileData.size() );
     }
 
-    // Filter out any entries not within the project directory
-    wxString projectDir = aProjectPath;
-    if( !projectDir.EndsWith( wxFileName::GetPathSeparator() ) )
-        projectDir += wxFileName::GetPathSeparator();
-
+    // Reject entries with an empty or absolute relativePath; the saver contract requires
+    // a project-relative path so we can dispatch to either the .history mirror or the
+    // autosave-files root without ambiguity.
     auto it = std::remove_if( fileData.begin(), fileData.end(),
-        [&projectDir]( const HISTORY_FILE_DATA& entry )
+        []( const HISTORY_FILE_DATA& entry )
         {
-            if( !entry.path.StartsWith( projectDir ) )
+            if( entry.relativePath.IsEmpty() || wxFileName( entry.relativePath ).IsAbsolute() )
             {
-                wxLogTrace( traceAutoSave, wxS("[history] filtered out entry outside project: %s"), entry.path );
+                wxLogTrace( traceAutoSave, wxS("[history] filtered out entry with invalid path: '%s'"),
+                            entry.relativePath );
                 return true;
             }
             return false;
@@ -217,6 +321,236 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
 }
 
 
+bool LOCAL_HISTORY::RunRegisteredSaversAsAutosaveFiles( const wxString& aProjectPath )
+{
+    if( !Pgm().GetCommonSettings()->m_Backup.enabled )
+        return true;
+
+    if( m_savers.empty() )
+    {
+        wxLogTrace( traceAutoSave, wxS("[autosave] no savers registered; skipping") );
+        return false;
+    }
+
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    BACKUP_LOCATION   location = mgr.GetCommonSettings()->m_Backup.location;
+    wxString          autosaveRoot = mgr.GetAutosaveRootForProject( mgr.GetProjectForPath( aProjectPath ) );
+
+    if( !PATHS::EnsurePathExists( autosaveRoot ) )
+    {
+        wxLogTrace( traceAutoSave, wxS("[autosave] cannot create autosave root '%s'"), autosaveRoot );
+        return false;
+    }
+
+    std::vector<HISTORY_FILE_DATA> fileData;
+
+    for( const auto& [saverObject, saver] : m_savers )
+        saver( aProjectPath, fileData );
+
+    bool anyWritten = false;
+
+    for( HISTORY_FILE_DATA& entry : fileData )
+    {
+        if( entry.relativePath.IsEmpty() || wxFileName( entry.relativePath ).IsAbsolute() )
+            continue;
+
+        wxString dst = resolveAutosaveDestination( autosaveRoot, entry.relativePath, location );
+        wxFileName dstFn( dst );
+
+        if( !PATHS::EnsurePathExists( dstFn.GetPath() ) )
+        {
+            wxLogTrace( traceAutoSave, wxS("[autosave] cannot create dir '%s'"), dstFn.GetPath() );
+            continue;
+        }
+
+        std::string buf;
+
+        if( !entry.content.empty() )
+        {
+            buf = std::move( entry.content );
+
+            if( entry.prettify )
+                KICAD_FORMAT::Prettify( buf, entry.formatMode );
+        }
+        else if( !entry.sourcePath.IsEmpty() )
+        {
+            wxFFile src( entry.sourcePath, wxS( "rb" ) );
+
+            if( !src.IsOpened() )
+                continue;
+
+            wxFileOffset len = src.Length();
+
+            if( len < 0 )
+                continue;
+
+            buf.resize( static_cast<size_t>( len ) );
+
+            if( len > 0 && src.Read( buf.data(), buf.size() ) != buf.size() )
+            {
+                buf.clear();
+                continue;
+            }
+        }
+        else
+        {
+            continue;
+        }
+
+        wxFFile out( dst, wxS( "wb" ) );
+
+        if( out.IsOpened() && ( buf.empty() || out.Write( buf.data(), buf.size() ) == buf.size() ) )
+        {
+            anyWritten = true;
+            wxLogTrace( traceAutoSave, wxS("[autosave] wrote %zu bytes to '%s'"), buf.size(), dst );
+        }
+        else
+        {
+            wxLogTrace( traceAutoSave, wxS("[autosave] write failed for '%s'"), dst );
+        }
+    }
+
+    return anyWritten;
+}
+
+
+// Enumerate every (autosave, source) pair under the per-project autosave root, without
+// any modification-time filter.  Callers that want only files newer than their source
+// (the recovery-prompt path) apply that filter themselves; cleanup callers want the
+// full list so they can remove leftover autosave files even when the source has been
+// re-saved and is newer.
+static std::vector<std::pair<wxString, wxString>>
+findAutosaveFilePairs( const wxString& aProjectPath )
+{
+    std::vector<std::pair<wxString, wxString>> results;
+
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    BACKUP_LOCATION   location = mgr.GetCommonSettings()->m_Backup.location;
+    wxString          autosaveRoot = mgr.GetAutosaveRootForProject( mgr.GetProjectForPath( aProjectPath ) );
+
+    if( !wxDirExists( autosaveRoot ) )
+        return results;
+
+    std::function<void( const wxString& )> walk = [&]( const wxString& aDir )
+    {
+        wxDir d( aDir );
+
+        if( !d.IsOpened() )
+            return;
+
+        wxString name;
+        bool cont = d.GetFirst( &name );
+
+        while( cont )
+        {
+            wxFileName fn( aDir, name );
+            wxString fullPath = fn.GetFullPath();
+
+            if( wxDirExists( fullPath ) )
+            {
+                if( location == BACKUP_LOCATION::PROJECT_DIR
+                    && ( name == wxS( ".history" ) || name.EndsWith( wxS( "-backups" ) ) ) )
+                {
+                    cont = d.GetNext( &name );
+                    continue;
+                }
+
+                walk( fullPath );
+            }
+            else if( location != BACKUP_LOCATION::PROJECT_DIR
+                     || fn.GetFullName().StartsWith( AUTOSAVE_PREFIX ) )
+            {
+                wxString src = sourceForAutosaveFile( fullPath, aProjectPath, autosaveRoot,
+                                                     location );
+
+                if( !src.IsEmpty() )
+                    results.emplace_back( fullPath, src );
+            }
+
+            cont = d.GetNext( &name );
+        }
+    };
+
+    walk( autosaveRoot );
+    return results;
+}
+
+
+std::vector<std::pair<wxString, wxString>>
+LOCAL_HISTORY::FindStaleAutosaveFiles( const wxString& aProjectPath ) const
+{
+    std::vector<std::pair<wxString, wxString>> results;
+
+    for( auto& pair : findAutosaveFilePairs( aProjectPath ) )
+    {
+        wxFileName autosaveFn( pair.first );
+        wxFileName srcFn( pair.second );
+        wxDateTime srcTime;
+
+        if( srcFn.FileExists() )
+            srcTime = srcFn.GetModificationTime();
+
+        wxDateTime autosaveTime = autosaveFn.GetModificationTime();
+
+        if( !srcTime.IsValid() || autosaveTime.IsLaterThan( srcTime ) )
+            results.emplace_back( std::move( pair ) );
+    }
+
+    return results;
+}
+
+
+void LOCAL_HISTORY::RemoveAutosaveFiles( const wxString& aProjectPath ) const
+{
+    // After a successful manual save the source typically has a newer mtime than its
+    // autosave, so we cannot rely on FindStaleAutosaveFiles() here -- we need to remove
+    // every autosave file associated with the project regardless of mtime.
+    for( const auto& [autosavePath, srcPath] : findAutosaveFilePairs( aProjectPath ) )
+    {
+        if( wxFileExists( autosavePath ) )
+            wxRemoveFile( autosavePath );
+    }
+}
+
+
+void LOCAL_HISTORY::RemoveAutosaveFiles( const wxString& aProjectPath,
+                                         const std::vector<wxString>& aSourcePaths ) const
+{
+    if( aSourcePaths.empty() )
+        return;
+
+    std::vector<wxFileName> targets;
+    targets.reserve( aSourcePaths.size() );
+
+    for( const wxString& src : aSourcePaths )
+    {
+        if( !src.IsEmpty() )
+            targets.emplace_back( src );
+    }
+
+    if( targets.empty() )
+        return;
+
+    for( const auto& [autosavePath, srcPath] : findAutosaveFilePairs( aProjectPath ) )
+    {
+        wxFileName srcFn( srcPath );
+        bool       match = false;
+
+        for( const wxFileName& target : targets )
+        {
+            if( srcFn.SameAs( target ) )
+            {
+                match = true;
+                break;
+            }
+        }
+
+        if( match && wxFileExists( autosavePath ) )
+            wxRemoveFile( autosavePath );
+    }
+}
+
+
 bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxString& aTitle,
                                         const std::vector<HISTORY_FILE_DATA>& aFileData )
 {
@@ -225,9 +559,24 @@ bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxSt
 
     wxString hist = historyPath( aProjectPath );
 
-    // Write files to the .history mirror
+    if( !PATHS::EnsurePathExists( hist ) )
+    {
+        wxLogTrace( traceAutoSave, wxS("[history] background: cannot create history root '%s'"), hist );
+        return false;
+    }
+
     for( const HISTORY_FILE_DATA& entry : aFileData )
     {
+        wxString dst = joinHistoryDestination( hist, entry.relativePath );
+        wxFileName dstFn( dst );
+        wxString   parent = dstFn.GetPath();
+
+        if( !parent.IsEmpty() && !PATHS::EnsurePathExists( parent ) )
+        {
+            wxLogTrace( traceAutoSave, wxS("[history] background: cannot create dir '%s'"), parent );
+            continue;
+        }
+
         if( !entry.content.empty() )
         {
             std::string buf = entry.content;
@@ -235,26 +584,25 @@ bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxSt
             if( entry.prettify )
                 KICAD_FORMAT::Prettify( buf, entry.formatMode );
 
-            wxFFile fp( entry.path, wxS( "wb" ) );
+            wxFFile fp( dst, wxS( "wb" ) );
 
             if( fp.IsOpened() )
             {
                 fp.Write( buf.data(), buf.size() );
                 fp.Close();
                 wxLogTrace( traceAutoSave, wxS("[history] background: wrote %zu bytes to '%s'"),
-                            buf.size(), entry.path );
+                            buf.size(), dst );
             }
             else
             {
-                wxLogTrace( traceAutoSave, wxS("[history] background: failed to open '%s' for writing"),
-                            entry.path );
+                wxLogTrace( traceAutoSave, wxS("[history] background: failed to open '%s' for writing"), dst );
             }
         }
         else if( !entry.sourcePath.IsEmpty() )
         {
-            wxCopyFile( entry.sourcePath, entry.path, true );
+            wxCopyFile( entry.sourcePath, dst, true );
             wxLogTrace( traceAutoSave, wxS("[history] background: copied '%s' -> '%s'"),
-                        entry.sourcePath, entry.path );
+                        entry.sourcePath, dst );
         }
     }
 
@@ -272,19 +620,19 @@ bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxSt
 
     git_repository_set_workdir( repo, hist.mb_str().data(), false );
 
-    // Stage all written files
+    // Stage all written files using their project-relative paths.  libgit2 needs forward
+    // slashes on every platform, so normalize before adding to the index.
     for( const HISTORY_FILE_DATA& entry : aFileData )
     {
-        wxFileName src( entry.path );
+        wxString rel = entry.relativePath;
+        rel.Replace( wxS( "\\" ), wxS( "/" ) );
 
-        if( !src.FileExists() )
+        wxString abs = joinHistoryDestination( hist, entry.relativePath );
+
+        if( !wxFileExists( abs ) )
             continue;
 
-        if( src.GetFullPath().StartsWith( hist + wxFILE_SEP_PATH ) )
-        {
-            std::string relHist = src.GetFullPath().ToStdString().substr( hist.length() + 1 );
-            git_index_add_bypath( index, relHist.c_str() );
-        }
+        git_index_add_bypath( index, rel.ToStdString().c_str() );
     }
 
     // Compare index to HEAD; if no diff -> abort to avoid empty commit.
@@ -391,20 +739,18 @@ bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
     if( !isProjectDirectory( aProjectPath ) )
         return false;
 
-    if( !Pgm().GetCommonSettings()->m_Backup.enabled )
+    if( !Pgm().GetCommonSettings()->m_Backup.enabled || !formatUsesIncrementalHistory() )
         return true;
 
     wxString hist = historyPath( aProjectPath );
 
     if( !wxDirExists( hist ) )
     {
-        if( wxIsWritable( aProjectPath ) )
-        {
-            if( !wxMkdir( hist ) )
-            {
-                return false;
-            }
-        }
+        // EnsurePathExists creates intermediate directories as needed, which is required
+        // for USER_DIR mode where the parent (e.g., ~/.config/kicad/<ver>/local_history/)
+        // may not yet exist.  In PROJECT_DIR mode it falls back to a single mkdir.
+        if( !PATHS::EnsurePathExists( hist ) )
+            return false;
     }
 
     git_repository* rawRepo = nullptr;
@@ -698,8 +1044,11 @@ static bool commitSnapshotForProject( const wxString& aProjectPath, const std::v
 
 bool LOCAL_HISTORY::CommitSnapshot( const std::vector<wxString>& aFiles, const wxString& aTitle )
 {
-    if( aFiles.empty() || !Pgm().GetCommonSettings()->m_Backup.enabled )
+    if( aFiles.empty() || !Pgm().GetCommonSettings()->m_Backup.enabled
+        || !formatUsesIncrementalHistory() )
+    {
         return true;
+    }
 
     wxString proj = wxFileName( aFiles[0] ).GetPath();
 
@@ -765,6 +1114,12 @@ bool LOCAL_HISTORY::CommitFullProjectSnapshot( const wxString& aProjectPath, con
     if( !isProjectDirectory( aProjectPath ) || !Pgm().GetCommonSettings()->m_Backup.enabled )
         return false;
 
+    if( !formatUsesIncrementalHistory() )
+    {
+        wxLogTrace( traceAutoSave, wxS("[history] Backup format is ZIP; skipping full snapshot" ) );
+        return true;
+    }
+
     std::vector<wxString> files;
     collectProjectFiles( aProjectPath, files );
 
@@ -782,7 +1137,7 @@ bool LOCAL_HISTORY::HistoryExists( const wxString& aProjectPath )
 
 bool LOCAL_HISTORY::TagSave( const wxString& aProjectPath, const wxString& aFileType )
 {
-    if( !Pgm().GetCommonSettings()->m_Backup.enabled )
+    if( !Pgm().GetCommonSettings()->m_Backup.enabled || !formatUsesIncrementalHistory() )
         return true;
 
     if( !isProjectDirectory( aProjectPath ) )
@@ -894,7 +1249,7 @@ bool LOCAL_HISTORY::HeadNewerThanLastSave( const wxString& aProjectPath )
 bool LOCAL_HISTORY::CommitDuplicateOfLastSave( const wxString& aProjectPath, const wxString& aFileType,
                                                const wxString& aMessage )
 {
-    if( !Pgm().GetCommonSettings()->m_Backup.enabled )
+    if( !Pgm().GetCommonSettings()->m_Backup.enabled || !formatUsesIncrementalHistory() )
         return true;
 
     if( !isProjectDirectory( aProjectPath ) )

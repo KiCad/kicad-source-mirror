@@ -73,9 +73,12 @@ BOOST_FIXTURE_TEST_CASE( SavesLegacySheetIntoHistoryPath, HISTORY_AUTOSAVE_FIXTU
 
     BOOST_REQUIRE_EQUAL( fileData.size(), 1 );
 
-    wxFileName saved( fileData[0].path );
+    // SaveToHistory now emits project-relative paths -- the dispatcher joins them with
+    // the storage root (.history/ or the user data dir) at write time.
+    wxFileName saved( fileData[0].relativePath );
     BOOST_CHECK_EQUAL( saved.GetExt(), FILEEXT::LegacySchematicFileExtension );
     BOOST_CHECK( saved.GetPath().Contains( wxS( "legacy" ) ) );
+    BOOST_CHECK( !wxFileName( fileData[0].relativePath ).IsAbsolute() );
     BOOST_CHECK( !fileData[0].content.empty() );
     BOOST_CHECK( fileData[0].prettify );
 }

@@ -42,12 +42,14 @@ class PROGRESS_REPORTER;
 
 
 /**
- * Data produced by a registered saver on the UI thread, consumed by the background commit thread.
- * Each entry represents one file to write into the .history mirror.
+ * Data produced by a registered saver on the UI thread, consumed by either the background
+ * local-history commit thread or the foreground autosave-file writer.  Each entry represents
+ * one file to write.  The dispatcher joins @p relativePath to a destination root chosen by
+ * the active backup format and location preferences.
  */
 struct KICOMMON_API HISTORY_FILE_DATA
 {
-    wxString    path;           ///< Destination inside .history/
+    wxString    relativePath;   ///< Destination path relative to the project root
     std::string content;        ///< Serialized content (mutually exclusive with sourcePath)
     wxString    sourcePath;     ///< For file-copy savers (small files like .kicad_pro)
     bool        prettify = false;
@@ -105,6 +107,50 @@ public:
 
     /** Run all registered savers and, if any staged changes differ from HEAD, create a commit. */
     bool RunRegisteredSaversAndCommit( const wxString& aProjectPath, const wxString& aTitle );
+
+    /**
+     * Run all registered savers and write their output to autosave files instead of
+     * committing to the local history repository.  Used when BACKUP_FORMAT::ZIP is
+     * selected so the user still has crash recovery without a git store.
+     *
+     * Output location follows BACKUP_LOCATION:
+     *   PROJECT_DIR  ->  "<projectpath>/<reldir>/_autosave-<basename>"
+     *   USER_DIR     ->  "<user_root>/<reldir>/<basename>" (mirroring the project tree)
+     *
+     * Files are written via KIPLATFORM::IO::AtomicWriteFile so a crash mid-write
+     * cannot leave a half-written autosave on disk.
+     */
+    bool RunRegisteredSaversAsAutosaveFiles( const wxString& aProjectPath );
+
+    /**
+     * Enumerate autosave files newer than their corresponding source files for the
+     * project at @p aProjectPath.  Used by editors at startup to detect crash-recovery
+     * candidates.
+     *
+     * Each entry in the returned vector has:
+     *   first  - autosave file path
+     *   second - corresponding source path under the project directory
+     */
+    std::vector<std::pair<wxString, wxString>>
+            FindStaleAutosaveFiles( const wxString& aProjectPath ) const;
+
+    /**
+     * Remove every autosave file under the project at @p aProjectPath regardless of
+     * which source it shadowed.  Used when the user declines crash recovery so the
+     * stale set is not re-prompted next launch.  Manual-save callers should prefer the
+     * source-scoped overload below to avoid wiping autosaves for files this save did
+     * not actually persist.
+     */
+    void RemoveAutosaveFiles( const wxString& aProjectPath ) const;
+
+    /**
+     * Remove only the autosave files corresponding to @p aSourcePaths.  Called after a
+     * successful manual save so we drop autosaves the save just superseded without
+     * touching unsaved siblings (e.g. a PCB save must not erase a dirty schematic
+     * sheet's autosave when both editors are open).
+     */
+    void RemoveAutosaveFiles( const wxString& aProjectPath,
+                              const std::vector<wxString>& aSourcePaths ) const;
 
     /** Record that a file has been modified and should be included in the next snapshot. */
     void NoteFileChange( const wxString& aFile );
