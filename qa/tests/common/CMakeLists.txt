@@ -53,6 +53,7 @@ set( QA_COMMON_SRCS
     test_markup_parser.cpp
     test_kicad_string.cpp
     test_kicad_stroke_font.cpp
+    test_gerber_plotter.cpp
     test_pdf_unicode_plot.cpp
     test_kiid.cpp
     test_layer_ids.cpp

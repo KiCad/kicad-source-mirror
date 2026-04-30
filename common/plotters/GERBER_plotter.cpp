@@ -1193,6 +1193,17 @@ void GERBER_PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, i
         formatNetAttribute( &gbr_metadata->m_NetlistMetadata );
 
     SetCurrentLineWidth( width, aData );
+
+    // A zero-length segment is plotted as a single flash of the segment's aperture.
+    // Falling through to PLOTTER::ThickSegment would emit a filled circle stroked with
+    // the (now sentinel) DO_NOT_SET_LINE_WIDTH width, creating a spurious 0-size aperture.
+    if( start == end )
+    {
+        MoveTo( start );
+        FinishTo( end );
+        return;
+    }
+
     PLOTTER::ThickSegment( start, end, DO_NOT_SET_LINE_WIDTH, aData );
 }
 

@@ -541,7 +541,27 @@ void PLOTTER::ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int widt
 {
     if( start == end )
     {
-        Circle( start, width, FILL_T::FILLED_SHAPE, 0 );
+        // The width parameter doubles as a sentinel. DO_NOT_SET_LINE_WIDTH means the
+        // caller already configured the pen so we use the live pen width as the diameter.
+        // USE_DEFAULT_LINE_WIDTH must be resolved through SetCurrentLineWidth so the pen
+        // is also set to the default value, otherwise we would emit whatever the prior
+        // pen width happened to be.
+        int diameter = width;
+
+        if( width == USE_DEFAULT_LINE_WIDTH )
+        {
+            SetCurrentLineWidth( width, aData );
+            diameter = GetCurrentLineWidth();
+        }
+        else if( width == DO_NOT_SET_LINE_WIDTH )
+        {
+            diameter = GetCurrentLineWidth();
+        }
+
+        wxCHECK2_MSG( diameter >= 0, return,
+                      wxT( "Plotter called with unresolved line width sentinel" ) );
+
+        Circle( start, diameter, FILL_T::FILLED_SHAPE, 0 );
     }
     else
     {
