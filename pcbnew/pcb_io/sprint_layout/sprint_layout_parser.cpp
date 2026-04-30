@@ -329,34 +329,48 @@ void SPRINT_LAYOUT_PARSER::parseBoardHeader( SPRINT_LAYOUT::BOARD_DATA& aBoard )
     for( int i = 0; i < 7; i++ )
         aBoard.ground_plane[i] = readUint8();
 
-    // Grid and viewport (not needed for import)
-    readDouble(); // active_grid_val
-    readDouble(); // zoom
-    readUint32(); // viewport_offset_x
-    readUint32(); // viewport_offset_y
+    if( m_fileData.version >= 5 )
+    {
+        // Grid and viewport (not needed for import)
+        readDouble(); // active_grid_val
+        readDouble(); // zoom
+        readUint32(); // viewport_offset_x
+        readUint32(); // viewport_offset_y
 
-    // Active layer + padding
-    skip( 4 );
+        // Active layer + padding
+        skip( 4 );
 
-    // Layer visibility + scanned copy flags
-    skip( 7 ); // layer_visible[7]
-    skip( 1 ); // show_scanned_copy_top
-    skip( 1 ); // show_scanned_copy_bottom
+        // Layer visibility + scanned copy flags
+        skip( 7 ); // layer_visible[7]
+        skip( 1 ); // show_scanned_copy_top
+        skip( 1 ); // show_scanned_copy_bottom
 
-    // Scanned copy paths
-    readFixedString( 200 );
-    readFixedString( 200 );
+        // Scanned copy paths
+        readFixedString( 200 );
+        readFixedString( 200 );
 
-    // DPI and shift values for scanned copies
-    skip( 4 * 6 ); // dpi_top, dpi_bottom, shiftx/y_top, shiftx/y_bottom
+        // DPI and shift values for scanned copies
+        skip( 4 * 6 ); // dpi_top, dpi_bottom, shiftx/y_top, shiftx/y_bottom
 
-    // Unknown fields
-    skip( 4 * 2 );
+        // Unknown fields
+        skip( 4 * 2 );
 
-    aBoard.center_x = readInt32();
-    aBoard.center_y = readInt32();
+        aBoard.center_x = readInt32();
+        aBoard.center_y = readInt32();
 
-    aBoard.is_multilayer = readUint8();
+        aBoard.is_multilayer = readUint8();
+    }
+    else
+    {
+        skip( 19 );
+        readUint32(); // active_layer
+        skip( 7 );    // layer_visible
+        skip( 400 );  // unknown_list: 100 * 4 bytes
+        skip( 33 );
+
+        aBoard.center_x = readInt32();
+        aBoard.center_y = readInt32();
+    }
 }
 
 
@@ -462,10 +476,9 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
     else if( m_fileData.version == 4 )
     {
         skip( 4 ); // padding
-        aObj.component_id = readUint16();
-        skip( 1 );                      // selected
-        aObj.start_angle = readInt32(); // also th_style[4]
-        skip( 5 );                      // unknown
+        skip( 3 );
+        aObj.start_angle = readInt32();
+        skip( 5 );
         aObj.filled = readUint8();
         aObj.clearance = readInt32();
         skip( 9 ); // padding
@@ -1603,6 +1616,9 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
         add = true;
     }
 
+    if( !text )
+        return;
+
     text->SetLayer( layer );
     text->SetText( convertString( aObj.text ) );
     text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
@@ -1615,12 +1631,12 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
 
     if( aObj.type == SPRINT_LAYOUT::OBJ_STROKE_TEXT )
     {
-        int height = sprintToKicadCoord( aObj.outer ) * 0.8;
+        int height = sprintToKicadCoord( aObj.outer ) * 0.75;
 
         if( height <= 0 )
             height = pcbIUScale.mmToIU( 1.0 );
 
-        double widthScale = 0.5 + 0.5 * aObj.line_width;
+        double widthScale = 0.75 + 0.25 * aObj.line_width;
         text->SetTextSize( VECTOR2I( height * widthScale, height ) );
 
         double thicknessScale = 0.06 + 0.05 * aObj.inner;
@@ -1635,7 +1651,7 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
     {
         // -133 maps to 1 mm height
         int normalized = std::abs( aObj.line_width ) * 100 / 133;
-        int height = sprintToKicadCoord( normalized ) * 0.8;
+        int height = sprintToKicadCoord( normalized ) * 0.75;
 
         if( aObj.line_width < 0 ) // Seems to be always
             text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
@@ -1644,6 +1660,10 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
         text->SetTextThickness( height / 8 );
     }
 
+    // Note to rotate/mirror around the center of unrotated text
+    VECTOR2I rotCenter = text->GetCenter();
+    // TODO: if inside group, rotate/mirror around group center
+
     int rotation = 0;
 
     if( m_fileData.version >= 5 )
@@ -1651,15 +1671,20 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
     else
         rotation = aObj.start_angle * 90;
 
-    text->SetTextAngle( EDA_ANGLE( rotation, DEGREES_T ) );
-
     bool mirrorH = aObj.thermal_width != 0;
     bool mirrorV = aObj.mirror != 0;
 
-    text->SetMirrored( mirrorH ^ mirrorV );
+    if( mirrorH ^ mirrorV )
+    {
+        text->SetMirrored( true );
+        text->SetHorizJustify( (GR_TEXT_H_ALIGN_T) -text->GetHorizJustify() );
+        rotation = -rotation;
+    }
 
     if( mirrorV )
-        text->Rotate( text->GetTextPos(), ANGLE_180 );
+        text->Rotate( rotCenter, ANGLE_180 );
+
+    text->Rotate( rotCenter, EDA_ANGLE( -rotation, DEGREES_T ) );
 
     if( add )
     {
@@ -1721,7 +1746,9 @@ void SPRINT_LAYOUT_PARSER::resolveGroups( BOARD_ITEM_CONTAINER*                 
             }
             else
             {
-                grp->AddItem( item );
+                // Only add if we don't cross board-footprint boundaries
+                if( item->GetParent() == grp->GetParent() )
+                    grp->AddItem( item );
             }
         }
     }
