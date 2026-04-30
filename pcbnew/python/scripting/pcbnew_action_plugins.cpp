@@ -283,8 +283,15 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     BOARD*  currentPcb  = GetBoard();
     bool    fromEmpty   = false;
 
+    // Skip PCB_MARKERs. They are DRC artifacts owned by the board's marker list and
+    // can be regenerated or cleared by DRC tooling the plugin invokes (e.g. WriteDRCReport).
+    // Including them here would leave dangling pointers in the undo snapshot if the plugin
+    // triggers a DRC run that rebuilds the marker list.
     for( BOARD_ITEM* item : currentPcb->GetItemSet() )
     {
+        if( item->Type() == PCB_MARKER_T )
+            continue;
+
         ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
         itemsList.PushItem( picker );
     }
@@ -344,9 +351,12 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         oldBuffer->PushItem( deletedItemsList.GetItemWrapper( i ) );
     }
 
-    // Find new items
+    // Find new items. Skip PCB_MARKERs for the same reason as the initial snapshot.
     for( BOARD_ITEM* item : currentPcb->GetItemSet() )
     {
+        if( item->Type() == PCB_MARKER_T )
+            continue;
+
         if( !oldBuffer->ContainsItem( item ) )
         {
             ITEM_PICKER picker( nullptr, item, UNDO_REDO::NEWITEM );

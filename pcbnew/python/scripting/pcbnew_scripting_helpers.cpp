@@ -613,13 +613,13 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
                 }
             } );
 
-    aBoard->RecordDRCExclusions();
-    aBoard->DeleteMARKERs( true, true );
+    // Run the engine. The violation handler above collects results into local vectors,
+    // so we deliberately do NOT mutate the board's marker list. Action plugins call this
+    // helper while the host frame still holds raw pointers to existing markers (in undo
+    // snapshots), and deleting them out from under those snapshots produces dangling
+    // pointers that crash on the next event loop iteration.
     engine->RunTests( aUnits, aReportAllTrackErrors, false );
     engine->ClearViolationHandler();
-
-    // Update the exclusion status on any excluded markers that still exist.
-    aBoard->ResolveDRCExclusions( false );
 
     // TODO: Unify this with DIALOG_DRC::writeReport
 
