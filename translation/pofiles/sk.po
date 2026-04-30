@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-26 04:51+0300\n"
-"PO-Revision-Date: 2026-04-30 19:09+0000\n"
+"PO-Revision-Date: 2026-04-30 23:10+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -9241,15 +9241,15 @@ msgstr "Pri načítaní tabuľky knižnice nastala neočakávaná chyba"
 
 #: common/local_history.cpp:1135
 msgid "Compacting local history..."
-msgstr ""
+msgstr "Zlučovanie lokálnej histórie..."
 
 #: common/local_history.cpp:1332
 msgid "Trimming local history..."
-msgstr ""
+msgstr "Orezávanie lokálnej histórie..."
 
 #: common/local_history.cpp:1425
 msgid "Compacting trimmed history..."
-msgstr ""
+msgstr "Zlučovanie orezanej histórie…"
 
 #: common/local_history.cpp:1728
 msgid ""
@@ -37546,12 +37546,12 @@ msgstr "počet zvislo"
 #: pcbnew/dialogs/dialog_create_array.cpp:436
 #, c-format
 msgid "horizontal delta of zero with %ld objects"
-msgstr "vodorovný rozdiel je nulový pre %ld objektov"
+msgstr "horizontálna delta nuly s %ld objektmi"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:442
 #, c-format
 msgid "vertical delta of zero with %ld objects"
-msgstr "zvislý rozdiel je nulový pre %ld objektov"
+msgstr "vertikálna delta nuly s %ld objektmi"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:451
 msgid "stagger"
@@ -37564,7 +37564,7 @@ msgstr "počet bodov"
 #: pcbnew/dialogs/dialog_create_array.cpp:517
 #, c-format
 msgid "angular delta of zero with %ld objects"
-msgstr "šikmý rozdiel je nulový pre %ld objektov"
+msgstr "šikmá delta nuly s %ld objektmi"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:564
 msgid "Bad parameters"
