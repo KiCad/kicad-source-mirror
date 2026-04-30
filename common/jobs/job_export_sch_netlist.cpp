@@ -67,6 +67,9 @@ JOB_EXPORT_SCH_NETLIST::JOB_EXPORT_SCH_NETLIST() :
                                                 m_spiceSaveAllEvents ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "spice.save_all_dissipations", &m_spiceSaveAllDissipations,
                                                 m_spiceSaveAllDissipations ) );
+
+    m_params.emplace_back( new JOB_PARAM_LIST<wxString>( "variant_names", &m_variantNames,
+                                                         m_variantNames ) );
 }
 
 
