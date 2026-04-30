@@ -269,6 +269,10 @@ private:
     /// per-sheet used-decal name tables (for the placement->decal binding).
     void decodeDecals( const std::vector<uint8_t>& aData );
 
+    /// Decode the per-sheet used-decal name tables and snap each table's pin terminals onto the
+    /// geometry-library decals decodeDecals already built.
+    void decodeUsedDecalTables( const std::vector<uint8_t>& aData );
+
     /// The used-decal name table that owns @p aOffset (greatest table at/below it).
     const std::vector<std::string>* usedDecalTableForOffset( size_t aOffset ) const;
 

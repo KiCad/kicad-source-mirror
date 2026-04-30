@@ -566,6 +566,15 @@ void PADS_SCH_BINARY_READER::decodeDecals( const std::vector<uint8_t>& d )
         }
     }
 
+    decodeUsedDecalTables( d );
+}
+
+
+void PADS_SCH_BINARY_READER::decodeUsedDecalTables( const std::vector<uint8_t>& d )
+{
+    BINARY_CURSOR cur( d );
+    size_t        n = streamLimit( d );
+
     // Used-decal tables (stride 0x6c, a 1-byte lead precedes the name), one per sheet, plus the
     // stride-26 pin terminal pool that immediately follows each.  Per record: name@+1, terminal
     // count@+0x2b, cumulative-terminal start@+0x2d (a running prefix sum).  Terminal: X = 2*i16@+3,
