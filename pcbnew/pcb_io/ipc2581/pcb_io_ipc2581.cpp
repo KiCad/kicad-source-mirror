@@ -2529,6 +2529,23 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aContentNode, const PCB_VIA* aVia )
 }
 
 
+// Map the top-level CadHeader/units value to the propertyUnitType enum used
+// inside <Property unit="..."/>. The two enumerations differ (MILLIMETER vs MM).
+static wxString propertyUnitForCadUnits( const wxString& aCadUnits )
+{
+    if( aCadUnits == wxT( "MILLIMETER" ) )
+        return wxT( "MM" );
+
+    if( aCadUnits == wxT( "MICRON" ) )
+        return wxT( "MICRON" );
+
+    if( aCadUnits == wxT( "INCH" ) )
+        return wxT( "INCH" );
+
+    return wxT( "MM" );
+}
+
+
 void PCB_IO_IPC2581::ensureBackdrillSpecs( const wxString& aPadstackName, const PADSTACK& aPadstack )
 {
     if( m_padstack_backdrill_specs.find( aPadstackName ) != m_padstack_backdrill_specs.end() )
@@ -2570,43 +2587,128 @@ void PCB_IO_IPC2581::ensureBackdrillSpecs( const wxString& aPadstackName, const 
     BOARD_STACKUP&         stackup = dsnSettings.GetStackupDescriptor();
     stackup.SynchronizeWithBoard( &dsnSettings );
 
-    auto createSpec = [&]( const PADSTACK::DRILL_PROPS& aDrill, const wxString& aSpecName ) -> wxString
+    // KiCad's DRILL_PROPS.end is the must-cut layer (deepest copper the drill
+    // must pass through, per the UI label "backdrill must-cut"). IPC-2581
+    // requires the must-not-cut layer, which is the next enabled copper layer
+    // past the must-cut layer going inward (away from the drill start surface).
+    LSEQ cuStack = m_board->GetEnabledLayers().CuStack();
+
+    auto computeMustNotCutLayer = [&]( const PADSTACK::DRILL_PROPS& aDrill ) -> PCB_LAYER_ID
     {
-        if( aDrill.start == UNDEFINED_LAYER || aDrill.end == UNDEFINED_LAYER )
+        auto it = std::find( cuStack.begin(), cuStack.end(), aDrill.end );
+
+        if( it == cuStack.end() )
+            return UNDEFINED_LAYER;
+
+        if( aDrill.start == F_Cu )
+        {
+            ++it;
+
+            if( it == cuStack.end() )
+                return UNDEFINED_LAYER;
+
+            return *it;
+        }
+
+        if( aDrill.start == B_Cu )
+        {
+            if( it == cuStack.begin() )
+                return UNDEFINED_LAYER;
+
+            return *( --it );
+        }
+
+        return UNDEFINED_LAYER;
+    };
+
+    auto createSpec = [&]( const PADSTACK::DRILL_PROPS& aDrill,
+                           const wxString& aSpecName ) -> wxString
+    {
+        if( !hasBackdrill( aDrill ) )
             return wxString();
 
         auto startLayer = m_layer_name_map.find( aDrill.start );
-        auto endLayer = m_layer_name_map.find( aDrill.end );
 
-        if( startLayer == m_layer_name_map.end() || endLayer == m_layer_name_map.end() )
+        if( startLayer == m_layer_name_map.end() )
             return wxString();
 
+        PCB_LAYER_ID mustNotCut = computeMustNotCutLayer( aDrill );
+        auto         mustNotCutEntry = m_layer_name_map.find( mustNotCut );
+
         wxXmlNode* specNode = appendNode( m_cad_header_node, "Spec" );
-        addAttribute( specNode,  "name", aSpecName );
+        addAttribute( specNode, "name", aSpecName );
 
-        wxXmlNode* backdrillNode = appendNode( specNode, "Backdrill" );
-        addAttribute( backdrillNode,  "startLayerRef", startLayer->second );
-        addAttribute( backdrillNode,  "mustNotCutLayerRef", endLayer->second );
-
-        int stubLength = stackup.GetLayerDistance( aDrill.start, aDrill.end );
-
-        if( stubLength < 0 )
-            stubLength = 0;
-
-        addAttribute( backdrillNode,  "maxStubLength", floatVal( m_scale * stubLength ) );
-
+        // Counterbore/countersink hint. SpecType has no comment attribute, so
+        // surface it as an OTHER-typed Backdrill child whose comment field is
+        // schema-allowed.
         PAD_DRILL_POST_MACHINING_MODE pm_mode = PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
 
         if( aDrill.start == F_Cu )
-            pm_mode = aPadstack.FrontPostMachining().mode.value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN );
+        {
+            pm_mode = aPadstack.FrontPostMachining().mode.value_or(
+                    PAD_DRILL_POST_MACHINING_MODE::UNKNOWN );
+        }
         else if( aDrill.start == B_Cu )
-            pm_mode = aPadstack.BackPostMachining().mode.value_or( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN );
+        {
+            pm_mode = aPadstack.BackPostMachining().mode.value_or(
+                    PAD_DRILL_POST_MACHINING_MODE::UNKNOWN );
+        }
 
-        bool isPostMachined = ( pm_mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE ||
-                                pm_mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK );
+        wxString postMachiningComment;
 
-        addAttribute( backdrillNode,  "postMachining", isPostMachined ? wxT( "true" )
-                                                                      : wxT( "false" ) );
+        if( pm_mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
+            postMachiningComment = wxT( "post-machining=COUNTERBORE" );
+        else if( pm_mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
+            postMachiningComment = wxT( "post-machining=COUNTERSINK" );
+
+        // START_LAYER
+        {
+            wxXmlNode* bd = appendNode( specNode, "Backdrill" );
+            addAttribute( bd, "type", wxT( "START_LAYER" ) );
+
+            wxXmlNode* p = appendNode( bd, "Property" );
+            addAttribute( p, "layerOrGroupRef", startLayer->second );
+        }
+
+        // MUST_NOT_CUT_LAYER (only when a deeper signal layer exists)
+        if( mustNotCut != UNDEFINED_LAYER && mustNotCutEntry != m_layer_name_map.end() )
+        {
+            wxXmlNode* bd = appendNode( specNode, "Backdrill" );
+            addAttribute( bd, "type", wxT( "MUST_NOT_CUT_LAYER" ) );
+
+            wxXmlNode* p = appendNode( bd, "Property" );
+            addAttribute( p, "layerOrGroupRef", mustNotCutEntry->second );
+        }
+
+        // MAX_STUB_LENGTH: the maximum residual copper allowed past the
+        // must-cut layer. KiCad has no explicit fabricator tolerance, so use
+        // half the dielectric thickness between must-cut and must-not-cut as
+        // a nominal midpoint. Falls back to zero if no inner signal exists.
+        int stubLength = 0;
+
+        if( mustNotCut != UNDEFINED_LAYER )
+        {
+            int dielectric = stackup.GetLayerDistance( aDrill.end, mustNotCut );
+
+            if( dielectric > 0 )
+                stubLength = dielectric / 2;
+        }
+
+        {
+            wxXmlNode* bd = appendNode( specNode, "Backdrill" );
+            addAttribute( bd, "type", wxT( "MAX_STUB_LENGTH" ) );
+
+            wxXmlNode* p = appendNode( bd, "Property" );
+            addAttribute( p, "value", floatVal( m_scale * stubLength ) );
+            addAttribute( p, "unit", propertyUnitForCadUnits( m_units_str ) );
+        }
+
+        if( !postMachiningComment.IsEmpty() )
+        {
+            wxXmlNode* bd = appendNode( specNode, "Backdrill" );
+            addAttribute( bd, "type", wxT( "OTHER" ) );
+            addAttribute( bd, "comment", postMachiningComment );
+        }
 
         m_backdrill_spec_nodes[aSpecName] = specNode;
 
@@ -2615,19 +2717,15 @@ void PCB_IO_IPC2581::ensureBackdrillSpecs( const wxString& aPadstackName, const 
 
     int specIndex = m_backdrill_spec_index + 1;
 
-    const PADSTACK::DRILL_PROPS& primary = aPadstack.Drill();
-    wxString primarySpec = createSpec( primary, wxString::Format( wxT( "BD_%dA" ), specIndex ) );
+    wxString secondarySpec = createSpec( secondary, wxString::Format( wxT( "BD_%dA" ), specIndex ) );
+    wxString tertiarySpec = createSpec( tertiary, wxString::Format( wxT( "BD_%dB" ), specIndex ) );
 
-    wxString secondarySpec = createSpec( secondary, wxString::Format( wxT( "BD_%dB" ), specIndex ) );
-    wxString tertiarySpec = createSpec( tertiary, wxString::Format( wxT( "BD_%dC" ), specIndex ) );
-
-    if( primarySpec.IsEmpty() && secondarySpec.IsEmpty() && tertiarySpec.IsEmpty() )
+    if( secondarySpec.IsEmpty() && tertiarySpec.IsEmpty() )
         return;
 
     m_backdrill_spec_index = specIndex;
     m_padstack_backdrill_specs.emplace( aPadstackName,
-                                        std::array<wxString, 3>{ primarySpec, secondarySpec,
-                                                                 tertiarySpec } );
+                                        std::array<wxString, 2>{ secondarySpec, tertiarySpec } );
 }
 
 
