@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-26 04:51+0300\n"
-"PO-Revision-Date: 2026-04-28 15:20+0000\n"
+"PO-Revision-Date: 2026-04-30 19:09+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -43,7 +43,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7806,9 +7806,9 @@ msgid "Could not create directory '%s'"
 msgstr "Konnte Verzeichnis \"%s\" nicht erstellen"
 
 #: common/git/libgit_backend.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s' : %s"
-msgstr "Konnte Repository \"%s\" nicht klonen"
+msgstr "Konnte Repository \"%s\" nicht klonen: %s"
 
 #: common/git/libgit_backend.cpp:171
 #, c-format
@@ -9349,15 +9349,15 @@ msgstr "Unerwarteter Fehler beim Schreiben der Bibliothekstabelle"
 
 #: common/local_history.cpp:1135
 msgid "Compacting local history..."
-msgstr ""
+msgstr "Fasse lokalen Verlauf zusammen..."
 
 #: common/local_history.cpp:1332
 msgid "Trimming local history..."
-msgstr ""
+msgstr "Kürze lokalen Verlauf..."
 
 #: common/local_history.cpp:1425
 msgid "Compacting trimmed history..."
-msgstr ""
+msgstr "Fasse gekürzten lokalen Verlauf zusammen..."
 
 #: common/local_history.cpp:1728
 msgid ""
@@ -22018,14 +22018,14 @@ msgid "LTspice schematic files"
 msgstr "LTspice Schaltplandateien"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1457
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a PADS Logic ASCII file."
-msgstr "\"%s\" ist kein gültiger SPICE-Wert."
+msgstr "\"%s\" ist keine gültige PADS Logic-ASCII-Datei."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1469
 #, c-format
 msgid "Failed to parse PADS Logic file '%s'."
-msgstr "Fehler beim Parsen der PADS  Logic-Datei \"%s\"."
+msgstr "Fehler beim Parsen der PADS Logic-Datei \"%s\"."
 
 #: eeschema/sch_io/pads/sch_io_pads.h:49
 msgid "PADS Logic schematic files"
@@ -32841,15 +32841,16 @@ msgid "Please wait"
 msgstr "Bitten warten"
 
 #: kicad/project_tree_pane.cpp:1706
-#, fuzzy
 msgid "Closing project..."
-msgstr "Projekt committen ..."
+msgstr "Schließe Projekt..."
 
 #: kicad/project_tree_pane.cpp:1723
 msgid ""
 "A Git operation is still running.\n"
 "Keep waiting, or abandon?"
 msgstr ""
+"Es läuft noch eine Git-Operation.\n"
+"Warten oder abbrechen?"
 
 #: kicad/project_tree_pane.cpp:1725
 msgid "Git Operation Delayed"
