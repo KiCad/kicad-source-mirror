@@ -39,7 +39,8 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
         m_Defaults(),
         m_Repeat(),
         m_ShowPinElectricalType( true ),
-        m_LibWidth()
+        m_LibWidth(),
+        m_ArcEditMode( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS )
 {
     // Make Coverity happy
     m_UseEeschemaColorSettings = true;;
@@ -100,6 +101,10 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "use_eeschema_color_settings",
             &m_UseEeschemaColorSettings, true ) );
+
+    m_params.emplace_back( new PARAM<int>( "editing.arc_edit_mode",
+            reinterpret_cast<int*>( &m_ArcEditMode ),
+            static_cast<int>( ARC_EDIT_MODE::KEEP_CENTER_ADJUST_ANGLE_RADIUS ) ) );
 
     m_params.emplace_back( new PARAM_MAP<int>( "lib_field_editor.field_widths",
             &m_LibFieldEditor.field_widths, {} ) );
