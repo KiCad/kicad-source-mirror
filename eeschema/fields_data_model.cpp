@@ -1070,7 +1070,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
             {
                 for( const wxString& variantName : m_variantNames )
                 {
-                    if( ref.GetSymbol()->GetDNP( &ref.GetSheetPath(), variantName )
+                    if( ref.GetSymbol()->ResolveDNP( &ref.GetSheetPath(), variantName )
                         || ref.GetSheetPath().GetDNP( variantName ) )
                     {
                         isDNP = true;
@@ -1080,7 +1080,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
             }
             else
             {
-                isDNP = ref.GetSymbol()->GetDNP( &ref.GetSheetPath(), m_currentVariant )
+                isDNP = ref.GetSymbol()->ResolveDNP( &ref.GetSheetPath(), m_currentVariant )
                         || ref.GetSheetPath().GetDNP( m_currentVariant );
             }
 
