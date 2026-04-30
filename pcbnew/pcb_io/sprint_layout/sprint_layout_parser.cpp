@@ -1619,15 +1619,48 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
     if( !text )
         return;
 
+    // When inside a group, the rotation center seems to be at the group center.
+    // Just so we don't have to do a complex fixup later, use points to detect 
+    // text center instead, they are always in absolute coordinates.
+    VECTOR2I ptsCenter;
+
+    if( !aObj.text_children.empty() )
+    {
+        double cx = 0, cy = 0;
+        size_t ptsCount = 0;
+
+        for( const SPRINT_LAYOUT::OBJECT& child : aObj.text_children )
+        {
+            if( child.type == SPRINT_LAYOUT::OBJ_LINE )
+            {
+                for( const SPRINT_LAYOUT::POINT& pt : child.points )
+                {
+                    cx += pt.x;
+                    cy += pt.y;
+                    ptsCount += 1;
+                }
+            }
+            else if( child.type == SPRINT_LAYOUT::OBJ_SEGMENT )
+            {
+                cx += child.x;
+                cy += child.y;
+                cx += child.outer;
+                cy += child.inner;
+                ptsCount += 2;
+            }
+        }
+
+        cx /= static_cast<double>( ptsCount );
+        cy /= static_cast<double>( ptsCount );
+        ptsCenter = sprintToKicadPos( static_cast<float>( cx ), static_cast<float>( cy ) );
+    }
+
     text->SetLayer( layer );
     text->SetText( convertString( aObj.text ) );
     text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
     text->SetKeepUpright( false );
     text->SetVisible( aObj.filled != 0 );
-
-    VECTOR2I pos = sprintToKicadPos( aObj.x, aObj.y );
-    text->SetTextPos( pos );
 
     if( aObj.type == SPRINT_LAYOUT::OBJ_STROKE_TEXT )
     {
@@ -1636,7 +1669,7 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
         if( height <= 0 )
             height = pcbIUScale.mmToIU( 1.0 );
 
-        double widthScale = 0.75 + 0.25 * aObj.line_width;
+        double widthScale = 0.8 + 0.2 * aObj.line_width;
         text->SetTextSize( VECTOR2I( height * widthScale, height ) );
 
         double thicknessScale = 0.06 + 0.05 * aObj.inner;
@@ -1660,9 +1693,14 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
         text->SetTextThickness( height / 8 );
     }
 
-    // Note to rotate/mirror around the center of unrotated text
-    VECTOR2I rotCenter = text->GetCenter();
-    // TODO: if inside group, rotate/mirror around group center
+    VECTOR2I untransformedPos = sprintToKicadPos( aObj.x, aObj.y );
+    text->SetTextPos( untransformedPos );
+    VECTOR2I untransformedCenter = text->GetCenter();
+
+    VECTOR2I newCenter = !aObj.text_children.empty() ? ptsCenter : untransformedCenter;
+    text->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+    text->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+    text->SetTextPos( newCenter );
 
     int rotation = 0;
 
@@ -1682,9 +1720,9 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
     }
 
     if( mirrorV )
-        text->Rotate( rotCenter, ANGLE_180 );
+        text->Rotate( newCenter, ANGLE_180 );
 
-    text->Rotate( rotCenter, EDA_ANGLE( -rotation, DEGREES_T ) );
+    text->Rotate( newCenter, EDA_ANGLE( -rotation, DEGREES_T ) );
 
     if( add )
     {
