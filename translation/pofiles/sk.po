@@ -14,15 +14,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-26 04:51+0300\n"
-"PO-Revision-Date: 2026-04-24 15:14+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-04-30 19:09+0000\n"
+"Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -3421,7 +3421,7 @@ msgstr "Vymaž referenčné označenia pre všetky vložené symboly"
 #: common/dialogs/dialog_paste_special_base.cpp:24
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:213
 msgid "Reference Designators"
-msgstr "Referenčné označovače"
+msgstr "Referenčné označenia"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
 msgid "Clear net assignments"
@@ -7710,9 +7710,9 @@ msgid "Could not create directory '%s'"
 msgstr "Nepodarilo sa vytvoriť adresár '%s'"
 
 #: common/git/libgit_backend.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s' : %s"
-msgstr "Nepodarilo sa naklonovať repozitár '%s'"
+msgstr "Nebolo možné naklonovať repozitár '%s' : %s"
 
 #: common/git/libgit_backend.cpp:171
 #, c-format
@@ -19578,7 +19578,7 @@ msgstr "Prepísať súbory"
 
 #: eeschema/files-io.cpp:1332
 msgid "Abort Project Save"
-msgstr "Zrušiť uloženie projektu"
+msgstr "Prerušiť uloženie projektu"
 
 #: eeschema/files-io.cpp:1573
 #, c-format
@@ -21766,14 +21766,14 @@ msgid "LTspice schematic files"
 msgstr "LTspice súbory schém"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1457
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a PADS Logic ASCII file."
-msgstr "'%s' nie je platná hodnota SPICE."
+msgstr "'%s' nie je PADS Logic ASCII súbor."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1469
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS Logic file '%s'."
-msgstr "Nepodarilo sa načítať súbor '%s'."
+msgstr "Nepodarilo sa spracovať PADS Logic súbor '%s'."
 
 #: eeschema/sch_io/pads/sch_io_pads.h:49
 msgid "PADS Logic schematic files"
@@ -32426,30 +32426,28 @@ msgid "Please wait"
 msgstr "Prosím čakajte"
 
 #: kicad/project_tree_pane.cpp:1706
-#, fuzzy
 msgid "Closing project..."
-msgstr "Odovzdať projekt..."
+msgstr "Zatváranie projektu..."
 
 #: kicad/project_tree_pane.cpp:1723
 msgid ""
 "A Git operation is still running.\n"
 "Keep waiting, or abandon?"
 msgstr ""
+"Operácia v Gite stále beží.\n"
+"Čakať ďalej alebo prerušiť?"
 
 #: kicad/project_tree_pane.cpp:1725
-#, fuzzy
 msgid "Git Operation Delayed"
-msgstr "Merné oneskorenie šírenia:"
+msgstr "Operácia Gitu oneskorená"
 
 #: kicad/project_tree_pane.cpp:1727
-#, fuzzy
 msgid "Keep Waiting"
-msgstr "Zachovať očíslovania"
+msgstr "Čakať ďalej"
 
 #: kicad/project_tree_pane.cpp:1727
-#, fuzzy
 msgid "Abandon"
-msgstr "Náhodnosť"
+msgstr "Ukončiť"
 
 #: kicad/project_tree_pane.cpp:1803
 msgid "The selected directory is already a Git project."
@@ -35628,7 +35626,7 @@ msgstr "Dĺžka kábla"
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
 msgid "um"
-msgstr "µm"
+msgstr "um"
 
 #: pcb_calculator/widgets/unit_selector.cpp:36
 #: pcb_calculator/widgets/unit_selector.cpp:210
@@ -40533,7 +40531,7 @@ msgstr "Nastaviť predvolené hodnoty vrstvy:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:336
 msgid "(auto)"
-msgstr ""
+msgstr "(automaticky)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "PCB graphic items"
@@ -40899,72 +40897,64 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:436
 msgid "Auto-migrate 3D model references"
-msgstr ""
+msgstr "Automatická migrácia referencií 3D modelov"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:662
-#, fuzzy
 msgid "(keep existing reference)"
-msgstr "Zachovať existujúce referenčné označenia"
+msgstr "(zachovať existujúce odkazy)"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:863
 msgid "Add 3D Model Search Directory"
-msgstr ""
+msgstr "Pridať adresár vyhľadávania 3D modelov"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:957
-#, fuzzy
 msgid "Select 3D Model File"
-msgstr "Vybrať 3D model"
+msgstr "Vybrať súbor 3D modelu"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:974
-#, fuzzy
 msgid "user-selected"
-msgstr "Nie je vybraný žiadny autobus"
+msgstr "vybraný-používateľom"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1058
-#, fuzzy
 msgid "Migrate 3D model references"
-msgstr "Tlačit referenčný rám."
+msgstr "Migrácia odkazov 3D modelov"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:19
 msgid ""
 "This board references 3D models that are no longer present on your system.\n"
 "Select replacements below, or keep the existing references unchanged."
 msgstr ""
+"Táto doska odkazuje na 3D modely, ktoré sa už nenachádzajú vo vašom "
+"systéme.\n"
+"Vyberte náhrady nižšie alebo ponechajte existujúce referencie nezmenené."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:31
-#, fuzzy
 msgid "Missing 3D model references:"
-msgstr "Tlačit referenčný rám."
+msgstr "Chýbajúce odkazy 3D modelov:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:54
-#, fuzzy
 msgid "Potential replacements:"
-msgstr "Súbory knižníc súčiastok"
+msgstr "Možné náhrady:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
-#, fuzzy
 msgid "Add Search Directory..."
-msgstr "Nový adresár..."
+msgstr "Pridať vyhľadávací adresár..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:67
-#, fuzzy
 msgid "Open External File..."
-msgstr "Otvoriť súbor dosky"
+msgstr "Otvoriť externý súbor..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:105
-#, fuzzy
 msgid "Replace Models"
-msgstr "Nahradiť Všetko"
+msgstr "Nahradiť modely"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:108
-#, fuzzy
 msgid "Keep Existing"
-msgstr "Znova použiť existujúce"
+msgstr "Zachovať existujúce"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.h:68
-#, fuzzy
 msgid "Migrate 3D Models"
-msgstr "Aktualizovať 3D modely"
+msgstr "Migrovať 3D modely"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:96
 msgid "Rotate around item anchor"
@@ -49991,7 +49981,7 @@ msgstr "Uhol v stupňoch:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:108
 msgid "Incorrect number, abort"
-msgstr "Nesprávne číslo, zrušené"
+msgstr "Nesprávne číslo, prerušené"
 
 #: pcbnew/microwave/microwave_inductor.cpp:317
 msgid "Add Microwave Inductor"
@@ -51250,14 +51240,13 @@ msgstr "Nový súbor DPS je neuložený"
 #, c-format
 msgid "%d WRL 3D model could not be matched to an equivalent STEP model."
 msgid_plural "%d WRL 3D models could not be matched to equivalent STEP models."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d 3D model WRL sa nepodaril priradiť k ekvivalentnému STEP modelu."
+msgstr[1] "%d 3D modely WRL sa nepodarilo priradiť k ekvivalentným STEP modelom."
+msgstr[2] "%d 3D modelov WRL sa nepodarilo priradiť k ekvivalentným STEP modelom."
 
 #: pcbnew/pcb_edit_frame.cpp:1958
-#, fuzzy
 msgid "Show options"
-msgstr "Ďalšie nastavenia:"
+msgstr "Zobraziť možnosti"
 
 #: pcbnew/pcb_edit_frame.cpp:1986
 msgid "Board file is read only."
@@ -56842,13 +56831,12 @@ msgid "Update footprints to include any changes from the library"
 msgstr "Aktualizovať puzdra, aby zahŕňali všetky zmeny z knižnice"
 
 #: pcbnew/tools/pcb_actions.cpp:996
-#, fuzzy
 msgid "Migrate 3D Models..."
-msgstr "Načítavanie 3D modelov..."
+msgstr "Migrovať 3D modely..."
 
 #: pcbnew/tools/pcb_actions.cpp:997
 msgid "Replace obsolete WRL 3D model references with current STEP models"
-msgstr ""
+msgstr "Nahradiť zastarané referencie 3D modelu WRL aktuálnymi STEP modelmi"
 
 #: pcbnew/tools/pcb_actions.cpp:1003
 msgid "Remove Unused Pads..."
