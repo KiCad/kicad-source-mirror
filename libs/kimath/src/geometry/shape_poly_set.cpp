@@ -3209,14 +3209,13 @@ static SHAPE_POLY_SET partitionPolyIntoRegularCellGrid( const SHAPE_POLY_SET& aP
 void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
                                          std::vector<std::unique_ptr<TRIANGULATED_POLYGON>>* aHintData )
 {
+    if( m_hashValid && m_hash == checksum() )
+        return;
+
     std::unique_lock<std::mutex> lock( m_triangulationMutex );
 
-    if( m_triangulationValid && m_hashValid )
-    {
-        if( m_hash == checksum() )
-            return;
-    }
-
+    if( m_hashValid && m_hash == checksum() )
+        return;
     // Invalidate, in case anything goes wrong below
     m_triangulationValid = false;
     m_hashValid = false;
@@ -3308,9 +3307,6 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
             }
             else
             {
-                m_hash = checksum();
-                m_hashValid = true;
-                // Set valid flag only after everything has been updated
                 m_triangulationValid = true;
             }
         }
@@ -3329,12 +3325,12 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
         }
         else
         {
-            m_hash = checksum();
-            m_hashValid = true;
-            // Set valid flag only after everything has been updated
             m_triangulationValid = true;
         }
     }
+
+    m_hash = checksum();
+    m_hashValid = true;
 }
 
 
