@@ -481,7 +481,8 @@ public:
      *
      * @return the field if found or NULL if the field was not found.
      */
-    SCH_FIELD* FindFieldCaseInsensitive( const wxString& aFieldName );
+    SCH_FIELD*       FindFieldCaseInsensitive( const wxString& aFieldName );
+    const SCH_FIELD* FindFieldCaseInsensitive( const wxString& aFieldName ) const;
 
     /**
      * @return the reference for the instance on the given sheet.

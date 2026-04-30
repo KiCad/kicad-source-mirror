@@ -736,7 +736,12 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
     AddField( FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE, _( "#" ), true, false );
 
     // User fields next
-    std::set<wxString> userFieldNames;
+    auto caseInsensitiveLess = []( const wxString& a, const wxString& b )
+    {
+        return a.CmpNoCase( b ) < 0;
+    };
+
+    std::map<wxString, std::map<wxString, int>, decltype( caseInsensitiveLess )> userFieldGroups( caseInsensitiveLess );
 
     for( int ii = 0; ii < (int) m_symbolsList.GetCount(); ++ii )
     {
@@ -745,17 +750,39 @@ void DIALOG_SYMBOL_FIELDS_TABLE::LoadFieldNames()
         for( const SCH_FIELD& field : symbol->GetFields() )
         {
             if( !field.IsMandatory() && !field.IsPrivate() )
-                userFieldNames.insert( field.GetName() );
+                userFieldGroups[field.GetName()][field.GetName()]++;
         }
     }
 
-    for( const wxString& fieldName : userFieldNames )
-        AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false );
+    for( const auto& [groupKey, exactCounts] : userFieldGroups )
+    {
+        wxString canonicalName;
 
-    // Add any templateFieldNames which aren't already present in the userFieldNames
+        if( const TEMPLATE_FIELDNAME* tfn = m_schSettings.m_TemplateFieldNames.GetFieldName( groupKey ) )
+        {
+            canonicalName = tfn->m_Name;
+        }
+        else
+        {
+            int bestCount = -1;
+
+            for( const auto& [name, count] : exactCounts )
+            {
+                if( count > bestCount )
+                {
+                    bestCount = count;
+                    canonicalName = name;
+                }
+            }
+        }
+
+        AddField( canonicalName, GetGeneratedFieldDisplayName( canonicalName ), true, false );
+    }
+
+    // Add any templateFieldNames which aren't already present.
     for( const TEMPLATE_FIELDNAME& tfn : m_schSettings.m_TemplateFieldNames.GetTemplateFieldNames() )
     {
-        if( userFieldNames.count( tfn.m_Name ) == 0 )
+        if( userFieldGroups.count( tfn.m_Name ) == 0 )
             AddField( tfn.m_Name, GetGeneratedFieldDisplayName( tfn.m_Name ), false, false );
     }
 }

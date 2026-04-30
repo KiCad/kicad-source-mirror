@@ -1622,6 +1622,20 @@ SCH_FIELD* LIB_SYMBOL::FindFieldCaseInsensitive( const wxString& aFieldName )
 }
 
 
+const SCH_FIELD* LIB_SYMBOL::FindFieldCaseInsensitive( const wxString& aFieldName ) const
+{
+    for( const SCH_ITEM& item : m_drawings[SCH_FIELD_T] )
+    {
+        const SCH_FIELD& field = static_cast<const SCH_FIELD&>( item );
+
+        if( field.GetCanonicalName().IsSameAs( aFieldName, false ) )
+            return &field;
+    }
+
+    return nullptr;
+}
+
+
 const SCH_FIELD& LIB_SYMBOL::GetValueField() const
 {
     const SCH_FIELD* field = GetField( FIELD_T::VALUE );

@@ -63,7 +63,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const LIB_SY
         dataElement.m_currentlyEmpty = false;
         dataElement.m_isModified = false;
     }
-    else if( const SCH_FIELD* field = aSymbol->GetField( aFieldName ) )
+    else if( const SCH_FIELD* field = aSymbol->FindFieldCaseInsensitive( aFieldName ) )
     {
         dataElement.m_originalData = field->GetText();
         dataElement.m_currentData = field->GetText();
@@ -1000,7 +1000,11 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
                 continue;
             }
 
-            SCH_FIELD* destField = symbol->GetField( srcName );
+            SCH_FIELD* destField = symbol->FindFieldCaseInsensitive( srcName );
+
+            if( destField && !destField->IsMandatory() && destField->GetName() != srcName )
+                destField->SetName( srcName );
+
             bool       userAdded = ( col != -1 && m_cols[col].m_userAdded );
 
             // Add a not existing field if it has a value for this symbol
@@ -1051,8 +1055,15 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
             if( field->IsMandatory() )
                 continue;
 
-            // Remove any fields that are not in the fieldStore
-            if( !fieldStore.contains( field->GetName() ) )
+            const wxString& existingName = field->GetName();
+
+            bool stillTracked = std::any_of( fieldStore.begin(), fieldStore.end(),
+                                             [&]( const auto& kv )
+                                             {
+                                                 return kv.first.IsSameAs( existingName, false );
+                                             } );
+
+            if( !stillTracked )
             {
                 symbolChangeHandler( symbol );
                 symbol->RemoveField( field );

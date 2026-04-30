@@ -1054,7 +1054,12 @@ void DIALOG_LIB_FIELDS_TABLE::UpdateFieldList()
     AddField( wxS( "LocalPower" ), _( "Local Power Symbol" ), true, false, false, true );
 
     // User fields next
-    std::set<wxString> userFieldNames;
+    auto caseInsensitiveLess = []( const wxString& a, const wxString& b )
+    {
+        return a.CmpNoCase( b ) < 0;
+    };
+
+    std::map<wxString, std::map<wxString, int>, decltype( caseInsensitiveLess )> userFieldGroups( caseInsensitiveLess );
 
     for( LIB_SYMBOL* symbol : m_symbolsList )
     {
@@ -1064,12 +1069,26 @@ void DIALOG_LIB_FIELDS_TABLE::UpdateFieldList()
         for( SCH_FIELD* field : fields )
         {
             if( !field->IsMandatory() && !field->IsPrivate() )
-                userFieldNames.insert( field->GetName() );
+                userFieldGroups[field->GetName()][field->GetName()]++;
         }
     }
 
-    for( const wxString& fieldName : userFieldNames )
-        AddField( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, false );
+    for( const auto& [groupKey, exactCounts] : userFieldGroups )
+    {
+        wxString canonicalName;
+        int      bestCount = -1;
+
+        for( const auto& [name, count] : exactCounts )
+        {
+            if( count > bestCount )
+            {
+                bestCount = count;
+                canonicalName = name;
+            }
+        }
+
+        AddField( canonicalName, GetGeneratedFieldDisplayName( canonicalName ), true, false );
+    }
 }
 
 
