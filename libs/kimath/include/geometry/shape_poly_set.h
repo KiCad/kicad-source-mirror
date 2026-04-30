@@ -35,7 +35,6 @@
 #include <iosfwd>                       // for string, stringstream
 #include <memory>
 #include <mutex>
-#include <shared_mutex>
 #include <set>                          // for set
 #include <stdexcept>                    // for out_of_range
 #include <stdlib.h>                     // for abs
@@ -1602,7 +1601,7 @@ protected:
     std::vector<std::unique_ptr<TRIANGULATED_POLYGON>> m_triangulatedPolys;
 
     std::atomic<bool> m_triangulationValid = false;
-    mutable std::shared_mutex m_triangulationMutex;
+    std::mutex  m_triangulationMutex;
 
 private:
     HASH_128 m_hash;
