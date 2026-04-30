@@ -3585,14 +3585,8 @@ void BINARY_PARSER::parseCopperPours()
     // table, and vertex coordinates appended at the end. The complex format (v0x2025, v0x2027)
     // puts POR records in sec52, per-pour layer/width metadata in a table at the tail of sec53,
     // and all vertex coordinates contiguously in sec54 after its piece metadata block.
-    struct PourHeader
-    {
-        size_t      offset   = 0;
-        std::string name;
-        uint32_t    vtxCount = 0;
-    };
 
-    std::vector<PourHeader> porHeaders;
+    std::vector<POUR_HEADER> porHeaders;
     bool                    simpleFormat = false;
 
     const SDB_SECTION* sec49 = getSection( SECTION::ClearanceRules );
@@ -3629,7 +3623,7 @@ void BINARY_PARSER::parseCopperPours()
                 continue;
             }
 
-            PourHeader hdr;
+            POUR_HEADER hdr;
             hdr.offset   = i;
             hdr.name     = name;
             hdr.vtxCount = rec.U32( 32 );
@@ -3642,81 +3636,92 @@ void BINARY_PARSER::parseCopperPours()
     }
 
     if( simpleFormat )
+        parseCopperPoursSimple( porHeaders, *sec49 );
+    else
+        parseCopperPoursComplex();
+}
+
+
+void BINARY_PARSER::parseCopperPoursSimple( const std::vector<POUR_HEADER>& aHeaders,
+                                             const SDB_SECTION& aSec49 )
+{
+    size_t       numPours  = aHeaders.size();
+    const size_t lastOff   = aHeaders[numPours - 1].offset;
+    const size_t tableBase = aSec49.dataOffset + lastOff + 32;
+    uint32_t     poolSize  = aSec49.totalBytes;
+
+    std::vector<uint32_t> vtxCounts( numPours );
+    vtxCounts[0] = aHeaders[0].vtxCount;
+
+    struct PourMeta
     {
-        size_t       numPours  = porHeaders.size();
-        const size_t lastOff   = porHeaders[numPours - 1].offset;
-        const size_t tableBase = sec49->dataOffset + lastOff + 32;
-        uint32_t     poolSize  = sec49->totalBytes;
+        int32_t width     = 0;
+        uint8_t pieceType = 0;
+        uint8_t layer     = 0;
+    };
 
-        std::vector<uint32_t> vtxCounts( numPours );
-        vtxCounts[0] = porHeaders[0].vtxCount;
+    std::vector<PourMeta> pourMeta( numPours );
 
-        struct PourMeta
+    size_t tablePos = tableBase + 4;
+
+    for( size_t p = 0; p < numPours; ++p )
+    {
+        if( tablePos + 8 > aSec49.dataOffset + poolSize )
+            return;
+
+        SDB_RECORD metaRec = m_sdb.RecordAt( tablePos );
+        PourMeta   meta;
+        meta.width     = metaRec.I32( 0 );
+        meta.pieceType = metaRec.U8( 4 );
+        meta.layer     = metaRec.U8( 5 );
+        pourMeta[p]    = meta;
+        tablePos += 8;
+
+        if( p < numPours - 1 )
         {
-            int32_t width     = 0;
-            uint8_t pieceType = 0;
-            uint8_t layer     = 0;
-        };
-
-        std::vector<PourMeta> pourMeta( numPours );
-
-        size_t tablePos = tableBase + 4;
-
-        for( size_t p = 0; p < numPours; ++p )
-        {
-            if( tablePos + 8 > sec49->dataOffset + poolSize )
+            if( tablePos + 8 > aSec49.dataOffset + poolSize )
                 return;
 
-            SDB_RECORD metaRec = m_sdb.RecordAt( tablePos );
-            PourMeta   meta;
-            meta.width     = metaRec.I32( 0 );
-            meta.pieceType = metaRec.U8( 4 );
-            meta.layer     = metaRec.U8( 5 );
-            pourMeta[p]    = meta;
+            vtxCounts[p + 1] = m_sdb.RecordAt( tablePos ).U32( 0 );
             tablePos += 8;
-
-            if( p < numPours - 1 )
-            {
-                if( tablePos + 8 > sec49->dataOffset + poolSize )
-                    return;
-
-                vtxCounts[p + 1] = m_sdb.RecordAt( tablePos ).U32( 0 );
-                tablePos += 8;
-            }
         }
-
-        size_t vtxPos = tablePos;
-
-        for( size_t p = 0; p < numPours; ++p )
-        {
-            POUR pour;
-            pour.owner_pour = porHeaders[p].name;
-            pour.width      = static_cast<double>( pourMeta[p].width );
-            pour.layer      = static_cast<int>( pourMeta[p].layer );
-
-            uint32_t nVtx = vtxCounts[p];
-
-            if( nVtx == 0 || nVtx > 100000 )
-                continue;
-
-            if( vtxPos + static_cast<size_t>( nVtx ) * 8 > sec49->dataOffset + poolSize )
-                break;
-
-            for( uint32_t v = 0; v < nVtx; ++v )
-            {
-                SDB_RECORD vtx = m_sdb.RecordAt( vtxPos );
-                int32_t    x = vtx.I32( 0 );
-                int32_t    y = vtx.I32( 4 );
-
-                pour.points.emplace_back( toBasicCoordX( x ), toBasicCoordY( y ) );
-                vtxPos += 8;
-            }
-
-            m_pours.push_back( std::move( pour ) );
-        }
-
-        return;
     }
+
+    size_t vtxPos = tablePos;
+
+    for( size_t p = 0; p < numPours; ++p )
+    {
+        POUR pour;
+        pour.owner_pour = aHeaders[p].name;
+        pour.width      = static_cast<double>( pourMeta[p].width );
+        pour.layer      = static_cast<int>( pourMeta[p].layer );
+
+        uint32_t nVtx = vtxCounts[p];
+
+        if( nVtx == 0 || nVtx > 100000 )
+            continue;
+
+        if( vtxPos + static_cast<size_t>( nVtx ) * 8 > aSec49.dataOffset + poolSize )
+            break;
+
+        for( uint32_t v = 0; v < nVtx; ++v )
+        {
+            SDB_RECORD vtx = m_sdb.RecordAt( vtxPos );
+            int32_t    x = vtx.I32( 0 );
+            int32_t    y = vtx.I32( 4 );
+
+            pour.points.emplace_back( toBasicCoordX( x ), toBasicCoordY( y ) );
+            vtxPos += 8;
+        }
+
+        m_pours.push_back( std::move( pour ) );
+    }
+}
+
+
+void BINARY_PARSER::parseCopperPoursComplex()
+{
+    std::vector<POUR_HEADER> porHeaders;
 
     const SDB_SECTION* sec52 = getSection( SECTION::PourTokensA );
     const SDB_SECTION* sec53 = getSection( SECTION::PourTokensB );
@@ -3760,7 +3765,7 @@ void BINARY_PARSER::parseCopperPours()
         if( name.size() < 4 || name.substr( 0, 3 ) != "POR" )
             continue;
 
-        PourHeader hdr;
+        POUR_HEADER hdr;
         hdr.offset   = i;
         hdr.name     = name;
         hdr.vtxCount = rec.U32( 32 );

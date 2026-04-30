@@ -92,6 +92,14 @@ struct BIN_NET_CLASS_DEF
     bool hasRuleValues = false;
 };
 
+/// One copper-pour POR header: its byte offset, name and vertex count.
+struct POUR_HEADER
+{
+    size_t      offset = 0;
+    std::string name;
+    uint32_t    vtxCount = 0;
+};
+
 /// One board-outline vertex triplet: [i32 X, i32 Y, i32 attr] where attr -1 is a plain corner
 /// and attr >= 0 is the arc-parameter ordinal.
 struct ARC_VERTEX
@@ -296,6 +304,9 @@ private:
     void parseKeepouts();
     void parseCopperShapes();
     void parseCopperPours();
+    void parseCopperPoursSimple( const std::vector<POUR_HEADER>& aHeaders,
+                                 const SDB_SECTION& aSec49 );
+    void parseCopperPoursComplex();
 
     // Reconstruct PADS dimensions, which the binary does not store as a dedicated section.
     // Each dimension is a DRW graphic-piece owner named DIM* whose sec12 vertex run holds the
