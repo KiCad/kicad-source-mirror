@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-24 17:36+0300\n"
-"PO-Revision-Date: 2026-04-23 03:03+0000\n"
+"PO-Revision-Date: 2026-05-01 04:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -2409,9 +2409,9 @@ msgid "Board file '%s' could not be saved as design block at '%s'."
 msgstr "Súbor dosky '%s' sa nepodarilo uložiť ako návrhový blok na '%s'."
 
 #: common/design_block_io.cpp:476
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save design block metadata '%s': %s"
-msgstr "Nepodarilo sa uložiť súbor knižnice návrhového bloku '%s'."
+msgstr "Nebolo možné uložiť metadáta návrhového bloku '%s': %s"
 
 #: common/design_block_io.cpp:488
 #, c-format
@@ -3451,7 +3451,7 @@ msgstr "Vymaž referenčné označenia pre všetky vložené symboly"
 #: common/dialogs/dialog_paste_special_base.cpp:24
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:213
 msgid "Reference Designators"
-msgstr "Referenčné označovače"
+msgstr "Referenčné označenia"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
 msgid "Clear net assignments"
@@ -7753,9 +7753,9 @@ msgid "Could not create directory '%s'"
 msgstr "Nepodarilo sa vytvoriť adresár '%s'"
 
 #: common/git/libgit_backend.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s' : %s"
-msgstr "Nepodarilo sa naklonovať repozitár '%s'"
+msgstr "Nebolo možné naklonovať repozitár '%s' : %s"
 
 #: common/git/libgit_backend.cpp:171
 #, c-format
@@ -9332,11 +9332,11 @@ msgstr "Zlučovanie lokálnej histórie..."
 
 #: common/local_history.cpp:1332
 msgid "Trimming local history..."
-msgstr "Odstraňovanie starších záznamov histórie..."
+msgstr "Orezávanie lokálnej histórie..."
 
 #: common/local_history.cpp:1425
 msgid "Compacting trimmed history..."
-msgstr "Zlučovanie upravenej histórie…"
+msgstr "Zlučovanie orezanej histórie…"
 
 #: common/local_history.cpp:1728
 msgid ""
@@ -9900,19 +9900,19 @@ msgid "Line length exceeded"
 msgstr "Prekročená dĺžka riadka"
 
 #: common/richio.cpp:560
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot flush '%s' to disk: %s"
-msgstr "Nie je možné presunúť '%s' do koša."
+msgstr "Nie je možné flushnúť '%s' na disk: %s"
 
 #: common/richio.cpp:614
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to commit save of '%s': %s"
-msgstr "Nepodarilo sa načítať stránku '%s': %s"
+msgstr "Nepodarilo sa commitnúť '%s': %s"
 
 #: common/richio.cpp:718
-#, fuzzy, c-format
+#, c-format
 msgid "Write failed to '%s': %s"
-msgstr "Nepodarilo sa spustiť rebase: %s"
+msgstr "Nepodarilo sa zapísať do '%s': %s"
 
 #: common/settings/bom_settings.cpp:126
 msgid "Default Editing"
@@ -19673,7 +19673,7 @@ msgstr "Prepísať súbory"
 
 #: eeschema/files-io.cpp:1332
 msgid "Abort Project Save"
-msgstr "Zrušiť uloženie projektu"
+msgstr "Prerušiť uloženie projektu"
 
 #: eeschema/files-io.cpp:1573
 #, c-format
@@ -21862,14 +21862,14 @@ msgid "LTspice schematic files"
 msgstr "LTspice súbory schém"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1457
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a PADS Logic ASCII file."
-msgstr "'%s' nie je platná hodnota SPICE."
+msgstr "'%s' nie je PADS Logic ASCII súbor."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1469
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS Logic file '%s'."
-msgstr "Nepodarilo sa spracovať Sprint Layout súbor '%s'"
+msgstr "Nepodarilo sa spracovať PADS Logic súbor '%s'."
 
 #: eeschema/sch_io/pads/sch_io_pads.h:49
 msgid "PADS Logic schematic files"
@@ -24084,7 +24084,6 @@ msgid "Incorrect inv_pin name"
 msgstr "Nesprávny názov inv_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2839
-#, fuzzy
 msgid "Wrong number of columns for series pin mapping."
 msgstr "Chybný počet stĺpcov pre mapovanie vývodov."
 
@@ -32732,30 +32731,28 @@ msgid "Please wait"
 msgstr "Prosím čakajte"
 
 #: kicad/project_tree_pane.cpp:1706
-#, fuzzy
 msgid "Closing project..."
-msgstr "Odovzdať projekt..."
+msgstr "Zatváranie projektu..."
 
 #: kicad/project_tree_pane.cpp:1723
 msgid ""
 "A Git operation is still running.\n"
 "Keep waiting, or abandon?"
 msgstr ""
+"Operácia v Gite stále beží.\n"
+"Čakať ďalej alebo prerušiť?"
 
 #: kicad/project_tree_pane.cpp:1725
-#, fuzzy
 msgid "Git Operation Delayed"
-msgstr "Merné oneskorenie šírenia:"
+msgstr "Operácia Gitu oneskorená"
 
 #: kicad/project_tree_pane.cpp:1727
-#, fuzzy
 msgid "Keep Waiting"
-msgstr "Zachovať očíslovania"
+msgstr "Čakať ďalej"
 
 #: kicad/project_tree_pane.cpp:1727
-#, fuzzy
 msgid "Abandon"
-msgstr "Náhodnosť"
+msgstr "Ukončiť"
 
 #: kicad/project_tree_pane.cpp:1803
 msgid "The selected directory is already a Git project."
@@ -34980,34 +34977,46 @@ msgid ""
 "'Constant': εr and tan δ applied at all frequencies.\n"
 "'Djordjevic-Sarkar': causal wideband Debye anchored at the spec frequency."
 msgstr ""
+"'Konštanta': εr a tan δ aplikované na všetkých frekvenciách.\n"
+"'Djordjevic-Sarkar': kauzálny širokopásmový Debyeov efekt daný na "
+"špecifikovanej frekvencii."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:65
 msgid ""
 "Enable solder resist / LPI overlay correction.  Affects εeff, Z0, and "
 "dielectric loss for microstrip, coupled microstrip, CPW, and CBCPW."
 msgstr ""
+"Povoliť korekciu spájkovacej masky / prekrytia LPI.  Ovplyvňuje εeff, Z0 a "
+"dielektrické straty pre mikropáskové vedenie, prepojené mikropáskové "
+"vedenie, CPW a CBCPW."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:69
 msgid ""
 "Cured mask thickness.  Typical LPI is 15-30 um; set to 0 or uncheck to "
 "disable."
 msgstr ""
+"Hrúbka vytvrdenej masky.  Typický LPI je 15 – 30 µm; nastaviť na 0 alebo "
+"zrušiť začiarknutie pre deaktiváciu."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:74
 msgid ""
 "Mask relative permittivity.  Default 3.5 for standard green LPI.  Range "
 "3.3-3.8 for typical resins."
 msgstr ""
+"Relatívna permitivita masky.  Predvolená hodnota 3,5 pre štandardný zelený "
+"LPI.  Rozsah 3,3 – 3,8 pre typické živice."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:79
 msgid "Mask loss tangent.  Default 0.025 for LPI."
-msgstr ""
+msgstr "Tangens straty na maske.  Predvolená hodnota pre LPI je 0,025."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:83
 msgid ""
 "Enable when the mask fills the CPW slots (standard LPI process).\n"
 "Disable for selective mask that covers only the traces."
 msgstr ""
+"Povoliť, keď maska zaplní sloty CPW (štandardný proces LPI).\n"
+"Zakázať pre selektívnu masku, ktorá pokrýva iba spoje."
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Microstrip Line"
@@ -35054,43 +35063,40 @@ msgid "Substrate Parameters"
 msgstr "Parametre podkladu"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:47
-#, fuzzy
 msgid "Dielectric model:"
-msgstr "Dielektrické straty:"
+msgstr "Dielektrický model:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:51
 msgid "Constant (εr, tan δ)"
-msgstr ""
+msgstr "Konštanta (εr, tan δ)"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:51
 msgid "Djordjevic-Sarkar causal"
-msgstr ""
+msgstr "Djordjevič-Sarkar kauzál"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:63
-#, fuzzy
 msgid "Soldermask present"
-msgstr "Spájkovacia maska"
+msgstr "Spájkovacia maska prítomná"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:66
 msgid "Mask fills gaps"
-msgstr ""
+msgstr "Maska vypĺňa medzery"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:79
-#, fuzzy
 msgid "Mask thickness:"
-msgstr "Hrúbka spoja:"
+msgstr "Hrúbka masky:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:86
 msgid "µm"
-msgstr ""
+msgstr "µm"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:90
 msgid "Mask εr:"
-msgstr ""
+msgstr "εr masky:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:100
 msgid "Mask tan δ:"
-msgstr ""
+msgstr "Tan δ masky:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:119
 msgid "Er:"
@@ -35143,9 +35149,8 @@ msgid "Frequency:"
 msgstr "Frekvencia:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:278
-#, fuzzy
 msgid "Spec frequency:"
-msgstr "Koncová frekvencia:"
+msgstr "Špec. frekvencia:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:315
 msgid "Physical Parameters"
@@ -35693,6 +35698,8 @@ msgid ""
 "Height from substrate top to grounded cover. Leave at the large default "
 "value for no cover."
 msgstr ""
+"Výška od vrchu substrátu po uzemnený kryt. Ak nie je krytý, ponechajte "
+"väčšiu predvolenú hodnotu."
 
 #: pcb_calculator/transline_ident.cpp:102
 msgid "Substrate relative permittivity (dielectric constant)"
@@ -35991,15 +35998,17 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:368
 msgid "Common-mode Impedance (Zcomm):"
-msgstr ""
+msgstr "Impedancia pri spoločnom režime (Zcomm):"
 
 #: pcb_calculator/transline_ident.cpp:369
 msgid "Coupling coefficient (kc):"
-msgstr ""
+msgstr "Koeficient väzby (kc):"
 
 #: pcb_calculator/transline_ident.cpp:375
 msgid "Distance from track to closest ground plane (default: centered)"
 msgstr ""
+"Vzdialenosť od spoja k najbližšej uzemňovacej rovine (predvolene: "
+"vycentrovaná)"
 
 #: pcb_calculator/transline_ident.cpp:413
 msgid "Distance between strip and top metal"
@@ -36027,7 +36036,7 @@ msgstr "Dĺžka kábla"
 
 #: pcb_calculator/widgets/unit_selector.cpp:35
 msgid "um"
-msgstr "µm"
+msgstr "um"
 
 #: pcb_calculator/widgets/unit_selector.cpp:36
 #: pcb_calculator/widgets/unit_selector.cpp:210
@@ -36231,14 +36240,14 @@ msgid "no layers"
 msgstr "žiadne vrstvy"
 
 #: pcbnew/board_loader.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save board '%s': %s"
-msgstr "Nie je možné importovať symbol '%s': %s"
+msgstr "Nie je možné uložiť dosku '%s': %s"
 
 #: pcbnew/board_loader.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected error saving board '%s': %s"
-msgstr "Pri načítavaní dosky '%s': %s nastala chyba"
+msgstr "Vyskytla sa neočakávaná chyba pri ukladaní dosky '%s': %s"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:344
 #, c-format
@@ -37971,12 +37980,12 @@ msgstr "počet zvislo"
 #: pcbnew/dialogs/dialog_create_array.cpp:436
 #, c-format
 msgid "horizontal delta of zero with %ld objects"
-msgstr "vodorovný rozdiel je nulový pre %ld objektov"
+msgstr "horizontálna delta nuly s %ld objektmi"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:442
 #, c-format
 msgid "vertical delta of zero with %ld objects"
-msgstr "zvislý rozdiel je nulový pre %ld objektov"
+msgstr "vertikálna delta nuly s %ld objektmi"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:451
 msgid "stagger"
@@ -37989,7 +37998,7 @@ msgstr "počet bodov"
 #: pcbnew/dialogs/dialog_create_array.cpp:517
 #, c-format
 msgid "angular delta of zero with %ld objects"
-msgstr "šikmý rozdiel je nulový pre %ld objektov"
+msgstr "šikmá delta nuly s %ld objektmi"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:564
 msgid "Bad parameters"
@@ -41047,7 +41056,7 @@ msgstr "Nastaviť predvolené hodnoty vrstvy:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:336
 msgid "(auto)"
-msgstr ""
+msgstr "(automaticky)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "PCB graphic items"
@@ -41425,72 +41434,64 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:436
 msgid "Auto-migrate 3D model references"
-msgstr ""
+msgstr "Automatická migrácia referencií 3D modelov"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:662
-#, fuzzy
 msgid "(keep existing reference)"
-msgstr "Zachovať existujúce referenčné označenia"
+msgstr "(zachovať existujúce odkazy)"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:872
 msgid "Add 3D Model Search Directory"
-msgstr ""
+msgstr "Pridať adresár vyhľadávania 3D modelov"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:966
-#, fuzzy
 msgid "Select 3D Model File"
-msgstr "Vybrať 3D model"
+msgstr "Vybrať súbor 3D modelu"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:983
-#, fuzzy
 msgid "user-selected"
-msgstr "Nie je vybraný žiadny autobus"
+msgstr "vybraný-používateľom"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1067
-#, fuzzy
 msgid "Migrate 3D model references"
-msgstr "Tlačit referenčný rám."
+msgstr "Migrácia odkazov 3D modelov"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:19
 msgid ""
 "This board references 3D models that are no longer present on your system.\n"
 "Select replacements below, or keep the existing references unchanged."
 msgstr ""
+"Táto doska odkazuje na 3D modely, ktoré sa už nenachádzajú vo vašom "
+"systéme.\n"
+"Vyberte náhrady nižšie alebo ponechajte existujúce referencie nezmenené."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:31
-#, fuzzy
 msgid "Missing 3D model references:"
-msgstr "Tlačit referenčný rám."
+msgstr "Chýbajúce odkazy 3D modelov:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:54
-#, fuzzy
 msgid "Potential replacements:"
-msgstr "Súbory knižníc súčiastok"
+msgstr "Možné náhrady:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
-#, fuzzy
 msgid "Add Search Directory..."
-msgstr "Nový adresár..."
+msgstr "Pridať vyhľadávací adresár..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:67
-#, fuzzy
 msgid "Open External File..."
-msgstr "Otvoriť súbor dosky"
+msgstr "Otvoriť externý súbor..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:105
-#, fuzzy
 msgid "Replace Models"
-msgstr "Nahradiť Všetko"
+msgstr "Nahradiť modely"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:108
-#, fuzzy
 msgid "Keep Existing"
-msgstr "Znova použiť existujúce"
+msgstr "Zachovať existujúce"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.h:68
-#, fuzzy
 msgid "Migrate 3D Models"
-msgstr "Aktualizovať 3D modely"
+msgstr "Migrovať 3D modely"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:96
 msgid "Rotate around item anchor"
@@ -44373,15 +44374,13 @@ msgstr "Výrobná vrstva"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:214
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:143
-#, fuzzy
 msgid "Silkscreen layer"
-msgstr "Odstup potlače"
+msgstr "Vrstva potlače"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:215
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:143
-#, fuzzy
 msgid "Pin bounding box"
-msgstr "Zobraziť modelové ohraničovacie boxy"
+msgstr "Ohraničujúci rámček vývodu"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:263
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:890
@@ -45292,12 +45291,9 @@ msgid "Design rules cannot be added without a project"
 msgstr "Pravidlá návrhu sa nedajú pridať bez projektu"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:915
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save design rules to '%s': %s"
-msgstr ""
-"Nie je možné uložiť z dôvodu chyby overenia v pravidle '%s':\n"
-"\n"
-"%s"
+msgstr "Nie je možné uložiť pravidlá návrhu do '%s': %s"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
 msgid "DRC Rules"
@@ -50706,7 +50702,7 @@ msgstr "Uhol v stupňoch:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:108
 msgid "Incorrect number, abort"
-msgstr "Nesprávne číslo, zrušené"
+msgstr "Nesprávne číslo, prerušené"
 
 #: pcbnew/microwave/microwave_inductor.cpp:317
 msgid "Add Microwave Inductor"
@@ -51965,14 +51961,13 @@ msgstr "Nový súbor DPS je neuložený"
 #, c-format
 msgid "%d WRL 3D model could not be matched to an equivalent STEP model."
 msgid_plural "%d WRL 3D models could not be matched to equivalent STEP models."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d 3D model WRL sa nepodaril priradiť k ekvivalentnému STEP modelu."
+msgstr[1] "%d 3D modely WRL sa nepodarilo priradiť k ekvivalentným STEP modelom."
+msgstr[2] "%d 3D modelov WRL sa nepodarilo priradiť k ekvivalentným STEP modelom."
 
 #: pcbnew/pcb_edit_frame.cpp:2032
-#, fuzzy
 msgid "Show options"
-msgstr "Ďalšie nastavenia:"
+msgstr "Zobraziť možnosti"
 
 #: pcbnew/pcb_edit_frame.cpp:2060
 msgid "Board file is read only."
@@ -57587,13 +57582,12 @@ msgid "Update footprints to include any changes from the library"
 msgstr "Aktualizovať puzdra, aby zahŕňali všetky zmeny z knižnice"
 
 #: pcbnew/tools/pcb_actions.cpp:1003
-#, fuzzy
 msgid "Migrate 3D Models..."
-msgstr "Načítavanie 3D modelov..."
+msgstr "Migrovať 3D modely..."
 
 #: pcbnew/tools/pcb_actions.cpp:1004
 msgid "Replace obsolete WRL 3D model references with current STEP models"
-msgstr ""
+msgstr "Nahradiť zastarané referencie 3D modelu WRL aktuálnymi STEP modelmi"
 
 #: pcbnew/tools/pcb_actions.cpp:1010
 msgid "Remove Unused Pads..."
