@@ -1724,3 +1724,43 @@ bool FIELDS_EDITOR_GRID_DATA_MODEL::DeleteRows( size_t aPosition, size_t aNumRow
 
     return true;
 }
+
+
+std::vector<FIELD_CASE_CONFLICT> DetectFieldCaseConflicts( const SCH_REFERENCE_LIST& aSymbols )
+{
+    std::vector<FIELD_CASE_CONFLICT> conflicts;
+
+    for( unsigned i = 0; i < aSymbols.GetCount(); ++i )
+    {
+        SCH_SYMBOL* symbol = aSymbols[i].GetSymbol();
+
+        if( !symbol )
+            continue;
+
+        std::map<wxString, std::vector<std::pair<wxString, wxString>>> groups;
+
+        for( const SCH_FIELD& field : symbol->GetFields() )
+        {
+            if( field.IsMandatory() || field.IsPrivate() )
+                continue;
+
+            groups[field.GetName().Lower()].emplace_back( field.GetName(), field.GetText() );
+        }
+
+        for( const auto& [key, members] : groups )
+        {
+            if( members.size() < 2 )
+                continue;
+
+            FIELD_CASE_CONFLICT c;
+            c.symbol = symbol;
+            c.sheetPath = aSymbols[i].GetSheetPath();
+            c.reference = symbol->GetRef( &c.sheetPath );
+            c.caseFoldedKey = key;
+            c.variants = members;
+            conflicts.push_back( std::move( c ) );
+        }
+    }
+
+    return conflicts;
+}

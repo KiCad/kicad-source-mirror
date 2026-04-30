@@ -159,6 +159,7 @@ set( QA_EESCHEMA_SRCS
     test_symbol_clipboard_export.cpp
     test_schematic_clipboard_export.cpp
     test_autoplace_fields.cpp
+    test_field_case_conflicts.cpp
 )
 
 if( WIN32 )

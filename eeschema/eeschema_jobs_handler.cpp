@@ -99,6 +99,10 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
                   wxCHECK( bomJob && editFrame, false );
 
                   DIALOG_SYMBOL_FIELDS_TABLE dlg( editFrame, bomJob );
+
+                  if( dlg.WasAborted() )
+                      return false;
+
                   return dlg.ShowModal() == wxID_OK;
               } );
     Register( "pythonbom",

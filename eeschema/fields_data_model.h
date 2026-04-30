@@ -27,6 +27,20 @@
 struct BOM_FIELD;
 struct BOM_PRESET;
 struct BOM_FMT_PRESET;
+class SCH_SYMBOL;
+
+
+struct FIELD_CASE_CONFLICT
+{
+    SCH_SYMBOL*                                symbol;
+    SCH_SHEET_PATH                             sheetPath;
+    wxString                                   reference;
+    wxString                                   caseFoldedKey;
+    std::vector<std::pair<wxString, wxString>> variants;
+};
+
+
+std::vector<FIELD_CASE_CONFLICT> DetectFieldCaseConflicts( const SCH_REFERENCE_LIST& aSymbols );
 
 
 // Columns for the View Fields grid

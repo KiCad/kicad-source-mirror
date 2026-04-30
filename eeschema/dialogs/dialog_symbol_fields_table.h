@@ -187,4 +187,9 @@ private:
     SCHEMATIC_SETTINGS&                m_schSettings;
 
     JOB_EXPORT_SCH_BOM* m_job;
+
+    bool m_aborted = false;
+
+public:
+    bool WasAborted() const { return m_aborted; }
 };

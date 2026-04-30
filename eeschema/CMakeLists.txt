@@ -150,6 +150,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_erc_job_config.cpp
     dialogs/dialog_rescue_each.cpp
     dialogs/dialog_rescue_each_base.cpp
+    dialogs/dialog_resolve_field_case_conflicts.cpp
+    dialogs/dialog_resolve_field_case_conflicts_base.cpp
     dialogs/dialog_sch_import_settings.cpp
     dialogs/dialog_sch_import_settings_base.cpp
     dialogs/dialog_sch_find.cpp

@@ -2439,7 +2439,17 @@ void SCH_EDIT_FRAME::onCloseErcDialog( wxCommandEvent& aEvent )
 DIALOG_SYMBOL_FIELDS_TABLE* SCH_EDIT_FRAME::GetSymbolFieldsTableDialog()
 {
     if( !m_symbolFieldsTableDialog )
-        m_symbolFieldsTableDialog = new DIALOG_SYMBOL_FIELDS_TABLE( this );
+    {
+        auto* dlg = new DIALOG_SYMBOL_FIELDS_TABLE( this );
+
+        if( dlg->WasAborted() )
+        {
+            dlg->Destroy();
+            return nullptr;
+        }
+
+        m_symbolFieldsTableDialog = dlg;
+    }
 
     return m_symbolFieldsTableDialog;
 }

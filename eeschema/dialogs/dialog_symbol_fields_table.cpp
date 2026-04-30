@@ -53,6 +53,7 @@
 #include <wx/msgdlg.h>
 #include <dialogs/eda_view_switcher.h>
 #include "dialog_symbol_fields_table.h"
+#include "dialog_resolve_field_case_conflicts.h"
 #include <fields_data_model.h>
 #include <eda_list_dialog.h>
 #include <project_sch.h>
@@ -198,6 +199,20 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 {
     // Get all symbols from the list of schematic sheets
     m_parent->Schematic().Hierarchy().GetSymbols( m_symbolsList, SYMBOL_FILTER_NON_POWER );
+
+    if( auto conflicts = DetectFieldCaseConflicts( m_symbolsList ); !conflicts.empty() )
+    {
+        DIALOG_RESOLVE_FIELD_CASE_CONFLICTS resolver( this, m_parent, std::move( conflicts ) );
+
+        if( resolver.ShowModal() != wxID_OK )
+        {
+            m_aborted = true;
+            return;
+        }
+
+        m_symbolsList.Clear();
+        m_parent->Schematic().Hierarchy().GetSymbols( m_symbolsList, SYMBOL_FILTER_NON_POWER );
+    }
 
     m_bRefresh->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
     m_bMenu->SetBitmap( KiBitmapBundle( BITMAPS::config ) );

@@ -2967,7 +2967,8 @@ int SCH_EDITOR_CONTROL::EditSymbolFields( const TOOL_EVENT& aEvent )
 {
     DIALOG_SYMBOL_FIELDS_TABLE* dlg = m_frame->GetSymbolFieldsTableDialog();
 
-    wxCHECK( dlg, 0 );
+    if( !dlg )
+        return 0;
 
     // Needed at least on Windows. Raise() is not enough
     dlg->Show( true );
@@ -3026,7 +3027,8 @@ int SCH_EDITOR_CONTROL::GenerateBOM( const TOOL_EVENT& aEvent )
 {
     DIALOG_SYMBOL_FIELDS_TABLE* dlg = m_frame->GetSymbolFieldsTableDialog();
 
-    wxCHECK( dlg, 0 );
+    if( !dlg )
+        return 0;
 
     // Needed at least on Windows. Raise() is not enough
     dlg->Show( true );
