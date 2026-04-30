@@ -142,6 +142,15 @@ double SPRINT_LAYOUT_PARSER::readDouble()
 }
 
 
+float SPRINT_LAYOUT_PARSER::readCoord()
+{
+    if( m_fileData.version >= 5 )
+        return readFloat();
+    else
+        return static_cast<float>( readInt32() );
+}
+
+
 std::string SPRINT_LAYOUT_PARSER::readFixedString( size_t aMaxLen )
 {
     size_t rawLen = readUint8();
@@ -199,6 +208,7 @@ void SPRINT_LAYOUT_PARSER::seek( int aBytes )
 
 bool SPRINT_LAYOUT_PARSER::ParseBoard( const wxString& aFileName )
 {
+    m_parsingMacro = false;
     parseFileStart( aFileName );
 
     uint32_t numBoards = readUint32();
@@ -253,6 +263,7 @@ bool SPRINT_LAYOUT_PARSER::ParseMacroFile( const wxString& aFileName )
     SPRINT_LAYOUT::BOARD_DATA data;
     data.name = wxFileNameFromPath( aFileName ).BeforeLast( '.' );
 
+    m_parsingMacro = true;
     parseFileStart( aFileName );
     parseObjectsList( data );
 
@@ -293,11 +304,12 @@ void SPRINT_LAYOUT_PARSER::parseFileStart( const wxString& aFileName )
     if( m_fileData.version > 6 || magic1 != 0x33 || magic2 != 0xAA || magic3 != 0xFF )
         THROW_IO_ERROR( _( "Invalid Sprint Layout file header" ) );
 
-    if( m_fileData.version < 5 )
+    if( m_fileData.version < 4 )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Current file appears to be generated in Sprint Layout %d. Only version 5 "
-                                             "and 6 files are supported. " ),
-                                          m_fileData.version ) );
+        THROW_IO_ERROR(
+                wxString::Format( _( "Current file appears to be generated in Sprint Layout %d. Only version 4, 5 "
+                                     "and 6 files are supported. " ),
+                                  m_fileData.version ) );
     }
 }
 
@@ -362,64 +374,143 @@ void SPRINT_LAYOUT_PARSER::parseObjectsList( SPRINT_LAYOUT::BOARD_DATA& aBoard )
 }
 
 
+void SPRINT_LAYOUT_PARSER::parseGroups( SPRINT_LAYOUT::OBJECT& aObj )
+{
+    uint32_t groupCount = readUint32();
+
+    if( groupCount > MAX_GROUPS )
+        THROW_IO_ERROR( _( "Too many groups in Sprint Layout object" ) );
+
+    aObj.groups.resize( groupCount );
+
+    for( uint32_t i = 0; i < groupCount; i++ )
+        aObj.groups[i] = readUint32();
+}
+
+
+void SPRINT_LAYOUT_PARSER::parsePoints( SPRINT_LAYOUT::OBJECT& aObj )
+{
+    uint32_t pointCount = readUint32();
+
+    if( pointCount > MAX_POINTS )
+        THROW_IO_ERROR( _( "Too many points in Sprint Layout object" ) );
+
+    for( uint32_t i = 0; i < pointCount; i++ )
+    {
+        SPRINT_LAYOUT::POINT pt;
+        pt.x = readCoord();
+        pt.y = readCoord();
+
+        if( pt.x == 0.0f || std::isnormal( pt.x ) )
+        {
+            aObj.points.emplace_back( pt );
+        }
+        else
+        {
+            seek( -8 );
+        }
+    }
+}
+
+
 void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTextChild )
 {
     aObj.type = readUint8();
 
-    if( aObj.type != SPRINT_LAYOUT::OBJ_THT_PAD && aObj.type != SPRINT_LAYOUT::OBJ_POLY
-        && aObj.type != SPRINT_LAYOUT::OBJ_CIRCLE && aObj.type != SPRINT_LAYOUT::OBJ_LINE
-        && aObj.type != SPRINT_LAYOUT::OBJ_TEXT && aObj.type != SPRINT_LAYOUT::OBJ_SMD_PAD )
+    if( aObj.type != SPRINT_LAYOUT::OBJ_SEGMENT && aObj.type != SPRINT_LAYOUT::OBJ_THT_PAD
+        && aObj.type != SPRINT_LAYOUT::OBJ_POLY && aObj.type != SPRINT_LAYOUT::OBJ_CIRCLE
+        && aObj.type != SPRINT_LAYOUT::OBJ_LINE && aObj.type != SPRINT_LAYOUT::OBJ_TEXT
+        && aObj.type != SPRINT_LAYOUT::OBJ_SMD_PAD )
     {
-        THROW_IO_ERROR( wxString::Format( _( "Unknown object type %d in Sprint Layout file" ),
-                                          aObj.type ) );
+        THROW_IO_ERROR( wxString::Format( _( "Unknown object type %d in Sprint Layout file" ), aObj.type ) );
     }
 
-    aObj.x = readFloat();
-    aObj.y = readFloat();
-    aObj.outer = readFloat();
-    aObj.inner = readFloat();
+    aObj.x = readCoord();
+    aObj.y = readCoord();
+    aObj.outer = readCoord();
+    aObj.inner = readCoord();
     aObj.line_width = readUint32();
-    skip( 1 );  // padding
+    skip( 1 ); // padding
     aObj.layer = readUint8();
     aObj.tht_shape = readUint8();
-    skip( 4 );  // padding
+    skip( 4 ); // padding
     aObj.component_id = readUint16();
-    skip( 1 );  // selected
+    skip( 1 ); // selected
     aObj.start_angle = readInt32(); // also th_style[4]
-    skip( 5 );  // unknown
+    skip( 5 ); // unknown
     aObj.filled = readUint8();
     aObj.clearance = readInt32();
-    skip( 5 );  // unknown
-    aObj.thermal_width = readUint8();
-    aObj.mirror = readUint8();
-    aObj.keepout = readUint8();
-    aObj.rotation = readInt32(); // thzise
-    aObj.plated = readUint8();
-    aObj.soldermask = readUint8();
-    skip( 18 ); // unknown padding
 
-    // Variable-length data after header
-    if( !aIsTextChild )
+    if( m_fileData.version >= 5 )
     {
-        aObj.text = readVarString();
-        aObj.net_name = readVarString();
+        skip( 5 ); // padding
+        aObj.thermal_width = readUint8();
+        aObj.mirror = readUint8();
+        aObj.keepout = readUint8();
+        aObj.rotation = readInt32();
+        aObj.plated = readUint8();
+        aObj.soldermask = readUint8();
+        skip( 18 );
 
-        uint32_t groupCount = readUint32();
+        if( !aIsTextChild )
+        {
+            aObj.text = readVarString();
+            aObj.net_name = readVarString();
+            parseGroups( aObj );
+        }
+    }
+    else if( m_fileData.version == 4 )
+    {
+        skip( 9 ); // padding
+        aObj.thermal_width = readUint8(); // text H mirror
+        aObj.mirror = readUint8();        // text V mirror
+        aObj.keepout = readUint8();
+        skip( 18 );
 
-        if( groupCount > MAX_GROUPS )
-            THROW_IO_ERROR( _( "Too many groups in Sprint Layout object" ) );
-
-        aObj.groups.resize( groupCount );
-
-        for( uint32_t i = 0; i < groupCount; i++ )
-            aObj.groups[i] = readUint32();
+        if( !aIsTextChild )
+        {
+            aObj.text = readVarString();
+            parseGroups( aObj );
+        }
     }
 
     switch( aObj.type )
     {
+    case SPRINT_LAYOUT::OBJ_SEGMENT:
     case SPRINT_LAYOUT::OBJ_CIRCLE:
-        // Circles have no points list
+    {
+        return; // Segments and circles have no points list
+    }
+
+    case SPRINT_LAYOUT::OBJ_POLY:
+    case SPRINT_LAYOUT::OBJ_LINE:
+    {
+        parsePoints( aObj );
         return;
+    }
+
+    case SPRINT_LAYOUT::OBJ_THT_PAD:
+    {
+        if( m_fileData.version >= 5 )
+        {
+            parsePoints( aObj );
+            return;
+        }
+
+        skip( 4 ); // Usually 0xFFFFFFFF
+        return;    // No points in older versions
+    }
+
+    case SPRINT_LAYOUT::OBJ_SMD_PAD:
+    {
+        if( m_fileData.version >= 5 )
+        {
+            parsePoints( aObj );
+            return;
+        }
+
+        return; // No points in older versions
+    }
 
     case SPRINT_LAYOUT::OBJ_TEXT:
     {
@@ -437,8 +528,8 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
         if( m_fileData.version >= 6 && aObj.tht_shape == 1 )
         {
             aObj.component.valid = true;
-            aObj.component.off_x = readFloat();
-            aObj.component.off_y = readFloat();
+            aObj.component.off_x = readCoord();
+            aObj.component.off_y = readCoord();
             aObj.component.center_mode = readUint8();
             aObj.component.rotation = readDouble();
             aObj.component.package = readVarString();
@@ -450,32 +541,9 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
     }
 
     default:
-        break;
-    }
-
-    // Points list for pads, lines, and polygons
-    uint32_t pointCount = readUint32();
-
-    if( pointCount > MAX_POINTS )
-        THROW_IO_ERROR( _( "Too many points in Sprint Layout object" ) );
-
-    for( uint32_t i = 0; i < pointCount; i++ )
     {
-        SPRINT_LAYOUT::POINT pt;
-
-        pt.x = readFloat();
-        pt.y = readFloat();
-
-        if( pt.x == 0.0f || std::isnormal( pt.x ) )
-        {
-            aObj.points.emplace_back( pt );
-        }
-        else
-        {
-            // ku14194revb.lay6 has polygons where pointCount is 5 but only 4 points are valid.
-            // seek back so that the next object type is read correctly, and ignore invalid points.
-            seek( -8 );
-        }
+        THROW_IO_ERROR( wxString::Format( _( "Unknown object type %d in Sprint Layout file" ), aObj.type ) );
+    }
     }
 }
 
@@ -759,6 +827,10 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
             processPad( container, obj, boardData.ground_plane, gndPlaneNet, gidToItems );
             break;
 
+        case SPRINT_LAYOUT::OBJ_SEGMENT:
+            processSegment( container, obj, outlineSegments, boardData.ground_plane, gndPlaneNet, gidToItems );
+            break;
+
         case SPRINT_LAYOUT::OBJ_LINE:
             processLine( container, obj, outlineSegments, boardData.ground_plane, gndPlaneNet, gidToItems );
             break;
@@ -860,6 +932,10 @@ FOOTPRINT* SPRINT_LAYOUT_PARSER::CreateFootprint()
         case SPRINT_LAYOUT::OBJ_THT_PAD:
         case SPRINT_LAYOUT::OBJ_SMD_PAD:
             processPad( container, obj, groundPlane, nullptr, gidToItems );
+            break;
+
+        case SPRINT_LAYOUT::OBJ_SEGMENT:
+            processSegment( container, obj, outlineSegments, groundPlane, nullptr, gidToItems );
             break;
 
         case SPRINT_LAYOUT::OBJ_LINE:
@@ -978,6 +1054,7 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
     }
 
     PCB_LAYER_ID padLayer = mapLayer( aObj.layer );
+    VECTOR2I     padPos = sprintToKicadPos( aObj.x, aObj.y );
 
     if( aObj.type == SPRINT_LAYOUT::OBJ_THT_PAD )
     {
@@ -1070,8 +1147,6 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
         else
             pad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );
 
-        VECTOR2I padPos = sprintToKicadPos( aObj.x, aObj.y );
-
         pad->SetPosition( padPos );
         pad->Rotate( padPos, -ptsAngle );
     }
@@ -1097,9 +1172,12 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
         if( height <= 0 )
             height = width;
 
+        if( !aObj.points.empty() )
+            padPos = ptsCenter;
+
         pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( width, height ) );
-        pad->SetPosition( ptsCenter );
-        pad->Rotate( ptsCenter, -ptsAngle );
+        pad->SetPosition( padPos );
+        pad->Rotate( padPos, -ptsAngle );
     }
 
     // Solder mask: soldermask==0 means no mask opening (pad is tented/covered)
@@ -1211,6 +1289,39 @@ void SPRINT_LAYOUT_PARSER::processLine( BOARD_ITEM_CONTAINER* aContainer, const 
 }
 
 
+void SPRINT_LAYOUT_PARSER::processSegment( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
+                                           std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
+                                           const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet,
+                                           std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems )
+{
+    PCB_LAYER_ID layer = mapLayer( aObj.layer );
+
+    if( layer == Edge_Cuts )
+    {
+        std::vector<VECTOR2I> seg;
+        seg.push_back( sprintToKicadPos( aObj.x, aObj.y ) );
+        seg.push_back( sprintToKicadPos( aObj.outer, aObj.inner ) );
+        aOutlineSegments.push_back( std::move( seg ) );
+        return;
+    }
+
+    int width = sprintToKicadCoord( static_cast<float>( aObj.line_width ) );
+
+    if( width <= 0 )
+        width = pcbIUScale.mmToIU( 0.25 );
+
+    PCB_SHAPE* shape = new PCB_SHAPE( aContainer );
+    shape->SetShape( SHAPE_T::SEGMENT );
+    shape->SetLayer( layer );
+    shape->SetWidth( width );
+    shape->SetStart( sprintToKicadPos( aObj.x, aObj.y ) );
+    shape->SetEnd( sprintToKicadPos( aObj.outer, aObj.inner ) );
+
+    aContainer->Add( shape );
+    processItemGroups( shape, aObj, aGidToItems );
+}
+
+
 void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
                                         std::vector<std::vector<VECTOR2I>>& aOutlineSegments,
                                         const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet,
@@ -1312,15 +1423,21 @@ void SPRINT_LAYOUT_PARSER::processCircle( BOARD_ITEM_CONTAINER* aContainer, cons
     if( width <= 0 )
         width = pcbIUScale.mmToIU( 0.25 );
 
-    int32_t startAngle = aObj.start_angle;
+    int32_t startAngleRaw = aObj.start_angle;
 
     // line_width is uint32_t but stores end_angle (signed) for circle objects.
     // Two's complement reinterpretation is correct here.
-    int32_t endAngle = static_cast<int32_t>( aObj.line_width );
+    int32_t endAngleRaw = static_cast<int32_t>( aObj.line_width );
 
-    bool isFullCircle = ( startAngle == 0 && endAngle == 0 )
-                        || ( endAngle - startAngle >= 360000 )
-                        || ( startAngle == endAngle );
+    // Only version 6 layouts (and not macros) seem to use 0.001 deg scale
+    double angleScale = ( m_fileData.version >= 6 && !m_parsingMacro ) ? 0.001 : 1.0;
+
+    double startAngleDeg = startAngleRaw * angleScale;
+    double endAngleDeg = endAngleRaw * angleScale;
+
+    bool isFullCircle = ( startAngleDeg == 0 && endAngleDeg == 0 )
+                        || ( endAngleDeg - startAngleDeg >= 360 )
+                        || ( startAngleDeg == endAngleDeg );
 
     if( layer == Edge_Cuts )
     {
@@ -1339,8 +1456,8 @@ void SPRINT_LAYOUT_PARSER::processCircle( BOARD_ITEM_CONTAINER* aContainer, cons
         }
         else
         {
-            int32_t sa = startAngle;
-            int32_t ea = endAngle;
+            int32_t sa = startAngleDeg * 1000;
+            int32_t ea = endAngleDeg * 1000;
 
             if( ea <= sa )
                 ea += 360000;
@@ -1379,18 +1496,18 @@ void SPRINT_LAYOUT_PARSER::processCircle( BOARD_ITEM_CONTAINER* aContainer, cons
         shape->SetCenter( center );
 
         // Y-flip reverses angular direction, so negate start angle
-        double startRad = ( static_cast<double>( startAngle ) / 1000.0 ) * M_PI / 180.0;
-        int sx = center.x + static_cast<int>( std::cos( startRad ) * kiRadius );
-        int sy = center.y - static_cast<int>( std::sin( startRad ) * kiRadius );
+        double startRad = startAngleDeg * M_PI / 180.0;
+        int    sx = center.x + static_cast<int>( std::cos( startRad ) * kiRadius );
+        int    sy = center.y - static_cast<int>( std::sin( startRad ) * kiRadius );
         shape->SetStart( VECTOR2I( sx, sy ) );
 
-        int32_t ea = endAngle;
+        double newEndAngle = endAngleDeg;
 
-        if( ea <= startAngle )
-            ea += 360000;
+        if( newEndAngle < startAngleDeg )
+            newEndAngle += 360;
 
         // Negate arc angle for Y-flip (reverses sweep direction)
-        double arcAngle = -static_cast<double>( ea - startAngle ) / 1000.0;
+        double arcAngle = startAngleDeg - newEndAngle;
         shape->SetArcAngleAndEnd( EDA_ANGLE( arcAngle, DEGREES_T ), true );
     }
 
@@ -1463,8 +1580,15 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
     if( thickness <= 0 )
         thickness = std::max( 1, height / 8 );
 
+    int rotation = 0;
+
+    if( m_fileData.version >= 5 )
+        rotation = aObj.rotation;
+    else
+        rotation = aObj.start_angle * 90;
+
     text->SetTextThickness( thickness );
-    text->SetTextAngle( EDA_ANGLE( -aObj.rotation, DEGREES_T ) );
+    text->SetTextAngle( EDA_ANGLE( rotation, DEGREES_T ) );
 
     bool mirrorH = aObj.thermal_width != 0;
     bool mirrorV = aObj.mirror != 0;

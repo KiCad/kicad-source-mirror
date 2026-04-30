@@ -52,6 +52,7 @@ namespace SPRINT_LAYOUT
 
 enum OBJECT_TYPE
 {
+    OBJ_SEGMENT  = 1,
     OBJ_THT_PAD  = 2,
     OBJ_POLY     = 4,
     OBJ_CIRCLE   = 5,
@@ -188,6 +189,7 @@ private:
     int32_t     readInt32();
     float       readFloat();
     double      readDouble();
+    float       readCoord();
     std::string readFixedString( size_t aMaxLen );
     std::string readVarString();
     void        skip( size_t aBytes );
@@ -196,6 +198,8 @@ private:
     void parseFileStart( const wxString& aFileName );
     void parseBoardHeader( SPRINT_LAYOUT::BOARD_DATA& aBoard );
     void parseObjectsList( SPRINT_LAYOUT::BOARD_DATA& aBoard );
+    void parseGroups( SPRINT_LAYOUT::OBJECT& aObj );
+    void parsePoints( SPRINT_LAYOUT::OBJECT& aObj );
     void parseObject( SPRINT_LAYOUT::OBJECT& aObject, bool aIsTextChild = false );
     void parseTrailer();
 
@@ -221,6 +225,10 @@ private:
                       std::vector<std::vector<VECTOR2I>>& aOutlineSegments, const uint8_t aGroundPlane[7],
                       NETINFO_ITEM* aGndPlaneNet, std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems );
 
+    void processSegment( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
+                         std::vector<std::vector<VECTOR2I>>& aOutlineSegments, const uint8_t aGroundPlane[7],
+                         NETINFO_ITEM* aGndPlaneNet, std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems );
+
     void processPoly( BOARD_ITEM_CONTAINER* aContainer, const SPRINT_LAYOUT::OBJECT& aObj,
                       std::vector<std::vector<VECTOR2I>>& aOutlineSegments, const uint8_t aGroundPlane[7],
                       NETINFO_ITEM* aGndPlaneNet, std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems );
@@ -241,6 +249,7 @@ private:
     const uint8_t*              m_start = nullptr;
     const uint8_t*              m_end = nullptr;
     std::vector<uint8_t>        m_buffer;
+    bool                        m_parsingMacro = false;
 };
 
 #endif // SPRINT_LAYOUT_PARSER_H_
