@@ -49,6 +49,7 @@ JOB_EXPORT_PCB_ODB::JOB_EXPORT_PCB_ODB() :
     m_params.emplace_back( new JOB_PARAM<int>( "precision", &m_precision, m_precision ) );
     m_params.emplace_back( new JOB_PARAM<ODB_COMPRESSION>( "compression", &m_compressionMode,
                                                            m_compressionMode ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "variant", &m_variant, m_variant ) );
 }
 
 

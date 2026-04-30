@@ -104,4 +104,6 @@ JOB_EXPORT_PCB_PLOT::JOB_EXPORT_PCB_PLOT( PLOT_FORMAT aFormat, const std::string
                                                     &m_drawingSheet, m_drawingSheet ) );
 
     m_params.emplace_back( new JOB_PARAM<bool>( "check_zones", &m_checkZonesBeforePlot, m_checkZonesBeforePlot ) );
+
+    m_params.emplace_back( new JOB_PARAM<wxString>( "variant", &m_variant, m_variant ) );
 }

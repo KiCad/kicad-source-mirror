@@ -118,6 +118,8 @@ JOB_PCB_RENDER::JOB_PCB_RENDER() :
     m_params.emplace_back( new JOB_PARAM<VECTOR3D>( "light_camera_intensity", &m_lightCameraIntensity, m_lightCameraIntensity ) );
 
     m_params.emplace_back( new JOB_PARAM<int>( "light_side_elevation", &m_lightSideElevation, m_lightSideElevation ) );
+
+    m_params.emplace_back( new JOB_PARAM<wxString>( "variant", &m_variant, m_variant ) );
 }
 
 

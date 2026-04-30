@@ -153,9 +153,16 @@ bool DIALOG_PLOT_SCHEMATIC::TransferDataToWindow()
 
         m_outputPath->SetValue( m_job->GetConfiguredOutputPath() );
 
-        if( !m_job->m_variant.IsEmpty() )
+        // The job exposes both a scalar (m_variant, dialog-edited) and a list (m_variantNames,
+        // CLI-populated).  Prefer the scalar when present, fall back to the first list entry.
+        wxString selectedVariant = m_job->m_variant;
+
+        if( selectedVariant.IsEmpty() && !m_job->m_variantNames.empty() )
+            selectedVariant = m_job->m_variantNames.front();
+
+        if( !selectedVariant.IsEmpty() )
         {
-            int idx = m_variantChoiceCtrl->FindString( m_job->m_variant );
+            int idx = m_variantChoiceCtrl->FindString( selectedVariant );
 
             if( idx != wxNOT_FOUND )
                 m_variantChoiceCtrl->SetSelection( idx );
@@ -323,7 +330,13 @@ void DIALOG_PLOT_SCHEMATIC::OnPlotAll( wxCommandEvent& event )
         m_job->m_plotAll = true;
         m_job->SetConfiguredOutputPath( m_outputPath->GetValue() );
         m_job->m_theme = getColorSettings()->GetName();
+        // Keep m_variant (scalar) and m_variantNames (list) in sync so reload + edit + run
+        // honors the dialog selection regardless of which field the executor consults.
         m_job->m_variant = getSelectedVariant();
+        m_job->m_variantNames.clear();
+
+        if( !m_job->m_variant.IsEmpty() )
+            m_job->m_variantNames.push_back( m_job->m_variant );
 
         event.Skip(); // Allow normal close action
     }

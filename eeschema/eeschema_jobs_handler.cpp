@@ -285,14 +285,15 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     aJob->SetTitleBlock( sch->RootScreen()->GetTitleBlock() );
     sch->Project().ApplyTextVars( aJob->GetVarOverrides() );
 
-    // Determine the variant to use. The CLI path populates m_variantNames directly, while
-    // the jobset path serializes into m_variant. Use whichever is available.
+    // Determine the variant to use.  The dialog edit path writes m_variant (the scalar),
+    // while the CLI path populates m_variantNames directly.  Prefer the scalar so a
+    // dialog-edited selection always wins over a stale list left over from CLI input.
     wxString variantName;
 
-    if( !aPlotJob->m_variantNames.empty() )
-        variantName = aPlotJob->m_variantNames.front();
-    else if( !aPlotJob->m_variant.IsEmpty() )
+    if( !aPlotJob->m_variant.IsEmpty() )
         variantName = aPlotJob->m_variant;
+    else if( !aPlotJob->m_variantNames.empty() )
+        variantName = aPlotJob->m_variantNames.front();
 
     if( !variantName.IsEmpty() && variantName != wxS( "all" ) )
         sch->SetCurrentVariant( variantName );

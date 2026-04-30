@@ -96,6 +96,9 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aOutputIsDirectory ) :
             &m_theme, m_theme ) );
 
     m_params.emplace_back( new JOB_PARAM<wxString>( "variant_name", &m_variant, m_variant ) );
+
+    m_params.emplace_back( new JOB_PARAM_LIST<wxString>( "variant_names", &m_variantNames,
+                                                         m_variantNames ) );
 }
 
 
