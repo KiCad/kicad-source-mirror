@@ -42,6 +42,9 @@
 #include <libeval/numeric_evaluator.h>
 #include "locale_io.h"
 #include <wx/event.h>
+#include <wx/uri.h>
+#include <project.h>
+#include <common.h>
 
 
 /**
@@ -1552,6 +1555,86 @@ wxString NormalizeFileUri( const wxString& aFileUri )
     retv += tmp;
 
     return retv;
+}
+
+
+wxString ConvertPathToFileUri( const wxString& aPath, const PROJECT* aProject )
+{
+    if( aPath.IsEmpty() || aPath == wxS( "~" ) )
+        return aPath;
+
+    bool looksLikePath = aPath.StartsWith( wxS( "/" ) ) || aPath.StartsWith( wxS( "${" ) )
+                         || aPath.StartsWith( wxS( "./" ) ) || aPath.StartsWith( wxS( "../" ) );
+
+#ifdef __WINDOWS__
+    looksLikePath = looksLikePath || ( aPath.Length() >= 2 && wxIsalpha( aPath[0] ) && aPath[1] == ':' )
+                    || aPath.StartsWith( wxS( "\\\\" ) ) || aPath.StartsWith( wxS( ".\\" ) )
+                    || aPath.StartsWith( wxS( "..\\" ) );
+#endif
+
+    if( !looksLikePath )
+    {
+        wxURI uri( aPath );
+
+        if( uri.HasScheme() )
+            return aPath;
+
+        return aPath; // Not a path, return unchanged
+    }
+
+    // Resolve env vars
+    wxString resolved = aPath;
+
+    if( aProject )
+        resolved = ResolveUriByEnvVars( aPath, aProject );
+
+    wxFileName fname( resolved );
+
+    if( !fname.IsAbsolute() && aProject && !aProject->GetProjectPath().IsEmpty() )
+    {
+        fname.MakeAbsolute( aProject->GetProjectPath() );
+        resolved = fname.GetFullPath();
+    }
+
+    // Only convert if the file actually exists
+    bool isUNC = resolved.StartsWith( wxS( "\\\\" ) );
+
+    if( !isUNC && !wxFileExists( resolved ) && !wxDirExists( resolved ) )
+        return aPath;
+
+    if( aPath.StartsWith( wxS( "/" ) ) )
+        return wxS( "file://" ) + aPath;
+
+    if( aPath.StartsWith( wxS( "${" ) ) )
+        return wxS( "file://" ) + aPath;
+
+    if( aPath.StartsWith( wxS( "./" ) ) || aPath.StartsWith( wxS( "../" ) ) )
+        return wxS( "file://" ) + aPath;
+
+#ifdef __WINDOWS__
+    if( aPath.StartsWith( wxS( "\\\\" ) ) )
+    {
+        wxString path = aPath.Mid( 2 );
+        path.Replace( wxS( "\\" ), wxS( "/" ) );
+        return wxS( "file://" ) + path;
+    }
+
+    if( aPath.Length() >= 2 && wxIsalpha( aPath[0] ) && aPath[1] == ':' )
+    {
+        wxString path = aPath;
+        path.Replace( wxS( "\\" ), wxS( "/" ) );
+        return wxS( "file:///" ) + path;
+    }
+
+    if( aPath.StartsWith( wxS( ".\\" ) ) || aPath.StartsWith( wxS( "..\\" ) ) )
+    {
+        wxString path = aPath;
+        path.Replace( wxS( "\\" ), wxS( "/" ) );
+        return wxS( "file://" ) + path;
+    }
+#endif
+
+    return aPath;
 }
 
 
