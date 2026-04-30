@@ -112,6 +112,18 @@ def test_pcb_export_svg( kitest: KiTestFixture,
                                 ["F.Cu","B.Cu"],
                                 ( -0.6, -0.4 ),
                                 ( 1.7, 0.8 )
+                            ),
+                            (
+                                # Regression for https://gitlab.com/kicad/code/kicad/-/issues/24143:
+                                # gr_poly shapes whose outline contains a degenerate
+                                # near-zero-width "spike" must keep that spike (drawn as a thick
+                                # stroke) when exported to gerber. Fracture/Simplify drops
+                                # the spike from the fill, so the stroke must be plotted from the
+                                # unfractured outline.
+                                "cli/artwork_generation_regressions/Issue24143.kicad_pcb",
+                                ["F.Cu"],
+                                ( 4.5, -3.1 ),
+                                ( 0.4, 0.4 )
                             )
                          ])
 def test_pcb_export_gerber( kitest: KiTestFixture,

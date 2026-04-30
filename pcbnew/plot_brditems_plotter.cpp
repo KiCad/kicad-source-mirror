@@ -1048,36 +1048,46 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                 {
                     m_plotter->SetCurrentLineWidth( thickness, &gbr_metadata );
 
-                    // Draw the polygon: only one polygon is expected
-                    // However we provide a multi polygon shape drawing
-                    // ( for the future or to show a non expected shape )
-                    // This must be simplified and fractured to prevent overlapping polygons
-                    // from generating invalid Gerber files
-                    SHAPE_POLY_SET tmpPoly = aShape->GetPolyShape().CloneDropTriangulation();
+                    const SHAPE_POLY_SET& origPoly = aShape->GetPolyShape();
+
+                    // Stroke the unfractured outline so degenerate near-zero-width
+                    // spikes (which Fracture() collapses but the editor still draws as
+                    // thick lines) are preserved in the plot output (issue #24143).
+                    if( thickness > 0 )
+                    {
+                        for( int jj = 0; jj < origPoly.OutlineCount(); ++jj )
+                        {
+                            m_plotter->PlotPoly( origPoly.COutline( jj ), FILL_T::NO_FILL,
+                                                 thickness, getMetadata() );
+                        }
+                    }
+
+                    if( !isSolidFill )
+                        break;
+
+                    // Fracture before plotting the fill to avoid invalid gerber regions
+                    // from self-intersecting or overlapping outlines.
+                    SHAPE_POLY_SET tmpPoly = origPoly.CloneDropTriangulation();
                     tmpPoly.Fracture();
 
                     if( margin < 0 )
                         tmpPoly.Inflate( margin / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, aShape->GetMaxError() );
 
-                    FILL_T fill = isSolidFill ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL;
-
                     for( int jj = 0; jj < tmpPoly.OutlineCount(); ++jj )
                     {
                         SHAPE_LINE_CHAIN& poly = tmpPoly.Outline( jj );
-
-                        // Ensure the polygon is closed:
                         poly.SetClosed( true );
 
-                        // Plot the current filled area
-                        // (as region for Gerber plotter to manage attributes)
+                        // Width 0; the stroke was already plotted from the unfractured outline.
                         if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
                         {
                             GERBER_PLOTTER* gbr_plotter = static_cast<GERBER_PLOTTER*>( m_plotter );
-                            gbr_plotter->PlotPolyAsRegion( poly, fill, thickness, &gbr_metadata );
+                            gbr_plotter->PlotPolyAsRegion( poly, FILL_T::FILLED_SHAPE, 0,
+                                                           &gbr_metadata );
                         }
                         else
                         {
-                            m_plotter->PlotPoly( poly, fill, thickness, getMetadata() );
+                            m_plotter->PlotPoly( poly, FILL_T::FILLED_SHAPE, 0, getMetadata() );
                         }
                     }
                 }
