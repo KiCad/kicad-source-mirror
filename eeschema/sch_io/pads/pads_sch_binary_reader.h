@@ -265,6 +265,10 @@ private:
     /// Decode component fields via the u32 offset-index table.  Returns true if an index was used.
     bool decodeFieldsViaIndex( const std::vector<uint8_t>& aData, size_t aPoolBase );
 
+    /// Fallback field decode when there is no consolidated offset index: parse the resolved
+    /// attribute stream into per-part-type sub-records and union them into m_partTypeFields.
+    void decodeFieldsFallback( const std::vector<uint8_t>& aData, size_t aPoolBase );
+
     /// Decode the CAE-decal geometry library + pin terminals, and locate the
     /// per-sheet used-decal name tables (for the placement->decal binding).
     void decodeDecals( const std::vector<uint8_t>& aData );

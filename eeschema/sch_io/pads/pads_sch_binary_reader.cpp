@@ -842,6 +842,12 @@ void PADS_SCH_BINARY_READER::decodeFields( const std::vector<uint8_t>& d )
     if( decodeFieldsViaIndex( d, ptBase ) )
         return;
 
+    decodeFieldsFallback( d, ptBase );
+}
+
+
+void PADS_SCH_BINARY_READER::decodeFieldsFallback( const std::vector<uint8_t>& d, size_t ptBase )
+{
     // Fallback when there is no consolidated index: the resolved-attribute stream after the
     // title-block *FIELDS*.  It is a flat tagged key/value run grouped into per-part-type blocks;
     // because an append re-emits whole field groups, the stream is split into sub-records (a
