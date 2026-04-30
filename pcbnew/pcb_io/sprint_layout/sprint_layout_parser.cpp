@@ -304,11 +304,11 @@ void SPRINT_LAYOUT_PARSER::parseFileStart( const wxString& aFileName )
     if( m_fileData.version > 6 || magic1 != 0x33 || magic2 != 0xAA || magic3 != 0xFF )
         THROW_IO_ERROR( _( "Invalid Sprint Layout file header" ) );
 
-    if( m_fileData.version < 4 )
+    if( m_fileData.version < 3 )
     {
         THROW_IO_ERROR(
-                wxString::Format( _( "Current file appears to be generated in Sprint Layout %d. Only version 4, 5 "
-                                     "and 6 files are supported. " ),
+                wxString::Format( _( "Current file appears to be generated in Sprint Layout %d. Only version 3 to 6"
+                                     " files are supported. " ),
                                   m_fileData.version ) );
     }
 }
@@ -418,9 +418,9 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
     aObj.type = readUint8();
 
     if( aObj.type != SPRINT_LAYOUT::OBJ_SEGMENT && aObj.type != SPRINT_LAYOUT::OBJ_THT_PAD
-        && aObj.type != SPRINT_LAYOUT::OBJ_POLY && aObj.type != SPRINT_LAYOUT::OBJ_CIRCLE
-        && aObj.type != SPRINT_LAYOUT::OBJ_LINE && aObj.type != SPRINT_LAYOUT::OBJ_TEXT
-        && aObj.type != SPRINT_LAYOUT::OBJ_SMD_PAD )
+        && aObj.type != SPRINT_LAYOUT::OBJ_OUTLINE_TEXT && aObj.type != SPRINT_LAYOUT::OBJ_POLY
+        && aObj.type != SPRINT_LAYOUT::OBJ_CIRCLE && aObj.type != SPRINT_LAYOUT::OBJ_LINE
+        && aObj.type != SPRINT_LAYOUT::OBJ_STROKE_TEXT && aObj.type != SPRINT_LAYOUT::OBJ_SMD_PAD )
     {
         THROW_IO_ERROR( wxString::Format( _( "Unknown object type %d in Sprint Layout file" ), aObj.type ) );
     }
@@ -429,20 +429,20 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
     aObj.y = readCoord();
     aObj.outer = readCoord();
     aObj.inner = readCoord();
-    aObj.line_width = readUint32();
+    aObj.line_width = readInt32();
     skip( 1 ); // padding
     aObj.layer = readUint8();
     aObj.tht_shape = readUint8();
-    skip( 4 ); // padding
-    aObj.component_id = readUint16();
-    skip( 1 ); // selected
-    aObj.start_angle = readInt32(); // also th_style[4]
-    skip( 5 ); // unknown
-    aObj.filled = readUint8();
-    aObj.clearance = readInt32();
 
     if( m_fileData.version >= 5 )
     {
+        skip( 4 ); // padding
+        aObj.component_id = readUint16();
+        skip( 1 );                      // selected
+        aObj.start_angle = readInt32(); // also th_style[4]
+        skip( 5 );                      // unknown
+        aObj.filled = readUint8();
+        aObj.clearance = readInt32();
         skip( 5 ); // padding
         aObj.thermal_width = readUint8();
         aObj.mirror = readUint8();
@@ -461,6 +461,13 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
     }
     else if( m_fileData.version == 4 )
     {
+        skip( 4 ); // padding
+        aObj.component_id = readUint16();
+        skip( 1 );                      // selected
+        aObj.start_angle = readInt32(); // also th_style[4]
+        skip( 5 );                      // unknown
+        aObj.filled = readUint8();
+        aObj.clearance = readInt32();
         skip( 9 ); // padding
         aObj.thermal_width = readUint8(); // text H mirror
         aObj.mirror = readUint8();        // text V mirror
@@ -473,13 +480,37 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
             parseGroups( aObj );
         }
     }
+    else if( m_fileData.version == 3 )
+    {
+        if( aObj.type != SPRINT_LAYOUT::OBJ_OUTLINE_TEXT )
+        {
+            skip( 4 ); // padding
+            skip( 19 );
+            aObj.start_angle = readInt32();
+            skip( 3 );
+            aObj.thermal_width = readUint8();
+            aObj.mirror = readUint8();
+            aObj.keepout = readUint8();
+            skip( 17 );
+        }
+        else
+        {
+            aObj.text = readFixedString( 49 );
+        }
+
+        if( !aIsTextChild )
+        {
+            parseGroups( aObj );
+        }
+    }
 
     switch( aObj.type )
     {
+    case SPRINT_LAYOUT::OBJ_OUTLINE_TEXT:
     case SPRINT_LAYOUT::OBJ_SEGMENT:
     case SPRINT_LAYOUT::OBJ_CIRCLE:
     {
-        return; // Segments and circles have no points list
+        return; // No points list
     }
 
     case SPRINT_LAYOUT::OBJ_POLY:
@@ -512,7 +543,7 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
         return; // No points in older versions
     }
 
-    case SPRINT_LAYOUT::OBJ_TEXT:
+    case SPRINT_LAYOUT::OBJ_STROKE_TEXT:
     {
         uint32_t childCount = readUint32();
 
@@ -564,6 +595,21 @@ void SPRINT_LAYOUT_PARSER::parseTrailer()
 
 PCB_LAYER_ID SPRINT_LAYOUT_PARSER::mapLayer( uint8_t aSprintLayer ) const
 {
+    if( m_fileData.version <= 3 )
+    {
+        switch( aSprintLayer )
+        {
+        case SPRINT_LAYOUT::LAYER_C1: return F_Cu;
+        case SPRINT_LAYOUT::LAYER_S1: return F_SilkS;
+        case SPRINT_LAYOUT::LAYER_C2: return B_Cu;
+        case SPRINT_LAYOUT::LAYER_S2: return B_SilkS;
+
+        case 5: return F_Cu;    // used for PTH pads
+        case 6: return F_SilkS; // used for component lines
+        default: return F_Cu;
+        }
+    }
+
     switch( aSprintLayer )
     {
     case SPRINT_LAYOUT::LAYER_C1: return F_Cu;
@@ -763,7 +809,7 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
 
         FOOTPRINT* fp = new FOOTPRINT( board.get() );
 
-        if( aObj.type == SPRINT_LAYOUT::OBJ_TEXT && !aObj.text.empty() )
+        if( aObj.type == SPRINT_LAYOUT::OBJ_STROKE_TEXT && !aObj.text.empty() )
         {
             fp->SetReference( convertString( aObj.text ) );
         }
@@ -775,7 +821,7 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
                 fd->SetVisible( false );
         }
 
-        if( aObj.type == SPRINT_LAYOUT::OBJ_TEXT && aObj.component.valid )
+        if( aObj.type == SPRINT_LAYOUT::OBJ_STROKE_TEXT && aObj.component.valid )
         {
             if( !aObj.component.comment.empty() )
             {
@@ -805,7 +851,7 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
     // First pass: create footprints from component text records where available
     for( const SPRINT_LAYOUT::OBJECT& obj : boardData.objects )
     {
-        if( obj.type == SPRINT_LAYOUT::OBJ_TEXT && obj.component_id > 0 && obj.component.valid )
+        if( obj.type == SPRINT_LAYOUT::OBJ_STROKE_TEXT && obj.component_id > 0 && obj.component.valid )
             getOrCreateComponentFootprint( obj );
     }
 
@@ -843,7 +889,8 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
             processCircle( container, obj, outlineSegments, boardData.ground_plane, gndPlaneNet, gidToItems );
             break;
 
-        case SPRINT_LAYOUT::OBJ_TEXT:
+        case SPRINT_LAYOUT::OBJ_OUTLINE_TEXT:
+        case SPRINT_LAYOUT::OBJ_STROKE_TEXT:
             processText( container, obj, gidToItems );
             break;
 
@@ -950,7 +997,8 @@ FOOTPRINT* SPRINT_LAYOUT_PARSER::CreateFootprint()
             processCircle( container, obj, outlineSegments, groundPlane, nullptr, gidToItems );
             break;
 
-        case SPRINT_LAYOUT::OBJ_TEXT:
+        case SPRINT_LAYOUT::OBJ_OUTLINE_TEXT:
+        case SPRINT_LAYOUT::OBJ_STROKE_TEXT:
             processText( container, obj, gidToItems );
             break;
 
@@ -1061,7 +1109,14 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
         int outerDia = sprintToKicadCoord( aObj.outer * 2.0f );
         int drillDia = sprintToKicadCoord( aObj.inner * 2.0f );
 
-        if( aObj.plated == 0 )
+        bool isPTH = aObj.plated != 0 || ( m_fileData.version <= 3 && aObj.layer == 5 );
+
+        if( isPTH )
+        {
+            pad->SetAttribute( PAD_ATTRIB::PTH );
+            pad->SetLayerSet( PAD::PTHMask() );
+        }
+        else
         {
             pad->SetAttribute( drillDia > 0 ? PAD_ATTRIB ::NPTH : PAD_ATTRIB::SMD );
 
@@ -1074,11 +1129,6 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
 
             if( standaloneFp && IsBackLayer( padLayer ) )
                 fp->SetLayer( B_Cu );
-        }
-        else
-        {
-            pad->SetAttribute( PAD_ATTRIB::PTH );
-            pad->SetLayerSet( PAD::PTHMask() );
         }
 
         VECTOR2I padSize( outerDia, outerDia );
@@ -1424,10 +1474,7 @@ void SPRINT_LAYOUT_PARSER::processCircle( BOARD_ITEM_CONTAINER* aContainer, cons
         width = pcbIUScale.mmToIU( 0.25 );
 
     int32_t startAngleRaw = aObj.start_angle;
-
-    // line_width is uint32_t but stores end_angle (signed) for circle objects.
-    // Two's complement reinterpretation is correct here.
-    int32_t endAngleRaw = static_cast<int32_t>( aObj.line_width );
+    int32_t endAngleRaw = aObj.line_width;
 
     // Only version 6 layouts (and not macros) seem to use 0.001 deg scale
     double angleScale = ( m_fileData.version >= 6 && !m_parsingMacro ) ? 0.001 : 1.0;
@@ -1540,7 +1587,7 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
     PCB_TEXT* text = nullptr;
     bool      add = false;
 
-    if( fp && aObj.tht_shape > 0 && aObj.tht_shape <= 2 )
+    if( aObj.type == SPRINT_LAYOUT::OBJ_STROKE_TEXT && fp && aObj.tht_shape > 0 && aObj.tht_shape <= 2 )
     {
         if( aObj.tht_shape == 1 )
             text = &fp->Reference();
@@ -1566,19 +1613,36 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
     VECTOR2I pos = sprintToKicadPos( aObj.x, aObj.y );
     text->SetTextPos( pos );
 
-    int height = sprintToKicadCoord( aObj.outer ) * 0.8;
+    if( aObj.type == SPRINT_LAYOUT::OBJ_STROKE_TEXT )
+    {
+        int height = sprintToKicadCoord( aObj.outer ) * 0.8;
 
-    if( height <= 0 )
-        height = pcbIUScale.mmToIU( 1.0 );
+        if( height <= 0 )
+            height = pcbIUScale.mmToIU( 1.0 );
 
-    double widthScale = 0.5 + 0.5 * aObj.line_width;
-    text->SetTextSize( VECTOR2I( height * widthScale, height ) );
+        double widthScale = 0.5 + 0.5 * aObj.line_width;
+        text->SetTextSize( VECTOR2I( height * widthScale, height ) );
 
-    double thicknessScale = 0.06 + 0.05 * aObj.inner;
-    int    thickness = height * thicknessScale;
+        double thicknessScale = 0.06 + 0.05 * aObj.inner;
+        int    thickness = height * thicknessScale;
 
-    if( thickness <= 0 )
-        thickness = std::max( 1, height / 8 );
+        if( thickness <= 0 )
+            thickness = std::max( 1, height / 8 );
+
+        text->SetTextThickness( thickness );
+    }
+    else
+    {
+        // -133 maps to 1 mm height
+        int normalized = std::abs( aObj.line_width ) * 100 / 133;
+        int height = sprintToKicadCoord( normalized ) * 0.8;
+
+        if( aObj.line_width < 0 ) // Seems to be always
+            text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+
+        text->SetTextSize( VECTOR2I( height, height ) );
+        text->SetTextThickness( height / 8 );
+    }
 
     int rotation = 0;
 
@@ -1587,7 +1651,6 @@ void SPRINT_LAYOUT_PARSER::processText( BOARD_ITEM_CONTAINER* aContainer, const 
     else
         rotation = aObj.start_angle * 90;
 
-    text->SetTextThickness( thickness );
     text->SetTextAngle( EDA_ANGLE( rotation, DEGREES_T ) );
 
     bool mirrorH = aObj.thermal_width != 0;

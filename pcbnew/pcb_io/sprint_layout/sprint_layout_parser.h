@@ -52,13 +52,14 @@ namespace SPRINT_LAYOUT
 
 enum OBJECT_TYPE
 {
-    OBJ_SEGMENT  = 1,
-    OBJ_THT_PAD  = 2,
-    OBJ_POLY     = 4,
-    OBJ_CIRCLE   = 5,
-    OBJ_LINE     = 6,
-    OBJ_TEXT     = 7,
-    OBJ_SMD_PAD  = 8,
+    OBJ_SEGMENT      = 1,
+    OBJ_THT_PAD      = 2,
+    OBJ_OUTLINE_TEXT = 3,
+    OBJ_POLY         = 4,
+    OBJ_CIRCLE       = 5,
+    OBJ_LINE         = 6,
+    OBJ_STROKE_TEXT  = 7,
+    OBJ_SMD_PAD      = 8,
 };
 
 enum LAYER_ID
@@ -112,7 +113,7 @@ struct OBJECT
     float                  y = 0;
     float                  outer = 0;          // THT/circle outer radius, SMD half-width, text height
     float                  inner = 0;          // THT drill radius, SMD half-height, text stroke width
-    uint32_t               line_width = 0;     // line/poly stroke width, circle end_angle (deg*1000)
+    int32_t                line_width = 0;     // line/poly stroke width, circle end_angle (deg*1000)
     uint8_t                layer = 0;          // LAYER_ID enum value
     uint8_t                tht_shape = 0;      // THT_SHAPE for pads, 1=component-ref for text
     uint16_t               component_id = 0;
