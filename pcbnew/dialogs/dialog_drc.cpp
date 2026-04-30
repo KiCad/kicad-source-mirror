@@ -45,6 +45,7 @@
 #include <wx/app.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
+#include <wx/statusbr.h>
 #include <wx/wupdlock.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/ui_common.h>
@@ -84,7 +85,9 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         m_unconnectedTreeModel( nullptr ),
         m_fpWarningsTreeModel( nullptr ),
         m_updateThrottle( std::chrono::milliseconds( 100 ) ),
-        m_yieldThrottle( std::chrono::milliseconds( 2000 ) )
+        m_yieldThrottle( std::chrono::milliseconds( 2000 ) ),
+        m_drcStatusBar( nullptr ),
+        m_lastTickSeconds( -1 )
 {
     SetName( DIALOG_DRC_WINDOW_NAME ); // Set a window name to be able to find it
     KIPLATFORM::UI::SetFloatLevel( this );
@@ -162,6 +165,15 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     // DPI fix
     bSizerViolationsBox->SetMinSize( FromDIP( bSizerViolationsBox->GetMinSize() ) );
 
+    m_drcStatusBar = new wxStatusBar( this, wxID_ANY, wxSTB_DEFAULT_STYLE );
+    m_drcStatusBar->SetFieldsCount( 2 );
+
+    int statusBarWidths[2] = { FromDIP( 12 ), -1 };
+    m_drcStatusBar->SetStatusWidths( 2, statusBarWidths );
+
+    if( wxSizer* mainSizer = GetSizer() )
+        mainSizer->Add( m_drcStatusBar, 0, wxEXPAND );
+
     Layout(); // adding the units above expanded Clearance text, now resize.
 
     SetFocus();
@@ -228,6 +240,27 @@ bool DIALOG_DRC::updateUI()
 
         int newValue = KiROUND( cur * 1000.0 );
         m_gauge->SetValue( newValue );
+    }
+
+    if( m_running && m_drcStatusBar )
+    {
+        int elapsed = static_cast<int>(
+                std::chrono::duration_cast<std::chrono::seconds>( std::chrono::steady_clock::now() - m_drcStartTime )
+                        .count() );
+
+        if( elapsed != m_lastTickSeconds )
+        {
+            m_lastTickSeconds = elapsed;
+
+            wxString tick;
+
+            if( elapsed >= 60 )
+                tick = wxString::Format( wxT( "%1$d min %2$d s" ), elapsed / 60, elapsed % 60 );
+            else
+                tick = wxString::Format( wxT( "%d s" ), elapsed );
+
+            m_drcStatusBar->SetStatusText( wxString::Format( _( "Elapsed: %s" ), tick ), 1 );
+        }
     }
 
     // Repaint the dialog at ~10Hz using Update() which processes only pending expose/
@@ -417,15 +450,45 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     m_DeleteAllMarkersButton->Enable( false );
     m_saveReport->Enable( false );
 
+    m_drcStartTime = std::chrono::steady_clock::now();
+    m_lastTickSeconds = -1;
+
+    if( m_drcStatusBar )
+        m_drcStatusBar->SetStatusText( _( "Elapsed: 0 s" ), 1 );
+
     {
     wxBusyCursor dummy;
     drcTool->RunTests( this, refillZones, m_report_all_track_errors, testFootprints );
     }
 
+    double elapsedMs =
+            std::chrono::duration<double, std::milli>( std::chrono::steady_clock::now() - m_drcStartTime ).count();
+
+    auto formatElapsed = []( double aMsecs ) -> wxString
+    {
+        int totalSeconds = static_cast<int>( aMsecs / 1000.0 + 0.5 );
+
+        if( totalSeconds >= 60 )
+            return wxString::Format( _( "%1$d min %2$d s" ), totalSeconds / 60, totalSeconds % 60 );
+
+        return wxString::Format( _( "%.2f s" ), aMsecs / 1000.0 );
+    };
+
     if( m_cancelled )
+    {
         m_messages->Report( _( "-------- DRC canceled by user.<br><br>" ) );
+
+        if( m_drcStatusBar )
+            m_drcStatusBar->SetStatusText( wxString::Format( _( "Canceled after %s" ), formatElapsed( elapsedMs ) ),
+                                           1 );
+    }
     else
+    {
         m_messages->Report( _( "Done.<br><br>" ) );
+
+        if( m_drcStatusBar )
+            m_drcStatusBar->SetStatusText( wxString::Format( _( "Completed in %s" ), formatElapsed( elapsedMs ) ), 1 );
+    }
 
     Raise();
     Update();                                     // Repaint only, don't enter the full event loop
