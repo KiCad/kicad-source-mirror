@@ -46,8 +46,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-26 04:51+0300\n"
-"PO-Revision-Date: 2026-04-24 16:59+0000\n"
-"Last-Translator: yanzhen zhu <acme.zhuyanzhen@gmail.com>\n"
+"PO-Revision-Date: 2026-04-30 19:09+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -55,7 +55,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7634,9 +7634,9 @@ msgid "Could not create directory '%s'"
 msgstr "无法创建目录 '%s'"
 
 #: common/git/libgit_backend.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s' : %s"
-msgstr "无法克隆仓库 '%s'"
+msgstr "无法克隆仓库 '%s': %s"
 
 #: common/git/libgit_backend.cpp:171
 #, c-format
@@ -18041,14 +18041,12 @@ msgid "Largest"
 msgstr "最大"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:146
-#, fuzzy
 msgid "Hop-over size:"
-msgstr "圆角尺寸:"
+msgstr "跳线大小:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:150
-#, fuzzy
 msgid "Medium"
-msgstr "铟"
+msgstr "中等"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:156
 msgid "Connection grid:"
@@ -18892,11 +18890,11 @@ msgstr "引脚未连接"
 
 #: eeschema/erc/erc_item.cpp:57
 msgid "Input pin not driven by any Output pins"
-msgstr "输入引脚不受任何输出引脚驱动"
+msgstr "输入引脚没有被任何输出引脚驱动"
 
 #: eeschema/erc/erc_item.cpp:61
 msgid "Input Power pin not driven by any Output Power pins"
-msgstr "输入电源引脚不受任何输出电源引脚驱动"
+msgstr "输入电源引脚没有被任何输出电源引脚驱动"
 
 #: eeschema/erc/erc_item.cpp:65
 #, fuzzy
@@ -20385,19 +20383,16 @@ msgid "Find in Net Inspector"
 msgstr "在网络检查器中查找"
 
 #: eeschema/sch_edit_frame.cpp:3043
-#, fuzzy
 msgid "No design variants to edit."
-msgstr "添加新的设计变体到原理图中。"
+msgstr "没有可编辑的设计变体。"
 
 #: eeschema/sch_edit_frame.cpp:3047
-#, fuzzy
 msgid "Select variant to edit description:"
-msgstr "选择要移除的变体名称:"
+msgstr "选择要编辑描述的变体:"
 
 #: eeschema/sch_edit_frame.cpp:3048
-#, fuzzy
 msgid "Edit Variant Description"
-msgstr "编辑作业描述"
+msgstr "编辑变体描述"
 
 #: eeschema/sch_edit_frame.cpp:3108
 msgid "Select variant name to remove:"
@@ -21468,14 +21463,14 @@ msgid "LTspice schematic files"
 msgstr "LTspice 原理图文件"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1457
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a PADS Logic ASCII file."
-msgstr "'%s' 不是有效的 SPICE 值。"
+msgstr "'%s' 不是 PADS Logic ASCII 文件。"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1469
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS Logic file '%s'."
-msgstr "读取文件 '%s' 失败。"
+msgstr "粘贴 PADS Logic file '%s' 失败。"
 
 #: eeschema/sch_io/pads/sch_io_pads.h:49
 msgid "PADS Logic schematic files"
@@ -25838,9 +25833,8 @@ msgid "Import 2D drawing file"
 msgstr "导入 2D 绘图文件"
 
 #: eeschema/tools/sch_actions.cpp:1212
-#, fuzzy
 msgid "Import Non-KiCad Schematic..."
-msgstr "非 KiCad 原理图..."
+msgstr "导入非 KiCad 原理图..."
 
 #: eeschema/tools/sch_actions.cpp:1213
 msgid ""
@@ -30647,12 +30641,11 @@ msgstr "工程 '%s' 已由 '%s' 在 '%s' 中打开。"
 msgid ""
 "KiCad found unsaved changes from your last session that are newer than the "
 "saved project files."
-msgstr ""
+msgstr "KiCad 检测到上次会话存在未保存的更改, 这些更改比已保存的工程文件内容更新。"
 
 #: kicad/kicad_manager_frame.cpp:966
-#, fuzzy
 msgid "Recover Unsaved Changes"
-msgstr "撤销变更"
+msgstr "恢复未保存的更改"
 
 #: kicad/kicad_manager_frame.cpp:968
 msgid ""
@@ -30661,6 +30654,9 @@ msgid ""
 "Choose 'Restore' to recover those changes, or 'Discard' to keep the "
 "currently saved files."
 msgstr ""
+"之前的会话可能未被正确关闭。\n"
+"\n"
+"选择「恢复」以恢复那些更改，或选择「丢弃」以保留当前保存的文件。"
 
 #: kicad/kicad_manager_frame.cpp:1143
 msgid "Edit File in Text Editor"
@@ -31506,30 +31502,28 @@ msgid "Please wait"
 msgstr "请稍候"
 
 #: kicad/project_tree_pane.cpp:1706
-#, fuzzy
 msgid "Closing project..."
-msgstr "提交工程..."
+msgstr "关闭工程..."
 
 #: kicad/project_tree_pane.cpp:1723
 msgid ""
 "A Git operation is still running.\n"
 "Keep waiting, or abandon?"
 msgstr ""
+"有 Git 操作仍在运行。\n"
+"继续等待, 还是放弃?"
 
 #: kicad/project_tree_pane.cpp:1725
-#, fuzzy
 msgid "Git Operation Delayed"
-msgstr "单位传播时延:"
+msgstr "等待 Git 操作完成"
 
 #: kicad/project_tree_pane.cpp:1727
-#, fuzzy
 msgid "Keep Waiting"
-msgstr "保留现有的批注"
+msgstr "继续等待"
 
 #: kicad/project_tree_pane.cpp:1727
-#, fuzzy
 msgid "Abandon"
-msgstr "随机"
+msgstr "放弃"
 
 #: kicad/project_tree_pane.cpp:1803
 msgid "The selected directory is already a Git project."
@@ -39876,12 +39870,11 @@ msgstr "保留现有的位号"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:863
 msgid "Add 3D Model Search Directory"
-msgstr ""
+msgstr "添加 3D 模型搜索目录"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:957
-#, fuzzy
 msgid "Select 3D Model File"
-msgstr "选择 3D 模型"
+msgstr "选择 3D 模型文件"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:974
 #, fuzzy
@@ -49106,19 +49099,19 @@ msgid "Add %s '%s' attribute to variant %s."
 msgstr "为 %1$s 添加值为 '%3$s' 的字段 '%2$s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1403
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s '%s' attribute from variant %s."
-msgstr "为 %s 移除 '从 BOM 中移除' 制造特性。"
+msgstr "从 %1$s 的变体 %3$s 中移除「%2$s」属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1413
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s '%s' attribute to variant %s (footprint %s)."
-msgstr "添加了 %s (封装 '%s')。"
+msgstr "为 %1$s 的变体 %3$s 添加了「%2$s」属性 (封装 %4$s)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1414
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s '%s' attribute from variant %s (footprint %s)."
-msgstr "已为 %s 移除 '从 BOM 中移除' 制造特性。"
+msgstr "从 %1$s 的变体 %3$s 移除了「%2$s」属性 (封装 %4$s)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1422
 #, c-format
@@ -49126,9 +49119,9 @@ msgid "Added %s '%s' attribute to variant %s."
 msgstr ""
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1423
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s '%s' attribute from variant %s."
-msgstr "已为 %s 移除 '从 BOM 中移除' 制造特性。"
+msgstr "从 %1$s 的变体 %3$s 移除了「%2$s」属性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1458
 msgid "Do not place"
