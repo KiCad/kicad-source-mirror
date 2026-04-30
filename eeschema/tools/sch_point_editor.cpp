@@ -935,6 +935,18 @@ void SCH_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
         switch( shape->GetShape() )
         {
         case SHAPE_T::ARC:
+            // EDA_ARC_POINT_EDIT_BEHAVIOR holds a reference to m_arcEditMode, so the
+            // persisted value must be synced from settings before the behavior is built.
+            if( m_isSymbolEditor )
+            {
+                if( SYMBOL_EDITOR_SETTINGS* cfg = m_frame->libeditconfig() )
+                    m_arcEditMode = cfg->m_ArcEditMode;
+            }
+            else if( EESCHEMA_SETTINGS* cfg = m_frame->eeconfig() )
+            {
+                m_arcEditMode = cfg->m_Drawing.arc_edit_mode;
+            }
+
             m_editBehavior = std::make_unique<EDA_ARC_POINT_EDIT_BEHAVIOR>(
                     *shape, m_arcEditMode, *getViewControls() );
             break;
@@ -1486,9 +1498,18 @@ int SCH_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
 int SCH_POINT_EDITOR::changeArcEditMode( const TOOL_EVENT& aEvent )
 {
+    // The Symbol Editor uses SYMBOL_EDITOR_SETTINGS, not EESCHEMA_SETTINGS, so eeconfig()
+    // returns nullptr there. Dispatch on frame type to read/write the right settings store.
+    EESCHEMA_SETTINGS*      schCfg = m_isSymbolEditor ? nullptr : m_frame->eeconfig();
+    SYMBOL_EDITOR_SETTINGS* symCfg = m_isSymbolEditor ? m_frame->libeditconfig() : nullptr;
+
     if( aEvent.Matches( ACTIONS::cycleArcEditMode.MakeEvent() ) )
     {
-        m_arcEditMode = m_frame->eeconfig()->m_Drawing.arc_edit_mode;
+        if( schCfg )
+            m_arcEditMode = schCfg->m_Drawing.arc_edit_mode;
+        else if( symCfg )
+            m_arcEditMode = symCfg->m_ArcEditMode;
+
         m_arcEditMode = IncrementArcEditMode( m_arcEditMode );
     }
     else
@@ -1496,7 +1517,10 @@ int SCH_POINT_EDITOR::changeArcEditMode( const TOOL_EVENT& aEvent )
         m_arcEditMode = aEvent.Parameter<ARC_EDIT_MODE>();
     }
 
-    m_frame->eeconfig()->m_Drawing.arc_edit_mode = m_arcEditMode;
+    if( schCfg )
+        schCfg->m_Drawing.arc_edit_mode = m_arcEditMode;
+    else if( symCfg )
+        symCfg->m_ArcEditMode = m_arcEditMode;
 
     return 0;
 }

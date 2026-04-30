@@ -91,6 +91,8 @@ public:
 
     bool m_UseEeschemaColorSettings;
 
+    ARC_EDIT_MODE m_ArcEditMode;
+
     SCH_SELECTION_FILTER_OPTIONS m_SelectionFilter;
 
     PANEL_LIB_FIELDS_TABLE m_LibFieldEditor;
