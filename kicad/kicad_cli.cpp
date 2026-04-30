@@ -693,14 +693,19 @@ struct APP_KICAD_CLI : public wxAppConsole
 
     int OnExit() override
     {
-        program.OnPgmExit();
+        // Drain any pending wx-managed objects before tearing down PGM_BASE
+        // singletons so destructors can still call into Pgm(). See
+        // https://gitlab.com/kicad/code/kicad/-/issues/23373 for the GUI variant
+        // of this hazard; kept consistent with the GUI apps for parity.
+        int ret = wxAppConsole::OnExit();
 
 #if defined( __FreeBSD__ )
-        // Avoid wxLog crashing when used in destructors.
+        // Avoid wxLog crashing when used in destructors invoked from OnPgmExit().
         wxLog::EnableLogging( false );
 #endif
 
-        return wxAppConsole::OnExit();
+        program.OnPgmExit();
+        return ret;
     }
 
     int OnRun() override

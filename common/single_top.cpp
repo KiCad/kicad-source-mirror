@@ -229,8 +229,14 @@ struct APP_SINGLE_TOP : public wxApp
 
     int  OnExit() override
     {
+        // Drain wxPendingDelete (frames deferred via Destroy()) before tearing down
+        // PGM_BASE singletons. On macOS the dock-quit path leaves frames in this
+        // queue at OnExit() time, and their canvas destructors call into
+        // Pgm().GetGLContextManager(). Running OnPgmExit() first would null that
+        // pointer out from under them. See https://gitlab.com/kicad/code/kicad/-/issues/23373
+        int ret = wxApp::OnExit();
         program.OnPgmExit();
-        return wxApp::OnExit();
+        return ret;
     }
 
     int OnRun() override
