@@ -42,6 +42,8 @@
 #include <board_stackup_manager/board_stackup.h>
 #include <footprint.h>
 #include <pad.h>
+#include <pcb_track.h>
+#include <base_units.h>
 
 #include <wx/dir.h>
 #include <wx/file.h>
@@ -669,6 +671,95 @@ BOOST_AUTO_TEST_CASE( KnockoutTextMultiContour_Issue23968 )
 
         m_ipc2581Plugin = PCB_IO_IPC2581();
     }
+}
+
+
+/**
+ * Verify IPC-2581 backdrill encoding matches the schema and expresses the
+ * correct must-not-cut layer.
+ *
+ * KiCad's PADSTACK::DRILL_PROPS::end is the must-cut layer (per the UI
+ * "must-cut" labels). The IPC-2581 standard expects the must-not-cut layer,
+ * which is the next signal layer past the must-cut layer. The exporter must
+ * emit one Spec containing three sibling Backdrill children with type
+ * START_LAYER, MUST_NOT_CUT_LAYER, and MAX_STUB_LENGTH, each carrying its
+ * value in a Property child.
+ */
+BOOST_AUTO_TEST_CASE( BackdrillSpecEncoding )
+{
+    // Build a minimal 6-layer synthetic board so we can place a via whose
+    // backdrill targets a specific must-cut layer.
+    BOARD board;
+    board.SetCopperLayerCount( 6 );
+
+    BOARD_DESIGN_SETTINGS& dsn = board.GetDesignSettings();
+    dsn.GetStackupDescriptor().BuildDefaultStackupList( &dsn, 6 );
+
+    // Front-side backdrill: drill from F_Cu, must cut through In3_Cu. The
+    // must-not-cut layer should therefore resolve to In4_Cu (the next signal
+    // layer past must-cut going inward from the start surface).
+    auto* via = new PCB_VIA( &board );
+    via->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ) );
+    via->SetLayerPair( F_Cu, B_Cu );
+    via->SetDrill( pcbIUScale.mmToIU( 0.30 ) );
+    via->SetWidth( pcbIUScale.mmToIU( 0.60 ) );
+    via->SetSecondaryDrillSize( pcbIUScale.mmToIU( 0.40 ) );
+    via->SetSecondaryDrillStartLayer( F_Cu );
+    via->SetSecondaryDrillEndLayer( In3_Cu );
+    via->SetFrontPostMachiningMode( PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK );
+    board.Add( via );
+
+    wxString tempPath = CreateTempFile();
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["version"] = "C";
+    props["sigfig"] = "4";
+
+    BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, &board, &props ) );
+    BOOST_REQUIRE( wxFileExists( tempPath ) );
+
+    BOOST_CHECK_MESSAGE(
+            FileContainsPattern( tempPath, wxT( "<Backdrill type=\"START_LAYER\"" ) ),
+            "Backdrill spec should declare a START_LAYER child" );
+    BOOST_CHECK_MESSAGE(
+            FileContainsPattern( tempPath, wxT( "<Backdrill type=\"MUST_NOT_CUT_LAYER\"" ) ),
+            "Backdrill spec should declare a MUST_NOT_CUT_LAYER child" );
+    BOOST_CHECK_MESSAGE(
+            FileContainsPattern( tempPath, wxT( "<Backdrill type=\"MAX_STUB_LENGTH\"" ) ),
+            "Backdrill spec should declare a MAX_STUB_LENGTH child" );
+
+    // Schema requires layer references via Property layerOrGroupRef, not as
+    // Backdrill attributes.
+    BOOST_CHECK_MESSAGE( FileContainsPattern( tempPath, wxT( "layerOrGroupRef=" ) ),
+                         "Backdrill must convey layers through Property layerOrGroupRef" );
+    BOOST_CHECK_MESSAGE( !FileContainsPattern( tempPath, wxT( "startLayerRef=" ) ),
+                         "Backdrill should not use schema-invalid startLayerRef attribute" );
+    BOOST_CHECK_MESSAGE( !FileContainsPattern( tempPath, wxT( "mustNotCutLayerRef=" ) ),
+                         "Backdrill should not use schema-invalid mustNotCutLayerRef attribute" );
+    BOOST_CHECK_MESSAGE( !FileContainsPattern( tempPath, wxT( "maxStubLength=" ) ),
+                         "Backdrill should not use schema-invalid maxStubLength attribute" );
+    BOOST_CHECK_MESSAGE( !FileContainsPattern( tempPath, wxT( "postMachining=" ) ),
+                         "Backdrill should not use the non-standard postMachining attribute" );
+
+    // The must-not-cut layer for a backdrill from F_Cu through In3_Cu in a
+    // 6-layer stack must resolve to In4_Cu, not the must-cut layer itself.
+    BOOST_CHECK_MESSAGE(
+            FileContainsPattern( tempPath, wxT( "layerOrGroupRef=\"In4.Cu\"" ) ),
+            "Front backdrill must-not-cut layer should be In4.Cu" );
+
+    // The third (primary) backdrill spec slot has been removed; through-drills
+    // must not be exported as backdrill specs.
+    BOOST_CHECK_MESSAGE( !FileContainsPattern( tempPath, wxT( "BD_1C" ) ),
+                         "Exporter should not emit a primary backdrill spec slot" );
+
+    // Counterbore/countersink encoded as a Backdrill type=OTHER child with
+    // a comment, never as a non-standard postMachining attribute.
+    BOOST_CHECK_MESSAGE(
+            FileContainsPattern( tempPath, wxT( "<Backdrill type=\"OTHER\"" ) ),
+            "Post-machining hint should produce a Backdrill type=OTHER child" );
+    BOOST_CHECK_MESSAGE(
+            FileContainsPattern( tempPath, wxT( "comment=\"post-machining=COUNTERSINK\"" ) ),
+            "OTHER Backdrill should carry the post-machining comment" );
 }
 
 

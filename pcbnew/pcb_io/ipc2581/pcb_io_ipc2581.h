@@ -326,7 +326,7 @@ private:
     std::vector<wxXmlNode*>    m_padstacks;         //<! Holding vector for padstacks.  These need to be inserted prior to the components
     wxXmlNode*                 m_last_padstack;     //<! Pointer to padstack list where we can insert the VIA padstacks once we process tracks
 
-    std::map<wxString, std::array<wxString, 3>>       m_padstack_backdrill_specs;
+    std::map<wxString, std::array<wxString, 2>>       m_padstack_backdrill_specs;
     std::map<wxString, wxXmlNode*>                    m_backdrill_spec_nodes;
     std::set<wxString>                                m_backdrill_spec_used;
     int                                               m_backdrill_spec_index;
