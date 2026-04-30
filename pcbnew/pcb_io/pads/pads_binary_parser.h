@@ -92,6 +92,17 @@ struct BIN_NET_CLASS_DEF
     bool hasRuleValues = false;
 };
 
+/// One type-66 net-class rule edge: its owner pointer, rule-detail page, full rule pointer
+/// (declaration order within a page), layer and file offset.
+struct NET_CLASS_RULE_EDGE
+{
+    uint32_t owner = 0;
+    uint32_t page = 0;
+    uint32_t rulePtr = 0;
+    int      layer = 0;
+    size_t   off = 0;
+};
+
 /**
  * A PADS part cluster (named group of parts).
  *
@@ -225,6 +236,9 @@ private:
     // Group nets by their +188 net-class pointer for membership, name each class from the
     // 0x118 name table, and read per-class clearance-rule layers from the type-66 rule table.
     void parseNetClasses();
+    std::vector<NET_CLASS_RULE_EDGE> collectNetClassRuleEdges( const std::set<uint32_t>& aOwnerSet );
+    void applyNetClassClearances( const std::vector<NET_CLASS_RULE_EDGE>& aEdges,
+                                  const std::map<uint32_t, size_t>& aOwnerOrdinal );
 
     // Recover serialized differential pairs from the sec49 MFC heap. Member nets are the
     // self-pointers at +12/+16, joined to a net name via m_netSelfPtrToName. Inherit-default

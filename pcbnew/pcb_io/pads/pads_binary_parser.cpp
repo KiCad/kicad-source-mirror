@@ -2407,44 +2407,7 @@ void BINARY_PARSER::parseNetClasses()
     for( size_t k = 0; k < owners.size(); ++k )
         ownerOrdinal[owners[k]] = k;
 
-    // The type-66 rule table is 24-byte records with tag 0x42 at +4 and a net-class owner
-    // pointer at +8 (== a net's +188), a rule-detail page at +0 and a layer at +20.
-    constexpr size_t   EDGE_SIZE      = 24;
-    constexpr size_t   EDGE_RULE_PTR  = 0;
-    constexpr size_t   EDGE_TAG       = 4;
-    constexpr uint32_t EDGE_TAG_VALUE = 0x42;
-    constexpr size_t   EDGE_OWNER     = 8;
-    constexpr size_t   EDGE_LAYER     = 20;
-    constexpr uint32_t RULE_PAGE_MASK = ~0xfffu;
-
-    struct EdgeRec
-    {
-        uint32_t owner;
-        uint32_t page;     // rulePtr & RULE_PAGE_MASK, selects the rule kind
-        uint32_t rulePtr;  // full rule-value-object pointer; declaration order within a page
-        int      layer;
-        size_t   off;
-    };
-
-    std::vector<EdgeRec> edges;
-
-    for( size_t off = 0; off + EDGE_SIZE <= m_data.size(); ++off )
-    {
-        SDB_RECORD rec = m_sdb.RecordAt( off );
-
-        if( rec.U32( EDGE_TAG ) != EDGE_TAG_VALUE )
-            continue;
-
-        uint32_t owner = rec.U32( EDGE_OWNER );
-
-        if( !ownerSet.count( owner ) )
-            continue;
-
-        uint32_t rulePtr = rec.U32( EDGE_RULE_PTR );
-
-        edges.push_back( { owner, rulePtr & RULE_PAGE_MASK, rulePtr,
-                           static_cast<int>( rec.U32( EDGE_LAYER ) ), off } );
-    }
+    std::vector<NET_CLASS_RULE_EDGE> edges = collectNetClassRuleEdges( ownerSet );
 
     if( edges.empty() )
         return;
@@ -2458,7 +2421,7 @@ void BINARY_PARSER::parseNetClasses()
 
     size_t firstEdge = edges.front().off;
 
-    for( const EdgeRec& e : edges )
+    for( const NET_CLASS_RULE_EDGE& e : edges )
         firstEdge = std::min( firstEdge, e.off );
 
     size_t headSpan = owners.size() * NAME_STRIDE + NAME_HEAD_PAD;
@@ -2485,12 +2448,65 @@ void BINARY_PARSER::parseNetClasses()
             m_netClasses[it->second].nets.push_back( net );
     }
 
+    applyNetClassClearances( edges, ownerOrdinal );
+
+    // Sort for reproducible output.
+    for( BIN_NET_CLASS_DEF& nc : m_netClasses )
+    {
+        std::sort( nc.nets.begin(), nc.nets.end() );
+        std::sort( nc.ruleLayers.begin(), nc.ruleLayers.end() );
+        nc.ruleLayers.erase( std::unique( nc.ruleLayers.begin(), nc.ruleLayers.end() ),
+                             nc.ruleLayers.end() );
+    }
+}
+
+
+std::vector<NET_CLASS_RULE_EDGE>
+BINARY_PARSER::collectNetClassRuleEdges( const std::set<uint32_t>& aOwnerSet )
+{
+    // The type-66 rule table is 24-byte records with tag 0x42 at +4 and a net-class owner
+    // pointer at +8 (== a net's +188), a rule-detail page at +0 and a layer at +20.
+    constexpr size_t   EDGE_SIZE      = 24;
+    constexpr size_t   EDGE_RULE_PTR  = 0;
+    constexpr size_t   EDGE_TAG       = 4;
+    constexpr uint32_t EDGE_TAG_VALUE = 0x42;
+    constexpr size_t   EDGE_OWNER     = 8;
+    constexpr size_t   EDGE_LAYER     = 20;
+    constexpr uint32_t RULE_PAGE_MASK = ~0xfffu;
+
+    std::vector<NET_CLASS_RULE_EDGE> edges;
+
+    for( size_t off = 0; off + EDGE_SIZE <= m_data.size(); ++off )
+    {
+        SDB_RECORD rec = m_sdb.RecordAt( off );
+
+        if( rec.U32( EDGE_TAG ) != EDGE_TAG_VALUE )
+            continue;
+
+        uint32_t owner = rec.U32( EDGE_OWNER );
+
+        if( !aOwnerSet.count( owner ) )
+            continue;
+
+        uint32_t rulePtr = rec.U32( EDGE_RULE_PTR );
+
+        edges.push_back( { owner, rulePtr & RULE_PAGE_MASK, rulePtr,
+                           static_cast<int>( rec.U32( EDGE_LAYER ) ), off } );
+    }
+
+    return edges;
+}
+
+
+void BINARY_PARSER::applyNetClassClearances( const std::vector<NET_CLASS_RULE_EDGE>& aEdges,
+                                             const std::map<uint32_t, size_t>& aOwnerOrdinal )
+{
     // The clearance rule kind is the rule-detail page whose (class, layer) keys are all
     // unique and that spans the most classes. Record each class's clearance-rule layers.
     std::map<uint32_t, std::set<std::pair<uint32_t, int>>> pageKeys;
     std::map<uint32_t, bool>                               pageUnique;
 
-    for( const EdgeRec& e : edges )
+    for( const NET_CLASS_RULE_EDGE& e : aEdges )
     {
         bool& uniq = pageUnique.try_emplace( e.page, true ).first->second;
 
@@ -2522,14 +2538,14 @@ void BINARY_PARSER::parseNetClasses()
 
     if( havePage )
     {
-        for( const EdgeRec& e : edges )
+        for( const NET_CLASS_RULE_EDGE& e : aEdges )
         {
             if( e.page != clearancePage )
                 continue;
 
-            auto it = ownerOrdinal.find( e.owner );
+            auto it = aOwnerOrdinal.find( e.owner );
 
-            if( it != ownerOrdinal.end() )
+            if( it != aOwnerOrdinal.end() )
                 m_netClasses[it->second].ruleLayers.push_back( e.layer );
         }
 
@@ -2537,16 +2553,16 @@ void BINARY_PARSER::parseNetClasses()
         // the value records live in a separate arena keyed by their own self-pointer at +12,
         // with no pointer chain between the two. Both arenas are emitted in the same declaration
         // order, so the i-th layer-0 clearance edge pairs positionally with the i-th value record.
-        std::vector<const EdgeRec*> layer0Edges;
+        std::vector<const NET_CLASS_RULE_EDGE*> layer0Edges;
 
-        for( const EdgeRec& e : edges )
+        for( const NET_CLASS_RULE_EDGE& e : aEdges )
         {
             if( e.page == clearancePage && e.layer == 0 )
                 layer0Edges.push_back( &e );
         }
 
         std::sort( layer0Edges.begin(), layer0Edges.end(),
-                   []( const EdgeRec* a, const EdgeRec* b ) { return a->rulePtr < b->rulePtr; } );
+                   []( const NET_CLASS_RULE_EDGE* a, const NET_CLASS_RULE_EDGE* b ) { return a->rulePtr < b->rulePtr; } );
 
         // The value arena sits in a broader MFC blob outside the sec49 directory byte-range, so
         // the scan covers the whole file, seeded on the marker value (12 mil, the TRACK_TO_TRACK
@@ -2610,9 +2626,9 @@ void BINARY_PARSER::parseNetClasses()
         {
             for( size_t i = 0; i < layer0Edges.size(); ++i )
             {
-                auto it = ownerOrdinal.find( layer0Edges[i]->owner );
+                auto it = aOwnerOrdinal.find( layer0Edges[i]->owner );
 
-                if( it == ownerOrdinal.end() )
+                if( it == aOwnerOrdinal.end() )
                     continue;
 
                 // Field positions within the int32 rule-value core.
@@ -2633,15 +2649,6 @@ void BINARY_PARSER::parseNetClasses()
                 nc.hasRuleValues = true;
             }
         }
-    }
-
-    // Sort for reproducible output.
-    for( BIN_NET_CLASS_DEF& nc : m_netClasses )
-    {
-        std::sort( nc.nets.begin(), nc.nets.end() );
-        std::sort( nc.ruleLayers.begin(), nc.ruleLayers.end() );
-        nc.ruleLayers.erase( std::unique( nc.ruleLayers.begin(), nc.ruleLayers.end() ),
-                             nc.ruleLayers.end() );
     }
 }
 
