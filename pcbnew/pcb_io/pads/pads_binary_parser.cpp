@@ -1500,138 +1500,25 @@ bool BINARY_PARSER::parseArcBoardOutline()
     constexpr size_t ARC_REC = 20;
     constexpr int    MAX_CORNERS = 256;
 
-    struct Vertex { int32_t x; int32_t y; int32_t attr; };
 
-    struct DrawingItem
-    {
-        int32_t originX = 0;
-        int32_t originY = 0;
-        int64_t localMinX = 0;
-        int64_t localMinY = 0;
-        int64_t localMaxX = 0;
-        int64_t localMaxY = 0;
-        int64_t span = 0;
-        bool    preferred = false;
-    };
 
     struct RunCandidate
     {
-        std::vector<Vertex> verts;
+        std::vector<ARC_VERTEX> verts;
         std::vector<size_t> arcCornerIdx;
         size_t              arcTableOffset = 0;
         int64_t             span = 0;
-        DrawingItem         owner;
+        ARC_DRAWING_ITEM         owner;
         bool                haveOwner = false;
     };
 
-    auto findArcTable = [&]( const std::vector<Vertex>& verts,
-                             const std::vector<size_t>& arcIdx ) -> int64_t
-    {
-        size_t nArcs = arcIdx.size();
-
-        if( nArcs == 0 )
-            return -1;
-
-        const SDB_SECTION* sec1 = getSection( SECTION::BoardSetup );
-        size_t          scanStart = sec1 ? sec1->dataOffset : 0;
-
-        if( m_data.size() < ARC_REC * nArcs )
-            return -1;
-
-        size_t scanEnd = m_data.size() - ARC_REC * nArcs;
-
-        for( size_t off = scanStart; off <= scanEnd; ++off )
-        {
-            bool ok = true;
-
-            for( size_t i = 0; i < nArcs && ok; ++i )
-            {
-                size_t     rec = off + i * ARC_REC;
-                SDB_RECORD r = m_sdb.RecordAt( rec );
-                double     xmin = r.I32( 0 );
-                double     ymin = r.I32( 4 );
-                double     xmax = r.I32( 8 );
-                double     ymax = r.I32( 12 );
-                double     rx = ( xmax - xmin ) / 2.0;
-                double ry = ( ymax - ymin ) / 2.0;
-
-                // An arc box is square and non-degenerate.
-                if( rx < 1.0 || std::abs( rx - ry ) > 2.0 )
-                {
-                    ok = false;
-                    break;
-                }
-
-                double cx = ( xmin + xmax ) / 2.0;
-                double cy = ( ymin + ymax ) / 2.0;
-                size_t j = arcIdx[i];
-                const Vertex& s = verts[j];
-                const Vertex& e = verts[( j + 1 ) % verts.size()];
-                double tol = std::max( 3.0, rx * 1e-5 );
-                double distStart = std::hypot( s.x - cx, s.y - cy );
-                double distEnd = std::hypot( e.x - cx, e.y - cy );
-
-                if( std::abs( distStart - rx ) > tol || std::abs( distEnd - rx ) > tol )
-                    ok = false;
-            }
-
-            if( ok )
-                return static_cast<int64_t>( off );
-        }
-
-        return -1;
-    };
 
     // Build the drawing-item index from the 112-byte DRW records in sections 8..10. Each record
     // stores an absolute origin at +88/+92 and an absolute bbox at +96..+108, made origin-
     // relative here so it compares directly against a run's local vertex extent. The +84 type
     // word marks the board outline item (0x00004D00), used only as a tie break.
-    auto collectDrawingItems = [&]() -> std::vector<DrawingItem>
-    {
-        std::vector<DrawingItem> items;
-        const SDB_SECTION* s8 = getSection( SECTION::FreeText );
-        const SDB_SECTION* s10 = getSection( SECTION::DrwItems );
 
-        if( !s8 || !s10 )
-            return items;
-
-        size_t start = s8->dataOffset;
-        size_t end = s10->dataOffset + s10->totalBytes;
-
-        for( size_t pos = start; pos + 112 <= end && pos + 112 <= m_data.size(); )
-        {
-            SDB_RECORD rec = m_sdb.RecordAt( pos );
-            uint16_t   marker = rec.U16( 0 );
-
-            if( ( marker == SDB_RECORD_SENTINEL || marker == 0xFFFF ) && rec.U16( 2 ) == 0 )
-            {
-                std::string name = rec.Str( DRW_ITEM::NAME, 12 );
-
-                if( name.size() >= 3 && name.compare( 0, 3, "DRW" ) == 0 )
-                {
-                    DrawingItem item;
-                    item.originX = rec.I32( DRW_ITEM::ORIGIN_X );
-                    item.originY = rec.I32( DRW_ITEM::ORIGIN_Y );
-                    item.localMinX = (int64_t) rec.I32( DRW_ITEM::BBOX_MIN_X ) - item.originX;
-                    item.localMinY = (int64_t) rec.I32( DRW_ITEM::BBOX_MIN_Y ) - item.originY;
-                    item.localMaxX = (int64_t) rec.I32( DRW_ITEM::BBOX_MAX_X ) - item.originX;
-                    item.localMaxY = (int64_t) rec.I32( DRW_ITEM::BBOX_MAX_Y ) - item.originY;
-                    item.span = std::max( item.localMaxX - item.localMinX,
-                                          item.localMaxY - item.localMinY );
-                    item.preferred = rec.U32( DRW_ITEM::TYPE_TAG ) == DRW_TAG::LINE_ITEM;
-                    items.push_back( item );
-                    pos += DRW_ITEM::SIZE;
-                    continue;
-                }
-            }
-
-            ++pos;
-        }
-
-        return items;
-    };
-
-    std::vector<DrawingItem> drawingItems = collectDrawingItems();
+    std::vector<ARC_DRAWING_ITEM> drawingItems = collectArcDrawingItems();
 
     if( drawingItems.empty() )
         return false;
@@ -1675,7 +1562,7 @@ bool BINARY_PARSER::parseArcBoardOutline()
     int64_t bestErr = std::numeric_limits<int64_t>::max();
     double  bestCenterDist = std::numeric_limits<double>::max();
 
-    std::vector<Vertex> verts;
+    std::vector<ARC_VERTEX> verts;
     std::vector<size_t> arcIdx;
 
     for( int si : { 10, 11, 12 } )
@@ -1699,7 +1586,7 @@ bool BINARY_PARSER::parseArcBoardOutline()
             for( size_t p = off; p + VTX <= end && (int) verts.size() < MAX_CORNERS; p += VTX )
             {
                 SDB_RECORD r = m_sdb.RecordAt( p );
-                Vertex     v{ r.I32( 0 ), r.I32( 4 ), r.I32( 8 ) };
+                ARC_VERTEX     v{ r.I32( 0 ), r.I32( 4 ), r.I32( 8 ) };
 
                 if( verts.size() >= 3 && verts.front().x == v.x && verts.front().y == v.y )
                 {
@@ -1731,7 +1618,7 @@ bool BINARY_PARSER::parseArcBoardOutline()
             int32_t maxX = std::numeric_limits<int32_t>::lowest();
             int32_t maxY = std::numeric_limits<int32_t>::lowest();
 
-            for( const Vertex& v : verts )
+            for( const ARC_VERTEX& v : verts )
             {
                 minX = std::min( minX, v.x );
                 minY = std::min( minY, v.y );
@@ -1759,7 +1646,7 @@ bool BINARY_PARSER::parseArcBoardOutline()
 
             if( !arcIdx.empty() )
             {
-                arcTable = findArcTable( verts, arcIdx );
+                arcTable = findArcParameterTable( verts, arcIdx );
 
                 if( arcTable < 0 )
                     continue;
@@ -1767,7 +1654,7 @@ bool BINARY_PARSER::parseArcBoardOutline()
 
             // Accept this run only when its extent coincides with a drawing item's bbox. The
             // tolerance absorbs arc bulge beyond the chord vertices and rounding.
-            for( const DrawingItem& item : drawingItems )
+            for( const ARC_DRAWING_ITEM& item : drawingItems )
             {
                 int64_t err = std::abs( item.localMinX - minX )
                               + std::abs( item.localMinY - minY )
@@ -1849,7 +1736,7 @@ bool BINARY_PARSER::parseArcBoardOutline()
 
     for( size_t i = 0; i < n; ++i )
     {
-        const Vertex& v = best.verts[i];
+        const ARC_VERTEX& v = best.verts[i];
 
         // Vertices are local to the owning item; add the item origin to reach the binary
         // absolute frame the converter expects (it subtracts the design origin once downstream).
@@ -1868,7 +1755,7 @@ bool BINARY_PARSER::parseArcBoardOutline()
             double cyLocal = ( ymin + ymax ) / 2.0;
             double radius = ( xmax - xmin ) / 2.0;
 
-            const Vertex& s = best.verts[i - 1];
+            const ARC_VERTEX& s = best.verts[i - 1];
             double startAng = std::atan2( s.y - cyLocal, s.x - cxLocal ) * 180.0 / M_PI;
             double endAng = std::atan2( v.y - cyLocal, v.x - cxLocal ) * 180.0 / M_PI;
             double delta = endAng - startAng;
@@ -1899,6 +1786,113 @@ bool BINARY_PARSER::parseArcBoardOutline()
 
     m_boardOutlines.push_back( std::move( outline ) );
     return true;
+}
+
+
+std::vector<ARC_DRAWING_ITEM> BINARY_PARSER::collectArcDrawingItems()
+{
+    std::vector<ARC_DRAWING_ITEM> items;
+    const SDB_SECTION* s8 = getSection( SECTION::FreeText );
+    const SDB_SECTION* s10 = getSection( SECTION::DrwItems );
+
+    if( !s8 || !s10 )
+        return items;
+
+    size_t start = s8->dataOffset;
+    size_t end = s10->dataOffset + s10->totalBytes;
+
+    for( size_t pos = start; pos + 112 <= end && pos + 112 <= m_data.size(); )
+    {
+        SDB_RECORD rec = m_sdb.RecordAt( pos );
+        uint16_t   marker = rec.U16( 0 );
+
+        if( ( marker == SDB_RECORD_SENTINEL || marker == 0xFFFF ) && rec.U16( 2 ) == 0 )
+        {
+            std::string name = rec.Str( DRW_ITEM::NAME, 12 );
+
+            if( name.size() >= 3 && name.compare( 0, 3, "DRW" ) == 0 )
+            {
+                ARC_DRAWING_ITEM item;
+                item.originX = rec.I32( DRW_ITEM::ORIGIN_X );
+                item.originY = rec.I32( DRW_ITEM::ORIGIN_Y );
+                item.localMinX = (int64_t) rec.I32( DRW_ITEM::BBOX_MIN_X ) - item.originX;
+                item.localMinY = (int64_t) rec.I32( DRW_ITEM::BBOX_MIN_Y ) - item.originY;
+                item.localMaxX = (int64_t) rec.I32( DRW_ITEM::BBOX_MAX_X ) - item.originX;
+                item.localMaxY = (int64_t) rec.I32( DRW_ITEM::BBOX_MAX_Y ) - item.originY;
+                item.span = std::max( item.localMaxX - item.localMinX,
+                                      item.localMaxY - item.localMinY );
+                item.preferred = rec.U32( DRW_ITEM::TYPE_TAG ) == DRW_TAG::LINE_ITEM;
+                items.push_back( item );
+                pos += DRW_ITEM::SIZE;
+                continue;
+            }
+        }
+
+        ++pos;
+    }
+
+    return items;
+}
+
+
+int64_t BINARY_PARSER::findArcParameterTable( const std::vector<ARC_VERTEX>& verts,
+                                              const std::vector<size_t>& arcIdx )
+{
+    constexpr size_t ARC_REC = 20;
+
+    size_t nArcs = arcIdx.size();
+
+    if( nArcs == 0 )
+        return -1;
+
+    const SDB_SECTION* sec1 = getSection( SECTION::BoardSetup );
+    size_t          scanStart = sec1 ? sec1->dataOffset : 0;
+
+    if( m_data.size() < ARC_REC * nArcs )
+        return -1;
+
+    size_t scanEnd = m_data.size() - ARC_REC * nArcs;
+
+    for( size_t off = scanStart; off <= scanEnd; ++off )
+    {
+        bool ok = true;
+
+        for( size_t i = 0; i < nArcs && ok; ++i )
+        {
+            size_t     rec = off + i * ARC_REC;
+            SDB_RECORD r = m_sdb.RecordAt( rec );
+            double     xmin = r.I32( 0 );
+            double     ymin = r.I32( 4 );
+            double     xmax = r.I32( 8 );
+            double     ymax = r.I32( 12 );
+            double     rx = ( xmax - xmin ) / 2.0;
+            double ry = ( ymax - ymin ) / 2.0;
+
+            // An arc box is square and non-degenerate.
+            if( rx < 1.0 || std::abs( rx - ry ) > 2.0 )
+            {
+                ok = false;
+                break;
+            }
+
+            double cx = ( xmin + xmax ) / 2.0;
+            double cy = ( ymin + ymax ) / 2.0;
+            size_t j = arcIdx[i];
+            const ARC_VERTEX& s = verts[j];
+            const ARC_VERTEX& e = verts[( j + 1 ) % verts.size()];
+            double tol = std::max( 3.0, rx * 1e-5 );
+            double distStart = std::hypot( s.x - cx, s.y - cy );
+            double distEnd = std::hypot( e.x - cx, e.y - cy );
+
+            if( std::abs( distStart - rx ) > tol || std::abs( distEnd - rx ) > tol )
+                ok = false;
+        }
+
+        if( ok )
+            return static_cast<int64_t>( off );
+    }
+
+    return -1;
 }
 
 

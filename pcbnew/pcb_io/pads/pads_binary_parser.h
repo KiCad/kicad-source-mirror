@@ -92,6 +92,28 @@ struct BIN_NET_CLASS_DEF
     bool hasRuleValues = false;
 };
 
+/// One board-outline vertex triplet: [i32 X, i32 Y, i32 attr] where attr -1 is a plain corner
+/// and attr >= 0 is the arc-parameter ordinal.
+struct ARC_VERTEX
+{
+    int32_t x = 0;
+    int32_t y = 0;
+    int32_t attr = 0;
+};
+
+/// One DRW drawing-item bbox, made origin-relative, used to match a board-outline vertex run.
+struct ARC_DRAWING_ITEM
+{
+    int32_t originX = 0;
+    int32_t originY = 0;
+    int64_t localMinX = 0;
+    int64_t localMinY = 0;
+    int64_t localMaxX = 0;
+    int64_t localMaxY = 0;
+    int64_t span = 0;
+    bool    preferred = false;
+};
+
 /// One type-66 net-class rule edge: its owner pointer, rule-detail page, full rule pointer
 /// (declaration order within a page), layer and file offset.
 struct NET_CLASS_RULE_EDGE
@@ -225,6 +247,9 @@ private:
     void parseBoardOutlineDrwOrigin();
     void parseBoardOutline();
     bool parseArcBoardOutline();
+    std::vector<ARC_DRAWING_ITEM> collectArcDrawingItems();
+    int64_t findArcParameterTable( const std::vector<ARC_VERTEX>& aVerts,
+                                   const std::vector<size_t>& aArcIdx );
     void parseNetNames();
     void parseNetNamesNew();
     void parseNetNamesOld();
