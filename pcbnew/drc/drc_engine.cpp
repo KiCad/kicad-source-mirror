@@ -1048,6 +1048,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 {
                     if( c->parentRule && c->parentRule->IsImplicit() )
                         constraint.m_ImplicitMin = true;
+                    else
+                        constraint.m_ImplicitMin = false;
 
                     constraint.m_Value.SetMin( c->constraint.m_Value.Min() );
                 }
