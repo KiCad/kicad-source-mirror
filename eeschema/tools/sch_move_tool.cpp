@@ -874,6 +874,16 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                 evt->SetPassEvent( false );
                 restore_state = true;
             }
+            else if( m_mode == BREAK || m_mode == SLICE )
+            {
+                // preprocessBreakOrSliceSelection() split the wire before any motion arrived,
+                // so cancel must roll those edits back.  Activations still pass through so the
+                // requested tool starts.
+                if( !evt->IsActivate() )
+                    evt->SetPassEvent( false );
+
+                restore_state = true;
+            }
 
             clearNewDragLines();
 
@@ -969,6 +979,13 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
     if( restore_state )
     {
         m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
+
+        // Clear the split-segment selection that preprocessBreakOrSliceSelection() built
+        // before the caller's Revert() runs.  Revert() rebuilds selection from the screen,
+        // so leaving the splits selected keeps the restored wire hidden until the next
+        // selection refresh.
+        if( m_mode == BREAK || m_mode == SLICE )
+            m_toolMgr->RunAction( ACTIONS::selectionClear );
     }
     else
     {
