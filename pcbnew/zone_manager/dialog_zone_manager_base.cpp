@@ -65,9 +65,7 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 
 	m_leftColumn->Add( layerFilterSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
-	m_viewZonesOverview = new wxDataViewCtrl( m_listPanel, wxID_ANY, wxDefaultPosition, wxSize( -1,240 ), wxDV_HORIZ_RULES|wxDV_SINGLE|wxDV_VERT_RULES );
-	m_viewZonesOverview->SetMinSize( wxSize( -1,240 ) );
-
+	m_viewZonesOverview = new wxDataViewCtrl( m_listPanel, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxDV_HORIZ_RULES|wxDV_SINGLE|wxDV_VERT_RULES );
 	m_leftColumn->Add( m_viewZonesOverview, 1, wxEXPAND, 5 );
 
 	m_sizerZoneOP = new wxBoxSizer( wxHORIZONTAL );
@@ -129,13 +127,13 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_rightColumn->Add( m_sizerPreview, 1, wxEXPAND, 5 );
 
 
-	zonePanelSizer->Add( m_rightColumn, 0, wxBOTTOM|wxEXPAND, 5 );
+	zonePanelSizer->Add( m_rightColumn, 1, wxBOTTOM|wxEXPAND, 5 );
 
 
 	m_zonePanel->SetSizer( zonePanelSizer );
 	m_zonePanel->Layout();
 	zonePanelSizer->Fit( m_zonePanel );
-	m_sizerTop->Add( m_zonePanel, 1, wxEXPAND, 5 );
+	m_sizerTop->Add( m_zonePanel, 2, wxEXPAND, 5 );
 
 
 	m_MainBoxSizer->Add( m_sizerTop, 1, wxEXPAND, 5 );
