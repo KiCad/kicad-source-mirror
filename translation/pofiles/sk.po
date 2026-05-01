@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-01 15:37+0300\n"
-"PO-Revision-Date: 2026-05-01 04:09+0000\n"
+"PO-Revision-Date: 2026-05-02 19:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -4540,14 +4540,12 @@ msgstr ""
 "Pri ukladaní súborov automaticky vytvárať záložné archívy aktuálneho projektu"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Incremental"
-msgstr "Prírastok"
+msgstr "Prírastkové"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Zip archive"
-msgstr "Roz&baliť"
+msgstr "Zip archív"
 
 #: common/dialogs/panel_common_settings_base.cpp:441
 msgid ""
@@ -4555,22 +4553,27 @@ msgid ""
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
+"Prírastkové: udržiavať skryté .history git repozitáre s priebežnými "
+"zmenami.\n"
+"Zip: pri ukladaní vytvárať zip archívy s časovou pečiatkou; automatické "
+"uloženie používa súbory na obnovenie."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "Project directory"
-msgstr "Odoslať projekt priamo"
+msgstr "Projektový adresár"
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "User data directory"
-msgstr "'%s' nie je adresár"
+msgstr "Adresár používateľských údajov"
 
 #: common/dialogs/panel_common_settings_base.cpp:453
 msgid ""
 "Project: store backups and autosave files inside the project directory.\n"
 "User: store them in your KiCad user data directory."
 msgstr ""
+"Projekt: ukladanie záloh a automaticky ukladaných súborov do adresára "
+"projektu. \n"
+"Používateľ: ukladanie do adresára s používateľskými údajmi KiCadu."
 
 #: common/dialogs/panel_common_settings_base.cpp:457
 msgid "Maximum total backup size:"
@@ -5784,9 +5787,8 @@ msgid "Minimum copper clearance"
 msgstr "Minimálna izolačná medzera medi"
 
 #: common/dialogs/panel_setup_netclasses.cpp:703
-#, fuzzy
 msgid "Optimum track width"
-msgstr "Minimálna šírka spoja"
+msgstr "Optimálna šírka spoja"
 
 #: common/dialogs/panel_setup_netclasses.cpp:704
 msgid "Via pad diameter"
@@ -6523,15 +6525,20 @@ msgid ""
 "%s\n"
 "Recover the auto-saved data?"
 msgstr ""
+"Existujú automaticky uložené súbory, ktoré sú novšie ako uložené súbory "
+"projektu:\n"
+"\n"
+"%s\n"
+"Obnoviť automaticky uložené údaje?"
 
 #: common/eda_base_frame.cpp:437
 msgid "Auto-Save Recovery"
-msgstr ""
+msgstr "Automatické ukladanie obnovy"
 
 #: common/eda_base_frame.cpp:445
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to recover auto-saved file '%s'."
-msgstr "Nepodarilo sa vytvoriť súbor '%s'."
+msgstr "Nepodarilo sa obnoviť z automaticky uloženého súboru '%s'."
 
 #: common/eda_base_frame.cpp:568 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:136
@@ -8547,20 +8554,17 @@ msgstr "DPS: Export PDF"
 
 #: common/jobs/job_export_pcb_png.cpp:37
 #: common/jobs/job_export_sch_plot.cpp:209 kicad/kicad_cli.cpp:195
-#, fuzzy
 msgid "Export PNG"
-msgstr "HPGL Export"
+msgstr "Exportovať PNG"
 
 #: common/jobs/job_export_pcb_png.cpp:43
 #: common/jobs/job_export_sch_plot.cpp:215
-#, fuzzy
 msgid "Export PNG Job Settings"
-msgstr "Nastavenia úlohy exportu PDF"
+msgstr "Nastavenia úlohy exportu PNG"
 
 #: common/jobs/job_export_pcb_png.cpp:47
-#, fuzzy
 msgid "PCB: Export PNG"
-msgstr "DPS: Export HPGL"
+msgstr "DPS: Export PNG"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
 msgid "Export position data"
@@ -8658,9 +8662,8 @@ msgid "Schematic: Export PDF"
 msgstr "Schéma: Export PDF"
 
 #: common/jobs/job_export_sch_plot.cpp:229
-#, fuzzy
 msgid "Schematic: Export PNG"
-msgstr "Schéma: Export HPGL"
+msgstr "Schéma: Export PNG"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
 msgid "Schematic PythonBOM export"
@@ -9984,10 +9987,12 @@ msgid "Cannot flush '%s' to disk: %s"
 msgstr "Nie je možné flushnúť '%s' na disk: %s"
 
 #: common/richio.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to commit save of '%s': %s. The file on disk has not been modified."
-msgstr "Nepodarilo sa commitnúť '%s': %s"
+msgstr ""
+"Nepodarilo sa commitnúť uloženie súboru '%s': %s. Súbor na disku nebol "
+"upravený."
 
 #: common/richio.cpp:721
 #, c-format
@@ -15700,7 +15705,7 @@ msgstr "DXF"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:54
 #: pcbnew/dialogs/dialog_plot_base.cpp:41
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:69
 msgid "Page size:"
@@ -15805,20 +15810,18 @@ msgstr "Exportné jednotky:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:177
 #: pcbnew/dialogs/dialog_plot_base.cpp:451
-#, fuzzy
 msgid "PNG Options"
-msgstr "Možnosti HPGL"
+msgstr "Možnosti PNG"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:184
 #: pcbnew/dialogs/dialog_plot_base.cpp:458
 msgid "DPI:"
-msgstr ""
+msgstr "DPI:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:191
 #: pcbnew/dialogs/dialog_plot_base.cpp:465
-#, fuzzy
 msgid "Anti-alias"
-msgstr "Antialiasing"
+msgstr "Anti-alias"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:201
 #: pcbnew/dialogs/dialog_export_step_base.cpp:248
@@ -16057,63 +16060,61 @@ msgid ""
 "%zu symbols have user fields whose names differ only in case. Choose how to "
 "resolve each before opening the table."
 msgstr ""
+"Symboly %zu majú používateľské polia, ktorých názvy sa líšia iba veľkosťou "
+"písmen. Pred otvorením tabuľky vyberte spôsob ich vyriešenia."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:45
-#, fuzzy
 msgid "Apply and Continue"
-msgstr "Použiť a zavrieť"
+msgstr "Použiť a pokračovať"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:75
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:78
-#, fuzzy
 msgid "(empty)"
-msgstr "<prázdny>"
+msgstr "(prázdne)"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:85
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Keep '%s'"
-msgstr "Text '%s'"
+msgstr "Zachovať '%s'"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:87
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:137
-#, fuzzy
 msgid "Join values"
-msgstr "Koncová hodnota:"
+msgstr "Spojiť hodnoty"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:215
-#, fuzzy
 msgid "Resolve duplicate field names"
-msgstr "Odstrániť duplicitný spoj"
+msgstr "Vyriešiť duplicitné názvy polí"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:19
 msgid ""
 "Some symbols have user fields whose names differ only in case. Choose how to "
 "resolve each before opening the table."
 msgstr ""
+"Niektoré symboly majú používateľské polia, ktorých názvy sa líšia iba "
+"veľkosťou písmen. Pred otvorením tabuľky si vyberte spôsob vyriešenia "
+"každého z nich."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:64
 msgid "Apply same choice to all conflicts of the same field name"
-msgstr ""
+msgstr "Použiť rovnakú voľbu na všetky konflikty s rovnakým názvom poľa"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:71
-#, fuzzy
 msgid "Join separator:"
-msgstr "Vložiť oddeľovač"
+msgstr "Oddeľovač spájania:"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:75
-#, fuzzy
 msgid "; "
-msgstr ";"
+msgstr "; "
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:84
 msgid "String inserted between values when the \"Join\" action is selected."
-msgstr ""
+msgstr "Reťazec ktorý bude vložený medzi hodnoty pri výbere akcie „Spojiť“."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.h:57
-#, fuzzy
 msgid "Resolve Field Name Conflicts"
-msgstr "Vyriešiť konflikty pri importe"
+msgstr "Vyriešiť konflikty názvov polí"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:31
 msgid "&Search for:"
@@ -18946,9 +18947,9 @@ msgstr ""
 "východzieho listu."
 
 #: eeschema/eeschema_config.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save drawing sheet '%s': %s"
-msgstr "Nepodarilo sa načítať stránku '%s': %s"
+msgstr "Nepodarilo sa uložiť list výkresu '%s': %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:142 pcbnew/pcbnew_jobs_handler.cpp:313
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
@@ -20616,9 +20617,9 @@ msgid "Unable to access the KiCad symbol plugin."
 msgstr "Nepodarilo sa získať prístup k pluginu symbolov KiCad."
 
 #: eeschema/remote_symbol_import_job.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save the downloaded symbol: %s"
-msgstr "Nepodarilo sa uložiť stiahnutý symbol."
+msgstr "Nepodarilo sa uložiť stiahnutý symbol: %s"
 
 #: eeschema/remote_symbol_import_job.cpp:354
 msgid "No symbol asset was available to place."
@@ -24297,7 +24298,7 @@ msgstr "Nesprávny názov inv_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2839
 msgid "Wrong number of columns for series pin mapping."
-msgstr "Chybný počet stĺpcov pre mapovanie vývodov."
+msgstr "Nesprávny počet stĺpcov pre sériové mapovanie vývodov."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2948
 msgid "Internal error detected, a waveform should exist"
@@ -30832,9 +30833,8 @@ msgid "Cannot use more than one mode flag\n"
 msgstr "Nie je možné použiť viac ako jeden príznak režimu\n"
 
 #: kicad/cli/command_pcb_export_png.cpp:37
-#, fuzzy
 msgid "Generate PNG outputs of a given layer list"
-msgstr "Generovať SVG výstupy daného zoznamu vrstiev"
+msgstr "Generovať PNG výstupy daného zoznamu vrstiev"
 
 #: kicad/cli/command_pcb_export_png.cpp:54
 #: kicad/cli/command_pcb_export_svg.cpp:58
@@ -30843,15 +30843,15 @@ msgstr "Farebná téma k použitiu (ako predvolená pre nastavenia editora DPS)"
 
 #: kicad/cli/command_pcb_export_png.cpp:98
 #: kicad/cli/command_sch_export_plot.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Resolution in dots per inch (default %d)"
-msgstr "Rozlíšenie v DPI (predvolené: 300)"
+msgstr "Rozlíšenie v DPI (predvolené: %d)"
 
 #: kicad/cli/command_pcb_export_png.cpp:141
 #: kicad/cli/command_sch_export_plot.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid "DPI must be between %d and %d\n"
-msgstr "Hodnota musí byť medzi %s a %s."
+msgstr "DPI musí byť medzi %d a %d\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:79
@@ -38838,9 +38838,9 @@ msgid "Run DRC"
 msgstr "Spustiť DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Elapsed: %s"
-msgstr "Pravidlá: %s"
+msgstr "Uplynuté: %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:313
 msgid "Report All Errors for Each Track"
@@ -38864,31 +38864,31 @@ msgstr "Zobraziť pravidlá návrhu."
 
 #: pcbnew/dialogs/dialog_drc.cpp:457
 msgid "Elapsed: 0 s"
-msgstr ""
+msgstr "Uplynuté: 0 s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:472
 #, c-format
 msgid "%1$d min %2$d s"
-msgstr ""
+msgstr "%1$d min %2$d s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f s"
-msgstr "Zväčšenie: %.2f"
+msgstr "%.2f s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:479
 msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- DRC zrušené používateľom.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "Canceled after %s"
-msgstr "Zrušiť zmeny"
+msgstr "Zrušené po %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "Completed in %s"
-msgstr "Súčiastka %s zmazaná z knižnice %s"
+msgstr "Ukončené za %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:817
 #, c-format
@@ -54130,14 +54130,12 @@ msgid "Sprint Layout board file"
 msgstr "Sprint Layout súbor dosky"
 
 #: pcbnew/pcb_io/sprint_layout/pcb_io_sprint_layout.h:54
-#, fuzzy
 msgid "Sprint Layout macro file"
-msgstr "Sprint Layout súbor dosky"
+msgstr "Sprint Layout súbor makra"
 
 #: pcbnew/pcb_io/sprint_layout/pcb_io_sprint_layout.h:59
-#, fuzzy
 msgid "Sprint Layout macro library"
-msgstr "Sprint Layout súbor dosky"
+msgstr "Sprint Layout knižnica makra"
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:77
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:86
@@ -54154,9 +54152,8 @@ msgid "Invalid string length in Sprint Layout file"
 msgstr "Neplatná dĺžka reťazca v Sprint Layout súbore"
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:198
-#, fuzzy
 msgid "Unexpected seek in Sprint Layout file"
-msgstr "Neočakávaný koniec Sprint Layout súboru"
+msgstr "Neočakávaný presun v Sprint Layout súbore"
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:217
 msgid "Invalid board count in Sprint Layout file"
@@ -54186,11 +54183,12 @@ msgid ""
 "Current file appears to be generated in Sprint Layout %d. Only version 3 to "
 "6 files are supported. "
 msgstr ""
+"Zdá sa, že aktuálny súbor bol vygenerovaný v programe Sprint Layout %d. "
+"Podporované sú iba súbory verzie 3 až 6. "
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:382
-#, fuzzy
 msgid "Too many objects in Sprint Layout file"
-msgstr "Príliš veľa objektov v Sprint Layout doske"
+msgstr "Príliš veľa objektov v Sprint Layout súbore"
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:396
 msgid "Too many groups in Sprint Layout object"
@@ -56048,9 +56046,9 @@ msgid "KiCad board netlist files"
 msgstr "KiCad netlist súbory dosky"
 
 #: pcbnew/tools/board_editor_control.cpp:737
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to export netlist to '%s': %s"
-msgstr "Nepodarilo sa commitnúť '%s': %s"
+msgstr "Nepodarilo sa exportovať netlist do '%s': %s"
 
 #: pcbnew/tools/board_editor_control.cpp:771
 #: pcbnew/tools/footprint_editor_control.cpp:959
@@ -56143,19 +56141,19 @@ msgstr "Duplikovať zónu"
 
 #: pcbnew/tools/board_editor_control.cpp:1876
 msgid "Move Zone to Top Priority"
-msgstr "Presunúť zónu na vrch priorít"
+msgstr "Presunúť prioritu zóny navrch"
 
 #: pcbnew/tools/board_editor_control.cpp:1930
 msgid "Raise Zone Priority"
-msgstr "Zvýšiť úroveň priority zóny"
+msgstr "Zvýšiť prioritu zóny"
 
 #: pcbnew/tools/board_editor_control.cpp:1984
 msgid "Lower Zone Priority"
-msgstr "Znížiť úroveň priority zóny"
+msgstr "Znížiť prioritu zóny"
 
 #: pcbnew/tools/board_editor_control.cpp:2065
 msgid "Move Zone to Bottom Priority"
-msgstr "Presunúť zónu na koniec priorít"
+msgstr "Presunúť prioritu zóny naspodok"
 
 #: pcbnew/tools/board_editor_control.cpp:2138
 msgid "Selection contains no items with labeled nets."
@@ -56762,9 +56760,8 @@ msgid "Edit Text Properties..."
 msgstr "Upraviť vlastnosti textu..."
 
 #: pcbnew/tools/edit_tool.cpp:153
-#, fuzzy
 msgid "Mirror / Rotate"
-msgstr "Zrkadlový text"
+msgstr "Zrkadliť / otočiť"
 
 #: pcbnew/tools/edit_tool.cpp:227
 msgid "Shape Modification"
@@ -58277,7 +58274,7 @@ msgstr "Duplikovať zónu na vrstvu..."
 
 #: pcbnew/tools/pcb_actions.cpp:1435
 msgid "Move to Top"
-msgstr "Presunúť na vrch"
+msgstr "Presunúť navrch"
 
 #: pcbnew/tools/pcb_actions.cpp:1441
 msgid "Raise"
@@ -58289,7 +58286,7 @@ msgstr "Znížiť"
 
 #: pcbnew/tools/pcb_actions.cpp:1453
 msgid "Move to Bottom"
-msgstr "Presunúť na spodok"
+msgstr "Presunúť nadol"
 
 #: pcbnew/tools/pcb_actions.cpp:1461
 msgid "Place Footprints"
@@ -59435,6 +59432,8 @@ msgstr "Vybrať/rozšíriť prepojenie..."
 msgid ""
 "Selection contains locked items. Enable 'Override locks' to operate on them."
 msgstr ""
+"Výber obsahuje uzamknuté položky. Povoľte možnosť 'Prepísať uzamknutia', aby "
+"sa aj s nimi dalo pracovať."
 
 #: pcbnew/tools/position_relative_tool.cpp:234
 msgid "Select the reference point on the item to move."
