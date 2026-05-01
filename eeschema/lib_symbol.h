@@ -323,7 +323,8 @@ public:
     SCH_FIELD* GetField( const wxString& aFieldName );
     const SCH_FIELD* GetField( const wxString& aFieldName ) const;
 
-    SCH_FIELD* FindFieldCaseInsensitive( const wxString& aFieldName );
+    SCH_FIELD*       FindFieldCaseInsensitive( const wxString& aFieldName );
+    const SCH_FIELD* FindFieldCaseInsensitive( const wxString& aFieldName ) const;
 
     const SCH_FIELD* GetField( FIELD_T aFieldType ) const;
     SCH_FIELD* GetField( FIELD_T aFieldType );

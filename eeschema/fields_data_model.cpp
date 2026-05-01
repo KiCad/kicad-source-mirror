@@ -270,7 +270,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::updateDataStoreSymbolField( const SCH_REFERE
     {
         m_dataStore[key][aFieldName] = getAttributeValue( aSymbolRef, aFieldName, aVariantName );
     }
-    else if( const SCH_FIELD* field = symbol->GetField( aFieldName ) )
+    else if( const SCH_FIELD* field = symbol->FindFieldCaseInsensitive( aFieldName ) )
     {
         if( field->IsPrivate() )
         {
@@ -1297,7 +1297,13 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& a
             if( IsGeneratedField( srcName ) )
                 continue;
 
-            SCH_FIELD* destField = symbol->GetField( srcName );
+            SCH_FIELD* destField = symbol->FindFieldCaseInsensitive( srcName );
+
+            if( destField && !destField->IsMandatory() && destField->GetName() != srcName )
+            {
+                destField->SetName( srcName );
+                symbolModified = true;
+            }
 
             if( destField && destField->IsPrivate() )
             {
@@ -1348,7 +1354,15 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( SCH_COMMIT& aCommit, TEMPLATES& a
             if( symbol->GetFields()[ii].IsMandatory() || symbol->GetFields()[ii].IsPrivate() )
                 continue;
 
-            if( fieldStore.count( symbol->GetFields()[ii].GetName() ) == 0 )
+            const wxString& existingName = symbol->GetFields()[ii].GetName();
+
+            bool stillTracked = std::any_of( fieldStore.begin(), fieldStore.end(),
+                                             [&]( const auto& kv )
+                                             {
+                                                 return kv.first.IsSameAs( existingName, false );
+                                             } );
+
+            if( !stillTracked )
             {
                 symbol->GetFields().erase( symbol->GetFields().begin() + ii );
                 symbolModified = true;
