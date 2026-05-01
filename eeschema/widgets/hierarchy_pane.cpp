@@ -842,8 +842,7 @@ void HIERARCHY_PANE::UpdateNetHighlight( const wxString& aNetName )
     m_highlightedNet = aNetName;
 
     KIGFX::COLOR4D netColor = m_frame->GetRenderSettings()->GetLayerColor( LAYER_BRIGHTENED );
-    const wxColour markBG = netColor.ToColour();
-    const wxColour markText = netColor.GetBrightness() > 0.5 ? *wxBLACK : *wxWHITE;
+    const wxColour markText = netColor.ToColour();
 
     std::set<wxString> sheetsWithNet;
 
@@ -870,7 +869,6 @@ void HIERARCHY_PANE::UpdateNetHighlight( const wxString& aNetName )
         if( data )
         {
             bool mark = sheetsWithNet.count( data->m_SheetPath.PathAsString() ) > 0;
-            m_tree->SetItemBackgroundColour( id, mark ? markBG : wxNullColour );
             m_tree->SetItemTextColour( id, mark ? markText : wxNullColour );
         }
 
