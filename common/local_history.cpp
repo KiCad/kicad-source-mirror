@@ -177,7 +177,22 @@ static bool isProjectDirectory( const wxString& aProjectPath )
     wxString name;
 
     return dir.IsOpened()
-           && dir.GetFirst( &name, wxString( wxS( "*." ) ) + FILEEXT::ProjectFileExtension, wxDIR_FILES ); 
+           && dir.GetFirst( &name, wxString( wxS( "*." ) ) + FILEEXT::ProjectFileExtension, wxDIR_FILES );
+}
+
+
+// Top-level project entries that must survive a restore unchanged: git/history metadata, the
+// transient restore staging directories (current and any timestamped retained copies), and
+// the per-project zip backup directory produced by SETTINGS_MANAGER::BackupProject (named
+// "<projectname>-backups").
+static bool isRestoreProtectedEntry( const wxString& aName )
+{
+    return aName == wxS( ".history" )
+           || aName == wxS( ".git" )
+           || aName == wxS( "_restore_backup" )
+           || aName.StartsWith( wxS( "_restore_backup_" ) )
+           || aName == wxS( "_restore_temp" )
+           || aName.EndsWith( PROJECT_BACKUPS_DIR_SUFFIX );
 }
 
 LOCAL_HISTORY::LOCAL_HISTORY()
@@ -1060,7 +1075,8 @@ bool LOCAL_HISTORY::CommitSnapshot( const std::vector<wxString>& aFiles, const w
 }
 
 
-// Helper to collect all project files (excluding .history, backups, and transient files)
+// Helper to collect all project files (excluding .history, backups, and transient files).
+// Skips subtrees that contain kicad_pro file since they belong to nested projects
 static void collectProjectFiles( const wxString& aProjectPath, std::vector<wxString>& aFiles )
 {
     wxDir dir( aProjectPath );
@@ -1068,11 +1084,20 @@ static void collectProjectFiles( const wxString& aProjectPath, std::vector<wxStr
     if( !dir.IsOpened() )
         return;
 
-    // Collect recursively.
-    std::function<void(const wxString&)> collect = [&]( const wxString& path )
+    // Collect recursively. Flag top-level to avoid hitting the same logic for nested projects
+    std::function<void( const wxString&, bool )> collect =
+            [&]( const wxString& path, bool topLevel )
     {
+        if( !topLevel && isProjectDirectory( path ) )
+        {
+            wxLogTrace( traceAutoSave,
+                        wxS( "[history] collectProjectFiles: Skipping nested project at %s" ),
+                        path );
+            return;
+        }
+
         wxString name;
-        wxDir d( path );
+        wxDir    d( path );
 
         if( !d.IsOpened() )
             return;
@@ -1081,10 +1106,10 @@ static void collectProjectFiles( const wxString& aProjectPath, std::vector<wxStr
 
         while( cont )
         {
-            if( name == wxS( ".history" ) || name.EndsWith( wxS( "-backups" ) ) )
+            if( topLevel && isRestoreProtectedEntry( name ) )
             {
                 cont = d.GetNext( &name );
-                continue; // Skip history repo itself.
+                continue;
             }
 
             wxFileName fn( path, name );
@@ -1092,11 +1117,10 @@ static void collectProjectFiles( const wxString& aProjectPath, std::vector<wxStr
 
             if( wxFileName::DirExists( fullPath ) )
             {
-                collect( fullPath );
+                collect( fullPath, false );
             }
             else if( fn.FileExists() )
             {
-                // Reuse NoteFileChange filters implicitly by skipping the transient names.
                 if( fn.GetFullName() != wxS( "fp-info-cache" ) )
                     aFiles.push_back( fn.GetFullPath() );
             }
@@ -1105,7 +1129,7 @@ static void collectProjectFiles( const wxString& aProjectPath, std::vector<wxStr
         }
     };
 
-    collect( aProjectPath );
+    collect( aProjectPath, true );
 }
 
 
@@ -2033,27 +2057,38 @@ void collectFilesInDirectory( const wxString& aRootPath, const wxString& aSearch
 
 
 /**
- * Top-level project entries that must survive a restore unchanged: git/history metadata, the
- * transient restore staging directories, and the per-project zip backup directory produced by
- * SETTINGS_MANAGER::BackupProject (named "<projectname>-backups").
- */
-bool isRestoreProtectedEntry( const wxString& aName )
-{
-    return aName == wxS( ".history" )
-           || aName == wxS( ".git" )
-           || aName == wxS( "_restore_backup" )
-           || aName == wxS( "_restore_temp" )
-           || aName.EndsWith( PROJECT_BACKUPS_DIR_SUFFIX );
-}
-
-
-/**
  * Check if a file should be excluded from backup (and thus not deleted during restore).
  */
 bool shouldExcludeFromBackup( const wxString& aFilename )
 {
     // Files explicitly excluded from backup should not be deleted during restore
     return aFilename == wxS( "fp-info-cache" ) || isRestoreProtectedEntry( aFilename );
+}
+
+
+bool isPathUnderNestedProject( const wxString& aProjectPath, const wxString& aRelativePath )
+{
+    if( aRelativePath.IsEmpty() )
+        return false;
+
+    wxArrayString parts = wxSplit( aRelativePath, '/', '\0' );
+
+    if( parts.GetCount() < 2 )
+        return false;
+
+    wxString accumulated = aProjectPath;
+
+    // Walk every ancestor directory of the file, stopping before the file itself. The project
+    // root is excluded because its .kicad_pro is the one we are restoring, not a nested one.
+    for( size_t i = 0; i + 1 < parts.GetCount(); ++i )
+    {
+        accumulated += wxFileName::GetPathSeparator() + parts[i];
+
+        if( isProjectDirectory( accumulated ) )
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -2089,7 +2124,19 @@ void findFilesToDelete( const wxString& aProjectPath, const std::set<wxString>& 
 
             if( fullPath.IsDir() && fullPath.DirExists() )
             {
-                scanDirectory( fullPath.GetFullPath(), relativePath );
+                // Skip nested projects entirely. Their files belong to a different .kicad_pro
+                // and must never be proposed for deletion by the parent's restore.
+                if( isProjectDirectory( fullPath.GetFullPath() ) )
+                {
+                    wxLogTrace( traceAutoSave,
+                                wxS( "[history] findFilesToDelete: Skipping nested project "
+                                     "subtree at %s" ),
+                                fullPath.GetFullPath() );
+                }
+                else
+                {
+                    scanDirectory( fullPath.GetFullPath(), relativePath );
+                }
             }
             else if( fullPath.FileExists() )
             {
@@ -2114,12 +2161,32 @@ void findFilesToDelete( const wxString& aProjectPath, const std::set<wxString>& 
  * Show confirmation dialog for files that will be deleted.
  * Returns true to proceed, false to abort. Sets aKeepAllFiles based on user choice.
  */
-bool confirmFileDeletion( wxWindow* aParent, const std::vector<wxString>& aFilesToDelete,
-                         bool& aKeepAllFiles )
+bool confirmFileDeletion( wxWindow* aParent, const wxString& aProjectPath,
+                          const wxString& aBackupPath,
+                          const std::vector<wxString>& aFilesToDelete, bool& aKeepAllFiles )
 {
     if( aFilesToDelete.empty() || !aParent )
     {
-        aKeepAllFiles = false;
+        aKeepAllFiles = true;
+        return true;
+    }
+
+    bool hasNestedProjectFile = false;
+
+    for( const wxString& rel : aFilesToDelete )
+    {
+        if( isPathUnderNestedProject( aProjectPath, rel ) )
+        {
+            hasNestedProjectFile = true;
+            break;
+        }
+    }
+
+    if( hasNestedProjectFile )
+    {
+        wxLogTrace( traceAutoSave, wxS( "[history] Forcing keepAllFiles due to nested project under "
+                                        "candidate path" ) );
+        aKeepAllFiles = true;
         return true;
     }
 
@@ -2139,12 +2206,16 @@ bool confirmFileDeletion( wxWindow* aParent, const std::vector<wxString>& aFiles
     }
 
     KICAD_MESSAGE_DIALOG dlg( aParent, message, _( "Delete Files during Restore" ),
-                              wxYES_NO | wxCANCEL | wxICON_QUESTION );
+                              wxYES_NO | wxCANCEL | wxNO_DEFAULT | wxICON_QUESTION );
     dlg.SetYesNoCancelLabels( _( "Proceed" ), _( "Keep All Files" ), _( "Abort" ) );
     dlg.SetExtendedMessage(
         _( "Choosing 'Keep All Files' will restore the selected commit but retain any existing "
            "files in the project directory. Choosing 'Proceed' will delete files that are not "
-           "present in the restored commit." ) );
+           "present in the restored commit." )
+        + wxS( "\n\n" )
+        + wxString::Format( _( "Files removed by 'Proceed' are archived to %s and can be "
+                               "recovered manually." ),
+                            aBackupPath ) );
 
     int choice = dlg.ShowModal();
 
@@ -2481,8 +2552,17 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
     std::vector<wxString> filesToDelete;
     findFilesToDelete( aProjectPath, restoredFiles, filesToDelete );
 
+    // Each restore gets a unique, timestamped backup directory that is retained on success
+    // so the user can recover any displaced file. Pruning is done by a separate maintenance
+    // pass, never by RestoreCommit. Windows path-safe (no ':'); ms suffix avoids collisions
+    // when restores fire within the same second. Computed up-front so the confirmation
+    // dialog can show the user where their files will go.
+    wxString backupPath =
+            aProjectPath + wxS( "_restore_backup_" )
+            + wxDateTime::UNow().Format( wxS( "%Y-%m-%dT%H-%M-%S-%l" ) );
+
     bool keepAllFiles = true;
-    if( !confirmFileDeletion( aParent, filesToDelete, keepAllFiles ) )
+    if( !confirmFileDeletion( aParent, aProjectPath, backupPath, filesToDelete, keepAllFiles ) )
     {
         // User cancelled
         wxFileName::Rmdir( tempRestorePath, wxPATH_RMDIR_RECURSIVE );
@@ -2493,16 +2573,6 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
 
     // STEP 5: Perform atomic swap - backup current, move temp to current
     wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Performing atomic swap" ) );
-
-    wxString backupPath = aProjectPath + wxS("_restore_backup");
-
-    // Remove old backup if exists
-    if( wxDirExists( backupPath ) )
-    {
-        wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Removing old backup %s" ),
-                   backupPath );
-        wxFileName::Rmdir( backupPath, wxPATH_RMDIR_RECURSIVE );
-    }
 
     // Track which files we moved to backup and restored (for rollback)
     std::set<wxString> backedUpFiles;
@@ -2529,10 +2599,11 @@ bool LOCAL_HISTORY::RestoreCommit( const wxString& aProjectPath, const wxString&
         return false;
     }
 
-    // SUCCESS - Clean up temp and backup directories
-    wxLogTrace( traceAutoSave, wxS( "[history] RestoreCommit: Restore successful, cleaning up" ) );
+    // The backup directory is retained so the user can recover any displaced file.
+    wxLogTrace( traceAutoSave,
+                wxS( "[history] RestoreCommit: Restore successful, backup retained at %s" ),
+                backupPath );
     wxFileName::Rmdir( tempRestorePath, wxPATH_RMDIR_RECURSIVE );
-    wxFileName::Rmdir( backupPath, wxPATH_RMDIR_RECURSIVE );
 
     // Record the restore in history
     recordRestoreInHistory( repo, commit, tree, aHash );

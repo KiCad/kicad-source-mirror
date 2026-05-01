@@ -286,4 +286,149 @@ BOOST_AUTO_TEST_CASE( RestoreCommitPreservesZipBackupsDirectory )
 }
 
 
+/**
+ * Regression test: a user reported that opening a project containing a nested project and
+ * accepting "restore previous version" deleted the entire nested project. The data-loss path
+ * was that LOCAL_HISTORY treated the nested project's files as ordinary subtree contents,
+ * captured them in the parent's snapshot, then on restore proposed them for deletion and
+ * (because backupCurrentFiles renamed whole top-level entries) wiped the nested directory.
+ *
+ * The fix: collectProjectFiles() and findFilesToDelete() must skip subtrees that contain
+ * their own .kicad_pro file, and the restore confirmation dialog must enter the
+ * non-destructive "Keep All Files" path automatically when a nested project is at risk.
+ *
+ * This test exercises the simple reported scenario - nested project as a top-level subdir.
+ */
+BOOST_AUTO_TEST_CASE( RestoreCommitPreservesNestedProject )
+{
+    LIBGIT2_SCOPE libgit;
+
+    bool& backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
+    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
+    backupEnabled = true;
+
+    SCOPED_TEMP_DIR tempProject( wxS( "kicad_qa_nested_project" ) );
+    const wxString& projectPath = tempProject.Path();
+
+    // Parent project (projectA): minimal .kicad_pro plus a board file.
+    wxString parentPro = projectPath + wxFileName::GetPathSeparator() + wxS( "projectA.kicad_pro" );
+    wxString parentPcb = projectPath + wxFileName::GetPathSeparator() + wxS( "projectA.kicad_pcb" );
+    writeTextFile( parentPro, wxS( "{}\n" ) );
+    writeTextFile( parentPcb, wxS( "(kicad_pcb (version 20240108))\n" ) );
+
+    LOCAL_HISTORY history;
+    BOOST_REQUIRE( history.Init( projectPath ) );
+
+    wxString headHash = history.GetHeadHash( projectPath );
+    BOOST_REQUIRE( !headHash.IsEmpty() );
+
+    // Now drop a nested project under projectA/. The user's scenario was that this nested
+    // project was added AFTER the parent's snapshot was committed - so its files are not in
+    // the restored commit, and a naive restore would propose them for deletion.
+    wxString nestedDir = projectPath + wxFileName::GetPathSeparator() + wxS( "projectB" );
+    BOOST_REQUIRE( wxFileName::Mkdir( nestedDir, 0777, wxPATH_MKDIR_FULL ) );
+
+    wxString nestedPro = nestedDir + wxFileName::GetPathSeparator() + wxS( "projectB.kicad_pro" );
+    wxString nestedPcb = nestedDir + wxFileName::GetPathSeparator() + wxS( "projectB.kicad_pcb" );
+    wxString nestedSch = nestedDir + wxFileName::GetPathSeparator() + wxS( "projectB.kicad_sch" );
+    writeTextFile( nestedPro, wxS( "{ \"nested\": true }\n" ) );
+    writeTextFile( nestedPcb, wxS( "(kicad_pcb (version 20240108) (nested yes))\n" ) );
+    writeTextFile( nestedSch, wxS( "(kicad_sch (version 20240108))\n" ) );
+
+    // Modify the parent board so the restore actually has work to do.
+    writeTextFile( parentPcb, wxS( "(kicad_pcb (version 20240108) (dirty yes))\n" ) );
+
+    BOOST_REQUIRE( history.RestoreCommit( projectPath, headHash, nullptr ) );
+
+    // The nested project's directory and every one of its files MUST survive the restore.
+    BOOST_CHECK_MESSAGE( wxDirExists( nestedDir ),
+                         "nested project directory must survive RestoreCommit" );
+    BOOST_CHECK_MESSAGE( wxFileExists( nestedPro ),
+                         "nested .kicad_pro must survive RestoreCommit" );
+    BOOST_CHECK_MESSAGE( wxFileExists( nestedPcb ),
+                         "nested .kicad_pcb must survive RestoreCommit" );
+    BOOST_CHECK_MESSAGE( wxFileExists( nestedSch ),
+                         "nested .kicad_sch must survive RestoreCommit" );
+
+    // Parent project files were correctly restored.
+    BOOST_CHECK( wxFileExists( parentPro ) );
+    BOOST_CHECK( wxFileExists( parentPcb ) );
+}
+
+
+/**
+ * The retained backup directory must be timestamped (Windows-safe, no colons) and survive
+ * the success path of RestoreCommit so the user can recover any displaced file. Replaces
+ * the old behavior where _restore_backup/ was unconditionally rmdir'd on success.
+ */
+BOOST_AUTO_TEST_CASE( RestoreCommitRetainsTimestampedBackup )
+{
+    LIBGIT2_SCOPE libgit;
+
+    bool& backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
+    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
+    backupEnabled = true;
+
+    SCOPED_TEMP_DIR tempProject( wxS( "kicad_qa_retained_backup" ) );
+    const wxString& projectPath = tempProject.Path();
+
+    wxString boardPath = projectPath + wxFileName::GetPathSeparator() + wxS( "rb.kicad_pcb" );
+    wxString projectFile = projectPath + wxFileName::GetPathSeparator() + wxS( "rb.kicad_pro" );
+    writeTextFile( projectFile, wxS( "{}\n" ) );
+    writeTextFile( boardPath, wxS( "(kicad_pcb (version 20240108))\n" ) );
+
+    LOCAL_HISTORY history;
+    BOOST_REQUIRE( history.Init( projectPath ) );
+
+    wxString headHash = history.GetHeadHash( projectPath );
+    BOOST_REQUIRE( !headHash.IsEmpty() );
+
+    // Mutate the board so restore has work to do (and produces a backup).
+    writeTextFile( boardPath, wxS( "(kicad_pcb (version 20240108) (dirty yes))\n" ) );
+
+    BOOST_REQUIRE( history.RestoreCommit( projectPath, headHash, nullptr ) );
+
+    // Backups land at a SIBLING path (aProjectPath + "_restore_backup_<ts>"), so look in
+    // the parent directory of the project. Same convention as the legacy "_restore_backup".
+    wxString parentDir = wxFileName( projectPath ).GetPath();
+    wxString leafPrefix = wxFileName( projectPath ).GetFullName() + wxS( "_restore_backup_" );
+
+    wxDir dir( parentDir );
+    BOOST_REQUIRE( dir.IsOpened() );
+
+    wxString retainedBackup;
+    bool     foundLegacyBackup = false;
+
+    wxString name;
+    for( bool cont = dir.GetFirst( &name, wxEmptyString, wxDIR_DIRS ); cont;
+         cont = dir.GetNext( &name ) )
+    {
+        if( name.StartsWith( leafPrefix ) )
+        {
+            retainedBackup = parentDir + wxFileName::GetPathSeparator() + name;
+
+            // No colons - Windows path-safe.
+            BOOST_CHECK_MESSAGE( name.Find( ':' ) == wxNOT_FOUND,
+                                 "retained backup directory name must not contain ':' "
+                                 "(Windows-illegal in path components)" );
+        }
+        else if( name == wxFileName( projectPath ).GetFullName() + wxS( "_restore_backup" ) )
+        {
+            foundLegacyBackup = true;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE(
+            !retainedBackup.IsEmpty(),
+            "RestoreCommit must retain a timestamped _restore_backup_<ts>/ sibling directory" );
+    BOOST_CHECK_MESSAGE(
+            !foundLegacyBackup,
+            "RestoreCommit must not leave the legacy non-timestamped _restore_backup/ behind" );
+
+    // Clean up the retained backup so the test does not leak files into /tmp.
+    if( !retainedBackup.IsEmpty() && wxDirExists( retainedBackup ) )
+        wxFileName::Rmdir( retainedBackup, wxPATH_RMDIR_RECURSIVE );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
