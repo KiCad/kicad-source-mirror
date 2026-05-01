@@ -113,17 +113,17 @@ struct OBJECT
     float                  y = 0;
     float                  outer = 0;          // THT/circle outer radius, SMD half-width, text height
     float                  inner = 0;          // THT drill radius, SMD half-height, text stroke width
-    int32_t                line_width = 0;     // line/poly stroke width, circle end_angle (deg*1000)
+    int32_t                line_width = 0;     // line/poly stroke width, circle end_angle
     uint8_t                layer = 0;          // LAYER_ID enum value
     uint8_t                tht_shape = 0;      // THT_SHAPE for pads, 1=component-ref for text
     uint16_t               component_id = 0;
-    int32_t                start_angle = 0;    // circle start angle (deg*1000), pad thermal style bytes
+    int32_t                start_angle = 0;    // circle start angle, pad thermal style bytes
     uint8_t                filled = 0;         // nonzero = filled polygon
-    int32_t                clearance = 0;      // ground plane clearance (1/10000 mm)
-    uint8_t                mirror = 0;
-    uint8_t                thermal_width = 0;  // thermal relief spoke width
+    int32_t                clearance = 0;      // ground plane clearance
+    uint8_t                mirror_v = 0;
+    uint8_t                mirror_h = 0;       // or thermal relief spoke width
     uint8_t                keepout = 0;        // nonzero = ground plane exclusion area
-    int32_t                rotation = 0;       // rotation in degrees * 1000
+    int32_t                rotation = 0;       // rotation in degree units
     uint8_t                plated = 0;         // 0 = NPTH, nonzero = plated
     uint8_t                soldermask = 0;     // 0 = no mask opening (tented)
 
@@ -186,8 +186,11 @@ private:
     // Binary reading helpers
     uint8_t     readUint8();
     uint16_t    readUint16();
+    int16_t     readInt16();
     uint32_t    readUint32();
+    uint32_t    readUnsigned();
     int32_t     readInt32();
+    int32_t     readSigned();
     float       readFloat();
     double      readDouble();
     float       readCoord();
