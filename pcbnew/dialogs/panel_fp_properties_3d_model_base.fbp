@@ -110,7 +110,7 @@
             <property name="pin_button">1</property>
             <property name="pos"></property>
             <property name="resize">Resizable</property>
-            <property name="sashgravity">0.85</property>
+            <property name="sashgravity">0.7</property>
             <property name="sashpos">300</property>
             <property name="sashsize">-1</property>
             <property name="show">1</property>
