@@ -115,6 +115,16 @@ COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCRE
         }
     }
 
+    if( m_isBoardEditor && ( aChangeType & CHT_TYPE ) == CHT_REMOVE
+            && aItem->IsBOARD_ITEM()
+            && static_cast<BOARD_ITEM*>( aItem )->GetParentFootprint() )
+    {
+        if( m_deletedItems.find( { aItem, aScreen } ) == m_deletedItems.end() )
+            makeEntry( aItem, aChangeType, makeImage( aItem ), aScreen );
+
+        return *this;
+    }
+
     return COMMIT::Stage( aItem, aChangeType );
 }
 
@@ -402,6 +412,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                     {
                         if( FOOTPRINT* parentFP = board->GetFirstFootprint() )
                             parentFP->Remove( boardItem );
+                    }
+                    else if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
+                    {
+                        parentFP->Remove( boardItem );
                     }
                     else
                     {

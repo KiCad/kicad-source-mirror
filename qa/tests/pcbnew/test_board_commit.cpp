@@ -22,7 +22,9 @@
 #include <pcbnew_utils/board_test_utils.h>
 #include <board.h>
 #include <board_commit.h>
+#include <footprint.h>
 #include <pcb_shape.h>
+#include <pcb_text.h>
 #include <pcb_group.h>
 
 BOOST_AUTO_TEST_SUITE( BoardCommit )
@@ -71,6 +73,32 @@ BOOST_AUTO_TEST_CASE( ReturnsBoardFromManager )
     BOARD_COMMIT commit( dummyTool );
 
     BOOST_CHECK_EQUAL( commit.GetBoard(), &board );
+}
+
+BOOST_AUTO_TEST_CASE( RemoveFootprintTextFromBoardEditor )
+{
+    BOARD        board;
+    TOOL_MANAGER mgr;
+    mgr.SetEnvironment( &board, nullptr, nullptr, nullptr, nullptr );
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    mgr.RegisterTool( dummyTool );
+
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    PCB_TEXT*  text = new PCB_TEXT( fp );
+    text->SetText( wxT( "${REFERENCE}" ) );
+    text->SetLayer( F_Fab );
+    fp->Add( text );
+    board.Add( fp );
+
+    BOOST_REQUIRE_EQUAL( fp->GraphicalItems().size(), 1 );
+
+    {
+        BOARD_COMMIT commit( &mgr, true, false );
+        commit.Remove( text );
+        commit.Push( wxT( "Delete" ), SKIP_UNDO );
+    }
+
+    BOOST_CHECK_EQUAL( fp->GraphicalItems().size(), 0 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
