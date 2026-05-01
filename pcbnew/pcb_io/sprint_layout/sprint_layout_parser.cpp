@@ -340,14 +340,6 @@ void SPRINT_LAYOUT_PARSER::parseFileStart( const wxString& aFileName )
 
     if( m_fileData.version > 6 || magic1 != 0x33 || magic2 != 0xAA || magic3 != 0xFF )
         THROW_IO_ERROR( _( "Invalid Sprint Layout file header" ) );
-
-    if( m_fileData.version < 2 )
-    {
-        THROW_IO_ERROR(
-                wxString::Format( _( "Current file appears to be generated in Sprint Layout %d. Only version 2 to 6"
-                                     " files are supported. " ),
-                                  m_fileData.version ) );
-    }
 }
 
 
@@ -525,7 +517,7 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
             aObj.net_name = readVarString();
         }
     }
-    else if( m_fileData.version == 4 )
+    else if( m_fileData.version >= 4 )
     {
         skip( 4 ); // padding
         skip( 3 );
@@ -544,7 +536,7 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
             aObj.text = readVarString();
         }
     }
-    else if( m_fileData.version == 3 )
+    else if( m_fileData.version >= 3 )
     {
         // 50 bytes of data
         if( aObj.type == SPRINT_LAYOUT::OBJ_OUTLINE_TEXT )
@@ -565,7 +557,7 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
             skip( 17 );
         }
     }
-    else
+    else // Versions 1 and 2
     {
         // 35 bytes of data
         if( aObj.type == SPRINT_LAYOUT::OBJ_OUTLINE_TEXT )
@@ -581,7 +573,7 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
         }
     }
 
-    if( !aIsTextChild )
+    if( m_fileData.version >= 2 && !aIsTextChild )
         parseGroups( aObj );
 
     switch( aObj.type )
@@ -1438,17 +1430,20 @@ void SPRINT_LAYOUT_PARSER::processSegment( BOARD_ITEM_CONTAINER* aContainer, con
         return;
     }
 
-    int width = sprintToKicadCoord( static_cast<float>( aObj.line_width ) );
+    VECTOR2I start = sprintToKicadPos( aObj.x, aObj.y );
+    VECTOR2I end = sprintToKicadPos( aObj.outer, aObj.inner );
+    int      width = sprintToKicadCoord( static_cast<float>( aObj.line_width ) );
 
-    if( width <= 0 )
-        width = pcbIUScale.mmToIU( 0.25 );
+    // Skip the dummy segment at 0,0 in version 1 files
+    if( aObj.line_width == 0 && start == end )
+        return;
 
     PCB_SHAPE* shape = new PCB_SHAPE( aContainer );
     shape->SetShape( SHAPE_T::SEGMENT );
     shape->SetLayer( layer );
     shape->SetWidth( width );
-    shape->SetStart( sprintToKicadPos( aObj.x, aObj.y ) );
-    shape->SetEnd( sprintToKicadPos( aObj.outer, aObj.inner ) );
+    shape->SetStart( start );
+    shape->SetEnd( end );
 
     aContainer->Add( shape );
     processItemGroups( shape, aObj, aGidToItems );
