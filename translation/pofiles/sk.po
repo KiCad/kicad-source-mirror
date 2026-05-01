@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-01 15:38+0300\n"
-"PO-Revision-Date: 2026-04-30 23:10+0000\n"
+"PO-Revision-Date: 2026-05-02 19:09+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -6226,19 +6226,16 @@ msgid "Graphics error"
 msgstr "Chyba grafiky"
 
 #: common/draw_panel_gal.cpp:236 common/draw_panel_gal.cpp:240
-#, fuzzy
 msgid "Graphics error during recovery"
-msgstr "Chyba grafiky"
+msgstr "Chyba grafiky počas obnovy"
 
 #: common/draw_panel_gal.cpp:241
-#, fuzzy
 msgid "Unknown exception during backend switch"
-msgstr "Výnimka OCC pri zostavovaní plochy: %s"
+msgstr "Neznáma výnimka počas prepínania backendu"
 
 #: common/draw_panel_gal.cpp:416
-#, fuzzy
 msgid "Unknown exception"
-msgstr "Neznáma akcia čistenia"
+msgstr "Neznáma výnimka"
 
 #: common/draw_panel_gal.cpp:619
 msgid "Could not use OpenGL"
@@ -20361,9 +20358,9 @@ msgid "Unable to access the KiCad symbol plugin."
 msgstr "Nepodarilo sa získať prístup k pluginu symbolov KiCad."
 
 #: eeschema/remote_symbol_import_job.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save the downloaded symbol: %s"
-msgstr "Nepodarilo sa uložiť stiahnutý symbol."
+msgstr "Nepodarilo sa uložiť stiahnutý symbol: %s"
 
 #: eeschema/remote_symbol_import_job.cpp:354
 msgid "No symbol asset was available to place."
@@ -24037,9 +24034,8 @@ msgid "Incorrect inv_pin name"
 msgstr "Nesprávny názov inv_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2839
-#, fuzzy
 msgid "Wrong number of columns for series pin mapping."
-msgstr "Chybný počet stĺpcov pre mapovanie vývodov."
+msgstr "Nesprávny počet stĺpcov pre sériové mapovanie vývodov."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2948
 msgid "Internal error detected, a waveform should exist"
@@ -55065,9 +55061,8 @@ msgid "Align/Distribute"
 msgstr "Zarovnať/Umiestniť"
 
 #: pcbnew/tools/board_editor_control.cpp:212
-#, fuzzy
 msgid "Zone Priority"
-msgstr "Priorita"
+msgstr "Priorita zóny"
 
 #: pcbnew/tools/board_editor_control.cpp:310
 msgid "Locking"
@@ -55186,24 +55181,20 @@ msgid "Duplicate Zone"
 msgstr "Duplikovať zónu"
 
 #: pcbnew/tools/board_editor_control.cpp:1908
-#, fuzzy
 msgid "Move Zone to Top Priority"
-msgstr "Presunúť roh na polohu"
+msgstr "Presunúť prioritu zóny navrch"
 
 #: pcbnew/tools/board_editor_control.cpp:1962
-#, fuzzy
 msgid "Raise Zone Priority"
-msgstr "Úroveň priority zóny:"
+msgstr "Zvýšiť prioritu zóny"
 
 #: pcbnew/tools/board_editor_control.cpp:2016
-#, fuzzy
 msgid "Lower Zone Priority"
-msgstr "Vlastnosti medených oblastí"
+msgstr "Znížiť prioritu zóny"
 
 #: pcbnew/tools/board_editor_control.cpp:2097
-#, fuzzy
 msgid "Move Zone to Bottom Priority"
-msgstr "Presunúť roh na polohu"
+msgstr "Presunúť prioritu zóny naspodok"
 
 #: pcbnew/tools/board_editor_control.cpp:2170
 msgid "Selection contains no items with labeled nets."
@@ -57306,23 +57297,20 @@ msgid "Duplicate Zone onto Layer..."
 msgstr "Duplikovať zónu na vrstvu..."
 
 #: pcbnew/tools/pcb_actions.cpp:1428
-#, fuzzy
 msgid "Move to Top"
-msgstr "Presunúť do koša"
+msgstr "Presunúť navrch"
 
 #: pcbnew/tools/pcb_actions.cpp:1434
 msgid "Raise"
-msgstr ""
+msgstr "Zvýšiť"
 
 #: pcbnew/tools/pcb_actions.cpp:1440
-#, fuzzy
 msgid "Lower"
-msgstr "Napájanie"
+msgstr "Znížiť"
 
 #: pcbnew/tools/pcb_actions.cpp:1446
-#, fuzzy
 msgid "Move to Bottom"
-msgstr "Zarovnať nadol"
+msgstr "Presunúť nadol"
 
 #: pcbnew/tools/pcb_actions.cpp:1454
 msgid "Place Footprints"
@@ -59871,6 +59859,8 @@ msgid ""
 "Automatically assign zone priorities based on connectivity analysis of "
 "overlapping regions."
 msgstr ""
+"Automaticky priradiť priority zón na základe analýzy prepojenia "
+"prekrývajúcich sa oblastí."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:148
 msgid "Refill zones"
