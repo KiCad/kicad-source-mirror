@@ -237,14 +237,21 @@ bool SPRINT_LAYOUT_PARSER::ParseBoard( const wxString& aFileName )
     m_parsingMacro = false;
     parseFileStart( aFileName );
 
-    uint32_t numBoards = readUnsigned();
+    if( m_fileData.version >= 3 )
+    {
+        uint32_t numBoards = readUnsigned();
 
-    if( numBoards == 0 || numBoards > 100 )
-        THROW_IO_ERROR( _( "Invalid board count in Sprint Layout file" ) );
+        if( numBoards == 0 || numBoards > 100 )
+            THROW_IO_ERROR( _( "Invalid board count in Sprint Layout file" ) );
 
-    m_fileData.boards.resize( numBoards );
+        m_fileData.boards.resize( numBoards );
+    }
+    else
+    {
+        m_fileData.boards.resize( 1 );
+    }
 
-    for( uint32_t b = 0; b < numBoards; b++ )
+    for( uint32_t b = 0; b < m_fileData.boards.size(); b++ )
     {
         SPRINT_LAYOUT::BOARD_DATA& boardData = m_fileData.boards[b];
         parseBoardHeader( boardData );
@@ -259,22 +266,25 @@ bool SPRINT_LAYOUT_PARSER::ParseBoard( const wxString& aFileName )
         for( uint32_t i = 0; i < numObjects; i++ )
             parseObject( boardData.objects[i] );
 
-        uint32_t numConnections = 0;
-
-        for( auto& obj : boardData.objects )
+        if( m_fileData.version >= 3 )
         {
-            if( obj.type == SPRINT_LAYOUT::OBJ_THT_PAD || obj.type == SPRINT_LAYOUT::OBJ_SMD_PAD )
-                numConnections++;
-        }
+            uint32_t numConnections = 0;
 
-        // Read connection records (one per pad object)
-        for( uint32_t c = 0; c < numConnections; c++ )
-        {
-            uint32_t connCount = readUnsigned();
+            for( auto& obj : boardData.objects )
+            {
+                if( obj.type == SPRINT_LAYOUT::OBJ_THT_PAD || obj.type == SPRINT_LAYOUT::OBJ_SMD_PAD )
+                    numConnections++;
+            }
 
-            // Skip the connection data for now
-            for( uint32_t i = 0; i < connCount; i++ )
-                (void) readUnsigned();
+            // Read connection records (one per pad object)
+            for( uint32_t c = 0; c < numConnections; c++ )
+            {
+                uint32_t connCount = readUnsigned();
+
+                // Skip the connection data for now
+                for( uint32_t i = 0; i < connCount; i++ )
+                    (void) readUnsigned();
+            }
         }
     }
 
@@ -343,68 +353,76 @@ void SPRINT_LAYOUT_PARSER::parseFileStart( const wxString& aFileName )
 
 void SPRINT_LAYOUT_PARSER::parseBoardHeader( SPRINT_LAYOUT::BOARD_DATA& aBoard )
 {
-    // Board name (Pascal string, 30 bytes max)
-    aBoard.name = readFixedString( 30 );
-
-    // Unknown padding
-    skip( 4 );
-
-    aBoard.size_x = readUint32();
-    aBoard.size_y = readUint32();
-
-    // Ground plane enabled flag per layer (C1, S1, C2, S2, I1, I2, O)
-    for( int i = 0; i < 7; i++ )
-        aBoard.ground_plane[i] = readUint8();
-
-    if( m_fileData.version >= 5 )
+    if( m_fileData.version >= 3 )
     {
-        // Grid and viewport (not needed for import)
-        readDouble(); // active_grid_val
-        readDouble(); // zoom
-        readUint32(); // viewport_offset_x
-        readUint32(); // viewport_offset_y
+        // Board name (Pascal string, 30 bytes max)
+        aBoard.name = readFixedString( 30 );
 
-        // Active layer + padding
+        // Unknown padding
         skip( 4 );
 
-        // Layer visibility + scanned copy flags
-        skip( 7 ); // layer_visible[7]
-        skip( 1 ); // show_scanned_copy_top
-        skip( 1 ); // show_scanned_copy_bottom
+        aBoard.size_x = readUint32();
+        aBoard.size_y = readUint32();
 
-        // Scanned copy paths
-        readFixedString( 200 );
-        readFixedString( 200 );
+        // Ground plane enabled flag per layer (C1, S1, C2, S2, I1, I2, O)
+        for( int i = 0; i < 7; i++ )
+            aBoard.ground_plane[i] = readUint8();
 
-        // DPI and shift values for scanned copies
-        skip( 4 * 6 ); // dpi_top, dpi_bottom, shiftx/y_top, shiftx/y_bottom
+        if( m_fileData.version >= 5 )
+        {
+            // Grid and viewport (not needed for import)
+            readDouble(); // active_grid_val
+            readDouble(); // zoom
+            readUint32(); // viewport_offset_x
+            readUint32(); // viewport_offset_y
 
-        // Unknown fields
-        skip( 4 * 2 );
+            // Active layer + padding
+            skip( 4 );
 
-        aBoard.center_x = readInt32();
-        aBoard.center_y = readInt32();
+            // Layer visibility + scanned copy flags
+            skip( 7 ); // layer_visible[7]
+            skip( 1 ); // show_scanned_copy_top
+            skip( 1 ); // show_scanned_copy_bottom
 
-        aBoard.is_multilayer = readUint8();
+            // Scanned copy paths
+            readFixedString( 200 );
+            readFixedString( 200 );
+
+            // DPI and shift values for scanned copies
+            skip( 4 * 6 ); // dpi_top, dpi_bottom, shiftx/y_top, shiftx/y_bottom
+
+            // Unknown fields
+            skip( 4 * 2 );
+
+            aBoard.center_x = readInt32();
+            aBoard.center_y = readInt32();
+
+            aBoard.is_multilayer = readUint8();
+        }
+        else if( m_fileData.version >= 4 )
+        {
+            skip( 19 );
+            readUint32(); // active_layer
+            skip( 7 );    // layer_visible
+            skip( 400 );  // unknown_list: 100 * 4 bytes
+            skip( 33 );
+
+            aBoard.center_x = readInt32();
+            aBoard.center_y = readInt32();
+        }
+        else if( m_fileData.version >= 3 )
+        {
+            skip( 19 );
+            readUint32(); // active_layer
+            skip( 7 );    // layer_visible
+            skip( 400 );  // unknown_list: 100 * 4 bytes
+            skip( 33 );
+        }
     }
-    else if( m_fileData.version >= 4 )
+    else // Version 2 and older
     {
-        skip( 19 );
-        readUint32(); // active_layer
-        skip( 7 );    // layer_visible
-        skip( 400 );  // unknown_list: 100 * 4 bytes
-        skip( 33 );
-
-        aBoard.center_x = readInt32();
-        aBoard.center_y = readInt32();
-    }
-    else
-    {
-        skip( 19 );
-        readUint32(); // active_layer
-        skip( 7 );    // layer_visible
-        skip( 400 );  // unknown_list: 100 * 4 bytes
-        skip( 33 );
+        aBoard.size_x = readUint32();
+        aBoard.size_y = readUint32();
     }
 }
 
