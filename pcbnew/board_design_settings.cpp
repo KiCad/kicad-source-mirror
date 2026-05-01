@@ -874,6 +874,125 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             &m_defaultZoneSettings.m_ZoneClearance, pcbIUScale.mmToIU( ZONE_CLEARANCE_MM ),
             pcbIUScale.mmToIU( 0.0 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
 
+    m_params.emplace_back( new PARAM_SCALED<int>(
+            "defaults.zones.min_thickness", &m_defaultZoneSettings.m_ZoneMinThickness,
+            pcbIUScale.mmToIU( ZONE_THICKNESS_MM ), pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM ),
+            pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
+
+    m_params.emplace_back( new PARAM_ENUM<ZONE_FILL_MODE>( "defaults.zones.fill_mode",
+                                                           &m_defaultZoneSettings.m_FillMode, ZONE_FILL_MODE::POLYGONS,
+                                                           ZONE_FILL_MODE::POLYGONS, ZONE_FILL_MODE::HATCH_PATTERN ) );
+
+    m_params.emplace_back(
+            new PARAM_SCALED<int>( "defaults.zones.hatch_thickness", &m_defaultZoneSettings.m_HatchThickness,
+                                   std::max( pcbIUScale.mmToIU( ZONE_THICKNESS_MM ) * 4, pcbIUScale.mmToIU( 1.0 ) ),
+                                   pcbIUScale.mmToIU( 0.0 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
+
+    m_params.emplace_back(
+            new PARAM_SCALED<int>( "defaults.zones.hatch_gap", &m_defaultZoneSettings.m_HatchGap,
+                                   std::max( pcbIUScale.mmToIU( ZONE_THICKNESS_MM ) * 6, pcbIUScale.mmToIU( 1.5 ) ),
+                                   pcbIUScale.mmToIU( 0.0 ), pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<double>(
+            "defaults.zones.hatch_orientation",
+            [&]() -> double
+            {
+                return m_defaultZoneSettings.m_HatchOrientation.AsDegrees();
+            },
+            [&]( double aVal )
+            {
+                m_defaultZoneSettings.m_HatchOrientation = EDA_ANGLE( aVal, DEGREES_T );
+            },
+            0.0 ) );
+
+    m_params.emplace_back( new PARAM<int>( "defaults.zones.hatch_smoothing_level",
+                                           &m_defaultZoneSettings.m_HatchSmoothingLevel, 0, 0, 2 ) );
+
+    m_params.emplace_back( new PARAM<double>( "defaults.zones.hatch_smoothing_value",
+                                              &m_defaultZoneSettings.m_HatchSmoothingValue, 0.1, 0.0, 1.0 ) );
+
+    m_params.emplace_back( new PARAM_ENUM<ZONE_BORDER_DISPLAY_STYLE>(
+            "defaults.zones.border_display_style", &m_defaultZoneSettings.m_ZoneBorderDisplayStyle,
+            ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE, ZONE_BORDER_DISPLAY_STYLE::NO_HATCH,
+            ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER ) );
+
+    m_params.emplace_back( new PARAM_SCALED<int>(
+            "defaults.zones.border_hatch_pitch", &m_defaultZoneSettings.m_BorderHatchPitch,
+            pcbIUScale.mmToIU( ZONE_BORDER_HATCH_DIST_MM ), pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MINDIST_MM ),
+            pcbIUScale.mmToIU( ZONE_BORDER_HATCH_MAXDIST_MM ), pcbIUScale.MM_PER_IU ) );
+
+    m_params.emplace_back(
+            new PARAM_SCALED<long>( "defaults.zones.thermal_relief_gap", &m_defaultZoneSettings.m_ThermalReliefGap,
+                                    pcbIUScale.mmToIU( ZONE_THERMAL_RELIEF_GAP_MM ), pcbIUScale.mmToIU( 0.0 ),
+                                    pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
+
+    m_params.emplace_back( new PARAM_SCALED<long>(
+            "defaults.zones.thermal_relief_spoke_width", &m_defaultZoneSettings.m_ThermalReliefSpokeWidth,
+            pcbIUScale.mmToIU( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MM ), pcbIUScale.mmToIU( 0.0 ),
+            pcbIUScale.mmToIU( 25.0 ), pcbIUScale.MM_PER_IU ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<int>(
+            "defaults.zones.pad_connection",
+            [&]() -> int
+            {
+                return static_cast<int>( m_defaultZoneSettings.GetPadConnection() );
+            },
+            [&]( int aVal )
+            {
+                m_defaultZoneSettings.SetPadConnection( static_cast<ZONE_CONNECTION>( aVal ) );
+            },
+            static_cast<int>( ZONE_CONNECTION::THERMAL ) ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<int>(
+            "defaults.zones.corner_smoothing",
+            [&]() -> int
+            {
+                return m_defaultZoneSettings.GetCornerSmoothingType();
+            },
+            [&]( int aVal )
+            {
+                m_defaultZoneSettings.SetCornerSmoothingType( aVal );
+            },
+            ZONE_SETTINGS::SMOOTHING_NONE ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<double>(
+            "defaults.zones.corner_radius",
+            [&]() -> double
+            {
+                return pcbIUScale.IUTomm( m_defaultZoneSettings.GetCornerRadius() );
+            },
+            [&]( double aVal )
+            {
+                m_defaultZoneSettings.SetCornerRadius( pcbIUScale.mmToIU( aVal ) );
+            },
+            0.0 ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<int>(
+            "defaults.zones.remove_islands",
+            [&]() -> int
+            {
+                return static_cast<int>( m_defaultZoneSettings.GetIslandRemovalMode() );
+            },
+            [&]( int aVal )
+            {
+                m_defaultZoneSettings.SetIslandRemovalMode( static_cast<ISLAND_REMOVAL_MODE>( aVal ) );
+            },
+            static_cast<int>( ISLAND_REMOVAL_MODE::ALWAYS ) ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<double>(
+            "defaults.zones.min_island_area",
+            [&]() -> double
+            {
+                const double iuPerMm2 = pcbIUScale.IU_PER_MM * pcbIUScale.IU_PER_MM;
+                return static_cast<double>( m_defaultZoneSettings.GetMinIslandArea() ) / iuPerMm2;
+            },
+            [&]( double aVal )
+            {
+                const double iuPerMm2 = pcbIUScale.IU_PER_MM * pcbIUScale.IU_PER_MM;
+                m_defaultZoneSettings.SetMinIslandArea( static_cast<long long int>( aVal * iuPerMm2 ) );
+            },
+            10.0 ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "defaults.pads",
             [&]() -> nlohmann::json
             {
