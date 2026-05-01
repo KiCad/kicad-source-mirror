@@ -36,7 +36,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-26 04:51+0300\n"
+"POT-Creation-Date: 2026-05-01 15:38+0300\n"
 "PO-Revision-Date: 2026-04-24 15:33+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v10/tr/>\n"
@@ -232,7 +232,7 @@ msgstr "Oluşturma: Görüntü Sonrası İşleme Gölgelendiricisi"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:54
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:627
-#: common/eda_base_frame.cpp:1521 common/hotkey_store.cpp:80
+#: common/eda_base_frame.cpp:1539 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1268 pcbnew/footprint_chooser_frame.cpp:364
 #: pcbnew/footprint_viewer_frame.cpp:968 pcbnew/pcb_base_frame.cpp:683
 msgid "3D Viewer"
@@ -304,7 +304,7 @@ msgstr "KiCad 3B Görüntüleyici"
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:25
 #: pcbnew/footprint_edit_frame.cpp:245 pcbnew/footprint_edit_frame.cpp:1042
 #: pcbnew/pcb_edit_frame.cpp:347 pcbnew/pcb_edit_frame.cpp:2065
-#: pcbnew/tools/pcb_actions.cpp:1625
+#: pcbnew/tools/pcb_actions.cpp:1649
 msgid "Appearance"
 msgstr "Görselleştirme"
 
@@ -325,7 +325,7 @@ msgstr "Kart Çizim Ayarlarını Takip Et"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:567
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:753
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:940
-#: pcbnew/pcbnew_jobs_handler.cpp:815
+#: pcbnew/pcbnew_jobs_handler.cpp:818
 msgid "legacy colors"
 msgstr "eski renkler"
 
@@ -334,7 +334,7 @@ msgid "3D Image File Name"
 msgstr "3B Görüntü Dosyası Adı"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:803
-#: common/eda_base_frame.cpp:1671 common/eda_base_frame.cpp:1675
+#: common/eda_base_frame.cpp:1689 common/eda_base_frame.cpp:1693
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:309
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
@@ -350,7 +350,7 @@ msgstr "Dosya '%s' kaydetmek için yeterli izin yok."
 #: common/dialogs/panel_embedded_files.cpp:498
 #: common/dialogs/panel_embedded_files.cpp:529
 #: common/dialogs/panel_embedded_files.cpp:540
-#: common/dialogs/panel_setup_severities.cpp:44 common/eda_base_frame.cpp:1331
+#: common/dialogs/panel_setup_severities.cpp:44 common/eda_base_frame.cpp:1349
 #: common/kidialog.cpp:124 eeschema/dialogs/dialog_erc.cpp:980
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1912
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2314
@@ -623,7 +623,7 @@ msgid "Show Appearance Manager"
 msgstr "Görünüm Yöneticisini Göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:375
-#: pcbnew/tools/pcb_actions.cpp:1626
+#: pcbnew/tools/pcb_actions.cpp:1650
 msgid "Show/hide the appearance manager"
 msgstr "Görünüm yöneticisini göster/gizle"
 
@@ -1820,7 +1820,7 @@ msgid "Clear Recent Files"
 msgstr "Son Kullanılan Dosyaları Temizle"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:402
-#: eeschema/tools/sch_drawing_tools.cpp:1223
+#: eeschema/tools/sch_drawing_tools.cpp:1247
 #: pagelayout_editor/pl_editor_frame.cpp:846 pcbnew/tools/drawing_tool.cpp:758
 msgid "Choose Image"
 msgstr "Resim Seç"
@@ -3226,7 +3226,7 @@ msgstr "Başlık Bloğu Verilerini Önizle"
 #: common/dialogs/dialog_page_settings.cpp:90
 #: common/dialogs/dialog_page_settings_base.h:146
 #: eeschema/tools/sch_editor_control.cpp:508
-#: pcbnew/tools/board_editor_control.cpp:351
+#: pcbnew/tools/board_editor_control.cpp:527
 msgid "Page Settings"
 msgstr "Sayfa Ayarları"
 
@@ -3242,7 +3242,7 @@ msgstr "Başlık Bloğu"
 #: common/dialogs/dialog_page_settings.cpp:465
 #: eeschema/eeschema_jobs_handler.cpp:249 pagelayout_editor/files.cpp:254
 #: pagelayout_editor/pl_editor_frame.cpp:369
-#: pcbnew/pcbnew_jobs_handler.cpp:2752
+#: pcbnew/pcbnew_jobs_handler.cpp:2755
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Çizim sayfası '%s' yüklenirken hata oluştu."
@@ -4690,7 +4690,7 @@ msgstr "Takma adlardan birinin değiştirilmesi gerekecek."
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:549
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:569
 #: eeschema/dialogs/panel_sym_lib_table.cpp:596
-#: kicad/project_tree_pane.cpp:1819 pcbnew/dialogs/panel_fp_lib_table.cpp:693
+#: kicad/project_tree_pane.cpp:1830 pcbnew/dialogs/panel_fp_lib_table.cpp:693
 #: pcbnew/tools/pcb_actions.cpp:727
 msgid "Skip"
 msgstr "Atla"
@@ -4718,8 +4718,8 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:883 eeschema/project_rescue.cpp:854
 #: eeschema/sheet.cpp:807 eeschema/symbol_editor/symbol_edit_frame.cpp:1208
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1258
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:2034
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:2103
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2045
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2114
 #: eeschema/symbol_library_manager.cpp:766
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:861
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:880
@@ -5058,9 +5058,9 @@ msgid "Grid size '%s' already exists."
 msgstr "'%s' ızgara boyutu listede zaten var."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#: common/eda_base_frame.cpp:1463 common/eda_base_frame.cpp:1473
-#: common/eda_base_frame.cpp:1497 common/eda_base_frame.cpp:1511
-#: common/eda_base_frame.cpp:1545 common/eda_base_frame.cpp:1564
+#: common/eda_base_frame.cpp:1481 common/eda_base_frame.cpp:1491
+#: common/eda_base_frame.cpp:1515 common/eda_base_frame.cpp:1529
+#: common/eda_base_frame.cpp:1563 common/eda_base_frame.cpp:1582
 #: common/tool/common_tools.cpp:610
 msgid "Grids"
 msgstr "Izgaralar"
@@ -5496,7 +5496,7 @@ msgid "Reset to Trackpad Defaults"
 msgstr "Dokunmatik Yüzey Varsayılanlarına Sıfırla"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:17
-#: common/eda_base_frame.cpp:1522
+#: common/eda_base_frame.cpp:1540
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:165
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:281
 #: eeschema/dialogs/dialog_schematic_setup.cpp:58
@@ -5584,7 +5584,7 @@ msgstr ""
 "KiCad API etkinleştirildiğinde, bu bilgisayarda çalışan eklentiler ve diğer "
 "yazılımlar KiCad'e bağlanabilir."
 
-#: common/dialogs/panel_plugin_settings_base.cpp:31 kicad/pcm/pcm.cpp:1261
+#: common/dialogs/panel_plugin_settings_base.cpp:31 kicad/pcm/pcm.cpp:1267
 msgid "Enable KiCad API"
 msgstr "KiCad API'sini Etkinleştir"
 
@@ -6051,7 +6051,7 @@ msgstr ""
 "mi?"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
-#: common/eda_base_frame.cpp:1441
+#: common/eda_base_frame.cpp:1459
 msgid "Data Collection"
 msgstr "Veri Toplama"
 
@@ -6126,7 +6126,7 @@ msgstr "Metin Değiştirme"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:238
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 #: eeschema/fields_grid_table.cpp:352 eeschema/fields_grid_table.cpp:796
-#: eeschema/fields_grid_table.cpp:933 eeschema/pin_type.cpp:113
+#: eeschema/fields_grid_table.cpp:936 eeschema/pin_type.cpp:113
 #: eeschema/sch_field.cpp:917 eeschema/sch_field.cpp:1638
 #: eeschema/sch_pin.cpp:1959 pcbnew/dialogs/dialog_render_job.cpp:40
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2545
@@ -6137,7 +6137,7 @@ msgstr "Sol"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:238
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 #: eeschema/fields_grid_table.cpp:354 eeschema/fields_grid_table.cpp:798
-#: eeschema/fields_grid_table.cpp:937 eeschema/pin_type.cpp:112
+#: eeschema/fields_grid_table.cpp:940 eeschema/pin_type.cpp:112
 #: eeschema/sch_field.cpp:919 eeschema/sch_field.cpp:1640
 #: eeschema/sch_pin.cpp:1958 pcbnew/dialogs/dialog_render_job.cpp:41
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2546
@@ -6232,19 +6232,34 @@ msgstr "Yukarı Taşı"
 msgid "Move Down"
 msgstr "Aşağı Taşı"
 
-#: common/draw_panel_gal.cpp:381 common/draw_panel_gal.cpp:587
+#: common/draw_panel_gal.cpp:225 common/draw_panel_gal.cpp:612
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "OpenGL kullanılamadı, yazılımsal oluşturmaya geri dönülüyor"
 
-#: common/draw_panel_gal.cpp:389
+#: common/draw_panel_gal.cpp:232 common/draw_panel_gal.cpp:416
 msgid "Graphics error"
 msgstr "Grafik hatası"
 
-#: common/draw_panel_gal.cpp:594
+#: common/draw_panel_gal.cpp:236 common/draw_panel_gal.cpp:240
+#, fuzzy
+msgid "Graphics error during recovery"
+msgstr "Grafik hatası"
+
+#: common/draw_panel_gal.cpp:241
+#, fuzzy
+msgid "Unknown exception during backend switch"
+msgstr "Yüzey oluşturulurken OCC istisnası: %s"
+
+#: common/draw_panel_gal.cpp:416
+#, fuzzy
+msgid "Unknown exception"
+msgstr "Bilinmeyen temizleme eylemi"
+
+#: common/draw_panel_gal.cpp:619
 msgid "Could not use OpenGL"
 msgstr "OpenGL kullanılamadı"
 
-#: common/draw_panel_gal.cpp:622
+#: common/draw_panel_gal.cpp:647
 msgid "Error switching GAL backend"
 msgstr "GAL arka ucu değiştirilirken hata oluştu"
 
@@ -6468,128 +6483,128 @@ msgstr "Çalıştır: %s > %s"
 msgid "Run: %s"
 msgstr "Çalıştır: %s"
 
-#: common/eda_base_frame.cpp:1331
+#: common/eda_base_frame.cpp:1349
 #, c-format
 msgid "File '%s' was not found.\n"
 msgstr "'%s' dosyası bulunamadı.\n"
 
-#: common/eda_base_frame.cpp:1334
+#: common/eda_base_frame.cpp:1352
 msgid "Do you want to remove it from list of recently opened files?"
 msgstr "Son açılan dosyalar listesinden kaldırmak istiyor musunuz?"
 
-#: common/eda_base_frame.cpp:1335
+#: common/eda_base_frame.cpp:1353
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:79
 msgid "Remove"
 msgstr "Kaldır"
 
-#: common/eda_base_frame.cpp:1336
+#: common/eda_base_frame.cpp:1354
 msgid "Keep"
 msgstr "Sakla"
 
-#: common/eda_base_frame.cpp:1385
+#: common/eda_base_frame.cpp:1403
 msgid "Preferences"
 msgstr "Tercihler"
 
-#: common/eda_base_frame.cpp:1412 common/hotkey_store.cpp:75
+#: common/eda_base_frame.cpp:1430 common/hotkey_store.cpp:75
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
 msgstr "Ortak"
 
-#: common/eda_base_frame.cpp:1418
+#: common/eda_base_frame.cpp:1436
 msgid "Mouse and Touchpad"
 msgstr "Fare ve Dokunmatik Yüzey"
 
-#: common/eda_base_frame.cpp:1425
+#: common/eda_base_frame.cpp:1443
 msgid "SpaceMouse"
 msgstr "Uzay Faresi"
 
-#: common/eda_base_frame.cpp:1428
+#: common/eda_base_frame.cpp:1446
 msgid "Hotkeys"
 msgstr "Kısayol Tuşları"
 
-#: common/eda_base_frame.cpp:1434 kicad/project_tree_pane.cpp:1088
+#: common/eda_base_frame.cpp:1452 kicad/project_tree_pane.cpp:1088
 msgid "Version Control"
 msgstr "Sürüm Kontrolü"
 
-#: common/eda_base_frame.cpp:1461 common/tool/actions.cpp:1283
+#: common/eda_base_frame.cpp:1479 common/tool/actions.cpp:1283
 #: common/tool/common_tools.cpp:617 eeschema/symbol_editor/symbol_editor.cpp:85
 #: kicad/tools/kicad_manager_actions.cpp:116
 msgid "Symbol Editor"
 msgstr "Sembol Düzenleyici"
 
-#: common/eda_base_frame.cpp:1462 common/eda_base_frame.cpp:1472
-#: common/eda_base_frame.cpp:1496 common/eda_base_frame.cpp:1510
-#: common/eda_base_frame.cpp:1542 common/eda_base_frame.cpp:1563
+#: common/eda_base_frame.cpp:1480 common/eda_base_frame.cpp:1490
+#: common/eda_base_frame.cpp:1514 common/eda_base_frame.cpp:1528
+#: common/eda_base_frame.cpp:1560 common/eda_base_frame.cpp:1581
 msgid "Display Options"
 msgstr "Görüntüleme Seçenekleri"
 
-#: common/eda_base_frame.cpp:1464 common/eda_base_frame.cpp:1474
-#: common/eda_base_frame.cpp:1499 common/eda_base_frame.cpp:1513
+#: common/eda_base_frame.cpp:1482 common/eda_base_frame.cpp:1492
+#: common/eda_base_frame.cpp:1517 common/eda_base_frame.cpp:1531
 #: pcbnew/dialogs/panel_edit_options_base.cpp:23
 #: pcbnew/tools/zone_filler_tool.cpp:292
 msgid "Editing Options"
 msgstr "Düzenleme Seçenekleri"
 
-#: common/eda_base_frame.cpp:1465 common/eda_base_frame.cpp:1475
-#: common/eda_base_frame.cpp:1500 common/eda_base_frame.cpp:1514
-#: common/eda_base_frame.cpp:1543 common/eda_base_frame.cpp:1565
+#: common/eda_base_frame.cpp:1483 common/eda_base_frame.cpp:1493
+#: common/eda_base_frame.cpp:1518 common/eda_base_frame.cpp:1532
+#: common/eda_base_frame.cpp:1561 common/eda_base_frame.cpp:1583
 msgid "Colors"
 msgstr "Renkler"
 
-#: common/eda_base_frame.cpp:1466 common/eda_base_frame.cpp:1476
-#: common/eda_base_frame.cpp:1501 common/eda_base_frame.cpp:1515
-#: common/eda_base_frame.cpp:1523 common/eda_base_frame.cpp:1544
-#: common/eda_base_frame.cpp:1566
+#: common/eda_base_frame.cpp:1484 common/eda_base_frame.cpp:1494
+#: common/eda_base_frame.cpp:1519 common/eda_base_frame.cpp:1533
+#: common/eda_base_frame.cpp:1541 common/eda_base_frame.cpp:1562
+#: common/eda_base_frame.cpp:1584
 msgid "Toolbars"
 msgstr "Araç Çubukları"
 
-#: common/eda_base_frame.cpp:1471 common/hotkey_store.cpp:77
+#: common/eda_base_frame.cpp:1489 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:616 eeschema/menubar.cpp:129
 #: eeschema/sch_edit_frame.cpp:1830 kicad/tools/kicad_manager_actions.cpp:105
 msgid "Schematic Editor"
 msgstr "Şematik Düzenleyici"
 
-#: common/eda_base_frame.cpp:1477
+#: common/eda_base_frame.cpp:1495
 #: eeschema/dialogs/dialog_schematic_setup.cpp:80
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field Name Templates"
 msgstr "Alan Adı Şablonları"
 
-#: common/eda_base_frame.cpp:1478
+#: common/eda_base_frame.cpp:1496
 msgid "Data Sources"
 msgstr "Veri Kaynakları"
 
-#: common/eda_base_frame.cpp:1479 eeschema/sim/simulator_frame.cpp:118
+#: common/eda_base_frame.cpp:1497 eeschema/sim/simulator_frame.cpp:118
 #: eeschema/sim/toolbars_simulator_frame.cpp:112
 #: eeschema/tools/sch_actions.cpp:77
 msgid "Simulator"
 msgstr "Simülatör"
 
-#: common/eda_base_frame.cpp:1495 common/tool/actions.cpp:1300
+#: common/eda_base_frame.cpp:1513 common/tool/actions.cpp:1300
 #: common/tool/common_tools.cpp:619 kicad/tools/kicad_manager_actions.cpp:138
 #: pcbnew/dialogs/panel_display_options_base.cpp:97
 #: pcbnew/footprint_edit_frame.cpp:1126 pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "Ayak İzi Düzenleyici"
 
-#: common/eda_base_frame.cpp:1498 common/eda_base_frame.cpp:1512
+#: common/eda_base_frame.cpp:1516 common/eda_base_frame.cpp:1530
 msgid "Origins & Axes"
 msgstr "Başlangıç noktası ve Eksenler"
 
-#: common/eda_base_frame.cpp:1502
+#: common/eda_base_frame.cpp:1520
 msgid "Footprint Defaults"
 msgstr "Ayak İzi Varsayılanları"
 
-#: common/eda_base_frame.cpp:1503
+#: common/eda_base_frame.cpp:1521
 msgid "Graphics Defaults"
 msgstr "Grafik Varsayılanları"
 
-#: common/eda_base_frame.cpp:1504
+#: common/eda_base_frame.cpp:1522
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:45
 msgid "User Layer Names"
 msgstr "Kullanıcı Katman Adları"
 
-#: common/eda_base_frame.cpp:1509 common/hotkey_store.cpp:78
+#: common/eda_base_frame.cpp:1527 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:127
 #: pcbnew/dialogs/panel_display_options_base.cpp:214
 #: pcbnew/menubar_pcb_editor.cpp:165 pcbnew/pcb_edit_frame.cpp:202
@@ -6597,51 +6612,51 @@ msgstr "Kullanıcı Katman Adları"
 msgid "PCB Editor"
 msgstr "Baskı Devre Düzenleyici"
 
-#: common/eda_base_frame.cpp:1516 common/eda_base_frame.cpp:1580
+#: common/eda_base_frame.cpp:1534 common/eda_base_frame.cpp:1598
 msgid "Plugins"
 msgstr "Eklentiler"
 
-#: common/eda_base_frame.cpp:1524
+#: common/eda_base_frame.cpp:1542
 msgid "Realtime Renderer"
 msgstr "Gerçek Zamanlı Oluşturucu"
 
-#: common/eda_base_frame.cpp:1525
+#: common/eda_base_frame.cpp:1543
 msgid "Raytracing Renderer"
 msgstr "Işın İzleme Oluşturucu"
 
-#: common/eda_base_frame.cpp:1541 common/hotkey_store.cpp:81
+#: common/eda_base_frame.cpp:1559 common/hotkey_store.cpp:81
 #: common/tool/common_tools.cpp:622 gerbview/gerbview_frame.cpp:666
 #: gerbview/gerbview_frame.cpp:689 gerbview/menubar.cpp:159
 #: kicad/tools/kicad_manager_actions.cpp:149
 msgid "Gerber Viewer"
 msgstr "Gerber Görüntüleyici"
 
-#: common/eda_base_frame.cpp:1546
+#: common/eda_base_frame.cpp:1564
 msgid "Excellon Options"
 msgstr "Excellon Seçenekleri"
 
-#: common/eda_base_frame.cpp:1562 common/hotkey_store.cpp:79
+#: common/eda_base_frame.cpp:1580 common/hotkey_store.cpp:79
 #: common/tool/common_tools.cpp:621 kicad/tools/kicad_manager_actions.cpp:178
 #: pagelayout_editor/menubar.cpp:88 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:577
 msgid "Drawing Sheet Editor"
 msgstr "Çizim Sayfası Düzenleyici"
 
-#: common/eda_base_frame.cpp:1572
+#: common/eda_base_frame.cpp:1590
 msgid "Packages and Updates"
 msgstr "Paketler ve Güncellemeler"
 
-#: common/eda_base_frame.cpp:1583
+#: common/eda_base_frame.cpp:1601
 msgid "Maintenance"
 msgstr "Bakım"
 
-#: common/eda_base_frame.cpp:1667 pcbnew/dialogs/dialog_export_odbpp.cpp:295
-#: pcbnew/tools/board_editor_control.cpp:505
+#: common/eda_base_frame.cpp:1685 pcbnew/dialogs/dialog_export_odbpp.cpp:295
+#: pcbnew/tools/board_editor_control.cpp:681
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
 msgstr "'%s' klasörü için yetersiz izin."
 
-#: common/eda_base_frame.cpp:1894
+#: common/eda_base_frame.cpp:1912
 msgid "Set Language"
 msgstr "Dili Ayarla"
 
@@ -6749,7 +6764,7 @@ msgid "Properties"
 msgstr "Özellikler"
 
 #: common/eda_draw_frame.cpp:1293 pcbnew/pcb_edit_frame.cpp:396
-#: pcbnew/pcb_edit_frame.cpp:2068 pcbnew/tools/pcb_actions.cpp:1633
+#: pcbnew/pcb_edit_frame.cpp:2068 pcbnew/tools/pcb_actions.cpp:1657
 msgid "Net Inspector"
 msgstr "Ağ Denetleyici"
 
@@ -6925,7 +6940,7 @@ msgid "Sheet Pin"
 msgstr "Sayfa Pini"
 
 #: common/eda_item.cpp:475 eeschema/dialogs/dialog_migrate_buses.cpp:110
-#: pcbnew/tools/pcb_actions.cpp:2414
+#: pcbnew/tools/pcb_actions.cpp:2438
 msgid "Sheet"
 msgstr "Yaprak"
 
@@ -7234,7 +7249,7 @@ msgstr "Varsayılan Yazı Tipi"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:303
 #: eeschema/fields_grid_table.cpp:345 eeschema/fields_grid_table.cpp:353
 #: eeschema/fields_grid_table.cpp:797 eeschema/fields_grid_table.cpp:808
-#: eeschema/fields_grid_table.cpp:935 eeschema/fields_grid_table.cpp:957
+#: eeschema/fields_grid_table.cpp:938 eeschema/fields_grid_table.cpp:960
 #: eeschema/sch_field.cpp:918 eeschema/sch_field.cpp:928
 #: eeschema/sch_field.cpp:1639 eeschema/sch_field.cpp:1648
 #: eeschema/sch_text.cpp:659 gerbview/gerber_file_image.cpp:374
@@ -7249,7 +7264,7 @@ msgstr "Merkez"
 #: common/eda_text.cpp:1336
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:303
 #: eeschema/fields_grid_table.cpp:344 eeschema/fields_grid_table.cpp:807
-#: eeschema/fields_grid_table.cpp:955 eeschema/sch_field.cpp:927
+#: eeschema/fields_grid_table.cpp:958 eeschema/sch_field.cpp:927
 #: eeschema/sch_field.cpp:1647 eeschema/sch_text.cpp:658
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1199
 #: pcbnew/dialogs/dialog_render_job.cpp:42
@@ -7261,7 +7276,7 @@ msgstr "Üst"
 #: common/eda_text.cpp:1338
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:303
 #: eeschema/fields_grid_table.cpp:346 eeschema/fields_grid_table.cpp:809
-#: eeschema/fields_grid_table.cpp:959 eeschema/sch_field.cpp:929
+#: eeschema/fields_grid_table.cpp:962 eeschema/sch_field.cpp:929
 #: eeschema/sch_field.cpp:1649 eeschema/sch_text.cpp:660
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1199
 #: pcbnew/dialogs/dialog_render_job.cpp:38
@@ -7768,7 +7783,7 @@ msgstr "Commit alınamadı: %s"
 msgid "Failed to create author signature: %s"
 msgstr "Yazar imzası oluşturulamadı: %s"
 
-#: common/git/libgit_backend.cpp:264 kicad/project_tree_pane.cpp:2353
+#: common/git/libgit_backend.cpp:264 kicad/project_tree_pane.cpp:2364
 #, c-format
 msgid "Failed to create commit: %s"
 msgstr "Taahhüt oluşturulamadı: %s"
@@ -8075,8 +8090,8 @@ msgid "Add to Selection"
 msgstr "Seçime Ekle"
 
 #: common/hotkey_store.cpp:51 eeschema/tools/sch_actions.cpp:1037
-#: gerbview/tools/gerbview_actions.cpp:133 pcbnew/tools/pcb_actions.cpp:1524
-#: pcbnew/tools/pcb_actions.cpp:1554
+#: gerbview/tools/gerbview_actions.cpp:133 pcbnew/tools/pcb_actions.cpp:1548
+#: pcbnew/tools/pcb_actions.cpp:1578
 msgid "Highlight Net"
 msgstr "Ağı Vurgula"
 
@@ -8228,7 +8243,7 @@ msgstr "'%s' dosyası açılamıyor"
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:350
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:158
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:120
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:82
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:83
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:117
 msgid "File import canceled by user."
 msgstr "Dosya içe aktarımı kullanıcı tarafından iptal edildi."
@@ -8665,8 +8680,8 @@ msgstr "Düzenleyici yüklenirken hata oluştu."
 msgid "Unable to switch language to %s"
 msgstr "Dil %s olarak değiştirilemiyor"
 
-#: common/layer_id.cpp:36 pcbnew/drc/drc_engine.cpp:1553
-#: pcbnew/drc/drc_engine.cpp:1556 pcbnew/drc/drc_engine.cpp:1559
+#: common/layer_id.cpp:36 pcbnew/drc/drc_engine.cpp:1555
+#: pcbnew/drc/drc_engine.cpp:1558 pcbnew/drc/drc_engine.cpp:1561
 #: pcbnew/tools/board_inspection_tool.cpp:454
 #: pcbnew/tools/board_inspection_tool.cpp:463
 #: pcbnew/tools/board_inspection_tool.cpp:472
@@ -9572,19 +9587,19 @@ msgstr "Sayfa %s"
 msgid "%s (Page %s)"
 msgstr "%s (Sayfa %s)"
 
-#: common/plotters/PDF_plotter.cpp:1789
+#: common/plotters/PDF_plotter.cpp:1829
 #, c-format
 msgid "Show Page %s"
 msgstr "Sayfayı göster %s"
 
-#: common/plotters/PDF_plotter.cpp:1808
+#: common/plotters/PDF_plotter.cpp:1871
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1000
 #: eeschema/tools/sch_navigate_tool.cpp:105
 #, c-format
 msgid "Open %s"
 msgstr "%s aç"
 
-#: common/plotters/PDF_plotter.cpp:2792
+#: common/plotters/PDF_plotter.cpp:2871
 #, c-format
 msgid "Failed to open 3D model file: %s"
 msgstr "3B model dosyası açılamadı: %s"
@@ -9815,7 +9830,7 @@ msgstr ""
 "%s, güvenli olmayan localhost'a izin ver bir geri döngü URL adresi için "
 "etkinleştirilmedikçe HTTPS kullanmalıdır."
 
-#: common/richio.cpp:59 eeschema/tools/sch_drawing_tools.cpp:3219
+#: common/richio.cpp:59 eeschema/tools/sch_drawing_tools.cpp:3243
 #, c-format
 msgid "File '%s' does not exist."
 msgstr "'%s' dosyası mevcut değil."
@@ -10980,7 +10995,7 @@ msgstr "Özellikler Yöneticisi'ni Göster/Gizle"
 #: common/tool/actions.cpp:1328
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:138
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:121
-#: eeschema/fields_grid_table.cpp:1203
+#: eeschema/fields_grid_table.cpp:1206
 msgid "Show Datasheet"
 msgstr "Veri Sayfası Göster"
 
@@ -13706,7 +13721,7 @@ msgstr "Komutlara Gözat..."
 msgid "Add Script-based Netlist Exporter"
 msgstr "Betik tabanlı ağ listesi dışa aktarıcısı ekle"
 
-#: eeschema/dialogs/dialog_field_properties.cpp:674
+#: eeschema/dialogs/dialog_field_properties.cpp:681
 #: eeschema/dialogs/dialog_label_properties.cpp:528
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
@@ -14663,19 +14678,19 @@ msgstr "Seçilenden türetilmiş yeni bir sembol oluştur"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:133
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:116
-#: eeschema/fields_grid_table.cpp:1196
+#: eeschema/fields_grid_table.cpp:1199
 msgid "Select Footprint..."
 msgstr "Ayak İzi Seç..."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:133
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:116
-#: eeschema/fields_grid_table.cpp:1196
+#: eeschema/fields_grid_table.cpp:1199
 msgid "Browse for footprint"
 msgstr "Ayak izi için göz at"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:138
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:121
-#: eeschema/fields_grid_table.cpp:1203
+#: eeschema/fields_grid_table.cpp:1206
 msgid "Show datasheet in browser"
 msgstr "Veri sayfasını tarayıcıda göster"
 
@@ -14817,7 +14832,7 @@ msgstr "Grup sembolleri"
 msgid "Group symbols together based on common properties"
 msgstr "Sembolleri ortak özelliklere göre birlikte gruplayın"
 
-#: eeschema/dialogs/dialog_lib_new_symbol.cpp:135
+#: eeschema/dialogs/dialog_lib_new_symbol.cpp:142
 #, c-format
 msgid "Deriving from symbol '%s'."
 msgstr "'%s' sembolünden türetilmiştir."
@@ -15773,7 +15788,7 @@ msgid "Provider metadata refreshed."
 msgstr "Sağlayıcı meta verileri yenilendi."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:474
-#: eeschema/generate_alias_info.cpp:124 kicad/pcm/pcm.cpp:813
+#: eeschema/generate_alias_info.cpp:124 kicad/pcm/pcm.cpp:819
 #: pcbnew/zone.cpp:989
 msgid "Unknown"
 msgstr "Bilinmiyor"
@@ -17717,7 +17732,7 @@ msgstr "Alan boyutlarını ve stillerini güncelle/sıfırla"
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:236
 #: eeschema/sch_label.cpp:2401
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:35
-#: pcbnew/dialogs/panel_setup_rules.cpp:988
+#: pcbnew/dialogs/panel_setup_rules.cpp:990
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:917 pcbnew/pcb_text.cpp:719
 msgid "Syntax Help"
 msgstr "Sözdizimi Yardımı"
@@ -18728,13 +18743,13 @@ msgstr "HPGL'ye çizim (plotlama) KiCad 10.0 itibarıyla artık desteklenmiyor.\
 #: eeschema/eeschema_jobs_handler.cpp:959
 #: eeschema/eeschema_jobs_handler.cpp:1295
 #: pcbnew/dialogs/dialog_export_2581.cpp:315 pcbnew/pcbnew_jobs_handler.cpp:570
-#: pcbnew/pcbnew_jobs_handler.cpp:699 pcbnew/pcbnew_jobs_handler.cpp:963
-#: pcbnew/pcbnew_jobs_handler.cpp:1072 pcbnew/pcbnew_jobs_handler.cpp:1169
-#: pcbnew/pcbnew_jobs_handler.cpp:1255 pcbnew/pcbnew_jobs_handler.cpp:1310
-#: pcbnew/pcbnew_jobs_handler.cpp:1497 pcbnew/pcbnew_jobs_handler.cpp:1564
-#: pcbnew/pcbnew_jobs_handler.cpp:1711 pcbnew/pcbnew_jobs_handler.cpp:1878
-#: pcbnew/pcbnew_jobs_handler.cpp:2169 pcbnew/pcbnew_jobs_handler.cpp:2314
-#: pcbnew/pcbnew_jobs_handler.cpp:2532 pcbnew/pcbnew_jobs_handler.cpp:2568
+#: pcbnew/pcbnew_jobs_handler.cpp:702 pcbnew/pcbnew_jobs_handler.cpp:966
+#: pcbnew/pcbnew_jobs_handler.cpp:1075 pcbnew/pcbnew_jobs_handler.cpp:1172
+#: pcbnew/pcbnew_jobs_handler.cpp:1258 pcbnew/pcbnew_jobs_handler.cpp:1313
+#: pcbnew/pcbnew_jobs_handler.cpp:1500 pcbnew/pcbnew_jobs_handler.cpp:1567
+#: pcbnew/pcbnew_jobs_handler.cpp:1714 pcbnew/pcbnew_jobs_handler.cpp:1881
+#: pcbnew/pcbnew_jobs_handler.cpp:2172 pcbnew/pcbnew_jobs_handler.cpp:2317
+#: pcbnew/pcbnew_jobs_handler.cpp:2535 pcbnew/pcbnew_jobs_handler.cpp:2571
 msgid "Failed to create output directory\n"
 msgstr "Çıktı dizini oluşturulamadı\n"
 
@@ -18786,8 +18801,8 @@ msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "'%s' sembolü %d biriminden '%s' birimine çiziliyor\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1106
-#: eeschema/eeschema_jobs_handler.cpp:1215 pcbnew/pcbnew_jobs_handler.cpp:2088
-#: pcbnew/pcbnew_jobs_handler.cpp:2161
+#: eeschema/eeschema_jobs_handler.cpp:1215 pcbnew/pcbnew_jobs_handler.cpp:2091
+#: pcbnew/pcbnew_jobs_handler.cpp:2164
 msgid "Unable to load library\n"
 msgstr "Kütüphane yüklenemiyor\n"
 
@@ -18801,17 +18816,17 @@ msgstr "Kaydedilecek bir sembol seçilmedi."
 msgid "Unable to create output directory '%s'."
 msgstr "Çıktı dizini '%s' oluşturulamadı."
 
-#: eeschema/eeschema_jobs_handler.cpp:1161 pcbnew/pcbnew_jobs_handler.cpp:1408
-#: pcbnew/pcbnew_jobs_handler.cpp:2180
+#: eeschema/eeschema_jobs_handler.cpp:1161 pcbnew/pcbnew_jobs_handler.cpp:1411
+#: pcbnew/pcbnew_jobs_handler.cpp:2183
 #, c-format
 msgid "Exporting %s"
 msgstr "%s Dışa Aktarılıyor"
 
-#: eeschema/eeschema_jobs_handler.cpp:1191 pcbnew/pcbnew_jobs_handler.cpp:2057
+#: eeschema/eeschema_jobs_handler.cpp:1191 pcbnew/pcbnew_jobs_handler.cpp:2060
 msgid "Output path must not conflict with existing path\n"
 msgstr "Çıktı yolu mevcut yolla çakışmamalıdır\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1199 pcbnew/pcbnew_jobs_handler.cpp:2064
+#: eeschema/eeschema_jobs_handler.cpp:1199 pcbnew/pcbnew_jobs_handler.cpp:2067
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
@@ -18826,7 +18841,7 @@ msgstr "Sembol kütüphanesi güncellenmiş biçimde kaydediliyor\n"
 msgid "Symbol library was not updated\n"
 msgstr "Sembol kütüphanesi güncellenmedi\n"
 
-#: eeschema/eeschema_jobs_handler.cpp:1325 pcbnew/pcbnew_jobs_handler.cpp:2445
+#: eeschema/eeschema_jobs_handler.cpp:1325 pcbnew/pcbnew_jobs_handler.cpp:2448
 #, c-format
 msgid "Found %d violations\n"
 msgstr "%d ihlal bulundu\n"
@@ -19336,13 +19351,13 @@ msgid "Schematic Files"
 msgstr "Şematik Dosyalar"
 
 #: eeschema/fields_grid_table.cpp:360 eeschema/fields_grid_table.cpp:826
-#: eeschema/fields_grid_table.cpp:986
+#: eeschema/fields_grid_table.cpp:989
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:157
 msgid "Horizontal"
 msgstr "Yatay"
 
 #: eeschema/fields_grid_table.cpp:361 eeschema/fields_grid_table.cpp:828
-#: eeschema/fields_grid_table.cpp:988
+#: eeschema/fields_grid_table.cpp:991
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:157
 msgid "Vertical"
 msgstr "Dikey"
@@ -20048,7 +20063,7 @@ msgid "Failed to create directory 'devices' ."
 msgstr "'devices' dizini oluşturulamadı."
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:408
-#: pcbnew/pcbnew_jobs_handler.cpp:1503 pcbnew/pcbnew_jobs_handler.cpp:1572
+#: pcbnew/pcbnew_jobs_handler.cpp:1506 pcbnew/pcbnew_jobs_handler.cpp:1575
 #, c-format
 msgid "Failed to create file '%s'.\n"
 msgstr "'%s' dosyası oluşturulamadı.\n"
@@ -20332,85 +20347,122 @@ msgstr "Uzak varlık, kalan indirme limitini aşıyor."
 msgid "Remote asset digest did not match the manifest."
 msgstr "Uzak varlık özeti manifest ile eşleşmedi."
 
-#: eeschema/remote_symbol_import_job.cpp:44
+#: eeschema/remote_symbol_import_job.cpp:52
 msgid "Downloaded symbol payload was empty."
 msgstr "İndirilen sembol veri yükü boştu."
 
-#: eeschema/remote_symbol_import_job.cpp:52
+#: eeschema/remote_symbol_import_job.cpp:60
 msgid "Downloaded symbol payload was not a KiCad symbol library."
 msgstr "İndirilen sembol veri yükü bir KiCad sembol kütüphanesi değildi."
 
-#: eeschema/remote_symbol_import_job.cpp:62
+#: eeschema/remote_symbol_import_job.cpp:70
 #, c-format
 msgid "Downloaded symbol payload did not include expected symbol '%s'."
 msgstr "İndirilen sembol veri yükü beklenen '%s' sembolünü içermiyordu."
 
-#: eeschema/remote_symbol_import_job.cpp:96
-#: eeschema/remote_symbol_import_utils.cpp:114
-#: eeschema/widgets/panel_remote_symbol.cpp:1091
-#: eeschema/widgets/panel_remote_symbol.cpp:1319
+#: eeschema/remote_symbol_import_job.cpp:104
+#: eeschema/remote_symbol_import_utils.cpp:117
+#: eeschema/widgets/panel_remote_symbol.cpp:1023
+#: eeschema/widgets/panel_remote_symbol.cpp:1306
 msgid "Unable to load schematic settings."
 msgstr "Şematik ayarları yüklenemiyor."
 
-#: eeschema/remote_symbol_import_job.cpp:243
+#: eeschema/remote_symbol_import_job.cpp:301
+#: eeschema/widgets/panel_remote_symbol.cpp:1080
+msgid "Unable to save the downloaded symbol."
+msgstr "İndirilen sembol kaydedilemiyor."
+
+#: eeschema/remote_symbol_import_job.cpp:329
+#: eeschema/remote_symbol_import_utils.cpp:293
+msgid "Unable to access the KiCad symbol plugin."
+msgstr "KiCad sembol eklentisine erişilemiyor."
+
+#: eeschema/remote_symbol_import_job.cpp:338
+#, fuzzy, c-format
+msgid "Unable to save the downloaded symbol: %s"
+msgstr "İndirilen sembol kaydedilemiyor."
+
+#: eeschema/remote_symbol_import_job.cpp:354
 msgid "No symbol asset was available to place."
 msgstr "Yerleştirilebilecek hiçbir sembol varlığı mevcut değildi."
 
-#: eeschema/remote_symbol_import_utils.cpp:76
+#: eeschema/remote_symbol_import_utils.cpp:79
 msgid "Payload was empty."
 msgstr "Yükleme boştu."
 
-#: eeschema/remote_symbol_import_utils.cpp:85
+#: eeschema/remote_symbol_import_utils.cpp:88
 #, c-format
 msgid "Unable to create '%s'."
 msgstr "'%s' oluşturulamıyor."
 
-#: eeschema/remote_symbol_import_utils.cpp:93
+#: eeschema/remote_symbol_import_utils.cpp:96
 #, c-format
 msgid "Unable to open '%s' for writing."
 msgstr "'%s' yazma için açılamıyor."
 
-#: eeschema/remote_symbol_import_utils.cpp:99
+#: eeschema/remote_symbol_import_utils.cpp:102
 #, c-format
 msgid "Failed to write '%s'."
 msgstr "'%s' yazılamadı."
 
-#: eeschema/remote_symbol_import_utils.cpp:128
+#: eeschema/remote_symbol_import_utils.cpp:131
 msgid "Destination directory is not configured."
 msgstr "Hedef dizin yapılandırılmamış."
 
-#: eeschema/remote_symbol_import_utils.cpp:137
+#: eeschema/remote_symbol_import_utils.cpp:140
 #, c-format
 msgid "Unable to create directory '%s'."
 msgstr "'%s' dizini oluşturulamıyor."
 
-#: eeschema/remote_symbol_import_utils.cpp:158
+#: eeschema/remote_symbol_import_utils.cpp:161
 msgid "Unable to access the library table."
 msgstr "Kütüphane tablosuna erişilemiyor."
 
-#: eeschema/remote_symbol_import_utils.cpp:178
+#: eeschema/remote_symbol_import_utils.cpp:181
 msgid "Failed to update the library table."
 msgstr "Kütüphane tablosu güncellenemedi."
 
-#: eeschema/remote_symbol_import_utils.cpp:192
+#: eeschema/remote_symbol_import_utils.cpp:195
 msgid "Remote download"
 msgstr "Uzak indirme"
 
-#: eeschema/remote_symbol_import_utils.cpp:197
+#: eeschema/remote_symbol_import_utils.cpp:200
 msgid "Failed to save the library table."
 msgstr "Kütüphane tablosu kaydedilemedi."
 
-#: eeschema/remote_symbol_import_utils.cpp:210
+#: eeschema/remote_symbol_import_utils.cpp:213
 msgid "No schematic editor is available for placement."
 msgstr "Yerleştirme için hiçbir şematik düzenleyici mevcut değil."
 
-#: eeschema/remote_symbol_import_utils.cpp:222
+#: eeschema/remote_symbol_import_utils.cpp:225
 msgid "Unable to load the downloaded symbol for placement."
 msgstr "Yerleştirme için indirilen sembol yüklenemiyor."
 
-#: eeschema/remote_symbol_import_utils.cpp:237
+#: eeschema/remote_symbol_import_utils.cpp:240
 msgid "Unable to access the schematic placement tools."
 msgstr "Şematik yerleştirme araçlarına erişilemiyor."
+
+#: eeschema/remote_symbol_import_utils.cpp:257
+msgid "Symbol payload was empty."
+msgstr "Sembol veri yükü boştu."
+
+#: eeschema/remote_symbol_import_utils.cpp:265
+#: eeschema/remote_symbol_import_utils.cpp:274
+msgid "Unable to create a temporary file for the symbol payload."
+msgstr "Sembol veri yükü için geçici bir dosya oluşturulamıyor."
+
+#: eeschema/remote_symbol_import_utils.cpp:281
+msgid "Failed to write the temporary symbol payload."
+msgstr "Geçici sembol veri yükü yazılamadı."
+
+#: eeschema/remote_symbol_import_utils.cpp:307
+msgid "Symbol payload did not include the expected symbol."
+msgstr "Sembol yüklemesi beklenen sembolü içermiyor."
+
+#: eeschema/remote_symbol_import_utils.cpp:311
+#, c-format
+msgid "Unable to decode the symbol payload: %s"
+msgstr "Sembol veri yükü çözümlenemiyor: %s"
 
 #: eeschema/sch_base_frame.cpp:750
 msgid "Create New Library"
@@ -20428,7 +20480,7 @@ msgstr "Kütüphane '%s' zaten mevcut."
 msgid "Could not add library '%s'."
 msgstr "'%s' kütüphanesi eklenemedi."
 
-#: eeschema/sch_base_frame.cpp:928
+#: eeschema/sch_base_frame.cpp:940
 msgid ""
 "The library containing the current symbol has changed.\n"
 "Do you want to reload the library?"
@@ -21470,22 +21522,22 @@ msgstr ""
 msgid "Save Anyway"
 msgstr "Yine de Kaydet"
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1808
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1814
 #, c-format
 msgid "Symbol library file '%s' already exists."
 msgstr "'%s' sembol kütüphanesi dosyası zaten mevcut."
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1813
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1819
 #, c-format
 msgid "Symbol library path '%s' already exists."
 msgstr "'%s' sembol kütüphanesi yolu zaten mevcut."
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1843
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1849
 #, c-format
 msgid "Symbol library file '%s' cannot be deleted."
 msgstr "'%s' sembol kütüphanesi dosyası silinemiyor."
 
-#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1853
+#: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1859
 #, c-format
 msgid "Symbol library folder '%s' cannot be deleted."
 msgstr "'%s' sembol kütüphanesi klasörü silinemiyor."
@@ -22028,7 +22080,7 @@ msgstr "Pin Adı"
 msgid "No sheets to plot."
 msgstr "Çizilecek sayfa yok."
 
-#: eeschema/sch_plotter.cpp:227 pcbnew/pcbnew_jobs_handler.cpp:1430
+#: eeschema/sch_plotter.cpp:227 pcbnew/pcbnew_jobs_handler.cpp:1433
 #, c-format
 msgid "Plotted to '%s'.\n"
 msgstr "'%s' olarak çizildi.\n"
@@ -23417,8 +23469,8 @@ msgstr ""
 
 #: eeschema/sheet.cpp:807 eeschema/symbol_editor/symbol_edit_frame.cpp:1208
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1258
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:2034
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:2103
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2045
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:2114
 msgid "Error saving library table."
 msgstr "Kütüphane tablosu kaydedilirken hata."
 
@@ -23956,47 +24008,52 @@ msgstr "Submodel_type değeri eksik."
 msgid " is not a recognised Submodel subparameter."
 msgstr " tanınmış bir Altmodel alt parametresi değil."
 
-#: eeschema/sim/kibis/ibis_parser.cpp:2616
+#: eeschema/sim/kibis/ibis_parser.cpp:2620
 msgid "A [Package] line requires exactly 4 elements."
 msgstr "Bir [Paket] satırı tam olarak 4 öge gerektirir."
 
-#: eeschema/sim/kibis/ibis_parser.cpp:2668
+#: eeschema/sim/kibis/ibis_parser.cpp:2672
 msgid "Invalid pin entry: 6 values from a table with only 3."
 msgstr "Geçersiz pin girişi: Yalnızca 3 sütunlu bir tablodan 6 değer."
 
-#: eeschema/sim/kibis/ibis_parser.cpp:2678
+#: eeschema/sim/kibis/ibis_parser.cpp:2682
 msgid "Can't read a R, L or C value for a pin."
 msgstr "Bir pin için R, L veya C değeri okunamıyor."
 
-#: eeschema/sim/kibis/ibis_parser.cpp:2701
+#: eeschema/sim/kibis/ibis_parser.cpp:2705
 msgid "Invalid field name in [Pin]"
 msgstr "[Pin] içinde geçersiz alan adı"
 
-#: eeschema/sim/kibis/ibis_parser.cpp:2708
+#: eeschema/sim/kibis/ibis_parser.cpp:2712
 msgid "Missing argument in [Pin]"
 msgstr "[Pin] içinde eksik argüman"
 
-#: eeschema/sim/kibis/ibis_parser.cpp:2744
+#: eeschema/sim/kibis/ibis_parser.cpp:2748
 msgid "Wrong number of columns for pin mapping."
 msgstr "Pın eşlemesi için yanlış sütun sayısı."
 
-#: eeschema/sim/kibis/ibis_parser.cpp:2785
+#: eeschema/sim/kibis/ibis_parser.cpp:2789
 msgid "Incorrect diff pin name"
 msgstr "Yanlış diferansiyel pin adı"
 
-#: eeschema/sim/kibis/ibis_parser.cpp:2791
+#: eeschema/sim/kibis/ibis_parser.cpp:2795
 msgid "Incorrect inv_pin name"
 msgstr "Yanlış inv_pin adı"
 
-#: eeschema/sim/kibis/ibis_parser.cpp:2904
+#: eeschema/sim/kibis/ibis_parser.cpp:2839
+#, fuzzy
+msgid "Wrong number of columns for series pin mapping."
+msgstr "Pın eşlemesi için yanlış sütun sayısı."
+
+#: eeschema/sim/kibis/ibis_parser.cpp:2948
 msgid "Internal error detected, a waveform should exist"
 msgstr "Dahili hata tespit edildi, bir dalga formu mevcut olmalıdır"
 
-#: eeschema/sim/kibis/ibis_parser.cpp:2981
+#: eeschema/sim/kibis/ibis_parser.cpp:3025
 msgid "Internal error: Bad parser context."
 msgstr "İç hata: Hatalı ayrıştırıcı bağlamı."
 
-#: eeschema/sim/kibis/ibis_parser.cpp:3057
+#: eeschema/sim/kibis/ibis_parser.cpp:3104
 msgid "Missing keyword."
 msgstr "Anahtar kelime eksik."
 
@@ -24151,7 +24208,7 @@ msgstr "ölçüm tanımı bekleniyor"
 msgid "expecting measurement format definition"
 msgstr "ölçüm formatı tanımını bekliyor"
 
-#: eeschema/sim/ngspice.cpp:393
+#: eeschema/sim/ngspice.cpp:402
 #, c-format
 msgid ""
 "Simulation crashed (%s). This is usually caused by a bug in ngspice or an "
@@ -24160,12 +24217,12 @@ msgstr ""
 "Simülasyon çöktü (%s). Bu genellikle ngspice'deki bir hata veya geçersiz bir "
 "ağ listesinden kaynaklanır. Simülatör sıfırlanacaktır."
 
-#: eeschema/sim/ngspice.cpp:551
+#: eeschema/sim/ngspice.cpp:560
 msgid "Unable to load ngspice shared library. Please check your install."
 msgstr ""
 "Ngspice paylaşımlı kütüphanesi yüklenemedi. Lütfen kurulumunuzu kontrol edin."
 
-#: eeschema/sim/ngspice.cpp:779
+#: eeschema/sim/ngspice.cpp:788
 msgid ""
 "Simulation terminated by ngspice. This may be caused by insufficient memory "
 "or an internal error. The simulator will be reset."
@@ -25709,12 +25766,12 @@ msgstr ""
 "SPICE veya IBIS simülasyonlarını çalıştırmak için simülasyon penceresini "
 "gösterin."
 
-#: eeschema/tools/sch_actions.cpp:87 pcbnew/tools/pcb_actions.cpp:2302
+#: eeschema/tools/sch_actions.cpp:87 pcbnew/tools/pcb_actions.cpp:2326
 msgid "Create Corner"
 msgstr "Köşe Oluştur"
 
 #: eeschema/tools/sch_actions.cpp:93 eeschema/tools/sch_point_editor.cpp:1482
-#: pcbnew/tools/pcb_actions.cpp:2309
+#: pcbnew/tools/pcb_actions.cpp:2333
 msgid "Remove Corner"
 msgstr "Köşeyi Kaldır"
 
@@ -25726,7 +25783,7 @@ msgstr "Düğüm Seç"
 msgid "Select a connection item under the cursor"
 msgstr "İmlecin altında bir bağlantı ögesi seçin"
 
-#: eeschema/tools/sch_actions.cpp:111 pcbnew/tools/pcb_actions.cpp:2356
+#: eeschema/tools/sch_actions.cpp:111 pcbnew/tools/pcb_actions.cpp:2380
 msgid "Select/Expand Connection"
 msgstr "Bağlantıyı Seç/Genişlet"
 
@@ -26468,11 +26525,11 @@ msgstr "Dilim"
 msgid "Divide into unconnected segments"
 msgstr "Bağlantısız bölümlere ayırın"
 
-#: eeschema/tools/sch_actions.cpp:1038 pcbnew/tools/pcb_actions.cpp:1525
+#: eeschema/tools/sch_actions.cpp:1038 pcbnew/tools/pcb_actions.cpp:1549
 msgid "Highlight net under cursor"
 msgstr "İmleç altındaki ağı vurgula"
 
-#: eeschema/tools/sch_actions.cpp:1045 pcbnew/tools/pcb_actions.cpp:1540
+#: eeschema/tools/sch_actions.cpp:1045 pcbnew/tools/pcb_actions.cpp:1564
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1098
 msgid "Clear Net Highlighting"
 msgstr "Net Vurgulamayı Temizle"
@@ -26784,15 +26841,15 @@ msgstr "Alternatif modlara sahip pinler için gösterge simgelerini göster"
 msgid "Line Mode for Wires and Buses"
 msgstr "Teller ve Veri Yolları için Çizgi Modu"
 
-#: eeschema/tools/sch_actions.cpp:1339 pcbnew/tools/pcb_actions.cpp:1469
+#: eeschema/tools/sch_actions.cpp:1339 pcbnew/tools/pcb_actions.cpp:1493
 msgid "Draw and drag at any angle"
 msgstr "İstediğiniz açıda çizin ve sürükleyin"
 
-#: eeschema/tools/sch_actions.cpp:1348 pcbnew/tools/pcb_actions.cpp:1478
+#: eeschema/tools/sch_actions.cpp:1348 pcbnew/tools/pcb_actions.cpp:1502
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
 msgstr "Çizimi ve sürüklemeyi yatay veya dikey hareketlerle sınırlayın"
 
-#: eeschema/tools/sch_actions.cpp:1357 pcbnew/tools/pcb_actions.cpp:1487
+#: eeschema/tools/sch_actions.cpp:1357 pcbnew/tools/pcb_actions.cpp:1511
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
@@ -26800,7 +26857,7 @@ msgstr ""
 "Çizimi ve sürüklemeyi yatay, dikey veya 45 derecelik açı hareketleriyle "
 "sınırlayın"
 
-#: eeschema/tools/sch_actions.cpp:1367 pcbnew/tools/pcb_actions.cpp:1497
+#: eeschema/tools/sch_actions.cpp:1367 pcbnew/tools/pcb_actions.cpp:1521
 msgid "Switch to next angle snapping mode"
 msgstr "Sonraki açı yakalama moduna geç"
 
@@ -26921,7 +26978,7 @@ msgstr "Veri Yolundan Aç"
 msgid "Break a wire out of a bus"
 msgstr "Bir teli veri yolundan ayır"
 
-#: eeschema/tools/sch_actions.cpp:1524 pcbnew/tools/pcb_actions.cpp:2636
+#: eeschema/tools/sch_actions.cpp:1524 pcbnew/tools/pcb_actions.cpp:2660
 msgid "Undo Last Segment"
 msgstr "Son Segmenti Geri Al"
 
@@ -26959,55 +27016,55 @@ msgid "Align Items to Grid"
 msgstr "Ögeleri Izgaraya Hizala"
 
 #: eeschema/tools/sch_actions.cpp:1568 eeschema/tools/sch_align_tool.cpp:221
-#: pcbnew/tools/align_distribute_tool.cpp:258 pcbnew/tools/pcb_actions.cpp:2221
+#: pcbnew/tools/align_distribute_tool.cpp:258 pcbnew/tools/pcb_actions.cpp:2245
 msgid "Align to Top"
 msgstr "Üste Hizala"
 
-#: eeschema/tools/sch_actions.cpp:1569 pcbnew/tools/pcb_actions.cpp:2222
+#: eeschema/tools/sch_actions.cpp:1569 pcbnew/tools/pcb_actions.cpp:2246
 msgid "Aligns selected items to the top edge of the item under the cursor"
 msgstr "Seçili ögeleri imleç altındaki ögenin üst kenarına hizala"
 
 #: eeschema/tools/sch_actions.cpp:1576 eeschema/tools/sch_align_tool.cpp:256
-#: pcbnew/tools/align_distribute_tool.cpp:297 pcbnew/tools/pcb_actions.cpp:2228
+#: pcbnew/tools/align_distribute_tool.cpp:297 pcbnew/tools/pcb_actions.cpp:2252
 msgid "Align to Bottom"
 msgstr "Alta Hizala"
 
-#: eeschema/tools/sch_actions.cpp:1577 pcbnew/tools/pcb_actions.cpp:2229
+#: eeschema/tools/sch_actions.cpp:1577 pcbnew/tools/pcb_actions.cpp:2253
 msgid "Aligns selected items to the bottom edge of the item under the cursor"
 msgstr "Seçili ögeleri imleç altındaki ögenin alt kenarına hizala"
 
 #: eeschema/tools/sch_actions.cpp:1584 eeschema/tools/sch_align_tool.cpp:291
-#: pcbnew/tools/align_distribute_tool.cpp:347 pcbnew/tools/pcb_actions.cpp:2235
+#: pcbnew/tools/align_distribute_tool.cpp:347 pcbnew/tools/pcb_actions.cpp:2259
 msgid "Align to Left"
 msgstr "Sola Hizala"
 
-#: eeschema/tools/sch_actions.cpp:1585 pcbnew/tools/pcb_actions.cpp:2236
+#: eeschema/tools/sch_actions.cpp:1585 pcbnew/tools/pcb_actions.cpp:2260
 msgid "Aligns selected items to the left edge of the item under the cursor"
 msgstr "Seçili ögeleri imleç altındaki ögenin sol kenarına hizala"
 
 #: eeschema/tools/sch_actions.cpp:1592 eeschema/tools/sch_align_tool.cpp:326
-#: pcbnew/tools/align_distribute_tool.cpp:397 pcbnew/tools/pcb_actions.cpp:2242
+#: pcbnew/tools/align_distribute_tool.cpp:397 pcbnew/tools/pcb_actions.cpp:2266
 msgid "Align to Right"
 msgstr "Sağa Hizala"
 
-#: eeschema/tools/sch_actions.cpp:1593 pcbnew/tools/pcb_actions.cpp:2243
+#: eeschema/tools/sch_actions.cpp:1593 pcbnew/tools/pcb_actions.cpp:2267
 msgid "Aligns selected items to the right edge of the item under the cursor"
 msgstr "Seçili ögeleri imleç altındaki ögenin sağ kenarına hizala"
 
-#: eeschema/tools/sch_actions.cpp:1600 pcbnew/tools/pcb_actions.cpp:2256
+#: eeschema/tools/sch_actions.cpp:1600 pcbnew/tools/pcb_actions.cpp:2280
 msgid "Align to Horizontal Center"
 msgstr "Yatay Ortaya Hizala"
 
-#: eeschema/tools/sch_actions.cpp:1601 pcbnew/tools/pcb_actions.cpp:2257
+#: eeschema/tools/sch_actions.cpp:1601 pcbnew/tools/pcb_actions.cpp:2281
 msgid ""
 "Aligns selected items to the horizontal center of the item under the cursor"
 msgstr "Seçili ögeleri imleç altındaki ögenin yatay merkezine hizala"
 
-#: eeschema/tools/sch_actions.cpp:1608 pcbnew/tools/pcb_actions.cpp:2249
+#: eeschema/tools/sch_actions.cpp:1608 pcbnew/tools/pcb_actions.cpp:2273
 msgid "Align to Vertical Center"
 msgstr "Dikey Ortaya Hizala"
 
-#: eeschema/tools/sch_actions.cpp:1609 pcbnew/tools/pcb_actions.cpp:2250
+#: eeschema/tools/sch_actions.cpp:1609 pcbnew/tools/pcb_actions.cpp:2274
 msgid ""
 "Aligns selected items to the vertical center of the item under the cursor"
 msgstr "Seçili ögeleri imleç altındaki ögenin dikey merkezine hizala"
@@ -27186,23 +27243,23 @@ msgstr "Sembol oluşturmayı iptal etmek için <ESC> tuşuna basın."
 msgid "Place Symbol"
 msgstr "Sembol Yerleştir"
 
-#: eeschema/tools/sch_drawing_tools.cpp:643
+#: eeschema/tools/sch_drawing_tools.cpp:667
 msgid "Select a single symbol to place the next unit."
 msgstr "Bir sonraki birimi yerleştirmek için tek bir sembol seç."
 
-#: eeschema/tools/sch_drawing_tools.cpp:656
+#: eeschema/tools/sch_drawing_tools.cpp:680
 msgid "This symbol has only one unit."
 msgstr "Bu sembolün yalnızca bir birimi vardır."
 
-#: eeschema/tools/sch_drawing_tools.cpp:664
+#: eeschema/tools/sch_drawing_tools.cpp:688
 msgid "All units of this symbol are already placed."
 msgstr "Bu sembolün tüm birimleri zaten yerleştirildi."
 
-#: eeschema/tools/sch_drawing_tools.cpp:674
+#: eeschema/tools/sch_drawing_tools.cpp:698
 msgid "Requested unit already placed."
 msgstr "İstenen birim zaten yerleştirilmiş."
 
-#: eeschema/tools/sch_drawing_tools.cpp:749
+#: eeschema/tools/sch_drawing_tools.cpp:773
 #: eeschema/tools/sch_editor_control.cpp:3395
 #: eeschema/tools/sch_editor_control.cpp:3442 pcbnew/tools/pcb_control.cpp:1427
 #: pcbnew/tools/pcb_control.cpp:1491 pcbnew/tools/pcb_control.cpp:1716
@@ -27211,27 +27268,27 @@ msgstr "İstenen birim zaten yerleştirilmiş."
 msgid "Could not find design block %s."
 msgstr "Tasarım bloğu %s bulunamadı."
 
-#: eeschema/tools/sch_drawing_tools.cpp:759
+#: eeschema/tools/sch_drawing_tools.cpp:783
 msgid "Design block has no schematic to place."
 msgstr "Tasarım bloğunun yerleştirilecek bir şematiği yok."
 
-#: eeschema/tools/sch_drawing_tools.cpp:936
+#: eeschema/tools/sch_drawing_tools.cpp:960
 msgid "Add Design Block"
 msgstr "Tasarım Bloğu Ekle"
 
-#: eeschema/tools/sch_drawing_tools.cpp:937
+#: eeschema/tools/sch_drawing_tools.cpp:961
 msgid "Import Schematic Sheet Content"
 msgstr "Şematik Sayfa İçeriğini İçe Aktar"
 
-#: eeschema/tools/sch_drawing_tools.cpp:972
+#: eeschema/tools/sch_drawing_tools.cpp:996
 msgid "Choose Schematic"
 msgstr "Şematik Seç"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1199 pcbnew/tools/drawing_tool.cpp:736
+#: eeschema/tools/sch_drawing_tools.cpp:1223 pcbnew/tools/drawing_tool.cpp:736
 msgid "Press <ESC> to cancel image creation."
 msgstr "Görüntü oluşturmayı iptal etmek için <ESC> tuşuna basın."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1261
+#: eeschema/tools/sch_drawing_tools.cpp:1285
 #: eeschema/tools/sch_edit_tool.cpp:3496
 #: pagelayout_editor/pl_editor_frame.cpp:859
 #: pagelayout_editor/pl_editor_frame.cpp:867 pcbnew/tools/drawing_tool.cpp:797
@@ -27239,106 +27296,106 @@ msgstr "Görüntü oluşturmayı iptal etmek için <ESC> tuşuna basın."
 msgid "Could not load image from '%s'."
 msgstr "'%s' görüntüsü yüklenemedi."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1284 pcbnew/tools/drawing_tool.cpp:818
+#: eeschema/tools/sch_drawing_tools.cpp:1308 pcbnew/tools/drawing_tool.cpp:818
 msgid "Place Image"
 msgstr "Resim Yerleştir"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1382
+#: eeschema/tools/sch_drawing_tools.cpp:1406
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:708
 #: pcbnew/tools/drawing_tool.cpp:2070
 msgid "No graphic items found in file."
 msgstr "Dosyada grafik ögeler bulunamadı."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1412
-#: eeschema/tools/sch_drawing_tools.cpp:1496
+#: eeschema/tools/sch_drawing_tools.cpp:1436
+#: eeschema/tools/sch_drawing_tools.cpp:1520
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:743
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:832
 msgid "Import Graphic"
 msgstr "Grafik İçe Aktar"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1553
+#: eeschema/tools/sch_drawing_tools.cpp:1577
 msgid "Add No Connect Flag"
 msgstr "Bağlantısız İşaretçisi Ekle"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1560
+#: eeschema/tools/sch_drawing_tools.cpp:1584
 msgid "Add Junction"
 msgstr "Düğüm Noktası Ekle"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1566
+#: eeschema/tools/sch_drawing_tools.cpp:1590
 msgid "Add Wire to Bus Entry"
 msgstr "Veriyolu Girişine Yol Ekle"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1642
+#: eeschema/tools/sch_drawing_tools.cpp:1666
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr "Düğüm noktası konumu birleştirilebilir yol ve/veya pin içermiyor."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2164
+#: eeschema/tools/sch_drawing_tools.cpp:2188
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:185
 msgid "Press <ESC> to cancel item creation."
 msgstr "Öge oluşturmayı iptal etmek için <ESC> tuşuna basın."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2197
+#: eeschema/tools/sch_drawing_tools.cpp:2221
 msgid "Add Text"
 msgstr "Metin Ekle"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2223
+#: eeschema/tools/sch_drawing_tools.cpp:2247
 msgid "Add Hierarchical Label"
 msgstr "Hiyerarşik Etiket Ekle"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2228
-#: eeschema/tools/sch_drawing_tools.cpp:2233
-#: eeschema/tools/sch_drawing_tools.cpp:2238
+#: eeschema/tools/sch_drawing_tools.cpp:2252
+#: eeschema/tools/sch_drawing_tools.cpp:2257
+#: eeschema/tools/sch_drawing_tools.cpp:2262
 msgid "Add Label"
 msgstr "Etiket Ekle"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2251
+#: eeschema/tools/sch_drawing_tools.cpp:2275
 msgid "Click over a sheet."
 msgstr "Bir sayfanın üzerine tıklayın."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2274
-#: eeschema/tools/sch_drawing_tools.cpp:2370
-#: eeschema/tools/sch_drawing_tools.cpp:3708
+#: eeschema/tools/sch_drawing_tools.cpp:2298
+#: eeschema/tools/sch_drawing_tools.cpp:2394
+#: eeschema/tools/sch_drawing_tools.cpp:3732
 msgid "No new hierarchical labels found."
 msgstr "Yeni hiyerarşik etiket bulunamadı."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2287
-#: eeschema/tools/sch_drawing_tools.cpp:3786
+#: eeschema/tools/sch_drawing_tools.cpp:2311
+#: eeschema/tools/sch_drawing_tools.cpp:3810
 msgid "Add Sheet Pin"
 msgstr "Sayfa Pini Ekle"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2622
+#: eeschema/tools/sch_drawing_tools.cpp:2646
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:502
 msgid "Add Text Box"
 msgstr "Metin Kutusu Ekle"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2631
+#: eeschema/tools/sch_drawing_tools.cpp:2655
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:508
 #, c-format
 msgid "Add %s"
 msgstr "%s Ekle"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2697
+#: eeschema/tools/sch_drawing_tools.cpp:2721
 #, c-format
 msgid "Draw %s"
 msgstr "%s Çiz"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3087 pcbnew/tools/drawing_tool.cpp:1341
+#: eeschema/tools/sch_drawing_tools.cpp:3111 pcbnew/tools/drawing_tool.cpp:1341
 msgid "Draw Table"
 msgstr "Tablo Çiz"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3304
+#: eeschema/tools/sch_drawing_tools.cpp:3328
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Sayfa oluşturmayı iptal etmek için <ESC> tuşuna basın."
 
-#: eeschema/tools/sch_drawing_tools.cpp:3609
+#: eeschema/tools/sch_drawing_tools.cpp:3633
 msgid "Modify sheet pin"
 msgstr "Sayfa pinini düzenle"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3615
+#: eeschema/tools/sch_drawing_tools.cpp:3639
 msgid "Modify schematic item"
 msgstr "Şematik ögeyi düzenle"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3838
+#: eeschema/tools/sch_drawing_tools.cpp:3862
 msgid "No sub schematic found in the current project"
 msgstr "Geçerli projede alt şematik bulunamadı"
 
@@ -28006,169 +28063,139 @@ msgstr "Sayfa yeniden adlandırılıyor"
 msgid "(page %s)"
 msgstr "(sayfa %s)"
 
-#: eeschema/widgets/panel_remote_symbol.cpp:76
+#: eeschema/widgets/panel_remote_symbol.cpp:75
 msgid "Missing payload data."
 msgstr "Veri yükü verisi eksik."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:84
+#: eeschema/widgets/panel_remote_symbol.cpp:83
 msgid "Failed to decode base64 payload."
 msgstr "Base64 veri yükü çözümlenemedi."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:107
+#: eeschema/widgets/panel_remote_symbol.cpp:106
 #, c-format
 msgid "Unsupported compression '%s'."
 msgstr "Desteklenmeyen sıkıştırma '%s'."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:114
+#: eeschema/widgets/panel_remote_symbol.cpp:113
 msgid "Compressed payload was empty."
 msgstr "Sıkıştırılmış yükleme boş."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:133
+#: eeschema/widgets/panel_remote_symbol.cpp:132
 #, c-format
 msgid "Decompressed size %llu exceeds limit %llu."
 msgstr "Açılmış boyut %llu limit %llu aşıyor."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:144
+#: eeschema/widgets/panel_remote_symbol.cpp:143
 #, c-format
 msgid "ZSTD decompression failed: %s"
 msgstr "ZSTD açma başarısız: %s"
 
-#: eeschema/widgets/panel_remote_symbol.cpp:169
-msgid "Symbol payload was empty."
-msgstr "Sembol veri yükü boştu."
-
-#: eeschema/widgets/panel_remote_symbol.cpp:177
-#: eeschema/widgets/panel_remote_symbol.cpp:186
-msgid "Unable to create a temporary file for the symbol payload."
-msgstr "Sembol veri yükü için geçici bir dosya oluşturulamıyor."
-
-#: eeschema/widgets/panel_remote_symbol.cpp:193
-msgid "Failed to write the temporary symbol payload."
-msgstr "Geçici sembol veri yükü yazılamadı."
-
-#: eeschema/widgets/panel_remote_symbol.cpp:205
-msgid "Unable to access the KiCad symbol plugin."
-msgstr "KiCad sembol eklentisine erişilemiyor."
-
-#: eeschema/widgets/panel_remote_symbol.cpp:219
-msgid "Symbol payload did not include the expected symbol."
-msgstr "Sembol yüklemesi beklenen sembolü içermiyor."
-
-#: eeschema/widgets/panel_remote_symbol.cpp:223
-#, c-format
-msgid "Unable to decode the symbol payload: %s"
-msgstr "Sembol veri yükü çözümlenemiyor: %s"
-
-#: eeschema/widgets/panel_remote_symbol.cpp:252
+#: eeschema/widgets/panel_remote_symbol.cpp:183
 msgid "Reload current provider page"
 msgstr "Geçerli sağlayıcı sayfasını yeniden yükle"
 
-#: eeschema/widgets/panel_remote_symbol.cpp:257
+#: eeschema/widgets/panel_remote_symbol.cpp:188
 msgid "Configure remote providers"
 msgstr "Uzak sağlayıcıları yapılandır"
 
-#: eeschema/widgets/panel_remote_symbol.cpp:395
+#: eeschema/widgets/panel_remote_symbol.cpp:326
 msgid "No remote providers configured."
 msgstr "Uzak sağlayıcı yapılandırılmamış."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:470
+#: eeschema/widgets/panel_remote_symbol.cpp:401
 msgid "Unable to load remote provider metadata."
 msgstr "Uzak sağlayıcı meta verileri yüklenemiyor."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:715
+#: eeschema/widgets/panel_remote_symbol.cpp:646
 msgid "A remote provider sign-in flow is already in progress."
 msgstr "Bir uzak sağlayıcı oturum açma işlemi zaten devam ediyor."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:747
+#: eeschema/widgets/panel_remote_symbol.cpp:678
 msgid "Unable to start the local OAuth callback listener."
 msgstr "Yerel OAuth geri çağırma dinleyicisi başlatılamıyor."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:757
+#: eeschema/widgets/panel_remote_symbol.cpp:688
 msgid "Unable to open the system browser for sign-in."
 msgstr "Oturum açmak için sistem tarayıcısı açılamıyor."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:787
+#: eeschema/widgets/panel_remote_symbol.cpp:718
 msgid "Failed to delete stored remote provider tokens."
 msgstr "Depolanmış uzak sağlayıcı token'ları silinemedi."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:827
+#: eeschema/widgets/panel_remote_symbol.cpp:758
 #, c-format
 msgid "Unsupported RPC version %d."
 msgstr "Desteklenmeyen RPC sürümü %d."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:836
+#: eeschema/widgets/panel_remote_symbol.cpp:767
 msgid "Missing session identifier."
 msgstr "Oturum tanımlayıcısı eksik."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:843
+#: eeschema/widgets/panel_remote_symbol.cpp:774
 msgid "Session identifier did not match the active provider session."
 msgstr "Oturum tanımlayıcısı, etkin sağlayıcı oturumuyla eşleşmedi."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:931
+#: eeschema/widgets/panel_remote_symbol.cpp:862
 msgid "No remote provider is currently selected."
 msgstr "Şu anda hiçbir uzak sağlayıcı seçili değil."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1052
+#: eeschema/widgets/panel_remote_symbol.cpp:983
 msgid "Unable to process provider payload."
 msgstr "Sağlayıcı veri yükü işlenemiyor."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1058
+#: eeschema/widgets/panel_remote_symbol.cpp:989
 #, c-format
 msgid "Command '%s' is not supported."
 msgstr "'%s' komutu desteklenmiyor."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1071
+#: eeschema/widgets/panel_remote_symbol.cpp:1003
 #, c-format
 msgid "Unsupported transfer mode '%s'."
 msgstr "Desteklenmeyen aktarım modu '%s'."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1077
+#: eeschema/widgets/panel_remote_symbol.cpp:1009
 msgid "Unsupported symbol payload type."
 msgstr "Desteklenmeyen sembol veri yükü türü."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1083
+#: eeschema/widgets/panel_remote_symbol.cpp:1015
 msgid "No schematic editor is available to store symbols."
 msgstr "Sembolleri depolamak için hiçbir şematik düzenleyici mevcut değil."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1128
+#: eeschema/widgets/panel_remote_symbol.cpp:1060
 msgid "Unable to access the symbol library manager."
 msgstr "Sembol kütüphane yöneticisine erişilemiyor."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1145
-msgid "Unable to save the downloaded symbol."
-msgstr "İndirilen sembol kaydedilemiyor."
-
-#: eeschema/widgets/panel_remote_symbol.cpp:1178
+#: eeschema/widgets/panel_remote_symbol.cpp:1116
 #, c-format
 msgid "Failed to parse component list: %s"
 msgstr "Bileşen listesi ayrıştırılamadı: %s"
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1184
+#: eeschema/widgets/panel_remote_symbol.cpp:1122
 msgid "Component list must be a non-empty array."
 msgstr "Bileşen listesi, boş olmayan bir dizi olmalıdır."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1194
+#: eeschema/widgets/panel_remote_symbol.cpp:1143
 msgid "Component entries must be objects."
 msgstr "Bileşen girdileri nesne olmalıdır."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1202
+#: eeschema/widgets/panel_remote_symbol.cpp:1151
 msgid "Component entry was missing a type."
 msgstr "Bileşen girdisinde tür eksikti."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1261
+#: eeschema/widgets/panel_remote_symbol.cpp:1212
 #, c-format
 msgid "Unsupported component type '%s'."
 msgstr "Desteklenmeyen bileşen türü '%s'."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1280
+#: eeschema/widgets/panel_remote_symbol.cpp:1261
 msgid "Unsupported footprint payload type."
 msgstr "Desteklenmeyen ayak izi veri yükü türü."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1398
+#: eeschema/widgets/panel_remote_symbol.cpp:1389
 msgid "Remote provider metadata is not loaded."
 msgstr "Uzak sağlayıcı meta verileri yüklenmemiş."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1428
+#: eeschema/widgets/panel_remote_symbol.cpp:1419
 msgid ""
 "Manifest assets require asset_type, content_type, size_bytes, and "
 "download_url."
@@ -28176,15 +28203,15 @@ msgstr ""
 "Manifest varlıkları, varlık_türü, içerik_türü, boyut_baytları ve indirme_url "
 "gerektirir."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1464
+#: eeschema/widgets/panel_remote_symbol.cpp:1455
 msgid "Remote provider sign-in was cancelled or failed."
 msgstr "Uzak sağlayıcı oturum açma işlemi iptal edildi veya başarısız oldu."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1475
+#: eeschema/widgets/panel_remote_symbol.cpp:1466
 msgid "Remote provider sign-in failed."
 msgstr "Uzak sağlayıcı oturum açma başarısız oldu."
 
-#: eeschema/widgets/panel_remote_symbol.cpp:1491
+#: eeschema/widgets/panel_remote_symbol.cpp:1482
 msgid "Failed to store remote provider tokens securely."
 msgstr "Uzak sağlayıcı token'ları güvenli bir şekilde depolanamadı."
 
@@ -30551,47 +30578,47 @@ msgstr "Geçersiz format: %s\n"
 msgid "Invalid report format: %s\n"
 msgstr "Geçersiz rapor formatı: %si\n"
 
-#: kicad/cli/command_pcb_render.cpp:220
+#: kicad/cli/command_pcb_render.cpp:221
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
 msgstr "Baskı Devreyi 3B görünümde PNG veya JPEG görüntü olarak oluşturur"
 
-#: kicad/cli/command_pcb_render.cpp:226
+#: kicad/cli/command_pcb_render.cpp:227
 msgid "Image width"
 msgstr "Resim genişliği"
 
-#: kicad/cli/command_pcb_render.cpp:232
+#: kicad/cli/command_pcb_render.cpp:233
 msgid "Image height"
 msgstr "Resim yüksekliği"
 
-#: kicad/cli/command_pcb_render.cpp:238
+#: kicad/cli/command_pcb_render.cpp:239
 #, c-format
 msgid "Render from side. Options: %s"
 msgstr "Yandan render et. Seçenekler: %s"
 
-#: kicad/cli/command_pcb_render.cpp:243
+#: kicad/cli/command_pcb_render.cpp:244
 #, c-format
 msgid ""
 "Image background. Options: %s. Default: transparent for PNG, opaque for JPEG"
 msgstr ""
 "Resim arka planı. Seçenekler: %s. Varsayılan: PNG için şeffaf, JPEG için opak"
 
-#: kicad/cli/command_pcb_render.cpp:252
+#: kicad/cli/command_pcb_render.cpp:253
 #, c-format
 msgid "Render quality. Options: %s"
 msgstr "Render kalitesi. Seçenekler: %s"
 
-#: kicad/cli/command_pcb_render.cpp:258
+#: kicad/cli/command_pcb_render.cpp:259
 #, c-format
 msgid "Appearance preset. Options: %s, %s, or user-defined preset name"
 msgstr ""
 "Görünüm ön ayarı. Seçenekler: %s, %s veya kullanıcı tanımlı hazır ayar adı"
 
-#: kicad/cli/command_pcb_render.cpp:265
+#: kicad/cli/command_pcb_render.cpp:266
 msgid "Colors defined in board stackup override those in preset"
 msgstr ""
 "Kart diziliminde tanımlanan renkler, ön ayardaki renkleri geçersiz kılar"
 
-#: kicad/cli/command_pcb_render.cpp:269
+#: kicad/cli/command_pcb_render.cpp:270
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "setting"
@@ -30599,19 +30626,19 @@ msgstr ""
 "Kalite ayarında devre dışı bırakılmış olsa bile zemin, gölgeler ve son "
 "işlemeyi etkinleştir"
 
-#: kicad/cli/command_pcb_render.cpp:274
+#: kicad/cli/command_pcb_render.cpp:275
 msgid "Use perspective projection instead of orthogonal"
 msgstr "Dik açılı (ortogonal) yerine perspektif projeksiyon kullan"
 
-#: kicad/cli/command_pcb_render.cpp:280
+#: kicad/cli/command_pcb_render.cpp:281
 msgid "Camera zoom"
 msgstr "Kamera yakınlaştırma"
 
-#: kicad/cli/command_pcb_render.cpp:285
+#: kicad/cli/command_pcb_render.cpp:286
 msgid "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
 msgstr "Kamerayı kaydır, format 'X,Y,Z', örneğin: '3,0,0'"
 
-#: kicad/cli/command_pcb_render.cpp:290
+#: kicad/cli/command_pcb_render.cpp:291
 msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
@@ -30619,69 +30646,69 @@ msgstr ""
 "Dönme noktasını kart merkezine göre santimetre cinsinden ayarla, format 'X,Y,"
 "Z', örneğin: '-10,2,0'"
 
-#: kicad/cli/command_pcb_render.cpp:297
+#: kicad/cli/command_pcb_render.cpp:298
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
 msgstr ""
 "Kartı döndür, format 'X,Y,Z', örneğin: '-45,0,45' izometrik görünüm için"
 
-#: kicad/cli/command_pcb_render.cpp:302
+#: kicad/cli/command_pcb_render.cpp:303
 msgid "Top light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr "Üst ışık yoğunluğu, format: ‘R,G,B’ veya tek bir sayı, aralık: 0-1"
 
-#: kicad/cli/command_pcb_render.cpp:307
+#: kicad/cli/command_pcb_render.cpp:308
 msgid "Bottom light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr "Alt ışık yoğunluğu, format: 'R,G,B' veya tek bir sayı, aralık: 0-1"
 
-#: kicad/cli/command_pcb_render.cpp:312
+#: kicad/cli/command_pcb_render.cpp:313
 msgid "Side lights intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr ""
 "Yan ışıkların yoğunluğu, format: ‘R,G,B’ veya tek bir sayı, aralık: 0-1"
 
-#: kicad/cli/command_pcb_render.cpp:317
+#: kicad/cli/command_pcb_render.cpp:318
 msgid "Camera light intensity, format 'R,G,B' or a single number, range: 0-1"
 msgstr "Kamera ışık yoğunluğu, biçim 'R,G,B' veya tek bir sayı, aralık: 0-1"
 
-#: kicad/cli/command_pcb_render.cpp:323
+#: kicad/cli/command_pcb_render.cpp:324
 msgid "Side lights elevation angle in degrees, range: 0-90"
 msgstr "Yan ışıkların yükselme açısı (derece cinsinden), aralık: 0-90"
 
-#: kicad/cli/command_pcb_render.cpp:339
+#: kicad/cli/command_pcb_render.cpp:343
 msgid "Invalid preset\n"
 msgstr "Geçersiz ön ayar\n"
 
-#: kicad/cli/command_pcb_render.cpp:357
+#: kicad/cli/command_pcb_render.cpp:361
 msgid "Invalid background\n"
 msgstr "Geçersiz arka plan\n"
 
-#: kicad/cli/command_pcb_render.cpp:363
+#: kicad/cli/command_pcb_render.cpp:367
 msgid "Invalid rotation format\n"
 msgstr "Geçersiz döndürme formatı\n"
 
-#: kicad/cli/command_pcb_render.cpp:369
+#: kicad/cli/command_pcb_render.cpp:373
 msgid "Invalid pan format\n"
 msgstr "Geçersiz kaydırma formatı\n"
 
-#: kicad/cli/command_pcb_render.cpp:375
+#: kicad/cli/command_pcb_render.cpp:379
 msgid "Invalid pivot format\n"
 msgstr "Geçersiz pivot formatı\n"
 
-#: kicad/cli/command_pcb_render.cpp:382
+#: kicad/cli/command_pcb_render.cpp:386
 msgid "Invalid light top intensity format\n"
 msgstr "Geçersiz üst ışık yoğunluğu formatı\n"
 
-#: kicad/cli/command_pcb_render.cpp:389
+#: kicad/cli/command_pcb_render.cpp:393
 msgid "Invalid light bottom intensity format\n"
 msgstr "Geçersiz alt ışık yoğunluğu formatı\n"
 
-#: kicad/cli/command_pcb_render.cpp:396
+#: kicad/cli/command_pcb_render.cpp:400
 msgid "Invalid light side intensity format\n"
 msgstr "Geçersiz yan ışık yoğunluğu formatı\n"
 
-#: kicad/cli/command_pcb_render.cpp:403
+#: kicad/cli/command_pcb_render.cpp:407
 msgid "Invalid light camera intensity format\n"
 msgstr "Geçersiz kamera ışık yoğunluğu formatı\n"
 
-#: kicad/cli/command_pcb_render.cpp:418
+#: kicad/cli/command_pcb_render.cpp:422
 msgid "Invalid image format\n"
 msgstr "Geçersiz resim formatı\n"
 
@@ -32047,20 +32074,20 @@ msgstr "Yüklü paket listesi yüklenirken hata oluştu: %s"
 msgid "Downloading %lld/%lld kB"
 msgstr "%lld/%lld kB indiriliyor"
 
-#: kicad/pcm/pcm.cpp:252 kicad/update_manager.cpp:158
+#: kicad/pcm/pcm.cpp:258 kicad/update_manager.cpp:159
 msgid "Download is too large."
 msgstr "İndirme boyutu çok büyük."
 
-#: kicad/pcm/pcm.cpp:269
+#: kicad/pcm/pcm.cpp:275
 msgid "Fetching repository"
 msgstr "Depo alınıyor"
 
-#: kicad/pcm/pcm.cpp:306
+#: kicad/pcm/pcm.cpp:312
 #, c-format
 msgid "Unable to parse repository: %s"
 msgstr "Depo çözümlenemiyor: %s"
 
-#: kicad/pcm/pcm.cpp:307
+#: kicad/pcm/pcm.cpp:313
 msgid ""
 "The given repository URL does not look like a valid KiCad package "
 "repository. Please double check the URL."
@@ -32068,19 +32095,19 @@ msgstr ""
 "Verilen depo URL'si geçerli bir KiCad paket deposu gibi görünmüyor. Lütfen "
 "URL'yi iki kez kontrol edin."
 
-#: kicad/pcm/pcm.cpp:343
+#: kicad/pcm/pcm.cpp:349
 msgid "Fetching repository packages"
 msgstr "Depo paketleri getiriliyor"
 
-#: kicad/pcm/pcm.cpp:349
+#: kicad/pcm/pcm.cpp:355
 msgid "Unable to load repository packages url."
 msgstr "Depo paket adresi yüklenemiyor."
 
-#: kicad/pcm/pcm.cpp:359
+#: kicad/pcm/pcm.cpp:365
 msgid "Packages hash doesn't match. Repository may be corrupted."
 msgstr "Paketlerin karması eşleşmiyor. Depo bozulmuş olabilir."
 
-#: kicad/pcm/pcm.cpp:380
+#: kicad/pcm/pcm.cpp:386
 #, c-format
 msgid ""
 "Unable to parse packages metadata:\n"
@@ -32091,20 +32118,20 @@ msgstr ""
 "\n"
 "%s"
 
-#: kicad/pcm/pcm.cpp:464
+#: kicad/pcm/pcm.cpp:470
 msgid "Failed to parse locally stored repository.json."
 msgstr "Yerel olarak depolanan repository.json dosyası ayrıştırılamadı."
 
-#: kicad/pcm/pcm.cpp:492
+#: kicad/pcm/pcm.cpp:498
 msgid ""
 "Packages cache for current repository is corrupted, it will be redownloaded."
 msgstr "Geçerli depo için paket önbelleği bozuldu, yeniden indirilecek."
 
-#: kicad/pcm/pcm.cpp:546
+#: kicad/pcm/pcm.cpp:552
 msgid "Downloading resources"
 msgstr "Kaynakları indirme"
 
-#: kicad/pcm/pcm.cpp:566
+#: kicad/pcm/pcm.cpp:572
 msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
@@ -32112,27 +32139,27 @@ msgstr ""
 "Kaynaklar dosyası karması eşleşmiyor ve kullanılmayacak. Depo bozulmuş "
 "olabilir."
 
-#: kicad/pcm/pcm.cpp:809
+#: kicad/pcm/pcm.cpp:815
 msgid "Local file"
 msgstr "Yerel dosya"
 
-#: kicad/pcm/pcm.cpp:1162
+#: kicad/pcm/pcm.cpp:1168
 msgid "PCM Update"
 msgstr "PCM Güncellemesi"
 
-#: kicad/pcm/pcm.cpp:1174
+#: kicad/pcm/pcm.cpp:1180
 msgid "Preparing to fetch repositories"
 msgstr "Depoları almaya hazırlanıyor"
 
-#: kicad/pcm/pcm.cpp:1192
+#: kicad/pcm/pcm.cpp:1198
 msgid "Fetching repository..."
 msgstr "Depo getiriliyor..."
 
-#: kicad/pcm/pcm.cpp:1205
+#: kicad/pcm/pcm.cpp:1211
 msgid "Reviewing packages..."
 msgstr "Paketler inceleniyor..."
 
-#: kicad/pcm/pcm.cpp:1259
+#: kicad/pcm/pcm.cpp:1265
 msgid ""
 "This plugin requires the KiCad API, which is currently disabled in "
 "preferences. Would you like to enable it?"
@@ -32518,36 +32545,36 @@ msgstr "Seçilen dizin zaten bir Git projesi."
 msgid "Failed to initialize Git project."
 msgstr "(Git) projesi başlatılamadı."
 
-#: kicad/project_tree_pane.cpp:1818
+#: kicad/project_tree_pane.cpp:1829
 msgid "Set default remote"
 msgstr "Varsayılan uzaktan ayarla"
 
-#: kicad/project_tree_pane.cpp:1834
+#: kicad/project_tree_pane.cpp:1845
 msgid "Failed to set default remote."
 msgstr "Varsayılan uzaktan ayarlanamadı."
 
-#: kicad/project_tree_pane.cpp:1842 kicad/project_tree_pane.cpp:1873
-#: kicad/project_tree_pane.cpp:1896
+#: kicad/project_tree_pane.cpp:1853 kicad/project_tree_pane.cpp:1884
+#: kicad/project_tree_pane.cpp:1907
 msgid "Fetch Remote"
 msgstr "Uzak Sunucudan Getir"
 
-#: kicad/project_tree_pane.cpp:1880
+#: kicad/project_tree_pane.cpp:1891
 msgid "Failed to pull project"
 msgstr "Proje çekilemedi"
 
-#: kicad/project_tree_pane.cpp:1903
+#: kicad/project_tree_pane.cpp:1914
 msgid "Failed to push project"
 msgstr "Proje gönderilemedi"
 
-#: kicad/project_tree_pane.cpp:2250
+#: kicad/project_tree_pane.cpp:2261
 msgid "The selected directory is not a Git project."
 msgstr "Seçilen dizin bir Git projesi değil."
 
-#: kicad/project_tree_pane.cpp:2337
+#: kicad/project_tree_pane.cpp:2348
 msgid "Discarding commit due to empty commit message."
 msgstr "Boş işlem mesajı nedeniyle işlem reddediliyor."
 
-#: kicad/project_tree_pane.cpp:2343
+#: kicad/project_tree_pane.cpp:2354
 msgid "Discarding commit due to empty file selection."
 msgstr "Boş dosya seçimi nedeniyle işlem reddediliyor."
 
@@ -32766,15 +32793,15 @@ msgstr "Uygulama yüklenemedi:\n"
 msgid "Application cannot start."
 msgstr "Uygulama başlatılamıyor."
 
-#: kicad/update_manager.cpp:177
+#: kicad/update_manager.cpp:178
 msgid "Update Check"
 msgstr "Güncelleme Kontrolü"
 
-#: kicad/update_manager.cpp:188
+#: kicad/update_manager.cpp:189
 msgid "Requesting update info"
 msgstr "Güncelleme bilgisi isteniyor"
 
-#: kicad/update_manager.cpp:268
+#: kicad/update_manager.cpp:269
 #, c-format
 msgid "Unable to parse update response: %s"
 msgstr "Güncelleme yanıtı ayrıştırılamıyor: %s"
@@ -36791,7 +36818,7 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr "(yay boyutu sıfır veya çok küçük: %d nm)"
 
 #: pcbnew/cross-probing.cpp:108 pcbnew/dialogs/dialog_board_setup.cpp:236
-#: pcbnew/dialogs/dialog_drc.cpp:317 pcbnew/pcb_edit_frame.cpp:3113
+#: pcbnew/dialogs/dialog_drc.cpp:317 pcbnew/pcb_edit_frame.cpp:3117
 msgid "Custom Rules"
 msgstr "Özel Kurallar"
 
@@ -37211,8 +37238,8 @@ msgstr "Varsayılanlar"
 msgid "Constraints"
 msgstr "Kısıtlamalar"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:177 pcbnew/edit_track_width.cpp:165
-#: pcbnew/edit_track_width.cpp:189
+#: pcbnew/dialogs/dialog_board_setup.cpp:177 pcbnew/edit_track_width.cpp:173
+#: pcbnew/edit_track_width.cpp:202
 msgid "Pre-defined Sizes"
 msgstr "Önceden Tanımlanmış Boyutlar"
 
@@ -39329,7 +39356,7 @@ msgstr "Ayak İzi Denetleyici"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:74
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:174
-#: pcbnew/dialogs/dialog_migrate_3d_models.cpp:958
+#: pcbnew/dialogs/dialog_migrate_3d_models.cpp:964
 msgid "3D Models"
 msgstr "3B Modeller"
 
@@ -39486,7 +39513,7 @@ msgid "Not in schematic"
 msgstr "Şematikte yok"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:224
-#: pcbnew/pcb_edit_frame.cpp:3275
+#: pcbnew/pcb_edit_frame.cpp:3279
 msgid "Update Footprint from Library..."
 msgstr "Ayak İzini Kütüphaneden Güncelle..."
 
@@ -40205,7 +40232,7 @@ msgid "Items to Delete"
 msgstr "Silinecek Ögeler"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
-#: pcbnew/tools/board_editor_control.cpp:100
+#: pcbnew/tools/board_editor_control.cpp:272
 #: pcbnew/widgets/appearance_controls.cpp:340
 #: pcbnew/widgets/panel_selection_filter.cpp:227
 #: pcbnew/widgets/panel_selection_filter_base.cpp:53
@@ -40983,21 +41010,21 @@ msgstr ""
 msgid "(keep existing reference)"
 msgstr "Mevcut referans tanımlayıcılarını koru"
 
-#: pcbnew/dialogs/dialog_migrate_3d_models.cpp:863
+#: pcbnew/dialogs/dialog_migrate_3d_models.cpp:869
 msgid "Add 3D Model Search Directory"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_migrate_3d_models.cpp:957
+#: pcbnew/dialogs/dialog_migrate_3d_models.cpp:963
 #, fuzzy
 msgid "Select 3D Model File"
 msgstr "3B Model Seç"
 
-#: pcbnew/dialogs/dialog_migrate_3d_models.cpp:974
+#: pcbnew/dialogs/dialog_migrate_3d_models.cpp:980
 #, fuzzy
 msgid "user-selected"
 msgstr "Hiçbir veriyolu seçilmedi"
 
-#: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1058
+#: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1064
 #, fuzzy
 msgid "Migrate 3D model references"
 msgstr "Çerçeve referanslarını yazdır."
@@ -43763,7 +43790,7 @@ msgid "Always show selected ratsnest"
 msgstr "Her zaman seçili bağlantı ağın göster"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:397
-#: pcbnew/tools/pcb_actions.cpp:1671
+#: pcbnew/tools/pcb_actions.cpp:1695
 msgid "Show ratsnest with curved lines"
 msgstr "Bağlantı ağını eğri çizgilerle göster"
 
@@ -44671,32 +44698,32 @@ msgstr ""
 msgid "Cancel Changes?"
 msgstr "Değişikliklerden Vazgeçilsin mi?"
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:737
+#: pcbnew/dialogs/panel_setup_rules.cpp:739
 msgid "DRC rules"
 msgstr "DRC (Tasarım Kuralı Kontrolü) kuralları"
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:745
+#: pcbnew/dialogs/panel_setup_rules.cpp:747
 #: pcbnew/drc/drc_rule_condition.cpp:64
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:956
 msgid "ERROR:"
 msgstr "HATA:"
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:780
+#: pcbnew/dialogs/panel_setup_rules.cpp:782
 #, c-format
 msgid "Rules '%s' and '%s' share the same condition."
 msgstr "'%s' ve '%s' kuralları aynı koşulu paylaşıyor."
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:800
+#: pcbnew/dialogs/panel_setup_rules.cpp:802
 #, c-format
 msgid "Rule '%s' references undefined netclass '%s'."
 msgstr "'%s' kuralı, tanımlanmamış '%s' ağ sınıfına başvuruyor."
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:826
+#: pcbnew/dialogs/panel_setup_rules.cpp:828
 #, c-format
 msgid "Rule '%s' references undefined layer(s): %s."
 msgstr "'%s' kuralı, tanımlanmamış katman(lar)a başvuruyor: %s."
 
-#: pcbnew/dialogs/panel_setup_rules.cpp:890
+#: pcbnew/dialogs/panel_setup_rules.cpp:892
 msgid "Design rules cannot be added without a project"
 msgstr "Tasarım kuralları proje olmadan eklenemez"
 
@@ -44768,6 +44795,7 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
+#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -44842,13 +44870,13 @@ msgid ""
 "<br>                                                                                                                                                                                                         "
 "|\n"
 "| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"`track`<br>`via`<br>`through_via`<br>`blind_via`<br>`buried_via`<br>`micro_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
 "| Specify one or more object types to disallow, separated by spaces.  For "
 "example, `(constraint disallow track)` or `(constraint disallow track via "
 "pad)`.  If an object of this type matches the rule condition, a DRC error "
 "will be created.<br><br>This constraint is essentially the same as a keepout "
 "rule area, but can be used to create more specific keepout restrictions."
-"<br>                                                                   |\n"
+"<br>                                  |\n"
 "| `edge_clearance`          | "
 "min                                                                                                                   "
 "| Checks the clearance between objects and the board edge.<br><br>This can "
@@ -45839,6 +45867,7 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
+#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -45971,14 +46000,13 @@ msgid ""
 "        (condition \"A.isPlated() && A.Hole_Size_X != A.Hole_Size_Y\"))\n"
 "\n"
 "\n"
-"    # Allow blind/buried to micro-via hole-to-hole violations when it is "
-"known that\n"
-"    # the fab will mechanically drill blind/buried via holes -before- laser "
+"    # Allow blind to micro-via hole-to-hole violations when it is known "
+"that\n"
+"    # the fab will mechanically drill blind via holes -before- laser "
 "drilling \n"
 "    # micro-vias.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind' && B.Via_Type == 'Micro'\")\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -46651,331 +46679,331 @@ msgstr "Çözümlenmiş bölge bağlantı türü: %s."
 msgid "Pad is not a through hole pad; connection will be: %s."
 msgstr "Ped bir açık delik pedi değildir; bağlantı olacaktır: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1122
+#: pcbnew/drc/drc_engine.cpp:1124
 #, c-format
 msgid "Net tie on %s; clearance: 0."
 msgstr "%s üzerinde ağ bağı; boşluk: 0."
 
-#: pcbnew/drc/drc_engine.cpp:1125
+#: pcbnew/drc/drc_engine.cpp:1127
 msgid "net tie"
 msgstr "ağ bağı (net tie)"
 
-#: pcbnew/drc/drc_engine.cpp:1152 pcbnew/drc/drc_engine.cpp:1162
+#: pcbnew/drc/drc_engine.cpp:1154 pcbnew/drc/drc_engine.cpp:1164
 #, c-format
 msgid "Local override on %s; clearance: %s."
 msgstr "%s üzerinde yerel istisna; açıklık: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1177 pcbnew/drc/drc_engine.cpp:1967
-#: pcbnew/drc/drc_engine.cpp:1983
+#: pcbnew/drc/drc_engine.cpp:1179 pcbnew/drc/drc_engine.cpp:1969
+#: pcbnew/drc/drc_engine.cpp:1985
 msgid "board minimum"
 msgstr "kart en azı"
 
-#: pcbnew/drc/drc_engine.cpp:1180 pcbnew/drc/drc_engine.cpp:1961
-#: pcbnew/drc/drc_engine.cpp:1977
+#: pcbnew/drc/drc_engine.cpp:1182 pcbnew/drc/drc_engine.cpp:1963
+#: pcbnew/drc/drc_engine.cpp:1979
 #, c-format
 msgid "Board minimum clearance: %s."
 msgstr "Kart minimum boşluğu: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1189
+#: pcbnew/drc/drc_engine.cpp:1191
 msgid "board minimum hole"
 msgstr "kart en az delik"
 
-#: pcbnew/drc/drc_engine.cpp:1192
+#: pcbnew/drc/drc_engine.cpp:1194
 #, c-format
 msgid "Board minimum hole clearance: %s."
 msgstr "Kart minimum delik açıklığı: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1211
+#: pcbnew/drc/drc_engine.cpp:1213
 #, c-format
 msgid "Local override on %s; zone connection: %s."
 msgstr "%s üzerinde yerel üzerine yazma; bölge bağlantısı: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1228
+#: pcbnew/drc/drc_engine.cpp:1230
 #, c-format
 msgid "Local override on %s; thermal relief gap: %s."
 msgstr "%s üzerinde yerel geçersiz kılma; termal rölyef aralığı: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1245
+#: pcbnew/drc/drc_engine.cpp:1247
 #, c-format
 msgid "Local override on %s; thermal spoke width: %s."
 msgstr "%s üzerinde yerel üzerine yazma; termal bağlantı kolu genişliği: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1254
+#: pcbnew/drc/drc_engine.cpp:1256
 #, c-format
 msgid "%s min thickness: %s."
 msgstr "%s min kalınlık: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1288
+#: pcbnew/drc/drc_engine.cpp:1290
 #, c-format
 msgid "Local override on %s; solder mask expansion: %s."
 msgstr "%s üzerinde yerel geçersiz kılma; lehim maskesi genişlemesi: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1316
+#: pcbnew/drc/drc_engine.cpp:1318
 #, c-format
 msgid "Local override on %s; solder paste absolute clearance: %s."
 msgstr "%s üzerinde yerel geçersiz kılma; lehim pastası mutlak boşluğu: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1344
+#: pcbnew/drc/drc_engine.cpp:1346
 #, c-format
 msgid "Local override on %s; solder paste relative clearance: %s."
 msgstr "%s üzerinde yerel geçersiz kılma; lehim pastası göreceli boşluğu: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1356
+#: pcbnew/drc/drc_engine.cpp:1358
 #, c-format
 msgid "Checking assertion '%s'."
 msgstr "'%s' tez kontrol ediliyor."
 
-#: pcbnew/drc/drc_engine.cpp:1360 pcbnew/drc/drc_engine.cpp:2122
+#: pcbnew/drc/drc_engine.cpp:1362 pcbnew/drc/drc_engine.cpp:2124
 msgid "Assertion passed."
 msgstr "İddia kabul edildi."
 
-#: pcbnew/drc/drc_engine.cpp:1362 pcbnew/drc/drc_engine.cpp:2126
+#: pcbnew/drc/drc_engine.cpp:1364 pcbnew/drc/drc_engine.cpp:2128
 msgid "--> Assertion failed. <--"
 msgstr "--> Onaylama başarısız oldu. <--"
 
-#: pcbnew/drc/drc_engine.cpp:1381
+#: pcbnew/drc/drc_engine.cpp:1383
 #, c-format
 msgid "Checking %s clearance: %s."
 msgstr "%s boşluğunun kontrol edilmesi: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1386
+#: pcbnew/drc/drc_engine.cpp:1388
 #, c-format
 msgid "Checking %s creepage: %s."
 msgstr "%s sızıntı yolu kontrol ediliyor: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1391
+#: pcbnew/drc/drc_engine.cpp:1393
 #, c-format
 msgid "Checking %s max uncoupled length: %s."
 msgstr "%s maksimum eşleşmemiş uzunluk kontrol ediliyor: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1397
+#: pcbnew/drc/drc_engine.cpp:1399
 #, c-format
 msgid "Checking %s max skew: %s."
 msgstr "%s maksimum sapma kontrol ediliyor: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1403
+#: pcbnew/drc/drc_engine.cpp:1405
 #, c-format
 msgid "Checking %s gap: %s."
 msgstr "%s boşluğu kontrol ediliyor: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1409
+#: pcbnew/drc/drc_engine.cpp:1411
 #, c-format
 msgid "Checking %s thermal spoke width: %s."
 msgstr "%s termal bağlantı kolu genişliği kontrol ediliyor: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1415
+#: pcbnew/drc/drc_engine.cpp:1417
 #, c-format
 msgid "Checking %s solder mask expansion: %s."
 msgstr "%s lehim maskesi genişlemesi kontrol ediliyor: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1421
+#: pcbnew/drc/drc_engine.cpp:1423
 #, c-format
 msgid "Checking %s solder paste absolute clearance: %s."
 msgstr "%s lehim pastası mutlak açıklığı kontrol ediliyor: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1427
+#: pcbnew/drc/drc_engine.cpp:1429
 #, c-format
 msgid "Checking %s solder paste relative clearance: %s."
 msgstr "%s lehim pastası göreceli boşluğu kontrol ediliyor: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1433
+#: pcbnew/drc/drc_engine.cpp:1435
 #, c-format
 msgid "Checking %s min spoke count: %s."
 msgstr "%s minimum bağlantı kolu sayısı kontrol ediliyor: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1439
+#: pcbnew/drc/drc_engine.cpp:1441
 #, c-format
 msgid "Checking %s zone connection: %s."
 msgstr "%s bölge bağlantısı kontrol ediliyor: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1462
+#: pcbnew/drc/drc_engine.cpp:1464
 #, c-format
 msgid "Checking %s track width: opt %s."
 msgstr "%s yol genişliği kontrol ediliyor: opt %s."
 
-#: pcbnew/drc/drc_engine.cpp:1468
+#: pcbnew/drc/drc_engine.cpp:1470
 #, c-format
 msgid "Checking %s track width: min %s."
 msgstr "%s yol genişliği kontrol ediliyor: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:1476
+#: pcbnew/drc/drc_engine.cpp:1478
 #, c-format
 msgid "Checking %s annular width: min %s."
 msgstr "%s halka genişliği kontrol ediliyor: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:1484
+#: pcbnew/drc/drc_engine.cpp:1486
 #, c-format
 msgid "Checking %s via diameter: opt %s."
 msgstr "%s geçit çapı kontrol ediliyor: opt %s."
 
-#: pcbnew/drc/drc_engine.cpp:1490
+#: pcbnew/drc/drc_engine.cpp:1492
 #, c-format
 msgid "Checking %s via diameter: min %s."
 msgstr "%s geçit çapı kontrol ediliyor: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:1499
+#: pcbnew/drc/drc_engine.cpp:1501
 #, c-format
 msgid "Checking %s hole size: opt %s."
 msgstr "%s delik boyutu kontrol ediliyor: opt %s."
 
-#: pcbnew/drc/drc_engine.cpp:1505
+#: pcbnew/drc/drc_engine.cpp:1507
 #, c-format
 msgid "Checking %s hole size: min %s."
 msgstr "%s delik boyutu kontrol ediliyor: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:1515
+#: pcbnew/drc/drc_engine.cpp:1517
 #, c-format
 msgid "Checking %s: min %s."
 msgstr "%s kontrol ediliyor: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:1523
+#: pcbnew/drc/drc_engine.cpp:1525
 #, c-format
 msgid "Checking %s diff pair gap: opt %s."
 msgstr "%s diferansiyel çift boşluğu kontrol ediliyor: opt %s."
 
-#: pcbnew/drc/drc_engine.cpp:1529
+#: pcbnew/drc/drc_engine.cpp:1531
 #, c-format
 msgid "Checking %s clearance: min %s."
 msgstr "%s boşluğu kontrol ediliyor: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:1537
+#: pcbnew/drc/drc_engine.cpp:1539
 #, c-format
 msgid "Checking %s hole to hole: min %s."
 msgstr "%s delikten deliğe kontrol ediliyor: min %s."
 
-#: pcbnew/drc/drc_engine.cpp:1543 pcbnew/drc/drc_engine.cpp:1565
-#: pcbnew/drc/drc_engine.cpp:2135
+#: pcbnew/drc/drc_engine.cpp:1545 pcbnew/drc/drc_engine.cpp:1567
+#: pcbnew/drc/drc_engine.cpp:2137
 #, c-format
 msgid "Checking %s."
 msgstr "%s kontrol ediliyor."
 
-#: pcbnew/drc/drc_engine.cpp:1549
+#: pcbnew/drc/drc_engine.cpp:1551
 #, c-format
 msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "%s %s pini '%s'den '%s'e yeniden bağlandı."
 
-#: pcbnew/drc/drc_engine.cpp:1575
+#: pcbnew/drc/drc_engine.cpp:1577
 msgid "Netclass clearances apply only between copper items."
 msgstr "Ağ sınıfı boşlukları sadece bakır ögeler arasında uygulanır."
 
-#: pcbnew/drc/drc_engine.cpp:1579 pcbnew/drc/drc_engine.cpp:1584
+#: pcbnew/drc/drc_engine.cpp:1581 pcbnew/drc/drc_engine.cpp:1586
 #, c-format
 msgid "%s contains no copper.  Rule ignored."
 msgstr "%s bakır içermiyor. Kural yok sayıldı."
 
-#: pcbnew/drc/drc_engine.cpp:1644
+#: pcbnew/drc/drc_engine.cpp:1646
 msgid "Keepout constraint not met."
 msgstr "Sınır çizgisi(keepout) kısıtlaması karşılanmadı."
 
-#: pcbnew/drc/drc_engine.cpp:1646
+#: pcbnew/drc/drc_engine.cpp:1648
 msgid "Disallow constraint not met."
 msgstr "Kısıtlamaya izin vermiyor."
 
-#: pcbnew/drc/drc_engine.cpp:1668
+#: pcbnew/drc/drc_engine.cpp:1670
 msgid "Keepout layer(s) not matched."
 msgstr "Sınır çizgisi(keepout) katman(ları) eşleşmiyor."
 
-#: pcbnew/drc/drc_engine.cpp:1672 pcbnew/drc/drc_engine.cpp:1693
-#: pcbnew/drc/drc_engine.cpp:2139
+#: pcbnew/drc/drc_engine.cpp:1674 pcbnew/drc/drc_engine.cpp:1695
+#: pcbnew/drc/drc_engine.cpp:2141
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
 msgstr "'%s' kural katmanı eşleşmiyor; kural yoksayıldı."
 
-#: pcbnew/drc/drc_engine.cpp:1677 pcbnew/drc/drc_engine.cpp:1698
+#: pcbnew/drc/drc_engine.cpp:1679 pcbnew/drc/drc_engine.cpp:1700
 msgid "Rule layer not matched; rule ignored."
 msgstr "Kural katmanı eşleşmiyor; kuralı yoksayıldı."
 
-#: pcbnew/drc/drc_engine.cpp:1689
+#: pcbnew/drc/drc_engine.cpp:1691
 msgid "Constraint layer not matched."
 msgstr "Kısıtlama katmanı eşleşmedi."
 
-#: pcbnew/drc/drc_engine.cpp:1705
+#: pcbnew/drc/drc_engine.cpp:1707
 #, c-format
 msgid "%s is not a drilled hole; rule ignored."
 msgstr "%s delinmiş bir delik değil; kural yok sayıldı."
 
-#: pcbnew/drc/drc_engine.cpp:1714
+#: pcbnew/drc/drc_engine.cpp:1716
 msgid "Unconditional constraint applied."
 msgstr "Koşulsuz kısıtlama uygulandı."
 
-#: pcbnew/drc/drc_engine.cpp:1718 pcbnew/drc/drc_engine.cpp:2145
+#: pcbnew/drc/drc_engine.cpp:1720 pcbnew/drc/drc_engine.cpp:2147
 msgid "Unconditional rule applied."
 msgstr "Koşulsuz kural uygulandı."
 
-#: pcbnew/drc/drc_engine.cpp:1723
+#: pcbnew/drc/drc_engine.cpp:1725
 msgid "Unconditional rule applied; overrides previous constraints."
 msgstr "Koşulsuz kural uygulanır; önceki kısıtlamaları geçersiz kılar."
 
-#: pcbnew/drc/drc_engine.cpp:1737 pcbnew/drc/drc_engine.cpp:2150
+#: pcbnew/drc/drc_engine.cpp:1739 pcbnew/drc/drc_engine.cpp:2152
 #, c-format
 msgid "Checking rule condition '%s'."
 msgstr "'%s' kural koşulu kontrol ediliyor."
 
-#: pcbnew/drc/drc_engine.cpp:1747
+#: pcbnew/drc/drc_engine.cpp:1749
 msgid "Constraint applied."
 msgstr "Kısıtlama uygulandı."
 
-#: pcbnew/drc/drc_engine.cpp:1751 pcbnew/drc/drc_engine.cpp:2156
+#: pcbnew/drc/drc_engine.cpp:1753 pcbnew/drc/drc_engine.cpp:2158
 msgid "Rule applied."
 msgstr "Kural uygulandı."
 
-#: pcbnew/drc/drc_engine.cpp:1756
+#: pcbnew/drc/drc_engine.cpp:1758
 msgid "Rule applied; overrides previous constraints."
 msgstr "Kural uygulandı; önceki kısıtlamaları geçersiz kılar."
 
-#: pcbnew/drc/drc_engine.cpp:1764
+#: pcbnew/drc/drc_engine.cpp:1766
 msgid "Membership not satisfied; constraint ignored."
 msgstr "Üyelik karşılanmadı; kısıtlama yok sayıldı."
 
-#: pcbnew/drc/drc_engine.cpp:1765 pcbnew/drc/drc_engine.cpp:2161
+#: pcbnew/drc/drc_engine.cpp:1767 pcbnew/drc/drc_engine.cpp:2163
 msgid "Condition not satisfied; rule ignored."
 msgstr "Durum karşılanmadı; kural göz ardı edildi."
 
-#: pcbnew/drc/drc_engine.cpp:1853
+#: pcbnew/drc/drc_engine.cpp:1855
 #, c-format
 msgid "Inheriting from parent: %s."
 msgstr "Üst ögeden devralınıyor: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1876 pcbnew/drc/drc_engine.cpp:1883
-#: pcbnew/drc/drc_engine.cpp:1890
+#: pcbnew/drc/drc_engine.cpp:1878 pcbnew/drc/drc_engine.cpp:1885
+#: pcbnew/drc/drc_engine.cpp:1892
 msgid "board setup"
 msgstr "kart ayarları"
 
-#: pcbnew/drc/drc_engine.cpp:1915 pcbnew/drc/drc_engine.cpp:1939
+#: pcbnew/drc/drc_engine.cpp:1917 pcbnew/drc/drc_engine.cpp:1941
 #, c-format
 msgid "Local clearance on %s: %s."
 msgstr "%s üzerinde yerel boşluk: %s."
 
-#: pcbnew/drc/drc_engine.cpp:1998
+#: pcbnew/drc/drc_engine.cpp:2000
 #, c-format
 msgid "%s zone connection: %s."
 msgstr "%s bölge bağlantısı: %s."
 
-#: pcbnew/drc/drc_engine.cpp:2003
+#: pcbnew/drc/drc_engine.cpp:2005
 msgid "footprint"
 msgstr "ayak izi"
 
-#: pcbnew/drc/drc_engine.cpp:2014
+#: pcbnew/drc/drc_engine.cpp:2016
 #, c-format
 msgid "%s pad connection: %s."
 msgstr "%s ped bağlantısı: %s."
 
-#: pcbnew/drc/drc_engine.cpp:2019 pcbnew/drc/drc_engine.cpp:2036
-#: pcbnew/drc/drc_engine.cpp:2053 pcbnew/zone.cpp:693 pcbnew/zone.h:201
+#: pcbnew/drc/drc_engine.cpp:2021 pcbnew/drc/drc_engine.cpp:2038
+#: pcbnew/drc/drc_engine.cpp:2055 pcbnew/zone.cpp:693 pcbnew/zone.h:201
 msgid "zone"
 msgstr "bölge"
 
-#: pcbnew/drc/drc_engine.cpp:2031
+#: pcbnew/drc/drc_engine.cpp:2033
 #, c-format
 msgid "%s thermal relief gap: %s."
 msgstr "%s termal rölyef aralığı: %s."
 
-#: pcbnew/drc/drc_engine.cpp:2048
+#: pcbnew/drc/drc_engine.cpp:2050
 #, c-format
 msgid "%s thermal spoke width: %s."
 msgstr "%s termal bağlantı kolu genişliği: %s."
 
-#: pcbnew/drc/drc_engine.cpp:2116
+#: pcbnew/drc/drc_engine.cpp:2118
 #, c-format
 msgid "Checking rule assertion '%s'."
 msgstr "'%s' kural tezi kontrol ediliyor."
@@ -49273,7 +49301,7 @@ msgid "Error saving custom rules file '%s'."
 msgstr "'%s' özel kurallar dosyası kaydedilirken hata oluştu."
 
 #: pcbnew/files.cpp:1094 pcbnew/files.cpp:1185
-#: pcbnew/pcb_design_block_utils.cpp:113 pcbnew/pcbnew_jobs_handler.cpp:2680
+#: pcbnew/pcb_design_block_utils.cpp:113 pcbnew/pcbnew_jobs_handler.cpp:2683
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -51381,11 +51409,11 @@ msgstr "Kart dosyası salt okunur."
 msgid "PCB file changes are unsaved"
 msgstr "Baskı Devre dosyasındaki değişiklikler kaydedilmedi"
 
-#: pcbnew/pcb_edit_frame.cpp:2299
+#: pcbnew/pcb_edit_frame.cpp:2303
 msgid "The schematic for this board cannot be found."
 msgstr "Bu kart için şematik bulunamıyor."
 
-#: pcbnew/pcb_edit_frame.cpp:2325
+#: pcbnew/pcb_edit_frame.cpp:2329
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -51395,11 +51423,11 @@ msgstr ""
 "güncellenemiyor. Şematiklerden Baskı Devre oluşturmak veya güncellemek için "
 "KiCad proje yöneticisini başlatmanız ve bir proje oluşturmanız gerekir."
 
-#: pcbnew/pcb_edit_frame.cpp:2350 pcbnew/pcbnew_jobs_handler.cpp:2389
+#: pcbnew/pcb_edit_frame.cpp:2354 pcbnew/pcbnew_jobs_handler.cpp:2392
 msgid "Eeschema netlist"
 msgstr "Eeschema ağ listesi"
 
-#: pcbnew/pcb_edit_frame.cpp:2361
+#: pcbnew/pcb_edit_frame.cpp:2365
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
@@ -51407,27 +51435,27 @@ msgstr ""
 "Ağ listesi okunurken bir hata alındı. Lütfen bu sorunu Yardım->Hata Bildir "
 "menüsünü kullanarak KiCad ekibine bildirin."
 
-#: pcbnew/pcb_edit_frame.cpp:3107
+#: pcbnew/pcb_edit_frame.cpp:3111
 msgid "Edit design rules"
 msgstr "Tasarım kurallarını düzenle"
 
-#: pcbnew/pcb_edit_frame.cpp:3119
+#: pcbnew/pcb_edit_frame.cpp:3123
 msgid "Could not compile custom design rules."
 msgstr "Özel tasarım kuralları derlenemedi."
 
-#: pcbnew/pcb_edit_frame.cpp:3237
+#: pcbnew/pcb_edit_frame.cpp:3241
 msgid "Violation Report"
 msgstr "İhlal Raporu"
 
-#: pcbnew/pcb_edit_frame.cpp:3249
+#: pcbnew/pcb_edit_frame.cpp:3253
 msgid "Clearance Report"
 msgstr "Boşluk Raporu"
 
-#: pcbnew/pcb_edit_frame.cpp:3261
+#: pcbnew/pcb_edit_frame.cpp:3265
 msgid "Constraints Report"
 msgstr "Kısıtlamalar Raporu"
 
-#: pcbnew/pcb_edit_frame.cpp:3273 pcbnew/tools/pcb_actions.cpp:2181
+#: pcbnew/pcb_edit_frame.cpp:3277 pcbnew/tools/pcb_actions.cpp:2205
 msgid "Compare Footprint with Library"
 msgstr "Ayak izini Kütüphane ile Karşılaştırın"
 
@@ -52412,7 +52440,7 @@ msgstr "Eagle katmanı '%s' (%d) eşlenmediği için bir kablo yok sayılıyor"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2094
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2096
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2843
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2844
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:592
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:1592
 #, c-format
@@ -52497,121 +52525,121 @@ msgstr "'%s' ayak izi '%s' projesinde bulunamadı"
 msgid "EasyEDA (JLCEDA) Pro project"
 msgstr "EasyEDA (JLCEDA) Pro projesi"
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:268
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:269
 #, c-format
 msgid "Unknown FABMASTER section %s:%s at row %zu."
 msgstr "Bilinmeyen FABMASTER bölümü %s:%s satır %zu'da."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:286
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:287
 #, c-format
 msgid "Invalid row size in J row %zu. Expecting 11 elements but found %zu."
 msgstr ""
 "J satırında geçersiz satır boyutu %zu. 11 öge bekleniyordu ancak %zu bulundu."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:309
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:310
 msgid "Could not find units value, defaulting to mils."
 msgstr "Birim değeri bulunamadı, varsayılan olarak mils kullanılıyor."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:334
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:335
 #, c-format
 msgid "Could not find column label %s."
 msgstr "%s sütun etiketi bulunamadı."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:368
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:439
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:680
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:863
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:947
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1503
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1622
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1872
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1962
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2035
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:369
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:440
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:681
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:864
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:948
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1504
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1623
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1873
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1963
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2036
 #, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
 msgstr ""
 "%zu satırında geçersiz satır boyutu. %zu ögeleri bekleniyordu ancak %zu "
 "bulundu."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:489
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:490
 #, c-format
 msgid "Expecting drill size value but found %s!%s!%s in row %zu."
 msgstr "Delik boyutu değeri bekleniyordu ancak %s!%s!%s satır %zu 'da bulundu."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:537
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:538
 #, c-format
 msgid "Expecting pad size values but found %s : %s in row %zu."
 msgstr "Ped boyut değerleri bekleniyordu ancak %s : %s satır %zu 'da bulundu."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:562
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:563
 #, c-format
 msgid "Invalid pad size in row %zu."
 msgstr "Satır %zu'da geçersiz ped boyutu."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:597
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:598
 #, c-format
 msgid "Expecting pad offset values but found %s:%s in row %zu."
 msgstr "Ped ofset değerleri bekleniyordu ancak %s:%s satır %zu 'da bulundu."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:642
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:643
 #, c-format
 msgid "Unknown pad shape name '%s' on layer '%s' in row %zu."
 msgstr "Bilinmeyen ped şekli adı '%s', katman '%s'de, satır %zu 'da."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:780
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:781
 #, c-format
 msgid "No user layer to put layer %s"
 msgstr "%s katmanına koyulacak kullanıcı katmanı yok"
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:993
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:994
 #, c-format
 msgid "Invalid format for id string '%s' in custom pad row %zu."
 msgstr "'%s' id dizesi için geçersiz format, özel ped satırı %zu."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1035
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1036
 #, c-format
 msgid "Could not insert graphical item %d into padstack '%s'."
 msgstr "Grafik ögesi %d, ped katmanı '%s' içine eklenemedi."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1042
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1043
 #, c-format
 msgid "Unrecognized pad shape primitive '%s' in row %zu."
 msgstr "Tanınmayan ped şekli ilkel '%s' %zu satırında."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1146
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1147
 #, c-format
 msgid "Circle with unequal x and y radii (x=%d, y=%d)"
 msgstr "Eşitsiz x ve y yarıçaplarına sahip daire (x=%d, y=%d)"
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1386
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1387
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
 msgstr "Geçersiz belirteç sayısı. 8 bekleniyordu ama %zu bulundu."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1535
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1718
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1536
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1719
 #, c-format
 msgid "Invalid format for record_tag string '%s' in row %zu."
 msgstr "'%s' record_tag dizesi için geçersiz format, satır %zu."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1689
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1690
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu."
 msgstr ""
 "Satır %zu'da geçersiz satır boyutu. %zu öge bekleniyordu ancak %zu bulundu."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1728
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1729
 #, c-format
 msgid "Unhandled graphic item '%s' in row %zu."
 msgstr "İşlenemeyen grafik ögesi '%s', satır %zu'da."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1773
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1787
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1774
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1788
 #, c-format
 msgid "Duplicate item for ID %d and sequence %d in row %zu."
 msgstr "Kimlik %d ve sıra %d için yinelenen öge, satır %zu."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1883
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1884
 #, c-format
 msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
@@ -52620,40 +52648,40 @@ msgstr ""
 "Satır %zu'da %s referans tanımlayıcısı için X, Y veya dönüş verisi eksik. Bu "
 "yerleştirilmemiş bir bileşen olabilir."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2674
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2675
 #, c-format
 msgid "Unable to locate padstack %s in file %s\n"
 msgstr "Ped katmanı %s, %s dosyasında bulunamadı.\n"
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2749
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2781
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2750
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2782
 #, c-format
 msgid "Invalid custom pad '%s'. Replacing with circular pad."
 msgstr "Geçersiz özel ped '%s'. Dairesel ped ile değiştiriliyor."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2789
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2790
 #, c-format
 msgid "Could not find custom pad '%s'."
 msgstr "'%s' özel ayak bulunamadı."
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3062
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3063
 #, c-format
 msgid "Expecting etch data to be on copper layer. Row found on layer '%s'"
 msgstr ""
 "Aşındırma verilerinin bakır katmanda olması bekleniyor. Satır '%s' "
 "katmanında bulundu"
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3353
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3354
 #, c-format
 msgid "Unhandled shape type %d in polygon on layer %s, seq %d %d"
 msgstr "Tanınmayan şekil tipi %d, katman %s'deki çokgende, sıra %d %d"
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3511
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3512
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
 msgstr "Geçersiz %d noktaya sahip delik, katman %s'deki bölgede, ağ %s ile"
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3553
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3554
 #, c-format
 msgid ""
 "Outline seems discontinuous: last point was %s, start point of next segment "
@@ -52662,7 +52690,7 @@ msgstr ""
 "Ana hatlar kesikli görünüyor: son nokta %s idi, bir sonraki bölümün "
 "başlangıç noktası %s"
 
-#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3569
+#: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3570
 #, c-format
 msgid "Invalid shape type %d in zone outline"
 msgstr "Bölge dış hattında geçersiz şekil tipi %d"
@@ -52754,7 +52782,7 @@ msgid "Generating history section"
 msgstr "Geçmiş bölümü oluşturuluyor"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1507
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3957
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4055
 msgid "Generating BOM section"
 msgstr "BOM (Malzeme Listesi) bölümü oluşturuluyor"
 
@@ -52775,35 +52803,35 @@ msgstr ""
 msgid "Generating CAD data"
 msgstr "CAD verisi oluşturma"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2832
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2930
 msgid "Board outline is invalid or missing.  Please run DRC."
 msgstr ""
 "Kart ana hattı geçersiz veya eksik.  Lütfen Tasarım Kuralı Kontrolü "
 "çalıştırın."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3289
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3387
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
 "Yinelenen ayak izi işaretçileriyle karşılaşıldı; IPC-2581 çıktısı hatalı "
 "olabilir."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3471
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3569
 #, c-format
 msgid "Exporting Layer %s, Net %s"
 msgstr "Katman %s, Ağ %s dışa aktarılıyor"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3507
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3605
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
 "Geçit desteklenmeyen ped yığını kullanıyor; delme verilerinden çıkarıldı."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3534
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3632
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
 "Ped desteklenmeyen ped yığını kullanıyor; delik delme verilerinden çıkarıldı."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3677
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3775
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
@@ -52811,15 +52839,15 @@ msgstr ""
 "IPC-2581 revizyon B'de damlacıklar desteklenmez; bunlar bölgeler olarak dışa "
 "aktarıldı."
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4157
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4255
 msgid "Generating logistic section"
 msgstr "Lojistik bölümü oluşturuluyor"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4203
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4301
 msgid "Saving file"
 msgstr "Dosya kaydediliyor"
 
-#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4235
+#: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4333
 msgid "Failed to save IPC-2581 data to buffer."
 msgstr "IPC-2581 verileri arabelleğe kaydedilemedi."
 
@@ -54320,7 +54348,7 @@ msgstr "Eksik hasComponentClass() bileşen sınıfı adı argümanı"
 msgid "Loading Footprint Libraries"
 msgstr "Ayak İzi Kütüphaneleri Yükleniyor"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:453 pcbnew/pcbnew_jobs_handler.cpp:2866
+#: pcbnew/pcbnew_jobs_handler.cpp:453 pcbnew/pcbnew_jobs_handler.cpp:2869
 msgid "Failed to load board\n"
 msgstr "'%s' yüklenemedi\n"
 
@@ -54330,7 +54358,7 @@ msgid "Invalid layer name '%s'\n"
 msgstr "Geçersiz katman adı '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:559 pcbnew/pcbnew_jobs_handler.cpp:639
-#: pcbnew/pcbnew_jobs_handler.cpp:683
+#: pcbnew/pcbnew_jobs_handler.cpp:686
 msgid "Unknown export format"
 msgstr "Bilinmeyen dışa aktarma biçimi"
 
@@ -54347,161 +54375,161 @@ msgstr "VRML dışa aktarılırken hata oluştu"
 msgid "Invalid image dimensions"
 msgstr "Geçersiz resim boyutları"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:920
+#: pcbnew/pcbnew_jobs_handler.cpp:923
 msgid "Successfully created 3D render image"
 msgstr "3B oluşturma görseli başarıyla oluşturuldu"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:925
+#: pcbnew/pcbnew_jobs_handler.cpp:928
 msgid "Error creating 3D render image"
 msgstr "3B oluşturma görseli oluşturulurken hata oluştu"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:983 pcbnew/pcbnew_jobs_handler.cpp:1052
-#: pcbnew/pcbnew_jobs_handler.cpp:1145 pcbnew/pcbnew_jobs_handler.cpp:1233
-#: pcbnew/pcbnew_jobs_handler.cpp:1619
+#: pcbnew/pcbnew_jobs_handler.cpp:986 pcbnew/pcbnew_jobs_handler.cpp:1055
+#: pcbnew/pcbnew_jobs_handler.cpp:1148 pcbnew/pcbnew_jobs_handler.cpp:1236
+#: pcbnew/pcbnew_jobs_handler.cpp:1622
 msgid "At least one layer must be specified\n"
 msgstr "En az bir katman belirtilmelidir\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1438 pcbnew/pcbnew_jobs_handler.cpp:1681
+#: pcbnew/pcbnew_jobs_handler.cpp:1441 pcbnew/pcbnew_jobs_handler.cpp:1684
 #, c-format
 msgid "Failed to plot to '%s'.\n"
 msgstr "'%s'ye çizimi başarısız oldu.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1509
+#: pcbnew/pcbnew_jobs_handler.cpp:1512
 msgid "Successfully created genCAD file\n"
 msgstr "genCAD dosyası başarıyla oluşturuldu\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1579
+#: pcbnew/pcbnew_jobs_handler.cpp:1582
 #, c-format
 msgid "Error writing file '%s'.\n"
 msgstr "'%s' dosyası yazılırken hata.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1585
+#: pcbnew/pcbnew_jobs_handler.cpp:1588
 #, c-format
 msgid "Wrote board statistics to '%s'.\n"
 msgstr "Kart istatistikleri '%s' dosyasına yazıldı.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1925 pcbnew/pcbnew_jobs_handler.cpp:2003
+#: pcbnew/pcbnew_jobs_handler.cpp:1928 pcbnew/pcbnew_jobs_handler.cpp:2006
 #, c-format
 msgid "Wrote front position data to '%s'.\n"
 msgstr "Ön konum verisi '%s'e yazıldı.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1943 pcbnew/pcbnew_jobs_handler.cpp:2027
+#: pcbnew/pcbnew_jobs_handler.cpp:1946 pcbnew/pcbnew_jobs_handler.cpp:2030
 #, c-format
 msgid "Wrote back position data to '%s'.\n"
 msgstr "Konum verisi '%s' konumuna geri yazıldı.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:1972
+#: pcbnew/pcbnew_jobs_handler.cpp:1975
 #, c-format
 msgid "Wrote position data to '%s'.\n"
 msgstr "Konum verileri '%s'e yazıldı.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2074
+#: pcbnew/pcbnew_jobs_handler.cpp:2077
 msgid "Footprint library path does not exist or is not accessible\n"
 msgstr "Ayak izi kütüphanesi yolu mevcut değil veya erişilebilir değil\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2114
+#: pcbnew/pcbnew_jobs_handler.cpp:2117
 msgid "Unable to save library\n"
 msgstr "Kütüphane kaydedilemiyor\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2120
+#: pcbnew/pcbnew_jobs_handler.cpp:2123
 msgid "Footprint library was not updated\n"
 msgstr "Ayak izi kütüphanesi güncellenmedi\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2201
+#: pcbnew/pcbnew_jobs_handler.cpp:2204
 msgid "The given footprint could not be found to export."
 msgstr "Belirtilen ayak izi dışa aktarmak için bulunamadı."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2243
+#: pcbnew/pcbnew_jobs_handler.cpp:2246
 #, c-format
 msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "Ayak izi '%s' ile '%s' arasında çiziliyor\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2272
+#: pcbnew/pcbnew_jobs_handler.cpp:2275
 msgid "Error creating svg file"
 msgstr "Svg dosyası oluşturulurken hata oluştu"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2342 pcbnew/tools/drc_tool.cpp:170
+#: pcbnew/pcbnew_jobs_handler.cpp:2345 pcbnew/tools/drc_tool.cpp:170
 msgid "Schematic parity tests require a fully annotated schematic."
 msgstr "Karşılıklı şema testi tamamen isimlendirilmiş şema gerektirir."
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2363 pcbnew/pcbnew_jobs_handler.cpp:2396
+#: pcbnew/pcbnew_jobs_handler.cpp:2366 pcbnew/pcbnew_jobs_handler.cpp:2399
 msgid "Failed to fetch schematic netlist for parity tests.\n"
 msgstr "Şematik ağ listesi denklik testleri için alınamadı.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2427 pcbnew/tools/drc_tool.cpp:208
+#: pcbnew/pcbnew_jobs_handler.cpp:2430 pcbnew/tools/drc_tool.cpp:208
 msgid "DRC"
 msgstr "Tasarım Kuralı Kontrolü"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2448
+#: pcbnew/pcbnew_jobs_handler.cpp:2451
 #, c-format
 msgid "Found %d unconnected items\n"
 msgstr "%d bağlantısız öge bulundu\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2454
+#: pcbnew/pcbnew_jobs_handler.cpp:2457
 #, c-format
 msgid "Found %d schematic parity issues\n"
 msgstr "Bulunan %d şematik eşlik sorunları\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2470
+#: pcbnew/pcbnew_jobs_handler.cpp:2473
 #, c-format
 msgid "Unable to save DRC report to %s\n"
 msgstr "DRC (Tasarım Kuralı Kontrolü) raporu %s'ye kaydedilemiyor\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2475
+#: pcbnew/pcbnew_jobs_handler.cpp:2478
 #, c-format
 msgid "Saved DRC Report to %s\n"
 msgstr "DRC (Tasarım Kuralı Kontrolü) Raporu %s olarak kaydedildi\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2482
+#: pcbnew/pcbnew_jobs_handler.cpp:2485
 msgid "Saved board\n"
 msgstr "Kart kaydedildi\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2486
+#: pcbnew/pcbnew_jobs_handler.cpp:2489
 msgid "Failed to save board.\n"
 msgstr "Kart kaydedilemedi.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2578
+#: pcbnew/pcbnew_jobs_handler.cpp:2581
 msgid "Successfully created IPC-D-356 file\n"
 msgstr "IPC-D-356 dosyası başarıyla oluşturuldu\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2583
+#: pcbnew/pcbnew_jobs_handler.cpp:2586
 msgid "Failed to create IPC-D-356 file\n"
 msgstr "IPC-D-356 dosyası oluşturulamadı\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2670
+#: pcbnew/pcbnew_jobs_handler.cpp:2673
 msgid "Successfully saved board file using the latest format\n"
 msgstr "Kart dosyası en son format kullanılarak başarıyla kaydedildi\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2674
+#: pcbnew/pcbnew_jobs_handler.cpp:2677
 msgid "Board file was not updated\n"
 msgstr "Kart dosyası güncellenmedi\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2817
+#: pcbnew/pcbnew_jobs_handler.cpp:2820
 #, c-format
 msgid "Unable to determine file format for '%s'\n"
 msgstr "'%s' için dosya formatı belirlenemiyor\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2826
+#: pcbnew/pcbnew_jobs_handler.cpp:2829
 #, c-format
 msgid "Input file not found: '%s'\n"
 msgstr "Girdi dosyası bulunamadı: '%s'\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2852
+#: pcbnew/pcbnew_jobs_handler.cpp:2855
 #, c-format
 msgid "No plugin found for file type '%s'\n"
 msgstr "'%s' dosya türü için eklenti bulunamadı.\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2858
+#: pcbnew/pcbnew_jobs_handler.cpp:2861
 #, c-format
 msgid "Importing '%s' using %s format...\n"
 msgstr "'%s', %s formatı kullanılarak içe aktarılıyor...\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2874
+#: pcbnew/pcbnew_jobs_handler.cpp:2877
 #, c-format
 msgid "Successfully saved imported board to '%s'\n"
 msgstr "İçe aktarılan kart başarıyla '%s' konumuna kaydedildi\n"
 
-#: pcbnew/pcbnew_jobs_handler.cpp:2996
+#: pcbnew/pcbnew_jobs_handler.cpp:2999
 #, c-format
 msgid "Error during import: %s\n"
 msgstr "İçe aktarma sırasında hata: %s\n"
@@ -54573,7 +54601,7 @@ msgstr "'%s' yöntemi bulunamadı veya çağrılamaz"
 msgid "Unknown Method"
 msgstr "Bilinmeyen Yöntem"
 
-#: pcbnew/python/scripting/pcbnew_action_plugins.cpp:369
+#: pcbnew/python/scripting/pcbnew_action_plugins.cpp:379
 msgid "Apply Action Script"
 msgstr "Eylem Betiği Uygula"
 
@@ -54956,7 +54984,7 @@ msgstr "(%s zaten işlenecek.)"
 msgid "Track violates DRC."
 msgstr "Yol DRC (Tasarım Kuralı Kontrolü) ihlal ediyor."
 
-#: pcbnew/router/router_tool.cpp:2847 pcbnew/tools/pcb_actions.cpp:2690
+#: pcbnew/router/router_tool.cpp:2847 pcbnew/tools/pcb_actions.cpp:2714
 msgid "Break Track"
 msgstr "Yolu Böl"
 
@@ -55176,53 +55204,58 @@ msgstr "Geçit: %s (%s)"
 msgid "Align/Distribute"
 msgstr "Hizala/Dağıt"
 
-#: pcbnew/tools/board_editor_control.cpp:134
+#: pcbnew/tools/board_editor_control.cpp:212
+#, fuzzy
+msgid "Zone Priority"
+msgstr "Öncelik"
+
+#: pcbnew/tools/board_editor_control.cpp:310
 msgid "Locking"
 msgstr "Kilitle"
 
-#: pcbnew/tools/board_editor_control.cpp:439
+#: pcbnew/tools/board_editor_control.cpp:615
 msgid "Specctra Session File"
 msgstr "Specctra Oturum Dosyası"
 
-#: pcbnew/tools/board_editor_control.cpp:466
+#: pcbnew/tools/board_editor_control.cpp:642
 msgid "Specctra DSN File"
 msgstr "Specctra DSN Dosyası"
 
-#: pcbnew/tools/board_editor_control.cpp:490
+#: pcbnew/tools/board_editor_control.cpp:666
 msgid "Export Board Netlist"
 msgstr "Kart Ağ Listesini Dışa Aktar"
 
-#: pcbnew/tools/board_editor_control.cpp:491
+#: pcbnew/tools/board_editor_control.cpp:667
 msgid "KiCad board netlist files"
 msgstr "KiCad kart ağ listesi dosyaları"
 
-#: pcbnew/tools/board_editor_control.cpp:598
+#: pcbnew/tools/board_editor_control.cpp:774
 #, c-format
 msgid "Orphaned net %s re-parented.\n"
 msgstr "Yetim ağ %s yeniden ebeveynlendirildi.\n"
 
-#: pcbnew/tools/board_editor_control.cpp:661
+#: pcbnew/tools/board_editor_control.cpp:837
 #: pcbnew/tools/footprint_editor_control.cpp:958
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d yinelenen zaman damgaları bulundu ve değiştirildi.\n"
 
-#: pcbnew/tools/board_editor_control.cpp:676
+#: pcbnew/tools/board_editor_control.cpp:852
 #: pcbnew/tools/footprint_editor_control.cpp:965
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d olası sorunlar giderildi."
 
-#: pcbnew/tools/board_editor_control.cpp:683
+#: pcbnew/tools/board_editor_control.cpp:859
 msgid "No board problems found."
 msgstr "Kartta sorun bulunamadı."
 
-#: pcbnew/tools/board_editor_control.cpp:699
+#: pcbnew/tools/board_editor_control.cpp:875
 msgid "Updating PCB requires a fully annotated schematic."
 msgstr ""
 "Baskı Devreyi güncellemek için tam numaralandırılmış bir şematik gerekiyor."
 
-#: pcbnew/tools/board_editor_control.cpp:715
+#: pcbnew/tools/board_editor_control.cpp:891
 msgid ""
 "Cannot update schematic because Pcbnew is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -55232,68 +55265,88 @@ msgstr ""
 "Baskı Devre oluşturmak veya güncellemek için KiCad proje yöneticisini "
 "başlatmalı ve bir proje oluşturmalısın."
 
-#: pcbnew/tools/board_editor_control.cpp:759
+#: pcbnew/tools/board_editor_control.cpp:935
 #, c-format
 msgid "Schematic file '%s' not found."
 msgstr "Şematik dosya '%s' bulunamadı."
 
-#: pcbnew/tools/board_editor_control.cpp:793
+#: pcbnew/tools/board_editor_control.cpp:969
 msgid "Eeschema failed to load."
 msgstr "Eeschema yüklenemedi."
 
-#: pcbnew/tools/board_editor_control.cpp:907
+#: pcbnew/tools/board_editor_control.cpp:1083
 msgid "Increase Track Width"
 msgstr "Yol Genişliğini Artır"
 
-#: pcbnew/tools/board_editor_control.cpp:989
+#: pcbnew/tools/board_editor_control.cpp:1165
 msgid "Decrease Track Width"
 msgstr "Yol Genişliğini Azalt"
 
-#: pcbnew/tools/board_editor_control.cpp:1074 pcbnew/tools/pcb_actions.cpp:1382
+#: pcbnew/tools/board_editor_control.cpp:1250 pcbnew/tools/pcb_actions.cpp:1382
 msgid "Increase Via Size"
 msgstr "Geçit Boyutunu Artır"
 
-#: pcbnew/tools/board_editor_control.cpp:1344
+#: pcbnew/tools/board_editor_control.cpp:1520
 msgid "Place Footprint"
 msgstr "Yer Ayak İzi"
 
-#: pcbnew/tools/board_editor_control.cpp:1472 pcbnew/tools/pcb_actions.cpp:1507
+#: pcbnew/tools/board_editor_control.cpp:1648 pcbnew/tools/pcb_actions.cpp:1531
 msgid "Lock"
 msgstr "Kilitle"
 
-#: pcbnew/tools/board_editor_control.cpp:1472 pcbnew/tools/pcb_actions.cpp:1514
+#: pcbnew/tools/board_editor_control.cpp:1648 pcbnew/tools/pcb_actions.cpp:1538
 msgid "Unlock"
 msgstr "Kilidini aç"
 
-#: pcbnew/tools/board_editor_control.cpp:1503
+#: pcbnew/tools/board_editor_control.cpp:1679
 msgid "Zones have insufficient overlap for merging."
 msgstr "Bölgeler birleştirme için yeterli örtüşmeye sahip değil."
 
-#: pcbnew/tools/board_editor_control.cpp:1558
+#: pcbnew/tools/board_editor_control.cpp:1734
 msgid "Some zone netcodes did not match and were not merged."
 msgstr "Bazı bölge ağ kodları eşleşmedi ve birleştirilmedi."
 
-#: pcbnew/tools/board_editor_control.cpp:1564
+#: pcbnew/tools/board_editor_control.cpp:1740
 msgid "Some zones were rule areas and were not merged."
 msgstr "Bazı bölgeler kural alanıydı ve birleştirilmedi."
 
-#: pcbnew/tools/board_editor_control.cpp:1570
+#: pcbnew/tools/board_editor_control.cpp:1746
 msgid "Some zone layer sets did not match and were not merged."
 msgstr "Bazı bölge katman setleri eşleşmedi ve birleştirilmedi."
 
-#: pcbnew/tools/board_editor_control.cpp:1587
+#: pcbnew/tools/board_editor_control.cpp:1763
 msgid "Some zones did not intersect and were not merged."
 msgstr "Bazı bölgeler kesişmedi ve birleştirilmedi."
 
-#: pcbnew/tools/board_editor_control.cpp:1600 pcbnew/tools/pcb_actions.cpp:1417
+#: pcbnew/tools/board_editor_control.cpp:1776 pcbnew/tools/pcb_actions.cpp:1417
 msgid "Merge Zones"
 msgstr "Bölgeleri Birleştir"
 
-#: pcbnew/tools/board_editor_control.cpp:1654
+#: pcbnew/tools/board_editor_control.cpp:1830
 msgid "Duplicate Zone"
 msgstr "Bölgeyi Çoğalt"
 
-#: pcbnew/tools/board_editor_control.cpp:1727
+#: pcbnew/tools/board_editor_control.cpp:1908
+#, fuzzy
+msgid "Move Zone to Top Priority"
+msgstr "Köşeyi Konuma Taşı"
+
+#: pcbnew/tools/board_editor_control.cpp:1962
+#, fuzzy
+msgid "Raise Zone Priority"
+msgstr "Bölge öncelik seviyesi:"
+
+#: pcbnew/tools/board_editor_control.cpp:2016
+#, fuzzy
+msgid "Lower Zone Priority"
+msgstr "Bakır Bölge Özellikleri"
+
+#: pcbnew/tools/board_editor_control.cpp:2097
+#, fuzzy
+msgid "Move Zone to Bottom Priority"
+msgstr "Köşeyi Konuma Taşı"
+
+#: pcbnew/tools/board_editor_control.cpp:2170
 msgid "Selection contains no items with labeled nets."
 msgstr "Seçimde etiketli ağlara sahip öge yok."
 
@@ -57397,159 +57450,178 @@ msgstr ""
 msgid "Duplicate Zone onto Layer..."
 msgstr "Bölgeyi Katman Üzerine Çoğalt…"
 
-#: pcbnew/tools/pcb_actions.cpp:1430
+#: pcbnew/tools/pcb_actions.cpp:1428
+#, fuzzy
+msgid "Move to Top"
+msgstr "Çöp Kutusuna Taşı"
+
+#: pcbnew/tools/pcb_actions.cpp:1434
+msgid "Raise"
+msgstr ""
+
+#: pcbnew/tools/pcb_actions.cpp:1440
+#, fuzzy
+msgid "Lower"
+msgstr "Güç"
+
+#: pcbnew/tools/pcb_actions.cpp:1446
+#, fuzzy
+msgid "Move to Bottom"
+msgstr "Alta Hizala"
+
+#: pcbnew/tools/pcb_actions.cpp:1454
 msgid "Place Footprints"
 msgstr "Ayak İzlerini Yerleştirin"
 
-#: pcbnew/tools/pcb_actions.cpp:1439
+#: pcbnew/tools/pcb_actions.cpp:1463
 msgid "Drill/Place File Origin"
 msgstr "Delme/Yerleştirme Dosyası Kökeni"
 
-#: pcbnew/tools/pcb_actions.cpp:1440
+#: pcbnew/tools/pcb_actions.cpp:1464
 msgid "Place origin point for drill files and component placement files"
 msgstr "Delme ve bileşen yerleştirme dosyaları için orijin noktası yerleştir"
 
-#: pcbnew/tools/pcb_actions.cpp:1448
+#: pcbnew/tools/pcb_actions.cpp:1472
 msgid "Reset Drill Origin"
 msgstr "Delme Orijinini Sıfırla"
 
-#: pcbnew/tools/pcb_actions.cpp:1460
+#: pcbnew/tools/pcb_actions.cpp:1484
 msgid "Toggle Lock"
 msgstr "Kilitle/Kilidi Aç"
 
-#: pcbnew/tools/pcb_actions.cpp:1461
+#: pcbnew/tools/pcb_actions.cpp:1485
 msgid "Lock or unlock selected items"
 msgstr "Seçili ögeleri kilitle veya kilidini aç"
 
-#: pcbnew/tools/pcb_actions.cpp:1468 pcbnew/tools/pcb_actions.cpp:1477
-#: pcbnew/tools/pcb_actions.cpp:1486 pcbnew/tools/pcb_actions.cpp:1496
+#: pcbnew/tools/pcb_actions.cpp:1492 pcbnew/tools/pcb_actions.cpp:1501
+#: pcbnew/tools/pcb_actions.cpp:1510 pcbnew/tools/pcb_actions.cpp:1520
 msgid "Line Modes"
 msgstr "Çizgi Modları"
 
-#: pcbnew/tools/pcb_actions.cpp:1508
+#: pcbnew/tools/pcb_actions.cpp:1532
 msgid "Prevent items from being moved and/or resized on the canvas"
 msgstr ""
 "Öğelerin tuval üzerinde taşınmasını ve/veya yeniden boyutlandırılmasını "
 "engelle"
 
-#: pcbnew/tools/pcb_actions.cpp:1515
+#: pcbnew/tools/pcb_actions.cpp:1539
 msgid "Allow items to be moved and/or resized on the canvas"
 msgstr ""
 "Öğelerin tuval üzerinde taşınmasına ve/veya yeniden boyutlandırılmasına izin "
 "ver"
 
-#: pcbnew/tools/pcb_actions.cpp:1532
+#: pcbnew/tools/pcb_actions.cpp:1556
 msgid "Toggle Last Net Highlight"
 msgstr "Son Net Vurgulamasını Değiştir"
 
-#: pcbnew/tools/pcb_actions.cpp:1533
+#: pcbnew/tools/pcb_actions.cpp:1557
 msgid "Toggle between last two highlighted nets"
 msgstr "Vurgulanan son iki ağ arasında geçiş yap"
 
-#: pcbnew/tools/pcb_actions.cpp:1546
+#: pcbnew/tools/pcb_actions.cpp:1570
 msgid "Toggle Net Highlight"
 msgstr "Ağ Vurgusunu Aç/Kapat"
 
-#: pcbnew/tools/pcb_actions.cpp:1555
+#: pcbnew/tools/pcb_actions.cpp:1579
 msgid "Highlight all copper items on the selected net(s)"
 msgstr "Seçili ağ(lar)daki tüm bakır ögeleri vurgula"
 
-#: pcbnew/tools/pcb_actions.cpp:1566
+#: pcbnew/tools/pcb_actions.cpp:1590
 msgid "Hide Net in Ratsnest"
 msgstr "Ağı Bağlantı Ağında Gizle"
 
-#: pcbnew/tools/pcb_actions.cpp:1567
+#: pcbnew/tools/pcb_actions.cpp:1591
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
 msgstr "Seçili ağı, bağlantısız ağ çizgileri/yaylarının bağlantı ağında gizle"
 
-#: pcbnew/tools/pcb_actions.cpp:1574
+#: pcbnew/tools/pcb_actions.cpp:1598
 msgid "Show Net in Ratsnest"
 msgstr "Ağı Bağlantı Ağında Göster"
 
-#: pcbnew/tools/pcb_actions.cpp:1575
+#: pcbnew/tools/pcb_actions.cpp:1599
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
 msgstr "Seçili ağı, bağlantısız ağ çizgileri/yaylarının bağlantı ağında göster"
 
-#: pcbnew/tools/pcb_actions.cpp:1582
+#: pcbnew/tools/pcb_actions.cpp:1606
 msgid "Switch to Schematic Editor"
 msgstr "Şematik Düzenleyiciye Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1583
+#: pcbnew/tools/pcb_actions.cpp:1607
 msgid "Open schematic in schematic editor"
 msgstr "Şematiği şematik düzenleyicide açar"
 
-#: pcbnew/tools/pcb_actions.cpp:1590
+#: pcbnew/tools/pcb_actions.cpp:1614
 msgid "DRC Rule Editor"
 msgstr "Tasarım Kuralı Kontrolü Kural Düzenleyici"
 
-#: pcbnew/tools/pcb_actions.cpp:1591
+#: pcbnew/tools/pcb_actions.cpp:1615
 msgid "Open DRC rule editor window"
 msgstr "Tasarım Kuralı Kontrolü kural düzenleyici penceresini aç"
 
-#: pcbnew/tools/pcb_actions.cpp:1599
+#: pcbnew/tools/pcb_actions.cpp:1623
 msgid "Local Ratsnest"
 msgstr "Yerel Bağlantı Ağı"
 
-#: pcbnew/tools/pcb_actions.cpp:1600
+#: pcbnew/tools/pcb_actions.cpp:1624
 msgid "Toggle ratsnest display of selected item(s)"
 msgstr "Seçili öge(ler)in bağlantı ağını göster/gizle"
 
-#: pcbnew/tools/pcb_actions.cpp:1617
+#: pcbnew/tools/pcb_actions.cpp:1641
 msgid "Scripting Console"
 msgstr "Komut Dosyası Konsolu"
 
-#: pcbnew/tools/pcb_actions.cpp:1618
+#: pcbnew/tools/pcb_actions.cpp:1642
 msgid "Show the Python scripting console"
 msgstr "Python komut dosyası konsolunu göster"
 
-#: pcbnew/tools/pcb_actions.cpp:1634
+#: pcbnew/tools/pcb_actions.cpp:1658
 msgid "Show/hide the net inspector"
 msgstr "Ağ denetleyicisini göster/gizle"
 
-#: pcbnew/tools/pcb_actions.cpp:1641
+#: pcbnew/tools/pcb_actions.cpp:1665
 msgid "Zone Manager..."
 msgstr "Bölge Yöneticisi..."
 
-#: pcbnew/tools/pcb_actions.cpp:1642
+#: pcbnew/tools/pcb_actions.cpp:1666
 msgid "Show the zone manager dialog"
 msgstr "Bölge yöneticisi iletişim kutusunu göster"
 
-#: pcbnew/tools/pcb_actions.cpp:1648
+#: pcbnew/tools/pcb_actions.cpp:1672
 msgid "Flip Board View"
 msgstr "Kart Görünümünü Çevir"
 
-#: pcbnew/tools/pcb_actions.cpp:1649
+#: pcbnew/tools/pcb_actions.cpp:1673
 msgid "View board from the opposite side"
 msgstr "Kartı karşı taraftan görüntüle"
 
-#: pcbnew/tools/pcb_actions.cpp:1662
+#: pcbnew/tools/pcb_actions.cpp:1686
 msgid "Show Ratsnest"
 msgstr "Bağlantı ağını göster"
 
-#: pcbnew/tools/pcb_actions.cpp:1663
+#: pcbnew/tools/pcb_actions.cpp:1687
 msgid "Show lines/arcs representing missing connections on the board"
 msgstr "Tahtada eksik bağlantıları temsil eden çizgileri/yayları göster"
 
-#: pcbnew/tools/pcb_actions.cpp:1670
+#: pcbnew/tools/pcb_actions.cpp:1694
 msgid "Curved Ratsnest Lines"
 msgstr "Eğri Bağlantı Ağı Çizgileri"
 
-#: pcbnew/tools/pcb_actions.cpp:1678
+#: pcbnew/tools/pcb_actions.cpp:1702
 msgid "Ratsnest Mode (3-state)"
 msgstr "Bağlantı Ağı Modu (3 Durumlu)"
 
-#: pcbnew/tools/pcb_actions.cpp:1679
+#: pcbnew/tools/pcb_actions.cpp:1703
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
 msgstr ""
 "Tüm katmanlar, sadece görünür katmanlar ve hiçbiri arasında bağlantı ağı "
 "görünümlerini değiştir"
 
-#: pcbnew/tools/pcb_actions.cpp:1684
+#: pcbnew/tools/pcb_actions.cpp:1708
 msgid "Net Color Mode (3-state)"
 msgstr "Ağ Renk Modu (3-durumlu)"
 
-#: pcbnew/tools/pcb_actions.cpp:1685
+#: pcbnew/tools/pcb_actions.cpp:1709
 msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
@@ -57557,326 +57629,326 @@ msgstr ""
 "Tüm ağlar, sadece bağlantı ağları ve hiçbiri için ağ ve ağ sınıfı renklerini "
 "kullanma arasında geçiş yap"
 
-#: pcbnew/tools/pcb_actions.cpp:1692
+#: pcbnew/tools/pcb_actions.cpp:1716
 msgid "Sketch Tracks"
 msgstr "Çizgi Yollar"
 
-#: pcbnew/tools/pcb_actions.cpp:1693
+#: pcbnew/tools/pcb_actions.cpp:1717
 msgid "Show tracks in outline mode"
 msgstr "Yolları dış hat modunda göster"
 
-#: pcbnew/tools/pcb_actions.cpp:1700
+#: pcbnew/tools/pcb_actions.cpp:1724
 msgid "Sketch Pads"
 msgstr "Çizgi Pedler"
 
-#: pcbnew/tools/pcb_actions.cpp:1701
+#: pcbnew/tools/pcb_actions.cpp:1725
 msgid "Show pads in outline mode"
 msgstr "Pedleri dış hat modunda göster"
 
-#: pcbnew/tools/pcb_actions.cpp:1708
+#: pcbnew/tools/pcb_actions.cpp:1732
 msgid "Sketch Vias"
 msgstr "Çizgi Geçitler"
 
-#: pcbnew/tools/pcb_actions.cpp:1709
+#: pcbnew/tools/pcb_actions.cpp:1733
 msgid "Show vias in outline mode"
 msgstr "Geçitleri dış hat modunda göster"
 
-#: pcbnew/tools/pcb_actions.cpp:1716
+#: pcbnew/tools/pcb_actions.cpp:1740
 msgid "Sketch Graphic Items"
 msgstr "Çizgi Grafik Ögeleri"
 
-#: pcbnew/tools/pcb_actions.cpp:1717
+#: pcbnew/tools/pcb_actions.cpp:1741
 msgid "Show graphic items in outline mode"
 msgstr "Grafik ögeleri dış hat modunda göster"
 
-#: pcbnew/tools/pcb_actions.cpp:1724
+#: pcbnew/tools/pcb_actions.cpp:1748
 msgid "Sketch Text Items"
 msgstr "Çizgi Metin Ögeleri"
 
-#: pcbnew/tools/pcb_actions.cpp:1725
+#: pcbnew/tools/pcb_actions.cpp:1749
 msgid "Show footprint texts in line mode"
 msgstr "Ayak izi metinlerini çizgi modunda göster"
 
-#: pcbnew/tools/pcb_actions.cpp:1732
+#: pcbnew/tools/pcb_actions.cpp:1756
 msgid "Show Pad Numbers"
 msgstr "Ped Numaralarını Göster"
 
-#: pcbnew/tools/pcb_actions.cpp:1739
+#: pcbnew/tools/pcb_actions.cpp:1763
 msgid "Draw Zone Fills"
 msgstr "Bölge Dolguları Çiz"
 
-#: pcbnew/tools/pcb_actions.cpp:1740
+#: pcbnew/tools/pcb_actions.cpp:1764
 msgid "Show filled areas of zones"
 msgstr "Bölgelerin dolu alanlarını göster"
 
-#: pcbnew/tools/pcb_actions.cpp:1747
+#: pcbnew/tools/pcb_actions.cpp:1771
 msgid "Draw Zone Outlines"
 msgstr "Bölge Dış Hatlarını Çiz"
 
-#: pcbnew/tools/pcb_actions.cpp:1748
+#: pcbnew/tools/pcb_actions.cpp:1772
 msgid "Show only zone boundaries"
 msgstr "Sadece bölge sınırlarını göster"
 
-#: pcbnew/tools/pcb_actions.cpp:1755
+#: pcbnew/tools/pcb_actions.cpp:1779
 msgid "Draw Zone Fill Fracture Borders"
 msgstr "Bölge Dolgu Kırılma Sınırlarını Çiz"
 
-#: pcbnew/tools/pcb_actions.cpp:1762
+#: pcbnew/tools/pcb_actions.cpp:1786
 msgid "Draw Zone Fill Triangulation"
 msgstr "Bölge Dolgu Üçgenlemesini Çiz"
 
-#: pcbnew/tools/pcb_actions.cpp:1769
+#: pcbnew/tools/pcb_actions.cpp:1793
 msgid "Toggle Zone Display"
 msgstr "Bölge Görünümünü Aç/Kapat"
 
-#: pcbnew/tools/pcb_actions.cpp:1770
+#: pcbnew/tools/pcb_actions.cpp:1794
 msgid "Cycle between showing zone fills and just their outlines"
 msgstr ""
 "Bölge dolgularını ve sadece dış hatlarını gösterme arasında geçiş yapabilme"
 
-#: pcbnew/tools/pcb_actions.cpp:1777
+#: pcbnew/tools/pcb_actions.cpp:1801
 msgid "Automatic zoom"
 msgstr "Otomatik yakınlaştırma"
 
-#: pcbnew/tools/pcb_actions.cpp:1778
+#: pcbnew/tools/pcb_actions.cpp:1802
 msgid "Automatic Zoom on footprint change"
 msgstr "Lehimleme yüzeyi değiştiğinde otomatik yakınlaş"
 
-#: pcbnew/tools/pcb_actions.cpp:1839
+#: pcbnew/tools/pcb_actions.cpp:1863
 msgid "Switch to Component (F.Cu) layer"
 msgstr "Bileşen (F.Cu) Katmanına Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1848
+#: pcbnew/tools/pcb_actions.cpp:1872
 msgid "Switch to Inner Layer 1"
 msgstr "İç Katman 1'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1857
+#: pcbnew/tools/pcb_actions.cpp:1881
 msgid "Switch to Inner Layer 2"
 msgstr "İç Katman 2'ye Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1866
+#: pcbnew/tools/pcb_actions.cpp:1890
 msgid "Switch to Inner Layer 3"
 msgstr "İç Katman 3'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1875
+#: pcbnew/tools/pcb_actions.cpp:1899
 msgid "Switch to Inner Layer 4"
 msgstr "İç Katman 4'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1884
+#: pcbnew/tools/pcb_actions.cpp:1908
 msgid "Switch to Inner Layer 5"
 msgstr "İç Katman 5'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1893
+#: pcbnew/tools/pcb_actions.cpp:1917
 msgid "Switch to Inner Layer 6"
 msgstr "İç Katman 6'ya Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1901
+#: pcbnew/tools/pcb_actions.cpp:1925
 msgid "Switch to Inner Layer 7"
 msgstr "İç Katman 7'ye Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1909
+#: pcbnew/tools/pcb_actions.cpp:1933
 msgid "Switch to Inner Layer 8"
 msgstr "İç Katman 8'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1917
+#: pcbnew/tools/pcb_actions.cpp:1941
 msgid "Switch to Inner Layer 9"
 msgstr "İç Katman 9'a Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1925
+#: pcbnew/tools/pcb_actions.cpp:1949
 msgid "Switch to Inner Layer 10"
 msgstr "İç Katman 10'a Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1933
+#: pcbnew/tools/pcb_actions.cpp:1957
 msgid "Switch to Inner Layer 11"
 msgstr "İç Katman 11'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1941
+#: pcbnew/tools/pcb_actions.cpp:1965
 msgid "Switch to Inner Layer 12"
 msgstr "İç Katman 12'ye Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1949
+#: pcbnew/tools/pcb_actions.cpp:1973
 msgid "Switch to Inner Layer 13"
 msgstr "İç Katman 13'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1957
+#: pcbnew/tools/pcb_actions.cpp:1981
 msgid "Switch to Inner Layer 14"
 msgstr "İç Katman 14'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1965
+#: pcbnew/tools/pcb_actions.cpp:1989
 msgid "Switch to Inner Layer 15"
 msgstr "İç Katman 15'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1973
+#: pcbnew/tools/pcb_actions.cpp:1997
 msgid "Switch to Inner Layer 16"
 msgstr "İç Katman 16'ya Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1981
+#: pcbnew/tools/pcb_actions.cpp:2005
 msgid "Switch to Inner Layer 17"
 msgstr "İç Katman 17'ye Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1989
+#: pcbnew/tools/pcb_actions.cpp:2013
 msgid "Switch to Inner Layer 18"
 msgstr "İç Katman 18'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:1997
+#: pcbnew/tools/pcb_actions.cpp:2021
 msgid "Switch to Inner Layer 19"
 msgstr "İç Katman 19'a Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2005
+#: pcbnew/tools/pcb_actions.cpp:2029
 msgid "Switch to Inner Layer 20"
 msgstr "İç Katman 20'ye Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2013
+#: pcbnew/tools/pcb_actions.cpp:2037
 msgid "Switch to Inner Layer 21"
 msgstr "İç Katman 21'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2021
+#: pcbnew/tools/pcb_actions.cpp:2045
 msgid "Switch to Inner Layer 22"
 msgstr "İç Katman 22'ye Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2029
+#: pcbnew/tools/pcb_actions.cpp:2053
 msgid "Switch to Inner Layer 23"
 msgstr "İç Katman 23'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2037
+#: pcbnew/tools/pcb_actions.cpp:2061
 msgid "Switch to Inner Layer 24"
 msgstr "İç Katman 24'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2045
+#: pcbnew/tools/pcb_actions.cpp:2069
 msgid "Switch to Inner Layer 25"
 msgstr "İç Katman 25'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2053
+#: pcbnew/tools/pcb_actions.cpp:2077
 msgid "Switch to Inner Layer 26"
 msgstr "İç Katman 26'ya Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2061
+#: pcbnew/tools/pcb_actions.cpp:2085
 msgid "Switch to Inner Layer 27"
 msgstr "İç Katman 27'ye Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2069
+#: pcbnew/tools/pcb_actions.cpp:2093
 msgid "Switch to Inner Layer 28"
 msgstr "İç Katman 28'e Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2077
+#: pcbnew/tools/pcb_actions.cpp:2101
 msgid "Switch to Inner Layer 29"
 msgstr "İç Katman 29'a Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2085
+#: pcbnew/tools/pcb_actions.cpp:2109
 msgid "Switch to Inner Layer 30"
 msgstr "İç Katman 30'a Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2095
+#: pcbnew/tools/pcb_actions.cpp:2119
 msgid "Switch to Copper (B.Cu) Layer"
 msgstr "Bakır (B.Cu) Katmanına Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2104
+#: pcbnew/tools/pcb_actions.cpp:2128
 msgid "Switch to Next Layer"
 msgstr "Sonraki Katmana Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2112
+#: pcbnew/tools/pcb_actions.cpp:2136
 msgid "Switch to Previous Layer"
 msgstr "Önceki Katmana Geç"
 
-#: pcbnew/tools/pcb_actions.cpp:2120
+#: pcbnew/tools/pcb_actions.cpp:2144
 msgid "Toggle Layer"
 msgstr "Katmanı Aç/Kapat"
 
-#: pcbnew/tools/pcb_actions.cpp:2121
+#: pcbnew/tools/pcb_actions.cpp:2145
 msgid "Switch between layers in active layer pair"
 msgstr "Aktif katman çiftindeki katmanlar arasında geçiş yap"
 
-#: pcbnew/tools/pcb_actions.cpp:2130
+#: pcbnew/tools/pcb_actions.cpp:2154
 msgid "Increase Layer Opacity"
 msgstr "Katman Opaklığını Artır"
 
-#: pcbnew/tools/pcb_actions.cpp:2131
+#: pcbnew/tools/pcb_actions.cpp:2155
 msgid "Make the current layer less transparent"
 msgstr "Geçerli katmanı daha az saydam yap"
 
-#: pcbnew/tools/pcb_actions.cpp:2140
+#: pcbnew/tools/pcb_actions.cpp:2164
 msgid "Decrease Layer Opacity"
 msgstr "Katman Opaklığını Azalt"
 
-#: pcbnew/tools/pcb_actions.cpp:2141
+#: pcbnew/tools/pcb_actions.cpp:2165
 msgid "Make the current layer more transparent"
 msgstr "Geçerli katmanı daha şeffaf hale getirin"
 
-#: pcbnew/tools/pcb_actions.cpp:2148
+#: pcbnew/tools/pcb_actions.cpp:2172
 msgid "Cycle Layer Pair Presets"
 msgstr "Katman Çifti Ön Ayarlarını Döngüye Al"
 
-#: pcbnew/tools/pcb_actions.cpp:2149
+#: pcbnew/tools/pcb_actions.cpp:2173
 msgid "Cycle between preset layer pairs"
 msgstr "Önceden ayarlanmış katman çiftleri arasında geçiş yap"
 
-#: pcbnew/tools/pcb_actions.cpp:2160
+#: pcbnew/tools/pcb_actions.cpp:2184
 msgid "Show Board Statistics"
 msgstr "Kart İstatistiklerini Göster"
 
-#: pcbnew/tools/pcb_actions.cpp:2161
+#: pcbnew/tools/pcb_actions.cpp:2185
 msgid "Shows board statistics"
 msgstr "Kart istatistiklerini göster"
 
-#: pcbnew/tools/pcb_actions.cpp:2167
+#: pcbnew/tools/pcb_actions.cpp:2191
 msgid "Clearance Resolution"
 msgstr "Boşluk Çözünürlüğü"
 
-#: pcbnew/tools/pcb_actions.cpp:2168
+#: pcbnew/tools/pcb_actions.cpp:2192
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
 "Seçilen iki nesne arasındaki etkin katman için boşluk çözünürlüğünü göster"
 
-#: pcbnew/tools/pcb_actions.cpp:2174
+#: pcbnew/tools/pcb_actions.cpp:2198
 msgid "Constraints Resolution"
 msgstr "Kısıtlamalar Çözümü"
 
-#: pcbnew/tools/pcb_actions.cpp:2175
+#: pcbnew/tools/pcb_actions.cpp:2199
 msgid "Show constraints resolution for the selected object"
 msgstr "Seçilen nesne için kısıtlama çözünürlüğünü göster"
 
-#: pcbnew/tools/pcb_actions.cpp:2182
+#: pcbnew/tools/pcb_actions.cpp:2206
 msgid "Show differences between board footprint and its library equivalent"
 msgstr "Kart ayak izi ile kütüphane eşdeğeri arasındaki farkları göster"
 
-#: pcbnew/tools/pcb_actions.cpp:2188
+#: pcbnew/tools/pcb_actions.cpp:2212
 msgid "Show Footprint Associations"
 msgstr "Ayak İzi İlişkilerini Göster"
 
-#: pcbnew/tools/pcb_actions.cpp:2189
+#: pcbnew/tools/pcb_actions.cpp:2213
 msgid "Show footprint library and schematic symbol associations"
 msgstr "Ayak izi kütüphanesi ve şematik sembol ilişkilerini göster"
 
-#: pcbnew/tools/pcb_actions.cpp:2196
+#: pcbnew/tools/pcb_actions.cpp:2220
 msgid "Geographical Reannotate..."
 msgstr "Coğrafi Yeniden Notlandır..."
 
-#: pcbnew/tools/pcb_actions.cpp:2197
+#: pcbnew/tools/pcb_actions.cpp:2221
 msgid "Reannotate PCB in geographical order"
 msgstr "Baskı Devreyi konumsal sıraya göre yeniden numaralandır"
 
-#: pcbnew/tools/pcb_actions.cpp:2203
+#: pcbnew/tools/pcb_actions.cpp:2227
 msgid "Repair Board"
 msgstr "Kartı Onar"
 
-#: pcbnew/tools/pcb_actions.cpp:2204
+#: pcbnew/tools/pcb_actions.cpp:2228
 msgid "Run various diagnostics and attempt to repair board"
 msgstr "Çeşitli tanılama işlemleri çalıştır ve kartı onarmayı dene"
 
-#: pcbnew/tools/pcb_actions.cpp:2211
+#: pcbnew/tools/pcb_actions.cpp:2235
 msgid "Repair Footprint"
 msgstr "Ayak İzi Onar"
 
-#: pcbnew/tools/pcb_actions.cpp:2212
+#: pcbnew/tools/pcb_actions.cpp:2236
 msgid "Run various diagnostics and attempt to repair footprint"
 msgstr "Çeşitli arıza tespitlerini çalıştır ve ayak izini onarmaya çalış"
 
-#: pcbnew/tools/pcb_actions.cpp:2263
+#: pcbnew/tools/pcb_actions.cpp:2287
 msgid "Distribute Horizontally by Centers"
 msgstr "Merkezlere Göre Yatay Dağıt"
 
-#: pcbnew/tools/pcb_actions.cpp:2264
+#: pcbnew/tools/pcb_actions.cpp:2288
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the item centers are equally distributed"
@@ -57884,11 +57956,11 @@ msgstr ""
 "Seçili ögeleri, en soldaki öge ile en sağdaki öge arasında, öge merkezleri "
 "eşit olarak dağıtılacak şekilde dağıtır"
 
-#: pcbnew/tools/pcb_actions.cpp:2271
+#: pcbnew/tools/pcb_actions.cpp:2295
 msgid "Distribute Horizontally with Even Gaps"
 msgstr "Eşit Boşluklarla Yatay Dağıt"
 
-#: pcbnew/tools/pcb_actions.cpp:2272
+#: pcbnew/tools/pcb_actions.cpp:2296
 msgid ""
 "Distributes selected items between the left-most item and the right-most "
 "item so that the gaps between items are equal"
@@ -57896,11 +57968,11 @@ msgstr ""
 "Seçili ögeleri en soldaki ve en sağdaki öge arasında, ögeler arasındaki "
 "boşluklar eşit olacak şekilde dağıtır"
 
-#: pcbnew/tools/pcb_actions.cpp:2279
+#: pcbnew/tools/pcb_actions.cpp:2303
 msgid "Distribute Vertically with Even Gaps"
 msgstr "Eşit Boşluklarla Dikey Dağıt"
 
-#: pcbnew/tools/pcb_actions.cpp:2280
+#: pcbnew/tools/pcb_actions.cpp:2304
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the gaps between items are equal"
@@ -57908,11 +57980,11 @@ msgstr ""
 "Seçili ögeleri en üstteki ve en alttaki öge arasında, ögeler arasındaki "
 "boşluklar eşit olacak şekilde dağıtır"
 
-#: pcbnew/tools/pcb_actions.cpp:2287
+#: pcbnew/tools/pcb_actions.cpp:2311
 msgid "Distribute Vertically by Centers"
 msgstr "Merkezlere Göre Dikey Dağıt"
 
-#: pcbnew/tools/pcb_actions.cpp:2288
+#: pcbnew/tools/pcb_actions.cpp:2312
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most "
 "item so that the item centers are equally distributed"
@@ -57920,41 +57992,41 @@ msgstr ""
 "Seçili ögeleri, en üstteki ve en alttaki öge arasında, öge merkezleri eşit "
 "dağılacak şekilde yerleştir"
 
-#: pcbnew/tools/pcb_actions.cpp:2303
+#: pcbnew/tools/pcb_actions.cpp:2327
 msgid "Create a corner"
 msgstr "Köşe oluştur"
 
-#: pcbnew/tools/pcb_actions.cpp:2310
+#: pcbnew/tools/pcb_actions.cpp:2334
 msgid "Remove corner"
 msgstr "Köşeyi kaldır"
 
-#: pcbnew/tools/pcb_actions.cpp:2316
+#: pcbnew/tools/pcb_actions.cpp:2340
 msgid "Chamfer Corner"
 msgstr "Köşeyi Pah Kır"
 
-#: pcbnew/tools/pcb_actions.cpp:2317
+#: pcbnew/tools/pcb_actions.cpp:2341
 msgid "Chamfer corner"
 msgstr "Köşeyi pah kır"
 
-#: pcbnew/tools/pcb_actions.cpp:2327
+#: pcbnew/tools/pcb_actions.cpp:2351
 msgid "Position Relative To..."
 msgstr "...Göre Pozisyon..."
 
-#: pcbnew/tools/pcb_actions.cpp:2328
+#: pcbnew/tools/pcb_actions.cpp:2352
 msgid "Positions the selected item(s) by an exact amount relative to another"
 msgstr ""
 "Seçilen öge(ler)i bir diğerine göre belirli bir miktar uzaklıkta "
 "konumlandırır"
 
-#: pcbnew/tools/pcb_actions.cpp:2334
+#: pcbnew/tools/pcb_actions.cpp:2358
 msgid "Interactive Offset Tool"
 msgstr "Etkileşimli Ofset Aracı"
 
-#: pcbnew/tools/pcb_actions.cpp:2335
+#: pcbnew/tools/pcb_actions.cpp:2359
 msgid "Interactive tool for offsetting items by exact amounts"
 msgstr "Ögeleri tam miktarlarla ofsetlemek için etkileşimli araç"
 
-#: pcbnew/tools/pcb_actions.cpp:2357
+#: pcbnew/tools/pcb_actions.cpp:2381
 msgid ""
 "Selects a connection or expands an existing selection to junctions, pads, or "
 "entire connections"
@@ -57962,51 +58034,51 @@ msgstr ""
 "Bir bağlantı seçer veya mevcut seçimi birleşim yerlerine, pedlere veya tüm "
 "bağlantılara genişletir"
 
-#: pcbnew/tools/pcb_actions.cpp:2363 pcbnew/tools/pcb_selection_tool.cpp:1672
+#: pcbnew/tools/pcb_actions.cpp:2387 pcbnew/tools/pcb_selection_tool.cpp:1672
 msgid "Unroute Selected"
 msgstr "Seçili Yönlendirmeyi Kaldır"
 
-#: pcbnew/tools/pcb_actions.cpp:2364
+#: pcbnew/tools/pcb_actions.cpp:2388
 msgid "Unroutes selected items to the nearest pad."
 msgstr "Seçili ögeleri en yakın pad'e yönlendirir."
 
-#: pcbnew/tools/pcb_actions.cpp:2371 pcbnew/tools/pcb_selection_tool.cpp:1784
+#: pcbnew/tools/pcb_actions.cpp:2395 pcbnew/tools/pcb_selection_tool.cpp:1784
 msgid "Unroute Segment"
 msgstr "Segment Yönlendirmesini Kaldır"
 
-#: pcbnew/tools/pcb_actions.cpp:2372
+#: pcbnew/tools/pcb_actions.cpp:2396
 msgid "Unroutes segment to the nearest segment."
 msgstr "Segmenti en yakın segmente kadar yönlendirmeyi kaldırır."
 
-#: pcbnew/tools/pcb_actions.cpp:2386
+#: pcbnew/tools/pcb_actions.cpp:2410
 msgid "Select All Tracks in Net"
 msgstr "Ağdaki Tüm Yolları Seç"
 
-#: pcbnew/tools/pcb_actions.cpp:2387
+#: pcbnew/tools/pcb_actions.cpp:2411
 msgid "Selects all tracks & vias belonging to the same net."
 msgstr "Aynı ağa ait tüm yolları ve geçitleri seçer."
 
-#: pcbnew/tools/pcb_actions.cpp:2393
+#: pcbnew/tools/pcb_actions.cpp:2417
 msgid "Deselect All Tracks in Net"
 msgstr "Ağdaki Tüm Yolların Seçimini Kaldır"
 
-#: pcbnew/tools/pcb_actions.cpp:2394
+#: pcbnew/tools/pcb_actions.cpp:2418
 msgid "Deselects all tracks & vias belonging to the same net."
 msgstr "Aynı ağa ait tüm yolları ve geçitleri seçimi kaldırır."
 
-#: pcbnew/tools/pcb_actions.cpp:2401
+#: pcbnew/tools/pcb_actions.cpp:2425
 msgid "Select All Unconnected Footprints"
 msgstr "Bağlantısız Tüm Ayak İzlerini Seç"
 
-#: pcbnew/tools/pcb_actions.cpp:2402
+#: pcbnew/tools/pcb_actions.cpp:2426
 msgid "Selects all unconnected footprints belonging to each selected net."
 msgstr "Her seçili ağa ait tüm bağlantısız ayak izlerini seçer."
 
-#: pcbnew/tools/pcb_actions.cpp:2408
+#: pcbnew/tools/pcb_actions.cpp:2432
 msgid "Grab Nearest Unconnected Footprints"
 msgstr "En Yakın Bağlantısız Ayak İzlerini Yakala"
 
-#: pcbnew/tools/pcb_actions.cpp:2409
+#: pcbnew/tools/pcb_actions.cpp:2433
 msgid ""
 "Selects and initiates moving the nearest unconnected footprint on each "
 "selected net."
@@ -58014,39 +58086,39 @@ msgstr ""
 "Seçilen her ağ üzerinde en yakın bağlantısız ayak izini seçer ve taşımayı "
 "başlatır."
 
-#: pcbnew/tools/pcb_actions.cpp:2415
+#: pcbnew/tools/pcb_actions.cpp:2439
 msgid "Selects all footprints and tracks in the schematic sheet"
 msgstr "Şematik sayfadaki tüm ayak izlerini ve yolları seçer"
 
-#: pcbnew/tools/pcb_actions.cpp:2421
+#: pcbnew/tools/pcb_actions.cpp:2445
 msgid "Items in Same Hierarchical Sheet"
 msgstr "Aynı Hiyerarşik Sayfadaki Öğeler"
 
-#: pcbnew/tools/pcb_actions.cpp:2422
+#: pcbnew/tools/pcb_actions.cpp:2446
 msgid "Selects all footprints and tracks in the same schematic sheet"
 msgstr "Aynı şematik sayfadaki tüm ayak izlerini ve izleri seçer"
 
-#: pcbnew/tools/pcb_actions.cpp:2428
+#: pcbnew/tools/pcb_actions.cpp:2452
 msgid "Select on Schematic"
 msgstr "Şematikte Seç"
 
-#: pcbnew/tools/pcb_actions.cpp:2429
+#: pcbnew/tools/pcb_actions.cpp:2453
 msgid "Selects corresponding items in Schematic editor"
 msgstr "Şematik düzenleyicide ilgili ögeleri seçer"
 
-#: pcbnew/tools/pcb_actions.cpp:2435
+#: pcbnew/tools/pcb_actions.cpp:2459
 msgid "Filter Selected Items..."
 msgstr "Seçili Ögeleri Filtrele..."
 
-#: pcbnew/tools/pcb_actions.cpp:2436
+#: pcbnew/tools/pcb_actions.cpp:2460
 msgid "Remove items from the selection by type"
 msgstr "Ögeleri türüne göre seçimden çıkar"
 
-#: pcbnew/tools/pcb_actions.cpp:2445
+#: pcbnew/tools/pcb_actions.cpp:2469
 msgid "Draft Fill Selected Zone(s)"
 msgstr "Seçili Bölge(ler)i Taslak Doldur"
 
-#: pcbnew/tools/pcb_actions.cpp:2446
+#: pcbnew/tools/pcb_actions.cpp:2470
 msgid ""
 "Update copper fill of selected zone(s) without regard to other interacting "
 "zones"
@@ -58054,300 +58126,300 @@ msgstr ""
 "Seçili bölge(ler)in bakır dolgusunu diğer etkileşimli bölgeleri dikkate "
 "almadan güncelle"
 
-#: pcbnew/tools/pcb_actions.cpp:2455 pcbnew/tools/zone_filler_tool.cpp:169
-#: pcbnew/zone_manager/dialog_zone_manager.cpp:471
+#: pcbnew/tools/pcb_actions.cpp:2479 pcbnew/tools/zone_filler_tool.cpp:169
+#: pcbnew/zone_manager/dialog_zone_manager.cpp:503
 msgid "Fill All Zones"
 msgstr "Tüm Bölgeleri Doldur"
 
-#: pcbnew/tools/pcb_actions.cpp:2456
+#: pcbnew/tools/pcb_actions.cpp:2480
 msgid "Update copper fill of all zones"
 msgstr "Tüm bölgelerin bakır dolgusunu güncelle"
 
-#: pcbnew/tools/pcb_actions.cpp:2466
+#: pcbnew/tools/pcb_actions.cpp:2490
 msgid "Unfill Selected Zone(s)"
 msgstr "Seçili Bölge(ler)in Dolgusunu Kaldır"
 
-#: pcbnew/tools/pcb_actions.cpp:2467
+#: pcbnew/tools/pcb_actions.cpp:2491
 msgid "Remove copper fill from selected zone(s)"
 msgstr "Seçili bölge(ler)den bakır dolguyu kaldır"
 
-#: pcbnew/tools/pcb_actions.cpp:2475 pcbnew/tools/zone_filler_tool.cpp:437
+#: pcbnew/tools/pcb_actions.cpp:2499 pcbnew/tools/zone_filler_tool.cpp:437
 msgid "Unfill All Zones"
 msgstr "Tüm Bölgelerin Dolgusunu Kaldır"
 
-#: pcbnew/tools/pcb_actions.cpp:2476
+#: pcbnew/tools/pcb_actions.cpp:2500
 msgid "Remove copper fill from all zones"
 msgstr "Tüm bölgelerden bakır dolgusunu kaldır"
 
-#: pcbnew/tools/pcb_actions.cpp:2485
+#: pcbnew/tools/pcb_actions.cpp:2509
 msgid "Place Selected Footprints"
 msgstr "Seçili Ayak İzlerini Yerleştir"
 
-#: pcbnew/tools/pcb_actions.cpp:2486
+#: pcbnew/tools/pcb_actions.cpp:2510
 msgid "Performs automatic placement of selected components"
 msgstr "Seçili bileşenlerin otomatik yerleşimini gerçekleştirir"
 
-#: pcbnew/tools/pcb_actions.cpp:2491
+#: pcbnew/tools/pcb_actions.cpp:2515
 msgid "Place Off-Board Footprints"
 msgstr "Gemi Dışı Ayak İzlerini Yerleştirin"
 
-#: pcbnew/tools/pcb_actions.cpp:2492
+#: pcbnew/tools/pcb_actions.cpp:2516
 msgid "Performs automatic placement of components outside board area"
 msgstr "Bileşenlerin kart alanı dışına otomatik yerleşimini gerçekleştirir"
 
-#: pcbnew/tools/pcb_actions.cpp:2497
+#: pcbnew/tools/pcb_actions.cpp:2521
 msgid "Generate Placement Rule Areas..."
 msgstr "Yerleştirme Kuralı Alanlarını Oluştur..."
 
-#: pcbnew/tools/pcb_actions.cpp:2498
+#: pcbnew/tools/pcb_actions.cpp:2522
 msgid "Creates best-fit placement rule areas"
 msgstr "En uygun yerleşim kural alanlarını oluşturur"
 
-#: pcbnew/tools/pcb_actions.cpp:2505
+#: pcbnew/tools/pcb_actions.cpp:2529
 msgid "Repeat Layout..."
 msgstr "Düzeni Tekrarla..."
 
-#: pcbnew/tools/pcb_actions.cpp:2506
+#: pcbnew/tools/pcb_actions.cpp:2530
 msgid "Clones placement & routing across multiple identical channels"
 msgstr "Birden fazla özdeş kanalda klon yerleştirme ve yönlendirme"
 
-#: pcbnew/tools/pcb_actions.cpp:2517
+#: pcbnew/tools/pcb_actions.cpp:2541
 msgid "Route Single Track"
 msgstr "Tek Yol Yönlendir"
 
-#: pcbnew/tools/pcb_actions.cpp:2518
+#: pcbnew/tools/pcb_actions.cpp:2542
 msgid "Route tracks"
 msgstr "Rota izleri"
 
-#: pcbnew/tools/pcb_actions.cpp:2530
+#: pcbnew/tools/pcb_actions.cpp:2554
 msgid "Route Differential Pair"
 msgstr "Diferansiyel Çifti Yönlendir"
 
-#: pcbnew/tools/pcb_actions.cpp:2531
+#: pcbnew/tools/pcb_actions.cpp:2555
 msgid "Route differential pairs"
 msgstr "Diferansiyel çiftleri yönlendir"
 
-#: pcbnew/tools/pcb_actions.cpp:2542
+#: pcbnew/tools/pcb_actions.cpp:2566
 msgid "Interactive Router Settings..."
 msgstr "Etkileşimli Yol Oluşturucu Ayarları..."
 
-#: pcbnew/tools/pcb_actions.cpp:2543
+#: pcbnew/tools/pcb_actions.cpp:2567
 msgid "Open Interactive Router settings"
 msgstr "İnteraktif Yönlendirici ayarlarını aç"
 
-#: pcbnew/tools/pcb_actions.cpp:2549
+#: pcbnew/tools/pcb_actions.cpp:2573
 msgid "Differential Pair Dimensions..."
 msgstr "Diferansiyel Çift Boyutları..."
 
-#: pcbnew/tools/pcb_actions.cpp:2550
+#: pcbnew/tools/pcb_actions.cpp:2574
 msgid "Open Differential Pair Dimension settings"
 msgstr "Diferansiyel Çift Boyut ayarlarını aç"
 
-#: pcbnew/tools/pcb_actions.cpp:2556
+#: pcbnew/tools/pcb_actions.cpp:2580
 msgid "Router Highlight Mode"
 msgstr "Yol Oluşturucu Vurgu Modu"
 
-#: pcbnew/tools/pcb_actions.cpp:2557
+#: pcbnew/tools/pcb_actions.cpp:2581
 msgid "Switch router to highlight mode"
 msgstr "Yol Oluşturucuyu vurgu moduna geçir"
 
-#: pcbnew/tools/pcb_actions.cpp:2564
+#: pcbnew/tools/pcb_actions.cpp:2588
 msgid "Router Shove Mode"
 msgstr "Yönlendirici İtme Modu"
 
-#: pcbnew/tools/pcb_actions.cpp:2565
+#: pcbnew/tools/pcb_actions.cpp:2589
 msgid "Switch router to shove mode"
 msgstr "Yol Oluşturucuyu itme moduna geçir"
 
-#: pcbnew/tools/pcb_actions.cpp:2572
+#: pcbnew/tools/pcb_actions.cpp:2596
 msgid "Router Walkaround Mode"
 msgstr "Yönlendirici Gezinti Modu"
 
-#: pcbnew/tools/pcb_actions.cpp:2573
+#: pcbnew/tools/pcb_actions.cpp:2597
 msgid "Switch router to walkaround mode"
 msgstr "Yol Oluşturucuyu etrafından dolaşma moduna geçir"
 
-#: pcbnew/tools/pcb_actions.cpp:2580
+#: pcbnew/tools/pcb_actions.cpp:2604
 msgid "Cycle Router Mode"
 msgstr "Çevrim Yönlendirici Modu"
 
-#: pcbnew/tools/pcb_actions.cpp:2581
+#: pcbnew/tools/pcb_actions.cpp:2605
 msgid "Cycle router to the next mode"
 msgstr "Yönlendiriciyi bir sonraki moda geçir"
 
-#: pcbnew/tools/pcb_actions.cpp:2586
+#: pcbnew/tools/pcb_actions.cpp:2610
 msgid "Set Layer Pair..."
 msgstr "Katman Çiftini Ayarla..."
 
-#: pcbnew/tools/pcb_actions.cpp:2587
+#: pcbnew/tools/pcb_actions.cpp:2611
 msgid "Change active layer pair for routing"
 msgstr "Yönlendirme için etkin katman çiftini değiştir"
 
-#: pcbnew/tools/pcb_actions.cpp:2597
+#: pcbnew/tools/pcb_actions.cpp:2621
 msgid "Tune Length of a Single Track"
 msgstr "Tek Bir Yolun Uzunluğunu Ayarla"
 
-#: pcbnew/tools/pcb_actions.cpp:2609
+#: pcbnew/tools/pcb_actions.cpp:2633
 msgid "Tune Length of a Differential Pair"
 msgstr "Diferansiyel Çiftinin Uzunluğunu Ayarla"
 
-#: pcbnew/tools/pcb_actions.cpp:2621
+#: pcbnew/tools/pcb_actions.cpp:2645
 msgid "Tune Skew of a Differential Pair"
 msgstr "Diferansiyel Çiftinin Çarpıklığını Ayarla"
 
-#: pcbnew/tools/pcb_actions.cpp:2637
+#: pcbnew/tools/pcb_actions.cpp:2661
 msgid "Walks the current track back one segment."
 msgstr "Geçerli parçayı bir segment geriye götürür."
 
-#: pcbnew/tools/pcb_actions.cpp:2643
+#: pcbnew/tools/pcb_actions.cpp:2667
 msgid "Route From Other End"
 msgstr "Diğer Uçtan Rota"
 
-#: pcbnew/tools/pcb_actions.cpp:2644
+#: pcbnew/tools/pcb_actions.cpp:2668
 msgid ""
 "Commits current segments and starts next segment from nearest ratsnest end."
 msgstr ""
 "Mevcut segmentleri kaydeder ve sonraki segmenti en yakın bağlantı ağı "
 "ucundan başlatır."
 
-#: pcbnew/tools/pcb_actions.cpp:2650
+#: pcbnew/tools/pcb_actions.cpp:2674
 msgid "Attempt Finish"
 msgstr "Bitirme Denemesi"
 
-#: pcbnew/tools/pcb_actions.cpp:2651
+#: pcbnew/tools/pcb_actions.cpp:2675
 msgid "Attempts to complete current route to nearest ratsnest end."
 msgstr "Mevcut yolu en yakın bağlantı ağı ucuna tamamlamaya çalışır."
 
-#: pcbnew/tools/pcb_actions.cpp:2658
+#: pcbnew/tools/pcb_actions.cpp:2682
 msgid "Route Selected"
 msgstr "Seçiliyi Yönlendir"
 
-#: pcbnew/tools/pcb_actions.cpp:2659
+#: pcbnew/tools/pcb_actions.cpp:2683
 msgid "Sequentially route selected items from ratsnest anchor."
 msgstr "Seçilen ögeleri bağlantı ağı bağlantısından sıralı olarak yönlendir."
 
-#: pcbnew/tools/pcb_actions.cpp:2667
+#: pcbnew/tools/pcb_actions.cpp:2691
 msgid "Route Selected From Other End"
 msgstr "Seçiliyi Diğer Uçtan Yönlendir"
 
-#: pcbnew/tools/pcb_actions.cpp:2668
+#: pcbnew/tools/pcb_actions.cpp:2692
 msgid "Sequentially route selected items from other end of ratsnest anchor."
 msgstr ""
 "Seçilen ögeleri bağlantı ağı bağlantısının diğer ucundan sıralı olarak "
 "yönlendir."
 
-#: pcbnew/tools/pcb_actions.cpp:2676
+#: pcbnew/tools/pcb_actions.cpp:2700
 msgid "Attempt Finish Selected (Autoroute)"
 msgstr "Sonlandırma Denemesi Seçildi (Autoroute)"
 
-#: pcbnew/tools/pcb_actions.cpp:2677
+#: pcbnew/tools/pcb_actions.cpp:2701
 msgid "Sequentially attempt to automatically route all selected pads."
 msgstr "Seçilen tüm pedleri otomatik olarak sırayla yönlendirmeye çalışır."
 
-#: pcbnew/tools/pcb_actions.cpp:2684
+#: pcbnew/tools/pcb_actions.cpp:2708
 msgid "Cancel Current Item"
 msgstr "Geçerli Ögeyi İptal Et"
 
-#: pcbnew/tools/pcb_actions.cpp:2685
+#: pcbnew/tools/pcb_actions.cpp:2709
 msgid "Skip current item and route next selected item."
 msgstr "Geçerli ögeyi atla ve sonraki seçili ögeyi yönlendir."
 
-#: pcbnew/tools/pcb_actions.cpp:2691
+#: pcbnew/tools/pcb_actions.cpp:2715
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr "Parça segmentini imleç konumuna bağlı iki segmente böler."
 
-#: pcbnew/tools/pcb_actions.cpp:2699
+#: pcbnew/tools/pcb_actions.cpp:2723
 msgid "Drag 45 Degree Mode"
 msgstr "45 Derece Sürükleme Modu"
 
-#: pcbnew/tools/pcb_actions.cpp:2700
+#: pcbnew/tools/pcb_actions.cpp:2724
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr "Bağlı izleri 45 derecede tutarken iz segmentini sürükler."
 
-#: pcbnew/tools/pcb_actions.cpp:2708
+#: pcbnew/tools/pcb_actions.cpp:2732
 msgid "Drag Free Angle"
 msgstr "Serbest Açı Sürükle"
 
-#: pcbnew/tools/pcb_actions.cpp:2709
+#: pcbnew/tools/pcb_actions.cpp:2733
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
 msgstr "Ray açısını kısıtlamadan raydaki en yakın eklemi sürükler."
 
-#: pcbnew/tools/pcb_actions.cpp:2719
+#: pcbnew/tools/pcb_actions.cpp:2743
 msgid "Update All Tuning Patterns"
 msgstr "Tüm Ayarlama Modellerini Güncelle"
 
-#: pcbnew/tools/pcb_actions.cpp:2720
+#: pcbnew/tools/pcb_actions.cpp:2744
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
 msgstr ""
 "Mevcut ayarlama modellerini kendi sınırları içinde yeniden ayarlama girişimi"
 
-#: pcbnew/tools/pcb_actions.cpp:2727
+#: pcbnew/tools/pcb_actions.cpp:2751
 msgid "Rebuild All Generators"
 msgstr "Tüm Üreteçleri Yeniden Oluştur"
 
-#: pcbnew/tools/pcb_actions.cpp:2728
+#: pcbnew/tools/pcb_actions.cpp:2752
 msgid "Rebuilds geometry of all generators"
 msgstr "Tüm jeneratörlerin geometrisini yeniden oluştur"
 
-#: pcbnew/tools/pcb_actions.cpp:2735
+#: pcbnew/tools/pcb_actions.cpp:2759
 msgid "Rebuild Selected Generators"
 msgstr "Seçili Üreteçleri Yeniden Oluştur"
 
-#: pcbnew/tools/pcb_actions.cpp:2736
+#: pcbnew/tools/pcb_actions.cpp:2760
 msgid "Rebuilds geometry of selected generator(s)"
 msgstr "Seçilen jeneratör(ler)in geometrisini yeniden oluştur"
 
-#: pcbnew/tools/pcb_actions.cpp:2764
+#: pcbnew/tools/pcb_actions.cpp:2788
 msgid "Generators Manager"
 msgstr "Üreteç Yöneticisi"
 
-#: pcbnew/tools/pcb_actions.cpp:2765
+#: pcbnew/tools/pcb_actions.cpp:2789
 msgid "Show a manager dialog for Generator objects"
 msgstr "Jeneratör nesneleri için bir yönetici iletişim kutusu göster"
 
-#: pcbnew/tools/pcb_actions.cpp:2777
+#: pcbnew/tools/pcb_actions.cpp:2801
 msgid "Length Tuning Settings..."
 msgstr "Uzunluk Ayarlama Ayarları..."
 
-#: pcbnew/tools/pcb_actions.cpp:2778
+#: pcbnew/tools/pcb_actions.cpp:2802
 msgid "Displays tuning pattern properties dialog"
 msgstr "Ayar deseni özellikleri iletişim kutusunu göster"
 
-#: pcbnew/tools/pcb_actions.cpp:2798
+#: pcbnew/tools/pcb_actions.cpp:2822
 msgid "Show wizards selector"
 msgstr "Sihirbaz Seçici"
 
-#: pcbnew/tools/pcb_actions.cpp:2799
+#: pcbnew/tools/pcb_actions.cpp:2823
 msgid "Select wizard script to run"
 msgstr "Çalıştırılacak sihirbaz betiğini seçin"
 
-#: pcbnew/tools/pcb_actions.cpp:2805
+#: pcbnew/tools/pcb_actions.cpp:2829
 msgid "Reset wizard parameters"
 msgstr "Sihirbaz parametrelerini sıfırla"
 
-#: pcbnew/tools/pcb_actions.cpp:2806
+#: pcbnew/tools/pcb_actions.cpp:2830
 msgid "Reset wizard parameters to default"
 msgstr "Sihirbaz parametrelerini varsayılana sıfırla"
 
-#: pcbnew/tools/pcb_actions.cpp:2812
+#: pcbnew/tools/pcb_actions.cpp:2836
 msgid "Select previous wizard page"
 msgstr "Önceki sihirbaz sayfasını seç"
 
-#: pcbnew/tools/pcb_actions.cpp:2813
+#: pcbnew/tools/pcb_actions.cpp:2837
 msgid "Select previous parameters page"
 msgstr "Önceki parametreler sayfasını seçin"
 
-#: pcbnew/tools/pcb_actions.cpp:2819
+#: pcbnew/tools/pcb_actions.cpp:2843
 msgid "Select next wizard page"
 msgstr "Sonraki sihirbaz sayfasını seç"
 
-#: pcbnew/tools/pcb_actions.cpp:2820
+#: pcbnew/tools/pcb_actions.cpp:2844
 msgid "Select next parameters page"
 msgstr "Sonraki parametre sayfasını seçin"
 
-#: pcbnew/tools/pcb_actions.cpp:2826 pcbnew/tools/pcb_actions.cpp:2827
+#: pcbnew/tools/pcb_actions.cpp:2850 pcbnew/tools/pcb_actions.cpp:2851
 msgid "Export footprint to editor"
 msgstr "Ayak izini düzenleyiciye aktar"
 
@@ -58442,7 +58514,7 @@ msgstr "Aktif Katman"
 
 #: pcbnew/tools/pcb_control.cpp:2203 pcbnew/widgets/appearance_controls.cpp:385
 #: pcbnew/widgets/appearance_controls_base.cpp:165
-#: pcbnew/zone_manager/dialog_zone_manager.cpp:121
+#: pcbnew/zone_manager/dialog_zone_manager.cpp:123
 msgid "All Layers"
 msgstr "Tüm Katmanlar"
 
@@ -59939,25 +60011,31 @@ msgstr ""
 "En üst bölge en yüksek önceliğe sahiptir. Bir bölge başka bir bölgenin "
 "içindeyse, önceliği daha yüksekse, ana hatları diğer bölgeden kaldırılır."
 
-#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:140
+#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:99
+msgid ""
+"Automatically assign zone priorities based on connectivity analysis of "
+"overlapping regions."
+msgstr ""
+
+#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:148
 msgid "Refill zones"
 msgstr "Bölgeleri yeniden doldur"
 
-#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:141
+#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:149
 msgid "Refill zones after changes made on board"
 msgstr "Baskıdevrede yapılan değişikliklerden sonra bölgeleri yeniden doldurun"
 
-#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:148
+#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:156
 msgid "Update Displayed Zones"
 msgstr "Görüntülenen Bölgeleri Güncelle"
 
-#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:149
+#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:157
 msgid ""
 "Update filled areas shown in dialog, according to the new current settings"
 msgstr ""
 "Diyalogda gösterilen doldurulmuş alanları, yeni mevcut ayarlarla güncelleyin"
 
-#: pcbnew/zone_manager/dialog_zone_manager_base.h:93
+#: pcbnew/zone_manager/dialog_zone_manager_base.h:95
 msgid "Zone Manager"
 msgstr "Bölge Yöneticisi"
 
@@ -61451,9 +61529,6 @@ msgstr "Kullanıcı betik yolu %s oluşturulamadı."
 #~ msgstr ""
 #~ "DRC (Tasarım Kuralı Kontrolü) için tanımlamak üzere bu bölge için özgün "
 #~ "bir ad"
-
-#~ msgid "Zone priority level:"
-#~ msgstr "Bölge öncelik seviyesi:"
 
 #~ msgid ""
 #~ "Zones are filled by priority level, level 3 has higher priority than "
