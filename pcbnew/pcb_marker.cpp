@@ -334,7 +334,7 @@ std::vector<int> PCB_MARKER::ViewGetLayers() const
     if( GetMarkerType() == MARKER_RATSNEST )
         return {};
 
-    std::vector<int> layers{ 0, LAYER_MARKER_SHADOWS, LAYER_DRC_SHAPES };
+    std::vector<int> layers{ 0, LAYER_MARKER_SHADOWS, LAYER_DRC_SHAPES, LAYER_DRC_HIGHLIGHTED };
 
     switch( GetSeverity() )
     {

@@ -3211,7 +3211,13 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
     case LAYER_DRC_ERROR:
     case LAYER_DRC_WARNING:
     case LAYER_DRC_EXCLUSION:
+    case LAYER_DRC_HIGHLIGHTED:
     {
+        // The brightened marker is redrawn on LAYER_DRC_HIGHLIGHTED so it lands on top of
+        // any neighbouring unbrightened markers; skip the normal draw to avoid doubling up.
+        if( aLayer == LAYER_DRC_HIGHLIGHTED && !aMarker->IsBrightened() )
+            return;
+
         bool isShadow = aLayer == LAYER_MARKER_SHADOWS;
 
         SHAPE_LINE_CHAIN polygon;

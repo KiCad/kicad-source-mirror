@@ -270,6 +270,25 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
     if( aItems.empty() )
         return;
 
+    for( BOARD_ITEM* item : aItems )
+    {
+        if( item && item != DELETED_BOARD_ITEM::GetInstance() )
+        {
+            item->SetBrightened();
+            lastBrightenedItemIDs.push_back( item->m_Uuid );
+
+            item->RunOnChildren(
+                    [&]( BOARD_ITEM* child )
+                    {
+                        child->SetBrightened();
+                        lastBrightenedItemIDs.push_back( child->m_Uuid );
+                    },
+                    RECURSE_MODE::RECURSE );
+
+            GetCanvas()->GetView()->Update( item );
+        }
+    }
+
     VECTOR2I       focusPt;
     KIGFX::VIEW*   view = GetCanvas()->GetView();
     SHAPE_POLY_SET viewportPoly( view->GetViewport() );
@@ -296,19 +315,6 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
     {
         if( item && item != DELETED_BOARD_ITEM::GetInstance() )
         {
-            item->SetBrightened();
-            lastBrightenedItemIDs.push_back( item->m_Uuid );
-
-            item->RunOnChildren(
-                    [&]( BOARD_ITEM* child )
-                    {
-                        child->SetBrightened();
-                        lastBrightenedItemIDs.push_back( child->m_Uuid );
-                    },
-                    RECURSE_MODE::RECURSE );
-
-            GetCanvas()->GetView()->Update( item );
-
             // Focus on the object's location.  Prefer a visible part of the object to its anchor
             // in order to keep from scrolling around.
 
