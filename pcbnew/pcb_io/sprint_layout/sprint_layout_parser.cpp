@@ -237,7 +237,7 @@ bool SPRINT_LAYOUT_PARSER::ParseBoard( const wxString& aFileName )
     m_parsingMacro = false;
     parseFileStart( aFileName );
 
-    uint32_t numBoards = readUint32();
+    uint32_t numBoards = readUnsigned();
 
     if( numBoards == 0 || numBoards > 100 )
         THROW_IO_ERROR( _( "Invalid board count in Sprint Layout file" ) );
@@ -249,7 +249,7 @@ bool SPRINT_LAYOUT_PARSER::ParseBoard( const wxString& aFileName )
         SPRINT_LAYOUT::BOARD_DATA& boardData = m_fileData.boards[b];
         parseBoardHeader( boardData );
 
-        uint32_t numObjects = readUint32();
+        uint32_t numObjects = readUnsigned();
 
         if( numObjects > MAX_OBJECTS )
             THROW_IO_ERROR( _( "Too many objects in Sprint Layout board" ) );
@@ -270,10 +270,11 @@ bool SPRINT_LAYOUT_PARSER::ParseBoard( const wxString& aFileName )
         // Read connection records (one per pad object)
         for( uint32_t c = 0; c < numConnections; c++ )
         {
-            uint32_t connCount = readUint32();
+            uint32_t connCount = readUnsigned();
 
             // Skip the connection data for now
-            skip( connCount * sizeof( uint32_t ) );
+            for( uint32_t i = 0; i < connCount; i++ )
+                (void) readUnsigned();
         }
     }
 
@@ -386,7 +387,7 @@ void SPRINT_LAYOUT_PARSER::parseBoardHeader( SPRINT_LAYOUT::BOARD_DATA& aBoard )
 
         aBoard.is_multilayer = readUint8();
     }
-    else
+    else if( m_fileData.version >= 4 )
     {
         skip( 19 );
         readUint32(); // active_layer
@@ -396,6 +397,14 @@ void SPRINT_LAYOUT_PARSER::parseBoardHeader( SPRINT_LAYOUT::BOARD_DATA& aBoard )
 
         aBoard.center_x = readInt32();
         aBoard.center_y = readInt32();
+    }
+    else
+    {
+        skip( 19 );
+        readUint32(); // active_layer
+        skip( 7 );    // layer_visible
+        skip( 400 );  // unknown_list: 100 * 4 bytes
+        skip( 33 );
     }
 }
 
@@ -630,11 +639,14 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
 
 void SPRINT_LAYOUT_PARSER::parseTrailer()
 {
-    readUint32(); // active_board_tab
-    m_fileData.project_name = readFixedString( 100 );
-    m_fileData.project_author = readFixedString( 100 );
-    m_fileData.project_company = readFixedString( 100 );
-    m_fileData.project_comment = readVarString();
+    if( m_fileData.version >= 4 )
+    {
+        readUint32(); // active_board_tab
+        m_fileData.project_name = readFixedString( 100 );
+        m_fileData.project_author = readFixedString( 100 );
+        m_fileData.project_company = readFixedString( 100 );
+        m_fileData.project_comment = readVarString();
+    }
 }
 
 
@@ -660,10 +672,17 @@ PCB_LAYER_ID SPRINT_LAYOUT_PARSER::mapLayer( uint8_t aSprintLayer ) const
     }
     else
     {
+        // In older Sprint Layout versions the meaning of C1/C2 is flipped
         switch( aSprintLayer )
         {
-        case 5: return B_Cu;    // used for PTH pads and tracks
-        case 6: return F_SilkS; // used for component lines
+        case SPRINT_LAYOUT::LAYER_C1: return B_Cu;
+        case SPRINT_LAYOUT::LAYER_S1: return F_SilkS;
+        case SPRINT_LAYOUT::LAYER_C2: return F_Cu;
+        case SPRINT_LAYOUT::LAYER_S2: return B_SilkS;
+        case SPRINT_LAYOUT::LAYER_O: return Edge_Cuts;
+
+        case SPRINT_LAYOUT::LAYER_I1: return B_Cu;    // used for PTH pads and tracks inside macros
+        case SPRINT_LAYOUT::LAYER_I2: return F_SilkS; // used for graphics inside macros
         default: return F_Cu;
         }
     }
