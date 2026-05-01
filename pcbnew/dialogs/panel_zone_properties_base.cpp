@@ -142,7 +142,7 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_clearancesPanel->SetSizer( bClearancesSizer );
 	m_clearancesPanel->Layout();
 	bClearancesSizer->Fit( m_clearancesPanel );
-	m_notebook->AddPage( m_clearancesPanel, _("Clearances && Pad Connections"), false );
+	m_notebook->AddPage( m_clearancesPanel, _("Clearances && Pad Connections"), true );
 	m_displayOverridesPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bDisplayOverridesSizer;
 	bDisplayOverridesSizer = new wxBoxSizer( wxVERTICAL );
@@ -318,7 +318,7 @@ PANEL_ZONE_PROPERTIES_BASE::PANEL_ZONE_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_hatchedFillPanel->SetSizer( bHatchedFillSizer );
 	m_hatchedFillPanel->Layout();
 	bHatchedFillSizer->Fit( m_hatchedFillPanel );
-	m_notebook->AddPage( m_hatchedFillPanel, _("Hatched Fill"), true );
+	m_notebook->AddPage( m_hatchedFillPanel, _("Hatched Fill"), false );
 
 	bPropertiesSizer->Add( m_notebook, 1, wxEXPAND|wxALL, 5 );
 
