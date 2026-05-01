@@ -1972,7 +1972,7 @@ void PCB_EDIT_FRAME::OnBoardLoaded()
             m_loadNoticeInfoBar->RemoveAllButtons();
             m_loadNoticeInfoBar->AddButton( link );
             m_loadNoticeInfoBar->AddCloseButton();
-            m_loadNoticeInfoBar->ShowMessage( msg, wxICON_INFORMATION );
+            m_loadNoticeInfoBar->ShowMessageFor( msg, 10000, wxICON_INFORMATION );
         }
     }
 
