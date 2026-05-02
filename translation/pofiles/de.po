@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-01 15:38+0300\n"
-"PO-Revision-Date: 2026-04-30 19:09+0000\n"
+"PO-Revision-Date: 2026-05-03 21:09+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -6321,9 +6321,8 @@ msgid "Graphics error during recovery"
 msgstr "Grafikfehler"
 
 #: common/draw_panel_gal.cpp:241
-#, fuzzy
 msgid "Unknown exception during backend switch"
-msgstr "OCC-Exception beim Erzeugen von Fläche: %s"
+msgstr "Unbekannte Ausnahme beim Wechseln des Backends"
 
 #: common/draw_panel_gal.cpp:416
 #, fuzzy
@@ -20582,9 +20581,9 @@ msgid "Unable to access the KiCad symbol plugin."
 msgstr "Konnte nicht auf KiCad Symbolplugin zugreifen."
 
 #: eeschema/remote_symbol_import_job.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save the downloaded symbol: %s"
-msgstr "Konnte heruntergeladenes Symbol nicht speichern."
+msgstr "Konnte heruntergeladenes Symbol nicht speichern: %s"
 
 #: eeschema/remote_symbol_import_job.cpp:354
 msgid "No symbol asset was available to place."
@@ -41043,7 +41042,7 @@ msgstr "Auf Standardwerte für Lage einstellen:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:336
 msgid "(auto)"
-msgstr ""
+msgstr "(auto)"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "PCB graphic items"
@@ -41419,7 +41418,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:436
 msgid "Auto-migrate 3D model references"
-msgstr ""
+msgstr "3D-Modellverweise automatisch migrieren"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:662
 #, fuzzy
@@ -41428,7 +41427,7 @@ msgstr "Bestehende Referenzbezeichner beibehalten"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:869
 msgid "Add 3D Model Search Directory"
-msgstr ""
+msgstr "3D-Modell-Suchverzeichnis hinzufügen"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:963
 #, fuzzy
@@ -41449,6 +41448,10 @@ msgid ""
 "This board references 3D models that are no longer present on your system.\n"
 "Select replacements below, or keep the existing references unchanged."
 msgstr ""
+"Diese Platine verweist auf 3D-Modelle, die auf dem System nicht mehr "
+"existieren.\n"
+"Sie können unten einen Ersatz auswählen oder die bestehenden Verweise "
+"unverändert beibehalten."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:31
 msgid "Missing 3D model references:"
@@ -51910,7 +51913,11 @@ msgstr "Neue Platinendatei ist nicht gespeichert"
 msgid "%d WRL 3D model could not be matched to an equivalent STEP model."
 msgid_plural "%d WRL 3D models could not be matched to equivalent STEP models."
 msgstr[0] ""
+"Das %d WRL-3D-Modell konnte keinem entsprechenden STEP-Modell zugeordnet "
+"werden."
 msgstr[1] ""
+"Die %d WRL-3D-Modelle konnten keinen entsprechenden STEP-Modellen zugeordnet "
+"werden."
 
 #: pcbnew/pcb_edit_frame.cpp:1958
 #, fuzzy
@@ -55913,9 +55920,8 @@ msgid "Move Zone to Top Priority"
 msgstr "Ecke zu Position verschieben"
 
 #: pcbnew/tools/board_editor_control.cpp:1962
-#, fuzzy
 msgid "Raise Zone Priority"
-msgstr "Zonen-Prioritätsebene:"
+msgstr "Zonenpriorität erhöhen"
 
 #: pcbnew/tools/board_editor_control.cpp:2016
 #, fuzzy
@@ -57649,7 +57655,7 @@ msgstr "Lade 3D-Modelle ..."
 
 #: pcbnew/tools/pcb_actions.cpp:997
 msgid "Replace obsolete WRL 3D model references with current STEP models"
-msgstr ""
+msgstr "Veraltete WRL-3D-Modellreferenzen durch STEP-Modelle ersetzen"
 
 #: pcbnew/tools/pcb_actions.cpp:1003
 msgid "Remove Unused Pads..."
@@ -58078,7 +58084,7 @@ msgstr "In Papierkorb verschieben"
 
 #: pcbnew/tools/pcb_actions.cpp:1434
 msgid "Raise"
-msgstr ""
+msgstr "Erhöhen"
 
 #: pcbnew/tools/pcb_actions.cpp:1440
 #, fuzzy
@@ -60660,6 +60666,8 @@ msgid ""
 "Automatically assign zone priorities based on connectivity analysis of "
 "overlapping regions."
 msgstr ""
+"Zonenprioritäten automatisch anhand einer Analyse der Verbindungen "
+"überlappender Gebiete zuweisen."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:148
 msgid "Refill zones"
