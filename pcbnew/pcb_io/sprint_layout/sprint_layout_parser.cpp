@@ -806,13 +806,21 @@ NETINFO_ITEM* SPRINT_LAYOUT_PARSER::resolveItemNet( BOARD* aBoard, const SPRINT_
     if( !aBoard )
         return nullptr;
 
-    if( aObj.clearance == 0 && aGndPlaneNet != nullptr && aObj.net_name.empty()
-        && layerHasGroundPlane( aLayer, aGroundPlane ) )
-    {
-        return aGndPlaneNet;
-    }
+    bool isPad = aObj.type == SPRINT_LAYOUT::OBJ_THT_PAD || aObj.type == SPRINT_LAYOUT::OBJ_SMD_PAD;
 
-    if( !aObj.net_name.empty() )
+    if( aObj.net_name.empty() )
+    {
+        if( aGndPlaneNet != nullptr && layerHasGroundPlane( aLayer, aGroundPlane ) )
+        {
+            if( aObj.clearance == 0 )
+                return aGndPlaneNet;
+
+            // If pad thermal reliefs are enabled, connect to the plane
+            if( isPad && aObj.mirror_h != 0 )
+                return aGndPlaneNet;
+        }
+    }
+    else
     {
         wxString      netName = convertString( aObj.net_name );
         NETINFO_ITEM* net = aBoard->FindNet( netName );
@@ -1304,18 +1312,6 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
             break;
         }
 
-        // The start_angle field is a union with th_style[4] for pad objects.
-        // Each byte is the thermal style for one copper layer (C1, C2, I1, I2).
-        // 0=direct/full, 1=thermal relief, 2=no connection
-        uint8_t thStyle = aObj.start_angle & 0xFF;
-
-        if( thStyle == 0 )
-            pad->SetLocalZoneConnection( ZONE_CONNECTION::FULL );
-        else if( thStyle == 2 )
-            pad->SetLocalZoneConnection( ZONE_CONNECTION::NONE );
-        else
-            pad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );
-
         pad->SetPosition( padPos );
         pad->Rotate( padPos, -ptsAngle );
     }
@@ -1361,13 +1357,37 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
     {
         int clearance = sprintToKicadCoord( static_cast<float>( aObj.clearance ) );
         pad->SetLocalClearance( std::optional<int>( clearance ) );
+        pad->SetLocalThermalGapOverride( std::optional<int>( clearance ) );
     }
 
-    // Thermal spoke width
-    if( aObj.mirror_h > 0 )
+    // Thermal reliefs
+    if( aObj.mirror_h != 0 )
     {
-        int spokeWidth = sprintToKicadCoord( static_cast<float>( aObj.mirror_h ) );
-        pad->SetLocalThermalSpokeWidthOverride( std::optional<int>( spokeWidth ) );
+        int spokeWidth = aObj.rotation * 10000 / 2;
+        pad->SetLocalThermalSpokeWidthOverride( spokeWidth );
+        
+        // Each byte is the spoke directions for one copper layer (C1, C2, I1, I2).
+        // 0x55 matches H/V directions, 0xAA matches diagonal directions
+        uint32_t spokeMask = static_cast<uint32_t>( aObj.start_angle );
+
+        if( spokeMask != 0 )
+        {
+            pad->SetLocalZoneConnection( ZONE_CONNECTION::THERMAL );
+
+            if( spokeMask & 0x55555555 )
+                pad->SetThermalSpokeAngle( ANGLE_90 );
+            else if( spokeMask & 0xAAAAAAAA )
+                pad->SetThermalSpokeAngle( ANGLE_45 );
+        }
+        else
+        {
+            pad->SetLocalZoneConnection( ZONE_CONNECTION::NONE );
+        }
+    }
+    else
+    {
+        pad->SetLocalZoneConnection( ZONE_CONNECTION::FULL );
+        pad->SetThermalSpokeAngle( ANGLE_90 );
     }
 
     // Set net name. Plated THT pads span all copper layers, so accept the GND
@@ -1417,7 +1437,7 @@ void SPRINT_LAYOUT_PARSER::processLine( BOARD_ITEM_CONTAINER* aContainer, const 
     if( aObj.points.size() < 2 )
         return;
 
-    //BOARD* board = aContainer ? aContainer->GetBoard() : nullptr;
+    BOARD* board = aContainer ? aContainer->GetBoard() : nullptr;
     PCB_LAYER_ID layer = mapLayer( aObj.layer );
 
     if( layer == Edge_Cuts )
@@ -1445,12 +1465,11 @@ void SPRINT_LAYOUT_PARSER::processLine( BOARD_ITEM_CONTAINER* aContainer, const 
         shape->SetStart( sprintToKicadPos( aObj.points[i].x, aObj.points[i].y ) );
         shape->SetEnd( sprintToKicadPos( aObj.points[i + 1].x, aObj.points[i + 1].y ) );
 
-        // TODO: Can't detect clearance reliably yet
-        //if( IsCopperLayer( layer ) )
-        //{
-        //    if( NETINFO_ITEM* net = resolveItemNet( board, aObj, layer, aGroundPlane, aGndPlaneNet ) )
-        //        shape->SetNet( net );
-        //}
+        if( IsCopperLayer( layer ) )
+        {
+            if( NETINFO_ITEM* net = resolveItemNet( board, aObj, layer, aGroundPlane, aGndPlaneNet ) )
+                shape->SetNet( net );
+        }
 
         aContainer->Add( shape );
         processItemGroups( shape, aObj, aGidToItems );
@@ -1585,7 +1604,7 @@ void SPRINT_LAYOUT_PARSER::processCircle( BOARD_ITEM_CONTAINER* aContainer, cons
                                           const uint8_t aGroundPlane[7], NETINFO_ITEM* aGndPlaneNet,
                                           std::map<uint32_t, std::set<BOARD_ITEM*>>& aGidToItems )
 {
-    //BOARD* board = aContainer ? aContainer->GetBoard() : nullptr;
+    BOARD* board = aContainer ? aContainer->GetBoard() : nullptr;
     PCB_LAYER_ID layer = mapLayer( aObj.layer );
     VECTOR2I center = sprintToKicadPos( aObj.x, aObj.y );
     float radius = ( aObj.outer + aObj.inner ) / 2.0f;
@@ -1686,12 +1705,11 @@ void SPRINT_LAYOUT_PARSER::processCircle( BOARD_ITEM_CONTAINER* aContainer, cons
         shape->SetArcAngleAndEnd( EDA_ANGLE( arcAngle, DEGREES_T ), true );
     }
 
-    // TODO: Can't detect clearance reliably yet
-    //if( IsCopperLayer( layer ) )
-    //{
-    //    if( NETINFO_ITEM* net = resolveItemNet( board, aObj, layer, aGroundPlane, aGndPlaneNet ) )
-    //        shape->SetNet( net );
-    //}
+    if( IsCopperLayer( layer ) )
+    {
+        if( NETINFO_ITEM* net = resolveItemNet( board, aObj, layer, aGroundPlane, aGndPlaneNet ) )
+            shape->SetNet( net );
+    }
 
     aContainer->Add( shape );
     processItemGroups( shape, aObj, aGidToItems );
