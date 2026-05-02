@@ -39,6 +39,7 @@
 #include <zone.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <math/util.h>
+#include <math/box2.h>
 #include <font/fontconfig.h>
 
 #include <wx/filename.h>
@@ -686,9 +687,9 @@ PCB_LAYER_ID SPRINT_LAYOUT_PARSER::mapLayer( uint8_t aSprintLayer ) const
         // In older Sprint Layout versions the meaning of C1/C2 is flipped
         switch( aSprintLayer )
         {
-        case SPRINT_LAYOUT::LAYER_C1: return B_Cu;
+        case SPRINT_LAYOUT::LAYER_C1: return m_fileData.version >= 3 ? F_Cu : B_Cu;
         case SPRINT_LAYOUT::LAYER_S1: return F_SilkS;
-        case SPRINT_LAYOUT::LAYER_C2: return F_Cu;
+        case SPRINT_LAYOUT::LAYER_C2: return m_fileData.version >= 3 ? B_Cu : F_Cu;
         case SPRINT_LAYOUT::LAYER_S2: return B_SilkS;
         case SPRINT_LAYOUT::LAYER_O: return Edge_Cuts;
 
@@ -775,13 +776,25 @@ wxString SPRINT_LAYOUT_PARSER::convertString( const std::string& aStr ) const
 bool SPRINT_LAYOUT_PARSER::layerHasGroundPlane( PCB_LAYER_ID aLayer, const uint8_t aGroundPlane[7] ) const
 {
     // Ground plane index map mirrors CreateBoard()'s groundPlaneMap
-    switch( aLayer )
+    if( m_fileData.version >= 5 )
     {
-    case F_Cu:   return aGroundPlane[0] != 0;
-    case B_Cu:   return aGroundPlane[2] != 0;
-    case In1_Cu: return aGroundPlane[4] != 0;
-    case In2_Cu: return aGroundPlane[5] != 0;
-    default:     return false;
+        switch( aLayer )
+        {
+        case F_Cu: return aGroundPlane[0] != 0;
+        case B_Cu: return aGroundPlane[2] != 0;
+        case In1_Cu: return aGroundPlane[4] != 0;
+        case In2_Cu: return aGroundPlane[5] != 0;
+        default: return false;
+        }
+    }
+    else
+    {
+        switch( aLayer )
+        {
+        case F_Cu: return aGroundPlane[0] != 0;
+        case B_Cu: return aGroundPlane[1] != 0;
+        default: return false;
+        }
     }
 }
 
@@ -843,44 +856,48 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
     else
         board->SetCopperLayerCount( 2 );
 
-    const wxString gndPlaneNetName( "GND_PLANE" );
-    NETINFO_ITEM*  gndPlaneNet = nullptr;
-
     // Create ground plane zones for layers where ground plane is enabled.
     // Sprint Layout stores a per-layer flag in the board header.
-    // Indices: 0=C1(F.Cu), 2=C2(B.Cu), 4=I1(In1.Cu), 5=I2(In2.Cu)
-    static const struct
-    {
-        int          index;
-        PCB_LAYER_ID layer;
-    } groundPlaneMap[] = {
-        { 0, F_Cu },
-        { 2, B_Cu },
-        { 4, In1_Cu },
-        { 5, In2_Cu },
-    };
+    const wxString              gndPlaneNetName( "GND_PLANE" );
+    std::map<int, PCB_LAYER_ID> groundPlaneMap;
+    LSET                        groundPlaneLayerSet;
+    NETINFO_ITEM*               gndPlaneNet = nullptr;
 
-    for( const auto& gp : groundPlaneMap )
+    if( m_fileData.version >= 5 )
     {
-        if( boardData.ground_plane[gp.index] == 0 )
-            continue;
+        groundPlaneMap = {
+            { 0, F_Cu },
+            { 2, B_Cu },
+            { 4, In1_Cu },
+            { 5, In2_Cu },
+        };
+    }
+    else
+    {
+        groundPlaneMap = {
+            { 0, F_Cu },
+            { 1, B_Cu },
+        };
+    }
 
+    for( const auto& [index, layer] : groundPlaneMap )
+    {
+        if( boardData.ground_plane[index] != 0 )
+            groundPlaneLayerSet.set( layer );
+    }
+
+    if( !groundPlaneLayerSet.empty() )
+    {
         int w = sprintToKicadCoord( static_cast<float>( boardData.size_x ) );
         int h = sprintToKicadCoord( static_cast<float>( boardData.size_y ) );
 
-        if( w <= 0 || h <= 0 )
-            continue;
-
-        if( gndPlaneNet == nullptr )
-        {
-            gndPlaneNet = new NETINFO_ITEM( board.get(), gndPlaneNetName );
-            board->Add( gndPlaneNet );
-        }
+        gndPlaneNet = new NETINFO_ITEM( board.get(), gndPlaneNetName );
+        board->Add( gndPlaneNet );
 
         ZONE* zone = new ZONE( board.get() );
-        zone->SetLayer( gp.layer );
+        zone->SetLayerSet( groundPlaneLayerSet );
         zone->SetIsRuleArea( false );
-        zone->SetZoneName( wxString::Format( wxS( "GND_PLANE_%s" ), board->GetLayerName( gp.layer ) ) );
+        zone->SetZoneName( wxS( "GND_PLANE" ) );
         zone->SetLocalClearance( std::optional<int>( pcbIUScale.mmToIU( 0.3 ) ) );
         zone->SetThermalReliefGap( pcbIUScale.mmToIU( 0.5 ) );
         zone->SetThermalReliefSpokeWidth( pcbIUScale.mmToIU( 0.5 ) );
@@ -888,14 +905,10 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
         zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
         zone->SetNet( gndPlaneNet );
 
-        SHAPE_POLY_SET outline;
-        outline.NewOutline();
-        outline.Append( 0, 0 );
-        outline.Append( w, 0 );
-        outline.Append( w, h );
-        outline.Append( 0, h );
-
+        SHAPE_POLY_SET outline( BOX2D( VECTOR2D( 0, 0 ), VECTOR2D( w, h ) ) );
         zone->AddPolygon( outline.COutline( 0 ) );
+        zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE, ZONE::GetDefaultHatchPitch(), true );
+
         board->Add( zone );
     }
 
