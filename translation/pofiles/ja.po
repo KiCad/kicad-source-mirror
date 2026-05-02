@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-01 15:38+0300\n"
 "PO-Revision-Date: 2026-05-02 19:09+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -15226,7 +15226,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:500
 msgid "Explicit jumper pin groups:"
-msgstr "詳しいジャンパーピングループ:"
+msgstr "ジャンパーピングループの詳細:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:555
 msgid "Pin Connections"
@@ -39728,7 +39728,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:529
 msgid "Explicit jumper pad groups:"
-msgstr "詳しいジャンパーパッドグループ:"
+msgstr "ジャンパーパッドグループの詳細:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:120
 msgid "All footprint generator scripts were loaded"
