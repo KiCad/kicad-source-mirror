@@ -553,8 +553,9 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
             skip( 3 );
             aObj.mirror_h = readUint8();
             aObj.mirror_v = readUint8();
-            aObj.keepout = readUint8();
-            skip( 17 );
+            skip( 1 );
+            aObj.clearance = readInt32();
+            skip( 13 );
         }
     }
     else // Versions 1 and 2

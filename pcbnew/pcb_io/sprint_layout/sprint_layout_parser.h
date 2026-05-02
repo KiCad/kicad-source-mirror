@@ -121,7 +121,7 @@ struct OBJECT
     uint8_t                filled = 0;         // nonzero = filled polygon
     int32_t                clearance = 0;      // ground plane clearance
     uint8_t                mirror_v = 0;
-    uint8_t                mirror_h = 0;       // or thermal relief spoke width
+    uint8_t                mirror_h = 0;       // or thermal relief spoke enable
     uint8_t                keepout = 0;        // nonzero = ground plane exclusion area
     int32_t                rotation = 0;       // rotation in degree units
     uint8_t                plated = 0;         // 0 = NPTH, nonzero = plated
