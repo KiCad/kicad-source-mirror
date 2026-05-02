@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-01 15:37+0300\n"
-"PO-Revision-Date: 2026-04-27 22:09+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"PO-Revision-Date: 2026-05-02 19:09+0000\n"
+"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
 "Language: ja\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -15390,7 +15390,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:500
 msgid "Explicit jumper pin groups:"
-msgstr "詳しいジャンパーピングループ:"
+msgstr "ジャンパーピングループの詳細:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:555
 msgid "Pin Connections"
@@ -15692,7 +15692,7 @@ msgstr "DXF"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:54
 #: pcbnew/dialogs/dialog_plot_base.cpp:41
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:69
 msgid "Page size:"
@@ -15797,9 +15797,8 @@ msgstr "エクスポート 単位:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:177
 #: pcbnew/dialogs/dialog_plot_base.cpp:451
-#, fuzzy
 msgid "PNG Options"
-msgstr "HPGL オプション"
+msgstr "PNG オプション"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:184
 #: pcbnew/dialogs/dialog_plot_base.cpp:458
@@ -40483,7 +40482,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:529
 msgid "Explicit jumper pad groups:"
-msgstr "詳しいジャンパーパッドグループ:"
+msgstr "ジャンパーパッドグループの詳細:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.h:47
 msgid "Footprint Wizards"
