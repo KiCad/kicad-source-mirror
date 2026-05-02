@@ -94,9 +94,19 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
    	m_staticTextDuplicatePins->Wrap( -1 );
    	bSummarySizer->Add( m_staticTextDuplicatePins, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
-   	m_duplicate_pins = new wxStaticText( this, wxID_ANY, _( "0" ) );
-   	m_duplicate_pins->Wrap( -1 );
-   	bSummarySizer->Add( m_duplicate_pins, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+    m_duplicate_pins = new wxStaticText( this, wxID_ANY, _( "0" ) );
+    m_duplicate_pins->Wrap( -1 );
+    bSummarySizer->Add( m_duplicate_pins, 0, wxRIGHT | wxLEFT | wxALIGN_CENTER_VERTICAL, 5 );
+
+    const int summaryW = m_pin_numbers_summary->GetCharWidth() * 30;
+
+    m_pin_numbers_summary->SetWindowStyleFlag( m_pin_numbers_summary->GetWindowStyleFlag() | wxST_ELLIPSIZE_END );
+    m_pin_numbers_summary->SetMinSize( wxSize( summaryW, -1 ) );
+    m_pin_numbers_summary->SetMaxSize( wxSize( summaryW, -1 ) );
+
+    m_duplicate_pins->SetWindowStyleFlag( m_duplicate_pins->GetWindowStyleFlag() | wxST_ELLIPSIZE_END );
+    m_duplicate_pins->SetMinSize( wxSize( summaryW, -1 ) );
+    m_duplicate_pins->SetMaxSize( wxSize( summaryW, -1 ) );
 
     topSizer->Add( bSummarySizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
@@ -911,9 +921,14 @@ void DIALOG_FP_EDIT_PAD_TABLE::updateSummary()
             pinNumbers.insert( pad->GetNumber() );
     }
 
-    m_pin_numbers_summary->SetLabel( pinNumbers.GetSummary() );
+    const wxString summary = pinNumbers.GetSummary();
+    const wxString duplicates = pinNumbers.GetDuplicates();
+
+    m_pin_numbers_summary->SetLabel( summary );
+    m_pin_numbers_summary->SetToolTip( summary );
     m_pin_count->SetLabel( wxString::Format( wxT( "%u" ), (unsigned) m_footprint->Pads().size() ) );
-    m_duplicate_pins->SetLabel( pinNumbers.GetDuplicates() );
+    m_duplicate_pins->SetLabel( duplicates );
+    m_duplicate_pins->SetToolTip( duplicates );
 
     Layout();
 }
