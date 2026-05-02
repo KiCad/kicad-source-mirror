@@ -1657,7 +1657,19 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
-            if( !screen->GetItem( cursorPos, 0, type ) )
+            if( SCH_ITEM* existingItem = screen->GetItem( cursorPos, 0, type ) )
+            {
+                // No connects can be "toggled"/removed by clicking on them again
+                // It helps with not having to fight pin selection ambiguity
+                if( type == SCH_NO_CONNECT_T )
+                {
+                    SCH_COMMIT commit( m_toolMgr );
+                    commit.Removed( existingItem, screen );
+                    m_frame->RemoveFromScreen( existingItem, screen );
+                    commit.Push( _( "Remove No Connect Flag" ) );
+                }
+            }
+            else
             {
                 if( type == SCH_JUNCTION_T )
                 {
