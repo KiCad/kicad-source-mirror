@@ -729,14 +729,44 @@ VECTOR2I SPRINT_LAYOUT_PARSER::sprintToKicadPos( float aX, float aY ) const
 wxString SPRINT_LAYOUT_PARSER::convertString( const std::string& aStr ) const
 {
     static wxCSConv convCP1251( wxFONTENCODING_CP1251 );
+    static wxCSConv convCP1252( wxFONTENCODING_CP1252 );
 
     if( aStr.empty() )
         return wxEmptyString;
 
     wxString ret = wxString::FromUTF8( aStr );
 
-    if( ret.empty() && convCP1251.IsOk() )
-        ret = wxString( aStr.c_str(), convCP1251 );
+    if( ret.empty() && convCP1251.IsOk() && convCP1252.IsOk() )
+    {
+        // Statistically determine if the string is more likely to be CP1251 (Cyrillic) or CP1252 (Western European)
+        size_t extNonGermanCount = 0;
+
+        for( unsigned char c : aStr )
+        {
+            // Extended-range German characters in CP1252
+            switch( c )
+            {
+            case 0xC4: // Ä
+            case 0xD6: // Ö
+            case 0xDC: // Ü
+            case 0xE4: // ä
+            case 0xF6: // ö
+            case 0xFC: // ü
+            case 0xDF: // ß
+                break;
+
+            default:
+                if( c >= 0x80 )
+                    extNonGermanCount++;
+                break;
+            }
+        }
+
+        if( extNonGermanCount > 0 )
+            ret = wxString( aStr.c_str(), convCP1251 );
+        else
+            ret = wxString( aStr.c_str(), convCP1252 );
+    }
 
     return ret;
 }
