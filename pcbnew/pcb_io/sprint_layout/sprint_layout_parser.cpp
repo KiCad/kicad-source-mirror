@@ -1545,6 +1545,16 @@ void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const 
     if( width < 0 )
         width = pcbIUScale.mmToIU( 0.25 );
 
+    SHAPE_LINE_CHAIN outline;
+
+    for( const auto& pt : aObj.points )
+    {
+        VECTOR2I pos = sprintToKicadPos( pt.x, pt.y );
+        outline.Append( pos.x, pos.y );
+    }
+
+    outline.SetClosed( true ); // Deduplicate the last point properly
+
     if( isCutout && IsCopperLayer( layer ) && aObj.points.size() >= 3 )
     {
         // Cutout area for ground plane exclusion -> rule area (keepout zone)
@@ -1557,16 +1567,7 @@ void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const 
         zone->SetDoNotAllowPads( false );
         zone->SetDoNotAllowFootprints( false );
 
-        SHAPE_POLY_SET outline;
-        outline.NewOutline();
-
-        for( const auto& pt : aObj.points )
-        {
-            VECTOR2I pos = sprintToKicadPos( pt.x, pt.y );
-            outline.Append( pos.x, pos.y );
-        }
-
-        zone->AddPolygon( outline.COutline( 0 ) );
+        zone->AddPolygon( outline );
         aContainer->Add( zone );
         processItemGroups( zone, aObj, aGidToItems );
     }
@@ -1579,16 +1580,7 @@ void SPRINT_LAYOUT_PARSER::processPoly( BOARD_ITEM_CONTAINER* aContainer, const 
         shape->SetLayer( layer );
         shape->SetWidth( width );
 
-        SHAPE_POLY_SET polySet;
-        polySet.NewOutline();
-
-        for( const auto& pt : aObj.points )
-        {
-            VECTOR2I pos = sprintToKicadPos( pt.x, pt.y );
-            polySet.Append( pos.x, pos.y );
-        }
-
-        shape->SetPolyShape( polySet );
+        shape->SetPolyShape( SHAPE_POLY_SET( outline ) );
 
         if( NETINFO_ITEM* net = resolveItemNet( board, aObj, layer, aGroundPlane, aGndPlaneNet ) )
             shape->SetNet( net );
