@@ -128,7 +128,7 @@ struct OBJECT
     uint8_t                soldermask = 0;     // 0 = no mask opening (tented)
 
     std::string            text;
-    std::string            net_name;
+    std::string            identifier;
     std::vector<uint32_t>  groups;
     std::vector<POINT>     points;
     std::vector<OBJECT>    text_children;

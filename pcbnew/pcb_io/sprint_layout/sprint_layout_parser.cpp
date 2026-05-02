@@ -515,7 +515,7 @@ void SPRINT_LAYOUT_PARSER::parseObject( SPRINT_LAYOUT::OBJECT& aObj, bool aIsTex
         if( !aIsTextChild )
         {
             aObj.text = readVarString();
-            aObj.net_name = readVarString();
+            aObj.identifier = readVarString();
         }
     }
     else if( m_fileData.version >= 4 )
@@ -808,31 +808,34 @@ NETINFO_ITEM* SPRINT_LAYOUT_PARSER::resolveItemNet( BOARD* aBoard, const SPRINT_
 
     bool isPad = aObj.type == SPRINT_LAYOUT::OBJ_THT_PAD || aObj.type == SPRINT_LAYOUT::OBJ_SMD_PAD;
 
-    if( aObj.net_name.empty() )
+    // Override the net for ground plane connection. Note that the identifier string
+    // could specify anything (e.g. component value), not just the net name
+    if( aGndPlaneNet != nullptr && layerHasGroundPlane( aLayer, aGroundPlane ) )
     {
-        if( aGndPlaneNet != nullptr && layerHasGroundPlane( aLayer, aGroundPlane ) )
-        {
-            if( aObj.clearance == 0 )
-                return aGndPlaneNet;
+        if( aObj.clearance == 0 )
+            return aGndPlaneNet;
 
-            // If pad thermal reliefs are enabled, connect to the plane
-            if( isPad && aObj.mirror_h != 0 )
-                return aGndPlaneNet;
-        }
+        // If pad thermal reliefs are enabled, connect to the plane
+        if( m_fileData.version >= 5 && isPad && aObj.mirror_h != 0 )
+            return aGndPlaneNet;
     }
-    else
-    {
-        wxString      netName = convertString( aObj.net_name );
-        NETINFO_ITEM* net = aBoard->FindNet( netName );
 
-        if( !net )
-        {
-            net = new NETINFO_ITEM( aBoard, netName );
-            aBoard->Add( net );
-        }
+    // TODO: if a pad is connected through lines to the GND_PLANE, we don't want to set the pad's
+    // netname as this would update the nets of the lines, disconnecting them from the plane.
+    //
+    //if( !aObj.identifier.empty() )
+    //{
+    //    wxString      netName = convertString( aObj.identifier );
+    //    NETINFO_ITEM* net = aBoard->FindNet( netName );
 
-        return net;
-    }
+    //    if( !net )
+    //    {
+    //        net = new NETINFO_ITEM( aBoard, netName );
+    //        aBoard->Add( net );
+    //    }
+
+    //    return net;
+    //}
 
     return nullptr;
 }
@@ -956,9 +959,9 @@ BOARD* SPRINT_LAYOUT_PARSER::CreateBoard( std::map<wxString, std::unique_ptr<FOO
                 fp->GetField( FIELD_T::DESCRIPTION )->SetText( comment );
                 fp->SetValue( comment );
             }
-            else if( !aObj.net_name.empty() )
+            else if( !aObj.identifier.empty() )
             {
-                fp->SetValue( convertString( aObj.net_name ) );
+                fp->SetValue( convertString( aObj.identifier ) );
             }
 
             if( !aObj.component.package.empty() )
@@ -1361,7 +1364,7 @@ void SPRINT_LAYOUT_PARSER::processPad( BOARD_ITEM_CONTAINER* aContainer, const S
     }
 
     // Thermal reliefs
-    if( aObj.mirror_h != 0 )
+    if( m_fileData.version >= 5 && aObj.mirror_h != 0 )
     {
         int spokeWidth = aObj.rotation * 10000 / 2;
         pad->SetLocalThermalSpokeWidthOverride( spokeWidth );
