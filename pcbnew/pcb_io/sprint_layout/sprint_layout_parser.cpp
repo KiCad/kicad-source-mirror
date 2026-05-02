@@ -1611,19 +1611,26 @@ void SPRINT_LAYOUT_PARSER::processCircle( BOARD_ITEM_CONTAINER* aContainer, cons
 
     if( m_fileData.version >= 3 )
     {
-        int32_t startAngleRaw = aObj.start_angle;
-        int32_t endAngleRaw = aObj.line_width;
+        startAngleDeg = aObj.start_angle;
+        endAngleDeg = aObj.line_width;
 
-        // Only version 6 layouts (and not macros) seem to use 0.001 deg scale
-        double angleScale = ( m_fileData.version >= 6 && !m_parsingMacro ) ? 0.001 : 1.0;
-
-        startAngleDeg = startAngleRaw * angleScale;
-        endAngleDeg = endAngleRaw * angleScale;
+        if( m_fileData.version >= 6 )
+        {
+            // There's nothing else in the format to specify the angle scale
+            // It's either in 1 degree or 0.001 degree units
+            if( startAngleDeg > 1000 || startAngleDeg < -1000 || endAngleDeg > 1000 || endAngleDeg < -1000 )
+            {
+                startAngleDeg /= 1000;
+                endAngleDeg /= 1000;
+            }
+        }
+        // Older versions always use 1 degree units
 
         isFullCircle = ( startAngleDeg == 0 && endAngleDeg == 0 )
                        || ( endAngleDeg - startAngleDeg >= 360 )
                        || ( startAngleDeg == endAngleDeg );
     }
+    // Older versions do not have arcs
 
     if( layer == Edge_Cuts )
     {
