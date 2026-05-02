@@ -76,9 +76,9 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
     for( const auto& [k, v] : MODEL_ZONES_OVERVIEW::GetColumnNames() )
     {
         if( k == MODEL_ZONES_OVERVIEW::LAYERS )
-            m_viewZonesOverview->AppendIconTextColumn( v, k, wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE );
+            m_viewZonesOverview->AppendIconTextColumn( v, k, wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_DEFAULT );
         else
-            m_viewZonesOverview->AppendTextColumn( v, k, wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE );
+            m_viewZonesOverview->AppendTextColumn( v, k, wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_DEFAULT );
     }
 
     m_modelZonesOverview = new MODEL_ZONES_OVERVIEW( this, m_pcbFrame, m_zoneSettingsBag );
