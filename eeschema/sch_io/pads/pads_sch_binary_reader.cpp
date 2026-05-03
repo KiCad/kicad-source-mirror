@@ -2729,6 +2729,15 @@ void PADS_SCH_BINARY_READER::decodeNetLabels( const std::vector<uint8_t>& d )
         i = run.base + run.count * SEG_STRIDE;
     }
 
+    emitOffPageNetLabels( d, offNet );
+}
+
+
+void PADS_SCH_BINARY_READER::emitOffPageNetLabels(
+        const std::vector<uint8_t>& d, const std::map<std::pair<int, int>, std::string>& offNet )
+{
+    BINARY_CURSOR cur( d );
+
     // The symbol-group of an off-page is read from its used-decal handle (one slot back at
     // record-0x12), indexed into the canonical group table.  Per-sheet tables that drop $OSR
     // variants shift every handle, so the canonical (most-$OSR-leading) table is used as the

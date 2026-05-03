@@ -304,6 +304,11 @@ private:
     void decodeJunctions( const std::vector<uint8_t>& aData );
     void decodeNetLabels( const std::vector<uint8_t>& aData );
 
+    /// Emit a net label per off-page reference, classifying each via the canonical $OSR group
+    /// table; @p aOffNet maps (sheet, off-page index) to the net name.
+    void emitOffPageNetLabels( const std::vector<uint8_t>& aData,
+                               const std::map<std::pair<int, int>, std::string>& aOffNet );
+
     /// Emit every element belonging to @p aSheetIndex (or all sheets when it is
     /// negative) onto @p aScreen, returning the count appended.
     int appendSheetContent( SCH_SCREEN* aScreen, const SCH_SHEET_PATH& aPath, int aSheetIndex,
