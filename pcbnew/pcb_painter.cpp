@@ -328,7 +328,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
         return color;
 
     // Selection disambiguation
-    if( aItem->IsBrightened() )
+    if( aItem->IsBrightened() || ( aItem->Type() == PCB_MARKER_T && aItem->IsSelected() ) )
     {
         if( aItem->Type() == PCB_MARKER_T )
         {
@@ -3213,9 +3213,9 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
     case LAYER_DRC_EXCLUSION:
     case LAYER_DRC_HIGHLIGHTED:
     {
-        // The brightened marker is redrawn on LAYER_DRC_HIGHLIGHTED so it lands on top of
-        // any neighbouring unbrightened markers; skip the normal draw to avoid doubling up.
-        if( aLayer == LAYER_DRC_HIGHLIGHTED && !aMarker->IsBrightened() )
+        // The active marker is redrawn on LAYER_DRC_HIGHLIGHTED so it lands on top of any
+        // neighbouring inactive markers
+        if( aLayer == LAYER_DRC_HIGHLIGHTED && !aMarker->IsBrightened() && !aMarker->IsSelected() )
             return;
 
         bool isShadow = aLayer == LAYER_MARKER_SHADOWS;
@@ -3244,7 +3244,7 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
     }
 
     case LAYER_DRC_SHAPES:
-        if( !aMarker->IsBrightened() )
+        if( !aMarker->IsBrightened() && !aMarker->IsSelected() )
             return;
 
         for( const PCB_SHAPE& shape : aMarker->GetShapes() )
