@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-01 15:38+0300\n"
-"PO-Revision-Date: 2026-04-28 15:20+0000\n"
+"PO-Revision-Date: 2026-05-03 21:10+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -6268,19 +6268,16 @@ msgid "Graphics error"
 msgstr "Błąd grafiki"
 
 #: common/draw_panel_gal.cpp:236 common/draw_panel_gal.cpp:240
-#, fuzzy
 msgid "Graphics error during recovery"
-msgstr "Błąd grafiki"
+msgstr "Błąd grafiki podczas odzyskiwania"
 
 #: common/draw_panel_gal.cpp:241
-#, fuzzy
 msgid "Unknown exception during backend switch"
-msgstr "Wystąpił wyjątek OCC podczas budowania postaci: %s"
+msgstr "Wystąpił nieznany wyjątek podczas zamiany środowiska"
 
 #: common/draw_panel_gal.cpp:416
-#, fuzzy
 msgid "Unknown exception"
-msgstr "Nieznana metoda czyszczenia"
+msgstr "Nieznany wyjątek"
 
 #: common/draw_panel_gal.cpp:619
 msgid "Could not use OpenGL"
@@ -20483,9 +20480,9 @@ msgid "Unable to access the KiCad symbol plugin."
 msgstr "Nie można uzyskać dostępu do wtyczki obsługującej symbole KiCad."
 
 #: eeschema/remote_symbol_import_job.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save the downloaded symbol: %s"
-msgstr "Nie można zapisać pobranego symbolu."
+msgstr "Nie można zapisać pobranego symbolu: %s"
 
 #: eeschema/remote_symbol_import_job.cpp:354
 msgid "No symbol asset was available to place."
@@ -24191,9 +24188,8 @@ msgid "Incorrect inv_pin name"
 msgstr "Nieprawidłowa nazwa inv_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2839
-#, fuzzy
 msgid "Wrong number of columns for series pin mapping."
-msgstr "Niewłaściwa liczba kolumn dla mapowania pinów."
+msgstr "Niewłaściwa liczba kolumn dla seryjnego mapowania pinów."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2948
 msgid "Internal error detected, a waveform should exist"
@@ -55514,9 +55510,8 @@ msgid "Align/Distribute"
 msgstr "Wyrównywanie/rozkładanie"
 
 #: pcbnew/tools/board_editor_control.cpp:212
-#, fuzzy
 msgid "Zone Priority"
-msgstr "Priorytet"
+msgstr "Priorytet strefy"
 
 #: pcbnew/tools/board_editor_control.cpp:310
 msgid "Locking"
@@ -55642,24 +55637,20 @@ msgid "Duplicate Zone"
 msgstr "Klonowanie strefy"
 
 #: pcbnew/tools/board_editor_control.cpp:1908
-#, fuzzy
 msgid "Move Zone to Top Priority"
-msgstr "Przesuwanie narożnika na określoną pozycję"
+msgstr "Przesuń na najwyższy priorytet"
 
 #: pcbnew/tools/board_editor_control.cpp:1962
-#, fuzzy
 msgid "Raise Zone Priority"
-msgstr "Poziom priorytetu strefy:"
+msgstr "Zwiększ poziom priorytetu strefy"
 
 #: pcbnew/tools/board_editor_control.cpp:2016
-#, fuzzy
 msgid "Lower Zone Priority"
-msgstr "Właściwości stref miedzi"
+msgstr "Zmniejsz poziom priorytetu strefy"
 
 #: pcbnew/tools/board_editor_control.cpp:2097
-#, fuzzy
 msgid "Move Zone to Bottom Priority"
-msgstr "Przesuwanie narożnika na określoną pozycję"
+msgstr "Przesuń na najniższy priorytet"
 
 #: pcbnew/tools/board_editor_control.cpp:2170
 msgid "Selection contains no items with labeled nets."
@@ -57776,23 +57767,20 @@ msgid "Duplicate Zone onto Layer..."
 msgstr "Klonuj strefę na inną warstwę..."
 
 #: pcbnew/tools/pcb_actions.cpp:1428
-#, fuzzy
 msgid "Move to Top"
-msgstr "Przenieś do kosza"
+msgstr "Przenieś na górę"
 
 #: pcbnew/tools/pcb_actions.cpp:1434
 msgid "Raise"
-msgstr ""
+msgstr "Podwyższ"
 
 #: pcbnew/tools/pcb_actions.cpp:1440
-#, fuzzy
 msgid "Lower"
-msgstr "Port zasilania"
+msgstr "Obniż"
 
 #: pcbnew/tools/pcb_actions.cpp:1446
-#, fuzzy
 msgid "Move to Bottom"
-msgstr "Wyrównaj do dołu"
+msgstr "Przenieś na dół"
 
 #: pcbnew/tools/pcb_actions.cpp:1454
 msgid "Place Footprints"
@@ -60370,6 +60358,8 @@ msgid ""
 "Automatically assign zone priorities based on connectivity analysis of "
 "overlapping regions."
 msgstr ""
+"Automatyczne przypisywanie priorytetów strefom w oparciu o analizę łączności "
+"nakładających się regionów."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:148
 msgid "Refill zones"
