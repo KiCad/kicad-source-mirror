@@ -48,6 +48,9 @@
 #include <widgets/appearance_controls.h>
 #include <widgets/wx_html_report_box.h>
 #include <widgets/footprint_diff_widget.h>
+#include <wx/choice.h>
+#include <wx/sizer.h>
+#include <wx/stattext.h>
 #include <drc/drc_item.h>
 #include <pad.h>
 #include <pcb_track.h>
@@ -444,6 +447,25 @@ void BOARD_INSPECTION_TOOL::reportHeader( const wxString& aTitle, BOARD_ITEM* a,
                + wxT( "<li>" ) + EscapeHTML( getItemDescription( a ) ) + wxT( "</li>" )
                + wxT( "<li>" ) + EscapeHTML( getItemDescription( b ) ) + wxT( "</li></ul>" ) );
 }
+
+
+namespace
+{
+class VECTOR_REPORTER : public REPORTER
+{
+public:
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override
+    {
+        m_messages.push_back( aText );
+        return *this;
+    }
+
+    bool      HasMessage() const override { return !m_messages.empty(); }
+    EDA_UNITS GetUnits() const override { return EDA_UNITS::UNSCALED; }
+
+    std::vector<wxString> m_messages;
+};
+} // namespace
 
 
 wxString reportMin( PCB_BASE_FRAME* aFrame, DRC_CONSTRAINT& aConstraint )
@@ -1164,46 +1186,117 @@ void BOARD_INSPECTION_TOOL::reportClearance( BOARD_ITEM* aItemA, BOARD_ITEM* aIt
     }
     else if( copperIntersection.any() && !aFP && !bFP )
     {
-        PCB_LAYER_ID layer = active;
+        bool sameNet = ac && bc && ac->GetNetCode() > 0 && ac->GetNetCode() == bc->GetNetCode();
 
-        if( !copperIntersection.test( layer ) )
-            layer = copperIntersection.Seq().front();
+        std::vector<PCB_LAYER_ID> layers;
 
-        r = dialog->AddHTMLPage( m_frame->GetBoard()->GetLayerName( layer ) );
-        reportHeader( _( "Clearance resolution for:" ), a, b, layer, r );
+        if( copperIntersection.test( active ) )
+            layers.push_back( active );
 
-        if( ac && bc && ac->GetNetCode() > 0 && ac->GetNetCode() == bc->GetNetCode() )
+        for( PCB_LAYER_ID layer : copperIntersection.Seq() )
         {
-            r->Report( _( "Items belong to the same net. Min clearance is 0." ) );
+            if( layer != active )
+                layers.push_back( layer );
         }
-        else
+
+        auto fillReport = [&]( PCB_LAYER_ID layer, REPORTER* rep )
         {
-            constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, a, b, layer, r );
+            reportHeader( _( "Clearance resolution for:" ), a, b, layer, rep );
+
+            if( sameNet )
+            {
+                rep->Report( _( "Items belong to the same net. Min clearance is 0." ) );
+                return;
+            }
+
+            constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, a, b, layer, rep );
             clearance = constraint.m_Value.Min();
 
             if( compileError )
-                reportCompileError( r );
+                reportCompileError( rep );
 
-            r->Report( "" );
+            rep->Report( "" );
 
             if( constraint.IsNull() )
             {
-                r->Report( _( "Min clearance is 0." ) );
+                rep->Report( _( "Min clearance is 0." ) );
             }
             else if( clearance < 0 )
             {
-                r->Report( wxString::Format( _( "Resolved clearance: %s; clearance will not be "
-                                                "tested." ),
-                                             m_frame->StringFromValue( clearance, true ) ) );
+                rep->Report( wxString::Format( _( "Resolved clearance: %s; clearance will "
+                                                  "not be tested." ),
+                                               m_frame->StringFromValue( clearance, true ) ) );
             }
             else
             {
-                r->Report( wxString::Format( _( "Resolved min clearance: %s." ),
-                                             m_frame->StringFromValue( clearance, true ) ) );
+                rep->Report( wxString::Format( _( "Resolved min clearance: %s." ),
+                                               m_frame->StringFromValue( clearance, true ) ) );
             }
-        }
+        };
 
-        r->Flush();
+        if( layers.size() == 1 )
+        {
+            PCB_LAYER_ID layer = layers.front();
+
+            r = dialog->AddHTMLPage( m_frame->GetBoard()->GetLayerName( layer ) );
+            fillReport( layer, r );
+            r->Flush();
+        }
+        else
+        {
+            auto perLayerMessages = std::make_shared<std::vector<std::vector<wxString>>>();
+            perLayerMessages->reserve( layers.size() );
+
+            for( PCB_LAYER_ID layer : layers )
+            {
+                VECTOR_REPORTER tmp;
+                fillReport( layer, &tmp );
+                perLayerMessages->push_back( std::move( tmp.m_messages ) );
+            }
+
+            wxPanel*    panel = dialog->AddBlankPage( _( "Clearance" ) );
+            wxBoxSizer* vbox = new wxBoxSizer( wxVERTICAL );
+
+            wxChoice* choice = new wxChoice( panel, wxID_ANY );
+
+            for( PCB_LAYER_ID layer : layers )
+                choice->Append( m_frame->GetBoard()->GetLayerName( layer ) );
+
+            choice->SetSelection( 0 );
+
+            WX_HTML_REPORT_BOX* reportBox = new WX_HTML_REPORT_BOX( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                                                    wxHW_SCROLLBAR_AUTO | wxBORDER_SIMPLE );
+            reportBox->SetUnits( m_frame->GetUserUnits() );
+
+            wxStaticText* layerLabel = new wxStaticText( panel, wxID_ANY, _( "Layer:" ) );
+
+            vbox->Add( layerLabel, 0, wxLEFT | wxRIGHT | wxTOP, 5 );
+            vbox->Add( choice, 0, wxEXPAND | wxALL, 5 );
+            vbox->Add( reportBox, 1, wxEXPAND | wxALL, 5 );
+            panel->SetSizer( vbox );
+            panel->Layout();
+
+            auto refresh = [reportBox, perLayerMessages]( int sel )
+            {
+                reportBox->Clear();
+
+                if( sel >= 0 && sel < (int) perLayerMessages->size() )
+                {
+                    for( const wxString& line : ( *perLayerMessages )[sel] )
+                        reportBox->Report( line );
+                }
+
+                reportBox->Flush();
+            };
+
+            choice->Bind( wxEVT_CHOICE,
+                          [refresh]( wxCommandEvent& evt )
+                          {
+                              refresh( evt.GetSelection() );
+                          } );
+
+            refresh( 0 );
+        }
     }
 
     if( ac && bc )
@@ -1215,10 +1308,16 @@ void BOARD_INSPECTION_TOOL::reportClearance( BOARD_ITEM* aItemA, BOARD_ITEM* aIt
         if( DRC_ENGINE::MatchDpSuffix( refNet->GetNetname(), coupledNet, dummy )
                 && bc->GetNetname() == coupledNet )
         {
-            r = dialog->AddHTMLPage( _( "Diff Pair" ) );
-            reportHeader( _( "Diff-pair gap resolution for:" ), ac, bc, active, r );
+            LSET         dpIntersection = ac->GetLayerSet() & bc->GetLayerSet() & LSET::AllCuMask();
+            PCB_LAYER_ID dpLayer = active;
 
-            constraint = drcEngine->EvalRules( DIFF_PAIR_GAP_CONSTRAINT, ac, bc, active, r );
+            if( !dpIntersection.test( dpLayer ) && dpIntersection.any() )
+                dpLayer = dpIntersection.Seq().front();
+
+            r = dialog->AddHTMLPage( _( "Diff Pair" ) );
+            reportHeader( _( "Diff-pair gap resolution for:" ), ac, bc, dpLayer, r );
+
+            constraint = drcEngine->EvalRules( DIFF_PAIR_GAP_CONSTRAINT, ac, bc, dpLayer, r );
 
             r->Report( "" );
             r->Report( wxString::Format( _( "Resolved gap constraints: min %s; opt %s; max %s." ),
@@ -1229,8 +1328,7 @@ void BOARD_INSPECTION_TOOL::reportClearance( BOARD_ITEM* aItemA, BOARD_ITEM* aIt
             r->Report( "" );
             r->Report( "" );
             r->Report( "" );
-            reportHeader( _( "Diff-pair max uncoupled length resolution for:" ), ac, bc,
-                          active, r );
+            reportHeader( _( "Diff-pair max uncoupled length resolution for:" ), ac, bc, dpLayer, r );
 
             if( !drcEngine->HasRulesForConstraintType( MAX_UNCOUPLED_CONSTRAINT ) )
             {
@@ -1239,7 +1337,7 @@ void BOARD_INSPECTION_TOOL::reportClearance( BOARD_ITEM* aItemA, BOARD_ITEM* aIt
             }
             else
             {
-                constraint = drcEngine->EvalRules( MAX_UNCOUPLED_CONSTRAINT, ac, bc, active, r );
+                constraint = drcEngine->EvalRules( MAX_UNCOUPLED_CONSTRAINT, ac, bc, dpLayer, r );
 
                 r->Report( "" );
                 r->Report( wxString::Format( _( "Resolved max uncoupled length: %s." ),
@@ -1339,7 +1437,7 @@ void BOARD_INSPECTION_TOOL::reportClearance( BOARD_ITEM* aItemA, BOARD_ITEM* aIt
             layer = active;
         else if( a->HasHole() && b->IsOnCopperLayer() )
             layer = b->GetLayer();
-        else if( b->HasHole() && b->IsOnCopperLayer() )
+        else if( b->HasHole() && a->IsOnCopperLayer() )
             layer = a->GetLayer();
 
         if( layer >= 0 )
