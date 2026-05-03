@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-01 15:38+0300\n"
-"PO-Revision-Date: 2026-05-02 19:09+0000\n"
-"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
+"PO-Revision-Date: 2026-05-03 21:09+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -10017,7 +10017,7 @@ msgstr "IPC/スクリプトプラグイン"
 
 #: common/tool/action_toolbar.cpp:1210
 msgid "Region to hold the IPC/Scripting action buttons"
-msgstr "PIC/スクリプトアクションボタンを保持する"
+msgstr "IPC/スクリプト アクションボタンを保持する"
 
 #: common/tool/action_toolbar.cpp:1215
 msgid "Layer selector"
