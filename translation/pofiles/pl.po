@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-01 15:37+0300\n"
-"PO-Revision-Date: 2026-04-28 15:19+0000\n"
+"PO-Revision-Date: 2026-05-03 21:10+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -4568,14 +4568,12 @@ msgstr ""
 "zapisywania plików"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Incremental"
-msgstr "Zwiększenie"
+msgstr "Przyrostowo"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Zip archive"
-msgstr "Archiwizuj"
+msgstr "Archiwum ZIP"
 
 #: common/dialogs/panel_common_settings_base.cpp:441
 msgid ""
@@ -4583,22 +4581,27 @@ msgid ""
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
+"Przyrostowo: zarządza ukrytym folderem .history z repozytorium git śledzącym "
+"zmiany.\n"
+"ZIP: tworzy archiwum ZIP z odciskiem czasowym podczas zapisywania; "
+"automatyczne zapisy używają plików odzyskania."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "Project directory"
-msgstr "Wyślij projekt bezpośrednio"
+msgstr "Folder projektu"
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "User data directory"
-msgstr "'%s' nie jest folderem"
+msgstr "Folder danych użytkownika"
 
 #: common/dialogs/panel_common_settings_base.cpp:453
 msgid ""
 "Project: store backups and autosave files inside the project directory.\n"
 "User: store them in your KiCad user data directory."
 msgstr ""
+"Projekt: zapisuje kopie oraz automatyczne zapisy wewnątrz folderu z "
+"projektem.\n"
+"Użytkownika: zapisuje je w twoim folderze danych KiCad użytkownika."
 
 #: common/dialogs/panel_common_settings_base.cpp:457
 msgid "Maximum total backup size:"
@@ -5826,9 +5829,8 @@ msgid "Minimum copper clearance"
 msgstr "Minimalny prześwit"
 
 #: common/dialogs/panel_setup_netclasses.cpp:703
-#, fuzzy
 msgid "Optimum track width"
-msgstr "Minimalna szerokość ścieżki"
+msgstr "Optymalna szerokość ścieżki"
 
 #: common/dialogs/panel_setup_netclasses.cpp:704
 msgid "Via pad diameter"
@@ -6347,7 +6349,7 @@ msgstr "Błąd grafiki podczas odzyskiwania"
 
 #: common/draw_panel_gal.cpp:243
 msgid "Unknown exception during backend switch"
-msgstr "Nieznany wyjątek podczas przełączania zaplecza"
+msgstr "Wystąpił nieznany wyjątek podczas zamiany środowiska"
 
 #: common/draw_panel_gal.cpp:418
 msgid "Unknown exception"
@@ -6566,15 +6568,20 @@ msgid ""
 "%s\n"
 "Recover the auto-saved data?"
 msgstr ""
+"Istnieją pliki zapisane automatycznie, które są nowsze niż zapisane pliki "
+"projektu:\n"
+"\n"
+"%s\n"
+"Czy odzyskać dane zapisane automatycznie?"
 
 #: common/eda_base_frame.cpp:437
 msgid "Auto-Save Recovery"
-msgstr ""
+msgstr "Odzyskiwanie zapisów automatycznych"
 
 #: common/eda_base_frame.cpp:445
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to recover auto-saved file '%s'."
-msgstr "Nie można było utworzyć pliku '%s'."
+msgstr "Nie można było odtworzyć automatycznie zapisanego pliku '%s'."
 
 #: common/eda_base_frame.cpp:568 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:136
@@ -8595,20 +8602,17 @@ msgstr "PCB: Eksport PDF"
 
 #: common/jobs/job_export_pcb_png.cpp:37
 #: common/jobs/job_export_sch_plot.cpp:209 kicad/kicad_cli.cpp:195
-#, fuzzy
 msgid "Export PNG"
-msgstr "Eksportuj HPGL"
+msgstr "Eksportuj PNG"
 
 #: common/jobs/job_export_pcb_png.cpp:43
 #: common/jobs/job_export_sch_plot.cpp:215
-#, fuzzy
 msgid "Export PNG Job Settings"
-msgstr "Ustawienia zadania eksportu PDF"
+msgstr "Ustawienia zadania eksportu PNG"
 
 #: common/jobs/job_export_pcb_png.cpp:47
-#, fuzzy
 msgid "PCB: Export PNG"
-msgstr "PCB: Eksport HPGL"
+msgstr "PCB: Eksport PNG"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
 msgid "Export position data"
@@ -8706,9 +8710,8 @@ msgid "Schematic: Export PDF"
 msgstr "Schemat: Eksport PDF"
 
 #: common/jobs/job_export_sch_plot.cpp:229
-#, fuzzy
 msgid "Schematic: Export PNG"
-msgstr "Schemat: Eksport HPGL"
+msgstr "Schemat: Eksport PNG"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
 msgid "Schematic PythonBOM export"
@@ -10037,10 +10040,12 @@ msgid "Cannot flush '%s' to disk: %s"
 msgstr "Nie można przelać '%s' na dysk: %s"
 
 #: common/richio.cpp:616
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to commit save of '%s': %s. The file on disk has not been modified."
-msgstr "Nie udało się zatwierdzić zapisu '%s':%s"
+msgstr ""
+"Nie udało się zatwierdzić zapisu '%s':%s. Plik na dysku nie został "
+"zmodyfikowany."
 
 #: common/richio.cpp:721
 #, c-format
@@ -15885,20 +15890,18 @@ msgstr "Eksportuj jednostki:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:177
 #: pcbnew/dialogs/dialog_plot_base.cpp:451
-#, fuzzy
 msgid "PNG Options"
-msgstr "Opcje HPGL"
+msgstr "Opcje PNG"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:184
 #: pcbnew/dialogs/dialog_plot_base.cpp:458
 msgid "DPI:"
-msgstr ""
+msgstr "DPI:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:191
 #: pcbnew/dialogs/dialog_plot_base.cpp:465
-#, fuzzy
 msgid "Anti-alias"
-msgstr "Anty-aliasing"
+msgstr "Antyaliasing"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:201
 #: pcbnew/dialogs/dialog_export_step_base.cpp:248
@@ -16143,62 +16146,64 @@ msgid ""
 "%zu symbols have user fields whose names differ only in case. Choose how to "
 "resolve each before opening the table."
 msgstr ""
+"%zu symboli zawiera pola użytkownika, których nazwy różnią się jedynie "
+"wielkością liter. Wybierz sposób rozwiązania konfliktu dla każdego z nich "
+"przed otwarciem tabeli."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:45
-#, fuzzy
 msgid "Apply and Continue"
-msgstr "Zatwierdź i zamknij"
+msgstr "Zatwierdź i kontynuuj"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:75
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:78
-#, fuzzy
 msgid "(empty)"
-msgstr "<pusty>"
+msgstr "(pusty)"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:85
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Keep '%s'"
-msgstr "Tekst '%s'"
+msgstr "Zachowaj '%s'"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:87
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:137
-#, fuzzy
 msgid "Join values"
-msgstr "Wartość końcowa:"
+msgstr "Połącz wartości"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:215
-#, fuzzy
 msgid "Resolve duplicate field names"
-msgstr "Usuń zdublowane ścieżki"
+msgstr "Rozwiązanie konfliktu zdublowanych nazw pól"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:19
 msgid ""
 "Some symbols have user fields whose names differ only in case. Choose how to "
 "resolve each before opening the table."
 msgstr ""
+"Niektóre symbole zawierają pola użytkownika, których nazwy różnią się "
+"jedynie wielkością liter. Wybierz sposób rozwiązania konfliktu dla każdego z "
+"nich przed otwarciem tabeli."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:64
 msgid "Apply same choice to all conflicts of the same field name"
-msgstr ""
+msgstr "Zastosuj ten sam wybór do wszystkich konfliktów o tej samej nazwie pola"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:71
-#, fuzzy
 msgid "Join separator:"
-msgstr "Wstaw separator"
+msgstr "Wstaw separator:"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:75
 msgid "; "
-msgstr ""
+msgstr "; "
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:84
 msgid "String inserted between values when the \"Join\" action is selected."
 msgstr ""
+"Ciąg znaków wstawiany pomiędzy wartości, gdy wybrana jest akcja \"Wstaw "
+"separator\"."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.h:57
-#, fuzzy
 msgid "Resolve Field Name Conflicts"
-msgstr "Analiza konfliktów importu"
+msgstr "Rozwiąż konflikty nazw pól"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:31
 msgid "&Search for:"
@@ -19045,9 +19050,9 @@ msgstr ""
 "arkusza głównego."
 
 #: eeschema/eeschema_config.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save drawing sheet '%s': %s"
-msgstr "Nie można załadować strony '%s':%s"
+msgstr "Nie można zapisać arkusza rysunkowego '%s':%s"
 
 #: eeschema/eeschema_jobs_handler.cpp:142 pcbnew/pcbnew_jobs_handler.cpp:313
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
@@ -20738,9 +20743,9 @@ msgid "Unable to access the KiCad symbol plugin."
 msgstr "Nie można uzyskać dostępu do wtyczki obsługującej symbole KiCad."
 
 #: eeschema/remote_symbol_import_job.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save the downloaded symbol: %s"
-msgstr "Nie można zapisać pobranego symbolu."
+msgstr "Nie można zapisać pobranego symbolu: %s"
 
 #: eeschema/remote_symbol_import_job.cpp:354
 msgid "No symbol asset was available to place."
@@ -31049,9 +31054,8 @@ msgid "Cannot use more than one mode flag\n"
 msgstr "Nie można użyć więcej niż jednej flagi\n"
 
 #: kicad/cli/command_pcb_export_png.cpp:37
-#, fuzzy
 msgid "Generate PNG outputs of a given layer list"
-msgstr "Generuj plik SVG na podstawie podanej listy warstw"
+msgstr "Generuj plik PNG na podstawie podanej listy warstw"
 
 #: kicad/cli/command_pcb_export_png.cpp:54
 #: kicad/cli/command_pcb_export_svg.cpp:58
@@ -31060,15 +31064,15 @@ msgstr "Używana kolorystyka (będzie domyślną dla edytora PCB)"
 
 #: kicad/cli/command_pcb_export_png.cpp:98
 #: kicad/cli/command_sch_export_plot.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Resolution in dots per inch (default %d)"
-msgstr "Rozdzielczość w DPI (domyślnie: 300)"
+msgstr "Rozdzielczość w DPI (domyślnie: %d)"
 
 #: kicad/cli/command_pcb_export_png.cpp:141
 #: kicad/cli/command_sch_export_plot.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid "DPI must be between %d and %d\n"
-msgstr "Wartość musi zawierać się między %s a %s."
+msgstr "Wartość musi zawierać się między %d a %d\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:79
@@ -39097,9 +39101,9 @@ msgid "Run DRC"
 msgstr "Uruchom DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Elapsed: %s"
-msgstr "Reguła: %s"
+msgstr "Pozostało: %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:313
 msgid "Report All Errors for Each Track"
@@ -39126,31 +39130,31 @@ msgstr "Pokazuje reguły projektowe."
 
 #: pcbnew/dialogs/dialog_drc.cpp:457
 msgid "Elapsed: 0 s"
-msgstr ""
+msgstr "Pozostało: 0 s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:472
 #, c-format
 msgid "%1$d min %2$d s"
-msgstr ""
+msgstr "%1$d min %2$d s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f s"
-msgstr "%.2f mm"
+msgstr "%.2f s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:479
 msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- DRC przerwane przez użytkownika.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "Canceled after %s"
-msgstr "Anuluj zmiany"
+msgstr "Anuluj po %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "Completed in %s"
-msgstr "Komponent \"%s\" dodany do \"%s\""
+msgstr "Skompletowany w %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:817
 #, c-format
@@ -54557,14 +54561,12 @@ msgid "Sprint Layout board file"
 msgstr "Pliki obwodu drukowanego programu Sprint Layout"
 
 #: pcbnew/pcb_io/sprint_layout/pcb_io_sprint_layout.h:54
-#, fuzzy
 msgid "Sprint Layout macro file"
-msgstr "Pliki obwodu drukowanego programu Sprint Layout"
+msgstr "Plik makra programu Sprint Layout"
 
 #: pcbnew/pcb_io/sprint_layout/pcb_io_sprint_layout.h:59
-#, fuzzy
 msgid "Sprint Layout macro library"
-msgstr "Pliki obwodu drukowanego programu Sprint Layout"
+msgstr "Biblioteka makr programu Sprint Layout"
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:77
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:86
@@ -54581,9 +54583,8 @@ msgid "Invalid string length in Sprint Layout file"
 msgstr "Nieprawidłowa długość ciągu w pliku Sprint Layout"
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:198
-#, fuzzy
 msgid "Unexpected seek in Sprint Layout file"
-msgstr "Niespodziewany koniec pliku Sprint Layout"
+msgstr "Nieoczekiwane przeszukiwanie pliku Sprint Layout"
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:217
 msgid "Invalid board count in Sprint Layout file"
@@ -54613,11 +54614,12 @@ msgid ""
 "Current file appears to be generated in Sprint Layout %d. Only version 3 to "
 "6 files are supported. "
 msgstr ""
+"Bieżący plik wygląda na wygenerowany przez Sprint Layout %d. Wspierane są "
+"wyłącznie wersje plików od 3 do 6. "
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:382
-#, fuzzy
 msgid "Too many objects in Sprint Layout file"
-msgstr "Zbyt wiele obiektów na płytce Sprint Layout"
+msgstr "Zbyt wiele obiektów w pliku Sprint Layout"
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:396
 msgid "Too many groups in Sprint Layout object"
@@ -56496,9 +56498,9 @@ msgid "KiCad board netlist files"
 msgstr "Pliki listy sieci płytki programu KiCad"
 
 #: pcbnew/tools/board_editor_control.cpp:737
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to export netlist to '%s': %s"
-msgstr "Nie udało się zatwierdzić zapisu '%s':%s"
+msgstr "Nie udało się wyeksportować listy sieci do '%s': %s"
 
 #: pcbnew/tools/board_editor_control.cpp:771
 #: pcbnew/tools/footprint_editor_control.cpp:959
@@ -56598,19 +56600,19 @@ msgstr "Klonowanie strefy"
 
 #: pcbnew/tools/board_editor_control.cpp:1876
 msgid "Move Zone to Top Priority"
-msgstr "Podnieś priorytet do najwyższego"
+msgstr "Przesuń na najwyższy priorytet"
 
 #: pcbnew/tools/board_editor_control.cpp:1930
 msgid "Raise Zone Priority"
-msgstr "Podnieś priorytet strefy"
+msgstr "Zwiększ poziom priorytetu strefy"
 
 #: pcbnew/tools/board_editor_control.cpp:1984
 msgid "Lower Zone Priority"
-msgstr "Obniż priorytet strefy"
+msgstr "Zmniejsz poziom priorytetu strefy"
 
 #: pcbnew/tools/board_editor_control.cpp:2065
 msgid "Move Zone to Bottom Priority"
-msgstr "Obniż priorytet do najniższego"
+msgstr "Przesuń na najniższy priorytet"
 
 #: pcbnew/tools/board_editor_control.cpp:2138
 msgid "Selection contains no items with labeled nets."
@@ -57223,9 +57225,8 @@ msgid "Edit Text Properties..."
 msgstr "Edytuj właściwości tekstu..."
 
 #: pcbnew/tools/edit_tool.cpp:153
-#, fuzzy
 msgid "Mirror / Rotate"
-msgstr "Tekst odbity"
+msgstr "Odbij / Obróć"
 
 #: pcbnew/tools/edit_tool.cpp:227
 msgid "Shape Modification"
@@ -58747,15 +58748,15 @@ msgstr "Klonuj strefę na inną warstwę..."
 
 #: pcbnew/tools/pcb_actions.cpp:1435
 msgid "Move to Top"
-msgstr "Przenieś do góry"
+msgstr "Przenieś na górę"
 
 #: pcbnew/tools/pcb_actions.cpp:1441
 msgid "Raise"
-msgstr "Wyżej"
+msgstr "Podwyższ"
 
 #: pcbnew/tools/pcb_actions.cpp:1447
 msgid "Lower"
-msgstr "Niżej"
+msgstr "Obniż"
 
 #: pcbnew/tools/pcb_actions.cpp:1453
 msgid "Move to Bottom"
@@ -59929,6 +59930,8 @@ msgstr "Zaznacz/rozszerz połączenie..."
 msgid ""
 "Selection contains locked items. Enable 'Override locks' to operate on them."
 msgstr ""
+"Zaznaczenie zawiera zablokowane elementy. Włącz opcję \"Pomiń blokady\", aby "
+"móc operować."
 
 #: pcbnew/tools/position_relative_tool.cpp:234
 msgid "Select the reference point on the item to move."
@@ -61302,7 +61305,7 @@ msgid ""
 "Automatically assign zone priorities based on connectivity analysis of "
 "overlapping regions."
 msgstr ""
-"Automatyczne przypisywanie priorytetów strefom w oparciu o analizę "
+"Automatyczne przypisywanie priorytetów strefom w oparciu o analizę łączności "
 "nakładających się regionów."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:148
