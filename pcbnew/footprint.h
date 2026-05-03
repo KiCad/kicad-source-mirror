@@ -440,7 +440,7 @@ public:
     wxString GetName() const override { return m_fpid.GetLibItemName(); }
     wxString GetLibNickname() const override { return m_fpid.GetLibNickname(); }
     wxString GetDesc() override { return GetLibDescription(); }
-    int GetPinCount() override { return static_cast<int>( GetUniquePadCount( DO_NOT_INCLUDE_NPTH ) ); }
+    int GetPinCount() override { return static_cast<int>( GetNumberedPadCount() ); }
     std::vector<SEARCH_TERM>& GetSearchTerms() override;
 
     wxString GetLibDescription() const { return m_libDescription; }
@@ -1112,6 +1112,16 @@ public:
      */
     std::set<wxString>
     GetUniquePadNumbers( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T(INCLUDE_NPTH) ) const;
+
+    /**
+     * Return the number of unique pads whose pad number represents an electrical pin.
+     *
+     * A pad number is considered electrical if it is either purely numeric (e.g. "1", "42")
+     * or follows the BGA/alphanumeric convention of up to two letters followed by one or more
+     * digits (e.g. "A1", "B12", "AA3"). This deliberately excludes mounting-pad designators
+     * such as "MP" that carry no signal connection.
+     */
+    unsigned GetNumberedPadCount() const;
 
     /**
      * Return the next available pad number in the footprint.

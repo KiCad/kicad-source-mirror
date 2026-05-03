@@ -2528,6 +2528,63 @@ unsigned FOOTPRINT::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 }
 
 
+unsigned FOOTPRINT::GetNumberedPadCount() const
+{
+    // A pad number is "electrical" (i.e. maps to a schematic pin) when it is either:
+    //   - purely numeric:           "1", "42"
+    //   - BGA / alphanumeric style: up to two leading letters followed by digits, e.g.
+    //                               "A1", "B12", "AA3", "AB10"
+    // Mounting-pad designators such as "MP" do not end in a digit typically
+    // and are intentionally excluded.
+    auto isElectricalPadNumber = []( const wxString& num ) -> bool
+    {
+        if( num.IsEmpty() )
+            return false;
+
+        // Walk past an optional alphabetic prefix of at most two characters.
+        size_t i = 0;
+        while( i < num.size() && wxIsalpha( num[i] ) )
+            ++i;
+
+        // Prefix must be 0–2 letters; anything longer is not a pin number.
+        if( i > 2 )
+            return false;
+
+        // The remainder must be non-empty and consist entirely of digits.
+        if( i == num.size() )
+            return false;   // no digits at all (e.g. "MP", "GND")
+
+        for( size_t j = i; j < num.size(); ++j )
+        {
+            if( !wxIsdigit( num[j] ) )
+                return false;
+        }
+
+        return true;
+    };
+
+    std::set<wxString> counted;
+
+    for( const PAD* pad : m_pads )
+    {
+        // Must be on at least one copper layer.
+        if( ( pad->GetLayerSet() & LSET::AllCuMask() ).none() )
+            continue;
+
+        // Skip NPTH (mechanical holes).
+        if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
+            continue;
+
+        const wxString& num = pad->GetNumber();
+
+        if( isElectricalPadNumber( num ) )
+            counted.insert( num );
+    }
+
+    return static_cast<unsigned>( counted.size() );
+}
+
+
 void FOOTPRINT::Add3DModel( FP_3DMODEL* a3DModel )
 {
     if( nullptr == a3DModel )
