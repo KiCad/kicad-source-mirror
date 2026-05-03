@@ -32,17 +32,13 @@
 
 wxDEFINE_EVENT( EVT_LOCAL_HISTORY_REFRESH, wxCommandEvent );
 
-LOCAL_HISTORY_PANE::LOCAL_HISTORY_PANE( KICAD_MANAGER_FRAME* aParent ) : wxPanel( aParent ),
-        m_frame( aParent ), m_list( nullptr ), m_timer( this ), m_refreshTimer( this ),
-        m_hoverItem( -1 ),
-#if wxCHECK_VERSION( 3, 3, 2 )
-        m_tip()
-#else
-        m_tip( nullptr )
-#endif
+LOCAL_HISTORY_PANE::LOCAL_HISTORY_PANE( KICAD_MANAGER_FRAME* aParent ) :
+        wxPanel( aParent ),
+        m_frame( aParent ),
+        m_list( nullptr ),
+        m_refreshTimer( this )
 {
-    m_list = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                             wxLC_REPORT | wxLC_SINGLE_SEL );
+    m_list = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL );
     m_list->AppendColumn( _( "Title" ) );
     m_list->AppendColumn( _( "Time" ) );
     m_list->SetColumnWidth( 0, FromDIP( 200 ) );
@@ -53,34 +49,22 @@ LOCAL_HISTORY_PANE::LOCAL_HISTORY_PANE( KICAD_MANAGER_FRAME* aParent ) : wxPanel
     SetSizer( sizer );
 
     m_list->Bind( wxEVT_MOTION, &LOCAL_HISTORY_PANE::OnMotion, this );
-    m_list->Bind( wxEVT_LEAVE_WINDOW, &LOCAL_HISTORY_PANE::OnLeave, this );
     m_list->Bind( wxEVT_LIST_ITEM_RIGHT_CLICK, &LOCAL_HISTORY_PANE::OnRightClick, this );
-    Bind( wxEVT_TIMER, &LOCAL_HISTORY_PANE::OnTimer, this, m_timer.GetId() );
     Bind( wxEVT_TIMER, &LOCAL_HISTORY_PANE::OnRefreshTimer, this, m_refreshTimer.GetId() );
     Bind( EVT_LOCAL_HISTORY_REFRESH, &LOCAL_HISTORY_PANE::OnRefreshEvent, this );
 
-    // Start refresh timer to check for updates every 10 seconds
     m_refreshTimer.Start( 10000 );
 }
 
 LOCAL_HISTORY_PANE::~LOCAL_HISTORY_PANE()
 {
-    m_timer.Stop();
     m_refreshTimer.Stop();
-
-    if( m_tip )
-    {
-        m_tip->Destroy();
-        m_tip = nullptr;
-    }
 }
 
 void LOCAL_HISTORY_PANE::RefreshHistory( const wxString& aProjectPath )
 {
     if( !IsShownOnScreen() )
         return;
-
-    std::lock_guard<std::mutex> lock( m_mutex );
 
     m_list->DeleteAllItems();
     m_commits.clear();
@@ -162,79 +146,28 @@ void LOCAL_HISTORY_PANE::RefreshHistory( const wxString& aProjectPath )
 
 void LOCAL_HISTORY_PANE::OnMotion( wxMouseEvent& aEvent )
 {
-    std::lock_guard<std::mutex> lock( m_mutex );
-
-    int flags = 0;
+    int  flags = 0;
     long item = m_list->HitTest( aEvent.GetPosition(), flags );
 
-    if( item != m_hoverItem )
+    if( item >= 0 && item < static_cast<long>( m_commits.size() ) )
     {
-        if( m_hoverItem != -1 )
-            m_list->SetItemState( m_hoverItem, 0, wxLIST_STATE_SELECTED );
+        const LOCAL_COMMIT_INFO& info = m_commits[item];
+        wxString                 tip = info.message;
 
-        m_hoverItem = item;
-        m_hoverPos = aEvent.GetPosition();
+        if( !tip.EndsWith( wxS( "\n" ) ) )
+            tip << wxS( "\n" );
 
-        if( m_hoverItem != -1 )
-            m_list->SetItemState( m_hoverItem, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+        tip << wxS( "\n" ) << info.date.FormatISOCombined();
 
-        m_timer.StartOnce( 500 );
+        if( m_list->GetToolTipText() != tip )
+            m_list->SetToolTip( tip );
+    }
+    else
+    {
+        m_list->UnsetToolTip();
     }
 
     aEvent.Skip();
-}
-
-void LOCAL_HISTORY_PANE::OnLeave( wxMouseEvent& aEvent )
-{
-    std::lock_guard<std::mutex> lock( m_mutex );
-
-    m_timer.Stop();
-
-    if( m_hoverItem != -1 )
-        m_list->SetItemState( m_hoverItem, 0, wxLIST_STATE_SELECTED );
-
-    m_hoverItem = -1;
-
-    if( m_tip )
-    {
-        m_tip->Destroy();
-        m_tip = nullptr;
-    }
-
-    aEvent.Skip();
-}
-
-void LOCAL_HISTORY_PANE::OnTimer( wxTimerEvent& aEvent )
-{
-    std::lock_guard<std::mutex> lock( m_mutex );
-
-    if( m_hoverItem < 0 || m_hoverItem >= static_cast<long>( m_commits.size() ) )
-        return;
-
-    if( m_tip )
-    {
-        m_tip->Destroy();
-        m_tip = nullptr;
-    }
-
-    SetFocus();
-
-    wxString otherLines;
-    wxString title = m_commits[m_hoverItem].message.BeforeFirst( '\n', &otherLines );
-
-    wxString msg = title << "\n\n" << otherLines << "\n\n" << m_commits[m_hoverItem].date.FormatISOCombined();
-
-#if wxCHECK_VERSION( 3, 3, 2 )
-    m_tip = wxTipWindow::New( this, msg, FromDIP( 400 ) );
-#else
-    m_tip = new wxTipWindow( this, msg, FromDIP( 400 ) );
-    m_tip->SetTipWindowPtr( &m_tip );
-#endif
-
-    wxPoint pos = ClientToScreen( m_hoverPos ) + FromDIP( wxSize( 20, 20 ) );
-
-    if( m_tip )
-        m_tip->Position( pos, wxDefaultSize );
 }
 
 void LOCAL_HISTORY_PANE::OnRightClick( wxListEvent& aEvent )
