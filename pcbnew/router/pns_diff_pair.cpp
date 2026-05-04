@@ -839,8 +839,14 @@ void DIFF_PAIR::CoupledSegmentPairs( COUPLED_SEGMENTS_VEC& aPairs ) const
 
     for( int i = 0; i < p.SegmentCount(); i++ )
     {
+        if( p.IsArcSegment( i ) )
+            continue;
+
         for( int j = 0; j < n.SegmentCount(); j++ )
         {
+            if( n.IsArcSegment( j ) )
+                continue;
+            
             SEG sp = p.Segment( i );
             SEG sn = n.Segment( j );
 
