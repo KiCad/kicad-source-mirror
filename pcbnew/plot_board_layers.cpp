@@ -1337,7 +1337,6 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
                                   KiROUND( sizeIU.y * dpi / iuPerInch ) );
         pngPlotter->SetResolution( dpi );
         pngPlotter->SetAntialias( aPlotOpts->GetPngAntialias() );
-        pngPlotter->SetYAxisReversed( true );
         plotter = pngPlotter;
         break;
     }
