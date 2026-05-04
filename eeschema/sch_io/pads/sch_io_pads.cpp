@@ -273,6 +273,144 @@ bool SCH_IO_PADS::CanReadLibrary( const wxString& aFileName ) const
 }
 
 
+static void appendGraphicPrimitive( SCH_SCREEN* aScreen, const PADS_SCH::SYMBOL_GRAPHIC& aPrim,
+                                     double aOx, double aOy, int aPageHeightIU )
+{
+    int strokeWidth = aPrim.line_width > 0.0
+                              ? schIUScale.MilsToIU( KiROUND( aPrim.line_width ) )
+                              : 0;
+
+    LINE_STYLE lineStyle = PADS_COMMON::PadsLineStyleToKiCad( aPrim.line_style );
+
+    if( aPrim.type == PADS_SCH::GRAPHIC_TYPE::CIRCLE )
+    {
+        VECTOR2I center(
+                schIUScale.MilsToIU( KiROUND( aOx + aPrim.center.x ) ),
+                aPageHeightIU
+                        - schIUScale.MilsToIU( KiROUND( aOy + aPrim.center.y ) ) );
+        int radius = schIUScale.MilsToIU( KiROUND( aPrim.radius ) );
+
+        SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE );
+        circle->SetStart( center );
+        circle->SetEnd( VECTOR2I( center.x + radius, center.y ) );
+        circle->SetStroke( STROKE_PARAMS( strokeWidth, lineStyle ) );
+
+        if( aPrim.filled )
+            circle->SetFillMode( FILL_T::FILLED_SHAPE );
+
+        aScreen->Append( circle );
+    }
+    else if( aPrim.type == PADS_SCH::GRAPHIC_TYPE::RECTANGLE
+             && aPrim.points.size() == 2 )
+    {
+        VECTOR2I pos(
+                schIUScale.MilsToIU( KiROUND( aOx + aPrim.points[0].coord.x ) ),
+                aPageHeightIU
+                        - schIUScale.MilsToIU(
+                                KiROUND( aOy + aPrim.points[0].coord.y ) ) );
+        VECTOR2I end(
+                schIUScale.MilsToIU( KiROUND( aOx + aPrim.points[1].coord.x ) ),
+                aPageHeightIU
+                        - schIUScale.MilsToIU(
+                                KiROUND( aOy + aPrim.points[1].coord.y ) ) );
+
+        SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECTANGLE );
+        rect->SetPosition( pos );
+        rect->SetEnd( end );
+        rect->SetStroke( STROKE_PARAMS( strokeWidth, lineStyle ) );
+
+        if( aPrim.filled )
+            rect->SetFillMode( FILL_T::FILLED_SHAPE );
+
+        aScreen->Append( rect );
+    }
+    else if( aPrim.points.size() >= 2 )
+    {
+        for( size_t p = 0; p + 1 < aPrim.points.size(); p++ )
+        {
+            VECTOR2I start(
+                    schIUScale.MilsToIU(
+                            KiROUND( aOx + aPrim.points[p].coord.x ) ),
+                    aPageHeightIU
+                            - schIUScale.MilsToIU(
+                                    KiROUND( aOy + aPrim.points[p].coord.y ) ) );
+            VECTOR2I end(
+                    schIUScale.MilsToIU(
+                            KiROUND( aOx + aPrim.points[p + 1].coord.x ) ),
+                    aPageHeightIU
+                            - schIUScale.MilsToIU(
+                                    KiROUND( aOy + aPrim.points[p + 1].coord.y ) ) );
+
+            if( start == end )
+                continue;
+
+            if( aPrim.points[p].arc.has_value() )
+            {
+                const PADS_SCH::ARC_DATA& ad = *aPrim.points[p].arc;
+                double cx = ( ad.bbox_x1 + ad.bbox_x2 ) / 2.0;
+                double cy = ( ad.bbox_y1 + ad.bbox_y2 ) / 2.0;
+                VECTOR2I center(
+                        schIUScale.MilsToIU( KiROUND( aOx + cx ) ),
+                        aPageHeightIU
+                                - schIUScale.MilsToIU( KiROUND( aOy + cy ) ) );
+
+                double sx = start.x - center.x;
+                double sy = start.y - center.y;
+                double ex = end.x - center.x;
+                double ey = end.y - center.y;
+                double radius = std::sqrt( sx * sx + sy * sy );
+
+                double mx = sx + ex;
+                double my = sy + ey;
+                double mlen = std::sqrt( mx * mx + my * my );
+
+                VECTOR2I midPt;
+
+                if( mlen > 0.001 )
+                {
+                    midPt.x = center.x
+                               + static_cast<int>( radius * mx / mlen );
+                    midPt.y = center.y
+                               + static_cast<int>( radius * my / mlen );
+                }
+                else
+                {
+                    midPt.x = center.x
+                               + static_cast<int>( -sy * radius
+                                                   / std::max( radius, 1.0 ) );
+                    midPt.y = center.y
+                               + static_cast<int>( sx * radius
+                                                   / std::max( radius, 1.0 ) );
+                }
+
+                if( ad.angle < 0 )
+                {
+                    midPt.x = 2 * center.x - midPt.x;
+                    midPt.y = 2 * center.y - midPt.y;
+                }
+
+                SCH_SHAPE* arc = new SCH_SHAPE( SHAPE_T::ARC );
+                arc->SetArcGeometry( start, midPt, end );
+                arc->SetStroke( STROKE_PARAMS( strokeWidth, lineStyle ) );
+
+                if( aPrim.filled )
+                    arc->SetFillMode( FILL_T::FILLED_SHAPE );
+
+                aScreen->Append( arc );
+            }
+            else
+            {
+                SCH_LINE* line = new SCH_LINE(
+                        start, SCH_LAYER_ID::LAYER_NOTES );
+                line->SetEndPoint( end );
+                line->SetStroke( STROKE_PARAMS( strokeWidth, lineStyle ) );
+                aScreen->Append( line );
+            }
+        }
+    }
+}
+
+
 SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aFileName,
                                            SCHEMATIC*                         aSchematic,
                                            SCH_SHEET*                         aAppendToMe,
@@ -1171,114 +1309,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
             double oy = linesItem.origin.y;
 
             for( const PADS_SCH::SYMBOL_GRAPHIC& prim : linesItem.primitives )
-            {
-                int strokeWidth = prim.line_width > 0.0 ? schIUScale.MilsToIU( KiROUND( prim.line_width ) )
-                                                        : 0;
-
-                LINE_STYLE lineStyle = PADS_COMMON::PadsLineStyleToKiCad( prim.line_style );
-
-                if( prim.type == PADS_SCH::GRAPHIC_TYPE::CIRCLE )
-                {
-                    VECTOR2I center( schIUScale.MilsToIU( KiROUND( ox + prim.center.x ) ),
-                                     pageHeightIU - schIUScale.MilsToIU( KiROUND( oy + prim.center.y ) ) );
-                    int radius = schIUScale.MilsToIU( KiROUND( prim.radius ) );
-
-                    SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE );
-                    circle->SetStart( center );
-                    circle->SetEnd( VECTOR2I( center.x + radius, center.y ) );
-                    circle->SetStroke( STROKE_PARAMS( strokeWidth, lineStyle ) );
-
-                    if( prim.filled )
-                        circle->SetFillMode( FILL_T::FILLED_SHAPE );
-
-                    linesScreen->Append( circle );
-                }
-                else if( prim.type == PADS_SCH::GRAPHIC_TYPE::RECTANGLE
-                         && prim.points.size() == 2 )
-                {
-                    VECTOR2I pos( schIUScale.MilsToIU( KiROUND( ox + prim.points[0].coord.x ) ),
-                                  pageHeightIU - schIUScale.MilsToIU( KiROUND( oy + prim.points[0].coord.y ) ) );
-                    VECTOR2I end( schIUScale.MilsToIU( KiROUND( ox + prim.points[1].coord.x ) ),
-                                  pageHeightIU - schIUScale.MilsToIU( KiROUND( oy + prim.points[1].coord.y ) ) );
-
-                    SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECTANGLE );
-                    rect->SetPosition( pos );
-                    rect->SetEnd( end );
-                    rect->SetStroke( STROKE_PARAMS( strokeWidth, lineStyle ) );
-
-                    if( prim.filled )
-                        rect->SetFillMode( FILL_T::FILLED_SHAPE );
-
-                    linesScreen->Append( rect );
-                }
-                else if( prim.points.size() >= 2 )
-                {
-                    for( size_t p = 0; p + 1 < prim.points.size(); p++ )
-                    {
-                        VECTOR2I start( schIUScale.MilsToIU( KiROUND( ox + prim.points[p].coord.x ) ),
-                                        pageHeightIU - schIUScale.MilsToIU( KiROUND( oy + prim.points[p].coord.y ) ) );
-                        VECTOR2I end( schIUScale.MilsToIU( KiROUND( ox + prim.points[p + 1].coord.x ) ),
-                                      pageHeightIU - schIUScale.MilsToIU( KiROUND( oy + prim.points[p + 1].coord.y ) ) );
-
-                        if( start == end )
-                            continue;
-
-                        if( prim.points[p].arc.has_value() )
-                        {
-                            const PADS_SCH::ARC_DATA& ad = *prim.points[p].arc;
-                            double cx = ( ad.bbox_x1 + ad.bbox_x2 ) / 2.0;
-                            double cy = ( ad.bbox_y1 + ad.bbox_y2 ) / 2.0;
-                            VECTOR2I center( schIUScale.MilsToIU( KiROUND( ox + cx ) ),
-                                             pageHeightIU - schIUScale.MilsToIU( KiROUND( oy + cy ) ) );
-
-                            double sx = start.x - center.x;
-                            double sy = start.y - center.y;
-                            double ex = end.x - center.x;
-                            double ey = end.y - center.y;
-                            double radius = std::sqrt( sx * sx + sy * sy );
-
-                            double mx = sx + ex;
-                            double my = sy + ey;
-                            double mlen = std::sqrt( mx * mx + my * my );
-
-                            VECTOR2I midPt;
-
-                            if( mlen > 0.001 )
-                            {
-                                midPt.x = center.x + static_cast<int>( radius * mx / mlen );
-                                midPt.y = center.y + static_cast<int>( radius * my / mlen );
-                            }
-                            else
-                            {
-                                midPt.x = center.x + static_cast<int>( -sy * radius / std::max( radius, 1.0 ) );
-                                midPt.y = center.y + static_cast<int>( sx * radius / std::max( radius, 1.0 ) );
-                            }
-
-                            if( ad.angle < 0 )
-                            {
-                                midPt.x = 2 * center.x - midPt.x;
-                                midPt.y = 2 * center.y - midPt.y;
-                            }
-
-                            SCH_SHAPE* arc = new SCH_SHAPE( SHAPE_T::ARC );
-                            arc->SetArcGeometry( start, midPt, end );
-                            arc->SetStroke( STROKE_PARAMS( strokeWidth, lineStyle ) );
-
-                            if( prim.filled )
-                                arc->SetFillMode( FILL_T::FILLED_SHAPE );
-
-                            linesScreen->Append( arc );
-                        }
-                        else
-                        {
-                            SCH_LINE* line = new SCH_LINE( start, SCH_LAYER_ID::LAYER_NOTES );
-                            line->SetEndPoint( end );
-                            line->SetStroke( STROKE_PARAMS( strokeWidth, lineStyle ) );
-                            linesScreen->Append( line );
-                        }
-                    }
-                }
-            }
+                appendGraphicPrimitive( linesScreen, prim, ox, oy, pageHeightIU );
 
             // Render text items within this LINES group
             for( const PADS_SCH::TEXT_ITEM& textItem : linesItem.texts )
