@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <set>
+#include <vector>
 
 #include <wx/grid.h>
 #include <wx/msgdlg.h>
@@ -475,11 +476,18 @@ bool PANEL_SETUP_NET_CHAINS::ApplyEdits()
             if( !cls.deletePending )
                 continue;
 
+            // Collect first; SetNetChainClass with empty value erases from the map and would
+            // invalidate the active iterator if mutated during the range-for.
+            std::vector<wxString> toClear;
+
             for( const auto& [chainName, className] : ns->GetNetChainClasses() )
             {
                 if( className == cls.origName )
-                    ns->SetNetChainClass( chainName, wxEmptyString );
+                    toClear.push_back( chainName );
             }
+
+            for( const wxString& chainName : toClear )
+                ns->SetNetChainClass( chainName, wxEmptyString );
         }
 
         for( const CLASS_ROW& cls : m_classRows )
@@ -489,12 +497,18 @@ bool PANEL_SETUP_NET_CHAINS::ApplyEdits()
 
             if( !cls.origName.IsEmpty() && cls.origName != cls.newName )
             {
-                // Re-assign every chain that referenced the old class label.
+                // Two-pass for symmetry with the delete loop above and to avoid coupling to
+                // std::map mutation semantics during iteration.
+                std::vector<wxString> toRename;
+
                 for( const auto& [chainName, className] : ns->GetNetChainClasses() )
                 {
                     if( className == cls.origName )
-                        ns->SetNetChainClass( chainName, cls.newName );
+                        toRename.push_back( chainName );
                 }
+
+                for( const wxString& chainName : toRename )
+                    ns->SetNetChainClass( chainName, cls.newName );
             }
         }
     }

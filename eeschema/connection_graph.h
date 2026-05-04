@@ -393,6 +393,12 @@ public:
     friend void boost_test_update_generic_connectivity();
     friend void boost_test_inject_committed_net_chain( CONNECTION_GRAPH& aGraph,
                                                        std::unique_ptr<SCH_NETCHAIN> aChain );
+    friend SCH_NETCHAIN* boost_test_resolve_potential_chain_by_terminals(
+            const std::pair<std::pair<wxString, wxString>,
+                            std::pair<wxString, wxString>>& aTerms,
+            const std::map<std::pair<wxString, wxString>, wxString>& aRefPinToNet,
+            const std::vector<std::unique_ptr<SCH_NETCHAIN>>& aPotentials,
+            const wxString& aChainName );
 
     void Reset();
 
@@ -479,6 +485,16 @@ public:
     void SetNetChainTerminalRefOverrides( const std::map<wxString, CHAIN_TERMINAL_REFS>& aRefs )
     {
         m_netChainTerminalRefOverrides = aRefs;
+    }
+
+    const std::map<wxString, CHAIN_TERMINAL_REFS>& GetNetChainTerminalRefOverrides() const
+    {
+        return m_netChainTerminalRefOverrides;
+    }
+
+    const std::map<wxString, std::pair<KIID, KIID>>& GetNetChainTerminalOverrides() const
+    {
+        return m_netChainTerminalOverrides;
     }
 
     void SetNetChainColorOverrides( const std::map<wxString, COLOR4D>& aOverrides )
@@ -874,10 +890,10 @@ public:
     const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetCommittedNetChains() const { return m_committedNetChains; }
 
     /**
-     * Delete a committed net chain by name.  Also clears any orphaned override
-     * map entries (m_netChainNetClassOverrides / m_netChainColorOverrides) and
-     * resets the SetNetChainName marker on every member symbol so the chain is
-     * not reapplied on the next RebuildNetChains() pass.
+     * Delete a committed net chain by name.  Clears every net-chain override map
+     * entry (netclass, colour, terminal refs, terminal pin overrides) and resets
+     * the SetNetChainName marker on every member symbol so the chain is not
+     * reapplied on the next RebuildNetChains() pass.
      *
      * @return true if a chain with that name was found and removed.
      */
@@ -898,6 +914,26 @@ public:
     const std::map<std::pair<KIID, KIID>, wxString>& GetNetChains() const { return m_netChains; }
 
 private:
+    /**
+     * Disambiguate the saved (refA.pinA, refB.pinB) terminal pair against the current set of
+     * potential net chains.  Returns the potential chain whose net set contains BOTH endpoint
+     * nets.  Returning the first match that contains only one net would silently pick the wrong
+     * chain when two potentials share an endpoint but differ at the other terminal.  Tested
+     * via the boost_test_resolve_potential_chain_by_terminals friend shim.
+     */
+    static SCH_NETCHAIN* resolvePotentialChainByTerminals(
+            const CHAIN_TERMINAL_REFS& aTermRefs,
+            const std::map<std::pair<wxString, wxString>, wxString>& aRefPinToNet,
+            const std::vector<std::unique_ptr<SCH_NETCHAIN>>& aPotentials,
+            const wxString& aChainName );
+
+    /**
+     * Move every net-chain override map entry keyed by @p aOld to @p aNew.
+     * Maps that do not contain @p aOld are left untouched, so this is safe to
+     * call from any rename path regardless of which overrides exist.
+     */
+    void rekeyOverrideMaps( const wxString& aOld, const wxString& aNew );
+
     /// All the sheets in the schematic (as long as we don't have partial updates).
     SCH_SHEET_LIST m_sheetList;
 

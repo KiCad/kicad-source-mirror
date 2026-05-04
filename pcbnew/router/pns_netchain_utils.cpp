@@ -24,6 +24,7 @@
 #include "pns_netchain_utils.h"
 
 #include <board.h>
+#include <math/util.h>
 #include <netinfo.h>
 #include <pcb_track.h>
 
@@ -47,9 +48,10 @@ static void accumulateNet( BOARD* aBoard, int aNetCode, long long& aLen, long lo
     {
         int count = 0; double track = 0, pad = 0, tDelay = 0, padDelay = 0;
         std::tie( count, track, pad, tDelay, padDelay ) = aBoard->GetTrackLength( *rep );
-        aLen += static_cast<long long>( track + pad );
+        aLen += KiROUND<double, long long>( track + pad );
+
         if( tDelay > 0.0 || padDelay > 0.0 )
-            aDelay += static_cast<long long>( tDelay + padDelay );
+            aDelay += KiROUND<double, long long>( tDelay + padDelay );
     }
 }
 

@@ -56,8 +56,9 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE
     const auto& potentials = graph->GetPotentialNetChains();
     BOOST_REQUIRE( !potentials.empty() );
 
-    // Seed override maps so RenameCommittedNetChain has something to rekey.
-    std::map<wxString, wxString>      classes;
+    // Seed netclass + color override maps so RenameCommittedNetChain has
+    // something to rekey on the simple paths.
+    std::map<wxString, wxString>       classes;
     std::map<wxString, KIGFX::COLOR4D> colors;
     classes[wxT( "FIRST" )] = wxT( "DDR_DATA" );
     colors[wxT( "FIRST" )]  = KIGFX::COLOR4D( 0.1, 0.2, 0.3, 1.0 );
@@ -70,6 +71,28 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE
     BOOST_REQUIRE( committed );
     BOOST_CHECK_EQUAL( committed->GetName(), wxT( "FIRST" ) );
     BOOST_CHECK_EQUAL( committed->GetNetClass(), wxT( "DDR_DATA" ) );
+
+    // Seed the terminal-ref / terminal-pin override maps from the live committed
+    // chain so the values match whatever pins the fixture's potential picked.
+    // This exercises the same restore path RebuildNetChains() takes after a
+    // file reload, and stays valid if the fixture is edited.
+    const wxString liveRefA  = committed->GetTerminalRef( 0 );
+    const wxString livePinA  = committed->GetTerminalPinNum( 0 );
+    const wxString liveRefB  = committed->GetTerminalRef( 1 );
+    const wxString livePinB  = committed->GetTerminalPinNum( 1 );
+    const KIID     livePinUA = committed->GetTerminalPinA();
+    const KIID     livePinUB = committed->GetTerminalPinB();
+
+    BOOST_REQUIRE( !liveRefA.IsEmpty() );
+    BOOST_REQUIRE( !liveRefB.IsEmpty() );
+
+    std::map<wxString, CONNECTION_GRAPH::CHAIN_TERMINAL_REFS> termRefs;
+    termRefs[wxT( "FIRST" )] = { { liveRefA, livePinA }, { liveRefB, livePinB } };
+    graph->SetNetChainTerminalRefOverrides( termRefs );
+
+    std::map<wxString, std::pair<KIID, KIID>> termPins;
+    termPins[wxT( "FIRST" )] = std::make_pair( livePinUA, livePinUB );
+    graph->SetNetChainTerminalOverrides( termPins );
 
     // Promote a second one so we have something to collide with.
     if( potentials.size() > 1 )
@@ -103,6 +126,48 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE
     BOOST_CHECK( colOverrides.find( wxT( "FIRST" ) ) == colOverrides.end() );
     BOOST_CHECK( colOverrides.find( wxT( "RENAMED" ) ) != colOverrides.end() );
 
+    // Terminal-ref overrides must follow the rename so RebuildNetChains() restores
+    // the chain under the new name on the next graph rebuild.
+    const auto& refOverrides = graph->GetNetChainTerminalRefOverrides();
+    BOOST_CHECK( refOverrides.find( wxT( "FIRST" ) ) == refOverrides.end() );
+    BOOST_REQUIRE( refOverrides.find( wxT( "RENAMED" ) ) != refOverrides.end() );
+    BOOST_CHECK_EQUAL( refOverrides.at( wxT( "RENAMED" ) ).first.ref, liveRefA );
+    BOOST_CHECK_EQUAL( refOverrides.at( wxT( "RENAMED" ) ).first.pin, livePinA );
+    BOOST_CHECK_EQUAL( refOverrides.at( wxT( "RENAMED" ) ).second.ref, liveRefB );
+    BOOST_CHECK_EQUAL( refOverrides.at( wxT( "RENAMED" ) ).second.pin, livePinB );
+
+    const auto& pinOverrides = graph->GetNetChainTerminalOverrides();
+    BOOST_CHECK( pinOverrides.find( wxT( "FIRST" ) ) == pinOverrides.end() );
+    BOOST_REQUIRE( pinOverrides.find( wxT( "RENAMED" ) ) != pinOverrides.end() );
+    BOOST_CHECK( pinOverrides.at( wxT( "RENAMED" ) ).first == livePinUA );
+    BOOST_CHECK( pinOverrides.at( wxT( "RENAMED" ) ).second == livePinUB );
+
+    // After Recalculate the chain must still appear only under the new name; the
+    // committed restore path keys on m_netChainTerminalRefOverrides, so a stale
+    // "FIRST" entry would resurrect a duplicate chain.
+    graph->Recalculate( m_schematic->BuildSheetListSortedByPageNumbers(), true );
+
+    {
+        const auto& chains = graph->GetCommittedNetChains();
+        bool        sawFirst   = false;
+        bool        sawRenamed = false;
+
+        for( const std::unique_ptr<SCH_NETCHAIN>& s : chains )
+        {
+            if( !s )
+                continue;
+
+            if( s->GetName() == wxT( "FIRST" ) )
+                sawFirst = true;
+
+            if( s->GetName() == wxT( "RENAMED" ) )
+                sawRenamed = true;
+        }
+
+        BOOST_CHECK( !sawFirst );
+        BOOST_CHECK( sawRenamed );
+    }
+
     // Rejecting deletion of an unknown chain.
     BOOST_CHECK( !graph->DeleteCommittedNetChain( wxT( "DOES_NOT_EXIST" ) ) );
     BOOST_CHECK( !graph->DeleteCommittedNetChain( wxEmptyString ) );
@@ -127,4 +192,8 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE
                  == graph->GetNetChainNetClassOverrides().end() );
     BOOST_CHECK( graph->GetNetChainColorOverrides().find( wxT( "RENAMED" ) )
                  == graph->GetNetChainColorOverrides().end() );
+    BOOST_CHECK( graph->GetNetChainTerminalRefOverrides().find( wxT( "RENAMED" ) )
+                 == graph->GetNetChainTerminalRefOverrides().end() );
+    BOOST_CHECK( graph->GetNetChainTerminalOverrides().find( wxT( "RENAMED" ) )
+                 == graph->GetNetChainTerminalOverrides().end() );
 }

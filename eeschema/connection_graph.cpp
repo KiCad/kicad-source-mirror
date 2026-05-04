@@ -3364,10 +3364,16 @@ void CONNECTION_GRAPH::RebuildNetChains()
                 {
                     if( CONNECTION_SUBGRAPH* sg = GetSubgraphForItem( pin ) )
                     {
+                        // Normalize identical to potential-chain construction (getSubgraphNet
+                        // lambda above) so unnamed subgraphs use the synthetic __SG_<code>
+                        // key instead of being skipped.  Otherwise a chain whose only named
+                        // endpoint is at one terminal would fail strict both-endpoint matching.
                         wxString net = sg->GetNetName();
 
-                        if( !net.IsEmpty() )
-                            refPinToNet[{ ref, pin->GetNumber() }] = net;
+                        if( net.IsEmpty() || net.Find( wxS( "<NO NET>" ) ) != wxNOT_FOUND )
+                            net = wxString::Format( wxT( "__SG_%ld" ), sg->m_code );
+
+                        refPinToNet[{ ref, pin->GetNumber() }] = net;
                     }
                 }
             }
@@ -3378,19 +3384,13 @@ void CONNECTION_GRAPH::RebuildNetChains()
             if( alreadyCommitted.count( chainName ) )
                 continue;
 
-            auto itFrom = refPinToNet.find( { termRefs.first.ref, termRefs.first.pin } );
+            SCH_NETCHAIN* match = resolvePotentialChainByTerminals( termRefs, refPinToNet,
+                                                                    m_potentialNetChains, chainName );
 
-            if( itFrom != refPinToNet.end() )
+            if( match )
             {
-                for( const auto& pot : m_potentialNetChains )
-                {
-                    if( pot && pot->GetNets().count( itFrom->second ) )
-                    {
-                        CreateNetChainFromPotential( pot.get(), chainName );
-                        alreadyCommitted.insert( chainName );
-                        break;
-                    }
-                }
+                CreateNetChainFromPotential( match, chainName );
+                alreadyCommitted.insert( chainName );
             }
         }
     }
@@ -3421,6 +3421,37 @@ void CONNECTION_GRAPH::RebuildNetChains()
         return;
     }
 }
+
+SCH_NETCHAIN* CONNECTION_GRAPH::resolvePotentialChainByTerminals(
+        const CHAIN_TERMINAL_REFS& aTermRefs,
+        const std::map<std::pair<wxString, wxString>, wxString>& aRefPinToNet,
+        const std::vector<std::unique_ptr<SCH_NETCHAIN>>& aPotentials,
+        const wxString& aChainName )
+{
+    auto itFrom = aRefPinToNet.find( { aTermRefs.first.ref, aTermRefs.first.pin } );
+    auto itTo = aRefPinToNet.find( { aTermRefs.second.ref, aTermRefs.second.pin } );
+
+    if( itFrom == aRefPinToNet.end() || itTo == aRefPinToNet.end() )
+    {
+        wxLogTrace( "KICAD_SCH_HIGHLIGHT",
+                    "RebuildNetChains: cannot restore chain '%s' (terminal %s.%s/%s.%s unresolved)",
+                    aChainName, aTermRefs.first.ref, aTermRefs.first.pin,
+                    aTermRefs.second.ref, aTermRefs.second.pin );
+        return nullptr;
+    }
+
+    for( const auto& pot : aPotentials )
+    {
+        if( pot && pot->GetNets().count( itFrom->second ) && pot->GetNets().count( itTo->second ) )
+            return pot.get();
+    }
+
+    wxLogTrace( "KICAD_SCH_HIGHLIGHT",
+                "RebuildNetChains: no potential chain spans both terminals of '%s' (%s/%s)",
+                aChainName, itFrom->second, itTo->second );
+    return nullptr;
+}
+
 
 SCH_NETCHAIN* CONNECTION_GRAPH::FindPotentialNetChainBetweenPins( SCH_PIN* aPinA, SCH_PIN* aPinB )
 {
@@ -3474,6 +3505,7 @@ bool CONNECTION_GRAPH::DeleteCommittedNetChain( const wxString& aName )
     m_netChainNetClassOverrides.erase( aName );
     m_netChainColorOverrides.erase( aName );
     m_netChainTerminalRefOverrides.erase( aName );
+    m_netChainTerminalOverrides.erase( aName );
 
     return true;
 }
@@ -3513,36 +3545,33 @@ bool CONNECTION_GRAPH::RenameCommittedNetChain( const wxString& aOld, const wxSt
             sym->SetNetChainName( aNew );
     }
 
-    auto rekey = []( std::map<wxString, wxString>& aMap, const wxString& aOldKey,
-                     const wxString& aNewKey )
-    {
-        auto it = aMap.find( aOldKey );
-
-        if( it != aMap.end() )
-        {
-            wxString val = std::move( it->second );
-            aMap.erase( it );
-            aMap[aNewKey] = std::move( val );
-        }
-    };
-
-    auto rekeyColor = []( std::map<wxString, COLOR4D>& aMap, const wxString& aOldKey,
-                          const wxString& aNewKey )
-    {
-        auto it = aMap.find( aOldKey );
-
-        if( it != aMap.end() )
-        {
-            COLOR4D val = it->second;
-            aMap.erase( it );
-            aMap[aNewKey] = val;
-        }
-    };
-
-    rekey( m_netChainNetClassOverrides, aOld, aNew );
-    rekeyColor( m_netChainColorOverrides, aOld, aNew );
+    rekeyOverrideMaps( aOld, aNew );
 
     return true;
+}
+
+
+void CONNECTION_GRAPH::rekeyOverrideMaps( const wxString& aOld, const wxString& aNew )
+{
+    if( aOld == aNew )
+        return;
+
+    auto rekey = [&]( auto& aMap )
+    {
+        auto it = aMap.find( aOld );
+
+        if( it != aMap.end() )
+        {
+            auto val = std::move( it->second );
+            aMap.erase( it );
+            aMap[aNew] = std::move( val );
+        }
+    };
+
+    rekey( m_netChainNetClassOverrides );
+    rekey( m_netChainColorOverrides );
+    rekey( m_netChainTerminalRefOverrides );
+    rekey( m_netChainTerminalOverrides );
 }
 
 

@@ -108,6 +108,30 @@ bool MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_baselineLength = origPathLength();
     m_baselineDelay = m_settings.m_isTimeDomain ? origPathDelay() : 0;
 
+    // Cache the chain extras (other nets in the same chain) once at session start. The
+    // non-edited members of a chain don't change while we're tuning, so we avoid the
+    // O(N nets * M tracks) BOARD walk on every Move event.
+    m_chainExtrasLength = 0;
+    m_chainExtrasDelay = 0;
+    m_chainExtrasValid = false;
+
+    const std::vector<NET_HANDLE> startNets = CurrentNets();
+
+    if( !startNets.empty() )
+    {
+        long long extraLen = 0;
+        long long extraDelay = 0;
+        NET_HANDLE h = startNets[0];
+
+        if( Router()->GetInterface()->GetSignalAggregate( h, h, extraLen, extraDelay ) )
+        {
+            m_chainExtrasLength = extraLen;
+            m_chainExtrasDelay = extraDelay;
+        }
+
+        m_chainExtrasValid = true;
+    }
+
     calculateTimeDomainTargets();
 
     return true;
@@ -183,16 +207,11 @@ void MEANDER_PLACER::calculateTimeDomainTargets()
 
 bool MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 {
-    // Recompute aggregate length/delay of other chain nets from the live board state.
-    long long extraLen = 0;
-    long long extraDelay = 0;
+    // Reuse the chain-extras aggregate captured at Start(). Other nets in the chain are
+    // not edited during a tuning session, so we don't need to walk the BOARD again.
+    const long long extraLen = m_chainExtrasValid ? m_chainExtrasLength : 0;
+    const long long extraDelay = m_chainExtrasValid ? m_chainExtrasDelay : 0;
     const std::vector<NET_HANDLE> nets = CurrentNets();
-
-    if( !nets.empty() )
-    {
-        NET_HANDLE h = nets[0];
-        Router()->GetInterface()->GetSignalAggregate( h, h, extraLen, extraDelay );
-    }
 
     // m_signalExtraDelay is needed for calculateTimeDomainTargets().
     m_settings.m_signalExtraDelay = extraDelay;

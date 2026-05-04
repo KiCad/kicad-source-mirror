@@ -163,6 +163,32 @@ bool DP_MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_baselineLength = origPathLength();
     m_baselineDelay = m_settings.m_isTimeDomain ? origPathDelay() : 0;
 
+    // Cache the chain extras (other nets in the same chain) once at session start. The
+    // non-edited members of a chain don't change while we're tuning, so we avoid the
+    // O(N nets * M tracks) BOARD walk on every Move event.
+    m_chainExtrasLength = 0;
+    m_chainExtrasDelay = 0;
+    m_chainExtrasValid = false;
+
+    const std::vector<NET_HANDLE> startNets = CurrentNets();
+    long long extraLen = 0;
+    long long extraDelay = 0;
+    bool aggregated = false;
+
+    if( startNets.size() >= 2 )
+        aggregated = Router()->GetInterface()->GetSignalAggregate( startNets[0], startNets[1], extraLen, extraDelay );
+    else if( startNets.size() == 1 )
+        aggregated = Router()->GetInterface()->GetSignalAggregate( startNets[0], startNets[0], extraLen, extraDelay );
+
+    if( aggregated )
+    {
+        m_chainExtrasLength = extraLen;
+        m_chainExtrasDelay = extraDelay;
+    }
+
+    if( !startNets.empty() )
+        m_chainExtrasValid = true;
+
     calculateTimeDomainTargets();
 
     return true;
@@ -211,14 +237,11 @@ bool DP_MEANDER_PLACER::pairOrientation( const DIFF_PAIR::COUPLED_SEGMENTS& aPai
 
 bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 {
-    long long extraLen = 0;
-    long long extraDelay = 0;
+    // Reuse the chain-extras aggregate captured at Start(). Other nets in the chain are
+    // not edited during a tuning session, so we don't need to walk the BOARD again.
+    const long long extraLen = m_chainExtrasValid ? m_chainExtrasLength : 0;
+    const long long extraDelay = m_chainExtrasValid ? m_chainExtrasDelay : 0;
     const std::vector<NET_HANDLE> nets = CurrentNets();
-
-    if( nets.size() >= 2 )
-        Router()->GetInterface()->GetSignalAggregate( nets[0], nets[1], extraLen, extraDelay );
-    else if( nets.size() == 1 )
-        Router()->GetInterface()->GetSignalAggregate( nets[0], nets[0], extraLen, extraDelay );
 
     m_settings.m_signalExtraDelay = extraDelay;
 

@@ -2958,9 +2958,10 @@ bool PNS_KICAD_IFACE_BASE::GetSignalAggregate( PNS::NET_HANDLE aNetP, PNS::NET_H
         {
             int count = 0; double trk = 0, pad = 0, tDelay = 0, padDelay = 0;
             std::tie( count, trk, pad, tDelay, padDelay ) = m_board->GetTrackLength( *rep );
-            aExtraLength += static_cast<long long>( trk + pad );
+            aExtraLength += KiROUND<double, long long>( trk + pad );
+
             if( tDelay > 0.0 || padDelay > 0.0 )
-                aExtraDelay += static_cast<long long>( tDelay + padDelay );
+                aExtraDelay += KiROUND<double, long long>( tDelay + padDelay );
         }
     }
 
@@ -2989,7 +2990,7 @@ long long PNS_KICAD_IFACE_BASE::GetNetBoardLength( PNS::NET_HANDLE aNet ) const
             {
                 int count = 0; double trk = 0, pad = 0, tDelay = 0, padDelay = 0;
                 std::tie( count, trk, pad, tDelay, padDelay ) = m_board->GetTrackLength( *tr );
-                return static_cast<long long>( trk + pad );
+                return KiROUND<double, long long>( trk + pad );
             }
         }
     }

@@ -151,6 +151,13 @@ protected:
     long long int m_baselineLength = 0;
     int64_t       m_baselineDelay = 0;
 
+    ///< Aggregate length/delay of other nets in the same chain, cached at Start().
+    ///< The non-edited members of a chain don't change during a tuning session, so we avoid
+    ///< walking the live BOARD on every Move event.
+    long long int m_chainExtrasLength = 0;
+    long long int m_chainExtrasDelay = 0;
+    bool          m_chainExtrasValid = false;
+
     ///< Pointer to world to search colliding items.
     NODE* m_world;
 
