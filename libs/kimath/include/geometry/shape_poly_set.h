@@ -1606,6 +1606,9 @@ protected:
 private:
     HASH_128 m_hash;
     std::atomic<bool> m_hashValid = false;
+
+    HASH_128 m_failedHash;
+    std::atomic<bool> m_failedHashValid = false;
 };
 
 #endif // __SHAPE_POLY_SET_H

@@ -1102,4 +1102,45 @@ BOOST_AUTO_TEST_CASE( Issue24121_DegenerateHoleBelowSimplification )
     BOOST_TEST( fixture.GetResult().GetTriangleCount() > 0 );
 }
 
+BOOST_AUTO_TEST_CASE( CacheTriangulation_AfterMove_FreshPoly )
+{
+    SHAPE_LINE_CHAIN outline;
+    outline.Append( 0, 0 );
+    outline.Append( 10000, 0 );
+    outline.Append( 10000, 10000 );
+    outline.Append( 0, 10000 );
+    outline.SetClosed( true );
+
+    SHAPE_POLY_SET polySet;
+    polySet.AddOutline( outline );
+
+    BOOST_TEST( !polySet.IsTriangulationUpToDate() );
+
+    // Move() sets m_hashValid=true without triangulating
+    polySet.Move( { 1, 1 } );
+    polySet.CacheTriangulation();
+
+    BOOST_TEST( polySet.IsTriangulationUpToDate() );
+    BOOST_TEST( polySet.TriangulatedPolyCount() > 0 );
+}
+
+BOOST_AUTO_TEST_CASE( CacheTriangulation_AfterUpdateTriangulationDataHash )
+{
+    SHAPE_LINE_CHAIN outline;
+    outline.Append( 0, 0 );
+    outline.Append( 10000, 0 );
+    outline.Append( 10000, 10000 );
+    outline.Append( 0, 10000 );
+    outline.SetClosed( true );
+
+    SHAPE_POLY_SET polySet;
+    polySet.AddOutline( outline );
+
+    polySet.UpdateTriangulationDataHash();
+    polySet.CacheTriangulation();
+
+    BOOST_TEST( polySet.IsTriangulationUpToDate() );
+    BOOST_TEST( polySet.TriangulatedPolyCount() > 0 );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
