@@ -2235,6 +2235,8 @@ void SCHEMATIC::SetCurrentVariant( const wxString& aVariantName )
                 item->ClearCaches();
         }
     }
+
+    InvokeListeners( &SCHEMATIC_LISTENER::OnSchCurrentVariantChanged, *this );
 }
 
 

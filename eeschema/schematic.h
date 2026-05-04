@@ -69,6 +69,8 @@ public:
     // This is called when the user changes to a new sheet, not when a sheet is altered.
     // Sheet alteration events will call OnSchItems*
     virtual void OnSchSheetChanged( SCHEMATIC& aSch ) {}
+
+    virtual void OnSchCurrentVariantChanged( SCHEMATIC& aSch ) {}
 };
 
 enum SCH_CLEANUP_FLAGS
