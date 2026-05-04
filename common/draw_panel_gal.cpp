@@ -434,6 +434,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 
     if( isDirty )
     {
+#ifdef KICAD_GAL_PROFILE
         wxLogTrace( traceGalProfile, "View timing: %s %s %s %s %s",
             cntTotal.to_string(),
             cntUpd.to_string(),
@@ -441,6 +442,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
             cntCtx.to_string(),
             cntCtxDestroy.to_string()
         );
+#endif
     }
 
     m_lastRepaintEnd = wxGetLocalTimeMillis();

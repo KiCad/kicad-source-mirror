@@ -67,7 +67,9 @@ CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
         m_useCopyBuffer = false;
     }
 
+#ifdef KICAD_GAL_PROFILE
     wxLogTrace( traceGalProfile, "VBO initial size: %u", m_currentSize );
+#endif
 
     glGenBuffers( 1, &m_glBufferHandle );
     glBindBuffer( GL_ARRAY_BUFFER, m_glBufferHandle );

@@ -221,6 +221,7 @@ void GPU_CACHED_MANAGER::EndDrawing()
         drawCalls++;
     }
 
+    (void) drawCalls; // silence warning
     cntDraw.Stop();
 
 #ifdef KICAD_GAL_PROFILE

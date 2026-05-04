@@ -244,14 +244,14 @@ VIEW::VIEW() :
     m_scale( 4.0 ),
     m_minScale( 0.2 ), m_maxScale( 50000.0 ),
     m_mirrorX( false ), m_mirrorY( false ),
+    m_layerVisibilityCache( VIEW_MAX_LAYERS ),
+    m_layerCachedFlagCache( VIEW_MAX_LAYERS ),
     m_painter( nullptr ),
     m_gal( nullptr ),
     m_useDrawPriority( false ),
     m_nextDrawPriority( 0 ),
     m_reverseDrawOrder( false ),
-    m_hasPendingItemUpdates( false ),
-    m_layerVisibilityCache( VIEW_MAX_LAYERS ),
-    m_layerCachedFlagCache( VIEW_MAX_LAYERS )
+    m_hasPendingItemUpdates( false )
 {
     // Set m_boundary to define the max area size. The default area size
     // is defined here as the max value of a int.
@@ -1673,8 +1673,10 @@ void VIEW::UpdateItems()
         }
     }
 
+#ifdef KICAD_GAL_PROFILE
     wxLogTrace( traceGalProfile, wxS( "View update: total items %u, geom %u anyUpdated %u" ),
               cntTotal, cntGeomUpdate, (unsigned) anyUpdated );
+#endif
 
     m_hasPendingItemUpdates = false;
 }

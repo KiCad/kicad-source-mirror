@@ -483,9 +483,9 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
             const int    rotation = aEvent.GetWheelRotation() * ( m_settings.m_scrollReverseZoom ? -1 : 1 );
             const double zoomScale = m_zoomController->GetScaleForRotation( rotation );
 
-            wxLogTrace( traceGalProfile, "Zoom: %.5f",  m_view->GetScale() * zoomScale );
 
 #ifdef KICAD_GAL_PROFILE
+            wxLogTrace( traceGalProfile, "Zoom: %.5f",  m_view->GetScale() * zoomScale );
             latencyProbeZoomToRender.Checkpoint("mouse-wheel-zoom");
 #endif
 

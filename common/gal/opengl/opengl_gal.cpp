@@ -797,9 +797,11 @@ void OPENGL_GAL::EndDrawing()
 
     cntTotal.Stop();
 
+#ifdef KICAD_GAL_PROFILE
     wxLogTrace( traceGalProfile, "Timing: %s %s %s %s %s %s", cntTotal.to_string(),
               cntEndCached.to_string(), cntEndNoncached.to_string(), cntEndOverlay.to_string(),
               cntComposite.to_string(), cntSwap.to_string() );
+#endif
 }
 
 
