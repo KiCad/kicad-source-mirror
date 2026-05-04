@@ -1590,6 +1590,8 @@ bool SCH_IO_PADS::checkFileHeader( const wxString& aFileName ) const
     }
     catch( ... )
     {
+        // An unreadable or short file is simply not an ASCII PADS schematic; fall through to the
+        // binary probe rather than surface the error.
     }
 
     return false;
@@ -1610,6 +1612,7 @@ bool SCH_IO_PADS::isBinarySchematicFile( const wxString& aFileName ) const
     }
     catch( ... )
     {
+        // An unreadable or malformed file is not a binary PADS schematic, so the probe is false.
     }
 
     return false;

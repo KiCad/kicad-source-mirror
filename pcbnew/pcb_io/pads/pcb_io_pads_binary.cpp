@@ -1317,6 +1317,7 @@ void PCB_IO_PADS_BINARY::generateDrcRules( const wxString& aFileName )
             };
 
     wxString customRules = wxT( "(version 1)\n" );
+    bool     hasAnyRule = false;
 
     for( const PADS_IO::DIFF_PAIR_DEF& dp : diffPairs )
     {
@@ -1352,10 +1353,12 @@ void PCB_IO_PADS_BINARY::generateDrcRules( const wxString& aFileName )
                     wxT( "  (condition \"A.NetName == '%s' && B.NetName == '%s'\")\n" )
                     wxT( "  (constraint clearance (min %s)))\n" ),
                     escapeSymbol( ruleName ), escapeOperand( posNet ), escapeOperand( negNet ), gapStr );
+            hasAnyRule = true;
         }
     }
 
-    if( customRules.length() <= 15 )
+    // A file holding only the version header is clutter, so write nothing unless a rule was emitted
+    if( !hasAnyRule )
         return;
 
     // An import must not destroy rules the user already has. Creating exclusively both refuses an
