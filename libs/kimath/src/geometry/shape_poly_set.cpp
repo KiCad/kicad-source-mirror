@@ -127,6 +127,9 @@ SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther ) :
         m_hashValid = false;
         m_triangulationValid = false;
     }
+
+    m_failedHash = aOther.m_failedHash;
+    m_failedHashValid.store( aOther.m_failedHashValid.load() );
 }
 
 
@@ -3100,7 +3103,7 @@ SHAPE_POLY_SET &SHAPE_POLY_SET::operator=( const SHAPE_POLY_SET& aOther )
         }
 
         m_hash = aOther.m_hash;
-        m_hashValid = aOther.m_hashValid;
+        m_hashValid.store( aOther.m_hashValid.load() );
         m_triangulationValid = aOther.m_triangulationValid.load();
     }
     else
@@ -3109,6 +3112,9 @@ SHAPE_POLY_SET &SHAPE_POLY_SET::operator=( const SHAPE_POLY_SET& aOther )
         m_hashValid = false;
         m_triangulationValid = false;
     }
+
+    m_failedHash = aOther.m_failedHash;
+    m_failedHashValid.store( aOther.m_failedHashValid.load() );
 
     return *this;
 }
@@ -3209,16 +3215,22 @@ static SHAPE_POLY_SET partitionPolyIntoRegularCellGrid( const SHAPE_POLY_SET& aP
 void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
                                          std::vector<std::unique_ptr<TRIANGULATED_POLYGON>>* aHintData )
 {
-    if( m_hashValid && m_hash == checksum() )
-        return;
+    // if( m_triangulationValid && m_hashValid && m_hash == checksum() )
+    //     return;
+    // if( m_failedHashValid && m_failedHash == checksum() )
+    //     return;
 
     std::unique_lock<std::mutex> lock( m_triangulationMutex );
 
-    if( m_hashValid && m_hash == checksum() )
+    if( m_triangulationValid && m_hashValid && m_hash == checksum() )
         return;
+    if( m_failedHashValid && m_failedHash == checksum() )
+        return;
+
     // Invalidate, in case anything goes wrong below
     m_triangulationValid = false;
     m_hashValid = false;
+    m_failedHashValid = false;
 
     auto triangulate =
             []( SHAPE_POLY_SET& polySet, int forOutline,
@@ -3329,8 +3341,16 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
         }
     }
 
-    m_hash = checksum();
-    m_hashValid = true;
+    if( m_triangulationValid )
+    {
+        m_hash = checksum();
+        m_hashValid = true;
+    }
+    else
+    {
+        m_failedHash = checksum();
+        m_failedHashValid = true;
+    }
 }
 
 
