@@ -2451,6 +2451,9 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     m_hierarchy->UpdateHierarchySelection();
 
     m_schematic->OnSchSheetChanged();
+
+    std::string sheetPath = TO_UTF8( GetCurrentSheet().PathAsString() );
+    Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_SCH_SHEET_CHANGED, sheetPath, this );
 }
 
 

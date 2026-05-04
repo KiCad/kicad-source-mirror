@@ -570,6 +570,10 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
     switch( mail.Command() )
     {
+    case MAIL_SCH_SHEET_CHANGED:
+        m_lastSchematicSheetPath = KIID_PATH( wxString::FromUTF8( payload.c_str() ) );
+        break;
+
     case MAIL_PCB_GET_NETLIST:
     {
         NETLIST          netlist;

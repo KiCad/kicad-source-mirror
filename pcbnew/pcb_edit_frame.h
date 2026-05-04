@@ -111,6 +111,8 @@ public:
 
     void KiwayMailIn( KIWAY_MAIL_EVENT& aEvent ) override;
 
+    KIID_PATH GetLastSchematicSheetPath() const { return m_lastSchematicSheetPath; }
+
     /**
      * Used to find items by selection synchronization spec string.
      */
@@ -866,6 +868,10 @@ private:
     int               m_crossProbeFlashPhase = 0;      ///< Phase counter
     std::vector<KIID> m_crossProbeFlashItems;          ///< Items to flash (by UUID)
     bool              m_crossProbeFlashing = false;    ///< Currently flashing guard
+
+    // Most recent schematic path (default to root), used in the footprint fields
+    // table to enable the same schematic scope limiting as the symbol fields table
+    KIID_PATH         m_lastSchematicSheetPath;
 
     std::unique_ptr<API_HANDLER_PCB>    m_apiHandler;
     std::unique_ptr<API_HANDLER_COMMON> m_apiHandlerCommon;

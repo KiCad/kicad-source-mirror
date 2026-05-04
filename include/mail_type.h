@@ -51,10 +51,11 @@ enum MAIL_T
     MAIL_ADD_LOCAL_LIB,     // Add a local library to the project library table
     MAIL_LIB_EDIT,
     MAIL_FP_EDIT,
-    MAIL_RELOAD_LIB,           // Reload Library List if one was added
-    MAIL_RELOAD_PLUGINS,       // Reload python plugins
-    MAIL_REFRESH_SYMBOL,       // Refresh symbol in symbol viewer
-    MAIL_SCH_NAVIGATE_TO_SHEET // Navigate to sheet by filename if in hierarchy
+    MAIL_RELOAD_LIB,            // Reload Library List if one was added
+    MAIL_RELOAD_PLUGINS,        // Reload python plugins
+    MAIL_REFRESH_SYMBOL,        // Refresh symbol in symbol viewer
+    MAIL_SCH_NAVIGATE_TO_SHEET, // Navigate to sheet by filename if in hierarchy
+    MAIL_SCH_SHEET_CHANGED      // Schematic editor current sheet changed
 };
 
 /**
