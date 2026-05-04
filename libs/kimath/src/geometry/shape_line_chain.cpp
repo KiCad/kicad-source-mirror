@@ -2814,10 +2814,10 @@ void SHAPE_LINE_CHAIN::Simplify( int aTolerance )
                  test_idx != end_idx;
                  test_idx = ( test_idx + 1 ) % m_points.size() )
             {
-                // Check if all points are regular points (not arcs)
-                if( m_shapes[start_idx].first != SHAPE_IS_PT ||
-                    m_shapes[test_idx].first != SHAPE_IS_PT ||
-                    m_shapes[end_idx].first != SHAPE_IS_PT )
+                // Only intermediate test points must be regular points (not arcs).
+                // Allow start or end to be arc endpoints so collinear segments
+                // adjacent to arcs can still be simplified while preserving arcs.
+                if( m_shapes[test_idx].first != SHAPE_IS_PT )
                 {
                     can_simplify = false;
                     break;
