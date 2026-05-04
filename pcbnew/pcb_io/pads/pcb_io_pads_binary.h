@@ -32,8 +32,10 @@
 class BOARD;
 class PCB_SHAPE;
 class FOOTPRINT;
+class PAD;
+class EDA_ANGLE;
 
-namespace PADS_IO { class BINARY_PARSER; struct ARC_POINT; }
+namespace PADS_IO { class BINARY_PARSER; struct ARC_POINT; struct PART_DECAL; struct PAD_STACK_LAYER; }
 
 /**
  * PCB I/O plugin for importing the native PADS Layout binary .pcb format, distinct from
@@ -71,6 +73,14 @@ private:
     void loadBoardSetup();
     void loadNets();
     void loadFootprints();
+
+    /// Build one terminal's pad on @p aFootprint from decal terminal @p aTermIdx, oriented by
+    /// the part orientation @p aPartOrient.
+    void buildPad( FOOTPRINT* aFootprint, const PADS_IO::PART_DECAL& aDecal, size_t aTermIdx,
+                   const EDA_ANGLE& aPartOrient );
+
+    /// Apply a pad-stack layer's shape, size and finger offset to @p aPad.
+    void applyPadShape( PAD* aPad, const PADS_IO::PAD_STACK_LAYER& aLayer );
 
     /// Build one PCB_GROUP per PADS part cluster and add each footprint to the group named
     /// by its part's CLSTID. Must run after loadFootprints().

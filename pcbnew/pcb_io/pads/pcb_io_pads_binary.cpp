@@ -518,108 +518,7 @@ void PCB_IO_PADS_BINARY::loadFootprints()
             EDA_ANGLE partOrient( padsPart.rotation, DEGREES_T );
 
             for( size_t termIdx = 0; termIdx < decal.terminals.size(); ++termIdx )
-            {
-                const auto& term = decal.terminals[termIdx];
-                PAD* pad = new PAD( footprint );
-                footprint->Add( pad );
-
-                pad->SetNumber( PADS_COMMON::ConvertText( term.name ) );
-
-                VECTOR2I padPos( scaleSize( term.x ), -scaleSize( term.y ) );
-                RotatePoint( padPos, partOrient );
-                pad->SetPosition( footprint->GetPosition() + padPos );
-
-                int pinNum = static_cast<int>( termIdx + 1 );
-                auto stackIt = decal.pad_stacks.find( pinNum );
-
-                if( stackIt == decal.pad_stacks.end() )
-                    stackIt = decal.pad_stacks.find( 0 );
-
-                if( stackIt != decal.pad_stacks.end() && !stackIt->second.empty() )
-                {
-                    const std::vector<PADS_IO::PAD_STACK_LAYER>& stack = stackIt->second;
-                    const PADS_IO::PAD_STACK_LAYER& layerDef = stack[0];
-
-                    VECTOR2I size( scaleSize( layerDef.sizeA ), scaleSize( layerDef.sizeA ) );
-
-                    if( layerDef.shape == "R" || layerDef.shape == "C" || layerDef.shape == "A" )
-                    {
-                        pad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
-                        pad->SetSize( F_Cu, size );
-                    }
-                    else if( layerDef.shape == "S" )
-                    {
-                        pad->SetShape( F_Cu, PAD_SHAPE::RECTANGLE );
-                        pad->SetSize( F_Cu, size );
-                    }
-                    else if( layerDef.shape == "O" || layerDef.shape == "OF" )
-                    {
-                        pad->SetShape( F_Cu, PAD_SHAPE::OVAL );
-                        VECTOR2I ovalSize( scaleSize( layerDef.sizeB ),
-                                           scaleSize( layerDef.sizeA ) );
-                        pad->SetSize( F_Cu, ovalSize );
-                    }
-                    else if( layerDef.shape == "RF" )
-                    {
-                        pad->SetShape( F_Cu, PAD_SHAPE::RECTANGLE );
-                        VECTOR2I rectSize( scaleSize( layerDef.sizeB ),
-                                           scaleSize( layerDef.sizeA ) );
-                        pad->SetSize( F_Cu, rectSize );
-
-                        if( layerDef.finger_offset != 0 )
-                        {
-                            int offset = scaleSize( layerDef.finger_offset );
-                            VECTOR2I padOffset( offset, 0 );
-                            RotatePoint( padOffset,
-                                         EDA_ANGLE( layerDef.rotation, DEGREES_T ) );
-                            pad->SetOffset( F_Cu, padOffset );
-                        }
-                    }
-                    else if( layerDef.shape == "RC" || layerDef.shape == "OC" )
-                    {
-                        pad->SetShape( F_Cu, PAD_SHAPE::ROUNDRECT );
-                        VECTOR2I rrSize( scaleSize( layerDef.sizeB ),
-                                         scaleSize( layerDef.sizeA ) );
-                        pad->SetSize( F_Cu, rrSize );
-                        pad->SetRoundRectRadiusRatio( F_Cu, 0.25 );
-                    }
-                    else
-                    {
-                        pad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
-                        pad->SetSize( F_Cu, size );
-                    }
-
-                    pad->SetOrientation( partOrient
-                                         + EDA_ANGLE( layerDef.rotation, DEGREES_T ) );
-
-                    int drill = scaleSize( layerDef.drill );
-                    pad->SetDrillSize( VECTOR2I( drill, drill ) );
-
-                    if( drill == 0 )
-                    {
-                        pad->SetAttribute( PAD_ATTRIB::SMD );
-                        pad->SetLayerSet( LSET( { F_Cu } ) );
-                    }
-                    else
-                    {
-                        if( layerDef.plated )
-                            pad->SetAttribute( PAD_ATTRIB::PTH );
-                        else
-                            pad->SetAttribute( PAD_ATTRIB::NPTH );
-
-                        pad->SetLayerSet( LSET::AllCuMask() );
-                    }
-                }
-                else
-                {
-                    // 38100 basic units = 1 mil; default 60 mil pad.
-                    int defaultPad = scaleSize( 60.0 * PADS_IO::SDB_BASIC_PER_MIL );
-                    pad->SetSize( F_Cu, VECTOR2I( defaultPad, defaultPad ) );
-                    pad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
-                    pad->SetAttribute( PAD_ATTRIB::PTH );
-                    pad->SetLayerSet( LSET::AllCuMask() );
-                }
-            }
+                buildPad( footprint, decal, termIdx, partOrient );
         }
 
         m_loadBoard->Add( footprint );
@@ -628,6 +527,118 @@ void PCB_IO_PADS_BINARY::loadFootprints()
             footprint->Flip( footprint->GetPosition(), FLIP_DIRECTION::LEFT_RIGHT );
 
         m_partFootprints.push_back( footprint );
+    }
+}
+
+
+void PCB_IO_PADS_BINARY::buildPad( FOOTPRINT* aFootprint, const PADS_IO::PART_DECAL& aDecal,
+                                   size_t aTermIdx, const EDA_ANGLE& aPartOrient )
+{
+    const auto& term = aDecal.terminals[aTermIdx];
+    PAD* pad = new PAD( aFootprint );
+    aFootprint->Add( pad );
+
+    pad->SetNumber( PADS_COMMON::ConvertText( term.name ) );
+
+    VECTOR2I padPos( scaleSize( term.x ), -scaleSize( term.y ) );
+    RotatePoint( padPos, aPartOrient );
+    pad->SetPosition( aFootprint->GetPosition() + padPos );
+
+    int pinNum = static_cast<int>( aTermIdx + 1 );
+    auto stackIt = aDecal.pad_stacks.find( pinNum );
+
+    if( stackIt == aDecal.pad_stacks.end() )
+        stackIt = aDecal.pad_stacks.find( 0 );
+
+    if( stackIt != aDecal.pad_stacks.end() && !stackIt->second.empty() )
+    {
+        const std::vector<PADS_IO::PAD_STACK_LAYER>& stack = stackIt->second;
+        const PADS_IO::PAD_STACK_LAYER& layerDef = stack[0];
+
+        applyPadShape( pad, layerDef );
+
+        pad->SetOrientation( aPartOrient
+                             + EDA_ANGLE( layerDef.rotation, DEGREES_T ) );
+
+        int drill = scaleSize( layerDef.drill );
+        pad->SetDrillSize( VECTOR2I( drill, drill ) );
+
+        if( drill == 0 )
+        {
+            pad->SetAttribute( PAD_ATTRIB::SMD );
+            pad->SetLayerSet( LSET( { F_Cu } ) );
+        }
+        else
+        {
+            if( layerDef.plated )
+                pad->SetAttribute( PAD_ATTRIB::PTH );
+            else
+                pad->SetAttribute( PAD_ATTRIB::NPTH );
+
+            pad->SetLayerSet( LSET::AllCuMask() );
+        }
+    }
+    else
+    {
+        // 38100 basic units = 1 mil; default 60 mil pad.
+        int defaultPad = scaleSize( 60.0 * PADS_IO::SDB_BASIC_PER_MIL );
+        pad->SetSize( F_Cu, VECTOR2I( defaultPad, defaultPad ) );
+        pad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
+        pad->SetAttribute( PAD_ATTRIB::PTH );
+        pad->SetLayerSet( LSET::AllCuMask() );
+    }
+}
+
+
+void PCB_IO_PADS_BINARY::applyPadShape( PAD* aPad, const PADS_IO::PAD_STACK_LAYER& aLayer )
+{
+    VECTOR2I size( scaleSize( aLayer.sizeA ), scaleSize( aLayer.sizeA ) );
+
+    if( aLayer.shape == "R" || aLayer.shape == "C" || aLayer.shape == "A" )
+    {
+        aPad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
+        aPad->SetSize( F_Cu, size );
+    }
+    else if( aLayer.shape == "S" )
+    {
+        aPad->SetShape( F_Cu, PAD_SHAPE::RECTANGLE );
+        aPad->SetSize( F_Cu, size );
+    }
+    else if( aLayer.shape == "O" || aLayer.shape == "OF" )
+    {
+        aPad->SetShape( F_Cu, PAD_SHAPE::OVAL );
+        VECTOR2I ovalSize( scaleSize( aLayer.sizeB ),
+                           scaleSize( aLayer.sizeA ) );
+        aPad->SetSize( F_Cu, ovalSize );
+    }
+    else if( aLayer.shape == "RF" )
+    {
+        aPad->SetShape( F_Cu, PAD_SHAPE::RECTANGLE );
+        VECTOR2I rectSize( scaleSize( aLayer.sizeB ),
+                           scaleSize( aLayer.sizeA ) );
+        aPad->SetSize( F_Cu, rectSize );
+
+        if( aLayer.finger_offset != 0 )
+        {
+            int offset = scaleSize( aLayer.finger_offset );
+            VECTOR2I padOffset( offset, 0 );
+            RotatePoint( padOffset,
+                         EDA_ANGLE( aLayer.rotation, DEGREES_T ) );
+            aPad->SetOffset( F_Cu, padOffset );
+        }
+    }
+    else if( aLayer.shape == "RC" || aLayer.shape == "OC" )
+    {
+        aPad->SetShape( F_Cu, PAD_SHAPE::ROUNDRECT );
+        VECTOR2I rrSize( scaleSize( aLayer.sizeB ),
+                         scaleSize( aLayer.sizeA ) );
+        aPad->SetSize( F_Cu, rrSize );
+        aPad->SetRoundRectRadiusRatio( F_Cu, 0.25 );
+    }
+    else
+    {
+        aPad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
+        aPad->SetSize( F_Cu, size );
     }
 }
 
