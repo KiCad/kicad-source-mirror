@@ -2929,6 +2929,46 @@ static void orientStubPin( SCH_PIN* aPin, int aMinX, int aMaxX, int aMinY, int a
 }
 
 
+// Bounding box and vertex centroid of a decal body (all its piece vertices).
+static void decalBodyBounds( const PADS_SCH_BINARY::DECAL& aDecal, int& aMinX, int& aMaxX,
+                             int& aMinY, int& aMaxY, double& aCx, double& aCy )
+{
+    aMinX = aMaxX = aMinY = aMaxY = 0;
+    aCx = 0.0;
+    aCy = 0.0;
+    int nv = 0;
+
+    for( const DECAL_PIECE& piece : aDecal.pieces )
+    {
+        for( const std::pair<int, int>& v : piece.verts )
+        {
+            if( nv == 0 )
+            {
+                aMinX = aMaxX = v.first;
+                aMinY = aMaxY = v.second;
+            }
+            else
+            {
+                aMinX = std::min( aMinX, v.first );
+                aMaxX = std::max( aMaxX, v.first );
+                aMinY = std::min( aMinY, v.second );
+                aMaxY = std::max( aMaxY, v.second );
+            }
+
+            aCx += v.first;
+            aCy += v.second;
+            ++nv;
+        }
+    }
+
+    if( nv > 0 )
+    {
+        aCx /= nv;
+        aCy /= nv;
+    }
+}
+
+
 // Add one gate's body shapes and pins to a LIB_SYMBOL on unit @p aUnit (0 = common to all
 // units, for single-unit symbols). When @p aDecal is null (an unplaced or unbound gate) the
 // pins are laid out in a column so the unit stays electrically complete. Pins are labelled
@@ -2961,36 +3001,8 @@ static void addGateUnit( LIB_SYMBOL* aLib, const PADS_SCH_BINARY::DECAL* aDecal,
         int    minX = 0, maxX = 0, minY = 0, maxY = 0;
         double cx = 0.0;
         double cy = 0.0;
-        int    nv = 0;
 
-        for( const DECAL_PIECE& piece : aDecal->pieces )
-        {
-            for( const std::pair<int, int>& v : piece.verts )
-            {
-                if( nv == 0 )
-                {
-                    minX = maxX = v.first;
-                    minY = maxY = v.second;
-                }
-                else
-                {
-                    minX = std::min( minX, v.first );
-                    maxX = std::max( maxX, v.first );
-                    minY = std::min( minY, v.second );
-                    maxY = std::max( maxY, v.second );
-                }
-
-                cx += v.first;
-                cy += v.second;
-                ++nv;
-            }
-        }
-
-        if( nv > 0 )
-        {
-            cx /= nv;
-            cy /= nv;
-        }
+        decalBodyBounds( *aDecal, minX, maxX, minY, maxY, cx, cy );
 
         bool   label = aGatePins.size() == aDecal->terminals.size();
         int    pinNumber = 1;
@@ -3167,36 +3179,8 @@ int PADS_SCH_BINARY_READER::appendSheetContent( SCH_SCREEN* aScreen, const SCH_S
             int          minX = 0, maxX = 0, minY = 0, maxY = 0;
             double       cx = 0.0;
             double       cy = 0.0;
-            int          nv = 0;
 
-            for( const DECAL_PIECE& piece : decal.pieces )
-            {
-                for( const std::pair<int, int>& v : piece.verts )
-                {
-                    if( nv == 0 )
-                    {
-                        minX = maxX = v.first;
-                        minY = maxY = v.second;
-                    }
-                    else
-                    {
-                        minX = std::min( minX, v.first );
-                        maxX = std::max( maxX, v.first );
-                        minY = std::min( minY, v.second );
-                        maxY = std::max( maxY, v.second );
-                    }
-
-                    cx += v.first;
-                    cy += v.second;
-                    ++nv;
-                }
-            }
-
-            if( nv > 0 )
-            {
-                cx /= nv;
-                cy /= nv;
-            }
+            decalBodyBounds( decal, minX, maxX, minY, maxY, cx, cy );
 
             // Recovered electrical pins for the part-type label the symbol's pins (number,
             // name, type) when their count matches the decal's terminals (the single-gate
