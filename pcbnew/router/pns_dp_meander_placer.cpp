@@ -300,7 +300,116 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         }
     }
 
+    struct GET_ITEM_RET
+    {
+        std::optional<SHAPE_ARC> arc;
+        VECTOR2I                 startPt;
+        VECTOR2I                 endPt;
+    };
+
+    auto getItem = [&]( const SHAPE_LINE_CHAIN& aChain, int aIndex, int aLastIndex )
+    {
+        std::optional<SHAPE_ARC> optArc;
+        VECTOR2I                 startPt;
+        VECTOR2I                 endPt;
+
+        if( aChain.IsArcSegment( aIndex ) )
+        {
+            SHAPE_ARC arc = aChain.Arc( aChain.ArcIndex( aIndex ) );
+            optArc = arc;
+            startPt = arc.GetStart();
+            endPt = arc.GetEnd();
+        }
+        else
+        {
+            SEG seg = aChain.GetSegment( aIndex );
+            startPt = seg.A;
+            endPt = seg.B;
+        }
+
+        return GET_ITEM_RET{ optArc, startPt, endPt };
+    };
+
+    auto checkIndex = [&]( bool& aOk, int aCurIndex, int aLastIndex ) -> bool
+    {
+        aOk = aCurIndex <= aLastIndex && aCurIndex != -1;
+        return aOk;
+    };
+
     int curIndexP = 0, curIndexN = 0;
+
+    auto addCornersUntilIndex = [&]( int aLastIndexP, int aLastIndexN )
+    {
+        while( true )
+        {
+            bool p_ok, n_ok;
+            checkIndex( p_ok, curIndexP, aLastIndexP );
+            checkIndex( n_ok, curIndexN, aLastIndexN );
+
+            if( !p_ok && !n_ok )
+                break;
+
+            auto p_item = getItem( tunedP, curIndexP, aLastIndexP );
+            auto n_item = getItem( tunedN, curIndexN, aLastIndexN );
+
+            if( !p_item.arc && !n_item.arc )
+            {
+                m_result.AddCorner( p_item.startPt, n_item.startPt );
+            }
+            else if( p_item.arc && n_item.arc )
+            {
+                m_result.AddArc( *p_item.arc, *n_item.arc );
+            }
+            else if( p_item.arc && !n_item.arc )
+            {
+                m_result.AddCorner( p_item.startPt, n_item.startPt );
+
+                // Find arc in N
+                while( checkIndex( n_ok, curIndexN, aLastIndexN ) )
+                {
+                    curIndexN = tunedN.NextShape( curIndexN );
+                    n_item = getItem( tunedN, curIndexN, aLastIndexN );
+
+                    if( n_item.arc )
+                    {
+                        m_result.AddArc( *p_item.arc, *n_item.arc );
+                        break;
+                    }
+                    else
+                    {
+                        m_result.AddCorner( p_item.startPt, n_item.startPt );
+                    }
+                }
+            }
+            else if( !p_item.arc && n_item.arc )
+            {
+                m_result.AddCorner( p_item.startPt, n_item.startPt );
+
+                // Find arc in P
+                while( checkIndex( p_ok, curIndexP, aLastIndexP ) )
+                {
+                    curIndexP = tunedP.NextShape( curIndexP );
+                    p_item = getItem( tunedP, curIndexP, aLastIndexP );
+
+                    if( p_item.arc )
+                    {
+                        m_result.AddArc( *p_item.arc, *n_item.arc );
+                        break;
+                    }
+                    else
+                    {
+                        m_result.AddCorner( p_item.startPt, n_item.startPt );
+                    }
+                }
+            }
+
+            if( p_ok )
+                curIndexP = tunedP.NextShape( curIndexP );
+
+            if( n_ok )
+                curIndexN = tunedN.NextShape( curIndexN );
+        }
+    };
 
     for( const DIFF_PAIR::COUPLED_SEGMENTS& sp : coupledSegments )
     {
@@ -314,72 +423,12 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
         PNS_DBG( Dbg(), AddShape, base, GREEN, 10000, wxT( "dp-baseline" ) );
 
-        while( sp.indexP >= curIndexP && curIndexP != -1 )
-        {
-            if( tunedP.IsArcSegment( curIndexP ) )
-            {
-                ssize_t arcIndex = tunedP.ArcIndex( curIndexP );
-
-                m_result.AddArcAndPt( tunedP.Arc( arcIndex ), tunedN.CPoint( curIndexN ) );
-            }
-            else
-            {
-                m_result.AddCorner( tunedP.CPoint( curIndexP ), tunedN.CPoint( curIndexN ) );
-            }
-
-            curIndexP = tunedP.NextShape( curIndexP );
-        }
-
-        while( sp.indexN >= curIndexN && curIndexN != -1 )
-        {
-            if( tunedN.IsArcSegment( curIndexN ) )
-            {
-                ssize_t arcIndex = tunedN.ArcIndex( curIndexN );
-
-                m_result.AddPtAndArc( tunedP.CPoint( sp.indexP ), tunedN.Arc( arcIndex ) );
-            }
-            else
-            {
-                m_result.AddCorner( tunedP.CPoint( sp.indexP ), tunedN.CPoint( curIndexN ) );
-            }
-
-            curIndexN = tunedN.NextShape( curIndexN );
-        }
+        addCornersUntilIndex( sp.indexP, sp.indexN );
 
         m_result.MeanderSegment( base, side );
     }
 
-    while( curIndexP < tunedP.PointCount() && curIndexP != -1 )
-    {
-        if( tunedP.IsArcSegment( curIndexP ) )
-        {
-            ssize_t arcIndex = tunedP.ArcIndex( curIndexP );
-
-            m_result.AddArcAndPt( tunedP.Arc( arcIndex ), tunedN.CPoint( curIndexN ) );
-        }
-        else
-        {
-            m_result.AddCorner( tunedP.CPoint( curIndexP ), tunedN.CPoint( curIndexN ) );
-        }
-
-        curIndexP = tunedP.NextShape( curIndexP );
-    }
-
-    while( curIndexN < tunedN.PointCount() && curIndexN != -1 )
-    {
-        if( tunedN.IsArcSegment( curIndexN ) )
-        {
-            ssize_t arcIndex = tunedN.ArcIndex( curIndexN );
-
-            m_result.AddPtAndArc( tunedP.CLastPoint(), tunedN.Arc( arcIndex ) );
-        }
-        else
-        {
-            m_result.AddCorner( tunedP.CLastPoint(), tunedN.CPoint( curIndexN ) );
-        }
-
-        curIndexN = tunedN.NextShape( curIndexN );
-    }
+    addCornersUntilIndex( tunedP.PointCount() - 1, tunedN.PointCount() - 1 );
 
     m_result.AddCorner( tunedP.CLastPoint(), tunedN.CLastPoint() );
 
