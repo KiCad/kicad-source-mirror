@@ -701,14 +701,14 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
             if( constraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
             {
                 pattern->m_settings.SetTargetSkew( MINOPTMAX<int>() );
-                pattern->m_settings.SetTargetLengthDelay( constraint.GetValue() );
+                pattern->m_settings.SetTargetSkewDelay( constraint.GetValue() );
                 pattern->m_settings.m_isTimeDomain = true;
             }
             else
             {
                 pattern->m_settings.SetTargetSkew( constraint.GetValue() );
                 pattern->m_settings.SetTargetSkewDelay( MINOPTMAX<int>() );
-                pattern->m_settings.m_isTimeDomain = true;
+                pattern->m_settings.m_isTimeDomain = false;
             }
         }
     }
@@ -2064,14 +2064,14 @@ void PCB_TUNING_PATTERN::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
             {
                 if( constraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
                 {
-                    settings.SetTargetLengthDelay( constraint.GetValue() );
-                    settings.SetTargetLength( MINOPTMAX<int>() );
+                    settings.SetTargetSkewDelay( constraint.GetValue() );
+                    settings.SetTargetSkew( MINOPTMAX<int>() );
                     settings.m_isTimeDomain = true;
                 }
                 else
                 {
-                    settings.SetTargetLengthDelay( MINOPTMAX<int>() );
-                    settings.SetTargetLength( constraint.GetValue() );
+                    settings.SetTargetSkewDelay( MINOPTMAX<int>() );
+                    settings.SetTargetSkew( constraint.GetValue() );
                     settings.m_isTimeDomain = false;
                 }
             }

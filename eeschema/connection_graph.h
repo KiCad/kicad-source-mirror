@@ -391,6 +391,8 @@ public:
     // Define QA friend functions to allow testing of private methods
     friend void boost_test_update_symbol_connectivity();
     friend void boost_test_update_generic_connectivity();
+    friend void boost_test_inject_committed_net_chain( CONNECTION_GRAPH& aGraph,
+                                                       std::unique_ptr<SCH_NETCHAIN> aChain );
 
     void Reset();
 

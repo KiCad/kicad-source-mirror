@@ -551,36 +551,42 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
         }
     }
 
-    for( const auto& sigPtr : m_schematic->ConnectionGraph()->GetCommittedNetChains() )
+    // Net chains are schematic-wide state owned by the connection graph, so they must be written
+    // by exactly one sheet file.  Anchor the write to the schematic's first top-level sheet to
+    // match the embedded files convention below.
+    if( m_schematic->GetTopLevelSheet( 0 ) == aSheet )
     {
-        if( !sigPtr )
-            continue;
-
-        const SCH_NETCHAIN& sig = *sigPtr;
-        m_out->Print( "(net_chain %s", m_out->Quotew( sig.GetName() ).c_str() );
-
-        wxASSERT_MSG( !sig.GetTerminalRef( 0 ).IsEmpty() && !sig.GetTerminalRef( 1 ).IsEmpty(),
-                      wxT( "Net chain missing terminal refs" ) );
-
-        m_out->Print( " (from %s %s)", m_out->Quotew( sig.GetTerminalRef( 0 ) ).c_str(),
-                      m_out->Quotew( sig.GetTerminalPinNum( 0 ) ).c_str() );
-        m_out->Print( " (to %s %s)", m_out->Quotew( sig.GetTerminalRef( 1 ) ).c_str(),
-                      m_out->Quotew( sig.GetTerminalPinNum( 1 ) ).c_str() );
-
-        if( !sig.GetNetClass().IsEmpty() )
-            m_out->Print( " (net_class %s)", m_out->Quotew( sig.GetNetClass() ).c_str() );
-
-        if( sig.GetColor() != KIGFX::COLOR4D::UNSPECIFIED )
+        for( const auto& sigPtr : m_schematic->ConnectionGraph()->GetCommittedNetChains() )
         {
-            const KIGFX::COLOR4D& c = sig.GetColor();
-            m_out->Print( " (color %d %d %d %s)",
-                          KiROUND( c.r * 255.0 ),
-                          KiROUND( c.g * 255.0 ),
-                          KiROUND( c.b * 255.0 ),
-                          FormatDouble2Str( c.a ).c_str() );
-        }
+            if( !sigPtr )
+                continue;
 
-        m_out->Print( ")" );
+            const SCH_NETCHAIN& sig = *sigPtr;
+            m_out->Print( "(net_chain %s", m_out->Quotew( sig.GetName() ).c_str() );
+
+            wxASSERT_MSG( !sig.GetTerminalRef( 0 ).IsEmpty() && !sig.GetTerminalRef( 1 ).IsEmpty(),
+                          wxT( "Net chain missing terminal refs" ) );
+
+            m_out->Print( " (from %s %s)", m_out->Quotew( sig.GetTerminalRef( 0 ) ).c_str(),
+                          m_out->Quotew( sig.GetTerminalPinNum( 0 ) ).c_str() );
+            m_out->Print( " (to %s %s)", m_out->Quotew( sig.GetTerminalRef( 1 ) ).c_str(),
+                          m_out->Quotew( sig.GetTerminalPinNum( 1 ) ).c_str() );
+
+            if( !sig.GetNetClass().IsEmpty() )
+                m_out->Print( " (net_class %s)", m_out->Quotew( sig.GetNetClass() ).c_str() );
+
+            if( sig.GetColor() != KIGFX::COLOR4D::UNSPECIFIED )
+            {
+                const KIGFX::COLOR4D& c = sig.GetColor();
+                m_out->Print( " (color %d %d %d %s)",
+                              KiROUND( c.r * 255.0 ),
+                              KiROUND( c.g * 255.0 ),
+                              KiROUND( c.b * 255.0 ),
+                              FormatDouble2Str( c.a ).c_str() );
+            }
+
+            m_out->Print( ")" );
+        }
     }
 
     if( aSheet->HasRootInstance() )

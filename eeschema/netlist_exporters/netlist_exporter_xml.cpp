@@ -1361,6 +1361,23 @@ XNODE* NETLIST_EXPORTER_XML::makeNetChains()
             xmembers->AddChild( xmember = node( wxT( "member" ) ) );
             xmember->AddAttribute( wxT( "net" ), net );
         }
+
+        if( !chain->GetTerminalRef( 0 ).IsEmpty() || !chain->GetTerminalRef( 1 ).IsEmpty() )
+        {
+            XNODE* xterms;
+            xchain->AddChild( xterms = node( wxT( "terminal_pins" ) ) );
+
+            for( int i = 0; i < 2; ++i )
+            {
+                if( chain->GetTerminalRef( i ).IsEmpty() )
+                    continue;
+
+                XNODE* xterm;
+                xterms->AddChild( xterm = node( wxT( "terminal_pin" ) ) );
+                xterm->AddAttribute( wxT( "ref" ), chain->GetTerminalRef( i ) );
+                xterm->AddAttribute( wxT( "pin" ), chain->GetTerminalPinNum( i ) );
+            }
+        }
     }
 
     return xchains;

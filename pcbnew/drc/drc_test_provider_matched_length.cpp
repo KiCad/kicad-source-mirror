@@ -505,9 +505,9 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                     if( chainName.IsEmpty() )
                         continue;
 
-                    auto it = chainAgg.find( chainName );
+                    auto aggIt = chainAgg.find( chainName );
 
-                    if( it == chainAgg.end() )
+                    if( aggIt == chainAgg.end() )
                     {
                         CONNECTION agg = conn;
                         agg.netname = chainName;
@@ -515,7 +515,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                     }
                     else
                     {
-                        CONNECTION& agg = it->second;
+                        CONNECTION& agg = aggIt->second;
                         agg.total += conn.total;
                         agg.totalDelay += conn.totalDelay;
                         agg.totalRoute += conn.totalRoute;
@@ -577,7 +577,8 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
                 checkLengths( *netChainLengthConstraint, chainConnections );
             }
-            else if( lengthConstraint && lengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
+
+            if( lengthConstraint && lengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
             {
                 checkLengths( *lengthConstraint, matchedConnections );
             }
@@ -655,9 +656,16 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 }
             }
 
-            // Stub-length constraint: on a multi-net net chain, any member net that
-            // touches neither terminal pad is a pure stub; its total routed length
-            // must stay within the (stub_length ...) range.
+            // Stub-length constraint on a multi-net chain. A member net is on the
+            // trunk when it owns at least one of the chain's terminal pad
+            // assignments (chain endpoint segment). Every other member is treated
+            // as a stub and must satisfy the (stub_length ...) range.
+            //
+            // TODO Real topological stub detection (a net lying on the path
+            // between the chain's two terminal pads, regardless of which member
+            // owns each end) requires walking the connectivity graph across
+            // chain members. Until that lands, ownership of a terminal pad is
+            // the practical proxy for "on trunk".
             std::optional<DRC_CONSTRAINT> stubLengthConstraint =
                     rule->FindConstraint( NET_CHAIN_STUB_LENGTH_CONSTRAINT );
 
@@ -671,21 +679,8 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                     if( !netInfo || netInfo->GetNetChain().IsEmpty() )
                         continue;
 
-                    // Look up every net in this chain and check whether *this* net
-                    // is one that touches a terminal pad.
-                    bool onTrunk = false;
-
-                    for( NETINFO_ITEM* candidate : m_board->GetNetInfo() )
-                    {
-                        if( !candidate || candidate->GetNetChain() != netInfo->GetNetChain() )
-                            continue;
-
-                        if( candidate == netInfo )
-                        {
-                            if( candidate->GetTerminalPad( 0 ) || candidate->GetTerminalPad( 1 ) )
-                                onTrunk = true;
-                        }
-                    }
+                    const bool onTrunk =
+                            netInfo->GetTerminalPad( 0 ) || netInfo->GetTerminalPad( 1 );
 
                     if( onTrunk )
                         continue;
