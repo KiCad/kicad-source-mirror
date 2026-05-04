@@ -2452,22 +2452,66 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 if( grid.GetUseGrid() )
                 {
-                    VECTOR2I gridPt = grid.BestSnapAnchor( pos, {}, grid.GetItemGrid( item ), { item } );
+                    EC_CONVERGING* convergingConstraint =
+                            line ? dynamic_cast<EC_CONVERGING*>( line->GetConstraint() ) : nullptr;
 
-                    VECTOR2I last = m_editedPoint->GetPosition();
-                    VECTOR2I delta = pos - last;
-                    VECTOR2I deltaGrid = gridPt - grid.BestSnapAnchor( last, {}, grid.GetItemGrid( item ),
-                                                                       { item } );
+                    bool snappedAlongPerp = false;
 
-                    if( abs( delta.x ) > grid.GetGrid().x / 2 )
-                        pos.x = last.x + deltaGrid.x;
-                    else
-                        pos.x = last.x;
+                    if( convergingConstraint )
+                    {
+                        // For a polygon edge, the line moves only perpendicular to itself.
+                        // Snapping pos.x and pos.y independently to the axis-aligned grid
+                        // produces inconsistent perpendicular displacements when the edge is
+                        // tilted (different magnitudes depending on which axis crossed the
+                        // half-grid threshold first), causing the rendered edge to flicker
+                        // between two positions. Quantize the perpendicular displacement
+                        // directly so each grid step produces one stable line position.
+                        const VECTOR2I& origCenter = convergingConstraint->GetOriginalCenter();
+                        const VECTOR2I& perpVec = convergingConstraint->GetPerpVector();
+                        double perpLen = VECTOR2D( perpVec ).EuclideanNorm();
 
-                    if( abs( delta.y ) > grid.GetGrid().y / 2 )
-                        pos.y = last.y + deltaGrid.y;
-                    else
-                        pos.y = last.y;
+                        if( perpLen > 0 )
+                        {
+                            VECTOR2D perpUnit = VECTOR2D( perpVec ) / perpLen;
+                            VECTOR2D gridSize = grid.GetGridSize( grid.GetItemGrid( item ) );
+
+                            // Effective grid spacing along the perpendicular direction. For an
+                            // axis-aligned edge this reduces to the grid pitch on that axis.
+                            double step = std::hypot( gridSize.x * perpUnit.x,
+                                                      gridSize.y * perpUnit.y );
+
+                            if( step > 0 )
+                            {
+                                double offset = VECTOR2D( pos - origCenter ).Dot( perpUnit );
+                                double snapped = std::round( offset / step ) * step;
+                                VECTOR2D snappedPt = VECTOR2D( origCenter ) + perpUnit * snapped;
+                                pos = VECTOR2I( KiROUND( snappedPt.x ), KiROUND( snappedPt.y ) );
+                                snappedAlongPerp = true;
+                            }
+                        }
+                    }
+
+                    if( !snappedAlongPerp )
+                    {
+                        VECTOR2I gridPt = grid.BestSnapAnchor( pos, {}, grid.GetItemGrid( item ),
+                                                                { item } );
+
+                        VECTOR2I last = m_editedPoint->GetPosition();
+                        VECTOR2I delta = pos - last;
+                        VECTOR2I deltaGrid = gridPt - grid.BestSnapAnchor( last, {},
+                                                                           grid.GetItemGrid( item ),
+                                                                           { item } );
+
+                        if( abs( delta.x ) > grid.GetGrid().x / 2 )
+                            pos.x = last.x + deltaGrid.x;
+                        else
+                            pos.x = last.x;
+
+                        if( abs( delta.y ) > grid.GetGrid().y / 2 )
+                            pos.y = last.y + deltaGrid.y;
+                        else
+                            pos.y = last.y;
+                    }
                 }
             }
 

@@ -266,6 +266,13 @@ public:
     /// Set the constraint mode (allows switching between converging and fixed-length)
     void SetMode( POLYGON_LINE_MODE aMode ) { m_mode = aMode; }
 
+    /// Original center of the dragged line, captured at drag start.
+    const VECTOR2I& GetOriginalCenter() const { return m_originalCenter; }
+
+    /// Perpendicular direction of motion for the dragged line, captured at drag start.
+    /// Length matches the original dragged segment vector.
+    const VECTOR2I& GetPerpVector() const { return m_perpVector; }
+
 private:
     /// Apply converging mode: find intersections with adjacent lines
     void applyConverging( EDIT_LINE& aHandle );
