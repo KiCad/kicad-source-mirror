@@ -1223,6 +1223,20 @@ void SCH_EDIT_FRAME::doCloseWindow()
 
     SCH_SHEET_LIST sheetlist = Schematic().Hierarchy();
 
+    if( !Prj().IsNullProject() )
+    {
+        std::vector<wxString> sheetSrcs;
+        sheetSrcs.reserve( sheetlist.size() );
+
+        for( const SCH_SHEET_PATH& path : sheetlist )
+        {
+            if( SCH_SCREEN* screen = path.LastScreen() )
+                sheetSrcs.push_back( Prj().AbsolutePath( screen->GetFileName() ) );
+        }
+
+        Kiway().LocalHistory().RemoveAutosaveFiles( Prj().GetProjectPath(), sheetSrcs );
+    }
+
 #ifdef KICAD_IPC_API
     Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
     wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, &SCH_EDIT_FRAME::onPluginAvailabilityChanged, this );
