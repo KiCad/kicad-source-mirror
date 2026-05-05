@@ -72,21 +72,6 @@ int MEANDER_PLACER_BASE::Clearance()
     // It shouldn't matter which track we pick. They should all have the same clearance if
     // they are part of the same net class. Therefore, pick the first one on the list.
     ITEM*           itemToCheck = Traces().CItems().front();
-
-    // QueryConstraint() runs segment-by-segment DRC evaluation on multi-segment LINEs when
-    // geometry-dependent rules are present (intersectsArea, insideCourtyard, ...). The LINE
-    // returned by Traces() may carry the previous Move's meander shape, making this really
-    // slow. In general, we only need the basic clearance so this will do until we fully
-    // implement the reverse area query caching
-    SEGMENT singleSeg;
-    const LINE* line = dyn_cast<const LINE*>( itemToCheck );
-
-    if( line && line->SegmentCount() > 0 )
-    {
-        singleSeg = SEGMENT( *line, line->CSegment( 0 ) );
-        itemToCheck = &singleSeg;
-    }
-
     PNS::CONSTRAINT constraint;
 
     Router()->GetRuleResolver()->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, itemToCheck,
