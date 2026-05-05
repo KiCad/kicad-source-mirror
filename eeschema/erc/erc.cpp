@@ -1098,7 +1098,10 @@ int ERC_TESTER::TestPinToPin()
 
                 PIN_ERROR erc = m_settings.GetPinMapValue( refType, testType );
 
-                if( erc != PIN_ERROR::OK && m_settings.IsTestEnabled( ERCE_PIN_TO_PIN_WARNING ) )
+                ERCE_T ercCode = ( erc == PIN_ERROR::WARNING ) ? ERCE_PIN_TO_PIN_WARNING
+                                                                       : ERCE_PIN_TO_PIN_ERROR;
+
+                if( erc != PIN_ERROR::OK && m_settings.IsTestEnabled( ercCode ) )
                 {
                     pin_mismatches.emplace_back( std::tuple<iterator_t, iterator_t, PIN_ERROR>{ refIt, testIt, erc } );
 
@@ -1388,11 +1391,12 @@ int ERC_TESTER::TestPinToPin()
                     ELECTRICAL_PINTYPE bType = bPin->GetType();
                     PIN_ERROR erc = m_settings.GetPinMapValue( aType, bType );
 
-                    if( erc != PIN_ERROR::OK && m_settings.IsTestEnabled( ERCE_PIN_TO_PIN_WARNING ) )
+                    ERCE_T ercCode = ( erc == PIN_ERROR::WARNING ) ? ERCE_PIN_TO_PIN_WARNING
+                                                                           : ERCE_PIN_TO_PIN_ERROR;
+
+                    if( erc != PIN_ERROR::OK && m_settings.IsTestEnabled( ercCode ) )
                     {
-                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create(
-                                erc == PIN_ERROR::WARNING ? ERCE_PIN_TO_PIN_WARNING
-                                                          : ERCE_PIN_TO_PIN_ERROR );
+                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ercCode );
 
                         ercItem->SetItems( aPin, bPin );
                         ercItem->SetSheetSpecificPath( netChainPins[i].Sheet() );
@@ -2317,6 +2321,7 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
 
     // Test pins on each net against the pin connection table
     if( m_settings.IsTestEnabled( ERCE_PIN_TO_PIN_ERROR )
+        || m_settings.IsTestEnabled( ERCE_PIN_TO_PIN_WARNING )
         || m_settings.IsTestEnabled( ERCE_POWERPIN_NOT_DRIVEN )
         || m_settings.IsTestEnabled( ERCE_PIN_NOT_DRIVEN ) )
     {

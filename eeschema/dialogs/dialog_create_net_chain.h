@@ -67,9 +67,16 @@ private:
         wxString           terminals; ///< e.g. "J1:1 -> J2:1"
         bool               isManual = false;
 
-        /// For force-created rows without a livePtr
-        KIID forceFromUuid;
-        KIID forceToUuid;
+        /// For force-created rows without a livePtr.  Ref/pin strings are cached at
+        /// row build time to avoid re-resolving the owning sheet path at commit.
+        KIID     forceFromUuid;
+        KIID     forceToUuid;
+        KIID     forceFromPinUuid;
+        KIID     forceToPinUuid;
+        wxString forceFromRef;
+        wxString forceToRef;
+        wxString forceFromPinNum;
+        wxString forceToPinNum;
     };
 
     void loadPotentials();

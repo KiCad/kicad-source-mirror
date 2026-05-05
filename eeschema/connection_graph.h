@@ -508,6 +508,21 @@ public:
     }
 
     /**
+     * Stash per-chain member-net lists read from the schematic file.  Used by
+     * RebuildNetChains to reconstruct manual force-created chains, which have no
+     * underlying inferred potential to match against.
+     */
+    void SetNetChainMemberNetOverrides( const std::map<wxString, std::set<wxString>>& aOverrides )
+    {
+        m_netChainMemberNetOverrides = aOverrides;
+    }
+
+    const std::map<wxString, std::set<wxString>>& GetNetChainMemberNetOverrides() const
+    {
+        return m_netChainMemberNetOverrides;
+    }
+
+    /**
      * Return the subgraph for a given net name on a given sheet.
      *
      * @param aNetName is the local net name to look for.
@@ -886,6 +901,29 @@ public:
     /** Promote a potential net chain to an actual user net chain with the provided name. */
     SCH_NETCHAIN* CreateNetChainFromPotential( SCH_NETCHAIN* aPotential, const wxString& aName );
 
+    /**
+     * Commit a manually-defined net chain that the inferred-potential pass did not produce.
+     *
+     * @param aName        Name of the new chain.  Must satisfy SCH_NETCHAIN::IsValidName().
+     * @param aSymbols     Symbols that participate in the chain.
+     * @param aNets        Member nets of the chain.
+     * @param aTerminalPinA First terminal pin KIID.
+     * @param aTerminalPinB Second terminal pin KIID.
+     * @param aRefA        Reference designator for the first terminal symbol.
+     * @param aPinNumA     Pin number for the first terminal pin.
+     * @param aRefB        Reference designator for the second terminal symbol.
+     * @param aPinNumB     Pin number for the second terminal pin.
+     *
+     * @return The new committed chain, or nullptr on name collision, name validation
+     *         failure, or net-ownership collision with an existing committed chain.
+     */
+    SCH_NETCHAIN* CreateManualNetChain( const wxString& aName,
+                                        const std::set<class SCH_SYMBOL*>& aSymbols,
+                                        const std::set<wxString>& aNets,
+                                        const KIID& aTerminalPinA, const KIID& aTerminalPinB,
+                                        const wxString& aRefA, const wxString& aPinNumA,
+                                        const wxString& aRefB, const wxString& aPinNumB );
+
     /** Return user-created (committed) net chains (legacy accessor retained under net-chain API). */
     const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetCommittedNetChains() const { return m_committedNetChains; }
 
@@ -934,6 +972,25 @@ private:
      */
     void rekeyOverrideMaps( const wxString& aOld, const wxString& aNew );
 
+    /**
+     * Replace the derived-view payload on @p aTarget with explicitly supplied member nets,
+     * symbols, terminal pins, and terminal refs.  Preserves the chain's name and any
+     * user-set netclass/color overrides stored on the chain itself.  Empty net names are
+     * filtered.  Used by RebuildNetChains to refresh committed chains in place after Reset()
+     * has cleared their stale schematic-item pointers.
+     */
+    void refreshCommittedChainPayload( SCH_NETCHAIN* aTarget, const std::set<wxString>& aNets,
+                                       const std::set<class SCH_SYMBOL*>& aSymbols,
+                                       const KIID& aTerminalPinA, const KIID& aTerminalPinB,
+                                       const wxString& aRefA, const wxString& aPinNumA,
+                                       const wxString& aRefB, const wxString& aPinNumB );
+
+    /**
+     * Thin forwarder over @ref refreshCommittedChainPayload that pulls payload fields from
+     * an inferred potential chain.
+     */
+    void refreshCommittedChainFromPotential( SCH_NETCHAIN* aTarget, const SCH_NETCHAIN& aSource );
+
     /// All the sheets in the schematic (as long as we don't have partial updates).
     SCH_SHEET_LIST m_sheetList;
 
@@ -975,6 +1032,7 @@ private:
     std::map<wxString, wxString>              m_netChainNetClassOverrides;
     std::map<wxString, COLOR4D>               m_netChainColorOverrides;
     std::map<wxString, CHAIN_TERMINAL_REFS>    m_netChainTerminalRefOverrides;
+    std::map<wxString, std::set<wxString>>    m_netChainMemberNetOverrides;
 
     int m_last_net_code;
 

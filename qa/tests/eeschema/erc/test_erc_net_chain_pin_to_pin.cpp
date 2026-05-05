@@ -6,6 +6,7 @@
 #include <settings/settings_manager.h>
 #include <connection_graph.h>
 #include <locale_io.h>
+#include <pin_type.h>
 
 struct ERC_SIGNAL_TEST_FIXTURE
 {
@@ -159,6 +160,93 @@ BOOST_FIXTURE_TEST_CASE( ERCSignalPowerInputDrivenAcrossSignal, ERC_SIGNAL_TEST_
 
     ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM );
     BOOST_CHECK_MESSAGE( powerNotDriven == 0, "Expected no ERCE_POWERPIN_NOT_DRIVEN errors due to cross-signal driver; got " << powerNotDriven << "\n" << reportWriter.GetTextReport() );
+}
+
+// Regression test for chain-cross pin-to-pin gating. The chain-cross gate
+// previously consulted IsTestEnabled( ERCE_PIN_TO_PIN_WARNING ) regardless of
+// the resolved code, so silencing pin-to-pin warnings also suppressed
+// pin-to-pin errors. The fix selects ercCode (warning vs error) from the
+// resolved PIN_ERROR first, then gates IsTestEnabled( ercCode ). To make the
+// regression observable, ERCE_PIN_TO_PIN_WARNING and ERCE_PIN_TO_PIN_ERROR
+// must be independently controllable; that decoupling lives in
+// ERC_SETTINGS::GetSeverity.
+BOOST_FIXTURE_TEST_CASE( ERCSignalPinToPinErrorMatrixMapped, ERC_SIGNAL_TEST_FIXTURE )
+{
+    LOCALE_IO dummy;
+    KI_TEST::LoadSchematic( m_settingsManager, wxString( "erc_net_chain_pin_to_pin" ), m_schematic );
+
+    ERC_SETTINGS& settings = m_schematic->ErcSettings();
+    settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
+    settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
+
+    // Force OUTPUT-OUTPUT pairs to PP_ERROR so the X6/X7 chain-cross pair
+    // resolves to ERCE_PIN_TO_PIN_ERROR rather than ERCE_PIN_TO_PIN_WARNING.
+    settings.SetPinMapValue( ELECTRICAL_PINTYPE::PT_OUTPUT, ELECTRICAL_PINTYPE::PT_OUTPUT,
+                             PIN_ERROR::PP_ERROR );
+
+    // Silence ERCE_PIN_TO_PIN_WARNING while leaving ERCE_PIN_TO_PIN_ERROR active.
+    // Under the OLD gate (always IsTestEnabled( ERCE_PIN_TO_PIN_WARNING )) this
+    // would suppress the marker; under the NEW gate the resolved ercCode is
+    // ERCE_PIN_TO_PIN_ERROR, which is still enabled, so the marker reports.
+    settings.m_ERCSeverities[ERCE_PIN_TO_PIN_WARNING] = RPT_SEVERITY_IGNORE;
+    settings.m_ERCSeverities[ERCE_PIN_TO_PIN_ERROR]   = RPT_SEVERITY_ERROR;
+
+    BOOST_REQUIRE( !settings.IsTestEnabled( ERCE_PIN_TO_PIN_WARNING ) );
+    BOOST_REQUIRE( settings.IsTestEnabled( ERCE_PIN_TO_PIN_ERROR ) );
+
+    m_schematic->ConnectionGraph()->Recalculate( m_schematic->BuildSheetListSortedByPageNumbers(),
+                                                 true );
+
+    {
+        CONNECTION_GRAPH* graph = m_schematic->ConnectionGraph();
+        int idx = 1;
+
+        for( const auto& pot : graph->GetPotentialNetChains() )
+        {
+            if( !pot )
+                continue;
+
+            wxString name = wxString::Format( wxS( "ERC_SIG_%d" ), idx++ );
+            graph->CreateNetChainFromPotential( pot.get(), name );
+        }
+    }
+
+    m_schematic->ConnectionGraph()->RunERC();
+
+    ERC_TESTER tester( m_schematic.get() );
+    tester.TestPinToPin();
+
+    SHEETLIST_ERC_ITEMS_PROVIDER provider( m_schematic.get() );
+    provider.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
+
+    int errorCount = 0;
+    int warningCount = 0;
+
+    for( size_t i = 0; i < provider.GetCount(); ++i )
+    {
+        auto item = provider.GetItem( i );
+
+        if( !item )
+            continue;
+
+        if( item->GetErrorCode() == ERCE_PIN_TO_PIN_ERROR )
+            errorCount++;
+        else if( item->GetErrorCode() == ERCE_PIN_TO_PIN_WARNING )
+            warningCount++;
+    }
+
+    ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM );
+
+    BOOST_CHECK_MESSAGE( errorCount > 0,
+                         "Expected ERCE_PIN_TO_PIN_ERROR markers to be reported when only"
+                         " ERCE_PIN_TO_PIN_WARNING is silenced, but got "
+                                 << errorCount << "\n"
+                                 << reportWriter.GetTextReport() );
+
+    BOOST_CHECK_MESSAGE( warningCount == 0,
+                         "Expected zero ERCE_PIN_TO_PIN_WARNING markers when warning is silenced,"
+                         " got " << warningCount << "\n"
+                                 << reportWriter.GetTextReport() );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

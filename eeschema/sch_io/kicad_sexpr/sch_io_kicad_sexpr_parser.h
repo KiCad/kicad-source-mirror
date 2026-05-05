@@ -37,6 +37,7 @@
 #include <sch_file_versions.h>
 #include <default_values.h>    // For some default values
 #include <map>
+#include <set>
 #include <wx/string.h>
 
 
@@ -141,6 +142,13 @@ public:
     using CHAIN_TERMINALS = std::pair<CHAIN_TERMINAL, CHAIN_TERMINAL>;
 
     const std::map<wxString, CHAIN_TERMINALS>& GetNetChainTerminalRefs() const { return m_netChainTerminalRefs; }
+
+    // Access parsed per-chain member-net lists.  Used to reconstruct manually force-created
+    // chains on reload, since those have no underlying inferred potential.
+    const std::map<wxString, std::set<wxString>>& GetNetChainMemberNets() const
+    {
+        return m_netChainMemberNets;
+    }
 
 private:
     // Group membership info refers to other Uuids in the file.
@@ -330,6 +338,7 @@ private:
     std::map<wxString, wxString>              m_netChainNetClasses;
     std::map<wxString, COLOR4D>               m_netChainColors;
     std::map<wxString, CHAIN_TERMINALS>       m_netChainTerminalRefs;
+    std::map<wxString, std::set<wxString>>    m_netChainMemberNets;
 };
 
 #endif    // SCH_IO_KICAD_SEXPR_PARSER_H_

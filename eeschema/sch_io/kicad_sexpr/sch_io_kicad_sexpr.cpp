@@ -352,6 +352,7 @@ void SCH_IO_KICAD_SEXPR::loadFile( const wxString& aFileName, SCH_SHEET* aSheet 
         }
 
         m_schematic->ConnectionGraph()->SetNetChainTerminalRefOverrides( termRefs );
+        m_schematic->ConnectionGraph()->SetNetChainMemberNetOverrides( parser.GetNetChainMemberNets() );
     }
 }
 
@@ -377,6 +378,7 @@ void SCH_IO_KICAD_SEXPR::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, i
         }
 
         m_schematic->ConnectionGraph()->SetNetChainTerminalRefOverrides( termRefs );
+        m_schematic->ConnectionGraph()->SetNetChainMemberNetOverrides( parser.GetNetChainMemberNets() );
     }
 }
 
@@ -586,6 +588,26 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
                               KiROUND( c.g * 255.0 ),
                               KiROUND( c.b * 255.0 ),
                               FormatDouble2Str( c.a ).c_str() );
+            }
+
+            // Synthetic subgraph names are not stable across runs, so they are
+            // skipped when persisting the member-net list.
+            std::vector<wxString> persistableNets;
+
+            for( const wxString& n : sig.GetNets() )
+            {
+                if( !n.IsEmpty() && !n.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) )
+                    persistableNets.push_back( n );
+            }
+
+            if( !persistableNets.empty() )
+            {
+                m_out->Print( " (nets" );
+
+                for( const wxString& n : persistableNets )
+                    m_out->Print( " %s", m_out->Quotew( n ).c_str() );
+
+                m_out->Print( ")" );
             }
 
             m_out->Print( ")" );

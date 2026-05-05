@@ -158,6 +158,26 @@ std::unique_ptr<SCHEMATIC> ReadSchematicFromStream( std::istream& aStream, PROJE
     sheets.AnnotatePowerSymbols();
     for( SCH_SHEET_PATH& sheet : sheets )
         sheet.UpdateAllScreenReferences();
+
+    // The IO layer normally pipes parsed override maps into the connection graph;
+    // this reload-only path has to do the same so manual chains survive a reload.
+    if( schematic->ConnectionGraph() )
+    {
+        schematic->ConnectionGraph()->SetNetChainNetClassOverrides( parser.GetNetChainNetClasses() );
+        schematic->ConnectionGraph()->SetNetChainColorOverrides( parser.GetNetChainColors() );
+
+        std::map<wxString, CONNECTION_GRAPH::CHAIN_TERMINAL_REFS> termRefs;
+
+        for( const auto& [name, terms] : parser.GetNetChainTerminalRefs() )
+        {
+            termRefs[name] = { { terms.first.ref, terms.first.pin },
+                               { terms.second.ref, terms.second.pin } };
+        }
+
+        schematic->ConnectionGraph()->SetNetChainTerminalRefOverrides( termRefs );
+        schematic->ConnectionGraph()->SetNetChainMemberNetOverrides( parser.GetNetChainMemberNets() );
+    }
+
     return schematic;
 }
 

@@ -164,6 +164,7 @@ show_name
 size
 from
 net_chain
+nets
 to
 span
 start

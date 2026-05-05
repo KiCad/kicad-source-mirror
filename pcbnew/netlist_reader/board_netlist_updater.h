@@ -99,6 +99,16 @@ public:
 
     std::vector<FOOTPRINT*> GetAddedFootprints() const { return m_addedFootprints; }
 
+    /**
+     * Apply the netlist's chain assignments to every NETINFO_ITEM on the board.
+     *
+     * Whenever a net's chain name is renamed or cleared, the prior terminal-pad pointer and
+     * its persisted UUID are dropped together so the pair stays in lockstep and stale
+     * terminals from a previous session do not bleed into the resaved board.
+     */
+    static void ApplyChainAssignments( BOARD* aBoard, const NETLIST& aNetlist, REPORTER* aReporter,
+                                       bool aDryRun );
+
 private:
     void cacheNetname( PAD* aPad, const wxString& aNetname );
     wxString getNetname( PAD* aPad );

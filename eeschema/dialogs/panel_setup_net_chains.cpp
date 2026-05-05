@@ -329,6 +329,9 @@ bool PANEL_SETUP_NET_CHAINS::Validate()
 
     for( size_t i = 0; i < m_classRows.size(); ++i )
     {
+        if( m_classRows[i].deletePending )
+            continue;
+
         m_classRows[i].newName =
                 m_classesGrid->GetCellValue( static_cast<int>( i ), CLASS_COL_NAME );
     }
@@ -537,7 +540,15 @@ int PANEL_SETUP_NET_CHAINS::selectedChainRow() const
     if( !rows.empty() )
         return rows.front();
 
-    return m_chainsGrid->GetGridCursorRow();
+    // The grid cursor can survive a DeleteRows/AppendRows rebuild and point at an index
+    // beyond the new row count.  Clamp before returning so callers don't dereference a
+    // stale data slot.
+    int cursor = m_chainsGrid->GetGridCursorRow();
+
+    if( cursor < 0 || cursor >= m_chainsGrid->GetNumberRows() )
+        return -1;
+
+    return cursor;
 }
 
 
@@ -548,7 +559,12 @@ int PANEL_SETUP_NET_CHAINS::selectedClassRow() const
     if( !rows.empty() )
         return rows.front();
 
-    return m_classesGrid->GetGridCursorRow();
+    int cursor = m_classesGrid->GetGridCursorRow();
+
+    if( cursor < 0 || cursor >= m_classesGrid->GetNumberRows() )
+        return -1;
+
+    return cursor;
 }
 
 

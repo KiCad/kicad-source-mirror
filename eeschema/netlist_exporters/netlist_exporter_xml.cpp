@@ -101,7 +101,16 @@ XNODE* NETLIST_EXPORTER_XML::makeRoot( unsigned aCtl )
     if( aCtl & GNL_NETS )
     {
         xroot->AddChild( makeListOfNets( aCtl ) );
-        xroot->AddChild( makeNetChains() );
+
+        // Net chains are a KiCad-internal extension that is not part of the public XML
+        // netlist schema (version "E"). Emit them only for the KiCad-internal consumer
+        // (eeschema -> pcbnew via NETLIST_EXPORTER_KICAD) so that generic XML, KiCost and
+        // other schema-validating tools do not see an unexpected element.
+        if( aCtl & GNL_OPT_KICAD )
+        {
+            if( XNODE* xchains = makeNetChains() )
+                xroot->AddChild( xchains );
+        }
     }
 
     return xroot;
@@ -1310,9 +1319,14 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
 XNODE* NETLIST_EXPORTER_XML::makeNetChains()
 {
+    const auto& committed = m_schematic->ConnectionGraph()->GetCommittedNetChains();
+
+    if( committed.empty() )
+        return nullptr;
+
     XNODE* xchains = node( wxT( "net_chains" ) );
 
-    for( const std::unique_ptr<SCH_NETCHAIN>& chain : m_schematic->ConnectionGraph()->GetCommittedNetChains() )
+    for( const std::unique_ptr<SCH_NETCHAIN>& chain : committed )
     {
         if( !chain )
             continue;

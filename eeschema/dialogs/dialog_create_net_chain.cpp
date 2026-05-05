@@ -197,7 +197,29 @@ bool DIALOG_CREATE_NET_CHAIN::validateAndCreate()
     }
     else
     {
-        graph->AddNetChain( prow.forceFromUuid, prow.forceToUuid, name );
+        std::set<SCH_SYMBOL*> symbols;
+
+        SCH_ITEM* fromItem = m_frame->Schematic().ResolveItem( prow.forceFromUuid, nullptr, true );
+        SCH_ITEM* toItem   = m_frame->Schematic().ResolveItem( prow.forceToUuid, nullptr, true );
+
+        if( fromItem && fromItem->Type() == SCH_SYMBOL_T )
+            symbols.insert( static_cast<SCH_SYMBOL*>( fromItem ) );
+
+        if( toItem && toItem->Type() == SCH_SYMBOL_T )
+            symbols.insert( static_cast<SCH_SYMBOL*>( toItem ) );
+
+        SCH_NETCHAIN* committed = graph->CreateManualNetChain( name, symbols, prow.memberNets,
+                                                               prow.forceFromPinUuid,
+                                                               prow.forceToPinUuid,
+                                                               prow.forceFromRef, prow.forceFromPinNum,
+                                                               prow.forceToRef, prow.forceToPinNum );
+
+        if( !committed )
+        {
+            wxMessageBox( _( "Failed to create the manual net chain." ), _( "Create Net Chain" ),
+                          wxOK | wxICON_ERROR, this );
+            return false;
+        }
     }
 
     m_createdCount++;
@@ -376,17 +398,36 @@ void DIALOG_CREATE_NET_CHAIN::OnFindPathClicked( wxCommandEvent& aEvent )
         if( answer == wxYES )
         {
             std::set<wxString> fromNets, toNets;
+            SCH_PIN*           fromTerminalPin = nullptr;
+            SCH_PIN*           toTerminalPin = nullptr;
 
             for( SCH_PIN* pin : fromPins )
             {
                 if( pin->Connection() && !pin->Connection()->Name().IsEmpty() )
+                {
                     fromNets.insert( pin->Connection()->Name() );
+
+                    if( !fromTerminalPin )
+                        fromTerminalPin = pin;
+                }
             }
 
             for( SCH_PIN* pin : toPins )
             {
                 if( pin->Connection() && !pin->Connection()->Name().IsEmpty() )
+                {
                     toNets.insert( pin->Connection()->Name() );
+
+                    if( !toTerminalPin )
+                        toTerminalPin = pin;
+                }
+            }
+
+            if( !fromTerminalPin || !toTerminalPin )
+            {
+                wxMessageBox( _( "Selected components have no connected pins to anchor a manual chain." ),
+                              _( "Find Path" ), wxOK | wxICON_ERROR, this );
+                return;
             }
 
             // Replace grid with just this one force-created entry
@@ -397,6 +438,12 @@ void DIALOG_CREATE_NET_CHAIN::OnFindPathClicked( wxCommandEvent& aEvent )
             row.isManual = true;
             row.forceFromUuid = fromSym->m_Uuid;
             row.forceToUuid = toSym->m_Uuid;
+            row.forceFromPinUuid = fromTerminalPin->m_Uuid;
+            row.forceToPinUuid = toTerminalPin->m_Uuid;
+            row.forceFromRef = fromRef;
+            row.forceToRef = toRef;
+            row.forceFromPinNum = fromTerminalPin->GetNumber();
+            row.forceToPinNum = toTerminalPin->GetNumber();
             row.suggestedName = fromRef + wxT( "_" ) + toRef;
             row.terminals = fromRef + wxT( " \u2192 " ) + toRef;
             row.memberNets.insert( fromNets.begin(), fromNets.end() );
@@ -731,7 +778,15 @@ int DIALOG_CREATE_NET_CHAIN::selectedRow() const
     if( !rows.empty() )
         return rows.front();
 
-    return m_chainsGrid->GetGridCursorRow();
+    // The grid cursor can survive a DeleteRows/AppendRows rebuild and point at an index
+    // beyond the new row count.  Clamp before returning so callers don't dereference a
+    // stale data slot.
+    int cursor = m_chainsGrid->GetGridCursorRow();
+
+    if( cursor < 0 || cursor >= m_chainsGrid->GetNumberRows() )
+        return -1;
+
+    return cursor;
 }
 
 

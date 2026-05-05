@@ -98,6 +98,7 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
     m_ERCSeverities[ERCE_UNSPECIFIED]             = RPT_SEVERITY_UNDEFINED;
     m_ERCSeverities[ERCE_ENDPOINT_OFF_GRID]       = RPT_SEVERITY_WARNING;
     m_ERCSeverities[ERCE_PIN_TO_PIN_WARNING]      = RPT_SEVERITY_WARNING;
+    m_ERCSeverities[ERCE_PIN_TO_PIN_ERROR]        = RPT_SEVERITY_ERROR;
     m_ERCSeverities[ERCE_SIMILAR_LABELS]          = RPT_SEVERITY_WARNING;
     m_ERCSeverities[ERCE_SIMILAR_POWER]           = RPT_SEVERITY_WARNING;
     m_ERCSeverities[ERCE_SIMILAR_LABEL_AND_POWER] = RPT_SEVERITY_WARNING;
@@ -275,26 +276,26 @@ SEVERITY ERC_SETTINGS::GetSeverity( int aErrorCode ) const
     {
         return RPT_SEVERITY_ERROR;
     }
-    // Special-case pin-to-pin errors:
-    // Ignore-or-not is controlled by ERCE_PIN_TO_PIN_WARNING (for both)
-    // Warning-or-error is controlled by which errorCode it is
+    // Pin-to-pin codes carry independent ignore state but a fixed reported severity.
+    // Warning-or-error is controlled by which errorCode it is, so each slot's stored
+    // value is consulted only to determine ignore-vs-active.
     else if( aErrorCode == ERCE_PIN_TO_PIN_ERROR )
     {
-        wxASSERT( m_ERCSeverities.count( ERCE_PIN_TO_PIN_WARNING ) );
+        auto it = m_ERCSeverities.find( ERCE_PIN_TO_PIN_ERROR );
 
-        if( m_ERCSeverities.at( ERCE_PIN_TO_PIN_WARNING ) == RPT_SEVERITY_IGNORE )
+        if( it != m_ERCSeverities.end() && it->second == RPT_SEVERITY_IGNORE )
             return RPT_SEVERITY_IGNORE;
-        else
-            return RPT_SEVERITY_ERROR;
+
+        return RPT_SEVERITY_ERROR;
     }
     else if( aErrorCode == ERCE_PIN_TO_PIN_WARNING )
     {
-        wxASSERT( m_ERCSeverities.count( ERCE_PIN_TO_PIN_WARNING ) );
+        auto it = m_ERCSeverities.find( ERCE_PIN_TO_PIN_WARNING );
 
-        if( m_ERCSeverities.at( ERCE_PIN_TO_PIN_WARNING ) == RPT_SEVERITY_IGNORE )
+        if( it != m_ERCSeverities.end() && it->second == RPT_SEVERITY_IGNORE )
             return RPT_SEVERITY_IGNORE;
-        else
-            return RPT_SEVERITY_WARNING;
+
+        return RPT_SEVERITY_WARNING;
     }
     else if( aErrorCode == ERCE_GENERIC_WARNING )
     {

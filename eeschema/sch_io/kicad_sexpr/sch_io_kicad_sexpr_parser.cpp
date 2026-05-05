@@ -5458,6 +5458,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchNetChain()
     wxString netClass;
     COLOR4D  color = COLOR4D::UNSPECIFIED;
     wxString fromRef, fromPin, toRef, toPin;
+    std::set<wxString> memberNets;
 
     for( T tok = NextTok(); tok != T_RIGHT; tok = NextTok() )
     {
@@ -5495,6 +5496,16 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchNetChain()
             color = COLOR4D( r / 255.0, g / 255.0, b / 255.0, al );
             NeedRIGHT();
         }
+        else if( tok == T_nets )
+        {
+            for( T inner = NextTok(); inner != T_RIGHT; inner = NextTok() )
+            {
+                if( !IsSymbol( inner ) && inner != T_NUMBER )
+                    Expecting( "net name" );
+
+                memberNets.insert( FromUTF8() );
+            }
+        }
         else
         {
             // Skip unknown subsections
@@ -5525,6 +5536,9 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchNetChain()
 
     if( color != KIGFX::COLOR4D::UNSPECIFIED )
         m_netChainColors[name] = color;
+
+    if( !memberNets.empty() )
+        m_netChainMemberNets[name] = std::move( memberNets );
 }
 
 

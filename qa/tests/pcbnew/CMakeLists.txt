@@ -93,6 +93,7 @@ set( QA_PCBNEW_SRCS
     # Net chain roundtrip tests
     net_chains/test_net_chain_terminal_pads.cpp
     net_chains/test_net_chain_terminal_pad_assignment.cpp
+    net_chains/test_net_chain_terminal_pad_stale.cpp
     # Net chain aggregation / skew / total length tests
     net_chains/test_net_chain_skew_tuning.cpp
     net_chains/test_net_chain_total_length.cpp

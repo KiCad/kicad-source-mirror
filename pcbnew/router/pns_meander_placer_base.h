@@ -147,6 +147,12 @@ protected:
      */
     int64_t lineDelay( const ITEM_SET& aLine, const SOLID* aStartPad, const SOLID* aEndPad ) const;
 
+    /**
+     * Cache the per-session chain-extras length/delay (other nets in the same chain) so per-Move
+     * use does not re-walk the live BOARD. Called from Start() of each derived placer.
+     */
+    void initChainExtras();
+
     ///< Original path length/delay captured at Start().
     long long int m_baselineLength = 0;
     int64_t       m_baselineDelay = 0;

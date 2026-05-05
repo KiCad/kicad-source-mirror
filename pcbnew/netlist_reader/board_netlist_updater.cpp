@@ -80,6 +80,35 @@ BOARD_NETLIST_UPDATER::~BOARD_NETLIST_UPDATER()
 }
 
 
+void BOARD_NETLIST_UPDATER::ApplyChainAssignments( BOARD* aBoard, const NETLIST& aNetlist,
+                                                   REPORTER* aReporter, bool aDryRun )
+{
+    for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
+    {
+        const wxString previous = net->GetNetChain();
+        wxString       next = aNetlist.GetNetChainFor( net->GetNetname() );
+
+        if( !previous.IsEmpty() && next.IsEmpty() && aReporter && !aDryRun )
+        {
+            aReporter->Report(
+                    wxString::Format(
+                            _( "Net chain assignment '%s' on net '%s' cleared by netlist "
+                               "update." ),
+                            previous, net->GetNetname() ),
+                    RPT_SEVERITY_WARNING );
+        }
+
+        net->SetNetChain( next );
+
+        if( previous != next )
+        {
+            for( int i = 0; i < 2; ++i )
+                net->ClearTerminalPad( i );
+        }
+    }
+}
+
+
 // These functions allow inspection of pad nets during dry runs by keeping a cache of
 // current pad netnames indexed by pad.
 
@@ -2437,8 +2466,9 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
         m_board->GetConnectivity()->RefreshNetcodeMap( m_board );
 
-        for( NETINFO_ITEM* net : m_board->GetNetInfo() )
-            net->SetNetChain( aNetlist.GetNetChainFor( net->GetNetname() ) );
+        // Netlist is authoritative for chain assignment, so the terminal-pin reapplication
+        // below starts from a clean slate.
+        ApplyChainAssignments( m_board, aNetlist, m_reporter, m_isDryRun );
 
         // Net chains may specify a display colour override; lift that into the
         // board-side lookup so the PCB painter can use it when highlighting.
@@ -2546,11 +2576,11 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     if( net != termNet && net->GetNetChain() == sig.first
                         && net->GetTerminalPad( i ) )
                     {
-                        net->SetTerminalPad( i, nullptr );
+                        net->ClearTerminalPad( i );
                     }
                 }
 
-                termNet->SetTerminalPad( i, pads[i] );
+                termNet->SetTerminal( i, pads[i] );
             }
         }
 

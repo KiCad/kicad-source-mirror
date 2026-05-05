@@ -109,6 +109,13 @@ void NETINFO_ITEM::ResolveTerminalPads( BOARD* aBoard )
 }
 
 
+void NETINFO_ITEM::SetTerminal( int aIndex, PAD* aPad )
+{
+    m_terminalPads[aIndex] = aPad;
+    m_terminalPadUuids[aIndex] = aPad ? aPad->m_Uuid : niluuid;
+}
+
+
 void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.emplace_back( _( "Net Name" ), UnescapeString( GetNetname() ) );

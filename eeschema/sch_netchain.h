@@ -33,6 +33,10 @@
 class SCH_NETCHAIN
 {
 public:
+    /// Prefix used when synthesising net names for unnamed subgraphs.  Such names
+    /// embed the per-run subgraph code and so are not stable across reloads.
+    static constexpr char SYNTHETIC_NET_PREFIX[] = "__SG_";
+
     SCH_NETCHAIN() {}
 
     void SetName( const wxString& aName ) { m_name = aName; }
@@ -110,8 +114,17 @@ public:
         m_terminalPinNum[1] = aPinB;
     }
 
-    const wxString& GetTerminalRef( int aIdx ) const { return m_terminalRef[aIdx]; }
-    const wxString& GetTerminalPinNum( int aIdx ) const { return m_terminalPinNum[aIdx]; }
+    const wxString& GetTerminalRef( int aIdx ) const
+    {
+        wxASSERT( aIdx >= 0 && aIdx < 2 );
+        return m_terminalRef[aIdx];
+    }
+
+    const wxString& GetTerminalPinNum( int aIdx ) const
+    {
+        wxASSERT( aIdx >= 0 && aIdx < 2 );
+        return m_terminalPinNum[aIdx];
+    }
 
 private:
     wxString                       m_name;

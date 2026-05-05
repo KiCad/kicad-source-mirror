@@ -119,6 +119,23 @@ public:
     void SetTerminalPad( int aIndex, PAD* aPad ) { m_terminalPads[aIndex] = aPad; }
     void SetTerminalPadUuid( int aIndex, const KIID& aUuid ) { m_terminalPadUuids[aIndex] = aUuid; }
     const KIID& GetTerminalPadUuid( int aIndex ) const { return m_terminalPadUuids[aIndex]; }
+
+    /**
+     * Reset the terminal-pad pointer and UUID at @p aIndex to their empty state so the
+     * pair stays in lockstep.
+     */
+    void ClearTerminalPad( int aIndex )
+    {
+        m_terminalPads[aIndex] = nullptr;
+        m_terminalPadUuids[aIndex] = niluuid;
+    }
+
+    /**
+     * Set the terminal-pad pointer and the persisted UUID at @p aIndex from a single pad,
+     * keeping the two views consistent.
+     */
+    void SetTerminal( int aIndex, PAD* aPad );
+
     void ResolveTerminalPads( BOARD* aBoard );
 
     /**

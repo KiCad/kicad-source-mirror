@@ -150,6 +150,7 @@ set( QA_EESCHEMA_SRCS
     test_remote_symbol_import.cpp
     test_remote_symbol_load_from_payload.cpp
     test_backannotate_unit_swap.cpp
+    test_netlist_exporter_xml_chain_gating.cpp
     test_netlist_exporter_xml_stacked.cpp
     test_netlist_exporter_xml_terminal_pins.cpp
     test_resolve_drivers.cpp
@@ -173,6 +174,8 @@ set( QA_EESCHEMA_SRCS
     net_chains/test_net_chain_save_root_only.cpp
     net_chains/test_net_chain_resolve_terminals.cpp
     net_chains/test_net_chain_hierarchical_roundtrip.cpp
+    net_chains/test_net_chain_manual.cpp
+    net_chains/test_net_chain_recalc_refresh.cpp
 )
 
 if( WIN32 )

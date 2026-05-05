@@ -534,12 +534,11 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 {
                     double bridging = 0.0;
 
+                    std::vector<PAD*> chainPads;
+
                     for( FOOTPRINT* fp : m_board->Footprints() )
                     {
-                        // Collect every chain-member pad on this footprint so a 3+ pad device
-                        // (ferrite bead with center tap, transformer winding, etc.) can't be
-                        // silently reduced to an arbitrary 2-pad bridge by net-code keying.
-                        std::vector<PAD*> chainPads;
+                        chainPads.clear();
 
                         for( PAD* pad : fp->Pads() )
                         {
@@ -549,20 +548,38 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                                 continue;
 
                             chainPads.push_back( pad );
-
-                            if( chainPads.size() > 2 )
-                                break;
                         }
 
-                        if( chainPads.size() != 2 )
+                        if( chainPads.size() < 2 )
                             continue;
 
-                        if( chainPads[0]->GetNetCode() == chainPads[1]->GetNetCode() )
+                        int firstNet = chainPads.front()->GetNetCode();
+
+                        auto crossesNet = [firstNet]( const PAD* p )
+                                          { return p->GetNetCode() != firstNet; };
+
+                        if( !std::any_of( chainPads.begin() + 1, chainPads.end(), crossesNet ) )
                             continue;
 
-                        VECTOR2D delta = VECTOR2D( chainPads[0]->GetCenter() )
-                                       - VECTOR2D( chainPads[1]->GetCenter() );
-                        bridging += delta.EuclideanNorm();
+                        // Take the max pairwise cross-net pad span as a conservative upper
+                        // bound on bridging.  Dropping the 3+ pad case would under-report
+                        // length DRC; over-reporting only fails an already-tight budget.
+                        double maxSpan = 0.0;
+
+                        for( size_t i = 0; i < chainPads.size(); ++i )
+                        {
+                            for( size_t j = i + 1; j < chainPads.size(); ++j )
+                            {
+                                if( chainPads[i]->GetNetCode() == chainPads[j]->GetNetCode() )
+                                    continue;
+
+                                VECTOR2D delta = VECTOR2D( chainPads[i]->GetCenter() )
+                                               - VECTOR2D( chainPads[j]->GetCenter() );
+                                maxSpan = std::max( maxSpan, delta.EuclideanNorm() );
+                            }
+                        }
+
+                        bridging += maxSpan;
                     }
 
                     agg.total += bridging;

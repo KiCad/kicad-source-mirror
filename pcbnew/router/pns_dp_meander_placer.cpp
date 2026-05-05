@@ -163,31 +163,7 @@ bool DP_MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_baselineLength = origPathLength();
     m_baselineDelay = m_settings.m_isTimeDomain ? origPathDelay() : 0;
 
-    // Cache the chain extras (other nets in the same chain) once at session start. The
-    // non-edited members of a chain don't change while we're tuning, so we avoid the
-    // O(N nets * M tracks) BOARD walk on every Move event.
-    m_chainExtrasLength = 0;
-    m_chainExtrasDelay = 0;
-    m_chainExtrasValid = false;
-
-    const std::vector<NET_HANDLE> startNets = CurrentNets();
-    long long extraLen = 0;
-    long long extraDelay = 0;
-    bool aggregated = false;
-
-    if( startNets.size() >= 2 )
-        aggregated = Router()->GetInterface()->GetSignalAggregate( startNets[0], startNets[1], extraLen, extraDelay );
-    else if( startNets.size() == 1 )
-        aggregated = Router()->GetInterface()->GetSignalAggregate( startNets[0], startNets[0], extraLen, extraDelay );
-
-    if( aggregated )
-    {
-        m_chainExtrasLength = extraLen;
-        m_chainExtrasDelay = extraDelay;
-    }
-
-    if( !startNets.empty() )
-        m_chainExtrasValid = true;
+    initChainExtras();
 
     calculateTimeDomainTargets();
 
