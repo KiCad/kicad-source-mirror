@@ -227,9 +227,10 @@ private:
 
     bool isOldFormat() const { return m_sdb.IsOldFormat(); }
 
-    // v0x2022 shares the old-format placement layout but its decal chain differs, so the
-    // direct decal-index pad chain is enabled for v0x2021 only.
-    bool isV2021PadChain() const { return m_version == 0x2021; }
+    // Both old dialects resolve a placement's decal via a direct index in the next physical
+    // record rather than through a parttype-definition table (v0x2022 does have such a table,
+    // but placements don't reference it); only the field's offset within that record differs.
+    bool usesDirectDecalChain() const { return m_version == 0x2021 || m_version == 0x2022; }
 
     // The SECTION overload forwards to the int form so a constant section reads by role; the
     // int form serves callers that iterate a computed directory index.
@@ -244,9 +245,19 @@ private:
     // the scored new-format locator does not resolve the v2021 decal-index lag.
     void recoverOmittedPlacementsOld();
 
+    // v0x2022 placements are relative to a different section-1 origin field than every other
+    // geometry type in the file (aAltOriginXOff/YOff, when set); returns the (x, y) shift to
+    // add to a raw placement coordinate so the shared origin subtraction downstream still lands
+    // on the correct design coordinate. Zero when either offset is unset (every other version).
+    std::pair<int32_t, int32_t> placementOriginAdjust( std::optional<int> aAltOriginXOff,
+                                                        std::optional<int> aAltOriginYOff ) const;
+
     // Build a PART from a placement record's refdes and its coordinate, rotation and side fields.
+    // aXAdjust/aYAdjust shift the raw coordinate before the shared origin subtraction downstream;
+    // only v0x2022 uses a nonzero value, to compensate for its placement-specific origin field.
     PART makePlacementPart( const SDB_RECORD& aRec, int aXOff, std::optional<int> aYOff,
-                            int aAngleOff, int aNameOff, const std::string& aRefDes ) const;
+                            int aAngleOff, int aNameOff, const std::string& aRefDes,
+                            int32_t aXAdjust = 0, int32_t aYAdjust = 0 ) const;
     void parsePadStacks();
     void parsePartDecals();
     void parseDecalNameTable();

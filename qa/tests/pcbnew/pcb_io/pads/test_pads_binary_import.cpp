@@ -1790,4 +1790,33 @@ BOOST_AUTO_TEST_CASE( SdbContainerDecode )
 }
 
 
+// Matches the "__"-joined, space-to-underscore flattening used for the ground-truth
+// ASCII exports, so dumps and exports pair up by filename.
+static std::string FlattenPath( const std::filesystem::path& aRoot, const std::filesystem::path& aFile )
+{
+    std::filesystem::path relPath = std::filesystem::relative( aFile, aRoot );
+    std::string           out;
+    bool                  first = true;
+
+    for( const auto& part : relPath )
+    {
+        if( !first )
+            out += "__";
+
+        std::string p = part.string();
+
+        for( char& c : p )
+        {
+            if( c == ' ' )
+                c = '_';
+        }
+
+        out += p;
+        first = false;
+    }
+
+    return out;
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

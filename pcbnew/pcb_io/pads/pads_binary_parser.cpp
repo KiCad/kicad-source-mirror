@@ -59,28 +59,51 @@ struct PLACEMENT_LAYOUT
     int                angleOff = 0;          // i32 rotation
     int                feffOff = 0;           // 0xFEFF marker offset within the record
     int                scanStride = 0;        // record stride for the section-19/21 FEFF scan
-    bool               v2021PadChain = false; // direct decal-index pad chain (v0x2021 only)
+
+    // Both old dialects carry the decal-name-table index directly at this offset within the NEXT
+    // physical record (a +1 block-interleave lag); nullopt for new dialects, which resolve via
+    // the parttype-index chain (parttypeIndexNextRecord) instead. The offset differs per dialect
+    // (v0x2021 @+56, v0x2022 @+40).
+    std::optional<int> directDecalOff = std::nullopt;
+
+    // The parttype index lives in the NEXT physical record's @+4 field (a +1 block-interleave
+    // lag). New-format dialects use it; both old dialects resolve decals directly via
+    // directDecalOff instead.
+    bool               parttypeIndexNextRecord = false;
+
+    // v0x2022 only: X/Y are relative to a DIFFERENT section-1 origin than every other
+    // geometry type in the file (section-1 +44/+48, not the usual +60/+64). Set together.
+    std::optional<int> altOriginXOff = std::nullopt;
+    std::optional<int> altOriginYOff = std::nullopt;
 };
 
 
 static const PLACEMENT_LAYOUT& placementLayout( uint16_t aVersion )
 {
-    // v0x2021 and v0x2022 share the old offset block; only v0x2021 enables the direct
-    // decal-index pad chain. The record is structurally identical to the new dialect (refdes,
-    // then X/Y/angle/side following), but the old framing anchors refdes at +76 instead of
-    // +44, so X/Y/angle/side land at +92/+96/+100/+104.
+    // v0x2021 anchors refdes at +76, with X/Y/angle/side at +92/+96/+100/+104 (partly past the
+    // 96 B stride, spilling into the next physical record -- the format's usual field lag).
     static constexpr PLACEMENT_LAYOUT v2021{ .nameOff = 76, .xOff = 92, .yOff = 96, .angleOff = 100,
-                                             .feffOff = 28, .scanStride = 96, .v2021PadChain = true };
-    static constexpr PLACEMENT_LAYOUT vOld{ .nameOff = 76, .xOff = 92, .yOff = 96, .angleOff = 100,
-                                            .feffOff = 28, .scanStride = 96, .v2021PadChain = false };
+                                             .feffOff = 28, .scanStride = 96, .directDecalOff = 56 };
+    // v0x2022 uses a DIFFERENT anchor (+60) despite sharing v0x2021's 96 B stride, with X/Y/angle
+    // at +76/+80/+84 -- and critically, those coordinates are relative to section-1 +44/+48, not
+    // the +60/+64 origin every other v0x2022 geometry type uses. Verified against 2FOC_4.pcb
+    // ground truth (J13/J4/J5 zero-rotation parts, U19/U20/U21 at 270/270/90 degrees) -- all six
+    // match exactly with this layout and origin. Like v0x2021, the decal-name-table index is
+    // direct (not via the parttype-index chain), but at the next record's +40 rather than +56;
+    // verified against 337 of 2FOC_4.pcb's 340 placements (the rest resolve to a plausible
+    // sibling decal, e.g. FIDUCIAL/FIDTOP, so are ground-truth parsing noise, not real misses).
+    static constexpr PLACEMENT_LAYOUT v2022{ .nameOff = 60, .xOff = 76, .yOff = 80, .angleOff = 84,
+                                             .feffOff = 28, .scanStride = 96, .directDecalOff = 40,
+                                             .altOriginXOff = 44, .altOriginYOff = 48 };
     static constexpr PLACEMENT_LAYOUT vNew{ .nameOff = 44, .xOff = 60, .yOff = 64, .angleOff = 68,
-                                            .feffOff = 92, .scanStride = 94, .v2021PadChain = false };
+                                            .feffOff = 92, .scanStride = 94,
+                                            .parttypeIndexNextRecord = true };
 
     if( aVersion == 0x2021 )
         return v2021;
 
     if( aVersion == 0x2022 )
-        return vOld;
+        return v2022;
 
     return vNew;
 }
@@ -297,13 +320,32 @@ void BINARY_PARSER::parseBoardSetup()
 }
 
 
+std::pair<int32_t, int32_t> BINARY_PARSER::placementOriginAdjust( std::optional<int> aAltOriginXOff,
+                                                                   std::optional<int> aAltOriginYOff ) const
+{
+    if( !aAltOriginXOff || !aAltOriginYOff )
+        return { 0, 0 };
+
+    const SDB_SECTION* setup = getSection( SECTION::BoardSetup );
+
+    if( !setup || !m_cursor.InBounds( setup->dataOffset + *aAltOriginYOff, 4 ) )
+        return { 0, 0 };
+
+    int32_t altOriginX = m_sdb.RecordAt( setup->dataOffset ).I32( *aAltOriginXOff );
+    int32_t altOriginY = m_sdb.RecordAt( setup->dataOffset ).I32( *aAltOriginYOff );
+
+    return { m_originX - altOriginX, m_originY - altOriginY };
+}
+
+
 PART BINARY_PARSER::makePlacementPart( const SDB_RECORD& aRec, int aXOff, std::optional<int> aYOff,
-                                      int aAngleOff, int aNameOff, const std::string& aRefDes ) const
+                                      int aAngleOff, int aNameOff, const std::string& aRefDes,
+                                      int32_t aXAdjust, int32_t aYAdjust ) const
 {
     PART part;
     part.name = aRefDes;
-    part.location.x = toBasicCoordX( aRec.I32( aXOff ) );
-    part.location.y = aYOff ? toBasicCoordY( aRec.I32( *aYOff ) ) : 0;
+    part.location.x = toBasicCoordX( aRec.I32( aXOff ) + aXAdjust );
+    part.location.y = aYOff ? toBasicCoordY( aRec.I32( *aYOff ) + aYAdjust ) : 0;
     part.rotation = toBasicAngle( aRec.I32( aAngleOff ) );
 
     // The side flag is the word at nameOff+28 in both dialects; bit 0 marks a bottom placement.
@@ -330,6 +372,8 @@ void BINARY_PARSER::parsePartPlacements()
     // The old framing reads the side flag at nameOff+28, past its 96 B stride.
     size_t fieldSpan = std::max<size_t>( recSize, static_cast<size_t>( layout.nameOff ) + 29 );
 
+    const auto [xAdjust, yAdjust] = placementOriginAdjust( layout.altOriginXOff, layout.altOriginYOff );
+
     for( uint32_t i = 0; i < entry->count; ++i )
     {
         size_t off = static_cast<size_t>( i ) * recSize;
@@ -346,11 +390,11 @@ void BINARY_PARSER::parsePartPlacements()
             continue;
 
         PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
-                                       layout.nameOff, refDes );
+                                       layout.nameOff, refDes, xAdjust, yAdjust );
 
         // The parttype index lives in the NEXT physical record's @+4 field (a +1 block-
         // interleave lag); linkPartsToDecals resolves it to the decal name.
-        if( !isOld && i + 1 < entry->count )
+        if( layout.parttypeIndexNextRecord && i + 1 < entry->count )
         {
             size_t nextOff = ( static_cast<size_t>( i ) + 1 ) * recSize;
 
@@ -358,13 +402,15 @@ void BINARY_PARSER::parsePartPlacements()
                 m_partTypeIndex[m_parts.size()] = m_sdb.Record( *entry, i + 1, recSize ).U32( 4 );
         }
 
-        // v0x2021 has no parttype layer; the decal index is the NEXT record's @+56 field.
-        if( layout.v2021PadChain && i + 1 < entry->count )
+        // Old dialects have no working parttype-index chain for placements; the decal index is
+        // direct, in the NEXT record at layout.directDecalOff.
+        if( layout.directDecalOff && i + 1 < entry->count )
         {
             size_t nextOff = ( static_cast<size_t>( i ) + 1 ) * recSize;
+            uint32_t fieldOff = static_cast<uint32_t>( *layout.directDecalOff );
 
-            if( nextOff + 60 <= entry->totalBytes )
-                m_partDecalIndex[m_parts.size()] = m_sdb.Record( *entry, i + 1, recSize ).U32( 56 );
+            if( nextOff + fieldOff + 4 <= entry->totalBytes )
+                m_partDecalIndex[m_parts.size()] = m_sdb.Record( *entry, i + 1, recSize ).U32( fieldOff );
         }
 
         // Cluster membership is the 1-based CLSTID at nameOff+64 (=+108), present only in the
@@ -596,6 +642,8 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
     int    recSize = layout.scanStride;
     size_t fieldSpan = std::max<size_t>( recSize, static_cast<size_t>( layout.nameOff ) + 29 );
 
+    const auto [xAdjust, yAdjust] = placementOriginAdjust( layout.altOriginXOff, layout.altOriginYOff );
+
     std::unordered_set<std::string> existingRefs;
 
     for( const auto& p : m_parts )
@@ -613,7 +661,7 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
 
         uint32_t size = entry->totalBytes;
 
-        bool oldLeadingHandled = !layout.v2021PadChain;
+        bool oldLeadingHandled = !layout.directDecalOff.has_value();
 
         for( size_t pos = 0; pos + 1 < size; ++pos )
         {
@@ -636,7 +684,7 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
                 continue;
 
             // Emit the leading (anchor) block once, only after the first genuine placement is
-            // confirmed. Its decal index is in this first marked block's @+56.
+            // confirmed. Its decal index is in this first marked block's @+directDecalOff.
             if( !oldLeadingHandled )
             {
                 oldLeadingHandled = true;
@@ -651,9 +699,10 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
                         && !existingRefs.count( leadRef ) )
                     {
                         PART lead = makePlacementPart( leadRec, layout.xOff, layout.yOff,
-                                                       layout.angleOff, layout.nameOff, leadRef );
+                                                       layout.angleOff, layout.nameOff, leadRef,
+                                                       xAdjust, yAdjust );
 
-                        size_t leadField = base + 56;
+                        size_t leadField = base + static_cast<size_t>( *layout.directDecalOff );
 
                         if( m_cursor.InBounds( leadField, 4 ) )
                             m_partDecalIndex[m_parts.size()] = m_sdb.RecordAt( leadField ).U32( 0 );
@@ -670,14 +719,14 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
             SDB_RECORD partRec = m_sdb.RecordAt( base );
 
             PART part = makePlacementPart( partRec, layout.xOff, layout.yOff, layout.angleOff,
-                                           layout.nameOff, refDes );
+                                           layout.nameOff, refDes, xAdjust, yAdjust );
 
-            // The decal index is in the NEXT 96 B block's @+56. Gate on that block's own 0xFEFF
-            // marker so trailing section data cannot supply a bogus index.
-            if( layout.v2021PadChain )
+            // The decal index is in the NEXT 96 B block's @+directDecalOff. Gate on that block's
+            // own 0xFEFF marker so trailing section data cannot supply a bogus index.
+            if( layout.directDecalOff )
             {
                 size_t nextMarker = markerBase + OLD_REC_SIZE;
-                size_t nextField = base + OLD_REC_SIZE + 56;
+                size_t nextField = base + OLD_REC_SIZE + static_cast<size_t>( *layout.directDecalOff );
 
                 if( m_cursor.InBounds( nextMarker, 2 ) && m_data[nextMarker] == 0xFE
                     && m_data[nextMarker + 1] == 0xFF && m_cursor.InBounds( nextField, 4 ) )
@@ -890,12 +939,13 @@ void BINARY_PARSER::parseDecalNameTable()
 
 void BINARY_PARSER::parseDecalNameTableOld()
 {
-    // v0x2021 stores no parttype-definition layer and no 1188-byte sec14 header. Its complete
-    // decal-name table is a run of 100-byte records anchored at the JMPVIA_AAAAA signature in
-    // the section 12 tail, each carrying NAME @ +0 (null-terminated), a 0xFFFE sentinel @ +64
-    // that terminates the table, and a terminal count @ +72. Located by signature rather than a
-    // fixed offset because the v0x2021 section framing differs from the newer dialects.
-    if( !isV2021PadChain() )
+    // Neither old dialect (v0x2021 or v0x2022) stores the 1188-byte sec14 header the newer
+    // dialects use. Both share the same complete decal-name table instead: a run of 100-byte
+    // records anchored at the JMPVIA_AAAAA signature in the section 12 tail, each carrying
+    // NAME @ +0 (null-terminated), a 0xFFFE sentinel @ +64 that terminates the table, and a
+    // terminal count @ +72. Located by signature rather than a fixed offset because the old
+    // dialects' section framing differs from the newer ones.
+    if( !isOldFormat() )
         return;
 
     static constexpr int REC_SIZE = 100;
@@ -948,36 +998,45 @@ void BINARY_PARSER::parseDecalNameTableOld()
 
 void BINARY_PARSER::parsePartTypeTable()
 {
-    // The parttype-definition table sits in a fixed-size header immediately before section 17,
-    // at sec17.dataOffset - 1232. Each record is 224 bytes; the decal_index (into
-    // m_decalNameTable) is at payload +96. A placement's parttype index selects a record here.
-    if( isOldFormat() )
+    // The parttype-definition table's record size, decal_index field offset, and header framing
+    // all differ between dialects. New dialects carry a fixed-size header immediately before
+    // section 17, at sec17.dataOffset - 1232, with 224-byte records and decal_index at +96.
+    // v0x2022 has no such header -- its table starts exactly at sec17.dataOffset, with 208-byte
+    // records and decal_index at +112 (v0x2021 has no parttype-definition layer at all).
+    // Verified against 2FOC_4.pcb: the decal_index for DSPIC33FJ128MC802/TP-LC/LMC7101/
+    // MOLEX53261_0790 all land on +112 and resolve to their correct ground-truth decal names via
+    // m_decalNameTable. Note placements don't reference this table for v0x2022 -- see
+    // usesDirectDecalChain -- but it is still populated for potential future use (e.g. rules).
+    if( m_version == 0x2021 )
         return;
 
-    static constexpr int PARTTYPE_HDR_OFFSET = 1232;
-    static constexpr int REC_SIZE = 224;
+    const bool isV2022 = ( m_version == 0x2022 );
+
+    const uint32_t hdrOffset = isV2022 ? 0 : 1232;
+    const uint32_t recSize   = isV2022 ? 208 : 224;
+    const uint32_t decalOff  = isV2022 ? 112 : 96;
 
     const SDB_SECTION* sec17 = getSection( SECTION::ParttypeDefs );
 
-    if( !sec17 || sec17->count == 0 || sec17->dataOffset < PARTTYPE_HDR_OFFSET )
+    if( !sec17 || sec17->count == 0 || sec17->dataOffset < hdrOffset )
         return;
 
-    uint32_t start = sec17->dataOffset - PARTTYPE_HDR_OFFSET;
+    uint32_t start = sec17->dataOffset - hdrOffset;
 
     m_partTypeDecalIndex.clear();
     m_partTypeDecalIndex.reserve( sec17->count );
 
     for( uint32_t k = 0; k < sec17->count; ++k )
     {
-        uint32_t off = start + k * REC_SIZE;
+        uint32_t off = start + k * recSize;
 
-        if( off + 100 > m_data.size() )
+        if( off + decalOff + 4 > m_data.size() )
         {
             m_partTypeDecalIndex.push_back( -1 );
             continue;
         }
 
-        m_partTypeDecalIndex.push_back( m_sdb.RecordAt( off ).I32( 96 ) );
+        m_partTypeDecalIndex.push_back( m_sdb.RecordAt( off ).I32( decalOff ) );
     }
 }
 
@@ -993,6 +1052,8 @@ void BINARY_PARSER::parsePartDecals()
         return;
 
     bool     isNew = !isOldFormat();
+    bool     isV2022 = ( m_version == 0x2022 );
+    uint32_t nameOff = isNew ? 44 : ( isV2022 ? 12 : 28 );
     uint32_t recSize = entry->stride;
 
     for( uint32_t i = 0; i < entry->count; ++i )
@@ -1002,8 +1063,10 @@ void BINARY_PARSER::parsePartDecals()
 
         SDB_RECORD rec = m_sdb.Record( *entry, i, recSize );
 
-        // New format carries a unit flag at +76: 0x4D 'M' = metric, else inch.
-        std::string name = isNew ? rec.Str( 44, 32 ) : rec.Str( 28, 32 );
+        // New format carries a unit flag at +76: 0x4D 'M' = metric, else inch. v0x2022's name
+        // field sits at +12 rather than v0x2021's +28, matching the same per-dialect field-shift
+        // seen throughout this section's old-format layouts.
+        std::string name = rec.Str( nameOff, 32 );
 
         if( name.empty() )
             continue;
@@ -2927,13 +2990,12 @@ void BINARY_PARSER::parseTextRecords()
 struct VIA_SEC60_LAYOUT
 {
     int                xOff = 0;             // raw via X
-    int                yOff = 0;             // raw via Y (pre Y-flip)
+    int                yOff = 0;             // raw via Y
     std::optional<int> netIndexOff = std::nullopt; // dense net-index byte; old dialect only
     bool               dedup = false;        // collapse repeated coordinates (new dialects only)
     uint32_t           minRecSize = 0;       // 0 = no record-size gate
     bool               exactRecSize = false; // require stride == minRecSize (else >=)
     uint32_t           boundSize = 0;        // bytes that must be present per record (0 = use stride)
-    bool               guardUsesRawY = false;// deviation guard on rawY (true) vs the narrowed vy
     bool ( *matchesMarker )( const BINARY_CURSOR&, size_t aBase ) = nullptr;
 };
 
@@ -2968,16 +3030,27 @@ static bool matchVia2026( const BINARY_CURSOR& aCur, size_t aBase )
 }
 
 
+// v0x2027 64-byte records. 0x0E fill-type marker at @10. Verified against the
+// OpenCellular OC-LTE-BASEBAND corpus board (v0x2027, 3943 vias) by cross-referencing
+// the *TESTPOINT* "TEST POINTS ON VIAS" table from the board's own ASCII export.
+static bool matchVia2027( const BINARY_CURSOR& aCur, size_t aBase )
+{
+    return aCur.U8At( aBase + 10 ) == 0x0E;
+}
+
+
 static const VIA_SEC60_LAYOUT* via60Layout( uint16_t aVersion )
 {
     // Only the fields that differ from the defaults are listed.
     static const VIA_SEC60_LAYOUT vOld{ .xOff = 1, .yOff = 5, .netIndexOff = 29,
                                         .matchesMarker = &matchViaOld };
     static const VIA_SEC60_LAYOUT v2025{ .xOff = 23, .yOff = 27, .dedup = true, .minRecSize = 64,
-                                         .exactRecSize = true, .boundSize = 64, .guardUsesRawY = true,
+                                         .exactRecSize = true, .boundSize = 64,
                                          .matchesMarker = &matchVia2025 };
     static const VIA_SEC60_LAYOUT v2026{ .xOff = 17, .yOff = 21, .dedup = true, .minRecSize = 64,
                                          .boundSize = 64, .matchesMarker = &matchVia2026 };
+    static const VIA_SEC60_LAYOUT v2027{ .xOff = 47, .yOff = 51, .dedup = true, .minRecSize = 64,
+                                         .boundSize = 64, .matchesMarker = &matchVia2027 };
 
     if( aVersion == 0x2021 || aVersion == 0x2022 )
         return &vOld;
@@ -2987,6 +3060,9 @@ static const VIA_SEC60_LAYOUT* via60Layout( uint16_t aVersion )
 
     if( aVersion == 0x2026 )
         return &v2026;
+
+    if( aVersion == 0x2027 )
+        return &v2027;
 
     return nullptr;
 }
@@ -3044,17 +3120,16 @@ void BINARY_PARSER::parseRouteVertices()
             if( !layout->matchesMarker( m_cursor, base ) )
                 continue;
 
-            SDB_RECORD rec  = m_sdb.RecordAt( base );
-            int32_t    vx   = rec.I32( layout->xOff );
-            int32_t    rawY = rec.I32( layout->yOff );
-            int32_t    vy   = static_cast<int32_t>( 2LL * m_originY - rawY );
+            SDB_RECORD rec = m_sdb.RecordAt( base );
+            int32_t    vx  = rec.I32( layout->xOff );
+            int32_t    vy  = rec.I32( layout->yOff );
 
-            // The deviation guard is symmetric about the origin, but old/0x2026 guard the
-            // narrowed vy while 0x2025 guards the raw Y; these match only while 2*originY - rawY
-            // stays in int32_t range, so each arm is reproduced exactly.
+            // Raw X/Y pass through unshifted, matching every other geometry reader (e.g.
+            // toBasicCoordX/Y): the single required origin-subtract-and-Y-flip happens later,
+            // in scalePoint()/PadsScaleCoord(), shared with placements and outlines. Pre-flipping
+            // here as well double-negates Y, mirroring every via to the wrong side of the origin.
             int64_t dx = static_cast<int64_t>( vx ) - m_originX;
-            int64_t dy = layout->guardUsesRawY ? ( static_cast<int64_t>( rawY ) - m_originY )
-                                               : ( static_cast<int64_t>( vy ) - m_originY );
+            int64_t dy = static_cast<int64_t>( vy ) - m_originY;
 
             if( std::abs( dx ) > MAX_COORD_DEVIATION || std::abs( dy ) > MAX_COORD_DEVIATION )
                 continue;
@@ -4096,10 +4171,12 @@ void BINARY_PARSER::linkPartsToDecals()
     if( m_parts.empty() || m_decals.empty() )
         return;
 
-    if( isOldFormat() )
+    if( usesDirectDecalChain() )
     {
-        // v0x2021 has no parttype-definition layer. The placement's decal is the direct index in
-        // m_partDecalIndex, resolved against the decal-name table.
+        // Both old dialects resolve a placement's decal via the direct index in
+        // m_partDecalIndex, against the decal-name table -- not through the parttype-index chain
+        // below (v0x2022 does have a parttype-definition table, see parsePartTypeTable, but
+        // placements don't reference it for their decal).
         if( m_partDecalIndex.empty() || m_decalNameTable.empty() )
             return;
 
