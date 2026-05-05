@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-01 15:37+0300\n"
-"PO-Revision-Date: 2026-05-03 21:10+0000\n"
+"PO-Revision-Date: 2026-05-06 11:11+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -10111,9 +10111,9 @@ msgid ""
 msgstr "Fehler beim Laden der Seite \"%s\": %s"
 
 #: common/richio.cpp:721
-#, fuzzy, c-format
+#, c-format
 msgid "Write failed to '%s': %s"
-msgstr "Start des Rebase fehlgeschlagen: %s"
+msgstr "Schreiben nach \"%s\" fehlgeschlagen: %s"
 
 #: common/settings/bom_settings.cpp:126
 msgid "Default Editing"
@@ -24566,9 +24566,8 @@ msgid "Incorrect inv_pin name"
 msgstr "Falscher Name für inv_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2839
-#, fuzzy
 msgid "Wrong number of columns for series pin mapping."
-msgstr "Falsche Anzahl von Spalten für Pinzuweisung."
+msgstr "Falsche Anzahl von Spalten für Mehrfachpinzuweisung."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2948
 msgid "Internal error detected, a waveform should exist"
@@ -31224,15 +31223,15 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_png.cpp:98
 #: kicad/cli/command_sch_export_plot.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Resolution in dots per inch (default %d)"
-msgstr "Auflösung in DPI (Standard: 300)"
+msgstr "Auflösung in DPI (Standard: %d)"
 
 #: kicad/cli/command_pcb_export_png.cpp:141
 #: kicad/cli/command_sch_export_plot.cpp:222
-#, fuzzy, c-format
+#, c-format
 msgid "DPI must be between %d and %d\n"
-msgstr "Der Wert muss zwischen %s und %s liegen."
+msgstr "Die Auflösung muss zwischen %d und %d liegen\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:79
@@ -33371,14 +33370,12 @@ msgid "Git Operation Delayed"
 msgstr "Git-Operation verzögert"
 
 #: kicad/project_tree_pane.cpp:1720
-#, fuzzy
 msgid "Keep Waiting"
-msgstr "Annotationen beibehalten"
+msgstr "Bitte warten"
 
 #: kicad/project_tree_pane.cpp:1720
-#, fuzzy
 msgid "Abandon"
-msgstr "Zufällig"
+msgstr "Abbrechen"
 
 #: kicad/project_tree_pane.cpp:1823
 msgid "The selected directory is already a Git project."
@@ -39342,14 +39339,14 @@ msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- DRC durch Benutzer abgebrochen. <br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "Canceled after %s"
-msgstr "Änderungen verwerfen"
+msgstr "Nach %s abgebrochen"
 
 #: pcbnew/dialogs/dialog_drc.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "Completed in %s"
-msgstr "Bauteil \"%s\" hinzugefügt zu \"%s\"."
+msgstr "In %s fertiggestellt"
 
 #: pcbnew/dialogs/dialog_drc.cpp:817
 #, c-format
@@ -42158,23 +42155,20 @@ msgid "Auto-migrate 3D model references"
 msgstr "3D-Modellverweise automatisch migrieren"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:662
-#, fuzzy
 msgid "(keep existing reference)"
-msgstr "Bestehende Referenzbezeichner beibehalten"
+msgstr "(bestehende Referenz beibehalten)"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:872
 msgid "Add 3D Model Search Directory"
 msgstr "3D-Modell-Suchverzeichnis hinzufügen"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:966
-#, fuzzy
 msgid "Select 3D Model File"
-msgstr "Auswahl des 3D-Modells"
+msgstr "3D-Modell auswählen"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:983
-#, fuzzy
 msgid "user-selected"
-msgstr "Kein Bus ausgewählt"
+msgstr "durch Nutzer gewählt"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1067
 msgid "Migrate 3D model references"
@@ -42199,29 +42193,24 @@ msgid "Potential replacements:"
 msgstr "Möglicher Ersatz:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
-#, fuzzy
 msgid "Add Search Directory..."
-msgstr "Neues Verzeichnis ..."
+msgstr "Suchverzeichnis hinzufügen..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:67
-#, fuzzy
 msgid "Open External File..."
-msgstr "Lokale Datei &öffnen..."
+msgstr "Externe Datei öffnen..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:105
-#, fuzzy
 msgid "Replace Models"
-msgstr "Alle ersetzen"
+msgstr "Modelle ersetzen"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:108
-#, fuzzy
 msgid "Keep Existing"
-msgstr "Vorhandene nutzen"
+msgstr "Vorhandene(s) beibehalten"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.h:68
-#, fuzzy
 msgid "Migrate 3D Models"
-msgstr "3D-Modelle aktualisieren"
+msgstr "3D-Modelle migrieren"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:96
 msgid "Rotate around item anchor"
@@ -52858,9 +52847,8 @@ msgstr[1] ""
 "werden."
 
 #: pcbnew/pcb_edit_frame.cpp:2035
-#, fuzzy
 msgid "Show options"
-msgstr "Andere Optionen"
+msgstr "Optionen anzeigen"
 
 #: pcbnew/pcb_edit_frame.cpp:2063
 msgid "Board file is read only."
@@ -56876,7 +56864,7 @@ msgstr "Zone verdoppeln"
 
 #: pcbnew/tools/board_editor_control.cpp:1876
 msgid "Move Zone to Top Priority"
-msgstr "Zone zur höchsten Priorität verschieben"
+msgstr "Zone auf höchste Priorität setzen"
 
 #: pcbnew/tools/board_editor_control.cpp:1930
 msgid "Raise Zone Priority"
@@ -56888,7 +56876,7 @@ msgstr "Zonenpriorität verringern"
 
 #: pcbnew/tools/board_editor_control.cpp:2065
 msgid "Move Zone to Bottom Priority"
-msgstr "Zone zur niedrigsten Priorität verschieben"
+msgstr "Zone auf niedrigste Priorität setzen"
 
 #: pcbnew/tools/board_editor_control.cpp:2138
 msgid "Selection contains no items with labeled nets."
@@ -58625,9 +58613,8 @@ msgstr ""
 "Aktualisieren der Footprints, um alle Änderungen der Bibliothek zu übernehmen"
 
 #: pcbnew/tools/pcb_actions.cpp:1003
-#, fuzzy
 msgid "Migrate 3D Models..."
-msgstr "Lade 3D-Modelle ..."
+msgstr "Migriere 3D-Modelle ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1004
 msgid "Replace obsolete WRL 3D model references with current STEP models"
@@ -59055,7 +59042,7 @@ msgstr "Zone auf Lage duplizieren ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1435
 msgid "Move to Top"
-msgstr "Nach oben verschieben"
+msgstr "Nach ganz oben schieben"
 
 #: pcbnew/tools/pcb_actions.cpp:1441
 msgid "Raise"
@@ -59067,7 +59054,7 @@ msgstr "Verringern"
 
 #: pcbnew/tools/pcb_actions.cpp:1453
 msgid "Move to Bottom"
-msgstr "Nach unten verschieben"
+msgstr "Nach ganz unten schieben"
 
 #: pcbnew/tools/pcb_actions.cpp:1461
 msgid "Place Footprints"
