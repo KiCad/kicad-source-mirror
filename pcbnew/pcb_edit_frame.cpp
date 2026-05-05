@@ -1614,7 +1614,11 @@ void PCB_EDIT_FRAME::doCloseWindow()
     }
 
     // Delete the auto save file if it exists.
-    wxFileName fn = GetBoard()->GetFileName();
+    if( !Prj().IsNullProject() && GetBoard() )
+    {
+        Kiway().LocalHistory().RemoveAutosaveFiles( Prj().GetProjectPath(),
+                                                    { GetBoard()->GetFileName() } );
+    }
 
     // Make sure local settings are persisted
     if( Prj().GetLocalSettings().ShouldAutoSave() )
