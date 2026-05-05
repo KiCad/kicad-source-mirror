@@ -592,11 +592,11 @@ protected:
 
     // Bridging cache (pad-to-pad gaps across 2-net series components in a chain)
 public:
-    long long GetCachedBridgingLength( BOARD* aBoard, const wxString& aNetChain, double* aDelayPsOut );
+    long long GetCachedBridgingLength( BOARD* aBoard, const wxString& aNetChain, double* aDelayIUOut );
 
 private:
     long long    m_cachedBridgingLen;
-    double       m_cachedBridgingDelayPs;
+    double       m_cachedBridgingDelayIU;
     wxString     m_cachedBridgingSignal;
     const BOARD* m_cachedBridgingBoardPtr = nullptr;
     size_t       m_cachedBridgingPadCount;

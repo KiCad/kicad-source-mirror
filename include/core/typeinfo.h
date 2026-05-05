@@ -137,8 +137,6 @@ enum KICAD_T
     PCB_SHAPE_LOCATE_ARC_T,
     PCB_SHAPE_LOCATE_POLY_T,
     PCB_SHAPE_LOCATE_BEZIER_T,
-    PCB_SHAPE_LOCATE_ELLIPSE_T,
-    PCB_SHAPE_LOCATE_ELLIPSE_ARC_T,
 
     /*
      * Draw items in library symbol.
@@ -237,9 +235,18 @@ enum KICAD_T
     SEARCH_STACK_T,
     S3D_CACHE_T,
 
+    // New types appended here to preserve historical KICAD_T ordinals
+    // (IPC clients with stale protobuf-generated headers depend on stable values).
+    PCB_SHAPE_LOCATE_ELLIPSE_T,
+    PCB_SHAPE_LOCATE_ELLIPSE_ARC_T,
+
     // End value
     MAX_STRUCT_TYPE_ID
 };
+
+static_assert( S3D_CACHE_T == 104,
+               "KICAD_T ordinals are exposed via IPC; new values must be appended at the end "
+               "of the enum, not inserted into existing blocks." );
 
 /**
  * Return the underlying type of the given type.

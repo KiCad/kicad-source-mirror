@@ -2965,7 +2965,9 @@ bool PNS_KICAD_IFACE_BASE::GetSignalAggregate( PNS::NET_HANDLE aNetP, PNS::NET_H
         }
     }
 
-    return aExtraLength > 0 || aExtraDelay > 0;
+    // Chain is valid; return true even if no sibling nets carry routed length yet so the
+    // placer applies the full chain budget to the net being routed first.
+    return true;
 }
 
 bool PNS_KICAD_IFACE::GetSignalAggregate( PNS::NET_HANDLE aNetP, PNS::NET_HANDLE aNetN,

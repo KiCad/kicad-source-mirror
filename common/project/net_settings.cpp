@@ -383,22 +383,53 @@ NET_SETTINGS::~NET_SETTINGS()
 bool NET_SETTINGS::operator==( const NET_SETTINGS& aOther ) const
 {
     if( !std::equal( std::begin( m_netClasses ), std::end( m_netClasses ),
-                     std::begin( aOther.m_netClasses ) ) )
+                     std::begin( aOther.m_netClasses ), std::end( aOther.m_netClasses ) ) )
         return false;
 
+    // TODO: m_netClassPatternAssignments stores std::unique_ptr<EDA_COMBINED_MATCHER>, so this
+    // std::equal call compares matcher pointer identity rather than pattern text.  Two settings
+    // instances built from identical input therefore compare unequal.  Pre-existing bug; the
+    // chain comparison below avoids the same issue by comparing GetPattern() values explicitly.
     if( !std::equal( std::begin( m_netClassPatternAssignments ),
                      std::end( m_netClassPatternAssignments ),
-                     std::begin( aOther.m_netClassPatternAssignments ) ) )
+                     std::begin( aOther.m_netClassPatternAssignments ),
+                     std::end( aOther.m_netClassPatternAssignments ) ) )
         return false;
+
+    if( m_netClassChainPatternAssignments.size() != aOther.m_netClassChainPatternAssignments.size() )
+        return false;
+
+    for( size_t i = 0; i < m_netClassChainPatternAssignments.size(); ++i )
+    {
+        const auto& lhs = m_netClassChainPatternAssignments[i];
+        const auto& rhs = aOther.m_netClassChainPatternAssignments[i];
+
+        if( !lhs.first || !rhs.first )
+        {
+            if( lhs.first.get() != rhs.first.get() )
+                return false;
+        }
+        else if( lhs.first->GetPattern() != rhs.first->GetPattern() )
+        {
+            return false;
+        }
+
+        if( lhs.second != rhs.second )
+            return false;
+    }
 
     if( !std::equal( std::begin( m_netClassLabelAssignments ),
                      std::end( m_netClassLabelAssignments ),
-                     std::begin( aOther.m_netClassLabelAssignments ) ) )
+                     std::begin( aOther.m_netClassLabelAssignments ),
+                     std::end( aOther.m_netClassLabelAssignments ) ) )
         return false;
 
-
     if( !std::equal( std::begin( m_netColorAssignments ), std::end( m_netColorAssignments ),
-                     std::begin( aOther.m_netColorAssignments ) ) )
+                     std::begin( aOther.m_netColorAssignments ),
+                     std::end( aOther.m_netColorAssignments ) ) )
+        return false;
+
+    if( m_netChainClasses != aOther.m_netChainClasses )
         return false;
 
     return true;
@@ -661,6 +692,39 @@ void NET_SETTINGS::ClearNetclassPatternAssignments()
 }
 
 
+void NET_SETTINGS::SetChainPatternAssignment( const wxString& pattern, const wxString& netclass )
+{
+    ForEachBusMember( pattern,
+                      [&]( const wxString& memberPattern )
+                      {
+                          addSingleChainPatternAssignment( memberPattern, netclass );
+                      } );
+
+    ClearAllCaches();
+}
+
+
+void NET_SETTINGS::addSingleChainPatternAssignment( const wxString& pattern,
+                                                    const wxString& netclass )
+{
+    for( auto& assignment : m_netClassChainPatternAssignments )
+    {
+        if( assignment.first->GetPattern() == pattern && assignment.second == netclass )
+            return;
+    }
+
+    m_netClassChainPatternAssignments.push_back(
+            { std::make_unique<EDA_COMBINED_MATCHER>( pattern, CTX_NETCLASS ), netclass } );
+}
+
+
+void NET_SETTINGS::ClearChainPatternAssignments()
+{
+    m_netClassChainPatternAssignments.clear();
+    ClearAllCaches();
+}
+
+
 void NET_SETTINGS::ClearCacheForNet( const wxString& netName )
 {
     if( m_effectiveNetclassCache.count( netName ) )
@@ -780,23 +844,27 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
         }
     }
 
-    // Now find any pattern-matched netclass assignments
-    for( const auto& [matcher, netclassName] : m_netClassPatternAssignments )
-    {
-        if( matcher->StartsWith( aNetName ) )
-        {
-            std::shared_ptr<NETCLASS> netclass = getExplicitNetclass( netclassName );
+    // Now find any pattern-matched netclass assignments (user + chain-derived)
+    auto applyPatternList =
+            [&]( const std::vector<std::pair<std::unique_ptr<EDA_COMBINED_MATCHER>, wxString>>&
+                         patterns )
+            {
+                for( const auto& [matcher, netclassName] : patterns )
+                {
+                    if( matcher->StartsWith( aNetName ) )
+                    {
+                        std::shared_ptr<NETCLASS> netclass = getExplicitNetclass( netclassName );
 
-            if( netclass )
-            {
-                resolvedNetclasses.insert( std::move( netclass ) );
-            }
-            else
-            {
-                resolvedNetclasses.insert( getOrAddImplicitNetcless( netclassName ) );
-            }
-        }
-    }
+                        if( netclass )
+                            resolvedNetclasses.insert( std::move( netclass ) );
+                        else
+                            resolvedNetclasses.insert( getOrAddImplicitNetcless( netclassName ) );
+                    }
+                }
+            };
+
+    applyPatternList( m_netClassPatternAssignments );
+    applyPatternList( m_netClassChainPatternAssignments );
 
     // Handle zero resolved netclasses
     if( resolvedNetclasses.size() == 0 )

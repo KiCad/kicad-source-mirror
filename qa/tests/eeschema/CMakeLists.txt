@@ -172,6 +172,7 @@ set( QA_EESCHEMA_SRCS
     net_chains/test_net_chain_remove_rename.cpp
     net_chains/test_net_chain_save_root_only.cpp
     net_chains/test_net_chain_resolve_terminals.cpp
+    net_chains/test_net_chain_hierarchical_roundtrip.cpp
 )
 
 if( WIN32 )

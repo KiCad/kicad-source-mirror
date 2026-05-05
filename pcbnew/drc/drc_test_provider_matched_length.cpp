@@ -560,7 +560,8 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                         if( chainPads[0]->GetNetCode() == chainPads[1]->GetNetCode() )
                             continue;
 
-                        VECTOR2I delta = chainPads[0]->GetCenter() - chainPads[1]->GetCenter();
+                        VECTOR2D delta = VECTOR2D( chainPads[0]->GetCenter() )
+                                       - VECTOR2D( chainPads[1]->GetCenter() );
                         bridging += delta.EuclideanNorm();
                     }
 
@@ -732,7 +733,10 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                         continue;
 
                     const bool onTrunk =
-                            netInfo->GetTerminalPad( 0 ) || netInfo->GetTerminalPad( 1 );
+                            ( netInfo->GetTerminalPad( 0 )
+                              && netInfo->GetTerminalPad( 0 )->GetNetCode() == conn.netcode )
+                         || ( netInfo->GetTerminalPad( 1 )
+                              && netInfo->GetTerminalPad( 1 )->GetNetCode() == conn.netcode );
 
                     if( onTrunk )
                         continue;
@@ -756,7 +760,16 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                         item->SetErrorMessage( msg );
                         item->SetViolatingRule( rule );
 
-                        reportViolation( item, VECTOR2I{}, UNDEFINED_LAYER );
+                        VECTOR2I     pos;
+                        PCB_LAYER_ID layer = UNDEFINED_LAYER;
+
+                        if( !conn.items.empty() )
+                        {
+                            pos = ( *conn.items.begin() )->GetPosition();
+                            layer = ( *conn.items.begin() )->GetLayer();
+                        }
+
+                        reportViolation( item, pos, layer );
                     }
                 }
             }

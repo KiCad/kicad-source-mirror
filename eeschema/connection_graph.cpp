@@ -790,6 +790,17 @@ void CONNECTION_GRAPH::Reset()
     m_last_net_code = 1;
     m_last_bus_code = 1;
     m_last_subgraph_code = 1;
+
+    // SCH_NETCHAIN::m_symbols holds non-owning SCH_SYMBOL pointers. Once the connectivity
+    // pass clears the rest of the graph the schematic items can be freed before
+    // RebuildNetChains() repopulates the chain caches, so drop the stale pointers now.
+    for( std::unique_ptr<SCH_NETCHAIN>& chain : m_committedNetChains )
+    {
+        if( chain )
+            chain->ClearSymbols();
+    }
+
+    m_potentialNetChains.clear();
 }
 
 
@@ -3215,6 +3226,18 @@ void CONNECTION_GRAPH::RebuildNetChains()
     }
 
 
+    // Names already in use by committed chains.  A plain SCH_LABEL whose text matches a
+    // committed chain's name must NOT steal that name from the committed chain; the
+    // downstream restore pass uses these names as keys and would skip the potential
+    // chain entirely on collision, silently losing it.
+    std::set<wxString> committedNames;
+
+    for( const auto& chain : m_committedNetChains )
+    {
+        if( chain )
+            committedNames.insert( chain->GetName() );
+    }
+
     for( SCH_ITEM* item : m_items )
     {
         if( item->Type() != SCH_LABEL_T )
@@ -3235,7 +3258,10 @@ void CONNECTION_GRAPH::RebuildNetChains()
             if( name.StartsWith( wxS( "/" ) ) )
                 name = name.Mid( 1 );
 
-            netToNetChain[net]->SetName( name );
+            // Skip if a committed chain already owns this name; let the terminal-ref /
+            // saved-net-name restore logic below resolve the committed chain on its own.
+            if( !committedNames.count( name ) )
+                netToNetChain[net]->SetName( name );
         }
     }
 

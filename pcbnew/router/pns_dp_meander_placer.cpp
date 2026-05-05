@@ -211,7 +211,7 @@ long long int DP_MEANDER_PLACER::origPathLength() const
 int64_t DP_MEANDER_PLACER::origPathDelay() const
 {
     const int64_t totalP = m_padToDieDelayP + lineDelay( m_tunedPathP, m_startPad_p, m_endPad_p );
-    const int64_t totalN = m_padToDieDelayP + lineDelay( m_tunedPathN, m_startPad_n, m_endPad_n );
+    const int64_t totalN = m_padToDieDelayN + lineDelay( m_tunedPathN, m_startPad_n, m_endPad_n );
     return std::max( totalP, totalN );
 }
 

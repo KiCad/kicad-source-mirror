@@ -85,6 +85,17 @@ PANEL_SETUP_NET_CHAINS::PANEL_SETUP_NET_CHAINS( wxWindow* aParent, SCH_EDIT_FRAM
                                               _( "Name '%s' contains invalid characters." ), val ),
                                       _( "Net Chains" ), wxOK | wxICON_ERROR, this );
                         m_chainsGrid->SetCellValue( evt.GetRow(), COL_NAME, evt.GetString() );
+                        return;
+                    }
+
+                    int gridRow = evt.GetRow();
+
+                    if( gridRow >= 0 && gridRow < static_cast<int>( m_gridToChainIdx.size() ) )
+                    {
+                        int dataIdx = m_gridToChainIdx[gridRow];
+
+                        if( dataIdx >= 0 && dataIdx < static_cast<int>( m_chainRows.size() ) )
+                            m_chainRows[dataIdx].newName = val;
                     }
                 }
             } );
@@ -690,8 +701,17 @@ void PANEL_SETUP_NET_CHAINS::OnClassRenameClicked( wxCommandEvent& )
         return;
     }
 
+    wxString oldName = row.newName;
     row.newName = name;
+
+    for( CHAIN_ROW& chainRow : m_chainRows )
+    {
+        if( chainRow.newChainClass == oldName )
+            chainRow.newChainClass = name;
+    }
+
     rebuildClassesGrid();
+    rebuildChainsGrid();
     refreshChainClassDropdownChoices();
 }
 

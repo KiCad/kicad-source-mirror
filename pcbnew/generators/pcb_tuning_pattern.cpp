@@ -409,7 +409,7 @@ static std::string sideToString( const PNS::MEANDER_SIDE aValue )
 // Recompute if chain name changed, board UUID changed, or total pad count on the board changed.
 // (Pad count change is a low-cost proxy for edits that might affect bridging.)
 long long PCB_TUNING_PATTERN::GetCachedBridgingLength( BOARD* aBoard, const wxString& aNetChain,
-                                                       double* aDelayPsOut )
+                                                       double* aDelayIUOut )
 {
     if( !aBoard )
         return 0;
@@ -451,40 +451,48 @@ long long PCB_TUNING_PATTERN::GetCachedBridgingLength( BOARD* aBoard, const wxSt
             }
         }
 
-        // Very simple propagation delay model: use average propagation of participating nets.
-        // If board has no net classes defining diff pair rules, fallback to 150ps/in (~5.9ps/mm).
-        double totalDelayPs = 0.0;
+        // Very simple propagation delay model. Result is in internal delay IU (attoseconds).
+        // Fallback to 150ps/in (~5.9ps/mm) when no track on the chain has a measurable delay.
+        double totalDelayIU = 0.0;
+
         if( len > 0 )
         {
-            double psPerMm = 5.9; // fallback default
-            // Try to derive from one net's existing track length / delay if available.
+            // Internal delay IU per mm; fallback is 5.9 ps/mm converted to attoseconds/mm.
+            double delayIUPerMm = 5.9 * pcbIUScale.IU_PER_PS;
+
             for( BOARD_ITEM* bi : aBoard->Tracks() )
             {
                 if( PCB_TRACK* tr = dynamic_cast<PCB_TRACK*>( bi ) )
                 {
                     NETINFO_ITEM* ninfo = tr->GetNet();
+
                     if( ninfo && ninfo->GetNetChain() == aNetChain )
                     {
-                        int dummyCount; double tLen, padDieLen, tDelay, padDieDelay;
+                        int    dummyCount;
+                        double tLen, padDieLen, tDelay, padDieDelay;
                         std::tie( dummyCount, tLen, padDieLen, tDelay, padDieDelay ) = aBoard->GetTrackLength( *tr );
+
                         if( tLen > 0.0 && tDelay > 0.0 )
-                            psPerMm = ( tDelay / pcbIUScale.IUTomm( (int) tLen ) );
+                            delayIUPerMm = tDelay / pcbIUScale.IUTomm( (int) tLen );
+
                         break;
                     }
                 }
             }
-            totalDelayPs = psPerMm * pcbIUScale.IUTomm( (int) len );
+
+            totalDelayIU = delayIUPerMm * pcbIUScale.IUTomm( (int) len );
         }
 
         m_cachedBridgingLen = len;
-        m_cachedBridgingDelayPs = totalDelayPs;
+        m_cachedBridgingDelayIU = totalDelayIU;
         m_cachedBridgingSignal = aNetChain;
-    m_cachedBridgingBoardPtr = aBoard;
+        m_cachedBridgingBoardPtr = aBoard;
         m_cachedBridgingPadCount = padCount;
     }
 
-    if( aDelayPsOut )
-        *aDelayPsOut = m_cachedBridgingDelayPs;
+    if( aDelayIUOut )
+        *aDelayIUOut = m_cachedBridgingDelayIU;
+
     return m_cachedBridgingLen;
 }
 
@@ -499,7 +507,7 @@ PCB_TUNING_PATTERN::PCB_TUNING_PATTERN( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer
         m_tuningStatus( PNS::MEANDER_PLACER_BASE::TUNING_STATUS::TUNED ),
         m_updateSideFromEnd( false ),
         m_cachedBridgingLen( 0 ),
-        m_cachedBridgingDelayPs( 0.0 ),
+        m_cachedBridgingDelayIU( 0.0 ),
         m_cachedBridgingSignal(),
         m_cachedBridgingBoardPtr( nullptr ),
         m_cachedBridgingPadCount( 0 )
@@ -619,32 +627,20 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
 
                 // Subtract bridging so the copper-only budget aligns with the DRC check.
                 MINOPTMAX<int> adjustedTarget = chainConstraint.GetValue();
-                double         bridgingDelayPs = 0.0;
+                double         bridgingDelayIU = 0.0;
                 long long      bridging = pattern->GetCachedBridgingLength( board, chainName,
-                                                                            &bridgingDelayPs );
+                                                                            &bridgingDelayIU );
 
                 if( bridging > 0 )
                 {
-                    if( isTimeDomain )
-                    {
-                        int bridgingIU = static_cast<int>( bridgingDelayPs );
+                    int bridgingIU = isTimeDomain ? static_cast<int>( bridgingDelayIU )
+                                                  : static_cast<int>( bridging );
 
-                        if( adjustedTarget.HasMin() )
-                            adjustedTarget.SetMin( std::max( 0, adjustedTarget.Min() - bridgingIU ) );
+                    if( adjustedTarget.HasMin() )
+                        adjustedTarget.SetMin( std::max( 0, adjustedTarget.Min() - bridgingIU ) );
 
-                        if( adjustedTarget.HasMax() )
-                            adjustedTarget.SetMax( std::max( 0, adjustedTarget.Max() - bridgingIU ) );
-                    }
-                    else
-                    {
-                        int bridgingIU = static_cast<int>( bridging );
-
-                        if( adjustedTarget.HasMin() )
-                            adjustedTarget.SetMin( std::max( 0, adjustedTarget.Min() - bridgingIU ) );
-
-                        if( adjustedTarget.HasMax() )
-                            adjustedTarget.SetMax( std::max( 0, adjustedTarget.Max() - bridgingIU ) );
-                    }
+                    if( adjustedTarget.HasMax() )
+                        adjustedTarget.SetMax( std::max( 0, adjustedTarget.Max() - bridgingIU ) );
                 }
 
                 if( isTimeDomain )
@@ -2327,13 +2323,13 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
                             + tuningDelta;
 
             // Bridging: pad-to-pad gaps through series components.
-            double delayPs = 0.0;
-            long long bridging = GetCachedBridgingLength( board, netChainName, &delayPs );
+            double delayIU = 0.0;
+            long long bridging = GetCachedBridgingLength( board, netChainName, &delayIU );
 
             if( bridging > 0 )
             {
                 if( m_settings.m_isTimeDomain )
-                    sigVal += delayPs;
+                    sigVal += delayIU;
                 else
                     sigVal += static_cast<double>( bridging );
             }
@@ -2523,19 +2519,19 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
             // Bridging contribution (pad-to-pad gaps in 2-net series components of the chain)
             if( trackDelay == 0.0 )
             {
-                double delayPsDummy = 0.0; // not used in length mode
-                long long bridging = GetCachedBridgingLength( boardPtr, chainName, &delayPsDummy );
+                double delayIUDummy = 0.0; // not used in length mode
+                long long bridging = GetCachedBridgingLength( boardPtr, chainName, &delayIUDummy );
                 aList.emplace_back( _( "Net Chain Full Length" ),
                                      aFrame->MessageTextFromValue( ( trackLen + lenPadToDie ) + totalOtherLen
                                                                    + (double) bridging ) );
             }
             else
             {
-                double bridgingDelayPs = 0.0;
-                GetCachedBridgingLength( boardPtr, chainName, &bridgingDelayPs );
+                double bridgingDelayIU = 0.0;
+                GetCachedBridgingLength( boardPtr, chainName, &bridgingDelayIU );
                 aList.emplace_back( _( "Net Chain Full Delay" ),
                                      aFrame->MessageTextFromValue( ( trackDelay + delayPadToDie ) + totalOtherDelay
-                                                                   + bridgingDelayPs,
+                                                                   + bridgingDelayIU,
                                                                    true, EDA_DATA_TYPE::TIME ) );
             }
         }

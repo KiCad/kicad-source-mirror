@@ -2435,8 +2435,6 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         // * it is useless because zones will be refilled after placing new footprints
         m_commit.Push( _( "Update Netlist" ), m_newFootprintsCount ? ZONE_FILL_OP  : 0 );
 
-        // Update net, netcode and netclass data after commiting the netlist
-        m_board->SynchronizeNetsAndNetClasses( true );
         m_board->GetConnectivity()->RefreshNetcodeMap( m_board );
 
         for( NETINFO_ITEM* net : m_board->GetNetInfo() )
@@ -2457,25 +2455,22 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
         // Net chain class assignments stored in the netlist are mirrored into
         // the project-level NET_SETTINGS map so the inNetChainClass() rule
-        // function can resolve them at DRC time.
-        if( !aNetlist.GetSignalChainClasses().empty() )
+        // function can resolve them at DRC time.  Both the chain->class map and the
+        // chain-derived pattern assignments are rebuilt from scratch on each netlist
+        // update so that removed or renamed chains do not leave stale entries.
+        std::shared_ptr<NET_SETTINGS>& netSettings = m_board->GetDesignSettings().m_NetSettings;
+
+        if( netSettings )
         {
-            std::shared_ptr<NET_SETTINGS>& netSettings = m_board->GetDesignSettings().m_NetSettings;
+            netSettings->ClearNetChainClasses();
+            netSettings->ClearChainPatternAssignments();
 
-            if( netSettings )
-            {
-                for( const auto& [chain, className] : aNetlist.GetSignalChainClasses() )
-                    netSettings->SetNetChainClass( chain, className );
-            }
-        }
+            for( const auto& [chain, className] : aNetlist.GetSignalChainClasses() )
+                netSettings->SetNetChainClass( chain, className );
 
-        // Net chains may specify a netclass that applies to every member net.
-        // Push that assignment into the board's netclass map before resyncing.
-        const std::map<wxString, wxString>& chainClasses = aNetlist.GetNetChainNetClasses();
-
-        if( !chainClasses.empty() )
-        {
-            std::shared_ptr<NET_SETTINGS>& netSettings = m_board->GetDesignSettings().m_NetSettings;
+            // Net chains may specify a netclass that applies to every member net.
+            // Push that assignment into the board's netclass map before resyncing.
+            const std::map<wxString, wxString>& chainClasses = aNetlist.GetNetChainNetClasses();
 
             for( NETINFO_ITEM* net : m_board->GetNetInfo() )
             {
@@ -2490,9 +2485,15 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     continue;
 
                 if( netSettings->HasNetclass( it->second ) )
-                    netSettings->SetNetclassPatternAssignment( net->GetNetname(), it->second );
+                    netSettings->SetChainPatternAssignment( net->GetNetname(), it->second );
             }
 
+            // Always resync after chain cleanup so existing NETINFO_ITEM effective-netclass
+            // pointers pick up cleared/changed chain entries even when chainClasses is empty.
+            m_board->SynchronizeNetsAndNetClasses( true );
+        }
+        else
+        {
             m_board->SynchronizeNetsAndNetClasses( true );
         }
 
@@ -2530,13 +2531,26 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                 pads[i] = best;
             }
 
-            for( NETINFO_ITEM* net : m_board->GetNetInfo() )
+            for( int i = 0; i < 2; ++i )
             {
-                if( net->GetNetChain() == sig.first )
+                if( !pads[i] )
+                    continue;
+
+                NETINFO_ITEM* termNet = pads[i]->GetNet();
+
+                if( !termNet || termNet->GetNetChain() != sig.first )
+                    continue;
+
+                for( NETINFO_ITEM* net : m_board->GetNetInfo() )
                 {
-                    net->SetTerminalPad( 0, pads[0] );
-                    net->SetTerminalPad( 1, pads[1] );
+                    if( net != termNet && net->GetNetChain() == sig.first
+                        && net->GetTerminalPad( i ) )
+                    {
+                        net->SetTerminalPad( i, nullptr );
+                    }
                 }
+
+                termNet->SetTerminalPad( i, pads[i] );
             }
         }
 

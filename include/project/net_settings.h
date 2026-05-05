@@ -118,6 +118,18 @@ public:
     /// @brief Clears all netclass pattern assignments
     void ClearNetclassPatternAssignments();
 
+    /// @brief Sets a chain-derived netclass pattern assignment.
+    ///
+    /// Chain-derived assignments are recomputed from the netlist on every netlist update and are
+    /// kept separate from the user-authored pattern list so that stale chain entries can be
+    /// dropped without disturbing user pattern rules.
+    /// Calling this method will reset the effective netclass calculation caches.
+    void SetChainPatternAssignment( const wxString& pattern, const wxString& netclass );
+
+    /// @brief Clears all chain-derived pattern assignments.
+    /// Calling this method will reset the effective netclass calculation caches.
+    void ClearChainPatternAssignments();
+
     /// @brief Clears effective netclass cache for the given net
     void ClearCacheForNet( const wxString& netName );
 
@@ -154,6 +166,12 @@ public:
     const std::map<wxString, wxString>& GetNetChainClasses() const
     {
         return m_netChainClasses;
+    }
+
+    /// @brief Removes all chain-to-class assignments.
+    void ClearNetChainClasses()
+    {
+        m_netChainClasses.clear();
     }
 
     /// @brief Determines if an effective netclass for the given net name has been cached
@@ -245,6 +263,9 @@ private:
     /// @brief Adds a single pattern assignment without bus expansion (internal helper)
     void addSinglePatternAssignment( const wxString& pattern, const wxString& netclass );
 
+    /// @brief Adds a single chain-derived pattern assignment without bus expansion (internal helper)
+    void addSingleChainPatternAssignment( const wxString& pattern, const wxString& netclass );
+
     /// @brief The default netclass
     std::shared_ptr<NETCLASS> m_defaultNetClass;
 
@@ -257,6 +278,14 @@ private:
     /// @brief List of net class pattern assignments
     std::vector<std::pair<std::unique_ptr<EDA_COMBINED_MATCHER>, wxString>>
             m_netClassPatternAssignments;
+
+    /// @brief List of chain-derived netclass pattern assignments
+    ///
+    /// Populated each netlist update from net-chain class overrides.  Held separately from the
+    /// user pattern list so removed/changed chain assignments do not leave stale entries in the
+    /// user list.  Not serialised — these are recomputed each netlist update.
+    std::vector<std::pair<std::unique_ptr<EDA_COMBINED_MATCHER>, wxString>>
+            m_netClassChainPatternAssignments;
 
     /// @brief Map of netclass names to netclass definitions for
     // composite (multiple netclass assignment / missing defaults) netclasses

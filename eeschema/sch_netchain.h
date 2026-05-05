@@ -62,6 +62,10 @@ public:
         m_symbols.insert( aOther.m_symbols.begin(), aOther.m_symbols.end() );
     }
 
+    // The symbol set holds non-owning raw pointers to schematic items. Callers must invoke
+    // this before any pass that may free those items (e.g. CONNECTION_GRAPH::Reset()).
+    void ClearSymbols() { m_symbols.clear(); }
+
     const std::set<wxString>& GetNets() const { return m_nets; }
 
     void SetTerminalPins( const KIID& aPinA, const KIID& aPinB )

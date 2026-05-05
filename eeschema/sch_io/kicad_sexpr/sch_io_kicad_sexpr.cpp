@@ -337,7 +337,9 @@ void SCH_IO_KICAD_SEXPR::loadFile( const wxString& aFileName, SCH_SHEET* aSheet 
 
     parser.ParseSchematic( aSheet );
 
-    if( m_schematic && m_schematic->ConnectionGraph() )
+    // Net chains live at the root-sheet level. Sub-sheet parses always produce empty maps,
+    // so applying them would wipe the chains restored from the root file.
+    if( m_schematic && m_schematic->ConnectionGraph() && aSheet == m_rootSheet )
     {
         m_schematic->ConnectionGraph()->SetNetChainNetClassOverrides( parser.GetNetChainNetClasses() );
         m_schematic->ConnectionGraph()->SetNetChainColorOverrides( parser.GetNetChainColors() );
@@ -362,7 +364,7 @@ void SCH_IO_KICAD_SEXPR::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, i
 
     parser.ParseSchematic( aSheet, true, aFileVersion );
 
-    if( m_schematic && m_schematic->ConnectionGraph() )
+    if( m_schematic && m_schematic->ConnectionGraph() && aSheet == m_rootSheet )
     {
         m_schematic->ConnectionGraph()->SetNetChainNetClassOverrides( parser.GetNetChainNetClasses() );
         m_schematic->ConnectionGraph()->SetNetChainColorOverrides( parser.GetNetChainColors() );
@@ -562,10 +564,11 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
                 continue;
 
             const SCH_NETCHAIN& sig = *sigPtr;
-            m_out->Print( "(net_chain %s", m_out->Quotew( sig.GetName() ).c_str() );
 
-            wxASSERT_MSG( !sig.GetTerminalRef( 0 ).IsEmpty() && !sig.GetTerminalRef( 1 ).IsEmpty(),
-                          wxT( "Net chain missing terminal refs" ) );
+            if( sig.GetTerminalRef( 0 ).IsEmpty() || sig.GetTerminalRef( 1 ).IsEmpty() )
+                continue;
+
+            m_out->Print( "(net_chain %s", m_out->Quotew( sig.GetName() ).c_str() );
 
             m_out->Print( " (from %s %s)", m_out->Quotew( sig.GetTerminalRef( 0 ) ).c_str(),
                           m_out->Quotew( sig.GetTerminalPinNum( 0 ) ).c_str() );
