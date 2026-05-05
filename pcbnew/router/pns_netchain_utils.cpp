@@ -55,7 +55,7 @@ static void accumulateNet( BOARD* aBoard, int aNetCode, long long& aLen, long lo
     }
 }
 
-long long ComputeExtraSignalLength( BOARD* aBoard, const wxString& aNetChain, const std::set<int>& aExclude )
+long long ComputeExtraNetChainLength( BOARD* aBoard, const wxString& aNetChain, const std::set<int>& aExclude )
 {
     long long total = 0;
     if( !aBoard || aNetChain.IsEmpty() )
@@ -73,7 +73,7 @@ long long ComputeExtraSignalLength( BOARD* aBoard, const wxString& aNetChain, co
     return total;
 }
 
-long long ComputeExtraSignalDelay( BOARD* aBoard, const wxString& aNetChain, const std::set<int>& aExclude )
+long long ComputeExtraNetChainDelay( BOARD* aBoard, const wxString& aNetChain, const std::set<int>& aExclude )
 {
     long long totalDelay = 0;
     if( !aBoard || aNetChain.IsEmpty() )

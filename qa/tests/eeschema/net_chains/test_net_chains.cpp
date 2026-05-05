@@ -99,6 +99,10 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_WithPullupBranch_ExcludesPowerBranch, SI
     graph->Recalculate( sheets, /*aUnconditional=*/true );
 
     const auto& netChains = graph->GetPotentialNetChains();
+
+    // Pullup fixture has two resistors driving a single net through a pullup to VCC. The chain
+    // walker should produce a multi-net chain that does NOT pull VCC into the group, since power
+    // nets are sinks rather than chain participants.
     bool mainSignalExcludesVCC = false;
     for( const auto& sig : netChains )
     {
@@ -106,28 +110,35 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_WithPullupBranch_ExcludesPowerBranch, SI
             continue;
 
         const auto& nets = sig->GetNets();
-        if( nets.size() >= 4 )
+
+        if( nets.size() < 2 )
+            continue;
+
+        bool containsVCC = false;
+        for( const wxString& n : nets )
         {
-            bool containsVCC = false;
-            for( const wxString& n : nets )
+            wxString nn = n;
+
+            if( nn.StartsWith( wxString( "/" ) ) )
+                nn = nn.Mid( 1 );
+
+            if( nn.CmpNoCase( wxString( "VCC" ) ) == 0 )
             {
-                wxString nn = n;
-                if( nn.StartsWith( wxString( "/" ) ) )
-                    nn = nn.Mid( 1 );
-                if( nn.CmpNoCase( wxString( "VCC" ) ) == 0 )
-                {
-                    containsVCC = true;
-                    break;
-                }
-            }
-            if( !containsVCC )
-            {
-                mainSignalExcludesVCC = true;
+                containsVCC = true;
                 break;
             }
         }
+
+        if( !containsVCC )
+        {
+            mainSignalExcludesVCC = true;
+            break;
+        }
     }
-    BOOST_CHECK( true ); // Temporarily relaxed
+
+    BOOST_CHECK_MESSAGE( mainSignalExcludesVCC,
+                         "Expected at least one multi-net signal that does not include VCC "
+                         "(power branch should not be merged into the main signal)" );
 }
 
 BOOST_FIXTURE_TEST_CASE( RebuildSignals_WithBypassCap_ExcludesPowerBranch, SIGNALS_TEST_FIXTURE )
@@ -139,6 +150,10 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_WithBypassCap_ExcludesPowerBranch, SIGNA
     graph->Recalculate( sheets, /*aUnconditional=*/true );
 
     const auto& netChains = graph->GetPotentialNetChains();
+
+    // Bypass-cap fixture has a signal path with a decoupling capacitor to GND. The chain walker
+    // should produce a multi-net chain that does NOT pull GND into the group, since power nets
+    // are sinks rather than chain participants.
     bool mainSignalExcludesGND = false;
     for( const auto& sig : netChains )
     {
@@ -146,28 +161,35 @@ BOOST_FIXTURE_TEST_CASE( RebuildSignals_WithBypassCap_ExcludesPowerBranch, SIGNA
             continue;
 
         const auto& nets = sig->GetNets();
-        if( nets.size() >= 4 )
+
+        if( nets.size() < 2 )
+            continue;
+
+        bool containsGND = false;
+        for( const wxString& n : nets )
         {
-            bool containsGND = false;
-            for( const wxString& n : nets )
+            wxString nn = n;
+
+            if( nn.StartsWith( wxString( "/" ) ) )
+                nn = nn.Mid( 1 );
+
+            if( nn.CmpNoCase( wxString( "GND" ) ) == 0 )
             {
-                wxString nn = n;
-                if( nn.StartsWith( wxString( "/" ) ) )
-                    nn = nn.Mid( 1 );
-                if( nn.CmpNoCase( wxString( "GND" ) ) == 0 )
-                {
-                    containsGND = true;
-                    break;
-                }
-            }
-            if( !containsGND )
-            {
-                mainSignalExcludesGND = true;
+                containsGND = true;
                 break;
             }
         }
+
+        if( !containsGND )
+        {
+            mainSignalExcludesGND = true;
+            break;
+        }
     }
-    BOOST_CHECK( true ); // Temporarily relaxed
+
+    BOOST_CHECK_MESSAGE( mainSignalExcludesGND,
+                         "Expected at least one multi-net signal that does not include GND "
+                         "(power branch should not be merged into the main signal)" );
 }
 
 // EOF

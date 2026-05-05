@@ -536,7 +536,10 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
                     for( FOOTPRINT* fp : m_board->Footprints() )
                     {
-                        std::map<int, PAD*> netsInFp;
+                        // Collect every chain-member pad on this footprint so a 3+ pad device
+                        // (ferrite bead with center tap, transformer winding, etc.) can't be
+                        // silently reduced to an arbitrary 2-pad bridge by net-code keying.
+                        std::vector<PAD*> chainPads;
 
                         for( PAD* pad : fp->Pads() )
                         {
@@ -545,24 +548,20 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                             if( !pn || pn->GetNetChain() != chainName )
                                 continue;
 
-                            netsInFp.emplace( pn->GetNetCode(), pad );
+                            chainPads.push_back( pad );
 
-                            if( netsInFp.size() > 2 )
-                            {
-                                netsInFp.clear();
+                            if( chainPads.size() > 2 )
                                 break;
-                            }
                         }
 
-                        if( netsInFp.size() == 2 )
-                        {
-                            auto fpIt = netsInFp.begin();
-                            PAD* p1 = fpIt->second;
-                            ++fpIt;
-                            PAD*     p2 = fpIt->second;
-                            VECTOR2I delta = p1->GetCenter() - p2->GetCenter();
-                            bridging += delta.EuclideanNorm();
-                        }
+                        if( chainPads.size() != 2 )
+                            continue;
+
+                        if( chainPads[0]->GetNetCode() == chainPads[1]->GetNetCode() )
+                            continue;
+
+                        VECTOR2I delta = chainPads[0]->GetCenter() - chainPads[1]->GetCenter();
+                        bridging += delta.EuclideanNorm();
                     }
 
                     agg.total += bridging;
@@ -619,39 +618,92 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 
                 if( refLayer != UNDEFINED_LAYER )
                 {
-                    // Count zones on the reference layer.  A chain with tracks on
-                    // a different layer but no zone on the reference layer is
-                    // probably missing its return path.
-                    int zonesOnRefLayer = 0;
+                    // Collect non-rule-area zones on the reference layer once.  We then
+                    // intersect each chain's bounding box with these zones to decide if
+                    // the chain has a candidate return path.  This is a coarse check:
+                    // overlap of the chain bbox with a zone polygon does not prove that
+                    // every track segment is shadowed by the zone.  Per-track coverage
+                    // is future work.
+                    std::vector<ZONE*> refLayerZones;
 
                     for( ZONE* zone : m_board->Zones() )
                     {
                         if( zone && zone->IsOnLayer( refLayer ) && !zone->GetIsRuleArea() )
-                            ++zonesOnRefLayer;
+                            refLayerZones.push_back( zone );
                     }
 
-                    if( zonesOnRefLayer == 0 )
-                    {
-                        for( const CONNECTION& conn : matchedConnections )
-                        {
-                            NETINFO_ITEM* netInfo =
-                                    m_board->GetNetInfo().GetNetItem( conn.netcode );
+                    // Aggregate per-chain bounding boxes so the spatial test is run once
+                    // per chain rather than once per net.  A chain whose bbox does not
+                    // overlap any reference-layer zone is reported as a return-path break.
+                    std::map<wxString, BOX2I>        chainBBox;
+                    std::map<wxString, NETINFO_ITEM*> chainSampleNet;
 
-                            if( !netInfo || netInfo->GetNetChain().IsEmpty() )
+                    for( const CONNECTION& conn : matchedConnections )
+                    {
+                        NETINFO_ITEM* netInfo =
+                                m_board->GetNetInfo().GetNetItem( conn.netcode );
+
+                        if( !netInfo )
+                            continue;
+
+                        wxString chainName = netInfo->GetNetChain();
+
+                        if( chainName.IsEmpty() )
+                            continue;
+
+                        BOX2I& bbox = chainBBox[chainName];
+
+                        for( BOARD_CONNECTED_ITEM* connItem : conn.items )
+                        {
+                            if( !connItem )
                                 continue;
 
-                            std::shared_ptr<DRC_ITEM> item =
-                                    DRC_ITEM::Create( DRCE_NET_CHAIN_RETURN_PATH_BREAK );
-                            item->SetErrorMessage( wxString::Format(
-                                    _( "Net chain '%s' has no copper zone on reference "
-                                       "layer '%s' (net '%s')." ),
-                                    netInfo->GetNetChain(),
-                                    refLayerName,
-                                    netInfo->GetNetname() ) );
-                            item->SetViolatingRule( rule );
-
-                            reportViolation( item, VECTOR2I{}, UNDEFINED_LAYER );
+                            bbox.Merge( connItem->GetBoundingBox() );
                         }
+
+                        chainSampleNet.try_emplace( chainName, netInfo );
+                    }
+
+                    for( const auto& [chainName, bbox] : chainBBox )
+                    {
+                        if( !bbox.IsValid() )
+                            continue;
+
+                        bool covered = false;
+
+                        for( ZONE* zone : refLayerZones )
+                        {
+                            // Cheap bbox-vs-bbox reject, then a polygon-aware check that
+                            // also catches the case where the chain bbox sits entirely
+                            // inside the zone polygon.
+                            if( !zone->GetBoundingBox().Intersects( bbox ) )
+                                continue;
+
+                            if( zone->HitTest( bbox, false )
+                                || ( zone->Outline()
+                                     && zone->Outline()->Contains( bbox.Centre() ) ) )
+                            {
+                                covered = true;
+                                break;
+                            }
+                        }
+
+                        if( covered )
+                            continue;
+
+                        NETINFO_ITEM* netInfo = chainSampleNet[chainName];
+
+                        std::shared_ptr<DRC_ITEM> item =
+                                DRC_ITEM::Create( DRCE_NET_CHAIN_RETURN_PATH_BREAK );
+                        item->SetErrorMessage( wxString::Format(
+                                _( "Net chain '%s' has no copper zone on reference "
+                                   "layer '%s' (net '%s')." ),
+                                chainName,
+                                refLayerName,
+                                netInfo ? netInfo->GetNetname() : wxString{} ) );
+                        item->SetViolatingRule( rule );
+
+                        reportViolation( item, bbox.Centre(), refLayer );
                     }
                 }
             }

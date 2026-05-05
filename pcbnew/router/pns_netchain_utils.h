@@ -20,11 +20,11 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  *
- * Utility functions for signal-level aggregation used by tuning/skew placers.
+ * Utility functions for net-chain-level aggregation used by tuning/skew placers.
  */
 
-#ifndef PNS_SIGNAL_UTILS_H
-#define PNS_SIGNAL_UTILS_H
+#ifndef PNS_NETCHAIN_UTILS_H
+#define PNS_NETCHAIN_UTILS_H
 
 #include <wx/string.h>
 #include <set>
@@ -34,19 +34,19 @@ class BOARD;
 namespace PNS {
 
 /**
- * Compute the aggregate routed length (track + pad-to-die) of all nets belonging to a signal,
- * excluding any net codes present in aExclude.
+ * Compute the aggregate routed length (track + pad-to-die) of all nets belonging to a net
+ * chain, excluding any net codes present in aExclude.
  *
  * Each contributing net is represented by the first track found with a matching net code; its
  * full length (including pad-to-die) is taken from BOARD::GetTrackLength.
  */
-long long ComputeExtraSignalLength( BOARD* aBoard, const wxString& aNetChain, const std::set<int>& aExclude );
+long long ComputeExtraNetChainLength( BOARD* aBoard, const wxString& aNetChain, const std::set<int>& aExclude );
 
 /**
- * Compute the aggregate routed delay (ps internal units) for all nets in a signal excluding
- * any in aExclude (time-domain only contributes delay values when available).
+ * Compute the aggregate routed delay (ps internal units) for all nets in a net chain,
+ * excluding any in aExclude (time-domain only contributes delay values when available).
  */
-long long ComputeExtraSignalDelay( BOARD* aBoard, const wxString& aNetChain, const std::set<int>& aExclude );
+long long ComputeExtraNetChainDelay( BOARD* aBoard, const wxString& aNetChain, const std::set<int>& aExclude );
 
 }
 

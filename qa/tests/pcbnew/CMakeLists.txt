@@ -118,6 +118,8 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_orientation.cpp
     drc/test_drc_lengths.cpp
     drc/test_drc_length_with_chain.cpp
+    drc/test_drc_return_path_zone_bbox.cpp
+    drc/test_drc_chain_bridging_multipad.cpp
     drc/test_drc_stub_length.cpp
     drc/test_drc_tuner_agreement.cpp
     drc/test_drc_unconnected_items_exclusion_loss.cpp

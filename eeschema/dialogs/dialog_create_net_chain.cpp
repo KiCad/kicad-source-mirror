@@ -112,12 +112,15 @@ bool DIALOG_CREATE_NET_CHAIN::TransferDataFromWindow()
     if( !validateAndCreate() )
         return false;
 
-    // Refresh grid, then notify (OnModify may trigger recalculation).
-    loadPotentials();
+    // Drop livePtr-bearing rows BEFORE the OnModify notify, then reload AFTER.  OnModify()
+    // does not recalculate today, but if a future hook attaches a recalc to it, the cleared
+    // window keeps livePtrs from dangling across the destruction of m_potentialNetChains.
+    m_rows.clear();
     m_filteredIndices.clear();
-    rebuildGrid();
     m_nameInput->Clear();
     m_frame->OnModify();
+    loadPotentials();
+    rebuildGrid();
 
     m_headerLabel->SetLabel(
             wxString::Format( _( "Chain created (%d total). Select another or close." ), m_createdCount ) );
@@ -242,16 +245,30 @@ void DIALOG_CREATE_NET_CHAIN::OnChainSelected( wxGridEvent& aEvent )
 
 void DIALOG_CREATE_NET_CHAIN::OnRefreshClicked( wxCommandEvent& aEvent )
 {
-    CONNECTION_GRAPH* graph = m_frame->Schematic().ConnectionGraph();
+    if( !m_frame->Schematic().ConnectionGraph() )
+        return;
 
-    if( graph )
+    populateComponentCombos();
+    recalculateAndReload( true );
+}
+
+
+void DIALOG_CREATE_NET_CHAIN::recalculateAndReload( bool aRunRecalculate )
+{
+    // Drop all references into m_potentialNetChains BEFORE any recalc clears that vector.
+    // This is the load-bearing step: while m_rows is non-empty, livePtr values may be live
+    // pointers into the pool, and Recalculate() destroys those entries.
+    m_rows.clear();
+    m_filteredIndices.clear();
+
+    if( aRunRecalculate )
     {
-        m_rows.clear();
-        graph->Recalculate( m_frame->Schematic().BuildSheetListSortedByPageNumbers(), true );
-        populateComponentCombos();
-        loadPotentials();
-        rebuildGrid();
+        if( CONNECTION_GRAPH* graph = m_frame->Schematic().ConnectionGraph() )
+            graph->Recalculate( m_frame->Schematic().BuildSheetListSortedByPageNumbers(), true );
     }
+
+    loadPotentials();
+    rebuildGrid();
 }
 
 

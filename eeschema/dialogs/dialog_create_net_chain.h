@@ -50,6 +50,15 @@ protected:
     void OnFindPathClicked( wxCommandEvent& aEvent ) override;
 
 private:
+    /**
+     * Row backing data for the chains grid.
+     *
+     * livePtr is a non-owning pointer into the current contents of
+     * CONNECTION_GRAPH::m_potentialNetChains and remains valid only until that pool is rebuilt
+     * or cleared.  RebuildNetChains() (invoked via Recalculate) destroys every entry, so any
+     * path that triggers a recalc must clear m_rows BEFORE the recalc — recalculateAndReload()
+     * centralizes that ordering for the dialog's own refresh paths.
+     */
     struct POTENTIAL_ROW
     {
         SCH_NETCHAIN*      livePtr = nullptr; ///< null for force-created manual rows
@@ -69,6 +78,13 @@ private:
     void populateComponentCombos();
     void highlightChainNets( const std::set<wxString>& aNets );
     int  selectedRow() const;
+
+    /**
+     * Tear down row state, optionally trigger a connectivity recalculation, then reload
+     * rows and refresh the grid. Centralizes the lifetime contract for POTENTIAL_ROW::livePtr
+     * so callers cannot leave dangling pointers reachable during a recalc.
+     */
+    void recalculateAndReload( bool aRunRecalculate );
 
     bool validateAndCreate();
 

@@ -17,8 +17,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SCH_SIGNAL_H
-#define SCH_SIGNAL_H
+#ifndef SCH_NETCHAIN_H
+#define SCH_NETCHAIN_H
 
 #include <set>
 #include <utility>
@@ -27,7 +27,7 @@
 #include <kiid.h>
 
 /**
- * A signal is a collection of nets that are connected together through
+ * A net chain is a collection of nets that are connected together through
  * passive components.
  */
 class SCH_NETCHAIN
@@ -54,7 +54,7 @@ public:
     void RemoveNet( const wxString& aNet ) { m_nets.erase( aNet ); }
     void ReplaceNets( const std::set<wxString>& aNew ) { m_nets = aNew; }
 
-    // Track a symbol that participates in this signal (2-pin passthrough component).
+    // Track a symbol that participates in this chain (2-pin passthrough component).
     void AddSymbol( class SCH_SYMBOL* aSymbol ) { m_symbols.insert( aSymbol ); }
     const std::set<class SCH_SYMBOL*>& GetSymbols() const { return m_symbols; }
     void AbsorbSymbolsFrom( const SCH_NETCHAIN& aOther )
