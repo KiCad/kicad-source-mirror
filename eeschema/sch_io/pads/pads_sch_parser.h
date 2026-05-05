@@ -25,6 +25,8 @@
 #include <set>
 #include <optional>
 
+#include <math/vector2d.h>
+
 class REPORTER;
 
 
@@ -92,6 +94,12 @@ struct PARAMETERS
 
     std::map<std::string, std::string> fields;
 };
+
+
+/// Midpoint of the arc through @p aStart and @p aEnd about @p aCenter, on the minor-arc side
+/// (the perpendicular bisector intersection); callers flip it to the major-arc side per their
+/// own sweep convention.
+VECTOR2I padsSchArcMidpoint( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCenter );
 
 
 struct POINT

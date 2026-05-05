@@ -354,34 +354,7 @@ static void appendGraphicPrimitive( SCH_SCREEN* aScreen, const PADS_SCH::SYMBOL_
                         aPageHeightIU
                                 - schIUScale.MilsToIU( KiROUND( aOy + cy ) ) );
 
-                double sx = start.x - center.x;
-                double sy = start.y - center.y;
-                double ex = end.x - center.x;
-                double ey = end.y - center.y;
-                double radius = std::sqrt( sx * sx + sy * sy );
-
-                double mx = sx + ex;
-                double my = sy + ey;
-                double mlen = std::sqrt( mx * mx + my * my );
-
-                VECTOR2I midPt;
-
-                if( mlen > 0.001 )
-                {
-                    midPt.x = center.x
-                               + static_cast<int>( radius * mx / mlen );
-                    midPt.y = center.y
-                               + static_cast<int>( radius * my / mlen );
-                }
-                else
-                {
-                    midPt.x = center.x
-                               + static_cast<int>( -sy * radius
-                                                   / std::max( radius, 1.0 ) );
-                    midPt.y = center.y
-                               + static_cast<int>( sx * radius
-                                                   / std::max( radius, 1.0 ) );
-                }
+                VECTOR2I midPt = PADS_SCH::padsSchArcMidpoint( start, end, center );
 
                 if( ad.angle < 0 )
                 {

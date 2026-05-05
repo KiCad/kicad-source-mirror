@@ -589,32 +589,7 @@ std::vector<SCH_SHAPE*> PADS_SCH_SYMBOL_BUILDER::createShapes( const SYMBOL_GRAP
             double cy = ( ad.bbox_y1 + ad.bbox_y2 ) / 2.0;
             VECTOR2I center( toKiCadUnits( cx ), -toKiCadUnits( cy ) );
 
-            // Compute the arc midpoint on the circle between start and end.
-            // Use vector math: midpoint of arc = center + R * normalize(midvector)
-            // where midvector = (start - center) + (end - center)
-            double sx = startPt.x - center.x;
-            double sy = startPt.y - center.y;
-            double ex = endPt.x - center.x;
-            double ey = endPt.y - center.y;
-            double radius = std::sqrt( sx * sx + sy * sy );
-
-            double mx = sx + ex;
-            double my = sy + ey;
-            double mlen = std::sqrt( mx * mx + my * my );
-
-            VECTOR2I midPt;
-
-            if( mlen > 0.001 )
-            {
-                midPt.x = center.x + static_cast<int>( radius * mx / mlen );
-                midPt.y = center.y + static_cast<int>( radius * my / mlen );
-            }
-            else
-            {
-                // Start and end are diametrically opposite, pick perpendicular direction
-                midPt.x = center.x + static_cast<int>( -sy * radius / std::max( radius, 1.0 ) );
-                midPt.y = center.y + static_cast<int>( sx * radius / std::max( radius, 1.0 ) );
-            }
+            VECTOR2I midPt = padsSchArcMidpoint( startPt, endPt, center );
 
             // The initial midpoint is always on the minor arc side (between start
             // and end radii). Flip to the major arc side when the sweep exceeds

@@ -23,12 +23,42 @@
 #include <reporter.h>
 
 #include <algorithm>
+#include <cmath>
 #include <fstream>
 #include <sstream>
 #include <regex>
 
 namespace PADS_SCH
 {
+
+VECTOR2I padsSchArcMidpoint( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCenter )
+{
+    double sx = aStart.x - aCenter.x;
+    double sy = aStart.y - aCenter.y;
+    double ex = aEnd.x - aCenter.x;
+    double ey = aEnd.y - aCenter.y;
+    double radius = std::sqrt( sx * sx + sy * sy );
+
+    double mx = sx + ex;
+    double my = sy + ey;
+    double mlen = std::sqrt( mx * mx + my * my );
+
+    VECTOR2I midPt;
+
+    if( mlen > 0.001 )
+    {
+        midPt.x = aCenter.x + static_cast<int>( radius * mx / mlen );
+        midPt.y = aCenter.y + static_cast<int>( radius * my / mlen );
+    }
+    else
+    {
+        midPt.x = aCenter.x + static_cast<int>( -sy * radius / std::max( radius, 1.0 ) );
+        midPt.y = aCenter.y + static_cast<int>( sx * radius / std::max( radius, 1.0 ) );
+    }
+
+    return midPt;
+}
+
 
 PADS_SCH_PARSER::PADS_SCH_PARSER() :
     m_reporter( nullptr ),
