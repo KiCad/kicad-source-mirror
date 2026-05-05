@@ -744,7 +744,15 @@ void ROUTER::updateView( NODE* aNode, ITEM_SET& aCurrent, bool aDragging )
     if( !aNode )
         return;
 
-    markViolations( aNode, aCurrent, removed );
+    // hack: we only mark violations when routing, not when length tuning - as the length tuner
+    // by design can never generate clearance violations. Since markViolations() calls multiple
+    // collision/clearance queries, it can be extremely expensive with certain custom DRC rules
+    // (rule area/courtyard-based, see issue #24052 for examples)
+    if( m_mode == PNS_MODE_ROUTE_SINGLE ||
+        m_mode == PNS_MODE_ROUTE_DIFF_PAIR )
+    {
+        markViolations( aNode, aCurrent, removed );
+    }
 
     aNode->GetUpdatedItems( removed, added );
 
