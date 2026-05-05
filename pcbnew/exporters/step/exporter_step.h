@@ -71,6 +71,8 @@ private:
     bool isLayerInBackdrillSpan( PCB_LAYER_ID aLayer, PCB_LAYER_ID aStartLayer,
                                  PCB_LAYER_ID aEndLayer ) const;
 
+    bool netFilterMatches( const wxString& netname ) const;
+
     EXPORTER_STEP_PARAMS m_params;
     std::unique_ptr<FILENAME_RESOLVER> m_resolver;
 
