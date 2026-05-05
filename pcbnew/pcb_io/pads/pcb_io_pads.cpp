@@ -19,6 +19,7 @@
 
 #include "pcb_io_pads.h"
 #include "pads_layer_mapper.h"
+#include "pads_pcb_shapes.h"
 
 #include <algorithm>
 #include <climits>
@@ -610,9 +611,10 @@ void PCB_IO_PADS::loadFootprints()
                         VECTOR2I size( std::max( decalScaler( layer_def.sizeB ), m_minObjectSize ),
                                        std::max( decalScaler( layer_def.sizeA ), m_minObjectSize ) );
 
+                        pad->SetShape( kicad_layer, PADS_PCB::PadsShapeToKiCad( shape ) );
+
                         if( shape == "R" || shape == "C" || shape == "A" || shape == "RT" )
                         {
-                            pad->SetShape( kicad_layer, PAD_SHAPE::CIRCLE );
                             pad->SetSize( kicad_layer, VECTOR2I( size.x, size.x ) );
                         }
                         else if( shape == "S" || shape == "ST" )
@@ -626,7 +628,6 @@ void PCB_IO_PADS::loadFootprints()
                         }
                         else if( shape == "O" || shape == "OT" )
                         {
-                            pad->SetShape( kicad_layer, PAD_SHAPE::OVAL );
                             pad->SetSize( kicad_layer, size );
                         }
                         else if( shape == "RF" )
@@ -636,7 +637,6 @@ void PCB_IO_PADS::loadFootprints()
                         }
                         else if( shape == "OF" )
                         {
-                            pad->SetShape( kicad_layer, PAD_SHAPE::OVAL );
                             pad->SetSize( kicad_layer, size );
                         }
                         else if( shape == "RC" || shape == "OC" )
@@ -646,7 +646,6 @@ void PCB_IO_PADS::loadFootprints()
                         }
                         else
                         {
-                            pad->SetShape( kicad_layer, PAD_SHAPE::CIRCLE );
                             pad->SetSize( kicad_layer, VECTOR2I( size.x, size.x ) );
                         }
 

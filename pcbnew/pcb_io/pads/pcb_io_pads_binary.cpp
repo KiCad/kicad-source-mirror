@@ -20,6 +20,7 @@
 #include "pcb_io_pads_binary.h"
 #include "pads_binary_parser.h"
 #include "pads_layer_mapper.h"
+#include "pads_pcb_shapes.h"
 
 #include <algorithm>
 #include <cmath>
@@ -594,50 +595,34 @@ void PCB_IO_PADS_BINARY::applyPadShape( PAD* aPad, const PADS_IO::PAD_STACK_LAYE
 {
     VECTOR2I size( scaleSize( aLayer.sizeA ), scaleSize( aLayer.sizeA ) );
 
-    if( aLayer.shape == "R" || aLayer.shape == "C" || aLayer.shape == "A" )
+    aPad->SetShape( F_Cu, PADS_PCB::PadsShapeToKiCad( aLayer.shape ) );
+
+    if( aLayer.shape == "O" || aLayer.shape == "OF" )
     {
-        aPad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
-        aPad->SetSize( F_Cu, size );
-    }
-    else if( aLayer.shape == "S" )
-    {
-        aPad->SetShape( F_Cu, PAD_SHAPE::RECTANGLE );
-        aPad->SetSize( F_Cu, size );
-    }
-    else if( aLayer.shape == "O" || aLayer.shape == "OF" )
-    {
-        aPad->SetShape( F_Cu, PAD_SHAPE::OVAL );
-        VECTOR2I ovalSize( scaleSize( aLayer.sizeB ),
-                           scaleSize( aLayer.sizeA ) );
+        VECTOR2I ovalSize( scaleSize( aLayer.sizeB ), scaleSize( aLayer.sizeA ) );
         aPad->SetSize( F_Cu, ovalSize );
     }
     else if( aLayer.shape == "RF" )
     {
-        aPad->SetShape( F_Cu, PAD_SHAPE::RECTANGLE );
-        VECTOR2I rectSize( scaleSize( aLayer.sizeB ),
-                           scaleSize( aLayer.sizeA ) );
+        VECTOR2I rectSize( scaleSize( aLayer.sizeB ), scaleSize( aLayer.sizeA ) );
         aPad->SetSize( F_Cu, rectSize );
 
         if( aLayer.finger_offset != 0 )
         {
             int offset = scaleSize( aLayer.finger_offset );
             VECTOR2I padOffset( offset, 0 );
-            RotatePoint( padOffset,
-                         EDA_ANGLE( aLayer.rotation, DEGREES_T ) );
+            RotatePoint( padOffset, EDA_ANGLE( aLayer.rotation, DEGREES_T ) );
             aPad->SetOffset( F_Cu, padOffset );
         }
     }
     else if( aLayer.shape == "RC" || aLayer.shape == "OC" )
     {
-        aPad->SetShape( F_Cu, PAD_SHAPE::ROUNDRECT );
-        VECTOR2I rrSize( scaleSize( aLayer.sizeB ),
-                         scaleSize( aLayer.sizeA ) );
+        VECTOR2I rrSize( scaleSize( aLayer.sizeB ), scaleSize( aLayer.sizeA ) );
         aPad->SetSize( F_Cu, rrSize );
         aPad->SetRoundRectRadiusRatio( F_Cu, 0.25 );
     }
     else
     {
-        aPad->SetShape( F_Cu, PAD_SHAPE::CIRCLE );
         aPad->SetSize( F_Cu, size );
     }
 }
