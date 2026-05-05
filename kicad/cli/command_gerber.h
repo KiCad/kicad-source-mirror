@@ -31,7 +31,7 @@ struct GERBER_COMMAND : public COMMAND
             COMMAND( "gerber" )
     {
         m_argParser.add_description( UTF8STDSTR( _( "View and compare existing Gerber/Excellon files. "
-                                                    "To export Gerbers from a PCB, use 'pcb export gerber'" ) ) );
+                                                    "To export Gerbers from a PCB, use 'pcb export gerbers'" ) ) );
     }
 };
 
