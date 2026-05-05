@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-01 15:38+0300\n"
-"PO-Revision-Date: 2026-05-03 21:09+0000\n"
+"PO-Revision-Date: 2026-05-06 11:11+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -6316,18 +6316,16 @@ msgid "Graphics error"
 msgstr "Grafikfehler"
 
 #: common/draw_panel_gal.cpp:236 common/draw_panel_gal.cpp:240
-#, fuzzy
 msgid "Graphics error during recovery"
-msgstr "Grafikfehler"
+msgstr "Grafikfehler während Wiederherstellung"
 
 #: common/draw_panel_gal.cpp:241
 msgid "Unknown exception during backend switch"
 msgstr "Unbekannte Ausnahme beim Wechseln des Backends"
 
 #: common/draw_panel_gal.cpp:416
-#, fuzzy
 msgid "Unknown exception"
-msgstr "Unbekannte Bereinigungsaktion"
+msgstr "Unbekannte Ausnahme"
 
 #: common/draw_panel_gal.cpp:619
 msgid "Could not use OpenGL"
@@ -24306,9 +24304,8 @@ msgid "Incorrect inv_pin name"
 msgstr "Falscher Name für inv_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2839
-#, fuzzy
 msgid "Wrong number of columns for series pin mapping."
-msgstr "Falsche Anzahl von Spalten für Pinzuweisung."
+msgstr "Falsche Anzahl von Spalten für Mehrfachpinzuweisung."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2948
 msgid "Internal error detected, a waveform should exist"
@@ -32883,14 +32880,12 @@ msgid "Git Operation Delayed"
 msgstr "Git-Operation verzögert"
 
 #: kicad/project_tree_pane.cpp:1727
-#, fuzzy
 msgid "Keep Waiting"
-msgstr "Annotationen beibehalten"
+msgstr "Bitte warten"
 
 #: kicad/project_tree_pane.cpp:1727
-#, fuzzy
 msgid "Abandon"
-msgstr "Zufällig"
+msgstr "Abbrechen"
 
 #: kicad/project_tree_pane.cpp:1803
 msgid "The selected directory is already a Git project."
@@ -41421,23 +41416,20 @@ msgid "Auto-migrate 3D model references"
 msgstr "3D-Modellverweise automatisch migrieren"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:662
-#, fuzzy
 msgid "(keep existing reference)"
-msgstr "Bestehende Referenzbezeichner beibehalten"
+msgstr "(bestehende Referenz beibehalten)"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:869
 msgid "Add 3D Model Search Directory"
 msgstr "3D-Modell-Suchverzeichnis hinzufügen"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:963
-#, fuzzy
 msgid "Select 3D Model File"
-msgstr "Auswahl des 3D-Modells"
+msgstr "3D-Modell auswählen"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:980
-#, fuzzy
 msgid "user-selected"
-msgstr "Kein Bus ausgewählt"
+msgstr "durch Nutzer gewählt"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:1064
 msgid "Migrate 3D model references"
@@ -41462,29 +41454,24 @@ msgid "Potential replacements:"
 msgstr "Möglicher Ersatz:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
-#, fuzzy
 msgid "Add Search Directory..."
-msgstr "Neues Verzeichnis ..."
+msgstr "Suchverzeichnis hinzufügen..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:67
-#, fuzzy
 msgid "Open External File..."
-msgstr "Lokale Datei &öffnen..."
+msgstr "Externe Datei öffnen..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:105
-#, fuzzy
 msgid "Replace Models"
-msgstr "Alle ersetzen"
+msgstr "Modelle ersetzen"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:108
-#, fuzzy
 msgid "Keep Existing"
-msgstr "Vorhandene nutzen"
+msgstr "Vorhandene(s) beibehalten"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.h:68
-#, fuzzy
 msgid "Migrate 3D Models"
-msgstr "3D-Modelle aktualisieren"
+msgstr "3D-Modelle migrieren"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:96
 msgid "Rotate around item anchor"
@@ -51920,9 +51907,8 @@ msgstr[1] ""
 "werden."
 
 #: pcbnew/pcb_edit_frame.cpp:1958
-#, fuzzy
 msgid "Show options"
-msgstr "Andere Optionen"
+msgstr "Optionen anzeigen"
 
 #: pcbnew/pcb_edit_frame.cpp:1986
 msgid "Board file is read only."
@@ -55788,9 +55774,8 @@ msgid "Align/Distribute"
 msgstr "Ausrichtung/Verteilung"
 
 #: pcbnew/tools/board_editor_control.cpp:212
-#, fuzzy
 msgid "Zone Priority"
-msgstr "Priorität"
+msgstr "Zonenpriorität"
 
 #: pcbnew/tools/board_editor_control.cpp:310
 msgid "Locking"
@@ -55915,23 +55900,20 @@ msgid "Duplicate Zone"
 msgstr "Zone verdoppeln"
 
 #: pcbnew/tools/board_editor_control.cpp:1908
-#, fuzzy
 msgid "Move Zone to Top Priority"
-msgstr "Ecke zu Position verschieben"
+msgstr "Zone auf höchste Priorität setzen"
 
 #: pcbnew/tools/board_editor_control.cpp:1962
 msgid "Raise Zone Priority"
 msgstr "Zonenpriorität erhöhen"
 
 #: pcbnew/tools/board_editor_control.cpp:2016
-#, fuzzy
 msgid "Lower Zone Priority"
-msgstr "Kupferzonen-Eigenschaften"
+msgstr "Zonenpriorität verringern"
 
 #: pcbnew/tools/board_editor_control.cpp:2097
-#, fuzzy
 msgid "Move Zone to Bottom Priority"
-msgstr "Ecke zu Position verschieben"
+msgstr "Zone auf niedrigste Priorität setzen"
 
 #: pcbnew/tools/board_editor_control.cpp:2170
 msgid "Selection contains no items with labeled nets."
@@ -57649,9 +57631,8 @@ msgstr ""
 "Aktualisieren der Footprints, um alle Änderungen der Bibliothek zu übernehmen"
 
 #: pcbnew/tools/pcb_actions.cpp:996
-#, fuzzy
 msgid "Migrate 3D Models..."
-msgstr "Lade 3D-Modelle ..."
+msgstr "Migriere 3D-Modelle ..."
 
 #: pcbnew/tools/pcb_actions.cpp:997
 msgid "Replace obsolete WRL 3D model references with current STEP models"
@@ -58078,23 +58059,20 @@ msgid "Duplicate Zone onto Layer..."
 msgstr "Zone auf Lage duplizieren ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1428
-#, fuzzy
 msgid "Move to Top"
-msgstr "In Papierkorb verschieben"
+msgstr "Nach ganz oben schieben"
 
 #: pcbnew/tools/pcb_actions.cpp:1434
 msgid "Raise"
 msgstr "Erhöhen"
 
 #: pcbnew/tools/pcb_actions.cpp:1440
-#, fuzzy
 msgid "Lower"
-msgstr "Leistung"
+msgstr "Verringern"
 
 #: pcbnew/tools/pcb_actions.cpp:1446
-#, fuzzy
 msgid "Move to Bottom"
-msgstr "Unten ausrichten"
+msgstr "Nach ganz unten schieben"
 
 #: pcbnew/tools/pcb_actions.cpp:1454
 msgid "Place Footprints"
