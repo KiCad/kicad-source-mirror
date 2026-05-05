@@ -377,7 +377,7 @@ const wxString& BITMAP_STORE::bitmapName( BITMAPS aBitmapId, int aHeight )
 
 wxString BITMAP_STORE::computeBitmapName( BITMAPS aBitmapId, int aHeight )
 {
-    if( !m_bitmapInfoCache.count( aBitmapId ) )
+    if( !m_bitmapInfoCache.count( aBitmapId ) || m_bitmapInfoCache.at( aBitmapId ).empty() )
     {
         wxLogTrace( traceBitmaps, "No bitmap info available for %d", aBitmapId );
         return wxEmptyString;
