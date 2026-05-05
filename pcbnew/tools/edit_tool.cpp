@@ -1016,11 +1016,10 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    m_selectionTool->ReportFilteredLockedItems();
+
     if( selection.Empty() )
-    {
-        m_selectionTool->ReportFilteredLockedItems();
         return 0;
-    }
 
     if( selection.Size() == 1 && selection.Front()->Type() == PCB_ARC_T )
     {
@@ -1397,6 +1396,8 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    m_selectionTool->ReportFilteredLockedItems();
+
     BOARD_COMMIT commit( this );
 
     for( EDA_ITEM* item : selection )
@@ -1476,6 +1477,8 @@ int EDIT_TOOL::ChangeTrackLayer( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    m_selectionTool->ReportFilteredLockedItems();
+
     PCB_LAYER_ID origLayer = frame()->GetActiveLayer();
 
     if( isNext )
@@ -1537,6 +1540,8 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
 
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
+
+    m_selectionTool->ReportFilteredLockedItems();
 
     if( selection.Size() < 2 )
     {
@@ -1831,6 +1836,8 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    m_selectionTool->ReportFilteredLockedItems();
+
     std::set<PCB_SHAPE*>    lines_to_add;
     std::vector<PCB_SHAPE*> items_to_remove;
 
@@ -2074,6 +2081,8 @@ int EDIT_TOOL::SimplifyPolygons( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    m_selectionTool->ReportFilteredLockedItems();
+
     // Store last used value
     static int s_toleranceValue = pcbIUScale.mmToIU( 3 );
 
@@ -2144,6 +2153,8 @@ int EDIT_TOOL::HealShapes( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    m_selectionTool->ReportFilteredLockedItems();
+
     // Store last used value
     static int s_toleranceValue = pcbIUScale.mmToIU( 3 );
 
@@ -2203,6 +2214,8 @@ int EDIT_TOOL::BooleanPolygons( const TOOL_EVENT& aEvent )
 
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
+
+    m_selectionTool->ReportFilteredLockedItems();
 
     const EDA_ITEM* const last_item = selection.GetLastAddedItem();
 
@@ -2437,6 +2450,8 @@ int EDIT_TOOL::EditVertices( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    m_selectionTool->ReportFilteredLockedItems();
+
     if( !selectionHasEditableCorners( selection ) )
     {
         wxBell();
@@ -2484,6 +2499,8 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                     sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    m_selectionTool->ReportFilteredLockedItems();
+
     if( selection.Empty() )
         return 0;
 
@@ -2507,6 +2524,8 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                     sTool->FilterCollectorForTableCells( aCollector );
                     sTool->FilterCollectorForLockedItems( aCollector );
                 } );
+
+        m_selectionTool->ReportFilteredLockedItems();
     }
 
     // Did we filter everything out?  If so, don't try to operate further
@@ -2669,6 +2688,8 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    m_selectionTool->ReportFilteredLockedItems();
+
     if( selection.Empty() )
         return 0;
 
@@ -2778,6 +2799,8 @@ int EDIT_TOOL::JustifyText( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    m_selectionTool->ReportFilteredLockedItems();
+
     if( selection.Empty() )
         return 0;
 
@@ -2853,6 +2876,8 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForTableCells( aCollector );
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
+
+    m_selectionTool->ReportFilteredLockedItems();
 
     if( selection.Empty() )
         return 0;
@@ -3139,6 +3164,8 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                     sTool->FilterCollectorForLockedItems( aCollector );
                 } );
 
+        m_selectionTool->ReportFilteredLockedItems();
+
         size_t beforeFPCount = selectionCopy.CountType( PCB_FOOTPRINT_T );
 
         selectionCopy = m_selectionTool->RequestSelection(
@@ -3165,7 +3192,6 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
         if( selectionCopy.Empty() )
         {
-            m_selectionTool->ReportFilteredLockedItems();
             editFrame->PopTool( aEvent );
             return 0;
         }
@@ -3196,6 +3222,8 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForTableCells( aCollector );
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
+
+    m_selectionTool->ReportFilteredLockedItems();
 
     if( selection.Empty() )
         return 0;
@@ -3458,6 +3486,8 @@ int EDIT_TOOL::Increment( const TOOL_EVENT& aEvent )
 
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
+
+    m_selectionTool->ReportFilteredLockedItems();
 
     if( selection.Empty() )
         return 0;
@@ -3729,6 +3759,8 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
                 if( aEvent.IsAction( &ACTIONS::cut ) )
                     sTool->FilterCollectorForLockedItems( aCollector );
             } );
+
+    m_selectionTool->ReportFilteredLockedItems();
 
     if( !selection.Empty() )
     {

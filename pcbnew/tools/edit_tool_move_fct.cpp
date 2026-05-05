@@ -131,6 +131,8 @@ int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    m_selectionTool->ReportFilteredLockedItems();
+
     if( selection.Size() < 2 )
         return 0;
 
@@ -706,6 +708,8 @@ int EDIT_TOOL::PackAndMoveFootprints( const TOOL_EVENT& aEvent )
                 sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
+    m_selectionTool->ReportFilteredLockedItems();
+
     std::vector<FOOTPRINT*> footprintsToPack;
 
     for( EDA_ITEM* item : selection )
@@ -842,11 +846,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     if( m_dragging )
         return false;
 
+    m_selectionTool->ReportFilteredLockedItems();
+
     if( selection.Empty() )
-    {
-        m_selectionTool->ReportFilteredLockedItems();
         return false;
-    }
 
     TOOL_EVENT pushedEvent = aEvent;
     editFrame->PushTool( aEvent );
