@@ -2510,13 +2510,7 @@ double PCB_IO_PADS::decalUnitScale( const std::string& aUnits ) const
 
 int PCB_IO_PADS::scaleCoord( double aVal, bool aIsX ) const
 {
-    double origin = aIsX ? m_originX : m_originY;
-
-    long long origin_nm = static_cast<long long>( std::round( origin * m_scaleFactor ) );
-    long long val_nm = static_cast<long long>( std::round( aVal * m_scaleFactor ) );
-
-    long long result = aIsX ? ( val_nm - origin_nm ) : ( origin_nm - val_nm );
-    return static_cast<int>( std::clamp<long long>( result, INT_MIN, INT_MAX ) );
+    return PADS_COMMON::PadsScaleCoord( aVal, aIsX, m_originX, m_originY, m_scaleFactor );
 }
 
 

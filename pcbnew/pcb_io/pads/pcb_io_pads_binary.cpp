@@ -1446,15 +1446,7 @@ int PCB_IO_PADS_BINARY::scaleSize( double aVal ) const
 
 int PCB_IO_PADS_BINARY::scaleCoord( double aVal, bool aIsX ) const
 {
-    double origin = aIsX ? m_originX : m_originY;
-
-    long long originNm = static_cast<long long>( std::round( origin * m_scaleFactor ) );
-    long long valNm = static_cast<long long>( std::round( aVal * m_scaleFactor ) );
-    long long result = aIsX ? ( valNm - originNm ) : ( originNm - valNm );
-
-    return static_cast<int>( std::clamp( result,
-                                         static_cast<long long>( std::numeric_limits<int>::min() ),
-                                         static_cast<long long>( std::numeric_limits<int>::max() ) ) );
+    return PADS_COMMON::PadsScaleCoord( aVal, aIsX, m_originX, m_originY, m_scaleFactor );
 }
 
 

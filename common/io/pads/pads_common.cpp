@@ -24,6 +24,9 @@
 #include <iomanip>
 #include <fstream>
 #include <exception>
+#include <algorithm>
+#include <cmath>
+#include <limits>
 
 
 #include <wx/dir.h>
@@ -350,6 +353,20 @@ void DecodeJustification( int aJustification, GR_TEXT_H_ALIGN_T& aHJustify,
     case 1: aVJustify = GR_TEXT_V_ALIGN_TOP;    break;
     case 2: aVJustify = GR_TEXT_V_ALIGN_CENTER; break;
     }
+}
+
+
+int PadsScaleCoord( double aVal, bool aIsX, double aOriginX, double aOriginY, double aScaleFactor )
+{
+    double origin = aIsX ? aOriginX : aOriginY;
+
+    long long origin_nm = static_cast<long long>( std::round( origin * aScaleFactor ) );
+    long long val_nm = static_cast<long long>( std::round( aVal * aScaleFactor ) );
+
+    long long result = aIsX ? ( val_nm - origin_nm ) : ( origin_nm - val_nm );
+
+    return static_cast<int>( std::clamp<long long>( result, std::numeric_limits<int>::min(),
+                                                    std::numeric_limits<int>::max() ) );
 }
 
 } // namespace PADS_COMMON

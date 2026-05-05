@@ -136,6 +136,15 @@ LINE_STYLE PadsLineStyleToKiCad( int aPadsStyle );
 void DecodeJustification( int aJustification, GR_TEXT_H_ALIGN_T& aHJustify,
                           GR_TEXT_V_ALIGN_T& aVJustify );
 
+/**
+ * Map a PADS board coordinate to a KiCad internal coordinate.
+ *
+ * Subtracts the per-axis design origin (scaled by @p aScaleFactor), applies the PADS-Y-up to
+ * KiCad-Y-down flip on the Y axis (@p aIsX false), and clamps to the int range. Both PADS PCB
+ * importers share this mapping.
+ */
+int PadsScaleCoord( double aVal, bool aIsX, double aOriginX, double aOriginY, double aScaleFactor );
+
 } // namespace PADS_COMMON
 
 #endif // PADS_COMMON_H
