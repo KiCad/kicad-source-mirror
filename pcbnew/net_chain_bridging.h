@@ -157,12 +157,12 @@ inline std::tuple<double, double> BoardChainBridging( const BOARD* aBoard, const
 
         if( tLen > 0.0 && tDelay > 0.0 )
         {
-            delayIUPerMm = tDelay / pcbIUScale.IUTomm( static_cast<int>( tLen ) );
+            delayIUPerMm = tDelay / ( tLen / pcbIUScale.IU_PER_MM );
             break;
         }
     }
 
-    double delayIU = delayIUPerMm * pcbIUScale.IUTomm( static_cast<int>( lengthIU ) );
+    double delayIU = delayIUPerMm * lengthIU / pcbIUScale.IU_PER_MM;
 
     return { lengthIU, delayIU };
 }

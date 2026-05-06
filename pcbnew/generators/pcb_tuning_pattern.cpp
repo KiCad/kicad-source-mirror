@@ -31,6 +31,7 @@
 #include <optional>
 #include <magic_enum.hpp>
 #include <map>
+#include <unordered_map>
 
 #include <wx/debug.h>
 #include <wx/log.h>
@@ -2235,29 +2236,27 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
             double chainBoardLen = 0.0;
             double chainBoardDelay = 0.0;
 
+            // Index tracks by netcode once so each chain member is an O(1) lookup
+            // rather than re-scanning BOARD::Tracks() per net.
+            std::unordered_map<int, PCB_TRACK*> repByNet;
+
+            for( BOARD_ITEM* bi : board->Tracks() )
+            {
+                if( PCB_TRACK* tr = dynamic_cast<PCB_TRACK*>( bi ) )
+                    repByNet.emplace( tr->GetNetCode(), tr );
+            }
+
             for( NETINFO_ITEM* net : board->GetNetInfo() )
             {
                 if( net->GetNetChain() != netChainName )
                     continue;
 
-                PCB_TRACK* rep = nullptr;
+                auto it = repByNet.find( net->GetNetCode() );
 
-                for( BOARD_ITEM* bi : board->Tracks() )
-                {
-                    if( PCB_TRACK* tr = dynamic_cast<PCB_TRACK*>( bi ) )
-                    {
-                        if( tr->GetNetCode() == net->GetNetCode() )
-                        {
-                            rep = tr;
-                            break;
-                        }
-                    }
-                }
-
-                if( rep )
+                if( it != repByNet.end() && it->second )
                 {
                     int cnt = 0; double trk = 0, pd = 0, tDel = 0, pdDel = 0;
-                    std::tie( cnt, trk, pd, tDel, pdDel ) = board->GetTrackLength( *rep );
+                    std::tie( cnt, trk, pd, tDel, pdDel ) = board->GetTrackLength( *it->second );
                     chainBoardLen += trk + pd;
                     chainBoardDelay += tDel + pdDel;
                 }

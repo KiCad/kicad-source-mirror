@@ -111,6 +111,8 @@ class DrillResult:
 @dataclass
 class TestCaseResult:
     """Result of testing a complete design"""
+    __test__ = False  # Not a pytest test class
+
     name: str
     passed: bool
     layer_results: List[LayerResult] = field( default_factory=list )

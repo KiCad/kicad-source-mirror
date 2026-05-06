@@ -578,7 +578,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                 && !returnPathConstraint->m_ReferenceLayer.IsEmpty() )
             {
                 const wxString&    refLayerName = returnPathConstraint->m_ReferenceLayer;
-                const LSET         copperLayers = LSET::AllCuMask();
+                const LSET         copperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
                 PCB_LAYER_ID       refLayer = UNDEFINED_LAYER;
 
                 for( PCB_LAYER_ID layer : copperLayers )
@@ -677,6 +677,18 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                                 netInfo ? netInfo->GetNetname() : wxString{} ) );
                         item->SetViolatingRule( rule );
 
+                        for( const CONNECTION& conn : matchedConnections )
+                        {
+                            NETINFO_ITEM* connNet =
+                                    m_board->GetNetInfo().GetNetItem( conn.netcode );
+
+                            if( !connNet || connNet->GetNetChain() != chainName )
+                                continue;
+
+                            for( BOARD_CONNECTED_ITEM* connItem : conn.items )
+                                item->AddItem( connItem );
+                        }
+
                         reportViolation( item, bbox.Centre(), refLayer );
                     }
                 }
@@ -740,6 +752,9 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                                 netInfo->GetNetname() );
                         item->SetErrorMessage( msg );
                         item->SetViolatingRule( rule );
+
+                        for( BOARD_CONNECTED_ITEM* connItem : conn.items )
+                            item->AddItem( connItem );
 
                         VECTOR2I     pos;
                         PCB_LAYER_ID layer = UNDEFINED_LAYER;

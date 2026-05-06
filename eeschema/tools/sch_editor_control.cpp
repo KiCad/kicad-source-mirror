@@ -1965,28 +1965,47 @@ int SCH_EDITOR_CONTROL::ShowCreateNetChain( const TOOL_EVENT& aEvent )
         graph->Recalculate( sheets, true );
     }
 
-    // Pre-seed From/To from current selection
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    wxString            fromRef, toRef;
+    DIALOG_CREATE_NET_CHAIN::FOCUS_HINT hint;
 
-    if( selTool )
+    if( SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>() )
     {
+        const SCH_SELECTION& sel = selTool->GetSelection();
+
         std::vector<SCH_SYMBOL*> symbols;
 
-        for( EDA_ITEM* item : selTool->GetSelection() )
+        for( EDA_ITEM* item : sel )
         {
             if( SCH_SYMBOL* sym = dynamic_cast<SCH_SYMBOL*>( static_cast<SCH_ITEM*>( item ) ) )
                 symbols.push_back( sym );
         }
 
         if( symbols.size() >= 1 )
-            fromRef = symbols[0]->GetRef( &editFrame->GetCurrentSheet() );
+            hint.fromRef = symbols[0]->GetRef( &editFrame->GetCurrentSheet() );
 
         if( symbols.size() >= 2 )
-            toRef = symbols[1]->GetRef( &editFrame->GetCurrentSheet() );
+            hint.toRef = symbols[1]->GetRef( &editFrame->GetCurrentSheet() );
+
+        // Single pin or single wire/bus → use its connection's net name as the focus hint.
+        if( symbols.empty() && sel.GetSize() == 1 )
+        {
+            SCH_ITEM* schItem = static_cast<SCH_ITEM*>( sel.Front() );
+
+            if( SCH_PIN* pin = dynamic_cast<SCH_PIN*>( schItem ) )
+            {
+                if( pin->Connection() )
+                    hint.netName = pin->Connection()->Name();
+            }
+            else if( schItem
+                     && schItem->Type() == SCH_LINE_T
+                     && schItem->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } )
+                     && schItem->Connection() )
+            {
+                hint.netName = schItem->Connection()->Name();
+            }
+        }
     }
 
-    DIALOG_CREATE_NET_CHAIN dlg( editFrame, fromRef, toRef );
+    DIALOG_CREATE_NET_CHAIN dlg( editFrame, hint );
     dlg.ShowModal();
 
     return 0;

@@ -79,6 +79,19 @@ static const wxChar DanglingProfileMask[] = wxT( "CONN_PROFILE" );
 static const wxChar ConnTrace[] = wxT( "CONN" );
 
 
+// Resolve a subgraph's raw name + code to a stable, non-empty net-chain key.  Drivers without
+// a label produce empty names or the placeholder "<NO NET>"; both cases collapse to a synthetic
+// key prefixed so consumers like the netlist exporter recognise them via
+// SCH_NETCHAIN::SYNTHETIC_NET_PREFIX.
+static wxString netChainKeyFor( const wxString& aRawNetName, long aSubgraphCode )
+{
+    if( !aRawNetName.IsEmpty() && aRawNetName.Find( wxS( "<NO NET>" ) ) == wxNOT_FOUND )
+        return aRawNetName;
+
+    return wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) << aSubgraphCode;
+}
+
+
 CONNECTION_GRAPH::~CONNECTION_GRAPH()
 {
     // Ensure destruction happens in a translation unit that includes full SCH_NETCHAIN
@@ -2901,6 +2914,281 @@ std::function<void( CONNECTION_GRAPH& )>& CONNECTION_GRAPH::RebuildNetChainsTest
 }
 
 
+CONNECTION_GRAPH::BRIDGE_GRAPH CONNECTION_GRAPH::buildBridgeAdjacency()
+{
+    BRIDGE_GRAPH result;
+
+    auto getSubgraphNet = [&]( SCH_PIN* aPin ) -> wxString
+    {
+        if( !aPin )
+            return wxString();
+
+        CONNECTION_SUBGRAPH* sg = GetSubgraphForItem( aPin );
+
+        return sg ? netChainKeyFor( sg->GetNetName(), sg->m_code ) : wxString();
+    };
+
+    // Walk every 2-pin passthrough symbol on every sheet, building a flat list of bridge
+    // edges between distinct subgraph nets.
+
+    result.edges.reserve( 256 );
+
+    for( const SCH_SHEET_PATH& sheetPath : m_sheetList )
+    {
+        SCH_SCREEN* sc = sheetPath.LastScreen();
+
+        if( !sc )
+            continue;
+
+        auto findWireOnScreen = [&]( SCH_PIN* aPin, SCH_LINE*& aWire ) -> bool
+        {
+            const VECTOR2I p = aPin->GetPosition();
+
+            auto consider = [&]( SCH_ITEM* cand ) -> bool
+            {
+                if( cand->Type() != SCH_LINE_T )
+                    return false;
+
+                SCH_LINE* line = static_cast<SCH_LINE*>( cand );
+
+                if( line->GetLayer() != LAYER_WIRE )
+                    return false;
+
+                const VECTOR2I s = line->GetStartPoint();
+                const VECTOR2I e = line->GetEndPoint();
+
+                if( s.y == e.y && p.y == s.y )
+                {
+                    int minx = std::min( s.x, e.x );
+                    int maxx = std::max( s.x, e.x );
+
+                    if( p.x >= minx && p.x <= maxx )
+                    {
+                        aWire = line;
+                        return true;
+                    }
+                }
+                else if( s.x == e.x && p.x == s.x )
+                {
+                    int miny = std::min( s.y, e.y );
+                    int maxy = std::max( s.y, e.y );
+
+                    if( p.y >= miny && p.y <= maxy )
+                    {
+                        aWire = line;
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
+            for( SCH_ITEM* c : sc->Items().Overlapping( SCH_LINE_T, p ) )
+                if( consider( c ) )
+                    return true;
+
+            for( SCH_ITEM* c : sc->Items().OfType( SCH_LINE_T ) )
+                if( consider( c ) )
+                    return true;
+
+            return false;
+        };
+
+        for( SCH_ITEM* item : sc->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL*           symbol = static_cast<SCH_SYMBOL*>( item );
+            std::vector<SCH_PIN*> pins = symbol->GetPins( &sheetPath );
+
+            if( pins.size() != 2 )
+                continue;
+
+            if( symbol->GetPassthroughMode() == SCH_SYMBOL::PASSTHROUGH_MODE::BLOCK )
+                continue;
+
+            SCH_LINE* wireA = nullptr;
+            SCH_LINE* wireB = nullptr;
+
+            if( !findWireOnScreen( pins[0], wireA ) || !findWireOnScreen( pins[1], wireB ) )
+                continue;
+
+            bool allow = false;
+
+            if( symbol->GetPassthroughMode() == SCH_SYMBOL::PASSTHROUGH_MODE::FORCE )
+            {
+                allow = true;
+            }
+            else
+            {
+                if( pins[0]->IsPower() || pins[1]->IsPower() )
+                    continue;
+
+                VECTOR2I aS = wireA->GetStartPoint();
+                VECTOR2I aE = wireA->GetEndPoint();
+                VECTOR2I bS = wireB->GetStartPoint();
+                VECTOR2I bE = wireB->GetEndPoint();
+
+                if( aS.x == aE.x && bS.x == bE.x && aS.x == bS.x )
+                    allow = true;
+                else if( aS.y == aE.y && bS.y == bE.y && aS.y == bS.y )
+                    allow = true;
+            }
+
+            if( !allow )
+                continue;
+
+            wxString netA = getSubgraphNet( pins[0] );
+            wxString netB = getSubgraphNet( pins[1] );
+
+            if( netA.IsEmpty() || netB.IsEmpty() || netA == netB )
+                continue;
+
+            result.edges.push_back( { netA, netB, symbol } );
+        }
+    }
+
+    // Mark power subgraphs by walking every pin across every sheet. Any subgraph touched by a
+    // power-class pin (or a power-symbol parent) is treated as a power node and its incident
+    // bridge edges are excluded below.
+
+    std::set<long>          powerSubgraphs;
+    std::map<wxString, long> netToCode;
+
+    for( const SCH_SHEET_PATH& sheetPath : m_sheetList )
+    {
+        SCH_SCREEN* sc = sheetPath.LastScreen();
+
+        if( !sc )
+            continue;
+
+        for( SCH_ITEM* item : sc->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL*           sym = static_cast<SCH_SYMBOL*>( item );
+            std::vector<SCH_PIN*> pins = sym->GetPins( &sheetPath );
+
+            for( SCH_PIN* p : pins )
+            {
+                if( CONNECTION_SUBGRAPH* sg = GetSubgraphForItem( p ) )
+                {
+                    netToCode[netChainKeyFor( sg->GetNetName(), sg->m_code )] = sg->m_code;
+
+                    if( p->IsPower()
+                        || ( p->GetParentSymbol() && p->GetParentSymbol()->IsPower() ) )
+                    {
+                        powerSubgraphs.insert( sg->m_code );
+                    }
+                }
+            }
+        }
+    }
+
+    // Build the filtered adjacency. Edges that touch a power subgraph are dropped, and any
+    // non-power endpoint of such a dropped edge is recorded as power-adjacent so the leaf-prune
+    // pass below can iteratively remove power stubs.
+
+    std::set<wxString> powerAdjacentNets;
+
+    for( const BRIDGE_EDGE& be : result.edges )
+    {
+        long ca = -1;
+        long cb = -1;
+
+        if( auto it = netToCode.find( be.a ); it != netToCode.end() )
+            ca = it->second;
+
+        if( auto it = netToCode.find( be.b ); it != netToCode.end() )
+            cb = it->second;
+
+        if( ca == -1 || cb == -1 )
+            continue;
+
+        if( powerSubgraphs.contains( ca ) || powerSubgraphs.contains( cb ) )
+        {
+            if( !powerSubgraphs.contains( ca ) )
+                powerAdjacentNets.insert( be.a );
+
+            if( !powerSubgraphs.contains( cb ) )
+                powerAdjacentNets.insert( be.b );
+
+            continue;
+        }
+
+        result.adjacency[be.a].push_back( { be.b, be.sym } );
+        result.adjacency[be.b].push_back( { be.a, be.sym } );
+    }
+
+    // Iteratively prune degree-1 power-adjacent leaves.  Skip pruning entirely for very small
+    // graphs to avoid wiping out legitimate two-net chains.
+
+    std::map<wxString, int> degree;
+
+    for( const auto& kv : result.adjacency )
+        degree[kv.first] = static_cast<int>( kv.second.size() );
+
+    if( result.adjacency.size() <= 2 )
+        powerAdjacentNets.clear();
+
+    if( powerAdjacentNets.size() <= 2 )
+        powerAdjacentNets.clear();
+
+    std::queue<wxString> q;
+    std::set<wxString>   removed;
+
+    for( const auto& kv : degree )
+    {
+        if( kv.second <= 1 && powerAdjacentNets.contains( kv.first ) )
+            q.push( kv.first );
+    }
+
+    while( !q.empty() )
+    {
+        wxString n = q.front();
+        q.pop();
+
+        if( removed.contains( n ) )
+            continue;
+
+        removed.insert( n );
+
+        for( const BRIDGE_NEIGHBOR& e : result.adjacency[n] )
+        {
+            if( removed.contains( e.other ) )
+                continue;
+
+            if( degree.count( e.other ) )
+            {
+                degree[e.other]--;
+
+                if( degree[e.other] <= 1 && powerAdjacentNets.contains( e.other ) )
+                    q.push( e.other );
+            }
+        }
+    }
+
+    if( !removed.empty() )
+    {
+        std::map<wxString, std::vector<BRIDGE_NEIGHBOR>> newAdj;
+
+        for( const auto& kv : result.adjacency )
+        {
+            if( removed.contains( kv.first ) )
+                continue;
+
+            for( const BRIDGE_NEIGHBOR& e : kv.second )
+            {
+                if( removed.contains( e.other ) )
+                    continue;
+
+                newAdj[kv.first].push_back( e );
+            }
+        }
+
+        result.adjacency.swap( newAdj );
+    }
+
+    return result;
+}
+
+
 void CONNECTION_GRAPH::RebuildNetChains()
 {
     // Snapshot the committed-chain count so a throw partway through the restore loop can
@@ -2951,202 +3239,27 @@ void CONNECTION_GRAPH::RebuildNetChains()
 
     auto getSubgraphNet = [&]( SCH_PIN* aPin ) -> wxString
     {
-        if( !aPin ) return wxEmptyString;
-        if( CONNECTION_SUBGRAPH* sg = GetSubgraphForItem( aPin ) )
-        {
-            wxString n = sg->GetNetName();
-            if( !n.IsEmpty() && n.Find( wxS("<NO NET>") ) == wxNOT_FOUND )
-                return n;
-            return wxString::Format( wxT("__SG_%ld"), sg->m_code );
-        }
-        return wxEmptyString;
+        if( !aPin )
+            return wxString();
+
+        CONNECTION_SUBGRAPH* sg = GetSubgraphForItem( aPin );
+
+        return sg ? netChainKeyFor( sg->GetNetName(), sg->m_code ) : wxString();
     };
 
-    struct BRIDGE_EDGE { wxString a; wxString b; SCH_SYMBOL* sym; };
-    std::vector<BRIDGE_EDGE> bridgeEdges; bridgeEdges.reserve( 256 );
+    BRIDGE_GRAPH bridgeGraph = buildBridgeAdjacency();
+    auto&        bridgeEdges = bridgeGraph.edges;
+    auto&        adjacency = bridgeGraph.adjacency;
 
-    // Collect only bridge edges (2-pin pass-through symbols) without forming chains yet.
-    for( const SCH_SHEET_PATH& sheetPath : m_sheetList )
-    {
-        SCH_SCREEN* sc = sheetPath.LastScreen();
-        if( !sc ) continue;
-
-        auto findWireOnScreen = [&]( SCH_PIN* aPin, SCH_LINE*& aWire ) -> bool
-        {
-            const VECTOR2I p = aPin->GetPosition();
-            auto consider = [&]( SCH_ITEM* cand ) -> bool
-            {
-                if( cand->Type() != SCH_LINE_T ) return false;
-                SCH_LINE* line = static_cast<SCH_LINE*>( cand );
-                if( line->GetLayer() != LAYER_WIRE ) return false;
-                const VECTOR2I s = line->GetStartPoint(); const VECTOR2I e = line->GetEndPoint();
-                if( s.y == e.y && p.y == s.y )
-                {
-                    int minx = std::min( s.x, e.x ); int maxx = std::max( s.x, e.x );
-                    if( p.x >= minx && p.x <= maxx ) { aWire = line; return true; }
-                }
-                else if( s.x == e.x && p.x == s.x )
-                {
-                    int miny = std::min( s.y, e.y ); int maxy = std::max( s.y, e.y );
-                    if( p.y >= miny && p.y <= maxy ) { aWire = line; return true; }
-                }
-                return false;
-            };
-            for( SCH_ITEM* c : sc->Items().Overlapping( SCH_LINE_T, p ) ) if( consider( c ) ) return true;
-            for( SCH_ITEM* c : sc->Items().OfType( SCH_LINE_T ) ) if( consider( c ) ) return true;
-            return false;
-        };
-
-        for( SCH_ITEM* item : sc->Items().OfType( SCH_SYMBOL_T ) )
-        {
-            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-            std::vector<SCH_PIN*> pins = symbol->GetPins( &sheetPath );
-            if( pins.size() != 2 )
-                continue;
-            if( symbol->GetPassthroughMode() == SCH_SYMBOL::PASSTHROUGH_MODE::BLOCK )
-                continue;
-            SCH_LINE* wireA = nullptr; SCH_LINE* wireB = nullptr;
-            if( !findWireOnScreen( pins[0], wireA ) || !findWireOnScreen( pins[1], wireB ) )
-                continue;
-            bool allow = false;
-            if( symbol->GetPassthroughMode() == SCH_SYMBOL::PASSTHROUGH_MODE::FORCE )
-                allow = true;
-            else
-            {
-                if( pins[0]->IsPower() || pins[1]->IsPower() )
-                    continue; // disallow power bridging in default mode
-                VECTOR2I aS = wireA->GetStartPoint(); VECTOR2I aE = wireA->GetEndPoint();
-                VECTOR2I bS = wireB->GetStartPoint(); VECTOR2I bE = wireB->GetEndPoint();
-                if( aS.x == aE.x && bS.x == bE.x && aS.x == bS.x ) allow = true;
-                else if( aS.y == aE.y && bS.y == bE.y && aS.y == bS.y ) allow = true;
-            }
-            if( !allow )
-                continue;
-            wxString netA = getSubgraphNet( pins[0] );
-            wxString netB = getSubgraphNet( pins[1] );
-            if( netA.IsEmpty() || netB.IsEmpty() || netA == netB )
-                continue;
-            bridgeEdges.push_back( { netA, netB, symbol } );
-        }
-    }
-
-    // Mark power subgraphs first using full connectivity prior to passive bridging.
-    wxLogTrace( traceSchNetChain, "RebuildNetChains: pass 1.5 (power marking)" );
-    std::set<long> powerSubgraphs; // subgraph codes containing at least one power-class pin
-    std::map<wxString,long> netToCode; // map net (subgraph) name to code for filtering
-    for( const SCH_SHEET_PATH& sheetPath : m_sheetList )
-    {
-        SCH_SCREEN* sc = sheetPath.LastScreen(); if( !sc ) continue;
-        for( SCH_ITEM* item : sc->Items().OfType( SCH_SYMBOL_T ) )
-        {
-            SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
-            auto pins = sym->GetPins( &sheetPath );
-            for( SCH_PIN* p : pins )
-            {
-                if( CONNECTION_SUBGRAPH* sg = GetSubgraphForItem( p ) )
-                {
-                    wxString netName = sg->GetNetName();
-                    if( netName.IsEmpty() || netName.Find( wxS("<NO NET>") ) != wxNOT_FOUND )
-                        netName = wxString::Format( wxT("__SG_%ld"), sg->m_code );
-                    netToCode[ netName ] = sg->m_code;
-                    // Consider multiple indicators of a power node. We want structural exclusion, not name heuristics.
-                    ELECTRICAL_PINTYPE pt = p->GetType();
-                    if( p->IsPower() || ( p->GetParentSymbol() && p->GetParentSymbol()->IsPower() ) )
-                    {
-                        powerSubgraphs.insert( sg->m_code );
-                        wxLogTrace( traceSchNetChain, "  powerSubgraph code=%ld net='%s' pinType=%d sym=%p", sg->m_code, netName, (int) pt, (void*) sym );
-                    }
-                }
-            }
-        }
-    }
-    wxLogTrace( traceSchNetChain, "RebuildNetChains: powerSubgraphs size=%zu", powerSubgraphs.size() );
-
-    struct EDGE { wxString other; SCH_SYMBOL* sym; };
-    std::map<wxString, std::vector<EDGE>> adjacency; // filtered adjacency
-    std::set<wxString> powerAdjacentNets; // nets that had an edge to a power subgraph
-    for( const BRIDGE_EDGE& be : bridgeEdges )
-    {
-        long ca = -1, cb = -1;
-        if( auto it = netToCode.find( be.a ); it != netToCode.end() ) ca = it->second;
-        if( auto it = netToCode.find( be.b ); it != netToCode.end() ) cb = it->second;
-        if( ca == -1 || cb == -1 )
-            continue; // incomplete mapping; shouldn't happen but be safe
-        if( powerSubgraphs.contains( ca ) || powerSubgraphs.contains( cb ) )
-        {
-            // Record non-power endpoint(s) as being adjacent to power for later pruning.
-            if( !powerSubgraphs.contains( ca ) ) powerAdjacentNets.insert( be.a );
-            if( !powerSubgraphs.contains( cb ) ) powerAdjacentNets.insert( be.b );
-            continue; // exclude edges touching power subgraphs
-        }
-        adjacency[be.a].push_back( { be.b, be.sym } );
-        adjacency[be.b].push_back( { be.a, be.sym } );
-    }
-
-    // Prune leaf nets that were only connected to power nets (power-adjacent stubs) iteratively.
-    {
-        std::map<wxString,int> degree;
-        for( const auto& kv : adjacency )
-            degree[kv.first] = (int) kv.second.size();
-
-        // If very small adjacency (<=2 nets) don't risk pruning away valid small chains
-        if( adjacency.size() <= 2 )
-        {
-            powerAdjacentNets.clear(); // ignore any incidental marking
-        }
-        if( powerAdjacentNets.size() <= 2 )
-        {
-            powerAdjacentNets.clear();
-        }
-
-        std::queue<wxString> q;
-        std::set<wxString> removed;
-        for( const auto& kv : degree )
-        {
-            if( kv.second <= 1 && powerAdjacentNets.contains( kv.first ) )
-                q.push( kv.first );
-        }
-        while( !q.empty() )
-        {
-            wxString n = q.front(); q.pop();
-            if( removed.contains( n ) ) continue;
-            removed.insert( n );
-            // Decrement neighbor degrees
-            for( const auto& e : adjacency[n] )
-            {
-                if( removed.contains( e.other ) ) continue;
-                if( degree.count( e.other ) )
-                {
-                    degree[e.other]--;
-                    if( degree[e.other] <= 1 && powerAdjacentNets.contains( e.other ) )
-                        q.push( e.other );
-                }
-            }
-        }
-    if( !removed.empty() )
-        {
-            wxLogTrace( traceSchNetChain, "RebuildNetChains: pruned %zu power-adjacent leaf nets", removed.size() );
-            // Rebuild adjacency without removed nets
-            std::map<wxString,std::vector<EDGE>> newAdj;
-            for( const auto& kv : adjacency )
-            {
-                if( removed.contains( kv.first ) ) continue;
-                for( const EDGE& e : kv.second )
-                {
-                    if( removed.contains( e.other ) ) continue;
-                    newAdj[kv.first].push_back( e );
-                }
-            }
-            adjacency.swap( newAdj );
-        }
-    }
+    wxLogTrace( traceSchNetChain, "RebuildNetChains: bridgeEdges=%zu adjacency=%zu",
+                bridgeEdges.size(), adjacency.size() );
 
     // Targeted stub pruning: reduce any component >4 nets by removing minimal number of "stub" leaves
     // (degree 1 whose neighbor has degree >2). This satisfies legacy test expecting longest branch kept.
     {
         // First, discover connected components over current adjacency.
         wxLogTrace( traceSchNetChain, "RebuildNetChains: targeted stub pruning start (adj=%zu)", adjacency.size() );
-        std::map<wxString,std::vector<EDGE>> snapshot = adjacency; // read-only snapshot
+        std::map<wxString,std::vector<BRIDGE_NEIGHBOR>> snapshot = adjacency; // read-only snapshot
         std::set<wxString> seen;
         std::set<wxString> globalPrune;
         for( const auto& kv : snapshot )
@@ -3158,7 +3271,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
             while( !q.empty() )
             {
                 wxString cur = q.front(); q.pop(); comp.push_back( cur );
-                for( const EDGE& e : snapshot[cur] ) if( !seen.contains( e.other ) ) { seen.insert( e.other ); q.push( e.other ); }
+                for( const BRIDGE_NEIGHBOR& e : snapshot[cur] ) if( !seen.contains( e.other ) ) { seen.insert( e.other ); q.push( e.other ); }
             }
             wxLogTrace( traceSchNetChain, "  component size=%zu", comp.size() );
             if( comp.size() <= 4 ) continue;
@@ -3183,11 +3296,11 @@ void CONNECTION_GRAPH::RebuildNetChains()
         }
         if( !globalPrune.empty() )
         {
-            std::map<wxString,std::vector<EDGE>> newAdj;
+            std::map<wxString,std::vector<BRIDGE_NEIGHBOR>> newAdj;
             for( const auto& kv2 : adjacency )
             {
                 if( globalPrune.contains( kv2.first ) ) continue;
-                for( const EDGE& e : kv2.second )
+                for( const BRIDGE_NEIGHBOR& e : kv2.second )
                 {
                     if( globalPrune.contains( e.other ) ) continue;
                     newAdj[kv2.first].push_back( e );
@@ -3199,7 +3312,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
     }
 
     // ---------- Small helpers ----------
-    auto neighbors_of = [&]( const wxString& n ) -> const std::vector<EDGE>*
+    auto neighbors_of = [&]( const wxString& n ) -> const std::vector<BRIDGE_NEIGHBOR>*
     {
         if( auto it = adjacency.find(n); it != adjacency.end() ) return &it->second;
         return nullptr;
@@ -3225,7 +3338,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
             wxString cur = q.front(); q.pop();
             if( auto nbrs = neighbors_of( cur ) )
             {
-                for( const EDGE& e : *nbrs )
+                for( const BRIDGE_NEIGHBOR& e : *nbrs )
                 {
                     if( visited.contains( e.other ) ) continue;
                     visited.insert( e.other );
@@ -3439,16 +3552,12 @@ void CONNECTION_GRAPH::RebuildNetChains()
                 {
                     if( CONNECTION_SUBGRAPH* sg = GetSubgraphForItem( pin ) )
                     {
-                        // Normalize identical to potential-chain construction (getSubgraphNet
-                        // lambda above) so unnamed subgraphs use the synthetic __SG_<code>
-                        // key instead of being skipped.  Otherwise a chain whose only named
-                        // endpoint is at one terminal would fail strict both-endpoint matching.
-                        wxString net = sg->GetNetName();
-
-                        if( net.IsEmpty() || net.Find( wxS( "<NO NET>" ) ) != wxNOT_FOUND )
-                            net = wxString::Format( wxT( "__SG_%ld" ), sg->m_code );
-
-                        refPinToNet[{ ref, pin->GetNumber() }] = net;
+                        // Match potential-chain key construction so unnamed subgraphs use the
+                        // synthetic prefix instead of being skipped — without this, a chain
+                        // whose only named endpoint is at one terminal would fail strict
+                        // both-endpoint matching.
+                        refPinToNet[{ ref, pin->GetNumber() }] =
+                                netChainKeyFor( sg->GetNetName(), sg->m_code );
                     }
                 }
             }
@@ -3671,10 +3780,12 @@ SCH_NETCHAIN* CONNECTION_GRAPH::FindPotentialNetChainBetweenPins( SCH_PIN* aPinA
 
     wxString netA;
     wxString netB;
+
     if( CONNECTION_SUBGRAPH* sgA = GetSubgraphForItem( aPinA ) )
-        netA = sgA->GetNetName().IsEmpty() ? wxString::Format( wxT("__SG_%ld"), sgA->m_code ) : sgA->GetNetName();
+        netA = netChainKeyFor( sgA->GetNetName(), sgA->m_code );
+
     if( CONNECTION_SUBGRAPH* sgB = GetSubgraphForItem( aPinB ) )
-        netB = sgB->GetNetName().IsEmpty() ? wxString::Format( wxT("__SG_%ld"), sgB->m_code ) : sgB->GetNetName();
+        netB = netChainKeyFor( sgB->GetNetName(), sgB->m_code );
 
     if( netA.IsEmpty() || netB.IsEmpty() )
         return nullptr;

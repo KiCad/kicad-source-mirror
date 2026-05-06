@@ -34,17 +34,21 @@
 #include <sch_netchain.h>
 #include <sch_pin.h>
 #include <sch_reference_list.h>
+#include <sch_screen.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_symbol.h>
 #include <schematic.h>
+#include <tool/tool_manager.h>
+#include <tools/sch_actions.h>
+#include <tools/sch_selection_tool.h>
 #include <view/view.h>
 
 
-DIALOG_CREATE_NET_CHAIN::DIALOG_CREATE_NET_CHAIN( SCH_EDIT_FRAME* aParent, const wxString& aFromRef,
-                                                  const wxString& aToRef ) :
+DIALOG_CREATE_NET_CHAIN::DIALOG_CREATE_NET_CHAIN( SCH_EDIT_FRAME* aParent, const FOCUS_HINT& aHint ) :
         DIALOG_CREATE_NET_CHAIN_BASE( aParent ),
-        m_frame( aParent )
+        m_frame( aParent ),
+        m_hint( aHint )
 {
     m_refreshButton->SetBitmap( KiBitmapBundle( BITMAPS::refresh ) );
     m_findPathButton->SetBitmap( KiBitmapBundle( BITMAPS::find ) );
@@ -61,11 +65,11 @@ DIALOG_CREATE_NET_CHAIN::DIALOG_CREATE_NET_CHAIN( SCH_EDIT_FRAME* aParent, const
     populateComponentCombos();
 
     // Pre-seed From/To from caller (e.g. current selection)
-    if( !aFromRef.IsEmpty() )
-        m_fromComponent->SetValue( aFromRef );
+    if( !m_hint.fromRef.IsEmpty() )
+        m_fromComponent->SetValue( m_hint.fromRef );
 
-    if( !aToRef.IsEmpty() )
-        m_toComponent->SetValue( aToRef );
+    if( !m_hint.toRef.IsEmpty() )
+        m_toComponent->SetValue( m_hint.toRef );
 
     SetupStandardButtons();
 
@@ -83,12 +87,7 @@ DIALOG_CREATE_NET_CHAIN::DIALOG_CREATE_NET_CHAIN( SCH_EDIT_FRAME* aParent, const
     loadPotentials();
     rebuildGrid();
 
-    // If both endpoints were pre-seeded, auto-trigger Find Path
-    if( !aFromRef.IsEmpty() && !aToRef.IsEmpty() )
-    {
-        wxCommandEvent dummy;
-        OnFindPathClicked( dummy );
-    }
+    applyFocusHint();
 
     finishDialogSettings();
 }
@@ -96,8 +95,12 @@ DIALOG_CREATE_NET_CHAIN::DIALOG_CREATE_NET_CHAIN( SCH_EDIT_FRAME* aParent, const
 
 DIALOG_CREATE_NET_CHAIN::~DIALOG_CREATE_NET_CHAIN()
 {
-    // Clear all highlighting when dialog closes
-    highlightChainNets( {} );
+    // Clear highlighting on whichever sheet we last touched.  The user may have navigated
+    // away via row selection, and we don't want stale brightening to outlive the dialog.
+    SCH_SCREEN* screen = !m_lastHighlightedSheet.empty() ? m_lastHighlightedSheet.LastScreen()
+                                                         : ( m_frame ? m_frame->GetCurrentSheet().LastScreen()
+                                                                     : nullptr );
+    highlightChainNets( {}, screen );
 }
 
 
@@ -254,11 +257,13 @@ void DIALOG_CREATE_NET_CHAIN::OnChainSelected( wxGridEvent& aEvent )
 
         m_nameInput->SetValue( m_rows[dataIdx].suggestedName );
 
-        highlightChainNets( m_rows[dataIdx].memberNets );
+        navigateAndHighlightChain( m_rows[dataIdx] );
     }
     else
     {
-        highlightChainNets( {} );
+        SCH_SCREEN* screen = !m_lastHighlightedSheet.empty() ? m_lastHighlightedSheet.LastScreen()
+                                                              : m_frame->GetCurrentSheet().LastScreen();
+        highlightChainNets( {}, screen );
     }
 
     aEvent.Skip();
@@ -269,6 +274,11 @@ void DIALOG_CREATE_NET_CHAIN::OnRefreshClicked( wxCommandEvent& aEvent )
 {
     if( !m_frame->Schematic().ConnectionGraph() )
         return;
+
+    // Clear any focus-hint filter so Refresh truly restores the full list.  Otherwise the
+    // empty-state message ("Use Refresh to restore the full list.") would refresh and
+    // immediately re-apply the same no-match filter.
+    m_filterInput->Clear();
 
     populateComponentCombos();
     recalculateAndReload( true );
@@ -455,9 +465,7 @@ void DIALOG_CREATE_NET_CHAIN::OnFindPathClicked( wxCommandEvent& aEvent )
             m_rows.push_back( std::move( row ) );
             rebuildGrid();
 
-            m_chainsGrid->SelectRow( 0 );
-            updateMemberDetail( 0 );
-            m_nameInput->SetValue( m_rows[0].suggestedName );
+            autoSelectFirstRow();
             m_headerLabel->SetLabel( wxString::Format(
                     _( "Showing manual chain between %s and %s. Use Refresh to restore all." ),
                     fromRef, toRef ) );
@@ -532,9 +540,7 @@ void DIALOG_CREATE_NET_CHAIN::OnFindPathClicked( wxCommandEvent& aEvent )
 
     rebuildGrid();
 
-    m_chainsGrid->SelectRow( 0 );
-    updateMemberDetail( 0 );
-    m_nameInput->SetValue( m_rows[0].suggestedName );
+    autoSelectFirstRow();
 
     m_headerLabel->SetLabel( wxString::Format(
             _( "Showing %zu path(s) between %s and %s. Use Refresh to restore all." ),
@@ -617,6 +623,20 @@ void DIALOG_CREATE_NET_CHAIN::loadPotentials()
                 row.suggestedName = net;
         }
 
+        // Surface the terminal refs in the row so a ref-keyed filter (e.g. right-click on a
+        // single symbol → focus on chains touching that symbol) can match them.
+        wxString terminalA = chain->GetTerminalRef( 0 );
+        wxString terminalB = chain->GetTerminalRef( 1 );
+
+        if( !chain->GetTerminalPinNum( 0 ).IsEmpty() )
+            terminalA += wxT( ":" ) + chain->GetTerminalPinNum( 0 );
+
+        if( !chain->GetTerminalPinNum( 1 ).IsEmpty() )
+            terminalB += wxT( ":" ) + chain->GetTerminalPinNum( 1 );
+
+        if( !terminalA.IsEmpty() || !terminalB.IsEmpty() )
+            row.terminals = terminalA + wxT( " → " ) + terminalB;
+
         m_rows.push_back( std::move( row ) );
     }
 }
@@ -684,6 +704,14 @@ void DIALOG_CREATE_NET_CHAIN::rebuildGrid()
 
         // Match against suggested name
         if( row.suggestedName.Lower().Contains( filter ) )
+        {
+            m_filteredIndices.push_back( static_cast<int>( i ) );
+            continue;
+        }
+
+        // Match against terminal refs/pins (e.g. "J1:1 → J2:1") so a focus hint based on a
+        // selected symbol or pin reference catches chains anchored at that ref.
+        if( !row.terminals.IsEmpty() && row.terminals.Lower().Contains( filter ) )
         {
             m_filteredIndices.push_back( static_cast<int>( i ) );
             continue;
@@ -803,20 +831,28 @@ int DIALOG_CREATE_NET_CHAIN::selectedRow() const
 }
 
 
-void DIALOG_CREATE_NET_CHAIN::highlightChainNets( const std::set<wxString>& aNets )
+BOX2I DIALOG_CREATE_NET_CHAIN::highlightChainNets( const std::set<wxString>& aNets, SCH_SCREEN* aScreen )
 {
-    if( !m_frame )
-        return;
+    BOX2I highlightedBBox;
 
-    SCH_SCREEN* screen = m_frame->GetCurrentSheet().LastScreen();
+    if( !m_frame || !aScreen )
+        return highlightedBBox;
 
-    if( !screen )
-        return;
-
-    KIGFX::VIEW*           view = m_frame->GetCanvas()->GetView();
+    // Only the current sheet's view can be live-updated; brightening flags on items belonging
+    // to other screens still apply visually next time that sheet is shown.
+    bool onCurrentSheet = aScreen == m_frame->GetCurrentSheet().LastScreen();
+    KIGFX::VIEW*           view = onCurrentSheet ? m_frame->GetCanvas()->GetView() : nullptr;
     std::vector<EDA_ITEM*> itemsToRedraw;
 
-    for( SCH_ITEM* item : screen->Items() )
+    auto recordHighlight = [&]( SCH_ITEM* aItem )
+    {
+        if( highlightedBBox.GetWidth() == 0 && highlightedBBox.GetHeight() == 0 )
+            highlightedBBox = aItem->GetBoundingBox();
+        else
+            highlightedBBox.Merge( aItem->GetBoundingBox() );
+    };
+
+    for( SCH_ITEM* item : aScreen->Items() )
     {
         if( !item || !item->IsConnectable() )
             continue;
@@ -826,6 +862,7 @@ void DIALOG_CREATE_NET_CHAIN::highlightChainNets( const std::set<wxString>& aNet
         if( item->Type() == SCH_SYMBOL_T )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            bool        anyPinHighlighted = false;
 
             for( SCH_PIN* pin : symbol->GetPins() )
             {
@@ -837,11 +874,16 @@ void DIALOG_CREATE_NET_CHAIN::highlightChainNets( const std::set<wxString>& aNet
                     {
                         pin->SetBrightened();
                         redrawItem = symbol;
+                        anyPinHighlighted = true;
                     }
                     else if( pin->IsBrightened() && !aNets.count( pinConn->Name() ) )
                     {
                         pin->ClearBrightened();
                         redrawItem = symbol;
+                    }
+                    else if( pin->IsBrightened() )
+                    {
+                        anyPinHighlighted = true;
                     }
                 }
                 else if( pin->IsBrightened() )
@@ -850,6 +892,9 @@ void DIALOG_CREATE_NET_CHAIN::highlightChainNets( const std::set<wxString>& aNet
                     redrawItem = symbol;
                 }
             }
+
+            if( anyPinHighlighted )
+                recordHighlight( symbol );
         }
         else
         {
@@ -861,11 +906,16 @@ void DIALOG_CREATE_NET_CHAIN::highlightChainNets( const std::set<wxString>& aNet
                 {
                     item->SetBrightened();
                     redrawItem = item;
+                    recordHighlight( item );
                 }
                 else if( item->IsBrightened() && !aNets.count( itemConn->Name() ) )
                 {
                     item->ClearBrightened();
                     redrawItem = item;
+                }
+                else if( item->IsBrightened() )
+                {
+                    recordHighlight( item );
                 }
             }
             else if( item->IsBrightened() )
@@ -879,11 +929,183 @@ void DIALOG_CREATE_NET_CHAIN::highlightChainNets( const std::set<wxString>& aNet
             itemsToRedraw.push_back( redrawItem );
     }
 
-    if( !itemsToRedraw.empty() )
+    if( !itemsToRedraw.empty() && view )
     {
         for( EDA_ITEM* redrawItem : itemsToRedraw )
             view->Update( static_cast<KIGFX::VIEW_ITEM*>( redrawItem ), KIGFX::REPAINT );
 
         m_frame->GetCanvas()->Refresh();
+    }
+
+    return highlightedBBox;
+}
+
+
+const SCH_SHEET_PATH& DIALOG_CREATE_NET_CHAIN::findSheetForRow( POTENTIAL_ROW& aRow )
+{
+    if( aRow.cachedSheetResolved )
+        return aRow.cachedSheet;
+
+    aRow.cachedSheetResolved = true;
+    aRow.cachedSheet = m_frame->GetCurrentSheet(); // safe default
+
+    // Prefer the deterministic terminal ref recorded with the chain.  std::set<SCH_SYMBOL*>
+    // ordering depends on pointer values and is unstable across runs, so we never key off
+    // GetSymbols().begin() here.
+    wxString targetRef;
+
+    if( aRow.livePtr )
+    {
+        targetRef = aRow.livePtr->GetTerminalRef( 0 );
+
+        if( targetRef.IsEmpty() )
+            targetRef = aRow.livePtr->GetTerminalRef( 1 );
+    }
+    else
+    {
+        targetRef = aRow.forceFromRef;
+
+        if( targetRef.IsEmpty() )
+            targetRef = aRow.forceToRef;
+    }
+
+    if( !targetRef.IsEmpty() )
+    {
+        SCH_REFERENCE_LIST refs;
+        m_frame->Schematic().Hierarchy().GetSymbols( refs, SYMBOL_FILTER_ALL );
+
+        for( const SCH_REFERENCE& ref : refs )
+        {
+            if( ref.GetRef() == targetRef && ref.GetSymbol() )
+            {
+                aRow.cachedSheet = ref.GetSheetPath();
+                return aRow.cachedSheet;
+            }
+        }
+    }
+
+    // Fallback: scan every sheet for an item whose connection matches a member net.
+    for( const SCH_SHEET_PATH& path : m_frame->Schematic().Hierarchy() )
+    {
+        SCH_SCREEN* screen = path.LastScreen();
+
+        if( !screen )
+            continue;
+
+        for( SCH_ITEM* item : screen->Items() )
+        {
+            if( !item || !item->IsConnectable() )
+                continue;
+
+            if( SCH_CONNECTION* conn = item->Connection() )
+            {
+                if( aRow.memberNets.count( conn->Name() ) )
+                {
+                    aRow.cachedSheet = path;
+                    return aRow.cachedSheet;
+                }
+            }
+        }
+    }
+
+    return aRow.cachedSheet;
+}
+
+
+void DIALOG_CREATE_NET_CHAIN::navigateAndHighlightChain( POTENTIAL_ROW& aRow )
+{
+    if( !m_frame )
+        return;
+
+    SCH_SHEET_PATH targetPath = findSheetForRow( aRow );
+
+    // Clear leftover brightening on the previously-touched sheet first when it differs from
+    // the new target.  Otherwise navigating from row A (sheet 1) to row B (sheet 2) leaves
+    // sheet 1's items lit when the user pages back.  Skip when the path is unchanged so we
+    // don't double-walk the same screen.
+    if( !m_lastHighlightedSheet.empty() && m_lastHighlightedSheet != targetPath )
+        highlightChainNets( {}, m_lastHighlightedSheet.LastScreen() );
+
+    if( targetPath != m_frame->GetCurrentSheet() )
+    {
+        // SCH_ACTIONS::changeSheet wraps cancelInteractive, selectionClear, zoom-state save,
+        // history push, and DisplayCurrentSheet — same path eeschema cross-probing uses.
+        m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &targetPath );
+    }
+
+    SCH_SCREEN* screen = m_frame->GetCurrentSheet().LastScreen();
+    BOX2I       bbox = highlightChainNets( aRow.memberNets, screen );
+
+    if( bbox.GetWidth() > 0 || bbox.GetHeight() > 0 )
+    {
+        if( SCH_SELECTION_TOOL* selTool = m_frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>() )
+            selTool->ZoomFitCrossProbeBBox( bbox );
+    }
+
+    m_lastHighlightedSheet = m_frame->GetCurrentSheet();
+}
+
+
+void DIALOG_CREATE_NET_CHAIN::autoSelectFirstRow()
+{
+    if( m_filteredIndices.empty() )
+        return;
+
+    int dataIdx = m_filteredIndices[0];
+    m_chainsGrid->SelectRow( 0 );
+    m_chainsGrid->SetGridCursor( 0, 0 );
+    updateMemberDetail( dataIdx );
+    m_nameInput->SetValue( m_rows[dataIdx].suggestedName );
+    navigateAndHighlightChain( m_rows[dataIdx] );
+}
+
+
+void DIALOG_CREATE_NET_CHAIN::applyFocusHint()
+{
+    // Both refs set: existing two-component find-path flow.
+    if( !m_hint.fromRef.IsEmpty() && !m_hint.toRef.IsEmpty() )
+    {
+        wxCommandEvent dummy;
+        OnFindPathClicked( dummy );
+        return;
+    }
+
+    wxString filterValue;
+    wxString hintLabel;
+
+    if( !m_hint.netName.IsEmpty() )
+    {
+        filterValue = m_hint.netName;
+        hintLabel = wxString::Format( _( "net '%s'" ), m_hint.netName );
+    }
+    else if( !m_hint.fromRef.IsEmpty() )
+    {
+        filterValue = m_hint.fromRef;
+        hintLabel = wxString::Format( _( "component %s" ), m_hint.fromRef );
+    }
+    else if( !m_hint.toRef.IsEmpty() )
+    {
+        filterValue = m_hint.toRef;
+        hintLabel = wxString::Format( _( "component %s" ), m_hint.toRef );
+    }
+    else
+    {
+        return; // No hint supplied — leave the dialog showing the full list.
+    }
+
+    m_filterInput->ChangeValue( filterValue );
+
+    wxCommandEvent dummy;
+    OnFilterChanged( dummy );
+
+    if( m_filteredIndices.size() == 1 )
+    {
+        autoSelectFirstRow();
+    }
+    else if( m_filteredIndices.empty() )
+    {
+        m_headerLabel->SetLabel( wxString::Format(
+                _( "No uncommitted chains match the selected %s. Use Refresh to restore the full list." ),
+                hintLabel ) );
     }
 }

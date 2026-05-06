@@ -997,6 +997,42 @@ private:
      */
     void refreshCommittedChainFromPotential( SCH_NETCHAIN* aTarget, const SCH_NETCHAIN& aSource );
 
+    // Bridge-graph helper types shared by RebuildNetChains() and FindNetChainPathsBetweenPins().
+    // A bridge edge represents a 2-pin passthrough symbol that ties two distinct subgraph nets
+    // together; the bridge graph is the adjacency built from the surviving (non-power-touching)
+    // edges after the leaf-prune pass.
+
+    struct BRIDGE_EDGE
+    {
+        wxString             a;
+        wxString             b;
+        class SCH_SYMBOL*    sym;
+    };
+
+    struct BRIDGE_NEIGHBOR
+    {
+        wxString             other;
+        class SCH_SYMBOL*    sym;
+    };
+
+    struct BRIDGE_GRAPH
+    {
+        std::map<wxString, std::vector<BRIDGE_NEIGHBOR>> adjacency;
+        std::vector<BRIDGE_EDGE>                         edges;
+    };
+
+    /**
+     * Build the bridge graph used for net-chain discovery.  Walks every 2-pin passthrough
+     * symbol on every sheet and records the raw bridge edge list in `edges`; the returned
+     * `adjacency` is built from those edges after dropping any that touch a power subgraph
+     * and after iteratively pruning power-adjacent leaf nets.  `edges` itself stays raw
+     * because RebuildNetChains() still iterates the full list to attach bridging symbols
+     * to their owning component.  Does NOT apply the legacy >4-net stub trim — that fossil
+     * lives only in RebuildNetChains() so the path-enumeration API can see the unpruned
+     * adjacency.
+     */
+    BRIDGE_GRAPH buildBridgeAdjacency();
+
     /// All the sheets in the schematic (as long as we don't have partial updates).
     SCH_SHEET_LIST m_sheetList;
 

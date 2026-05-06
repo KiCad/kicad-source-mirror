@@ -187,4 +187,28 @@ BOOST_AUTO_TEST_CASE( ChainsArePartitionedByName )
 }
 
 
+BOOST_AUTO_TEST_CASE( LargeBridgingLengthDoesNotOverflowIntCast )
+{
+    BOARD board;
+
+    NETINFO_ITEM* netA = addNet( &board, wxS( "/A" ), 1, wxS( "SIG" ) );
+    NETINFO_ITEM* netB = addNet( &board, wxS( "/B" ), 2, wxS( "SIG" ) );
+
+    // 3 m span (3,000,000,000 nm) exceeds INT_MAX (~2.147e9).  The previous
+    // (int) cast on lengthIU silently truncated to a negative value here,
+    // producing a negative delay; the direct-divide form must remain accurate.
+    FOOTPRINT* fp = addFootprint( &board );
+    addPad( fp, netA, VECTOR2I( -1'500'000'000, 0 ) );
+    addPad( fp, netB, VECTOR2I(  1'500'000'000, 0 ) );
+
+    auto [len, delay] = BoardChainBridging( &board, wxS( "SIG" ) );
+
+    BOOST_CHECK_CLOSE( len, 3'000'000'000.0, 0.001 );
+
+    double expectedDelayIU = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * pcbIUScale.IU_PER_PS * 3000.0;
+    BOOST_CHECK_CLOSE( delay, expectedDelayIU, 0.001 );
+    BOOST_CHECK_GT( delay, 0.0 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
