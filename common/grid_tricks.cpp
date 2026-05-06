@@ -345,6 +345,22 @@ void GRID_TRICKS::onGridCellRightClick( wxGridEvent& aEvent  )
 {
     m_grid->CommitPendingChanges( true );
 
+    // Select the right-clicked row if it is not already part of the current selection
+    int row = aEvent.GetRow();
+
+    if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectRows )
+    {
+        wxArrayInt selectedRows = m_grid->GetSelectedRows();
+
+        if( selectedRows.Index( row ) == wxNOT_FOUND )
+            m_grid->SelectRow( row );
+    }
+    else
+    {
+        if( !m_grid->IsInSelection( row, aEvent.GetCol() ) )
+            m_grid->SetGridCursor( row, aEvent.GetCol() );
+    }
+
     wxMenu menu;
 
     showPopupMenu( menu, aEvent );
