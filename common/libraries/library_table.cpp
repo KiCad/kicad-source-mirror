@@ -84,7 +84,7 @@ LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScop
         if( aExpectedType != LIBRARY_TABLE_TYPE::UNINITIALIZED && ir->type != aExpectedType )
         {
             m_ok = false;
-            m_errorDescription = wxString::Format( _( "The library table is of wrong type" ) );
+            m_errorDescription = _( "The library table is of wrong type" );
             return;
         }
 
