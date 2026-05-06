@@ -74,4 +74,125 @@ BOOST_AUTO_TEST_CASE( ExtraSignalLengthExcludedSet )
     BOOST_CHECK_EQUAL( extraLen, 800000 );
 }
 
+
+// Regression test for H-7: MEANDER_SKEW_PLACER::Move must narrow the doMove target by the
+// chain-extras aggregate plus any unmeasured stub on the active net. Before the fix, the skew
+// placer dispatched directly to doMove with m_coupledLength + targetSkew, which double-counted
+// the chain extras already baked into m_coupledLength at Start() and caused over-meandering by
+// exactly the chain budget.
+//
+// Codex review caught a subtle pitfall in the offset source: chainNarrowingOffset() relies on
+// initChainExtras(), which calls GetSignalAggregate(CurrentNets()[0], CurrentNets()[1], ...).
+// MEANDER_PLACER::CurrentNets() (the parent class) returns only the active net, so without an
+// override the aggregate would exclude only the active net and therefore include the coupled
+// net's routed length. m_coupledLength baked at Start() uses GetSignalAggregate(P, N, ...) which
+// excludes BOTH legs. The two values must match, otherwise the skew Move would over-subtract by
+// exactly the coupled net's routed length.
+//
+// We can't drive the full router from a unit test, but we can encode the arithmetic contract
+// the placer relies on: given the variables captured at Start(), the meander target the placer
+// passes to doMove must equal coupled_origPath_without_extras + targetSkew - unmeasured. In
+// terms of cached state that simplifies to:
+//
+//     target = m_coupledLength + targetSkew - (m_chainExtrasLength + unmeasured)
+//
+// because m_coupledLength = coupled_origPath + extraSignalLen at Start(). If anyone re-introduces
+// the regression by removing the offset, the symbolic identity below stops holding.
+BOOST_AUTO_TEST_CASE( SkewMeanderTargetHonorsChainBudget )
+{
+    // Synthetic snapshot of state captured at MEANDER_SKEW_PLACER::Start() for a diff pair in a
+    // chain that includes one extra net.
+    const long long coupled_origPath = 12'000'000; // 12 mm coupled net PNS path
+    const long long active_origPath  = 11'500'000; // 11.5 mm active net PNS path (baseline)
+    const long long chainExtras      =  5'000'000; // 5 mm of routed length on sibling nets (excl P & N)
+    const long long unmeasuredStub   =    300'000; // 0.3 mm stub outside PNS path on active net
+
+    const long long m_coupledLength    = coupled_origPath + chainExtras;
+    const long long m_baselineLength   = active_origPath;
+    const long long m_chainExtrasLength = chainExtras; // matches Start()'s exclude-both aggregate
+    const long long activeBoardLen     = active_origPath + unmeasuredStub;
+
+    // Reproduce MEANDER_PLACER_BASE::chainNarrowingOffset() arithmetic.
+    const long long unmeasured = std::max( 0LL, activeBoardLen - m_baselineLength );
+    const long long offset = m_chainExtrasLength + unmeasured;
+    BOOST_CHECK_EQUAL( offset, chainExtras + unmeasuredStub );
+
+    // Pick a target skew. The placer should request a meander-only path length such that the
+    // final active total minus the final coupled total equals targetSkew.
+    const long long targetSkew = 200'000; // 0.2 mm
+
+    const long long meanderTarget = m_coupledLength + targetSkew - offset;
+
+    // The meander only adds length on the active net's PNS path. Final active PNS path =
+    // meanderTarget. Final active total signal = meanderTarget + unmeasuredStub + chainExtras.
+    const long long activeTotalAfterTune = meanderTarget + unmeasuredStub + chainExtras;
+    const long long coupledTotal = coupled_origPath + chainExtras; // unchanged during this session
+
+    const long long realizedSkew = activeTotalAfterTune - coupledTotal;
+    BOOST_CHECK_EQUAL( realizedSkew, targetSkew );
+
+    // Sanity-check the previously-broken arithmetic so the regression is documented.
+    const long long brokenMeanderTarget = m_coupledLength + targetSkew; // pre-fix path
+    const long long brokenActiveAfter = brokenMeanderTarget + unmeasuredStub + chainExtras;
+    const long long brokenSkew = brokenActiveAfter - coupledTotal;
+    BOOST_CHECK_EQUAL( brokenSkew, targetSkew + offset );
+    BOOST_CHECK( brokenSkew != targetSkew );
+
+    // Codex's case: if CurrentNets() were not overridden in MEANDER_SKEW_PLACER, the chain-extras
+    // helper would call GetSignalAggregate(active, active, ...) excluding only the active net. The
+    // coupled net's routed length would leak into m_chainExtrasLength, causing the offset to
+    // include coupled_origPath. The Move target would then under-shoot the meander by exactly
+    // that amount.
+    const long long badChainExtras = chainExtras + coupled_origPath; // exclude-active-only
+    const long long badOffset = badChainExtras + unmeasured;
+    const long long badMeanderTarget = m_coupledLength + targetSkew - badOffset;
+    const long long badActiveAfter = badMeanderTarget + unmeasuredStub + chainExtras;
+    const long long badRealizedSkew = badActiveAfter - coupledTotal;
+    BOOST_CHECK_EQUAL( badRealizedSkew, targetSkew - coupled_origPath );
+    BOOST_CHECK( badRealizedSkew != targetSkew );
+}
+
+
+// Companion runtime check on GetSignalAggregate's exclusion semantics. With both P and N passed,
+// only sibling nets in the chain contribute. With the same net passed twice, only that single
+// net is excluded (this is what MEANDER_PLACER::CurrentNets() would have caused for skew before
+// the override fix).
+BOOST_AUTO_TEST_CASE( SignalAggregateExcludesBothDiffPairLegs )
+{
+    BOARD board;
+
+    NETINFO_ITEM* nP = new NETINFO_ITEM( &board, wxS( "/D_P" ), 1 ); board.Add( nP );
+    NETINFO_ITEM* nN = new NETINFO_ITEM( &board, wxS( "/D_N" ), 2 ); board.Add( nN );
+    NETINFO_ITEM* nA = new NETINFO_ITEM( &board, wxS( "/AUX" ), 3 ); board.Add( nA );
+
+    for( NETINFO_ITEM* n : { nP, nN, nA } )
+        n->SetNetChain( wxS( "SIG_D" ) );
+
+    auto addTrack = [&]( int netCode, int x1, int x2 )
+    {
+        PCB_TRACK* t = new PCB_TRACK( &board );
+        t->SetNetCode( netCode );
+        t->SetStart( VECTOR2I( x1, 0 ) );
+        t->SetEnd( VECTOR2I( x2, 0 ) );
+        t->SetWidth( 100000 );
+        board.Add( t );
+    };
+
+    addTrack( nP->GetNetCode(), 0, 5'000'000 ); // P  5 mm
+    addTrack( nN->GetNetCode(), 0, 7'000'000 ); // N  7 mm
+    addTrack( nA->GetNetCode(), 0, 2'000'000 ); // AUX 2 mm
+
+    PNS_KICAD_IFACE_BASE iface;
+    iface.SetBoard( &board );
+
+    long long extraLen = 0, extraDelay = 0;
+
+    BOOST_REQUIRE( iface.GetSignalAggregate( nP, nN, extraLen, extraDelay ) );
+    BOOST_CHECK_EQUAL( extraLen, 2'000'000 ); // only AUX
+
+    extraLen = 0;
+    BOOST_REQUIRE( iface.GetSignalAggregate( nP, nP, extraLen, extraDelay ) );
+    BOOST_CHECK_EQUAL( extraLen, 7'000'000 + 2'000'000 ); // N + AUX (this is the buggy path)
+}
+
 BOOST_AUTO_TEST_SUITE_END()

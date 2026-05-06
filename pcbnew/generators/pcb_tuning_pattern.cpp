@@ -78,6 +78,7 @@
 #include <dialogs/dialog_tuning_pattern_properties.h>
 
 #include <generators/pcb_tuning_pattern.h>
+#include <net_chain_bridging.h>
 #include <project/project_file.h>
 #include <project/tuning_profiles.h>
 #include <properties/property.h>
@@ -405,9 +406,10 @@ static std::string sideToString( const PNS::MEANDER_SIDE aValue )
     }
 }
 
-// Simple cache invalidation heuristic for bridging distances:
-// Recompute if chain name changed, board UUID changed, or total pad count on the board changed.
-// (Pad count change is a low-cost proxy for edits that might affect bridging.)
+// Cache invalidation heuristic for bridging distances.
+// Recompute if chain name changed, board pointer changed, or total pad count on the board changed.
+// Pad count change is a low-cost proxy for edits that might affect bridging.  The bridging
+// computation itself is delegated to the shared helper in net_chain_bridging.h.
 long long PCB_TUNING_PATTERN::GetCachedBridgingLength( BOARD* aBoard, const wxString& aNetChain,
                                                        double* aDelayIUOut )
 {
@@ -424,32 +426,10 @@ long long PCB_TUNING_PATTERN::GetCachedBridgingLength( BOARD* aBoard, const wxSt
 
     if( invalid )
     {
-        long long len = 0;
-        for( FOOTPRINT* fp : aBoard->Footprints() )
-        {
-            std::map<int, PAD*> netsInFp;
-            for( PAD* pad : fp->Pads() )
-            {
-                NETINFO_ITEM* pn = pad->GetNet();
-                if( !pn )
-                    continue;
-                if( pn->GetNetChain() != aNetChain )
-                    continue;
-                netsInFp.emplace( pn->GetNetCode(), pad );
-                if( netsInFp.size() > 2 )
-                {
-                    netsInFp.clear();
-                    break;
-                }
-            }
-            if( netsInFp.size() == 2 )
-            {
-                auto it = netsInFp.begin();
-                PAD* p1 = it->second; ++it; PAD* p2 = it->second;
-                VECTOR2I delta = p1->GetCenter() - p2->GetCenter();
-                len += delta.EuclideanNorm();
-            }
-        }
+        // Mirror the matched-length DRC predicate so DRC and the tuner agree on which
+        // footprints bridge a chain and by how much.  See net_chain_bridging.h for the
+        // max-pairwise-cross-net-span scoring shared by both engines.
+        long long len = static_cast<long long>( BoardChainBridgingLength( aBoard, aNetChain ) );
 
         // Very simple propagation delay model. Result is in internal delay IU (attoseconds).
         // Fallback to 150ps/in (~5.9ps/mm) when no track on the chain has a measurable delay.

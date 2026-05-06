@@ -573,6 +573,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                     || c.m_Type == BRIDGED_MASK_CONSTRAINT;
 
     allowsTimeDomain = c.m_Type == LENGTH_CONSTRAINT || c.m_Type == NET_CHAIN_LENGTH_CONSTRAINT
+                       || c.m_Type == NET_CHAIN_STUB_LENGTH_CONSTRAINT
                        || c.m_Type == SKEW_CONSTRAINT;
 
     if( c.m_Type == DISALLOW_CONSTRAINT )

@@ -19,7 +19,7 @@ DIALOG_CREATE_NET_CHAIN_BASE::DIALOG_CREATE_NET_CHAIN_BASE( wxWindow* parent, wx
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_headerLabel = new wxStaticText( this, wxID_ANY, _(" Select a detected signal path and assign a name to create a net chain."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_headerLabel = new wxStaticText( this, wxID_ANY, _(" Select a detected net chain path and assign a name to create a net chain."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_headerLabel->Wrap( -1 );
 	bMainSizer->Add( m_headerLabel, 0, wxLEFT|wxRIGHT|wxTOP, 10 );
 
@@ -118,7 +118,7 @@ DIALOG_CREATE_NET_CHAIN_BASE::DIALOG_CREATE_NET_CHAIN_BASE( wxWindow* parent, wx
 	bEndpointSizer->Add( m_toComponent, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP, 5 );
 
 	m_findPathButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_findPathButton->SetToolTip( _("Find signal path between the two components") );
+	m_findPathButton->SetToolTip( _("Find net chain path between the two components") );
 
 	bEndpointSizer->Add( m_findPathButton, 0, wxALIGN_CENTER_VERTICAL|wxTOP, 0 );
 

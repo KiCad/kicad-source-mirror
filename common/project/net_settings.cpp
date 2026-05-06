@@ -386,37 +386,28 @@ bool NET_SETTINGS::operator==( const NET_SETTINGS& aOther ) const
                      std::begin( aOther.m_netClasses ), std::end( aOther.m_netClasses ) ) )
         return false;
 
-    // TODO: m_netClassPatternAssignments stores std::unique_ptr<EDA_COMBINED_MATCHER>, so this
-    // std::equal call compares matcher pointer identity rather than pattern text.  Two settings
-    // instances built from identical input therefore compare unequal.  Pre-existing bug; the
-    // chain comparison below avoids the same issue by comparing GetPattern() values explicitly.
+    // m_netClassPatternAssignments stores std::unique_ptr<EDA_COMBINED_MATCHER>, so a naive
+    // std::equal would compare matcher pointer identity and report two settings instances built
+    // from identical input as unequal.  Compare pattern text plus the assigned netclass name.
+    auto patternEqual = []( const auto& aLhs, const auto& aRhs )
+    {
+        if( !aLhs.first || !aRhs.first )
+            return aLhs.first.get() == aRhs.first.get() && aLhs.second == aRhs.second;
+
+        return aLhs.first->GetPattern() == aRhs.first->GetPattern() && aLhs.second == aRhs.second;
+    };
+
     if( !std::equal( std::begin( m_netClassPatternAssignments ),
                      std::end( m_netClassPatternAssignments ),
                      std::begin( aOther.m_netClassPatternAssignments ),
-                     std::end( aOther.m_netClassPatternAssignments ) ) )
+                     std::end( aOther.m_netClassPatternAssignments ),
+                     patternEqual ) )
         return false;
 
-    if( m_netClassChainPatternAssignments.size() != aOther.m_netClassChainPatternAssignments.size() )
-        return false;
-
-    for( size_t i = 0; i < m_netClassChainPatternAssignments.size(); ++i )
-    {
-        const auto& lhs = m_netClassChainPatternAssignments[i];
-        const auto& rhs = aOther.m_netClassChainPatternAssignments[i];
-
-        if( !lhs.first || !rhs.first )
-        {
-            if( lhs.first.get() != rhs.first.get() )
-                return false;
-        }
-        else if( lhs.first->GetPattern() != rhs.first->GetPattern() )
-        {
-            return false;
-        }
-
-        if( lhs.second != rhs.second )
-            return false;
-    }
+    // m_netClassChainPatternAssignments is derived state, rebuilt from m_netChainClasses and
+    // board NETINFO on every netlist update.  Equality is defined by persisted inputs only;
+    // including the derived list here would mark the project dirty whenever a rebuild produced
+    // a transient ordering difference.
 
     if( !std::equal( std::begin( m_netClassLabelAssignments ),
                      std::end( m_netClassLabelAssignments ),
@@ -709,6 +700,9 @@ void NET_SETTINGS::addSingleChainPatternAssignment( const wxString& pattern,
 {
     for( auto& assignment : m_netClassChainPatternAssignments )
     {
+        if( !assignment.first )
+            continue;
+
         if( assignment.first->GetPattern() == pattern && assignment.second == netclass )
             return;
     }

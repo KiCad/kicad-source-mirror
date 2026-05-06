@@ -97,7 +97,7 @@
             <property name="gripper">0</property>
             <property name="hidden">0</property>
             <property name="id">wxID_ANY</property>
-            <property name="label"> Select a detected signal path and assign a name to create a net chain.</property>
+            <property name="label"> Select a detected net chain path and assign a name to create a net chain.</property>
             <property name="markup">0</property>
             <property name="max_size"></property>
             <property name="maximize_button">0</property>
@@ -1044,7 +1044,7 @@
                 <property name="style"></property>
                 <property name="subclass">STD_BITMAP_BUTTON; widgets/std_bitmap_button.h; forward_declare</property>
                 <property name="toolbar_pane">0</property>
-                <property name="tooltip">Find signal path between the two components</property>
+                <property name="tooltip">Find net chain path between the two components</property>
                 <property name="validator_data_type"></property>
                 <property name="validator_style">wxFILTER_NONE</property>
                 <property name="validator_type">wxDefaultValidator</property>

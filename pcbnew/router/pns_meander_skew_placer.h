@@ -56,6 +56,19 @@ public:
 
     long long int CurrentSkew() const;
 
+    /// @copydoc PLACEMENT_ALGO::CurrentNets()
+    const std::vector<NET_HANDLE> CurrentNets() const override
+    {
+        // Active net first so chainNarrowingOffset() looks up the active net's board length when
+        // computing the unmeasured stub. Both legs are returned so initChainExtras() excludes
+        // them from the aggregate; m_coupledLength baked at Start() uses
+        // GetSignalAggregate(P, N, ...) which also excludes both, and the offset must match.
+        const bool pIsActive = m_originPair.NetP() == m_originLine.Net();
+        NET_HANDLE active = pIsActive ? m_originPair.NetP() : m_originPair.NetN();
+        NET_HANDLE coupled = pIsActive ? m_originPair.NetN() : m_originPair.NetP();
+        return std::vector<NET_HANDLE>{ active, coupled };
+    }
+
 private:
     long long int origPathLength() const override;
 

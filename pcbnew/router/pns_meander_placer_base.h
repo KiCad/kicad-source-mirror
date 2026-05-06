@@ -153,6 +153,17 @@ protected:
      */
     void initChainExtras();
 
+    /**
+     * Return the length offset to subtract when converting a user-facing total signal length
+     * target into a meander-only doMove target. The offset combines the chain-extras aggregate
+     * (other nets in the same chain) with any unmeasured stub on the actively-tuned net that
+     * lives outside the PNS-measured baseline.
+     *
+     * Single-ended and skew tuning both rely on this so the meander does not over-correct by
+     * the chain budget already absorbed by sibling nets.
+     */
+    long long int chainNarrowingOffset() const;
+
     ///< Original path length/delay captured at Start().
     long long int m_baselineLength = 0;
     int64_t       m_baselineDelay = 0;

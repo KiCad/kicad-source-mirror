@@ -174,17 +174,20 @@ BOOST_AUTO_TEST_CASE( ClearNetChainClassesRemovesAllEntries )
 }
 
 
-// Regression guard for operator== coverage of m_netClassChainPatternAssignments.
-// The container holds unique_ptrs, so naive std::equal would compare pointer identity
-// and silently mark two settings instances built from identical input as unequal.
-BOOST_AUTO_TEST_CASE( ChainPatternAssignmentAffectsEquality )
+// m_netClassChainPatternAssignments is derived state rebuilt on every netlist update from
+// m_netChainClasses plus board NETINFO.  It must NOT contribute to operator==, otherwise a
+// no-op netlist rebuild marks the project dirty even when the user made no edit.  The
+// persisted m_netChainClasses map (covered above) is the source of truth for equality.
+BOOST_AUTO_TEST_CASE( ChainPatternAssignmentExcludedFromEquality )
 {
     NET_SETTINGS a( nullptr, "" );
     NET_SETTINGS b( nullptr, "" );
 
     std::shared_ptr<NETCLASS> highSpeed = std::make_shared<NETCLASS>( wxS( "HighSpeed" ), false );
+    std::shared_ptr<NETCLASS> power = std::make_shared<NETCLASS>( wxS( "Power" ), false );
     std::map<wxString, std::shared_ptr<NETCLASS>> classes;
     classes[wxS( "HighSpeed" )] = highSpeed;
+    classes[wxS( "Power" )] = power;
 
     a.SetNetclasses( classes );
     b.SetNetclasses( classes );
@@ -193,17 +196,14 @@ BOOST_AUTO_TEST_CASE( ChainPatternAssignmentAffectsEquality )
 
     a.SetChainPatternAssignment( wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) );
 
-    BOOST_CHECK( a != b );
+    BOOST_CHECK( a == b );
 
-    b.SetChainPatternAssignment( wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) );
+    a.SetChainPatternAssignment( wxS( "VCC_3V3" ), wxS( "Power" ) );
+    b.SetChainPatternAssignment( wxS( "OTHER" ), wxS( "HighSpeed" ) );
 
     BOOST_CHECK( a == b );
 
     a.ClearChainPatternAssignments();
-
-    BOOST_CHECK( a != b );
-
-    b.ClearChainPatternAssignments();
 
     BOOST_CHECK( a == b );
 }

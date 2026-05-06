@@ -27,6 +27,7 @@
 #include <drc/drc_test_provider.h>
 #include <drc/drc_length_report.h>
 #include <length_delay_calculation/length_delay_calculation.h>
+#include <net_chain_bridging.h>
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/from_to_cache.h>
@@ -529,58 +530,12 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                     }
                 }
 
-                // Add bridging length: pad-to-pad distance through series components
+                // Add bridging length: pad-to-pad distance through series components.
+                // The shared helper mirrors the predicate used by the tuning pattern
+                // generator so DRC and tuner agree on which footprints bridge a chain.
                 for( auto& [chainName, agg] : chainAgg )
                 {
-                    double bridging = 0.0;
-
-                    std::vector<PAD*> chainPads;
-
-                    for( FOOTPRINT* fp : m_board->Footprints() )
-                    {
-                        chainPads.clear();
-
-                        for( PAD* pad : fp->Pads() )
-                        {
-                            NETINFO_ITEM* pn = pad->GetNet();
-
-                            if( !pn || pn->GetNetChain() != chainName )
-                                continue;
-
-                            chainPads.push_back( pad );
-                        }
-
-                        if( chainPads.size() < 2 )
-                            continue;
-
-                        int firstNet = chainPads.front()->GetNetCode();
-
-                        auto crossesNet = [firstNet]( const PAD* p )
-                                          { return p->GetNetCode() != firstNet; };
-
-                        if( !std::any_of( chainPads.begin() + 1, chainPads.end(), crossesNet ) )
-                            continue;
-
-                        // Take the max pairwise cross-net pad span as a conservative upper
-                        // bound on bridging.  Dropping the 3+ pad case would under-report
-                        // length DRC; over-reporting only fails an already-tight budget.
-                        double maxSpan = 0.0;
-
-                        for( size_t i = 0; i < chainPads.size(); ++i )
-                        {
-                            for( size_t j = i + 1; j < chainPads.size(); ++j )
-                            {
-                                if( chainPads[i]->GetNetCode() == chainPads[j]->GetNetCode() )
-                                    continue;
-
-                                VECTOR2D delta = VECTOR2D( chainPads[i]->GetCenter() )
-                                               - VECTOR2D( chainPads[j]->GetCenter() );
-                                maxSpan = std::max( maxSpan, delta.EuclideanNorm() );
-                            }
-                        }
-
-                        bridging += maxSpan;
-                    }
+                    double bridging = BoardChainBridgingLength( m_board, chainName );
 
                     agg.total += bridging;
                     agg.totalRoute += bridging;
@@ -742,6 +697,11 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             if( stubLengthConstraint
                 && stubLengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
             {
+                const bool isTimeDomain =
+                        stubLengthConstraint->GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
+                const EDA_DATA_TYPE dataType =
+                        isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
+
                 for( const CONNECTION& conn : matchedConnections )
                 {
                     NETINFO_ITEM* netInfo = m_board->GetNetInfo().GetNetItem( conn.netcode );
@@ -763,15 +723,18 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                     if( !range.HasMax() && !range.HasMin() )
                         continue;
 
-                    if( ( range.HasMax() && conn.totalRoute > range.Max() )
-                        || ( range.HasMin() && conn.totalRoute < range.Min() ) )
+                    const double measured = isTimeDomain ? conn.totalDelay
+                                                         : static_cast<double>( conn.total );
+
+                    if( ( range.HasMax() && measured > range.Max() )
+                        || ( range.HasMin() && measured < range.Min() ) )
                     {
                         std::shared_ptr<DRC_ITEM> item =
                                 DRC_ITEM::Create( DRCE_NET_CHAIN_STUB_TOO_LONG );
                         wxString msg = wxString::Format(
                                 _( "Stub length (%s) out of range for net chain '%s' on net "
                                    "'%s'." ),
-                                MessageTextFromValue( conn.totalRoute ),
+                                MessageTextFromValue( measured, true, dataType ),
                                 netInfo->GetNetChain(),
                                 netInfo->GetNetname() );
                         item->SetErrorMessage( msg );

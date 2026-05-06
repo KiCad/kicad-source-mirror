@@ -73,6 +73,7 @@ const wxChar* const traceSnap = wxT( "KICAD_SNAP" );
 const wxChar* const traceLibraries = wxT( "KICAD_LIBRARIES" );
 const wxChar* const traceSchMove = wxT( "KICAD_SCH_MOVE" );
 const wxChar* const traceSymbolInheritance = wxT( "KICAD_SYMBOL_INHERITANCE" );
+const wxChar* const traceSchNetChain = wxT( "KICAD_SCH_NETCHAIN" );
 
 #ifdef KICAD_GAL_PROFILE
 LATENCY_PROBE latencyProbeZoomToRender( "zoom-to-render", 16 );

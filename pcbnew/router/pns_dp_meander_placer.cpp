@@ -215,9 +215,7 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 {
     // Reuse the chain-extras aggregate captured at Start(). Other nets in the chain are
     // not edited during a tuning session, so we don't need to walk the BOARD again.
-    const long long extraLen = m_chainExtrasValid ? m_chainExtrasLength : 0;
     const long long extraDelay = m_chainExtrasValid ? m_chainExtrasDelay : 0;
-    const std::vector<NET_HANDLE> nets = CurrentNets();
 
     m_settings.m_signalExtraDelay = extraDelay;
 
@@ -225,13 +223,7 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     // Take the tighter of chain budget and existing per-net constraint.
     if( m_settings.m_targetSignalLength.Opt() != MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
     {
-        long long tunedNetBoardLen = 0;
-
-        if( !nets.empty() )
-            tunedNetBoardLen = Router()->GetInterface()->GetNetBoardLength( nets[0] );
-
-        long long unmeasured = std::max( 0LL, tunedNetBoardLen - m_baselineLength );
-        long long otherLen = extraLen + unmeasured;
+        const long long otherLen = chainNarrowingOffset();
 
         long long budgetMin = std::max( 0LL, m_settings.m_targetSignalLength.Min() - otherLen );
         long long budgetOpt = std::max( 0LL, m_settings.m_targetSignalLength.Opt() - otherLen );

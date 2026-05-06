@@ -349,6 +349,13 @@ extern KICOMMON_API const wxChar* const traceSchMove;
  */
 extern KICOMMON_API const wxChar* const traceSymbolInheritance;
 
+/**
+ * Flag to enable tracing of schematic net chain rebuild and ERC cross-chain checks.
+ *
+ * Use "KICAD_SCH_NETCHAIN" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceSchNetChain;
+
 ///@}
 
 /**

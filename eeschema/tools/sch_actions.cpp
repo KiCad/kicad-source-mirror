@@ -1131,7 +1131,7 @@ TOOL_ACTION SCH_ACTIONS::createNetChain( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.createNetChain" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Create Net Chain..." ) )
-        .Tooltip( _( "Detect signal paths through passives and create a named net chain" ) ) );
+        .Tooltip( _( "Detect net chain paths through passives and create a named net chain" ) ) );
 
 TOOL_ACTION SCH_ACTIONS::showNetNavigator( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.showNetNavigator" )

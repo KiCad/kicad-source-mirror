@@ -59,6 +59,7 @@
 #include <kiway.h>
 #include <pgm_base.h>
 #include <libraries/symbol_library_adapter.h>
+#include <trace_helpers.h>
 
 
 /* ERC tests :
@@ -1319,7 +1320,8 @@ int ERC_TESTER::TestPinToPin()
     if( m_schematic && m_schematic->ConnectionGraph() )
     {
         auto& netChains = m_schematic->ConnectionGraph()->GetCommittedNetChains();
-    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ERC TestPinToPin: cross-chain phase start chains=%zu", netChains.size() );
+        wxLogTrace( traceSchNetChain, "ERC TestPinToPin: cross-chain phase start chains=%zu",
+                    netChains.size() );
 
         for( const auto& sig : netChains )
         {
@@ -1346,7 +1348,9 @@ int ERC_TESTER::TestPinToPin()
             if( netChainPins.size() < 2 )
                 continue; // nothing to compare
 
-            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ERC TestPinToPin: chain '%s' nets=%zu collectedPins=%zu", TO_UTF8( chainName ), sigNets.size(), netChainPins.size() );
+            wxLogTrace( traceSchNetChain,
+                        "ERC TestPinToPin: chain '%s' nets=%zu collectedPins=%zu",
+                        TO_UTF8( chainName ), sigNets.size(), netChainPins.size() );
 
             // For deterministic behavior, sort by reference/pin number similar to earlier pass.
             std::sort( netChainPins.begin(), netChainPins.end(),
@@ -1372,7 +1376,6 @@ int ERC_TESTER::TestPinToPin()
                 SCH_PIN* aPin = netChainPins[i].Pin();
                 ELECTRICAL_PINTYPE aType = aPin->GetType();
                 const wxString& aNet = pinNet[aPin];
-                wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ERC TestPinToPin: iter a=%s net=%s type=%d", TO_UTF8( aPin->GetParentSymbol()->GetRef( &netChainPins[i].Sheet() ) ), TO_UTF8( aNet ), (int) aType );
 
                 for( size_t j = i + 1; j < netChainPins.size(); ++j )
                 {
@@ -1381,12 +1384,6 @@ int ERC_TESTER::TestPinToPin()
 
                     if( aNet == bNet )
                         continue; // already handled at net-level
-
-                    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "ERC TestPinToPin: pair %s(%s)-%s(%s)",
-                                TO_UTF8( aPin->GetParentSymbol()->GetRef( &netChainPins[i].Sheet() ) ),
-                                TO_UTF8( aNet ),
-                                TO_UTF8( bPin->GetParentSymbol()->GetRef( &netChainPins[j].Sheet() ) ),
-                                TO_UTF8( bNet ) );
 
                     ELECTRICAL_PINTYPE bType = bPin->GetType();
                     PIN_ERROR erc = m_settings.GetPinMapValue( aType, bType );

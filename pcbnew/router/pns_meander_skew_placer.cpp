@@ -223,9 +223,16 @@ bool MEANDER_SKEW_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         }
     }
 
-    return doMove( aP, aEndItem, m_coupledLength + m_settings.m_targetSkew.Opt(),
-                   m_coupledLength + m_settings.m_targetSkew.Min(),
-                   m_coupledLength + m_settings.m_targetSkew.Max() );
+    // Convert the user-facing skew target (active total minus coupled total) into a meander-only
+    // doMove target. m_coupledLength already includes the chain-extras aggregate captured at
+    // Start(); the chain extras and any unmeasured stub on the active net are absorbed by the
+    // chain rather than by the meander, so subtract them here. Without this, the meander
+    // over-corrects by exactly chainNarrowingOffset() whenever the diff pair belongs to a chain.
+    const long long offset = chainNarrowingOffset();
+
+    return doMove( aP, aEndItem, m_coupledLength + m_settings.m_targetSkew.Opt() - offset,
+                   m_coupledLength + m_settings.m_targetSkew.Min() - offset,
+                   m_coupledLength + m_settings.m_targetSkew.Max() - offset );
 }
 
 

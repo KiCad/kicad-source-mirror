@@ -388,7 +388,7 @@ void DIALOG_CREATE_NET_CHAIN::OnFindPathClicked( wxCommandEvent& aEvent )
     {
         // No potential chain found — offer force-create
         int answer = wxMessageBox(
-                wxString::Format( _( "No signal path found between %s and %s through "
+                wxString::Format( _( "No net chain path found between %s and %s through "
                                      "passthrough components.\n\n"
                                      "Would you like to force-create a manual chain link "
                                      "between these components?" ),
@@ -430,7 +430,10 @@ void DIALOG_CREATE_NET_CHAIN::OnFindPathClicked( wxCommandEvent& aEvent )
                 return;
             }
 
-            // Replace grid with just this one force-created entry
+            // Replace grid with just this one force-created entry. Clear m_filteredIndices
+            // before mutating m_rows so rebuildGrid()'s "sync edited names back" pass
+            // cannot index stale grid rows into freshly-replaced m_rows entries.
+            m_filteredIndices.clear();
             m_rows.clear();
 
             POTENTIAL_ROW row;
@@ -496,14 +499,17 @@ void DIALOG_CREATE_NET_CHAIN::OnFindPathClicked( wxCommandEvent& aEvent )
 
     if( uncommitted.empty() )
     {
-        wxMessageBox( wxString::Format( _( "All %zu signal paths between %s and %s are "
+        wxMessageBox( wxString::Format( _( "All %zu net chain paths between %s and %s are "
                                            "already committed as net chains." ),
                                         foundChains.size(), fromRef, toRef ),
                       _( "Find Path" ), wxOK | wxICON_INFORMATION, this );
         return;
     }
 
-    // Replace grid contents with only the found paths
+    // Replace grid contents with only the found paths. Clear m_filteredIndices first so
+    // rebuildGrid()'s "sync edited names back" pass cannot index stale grid rows into
+    // freshly-replaced m_rows entries.
+    m_filteredIndices.clear();
     m_rows.clear();
 
     for( const FOUND_CHAIN& fc : uncommitted )
@@ -640,6 +646,9 @@ void DIALOG_CREATE_NET_CHAIN::rebuildGrid()
 {
     m_rebuilding = true;
 
+    // Invariant: callers that replace m_rows must clear m_filteredIndices first. Otherwise
+    // this sync-edits pass would copy grid cell values into the wrong (or out-of-bounds)
+    // m_rows entries. The dataIdx bounds check below is belt-and-suspenders.
     // Sync any edited names back from the grid before clearing it
     for( size_t gi = 0; gi < m_filteredIndices.size(); ++gi )
     {
@@ -728,7 +737,11 @@ void DIALOG_CREATE_NET_CHAIN::rebuildGrid()
 
     m_membersListBox->Clear();
     m_membersLabel->SetLabel( _( "Member Nets" ) );
-    m_nameInput->Clear();
+
+    // m_nameInput is intentionally not cleared here. OnFilterChanged calls rebuildGrid, so
+    // clearing would erase a name the user is typing while narrowing the filter list. The
+    // explicit clear in TransferDataFromWindow handles the post-create reset, and the row
+    // selection handler overwrites the field with each row's suggested name on click.
 
     m_rebuilding = false;
 }
@@ -870,38 +883,6 @@ void DIALOG_CREATE_NET_CHAIN::highlightChainNets( const std::set<wxString>& aNet
     {
         for( EDA_ITEM* redrawItem : itemsToRedraw )
             view->Update( static_cast<KIGFX::VIEW_ITEM*>( redrawItem ), KIGFX::REPAINT );
-
-        // Zoom to fit the highlighted items if we're highlighting (not clearing)
-        if( !aNets.empty() )
-        {
-            BOX2I bbox;
-            bool  first = true;
-
-            for( EDA_ITEM* item : itemsToRedraw )
-            {
-                if( item->IsBrightened() )
-                {
-                    if( first )
-                    {
-                        bbox = item->GetBoundingBox();
-                        first = false;
-                    }
-                    else
-                    {
-                        bbox.Merge( item->GetBoundingBox() );
-                    }
-                }
-            }
-
-            if( !first )
-            {
-                // Add some margin around the highlighted area
-                bbox.Inflate( bbox.GetWidth() / 5, bbox.GetHeight() / 5 );
-
-                BOX2D viewport( bbox.GetOrigin(), bbox.GetSize() );
-                view->SetViewport( viewport );
-            }
-        }
 
         m_frame->GetCanvas()->Refresh();
     }
