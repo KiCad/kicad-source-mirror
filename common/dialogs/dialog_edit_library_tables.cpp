@@ -61,6 +61,10 @@ void DIALOG_EDIT_LIBRARY_TABLES::InstallPanel( wxPanel* aPanel )
 
     SetupStandardButtons();
 
+    Bind( wxEVT_CLOSE_WINDOW, &DIALOG_EDIT_LIBRARY_TABLES::onCloseWindow, this );
+    Bind( wxEVT_BUTTON, &DIALOG_EDIT_LIBRARY_TABLES::onCancelButton, this, wxID_CANCEL );
+    Bind( wxEVT_BUTTON, &DIALOG_EDIT_LIBRARY_TABLES::onOkButton, this, wxID_OK );
+
     finishDialogSettings();
 
     // On some windows manager (Unity, XFCE), this dialog is not always raised, depending
@@ -87,5 +91,35 @@ bool DIALOG_EDIT_LIBRARY_TABLES::TransferDataFromWindow()
      * because m_contentPanel->TransferDataFromWindow() is called here.
      */
     return m_contentPanel->TransferDataFromWindow();
+}
+
+
+void DIALOG_EDIT_LIBRARY_TABLES::onCloseWindow( wxCloseEvent& aEvent )
+{
+    if( m_canCloseCheck && !m_canCloseCheck() )
+    {
+        aEvent.Veto();
+        return;
+    }
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_EDIT_LIBRARY_TABLES::onCancelButton( wxCommandEvent& aEvent )
+{
+    if( m_canCloseCheck && !m_canCloseCheck() )
+        return;
+
+    aEvent.Skip();
+}
+
+
+void DIALOG_EDIT_LIBRARY_TABLES::onOkButton( wxCommandEvent& aEvent )
+{
+    if( m_canCloseCheck && !m_canCloseCheck() )
+        return;
+
+    aEvent.Skip();
 }
 

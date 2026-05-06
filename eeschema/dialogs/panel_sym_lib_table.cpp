@@ -426,6 +426,32 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
     m_notebook->Bind( wxEVT_AUINOTEBOOK_PAGE_CLOSE, &PANEL_SYM_LIB_TABLE::onNotebookPageCloseRequest, this );
     m_notebook->Bind( wxEVT_AUINOTEBOOK_PAGE_CHANGING, &PANEL_SYM_LIB_TABLE::onNotebookPageChangeRequest, this );
     m_browseButton->Bind( wxEVT_BUTTON, &PANEL_SYM_LIB_TABLE::browseLibrariesHandler, this );
+
+    m_parent->SetCanCloseCheck(
+            [this]()
+            {
+                for( int ii = 0; ii < (int) m_notebook->GetPageCount(); ++ii )
+                {
+                    LIB_TABLE_NOTEBOOK_PANEL* panel =
+                            static_cast<LIB_TABLE_NOTEBOOK_PANEL*>( m_notebook->GetPage( ii ) );
+
+                    if( panel->GetClosable() )
+                    {
+                        bool wasDirty = panel->TableModified();
+
+                        if( !panel->GetCanClose() )
+                            return false;
+
+                        if( wasDirty && !panel->TableModified() )
+                        {
+                            m_parent->m_GlobalTableChanged = true;
+                            m_parent->m_ProjectTableChanged = true;
+                        }
+                    }
+                }
+
+                return true;
+            } );
 }
 
 
@@ -905,18 +931,6 @@ bool PANEL_SYM_LIB_TABLE::TransferDataFromWindow()
                         wxMessageBox( _( "Error saving project library table:\n\n" ) + aError.message,
                                       _( "File Save Error" ), wxOK | wxICON_ERROR );
                     } );
-        }
-    }
-
-    for( int ii = 0; ii < (int) m_notebook->GetPageCount(); ++ii )
-    {
-        LIB_TABLE_NOTEBOOK_PANEL* panel = static_cast<LIB_TABLE_NOTEBOOK_PANEL*>( m_notebook->GetPage( ii ) );
-
-        if( panel->GetClosable() && panel->TableModified() )
-        {
-            panel->SaveTable();
-            m_parent->m_GlobalTableChanged = true;
-            m_parent->m_ProjectTableChanged = true;
         }
     }
 

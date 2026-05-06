@@ -22,6 +22,7 @@
 #define DIALOG_EDIT_LIBRARY_TABLES_H
 
 #include <dialog_shim.h>
+#include <functional>
 #include <wx/panel.h>
 #include <widgets/wx_infobar.h>
 
@@ -36,6 +37,8 @@ public:
     DIALOG_EDIT_LIBRARY_TABLES( wxWindow* aParent, const wxString& aTitle );
 
     void InstallPanel( wxPanel* aPanel );
+
+    void SetCanCloseCheck( std::function<bool()> aCheck ) { m_canCloseCheck = std::move( aCheck ); }
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -54,6 +57,13 @@ public:
 protected:
     WX_INFOBAR* m_infoBar;
     wxPanel*    m_contentPanel;
+
+private:
+    void onCloseWindow( wxCloseEvent& aEvent );
+    void onCancelButton( wxCommandEvent& aEvent );
+    void onOkButton( wxCommandEvent& aEvent );
+
+    std::function<bool()> m_canCloseCheck;
 };
 
 
