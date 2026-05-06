@@ -8451,6 +8451,9 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
             outline.SetClosed( true );
 
+            if( outline.PointCount() == 0 )
+                break;
+
             // Remark: The first polygon is the main outline.
             // Others are holes inside the main outline.
             zone->AddPolygon( outline );
