@@ -82,7 +82,41 @@ void LIB_TABLE_NOTEBOOK_PANEL::AddTable( wxAuiNotebook* aNotebook, const wxStrin
 
     grid->Bind( wxEVT_GRID_CELL_CHANGING, &LIB_TABLE_NOTEBOOK_PANEL::onGridCellChanging, panel );
 
-   	aNotebook->AddPage( panel, aTitle, false );
+    panel->m_baseTitle = aTitle;
+    aNotebook->AddPage( panel, aTitle, false );
+}
+
+
+void LIB_TABLE_NOTEBOOK_PANEL::MarkDirty()
+{
+    wxAuiNotebook* notebook = dynamic_cast<wxAuiNotebook*>( GetParent() );
+
+    if( !notebook )
+        return;
+
+    int page = notebook->GetPageIndex( this );
+
+    if( page == wxNOT_FOUND )
+        return;
+
+    if( !notebook->GetPageText( page ).EndsWith( wxT( " *" ) ) )
+        notebook->SetPageText( page, m_baseTitle + wxT( " *" ) );
+}
+
+
+void LIB_TABLE_NOTEBOOK_PANEL::ClearDirty()
+{
+    wxAuiNotebook* notebook = dynamic_cast<wxAuiNotebook*>( GetParent() );
+
+    if( !notebook )
+        return;
+
+    int page = notebook->GetPageIndex( this );
+
+    if( page == wxNOT_FOUND )
+        return;
+
+    notebook->SetPageText( page, m_baseTitle );
 }
 
 
@@ -138,6 +172,9 @@ bool LIB_TABLE_NOTEBOOK_PANEL::SaveTable()
 
                 retVal = false;
             } );
+
+    if( retVal )
+        ClearDirty();
 
     return retVal;
 }

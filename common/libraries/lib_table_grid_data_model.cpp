@@ -245,6 +245,9 @@ void LIB_TABLE_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString& aV
                     GetView()->RefreshBlock( aRow, COL_STATUS, aRow, COL_STATUS );
                 } );
     }
+
+    if( m_changeCallback )
+        m_changeCallback();
 }
 
 
@@ -257,6 +260,9 @@ void LIB_TABLE_GRID_DATA_MODEL::SetValueAsBool( int aRow, int aCol, bool aValue 
         at( aRow ).SetDisabled( !aValue );
     else if( aCol == COL_VISIBLE )
         at( aRow ).SetHidden( !aValue );
+
+    if( m_changeCallback )
+        m_changeCallback();
 }
 
 
@@ -273,6 +279,9 @@ bool LIB_TABLE_GRID_DATA_MODEL::InsertRows( size_t aPos, size_t aNumRows  )
             wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, aPos, aNumRows );
             GetView()->ProcessTableMessage( msg );
         }
+
+        if( m_changeCallback )
+            m_changeCallback();
 
         return true;
     }
@@ -293,6 +302,9 @@ bool LIB_TABLE_GRID_DATA_MODEL::AppendRows( size_t aNumRows )
         GetView()->ProcessTableMessage( msg );
     }
 
+    if( m_changeCallback )
+        m_changeCallback();
+
     return true;
 }
 
@@ -311,6 +323,9 @@ bool LIB_TABLE_GRID_DATA_MODEL::DeleteRows( size_t aPos, size_t aNumRows )
             wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aPos, aNumRows );
             GetView()->ProcessTableMessage( msg );
         }
+
+        if( m_changeCallback )
+            m_changeCallback();
 
         return true;
     }
