@@ -65,6 +65,8 @@ public:
                         UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED,
                         BASE_SCREEN* aScreen = nullptr ) override;
 
+    virtual EDA_ITEM* ResolveItem( KIID& aID ) override;
+
     static EDA_ITEM* MakeImage( EDA_ITEM* aItem );
 
 private:

@@ -131,6 +131,14 @@ public:
     /// Revert the commit by restoring the modified items state.
     virtual void Revert() = 0;
 
+    /**
+     * Search for an item in this commit that matches the provided KIID.
+     *
+     * @param aID is the KIID to search for in the committed items.
+     * @return null pointer if \a aID is null or the item is not found.
+     */
+    virtual EDA_ITEM* ResolveItem( KIID& aID ) = 0;
+
     bool Empty() const
     {
         return m_entries.empty();
@@ -182,4 +190,3 @@ protected:
     std::set<std::pair<EDA_ITEM*, BASE_SCREEN*>> m_deletedItems;
     std::vector<COMMIT_LINE>                     m_entries;
 };
-

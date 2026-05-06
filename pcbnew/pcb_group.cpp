@@ -79,7 +79,12 @@ void PCB_GROUP::Serialize( google::protobuf::Any &aContainer ) const
 }
 
 
-bool PCB_GROUP::Deserialize( const google::protobuf::Any &aContainer )
+bool PCB_GROUP::Deserialize( const google::protobuf::Any& aContainer )
+{
+    return DeserializeGroup( aContainer, nullptr );
+}
+
+bool PCB_GROUP::DeserializeGroup( const google::protobuf::Any& aContainer, COMMIT* aCommit )
 {
     kiapi::board::types::Group group;
 
@@ -98,8 +103,12 @@ bool PCB_GROUP::Deserialize( const google::protobuf::Any &aContainer )
     for( const kiapi::common::types::KIID& itemId : group.items() )
     {
         KIID id( itemId.value() );
+        EDA_ITEM* item = board->ResolveItem( id, true );
 
-        if( BOARD_ITEM* item = board->ResolveItem( id, true ) )
+        if( !item && aCommit )
+            item = aCommit->ResolveItem( id );
+
+        if( item )
             AddItem( item );
     }
 

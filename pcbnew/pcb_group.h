@@ -52,8 +52,9 @@ class PCB_GROUP : public BOARD_ITEM, public EDA_GROUP
 public:
     PCB_GROUP( BOARD_ITEM* aParent );
 
-    void Serialize( google::protobuf::Any &aContainer ) const override;
-    bool Deserialize( const google::protobuf::Any &aContainer ) override;
+    void Serialize( google::protobuf::Any& aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any& aContainer ) override;
+    bool DeserializeGroup( const google::protobuf::Any& aContainer, COMMIT* aCommit ) override;
 
     EDA_ITEM* AsEdaItem() override { return this; }
 

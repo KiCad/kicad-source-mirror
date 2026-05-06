@@ -54,6 +54,8 @@ public:
     COMMIT& Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType,
                    BASE_SCREEN *aScreen = nullptr ) override;
 
+    virtual EDA_ITEM* ResolveItem( KIID& aID ) override;
+
 private:
     EDA_ITEM* undoLevelItem( EDA_ITEM* aItem ) const override;
 

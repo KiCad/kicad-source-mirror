@@ -39,6 +39,7 @@ class TEST_COMMIT : public COMMIT
 public:
     void Push( const wxString&, int ) override {}
     void Revert() override {}
+    EDA_ITEM* ResolveItem( KIID& aID ) override { return nullptr; }
 
 private:
     EDA_ITEM* undoLevelItem( EDA_ITEM* aItem ) const override { return aItem; }
@@ -113,4 +114,3 @@ BOOST_AUTO_TEST_CASE( UnstageRemovesNewItem )
 }
 
 BOOST_AUTO_TEST_SUITE_END()
-

@@ -20,6 +20,7 @@
 #ifndef EDA_GROUP_H
 #define EDA_GROUP_H
 
+#include <commit.h>
 #include <eda_item.h>
 #include <lib_id.h>
 #include <lset.h>
@@ -43,6 +44,19 @@ class EDA_GROUP
 public:
     virtual EDA_ITEM* AsEdaItem() = 0;
     virtual ~EDA_GROUP() = default;
+
+    /**
+     * Deserializes the given protobuf message into this group.
+     *
+     * Groups may contain references to items in the current commit that are not yet present
+     * in the board or schematic. When necessary, items in the provided commit are used when
+     * populating the items contained in the group.
+     *
+     * @param aContainer is a protobuf message to be unpacked and deserialized.
+     * @param aCommit is an active commit which may contain new items that belong in the group.
+     * @return true if unpacking and deserialization succeeded.
+     */
+    virtual bool DeserializeGroup( const google::protobuf::Any& aContainer, COMMIT* aCommit ) = 0;
 
     wxString GetName() const { return m_name; }
     void     SetName( const wxString& aName ) { m_name = aName; }

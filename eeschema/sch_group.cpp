@@ -75,6 +75,11 @@ void SCH_GROUP::Serialize( google::protobuf::Any& aContainer ) const
 
 bool SCH_GROUP::Deserialize( const google::protobuf::Any& aContainer )
 {
+    return DeserializeGroup( aContainer, nullptr );
+}
+
+bool SCH_GROUP::DeserializeGroup( const google::protobuf::Any& aContainer, COMMIT* aCommit )
+{
     using namespace kiapi::schematic::types;
 
     Group group;
@@ -97,8 +102,12 @@ bool SCH_GROUP::Deserialize( const google::protobuf::Any& aContainer )
     for( const kiapi::common::types::KIID& memberId : group.items() )
     {
         KIID id( memberId.value() );
+        EDA_ITEM* item = schematic->ResolveItem( id, nullptr, true );
 
-        if( SCH_ITEM* item = schematic->ResolveItem( id, nullptr, true ) )
+        if( !item && aCommit )
+            item = aCommit->ResolveItem( id );
+
+        if( item )
             m_items.insert( item );
     }
 

@@ -984,7 +984,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
             unpacked = anyItem.UnpackTo( &symbolProto )
                        && UnpackSymbol( static_cast<SCH_SYMBOL*>( item.get() ), symbolProto );
         }
-        else if( *type == SCH_SHEET_T )
+        else if( type == SCH_SHEET_T )
         {
             unpacked = anyItem.UnpackTo( &sheetProto );
 
@@ -1002,6 +1002,10 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
                     return tl::unexpected( result.error() );
                 }
             }
+        }
+        else if( SCH_GROUP* group = dynamic_cast<SCH_GROUP*>( item.get() ) )
+        {
+            unpacked = group->DeserializeGroup( anyItem, commit );
         }
         else
         {
@@ -1072,7 +1076,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
             }
         }
 
-        if( *type == SCH_SHEET_T )
+        if( type == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item.get() );
 

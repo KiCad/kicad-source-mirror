@@ -336,7 +336,14 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
 
         std::unique_ptr<BOARD_ITEM> item( std::move( *creationResult ) );
 
-        if( !item->Deserialize( anyItem ) )
+        bool unpacked = false;
+
+        if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( item.get() ) )
+            unpacked = group->DeserializeGroup( anyItem, commit );
+        else
+            unpacked = item->Deserialize( anyItem );
+
+        if( !unpacked )
         {
             e.set_status( ApiStatusCode::AS_BAD_REQUEST );
             e.set_error_message( fmt::format( "could not unpack {} from request",
