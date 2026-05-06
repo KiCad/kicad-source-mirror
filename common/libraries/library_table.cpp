@@ -53,7 +53,7 @@ std::map<std::string, UTF8> LIBRARY_TABLE_ROW::GetOptionsMap() const
 }
 
 
-LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScope ) :
+LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScope, LIBRARY_TABLE_TYPE aExpectedType ) :
         m_scope( aScope )
 {
     LIBRARY_TABLE_PARSER parser;
@@ -70,10 +70,24 @@ LIBRARY_TABLE::LIBRARY_TABLE( const wxFileName &aPath, LIBRARY_TABLE_SCOPE aScop
         return;
     }
 
+    if( fn.GetSize() <= 1 ) // test for an empty file, 1 byte allowed for BOM
+    {
+        m_ok = true;
+        m_type = aExpectedType;
+        return;
+    }
+
     tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> ir = parser.Parse( m_path.ToStdString() );
 
     if( ir.has_value() )
     {
+        if( aExpectedType != LIBRARY_TABLE_TYPE::UNINITIALIZED && ir->type != aExpectedType )
+        {
+            m_ok = false;
+            m_errorDescription = wxString::Format( _( "The library table is of wrong type" ) );
+            return;
+        }
+
         m_ok = initFromIR( *ir );
     }
     else

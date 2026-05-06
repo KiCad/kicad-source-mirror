@@ -252,7 +252,7 @@ protected:
     void openTable( const LIBRARY_TABLE_ROW& aRow ) override
     {
         wxFileName fn( LIBRARY_MANAGER::ExpandURI( aRow.URI(), Pgm().GetSettingsManager().Prj() ) );
-        std::shared_ptr<LIBRARY_TABLE> child = std::make_shared<LIBRARY_TABLE>( fn, LIBRARY_TABLE_SCOPE::GLOBAL );
+        std::shared_ptr<LIBRARY_TABLE> child = std::make_shared<LIBRARY_TABLE>( fn, LIBRARY_TABLE_SCOPE::GLOBAL, LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
 
         m_panel->OpenTable( child, aRow.Nickname() );
     }
