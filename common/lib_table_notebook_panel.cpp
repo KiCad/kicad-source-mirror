@@ -40,7 +40,7 @@ void LIB_TABLE_NOTEBOOK_PANEL::AddTable( wxAuiNotebook* aNotebook, const wxStrin
     LIB_TABLE_NOTEBOOK_PANEL* panel = new LIB_TABLE_NOTEBOOK_PANEL( aNotebook, wxID_ANY );
    	wxBoxSizer*               sizer = new wxBoxSizer( wxVERTICAL );
     WX_GRID*                  grid = new WX_GRID( panel, wxID_ANY );
-   
+
    	// Grid
    	grid->CreateGrid( 1, 7 );
    	grid->EnableGridLines( true );
@@ -57,12 +57,12 @@ void LIB_TABLE_NOTEBOOK_PANEL::AddTable( wxAuiNotebook* aNotebook, const wxStrin
    	grid->SetColSize( 6, 240 );
    	grid->SetColLabelSize( 22 );
    	grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-   
+
    	// Rows
    	grid->EnableDragRowSize( false );
    	grid->SetRowLabelSize( 0 );
    	grid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
-   
+
    	// Cell Defaults
    	grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 

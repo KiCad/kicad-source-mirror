@@ -27,6 +27,7 @@
 #include <trace_helpers.h>
 #include <wx_filename.h>
 #include <xnode.h>
+#include <ki_exception.h>
 #include <libraries/library_manager.h>
 
 
@@ -164,7 +165,10 @@ void LIBRARY_TABLE::Format( OUTPUTFORMATTER* aOutput ) const
         { LIBRARY_TABLE_TYPE::DESIGN_BLOCK, "design_block_lib_table" }
     };
 
-    wxCHECK( types.contains( Type() ), /* void */ );
+    if( !types.contains( Type() ) )
+    {
+        THROW_IO_ERROR( "Unknown library table type: " + std::to_string( static_cast<int>( Type() ) ) );
+    }
 
     XNODE self( wxXML_ELEMENT_NODE, types.at( Type() ) );
 
