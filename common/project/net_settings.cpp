@@ -252,7 +252,10 @@ NET_SETTINGS::NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "net_chain_classes",
             [&]() -> nlohmann::json
             {
-                nlohmann::json ret = {};
+                // Force object type so an empty map round-trips as {} rather than null;
+                // the reader rejects non-objects, which would otherwise leave stale
+                // chain assignments in place after the user clears them all.
+                nlohmann::json ret = nlohmann::json::object();
 
                 for( const auto& [chain, className] : m_netChainClasses )
                     ret[ std::string( chain.ToUTF8() ) ] = std::string( className.ToUTF8() );

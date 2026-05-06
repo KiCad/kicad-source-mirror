@@ -98,12 +98,15 @@ void BOARD_NETLIST_UPDATER::ApplyChainAssignments( BOARD* aBoard, const NETLIST&
                     RPT_SEVERITY_WARNING );
         }
 
-        net->SetNetChain( next );
-
-        if( previous != next )
+        if( !aDryRun )
         {
-            for( int i = 0; i < 2; ++i )
-                net->ClearTerminalPad( i );
+            net->SetNetChain( next );
+
+            if( previous != next )
+            {
+                for( int i = 0; i < 2; ++i )
+                    net->ClearTerminalPad( i );
+            }
         }
     }
 }

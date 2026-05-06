@@ -1369,8 +1369,15 @@ XNODE* NETLIST_EXPORTER_XML::makeNetChains()
         XNODE* xmembers;
         xchain->AddChild( xmembers = node( wxT( "members" ) ) );
 
+        // Synthetic per-run subgraph names (__SG_*) embed run-specific subgraph codes
+        // that do not survive a reload, and downstream consumers cannot resolve them
+        // back to a real net.  Mirror the sexpr writer's filter so the XML output is
+        // limited to nets that have stable, user-visible names.
         for( const wxString& net : chain->GetNets() )
         {
+            if( net.IsEmpty() || net.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) )
+                continue;
+
             XNODE* xmember;
             xmembers->AddChild( xmember = node( wxT( "member" ) ) );
             xmember->AddAttribute( wxT( "net" ), net );

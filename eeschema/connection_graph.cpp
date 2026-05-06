@@ -2894,6 +2894,13 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     RebuildNetChains();
 }
 
+std::function<void( CONNECTION_GRAPH& )>& CONNECTION_GRAPH::RebuildNetChainsTestHook()
+{
+    static std::function<void( CONNECTION_GRAPH& )> s_hook;
+    return s_hook;
+}
+
+
 void CONNECTION_GRAPH::RebuildNetChains()
 {
     // Snapshot the committed-chain count so a throw partway through the restore loop can
@@ -3589,6 +3596,11 @@ void CONNECTION_GRAPH::RebuildNetChains()
         }
     }
 
+    // QA fixtures install this hook to inject a throw inside the protected block and
+    // verify the catch handler resizes m_committedNetChains and restores m_netChainsBuilt.
+    if( auto& hook = RebuildNetChainsTestHook() )
+        hook( *this );
+
     // An empty chain list is a valid built state for chainless schematics.
     m_netChainsBuilt = true;
     }
@@ -3973,6 +3985,9 @@ SCH_NETCHAIN* CONNECTION_GRAPH::GetNetChainForNet( const wxString& aNet )
     wxLogTrace( traceSchNetChain, "CONNECTION_GRAPH::GetNetChainForNet(%s)", aNet );
     for( std::unique_ptr<SCH_NETCHAIN>& sig : m_committedNetChains )
     {
+        if( !sig )
+            continue;
+
         if( sig->GetNets().count( aNet ) )
         {
             wxLogTrace( traceSchNetChain, "GetNetChainForNet: found chain '%s'", sig->GetName() );

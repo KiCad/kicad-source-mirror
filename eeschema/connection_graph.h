@@ -22,6 +22,7 @@
 #ifndef _CONNECTION_GRAPH_H
 #define _CONNECTION_GRAPH_H
 
+#include <functional>
 #include <memory>
 #include <mutex>
 #include <utility>
@@ -928,6 +929,15 @@ public:
 
     /** Returns true once RebuildNetChains() has completed at least once on this graph. */
     bool NetChainsBuilt() const { return m_netChainsBuilt; }
+
+    /**
+     * Test-only hook fired inside RebuildNetChains() after the restore passes have finished
+     * but before the success flag is flipped.  QA fixtures install a callback to inject a
+     * throw and validate that the catch-block rollback truncates m_committedNetChains and
+     * restores m_netChainsBuilt.  Production code never sets this; the default value is
+     * empty and the hook call site is a no-op.
+     */
+    static std::function<void( CONNECTION_GRAPH& )>& RebuildNetChainsTestHook();
 
     /**
      * Delete a committed net chain by name.  Clears every net-chain override map

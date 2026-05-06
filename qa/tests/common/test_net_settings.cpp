@@ -21,6 +21,7 @@
 
 #include <project/net_settings.h>
 #include <netclass.h>
+#include <settings/json_settings_internals.h>
 
 
 BOOST_AUTO_TEST_SUITE( NetSettingsTests )
@@ -206,6 +207,115 @@ BOOST_AUTO_TEST_CASE( ChainPatternAssignmentExcludedFromEquality )
     a.ClearChainPatternAssignments();
 
     BOOST_CHECK( a == b );
+}
+
+
+// Persisted-state regression guard for the "net_chain_classes" JSON key.  In-memory
+// equality tests cannot detect a renamed/missing JSON key or a broken read lambda --
+// those failures present as silent loss of every chain->class assignment on project
+// reopen.  Exercise the full Store -> serialize -> parse -> Load round trip so any
+// drift in the JSON contract fails the suite immediately.
+BOOST_AUTO_TEST_CASE( NetChainClassesJsonRoundTrip )
+{
+    NET_SETTINGS source( nullptr, "" );
+
+    source.SetNetChainClass( wxS( "CHAIN_A" ), wxS( "Default" ) );
+    source.SetNetChainClass( wxS( "CHAIN_B" ), wxS( "HighSpeed" ) );
+    source.SetNetChainClass( wxS( "CHAIN_WITH_SPACES and: punctuation!" ), wxS( "Power" ) );
+    source.SetNetChainClass( wxS( "Unicode_éèê" ), wxS( "RF_µwave" ) );
+
+    BOOST_REQUIRE( source.Store() );
+
+    // Round-trip through the text form so a renamed key, broken serializer, or broken
+    // parser all surface as a test failure.  FormatAsString -> parse mirrors what
+    // SaveToFile / LoadFromFile do on disk.
+    std::string serialized = source.FormatAsString();
+    nlohmann::json reparsed = nlohmann::json::parse( serialized );
+
+    BOOST_REQUIRE( reparsed.contains( "net_chain_classes" ) );
+    BOOST_REQUIRE( reparsed["net_chain_classes"].is_object() );
+
+    NET_SETTINGS sink( nullptr, "" );
+
+    // Seed the sink with a stale entry so a no-op reader would still leave it behind;
+    // the read lambda must clear() before applying the loaded map.
+    sink.SetNetChainClass( wxS( "STALE_CHAIN" ), wxS( "Default" ) );
+
+    JSON_SETTINGS_INTERNALS reparsedInternals;
+    static_cast<nlohmann::json&>( reparsedInternals ) = reparsed;
+    sink.Internals()->CloneFrom( reparsedInternals );
+    sink.Load();
+
+    BOOST_CHECK( sink.GetNetChainClasses().size() == source.GetNetChainClasses().size() );
+    BOOST_CHECK( sink.GetNetChainClasses() == source.GetNetChainClasses() );
+    BOOST_CHECK( sink.GetNetChainClass( wxS( "CHAIN_A" ) ) == wxS( "Default" ) );
+    BOOST_CHECK( sink.GetNetChainClass( wxS( "CHAIN_B" ) ) == wxS( "HighSpeed" ) );
+    BOOST_CHECK( sink.GetNetChainClass( wxS( "CHAIN_WITH_SPACES and: punctuation!" ) )
+                 == wxS( "Power" ) );
+    BOOST_CHECK( sink.GetNetChainClass( wxS( "Unicode_éèê" ) ) == wxS( "RF_µwave" ) );
+    BOOST_CHECK( sink.GetNetChainClass( wxS( "STALE_CHAIN" ) ).IsEmpty() );
+    BOOST_CHECK( source == sink );
+}
+
+
+// An empty m_netChainClasses must serialize as an empty object (not be omitted, not be
+// emitted as null) and round-trip back to an empty map without leaving stale entries.
+BOOST_AUTO_TEST_CASE( NetChainClassesJsonRoundTripEmpty )
+{
+    NET_SETTINGS source( nullptr, "" );
+
+    BOOST_REQUIRE( source.Store() );
+
+    std::string serialized = source.FormatAsString();
+    nlohmann::json reparsed = nlohmann::json::parse( serialized );
+
+    BOOST_REQUIRE( reparsed.contains( "net_chain_classes" ) );
+    BOOST_CHECK( reparsed["net_chain_classes"].is_object() );
+    BOOST_CHECK( reparsed["net_chain_classes"].empty() );
+
+    NET_SETTINGS sink( nullptr, "" );
+
+    sink.SetNetChainClass( wxS( "STALE" ), wxS( "Default" ) );
+
+    JSON_SETTINGS_INTERNALS reparsedInternals;
+    static_cast<nlohmann::json&>( reparsedInternals ) = reparsed;
+    sink.Internals()->CloneFrom( reparsedInternals );
+    sink.Load();
+
+    BOOST_CHECK( sink.GetNetChainClasses().empty() );
+}
+
+
+// Empty class strings are how chain assignments are cleared (SetNetChainClass with "")
+// and the writer must not emit them.  An attacker-supplied or hand-edited JSON file
+// that contains an empty string value must also be ignored on load, matching the
+// in-memory clear semantics tested in ChainClassValueAndClearAffectEquality.
+BOOST_AUTO_TEST_CASE( NetChainClassesJsonDropsEmptyValues )
+{
+    NET_SETTINGS source( nullptr, "" );
+
+    source.SetNetChainClass( wxS( "KEEP" ), wxS( "Default" ) );
+
+    BOOST_REQUIRE( source.Store() );
+
+    nlohmann::json reparsed = nlohmann::json::parse( source.FormatAsString() );
+
+    BOOST_REQUIRE( reparsed.contains( "net_chain_classes" ) );
+    BOOST_REQUIRE_EQUAL( reparsed["net_chain_classes"].size(), 1u );
+
+    // Inject a hand-crafted empty-value entry to confirm the reader rejects it.
+    reparsed["net_chain_classes"]["EMPTY"] = "";
+
+    NET_SETTINGS sink( nullptr, "" );
+
+    JSON_SETTINGS_INTERNALS reparsedInternals;
+    static_cast<nlohmann::json&>( reparsedInternals ) = reparsed;
+    sink.Internals()->CloneFrom( reparsedInternals );
+    sink.Load();
+
+    BOOST_CHECK_EQUAL( sink.GetNetChainClasses().size(), 1u );
+    BOOST_CHECK( sink.GetNetChainClass( wxS( "KEEP" ) ) == wxS( "Default" ) );
+    BOOST_CHECK( sink.GetNetChainClass( wxS( "EMPTY" ) ).IsEmpty() );
 }
 
 

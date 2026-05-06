@@ -176,6 +176,8 @@ set( QA_EESCHEMA_SRCS
     net_chains/test_net_chain_hierarchical_roundtrip.cpp
     net_chains/test_net_chain_manual.cpp
     net_chains/test_net_chain_recalc_refresh.cpp
+    net_chains/test_net_chain_synthetic_filter.cpp
+    net_chains/test_net_chain_rollback.cpp
 )
 
 if( WIN32 )

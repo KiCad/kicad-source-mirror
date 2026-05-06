@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_CASE( ChainRemovalClearsTerminalPads )
 
     NETLIST netlist;
 
-    BOARD_NETLIST_UPDATER::ApplyChainAssignments( board.get(), netlist, nullptr, true );
+    BOARD_NETLIST_UPDATER::ApplyChainAssignments( board.get(), netlist, nullptr, false );
 
     BOOST_CHECK( n1->GetNetChain().IsEmpty() );
     BOOST_CHECK( n2->GetNetChain().IsEmpty() );
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE( ChainRenameClearsStaleTerminalPads )
     NETLIST netlist;
     netlist.SetNetChainFor( wxS( "Net1" ), wxS( "BUS_NEW" ) );
 
-    BOARD_NETLIST_UPDATER::ApplyChainAssignments( board.get(), netlist, nullptr, true );
+    BOARD_NETLIST_UPDATER::ApplyChainAssignments( board.get(), netlist, nullptr, false );
 
     BOOST_CHECK_EQUAL( n1->GetNetChain(), wxS( "BUS_NEW" ) );
     BOOST_CHECK( n2->GetNetChain().IsEmpty() );
@@ -170,7 +170,7 @@ BOOST_AUTO_TEST_CASE( UnchangedChainPreservesTerminalPads )
     NETLIST netlist;
     netlist.SetNetChainFor( wxS( "Net1" ), wxS( "BUS_K" ) );
 
-    BOARD_NETLIST_UPDATER::ApplyChainAssignments( board.get(), netlist, nullptr, true );
+    BOARD_NETLIST_UPDATER::ApplyChainAssignments( board.get(), netlist, nullptr, false );
 
     BOOST_CHECK_EQUAL( n1->GetNetChain(), wxS( "BUS_K" ) );
     BOOST_CHECK_EQUAL( n1->GetTerminalPad( 0 ), pA );
