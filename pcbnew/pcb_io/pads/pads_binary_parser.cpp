@@ -426,6 +426,42 @@ void BINARY_PARSER::parsePartPlacements()
 
         m_parts.push_back( part );
     }
+
+    // Old dialects can carry a run of leading placements immediately BEFORE the section's own
+    // dataOffset, spilling into what the directory attributes to the preceding section -- the
+    // same one-record quirk recoverOmittedPlacementsOld's leading-block case handles, but as a
+    // run of arbitrary length rather than a single record. Walk backward while each candidate
+    // has a valid refdes; verified against 2FOC_4.pcb, where 13 such records (M1/M2/M3/U4/U5/
+    // U9-U12/C17/J11/J12 and one oddly-named "5") sit directly before section 22's start, each
+    // resolving to its correct ground-truth decal via the same next-record directDecalOff chain.
+    if( layout.directDecalOff )
+    {
+        uint32_t fieldOff = static_cast<uint32_t>( *layout.directDecalOff );
+
+        for( uint32_t k = 1; k <= entry->count; ++k )
+        {
+            size_t candidateBase = static_cast<size_t>( entry->dataOffset ) - static_cast<size_t>( k ) * recSize;
+
+            if( entry->dataOffset < k * recSize || !m_cursor.InBounds( candidateBase, fieldSpan ) )
+                break;
+
+            SDB_RECORD  rec    = m_sdb.RecordAt( static_cast<uint32_t>( candidateBase ) );
+            std::string refDes = rec.Str( layout.nameOff, 16 );
+
+            if( !refdesFirstCharOk( refDes ) )
+                break;
+
+            PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
+                                           layout.nameOff, refDes, xAdjust, yAdjust );
+
+            size_t nextBase = candidateBase + recSize;
+
+            if( m_cursor.InBounds( nextBase, fieldOff + 4 ) )
+                m_partDecalIndex[m_parts.size()] = m_sdb.RecordAt( static_cast<uint32_t>( nextBase ) ).U32( fieldOff );
+
+            m_parts.push_back( part );
+        }
+    }
 }
 
 
