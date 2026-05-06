@@ -785,7 +785,9 @@ bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
             wxFFile f( ignoreFile.GetFullPath(), wxT( "w" ) );
             if( f.IsOpened() )
             {
-                f.Write( wxS( "fp-info-cache\n*-backups\nREADME.txt\n" ) );
+                f.Write( wxS( "# KiCad local history exclusions. Edit to add your own rules.\n"
+                              "fp-info-cache\n"
+                              "*-backups/\n" ) );
                 f.Close();
             }
         }
