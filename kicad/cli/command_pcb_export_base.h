@@ -29,7 +29,10 @@ namespace CLI
 #define ARG_BLACKANDWHITE_DESC "Black and white only"
 
 #define ARG_SKETCH_PADS_ON_FAB_LAYERS "--sketch-pads-on-fab-layers"
-#define ARG_SKETCH_PADS_ON_FAB_LAYERS_DESC "Draw pad outlines and their numbers on front and back fab layers"
+#define ARG_SKETCH_PADS_ON_FAB_LAYERS_DESC "Draw pad outlines on front and back fab layers"
+
+#define ARG_SKETCH_PAD_NUMBERS "--sketch-pad-numbers"
+#define ARG_SKETCH_PAD_NUMBERS_DESC "Plot pad numbers on top of sketched pads on fab layers"
 
 #define ARG_HIDE_DNP_FPS_ON_FAB_LAYERS "--hide-DNP-footprints-on-fab-layers"
 #define ARG_HIDE_DNP_FPS_ON_FAB_LAYERS_DESC "Don't plot text & graphics of DNP footprints on fab layers"

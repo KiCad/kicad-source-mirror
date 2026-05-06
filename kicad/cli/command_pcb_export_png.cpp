@@ -66,6 +66,10 @@ CLI::PCB_EXPORT_PNG_COMMAND::PCB_EXPORT_PNG_COMMAND() :
             .help( UTF8STDSTR( _( ARG_SKETCH_PADS_ON_FAB_LAYERS_DESC ) ) )
             .flag();
 
+    m_argParser.add_argument( "--spn", ARG_SKETCH_PAD_NUMBERS )
+            .help( UTF8STDSTR( _( ARG_SKETCH_PAD_NUMBERS_DESC ) ) )
+            .flag();
+
     m_argParser.add_argument( "--hdnp", ARG_HIDE_DNP_FPS_ON_FAB_LAYERS )
             .help( UTF8STDSTR( _( ARG_HIDE_DNP_FPS_ON_FAB_LAYERS_DESC ) ) )
             .flag();
@@ -121,9 +125,7 @@ int CLI::PCB_EXPORT_PNG_COMMAND::doPerform( KIWAY& aKiway )
     pngJob->m_blackAndWhite = m_argParser.get<bool>( ARG_BLACKANDWHITE );
     pngJob->m_negative = m_argParser.get<bool>( ARG_NEGATIVE );
     pngJob->m_sketchPadsOnFabLayers = m_argParser.get<bool>( ARG_SKETCH_PADS_ON_FAB_LAYERS );
-
-    if( pngJob->m_sketchPadsOnFabLayers )
-        pngJob->m_plotPadNumbers = true;
+    pngJob->m_plotPadNumbers = pngJob->m_sketchPadsOnFabLayers && m_argParser.get<bool>( ARG_SKETCH_PAD_NUMBERS );
 
     pngJob->m_hideDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_HIDE_DNP_FPS_ON_FAB_LAYERS );
     pngJob->m_sketchDNPFPsOnFabLayers = m_argParser.get<bool>( ARG_SKETCH_DNP_FPS_ON_FAB_LAYERS );
