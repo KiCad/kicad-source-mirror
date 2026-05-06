@@ -274,10 +274,15 @@ double PCB_TEXT::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
                 return LOD_HIDE;
         }
 
-        if( parentFP->GetLayer() == F_Cu && !aView->IsLayerVisibleCached( LAYER_FOOTPRINTS_FR ) )
+        PCB_LAYER_ID checkLayer = GetLayer();
+
+        if( !IsFrontLayer( checkLayer ) && !IsBackLayer( checkLayer ) )
+            checkLayer = parentFP->GetLayer();
+
+        if( IsFrontLayer( checkLayer ) && !aView->IsLayerVisibleCached( LAYER_FOOTPRINTS_FR ) )
             return LOD_HIDE;
 
-        if( parentFP->GetLayer() == B_Cu && !aView->IsLayerVisibleCached( LAYER_FOOTPRINTS_BK ) )
+        if( IsBackLayer( checkLayer ) && !aView->IsLayerVisibleCached( LAYER_FOOTPRINTS_BK ) )
             return LOD_HIDE;
 
         if( !aView->IsLayerVisibleCached( LAYER_FP_TEXT ) )

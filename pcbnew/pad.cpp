@@ -2407,11 +2407,22 @@ double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
     // Handle Render tab switches
     //const PCB_LAYER_ID& pcbLayer = static_cast<PCB_LAYER_ID>( aLayer );
 
-    if( !IsFlipped() && !aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
-        return LOD_HIDE;
+    {
+        const LSET padLayers = GetLayerSet();
+        const bool onFront = ( padLayers & LSET::FrontMask() ).any();
+        const bool onBack = ( padLayers & LSET::BackMask() ).any();
+        const bool frVis = aView->IsLayerVisible( LAYER_FOOTPRINTS_FR );
+        const bool bkVis = aView->IsLayerVisible( LAYER_FOOTPRINTS_BK );
 
-    if( IsFlipped() && !aView->IsLayerVisible( LAYER_FOOTPRINTS_BK ) )
-        return LOD_HIDE;
+        if( onFront && !onBack && !frVis )
+            return LOD_HIDE;
+
+        if( onBack && !onFront && !bkVis )
+            return LOD_HIDE;
+
+        if( onFront && onBack && !frVis && !bkVis )
+            return LOD_HIDE;
+    }
 
     if( IsHoleLayer( aLayer ) )
     {
