@@ -22,15 +22,22 @@
 #define PCBNEW_NET_CHAIN_BRIDGING_H
 
 #include <algorithm>
+#include <limits>
+#include <tuple>
 #include <vector>
 
 #include <wx/string.h>
 
+#include <base_units.h>
 #include <board.h>
 #include <footprint.h>
 #include <math/vector2d.h>
 #include <netinfo.h>
 #include <pad.h>
+#include <pcb_track.h>
+
+
+constexpr double DEFAULT_PROPAGATION_DELAY_PS_PER_MM = 5.9;  // 150 ps/in fallback when no track delay sample is available
 
 
 /**
@@ -108,6 +115,71 @@ inline double BoardChainBridgingLength( const BOARD* aBoard, const wxString& aNe
         total += FootprintChainBridgingLength( fp, aNetChain );
 
     return total;
+}
+
+
+/**
+ * Compute both the chain bridging length and its associated propagation delay (in internal
+ * delay IU, i.e. attoseconds) in one pass.  The delay is derived from the first chain track
+ * with a measurable per-mm propagation delay so the bridging contribution tracks the actual
+ * stackup; if no such track exists the helper falls back to ~5.9 ps/mm (150 ps/in).
+ *
+ * The matched-length DRC provider and the tuning pattern generator share this helper so the
+ * time-domain DRC verdict and the tuner's per-net budget agree on bridging delay.  The
+ * returned tuple is (lengthIU, delayIU).
+ */
+inline std::tuple<double, double> BoardChainBridging( const BOARD* aBoard, const wxString& aNetChain )
+{
+    if( !aBoard || aNetChain.IsEmpty() )
+        return { 0.0, 0.0 };
+
+    double lengthIU = BoardChainBridgingLength( aBoard, aNetChain );
+
+    if( lengthIU <= 0.0 )
+        return { 0.0, 0.0 };
+
+    double delayIUPerMm = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * pcbIUScale.IU_PER_PS;
+
+    for( const PCB_TRACK* track : aBoard->Tracks() )
+    {
+        const NETINFO_ITEM* ninfo = track->GetNet();
+
+        if( !ninfo || ninfo->GetNetChain() != aNetChain )
+            continue;
+
+        double tLen = 0.0;
+        double padDieLen = 0.0;
+        double tDelay = 0.0;
+        double padDieDelay = 0.0;
+
+        std::tie( std::ignore, tLen, padDieLen, tDelay, padDieDelay ) =
+                aBoard->GetTrackLength( *track );
+
+        if( tLen > 0.0 && tDelay > 0.0 )
+        {
+            delayIUPerMm = tDelay / pcbIUScale.IUTomm( static_cast<int>( tLen ) );
+            break;
+        }
+    }
+
+    double delayIU = delayIUPerMm * pcbIUScale.IUTomm( static_cast<int>( lengthIU ) );
+
+    return { lengthIU, delayIU };
+}
+
+
+/**
+ * Saturating subtract for bridge-adjusting MINOPTMAX<int> bounds without overflow when the
+ * delta is in attoseconds (time-domain bridging routinely exceeds INT_MAX).  Returns
+ * max(0, aValue - aDelta), clamped to fit in int.
+ */
+inline int SubtractBridgingClamped( int aValue, long long aDelta )
+{
+    long long adjusted = static_cast<long long>( aValue ) - aDelta;
+
+    return static_cast<int>( std::clamp( adjusted,
+                                         0LL,
+                                         static_cast<long long>( std::numeric_limits<int>::max() ) ) );
 }
 
 

@@ -530,15 +530,16 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                     }
                 }
 
-                // Add bridging length: pad-to-pad distance through series components.
-                // The shared helper mirrors the predicate used by the tuning pattern
-                // generator so DRC and tuner agree on which footprints bridge a chain.
+                // Add bridging length and delay through series components shared with the tuner so
+                // time-domain rules see the same compensated chain.
                 for( auto& [chainName, agg] : chainAgg )
                 {
-                    double bridging = BoardChainBridgingLength( m_board, chainName );
+                    auto [bridging, bridgingDelay] = BoardChainBridging( m_board, chainName );
 
                     agg.total += bridging;
                     agg.totalRoute += bridging;
+                    agg.totalDelay += bridgingDelay;
+                    agg.totalRouteDelay += bridgingDelay;
                 }
 
                 std::vector<CONNECTION> chainConnections;

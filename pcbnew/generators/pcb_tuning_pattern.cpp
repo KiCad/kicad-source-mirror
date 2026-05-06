@@ -25,7 +25,9 @@
 #include <pcb_generator.h>
 #include <generators_mgr.h>
 
+#include <algorithm>
 #include <functional>
+#include <limits>
 #include <optional>
 #include <magic_enum.hpp>
 #include <map>
@@ -426,45 +428,11 @@ long long PCB_TUNING_PATTERN::GetCachedBridgingLength( BOARD* aBoard, const wxSt
 
     if( invalid )
     {
-        // Mirror the matched-length DRC predicate so DRC and the tuner agree on which
-        // footprints bridge a chain and by how much.  See net_chain_bridging.h for the
-        // max-pairwise-cross-net-span scoring shared by both engines.
-        long long len = static_cast<long long>( BoardChainBridgingLength( aBoard, aNetChain ) );
+        // Mirror the matched-length DRC predicate; see net_chain_bridging.h.
+        auto [lenIU, delayIU] = BoardChainBridging( aBoard, aNetChain );
 
-        // Very simple propagation delay model. Result is in internal delay IU (attoseconds).
-        // Fallback to 150ps/in (~5.9ps/mm) when no track on the chain has a measurable delay.
-        double totalDelayIU = 0.0;
-
-        if( len > 0 )
-        {
-            // Internal delay IU per mm; fallback is 5.9 ps/mm converted to attoseconds/mm.
-            double delayIUPerMm = 5.9 * pcbIUScale.IU_PER_PS;
-
-            for( BOARD_ITEM* bi : aBoard->Tracks() )
-            {
-                if( PCB_TRACK* tr = dynamic_cast<PCB_TRACK*>( bi ) )
-                {
-                    NETINFO_ITEM* ninfo = tr->GetNet();
-
-                    if( ninfo && ninfo->GetNetChain() == aNetChain )
-                    {
-                        int    dummyCount;
-                        double tLen, padDieLen, tDelay, padDieDelay;
-                        std::tie( dummyCount, tLen, padDieLen, tDelay, padDieDelay ) = aBoard->GetTrackLength( *tr );
-
-                        if( tLen > 0.0 && tDelay > 0.0 )
-                            delayIUPerMm = tDelay / pcbIUScale.IUTomm( (int) tLen );
-
-                        break;
-                    }
-                }
-            }
-
-            totalDelayIU = delayIUPerMm * pcbIUScale.IUTomm( (int) len );
-        }
-
-        m_cachedBridgingLen = len;
-        m_cachedBridgingDelayIU = totalDelayIU;
+        m_cachedBridgingLen = static_cast<long long>( lenIU );
+        m_cachedBridgingDelayIU = delayIU;
         m_cachedBridgingSignal = aNetChain;
         m_cachedBridgingBoardPtr = aBoard;
         m_cachedBridgingPadCount = padCount;
@@ -613,14 +581,20 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
 
                 if( bridging > 0 )
                 {
-                    int bridgingIU = isTimeDomain ? static_cast<int>( bridgingDelayIU )
-                                                  : static_cast<int>( bridging );
+                    long long bridgingIU = isTimeDomain ? static_cast<long long>( bridgingDelayIU )
+                                                       : bridging;
 
                     if( adjustedTarget.HasMin() )
-                        adjustedTarget.SetMin( std::max( 0, adjustedTarget.Min() - bridgingIU ) );
+                        adjustedTarget.SetMin( SubtractBridgingClamped( adjustedTarget.Min(),
+                                                                        bridgingIU ) );
+
+                    if( adjustedTarget.HasOpt() )
+                        adjustedTarget.SetOpt( SubtractBridgingClamped( adjustedTarget.Opt(),
+                                                                        bridgingIU ) );
 
                     if( adjustedTarget.HasMax() )
-                        adjustedTarget.SetMax( std::max( 0, adjustedTarget.Max() - bridgingIU ) );
+                        adjustedTarget.SetMax( SubtractBridgingClamped( adjustedTarget.Max(),
+                                                                        bridgingIU ) );
                 }
 
                 if( isTimeDomain )

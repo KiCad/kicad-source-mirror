@@ -1431,7 +1431,11 @@ static void inNetChainClassFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                     if( ns )
                     {
                         const wxString& className = ns->GetNetChainClass( chainName );
-                        wxString        arg       = argv->AsString();
+
+                        if( className.IsEmpty() )
+                            return 0.0;
+
+                        wxString arg = argv->AsString();
 
                         return className.Matches( arg ) ? 1.0 : 0.0;
                     }

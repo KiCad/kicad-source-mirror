@@ -1141,10 +1141,10 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
             if( graph )
             {
-                // Build chains on-demand if needed
-                if( graph->GetNetChains().empty() )
+                // An empty chain list is valid; rely on the explicit built flag.
+                if( !graph->NetChainsBuilt() )
                 {
-                    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "highlightNet: chains empty; rebuilding before expand" );
+                    wxLogTrace( "KICAD_SCH_HIGHLIGHT", "highlightNet: chains not built; rebuilding before expand" );
                     SCH_SHEET_LIST sheets = editFrame->Schematic().Hierarchy();
                     graph->Recalculate( sheets, /*aUnconditional=*/true );
                 }
@@ -1217,10 +1217,9 @@ int SCH_EDITOR_CONTROL::HighlightNetChain( const TOOL_EVENT& aEvent )
     wxLogTrace( "KICAD_SCH_HIGHLIGHT", "HighlightNetChain: item=%p type=%d",
                 (void*) item, item ? (int) item->Type() : -1 );
 
-    // If net chains haven't been built yet (e.g., after load), build them on-demand.
-    if( graph && graph->GetNetChains().empty() )
+    if( graph && !graph->NetChainsBuilt() )
     {
-        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "HighlightNetChain: chains empty; calling Recalculate(unconditional=true)" );
+        wxLogTrace( "KICAD_SCH_HIGHLIGHT", "HighlightNetChain: chains not built; calling Recalculate(unconditional=true)" );
         SCH_SHEET_LIST sheets = editFrame->Schematic().Hierarchy();
         graph->Recalculate( sheets, /*aUnconditional=*/true );
     }
@@ -1234,15 +1233,6 @@ int SCH_EDITOR_CONTROL::HighlightNetChain( const TOOL_EVENT& aEvent )
         if( conn )
         {
             SCH_NETCHAIN* sig = graph ? graph->GetNetChainForNet( conn->Name() ) : nullptr;
-
-            // If not found, try a one-time rebuild in case the table is stale.
-            if( !sig && graph )
-            {
-                wxLogTrace( "KICAD_SCH_HIGHLIGHT", "HighlightNetChain: no chain found; Recalculate(unconditional=true) and retry" );
-                SCH_SHEET_LIST sheets = editFrame->Schematic().Hierarchy();
-                graph->Recalculate( sheets, /*aUnconditional=*/true );
-                sig = graph->GetNetChainForNet( conn->Name() );
-            }
 
             if( sig )
             {

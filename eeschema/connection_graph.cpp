@@ -716,10 +716,9 @@ void CONNECTION_GRAPH::Merge( CONNECTION_GRAPH& aGraph )
     m_last_net_code = std::max( m_last_net_code, aGraph.m_last_net_code );
     m_last_subgraph_code = std::max( m_last_subgraph_code, aGraph.m_last_subgraph_code );
 
-    // Net chains: committed chains and override maps belong to the persistent schematic
-    // state, so they must travel across an incremental graph merge.  Potential chains and
-    // the runtime KIID-pair name cache are recomputed by RebuildNetChains() but moving
-    // them here keeps the merged graph self-consistent until the next rebuild.
+    // Committed chains and override maps belong to the persistent schematic state, so they
+    // must travel across an incremental graph merge.  Potential chains are moved alongside
+    // them to keep the merged graph self-consistent until the next RebuildNetChains() pass.
     for( std::unique_ptr<SCH_NETCHAIN>& chain : aGraph.m_committedNetChains )
     {
         if( chain )
@@ -736,8 +735,7 @@ void CONNECTION_GRAPH::Merge( CONNECTION_GRAPH& aGraph )
 
     aGraph.m_potentialNetChains.clear();
 
-    for( auto& [key, value] : aGraph.m_netChains )
-        m_netChains.insert_or_assign( key, value );
+    m_netChainsBuilt = m_netChainsBuilt || aGraph.m_netChainsBuilt;
 
     for( auto& [key, value] : aGraph.m_netChainTerminalOverrides )
         m_netChainTerminalOverrides.insert_or_assign( key, value );
@@ -839,6 +837,7 @@ void CONNECTION_GRAPH::Reset()
     }
 
     m_potentialNetChains.clear();
+    m_netChainsBuilt = false;
 }
 
 
@@ -2900,6 +2899,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
     // Snapshot the committed-chain count so a throw partway through the restore loop can
     // truncate any half-built entries instead of leaving the container partially mutated.
     const size_t committedSnapshot = m_committedNetChains.size();
+    const bool   builtSnapshot = m_netChainsBuilt;
 
     try
     {
@@ -3588,6 +3588,9 @@ void CONNECTION_GRAPH::RebuildNetChains()
             }
         }
     }
+
+    // An empty chain list is a valid built state for chainless schematics.
+    m_netChainsBuilt = true;
     }
     catch( const std::exception& e )
     {
@@ -3600,6 +3603,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
         if( m_committedNetChains.size() > committedSnapshot )
             m_committedNetChains.resize( committedSnapshot );
 
+        m_netChainsBuilt = builtSnapshot;
         return;
     }
     catch( ... )
@@ -3612,6 +3616,7 @@ void CONNECTION_GRAPH::RebuildNetChains()
         if( m_committedNetChains.size() > committedSnapshot )
             m_committedNetChains.resize( committedSnapshot );
 
+        m_netChainsBuilt = builtSnapshot;
         return;
     }
 }
@@ -5945,25 +5950,4 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
     }
 
     return errors;
-}
-
-std::optional<wxString> CONNECTION_GRAPH::GetNetChainName( const KIID& aSource,
-                                                           const KIID& aTarget ) const
-{
-    auto it = m_netChains.find( std::make_pair( aSource, aTarget ) );
-
-    if( it == m_netChains.end() )
-        return std::nullopt;
-
-    return it->second;
-}
-
-void CONNECTION_GRAPH::AddNetChain( const KIID& aSource, const KIID& aTarget, const wxString& aName )
-{
-    m_netChains[ std::make_pair( aSource, aTarget ) ] = aName;
-}
-
-void CONNECTION_GRAPH::RemoveNetChain( const KIID& aSource, const KIID& aTarget )
-{
-    m_netChains.erase( std::make_pair( aSource, aTarget ) );
 }

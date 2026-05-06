@@ -116,11 +116,19 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     }
     else if( strcmp( idcmd, "$CLEAR" ) == 0 )
     {
-        if( renderSettings->IsHighlightEnabled() )
-        {
+        auto* pcbRender = dynamic_cast<KIGFX::PCB_RENDER_SETTINGS*>( renderSettings );
+
+        bool hadHighlight = renderSettings->IsHighlightEnabled();
+        bool hadChain = pcbRender && !pcbRender->GetHighlightedNetChain().IsEmpty();
+
+        if( hadHighlight )
             renderSettings->SetHighlight( false );
+
+        if( hadChain )
+            pcbRender->SetHighlightedNetChain( wxString() );
+
+        if( hadHighlight || hadChain )
             view->UpdateAllLayersColor();
-        }
 
         if( pcb->IsHighLightNetON() )
         {

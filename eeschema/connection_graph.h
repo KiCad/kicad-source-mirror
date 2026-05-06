@@ -27,7 +27,6 @@
 #include <utility>
 #include <vector>
 #include <map>
-#include <optional>
 
 #include <erc/erc_settings.h>
 #include <gal/color4d.h>
@@ -927,6 +926,9 @@ public:
     /** Return user-created (committed) net chains (legacy accessor retained under net-chain API). */
     const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetCommittedNetChains() const { return m_committedNetChains; }
 
+    /** Returns true once RebuildNetChains() has completed at least once on this graph. */
+    bool NetChainsBuilt() const { return m_netChainsBuilt; }
+
     /**
      * Delete a committed net chain by name.  Clears every net-chain override map
      * entry (netclass, colour, terminal refs, terminal pin overrides) and resets
@@ -944,12 +946,6 @@ public:
      * not exist, or another chain already uses the new name.
      */
     bool RenameCommittedNetChain( const wxString& aOld, const wxString& aNew );
-
-    // Net Chain link API (formerly KiLink) -------------------------------
-    std::optional<wxString> GetNetChainName( const KIID& aSource, const KIID& aTarget ) const;
-    void AddNetChain( const KIID& aSource, const KIID& aTarget, const wxString& aName );
-    void RemoveNetChain( const KIID& aSource, const KIID& aTarget );
-    const std::map<std::pair<KIID, KIID>, wxString>& GetNetChains() const { return m_netChains; }
 
 private:
     /**
@@ -1027,7 +1023,7 @@ private:
 
     std::vector<std::unique_ptr<SCH_NETCHAIN>> m_committedNetChains;
     std::vector<std::unique_ptr<SCH_NETCHAIN>> m_potentialNetChains; ///< last built potential (uncommitted) net chains
-    std::map<std::pair<KIID, KIID>, wxString> m_netChains;
+    bool                                       m_netChainsBuilt = false;
     std::map<wxString, std::pair<KIID, KIID>> m_netChainTerminalOverrides;
     std::map<wxString, wxString>              m_netChainNetClassOverrides;
     std::map<wxString, COLOR4D>               m_netChainColorOverrides;

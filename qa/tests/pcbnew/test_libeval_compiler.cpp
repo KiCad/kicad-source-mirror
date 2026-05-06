@@ -30,7 +30,9 @@
 #include <pcbnew/pcbexpr_evaluator.h>
 #include <drc/drc_rule.h>
 #include <pcbnew/board.h>
+#include <board_design_settings.h>
 #include <pcbnew/pcb_track.h>
+#include <project/net_settings.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
@@ -187,6 +189,53 @@ BOOST_AUTO_TEST_CASE( IntrospectedProperties )
     {
         testEvalExpr( expr.expression, expr.expectedResult, expr.expectError, &trackA, &trackB );
     }
+}
+
+BOOST_AUTO_TEST_CASE( InNetChainClassWildcard )
+{
+    PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+    propMgr.Rebuild();
+
+    BOARD brd;
+
+    std::shared_ptr<NET_SETTINGS> netSettings = brd.GetDesignSettings().m_NetSettings;
+    netSettings->SetNetChainClass( wxT( "ChainHS" ), wxT( "HighSpeed" ) );
+
+    auto netUnclassified = new NETINFO_ITEM( &brd, "netA", 1 );
+    auto netClassified   = new NETINFO_ITEM( &brd, "netB", 2 );
+    auto netNoChain      = new NETINFO_ITEM( &brd, "netC", 3 );
+
+    netUnclassified->SetNetChain( wxT( "ChainOrphan" ) );
+    netClassified->SetNetChain( wxT( "ChainHS" ) );
+
+    PCB_TRACK trackUnclassified( &brd );
+    PCB_TRACK trackClassified( &brd );
+    PCB_TRACK trackNoChain( &brd );
+
+    trackUnclassified.SetNet( netUnclassified );
+    trackClassified.SetNet( netClassified );
+    trackNoChain.SetNet( netNoChain );
+
+    // A chain with no class assignment must not match any inNetChainClass() pattern,
+    // including the '*' wildcard.
+    testEvalExpr( wxT( "A.inNetChainClass('*')" ), VAL( 0.0 ), false, &trackUnclassified,
+                  &trackUnclassified );
+    testEvalExpr( wxT( "A.inNetChainClass('HighSpeed')" ), VAL( 0.0 ), false, &trackUnclassified,
+                  &trackUnclassified );
+
+    // Net with no chain at all must not match either.
+    testEvalExpr( wxT( "A.inNetChainClass('*')" ), VAL( 0.0 ), false, &trackNoChain,
+                  &trackNoChain );
+
+    // Properly classified chain must match both wildcard and exact patterns.
+    testEvalExpr( wxT( "A.inNetChainClass('*')" ), VAL( 1.0 ), false, &trackClassified,
+                  &trackClassified );
+    testEvalExpr( wxT( "A.inNetChainClass('HighSpeed')" ), VAL( 1.0 ), false, &trackClassified,
+                  &trackClassified );
+    testEvalExpr( wxT( "A.inNetChainClass('High*')" ), VAL( 1.0 ), false, &trackClassified,
+                  &trackClassified );
+    testEvalExpr( wxT( "A.inNetChainClass('LowSpeed')" ), VAL( 0.0 ), false, &trackClassified,
+                  &trackClassified );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
