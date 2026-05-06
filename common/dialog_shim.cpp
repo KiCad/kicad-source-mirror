@@ -287,6 +287,15 @@ DIALOG_SHIM::~DIALOG_SHIM()
 
 void DIALOG_SHIM::onInitDialog( wxInitDialogEvent& aEvent )
 {
+#ifdef __WXMAC__
+    CallAfter(
+            [this]
+            {
+                if( wxSizer* sz = GetSizer() )
+                    sz->Layout();
+            } );
+#endif
+
     LoadControlState();
     aEvent.Skip();
 }
