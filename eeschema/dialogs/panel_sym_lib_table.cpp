@@ -280,6 +280,16 @@ void PANEL_SYM_LIB_TABLE::AddTable( LIBRARY_TABLE* table, const wxString& aTitle
 
     static_cast<LIB_TABLE_GRID_DATA_MODEL*>( grid->GetTable() )->RecheckRows();
 
+    LIB_TABLE_NOTEBOOK_PANEL* notebookPanel =
+            static_cast<LIB_TABLE_NOTEBOOK_PANEL*>( m_notebook->GetPage( m_notebook->GetPageCount() - 1 ) );
+
+    static_cast<LIB_TABLE_GRID_DATA_MODEL*>( grid->GetTable() )
+            ->SetChangeCallback(
+                    [notebookPanel]()
+                    {
+                        notebookPanel->MarkDirty();
+                    } );
+
     // add Cut, Copy, and Paste to wxGrids
     grid->PushEventHandler( new SYMBOL_GRID_TRICKS( this, grid,
             [this]( wxCommandEvent& event )
@@ -704,6 +714,12 @@ void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
     grid->SetTable( new SYMBOL_LIB_TABLE_GRID_DATA_MODEL( m_parent, grid, *newTable.value(), adapter, m_pluginChoices,
                                                           lastGlobalLibDir, wxEmptyString ),
                     true /* take ownership */ );
+
+    LIB_TABLE_NOTEBOOK_PANEL* panel0 =
+            static_cast<LIB_TABLE_NOTEBOOK_PANEL*>( m_notebook->GetPage( 0 ) );
+    panel0->ClearDirty();
+    static_cast<LIB_TABLE_GRID_DATA_MODEL*>( grid->GetTable() )->SetChangeCallback(
+            [panel0]() { panel0->MarkDirty(); } );
 
     m_parent->m_GlobalTableChanged = true;
 

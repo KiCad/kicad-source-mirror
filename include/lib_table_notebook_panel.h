@@ -63,8 +63,13 @@ public:
     bool TableModified();
     bool SaveTable();
 
+    void MarkDirty();
+    void ClearDirty();
+
     static void AddTable( wxAuiNotebook* aNotebook, const wxString& aTitle, bool aClosable );
 
 private:
     void onGridCellChanging( wxGridEvent& aEvent );
+
+    wxString m_baseTitle;
 };

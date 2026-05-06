@@ -265,6 +265,16 @@ void PANEL_FP_LIB_TABLE::AddTable( LIBRARY_TABLE* aTable, const wxString& aTitle
 
     static_cast<LIB_TABLE_GRID_DATA_MODEL*>( grid->GetTable() )->RecheckRows();
 
+    LIB_TABLE_NOTEBOOK_PANEL* notebookPanel =
+            static_cast<LIB_TABLE_NOTEBOOK_PANEL*>( m_notebook->GetPage( m_notebook->GetPageCount() - 1 ) );
+
+    static_cast<LIB_TABLE_GRID_DATA_MODEL*>( grid->GetTable() )
+            ->SetChangeCallback(
+                    [notebookPanel]()
+                    {
+                        notebookPanel->MarkDirty();
+                    } );
+
     // add Cut, Copy, and Paste to wxGrids
     grid->PushEventHandler( new FP_GRID_TRICKS( this, grid,
             [this]( wxCommandEvent& event )
