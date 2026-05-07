@@ -28,8 +28,12 @@
 #include <memory>
 #include <set>
 #include <magic_enum.hpp>
+#include <type_traits>
+#include <unordered_set>
 
 #include <api/api_enums.h>
+#include <eda_group.h>
+#include <eda_item.h>
 #include <qa_utils/wx_utils/wx_assert.h>
 
 /**
@@ -120,6 +124,13 @@ void testProtoFromKiCadObject( KiCadClass* aInput, Factory&& aCreateOutput )
 {
     BOOST_TEST_CONTEXT( aInput->GetFriendlyName() << ": " << aInput->m_Uuid.AsStdString() )
     {
+        constexpr bool isGroup = std::is_base_of_v<EDA_GROUP, std::decay_t<KiCadClass>>;
+
+        std::unordered_set<EDA_ITEM*> cachedItems;
+
+        if constexpr( isGroup )
+            cachedItems = aInput->GetItems();
+
         google::protobuf::Any any;
         BOOST_REQUIRE_NO_THROW( aInput->Serialize( any ) );
 
@@ -143,8 +154,19 @@ void testProtoFromKiCadObject( KiCadClass* aInput, Factory&& aCreateOutput )
             BOOST_TEST_FAIL( "Round-tripped protobuf does not match" );
         }
 
-        if( !output->operator==( *aInput ) )
+        if constexpr( isGroup )
+        {
+            if( output->GetItems() != cachedItems )
+                BOOST_TEST_FAIL( "Round-tripped group does not match" );
+
+            // Restore cached items into original group
+            for( EDA_ITEM* item : cachedItems )
+                aInput->AddItem( item );
+        }
+        else if( !output->operator==( *aInput ) )
+        {
             BOOST_TEST_FAIL( "Round-tripped object does not match" );
+        }
     }
 }
 

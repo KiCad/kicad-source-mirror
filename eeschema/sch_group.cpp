@@ -108,7 +108,7 @@ bool SCH_GROUP::DeserializeGroup( const google::protobuf::Any& aContainer, COMMI
             item = aCommit->ResolveItem( id );
 
         if( item )
-            m_items.insert( item );
+            AddItem( item );
     }
 
     return true;
