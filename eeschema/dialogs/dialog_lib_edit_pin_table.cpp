@@ -1154,6 +1154,16 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     m_refreshButton->SetBitmap( KiBitmapBundle( BITMAPS::small_refresh ) );
     m_bMenu->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
 
+    const int summaryW = m_pin_numbers_summary->GetCharWidth() * 30;
+
+    m_pin_numbers_summary->SetWindowStyleFlag( m_pin_numbers_summary->GetWindowStyleFlag() | wxST_ELLIPSIZE_END );
+    m_pin_numbers_summary->SetMinSize( wxSize( summaryW, -1 ) );
+    m_pin_numbers_summary->SetMaxSize( wxSize( summaryW, -1 ) );
+
+    m_duplicate_pins->SetWindowStyleFlag( m_duplicate_pins->GetWindowStyleFlag() | wxST_ELLIPSIZE_END );
+    m_duplicate_pins->SetMinSize( wxSize( summaryW, -1 ) );
+    m_duplicate_pins->SetMaxSize( wxSize( summaryW, -1 ) );
+
     GetSizer()->SetSizeHints(this);
     Centre();
 
@@ -1613,6 +1623,11 @@ void DIALOG_LIB_EDIT_PIN_TABLE::adjustGridColumns()
     // no less wide than their original widths.
     m_grid->AutoSizeColumn( COL_NUMBER );
 
+    const int colNumberMax = std::max( m_originalColWidths[COL_NUMBER] * 4, 400 );
+
+    if( m_grid->GetColSize( COL_NUMBER ) > colNumberMax )
+        m_grid->SetColSize( COL_NUMBER, colNumberMax );
+
     if( m_grid->GetColSize( COL_NUMBER ) < m_originalColWidths[ COL_NUMBER ] )
         m_grid->SetColSize( COL_NUMBER, m_originalColWidths[ COL_NUMBER ] );
 
@@ -1731,9 +1746,14 @@ void DIALOG_LIB_EDIT_PIN_TABLE::updateSummary()
             pinNumbers.insert( pin->GetNumber() );
     }
 
-    m_pin_numbers_summary->SetLabel( pinNumbers.GetSummary() );
+    const wxString summary = pinNumbers.GetSummary();
+    const wxString duplicates = pinNumbers.GetDuplicates();
+
+    m_pin_numbers_summary->SetLabel( summary );
+    m_pin_numbers_summary->SetToolTip( summary );
     m_pin_count->SetLabel( wxString::Format( wxT( "%u" ), (unsigned) m_pins.size() ) );
-    m_duplicate_pins->SetLabel( pinNumbers.GetDuplicates() );
+    m_duplicate_pins->SetLabel( duplicates );
+    m_duplicate_pins->SetToolTip( duplicates );
 
     Layout();
 }
