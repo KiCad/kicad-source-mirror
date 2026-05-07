@@ -216,6 +216,10 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
     m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
 
+    // The active notebook page is dictated by the tool that opens this dialog
+    // (EditSymbolFields vs GenerateBOM), so suppress DIALOG_SHIM's tab persistence.
+    OptOut( m_nbPages );
+
     m_viewControlsDataModel = new VIEW_CONTROLS_GRID_DATA_MODEL( true );
 
     m_viewControlsGrid->UseNativeColHeader( true );
