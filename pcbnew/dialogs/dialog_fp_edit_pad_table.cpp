@@ -817,15 +817,10 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged( wxGridEvent& aEvent )
         break;
 
     case COL_P2D_DELAY:
-    {
-        wxString d = m_grid->GetCellValue( row, col );
-        long val;
-
-        if( d.ToLong( &val ) )
-            target->SetPadToDieDelay( (int) val );
+        if( !m_grid->GetCellValue( row, col ).IsEmpty() )
+            target->SetPadToDieDelay( m_grid->GetUnitValue( row, col ) );
 
         break;
-    }
 
     default:
         break;
