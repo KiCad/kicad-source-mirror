@@ -1,6 +1,8 @@
 #pragma once
 
 #include "dialog_shim.h"
+#include "string_utils.h"
+
 #include <memory>
 #include <vector>
 #include <pad.h>
@@ -49,6 +51,8 @@ private:
     void updateSummary();
     void setRowNullableEditors( int aRowId ) const;
 
+    PAD* getPadForRow( int aRowId ) const;
+
 private:
     PCB_BASE_FRAME*     m_frame;
 
@@ -58,24 +62,54 @@ private:
 
     struct PAD_SNAPSHOT
     {
-        PAD_SNAPSHOT( PAD* aPad ) :
-                padstack( aPad ),
-                attribute( PAD_ATTRIB::PTH ),
-                padToDieLength( 0 ),
-                padToDieDelay( 0 )
-        {}
+        explicit PAD_SNAPSHOT( PAD* aPad ) :
+                padstack( aPad )
+        {
+        }
 
         wxString   number;
-        PAD_SHAPE  shape;
+        PAD_SHAPE  shape{ PAD_SHAPE::CHAMFERED_RECT };
         PADSTACK   padstack;
         VECTOR2I   position;
         VECTOR2I   size;
-        PAD_ATTRIB attribute;
-        int        padToDieLength;
-        int        padToDieDelay;
+        PAD_ATTRIB attribute{ PAD_ATTRIB::PTH };
+        int        padToDieLength{ 0 };
+        int        padToDieDelay{ 0 };
     };
 
-    std::vector<PAD_SNAPSHOT> m_originalPads; // original pad data for cancel rollback
+    // Comparison function to order the pads in the map
+    struct PAD_SNAPSHOT_COMPARE
+    {
+        bool operator()( const PAD* a, const PAD* b ) const
+        {
+            const int cmpVal = StrNumCmp( a->GetNumber(), b->GetNumber() );
+
+            // First sort by alphanumeric ordering
+            if( cmpVal < 0 )
+                return true;
+
+            if( cmpVal > 0 )
+                return false;
+
+            // Sort by x and then y
+            if( a->GetCenter().x < b->GetCenter().x )
+                return true;
+
+            if( a->GetCenter().x > b->GetCenter().x )
+                return false;
+
+            if( a->GetCenter().y < b->GetCenter().y )
+                return true;
+
+            if( a->GetCenter().y > b->GetCenter().y )
+                return false;
+
+            // For degenerate pads, sort by raw pointer value
+            return a < b;
+        }
+    };
+
+    std::map<PAD*, PAD_SNAPSHOT, PAD_SNAPSHOT_COMPARE> m_originalPads;      // original pad data for cancel rollback
     bool                      m_cancelled = false; // set if user hit cancel
 
     wxStaticText*                     m_staticTextPinNumbers;
