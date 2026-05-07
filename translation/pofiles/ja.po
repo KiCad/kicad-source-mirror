@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-03 21:10+0000\n"
+"PO-Revision-Date: 2026-05-07 23:06+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -8482,11 +8482,11 @@ msgstr "単一ガーバーのエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:37
 msgid "Export Gerbers"
-msgstr "ガーバーとしてエクスポート"
+msgstr "ガーバー としてエクスポート"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
 msgid "Export Gerbers Job Settings"
-msgstr "ガーバーのエクスポートジョブ設定"
+msgstr "ガーバー としてエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
@@ -9398,9 +9398,8 @@ msgid "The library table path '%s' does not exist"
 msgstr "ライブラリ テーブル パス '%s' が存在しません"
 
 #: common/libraries/library_table.cpp:94
-#, fuzzy
 msgid "The library table is of wrong type"
-msgstr "ライブラリ テーブル パス '%s' が存在しません"
+msgstr "ライブラリ テーブルのタイプが間違っています"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -9477,6 +9476,8 @@ msgstr ""
 msgid ""
 "Files removed by 'Proceed' are archived to %s and can be recovered manually."
 msgstr ""
+"'続行'によって削除したファイルは %s にアーカイブされ、そして手動で復元できま"
+"す。"
 
 #: common/local_history.cpp:2455
 msgid "Cannot restore - the following files are open by another user:"
@@ -18822,9 +18823,8 @@ msgid "Symbol Library Tables"
 msgstr "シンボル ライブラリ テーブル"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:201
-#, fuzzy
 msgid "Unable to load library table."
-msgstr "ライブラリを読み込めません\n"
+msgstr "ライブラリ テーブルを読み込めません。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:417
 msgid "folder with .kicad_sym files"
@@ -26403,9 +26403,8 @@ msgid "Save selected group to linked design block"
 msgstr "選択したグループをリンクされたデザインブロックに保存"
 
 #: eeschema/tools/sch_actions.cpp:520
-#, fuzzy
 msgid "Place/Remove No Connect Flags"
-msgstr "空き端子フラグを配置"
+msgstr "未接続フラグを配置/削除"
 
 #: eeschema/tools/sch_actions.cpp:531
 msgid "Place Junctions"
@@ -27595,7 +27594,7 @@ msgstr "グラフィックをインポート"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1580
 msgid "Add No Connect Flag"
-msgstr "空き端子フラグを追加"
+msgstr "未接続フラグを追加"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1587
 msgid "Add Junction"
@@ -27606,9 +27605,8 @@ msgid "Add Wire to Bus Entry"
 msgstr "ワイヤー-バス エントリーを追加"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1672
-#, fuzzy
 msgid "Remove No Connect Flag"
-msgstr "空き端子フラグを追加"
+msgstr "未接続フラグを削除"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1681
 msgid "Junction location contains no joinable wires and/or pins."
@@ -30143,13 +30141,12 @@ msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr "バージョンに関係なくフットプリント ライブラリを強制的に再保存します"
 
 #: kicad/cli/command_gerber.h:33
-#, fuzzy
 msgid ""
 "View and compare existing Gerber/Excellon files. To export Gerbers from a "
 "PCB, use 'pcb export gerbers'"
 msgstr ""
-"既存のガーバー/Excellon ファイルを表示および比較します。ガーバーをエクスポー"
-"トするには、'ガーバー としてエクスポート' を使用します"
+"既存のガーバー/Excellon ファイルを表示および比較します。ガーバーを"
+"エクスポートするには、'PCB: ガーバー としてエクスポート' を使用します"
 
 #: kicad/cli/command_gerber_convert.h:33
 msgid "Convert Gerber/Excellon to other formats"
@@ -46789,13 +46786,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -46846,8 +46843,8 @@ msgstr ""
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil)))\n"
 "\n"
-"    # GNDとPWRのゾーンに対してサーマルリリーフギャップとスポーク幅をオーバラ"
-"イドする\n"
+"    # GNDとPWRのゾーンに対してサーマルリリーフギャップとスポーク幅を"
+"オーバライドする\n"
 "    (rule defined_relief_pwr\n"
 "        (constraint thermal_relief_gap (min 10mil))\n"
 "        (constraint thermal_spoke_width (min 12mil))\n"
@@ -46903,8 +46900,8 @@ msgstr ""
 "\n"
 "    # ブラインド ビアからマイクロビアへの穴間違反を、次の条件が満たされている"
 "場合に許可する\n"
-"    # 製造工場で、マイクロビアをレーザーで穴あけする前に、ブラインド ビアホー"
-"ルを機械的に穴あけ\n"
+"    # 製造工場で、マイクロビアをレーザーで穴あけする前に、ブラインド "
+"ビアホールを機械的に穴あけ\n"
 "    # する場合\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
 "        (condition \"A.Via_Type == 'Blind' && B.Via_Type == 'Micro'\")\n"
