@@ -147,13 +147,58 @@ void PADS_SDB::locateOrigin()
 {
     const SDB_SECTION* setup = Section( 1 );
 
-    if( !setup || setup->totalBytes < 68 || setup->End() > m_data.size() )
+    if( !setup || setup->totalBytes < 100 || setup->End() > m_data.size() )
         return;
 
-    // The per-axis origin is the i32 pair at section-1 offset +60/+64.
-    m_coords.m_originX = m_cursor.I32At( setup->dataOffset + 60 );
-    m_coords.m_originY = m_cursor.I32At( setup->dataOffset + 64 );
-    m_coords.m_found = true;
+    // Section 1 is the serialized *PCB* board-setup parameter block, but its start can be
+    // shifted from the directory-declared dataOffset by anywhere from -16 to +1116 bytes
+    // (observed across the QA corpus) -- v0x2022/v0x2024 read 16 bytes short (a discrepancy
+    // localized to this one section, not a directory-wide entry-count error: every OTHER
+    // section, including placements, aligns correctly at the directory-declared offset), and
+    // PADS can also prepend a variable-length run of 48-byte view-state records ahead of the
+    // block. Rather than guess the shift, locate the block itself by the field-range signature
+    // below (SCALE/BACKUPTIME/REAL WIDTH/ALLSIGONOFF/REFNAMESIZE, mirroring the *PCB* section's
+    // own ASCII-export field order), then read the origin at its fixed +60/+64. Verified unique
+    // (exactly one match) and correct against ground truth across all 66 QA corpus files,
+    // spanning every displacement value observed.
+    constexpr uint32_t BACKWARD_MARGIN = 64;
+    uint32_t           searchStart = setup->dataOffset > BACKWARD_MARGIN
+                                              ? setup->dataOffset - BACKWARD_MARGIN
+                                              : 0;
+
+    for( uint32_t base = searchStart; base + 100 <= setup->End(); ++base )
+    {
+        float scale = m_cursor.F32At( base + 56 );
+
+        if( !( scale > 0.01f && scale < 1e6f ) )
+            continue;
+
+        int32_t backupTime = m_cursor.I32At( base + 76 );
+
+        if( backupTime < 0 || backupTime > 100000 )
+            continue;
+
+        int32_t realWidth = m_cursor.I32At( base + 80 );
+
+        if( realWidth <= 50 || realWidth >= 100000000 )
+            continue;
+
+        int32_t allSigOnOff = m_cursor.I32At( base + 84 );
+
+        if( allSigOnOff != 0 && allSigOnOff != 1 )
+            continue;
+
+        int32_t refHeight = m_cursor.I32At( base + 92 );
+        int32_t refWidth = m_cursor.I32At( base + 96 );
+
+        if( !( refWidth > 100000 && refWidth <= refHeight && refHeight < 100000000 ) )
+            continue;
+
+        m_coords.m_originX = m_cursor.I32At( base + 60 );
+        m_coords.m_originY = m_cursor.I32At( base + 64 );
+        m_coords.m_found = true;
+        return;
+    }
 }
 
 } // namespace PADS_IO

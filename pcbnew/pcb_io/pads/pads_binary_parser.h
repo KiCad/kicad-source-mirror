@@ -245,19 +245,9 @@ private:
     // the scored new-format locator does not resolve the v2021 decal-index lag.
     void recoverOmittedPlacementsOld();
 
-    // v0x2022 placements are relative to a different section-1 origin field than every other
-    // geometry type in the file (aAltOriginXOff/YOff, when set); returns the (x, y) shift to
-    // add to a raw placement coordinate so the shared origin subtraction downstream still lands
-    // on the correct design coordinate. Zero when either offset is unset (every other version).
-    std::pair<int32_t, int32_t> placementOriginAdjust( std::optional<int> aAltOriginXOff,
-                                                        std::optional<int> aAltOriginYOff ) const;
-
     // Build a PART from a placement record's refdes and its coordinate, rotation and side fields.
-    // aXAdjust/aYAdjust shift the raw coordinate before the shared origin subtraction downstream;
-    // only v0x2022 uses a nonzero value, to compensate for its placement-specific origin field.
     PART makePlacementPart( const SDB_RECORD& aRec, int aXOff, std::optional<int> aYOff,
-                            int aAngleOff, int aNameOff, const std::string& aRefDes,
-                            int32_t aXAdjust = 0, int32_t aYAdjust = 0 ) const;
+                            int aAngleOff, int aNameOff, const std::string& aRefDes ) const;
     void parsePadStacks();
     void parsePartDecals();
     void parseDecalNameTable();

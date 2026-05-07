@@ -70,11 +70,6 @@ struct PLACEMENT_LAYOUT
     // lag). New-format dialects use it; both old dialects resolve decals directly via
     // directDecalOff instead.
     bool               parttypeIndexNextRecord = false;
-
-    // v0x2022 only: X/Y are relative to a DIFFERENT section-1 origin than every other
-    // geometry type in the file (section-1 +44/+48, not the usual +60/+64). Set together.
-    std::optional<int> altOriginXOff = std::nullopt;
-    std::optional<int> altOriginYOff = std::nullopt;
 };
 
 
@@ -85,16 +80,16 @@ static const PLACEMENT_LAYOUT& placementLayout( uint16_t aVersion )
     static constexpr PLACEMENT_LAYOUT v2021{ .nameOff = 76, .xOff = 92, .yOff = 96, .angleOff = 100,
                                              .feffOff = 28, .scanStride = 96, .directDecalOff = 56 };
     // v0x2022 uses a DIFFERENT anchor (+60) despite sharing v0x2021's 96 B stride, with X/Y/angle
-    // at +76/+80/+84 -- and critically, those coordinates are relative to section-1 +44/+48, not
-    // the +60/+64 origin every other v0x2022 geometry type uses. Verified against 2FOC_4.pcb
-    // ground truth (J13/J4/J5 zero-rotation parts, U19/U20/U21 at 270/270/90 degrees) -- all six
-    // match exactly with this layout and origin. Like v0x2021, the decal-name-table index is
-    // direct (not via the parttype-index chain), but at the next record's +40 rather than +56;
-    // verified against 337 of 2FOC_4.pcb's 340 placements (the rest resolve to a plausible
-    // sibling decal, e.g. FIDUCIAL/FIDTOP, so are ground-truth parsing noise, not real misses).
+    // at +76/+80/+84. Verified against 2FOC_4.pcb ground truth (J13/J4/J5 zero-rotation parts,
+    // U19/U20/U21 at 270/270/90 degrees) -- all six match exactly with this layout under the
+    // shared origin (PADS_SDB::locateOrigin -- v0x2022's directory entry count and origin field
+    // were both wrong before that fix, which looked like a placement-specific alt origin until
+    // the root cause was found). Like v0x2021, the decal-name-table index is direct (not via the
+    // parttype-index chain), but at the next record's +40 rather than +56; verified against 337
+    // of 2FOC_4.pcb's 340 placements (the rest resolve to a plausible sibling decal, e.g.
+    // FIDUCIAL/FIDTOP, so are ground-truth parsing noise, not real misses).
     static constexpr PLACEMENT_LAYOUT v2022{ .nameOff = 60, .xOff = 76, .yOff = 80, .angleOff = 84,
-                                             .feffOff = 28, .scanStride = 96, .directDecalOff = 40,
-                                             .altOriginXOff = 44, .altOriginYOff = 48 };
+                                             .feffOff = 28, .scanStride = 96, .directDecalOff = 40 };
     static constexpr PLACEMENT_LAYOUT vNew{ .nameOff = 44, .xOff = 60, .yOff = 64, .angleOff = 68,
                                             .feffOff = 92, .scanStride = 94,
                                             .parttypeIndexNextRecord = true };
@@ -320,32 +315,13 @@ void BINARY_PARSER::parseBoardSetup()
 }
 
 
-std::pair<int32_t, int32_t> BINARY_PARSER::placementOriginAdjust( std::optional<int> aAltOriginXOff,
-                                                                   std::optional<int> aAltOriginYOff ) const
-{
-    if( !aAltOriginXOff || !aAltOriginYOff )
-        return { 0, 0 };
-
-    const SDB_SECTION* setup = getSection( SECTION::BoardSetup );
-
-    if( !setup || !m_cursor.InBounds( setup->dataOffset + *aAltOriginYOff, 4 ) )
-        return { 0, 0 };
-
-    int32_t altOriginX = m_sdb.RecordAt( setup->dataOffset ).I32( *aAltOriginXOff );
-    int32_t altOriginY = m_sdb.RecordAt( setup->dataOffset ).I32( *aAltOriginYOff );
-
-    return { m_originX - altOriginX, m_originY - altOriginY };
-}
-
-
 PART BINARY_PARSER::makePlacementPart( const SDB_RECORD& aRec, int aXOff, std::optional<int> aYOff,
-                                      int aAngleOff, int aNameOff, const std::string& aRefDes,
-                                      int32_t aXAdjust, int32_t aYAdjust ) const
+                                      int aAngleOff, int aNameOff, const std::string& aRefDes ) const
 {
     PART part;
     part.name = aRefDes;
-    part.location.x = toBasicCoordX( aRec.I32( aXOff ) + aXAdjust );
-    part.location.y = aYOff ? toBasicCoordY( aRec.I32( *aYOff ) + aYAdjust ) : 0;
+    part.location.x = toBasicCoordX( aRec.I32( aXOff ) );
+    part.location.y = aYOff ? toBasicCoordY( aRec.I32( *aYOff ) ) : 0;
     part.rotation = toBasicAngle( aRec.I32( aAngleOff ) );
 
     // The side flag is the word at nameOff+28 in both dialects; bit 0 marks a bottom placement.
@@ -372,8 +348,6 @@ void BINARY_PARSER::parsePartPlacements()
     // The old framing reads the side flag at nameOff+28, past its 96 B stride.
     size_t fieldSpan = std::max<size_t>( recSize, static_cast<size_t>( layout.nameOff ) + 29 );
 
-    const auto [xAdjust, yAdjust] = placementOriginAdjust( layout.altOriginXOff, layout.altOriginYOff );
-
     for( uint32_t i = 0; i < entry->count; ++i )
     {
         size_t off = static_cast<size_t>( i ) * recSize;
@@ -390,7 +364,7 @@ void BINARY_PARSER::parsePartPlacements()
             continue;
 
         PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
-                                       layout.nameOff, refDes, xAdjust, yAdjust );
+                                       layout.nameOff, refDes );
 
         // The parttype index lives in the NEXT physical record's @+4 field (a +1 block-
         // interleave lag); linkPartsToDecals resolves it to the decal name.
@@ -452,7 +426,7 @@ void BINARY_PARSER::parsePartPlacements()
                 break;
 
             PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
-                                           layout.nameOff, refDes, xAdjust, yAdjust );
+                                           layout.nameOff, refDes );
 
             size_t nextBase = candidateBase + recSize;
 
@@ -678,8 +652,6 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
     int    recSize = layout.scanStride;
     size_t fieldSpan = std::max<size_t>( recSize, static_cast<size_t>( layout.nameOff ) + 29 );
 
-    const auto [xAdjust, yAdjust] = placementOriginAdjust( layout.altOriginXOff, layout.altOriginYOff );
-
     std::unordered_set<std::string> existingRefs;
 
     for( const auto& p : m_parts )
@@ -735,8 +707,7 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
                         && !existingRefs.count( leadRef ) )
                     {
                         PART lead = makePlacementPart( leadRec, layout.xOff, layout.yOff,
-                                                       layout.angleOff, layout.nameOff, leadRef,
-                                                       xAdjust, yAdjust );
+                                                       layout.angleOff, layout.nameOff, leadRef );
 
                         size_t leadField = base + static_cast<size_t>( *layout.directDecalOff );
 
@@ -755,7 +726,7 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
             SDB_RECORD partRec = m_sdb.RecordAt( base );
 
             PART part = makePlacementPart( partRec, layout.xOff, layout.yOff, layout.angleOff,
-                                           layout.nameOff, refDes, xAdjust, yAdjust );
+                                           layout.nameOff, refDes );
 
             // The decal index is in the NEXT 96 B block's @+directDecalOff. Gate on that block's
             // own 0xFEFF marker so trailing section data cannot supply a bogus index.

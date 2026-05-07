@@ -95,6 +95,16 @@ inline double getF64LE( const std::vector<uint8_t>& aData, size_t aOffset )
 }
 
 
+inline float getF32LE( const std::vector<uint8_t>& aData, size_t aOffset )
+{
+    uint32_t bits = getU32LE( aData, aOffset );
+    float    value = 0;
+    std::memcpy( &value, &bits, sizeof( value ) );
+
+    return value;
+}
+
+
 /// Returned by findSignature when the signature does not occur.
 constexpr size_t SIGNATURE_NOT_FOUND = static_cast<size_t>( -1 );
 
@@ -312,6 +322,12 @@ public:
     {
         check( aOffset, 8 );
         return getF64LE( m_data, aOffset );
+    }
+
+    float F32At( size_t aOffset ) const
+    {
+        check( aOffset, 4 );
+        return getF32LE( m_data, aOffset );
     }
 
     // Unlike the numeric accessors this does not throw out of range; aMaxLen is
