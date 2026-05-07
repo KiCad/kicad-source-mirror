@@ -909,7 +909,15 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnUpdateUI( wxUpdateUIEvent& aEvent )
             }
 
             if( target )
-                target->SetNumber( m_grid->GetCellEditor( row, col )->GetValue() );
+            {
+                wxGridCellEditor* editor = m_grid->GetCellEditor( row, col );
+
+                if( editor )
+                {
+                    target->SetNumber( editor->GetValue() );
+                    editor->DecRef();
+                }
+            }
         }
 
         updateSummary();
