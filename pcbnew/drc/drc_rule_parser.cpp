@@ -620,7 +620,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     }
     else if( c.m_Type == NET_CHAIN_RETURN_PATH_CONSTRAINT )
     {
-        // (constraint return_path (layer "B.Cu"))
+        // (constraint return_path (layer "B.Cu") (net "GND"))
         for( token = NextTok(); token != T_RIGHT; token = NextTok() )
         {
             if( token == T_LEFT )
@@ -631,6 +631,12 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             case T_layer:
                 NeedSYMBOLorNUMBER();
                 c.m_ReferenceLayer = FromUTF8();
+                NeedRIGHT();
+                break;
+
+            case T_net:
+                NeedSYMBOLorNUMBER();
+                c.m_ReferenceNet = FromUTF8();
                 NeedRIGHT();
                 break;
 

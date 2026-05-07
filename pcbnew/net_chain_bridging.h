@@ -128,6 +128,10 @@ inline double BoardChainBridgingLength( const BOARD* aBoard, const wxString& aNe
  * time-domain DRC verdict and the tuner's per-net budget agree on bridging delay.  The
  * returned tuple is (lengthIU, delayIU).
  */
+// Forward declaration; defined below.
+inline double ChainBridgingDelayPerMm( const BOARD* aBoard, const wxString& aNetChain );
+
+
 inline std::tuple<double, double> BoardChainBridging( const BOARD* aBoard, const wxString& aNetChain )
 {
     if( !aBoard || aNetChain.IsEmpty() )
@@ -138,31 +142,8 @@ inline std::tuple<double, double> BoardChainBridging( const BOARD* aBoard, const
     if( lengthIU <= 0.0 )
         return { 0.0, 0.0 };
 
-    double delayIUPerMm = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * pcbIUScale.IU_PER_PS;
-
-    for( const PCB_TRACK* track : aBoard->Tracks() )
-    {
-        const NETINFO_ITEM* ninfo = track->GetNet();
-
-        if( !ninfo || ninfo->GetNetChain() != aNetChain )
-            continue;
-
-        double tLen = 0.0;
-        double padDieLen = 0.0;
-        double tDelay = 0.0;
-        double padDieDelay = 0.0;
-
-        std::tie( std::ignore, tLen, padDieLen, tDelay, padDieDelay ) =
-                aBoard->GetTrackLength( *track );
-
-        if( tLen > 0.0 && tDelay > 0.0 )
-        {
-            delayIUPerMm = tDelay / ( tLen / pcbIUScale.IU_PER_MM );
-            break;
-        }
-    }
-
-    double delayIU = delayIUPerMm * lengthIU / pcbIUScale.IU_PER_MM;
+    double delayIU = ChainBridgingDelayPerMm( aBoard, aNetChain ) * lengthIU
+                     / pcbIUScale.IU_PER_MM;
 
     return { lengthIU, delayIU };
 }
@@ -180,6 +161,116 @@ inline int SubtractBridgingClamped( int aValue, long long aDelta )
     return static_cast<int>( std::clamp( adjusted,
                                          0LL,
                                          static_cast<long long>( std::numeric_limits<int>::max() ) ) );
+}
+
+
+/**
+ * One series-component bridge edge inside a chain graph.
+ *
+ * EnumerateChainBridges returns one CHAIN_BRIDGE per qualifying pad pair on a footprint
+ * (rather than collapsing to the maximum span the way FootprintChainBridgingLength does).
+ * The CHAIN_TOPOLOGY graph builder consumes these as edges so it can route the trunk path
+ * through every series passive in the chain.
+ */
+struct CHAIN_BRIDGE
+{
+    PAD*   padA;
+    PAD*   padB;
+    double length;
+    double delay;
+};
+
+
+/**
+ * Pick a single per-IU-per-mm delay for a given chain.  Walks the chain's tracks until it
+ * finds one with a measurable per-mm propagation delay; falls back to the default constant
+ * if none.  Shared between the aggregate and per-edge bridge helpers so they always
+ * apply the same scaling.
+ */
+inline double ChainBridgingDelayPerMm( const BOARD* aBoard, const wxString& aNetChain )
+{
+    double delayIUPerMm = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * pcbIUScale.IU_PER_PS;
+
+    if( !aBoard || aNetChain.IsEmpty() )
+        return delayIUPerMm;
+
+    for( const PCB_TRACK* track : aBoard->Tracks() )
+    {
+        const NETINFO_ITEM* ninfo = track->GetNet();
+
+        if( !ninfo || ninfo->GetNetChain() != aNetChain )
+            continue;
+
+        double tLen = 0.0;
+        double tDelay = 0.0;
+
+        std::tie( std::ignore, tLen, std::ignore, tDelay, std::ignore ) =
+                aBoard->GetTrackLength( *track );
+
+        if( tLen > 0.0 && tDelay > 0.0 )
+        {
+            delayIUPerMm = tDelay / ( tLen / pcbIUScale.IU_PER_MM );
+            break;
+        }
+    }
+
+    return delayIUPerMm;
+}
+
+
+/**
+ * Enumerate every per-pad-pair bridge edge contributed by every footprint on the board to
+ * the named chain.  Unlike FootprintChainBridgingLength (which returns a single max-span
+ * scalar per footprint), this returns one edge per qualifying cross-net pad pair, which is
+ * what the CHAIN_TOPOLOGY graph builder needs to compute trunk paths through series
+ * passives.
+ */
+inline std::vector<CHAIN_BRIDGE>
+EnumerateChainBridges( const BOARD* aBoard, const wxString& aNetChain )
+{
+    std::vector<CHAIN_BRIDGE> bridges;
+
+    if( !aBoard || aNetChain.IsEmpty() )
+        return bridges;
+
+    const double delayIUPerMm = ChainBridgingDelayPerMm( aBoard, aNetChain );
+
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        if( !fp )
+            continue;
+
+        std::vector<PAD*> chainPads;
+
+        for( PAD* pad : fp->Pads() )
+        {
+            const NETINFO_ITEM* pn = pad->GetNet();
+
+            if( pn && pn->GetNetChain() == aNetChain )
+                chainPads.push_back( pad );
+        }
+
+        if( chainPads.size() < 2 )
+            continue;
+
+        for( size_t i = 0; i < chainPads.size(); ++i )
+        {
+            for( size_t j = i + 1; j < chainPads.size(); ++j )
+            {
+                if( chainPads[i]->GetNetCode() == chainPads[j]->GetNetCode() )
+                    continue;
+
+                VECTOR2D delta = VECTOR2D( chainPads[i]->GetCenter() )
+                               - VECTOR2D( chainPads[j]->GetCenter() );
+                double   length = delta.EuclideanNorm();
+                double   delay = delayIUPerMm * length / pcbIUScale.IU_PER_MM;
+
+                bridges.push_back( CHAIN_BRIDGE{ chainPads[i], chainPads[j], length, delay } );
+            }
+        }
+    }
+
+    return bridges;
 }
 
 

@@ -36,6 +36,7 @@ mechanical_hole_clearance
 micro_via
 min
 min_resolved_spokes
+net
 none
 npth
 opt

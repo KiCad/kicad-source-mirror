@@ -18,6 +18,7 @@
  */
 
 #include <common.h>
+#include <numeric>
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
@@ -26,8 +27,12 @@
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
 #include <drc/drc_length_report.h>
+#include <drc/drc_chain_topology.h>
 #include <length_delay_calculation/length_delay_calculation.h>
+#include <lset.h>
 #include <net_chain_bridging.h>
+#include <geometry/shape_poly_set.h>
+#include <string_utils.h>
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/from_to_cache.h>
@@ -67,10 +72,30 @@ private:
                      const std::vector<CONNECTION>& aMatchedConnections );
     void checkViaCounts( const DRC_CONSTRAINT& aConstraint,
                          const std::vector<CONNECTION>& aMatchedConnections );
+    void checkStubLengths( const DRC_CONSTRAINT& aConstraint,
+                           DRC_RULE* aRule,
+                           const std::vector<CONNECTION>& aMatchedConnections );
+    void checkReturnPath( const DRC_CONSTRAINT& aConstraint,
+                          DRC_RULE* aRule,
+                          const std::map<wxString, CONNECTION>& aChainAgg );
+
+    // Lazily-built shared topology view of a named chain, built from every
+    // item on the board that carries that chain.  Cached for the duration of
+    // a single DRC pass so two rules constraining the same chain don't
+    // rebuild the graph (the topology is a property of the routed copper,
+    // not of which rule matched).
+    std::shared_ptr<CHAIN_TOPOLOGY> chainTopologyFor( const wxString& aChain );
+
+    // Cached zone-coverage union per (reference layer, net pattern) tuple
+    // for the duration of a DRC pass — return-path checks can reuse it
+    // across rules.
+    SHAPE_POLY_SET* zoneUnionFor( PCB_LAYER_ID aRefLayer, const wxString& aRefNet );
 
 private:
-    BOARD*            m_board;
-    DRC_LENGTH_REPORT m_report;
+    BOARD*                                                  m_board;
+    DRC_LENGTH_REPORT                                       m_report;
+    std::map<wxString, std::shared_ptr<CHAIN_TOPOLOGY>>     m_chainTopoCache;
+    std::map<std::pair<PCB_LAYER_ID, wxString>, SHAPE_POLY_SET> m_refUnionCache;
 };
 
 void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkLengths( const DRC_CONSTRAINT& aConstraint,
@@ -325,6 +350,8 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 {
     m_board = m_drcEngine->GetBoard();
     m_report.Clear();
+    m_chainTopoCache.clear();
+    m_refUnionCache.clear();
 
     if( !aDelayReportMode )
     {
@@ -491,11 +518,25 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             std::optional<DRC_CONSTRAINT> lengthConstraint = rule->FindConstraint( LENGTH_CONSTRAINT );
             std::optional<DRC_CONSTRAINT> netChainLengthConstraint = rule->FindConstraint( NET_CHAIN_LENGTH_CONSTRAINT );
 
-            if( netChainLengthConstraint && netChainLengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
-            {
-                // Aggregate per-net connections into per-chain totals
-                std::map<wxString, CONNECTION> chainAgg;
+            // Build per-chain aggregates (kept for the length report).  The
+            // shared CHAIN_TOPOLOGY is fetched lazily from the provider's
+            // cache so two rules constraining the same chain don't rebuild
+            // the graph.
+            std::map<wxString, CONNECTION>      chainAgg;
+            std::optional<DRC_CONSTRAINT>       stubConstraint =
+                    rule->FindConstraint( NET_CHAIN_STUB_LENGTH_CONSTRAINT );
+            std::optional<DRC_CONSTRAINT>       returnPathConstraint =
+                    rule->FindConstraint( NET_CHAIN_RETURN_PATH_CONSTRAINT );
 
+            const bool needsChainAgg =
+                    ( netChainLengthConstraint
+                      && netChainLengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
+                 || ( stubConstraint && stubConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
+                 || ( returnPathConstraint
+                      && returnPathConstraint->GetSeverity() != RPT_SEVERITY_IGNORE );
+
+            if( needsChainAgg )
+            {
                 for( const CONNECTION& conn : matchedConnections )
                 {
                     if( !conn.netinfo )
@@ -529,24 +570,44 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                         agg.items.insert( conn.items.begin(), conn.items.end() );
                     }
                 }
+            }
 
-                // Add bridging length and delay through series components shared with the tuner so
-                // time-domain rules see the same compensated chain.
-                for( auto& [chainName, agg] : chainAgg )
-                {
-                    auto [bridging, bridgingDelay] = BoardChainBridging( m_board, chainName );
-
-                    agg.total += bridging;
-                    agg.totalRoute += bridging;
-                    agg.totalDelay += bridgingDelay;
-                    agg.totalRouteDelay += bridgingDelay;
-                }
-
+            if( netChainLengthConstraint && netChainLengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
+            {
                 std::vector<CONNECTION> chainConnections;
                 chainConnections.reserve( chainAgg.size() );
 
-                for( auto& [name, agg] : chainAgg )
-                    chainConnections.push_back( std::move( agg ) );
+                for( auto& [chainName, agg] : chainAgg )
+                {
+                    CONNECTION constraintInput = agg;
+                    std::shared_ptr<CHAIN_TOPOLOGY> topo = chainTopologyFor( chainName );
+
+                    if( topo && topo->IsValid() )
+                    {
+                        // Trunk semantics: constrain the matched-length signal
+                        // path between terminal pads, not the sum of all member
+                        // segments.  Bridging is folded into the topology graph.
+                        constraintInput.total = topo->TrunkLength();
+                        constraintInput.totalDelay = topo->TrunkDelay();
+                        constraintInput.totalRoute = topo->TrunkLength();
+                        constraintInput.totalRouteDelay = topo->TrunkDelay();
+                    }
+                    else
+                    {
+                        // Aggregate fallback (legacy) — preserves behavior for
+                        // chains without terminal pads or with looped routing.
+                        // Add bridging length/delay through series passives so
+                        // the time-domain rule sees a compensated chain.
+                        auto [bridging, bridgingDelay] = BoardChainBridging( m_board, chainName );
+
+                        constraintInput.total += bridging;
+                        constraintInput.totalRoute += bridging;
+                        constraintInput.totalDelay += bridgingDelay;
+                        constraintInput.totalRouteDelay += bridgingDelay;
+                    }
+
+                    chainConnections.push_back( std::move( constraintInput ) );
+                }
 
                 checkLengths( *netChainLengthConstraint, chainConnections );
             }
@@ -566,213 +627,403 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             if( viaCountConstraint && viaCountConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
                 checkViaCounts( *viaCountConstraint, matchedConnections );
 
-            // Return-path constraint: warn when the chain is routed on a layer
-            // but the specified reference layer has no continuous zone on it
-            // (coarse check: any zone of any net covers *some* of the chain's
-            // trunk path).  Fine-grained per-track checks are future work.
-            std::optional<DRC_CONSTRAINT> returnPathConstraint =
-                    rule->FindConstraint( NET_CHAIN_RETURN_PATH_CONSTRAINT );
-
             if( returnPathConstraint
                 && returnPathConstraint->GetSeverity() != RPT_SEVERITY_IGNORE
                 && !returnPathConstraint->m_ReferenceLayer.IsEmpty() )
             {
-                const wxString&    refLayerName = returnPathConstraint->m_ReferenceLayer;
-                const LSET         copperLayers = LSET::AllCuMask( m_board->GetCopperLayerCount() );
-                PCB_LAYER_ID       refLayer = UNDEFINED_LAYER;
-
-                for( PCB_LAYER_ID layer : copperLayers )
-                {
-                    if( m_board->GetLayerName( layer ) == refLayerName )
-                    {
-                        refLayer = layer;
-                        break;
-                    }
-                }
-
-                if( refLayer != UNDEFINED_LAYER )
-                {
-                    // Collect non-rule-area zones on the reference layer once.  We then
-                    // intersect each chain's bounding box with these zones to decide if
-                    // the chain has a candidate return path.  This is a coarse check:
-                    // overlap of the chain bbox with a zone polygon does not prove that
-                    // every track segment is shadowed by the zone.  Per-track coverage
-                    // is future work.
-                    std::vector<ZONE*> refLayerZones;
-
-                    for( ZONE* zone : m_board->Zones() )
-                    {
-                        if( zone && zone->IsOnLayer( refLayer ) && !zone->GetIsRuleArea() )
-                            refLayerZones.push_back( zone );
-                    }
-
-                    // Aggregate per-chain bounding boxes so the spatial test is run once
-                    // per chain rather than once per net.  A chain whose bbox does not
-                    // overlap any reference-layer zone is reported as a return-path break.
-                    std::map<wxString, BOX2I>        chainBBox;
-                    std::map<wxString, NETINFO_ITEM*> chainSampleNet;
-
-                    for( const CONNECTION& conn : matchedConnections )
-                    {
-                        NETINFO_ITEM* netInfo =
-                                m_board->GetNetInfo().GetNetItem( conn.netcode );
-
-                        if( !netInfo )
-                            continue;
-
-                        wxString chainName = netInfo->GetNetChain();
-
-                        if( chainName.IsEmpty() )
-                            continue;
-
-                        BOX2I& bbox = chainBBox[chainName];
-
-                        for( BOARD_CONNECTED_ITEM* connItem : conn.items )
-                        {
-                            if( !connItem )
-                                continue;
-
-                            bbox.Merge( connItem->GetBoundingBox() );
-                        }
-
-                        chainSampleNet.try_emplace( chainName, netInfo );
-                    }
-
-                    for( const auto& [chainName, bbox] : chainBBox )
-                    {
-                        if( !bbox.IsValid() )
-                            continue;
-
-                        bool covered = false;
-
-                        for( ZONE* zone : refLayerZones )
-                        {
-                            // Cheap bbox-vs-bbox reject, then a polygon-aware check that
-                            // also catches the case where the chain bbox sits entirely
-                            // inside the zone polygon.
-                            if( !zone->GetBoundingBox().Intersects( bbox ) )
-                                continue;
-
-                            if( zone->HitTest( bbox, false )
-                                || ( zone->Outline()
-                                     && zone->Outline()->Contains( bbox.Centre() ) ) )
-                            {
-                                covered = true;
-                                break;
-                            }
-                        }
-
-                        if( covered )
-                            continue;
-
-                        NETINFO_ITEM* netInfo = chainSampleNet[chainName];
-
-                        std::shared_ptr<DRC_ITEM> item =
-                                DRC_ITEM::Create( DRCE_NET_CHAIN_RETURN_PATH_BREAK );
-                        item->SetErrorMessage( wxString::Format(
-                                _( "Net chain '%s' has no copper zone on reference "
-                                   "layer '%s' (net '%s')." ),
-                                chainName,
-                                refLayerName,
-                                netInfo ? netInfo->GetNetname() : wxString{} ) );
-                        item->SetViolatingRule( rule );
-
-                        for( const CONNECTION& conn : matchedConnections )
-                        {
-                            NETINFO_ITEM* connNet =
-                                    m_board->GetNetInfo().GetNetItem( conn.netcode );
-
-                            if( !connNet || connNet->GetNetChain() != chainName )
-                                continue;
-
-                            for( BOARD_CONNECTED_ITEM* connItem : conn.items )
-                                item->AddItem( connItem );
-                        }
-
-                        reportViolation( item, bbox.Centre(), refLayer );
-                    }
-                }
+                checkReturnPath( *returnPathConstraint, rule, chainAgg );
             }
 
-            // Stub-length constraint on a multi-net chain. A member net is on the
-            // trunk when it owns at least one of the chain's terminal pad
-            // assignments (chain endpoint segment). Every other member is treated
-            // as a stub and must satisfy the (stub_length ...) range.
-            //
-            // TODO Real topological stub detection (a net lying on the path
-            // between the chain's two terminal pads, regardless of which member
-            // owns each end) requires walking the connectivity graph across
-            // chain members. Until that lands, ownership of a terminal pad is
-            // the practical proxy for "on trunk".
-            std::optional<DRC_CONSTRAINT> stubLengthConstraint =
-                    rule->FindConstraint( NET_CHAIN_STUB_LENGTH_CONSTRAINT );
-
-            if( stubLengthConstraint
-                && stubLengthConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
-            {
-                const bool isTimeDomain =
-                        stubLengthConstraint->GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
-                const EDA_DATA_TYPE dataType =
-                        isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
-
-                for( const CONNECTION& conn : matchedConnections )
-                {
-                    NETINFO_ITEM* netInfo = m_board->GetNetInfo().GetNetItem( conn.netcode );
-
-                    if( !netInfo || netInfo->GetNetChain().IsEmpty() )
-                        continue;
-
-                    const bool onTrunk =
-                            ( netInfo->GetTerminalPad( 0 )
-                              && netInfo->GetTerminalPad( 0 )->GetNetCode() == conn.netcode )
-                         || ( netInfo->GetTerminalPad( 1 )
-                              && netInfo->GetTerminalPad( 1 )->GetNetCode() == conn.netcode );
-
-                    if( onTrunk )
-                        continue;
-
-                    const MINOPTMAX<int>& range = stubLengthConstraint->GetValue();
-
-                    if( !range.HasMax() && !range.HasMin() )
-                        continue;
-
-                    const double measured = isTimeDomain ? conn.totalDelay
-                                                         : static_cast<double>( conn.total );
-
-                    if( ( range.HasMax() && measured > range.Max() )
-                        || ( range.HasMin() && measured < range.Min() ) )
-                    {
-                        std::shared_ptr<DRC_ITEM> item =
-                                DRC_ITEM::Create( DRCE_NET_CHAIN_STUB_TOO_LONG );
-                        wxString msg = wxString::Format(
-                                _( "Stub length (%s) out of range for net chain '%s' on net "
-                                   "'%s'." ),
-                                MessageTextFromValue( measured, true, dataType ),
-                                netInfo->GetNetChain(),
-                                netInfo->GetNetname() );
-                        item->SetErrorMessage( msg );
-                        item->SetViolatingRule( rule );
-
-                        for( BOARD_CONNECTED_ITEM* connItem : conn.items )
-                            item->AddItem( connItem );
-
-                        VECTOR2I     pos;
-                        PCB_LAYER_ID layer = UNDEFINED_LAYER;
-
-                        if( !conn.items.empty() )
-                        {
-                            pos = ( *conn.items.begin() )->GetPosition();
-                            layer = ( *conn.items.begin() )->GetLayer();
-                        }
-
-                        reportViolation( item, pos, layer );
-                    }
-                }
-            }
+            if( stubConstraint && stubConstraint->GetSeverity() != RPT_SEVERITY_IGNORE )
+                checkStubLengths( *stubConstraint, rule, matchedConnections );
         }
     }
 
     return !m_drcEngine->IsCancelled();
+}
+
+
+std::shared_ptr<CHAIN_TOPOLOGY>
+DRC_TEST_PROVIDER_MATCHED_LENGTH::chainTopologyFor( const wxString& aChain )
+{
+    auto it = m_chainTopoCache.find( aChain );
+
+    if( it != m_chainTopoCache.end() )
+        return it->second;
+
+    std::set<BOARD_CONNECTED_ITEM*> items;
+
+    for( PCB_TRACK* t : m_board->Tracks() )
+    {
+        if( t->GetNet() && t->GetNet()->GetNetChain() == aChain )
+            items.insert( t );
+    }
+
+    for( FOOTPRINT* fp : m_board->Footprints() )
+    {
+        for( PAD* p : fp->Pads() )
+        {
+            if( p->GetNet() && p->GetNet()->GetNetChain() == aChain )
+                items.insert( p );
+        }
+    }
+
+    auto topo = std::make_shared<CHAIN_TOPOLOGY>( m_board, aChain, items );
+    m_chainTopoCache.emplace( aChain, topo );
+    return topo;
+}
+
+
+SHAPE_POLY_SET*
+DRC_TEST_PROVIDER_MATCHED_LENGTH::zoneUnionFor( PCB_LAYER_ID aRefLayer,
+                                                const wxString& aRefNet )
+{
+    auto key = std::make_pair( aRefLayer, aRefNet );
+    auto it = m_refUnionCache.find( key );
+
+    if( it != m_refUnionCache.end() )
+        return &it->second;
+
+    SHAPE_POLY_SET refUnion;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone || !zone->IsOnLayer( aRefLayer ) || zone->GetIsRuleArea() )
+            continue;
+
+        if( !aRefNet.IsEmpty() )
+        {
+            wxString zoneNet = zone->GetNetname();
+
+            if( !WildCompareString( aRefNet, zoneNet, false ) )
+                continue;
+        }
+
+        // Prefer the cached filled-fill polys (respect holes / islands).
+        // Fall back to the zone outline for synthetic / unfilled boards
+        // (test fixtures, freshly imported designs).  GetFill returns
+        // nullptr when the zone hasn't been filled for this layer; using
+        // GetFilledPolysList here would assert.
+        if( SHAPE_POLY_SET* filled = zone->GetFill( aRefLayer );
+            filled && filled->OutlineCount() > 0 )
+        {
+            refUnion.BooleanAdd( *filled );
+        }
+        else if( zone->Outline() )
+        {
+            refUnion.BooleanAdd( *zone->Outline() );
+        }
+    }
+
+    refUnion.Simplify();
+    return &m_refUnionCache.emplace( key, std::move( refUnion ) ).first->second;
+}
+
+
+void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkStubLengths(
+        const DRC_CONSTRAINT& aConstraint, DRC_RULE* aRule,
+        const std::vector<CONNECTION>& aMatchedConnections )
+{
+    const bool isTimeDomain =
+            aConstraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN );
+    const EDA_DATA_TYPE dataType =
+            isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
+    const MINOPTMAX<int>& range = aConstraint.GetValue();
+
+    if( !range.HasMax() && !range.HasMin() )
+        return;
+
+    auto outOfRange = [&]( double aMeasured )
+    {
+        return ( range.HasMax() && aMeasured > range.Max() )
+            || ( range.HasMin() && aMeasured < range.Min() );
+    };
+
+    // Collect the distinct chains touched by the rule's matched items, then
+    // dispatch each chain through the topology if it's valid, falling back
+    // to the legacy proxy otherwise.
+    std::set<wxString> chainNames;
+
+    for( const CONNECTION& conn : aMatchedConnections )
+    {
+        if( conn.netinfo && !conn.netinfo->GetNetChain().IsEmpty() )
+            chainNames.insert( conn.netinfo->GetNetChain() );
+    }
+
+    std::set<wxString> handledByTopology;
+
+    for( const wxString& chainName : chainNames )
+    {
+        std::shared_ptr<CHAIN_TOPOLOGY> topoPtr = chainTopologyFor( chainName );
+
+        if( !topoPtr || !topoPtr->IsValid() )
+            continue;
+
+        handledByTopology.insert( chainName );
+
+        for( const CHAIN_TOPOLOGY::STUB& stub : topoPtr->Stubs() )
+        {
+            const double measured = isTimeDomain ? stub.delay : stub.length;
+
+            if( !outOfRange( measured ) )
+                continue;
+
+            std::shared_ptr<DRC_ITEM> item =
+                    DRC_ITEM::Create( DRCE_NET_CHAIN_STUB_TOO_LONG );
+            item->SetErrorMessage( wxString::Format(
+                    _( "Stub length (%s) out of range for net chain '%s'." ),
+                    MessageTextFromValue( measured, true, dataType ),
+                    chainName ) );
+            item->SetViolatingRule( aRule );
+
+            for( BOARD_CONNECTED_ITEM* it : stub.items )
+                item->AddItem( it );
+
+            reportViolation( item, stub.branchPoint, stub.branchLayer );
+        }
+    }
+
+    // Legacy proxy fallback for chains where the topology builder reported an
+    // invalid status (no terminal pads, disconnected, or cycle).  This
+    // preserves behavior on rule sets that pre-date the terminal-pad model.
+    for( const CONNECTION& conn : aMatchedConnections )
+    {
+        NETINFO_ITEM* netInfo = m_board->GetNetInfo().GetNetItem( conn.netcode );
+
+        if( !netInfo || netInfo->GetNetChain().IsEmpty() )
+            continue;
+
+        if( handledByTopology.count( netInfo->GetNetChain() ) )
+            continue;
+
+        const bool onTrunk =
+                ( netInfo->GetTerminalPad( 0 )
+                  && netInfo->GetTerminalPad( 0 )->GetNetCode() == conn.netcode )
+             || ( netInfo->GetTerminalPad( 1 )
+                  && netInfo->GetTerminalPad( 1 )->GetNetCode() == conn.netcode );
+
+        if( onTrunk )
+            continue;
+
+        const double measured = isTimeDomain ? conn.totalDelay
+                                             : static_cast<double>( conn.total );
+
+        if( !outOfRange( measured ) )
+            continue;
+
+        std::shared_ptr<DRC_ITEM> item =
+                DRC_ITEM::Create( DRCE_NET_CHAIN_STUB_TOO_LONG );
+        item->SetErrorMessage( wxString::Format(
+                _( "Stub length (%s) out of range for net chain '%s' on net '%s'." ),
+                MessageTextFromValue( measured, true, dataType ),
+                netInfo->GetNetChain(),
+                netInfo->GetNetname() ) );
+        item->SetViolatingRule( aRule );
+
+        for( BOARD_CONNECTED_ITEM* connItem : conn.items )
+            item->AddItem( connItem );
+
+        VECTOR2I     pos;
+        PCB_LAYER_ID layer = UNDEFINED_LAYER;
+
+        if( !conn.items.empty() )
+        {
+            pos = ( *conn.items.begin() )->GetPosition();
+            layer = ( *conn.items.begin() )->GetLayer();
+        }
+
+        reportViolation( item, pos, layer );
+    }
+}
+
+
+void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkReturnPath(
+        const DRC_CONSTRAINT& aConstraint, DRC_RULE* aRule,
+        const std::map<wxString, CONNECTION>& aChainAgg )
+{
+    const wxString& refLayerName = aConstraint.m_ReferenceLayer;
+    const wxString& refNetPattern = aConstraint.m_ReferenceNet;
+
+    PCB_LAYER_ID refLayer = m_board->GetLayerID( refLayerName );
+
+    if( refLayer == UNDEFINED_LAYER )
+        return;
+
+    SHAPE_POLY_SET&  refUnion = *zoneUnionFor( refLayer, refNetPattern );
+    const BOX2I      refBbox = refUnion.OutlineCount() ? refUnion.BBox() : BOX2I();
+
+    struct FlaggedRegion
+    {
+        SHAPE_POLY_SET                     poly;
+        std::vector<BOARD_CONNECTED_ITEM*> items;
+        PCB_LAYER_ID                       layer = UNDEFINED_LAYER;
+    };
+
+    auto flagItem = [&]( BOARD_CONNECTED_ITEM* aItem,
+                         std::vector<FlaggedRegion>& aFlagged,
+                         SHAPE_POLY_SET&& aRegion )
+    {
+        for( int o = 0; o < aRegion.OutlineCount(); ++o )
+        {
+            FlaggedRegion fr;
+            fr.poly.AddOutline( aRegion.Outline( o ) );
+
+            for( int h = 0; h < aRegion.HoleCount( o ); ++h )
+                fr.poly.AddHole( aRegion.Hole( o, h ) );
+
+            fr.items.push_back( aItem );
+            fr.layer = aItem->GetLayer();
+            aFlagged.push_back( std::move( fr ) );
+        }
+    };
+
+    for( const auto& [chainName, agg] : aChainAgg )
+    {
+        std::vector<FlaggedRegion> flagged;
+
+        for( BOARD_CONNECTED_ITEM* item : agg.items )
+        {
+            if( !item )
+                continue;
+
+            if( item->Type() != PCB_TRACE_T && item->Type() != PCB_ARC_T )
+                continue;
+
+            BOX2I itemBbox = item->GetBoundingBox();
+
+            if( refUnion.OutlineCount() == 0 || !itemBbox.Intersects( refBbox ) )
+            {
+                // Nothing on the reference layer covers this item.
+                SHAPE_POLY_SET itemPoly;
+                item->TransformShapeToPolygon( itemPoly, item->GetLayer(),
+                                               0, ARC_HIGH_DEF, ERROR_INSIDE );
+                flagItem( item, flagged, std::move( itemPoly ) );
+                continue;
+            }
+
+            SHAPE_POLY_SET itemPoly;
+            item->TransformShapeToPolygon( itemPoly, item->GetLayer(),
+                                           0, ARC_HIGH_DEF, ERROR_INSIDE );
+
+            SHAPE_POLY_SET diff = itemPoly;
+            diff.BooleanSubtract( refUnion );
+            diff.Simplify();
+
+            if( diff.OutlineCount() == 0 )
+                continue;
+
+            flagItem( item, flagged, std::move( diff ) );
+        }
+
+        if( flagged.empty() )
+            continue;
+
+        // Coalesce flagged regions by spatial adjacency: two regions belong to
+        // the same group if their bounding boxes intersect (within epsilon).
+        // Provider-local union-find over the flagged set only — does NOT use
+        // CONNECTIVITY_DATA, which would merge across covered tracks.
+        std::vector<int> parent( flagged.size() );
+        std::iota( parent.begin(), parent.end(), 0 );
+
+        auto find = [&]( int x )
+        {
+            while( parent[x] != x )
+            {
+                parent[x] = parent[parent[x]];
+                x = parent[x];
+            }
+
+            return x;
+        };
+
+        for( size_t i = 0; i < flagged.size(); ++i )
+        {
+            BOX2I bi = flagged[i].poly.BBox();
+            bi.Inflate( 1 );
+
+            for( size_t j = i + 1; j < flagged.size(); ++j )
+            {
+                BOX2I bj = flagged[j].poly.BBox();
+
+                // Cheap reject: if the inflated bboxes don't even touch,
+                // the polygons cannot be adjacent.
+                if( !bi.Intersects( bj ) )
+                    continue;
+
+                // Confirm polygon-level adjacency: two flagged regions
+                // belong to the same group only if their copper polygons
+                // actually intersect (after a 1 IU inflate to bridge
+                // touching boundaries).  Bbox-touch alone can merge
+                // unrelated runs whose AABBs overlap but copper does not.
+                SHAPE_POLY_SET probe = flagged[i].poly;
+                probe.Inflate( 1, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+                probe.BooleanIntersection( flagged[j].poly );
+                probe.Simplify();
+
+                if( probe.OutlineCount() == 0 )
+                    continue;
+
+                int ri = find( static_cast<int>( i ) );
+                int rj = find( static_cast<int>( j ) );
+
+                if( ri != rj )
+                    parent[ri] = rj;
+            }
+        }
+
+        std::map<int, std::vector<int>> groups;
+
+        for( size_t i = 0; i < flagged.size(); ++i )
+            groups[find( static_cast<int>( i ) )].push_back( static_cast<int>( i ) );
+
+        for( const auto& [root, members] : groups )
+        {
+            SHAPE_POLY_SET                          unionPoly;
+            std::vector<BOARD_CONNECTED_ITEM*>      items;
+            std::set<BOARD_CONNECTED_ITEM*>         seen;
+            PCB_LAYER_ID                            markerLayer = UNDEFINED_LAYER;
+
+            for( int idx : members )
+            {
+                unionPoly.BooleanAdd( flagged[idx].poly );
+
+                for( BOARD_CONNECTED_ITEM* it : flagged[idx].items )
+                {
+                    if( seen.insert( it ).second )
+                        items.push_back( it );
+                }
+
+                if( markerLayer == UNDEFINED_LAYER )
+                    markerLayer = flagged[idx].layer;
+            }
+
+            unionPoly.Simplify();
+
+            VECTOR2I markerPos = unionPoly.OutlineCount()
+                                         ? unionPoly.BBox().Centre()
+                                         : ( !items.empty()
+                                                   ? items.front()->GetPosition()
+                                                   : VECTOR2I() );
+
+            std::shared_ptr<DRC_ITEM> drcItem =
+                    DRC_ITEM::Create( DRCE_NET_CHAIN_RETURN_PATH_BREAK );
+
+            wxString msg = wxString::Format(
+                    _( "Net chain '%s' has no copper return path on reference layer '%s'." ),
+                    chainName, refLayerName );
+
+            if( !refNetPattern.IsEmpty() )
+                msg += wxString::Format( _( " (net '%s')" ), refNetPattern );
+
+            drcItem->SetErrorMessage( msg );
+            drcItem->SetViolatingRule( aRule );
+
+            for( BOARD_CONNECTED_ITEM* it : items )
+                drcItem->AddItem( it );
+
+            reportViolation( drcItem, markerPos, markerLayer );
+        }
+    }
 }
 
 

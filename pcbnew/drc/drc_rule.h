@@ -252,6 +252,11 @@ public:
     // can survive save/load without layer-id renumbering.
     wxString            m_ReferenceLayer;
 
+    // Optional reference-zone net for NET_CHAIN_RETURN_PATH_CONSTRAINT.  Empty
+    // accepts any zone on the reference layer; non-empty filters zones by net
+    // name (wildcards via WildCompareString).
+    wxString            m_ReferenceNet;
+
 private:
     wxString            m_name;          // For just-in-time constraints
     DRC_RULE*           m_parentRule;    // For constraints found in rules

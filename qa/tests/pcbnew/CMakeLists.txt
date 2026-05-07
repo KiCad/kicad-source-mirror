@@ -123,7 +123,11 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_orientation.cpp
     drc/test_drc_lengths.cpp
     drc/test_drc_length_with_chain.cpp
+    drc/test_drc_chain_topology.cpp
+    drc/test_drc_chain_length_trunk.cpp
     drc/test_drc_return_path_zone_bbox.cpp
+    drc/test_drc_return_path_per_segment.cpp
+    drc/test_drc_return_path_reference_net.cpp
     drc/test_drc_chain_bridging_multipad.cpp
     drc/test_drc_tuner_chain_bridging_agreement.cpp
     drc/test_drc_stub_length.cpp
