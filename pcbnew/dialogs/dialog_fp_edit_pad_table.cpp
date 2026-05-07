@@ -179,14 +179,10 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
     m_grid->SetColAttr( COL_DRILL_Y, attr );
 
     // Pad->Die Length
-    attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_TEXT_EDITOR() );
-    m_grid->SetColAttr( COL_P2D_LENGTH, attr );
+    m_grid->SetAutoEvalColUnits( COL_P2D_LENGTH, m_unitsProvider->GetUnitsFromType( EDA_DATA_TYPE::DISTANCE ) );
 
     // Pad->Die Delay
-    attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_TEXT_EDITOR() );
-    m_grid->SetColAttr( COL_P2D_DELAY, attr );
+    m_grid->SetAutoEvalColUnits( COL_P2D_DELAY, m_unitsProvider->GetUnitsFromType( EDA_DATA_TYPE::TIME ) );
 
     m_grid->SetUnitsProvider( m_unitsProvider.get(), COL_POS_X );
     m_grid->SetUnitsProvider( m_unitsProvider.get(), COL_POS_Y );
@@ -194,7 +190,8 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
     m_grid->SetUnitsProvider( m_unitsProvider.get(), COL_SIZE_Y );
     m_grid->SetUnitsProvider( m_unitsProvider.get(), COL_DRILL_X );
     m_grid->SetUnitsProvider( m_unitsProvider.get(), COL_DRILL_Y );
-    m_grid->SetAutoEvalCols( { COL_POS_X, COL_POS_Y, COL_SIZE_X, COL_SIZE_Y, COL_DRILL_X, COL_DRILL_Y } );
+    m_grid->SetAutoEvalCols(
+            { COL_POS_X, COL_POS_Y, COL_SIZE_X, COL_SIZE_Y, COL_DRILL_X, COL_DRILL_Y, COL_P2D_LENGTH, COL_P2D_DELAY } );
 
     // add Cut, Copy, and Paste to wxGrid
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
@@ -346,11 +343,12 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataToWindow()
 
         // Pad to die metrics
         if( pad->GetPadToDieLength() )
-            m_grid->SetCellValue( row, COL_P2D_LENGTH, m_unitsProvider->StringFromValue( pad->GetPadToDieLength(),
-                                                                                         true ) );
+            m_grid->SetUnitValue( row, COL_P2D_LENGTH, pad->GetPadToDieLength() );
 
         if( pad->GetPadToDieDelay() )
-            m_grid->SetCellValue( row, COL_P2D_DELAY, wxString::Format( "%d", pad->GetPadToDieDelay() ) );
+            m_grid->SetUnitValue( row, COL_P2D_DELAY, pad->GetPadToDieDelay() );
+
+        setRowNullableEditors( row );
 
         row++;
     }
@@ -413,6 +411,22 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataToWindow()
     }
 
     return true;
+}
+
+
+void DIALOG_FP_EDIT_PAD_TABLE::setRowNullableEditors( int aRowId ) const
+{
+    // Set nullable editors
+    auto setCellEditor = [this, aRowId]( int aCol )
+    {
+        GRID_CELL_MARK_AS_NULLABLE* cellEditor = new GRID_CELL_MARK_AS_NULLABLE( true );
+        wxGridCellAttr*             attr = m_grid->GetOrCreateCellAttr( aRowId, aCol );
+        attr->SetEditor( cellEditor );
+        attr->DecRef();
+    };
+
+    setCellEditor( COL_P2D_LENGTH );
+    setCellEditor( COL_P2D_DELAY );
 }
 
 
@@ -569,8 +583,8 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataFromWindow()
         }
 
         // Pad->Die
-        wxString delayStr = m_grid->GetCellValue( row, COL_P2D_DELAY );
-        wxString lenStr = m_grid->GetCellValue( row, COL_P2D_LENGTH );
+        const wxString delayStr = m_grid->GetCellValue( row, COL_P2D_DELAY );
+        const wxString lenStr = m_grid->GetCellValue( row, COL_P2D_LENGTH );
 
         if( !lenStr.IsEmpty() )
             pad->SetPadToDieLength( m_grid->GetUnitValue( row, COL_P2D_LENGTH ) );
@@ -578,14 +592,7 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataFromWindow()
             pad->SetPadToDieLength( 0 );
 
         if( !delayStr.IsEmpty() )
-        {
-            long delayVal;
-
-            if( delayStr.ToLong( &delayVal ) )
-                pad->SetPadToDieDelay( (int) delayVal );
-            else
-                pad->SetPadToDieDelay( 0 );
-        }
+            pad->SetPadToDieDelay( m_grid->GetUnitValue( row, COL_P2D_DELAY ) );
         else
             pad->SetPadToDieDelay( 0 );
 

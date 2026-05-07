@@ -47,6 +47,7 @@ private:
     void InitColumnProportions();
 
     void updateSummary();
+    void setRowNullableEditors( int aRowId ) const;
 
 private:
     PCB_BASE_FRAME*     m_frame;
