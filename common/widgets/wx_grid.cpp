@@ -29,7 +29,7 @@
 #include <wx/textentry.h>
 
 #include <widgets/indicator_icon.h>
-#include <widgets/grid_icon_text_helpers.h>
+#include <widgets/grid_text_helpers.h>
 #include <widgets/wx_grid.h>
 #include <widgets/ui_common.h>
 #include <algorithm>

@@ -40,6 +40,7 @@
 #include <view/view.h>
 #include <widgets/grid_color_swatch_helpers.h>
 #include <widgets/grid_icon_text_helpers.h>
+#include <widgets/grid_text_helpers.h>
 #include <widgets/wx_html_report_box.h>
 #include <widgets/wx_panel.h>
 #include <widgets/std_bitmap_button.h>
