@@ -3058,6 +3058,9 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
 
         for( const SHAPE_LINE_CHAIN& chain : poly )
         {
+            if( chain.PointCount() == 0 )
+                continue;
+
             m_out->Print( "(polygon" );
             formatPolyPts( chain );
             m_out->Print( ")" );
