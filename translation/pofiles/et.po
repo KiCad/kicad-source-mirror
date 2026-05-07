@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-01 15:37+0300\n"
+"POT-Creation-Date: 2026-05-07 05:17+0300\n"
 "PO-Revision-Date: 2026-03-18 20:48+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/master-"
@@ -166,7 +166,7 @@ msgstr "Uuestilaadimise aeg %.3f s"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:117
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:114
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:501
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3184
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3187
 #, c-format
 msgid "Loading %s..."
 msgstr "Laadimine %s..."
@@ -203,7 +203,7 @@ msgstr "Renderdamine: järeltöötluse šeider"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:633
 #: common/eda_base_frame.cpp:1596 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1268 pcbnew/footprint_chooser_frame.cpp:364
-#: pcbnew/footprint_viewer_frame.cpp:968 pcbnew/pcb_base_frame.cpp:683
+#: pcbnew/footprint_viewer_frame.cpp:968 pcbnew/pcb_base_frame.cpp:689
 msgid "3D Viewer"
 msgstr "3D-vaatur"
 
@@ -272,7 +272,7 @@ msgstr "KiCad 3D-vaatur"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:84
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:25
 #: pcbnew/footprint_edit_frame.cpp:244 pcbnew/footprint_edit_frame.cpp:1041
-#: pcbnew/pcb_edit_frame.cpp:346 pcbnew/pcb_edit_frame.cpp:2142
+#: pcbnew/pcb_edit_frame.cpp:346 pcbnew/pcb_edit_frame.cpp:2146
 #: pcbnew/tools/pcb_actions.cpp:1648
 msgid "Appearance"
 msgstr "Välimus"
@@ -337,7 +337,7 @@ msgstr "Ebapiisavad õigused faili '%s' salvestamiseks."
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:179
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:191
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
-#: pcbnew/dialogs/dialog_drc.cpp:1109
+#: pcbnew/dialogs/dialog_drc.cpp:1124
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:124
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:592
 #: pcbnew/drc/drc_item.cpp:233 pcbnew/pcb_marker.cpp:241
@@ -635,7 +635,7 @@ msgid "Show adhesive"
 msgstr "Kuva liimikihti"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#: pcbnew/tools/board_inspection_tool.cpp:1696
+#: pcbnew/tools/board_inspection_tool.cpp:1794
 msgid "Solder Paste"
 msgstr "Jootepasta"
 
@@ -1699,7 +1699,7 @@ msgstr "Mõõtkava"
 #: pcbnew/dialogs/dialog_shape_properties.cpp:778
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:102
 #: pcbnew/microwave/microwave_polygon.cpp:144
-#: pcbnew/tools/pcb_point_editor.cpp:2807
+#: pcbnew/tools/pcb_point_editor.cpp:2851
 msgid "X:"
 msgstr "X:"
 
@@ -1723,7 +1723,7 @@ msgstr "X:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:253
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:119
 #: pcbnew/microwave/microwave_polygon.cpp:153
-#: pcbnew/tools/pcb_point_editor.cpp:2807
+#: pcbnew/tools/pcb_point_editor.cpp:2851
 msgid "Y:"
 msgstr "Y:"
 
@@ -1798,7 +1798,7 @@ msgid "Clear Recent Files"
 msgstr "Tühjenda hiljutiste failide loend"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:402
-#: eeschema/tools/sch_drawing_tools.cpp:1247
+#: eeschema/tools/sch_drawing_tools.cpp:1250
 #: pagelayout_editor/pl_editor_frame.cpp:846 pcbnew/tools/drawing_tool.cpp:758
 msgid "Choose Image"
 msgstr "Vali pilt"
@@ -1847,7 +1847,7 @@ msgstr "Viga potrace'i rasterkujutise mälu eraldamisel"
 #: common/dialogs/dialog_rc_job_base.cpp:50
 #: common/widgets/wx_html_report_panel_base.cpp:41
 #: eeschema/dialogs/dialog_erc_base.cpp:152
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1534 gerbview/files.cpp:418
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1544 gerbview/files.cpp:418
 #: gerbview/readgerb.cpp:76
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1266
 #: pcbnew/dialogs/dialog_drc_base.cpp:196
@@ -1938,7 +1938,7 @@ msgstr "Lukusta kõrguse/laiuse suhe"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:141
 #: common/dialogs/dialog_print_generic_base.cpp:35
-#: common/libraries/lib_table_grid_data_model.cpp:331
+#: common/libraries/lib_table_grid_data_model.cpp:346
 #: eeschema/dialogs/dialog_annotate_base.cpp:91
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:61
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:25
@@ -1991,6 +1991,7 @@ msgstr "Komponent (.kicad_mod-fail)"
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:74
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:165
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:140
+#: pcbnew/tools/board_inspection_tool.cpp:1271
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:56
 msgid "Layer:"
 msgstr "Kiht:"
@@ -2212,7 +2213,7 @@ msgid "Interleaved saves may produce very unexpected results."
 msgstr "Vahelduvad salvestused võivad põhjustada väga ootamatuid tulemusi."
 
 #: common/confirm.cpp:52 common/confirm.cpp:57 common/confirm.cpp:142
-#: common/confirm.cpp:177 common/dialog_shim.cpp:1716
+#: common/confirm.cpp:177 common/dialog_shim.cpp:1725
 msgid "&Cancel"
 msgstr "&Loobu"
 
@@ -2229,7 +2230,7 @@ msgstr "Salvesta muudatused?"
 msgid "If you don't save, all your changes will be permanently lost."
 msgstr "Kui te ei salvesta, lähevad kõik muudatused jäädavalt kaotsi."
 
-#: common/confirm.cpp:73 common/confirm.cpp:114 common/dialog_shim.cpp:1720
+#: common/confirm.cpp:73 common/confirm.cpp:114 common/dialog_shim.cpp:1729
 msgid "&Save"
 msgstr "&Salvesta"
 
@@ -2250,7 +2251,7 @@ msgid "&Revert"
 msgstr "&Taasta"
 
 #: common/confirm.cpp:176 common/dialog_about/dialog_about_base.cpp:90
-#: common/dialog_shim.cpp:1715
+#: common/dialog_shim.cpp:1724
 msgid "&OK"
 msgstr "&OK"
 
@@ -2288,11 +2289,11 @@ msgstr "Teave"
 msgid "Confirmation"
 msgstr "Kinnitus"
 
-#: common/confirm.cpp:297 common/dialog_shim.cpp:1717
+#: common/confirm.cpp:297 common/dialog_shim.cpp:1726
 msgid "&Yes"
 msgstr "&Jah"
 
-#: common/confirm.cpp:297 common/dialog_shim.cpp:1718
+#: common/confirm.cpp:297 common/dialog_shim.cpp:1727
 msgid "&No"
 msgstr "&Ei"
 
@@ -2312,7 +2313,7 @@ msgid "KiCad Design Block folders"
 msgstr "KiCadi disainiploki kaustad"
 
 #: common/design_block_io.cpp:185
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3557
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3560
 #, c-format
 msgid "Cannot overwrite library path '%s'."
 msgstr "Teegi teed '%s' ei saa üle kirjutada."
@@ -2329,7 +2330,7 @@ msgstr ""
 "Veenduge, et teil on kirjutamisõigused, ja proovige uuesti."
 
 #: common/design_block_io.cpp:214 pcbnew/pcb_io/geda/pcb_io_geda.cpp:989
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3581
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3584
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
 msgstr "Kausta '%s' kustutamiseks pole piisavalt õigusi."
@@ -2438,7 +2439,7 @@ msgstr "Sisemine viga"
 #: eeschema/lib_symbol.cpp:2552 eeschema/sch_symbol.cpp:2977
 #: eeschema/sch_symbol.cpp:3596 eeschema/sch_symbol.cpp:4189
 #: eeschema/symbol_editor/symbol_editor.cpp:1768
-#: eeschema/symbol_viewer_frame.cpp:389 pcbnew/footprint.cpp:4872
+#: eeschema/symbol_viewer_frame.cpp:389 pcbnew/footprint.cpp:4929
 #: pcbnew/generate_footprint_info.cpp:39 pcbnew/plot_board_layers.cpp:195
 msgid "Keywords"
 msgstr "Võtmesõnad"
@@ -2453,7 +2454,7 @@ msgstr "Viga disainiploki %s laadimisel teegist '%s'."
 #: common/dialog_about/AboutDialog_main.cpp:112
 #: common/lib_tree_model_adapter.cpp:156 common/lib_tree_model_adapter.cpp:158
 #: common/lib_tree_model_adapter.cpp:182
-#: common/libraries/lib_table_grid_data_model.cpp:332
+#: common/libraries/lib_table_grid_data_model.cpp:347
 #: common/widgets/widget_hotkey_list.cpp:544 eeschema/sch_base_frame.cpp:664
 #: eeschema/sch_symbol.cpp:2976 eeschema/symbol_editor/symbol_editor.cpp:1767
 #: eeschema/symbol_tree_model_adapter.cpp:74
@@ -2663,11 +2664,11 @@ msgstr "Anneta"
 msgid "Donate to KiCad"
 msgstr "Anneta KiCadile"
 
-#: common/dialog_shim.cpp:1719
+#: common/dialog_shim.cpp:1728
 msgid "&Apply"
 msgstr "&Rakenda"
 
-#: common/dialog_shim.cpp:1721 common/dialog_shim.cpp:1722
+#: common/dialog_shim.cpp:1730 common/dialog_shim.cpp:1731
 #: common/eda_base_frame.cpp:819
 msgid "&Help"
 msgstr "&Abi"
@@ -2836,7 +2837,7 @@ msgstr "Keskkonnamuutujad"
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: common/dialogs/dialog_design_block_properties_base.cpp:42
 #: common/dialogs/git/dialog_git_auth.cpp:56
-#: common/dialogs/panel_design_block_lib_table.cpp:398
+#: common/dialogs/panel_design_block_lib_table.cpp:408
 #: common/dialogs/panel_setup_netclasses_base.cpp:51
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:88
 #: eeschema/dialogs/dialog_label_properties_base.cpp:109
@@ -2847,7 +2848,7 @@ msgstr "Keskkonnamuutujad"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:56
 #: eeschema/dialogs/panel_bom_presets_base.cpp:40
 #: eeschema/dialogs/panel_bom_presets_base.cpp:83
-#: eeschema/dialogs/panel_sym_lib_table.cpp:349
+#: eeschema/dialogs/panel_sym_lib_table.cpp:366
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:525 eeschema/sch_group.cpp:518
 #: eeschema/sch_pin.cpp:1467 eeschema/sch_symbol.cpp:2939
@@ -2862,7 +2863,7 @@ msgstr "Keskkonnamuutujad"
 #: kicad/pcm/dialogs/panel_package_base.cpp:53
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:33
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:122
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:330
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:340
 #: pcbnew/dialogs/panel_fp_user_layer_names.cpp:54
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:70
 #: pcbnew/pcb_field.cpp:354 pcbnew/pcb_fields_grid_table.cpp:147
@@ -2870,8 +2871,8 @@ msgstr "Keskkonnamuutujad"
 #: pcbnew/widgets/search_handlers.cpp:226
 #: pcbnew/widgets/search_handlers.cpp:391
 #: pcbnew/widgets/search_handlers.cpp:452
-#: pcbnew/widgets/search_handlers.cpp:538 pcbnew/zone.cpp:980
-#: pcbnew/zone.cpp:2009 pcbnew/zone_manager/dialog_zone_manager_base.cpp:42
+#: pcbnew/widgets/search_handlers.cpp:538 pcbnew/zone.cpp:993
+#: pcbnew/zone.cpp:2022 pcbnew/zone_manager/dialog_zone_manager_base.cpp:42
 #: pcbnew/zone_manager/model_zones_overview.h:73
 msgid "Name"
 msgstr "Nimi"
@@ -2900,7 +2901,7 @@ msgstr "Vaikeväljad"
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:43
 #: common/dialogs/dialog_plugin_options_base.cpp:44
-#: common/dialogs/panel_design_block_lib_table.cpp:399
+#: common/dialogs/panel_design_block_lib_table.cpp:409
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:89
 #: eeschema/dialogs/dialog_label_properties_base.cpp:110
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:60
@@ -2910,7 +2911,7 @@ msgstr "Vaikeväljad"
 #: eeschema/dialogs/dialog_sim_format_value.cpp:68
 #: eeschema/dialogs/dialog_sim_format_value.cpp:77
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
-#: eeschema/dialogs/panel_sym_lib_table.cpp:350
+#: eeschema/dialogs/panel_sym_lib_table.cpp:367
 #: eeschema/fields_grid_table.cpp:526 eeschema/lib_symbol.cpp:2543
 #: eeschema/sch_symbol.cpp:1703 eeschema/sch_symbol.cpp:2936
 #: eeschema/sch_symbol.cpp:2985 eeschema/sch_symbol.cpp:4178
@@ -2931,7 +2932,7 @@ msgstr "Vaikeväljad"
 #: pcbnew/dialogs/panel_fp_editor_field_defaults.cpp:81
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_field_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:331 pcbnew/pcb_dimension.cpp:641
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:341 pcbnew/pcb_dimension.cpp:641
 #: pcbnew/pcb_fields_grid_table.cpp:148 pcbnew/plot_board_layers.cpp:168
 #: pcbnew/widgets/pcb_properties_panel.cpp:419
 #: pcbnew/widgets/pcb_properties_panel.cpp:420
@@ -2961,7 +2962,7 @@ msgstr "Võtmesõnad:"
 
 #: common/dialogs/dialog_design_block_properties_base.cpp:111
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:3002
-#: eeschema/sch_edit_frame.cpp:3085
+#: eeschema/sch_edit_frame.cpp:3099
 #: kicad/dialogs/dialog_destination_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:120
 msgid "Description:"
@@ -2979,7 +2980,7 @@ msgstr "Loo andmebaasi ühendus"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 #: eeschema/sim/spice_simulator.cpp:69
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:96
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:292 pcbnew/pad.cpp:3316
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:292 pcbnew/pad.cpp:3327
 #: pcbnew/via_protection_ui_mixin.h:136
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:847
 msgid "Custom"
@@ -3159,13 +3160,13 @@ msgstr "Teegi viide:"
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:71
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:58
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:56 pcbnew/footprint.cpp:2145
-#: pcbnew/pad.cpp:1913 pcbnew/pad.cpp:3388 pcbnew/pcb_barcode.cpp:551
+#: pcbnew/pad.cpp:1913 pcbnew/pad.cpp:3399 pcbnew/pcb_barcode.cpp:551
 #: pcbnew/pcb_dimension.cpp:695 pcbnew/pcb_group.cpp:417
-#: pcbnew/pcb_marker.cpp:467 pcbnew/pcb_shape.cpp:703
-#: pcbnew/pcb_tablecell.cpp:206 pcbnew/pcb_text.cpp:324
+#: pcbnew/pcb_marker.cpp:467 pcbnew/pcb_shape.cpp:708
+#: pcbnew/pcb_tablecell.cpp:206 pcbnew/pcb_text.cpp:329
 #: pcbnew/pcb_textbox.cpp:498 pcbnew/pcb_track.cpp:2480
 #: pcbnew/tools/generator_tool.cpp:49
-#: pcbnew/widgets/pcb_properties_panel.cpp:641 pcbnew/zone.cpp:946
+#: pcbnew/widgets/pcb_properties_panel.cpp:641 pcbnew/zone.cpp:959
 msgid "Locked"
 msgstr "Lukustatud"
 
@@ -3196,7 +3197,7 @@ msgid "PCB"
 msgstr "PCB"
 
 #: common/dialogs/dialog_import_choose_project.cpp:35 common/eda_item.cpp:425
-#: eeschema/sch_edit_frame.cpp:1400 eeschema/sch_plotter.cpp:1033
+#: eeschema/sch_edit_frame.cpp:1414 eeschema/sch_plotter.cpp:1033
 #: eeschema/widgets/hierarchy_pane.cpp:832
 #: eeschema/widgets/hierarchy_pane.cpp:838
 #: eeschema/widgets/symbol_diff_widget.cpp:44
@@ -3602,7 +3603,7 @@ msgstr "Väljundrežiim:"
 #: pcbnew/board_tables/board_stackup_table.cpp:89
 #: pcbnew/dialogs/dialog_plot_base.cpp:392
 #: pcbnew/dialogs/dialog_plot_base.cpp:418 pcbnew/pcb_field.cpp:361
-#: pcbnew/pcb_tablecell.cpp:308 pcbnew/pcb_text.cpp:745
+#: pcbnew/pcb_tablecell.cpp:308 pcbnew/pcb_text.cpp:750
 #: pcbnew/pcb_textbox.cpp:865
 msgid "Color"
 msgstr "Värvus"
@@ -3707,7 +3708,7 @@ msgstr "Taasta projekt kohalikust ajaloost..."
 #: common/dialogs/dialog_restore_local_history.cpp:47
 #: eeschema/dialogs/dialog_sim_format_value.cpp:48
 #: eeschema/sim/sim_plot_tab.cpp:833 eeschema/sim/simulator_frame_ui.cpp:747
-#: eeschema/sim/simulator_frame_ui_base.cpp:169 kicad/local_history_pane.cpp:47
+#: eeschema/sim/simulator_frame_ui_base.cpp:169 kicad/local_history_pane.cpp:43
 msgid "Time"
 msgstr "Aeg"
 
@@ -3735,7 +3736,7 @@ msgid "Count"
 msgstr "Arv"
 
 #: common/dialogs/dialog_restore_local_history.cpp:55
-#: kicad/kicad_manager_frame.cpp:972
+#: kicad/kicad_manager_frame.cpp:979
 msgid "Restore"
 msgstr "Taasta"
 
@@ -3765,7 +3766,7 @@ msgstr "Y-silt:"
 msgid "Reset"
 msgstr "Lähtesta"
 
-#: common/dialogs/dialog_unit_entry_base.h:48 kicad/local_history_pane.cpp:46
+#: common/dialogs/dialog_unit_entry_base.h:48 kicad/local_history_pane.cpp:42
 msgid "Title"
 msgstr "Pealkiri"
 
@@ -3922,9 +3923,9 @@ msgstr "Failinimi"
 #: pcbnew/dialogs/dialog_find_base.cpp:138
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout_base.cpp:78
 #: pcbnew/pad.cpp:1913 pcbnew/pcb_barcode.cpp:551 pcbnew/pcb_dimension.cpp:695
-#: pcbnew/pcb_group.cpp:417 pcbnew/pcb_shape.cpp:703
-#: pcbnew/pcb_tablecell.cpp:206 pcbnew/pcb_text.cpp:324
-#: pcbnew/pcb_textbox.cpp:498 pcbnew/pcb_track.cpp:2480 pcbnew/zone.cpp:946
+#: pcbnew/pcb_group.cpp:417 pcbnew/pcb_shape.cpp:708
+#: pcbnew/pcb_tablecell.cpp:206 pcbnew/pcb_text.cpp:329
+#: pcbnew/pcb_textbox.cpp:498 pcbnew/pcb_track.cpp:2480 pcbnew/zone.cpp:959
 msgid "Status"
 msgstr "Olek"
 
@@ -4622,57 +4623,57 @@ msgstr "Disainiploki teegitabelid"
 msgid " (%s)|%s"
 msgstr " (%s)|%s"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:380
-#: eeschema/dialogs/panel_sym_lib_table.cpp:334
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:315
+#: common/dialogs/panel_design_block_lib_table.cpp:390
+#: eeschema/dialogs/panel_sym_lib_table.cpp:351
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:325
 msgid "Global Libraries"
 msgstr "Globaalsed teegid"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:386
-#: eeschema/dialogs/panel_sym_lib_table.cpp:340
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:321
+#: common/dialogs/panel_design_block_lib_table.cpp:396
+#: eeschema/dialogs/panel_sym_lib_table.cpp:357
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:331
 msgid "Project Specific Libraries"
 msgstr "Projektipõhised teegid"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:431
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:363
+#: common/dialogs/panel_design_block_lib_table.cpp:441
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:373
 #, c-format
 msgid "folder with %s files"
 msgstr "kaust %s failidega"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:601
-#: eeschema/dialogs/panel_sym_lib_table.cpp:774
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:516
+#: common/dialogs/panel_design_block_lib_table.cpp:637
+#: eeschema/dialogs/panel_sym_lib_table.cpp:823
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:552
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
 "Valige üks või mitu rida, mis sisaldavad teeke, mida salvestada praeguses "
 "KiCad vormingus."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:608
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:523
+#: common/dialogs/panel_design_block_lib_table.cpp:644
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:559
 #, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
 msgstr ""
 "Kas salvestada '%s' praeguses KiCad vormingus ja asendada kirje tabelis?"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:613
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:528
+#: common/dialogs/panel_design_block_lib_table.cpp:649
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:564
 #, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr ""
 "Kas salvestada %d teeki praeguses KiCad vormingus ja asendada kirjed tabelis?"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:629
+#: common/dialogs/panel_design_block_lib_table.cpp:665
 #: eeschema/dialogs/dialog_symbol_remap.cpp:230
-#: eeschema/dialogs/panel_sym_lib_table.cpp:803
+#: eeschema/dialogs/panel_sym_lib_table.cpp:852
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:67
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:544
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:580
 #, c-format
 msgid "Library '%s' not found."
 msgstr "Teeki '%s' ei leitud."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:641
+#: common/dialogs/panel_design_block_lib_table.cpp:677
 #, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing design blocks?"
@@ -4680,63 +4681,63 @@ msgstr ""
 "Kaust '%s' on juba olemas. Kas soovite olemasolevad disainiplokid üle "
 "kirjutada?"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:644
-#: eeschema/dialogs/panel_sym_lib_table.cpp:814
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:559
+#: common/dialogs/panel_design_block_lib_table.cpp:680
+#: eeschema/dialogs/panel_sym_lib_table.cpp:863
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:595
 msgid "Migrate Library"
 msgstr "Migreeeri teek"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:664
+#: common/dialogs/panel_design_block_lib_table.cpp:700
 #, c-format
 msgid "Failed to save design block library file '%s'."
 msgstr "Disainiploki teegi faili '%s' salvestamine ebaõnnestus."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:696
-#: eeschema/dialogs/panel_sym_lib_table.cpp:538
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:626
+#: common/dialogs/panel_design_block_lib_table.cpp:732
+#: eeschema/dialogs/panel_sym_lib_table.cpp:581
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:662
 #, c-format
 msgid "Select %s Library"
 msgstr "Vali %s teek"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:745
-#: eeschema/dialogs/panel_sym_lib_table.cpp:580
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:671
+#: common/dialogs/panel_design_block_lib_table.cpp:781
+#: eeschema/dialogs/panel_sym_lib_table.cpp:623
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:707
 msgid "Warning: Duplicate Nicknames"
 msgstr "Hoiatus: dubleeritud hüüdnimed"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:746
-#: eeschema/dialogs/panel_sym_lib_table.cpp:581
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:672
+#: common/dialogs/panel_design_block_lib_table.cpp:782
+#: eeschema/dialogs/panel_sym_lib_table.cpp:624
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:708
 #, c-format
 msgid "An item nicknamed '%s' already exists."
 msgstr "Nimega '%s' element on juba olemas."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:747
-#: eeschema/dialogs/panel_sym_lib_table.cpp:582
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:673
+#: common/dialogs/panel_design_block_lib_table.cpp:783
+#: eeschema/dialogs/panel_sym_lib_table.cpp:625
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:709
 msgid "One of the nicknames will need to be changed."
 msgstr "Üks nimedest tuleb ära muuta."
 
-#: common/dialogs/panel_design_block_lib_table.cpp:764
+#: common/dialogs/panel_design_block_lib_table.cpp:800
 #: common/dialogs/panel_embedded_files.cpp:479
 #: common/dialogs/panel_embedded_files.cpp:499
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:549
 #: eeschema/dialogs/dialog_import_symbol_select.cpp:569
-#: eeschema/dialogs/panel_sym_lib_table.cpp:596
-#: kicad/project_tree_pane.cpp:1850 pcbnew/dialogs/panel_fp_lib_table.cpp:693
+#: eeschema/dialogs/panel_sym_lib_table.cpp:639
+#: kicad/project_tree_pane.cpp:1850 pcbnew/dialogs/panel_fp_lib_table.cpp:729
 #: pcbnew/tools/pcb_actions.cpp:734
 msgid "Skip"
 msgstr "Jäta vahele"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:764
-#: eeschema/dialogs/panel_sym_lib_table.cpp:596
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:693
+#: common/dialogs/panel_design_block_lib_table.cpp:800
+#: eeschema/dialogs/panel_sym_lib_table.cpp:639
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:729
 msgid "Add Anyway"
 msgstr "Lisa siiski"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:839
-#: eeschema/dialogs/panel_sym_lib_table.cpp:863
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:860
+#: common/dialogs/panel_design_block_lib_table.cpp:875
+#: eeschema/dialogs/panel_sym_lib_table.cpp:912
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:896
 msgid ""
 "Error saving global library table:\n"
 "\n"
@@ -4744,25 +4745,25 @@ msgstr ""
 "Viga globaalse teegitabeli salvestamisel:\n"
 "\n"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:840
-#: common/dialogs/panel_design_block_lib_table.cpp:859
-#: common/lib_table_notebook_panel.cpp:137
-#: eeschema/dialogs/panel_sym_lib_table.cpp:864
-#: eeschema/dialogs/panel_sym_lib_table.cpp:883 eeschema/project_rescue.cpp:854
+#: common/dialogs/panel_design_block_lib_table.cpp:876
+#: common/dialogs/panel_design_block_lib_table.cpp:895
+#: common/lib_table_notebook_panel.cpp:171
+#: eeschema/dialogs/panel_sym_lib_table.cpp:913
+#: eeschema/dialogs/panel_sym_lib_table.cpp:932 eeschema/project_rescue.cpp:854
 #: eeschema/sheet.cpp:807 eeschema/symbol_editor/symbol_edit_frame.cpp:1208
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1258
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:2051
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:2120
 #: eeschema/symbol_library_manager.cpp:766
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:861
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:880
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:897
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:916
 #: pcbnew/footprint_libraries_utils.cpp:554
 msgid "File Save Error"
 msgstr "Faili salvestamise viga"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:858
-#: eeschema/dialogs/panel_sym_lib_table.cpp:882
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:879
+#: common/dialogs/panel_design_block_lib_table.cpp:894
+#: eeschema/dialogs/panel_sym_lib_table.cpp:931
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:915
 msgid ""
 "Error saving project library table:\n"
 "\n"
@@ -4770,7 +4771,7 @@ msgstr ""
 "Viga projekti teegitabeli salvestamisel:\n"
 "\n"
 
-#: common/dialogs/panel_design_block_lib_table.cpp:948
+#: common/dialogs/panel_design_block_lib_table.cpp:972
 msgid "Design Block Libraries"
 msgstr "Disainiploki teegid"
 
@@ -5022,7 +5023,7 @@ msgstr "Haaku ruudustiku külge:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:342
 #: pcbnew/dialogs/panel_edit_options_base.cpp:356
 #: pcbnew/dialogs/panel_edit_options_base.cpp:370
-#: pcbnew/dialogs/panel_zone_properties_base.cpp:356 pcbnew/zone.cpp:1922
+#: pcbnew/dialogs/panel_zone_properties_base.cpp:356 pcbnew/zone.cpp:1935
 msgid "Always"
 msgstr "Alati"
 
@@ -5036,7 +5037,7 @@ msgstr "Kui ruudustik on kuvatud"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:342
 #: pcbnew/dialogs/panel_edit_options_base.cpp:356
 #: pcbnew/dialogs/panel_edit_options_base.cpp:370
-#: pcbnew/dialogs/panel_zone_properties_base.cpp:356 pcbnew/zone.cpp:1923
+#: pcbnew/dialogs/panel_zone_properties_base.cpp:356 pcbnew/zone.cpp:1936
 msgid "Never"
 msgstr "Mitte kunagi"
 
@@ -5441,13 +5442,13 @@ msgstr "Suumi"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:581
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:102
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:333
-#: pcbnew/drc/drc_report.cpp:133 pcbnew/footprint.cpp:4809 pcbnew/pad.cpp:3319
-#: pcbnew/pad.cpp:3368 pcbnew/pcb_dimension.cpp:2102
+#: pcbnew/drc/drc_report.cpp:133 pcbnew/footprint.cpp:4866 pcbnew/pad.cpp:3330
+#: pcbnew/pad.cpp:3379 pcbnew/pcb_dimension.cpp:2102
 #: pcbnew/via_protection_ui_mixin.h:118
 #: pcbnew/widgets/appearance_controls.cpp:743
 #: pcbnew/widgets/appearance_controls.cpp:785
 #: pcbnew/widgets/appearance_controls.cpp:2679
-#: pcbnew/widgets/appearance_controls.cpp:2698 pcbnew/zone.cpp:1902
+#: pcbnew/widgets/appearance_controls.cpp:2698 pcbnew/zone.cpp:1915
 msgid "None"
 msgstr "Puudub"
 
@@ -5692,9 +5693,9 @@ msgstr "<Pole määratud>"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:449
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:887
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
-#: pcbnew/dialogs/panel_zone_properties_base.cpp:102 pcbnew/footprint.cpp:4811
-#: pcbnew/pad.cpp:3370 pcbnew/pcb_table.cpp:837 pcbnew/pcb_textbox.cpp:836
-#: pcbnew/zone.cpp:986 pcbnew/zone.cpp:1904
+#: pcbnew/dialogs/panel_zone_properties_base.cpp:102 pcbnew/footprint.cpp:4868
+#: pcbnew/pad.cpp:3381 pcbnew/pcb_table.cpp:837 pcbnew/pcb_textbox.cpp:836
+#: pcbnew/zone.cpp:999 pcbnew/zone.cpp:1917
 msgid "Solid"
 msgstr "Pidev"
 
@@ -5826,16 +5827,17 @@ msgid "Netclasses"
 msgstr "Ühendusniidiklassid"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
-#: pcbnew/tools/board_inspection_tool.cpp:809
-#: pcbnew/tools/board_inspection_tool.cpp:1417 pcbnew/zone.cpp:2132
+#: pcbnew/tools/board_inspection_tool.cpp:831
+#: pcbnew/tools/board_inspection_tool.cpp:1257
+#: pcbnew/tools/board_inspection_tool.cpp:1515 pcbnew/zone.cpp:2145
 msgid "Clearance"
 msgstr "Isoleervahemik"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
 #: pcb_calculator/pcb_calculator_frame.cpp:171
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:121
-#: pcbnew/tools/board_inspection_tool.cpp:601
-#: pcbnew/tools/board_inspection_tool.cpp:1603
+#: pcbnew/tools/board_inspection_tool.cpp:623
+#: pcbnew/tools/board_inspection_tool.cpp:1701
 msgid "Track Width"
 msgstr "Raja laius"
 
@@ -5904,7 +5906,7 @@ msgstr "Joone stiil"
 #: pcbnew/dialogs/dialog_render_job.cpp:31
 #: pcbnew/dialogs/dialog_render_job_base.cpp:75
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2547 pcbnew/pcb_dimension.cpp:664
-#: pcbnew/pcb_tablecell.cpp:214 pcbnew/pcb_text.cpp:332
+#: pcbnew/pcb_tablecell.cpp:214 pcbnew/pcb_text.cpp:337
 #: pcbnew/pcb_textbox.cpp:504
 msgid "Default"
 msgstr "Vaikimisi"
@@ -5927,7 +5929,7 @@ msgstr "Muster"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:148
 #: eeschema/sch_field.cpp:1162 eeschema/sch_label.cpp:225
-#: pcbnew/board_connected_item.cpp:252 pcbnew/pad.cpp:3422 pcbnew/zone.cpp:2002
+#: pcbnew/board_connected_item.cpp:252 pcbnew/pad.cpp:3433 pcbnew/zone.cpp:2015
 msgid "Net Class"
 msgstr "Ühendusniidiklass"
 
@@ -5942,7 +5944,7 @@ msgstr "Ühendusniidiklass"
 #: eeschema/symbol_editor/symbol_editor.cpp:441
 #: eeschema/symbol_editor/symbol_editor.cpp:1280
 #: eeschema/symbol_editor/symbol_editor.cpp:1705
-#: pcbnew/dialogs/dialog_drc.cpp:1110 pcbnew/dialogs/dialog_export_vrml.cpp:64
+#: pcbnew/dialogs/dialog_drc.cpp:1125 pcbnew/dialogs/dialog_export_vrml.cpp:64
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1194
 #: pcbnew/dialogs/panel_setup_layers.cpp:930 pcbnew/drc/drc_item.cpp:229
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:244 pcbnew/pcb_marker.cpp:238
@@ -5952,7 +5954,7 @@ msgstr "Hoiatus"
 #: common/dialogs/panel_setup_severities.cpp:44
 #: common/dialogs/panel_setup_severities.cpp:118
 #: eeschema/dialogs/dialog_erc.cpp:982 eeschema/sch_marker.cpp:364
-#: pcbnew/dialogs/dialog_drc.cpp:1111 pcbnew/pcb_marker.cpp:235
+#: pcbnew/dialogs/dialog_drc.cpp:1126 pcbnew/pcb_marker.cpp:235
 msgid "Ignore"
 msgstr "Ignoreeri"
 
@@ -6218,7 +6220,7 @@ msgstr "Vahetükk: %i"
 
 #: common/dialogs/panel_toolbar_customization.cpp:690 common/eda_item.cpp:451
 #: common/eda_item.cpp:476 eeschema/sch_group.cpp:417 pcbnew/pcb_group.cpp:413
-#: pcbnew/widgets/search_handlers.cpp:434 pcbnew/zone.cpp:1934
+#: pcbnew/widgets/search_handlers.cpp:434 pcbnew/zone.cpp:1947
 msgid "Group"
 msgstr "Rühm"
 
@@ -6243,7 +6245,7 @@ msgstr "Salvesta"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:474
 #: common/dialogs/rule_editor_dialog_base.cpp:492
-#: kicad/kicad_manager_frame.cpp:972
+#: kicad/kicad_manager_frame.cpp:979
 msgid "Discard"
 msgstr "Loobu"
 
@@ -6269,12 +6271,12 @@ msgstr "Liiguta üles"
 msgid "Move Down"
 msgstr "Liiguta alla"
 
-#: common/draw_panel_gal.cpp:227 common/draw_panel_gal.cpp:631
+#: common/draw_panel_gal.cpp:227 common/draw_panel_gal.cpp:652
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr ""
 "OpenGL-i ei saanud kasutada, langetakse tagasi tarkvaralisele renderdamisele"
 
-#: common/draw_panel_gal.cpp:234 common/draw_panel_gal.cpp:418
+#: common/draw_panel_gal.cpp:234 common/draw_panel_gal.cpp:431
 msgid "Graphics error"
 msgstr "Graafika viga"
 
@@ -6288,16 +6290,16 @@ msgstr "Graafika viga"
 msgid "Unknown exception during backend switch"
 msgstr "OCC erand pinna ehitamisel: %s"
 
-#: common/draw_panel_gal.cpp:418
+#: common/draw_panel_gal.cpp:431
 #, fuzzy
 msgid "Unknown exception"
 msgstr "Tundmatu puhastustoiming"
 
-#: common/draw_panel_gal.cpp:638
+#: common/draw_panel_gal.cpp:659
 msgid "Could not use OpenGL"
 msgstr "OpenGL-i ei saanud kasutada"
 
-#: common/draw_panel_gal.cpp:666
+#: common/draw_panel_gal.cpp:687
 msgid "Error switching GAL backend"
 msgstr "Viga GAL-taustarakenduse vahetamisel"
 
@@ -6344,7 +6346,7 @@ msgstr "Mälu sai otsa."
 #: pcbnew/pcb_dimension.cpp:2011 pcbnew/pcb_dimension.cpp:2044
 #: pcbnew/pcb_dimension.cpp:2082 pcbnew/pcb_dimension.cpp:2124
 #: pcbnew/pcb_dimension.cpp:2158 pcbnew/pcb_tablecell.cpp:203
-#: pcbnew/pcb_text.cpp:313 pcbnew/pcb_text.cpp:495
+#: pcbnew/pcb_text.cpp:318 pcbnew/pcb_text.cpp:500
 #: pcbnew/widgets/panel_selection_filter.cpp:222
 #: pcbnew/widgets/panel_selection_filter_base.cpp:33
 #: pcbnew/widgets/search_handlers.cpp:312
@@ -6370,7 +6372,7 @@ msgstr "Joon"
 #: eeschema/sch_label.cpp:2628
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:49 pcbnew/pad.cpp:2170
-#: pcbnew/pad.cpp:3311 pcbnew/pcb_dimension.cpp:2103
+#: pcbnew/pad.cpp:3322 pcbnew/pcb_dimension.cpp:2103
 msgid "Rectangle"
 msgstr "Ristkülik"
 
@@ -6615,7 +6617,7 @@ msgstr "Tööriistaribad"
 
 #: common/eda_base_frame.cpp:1546 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:616 eeschema/menubar.cpp:129
-#: eeschema/sch_edit_frame.cpp:1833 kicad/tools/kicad_manager_actions.cpp:105
+#: eeschema/sch_edit_frame.cpp:1847 kicad/tools/kicad_manager_actions.cpp:105
 msgid "Schematic Editor"
 msgstr "Ahelaskeemi redaktor"
 
@@ -6663,7 +6665,7 @@ msgstr "Kasutaja kihtide nimed"
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:127
 #: pcbnew/dialogs/panel_display_options_base.cpp:214
 #: pcbnew/menubar_pcb_editor.cpp:164 pcbnew/pcb_edit_frame.cpp:201
-#: pcbnew/pcb_edit_frame.cpp:2239 pcbnew/tools/zone_filler_tool.cpp:292
+#: pcbnew/pcb_edit_frame.cpp:2243 pcbnew/tools/zone_filler_tool.cpp:292
 msgid "PCB Editor"
 msgstr "Trükkplaadi redaktor"
 
@@ -6810,15 +6812,15 @@ msgid "Search"
 msgstr "Otsing"
 
 #: common/eda_draw_frame.cpp:1247 common/tool/actions.cpp:1318
-#: eeschema/eeschema_settings.cpp:94 eeschema/sch_edit_frame.cpp:2049
+#: eeschema/eeschema_settings.cpp:94 eeschema/sch_edit_frame.cpp:2063
 #: pagelayout_editor/pl_editor_frame.cpp:201
 #: pcbnew/footprint_edit_frame.cpp:235 pcbnew/pcb_edit_frame.cpp:383
-#: pcbnew/pcb_edit_frame.cpp:2144
+#: pcbnew/pcb_edit_frame.cpp:2148
 msgid "Properties"
 msgstr "Omadused"
 
 #: common/eda_draw_frame.cpp:1253 pcbnew/pcb_edit_frame.cpp:395
-#: pcbnew/pcb_edit_frame.cpp:2145 pcbnew/tools/pcb_actions.cpp:1656
+#: pcbnew/pcb_edit_frame.cpp:2149 pcbnew/tools/pcb_actions.cpp:1656
 msgid "Net Inspector"
 msgstr "Ühendusniidi inspektor"
 
@@ -6831,7 +6833,7 @@ msgstr "Ekraan"
 #: pcbnew/build_BOM_from_board.cpp:109
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 #: pcbnew/load_select_footprint.cpp:296 pcbnew/pad.cpp:1894
-#: pcbnew/pcb_barcode.cpp:543 pcbnew/pcb_shape.cpp:697 pcbnew/pcb_text.cpp:296
+#: pcbnew/pcb_barcode.cpp:543 pcbnew/pcb_shape.cpp:702 pcbnew/pcb_text.cpp:301
 #: pcbnew/plot_board_layers.cpp:172
 msgid "Footprint"
 msgstr "Komponendi trükkplaadijälg"
@@ -6910,7 +6912,7 @@ msgstr "Sihtmärk"
 msgid "Point"
 msgstr "Punkt"
 
-#: common/eda_item.cpp:448 pcbnew/tools/board_inspection_tool.cpp:1050
+#: common/eda_item.cpp:448 pcbnew/tools/board_inspection_tool.cpp:1072
 msgid "Zone"
 msgstr "Tsoon"
 
@@ -6948,7 +6950,7 @@ msgid "Bitmap"
 msgstr "Bitmap"
 
 #: common/eda_item.cpp:462 eeschema/sch_rule_area.cpp:65
-#: eeschema/sch_rule_area.cpp:391 pcbnew/zone.cpp:1064
+#: eeschema/sch_rule_area.cpp:391 pcbnew/zone.cpp:1077
 msgid "Rule Area"
 msgstr "Reeglipiirkond"
 
@@ -7016,7 +7018,7 @@ msgstr "Joonistuselement"
 msgid "Thermal Spoke"
 msgstr "Soojustõkke kodar"
 
-#: common/eda_shape.cpp:398 pcbnew/pcb_shape.cpp:1097
+#: common/eda_shape.cpp:398 pcbnew/pcb_shape.cpp:1102
 msgid "Number Box"
 msgstr "Numbrikast"
 
@@ -7033,7 +7035,7 @@ msgstr "Kaar"
 #: eeschema/dialogs/dialog_label_properties_base.cpp:194
 #: eeschema/sch_label.cpp:2626 gerbview/gerber_draw_item.cpp:231
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:45 pcbnew/pad.cpp:2168
-#: pcbnew/pad.cpp:2190 pcbnew/pad.cpp:3310 pcbnew/pcb_dimension.cpp:2104
+#: pcbnew/pad.cpp:2190 pcbnew/pad.cpp:3321 pcbnew/pcb_dimension.cpp:2104
 msgid "Circle"
 msgstr "Ring"
 
@@ -7049,7 +7051,7 @@ msgstr "Hulknurk"
 msgid "Pad Number Box"
 msgstr "Jootepadi numbrikast"
 
-#: common/eda_shape.cpp:1278 pcbnew/pcb_shape.cpp:1104
+#: common/eda_shape.cpp:1278 pcbnew/pcb_shape.cpp:1109
 msgid "Thermal Spoke Template"
 msgstr "Soojustõkke kodara mall"
 
@@ -7073,7 +7075,7 @@ msgstr "Segment"
 #: eeschema/sync_sheet_pin/sheet_synchronization_model.h:67
 #: pcbnew/board_statistics_report.cpp:660
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:240
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:107
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:117
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:47
 #: pcbnew/microwave/microwave_polygon.cpp:129 pcbnew/pcb_tablecell.cpp:299
 #: pcbnew/pcb_target.cpp:160 pcbnew/pcb_target.cpp:253
@@ -7083,7 +7085,7 @@ msgstr "Kujund"
 
 #: common/eda_shape.cpp:1308 common/eda_shape.cpp:1317
 #: common/eda_shape.cpp:2957 pcbnew/dialogs/dialog_shape_properties.cpp:941
-#: pcbnew/pcb_shape.cpp:1039 pcbnew/pcb_track.cpp:2345
+#: pcbnew/pcb_shape.cpp:1044 pcbnew/pcb_track.cpp:2345
 msgid "Radius"
 msgstr "Raadius"
 
@@ -7097,7 +7099,7 @@ msgstr "Pikkus"
 
 #: common/eda_shape.cpp:1315 common/eda_shape.cpp:1341
 #: common/eda_shape.cpp:3028 pcbnew/dialogs/dialog_shape_properties.cpp:906
-#: pcbnew/pcb_barcode.cpp:555 pcbnew/pcb_text.cpp:330
+#: pcbnew/pcb_barcode.cpp:555 pcbnew/pcb_text.cpp:335
 #: pcbnew/pcb_textbox.cpp:502 pcbnew/pcb_track.cpp:2347
 msgid "Angle"
 msgstr "Nurk"
@@ -7123,7 +7125,7 @@ msgstr "Punktid"
 #: pcbnew/pcb_barcode.cpp:928 pcbnew/pcb_fields_grid_table.cpp:150
 #: pcbnew/pcb_reference_image.cpp:291 pcbnew/pcb_reference_image.cpp:441
 #: pcbnew/pcb_tablecell.cpp:300 pcbnew/pcb_target.cpp:159
-#: pcbnew/pcb_target.cpp:250 pcbnew/pcb_text.cpp:339 pcbnew/pcb_textbox.cpp:857
+#: pcbnew/pcb_target.cpp:250 pcbnew/pcb_text.cpp:344 pcbnew/pcb_textbox.cpp:857
 #: pcbnew/pcb_track.cpp:2340 pcbnew/pcb_track.cpp:3133
 msgid "Width"
 msgstr "Laius"
@@ -7138,7 +7140,7 @@ msgstr "Laius"
 #: pcbnew/pad.cpp:1964 pcbnew/pcb_barcode.cpp:932 pcbnew/pcb_dimension.cpp:1077
 #: pcbnew/pcb_fields_grid_table.cpp:151 pcbnew/pcb_reference_image.cpp:293
 #: pcbnew/pcb_reference_image.cpp:446 pcbnew/pcb_tablecell.cpp:301
-#: pcbnew/pcb_text.cpp:340 pcbnew/pcb_textbox.cpp:858
+#: pcbnew/pcb_text.cpp:345 pcbnew/pcb_textbox.cpp:858
 msgid "Height"
 msgstr "Kõrgus"
 
@@ -7170,7 +7172,7 @@ msgstr "Kujundi omadused"
 
 #: common/eda_shape.cpp:2934 eeschema/sch_line.cpp:1303
 #: eeschema/sch_table.cpp:531 eeschema/sch_tablecell.cpp:429
-#: pcbnew/pcb_shape.cpp:1027 pcbnew/pcb_table.cpp:852
+#: pcbnew/pcb_shape.cpp:1032 pcbnew/pcb_table.cpp:852
 #: pcbnew/pcb_tablecell.cpp:295 pcbnew/pcb_textbox.cpp:853
 #: pcbnew/pcb_track.cpp:3136
 msgid "Start X"
@@ -7178,30 +7180,30 @@ msgstr "Algus X"
 
 #: common/eda_shape.cpp:2939 eeschema/sch_line.cpp:1307
 #: eeschema/sch_table.cpp:534 eeschema/sch_tablecell.cpp:430
-#: pcbnew/pcb_shape.cpp:1029 pcbnew/pcb_table.cpp:855
+#: pcbnew/pcb_shape.cpp:1034 pcbnew/pcb_table.cpp:855
 #: pcbnew/pcb_tablecell.cpp:296 pcbnew/pcb_textbox.cpp:854
 #: pcbnew/pcb_track.cpp:3140
 msgid "Start Y"
 msgstr "Algus Y"
 
-#: common/eda_shape.cpp:2945 pcbnew/pcb_shape.cpp:1035
+#: common/eda_shape.cpp:2945 pcbnew/pcb_shape.cpp:1040
 msgid "Center X"
 msgstr "Kese X"
 
-#: common/eda_shape.cpp:2951 pcbnew/pcb_shape.cpp:1037
+#: common/eda_shape.cpp:2951 pcbnew/pcb_shape.cpp:1042
 msgid "Center Y"
 msgstr "Kese Y"
 
 #: common/eda_shape.cpp:2963 eeschema/sch_line.cpp:1311
 #: eeschema/sch_tablecell.cpp:431 pcbnew/generators/pcb_tuning_pattern.cpp:2592
-#: pcbnew/pcb_shape.cpp:1031 pcbnew/pcb_tablecell.cpp:297
+#: pcbnew/pcb_shape.cpp:1036 pcbnew/pcb_tablecell.cpp:297
 #: pcbnew/pcb_textbox.cpp:855 pcbnew/pcb_track.cpp:3143
 msgid "End X"
 msgstr "Lõpp X"
 
 #: common/eda_shape.cpp:2969 eeschema/sch_line.cpp:1315
 #: eeschema/sch_tablecell.cpp:432 pcbnew/generators/pcb_tuning_pattern.cpp:2597
-#: pcbnew/pcb_shape.cpp:1033 pcbnew/pcb_tablecell.cpp:298
+#: pcbnew/pcb_shape.cpp:1038 pcbnew/pcb_tablecell.cpp:298
 #: pcbnew/pcb_textbox.cpp:856 pcbnew/pcb_track.cpp:3146
 msgid "End Y"
 msgstr "Lõpp Y"
@@ -7220,7 +7222,7 @@ msgid "Line Width"
 msgstr "Joone laius"
 
 #: common/eda_shape.cpp:3023 eeschema/sch_tablecell.cpp:441
-#: pcbnew/pcb_shape.cpp:990 pcbnew/pcb_tablecell.cpp:304
+#: pcbnew/pcb_shape.cpp:995 pcbnew/pcb_tablecell.cpp:304
 #: pcbnew/pcb_textbox.cpp:862
 msgid "Line Color"
 msgstr "Joone värv"
@@ -7229,12 +7231,12 @@ msgstr "Joone värv"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:217
 #: eeschema/sch_tablecell.cpp:437
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:120
-#: pcbnew/pcb_shape.cpp:1006
+#: pcbnew/pcb_shape.cpp:1011
 msgid "Fill"
 msgstr "Täide"
 
 #: common/eda_shape.cpp:3075 eeschema/sch_shape.cpp:650
-#: eeschema/sch_tablecell.cpp:438 pcbnew/pcb_shape.cpp:991
+#: eeschema/sch_tablecell.cpp:438 pcbnew/pcb_shape.cpp:996
 msgid "Fill Color"
 msgstr "Täitevärv"
 
@@ -7354,7 +7356,7 @@ msgstr "All"
 #: eeschema/sch_text.cpp:829 eeschema/sch_textbox.cpp:777
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
-#: pcbnew/footprint.cpp:4853 pcbnew/pad.cpp:3390 pcbnew/pcb_barcode.cpp:936
+#: pcbnew/footprint.cpp:4910 pcbnew/pad.cpp:3401 pcbnew/pcb_barcode.cpp:936
 #: pcbnew/pcb_dimension.cpp:1894 pcbnew/pcb_dimension.cpp:1969
 #: pcbnew/pcb_fields_grid_table.cpp:155 pcbnew/pcb_tablecell.cpp:306
 msgid "Orientation"
@@ -7365,8 +7367,8 @@ msgstr "Orientatsioon"
 #: eeschema/sch_text.cpp:826 eeschema/sch_textbox.cpp:775
 #: pcbnew/dialogs/dialog_text_properties.cpp:157
 #: pcbnew/dialogs/dialog_text_properties_base.h:113
-#: pcbnew/pcb_dimension.cpp:1956 pcbnew/pcb_text.cpp:749
-#: pcbnew/pcb_text.cpp:753 pcbnew/pcb_textbox.cpp:872
+#: pcbnew/pcb_dimension.cpp:1956 pcbnew/pcb_text.cpp:754
+#: pcbnew/pcb_text.cpp:758 pcbnew/pcb_textbox.cpp:872
 msgid "Text Properties"
 msgstr "Teksti omadused"
 
@@ -7379,7 +7381,7 @@ msgstr "Teksti omadused"
 #: eeschema/sch_label.cpp:1407 eeschema/sch_tablecell.cpp:364
 #: eeschema/sch_text.cpp:684 eeschema/sch_textbox.cpp:611
 #: pcbnew/pcb_dimension.cpp:664 pcbnew/pcb_tablecell.cpp:214
-#: pcbnew/pcb_text.cpp:332 pcbnew/pcb_textbox.cpp:504
+#: pcbnew/pcb_text.cpp:337 pcbnew/pcb_textbox.cpp:504
 msgid "Font"
 msgstr "Font"
 
@@ -7434,7 +7436,7 @@ msgstr "Vertikaalne joondus"
 #: pcbnew/pcb_dimension.cpp:2017 pcbnew/pcb_dimension.cpp:2050
 #: pcbnew/pcb_dimension.cpp:2088 pcbnew/pcb_dimension.cpp:2130
 #: pcbnew/pcb_dimension.cpp:2164 pcbnew/pcb_field.cpp:360
-#: pcbnew/pcb_tablecell.cpp:307 pcbnew/pcb_text.cpp:766
+#: pcbnew/pcb_tablecell.cpp:307 pcbnew/pcb_text.cpp:771
 #: pcbnew/pcb_textbox.cpp:906
 msgid "Hyperlink"
 msgstr "Hyperlink"
@@ -7998,19 +8000,19 @@ msgstr "Ümberasetamise kinnitus nurjus: %s"
 msgid "Rebase finish failed: %s"
 msgstr "Ümberasetamise lõpetamine nurjus: %s"
 
-#: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
+#: common/grid_tricks.cpp:395 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
 #: pcbnew/dialogs/panel_setup_rules.cpp:141
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:997
-#: pcbnew/tools/edit_tool.cpp:3090
+#: pcbnew/tools/edit_tool.cpp:3115
 msgid "Cut"
 msgstr "Lõika"
 
-#: common/grid_tricks.cpp:380
+#: common/grid_tricks.cpp:396
 msgid "Clear selected cells placing original contents on clipboard"
 msgstr "Puhasta valitud lahtrid, asetades sisu lõikelauale"
 
-#: common/grid_tricks.cpp:381 common/tool/actions.cpp:324
+#: common/grid_tricks.cpp:397 common/tool/actions.cpp:324
 #: common/widgets/html_window.cpp:106 common/widgets/listbox_tricks.cpp:208
 #: common/widgets/search_pane_tab.cpp:243
 #: common/widgets/wx_html_report_panel.cpp:242
@@ -8021,11 +8023,11 @@ msgstr "Puhasta valitud lahtrid, asetades sisu lõikelauale"
 msgid "Copy"
 msgstr "Kopeeri"
 
-#: common/grid_tricks.cpp:382 kicad/dialogs/panel_jobset.cpp:439
+#: common/grid_tricks.cpp:398 kicad/dialogs/panel_jobset.cpp:439
 msgid "Copy selected cells to clipboard"
 msgstr "Kopeeri valitud lahtrid lõikelauale"
 
-#: common/grid_tricks.cpp:386 common/tool/actions.cpp:344
+#: common/grid_tricks.cpp:402 common/tool/actions.cpp:344
 #: common/widgets/listbox_tricks.cpp:210
 #: eeschema/tools/sch_editor_control.cpp:2806
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1739
@@ -8035,26 +8037,26 @@ msgstr "Kopeeri valitud lahtrid lõikelauale"
 msgid "Paste"
 msgstr "Kleebi"
 
-#: common/grid_tricks.cpp:387
+#: common/grid_tricks.cpp:403
 msgid "Paste clipboard cells to matrix at current cell"
 msgstr "Kleebi lõikelaua lahtrid maatriksisse praeguses lahtris"
 
-#: common/grid_tricks.cpp:388 common/tool/actions.cpp:408
+#: common/grid_tricks.cpp:404 common/tool/actions.cpp:408
 #: common/widgets/listbox_tricks.cpp:212 eeschema/tools/sch_edit_tool.cpp:2333
 #: eeschema/tools/symbol_editor_edit_tool.cpp:858
 #: kicad/dialogs/panel_jobset.cpp:440 kicad/project_tree_pane.cpp:1005
 #: pcbnew/dialogs/panel_setup_rules.cpp:144
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:588
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1000
-#: pcbnew/tools/edit_tool.cpp:3060 pcbnew/tools/edit_tool.cpp:3103
+#: pcbnew/tools/edit_tool.cpp:3085 pcbnew/tools/edit_tool.cpp:3128
 msgid "Delete"
 msgstr "Kustuta"
 
-#: common/grid_tricks.cpp:389
+#: common/grid_tricks.cpp:405
 msgid "Clear contents of selected cells"
 msgstr "Puhasta valitud lahtrite sisu"
 
-#: common/grid_tricks.cpp:392 common/tool/actions.cpp:372
+#: common/grid_tricks.cpp:408 common/tool/actions.cpp:372
 #: common/widgets/html_window.cpp:107
 #: common/widgets/wx_html_report_panel.cpp:243
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:106
@@ -8070,40 +8072,40 @@ msgstr "Puhasta valitud lahtrite sisu"
 msgid "Select All"
 msgstr "Vali kõik"
 
-#: common/grid_tricks.cpp:393
+#: common/grid_tricks.cpp:409
 msgid "Select all cells"
 msgstr "Vali kõik lahtrid"
 
-#: common/history_lock.cpp:135
+#: common/history_lock.cpp:136
 #, c-format
 msgid "Cannot create history directory: %s"
 msgstr "Ajaloo kataloogi loomine nurjus: %s"
 
-#: common/history_lock.cpp:156
+#: common/history_lock.cpp:157
 #, c-format
 msgid "History repository is locked by %s@%s"
 msgstr "Ajaloo hoidla on lukustatud kasutaja %s@%s poolt"
 
-#: common/history_lock.cpp:171
+#: common/history_lock.cpp:172
 #, c-format
 msgid "History directory does not exist: %s"
 msgstr "Ajaloo kataloogi ei eksisteeri: %s"
 
-#: common/history_lock.cpp:182
+#: common/history_lock.cpp:183
 #, c-format
 msgid "Failed to open git repository: %s"
 msgstr "Git-hoidla avamine nurjus: %s"
 
-#: common/history_lock.cpp:193
+#: common/history_lock.cpp:194
 #, c-format
 msgid "Failed to set git repository workdir to %s: %s"
 msgstr "Git-hoidla töökataloogi seadmine asukohale %s nurjus: %s"
 
-#: common/history_lock.cpp:207
+#: common/history_lock.cpp:221
 msgid "Cannot acquire index lock: repository not open"
 msgstr "Indeksilukku ei saa hankida: hoidla pole avatud"
 
-#: common/history_lock.cpp:218
+#: common/history_lock.cpp:232
 #, c-format
 msgid "Failed to acquire git index lock (another operation in progress?): %s"
 msgstr "Git-indeksiluku hankimine nurjus (teine toiming käimas?): %s"
@@ -8279,7 +8281,7 @@ msgid "Error reading file."
 msgstr "Viga faili lugemisel."
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:2472
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:281
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:319
 #, c-format
 msgid "Cannot open file '%s'"
 msgstr "Faili '%s' ei saa avada"
@@ -8798,9 +8800,9 @@ msgstr "Keele vahetamine %s-le nurjus"
 
 #: common/layer_id.cpp:36 pcbnew/drc/drc_engine.cpp:1566
 #: pcbnew/drc/drc_engine.cpp:1569 pcbnew/drc/drc_engine.cpp:1572
-#: pcbnew/tools/board_inspection_tool.cpp:454
-#: pcbnew/tools/board_inspection_tool.cpp:463
-#: pcbnew/tools/board_inspection_tool.cpp:472
+#: pcbnew/tools/board_inspection_tool.cpp:476
+#: pcbnew/tools/board_inspection_tool.cpp:485
+#: pcbnew/tools/board_inspection_tool.cpp:494
 msgid "undefined"
 msgstr "määramata"
 
@@ -9212,7 +9214,7 @@ msgstr "Teegi hüüdnime viga"
 msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Mitu teeki ei saa jagada sama hüüdnime ('%s')."
 
-#: common/lib_table_notebook_panel.cpp:136
+#: common/lib_table_notebook_panel.cpp:170
 msgid ""
 "Error saving nested library table:\n"
 "\n"
@@ -9220,7 +9222,7 @@ msgstr ""
 "Viga pesastatud teegitabeli salvestamisel:\n"
 "\n"
 
-#: common/lib_table_notebook_panel.cpp:153
+#: common/lib_table_notebook_panel.cpp:190
 msgid "Save changes to nested library table?"
 msgstr "Salvesta muudatused pesastatud teegi tabelisse?"
 
@@ -9310,24 +9312,24 @@ msgstr "Muuda sätteid"
 msgid "Open library table"
 msgstr "Ava teegi tabel"
 
-#: common/libraries/lib_table_grid_data_model.cpp:326
+#: common/libraries/lib_table_grid_data_model.cpp:341
 msgid "Nickname"
 msgstr "Hüüdnimi"
 
-#: common/libraries/lib_table_grid_data_model.cpp:327
+#: common/libraries/lib_table_grid_data_model.cpp:342
 msgid "Library Path"
 msgstr "Teegi asukoht"
 
-#: common/libraries/lib_table_grid_data_model.cpp:330
+#: common/libraries/lib_table_grid_data_model.cpp:345
 msgid "Library Format"
 msgstr "Teegi vorming"
 
-#: common/libraries/lib_table_grid_data_model.cpp:333
-#: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:91 pcbnew/zone.cpp:2042
+#: common/libraries/lib_table_grid_data_model.cpp:348
+#: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:91 pcbnew/zone.cpp:2055
 msgid "Enable"
 msgstr "Luba"
 
-#: common/libraries/lib_table_grid_data_model.cpp:334
+#: common/libraries/lib_table_grid_data_model.cpp:349
 #: eeschema/dialogs/dialog_label_properties_base.cpp:111
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:61
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:62
@@ -9372,9 +9374,14 @@ msgstr "Teek '%s': %s"
 msgid "Library %s not found"
 msgstr "Teeki %s ei leitud"
 
-#: common/libraries/library_table.cpp:74
+#: common/libraries/library_table.cpp:75
 #, c-format
 msgid "The library table path '%s' does not exist"
+msgstr "Teegi tabeli asukoht '%s' ei ole olemas"
+
+#: common/libraries/library_table.cpp:94
+#, fuzzy
+msgid "The library table is of wrong type"
 msgstr "Teegi tabeli asukoht '%s' ei ole olemas"
 
 #: common/libraries/library_table_parser.cpp:171
@@ -9392,19 +9399,19 @@ msgstr "Süntaksiviga real %zu, veerus %zu"
 msgid "An unexpected error occurred while reading library table"
 msgstr "Teegitabeli lugemisel ilmnes ootamatu viga"
 
-#: common/local_history.cpp:1534
+#: common/local_history.cpp:1560
 msgid "Compacting local history..."
 msgstr ""
 
-#: common/local_history.cpp:1731
+#: common/local_history.cpp:1757
 msgid "Trimming local history..."
 msgstr ""
 
-#: common/local_history.cpp:1824
+#: common/local_history.cpp:1850
 msgid "Compacting trimmed history..."
 msgstr ""
 
-#: common/local_history.cpp:2127
+#: common/local_history.cpp:2196
 msgid ""
 "The following files will be deleted when restoring this commit:\n"
 "\n"
@@ -9412,7 +9419,7 @@ msgstr ""
 "Selle salvestuse taastamisel kustutatakse järgmised failid:\n"
 "\n"
 
-#: common/local_history.cpp:2138
+#: common/local_history.cpp:2207
 #, c-format
 msgid ""
 "\n"
@@ -9421,23 +9428,23 @@ msgstr ""
 "\n"
 "... ja veel %zu faili\n"
 
-#: common/local_history.cpp:2142
+#: common/local_history.cpp:2211
 msgid "Delete Files during Restore"
 msgstr "Kustuta failid taastamisel"
 
-#: common/local_history.cpp:2144
+#: common/local_history.cpp:2213
 msgid "Proceed"
 msgstr "Jätka"
 
-#: common/local_history.cpp:2144
+#: common/local_history.cpp:2213
 msgid "Keep All Files"
 msgstr "Säilita kõik failid"
 
-#: common/local_history.cpp:2144 eeschema/files-io.cpp:648
+#: common/local_history.cpp:2213 eeschema/files-io.cpp:648
 msgid "Abort"
 msgstr "Katkesta"
 
-#: common/local_history.cpp:2146
+#: common/local_history.cpp:2215
 msgid ""
 "Choosing 'Keep All Files' will restore the selected commit but retain any "
 "existing files in the project directory. Choosing 'Proceed' will delete "
@@ -9447,29 +9454,35 @@ msgstr ""
 "olemasolevad failid projektikaustas. Valik 'Jätka' kustutab failid, mida "
 "taastatavas salvestuses ei ole."
 
-#: common/local_history.cpp:2382
+#: common/local_history.cpp:2219
+#, c-format
+msgid ""
+"Files removed by 'Proceed' are archived to %s and can be recovered manually."
+msgstr ""
+
+#: common/local_history.cpp:2455
 msgid "Cannot restore - the following files are open by another user:"
 msgstr ""
 "Taastamine pole võimalik - järgmised failid on teise kasutaja poolt avatud:"
 
-#: common/local_history.cpp:2384
+#: common/local_history.cpp:2457
 msgid "Restore Failed"
 msgstr "Taastamine nurjus"
 
 #: common/netclass.cpp:305 pcbnew/component_classes/component_class.cpp:67
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1237 pcbnew/zone.cpp:958
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1237 pcbnew/zone.cpp:971
 #, c-format
 msgid "%s and %s"
 msgstr "%s ja %s"
 
 #: common/netclass.cpp:311 pcbnew/component_classes/component_class.cpp:72
-#: pcbnew/zone.cpp:964
+#: pcbnew/zone.cpp:977
 #, c-format
 msgid "%s, %s and %s"
 msgstr "%s, %s ja %s"
 
 #: common/netclass.cpp:318 pcbnew/component_classes/component_class.cpp:77
-#: pcbnew/zone.cpp:971
+#: pcbnew/zone.cpp:984
 #, c-format
 msgid "%s, %s and %d more"
 msgstr "%s, %s ja %d veel"
@@ -9764,7 +9777,7 @@ msgstr "Viga faili lahtipakkimisel!"
 #: gerbview/export_to_pcbnew.cpp:65 pagelayout_editor/files.cpp:224
 #: pcbnew/build_BOM_from_board.cpp:101
 #: pcbnew/dialogs/dialog_board_statistics.cpp:475
-#: pcbnew/dialogs/dialog_drc.cpp:1186 pcbnew/dialogs/dialog_export_idf.cpp:130
+#: pcbnew/dialogs/dialog_drc.cpp:1201 pcbnew/dialogs/dialog_export_idf.cpp:130
 #: pcbnew/dialogs/dialog_export_vrml.cpp:139
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:335
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:357
@@ -9938,7 +9951,7 @@ msgid ""
 "URL."
 msgstr ""
 
-#: common/richio.cpp:63 eeschema/tools/sch_drawing_tools.cpp:3243
+#: common/richio.cpp:63 eeschema/tools/sch_drawing_tools.cpp:3258
 #, c-format
 msgid "File '%s' does not exist."
 msgstr "Faili '%s' ei ole olemas."
@@ -9993,7 +10006,7 @@ msgstr "Vaikimisi redigeerimine"
 #: eeschema/sch_symbol.cpp:4175 eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:256
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
-#: pcbnew/dialogs/dialog_find_by_properties.cpp:341 pcbnew/footprint.cpp:4860
+#: pcbnew/dialogs/dialog_find_by_properties.cpp:341 pcbnew/footprint.cpp:4917
 #: pcbnew/widgets/search_handlers.cpp:140
 msgid "Reference"
 msgstr "Viide"
@@ -10014,7 +10027,7 @@ msgstr "Rühmitatud väärtuse ja trükkplaadijälje järgi"
 #: eeschema/lib_symbol.cpp:2583 eeschema/menubar.cpp:162
 #: eeschema/sch_rule_area.cpp:452 eeschema/sch_sheet.cpp:2285
 #: eeschema/sch_symbol.cpp:4243 eeschema/tools/sch_edit_tool.cpp:763
-#: pcbnew/footprint.cpp:4882
+#: pcbnew/footprint.cpp:4939
 msgid "Attributes"
 msgstr "Atribuudid"
 
@@ -10408,7 +10421,7 @@ msgstr "Kleebi element(id) lõikelaualt valikutega"
 
 #: common/tool/actions.cpp:395 common/widgets/listbox_tricks.cpp:211
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1820
-#: pcbnew/tools/edit_tool.cpp:3431
+#: pcbnew/tools/edit_tool.cpp:3459
 msgid "Duplicate"
 msgstr "Dubleeri"
 
@@ -10429,7 +10442,7 @@ msgid "Delete clicked items"
 msgstr "Kustuta klõpsatud elemendid"
 
 #: common/tool/actions.cpp:425 eeschema/tools/sch_edit_tool.cpp:3406
-#: pcbnew/tools/edit_tool.cpp:2811
+#: pcbnew/tools/edit_tool.cpp:2834
 msgid "Left Justify"
 msgstr "Vasakjoondus"
 
@@ -10438,7 +10451,7 @@ msgid "Left-justify fields and text items"
 msgstr "Joonda väljad ja tekstielemendid vasakule"
 
 #: common/tool/actions.cpp:432 eeschema/tools/sch_edit_tool.cpp:3408
-#: pcbnew/tools/edit_tool.cpp:2813
+#: pcbnew/tools/edit_tool.cpp:2836
 msgid "Center Justify"
 msgstr "Keskjoondus"
 
@@ -10447,7 +10460,7 @@ msgid "Center-justify fields and text items"
 msgstr "Joonda väljad ja tekstielemendid keskele"
 
 #: common/tool/actions.cpp:439 eeschema/tools/sch_edit_tool.cpp:3410
-#: pcbnew/tools/edit_tool.cpp:2815
+#: pcbnew/tools/edit_tool.cpp:2838
 msgid "Right Justify"
 msgstr "Paremjoondus"
 
@@ -10455,16 +10468,16 @@ msgstr "Paremjoondus"
 msgid "Right-justify fields and text items"
 msgstr "Joonda väljad ja tekstielemendid paremale"
 
-#: common/tool/actions.cpp:446 eeschema/sch_edit_frame.cpp:2683
+#: common/tool/actions.cpp:446 eeschema/sch_edit_frame.cpp:2697
 msgid "Expand All"
 msgstr "Laienda kõik"
 
-#: common/tool/actions.cpp:452 eeschema/sch_edit_frame.cpp:2684
+#: common/tool/actions.cpp:452 eeschema/sch_edit_frame.cpp:2698
 msgid "Collapse All"
 msgstr "Ahenda kõik"
 
 #: common/tool/actions.cpp:460 eeschema/tools/sch_tool_base.h:239
-#: pcbnew/tools/edit_tool.cpp:3527
+#: pcbnew/tools/edit_tool.cpp:3557
 msgid "Increment"
 msgstr "Suurenda"
 
@@ -11451,7 +11464,7 @@ msgstr "Viited peavad algama tähega."
 msgid "Field Validation Error"
 msgstr "Välja valideerimise viga"
 
-#: common/view/view.cpp:627
+#: common/view/view.cpp:630
 msgid "Mirroring for Y axis is not supported yet"
 msgstr "Y-telje peegeldamine ei ole veel toetatud"
 
@@ -11491,8 +11504,8 @@ msgstr "Palun valige kustutatav teek."
 #: common/widgets/design_block_pane.cpp:382
 #: pcbnew/footprint_libraries_utils.cpp:614
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:970
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3444
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3528
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3447
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3531
 #, c-format
 msgid "Library '%s' is read only."
 msgstr "Teek '%s' on kirjutuskaitstud."
@@ -11832,7 +11845,7 @@ msgstr "Hoiatus:"
 #: common/widgets/wx_html_report_panel.cpp:315
 #: eeschema/dialogs/dialog_erc.cpp:1126
 #: pcbnew/dialogs/dialog_board_statistics.cpp:459
-#: pcbnew/dialogs/dialog_drc.cpp:1154
+#: pcbnew/dialogs/dialog_drc.cpp:1169
 msgid "Save Report File"
 msgstr "Salvesta aruandefail"
 
@@ -12165,7 +12178,7 @@ msgstr "CvPcb hoiatus"
 msgid "Assign Footprints"
 msgstr "Määra komponendi trükkplaadijäljed"
 
-#: cvpcb/cvpcb_mainframe.cpp:123 pcbnew/dialogs/panel_fp_lib_table.cpp:971
+#: cvpcb/cvpcb_mainframe.cpp:123 pcbnew/dialogs/panel_fp_lib_table.cpp:995
 msgid "Footprint Libraries"
 msgstr "Komponendi trükkplaadijälgede teegid"
 
@@ -12618,15 +12631,15 @@ msgstr ""
 "Ühendusniit %s on graafiliselt ühendatud siiniga %s, kuid ei ole selle siini "
 "liige"
 
-#: eeschema/connection_graph.cpp:4231 eeschema/erc/erc_item.cpp:245
+#: eeschema/connection_graph.cpp:4259 eeschema/erc/erc_item.cpp:245
 msgid "Unconnected wire endpoint"
 msgstr "Ühendamata juhtme otspunkt"
 
-#: eeschema/connection_graph.cpp:4255
+#: eeschema/connection_graph.cpp:4283
 msgid "Unconnected wire to bus entry"
 msgstr "Ühendamata juhe siiniühenduse juurde"
 
-#: eeschema/connection_graph.cpp:4625
+#: eeschema/connection_graph.cpp:4653
 #, c-format
 msgid ""
 "Hierarchical label '%s' in root sheet cannot be connected to non-existent "
@@ -12634,12 +12647,12 @@ msgid ""
 msgstr ""
 "Hierarhiline silt '%s' juurlehel ei saa ühenduda olematult vanemlehtelt"
 
-#: eeschema/connection_graph.cpp:4691
+#: eeschema/connection_graph.cpp:4719
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Lehe klemm %s ei vasta ühelegi hierarhilisele sildile lehel"
 
-#: eeschema/connection_graph.cpp:4708
+#: eeschema/connection_graph.cpp:4736
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "Hierarhiline silt %s ei vasta ühelegi lehe klemmile vanemlehel"
@@ -13440,21 +13453,21 @@ msgstr "Näita kõiki vigu"
 msgid "Show duplicate ERC markers on all applicable pins"
 msgstr "Näita korduvaid ERC markereid kõigil asjakohastel klemmidel"
 
-#: eeschema/dialogs/dialog_erc.cpp:418 pcbnew/dialogs/dialog_drc.cpp:1374
+#: eeschema/dialogs/dialog_erc.cpp:418 pcbnew/dialogs/dialog_drc.cpp:1389
 msgid "Delete exclusions too?"
 msgstr "Kustutada ka välistamised?"
 
 #: eeschema/dialogs/dialog_erc.cpp:418 eeschema/dialogs/dialog_erc_base.cpp:190
-#: pcbnew/dialogs/dialog_drc.cpp:1374 pcbnew/dialogs/dialog_drc_base.cpp:233
+#: pcbnew/dialogs/dialog_drc.cpp:1389 pcbnew/dialogs/dialog_drc_base.cpp:233
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:80
 msgid "Delete All Markers"
 msgstr "Kustuta kõik markerid"
 
-#: eeschema/dialogs/dialog_erc.cpp:420 pcbnew/dialogs/dialog_drc.cpp:1376
+#: eeschema/dialogs/dialog_erc.cpp:420 pcbnew/dialogs/dialog_drc.cpp:1391
 msgid "Errors and Warnings Only"
 msgstr "Ainult vead ja hoiatused"
 
-#: eeschema/dialogs/dialog_erc.cpp:421 pcbnew/dialogs/dialog_drc.cpp:1377
+#: eeschema/dialogs/dialog_erc.cpp:421 pcbnew/dialogs/dialog_drc.cpp:1392
 msgid "Errors, Warnings and Exclusions"
 msgstr "Vead, hoiatused ja välistused"
 
@@ -13471,46 +13484,46 @@ msgstr "-------- ERC tühistatud kasutaja poolt.<br><br>"
 msgid "Done.<br><br>"
 msgstr "Valmis.<br><br>"
 
-#: eeschema/dialogs/dialog_erc.cpp:713 pcbnew/dialogs/dialog_drc.cpp:784
+#: eeschema/dialogs/dialog_erc.cpp:713 pcbnew/dialogs/dialog_drc.cpp:799
 msgid "errors"
 msgstr "vead"
 
-#: eeschema/dialogs/dialog_erc.cpp:714 pcbnew/dialogs/dialog_drc.cpp:785
+#: eeschema/dialogs/dialog_erc.cpp:714 pcbnew/dialogs/dialog_drc.cpp:800
 msgid "warnings"
 msgstr "hoiatused"
 
-#: eeschema/dialogs/dialog_erc.cpp:715 pcbnew/dialogs/dialog_drc.cpp:786
+#: eeschema/dialogs/dialog_erc.cpp:715 pcbnew/dialogs/dialog_drc.cpp:801
 msgid "appropriate"
 msgstr "sobiv"
 
-#: eeschema/dialogs/dialog_erc.cpp:739 pcbnew/dialogs/dialog_drc.cpp:808
+#: eeschema/dialogs/dialog_erc.cpp:739 pcbnew/dialogs/dialog_drc.cpp:823
 msgid "Remove exclusion for this violation"
 msgstr "Eemalda selle rikkumise välistus"
 
-#: eeschema/dialogs/dialog_erc.cpp:740 pcbnew/dialogs/dialog_drc.cpp:809
+#: eeschema/dialogs/dialog_erc.cpp:740 pcbnew/dialogs/dialog_drc.cpp:824
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "See paigutatakse tagasi %s loendisse"
 
-#: eeschema/dialogs/dialog_erc.cpp:743 pcbnew/dialogs/dialog_drc.cpp:812
+#: eeschema/dialogs/dialog_erc.cpp:743 pcbnew/dialogs/dialog_drc.cpp:827
 msgid "Edit exclusion comment..."
 msgstr "Muuda välistamise kommentaari..."
 
-#: eeschema/dialogs/dialog_erc.cpp:748 pcbnew/dialogs/dialog_drc.cpp:825
+#: eeschema/dialogs/dialog_erc.cpp:748 pcbnew/dialogs/dialog_drc.cpp:840
 msgid "Exclude this violation"
 msgstr "Välista see rikkumine"
 
 #: eeschema/dialogs/dialog_erc.cpp:749 eeschema/dialogs/dialog_erc.cpp:753
-#: pcbnew/dialogs/dialog_drc.cpp:826 pcbnew/dialogs/dialog_drc.cpp:830
+#: pcbnew/dialogs/dialog_drc.cpp:841 pcbnew/dialogs/dialog_drc.cpp:845
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "See välistatakse %s loendist"
 
-#: eeschema/dialogs/dialog_erc.cpp:752 pcbnew/dialogs/dialog_drc.cpp:829
+#: eeschema/dialogs/dialog_erc.cpp:752 pcbnew/dialogs/dialog_drc.cpp:844
 msgid "Exclude with comment..."
 msgstr "Välista kommentaariga..."
 
-#: eeschema/dialogs/dialog_erc.cpp:780 pcbnew/dialogs/dialog_drc.cpp:860
+#: eeschema/dialogs/dialog_erc.cpp:780 pcbnew/dialogs/dialog_drc.cpp:875
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "Muuda kõikide '%s' rikkumiste tõsiduseks viga"
@@ -13520,17 +13533,17 @@ msgstr "Muuda kõikide '%s' rikkumiste tõsiduseks viga"
 msgid "Violation severities can also be edited in Schematic Setup"
 msgstr "Rikkumise tõsidusi saab muuta ka dialoogis Ahelaskeemi seadistus..."
 
-#: eeschema/dialogs/dialog_erc.cpp:787 pcbnew/dialogs/dialog_drc.cpp:867
+#: eeschema/dialogs/dialog_erc.cpp:787 pcbnew/dialogs/dialog_drc.cpp:882
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "Muuda kõikide '%s' rikkumiste tõsiduseks hoiatus"
 
-#: eeschema/dialogs/dialog_erc.cpp:793 pcbnew/dialogs/dialog_drc.cpp:873
+#: eeschema/dialogs/dialog_erc.cpp:793 pcbnew/dialogs/dialog_drc.cpp:888
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "Ignoreeri kõiki '%s' rikkumisi"
 
-#: eeschema/dialogs/dialog_erc.cpp:794 pcbnew/dialogs/dialog_drc.cpp:874
+#: eeschema/dialogs/dialog_erc.cpp:794 pcbnew/dialogs/dialog_drc.cpp:889
 msgid "Violations will not be checked or reported"
 msgstr "Rikkumisi ei kontrollita ega raporteerita"
 
@@ -13544,7 +13557,7 @@ msgstr "Muuda klemm-klemm konfliktimaatriksit..."
 msgid "Open the Schematic Setup dialog"
 msgstr "Ava ahelaskeemi seadistamise... dialoog"
 
-#: eeschema/dialogs/dialog_erc.cpp:808 pcbnew/dialogs/dialog_drc.cpp:879
+#: eeschema/dialogs/dialog_erc.cpp:808 pcbnew/dialogs/dialog_drc.cpp:894
 msgid "Edit violation severities..."
 msgstr "Muuda rikkumiste tõsidusi..."
 
@@ -13553,7 +13566,7 @@ msgid "Edit connection grid spacing..."
 msgstr "Muuda ühendusrastri sammu..."
 
 #: eeschema/dialogs/dialog_erc.cpp:827 eeschema/dialogs/dialog_erc.cpp:862
-#: pcbnew/dialogs/dialog_drc.cpp:890 pcbnew/dialogs/dialog_drc.cpp:942
+#: pcbnew/dialogs/dialog_drc.cpp:905 pcbnew/dialogs/dialog_drc.cpp:957
 msgid "Exclusion Comment"
 msgstr "Välistamise kommentaar"
 
@@ -13564,8 +13577,8 @@ msgstr "Klemmide konfliktikaart"
 
 #: eeschema/dialogs/dialog_erc.cpp:957 eeschema/dialogs/dialog_erc.cpp:1087
 #: eeschema/dialogs/dialog_schematic_setup.cpp:100
-#: pcbnew/dialogs/dialog_board_setup.cpp:246 pcbnew/dialogs/dialog_drc.cpp:1091
-#: pcbnew/dialogs/dialog_drc.cpp:1133
+#: pcbnew/dialogs/dialog_board_setup.cpp:246 pcbnew/dialogs/dialog_drc.cpp:1106
+#: pcbnew/dialogs/dialog_drc.cpp:1148
 msgid "Violation Severity"
 msgstr "Rikkumise tõsidus"
 
@@ -14422,7 +14435,7 @@ msgstr "Näita süntaksi abiakent"
 #: eeschema/widgets/sch_properties_panel.cpp:436
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
-#: pcbnew/footprint.cpp:4858 pcbnew/widgets/pcb_properties_panel.cpp:414
+#: pcbnew/footprint.cpp:4915 pcbnew/widgets/pcb_properties_panel.cpp:414
 msgid "Fields"
 msgstr "Väljad"
 
@@ -14458,7 +14471,7 @@ msgstr "V joondus"
 #: eeschema/sch_tablecell.cpp:370 eeschema/sch_text.cpp:690
 #: eeschema/sch_text.cpp:824 eeschema/sch_textbox.cpp:617
 #: eeschema/sch_textbox.cpp:773 pcbnew/pcb_barcode.cpp:924
-#: pcbnew/tools/board_inspection_tool.cpp:1726
+#: pcbnew/tools/board_inspection_tool.cpp:1824
 msgid "Text Size"
 msgstr "Teksti suurus"
 
@@ -14469,7 +14482,7 @@ msgstr "Teksti suurus"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:69
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:66
 #: eeschema/fields_grid_table.cpp:535
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:108
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:118
 msgid "X Position"
 msgstr "X positsioon"
 
@@ -14480,7 +14493,7 @@ msgstr "X positsioon"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:70
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:67
 #: eeschema/fields_grid_table.cpp:536
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:109
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:119
 msgid "Y Position"
 msgstr "Y positsioon"
 
@@ -14554,7 +14567,7 @@ msgstr "Romb"
 #: pcbnew/dialogs/dialog_plot_base.cpp:163
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:211
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:143
-#: pcbnew/pcb_tablecell.cpp:219 pcbnew/pcb_text.cpp:337
+#: pcbnew/pcb_tablecell.cpp:219 pcbnew/pcb_text.cpp:342
 #: pcbnew/pcb_textbox.cpp:509
 msgid "Auto"
 msgstr "Automaatne"
@@ -14570,7 +14583,7 @@ msgstr "Väär"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:70
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:94
 #: eeschema/dialogs/dialog_symbol_properties.cpp:151 eeschema/sch_pin.cpp:1468
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:105
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:115
 msgid "Number"
 msgstr "Number"
 
@@ -14630,7 +14643,7 @@ msgstr ""
 "kui 'Väär'"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1016
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1574
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1584
 msgid "Select pin data file"
 msgstr "Vali klemmiandmete fail"
 
@@ -14639,22 +14652,22 @@ msgstr "Vali klemmiandmete fail"
 msgid "Unknown columns in data: %s. These columns will be ignored."
 msgstr "Tundmatud veerud andmetes: %s. Need veerud jäetakse vahele."
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1203
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1213
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:153
 #: eeschema/dialogs/dialog_shape_properties.cpp:89
 msgid "Read Only"
 msgstr "Kirjutuskaitstud"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1451
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1461
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1015
 msgid "Highlight on Cross-probe"
 msgstr "Tõsta esile ristviite korral"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1452
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1462
 msgid "Highlight corresponding pin on canvas when it is selected in the table"
 msgstr "Tõsta vastav klemm lõuendil esile, kui see on tabelis valitud"
 
-#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1690
+#: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1705
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:988
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1013
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1678
@@ -15940,7 +15953,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:474
 #: eeschema/generate_alias_info.cpp:124 kicad/pcm/pcm.cpp:841
-#: pcbnew/zone.cpp:988
+#: pcbnew/zone.cpp:1001
 msgid "Unknown"
 msgstr "Teadmata"
 
@@ -16373,7 +16386,7 @@ msgstr "Täide:"
 msgid "Clear colors to use Schematic Editor colors."
 msgstr "Puhasta värvid, et kasutada ahelaskeemiredaktori värve."
 
-#: eeschema/dialogs/dialog_shape_properties_base.cpp:189 pcbnew/zone.cpp:2058
+#: eeschema/dialogs/dialog_shape_properties_base.cpp:189 pcbnew/zone.cpp:2071
 msgid "Fill Style"
 msgstr "Täite stiil"
 
@@ -17013,12 +17026,12 @@ msgstr "Parameeter"
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:36
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:83
 #: pcbnew/board_tables/board_stackup_table.cpp:86
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:106
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:116
 #: pcbnew/dialogs/dialog_router_save_test_case_base.cpp:47
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1995 pcbnew/pcb_marker.cpp:229
-#: pcbnew/pcb_shape.cpp:700 pcbnew/pcb_text.cpp:321 pcbnew/pcb_track.cpp:2334
+#: pcbnew/pcb_shape.cpp:705 pcbnew/pcb_text.cpp:326 pcbnew/pcb_track.cpp:2334
 #: pcbnew/pcb_track.cpp:2440 pcbnew/widgets/search_handlers.cpp:314
-#: pcbnew/widgets/search_handlers.cpp:390 pcbnew/zone.cpp:902
+#: pcbnew/widgets/search_handlers.cpp:390 pcbnew/zone.cpp:915
 msgid "Type"
 msgstr "Tüüp"
 
@@ -17338,7 +17351,7 @@ msgid "Cannot edit the default variant description."
 msgstr "Vaikimisi varianti ei saa kustutada."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2997
-#: eeschema/sch_edit_frame.cpp:3080
+#: eeschema/sch_edit_frame.cpp:3094
 #, fuzzy, c-format
 msgid "Edit Description for '%s'"
 msgstr "Muuda töö kirjeldust"
@@ -17522,7 +17535,7 @@ msgstr ""
 "koostamismasinate jaoks"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
-#: eeschema/sch_edit_frame.cpp:2382
+#: eeschema/sch_edit_frame.cpp:2396
 msgid "Update Symbol from Library..."
 msgstr "Uuenda sümbol teegist..."
 
@@ -17934,7 +17947,7 @@ msgstr "Uuenda/lähtesta väljade suurusi ja stiile"
 #: eeschema/sch_label.cpp:2548
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:35
 #: pcbnew/dialogs/panel_setup_rules.cpp:996
-#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:917 pcbnew/pcb_text.cpp:719
+#: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:917 pcbnew/pcb_text.cpp:724
 msgid "Syntax Help"
 msgstr "Süntaksi abi"
 
@@ -18804,17 +18817,22 @@ msgstr "Hoia klemmid servade lohistamisel kinni"
 msgid "Symbol Library Tables"
 msgstr "Sümboliteekide tabelid"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:400
+#: eeschema/dialogs/panel_sym_lib_table.cpp:201
+#, fuzzy
+msgid "Unable to load library table."
+msgstr "Teegi laadimine ebaõnnestus\n"
+
+#: eeschema/dialogs/panel_sym_lib_table.cpp:417
 msgid "folder with .kicad_sym files"
 msgstr "kaust .kicad_sym failidega"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:449
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:439
+#: eeschema/dialogs/panel_sym_lib_table.cpp:492
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:475
 msgid "Table (nested library table)"
 msgstr "Tabel (pesastatud teekide tabel)"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:662
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:773
+#: eeschema/dialogs/panel_sym_lib_table.cpp:705
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:809
 msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
@@ -18822,7 +18840,7 @@ msgstr ""
 "See tegevus lähtestab teie globaalse teegi tabeli kettal ja seda ei saa "
 "tagasi võtta."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:781
+#: eeschema/dialogs/panel_sym_lib_table.cpp:830
 #, c-format
 msgid ""
 "Save '%s' as current KiCad format (*.kicad_sym) and replace legacy entry in "
@@ -18831,7 +18849,7 @@ msgstr ""
 "Salvestada '%s' praeguses KiCadi vormingus (*.kicad_sym) ja asendada "
 "pärandkirje tabelis?"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:786
+#: eeschema/dialogs/panel_sym_lib_table.cpp:835
 #, c-format
 msgid ""
 "Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
@@ -18840,18 +18858,18 @@ msgstr ""
 "Salvestada %d teeki praeguses KiCadi vormingus (*.kicad_sym) ja asendada "
 "pärandkirjed tabelis?"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:812
+#: eeschema/dialogs/panel_sym_lib_table.cpp:861
 #: pcbnew/dialogs/dialog_export_step.cpp:461
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Fail '%s' on juba olemas. Kas soovite selle faili üle kirjutada?"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:835
+#: eeschema/dialogs/panel_sym_lib_table.cpp:884
 #, c-format
 msgid "Failed to save symbol library file '%s'."
 msgstr "Sümboli teegifaili '%s' salvestamine ebaõnnestus."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1008
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1045
 msgid ""
 "Modifications have been made to one or more symbol libraries.\n"
 "Changes must be saved or discarded before the symbol library table can be "
@@ -18861,7 +18879,7 @@ msgstr ""
 "Muudatused tuleb salvestada või tühistada enne, kui sümboliteekide tabelit "
 "saab muuta."
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:1021
+#: eeschema/dialogs/panel_sym_lib_table.cpp:1058
 msgid "Symbol Libraries"
 msgstr "Sümboliteegid"
 
@@ -19082,21 +19100,21 @@ msgstr "Ahelaskeemifail salvestati edukalt uusimas vormingus\n"
 msgid "Net Navigator"
 msgstr "Ühendusniidi navigaator"
 
-#: eeschema/eeschema_settings.cpp:116 eeschema/sch_edit_frame.cpp:2048
+#: eeschema/eeschema_settings.cpp:116 eeschema/sch_edit_frame.cpp:2062
 #: pcbnew/footprint_edit_frame.cpp:250 pcbnew/footprint_edit_frame.cpp:1043
-#: pcbnew/pcb_edit_frame.cpp:360 pcbnew/pcb_edit_frame.cpp:2143
+#: pcbnew/pcb_edit_frame.cpp:360 pcbnew/pcb_edit_frame.cpp:2147
 msgid "Selection Filter"
 msgstr "Valiku filter"
 
 #: eeschema/eeschema_settings.cpp:137 eeschema/menubar.cpp:186
-#: eeschema/sch_edit_frame.cpp:2044 eeschema/sch_edit_frame.cpp:2050
+#: eeschema/sch_edit_frame.cpp:2058 eeschema/sch_edit_frame.cpp:2064
 #: eeschema/tools/sch_actions.cpp:123 pcbnew/menubar_pcb_editor.cpp:225
 #: pcbnew/pcb_edit_frame.cpp:369 pcbnew/tools/pcb_actions.cpp:506
 msgid "Design Blocks"
 msgstr "Disainiplokid"
 
 #: eeschema/eeschema_settings.cpp:159 eeschema/menubar.cpp:187
-#: eeschema/sch_edit_frame.cpp:2051 eeschema/tools/sch_actions.cpp:130
+#: eeschema/sch_edit_frame.cpp:2065 eeschema/tools/sch_actions.cpp:130
 msgid "Remote Symbols"
 msgstr "Kaugsümbolid"
 
@@ -19886,7 +19904,7 @@ msgid "Only vectors will be imported.  Bitmaps and fonts will be ignored."
 msgstr "Imporditakse ainult vektorid. Rasterpildid ja fondid jäetakse vahele."
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:43
-#: pcbnew/dialogs/dialog_rule_area_properties.cpp:133 pcbnew/zone.cpp:2040
+#: pcbnew/dialogs/dialog_rule_area_properties.cpp:133 pcbnew/zone.cpp:2053
 msgid "Placement"
 msgstr "Paigutus"
 
@@ -20258,7 +20276,7 @@ msgstr "Käsitlemata elemendi tüüp %d"
 
 #: eeschema/net_navigator.cpp:384 pcbnew/board.cpp:2450
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2024
-#: pcbnew/pcb_draw_panel_gal.cpp:762
+#: pcbnew/pcb_draw_panel_gal.cpp:584
 #: pcbnew/widgets/appearance_controls.cpp:1038
 #: pcbnew/widgets/appearance_controls.cpp:2557
 #: pcbnew/widgets/appearance_controls_base.cpp:61
@@ -20706,21 +20724,21 @@ msgstr ""
 #: eeschema/sch_bitmap.cpp:356 eeschema/sch_group.cpp:512
 #: eeschema/sch_pin.cpp:2091 eeschema/sch_shape.cpp:642
 #: eeschema/sch_symbol.cpp:4143 pcbnew/board_item.cpp:475
-#: pcbnew/pcb_group.cpp:513 pcbnew/pcb_point.cpp:191 pcbnew/pcb_shape.cpp:986
+#: pcbnew/pcb_group.cpp:513 pcbnew/pcb_point.cpp:191 pcbnew/pcb_shape.cpp:991
 #: pcbnew/pcb_tablecell.cpp:282 pcbnew/pcb_track.cpp:3135
 #: pcbnew/widgets/pcb_properties_panel.cpp:563
-#: pcbnew/widgets/pcb_properties_panel.cpp:574 pcbnew/zone.cpp:1942
-#: pcbnew/zone.cpp:1954
+#: pcbnew/widgets/pcb_properties_panel.cpp:574 pcbnew/zone.cpp:1955
+#: pcbnew/zone.cpp:1967
 msgid "Position X"
 msgstr "Asukoht X"
 
 #: eeschema/sch_bitmap.cpp:361 eeschema/sch_group.cpp:513
 #: eeschema/sch_pin.cpp:2095 eeschema/sch_shape.cpp:644
 #: eeschema/sch_symbol.cpp:4146 pcbnew/board_item.cpp:478
-#: pcbnew/pcb_group.cpp:514 pcbnew/pcb_point.cpp:192 pcbnew/pcb_shape.cpp:988
+#: pcbnew/pcb_group.cpp:514 pcbnew/pcb_point.cpp:192 pcbnew/pcb_shape.cpp:993
 #: pcbnew/pcb_tablecell.cpp:283 pcbnew/pcb_track.cpp:3139
-#: pcbnew/widgets/pcb_properties_panel.cpp:564 pcbnew/zone.cpp:1948
-#: pcbnew/zone.cpp:1955
+#: pcbnew/widgets/pcb_properties_panel.cpp:564 pcbnew/zone.cpp:1961
+#: pcbnew/zone.cpp:1968
 msgid "Position Y"
 msgstr "Asukoht Y"
 
@@ -20758,7 +20776,7 @@ msgstr "Siiniühenduse tüüp"
 #: eeschema/sch_label.cpp:1437 eeschema/sch_line.cpp:1019
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2034 pcbnew/pad.cpp:1909
 #: pcbnew/pcb_track.cpp:2466 pcbnew/tools/pcb_control.cpp:2552
-#: pcbnew/zone.cpp:935
+#: pcbnew/zone.cpp:948
 msgid "Resolved Netclass"
 msgstr "Lahendatud ühendusniidiklass"
 
@@ -20828,7 +20846,7 @@ msgstr "Määra rühma disainiploki link"
 msgid "KiCad Schematic Editor"
 msgstr "KiCadi ahelaskeemiredaktor"
 
-#: eeschema/sch_edit_frame.cpp:259 eeschema/sch_edit_frame.cpp:2047
+#: eeschema/sch_edit_frame.cpp:259 eeschema/sch_edit_frame.cpp:2061
 msgid "Schematic Hierarchy"
 msgstr "Ahelaskeemi hierarhia"
 
@@ -20846,7 +20864,7 @@ msgstr "Uus ahelaskeemifail on salvestamata"
 msgid "Save changes to '%s' before closing?"
 msgstr "Salvestada muudatused faili '%s' enne sulgemist?"
 
-#: eeschema/sch_edit_frame.cpp:1336
+#: eeschema/sch_edit_frame.cpp:1350
 msgid ""
 "Cannot update the PCB because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the main KiCad "
@@ -20856,93 +20874,93 @@ msgstr ""
 "režiimis. PCB-de loomiseks/uuendamiseks ahelaskeemidest käivitage KiCadi "
 "põhirakendus ja looge projekt."
 
-#: eeschema/sch_edit_frame.cpp:1421
+#: eeschema/sch_edit_frame.cpp:1435
 msgid "New Schematic"
 msgstr "Uus ahelaskeem"
 
-#: eeschema/sch_edit_frame.cpp:1434
+#: eeschema/sch_edit_frame.cpp:1448
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Ahelaskeemifail '%s' on juba olemas."
 
-#: eeschema/sch_edit_frame.cpp:1459
+#: eeschema/sch_edit_frame.cpp:1473
 msgid "Open Schematic"
 msgstr "Ava ahelaskeem"
 
-#: eeschema/sch_edit_frame.cpp:1554
+#: eeschema/sch_edit_frame.cpp:1568
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr ""
 "Komponendi trükkplaadijälgede määramine nõuab täielikult annoteeritud "
 "ahelaskeemi."
 
-#: eeschema/sch_edit_frame.cpp:1581
+#: eeschema/sch_edit_frame.cpp:1595
 msgid "Could not open CvPcb"
 msgstr "CvPcb-d ei saanud avada"
 
-#: eeschema/sch_edit_frame.cpp:1823 eeschema/sim/simulator_frame.cpp:335
-#: kicad/kicad_manager_frame.cpp:1264 pcbnew/footprint_edit_frame.cpp:1109
-#: pcbnew/pcb_edit_frame.cpp:2234
+#: eeschema/sch_edit_frame.cpp:1837 eeschema/sim/simulator_frame.cpp:335
+#: kicad/kicad_manager_frame.cpp:1271 pcbnew/footprint_edit_frame.cpp:1109
+#: pcbnew/pcb_edit_frame.cpp:2238
 msgid "[Read Only]"
 msgstr "[Kirjutuskaitstud]"
 
-#: eeschema/sch_edit_frame.cpp:1826 eeschema/sim/simulator_frame.cpp:338
-#: pcbnew/footprint_edit_frame.cpp:1118 pcbnew/pcb_edit_frame.cpp:2237
+#: eeschema/sch_edit_frame.cpp:1840 eeschema/sim/simulator_frame.cpp:338
+#: pcbnew/footprint_edit_frame.cpp:1118 pcbnew/pcb_edit_frame.cpp:2241
 msgid "[Unsaved]"
 msgstr "[Salvestamata]"
 
-#: eeschema/sch_edit_frame.cpp:1830
+#: eeschema/sch_edit_frame.cpp:1844
 msgid "[no schematic loaded]"
 msgstr "[ahelaskeemi pole laaditud]"
 
-#: eeschema/sch_edit_frame.cpp:2074
+#: eeschema/sch_edit_frame.cpp:2088
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Esiletõstetud ühendusniit: %s"
 
-#: eeschema/sch_edit_frame.cpp:2272
+#: eeschema/sch_edit_frame.cpp:2286
 msgid "Save Symbol to Schematic"
 msgstr "Salvesta sümbol ahelaskeemi"
 
-#: eeschema/sch_edit_frame.cpp:2380 eeschema/tools/sch_actions.cpp:64
+#: eeschema/sch_edit_frame.cpp:2394 eeschema/tools/sch_actions.cpp:64
 msgid "Compare Symbol with Library"
 msgstr "Võrdle sümbolit teegiga"
 
-#: eeschema/sch_edit_frame.cpp:2504 pcbnew/widgets/appearance_controls.cpp:477
+#: eeschema/sch_edit_frame.cpp:2518 pcbnew/widgets/appearance_controls.cpp:477
 msgid "Filter nets"
 msgstr "Filtreeri ühendusniite"
 
-#: eeschema/sch_edit_frame.cpp:2532
+#: eeschema/sch_edit_frame.cpp:2546
 msgid "Wildcard Search"
 msgstr "Metamärgi otsing"
 
-#: eeschema/sch_edit_frame.cpp:2534
+#: eeschema/sch_edit_frame.cpp:2548
 msgid "Regex Search"
 msgstr "Regulaaravaldise otsing"
 
-#: eeschema/sch_edit_frame.cpp:2687
+#: eeschema/sch_edit_frame.cpp:2701
 msgid "Find in Net Inspector"
 msgstr "Leia ühendusniidi inspektoris"
 
-#: eeschema/sch_edit_frame.cpp:3062
+#: eeschema/sch_edit_frame.cpp:3076
 #, fuzzy
 msgid "No design variants to edit."
 msgstr "Lisa ahelaskeemile uus disainivariant."
 
-#: eeschema/sch_edit_frame.cpp:3066
+#: eeschema/sch_edit_frame.cpp:3080
 #, fuzzy
 msgid "Select variant to edit description:"
 msgstr "Valige eemaldatava variandi nimi:"
 
-#: eeschema/sch_edit_frame.cpp:3067
+#: eeschema/sch_edit_frame.cpp:3081
 #, fuzzy
 msgid "Edit Variant Description"
 msgstr "Muuda töö kirjeldust"
 
-#: eeschema/sch_edit_frame.cpp:3127
+#: eeschema/sch_edit_frame.cpp:3141
 msgid "Select variant name to remove:"
 msgstr "Valige eemaldatava variandi nimi:"
 
-#: eeschema/sch_edit_frame.cpp:3128
+#: eeschema/sch_edit_frame.cpp:3142
 msgid "Remove Design Variant"
 msgstr "Eemalda disainivariant"
 
@@ -20968,7 +20986,7 @@ msgstr "Sümboli väli"
 #: pcbnew/board_tables/board_characteristics_table.cpp:119
 #: pcbnew/board_tables/board_characteristics_table.cpp:122
 #: pcbnew/board_tables/board_characteristics_table.cpp:129
-#: pcbnew/pcb_tablecell.cpp:209 pcbnew/pcb_text.cpp:328
+#: pcbnew/pcb_tablecell.cpp:209 pcbnew/pcb_text.cpp:333
 #: pcbnew/pcb_textbox.cpp:501
 msgid "Yes"
 msgstr "Jah"
@@ -20980,7 +20998,7 @@ msgstr "Jah"
 #: pcbnew/board_tables/board_characteristics_table.cpp:119
 #: pcbnew/board_tables/board_characteristics_table.cpp:122
 #: pcbnew/board_tables/board_characteristics_table.cpp:128
-#: pcbnew/pcb_tablecell.cpp:209 pcbnew/pcb_text.cpp:328
+#: pcbnew/pcb_tablecell.cpp:209 pcbnew/pcb_text.cpp:333
 #: pcbnew/pcb_textbox.cpp:501
 msgid "No"
 msgstr "Ei"
@@ -21618,7 +21636,7 @@ msgstr "KiCadi HTTP teegi failid"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:108
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:221
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:504
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3187
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3190
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:159
 msgid "Open canceled by user."
 msgstr "Kasutaja katkestas avamise."
@@ -22125,13 +22143,13 @@ msgstr "Joondamine"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2030
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2575
 #: pcbnew/generators/pcb_tuning_pattern.h:494 pcbnew/pad.cpp:1907
-#: pcbnew/pad.cpp:3420 pcbnew/pcb_shape.cpp:712 pcbnew/pcb_shape.cpp:1051
+#: pcbnew/pad.cpp:3431 pcbnew/pcb_shape.cpp:717 pcbnew/pcb_shape.cpp:1056
 #: pcbnew/pcb_tablecell.cpp:289 pcbnew/pcb_track.cpp:2464
 #: pcbnew/tools/pcb_control.cpp:2549
 #: pcbnew/widgets/pcb_properties_panel.cpp:692
 #: pcbnew/widgets/pcb_properties_panel.cpp:695
-#: pcbnew/widgets/search_handlers.cpp:227 pcbnew/zone.cpp:933
-#: pcbnew/zone.cpp:2000 pcbnew/zone_manager/dialog_zone_manager_base.cpp:46
+#: pcbnew/widgets/search_handlers.cpp:227 pcbnew/zone.cpp:946
+#: pcbnew/zone.cpp:2013 pcbnew/zone_manager/dialog_zone_manager_base.cpp:46
 #: pcbnew/zone_manager/model_zones_overview.h:74
 msgid "Net"
 msgstr "Ühendusniit"
@@ -22285,7 +22303,7 @@ msgstr "Peidetud klemm %s [%s, %s, %s]"
 msgid "Hidden pin %s [%s, %s]"
 msgstr "Peidetud klemm %s [%s, %s]"
 
-#: eeschema/sch_pin.cpp:2075 pcbnew/pad.cpp:1900 pcbnew/pad.cpp:3443
+#: eeschema/sch_pin.cpp:2075 pcbnew/pad.cpp:1900 pcbnew/pad.cpp:3454
 msgid "Pin Name"
 msgstr "Klemmi nimi"
 
@@ -22346,7 +22364,7 @@ msgstr "Ahelaskeemi reeglipiirkond"
 
 #: eeschema/sch_rule_area.cpp:464 eeschema/sch_sheet.cpp:2294
 #: eeschema/sch_symbol.cpp:1705 eeschema/sch_symbol.cpp:4249
-#: pcbnew/dialogs/dialog_find_by_properties.cpp:174 pcbnew/footprint.cpp:4889
+#: pcbnew/dialogs/dialog_find_by_properties.cpp:174 pcbnew/footprint.cpp:4946
 #: pcbnew/widgets/pcb_properties_panel.cpp:605
 #: pcbnew/widgets/pcb_properties_panel.cpp:619
 #: pcbnew/widgets/pcb_properties_panel.cpp:717
@@ -22356,7 +22374,7 @@ msgstr "Välista materjalide loetelust"
 #: eeschema/sch_rule_area.cpp:469 eeschema/sch_sheet.cpp:2298
 #: eeschema/sch_symbol.cpp:1707 eeschema/sch_symbol.cpp:4261
 #: eeschema/tools/sch_actions.cpp:1118
-#: pcbnew/dialogs/dialog_find_by_properties.cpp:172 pcbnew/footprint.cpp:4892
+#: pcbnew/dialogs/dialog_find_by_properties.cpp:172 pcbnew/footprint.cpp:4949
 #: pcbnew/widgets/pcb_properties_panel.cpp:604
 #: pcbnew/widgets/pcb_properties_panel.cpp:617
 #: pcbnew/widgets/pcb_properties_panel.cpp:712
@@ -22438,13 +22456,13 @@ msgstr "Täitevärv"
 msgid "Filled"
 msgstr "Täidetud"
 
-#: eeschema/sch_shape.cpp:655 pcbnew/zone.cpp:991 pcbnew/zone.cpp:2060
+#: eeschema/sch_shape.cpp:655 pcbnew/zone.cpp:1004 pcbnew/zone.cpp:2073
 msgid "Fill Mode"
 msgstr "Täitmise režiim"
 
 #: eeschema/sch_sheet.cpp:1122 eeschema/sch_sheet.cpp:2258
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:64
-#: pcbnew/zone.cpp:1932
+#: pcbnew/zone.cpp:1945
 msgid "Sheet Name"
 msgstr "Lehe nimi"
 
@@ -22500,7 +22518,7 @@ msgid "Hierarchical Sheet Pin '%s'"
 msgstr "Hierarhilise lehe klemm '%s'"
 
 #: eeschema/sch_symbol.cpp:1706 eeschema/sch_symbol.cpp:4257
-#: pcbnew/dialogs/dialog_find_by_properties.cpp:176 pcbnew/footprint.cpp:4886
+#: pcbnew/dialogs/dialog_find_by_properties.cpp:176 pcbnew/footprint.cpp:4943
 #: pcbnew/widgets/pcb_properties_panel.cpp:606
 #: pcbnew/widgets/pcb_properties_panel.cpp:621
 #: pcbnew/widgets/pcb_properties_panel.cpp:722
@@ -22550,12 +22568,12 @@ msgid "Mirror Y"
 msgstr "Peegeldus Y"
 
 #: eeschema/sch_symbol.cpp:4181 eeschema/widgets/search_handlers.cpp:170
-#: pcbnew/footprint.cpp:4866 pcbnew/widgets/search_handlers.cpp:145
+#: pcbnew/footprint.cpp:4923 pcbnew/widgets/search_handlers.cpp:145
 msgid "Library Link"
 msgstr "Teegi link"
 
 #: eeschema/sch_symbol.cpp:4185 eeschema/widgets/search_handlers.cpp:171
-#: pcbnew/footprint.cpp:4869 pcbnew/plot_board_layers.cpp:192
+#: pcbnew/footprint.cpp:4926 pcbnew/plot_board_layers.cpp:192
 #: pcbnew/widgets/search_handlers.cpp:146
 msgid "Library Description"
 msgstr "Teegi kirjeldus"
@@ -26343,7 +26361,8 @@ msgid "Save selected group to linked design block"
 msgstr "Salvesta valitud rühm lingitud disainiplokki"
 
 #: eeschema/tools/sch_actions.cpp:520
-msgid "Place No Connect Flags"
+#, fuzzy
+msgid "Place/Remove No Connect Flags"
 msgstr "Paiguta ühendamata lipud"
 
 #: eeschema/tools/sch_actions.cpp:531
@@ -26509,7 +26528,7 @@ msgid "Flips selected item(s) from left to right"
 msgstr "Peegeldab valitud elemendid vasakult paremale"
 
 #: eeschema/tools/sch_actions.cpp:802 eeschema/tools/sch_edit_tool.cpp:1761
-#: pcbnew/tools/edit_tool_move_fct.cpp:216 pcbnew/tools/pcb_actions.cpp:703
+#: pcbnew/tools/edit_tool_move_fct.cpp:218 pcbnew/tools/pcb_actions.cpp:703
 msgid "Swap"
 msgstr "Vaheta"
 
@@ -27221,7 +27240,7 @@ msgstr "Lülitab praeguse segmendi asendit."
 #: eeschema/tools/symbol_editor_move_tool.cpp:110
 #: pagelayout_editor/tools/pl_actions.cpp:86
 #: pcbnew/dialogs/panel_edit_options_base.cpp:87
-#: pcbnew/tools/edit_tool_move_fct.cpp:766 pcbnew/tools/pcb_actions.cpp:591
+#: pcbnew/tools/edit_tool_move_fct.cpp:770 pcbnew/tools/pcb_actions.cpp:591
 msgid "Move"
 msgstr "Liiguta"
 
@@ -27233,7 +27252,7 @@ msgstr "Lohista"
 msgid "Move items while keeping their connections"
 msgstr "Liiguta elemente, säilitades nende ühendused"
 
-#: eeschema/tools/sch_actions.cpp:1582 eeschema/tools/sch_move_tool.cpp:2686
+#: eeschema/tools/sch_actions.cpp:1582 eeschema/tools/sch_move_tool.cpp:2703
 #: eeschema/tools/symbol_editor_move_tool.cpp:498
 msgid "Align Items to Grid"
 msgstr "Joonda elemendid ruudustikule"
@@ -27467,27 +27486,27 @@ msgstr "Joonda keskpunktile"
 msgid "Press <ESC> to cancel symbol creation."
 msgstr "Vajutage <ESC>, et sümboli loomist tühistada."
 
-#: eeschema/tools/sch_drawing_tools.cpp:475
+#: eeschema/tools/sch_drawing_tools.cpp:478
 msgid "Place Symbol"
 msgstr "Paiguta sümbol"
 
-#: eeschema/tools/sch_drawing_tools.cpp:667
+#: eeschema/tools/sch_drawing_tools.cpp:670
 msgid "Select a single symbol to place the next unit."
 msgstr "Valige üksik sümbol, et paigutada järgmine osa."
 
-#: eeschema/tools/sch_drawing_tools.cpp:680
+#: eeschema/tools/sch_drawing_tools.cpp:683
 msgid "This symbol has only one unit."
 msgstr "Sellel sümbolil on ainult üks osa."
 
-#: eeschema/tools/sch_drawing_tools.cpp:688
+#: eeschema/tools/sch_drawing_tools.cpp:691
 msgid "All units of this symbol are already placed."
 msgstr "Kõik selle sümboli osad on juba paigutatud."
 
-#: eeschema/tools/sch_drawing_tools.cpp:698
+#: eeschema/tools/sch_drawing_tools.cpp:701
 msgid "Requested unit already placed."
 msgstr "Soovitud ühik on juba paigutatud."
 
-#: eeschema/tools/sch_drawing_tools.cpp:773
+#: eeschema/tools/sch_drawing_tools.cpp:776
 #: eeschema/tools/sch_editor_control.cpp:3395
 #: eeschema/tools/sch_editor_control.cpp:3442 pcbnew/tools/pcb_control.cpp:1427
 #: pcbnew/tools/pcb_control.cpp:1491 pcbnew/tools/pcb_control.cpp:1716
@@ -27496,27 +27515,27 @@ msgstr "Soovitud ühik on juba paigutatud."
 msgid "Could not find design block %s."
 msgstr "Disainiplokki %s ei leitud."
 
-#: eeschema/tools/sch_drawing_tools.cpp:783
+#: eeschema/tools/sch_drawing_tools.cpp:786
 msgid "Design block has no schematic to place."
 msgstr "Disainiplokil ei ole paigutatavat ahelaskeemi."
 
-#: eeschema/tools/sch_drawing_tools.cpp:960
+#: eeschema/tools/sch_drawing_tools.cpp:963
 msgid "Add Design Block"
 msgstr "Lisa disainiplokk"
 
-#: eeschema/tools/sch_drawing_tools.cpp:961
+#: eeschema/tools/sch_drawing_tools.cpp:964
 msgid "Import Schematic Sheet Content"
 msgstr "Impordi ahelaskeemi lehe sisu"
 
-#: eeschema/tools/sch_drawing_tools.cpp:996
+#: eeschema/tools/sch_drawing_tools.cpp:999
 msgid "Choose Schematic"
 msgstr "Vali ahelaskeem"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1223 pcbnew/tools/drawing_tool.cpp:736
+#: eeschema/tools/sch_drawing_tools.cpp:1226 pcbnew/tools/drawing_tool.cpp:736
 msgid "Press <ESC> to cancel image creation."
 msgstr "Vajuta <ESC> pildi loomise tühistamiseks."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1285
+#: eeschema/tools/sch_drawing_tools.cpp:1288
 #: eeschema/tools/sch_edit_tool.cpp:3536
 #: pagelayout_editor/pl_editor_frame.cpp:859
 #: pagelayout_editor/pl_editor_frame.cpp:867 pcbnew/tools/drawing_tool.cpp:797
@@ -27524,106 +27543,111 @@ msgstr "Vajuta <ESC> pildi loomise tühistamiseks."
 msgid "Could not load image from '%s'."
 msgstr "Pildi laadimine failist '%s' ebaõnnestus."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1308 pcbnew/tools/drawing_tool.cpp:818
+#: eeschema/tools/sch_drawing_tools.cpp:1311 pcbnew/tools/drawing_tool.cpp:818
 msgid "Place Image"
 msgstr "Paiguta pilt"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1406
+#: eeschema/tools/sch_drawing_tools.cpp:1409
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:708
 #: pcbnew/tools/drawing_tool.cpp:2070
 msgid "No graphic items found in file."
 msgstr "Failist ei leitud graafilisi elemente."
 
-#: eeschema/tools/sch_drawing_tools.cpp:1436
-#: eeschema/tools/sch_drawing_tools.cpp:1520
+#: eeschema/tools/sch_drawing_tools.cpp:1439
+#: eeschema/tools/sch_drawing_tools.cpp:1523
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:743
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:832
 msgid "Import Graphic"
 msgstr "Impordi graafika"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1577
+#: eeschema/tools/sch_drawing_tools.cpp:1580
 msgid "Add No Connect Flag"
 msgstr "Lisa ühendamata lipp"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1584
+#: eeschema/tools/sch_drawing_tools.cpp:1587
 msgid "Add Junction"
 msgstr "Lisa sõlmpunkt"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1590
+#: eeschema/tools/sch_drawing_tools.cpp:1593
 msgid "Add Wire to Bus Entry"
 msgstr "Lisa juhtme ja siini üleminekukoht"
 
-#: eeschema/tools/sch_drawing_tools.cpp:1666
+#: eeschema/tools/sch_drawing_tools.cpp:1672
+#, fuzzy
+msgid "Remove No Connect Flag"
+msgstr "Lisa ühendamata lipp"
+
+#: eeschema/tools/sch_drawing_tools.cpp:1681
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr "Sõlmpunkti asukohas ei ole ühendatavaid juhtmeid ja/või klemme."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2188
+#: eeschema/tools/sch_drawing_tools.cpp:2203
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:185
 msgid "Press <ESC> to cancel item creation."
 msgstr "Vajuta <ESC> elemendi loomise tühistamiseks."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2221
+#: eeschema/tools/sch_drawing_tools.cpp:2236
 msgid "Add Text"
 msgstr "Lisa tekst"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2247
+#: eeschema/tools/sch_drawing_tools.cpp:2262
 msgid "Add Hierarchical Label"
 msgstr "Lisa hierarhiline silt"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2252
-#: eeschema/tools/sch_drawing_tools.cpp:2257
-#: eeschema/tools/sch_drawing_tools.cpp:2262
+#: eeschema/tools/sch_drawing_tools.cpp:2267
+#: eeschema/tools/sch_drawing_tools.cpp:2272
+#: eeschema/tools/sch_drawing_tools.cpp:2277
 msgid "Add Label"
 msgstr "Lisa silt"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2275
+#: eeschema/tools/sch_drawing_tools.cpp:2290
 msgid "Click over a sheet."
 msgstr "Klõpsa lehele."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2298
-#: eeschema/tools/sch_drawing_tools.cpp:2394
-#: eeschema/tools/sch_drawing_tools.cpp:3712
+#: eeschema/tools/sch_drawing_tools.cpp:2313
+#: eeschema/tools/sch_drawing_tools.cpp:2409
+#: eeschema/tools/sch_drawing_tools.cpp:3727
 msgid "No new hierarchical labels found."
 msgstr "Uusi hierarhilisi silte ei leitud."
 
-#: eeschema/tools/sch_drawing_tools.cpp:2311
-#: eeschema/tools/sch_drawing_tools.cpp:3790
+#: eeschema/tools/sch_drawing_tools.cpp:2326
+#: eeschema/tools/sch_drawing_tools.cpp:3805
 msgid "Add Sheet Pin"
 msgstr "Lisa lehe klemm"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2646
+#: eeschema/tools/sch_drawing_tools.cpp:2661
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:502
 msgid "Add Text Box"
 msgstr "Lisa tekstikast"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2655
+#: eeschema/tools/sch_drawing_tools.cpp:2670
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:508
 #, c-format
 msgid "Add %s"
 msgstr "Lisa %s"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2721
+#: eeschema/tools/sch_drawing_tools.cpp:2736
 #, c-format
 msgid "Draw %s"
 msgstr "Joonesta %s"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3111 pcbnew/tools/drawing_tool.cpp:1341
+#: eeschema/tools/sch_drawing_tools.cpp:3126 pcbnew/tools/drawing_tool.cpp:1341
 msgid "Draw Table"
 msgstr "Joonesta tabel"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3328
+#: eeschema/tools/sch_drawing_tools.cpp:3343
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Vajuta <ESC> lehe loomise tühistamiseks."
 
-#: eeschema/tools/sch_drawing_tools.cpp:3613
+#: eeschema/tools/sch_drawing_tools.cpp:3628
 msgid "Modify sheet pin"
 msgstr "Muuda lehe klemmi"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3619
+#: eeschema/tools/sch_drawing_tools.cpp:3634
 msgid "Modify schematic item"
 msgstr "Muuda ahelaskeemi elementi"
 
-#: eeschema/tools/sch_drawing_tools.cpp:3842
+#: eeschema/tools/sch_drawing_tools.cpp:3857
 msgid "No sub schematic found in the current project"
 msgstr "Praeguses projektis ei leitud alamskeemi"
 
@@ -27692,13 +27716,13 @@ msgstr "Muuda tüübiks"
 
 #: eeschema/tools/sch_edit_tool.cpp:1295
 #: eeschema/tools/symbol_editor_edit_tool.cpp:602
-#: pcbnew/tools/edit_tool.cpp:2593
+#: pcbnew/tools/edit_tool.cpp:2612
 msgid "Rotate"
 msgstr "Pööra"
 
 #: eeschema/tools/sch_edit_tool.cpp:1513 gerbview/gerber_draw_item.cpp:724
-#: pcbnew/pcb_tablecell.cpp:209 pcbnew/pcb_text.cpp:328
-#: pcbnew/pcb_textbox.cpp:501 pcbnew/tools/edit_tool.cpp:2743
+#: pcbnew/pcb_tablecell.cpp:209 pcbnew/pcb_text.cpp:333
+#: pcbnew/pcb_textbox.cpp:501 pcbnew/tools/edit_tool.cpp:2764
 msgid "Mirror"
 msgstr "Peegelda"
 
@@ -27926,7 +27950,7 @@ msgid "Symbol %s"
 msgstr "Sümbol %s"
 
 #: eeschema/tools/sch_inspection_tool.cpp:360
-#: pcbnew/tools/board_inspection_tool.cpp:1877
+#: pcbnew/tools/board_inspection_tool.cpp:1975
 msgid "Summary"
 msgstr "Kokkuvõte"
 
@@ -27936,17 +27960,17 @@ msgstr "Ahelaskeem vs. teek, erinevused:"
 
 #: eeschema/tools/sch_inspection_tool.cpp:364
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
-#: pcbnew/tools/board_inspection_tool.cpp:1881
+#: pcbnew/tools/board_inspection_tool.cpp:1979
 msgid "Library: "
 msgstr "Teek: "
 
 #: eeschema/tools/sch_inspection_tool.cpp:365
-#: pcbnew/tools/board_inspection_tool.cpp:1882
+#: pcbnew/tools/board_inspection_tool.cpp:1980
 msgid "Library item: "
 msgstr "Teegi element: "
 
 #: eeschema/tools/sch_inspection_tool.cpp:374
-#: pcbnew/tools/board_inspection_tool.cpp:1891
+#: pcbnew/tools/board_inspection_tool.cpp:1989
 msgid "The library is not included in the current configuration."
 msgstr "Teek ei ole praeguses konfiguratsioonis kaasatud."
 
@@ -27956,23 +27980,23 @@ msgid "Manage Symbol Libraries"
 msgstr "Halda sümboli teeke"
 
 #: eeschema/tools/sch_inspection_tool.cpp:380
-#: pcbnew/tools/board_inspection_tool.cpp:1899
+#: pcbnew/tools/board_inspection_tool.cpp:1997
 msgid "The library is not enabled in the current configuration."
 msgstr "Teek ei ole praeguses konfiguratsioonis lubatud."
 
 #: eeschema/tools/sch_inspection_tool.cpp:400
-#: pcbnew/tools/board_inspection_tool.cpp:1919
+#: pcbnew/tools/board_inspection_tool.cpp:2017
 #, c-format
 msgid "The library no longer contains the item %s."
 msgstr "Teek ei sisalda enam elementi %s."
 
 #: eeschema/tools/sch_inspection_tool.cpp:421
-#: pcbnew/tools/board_inspection_tool.cpp:1925
+#: pcbnew/tools/board_inspection_tool.cpp:2023
 msgid "No relevant differences detected."
 msgstr "Olulisi erinevusi ei tuvastatud."
 
 #: eeschema/tools/sch_inspection_tool.cpp:424
-#: pcbnew/tools/board_inspection_tool.cpp:1927
+#: pcbnew/tools/board_inspection_tool.cpp:2025
 msgid "Visual"
 msgstr "Visuaalne"
 
@@ -28029,7 +28053,7 @@ msgid "Page '%s' not found."
 msgstr "Lehekülge '%s' ei leitud."
 
 #: eeschema/tools/sch_point_editor.cpp:1226
-#: pcbnew/tools/pcb_point_editor.cpp:2675
+#: pcbnew/tools/pcb_point_editor.cpp:2719
 msgid "Move Point"
 msgstr "Liiguta punkti"
 
@@ -28133,12 +28157,12 @@ msgid "Place Pin"
 msgstr "Paiguta klemm"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:850
-#: pcbnew/tools/edit_tool.cpp:3095
+#: pcbnew/tools/edit_tool.cpp:3120
 msgid "Hide Field"
 msgstr "Peida väli"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:852
-#: pcbnew/tools/edit_tool.cpp:3097
+#: pcbnew/tools/edit_tool.cpp:3122
 msgid "Hide Fields"
 msgstr "Peida väljad"
 
@@ -28867,19 +28891,19 @@ msgstr "Vali kiht: %s"
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:44
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:282
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:154
-#: pcbnew/footprint.cpp:4847 pcbnew/footprint.cpp:4851
+#: pcbnew/footprint.cpp:4904 pcbnew/footprint.cpp:4908
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2037
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2567
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2569 pcbnew/pad.cpp:1917
-#: pcbnew/pad.cpp:3387 pcbnew/pcb_barcode.cpp:553 pcbnew/pcb_dimension.cpp:697
+#: pcbnew/pad.cpp:3398 pcbnew/pcb_barcode.cpp:553 pcbnew/pcb_dimension.cpp:697
 #: pcbnew/pcb_dimension.cpp:1547 pcbnew/pcb_fields_grid_table.cpp:154
 #: pcbnew/pcb_group.cpp:515 pcbnew/pcb_marker.cpp:466 pcbnew/pcb_point.cpp:194
 #: pcbnew/pcb_reference_image.cpp:295 pcbnew/pcb_reference_image.cpp:418
-#: pcbnew/pcb_shape.cpp:707 pcbnew/pcb_shape.cpp:970 pcbnew/pcb_shape.cpp:972
+#: pcbnew/pcb_shape.cpp:712 pcbnew/pcb_shape.cpp:975 pcbnew/pcb_shape.cpp:977
 #: pcbnew/pcb_tablecell.cpp:208 pcbnew/pcb_tablecell.cpp:284
-#: pcbnew/pcb_target.cpp:156 pcbnew/pcb_text.cpp:326 pcbnew/pcb_textbox.cpp:500
+#: pcbnew/pcb_target.cpp:156 pcbnew/pcb_text.cpp:331 pcbnew/pcb_textbox.cpp:500
 #: pcbnew/pcb_track.cpp:2338 pcbnew/pcb_track.cpp:2444
-#: pcbnew/pcb_track.cpp:3182 pcbnew/tools/board_inspection_tool.cpp:440
+#: pcbnew/pcb_track.cpp:3182 pcbnew/tools/board_inspection_tool.cpp:443
 #: pcbnew/tools/pcb_control.cpp:2479
 #: pcbnew/widgets/pcb_properties_panel.cpp:662
 #: pcbnew/widgets/pcb_properties_panel.cpp:663
@@ -28887,8 +28911,8 @@ msgstr "Vali kiht: %s"
 #: pcbnew/widgets/pcb_properties_panel.cpp:673
 #: pcbnew/widgets/search_handlers.cpp:142
 #: pcbnew/widgets/search_handlers.cpp:228
-#: pcbnew/widgets/search_handlers.cpp:316 pcbnew/zone.cpp:977
-#: pcbnew/zone.cpp:1995 pcbnew/zone.cpp:1996
+#: pcbnew/widgets/search_handlers.cpp:316 pcbnew/zone.cpp:990
+#: pcbnew/zone.cpp:2008 pcbnew/zone.cpp:2009
 #: pcbnew/zone_layer_properties_grid.h:52
 msgid "Layer"
 msgstr "Kiht"
@@ -30091,7 +30115,7 @@ msgstr ""
 #: kicad/cli/command_gerber.h:33
 msgid ""
 "View and compare existing Gerber/Excellon files. To export Gerbers from a "
-"PCB, use 'pcb export gerber'"
+"PCB, use 'pcb export gerbers'"
 msgstr ""
 
 #: kicad/cli/command_gerber_convert.h:33
@@ -31995,7 +32019,7 @@ msgstr "Redaktorid"
 msgid "Project Files"
 msgstr "Projektifailid"
 
-#: kicad/kicad_manager_frame.cpp:242 kicad/kicad_manager_frame.cpp:810
+#: kicad/kicad_manager_frame.cpp:242 kicad/kicad_manager_frame.cpp:817
 #: kicad/tools/kicad_manager_actions.cpp:245
 msgid "Local History"
 msgstr "Kohalik ajalugu"
@@ -32009,16 +32033,16 @@ msgstr "PCM värskendused saadaval"
 msgid "%d package update(s) available"
 msgstr "%d paketi värskendus(t) saadaval"
 
-#: kicad/kicad_manager_frame.cpp:881
+#: kicad/kicad_manager_frame.cpp:888
 msgid "Error opening jobs file"
 msgstr "Viga tööfaili avamisel"
 
-#: kicad/kicad_manager_frame.cpp:921 kicad/kicad_manager_frame.cpp:1240
+#: kicad/kicad_manager_frame.cpp:928 kicad/kicad_manager_frame.cpp:1247
 #, c-format
 msgid "Project '%s' is already open by '%s' at '%s'."
 msgstr "Projekt '%s' on juba avatud kasutaja '%s' poolt asukohas '%s'."
 
-#: kicad/kicad_manager_frame.cpp:964
+#: kicad/kicad_manager_frame.cpp:971
 msgid ""
 "KiCad found unsaved changes from your last session that are newer than the "
 "saved project files."
@@ -32026,11 +32050,11 @@ msgstr ""
 "KiCad leidis teie eelmisest seansist salvestamata muudatusi, mis on uuemad "
 "kui salvestatud projektifailid."
 
-#: kicad/kicad_manager_frame.cpp:966
+#: kicad/kicad_manager_frame.cpp:973
 msgid "Recover Unsaved Changes"
 msgstr "Taasta salvestamata muudatused"
 
-#: kicad/kicad_manager_frame.cpp:968
+#: kicad/kicad_manager_frame.cpp:975
 msgid ""
 "This can happen if your previous session ended unexpectedly.\n"
 "\n"
@@ -32042,43 +32066,43 @@ msgstr ""
 "Vahge 'Taasta', et need muudatused taastada, või 'Loobu', et säilitada "
 "praegu salvestatud failid."
 
-#: kicad/kicad_manager_frame.cpp:1143
+#: kicad/kicad_manager_frame.cpp:1150
 msgid "Edit File in Text Editor"
 msgstr "Redigeeri faili tekstiredaktoris"
 
-#: kicad/kicad_manager_frame.cpp:1268
+#: kicad/kicad_manager_frame.cpp:1275
 msgid "[no project loaded]"
 msgstr "[projekti pole laaditud]"
 
-#: kicad/kicad_manager_frame.cpp:1321
+#: kicad/kicad_manager_frame.cpp:1328
 #, c-format
 msgid "Project: %s"
 msgstr "Projekt: %s"
 
-#: kicad/kicad_manager_frame.cpp:1356
+#: kicad/kicad_manager_frame.cpp:1363
 msgid "Restoring session"
 msgstr "Seansi taastamine"
 
-#: kicad/kicad_manager_frame.cpp:1367
+#: kicad/kicad_manager_frame.cpp:1374
 #, c-format
 msgid "Restoring '%s'"
 msgstr "'%s' taastamine"
 
-#: kicad/local_history_pane.cpp:129
+#: kicad/local_history_pane.cpp:113
 msgid "Moments ago"
 msgstr "Hetk tagasi"
 
-#: kicad/local_history_pane.cpp:134
+#: kicad/local_history_pane.cpp:118
 #, c-format
 msgid "%d minutes ago"
 msgstr "%d minutit tagasi"
 
-#: kicad/local_history_pane.cpp:139
+#: kicad/local_history_pane.cpp:123
 #, c-format
 msgid "%d hours ago"
 msgstr "%d tundi tagasi"
 
-#: kicad/local_history_pane.cpp:248
+#: kicad/local_history_pane.cpp:181
 msgid "Restore Commit"
 msgstr "Taasta kinnitamine"
 
@@ -36290,7 +36314,7 @@ msgstr "Vasktsoonide tesselleerimine..."
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:27
 #: pcbnew/dialogs/panel_display_options_base.cpp:34 pcbnew/footprint.cpp:2114
 #: pcbnew/footprint_wizard.cpp:204 pcbnew/netinfo_item.cpp:111
-#: pcbnew/pcb_draw_panel_gal.cpp:759 pcbnew/widgets/appearance_controls.cpp:339
+#: pcbnew/pcb_draw_panel_gal.cpp:581 pcbnew/widgets/appearance_controls.cpp:339
 #: pcbnew/widgets/panel_selection_filter.cpp:225
 #: pcbnew/widgets/panel_selection_filter_base.cpp:45
 msgid "Pads"
@@ -36303,18 +36327,18 @@ msgstr "Jootepadid"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:231
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.cpp:24
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:78
-#: pcbnew/netinfo_item.cpp:126 pcbnew/pcb_draw_panel_gal.cpp:760
+#: pcbnew/netinfo_item.cpp:126 pcbnew/pcb_draw_panel_gal.cpp:582
 #: pcbnew/widgets/appearance_controls.cpp:338
 #: pcbnew/widgets/panel_selection_filter.cpp:224
 #: pcbnew/widgets/panel_selection_filter_base.cpp:41
 msgid "Vias"
 msgstr "Läbiviigud"
 
-#: pcbnew/board.cpp:2449 pcbnew/pcb_draw_panel_gal.cpp:761
+#: pcbnew/board.cpp:2449 pcbnew/pcb_draw_panel_gal.cpp:583
 msgid "Track Segments"
 msgstr "Rajalõigud"
 
-#: pcbnew/board.cpp:2451 pcbnew/pcb_draw_panel_gal.cpp:763
+#: pcbnew/board.cpp:2451 pcbnew/pcb_draw_panel_gal.cpp:585
 msgid "Unrouted"
 msgstr "Marsruutimata"
 
@@ -36990,7 +37014,7 @@ msgstr "Lõppkiht"
 #: pcbnew/board_statistics_report.cpp:675
 #: pcbnew/board_statistics_report.cpp:847
 #: pcbnew/dialogs/dialog_board_statistics.cpp:384
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:3331
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:3342
 #: pcbnew/widgets/search_handlers.cpp:914
 msgid "Round"
 msgstr "Ümmargune"
@@ -37016,10 +37040,10 @@ msgstr "PTH"
 
 #: pcbnew/board_statistics_report.cpp:680
 #: pcbnew/dialogs/dialog_board_statistics.cpp:403
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:128
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:286
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:493
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:720 pcbnew/pad.cpp:2209
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:138
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:296
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:503
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:730 pcbnew/pad.cpp:2209
 #: pcbnew/widgets/search_handlers.cpp:917
 msgid "NPTH"
 msgstr "NPTH"
@@ -37322,7 +37346,7 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr "(kaarel on null- või väga väike suurus: %d nm)"
 
 #: pcbnew/cross-probing.cpp:108 pcbnew/dialogs/dialog_board_setup.cpp:236
-#: pcbnew/dialogs/dialog_drc.cpp:350 pcbnew/pcb_edit_frame.cpp:3222
+#: pcbnew/dialogs/dialog_drc.cpp:350 pcbnew/pcb_edit_frame.cpp:3226
 msgid "Custom Rules"
 msgstr "Kohandatud reeglid"
 
@@ -37339,7 +37363,7 @@ msgstr "Muuda ribakoodi"
 #: pcbnew/pcb_dimension.cpp:2020 pcbnew/pcb_dimension.cpp:2053
 #: pcbnew/pcb_dimension.cpp:2091 pcbnew/pcb_dimension.cpp:2133
 #: pcbnew/pcb_dimension.cpp:2167 pcbnew/pcb_fields_grid_table.cpp:159
-#: pcbnew/pcb_text.cpp:747 pcbnew/pcb_textbox.cpp:871
+#: pcbnew/pcb_text.cpp:752 pcbnew/pcb_textbox.cpp:871
 msgid "Knockout"
 msgstr "Väljalõige"
 
@@ -38815,7 +38839,7 @@ msgstr "Tõsta DRC loendis valitud elemendid lõuendil esile"
 msgid "DRC incomplete: could not compile custom design rules."
 msgstr "DRC on puudulik: kohandatud disainireegleid ei suudetud kompileerida."
 
-#: pcbnew/dialogs/dialog_drc.cpp:412 pcbnew/tools/board_inspection_tool.cpp:417
+#: pcbnew/dialogs/dialog_drc.cpp:412 pcbnew/tools/board_inspection_tool.cpp:420
 msgid "Show design rules."
 msgstr "Kuva disainireeglid."
 
@@ -38847,42 +38871,42 @@ msgstr "Tühista muudatused"
 msgid "Completed in %s"
 msgstr "Rühmita valitud klemmid"
 
-#: pcbnew/dialogs/dialog_drc.cpp:817
+#: pcbnew/dialogs/dialog_drc.cpp:832
 #, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
 msgstr "Eemalda kõik välistused reegli '%s' rikkumiste kohta"
 
-#: pcbnew/dialogs/dialog_drc.cpp:819
+#: pcbnew/dialogs/dialog_drc.cpp:834
 #, c-format
 msgid "They will be placed back in the %s list"
 msgstr "Need paigutatakse tagasi %s loendisse"
 
-#: pcbnew/dialogs/dialog_drc.cpp:835
+#: pcbnew/dialogs/dialog_drc.cpp:850
 #, c-format
 msgid "Exclude all violations of rule '%s'..."
 msgstr "Välista kõik reegli '%s' rikkumised..."
 
-#: pcbnew/dialogs/dialog_drc.cpp:837
+#: pcbnew/dialogs/dialog_drc.cpp:852
 #, c-format
 msgid "They will be excluded from the %s list"
 msgstr "Need jäetakse %s loendist välja"
 
-#: pcbnew/dialogs/dialog_drc.cpp:862 pcbnew/dialogs/dialog_drc.cpp:869
+#: pcbnew/dialogs/dialog_drc.cpp:877 pcbnew/dialogs/dialog_drc.cpp:884
 #, fuzzy
 msgid "Violation severities can also be edited in Board Setup"
 msgstr "Rikkumiste tõsidust saab muuta ka Trükkplaadi seadistus... dialoogis"
 
-#: pcbnew/dialogs/dialog_drc.cpp:880
+#: pcbnew/dialogs/dialog_drc.cpp:895
 #, fuzzy
 msgid "Open the Board Setup dialog"
 msgstr "Ava Trükkplaadi seadistus... dialoog"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1184
+#: pcbnew/dialogs/dialog_drc.cpp:1199
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "Aruandefail '%s' loodud<br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1520
+#: pcbnew/dialogs/dialog_drc.cpp:1535
 msgid "not run"
 msgstr "ei käivitatud"
 
@@ -40100,8 +40124,8 @@ msgstr "Tekstielemendid"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:274
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:59
-#: pcbnew/pcb_fields_grid_table.cpp:156 pcbnew/pcb_text.cpp:751
-#: pcbnew/pcb_text.cpp:763
+#: pcbnew/pcb_fields_grid_table.cpp:156 pcbnew/pcb_text.cpp:756
+#: pcbnew/pcb_text.cpp:768
 msgid "Keep Upright"
 msgstr "Hoia püsti"
 
@@ -40153,12 +40177,12 @@ msgstr "THT"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:153
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:126
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:284
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:489
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:716
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:136
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:294
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:499
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:726
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:1659
-#: pcbnew/pad.cpp:2207 pcbnew/pad.cpp:3305
+#: pcbnew/pad.cpp:2207 pcbnew/pad.cpp:3316
 msgid "SMD"
 msgstr "SMD"
 
@@ -40169,7 +40193,7 @@ msgid "Not in schematic"
 msgstr "Pole ahelaskeemis"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:224
-#: pcbnew/pcb_edit_frame.cpp:3400
+#: pcbnew/pcb_edit_frame.cpp:3404
 msgid "Update Footprint from Library..."
 msgstr "Uuenda komponendi trükkplaadijälge teegist..."
 
@@ -40264,7 +40288,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:341
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:584
-#: pcbnew/zone.cpp:2144
+#: pcbnew/zone.cpp:2157
 msgid "Pad Connections"
 msgstr "Jootepadi ühendused"
 
@@ -40303,7 +40327,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:120
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:133
-#: pcbnew/footprint.cpp:4864
+#: pcbnew/footprint.cpp:4921
 msgid "Footprint Properties"
 msgstr "Komponendi trükkplaadijälje omadused"
 
@@ -40519,25 +40543,25 @@ msgstr "Pythoni skripti vigade kuhjajälg"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:48
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2169
-#: pcbnew/pad.cpp:2191 pcbnew/pad.cpp:3312
+#: pcbnew/pad.cpp:2191 pcbnew/pad.cpp:3323
 msgid "Oval"
 msgstr "Ovaal"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:50 pcbnew/pad.cpp:2171
-#: pcbnew/pad.cpp:3313
+#: pcbnew/pad.cpp:3324
 msgid "Trapezoid"
 msgstr "Trapets"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:51
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:207 pcbnew/pad.cpp:2172
-#: pcbnew/pad.cpp:3314
+#: pcbnew/pad.cpp:3325
 msgid "Rounded rectangle"
 msgstr "Ümardatud ristkülik"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:52
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127 pcbnew/pad.cpp:2173
-#: pcbnew/pad.cpp:3315
+#: pcbnew/pad.cpp:3326
 msgid "Chamfered rectangle"
 msgstr "Faasitud ristkülik"
 
@@ -40561,52 +40585,52 @@ msgstr "Jootepadide arv:"
 msgid "Duplicate pads:"
 msgstr "Korduvad jootepadid:"
 
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:110 pcbnew/pad.cpp:3461
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:120 pcbnew/pad.cpp:3472
 msgid "Size X"
 msgstr "Suurus X"
 
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:111 pcbnew/pad.cpp:3465
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:121 pcbnew/pad.cpp:3476
 msgid "Size Y"
 msgstr "Suurus Y"
 
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:112
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:122
 msgid "Drill X"
 msgstr "Puuri X"
 
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:113
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:123
 msgid "Drill Y"
 msgstr "Puuri Y"
 
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:114
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:124
 msgid "Pad->Die Length"
 msgstr "Jootepadi->kristalli pikkus"
 
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:115
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:125
 msgid "Pad->Die Delay"
 msgstr "Jootepadi->kristalli viide"
 
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:125
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:283
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:287
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:487
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:714
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:3304
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:135
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:293
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:297
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:497
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:724
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:3315
 msgid "Through-hole"
 msgstr "Läbiviik"
 
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:127
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:285
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:491
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:718
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:137
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:295
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:501
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:728
 msgid "Connector"
 msgstr "Pistik"
 
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:129
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:308
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:139
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:318
 msgid "Aperture"
 msgstr "Apertuur"
 
-#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:585
+#: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:595
 msgid "Edit Pads"
 msgstr "Muuda jootepadisid"
 
@@ -41208,7 +41232,7 @@ msgstr "Siiditrükikihid"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:230
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:64
-#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:66 pcbnew/pad.cpp:3738
+#: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:66 pcbnew/pad.cpp:3749
 msgid "Copper Layers"
 msgstr "Vaskkihid"
 
@@ -41249,7 +41273,7 @@ msgstr "Teksti laius"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:56
 #: pcbnew/pcb_barcode.cpp:557 pcbnew/pcb_dimension.cpp:667
 #: pcbnew/pcb_tablecell.cpp:222 pcbnew/pcb_textbox.cpp:512
-#: pcbnew/tools/board_inspection_tool.cpp:571
+#: pcbnew/tools/board_inspection_tool.cpp:593
 msgid "Text Height"
 msgstr "Teksti kõrgus"
 
@@ -41257,9 +41281,9 @@ msgstr "Teksti kõrgus"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:56
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:57
 #: pcbnew/pcb_dimension.cpp:665 pcbnew/pcb_tablecell.cpp:217
-#: pcbnew/pcb_tablecell.cpp:219 pcbnew/pcb_text.cpp:335 pcbnew/pcb_text.cpp:337
+#: pcbnew/pcb_tablecell.cpp:219 pcbnew/pcb_text.cpp:340 pcbnew/pcb_text.cpp:342
 #: pcbnew/pcb_textbox.cpp:507 pcbnew/pcb_textbox.cpp:509
-#: pcbnew/tools/board_inspection_tool.cpp:586
+#: pcbnew/tools/board_inspection_tool.cpp:608
 msgid "Text Thickness"
 msgstr "Teksti paksus"
 
@@ -41382,7 +41406,7 @@ msgstr "Läbiviigi rõngad:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:200
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1228
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:3375
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:3386
 msgid "All copper layers"
 msgstr "Kõik vaskkihid"
 
@@ -41393,12 +41417,12 @@ msgstr "Algus-, lõpp- ja ühendatud kihid"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:200
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1232
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:3376
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:3387
 msgid "Connected layers only"
 msgstr "Ainult ühendatud kihid"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:200
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:3378
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381 pcbnew/pad.cpp:3389
 msgid "Start and end layers only"
 msgstr "Ainult algus- ja lõppkihid"
 
@@ -41791,7 +41815,7 @@ msgid "Sheet Path"
 msgstr "Lehe tee"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
-#: pcbnew/footprint.cpp:2166 pcbnew/footprint.cpp:4877 pcbnew/zone.cpp:1933
+#: pcbnew/footprint.cpp:2166 pcbnew/footprint.cpp:4934 pcbnew/zone.cpp:1946
 msgid "Component Class"
 msgstr "Komponendiklass"
 
@@ -41903,7 +41927,7 @@ msgstr "Piirjoone stiil:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:62
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:75
-#: pcbnew/dialogs/panel_zone_properties_base.cpp:159 pcbnew/zone.cpp:987
+#: pcbnew/dialogs/panel_zone_properties_base.cpp:159 pcbnew/zone.cpp:1000
 msgid "Hatched"
 msgstr "Viirutatud"
 
@@ -41952,12 +41976,12 @@ msgid "Fill type:"
 msgstr "Täite tüüp:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:132
-#: pcbnew/zone.cpp:1913
+#: pcbnew/zone.cpp:1926
 msgid "Solid fill"
 msgstr "Ühtlane täide"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:132
-#: pcbnew/zone.cpp:1914
+#: pcbnew/zone.cpp:1927
 msgid "Hatch pattern"
 msgstr "Viirutusmuster"
 
@@ -42103,7 +42127,7 @@ msgid "Outset Items"
 msgstr "Väljanihke elemendid"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:183
-#: pcbnew/dialogs/dialog_pad_properties_base.h:322 pcbnew/pad.cpp:3425
+#: pcbnew/dialogs/dialog_pad_properties_base.h:322 pcbnew/pad.cpp:3436
 msgid "Pad Properties"
 msgstr "Jootepadi omadused"
 
@@ -42372,7 +42396,7 @@ msgstr "Nihuta kuju avast"
 msgid "Hole shape:"
 msgstr "Ava kuju:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:3332
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:3343
 msgid "Oblong"
 msgstr "Ovaalne"
 
@@ -42395,7 +42419,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:561
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:289
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:187
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2578 pcbnew/pcb_shape.cpp:1110
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2578 pcbnew/pcb_shape.cpp:1115
 #: pcbnew/pcb_track.cpp:3150
 msgid "Technical Layers"
 msgstr "Tehnilised kihid"
@@ -42469,23 +42493,23 @@ msgstr ""
 "Rinnakujuline määrab trükkplaadi äärel oleva läbiviikpadi\n"
 "Mehaaniline määrab mehaanilise toe jaoks kasutatava läbiviikpadi"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:3320
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:3331
 msgid "BGA pad"
 msgstr "BGA jootepadi"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:3322
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:3333
 msgid "Fiducial, local to footprint"
 msgstr "Markeerimistähis, komponendi trükkplaadijälje lokaalne"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:3321
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:3332
 msgid "Fiducial, global to board"
 msgstr "Markeerimistähis, globaalne trükkplaadil"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:3323
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:3334
 msgid "Test point pad"
 msgstr "Kontrollühenduse jootepadi"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:3324
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:616 pcbnew/pad.cpp:3335
 msgid "Heatsink pad"
 msgstr "Soojushajuti jootepadi"
 
@@ -42624,14 +42648,14 @@ msgstr "Esipool"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1116
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1159
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:534
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:581 pcbnew/pad.cpp:3344
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:581 pcbnew/pad.cpp:3355
 msgid "Countersink"
 msgstr "Kooniline faas"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1116
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1159
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:534
-#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:581 pcbnew/pad.cpp:3343
+#: pcbnew/dialogs/dialog_track_via_properties_base.cpp:581 pcbnew/pad.cpp:3354
 msgid "Counterbore"
 msgstr "Silindriline süvis"
 
@@ -43553,7 +43577,7 @@ msgid "Save Router Testcase"
 msgstr "Salvesta marsruuteri logi"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:130
-#: pcbnew/tools/board_inspection_tool.cpp:1759
+#: pcbnew/tools/board_inspection_tool.cpp:1857
 msgid "Keepouts"
 msgstr "Keelualad"
 
@@ -44020,7 +44044,7 @@ msgstr "Siht-kõrvalekalde viivitus: "
 #: pcbnew/router/router_tool.cpp:3067 pcbnew/router/router_tool.cpp:3078
 #: pcbnew/router/router_tool.cpp:3086 pcbnew/router/router_tool.cpp:3091
 #: pcbnew/tools/pcb_control.cpp:2292 pcbnew/tools/pcb_control.cpp:2301
-#: pcbnew/zone.cpp:1002
+#: pcbnew/zone.cpp:1015
 #, c-format
 msgid "(from %s)"
 msgstr "(alates %s)"
@@ -44588,7 +44612,7 @@ msgstr "Uute graafiliste elementide vaikimisi omadused"
 msgid "Footprint Library Tables"
 msgstr "Komponendi trükkplaadijälje teegitabelid"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:556
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:592
 #, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
@@ -44596,12 +44620,12 @@ msgstr ""
 "Kaust '%s' on juba olemas. Kas soovite olemasolevad komponendi "
 "trükkplaadijäljed üle kirjutada?"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:580
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:616
 #, c-format
 msgid "Failed to save footprint library file '%s'."
 msgstr "Komponendijälgede teegi faili '%s' salvestamine ebaõnnestus."
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:624
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:660
 msgid "Select Library Table"
 msgstr "Vali teegitabel"
 
@@ -47007,8 +47031,8 @@ msgstr "Uue graafika ja teksti vaikimisi omadused"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:97 pcbnew/pad.cpp:1990
 #: pcbnew/pcb_track.cpp:2447 pcbnew/pcb_track.cpp:3188
-#: pcbnew/tools/board_inspection_tool.cpp:1347
-#: pcbnew/tools/board_inspection_tool.cpp:1369
+#: pcbnew/tools/board_inspection_tool.cpp:1445
+#: pcbnew/tools/board_inspection_tool.cpp:1467
 msgid "Hole"
 msgstr "Ava"
 
@@ -47268,8 +47292,8 @@ msgstr ""
 "Vaikimisi jootepadi ühenduse tüüp tsooniga.\n"
 "Selle seade saab üle kirjutada kohaliku jootepadi seadetega"
 
-#: pcbnew/dialogs/panel_zone_properties_base.cpp:102 pcbnew/footprint.cpp:4810
-#: pcbnew/pad.cpp:3369 pcbnew/zone.cpp:1903
+#: pcbnew/dialogs/panel_zone_properties_base.cpp:102 pcbnew/footprint.cpp:4867
+#: pcbnew/pad.cpp:3380 pcbnew/zone.cpp:1916
 msgid "Thermal reliefs"
 msgstr "Soojustõkkekujundid"
 
@@ -47322,7 +47346,7 @@ msgid "Hatched Fill"
 msgstr "Viirutustäide"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:339
-#: pcbnew/tools/edit_tool.cpp:1547 pcbnew/tools/edit_tool.cpp:1727
+#: pcbnew/tools/edit_tool.cpp:1552 pcbnew/tools/edit_tool.cpp:1732
 msgid "Radius:"
 msgstr "Raadius:"
 
@@ -47334,7 +47358,7 @@ msgstr "Eemalda saareked:"
 msgid "Choose what to do with unconnected copper islands"
 msgstr "Valige, mida teha ühendamata vasesaarekestega"
 
-#: pcbnew/dialogs/panel_zone_properties_base.cpp:356 pcbnew/zone.cpp:1924
+#: pcbnew/dialogs/panel_zone_properties_base.cpp:356 pcbnew/zone.cpp:1937
 msgid "Below area limit"
 msgstr "Alla pindala piirangu"
 
@@ -47757,7 +47781,7 @@ msgid "%s pad connection: %s."
 msgstr "%s jootepadi ühendus: %s."
 
 #: pcbnew/drc/drc_engine.cpp:2045 pcbnew/drc/drc_engine.cpp:2062
-#: pcbnew/drc/drc_engine.cpp:2079 pcbnew/zone.cpp:692 pcbnew/zone.h:201
+#: pcbnew/drc/drc_engine.cpp:2079 pcbnew/zone.cpp:705 pcbnew/zone.h:201
 msgid "zone"
 msgstr "tsoon"
 
@@ -47776,7 +47800,7 @@ msgstr "%s soojustõkkekujundi kodara laius: %s."
 msgid "Checking rule assertion '%s'."
 msgstr "Kontrollitakse reegli kinnitust '%s'."
 
-#: pcbnew/drc/drc_item.cpp:43 pcbnew/zone.cpp:2130
+#: pcbnew/drc/drc_item.cpp:43 pcbnew/zone.cpp:2143
 msgid "Electrical"
 msgstr "Elektriline"
 
@@ -49516,7 +49540,7 @@ msgstr "Ekspordi GenCAD-sse"
 #: pcbnew/exporters/export_gencad_writer.cpp:1089
 #: pcbnew/exporters/export_hyperlynx.cpp:298
 #: pcbnew/exporters/exporter_vrml.cpp:781
-#: pcbnew/exporters/step/exporter_step.cpp:1174
+#: pcbnew/exporters/step/exporter_step.cpp:1190
 #: pcbnew/specctra_import_export/specctra_export.cpp:123
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "Trükkplaadi kontuur on vigane. Täieliku analüüsi jaoks käivitage DRC."
@@ -49587,7 +49611,7 @@ msgstr "Loodud Gerber töö fail '%s'."
 msgid "Board stackup settings not up to date."
 msgstr "Trükkplaadi kihilõike seaded ei ole ajakohased."
 
-#: pcbnew/exporters/step/exporter_step.cpp:565
+#: pcbnew/exporters/step/exporter_step.cpp:587
 #, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
@@ -49596,7 +49620,7 @@ msgstr ""
 "Ei saanud lisada 3D mudelit komponendile %s.\n"
 "Faili ei leitud: %s\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:623
+#: pcbnew/exporters/step/exporter_step.cpp:645
 #, c-format
 msgid ""
 "Could not add 3D model for %s.\n"
@@ -49605,7 +49629,7 @@ msgstr ""
 "3D-mudelit ei saanud lisada komponendile %s.\n"
 "OpenCASCADE viga: %s\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:664
+#: pcbnew/exporters/step/exporter_step.cpp:686
 #, fuzzy, c-format
 msgid ""
 "Could not add extruded body for %s.\n"
@@ -49614,7 +49638,7 @@ msgstr ""
 "3D-mudelit ei saanud lisada komponendile %s.\n"
 "OpenCASCADE viga: %s\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:679
+#: pcbnew/exporters/step/exporter_step.cpp:701
 #, fuzzy, c-format
 msgid ""
 "Could not add extruded pins for %s.\n"
@@ -49623,11 +49647,11 @@ msgstr ""
 "3D-mudelit ei saanud lisada komponendile %s.\n"
 "OpenCASCADE viga: %s\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:1284
+#: pcbnew/exporters/step/exporter_step.cpp:1300
 msgid "Could not create PCB solid model.\n"
 msgstr "Trükkplaadi tahkemudeli loomine ebaõnnestus.\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:1350
+#: pcbnew/exporters/step/exporter_step.cpp:1366
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
@@ -49635,7 +49659,7 @@ msgstr ""
 "\n"
 "** Viga STEP plaadimudeli ehitamisel. Eksport katkestatud. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:1381
+#: pcbnew/exporters/step/exporter_step.cpp:1397
 #, c-format
 msgid ""
 "\n"
@@ -49644,7 +49668,7 @@ msgstr ""
 "\n"
 "** Viga %s faili kirjutamisel. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:1397
+#: pcbnew/exporters/step/exporter_step.cpp:1413
 #, c-format
 msgid ""
 "\n"
@@ -49661,7 +49685,7 @@ msgstr ""
 "Proovige keelata valik 'Ühenda kujundid', vähendada trükkplaadi keerukust "
 "või vabastada süsteemimälu.\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:1409
+#: pcbnew/exporters/step/exporter_step.cpp:1425
 #, c-format
 msgid ""
 "\n"
@@ -49670,7 +49694,7 @@ msgstr ""
 "\n"
 "OpenCASCADE viga: %s\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:1416
+#: pcbnew/exporters/step/exporter_step.cpp:1432
 msgid ""
 "This error may indicate insufficient memory. Consider disabling 'Fuse "
 "Shapes', reducing the number of vias/components, or freeing system memory.\n"
@@ -49678,12 +49702,12 @@ msgstr ""
 "See viga võib viidata ebapiisavale mälule. Kaaluge 'Fuse Shapes' keelamiset, "
 "läbiviikude/komponentide arvu vähendamist või süsteemimälu vabastamist.\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:1422
+#: pcbnew/exporters/step/exporter_step.cpp:1438
 #, c-format
 msgid "** Error exporting %s file. Export aborted. **\n"
 msgstr "** Viga %s faili eksportimisel. Eksport katkestatud. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:1430
+#: pcbnew/exporters/step/exporter_step.cpp:1446
 #, c-format
 msgid ""
 "\n"
@@ -49700,7 +49724,7 @@ msgstr ""
 "lubatud.\n"
 "Proovige keelata\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:1443
+#: pcbnew/exporters/step/exporter_step.cpp:1459
 #, c-format
 msgid ""
 "\n"
@@ -50055,7 +50079,7 @@ msgstr "Mälu on otsas PCB '%s' laadimisel"
 msgid "Finalizing board"
 msgstr "Trükkplaadi viimistlemine"
 
-#: pcbnew/files.cpp:801 pcbnew/pcb_edit_frame.cpp:1702
+#: pcbnew/files.cpp:801 pcbnew/pcb_edit_frame.cpp:1706
 msgid "Could not load component class assignment rules"
 msgstr "Komponentide klassi määramise reegleid ei saanud laadida"
 
@@ -50152,68 +50176,68 @@ msgstr "3D-kujund: %s"
 msgid "<none>"
 msgstr "<puudub>"
 
-#: pcbnew/footprint.cpp:2677 pcbnew/tools/edit_tool_move_fct.cpp:88
+#: pcbnew/footprint.cpp:2734 pcbnew/tools/edit_tool_move_fct.cpp:88
 msgid "<no reference designator>"
 msgstr "<puudub viitetähis>"
 
-#: pcbnew/footprint.cpp:2679
+#: pcbnew/footprint.cpp:2736
 #, c-format
 msgid "Footprint %s"
 msgstr "Komponendijälg %s"
 
-#: pcbnew/footprint.cpp:3885
+#: pcbnew/footprint.cpp:3942
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "(oodati 'Through hole'; tegelik '%s')"
 
-#: pcbnew/footprint.cpp:3888
+#: pcbnew/footprint.cpp:3945
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(oodati 'SMD'; tegelik '%s')"
 
-#: pcbnew/footprint.cpp:4107
+#: pcbnew/footprint.cpp:4164
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr "(ühendussilla jootepadi rühm sisaldab tundmatut jootepadi numbrit %s)"
 
-#: pcbnew/footprint.cpp:4112
+#: pcbnew/footprint.cpp:4169
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr "(jootepadi %s esineb rohkem kui ühes ühendussilla jootepadi rühmas)"
 
-#: pcbnew/footprint.cpp:4808 pcbnew/pad.cpp:3367 pcbnew/zone.cpp:1901
+#: pcbnew/footprint.cpp:4865 pcbnew/pad.cpp:3378 pcbnew/zone.cpp:1914
 msgid "Inherited"
 msgstr "Päritud"
 
-#: pcbnew/footprint.cpp:4812 pcbnew/pad.cpp:3371 pcbnew/zone.cpp:1905
+#: pcbnew/footprint.cpp:4869 pcbnew/pad.cpp:3382 pcbnew/zone.cpp:1918
 msgid "Thermal reliefs for PTH"
 msgstr "Soojustõkkekujundid PTH jaoks"
 
-#: pcbnew/footprint.cpp:4884
+#: pcbnew/footprint.cpp:4941
 msgid "Not in Schematic"
 msgstr "Pole ahelaskeemis"
 
-#: pcbnew/footprint.cpp:4896 pcbnew/pad.cpp:3752
+#: pcbnew/footprint.cpp:4953 pcbnew/pad.cpp:3763
 msgid "Overrides"
 msgstr "Ülekirjutused"
 
-#: pcbnew/footprint.cpp:4898
+#: pcbnew/footprint.cpp:4955
 msgid "Exempt From Courtyard Requirement"
 msgstr "Hoovnõudest vabastatud"
 
-#: pcbnew/footprint.cpp:4901 pcbnew/pad.cpp:3754
+#: pcbnew/footprint.cpp:4958 pcbnew/pad.cpp:3765
 msgid "Clearance Override"
 msgstr "Isoleervahemiku alistamine"
 
-#: pcbnew/footprint.cpp:4905 pcbnew/pad.cpp:3762
+#: pcbnew/footprint.cpp:4962 pcbnew/pad.cpp:3773
 msgid "Solderpaste Margin Override"
 msgstr "Jootepasta vahemiku tühistamine"
 
-#: pcbnew/footprint.cpp:4909 pcbnew/pad.cpp:3766
+#: pcbnew/footprint.cpp:4966 pcbnew/pad.cpp:3777
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Jootepasta vahemiku suhte tühistamine"
 
-#: pcbnew/footprint.cpp:4914 pcbnew/pad.cpp:3771
+#: pcbnew/footprint.cpp:4971 pcbnew/pad.cpp:3782
 msgid "Zone Connection Style"
 msgstr "Tsooni ühendusstiil"
 
@@ -50324,7 +50348,7 @@ msgstr "Komponendijälje teek '%s' ei ole praeguses konfiguratsioonis lubatud."
 msgid "Footprint library not enabled."
 msgstr "Komponendijälje teek ei ole lubatud."
 
-#: pcbnew/footprint_info_impl.cpp:196
+#: pcbnew/footprint_info_impl.cpp:199
 msgid "Loading footprints..."
 msgstr "Komponendijälgede laadimine..."
 
@@ -50560,7 +50584,7 @@ msgstr "Marsruuditud pikkus"
 msgid "Routed Delay"
 msgstr "Marsruuditud viivitus"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2096 pcbnew/pad.cpp:3742
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2096 pcbnew/pad.cpp:3753
 #: pcbnew/pcb_track.cpp:2382
 msgid "Pad To Die Length"
 msgstr "Jootepadi kaugus kristallini"
@@ -50569,7 +50593,7 @@ msgstr "Jootepadi kaugus kristallini"
 msgid "Full Length"
 msgstr "Kogupikkus"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2104 pcbnew/pad.cpp:3747
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2104 pcbnew/pad.cpp:3758
 #: pcbnew/pcb_track.cpp:2396
 msgid "Pad To Die Delay"
 msgstr "Jootepadi viivitus kristallini"
@@ -50644,14 +50668,14 @@ msgstr "Diferentsiaalpaar"
 msgid "Diff pair skew"
 msgstr "Diferentsiaalpaari nihe"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2580 pcbnew/pcb_shape.cpp:1121
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2580 pcbnew/pcb_shape.cpp:1126
 #: pcbnew/pcb_tablecell.cpp:285 pcbnew/pcb_textbox.cpp:867
 #: pcbnew/pcb_track.cpp:3161
 msgid "Soldermask"
 msgstr "Jootemask"
 
-#: pcbnew/generators/pcb_tuning_pattern.cpp:2584 pcbnew/pad.cpp:3758
-#: pcbnew/pcb_shape.cpp:1126 pcbnew/pcb_tablecell.cpp:286
+#: pcbnew/generators/pcb_tuning_pattern.cpp:2584 pcbnew/pad.cpp:3769
+#: pcbnew/pcb_shape.cpp:1131 pcbnew/pcb_tablecell.cpp:286
 #: pcbnew/pcb_textbox.cpp:868 pcbnew/pcb_track.cpp:3164
 msgid "Soldermask Margin Override"
 msgstr "Jootemaski vahemiku tühistamine"
@@ -51628,7 +51652,7 @@ msgstr ""
 msgid "pad"
 msgstr "jootepadi"
 
-#: pcbnew/pad.cpp:1903 pcbnew/pad.cpp:3447
+#: pcbnew/pad.cpp:1903 pcbnew/pad.cpp:3458
 msgid "Pin Type"
 msgstr "Klemmi tüüp"
 
@@ -51670,7 +51694,7 @@ msgstr "Ava X / Y"
 
 #: pcbnew/pad.cpp:2008 pcbnew/pcb_track.cpp:2412 pcbnew/pcb_track.cpp:2452
 #: pcbnew/router/router_tool.cpp:3060 pcbnew/router/router_tool.cpp:3089
-#: pcbnew/zone.cpp:1001
+#: pcbnew/zone.cpp:1014
 #, c-format
 msgid "Min Clearance: %s"
 msgstr "Min isoleervahemik: %s"
@@ -51738,93 +51762,93 @@ msgstr "PTH padi %s %s komponendist %s"
 msgid "PTH pad %s"
 msgstr "PTH padi %s"
 
-#: pcbnew/pad.cpp:2858
+#: pcbnew/pad.cpp:2869
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr ""
 "(metalliseeritud läbiviigu aukudel on tavaliselt vasktäide vähemalt ühel "
 "väliskihil)"
 
-#: pcbnew/pad.cpp:2866
+#: pcbnew/pad.cpp:2877
 msgid "('fiducial' pads are normally plated)"
 msgstr "('fiducial' padjad on tavaliselt metalliseeritud)"
 
-#: pcbnew/pad.cpp:2870
+#: pcbnew/pad.cpp:2881
 msgid "('testpoint' pads are normally plated)"
 msgstr "('testpoint' padjad on tavaliselt metalliseeritud)"
 
-#: pcbnew/pad.cpp:2873
+#: pcbnew/pad.cpp:2884
 msgid "('heatsink' pads are normally plated)"
 msgstr "('heatsink' padjad on tavaliselt metalliseeritud)"
 
-#: pcbnew/pad.cpp:2876
+#: pcbnew/pad.cpp:2887
 msgid "('castellated' pads are normally PTH)"
 msgstr "('castellated' padjad on tavaliselt PTH)"
 
-#: pcbnew/pad.cpp:2879
+#: pcbnew/pad.cpp:2890
 msgid "('BGA' property is for SMD pads)"
 msgstr "('BGA' omadus on SMD padjade jaoks)"
 
-#: pcbnew/pad.cpp:2882
+#: pcbnew/pad.cpp:2893
 msgid "('mechanical' pads are normally PTH)"
 msgstr "('mechanical' padjad on tavaliselt PTH)"
 
-#: pcbnew/pad.cpp:2887
+#: pcbnew/pad.cpp:2898
 msgid "('press-fit' pads are normally PTH with round holes)"
 msgstr "('press-fit' padjad on tavaliselt PTH ümmarguste avadega)"
 
-#: pcbnew/pad.cpp:2904
+#: pcbnew/pad.cpp:2915
 msgid "(connector pads normally have no solder paste; use a SMD pad instead)"
 msgstr ""
 "(pistiku jootepadadel tavaliselt puudub jootepasta; kasutage selle asemel "
 "SMD jootepadi)"
 
-#: pcbnew/pad.cpp:2912
+#: pcbnew/pad.cpp:2923
 msgid "(SMD pad has a hole)"
 msgstr "(SMD padjal on ava)"
 
-#: pcbnew/pad.cpp:2918
+#: pcbnew/pad.cpp:2929
 msgid "(SMD pad has copper on both sides of the board)"
 msgstr "(SMD jootepadil on vask plaadi mõlemal küljel)"
 
-#: pcbnew/pad.cpp:2924 pcbnew/pad.cpp:2937
+#: pcbnew/pad.cpp:2935 pcbnew/pad.cpp:2948
 msgid "(SMD pad has copper and mask layers on different sides of the board)"
 msgstr "(SMD jootepadil on vask- ja maskikihid plaadi eri külgedel)"
 
-#: pcbnew/pad.cpp:2929 pcbnew/pad.cpp:2942
+#: pcbnew/pad.cpp:2940 pcbnew/pad.cpp:2953
 msgid "(SMD pad has copper and paste layers on different sides of the board)"
 msgstr "(SMD jootepadil on vask- ja pastakihid plaadi eri külgedel)"
 
-#: pcbnew/pad.cpp:2948
+#: pcbnew/pad.cpp:2959
 msgid "(SMD pad has no outer layers)"
 msgstr "(SMD jootepadi väliskihid puuduvad)"
 
-#: pcbnew/pad.cpp:2967
+#: pcbnew/pad.cpp:2978
 msgid "(Pad must have a positive size)"
 msgstr "(Jootepadi peab olema positiivse suurusega)"
 
-#: pcbnew/pad.cpp:2978
+#: pcbnew/pad.cpp:2989
 #, c-format
 msgid "(PTH pad hole size must be larger than %s)"
 msgstr "(PTH jootepadi ava suurus peab olema suurem kui %s)"
 
-#: pcbnew/pad.cpp:3001
+#: pcbnew/pad.cpp:3012
 msgid "(PTH pad hole leaves no copper)"
 msgstr "(PTH jootepadi ava ei jäta vaske alles)"
 
-#: pcbnew/pad.cpp:3011
+#: pcbnew/pad.cpp:3022
 msgid "(PTH pad hole not fully inside copper)"
 msgstr "(PTH jootepadi ava ei ole täielikult vase sees)"
 
-#: pcbnew/pad.cpp:3018
+#: pcbnew/pad.cpp:3029
 msgid "(pad hole not inside pad shape)"
 msgstr "(jootepadi ava ei ole jootepadi kujundi sees)"
 
-#: pcbnew/pad.cpp:3023
+#: pcbnew/pad.cpp:3034
 msgid "(negative local clearance values have no effect)"
 msgstr "(negatiivsetel kohalikel isoleervahemiku väärtustel puudub mõju)"
 
-#: pcbnew/pad.cpp:3042
+#: pcbnew/pad.cpp:3053
 msgid ""
 "(negative solder mask clearance is larger than some shape primitives; "
 "results may be surprising)"
@@ -51832,7 +51856,7 @@ msgstr ""
 "(negatiivne jootemaski isoleervahemik on suurem kui mõned primitiivid; "
 "tulemused võivad olla ootamatud)"
 
-#: pcbnew/pad.cpp:3052
+#: pcbnew/pad.cpp:3063
 msgid ""
 "(negative solder mask clearance is larger than pad; no solder mask will be "
 "generated)"
@@ -51840,7 +51864,7 @@ msgstr ""
 "(negatiivne jootemaskivahemik on suurem kui jootepadi; jootemaski ei "
 "genereerita)"
 
-#: pcbnew/pad.cpp:3071
+#: pcbnew/pad.cpp:3082
 msgid ""
 "(negative solder paste margin is larger than pad; no solder paste mask will "
 "be generated)"
@@ -51848,187 +51872,187 @@ msgstr ""
 "(negatiivne jootepasta vahemik on suurem kui jootepadi; jootepasta maski ei "
 "genereerita)"
 
-#: pcbnew/pad.cpp:3078
+#: pcbnew/pad.cpp:3089
 msgid "(negative corner radius is not allowed)"
 msgstr "(negatiivne nurgaraadius pole lubatud)"
 
-#: pcbnew/pad.cpp:3080
+#: pcbnew/pad.cpp:3091
 msgid "(corner size will make pad circular)"
 msgstr "(nurga suurus muudab jootepadi ringikujuliseks)"
 
-#: pcbnew/pad.cpp:3085
+#: pcbnew/pad.cpp:3096
 msgid "(negative corner chamfer is not allowed)"
 msgstr "(negatiivne nurgafaas pole lubatud)"
 
-#: pcbnew/pad.cpp:3087
+#: pcbnew/pad.cpp:3098
 msgid "(corner chamfer is too large)"
 msgstr "(nurgafaas on liiga suur)"
 
-#: pcbnew/pad.cpp:3096
+#: pcbnew/pad.cpp:3107
 msgid "(trapezoid delta is too large)"
 msgstr "(trapetsikõrgus on liiga suur)"
 
-#: pcbnew/pad.cpp:3106
+#: pcbnew/pad.cpp:3117
 msgid "(custom pad shape must resolve to a single polygon)"
 msgstr "(kohandatud jootepadi kujund peab lahenema üheks hulknurgaks)"
 
-#: pcbnew/pad.cpp:3306
+#: pcbnew/pad.cpp:3317
 msgid "Edge connector"
 msgstr "Äärepistik"
 
-#: pcbnew/pad.cpp:3307
+#: pcbnew/pad.cpp:3318
 msgid "NPTH, mechanical"
 msgstr "NPTH, mehaaniline"
 
-#: pcbnew/pad.cpp:3325
+#: pcbnew/pad.cpp:3336
 msgid "Castellated pad"
 msgstr "Rinnakujuline padi"
 
-#: pcbnew/pad.cpp:3326
+#: pcbnew/pad.cpp:3337
 msgid "Mechanical pad"
 msgstr "Mehaaniline padi"
 
-#: pcbnew/pad.cpp:3327
+#: pcbnew/pad.cpp:3338
 msgid "Press-fit pad"
 msgstr "Pressfiti padi"
 
-#: pcbnew/pad.cpp:3330
+#: pcbnew/pad.cpp:3341
 msgid "Undefined"
 msgstr "Määramata"
 
-#: pcbnew/pad.cpp:3342
+#: pcbnew/pad.cpp:3353
 msgid "Not post-machined"
 msgstr "Järeltöötlemata"
 
-#: pcbnew/pad.cpp:3355
+#: pcbnew/pad.cpp:3366
 msgid "No backdrill"
 msgstr "Tagapuurimine puudub"
 
-#: pcbnew/pad.cpp:3356
+#: pcbnew/pad.cpp:3367
 msgid "Backdrill bottom"
 msgstr "Tagapuurimine alt"
 
-#: pcbnew/pad.cpp:3357
+#: pcbnew/pad.cpp:3368
 msgid "Backdrill top"
 msgstr "Tagapuurimine ülevalt"
 
-#: pcbnew/pad.cpp:3358
+#: pcbnew/pad.cpp:3369
 msgid "Backdrill both"
 msgstr "Tagapuurimine mõlemalt poolt"
 
-#: pcbnew/pad.cpp:3377
+#: pcbnew/pad.cpp:3388
 msgid "Front, back and connected layers"
 msgstr "Esi-, taga- ja ühendatud kihid"
 
-#: pcbnew/pad.cpp:3426
+#: pcbnew/pad.cpp:3437
 msgid "Post-machining Properties"
 msgstr "Järeltöötluse omadused"
 
-#: pcbnew/pad.cpp:3427
+#: pcbnew/pad.cpp:3438
 msgid "Backdrill Properties"
 msgstr "Tagapuurimise omadused"
 
-#: pcbnew/pad.cpp:3429
+#: pcbnew/pad.cpp:3440
 msgid "Pad Type"
 msgstr "Jootepadi tüüp"
 
-#: pcbnew/pad.cpp:3433 pcbnew/tools/pcb_control.cpp:2484
+#: pcbnew/pad.cpp:3444 pcbnew/tools/pcb_control.cpp:2484
 msgid "Pad Shape"
 msgstr "Jootepadi kujund"
 
-#: pcbnew/pad.cpp:3438
+#: pcbnew/pad.cpp:3449
 msgid "Pad Number"
 msgstr "Jootepadi number"
 
-#: pcbnew/pad.cpp:3498
+#: pcbnew/pad.cpp:3509
 msgid "Corner Radius Ratio"
 msgstr "Nurgaraadiuse suhtarv"
 
-#: pcbnew/pad.cpp:3503
+#: pcbnew/pad.cpp:3514
 msgid "Corner Radius Size"
 msgstr "Nurgaraadiuse suurus"
 
-#: pcbnew/pad.cpp:3508
+#: pcbnew/pad.cpp:3519
 msgid "Hole Shape"
 msgstr "Ava kujund"
 
-#: pcbnew/pad.cpp:3512
+#: pcbnew/pad.cpp:3523
 msgid "Hole Size X"
 msgstr "Ava suurus X"
 
-#: pcbnew/pad.cpp:3518
+#: pcbnew/pad.cpp:3529
 msgid "Hole Size Y"
 msgstr "Ava suurus Y"
 
-#: pcbnew/pad.cpp:3532
+#: pcbnew/pad.cpp:3543
 msgid "Top Post-machining"
 msgstr "Ülemine järeltöötlus"
 
-#: pcbnew/pad.cpp:3545
+#: pcbnew/pad.cpp:3556
 msgid "Top Post-machining Size"
 msgstr "Ülemise järeltöötluse suurus"
 
-#: pcbnew/pad.cpp:3563
+#: pcbnew/pad.cpp:3574
 msgid "Top Counterbore Depth"
 msgstr "Ülemise silindrilise süvise sügavus"
 
-#: pcbnew/pad.cpp:3580
+#: pcbnew/pad.cpp:3591
 msgid "Top Countersink Angle"
 msgstr "Ülemise koonilise faasi nurk"
 
-#: pcbnew/pad.cpp:3597
+#: pcbnew/pad.cpp:3608
 msgid "Bottom Post-machining"
 msgstr "Alumine järeltöötlus"
 
-#: pcbnew/pad.cpp:3610
+#: pcbnew/pad.cpp:3621
 msgid "Bottom Post-machining Size"
 msgstr "Alumise järeltöötluse suurus"
 
-#: pcbnew/pad.cpp:3628
+#: pcbnew/pad.cpp:3639
 msgid "Bottom Counterbore Depth"
 msgstr "Alumise silindrilise süvise sügavus"
 
-#: pcbnew/pad.cpp:3645
+#: pcbnew/pad.cpp:3656
 msgid "Bottom Countersink Angle"
 msgstr "Alumise koonilise faasi nurk"
 
-#: pcbnew/pad.cpp:3662 pcbnew/pcb_track.cpp:3231
+#: pcbnew/pad.cpp:3673 pcbnew/pcb_track.cpp:3231
 msgid "Backdrill Mode"
 msgstr "Tagapuurimise režiim"
 
-#: pcbnew/pad.cpp:3665 pcbnew/pcb_track.cpp:3235
+#: pcbnew/pad.cpp:3676 pcbnew/pcb_track.cpp:3235
 msgid "Bottom Backdrill Size"
 msgstr "Alumine tagapuurimise suurus"
 
-#: pcbnew/pad.cpp:3682 pcbnew/pcb_track.cpp:3249
+#: pcbnew/pad.cpp:3693 pcbnew/pcb_track.cpp:3249
 #: pcbnew/widgets/pcb_properties_panel.cpp:667
 #: pcbnew/widgets/pcb_properties_panel.cpp:671
 msgid "Bottom Backdrill Must-Cut"
 msgstr "Alumine tagapuurimise kohustuslõige"
 
-#: pcbnew/pad.cpp:3699 pcbnew/pcb_track.cpp:3262
+#: pcbnew/pad.cpp:3710 pcbnew/pcb_track.cpp:3262
 msgid "Top Backdrill Size"
 msgstr "Ülemine tagapuurimise suurus"
 
-#: pcbnew/pad.cpp:3716 pcbnew/pcb_track.cpp:3276
+#: pcbnew/pad.cpp:3727 pcbnew/pcb_track.cpp:3276
 #: pcbnew/widgets/pcb_properties_panel.cpp:668
 #: pcbnew/widgets/pcb_properties_panel.cpp:672
 msgid "Top Backdrill Must-Cut"
 msgstr "Ülemine tagapuurimise kohustuslõige"
 
-#: pcbnew/pad.cpp:3734
+#: pcbnew/pad.cpp:3745
 msgid "Fabrication Property"
 msgstr "Tootmisomadus"
 
-#: pcbnew/pad.cpp:3777 pcbnew/zone.cpp:2153
+#: pcbnew/pad.cpp:3788 pcbnew/zone.cpp:2166
 msgid "Thermal Relief Spoke Width"
 msgstr "Soojustõkkekujundi kodara laius"
 
-#: pcbnew/pad.cpp:3783
+#: pcbnew/pad.cpp:3794
 msgid "Thermal Relief Spoke Angle"
 msgstr "Soojustõkkekujundi kodara nurk"
 
-#: pcbnew/pad.cpp:3788 pcbnew/zone.cpp:2148
+#: pcbnew/pad.cpp:3799 pcbnew/zone.cpp:2161
 msgid "Thermal Relief Gap"
 msgstr "Soojustõkkekujundi vahe"
 
@@ -52106,7 +52130,7 @@ msgstr "+/- lülitamiseks"
 msgid "Edit Vertices"
 msgstr "Redigeeri tippe"
 
-#: pcbnew/pcb_base_frame.cpp:1238
+#: pcbnew/pcb_base_frame.cpp:1244
 msgid ""
 "The library containing the current footprint has changed.\n"
 "Do you want to reload the footprint?"
@@ -52201,31 +52225,31 @@ msgstr "Ekspordi ahelaloend skeemide uuendamiseks"
 msgid "New PCB file is unsaved"
 msgstr "Uus PCB fail on salvestamata"
 
-#: pcbnew/pcb_edit_frame.cpp:2027
+#: pcbnew/pcb_edit_frame.cpp:2031
 #, c-format
 msgid "%d WRL 3D model could not be matched to an equivalent STEP model."
 msgid_plural "%d WRL 3D models could not be matched to equivalent STEP models."
 msgstr[0] ""
 msgstr[1] ""
 
-#: pcbnew/pcb_edit_frame.cpp:2035
+#: pcbnew/pcb_edit_frame.cpp:2039
 #, fuzzy
 msgid "Show options"
 msgstr "SVG valikud"
 
-#: pcbnew/pcb_edit_frame.cpp:2063
+#: pcbnew/pcb_edit_frame.cpp:2067
 msgid "Board file is read only."
 msgstr "Trükkplaadifail on kirjutuskaitstud."
 
-#: pcbnew/pcb_edit_frame.cpp:2109
+#: pcbnew/pcb_edit_frame.cpp:2113
 msgid "PCB file changes are unsaved"
 msgstr "PCB faili muudatused on salvestamata"
 
-#: pcbnew/pcb_edit_frame.cpp:2404
+#: pcbnew/pcb_edit_frame.cpp:2408
 msgid "The schematic for this board cannot be found."
 msgstr "Selle plaadi ahelaskeemi ei leitud."
 
-#: pcbnew/pcb_edit_frame.cpp:2430
+#: pcbnew/pcb_edit_frame.cpp:2434
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
@@ -52235,11 +52259,11 @@ msgstr ""
 "eraldiseisvas režiimis. Trükkplaatide loomiseks või uuendamiseks "
 "ahelaskeemidest tuleb käivitada KiCad projektihaldur ja luua projekt."
 
-#: pcbnew/pcb_edit_frame.cpp:2455 pcbnew/pcbnew_jobs_handler.cpp:2563
+#: pcbnew/pcb_edit_frame.cpp:2459 pcbnew/pcbnew_jobs_handler.cpp:2563
 msgid "Eeschema netlist"
 msgstr "Eeschema ahelaloend"
 
-#: pcbnew/pcb_edit_frame.cpp:2466
+#: pcbnew/pcb_edit_frame.cpp:2470
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
@@ -52247,27 +52271,27 @@ msgstr ""
 "Ahelaloendi lugemisel tekkis viga. Palun teatage sellest probleemist KiCad "
 "meeskonnale menüü kaudu Abi->Teata veast."
 
-#: pcbnew/pcb_edit_frame.cpp:3216
+#: pcbnew/pcb_edit_frame.cpp:3220
 msgid "Edit design rules"
 msgstr "Muuda disainireegleid"
 
-#: pcbnew/pcb_edit_frame.cpp:3228
+#: pcbnew/pcb_edit_frame.cpp:3232
 msgid "Could not compile custom design rules."
 msgstr "Kohandatud disainireegleid ei saanud kompileerida."
 
-#: pcbnew/pcb_edit_frame.cpp:3362
+#: pcbnew/pcb_edit_frame.cpp:3366
 msgid "Violation Report"
 msgstr "Rikkumiste aruanne"
 
-#: pcbnew/pcb_edit_frame.cpp:3374
+#: pcbnew/pcb_edit_frame.cpp:3378
 msgid "Clearance Report"
 msgstr "Isoleervahemike aruanne"
 
-#: pcbnew/pcb_edit_frame.cpp:3386
+#: pcbnew/pcb_edit_frame.cpp:3390
 msgid "Constraints Report"
 msgstr "Piirangute aruanne"
 
-#: pcbnew/pcb_edit_frame.cpp:3398 pcbnew/tools/pcb_actions.cpp:2204
+#: pcbnew/pcb_edit_frame.cpp:3402 pcbnew/tools/pcb_actions.cpp:2204
 msgid "Compare Footprint with Library"
 msgstr "Võrdle komponendijälge teegiga"
 
@@ -53539,7 +53563,7 @@ msgid "Element token contains %d parameters."
 msgstr "Elemendi sümbol sisaldab %d parameetrit."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:997
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3589
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3592
 #, c-format
 msgid "Library folder '%s' has unexpected sub-folders."
 msgstr "Teegikaustas '%s' on ootamatud alamkaustad."
@@ -53551,7 +53575,7 @@ msgstr "Ootamatu fail '%s' leiti teegis '%s'."
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:1035
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3329
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3626
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3629
 #, c-format
 msgid "Footprint library '%s' cannot be deleted."
 msgstr "Trükkplaadijälgede teeki '%s' ei saa kustutada."
@@ -53692,7 +53716,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER '%s'"
 msgstr "Vigane ZSmoothing CZONE_CONTAINER '%s' jaoks"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2593
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8653
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8656
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -53764,11 +53788,11 @@ msgstr "tundmatu läbiviik tüüp %d"
 msgid "unknown zone corner smoothing type %d"
 msgstr "tundmatu tsooni nurga silumise tüüp %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3238
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3241
 msgid "This file does not contain a PCB."
 msgstr "See fail ei sisalda trükkplaati."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3432
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3435
 #, c-format
 msgid ""
 "Library '%s' does not exist.\n"
@@ -53777,21 +53801,21 @@ msgstr ""
 "Teeki '%s' ei eksisteeri.\n"
 "Kas soovite selle luua?"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3436
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3439
 msgid "Library Not Found"
 msgstr "Teeki ei leitud"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3465
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3468
 #, c-format
 msgid "Footprint file name '%s' is not valid."
 msgstr "Trükkplaadijälje failinimi '%s' ei ole kehtiv."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3470
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3473
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
 msgstr "Ebapiisavad õigused faili '%s' kustutamiseks."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3608
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3611
 #, c-format
 msgid "Unexpected file '%s' found in library path '%s'."
 msgstr "Ootamatu fail '%s' leiti teegi rajal '%s'."
@@ -53950,7 +53974,7 @@ msgstr ""
 msgid "Invalid padstack layer '%s' in file '%s' at line %d, offset %d."
 msgstr "Kehtetu jootepadi kihilõike kiht '%s' failis '%s' real %d, nihkes %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8623
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8626
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
@@ -54141,84 +54165,73 @@ msgstr "KiCad trükkplaadi failid"
 msgid "Sprint Layout macro library"
 msgstr "KiCad trükkplaadi failid"
 
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:77
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:86
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:98
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:127
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:160
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:176
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:78
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:87
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:123
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:152
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:187
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:203
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:214
 #, fuzzy
 msgid "Unexpected end of Sprint Layout file"
 msgstr "Ootamatu faililõpp"
 
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:173
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:200
 msgid "Invalid string length in Sprint Layout file"
 msgstr ""
 
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:198
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:225
 #, fuzzy
 msgid "Unexpected seek in Sprint Layout file"
 msgstr "Ootamatu faililõpp"
 
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:217
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:246
 #, fuzzy
 msgid "Invalid board count in Sprint Layout file"
 msgstr "Vigane ujukomaarv"
 
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:229
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:263
 msgid "Too many objects in Sprint Layout board"
 msgstr ""
 
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:286
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:324
 #, fuzzy, c-format
 msgid "File '%s' is too small to be a Sprint Layout file"
 msgstr ""
 "Fail '%s'\n"
 "ei paista olevat KiCad projektifail."
 
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:292
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:330
 #, fuzzy, c-format
 msgid "Failed to read file '%s'"
 msgstr "Faili '%s' lugemine ebaõnnestus."
 
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:305
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:343
 #, fuzzy
 msgid "Invalid Sprint Layout file header"
 msgstr "Vigane ülemsümboli nimi"
 
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:310
-#, c-format
-msgid ""
-"Current file appears to be generated in Sprint Layout %d. Only version 3 to "
-"6 files are supported. "
-msgstr ""
-
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:382
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:428
 #, fuzzy
 msgid "Too many objects in Sprint Layout file"
 msgstr "Vigane ujukomaarv"
 
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:396
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:442
 msgid "Too many groups in Sprint Layout object"
 msgstr ""
 
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:410
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:456
 msgid "Too many points in Sprint Layout object"
 msgstr ""
 
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:439
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:589
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:485
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:646
 #, c-format
 msgid "Unknown object type %d in Sprint Layout file"
 msgstr ""
 
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:564
+#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:621
 msgid "Too many text children in Sprint Layout object"
-msgstr ""
-
-#: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:653
-msgid "Coordinate value out of range in Sprint Layout file"
 msgstr ""
 
 #: pcbnew/pcb_layer_box_selector.cpp:74
@@ -54251,31 +54264,31 @@ msgstr "Seotud kiht"
 msgid "Greyscale"
 msgstr "Halltoonid"
 
-#: pcbnew/pcb_shape.cpp:700
+#: pcbnew/pcb_shape.cpp:705
 msgid "Drawing"
 msgstr "Joonis"
 
-#: pcbnew/pcb_shape.cpp:729
+#: pcbnew/pcb_shape.cpp:734
 #, c-format
 msgid "%s %s of %s on %s"
 msgstr "%s %s %s-st kihil %s"
 
-#: pcbnew/pcb_shape.cpp:737
+#: pcbnew/pcb_shape.cpp:742
 #, c-format
 msgid "%s %s on %s"
 msgstr "%s %s kihil %s"
 
-#: pcbnew/pcb_shape.cpp:747
+#: pcbnew/pcb_shape.cpp:752
 #, c-format
 msgid "%s of %s on %s"
 msgstr "%s %s-st kihil %s"
 
-#: pcbnew/pcb_shape.cpp:754
+#: pcbnew/pcb_shape.cpp:759
 #, c-format
 msgid "%s on %s"
 msgstr "%s kihil %s"
 
-#: pcbnew/pcb_shape.cpp:1095
+#: pcbnew/pcb_shape.cpp:1100
 msgid "Pad Primitives"
 msgstr "Jootepadi primitiivid"
 
@@ -54293,16 +54306,16 @@ msgstr "Tabeli lahter %s"
 msgid "PCB Target"
 msgstr "PCB sihtmärk"
 
-#: pcbnew/pcb_text.cpp:317
+#: pcbnew/pcb_text.cpp:322
 msgid "PCB Text"
 msgstr "PCB tekst"
 
-#: pcbnew/pcb_text.cpp:506
+#: pcbnew/pcb_text.cpp:511
 #, c-format
 msgid "Footprint text of %s (%s)"
 msgstr "Komponendijälje tekst komponendist %s (%s)"
 
-#: pcbnew/pcb_text.cpp:509
+#: pcbnew/pcb_text.cpp:514
 #, c-format
 msgid "PCB text '%s' on %s"
 msgstr "PCB tekst '%s' kihil %s"
@@ -56170,364 +56183,364 @@ msgstr "Liiguta nurk asukohta"
 msgid "Selection contains no items with labeled nets."
 msgstr "Valik ei sisalda ühtegi märgistatud ühendusniidiga elementi."
 
-#: pcbnew/tools/board_inspection_tool.cpp:73
+#: pcbnew/tools/board_inspection_tool.cpp:76
 msgid "Net Inspection Tools"
 msgstr "Ühendusniidi kontrollitööriistad"
 
-#: pcbnew/tools/board_inspection_tool.cpp:209
+#: pcbnew/tools/board_inspection_tool.cpp:212
 #, c-format
 msgid "[netclass %s]"
 msgstr "[ühendusniidiklass %s]"
 
-#: pcbnew/tools/board_inspection_tool.cpp:415
+#: pcbnew/tools/board_inspection_tool.cpp:418
 msgid "Report incomplete: could not compile custom design rules."
 msgstr ""
 "Aruanne on puudulik: kohandatud disainireegleid ei saanud kompileerida."
 
-#: pcbnew/tools/board_inspection_tool.cpp:556
+#: pcbnew/tools/board_inspection_tool.cpp:578
 msgid "Uncoupled Length"
 msgstr "Sidestamata pikkus"
 
-#: pcbnew/tools/board_inspection_tool.cpp:557
+#: pcbnew/tools/board_inspection_tool.cpp:579
 msgid "Diff pair uncoupled length resolution for:"
 msgstr "Diferentsiaalpaari sidestamata pikkuse lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:565
-#: pcbnew/tools/board_inspection_tool.cpp:1245
+#: pcbnew/tools/board_inspection_tool.cpp:587
+#: pcbnew/tools/board_inspection_tool.cpp:1343
 #, c-format
 msgid "Resolved max uncoupled length: %s."
 msgstr "Lahendatud maks. sidestamata pikkus: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:572
-#: pcbnew/tools/board_inspection_tool.cpp:1727
+#: pcbnew/tools/board_inspection_tool.cpp:594
+#: pcbnew/tools/board_inspection_tool.cpp:1825
 msgid "Text height resolution for:"
 msgstr "Teksti kõrguse lahendus:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:580
+#: pcbnew/tools/board_inspection_tool.cpp:602
 #, c-format
 msgid "Resolved height constraints: min %s; max %s."
 msgstr "Lahendatud kõrguse piirangud: min %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:587
-#: pcbnew/tools/board_inspection_tool.cpp:1743
+#: pcbnew/tools/board_inspection_tool.cpp:609
+#: pcbnew/tools/board_inspection_tool.cpp:1841
 msgid "Text thickness resolution for:"
 msgstr "Teksti paksuse lahendus:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:595
+#: pcbnew/tools/board_inspection_tool.cpp:617
 #, c-format
 msgid "Resolved thickness constraints: min %s; max %s."
 msgstr "Lahendatud paksuse piirangud: min %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:602
-#: pcbnew/tools/board_inspection_tool.cpp:1604
+#: pcbnew/tools/board_inspection_tool.cpp:624
+#: pcbnew/tools/board_inspection_tool.cpp:1702
 msgid "Track width resolution for:"
 msgstr "Raja laiuse lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:610
+#: pcbnew/tools/board_inspection_tool.cpp:632
 #, c-format
 msgid "Resolved width constraints: min %s; max %s."
 msgstr "Lahendatud laiuse piirangud: min %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:616
+#: pcbnew/tools/board_inspection_tool.cpp:638
 msgid "Track Angle"
 msgstr "Raja nurk"
 
-#: pcbnew/tools/board_inspection_tool.cpp:617
+#: pcbnew/tools/board_inspection_tool.cpp:639
 msgid "Track Angle resolution for:"
 msgstr "Raja nurga lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:625
+#: pcbnew/tools/board_inspection_tool.cpp:647
 #, c-format
 msgid "Resolved angle constraints: min %s; max %s."
 msgstr "Lahendatud nurga piirangud: min %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:631
+#: pcbnew/tools/board_inspection_tool.cpp:653
 msgid "Track Segment Length"
 msgstr "Raja segmendi pikkus"
 
-#: pcbnew/tools/board_inspection_tool.cpp:632
+#: pcbnew/tools/board_inspection_tool.cpp:654
 msgid "Track segment length resolution for:"
 msgstr "Raja segmendi pikkuse lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:640
+#: pcbnew/tools/board_inspection_tool.cpp:662
 #, c-format
 msgid "Resolved segment length constraints: min %s; max %s."
 msgstr "Lahendatud segmendi pikkuse piirangud: min %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:646
+#: pcbnew/tools/board_inspection_tool.cpp:668
 msgid "Connection Width"
 msgstr "Ühenduse laius"
 
-#: pcbnew/tools/board_inspection_tool.cpp:647
+#: pcbnew/tools/board_inspection_tool.cpp:669
 msgid "Connection width resolution for:"
 msgstr "Ühenduse laiuse lahendus:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:655
+#: pcbnew/tools/board_inspection_tool.cpp:677
 #, c-format
 msgid "Resolved min connection width: %s."
 msgstr "Lahendatud minimaalne ühenduse laius: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:660
-#: pcbnew/tools/board_inspection_tool.cpp:1622
+#: pcbnew/tools/board_inspection_tool.cpp:682
+#: pcbnew/tools/board_inspection_tool.cpp:1720
 msgid "Via Diameter"
 msgstr "Läbiviigi läbimõõt"
 
-#: pcbnew/tools/board_inspection_tool.cpp:661
-#: pcbnew/tools/board_inspection_tool.cpp:1623
+#: pcbnew/tools/board_inspection_tool.cpp:683
+#: pcbnew/tools/board_inspection_tool.cpp:1721
 msgid "Via diameter resolution for:"
 msgstr "Läbiviigi läbimõõdu lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:669
+#: pcbnew/tools/board_inspection_tool.cpp:691
 #, c-format
 msgid "Resolved diameter constraints: min %s; max %s."
 msgstr "Lahendatud läbimõõdu piirangud: min %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:675
+#: pcbnew/tools/board_inspection_tool.cpp:697
 msgid "Via Annulus"
 msgstr "Läbiviigi rõngas"
 
-#: pcbnew/tools/board_inspection_tool.cpp:676
-#: pcbnew/tools/board_inspection_tool.cpp:1640
+#: pcbnew/tools/board_inspection_tool.cpp:698
+#: pcbnew/tools/board_inspection_tool.cpp:1738
 msgid "Via annular width resolution for:"
 msgstr "Läbiviigi rõnga laiuse lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:684
+#: pcbnew/tools/board_inspection_tool.cpp:706
 #, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
 msgstr "Lahendatud rõnga laiuse piirangud: min %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:691
-#: pcbnew/tools/board_inspection_tool.cpp:1660
+#: pcbnew/tools/board_inspection_tool.cpp:713
+#: pcbnew/tools/board_inspection_tool.cpp:1758
 msgid "Hole Size"
 msgstr "Ava suurus"
 
-#: pcbnew/tools/board_inspection_tool.cpp:692
-#: pcbnew/tools/board_inspection_tool.cpp:1661
+#: pcbnew/tools/board_inspection_tool.cpp:714
+#: pcbnew/tools/board_inspection_tool.cpp:1759
 msgid "Hole size resolution for:"
 msgstr "Ava suuruse lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:700
+#: pcbnew/tools/board_inspection_tool.cpp:722
 #, c-format
 msgid "Resolved hole size constraints: min %s; max %s."
 msgstr "Lahendatud ava suuruse piirangud: min %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:706
+#: pcbnew/tools/board_inspection_tool.cpp:728
 msgid "Hole Clearance"
 msgstr "Ava isoleervahemik"
 
-#: pcbnew/tools/board_inspection_tool.cpp:707
-#: pcbnew/tools/board_inspection_tool.cpp:1350
+#: pcbnew/tools/board_inspection_tool.cpp:729
+#: pcbnew/tools/board_inspection_tool.cpp:1448
 msgid "Hole clearance resolution for:"
 msgstr "Ava isoleervahemiku lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:715
-#: pcbnew/tools/board_inspection_tool.cpp:818
+#: pcbnew/tools/board_inspection_tool.cpp:737
+#: pcbnew/tools/board_inspection_tool.cpp:840
 msgid "Items belong to the same net. Clearance is 0."
 msgstr "Elemendid kuuluvad samale ühendusniidile. Isoleervahemik on 0."
 
-#: pcbnew/tools/board_inspection_tool.cpp:724
-#: pcbnew/tools/board_inspection_tool.cpp:744
-#: pcbnew/tools/board_inspection_tool.cpp:761
-#: pcbnew/tools/board_inspection_tool.cpp:776
-#: pcbnew/tools/board_inspection_tool.cpp:827
-#: pcbnew/tools/board_inspection_tool.cpp:847
-#: pcbnew/tools/board_inspection_tool.cpp:1146
-#: pcbnew/tools/board_inspection_tool.cpp:1159
-#: pcbnew/tools/board_inspection_tool.cpp:1201
-#: pcbnew/tools/board_inspection_tool.cpp:1300
-#: pcbnew/tools/board_inspection_tool.cpp:1324
-#: pcbnew/tools/board_inspection_tool.cpp:1359
-#: pcbnew/tools/board_inspection_tool.cpp:1388
-#: pcbnew/tools/board_inspection_tool.cpp:1427
-#: pcbnew/tools/board_inspection_tool.cpp:1481
-#: pcbnew/tools/board_inspection_tool.cpp:1529
+#: pcbnew/tools/board_inspection_tool.cpp:746
+#: pcbnew/tools/board_inspection_tool.cpp:766
+#: pcbnew/tools/board_inspection_tool.cpp:783
+#: pcbnew/tools/board_inspection_tool.cpp:798
+#: pcbnew/tools/board_inspection_tool.cpp:849
+#: pcbnew/tools/board_inspection_tool.cpp:869
+#: pcbnew/tools/board_inspection_tool.cpp:1168
+#: pcbnew/tools/board_inspection_tool.cpp:1181
+#: pcbnew/tools/board_inspection_tool.cpp:1232
+#: pcbnew/tools/board_inspection_tool.cpp:1398
+#: pcbnew/tools/board_inspection_tool.cpp:1422
+#: pcbnew/tools/board_inspection_tool.cpp:1457
+#: pcbnew/tools/board_inspection_tool.cpp:1486
+#: pcbnew/tools/board_inspection_tool.cpp:1525
+#: pcbnew/tools/board_inspection_tool.cpp:1579
+#: pcbnew/tools/board_inspection_tool.cpp:1627
 #, c-format
 msgid "Resolved min clearance: %s."
 msgstr "Lahendatud minimaalne isoleervahemik: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:730
-#: pcbnew/tools/board_inspection_tool.cpp:1512
+#: pcbnew/tools/board_inspection_tool.cpp:752
+#: pcbnew/tools/board_inspection_tool.cpp:1610
 msgid "Physical hole clearance resolution for:"
 msgstr "Füüsilise ava isoleervahemiku lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:739
-#: pcbnew/tools/board_inspection_tool.cpp:1524
+#: pcbnew/tools/board_inspection_tool.cpp:761
+#: pcbnew/tools/board_inspection_tool.cpp:1622
 msgid "No 'physical_hole_clearance' constraints defined."
 msgstr "'physical_hole_clearance' piiranguid pole defineeritud."
 
-#: pcbnew/tools/board_inspection_tool.cpp:750
+#: pcbnew/tools/board_inspection_tool.cpp:772
 msgid "Hole to Hole"
 msgstr "Avast avani"
 
-#: pcbnew/tools/board_inspection_tool.cpp:751
-#: pcbnew/tools/board_inspection_tool.cpp:1379
+#: pcbnew/tools/board_inspection_tool.cpp:773
+#: pcbnew/tools/board_inspection_tool.cpp:1477
 msgid "Hole-to-hole clearance resolution for:"
 msgstr "Avast avani isoleervahemiku lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:765
+#: pcbnew/tools/board_inspection_tool.cpp:787
 msgid "Edge Clearance"
 msgstr "Serva isoleervahemik"
 
-#: pcbnew/tools/board_inspection_tool.cpp:766
-#: pcbnew/tools/board_inspection_tool.cpp:1418
+#: pcbnew/tools/board_inspection_tool.cpp:788
+#: pcbnew/tools/board_inspection_tool.cpp:1516
 msgid "Edge clearance resolution for:"
 msgstr "Serva isoleervahemiku lahendus:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:810
-#: pcbnew/tools/board_inspection_tool.cpp:1173
+#: pcbnew/tools/board_inspection_tool.cpp:832
+#: pcbnew/tools/board_inspection_tool.cpp:1204
 msgid "Clearance resolution for:"
 msgstr "Isoleervahemiku lahendus:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:833
-#: pcbnew/tools/board_inspection_tool.cpp:1467
-#: pcbnew/tools/board_inspection_tool.cpp:1492
+#: pcbnew/tools/board_inspection_tool.cpp:855
+#: pcbnew/tools/board_inspection_tool.cpp:1565
+#: pcbnew/tools/board_inspection_tool.cpp:1590
 msgid "Physical clearance resolution for:"
 msgstr "Füüsilise isoleervahemiku lahendus:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:842
-#: pcbnew/tools/board_inspection_tool.cpp:1443
+#: pcbnew/tools/board_inspection_tool.cpp:864
+#: pcbnew/tools/board_inspection_tool.cpp:1541
 msgid "No 'physical_clearance' constraints defined."
 msgstr "'physical_clearance' piiranguid pole defineeritud."
 
-#: pcbnew/tools/board_inspection_tool.cpp:853
-#: pcbnew/tools/board_inspection_tool.cpp:1785
+#: pcbnew/tools/board_inspection_tool.cpp:875
+#: pcbnew/tools/board_inspection_tool.cpp:1883
 msgid "Assertions"
 msgstr "Väited"
 
-#: pcbnew/tools/board_inspection_tool.cpp:854
-#: pcbnew/tools/board_inspection_tool.cpp:1786
+#: pcbnew/tools/board_inspection_tool.cpp:876
+#: pcbnew/tools/board_inspection_tool.cpp:1884
 msgid "Assertions for:"
 msgstr "Väited:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:918
+#: pcbnew/tools/board_inspection_tool.cpp:940
 msgid "Select first item for clearance resolution..."
 msgstr "Valige esimene element isoleervahemiku lahendamiseks..."
 
-#: pcbnew/tools/board_inspection_tool.cpp:929
+#: pcbnew/tools/board_inspection_tool.cpp:951
 msgid "Select second item for clearance resolution..."
 msgstr "Valige teine element isoleervahemiku lahendamiseks..."
 
-#: pcbnew/tools/board_inspection_tool.cpp:939
+#: pcbnew/tools/board_inspection_tool.cpp:961
 msgid "Select two different items for clearance resolution."
 msgstr "Valige kaks erinevat elementi isoleervahemiku lahendamiseks."
 
-#: pcbnew/tools/board_inspection_tool.cpp:962
-#: pcbnew/tools/board_inspection_tool.cpp:975
+#: pcbnew/tools/board_inspection_tool.cpp:984
+#: pcbnew/tools/board_inspection_tool.cpp:997
 msgid "Cannot generate clearance report on empty group."
 msgstr "Tühjale rühmale ei saa isoleervahemiku aruannet genereerida."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1051
+#: pcbnew/tools/board_inspection_tool.cpp:1073
 msgid "Zone connection resolution for:"
 msgstr "Tsooni ühenduse lahendus:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1059
+#: pcbnew/tools/board_inspection_tool.cpp:1081
 msgid "Thermal-relief gap resolution for:"
 msgstr "Soojustõkkekujundi vahe lahendus:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1068
+#: pcbnew/tools/board_inspection_tool.cpp:1090
 #, c-format
 msgid "Resolved thermal relief gap: %s."
 msgstr "Lahendatud soojustõkkekujundi vahe: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1073
+#: pcbnew/tools/board_inspection_tool.cpp:1095
 msgid "Thermal-relief spoke width resolution for:"
 msgstr "Soojustõkkekujundi kodara laiuse lahendus:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1082
+#: pcbnew/tools/board_inspection_tool.cpp:1104
 #, c-format
 msgid "Resolved spoke width: %s."
 msgstr "Lahendatud kodara laius: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1087
+#: pcbnew/tools/board_inspection_tool.cpp:1109
 msgid "Thermal-relief min spoke count resolution for:"
 msgstr "Soojustõkkekujundi minimaalse kodarate arvu lahendus:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1096
+#: pcbnew/tools/board_inspection_tool.cpp:1118
 #, c-format
 msgid "Resolved min spoke count: %d."
 msgstr "Lahendatud minimaalne kodarate arv: %d."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1105
-#: pcbnew/tools/board_inspection_tool.cpp:1153
+#: pcbnew/tools/board_inspection_tool.cpp:1127
+#: pcbnew/tools/board_inspection_tool.cpp:1175
 msgid "Zone clearance resolution for:"
 msgstr "Tsooni isoleervahemiku lahendus:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1109
+#: pcbnew/tools/board_inspection_tool.cpp:1131
 #, c-format
 msgid "Zone clearance: %s."
 msgstr "Tsooni isoleervahemik: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1119
+#: pcbnew/tools/board_inspection_tool.cpp:1141
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
 msgstr ""
 "Tühistatud suurema füüsilise isoleervahemiku poolt %s; isoleervahemik: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1135
+#: pcbnew/tools/board_inspection_tool.cpp:1157
 #, c-format
 msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
 msgstr ""
 "Alistatud suurema füüsilise ava isoleervahemiku poolt allikast %s; "
 "isoleervahemik: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1177
+#: pcbnew/tools/board_inspection_tool.cpp:1208
 msgid "Items belong to the same net. Min clearance is 0."
 msgstr ""
 "Elemendid kuuluvad samale ühendusniidile. Minimaalne isoleervahemik on 0."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1191
+#: pcbnew/tools/board_inspection_tool.cpp:1222
 msgid "Min clearance is 0."
 msgstr "Minimaalne isoleervahemik on 0."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1195
+#: pcbnew/tools/board_inspection_tool.cpp:1226
 #, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
 msgstr "Lahendatud isoleervahemik: %s; isoleervahemikku ei testita."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1218
+#: pcbnew/tools/board_inspection_tool.cpp:1317
 msgid "Diff Pair"
 msgstr "Diferentsiaalpaar"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1219
+#: pcbnew/tools/board_inspection_tool.cpp:1318
 msgid "Diff-pair gap resolution for:"
 msgstr "Diferentsiaalpaari vahe lahendus:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1224
+#: pcbnew/tools/board_inspection_tool.cpp:1323
 #, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
 msgstr "Lahendatud vahe piirangud: min %s; opt %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1232
+#: pcbnew/tools/board_inspection_tool.cpp:1331
 msgid "Diff-pair max uncoupled length resolution for:"
 msgstr "Diferentsiaalpaari maks. sidestamata pikkuse lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1238
+#: pcbnew/tools/board_inspection_tool.cpp:1336
 msgid "No 'diff_pair_uncoupled' constraints defined."
 msgstr "'diff_pair_uncoupled' piiranguid pole defineeritud."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1270
+#: pcbnew/tools/board_inspection_tool.cpp:1368
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
 msgstr "Märkus: %s on kaetud; isoleervahemikku rakendatakse ainult avadele."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1287
+#: pcbnew/tools/board_inspection_tool.cpp:1385
 msgid "Silkscreen clearance resolution for:"
 msgstr "Siiditrüki isoleervahemiku lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1315
+#: pcbnew/tools/board_inspection_tool.cpp:1413
 msgid "Courtyard clearance resolution for:"
 msgstr "Hoovi isoleervahemiku lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1434
+#: pcbnew/tools/board_inspection_tool.cpp:1532
 msgid "Physical Clearances"
 msgstr "Füüsilised isoleervahemikud"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1475
+#: pcbnew/tools/board_inspection_tool.cpp:1573
 #, c-format
 msgid "No 'physical_clearance' constraints in effect on %s."
 msgstr "'physical_clearance' piirangud ei ole elemendil %s kehtivad."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1494
+#: pcbnew/tools/board_inspection_tool.cpp:1592
 msgid ""
 "Items share no relevant layers.  No 'physical_clearance' constraints will be "
 "applied."
@@ -56535,118 +56548,118 @@ msgstr ""
 "Elementidel pole ühiseid asjakohaseid kihte. 'physical_clearance' piiranguid "
 "ei rakendata."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1576
+#: pcbnew/tools/board_inspection_tool.cpp:1674
 msgid "Select item for constraints resolution..."
 msgstr "Valige element piirangute lahendamiseks..."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1584
+#: pcbnew/tools/board_inspection_tool.cpp:1682
 msgid "Select a single item for a constraints resolution report."
 msgstr "Valige üks element piirangute lahenduse aruande jaoks."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1612
+#: pcbnew/tools/board_inspection_tool.cpp:1710
 #, c-format
 msgid "Resolved width constraints: min %s; opt %s; max %s."
 msgstr "Lahendatud laiuse piirangud: min %s; opt %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1632
+#: pcbnew/tools/board_inspection_tool.cpp:1730
 #, c-format
 msgid "Resolved diameter constraints: min %s; opt %s; max %s."
 msgstr "Lahendatud läbimõõdu piirangud: min %s; opt %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1639
+#: pcbnew/tools/board_inspection_tool.cpp:1737
 msgid "Via Annular Width"
 msgstr "Läbiviigi rõnga laius"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1649
+#: pcbnew/tools/board_inspection_tool.cpp:1747
 #, c-format
 msgid "Resolved annular width constraints: min %s; opt %s; max %s."
 msgstr "Lahendatud rõnga laiuse piirangud: min %s; opt %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1669
+#: pcbnew/tools/board_inspection_tool.cpp:1767
 #, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
 msgstr "Lahendatud ava suuruse piirangud: min %s; opt %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1679
+#: pcbnew/tools/board_inspection_tool.cpp:1777
 msgid "Solder Mask"
 msgstr "Jootemask"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1680
+#: pcbnew/tools/board_inspection_tool.cpp:1778
 msgid "Solder mask expansion resolution for:"
 msgstr "Jootemaski laienduse lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1688
+#: pcbnew/tools/board_inspection_tool.cpp:1786
 #, c-format
 msgid "Resolved solder mask expansion: %s."
 msgstr "Lahendatud jootemaski laiendus: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1697
+#: pcbnew/tools/board_inspection_tool.cpp:1795
 msgid "Solder paste absolute clearance resolution for:"
 msgstr "Jootepasta absoluutse isoleervahemiku lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1705
+#: pcbnew/tools/board_inspection_tool.cpp:1803
 #, c-format
 msgid "Resolved solder paste absolute clearance: %s."
 msgstr "Lahendatud jootepasta absoluutne isoleervahemik: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1708
+#: pcbnew/tools/board_inspection_tool.cpp:1806
 msgid "Solder paste relative clearance resolution for:"
 msgstr "Jootepasta suhtelise isoleervahemiku lahendamine:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1718
+#: pcbnew/tools/board_inspection_tool.cpp:1816
 #, c-format
 msgid "Resolved solder paste relative clearance: %s."
 msgstr "Lahendatud jootepasta suhteline isoleervahemik: %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1735
+#: pcbnew/tools/board_inspection_tool.cpp:1833
 #, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
 msgstr "Lahendatud kõrguse piirangud: min %s; opt %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1751
+#: pcbnew/tools/board_inspection_tool.cpp:1849
 #, c-format
 msgid "Resolved thickness constraints: min %s; opt %s; max %s."
 msgstr "Lahendatud paksuse piirangud: min %s; opt %s; maks %s."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1760
+#: pcbnew/tools/board_inspection_tool.cpp:1858
 msgid "Keepout resolution for:"
 msgstr "Keeluala lahendus:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1770
-#: pcbnew/tools/board_inspection_tool.cpp:1794
+#: pcbnew/tools/board_inspection_tool.cpp:1868
+#: pcbnew/tools/board_inspection_tool.cpp:1892
 msgid "Report may be incomplete: some footprint courtyards are malformed."
 msgstr ""
 "Aruanne võib olla puudulik: mõned trükkplaadijälgede hoovid on vigased."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1772
-#: pcbnew/tools/board_inspection_tool.cpp:1796
+#: pcbnew/tools/board_inspection_tool.cpp:1870
+#: pcbnew/tools/board_inspection_tool.cpp:1894
 msgid "Run DRC for a full analysis."
 msgstr "Käivitage DRC täieliku analüüsi jaoks."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1779
+#: pcbnew/tools/board_inspection_tool.cpp:1877
 msgid "Item <b>disallowed</b> at current location."
 msgstr "Element on praegusel asukohal <b>keelatud</b>."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1781
+#: pcbnew/tools/board_inspection_tool.cpp:1879
 msgid "Item allowed at current location."
 msgstr "Element on praegusel asukohal lubatud."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1833
+#: pcbnew/tools/board_inspection_tool.cpp:1931
 msgid "Select a footprint to diff with its library equivalent."
 msgstr "Valige komponendi trükkplaadijälg võrdlemiseks teegi ekvivalendiga."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1851
+#: pcbnew/tools/board_inspection_tool.cpp:1949
 msgid "Select a footprint for a footprint associations report."
 msgstr ""
 "Valige komponendi trükkplaadijälg komponendi trükkplaadijälgede seose "
 "aruande jaoks."
 
-#: pcbnew/tools/board_inspection_tool.cpp:1879
+#: pcbnew/tools/board_inspection_tool.cpp:1977
 msgid "Board vs library diff for:"
 msgstr "Trükkplaadi ja teegi võrdlus:"
 
-#: pcbnew/tools/board_inspection_tool.cpp:1893
-#: pcbnew/tools/board_inspection_tool.cpp:1901
+#: pcbnew/tools/board_inspection_tool.cpp:1991
+#: pcbnew/tools/board_inspection_tool.cpp:1999
 msgid "Manage Footprint Libraries"
 msgstr "Halda komponendi trükkplaadijälgede teeke"
 
@@ -56792,125 +56805,125 @@ msgstr "Vaheta värati ühendusniite..."
 msgid "Swap with %s"
 msgstr "Vaheta %s-ga"
 
-#: pcbnew/tools/edit_tool.cpp:1052
+#: pcbnew/tools/edit_tool.cpp:1051
 #, c-format
 msgid "Unable to resize arc tracks of %s or greater."
 msgstr "%s või suuremaid kaarradasid ei saa suurust muuta."
 
-#: pcbnew/tools/edit_tool.cpp:1377
+#: pcbnew/tools/edit_tool.cpp:1376
 msgid "Drag Arc Track"
 msgstr "Lohista kaarraja"
 
-#: pcbnew/tools/edit_tool.cpp:1443
+#: pcbnew/tools/edit_tool.cpp:1444
 msgid "Edit Track Width/Via Size"
 msgstr "Muuda raja laius/läbiviigi suurus"
 
-#: pcbnew/tools/edit_tool.cpp:1507
+#: pcbnew/tools/edit_tool.cpp:1510
 msgid "Edit Track Layer"
 msgstr "Muuda raja kihti"
 
-#: pcbnew/tools/edit_tool.cpp:1543
+#: pcbnew/tools/edit_tool.cpp:1548
 msgid "At least two straight track segments must be selected."
 msgstr "Vähemalt kaks sirget radasegmenti peavad olema valitud."
 
-#: pcbnew/tools/edit_tool.cpp:1547 pcbnew/tools/edit_tool.cpp:1701
+#: pcbnew/tools/edit_tool.cpp:1552 pcbnew/tools/edit_tool.cpp:1706
 #: pcbnew/tools/pcb_actions.cpp:761
 msgid "Fillet Tracks"
 msgstr "Ümarsta rajad"
 
-#: pcbnew/tools/edit_tool.cpp:1708
+#: pcbnew/tools/edit_tool.cpp:1713
 msgid "Unable to fillet the selected track segments."
 msgstr "Valitud radasegmente ei saa ümardada."
 
-#: pcbnew/tools/edit_tool.cpp:1710
+#: pcbnew/tools/edit_tool.cpp:1715
 msgid "Some of the track segments could not be filleted."
 msgstr "Mõnda radasegmenti ei saanud ümardada."
 
-#: pcbnew/tools/edit_tool.cpp:1748
+#: pcbnew/tools/edit_tool.cpp:1753
 msgid "Arc radius:"
 msgstr "Kaare raadius:"
 
-#: pcbnew/tools/edit_tool.cpp:1753
+#: pcbnew/tools/edit_tool.cpp:1758
 msgid "Add slots in acute corners"
 msgstr "Lisa pilusid teravnurkadesse"
 
-#: pcbnew/tools/edit_tool.cpp:1755
+#: pcbnew/tools/edit_tool.cpp:1760
 msgid ""
 "Add slots in acute corners to allow access to a cutter of the given radius"
 msgstr ""
 "Lisa pilusid teravnurkadesse, et võimaldada juurdepääsu antud raadiusega "
 "lõikurile"
 
-#: pcbnew/tools/edit_tool.cpp:1759
+#: pcbnew/tools/edit_tool.cpp:1764
 msgid "Dogbone Corner Settings"
 msgstr "Kondinurga sätted"
 
-#: pcbnew/tools/edit_tool.cpp:1796
+#: pcbnew/tools/edit_tool.cpp:1801
 #: pcbnew/tools/item_modification_routine.cpp:199
 msgid "Chamfer Lines"
 msgstr "Faasi jooned"
 
-#: pcbnew/tools/edit_tool.cpp:1796
+#: pcbnew/tools/edit_tool.cpp:1801
 msgid "Chamfer setback:"
 msgstr "Faasi tagasinihe:"
 
-#: pcbnew/tools/edit_tool.cpp:1890
+#: pcbnew/tools/edit_tool.cpp:1897
 msgid "Exactly two lines must be selected to extend them."
 msgstr "Joonte pikendamiseks peab olema valitud täpselt kaks joont."
 
-#: pcbnew/tools/edit_tool.cpp:1899
+#: pcbnew/tools/edit_tool.cpp:1906
 msgid "A shape with at least two lines must be selected."
 msgstr "Valitud peab olema kujund vähemalt kahe joonega."
 
-#: pcbnew/tools/edit_tool.cpp:1973
+#: pcbnew/tools/edit_tool.cpp:1980
 #: pcbnew/tools/item_modification_routine.cpp:106
 msgid "Fillet Lines"
 msgstr "Ümarda jooned"
 
-#: pcbnew/tools/edit_tool.cpp:2080
+#: pcbnew/tools/edit_tool.cpp:2089
 msgid "Simplify Shapes"
 msgstr "Lihtsusta kujundeid"
 
-#: pcbnew/tools/edit_tool.cpp:2080 pcbnew/tools/edit_tool.cpp:2150
+#: pcbnew/tools/edit_tool.cpp:2089 pcbnew/tools/edit_tool.cpp:2161
 msgid "Tolerance value:"
 msgstr "Tolerantsi väärtus:"
 
-#: pcbnew/tools/edit_tool.cpp:2114 pcbnew/tools/pcb_actions.cpp:787
+#: pcbnew/tools/edit_tool.cpp:2123 pcbnew/tools/pcb_actions.cpp:787
 msgid "Simplify Polygons"
 msgstr "Lihtsusta hulknurki"
 
-#: pcbnew/tools/edit_tool.cpp:2150 pcbnew/tools/edit_tool.cpp:2175
+#: pcbnew/tools/edit_tool.cpp:2161 pcbnew/tools/edit_tool.cpp:2186
 #: pcbnew/tools/pcb_actions.cpp:800
 msgid "Heal Shapes"
 msgstr "Paranda kujundeid"
 
-#: pcbnew/tools/edit_tool.cpp:2906 pcbnew/tools/pcb_actions.cpp:681
+#: pcbnew/tools/edit_tool.cpp:2931 pcbnew/tools/pcb_actions.cpp:681
 msgid "Change Side / Flip"
 msgstr "Vaheta külge / pööra"
 
-#: pcbnew/tools/edit_tool.cpp:3099
+#: pcbnew/tools/edit_tool.cpp:3124
 msgid "Use the Footprint Properties dialog to remove fields."
 msgstr ""
 "Kasutage komponendi trükkplaadijälje omaduste dialoogi väljade eemaldamiseks."
 
-#: pcbnew/tools/edit_tool.cpp:3252
+#: pcbnew/tools/edit_tool.cpp:3280
 msgid "Move Exactly"
 msgstr "Liiguta täpselt"
 
-#: pcbnew/tools/edit_tool.cpp:3427
+#: pcbnew/tools/edit_tool.cpp:3455
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Dupleeriti %d element(i)"
 
-#: pcbnew/tools/edit_tool.cpp:3747
+#: pcbnew/tools/edit_tool.cpp:3779
 msgid "Select reference point for the copy..."
 msgstr "Valige koopia viitepunkt..."
 
-#: pcbnew/tools/edit_tool.cpp:3747 pcbnew/tools/edit_tool.cpp:3763
+#: pcbnew/tools/edit_tool.cpp:3779 pcbnew/tools/edit_tool.cpp:3795
 msgid "Selection copied"
 msgstr "Valik kopeeritud"
 
-#: pcbnew/tools/edit_tool.cpp:3748
+#: pcbnew/tools/edit_tool.cpp:3780
 msgid "Copy canceled"
 msgstr "Kopeerimine tühistatud"
 
@@ -56943,53 +56956,53 @@ msgstr "Eira valimata jootepadu"
 msgid "Swap All Connected Pads"
 msgstr "Vaheta kõik ühendatud jootepadi"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:331
-#: pcbnew/tools/edit_tool_move_fct.cpp:364 pcbnew/tools/pcb_actions.cpp:710
+#: pcbnew/tools/edit_tool_move_fct.cpp:333
+#: pcbnew/tools/edit_tool_move_fct.cpp:366 pcbnew/tools/pcb_actions.cpp:710
 msgid "Swap Pad Nets"
 msgstr "Vaheta jootepadi ühendusniite"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:385
+#: pcbnew/tools/edit_tool_move_fct.cpp:387
 msgid ""
 "Gate swapping must be performed on pads within one multi-gate footprint."
 msgstr ""
 "Väravate vahetamine peab toimuma ühe mitmeväravalise trükkplaadijälje "
 "jootepaddel."
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:508
+#: pcbnew/tools/edit_tool_move_fct.cpp:510
 msgid "Gate swapping must be performed on gates with equal pin counts."
 msgstr ""
 "Värati ühendusniitide vahetamist tuleb teostada võrdse klemmide arvuga "
 "väratitel."
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:529
+#: pcbnew/tools/edit_tool_move_fct.cpp:531
 msgid "Gate swapping failed: pad in unit missing from footprint."
 msgstr ""
 "Väravate vahetamine ebaõnnestus: trükkplaadijäljes puudub ühiku jootepadi."
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:557
+#: pcbnew/tools/edit_tool_move_fct.cpp:559
 msgid "Gate swapping has no effect: all selected gates have identical nets."
 msgstr ""
 "Väravate vahetamine ei mõju: kõigil valitud väravatel on identsed "
 "ühendusniidid."
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:630
-#: pcbnew/tools/edit_tool_move_fct.cpp:672 pcbnew/tools/pcb_actions.cpp:717
+#: pcbnew/tools/edit_tool_move_fct.cpp:632
+#: pcbnew/tools/edit_tool_move_fct.cpp:674 pcbnew/tools/pcb_actions.cpp:717
 msgid "Swap Gate Nets"
 msgstr "Vaheta värati ühendusniite"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:729
+#: pcbnew/tools/edit_tool_move_fct.cpp:733
 msgid "Pack Footprints"
 msgstr "Paki komponendi trükkplaadijäljed"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:868
+#: pcbnew/tools/edit_tool_move_fct.cpp:871
 msgid "Angle snap lines: 45°"
 msgstr "Nurga haardumise jooned: 45°"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:872
+#: pcbnew/tools/edit_tool_move_fct.cpp:875
 msgid "Angle snap lines: 90°"
 msgstr "Nurga haardumise jooned: 90°"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:886
+#: pcbnew/tools/edit_tool_move_fct.cpp:889
 #, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
@@ -56998,12 +57011,12 @@ msgstr ""
 "Klõpsa %s paigutamiseks (element %zu/%zu)\n"
 "Tühistamiseks vajutage <esc>; lõpetamiseks topeltklõps"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:899
+#: pcbnew/tools/edit_tool_move_fct.cpp:902
 #, c-format
 msgid "%s pad %s"
 msgstr "%s jootepadi %s"
 
-#: pcbnew/tools/edit_tool_move_fct.cpp:942
+#: pcbnew/tools/edit_tool_move_fct.cpp:945
 msgid "Select reference point for move..."
 msgstr "Valige viitepunkt liigutamiseks..."
 
@@ -59321,7 +59334,7 @@ msgstr "Aktiivne kiht"
 
 #: pcbnew/tools/pcb_control.cpp:2203 pcbnew/widgets/appearance_controls.cpp:385
 #: pcbnew/widgets/appearance_controls_base.cpp:165
-#: pcbnew/zone_manager/dialog_zone_manager.cpp:123
+#: pcbnew/zone_manager/dialog_zone_manager.cpp:89
 msgid "All Layers"
 msgstr "Kõik kihid"
 
@@ -59399,51 +59412,51 @@ msgstr "Manusta 3D-mudelid"
 msgid "%d 3D model(s) successfully embedded."
 msgstr "%d 3D-mudel(it) edukalt manustatud."
 
-#: pcbnew/tools/pcb_point_editor.cpp:2671
+#: pcbnew/tools/pcb_point_editor.cpp:2715
 msgid "Resize Table Cells"
 msgstr "Muuda tabeli lahtrite suurust"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2798
+#: pcbnew/tools/pcb_point_editor.cpp:2842
 msgid "Move Midpoint to Location"
 msgstr "Liiguta keskpunkt asukohta"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2799
+#: pcbnew/tools/pcb_point_editor.cpp:2843
 msgid "Move Midpoint"
 msgstr "Liiguta keskpunkt"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2803
+#: pcbnew/tools/pcb_point_editor.cpp:2847
 msgid "Move Corner to Location"
 msgstr "Liiguta nurk asukohta"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2804
+#: pcbnew/tools/pcb_point_editor.cpp:2848
 msgid "Move Corner"
 msgstr "Liiguta nurk"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3220
+#: pcbnew/tools/pcb_point_editor.cpp:3264
 msgid "Add Zone Corner"
 msgstr "Lisa tsooni nurk"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3243
+#: pcbnew/tools/pcb_point_editor.cpp:3287
 msgid "Split Segment"
 msgstr "Poolita segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3264
+#: pcbnew/tools/pcb_point_editor.cpp:3308
 msgid "Split Arc"
 msgstr "Poolita kaar"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3341
+#: pcbnew/tools/pcb_point_editor.cpp:3385
 msgid "Remove Zone Corner"
 msgstr "Eemalda tsooni nurk"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3343
+#: pcbnew/tools/pcb_point_editor.cpp:3387
 msgid "Remove Polygon Corner"
 msgstr "Eemalda hulknurga nurk"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3439
+#: pcbnew/tools/pcb_point_editor.cpp:3483
 msgid "Break Zone Corner"
 msgstr "Katkesta tsooni nurk"
 
-#: pcbnew/tools/pcb_point_editor.cpp:3441
+#: pcbnew/tools/pcb_point_editor.cpp:3485
 msgid "Break Polygon Corner"
 msgstr "Murra hulknurga nurk"
 
@@ -60558,8 +60571,8 @@ msgstr "Ühendusniit '%s' on kasutusel. Kas kustutada?"
 msgid "Delete all nets in group '%s'?"
 msgstr "Kas kustutada kõik rühma '%s' ühendusniidid?"
 
-#: pcbnew/widgets/search_handlers.cpp:229 pcbnew/zone.cpp:940
-#: pcbnew/zone.cpp:2005
+#: pcbnew/widgets/search_handlers.cpp:229 pcbnew/zone.cpp:953
+#: pcbnew/zone.cpp:2018
 msgid "Priority"
 msgstr "Prioriteet"
 
@@ -60593,177 +60606,177 @@ msgstr "Y-koordinaat"
 msgid "Edit Vertex"
 msgstr "Muuda tippu"
 
-#: pcbnew/zone.cpp:909
+#: pcbnew/zone.cpp:922
 msgid "No vias"
 msgstr "Läbiviigud puuduvad"
 
-#: pcbnew/zone.cpp:912
+#: pcbnew/zone.cpp:925
 msgid "No tracks"
 msgstr "Rajad puuduvad"
 
-#: pcbnew/zone.cpp:915
+#: pcbnew/zone.cpp:928
 msgid "No pads"
 msgstr "Jootepajad puuduvad"
 
-#: pcbnew/zone.cpp:918
+#: pcbnew/zone.cpp:931
 msgid "No zone fills"
 msgstr "Tsoonitäited puuduvad"
 
-#: pcbnew/zone.cpp:921
+#: pcbnew/zone.cpp:934
 msgid "No footprints"
 msgstr "Trükkplaadijäljed puuduvad"
 
-#: pcbnew/zone.cpp:924
+#: pcbnew/zone.cpp:937
 msgid "Restrictions"
 msgstr "Piirangud"
 
-#: pcbnew/zone.cpp:927
+#: pcbnew/zone.cpp:940
 msgid "Placement source"
 msgstr "Paigutuse allikas"
 
-#: pcbnew/zone.cpp:954
+#: pcbnew/zone.cpp:967
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: pcbnew/zone.cpp:993
+#: pcbnew/zone.cpp:1006
 msgid "Filled Area"
 msgstr "Täidetud ala"
 
-#: pcbnew/zone.cpp:1011
+#: pcbnew/zone.cpp:1024
 msgid "Outline Area"
 msgstr "Kontuuri pindala"
 
-#: pcbnew/zone.cpp:1023
+#: pcbnew/zone.cpp:1036
 msgid "Corner Count"
 msgstr "Nurkade arv"
 
-#: pcbnew/zone.cpp:1066
+#: pcbnew/zone.cpp:1079
 msgid "Teardrop Area"
 msgstr "Pisarühenduse pindala"
 
-#: pcbnew/zone.cpp:1068
+#: pcbnew/zone.cpp:1081
 msgid "Copper Zone"
 msgstr "Vasktsoon"
 
-#: pcbnew/zone.cpp:1070
+#: pcbnew/zone.cpp:1083
 msgid "Non-copper Zone"
 msgstr "Mittevasktsoon"
 
-#: pcbnew/zone.cpp:1216
+#: pcbnew/zone.cpp:1229
 #, c-format
 msgid "on %s"
 msgstr "kihil %s"
 
-#: pcbnew/zone.cpp:1220
+#: pcbnew/zone.cpp:1233
 #, c-format
 msgid "on %s and %s"
 msgstr "kihil %s ja %s"
 
-#: pcbnew/zone.cpp:1226
+#: pcbnew/zone.cpp:1239
 #, c-format
 msgid "on %s, %s and %s"
 msgstr "kihtidel %s, %s ja %s"
 
-#: pcbnew/zone.cpp:1233
+#: pcbnew/zone.cpp:1246
 #, c-format
 msgid "on %s, %s and %zu more"
 msgstr "kihtidel %s, %s ja %zu muul"
 
-#: pcbnew/zone.cpp:1243
+#: pcbnew/zone.cpp:1256
 #, c-format
 msgid "Rule Area %s"
 msgstr "Reeglipiirkond %s"
 
-#: pcbnew/zone.cpp:1248
+#: pcbnew/zone.cpp:1261
 #, c-format
 msgid "Rule area '%s' %s"
 msgstr "Reeglipiirkond '%s' %s"
 
-#: pcbnew/zone.cpp:1255
+#: pcbnew/zone.cpp:1268
 #, c-format
 msgid "Teardrop %s %s"
 msgstr "Pisarühendus %s %s"
 
-#: pcbnew/zone.cpp:1263
+#: pcbnew/zone.cpp:1276
 #, c-format
 msgid "Zone %s %s, priority %d"
 msgstr "Tsoon %s %s, prioriteet %d"
 
-#: pcbnew/zone.cpp:1270
+#: pcbnew/zone.cpp:1283
 #, c-format
 msgid "Zone '%s' %s %s, priority %d"
 msgstr "Tsoon '%s' %s %s, prioriteet %d"
 
-#: pcbnew/zone.cpp:2012
+#: pcbnew/zone.cpp:2025
 msgid "Keepout"
 msgstr "Keeluala"
 
-#: pcbnew/zone.cpp:2014
+#: pcbnew/zone.cpp:2027
 msgid "Keep Out Tracks"
 msgstr "Keelatud rajad"
 
-#: pcbnew/zone.cpp:2019
+#: pcbnew/zone.cpp:2032
 msgid "Keep Out Vias"
 msgstr "Keelatud läbiviigud"
 
-#: pcbnew/zone.cpp:2024
+#: pcbnew/zone.cpp:2037
 msgid "Keep Out Pads"
 msgstr "Keelatud jootepadi"
 
-#: pcbnew/zone.cpp:2029
+#: pcbnew/zone.cpp:2042
 msgid "Keep Out Zone Fills"
 msgstr "Keelatud tsooni täited"
 
-#: pcbnew/zone.cpp:2034
+#: pcbnew/zone.cpp:2047
 msgid "Keep Out Footprints"
 msgstr "Keelatud komponendijäljed"
 
-#: pcbnew/zone.cpp:2047
+#: pcbnew/zone.cpp:2060
 msgid "Source Type"
 msgstr "Allika tüüp"
 
-#: pcbnew/zone.cpp:2052
+#: pcbnew/zone.cpp:2065
 msgid "Source Name"
 msgstr "Allika nimi"
 
-#: pcbnew/zone.cpp:2065
+#: pcbnew/zone.cpp:2078
 msgid "Hatch Orientation"
 msgstr "Viirutuse suund"
 
-#: pcbnew/zone.cpp:2080
+#: pcbnew/zone.cpp:2093
 msgid "Cannot be less than zone minimum width"
 msgstr "Ei tohi olla väiksem kui tsooni minimaalne laius"
 
-#: pcbnew/zone.cpp:2085
+#: pcbnew/zone.cpp:2098
 msgid "Hatch Width"
 msgstr "Viirutuse laius"
 
-#: pcbnew/zone.cpp:2092
+#: pcbnew/zone.cpp:2105
 msgid "Hatch Gap"
 msgstr "Viirutuse vahe"
 
-#: pcbnew/zone.cpp:2099
+#: pcbnew/zone.cpp:2112
 msgid "Hatch Minimum Hole Ratio"
 msgstr "Viirutuse minimaalse ava suhe"
 
-#: pcbnew/zone.cpp:2107
+#: pcbnew/zone.cpp:2120
 msgid "Smoothing Effort"
 msgstr "Silumise intensiivsus"
 
-#: pcbnew/zone.cpp:2113
+#: pcbnew/zone.cpp:2126
 msgid "Smoothing Amount"
 msgstr "Silumise määr"
 
-#: pcbnew/zone.cpp:2119
+#: pcbnew/zone.cpp:2132
 msgid "Remove Islands"
 msgstr "Eemalda saareked"
 
-#: pcbnew/zone.cpp:2124
+#: pcbnew/zone.cpp:2137
 msgid "Minimum Island Area"
 msgstr "Minimaalse saareke ala"
 
-#: pcbnew/zone.cpp:2138
+#: pcbnew/zone.cpp:2151
 msgid "Minimum Width"
 msgstr "Minimaalne laius"
 
@@ -60811,10 +60824,10 @@ msgstr "Nihe X"
 msgid "Offset Y"
 msgstr "Nihe Y"
 
-#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:76
-#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:81
-#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:86
-#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:91
+#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:74
+#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:79
+#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:84
+#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:89
 msgid ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
 "its priority is higher, its outlines are removed from the other zone."
@@ -60822,25 +60835,25 @@ msgstr ""
 "Ülemisel tsoonil on kõrgeim prioriteet. Kui tsoon on teise tsooni sees ja "
 "selle prioriteet on kõrgem, eemaldatakse selle piirjooned teisest tsoonist."
 
-#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:99
+#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:97
 msgid ""
 "Automatically assign zone priorities based on connectivity analysis of "
 "overlapping regions."
 msgstr ""
 
-#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:148
+#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:146
 msgid "Refill zones"
 msgstr "Täida tsoonid uuesti"
 
-#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:149
+#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:147
 msgid "Refill zones after changes made on board"
 msgstr "Täida tsoonid uuesti pärast trükkplaadil tehtud muudatusi"
 
-#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:156
+#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:154
 msgid "Update Displayed Zones"
 msgstr "Uuenda kuvatavaid tsoone"
 
-#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:157
+#: pcbnew/zone_manager/dialog_zone_manager_base.cpp:155
 msgid ""
 "Update filled areas shown in dialog, according to the new current settings"
 msgstr ""

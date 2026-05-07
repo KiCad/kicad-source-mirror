@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-01 15:37+0300\n"
+"POT-Creation-Date: 2026-05-07 05:17+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5684,6 +5684,9 @@ msgstr "Library %s not found"
 msgid "The library table path '%s' does not exist"
 msgstr "The library table path '%s' does not exist"
 
+msgid "The library table is of wrong type"
+msgstr "The library table is of wrong type"
+
 #, c-format
 msgid "An unexpected error occurred while reading library table %s "
 msgstr "An unexpected error occurred while reading library table %s "
@@ -5739,6 +5742,12 @@ msgstr ""
 "Choosing 'Keep All Files' will restore the selected commit but retain any "
 "existing files in the project directory. Choosing 'Proceed' will delete "
 "files that are not present in the restored commit."
+
+#, c-format
+msgid ""
+"Files removed by 'Proceed' are archived to %s and can be recovered manually."
+msgstr ""
+"Files removed by 'Proceed' are archived to %s and can be recovered manually."
 
 msgid "Cannot restore - the following files are open by another user:"
 msgstr "Cannot restore - the following files are open by another user:"
@@ -12104,6 +12113,9 @@ msgstr "Keep pins attached when dragging edges"
 msgid "Symbol Library Tables"
 msgstr "Symbol Library Tables"
 
+msgid "Unable to load library table."
+msgstr "Unable to load library table."
+
 msgid "folder with .kicad_sym files"
 msgstr "folder with .kicad_sym files"
 
@@ -17883,8 +17895,8 @@ msgstr "Save to Linked Design Block"
 msgid "Save selected group to linked design block"
 msgstr "Save selected group to linked design block"
 
-msgid "Place No Connect Flags"
-msgstr "Place No Connect Flags"
+msgid "Place/Remove No Connect Flags"
+msgstr "Place/Remove No Connect Flags"
 
 msgid "Place Junctions"
 msgstr "Place Junctions"
@@ -18770,6 +18782,9 @@ msgstr "Add Junction"
 
 msgid "Add Wire to Bus Entry"
 msgstr "Add Wire to Bus Entry"
+
+msgid "Remove No Connect Flag"
+msgstr "Remove No Connect Flag"
 
 msgid "Junction location contains no joinable wires and/or pins."
 msgstr "Junction location contains no joinable wires and/or pins."
@@ -20544,10 +20559,10 @@ msgstr "Forces the footprint library to be resaved regardless of versioning"
 
 msgid ""
 "View and compare existing Gerber/Excellon files. To export Gerbers from a "
-"PCB, use 'pcb export gerber'"
+"PCB, use 'pcb export gerbers'"
 msgstr ""
 "View and compare existing Gerber/Excellon files. To export Gerbers from a "
-"PCB, use 'pcb export gerber'"
+"PCB, use 'pcb export gerbers'"
 
 msgid "Convert Gerber/Excellon to other formats"
 msgstr "Convert Gerber/Excellon to other formats"
@@ -38532,14 +38547,6 @@ msgstr "Failed to read file '%s'"
 msgid "Invalid Sprint Layout file header"
 msgstr "Invalid Sprint Layout file header"
 
-#, c-format
-msgid ""
-"Current file appears to be generated in Sprint Layout %d. Only version 3 to "
-"6 files are supported. "
-msgstr ""
-"Current file appears to be generated in Sprint Layout %d. Only version 3 to "
-"6 files are supported. "
-
 msgid "Too many objects in Sprint Layout file"
 msgstr "Too many objects in Sprint Layout file"
 
@@ -38555,9 +38562,6 @@ msgstr "Unknown object type %d in Sprint Layout file"
 
 msgid "Too many text children in Sprint Layout object"
 msgstr "Too many text children in Sprint Layout object"
-
-msgid "Coordinate value out of range in Sprint Layout file"
-msgstr "Coordinate value out of range in Sprint Layout file"
 
 msgid "(not activated)"
 msgstr "(not activated)"
@@ -43777,6 +43781,27 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Place No Connect Flags"
+#~ msgstr "Place No Connect Flags"
+
+#~ msgid ""
+#~ "View and compare existing Gerber/Excellon files. To export Gerbers from a "
+#~ "PCB, use 'pcb export gerber'"
+#~ msgstr ""
+#~ "View and compare existing Gerber/Excellon files. To export Gerbers from a "
+#~ "PCB, use 'pcb export gerber'"
+
+#, c-format
+#~ msgid ""
+#~ "Current file appears to be generated in Sprint Layout %d. Only version 3 "
+#~ "to 6 files are supported. "
+#~ msgstr ""
+#~ "Current file appears to be generated in Sprint Layout %d. Only version 3 "
+#~ "to 6 files are supported. "
+
+#~ msgid "Coordinate value out of range in Sprint Layout file"
+#~ msgstr "Coordinate value out of range in Sprint Layout file"
 
 #~ msgid "Minimum track width"
 #~ msgstr "Minimum track width"
