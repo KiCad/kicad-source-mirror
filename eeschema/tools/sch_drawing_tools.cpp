@@ -363,6 +363,9 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                         if( libSymbol )
                         {
+                            if( libSymbol->IsPower() != filter.GetFilterPowerSymbols() )
+                                continue;
+
                             PICKED_SYMBOL pickedSymbol;
                             pickedSymbol.LibId = libSymbol->GetLibId();
                             alreadyPlaced.push_back( pickedSymbol );
