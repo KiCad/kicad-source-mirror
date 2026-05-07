@@ -169,6 +169,37 @@ static bool refdesFirstCharOk( const std::string& aRef )
 }
 
 
+// A stricter check for the byte-granular 0xFEFF marker scan (recoverOmittedPlacementsOld), which
+// is far more prone to landing on a misaligned false-positive record than the grid-aligned main
+// scan. A single-letter refdes is never real in PADS' naming convention (always PREFIX+NUMBER,
+// e.g. "M1", "J13"); the sole real single-character refdes convention is a bare digit ("5"),
+// which this still accepts.
+static bool refdesPlausibleForByteScan( const std::string& aRef )
+{
+    if( !refdesFirstCharOk( aRef ) )
+        return false;
+
+    return aRef.size() > 1 || std::isdigit( static_cast<unsigned char>( aRef[0] ) );
+}
+
+
+// An unused/padding slot in the placement array can carry leftover non-placement text (e.g. a
+// stale net-name string) that still happens to pass refdesFirstCharOk. A real placement's raw
+// coordinate is design + origin, essentially never at raw (0, 0) -- the origin alone is normally
+// a large offset. Verified against two real false positives this session: a stray "A"/"A1" text
+// fragment preceding a genuine leading placement run, and a stale net name ("N1265572") sitting
+// in an otherwise-valid placement array slot -- both at or near raw (0, 0).
+static bool placementCoordPlausible( const SDB_RECORD& aRec, int aXOff, std::optional<int> aYOff )
+{
+    static constexpr int32_t MIN_PLAUSIBLE_RAW_COORD = 100000;
+
+    int32_t rawX = aRec.I32( aXOff );
+    int32_t rawY = aYOff ? aRec.I32( *aYOff ) : 0;
+
+    return std::abs( rawX ) >= MIN_PLAUSIBLE_RAW_COORD || std::abs( rawY ) >= MIN_PLAUSIBLE_RAW_COORD;
+}
+
+
 BINARY_PARSER::BINARY_PARSER() = default;
 
 
@@ -363,6 +394,9 @@ void BINARY_PARSER::parsePartPlacements()
         if( !refdesFirstCharOk( refDes ) )
             continue;
 
+        if( !placementCoordPlausible( rec, layout.xOff, layout.yOff ) )
+            continue;
+
         PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
                                        layout.nameOff, refDes );
 
@@ -423,6 +457,13 @@ void BINARY_PARSER::parsePartPlacements()
             std::string refDes = rec.Str( layout.nameOff, 16 );
 
             if( !refdesFirstCharOk( refDes ) )
+                break;
+
+            // This backward extrapolation walks past the section's own declared bounds, so
+            // unlike the main scan it needs a second signal beyond "looks like a refdes" --
+            // verified against a real false positive (a stray "A"/"A1" text fragment with
+            // near-zero raw X/Y immediately preceding a board's genuine 13-record leading run).
+            if( !placementCoordPlausible( rec, layout.xOff, layout.yOff ) )
                 break;
 
             PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
@@ -688,7 +729,7 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
 
             std::string refDes = m_sdb.RecordAt( base ).Str( layout.nameOff, 16 );
 
-            if( !refdesFirstCharOk( refDes ) )
+            if( !refdesPlausibleForByteScan( refDes ) )
                 continue;
 
             // Emit the leading (anchor) block once, only after the first genuine placement is
@@ -703,7 +744,7 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
                     SDB_RECORD  leadRec = m_sdb.RecordAt( leadBase );
                     std::string leadRef = leadRec.Str( layout.nameOff, 16 );
 
-                    if( m_cursor.InBounds( leadBase, fieldSpan ) && refdesFirstCharOk( leadRef )
+                    if( m_cursor.InBounds( leadBase, fieldSpan ) && refdesPlausibleForByteScan( leadRef )
                         && !existingRefs.count( leadRef ) )
                     {
                         PART lead = makePlacementPart( leadRec, layout.xOff, layout.yOff,
