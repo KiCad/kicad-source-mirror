@@ -1678,6 +1678,8 @@ void PCB_IO_PADS::loadCopperShapes()
             appendArcPoints( outline, copper.outline );
             outline.SetClosed( true );
             zone->Outline()->AddOutline( outline );
+            zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE, ZONE::GetDefaultHatchPitch(), true );
+
             m_loadBoard->Add( zone );
         }
         else
@@ -1851,6 +1853,7 @@ void PCB_IO_PADS::loadZones()
 
         zone->Outline()->NewOutline();
         appendArcPoints( zone->Outline()->Outline( 0 ), pour_def.points );
+        zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE, ZONE::GetDefaultHatchPitch(), true );
 
         if( pour_def.is_cutout )
         {
@@ -1915,6 +1918,8 @@ void PCB_IO_PADS::loadZones()
             fillPoly.Simplify();
         }
 
+        fillPoly.Inflate( scaleSize( pour_def.width ) / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+
         // Collect all matching VOIDOUT regions into a single poly set and
         // subtract in one operation. PADS VOIDOUT shapes can extend beyond
         // the HATOUT outline boundary (PADS clips at render time), so
@@ -1941,8 +1946,12 @@ void PCB_IO_PADS::loadZones()
             if( parentIt->second != pour_def.owner_pour )
                 continue;
 
-            allVoids.NewOutline();
-            appendArcPoints( allVoids.Outline( allVoids.OutlineCount() - 1 ), void_def.points );
+            SHAPE_POLY_SET voidPoly;
+            voidPoly.NewOutline();
+            appendArcPoints( voidPoly.Outline( 0 ), void_def.points );
+            voidPoly.Inflate( scaleSize( void_def.width ) / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+
+            allVoids.Append( voidPoly );
         }
 
         if( allVoids.OutlineCount() > 0 )
@@ -2201,6 +2210,7 @@ void PCB_IO_PADS::loadKeepouts()
 
         koChain.SetClosed( true );
         zone->Outline()->AddOutline( koChain );
+        zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE, ZONE::GetDefaultHatchPitch(), true );
 
         m_loadBoard->Add( zone );
     }
