@@ -28,6 +28,7 @@
 #include <project/project_file.h>
 #include <settings/app_settings.h>
 #include <widgets/ui_common.h>
+#include <widgets/wx_dataviewctrl.h>
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
 #include <wx/settings.h>
@@ -368,14 +369,8 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
         //
         // This also happens to circumvent https://bugs.launchpad.net/kicad/+bug/1804400 which
         // appears to be a GTK+3 bug.
-        {
-            wxDataViewItem parent = GetParent( item );
-
-            if( parent.IsOk() )
-                m_widget->EnsureVisible( parent );
-        }
-
-        m_widget->EnsureVisible( item );
+        EnsureVisibleIfEnabled( m_widget, GetParent( item ) );
+        EnsureVisibleIfEnabled( m_widget, item );
     }
 }
 
@@ -431,7 +426,7 @@ void LIB_TREE_MODEL_ADAPTER::PinLibrary( LIB_TREE_NODE* aTreeNode )
     aTreeNode->m_Pinned = true;
 
     resortTree();
-    m_widget->EnsureVisible( ToItem( aTreeNode ) );
+    EnsureVisibleIfEnabled( m_widget, ToItem( aTreeNode ) );
 }
 
 

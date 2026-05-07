@@ -507,7 +507,7 @@ void LIB_TREE::selectIfValid( const wxDataViewItem& aTreeId )
 {
     if( aTreeId.IsOk() )
     {
-        m_tree_ctrl->EnsureVisible( aTreeId );
+        EnsureVisibleIfEnabled( m_tree_ctrl, aTreeId );
         m_tree_ctrl->UnselectAll();
         m_tree_ctrl->Select( aTreeId );
         postPreselectEvent();
@@ -539,7 +539,7 @@ void LIB_TREE::centerIfValid( const wxDataViewItem& aTreeId )
 
             if( idx + 5 < (int) siblings.GetCount() )
             {
-                m_tree_ctrl->EnsureVisible( siblings.Item( idx + 5 ) );
+                EnsureVisibleIfEnabled( m_tree_ctrl, siblings.Item( idx + 5 ) );
             }
             else if( grandParent )
             {
@@ -549,16 +549,16 @@ void LIB_TREE::centerIfValid( const wxDataViewItem& aTreeId )
                 int p_idx = parentsSiblings.Index( wxDataViewItem( parent ) );
 
                 if( p_idx + 1 < (int) parentsSiblings.GetCount() )
-                    m_tree_ctrl->EnsureVisible( parentsSiblings.Item( p_idx + 1 ) );
+                    EnsureVisibleIfEnabled( m_tree_ctrl, parentsSiblings.Item( p_idx + 1 ) );
             }
 
             if( idx - 5 >= 0 )
-                m_tree_ctrl->EnsureVisible( siblings.Item( idx - 5 ) );
+                EnsureVisibleIfEnabled( m_tree_ctrl, siblings.Item( idx - 5 ) );
             else
-                m_tree_ctrl->EnsureVisible( wxDataViewItem( parent ) );
+                EnsureVisibleIfEnabled( m_tree_ctrl, wxDataViewItem( parent ) );
         }
 
-        m_tree_ctrl->EnsureVisible( aTreeId );
+        EnsureVisibleIfEnabled( m_tree_ctrl, aTreeId );
     }
 }
 
