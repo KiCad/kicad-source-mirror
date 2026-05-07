@@ -1942,7 +1942,7 @@ void PCB_IO_PADS::loadZones()
             continue;
         }
 
-        if( pour_def.points.size() < 3 )
+        if( !isValidPoly( pour_def.points ) )
             continue;
 
         PCB_LAYER_ID pourLayer = getMappedLayer( pour_def.layer );

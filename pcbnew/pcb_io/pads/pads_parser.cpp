@@ -1268,16 +1268,29 @@ void PARSER::parseSectionPOUR( std::ifstream& aStream )
             // Handle different piece types
             if( poly_type == "CIRCLE" || poly_type == "CIRCUT" )
             {
-                // Circle piece: one line with center and radius info
-                // Format: xloc yloc radius
-                if( !readLine( aStream, line ) )
-                    break;
+                // Circle piece: `corners` lines (always 2 in practice), each a diametrically
+                // opposite endpoint -- not a single "xloc yloc radius" line.
+                std::vector<std::pair<double, double>> endpoints;
 
-                std::stringstream iss3( line );
-                double cx = 0.0, cy = 0.0, radius = 0.0;
-
-                if( iss3 >> cx >> cy >> radius )
+                for( int j = 0; j < corners; ++j )
                 {
+                    if( !readLine( aStream, line ) )
+                        break;
+
+                    std::stringstream iss3( line );
+                    double px = 0.0, py = 0.0;
+
+                    if( iss3 >> px >> py )
+                        endpoints.emplace_back( px, py );
+                }
+
+                if( endpoints.size() == 2 )
+                {
+                    double cx = ( endpoints[0].first + endpoints[1].first ) / 2.0;
+                    double cy = ( endpoints[0].second + endpoints[1].second ) / 2.0;
+                    double radius = std::hypot( endpoints[1].first - endpoints[0].first,
+                                                endpoints[1].second - endpoints[0].second ) / 2.0;
+
                     // Create arc representing full circle
                     ARC arc{};
                     arc.cx = x + cx;
