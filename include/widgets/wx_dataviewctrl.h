@@ -72,4 +72,21 @@ public:
     void CollapseAll();
 };
 
+
+/**
+ * Scroll @p aItem into view only when @p aWidget is currently enabled.
+ *
+ * On GTK, queueing scroll_to_path on a tree whose host frame has been disabled by a
+ * quasimodal child dialog races with concurrent model rebuilds and crashes
+ * GtkTreeView::validate_visible_area on the next frame-clock tick.  The user can't see
+ * the scroll while the dialog is up anyway.  wxWindow::IsEnabled() cascades through
+ * WINDOW_DISABLER on the parent frame, so this guard naturally suppresses the racy
+ * scroll for any quasimodal child.
+ */
+inline void EnsureVisibleIfEnabled( wxDataViewCtrl* aWidget, const wxDataViewItem& aItem )
+{
+    if( aItem.IsOk() && aWidget->IsEnabled() )
+        aWidget->EnsureVisible( aItem );
+}
+
 #endif // WX_DATAVIEWCTRL_H_
