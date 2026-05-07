@@ -1,0 +1,154 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "ee232ec1-967f-45f5-ab84-294d3e989213")
+	(paper "A4")
+	(lib_symbols)
+	(text "GitLab #24201 - ERC false positive on hier sheet pin\n\nPin A: NC sits directly on the pin. ERC stays quiet (correct).\nPin B: NC sits at the end of a short wire stub off the pin.\n\nERC reports \"pin with no connection flag is connected\" (bug).\n\nBoth should behave the same. The bug only fires when the inner\nnet has 2+ pins on it (R1 and R3 here)."
+		(exclude_from_sim no)
+		(at 131.826 54.864 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "d724c438-ac53-4225-ba7e-2d9d15e9bee4")
+	)
+	(junction
+		(at 96.52 50.8)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "3a46e910-95b4-4913-a70b-3fbca1993d44")
+	)
+	(no_connect
+		(at 95.25 57.15)
+		(uuid "5a6b6748-80b1-497b-8075-06deed559b37")
+	)
+	(no_connect
+		(at 100.33 50.8)
+		(uuid "92be9316-60e4-4dcb-b0fe-8810013ebacd")
+	)
+	(wire
+		(pts
+			(xy 96.52 48.26) (xy 97.79 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5fe59a28-5b35-4b39-9b64-6d2c10a86c46")
+	)
+	(wire
+		(pts
+			(xy 95.25 50.8) (xy 96.52 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a6f6db3d-3a37-4c37-8daa-cc3b346cf201")
+	)
+	(wire
+		(pts
+			(xy 96.52 50.8) (xy 100.33 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d5fa292b-6eae-4d2d-935d-d1ec4f1b92a2")
+	)
+	(wire
+		(pts
+			(xy 96.52 48.26) (xy 96.52 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f1877c95-5b55-4d07-9a7a-4d586964488f")
+	)
+	(label "B_LABEL"
+		(at 97.79 48.26 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e80e7511-f8ff-4311-a63e-8c12190f2be8")
+	)
+	(sheet
+		(at 53.975 43.18)
+		(size 41.275 22.86)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "d4b3c873-dbbc-47e5-bb53-f5eae6c837c6")
+		(property "Sheetname" "A"
+			(at 53.975 42.4684 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "aSheet.kicad_sch"
+			(at 53.975 66.6246 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "A" input
+			(at 95.25 57.15 0)
+			(uuid "d432f546-c27b-42c8-87d0-5121ec038cc2")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "B" input
+			(at 95.25 50.8 0)
+			(uuid "0bdb1fc0-1044-4859-9d31-7884af30cc5b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "issue24201"
+				(path "/ee232ec1-967f-45f5-ab84-294d3e989213"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

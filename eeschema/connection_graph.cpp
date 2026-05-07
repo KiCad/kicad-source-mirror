@@ -3980,6 +3980,34 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
 
     if( aSubgraph->m_no_connect != nullptr )
     {
+        // If this subgraph reaches the rest of the schematic only through a hier
+        // sheet pin (parent side) or hier label (inner side), and contains no real
+        // connection points of its own, suppress the warning.  The user's intent
+        // is to mark the hier link as unconnected -- whether the no-connect sits
+        // on the pin or at the end of a short wire stub.
+        if( !aSubgraph->m_hier_pins.empty() || !aSubgraph->m_hier_ports.empty() )
+        {
+            bool clean = true;
+
+            for( SCH_ITEM* item : aSubgraph->m_items )
+            {
+                switch( item->Type() )
+                {
+                case SCH_PIN_T:
+                case SCH_LABEL_T:
+                case SCH_GLOBAL_LABEL_T:
+                case SCH_DIRECTIVE_LABEL_T: clean = false; break;
+                default: break;
+                }
+
+                if( !clean )
+                    break;
+            }
+
+            if( clean )
+                return true;
+        }
+
         // Special case: If the subgraph being checked consists of only a hier port/pin and
         // a no-connect, we don't issue a "no-connect connected" warning just because
         // connections exist on the sheet on the other side of the link.
