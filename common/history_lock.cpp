@@ -28,6 +28,7 @@
 #include <settings/settings_manager.h>
 #include <wx/filename.h>
 #include <wx/filefn.h>
+#include <wx/ffile.h>
 #include <wx/log.h>
 #include <wx/datetime.h>
 
@@ -193,6 +194,19 @@ bool HISTORY_LOCK_MANAGER::openRepository()
         m_lockError = wxString::Format( _( "Failed to set git repository workdir to %s: %s" ), m_projectPath,
                                         err ? wxString::FromUTF8( err->message ) : wxString( "Unknown error" ) );
         return false;
+    }
+
+    // libgit2 will not read .history/.gitignore on its own (it sits outside the workdir).
+    // Inject its rules so users can edit that file and have them honoured.
+    wxFileName ignoreFile( m_historyPath, wxS( ".gitignore" ) );
+
+    if( ignoreFile.FileExists() )
+    {
+        wxFFile  f( ignoreFile.GetFullPath(), wxT( "rb" ) );
+        wxString content;
+
+        if( f.IsOpened() && f.ReadAll( &content ) )
+            git_ignore_add_rule( m_repo, content.utf8_str() );
     }
 
     m_repoOwned = true;
