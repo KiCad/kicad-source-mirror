@@ -26,6 +26,7 @@
 #include <vector>
 #include <wx/string.h>
 #include <kiid.h>
+#include <math/box2.h>
 #include <sch_sheet_path.h>
 
 class SCH_EDIT_FRAME;
