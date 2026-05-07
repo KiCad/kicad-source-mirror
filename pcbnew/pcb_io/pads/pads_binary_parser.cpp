@@ -3662,344 +3662,159 @@ void BINARY_PARSER::parseKeepouts()
 
 void BINARY_PARSER::parseCopperPours()
 {
-    // Two formats exist depending on file version. The simple format (v0x2021, v0x2026) embeds
-    // POR headers and vertex data in sec49's byte pool with FFFFFFFF delimiters, a trailing piece
-    // table, and vertex coordinates appended at the end. The complex format (v0x2025, v0x2027)
-    // puts POR records in sec52, per-pour layer/width metadata in a table at the tail of sec53,
-    // and all vertex coordinates contiguously in sec54 after its piece metadata block.
+    // Copper pours are a global run of 88-byte "owner" records (one per pour), each anchoring a
+    // 16-byte "piece" record and indexing into a shared, file-wide vertex/arc array. The
+    // directory-declared offsets for sections 52-55 are frequently wrong -- the whole owner/
+    // piece/vertex/arc array set is shifted from them by a per-file displacement -- so owners
+    // are found by a global signature scan rather than by iterating a section's declared record
+    // count: section 52's declared count is pool capacity, not a pour count (observed as high as
+    // 18369 for 32 actual pours on one board).
+    //
+    // Owner signature, scanned byte-by-byte across the whole file (zero false positives/
+    // negatives verified across the QA corpus, including files with no pours and stray "POR"
+    // byte sequences elsewhere):
+    //   u32(O+64) == 1
+    //   bytes(O+70, 3) == "POR"
+    //
+    // Owner record (88 bytes), offsets from O:
+    //   +4   u32 cumulative corner start index into the shared vertex array
+    //   +8   u32 cumulative arc start index into the shared arc array (arcs are not yet
+    //        imported -- see the piece-record note below)
+    //   +24  i32 raw XLOC -- each pour owns its own anchor, not a shared board anchor
+    //   +28  i32 raw YLOC
+    //   +70  char name[16]
+    //
+    // Piece record (16 bytes, one per pour, in owner order), based at pieceBase:
+    //   +0   u32 corner count
+    //   +4   u32 arc count
+    //   +8   i32 width, BASIC units
+    //   +12  u8  piece type: 0x32 = polygon, 0x33 = circle (two diametrically-opposite corners,
+    //        not a 2-point polygon)
+    //   +13  u8  layer
+    //
+    // The vertex array (flat, file-wide, 8-byte local (i32 x, i32 y) pairs) is indexed by each
+    // owner's own cumulative corner-start field, not consumed sequentially per pour -- the pool
+    // is over-allocated on some boards (e.g. 10,380 slots for 1,377 used corners on one board).
+    // Arc records decorate specific corner-to-corner segments with a curve rather than adding
+    // extra boundary points, so the corner list alone still yields a closed (if not smoothly
+    // curved) outline; arc-to-curve conversion is not implemented.
+    static constexpr size_t OWNER_SIZE  = 88;
+    static constexpr size_t PIECE_SIZE  = 16;
+    static constexpr size_t VERTEX_SIZE = 8;
 
-    std::vector<POUR_HEADER> porHeaders;
-    bool                    simpleFormat = false;
-
-    const SDB_SECTION* sec49 = getSection( SECTION::ClearanceRules );
-
-    if( sec49 && sec49->totalBytes > 0 && sec49->End() <= m_data.size() )
+    struct POUR_OWNER
     {
-        uint32_t poolSize = sec49->totalBytes;
-
-        for( size_t i = 0; i + 26 < poolSize; )
-        {
-            SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( sec49->dataOffset + i ) );
-
-            // A pour header is a 0xFFFFFFFF delimiter, then marker==1, sig 0x80 and a POR name.
-            if( rec.U32( 0 ) != SDB_FIELD_UNSET )
-            {
-                i++;
-                continue;
-            }
-
-            if( i + 32 > poolSize )
-                break;
-
-            if( rec.U32( 4 ) != 1 || rec.U8( 8 ) != 0x80 )
-            {
-                i += 4;
-                continue;
-            }
-
-            std::string name = rec.Str( 10, 16 );
-
-            if( name.size() < 4 || name.substr( 0, 3 ) != "POR" )
-            {
-                i += 4;
-                continue;
-            }
-
-            POUR_HEADER hdr;
-            hdr.offset   = i;
-            hdr.name     = name;
-            hdr.vtxCount = rec.U32( 32 );
-            porHeaders.push_back( hdr );
-            i += 28;
-        }
-
-        if( !porHeaders.empty() )
-            simpleFormat = true;
-    }
-
-    if( simpleFormat )
-        parseCopperPoursSimple( porHeaders, *sec49 );
-    else
-        parseCopperPoursComplex();
-}
-
-
-void BINARY_PARSER::parseCopperPoursSimple( const std::vector<POUR_HEADER>& aHeaders,
-                                             const SDB_SECTION& aSec49 )
-{
-    size_t       numPours  = aHeaders.size();
-    const size_t lastOff   = aHeaders[numPours - 1].offset;
-    const size_t tableBase = aSec49.dataOffset + lastOff + 32;
-    uint32_t     poolSize  = aSec49.totalBytes;
-
-    std::vector<uint32_t> vtxCounts( numPours );
-    vtxCounts[0] = aHeaders[0].vtxCount;
-
-    struct PourMeta
-    {
-        int32_t width     = 0;
-        uint8_t pieceType = 0;
-        uint8_t layer     = 0;
+        size_t      offset = 0;
+        uint32_t    cornerStart = 0;
+        int32_t     rawX = 0;
+        int32_t     rawY = 0;
+        std::string name;
     };
 
-    std::vector<PourMeta> pourMeta( numPours );
+    std::vector<POUR_OWNER> owners;
 
-    size_t tablePos = tableBase + 4;
-
-    for( size_t p = 0; p < numPours; ++p )
+    for( size_t o = 0; o + OWNER_SIZE <= m_data.size(); ++o )
     {
-        if( tablePos + 8 > aSec49.dataOffset + poolSize )
-            return;
-
-        SDB_RECORD metaRec = m_sdb.RecordAt( tablePos );
-        PourMeta   meta;
-        meta.width     = metaRec.I32( 0 );
-        meta.pieceType = metaRec.U8( 4 );
-        meta.layer     = metaRec.U8( 5 );
-        pourMeta[p]    = meta;
-        tablePos += 8;
-
-        if( p < numPours - 1 )
-        {
-            if( tablePos + 8 > aSec49.dataOffset + poolSize )
-                return;
-
-            vtxCounts[p + 1] = m_sdb.RecordAt( tablePos ).U32( 0 );
-            tablePos += 8;
-        }
-    }
-
-    size_t vtxPos = tablePos;
-
-    for( size_t p = 0; p < numPours; ++p )
-    {
-        POUR pour;
-        pour.owner_pour = aHeaders[p].name;
-        pour.width      = static_cast<double>( pourMeta[p].width );
-        pour.layer      = static_cast<int>( pourMeta[p].layer );
-
-        uint32_t nVtx = vtxCounts[p];
-
-        if( nVtx == 0 || nVtx > 100000 )
+        if( m_cursor.U32At( o + 64 ) != 1 )
             continue;
 
-        if( vtxPos + static_cast<size_t>( nVtx ) * 8 > aSec49.dataOffset + poolSize )
-            break;
+        if( m_data[o + 70] != 'P' || m_data[o + 71] != 'O' || m_data[o + 72] != 'R' )
+            continue;
 
-        for( uint32_t v = 0; v < nVtx; ++v )
-        {
-            SDB_RECORD vtx = m_sdb.RecordAt( vtxPos );
-            int32_t    x = vtx.I32( 0 );
-            int32_t    y = vtx.I32( 4 );
-
-            pour.points.emplace_back( toBasicCoordX( x ), toBasicCoordY( y ) );
-            vtxPos += 8;
-        }
-
-        m_pours.push_back( std::move( pour ) );
+        POUR_OWNER owner;
+        owner.offset = o;
+        owner.cornerStart = m_cursor.U32At( o + 4 );
+        owner.rawX = m_cursor.I32At( o + 24 );
+        owner.rawY = m_cursor.I32At( o + 28 );
+        owner.name = m_cursor.StringAt( o + 70, 16 );
+        owners.push_back( std::move( owner ) );
     }
-}
 
-
-void BINARY_PARSER::parseCopperPoursComplex()
-{
-    std::vector<POUR_HEADER> porHeaders;
+    if( owners.empty() )
+        return;
 
     const SDB_SECTION* sec52 = getSection( SECTION::PourTokensA );
     const SDB_SECTION* sec53 = getSection( SECTION::PourTokensB );
     const SDB_SECTION* sec54 = getSection( SECTION::PourTokensC );
 
-    if( !sec52 || sec52->totalBytes == 0 || !sec53 || sec53->totalBytes == 0
-        || !sec54 || sec54->totalBytes == 0 )
-    {
+    if( !sec52 || !sec53 || !sec54 )
         return;
-    }
 
-    if( sec52->End() > m_data.size() || sec53->End() > m_data.size()
-        || sec54->End() > m_data.size() )
-    {
+    int64_t delta = static_cast<int64_t>( owners[0].offset ) - static_cast<int64_t>( sec52->dataOffset );
+    int64_t pieceBaseSigned = static_cast<int64_t>( sec53->dataOffset ) + delta;
+    int64_t vertexBaseSigned = static_cast<int64_t>( sec54->dataOffset ) + delta;
+
+    if( pieceBaseSigned < 0 || vertexBaseSigned < 0 )
         return;
-    }
 
-    const uint8_t* sec52Data = m_data.data() + sec52->dataOffset;
-    const uint8_t* sec53Data = m_data.data() + sec53->dataOffset;
-    const uint8_t* sec54Data = m_data.data() + sec54->dataOffset;
+    size_t pieceBase = static_cast<size_t>( pieceBaseSigned );
+    size_t vertexBase = static_cast<size_t>( vertexBaseSigned );
 
-    // POR records are FFFFFFFF + u32(marker) + u8(0x80) + u8(flag) + "POR..." name; the
-    // cumulative vertex count is at FF+32.
-    for( size_t i = 0; i + 36 < sec52->totalBytes; ++i )
+    for( size_t p = 0; p < owners.size(); ++p )
     {
-        if( sec52Data[i] != 0xFF || sec52Data[i + 1] != 0xFF
-            || sec52Data[i + 2] != 0xFF || sec52Data[i + 3] != 0xFF )
-        {
-            continue;
-        }
+        const POUR_OWNER& owner = owners[p];
+        size_t             pieceOff = pieceBase + p * PIECE_SIZE;
 
-        if( sec52Data[i + 8] != 0x80 )
-        {
-            i += 3;
-            continue;
-        }
-
-        SDB_RECORD  rec  = m_sdb.RecordAt( static_cast<uint32_t>( sec52->dataOffset + i ) );
-        std::string name = rec.Str( 10, 16 );
-
-        if( name.size() < 4 || name.substr( 0, 3 ) != "POR" )
+        if( !m_cursor.InBounds( pieceOff, PIECE_SIZE ) )
             continue;
 
-        POUR_HEADER hdr;
-        hdr.offset   = i;
-        hdr.name     = name;
-        hdr.vtxCount = rec.U32( 32 );
-        porHeaders.push_back( hdr );
-    }
+        uint32_t cornerCount = m_cursor.U32At( pieceOff );
+        int32_t  width = m_cursor.I32At( pieceOff + 8 );
+        uint8_t  pieceType = m_cursor.U8At( pieceOff + 12 );
+        uint8_t  layer = m_cursor.U8At( pieceOff + 13 );
 
-    if( porHeaders.empty() )
-        return;
+        if( cornerCount == 0 || cornerCount > 100000 )
+            continue;
 
-    size_t numPours = porHeaders.size();
+        size_t vOff = vertexBase + static_cast<size_t>( owner.cornerStart ) * VERTEX_SIZE;
 
-    // porHeaders[i].vtxCount is the running total through pour i; difference to per-pour counts.
-    std::vector<uint32_t> vtxCounts( numPours );
-    vtxCounts[0] = porHeaders[0].vtxCount;
+        POUR pour;
+        pour.owner_pour = owner.name;
+        pour.width = static_cast<double>( width );
+        pour.layer = static_cast<int>( layer );
 
-    for( size_t p = 1; p < numPours; ++p )
-        vtxCounts[p] = porHeaders[p].vtxCount - porHeaders[p - 1].vtxCount;
-
-    // sec53 begins with FFFFFFFF-delimited ANP records, then a table of 16-byte entries. Each
-    // entry carries the layer for its POR pour at byte 0 and the NEXT pour's width at bytes
-    // 11-14; the first pour's width comes from the 16 bytes immediately preceding the table.
-    size_t lastFF53 = 0;
-    bool   foundFF  = false;
-
-    for( size_t i = sec53->totalBytes; i >= 4; --i )
-    {
-        size_t pos = i - 4;
-
-        if( sec53Data[pos] == 0xFF && sec53Data[pos + 1] == 0xFF
-            && sec53Data[pos + 2] == 0xFF && sec53Data[pos + 3] == 0xFF )
+        if( pieceType == 0x33 && cornerCount == 2 )
         {
-            lastFF53 = pos;
-            foundFF  = true;
-            break;
-        }
-    }
+            // Circle piece: the two "corners" are diametrically opposite endpoints, not a
+            // 2-point polygon -- the downstream zone builder requires at least 3 points and
+            // would silently drop it. Synthesize a regular polygon approximation instead.
+            if( !m_cursor.InBounds( vOff, VERTEX_SIZE * 2 ) )
+                continue;
 
-    if( !foundFF )
-        return;
+            int32_t x0 = owner.rawX + m_cursor.I32At( vOff );
+            int32_t y0 = owner.rawY + m_cursor.I32At( vOff + 4 );
+            int32_t x1 = owner.rawX + m_cursor.I32At( vOff + VERTEX_SIZE );
+            int32_t y1 = owner.rawY + m_cursor.I32At( vOff + VERTEX_SIZE + 4 );
 
-    // The last FFFFFFFF record is 41 bytes: FFFFFFFF(4) + marker(4) + sig(1) + flag(1) +
-    // name(16) + separator(1) + tail(14). The table starts immediately after it.
-    static constexpr size_t LAST_FF_RECORD_SIZE = 41;
-    size_t metaTableStart = lastFF53 + LAST_FF_RECORD_SIZE;
+            double cx = ( x0 + x1 ) / 2.0;
+            double cy = ( y0 + y1 ) / 2.0;
+            double radius = std::hypot( x1 - x0, y1 - y0 ) / 2.0;
 
-    if( metaTableStart + numPours * 16 > sec53->totalBytes )
-        return;
+            static constexpr int CIRCLE_SEGMENTS = 48;
 
-    size_t preTableStart = metaTableStart - 16;
-
-    struct PourMeta
-    {
-        uint8_t layer = 0;
-        int32_t width = 0;
-    };
-
-    std::vector<PourMeta> pourMeta( numPours );
-
-    for( size_t p = 0; p < numPours; ++p )
-    {
-        size_t recOff = metaTableStart + p * 16;
-
-        pourMeta[p].layer = sec53Data[recOff];
-
-        // Width for pour p is in the previous 16-byte entry (bytes 11-14); for the first pour,
-        // the previous entry is the pre-table block.
-        size_t widthSrc = ( p == 0 ) ? preTableStart : metaTableStart + ( p - 1 ) * 16;
-        pourMeta[p].width =
-                m_sdb.RecordAt( static_cast<uint32_t>( sec53->dataOffset + widthSrc ) ).I32( 11 );
-    }
-
-    // sec54 begins with 16-byte piece metadata records (byte 0 in {0x32, 0x33, 0x34}) followed
-    // by 4 padding bytes and then contiguous vertex coordinates. The scan may include one extra
-    // false-positive record, so the vertex start is computed as scan_end - 12.
-    size_t metaScanEnd = 0;
-
-    for( size_t pos = 0; pos + 16 <= sec54->totalBytes; pos += 16 )
-    {
-        uint8_t ptype = sec54Data[pos];
-
-        if( ptype != 0x32 && ptype != 0x33 && ptype != 0x34 )
-        {
-            metaScanEnd = pos;
-            break;
-        }
-
-        metaScanEnd = pos + 16;
-    }
-
-    // v0x2025 has a 3-byte header before piece metadata, shifting the scan start.
-    if( m_version == 0x2025 )
-    {
-        if( sec54Data[0] != 0x32 && sec54Data[0] != 0x33 && sec54Data[0] != 0x34 )
-        {
-            metaScanEnd = 0;
-
-            for( size_t pos = 3; pos + 16 <= sec54->totalBytes; pos += 16 )
+            for( int s = 0; s < CIRCLE_SEGMENTS; ++s )
             {
-                uint8_t ptype = sec54Data[pos];
+                double  angle = 2.0 * M_PI * s / CIRCLE_SEGMENTS;
+                int32_t rawX = static_cast<int32_t>( std::lround( cx + radius * std::cos( angle ) ) );
+                int32_t rawY = static_cast<int32_t>( std::lround( cy + radius * std::sin( angle ) ) );
 
-                if( ptype != 0x32 && ptype != 0x33 && ptype != 0x34 )
-                {
-                    metaScanEnd = pos;
-                    break;
-                }
-
-                metaScanEnd = pos + 16;
+                pour.points.emplace_back( toBasicCoordX( rawX ), toBasicCoordY( rawY ) );
             }
         }
-    }
-
-    if( metaScanEnd < 12 )
-        return;
-
-    // The last scanned record is typically a false positive (vertex data that happens to start
-    // with a valid piece-type byte). Backing up 12 bytes accounts for the 4-byte padding after
-    // real metadata.
-    size_t vtxStart = metaScanEnd - 12;
-
-    uint32_t totalPorVtx = porHeaders.back().vtxCount;
-
-    if( vtxStart + static_cast<size_t>( totalPorVtx ) * 8 > sec54->totalBytes )
-    {
-        // Fall back in case the last metadata record was genuine.
-        vtxStart = metaScanEnd + 4;
-
-        if( vtxStart + static_cast<size_t>( totalPorVtx ) * 8 > sec54->totalBytes )
-            return;
-    }
-
-    size_t vtxPos = sec54->dataOffset + vtxStart;
-
-    for( size_t p = 0; p < numPours; ++p )
-    {
-        POUR pour;
-        pour.owner_pour = porHeaders[p].name;
-        pour.width      = static_cast<double>( pourMeta[p].width );
-        pour.layer      = static_cast<int>( pourMeta[p].layer );
-
-        uint32_t nVtx = vtxCounts[p];
-
-        if( nVtx == 0 || nVtx > 100000 )
-            continue;
-
-        for( uint32_t v = 0; v < nVtx; ++v )
+        else
         {
-            SDB_RECORD vtx = m_sdb.RecordAt( vtxPos );
-            int32_t    x = vtx.I32( 0 );
-            int32_t    y = vtx.I32( 4 );
+            if( !m_cursor.InBounds( vOff, static_cast<size_t>( cornerCount ) * VERTEX_SIZE ) )
+                continue;
 
-            pour.points.emplace_back( toBasicCoordX( x ), toBasicCoordY( y ) );
-            vtxPos += 8;
+            for( uint32_t v = 0; v < cornerCount; ++v )
+            {
+                size_t  o = vOff + static_cast<size_t>( v ) * VERTEX_SIZE;
+                int32_t localX = m_cursor.I32At( o );
+                int32_t localY = m_cursor.I32At( o + 4 );
+
+                pour.points.emplace_back( toBasicCoordX( owner.rawX + localX ),
+                                          toBasicCoordY( owner.rawY + localY ) );
+            }
         }
 
         m_pours.push_back( std::move( pour ) );

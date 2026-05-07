@@ -64,6 +64,7 @@ enum class SECTION : int
     PourTokensA    = 52,   // pour-relation token streams
     PourTokensB    = 53,
     PourTokensC    = 54,
+    PourTokensD    = 55,   // pour arc records (16 B)
     Vias           = 60,   // route-junction / via records (64 B)
     Clusters       = 68,   // part-cluster (*CLUSTER*) controller (60 B/rec)
     LayerTable     = 69,   // ODBLayer physical-stackup table (152 B/rec)
@@ -90,14 +91,6 @@ struct BIN_NET_CLASS_DEF
     int  maxTrackWidth = 0;
     int  viaClearance  = 0;
     bool hasRuleValues = false;
-};
-
-/// One copper-pour POR header: its byte offset, name and vertex count.
-struct POUR_HEADER
-{
-    size_t      offset = 0;
-    std::string name;
-    uint32_t    vtxCount = 0;
 };
 
 /// One board-outline vertex triplet: [i32 X, i32 Y, i32 attr] where attr -1 is a plain corner
@@ -305,9 +298,6 @@ private:
     void parseKeepouts();
     void parseCopperShapes();
     void parseCopperPours();
-    void parseCopperPoursSimple( const std::vector<POUR_HEADER>& aHeaders,
-                                 const SDB_SECTION& aSec49 );
-    void parseCopperPoursComplex();
 
     // Reconstruct PADS dimensions, which the binary does not store as a dedicated section.
     // Each dimension is a DRW graphic-piece owner named DIM* whose sec12 vertex run holds the
