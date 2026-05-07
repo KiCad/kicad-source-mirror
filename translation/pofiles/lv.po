@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 05:17+0300\n"
+"POT-Creation-Date: 2026-05-07 21:05+0300\n"
 "PO-Revision-Date: 2026-03-18 20:46+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/kicad/master-"
@@ -5680,11 +5680,11 @@ msgstr "Printeri"
 msgid "Info:"
 msgstr "Informācija:"
 
-#: common/dialogs/panel_setup_netclasses.cpp:99
+#: common/dialogs/panel_setup_netclasses.cpp:100
 msgid "<Not defined>"
 msgstr "<Nav definēts>"
 
-#: common/dialogs/panel_setup_netclasses.cpp:101 common/eda_shape.cpp:2877
+#: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2877
 #: common/eda_shape.cpp:2889 common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
@@ -5700,7 +5700,7 @@ msgstr "<Nav definēts>"
 msgid "Solid"
 msgstr "Nepārtraukts"
 
-#: common/dialogs/panel_setup_netclasses.cpp:103 common/eda_shape.cpp:2878
+#: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2878
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:705 eeschema/sch_line.cpp:1263
@@ -5709,7 +5709,7 @@ msgstr "Nepārtraukts"
 msgid "Dashed"
 msgstr "Pārtraukts"
 
-#: common/dialogs/panel_setup_netclasses.cpp:105 common/eda_shape.cpp:2879
+#: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2879
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:706 eeschema/sch_line.cpp:1264
@@ -5718,7 +5718,7 @@ msgstr "Pārtraukts"
 msgid "Dotted"
 msgstr "Punktēts"
 
-#: common/dialogs/panel_setup_netclasses.cpp:107 common/eda_shape.cpp:2880
+#: common/dialogs/panel_setup_netclasses.cpp:108 common/eda_shape.cpp:2880
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:707 eeschema/sch_line.cpp:1265
@@ -5727,7 +5727,7 @@ msgstr "Punktēts"
 msgid "Dash-Dot"
 msgstr "Strīpa-punkts"
 
-#: common/dialogs/panel_setup_netclasses.cpp:109 common/eda_shape.cpp:2881
+#: common/dialogs/panel_setup_netclasses.cpp:110 common/eda_shape.cpp:2881
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:708 eeschema/sch_line.cpp:1266
@@ -5736,11 +5736,11 @@ msgstr "Strīpa-punkts"
 msgid "Dash-Dot-Dot"
 msgstr "Strīpa-punkts-punkts"
 
-#: common/dialogs/panel_setup_netclasses.cpp:181
+#: common/dialogs/panel_setup_netclasses.cpp:182
 msgid "Set color to transparent to use layer default color."
 msgstr "Iestatiet krāsu kā caurspīdīgu, lai izmantotu slāņa noklusējuma krāsu."
 
-#: common/dialogs/panel_setup_netclasses.cpp:402
+#: common/dialogs/panel_setup_netclasses.cpp:403
 msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
@@ -5748,77 +5748,77 @@ msgstr ""
 "Tīklu klases ir mainītas ārpus iestatīšanas dialoga.\n"
 "Vai vēlaties tās atkārtoti ielādēt?"
 
-#: common/dialogs/panel_setup_netclasses.cpp:556
+#: common/dialogs/panel_setup_netclasses.cpp:557
 msgid "Netclass must have a name."
 msgstr "Tīklu klasei jābūt nosaukumam."
 
-#: common/dialogs/panel_setup_netclasses.cpp:565
+#: common/dialogs/panel_setup_netclasses.cpp:566
 msgid "Netclass name already in use."
 msgstr "Tīklu klases nosaukums jau tiek izmantots."
 
-#: common/dialogs/panel_setup_netclasses.cpp:585
+#: common/dialogs/panel_setup_netclasses.cpp:586
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
 msgstr "Atstarpe bija pārāk liela. Tā ir apgriezta līdz %s."
 
-#: common/dialogs/panel_setup_netclasses.cpp:702
+#: common/dialogs/panel_setup_netclasses.cpp:703
 msgid "Minimum copper clearance"
 msgstr "Minimālā vara atstarpe"
 
-#: common/dialogs/panel_setup_netclasses.cpp:703
+#: common/dialogs/panel_setup_netclasses.cpp:704
 #, fuzzy
 msgid "Optimum track width"
 msgstr "Minimālais celiņa platums"
 
-#: common/dialogs/panel_setup_netclasses.cpp:704
+#: common/dialogs/panel_setup_netclasses.cpp:705
 msgid "Via pad diameter"
 msgstr "Pārejas kontaktlaukuma diametrs"
 
-#: common/dialogs/panel_setup_netclasses.cpp:705
+#: common/dialogs/panel_setup_netclasses.cpp:706
 msgid "Via plated hole diameter"
 msgstr "Pārejas urbuma diametrs"
 
-#: common/dialogs/panel_setup_netclasses.cpp:706
+#: common/dialogs/panel_setup_netclasses.cpp:707
 msgid "Microvia pad diameter"
 msgstr "Mikropārejas kontaktlaukuma diametrs"
 
-#: common/dialogs/panel_setup_netclasses.cpp:707
+#: common/dialogs/panel_setup_netclasses.cpp:708
 msgid "Microvia plated hole diameter"
 msgstr "Mikropārejas urbuma diametrs"
 
-#: common/dialogs/panel_setup_netclasses.cpp:708
+#: common/dialogs/panel_setup_netclasses.cpp:709
 msgid "Differential pair track width"
 msgstr "Diferenciālā pāra celiņa platums"
 
-#: common/dialogs/panel_setup_netclasses.cpp:709
+#: common/dialogs/panel_setup_netclasses.cpp:710
 msgid "Differential pair gap"
 msgstr "Diferenciālā pāra atstarpe"
 
-#: common/dialogs/panel_setup_netclasses.cpp:710
+#: common/dialogs/panel_setup_netclasses.cpp:711
 msgid "Schematic wire thickness"
 msgstr "Shēmas vada biezums"
 
-#: common/dialogs/panel_setup_netclasses.cpp:711
+#: common/dialogs/panel_setup_netclasses.cpp:712
 msgid "Bus wire thickness"
 msgstr "Kopnes vada biezums"
 
-#: common/dialogs/panel_setup_netclasses.cpp:712
+#: common/dialogs/panel_setup_netclasses.cpp:713
 msgid "Schematic wire color"
 msgstr "Shēmas vada krāsa"
 
-#: common/dialogs/panel_setup_netclasses.cpp:713
+#: common/dialogs/panel_setup_netclasses.cpp:714
 msgid "Schematic wire line style"
 msgstr "Shēmas vada līnijas stils"
 
-#: common/dialogs/panel_setup_netclasses.cpp:714
+#: common/dialogs/panel_setup_netclasses.cpp:715
 msgid "PCB netclass color"
 msgstr "PCB tīklu klases krāsa"
 
-#: common/dialogs/panel_setup_netclasses.cpp:759
+#: common/dialogs/panel_setup_netclasses.cpp:760
 msgid "The default net class is required."
 msgstr "Nepieciešama noklusējuma tīklu klase."
 
-#: common/dialogs/panel_setup_netclasses.cpp:915
+#: common/dialogs/panel_setup_netclasses.cpp:916
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Tīkli, kas atbilst '%s':</b>"
@@ -53332,22 +53332,22 @@ msgstr "Celiņš uz bezvar slāņa %d tiek izlaists"
 msgid "COPPER item on unmapped layer %d defaulting to F.Cu"
 msgstr "COPPER elements uz nekartēta slāņa %d noklusējumā iestatīts uz F.Cu"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1842
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1844
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
 #, c-format
 msgid "Skipping pour on unmapped layer %d"
 msgstr "Aizpildījums uz nekartēta slāņa %d tiek izlaists"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2138
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2147
 #, c-format
 msgid "Skipping keepout on unmapped layer %d"
 msgstr "Aizliegtā zona uz nekartēta slāņa %d tiek izlaista"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2162
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2171
 msgid "Skipping keepout with no valid layers"
 msgstr "Aizliegtā zona bez derīgiem slāņiem tiek izlaista"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2359
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2369
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:652
 #, c-format
 msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"

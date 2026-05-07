@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 05:17+0300\n"
+"POT-Creation-Date: 2026-05-07 21:05+0300\n"
 "PO-Revision-Date: 2026-03-22 06:10+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/master-"
@@ -5676,11 +5676,11 @@ msgstr "அச்சுப்பொறிகள்"
 msgid "Info:"
 msgstr "தகவல்:"
 
-#: common/dialogs/panel_setup_netclasses.cpp:99
+#: common/dialogs/panel_setup_netclasses.cpp:100
 msgid "<Not defined>"
 msgstr "<வரையறுக்கப்படவில்லை>"
 
-#: common/dialogs/panel_setup_netclasses.cpp:101 common/eda_shape.cpp:2877
+#: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2877
 #: common/eda_shape.cpp:2889 common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
@@ -5696,7 +5696,7 @@ msgstr "<வரையறுக்கப்படவில்லை>"
 msgid "Solid"
 msgstr "திடமான"
 
-#: common/dialogs/panel_setup_netclasses.cpp:103 common/eda_shape.cpp:2878
+#: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2878
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:705 eeschema/sch_line.cpp:1263
@@ -5705,7 +5705,7 @@ msgstr "திடமான"
 msgid "Dashed"
 msgstr "கோடு"
 
-#: common/dialogs/panel_setup_netclasses.cpp:105 common/eda_shape.cpp:2879
+#: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2879
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:706 eeschema/sch_line.cpp:1264
@@ -5714,7 +5714,7 @@ msgstr "கோடு"
 msgid "Dotted"
 msgstr "புள்ளியிடப்பட்ட"
 
-#: common/dialogs/panel_setup_netclasses.cpp:107 common/eda_shape.cpp:2880
+#: common/dialogs/panel_setup_netclasses.cpp:108 common/eda_shape.cpp:2880
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:707 eeschema/sch_line.cpp:1265
@@ -5723,7 +5723,7 @@ msgstr "புள்ளியிடப்பட்ட"
 msgid "Dash-Dot"
 msgstr "டாச்-டாட்"
 
-#: common/dialogs/panel_setup_netclasses.cpp:109 common/eda_shape.cpp:2881
+#: common/dialogs/panel_setup_netclasses.cpp:110 common/eda_shape.cpp:2881
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:708 eeschema/sch_line.cpp:1266
@@ -5732,11 +5732,11 @@ msgstr "டாச்-டாட்"
 msgid "Dash-Dot-Dot"
 msgstr "டாச்-டாட்-டாட்"
 
-#: common/dialogs/panel_setup_netclasses.cpp:181
+#: common/dialogs/panel_setup_netclasses.cpp:182
 msgid "Set color to transparent to use layer default color."
 msgstr "அடுக்கு இயல்புநிலை வண்ணத்தைப் பயன்படுத்த வண்ணத்தை வெளிப்படையானதாக அமைக்கவும்."
 
-#: common/dialogs/panel_setup_netclasses.cpp:402
+#: common/dialogs/panel_setup_netclasses.cpp:403
 msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
@@ -5744,77 +5744,77 @@ msgstr ""
 "அமைவு உரையாடலுக்கு வெளியே நெட் கிளாச்கள் மாற்றப்பட்டுள்ளன. \n"
 "அவற்றை மீண்டும் ஏற்ற விரும்புகிறீர்களா?"
 
-#: common/dialogs/panel_setup_netclasses.cpp:556
+#: common/dialogs/panel_setup_netclasses.cpp:557
 msgid "Netclass must have a name."
 msgstr "நெட்ட்க்ளாசுக்கு ஒரு பெயர் இருக்க வேண்டும்."
 
-#: common/dialogs/panel_setup_netclasses.cpp:565
+#: common/dialogs/panel_setup_netclasses.cpp:566
 msgid "Netclass name already in use."
 msgstr "நெட் கிளாச் பெயர் ஏற்கனவே பயன்பாட்டில் உள்ளது."
 
-#: common/dialogs/panel_setup_netclasses.cpp:585
+#: common/dialogs/panel_setup_netclasses.cpp:586
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
 msgstr "இசைவு மிகப் பெரியது. இது %s உடன் ஒட்டப்பட்டுள்ளது."
 
-#: common/dialogs/panel_setup_netclasses.cpp:702
+#: common/dialogs/panel_setup_netclasses.cpp:703
 msgid "Minimum copper clearance"
 msgstr "குறைந்தபட்ச செப்பு இசைவு"
 
-#: common/dialogs/panel_setup_netclasses.cpp:703
+#: common/dialogs/panel_setup_netclasses.cpp:704
 #, fuzzy
 msgid "Optimum track width"
 msgstr "குறைந்தபட்ச தட அகலம்"
 
-#: common/dialogs/panel_setup_netclasses.cpp:704
+#: common/dialogs/panel_setup_netclasses.cpp:705
 msgid "Via pad diameter"
 msgstr "திண்டு விட்டம் வழியாக"
 
-#: common/dialogs/panel_setup_netclasses.cpp:705
+#: common/dialogs/panel_setup_netclasses.cpp:706
 msgid "Via plated hole diameter"
 msgstr "பூசப்பட்ட துளை விட்டம் வழியாக"
 
-#: common/dialogs/panel_setup_netclasses.cpp:706
+#: common/dialogs/panel_setup_netclasses.cpp:707
 msgid "Microvia pad diameter"
 msgstr "மைக்ரோவியா பேட் விட்டம்"
 
-#: common/dialogs/panel_setup_netclasses.cpp:707
+#: common/dialogs/panel_setup_netclasses.cpp:708
 msgid "Microvia plated hole diameter"
 msgstr "மைக்ரோவியா பூசப்பட்ட துளை விட்டம்"
 
-#: common/dialogs/panel_setup_netclasses.cpp:708
+#: common/dialogs/panel_setup_netclasses.cpp:709
 msgid "Differential pair track width"
 msgstr "வேறுபட்ட இணை டிராக் அகலம்"
 
-#: common/dialogs/panel_setup_netclasses.cpp:709
+#: common/dialogs/panel_setup_netclasses.cpp:710
 msgid "Differential pair gap"
 msgstr "வேறுபட்ட இணை இடைவெளி"
 
-#: common/dialogs/panel_setup_netclasses.cpp:710
+#: common/dialogs/panel_setup_netclasses.cpp:711
 msgid "Schematic wire thickness"
 msgstr "திட்ட கம்பி தடிமன்"
 
-#: common/dialogs/panel_setup_netclasses.cpp:711
+#: common/dialogs/panel_setup_netclasses.cpp:712
 msgid "Bus wire thickness"
 msgstr "பச் கம்பி தடிமன்"
 
-#: common/dialogs/panel_setup_netclasses.cpp:712
+#: common/dialogs/panel_setup_netclasses.cpp:713
 msgid "Schematic wire color"
 msgstr "திட்ட கம்பி நிறம்"
 
-#: common/dialogs/panel_setup_netclasses.cpp:713
+#: common/dialogs/panel_setup_netclasses.cpp:714
 msgid "Schematic wire line style"
 msgstr "திட்ட கம்பி வரி பாணி"
 
-#: common/dialogs/panel_setup_netclasses.cpp:714
+#: common/dialogs/panel_setup_netclasses.cpp:715
 msgid "PCB netclass color"
 msgstr "பிசிபி நெட் கிளாச் நிறம்"
 
-#: common/dialogs/panel_setup_netclasses.cpp:759
+#: common/dialogs/panel_setup_netclasses.cpp:760
 msgid "The default net class is required."
 msgstr "இயல்புநிலை நிகர வகுப்பு தேவை."
 
-#: common/dialogs/panel_setup_netclasses.cpp:915
+#: common/dialogs/panel_setup_netclasses.cpp:916
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
 msgstr "<b> நெட்ச் '%s' பொருந்துகிறது: </b>"
@@ -53951,22 +53951,22 @@ msgstr "செம்பு அல்லாத அடுக்கு %d இல்
 msgid "COPPER item on unmapped layer %d defaulting to F.Cu"
 msgstr "வரைபடமிடப்படாத அடுக்கில் %d உள்ள COPPER உருப்படி F.Cu க்கு இயல்பாக அமைகிறது"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1842
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1844
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
 #, c-format
 msgid "Skipping pour on unmapped layer %d"
 msgstr "வரைபடமிடப்படாத அடுக்கில் %d உள்ள நிரப்பு தவிர்க்கப்படுகிறது"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2138
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2147
 #, c-format
 msgid "Skipping keepout on unmapped layer %d"
 msgstr "வரைபடமிடப்படாத அடுக்கில் %d உள்ள தவிர்ப்பு வலயம் தவிர்க்கப்படுகிறது"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2162
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2171
 msgid "Skipping keepout with no valid layers"
 msgstr "சரியான அடுக்குகள் இல்லாத தவிர்ப்பு வலயம் தவிர்க்கப்படுகிறது"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2359
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2369
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:652
 #, c-format
 msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"

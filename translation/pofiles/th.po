@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 05:17+0300\n"
+"POT-Creation-Date: 2026-05-07 21:05+0300\n"
 "PO-Revision-Date: 2026-03-18 20:46+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
@@ -5614,11 +5614,11 @@ msgstr "เครื่องพิมพ์"
 msgid "Info:"
 msgstr "ข้อมูล:"
 
-#: common/dialogs/panel_setup_netclasses.cpp:99
+#: common/dialogs/panel_setup_netclasses.cpp:100
 msgid "<Not defined>"
 msgstr "<ไม่ได้กำหนด>"
 
-#: common/dialogs/panel_setup_netclasses.cpp:101 common/eda_shape.cpp:2877
+#: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2877
 #: common/eda_shape.cpp:2889 common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
@@ -5634,7 +5634,7 @@ msgstr "<ไม่ได้กำหนด>"
 msgid "Solid"
 msgstr "เส้นทึบ"
 
-#: common/dialogs/panel_setup_netclasses.cpp:103 common/eda_shape.cpp:2878
+#: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2878
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:705 eeschema/sch_line.cpp:1263
@@ -5643,7 +5643,7 @@ msgstr "เส้นทึบ"
 msgid "Dashed"
 msgstr "เส้นประ"
 
-#: common/dialogs/panel_setup_netclasses.cpp:105 common/eda_shape.cpp:2879
+#: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2879
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:706 eeschema/sch_line.cpp:1264
@@ -5652,7 +5652,7 @@ msgstr "เส้นประ"
 msgid "Dotted"
 msgstr "เส้นจุด"
 
-#: common/dialogs/panel_setup_netclasses.cpp:107 common/eda_shape.cpp:2880
+#: common/dialogs/panel_setup_netclasses.cpp:108 common/eda_shape.cpp:2880
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:707 eeschema/sch_line.cpp:1265
@@ -5661,7 +5661,7 @@ msgstr "เส้นจุด"
 msgid "Dash-Dot"
 msgstr "เส้นประ-จุด"
 
-#: common/dialogs/panel_setup_netclasses.cpp:109 common/eda_shape.cpp:2881
+#: common/dialogs/panel_setup_netclasses.cpp:110 common/eda_shape.cpp:2881
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:708 eeschema/sch_line.cpp:1266
@@ -5670,11 +5670,11 @@ msgstr "เส้นประ-จุด"
 msgid "Dash-Dot-Dot"
 msgstr "เส้นประ-จุด-จุด"
 
-#: common/dialogs/panel_setup_netclasses.cpp:181
+#: common/dialogs/panel_setup_netclasses.cpp:182
 msgid "Set color to transparent to use layer default color."
 msgstr "ตั้งสีเป็นโปร่งใสเพื่อใช้สีเริ่มต้นของเลเยอร์"
 
-#: common/dialogs/panel_setup_netclasses.cpp:402
+#: common/dialogs/panel_setup_netclasses.cpp:403
 msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
@@ -5682,77 +5682,77 @@ msgstr ""
 "เน็ตคลาสถูกเปลี่ยนแปลงนอกไดอะล็อกตั้งค่า\n"
 "ต้องการโหลดใหม่หรือไม่?"
 
-#: common/dialogs/panel_setup_netclasses.cpp:556
+#: common/dialogs/panel_setup_netclasses.cpp:557
 msgid "Netclass must have a name."
 msgstr "เน็ตคลาสต้องมีชื่อ"
 
-#: common/dialogs/panel_setup_netclasses.cpp:565
+#: common/dialogs/panel_setup_netclasses.cpp:566
 msgid "Netclass name already in use."
 msgstr "ชื่อเน็ตคลาสใช้ไปแล้ว"
 
-#: common/dialogs/panel_setup_netclasses.cpp:585
+#: common/dialogs/panel_setup_netclasses.cpp:586
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
 msgstr "ระยะห่างใหญ่เกินไป ถูกจำกัดที่ %s"
 
-#: common/dialogs/panel_setup_netclasses.cpp:702
+#: common/dialogs/panel_setup_netclasses.cpp:703
 msgid "Minimum copper clearance"
 msgstr "ระยะห่างอย่างน้อยระหว่างทองแดง"
 
-#: common/dialogs/panel_setup_netclasses.cpp:703
+#: common/dialogs/panel_setup_netclasses.cpp:704
 #, fuzzy
 msgid "Optimum track width"
 msgstr "ขนาดแทร็กอย่างน้อย"
 
-#: common/dialogs/panel_setup_netclasses.cpp:704
+#: common/dialogs/panel_setup_netclasses.cpp:705
 msgid "Via pad diameter"
 msgstr "เส้นผ่าศูนย์กลางแพ็ดของเวีย"
 
-#: common/dialogs/panel_setup_netclasses.cpp:705
+#: common/dialogs/panel_setup_netclasses.cpp:706
 msgid "Via plated hole diameter"
 msgstr "เส้นผ่าศูนย์กลางรูเจาะของเวียแบบเคลือบ"
 
-#: common/dialogs/panel_setup_netclasses.cpp:706
+#: common/dialogs/panel_setup_netclasses.cpp:707
 msgid "Microvia pad diameter"
 msgstr "เส้นผ่าศูนย์กลางแพ็ดของไมโครเวีย"
 
-#: common/dialogs/panel_setup_netclasses.cpp:707
+#: common/dialogs/panel_setup_netclasses.cpp:708
 msgid "Microvia plated hole diameter"
 msgstr "เส้นผ่าศูนย์กลางรูเจาะไมโครเวียแบบเคลือบ"
 
-#: common/dialogs/panel_setup_netclasses.cpp:708
+#: common/dialogs/panel_setup_netclasses.cpp:709
 msgid "Differential pair track width"
 msgstr "ขนาดแทร็กชนิดคู่ดิฟแพร์"
 
-#: common/dialogs/panel_setup_netclasses.cpp:709
+#: common/dialogs/panel_setup_netclasses.cpp:710
 msgid "Differential pair gap"
 msgstr "ช่องว่างระหว่างคู่ดิฟแพร์"
 
-#: common/dialogs/panel_setup_netclasses.cpp:710
+#: common/dialogs/panel_setup_netclasses.cpp:711
 msgid "Schematic wire thickness"
 msgstr "ความหนาเส้นลวดในวงจร"
 
-#: common/dialogs/panel_setup_netclasses.cpp:711
+#: common/dialogs/panel_setup_netclasses.cpp:712
 msgid "Bus wire thickness"
 msgstr "ความหนาเส้นบัส"
 
-#: common/dialogs/panel_setup_netclasses.cpp:712
+#: common/dialogs/panel_setup_netclasses.cpp:713
 msgid "Schematic wire color"
 msgstr "สีเส้นลวดในวงจร"
 
-#: common/dialogs/panel_setup_netclasses.cpp:713
+#: common/dialogs/panel_setup_netclasses.cpp:714
 msgid "Schematic wire line style"
 msgstr "สไตล์เส้นลวดในวงจร"
 
-#: common/dialogs/panel_setup_netclasses.cpp:714
+#: common/dialogs/panel_setup_netclasses.cpp:715
 msgid "PCB netclass color"
 msgstr "สีเน็ตคลาสของ PCB"
 
-#: common/dialogs/panel_setup_netclasses.cpp:759
+#: common/dialogs/panel_setup_netclasses.cpp:760
 msgid "The default net class is required."
 msgstr "ต้องกำหนดปริยายของเน็ตคลาส"
 
-#: common/dialogs/panel_setup_netclasses.cpp:915
+#: common/dialogs/panel_setup_netclasses.cpp:916
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
 msgstr "<b> เน็ตจับคู่กับ '%s':</b>"
@@ -53140,22 +53140,22 @@ msgstr "ข้ามแทร็กบนเลเยอร์ที่ไม่
 msgid "COPPER item on unmapped layer %d defaulting to F.Cu"
 msgstr "รายการ COPPER บนเลเยอร์ที่ไม่ได้แมป %d ใช้ F.Cu เป็นค่าเริ่มต้น"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1842
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1844
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
 #, c-format
 msgid "Skipping pour on unmapped layer %d"
 msgstr "ข้ามการเทบนเลเยอร์ที่ไม่ได้แมป %d"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2138
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2147
 #, c-format
 msgid "Skipping keepout on unmapped layer %d"
 msgstr "ข้ามพื้นที่หวงห้ามบนเลเยอร์ที่ไม่ได้แมป %d"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2162
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2171
 msgid "Skipping keepout with no valid layers"
 msgstr "ข้ามพื้นที่หวงห้ามที่ไม่มีเลเยอร์ที่ถูกต้อง"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2359
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2369
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:652
 #, c-format
 msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 05:17+0300\n"
+"POT-Creation-Date: 2026-05-07 21:05+0300\n"
 "PO-Revision-Date: 2026-03-19 00:23+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
@@ -5688,11 +5688,11 @@ msgstr "Skrivere"
 msgid "Info:"
 msgstr "Info:"
 
-#: common/dialogs/panel_setup_netclasses.cpp:99
+#: common/dialogs/panel_setup_netclasses.cpp:100
 msgid "<Not defined>"
 msgstr "<Ikke definert>"
 
-#: common/dialogs/panel_setup_netclasses.cpp:101 common/eda_shape.cpp:2877
+#: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2877
 #: common/eda_shape.cpp:2889 common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
@@ -5708,7 +5708,7 @@ msgstr "<Ikke definert>"
 msgid "Solid"
 msgstr "Hel"
 
-#: common/dialogs/panel_setup_netclasses.cpp:103 common/eda_shape.cpp:2878
+#: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2878
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:705 eeschema/sch_line.cpp:1263
@@ -5717,7 +5717,7 @@ msgstr "Hel"
 msgid "Dashed"
 msgstr "Stiplet"
 
-#: common/dialogs/panel_setup_netclasses.cpp:105 common/eda_shape.cpp:2879
+#: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2879
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:706 eeschema/sch_line.cpp:1264
@@ -5726,7 +5726,7 @@ msgstr "Stiplet"
 msgid "Dotted"
 msgstr "Prikket"
 
-#: common/dialogs/panel_setup_netclasses.cpp:107 common/eda_shape.cpp:2880
+#: common/dialogs/panel_setup_netclasses.cpp:108 common/eda_shape.cpp:2880
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:707 eeschema/sch_line.cpp:1265
@@ -5735,7 +5735,7 @@ msgstr "Prikket"
 msgid "Dash-Dot"
 msgstr "Dash-Dot"
 
-#: common/dialogs/panel_setup_netclasses.cpp:109 common/eda_shape.cpp:2881
+#: common/dialogs/panel_setup_netclasses.cpp:110 common/eda_shape.cpp:2881
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:708 eeschema/sch_line.cpp:1266
@@ -5744,11 +5744,11 @@ msgstr "Dash-Dot"
 msgid "Dash-Dot-Dot"
 msgstr "Strek-punkt-punkt"
 
-#: common/dialogs/panel_setup_netclasses.cpp:181
+#: common/dialogs/panel_setup_netclasses.cpp:182
 msgid "Set color to transparent to use layer default color."
 msgstr "Sett fargen til gjennomsiktig for å bruke lagets standardfarge."
 
-#: common/dialogs/panel_setup_netclasses.cpp:402
+#: common/dialogs/panel_setup_netclasses.cpp:403
 msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
@@ -5756,77 +5756,77 @@ msgstr ""
 "Nettklassene har blitt endret utenfor oppsettsdialogen.\n"
 "Vil du laste dem inn på nytt?"
 
-#: common/dialogs/panel_setup_netclasses.cpp:556
+#: common/dialogs/panel_setup_netclasses.cpp:557
 msgid "Netclass must have a name."
 msgstr "Netclass må ha et navn."
 
-#: common/dialogs/panel_setup_netclasses.cpp:565
+#: common/dialogs/panel_setup_netclasses.cpp:566
 msgid "Netclass name already in use."
 msgstr "Netclass-navnet allerede i bruk."
 
-#: common/dialogs/panel_setup_netclasses.cpp:585
+#: common/dialogs/panel_setup_netclasses.cpp:586
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
 msgstr "Klaring var for stor. Den har blitt begrenset til %s."
 
-#: common/dialogs/panel_setup_netclasses.cpp:702
+#: common/dialogs/panel_setup_netclasses.cpp:703
 msgid "Minimum copper clearance"
 msgstr "Minimum kobberklaring"
 
-#: common/dialogs/panel_setup_netclasses.cpp:703
+#: common/dialogs/panel_setup_netclasses.cpp:704
 #, fuzzy
 msgid "Optimum track width"
 msgstr "Minimum sporbredde"
 
-#: common/dialogs/panel_setup_netclasses.cpp:704
+#: common/dialogs/panel_setup_netclasses.cpp:705
 msgid "Via pad diameter"
 msgstr "Via-putediameter"
 
-#: common/dialogs/panel_setup_netclasses.cpp:705
+#: common/dialogs/panel_setup_netclasses.cpp:706
 msgid "Via plated hole diameter"
 msgstr "Via-hulldiameter (belagt)"
 
-#: common/dialogs/panel_setup_netclasses.cpp:706
+#: common/dialogs/panel_setup_netclasses.cpp:707
 msgid "Microvia pad diameter"
 msgstr "Mikro-via-putediameter"
 
-#: common/dialogs/panel_setup_netclasses.cpp:707
+#: common/dialogs/panel_setup_netclasses.cpp:708
 msgid "Microvia plated hole diameter"
 msgstr "Mikro-via-hulldiameter (belagt)"
 
-#: common/dialogs/panel_setup_netclasses.cpp:708
+#: common/dialogs/panel_setup_netclasses.cpp:709
 msgid "Differential pair track width"
 msgstr "Differensialpar sporbredde"
 
-#: common/dialogs/panel_setup_netclasses.cpp:709
+#: common/dialogs/panel_setup_netclasses.cpp:710
 msgid "Differential pair gap"
 msgstr "Differensialpar avstand"
 
-#: common/dialogs/panel_setup_netclasses.cpp:710
+#: common/dialogs/panel_setup_netclasses.cpp:711
 msgid "Schematic wire thickness"
 msgstr "Skjemaledningstykkelse"
 
-#: common/dialogs/panel_setup_netclasses.cpp:711
+#: common/dialogs/panel_setup_netclasses.cpp:712
 msgid "Bus wire thickness"
 msgstr "Bussledningstykkelse"
 
-#: common/dialogs/panel_setup_netclasses.cpp:712
+#: common/dialogs/panel_setup_netclasses.cpp:713
 msgid "Schematic wire color"
 msgstr "Skjemaledningsfarge"
 
-#: common/dialogs/panel_setup_netclasses.cpp:713
+#: common/dialogs/panel_setup_netclasses.cpp:714
 msgid "Schematic wire line style"
 msgstr "Skjemaledningslinjestil"
 
-#: common/dialogs/panel_setup_netclasses.cpp:714
+#: common/dialogs/panel_setup_netclasses.cpp:715
 msgid "PCB netclass color"
 msgstr "PCB-nettklassefarge"
 
-#: common/dialogs/panel_setup_netclasses.cpp:759
+#: common/dialogs/panel_setup_netclasses.cpp:760
 msgid "The default net class is required."
 msgstr "Standard nettoklasse kreves."
 
-#: common/dialogs/panel_setup_netclasses.cpp:915
+#: common/dialogs/panel_setup_netclasses.cpp:916
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Nett som samsvarer med '%s':</b>"
@@ -53977,22 +53977,22 @@ msgstr "Hopper over spor på ikke-kobberlag %d"
 msgid "COPPER item on unmapped layer %d defaulting to F.Cu"
 msgstr "KOBBER-element på ikke-tilordnet lag %d bruker standard F.Cu"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1842
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1844
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
 #, c-format
 msgid "Skipping pour on unmapped layer %d"
 msgstr "Hopper over fylling på ikke-tilordnet lag %d"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2138
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2147
 #, c-format
 msgid "Skipping keepout on unmapped layer %d"
 msgstr "Hopper over forbudssone på ikke-tilordnet lag %d"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2162
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2171
 msgid "Skipping keepout with no valid layers"
 msgstr "Hopper over forbudssone uten gyldige lag"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2359
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2369
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:652
 #, c-format
 msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"

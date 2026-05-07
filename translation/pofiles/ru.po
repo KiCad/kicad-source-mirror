@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 05:17+0300\n"
+"POT-Creation-Date: 2026-05-07 21:05+0300\n"
 "PO-Revision-Date: 2026-05-07 18:04+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
@@ -5751,11 +5751,11 @@ msgstr "Принтеры"
 msgid "Info:"
 msgstr "Информация:"
 
-#: common/dialogs/panel_setup_netclasses.cpp:99
+#: common/dialogs/panel_setup_netclasses.cpp:100
 msgid "<Not defined>"
 msgstr "<Не определено>"
 
-#: common/dialogs/panel_setup_netclasses.cpp:101 common/eda_shape.cpp:2877
+#: common/dialogs/panel_setup_netclasses.cpp:102 common/eda_shape.cpp:2877
 #: common/eda_shape.cpp:2889 common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
@@ -5771,7 +5771,7 @@ msgstr "<Не определено>"
 msgid "Solid"
 msgstr "Сплошной"
 
-#: common/dialogs/panel_setup_netclasses.cpp:103 common/eda_shape.cpp:2878
+#: common/dialogs/panel_setup_netclasses.cpp:104 common/eda_shape.cpp:2878
 #: common/stroke_params.cpp:41
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:705 eeschema/sch_line.cpp:1263
@@ -5780,7 +5780,7 @@ msgstr "Сплошной"
 msgid "Dashed"
 msgstr "Штриховой"
 
-#: common/dialogs/panel_setup_netclasses.cpp:105 common/eda_shape.cpp:2879
+#: common/dialogs/panel_setup_netclasses.cpp:106 common/eda_shape.cpp:2879
 #: common/stroke_params.cpp:42
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:706 eeschema/sch_line.cpp:1264
@@ -5789,7 +5789,7 @@ msgstr "Штриховой"
 msgid "Dotted"
 msgstr "Пунктир"
 
-#: common/dialogs/panel_setup_netclasses.cpp:107 common/eda_shape.cpp:2880
+#: common/dialogs/panel_setup_netclasses.cpp:108 common/eda_shape.cpp:2880
 #: common/stroke_params.cpp:43
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:707 eeschema/sch_line.cpp:1265
@@ -5798,7 +5798,7 @@ msgstr "Пунктир"
 msgid "Dash-Dot"
 msgstr "Штрихпунктир"
 
-#: common/dialogs/panel_setup_netclasses.cpp:109 common/eda_shape.cpp:2881
+#: common/dialogs/panel_setup_netclasses.cpp:110 common/eda_shape.cpp:2881
 #: common/stroke_params.cpp:44
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:368
 #: eeschema/sch_bus_entry.cpp:708 eeschema/sch_line.cpp:1266
@@ -5807,11 +5807,11 @@ msgstr "Штрихпунктир"
 msgid "Dash-Dot-Dot"
 msgstr "Штрихпунктир двойной"
 
-#: common/dialogs/panel_setup_netclasses.cpp:181
+#: common/dialogs/panel_setup_netclasses.cpp:182
 msgid "Set color to transparent to use layer default color."
 msgstr "Установите прозрачный цвет для использования цвета слоя по умолчанию."
 
-#: common/dialogs/panel_setup_netclasses.cpp:402
+#: common/dialogs/panel_setup_netclasses.cpp:403
 msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
@@ -5819,77 +5819,77 @@ msgstr ""
 "Классы цепей были изменены вне диалога настроек.\n"
 "Хотите перезагрузить их?"
 
-#: common/dialogs/panel_setup_netclasses.cpp:556
+#: common/dialogs/panel_setup_netclasses.cpp:557
 msgid "Netclass must have a name."
 msgstr "У класса цепей должно быть имя."
 
-#: common/dialogs/panel_setup_netclasses.cpp:565
+#: common/dialogs/panel_setup_netclasses.cpp:566
 msgid "Netclass name already in use."
 msgstr "Класс цепей с таким именем уже используется."
 
-#: common/dialogs/panel_setup_netclasses.cpp:585
+#: common/dialogs/panel_setup_netclasses.cpp:586
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
 msgstr "Зазор был слишком большим. Он был ограничен до %s."
 
-#: common/dialogs/panel_setup_netclasses.cpp:702
+#: common/dialogs/panel_setup_netclasses.cpp:703
 msgid "Minimum copper clearance"
 msgstr "Минимальный зазор"
 
-#: common/dialogs/panel_setup_netclasses.cpp:703
+#: common/dialogs/panel_setup_netclasses.cpp:704
 #, fuzzy
 msgid "Optimum track width"
 msgstr "Минимальная ширина дорожки"
 
-#: common/dialogs/panel_setup_netclasses.cpp:704
+#: common/dialogs/panel_setup_netclasses.cpp:705
 msgid "Via pad diameter"
 msgstr "Диаметр конт. пл. перех. отв."
 
-#: common/dialogs/panel_setup_netclasses.cpp:705
+#: common/dialogs/panel_setup_netclasses.cpp:706
 msgid "Via plated hole diameter"
 msgstr "Сверло перех. отв."
 
-#: common/dialogs/panel_setup_netclasses.cpp:706
+#: common/dialogs/panel_setup_netclasses.cpp:707
 msgid "Microvia pad diameter"
 msgstr "Диаметр конт. пл. перех. микроотв."
 
-#: common/dialogs/panel_setup_netclasses.cpp:707
+#: common/dialogs/panel_setup_netclasses.cpp:708
 msgid "Microvia plated hole diameter"
 msgstr "Сверло перех. микроотв."
 
-#: common/dialogs/panel_setup_netclasses.cpp:708
+#: common/dialogs/panel_setup_netclasses.cpp:709
 msgid "Differential pair track width"
 msgstr "Ширина дорожек диф.пары"
 
-#: common/dialogs/panel_setup_netclasses.cpp:709
+#: common/dialogs/panel_setup_netclasses.cpp:710
 msgid "Differential pair gap"
 msgstr "Зазор диф.пары"
 
-#: common/dialogs/panel_setup_netclasses.cpp:710
+#: common/dialogs/panel_setup_netclasses.cpp:711
 msgid "Schematic wire thickness"
 msgstr "Толщина проводника схемы"
 
-#: common/dialogs/panel_setup_netclasses.cpp:711
+#: common/dialogs/panel_setup_netclasses.cpp:712
 msgid "Bus wire thickness"
 msgstr "Толщина шин"
 
-#: common/dialogs/panel_setup_netclasses.cpp:712
+#: common/dialogs/panel_setup_netclasses.cpp:713
 msgid "Schematic wire color"
 msgstr "Цвет проводника схемы"
 
-#: common/dialogs/panel_setup_netclasses.cpp:713
+#: common/dialogs/panel_setup_netclasses.cpp:714
 msgid "Schematic wire line style"
 msgstr "Стиль линии проводника схемы"
 
-#: common/dialogs/panel_setup_netclasses.cpp:714
+#: common/dialogs/panel_setup_netclasses.cpp:715
 msgid "PCB netclass color"
 msgstr "Цвет класса цепей на печатной плате"
 
-#: common/dialogs/panel_setup_netclasses.cpp:759
+#: common/dialogs/panel_setup_netclasses.cpp:760
 msgid "The default net class is required."
 msgstr "Класс цепей \"default\" обязателен."
 
-#: common/dialogs/panel_setup_netclasses.cpp:915
+#: common/dialogs/panel_setup_netclasses.cpp:916
 #, c-format
 msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Цепи соответствующие '%s':</b>"
@@ -51976,8 +51976,10 @@ msgstr "Файл печатной платы не сохранён"
 msgid "%d WRL 3D model could not be matched to an equivalent STEP model."
 msgid_plural "%d WRL 3D models could not be matched to equivalent STEP models."
 msgstr[0] "%d WRL 3D-модель не удалось сопоставить с аналогичной моделью STEP."
-msgstr[1] "%d WRL 3D-модели не удалось сопоставить с аналогичными моделями STEP."
-msgstr[2] "%d WRL 3D-моделей не удалось сопоставить с аналогичными моделями STEP."
+msgstr[1] ""
+"%d WRL 3D-модели не удалось сопоставить с аналогичными моделями STEP."
+msgstr[2] ""
+"%d WRL 3D-моделей не удалось сопоставить с аналогичными моделями STEP."
 
 #: pcbnew/pcb_edit_frame.cpp:2039
 msgid "Show options"
@@ -53830,22 +53832,22 @@ msgid "COPPER item on unmapped layer %d defaulting to F.Cu"
 msgstr ""
 "COPPER элемент на несопоставленном слое %d по умолчанию помещается на F.Cu"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1842
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1844
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:580
 #, c-format
 msgid "Skipping pour on unmapped layer %d"
 msgstr "Пропуск заливки на несопоставленном слое %d"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2138
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2147
 #, c-format
 msgid "Skipping keepout on unmapped layer %d"
 msgstr "Пропуск области запрета на несопоставленном слое %d"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2162
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2171
 msgid "Skipping keepout with no valid layers"
 msgstr "Пропуск области запрета без допустимых слоев"
 
-#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2359
+#: pcbnew/pcb_io/pads/pcb_io_pads.cpp:2369
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:652
 #, c-format
 msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"
@@ -58957,8 +58959,8 @@ msgstr "Выделить/расширить соединение..."
 msgid ""
 "Selection contains locked items. Enable 'Override locks' to operate on them."
 msgstr ""
-"В выделении есть заблокированные элементы. Установите флажок «Разблокировать"
-"», чтобы работать с ними."
+"В выделении есть заблокированные элементы. Установите флажок "
+"«Разблокировать», чтобы работать с ними."
 
 #: pcbnew/tools/position_relative_tool.cpp:234
 msgid "Select the reference point on the item to move."
