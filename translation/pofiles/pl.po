@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-05 07:09+0000\n"
+"PO-Revision-Date: 2026-05-08 23:11+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.5-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -4582,10 +4582,10 @@ msgid ""
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
-"Przyrostowo: zarządza ukrytym folderem .history z repozytorium git śledzącym "
-"zmiany.\n"
-"ZIP: tworzy archiwum ZIP z odciskiem czasowym podczas zapisywania; "
-"automatyczne zapisy używają plików odzyskania."
+"Przyrostowe: utrzymuje ukryte repozytorium git .history z ciągłymi "
+"zmianami.\n"
+"ZIP: tworzy archiwum zip ze znacznikami czasu podczas zapisywania; "
+"automatyczne zapisywanie korzysta z plików odzyskiwania."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
 msgid "Project directory"
@@ -4600,9 +4600,9 @@ msgid ""
 "Project: store backups and autosave files inside the project directory.\n"
 "User: store them in your KiCad user data directory."
 msgstr ""
-"Projekt: zapisuje kopie oraz automatyczne zapisy wewnątrz folderu z "
-"projektem.\n"
-"Użytkownika: zapisuje je w twoim folderze danych KiCad użytkownika."
+"Projekt: przechowuje kopie zapasowe i pliki automatycznego zapisu w katalogu "
+"projektu.\n"
+"Użytkownika: przechowuje kopie zapasowe w katalogu danych użytkownika KiCad."
 
 #: common/dialogs/panel_common_settings_base.cpp:457
 msgid "Maximum total backup size:"
@@ -6578,7 +6578,7 @@ msgstr ""
 
 #: common/eda_base_frame.cpp:437
 msgid "Auto-Save Recovery"
-msgstr "Odzyskiwanie zapisów automatycznych"
+msgstr "Przywracanie z autozapisu"
 
 #: common/eda_base_frame.cpp:445
 #, c-format
@@ -9445,9 +9445,8 @@ msgid "The library table path '%s' does not exist"
 msgstr "Ścieżka tabeli bibliotek '%s' nie istnieje"
 
 #: common/libraries/library_table.cpp:94
-#, fuzzy
 msgid "The library table is of wrong type"
-msgstr "Ścieżka tabeli bibliotek '%s' nie istnieje"
+msgstr "Tabela bibliotek jest złego typu"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -9525,6 +9524,8 @@ msgstr ""
 msgid ""
 "Files removed by 'Proceed' are archived to %s and can be recovered manually."
 msgstr ""
+"Pliki usunięte przez 'Proceduj' są zarchiwizowane w %s i można je ręcznie "
+"odzyskać."
 
 #: common/local_history.cpp:2455
 msgid "Cannot restore - the following files are open by another user:"
@@ -18947,9 +18948,8 @@ msgid "Symbol Library Tables"
 msgstr "Tabele bibliotek symboli"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:201
-#, fuzzy
 msgid "Unable to load library table."
-msgstr "Nie można załadować biblioteki\n"
+msgstr "Nie można załadować tabeli bibliotek."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:417
 msgid "folder with .kicad_sym files"
@@ -26582,9 +26582,8 @@ msgid "Save selected group to linked design block"
 msgstr "Zapisuje zaznaczoną grupę w połączonym z nim blokiem projektowym"
 
 #: eeschema/tools/sch_actions.cpp:520
-#, fuzzy
 msgid "Place/Remove No Connect Flags"
-msgstr "Umieść flagi Niepołączone"
+msgstr "Umieszcza lub usuwa flagi Niepołączone"
 
 #: eeschema/tools/sch_actions.cpp:531
 msgid "Place Junctions"
@@ -27814,9 +27813,8 @@ msgid "Add Wire to Bus Entry"
 msgstr "Dodaj wejście do magistrali"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1672
-#, fuzzy
 msgid "Remove No Connect Flag"
-msgstr "Dodaj flagę Niepołączone"
+msgstr "Usuń flagę Niepołączone"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1681
 msgid "Junction location contains no joinable wires and/or pins."
@@ -30358,14 +30356,12 @@ msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr "Wymusza ponowne zapisanie biblioteki footprintów niezależnie od wersji"
 
 #: kicad/cli/command_gerber.h:33
-#, fuzzy
 msgid ""
 "View and compare existing Gerber/Excellon files. To export Gerbers from a "
 "PCB, use 'pcb export gerbers'"
 msgstr ""
 "Przegląda i porównuje istniejące pliki Gerber/Excellon. Aby wyeksportować "
-"pliki Gerber z płytki PCB, użyj polecenia 'Pliki produkcyjne -> Eksportuj "
-"pliki Gerber...'"
+"pliki Gerber z płytki PCB, użyj 'pcb export gerbers'"
 
 #: kicad/cli/command_gerber_convert.h:33
 msgid "Convert Gerber/Excellon to other formats"
@@ -47223,7 +47219,7 @@ msgstr ""
 "    # Określa optymalną przerwę dla konkretnej pary różnicowej\n"
 "    (rule \"odstęp dp dla lini zegarowej\"\n"
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-"        (condition \"A.inDiffPair('CLK')\")\n"
+"        (condition \"A.inDiffPair('CLK') && AB.isCoupledDiffPair()\"))\n"
 "\n"
 "    # Określa większy odstęp wokół dowolnej pary różnicowej\n"
 "    (rule \"odstęp dp\"\n"
@@ -47302,12 +47298,12 @@ msgstr ""
 "\n"
 "    # Zezwalaj na naruszenia bliskości otworów przelotek ślepych/"
 "zagrzebanych z mikropzelotkami gdy\n"
-"    # wiadomo, że producent PCB wierci otwory przelotek ślepych/zagrzebanych "
-"-przed- laserowym \n"
+"    # wiadomo, że producent PCB wierci otwory przelotek ślepych/"
+"zagrzebanych -przed- laserowym \n"
 "    # tworzeniem mikroprzelotek.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -59949,8 +59945,8 @@ msgstr "Zaznacz/rozszerz połączenie..."
 msgid ""
 "Selection contains locked items. Enable 'Override locks' to operate on them."
 msgstr ""
-"Zaznaczenie zawiera zablokowane elementy. Włącz opcję \"Pomiń blokady\", aby "
-"móc operować."
+"Zaznaczenie zawiera zablokowane elementy. Włącz opcję 'Pomiń blokady', aby "
+"na nich zadziałać."
 
 #: pcbnew/tools/position_relative_tool.cpp:234
 msgid "Select the reference point on the item to move."
