@@ -28,6 +28,7 @@
 #define ARG_MODE_SEPARATE "--mode-separate"
 #define ARG_MODE_MULTIPAGE "--mode-multipage"
 #define ARG_MODE_SINGLE "--mode-single"
+#define ARG_NO_PROPERTY_POPUPS "--no-property-popups"
 
 CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() :
         PCB_EXPORT_BASE_COMMAND( "pdf", IO_TYPE::FILE, IO_TYPE::DIRECTORY )
@@ -123,6 +124,10 @@ CLI::PCB_EXPORT_PDF_COMMAND::PCB_EXPORT_PDF_COMMAND() :
             .help( UTF8STDSTR( _( ARG_CHECK_ZONES_DESC ) ) )
             .flag();
 
+    m_argParser.add_argument( ARG_NO_PROPERTY_POPUPS )
+            .help( UTF8STDSTR( _( "Suppress footprint property popups" ) ) )
+            .flag();
+
     addVariantsArg();
 }
 
@@ -157,6 +162,12 @@ int CLI::PCB_EXPORT_PDF_COMMAND::doPerform( KIWAY& aKiway )
     pdfJob->m_negative = m_argParser.get<bool>( ARG_NEGATIVE );
     pdfJob->m_scale = m_argParser.get<double>( ARG_SCALE );
     pdfJob->m_checkZonesBeforePlot = m_argParser.get<bool>( ARG_CHECK_ZONES );
+
+    if( m_argParser.get<bool>( ARG_NO_PROPERTY_POPUPS ) )
+    {
+        pdfJob->m_pdfFrontFPPropertyPopups = false;
+        pdfJob->m_pdfBackFPPropertyPopups = false;
+    }
 
     pdfJob->m_sketchPadsOnFabLayers = m_argParser.get<bool>( ARG_SKETCH_PADS_ON_FAB_LAYERS );
     if( pdfJob->m_sketchPadsOnFabLayers )
