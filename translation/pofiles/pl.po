@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-05 09:12+0000\n"
+"PO-Revision-Date: 2026-05-08 23:11+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.5-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -4532,14 +4532,12 @@ msgstr ""
 "zapisywania plików"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Incremental"
-msgstr "Zwiększenie"
+msgstr "Przyrostowo"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Zip archive"
-msgstr "Archiwizuj"
+msgstr "Archiwum ZIP"
 
 #: common/dialogs/panel_common_settings_base.cpp:441
 msgid ""
@@ -4547,22 +4545,27 @@ msgid ""
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
+"Przyrostowe: utrzymuje ukryte repozytorium git .history z ciągłymi "
+"zmianami.\n"
+"ZIP: tworzy archiwum zip ze znacznikami czasu podczas zapisywania; "
+"automatyczne zapisywanie korzysta z plików odzyskiwania."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "Project directory"
-msgstr "Wyślij projekt bezpośrednio"
+msgstr "Folder projektu"
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "User data directory"
-msgstr "'%s' nie jest folderem"
+msgstr "Folder danych użytkownika"
 
 #: common/dialogs/panel_common_settings_base.cpp:453
 msgid ""
 "Project: store backups and autosave files inside the project directory.\n"
 "User: store them in your KiCad user data directory."
 msgstr ""
+"Projekt: przechowuje kopie zapasowe i pliki automatycznego zapisu w katalogu "
+"projektu.\n"
+"Użytkownika: przechowuje kopie zapasowe w katalogu danych użytkownika KiCad."
 
 #: common/dialogs/panel_common_settings_base.cpp:457
 msgid "Maximum total backup size:"
@@ -6530,15 +6533,20 @@ msgid ""
 "%s\n"
 "Recover the auto-saved data?"
 msgstr ""
+"Istnieją pliki zapisane automatycznie, które są nowsze niż zapisane pliki "
+"projektu:\n"
+"\n"
+"%s\n"
+"Czy odzyskać dane zapisane automatycznie?"
 
 #: common/eda_base_frame.cpp:437
 msgid "Auto-Save Recovery"
-msgstr ""
+msgstr "Przywracanie z autozapisu"
 
 #: common/eda_base_frame.cpp:445
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to recover auto-saved file '%s'."
-msgstr "Nie można było utworzyć pliku '%s'."
+msgstr "Nie można było odtworzyć automatycznie zapisanego pliku '%s'."
 
 #: common/eda_base_frame.cpp:568 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:135
@@ -9341,9 +9349,8 @@ msgid "The library table path '%s' does not exist"
 msgstr "Ścieżka tabeli bibliotek '%s' nie istnieje"
 
 #: common/libraries/library_table.cpp:87
-#, fuzzy
 msgid "The library table is of wrong type"
-msgstr "Ścieżka tabeli bibliotek '%s' nie istnieje"
+msgstr "Tabela bibliotek jest złego typu"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -9421,6 +9428,8 @@ msgstr ""
 msgid ""
 "Files removed by 'Proceed' are archived to %s and can be recovered manually."
 msgstr ""
+"Pliki usunięte przez 'Proceduj' są zarchiwizowane w %s i można je ręcznie "
+"odzyskać."
 
 #: common/local_history.cpp:2454
 msgid "Cannot restore - the following files are open by another user:"
@@ -18748,9 +18757,8 @@ msgid "Symbol Library Tables"
 msgstr "Tabele bibliotek symboli"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:201
-#, fuzzy
 msgid "Unable to load library table."
-msgstr "Nie można załadować biblioteki\n"
+msgstr "Nie można załadować tabeli bibliotek."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:417
 msgid "folder with .kicad_sym files"
@@ -46144,7 +46152,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
-#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -46402,7 +46409,7 @@ msgstr ""
 "\n"
 "    # Nie zezwalaj na nadpisywanie marginesów maski lutowniczej\n"
 "    (rule \"nie zezwalaj na nadpisywanie marginesów maski lutowniczej\"\n"
-"        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
+"        (constraint assertion \"A.Soldermask_Margin_Override == null\")\n"
 "        (condition \"A.Type == 'Pad'\"))\n"
 "\n"
 "\n"
@@ -46439,12 +46446,12 @@ msgstr ""
 "\n"
 "    # Zezwalaj na naruszenia bliskości otworów przelotek ślepych/"
 "zagrzebanych z mikropzelotkami gdy\n"
-"    # wiadomo, że producent PCB wierci otwory przelotek ślepych/zagrzebanych "
-"-przed- laserowym \n"
+"    # wiadomo, że producent PCB wierci otwory przelotek ślepych/"
+"zagrzebanych -przed- laserowym \n"
 "    # tworzeniem mikroprzelotek.\n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -59068,6 +59075,8 @@ msgstr "Zaznacz/rozszerz połączenie..."
 msgid ""
 "Selection contains locked items. Enable 'Override locks' to operate on them."
 msgstr ""
+"Zaznaczenie zawiera zablokowane elementy. Włącz opcję 'Pomiń blokady', aby "
+"na nich zadziałać."
 
 #: pcbnew/tools/position_relative_tool.cpp:234
 msgid "Select the reference point on the item to move."
