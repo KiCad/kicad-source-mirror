@@ -212,7 +212,7 @@ BOOST_AUTO_TEST_CASE( CommitFullProjectSnapshotHandlesSubdirectories )
                    wxS( "(footprint test)\n" ) );
 
     LOCAL_HISTORY history;
-    BOOST_REQUIRE( history.Init( path ) );
+    BOOST_REQUIRE( history.CommitFullProjectSnapshot( path, wxS( "Initial" ) ) );
 
     // History must have been created at the project root, not at the subdirectory.
     wxString historyDir = path + wxFileName::GetPathSeparator() + wxS( ".history" );
@@ -260,7 +260,7 @@ BOOST_AUTO_TEST_CASE( RestoreCommitPreservesZipBackupsDirectory )
     writeTextFile( projectFile, wxS( "{}\n" ) );
 
     LOCAL_HISTORY history;
-    BOOST_REQUIRE( history.Init( projectPath ) );
+    BOOST_REQUIRE( history.CommitFullProjectSnapshot( projectPath, wxS( "Initial" ) ) );
 
     wxString headHash = history.GetHeadHash( projectPath );
     BOOST_REQUIRE( !headHash.IsEmpty() );
@@ -317,7 +317,7 @@ BOOST_AUTO_TEST_CASE( RestoreCommitPreservesNestedProject )
     writeTextFile( parentPcb, wxS( "(kicad_pcb (version 20240108))\n" ) );
 
     LOCAL_HISTORY history;
-    BOOST_REQUIRE( history.Init( projectPath ) );
+    BOOST_REQUIRE( history.CommitFullProjectSnapshot( projectPath, wxS( "Initial" ) ) );
 
     wxString headHash = history.GetHeadHash( projectPath );
     BOOST_REQUIRE( !headHash.IsEmpty() );
@@ -378,7 +378,7 @@ BOOST_AUTO_TEST_CASE( RestoreCommitRetainsTimestampedBackup )
     writeTextFile( boardPath, wxS( "(kicad_pcb (version 20240108))\n" ) );
 
     LOCAL_HISTORY history;
-    BOOST_REQUIRE( history.Init( projectPath ) );
+    BOOST_REQUIRE( history.CommitFullProjectSnapshot( projectPath, wxS( "Initial" ) ) );
 
     wxString headHash = history.GetHeadHash( projectPath );
     BOOST_REQUIRE( !headHash.IsEmpty() );
@@ -428,6 +428,140 @@ BOOST_AUTO_TEST_CASE( RestoreCommitRetainsTimestampedBackup )
     // Clean up the retained backup so the test does not leak files into /tmp.
     if( !retainedBackup.IsEmpty() && wxDirExists( retainedBackup ) )
         wxFileName::Rmdir( retainedBackup, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+/**
+ * Snapshots must only commit KiCad managed files and user files in the project dir stay out.
+ */
+BOOST_AUTO_TEST_CASE( CommitFullProjectSnapshotExcludesNonKiCadFiles )
+{
+    LIBGIT2_SCOPE libgit;
+
+    bool&                backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
+    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
+    backupEnabled = true;
+
+    SCOPED_TEMP_DIR project( wxS( "kicad_qa_privacy" ) );
+    const wxString& path = project.Path();
+
+    writeTextFile( path + wxFileName::GetPathSeparator() + wxS( "p.kicad_pro" ), wxS( "{}\n" ) );
+    writeTextFile( path + wxFileName::GetPathSeparator() + wxS( "p.kicad_pcb" ),
+                   wxS( "(kicad_pcb (version 20240108))\n" ) );
+    writeTextFile( path + wxFileName::GetPathSeparator() + wxS( "p.kicad_sch" ),
+                   wxS( "(kicad_sch (version 20240108))\n" ) );
+
+    writeTextFile( path + wxFileName::GetPathSeparator() + wxS( "passwords.txt" ), wxS( "secret\n" ) );
+    writeTextFile( path + wxFileName::GetPathSeparator() + wxS( "datasheet.pdf" ), wxS( "fake pdf bytes\n" ) );
+    writeTextFile( path + wxFileName::GetPathSeparator() + wxS( "notes.md" ), wxS( "personal notes\n" ) );
+
+    wxString subDir = path + wxFileName::GetPathSeparator() + wxS( "docs" );
+    BOOST_REQUIRE( wxFileName::Mkdir( subDir, 0777, wxPATH_MKDIR_FULL ) );
+    writeTextFile( subDir + wxFileName::GetPathSeparator() + wxS( "manual.txt" ), wxS( "irrelevant\n" ) );
+
+    LOCAL_HISTORY history;
+    BOOST_REQUIRE( history.CommitFullProjectSnapshot( path, wxS( "Close" ) ) );
+
+    wxString        hist = path + wxFileName::GetPathSeparator() + wxS( ".history" );
+    git_repository* repo = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_open( &repo, hist.mb_str().data() ), 0 );
+
+    git_oid head_oid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &head_oid, repo, "HEAD" ), 0 );
+
+    git_commit* head = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &head, repo, &head_oid ), 0 );
+
+    git_tree* tree = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_tree( &tree, head ), 0 );
+
+    std::vector<std::string> committedPaths;
+    git_tree_walk(
+            tree, GIT_TREEWALK_PRE,
+            []( const char* root, const git_tree_entry* entry, void* payload ) -> int
+            {
+                auto* paths = static_cast<std::vector<std::string>*>( payload );
+
+                if( git_tree_entry_type( entry ) == GIT_OBJECT_BLOB )
+                    paths->push_back( std::string( root ) + git_tree_entry_name( entry ) );
+
+                return 0;
+            },
+            &committedPaths );
+
+    git_tree_free( tree );
+    git_commit_free( head );
+    git_repository_free( repo );
+
+    auto contains = [&]( const std::string& s )
+    {
+        return std::find( committedPaths.begin(), committedPaths.end(), s ) != committedPaths.end();
+    };
+
+    BOOST_CHECK_MESSAGE( contains( "p.kicad_pro" ), "kicad_pro must be committed" );
+    BOOST_CHECK_MESSAGE( contains( "p.kicad_pcb" ), "kicad_pcb must be committed" );
+    BOOST_CHECK_MESSAGE( contains( "p.kicad_sch" ), "kicad_sch must be committed" );
+
+    BOOST_CHECK_MESSAGE( !contains( "passwords.txt" ), "passwords.txt must NOT appear in history" );
+    BOOST_CHECK_MESSAGE( !contains( "datasheet.pdf" ), "datasheet.pdf must NOT appear in history" );
+    BOOST_CHECK_MESSAGE( !contains( "notes.md" ), "notes.md must NOT appear in history" );
+    BOOST_CHECK_MESSAGE( !contains( "docs/manual.txt" ), "subdirectory user content must NOT appear in history" );
+}
+
+
+/**
+ * Idle autosave on a fresh project (saver output == disk) must not create an untagged
+ * HEAD.  Real edits (saver output != disk) must commit.  Manual-save (tagged) path used
+ * so the call blocks on background completion; the skip behavior is shared with autosave.
+ */
+BOOST_AUTO_TEST_CASE( FirstAutosaveSkipsCommitWhenStagedMatchesDisk )
+{
+    LIBGIT2_SCOPE libgit;
+
+    bool&                backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
+    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
+    backupEnabled = true;
+
+    SCOPED_TEMP_DIR project( wxS( "kicad_qa_first_idle_autosave" ) );
+    const wxString& path = project.Path();
+
+    writeTextFile( path + wxFileName::GetPathSeparator() + wxS( "p.kicad_pro" ), wxS( "{}\n" ) );
+    writeTextFile( path + wxFileName::GetPathSeparator() + wxS( "p.kicad_pcb" ),
+                   wxS( "(kicad_pcb (version 20240108))\n" ) );
+
+    LOCAL_HISTORY history;
+
+    // Mutating this between calls simulates the user editing the in-memory document.
+    std::string inMemoryContent = "(kicad_pcb (version 20240108))\n";
+
+    auto saver = [&inMemoryContent]( const wxString&, std::vector<HISTORY_FILE_DATA>& aFileData )
+    {
+        HISTORY_FILE_DATA entry;
+        entry.relativePath = wxS( "p.kicad_pcb" );
+        entry.content = inMemoryContent;
+        aFileData.push_back( std::move( entry ) );
+    };
+
+    history.RegisterSaver( &history, saver );
+
+    // Saver output matches disk, must skip.
+    BOOST_REQUIRE( history.RunRegisteredSaversAndCommit( path, wxS( "Test" ), wxS( "test" ) ) );
+
+    wxString histDir = path + wxFileName::GetPathSeparator() + wxS( ".history" );
+    BOOST_CHECK( wxDirExists( histDir ) );
+
+    wxString head = history.GetHeadHash( path );
+    BOOST_CHECK_MESSAGE( head.IsEmpty(), "no untagged HEAD should exist after an idle first save" );
+
+    // Real edit, must commit.
+    inMemoryContent = "(kicad_pcb (version 20240108) (edited yes))\n";
+
+    BOOST_REQUIRE( history.RunRegisteredSaversAndCommit( path, wxS( "Test" ), wxS( "test" ) ) );
+
+    head = history.GetHeadHash( path );
+    BOOST_CHECK_MESSAGE( !head.IsEmpty(), "in-memory edits diverging from disk must produce a commit" );
+
+    history.UnregisterSaver( &history );
 }
 
 

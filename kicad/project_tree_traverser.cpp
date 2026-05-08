@@ -172,6 +172,13 @@ wxDirTraverseResult PROJECT_TREE_TRAVERSER::OnFile( const wxString& aSrcFilePath
 
 wxDirTraverseResult PROJECT_TREE_TRAVERSER::OnDir( const wxString& aSrcDirPath )
 {
+    // Skip the local-history git repository.
+    wxFileName    srcDir = wxFileName::DirName( aSrcDirPath );
+    wxArrayString dirs = srcDir.GetDirs();
+
+    if( !dirs.IsEmpty() && dirs.Last() == wxS( ".history" ) )
+        return wxDIR_IGNORE;
+
     // Recursion guard for a Save As to a location inside the source project.
     if( aSrcDirPath.StartsWith( m_newProjectDirPath ) )
         return wxDIR_CONTINUE;

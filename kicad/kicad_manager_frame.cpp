@@ -787,15 +787,16 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
         // a clean close.
         wxString projPath = Prj().GetProjectPath();
 
+        // Wait for any in-flight autosave so the HEAD check below isn't racing it.
+        Kiway().LocalHistory().WaitForPendingSave();
+
         if( !projPath.IsEmpty() && Kiway().LocalHistory().HistoryExists( projPath ) )
         {
             if( Kiway().LocalHistory().HeadNewerThanLastSave( projPath ) )
             {
-                // Commit the current on-disk state and tag it so Last_Save matches HEAD
-                if( Kiway().LocalHistory().CommitFullProjectSnapshot( projPath, wxS( "Close" ) ) )
-                {
-                    Kiway().LocalHistory().TagSave( projPath, wxS( "project" ) );
-                }
+                // Tag unconditionally: even on no-op snapshots Last_Save must anchor at HEAD.
+                Kiway().LocalHistory().CommitFullProjectSnapshot( projPath, wxS( "Close" ) );
+                Kiway().LocalHistory().TagSave( projPath, wxS( "project" ) );
             }
         }
 
@@ -984,10 +985,10 @@ bool KICAD_MANAGER_FRAME::LoadProject( const wxFileName& aProjectFileName )
         }
         else
         {
-            // User declined to restore - commit the current on-disk state and tag it
-            // so we don't prompt again on next load
-            if( Kiway().LocalHistory().CommitFullProjectSnapshot( Prj().GetProjectPath(), wxS( "Declined restore" ) ) )
-                Kiway().LocalHistory().TagSave( Prj().GetProjectPath(), wxS( "project" ) );
+            // User declined; commit on-disk state and tag unconditionally so Last_Save anchors
+            // at HEAD even if no new commit was needed.
+            Kiway().LocalHistory().CommitFullProjectSnapshot( Prj().GetProjectPath(), wxS( "Declined restore" ) );
+            Kiway().LocalHistory().TagSave( Prj().GetProjectPath(), wxS( "project" ) );
         }
     }
 

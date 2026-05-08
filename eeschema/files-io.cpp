@@ -1064,30 +1064,6 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
 
         msg.Printf( _( "File '%s' saved." ),  screen->GetFileName() );
         SetStatusText( msg, 0 );
-
-        // Record a full project snapshot so related files (symbols, libs, sheets) are captured.
-        // Skip when running standalone without a project loaded - the save path can land
-        // anywhere on the filesystem and there is no project context for a snapshot.
-        if( !Prj().IsNullProject() )
-        {
-            Kiway().LocalHistory().CommitFullProjectSnapshot( schematicFileName.GetPath(), wxS( "SCH Save" ) );
-            Kiway().LocalHistory().TagSave( schematicFileName.GetPath(), wxS( "sch" ) );
-
-            // Drop the autosave file for the sheet we just persisted.  Scope to that
-            // single source so other dirty sheets (and any open PCB) keep their
-            // autosaves until they are saved themselves; otherwise a Save All across
-            // editors would lose recovery data for files this save did not write.
-            // CommitFullProjectSnapshot/TagSave above are no-ops when format is ZIP, and
-            // RemoveAutosaveFiles is conversely a no-op in INCREMENTAL mode.
-            Kiway().LocalHistory().RemoveAutosaveFiles( schematicFileName.GetPath(),
-                                                        { schematicFileName.GetFullPath() } );
-        }
-
-        if( m_autoSaveTimer )
-            m_autoSaveTimer->Stop();
-
-        m_autoSavePending = false;
-        m_autoSaveRequired = false;
     }
 
     return success;
@@ -1358,6 +1334,8 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 
     screens.BuildClientSheetPathList();
 
+    std::vector<wxString> savedSheetPaths;
+
     for( size_t i = 0; i < screens.GetCount(); i++ )
     {
         screen = screens.GetScreen( i );
@@ -1407,11 +1385,22 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         if( !saveCopy && tmpFn.GetFullPath() != screen->GetFileName() )
             screen->AssignNewUuid();
 
-        success &= saveSchematicFile( screens.GetSheet( i ), tmpFn.GetFullPath() );
+        bool savedThisSheet = saveSchematicFile( screens.GetSheet( i ), tmpFn.GetFullPath() );
+
+        if( savedThisSheet )
+            savedSheetPaths.push_back( tmpFn.GetFullPath() );
+
+        success &= savedThisSheet;
     }
 
     if( success )
+    {
+        if( m_autoSaveTimer )
+            m_autoSaveTimer->Stop();
+
+        m_autoSavePending = false;
         m_autoSaveRequired = false;
+    }
 
     if( aSaveAs && success )
         LockFile( Schematic().RootScreen()->GetFileName() );
@@ -1453,6 +1442,22 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
     {
         SaveProjectLocalSettings();
         saveProjectSettings();
+    }
+
+    // Record a full project snapshot so related files (symbols, libs, sheets) are captured.
+    // Skip when running standalone without a project loaded - the save path can land
+    // anywhere on the filesystem and there is no project context for a snapshot.
+    if( success && !Prj().IsNullProject() )
+    {
+        Kiway().LocalHistory().RunRegisteredSaversAndCommit( Prj().GetProjectPath(), wxS( "SCH Save" ), wxS( "sch" ) );
+
+        // Drop the autosave files for the sheets we just persisted.  Scope to those
+        // sources so other dirty sheets (and any open PCB) keep their autosaves until
+        // they are saved themselves; otherwise a Save All across editors would lose
+        // recovery data for files this save did not write.
+        // RunRegisteredSaversAndCommit above is a no-op when format is ZIP, and
+        // RemoveAutosaveFiles is conversely a no-op in INCREMENTAL mode.
+        Kiway().LocalHistory().RemoveAutosaveFiles( Prj().GetProjectPath(), savedSheetPaths );
     }
 
     if( !Kiface().IsSingle() )
