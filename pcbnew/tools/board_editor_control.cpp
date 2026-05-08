@@ -38,6 +38,7 @@
 #include <collectors.h>
 #include <project/net_settings.h>
 #include <pcb_generator.h>
+#include <pcb_griditem.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_target.h>
@@ -1304,6 +1305,10 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     TOOL_EVENT pushedEvent = aEvent;
     m_frame->PushTool( aEvent );
 
+    // Frame angle already applied to fp; recaptured whenever fp is (re)acquired, so
+    // stale state can never leak into the next placement.
+    EDA_ANGLE prevFrameAngle = ANGLE_0;
+
     auto setCursor =
             [&]()
             {
@@ -1342,11 +1347,30 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
     bool     ignorePrimePosition = false;
     bool     reselect = false;
 
+    auto applyPlacementFrameOrientation = [&]()
+    {
+        if( !fp )
+            return;
+
+        EDA_ANGLE newAngle = GridFrameAngleAt( *board, fp->GetPosition(), PCB_GRIDITEM_ROLE::PLACEMENT );
+        EDA_ANGLE delta = GridFrameRotationDelta( prevFrameAngle, newAngle, m_frame->GetRotationAngle() );
+
+        prevFrameAngle = newAngle;
+
+        if( !delta.IsZero() )
+            fp->Rotate( fp->GetPosition(), delta );
+    };
+
     // Prime the pump
     if( fp )
     {
         m_placingFootprint = true;
+
+        // A footprint handed over from another command may already carry the frame
+        // rotation of the grid it sits in; count that as applied, like a move pick-up.
+        prevFrameAngle = GridFrameAngleAt( *board, fp->GetPosition(), PCB_GRIDITEM_ROLE::PLACEMENT );
         fp->SetPosition( cursorPos );
+        applyPlacementFrameOrientation();
         m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, fp );
         m_toolMgr->PostAction( ACTIONS::refreshPreview );
     }
@@ -1446,6 +1470,8 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
 
                 fp->SetOrientation( ANGLE_0 );
                 fp->SetPosition( cursorPos );
+                prevFrameAngle = ANGLE_0;
+                applyPlacementFrameOrientation();
 
                 commit.Add( fp );
                 m_toolMgr->RunAction<EDA_ITEM*>( ACTIONS::selectItem, fp );
@@ -1467,6 +1493,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
         else if( fp && ( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) ) )
         {
             fp->SetPosition( cursorPos );
+            applyPlacementFrameOrientation();
             selection().SetReferencePoint( cursorPos );
             getView()->Update( &selection() );
             getView()->Update( fp );

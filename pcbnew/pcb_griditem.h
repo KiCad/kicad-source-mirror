@@ -83,6 +83,13 @@ public:
     double    GetOrientationDegrees() const { return m_orientation.AsDegrees(); }
     void      SetOrientationDegrees( double aDeg ) { m_orientation = EDA_ANGLE( aDeg, DEGREES_T ); }
 
+    /**
+     * World-space angle of this grid's local-x axis at @p aPos.  Cartesian grids
+     * return @c GetOrientation() unconditionally; polar grids return the radial
+     * direction at @p aPos (i.e. the spoke from the grid centre through aPos).
+     */
+    EDA_ANGLE GetOrientationAt( const VECTOR2I& aPos ) const;
+
     void              SetGridItemType( PCB_GRIDITEM_TYPE aType ) { m_type = aType; }
     PCB_GRIDITEM_TYPE GetGridItemType() const { return m_type; }
 
@@ -233,6 +240,19 @@ class BOARD;
  * @return nullptr if no applicable grid covers aPos.
  */
 PCB_GRIDITEM* FindActiveGridAt( const BOARD& aBoard, const VECTOR2I& aPos, PCB_GRIDITEM_ROLE aRole );
+
+
+/**
+ * World frame angle of the grid active for aRole at aPos; ANGLE_0 when no grid applies.
+ */
+EDA_ANGLE GridFrameAngleAt( const BOARD& aBoard, const VECTOR2I& aPos, PCB_GRIDITEM_ROLE aRole );
+
+
+/**
+ * Minimal rotation that re-aligns an item from frame angle @p aFrom to @p aTo, reduced
+ * modulo min( aRotationStep, 90° ) so step-aligned footprints stay step-aligned.
+ */
+EDA_ANGLE GridFrameRotationDelta( const EDA_ANGLE& aFrom, const EDA_ANGLE& aTo, const EDA_ANGLE& aRotationStep );
 
 
 #endif

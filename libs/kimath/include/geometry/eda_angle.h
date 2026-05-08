@@ -287,6 +287,17 @@ public:
         return *this;
     }
 
+    /// Snap to the nearest integer multiple of @p aStep (returns *this if aStep <= 0).
+    EDA_ANGLE Snapped( const EDA_ANGLE& aStep ) const
+    {
+        double step = aStep.AsDegrees();
+
+        if( step <= 0.0 )
+            return *this;
+
+        return EDA_ANGLE( step * KiROUND( AsDegrees() / step ), DEGREES_T );
+    }
+
     EDA_ANGLE KeepUpright() const;
 
     [[nodiscard]] EDA_ANGLE Round( int digits ) const

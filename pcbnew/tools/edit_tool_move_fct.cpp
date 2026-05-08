@@ -34,6 +34,7 @@
 #include <padstack.h>
 #include <pcb_group.h>
 #include <pcb_generator.h>
+#include <pcb_griditem.h>
 #include <pcb_edit_frame.h>
 #include <spread_footprints.h>
 #include <tool/tool_manager.h>
@@ -1023,6 +1024,91 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     VECTOR2I        prevPos;
     bool            enableLocalRatsnest = true;
 
+    // Frame-aware orientation tracking (mirrors BOARD_EDITOR_CONTROL::PlaceFootprint).
+    // A single footprint (plus, at most, its own pads) rotates about its own position;
+    // any other selection containing footprints rotates as a whole about the pick-up
+    // point, just like manual rotation during a move.
+    auto findSingleFp = [&]() -> FOOTPRINT*
+    {
+        FOOTPRINT* singleFp = nullptr;
+
+        for( BOARD_ITEM* it : sel_items )
+        {
+            if( it->Type() == PCB_FOOTPRINT_T )
+            {
+                if( singleFp )
+                    return nullptr; // more than one footprint
+
+                singleFp = static_cast<FOOTPRINT*>( it );
+            }
+            else if( it->Type() != PCB_PAD_T )
+            {
+                return nullptr; // mixed selection
+            }
+        }
+
+        for( BOARD_ITEM* it : sel_items )
+        {
+            if( it->Type() == PCB_PAD_T && it->GetParentFootprint() != singleFp )
+                return nullptr; // free pad of another footprint
+        }
+
+        return singleFp;
+    };
+
+    auto selectionHasFp = [&]()
+    {
+        return std::any_of( sel_items.begin(), sel_items.end(),
+                            []( BOARD_ITEM* it )
+                            {
+                                return it->Type() == PCB_FOOTPRINT_T;
+                            } );
+    };
+
+    // Capture the frame angle at the PICK-UP position: a footprint inside a rotated/polar
+    // grid already carries that frame's orientation, so the first cursor move must
+    // not rotate it again.  frameFp/frameRotate are recomputed whenever sel_items
+    // changes (moveIndividually item switch).
+    EDA_ANGLE  prevFrameAngle = ANGLE_0;
+    FOOTPRINT* frameFp = findSingleFp();
+    bool       frameRotate = frameFp || selectionHasFp();
+
+    if( frameRotate )
+    {
+        prevFrameAngle = GridFrameAngleAt( *board, frameFp ? frameFp->GetPosition() : originalCursorPos,
+                                           PCB_GRIDITEM_ROLE::PLACEMENT );
+    }
+
+    auto applyMoveFrameOrientation = [&]()
+    {
+        if( !frameRotate )
+            return;
+
+        // m_cursor is the pick-up point dragged along with the selection.
+        VECTOR2I  pivot = frameFp ? frameFp->GetPosition() : m_cursor;
+        EDA_ANGLE newAngle = GridFrameAngleAt( *board, pivot, PCB_GRIDITEM_ROLE::PLACEMENT );
+        EDA_ANGLE delta = GridFrameRotationDelta( prevFrameAngle, newAngle, editFrame->GetRotationAngle() );
+
+        prevFrameAngle = newAngle;
+
+        if( delta.IsZero() )
+            return;
+
+        if( frameFp )
+        {
+            frameFp->Rotate( pivot, delta );
+        }
+        else
+        {
+            for( BOARD_ITEM* item : sel_items )
+            {
+                // Don't double rotate child items.
+                if( !item->GetParent() || !moved_items.count( item->GetParent() ) )
+                    item->Rotate( pivot, delta );
+            }
+        }
+    };
+
     LEADER_MODE angleSnapMode = GetAngleSnapMode();
     bool eatFirstMouseUp = true;
     bool allowRedraw3D   = cfg->m_Display.m_Live3DRefresh;
@@ -1315,6 +1401,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     }
                 }
 
+                applyMoveFrameOrientation();
+
                 if( redraw3D && allowRedraw3D )
                     editFrame->Update3DView( false, true );
 
@@ -1400,6 +1488,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                             view()->Update( boardItem, KIGFX::GEOMETRY );
                     }
 
+                    applyMoveFrameOrientation();
                     selection.SetReferencePoint( m_cursor );
                 }
                 else
@@ -1555,6 +1644,16 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     moved_items.clear();
                     moved_items.insert( nextItem );
                     updateStatusPopup( nextItem, itemIdx + 1, orig_items.size() );
+
+                    // Re-capture the frame angle at the new item's pick-up position.
+                    frameFp = findSingleFp();
+                    frameRotate = frameFp || selectionHasFp();
+
+                    if( frameRotate )
+                    {
+                        prevFrameAngle = GridFrameAngleAt( *board, frameFp ? frameFp->GetPosition() : originalPos,
+                                                           PCB_GRIDITEM_ROLE::PLACEMENT );
+                    }
 
                     // Pick up new item
                     aCommit->Modify( nextItem, nullptr, RECURSE_MODE::RECURSE );

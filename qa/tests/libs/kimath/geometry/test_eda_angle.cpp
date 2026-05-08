@@ -106,4 +106,30 @@ BOOST_AUTO_TEST_CASE( ConstantAngles )
 }
 
 
+BOOST_AUTO_TEST_CASE( Snapped )
+{
+    auto deg = []( double d ) { return EDA_ANGLE( d, DEGREES_T ); };
+
+    BOOST_CHECK_EQUAL( deg( 80 ).Snapped( ANGLE_90 ).AsDegrees(), 90.0 );
+    BOOST_CHECK_EQUAL( deg( 30 ).Snapped( ANGLE_90 ).AsDegrees(), 0.0 );
+    BOOST_CHECK_EQUAL( deg( 135 ).Snapped( ANGLE_90 ).AsDegrees(), 180.0 );
+    BOOST_CHECK_EQUAL( deg( 45 ).Snapped( ANGLE_90 ).AsDegrees(), 90.0 );
+    BOOST_CHECK_EQUAL( deg( -10 ).Snapped( ANGLE_90 ).AsDegrees(), 0.0 );
+    BOOST_CHECK_EQUAL( deg( 80 ).Snapped( ANGLE_45 ).AsDegrees(), 90.0 );
+    BOOST_CHECK_EQUAL( deg( 5 ).Snapped( ANGLE_0 ).AsDegrees(), 5.0 ); // step <= 0 guard
+
+    // Minimal equivalent rotation used by grid-aware placement: raw - raw.Snapped(period).
+    auto residual = [&]( double raw, const EDA_ANGLE& period )
+    {
+        EDA_ANGLE a = deg( raw );
+        return ( a - a.Snapped( period ) ).AsDegrees();
+    };
+
+    BOOST_CHECK_EQUAL( residual( 80, ANGLE_90 ), -10.0 );
+    BOOST_CHECK_EQUAL( residual( 30, ANGLE_90 ), 30.0 );
+    BOOST_CHECK_EQUAL( residual( 135, ANGLE_90 ), -45.0 );
+    BOOST_CHECK_EQUAL( residual( 0, ANGLE_90 ), 0.0 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

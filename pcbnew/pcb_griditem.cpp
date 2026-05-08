@@ -232,6 +232,24 @@ bool PCB_GRIDITEM::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
+EDA_ANGLE PCB_GRIDITEM::GetOrientationAt( const VECTOR2I& aPos ) const
+{
+    if( m_type != PCB_GRIDITEM_TYPE::POLAR )
+        return m_orientation;
+
+    // Polar: local-X is the radial spoke from this grid's centre through aPos.  The
+    // grid's own rotation maps spokes onto spokes, so the world radial does not
+    // depend on m_orientation.
+    VECTOR2I local = aPos - m_pos;
+
+    if( local.x == 0 && local.y == 0 )
+        return m_orientation;
+
+    // std::atan2 is math-CCW (y-up); EDA_ANGLE is screen-CCW (y-down) — negate.
+    return EDA_ANGLE( -std::atan2( (double) local.y, (double) local.x ), RADIANS_T );
+}
+
+
 SHAPE_LINE_CHAIN PCB_GRIDITEM::buildOutlineWorld() const
 {
     SHAPE_LINE_CHAIN outline;
@@ -441,6 +459,28 @@ PCB_GRIDITEM* FindActiveGridAt( const BOARD& aBoard, const VECTOR2I& aPos, PCB_G
     }
 
     return best;
+}
+
+
+EDA_ANGLE GridFrameAngleAt( const BOARD& aBoard, const VECTOR2I& aPos, PCB_GRIDITEM_ROLE aRole )
+{
+    if( PCB_GRIDITEM* grid = FindActiveGridAt( aBoard, aPos, aRole ) )
+        return grid->GetOrientationAt( aPos );
+
+    return ANGLE_0;
+}
+
+
+EDA_ANGLE GridFrameRotationDelta( const EDA_ANGLE& aFrom, const EDA_ANGLE& aTo, const EDA_ANGLE& aRotationStep )
+{
+    if( aTo == aFrom )
+        return ANGLE_0;
+
+    // Cartesian grids repeat every quarter turn, so never rotate by more than that.
+    EDA_ANGLE period = std::min( aRotationStep, ANGLE_90 );
+    EDA_ANGLE raw = aTo - aFrom;
+
+    return raw - raw.Snapped( period );
 }
 
 
