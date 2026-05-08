@@ -2295,11 +2295,22 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
 
     for( PROJECT_TREE_ITEM* item : tree_data )
     {
-        if( item->GetType() != TREE_FILE_TYPE::DIRECTORY )
-            selected_files.emplace( item->GetFileName() );
+        if( item->GetType() == TREE_FILE_TYPE::DIRECTORY )
+            continue;
+
+        wxString itemPath = item->GetFileName();
+#ifdef _WIN32
+        itemPath.Replace( wxS( "\\" ), wxS( "/" ) );
+#endif
+        selected_files.emplace( itemPath );
     }
 
     wxString repoWorkDir = statusHandler.GetWorkingDirectory();
+
+    wxString projectPath = Prj().GetProjectPath();
+#ifdef _WIN32
+    projectPath.Replace( wxS( "\\" ), wxS( "/" ) );
+#endif
 
     for( const auto& [absPath, fileStatus] : fileStatusMap )
     {
@@ -2324,7 +2335,6 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
         }
 
         // Do not commit files outside the project directory
-        wxString projectPath = Prj().GetProjectPath();
         if( !absPath.StartsWith( projectPath ) )
             continue;
 
