@@ -435,17 +435,16 @@ void BINARY_PARSER::parsePartPlacements()
         m_parts.push_back( part );
     }
 
-    // Old dialects can carry a run of leading placements immediately BEFORE the section's own
+    // Any dialect can carry a run of leading placements immediately BEFORE the section's own
     // dataOffset, spilling into what the directory attributes to the preceding section -- the
     // same one-record quirk recoverOmittedPlacementsOld's leading-block case handles, but as a
     // run of arbitrary length rather than a single record. Walk backward while each candidate
-    // has a valid refdes; verified against 2FOC_4.pcb, where 13 such records (M1/M2/M3/U4/U5/
-    // U9-U12/C17/J11/J12 and one oddly-named "5") sit directly before section 22's start, each
-    // resolving to its correct ground-truth decal via the same next-record directDecalOff chain.
-    if( layout.directDecalOff )
+    // has a valid refdes; verified against 2FOC_4.pcb (old dialect, direct decal chain), where
+    // 13 such records (M1/M2/M3/U4/U5/U9-U12/C17/J11/J12 and one oddly-named "5") sit directly
+    // before section 22's start, and against NEI2_2.pcb (new dialect, parttype-index chain),
+    // where 7 (P1-P6, U1) do the same.
+    if( layout.directDecalOff || layout.parttypeIndexNextRecord )
     {
-        uint32_t fieldOff = static_cast<uint32_t>( *layout.directDecalOff );
-
         for( uint32_t k = 1; k <= entry->count; ++k )
         {
             size_t candidateBase = static_cast<size_t>( entry->dataOffset ) - static_cast<size_t>( k ) * recSize;
@@ -471,8 +470,19 @@ void BINARY_PARSER::parsePartPlacements()
 
             size_t nextBase = candidateBase + recSize;
 
-            if( m_cursor.InBounds( nextBase, fieldOff + 4 ) )
-                m_partDecalIndex[m_parts.size()] = m_sdb.RecordAt( static_cast<uint32_t>( nextBase ) ).U32( fieldOff );
+            if( layout.directDecalOff )
+            {
+                uint32_t fieldOff = static_cast<uint32_t>( *layout.directDecalOff );
+
+                if( m_cursor.InBounds( nextBase, fieldOff + 4 ) )
+                {
+                    m_partDecalIndex[m_parts.size()] =
+                            m_sdb.RecordAt( static_cast<uint32_t>( nextBase ) ).U32( fieldOff );
+                }
+            }
+
+            if( layout.parttypeIndexNextRecord && m_cursor.InBounds( nextBase, 8 ) )
+                m_partTypeIndex[m_parts.size()] = m_sdb.RecordAt( static_cast<uint32_t>( nextBase ) ).U32( 4 );
 
             m_parts.push_back( part );
         }
