@@ -250,6 +250,8 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
 
                       menu->Add( PCB_ACTIONS::zoneFillAll );
                       menu->Add( PCB_ACTIONS::zoneUnfillAll );
+                      menu->AppendSeparator();
+                      menu->Add( PCB_ACTIONS::zonesManager );
 
                       return menu;
                   } )
