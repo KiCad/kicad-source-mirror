@@ -1490,7 +1490,9 @@ public:
     {
         wxCHECK( aItem, /* void */ );
 
-        UncacheItemById( aItem->m_Uuid );
+        // Pointer-keyed eviction: never remove an entry that belongs to a
+        // different live item with the same UUID (e.g. a temporary copy).
+        UncacheItemByPtr( aItem );
 
         aItem->RunOnChildren(
                 [this]( BOARD_ITEM* aChild )

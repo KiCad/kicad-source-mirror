@@ -1477,7 +1477,8 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
     aBoardItem->SetParent( this );
 
     // If this footprint is on a board, update the board's item-by-id cache
-    if( BOARD* board = GetBoard() )
+    // Skip caching for copy-constructed footprints (inherited board ptr but not a real member).
+    if( BOARD* board = GetBoard(); board && board->IsItemIndexedById( this ) )
         board->CacheItemSubtreeById( aBoardItem );
 
     InvalidateGeometryCaches();
@@ -1580,7 +1581,7 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
     }
 
     // If this footprint is on a board, update the board's item-by-id cache
-    if( BOARD* board = GetBoard() )
+    if( BOARD* board = GetBoard(); board && board->IsItemIndexedById( this ) )
         board->UncacheItemSubtreeById( aBoardItem );
 
     aBoardItem->SetFlags( STRUCT_DELETED );
