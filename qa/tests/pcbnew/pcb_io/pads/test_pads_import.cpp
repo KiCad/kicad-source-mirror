@@ -1051,7 +1051,7 @@ BOOST_AUTO_TEST_CASE( Peka_ZoneFillNoSelfIntersection )
                     continue;
                 }
 
-                if( segs[i].Collide( segs[j], 0 ) )
+                if( segs[i].Intersects( segs[j] ) )
                     return true;
             }
         }
