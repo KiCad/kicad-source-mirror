@@ -1493,7 +1493,7 @@ void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& a
 
         for( const std::unique_ptr<ELABEL>& elabel : esegment->labels )
         {
-            SCH_TEXT* label = loadLabel( elabel, netName );
+            SCH_LABEL_BASE* label = loadLabel( elabel, netName );
             screen->Append( label );
 
             wxASSERT( segDesc.labels.empty()
@@ -1537,10 +1537,20 @@ void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& a
                 label->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 40 ),
                                               schIUScale.MilsToIU( 40 ) ) );
 
-                if( firstWire.B.x > firstWire.A.x )
-                    label->SetSpinStyle( SPIN_STYLE::LEFT );
-                else
-                    label->SetSpinStyle( SPIN_STYLE::RIGHT );
+                if( firstWire.A.y == firstWire.B.y )         // Horizontal wire.
+                {
+                    if( firstWire.B.x > firstWire.A.x )
+                        label->SetSpinStyle( SPIN_STYLE::LEFT );
+                    else
+                        label->SetSpinStyle( SPIN_STYLE::RIGHT );
+                }
+                else if( firstWire.A.x == firstWire.B.x )    // Vertical wire.
+                {
+                    if( firstWire.B.y > firstWire.A.y )
+                        label->SetSpinStyle( SPIN_STYLE::BOTTOM );
+                    else
+                        label->SetSpinStyle( SPIN_STYLE::UP );
+                }
 
                 screen->Append( label.release() );
             }
@@ -1682,8 +1692,7 @@ SCH_JUNCTION* SCH_IO_EAGLE::loadJunction( const std::unique_ptr<EJUNCTION>&  aJu
 }
 
 
-SCH_TEXT* SCH_IO_EAGLE::loadLabel( const std::unique_ptr<ELABEL>& aLabel,
-                                   const wxString& aNetName )
+SCH_LABEL_BASE* SCH_IO_EAGLE::loadLabel( const std::unique_ptr<ELABEL>& aLabel, const wxString& aNetName )
 {
     VECTOR2I elabelpos( aLabel->x.ToSchUnits(), -aLabel->y.ToSchUnits() );
 
@@ -1749,11 +1758,24 @@ SCH_TEXT* SCH_IO_EAGLE::loadLabel( const std::unique_ptr<ELABEL>& aLabel,
 
     if( aLabel->rot )
     {
-        for( int i = 0; i < KiROUND( aLabel->rot->degrees / 90.0 ) %4; ++i )
-            label->Rotate90( false );
+        // According to the Eagle DTD, labels can only be rotated in 90 degree increments.
+        int angle = KiROUND( aLabel->rot->degrees );
 
-        if( aLabel->rot->mirror )
-            label->MirrorSpinStyle( false );
+        switch( angle )
+        {
+        case 90:
+            label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::BOTTOM : SPIN_STYLE::UP );
+            break;
+        case 180:
+            label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::RIGHT : SPIN_STYLE::LEFT );
+            break;
+        case 270:
+            label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::UP : SPIN_STYLE::BOTTOM );
+            break;
+        default:
+            label->SetSpinStyle( aLabel->rot->mirror ? SPIN_STYLE::LEFT : SPIN_STYLE::RIGHT );
+            break;
+        }
     }
 
     return label.release();
@@ -2735,7 +2757,7 @@ void SCH_IO_EAGLE::adjustNetLabels()
 
     for( SEG_DESC& segDesc : m_segments )
     {
-        for( SCH_TEXT* label : segDesc.labels )
+        for( SCH_LABEL_BASE* label : segDesc.labels )
         {
             VECTOR2I   labelPos( label->GetPosition() );
             const SEG* segAttached = segDesc.LabelAttached( label );
@@ -2755,11 +2777,17 @@ void SCH_IO_EAGLE::adjustNetLabels()
 
             // Create a vector pointing in the direction of the wire, 50 mils long
             VECTOR2I wireDirection( segAttached->B - segAttached->A );
+
+            if( ( wireDirection.x == 0 ) && (wireDirection.y == 0 ) )
+                continue;
+
             wireDirection = wireDirection.Resize( schIUScale.MilsToIU( 50 ) );
             const VECTOR2I origPos( labelPos );
 
             // Flags determining the search direction
-            bool checkPositive = true, checkNegative = true, move = false;
+            bool checkPositive = true;
+            bool checkNegative = true;
+            bool move = false;
             int  trial = 0;
 
             // Be sure the label is not placed on a wire intersection
@@ -2783,7 +2811,24 @@ void SCH_IO_EAGLE::adjustNetLabels()
             }
 
             if( move )
+            {
                 label->SetPosition( VECTOR2I( labelPos ) );
+
+                if( wireDirection.x == 0 )        // Moved vertically
+                {
+                    if( wireDirection.y < 0 )
+                        label->SetSpinStyle( SPIN_STYLE::UP );
+                    else
+                        label->SetSpinStyle( SPIN_STYLE::BOTTOM );
+                }
+                else if( wireDirection.y == 0 )   // Moved horizontally
+                {
+                    if( wireDirection.x < 0 )
+                        label->SetSpinStyle( SPIN_STYLE::LEFT );
+                    else
+                        label->SetSpinStyle( SPIN_STYLE::RIGHT );
+                }
+            }
         }
     }
 
@@ -3393,7 +3438,7 @@ void SCH_IO_EAGLE::addBusEntries()
 }
 
 
-const SEG* SCH_IO_EAGLE::SEG_DESC::LabelAttached( const SCH_TEXT* aLabel ) const
+const SEG* SCH_IO_EAGLE::SEG_DESC::LabelAttached( const SCH_LABEL_BASE* aLabel ) const
 {
     wxCHECK( aLabel, nullptr );
 
