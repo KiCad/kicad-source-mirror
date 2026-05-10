@@ -41,6 +41,7 @@ class SCH_BITMAP;
 class SCH_JUNCTION;
 class SCH_NO_CONNECT;
 class SCH_SHAPE;
+class SCH_LABEL_BASE;
 class SCH_LINE;
 class SCH_BUS_ENTRY_BASE;
 class SCH_TEXT;
