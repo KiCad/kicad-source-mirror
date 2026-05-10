@@ -1,6 +1,29 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
 #pragma once
 
-#include "dialog_shim.h"
+#include "dialog_fp_edit_pad_table_base.h"
 #include "string_utils.h"
 
 #include <memory>
@@ -9,11 +32,9 @@
 
 class PCB_BASE_FRAME;
 class FOOTPRINT;
-class WX_GRID;
-class wxStaticText;
 class UNITS_PROVIDER;
 
-class DIALOG_FP_EDIT_PAD_TABLE : public DIALOG_SHIM
+class DIALOG_FP_EDIT_PAD_TABLE : public DIALOG_FP_EDIT_PAD_TABLE_BASE
 {
 public:
     // Column indices (after adding Type column)
@@ -40,11 +61,12 @@ public:
     void RestoreOriginalPadState();
 
 private:
-    void OnSize( wxSizeEvent& aEvent );
+    void OnSize( wxSizeEvent& aEvent ) override;
     void OnCharHook( wxKeyEvent& aEvent ) override;
-    void OnCellChanged( wxGridEvent& aEvent );
-    void OnSelectCell( wxGridEvent& aEvent );
-    void OnUpdateUI( wxUpdateUIEvent& aEvent );
+    void OnCellChanged( wxGridEvent& aEvent ) override;
+    void OnSelectCell( wxGridEvent& aEvent ) override;
+    void OnUpdateUI( wxUpdateUIEvent& aEvent ) override;
+    void OnCancel( wxCommandEvent& aEvent ) override;
 
     void InitColumnProportions();
 
@@ -110,15 +132,8 @@ private:
     };
 
     std::map<PAD*, PAD_SNAPSHOT, PAD_SNAPSHOT_COMPARE> m_originalPads;      // original pad data for cancel rollback
-    bool                      m_cancelled = false; // set if user hit cancel
+    bool                              m_cancelled = false; // set if user hit cancel
 
-    wxStaticText*                     m_staticTextPinNumbers;
-    wxStaticText*                     m_pin_numbers_summary;
-    wxStaticText*                     m_staticTextPinCount;
-    wxStaticText*                     m_pin_count;
-    wxStaticText*                     m_staticTextDuplicatePins;
-    wxStaticText*                     m_duplicate_pins;
-    WX_GRID*                          m_grid;
     FOOTPRINT*                        m_footprint;
     std::unique_ptr<UNITS_PROVIDER>   m_unitsProvider;
     bool                              m_summaryDirty;

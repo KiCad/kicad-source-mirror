@@ -23,11 +23,8 @@
 
 #include "dialog_fp_edit_pad_table.h"
 
-#include <wx/button.h>
 #include <wx/display.h>
-#include <wx/sizer.h>
 #include <wx/dcclient.h>
-#include <wx/stattext.h>
 #include <pcb_shape.h>
 #include <widgets/wx_grid.h>
 #include <widgets/grid_text_helpers.h>
@@ -57,77 +54,30 @@ static PAD_SHAPE ShapeFromString( const wxString& shape )
 
 
 DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOOTPRINT* aFootprint ) :
-        DIALOG_SHIM( (wxWindow*)aParent, wxID_ANY, _( "Pad Table" ), wxDefaultPosition, wxDefaultSize,
-                     wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
+        DIALOG_FP_EDIT_PAD_TABLE_BASE( (wxWindow*) aParent ),
         m_frame( aParent ),
-        m_grid( nullptr ),
         m_footprint( aFootprint ),
         m_unitsProvider( std::make_unique<UNITS_PROVIDER>( pcbIUScale, GetUserUnits() ) ),
         m_summaryDirty( true )
 {
     CaptureOriginalPadState();
 
-    wxBoxSizer* topSizer = new wxBoxSizer( wxVERTICAL );
+    // The base class created a single placeholder row; resize the grid to fit the pads.
+    if( m_grid->GetNumberRows() > 0 )
+        m_grid->DeleteRows( 0, m_grid->GetNumberRows() );
 
-    wxBoxSizer* bSummarySizer;
-   	bSummarySizer = new wxBoxSizer( wxHORIZONTAL );
+    if( !m_originalPads.empty() )
+        m_grid->AppendRows( m_originalPads.size() );
 
-   	m_staticTextPinNumbers = new wxStaticText( this, wxID_ANY, _( "Pad numbers:" ) );
-   	m_staticTextPinNumbers->Wrap( -1 );
-   	bSummarySizer->Add( m_staticTextPinNumbers, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-   	m_pin_numbers_summary = new wxStaticText( this, wxID_ANY, _( "0" ) );
-   	m_pin_numbers_summary->Wrap( -1 );
-   	bSummarySizer->Add( m_pin_numbers_summary, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
-
-   	bSummarySizer->Add( 0, 0, 1, wxEXPAND, 5 );
-
-   	m_staticTextPinCount = new wxStaticText( this, wxID_ANY, _( "Pad count:" ) );
-   	m_staticTextPinCount->Wrap( -1 );
-   	bSummarySizer->Add( m_staticTextPinCount, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
-
-   	m_pin_count = new wxStaticText( this, wxID_ANY, _( "0" ) );
-   	m_pin_count->Wrap( -1 );
-   	bSummarySizer->Add( m_pin_count, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
-
-   	bSummarySizer->Add( 0, 0, 1, wxEXPAND, 5 );
-
-   	m_staticTextDuplicatePins = new wxStaticText( this, wxID_ANY, _("Duplicate pads:" ) );
-   	m_staticTextDuplicatePins->Wrap( -1 );
-   	bSummarySizer->Add( m_staticTextDuplicatePins, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
-
-    m_duplicate_pins = new wxStaticText( this, wxID_ANY, _( "0" ) );
-    m_duplicate_pins->Wrap( -1 );
-    bSummarySizer->Add( m_duplicate_pins, 0, wxRIGHT | wxLEFT | wxALIGN_CENTER_VERTICAL, 5 );
-
+    // Constrain summary label widths so they ellipsize rather than push the layout around
+    // when long pin-number summaries (or duplicate lists) are produced.
     const int summaryW = m_pin_numbers_summary->GetCharWidth() * 30;
 
-    m_pin_numbers_summary->SetWindowStyleFlag( m_pin_numbers_summary->GetWindowStyleFlag() | wxST_ELLIPSIZE_END );
     m_pin_numbers_summary->SetMinSize( wxSize( summaryW, -1 ) );
     m_pin_numbers_summary->SetMaxSize( wxSize( summaryW, -1 ) );
 
-    m_duplicate_pins->SetWindowStyleFlag( m_duplicate_pins->GetWindowStyleFlag() | wxST_ELLIPSIZE_END );
     m_duplicate_pins->SetMinSize( wxSize( summaryW, -1 ) );
     m_duplicate_pins->SetMaxSize( wxSize( summaryW, -1 ) );
-
-    topSizer->Add( bSummarySizer, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-
-    m_grid = new WX_GRID( this, wxID_ANY );
-    m_grid->CreateGrid( m_originalPads.size(), 11 );
-    m_grid->SetColLabelValue( COL_NUMBER, _( "Number" ) );
-    m_grid->SetColLabelValue( COL_TYPE,   _( "Type" ) );
-    m_grid->SetColLabelValue( COL_SHAPE,  _( "Shape" ) );
-    m_grid->SetColLabelValue( COL_POS_X,  _( "X Position" ) );
-    m_grid->SetColLabelValue( COL_POS_Y,  _( "Y Position" ) );
-    m_grid->SetColLabelValue( COL_SIZE_X, _( "Size X" ) );
-    m_grid->SetColLabelValue( COL_SIZE_Y, _( "Size Y" ) );
-    m_grid->SetColLabelValue( COL_DRILL_X, _( "Drill X" ) );
-    m_grid->SetColLabelValue( COL_DRILL_Y, _( "Drill Y" ) );
-    m_grid->SetColLabelValue( COL_P2D_LENGTH, _( "Pad->Die Length" ) );
-    m_grid->SetColLabelValue( COL_P2D_DELAY, _( "Pad->Die Delay" ) );
-    m_grid->SetColLabelSize( 24 );
-    m_grid->HideRowLabels();
-    m_grid->EnableEditing( true );
 
     wxGridCellAttr* attr;
 
@@ -198,30 +148,7 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
     // add Cut, Copy, and Paste to wxGrid
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
 
-    topSizer->Add( m_grid, 1, wxEXPAND | wxALL, 5 );
-
-    wxStdDialogButtonSizer* buttons = new wxStdDialogButtonSizer();
-    buttons->AddButton( new wxButton( this, wxID_OK ) );
-    buttons->AddButton( new wxButton( this, wxID_CANCEL ) );
-    buttons->Realize();
-    topSizer->Add( buttons, 0, wxALIGN_RIGHT | wxALL, 5 );
-
-    SetSizer( topSizer );
     SetupStandardButtons();
-
-    // Bind cell change handlers for real-time updates
-    m_grid->Bind( wxEVT_GRID_CELL_CHANGED, &DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged, this );
-    m_grid->Bind( wxEVT_GRID_SELECT_CELL, &DIALOG_FP_EDIT_PAD_TABLE::OnSelectCell, this );
-    Bind( wxEVT_UPDATE_UI, &DIALOG_FP_EDIT_PAD_TABLE::OnUpdateUI, this );
-
-    // Listen for cancel
-    Bind( wxEVT_BUTTON,
-          [this]( wxCommandEvent& aEvt )
-          {
-              m_cancelled = true;
-              aEvt.Skip();
-          },
-          wxID_CANCEL );
 
     Layout();
     finishDialogSettings();
@@ -261,10 +188,6 @@ DIALOG_FP_EDIT_PAD_TABLE::~DIALOG_FP_EDIT_PAD_TABLE()
 
     // destroy GRID_TRICKS before m_grid.
     m_grid->PopEventHandler( true );
-
-    m_grid->Unbind( wxEVT_GRID_CELL_CHANGED, &DIALOG_FP_EDIT_PAD_TABLE::OnCellChanged, this );
-    m_grid->Unbind( wxEVT_GRID_SELECT_CELL, &DIALOG_FP_EDIT_PAD_TABLE::OnSelectCell, this );
-    Unbind( wxEVT_UPDATE_UI, &DIALOG_FP_EDIT_PAD_TABLE::OnUpdateUI, this );
 }
 
 
@@ -388,7 +311,6 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataToWindow()
 
     // Record initial proportions for proportional resizing later.
     InitColumnProportions();
-    Bind( wxEVT_SIZE, &DIALOG_FP_EDIT_PAD_TABLE::OnSize, this );
 
     // Run an initial proportional resize using current client size so columns
     // respect proportions immediately.
@@ -887,6 +809,13 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnUpdateUI( wxUpdateUIEvent& aEvent )
         updateSummary();
         m_summaryDirty = false;
     }
+}
+
+
+void DIALOG_FP_EDIT_PAD_TABLE::OnCancel( wxCommandEvent& aEvent )
+{
+    m_cancelled = true;
+    aEvent.Skip();
 }
 
 
