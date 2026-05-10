@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
 "PO-Revision-Date: 2026-05-11 13:11+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2102,7 +2102,7 @@ msgstr "Export in Zwischenablage"
 #: bitmap2component/bitmap2component.cpp:404
 msgid "No shape in black and white image to convert: no outline created."
 msgstr ""
-"Im Bild wurde keine umzuwandelnde schwarz-weiß-Form gefunden: Kein Umriss "
+"Keine Form im Schwarz-Weiß-Bild zur Umwandlung vorhanden: Kein Umriss "
 "erzeugt."
 
 #: common/api/api_handler.cpp:27
