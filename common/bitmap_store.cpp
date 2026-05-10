@@ -199,14 +199,22 @@ wxBitmapBundle BITMAP_STORE::GetBitmapBundleDef( BITMAPS aBitmapId, int aDefHeig
         }
     }
 
-    if( !sizes.contains( aDefHeight ) )
+    if( !sizes.contains( aDefHeight ) && largestImage.IsOk() )
         bmps.push_back( wxBitmap( resampleImage( largestImage, aDefHeight, aDefHeight ) ) );
+
+    if( bmps.empty() )
+    {
+        wxFAIL_MSG( wxString::Format( "Missing bitmap for ID %d", static_cast<int>( aBitmapId ) ) );
+        wxMemoryInputStream is( s_imageNotFound, sizeof( s_imageNotFound ) );
+        largestImage = resampleImage( wxImage( is, wxBITMAP_TYPE_PNG ), aDefHeight, aDefHeight );
+        bmps.push_back( wxBitmap( largestImage ) );
+    }
 
 #ifdef __WXOSX__
     // OSX doesn't align text in trees properly when 2x bitmaps are not provided, apparently
     int size2x = aDefHeight * 2;
 
-    if( !sizes.contains( size2x ) )
+    if( !sizes.contains( size2x ) && largestImage.IsOk() )
         bmps.push_back( wxBitmap( resampleImage( largestImage, size2x, size2x ) ) );
 #endif
 
@@ -262,14 +270,22 @@ wxBitmapBundle BITMAP_STORE::GetDisabledBitmapBundleDef( BITMAPS aBitmapId, int 
         }
     }
 
-    if( !sizes.contains( aDefHeight ) )
+    if( !sizes.contains( aDefHeight ) && largestImage.IsOk() )
         bmps.push_back( wxBitmap( resampleImage( largestImage, aDefHeight, aDefHeight ) ) );
+
+    if( bmps.empty() )
+    {
+        wxFAIL_MSG( wxString::Format( "Missing bitmap for ID %d", static_cast<int>( aBitmapId ) ) );
+        wxMemoryInputStream is( s_imageNotFound, sizeof( s_imageNotFound ) );
+        largestImage = resampleImage( wxImage( is, wxBITMAP_TYPE_PNG ), aDefHeight, aDefHeight );
+        bmps.push_back( wxBitmap( largestImage ) );
+    }
 
 #ifdef __WXOSX__
     // OSX doesn't align text in trees properly when 2x bitmaps are not provided, apparently
     int size2x = aDefHeight * 2;
 
-    if( !sizes.contains( size2x ) )
+    if( !sizes.contains( size2x ) && largestImage.IsOk() )
         bmps.push_back( wxBitmap( resampleImage( largestImage, size2x, size2x ) ) );
 #endif
 
@@ -383,7 +399,7 @@ wxString BITMAP_STORE::computeBitmapName( BITMAPS aBitmapId, int aHeight )
 
     if( fn.IsEmpty() )
     {
-        wxLogTrace( traceBitmaps, "No bitmap found matching ID %d, height %d, theme %s", aBitmapId,
+        wxLogTrace( traceBitmaps, "No bitmap found matching ID %d, height %d, theme %s", static_cast<int>( aBitmapId ),
                     aHeight, m_theme );
         return m_bitmapInfoCache.at( aBitmapId ).begin()->filename;
     }
