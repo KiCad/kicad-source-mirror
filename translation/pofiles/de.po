@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-06 11:11+0000\n"
+"PO-Revision-Date: 2026-05-10 11:11+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.5-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -4607,14 +4607,12 @@ msgstr ""
 "Projekts erstellen"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Incremental"
-msgstr "Feld-in-Text-Erhöhung"
+msgstr "Inkrementell"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Zip archive"
-msgstr "Archiv"
+msgstr "ZIP-Archiv"
 
 #: common/dialogs/panel_common_settings_base.cpp:441
 msgid ""
@@ -4622,22 +4620,27 @@ msgid ""
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
+"Inkrementell: Verstecktes Git-Repositorys \".history\" mit fortlaufenden "
+"Änderungen führen.\n"
+"Zip: ZIP-Archive mit Zeitstempel beim Speichern erstellen; automatisches "
+"Speichern nutzt Wiederherstellungsdateien."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "Project directory"
-msgstr "Projekt direkt versenden"
+msgstr "Projektverzeichnis"
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "User data directory"
-msgstr "\"%s\" ist kein Verzeichnis"
+msgstr "Benutzerdaten-Verzeichnis"
 
 #: common/dialogs/panel_common_settings_base.cpp:453
 msgid ""
 "Project: store backups and autosave files inside the project directory.\n"
 "User: store them in your KiCad user data directory."
 msgstr ""
+"Projekt: Sicherungskopien und automatisch gespeicherte Dateien im "
+"Projektverzeichnis speichern.\n"
+"Benutzer: Obiges im KiCad-Benutzerdaten-Verzeichnis speichern."
 
 #: common/dialogs/panel_common_settings_base.cpp:457
 msgid "Maximum total backup size:"
@@ -6616,15 +6619,20 @@ msgid ""
 "%s\n"
 "Recover the auto-saved data?"
 msgstr ""
+"Es sind automatisch gespeicherte Dateien vorhanden, die neuer als die "
+"gespeicherten Projektdateien sind:\n"
+"\n"
+"%s\n"
+"Sollen die automatisch gespeicherten Daten wiederhergestellt werden?"
 
 #: common/eda_base_frame.cpp:437
 msgid "Auto-Save Recovery"
-msgstr ""
+msgstr "Wiederherstellung aus automatischer Sicherung"
 
 #: common/eda_base_frame.cpp:445
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to recover auto-saved file '%s'."
-msgstr "Konnte Datei \"%s\" nicht erstellen."
+msgstr "Konnte automatisch gespeicherte Datei \"%s\" nicht erstellen."
 
 #: common/eda_base_frame.cpp:568 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:136
@@ -9501,9 +9509,8 @@ msgid "The library table path '%s' does not exist"
 msgstr "Der Bibliothekstabellenpfad \"%s\" existiert nicht"
 
 #: common/libraries/library_table.cpp:94
-#, fuzzy
 msgid "The library table is of wrong type"
-msgstr "Der Bibliothekstabellenpfad \"%s\" existiert nicht"
+msgstr "Die Bibliothekstabelle hat den falschen Typ"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -9582,6 +9589,8 @@ msgstr ""
 msgid ""
 "Files removed by 'Proceed' are archived to %s and can be recovered manually."
 msgstr ""
+"Dateien, die durch \"Weiter\" entfernt wurden, werden unter %s archiviert "
+"und können manuell wiederhergestellt werden."
 
 #: common/local_history.cpp:2455
 msgid "Cannot restore - the following files are open by another user:"
@@ -19040,9 +19049,8 @@ msgid "Symbol Library Tables"
 msgstr "Symbolbibliothek-Tabellen"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:201
-#, fuzzy
 msgid "Unable to load library table."
-msgstr "Bibliothek kann nicht geladen werden\n"
+msgstr "Bibliothekstabelle kann nicht geladen werden."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:417
 msgid "folder with .kicad_sym files"
@@ -60230,6 +60238,8 @@ msgstr "Verbindung auswählen/erweitern ..."
 msgid ""
 "Selection contains locked items. Enable 'Override locks' to operate on them."
 msgstr ""
+"Die Auswahl enthält gesperrte Elemente. \"Sperren ignorieren\" aktivieren, "
+"um diese zu bearbeiten."
 
 #: pcbnew/tools/position_relative_tool.cpp:234
 msgid "Select the reference point on the item to move."
