@@ -347,7 +347,7 @@ wxString LIB_TABLE_GRID_DATA_MODEL::GetColLabelValue( int aCol )
     case COL_DESCR:     return _( "Description" );
     case COL_ENABLED:   return _( "Enable" );
     case COL_VISIBLE:   return _( "Show" );
-    case COL_STATUS:    return wxEmptyString;
+    case COL_STATUS:    return wxS( " " );
 
     default:            return wxEmptyString;
     }
