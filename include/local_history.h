@@ -105,8 +105,11 @@ public:
     /** Clear all registered savers. */
     void ClearAllSavers();
 
-    /** Run all registered savers and, if any staged changes differ from HEAD, create a commit. */
-    bool RunRegisteredSaversAndCommit( const wxString& aProjectPath, const wxString& aTitle );
+    /** Run all registered savers and, if any staged changes differ from HEAD, create a commit.
+     *  When @p aTagFileType is non-empty the new commit is tagged Save_<type>_N (manual save);
+     *  empty leaves the commit untagged (autosave). */
+    bool RunRegisteredSaversAndCommit( const wxString& aProjectPath, const wxString& aTitle,
+                                       const wxString& aTagFileType = wxEmptyString );
 
     /**
      * Run all registered savers and write their output to autosave files instead of
@@ -185,15 +188,17 @@ public:
     /** Show a dialog allowing the user to choose a snapshot to restore. */
     void ShowRestoreDialog( const wxString& aProjectPath, wxWindow* aParent );
 
+    /** Block until any pending background save completes.  Call before reading repo
+     *  state (HeadNewerThanLastSave / GetHeadHash) at close time so an in-flight
+     *  autosave can't leave the close path with a stale view of HEAD. */
+    void WaitForPendingSave();
+
 private:
     std::vector<LOCAL_HISTORY_SNAPSHOT_INFO> LoadSnapshots( const wxString& aProjectPath );
 
     /** Execute file writes and git commit on a background thread. */
     bool commitInBackground( const wxString& aProjectPath, const wxString& aTitle,
                              const std::vector<HISTORY_FILE_DATA>& aFileData );
-
-    /** Block until any pending background save completes. */
-    void WaitForPendingSave();
 
     std::set<wxString> m_pendingFiles;
     std::map<const void*,

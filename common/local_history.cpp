@@ -252,7 +252,8 @@ void LOCAL_HISTORY::ClearAllSavers()
 }
 
 
-bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, const wxString& aTitle )
+bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, const wxString& aTitle,
+                                                  const wxString& aTagFileType )
 {
     if( !Pgm().GetCommonSettings()->m_Backup.enabled )
     {
@@ -271,8 +272,9 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
 
     Init( aProjectPath );
 
-    wxLogTrace( traceAutoSave, wxS("[history] RunRegisteredSaversAndCommit start project='%s' title='%s' savers=%zu"),
-                aProjectPath, aTitle, m_savers.size() );
+    wxLogTrace( traceAutoSave,
+                wxS( "[history] RunRegisteredSaversAndCommit start project='%s' title='%s' savers=%zu tag='%s'" ),
+                aProjectPath, aTitle, m_savers.size(), aTagFileType );
 
     if( m_savers.empty() )
     {
@@ -280,8 +282,12 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
         return false;
     }
 
-    // Skip if previous background save is still running
-    if( m_saveInProgress.load( std::memory_order_acquire ) )
+    // Manual save must land; autosave is droppable because another tick will retry.
+    if( !aTagFileType.IsEmpty() )
+    {
+        WaitForPendingSave();
+    }
+    else if( m_saveInProgress.load( std::memory_order_acquire ) )
     {
         wxLogTrace( traceAutoSave, wxS("[history] previous save still in progress; skipping cycle") );
         return false;
@@ -324,13 +330,21 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
     m_saveInProgress.store( true, std::memory_order_release );
 
     m_pendingFuture = GetKiCadThreadPool().submit_task(
-            [this, projectPath = aProjectPath, title = aTitle,
+            [this, projectPath = aProjectPath, title = aTitle, tagFileType = aTagFileType,
              data = std::move( fileData )]() mutable -> bool
             {
                 bool result = commitInBackground( projectPath, title, data );
+
+                if( !tagFileType.IsEmpty() )
+                    TagSave( projectPath, tagFileType );
+
                 m_saveInProgress.store( false, std::memory_order_release );
                 return result;
             } );
+
+    // Manual save must complete (commit + tag)
+    if( !aTagFileType.IsEmpty() )
+        WaitForPendingSave();
 
     return true;
 }
@@ -686,6 +700,50 @@ bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxSt
             git_diff_free( diff );
         }
     }
+    else
+    {
+        // No HEAD: skip commit if staged matches disk, so an idle autosave on a fresh
+        // project doesn't leave an untagged HEAD that triggers a no-op restore prompt.
+        bool stagedMatchesDisk = true;
+
+        for( const HISTORY_FILE_DATA& entry : aFileData )
+        {
+            wxString diskPath = aProjectPath + wxFileName::GetPathSeparator() + entry.relativePath;
+            wxString histPath = joinHistoryDestination( hist, entry.relativePath );
+
+            if( !wxFileExists( diskPath ) || !wxFileExists( histPath ) )
+            {
+                stagedMatchesDisk = false;
+                break;
+            }
+
+            wxFFile diskFile( diskPath, wxT( "rb" ) );
+            wxFFile histFile( histPath, wxT( "rb" ) );
+
+            if( !diskFile.IsOpened() || !histFile.IsOpened() || diskFile.Length() != histFile.Length() )
+            {
+                stagedMatchesDisk = false;
+                break;
+            }
+
+            size_t      len = static_cast<size_t>( diskFile.Length() );
+            std::string diskBuf( len, '\0' );
+            std::string histBuf( len, '\0' );
+
+            if( diskFile.Read( diskBuf.data(), len ) != len || histFile.Read( histBuf.data(), len ) != len
+                || diskBuf != histBuf )
+            {
+                stagedMatchesDisk = false;
+                break;
+            }
+        }
+
+        if( stagedMatchesDisk )
+        {
+            wxLogTrace( traceAutoSave, wxS( "[history] background: first commit; staged matches disk -- skipping" ) );
+            hasChanges = false;
+        }
+    }
 
     if( head_tree ) git_tree_free( head_tree );
     if( head_commit ) git_commit_free( head_commit );
@@ -693,6 +751,40 @@ bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxSt
     if( !hasChanges )
     {
         wxLogTrace( traceAutoSave, wxS("[history] background: no changes detected; no commit") );
+
+        // Manual save matching HEAD: amend the prior message so the user's explicit save
+        // shows in the history dialog. Skip if HEAD already has this title.
+        if( !aTitle.IsEmpty() && aTitle != wxS( "Autosave" ) )
+        {
+            git_oid head_oid_amend;
+
+            if( git_reference_name_to_id( &head_oid_amend, repo, "HEAD" ) == 0 )
+            {
+                git_commit* head_commit_amend = nullptr;
+
+                if( git_commit_lookup( &head_commit_amend, repo, &head_oid_amend ) == 0 )
+                {
+                    wxString existingMsg = wxString::FromUTF8( git_commit_message( head_commit_amend ) );
+                    existingMsg.Trim( true ).Trim( false );
+
+                    if( existingMsg != aTitle )
+                    {
+                        git_oid amended_oid;
+                        int     amend_rc = git_commit_amend( &amended_oid, head_commit_amend, "HEAD", nullptr, nullptr,
+                                                             nullptr, aTitle.mb_str().data(), nullptr );
+
+                        if( amend_rc == 0 )
+                            wxLogTrace( traceAutoSave, wxS( "[history] background: amended HEAD message '%s' -> '%s'" ),
+                                        existingMsg, aTitle );
+                        else
+                            wxLogTrace( traceAutoSave, wxS( "[history] background: amend failed rc=%d" ), amend_rc );
+                    }
+
+                    git_commit_free( head_commit_amend );
+                }
+            }
+        }
+
         return false; // Nothing new; skip commit.
     }
 
@@ -769,14 +861,11 @@ bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
     }
 
     git_repository* rawRepo = nullptr;
-    bool isNewRepo = false;
 
     if( git_repository_open( &rawRepo, hist.mb_str().data() ) != 0 )
     {
         if( git_repository_init( &rawRepo, hist.mb_str().data(), 0 ) != 0 )
             return false;
-
-        isNewRepo = true;
 
         wxFileName ignoreFile( hist, wxS( ".gitignore" ) );
         if( !ignoreFile.FileExists() )
@@ -816,74 +905,6 @@ bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
     }
 
     git_repository_free( rawRepo );
-
-    // If this is a newly initialized repository with no commits, create an initial snapshot
-    // of all existing project files
-    if( isNewRepo )
-    {
-        wxLogTrace( traceAutoSave, wxS( "[history] Init: New repository created, collecting existing files" ) );
-
-        // Collect all files in the project directory (excluding backups and hidden files)
-        wxArrayString files;
-        std::function<void( const wxString& )> collect = [&]( const wxString& path )
-        {
-            wxString name;
-            wxDir d( path );
-
-            if( !d.IsOpened() )
-                return;
-
-            bool cont = d.GetFirst( &name );
-
-            while( cont )
-            {
-                // Skip hidden files/directories and backup directories
-                if( name.StartsWith( wxS( "." ) ) || name.EndsWith( wxS( "-backups" ) ) )
-                {
-                    cont = d.GetNext( &name );
-                    continue;
-                }
-
-                wxFileName fn( path, name );
-                wxString   fullPath = fn.GetFullPath();
-
-                if( wxFileName::DirExists( fullPath ) )
-                {
-                    collect( fullPath );
-                }
-                else if( fn.FileExists() )
-                {
-                    // Skip transient files
-                    if( fn.GetFullName() != wxS( "fp-info-cache" ) )
-                        files.Add( fn.GetFullPath() );
-                }
-
-                cont = d.GetNext( &name );
-            }
-        };
-
-        collect( aProjectPath );
-
-        if( files.GetCount() > 0 )
-        {
-            std::vector<wxString> vec;
-            vec.reserve( files.GetCount() );
-
-            for( unsigned i = 0; i < files.GetCount(); ++i )
-                vec.push_back( files[i] );
-
-            wxLogTrace( traceAutoSave, wxS( "[history] Init: Creating initial snapshot with %zu files" ), vec.size() );
-            commitSnapshotForProject( aProjectPath, vec, wxS( "Initial snapshot" ) );
-
-            // Tag the initial snapshot as saved so HeadNewerThanLastSave() doesn't
-            // incorrectly offer to restore when the project is first opened
-            TagSave( aProjectPath, wxS( "project" ) );
-        }
-        else
-        {
-            wxLogTrace( traceAutoSave, wxS( "[history] Init: No files found to add to initial snapshot" ) );
-        }
-    }
 
     return true;
 }
@@ -1077,8 +1098,22 @@ bool LOCAL_HISTORY::CommitSnapshot( const std::vector<wxString>& aFiles, const w
 }
 
 
-// Helper to collect all project files (excluding .history, backups, and transient files).
-// Skips subtrees that contain kicad_pro file since they belong to nested projects
+// Limit snapshots to KiCad project artifacts (kicad_* extensions and the no-extension
+// lib-tables) so unrelated files in the project dir don't end up in .history.
+static bool isKiCadProjectFile( const wxFileName& aFile )
+{
+    wxString name = aFile.GetFullName();
+
+    if( name == wxS( "sym-lib-table" ) || name == wxS( "fp-lib-table" ) )
+        return true;
+
+    return aFile.GetExt().StartsWith( wxS( "kicad_" ) );
+}
+
+
+// Helper to collect KiCad project files (excluding .history, backups, transient caches,
+// and any non-KiCad files such as user PDFs or notes).
+// Skips subtrees that contain a kicad_pro file since they belong to nested projects.
 static void collectProjectFiles( const wxString& aProjectPath, std::vector<wxString>& aFiles )
 {
     wxDir dir( aProjectPath );
@@ -1121,10 +1156,9 @@ static void collectProjectFiles( const wxString& aProjectPath, std::vector<wxStr
             {
                 collect( fullPath, false );
             }
-            else if( fn.FileExists() )
+            else if( fn.FileExists() && fn.GetFullName() != wxS( "fp-info-cache" ) && isKiCadProjectFile( fn ) )
             {
-                if( fn.GetFullName() != wxS( "fp-info-cache" ) )
-                    aFiles.push_back( fn.GetFullPath() );
+                aFiles.push_back( fn.GetFullPath() );
             }
 
             cont = d.GetNext( &name );
