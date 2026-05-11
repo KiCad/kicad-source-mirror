@@ -247,7 +247,7 @@ struct DATA
 
         Quantity_Color colorRgb = colorObj->GetRGB();
 
-        Standard_Real r, g, b;
+        double r, g, b;
         colorObj->GetRGB().Values( r, g, b, OCC_COLOR_SPACE );
 
         std::size_t hash = std::hash<double>{}( colorRgb.Distance( refColor ) )
@@ -354,12 +354,12 @@ void getTag( const TDF_Label& aLabel, std::string& aTag )
         return;
     }
 
-    TColStd_ListOfInteger tagList;
+    NCollection_List<int> tagList;
     TDF_Tool::TagList( aLabel, tagList );
 
-    for( TColStd_ListOfInteger::Iterator it( tagList ); it.More(); it.Next() )
+    for( const int& tag : tagList )
     {
-        ostr << it.Value();
+        ostr << tag;
         ostr << ":";
     }
 
@@ -547,7 +547,7 @@ bool readIGES( Handle( TDocStd_Document ) & m_doc, const char* fname )
 {
     IGESCAFControl_Reader reader;
     IFSelect_ReturnStatus stat  = reader.ReadFile( fname );
-    reader.PrintCheckLoad( Standard_False, IFSelect_ItemsByEntity );
+    reader.PrintCheckLoad( false, IFSelect_ItemsByEntity );
 
     if( stat != IFSelect_RetDone )
         return false;
@@ -855,7 +855,7 @@ bool processSolidOrShell( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
         // If the top-level label doesn't have the color information, search components
         if( !found_color )
         {
-            if( data.m_assy->Search( shape, label, Standard_False, Standard_True, Standard_True ) &&
+            if( data.m_assy->Search( shape, label, false, true, true ) &&
                 getColor( data, label, col ) )
             {
                 found_color = true;
@@ -866,8 +866,8 @@ bool processSolidOrShell( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
         // If the components do not have color information, search all components without location
         if( !found_color )
         {
-            if( data.m_assy->Search( shape, label, Standard_False, Standard_False,
-                                     Standard_True ) &&
+            if( data.m_assy->Search( shape, label, false, false,
+                                     true ) &&
                 getColor( data, label, col ) )
             {
                 found_color = true;
@@ -879,8 +879,8 @@ bool processSolidOrShell( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
         // shapes.
         if( !found_color )
         {
-            if( data.m_assy->Search( shape, label, Standard_False, Standard_False,
-                                     Standard_False ) &&
+            if( data.m_assy->Search( shape, label, false, false,
+                                     false ) &&
                 getColor( data, label, col ) )
             {
                 found_color = true;
@@ -1003,7 +1003,7 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
         childNode.SetTranslation( SGPOINT( coord.X(), coord.Y(), coord.Z() ) );
         wxLogTrace( MASK_OCE, wxT( "Translation %f, %f, %f" ), coord.X(), coord.Y(), coord.Z() );
         gp_XYZ        axis;
-        Standard_Real angle;
+        double angle;
 
         if( T.GetRotation( axis, angle ) )
         {
@@ -1095,7 +1095,7 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
 bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vector<SGNODE*>* items,
                   Quantity_ColorRGBA* color )
 {
-    if( Standard_True == face.IsNull() )
+    if( true == face.IsNull() )
         return false;
 
     bool reverse = ( face.Orientation() == TopAbs_REVERSED );
@@ -1110,7 +1110,7 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vect
     if( data.renderBoth || !data.hasSolid )
         useBothSides = true;
 
-    if( data.m_assy->FindShape( face, label, Standard_False ) )
+    if( data.m_assy->FindShape( face, label, false ) )
         getTag( label, partID );
 
     if( !partID.empty() )
@@ -1145,21 +1145,21 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vect
     }
 
     TopLoc_Location loc;
-    Standard_Boolean isTessellate (Standard_False);
+    bool isTessellate (false);
     Handle( Poly_Triangulation ) triangulation = BRep_Tool::Triangulation( face, loc );
     const double linDeflection = ADVANCED_CFG::GetCfg().m_OcePluginLinearDeflection;
 
     if( triangulation.IsNull() || triangulation->Deflection() > linDeflection + Precision::Confusion() )
-        isTessellate = Standard_True;
+        isTessellate = true;
 
     if( isTessellate )
     {
-        BRepMesh_IncrementalMesh IM(face, linDeflection, Standard_False,
+        BRepMesh_IncrementalMesh IM(face, linDeflection, false,
                                      glm::radians(ADVANCED_CFG::GetCfg().m_OcePluginAngularDeflection) );
         triangulation = BRep_Tool::Triangulation( face, loc );
     }
 
-    if( triangulation.IsNull() == Standard_True )
+    if( triangulation.IsNull() == true )
         return false;
 
     Quantity_ColorRGBA lcolor;

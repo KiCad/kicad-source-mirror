@@ -59,11 +59,11 @@ KI_XCAFDoc_AssemblyGraph::KI_XCAFDoc_AssemblyGraph(const TDF_Label& theLabel)
 // purpose  : Checks if one node is the direct child of other one
 // =======================================================================
 
-Standard_Boolean KI_XCAFDoc_AssemblyGraph::IsDirectLink(const Standard_Integer theNode1,
+bool KI_XCAFDoc_AssemblyGraph::IsDirectLink(const Standard_Integer theNode1,
                                                      const Standard_Integer theNode2) const
 {
   if (!HasChildren(theNode1))
-    return Standard_False;
+    return false;
 
   return GetChildren(theNode1).Contains(theNode2);
 }

@@ -976,12 +976,12 @@ bool WRITER::Perform( const Handle( TDocStd_Document ) & aDocument )
 
     generateMeshesByAssembly( aDocument );
 
-    Standard_Real xMin, yMin, zMin, xMax, yMax, zMax;
+    double xMin, yMin, zMin, xMax, yMax, zMax;
     m_meshBoundingBox.Get( xMin, yMin, zMin, xMax, yMax, zMax );
 
-    Standard_Real centerX = ( xMin + xMax ) / 2.0;
-    Standard_Real centerY = ( yMin + yMax ) / 2.0;
-    Standard_Real centerZ = ( zMin + zMax ) / 2.0;
+    double centerX = ( xMin + xMax ) / 2.0;
+    double centerY = ( yMin + yMax ) / 2.0;
+    double centerZ = ( zMin + zMax ) / 2.0;
 
     m_center = VECTOR3D( centerX, centerY, centerZ );
 

@@ -66,7 +66,7 @@ public:
 
     //! Checks if there are more graph nodes to iterate.
     //! \return true/false.
-    Standard_Boolean More() const
+    bool More() const
     {
       return myCurrentIndex <= myGraph->NbNodes();
     }
@@ -121,13 +121,13 @@ public:
   //! \param [in] theNode1 - one-based ID of the first node.
   //! \param [in] theNode2 - one-based ID of the second node.
   //! \return true/false.
-  Standard_EXPORT Standard_Boolean IsDirectLink(const Standard_Integer theNode1,
+  Standard_EXPORT bool IsDirectLink(const Standard_Integer theNode1,
                                                 const Standard_Integer theNode2) const;
 
   //! \brief Checks whether direct children exist for the given node.
   //! \param [in] theNode - one-based node ID.
   //! \return true/false.
-  Standard_Boolean HasChildren(const Standard_Integer theNode) const
+  bool HasChildren(const Standard_Integer theNode) const
   {
     return myAdjacencyMap.IsBound(theNode);
   }
