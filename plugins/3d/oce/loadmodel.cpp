@@ -76,7 +76,8 @@
 #include <Poly_PolygonOnTriangulation.hxx>
 #include <Precision.hxx>
 
-#include <TDF_LabelSequence.hxx>
+#include <NCollection_Sequence.hxx>
+#include <TDF_Label.hxx>
 #include <TDF_ChildIterator.hxx>
 #include <TDF_Tool.hxx>
 #include <TDataStd_Name.hxx>
@@ -745,7 +746,7 @@ SCENEGRAPH* LoadModel( char const* filename )
     }
 
     // retrieve all free shapes
-    TDF_LabelSequence frshapes;
+    NCollection_Sequence<TDF_Label> frshapes;
     data.m_assy->GetFreeShapes( frshapes );
 
     bool ret = false;
@@ -754,7 +755,7 @@ SCENEGRAPH* LoadModel( char const* filename )
     IFSG_TRANSFORM topNode( true );
     data.scene = topNode.GetRawPtr();
 
-    for( Standard_Integer i = 1; i <= frshapes.Length(); i++ )
+    for( int i = 1; i <= frshapes.Length(); i++ )
     {
         const TDF_Label& label = frshapes.Value( i );
 

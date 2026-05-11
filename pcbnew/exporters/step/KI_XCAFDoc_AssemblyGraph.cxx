@@ -13,7 +13,7 @@
 // commercial license or contractual agreement.
 
 #include <Standard_NullObject.hxx>
-#include <TColStd_MapIteratorOfPackedMapOfInteger.hxx>
+#include <TColStd_PackedMapOfInteger.hxx>
 #include <TDataStd_TreeNode.hxx>
 #include <TDF_ChildIterator.hxx>
 #include <TDF_Tool.hxx>
@@ -59,8 +59,8 @@ KI_XCAFDoc_AssemblyGraph::KI_XCAFDoc_AssemblyGraph(const TDF_Label& theLabel)
 // purpose  : Checks if one node is the direct child of other one
 // =======================================================================
 
-bool KI_XCAFDoc_AssemblyGraph::IsDirectLink(const Standard_Integer theNode1,
-                                                     const Standard_Integer theNode2) const
+bool KI_XCAFDoc_AssemblyGraph::IsDirectLink(const int theNode1,
+                                                     const int theNode2) const
 {
   if (!HasChildren(theNode1))
     return false;
@@ -74,7 +74,7 @@ bool KI_XCAFDoc_AssemblyGraph::IsDirectLink(const Standard_Integer theNode1,
 // =======================================================================
 
 KI_XCAFDoc_AssemblyGraph::NodeType 
-KI_XCAFDoc_AssemblyGraph::GetNodeType(const Standard_Integer theNode) const
+KI_XCAFDoc_AssemblyGraph::GetNodeType(const int theNode) const
 {
   const NodeType* typePtr = myNodeTypes.Seek(theNode);
   if (typePtr == NULL)
@@ -88,9 +88,9 @@ KI_XCAFDoc_AssemblyGraph::GetNodeType(const Standard_Integer theNode) const
 // purpose  : Calculates and returns the number of links
 // =======================================================================
 
-Standard_Integer KI_XCAFDoc_AssemblyGraph::NbLinks() const
+int KI_XCAFDoc_AssemblyGraph::NbLinks() const
 {
-  Standard_Integer aNumLinks = 0;
+  int aNumLinks = 0;
   for (AdjacencyMap::Iterator it(myAdjacencyMap); it.More(); it.Next())
   {
     aNumLinks += it.Value().Extent();
@@ -103,9 +103,9 @@ Standard_Integer KI_XCAFDoc_AssemblyGraph::NbLinks() const
 // purpose  : 
 // =======================================================================
 
-Standard_Integer KI_XCAFDoc_AssemblyGraph::NbOccurrences(const Standard_Integer theNode) const
+int KI_XCAFDoc_AssemblyGraph::NbOccurrences(const int theNode) const
 {
-  const Standard_Integer* aUsageOQPtr = myUsages.Seek(theNode);
+  const int* aUsageOQPtr = myUsages.Seek(theNode);
   if (aUsageOQPtr == NULL)
     return 0;
 
@@ -120,13 +120,13 @@ Standard_Integer KI_XCAFDoc_AssemblyGraph::NbOccurrences(const Standard_Integer 
 void KI_XCAFDoc_AssemblyGraph::buildGraph(const TDF_Label& theLabel)
 {
   // We start from those shapes which are "free" in terms of XDE.
-  TDF_LabelSequence aRoots;
+  NCollection_Sequence<TDF_Label> aRoots;
   if (theLabel.IsNull() || (myShapeTool->Label() == theLabel))
     myShapeTool->GetFreeShapes(aRoots);
   else
     aRoots.Append(theLabel);
 
-  for (TDF_LabelSequence::Iterator it(aRoots); it.More(); it.Next())
+  for (NCollection_Sequence<TDF_Label>::Iterator it(aRoots); it.More(); it.Next())
   {
     TDF_Label aLabel = it.Value();
 
@@ -134,7 +134,7 @@ void KI_XCAFDoc_AssemblyGraph::buildGraph(const TDF_Label& theLabel)
     if (!myShapeTool->GetReferredShape(aLabel, anOriginal))
       anOriginal = aLabel;
 
-    const Standard_Integer aRootId = addNode(anOriginal, 0);
+    const int aRootId = addNode(anOriginal, 0);
     if (aRootId == 0)
       continue;
 
@@ -152,7 +152,7 @@ void KI_XCAFDoc_AssemblyGraph::buildGraph(const TDF_Label& theLabel)
 // =======================================================================
 
 void KI_XCAFDoc_AssemblyGraph::addComponents(const TDF_Label&       theParent,
-                                          const Standard_Integer theParentId)
+                                          const int theParentId)
 {
   if (!myShapeTool->IsShape(theParent))
   {
@@ -168,7 +168,7 @@ void KI_XCAFDoc_AssemblyGraph::addComponents(const TDF_Label&       theParent,
     TDF_Label aComponent = anIt.Value();
 
     // Add component
-    const Standard_Integer aComponentId = addNode(aComponent, theParentId);
+    const int aComponentId = addNode(aComponent, theParentId);
     if (aComponentId == 0)
       continue;
 
@@ -186,7 +186,7 @@ void KI_XCAFDoc_AssemblyGraph::addComponents(const TDF_Label&       theParent,
       continue;
 
     // Add child
-    const Standard_Integer aChildId = addNode(aChildOriginal, aComponentId);
+    const int aChildId = addNode(aChildOriginal, aComponentId);
     if (aChildId == 0)
       continue;
 
@@ -200,8 +200,8 @@ void KI_XCAFDoc_AssemblyGraph::addComponents(const TDF_Label&       theParent,
 // purpose  : Adds node into the graph
 // =======================================================================
 
-Standard_Integer KI_XCAFDoc_AssemblyGraph::addNode(const TDF_Label&       theLabel,
-                                                const Standard_Integer theParentId)
+int KI_XCAFDoc_AssemblyGraph::addNode(const TDF_Label&       theLabel,
+                                                const int theParentId)
 {
   NodeType aNodeType = NodeType_UNDEFINED;
   if (myShapeTool->IsAssembly(theLabel))
@@ -228,13 +228,13 @@ Standard_Integer KI_XCAFDoc_AssemblyGraph::addNode(const TDF_Label&       theLab
     return 0;
 
   // Get ID of the insertion-level node in the abstract assembly graph.
-  const Standard_Integer aChildId = myNodes.Add(theLabel);
+  const int aChildId = myNodes.Add(theLabel);
   myNodeTypes.Bind(aChildId, aNodeType);
 
   if (aNodeType != NodeType_Occurrence)
   {
     // Bind usage occurrences.
-    Standard_Integer* aUsageOQPtr = myUsages.ChangeSeek(aChildId);
+    int* aUsageOQPtr = myUsages.ChangeSeek(aChildId);
     if (aUsageOQPtr == NULL)
       aUsageOQPtr = myUsages.Bound(aChildId, 1);
     else
@@ -260,7 +260,7 @@ Standard_Integer KI_XCAFDoc_AssemblyGraph::addNode(const TDF_Label&       theLab
 // =======================================================================
 
 KI_XCAFDoc_AssemblyGraph::Iterator::Iterator(const Handle(KI_XCAFDoc_AssemblyGraph)& theGraph,
-                                          const Standard_Integer               theNode)
+                                          const int               theNode)
 {
   Standard_NullObject_Raise_if(theGraph.IsNull(), "Null assembly graph!");
   Standard_NullObject_Raise_if(theNode < 1, "Node ID must be positive one-based integer!");

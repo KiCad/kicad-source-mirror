@@ -88,7 +88,7 @@
 #include <TDataStd_Name.hxx>
 #include <TDataStd_TreeNode.hxx>
 #include <TDF_ChildIterator.hxx>
-#include <TDF_LabelSequence.hxx>
+#include <NCollection_Sequence.hxx>
 #include <TDF_Tool.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>
@@ -503,7 +503,7 @@ static SHAPE_LINE_CHAIN approximateLineChainWithArcs( const SHAPE_LINE_CHAIN& aS
 
 static TopoDS_Shape getOneShape( Handle( XCAFDoc_ShapeTool ) aShapeTool )
 {
-    TDF_LabelSequence theLabels;
+    NCollection_Sequence<TDF_Label> theLabels;
     aShapeTool->GetFreeShapes( theLabels );
 
     TopoDS_Shape aShape;
@@ -515,7 +515,7 @@ static TopoDS_Shape getOneShape( Handle( XCAFDoc_ShapeTool ) aShapeTool )
     BRep_Builder    aBuilder;
     aBuilder.MakeCompound( aCompound );
 
-    for( TDF_LabelSequence::Iterator anIt( theLabels ); anIt.More(); anIt.Next() )
+    for( NCollection_Sequence<TDF_Label>::Iterator anIt( theLabels ); anIt.More(); anIt.Next() )
     {
         TopoDS_Shape aFreeShape;
 
@@ -576,7 +576,7 @@ static bool rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& aScale )
 
     BRepBuilderAPI_GTransform aBRepTrsf( aGTrsf );
 
-    for( Standard_Integer idx = 1; idx <= aG->NbNodes(); idx++ )
+    for( int idx = 1; idx <= aG->NbNodes(); idx++ )
     {
         const KI_XCAFDoc_AssemblyGraph::NodeType aNodeType = aG->GetNodeType( idx );
 
@@ -606,9 +606,9 @@ static bool rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& aScale )
             aShapeTool->SetShape( aLabel, aScaledShape );
 
             // Update sub-shapes
-            TDF_LabelSequence aSubshapes;
+            NCollection_Sequence<TDF_Label> aSubshapes;
             aShapeTool->GetSubShapes( aLabel, aSubshapes );
-            for( TDF_LabelSequence::Iterator anItSs( aSubshapes ); anItSs.More(); anItSs.Next() )
+            for( NCollection_Sequence<TDF_Label>::Iterator anItSs( aSubshapes ); anItSs.More(); anItSs.Next() )
             {
                 const TDF_Label&   aLSs = anItSs.Value();
                 const TopoDS_Shape aSs = aShapeTool->GetShape( aLSs );
@@ -794,7 +794,7 @@ static bool prefixNames( const TDF_Label&                  aLabel,
 
     bool anIsDone = true;
 
-    for( Standard_Integer idx = 1; idx <= aG->NbNodes(); idx++ )
+    for( int idx = 1; idx <= aG->NbNodes(); idx++ )
     {
         const TDF_Label& lbl = aG->GetNode( idx );
         Handle( TDataStd_Name ) nameHandle;
@@ -3904,7 +3904,7 @@ TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document ) & source,
 {
     Handle( XCAFDoc_ShapeTool ) s_assy = XCAFDoc_DocumentTool::ShapeTool( source->Main() );
 
-    TDF_LabelSequence frshapes;
+    NCollection_Sequence<TDF_Label> frshapes;
     s_assy->GetFreeShapes( frshapes );
 
     Handle( XCAFDoc_ShapeTool ) d_assy = XCAFDoc_DocumentTool::ShapeTool( dest->Main() );
@@ -3933,14 +3933,14 @@ TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document ) & source,
 
 bool STEP_PCB_MODEL::performMeshing( Handle( XCAFDoc_ShapeTool ) & aShapeTool )
 {
-    TDF_LabelSequence freeShapes;
+    NCollection_Sequence<TDF_Label> freeShapes;
     aShapeTool->GetFreeShapes( freeShapes );
 
     m_reporter->Report( wxT( "Meshing model" ), RPT_SEVERITY_DEBUG );
 
     // GLTF is a mesh format, we have to trigger opencascade to mesh the shapes we composited into the asesmbly
     // To mesh models, lets just grab the free shape root and execute on them
-    for( Standard_Integer i = 1; i <= freeShapes.Length(); ++i )
+    for( int i = 1; i <= freeShapes.Length(); ++i )
     {
         TDF_Label    label = freeShapes.Value( i );
         TopoDS_Shape shape;
