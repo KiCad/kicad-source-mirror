@@ -36,8 +36,8 @@
 #include <TopoDS_Shape.hxx>
 #include <TDocStd_Document.hxx>
 #include <Standard_Handle.hxx>
-#include <Graphic3d_Vec4.hxx>
-#include <Graphic3d_Vec3.hxx>
+#include <NCollection_Vec4.hxx>
+#include <NCollection_Vec3.hxx>
 #include <Bnd_Box.hxx>
 #include <XCAFDoc_ShapeTool.hxx>
 #include <XCAFDoc_ColorTool.hxx>
@@ -51,9 +51,9 @@
 namespace std
 {
 template <>
-struct hash<Graphic3d_Vec4>
+struct hash<NCollection_Vec4<float>>
 {
-    size_t operator()( const Graphic3d_Vec4& v ) const
+    size_t operator()( const NCollection_Vec4<float>& v ) const
     {
         size_t h1 = std::hash<float>{}( v.x() );
         size_t h2 = std::hash<float>{}( v.y() );
@@ -76,20 +76,20 @@ public:
     /**
      * List of all unique diffuse colors
      */
-    std::vector<Graphic3d_Vec4>        diffuse_colors;
+    std::vector<NCollection_Vec4<float>>        diffuse_colors;
 
     /**
      * List of all unique specular colors
      */
-    std::vector<Graphic3d_Vec4>        specular_colors;
+    std::vector<NCollection_Vec4<float>>        specular_colors;
     /**
      * Index map helps select the color index for a given vertex when creating the colorIndices
      */
-    std::unordered_map<Graphic3d_Vec4, uint32_t> diffuse_colors_index_map;
+    std::unordered_map<NCollection_Vec4<float>, uint32_t> diffuse_colors_index_map;
     /**
      * Index map helps select the color index for a given vertex when creating the colorIndices
      */
-    std::unordered_map<Graphic3d_Vec4, uint32_t> specular_colors_index_map;
+    std::unordered_map<NCollection_Vec4<float>, uint32_t> specular_colors_index_map;
 
     /**
      * Coordinate indices, maps vertex positions to triangles
@@ -114,12 +114,12 @@ public:
     /**
      * Diffuse color used if not using per-vertex color
      */
-    Graphic3d_Vec4                     diffuse_color;
+    NCollection_Vec4<float>                     diffuse_color;
 
     /**
      * Specular color used if not using per-vertex color
      */
-    Graphic3d_Vec3                     specular_color;
+    NCollection_Vec3<float>                     specular_color;
 
     /**
      * The name of the mesh, this will be visible in U3D viewers
@@ -138,7 +138,7 @@ public:
         return coords.empty() || coordIndices.empty();
     }
 
-    uint32_t GetOrAddUniqueDiffuseColor( const Graphic3d_Vec4& aColor )
+    uint32_t GetOrAddUniqueDiffuseColor( const NCollection_Vec4<float>& aColor )
     {
         uint32_t colorIndex = 0;
         if( diffuse_colors_index_map.find( aColor ) != diffuse_colors_index_map.end() )
@@ -155,7 +155,7 @@ public:
         return colorIndex;
     }
 
-    uint32_t GetOrAddUniqueSpecularColor( const Graphic3d_Vec4& aColor )
+    uint32_t GetOrAddUniqueSpecularColor( const NCollection_Vec4<float>& aColor )
     {
         uint32_t colorIndex = 0;
         if( specular_colors_index_map.find( aColor ) != specular_colors_index_map.end() )
@@ -236,8 +236,8 @@ private:
 
 
     std::shared_ptr<DATA_BLOCK> getMaterialResourceBlock( const std::string&    aMaterialName,
-                                                          const Graphic3d_Vec4& aDiffuseColor,
-                                                          const Graphic3d_Vec3& aSpecularColor );
+                                                          const NCollection_Vec4<float>& aDiffuseColor,
+                                                          const NCollection_Vec3<float>& aSpecularColor );
 
     std::shared_ptr<DATA_BLOCK>
     getModelResourceModifierChain( const std::string& aModifierChainName, const MESH* aMesh,
@@ -272,7 +272,7 @@ private:
                                    const Handle( XCAFDoc_VisMaterialTool ) & visMatTool,
                                    const gp_Trsf&    cumulativeTransform,
                                    const std::string& baseName,
-                                   std::unordered_map<Graphic3d_Vec4, MESH*>& meshesByColor );
+                                   std::unordered_map<NCollection_Vec4<float>, MESH*>& meshesByColor );
 
 
     void getMeshName( const TDF_Label& label, Handle( XCAFDoc_ShapeTool ) shapeTool, MESH* mesh );

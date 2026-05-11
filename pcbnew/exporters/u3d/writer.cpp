@@ -291,14 +291,14 @@ void WRITER::collectGeometryRecursive( const TDF_Label& label, const Handle( XCA
                                        const Handle( XCAFDoc_VisMaterialTool ) & visMatTool,
                                        const gp_Trsf& cumulativeTransform,
                                        const std::string& baseName,
-                                       std::unordered_map<Graphic3d_Vec4, MESH*>& meshesByColor )
+                                       std::unordered_map<NCollection_Vec4<float>, MESH*>& meshesByColor )
 {
     if( label.IsNull() )
         return;
 
     if( shapeTool->IsAssembly( label ) || shapeTool->IsReference( label ) )
     {
-        TDF_LabelSequence childrenOrComponents;
+        NCollection_Sequence<TDF_Label> childrenOrComponents;
         TDF_Label         referencedLabel;
         gp_Trsf           currentTransform = cumulativeTransform;
         bool              isRef = shapeTool->IsReference( label );
@@ -321,7 +321,7 @@ void WRITER::collectGeometryRecursive( const TDF_Label& label, const Handle( XCA
         else
         {
             shapeTool->GetComponents( label, childrenOrComponents );
-            for( Standard_Integer i = 1; i <= childrenOrComponents.Length(); ++i )
+            for( int i = 1; i <= childrenOrComponents.Length(); ++i )
             {
                 TDF_Label       compLabel = childrenOrComponents.Value( i );
                 TopLoc_Location compLocation;
@@ -353,8 +353,8 @@ void WRITER::collectGeometryRecursive( const TDF_Label& label, const Handle( XCA
                 if( triangulation.IsNull() )
                     continue;
 
-                Graphic3d_Vec4 aColorF = faceIter.FaceColor();
-                Graphic3d_Vec4 specularColor( 0.2f );
+                NCollection_Vec4<float> aColorF = faceIter.FaceColor();
+                NCollection_Vec4<float> specularColor( 0.2f );
 
                 MESH* mesh = nullptr;
                 auto  it = meshesByColor.find( aColorF );
@@ -378,7 +378,7 @@ void WRITER::collectGeometryRecursive( const TDF_Label& label, const Handle( XCA
                 uint32_t numberTriangles = 0;
                 uint32_t numberNodes = 0;
 
-                const Standard_Integer aNodeUpper = faceIter.NodeUpper();
+                const int aNodeUpper = faceIter.NodeUpper();
                 numberNodes += faceIter.NbNodes();
                 numberTriangles += faceIter.NbTriangles();
 
@@ -391,7 +391,7 @@ void WRITER::collectGeometryRecursive( const TDF_Label& label, const Handle( XCA
                     mesh->normals.reserve( mesh->normals.size() + numberNodes );
                 }
 
-                for( Standard_Integer aNodeIter = faceIter.NodeLower(); aNodeIter <= aNodeUpper; ++aNodeIter )
+                for( int aNodeIter = faceIter.NodeLower(); aNodeIter <= aNodeUpper; ++aNodeIter )
                 {
                     const gp_Dir aNormal = faceIter.NormalTransformed( aNodeIter );
                     gp_XYZ       vertex = faceIter.NodeTransformed( aNodeIter ).XYZ();
@@ -405,14 +405,14 @@ void WRITER::collectGeometryRecursive( const TDF_Label& label, const Handle( XCA
                     m_meshBoundingBox.Update( vertex.X(), vertex.Y(), vertex.Z() );
                 }
 
-                const Standard_Integer anElemLower = faceIter.ElemLower();
-                const Standard_Integer anElemUpper = faceIter.ElemUpper();
-                for( Standard_Integer anElemIter = anElemLower; anElemIter <= anElemUpper; ++anElemIter )
+                const int anElemLower = faceIter.ElemLower();
+                const int anElemUpper = faceIter.ElemUpper();
+                for( int anElemIter = anElemLower; anElemIter <= anElemUpper; ++anElemIter )
                 {
                     const Poly_Triangle aTri = faceIter.TriangleOriented( anElemIter );
 
-                    Graphic3d_Vec3i vec =
-                            Graphic3d_Vec3i( aTri( 1 ), aTri( 2 ), aTri( 3 ) ) - Graphic3d_Vec3i( anElemLower );
+                    NCollection_Vec3<int> vec =
+                            NCollection_Vec3<int>( aTri( 1 ), aTri( 2 ), aTri( 3 ) ) - NCollection_Vec3<int>( anElemLower );
 
                     mesh->coordIndices.emplace_back( vec.x() + nodesExistingSum );
                     mesh->coordIndices.emplace_back( vec.y() + nodesExistingSum );
@@ -451,8 +451,8 @@ void WRITER::generateMeshesByAssembly( const Handle( TDocStd_Document ) & doc )
         return;
     }
 
-    TDF_LabelSequence meshableLabels;
-    TDF_LabelSequence rootLabels;
+    NCollection_Sequence<TDF_Label> meshableLabels;
+    NCollection_Sequence<TDF_Label> rootLabels;
     shapeTool->GetFreeShapes( rootLabels );
 
     /*
@@ -469,16 +469,16 @@ void WRITER::generateMeshesByAssembly( const Handle( TDocStd_Document ) & doc )
             return;
         }
 
-        TDF_LabelSequence childrenOrComponents;
+        NCollection_Sequence<TDF_Label> childrenOrComponents;
         shapeTool->GetComponents( label, childrenOrComponents );
-        for( Standard_Integer i = 1; i <= childrenOrComponents.Length(); ++i )
+        for( int i = 1; i <= childrenOrComponents.Length(); ++i )
             recurseFindKiCadElements( childrenOrComponents.Value( i ) );
     };
 
-    for( Standard_Integer i = 1; i <= rootLabels.Length(); ++i )
+    for( int i = 1; i <= rootLabels.Length(); ++i )
         recurseFindKiCadElements( rootLabels.Value( i ) );
 
-    for( Standard_Integer i = 1; i <= meshableLabels.Length(); ++i )
+    for( int i = 1; i <= meshableLabels.Length(); ++i )
     {
         TDF_Label meshLabel = meshableLabels.Value( i );
         if( !( shapeTool->IsAssembly( meshLabel ) || shapeTool->IsShape( meshLabel ) ) )
@@ -507,7 +507,7 @@ void WRITER::generateMeshesByAssembly( const Handle( TDocStd_Document ) & doc )
         }
         m_groupNodes.push_back( gn );
 
-        std::unordered_map<Graphic3d_Vec4, MESH*> meshesByColor;
+        std::unordered_map<NCollection_Vec4<float>, MESH*> meshesByColor;
         gp_Trsf initialTransform; // identity
         collectGeometryRecursive( meshLabel, shapeTool, colorTool, visMatTool, initialTransform,
                                   topName, meshesByColor );
@@ -716,8 +716,8 @@ std::shared_ptr<DATA_BLOCK> WRITER::getLitTextureShaderBlock( const std::string&
 
 
 std::shared_ptr<DATA_BLOCK> WRITER::getMaterialResourceBlock( const std::string& aMaterialName,
-                                                              const Graphic3d_Vec4&     aDiffuseColor,
-                                                              const Graphic3d_Vec3&     aSpecularColor )
+                                                              const NCollection_Vec4<float>&     aDiffuseColor,
+                                                              const NCollection_Vec3<float>&     aSpecularColor )
 {
     BIT_STREAM_WRITER    w;
 
