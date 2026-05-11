@@ -682,13 +682,18 @@ protected:
 
     /**
      * Check for autosave files newer than their source files for the given project.
-     * If found, prompt the user; on confirmation, copy the autosave content over the
-     * source files so the subsequent open gets the recovered data.
+     * If found, present the user with the recovery dialog so they can pick what to
+     * do with each file (restore, keep current, or keep both as a sibling copy).
+     * Cancel leaves every autosave on disk so the dialog can offer it again next
+     * open.  The open always proceeds either way.
      *
-     * Only meaningful when BACKUP_FORMAT::ZIP is selected -- in INCREMENTAL mode the
+     * Only meaningful when BACKUP_FORMAT::ZIP is selected.  In INCREMENTAL mode the
      * user recovers via the Local History restore dialog instead.
      *
      * @param aProjectPath path to the project directory.
+     * @param aExtensions  Only autosave files whose source has one of these
+     *                     extensions are considered. PCB editor passes kicad_pcb,
+     *                     schematic editor passes kicad_sch.
      */
     void CheckForAutosaveFiles( const wxString& aProjectPath, const std::vector<wxString>& aExtensions );
 

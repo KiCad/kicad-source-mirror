@@ -1235,7 +1235,12 @@ void SCH_EDIT_FRAME::doCloseWindow()
 
         for( const SCH_SHEET_PATH& path : sheetlist )
         {
-            if( SCH_SCREEN* screen = path.LastScreen() )
+            SCH_SCREEN* screen = path.LastScreen();
+
+            // Only sweep autosaves for sheets actually dirtied in this session.
+            // A clean sheet's autosave, if any, is a previous-session leftover the
+            // user explicitly deferred in the recovery dialog.
+            if( screen && screen->IsContentModified() )
                 sheetSrcs.push_back( Prj().AbsolutePath( screen->GetFileName() ) );
         }
 

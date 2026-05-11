@@ -492,6 +492,8 @@ set( COMMON_DLG_SRCS
     ${COMMON_GIT_DLG_SRCS}
     dialogs/dialog_assign_netclass.cpp
     dialogs/dialog_assign_netclass_base.cpp
+    dialogs/dialog_autosave_recovery.cpp
+    dialogs/dialog_autosave_recovery_base.cpp
     dialogs/dialog_book_reporter.cpp
     dialogs/dialog_book_reporter_base.cpp
     dialogs/dialog_color_picker.cpp
