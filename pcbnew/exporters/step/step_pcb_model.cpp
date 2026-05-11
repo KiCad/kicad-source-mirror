@@ -88,7 +88,9 @@
 #include <TDataStd_TreeNode.hxx>
 #include <TDF_ChildIterator.hxx>
 #include <NCollection_Sequence.hxx>
+#include <TColStd_IndexedDataMapOfStringString.hxx>
 #include <TDF_Tool.hxx>
+#include <TopTools_IndexedMapOfShape.hxx>
 #include <TopExp_Explorer.hxx>
 #include <TopoDS.hxx>
 #include <XCAFApp_Application.hxx>
@@ -126,6 +128,7 @@
 
 #include <BRepBndLib.hxx>
 #include <Bnd_BoundSortBox.hxx>
+#include <Bnd_HArray1OfBox.hxx>
 #include <GProp_GProps.hxx>
 #include <BRepGProp.hxx>
 
@@ -541,8 +544,8 @@ static bool rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& aScale )
         return false;
     }
 
-    if( Abs( aScale.X() ) <= gp::Resolution() || Abs( aScale.Y() ) <= gp::Resolution()
-        || Abs( aScale.Z() ) <= gp::Resolution() )
+    if( std::abs( aScale.X() ) <= gp::Resolution() || std::abs( aScale.Y() ) <= gp::Resolution()
+        || std::abs( aScale.Z() ) <= gp::Resolution() )
     {
         Message::SendFail( "Scale factor is too small." );
         return false;
@@ -645,7 +648,7 @@ static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape, REPORTER* a
     BRepAlgoAPI_Fuse               mkFuse;
     NCollection_List<TopoDS_Shape> shapeArguments, shapeTools;
 
-    for( TopoDS_Shape& sh : aInputShapes )
+    for( const TopoDS_Shape& sh : aInputShapes )
     {
         if( sh.IsNull() )
             continue;
