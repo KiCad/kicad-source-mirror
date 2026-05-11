@@ -39,6 +39,7 @@
 #include <pcb_marker.h>
 #include <cstdlib>
 #include <drawing_sheet/ds_data_model.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <footprint_library_adapter.h>
@@ -597,6 +598,31 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
 
     engine->SetProgressReporter( nullptr );
 
+    // The DRC engine on BOARD_DESIGN_SETTINGS is shared across consumers
+    // (DIALOG_DRC, kicad-cli, this helper). DIALOG_DRC borrows the canvas's
+    // DS_PROXY_VIEW_ITEM*, and PCB_EDIT_FRAME's post-plugin reload destroys
+    // that proxy without notifying the engine. To both avoid dereferencing
+    // a stale pointer in testTextVars and keep drawing-sheet text-variable
+    // validation working from action plugins, build a fresh proxy bound to
+    // this board's state for the duration of the run, mirroring
+    // PCBNEW_JOBS_HANDLER::getDrawingSheetProxyView for kicad-cli.
+    std::unique_ptr<DS_PROXY_VIEW_ITEM> drawingSheet =
+            std::make_unique<DS_PROXY_VIEW_ITEM>( pcbIUScale, &aBoard->GetPageSettings(), aBoard->GetProject(),
+                                                  &aBoard->GetTitleBlock(), &aBoard->GetProperties() );
+
+    drawingSheet->SetSheetName( std::string() );
+    drawingSheet->SetSheetPath( std::string() );
+    drawingSheet->SetIsFirstPage( true );
+
+    drawingSheet->SetFileName( TO_UTF8( aBoard->GetFileName() ) );
+
+    wxString currentVariant = aBoard->GetCurrentVariant();
+    wxString variantDesc = aBoard->GetVariantDescription( currentVariant );
+    drawingSheet->SetVariantName( TO_UTF8( currentVariant ) );
+    drawingSheet->SetVariantDesc( TO_UTF8( variantDesc ) );
+
+    engine->SetDrawingSheet( drawingSheet.get() );
+
     engine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2D& aPos, int aLayer,
                  const std::function<void( PCB_MARKER* )>& aPathGenerator )
@@ -628,6 +654,12 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
     // pointers that crash on the next event loop iteration.
     engine->RunTests( aUnits, aReportAllTrackErrors, false );
     engine->ClearViolationHandler();
+
+    // Clear the engine's drawing-sheet pointer before the local unique_ptr
+    // goes out of scope: the engine outlives this function on
+    // BOARD_DESIGN_SETTINGS::m_DRCEngine and must not be left holding a
+    // dangling pointer.
+    engine->SetDrawingSheet( nullptr );
 
     // TODO: Unify this with DIALOG_DRC::writeReport
 

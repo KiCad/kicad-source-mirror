@@ -23,8 +23,11 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
+#include <base_units.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <drawing_sheet/ds_proxy_view_item.h>
+#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <pcb_marker.h>
 #include <python/scripting/pcbnew_scripting_helpers.h>
@@ -88,6 +91,55 @@ BOOST_FIXTURE_TEST_CASE( WriteDRCReportPreservesMarkers, WRITE_DRC_REPORT_FIXTUR
     BOOST_REQUIRE_EQUAL( bds.m_DrcExclusionComments.count( sentinelExclusion ), 1u );
     BOOST_CHECK_EQUAL( bds.m_DrcExclusionComments.at( sentinelExclusion ),
                        sentinelComment );
+
+    if( wxFileExists( outPath ) )
+        wxRemoveFile( outPath );
+}
+
+
+// Second regression test for https://gitlab.com/kicad/code/kicad/-/issues/24124
+//
+// Distinct mechanism from the marker-preservation bug fixed in 6f4dbf133e:
+// the DRC engine on BOARD_DESIGN_SETTINGS is shared across consumers, and
+// DIALOG_DRC leaves a borrowed DS_PROXY_VIEW_ITEM* on it pointing at a proxy
+// owned by PCB_DRAW_PANEL_GAL via unique_ptr. When an action plugin runs,
+// PCB_EDIT_FRAME's post-plugin reload calls SetPageSettings, which destroys
+// the canvas's proxy and installs a fresh one without notifying the engine.
+// A subsequent WriteDRCReport invocation from another plugin would then
+// dereference the stale pointer in DRC_TEST_PROVIDER_MISC::testTextVars and
+// crash. WriteDRCReport must own the proxy used for its run and reset the
+// engine's borrowed pointer before that proxy is destroyed.
+
+BOOST_FIXTURE_TEST_CASE( WriteDRCReportClearsStaleDrawingSheet, WRITE_DRC_REPORT_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue9870", m_board );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    // Pre-create the shared engine and seed a drawing-sheet pointer on it, the
+    // way DIALOG_DRC would leave it after a GUI DRC run.
+    bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( m_board.get(), &bds );
+
+    auto staleProxy = std::make_unique<DS_PROXY_VIEW_ITEM>( pcbIUScale, &m_board->GetPageSettings(),
+                                                            m_board->GetProject(), &m_board->GetTitleBlock(), nullptr );
+
+    bds.m_DRCEngine->SetDrawingSheet( staleProxy.get() );
+    BOOST_REQUIRE( bds.m_DRCEngine->GetDrawingSheet() != nullptr );
+
+    wxString outPath = wxFileName::CreateTempFileName( wxT( "kicad-drc-report" ) );
+    BOOST_REQUIRE( !outPath.IsEmpty() );
+
+    bool ok = WriteDRCReport( m_board.get(), outPath, EDA_UNITS::MM, false );
+    BOOST_CHECK_MESSAGE( ok, "WriteDRCReport returned false" );
+
+    // The fix: WriteDRCReport replaces the engine's drawing-sheet pointer with
+    // a fresh proxy bound to this board's state for the duration of the run
+    // (mirroring PCBNEW_JOBS_HANDLER::getDrawingSheetProxyView for kicad-cli),
+    // then clears it before that local proxy is destroyed. After this call
+    // the engine must not be left holding a borrowed pointer to anything,
+    // whether the caller's pre-seeded proxy or WriteDRCReport's own.
+    BOOST_CHECK_MESSAGE( bds.m_DRCEngine->GetDrawingSheet() == nullptr,
+                         "WriteDRCReport must reset DRC_ENGINE drawing-sheet pointer" );
 
     if( wxFileExists( outPath ) )
         wxRemoveFile( outPath );
