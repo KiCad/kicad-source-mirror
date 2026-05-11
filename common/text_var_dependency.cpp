@@ -20,6 +20,7 @@
 
 #include <text_var_dependency.h>
 
+#include <mutex>
 #include <functional>
 #include <utility>
 
