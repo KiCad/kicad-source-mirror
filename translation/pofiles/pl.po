@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-10 11:11+0000\n"
+"PO-Revision-Date: 2026-05-12 15:11+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -9882,7 +9882,7 @@ msgstr "Nie można zarchiwizować pliku '%s'."
 #, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr ""
-"Archiwum ZIP '%s' zostało utworzone (%s nieskompresowane, %s skompresowane)."
+"Archiwum zip '%s' zostało utworzone (%s nieskompresowane, %s skompresowane)."
 
 #: common/properties/pg_editors.cpp:642
 #: common/widgets/grid_text_button_helpers.cpp:255
@@ -10467,7 +10467,7 @@ msgstr "Używaj prostokątnego zaznaczenia"
 
 #: common/tool/actions.cpp:362
 msgid "Lasso"
-msgstr "Lasso"
+msgstr "Zaznaczenie dowolne"
 
 #: common/tool/actions.cpp:363
 msgid "Set selection mode to use polygon lasso"
@@ -12127,7 +12127,7 @@ msgstr "Pliki PostScript"
 
 #: common/wildcards_and_files_ext.cpp:451
 msgid "Json files"
-msgstr "Pliki JSON"
+msgstr "Pliki json"
 
 #: common/wildcards_and_files_ext.cpp:457
 msgid "Report files"
@@ -12155,7 +12155,7 @@ msgstr "Pliki eksportu starszych typów bibliotek"
 
 #: common/wildcards_and_files_ext.cpp:493
 msgid "Electrical rule check file"
-msgstr "Plik kontroli ERC"
+msgstr "Plik kontroli reguł elektrycznych"
 
 #: common/wildcards_and_files_ext.cpp:499
 msgid "SPICE library file"
@@ -12175,7 +12175,7 @@ msgstr "Pliki automatycznego przydzielania footprintów"
 
 #: common/wildcards_and_files_ext.cpp:523
 msgid "Zip file"
-msgstr "Plik ZIP"
+msgstr "Plik zip"
 
 #: common/wildcards_and_files_ext.cpp:529
 msgid "GenCAD 1.4 board files"
@@ -12212,7 +12212,7 @@ msgstr "Plik PNG"
 
 #: common/wildcards_and_files_ext.cpp:581
 msgid "Jpeg file"
-msgstr "Plik JPEG"
+msgstr "Plik jpeg"
 
 #: common/wildcards_and_files_ext.cpp:593
 msgid "Hotkey file"
@@ -12394,7 +12394,7 @@ msgstr "Przydzielenie ze schematu"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:42
 msgid "Cmp file assignment"
-msgstr "Przydzielenie z pliku CMP"
+msgstr "Przydzielenie z pliku cmp"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.cpp:19
 msgid ""
@@ -14306,11 +14306,11 @@ msgstr "Edycja właściwości tekstu oraz elementów graficznych"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr "Log parsera IBIS"
+msgstr "Log parsera ibis"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:46
 msgid "Ibis parser"
-msgstr "Parser IBIS"
+msgstr "Parser ibis"
 
 #: eeschema/dialogs/dialog_image_properties.cpp:81
 #: eeschema/dialogs/dialog_image_properties_base.h:48
@@ -15456,7 +15456,7 @@ msgid ""
 "starting by sm."
 msgstr ""
 "Lista nazw footprintów, które mogą być użyte dla tego symbolu.\n"
-"Nazwy footprintów mogą posiadać symbole wieloznaczne, np. SM* by umożliwić "
+"Nazwy footprintów mogą posiadać symbole wieloznaczne, np. sm* by umożliwić "
 "przypasowanie różnych wariantów."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:457
@@ -15518,7 +15518,7 @@ msgstr "Zmienia właściwości linii graficznych"
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:252
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:232
 msgid "Combo!"
-msgstr "Combo!"
+msgstr "Kombo!"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:79
 msgid "Set width to 0 to use schematic's default line width."
@@ -16384,7 +16384,7 @@ msgstr "Predefinicje BOM"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:91
 msgid "Electrical Rules"
-msgstr "Reguły ERC"
+msgstr "Reguły elektryczne"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:109
 #: pcbnew/board_statistics_report.cpp:540
@@ -21243,7 +21243,7 @@ msgstr "Pokrycia aktualnie nieobsługiwane."
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5323
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr "Odnaleziono nieznany lub niespodziewany ID rekordu %d w %s."
+msgstr "Odnaleziono nieznany lub niespodziewany identyfikator rekordu %d w %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1741
 #, c-format
@@ -22065,7 +22065,7 @@ msgstr "Niepoprawny numer stylu reprezentacji symbolu %s"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:889
 #, c-format
 msgid "Invalid hyperlink url '%s'"
-msgstr "Nieprawidłowy URL linku '%s'"
+msgstr "Nieprawidłowy url linku '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:919
 #, c-format
@@ -29426,7 +29426,7 @@ msgstr "Pliki Gerber"
 
 #: gerbview/files.cpp:87
 msgid "Zip files"
-msgstr "Pliki ZIP"
+msgstr "Pliki zip"
 
 #: gerbview/files.cpp:108
 msgid "Job files"
@@ -29515,7 +29515,7 @@ msgstr "Wczytywanie %u/%zu %s..."
 #: gerbview/files.cpp:457
 #, c-format
 msgid "Zip file '%s' cannot be opened."
-msgstr "Archiwum ZIP '%s' nie może zostać otwarte."
+msgstr "Archiwum zip '%s' nie może zostać otwarte."
 
 #: gerbview/files.cpp:499
 #, c-format
@@ -29539,7 +29539,7 @@ msgstr "<b>Błąd odczytu przy rozpakowywaniu pliku %s</b>"
 
 #: gerbview/files.cpp:661
 msgid "Open Zip File"
-msgstr "Otwórz archiwum ZIP"
+msgstr "Otwórz archiwum zip"
 
 #: gerbview/gerber_draw_item.cpp:666
 msgid "Attribute"
@@ -29644,7 +29644,7 @@ msgstr "Warstwa grafiki %d"
 #: gerbview/gerbview_frame.cpp:77 gerbview/menubar.cpp:134
 #: gerbview/menubar.cpp:140
 msgid "Clear Recent Zip Files"
-msgstr "Wyczyść ostatnie pliki ZIP"
+msgstr "Wyczyść ostatnie pliki zip"
 
 #: gerbview/gerbview_frame.cpp:79 gerbview/menubar.cpp:92
 #: gerbview/menubar.cpp:98
@@ -29705,7 +29705,7 @@ msgstr "Otwórz ostatnio używany plik zadań"
 
 #: gerbview/menubar.cpp:139
 msgid "Open Recent Zip File"
-msgstr "Otwórz ostatnio używane archiwum ZIP"
+msgstr "Otwórz ostatnio używane archiwum zip"
 
 #: gerbview/menubar.cpp:184
 msgid "&Units"
@@ -29847,7 +29847,7 @@ msgstr ""
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Open Zip Archive File..."
-msgstr "Otwórz plik archiwum ZIP..."
+msgstr "Otwórz plik archiwum zip..."
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "Open a zipped archive (Gerber and Drill) file"
@@ -30327,7 +30327,7 @@ msgstr "Footprinty oraz ich biblioteki"
 
 #: kicad/cli/command_fp_export.h:32 kicad/cli/command_sym_export.h:33
 msgid "Export utilities (svg)"
-msgstr "Eksportuj narzędzia (SVG)"
+msgstr "Eksportuj narzędzia (svg)"
 
 #: kicad/cli/command_fp_export_svg.cpp:36
 msgid "Exports the footprint or entire footprint library to SVG"
@@ -31456,7 +31456,7 @@ msgstr "Zwracaj niezerowy kod błędu zależny od istnienia naruszeń"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
-msgstr "Eksportuj narzędzia (lista sieci, PDF, BOM, itp.)"
+msgstr "Eksportuj narzędzia (lista sieci, pdf, bom, itp.)"
 
 #: kicad/cli/command_sch_export_bom.cpp:36
 msgid "Generate a Bill of Materials (BOM)"
@@ -32454,7 +32454,7 @@ msgstr "Dodaj do domyślnego repozytorium"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
 msgid "Fully qualified repository url:"
-msgstr "W pełni kwalifikowany adres URL repozytorium:"
+msgstr "W pełni kwalifikowany adres url repozytorium:"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
 msgid "Add Repository"
@@ -32681,7 +32681,7 @@ msgstr "Zasoby"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:523
 msgid "Package download url is not specified"
-msgstr "Nie określono adresu URL pobieranego pakietu"
+msgstr "Nie określono adresu url pobieranego pakietu"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:523
 msgid "Error downloading package"
@@ -32786,7 +32786,7 @@ msgstr "Pobieranie pakietów repozytoriów"
 
 #: kicad/pcm/pcm.cpp:355
 msgid "Unable to load repository packages url."
-msgstr "Nie można załadować URL pakietów z repozytorium."
+msgstr "Nie można załadować url pakietów z repozytorium."
 
 #: kicad/pcm/pcm.cpp:365
 msgid "Packages hash doesn't match. Repository may be corrupted."
@@ -32866,7 +32866,7 @@ msgstr "Nie można utworzyć folderu pobierania!"
 #: kicad/pcm/pcm_task_manager.cpp:132
 #, c-format
 msgid "Downloading package url: '%s'"
-msgstr "Pobieranie adresu URL pakietu: '%s'"
+msgstr "Pobieranie adresu url pakietu: '%s'"
 
 #: kicad/pcm/pcm_task_manager.cpp:146
 #, c-format
@@ -32874,7 +32874,7 @@ msgid ""
 "Failed to download url %s\n"
 "%s"
 msgstr ""
-"Nie można załadować URL %s \n"
+"Nie można załadować url %s \n"
 "%s"
 
 #: kicad/pcm/pcm_task_manager.cpp:191
@@ -33351,7 +33351,7 @@ msgstr "Rozpakuj projekt..."
 
 #: kicad/tools/kicad_manager_actions.cpp:220
 msgid "Unarchive project files from zip archive"
-msgstr "Rozpakowuje pliki projektu z archiwum ZIP"
+msgstr "Rozpakowuje pliki projektu z archiwum zip"
 
 #: kicad/tools/kicad_manager_actions.cpp:227
 msgid "Reveal Project in Finder"
@@ -39625,11 +39625,11 @@ msgstr "Eksport IDFv3"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:126
 msgid "zip files"
-msgstr "pliki ZIP"
+msgstr "pliki zip"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:128
 msgid "tgz files"
-msgstr "pliki TGZ"
+msgstr "pliki tgz"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:140
 msgid "Export ODB++ File"
@@ -55789,7 +55789,7 @@ msgstr "Rysowanie footprintu '%s' na '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2443
 msgid "Error creating svg file"
-msgstr "Błąd podczas tworzenia pliku SVG"
+msgstr "Błąd podczas tworzenia pliku svg"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2515 pcbnew/tools/drc_tool.cpp:177
 msgid "Schematic parity tests require a fully annotated schematic."
