@@ -800,12 +800,9 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
             }
         }
 
-        // Sweep any remaining autosave files from the project tree so a clean
-        // close never triggers the recovery prompt next launch.  The editors clean
-        // up their own files; this catches anything left from sub-sheets or aborted
-        // saves.
-        if( !projPath.IsEmpty() )
-            Kiway().LocalHistory().RemoveAutosaveFiles( projPath );
+        // The editors clean up autosaves for sheets actually dirtied in their session.
+        // Anything still on disk here was deferred by the user in the recovery dialog
+        // and must survive so the dialog can offer it again on the next open.
 
         m_active_project = false;
         // Enforce local history size limit (if enabled) once all pending saves/backups are done.

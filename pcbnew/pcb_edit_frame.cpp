@@ -1544,8 +1544,10 @@ void PCB_EDIT_FRAME::doCloseWindow()
         m_footprintDiffDlg = nullptr;
     }
 
-    // Delete the auto save file if it exists.
-    if( !Prj().IsNullProject() && GetBoard() )
+    // Delete the auto save file if it exists.  Only sweep when the board was actually
+    // dirtied in this session; otherwise an existing autosave is a previous-session
+    // leftover the user explicitly deferred in the recovery dialog.
+    if( !Prj().IsNullProject() && GetBoard() && IsContentModified() )
     {
         Kiway().LocalHistory().RemoveAutosaveFiles( Prj().GetProjectPath(),
                                                     { GetBoard()->GetFileName() } );
@@ -3158,9 +3160,18 @@ void PCB_EDIT_FRAME::ProjectChanged()
     // file I/O happen on a background thread to avoid blocking the UI.
     if( GetBoard() )
     {
-        Kiway().LocalHistory().RegisterSaver( GetBoard(),
+        Kiway().LocalHistory().RegisterSaver(
+                GetBoard(),
                 [this]( const wxString& aProjectPath, std::vector<HISTORY_FILE_DATA>& aFileData )
                 {
+                    // See SCHEMATIC::SaveToHistory: the dirty check is only valid in ZIP
+                    // mode.  In INCREMENTAL mode the manual-save flow clears the dirty
+                    // flag before the saver runs, so filtering would drop the snapshot.
+                    bool filterClean = Pgm().GetCommonSettings()->m_Backup.format == BACKUP_FORMAT::ZIP;
+
+                    if( filterClean && !IsContentModified() )
+                        return;
+
                     GetBoard()->SaveToHistory( aProjectPath, aFileData );
                 } );
     }
