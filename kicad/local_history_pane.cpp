@@ -29,6 +29,7 @@
 #include <wx/filename.h>
 #include <wx/intl.h>
 #include <wx/menu.h>
+#include <wx/settings.h>
 
 wxDEFINE_EVENT( EVT_LOCAL_HISTORY_REFRESH, wxCommandEvent );
 
@@ -131,10 +132,11 @@ void LOCAL_HISTORY_PANE::RefreshHistory( const wxString& aProjectPath )
         long     row = m_list->InsertItem( m_list->GetItemCount(), title );
         m_list->SetItem( row, 1, timeStr );
 
+        // Tint by foreground colour so light and dark themes both stay readable.
         if( info.summary.StartsWith( wxS( "Autosave" ) ) )
-            m_list->SetItemBackgroundColour( row, wxColour( 230, 255, 230 ) );
+            m_list->SetItemTextColour( row, wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
         else if( info.summary.StartsWith( wxS( "Backup" ) ) )
-            m_list->SetItemBackgroundColour( row, wxColour( 230, 230, 255 ) );
+            m_list->SetItemTextColour( row, wxColour( 80, 120, 200 ) );
 
         m_commits.emplace_back( std::move( info ) );
         git_commit_free( commit );
