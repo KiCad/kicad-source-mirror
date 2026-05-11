@@ -614,7 +614,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // Crash-recovery: when zip-format autosave is active, look for autosave files newer than
     // the saved board and offer to recover them before the load happens.
     if( !is_new )
-        CheckForAutosaveFiles( wx_filename.GetPath() );
+        CheckForAutosaveFiles( wx_filename.GetPath(), { FILEEXT::KiCadPcbFileExtension } );
 
     if( is_new )
     {

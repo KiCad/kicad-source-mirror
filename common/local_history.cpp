@@ -507,20 +507,36 @@ findAutosaveFilePairs( const wxString& aProjectPath )
 
 
 std::vector<std::pair<wxString, wxString>>
-LOCAL_HISTORY::FindStaleAutosaveFiles( const wxString& aProjectPath ) const
+LOCAL_HISTORY::FindStaleAutosaveFiles( const wxString& aProjectPath, const std::vector<wxString>& aExtensions ) const
 {
     std::vector<std::pair<wxString, wxString>> results;
 
+    if( aExtensions.empty() )
+        return results;
+
     for( auto& pair : findAutosaveFilePairs( aProjectPath ) )
     {
-        wxFileName autosaveFn( pair.first );
         wxFileName srcFn( pair.second );
+        bool       match = false;
+
+        for( const wxString& ext : aExtensions )
+        {
+            if( srcFn.GetExt().IsSameAs( ext, false ) )
+            {
+                match = true;
+                break;
+            }
+        }
+
+        if( !match )
+            continue;
+
         wxDateTime srcTime;
 
         if( srcFn.FileExists() )
             srcTime = srcFn.GetModificationTime();
 
-        wxDateTime autosaveTime = autosaveFn.GetModificationTime();
+        wxDateTime autosaveTime = wxFileName( pair.first ).GetModificationTime();
 
         if( !srcTime.IsValid() || autosaveTime.IsLaterThan( srcTime ) )
             results.emplace_back( std::move( pair ) );

@@ -413,14 +413,14 @@ void EDA_BASE_FRAME::onAutoSaveTimer( wxTimerEvent& aEvent )
 }
 
 
-void EDA_BASE_FRAME::CheckForAutosaveFiles( const wxString& aProjectPath )
+void EDA_BASE_FRAME::CheckForAutosaveFiles( const wxString& aProjectPath, const std::vector<wxString>& aExtensions )
 {
     COMMON_SETTINGS* cs = Pgm().GetCommonSettings();
 
     if( cs->m_Backup.format != BACKUP_FORMAT::ZIP )
         return;
 
-    auto stale = Kiway().LocalHistory().FindStaleAutosaveFiles( aProjectPath );
+    auto stale = Kiway().LocalHistory().FindStaleAutosaveFiles( aProjectPath, aExtensions );
 
     if( stale.empty() )
         return;
@@ -452,7 +452,11 @@ void EDA_BASE_FRAME::CheckForAutosaveFiles( const wxString& aProjectPath )
     else
     {
         // User declined; clear the autosave files so we don't re-prompt next time.
-        Kiway().LocalHistory().RemoveAutosaveFiles( aProjectPath );
+        for( const auto& [autosavePath, srcPath] : stale )
+        {
+            if( wxFileExists( autosavePath ) )
+                wxRemoveFile( autosavePath );
+        }
     }
 }
 
