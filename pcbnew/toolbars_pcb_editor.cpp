@@ -256,24 +256,26 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
 
         config.AppendSeparator()
               .AppendAction( PCB_ACTIONS::drawLine )
-              .AppendAction( PCB_ACTIONS::drawArc )
-              .WithContextMenu(
-                  []( TOOL_MANAGER* aMgr ) -> std::unique_ptr<ACTION_MENU>
-                  {
-                      PCB_SELECTION_TOOL* selTool = aMgr->GetTool<PCB_SELECTION_TOOL>();
-                      std::unique_ptr<ACTION_MENU> menu =
-                              std::make_unique<ACTION_MENU>( false, selTool );
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Arc" ) )
+                            .AddAction( PCB_ACTIONS::drawArc )
+                            .AddAction( PCB_ACTIONS::drawEllipseArc )
+                            .AddContextMenu(
+                                []( TOOL_MANAGER* aMgr ) -> std::unique_ptr<ACTION_MENU>
+                                {
+                                    PCB_SELECTION_TOOL* selTool = aMgr->GetTool<PCB_SELECTION_TOOL>();
+                                    std::unique_ptr<ACTION_MENU> menu =
+                                            std::make_unique<ACTION_MENU>( false, selTool );
 
-                      menu->Add( ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK  );
-                      menu->Add( ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK  );
-                      menu->Add( ACTIONS::pointEditorArcKeepRadius, ACTION_MENU::CHECK  );
+                                    menu->Add( ACTIONS::pointEditorArcKeepCenter, ACTION_MENU::CHECK );
+                                    menu->Add( ACTIONS::pointEditorArcKeepEndpoint, ACTION_MENU::CHECK );
+                                    menu->Add( ACTIONS::pointEditorArcKeepRadius, ACTION_MENU::CHECK );
 
-                      return menu;
-                  } )
+                                    return menu;
+                                } ) )
               .AppendAction( PCB_ACTIONS::drawRectangle )
-              .AppendAction( PCB_ACTIONS::drawCircle )
-              .AppendAction( PCB_ACTIONS::drawEllipse )
-              .AppendAction( PCB_ACTIONS::drawEllipseArc )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Circle" ) )
+                            .AddAction( PCB_ACTIONS::drawCircle )
+                            .AddAction( PCB_ACTIONS::drawEllipse ) )
               .AppendAction( PCB_ACTIONS::drawPolygon )
               .AppendAction( PCB_ACTIONS::drawBezier )
               .AppendAction( PCB_ACTIONS::placeReferenceImage )
