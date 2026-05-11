@@ -416,7 +416,7 @@ void EDA_BASE_FRAME::onAutoSaveTimer( wxTimerEvent& aEvent )
 
 static wxString buildRecoveredFileName( const wxFileName& aSrcFn, const wxDateTime& aStamp )
 {
-    wxString stamp = aStamp.IsValid() ? aStamp.Format( wxS( "%Y-%m-%d_%H%M%S" ) ) : wxS( "unknown-time" );
+    wxString stamp = aStamp.IsValid() ? aStamp.Format( wxS( "%Y-%m-%d_%H%M%S" ) ) : wxString( wxS( "unknown-time" ) );
 
     wxFileName recovered( aSrcFn );
     recovered.SetName( aSrcFn.GetName() + wxS( ".recovered." ) + stamp );
