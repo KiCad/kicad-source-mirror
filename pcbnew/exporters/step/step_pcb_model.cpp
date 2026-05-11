@@ -534,19 +534,19 @@ static TopoDS_Shape getOneShape( Handle( XCAFDoc_ShapeTool ) aShapeTool )
 
 // Apply scaling to shapes within theLabel.
 // Based on XCAFDoc_Editor::RescaleGeometry
-static Standard_Boolean rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& aScale )
+static bool rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& aScale )
 {
     if( theLabel.IsNull() )
     {
         Message::SendFail( "Null label." );
-        return Standard_False;
+        return false;
     }
 
     if( Abs( aScale.X() ) <= gp::Resolution() || Abs( aScale.Y() ) <= gp::Resolution()
         || Abs( aScale.Z() ) <= gp::Resolution() )
     {
         Message::SendFail( "Scale factor is too small." );
-        return Standard_False;
+        return false;
     }
 
     Handle( XCAFDoc_ShapeTool ) aShapeTool = XCAFDoc_DocumentTool::ShapeTool( theLabel );
@@ -554,7 +554,7 @@ static Standard_Boolean rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& 
     if( aShapeTool.IsNull() )
     {
         Message::SendFail( "Couldn't find XCAFDoc_ShapeTool attribute." );
-        return Standard_False;
+        return false;
     }
 
     Handle( KI_XCAFDoc_AssemblyGraph ) aG = new KI_XCAFDoc_AssemblyGraph( theLabel );
@@ -562,10 +562,10 @@ static Standard_Boolean rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& 
     if( aG.IsNull() )
     {
         Message::SendFail( "Couldn't create assembly graph." );
-        return Standard_False;
+        return false;
     }
 
-    Standard_Boolean anIsDone = Standard_True;
+    bool anIsDone = true;
 
     // clang-format off
     gp_GTrsf aGTrsf;
@@ -591,7 +591,7 @@ static Standard_Boolean rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& 
         if( aNodeType == KI_XCAFDoc_AssemblyGraph::NodeType_Part )
         {
             const TopoDS_Shape aShape = aShapeTool->GetShape( aLabel );
-            aBRepTrsf.Perform( aShape, Standard_True );
+            aBRepTrsf.Perform( aShape, true );
             if( !aBRepTrsf.IsDone() )
             {
                 Standard_SStream        aSS;
@@ -599,8 +599,8 @@ static Standard_Boolean rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& 
                 TDF_Tool::Entry( aLabel, anEntry );
                 aSS << "Shape " << anEntry << " is not scaled!";
                 Message::SendFail( aSS.str().c_str() );
-                anIsDone = Standard_False;
-                return Standard_False;
+                anIsDone = false;
+                return false;
             }
             TopoDS_Shape aScaledShape = aBRepTrsf.Shape();
             aShapeTool->SetShape( aLabel, aScaledShape );
@@ -632,7 +632,7 @@ static Standard_Boolean rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& 
 
     if( !anIsDone )
     {
-        return Standard_False;
+        return false;
     }
 
     aShapeTool->UpdateAssemblies();
@@ -643,8 +643,8 @@ static Standard_Boolean rescaleShapes( const TDF_Label& theLabel, const gp_XYZ& 
 
 static bool fuseShapes( auto& aInputShapes, TopoDS_Shape& aOutShape, REPORTER* aReporter )
 {
-    BRepAlgoAPI_Fuse     mkFuse;
-    TopTools_ListOfShape shapeArguments, shapeTools;
+    BRepAlgoAPI_Fuse               mkFuse;
+    NCollection_List<TopoDS_Shape> shapeArguments, shapeTools;
 
     for( TopoDS_Shape& sh : aInputShapes )
     {
@@ -766,8 +766,7 @@ static TopoDS_Compound makeCompound( const auto& aInputShapes )
 
 
 // Try to fuse shapes. If that fails, just add them to a compound
-static TopoDS_Shape fuseShapesOrCompound( const TopTools_ListOfShape& aInputShapes,
-                                          REPORTER* aReporter )
+static TopoDS_Shape fuseShapesOrCompound( const NCollection_List<TopoDS_Shape>& aInputShapes, REPORTER* aReporter )
 {
     TopoDS_Shape outShape;
 
@@ -782,7 +781,7 @@ static TopoDS_Shape fuseShapesOrCompound( const TopTools_ListOfShape& aInputShap
 
 
 // Sets names in assembly to <aPrefix> (<old name>), or to <aPrefix>
-static Standard_Boolean prefixNames( const TDF_Label&                  aLabel,
+static bool prefixNames( const TDF_Label&                  aLabel,
                                      const TCollection_ExtendedString& aPrefix )
 {
     Handle( KI_XCAFDoc_AssemblyGraph ) aG = new KI_XCAFDoc_AssemblyGraph( aLabel );
@@ -790,10 +789,10 @@ static Standard_Boolean prefixNames( const TDF_Label&                  aLabel,
     if( aG.IsNull() )
     {
         Message::SendFail( "Couldn't create assembly graph." );
-        return Standard_False;
+        return false;
     }
 
-    Standard_Boolean anIsDone = Standard_True;
+    bool anIsDone = true;
 
     for( Standard_Integer idx = 1; idx <= aG->NbNodes(); idx++ )
     {
@@ -1004,7 +1003,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
         // Fuse pad shapes here before fusing them with tracks because OCCT sometimes has trouble
         if( m_fuseShapes )
         {
-            TopTools_ListOfShape padShapesList;
+            NCollection_List<TopoDS_Shape> padShapesList;
 
             for( const TopoDS_Shape& shape : padShapes )
                 padShapesList.Append( shape );
@@ -2634,14 +2633,14 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
                         Bnd_Box shapeBbox;
                         BRepBndLib::Add( shape, shapeBbox );
 
-                        TopTools_ListOfShape holelist;
+                        NCollection_List<TopoDS_Shape> holelist;
 
                         {
                             std::unique_lock lock( mutex );
 
-                            const TColStd_ListOfInteger& indices = aBSBHoles.Compare( shapeBbox );
+                            const NCollection_List<int>& indices = aBSBHoles.Compare( shapeBbox );
 
-                            for( const Standard_Integer& index : indices )
+                            for( const int& index : indices )
                                 holelist.Append( aHolesList[index] );
 
                             // Workaround for OCCT bug (https://github.com/Open-Cascade-SAS/OCCT/issues/506)
@@ -2661,7 +2660,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
                         if( holelist.IsEmpty() )
                             return; // nothing to cut for this shape
 
-                        TopTools_ListOfShape cutArgs;
+                        NCollection_List<TopoDS_Shape> cutArgs;
                         cutArgs.Append( shape );
 
                         BRepAlgoAPI_Cut cut;
@@ -2743,7 +2742,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, const VECTOR2D& aOrigi
 
     if( m_fuseShapes )
     {
-        std::map<wxString, TopTools_ListOfShape> shapesToFuseMap;
+        std::map<wxString, NCollection_List<TopoDS_Shape>> shapesToFuseMap;
 
         auto addShapes = [&shapesToFuseMap]( const wxString&                  aNetname,
                                              const std::vector<TopoDS_Shape>& aShapes )
@@ -3081,8 +3080,8 @@ bool STEP_PCB_MODEL::WriteIGES( const wxString& aFileName )
     wxFileName fn( aFileName );
     IGESControl_Controller::Init();
     IGESCAFControl_Writer writer;
-    writer.SetColorMode( Standard_True );
-    writer.SetNameMode( Standard_True );
+    writer.SetColorMode( true );
+    writer.SetNameMode( true );
     IGESData_GlobalSection header = writer.Model()->GlobalSection();
     header.SetFileName( new TCollection_HAsciiString( fn.GetFullName().ToAscii() ) );
     header.SetSendName( new TCollection_HAsciiString( "KiCad electronic assembly" ) );
@@ -3090,7 +3089,7 @@ bool STEP_PCB_MODEL::WriteIGES( const wxString& aFileName )
     header.SetCompanyName( new TCollection_HAsciiString( Interface_Static::CVal( "write.iges.header.company" ) ) );
     writer.Model()->SetGlobalSection( header );
 
-    if( Standard_False == writer.Perform( m_doc, aFileName.c_str() ) )
+    if( false == writer.Perform( m_doc, aFileName.c_str() ) )
         return false;
 
     return true;
@@ -3151,8 +3150,8 @@ bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName, bool aOptimize, bool 
     wxFileName fn( aFileName );
 
     STEPCAFControl_Writer writer;
-    writer.SetColorMode( Standard_True );
-    writer.SetNameMode( Standard_True );
+    writer.SetColorMode( true );
+    writer.SetNameMode( true );
 
     // This must be set before we "transfer" the document.
     // Should default to kicad_pcb.general.title_block.title,
@@ -3173,7 +3172,7 @@ bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName, bool aOptimize, bool 
                             RPT_SEVERITY_WARNING );
     }
 
-    if( Standard_False == writer.Transfer( m_doc, STEPControl_AsIs ) )
+    if( false == writer.Transfer( m_doc, STEPControl_AsIs ) )
         return false;
 
     APIHeaderSection_MakeHeader hdr( writer.ChangeWriter().Model() );
@@ -3199,7 +3198,7 @@ bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName, bool aOptimize, bool 
 
     wxString tmpfname( "$tempfile$.step" );
 
-    if( Standard_False == writer.Write( tmpfname.c_str() ) )
+    if( false == writer.Write( tmpfname.c_str() ) )
         success = false;
 
     if( compress && success )
@@ -3347,7 +3346,7 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
 #if OCC_VERSION_HEX < 0x070600
     BRepTools::Write( shape, file );
 #else
-    BRepTools::Write( shape, file, Standard_True, Standard_True, TopTools_FormatVersion_VERSION_1 );
+    BRepTools::Write( shape, file, true, true, TopTools_FormatVersion_VERSION_1 );
 #endif
     file << "]]></shape>" << std::endl;
     file << "    <topology>" << std::endl;
@@ -3919,7 +3918,7 @@ TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document ) & source,
     // with linked components work as well.
     TDF_Label d_targetLabel = d_assy->NewShape();
 
-    if( !XCAFDoc_Editor::Extract( frshapes, d_targetLabel, Standard_False ) )
+    if( !XCAFDoc_Editor::Extract( frshapes, d_targetLabel, false ) )
     {
         m_reporter->Report( wxT( "Failed to transfer model." ), RPT_SEVERITY_ERROR );
         return TDF_Label();
@@ -3950,10 +3949,10 @@ bool STEP_PCB_MODEL::performMeshing( Handle( XCAFDoc_ShapeTool ) & aShapeTool )
         // These deflection values basically affect the accuracy of the mesh generated, a tighter
         // deflection will result in larger meshes
         // We could make this a tunable parameter, but for now fix it
-        const Standard_Real      linearDeflection = 0.14;
-        const Standard_Real      angularDeflection = DEG2RAD( 30.0 );
-        BRepMesh_IncrementalMesh mesh( shape, linearDeflection, Standard_False, angularDeflection,
-                                       Standard_True );
+        const double      linearDeflection = 0.14;
+        const double      angularDeflection = DEG2RAD( 30.0 );
+        BRepMesh_IncrementalMesh mesh( shape, linearDeflection, false, angularDeflection,
+                                       true );
     }
 
     return true;

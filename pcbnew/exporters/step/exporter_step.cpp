@@ -80,14 +80,14 @@ protected:
 #if OCC_VERSION_HEX < OCC_VERSION_MIN
     virtual void Send( const TCollection_ExtendedString& theString,
                        const Message_Gravity theGravity,
-                       const Standard_Boolean theToPutEol ) const override
+                       const bool theToPutEol ) const override
     {
         Send( TCollection_AsciiString( theString ), theGravity, theToPutEol );
     }
 
     virtual void Send( const TCollection_AsciiString& theString,
                        const Message_Gravity theGravity,
-                       const Standard_Boolean theToPutEol ) const override
+                       const bool theToPutEol ) const override
 #else
     virtual void send( const TCollection_AsciiString& theString,
                        const Message_Gravity theGravity ) const override
