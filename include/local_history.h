@@ -199,7 +199,7 @@ private:
 
     /** Execute file writes and git commit on a background thread. */
     bool commitInBackground( const wxString& aProjectPath, const wxString& aTitle,
-                             const std::vector<HISTORY_FILE_DATA>& aFileData );
+                             const std::vector<HISTORY_FILE_DATA>& aFileData, bool aIsManualSave );
 
     std::set<wxString> m_pendingFiles;
     std::map<const void*,

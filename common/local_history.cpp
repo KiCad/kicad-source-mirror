@@ -333,7 +333,7 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
             [this, projectPath = aProjectPath, title = aTitle, tagFileType = aTagFileType,
              data = std::move( fileData )]() mutable -> bool
             {
-                bool result = commitInBackground( projectPath, title, data );
+                bool result = commitInBackground( projectPath, title, data, !tagFileType.IsEmpty() );
 
                 if( !tagFileType.IsEmpty() )
                     TagSave( projectPath, tagFileType );
@@ -597,7 +597,7 @@ void LOCAL_HISTORY::RemoveAutosaveFiles( const wxString& aProjectPath,
 
 
 bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxString& aTitle,
-                                        const std::vector<HISTORY_FILE_DATA>& aFileData )
+                                        const std::vector<HISTORY_FILE_DATA>& aFileData, bool aIsManualSave )
 {
     wxLogTrace( traceAutoSave, wxS("[history] background: writing %zu entries for '%s'"),
                 aFileData.size(), aProjectPath );
@@ -754,7 +754,7 @@ bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxSt
             }
         }
 
-        if( stagedMatchesDisk )
+        if( stagedMatchesDisk && !aIsManualSave )
         {
             wxLogTrace( traceAutoSave, wxS( "[history] background: first commit; staged matches disk -- skipping" ) );
             hasChanges = false;
