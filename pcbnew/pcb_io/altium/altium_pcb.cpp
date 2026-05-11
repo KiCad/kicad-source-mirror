@@ -3472,7 +3472,10 @@ void ALTIUM_PCB::ConvertVias6ToFootprintItem( FOOTPRINT* aFootprint, const AVIA6
     {
         pad->Padstack().SetMode( PADSTACK::MODE::CUSTOM );
 
-        LSET cuLayers = m_board->GetEnabledLayers() & LSET::AllCuMask();
+        LSET cuLayers = LSET::AllCuMask();
+
+        if( m_board )
+            cuLayers &= m_board->GetEnabledLayers();
 
         for( PCB_LAYER_ID layer : cuLayers )
         {
