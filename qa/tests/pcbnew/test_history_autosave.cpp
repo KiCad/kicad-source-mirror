@@ -511,8 +511,7 @@ BOOST_AUTO_TEST_CASE( CommitFullProjectSnapshotExcludesNonKiCadFiles )
 
 /**
  * Idle autosave on a fresh project (saver output == disk) must not create an untagged
- * HEAD.  Real edits (saver output != disk) must commit.  Manual-save (tagged) path used
- * so the call blocks on background completion; the skip behavior is shared with autosave.
+ * HEAD.  Real edits (saver output != disk) must commit.
  */
 BOOST_AUTO_TEST_CASE( FirstAutosaveSkipsCommitWhenStagedMatchesDisk )
 {
@@ -544,8 +543,9 @@ BOOST_AUTO_TEST_CASE( FirstAutosaveSkipsCommitWhenStagedMatchesDisk )
 
     history.RegisterSaver( &history, saver );
 
-    // Saver output matches disk, must skip.
-    BOOST_REQUIRE( history.RunRegisteredSaversAndCommit( path, wxS( "Test" ), wxS( "test" ) ) );
+    // Saver output matches disk, must skip (autosave path: empty tagFileType).
+    BOOST_REQUIRE( history.RunRegisteredSaversAndCommit( path, wxS( "Autosave" ), wxEmptyString ) );
+    history.WaitForPendingSave();
 
     wxString histDir = path + wxFileName::GetPathSeparator() + wxS( ".history" );
     BOOST_CHECK( wxDirExists( histDir ) );
@@ -556,10 +556,55 @@ BOOST_AUTO_TEST_CASE( FirstAutosaveSkipsCommitWhenStagedMatchesDisk )
     // Real edit, must commit.
     inMemoryContent = "(kicad_pcb (version 20240108) (edited yes))\n";
 
-    BOOST_REQUIRE( history.RunRegisteredSaversAndCommit( path, wxS( "Test" ), wxS( "test" ) ) );
+    BOOST_REQUIRE( history.RunRegisteredSaversAndCommit( path, wxS( "Autosave" ), wxEmptyString ) );
+    history.WaitForPendingSave();
 
     head = history.GetHeadHash( path );
     BOOST_CHECK_MESSAGE( !head.IsEmpty(), "in-memory edits diverging from disk must produce a commit" );
+
+    history.UnregisterSaver( &history );
+}
+
+
+/**
+ * Manual save on a fresh project (saver output == disk) must still commit, so the user's
+ * first explicit save shows up in the history dialog.  Counterpart to
+ * FirstAutosaveSkipsCommitWhenStagedMatchesDisk.
+ */
+BOOST_AUTO_TEST_CASE( FirstManualSaveAlwaysCommitsOnFreshProject )
+{
+    LIBGIT2_SCOPE libgit;
+
+    bool&                backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
+    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
+    backupEnabled = true;
+
+    SCOPED_TEMP_DIR project( wxS( "kicad_qa_first_manual_save" ) );
+    const wxString& path = project.Path();
+
+    writeTextFile( path + wxFileName::GetPathSeparator() + wxS( "p.kicad_pro" ), wxS( "{}\n" ) );
+    writeTextFile( path + wxFileName::GetPathSeparator() + wxS( "p.kicad_pcb" ),
+                   wxS( "(kicad_pcb (version 20240108))\n" ) );
+
+    LOCAL_HISTORY history;
+
+    std::string inMemoryContent = "(kicad_pcb (version 20240108))\n";
+
+    auto saver = [&inMemoryContent]( const wxString&, std::vector<HISTORY_FILE_DATA>& aFileData )
+    {
+        HISTORY_FILE_DATA entry;
+        entry.relativePath = wxS( "p.kicad_pcb" );
+        entry.content = inMemoryContent;
+        aFileData.push_back( std::move( entry ) );
+    };
+
+    history.RegisterSaver( &history, saver );
+
+    // Manual save (non-empty tagFileType) on fresh project: commit even when staged matches disk.
+    BOOST_REQUIRE( history.RunRegisteredSaversAndCommit( path, wxS( "Manual Save" ), wxS( "pcb" ) ) );
+
+    wxString head = history.GetHeadHash( path );
+    BOOST_CHECK_MESSAGE( !head.IsEmpty(), "manual save on a fresh project must commit even when staged matches disk" );
 
     history.UnregisterSaver( &history );
 }
