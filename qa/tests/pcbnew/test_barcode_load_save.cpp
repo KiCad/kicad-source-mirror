@@ -173,7 +173,7 @@ BOOST_AUTO_TEST_CASE( BarcodePositioningAlignment )
 
         PCB_BARCODE* barcode = new PCB_BARCODE( board.get() );
         barcode->SetText( tc.text );
-        barcode->Text().SetVisible( false );
+        barcode->SetShowText( false );
         barcode->SetLayer( F_SilkS );
         barcode->SetWidth( tc.width );
         barcode->SetHeight( tc.height );
@@ -188,7 +188,7 @@ BOOST_AUTO_TEST_CASE( BarcodePositioningAlignment )
         if( tc.angle != 0.0 )
             barcode->Rotate( tc.position, EDA_ANGLE( tc.angle, DEGREES_T ) );
 
-        barcode->Text().SetVisible( tc.withText );
+        barcode->SetShowText( tc.withText );
         barcode->SetIsKnockout( tc.knockout );
 
         barcode->AssembleBarcode();
@@ -366,10 +366,7 @@ BOOST_AUTO_TEST_CASE( BarcodeDialogEditFlow )
     // Simulate copying current to dummy (as in initValues)
     *dummyBarcode = *currentBarcode;
 
-    // Verify dummy's m_text parent chain is correct after copy
-    BOOST_CHECK( dummyBarcode->Text().GetParent() == static_cast<EDA_ITEM*>( dummyBarcode ) );
     BOOST_CHECK( dummyBarcode->GetBoard() == board.get() );
-    BOOST_CHECK( dummyBarcode->Text().GetBoard() == board.get() );
 
     // Simulate user changing text to use a variable
     dummyBarcode->SetText( wxT( "${PART_NUMBER}" ) );

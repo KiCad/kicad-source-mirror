@@ -195,7 +195,7 @@ bool DIALOG_BARCODE_PROPERTIES::TransferDataToWindow()
     m_orientation.ChangeAngleValue( m_dummyBarcode->GetAngle() );
 
     // Show text option
-    m_cbShowText->SetValue( m_dummyBarcode->Text().IsVisible() );
+    m_cbShowText->SetValue( m_dummyBarcode->GetShowText() );
 
     m_cbKnockout->SetValue( m_dummyBarcode->IsKnockout() );
     m_knockoutMarginX.ChangeValue( m_dummyBarcode->GetMargin().x );
@@ -287,7 +287,7 @@ bool DIALOG_BARCODE_PROPERTIES::transferDataToBarcode( PCB_BARCODE* aBarcode )
     aBarcode->SetMargin( VECTOR2I( m_knockoutMarginX.GetIntValue(), m_knockoutMarginY.GetIntValue() ) );
 
     // Show text
-    aBarcode->Text().SetVisible( m_cbShowText->GetValue() );
+    aBarcode->SetShowText( m_cbShowText->GetValue() );
 
     // Barcode kind
     switch( m_barcode->GetSelection() )

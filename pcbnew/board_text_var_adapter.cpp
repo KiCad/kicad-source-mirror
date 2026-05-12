@@ -22,6 +22,7 @@
 
 #include <eda_text.h>
 #include <footprint.h>
+#include <pcb_barcode.h>
 #include <pcb_field.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
@@ -47,6 +48,15 @@ void BOARD_TEXT_VAR_ADAPTER::registerItem( BOARD_ITEM* aItem )
 
     if( !text )
     {
+        // PCB_BARCODE wraps an EDA_TEXT internally; register the barcode itself
+        // (not its inner PCB_TEXT) so invalidation callbacks receive the barcode
+        // as the dependent and the view can repaint it.
+        if( PCB_BARCODE* bc = dynamic_cast<PCB_BARCODE*>( aItem ) )
+        {
+            m_tracker.RegisterItem( aItem, FilterTrackable( bc->GetTextVarReferences() ) );
+            return;
+        }
+
         // FOOTPRINTs aren't themselves EDA_TEXT. Walk both their fields AND
         // their graphical items — silkscreen/copper/courtyard layers can
         // carry PCB_TEXT/PCB_TEXTBOX that reference `${...}`.
@@ -123,6 +133,10 @@ void BOARD_TEXT_VAR_ADAPTER::OnBoardItemChanged( BOARD&, BOARD_ITEM* aItem )
     {
         std::vector<TEXT_VAR_REF_KEY> updated = FilterTrackable( text->GetTextVarReferences() );
         m_tracker.HandleItemChanged( aItem, updated );
+    }
+    else if( PCB_BARCODE* bc = dynamic_cast<PCB_BARCODE*>( aItem ) )
+    {
+        m_tracker.HandleItemChanged( aItem, FilterTrackable( bc->GetTextVarReferences() ) );
     }
     else
     {

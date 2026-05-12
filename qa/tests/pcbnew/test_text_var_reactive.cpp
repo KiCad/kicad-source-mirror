@@ -24,6 +24,7 @@
 #include <board_text_var_adapter.h>
 #include <footprint.h>
 #include <netinfo.h>
+#include <pcb_barcode.h>
 #include <pcb_field.h>
 #include <pcb_text.h>
 #include <pcbnew_utils/board_test_utils.h>
@@ -228,6 +229,69 @@ BOOST_AUTO_TEST_CASE( RemoveAllNetInfoDoesNotUseDeletedPointers )
     // BOARD_TEXT_VAR_ADAPTER installed in the BOARD constructor) must not see
     // dangling pointers.
     BOOST_CHECK_NO_THROW( board.RemoveAll() );
+}
+
+
+BOOST_AUTO_TEST_CASE( BarcodeIsRegisteredOnAdd )
+{
+    BOARD        board;
+    TOOL_MANAGER mgr;
+    mgr.SetEnvironment( &board, nullptr, nullptr, nullptr, nullptr );
+    KI_TEST::DUMMY_TOOL* tool = new KI_TEST::DUMMY_TOOL();
+    mgr.RegisterTool( tool );
+    BOARD_COMMIT commit( tool );
+
+    PCB_BARCODE* barcode = new PCB_BARCODE( &board );
+    barcode->SetText( wxT( "${SN}" ) );
+    commit.Add( barcode );
+    commit.Push( wxT( "add barcode" ), 0 );
+
+    const TEXT_VAR_DEPENDENCY_INDEX& index = board.GetTextVarAdapter()->Tracker().Index();
+    BOOST_CHECK_EQUAL( index.DependentCount( TEXT_VAR_REF_KEY::FromToken( wxT( "SN" ) ) ), 1u );
+}
+
+
+BOOST_AUTO_TEST_CASE( BarcodeInvalidationFires )
+{
+    BOARD        board;
+    TOOL_MANAGER mgr;
+    mgr.SetEnvironment( &board, nullptr, nullptr, nullptr, nullptr );
+    KI_TEST::DUMMY_TOOL* tool = new KI_TEST::DUMMY_TOOL();
+    mgr.RegisterTool( tool );
+
+    {
+        BOARD_COMMIT commit( tool );
+        FOOTPRINT*   fp = new FOOTPRINT( &board );
+        fp->SetReference( wxT( "U1" ) );
+        fp->SetValue( wxT( "10k" ) );
+        commit.Add( fp );
+
+        PCB_BARCODE* barcode = new PCB_BARCODE( &board );
+        barcode->SetText( wxT( "${U1:Value}" ) );
+        commit.Add( barcode );
+
+        commit.Push( wxT( "seed" ), 0 );
+    }
+
+    std::vector<EDA_ITEM*> invalidations;
+    (void) board.GetTextVarAdapter()->Tracker().AddInvalidateListener(
+            [&]( EDA_ITEM* dep, const TEXT_VAR_REF_KEY& )
+            {
+                invalidations.push_back( dep );
+            } );
+
+    FOOTPRINT*   fp = board.Footprints().front();
+    BOARD_COMMIT commit( tool );
+    commit.Modify( fp );
+    fp->SetValue( wxT( "100k" ) );
+    commit.Push( wxT( "edit value" ), 0 );
+
+    bool sawBarcode = std::any_of( invalidations.begin(), invalidations.end(),
+                                   []( EDA_ITEM* item )
+                                   {
+                                       return item && item->Type() == PCB_BARCODE_T;
+                                   } );
+    BOOST_CHECK( sawBarcode );
 }
 
 
