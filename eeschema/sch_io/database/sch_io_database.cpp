@@ -168,7 +168,8 @@ LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
         }
     }
 
-    wxCHECK( foundTable, nullptr );
+    if( !foundTable )
+        return nullptr;
 
     return loadSymbolFromRow( aAliasName, *foundTable, result ).release();
 }
