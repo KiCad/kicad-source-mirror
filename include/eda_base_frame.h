@@ -690,7 +690,7 @@ protected:
      *
      * @param aProjectPath path to the project directory.
      */
-    void CheckForAutosaveFiles( const wxString& aProjectPath );
+    void CheckForAutosaveFiles( const wxString& aProjectPath, const std::vector<wxString>& aExtensions );
 
     virtual bool canCloseWindow( wxCloseEvent& aCloseEvent ) { return true; }
     virtual void doCloseWindow() { }

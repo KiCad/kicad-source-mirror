@@ -127,22 +127,23 @@ public:
 
     /**
      * Enumerate autosave files newer than their corresponding source files for the
-     * project at @p aProjectPath.  Used by editors at startup to detect crash-recovery
-     * candidates.
+     * project at @p aProjectPath, restricted to sources whose extension is in
+     * @p aExtensions.  Used by editors at startup to detect crash-recovery
+     * candidates for files they own.
      *
      * Each entry in the returned vector has:
      *   first  - autosave file path
      *   second - corresponding source path under the project directory
      */
-    std::vector<std::pair<wxString, wxString>>
-            FindStaleAutosaveFiles( const wxString& aProjectPath ) const;
+    std::vector<std::pair<wxString, wxString>> FindStaleAutosaveFiles( const wxString&              aProjectPath,
+                                                                       const std::vector<wxString>& aExtensions ) const;
 
     /**
      * Remove every autosave file under the project at @p aProjectPath regardless of
-     * which source it shadowed.  Used when the user declines crash recovery so the
-     * stale set is not re-prompted next launch.  Manual-save callers should prefer the
-     * source-scoped overload below to avoid wiping autosaves for files this save did
-     * not actually persist.
+     * which source it shadowed.  Used by the project manager to sweep autosaves on
+     * project close so nothing is left to prompt on next launch.  Manual-save callers
+     * should prefer the source-scoped overload below to avoid wiping autosaves for
+     * files this save did not actually persist.
      */
     void RemoveAutosaveFiles( const wxString& aProjectPath ) const;
 
