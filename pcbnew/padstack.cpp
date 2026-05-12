@@ -1279,12 +1279,19 @@ PCB_LAYER_ID PADSTACK::EffectiveLayerFor( PCB_LAYER_ID aLayer ) const
 
     if( m_mode == MODE::FRONT_INNER_BACK || IsNonCopperLayer( aLayer ) )
     {
+        PCB_LAYER_ID candidate;
+
         if( IsFrontLayer( aLayer ) )
-            return F_Cu;
+            candidate = F_Cu;
         else if( IsBackLayer( aLayer ) )
-            return B_Cu;
+            candidate = B_Cu;
         else
-            return INNER_LAYERS;
+            candidate = INNER_LAYERS;
+
+        // FRONT_INNER_BACK always has all three sides.
+        // In CUSTOM mode only return the side if the pad actually defines it.
+        if( m_mode == MODE::FRONT_INNER_BACK || m_copperProps.count( candidate ) )
+            return candidate;
     }
 
     if( m_copperProps.count( aLayer ) )
