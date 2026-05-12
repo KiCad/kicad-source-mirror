@@ -312,6 +312,8 @@ set( PCBNEW_ZONE_TESTS
 :OffCenterTeardropSymmetry\
 :RegressionKeepoutBoundaryMissingFill\
 :HatchZoneViaConnectionRespectsSetting\
+:RegressionCascadingIslandRefill\
+:IterativeRefillConvergenceLimit\
 :Zone" )
 
 # Allegro importer tests (~31s)
@@ -392,6 +394,8 @@ set( PCBNEW_EXCLUDED_FROM_OTHER
 :!OffCenterTeardropSymmetry\
 :!RegressionKeepoutBoundaryMissingFill\
 :!HatchZoneViaConnectionRespectsSetting\
+:!RegressionCascadingIslandRefill\
+:!IterativeRefillConvergenceLimit\
 :!Zone\
 :!AllegroBlocks\
 :!AllegroBoards\

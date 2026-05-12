@@ -2467,3 +2467,130 @@ BOOST_FIXTURE_TEST_CASE( HatchZoneViaConnectionRespectsSetting, ZONE_FILL_TEST_F
                                  "added for FULL connection (issue 23516 regression).",
                                  thermalFillArea * areaIU2toMM2, fullFillArea * areaIU2toMM2 ) );
 }
+
+
+/**
+ * Regression test for cascading island removal during iterative zone refill.
+ *
+ * Board layout (all zones on F.Cu):
+ *   hi1           - fully filled plane (lowest priority, base zone)
+ *   lo1,lo3,lo5   - small standalone zones, no merging with other zones
+ *   hi2,hi4,hi6   - small standalone zones, no merging with other zones
+ *   lo2,lo4,lo6   - each merged (same net, copper connects) with one part of
+ *                   the corresponding hi zone: lo2↔hi3, lo4↔hi5, lo6↔hi7
+ *   hi3,hi5,hi7   - each split into two copper islands: one standalone,
+ *                   one merged with the corresponding lo zone above
+ *
+ * Expected island counts after correct iterative refill:
+ *   2 islands: hi3, hi5, hi7
+ *   1 island:  lo1, lo2, lo3, lo4, lo5, lo6, hi2, hi4, hi6
+ *   hi1: at least one island (full plane, exact count not asserted)
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionCascadingIslandRefill, ZONE_FILL_TEST_FIXTURE )
+{
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    bool          originalIterativeRefill = cfg.m_ZoneFillIterativeRefill;
+    cfg.m_ZoneFillIterativeRefill = true;
+
+    struct ScopeGuard
+    {
+        bool& ref;
+        bool  orig;
+        ~ScopeGuard() { ref = orig; }
+    } guard{ cfg.m_ZoneFillIterativeRefill, originalIterativeRefill };
+
+    KI_TEST::LoadBoard( m_settingsManager, "zone_refill_cascading_islands", m_board );
+    KI_TEST::FillZones( m_board.get() );
+
+    const std::vector<std::string> checkedNames = { "hi1", "hi2", "hi3", "hi4", "hi5", "hi6", "hi7",
+                                                    "lo1", "lo2", "lo3", "lo4", "lo5", "lo6" };
+    std::map<std::string, ZONE*>   zoneByName;
+
+    for( ZONE* zone : m_board->Zones() )
+        zoneByName[zone->GetZoneName().ToStdString()] = zone;
+
+    for( const std::string& name : checkedNames )
+    {
+        BOOST_REQUIRE_MESSAGE( zoneByName.count( name ), "Zone '" + name + "' not found in test board" );
+        BOOST_REQUIRE_MESSAGE( zoneByName[name]->HasFilledPolysForLayer( F_Cu ),
+                               "Zone '" + name + "' has no fill on F.Cu" );
+    }
+
+    // hi3, hi5, hi7 each split into two copper islands (one standalone, one merged with lo2/lo4/lo6).
+    for( const std::string& name : { "hi3", "hi5", "hi7" } )
+    {
+        int islands = zoneByName[name]->GetFilledPolysList( F_Cu )->OutlineCount();
+
+        BOOST_CHECK_MESSAGE( islands == 2, wxString::Format( "Zone '%s' should have 2 filled islands but has %d. "
+                                                             "Cascading island removal did not converge correctly.",
+                                                             name, islands ) );
+    }
+
+    // All lo zones and hi2/hi4/hi6 are single zones.
+    for( const std::string& name : { "lo1", "lo2", "lo3", "lo4", "lo5", "lo6", "hi2", "hi4", "hi6" } )
+    {
+        int islands = zoneByName[name]->GetFilledPolysList( F_Cu )->OutlineCount();
+
+        BOOST_CHECK_MESSAGE( islands == 1, wxString::Format( "Zone '%s' should have 1 filled island but has %d. "
+                                                             "Iterative refill may have incorrectly blocked or "
+                                                             "expanded this zone.",
+                                                             name, islands ) );
+    }
+}
+
+
+/**
+ * Test that iterative zone refill terminates and warns when it cannot converge.
+ *
+ * The board has overlapping zones arranged so that island removal in one zone
+ * triggers island removal in another in an oscillating pattern that cannot
+ * reach a stable state - ever.
+ *
+ * The test verifies:
+ *   1. Fill() completes without hanging (the iteration cap is enforced).
+ *   2. A wxLogWarning is emitted, confirming the cap was hit rather than
+ *      a silent wrong result being returned.
+ */
+BOOST_FIXTURE_TEST_CASE( IterativeRefillConvergenceLimit, ZONE_FILL_TEST_FIXTURE )
+{
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    bool          originalIterativeRefill = cfg.m_ZoneFillIterativeRefill;
+    cfg.m_ZoneFillIterativeRefill = true;
+
+    struct ScopeGuard
+    {
+        bool& ref;
+        bool  orig;
+        ~ScopeGuard() { ref = orig; }
+    } guard{ cfg.m_ZoneFillIterativeRefill, originalIterativeRefill };
+
+    // Capture wxLogWarning calls so we can assert that the iteration cap fires.
+    class WarningCapture : public wxLog
+    {
+    public:
+        bool m_hadWarning = false;
+
+    protected:
+        void DoLogRecord( wxLogLevel aLevel, const wxString&, const wxLogRecordInfo& ) override
+        {
+            if( aLevel == wxLOG_Warning )
+                m_hadWarning = true;
+        }
+    };
+
+    auto*  capture = new WarningCapture();
+    wxLog* oldLog = wxLog::SetActiveTarget( capture );
+
+    struct LogGuard
+    {
+        wxLog* old;
+        ~LogGuard() { wxLog::SetActiveTarget( old ); }
+    } logGuard{ oldLog };
+
+    KI_TEST::LoadBoard( m_settingsManager, "zone_refill_convergence_limit", m_board );
+    KI_TEST::FillZones( m_board.get() );
+
+    BOOST_CHECK_MESSAGE( capture->m_hadWarning, "Expected a wxLogWarning when iterative refill hits the iteration "
+                                                "limit, but none was emitted.  The convergence-limit board may no "
+                                                "longer trigger the cap, or the warning path has changed." );
+}

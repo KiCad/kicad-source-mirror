@@ -170,11 +170,21 @@ private:
     void postKnockoutMinWidthPrune( const ZONE* aZone, SHAPE_POLY_SET& aFillPolys );
 
     /**
+     * Snapshot of zone fill polygons captured before an iterative refill wave.
+     */
+    using FillSnapshot = std::map<std::pair<const ZONE*, PCB_LAYER_ID>, SHAPE_POLY_SET>;
+
+    /**
      * Refill a zone from cached pre-knockout fill.
      * Used during iterative refill to avoid recomputing thermal reliefs and copper clearances.
      * Only re-applies the higher-priority zone knockout with updated fills.
+     *
+     * @param aSnapshot: If non-null, fills of other zones are read from the snapshot instead
+     * of from the live zone objects, ensuring all tasks in a parallel wave see the same
+     * pre-wave state.
      */
-    bool refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFillPolys );
+    bool refillZoneFromCache( ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFillPolys,
+                              const FillSnapshot* aSnapshot = nullptr );
 
     BOARD*                m_board;
     SHAPE_POLY_SET        m_boardOutline;       // the board outlines, if exists
