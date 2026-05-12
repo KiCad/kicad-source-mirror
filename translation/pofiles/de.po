@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-11 13:11+0000\n"
+"PO-Revision-Date: 2026-05-13 19:11+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.5-dev\n"
+"X-Generator: Weblate 2026.5.dev0\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -5874,9 +5874,8 @@ msgid "Minimum copper clearance"
 msgstr "Minimaler Kupferfreiraum"
 
 #: common/dialogs/panel_setup_netclasses.cpp:704
-#, fuzzy
 msgid "Optimum track width"
-msgstr "Minimale Leiterbahnbreite"
+msgstr "Optimale Leiterbahnbreite"
 
 #: common/dialogs/panel_setup_netclasses.cpp:705
 msgid "Via pad diameter"
@@ -8663,20 +8662,17 @@ msgstr "PCB: PDF exportieren"
 
 #: common/jobs/job_export_pcb_png.cpp:37
 #: common/jobs/job_export_sch_plot.cpp:209 kicad/kicad_cli.cpp:195
-#, fuzzy
 msgid "Export PNG"
-msgstr "HPGL exportieren"
+msgstr "PNG exportieren"
 
 #: common/jobs/job_export_pcb_png.cpp:43
 #: common/jobs/job_export_sch_plot.cpp:215
-#, fuzzy
 msgid "Export PNG Job Settings"
-msgstr "PDF-Auftragseinstellungen exportieren"
+msgstr "PNG-Auftragseinstellungen exportieren"
 
 #: common/jobs/job_export_pcb_png.cpp:47
-#, fuzzy
 msgid "PCB: Export PNG"
-msgstr "PCB: HPGL exportieren"
+msgstr "PCB: PNG exportieren"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
 msgid "Export position data"
@@ -8774,9 +8770,8 @@ msgid "Schematic: Export PDF"
 msgstr "Schaltplan: PDF exportieren"
 
 #: common/jobs/job_export_sch_plot.cpp:229
-#, fuzzy
 msgid "Schematic: Export PNG"
-msgstr "Schaltplan: HPGL exportieren"
+msgstr "Schaltplan: PNG exportieren"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
 msgid "Schematic PythonBOM export"
@@ -9529,15 +9524,15 @@ msgstr "Unerwarteter Fehler beim Schreiben der Bibliothekstabelle"
 
 #: common/local_history.cpp:1560
 msgid "Compacting local history..."
-msgstr "Fasse lokalen Verlauf zusammen..."
+msgstr "Fasse lokalen Verlauf zusammen ..."
 
 #: common/local_history.cpp:1757
 msgid "Trimming local history..."
-msgstr "Kürze lokalen Verlauf..."
+msgstr "Kürze lokalen Verlauf ..."
 
 #: common/local_history.cpp:1850
 msgid "Compacting trimmed history..."
-msgstr "Fasse gekürzten lokalen Verlauf zusammen..."
+msgstr "Fasse gekürzten lokalen Verlauf zusammen ..."
 
 #: common/local_history.cpp:2196
 msgid ""
@@ -12782,7 +12777,7 @@ msgid ""
 msgstr ""
 "Skript-Datei:\n"
 "%s\n"
-"wurde nicht gefunden. Skript ist nicht nutzbar."
+"wurde nicht gefunden. Skript ist nicht verfügbar."
 
 #: eeschema/connection_graph.cpp:3689
 #, c-format
@@ -12813,7 +12808,7 @@ msgid ""
 "Hierarchical label '%s' in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"Hierarchischer Bezeichner \"%s\" in Hauptschaltplanblatt kann nicht zu nicht-"
+"Hierarchischer Bezeichner \"%s\" im Hauptschaltplanblatt kann nicht zu nicht-"
 "vorhandenem übergeordneten Schaltplanblatt verbunden werden"
 
 #: eeschema/connection_graph.cpp:4719
@@ -13875,23 +13870,23 @@ msgstr "ERC-Auftragseinstellungen"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:272
 msgid "Export netlist in KiCad format"
-msgstr "Netzliste in KiCad-Format exportieren"
+msgstr "Netzliste im KiCad-Format exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:277
 msgid "Export netlist in OrcadPCB2 format"
-msgstr "Netzliste in OrcadPCB2-Format exportieren"
+msgstr "Netzliste im OrcadPCB2-Format exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:282
 msgid "Export netlist in Allegro format"
-msgstr "Netzliste in Allegro-Format exportieren"
+msgstr "Netzliste im Allegro-Format exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:287
 msgid "Export netlist in CadStar format"
-msgstr "Netzliste in CadStar-Format exportieren"
+msgstr "Netzliste im CadStar-Format exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:292
 msgid "Export netlist in PADS format"
-msgstr "Netzliste in PADS-Format exportieren"
+msgstr "Netzliste im PADS-Format exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:305
 #: eeschema/dialogs/dialog_export_netlist_base.h:66
@@ -13900,7 +13895,7 @@ msgstr "Netzliste exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 msgid "Export netlist in SPICE format"
-msgstr "Netzliste in SPICE-Format exportieren"
+msgstr "Netzliste im SPICE-Format exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:352
 #: eeschema/dialogs/dialog_export_netlist.cpp:397
@@ -16001,14 +15996,13 @@ msgstr "Einheit für Export:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:177
 #: pcbnew/dialogs/dialog_plot_base.cpp:451
-#, fuzzy
 msgid "PNG Options"
-msgstr "HPGL-Optionen"
+msgstr "PNG-Optionen"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:184
 #: pcbnew/dialogs/dialog_plot_base.cpp:458
 msgid "DPI:"
-msgstr ""
+msgstr "DPI:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:191
 #: pcbnew/dialogs/dialog_plot_base.cpp:465
@@ -16251,28 +16245,30 @@ msgid "Project Rescue Helper"
 msgstr "Assistent für Projekt-Rettung"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:39
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "%zu symbols have user fields whose names differ only in case. Choose how to "
 "resolve each before opening the table."
 msgstr ""
+"%zu Symbole haben Benutzerfelder, deren Namen sich nur in einem Fall "
+"unterscheiden. Wählen Sie vor dem Öffnen der Tabelle, wie jeder aufgelöst "
+"werden soll."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:45
 #, fuzzy
 msgid "Apply and Continue"
-msgstr "Anwenden und schließen"
+msgstr "Anwenden und fortsetzen"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:75
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:78
-#, fuzzy
 msgid "(empty)"
-msgstr "<leer>"
+msgstr "(leer)"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:85
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:86
 #, fuzzy, c-format
 msgid "Keep '%s'"
-msgstr "Text \"%s\""
+msgstr "\"%s\" behalten"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:87
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:137
@@ -16282,17 +16278,22 @@ msgstr "Werte zusammenführen"
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:215
 #, fuzzy
 msgid "Resolve duplicate field names"
-msgstr "Entferne redundante Leiterbahnen"
+msgstr "Doppelte Feldnamen auflösen"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:19
+#, fuzzy
 msgid ""
 "Some symbols have user fields whose names differ only in case. Choose how to "
 "resolve each before opening the table."
 msgstr ""
+"Einige Symbole haben Benutzerfelder, deren Namen sich nur in einem Fall "
+"unterscheiden. Wählen Sie vor dem Öffnen der Tabelle, wie jeder aufgelöst "
+"werden soll."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:64
+#, fuzzy
 msgid "Apply same choice to all conflicts of the same field name"
-msgstr ""
+msgstr "Dieselbe Wahl auf alle Konflikte mit demselben Feldnamen anwenden"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:71
 msgid "Join separator:"
@@ -16300,7 +16301,7 @@ msgstr "Zusammenführungs-Trennzeichen:"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:75
 msgid "; "
-msgstr ""
+msgstr "; "
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:84
 msgid "String inserted between values when the \"Join\" action is selected."
@@ -16309,7 +16310,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.h:57
 #, fuzzy
 msgid "Resolve Field Name Conflicts"
-msgstr "Importkonflikte auflösen"
+msgstr "Konflikte von Feldnamen auflösen"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:31
 msgid "&Search for:"
@@ -30486,7 +30487,7 @@ msgstr "API socket-Pfad überschreiben"
 
 #: kicad/cli/command_api_server.cpp:284
 msgid "Failed to start API server\n"
-msgstr "Starten des API-Servers fehlgeschlagen.\n"
+msgstr "Starten des API-Servers fehlgeschlagen\n"
 
 #: kicad/cli/command_fp.h:31
 msgid "Footprint and Footprint Libraries"
@@ -30530,8 +30531,8 @@ msgid ""
 "View and compare existing Gerber/Excellon files. To export Gerbers from a "
 "PCB, use 'pcb export gerbers'"
 msgstr ""
-"Anzeigen und Vergleichen vorhandener Gerber-/Excellon-Dateien. Um Gerber-"
-"Dateien aus einer Leiterplatte zu exportieren, 'pcb export gerber' verwenden"
+"Vorhandene Gerber/Excellon-Dateien ansehen und vergleichen. Für den Export "
+"von Gerber aus einer Leiterplatte verwenden Sie \"pcb export gerbers\""
 
 #: kicad/cli/command_gerber_convert.h:33
 msgid "Convert Gerber/Excellon to other formats"
@@ -33388,7 +33389,7 @@ msgstr "Bitten warten"
 
 #: kicad/project_tree_pane.cpp:1699
 msgid "Closing project..."
-msgstr "Schließe Projekt..."
+msgstr "Schließe Projekt ..."
 
 #: kicad/project_tree_pane.cpp:1716
 msgid ""
@@ -35674,8 +35675,9 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:79
+#, fuzzy
 msgid "Mask loss tangent.  Default 0.025 for LPI."
-msgstr ""
+msgstr "Verlustwinkel der Maske.  Standard 0,025 für LPI."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:83
 msgid ""
@@ -36679,16 +36681,21 @@ msgstr ""
 "angesteuert)"
 
 #: pcb_calculator/transline_ident.cpp:368
+#, fuzzy
 msgid "Common-mode Impedance (Zcomm):"
-msgstr ""
+msgstr "Gleichtaktimpedanz (Zcomm):"
 
 #: pcb_calculator/transline_ident.cpp:369
+#, fuzzy
 msgid "Coupling coefficient (kc):"
-msgstr ""
+msgstr "Koppelkoeffizient (kc):"
 
 #: pcb_calculator/transline_ident.cpp:375
+#, fuzzy
 msgid "Distance from track to closest ground plane (default: centered)"
 msgstr ""
+"Abstand von der Leiterbahn bis zur nächstliegenden Massefläche (Standard: "
+"zentriert)"
 
 #: pcb_calculator/transline_ident.cpp:413
 msgid "Distance between strip and top metal"
@@ -42231,7 +42238,7 @@ msgstr "Suchverzeichnis hinzufügen..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:67
 msgid "Open External File..."
-msgstr "Externe Datei öffnen..."
+msgstr "Externe Datei öffnen ..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:105
 msgid "Replace Models"
@@ -45213,12 +45220,12 @@ msgstr "Platinenkörper exportieren"
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:916
 #, fuzzy
 msgid "GLB files"
-msgstr "SVG-Dateien"
+msgstr "GLB-Dateien"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:917
 #, fuzzy
 msgid "BREP files"
-msgstr "STEP-Dateien"
+msgstr "BREP-Dateien"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:945
 msgid "Failed to create extruded body geometry."
@@ -45262,7 +45269,7 @@ msgstr "Material:"
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:172
 #, fuzzy
 msgid "Plastic"
-msgstr "Realistisch"
+msgstr "Plastik"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:172
 #, fuzzy
