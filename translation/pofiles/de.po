@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-11 13:11+0000\n"
+"PO-Revision-Date: 2026-05-13 19:11+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -43,7 +43,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.5-dev\n"
+"X-Generator: Weblate 2026.5.dev0\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -9428,15 +9428,15 @@ msgstr "Unerwarteter Fehler beim Schreiben der Bibliothekstabelle"
 
 #: common/local_history.cpp:1559
 msgid "Compacting local history..."
-msgstr "Fasse lokalen Verlauf zusammen..."
+msgstr "Fasse lokalen Verlauf zusammen ..."
 
 #: common/local_history.cpp:1756
 msgid "Trimming local history..."
-msgstr "Kürze lokalen Verlauf..."
+msgstr "Kürze lokalen Verlauf ..."
 
 #: common/local_history.cpp:1849
 msgid "Compacting trimmed history..."
-msgstr "Fasse gekürzten lokalen Verlauf zusammen..."
+msgstr "Fasse gekürzten lokalen Verlauf zusammen ..."
 
 #: common/local_history.cpp:2195
 msgid ""
@@ -12672,7 +12672,7 @@ msgid ""
 msgstr ""
 "Skript-Datei:\n"
 "%s\n"
-"wurde nicht gefunden. Skript ist nicht nutzbar."
+"wurde nicht gefunden. Skript ist nicht verfügbar."
 
 #: eeschema/connection_graph.cpp:3663
 #, c-format
@@ -12703,7 +12703,7 @@ msgid ""
 "Hierarchical label '%s' in root sheet cannot be connected to non-existent "
 "parent sheet"
 msgstr ""
-"Hierarchischer Bezeichner \"%s\" in Hauptschaltplanblatt kann nicht zu nicht-"
+"Hierarchischer Bezeichner \"%s\" im Hauptschaltplanblatt kann nicht zu nicht-"
 "vorhandenem übergeordneten Schaltplanblatt verbunden werden"
 
 #: eeschema/connection_graph.cpp:4693
@@ -13765,23 +13765,23 @@ msgstr "ERC-Auftragseinstellungen"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:272
 msgid "Export netlist in KiCad format"
-msgstr "Netzliste in KiCad-Format exportieren"
+msgstr "Netzliste im KiCad-Format exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:277
 msgid "Export netlist in OrcadPCB2 format"
-msgstr "Netzliste in OrcadPCB2-Format exportieren"
+msgstr "Netzliste im OrcadPCB2-Format exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:282
 msgid "Export netlist in Allegro format"
-msgstr "Netzliste in Allegro-Format exportieren"
+msgstr "Netzliste im Allegro-Format exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:287
 msgid "Export netlist in CadStar format"
-msgstr "Netzliste in CadStar-Format exportieren"
+msgstr "Netzliste im CadStar-Format exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:292
 msgid "Export netlist in PADS format"
-msgstr "Netzliste in PADS-Format exportieren"
+msgstr "Netzliste im PADS-Format exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:305
 #: eeschema/dialogs/dialog_export_netlist_base.h:66
@@ -13790,7 +13790,7 @@ msgstr "Netzliste exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 msgid "Export netlist in SPICE format"
-msgstr "Netzliste in SPICE-Format exportieren"
+msgstr "Netzliste im SPICE-Format exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:352
 #: eeschema/dialogs/dialog_export_netlist.cpp:397
@@ -32944,7 +32944,7 @@ msgstr "Bitten warten"
 
 #: kicad/project_tree_pane.cpp:1706
 msgid "Closing project..."
-msgstr "Schließe Projekt..."
+msgstr "Schließe Projekt ..."
 
 #: kicad/project_tree_pane.cpp:1723
 msgid ""
@@ -41538,7 +41538,7 @@ msgstr "Suchverzeichnis hinzufügen..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:67
 msgid "Open External File..."
-msgstr "Externe Datei öffnen..."
+msgstr "Externe Datei öffnen ..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:105
 msgid "Replace Models"
