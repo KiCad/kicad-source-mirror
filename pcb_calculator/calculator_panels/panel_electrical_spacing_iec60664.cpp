@@ -210,8 +210,15 @@ void PANEL_ELECTRICAL_SPACING_IEC60664::CalculateClearanceCreepage()
 
         wxString string;
 
-        if( groove >= 0 )
+        // Creepage distance and minimum trench spacing cannot be determined
+        // in the presence of PD4 because the surface may be covered with permanent
+        // conductive pollution, and surface impregnation should be considered.
+        // See IEC 60664 §4.6.3 for further infomation
+
+        if( groove >= 0 && pd < IEC60664::POLLUTION_DEGREE::PD4 )
             string << groove;
+        else if( pd == IEC60664::POLLUTION_DEGREE::PD4 )
+            string << _( "N/A" );
         else
             string << _( "Error" );
 
@@ -219,8 +226,10 @@ void PANEL_ELECTRICAL_SPACING_IEC60664::CalculateClearanceCreepage()
 
         string.Clear();
 
-        if( creepage >= 0 )
+        if( creepage >= 0 && pd < IEC60664::POLLUTION_DEGREE::PD4 )
             string << creepage;
+        else if( pd == IEC60664::POLLUTION_DEGREE::PD4 )
+            string << _( "N/A" );
         else
             string << _( "Error" );
 
