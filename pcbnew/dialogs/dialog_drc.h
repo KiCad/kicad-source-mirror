@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include <chrono>
 #include <core/throttle.h>
 #include <wx/htmllbox.h>
 #include <rc_item.h>
@@ -33,6 +34,8 @@
 #include <board.h>
 #include <dialog_drc_base.h>
 #include <widgets/progress_reporter_base.h>
+
+class wxStatusBar;
 
 
 class BOARD_DESIGN_SETTINGS;
@@ -138,5 +141,9 @@ private:
 
     THROTTLE m_updateThrottle;
     THROTTLE m_yieldThrottle;
+
+    wxStatusBar*                          m_drcStatusBar;
+    std::chrono::steady_clock::time_point m_drcStartTime;
+    int                                   m_lastTickSeconds;
 };
 
