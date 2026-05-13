@@ -2042,10 +2042,53 @@ bool BINARY_PARSER::isValidNetName( const std::string& aName ) const
 
 void BINARY_PARSER::parseNetNames()
 {
-    if( !isOldFormat() )
+    if( m_version == 0x2022 || m_version == 0x2024 )
+        parseNetNamesDirect();
+    else if( !isOldFormat() )
         parseNetNamesNew();
     else
         parseNetNamesOld();
+}
+
+
+void BINARY_PARSER::parseNetNamesDirect()
+{
+    // Unlike v0x2021 (whose net names are scattered across sec19 rule records and embedded in
+    // placement records -- see parseNetNamesOld), v0x2022 and v0x2024 carry every net name
+    // directly in section 23, one per record, at a fixed offset -- the same direct-table shape
+    // as the newer dialects' parseNetNamesNew, just with their own record stride and field
+    // offset (neither matches the 424/116 those use). Verified by brute-force string search
+    // against ground truth: v0x2022 (2FOC_4.pcb/2FOC_5.pcb) 173/173 and 162/173 names found at
+    // stride 144 offset 140; v0x2024 (PCB_2FOC_05.pcb/NEI2_2.pcb) 170/173 and 15/18 names found
+    // at stride 416 offset 92.
+    uint32_t netRecordSize = m_version == 0x2022 ? 144 : 416;
+    uint32_t netNameOff    = m_version == 0x2022 ? 140 : 92;
+    uint32_t netNameLen    = 48;
+
+    const SDB_SECTION* nets = getSection( SECTION::Nets );
+
+    if( !nets || nets->count == 0 || nets->stride != netRecordSize )
+        return;
+
+    std::unordered_set<std::string> existing;
+
+    for( uint32_t i = 0; i < nets->count; ++i )
+    {
+        if( ( i + 1 ) * netRecordSize > nets->totalBytes )
+            break;
+
+        SDB_RECORD  rec  = m_sdb.Record( *nets, i, netRecordSize );
+        std::string name = rec.Str( netNameOff, netNameLen );
+
+        if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
+            continue;
+
+        NET net;
+        net.name = name;
+        m_nets.push_back( net );
+        existing.insert( name );
+        m_sec23IndexToNet[i] = name;
+    }
 }
 
 
