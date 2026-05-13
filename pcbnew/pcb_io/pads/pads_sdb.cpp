@@ -197,6 +197,7 @@ void PADS_SDB::locateOrigin()
         m_coords.m_originX = m_cursor.I32At( base + 60 );
         m_coords.m_originY = m_cursor.I32At( base + 64 );
         m_coords.m_found = true;
+        m_coords.m_headerBase = base;
         return;
     }
 }

@@ -83,12 +83,20 @@ public:
     int32_t DesignX( int32_t aRaw ) const { return aRaw - m_originX; }
     int32_t DesignY( int32_t aRaw ) const { return aRaw - m_originY; }
 
+    /// Absolute file offset of the *PCB* board-setup parameter block PADS_SDB::locateOrigin
+    /// found (the origin sits at HeaderBase()+60/+64). Other fields in that same block (e.g.
+    /// MAXIMUMLAYER at +16) need this, not a section's directory-declared dataOffset, for the
+    /// same reason the origin does: the block's true start is displaced from that offset by a
+    /// per-file amount.
+    uint32_t HeaderBase() const { return m_headerBase; }
+
 private:
     friend class PADS_SDB;
 
-    int32_t m_originX = 0;
-    int32_t m_originY = 0;
-    bool    m_found = false;
+    int32_t  m_originX = 0;
+    int32_t  m_originY = 0;
+    bool     m_found = false;
+    uint32_t m_headerBase = 0;
 };
 
 /**

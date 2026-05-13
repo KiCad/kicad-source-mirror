@@ -322,18 +322,20 @@ double BINARY_PARSER::toBasicAngle( int32_t aRawAngle ) const
 
 void BINARY_PARSER::parseBoardSetup()
 {
-    const SDB_SECTION* setup = getSection( SECTION::BoardSetup );
-
-    if( !setup || setup->totalBytes < 160 )
+    // MAXIMUMLAYER lives in the same *PCB* board-setup parameter block PADS_SDB::locateOrigin
+    // already located structurally (its true start is displaced from section 1's
+    // directory-declared dataOffset by a per-file amount -- the same reason the origin needed
+    // that scan, not a fixed offset).
+    if( !m_sdb.Coords().Found() )
         return;
 
-    // A directory that declares a section larger than the file must not abort the import;
-    // skip gracefully and fall back to the default layer count.
-    if( setup->End() > m_data.size() )
+    uint32_t headerBase = m_sdb.Coords().HeaderBase();
+
+    if( !m_cursor.InBounds( headerBase, 20 ) )
         return;
 
     // Word 4 of the fixed u32 parameter block is the maximum layer count.
-    uint32_t maxLayer = m_sdb.RecordAt( setup->dataOffset ).U32( 16 );
+    uint32_t maxLayer = m_sdb.RecordAt( headerBase ).U32( 16 );
 
     if( maxLayer >= 1 && maxLayer <= 64 )
         m_parameters.layer_count = static_cast<int>( maxLayer );
