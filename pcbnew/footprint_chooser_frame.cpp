@@ -487,7 +487,7 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         m_pinCount = 0;
         m_fpFilters.clear();
-
+        bool needRegen = false;
         /*
          * Symbol netlist format:
          *   pinNumber pinName <tab> pinNumber pinName...
@@ -544,7 +544,10 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
                         } );
 
                 if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
+                {
                     m_filterByFPFilters->SetValue( cfg->m_FootprintChooser.use_fp_filters );
+                    needRegen = cfg->m_FootprintChooser.use_fp_filters;
+                }
 
                 m_chooserPanel->GetFiltersSizer()->Add( m_filterByFPFilters, 0, wxEXPAND|wxBOTTOM, 4 );
             }
@@ -573,7 +576,10 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
                         } );
 
                 if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
+                {
                     m_filterByPinCount->SetValue( cfg->m_FootprintChooser.filter_on_pin_count );
+                    needRegen = needRegen || cfg->m_FootprintChooser.filter_on_pin_count;
+                }
 
                 m_chooserPanel->GetFiltersSizer()->Add( m_filterByPinCount, 0, wxEXPAND|wxBOTTOM, 4 );
             }
@@ -585,6 +591,10 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
             if( m_filterByPinCount )
                 m_filterByPinCount->Hide();
         }
+
+        // Regenerate footprint tree to account for pin number filter and footprint filters being applied in settings.
+        if( needRegen )
+            m_chooserPanel->Regenerate();
 
         m_chooserPanel->GetViewerPanel()->SetPinFunctions( pinNames );
         wxLogTrace( "FOOTPRINT_CHOOSER", wxS( "SetPinFunctions called with %zu entries" ), pinNames.size() );
