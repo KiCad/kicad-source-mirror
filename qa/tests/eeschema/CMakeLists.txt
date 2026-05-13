@@ -95,6 +95,7 @@ set( QA_EESCHEMA_SRCS
     test_issue23719_global_label_chain.cpp
     test_issue24107_multiunit_grouping.cpp
     test_issue24072_symbol_arc_edit_mode.cpp
+    test_issue24290_local_labels_across_top_sheets.cpp
     test_issue16915_bus_netclass.cpp
     test_nc_pin_connectivity.cpp
     test_crossing_label.cpp

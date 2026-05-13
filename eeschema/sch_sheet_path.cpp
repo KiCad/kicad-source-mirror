@@ -489,8 +489,22 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName,
         s = fn.GetName() + wxS( "/" );
     }
 
-    // Start at startIdx + 1 since we've already processed the root sheet.
-    for( unsigned i = startIdx + 1; i < size(); i++ )
+    // When the schematic has multiple top-level sheets, the top-level sheet
+    // belongs in the path: otherwise sibling top-level sheets collapse to the
+    // same prefix (just "/") and local labels with identical text on different
+    // top-level sheets end up sharing a net.
+    size_t loopStart = startIdx + 1;
+
+    if( aUseShortRootName && size() > startIdx )
+    {
+        SCH_SHEET* first = at( startIdx );
+        SCHEMATIC* schem = first ? first->Schematic() : nullptr;
+
+        if( schem && schem->GetTopLevelSheets().size() > 1 && first->IsTopLevelSheet() )
+            loopStart = startIdx;
+    }
+
+    for( unsigned i = loopStart; i < size(); i++ )
     {
         wxString sheetName = at( i )->GetField( FIELD_T::SHEET_NAME )->GetShownText( false );
 
