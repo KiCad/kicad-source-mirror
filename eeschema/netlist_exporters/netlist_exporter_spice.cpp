@@ -263,6 +263,16 @@ void NETLIST_EXPORTER_SPICE::ConvertToSpiceMarkup( wxString* aNetName )
     aNetName->Replace( '~', '_' );
     aNetName->Replace( ' ', '_' );
 
+    // Make sure that SPICE zero should be zero anywhere, independent if it is local or not.
+    // Therefore any signal ending with '/0' is rewritten as '0' to be recognized by SPICE.
+    if( aNetName->EndsWith( wxS( "/0" ) ) && !aNetName->EndsWith( wxS( "//0" ) ) )
+        aNetName->assign( wxS( "0" ) );
+
+    // Make sure that local ground signals with leading slash ('/gnd') are rewritten as gloabal gnd to be recognized
+    // by SPICE as zero.
+    if( aNetName->IsSameAs( wxS( "/gnd" ), false /* caseSensitive=false */ ) )
+        aNetName->assign( aNetName->Mid( 1 ) );
+
     // A net name on the root sheet with a label '/foo' is going to get titled "//foo".  This
     // will trip up ngspice as "//" opens a line comment.
     if( aNetName->StartsWith( wxS( "//" ) ) )
