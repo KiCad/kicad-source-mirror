@@ -832,23 +832,45 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
         case SHAPE_T::ELLIPSE:
         case SHAPE_T::ELLIPSE_ARC:
         {
-            SHAPE_POLY_SET polyList;
-
-            aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, aShape->GetMaxError(), ERROR_INSIDE );
-
-            polyList.Simplify();
-
-            if( polyList.IsEmpty() )
-                break;
-
-            if( margin != 0 )
+            if( isSolidFill )
             {
-                CORNER_STRATEGY cornerStr =
-                        margin >= 0 ? CORNER_STRATEGY::ROUND_ALL_CORNERS : CORNER_STRATEGY::ALLOW_ACUTE_CORNERS;
-                polyList.Inflate( margin, cornerStr, aShape->GetMaxError() );
-            }
+                SHAPE_POLY_SET polyList;
 
-            ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
+                aShape->TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, aShape->GetMaxError(), ERROR_INSIDE );
+
+                polyList.Simplify();
+
+                if( polyList.IsEmpty() )
+                    break;
+
+                if( margin != 0 )
+                {
+                    CORNER_STRATEGY cornerStr =
+                            margin >= 0 ? CORNER_STRATEGY::ROUND_ALL_CORNERS : CORNER_STRATEGY::ALLOW_ACUTE_CORNERS;
+                    polyList.Inflate( margin, cornerStr, aShape->GetMaxError() );
+                }
+
+                ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
+            }
+            else
+            {
+                // Hatched fill: draw only the elliptical outline so the hatch polygons
+                // added below remain visible.
+                std::vector<SHAPE*> shapes = aShape->MakeEffectiveShapes( true );
+
+                for( SHAPE* shape : shapes )
+                {
+                    if( shape->Type() == SH_SEGMENT )
+                    {
+                        const SEG& seg = static_cast<const SHAPE_SEGMENT*>( shape )->GetSeg();
+                        addROUND_SEGMENT_2D( aContainer, TO_SFVEC2F( seg.A ), TO_SFVEC2F( seg.B ), linewidth3DU,
+                                             *aOwner );
+                    }
+                }
+
+                for( SHAPE* shape : shapes )
+                    delete shape;
+            }
             break;
         }
 
