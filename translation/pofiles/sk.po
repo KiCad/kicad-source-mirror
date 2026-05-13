@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-02 19:09+0000\n"
+"PO-Revision-Date: 2026-05-13 19:11+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.5.dev0\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -3185,7 +3185,7 @@ msgstr "Knižničné prepojenie:"
 #: pcbnew/tools/generator_tool.cpp:49
 #: pcbnew/widgets/pcb_properties_panel.cpp:641 pcbnew/zone.cpp:959
 msgid "Locked"
-msgstr "Zamčené"
+msgstr "Uzamknuté"
 
 #: common/dialogs/dialog_group_properties_base.cpp:48
 msgid "Prevents group from being moved on canvas"
@@ -4542,7 +4542,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:437
 msgid "Incremental"
-msgstr "Prírastkové"
+msgstr "Inkrementálne"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
 msgid "Zip archive"
@@ -4554,14 +4554,14 @@ msgid ""
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
-"Prírastkové: udržiavať skryté .history git repozitáre s priebežnými "
+"Inkrementálne: udržiavať skryté git repozitáre .history s priebežnými "
 "zmenami.\n"
 "Zip: pri ukladaní vytvárať zip archívy s časovou pečiatkou; automatické "
-"uloženie používa súbory na obnovenie."
+"ukladanie používa súbory na obnovenie."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
 msgid "Project directory"
-msgstr "Projektový adresár"
+msgstr "Adresár projektu"
 
 #: common/dialogs/panel_common_settings_base.cpp:449
 msgid "User data directory"
@@ -6540,7 +6540,7 @@ msgstr "Automatické ukladanie obnovy"
 #: common/eda_base_frame.cpp:445
 #, c-format
 msgid "Failed to recover auto-saved file '%s'."
-msgstr "Nepodarilo sa obnoviť z automaticky uloženého súboru '%s'."
+msgstr "Nepodarilo sa obnoviť automaticky uložený súbor '%s'."
 
 #: common/eda_base_frame.cpp:568 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:136
@@ -9395,9 +9395,8 @@ msgid "The library table path '%s' does not exist"
 msgstr "Cesta tabuľky knižnice '%s' neexistuje"
 
 #: common/libraries/library_table.cpp:94
-#, fuzzy
 msgid "The library table is of wrong type"
-msgstr "Cesta tabuľky knižnice '%s' neexistuje"
+msgstr "Tabuľka knižnice je nesprávneho typu"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -9474,6 +9473,8 @@ msgstr ""
 msgid ""
 "Files removed by 'Proceed' are archived to %s and can be recovered manually."
 msgstr ""
+"Súbory odstránené pomocou 'Pokračovať' sú archivované do %s a je možné ich "
+"obnoviť manuálne."
 
 #: common/local_history.cpp:2455
 msgid "Cannot restore - the following files are open by another user:"
@@ -15674,7 +15675,7 @@ msgstr "Pre aktuálnu schému nie je definovaný žiadny projekt ani cesta."
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:35
 #: pcbnew/dialogs/dialog_plot_base.cpp:62
 msgid "Output directory:"
-msgstr "Výstupný adresár:"
+msgstr "Adresár výstupu:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:30
 msgid ""
@@ -18844,9 +18845,8 @@ msgid "Symbol Library Tables"
 msgstr "Tabuľky knižníc symbolov"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:201
-#, fuzzy
 msgid "Unable to load library table."
-msgstr "Nepodarilo sa načítať knižnicu\n"
+msgstr "Nepodarilo sa načítať tabuľku knižnice."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:417
 msgid "folder with .kicad_sym files"
@@ -37660,11 +37660,11 @@ msgstr "Zadné"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:193
 msgid "Exclude locked footprints"
-msgstr "Vylúčit zamknuté puzdra"
+msgstr "Vylúčit uzamknuté puzdrá"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:194
 msgid "Locked footprints will not be reannotated"
-msgstr "Zamknuté puzdra nebudú očíslované"
+msgstr "Uzamknuté puzdrá nebudú prečíslované"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:201
 msgid "Exclude references:"
@@ -40944,7 +40944,7 @@ msgstr "Nastavenia filtra"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:65
 msgid "Locked graphics"
-msgstr "Zamknutá grafika"
+msgstr "Uzamknutá grafika"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 msgid "Unlocked graphics"
@@ -40960,7 +40960,7 @@ msgstr "Odomknuté puzdrá"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:79
 msgid "Locked tracks"
-msgstr "Zamknuté spoje"
+msgstr "Uzamknuté spoje"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:82
 msgid "Unlocked tracks"
@@ -51106,7 +51106,7 @@ msgstr "Nie je možné aktualizovať %s (puzdro '%s' sa nenašlo)."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:342
 #, c-format
 msgid "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."
-msgstr "Nie je možné zmeniť puzdro %s z '%s' na '%s' (puzdra je zamknutá)."
+msgstr "Nie je možné zmeniť puzdro %s z '%s' na '%s' (puzdro je uzamknuté)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:353
 #, c-format
@@ -51116,7 +51116,7 @@ msgstr "Zmeniť puzdro %s z '%s' na '%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:367
 #, c-format
 msgid "Could not change %s footprint from '%s' to '%s' (footprint is locked)."
-msgstr "Nepodarilo sa zmeniť puzdro %s z '%s' na '%s' (puzdra je zamknutá)."
+msgstr "Nebolo možné zmeniť puzdro %s z '%s' na '%s' (puzdro je uzamknuté)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:383
 #, c-format
@@ -51550,12 +51550,12 @@ msgstr ""
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2281
 #, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
-msgstr "Nie je možné odstrániť nepoužívanú puzdro %s (puzdra je zamknutá)."
+msgstr "Nie je možné odstrániť nepoužívané puzdro %s (puzdro je uzamknuté)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2286
 #, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
-msgstr "Nepodarilo sa odstrániť nepoužívanú puzdro %s (puzdra je zamknutá)."
+msgstr "Nebolo možné odstrániť nepoužívané puzdro %s (puzdro je uzamknuté)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2299
 #, c-format
@@ -59286,7 +59286,7 @@ msgstr ""
 #: pcbnew/tools/pcb_control.cpp:1615
 #, c-format
 msgid "Footprint %s is locked and cannot be placed."
-msgstr "Puzdro %s je zamknutá a nemôže byť umiestnená."
+msgstr "Puzdro %s je uzamknuté a nemôže byť umiestnené."
 
 #: pcbnew/tools/pcb_control.cpp:1632
 msgid "Selected group contains no footprints to place."
@@ -59444,8 +59444,8 @@ msgstr "Vybrať/rozšíriť prepojenie..."
 msgid ""
 "Selection contains locked items. Enable 'Override locks' to operate on them."
 msgstr ""
-"Výber obsahuje uzamknuté položky. Povoľte možnosť 'Prepísať uzamknutia', aby "
-"sa aj s nimi dalo pracovať."
+"Výber obsahuje uzamknuté položky. Je potrebné 'Prepísať uzamknutia', aby sa "
+"na nevzťahovali."
 
 #: pcbnew/tools/position_relative_tool.cpp:234
 msgid "Select the reference point on the item to move."
