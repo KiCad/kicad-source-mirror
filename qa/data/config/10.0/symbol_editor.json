@@ -40,6 +40,9 @@
     "width": -1
   },
   "drag_pins_along_with_edges": true,
+  "editing": {
+    "arc_edit_mode": 0
+  },
   "find_replace": {
     "find_history": [],
     "find_string": "",
