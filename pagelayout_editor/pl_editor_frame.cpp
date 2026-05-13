@@ -144,8 +144,8 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     configureToolbars();
     RecreateToolbars();
 
-    wxWindow* stsbar = GetStatusBar();
-    int       spacer = KIUI::GetTextSize( wxT( "M" ), stsbar ).x * 2;
+    wxStatusBar* stsbar = GetStatusBar();
+    int          spacer = KIUI::GetTextSize( wxT( "M" ), stsbar ).x * 2;
 
     int dims[] = {
 
@@ -177,7 +177,8 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         KIUI::GetTextSize( _( "Constrain to H, V, 45" ), stsbar ).x + spacer
     };
 
-    SetStatusWidths( arrayDim( dims ), dims );
+    if( stsbar )
+        stsbar->SetFieldsCount( arrayDim( dims ), dims );
 
     m_auimgr.SetManagedWindow( this );
 

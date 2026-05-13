@@ -227,56 +227,76 @@ void KISTATUSBAR::layoutControls()
     constexpr int padding = 5;
 
     wxRect r;
-    GetFieldRect( m_normalFieldsCount + *fieldIndex( FIELD::BGJOB_LABEL ), r );
-    int x = r.GetLeft();
-    int y = r.GetTop();
-    int textHeight = KIUI::GetTextSize( wxT( "bp" ), this ).y;
+    int sbField = m_normalFieldsCount + *fieldIndex( FIELD::BGJOB_LABEL );
 
-    if( r.GetHeight() > textHeight )
-        y += ( r.GetHeight() - textHeight ) / 2;
-
-    m_backgroundTxt->SetPosition( { x, y } );
-    m_backgroundTxt->SetSize( r.GetWidth(), textHeight );
-    updateBackgroundText();
-
-    GetFieldRect( m_normalFieldsCount + *fieldIndex( FIELD::BGJOB_GAUGE ), r );
-    x = r.GetLeft();
-    y = r.GetTop();
-    int           w = r.GetWidth();
-    int           h = r.GetHeight();
-    wxSize buttonSize( 0, 0 );
-
-    if( m_backgroundStopButton )
+    if( sbField >= 0 && sbField < GetFieldsCount() )
     {
-        buttonSize = m_backgroundStopButton->GetEffectiveMinSize();
-        m_backgroundStopButton->SetPosition( { x + w - buttonSize.GetWidth(), y } );
-        m_backgroundStopButton->SetSize( buttonSize.GetWidth(), h );
-        buttonSize.x += padding;
+        GetFieldRect( m_normalFieldsCount + *fieldIndex( FIELD::BGJOB_LABEL ), r );
+        int x = r.GetLeft();
+        int y = r.GetTop();
+        int textHeight = KIUI::GetTextSize( wxT( "bp" ), this ).y;
+
+        if( r.GetHeight() > textHeight )
+            y += ( r.GetHeight() - textHeight ) / 2;
+
+        m_backgroundTxt->SetPosition( { x, y } );
+        m_backgroundTxt->SetSize( r.GetWidth(), textHeight );
+        updateBackgroundText();
     }
 
-    m_backgroundProgressBar->SetPosition( { x + padding, y } );
-    m_backgroundProgressBar->SetSize( w - buttonSize.GetWidth() - padding, h );
+    sbField = m_normalFieldsCount + *fieldIndex( FIELD::BGJOB_GAUGE );
 
-    if( m_notificationsButton )
+    if( sbField >= 0 && sbField < GetFieldsCount() )
     {
-        GetFieldRect( m_normalFieldsCount + *fieldIndex( FIELD::NOTIFICATION ), r );
-        x = r.GetLeft();
-        y = r.GetTop();
-        h = r.GetHeight();
-        buttonSize = m_notificationsButton->GetEffectiveMinSize();
-        m_notificationsButton->SetPosition( { x, y } );
-        m_notificationsButton->SetSize( buttonSize.GetWidth() + 6, h );
+        GetFieldRect( m_normalFieldsCount + *fieldIndex( FIELD::BGJOB_GAUGE ), r );
+        int x = r.GetLeft();
+        int y = r.GetTop();
+        int w = r.GetWidth();
+        int h = r.GetHeight();
+        wxSize buttonSize( 0, 0 );
+
+        if( m_backgroundStopButton )
+        {
+            buttonSize = m_backgroundStopButton->GetEffectiveMinSize();
+            m_backgroundStopButton->SetPosition( { x + w - buttonSize.GetWidth(), y } );
+            m_backgroundStopButton->SetSize( buttonSize.GetWidth(), h );
+            buttonSize.x += padding;
+        }
+
+        m_backgroundProgressBar->SetPosition( { x + padding, y } );
+        m_backgroundProgressBar->SetSize( w - buttonSize.GetWidth() - padding, h );
+
+        if( m_notificationsButton )
+        {
+            sbField = m_normalFieldsCount + *fieldIndex( FIELD::NOTIFICATION );
+
+            if( sbField >= 0 && sbField < GetFieldsCount() )
+            {
+                GetFieldRect( m_normalFieldsCount + *fieldIndex( FIELD::NOTIFICATION ), r );
+                x = r.GetLeft();
+                y = r.GetTop();
+                h = r.GetHeight();
+                buttonSize = m_notificationsButton->GetEffectiveMinSize();
+                m_notificationsButton->SetPosition( { x, y } );
+                m_notificationsButton->SetSize( buttonSize.GetWidth() + 6, h );
+            }
+        }
     }
 
     if( m_warningButton )
     {
-        GetFieldRect( m_normalFieldsCount + *fieldIndex( FIELD::WARNING ), r );
-        x = r.GetLeft();
-        y = r.GetTop();
-        h = r.GetHeight();
-        buttonSize = m_warningButton->GetEffectiveMinSize();
-        m_warningButton->SetPosition( { x, y } );
-        m_warningButton->SetSize( buttonSize.GetWidth() + 6, h );
+        sbField = m_normalFieldsCount + *fieldIndex( FIELD::WARNING );
+
+        if( sbField >= 0 && sbField < GetFieldsCount() )
+        {
+            GetFieldRect( m_normalFieldsCount + *fieldIndex( FIELD::WARNING ), r );
+            int x = r.GetLeft();
+            int y = r.GetTop();
+            int h = r.GetHeight();
+            wxSize buttonSize = m_warningButton->GetEffectiveMinSize();
+            m_warningButton->SetPosition( { x, y } );
+            m_warningButton->SetSize( buttonSize.GetWidth() + 6, h );
+        }
     }
 }
 
