@@ -28,6 +28,7 @@
 #include <build_version.h>
 #include <drc/drc_item.h>
 #include <locale_io.h>
+#include <widgets/wx_data_view_hyperlink_renderer.h>
 #include <macros.h>
 #include <json_common.h>
 #include <rc_json_schema.h>
@@ -124,7 +125,7 @@ bool DRC_REPORT::WriteTextReport( const wxString& aFullFileName )
 
         if( code > 0 && bds.Ignore( code ) )
         {
-            fprintf( fp, "    - %s\n", TO_UTF8( item.GetErrorMessage( false ) ) );
+            fprintf( fp, "    - %s\n", TO_UTF8( HYPERLINK_DV_RENDERER::StripMarkup( item.GetErrorMessage( false ) ) ) );
             hasIgnored = true;
         }
     }
@@ -213,7 +214,7 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
         {
             RC_JSON::IGNORED_CHECK ignoredCheck;
             ignoredCheck.key = item.GetSettingsKey();
-            ignoredCheck.description = item.GetErrorMessage( false );
+            ignoredCheck.description = HYPERLINK_DV_RENDERER::StripMarkup( item.GetErrorMessage( false ) );
             reportHead.ignored_checks.push_back( ignoredCheck );
         }
     }

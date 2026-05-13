@@ -233,6 +233,7 @@ set( KICOMMON_SRCS
     widgets/ui_common.cpp
     widgets/up_down_tree.cpp
     widgets/wx_grid.cpp
+    widgets/wx_data_view_hyperlink_renderer.cpp
     widgets/wx_html_report_panel.cpp
     widgets/wx_html_report_panel_base.cpp
     widgets/wx_html_report_box.cpp

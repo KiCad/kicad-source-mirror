@@ -51,6 +51,7 @@
 #include <widgets/ui_common.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/progress_reporter_base.h>
+#include <widgets/wx_data_view_hyperlink_renderer.h>
 #include <widgets/wx_html_report_box.h>
 #include <view/view_controls.h>
 #include <dialogs/panel_setup_rules_base.h>
@@ -116,14 +117,17 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     m_fpWarningsProvider = std::make_shared<DRC_ITEMS_PROVIDER>( m_currentBoard,
                                                                  MARKER_BASE::MARKER_PARITY );
 
-    m_markersTreeModel = new RC_TREE_MODEL( m_frame, m_markerDataView );
-    m_markerDataView->AssociateModel( m_markersTreeModel );
+    auto installModel = [this]( RC_TREE_MODEL*& aModel, wxDataViewCtrl* aCtrl )
+    {
+        aModel = new RC_TREE_MODEL( m_frame, aCtrl );
+        aModel->EnableHyperlinks( true );
+        aCtrl->AssociateModel( aModel );
+        installLinkHandlers( aCtrl );
+    };
 
-    m_unconnectedTreeModel = new RC_TREE_MODEL( m_frame, m_unconnectedDataView );
-    m_unconnectedDataView->AssociateModel( m_unconnectedTreeModel );
-
-    m_fpWarningsTreeModel = new RC_TREE_MODEL( m_frame, m_footprintsDataView );
-    m_footprintsDataView->AssociateModel( m_fpWarningsTreeModel );
+    installModel( m_markersTreeModel, m_markerDataView );
+    installModel( m_unconnectedTreeModel, m_unconnectedDataView );
+    installModel( m_fpWarningsTreeModel, m_footprintsDataView );
 
     // Prevent RTL locales from mirroring the text in the data views
     m_markerDataView->SetLayoutDirection( wxLayout_LeftToRight );
@@ -205,6 +209,67 @@ DIALOG_DRC::~DIALOG_DRC()
     m_markersTreeModel->DecRef();
     m_unconnectedTreeModel->DecRef();
     m_fpWarningsTreeModel->DecRef();
+}
+
+
+void DIALOG_DRC::installLinkHandlers( wxDataViewCtrl* aCtrl )
+{
+    aCtrl->Bind( wxEVT_MOTION, &DIALOG_DRC::onDataViewMotion, this );
+    aCtrl->Bind( wxEVT_LEFT_UP, &DIALOG_DRC::onDataViewLeftUp, this );
+}
+
+
+void DIALOG_DRC::onDataViewMotion( wxMouseEvent& aEvent )
+{
+    aEvent.Skip();
+
+    wxDataViewCtrl* ctrl = dynamic_cast<wxDataViewCtrl*>( aEvent.GetEventObject() );
+
+    if( !ctrl )
+        return;
+
+    bool overLink = hitTestLink( ctrl, aEvent.GetPosition(), nullptr );
+    ctrl->SetCursor( overLink ? wxCursor( wxCURSOR_HAND ) : wxNullCursor );
+}
+
+
+void DIALOG_DRC::onDataViewLeftUp( wxMouseEvent& aEvent )
+{
+    aEvent.Skip();
+
+    wxDataViewCtrl* ctrl = dynamic_cast<wxDataViewCtrl*>( aEvent.GetEventObject() );
+    wxString        href;
+
+    if( ctrl && hitTestLink( ctrl, aEvent.GetPosition(), &href ) )
+        wxLaunchDefaultBrowser( href );
+}
+
+
+bool DIALOG_DRC::hitTestLink( wxDataViewCtrl* aCtrl, const wxPoint& aPoint, wxString* aHref )
+{
+    wxDataViewModel* model = aCtrl->GetModel();
+
+    if( !model )
+        return false;
+
+    wxDataViewItem    item;
+    wxDataViewColumn* col = nullptr;
+    aCtrl->HitTest( aPoint, item, col );
+
+    if( !item.IsOk() || !col )
+        return false;
+
+    auto* hl = dynamic_cast<HYPERLINK_DV_RENDERER*>( col->GetRenderer() );
+
+    if( !hl )
+        return false;
+
+    wxVariant value;
+    model->GetValue( value, item, col->GetModelColumn() );
+
+    wxRect cell = aCtrl->GetItemRect( item, col );
+
+    return hl->HitTestRunsForCell( value.GetString(), cell, aPoint, aHref );
 }
 
 

@@ -277,6 +277,10 @@ public:
 
     void Update( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities );
 
+    /// Render [label](url) markup as clickable links.  Must be called before
+    /// any rows are added.
+    void EnableHyperlinks( bool aEnable );
+
     void ExpandAll();
 
     void PrevMarker();
@@ -345,9 +349,13 @@ protected:
     void          deleteNodeTree( RC_TREE_NODE* aNode );
     void     rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities );
 
+    void onViewSize( wxSizeEvent& aEvent );
+
     EDA_DRAW_FRAME*                    m_editFrame;
     wxDataViewCtrl*                    m_view;
     int                                m_severities;
+    bool                               m_enableHyperlinks = false;
+    wxDataViewColumn*                  m_hyperlinkColumn = nullptr;
     std::shared_ptr<RC_ITEMS_PROVIDER> m_rcItemsProvider;
 
     std::vector<std::unique_ptr<RC_TREE_NODE::HANDLE>> m_handles;   // Stable wx item IDs

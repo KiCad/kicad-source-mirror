@@ -109,6 +109,12 @@ private:
     void deleteAllMarkers( bool aIncludeExclusions );
     void refreshEditor();
 
+    void installLinkHandlers( wxDataViewCtrl* aCtrl );
+    void onDataViewMotion( wxMouseEvent& aEvent );
+    void onDataViewLeftUp( wxMouseEvent& aEvent );
+
+    static bool hitTestLink( wxDataViewCtrl* aCtrl, const wxPoint& aPoint, wxString* aHref );
+
     // PROGRESS_REPORTER calls
     bool updateUI() override;
     void AdvancePhase( const wxString& aMessage ) override;

@@ -73,6 +73,7 @@ set( QA_COMMON_SRCS
     test_reporting.cpp
     test_rc_tree_model.cpp
     test_refdes_utils.cpp
+    test_wx_data_view_hyperlink_renderer.cpp
     test_grid_helper.cpp
     test_string_utils.cpp
     test_richio.cpp

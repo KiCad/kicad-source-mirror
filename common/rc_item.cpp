@@ -26,6 +26,7 @@
 #include <wx/dataview.h>
 #include <wx/settings.h>
 #include <widgets/ui_common.h>
+#include <widgets/wx_data_view_hyperlink_renderer.h>
 #include <marker_base.h>
 #include <eda_draw_frame.h>
 #include <rc_item.h>
@@ -118,6 +119,9 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
     if( ii != aItemMap.end() )
         auxItem = ii->second;
 
+    wxString errorMessage = HYPERLINK_DV_RENDERER::StripMarkup( GetErrorMessage( false ) );
+    wxString ruleDesc = HYPERLINK_DV_RENDERER::StripMarkup( GetViolatingRuleDesc( false ) );
+
     // Note: some customers machine-process these.  So:
     // 1) don't translate
     // 2) try not to re-order or change syntax
@@ -127,33 +131,21 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
 
     if( mainItem && auxItem )
     {
-        msg.Printf( wxT( "[%s]: %s\n    %s; %s\n    %s: %s\n    %s: %s\n" ),
-                    GetSettingsKey(),
-                    GetErrorMessage( false ),
-                    GetViolatingRuleDesc( false ),
-                    severity,
-                    showCoord( aUnitsProvider, mainItem->GetPosition()),
+        msg.Printf( wxT( "[%s]: %s\n    %s; %s\n    %s: %s\n    %s: %s\n" ), GetSettingsKey(), errorMessage, ruleDesc,
+                    severity, showCoord( aUnitsProvider, mainItem->GetPosition() ),
                     mainItem->GetItemDescription( aUnitsProvider, true ),
-                    showCoord( aUnitsProvider, auxItem->GetPosition()),
+                    showCoord( aUnitsProvider, auxItem->GetPosition() ),
                     auxItem->GetItemDescription( aUnitsProvider, true ) );
     }
     else if( mainItem )
     {
-        msg.Printf( wxT( "[%s]: %s\n    %s; %s\n    %s: %s\n" ),
-                    GetSettingsKey(),
-                    GetErrorMessage( false ),
-                    GetViolatingRuleDesc( false ),
-                    severity,
-                    showCoord( aUnitsProvider, mainItem->GetPosition()),
+        msg.Printf( wxT( "[%s]: %s\n    %s; %s\n    %s: %s\n" ), GetSettingsKey(), errorMessage, ruleDesc, severity,
+                    showCoord( aUnitsProvider, mainItem->GetPosition() ),
                     mainItem->GetItemDescription( aUnitsProvider, true ) );
     }
     else
     {
-        msg.Printf( wxT( "[%s]: %s\n    %s; %s\n" ),
-                    GetSettingsKey(),
-                    GetErrorMessage( false ),
-                    GetViolatingRuleDesc( false ),
-                    severity );
+        msg.Printf( wxT( "[%s]: %s\n    %s; %s\n" ), GetSettingsKey(), errorMessage, ruleDesc, severity );
     }
 
     if( m_parent && m_parent->IsExcluded() && !m_parent->GetComment().IsEmpty() )
@@ -167,7 +159,7 @@ void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* 
                                 SEVERITY aSeverity, const std::map<KIID, EDA_ITEM*>& aItemMap ) const
 {
     aViolation.severity = getSeverityString( aSeverity );
-    aViolation.description = GetErrorMessage( false );
+    aViolation.description = HYPERLINK_DV_RENDERER::StripMarkup( GetErrorMessage( false ) );
     aViolation.type = GetSettingsKey();
 
     if( m_parent && m_parent->IsExcluded() )
@@ -388,8 +380,11 @@ void RC_TREE_MODEL::rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, 
     m_view->AssociateModel( this );
 #endif
 
-    m_view->ClearColumns();
-    m_view->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE );
+    if( !m_enableHyperlinks )
+    {
+        m_view->ClearColumns();
+        m_view->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE );
+    }
 
     ExpandAll();
 
@@ -413,6 +408,31 @@ void RC_TREE_MODEL::rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, 
 void RC_TREE_MODEL::Update( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities )
 {
     rebuildModel( aProvider, aSeverities );
+}
+
+
+void RC_TREE_MODEL::EnableHyperlinks( bool aEnable )
+{
+    m_enableHyperlinks = aEnable;
+
+    if( !aEnable || !m_view || m_view->GetColumnCount() > 0 )
+        return;
+
+    HYPERLINK_DV_RENDERER* renderer = new HYPERLINK_DV_RENDERER();
+    m_hyperlinkColumn =
+            new wxDataViewColumn( wxEmptyString, renderer, 0, std::max( 200, m_view->GetClientSize().GetWidth() ),
+                                  wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE );
+    m_view->AppendColumn( m_hyperlinkColumn );
+    m_view->Bind( wxEVT_SIZE, &RC_TREE_MODEL::onViewSize, this );
+}
+
+
+void RC_TREE_MODEL::onViewSize( wxSizeEvent& aEvent )
+{
+    aEvent.Skip();
+
+    if( m_view && m_hyperlinkColumn )
+        m_hyperlinkColumn->SetWidth( std::max( 200, m_view->GetClientSize().GetWidth() ) );
 }
 
 
