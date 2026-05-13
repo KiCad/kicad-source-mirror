@@ -650,7 +650,11 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
             // Add the zone to the list of zones to test or refill
             toFill.emplace_back( std::make_pair( zone, layer ) );
 
-            isolatedIslandsMap[zone][layer] = ISOLATED_ISLANDS();
+            // Copper-thieving fills are intentionally disconnected stamps; do not
+            // track them through the isolated-islands pass or every stamp gets
+            // classified as removable.
+            if( !zone->IsCopperThieving() )
+                isolatedIslandsMap[zone][layer] = ISOLATED_ISLANDS();
         }
 
         // Remove existing fill first to prevent drawing invalid polygons on some platforms
@@ -1171,6 +1175,12 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
             for( const auto& [zone, layer] : zonesToRefill )
             {
                 if( m_debugZoneFiller && LSET::InternalCuMask().Contains( layer ) )
+                    continue;
+
+                // Mirrors the initial isolatedIslandsMap build above: thieving stamps
+                // are intentionally disconnected and must not be tracked as islands,
+                // or the iterative refill will delete them on the next pass.
+                if( zone->IsCopperThieving() )
                     continue;
 
                 refillIslandsMap[zone][layer] = ISOLATED_ISLANDS();
@@ -2959,6 +2969,11 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
         if( !addHatchFillTypeOnZone( aZone, aLayer, aDebugLayer, aFillPolys, ringsToProtect ) )
             return false;
     }
+    else if( aZone->GetFillMode() == ZONE_FILL_MODE::COPPER_THIEVING )
+    {
+        if( !addCopperThievingPattern( aZone, aLayer, aFillPolys ) )
+            return false;
+    }
     else
     {
         /* ---------------------------------------------------------------------------------
@@ -3146,6 +3161,11 @@ bool ZONE_FILLER::fillNonCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
         SHAPE_POLY_SET noThermalRings;  // Non-copper zones have no thermal reliefs
 
         if( !addHatchFillTypeOnZone( aZone, aLayer, aLayer, aFillPolys, noThermalRings ) )
+            return false;
+    }
+    else if( aZone->GetFillMode() == ZONE_FILL_MODE::COPPER_THIEVING )
+    {
+        if( !addCopperThievingPattern( aZone, aLayer, aFillPolys ) )
             return false;
     }
 
@@ -3685,6 +3705,211 @@ void ZONE_FILLER::buildHatchZoneThermalRings( const ZONE* aZone, PCB_LAYER_ID aL
         // Also collect thermal rings for hatch hole notching to ensure connectivity
         aThermalRings.BooleanAdd( thermalRing );
     }
+}
+
+
+bool ZONE_FILLER::addCopperThievingPattern( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                                            SHAPE_POLY_SET& aFillPolys )
+{
+    wxCHECK( aZone->IsCopperThieving(), false );
+
+    const THIEVING_SETTINGS& settings = aZone->GetThievingSettings();
+
+    // Constructor defaults are positive but a malformed file or test board could still
+    // produce a zero gap, which would deadlock the grid loop below.  Bail out without
+    // touching aFillPolys so the zone simply has no fill, matching POLYGONS-with-bad-poly.
+    // element_size is meaningful for dots and squares only.  Hatch uses line_width.
+    const bool needsElementSize = ( settings.pattern != THIEVING_PATTERN::HATCH );
+    const bool needsLineWidth   = ( settings.pattern == THIEVING_PATTERN::HATCH );
+
+    if( settings.gap <= 0
+            || ( needsElementSize && settings.element_size <= 0 )
+            || ( needsLineWidth && settings.line_width <= 0 ) )
+    {
+        aFillPolys.RemoveAllContours();
+        return true;
+    }
+
+    SHAPE_POLY_SET filledRegion = aFillPolys.CloneDropTriangulation();
+
+    if( filledRegion.OutlineCount() == 0 )
+    {
+        aFillPolys.RemoveAllContours();
+        return true;
+    }
+
+    // Rotate the clip region into the pattern's local frame so the grid iterates
+    // axis-aligned; the resulting stamps get rotated back into the zone's frame below.
+    if( !settings.orientation.IsZero() )
+        filledRegion.Rotate( -settings.orientation );
+
+    // BBox() over all outlines — the post-clearance fill region may be split
+    // into several pieces (e.g. by a track cutting across the zone) and the
+    // void grid has to cover every piece.
+    BOX2I bbox = filledRegion.BBox();
+
+    // Per-layer phase offset (hatching_offset) — same lookup the hatch generator uses
+    // so thieving on multiple copper layers can be de-correlated through the stack-up.
+    // Board-default offsets apply first; per-zone local offsets override.
+    const auto& defaultOffsets = m_board->GetDesignSettings().m_ZoneLayerProperties;
+    const auto& localOffsets   = aZone->LayerProperties();
+    VECTOR2I    offset;
+
+    if( auto it = defaultOffsets.find( aLayer ); it != defaultOffsets.end() )
+        offset = it->second.hatching_offset.value_or( VECTOR2I() );
+
+    if( localOffsets.contains( aLayer ) && localOffsets.at( aLayer ).hatching_offset.has_value() )
+        offset = localOffsets.at( aLayer ).hatching_offset.value();
+
+    if( !settings.orientation.IsZero() )
+        RotatePoint( offset, -settings.orientation );
+
+    // Gap is edge-to-edge; grid stride is element_size + gap (dots/squares) or
+    // line_width + gap (crosshatch).
+    const int dotStride = settings.element_size + settings.gap;
+
+    // The filler stamps thieving shapes while aFillPolys is deflated by
+    // half_min_width and then later re-inflates by the same amount.  Pre-compensate
+    // the dot radius so the final stamp matches element_size exactly.  If the
+    // user's element_size is smaller than min_thickness, fall back to a 1 IU
+    // radius so the reinflate produces approximately min_thickness diameter.
+    const int halfMinWidth = aZone->GetMinThickness() / 2;
+    const int dotRadius    = std::max( settings.element_size / 2 - halfMinWidth, 1 );
+    const int maxError     = m_board->GetDesignSettings().m_MaxError;
+
+    // Collect every stamp into a single SHAPE_POLY_SET, then BooleanIntersect once.
+    // Per-stamp boolean ops would explode in cost on a 10k-dot zone.
+    SHAPE_POLY_SET stamps;
+
+    int xStart = bbox.GetLeft()  - ( bbox.GetLeft()  % dotStride ) + offset.x;
+    int yStart = bbox.GetTop()   - ( bbox.GetTop()   % dotStride ) + offset.y;
+
+    while( xStart > bbox.GetLeft() )
+        xStart -= dotStride;
+
+    while( yStart > bbox.GetTop() )
+        yStart -= dotStride;
+
+    // Hatch is subtractive: keep the zone outline as a perimeter border around
+    // the mesh by carving voids out of aFillPolys.  Dots and squares are
+    // additive: replace aFillPolys with the stamp set, clipped to the zone.
+    if( settings.pattern == THIEVING_PATTERN::HATCH )
+    {
+        // Void size in the deflated frame is gap + min_thickness so that the
+        // generic reinflate at the end of fillCopperZone shrinks the void by
+        // min_thickness and the final edge-to-edge spacing equals user gap.
+        const int voidSize   = settings.gap + aZone->GetMinThickness();
+        const int lineStride = settings.line_width + settings.gap;
+
+        // Deflate aFillPolys by line_width to define an interior region that
+        // can receive voids.  The unaltered annulus between aFillPolys and
+        // interior becomes the perimeter outline of the mesh, matching how
+        // the existing HATCH_PATTERN fill mode produces a border.  This also
+        // protects narrow post-clearance fragments (e.g. a thin strip on the
+        // opposite side of a track) from being entirely consumed by voids.
+        SHAPE_POLY_SET interior = aFillPolys.CloneDropTriangulation();
+        interior.Deflate( settings.line_width, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, m_maxError );
+
+        if( interior.OutlineCount() == 0 )
+            return true;
+
+        // Walk a starting position backwards into the bbox so we never miss a
+        // void on the negative side after the modulo step.  bbox already
+        // contains the rotated filledRegion bounds, which slightly overcover
+        // the interior; extra voids get clipped to interior below.
+        int xVoid = bbox.GetLeft() - ( bbox.GetLeft() % lineStride ) + offset.x
+                    + lineStride / 2;
+        int yVoid = bbox.GetTop()  - ( bbox.GetTop()  % lineStride ) + offset.y
+                    + lineStride / 2;
+
+        while( xVoid - voidSize / 2 > bbox.GetLeft() )
+            xVoid -= lineStride;
+
+        while( yVoid - voidSize / 2 > bbox.GetTop() )
+            yVoid -= lineStride;
+
+        SHAPE_POLY_SET voids;
+
+        for( int yy = yVoid; yy <= bbox.GetBottom() + voidSize; yy += lineStride )
+        {
+            for( int xx = xVoid; xx <= bbox.GetRight() + voidSize; xx += lineStride )
+            {
+                SHAPE_LINE_CHAIN rect;
+                rect.Append( xx - voidSize / 2, yy - voidSize / 2 );
+                rect.Append( xx + voidSize / 2, yy - voidSize / 2 );
+                rect.Append( xx + voidSize / 2, yy + voidSize / 2 );
+                rect.Append( xx - voidSize / 2, yy + voidSize / 2 );
+                rect.SetClosed( true );
+                voids.AddOutline( rect );
+            }
+        }
+
+        if( !settings.orientation.IsZero() )
+            voids.Rotate( settings.orientation );
+
+        // Clip voids to interior so the perimeter border survives the
+        // subtraction.  Without this clamp, voids on the edge punch through
+        // the border, and narrow post-clearance pieces of aFillPolys are
+        // consumed entirely.
+        voids.BooleanIntersection( interior );
+
+        // Carve the voids out of the zone fill region.  No island removal: the
+        // hatch mesh is a single connected piece with its zone-outline border.
+        aFillPolys.BooleanSubtract( voids );
+        return true;
+    }
+
+    // Dots and squares: drop any stamp transected by an obstacle or touching the
+    // zone outline.  Deflating the fill region by stampHalfExtent + 1 IU yields
+    // the set of centres where a full stamp fits without touching the boundary.
+    const int sideLen = std::max( settings.element_size - aZone->GetMinThickness(), 1 );
+    const VECTOR2I squareSize( sideLen, sideLen );
+
+    const int containmentInset =
+            ( ( settings.pattern == THIEVING_PATTERN::SQUARES ) ? sideLen / 2 : dotRadius ) + 1;
+
+    filledRegion.Deflate( containmentInset, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
+
+    if( filledRegion.OutlineCount() == 0 )
+    {
+        aFillPolys.RemoveAllContours();
+        return true;
+    }
+
+    filledRegion.BuildBBoxCaches();
+
+    int rowIndex = 0;
+
+    for( int yy = yStart; yy <= bbox.GetBottom() + dotRadius; yy += dotStride )
+    {
+        const int rowOffset = ( settings.stagger && ( rowIndex & 1 ) ) ? dotStride / 2 : 0;
+
+        for( int xx = xStart + rowOffset; xx <= bbox.GetRight() + dotRadius; xx += dotStride )
+        {
+            VECTOR2I centre( xx, yy );
+
+            if( !filledRegion.Contains( centre, -1, 0, true ) )
+                continue;
+
+            if( settings.pattern == THIEVING_PATTERN::SQUARES )
+            {
+                TransformTrapezoidToPolygon( stamps, centre, squareSize, ANGLE_0, 0, 0, 0,
+                                             maxError, ERROR_OUTSIDE );
+            }
+            else
+            {
+                TransformCircleToPolygon( stamps, centre, dotRadius, maxError, ERROR_OUTSIDE );
+            }
+        }
+
+        ++rowIndex;
+    }
+
+    if( !settings.orientation.IsZero() )
+        stamps.Rotate( settings.orientation );
+
+    aFillPolys = stamps;
+    return true;
 }
 
 

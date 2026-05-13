@@ -409,7 +409,12 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
 
     m_settings->m_Name = m_tcZoneName->GetValue();
 
-    m_settings->m_FillMode = m_cbHatched->GetValue() ? ZONE_FILL_MODE::HATCH_PATTERN : ZONE_FILL_MODE::POLYGONS;
+    // Avoid clobbering theiving zone properties
+    if( m_settings->m_FillMode != ZONE_FILL_MODE::COPPER_THIEVING )
+    {
+        m_settings->m_FillMode = m_cbHatched->GetValue() ? ZONE_FILL_MODE::HATCH_PATTERN
+                                                          : ZONE_FILL_MODE::POLYGONS;
+    }
     m_settings->m_HatchOrientation = m_gridStyleRotation.GetAngleValue();
     m_settings->m_HatchThickness = m_gridStyleThickness.GetIntValue();
     m_settings->m_HatchGap = m_gridStyleGap.GetIntValue();

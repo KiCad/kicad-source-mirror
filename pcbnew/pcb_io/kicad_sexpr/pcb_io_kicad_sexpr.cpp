@@ -3130,6 +3130,8 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
     // Default is polygon filled.
     if( aZone->GetFillMode() == ZONE_FILL_MODE::HATCH_PATTERN )
         m_out->Print( "(mode hatch)" );
+    else if( aZone->GetFillMode() == ZONE_FILL_MODE::COPPER_THIEVING )
+        m_out->Print( "(mode thieving)" );
 
     if( !aZone->IsTeardropArea() )
     {
@@ -3185,6 +3187,28 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
         m_out->Print( "(hatch_border_algorithm %s) (hatch_min_hole_area %s)",
                       aZone->GetHatchBorderAlgorithm() ? "hatch_thickness" : "min_thickness",
                       FormatDouble2Str( aZone->GetHatchHoleMinArea() ).c_str() );
+    }
+    else if( aZone->GetFillMode() == ZONE_FILL_MODE::COPPER_THIEVING )
+    {
+        const THIEVING_SETTINGS& thieving = aZone->GetThievingSettings();
+        const char* patternStr = "dots";
+
+        switch( thieving.pattern )
+        {
+        case THIEVING_PATTERN::SQUARES: patternStr = "squares"; break;
+        case THIEVING_PATTERN::HATCH:   patternStr = "hatch";   break;
+        case THIEVING_PATTERN::DOTS:
+        default:                        patternStr = "dots";    break;
+        }
+
+        m_out->Print( "(thieving (type %s) (size %s) (gap %s) (width %s) "
+                      "(stagger %s) (orientation %s))",
+                      patternStr,
+                      formatInternalUnits( thieving.element_size ).c_str(),
+                      formatInternalUnits( thieving.gap ).c_str(),
+                      formatInternalUnits( thieving.line_width ).c_str(),
+                      thieving.stagger ? "yes" : "no",
+                      FormatDouble2Str( thieving.orientation.AsDegrees() ).c_str() );
     }
 
     m_out->Print( ")" );

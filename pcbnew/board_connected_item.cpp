@@ -69,13 +69,13 @@ void BOARD_CONNECTED_ITEM::UnpackNet( const kiapi::board::types::Net& aProto )
 
         if( NETINFO_ITEM* net = board->FindNet( name ) )
         {
-            m_netinfo = net;
+            SetNet( net );
         }
         else
         {
             NETINFO_ITEM* newnet = new NETINFO_ITEM( board, name, 0 );
             board->Add( newnet );
-            m_netinfo = newnet;
+            SetNet( newnet );
         }
     }
 }

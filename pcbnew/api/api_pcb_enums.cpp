@@ -548,8 +548,9 @@ types::ZoneFillMode ToProtoEnum( ZONE_FILL_MODE aValue )
 {
     switch( aValue )
     {
-    case ZONE_FILL_MODE::POLYGONS:      return types::ZoneFillMode::ZFM_SOLID;
-    case ZONE_FILL_MODE::HATCH_PATTERN: return types::ZoneFillMode::ZFM_HATCHED;
+    case ZONE_FILL_MODE::POLYGONS:        return types::ZoneFillMode::ZFM_SOLID;
+    case ZONE_FILL_MODE::HATCH_PATTERN:   return types::ZoneFillMode::ZFM_HATCHED;
+    case ZONE_FILL_MODE::COPPER_THIEVING: return types::ZoneFillMode::ZFM_COPPER_THIEVING;
 
     default:
         wxCHECK_MSG( false, types::ZoneFillMode::ZFM_UNKNOWN,
@@ -564,12 +565,46 @@ ZONE_FILL_MODE FromProtoEnum( types::ZoneFillMode aValue )
     switch( aValue )
     {
     case types::ZoneFillMode::ZFM_UNKNOWN:
-    case types::ZoneFillMode::ZFM_SOLID:    return ZONE_FILL_MODE::POLYGONS;
-    case types::ZoneFillMode::ZFM_HATCHED:  return ZONE_FILL_MODE::HATCH_PATTERN;
+    case types::ZoneFillMode::ZFM_SOLID:           return ZONE_FILL_MODE::POLYGONS;
+    case types::ZoneFillMode::ZFM_HATCHED:         return ZONE_FILL_MODE::HATCH_PATTERN;
+    case types::ZoneFillMode::ZFM_COPPER_THIEVING: return ZONE_FILL_MODE::COPPER_THIEVING;
 
     default:
         wxCHECK_MSG( false, ZONE_FILL_MODE::POLYGONS,
                      "Unhandled case in FromProtoEnum<types::ZoneFillMode>" );
+    }
+}
+
+
+template<>
+types::ThievingPattern ToProtoEnum( THIEVING_PATTERN aValue )
+{
+    switch( aValue )
+    {
+    case THIEVING_PATTERN::DOTS:       return types::ThievingPattern::TP_DOTS;
+    case THIEVING_PATTERN::SQUARES:    return types::ThievingPattern::TP_SQUARES;
+    case THIEVING_PATTERN::HATCH: return types::ThievingPattern::TP_CROSSHATCH;
+
+    default:
+        wxCHECK_MSG( false, types::ThievingPattern::TP_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<THIEVING_PATTERN>" );
+    }
+}
+
+
+template<>
+THIEVING_PATTERN FromProtoEnum( types::ThievingPattern aValue )
+{
+    switch( aValue )
+    {
+    case types::ThievingPattern::TP_UNKNOWN:
+    case types::ThievingPattern::TP_DOTS:       return THIEVING_PATTERN::DOTS;
+    case types::ThievingPattern::TP_SQUARES:    return THIEVING_PATTERN::SQUARES;
+    case types::ThievingPattern::TP_CROSSHATCH: return THIEVING_PATTERN::HATCH;
+
+    default:
+        wxCHECK_MSG( false, THIEVING_PATTERN::DOTS,
+                     "Unhandled case in FromProtoEnum<types::ThievingPattern>" );
     }
 }
 

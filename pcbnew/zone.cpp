@@ -183,6 +183,7 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone, PCB_LAYER_ID aLayer )
     m_hatchSmoothingValue     = aZone.m_hatchSmoothingValue;
     m_hatchBorderAlgorithm    = aZone.m_hatchBorderAlgorithm;
     m_hatchHoleMinArea        = aZone.m_hatchHoleMinArea;
+    m_thievingSettings        = aZone.m_thievingSettings;
 
     aZone.GetLayerSet().RunOnLayers(
             [&]( PCB_LAYER_ID layer )
@@ -302,6 +303,16 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
         PackNet( cu->mutable_net() );
         cu->mutable_teardrop()->set_type(
                 ToProtoEnum<TEARDROP_TYPE, types::TeardropType>( m_teardropType ) );
+
+        types::ThievingFillSettings* thieving = cu->mutable_thieving_settings();
+        thieving->set_pattern(
+                ToProtoEnum<THIEVING_PATTERN, types::ThievingPattern>( m_thievingSettings.pattern ) );
+        thieving->mutable_element_size()->set_value_nm( m_thievingSettings.element_size );
+        thieving->mutable_gap()->set_value_nm( m_thievingSettings.gap );
+        thieving->mutable_line_width()->set_value_nm( m_thievingSettings.line_width );
+        thieving->set_stagger( m_thievingSettings.stagger );
+        thieving->mutable_orientation()->set_value_degrees(
+                m_thievingSettings.orientation.AsDegrees() );
     }
 
     for( const auto& [layer, shape] : m_FilledPolysList )
@@ -379,7 +390,10 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
         m_ZoneMinThickness = cu.min_thickness().value_nm();
         m_islandRemovalMode = FromProtoEnum<ISLAND_REMOVAL_MODE>( cu.island_mode() );
         m_minIslandArea = cu.min_island_area();
-        m_fillMode = FromProtoEnum<ZONE_FILL_MODE>( cu.fill_mode() );
+        // Route through SetFillMode so the thieving single-layer / net-less invariants
+        // are enforced on protobuf imports — a direct m_fillMode assignment would leave
+        // the multi-layer set unpacked at line 355 in place for ZFM_COPPER_THIEVING.
+        SetFillMode( FromProtoEnum<ZONE_FILL_MODE>( cu.fill_mode() ) );
 
         m_hatchThickness = cu.hatch_settings().thickness().value_nm();
         m_hatchGap = cu.hatch_settings().gap().value_nm();
@@ -396,6 +410,27 @@ bool ZONE::Deserialize( const google::protobuf::Any& aContainer )
 
         UnpackNet( cu.net() );
         m_teardropType = FromProtoEnum<TEARDROP_TYPE>( cu.teardrop().type() );
+
+        if( cu.has_thieving_settings() )
+        {
+            const types::ThievingFillSettings& thieving = cu.thieving_settings();
+            m_thievingSettings.pattern =
+                    FromProtoEnum<THIEVING_PATTERN>( thieving.pattern() );
+
+            auto assignIfPositive = []( int aProtoValue, int& aTarget )
+            {
+                if( aProtoValue > 0 )
+                    aTarget = aProtoValue;
+            };
+
+            assignIfPositive( thieving.element_size().value_nm(), m_thievingSettings.element_size );
+            assignIfPositive( thieving.gap().value_nm(),          m_thievingSettings.gap );
+            assignIfPositive( thieving.line_width().value_nm(),   m_thievingSettings.line_width );
+
+            m_thievingSettings.stagger = thieving.stagger();
+            m_thievingSettings.orientation =
+                    EDA_ANGLE( thieving.orientation().value_degrees(), DEGREES_T );
+        }
 
         for( const auto& properties : zone.layer_properties() )
         {
@@ -547,9 +582,46 @@ bool ZONE::IsOnCopperLayer() const
 }
 
 
+bool ZONE::SetNetCode( int aNetCode, bool aNoAssert )
+{
+    if( IsCopperThieving() )
+        aNetCode = 0;
+
+    return BOARD_CONNECTED_ITEM::SetNetCode( aNetCode, aNoAssert );
+}
+
+
+void ZONE::SetNet( NETINFO_ITEM* aNetInfo )
+{
+    if( IsCopperThieving() )
+        aNetInfo = nullptr;
+
+    BOARD_CONNECTED_ITEM::SetNet( aNetInfo );
+}
+
+
 void ZONE::SetLayer( PCB_LAYER_ID aLayer )
 {
     SetLayerSet( LSET( { aLayer } ) );
+}
+
+
+void ZONE::SetFillMode( ZONE_FILL_MODE aFillMode )
+{
+    if( m_fillMode == aFillMode )
+        return;
+
+    SetNeedRefill( true );
+    m_fillMode = aFillMode;
+
+    // Thieving zones are net-less and single-layer; clamp on transition so a
+    // multi-layer netted POLYGONS zone converted via the property panel or a
+    // load-time SetLayerSet-then-SetFillMode sequence cannot keep stale state.
+    if( m_fillMode == ZONE_FILL_MODE::COPPER_THIEVING )
+    {
+        BOARD_CONNECTED_ITEM::SetNetCode( 0, true );
+        SetLayer( GetFirstLayer() );
+    }
 }
 
 
@@ -558,9 +630,15 @@ void ZONE::SetLayerSet( const LSET& aLayerSet )
     if( aLayerSet.count() == 0 )
         return;
 
+    // Thieving zones are single-layer; clamp here so direct callers cannot violate
+    // the invariant.  UIOrder().front() matches GetFirstLayer().
+    const LSET effectiveSet = ( IsCopperThieving() && aLayerSet.count() > 1 )
+                                      ? LSET( { aLayerSet.UIOrder().front() } )
+                                      : aLayerSet;
+
     std::scoped_lock lock( m_layerSetMutex, m_filledPolysListMutex );
 
-    if( m_layerSet != aLayerSet )
+    if( m_layerSet != effectiveSet )
     {
         SetNeedRefill( true );
 
@@ -570,7 +648,7 @@ void ZONE::SetLayerSet( const LSET& aLayerSet )
         m_filledPolysHash.clear();
         m_insulatedIslands.clear();
 
-        aLayerSet.RunOnLayers(
+        effectiveSet.RunOnLayers(
                 [&]( PCB_LAYER_ID layer )
                 {
                     m_FilledPolysList[layer]  = std::make_shared<SHAPE_POLY_SET>();
@@ -581,11 +659,11 @@ void ZONE::SetLayerSet( const LSET& aLayerSet )
         std::erase_if( m_layerProperties,
                        [&]( const auto& item )
                        {
-                           return !aLayerSet.Contains( item.first );
+                           return !effectiveSet.Contains( item.first );
                        } );
     }
 
-    m_layerSet = aLayerSet;
+    m_layerSet = effectiveSet;
 }
 
 
@@ -1923,8 +2001,19 @@ static struct ZONE_DESC
         if( zfmMap.Choices().GetCount() == 0 )
         {
             zfmMap.Undefined( ZONE_FILL_MODE::POLYGONS );
-            zfmMap.Map( ZONE_FILL_MODE::POLYGONS,      _HKI( "Solid fill" ) )
-                  .Map( ZONE_FILL_MODE::HATCH_PATTERN, _HKI( "Hatch pattern" ) );
+            zfmMap.Map( ZONE_FILL_MODE::POLYGONS,        _HKI( "Solid fill" ) )
+                  .Map( ZONE_FILL_MODE::HATCH_PATTERN,   _HKI( "Hatch pattern" ) )
+                  .Map( ZONE_FILL_MODE::COPPER_THIEVING, _HKI( "Copper thieving" ) );
+        }
+
+        ENUM_MAP<THIEVING_PATTERN>& tpMap = ENUM_MAP<THIEVING_PATTERN>::Instance();
+
+        if( tpMap.Choices().GetCount() == 0 )
+        {
+            tpMap.Undefined( THIEVING_PATTERN::DOTS );
+            tpMap.Map( THIEVING_PATTERN::DOTS,    _HKI( "Dots" ) )
+                 .Map( THIEVING_PATTERN::SQUARES, _HKI( "Squares" ) )
+                 .Map( THIEVING_PATTERN::HATCH,   _HKI( "Hatch" ) );
         }
 
         ENUM_MAP<ISLAND_REMOVAL_MODE>& irmMap = ENUM_MAP<ISLAND_REMOVAL_MODE>::Instance();
@@ -1976,6 +2065,21 @@ static struct ZONE_DESC
                     return false;
                 };
 
+        // Hide net-bearing and hatch/island properties for copper-thieving zones.
+        // Same predicate gates both kinds of properties.
+        auto isNonThievingCopperZone =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
+                    {
+                        return !zone->GetIsRuleArea()
+                                && IsCopperLayer( zone->GetFirstLayer() )
+                                && !zone->IsCopperThieving();
+                    }
+
+                    return false;
+                };
+
         auto isRuleArea =
                 []( INSPECTABLE* aItem ) -> bool
                 {
@@ -1994,6 +2098,39 @@ static struct ZONE_DESC
                     return false;
                 };
 
+        auto isThievingFill =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
+                        return zone->IsCopperThieving();
+
+                    return false;
+                };
+
+        auto isThievingHatch =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
+                    {
+                        return zone->IsCopperThieving()
+                                && zone->GetThievingPattern() == THIEVING_PATTERN::HATCH;
+                    }
+
+                    return false;
+                };
+
+        auto isThievingNonHatch =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
+                    {
+                        return zone->IsCopperThieving()
+                                && zone->GetThievingPattern() != THIEVING_PATTERN::HATCH;
+                    }
+
+                    return false;
+                };
+
         auto isAreaBasedIslandRemoval =
                 []( INSPECTABLE* aItem ) -> bool
                 {
@@ -2003,17 +2140,16 @@ static struct ZONE_DESC
                     return false;
                 };
 
-        // Layer property is hidden because it only holds a single layer and zones actually use
-        // a layer set
+        // Visible for thieving zones only; ordinary zones use a layer set, not a single layer.
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ),
                                  new PROPERTY_ENUM<ZONE, PCB_LAYER_ID>( _HKI( "Layer" ),
                                                                         &ZONE::SetLayer, &ZONE::GetLayer ) )
-                .SetIsHiddenFromPropertiesManager();
+                .SetAvailableFunc( isThievingFill );
 
         propMgr.OverrideAvailability( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ),
-                                      isCopperZone );
+                                      isNonThievingCopperZone );
         propMgr.OverrideAvailability( TYPE_HASH( ZONE ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net Class" ),
-                                      isCopperZone );
+                                      isNonThievingCopperZone );
 
         propMgr.AddProperty( new PROPERTY<ZONE, unsigned>( _HKI( "Priority" ), &ZONE::SetAssignedPriority,
                                                            &ZONE::GetAssignedPriority ) )
@@ -2079,7 +2215,7 @@ static struct ZONE_DESC
                     &ZONE::SetHatchOrientation, &ZONE::GetHatchOrientation,
                     PROPERTY_DISPLAY::PT_DEGREE ),
                     groupFill )
-                .SetAvailableFunc( isCopperZone )
+                .SetAvailableFunc( isNonThievingCopperZone )
                 .SetWriteableFunc( isHatchedFill );
 
         auto atLeastMinWidthValidator =
@@ -2098,21 +2234,21 @@ static struct ZONE_DESC
         propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Hatch Width" ),
                     &ZONE::SetHatchThickness, &ZONE::GetHatchThickness, PROPERTY_DISPLAY::PT_SIZE ),
                     groupFill )
-                .SetAvailableFunc( isCopperZone )
+                .SetAvailableFunc( isNonThievingCopperZone )
                 .SetWriteableFunc( isHatchedFill )
                 .SetValidator( atLeastMinWidthValidator );
 
         propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Hatch Gap" ),
                     &ZONE::SetHatchGap, &ZONE::GetHatchGap, PROPERTY_DISPLAY::PT_SIZE ),
                     groupFill )
-                .SetAvailableFunc( isCopperZone )
+                .SetAvailableFunc( isNonThievingCopperZone )
                 .SetWriteableFunc( isHatchedFill )
                 .SetValidator( atLeastMinWidthValidator );
 
         propMgr.AddProperty( new PROPERTY<ZONE, double>( _HKI( "Hatch Minimum Hole Ratio" ),
                      &ZONE::SetHatchHoleMinArea, &ZONE::GetHatchHoleMinArea ),
                      groupFill )
-                .SetAvailableFunc( isCopperZone )
+                .SetAvailableFunc( isNonThievingCopperZone )
                 .SetWriteableFunc( isHatchedFill )
                 .SetValidator( PROPERTY_VALIDATORS::PositiveRatioValidator );
 
@@ -2120,24 +2256,64 @@ static struct ZONE_DESC
         propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Smoothing Effort" ),
                     &ZONE::SetHatchSmoothingLevel, &ZONE::GetHatchSmoothingLevel ),
                     groupFill )
-                .SetAvailableFunc( isCopperZone )
+                .SetAvailableFunc( isNonThievingCopperZone )
                 .SetWriteableFunc( isHatchedFill );
 
         propMgr.AddProperty( new PROPERTY<ZONE, double>( _HKI( "Smoothing Amount" ),
                     &ZONE::SetHatchSmoothingValue, &ZONE::GetHatchSmoothingValue ),
                     groupFill )
-                .SetAvailableFunc( isCopperZone )
+                .SetAvailableFunc( isNonThievingCopperZone )
                 .SetWriteableFunc( isHatchedFill );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, THIEVING_PATTERN>( _HKI( "Thieving Pattern" ),
+                    &ZONE::SetThievingPattern, &ZONE::GetThievingPattern ),
+                    groupFill )
+                .SetAvailableFunc( isThievingFill );
+
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thieving Element Size" ),
+                    &ZONE::SetThievingElementSize, &ZONE::GetThievingElementSize,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    groupFill )
+                .SetAvailableFunc( isThievingFill )
+                .SetWriteableFunc( isThievingNonHatch )
+                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
+
+        // Gap is meaningful for all three patterns: edge-to-edge spacing between
+        // adjacent stamps for dots/squares, line-to-line edge spacing for hatch.
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thieving Gap" ),
+                    &ZONE::SetThievingGap, &ZONE::GetThievingGap, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupFill )
+                .SetAvailableFunc( isThievingFill )
+                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
+
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Thieving Line Width" ),
+                    &ZONE::SetThievingLineWidth, &ZONE::GetThievingLineWidth,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                    groupFill )
+                .SetAvailableFunc( isThievingFill )
+                .SetWriteableFunc( isThievingHatch )
+                .SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
+
+        propMgr.AddProperty( new PROPERTY<ZONE, bool>( _HKI( "Thieving Stagger" ),
+                    &ZONE::SetThievingStagger, &ZONE::GetThievingStagger ),
+                    groupFill )
+                .SetAvailableFunc( isThievingFill );
+
+        propMgr.AddProperty( new PROPERTY<ZONE, EDA_ANGLE>( _HKI( "Thieving Orientation" ),
+                    &ZONE::SetThievingOrientation, &ZONE::GetThievingOrientation,
+                    PROPERTY_DISPLAY::PT_DEGREE ),
+                    groupFill )
+                .SetAvailableFunc( isThievingFill );
 
         propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ISLAND_REMOVAL_MODE>( _HKI( "Remove Islands" ),
                     &ZONE::SetIslandRemovalMode, &ZONE::GetIslandRemovalMode ),
                     groupFill )
-                .SetAvailableFunc( isCopperZone );
+                .SetAvailableFunc( isNonThievingCopperZone );
 
         propMgr.AddProperty( new PROPERTY<ZONE, long long int>( _HKI( "Minimum Island Area" ),
                     &ZONE::SetMinIslandArea, &ZONE::GetMinIslandArea, PROPERTY_DISPLAY::PT_AREA ),
                     groupFill )
-                .SetAvailableFunc( isCopperZone )
+                .SetAvailableFunc( isNonThievingCopperZone )
                 .SetWriteableFunc( isAreaBasedIslandRemoval );
 
         const wxString groupElectrical = _HKI( "Electrical" );
@@ -2154,18 +2330,21 @@ static struct ZONE_DESC
         constexpr int minMinWidth = pcbIUScale.mmToIU( ZONE_THICKNESS_MIN_VALUE_MM );
         minWidth->SetValidator( PROPERTY_VALIDATORS::RangeIntValidator<minMinWidth, INT_MAX> );
 
+        // Pad connections and thermal-relief controls require a net to act on.
+        // Thieving zones are netless and explicitly use ZONE_CONNECTION::NONE,
+        // so hide these for them while keeping them visible for solid + hatched zones.
         auto padConnections = new PROPERTY_ENUM<ZONE, ZONE_CONNECTION>( _HKI( "Pad Connections" ),
                     &ZONE::SetPadConnection, &ZONE::GetPadConnection );
-        padConnections->SetAvailableFunc( isCopperZone );
+        padConnections->SetAvailableFunc( isNonThievingCopperZone );
 
         auto thermalGap = new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Gap" ),
                     &ZONE::SetThermalReliefGap, &ZONE::GetThermalReliefGap, PROPERTY_DISPLAY::PT_SIZE );
-        thermalGap->SetAvailableFunc( isCopperZone );
+        thermalGap->SetAvailableFunc( isNonThievingCopperZone );
         thermalGap->SetValidator( PROPERTY_VALIDATORS::PositiveIntValidator );
 
         auto thermalSpokeWidth = new PROPERTY<ZONE, int>( _HKI( "Thermal Relief Spoke Width" ),
                     &ZONE::SetThermalReliefSpokeWidth, &ZONE::GetThermalReliefSpokeWidth, PROPERTY_DISPLAY::PT_SIZE );
-        thermalSpokeWidth->SetAvailableFunc( isCopperZone );
+        thermalSpokeWidth->SetAvailableFunc( isNonThievingCopperZone );
         thermalSpokeWidth->SetValidator( atLeastMinWidthValidator );
 
         propMgr.AddProperty( clearance, groupElectrical );
@@ -2179,4 +2358,5 @@ static struct ZONE_DESC
 IMPLEMENT_ENUM_TO_WXANY( PLACEMENT_SOURCE_T )
 IMPLEMENT_ENUM_TO_WXANY( ZONE_CONNECTION )
 IMPLEMENT_ENUM_TO_WXANY( ZONE_FILL_MODE )
+IMPLEMENT_ENUM_TO_WXANY( THIEVING_PATTERN )
 IMPLEMENT_ENUM_TO_WXANY( ISLAND_REMOVAL_MODE )

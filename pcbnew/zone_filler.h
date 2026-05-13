@@ -163,6 +163,24 @@ private:
                                  const SHAPE_POLY_SET& aThermalRings );
 
     /**
+     * Stamp a regular grid of pattern shapes onto a zone's filled area for
+     * copper thieving.  Replaces aFillPolys with the clipped pattern.
+     *
+     * Thieving zones are netless dummy copper used to balance plating current
+     * density on outer layers (and copper distribution on inner layers).  Runs
+     * after electrical clearances have already been subtracted into aFillPolys,
+     * so the stamps inherit those keepouts automatically.
+     *
+     * v1 supports the dots pattern only.  Squares + crosshatch land in a follow-up.
+     *
+     * @param aZone the zone, fill mode must be COPPER_THIEVING.
+     * @param aLayer the copper layer.
+     * @param aFillPolys IN: pre-cleared valid fill region.  OUT: stamped pattern.
+     */
+    bool addCopperThievingPattern( const ZONE* aZone, PCB_LAYER_ID aLayer,
+                                   SHAPE_POLY_SET& aFillPolys );
+
+    /**
      * Remove minimum-width violations introduced by zone-to-zone knockouts.
      * Runs a deflate/reconnect/inflate cycle and intersects with the pre-deflate boundary
      * to avoid re-inflating into cleared areas.

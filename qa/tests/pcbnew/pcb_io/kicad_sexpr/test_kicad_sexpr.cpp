@@ -32,6 +32,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <richio.h>
 
 #include <board.h>
 #include <board_connected_item.h>
@@ -393,6 +394,193 @@ BOOST_AUTO_TEST_CASE( FootprintSave_OmitsNetsOnAllBoardConnectedItems )
     BOOST_CHECK_EQUAL( detachedZone->GetNet(), NETINFO_LIST::OrphanedItem() );
 
     std::filesystem::remove_all( tmpLib );
+}
+
+
+/**
+ * Verify that a copper-thieving zone round-trips through the kicad_sexpr writer
+ * and parser, preserving every THIEVING_SETTINGS field plus the netless invariant.
+ *
+ * Tests the writer's `(mode thieving)` emission, the `(thieving ...)` sub-block
+ * format, and the parser's case for both.  Independently exercises each pattern
+ * value to catch keyword-table omissions.
+ */
+BOOST_AUTO_TEST_CASE( CopperThievingZone_RoundTrip )
+{
+    std::unique_ptr<BOARD> writeBoard = std::make_unique<BOARD>();
+
+    ZONE* zone = new ZONE( writeBoard.get() );
+    zone->SetLayer( F_Cu );
+    zone->AppendCorner( VECTOR2I( 0, 0 ), -1 );
+    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ), -1 );
+    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ), -1 );
+    zone->AppendCorner( VECTOR2I( 0, pcbIUScale.mmToIU( 10 ) ), -1 );
+    zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+
+    THIEVING_SETTINGS thieving;
+    thieving.pattern      = THIEVING_PATTERN::HATCH;
+    thieving.element_size = pcbIUScale.mmToIU( 0.42 );
+    thieving.gap        = pcbIUScale.mmToIU( 1.27 );
+    thieving.line_width   = pcbIUScale.mmToIU( 0.35 );
+    thieving.stagger      = true;
+    thieving.orientation     = EDA_ANGLE( 30.0, DEGREES_T );
+    zone->SetThievingSettings( thieving );
+
+    writeBoard->Add( zone );
+
+    std::filesystem::path tmpPath = std::filesystem::temp_directory_path()
+                                    / "copper_thieving_roundtrip.kicad_pcb";
+
+    PCB_IO_KICAD_SEXPR writer;
+    writer.SaveBoard( tmpPath.string(), writeBoard.get() );
+
+    std::unique_ptr<BOARD> readBoard = std::make_unique<BOARD>();
+    PCB_IO_KICAD_SEXPR    reader;
+    reader.LoadBoard( tmpPath.string(), readBoard.get() );
+
+    BOOST_REQUIRE_EQUAL( readBoard->Zones().size(), 1u );
+
+    ZONE* loaded = readBoard->Zones()[0];
+
+    BOOST_CHECK( loaded->GetFillMode() == ZONE_FILL_MODE::COPPER_THIEVING );
+    BOOST_CHECK( loaded->IsCopperThieving() );
+    BOOST_CHECK_EQUAL( loaded->GetNetCode(), 0 );
+
+    const THIEVING_SETTINGS& loadedSettings = loaded->GetThievingSettings();
+    BOOST_CHECK( loadedSettings.pattern == THIEVING_PATTERN::HATCH );
+    BOOST_CHECK_EQUAL( loadedSettings.element_size, thieving.element_size );
+    BOOST_CHECK_EQUAL( loadedSettings.gap, thieving.gap );
+    BOOST_CHECK_EQUAL( loadedSettings.line_width, thieving.line_width );
+    BOOST_CHECK_EQUAL( loadedSettings.stagger, true );
+    BOOST_CHECK( loadedSettings.orientation == EDA_ANGLE( 30.0, DEGREES_T ) );
+
+    std::filesystem::remove( tmpPath );
+}
+
+
+/**
+ * Each THIEVING_PATTERN enum value should round-trip through the file format.
+ * Catches token-table mistakes that only affect a specific pattern.
+ */
+BOOST_AUTO_TEST_CASE( CopperThievingZone_AllPatternsRoundTrip )
+{
+    const std::array<THIEVING_PATTERN, 3> patterns = {
+        THIEVING_PATTERN::DOTS,
+        THIEVING_PATTERN::SQUARES,
+        THIEVING_PATTERN::HATCH,
+    };
+
+    for( THIEVING_PATTERN pattern : patterns )
+    {
+        BOOST_TEST_CONTEXT( "pattern enum value " << static_cast<int>( pattern ) )
+        {
+            std::unique_ptr<BOARD> writeBoard = std::make_unique<BOARD>();
+
+            ZONE* zone = new ZONE( writeBoard.get() );
+            zone->SetLayer( F_Cu );
+            zone->AppendCorner( VECTOR2I( 0, 0 ), -1 );
+            zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 5 ), 0 ), -1 );
+            zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ), -1 );
+            zone->AppendCorner( VECTOR2I( 0, pcbIUScale.mmToIU( 5 ) ), -1 );
+            zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+
+            THIEVING_SETTINGS thieving = zone->GetThievingSettings();
+            thieving.pattern = pattern;
+            zone->SetThievingSettings( thieving );
+
+            writeBoard->Add( zone );
+
+            std::filesystem::path tmpPath = std::filesystem::temp_directory_path()
+                                            / "copper_thieving_pattern.kicad_pcb";
+            PCB_IO_KICAD_SEXPR writer;
+            writer.SaveBoard( tmpPath.string(), writeBoard.get() );
+
+            std::unique_ptr<BOARD> readBoard = std::make_unique<BOARD>();
+            PCB_IO_KICAD_SEXPR    reader;
+            reader.LoadBoard( tmpPath.string(), readBoard.get() );
+
+            BOOST_REQUIRE_EQUAL( readBoard->Zones().size(), 1u );
+            BOOST_CHECK( readBoard->Zones()[0]->GetThievingSettings().pattern == pattern );
+
+            std::filesystem::remove( tmpPath );
+        }
+    }
+}
+
+
+/**
+ * Loading a .kicad_pcb that declares an old format version must reject
+ * (mode thieving) and (thieving ...) tokens.  Otherwise a misversioned file
+ * could load on this build but silently corrupt on an older reader because
+ * the format never went through a proper transition.
+ */
+BOOST_AUTO_TEST_CASE( CopperThievingZone_RejectedInOldFileVersion )
+{
+    std::filesystem::path tmpPath = std::filesystem::temp_directory_path()
+                                    / "copper_thieving_old_version.kicad_pcb";
+    std::ofstream out( tmpPath );
+    // 20260512 is the Net Chains release; thieving needs >= 20260513.  Using the
+    // immediately-prior version exercises the boundary check.
+    out << "(kicad_pcb (version 20260512) (generator \"test\") (generator_version \"test\")"
+        << " (general (thickness 1.6)) (paper \"A4\")"
+        << " (layers (0 \"F.Cu\" signal) (31 \"B.Cu\" signal))"
+        << " (zone (net 0) (net_name \"\") (layer \"F.Cu\") (uuid \"00000000-0000-0000-0000-000000000001\")"
+        << "       (hatch edge 0.5)"
+        << "       (connect_pads (clearance 0))"
+        << "       (min_thickness 0.25) (filled_areas_thickness no)"
+        << "       (fill yes (mode thieving) (thermal_gap 0.5) (thermal_bridge_width 0.5)"
+        << "             (island_removal_mode 0))"
+        << "       (polygon (pts (xy 0 0) (xy 5 0) (xy 5 5) (xy 0 5))))"
+        << ")";
+    out.close();
+
+    std::unique_ptr<BOARD> readBoard = std::make_unique<BOARD>();
+    PCB_IO_KICAD_SEXPR    reader;
+    BOOST_CHECK_THROW( reader.LoadBoard( tmpPath.string(), readBoard.get() ), IO_ERROR );
+
+    std::filesystem::remove( tmpPath );
+}
+
+
+/**
+ * The parser must reject non-positive size / gap / width values inline so a
+ * hand-edited or corrupted file cannot leave the zone in a state that would
+ * deadlock the filler.  Verifies the inline clamp keeps the constructor
+ * defaults for any malformed field.
+ */
+BOOST_AUTO_TEST_CASE( CopperThievingZone_RejectsMalformedGeometry )
+{
+    std::filesystem::path tmpPath = std::filesystem::temp_directory_path()
+                                    / "copper_thieving_malformed.kicad_pcb";
+    std::ofstream out( tmpPath );
+    out << "(kicad_pcb (version 20260513) (generator \"test\") (generator_version \"test\")"
+        << " (general (thickness 1.6)) (paper \"A4\")"
+        << " (layers (0 \"F.Cu\" signal) (31 \"B.Cu\" signal))"
+        << " (zone (net 0) (net_name \"\") (layer \"F.Cu\") (uuid \"00000000-0000-0000-0000-000000000002\")"
+        << "       (hatch edge 0.5)"
+        << "       (connect_pads (clearance 0))"
+        << "       (min_thickness 0.25) (filled_areas_thickness no)"
+        << "       (fill yes (mode thieving)"
+        << "             (thermal_gap 0.5) (thermal_bridge_width 0.5)"
+        << "             (island_removal_mode 0)"
+        << "             (thieving (type dots) (size -1) (gap 0)"
+        << "                       (width -5) (stagger no) (orientation 0)))"
+        << "       (polygon (pts (xy 0 0) (xy 5 0) (xy 5 5) (xy 0 5))))"
+        << ")";
+    out.close();
+
+    std::unique_ptr<BOARD> readBoard = std::make_unique<BOARD>();
+    PCB_IO_KICAD_SEXPR    reader;
+    reader.LoadBoard( tmpPath.string(), readBoard.get() );
+
+    BOOST_REQUIRE_EQUAL( readBoard->Zones().size(), 1u );
+
+    const THIEVING_SETTINGS& loaded = readBoard->Zones()[0]->GetThievingSettings();
+    BOOST_CHECK_GT( loaded.element_size, 0 );
+    BOOST_CHECK_GT( loaded.gap, 0 );
+    BOOST_CHECK_GT( loaded.line_width, 0 );
+
+    std::filesystem::remove( tmpPath );
 }
 
 

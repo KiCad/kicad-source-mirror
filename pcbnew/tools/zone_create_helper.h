@@ -50,6 +50,9 @@ public:
         ///< Should create a keepout zone?
         bool m_keepout;
 
+        ///< Are we creating copper theiving zone?
+        bool m_thieving = false;
+
         ///< Layer to begin drawing
         PCB_LAYER_ID m_layer;
 

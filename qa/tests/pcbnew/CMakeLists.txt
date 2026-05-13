@@ -112,6 +112,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_copper_conn.cpp
     drc/test_drc_copper_graphics.cpp
     drc/test_drc_copper_sliver.cpp
+    drc/test_drc_copper_thieving.cpp
     drc/test_solder_mask_bridging.cpp
     drc/test_solder_mask_bridge_all_tracks.cpp
     drc/test_solder_mask_track_to_pad.cpp

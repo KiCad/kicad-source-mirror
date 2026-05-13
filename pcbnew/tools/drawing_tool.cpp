@@ -3546,6 +3546,8 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     if( aEvent.IsAction( &PCB_ACTIONS::drawPolygon ) )
         drawMode = MODE::GRAPHIC_POLYGON;
 
+    const bool drawingThieving = aEvent.IsAction( &PCB_ACTIONS::drawCopperThievingZone );
+
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, drawMode );
 
     // get a source zone, if we need one. We need it for:
@@ -3562,6 +3564,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
     ZONE_CREATE_HELPER::PARAMS params;
 
     params.m_keepout = drawMode == MODE::KEEPOUT;
+    params.m_thieving = drawingThieving;
     params.m_mode = zoneMode;
     params.m_sourceZone = sourceZone;
     params.m_layer = m_frame->GetActiveLayer();
@@ -4574,6 +4577,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawLeader.MakeEvent() );
     Go( &DRAWING_TOOL::DrawBarcode,           PCB_ACTIONS::placeBarcode.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZone.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawCopperThievingZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawRuleArea.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawZoneCutout.MakeEvent() );
     Go( &DRAWING_TOOL::DrawZone,              PCB_ACTIONS::drawSimilarZone.MakeEvent() );

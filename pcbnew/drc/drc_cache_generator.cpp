@@ -303,7 +303,7 @@ bool DRC_CACHE_GENERATOR::Run()
 
     for( ZONE* zone : m_board->Zones() )
     {
-        if( !zone->GetIsRuleArea() && !zone->IsTeardropArea() )
+        if( !zone->GetIsRuleArea() && !zone->IsTeardropArea() && !zone->IsCopperThieving() )
         {
             zone->GetLayerSet().RunOnLayers(
                     [&]( PCB_LAYER_ID layer )

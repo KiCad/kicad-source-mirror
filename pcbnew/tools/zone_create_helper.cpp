@@ -99,6 +99,13 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
     zoneInfo.m_Netcode = highlightedNets.empty() ? -1 : *highlightedNets.begin();
     zoneInfo.SetIsRuleArea( m_params.m_keepout );
 
+    if( m_params.m_thieving )
+    {
+        zoneInfo.m_FillMode = ZONE_FILL_MODE::COPPER_THIEVING;
+        zoneInfo.m_Netcode  = 0;
+        zoneInfo.SetPadConnection( ZONE_CONNECTION::NONE );
+    }
+
     if( m_params.m_mode != ZONE_MODE::GRAPHIC_POLYGON
             && ( zoneInfo.m_Layers & LSET::AllCuMask() ).any() )
     {
@@ -116,9 +123,10 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
             zoneInfo.m_Netcode = bci->GetNetCode();
     }
 
-    if( m_params.m_mode != ZONE_MODE::GRAPHIC_POLYGON )
+    if( m_params.m_mode != ZONE_MODE::GRAPHIC_POLYGON && !m_params.m_thieving )
     {
-        // Show options dialog
+        // When drawing a new zone, skip the pre-draw dialog for thieving copper and
+        // graphic polygons as it is more disruptive than useful
         int dialogResult;
 
         if( m_params.m_keepout )

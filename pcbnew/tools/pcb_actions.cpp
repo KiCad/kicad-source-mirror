@@ -345,6 +345,16 @@ TOOL_ACTION PCB_ACTIONS::drawZone( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( ZONE_MODE::ADD ) );
 
+TOOL_ACTION PCB_ACTIONS::drawCopperThievingZone( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.copperThievingZone" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Draw Copper Thieving Zone" ) )
+        .Tooltip( _( "Add a non-electrical thieving zone for plating-balance copper" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::add_zone )
+        .Flags( AF_ACTIVATE )
+        .Parameter( ZONE_MODE::ADD ) );
+
 TOOL_ACTION PCB_ACTIONS::drawVia( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.via" )
         .Scope( AS_GLOBAL )

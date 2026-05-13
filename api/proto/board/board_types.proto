@@ -651,6 +651,7 @@ enum ZoneFillMode
   ZFM_UNKNOWN = 0;
   ZFM_SOLID = 1;
   ZFM_HATCHED = 2;
+  ZFM_COPPER_THIEVING = 3;
 }
 
 enum ZoneHatchSmoothing
@@ -679,6 +680,24 @@ message HatchFillSettings
   ZoneHatchFillBorderMode border_mode = 6;
 }
 
+enum ThievingPattern
+{
+  TP_UNKNOWN = 0;
+  TP_DOTS = 1;
+  TP_SQUARES = 2;
+  TP_CROSSHATCH = 3;
+}
+
+message ThievingFillSettings
+{
+  ThievingPattern pattern = 1;
+  kiapi.common.types.Distance element_size = 2;
+  kiapi.common.types.Distance gap = 3;
+  kiapi.common.types.Distance line_width = 4;
+  bool stagger = 5;
+  kiapi.common.types.Angle orientation = 6;
+}
+
 message TeardropSettings
 {
   TeardropType type = 1;
@@ -703,6 +722,8 @@ message CopperZoneSettings
   Net net = 8;
 
   TeardropSettings teardrop = 9;
+
+  ThievingFillSettings thieving_settings = 10;
 }
 
 enum PlacementRuleSourceType

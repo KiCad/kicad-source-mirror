@@ -274,6 +274,12 @@ bool DRC_TEST_PROVIDER_CONNECTIVITY::Run()
         if( !reportProgress( ii++, count, progressDelta ) )
             return false;   // DRC cancelled
 
+        // Copper-thieving fills are netless dummy copper by definition.  Every
+        // stamp is an "isolated island" but that is the intended geometry; flagging
+        // would produce thousands of false violations on a real board.
+        if( zone->IsCopperThieving() )
+            continue;
+
         for( const auto& [ layer, layerIslands ] : zoneIslands )
         {
             if( !IsCopperLayer( layer ) )

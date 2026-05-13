@@ -8402,13 +8402,26 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                 case T_mode:
                     token = NextTok();
 
-                    if( token != T_segment && token != T_hatch && token != T_polygon )
-                        Expecting( "segment, hatch or polygon" );
+                    if( token != T_segment && token != T_hatch && token != T_polygon
+                            && token != T_thieving )
+                    {
+                        Expecting( "segment, hatch, polygon or thieving" );
+                    }
 
                     switch( token )
                     {
                     case T_hatch:
                         zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
+                        break;
+
+                    case T_thieving:
+                        if( m_requiredVersion < 20260513 )
+                        {
+                            Expecting( "segment, hatch or polygon "
+                                       "(thieving requires file version >= 20260513)" );
+                        }
+
+                        zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
                         break;
 
                     case T_segment: // deprecated, convert to polygons
@@ -8463,6 +8476,93 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                     zone->SetHatchHoleMinArea( parseDouble( T_hatch_min_hole_area ) );
                     NeedRIGHT();
                     break;
+
+                case T_thieving:
+                {
+                    if( m_requiredVersion < 20260513 )
+                    {
+                        Expecting( "thieving requires file version >= 20260513" );
+                    }
+
+                    THIEVING_SETTINGS thieving = zone->GetThievingSettings();
+
+                    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+                    {
+                        if( token == T_LEFT )
+                            token = NextTok();
+
+                        switch( token )
+                        {
+                        case T_type:
+                            token = NextTok();
+
+                            switch( token )
+                            {
+                            case T_dots:    thieving.pattern = THIEVING_PATTERN::DOTS;    break;
+                            case T_squares: thieving.pattern = THIEVING_PATTERN::SQUARES; break;
+                            case T_hatch:   thieving.pattern = THIEVING_PATTERN::HATCH;   break;
+                            default:        Expecting( "dots, squares or hatch" );
+                            }
+
+                            NeedRIGHT();
+                            break;
+
+                        // Reject non-positive geometry inline.  Zero size would emit
+                        // zero-area stamps and zero gap would deadlock the filler grid
+                        // loop.  The zone's existing setting (constructor defaults)
+                        // stays in place for any malformed field.
+                        case T_size:
+                        {
+                            int val = parseBoardUnits( T_size );
+
+                            if( val > 0 )
+                                thieving.element_size = val;
+
+                            NeedRIGHT();
+                            break;
+                        }
+
+                        case T_gap:
+                        {
+                            int val = parseBoardUnits( T_gap );
+
+                            if( val > 0 )
+                                thieving.gap = val;
+
+                            NeedRIGHT();
+                            break;
+                        }
+
+                        case T_width:
+                        {
+                            int val = parseBoardUnits( T_width );
+
+                            if( val > 0 )
+                                thieving.line_width = val;
+
+                            NeedRIGHT();
+                            break;
+                        }
+
+                        case T_stagger:
+                            thieving.stagger = parseBool();
+                            NeedRIGHT();
+                            break;
+
+                        case T_orientation:
+                            thieving.orientation = EDA_ANGLE( parseDouble( T_orientation ),
+                                                              DEGREES_T );
+                            NeedRIGHT();
+                            break;
+
+                        default:
+                            Expecting( "type, size, gap, width, stagger or orientation" );
+                        }
+                    }
+
+                    zone->SetThievingSettings( thieving );
+                    break;
+                }
 
                 case T_arc_segments:
                     ignore_unused( parseInt( "arc segment count" ) );
@@ -8535,8 +8635,8 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                     Expecting( "mode, arc_segments, thermal_gap, thermal_bridge_width, "
                                "hatch_thickness, hatch_gap, hatch_orientation, "
                                "hatch_smoothing_level, hatch_smoothing_value, "
-                               "hatch_border_algorithm, hatch_min_hole_area, smoothing, radius, "
-                               "island_removal_mode, or island_area_min" );
+                               "hatch_border_algorithm, hatch_min_hole_area, thieving, "
+                               "smoothing, radius, island_removal_mode, or island_area_min" );
                 }
             }
 

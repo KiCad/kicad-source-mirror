@@ -210,6 +210,22 @@ public:
 
     virtual void SetLayer( PCB_LAYER_ID aLayer ) override;
 
+    /**
+     * Override that clamps the netcode to 0 when this zone is in copper-thieving
+     * fill mode.  Thieving zones are dummy plating-balance copper and must remain
+     * netless; the clamp guards paste, properties manager, PRL load, and any other
+     * caller that reaches the setter via BOARD_CONNECTED_ITEM*.
+     */
+    bool SetNetCode( int aNetCode, bool aNoAssert ) override;
+    using BOARD_CONNECTED_ITEM::SetNetCode;
+
+    /**
+     * Override that drops aNetInfo when this zone is in copper-thieving fill mode.
+     * SetNet bypasses the SetNetCode clamp; importers and API deserialize use it
+     * directly, so the invariant must be enforced here too.
+     */
+    void SetNet( NETINFO_ITEM* aNetInfo ) override;
+
     virtual PCB_LAYER_ID GetLayer() const override;
 
     // Return the first layer in GUI sequence.
@@ -221,7 +237,8 @@ public:
 
     double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
-    void SetFillMode( ZONE_FILL_MODE aFillMode ) { m_fillMode = aFillMode; }
+    void SetFillMode( ZONE_FILL_MODE aFillMode );
+
     ZONE_FILL_MODE GetFillMode() const { return m_fillMode; }
 
     void SetThermalReliefGap( int aThermalReliefGap )
@@ -302,9 +319,10 @@ public:
     int GetMinThickness() const { return m_ZoneMinThickness; }
     void SetMinThickness( int aMinThickness )
     {
-        m_ZoneMinThickness = aMinThickness;
-        m_hatchThickness   = std::max( m_hatchThickness, aMinThickness );
-        m_hatchGap         = std::max( m_hatchGap, aMinThickness );
+        m_ZoneMinThickness            = aMinThickness;
+        m_hatchThickness              = std::max( m_hatchThickness, aMinThickness );
+        m_hatchGap                    = std::max( m_hatchGap, aMinThickness );
+        m_thievingSettings.line_width = std::max( m_thievingSettings.line_width, aMinThickness );
         SetNeedRefill( true );
     }
 
@@ -328,6 +346,74 @@ public:
 
     int GetHatchBorderAlgorithm() const { return m_hatchBorderAlgorithm; }
     void SetHatchBorderAlgorithm( int aAlgo ) { m_hatchBorderAlgorithm = aAlgo; }
+
+    /**
+     * @return true when this zone fills with a non-electrical thieving pattern.
+     */
+    bool IsCopperThieving() const { return m_fillMode == ZONE_FILL_MODE::COPPER_THIEVING; }
+
+    const THIEVING_SETTINGS& GetThievingSettings() const { return m_thievingSettings; }
+    void SetThievingSettings( const THIEVING_SETTINGS& aSettings )
+    {
+        if( m_thievingSettings != aSettings )
+            SetNeedRefill( true );
+
+        m_thievingSettings = aSettings;
+    }
+
+    THIEVING_PATTERN GetThievingPattern() const { return m_thievingSettings.pattern; }
+    void SetThievingPattern( THIEVING_PATTERN aPattern )
+    {
+        if( m_thievingSettings.pattern != aPattern )
+            SetNeedRefill( true );
+
+        m_thievingSettings.pattern = aPattern;
+    }
+
+    int GetThievingElementSize() const { return m_thievingSettings.element_size; }
+    void SetThievingElementSize( int aSize )
+    {
+        if( m_thievingSettings.element_size != aSize )
+            SetNeedRefill( true );
+
+        m_thievingSettings.element_size = aSize;
+    }
+
+    int GetThievingGap() const { return m_thievingSettings.gap; }
+    void SetThievingGap( int aGap )
+    {
+        if( m_thievingSettings.gap != aGap )
+            SetNeedRefill( true );
+
+        m_thievingSettings.gap = aGap;
+    }
+
+    int GetThievingLineWidth() const { return m_thievingSettings.line_width; }
+    void SetThievingLineWidth( int aWidth )
+    {
+        if( m_thievingSettings.line_width != aWidth )
+            SetNeedRefill( true );
+
+        m_thievingSettings.line_width = aWidth;
+    }
+
+    bool GetThievingStagger() const { return m_thievingSettings.stagger; }
+    void SetThievingStagger( bool aStagger )
+    {
+        if( m_thievingSettings.stagger != aStagger )
+            SetNeedRefill( true );
+
+        m_thievingSettings.stagger = aStagger;
+    }
+
+    EDA_ANGLE GetThievingOrientation() const { return m_thievingSettings.orientation; }
+    void SetThievingOrientation( const EDA_ANGLE& aOrientation )
+    {
+        if( m_thievingSettings.orientation != aOrientation )
+            SetNeedRefill( true );
+
+        m_thievingSettings.orientation = aOrientation;
+    }
 
     ///
     int GetLocalFlags() const { return m_localFlgs; }
@@ -907,6 +993,9 @@ protected:
     double           m_hatchHoleMinArea;        // min size before holes are dropped (ratio)
     int              m_hatchBorderAlgorithm;    // 0 = use min zone thickness
                                                 // 1 = use hatch thickness
+
+    THIEVING_SETTINGS m_thievingSettings;       // valid when m_fillMode == COPPER_THIEVING
+
     int              m_localFlgs;               // Variable used in polygon calculations.
 
     /* set of filled polygons used to draw a zone as a filled area.
@@ -942,6 +1031,7 @@ protected:
 
 DECLARE_ENUM_TO_WXANY( ZONE_CONNECTION )
 DECLARE_ENUM_TO_WXANY( ZONE_FILL_MODE )
+DECLARE_ENUM_TO_WXANY( THIEVING_PATTERN )
 DECLARE_ENUM_TO_WXANY( ISLAND_REMOVAL_MODE )
 DECLARE_ENUM_TO_WXANY( PLACEMENT_SOURCE_T )
 

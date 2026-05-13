@@ -100,6 +100,9 @@ bool ZONE::IsSame( const ZONE& aZoneToCompare )
     if( m_fillMode != aZoneToCompare.GetFillMode() )
         return false;
 
+    if( m_thievingSettings != aZoneToCompare.GetThievingSettings() )
+        return false;
+
     if( m_PadConnection != aZoneToCompare.m_PadConnection )
         return false;
 

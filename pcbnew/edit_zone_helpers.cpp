@@ -40,6 +40,12 @@
 
 void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 {
+    if( aZone->IsCopperThieving() )
+    {
+        SetStatusText( _( "Edit copper-thieving parameters in the Properties panel." ), 0 );
+        return;
+    }
+
     int           dialogResult;
     ZONE_SETTINGS zoneInfo = m_pcb->GetDesignSettings().GetDefaultZoneSettings();
     BOARD_COMMIT  commit( this );

@@ -33,7 +33,8 @@ ZONE_SETTINGS_BAG::ZONE_SETTINGS_BAG( BOARD* aBoard )
 {
     for( ZONE* zone : aBoard->Zones() )
     {
-        if( !zone->GetIsRuleArea() && !zone->IsTeardropArea() && zone->IsOnCopperLayer() )
+        if( !zone->GetIsRuleArea() && !zone->IsTeardropArea() && !zone->IsCopperThieving()
+                && zone->IsOnCopperLayer() )
         {
             auto zone_clone = std::shared_ptr<ZONE>( static_cast<ZONE*>( zone->Clone() ) );
             m_zonesCloneMap.try_emplace( zone, zone_clone );

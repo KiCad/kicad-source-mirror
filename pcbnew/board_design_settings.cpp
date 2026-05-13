@@ -882,7 +882,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_params.emplace_back( new PARAM_ENUM<ZONE_FILL_MODE>( "defaults.zones.fill_mode",
                                                            &m_defaultZoneSettings.m_FillMode, ZONE_FILL_MODE::POLYGONS,
-                                                           ZONE_FILL_MODE::POLYGONS, ZONE_FILL_MODE::HATCH_PATTERN ) );
+                                                           ZONE_FILL_MODE::POLYGONS,
+                                                           ZONE_FILL_MODE::COPPER_THIEVING ) );
 
     m_params.emplace_back(
             new PARAM_SCALED<int>( "defaults.zones.hatch_thickness", &m_defaultZoneSettings.m_HatchThickness,

@@ -43,8 +43,17 @@ class wxDataViewListCtrl;
 
 enum class ZONE_FILL_MODE
 {
-    POLYGONS = 0,     // fill zone with polygons
-    HATCH_PATTERN = 1 // fill zone using a grid pattern
+    POLYGONS = 0,        // fill zone with polygons
+    HATCH_PATTERN = 1,   // fill zone using a grid pattern
+    COPPER_THIEVING = 2  // fill zone with non-functional copper stamps for plating uniformity
+};
+
+/// Shape stamped onto the grid for a copper-thieving fill.
+enum class THIEVING_PATTERN
+{
+    DOTS = 0,
+    SQUARES = 1,
+    HATCH = 2
 };
 
 struct ZONE_LAYER_PROPERTIES
@@ -52,6 +61,35 @@ struct ZONE_LAYER_PROPERTIES
     std::optional<VECTOR2I> hatching_offset;
 
     bool operator==( const ZONE_LAYER_PROPERTIES& aOther ) const;
+};
+
+
+/**
+ * Parameters that drive copper-thieving fill generation.
+ *
+ * Thieving zones are netless: fabricators plate the stamps along with real
+ * features to even out current density, but they participate in no electrical
+ * net.  Geometry is described in board internal units except for rotation.
+ */
+struct THIEVING_SETTINGS
+{
+    THIEVING_PATTERN pattern = THIEVING_PATTERN::DOTS;
+    int              element_size = 0; // diameter (dots) or side length (squares)
+    int              gap = 0;          // edge-to-edge spacing between adjacent stamps
+                                       // (or between crosshatch lines)
+    int              line_width = 0;   // line width for crosshatch only
+    bool             stagger = false;  // offset alternating rows by half the stride
+    EDA_ANGLE        orientation = ANGLE_0;
+
+    bool operator==( const THIEVING_SETTINGS& aOther ) const
+    {
+        return pattern == aOther.pattern
+                && element_size == aOther.element_size
+                && gap == aOther.gap
+                && line_width == aOther.line_width
+                && stagger == aOther.stagger
+                && orientation == aOther.orientation;
+    }
 };
 
 
@@ -111,6 +149,8 @@ public:
     double          m_HatchSmoothingValue;   // HatchBorder chamfer/fillet size as a ratio of hole size
     double          m_HatchHoleMinArea;      // min size before holes are dropped (ratio)
     int             m_HatchBorderAlgorithm;  // 0 = use min zone thickness
+
+    THIEVING_SETTINGS m_ThievingSettings;    // valid when m_FillMode == COPPER_THIEVING
 
     int             m_Netcode;               // Net code selection for the current zone
 

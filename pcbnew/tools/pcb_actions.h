@@ -220,6 +220,7 @@ public:
     static TOOL_ACTION drawLeader;
     static TOOL_ACTION placeBarcode;
     static TOOL_ACTION drawZone;
+    static TOOL_ACTION drawCopperThievingZone;
     static TOOL_ACTION drawVia;
     static TOOL_ACTION drawRuleArea;
     static TOOL_ACTION drawZoneCutout;

@@ -24,6 +24,8 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <boost/test/data/test_case.hpp>
 
+#include <chrono>
+
 #include <pcbnew_utils/board_test_utils.h>
 #include <board.h>
 #include <board_commit.h>
@@ -40,6 +42,23 @@
 #include <advanced_config.h>
 #include <connectivity/connectivity_data.h>
 #include <teardrop/teardrop.h>
+
+
+/// Assert every outline in @p aFill has at least @p aMinArea — used to verify
+/// thieving stamps survived the fill unclipped.
+static void CheckAllOutlineAreasAtLeast( const std::shared_ptr<SHAPE_POLY_SET>& aFill,
+                                         double aMinArea, const wxString& aLabel )
+{
+    for( int ii = 0; ii < aFill->OutlineCount(); ++ii )
+    {
+        const double area = std::abs( aFill->Outline( ii ).Area() );
+
+        BOOST_CHECK_MESSAGE( area >= aMinArea,
+                             wxString::Format( "%s %d area %.0f IU^2 below %.0f IU^2; partial "
+                                               "stamps should not survive.",
+                                               aLabel, ii, area, aMinArea ) );
+    }
+}
 
 
 struct ZONE_FILL_TEST_FIXTURE
@@ -2540,6 +2559,50 @@ BOOST_FIXTURE_TEST_CASE( RegressionCascadingIslandRefill, ZONE_FILL_TEST_FIXTURE
 
 
 /**
+ * A track bisecting a thieving hatch zone must not destroy the fill on the far
+ * side of the track.  Clearance carves a notch, and the prior subtractive
+ * implementation let void rectangles consume the resulting narrow strip
+ * entirely; assert geometry survives on both sides.
+ */
+BOOST_FIXTURE_TEST_CASE( CopperThievingZone_HatchSurvivesTrackBisection, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "zone_thieving_track_bisection", m_board );
+    KI_TEST::FillZones( m_board.get() );
+
+    ZONE* thievingZone = nullptr;
+
+    for( ZONE* z : m_board->Zones() )
+    {
+        if( z->GetFillMode() == ZONE_FILL_MODE::COPPER_THIEVING )
+        {
+            thievingZone = z;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( thievingZone );
+
+    const std::shared_ptr<SHAPE_POLY_SET>& fill = thievingZone->GetFilledPolysList( F_Cu );
+    BOOST_REQUIRE( fill );
+
+    // The track splits the fill area in two; before the fix the connectivity
+    // pass classified the narrow side as an isolated island and deleted it.
+    // Expect at least two outlines covering both halves of the original zone.
+    BOOST_CHECK_GE( fill->OutlineCount(), 2 );
+
+    // The fill must span the full zone width (left edge through right edge).
+    BOX2I fillBox = fill->BBox();
+    BOX2I zoneBox = thievingZone->Outline()->BBox();
+
+    BOOST_CHECK_LT( fillBox.GetLeft(),   zoneBox.GetLeft()  + pcbIUScale.mmToIU( 2.0 ) );
+    BOOST_CHECK_GT( fillBox.GetRight(),  zoneBox.GetRight() - pcbIUScale.mmToIU( 2.0 ) );
+
+    // The mesh must have real structure on both sides.
+    BOOST_CHECK_GT( fill->TotalVertices(), 200 );
+}
+
+
+/**
  * Test that iterative zone refill terminates and warns when it cannot converge.
  *
  * The board has overlapping zones arranged so that island removal in one zone
@@ -2593,4 +2656,280 @@ BOOST_FIXTURE_TEST_CASE( IterativeRefillConvergenceLimit, ZONE_FILL_TEST_FIXTURE
     BOOST_CHECK_MESSAGE( capture->m_hadWarning, "Expected a wxLogWarning when iterative refill hits the iteration "
                                                 "limit, but none was emitted.  The convergence-limit board may no "
                                                 "longer trigger the cap, or the warning path has changed." );
+}
+
+
+/**
+ * A copper-thieving zone placed on a non-copper layer (silkscreen, fab, etc.)
+ * must still produce stamps rather than degenerating to a solid fill.
+ * Regression for "fills with a solid" on non-copper layers.
+ */
+BOOST_FIXTURE_TEST_CASE( CopperThievingZone_NonCopperLayerStampsNotSolid, ZONE_FILL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+
+    ZONE* zone = new ZONE( m_board.get() );
+    zone->SetLayer( F_SilkS );
+    zone->AppendCorner( VECTOR2I( 0, 0 ), -1 );
+    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ), -1 );
+    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ), -1 );
+    zone->AppendCorner( VECTOR2I( 0, pcbIUScale.mmToIU( 10 ) ), -1 );
+    zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+
+    THIEVING_SETTINGS thieving;
+    thieving.pattern      = THIEVING_PATTERN::DOTS;
+    thieving.element_size = pcbIUScale.mmToIU( 0.5 );
+    thieving.gap          = pcbIUScale.mmToIU( 1.5 );
+    zone->SetThievingSettings( thieving );
+    zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
+    m_board->Add( zone );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    const std::shared_ptr<SHAPE_POLY_SET>& fill = zone->GetFilledPolysList( F_SilkS );
+    BOOST_REQUIRE( fill );
+
+    // A solid fill would have one outline (the zone polygon); a dots grid
+    // produces dozens.  Lower bound is conservative to avoid edge-clipping flakiness.
+    BOOST_CHECK_GT( fill->OutlineCount(), 5 );
+}
+
+
+/**
+ * A copper-thieving zone on an empty board should produce a grid of dot
+ * outlines whose count matches the geometric expectation.  No real board is
+ * needed: a single square zone outline exercises the grid generator without
+ * pad/track clearances confusing the count.  Only full dots survive: any
+ * grid position whose disc would touch the zone outline is dropped.
+ */
+BOOST_FIXTURE_TEST_CASE( CopperThievingZone_DotsGrid, ZONE_FILL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetCopperLayerCount( 2 );
+
+    // 10 mm x 10 mm zone outline
+    ZONE* zone = new ZONE( m_board.get() );
+    zone->SetLayer( F_Cu );
+    zone->AppendCorner( VECTOR2I( 0, 0 ), -1 );
+    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ), -1 );
+    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ), -1 );
+    zone->AppendCorner( VECTOR2I( 0, pcbIUScale.mmToIU( 10 ) ), -1 );
+
+    zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+
+    THIEVING_SETTINGS thieving;
+    thieving.pattern      = THIEVING_PATTERN::DOTS;
+    thieving.element_size = pcbIUScale.mmToIU( 0.5 );
+    thieving.gap        = pcbIUScale.mmToIU( 2.0 );
+    thieving.line_width   = pcbIUScale.mmToIU( 0.3 );
+    thieving.stagger      = false;
+    thieving.orientation     = ANGLE_0;
+    zone->SetThievingSettings( thieving );
+
+    zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
+
+    m_board->Add( zone );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    const std::shared_ptr<SHAPE_POLY_SET>& fill = zone->GetFilledPolysList( F_Cu );
+    BOOST_REQUIRE( fill );
+    BOOST_REQUIRE_GT( fill->OutlineCount(), 0 );
+
+    // 2.5 mm pitch, 0.5 mm dot.  The four positions whose disc touches the
+    // zone edge (x or y at 0 or 10 mm) are dropped, leaving a 3 x 3 grid.
+    BOOST_CHECK_GE( fill->OutlineCount(), 6 );
+    BOOST_CHECK_LE( fill->OutlineCount(), 12 );
+
+    // 10% slack covers the polygonal circle approximation plus post-fill corner rounding.
+    const double fullDotArea = M_PI * std::pow( pcbIUScale.mmToIU( 0.25 ), 2 );
+    CheckAllOutlineAreasAtLeast( fill, 0.9 * fullDotArea, wxT( "Dot" ) );
+}
+
+
+/**
+ * Stagger should shift odd rows by pitch/2 without breaking the fill.  Easiest
+ * positive signal is that staggered and unstaggered fills produce different
+ * dot layouts (different total counts in a finite outline).  Within-a-factor
+ * sanity bound catches the offset-walking-off-the-board failure modes.
+ */
+BOOST_FIXTURE_TEST_CASE( CopperThievingZone_StaggerProducesDifferentLayout, ZONE_FILL_TEST_FIXTURE )
+{
+    auto countDots = []( bool stagger ) -> int
+    {
+        auto board = std::make_unique<BOARD>();
+        board->SetCopperLayerCount( 2 );
+
+        ZONE* zone = new ZONE( board.get() );
+        zone->SetLayer( F_Cu );
+        zone->AppendCorner( VECTOR2I( 0, 0 ), -1 );
+        zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 20 ), 0 ), -1 );
+        zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ), -1 );
+        zone->AppendCorner( VECTOR2I( 0, pcbIUScale.mmToIU( 20 ) ), -1 );
+        zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+
+        THIEVING_SETTINGS thieving;
+        thieving.pattern      = THIEVING_PATTERN::DOTS;
+        thieving.element_size = pcbIUScale.mmToIU( 0.5 );
+        thieving.gap        = pcbIUScale.mmToIU( 2.0 );
+        thieving.stagger      = stagger;
+        zone->SetThievingSettings( thieving );
+        zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
+        board->Add( zone );
+
+        KI_TEST::FillZones( board.get() );
+        return zone->GetFilledPolysList( F_Cu )->OutlineCount();
+    };
+
+    int plain     = countDots( false );
+    int staggered = countDots( true );
+
+    BOOST_TEST_MESSAGE( "plain dots: " << plain << "  staggered dots: " << staggered );
+
+    // Within a factor of two — catches the offset walking dots off the board
+    // (returning ~0) without being brittle about edge-clipping rounding.
+    BOOST_CHECK_NE( plain, staggered );
+    BOOST_CHECK_GE( staggered, plain / 2 );
+    BOOST_CHECK_LE( staggered, plain * 2 );
+}
+
+
+/**
+ * A SQUARES pattern fills the zone with rectangular stamps on the same grid as
+ * dots.  Verifies the dispatch reaches the squares branch and produces a
+ * comparable stamp count.
+ */
+BOOST_FIXTURE_TEST_CASE( CopperThievingZone_SquaresGrid, ZONE_FILL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetCopperLayerCount( 2 );
+
+    ZONE* zone = new ZONE( m_board.get() );
+    zone->SetLayer( F_Cu );
+    zone->AppendCorner( VECTOR2I( 0, 0 ), -1 );
+    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ), -1 );
+    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ), -1 );
+    zone->AppendCorner( VECTOR2I( 0, pcbIUScale.mmToIU( 10 ) ), -1 );
+    zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+
+    THIEVING_SETTINGS thieving;
+    thieving.pattern      = THIEVING_PATTERN::SQUARES;
+    thieving.element_size = pcbIUScale.mmToIU( 0.6 );
+    thieving.gap        = pcbIUScale.mmToIU( 2.0 );
+    zone->SetThievingSettings( thieving );
+    zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
+    m_board->Add( zone );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    const std::shared_ptr<SHAPE_POLY_SET>& fill = zone->GetFilledPolysList( F_Cu );
+    BOOST_REQUIRE( fill );
+    BOOST_REQUIRE_GT( fill->OutlineCount(), 0 );
+
+    // 2.6 mm pitch, 0.6 mm square.  Same edge-drop behavior as the dots test:
+    // strict-containment leaves a 3 x 3 grid of full squares.
+    BOOST_CHECK_GE( fill->OutlineCount(), 6 );
+    BOOST_CHECK_LE( fill->OutlineCount(), 12 );
+
+    const double fullSquareArea = std::pow( pcbIUScale.mmToIU( 0.6 ), 2 );
+    CheckAllOutlineAreasAtLeast( fill, 0.9 * fullSquareArea, wxT( "Square" ) );
+}
+
+
+/**
+ * Performance gate for high-density thieving fills.  100 x 100 mm zone with
+ * 0.3 mm dots and 1 mm gap gives a 1.3 mm stride and roughly 5 900 stamps.
+ * The filler stamps shapes into a single SHAPE_POLY_SET and performs one
+ * BooleanIntersection at the end; a regression that switches to per-stamp
+ * boolean ops would blow up to minutes.  Bound generously so the gate is not
+ * flaky on slow CI but still catches an order-of-magnitude regression.
+ */
+BOOST_FIXTURE_TEST_CASE( CopperThievingZone_HighDensityPerformance, ZONE_FILL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetCopperLayerCount( 2 );
+
+    ZONE* zone = new ZONE( m_board.get() );
+    zone->SetLayer( F_Cu );
+    zone->AppendCorner( VECTOR2I( 0, 0 ), -1 );
+    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 100 ), 0 ), -1 );
+    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 100 ), pcbIUScale.mmToIU( 100 ) ), -1 );
+    zone->AppendCorner( VECTOR2I( 0, pcbIUScale.mmToIU( 100 ) ), -1 );
+    zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+
+    THIEVING_SETTINGS thieving;
+    thieving.pattern      = THIEVING_PATTERN::DOTS;
+    thieving.element_size = pcbIUScale.mmToIU( 0.3 );
+    thieving.gap          = pcbIUScale.mmToIU( 1.0 );
+    zone->SetThievingSettings( thieving );
+    zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
+    m_board->Add( zone );
+
+    auto start = std::chrono::steady_clock::now();
+    KI_TEST::FillZones( m_board.get() );
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                           std::chrono::steady_clock::now() - start )
+                           .count();
+
+    BOOST_TEST_MESSAGE( "5.9k-dot fill elapsed: " << elapsed << " ms" );
+
+    BOOST_REQUIRE( zone->GetFilledPolysList( F_Cu ) );
+    BOOST_CHECK_GT( zone->GetFilledPolysList( F_Cu )->OutlineCount(), 4000 );
+
+    // 30 s upper bound on QABUILD with assertions on; current implementation
+    // measures in low seconds.
+    BOOST_CHECK_LT( elapsed, 30000 );
+}
+
+
+/**
+ * A HATCH pattern carves a regular grid of voids out of the zone outline,
+ * leaving a perimeter border around an interior mesh.  The result is one
+ * connected polygon with holes — not the dot-grid of disconnected stamps that
+ * dots/squares produce.
+ */
+BOOST_FIXTURE_TEST_CASE( CopperThievingZone_HatchPattern, ZONE_FILL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetCopperLayerCount( 2 );
+
+    ZONE* zone = new ZONE( m_board.get() );
+    zone->SetLayer( F_Cu );
+    zone->AppendCorner( VECTOR2I( 0, 0 ), -1 );
+    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ), -1 );
+    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ), -1 );
+    zone->AppendCorner( VECTOR2I( 0, pcbIUScale.mmToIU( 10 ) ), -1 );
+    zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+
+    THIEVING_SETTINGS thieving;
+    thieving.pattern    = THIEVING_PATTERN::HATCH;
+    thieving.gap        = pcbIUScale.mmToIU( 2.0 );
+    thieving.line_width = pcbIUScale.mmToIU( 0.3 );
+    zone->SetThievingSettings( thieving );
+    zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
+    m_board->Add( zone );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    const std::shared_ptr<SHAPE_POLY_SET>& fill = zone->GetFilledPolysList( F_Cu );
+    BOOST_REQUIRE( fill );
+    BOOST_REQUIRE_GT( fill->TotalVertices(), 0 );
+
+    // Subtractive hatch produces a single connected outline after fracturing
+    // (perimeter border + interior mesh linked through bridges).  A dot grid
+    // in the same outline would have dozens of disconnected pieces.
+    BOOST_CHECK_EQUAL( fill->OutlineCount(), 1 );
+
+    // The fill bounding box must reach the zone corners — the perimeter
+    // border is what differentiates hatch from a dot grid.  Solid would also
+    // reach the corners; the high vertex count below catches that case.
+    BOX2I fillBox = fill->BBox();
+    BOOST_CHECK_LT( fillBox.GetLeft(),   pcbIUScale.mmToIU( 0.5 ) );
+    BOOST_CHECK_GT( fillBox.GetRight(),  pcbIUScale.mmToIU( 9.5 ) );
+    BOOST_CHECK_LT( fillBox.GetTop(),    pcbIUScale.mmToIU( 0.5 ) );
+    BOOST_CHECK_GT( fillBox.GetBottom(), pcbIUScale.mmToIU( 9.5 ) );
+
+    // A solid 10x10 mm rectangle would have ~4 vertices.  A hatched mesh has
+    // many vertices because each void cut adds outline segments.
+    BOOST_CHECK_GT( fill->TotalVertices(), 30 );
 }

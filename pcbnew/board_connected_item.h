@@ -89,8 +89,12 @@ public:
 
     /**
      * Set a NET_INFO object for the item.
+     *
+     * Subclasses with a netless invariant (e.g. ZONE in copper-thieving mode)
+     * override this to drop aNetInfo before storing it.  Direct callers of
+     * SetNet bypass the SetNetCode clamp, so this hook is essential.
      */
-    void SetNet( NETINFO_ITEM* aNetInfo )
+    virtual void SetNet( NETINFO_ITEM* aNetInfo )
     {
         m_netinfo = aNetInfo;
     }
@@ -110,6 +114,11 @@ public:
     /**
      * Set net using a net code.
      *
+     * Subclasses that enforce a netless invariant (e.g. ZONE in copper-thieving
+     * mode) override this to clamp aNetCode before it reaches the base routine.
+     * The non-virtual overload below routes through this one, so callers that
+     * reach the setter via a BOARD_CONNECTED_ITEM* still hit the clamp.
+     *
      * @note Pads not on copper layers will have their net code always set to 0 (not connected).
      *
      * @param aNetCode is a net code for the new net. It has to exist in #NETINFO_LIST held
@@ -118,7 +127,7 @@ public:
      *                  to the unconnected net.
      * @return true on success, false if the net did not exist
      */
-    bool SetNetCode( int aNetCode, bool aNoAssert );
+    virtual bool SetNetCode( int aNetCode, bool aNoAssert );
 
     void SetNetCode( int aNetCode )
     {

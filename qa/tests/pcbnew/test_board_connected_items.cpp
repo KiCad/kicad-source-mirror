@@ -37,6 +37,20 @@ struct BOARD_CONNECTED_ITEMS_FIXTURE
         m_board = std::make_unique<BOARD>();
     }
 
+    /// Build a 5x5 mm rectangular zone on F_Cu owned by m_board.  The fill mode
+    /// is left at the ZONE constructor default (POLYGONS); tests that need
+    /// thieving call SetFillMode themselves.
+    ZONE* MakeRectZone()
+    {
+        ZONE* zone = new ZONE( m_board.get() );
+        zone->SetLayer( F_Cu );
+        zone->AppendCorner( VECTOR2I( 0, 0 ), -1 );
+        zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 5 ), 0 ), -1 );
+        zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ), -1 );
+        zone->AppendCorner( VECTOR2I( 0, pcbIUScale.mmToIU( 5 ) ), -1 );
+        return zone;
+    }
+
     std::unique_ptr<BOARD> m_board;
 };
 
@@ -216,6 +230,123 @@ BOOST_AUTO_TEST_CASE( MapNets_FootprintShapeSurvivesSourceBoardDeletion )
     std::string output = formatter.GetString();
     BOOST_CHECK_MESSAGE( output.find( "GND" ) != std::string::npos,
                          "Formatted footprint should contain the remapped net name" );
+}
+
+
+/**
+ * Verify that copper-thieving zones reject any non-zero netcode assignment.
+ *
+ * Thieving zones are dummy plating-balance copper and must remain netless.
+ * The invariant has to hold even when the caller uses a base-class pointer,
+ * since paste/clipboard, properties manager, and PRL load all reach the
+ * setter via BOARD_CONNECTED_ITEM*.
+ */
+BOOST_AUTO_TEST_CASE( ThievingZone_RejectsNetCodeViaBasePointer )
+{
+    NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), wxT( "TestNet" ), 1 );
+    m_board->Add( net );
+
+    ZONE* zone = MakeRectZone();
+    zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+    m_board->Add( zone );
+
+    BOARD_CONNECTED_ITEM* base = zone;
+    base->SetNetCode( 1 );
+
+    BOOST_CHECK_EQUAL( zone->GetNetCode(), 0 );
+}
+
+
+/**
+ * SetNet bypasses SetNetCode entirely (importers and API deserialize use it
+ * directly).  Verify the ZONE override drops the netinfo for thieving zones
+ * even when called through the base-class pointer.
+ */
+BOOST_AUTO_TEST_CASE( ThievingZone_RejectsSetNetViaBasePointer )
+{
+    NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), wxT( "TestNet" ), 1 );
+    m_board->Add( net );
+
+    ZONE* zone = MakeRectZone();
+    zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+    m_board->Add( zone );
+
+    BOARD_CONNECTED_ITEM* base = zone;
+    base->SetNet( net );
+
+    BOOST_CHECK( zone->GetNet() == nullptr );
+}
+
+
+/**
+ * Switching a netted solid copper zone to copper-thieving fill mode must drop
+ * the assigned net atomically, otherwise the netless invariant is breakable
+ * by reordering operations in the dialog or properties manager.
+ */
+BOOST_AUTO_TEST_CASE( ThievingZone_DropsNetWhenFillModeBecomesThieving )
+{
+    NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), wxT( "TestNet" ), 1 );
+    m_board->Add( net );
+
+    ZONE* zone = MakeRectZone();
+    m_board->Add( zone );
+
+    zone->SetNetCode( 1 );
+    BOOST_REQUIRE_EQUAL( zone->GetNetCode(), 1 );
+
+    zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+
+    BOOST_CHECK_EQUAL( zone->GetNetCode(), 0 );
+}
+
+
+/// Conversion to thieving must clamp a multi-layer zone to a single layer.
+BOOST_AUTO_TEST_CASE( ThievingZone_ReducesToSingleLayerWhenFillModeBecomesThieving )
+{
+    ZONE* zone = MakeRectZone();
+    m_board->Add( zone );
+
+    zone->SetLayerSet( LSET( { F_Cu, B_Cu, In1_Cu } ) );
+    BOOST_REQUIRE_EQUAL( zone->GetLayerSet().count(), 3u );
+
+    zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+
+    BOOST_CHECK_EQUAL( zone->GetLayerSet().count(), 1u );
+    BOOST_CHECK_EQUAL( zone->GetLayer(), F_Cu );
+}
+
+
+/// Direct SetLayerSet on a thieving zone (protobuf, API) must clamp to one layer.
+BOOST_AUTO_TEST_CASE( ThievingZone_SetLayerSetClampsToOneLayer )
+{
+    ZONE* zone = MakeRectZone();
+    m_board->Add( zone );
+    zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+    BOOST_REQUIRE_EQUAL( zone->GetLayerSet().count(), 1u );
+
+    zone->SetLayerSet( LSET( { F_Cu, B_Cu, In1_Cu } ) );
+
+    BOOST_CHECK_EQUAL( zone->GetLayerSet().count(), 1u );
+}
+
+
+/**
+ * A solid-fill copper zone is not subject to the thieving netless invariant
+ * and must accept the assignment.  Regression guard for the override.
+ */
+BOOST_AUTO_TEST_CASE( SolidCopperZone_AcceptsNetCodeViaBasePointer )
+{
+    NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), wxT( "TestNet" ), 1 );
+    m_board->Add( net );
+
+    ZONE* zone = MakeRectZone();
+    zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
+    m_board->Add( zone );
+
+    BOARD_CONNECTED_ITEM* base = zone;
+    base->SetNetCode( 1 );
+
+    BOOST_CHECK_EQUAL( zone->GetNetCode(), 1 );
 }
 
 

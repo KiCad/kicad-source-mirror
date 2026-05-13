@@ -165,4 +165,59 @@ BOOST_FIXTURE_TEST_CASE( Padstacks, PROTO_TEST_FIXTURE )
         testProtoFromKiCadObject<kiapi::board::types::FootprintInstance>( footprint, m_board.get() );
 }
 
+/**
+ * Round-trip a copper-thieving zone through the protobuf API.  The shared
+ * testProtoFromKiCadObject helper relies on ZONE::operator==, which by
+ * existing precedent does not compare fill-mode or hatch/thieving fields,
+ * so we hand-check every thieving field plus the netless invariant.
+ */
+BOOST_FIXTURE_TEST_CASE( CopperThievingZoneRoundTrip, PROTO_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+
+    ZONE* zone = new ZONE( m_board.get() );
+    zone->SetLayer( F_Cu );
+    zone->AppendCorner( VECTOR2I( 0, 0 ), -1 );
+    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 5 ), 0 ), -1 );
+    zone->AppendCorner( VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) ), -1 );
+    zone->AppendCorner( VECTOR2I( 0, pcbIUScale.mmToIU( 5 ) ), -1 );
+    zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
+
+    THIEVING_SETTINGS thieving;
+    thieving.pattern      = THIEVING_PATTERN::SQUARES;
+    thieving.element_size = pcbIUScale.mmToIU( 0.75 );
+    thieving.gap        = pcbIUScale.mmToIU( 2.0 );
+    thieving.line_width   = pcbIUScale.mmToIU( 0.4 );
+    thieving.stagger      = true;
+    thieving.orientation     = EDA_ANGLE( 15.0, DEGREES_T );
+    zone->SetThievingSettings( thieving );
+
+    m_board->Add( zone );
+
+    google::protobuf::Any any;
+    BOOST_REQUIRE_NO_THROW( zone->Serialize( any ) );
+
+    kiapi::board::types::Zone proto;
+    BOOST_REQUIRE( any.UnpackTo( &proto ) );
+    BOOST_REQUIRE( proto.has_copper_settings() );
+    BOOST_REQUIRE( proto.copper_settings().has_thieving_settings() );
+
+    std::unique_ptr<ZONE> roundTripped = std::make_unique<ZONE>( m_board.get() );
+    BOOST_REQUIRE( roundTripped->Deserialize( any ) );
+
+    BOOST_CHECK( roundTripped->GetFillMode() == ZONE_FILL_MODE::COPPER_THIEVING );
+    // A board with no netinfo list returns GetNetCode() == -1 for an unbound zone.
+    // The invariant we want is "no real net assigned"; netcode > 0 would mean a leak.
+    BOOST_CHECK_LE( roundTripped->GetNetCode(), 0 );
+
+    const THIEVING_SETTINGS& loaded = roundTripped->GetThievingSettings();
+    BOOST_CHECK( loaded.pattern == THIEVING_PATTERN::SQUARES );
+    BOOST_CHECK_EQUAL( loaded.element_size, thieving.element_size );
+    BOOST_CHECK_EQUAL( loaded.gap, thieving.gap );
+    BOOST_CHECK_EQUAL( loaded.line_width, thieving.line_width );
+    BOOST_CHECK_EQUAL( loaded.stagger, true );
+    BOOST_CHECK( loaded.orientation == EDA_ANGLE( 15.0, DEGREES_T ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
