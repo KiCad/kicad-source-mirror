@@ -390,7 +390,12 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         aPlotter->PlotPoly( ptList, fill, pen_size, nullptr );
         break;
 
-    case SHAPE_T::ELLIPSE: aPlotter->PlotPoly( ptList, fill, pen_size, nullptr ); break;
+    case SHAPE_T::ELLIPSE:
+        if( !ptList.empty() )
+            ptList.push_back( ptList.front() );
+
+        aPlotter->PlotPoly( ptList, fill, pen_size, nullptr );
+        break;
 
     case SHAPE_T::ELLIPSE_ARC: aPlotter->PlotPoly( ptList, FILL_T::NO_FILL, pen_size, nullptr ); break;
 
