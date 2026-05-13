@@ -60,11 +60,16 @@ DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent ) :
 
     SetInitialFocus( m_xEntry );
 
-    updateDialogControls( m_polarCoords->IsChecked() );
-
     SetupStandardButtons();
 
     finishDialogSettings();
+}
+
+
+bool DIALOG_POSITION_RELATIVE::TransferDataToWindow()
+{
+    updateDialogControls( m_polarCoords->IsChecked() );
+    return DIALOG_POSITION_RELATIVE_BASE::TransferDataToWindow();
 }
 
 

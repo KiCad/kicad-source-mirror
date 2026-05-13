@@ -52,6 +52,8 @@ private:
     void OnPolarChanged( wxCommandEvent& event ) override;
     void OnClear( wxCommandEvent& event ) override;
 
+    bool TransferDataToWindow() override;
+
     void OnSelectItemClick( wxCommandEvent& event ) override;
     void OnSelectPointClick( wxCommandEvent& event ) override;
     void OnUseGridOriginClick( wxCommandEvent& event ) override;
