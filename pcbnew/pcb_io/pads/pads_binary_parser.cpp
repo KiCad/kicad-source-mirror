@@ -489,6 +489,68 @@ void BINARY_PARSER::parsePartPlacements()
             m_parts.push_back( part );
         }
     }
+
+    // A handful of tiny, mechanical-only old-dialect boards carry NO placements at either the
+    // declared dataOffset or immediately before it -- the whole record run is relocated further
+    // back, with unrelated data (not a contiguous extension of it) sitting in between. Verified
+    // against AdC_LCORE.pcb/AdC_LCORE-1.pcb (both v0x2022, 8 mounting-hole placements H1-H8),
+    // where the real array starts exactly 13 records (1248 B) before entry->dataOffset, with 5
+    // records of non-placement data separating it from the declared start. Since there is no
+    // contiguity to walk from, search backward for a base at which every one of entry->count
+    // records is a plausible placement -- requiring a full match keeps this from ever firing on
+    // the ordinary case (a real board's tail records would have to coincidentally all validate).
+    if( isOld && m_parts.empty() && entry->count > 0 )
+    {
+        constexpr uint32_t MAX_BACKWARD_RECORDS = 64;
+        uint32_t           maxK = std::min( MAX_BACKWARD_RECORDS, entry->dataOffset / recSize );
+
+        for( uint32_t k = 0; k <= maxK; ++k )
+        {
+            size_t base = static_cast<size_t>( entry->dataOffset ) - static_cast<size_t>( k ) * recSize;
+
+            if( !m_cursor.InBounds( base, static_cast<size_t>( entry->count ) * recSize + fieldSpan - recSize ) )
+                continue;
+
+            bool allValid = true;
+
+            for( uint32_t i = 0; i < entry->count && allValid; ++i )
+            {
+                SDB_RECORD  rec    = m_sdb.RecordAt( static_cast<uint32_t>( base + static_cast<size_t>( i ) * recSize ) );
+                std::string refDes = rec.Str( layout.nameOff, 16 );
+
+                if( !refdesFirstCharOk( refDes ) || !placementCoordPlausible( rec, layout.xOff, layout.yOff ) )
+                    allValid = false;
+            }
+
+            if( !allValid )
+                continue;
+
+            for( uint32_t i = 0; i < entry->count; ++i )
+            {
+                size_t      recBase = base + static_cast<size_t>( i ) * recSize;
+                SDB_RECORD  rec     = m_sdb.RecordAt( static_cast<uint32_t>( recBase ) );
+                std::string refDes  = rec.Str( layout.nameOff, 16 );
+                PART        part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
+                                                       layout.nameOff, refDes );
+
+                if( layout.directDecalOff )
+                {
+                    uint32_t fieldOff = static_cast<uint32_t>( *layout.directDecalOff );
+                    size_t   nextBase = recBase + recSize;
+
+                    if( m_cursor.InBounds( nextBase, fieldOff + 4 ) )
+                    {
+                        m_partDecalIndex[m_parts.size()] =
+                                m_sdb.RecordAt( static_cast<uint32_t>( nextBase ) ).U32( fieldOff );
+                    }
+                }
+
+                m_parts.push_back( part );
+            }
+
+            break;
+        }
+    }
 }
 
 
