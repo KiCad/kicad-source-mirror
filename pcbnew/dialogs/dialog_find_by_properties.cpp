@@ -898,6 +898,8 @@ void DIALOG_FIND_BY_PROPERTIES::applyMatchResults( EDA_ITEMS& aMatchList, wxStat
     if( m_zoomToFit->IsChecked() && !aMatchList.empty() )
         toolMgr->RunAction( ACTIONS::zoomFitSelection );
 
+    m_frame->GetCanvas()->ForceRefresh();
+
     aStatusLabel->SetLabel( wxString::Format( _( "%zu items matched" ), aMatchList.size() ) );
 }
 
