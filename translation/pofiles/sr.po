@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-04-24 15:51+0000\n"
-"Last-Translator: Damjan Prerad <damjan@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-05-15 04:11+0000\n"
+"Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v10/sr/>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.5.dev0\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -2052,95 +2052,90 @@ msgstr "Измена из API-ја"
 #: common/api/api_plugin.cpp:60
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr ""
+msgstr "Лоша конфигурација плугина на '%s': %s"
 
 #: common/api/api_plugin.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка током извршавања плугина: %s"
 
 #: common/api/api_plugin.cpp:112
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "Отвори"
+msgstr "Није могуће прочитати конфигурацијски документ за плугин"
 
 #: common/api/api_plugin.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "plugin configuration file error: %s"
-msgstr "Грешка у конфигурисању"
+msgstr "Грешка у конфигурисању плугина: %s"
 
 #: common/api/api_plugin.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "missing or invalid required keys: %s"
-msgstr "Сви фајлови (*.*)|*.*"
+msgstr "Непостојећи или неважећи кључеви: %s"
 
 #: common/api/api_plugin.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid "identifier '%s' is invalid"
-msgstr "Симбол"
+msgstr "Идентификатор '%s' је неважећи"
 
 #: common/api/api_plugin.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "actions section is invalid: %s"
-msgstr "Попуњавање зона"
+msgstr "Неважећа секција акција: %s"
 
 #: common/api/api_plugin_manager.cpp:98
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s': %s"
-msgstr "Опције Plugin-ова"
+msgstr "Опције додатака '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s': %s"
-msgstr "Тип:"
+msgstr "Додатак '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:124
 #, c-format
 msgid "exited with code %d"
-msgstr ""
+msgstr "Завршено за кодом %d"
 
 #: common/api/api_plugin_manager.cpp:351 common/api/api_plugin_manager.cpp:691
 #: common/api/api_plugin_manager.cpp:775
-#, fuzzy
 msgid "missing plugin environment"
-msgstr "Додјела шеме"
+msgstr "Недостаје окружење додатка"
 
 #: common/api/api_plugin_manager.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' could not be read"
-msgstr "Фајл '%s' није могао бити направљен."
+msgstr "Улаз '%s' не може да се прочита"
 
 #: common/api/api_plugin_manager.cpp:407
-#, fuzzy
 msgid "process could not be created"
-msgstr "Фајл '%s' није могао бити направљен."
+msgstr "Није могуће направити процес"
 
 #: common/api/api_plugin_manager.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "entrypoint '%s' is not executable"
-msgstr "Директоријум '%s' није доступан за упис."
+msgstr "Улаз '%s' не може да се изврши"
 
 #: common/api/api_plugin_manager.cpp:500
-#, fuzzy
 msgid "could not launch plugin"
-msgstr "Неуспешно коришћење OpenGL"
+msgstr "Није могуће покренути додатак"
 
 #: common/api/api_plugin_manager.cpp:661 common/api/api_plugin_manager.cpp:743
 #: common/api/api_plugin_manager.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "error code %d"
-msgstr "Грешка: "
+msgstr "Кодна грешка: %d"
 
 #: common/api/api_plugin_manager.cpp:663 common/api/api_plugin_manager.cpp:745
 #: common/api/api_plugin_manager.cpp:835
-#, fuzzy, c-format
+#, c-format
 msgid "could not create plugin environment: %s"
-msgstr "Додјела шеме"
+msgstr "Није могуће направити окружење додатка: %s"
 
 #: common/api/api_plugin_manager.cpp:784
-#, fuzzy
 msgid "requirements.txt could not be read"
-msgstr "Фајл '%s' није могао бити направљен."
+msgstr "requirements.txt не може да се прочита"
 
 #: common/background_jobs_monitor.cpp:98
 msgid "Background Jobs"
@@ -3676,9 +3671,8 @@ msgstr "Поново испуни све зоне прије покретања 
 
 #: common/dialogs/dialog_restore_local_history.cpp:34
 #: kicad/tools/kicad_manager_actions.cpp:238
-#, fuzzy
 msgid "Restore Project from Local History..."
-msgstr "Пројект"
+msgstr "Опорави пројекат из Локалне Историје..."
 
 #: common/dialogs/dialog_restore_local_history.cpp:47
 #: eeschema/dialogs/dialog_sim_format_value.cpp:48
@@ -3706,15 +3700,13 @@ msgstr "Акција"
 #: pcbnew/board_statistics_report.cpp:659
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:239
 #: pcbnew/widgets/search_handlers.cpp:630
-#, fuzzy
 msgid "Count"
-msgstr "Дужина чиоде:"
+msgstr "Број"
 
 #: common/dialogs/dialog_restore_local_history.cpp:55
 #: kicad/kicad_manager_frame.cpp:972
-#, fuzzy
 msgid "Restore"
-msgstr "Отпорник"
+msgstr "Опорави"
 
 #: common/dialogs/dialog_text_entry_base.cpp:20
 #: common/dialogs/dialog_unit_entry_base.cpp:21
@@ -4214,7 +4206,6 @@ msgid "Select Preferred PDF Viewer"
 msgstr "Изабери преферирани прегледач PDF фајлова"
 
 #: common/dialogs/panel_common_settings_base.cpp:21
-#, fuzzy
 msgid "Rendering Engine"
 msgstr "Render опције"
 
@@ -4239,9 +4230,8 @@ msgstr ""
 "а)"
 
 #: common/dialogs/panel_common_settings_base.cpp:58
-#, fuzzy
 msgid "Antialiasing:"
-msgstr "Anti-aliasing:"
+msgstr "Анти-алијасинг:"
 
 #: common/dialogs/panel_common_settings_base.cpp:62
 msgid "No Antialiasing"
@@ -4436,9 +4426,8 @@ msgid "High-contrast mode dimming factor:"
 msgstr "Диминг фактор висококонтрастног мода:"
 
 #: common/dialogs/panel_common_settings_base.cpp:298
-#, fuzzy
 msgid "App theme:"
-msgstr "Вријеме:"
+msgstr "Тема апликације:"
 
 #: common/dialogs/panel_common_settings_base.cpp:330
 msgid "Scaling"
@@ -4501,14 +4490,12 @@ msgstr ""
 "фајлове"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Incremental"
-msgstr "Вријеме:"
+msgstr "Инкрементално"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Zip archive"
-msgstr "Архива"
+msgstr "Зип архива"
 
 #: common/dialogs/panel_common_settings_base.cpp:441
 msgid ""
@@ -4516,22 +4503,27 @@ msgid ""
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
+"Инкрементално: чува скривени .history гит репозиторијум са пратећим "
+"измјенама\n"
+"Зип: прави временски означене зип архиве приликом чувања пројекта; "
+"аутоматско чување користи датотеке за опоравак."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "Project directory"
-msgstr "Пројект"
+msgstr "Директоријум пројекта"
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "User data directory"
-msgstr "компонента"
+msgstr "Директоријум корисничких података"
 
 #: common/dialogs/panel_common_settings_base.cpp:453
 msgid ""
 "Project: store backups and autosave files inside the project directory.\n"
 "User: store them in your KiCad user data directory."
 msgstr ""
+"Пројекат: чува резерву и аутоматски сачуване датотеке унутар путање на којој "
+"је пројекат.\n"
+"Корисник: чува ове датотеке у вашем KiCad корисничком директоријуму."
 
 #: common/dialogs/panel_common_settings_base.cpp:457
 msgid "Maximum total backup size:"
@@ -4598,9 +4590,9 @@ msgstr "Библиотеке дизајн блокова"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:116
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid " (%s)|%s"
-msgstr "Иди на страницу %s (%s)"
+msgstr " (%s)|%s"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:390
 #: eeschema/dialogs/panel_sym_lib_table.cpp:351
@@ -5996,22 +5988,19 @@ msgstr ""
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
 #: common/dialogs/panel_startwizard_libraries_base.cpp:25
 msgid "<b>The following global library tables need to be created:</b>"
-msgstr ""
+msgstr "<b>Следеће глобалне библиотечке табеле треба да се направе:</b>"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:37
-#, fuzzy
 msgid "How would you like KiCad to create them?"
-msgstr "Како бисте жељели да конфигуришете KiCad?"
+msgstr "Како желите да их KiCad направи?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
-#, fuzzy
 msgid "Start with the built-in KiCad libraries"
-msgstr "Започни без библиотека"
+msgstr "Започни са уграћеним KiCad библиотекама"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
-#, fuzzy
 msgid "Import tables from the previous version"
-msgstr "Увези поставке из претходне верзије код:"
+msgstr "Увези табеле из претходне верзије"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:46
 msgid ""
@@ -6019,16 +6008,21 @@ msgid ""
 "previous step.  Any tables that cannot be imported will be created with the "
 "default KiCad libraries."
 msgstr ""
+"Библиотечке табеле че бити увезене из верзије одабране у претходном кораку. "
+"Табела која не може да се увезе ће бити направљена са подразумеваним KiCad "
+"библиотекама."
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:53
 msgid "Migrate built-in libraries to the latest version (recommended)"
-msgstr ""
+msgstr "Мигрирајте уграђене библиотеке на најновију верзијуе (препоручено)"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:55
 msgid ""
 "When enabled, KiCad will replace any existing references to built-in "
 "libraries with references to the latest version"
 msgstr ""
+"Када је омогућено, KiCad ће заменити постојеће референце ка уграћеним "
+"библиотекама са референцама ка најновијом верзијом"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:62
 msgid "Start with no libraries"
@@ -6041,17 +6035,22 @@ msgid ""
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
+"Уграђене библиотечке табеле нису пронађене на очекиваној локацији. Ово "
+"обично значи да Сте инсталирали KiCad софтвер без инсталирања библиотека. "
+"Можете наставити са подешавањем, али је потребно инсталирати библиотеке "
+"одвојено да би оне биле доступне."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
-#, fuzzy
 msgid "Updates"
-msgstr "Поља"
+msgstr "Ажурирање"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:23
 msgid ""
 "Allow connections to the Internet to check for updated versions of KiCad and "
 "packages installed through the Plugin and Content Manager?"
 msgstr ""
+"Дозволи везама на интернету да провјеравају да ли постоји ажурирана верзија "
+"KiCad-а и пакета инсталираних користећи Менаџер Садржаја и Додатака?"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
 #: common/eda_base_frame.cpp:1516
@@ -6070,10 +6069,19 @@ msgid ""
 "files such as schematics, PCBs, and libraries are never shared as part of "
 "this process."
 msgstr ""
+"KiCad може анонимно да пријављује ненамерно гашење и друге догађаје "
+"развојном тиму ради лакшег уочавања и поправки грешака, те унапређења "
+"употребљивости софтвера.\n"
+"\n"
+"Када је опција прикупљања података омогућена, KiCad ће аутоматски да шаље "
+"извештаје о ненамерном гашењу и другим значајнијим догађајима. Ови извештаји "
+"садрже техничке детаље о стаљу KiCad-а у том тренутку. Лични подаци се не "
+"прикупљају и ваше пројектне датотеке као што је шема, штампана плочица и "
+"библиотеке нису никада дијељени као дио овог процеса."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:42
 msgid "Enable anonymous data collection"
-msgstr ""
+msgstr "Омогући анонимно прикупљање података"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:21
 msgid "How would you like to configure KiCad?"
@@ -6143,41 +6151,35 @@ msgid "Top main"
 msgstr "Горњи главни"
 
 #: common/dialogs/panel_toolbar_customization.cpp:55
-#, fuzzy
 msgid "Top auxiliary"
 msgstr "Горњи помоћни"
 
 #: common/dialogs/panel_toolbar_customization.cpp:157
-#, fuzzy
 msgid "Insert Separator"
-msgstr "Додај сепаратор"
+msgstr "Уметни сепаратор"
 
 #: common/dialogs/panel_toolbar_customization.cpp:163
-#, fuzzy
 msgid "Insert Spacer"
-msgstr "Додај одстојник"
+msgstr "Уметни Одстојник"
 
 #: common/dialogs/panel_toolbar_customization.cpp:164
-#, fuzzy
 msgid "Insert Group"
-msgstr "Додај групу"
+msgstr "Уметни Групу"
 
 #: common/dialogs/panel_toolbar_customization.cpp:176
-#, fuzzy
 msgid "Filter actions"
-msgstr "Поставке филтера:"
+msgstr "Поставке Филтера"
 
 #: common/dialogs/panel_toolbar_customization.cpp:468
 #: common/dialogs/panel_toolbar_customization.cpp:793
 #: common/dialogs/panel_toolbar_customization.cpp:797
-#, fuzzy
 msgid "Separator"
-msgstr "Избриши"
+msgstr "Сепаратор"
 
 #: common/dialogs/panel_toolbar_customization.cpp:477
 #, c-format
 msgid "Spacer: %i"
-msgstr ""
+msgstr "Сепаратор: %i"
 
 #: common/dialogs/panel_toolbar_customization.cpp:690 common/eda_item.cpp:451
 #: common/eda_item.cpp:476 eeschema/sch_group.cpp:363 pcbnew/pcb_group.cpp:413
@@ -6190,9 +6192,8 @@ msgid "Customize toolbars"
 msgstr "Прилагоди линије са алаткама"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:40
-#, fuzzy
 msgid "Toolbar:"
-msgstr "Линије алатки"
+msgstr "Линије алатки:"
 
 #: common/dialogs/panel_toolbar_customization_base.cpp:70
 msgid "Insert separator"
@@ -6208,24 +6209,20 @@ msgstr "Сачувај"
 #: common/dialogs/rule_editor_dialog_base.cpp:474
 #: common/dialogs/rule_editor_dialog_base.cpp:492
 #: kicad/kicad_manager_frame.cpp:972
-#, fuzzy
 msgid "Discard"
-msgstr "Дисторзија"
+msgstr "Одбаци"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:568
-#, fuzzy
 msgid "New Rule"
-msgstr "Нови"
+msgstr "Ново Правило"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:571
-#, fuzzy
 msgid "Copy Rule"
-msgstr "Изабери језик"
+msgstr "Копирај Правило"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:574
-#, fuzzy
 msgid "Delete Rule"
-msgstr "Избриши фајл"
+msgstr "Избриши Правило"
 
 #: common/dialogs/rule_editor_dialog_base.cpp:577
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:65
@@ -6246,18 +6243,16 @@ msgid "Graphics error"
 msgstr "Графичка грешка"
 
 #: common/draw_panel_gal.cpp:236 common/draw_panel_gal.cpp:240
-#, fuzzy
 msgid "Graphics error during recovery"
-msgstr "Графичка грешка"
+msgstr "Графичка грешка током опоравка"
 
 #: common/draw_panel_gal.cpp:241
 msgid "Unknown exception during backend switch"
-msgstr ""
+msgstr "Непознат изузетак доком промене позадинског стања"
 
 #: common/draw_panel_gal.cpp:416
-#, fuzzy
 msgid "Unknown exception"
-msgstr "Непозната метода"
+msgstr "Непознат изузетак"
 
 #: common/draw_panel_gal.cpp:619
 msgid "Could not use OpenGL"
@@ -6397,7 +6392,6 @@ msgid "Text '%s'"
 msgstr "Текст '%s'"
 
 #: common/drawing_sheet/ds_draw_item.cpp:338
-#, fuzzy
 msgid "Imported shape"
 msgstr "Увежени облик"
 
@@ -6413,9 +6407,8 @@ msgstr "Линија, дужина %s"
 
 #: common/drawing_sheet/ds_draw_item.cpp:528 common/layer_id.cpp:118
 #: common/layer_id.cpp:148
-#, fuzzy
 msgid "Page limits"
-msgstr "Прикажи"
+msgstr "Ограничења странице"
 
 #: common/dsnlexer.cpp:34
 msgid "clipboard"
@@ -6427,9 +6420,9 @@ msgid "Expecting '%s'"
 msgstr "Очекује се '%s'"
 
 #: common/dsnlexer.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s. Got '%s'"
-msgstr "Очекује се '%s'"
+msgstr "Очекује се '%s', а добило се '%s'"
 
 #: common/dsnlexer.cpp:359
 #, c-format
@@ -6452,9 +6445,8 @@ msgid "need a number for '%s'"
 msgstr "потребан је број за '%s'"
 
 #: common/dsnlexer.cpp:733
-#, fuzzy
 msgid "Unterminated delimited string"
-msgstr "Незавршен текст са сепаратором"
+msgstr "Текст завршава са сепаратором"
 
 #: common/dsnlexer.cpp:755
 msgid "String delimiter must be a single character of ', \", or $"
@@ -6476,15 +6468,20 @@ msgid ""
 "%s\n"
 "Recover the auto-saved data?"
 msgstr ""
+"Постоје аутоматски сачуване датотеке које су новије од сачуваних пројектних "
+"датотека:\n"
+"\n"
+"%s\n"
+"Приступи пораваку аутоматски сачуваних датотека?"
 
 #: common/eda_base_frame.cpp:437
 msgid "Auto-Save Recovery"
-msgstr ""
+msgstr "Опоравак аутоматски сачуваних датотека"
 
 #: common/eda_base_frame.cpp:445
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to recover auto-saved file '%s'."
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка у опоравку аутоматски сачуване датотеке '%s'."
 
 #: common/eda_base_frame.cpp:568 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:135
@@ -6499,24 +6496,23 @@ msgid "Redo"
 msgstr "Понови"
 
 #: common/eda_base_frame.cpp:840
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s > %s"
-msgstr "%s и %s"
+msgstr "Изврши: %s > %s"
 
 #: common/eda_base_frame.cpp:847
-#, fuzzy, c-format
+#, c-format
 msgid "Run: %s"
-msgstr "тренутно: %s)"
+msgstr "Изврши: %s"
 
 #: common/eda_base_frame.cpp:1406
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found.\n"
-msgstr "Фајл \"%s\" није пронађен."
+msgstr "Датотека \"%s\" није пронађена.\n"
 
 #: common/eda_base_frame.cpp:1409
-#, fuzzy
 msgid "Do you want to remove it from list of recently opened files?"
-msgstr "Стил линије"
+msgstr "Да ли желите да уклоните ово са листе недавно отворених датотека?"
 
 #: common/eda_base_frame.cpp:1410
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:79
@@ -6524,9 +6520,8 @@ msgid "Remove"
 msgstr "Избриши"
 
 #: common/eda_base_frame.cpp:1411
-#, fuzzy
 msgid "Keep"
-msgstr "Сачувај нуле"
+msgstr "Задржи"
 
 #: common/eda_base_frame.cpp:1460
 msgid "Preferences"
@@ -6543,7 +6538,7 @@ msgstr "Миш и Touchpad"
 
 #: common/eda_base_frame.cpp:1500
 msgid "SpaceMouse"
-msgstr ""
+msgstr "ПросторниМиш"
 
 #: common/eda_base_frame.cpp:1503
 msgid "Hotkeys"
@@ -6598,7 +6593,6 @@ msgid "Field Name Templates"
 msgstr "Шаблони имена поља"
 
 #: common/eda_base_frame.cpp:1553
-#, fuzzy
 msgid "Data Sources"
 msgstr "Извор"
 
@@ -6629,9 +6623,8 @@ msgstr "Подразумевана подешавања графике"
 
 #: common/eda_base_frame.cpp:1579
 #: pcbnew/dialogs/panel_fp_user_layer_names_base.cpp:45
-#, fuzzy
 msgid "User Layer Names"
-msgstr "Име табле"
+msgstr "Кориснички одабрана имена слојева"
 
 #: common/eda_base_frame.cpp:1584 common/hotkey_store.cpp:78
 #: common/tool/common_tools.cpp:618 kicad/tools/kicad_manager_actions.cpp:127
@@ -6676,9 +6669,8 @@ msgid "Packages and Updates"
 msgstr "Пакети и унаређења"
 
 #: common/eda_base_frame.cpp:1658
-#, fuzzy
 msgid "Maintenance"
-msgstr "Дужина:"
+msgstr "Одржавање"
 
 #: common/eda_base_frame.cpp:1742 pcbnew/dialogs/dialog_export_odbpp.cpp:295
 #: pcbnew/tools/board_editor_control.cpp:681
@@ -6706,9 +6698,8 @@ msgstr "Непознати MIME тип за фајл документације 
 
 #: common/eda_draw_frame.cpp:238 common/tool/action_toolbar.cpp:1235
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:55
-#, fuzzy
 msgid "Override locks"
-msgstr "Сакривен текст"
+msgstr "Прекрши правило закључавања"
 
 #: common/eda_draw_frame.cpp:451 common/tool/actions.cpp:1096
 msgid "Edit Grids..."
@@ -6777,9 +6768,8 @@ msgstr "Јединице"
 #: pcbnew/dialogs/panel_setup_dimensions_base.cpp:36
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:46
 #: pcbnew/pcb_dimension.cpp:1876
-#, fuzzy
 msgid "Inches"
-msgstr "инчи"
+msgstr "Инчи"
 
 #: common/eda_draw_frame.cpp:1281 common/tool/actions.cpp:620
 #: common/widgets/search_pane.cpp:154 eeschema/sch_edit_frame.cpp:292
@@ -6885,9 +6875,8 @@ msgid "Target"
 msgstr "Мета"
 
 #: common/eda_item.cpp:447 pcbnew/pcb_point.cpp:163
-#, fuzzy
 msgid "Point"
-msgstr "Тачке"
+msgstr "Тачка"
 
 #: common/eda_item.cpp:448 pcbnew/tools/board_inspection_tool.cpp:1072
 msgid "Zone"
@@ -6903,7 +6892,7 @@ msgstr "Информације о вези"
 
 #: common/eda_item.cpp:452 pcbnew/pcb_barcode.cpp:545
 msgid "Barcode"
-msgstr ""
+msgstr "Баркод"
 
 #: common/eda_item.cpp:455 eeschema/sch_junction.cpp:302
 #: eeschema/sch_junction.h:102
@@ -6998,7 +6987,6 @@ msgid "Number Box"
 msgstr "Бројчано поље"
 
 #: common/eda_shape.cpp:398 pcbnew/pad.cpp:2192
-#, fuzzy
 msgid "Rect"
 msgstr "Правоугаоник"
 
@@ -7151,18 +7139,16 @@ msgstr "Својства облика"
 #: pcbnew/pcb_shape.cpp:1027 pcbnew/pcb_table.cpp:852
 #: pcbnew/pcb_tablecell.cpp:295 pcbnew/pcb_textbox.cpp:853
 #: pcbnew/pcb_track.cpp:3136
-#, fuzzy
 msgid "Start X"
-msgstr "X старт:"
+msgstr "X почетак"
 
 #: common/eda_shape.cpp:2895 eeschema/sch_line.cpp:1267
 #: eeschema/sch_table.cpp:534 eeschema/sch_tablecell.cpp:430
 #: pcbnew/pcb_shape.cpp:1029 pcbnew/pcb_table.cpp:855
 #: pcbnew/pcb_tablecell.cpp:296 pcbnew/pcb_textbox.cpp:854
 #: pcbnew/pcb_track.cpp:3140
-#, fuzzy
 msgid "Start Y"
-msgstr "Y старт:"
+msgstr "Y почетак"
 
 #: common/eda_shape.cpp:2901 pcbnew/pcb_shape.cpp:1035
 msgid "Center X"
@@ -7176,24 +7162,21 @@ msgstr "Центар Y"
 #: eeschema/sch_tablecell.cpp:431 pcbnew/generators/pcb_tuning_pattern.cpp:2592
 #: pcbnew/pcb_shape.cpp:1031 pcbnew/pcb_tablecell.cpp:297
 #: pcbnew/pcb_textbox.cpp:855 pcbnew/pcb_track.cpp:3143
-#, fuzzy
 msgid "End X"
-msgstr "Крај X:"
+msgstr "Крај X"
 
 #: common/eda_shape.cpp:2925 eeschema/sch_line.cpp:1275
 #: eeschema/sch_tablecell.cpp:432 pcbnew/generators/pcb_tuning_pattern.cpp:2597
 #: pcbnew/pcb_shape.cpp:1033 pcbnew/pcb_tablecell.cpp:298
 #: pcbnew/pcb_textbox.cpp:856 pcbnew/pcb_track.cpp:3146
-#, fuzzy
 msgid "End Y"
-msgstr "Крај Y:"
+msgstr "Крај Y"
 
 #: common/eda_shape.cpp:2943 eeschema/sch_tablecell.cpp:442
 #: eeschema/sch_textbox.cpp:606 pcbnew/pcb_tablecell.cpp:287
 #: pcbnew/pcb_textbox.cpp:863
-#, fuzzy
 msgid "Corner Radius"
-msgstr "Полупречник"
+msgstr "Полупречник Ћошка"
 
 #: common/eda_shape.cpp:2971 common/stroke_params.cpp:297
 #: eeschema/sch_bus_entry.cpp:654 eeschema/sch_line.cpp:1290
@@ -7280,9 +7263,8 @@ msgstr "Подебљано+курзив"
 #: eeschema/dialogs/dialog_text_properties_base.cpp:93
 #: eeschema/fields_grid_table.cpp:60
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:155
-#, fuzzy
 msgid "Default Font"
-msgstr "Дужина линије:"
+msgstr "Почетни Фонт"
 
 #: common/eda_text.cpp:1328 common/eda_text.cpp:1337
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
@@ -7500,14 +7482,14 @@ msgstr ""
 "корисника."
 
 #: common/env_vars.cpp:141
-#, fuzzy, c-format
+#, c-format
 msgid "Deprecated version of %s."
-msgstr "Неочекиван крај фајла"
+msgstr "Застарјела верзија %s."
 
 #: common/exceptions.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr "%s у \"%s\", линија %d, помак %d"
+msgstr "%s у \"%s\", линија %d, помак %d."
 
 #: common/exceptions.cpp:114
 #, c-format
@@ -7539,14 +7521,12 @@ msgstr ""
 "(фајл формат са датумом %s или новијим)."
 
 #: common/exceptions.cpp:158
-#, fuzzy
 msgid "Full error text:"
-msgstr "X:"
+msgstr "Цели текст грешке:"
 
 #: common/file_history.cpp:155
-#, fuzzy
 msgid "No Files"
-msgstr "Doc фајлови"
+msgstr "Нема датотека"
 
 #: common/filename_resolver.cpp:547
 msgid "The given path does not exist"
@@ -7557,18 +7537,16 @@ msgid "Alias: "
 msgstr "Алијас: "
 
 #: common/filename_resolver.cpp:578
-#, fuzzy
 msgid "This path:"
-msgstr "Претражи путање:"
+msgstr "Ова путања:"
 
 #: common/filename_resolver.cpp:581
 msgid "Existing path:"
 msgstr "Постојећа путања:"
 
 #: common/filename_resolver.cpp:583
-#, fuzzy
 msgid "Bad alias (duplicate name)"
-msgstr "%s је дупликат"
+msgstr "Лош алијас (заменско име)"
 
 #: common/font/fontconfig.cpp:366
 #, c-format
@@ -7581,21 +7559,19 @@ msgid "Font '%s' not found; substituting '%s'."
 msgstr "Фонт '%s' није пронађен; замјена за '%s'."
 
 #: common/gestfich.cpp:252
-#, fuzzy, c-format
+#, c-format
 msgid "Command '%s' could not be found."
-msgstr "Наредба \"%s\" није пронађена"
+msgstr "Наредба \"%s\" није пронађена."
 
 #: common/gestfich.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a PDF viewer for '%s'."
-msgstr "Немогуће пронаћи PDF посматрач за \"%s\""
+msgstr "Немогуће пронаћи PDF прегледник за \"%s\""
 
 #: common/gestfich.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr ""
-"Проблем током рада PDF посматрача\n"
-"Наредба је \"%s\""
+msgstr "Проблем током рада PDF прегледника '%s'."
 
 #: common/gestfich.cpp:303 common/gestfich.cpp:378 eeschema/eeschema.cpp:741
 #: gerbview/gerbview.cpp:262 kicad/project_template.cpp:367
@@ -7614,193 +7590,175 @@ msgid "Directory '%s' does not exist"
 msgstr "Директоријум \"%s\" не постоји"
 
 #: common/gestfich.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "компонента"
+msgstr "'%s' није директоријум"
 
 #: common/gestfich.cpp:429
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "Избриши"
+msgstr "Грешка у уклањању директоријума '%s': %s"
 
 #: common/gestfich.cpp:445 common/gestfich.cpp:522 common/gestfich.cpp:622
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open source directory: %s"
-msgstr "Немогуће сачувати фајл %s."
+msgstr "Немогуће отворити изворни директоријум: %s."
 
 #: common/gestfich.cpp:452 common/gestfich.cpp:578
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create destination directory: %s"
-msgstr "Немогуће сачувати фајл %s."
+msgstr "Немогуће направити одредишни директоријум: %s."
 
 #: common/gestfich.cpp:480 common/gestfich.cpp:510
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy file: %s to %s"
-msgstr "Немогуће се повезати са '%s' "
+msgstr "Немогуће направити копију датотеке: %s на %s"
 
 #: common/gestfich.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "Could not copy directory: %s to %s"
-msgstr "Немогуће се повезати са '%s' "
+msgstr "Немогуће копирати директоријум: %s на %s"
 
 #: common/gestfich.cpp:596
-#, fuzzy, c-format
+#, c-format
 msgid "Source directory does not exist: %s"
-msgstr "\"%s\" већ постоји."
+msgstr "Изворни директоријум не постоји: %s"
 
 #: common/gestfich.cpp:652
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file: %s"
-msgstr "Немогуће учитати датотеку "
+msgstr "Немогуће учитати датотеку:  %s"
 
 #: common/git/kicad_git_common.cpp:904
 #, c-format
 msgid "Received %u of %u objects"
-msgstr ""
+msgstr "Примљено %u од %u објеката"
 
 #: common/git/kicad_git_common.cpp:938
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "Попуњавање зона"
+msgstr "* [ажурирано] %s. %s %s"
 
 #: common/git/kicad_git_common.cpp:942
-#, fuzzy, c-format
+#, c-format
 msgid "* [new] %s %s"
-msgstr "Попуњавање зона"
+msgstr "* [ново] %s %s"
 
 #: common/git/kicad_git_common.cpp:962
 #, c-format
 msgid "Writing objects: %lld%% (%u/%u), %zu bytes"
-msgstr ""
+msgstr "Писање објеката: %lld%% (%u/%u), %zu бајтова"
 
 #: common/git/kicad_git_common.cpp:977
-#, fuzzy, c-format
+#, c-format
 msgid "* [rejected] %s (%s)"
-msgstr "Попуњавање зона"
+msgstr "* [одбачено] %s (%s)"
 
 #: common/git/kicad_git_common.cpp:982
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "Поља"
+msgstr "[ажурирано] %s"
 
 #: common/git/kicad_git_common.cpp:1047
-#, fuzzy
 msgid "Unable to authenticate"
-msgstr "Немогуће направити "
+msgstr "Немогућа аутентикација"
 
 #: common/git/kicad_git_errors.cpp:40
-#, fuzzy
 msgid "Invalid repository."
-msgstr "Попуњавање зона"
+msgstr "Неважећи репозиторијум."
 
 #: common/git/kicad_git_errors.cpp:41
-#, fuzzy
 msgid "Failed to commit changes."
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка у изменама комита."
 
 #: common/git/kicad_git_errors.cpp:42
-#, fuzzy
 msgid "Failed to merge branches."
-msgstr "Учитавање  "
+msgstr "Грешка у обједињењу грана."
 
 #: common/git/kicad_git_errors.cpp:45
-#, fuzzy
 msgid "Failed to clone repository."
-msgstr "Попуњавање зона"
+msgstr "Грешка у клонирању репозиторијума."
 
 #: common/git/kicad_git_errors.cpp:46
-#, fuzzy
 msgid "Remote repository not found."
-msgstr "ERC извјештај"
+msgstr "Удаљени репозиторијум није пронађен."
 
 #: common/git/kicad_git_errors.cpp:47
 msgid "Authentication failed for remote repository."
-msgstr ""
+msgstr "Грешка у аутентикацији удаљеног репозиторијума."
 
 #: common/git/kicad_git_errors.cpp:50
-#, fuzzy
 msgid "Branch not found."
-msgstr "%s није пронађен"
+msgstr "Грана није пронађена."
 
 #: common/git/kicad_git_errors.cpp:51
-#, fuzzy
 msgid "Failed to create branch."
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка у прављењу гране."
 
 #: common/git/kicad_git_errors.cpp:52
-#, fuzzy
 msgid "Failed to delete branch."
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка у брисању гране."
 
 #: common/git/kicad_git_errors.cpp:55 common/git/libgit_backend.cpp:982
 msgid "Failed to perform checkout operation."
-msgstr ""
+msgstr "Грешка током извршења операције чекирања."
 
 #: common/git/kicad_git_errors.cpp:56
 msgid "File not found during checkout operation."
-msgstr ""
+msgstr "Датотека није пронађена током чекоут операције."
 
 #: common/git/kicad_git_errors.cpp:59
 msgid "Merge conflict encountered."
-msgstr ""
+msgstr "Конфликт у обједињењу."
 
 #: common/git/kicad_git_errors.cpp:60
 msgid "Rebase conflict encountered."
 msgstr "Конфликт при ребазирању."
 
 #: common/git/kicad_git_errors.cpp:63
-#, fuzzy
 msgid "Failed to pull changes from remote repository."
-msgstr "Попуњавање зона"
+msgstr "Грешка у повлачењу иѕмена са удаљеног репозиторијума."
 
 #: common/git/kicad_git_errors.cpp:64
-#, fuzzy
 msgid "Failed to push changes to remote repository."
-msgstr "Попуњавање зона"
+msgstr "Грешка у слању иѕмена на удаљени репозиторијум."
 
 #: common/git/kicad_git_errors.cpp:65
 msgid "No upstream branch configured."
 msgstr "upstream грана није конфигурисана."
 
 #: common/git/kicad_git_errors.cpp:67
-#, fuzzy
 msgid "Failed to establish connection with remote repository."
-msgstr "Попуњавање зона"
+msgstr "Грешка у успостављању везе са удаљеним репозиторијумом."
 
 #: common/git/kicad_git_errors.cpp:70
-#, fuzzy
 msgid "Tag not found."
-msgstr "%s није пронађен"
+msgstr "Ознака није пронађена."
 
 #: common/git/kicad_git_errors.cpp:71
-#, fuzzy
 msgid "Failed to create tag."
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка у прављењу ознаке."
 
 #: common/git/kicad_git_errors.cpp:72
-#, fuzzy
 msgid "Failed to delete tag."
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка бирсању ознаке."
 
 #: common/git/kicad_git_errors.cpp:74
-#, fuzzy
 msgid "Unknown error."
-msgstr "Непозната метода"
+msgstr "Непозната грешка."
 
 #: common/git/kicad_git_errors.cpp:75
-#, fuzzy
 msgid "No error."
-msgstr "Маркер није пронађен"
+msgstr "Без грешке."
 
 #: common/git/kicad_git_errors.h:47 common/git/kicad_git_errors.h:55
-#, fuzzy
 msgid "No error"
-msgstr "грешке"
+msgstr "Без грешке"
 
 #: common/git/libgit_backend.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'"
-msgstr "Немогуће сачувати фајл %s."
+msgstr "Немогуће направити директоријум %s."
 
 #: common/git/libgit_backend.cpp:146
 #, fuzzy, c-format
@@ -7853,23 +7811,22 @@ msgid "Failed to create commit: %s"
 msgstr "Грешка у креирању датотеке '%s'."
 
 #: common/git/libgit_backend.cpp:290
-#, fuzzy
 msgid "Could not lookup remote"
-msgstr "Отвори"
+msgstr "Немогуће потражити удаљени репозиторијум"
 
 #: common/git/libgit_backend.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote: %s"
-msgstr "Немогуће пронаћи %s пин '%s'."
+msgstr "Немогуће повезивање на удаљени репозиторијум: %s"
 
 #: common/git/libgit_backend.cpp:325 common/git/libgit_backend.cpp:906
 msgid "Could not get repository head"
-msgstr ""
+msgstr "Немогуће добавити главу репозиторијума"
 
 #: common/git/libgit_backend.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "Could not push to remote: %s"
-msgstr "Отвори"
+msgstr "Немогуће слање на удаљени репозиторијум: %s"
 
 #: common/git/libgit_backend.cpp:574
 #, fuzzy, c-format
@@ -7911,38 +7868,35 @@ msgid "Failed to update HEAD reference for branch '%s': %s"
 msgstr "потребан је број за '%s'"
 
 #: common/git/libgit_backend.cpp:763
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "Отвори"
+msgstr "Немогуће потражити удаљени репозиторијум '%s'"
 
 #: common/git/libgit_backend.cpp:784
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s': %s"
-msgstr "Немогуће пронаћи %s пин '%s'."
+msgstr "Немогуће се повезати на удаљени репозиторијум '%s': %s"
 
 #: common/git/libgit_backend.cpp:797
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s': %s"
-msgstr "Немогуће пронаћи %s пин '%s'."
+msgstr "Немогуће добавити податке са удаљеног репозиторијум %s: %s"
 
 #: common/git/libgit_backend.cpp:825
-#, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "Отвори"
+msgstr "Немогуће прочитати 'FETCH_HEAD'"
 
 #: common/git/libgit_backend.cpp:833
-#, fuzzy
 msgid "Could not lookup commit"
-msgstr "Отвори"
+msgstr "Немогуће потражити комит"
 
 #: common/git/libgit_backend.cpp:844
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "Отвори"
+msgstr "Немогуће анализирати обједињење"
 
 #: common/git/libgit_backend.cpp:850
 msgid "Invalid HEAD.  Cannot merge."
-msgstr ""
+msgstr "Неважећи HEAD. Није могуће објединити."
 
 #: common/git/libgit_backend.cpp:876
 #, fuzzy
@@ -7952,48 +7906,45 @@ msgstr "Отвори"
 #: common/git/libgit_backend.cpp:920
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
-msgstr ""
+msgstr "Није могуће добавити OID за референцу '%s'"
 
 #: common/git/libgit_backend.cpp:929
-#, fuzzy
 msgid "Could not look up target commit"
-msgstr "Отвори"
+msgstr "Није могуће потражити циљани комит"
 
 #: common/git/libgit_backend.cpp:940
-#, fuzzy
 msgid "Could not get tree from target commit"
-msgstr "Отвори"
+msgstr "Није могуће добавити стабло циљаног комита"
 
 #: common/git/libgit_backend.cpp:990
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update reference '%s' to point to '%s'"
-msgstr "потребан је број за '%s'"
+msgstr "Грепка током ажурирања референце '%s' да указује на '%s'"
 
 #: common/git/libgit_backend.cpp:999
-#, fuzzy
 msgid "Failed to clean up repository state after fast-forward."
-msgstr "Попуњавање зона"
+msgstr "Грешка током чишћења стања репозиторијума након брзог преомтавања."
 
 #: common/git/libgit_backend.cpp:1007
-#, fuzzy
 msgid "Failed to initialize revision walker."
-msgstr "Попуњавање зона"
+msgstr "Грешка у иницијализацији ревизионог шетача."
 
 #: common/git/libgit_backend.cpp:1016
-#, fuzzy
 msgid "Failed to push reference to revision walker."
-msgstr "Попуњавање зона"
+msgstr "Грешка у слању референци ревизионом шетачу."
 
 #: common/git/libgit_backend.cpp:1031
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup commit '%s'"
-msgstr "Отвори"
+msgstr "Немогуће потражити комит '%s'"
 
 #: common/git/libgit_backend.cpp:1098
 msgid ""
 "Cannot merge: you have unstaged changes. Please commit or stash them before "
 "pulling."
 msgstr ""
+"Немогуће обједињење: Имате измјене које нису у стејџу. Молим комитујте или "
+"стеширајте их прије новог повлачења."
 
 #: common/git/libgit_backend.cpp:1106
 #, fuzzy, c-format
@@ -8027,7 +7978,7 @@ msgstr "Попуњавање зона"
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:997
 #: pcbnew/tools/edit_tool.cpp:3055
 msgid "Cut"
-msgstr "Исјеци"
+msgstr "Исеци"
 
 #: common/grid_tricks.cpp:380
 msgid "Clear selected cells placing original contents on clipboard"
@@ -8045,9 +7996,8 @@ msgid "Copy"
 msgstr "Копирај"
 
 #: common/grid_tricks.cpp:382 kicad/dialogs/panel_jobset.cpp:439
-#, fuzzy
 msgid "Copy selected cells to clipboard"
-msgstr "Копирај"
+msgstr "Копирај одабране ћелије у клипборд"
 
 #: common/grid_tricks.cpp:386 common/tool/actions.cpp:344
 #: common/widgets/listbox_tricks.cpp:210
@@ -8057,7 +8007,7 @@ msgstr "Копирај"
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:999
 #: pcbnew/tools/pcb_control.cpp:1381
 msgid "Paste"
-msgstr "Залијепи"
+msgstr "Залепи"
 
 #: common/grid_tricks.cpp:387
 msgid "Paste clipboard cells to matrix at current cell"
@@ -8075,9 +8025,8 @@ msgid "Delete"
 msgstr "Избриши"
 
 #: common/grid_tricks.cpp:389
-#, fuzzy
 msgid "Clear contents of selected cells"
-msgstr "Избриши"
+msgstr "Избриши садржај одабране ћелије"
 
 #: common/grid_tricks.cpp:392 common/tool/actions.cpp:372
 #: common/widgets/html_window.cpp:107
@@ -8134,19 +8083,16 @@ msgid "Failed to acquire git index lock (another operation in progress?): %s"
 msgstr ""
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Чисто"
+msgstr "Прихвати аутоматско надопуњавање"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Струја"
+msgstr "Поништи аутоматско надопуњавање"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Изабери слој"
+msgstr "Измени Чекбокс"
 
 #: common/hotkey_store.cpp:47
 #, fuzzy
@@ -8159,14 +8105,12 @@ msgid "Pan Up/Down"
 msgstr "Доле"
 
 #: common/hotkey_store.cpp:49
-#, fuzzy
 msgid "Finish Drawing"
-msgstr "Опције цртања"
+msgstr "Заврши Цртање"
 
 #: common/hotkey_store.cpp:50
-#, fuzzy
 msgid "Add to Selection"
-msgstr "Појасни избор"
+msgstr "Додај у селекцију"
 
 #: common/hotkey_store.cpp:51 eeschema/tools/sch_actions.cpp:1037
 #: gerbview/tools/gerbview_actions.cpp:133 pcbnew/tools/pcb_actions.cpp:1548
@@ -8176,33 +8120,29 @@ msgid "Highlight Net"
 msgstr "компонента"
 
 #: common/hotkey_store.cpp:52
-#, fuzzy
 msgid "Remove from Selection"
-msgstr "Појасни избор"
+msgstr "Уклони из Селекције"
 
 #: common/hotkey_store.cpp:53
 msgid "Ignore Grid Snaps"
-msgstr "Игнориши лепљење на координатну мрежу"
+msgstr "Занемари лепљење на координатну мрежу"
 
 #: common/hotkey_store.cpp:54
 msgid "Ignore Other Snaps"
-msgstr "Игнориши остала лепљења"
+msgstr "Занемари остала лепљења"
 
 #: common/hotkey_store.cpp:61 common/tool/action_menu.cpp:242
 #: common/tool/action_menu.cpp:258 common/tool/actions.cpp:152
-#, fuzzy
 msgid "Quit"
-msgstr "Јединица %s"
+msgstr "Излаз"
 
 #: common/hotkey_store.cpp:76
-#, fuzzy
 msgid "Project Manager"
-msgstr "Име:"
+msgstr "Пројектни Менаџер"
 
 #: common/hotkey_store.cpp:159
-#, fuzzy
 msgid "Gestures"
-msgstr "Повлачење предмета"
+msgstr "Гестуре"
 
 #: common/http_lib/http_lib_connection.cpp:67
 msgid "KiCad received an empty response!"
@@ -8241,25 +8181,22 @@ msgid "Memory was exhausted trying to load the DXF, it may be too large."
 msgstr "Меморија је потрошена покушавајући да се учита DXF, можда је превелик."
 
 #: common/import_gfx/dxf_import_plugin.cpp:1549
-#, fuzzy
 msgid "Invalid spline definition encountered"
-msgstr "Изабери језик"
+msgstr "Неважећа дефиниција сплајна"
 
 #: common/import_gfx/dxf_import_plugin.h:210
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not supported."
-msgstr "Отвори"
+msgstr "%s није подржан."
 
 #: common/import_gfx/dxf_import_plugin.h:460
 #: common/import_gfx/dxf_import_plugin.h:465
-#, fuzzy
 msgid "DXF construction lines not currently supported."
-msgstr "Отвори"
+msgstr "DXF конструкција линија није тренутно подржана."
 
 #: common/import_gfx/dxf_import_plugin.h:470
-#, fuzzy
 msgid "DXF arc-aligned text not currently supported."
-msgstr "Отвори"
+msgstr "DXF поравнање текста са луком није тренутно подржано."
 
 #: common/import_gfx/dxf_import_plugin.h:475
 #: common/import_gfx/dxf_import_plugin.h:480
@@ -8269,34 +8206,28 @@ msgstr "Отвори"
 #: common/import_gfx/dxf_import_plugin.h:500
 #: common/import_gfx/dxf_import_plugin.h:505
 #: common/import_gfx/dxf_import_plugin.h:510
-#, fuzzy
 msgid "DXF dimensions not currently supported."
-msgstr "Отвори"
+msgstr "DXF димензије нису тренутно подржане."
 
 #: common/import_gfx/dxf_import_plugin.h:516
-#, fuzzy
 msgid "DXF hatches not currently supported."
-msgstr "Отвори"
+msgstr "DXF отвори нису тренутно подржани."
 
 #: common/import_gfx/dxf_import_plugin.h:524
-#, fuzzy
 msgid "DXF traces not currently supported."
-msgstr "Отвори"
+msgstr "DXF трагови нису тренутно подржани."
 
 #: common/import_gfx/dxf_import_plugin.h:529
-#, fuzzy
 msgid "DXF 3dfaces not currently supported."
-msgstr "Отвори"
+msgstr "DXF 3dfaces нису тренутно подржани."
 
 #: common/import_gfx/dxf_import_plugin.h:534
-#, fuzzy
 msgid "DXF solids not currently supported."
-msgstr "Отвори"
+msgstr "DXF solids нису тренутно подржани."
 
 #: common/import_gfx/dxf_import_plugin.h:539
-#, fuzzy
 msgid "DXF images not currently supported."
-msgstr "Отвори"
+msgstr "DXF слике нису тренутно подржане."
 
 #: common/import_gfx/graphics_importer_buffer.cpp:126
 #, c-format
@@ -62409,9 +62340,8 @@ msgid "KiCad Drawing Sheet"
 msgstr "Опције цртања"
 
 #: scripting/python_manager.cpp:135
-#, fuzzy
 msgid "Process could not be created"
-msgstr "Фајл '%s' није могао бити направљен."
+msgstr "Процес не може да се направи"
 
 #: scripting/python_scripting.cpp:367
 #, fuzzy, c-format
