@@ -2310,7 +2310,13 @@ void BINARY_PARSER::parseNetNamesOld()
             {
                 std::string name = rec.Str( nameOff, 48 );
 
-                if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
+                // +60 in particular is frequently NOT a second net name at all -- for a part
+                // with nothing valid at +12, it commonly holds unrelated single-character noise
+                // that still happens to pass isValidNetName (verified against 2FOC-001.pcb: 13
+                // distinct components each contributing a different bogus single-letter "net",
+                // several sharing one already-real net's stored index). No real net name in the
+                // whole QA corpus is a single character, so this is a safe, well-evidenced floor.
+                if( name.size() < 2 || !isValidNetName( name ) || existing.count( name ) )
                     continue;
 
                 uint32_t netIdx = rec.U32( nameOff - 4 );
