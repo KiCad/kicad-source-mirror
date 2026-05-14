@@ -872,7 +872,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
 
                     if( designBlock )
                     {
-                        baseName = designBlock->GetLibId().GetLibItemName();
+                        baseName = designBlock->GetLibId().GetLibItemName().wx_str();
                         group->SetDesignBlockLibId( designBlock->GetLibId() );
                     }
                     else
