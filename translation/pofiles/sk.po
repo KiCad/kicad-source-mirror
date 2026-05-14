@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-13 19:11+0000\n"
+"PO-Revision-Date: 2026-05-15 04:11+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -26401,9 +26401,8 @@ msgid "Save selected group to linked design block"
 msgstr "Uložiť vybranú skupinu do prepojeného návrhového bloku"
 
 #: eeschema/tools/sch_actions.cpp:520
-#, fuzzy
 msgid "Place/Remove No Connect Flags"
-msgstr "Umiestniť príznak nepripojenia"
+msgstr "Umiestniť/Odstrániť príznak \"bez pripojenia\""
 
 #: eeschema/tools/sch_actions.cpp:531
 msgid "Place Junctions"
@@ -27612,9 +27611,8 @@ msgid "Add Wire to Bus Entry"
 msgstr "Umiestniť pripojenie k zbernici"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1672
-#, fuzzy
 msgid "Remove No Connect Flag"
-msgstr "Pridať príznak Nie pripojiť"
+msgstr "Odstrániť príznak \"bez pripojenia\""
 
 #: eeschema/tools/sch_drawing_tools.cpp:1681
 msgid "Junction location contains no joinable wires and/or pins."
@@ -30140,13 +30138,12 @@ msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr "Vynútiť opätovné uloženie knižnice puzdier bez ohľadu na verziovanie"
 
 #: kicad/cli/command_gerber.h:33
-#, fuzzy
 msgid ""
 "View and compare existing Gerber/Excellon files. To export Gerbers from a "
 "PCB, use 'pcb export gerbers'"
 msgstr ""
-"Zobraziť a porovnať existujúce súbory Gerber/Excellon. Na export súborov "
-"Gerber z DPS, použite príkaz 'pcb export gerber'"
+"Zobraziť a porovnať existujúce Gerber/Excellon súbory. Na Gerber export z "
+"dosky plošných spojov, použite príkaz 'pcb export gerbers'"
 
 #: kicad/cli/command_gerber_convert.h:33
 msgid "Convert Gerber/Excellon to other formats"
