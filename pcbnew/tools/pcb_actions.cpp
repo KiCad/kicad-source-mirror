@@ -1426,7 +1426,7 @@ TOOL_ACTION PCB_ACTIONS::zonePriorityMoveToTop( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.zonePriorityMoveToTop" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Move to Top" ) )
-        .Icon( BITMAPS::go_up ) );
+        .Icon( BITMAPS::small_up ) );
 
 TOOL_ACTION PCB_ACTIONS::zonePriorityRaise( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.zonePriorityRaise" )
@@ -1444,7 +1444,7 @@ TOOL_ACTION PCB_ACTIONS::zonePriorityMoveToBottom( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.zonePriorityMoveToBottom" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Move to Bottom" ) )
-        .Icon( BITMAPS::go_down ) );
+        .Icon( BITMAPS::small_down ) );
 
 TOOL_ACTION PCB_ACTIONS::placeFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.placeFootprint" )
