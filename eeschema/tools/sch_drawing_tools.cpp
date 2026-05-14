@@ -23,8 +23,10 @@
  */
 
 #include "sch_sheet_path.h"
+#include <limits>
 #include <memory>
 #include <set>
+#include <unordered_set>
 
 #include <kiplatform/ui.h>
 #include <optional>
@@ -74,6 +76,36 @@
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
+
+
+namespace
+{
+// Returns aBaseName, or aBaseName + smallest free integer if already used on aScreen.
+wxString uniqueGroupName( SCH_SCREEN* aScreen, const wxString& aBaseName )
+{
+    if( !aScreen )
+        return aBaseName;
+
+    std::unordered_set<wxString> existing;
+
+    for( SCH_ITEM* item : aScreen->Items().OfType( SCH_GROUP_T ) )
+        existing.insert( static_cast<SCH_GROUP*>( item )->GetName() );
+
+    if( !existing.count( aBaseName ) )
+        return aBaseName;
+
+    for( int n = 1; n < std::numeric_limits<int>::max(); ++n )
+    {
+        wxString candidate = aBaseName + wxString::Format( wxT( "%d" ), n );
+
+        if( !existing.count( candidate ) )
+            return candidate;
+    }
+
+    return aBaseName;
+}
+} // namespace
+
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         SCH_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
@@ -759,7 +791,6 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
 
     std::unique_ptr<DESIGN_BLOCK> designBlock;
     wxString                      sheetFileName = wxEmptyString;
-    int                           suffix = 1;
 
     if( placingDesignBlock )
     {
@@ -812,7 +843,6 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                 EDA_ITEMS newItems;
                 bool      keepAnnotations = cfg->m_DesignBlockChooserPanel.keep_annotations;
                 bool      placeAsGroup = cfg->m_DesignBlockChooserPanel.place_as_group;
-                bool      repeatPlacement = cfg->m_DesignBlockChooserPanel.repeated_placement;
 
                 selectionTool->ClearSelection();
 
@@ -838,18 +868,19 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                 {
                     group = new SCH_GROUP( screen );
 
+                    wxString baseName;
+
                     if( designBlock )
                     {
-                        group->SetName( designBlock->GetLibId().GetLibItemName() );
+                        baseName = designBlock->GetLibId().GetLibItemName();
                         group->SetDesignBlockLibId( designBlock->GetLibId() );
                     }
                     else
                     {
-                        group->SetName( wxFileName( sheetFileName ).GetName() );
+                        baseName = wxFileName( sheetFileName ).GetName();
                     }
 
-                    if( repeatPlacement )
-                        group->SetName( group->GetName() + wxString::Format( "%d", suffix++ ) );
+                    group->SetName( uniqueGroupName( screen, baseName ) );
                 }
 
                 bool autoAnnotate = !keepAnnotations && cfg->m_AnnotatePanel.automatic;
@@ -3519,11 +3550,13 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
                 if( isDrawSheetFromDesignBlock && cfg->m_DesignBlockChooserPanel.place_as_group )
                 {
-                    sheetGroup = new SCH_GROUP( m_frame->GetScreen() );
-                    sheetGroup->SetName( designBlock->GetLibId().GetLibItemName() );
+                    SCH_SCREEN* screen = m_frame->GetScreen();
+
+                    sheetGroup = new SCH_GROUP( screen );
+                    sheetGroup->SetName( uniqueGroupName( screen, designBlock->GetLibId().GetLibItemName() ) );
                     sheetGroup->SetDesignBlockLibId( designBlock->GetLibId() );
-                    c.Add( sheetGroup, m_frame->GetScreen() );
-                    c.Modify( sheet, m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
+                    c.Add( sheetGroup, screen );
+                    c.Modify( sheet, screen, RECURSE_MODE::NO_RECURSE );
                     sheetGroup->AddItem( sheet );
                 }
 
