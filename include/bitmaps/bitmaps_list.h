@@ -243,8 +243,6 @@ enum class BITMAPS : unsigned int
     git_delete,
     git_good_check,
     git_out_of_date,
-    go_down,
-    go_up,
     grid,
     grid_override,
     grid_select,
