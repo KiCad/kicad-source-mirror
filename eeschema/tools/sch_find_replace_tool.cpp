@@ -273,7 +273,7 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
     if( afterSheet || !searchAllSheets )
         item = nextMatch( m_frame->GetScreen(), currentSheet, m_afterItem, data, isReversed );
 
-    if( !item && searchAllSheets )
+    if( !item && searchAllSheets && !selectedOnly )
     {
         if( SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
         {

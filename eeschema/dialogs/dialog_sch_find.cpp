@@ -74,9 +74,10 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_BASE_FRAME* aParent, SCH_SEARCH_DATA* aDat
     m_cbSearchHiddenFields->SetValue( m_findReplaceData->searchAllFields );
     m_cbReplaceReferences->SetValue( m_findReplaceData->replaceReferences );
     m_cbSearchPins->SetValue( m_findReplaceData->searchAllPins );
+    m_cbSelectedOnly->SetValue( m_findReplaceData->searchSelectedOnly );
+
     m_cbCurrentSheetOnly->SetValue( m_findReplaceData->searchCurrentSheetOnly );
     m_cbCurrentSheetOnly->Enable( !m_findReplaceData->searchSelectedOnly );
-    m_cbSelectedOnly->SetValue( m_findReplaceData->searchSelectedOnly );
     m_cbSearchNetNames->SetValue( m_findReplaceData->searchNetNames );
 
     if( int hotkey = ACTIONS::showSearch.GetHotKey() )
@@ -252,10 +253,14 @@ void DIALOG_SCH_FIND::updateFlags()
     // Rebuild the search flags in m_findReplaceData from dialog settings
     m_findReplaceData->matchCase                = m_checkMatchCase->GetValue();
     m_findReplaceData->searchAllFields          = m_cbSearchHiddenFields->GetValue();
-    m_findReplaceData->searchAllPins            = m_cbSearchPins->GetValue();
-    m_findReplaceData->searchCurrentSheetOnly   = m_cbCurrentSheetOnly->GetValue();
+    m_findReplaceData->searchAllPins = m_cbSearchPins->GetValue();
     m_findReplaceData->replaceReferences        = m_cbReplaceReferences->GetValue();
     m_findReplaceData->searchNetNames           = m_cbSearchNetNames->GetValue();
+
+    // Only read the current-sheet-only widget when the user can actually toggle it.
+    // While selection-only forces it on, its value doesn't reflect user intent.
+    if( m_cbCurrentSheetOnly->IsEnabled() )
+        m_findReplaceData->searchCurrentSheetOnly = m_cbCurrentSheetOnly->GetValue();
 
     if( m_checkWholeWord->GetValue() )
         m_findReplaceData->matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
@@ -266,12 +271,12 @@ void DIALOG_SCH_FIND::updateFlags()
 
     if( m_cbSelectedOnly->GetValue() )
     {
-        m_cbCurrentSheetOnly->SetValue( true );
         m_cbCurrentSheetOnly->Enable( false );
         m_findReplaceData->searchSelectedOnly = true;
     }
     else
     {
+        m_cbCurrentSheetOnly->SetValue( m_findReplaceData->searchCurrentSheetOnly );
         m_cbCurrentSheetOnly->Enable( true );
         m_findReplaceData->searchSelectedOnly = false;
     }
