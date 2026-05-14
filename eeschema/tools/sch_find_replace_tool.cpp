@@ -116,6 +116,7 @@ int SCH_FIND_REPLACE_TOOL::UpdateFind( const TOOL_EVENT& aEvent )
             // Normal find modifies the selection, but selection-based find does not, so we want
             // to start over in the items we are searching through when the selection changes
             m_afterItem = nullptr;
+            m_afterItemScreen = nullptr;
             visitAll();
         }
     }
@@ -262,13 +263,29 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
     else if( data.findString.IsEmpty() )
         return FindAndReplace( ACTIONS::find.MakeEvent() );
 
+    if( m_afterItem && m_afterItemScreen != m_frame->GetScreen() )
+    {
+        m_afterItem = nullptr;
+        m_afterItemScreen = nullptr;
+    }
+
+    if( data.findString != m_lastSearchString )
+    {
+        m_afterItem = nullptr;
+        m_afterItemScreen = nullptr;
+        m_lastSearchString = data.findString;
+    }
+
     if( m_wrapAroundTimer.IsRunning() )
     {
         afterSheet = nullptr;
         m_afterItem = nullptr;
+        m_afterItemScreen = nullptr;
         m_wrapAroundTimer.Stop();
         m_frame->ClearFindReplaceStatus();
     }
+
+    bool freshSession = ( m_afterItem == nullptr );
 
     if( afterSheet || !searchAllSheets )
         item = nextMatch( m_frame->GetScreen(), currentSheet, m_afterItem, data, isReversed );
@@ -295,7 +312,7 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
 
             for( SCH_SHEET_PATH& sheet : paths )
             {
-                if( afterSheet )
+                if( afterSheet && !freshSession )
                 {
                     if( afterSheet->GetCurrentHash() == sheet.GetCurrentHash() )
                         afterSheet = nullptr;
@@ -319,6 +336,7 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
     if( item )
     {
         m_afterItem = item;
+        m_afterItemScreen = m_frame->GetScreen();
 
         if( !selectedOnly )
         {

@@ -71,6 +71,8 @@ private:
 
 private:
     SCH_ITEM*   m_afterItem = nullptr;
+    SCH_SCREEN* m_afterItemScreen = nullptr;
+    wxString    m_lastSearchString;
     bool        m_foundItemHighlighted;
     wxTimer     m_wrapAroundTimer;          // A timer during which a subsequent FindNext will
                                             //  result in a wrap-around
