@@ -574,7 +574,9 @@ TOOL_ACTION ACTIONS::editTable( TOOL_ACTION_ARGS()
 
 TOOL_ACTION ACTIONS::exportTableCSV( TOOL_ACTION_ARGS()
         .Name( "common.TableEditor.exportTableCSV" )
+        .ToolbarState( TOOLBAR_STATE::HIDDEN )
         .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Export Table to CSV" ) )
         .MenuText( _( "Export Table to CSV..." ) )
         .Tooltip( _( "Export table contents to CSV file with resolved text variables" ) )
         .Icon( BITMAPS::export_file ) );
