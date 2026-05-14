@@ -1399,7 +1399,7 @@ SCH_SHEET* SCH_MOVE_TOOL::findTargetSheet( const SCH_SELECTION& aSelection, cons
     // Determine potential target sheet
     SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( m_frame->GetScreen()->GetItem( aCursorPos, 0, SCH_SHEET_T ) );
 
-    if( sheet && sheet->IsSelected() )
+    if( sheet && ( sheet->IsSelected() || sheet->HasFlag( IS_MOVING ) ) )
         sheet = nullptr;  // Never target a selected sheet
 
     if( !sheet )
@@ -1424,7 +1424,7 @@ SCH_SHEET* SCH_MOVE_TOOL::findTargetSheet( const SCH_SELECTION& aSelection, cons
             {
                 SCH_SHEET* candidate = static_cast<SCH_SHEET*>( it );
 
-                if( candidate->IsSelected() || candidate->IsTopLevelSheet() )
+                if( candidate->IsSelected() || candidate->IsTopLevelSheet() || candidate->HasFlag( IS_MOVING ) )
                     continue;
 
                 BOX2I body = candidate->GetBodyBoundingBox();
