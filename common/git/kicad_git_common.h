@@ -152,6 +152,8 @@ public:
         updateConnectionType();
     }
 
+    const wxString& GetRemote() const { return m_remote; }
+
     int HandleSSHKeyAuthentication( git_cred** aOut, const wxString& aUsername );
 
     int HandlePlaintextAuthentication( git_cred** aOut, const wxString& aUsername );
@@ -178,6 +180,10 @@ public:
         m_cancel.store( aCancel );
     }
 
+    bool WasAuthFailure() const { return m_authFailed; }
+    void ClearAuthFailure() { m_authFailed = false; }
+    void SetAuthFailure() { m_authFailed = true; }
+
 protected:
     git_repository* m_repo;
 
@@ -190,6 +196,8 @@ protected:
     wxString m_password;
 
     unsigned m_testedTypes;
+
+    bool m_authFailed = false;
 
     std::mutex m_gitActionMutex;
 

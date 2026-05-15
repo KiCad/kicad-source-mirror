@@ -41,6 +41,7 @@
 #include <bitmap_store.h>
 #include <confirm.h>
 #include <dialogs/git/dialog_git_commit.h>
+#include <dialogs/git/dialog_git_credentials.h>
 #include <dialogs/git/dialog_git_switch.h>
 #include <gestfich.h>
 #include <macros.h>
@@ -1802,6 +1803,35 @@ void KICAD_MANAGER_FRAME::OnChangeWatchedPaths( wxCommandEvent& aEvent )
 }
 
 
+// Prompts for git credentials after an auth failure. Returns false if cancelled.
+static bool promptForGitCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon )
+{
+    DIALOG_GIT_CREDENTIALS dlg( aParent, aCommon->GetRemote(), aCommon->GetConnType(), aCommon->GetUsername(),
+                                wxEmptyString );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return false;
+
+    aCommon->SetUsername( dlg.GetUsername() );
+    aCommon->SetPassword( dlg.GetPassword() );
+
+    if( dlg.GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH && !dlg.GetSSHKey().IsEmpty() )
+    {
+        aCommon->SetSSHKey( dlg.GetSSHKey() );
+    }
+
+    if( dlg.SaveCredentials() )
+    {
+        KIPLATFORM::SECRETS::StoreSecret( aCommon->GetRemote(), aCommon->GetUsername(), dlg.GetPassword() );
+    }
+
+    aCommon->ClearAuthFailure();
+    aCommon->TestedTypes() = 0;
+    aCommon->ResetNextKey();
+    return true;
+}
+
+
 void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 {
     PROJECT_TREE_ITEM* tree_data = GetItemIdData( m_TreeProject->GetRootItem() );
@@ -1869,9 +1899,24 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 
     m_gitLastError = GIT_ERROR_NONE;
 
-    GIT_PULL_HANDLER handler( m_TreeProject->GitCommon() );
-    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetch Remote" ), 1, PR_NO_ABORT ) );
-    handler.PerformFetch();
+    KIGIT_COMMON* common = m_TreeProject->GitCommon();
+
+    while( true )
+    {
+        common->ClearAuthFailure();
+
+        GIT_PULL_HANDLER handler( common );
+        handler.SetProgressReporter(
+                std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetch Remote" ), 1, PR_NO_ABORT ) );
+
+        if( handler.PerformFetch() )
+            break;
+
+        if( common->WasAuthFailure() && promptForGitCredentials( m_parent, common ) )
+            continue;
+
+        break;
+    }
 
     KIPLATFORM::SECRETS::StoreSecret( dlg.GetRepoURL(), dlg.GetUsername(), dlg.GetPassword() );
     Prj().GetLocalSettings().m_GitRepoUsername = dlg.GetUsername();
@@ -1899,16 +1944,24 @@ void PROJECT_TREE_PANE::onGitPullProject( wxCommandEvent& aEvent )
     if( !repo )
         return;
 
-    GIT_PULL_HANDLER handler( m_TreeProject->GitCommon() );
+    KIGIT_COMMON* common = m_TreeProject->GitCommon();
 
-    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetch Remote" ), 1,
-                                                                         PR_NO_ABORT ) );
-
-    if( handler.PerformPull() < PullResult::Success )
+    while( true )
     {
-        wxString errorMessage = handler.GetErrorString();
+        common->ClearAuthFailure();
 
-        DisplayErrorMessage( m_parent, _( "Failed to pull project" ), errorMessage );
+        GIT_PULL_HANDLER handler( common );
+        handler.SetProgressReporter(
+                std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetch Remote" ), 1, PR_NO_ABORT ) );
+
+        if( handler.PerformPull() >= PullResult::Success )
+            break;
+
+        if( common->WasAuthFailure() && promptForGitCredentials( m_parent, common ) )
+            continue;
+
+        DisplayErrorMessage( m_parent, _( "Failed to pull project" ), handler.GetErrorString() );
+        break;
     }
 
     m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
@@ -1922,16 +1975,24 @@ void PROJECT_TREE_PANE::onGitPushProject( wxCommandEvent& aEvent )
     if( !repo )
         return;
 
-    GIT_PUSH_HANDLER handler( m_TreeProject->GitCommon() );
+    KIGIT_COMMON* common = m_TreeProject->GitCommon();
 
-    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetch Remote" ), 1,
-                                                                         PR_NO_ABORT ) );
-
-    if( handler.PerformPush() != PushResult::Success )
+    while( true )
     {
-        wxString errorMessage = handler.GetErrorString();
+        common->ClearAuthFailure();
 
-        DisplayErrorMessage( m_parent, _( "Failed to push project" ), errorMessage );
+        GIT_PUSH_HANDLER handler( common );
+        handler.SetProgressReporter(
+                std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetch Remote" ), 1, PR_NO_ABORT ) );
+
+        if( handler.PerformPush() == PushResult::Success )
+            break;
+
+        if( common->WasAuthFailure() && promptForGitCredentials( m_parent, common ) )
+            continue;
+
+        DisplayErrorMessage( m_parent, _( "Failed to push project" ), handler.GetErrorString() );
+        break;
     }
 
     m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
@@ -2453,8 +2514,20 @@ void PROJECT_TREE_PANE::onGitFetch( wxCommandEvent& aEvent )
     if( !gitCommon )
         return;
 
-    GIT_PULL_HANDLER handler( gitCommon );
-    handler.PerformFetch();
+    while( true )
+    {
+        gitCommon->ClearAuthFailure();
+
+        GIT_PULL_HANDLER handler( gitCommon );
+
+        if( handler.PerformFetch() )
+            break;
+
+        if( gitCommon->WasAuthFailure() && promptForGitCredentials( m_parent, gitCommon ) )
+            continue;
+
+        break;
+    }
 
     m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
 }

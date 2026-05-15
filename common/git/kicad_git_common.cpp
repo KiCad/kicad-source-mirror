@@ -1072,7 +1072,19 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
                 && !( parent->TestedTypes() & GIT_CREDENTIAL_SSH_KEY ) )
     {
         // SSH key authentication
-        return common->HandleSSHKeyAuthentication( aOut, parent->GetUsername() );
+        int result = common->HandleSSHKeyAuthentication( aOut, parent->GetUsername() );
+
+        // Translate exhausted-keys PASSTHROUGH into a proper auth error so the
+        // retry loop runs and libgit2 doesn't emit "no callback set".
+        if( result == GIT_PASSTHROUGH )
+        {
+            git_error_clear();
+            git_error_set_str( GIT_ERROR_NET, _( "Unable to authenticate" ).mbc_str() );
+            common->SetAuthFailure();
+            return GIT_EAUTH;
+        }
+
+        return result;
     }
     else
     {
@@ -1085,6 +1097,7 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
         git_error_set_str( GIT_ERROR_NET, _( "Unable to authenticate" ).mbc_str() );
 
         // Otherwise, we did try something but we failed, so return an authentication error
+        common->SetAuthFailure();
         return GIT_EAUTH;
     }
 
