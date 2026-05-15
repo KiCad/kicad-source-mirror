@@ -69,7 +69,7 @@ static void transformDoc( Handle( TDocStd_Document ) & source, Handle( TDocStd_D
     Handle( XCAFDoc_ShapeTool ) s_assy = XCAFDoc_DocumentTool::ShapeTool( source->Main() );
 
     // retrieve all free shapes within the assembly
-    TDF_LabelSequence frshapes;
+    NCollection_Sequence<TDF_Label> frshapes;
     s_assy->GetFreeShapes( frshapes );
 
     // d_assy = shape tool for the destination
@@ -97,7 +97,7 @@ static void transformDoc( Handle( TDocStd_Document ) & source, Handle( TDocStd_D
             }
             else
             {
-                brep.Perform( shape, Standard_False );
+                brep.Perform( shape, false );
 
                 if( brep.IsDone() )
                     transformed_shape = brep.Shape();
@@ -255,7 +255,7 @@ UTILS_BOX3D UTILS_STEP_MODEL::GetBoundingBox()
     Handle( XCAFDoc_ShapeTool ) assy =
             XCAFDoc_DocumentTool::ShapeTool( m_data->m_frontDoc->Main() );
 
-    TDF_LabelSequence frshapes;
+    NCollection_Sequence<TDF_Label> frshapes;
     assy->GetFreeShapes( frshapes );
 
     int         nshapes = frshapes.Length();
