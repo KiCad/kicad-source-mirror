@@ -276,61 +276,71 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
         m_lastSearchString = data.findString;
     }
 
-    if( m_wrapAroundTimer.IsRunning() )
+    bool wrappedAround = false;
+
+    for( int attempt = 0; attempt < 2; ++attempt )
     {
-        afterSheet = nullptr;
-        m_afterItem = nullptr;
-        m_afterItemScreen = nullptr;
-        m_wrapAroundTimer.Stop();
-        m_frame->ClearFindReplaceStatus();
-    }
-
-    bool freshSession = ( m_afterItem == nullptr );
-
-    if( afterSheet || !searchAllSheets )
-        item = nextMatch( m_frame->GetScreen(), currentSheet, m_afterItem, data, isReversed );
-
-    if( !item && searchAllSheets && !selectedOnly )
-    {
-        if( SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+        if( attempt == 1 )
         {
-            SCH_SCREENS    screens( editFrame->Schematic().Root() );
-            SCH_SHEET_LIST paths;
+            if( m_afterItem == nullptr )
+                break; // already a fresh session; nothing to wrap to
 
-            screens.BuildClientSheetPathList();
+            m_afterItem = nullptr;
+            m_afterItemScreen = nullptr;
+            afterSheet = nullptr;
+            wrappedAround = true;
+        }
 
-            for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+        bool freshSession = ( m_afterItem == nullptr );
+
+        if( afterSheet || !searchAllSheets || selectedOnly )
+            item = nextMatch( m_frame->GetScreen(), currentSheet, m_afterItem, data, isReversed );
+
+        if( !item && searchAllSheets && !selectedOnly )
+        {
+            if( SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
             {
-                for( SCH_SHEET_PATH& sheet : screen->GetClientSheetPaths() )
-                    paths.push_back( sheet );
-            }
+                SCH_SCREENS    screens( editFrame->Schematic().Root() );
+                SCH_SHEET_LIST paths;
 
-            paths.SortByPageNumbers( false );
+                screens.BuildClientSheetPathList();
 
-            if( isReversed )
-                std::reverse( paths.begin(), paths.end() );
-
-            for( SCH_SHEET_PATH& sheet : paths )
-            {
-                if( afterSheet && !freshSession )
+                for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
                 {
-                    if( afterSheet->GetCurrentHash() == sheet.GetCurrentHash() )
-                        afterSheet = nullptr;
-
-                    continue;
+                    for( SCH_SHEET_PATH& sheet : screen->GetClientSheetPaths() )
+                        paths.push_back( sheet );
                 }
 
-                item = nextMatch( sheet.LastScreen(), &sheet, nullptr, data, isReversed );
+                paths.SortByPageNumbers( false );
 
-                if( item )
+                if( isReversed )
+                    std::reverse( paths.begin(), paths.end() );
+
+                for( SCH_SHEET_PATH& sheet : paths )
                 {
-                    if( editFrame->Schematic().CurrentSheet() != sheet )
-                        editFrame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &sheet );
+                    if( afterSheet && !freshSession )
+                    {
+                        if( afterSheet->GetCurrentHash() == sheet.GetCurrentHash() )
+                            afterSheet = nullptr;
 
-                    break;
+                        continue;
+                    }
+
+                    item = nextMatch( sheet.LastScreen(), &sheet, nullptr, data, isReversed );
+
+                    if( item )
+                    {
+                        if( editFrame->Schematic().CurrentSheet() != sheet )
+                            editFrame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &sheet );
+
+                        break;
+                    }
                 }
             }
         }
+
+        if( item )
+            break;
     }
 
     if( item )
@@ -357,21 +367,26 @@ int SCH_FIND_REPLACE_TOOL::FindNext( const TOOL_EVENT& aEvent )
 
         m_frame->FocusOnLocation( item->GetBoundingBox().GetCenter() );
         m_frame->GetCanvas()->Refresh();
+
+        if( wrappedAround )
+        {
+            wxString msg;
+
+            if( m_frame->GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
+                msg = _( "Reached end of symbol." );
+            else if( searchAllSheets )
+                msg = _( "Reached end of schematic." );
+            else
+                msg = _( "Reached end of sheet." );
+
+            m_frame->ShowFindReplaceStatus( msg, 2000 );
+        }
     }
     else
     {
-        wxString msg;
-
-        if( m_frame->GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
-            msg = _( "Reached end of symbol." );
-        else if( searchAllSheets )
-            msg = _( "Reached end of schematic." );
-        else
-            msg = _( "Reached end of sheet." );
-
-       // Show the popup during the time period the user can wrap the search
-        m_frame->ShowFindReplaceStatus( msg + wxS( " " ) + _( "Find again to wrap around to the start." ), 4000 );
-        m_wrapAroundTimer.StartOnce( 4000 );
+        m_afterItem = nullptr;
+        m_afterItemScreen = nullptr;
+        m_frame->ShowFindReplaceStatus( _( "No matches found." ), 2000 );
     }
 
     return 0;
