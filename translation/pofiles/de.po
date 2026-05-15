@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-13 19:11+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-05-16 05:11+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.5.dev0\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -16245,17 +16245,16 @@ msgid "Project Rescue Helper"
 msgstr "Assistent für Projekt-Rettung"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:39
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "%zu symbols have user fields whose names differ only in case. Choose how to "
 "resolve each before opening the table."
 msgstr ""
-"%zu Symbole haben Benutzerfelder, deren Namen sich nur in einem Fall "
-"unterscheiden. Wählen Sie vor dem Öffnen der Tabelle, wie jeder aufgelöst "
-"werden soll."
+"%zu Symbole haben Benutzerfelder, deren Namen sich nur in Groß-/"
+"Kleinschreibung unterscheiden. Wählen Sie vor dem Öffnen der Tabelle, wie "
+"jeder aufgelöst werden soll."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:45
-#, fuzzy
 msgid "Apply and Continue"
 msgstr "Anwenden und fortsetzen"
 
@@ -16266,9 +16265,9 @@ msgstr "(leer)"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:85
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Keep '%s'"
-msgstr "\"%s\" behalten"
+msgstr "\"%s\" beibehalten"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:87
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:137
@@ -16276,7 +16275,6 @@ msgid "Join values"
 msgstr "Werte zusammenführen"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:215
-#, fuzzy
 msgid "Resolve duplicate field names"
 msgstr "Doppelte Feldnamen auflösen"
 
