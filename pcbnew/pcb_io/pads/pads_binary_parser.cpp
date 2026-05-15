@@ -156,8 +156,9 @@ constexpr int    BBOX_MAX_Y   = 108;
 // is the library decal marker elsewhere.
 namespace DRW_TAG
 {
-constexpr uint32_t COPPER_FILL = 0x00004900;  // filled copper region
-constexpr uint32_t LINE_ITEM   = 0x00004D00;  // line/outline item (board outline, v2026 line copper)
+constexpr uint32_t COPPER_FILL   = 0x00004900;  // filled copper region
+constexpr uint32_t COPPER_FILL_B = 0x0000FF00;  // second filled-copper tag, same class/shape
+constexpr uint32_t LINE_ITEM     = 0x00004D00;  // line/outline item (board outline, v2026 line copper)
 } // namespace DRW_TAG
 
 
@@ -3324,18 +3325,25 @@ void BINARY_PARSER::parseCopperShapes()
     {
         SDB_RECORD hdr = m_sdb.Record( *sec10, rec, sec10->stride );
 
-        // class 1 = filled copper region, 7 = v2026 line-drawn copper; subtype 3 is the
-        // copper-pour variant, decoded separately, so it is excluded here.
+        // class 1 = filled copper region (either block tag -- the second was found covering the
+        // same shapes as the first within a single file, not a version split), 7 = v2026
+        // line-drawn copper. subtypeWord does NOT reliably separate real copper shapes from
+        // anything else here -- this used to also require subtypeWord != 3 on the assumption
+        // that 3 meant "pour, decoded separately elsewhere", but verified against
+        // MC4_PLUS_CSHAPE.pcb, subtype 3 is shared by 10 of its 15 real COPPER shapes (both
+        // fills and circles) and by at least one plain (non-filled) LINES item, so it cannot be
+        // used as a classifier either way. The real filled-vs-stroked discriminator is
+        // downstream: a filled shape's declared bbox equals its vertex extent exactly, while a
+        // stroked LINES item's bbox is pen-width-expanded.
         constexpr uint32_t CLASS_FILLED       = 1;
         constexpr uint32_t CLASS_LINE         = 7;
-        constexpr uint32_t SUBTYPE_POUR       = 3;
         constexpr uint32_t SUBTYPE_PLAIN_LINE = 0;
 
         uint32_t classWord = hdr.U32( DRW_ITEM::CLASS_WORD );
         uint32_t subtypeWord = hdr.U32( DRW_ITEM::SUBTYPE_WORD );
         uint32_t blockTag = hdr.U32( DRW_ITEM::TYPE_TAG );
-        bool legacyCopper = ( blockTag == DRW_TAG::COPPER_FILL && classWord == CLASS_FILLED
-                              && subtypeWord != SUBTYPE_POUR );
+        bool legacyCopper = ( ( blockTag == DRW_TAG::COPPER_FILL || blockTag == DRW_TAG::COPPER_FILL_B )
+                              && classWord == CLASS_FILLED );
         bool v2026LineCopper = ( m_version == 0x2026 && blockTag == DRW_TAG::LINE_ITEM
                                  && classWord == CLASS_LINE && subtypeWord == SUBTYPE_PLAIN_LINE );
 
