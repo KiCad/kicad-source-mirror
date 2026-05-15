@@ -3368,10 +3368,16 @@ void BINARY_PARSER::parseCopperShapes()
         int64_t localMaxX = static_cast<int64_t>( hdr.I32( DRW_ITEM::BBOX_MAX_X ) ) - originX;
         int64_t localMaxY = static_cast<int64_t>( hdr.I32( DRW_ITEM::BBOX_MAX_Y ) ) - originY;
 
+        // fetchOwnerLoop already strips the duplicate closing point, so its own >= 3 success
+        // condition is the true minimum for a valid polygon (a triangle). The previous minEdges
+        // of 5 (4 for v2026) was excluding legitimate 4-corner rectangles -- PADS' own corner
+        // count includes that closing repeat, so a "5 corner" ASCII COPCLS is a plain rectangle,
+        // not a pentagon. Verified against MC4_PLUS_CSHAPE.pcb's DRW43215695/DRW89204466 (both
+        // real 4-corner COPCLS rectangles, dropped by the old threshold) and the eight
+        // DRW_TAG::COPPER_FILL_B rectangles alongside them.
         std::vector<VECTOR2I> loop;
-        size_t minEdges = v2026LineCopper ? 4 : 5;
 
-        if( fetchOwnerLoop( name, MAX_COPPER_SHAPE_EDGES, loop ) && loop.size() >= minEdges )
+        if( fetchOwnerLoop( name, MAX_COPPER_SHAPE_EDGES, loop ) )
         {
             // The structural slice resolves which sec12 loop belongs to this owner; the
             // bbox-equality gate is the filled-copper classifier, since a stroked LINES item
