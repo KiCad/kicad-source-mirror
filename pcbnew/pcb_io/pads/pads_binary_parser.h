@@ -349,6 +349,15 @@ private:
     bool fetchOwnerLoop( const std::string& aName, size_t aMaxVerts,
                          std::vector<VECTOR2I>& aOut ) const;
 
+    // A circular piece (PADS' COPCIR convention) stores exactly two diametrically opposite
+    // endpoints, not a closed loop -- fetchOwnerLoop's closure search never terminates cleanly
+    // for one (whatever immediately follows in the vertex pool belongs to the next owner, not
+    // a repeat of this owner's own first point). Returns the two points directly; the caller is
+    // expected to cross-check the derived circle (center = midpoint, radius = half the span)
+    // against the owner's own declared bbox, since two arbitrary adjacent points are not enough
+    // signal on their own.
+    bool fetchOwnerCirclePoints( const std::string& aName, VECTOR2I& aP0, VECTOR2I& aP1 ) const;
+
     // DFT format parsers
     std::map<std::string, std::string> parseDftDotPadded( size_t aPos, size_t aEnd ) const;
     std::map<std::string, std::string> parseDftNullSeparated( size_t aPos, size_t aEnd ) const;

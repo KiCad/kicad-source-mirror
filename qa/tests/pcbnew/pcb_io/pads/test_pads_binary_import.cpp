@@ -870,14 +870,18 @@ BOOST_AUTO_TEST_CASE( ZoneCountExact_MC4_PLUS_CSHAPE )
     BOOST_REQUIRE( bin );
     BOOST_REQUIRE( asc );
 
-    // The binary importer recovers one more real copper shape than the ASCII importer here
-    // (DRW14608448, a COPCLS polygon verified by name against the ASCII *LINES* COPPER entry) --
-    // a subtype/block-tag misclassification was dropping it. The +1 is not this fix's doing;
-    // it's a pre-existing, separate divergence between the two importers' pour accounting that
-    // is out of scope here (the ASCII pour parser has its own unrelated bug: it reads far more
-    // "*POUROUT*"-adjacent lines than there are real pours, most filtered downstream, but not
-    // audited closely enough to explain this single-shape gap).
-    BOOST_CHECK_EQUAL( bin->Zones().size(), asc->Zones().size() + 1 );
+    // The binary importer recovers three more real copper shapes than the ASCII importer here,
+    // all verified by name against the ASCII *LINES* COPPER entries: DRW14608448 (a COPCLS
+    // polygon dropped by a subtype/block-tag misclassification) and DRW27123762/DRW9467290 (two
+    // COPCIR circles -- fetchOwnerLoop can never close a 2-point circle run, so they were always
+    // skipped; fetchOwnerCirclePoints reads the pair directly and cross-checks the derived
+    // circle's bbox against the owner's own declared bbox instead of requiring closure). The +3
+    // is not otherwise this fix's doing; it's a pre-existing, separate divergence between the two
+    // importers' pour accounting that is out of scope here (the ASCII pour parser has its own
+    // unrelated bug: it reads far more "*POUROUT*"-adjacent lines than there are real pours, most
+    // filtered downstream, but not audited closely enough to explain the residual single-shape
+    // gap on top of these three).
+    BOOST_CHECK_EQUAL( bin->Zones().size(), asc->Zones().size() + 3 );
 }
 
 
@@ -889,8 +893,8 @@ BOOST_AUTO_TEST_CASE( ZoneCountExact_Ems4_Rev2 )
     BOOST_REQUIRE( bin );
     BOOST_REQUIRE( asc );
 
-    // See ZoneCountExact_MC4_PLUS_CSHAPE -- same one-shape gap, same root cause.
-    BOOST_CHECK_EQUAL( bin->Zones().size(), asc->Zones().size() + 1 );
+    // See ZoneCountExact_MC4_PLUS_CSHAPE -- same three-shape recovery, same root causes.
+    BOOST_CHECK_EQUAL( bin->Zones().size(), asc->Zones().size() + 3 );
 }
 
 

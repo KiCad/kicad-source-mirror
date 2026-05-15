@@ -3371,29 +3371,62 @@ void BINARY_PARSER::parseCopperShapes()
         std::vector<VECTOR2I> loop;
         size_t minEdges = v2026LineCopper ? 4 : 5;
 
-        // The structural slice resolves which sec12 loop belongs to this owner; the
-        // bbox-equality gate is the filled-copper classifier, since a stroked LINES item records
-        // a pen-expanded bbox that no longer equals its vertex extent.
-        if( !fetchOwnerLoop( name, MAX_COPPER_SHAPE_EDGES, loop ) || loop.size() < minEdges )
-            continue;
-
-        int64_t loopMinX = loop.front().x;
-        int64_t loopMinY = loop.front().y;
-        int64_t loopMaxX = loop.front().x;
-        int64_t loopMaxY = loop.front().y;
-
-        for( const VECTOR2I& pt : loop )
+        if( fetchOwnerLoop( name, MAX_COPPER_SHAPE_EDGES, loop ) && loop.size() >= minEdges )
         {
-            loopMinX = std::min<int64_t>( loopMinX, pt.x );
-            loopMinY = std::min<int64_t>( loopMinY, pt.y );
-            loopMaxX = std::max<int64_t>( loopMaxX, pt.x );
-            loopMaxY = std::max<int64_t>( loopMaxY, pt.y );
+            // The structural slice resolves which sec12 loop belongs to this owner; the
+            // bbox-equality gate is the filled-copper classifier, since a stroked LINES item
+            // records a pen-expanded bbox that no longer equals its vertex extent.
+            int64_t loopMinX = loop.front().x;
+            int64_t loopMinY = loop.front().y;
+            int64_t loopMaxX = loop.front().x;
+            int64_t loopMaxY = loop.front().y;
+
+            for( const VECTOR2I& pt : loop )
+            {
+                loopMinX = std::min<int64_t>( loopMinX, pt.x );
+                loopMinY = std::min<int64_t>( loopMinY, pt.y );
+                loopMaxX = std::max<int64_t>( loopMaxX, pt.x );
+                loopMaxY = std::max<int64_t>( loopMaxY, pt.y );
+            }
+
+            if( loopMinX != localMinX || loopMinY != localMinY || loopMaxX != localMaxX
+                || loopMaxY != localMaxY )
+            {
+                continue;
+            }
         }
-
-        if( loopMinX != localMinX || loopMinY != localMinY || loopMaxX != localMaxX
-            || loopMaxY != localMaxY )
+        else
         {
-            continue;
+            // A circular copper fill (PADS' COPCIR piece type) stores exactly two diametrically
+            // opposite endpoints -- fetchOwnerLoop above always rejects that shape since it
+            // never finds a closing point. The bbox-equality cross-check still applies, now
+            // against the circle's own derived extent (center = midpoint, radius = half the
+            // point-to-point span): verified against MC4_PLUS_CSHAPE.pcb's DRW9467290, whose
+            // derived circle bbox matches its declared header bbox exactly.
+            VECTOR2I p0, p1;
+
+            if( !fetchOwnerCirclePoints( name, p0, p1 ) )
+                continue;
+
+            const double cx = ( p0.x + p1.x ) / 2.0;
+            const double cy = ( p0.y + p1.y ) / 2.0;
+            const double radius = std::hypot( p1.x - p0.x, p1.y - p0.y ) / 2.0;
+
+            if( std::lround( cx - radius ) != localMinX || std::lround( cy - radius ) != localMinY
+                || std::lround( cx + radius ) != localMaxX || std::lround( cy + radius ) != localMaxY )
+            {
+                continue;
+            }
+
+            constexpr int CIRCLE_SEGMENTS = 32;
+            loop.clear();
+
+            for( int i = 0; i < CIRCLE_SEGMENTS; ++i )
+            {
+                double angle = ( 2.0 * M_PI * static_cast<double>( i ) ) / static_cast<double>( CIRCLE_SEGMENTS );
+                loop.emplace_back( static_cast<int32_t>( std::lround( cx + radius * std::cos( angle ) ) ),
+                                   static_cast<int32_t>( std::lround( cy + radius * std::sin( angle ) ) ) );
+            }
         }
 
         COPPER_SHAPE copper;
@@ -3671,6 +3704,29 @@ bool BINARY_PARSER::fetchOwnerLoop( const std::string& aName, size_t aMaxVerts,
 
     aOut.clear();
     return false;
+}
+
+
+bool BINARY_PARSER::fetchOwnerCirclePoints( const std::string& aName, VECTOR2I& aP0, VECTOR2I& aP1 ) const
+{
+    auto it = m_ownerRuns.find( aName );
+
+    if( it == m_ownerRuns.end() )
+        return false;
+
+    int32_t startRow = it->second.vertexStart - m_sec12Base;
+
+    int32_t x0 = 0, y0 = 0, x1 = 0, y1 = 0, attr = 0;
+
+    if( !sec12Vertex( startRow, x0, y0, attr ) || !sec12Vertex( startRow + 1, x1, y1, attr ) )
+        return false;
+
+    if( x0 == x1 && y0 == y1 )
+        return false;
+
+    aP0 = VECTOR2I( x0, y0 );
+    aP1 = VECTOR2I( x1, y1 );
+    return true;
 }
 
 
