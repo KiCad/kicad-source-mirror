@@ -602,10 +602,7 @@ void EDA_3D_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE *aCfg )
 
         cfg->m_Camera.animation_enabled       = m_canvas->GetAnimationEnabled();
         cfg->m_Camera.moving_speed_multiplier = m_canvas->GetMovingSpeedMultiplier();
-        cfg->m_Camera.projection_mode         = m_canvas->GetProjectionMode();
-
-        if( EDA_3D_CONTROLLER* ctrlTool = GetToolManager()->GetTool<EDA_3D_CONTROLLER>() )
-            cfg->m_Camera.rotation_increment = ctrlTool->GetRotationIncrement();
+        cfg->m_Camera.projection_mode = m_canvas->GetProjectionMode();
     }
 }
 
@@ -618,7 +615,12 @@ void EDA_3D_VIEWER_FRAME::CommonSettingsChanged( int aFlags )
     EDA_BASE_FRAME::CommonSettingsChanged( aFlags );
 
     loadCommonSettings();
-    applySettings( GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" ) );
+
+    EDA_3D_VIEWER_SETTINGS* cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
+    applySettings( cfg );
+
+    if( EDA_3D_CONTROLLER* ctrlTool = GetToolManager()->GetTool<EDA_3D_CONTROLLER>() )
+        ctrlTool->SetRotationIncrement( cfg ? cfg->m_Camera.rotation_increment : 10.0 );
 
     m_appearancePanel->CommonSettingsChanged();
 
