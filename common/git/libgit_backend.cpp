@@ -369,6 +369,23 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler )
         return PushResult::Error;
     }
 
+    // First push from this branch: point it at where we just pushed (git push -u).
+    if( git_reference_is_branch( head ) )
+    {
+        git_reference* upstreamRef = nullptr;
+        int            rc = git_branch_upstream( &upstreamRef, head );
+
+        if( rc == GIT_ENOTFOUND )
+        {
+            wxString upstreamName = wxString::Format( "%s/%s", remoteName, git_reference_shorthand( head ) );
+            git_branch_set_upstream( head, upstreamName.utf8_string().c_str() );
+        }
+        else if( rc == GIT_OK )
+        {
+            KIGIT::GitReferencePtr upstreamPtr( upstreamRef );
+        }
+    }
+
     git_remote_disconnect( remote );
 
     return result;
