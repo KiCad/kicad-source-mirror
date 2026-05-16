@@ -772,6 +772,12 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         GetToolManager()->RunAction( ACTIONS::pluginsReload );
         break;
 
+    case MAIL_PCB_SAVE:
+        if( SavePcbFile( Prj().AbsolutePath( GetBoard()->GetFileName() ) ) )
+            payload = "success";
+
+        break;
+
     case MAIL_RELOAD_LIB:
     {
         m_designBlocksPane->RefreshLibs();
