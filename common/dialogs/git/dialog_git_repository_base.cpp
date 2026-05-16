@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -107,7 +107,7 @@ DIALOG_GIT_REPOSITORY_BASE::DIALOG_GIT_REPOSITORY_BASE( wxWindow* parent, wxWind
 	m_labelPass1->Wrap( -1 );
 	fgSizer21->Add( m_labelPass1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
-	m_txtPassword = new wxTextCtrl( m_panelAuth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtPassword = new wxTextCtrl( m_panelAuth, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PASSWORD );
 	fgSizer21->Add( m_txtPassword, 0, wxEXPAND|wxRIGHT, 5 );
 
 
