@@ -867,6 +867,49 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
         return PullResult::Error;
     }
 
+    // Add Version Control doesn't write branch.<name>.merge, so FETCH_HEAD has no
+    // merge-marked entry.  Fall back to refs/remotes/<remote>/<branch> and persist
+    // the upstream so subsequent pulls take the normal path.
+#if ( LIBGIT2_VER_MAJOR >= 1 ) || ( LIBGIT2_VER_MINOR >= 99 )
+    if( git_oid_is_zero( &pull_merge_oid ) )
+#else
+    if( git_oid_iszero( &pull_merge_oid ) )
+#endif
+    {
+        git_reference* head_ref = nullptr;
+
+        if( git_repository_head( &head_ref, aHandler->GetRepo() ) == GIT_OK )
+        {
+            KIGIT::GitReferencePtr headRefPtr( head_ref );
+
+            if( git_reference_is_branch( head_ref ) )
+            {
+                const char* branch_shorthand = git_reference_shorthand( head_ref );
+                wxString    remoteName = aHandler->GetCommon()->GetRemoteNameOrDefault();
+                wxString    remoteRefName = wxString::Format( "refs/remotes/%s/%s", remoteName, branch_shorthand );
+
+                if( git_reference_name_to_id( &pull_merge_oid, aHandler->GetRepo(),
+                                              remoteRefName.utf8_string().c_str() )
+                    == GIT_OK )
+                {
+                    wxString upstream = wxString::Format( "%s/%s", remoteName, branch_shorthand );
+                    git_branch_set_upstream( head_ref, upstream.utf8_string().c_str() );
+                }
+            }
+        }
+    }
+
+#if ( LIBGIT2_VER_MAJOR >= 1 ) || ( LIBGIT2_VER_MINOR >= 99 )
+    if( git_oid_is_zero( &pull_merge_oid ) )
+#else
+    if( git_oid_iszero( &pull_merge_oid ) )
+#endif
+    {
+        aHandler->AddErrorString( _( "Nothing to pull: the remote has no branch matching "
+                                     "the current local branch." ) );
+        return PullResult::Error;
+    }
+
     git_annotated_commit* fetchhead_commit;
 
     if( git_annotated_commit_lookup( &fetchhead_commit, aHandler->GetRepo(), &pull_merge_oid ) )
