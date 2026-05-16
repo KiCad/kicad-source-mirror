@@ -167,6 +167,11 @@ private:
     void onGitInitializeProject( wxCommandEvent& event );
 
     /**
+     * Configure (or change) the default remote on an already-initialized repository
+    */
+    void onGitRemoteSettings( wxCommandEvent& event );
+
+    /**
      * Commit the current project saved changes to the git repository
     */
     void onGitCommit( wxCommandEvent& event );

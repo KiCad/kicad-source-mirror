@@ -162,33 +162,34 @@ static const wxChar* s_allowedExtensionsToList[] =
 
 enum project_tree_ids
 {
-    ID_PROJECT_TXTEDIT = 8700,  // Start well above wxIDs
+    ID_PROJECT_TXTEDIT = 8700, // Start well above wxIDs
     ID_PROJECT_SWITCH_TO_OTHER,
     ID_PROJECT_NEWDIR,
     ID_PROJECT_OPEN_DIR,
     ID_PROJECT_DELETE,
     ID_PROJECT_RENAME,
 
-    ID_GIT_INITIALIZE_PROJECT,  // Initialize a new git repository in an existing project
-    ID_GIT_CLONE_PROJECT,       // Clone a project from a remote repository
-    ID_GIT_COMMIT_PROJECT,      // Commit all files in the project
-    ID_GIT_COMMIT_FILE,         // Commit a single file
-    ID_GIT_SYNC_PROJECT,        // Sync the project with the remote repository (pull and push -- same as Update)
-    ID_GIT_FETCH,               // Fetch the remote repository (without merging -- this is the same as Refresh)
-    ID_GIT_PUSH,                // Push the local repository to the remote repository
-    ID_GIT_PULL,                // Pull the remote repository to the local repository
-    ID_GIT_RESOLVE_CONFLICT,    // Present the user with a resolve conflicts dialog (ours/theirs/merge)
-    ID_GIT_REVERT_LOCAL,        // Revert the local repository to the last commit
-    ID_GIT_COMPARE,             // Compare the current project to a different branch or commit in the git repository
-    ID_GIT_REMOVE_VCS,          // Toggle Git integration for this project (preference in kicad_prl)
-    ID_GIT_ADD_TO_INDEX,        // Add a file to the git index
-    ID_GIT_REMOVE_FROM_INDEX,   // Remove a file from the git index
-    ID_GIT_SWITCH_BRANCH,       // Switch the local repository to a different branch
-    ID_GIT_SWITCH_QUICK1,       // Switch the local repository to the first quick branch
-    ID_GIT_SWITCH_QUICK2,       // Switch the local repository to the second quick branch
-    ID_GIT_SWITCH_QUICK3,       // Switch the local repository to the third quick branch
-    ID_GIT_SWITCH_QUICK4,       // Switch the local repository to the fourth quick branch
-    ID_GIT_SWITCH_QUICK5,       // Switch the local repository to the fifth quick branch
+    ID_GIT_INITIALIZE_PROJECT, // Initialize a new git repository in an existing project
+    ID_GIT_REMOTE_SETTINGS,    // Configure (or set) the default remote on an existing repo
+    ID_GIT_CLONE_PROJECT,      // Clone a project from a remote repository
+    ID_GIT_COMMIT_PROJECT,     // Commit all files in the project
+    ID_GIT_COMMIT_FILE,        // Commit a single file
+    ID_GIT_SYNC_PROJECT,       // Sync the project with the remote repository (pull and push -- same as Update)
+    ID_GIT_FETCH,              // Fetch the remote repository (without merging -- this is the same as Refresh)
+    ID_GIT_PUSH,               // Push the local repository to the remote repository
+    ID_GIT_PULL,               // Pull the remote repository to the local repository
+    ID_GIT_RESOLVE_CONFLICT,   // Present the user with a resolve conflicts dialog (ours/theirs/merge)
+    ID_GIT_REVERT_LOCAL,       // Revert the local repository to the last commit
+    ID_GIT_COMPARE,            // Compare the current project to a different branch or commit in the git repository
+    ID_GIT_REMOVE_VCS,         // Toggle Git integration for this project (preference in kicad_prl)
+    ID_GIT_ADD_TO_INDEX,       // Add a file to the git index
+    ID_GIT_REMOVE_FROM_INDEX,  // Remove a file from the git index
+    ID_GIT_SWITCH_BRANCH,      // Switch the local repository to a different branch
+    ID_GIT_SWITCH_QUICK1,      // Switch the local repository to the first quick branch
+    ID_GIT_SWITCH_QUICK2,      // Switch the local repository to the second quick branch
+    ID_GIT_SWITCH_QUICK3,      // Switch the local repository to the third quick branch
+    ID_GIT_SWITCH_QUICK4,      // Switch the local repository to the fourth quick branch
+    ID_GIT_SWITCH_QUICK5,      // Switch the local repository to the fifth quick branch
 
     ID_JOBS_RUN,
 };
@@ -206,6 +207,7 @@ BEGIN_EVENT_TABLE( PROJECT_TREE_PANE, wxSashLayoutWindow )
     EVT_MENU( ID_PROJECT_RENAME, PROJECT_TREE_PANE::onRenameFile )
 
     EVT_MENU( ID_GIT_INITIALIZE_PROJECT, PROJECT_TREE_PANE::onGitInitializeProject )
+    EVT_MENU( ID_GIT_REMOTE_SETTINGS, PROJECT_TREE_PANE::onGitRemoteSettings )
     EVT_MENU( ID_GIT_COMMIT_PROJECT, PROJECT_TREE_PANE::onGitCommit )
     EVT_MENU( ID_GIT_COMMIT_FILE, PROJECT_TREE_PANE::onGitCommit )
     EVT_MENU( ID_GIT_SYNC_PROJECT, PROJECT_TREE_PANE::onGitSyncProject )
@@ -825,6 +827,7 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     bool vcs_has_repo    = m_TreeProject->GetGitRepo() != nullptr;
     bool vcs_can_commit  = hasChangedFiles();
     bool vcs_can_init    = !vcs_has_repo;
+    bool vcs_can_set_remote = vcs_has_repo;
     bool gitIntegrationDisabled = Prj().GetLocalSettings().m_GitIntegrationDisabled;
     // Disable/Enable is a per-project preference toggle, so it's available whenever we
     // detected a repository for this project or integration is currently disabled.
@@ -1028,6 +1031,9 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
                                             _( "Initialize a new repository" ) );
         vcs_menuitem->Enable( vcs_can_init );
 
+        vcs_menuitem = vcs_submenu->Append( ID_GIT_REMOTE_SETTINGS, _( "Configure Default Remote..." ),
+                                            _( "Set or change the default remote URL and credentials" ) );
+        vcs_menuitem->Enable( vcs_can_set_remote );
 
         vcs_menuitem = vcs_submenu->Append( ID_GIT_COMMIT_PROJECT, _( "Commit Project..." ),
                                             _( "Commit changes to the local repository" ) );
@@ -1934,6 +1940,63 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
         Prj().GetLocalSettings().m_GitRepoType = "https";
     else
         Prj().GetLocalSettings().m_GitRepoType = "local";
+}
+
+
+void PROJECT_TREE_PANE::onGitRemoteSettings( wxCommandEvent& aEvent )
+{
+    KIGIT_COMMON*   common = m_TreeProject->GitCommon();
+    git_repository* repo = common ? common->GetRepo() : nullptr;
+
+    if( !repo )
+        return;
+
+    wxString    existingURL;
+    git_remote* remote = nullptr;
+
+    if( git_remote_lookup( &remote, repo, "origin" ) == GIT_OK )
+    {
+        KIGIT::GitRemotePtr remotePtr( remote );
+
+        if( const char* url = git_remote_url( remote ) )
+            existingURL = wxString::FromUTF8( url );
+    }
+
+    wxWindow*             topLevelParent = wxGetTopLevelParent( this );
+    DIALOG_GIT_REPOSITORY dlg( topLevelParent, repo, existingURL );
+    dlg.SetTitle( _( "Configure Default Remote" ) );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    GIT_INIT_HANDLER initHandler( common );
+
+    RemoteConfig remoteConfig;
+    remoteConfig.url = dlg.GetRepoURL();
+    remoteConfig.username = dlg.GetUsername();
+    remoteConfig.password = dlg.GetPassword();
+    remoteConfig.sshKey = dlg.GetRepoSSHPath();
+    remoteConfig.connType = dlg.GetRepoType();
+
+    if( !initHandler.SetupRemote( remoteConfig ) )
+    {
+        DisplayErrorMessage( topLevelParent, _( "Failed to configure remote." ), initHandler.GetErrorString() );
+        return;
+    }
+
+    KIPLATFORM::SECRETS::StoreSecret( dlg.GetRepoURL(), dlg.GetUsername(), dlg.GetPassword() );
+    Prj().GetLocalSettings().m_GitRepoUsername = dlg.GetUsername();
+    Prj().GetLocalSettings().m_GitSSHKey = dlg.GetRepoSSHPath();
+
+    if( dlg.GetRepoType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH )
+        Prj().GetLocalSettings().m_GitRepoType = "ssh";
+    else if( dlg.GetRepoType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS )
+        Prj().GetLocalSettings().m_GitRepoType = "https";
+    else
+        Prj().GetLocalSettings().m_GitRepoType = "local";
+
+    common->UpdateCurrentBranchInfo();
+    m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
 }
 
 
