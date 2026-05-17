@@ -296,7 +296,112 @@ CommitResult LIBGIT_BACKEND::Commit( GIT_COMMIT_HANDLER* aHandler,
 }
 
 
-PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler )
+CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vector<wxString>& aFiles,
+                                    const wxString& aMessage, const wxString& aAuthorName,
+                                    const wxString& aAuthorEmail )
+{
+    git_repository* repo = aHandler->GetRepo();
+
+    if( !repo )
+        return CommitResult::Error;
+
+    if( git_repository_head_unborn( repo ) != 0 )
+    {
+        aHandler->AddErrorString( _( "Cannot amend: the branch has no commits yet." ) );
+        return CommitResult::Error;
+    }
+
+    git_reference* headRef = nullptr;
+
+    if( git_repository_head( &headRef, repo ) != 0 )
+    {
+        aHandler->AddErrorString(
+                wxString::Format( _( "Failed to get HEAD reference: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        return CommitResult::Error;
+    }
+
+    KIGIT::GitReferencePtr headRefPtr( headRef );
+    git_commit*            headCommit = nullptr;
+
+    if( git_reference_peel( (git_object**) &headCommit, headRef, GIT_OBJECT_COMMIT ) != 0 )
+    {
+        aHandler->AddErrorString(
+                wxString::Format( _( "Failed to get HEAD commit: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        return CommitResult::Error;
+    }
+
+    KIGIT::GitCommitPtr headCommitPtr( headCommit );
+    git_index*          index = nullptr;
+
+    if( git_repository_index( &index, repo ) != 0 )
+    {
+        aHandler->AddErrorString(
+                wxString::Format( _( "Failed to get repository index: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        return CommitResult::Error;
+    }
+
+    KIGIT::GitIndexPtr indexPtr( index );
+
+    for( const wxString& file : aFiles )
+    {
+        if( git_index_add_bypath( index, file.mb_str() ) != 0 )
+        {
+            aHandler->AddErrorString(
+                    wxString::Format( _( "Failed to add file to index: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+            return CommitResult::Error;
+        }
+    }
+
+    if( git_index_write( index ) != 0 )
+    {
+        aHandler->AddErrorString(
+                wxString::Format( _( "Failed to write index: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        return CommitResult::Error;
+    }
+
+    git_oid tree_id;
+
+    if( git_index_write_tree( &tree_id, index ) != 0 )
+    {
+        aHandler->AddErrorString(
+                wxString::Format( _( "Failed to write tree: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        return CommitResult::Error;
+    }
+
+    git_tree* tree = nullptr;
+
+    if( git_tree_lookup( &tree, repo, &tree_id ) != 0 )
+    {
+        aHandler->AddErrorString(
+                wxString::Format( _( "Failed to lookup tree: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        return CommitResult::Error;
+    }
+
+    KIGIT::GitTreePtr treePtr( tree );
+    git_signature*    author = nullptr;
+
+    if( git_signature_now( &author, aAuthorName.mb_str(), aAuthorEmail.mb_str() ) != 0 )
+    {
+        aHandler->AddErrorString(
+                wxString::Format( _( "Failed to create author signature: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        return CommitResult::Error;
+    }
+
+    KIGIT::GitSignaturePtr authorPtr( author );
+    git_oid                oid;
+
+    if( git_commit_amend( &oid, headCommit, "HEAD", author, author, nullptr, aMessage.mb_str(), tree ) != 0 )
+    {
+        aHandler->AddErrorString(
+                wxString::Format( _( "Failed to amend commit: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        return CommitResult::Error;
+    }
+
+    return CommitResult::Success;
+}
+
+
+PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
 {
     KIGIT_COMMON* common = aHandler->GetCommon();
     std::unique_lock<std::mutex> lock( common->m_gitActionMutex, std::try_to_lock );
@@ -357,15 +462,26 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler )
 
     KIGIT::GitReferencePtr headPtr( head );
 
-    const char* refs[1];
-    refs[0] = git_reference_name( head );
+    // Force push prepends "+" to the refspec source, matching `git push --force`.
+    wxString           refspec = ( aForce ? wxS( "+" ) : wxS( "" ) ) + wxString( git_reference_name( head ) );
+    std::string        refspecUtf8 = refspec.utf8_string();
+    const char*        refs[1] = { refspecUtf8.c_str() };
     const git_strarray refspecs = { (char**) refs, 1 };
 
     if( git_remote_push( remote, &refspecs, &pushOptions ) )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Could not push to remote: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        wxString errorMsg = KIGIT_COMMON::GetLastGitError();
+        aHandler->AddErrorString( wxString::Format( _( "Could not push to remote: %s" ), errorMsg ) );
         git_remote_disconnect( remote );
+
+        wxString lower = errorMsg.Lower();
+
+        if( lower.Contains( wxS( "non-fast-forward" ) ) || lower.Contains( wxS( "non-fastforwardable" ) )
+            || lower.Contains( wxS( "would not be" ) ) )
+        {
+            return PushResult::NonFastForward;
+        }
+
         return PushResult::Error;
     }
 

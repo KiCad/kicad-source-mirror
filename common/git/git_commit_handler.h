@@ -48,6 +48,9 @@ public:
                                const wxString&               aAuthorName,
                                const wxString&               aAuthorEmail );
 
+    CommitResult PerformAmend( const std::vector<wxString>& aFiles, const wxString& aMessage,
+                               const wxString& aAuthorName, const wxString& aAuthorEmail );
+
     wxString GetErrorString() const;
 
 private:

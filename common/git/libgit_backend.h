@@ -45,7 +45,10 @@ public:
                          const wxString& aAuthorName,
                          const wxString& aAuthorEmail ) override;
 
-    PushResult Push( GIT_PUSH_HANDLER* aHandler ) override;
+    CommitResult Amend( GIT_COMMIT_HANDLER* aHandler, const std::vector<wxString>& aFiles, const wxString& aMessage,
+                        const wxString& aAuthorName, const wxString& aAuthorEmail ) override;
+
+    PushResult Push( GIT_PUSH_HANDLER* aHandler, bool aForce = false ) override;
 
     bool HasChangedFiles( GIT_STATUS_HANDLER* aHandler ) override;
 

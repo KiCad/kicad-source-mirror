@@ -177,6 +177,11 @@ private:
     void onGitCommit( wxCommandEvent& event );
 
     /**
+     * Amend (rewrite) the last commit on the current branch
+    */
+    void onGitAmendCommit( wxCommandEvent& event );
+
+    /**
      * Pull the latest changes from the git repository
     */
     void onGitPullProject( wxCommandEvent& event );

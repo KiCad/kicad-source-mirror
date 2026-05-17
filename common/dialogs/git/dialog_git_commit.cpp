@@ -192,6 +192,12 @@ wxString DIALOG_GIT_COMMIT::GetCommitMessage() const
 }
 
 
+void DIALOG_GIT_COMMIT::SetCommitMessage( const wxString& aMessage )
+{
+    m_commitMessageTextCtrl->SetValue( aMessage );
+}
+
+
 wxString DIALOG_GIT_COMMIT::GetAuthorName() const
 {
     wxString authorText = m_authorTextCtrl->GetValue();

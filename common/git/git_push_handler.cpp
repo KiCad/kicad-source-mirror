@@ -33,9 +33,9 @@ GIT_PUSH_HANDLER::~GIT_PUSH_HANDLER()
 {}
 
 
-PushResult GIT_PUSH_HANDLER::PerformPush()
+PushResult GIT_PUSH_HANDLER::PerformPush( bool aForce )
 {
-    return GetGitBackend()->Push( this );
+    return GetGitBackend()->Push( this, aForce );
 }
 
 

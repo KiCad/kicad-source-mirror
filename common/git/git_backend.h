@@ -87,7 +87,11 @@ public:
                                  const wxString& aAuthorName,
                                  const wxString& aAuthorEmail ) = 0;
 
-    virtual PushResult Push( GIT_PUSH_HANDLER* aHandler ) = 0;
+    virtual CommitResult Amend( GIT_COMMIT_HANDLER* aHandler, const std::vector<wxString>& aFiles,
+                                const wxString& aMessage, const wxString& aAuthorName,
+                                const wxString& aAuthorEmail ) = 0;
+
+    virtual PushResult Push( GIT_PUSH_HANDLER* aHandler, bool aForce = false ) = 0;
 
     virtual bool HasChangedFiles( GIT_STATUS_HANDLER* aHandler ) = 0;
 
