@@ -91,6 +91,42 @@ wxString KIGIT_COMMON::GetProjectDir() const
 }
 
 
+wxString KIGIT_COMMON::GetUpstreamShorthand() const
+{
+    wxCHECK( m_repo, wxEmptyString );
+
+    git_reference* head = nullptr;
+
+    if( git_repository_head( &head, m_repo ) != GIT_OK )
+        return wxEmptyString;
+
+    KIGIT::GitReferencePtr headPtr( head );
+
+    if( !git_reference_is_branch( head ) )
+        return wxEmptyString;
+
+    git_reference* upstream = nullptr;
+
+    if( git_branch_upstream( &upstream, head ) == GIT_OK )
+    {
+        KIGIT::GitReferencePtr upstreamPtr( upstream );
+        const char*            shorthand = git_reference_shorthand( upstream );
+
+        if( shorthand )
+            return wxString::FromUTF8( shorthand );
+    }
+
+    // No upstream configured.  Synthesise the target that PerformPull's fallback
+    // and the first push will use.
+    const char* branch_shorthand = git_reference_shorthand( head );
+
+    if( !branch_shorthand )
+        return wxEmptyString;
+
+    return wxString::Format( "%s/%s", GetRemoteNameOrDefault(), branch_shorthand );
+}
+
+
 wxString KIGIT_COMMON::GetCurrentBranchName() const
 {
     wxCHECK( m_repo, wxEmptyString );

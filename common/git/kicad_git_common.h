@@ -122,6 +122,10 @@ public:
     /// fallback policy used by push/pull/fetch paths.
     wxString GetRemoteNameOrDefault() const;
 
+    /// Returns the upstream shorthand for the current branch (e.g. "origin/master"),
+    /// or an empty string when there is no current branch.
+    wxString GetUpstreamShorthand() const;
+
     /**
      * Set the project directory path, preserving any symlinks in the path.
      * This is used to ensure git status paths match the paths used in the project tree.
