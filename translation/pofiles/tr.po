@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-16 05:11+0000\n"
+"PO-Revision-Date: 2026-05-18 11:11+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v10/tr/>\n"
 "Language: tr\n"
@@ -4521,14 +4521,12 @@ msgstr ""
 "oluşturur"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Incremental"
-msgstr "Artır"
+msgstr "Artımlı"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
-#, fuzzy
 msgid "Zip archive"
-msgstr "Arşiv"
+msgstr "Zip arşivi"
 
 #: common/dialogs/panel_common_settings_base.cpp:441
 msgid ""
@@ -4536,22 +4534,26 @@ msgid ""
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
+"Artımlı: Sürekli değişikliklerle gizli bir .history git deposu tutar.\n"
+"Zip: Kaydetme sırasında zaman damgalı zip arşivleri oluşturur; otomatik "
+"kaydetme kurtarma dosyalarını kullanır."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "Project directory"
-msgstr "Projeyi doğrudan gönder"
+msgstr "Proje dizini"
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "User data directory"
-msgstr "'%s' bir dizin değil"
+msgstr "Kullanıcı veri dizini"
 
 #: common/dialogs/panel_common_settings_base.cpp:453
 msgid ""
 "Project: store backups and autosave files inside the project directory.\n"
 "User: store them in your KiCad user data directory."
 msgstr ""
+"Proje: Yedeklemeleri ve otomatik kaydetme dosyalarını proje dizini içinde "
+"saklar.\n"
+"Kullanıcı: Bunları KiCad kullanıcı veri dizininizde saklar."
 
 #: common/dialogs/panel_common_settings_base.cpp:457
 msgid "Maximum total backup size:"
@@ -6278,19 +6280,16 @@ msgid "Graphics error"
 msgstr "Grafik hatası"
 
 #: common/draw_panel_gal.cpp:236 common/draw_panel_gal.cpp:240
-#, fuzzy
 msgid "Graphics error during recovery"
-msgstr "Grafik hatası"
+msgstr "Kurtarma sırasında grafik hatası"
 
 #: common/draw_panel_gal.cpp:241
-#, fuzzy
 msgid "Unknown exception during backend switch"
-msgstr "Yüzey oluşturulurken OCC istisnası: %s"
+msgstr "Arka uç değiştirme sırasında bilinmeyen bir özel durum oluştu"
 
 #: common/draw_panel_gal.cpp:416
-#, fuzzy
 msgid "Unknown exception"
-msgstr "Bilinmeyen temizleme eylemi"
+msgstr "Bilinmeyen özel durum"
 
 #: common/draw_panel_gal.cpp:619
 msgid "Could not use OpenGL"
@@ -6506,15 +6505,20 @@ msgid ""
 "%s\n"
 "Recover the auto-saved data?"
 msgstr ""
+"Kaydedilmiş proje dosyalarından daha yeni otomatik kaydedilmiş dosya(lar) "
+"mevcut:\n"
+"\n"
+"%s\n"
+"Otomatik kaydedilmiş veriler kurtarılsın mı?"
 
 #: common/eda_base_frame.cpp:437
 msgid "Auto-Save Recovery"
-msgstr ""
+msgstr "Otomatik Kaydetme Kurtarma"
 
 #: common/eda_base_frame.cpp:445
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to recover auto-saved file '%s'."
-msgstr "'%s' dosyası oluşturulamadı."
+msgstr "Otomatik kaydedilmiş '%s' dosyası kurtarılamadı."
 
 #: common/eda_base_frame.cpp:568 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:135
@@ -9329,15 +9333,15 @@ msgstr "Kütüphane tablosu okunurken beklenmeyen bir hata oluştu"
 
 #: common/local_history.cpp:1559
 msgid "Compacting local history..."
-msgstr ""
+msgstr "Yerel geçmiş sıkıştırılıyor..."
 
 #: common/local_history.cpp:1756
 msgid "Trimming local history..."
-msgstr ""
+msgstr "Yerel geçmiş budanıyor..."
 
 #: common/local_history.cpp:1849
 msgid "Compacting trimmed history..."
-msgstr ""
+msgstr "Budanmış geçmiş sıkıştırılıyor..."
 
 #: common/local_history.cpp:2195
 msgid ""
@@ -45924,7 +45928,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_9more_examples.h:2
-#, fuzzy
 msgid ""
 "### More Examples\n"
 "\n"
@@ -46107,13 +46110,13 @@ msgstr ""
 "\n"
 "    (rule \"Farklı Netlerdeki Via'lar Arasındaki Mesafe\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Farklı Netlerdeki Pad'ler Arasındaki Boşluk\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Deliği ile İz Arasındaki Boşluk\"\n"
@@ -46224,8 +46227,8 @@ msgstr ""
 "delecekse.\n"
 "    # \n"
 "    (rule hole_to_hole_uvia_exclusion\n"
-"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == "
-"'Micro'\")\n"
+"        (condition \"A.Via_Type == 'Blind/buried' && B.Via_Type == 'Micro'\")"
+"\n"
 "        (constraint hole_to_hole)\n"
 "        (severity ignore))\n"
 "\n"
@@ -55261,9 +55264,8 @@ msgid "Align/Distribute"
 msgstr "Hizala/Dağıt"
 
 #: pcbnew/tools/board_editor_control.cpp:212
-#, fuzzy
 msgid "Zone Priority"
-msgstr "Öncelik"
+msgstr "Bölge Önceliği"
 
 #: pcbnew/tools/board_editor_control.cpp:310
 msgid "Locking"
@@ -55383,24 +55385,20 @@ msgid "Duplicate Zone"
 msgstr "Bölgeyi Çoğalt"
 
 #: pcbnew/tools/board_editor_control.cpp:1908
-#, fuzzy
 msgid "Move Zone to Top Priority"
-msgstr "Köşeyi Konuma Taşı"
+msgstr "Bölgeyi En Yüksek Önceliğe Taşı"
 
 #: pcbnew/tools/board_editor_control.cpp:1962
-#, fuzzy
 msgid "Raise Zone Priority"
-msgstr "Bölge öncelik seviyesi:"
+msgstr "Bölge Önceliğini Artır"
 
 #: pcbnew/tools/board_editor_control.cpp:2016
-#, fuzzy
 msgid "Lower Zone Priority"
-msgstr "Bakır Bölge Özellikleri"
+msgstr "Bölge Önceliğini Düşür"
 
 #: pcbnew/tools/board_editor_control.cpp:2097
-#, fuzzy
 msgid "Move Zone to Bottom Priority"
-msgstr "Köşeyi Konuma Taşı"
+msgstr "Bölgeyi En Düşük Önceliğe Taşı"
 
 #: pcbnew/tools/board_editor_control.cpp:2170
 msgid "Selection contains no items with labeled nets."
@@ -57507,23 +57505,20 @@ msgid "Duplicate Zone onto Layer..."
 msgstr "Bölgeyi Katman Üzerine Çoğalt…"
 
 #: pcbnew/tools/pcb_actions.cpp:1428
-#, fuzzy
 msgid "Move to Top"
-msgstr "Çöp Kutusuna Taşı"
+msgstr "En Üste Taşı"
 
 #: pcbnew/tools/pcb_actions.cpp:1434
 msgid "Raise"
-msgstr ""
+msgstr "Yükselt"
 
 #: pcbnew/tools/pcb_actions.cpp:1440
-#, fuzzy
 msgid "Lower"
-msgstr "Güç"
+msgstr "Düşür"
 
 #: pcbnew/tools/pcb_actions.cpp:1446
-#, fuzzy
 msgid "Move to Bottom"
-msgstr "Alta Hizala"
+msgstr "En Alta Taşı"
 
 #: pcbnew/tools/pcb_actions.cpp:1454
 msgid "Place Footprints"
@@ -58708,6 +58703,8 @@ msgstr "Bağlantıyı Seç/Genişlet..."
 msgid ""
 "Selection contains locked items. Enable 'Override locks' to operate on them."
 msgstr ""
+"Seçim kilitli ögeler içeriyor. Bunlar üzerinde işlem yapmak için 'Kilitleri "
+"Geçersiz Kıl' seçeneğini etkinleştirin."
 
 #: pcbnew/tools/position_relative_tool.cpp:234
 msgid "Select the reference point on the item to move."
@@ -60077,6 +60074,8 @@ msgid ""
 "Automatically assign zone priorities based on connectivity analysis of "
 "overlapping regions."
 msgstr ""
+"Çakışan bölgelerin bağlantı analizine dayalı olarak bölge önceliklerini "
+"otomatik olarak ata."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:146
 msgid "Refill zones"
