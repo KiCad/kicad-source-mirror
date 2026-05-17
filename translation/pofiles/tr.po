@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-16 05:11+0000\n"
+"PO-Revision-Date: 2026-05-18 10:11+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
 "source/tr/>\n"
@@ -4558,11 +4558,11 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:437
 msgid "Incremental"
-msgstr "Aşamalı"
+msgstr "Artımlı"
 
 #: common/dialogs/panel_common_settings_base.cpp:437
 msgid "Zip archive"
-msgstr "Zip Arşivi"
+msgstr "Zip arşivi"
 
 #: common/dialogs/panel_common_settings_base.cpp:441
 msgid ""
@@ -4570,8 +4570,8 @@ msgid ""
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
-"Aşamalı: sürekli değişikliklerle gizli bir .history git deposu tut.\n"
-"Zip: kaydetme sırasında zaman damgalı zip arşivleri oluştur; otomatik "
+"Artımlı: Sürekli değişikliklerle gizli bir .history git deposu tutar.\n"
+"Zip: Kaydetme sırasında zaman damgalı zip arşivleri oluşturur; otomatik "
 "kaydetme kurtarma dosyalarını kullanır."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
@@ -4587,9 +4587,9 @@ msgid ""
 "Project: store backups and autosave files inside the project directory.\n"
 "User: store them in your KiCad user data directory."
 msgstr ""
-"Proje: yedekleri ve otomatik kaydetme dosyalarını proje dizini içinde "
-"sakla.\n"
-"Kullanıcı: bunları KiCad kullanıcı veri dizininde sakla."
+"Proje: Yedeklemeleri ve otomatik kaydetme dosyalarını proje dizini içinde "
+"saklar.\n"
+"Kullanıcı: Bunları KiCad kullanıcı veri dizininizde saklar."
 
 #: common/dialogs/panel_common_settings_base.cpp:457
 msgid "Maximum total backup size:"
@@ -6322,11 +6322,11 @@ msgstr "Kurtarma sırasında grafik hatası"
 
 #: common/draw_panel_gal.cpp:243
 msgid "Unknown exception during backend switch"
-msgstr "Arka uç geçişi sırasında bilinmeyen istisna"
+msgstr "Arka uç değiştirme sırasında bilinmeyen bir özel durum oluştu"
 
 #: common/draw_panel_gal.cpp:431
 msgid "Unknown exception"
-msgstr "Bilinmeyen istisna"
+msgstr "Bilinmeyen özel durum"
 
 #: common/draw_panel_gal.cpp:659
 msgid "Could not use OpenGL"
@@ -6554,7 +6554,7 @@ msgstr "Otomatik Kaydetme Kurtarma"
 #: common/eda_base_frame.cpp:445
 #, c-format
 msgid "Failed to recover auto-saved file '%s'."
-msgstr "Otomatik kaydedilmiş dosya '%s' kurtarılamadı."
+msgstr "Otomatik kaydedilmiş '%s' dosyası kurtarılamadı."
 
 #: common/eda_base_frame.cpp:568 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:136
@@ -56278,7 +56278,7 @@ msgstr "Bölgeyi En Yüksek Önceliğe Taşı"
 
 #: pcbnew/tools/board_editor_control.cpp:1930
 msgid "Raise Zone Priority"
-msgstr "Bölge Önceliğini Yükselt"
+msgstr "Bölge Önceliğini Artır"
 
 #: pcbnew/tools/board_editor_control.cpp:1984
 msgid "Lower Zone Priority"
