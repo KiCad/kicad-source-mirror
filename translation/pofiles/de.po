@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-16 05:11+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2026-05-18 10:11+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -52953,7 +52953,7 @@ msgstr "Erstelle Leiterbahnen"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4535
 msgid "Converting footprints"
-msgstr "Footprint konvertieren"
+msgstr "Footprints konvertieren"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2654
 msgid "Parsing Allegro objects"
@@ -56467,7 +56467,7 @@ msgstr "Leiterbahn-Ecken-Modus"
 #: pcbnew/router/router_tool.cpp:722
 #, c-format
 msgid "Test case in directory %s already exists. Overwrite?"
-msgstr "Testfall in Verzeichnis \"%s\" existiert bereits. Überschreiben?"
+msgstr "Testfall im Verzeichnis \"%s\" existiert bereits. Überschreiben?"
 
 #: pcbnew/router/router_tool.cpp:750
 msgid "Save router log"
@@ -57469,9 +57469,8 @@ msgid "Edit Text Properties..."
 msgstr "Texteigenschaften bearbeiten ..."
 
 #: pcbnew/tools/edit_tool.cpp:153
-#, fuzzy
 msgid "Mirror / Rotate"
-msgstr "Text spiegeln"
+msgstr "Spiegeln / Drehen"
 
 #: pcbnew/tools/edit_tool.cpp:227
 msgid "Shape Modification"
