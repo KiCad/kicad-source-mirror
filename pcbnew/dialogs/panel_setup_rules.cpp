@@ -152,6 +152,9 @@ void PANEL_SETUP_RULES::OnContextMenu(wxMouseEvent &event)
     menu.Append( wxID_ZOOM_IN, _( "Zoom In" ) );
     menu.Append( wxID_ZOOM_OUT, _( "Zoom Out" ) );
 
+    menu.AppendSeparator();
+
+    menu.Append( 6, _( "Show Matching Items" ) );
 
     switch( GetPopupMenuSelectionFromUser( menu ) )
     {
@@ -192,7 +195,240 @@ void PANEL_SETUP_RULES::OnContextMenu(wxMouseEvent &event)
     case wxID_ZOOM_OUT:
         m_textEditor->ZoomOut();
         break;
+
+    case 6: OnShowMatching(); break;
     }
+}
+
+
+void PANEL_SETUP_RULES::OnShowMatching()
+{
+    m_errorsReport->Clear();
+
+    if( m_frame->Prj().IsNullProject() )
+    {
+        m_errorsReport->Report( _( "Cannot show matching items without an open project." ), RPT_SEVERITY_ERROR );
+        m_errorsReport->Flush();
+        return;
+    }
+
+    const wxString text = m_textEditor->GetText();
+    const int      cursorPos = m_textEditor->GetCurrentPos();
+    const int      len = (int) text.length();
+
+    struct ParenFrame
+    {
+        int      start;
+        wxString token;
+        wxString ruleName;
+    };
+
+    std::vector<ParenFrame> stack;
+    bool                    inString = false;
+    bool                    inEscape = false;
+    wxString                targetRuleName;
+    bool                    foundRule = false;
+
+    for( int i = 0; i < len; ++i )
+    {
+        wxChar c = text[i];
+
+        if( inEscape )
+        {
+            inEscape = false;
+            continue;
+        }
+
+        if( c == '\\' )
+        {
+            inEscape = true;
+            continue;
+        }
+
+        if( inString )
+        {
+            if( c == '"' )
+                inString = false;
+
+            continue;
+        }
+
+        if( c == '"' )
+        {
+            inString = true;
+            continue;
+        }
+
+        if( c == '(' )
+        {
+            int j = i + 1;
+
+            while( j < len && wxIsspace( text[j] ) )
+                j++;
+
+            int tokStart = j;
+
+            while( j < len && !wxIsspace( text[j] ) && text[j] != '(' && text[j] != ')' )
+                j++;
+
+            wxString token = text.Mid( tokStart, j - tokStart );
+            wxString ruleName;
+
+            if( token == wxT( "rule" ) )
+            {
+                int k = j;
+
+                while( k < len && wxIsspace( text[k] ) )
+                    k++;
+
+                if( k < len && text[k] == '"' )
+                {
+                    k++;
+                    int  nameStart = k;
+                    bool esc = false;
+
+                    while( k < len )
+                    {
+                        if( esc )
+                        {
+                            esc = false;
+                            k++;
+                            continue;
+                        }
+                        if( text[k] == '\\' )
+                        {
+                            esc = true;
+                            k++;
+                            continue;
+                        }
+                        if( text[k] == '"' )
+                            break;
+                        k++;
+                    }
+
+                    ruleName = text.Mid( nameStart, k - nameStart );
+                }
+            }
+
+            stack.push_back( { i, token, ruleName } );
+        }
+        else if( c == ')' )
+        {
+            if( stack.empty() )
+                continue;
+
+            ParenFrame opened = stack.back();
+            stack.pop_back();
+
+            if( opened.token == wxT( "rule" ) && opened.start <= cursorPos && i >= cursorPos )
+            {
+                targetRuleName = opened.ruleName;
+                foundRule = true;
+                break;
+            }
+        }
+    }
+
+    if( !foundRule )
+    {
+        m_errorsReport->Report( _( "Place the cursor inside a (rule ...) block to show matching "
+                                   "items." ),
+                                RPT_SEVERITY_ACTION );
+        m_errorsReport->Flush();
+        return;
+    }
+
+    if( targetRuleName.IsEmpty() )
+    {
+        m_errorsReport->Report( _( "The rule under the cursor has no name; add a name to identify "
+                                   "it." ),
+                                RPT_SEVERITY_ERROR );
+        m_errorsReport->Flush();
+        return;
+    }
+
+    std::vector<std::shared_ptr<DRC_RULE>> rules;
+
+    try
+    {
+        std::function<bool( wxString* )> resolver = [&]( wxString* token ) -> bool
+        {
+            return m_frame->GetBoard()->ResolveTextVar( token, 0 );
+        };
+
+        wxString rulesText = m_frame->GetBoard()->ConvertCrossReferencesToKIIDs( text );
+        rulesText = ExpandTextVars( rulesText, &resolver );
+
+        DRC_RULES_PARSER parser( rulesText, _( "DRC rules" ) );
+        parser.Parse( rules, m_errorsReport );
+    }
+    catch( PARSE_ERROR& pe )
+    {
+        m_errorsReport->Report( wxString::Format( wxT( "%s <a href='%d:%d'>%s</a>%s" ), _( "ERROR:" ), pe.lineNumber,
+                                                  pe.byteIndex, pe.ParseProblem(), wxEmptyString ),
+                                RPT_SEVERITY_ERROR );
+        m_errorsReport->Flush();
+        return;
+    }
+
+    std::shared_ptr<DRC_RULE> targetRule;
+
+    for( const auto& rule : rules )
+    {
+        if( rule->m_Name == targetRuleName )
+        {
+            targetRule = rule;
+            break;
+        }
+    }
+
+    if( !targetRule )
+    {
+        m_errorsReport->Report( wxString::Format( _( "Rule '%s' could not be located after "
+                                                     "parsing." ),
+                                                  targetRuleName ),
+                                RPT_SEVERITY_ERROR );
+        m_errorsReport->Flush();
+        return;
+    }
+
+    if( targetRule->m_Condition && !targetRule->m_Condition->GetExpression().IsEmpty()
+        && !targetRule->m_Condition->Compile( m_errorsReport ) )
+    {
+        m_errorsReport->Flush();
+        return;
+    }
+
+    std::shared_ptr<DRC_ENGINE> engine = m_frame->GetBoard()->GetDesignSettings().m_DRCEngine;
+
+    if( !engine )
+    {
+        m_errorsReport->Report( _( "DRC engine not available." ), RPT_SEVERITY_ERROR );
+        m_errorsReport->Flush();
+        return;
+    }
+
+    std::vector<BOARD_ITEM*> allMatches = engine->GetItemsMatchingRule( targetRule, m_errorsReport );
+
+    std::vector<BOARD_ITEM*> matches;
+
+    for( BOARD_ITEM* item : allMatches )
+    {
+        switch( item->Type() )
+        {
+        case PCB_NETINFO_T:
+        case PCB_GENERATOR_T:
+        case PCB_GROUP_T: continue;
+        default: matches.push_back( item ); break;
+        }
+    }
+
+    m_frame->FocusOnItems( matches );
+
+    m_errorsReport->Report(
+            wxString::Format( _( "Rule '%s': %zu matching item(s)." ), targetRule->m_Name, matches.size() ),
+            RPT_SEVERITY_INFO );
+    m_errorsReport->Flush();
 }
 
 
