@@ -326,6 +326,7 @@ private:
         int32_t vertexStart = 0;   // R[i+1] @ +12, cumulative sec12 corner cursor
         int32_t arcStart    = 0;   // R[i+1] @ +16
         int32_t pieceCount  = 0;   // R[i+1] @ +24
+        size_t  ownOffset   = 0;   // R[i]'s own absolute file offset (this owner's header record)
     };
 
     // Owner DRW name -> lagged run, keyed by the +44 name. Built once by buildOwnerRuns().

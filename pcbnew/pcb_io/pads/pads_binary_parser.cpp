@@ -3321,9 +3321,31 @@ void BINARY_PARSER::parseCopperShapes()
 
     constexpr size_t MAX_COPPER_SHAPE_EDGES = 80;
 
-    for( uint32_t rec = 0; rec < sec10->count; ++rec )
+    // Iterate every owner buildOwnerRuns found (a wide, structural byte scan from section 8
+    // through the end of section 10) rather than sec10->count records based at sec10->dataOffset:
+    // that declared base is not reliable here either -- verified against Ems4_Rev2.pcb, where 6
+    // real DRW-named, valid-marker records with real copper class/tag fields sit before the
+    // declared section start, cleanly stride-aligned, with no discontinuity into the declared
+    // range (the marker walk finds real records straddling the "boundary" on both sides).
+    // Reading each owner's OWN header at its stored ownOffset (not the lagged run offset)
+    // preserves every existing field access below unchanged.
+    //
+    // This alone does not recover all of them, though: for the same displaced records, the
+    // owner's own vertexStart cursor can land BEFORE computeSec12Base's clean-prefix boundary
+    // (e.g. DRW26389629: vertexStart 20 vs a computed base of 99), which sec12Vertex correctly
+    // refuses to read as garbage. Either these owners' geometry legitimately lives in what
+    // computeSec12Base treats as the dirty heap tail, or that single-boundary model is too
+    // simple for a file where section 10 itself needed this same kind of correction -- not
+    // established either way. Left unrecovered rather than guessed at.
+    for( const auto& [name, run] : m_ownerRuns )
     {
-        SDB_RECORD hdr = m_sdb.Record( *sec10, rec, sec10->stride );
+        if( name.size() < 4 || name.substr( 0, 3 ) != "DRW" )
+            continue;
+
+        if( !m_cursor.InBounds( run.ownOffset, DRW_ITEM::SIZE ) )
+            continue;
+
+        SDB_RECORD hdr = m_sdb.RecordAt( static_cast<uint32_t>( run.ownOffset ) );
 
         // class 1 = filled copper region (either block tag -- the second was found covering the
         // same shapes as the first within a single file, not a version split), 7 = v2026
@@ -3348,11 +3370,6 @@ void BINARY_PARSER::parseCopperShapes()
                                  && classWord == CLASS_LINE && subtypeWord == SUBTYPE_PLAIN_LINE );
 
         if( !legacyCopper && !v2026LineCopper )
-            continue;
-
-        std::string name = hdr.Str( DRW_ITEM::NAME, 24 );
-
-        if( name.size() < 4 || name.substr( 0, 3 ) != "DRW" )
             continue;
 
         uint32_t sec11Index = hdr.U32( DRW_ITEM::PIECE_START );
@@ -3606,14 +3623,15 @@ void BINARY_PARSER::buildOwnerRuns()
                && pieceCount < ( 1 << 16 );
     };
 
-    auto readRun = [&]( size_t aOff ) -> OWNER_RUN
+    auto readRun = [&]( size_t aLagOff, size_t aOwnOff ) -> OWNER_RUN
     {
-        SDB_RECORD rec = m_sdb.RecordAt( aOff );
+        SDB_RECORD rec = m_sdb.RecordAt( aLagOff );
         OWNER_RUN  run;
         run.pieceStart = rec.I32( DRW_ITEM::PIECE_START );
         run.vertexStart = rec.I32( DRW_ITEM::VERTEX_START );
         run.arcStart = rec.I32( DRW_ITEM::ARC_START );
         run.pieceCount = rec.I32( DRW_ITEM::PIECE_COUNT );
+        run.ownOffset = aOwnOff;
         return run;
     };
 
@@ -3633,7 +3651,7 @@ void BINARY_PARSER::buildOwnerRuns()
             std::string name = m_sdb.RecordAt( off ).Str( DRW_ITEM::NAME, 44 );
 
             if( havePrev && !m_ownerRuns.count( prevName ) )
-                m_ownerRuns.emplace( prevName, readRun( off ) );
+                m_ownerRuns.emplace( prevName, readRun( off, prevOff ) );
 
             prevName = std::move( name );
             prevOff = off;
@@ -3650,7 +3668,7 @@ void BINARY_PARSER::buildOwnerRuns()
         size_t tailOff = prevOff + DRW_ITEM::SIZE;
 
         if( tailOff + DRW_ITEM::SIZE <= m_data.size() )
-            m_ownerRuns.emplace( prevName, readRun( tailOff ) );
+            m_ownerRuns.emplace( prevName, readRun( tailOff, prevOff ) );
     }
 }
 
