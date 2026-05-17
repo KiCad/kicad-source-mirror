@@ -767,7 +767,17 @@ bool LIBGIT_BACKEND::SetupRemote( GIT_INIT_HANDLER* aHandler, const RemoteConfig
 
     if( aConfig.connType == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH )
     {
-        fullURL = aConfig.username + "@" + aConfig.url;
+        wxString userPrefix;
+
+        if( !aConfig.url.Contains( "@" ) && !aConfig.username.IsEmpty() )
+            userPrefix = aConfig.username + "@";
+
+        if( aConfig.url.StartsWith( "ssh://" ) )
+            fullURL = "ssh://" + userPrefix + aConfig.url.Mid( 6 );
+        else if( aConfig.url.Contains( ":" ) )
+            fullURL = userPrefix + aConfig.url;
+        else
+            fullURL = "ssh://" + userPrefix + aConfig.url;
     }
     else if( aConfig.connType == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS )
     {
@@ -820,6 +830,10 @@ bool LIBGIT_BACKEND::SetupRemote( GIT_INIT_HANDLER* aHandler, const RemoteConfig
                 wxString::Format( _( "Failed to set up remote: %s" ), KIGIT_COMMON::GetLastGitError() ) );
         return false;
     }
+
+    // Sync the remote URL onto common so subsequent fetch/push see the right
+    // connection type; otherwise credentials_cb short-circuits as local.
+    aHandler->GetCommon()->SetRemote( fullURL );
 
     wxLogTrace( traceGit, "Successfully set up remote origin" );
     return true;
