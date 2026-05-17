@@ -78,6 +78,7 @@ set( QA_COMMON_SRCS
     test_string_utils.cpp
     test_richio.cpp
     test_text_attributes.cpp
+    git/test_libgit_backend.cpp
     text_eval/test_text_eval_parser.cpp
     text_eval/test_text_eval_parser_core.cpp
     text_eval/test_text_eval_parser_datetime.cpp
