@@ -47,7 +47,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-16 05:11+0000\n"
+"PO-Revision-Date: 2026-05-18 10:11+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -49614,7 +49614,7 @@ msgstr "Specctra 会话..."
 
 #: pcbnew/menubar_pcb_editor.cpp:123
 msgid "Specctra DSN..."
-msgstr "光绘 DSN..."
+msgstr "Specctra DSN..."
 
 #: pcbnew/menubar_pcb_editor.cpp:124
 msgid "GenCAD..."
