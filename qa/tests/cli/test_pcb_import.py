@@ -70,6 +70,17 @@ def get_pads_test_file() -> str:
     return None
 
 
+def get_pads_binary_test_file() -> str:
+    """Get path to a binary PADS PowerPCB test file from the QA test data directory."""
+    test_data_dir = os.path.join( os.path.dirname( __file__ ), "..", "..", "data", "pcbnew", "plugins", "pads" )
+    pads_file = os.path.join( test_data_dir, "LCORE_4", "LCORE_4.pcb" )
+
+    if os.path.exists( pads_file ):
+        return pads_file
+
+    return None
+
+
 class TestPcbImportHelp:
     """Test help output for pcb import command"""
 
@@ -157,6 +168,57 @@ class TestPcbImportErrors:
 
         assert return_code != 0
         assert not output_path.exists()
+
+
+@pytest.mark.skipif( get_pads_binary_test_file() is None,
+                     reason="PADS binary test files not available" )
+class TestPcbImportPadsBinary:
+    """PADS writes both an ASCII export and a binary PowerPCB database under the same .pcb
+    extension, so --format pads must resolve the dialect by content rather than handing a binary
+    file to the ASCII reader, which parses nothing and reports success on an empty board."""
+
+    def test_import_binary_with_explicit_format( self, kitest: KiTestFixture ):
+        """An explicit --format pads on a binary file imports its content, not an empty board"""
+        pads_file = get_pads_binary_test_file()
+        output_path = get_output_path( kitest, "pads", "binary_explicit.kicad_pcb" )
+
+        command = [
+            utils.kicad_cli(),
+            "pcb", "import",
+            "--format", "pads",
+            pads_file,
+            "-o", str( output_path )
+        ]
+
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+        assert output_path.exists()
+
+        # A board with no footprints is the empty-stub failure this guards against, so assert
+        # real content rather than merely a non-zero file size.
+        content = output_path.read_text()
+        assert content.count( "(footprint" ) == 30
+        assert content.count( "(via" ) == 16
+
+    def test_import_binary_matches_auto_detect( self, kitest: KiTestFixture ):
+        """Naming the format explicitly gives the same board as content auto-detection"""
+        pads_file = get_pads_binary_test_file()
+        explicit_path = get_output_path( kitest, "pads", "binary_named.kicad_pcb" )
+        auto_path = get_output_path( kitest, "pads", "binary_auto.kicad_pcb" )
+
+        for fmt_args, out in ( ( [ "--format", "pads" ], explicit_path ),
+                               ( [], auto_path ) ):
+            command = [ utils.kicad_cli(), "pcb", "import" ] + fmt_args + [
+                pads_file, "-o", str( out ) ]
+            _, _, return_code = utils.run_and_capture( command )
+            assert return_code == 0
+
+        explicit = explicit_path.read_text()
+        auto = auto_path.read_text()
+
+        assert explicit.count( "(footprint" ) == auto.count( "(footprint" )
+        assert explicit.count( "(via" ) == auto.count( "(via" )
 
 
 @pytest.mark.skipif( get_pads_test_file() is None,

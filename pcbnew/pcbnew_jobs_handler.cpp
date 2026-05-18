@@ -3450,7 +3450,15 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
     {
     case JOB_PCB_IMPORT::FORMAT::AUTO: fileType = PCB_IO_MGR::FindPluginTypeFromBoardPath( job->m_inputFile ); break;
 
-    case JOB_PCB_IMPORT::FORMAT::PADS_ASCII: fileType = PCB_IO_MGR::PADS; break;
+    // "pads" names the vendor format, not the dialect: PADS writes both an ASCII export and a
+    // binary PowerPCB database, and both use the .pcb extension. Resolve the dialect by content
+    // so an explicit --format pads on a binary file imports it instead of handing it to the ASCII
+    // reader, which parses nothing and silently yields an empty board.
+    case JOB_PCB_IMPORT::FORMAT::PADS_ASCII:
+        fileType = PCB_IO_MGR::FindPluginTypeFromBoardPath( job->m_inputFile ) == PCB_IO_MGR::PADS_BINARY
+                           ? PCB_IO_MGR::PADS_BINARY
+                           : PCB_IO_MGR::PADS;
+        break;
 
     case JOB_PCB_IMPORT::FORMAT::ALTIUM: fileType = PCB_IO_MGR::ALTIUM_DESIGNER; break;
 
