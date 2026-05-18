@@ -1146,8 +1146,21 @@ void BINARY_PARSER::parsePartTypeTable()
 
     uint32_t start = sec17->dataOffset - hdrOffset;
 
+    // The parttype's own name (the *PARTTYPE alias, e.g. a manufacturer part number such as
+    // GRM15XR71C103KA86D that resolves to a generic decal like C-0402) sits at +44 in the
+    // non-v2022 224 B record -- verified against parallella-rf.pcb by locating the literal
+    // "GRM15XR71C103KA86D" text and confirming its offset from the record's own decal_index
+    // field lands on +44. Not verified for v2022's 208 B record, so it is left unpopulated
+    // there rather than guessing; linkPartsToDecals() falls back to the decal name in that case.
+    const bool     hasName = !isV2022;
+    const uint32_t nameOff = 44;
+
     m_partTypeDecalIndex.clear();
     m_partTypeDecalIndex.reserve( sec17->count );
+    m_partTypeNames.clear();
+
+    if( hasName )
+        m_partTypeNames.reserve( sec17->count );
 
     for( uint32_t k = 0; k < sec17->count; ++k )
     {
@@ -1156,10 +1169,19 @@ void BINARY_PARSER::parsePartTypeTable()
         if( off + decalOff + 4 > m_data.size() )
         {
             m_partTypeDecalIndex.push_back( -1 );
+
+            if( hasName )
+                m_partTypeNames.emplace_back();
+
             continue;
         }
 
         m_partTypeDecalIndex.push_back( m_sdb.RecordAt( off ).I32( decalOff ) );
+
+        if( hasName )
+            m_partTypeNames.push_back( off + nameOff + 32 <= m_data.size()
+                                                ? m_sdb.RecordAt( off ).Str( nameOff, 32 )
+                                                : std::string() );
     }
 }
 
@@ -4265,6 +4287,18 @@ void BINARY_PARSER::linkPartsToDecals()
 
         if( !decalName.empty() && m_decals.count( decalName ) )
             part.decal = decalName;
+
+        // The *PARTTYPE alias (often a manufacturer part number) is more useful as the
+        // footprint's BOM value than the physical decal name it resolves to -- e.g. a part
+        // referencing PARTTYPE GRM15XR71C103KA86D that resolves to decal C-0402 should show
+        // the part number, not "C-0402", as its value.
+        if( part.value.empty() && partTypeIdx < m_partTypeNames.size() )
+        {
+            const std::string& typeName = m_partTypeNames[partTypeIdx];
+
+            if( !typeName.empty() && typeName != part.decal )
+                part.value = typeName;
+        }
     }
 }
 

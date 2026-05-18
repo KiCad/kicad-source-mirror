@@ -415,6 +415,11 @@ private:
     // a decal_index at payload +96 that indexes m_decalNameTable.
     std::vector<int32_t> m_partTypeDecalIndex;
 
+    // The parttype's own alias name (payload +44, non-v2022 dialects only), parallel to
+    // m_partTypeDecalIndex. This is the *PARTTYPE name a part references directly -- often a
+    // manufacturer part number -- distinct from the physical decal it resolves to.
+    std::vector<std::string> m_partTypeNames;
+
     // Complete decal-name table (sec14.dataOffset - 1188, 112 B records, NAME @ +0), indexed by
     // a parttype's decal_index. Includes vias, connectors and mounting holes that section 10
     // lacks. table[0] is always JMPVIA_AAAAA.

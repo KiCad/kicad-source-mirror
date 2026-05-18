@@ -494,7 +494,11 @@ void PCB_IO_PADS_BINARY::loadFootprints()
             fpid.SetLibItemName( PADS_COMMON::ConvertText( padsPart.name ) );
 
         footprint->SetFPID( fpid );
-        footprint->SetValue( PADS_COMMON::ConvertText( padsPart.decal ) );
+
+        // A part referencing a *PARTTYPE alias (often a manufacturer part number) shows that
+        // alias as its value, not the physical decal it resolves to; see linkPartsToDecals().
+        footprint->SetValue( PADS_COMMON::ConvertText( padsPart.value.empty() ? padsPart.decal
+                                                                              : padsPart.value ) );
 
         footprint->SetPosition( scalePoint( padsPart.location.x, padsPart.location.y ) );
         footprint->SetOrientation( EDA_ANGLE( padsPart.rotation, DEGREES_T ) );
