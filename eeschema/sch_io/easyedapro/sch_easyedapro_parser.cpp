@@ -1326,10 +1326,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                         SCH_FIELD* text = schSym->FindFieldCaseInsensitive( attrKey );
 
                         if( !text )
-                        {
-                            text = new SCH_FIELD( schSym.get(), FIELD_T::USER, attrKey );
-                            schSym->AddField( text );
-                        }
+                            text = schSym->AddField( SCH_FIELD( schSym.get(), FIELD_T::USER, attrKey ) );
 
                         wxString value = *valOpt;
 
@@ -1397,10 +1394,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                     SCH_FIELD* text = schSym->FindFieldCaseInsensitive( attrKey );
 
                     if( !text )
-                    {
-                        text = new SCH_FIELD( schSym.get(), FIELD_T::USER, attrKey );
-                        schSym->AddField( text );
-                    }
+                        text = schSym->AddField( SCH_FIELD( schSym.get(), FIELD_T::USER, attrKey ) );
 
                     text->SetPosition( schSym->GetPosition() );
 
