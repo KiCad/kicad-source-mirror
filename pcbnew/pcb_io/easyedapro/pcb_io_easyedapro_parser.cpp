@@ -587,6 +587,23 @@ PCB_IO_EASYEDAPRO_PARSER::ParseContour( nlohmann::json polyData, bool aInFill,
 }
 
 
+NETINFO_ITEM* PCB_IO_EASYEDAPRO_PARSER::getNet( BOARD* aBoard, const wxString& aNetName )
+{
+    if( !aBoard || aNetName.empty() )
+        return nullptr;
+
+    NETINFO_ITEM* net = aBoard->FindNet( aNetName );
+
+    if( !net )
+    {
+        net = new NETINFO_ITEM( aBoard, aNetName, static_cast<int>( aBoard->GetNetCount() ) + 1 );
+        aBoard->Add( net );
+    }
+
+    return net;
+}
+
+
 std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            aFootprint,
                                                           const nlohmann::json& line )
 {
@@ -1152,7 +1169,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                 via->SetDrill( ScaleSize( drill ) );
                 via->SetWidth( PADSTACK::ALL_LAYERS, ScaleSize( dia ) );
 
-                via->SetNet( aBoard->FindNet( netname ) );
+                via->SetNet( getNet( aBoard, netname ) );
 
                 aBoard->Add( via.release(), ADD_MODE::APPEND );
             }
@@ -1178,7 +1195,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                 track->SetEnd( ScalePos( end ) );
                 track->SetWidth( ScaleSize( width ) );
 
-                track->SetNet( aBoard->FindNet( netname ) );
+                track->SetNet( getNet( aBoard, netname ) );
 
                 aBoard->Add( track.release(), ADD_MODE::APPEND );
             }
@@ -1214,7 +1231,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                 arc->SetWidth( ScaleSize( width ) );
 
                 arc->SetLayer( klayer );
-                arc->SetNet( aBoard->FindNet( netname ) );
+                arc->SetNet( getNet( aBoard, netname ) );
 
                 aBoard->Add( arc.release(), ADD_MODE::APPEND );
             }
@@ -1247,7 +1264,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
 
                 std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( aBoard );
 
-                zone->SetNet( aBoard->FindNet( netname ) );
+                zone->SetNet( getNet( aBoard, netname ) );
                 zone->SetLayer( klayer );
                 zone->Outline()->Append( SHAPE_RECT( zoneFillPoly.BBox() ).Outline() );
                 zone->SetFilledPolysList( klayer, zoneFillPoly );
@@ -1290,7 +1307,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
 
                 std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( aBoard );
 
-                zone->SetNet( aBoard->FindNet( netname ) );
+                zone->SetNet( getNet( aBoard, netname ) );
                 zone->SetLayer( klayer );
                 zone->SetAssignedPriority( 500 - fillOrder );
                 zone->SetLocalClearance( bds.m_MinClearance );
@@ -1325,7 +1342,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
 
             std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( aBoard );
 
-            zone->SetNet( aBoard->FindNet( netname ) );
+            zone->SetNet( getNet( aBoard, netname ) );
             zone->SetLayer( klayer );
             zone->Outline()->Append( contour );
             zone->SetFilledPolysList( klayer, contour );
@@ -1382,7 +1399,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
             std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( aBoard );
             std::unique_ptr<PAD>       pad = createPAD( footprint.get(), line );
 
-            pad->SetNet( aBoard->FindNet( netname ) );
+            pad->SetNet( getNet( aBoard, netname ) );
 
             VECTOR2I  pos = pad->GetPosition();
             EDA_ANGLE orient = pad->GetOrientation();
@@ -1804,7 +1821,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
                 PAD* pad = footprint->FindPadByNumber( padNumber );
                 if( pad )
                 {
-                    pad->SetNet( aBoard->FindNet( padNet ) );
+                    pad->SetNet( getNet( aBoard, padNet ) );
                 }
                 else
                 {

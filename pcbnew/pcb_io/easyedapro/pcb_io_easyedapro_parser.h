@@ -41,6 +41,7 @@
 #include <board_item_container.h>
 #include <pcb_shape.h>
 
+class NETINFO_ITEM;
 class BOARD;
 class PROGRESS_REPORTER;
 
@@ -91,6 +92,8 @@ public:
 private:
     BOARD*   m_board;
     VECTOR2D m_relOrigin;
+
+    NETINFO_ITEM* getNet( BOARD* aBoard, const wxString& aNetName );
 
     std::unique_ptr<PAD> createPAD( FOOTPRINT* aFootprint, const nlohmann::json& line );
 
