@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-18 10:11+0000\n"
+"PO-Revision-Date: 2026-05-19 12:24+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -49999,7 +49999,7 @@ msgstr "Bitte %s auswählen."
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:667
 #, c-format
 msgid "%s value cannot be greater than %s value."
-msgstr "Der Wert %s darf nicht größer sein als der Wert %s."
+msgstr "Der Wert %s darf nicht größer als der Wert %s sein."
 
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:537
 #: pcbnew/drc/rule_editor/drc_rule_editor_utils.cpp:685
@@ -52051,12 +52051,12 @@ msgstr "Variante %s entfernt: %s ist nicht mehr mit Footprint %s verbunden."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1667
 #, c-format
 msgid "Reconnect via from %s to %s."
-msgstr "Via von %s nach %s wieder verbinden."
+msgstr "Via wieder von %s nach %s verbinden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1687
 #, c-format
 msgid "Reconnected via from %s to %s."
-msgstr "Via von %s nach %s wieder verbunden."
+msgstr "Via wieder von %s nach %s verbunden."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1697
 #, c-format
