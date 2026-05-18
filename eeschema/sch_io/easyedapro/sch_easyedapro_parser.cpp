@@ -1168,15 +1168,24 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
             if( !deviceAttr )
                 continue;
 
-            std::map<wxString, wxString> compAttrs = EASYEDAPRO::AnyMapToStringMap(
+            const std::map<wxString, wxString> prjCompAttrs = EASYEDAPRO::AnyMapToStringMap(
                     aProject.at( "devices" ).at( deviceAttr->value ).at( "attributes" ) );
+
+            // Merge attributes, giving priority to schematic attributes over project attributes
+            std::map<wxString, wxString> mergedAttrValues;
+
+            for( const auto& [key, value] : prjCompAttrs )
+                mergedAttrValues[key] = value;
+
+            for( const auto& [key, attr] : attributes )
+                mergedAttrValues[key] = attr.value;
 
             wxString symbolId;
 
             if( symbolAttr && !symbolAttr->value.IsEmpty() )
                 symbolId = symbolAttr->value;
             else
-                symbolId = compAttrs.at( "Symbol" );
+                symbolId = prjCompAttrs.at( "Symbol" );
 
             auto it = aSymbolMap.find( symbolId );
             if( it == aSymbolMap.end() )
@@ -1212,7 +1221,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                 SCH_FIELD* valueField = schSym->GetField( FIELD_T::VALUE );
 
                 auto     globalNetNameAttr = get_opt( attributes, "Global Net Name" );
-                wxString globalNetNameFromProject = get_def( compAttrs, "Global Net Name", wxEmptyString );
+                wxString globalNetNameFromProject = get_def( prjCompAttrs, "Global Net Name", wxEmptyString );
                 wxString globalNetName;
 
                 // 1. Pick from schematic attr
@@ -1223,13 +1232,13 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                     globalNetName = globalNetNameAttr->value;
 
                     ApplyAttrToField( fontStyles, schSym->GetField( FIELD_T::VALUE ), *globalNetNameAttr, false, true,
-                                      compAttrs, schSym.get() );
+                                      mergedAttrValues, schSym.get() );
                 }
                 else if( !globalNetNameFromProject.IsEmpty() )
                 {
                     globalNetName = globalNetNameFromProject;
 
-                    valueField->SetText( ResolveFieldVariables( globalNetName, compAttrs ) );
+                    valueField->SetText( ResolveFieldVariables( globalNetName, mergedAttrValues ) );
                 }
                 else
                 {
@@ -1251,7 +1260,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                 if( nameAttr && !nameAttr->value.IsEmpty() )
                     netName = nameAttr->value;
                 else
-                    netName = compAttrs.at( "Name" );
+                    netName = prjCompAttrs.at( "Name" );
 
                 std::unique_ptr<SCH_GLOBALLABEL> label = std::make_unique<SCH_GLOBALLABEL>(
                         ScalePos( component->position ), netName );
@@ -1318,7 +1327,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
             {
                 for( const wxString& attrKey : c_attributesWhitelist )
                 {
-                    if( auto valOpt = get_opt( compAttrs, attrKey ) )
+                    if( auto valOpt = get_opt( mergedAttrValues, attrKey ) )
                     {
                         if( valOpt->empty() )
                             continue;
@@ -1341,10 +1350,10 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                 auto valueAttr = get_opt( attributes, "Value" );
 
                 if( valueAttr && valueAttr->value.empty() )
-                    valueAttr->value = get_def( compAttrs, "Value", wxString() );
+                    valueAttr->value = get_def( prjCompAttrs, "Value", wxString() );
 
                 if( nameAttr && nameAttr->value.empty() )
-                    nameAttr->value = get_def( compAttrs, "Name", wxString() );
+                    nameAttr->value = get_def( prjCompAttrs, "Name", wxString() );
 
                 std::optional<EASYEDAPRO::SCH_ATTR> targetValueAttr;
 
@@ -1360,19 +1369,19 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                 if( targetValueAttr )
                 {
                     ApplyAttrToField( fontStyles, schSym->GetField( FIELD_T::VALUE ),
-                                      *targetValueAttr, false, true, compAttrs, schSym.get() );
+                                      *targetValueAttr, false, true, mergedAttrValues, schSym.get() );
                 }
 
                 if( auto descrAttr = get_opt( attributes, "Description" ) )
                 {
                     ApplyAttrToField( fontStyles, schSym->GetField( FIELD_T::DESCRIPTION ),
-                                      *descrAttr, false, true, compAttrs, schSym.get() );
+                                      *descrAttr, false, true, mergedAttrValues, schSym.get() );
                 }
 
                 if( auto designatorAttr = get_opt( attributes, "Designator" ) )
                 {
                     ApplyAttrToField( fontStyles, schSym->GetField( FIELD_T::REFERENCE ),
-                                      *designatorAttr, false, true, compAttrs, schSym.get() );
+                                      *designatorAttr, false, true, mergedAttrValues, schSym.get() );
 
                     schSym->SetRef( &aSchematic->CurrentSheet(), designatorAttr->value );
                 }
@@ -1398,7 +1407,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
                     text->SetPosition( schSym->GetPosition() );
 
-                    ApplyAttrToField( fontStyles, text, attr, false, true, compAttrs,
+                    ApplyAttrToField( fontStyles, text, attr, false, true, mergedAttrValues,
                                       schSym.get() );
                 }
             }
