@@ -247,10 +247,10 @@ static bool positioningChanged( const SCH_FIELD& a, const SCH_FIELD& b )
 
 static bool positioningChanged( FIELDS_GRID_TABLE* a, SCH_SHEET* b )
 {
-    if( positioningChanged( a->GetField( FIELD_T::SHEET_NAME ), b->GetField( FIELD_T::SHEET_NAME ) ) )
+    if( positioningChanged( *a->GetField( FIELD_T::SHEET_NAME ), *b->GetField( FIELD_T::SHEET_NAME ) ) )
         return true;
 
-    if( positioningChanged( a->GetField( FIELD_T::SHEET_FILENAME ), b->GetField( FIELD_T::SHEET_FILENAME ) ) )
+    if( positioningChanged( *a->GetField( FIELD_T::SHEET_FILENAME ), *b->GetField( FIELD_T::SHEET_FILENAME ) ) )
         return true;
 
     return false;

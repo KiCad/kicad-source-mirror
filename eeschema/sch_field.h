@@ -50,10 +50,9 @@ class SCH_FIELD : public SCH_ITEM, public EDA_TEXT
 public:
     SCH_FIELD();    // For std::map::operator[]
 
-    SCH_FIELD( SCH_ITEM* aParent, FIELD_T aFieldId = FIELD_T::USER,
-               const wxString& aName = wxEmptyString );
+    explicit SCH_FIELD( SCH_ITEM* aParent, FIELD_T aFieldId = FIELD_T::USER, const wxString& aName = wxEmptyString );
 
-    SCH_FIELD( SCH_ITEM* aParent, SCH_TEXT* aText );
+    explicit SCH_FIELD( SCH_ITEM* aParent, SCH_TEXT* aText );
 
     SCH_FIELD( const SCH_FIELD& aText );
 
