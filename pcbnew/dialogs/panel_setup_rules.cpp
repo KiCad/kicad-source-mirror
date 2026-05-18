@@ -279,8 +279,9 @@ void PANEL_SETUP_RULES::OnShowMatching()
                 if( sub == DRCRULE_T::T_rule )
                 {
                     wxString name;
+                    int      nameTok = lex.NextTok();
 
-                    if( lex.NextTok() == DSN_STRING )
+                    if( nameTok == DSN_STRING )
                         name = wxString::FromUTF8( lex.CurText() );
 
                     ruleStack.push_back( { depth, leftLine, leftCol, name } );
