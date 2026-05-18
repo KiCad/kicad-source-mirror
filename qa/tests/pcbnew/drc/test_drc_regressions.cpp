@@ -50,26 +50,26 @@ BOOST_FIXTURE_TEST_CASE( DRCFalsePositiveRegressions, DRC_REGRESSION_TEST_FIXTUR
 {
     // These documents at one time flagged DRC errors that they shouldn't have.
 
-    std::vector<wxString> tests =
-    {
-        "issue4139",    // DRC fails wrongly with minimally-spaced pads at 45 degree
-        "issue4774",    // Shape collisions missing SH_POLY_SET
-        "issue5978",    // Hole clearance violation with non-copper pad
-        "issue5990",    // DRC flags a board edge clearance violation although the clearance is respected
-        "issue6443",    // Wrong DRC and rendering of THT pads with selective inner copper layers
-        "issue7567",    // DRC constraint to disallow holes gets SMD pads also
-        "issue7975",    // Differential pair gap out of range fault by DRC
-        "issue8407",    // PCBNEW: Arc for diff pair has clearance DRC error
-        "issue10906",   // Soldermask bridge for only one object
-        "issue12609",   // Arc collison edge case
-        "issue14412",   // Solder mask bridge between pads in a net-tie pad group
-        "issue15280",   // Very wide spokes mis-counted as being single spoke
-        "issue14008",   // Net-tie clearance error
-        "issue17967/issue17967",   // Arc dp coupling
-        "issue18203",   // DRC error due to colliding arc and circle
-        "issue18839",   // False positive board edge clearance between concentric arcs
+    std::vector<wxString> tests = {
+        "issue4139",             // DRC fails wrongly with minimally-spaced pads at 45 degree
+        "issue4774",             // Shape collisions missing SH_POLY_SET
+        "issue5978",             // Hole clearance violation with non-copper pad
+        "issue5990",             // DRC flags a board edge clearance violation although the clearance is respected
+        "issue6443",             // Wrong DRC and rendering of THT pads with selective inner copper layers
+        "issue7567",             // DRC constraint to disallow holes gets SMD pads also
+        "issue7975",             // Differential pair gap out of range fault by DRC
+        "issue8407",             // PCBNEW: Arc for diff pair has clearance DRC error
+        "issue10906",            // Soldermask bridge for only one object
+        "issue12609",            // Arc collison edge case
+        "issue14412",            // Solder mask bridge between pads in a net-tie pad group
+        "issue15280",            // Very wide spokes mis-counted as being single spoke
+        "issue14008",            // Net-tie clearance error
+        "issue17967/issue17967", // Arc dp coupling
+        "issue18203",            // DRC error due to colliding arc and circle
+        "issue18839",            // False positive board edge clearance between concentric arcs
         "unconnected-netnames/unconnected-netnames", // Raised false schematic partity error
-        "net_tie_drc"   // Net tie bridging soldermask DRC test
+        "net_tie_drc",                               // Net tie bridging soldermask DRC test
+        "diff_pair_uncoupled_tuning_drc"             // Tuning pattern length wrongly counted as uncoupled
     };
 
     for( const wxString& relPath : tests )

@@ -277,23 +277,23 @@ struct DIFF_PAIR_ITEMS
 };
 
 
+static bool isInTuningPattern( BOARD_ITEM* aItem )
+{
+    if( EDA_GROUP* parent = aItem->GetParentGroup() )
+    {
+        if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( parent ) )
+        {
+            if( generator->GetGeneratorType() == wxS( "tuning_pattern" ) )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+
 static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
 {
-    auto isInTuningPattern =
-            []( BOARD_ITEM* track )
-            {
-                if( EDA_GROUP* parent = track->GetParentGroup() )
-                {
-                    if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( parent ) )
-                    {
-                        if( generator->GetGeneratorType() == wxS( "tuning_pattern" ) )
-                            return true;
-                    }
-                }
-
-                return false;
-            };
-
     for( BOARD_CONNECTED_ITEM* itemP : aDp.itemsP )
     {
         if( !itemP || itemP->Type() != PCB_TRACE_T || isInTuningPattern( itemP ) )
@@ -488,7 +488,6 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp )
 }
 
 
-
 bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 {
     m_board = m_drcEngine->GetBoard();
@@ -588,6 +587,9 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         {
             if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
             {
+                if( isInTuningPattern( track ) )
+                    continue;
+
                 if( allItems.insert( item ).second)
                     itemSet.totalLengthN += track->GetLength();
             }
@@ -597,6 +599,9 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         {
             if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
             {
+                if( isInTuningPattern( track ) )
+                    continue;
+
                 if( allItems.insert( item ).second)
                     itemSet.totalLengthP += track->GetLength();
             }
