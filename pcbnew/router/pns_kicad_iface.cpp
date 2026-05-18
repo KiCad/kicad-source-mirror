@@ -165,6 +165,8 @@ public:
     int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
                    bool aUseClearanceEpsilon = true ) override;
 
+    bool HasUserDefinedPhysicalConstraint() override;
+
     PNS::NET_HANDLE DpCoupledNet( PNS::NET_HANDLE aNet ) override;
     int DpNetPolarity( PNS::NET_HANDLE aNet ) override;
     bool DpNetPair( const PNS::ITEM* aItem, PNS::NET_HANDLE& aNetP,
@@ -209,6 +211,10 @@ private:
     PCB_ARC            m_dummyArcs[2];
     PCB_VIA            m_dummyVias[2];
     int                m_clearanceEpsilon;
+
+    // Cached for the routing session; HasUserDefinedPhysicalConstraint runs in the
+    // collideSimple inner loop and walks the DRC engine map otherwise.
+    std::optional<bool> m_hasUserPhysicalConstraint;
 
     std::unordered_map<CLEARANCE_CACHE_KEY, int> m_clearanceCache;
     std::unordered_map<CLEARANCE_CACHE_KEY, int> m_tempClearanceCache;
@@ -446,18 +452,19 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
     switch ( aType )
     {
-    case PNS::CONSTRAINT_TYPE::CT_CLEARANCE:          hostType = CLEARANCE_CONSTRAINT;          break;
-    case PNS::CONSTRAINT_TYPE::CT_WIDTH:              hostType = TRACK_WIDTH_CONSTRAINT;        break;
-    case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP:      hostType = DIFF_PAIR_GAP_CONSTRAINT;      break;
-    case PNS::CONSTRAINT_TYPE::CT_LENGTH:             hostType = LENGTH_CONSTRAINT;             break;
-    case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW:     hostType = SKEW_CONSTRAINT;               break;
-    case PNS::CONSTRAINT_TYPE::CT_MAX_UNCOUPLED:      hostType = MAX_UNCOUPLED_CONSTRAINT;      break;
-    case PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER:       hostType = VIA_DIAMETER_CONSTRAINT;       break;
-    case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE:           hostType = HOLE_SIZE_CONSTRAINT;          break;
-    case PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE:     hostType = HOLE_CLEARANCE_CONSTRAINT;     break;
-    case PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE:     hostType = EDGE_CLEARANCE_CONSTRAINT;     break;
-    case PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE:       hostType = HOLE_TO_HOLE_CONSTRAINT;       break;
+    case PNS::CONSTRAINT_TYPE::CT_CLEARANCE: hostType = CLEARANCE_CONSTRAINT; break;
+    case PNS::CONSTRAINT_TYPE::CT_WIDTH: hostType = TRACK_WIDTH_CONSTRAINT; break;
+    case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP: hostType = DIFF_PAIR_GAP_CONSTRAINT; break;
+    case PNS::CONSTRAINT_TYPE::CT_LENGTH: hostType = LENGTH_CONSTRAINT; break;
+    case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW: hostType = SKEW_CONSTRAINT; break;
+    case PNS::CONSTRAINT_TYPE::CT_MAX_UNCOUPLED: hostType = MAX_UNCOUPLED_CONSTRAINT; break;
+    case PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER: hostType = VIA_DIAMETER_CONSTRAINT; break;
+    case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE: hostType = HOLE_SIZE_CONSTRAINT; break;
+    case PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE: hostType = HOLE_CLEARANCE_CONSTRAINT; break;
+    case PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE: hostType = EDGE_CLEARANCE_CONSTRAINT; break;
+    case PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE: hostType = HOLE_TO_HOLE_CONSTRAINT; break;
     case PNS::CONSTRAINT_TYPE::CT_PHYSICAL_CLEARANCE: hostType = PHYSICAL_CLEARANCE_CONSTRAINT; break;
+    case PNS::CONSTRAINT_TYPE::CT_PHYSICAL_HOLE_CLEARANCE: hostType = PHYSICAL_HOLE_CLEARANCE_CONSTRAINT; break;
     default:                                          return false; // should not happen
     }
 
@@ -716,6 +723,7 @@ void PNS_PCBNEW_RULE_RESOLVER::ClearCaches()
     m_clearanceCache.clear();
     m_tempClearanceCache.clear();
     m_hullCache.clear();
+    m_hasUserPhysicalConstraint.reset();
 }
 
 
@@ -741,6 +749,20 @@ const SHAPE_LINE_CHAIN& PNS_PCBNEW_RULE_RESOLVER::HullCache( const PNS::ITEM* aI
     auto result = m_hullCache.emplace( key, std::move( hull ) );
 
     return result.first->second;
+}
+
+
+bool PNS_PCBNEW_RULE_RESOLVER::HasUserDefinedPhysicalConstraint()
+{
+    if( !m_hasUserPhysicalConstraint.has_value() )
+    {
+        if( std::shared_ptr<DRC_ENGINE> drc = m_board->GetDesignSettings().m_DRCEngine )
+            m_hasUserPhysicalConstraint = drc->HasUserDefinedPhysicalConstraint();
+        else
+            m_hasUserPhysicalConstraint = false;
+    }
+
+    return *m_hasUserPhysicalConstraint;
 }
 
 
@@ -777,39 +799,55 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
     // Normalize layer range (no -1 magic numbers)
     layers = layers.Intersection( PNS_LAYER_RANGE( PCBNEW_LAYER_ID_START, PCB_LAYER_ID_COUNT - 1 ) );
 
+    const bool sameNet = aA && aB && aA->Net() && aA->Net() == aB->Net();
+    const bool freePad = aA && aB && ( aA->IsFreePad() || aB->IsFreePad() );
+
     for( int layer = layers.Start(); layer <= layers.End(); ++layer )
     {
-        if( IsDrilledHole( aA ) && IsDrilledHole( aB ) )
+        if( !sameNet && !freePad )
         {
-            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, layer, &constraint ) )
+            if( IsDrilledHole( aA ) && IsDrilledHole( aB ) )
             {
-                if( constraint.m_Value.Min() > rv )
-                    rv = constraint.m_Value.Min();
+                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, layer, &constraint ) )
+                {
+                    if( constraint.m_Value.Min() > rv )
+                        rv = constraint.m_Value.Min();
+                }
             }
-        }
-        else if( isHole( aA ) || isHole( aB ) )
-        {
-            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, layer, &constraint ) )
+            else if( isHole( aA ) || isHole( aB ) )
             {
-                if( constraint.m_Value.Min() > rv )
-                    rv = constraint.m_Value.Min();
+                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, layer, &constraint ) )
+                {
+                    if( constraint.m_Value.Min() > rv )
+                        rv = constraint.m_Value.Min();
+                }
+            }
+
+            // No 'else'; plated holes get both HOLE_CLEARANCE and CLEARANCE
+            if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
+            {
+                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint ) )
+                {
+                    if( constraint.m_Value.Min() > rv )
+                        rv = constraint.m_Value.Min();
+                }
+            }
+
+            // No 'else'; non-plated milled holes get both HOLE_CLEARANCE and EDGE_CLEARANCE
+            if( isEdge( aA ) || IsNonPlatedSlot( aA ) || isEdge( aB ) || IsNonPlatedSlot( aB ) )
+            {
+                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
+                {
+                    if( constraint.m_Value.Min() > rv )
+                        rv = constraint.m_Value.Min();
+                }
             }
         }
 
-        // No 'else'; plated holes get both HOLE_CLEARANCE and CLEARANCE
-        if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
+        // Physical clearances are net-blind: a physical_clearance rule applies regardless
+        if( isHole( aA ) || isHole( aB ) )
         {
-            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint ) )
-            {
-                if( constraint.m_Value.Min() > rv )
-                    rv = constraint.m_Value.Min();
-            }
-        }
-
-        // No 'else'; non-plated milled holes get both HOLE_CLEARANCE and EDGE_CLEARANCE
-        if( isEdge( aA ) || IsNonPlatedSlot( aA ) || isEdge( aB ) || IsNonPlatedSlot( aB ) )
-        {
-            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
+            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_PHYSICAL_HOLE_CLEARANCE, aA, aB, layer, &constraint ) )
             {
                 if( constraint.m_Value.Min() > rv )
                     rv = constraint.m_Value.Min();
@@ -822,6 +860,10 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
                 rv = constraint.m_Value.Min();
         }
     }
+
+    // Same-net pairs short-circuit clearance unless a physical_clearance rule gave a positive value
+    if( ( sameNet || freePad ) && rv == 0 )
+        rv = -1;
 
     if( aUseClearanceEpsilon && rv > 0 )
         rv = std::max( 0, rv - m_clearanceEpsilon );
