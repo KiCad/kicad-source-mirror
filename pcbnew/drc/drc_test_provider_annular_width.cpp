@@ -184,6 +184,47 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                     }
                 }
 
+                // Same-number pads only add copper. Skip the slow path unless one
+                // fully covers this pad (combined outline is then bigger than this
+                // pad alone) or one's drill cuts into this pad (drill-to-drill copper
+                // becomes the real limit).
+                bool overlapHasConstrainingHole = false;
+                bool overlapCoversThisPad = false;
+
+                for( const PAD* p : overlappingSameNumPads )
+                {
+                    if( p->GetBoundingBox().Contains( pad->GetBoundingBox() ) )
+                        overlapCoversThisPad = true;
+
+                    if( p->HasHole() && pad->GetBoundingBox().Intersects( p->GetEffectiveHoleShape()->BBox() ) )
+                    {
+                        overlapHasConstrainingHole = true;
+                    }
+
+                    if( overlapCoversThisPad && overlapHasConstrainingHole )
+                        break;
+                }
+
+                if( handled && !overlappingSameNumPads.empty() && !overlapHasConstrainingHole && !overlapCoversThisPad
+                    && constraint.Value().HasMin() && !constraint.Value().HasMax() )
+                {
+                    // Circle: same annular width all around, so the fast value is exact
+                    // whenever any direction is uncovered. Non-circle has a narrow side
+                    // an SMD can rescue by itself, so trust the fast value here only
+                    // when it already passes.
+                    if( pad->GetShape( aLayer ) == PAD_SHAPE::CIRCLE )
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        int width = ( *ptA - *ptB ).EuclideanNorm();
+
+                        if( width >= constraint.Value().Min() )
+                            return;
+                    }
+                }
+
                 if( !handled || !overlappingSameNumPads.empty() )
                 {
                     // Slow (but general purpose) method.
