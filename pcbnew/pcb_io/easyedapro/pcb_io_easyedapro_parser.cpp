@@ -1052,22 +1052,63 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
             if( ruleType == wxS( "3" ) && isDefault ) // Track width
             {
                 wxString units = ruleData.at( 0 );
-                double   minVal = ruleData.at( 1 );
 
-                bds.m_TrackMinWidth = ScaleSize( minVal );
+                if( ruleData.at( 1 ).is_number() )
+                {
+                    // ["RULE","3","trackWidth",1,["mil",5,10,100]]
+                    double minVal = ruleData.at( 1 );
+                    // double optVal = ruleData.at( 2 );
+                    // double maxVal = ruleData.at( 3 );
+
+                    bds.m_TrackMinWidth = ScaleSize( minVal );
+                }
+                else
+                {
+                    // ["RULE","3","trackWidth",1,["mil",{"1":[10,10,150]}]]
+                    nlohmann::json table = ruleData.at( 1 );
+
+                    for( auto& [key, arr] : table.items() )
+                    {
+                        double minVal = arr.at( 0 );
+                        // double optVal = arr.at( 1 );
+                        // double maxVal = arr.at( 2 );
+
+                        bds.m_TrackMinWidth = ScaleSize( minVal );
+                    }
+                }
             }
             else if( ruleType == wxS( "1" ) && isDefault )
             {
                 wxString       units = ruleData.at( 0 );
                 nlohmann::json table = ruleData.at( 1 );
+                int            minVal = INT_MAX;
 
-                int minVal = INT_MAX;
-                for( const auto& arr : table )
+                if( table.is_array() && !table.empty() && table.at( 0 ).is_array() )
                 {
-                    for( int val : arr )
+                    // ["RULE","1","safeClearance",1,["mil",[[6],[6,6],[6,6,6],[6,6,6,6],[6,6,6,6,6],[6,6,6,6,6,6],[6,6,6,6,6,6,6],[11.8,11.8,11.8,11.8,11.8,11.8,11.8]]]]
+                    for( const auto& arr : table )
                     {
-                        if( val < minVal )
-                            minVal = val;
+                        for( int val : arr )
+                        {
+                            if( val != 0 && val < minVal )
+                                minVal = val;
+                        }
+                    }
+                }
+                else if( table.is_object() )
+                {
+                    // ["RULE","1","safeClearance",1,["mil",{"1":[[8,8,6,8,20,0,0,6,10,10],[8,6,8,8,12,0,0,6,10,10],[6,8,6,8,12,0,0,6,10,10],[8,8,8,8,12,0,0,6,10,10],
+                    //  [20,12,12,12,20,0,0,0,10,10],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[6,6,6,6,0,0,0,0,0,0],[10,10,10,10,10,0,0,0,0,0],[10,10,10,10,10,0,0,0,0,6]]}]]
+                    for( auto& [key, arr] : table.items() )
+                    {
+                        for( const auto& subarr : arr )
+                        {
+                            for( int val : subarr )
+                            {
+                                if( val != 0 && val < minVal )
+                                    minVal = val;
+                            }
+                        }
                     }
                 }
 
