@@ -304,30 +304,6 @@ const MEANDER_SETTINGS& MEANDER_PLACER_BASE::MeanderSettings() const
 }
 
 
-VECTOR2I MEANDER_PLACER_BASE::getSnappedStartPoint( LINKED_ITEM* aStartItem, VECTOR2I aStartPoint )
-{
-    if( aStartItem->Kind() == ITEM::SEGMENT_T )
-    {
-        return static_cast<SEGMENT*>( aStartItem )->Seg().NearestPoint( aStartPoint );
-    }
-    else
-    {
-        wxASSERT( aStartItem->Kind() == ITEM::ARC_T );
-        ARC* arc = static_cast<ARC*>( aStartItem );
-
-        if( ( VECTOR2I( arc->Anchor( 0 ) - aStartPoint ) ).SquaredEuclideanNorm() <=
-            ( VECTOR2I( arc->Anchor( 1 ) - aStartPoint ) ).SquaredEuclideanNorm() )
-        {
-            return arc->Anchor( 0 );
-        }
-        else
-        {
-            return arc->Anchor( 1 );
-        }
-    }
-}
-
-
 long long int MEANDER_PLACER_BASE::lineLength( const ITEM_SET& aLine, const SOLID* aStartPad, const SOLID* aEndPad ) const
 {
     if( aLine.Empty() )

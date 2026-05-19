@@ -311,7 +311,7 @@ public:
     std::vector<BOARD_ITEM*> GetItemsMatchingRule( const std::shared_ptr<DRC_RULE>& aRule,
                                                    REPORTER*                        aReporter = nullptr );
 
-    static bool IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, int& aNetN );
+    static bool IsNetADiffPair( BOARD* aBoard, const NETINFO_ITEM* aNet, int& aNetP, int& aNetN );
 
     /**
      * Check if the given net is a diff pair, returning its polarity and complement if so

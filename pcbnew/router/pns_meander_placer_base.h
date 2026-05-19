@@ -131,8 +131,6 @@ protected:
      */
     void tuneLineLength( MEANDERED_LINE& aTuned, long long int aElongation );
 
-    VECTOR2I getSnappedStartPoint( LINKED_ITEM* aStartItem, VECTOR2I aStartPoint );
-
     /**
      * Calculate the total length of the line represented by an item set (tracks and vias)
      * @param aLine

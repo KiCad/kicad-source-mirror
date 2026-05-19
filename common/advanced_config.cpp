@@ -150,6 +150,12 @@ static const wxChar PadsSchTextHeightScale[] = wxT( "PadsSchTextHeightScale" );
 static const wxChar PadsSchTextWidthScale[] = wxT( "PadsSchTextWidthScale" );
 static const wxChar PadsTextAnchorOffsetNm[] = wxT( "PadsTextAnchorOffsetNm" );
 static const wxChar PcbImportMinObjectSizeNm[] = wxT( "PcbImportMinObjectSizeNm" );
+static const wxChar DiffSkewOverlayTrackInflation[] = wxT( "DiffSkewOverlayTrackInflation" );
+static const wxChar DiffSkewTrackGapInflation[] = wxT( "DiffSkewTrackGapInflation" );
+static const wxChar DiffSkewCosThetaParallelTestValue[] = wxT( "DiffSkewCosThetaParallelTestValue" );
+static const wxChar DiffSkewColourInterpolationLogStrength[] = wxT( "DiffSkewColourInterpolationLogStrength" );
+static const wxChar DiffSkewTargetDiffSegmentSize[] = wxT( "DiffSkewTargetDiffSegmentSize" );
+
 
 } // namespace AC_KEYS
 
@@ -347,6 +353,12 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_PadsSchTextWidthScale  = 0.46;
     m_PadsTextAnchorOffsetNm = 350000;
     m_PcbImportMinObjectSizeNm = 1000;
+
+    m_DiffSkewOverlayTrackInflation = 1.1;
+    m_DiffSkewTrackGapInflation = 1.2;
+    m_DiffSkewCosThetaParallelTestValue = 0.9999;
+    m_DiffSkewColourInterpolationLogStrength = 9.0;
+    m_DiffSkewTargetDiffSegmentSize = 5e4;
 
     loadFromConfigFile();
 }
@@ -688,7 +700,27 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     m_entries.push_back( std::make_unique<PARAM_CFG_WXSTRING>( true, AC_KEYS::RouterTestCaseDirectory, &m_RouterTestCaseDirectory, wxS( "" ) ) );
 
-    
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DiffSkewOverlayTrackInflation,
+                                                             &m_DiffSkewOverlayTrackInflation,
+                                                             m_DiffSkewOverlayTrackInflation, 0.0, 10.0 ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DiffSkewTrackGapInflation,
+                                                             &m_DiffSkewTrackGapInflation, m_DiffSkewTrackGapInflation,
+                                                             0.0, 10.0 ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DiffSkewCosThetaParallelTestValue,
+                                                             &m_DiffSkewCosThetaParallelTestValue,
+                                                             m_DiffSkewCosThetaParallelTestValue, 0.0, 1.0 ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DiffSkewColourInterpolationLogStrength,
+                                                             &m_DiffSkewColourInterpolationLogStrength,
+                                                             m_DiffSkewColourInterpolationLogStrength, 0.1, 20.0 ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DiffSkewTargetDiffSegmentSize,
+                                                             &m_DiffSkewTargetDiffSegmentSize,
+                                                             m_DiffSkewTargetDiffSegmentSize, 1.0, 1e10 ) );
+
+
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
     m_entries.push_back( std::make_unique<PARAM_CFG_WXSTRING>( true, AC_KEYS::TraceMasks, &m_traceMasks, wxS( "" ) ) );

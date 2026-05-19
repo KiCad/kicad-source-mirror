@@ -2422,7 +2422,7 @@ int DRC_ENGINE::MatchDpSuffix( const wxString& aNetName, wxString& aComplementNe
 }
 
 
-bool DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, int& aNetN )
+bool DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, const NETINFO_ITEM* aNet, int& aNetP, int& aNetN )
 {
     wxString refName = aNet->GetNetname();
     wxString dummy, coupledNetName;

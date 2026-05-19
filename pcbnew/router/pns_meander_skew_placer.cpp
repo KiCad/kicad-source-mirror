@@ -31,6 +31,7 @@
 
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
+#include "pns_helpers.h"
 
 #include <board.h>
 #include <netinfo.h>
@@ -65,7 +66,7 @@ bool MEANDER_SKEW_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
     m_initialSegment = static_cast<LINKED_ITEM*>( aStartItem );
     m_currentNode    = nullptr;
-    m_currentStart   = getSnappedStartPoint( m_initialSegment, aP );
+    m_currentStart = PNS::HELPERS::GetSnappedStartPoint( m_initialSegment, aP );
 
     m_world = Router()->GetWorld( )->Branch();
     m_originLine = m_world->AssembleLine( m_initialSegment );

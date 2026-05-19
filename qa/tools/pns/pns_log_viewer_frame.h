@@ -120,7 +120,7 @@ public:
     long long int CalculateRoutedPathLength( const PNS::ITEM_SET& aLine, const PNS::SOLID* aStartPad,
                                              const PNS::SOLID* aEndPad, const NETCLASS* aNetClass ) override
     {
-        std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems = getLengthDelayCalculationItems( aLine, aNetClass );
+        std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems = GetLengthDelayCalculationItems( aLine, aNetClass );
 
         const PAD* startPad = nullptr;
         const PAD* endPad = nullptr;
@@ -141,7 +141,7 @@ public:
     int64_t CalculateRoutedPathDelay( const PNS::ITEM_SET& aLine, const PNS::SOLID* aStartPad,
                                       const PNS::SOLID* aEndPad, const NETCLASS* aNetClass ) override
     {
-        std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems = getLengthDelayCalculationItems( aLine, aNetClass );
+        std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems = GetLengthDelayCalculationItems( aLine, aNetClass );
 
         const PAD* startPad = nullptr;
         const PAD* endPad = nullptr;
@@ -159,7 +159,7 @@ public:
         return m_board->GetLengthCalculation()->CalculateDelay( lengthItems, opts, startPad, endPad );
     }
 
-    std::vector<LENGTH_DELAY_CALCULATION_ITEM> getLengthDelayCalculationItems( const PNS::ITEM_SET& aLine,
+    std::vector<LENGTH_DELAY_CALCULATION_ITEM> GetLengthDelayCalculationItems( const PNS::ITEM_SET& aLine,
                                                                                const NETCLASS*      aNetClass ) const
     {
         std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems;

@@ -93,6 +93,7 @@ public:
      *       std::shared_ptr stuff shows up large in performance profiling.
      */
     NETCLASS* GetNetClass() { return m_netClass.get(); }
+    const NETCLASS* GetNetClass() const { return m_netClass.get(); }
 
     int GetNetCode() const { return m_netCode; }
     void SetNetCode( int aNetCode ) { m_netCode = aNetCode; }

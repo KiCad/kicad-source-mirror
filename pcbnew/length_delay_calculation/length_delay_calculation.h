@@ -118,6 +118,29 @@ enum class LENGTH_DELAY_DOMAIN_OPT
 
 
 /**
+ * Used to represent the results of a call to CalculateLengthDetails, including inferred
+ * via-in-pad details
+ */
+struct LENGTH_DELAY_ITEM_DETAILS
+{
+    /// Per-item lengths and delays
+    std::vector<std::pair<int64_t, int64_t>> LengthsAndDelays;
+
+    /// The length of an inferred start via-in-pad
+    int64_t InferredStartViaLength{ 0 };
+
+    /// The length of an inferred end via-in-pad
+    int64_t InferredEndViaLength{ 0 };
+
+    /// The delay of an inferred start via-in-pad
+    int64_t InferredStartViaDelay{ 0 };
+
+    /// The delay of an inferred end via-in-pad
+    int64_t InferredEndViaDelay{ 0 };
+};
+
+
+/**
 * Class which calculates lengths (and associated routing statistics) in a BOARD context
 */
 class LENGTH_DELAY_CALCULATION
@@ -164,12 +187,14 @@ public:
      * @param aEndPad is the ending pad of the route
      * @param aLayerOpt determines whether the layer details map is populated
      * @param aDomain determines whether calculations include time domain (delay) details
+     * @param aPerItemLengthDelays vector of std::pair<length, delay> for each considered item
      */
     LENGTH_DELAY_STATS
     CalculateLengthDetails( std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aItems, PATH_OPTIMISATIONS aOptimisations,
                             const PAD* aStartPad = nullptr, const PAD* aEndPad = nullptr,
-                            LENGTH_DELAY_LAYER_OPT  aLayerOpt = LENGTH_DELAY_LAYER_OPT::NO_LAYER_DETAIL,
-                            LENGTH_DELAY_DOMAIN_OPT aDomain = LENGTH_DELAY_DOMAIN_OPT::NO_DELAY_DETAIL ) const;
+                            LENGTH_DELAY_LAYER_OPT     aLayerOpt = LENGTH_DELAY_LAYER_OPT::NO_LAYER_DETAIL,
+                            LENGTH_DELAY_DOMAIN_OPT    aDomain = LENGTH_DELAY_DOMAIN_OPT::NO_DELAY_DETAIL,
+                            LENGTH_DELAY_ITEM_DETAILS* aPerItemLengthDelays = nullptr ) const;
 
     /**
   * Gets the propagation delay for the given shape line chain
@@ -271,7 +296,7 @@ protected:
      * Infers if there is a via in the given pad. Adds via details to the length details data structure if found.
      */
     void inferViaInPad( const PAD* aPad, const LENGTH_DELAY_CALCULATION_ITEM& aItem, LENGTH_DELAY_STATS& aDetails,
-                        bool aWithDelayDetail ) const;
+                        std::pair<int64_t, int64_t>& aInferredViaLengthDelay, bool aWithDelayDetail ) const;
 
     /**
      * Finds the intersection point between an arc and a pad shape.

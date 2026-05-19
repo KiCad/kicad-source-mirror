@@ -3059,7 +3059,7 @@ PNS_LAYER_RANGE PNS_KICAD_IFACE_BASE::SetLayersFromPCBNew( PCB_LAYER_ID aStartLa
 long long int PNS_KICAD_IFACE_BASE::CalculateRoutedPathLength( const PNS::ITEM_SET& aLine, const PNS::SOLID* aStartPad,
                                                                const PNS::SOLID* aEndPad, const NETCLASS* aNetClass )
 {
-    std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems = getLengthDelayCalculationItems( aLine, aNetClass );
+    std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems = GetLengthDelayCalculationItems( aLine, aNetClass );
 
     const PAD* startPad = nullptr;
     const PAD* endPad = nullptr;
@@ -3084,7 +3084,7 @@ long long int PNS_KICAD_IFACE_BASE::CalculateRoutedPathLength( const PNS::ITEM_S
 int64_t PNS_KICAD_IFACE_BASE::CalculateRoutedPathDelay( const PNS::ITEM_SET& aLine, const PNS::SOLID* aStartPad,
                                                         const PNS::SOLID* aEndPad, const NETCLASS* aNetClass )
 {
-    std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems = getLengthDelayCalculationItems( aLine, aNetClass );
+    std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems = GetLengthDelayCalculationItems( aLine, aNetClass );
 
     const PAD* startPad = nullptr;
     const PAD* endPad = nullptr;
@@ -3139,7 +3139,7 @@ int64_t PNS_KICAD_IFACE_BASE::CalculateDelayForShapeLineChain( const SHAPE_LINE_
 
 
 std::vector<LENGTH_DELAY_CALCULATION_ITEM>
-PNS_KICAD_IFACE_BASE::getLengthDelayCalculationItems( const PNS::ITEM_SET& aLine, const NETCLASS* aNetClass ) const
+PNS_KICAD_IFACE_BASE::GetLengthDelayCalculationItems( const PNS::ITEM_SET& aLine, const NETCLASS* aNetClass ) const
 {
     std::vector<LENGTH_DELAY_CALCULATION_ITEM> lengthItems;
 
@@ -3155,6 +3155,7 @@ PNS_KICAD_IFACE_BASE::getLengthDelayCalculationItems( const PNS::ITEM_SET& aLine
             const PCB_LAYER_ID layer = GetBoardLayerFromPNSLayer( lineItem->Layer() );
             item.SetLayers( layer );
             item.SetEffectiveNetClass( aNetClass );
+            item.SetWidth( l->Width() );
 
             lengthItems.emplace_back( std::move( item ) );
         }

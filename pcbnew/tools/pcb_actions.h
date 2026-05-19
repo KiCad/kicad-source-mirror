@@ -638,6 +638,9 @@ public:
     static TOOL_ACTION showWizards;
     static TOOL_ACTION resetWizardPrms;
     static TOOL_ACTION exportFpToEditor;
+
+    /// Display of phase skew between differential pair tracks
+    static TOOL_ACTION showDiffPhaseSkew;
 };
 
 class PCB_EVENTS

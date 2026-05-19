@@ -2886,6 +2886,15 @@ TOOL_ACTION PCB_ACTIONS::exportFpToEditor( TOOL_ACTION_ARGS()
         .Tooltip( _( "Export footprint to editor" ) )
         .Icon( BITMAPS::export_footprint_names ) );
 
+TOOL_ACTION PCB_ACTIONS::showDiffPhaseSkew( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDiffPhaseSkew" )
+        .Scope( AS_GLOBAL )
+        .Flags( AF_ACTIVATE )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .FriendlyName( _( "Show relative skew of diff pair tracks" ) )
+        .Tooltip( _( "Show relative skew of diff pair tracks" ) )
+        .Icon( BITMAPS::tune_diff_pair_skew_legend ) );
+
 
 const TOOL_EVENT& PCB_EVENTS::SnappingModeChangedByKeyEvent()
 {

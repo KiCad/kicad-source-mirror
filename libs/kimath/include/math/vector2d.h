@@ -285,7 +285,7 @@ T VECTOR2<T>::EuclideanNorm() const
     // 45° are common in KiCad, so we can optimize the calculation
     if( std::abs( x ) == std::abs( y ) )
     {
-         if constexpr( std::is_integral<T>::value )
+        if constexpr( std::is_integral<T>::value )
             return KiROUND<double, T>( std::abs( x ) * M_SQRT2 );
 
         return static_cast<T>( std::abs( x ) * M_SQRT2 );

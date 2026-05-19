@@ -31,6 +31,7 @@
 #include "pns_topology.h"
 #include "pns_dp_meander_placer.h"
 #include "pns_diff_pair.h"
+#include "pns_helpers.h"
 #include "pns_router.h"
 #include "pns_solid.h"
 
@@ -95,7 +96,7 @@ bool DP_MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
     m_initialSegment = static_cast<LINKED_ITEM*>( aStartItem );
     m_currentNode    = nullptr;
-    m_currentStart   = getSnappedStartPoint( m_initialSegment, aP );
+    m_currentStart = PNS::HELPERS::GetSnappedStartPoint( m_initialSegment, aP );
 
     m_world = Router()->GetWorld()->Branch();
 

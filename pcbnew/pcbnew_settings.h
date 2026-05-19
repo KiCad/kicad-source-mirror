@@ -217,6 +217,15 @@ public:
         bool                 m_Live3DRefresh;
     };
 
+    struct DIFF_PHASE_SKEW_SETTINGS
+    {
+        KIGFX::COLOR4D m_ZeroSkewColor{ 1.0, 1.0, 1.0, 1.0 };
+        KIGFX::COLOR4D m_PositiveSkewColor{ 0.0, 0.0, 1.0, 1.0 };
+        KIGFX::COLOR4D m_NegativeSkewColor{ 1.0, 0.0, 0.0, 1.0 };
+        KIGFX::COLOR4D m_UnknownSkewColor{ 0.5, 0.5, 0.5, 1.0 };
+        bool           m_UseLogScale{ false };
+    };
+
     PCBNEW_SETTINGS();
     virtual ~PCBNEW_SETTINGS();
 
@@ -271,5 +280,7 @@ public:
 
     wxString  m_LastFootprintLibDir;
     wxString  m_LastFootprint3dDir;
+
+    DIFF_PHASE_SKEW_SETTINGS m_DiffPhaseSkewSettings;
 };
 

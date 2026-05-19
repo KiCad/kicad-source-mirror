@@ -82,6 +82,12 @@ public:
     /// Gets the SHAPE_LINE_CHAIN associated with this item
     SHAPE_LINE_CHAIN& GetLine() const { return m_line; }
 
+    /// Sets the line width
+    void SetWidth( const int aWidth ) { m_width = aWidth; }
+
+    /// Gets the line width
+    const int GetWidth() const { return m_width; }
+
     /// Sets the VIA associated with this item
     void SetVia( const PCB_VIA* aVia )
     {
@@ -139,6 +145,9 @@ protected:
 
     /// A proxied SHAPE_LINE_CHAIN object. Line is empty if not proxying a SHAPE_LINE_CHAIN.
     mutable SHAPE_LINE_CHAIN m_line;
+
+    /// The width of a line segment
+    int m_width{ 0 };
 
     /// A proxied PCB_VIA object. Set to nullptr if not proxying a VIA.
     const PCB_VIA* m_via{ nullptr };

@@ -236,6 +236,7 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
                             .AddAction( PCB_ACTIONS::tuneSingleTrack )
                             .AddAction( PCB_ACTIONS::tuneDiffPair )
                             .AddAction( PCB_ACTIONS::tuneSkew ) )
+              .AppendAction( PCB_ACTIONS::showDiffPhaseSkew )
               .AppendAction( PCB_ACTIONS::drawVia )
               .AppendAction( PCB_ACTIONS::drawZone )
               .WithContextMenu(
