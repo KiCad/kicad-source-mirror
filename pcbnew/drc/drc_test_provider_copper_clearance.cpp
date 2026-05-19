@@ -904,15 +904,22 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
             testHoles = false;
     }
 
-    if( testHoles && otherPad && otherPad->HasHole() )
+    if( testHoles && otherPad && otherPad->HasHole() && pad->FlashLayer( aLayer ) )
     {
         clearance = constraint.GetValue().Min();
 
-        if( !pad->FlashLayer( aLayer ) )
-            clearance = 0;
-
         if( clearance > 0 )
             doTestHole( pad, padShape, otherPad, otherPad->GetEffectiveHoleShape().get(), clearance );
+    }
+
+    // Pad pairs are deduplicated by pointer order in testPadClearances.
+    // Run the swapped direction so we don't miss any violations.
+    if( testHoles && pad->HasHole() && otherPad && otherPad->FlashLayer( aLayer ) )
+    {
+        clearance = constraint.GetValue().Min();
+
+        if( clearance > 0 )
+            doTestHole( otherPad, otherShape.get(), pad, pad->GetEffectiveHoleShape().get(), clearance );
     }
 
     if( testHoles && otherVia && otherVia->HasHole() )
