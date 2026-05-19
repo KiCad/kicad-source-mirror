@@ -46,7 +46,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-18 11:11+0000\n"
+"PO-Revision-Date: 2026-05-19 20:14+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hans/>\n"
@@ -9510,7 +9510,7 @@ msgstr ""
 
 #: common/pgm_base.cpp:246
 msgid "No default editor found, you must choose one."
-msgstr "未找到默认文本编辑器, 请选择一个。"
+msgstr "未找到预设的默认文本编辑器, 请选择。"
 
 #: common/pgm_base.cpp:266 common/pgm_base.cpp:268
 msgid "Executable file"
@@ -31510,7 +31510,7 @@ msgstr "移动到垃圾箱"
 
 #: kicad/project_tree_pane.cpp:1027
 msgid "Add Project to Version Control..."
-msgstr "将工程添加到版本控制..."
+msgstr "为工程添加版本控制集成..."
 
 #: kicad/project_tree_pane.cpp:1028
 msgid "Initialize a new repository"
