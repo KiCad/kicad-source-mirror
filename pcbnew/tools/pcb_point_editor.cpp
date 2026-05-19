@@ -2305,8 +2305,10 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
+                    VECTOR2I origin = m_altConstraint ? m_altConstrainer.GetPosition() : m_original.GetPosition();
+
                     grid.SetSnapLineDirections( directions );
-                    grid.SetSnapLineOrigin( m_original.GetPosition() );
+                    grid.SetSnapLineOrigin( origin );
                     grid.SetSnapLineEnd( std::nullopt );
                     haveSnapLineDirections = true;
                 }
@@ -2392,7 +2394,10 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 updateSnapLineDirections();
             }
 
-            bool need_constraint = Is45Limited() || Is90Limited();
+            EDIT_LINE* line = dynamic_cast<EDIT_LINE*>( m_editedPoint );
+            bool       ctrlHeld = evt->Modifier( MD_CTRL );
+
+            bool need_constraint = ( Is45Limited() || Is90Limited() ) && !ctrlHeld;
 
             if( isConstrained != need_constraint )
             {
@@ -2402,8 +2407,6 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
 
             // For polygon lines, Ctrl temporarily toggles between CONVERGING and FIXED_LENGTH modes
-            EDIT_LINE* line = dynamic_cast<EDIT_LINE*>( m_editedPoint );
-            bool       ctrlHeld = evt->Modifier( MD_CTRL );
 
             if( line )
             {
@@ -2631,6 +2634,9 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             if( haveSnapLineDirections )
             {
+                VECTOR2I snapOrigin = m_altConstraint ? m_altConstrainer.GetPosition() : m_original.GetPosition();
+                grid.SetSnapLineOrigin( snapOrigin );
+
                 if( constraintSnapped )
                     grid.SetSnapLineEnd( m_editedPoint->GetPosition() );
                 else
