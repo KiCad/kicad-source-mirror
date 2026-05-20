@@ -1151,6 +1151,11 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
     std::vector<NET_RECORD*> nets;
 
+    std::shared_ptr<NET_SETTINGS> netSettings;
+
+    if( m_schematic )
+        netSettings = m_schematic->Project().GetProjectFile().NetSettings();
+
     for( const auto& [ key, subgraphs ] : m_schematic->ConnectionGraph()->GetNetMap() )
     {
         wxString    net_name = key.Name;
@@ -1165,19 +1170,23 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
         nets.emplace_back( new NET_RECORD( net_name ) );
         net_record = nets.back();
 
+        // Resolve the effective netclass by net name through NET_SETTINGS. This matches
+        // the lookup used by the schematic painter and avoids relying on the subgraph's
+        // driver item, which is not set for bus-member subgraphs and which falls back to
+        // the schematic's current sheet path when looking up its connection (the exporter
+        // is not tied to any particular sheet view).
+        if( netSettings )
+        {
+            std::shared_ptr<NETCLASS> nc = netSettings->GetEffectiveNetClass( key.Name );
+
+            if( nc )
+                net_record->m_Class = UnescapeString( nc->GetName() );
+        }
+
         for( CONNECTION_SUBGRAPH* subgraph : subgraphs )
         {
             bool nc = subgraph->GetNoConnect() && subgraph->GetNoConnect()->Type() == SCH_NO_CONNECT_T;
             const SCH_SHEET_PATH& sheet = subgraph->GetSheet();
-
-            if( net_record->m_Class.IsEmpty() && subgraph->GetDriver() )
-            {
-                if( subgraph->GetDriver()->GetEffectiveNetClass() )
-                {
-                    net_record->m_Class = subgraph->GetDriver()->GetEffectiveNetClass()->GetName();
-                    net_record->m_Class = UnescapeString( net_record->m_Class );
-                }
-            }
 
             if( nc )
                 net_record->m_HasNoConnect = true;
