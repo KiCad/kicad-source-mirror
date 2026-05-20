@@ -185,6 +185,8 @@ PANEL_TOOLBAR_CUSTOMIZATION::PANEL_TOOLBAR_CUSTOMIZATION( wxWindow* aParent, APP
     m_actionsList->Bind( wxEVT_MOTION, &PANEL_TOOLBAR_CUSTOMIZATION::onActionListMouseMove, this );
     m_actionsList->Bind( wxEVT_LEAVE_WINDOW, &PANEL_TOOLBAR_CUSTOMIZATION::onActionListMouseMove, this );
 
+    m_toolbarTree->Bind( wxEVT_TREE_ITEM_ACTIVATED, &PANEL_TOOLBAR_CUSTOMIZATION::onTreeItemActivated, this );
+
     // TODO (ISM): Enable draging
     m_btnToolMoveDown->Enable( false );
     m_btnToolMoveUp->Enable( false );
@@ -198,6 +200,7 @@ PANEL_TOOLBAR_CUSTOMIZATION::~PANEL_TOOLBAR_CUSTOMIZATION()
                             &PANEL_TOOLBAR_CUSTOMIZATION::onActionFilterText, this );
     m_actionsList->Unbind( wxEVT_MOTION, &PANEL_TOOLBAR_CUSTOMIZATION::onActionListMouseMove, this );
     m_actionsList->Unbind( wxEVT_LEAVE_WINDOW, &PANEL_TOOLBAR_CUSTOMIZATION::onActionListMouseMove, this );
+    m_toolbarTree->Unbind( wxEVT_TREE_ITEM_ACTIVATED, &PANEL_TOOLBAR_CUSTOMIZATION::onTreeItemActivated, this );
 }
 
 
@@ -1026,9 +1029,45 @@ void PANEL_TOOLBAR_CUSTOMIZATION::onTreeBeginLabelEdit( wxTreeEvent& event )
 }
 
 
+void PANEL_TOOLBAR_CUSTOMIZATION::onTreeItemActivated( wxTreeEvent& event )
+{
+    wxTreeItemId id = event.GetItem();
+
+    if( auto* tbData = dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( m_toolbarTree->GetItemData( id ) ) )
+    {
+        if( tbData->GetType() == TOOLBAR_ITEM_TYPE::TB_GROUP )
+        {
+            m_toolbarTree->EditLabel( id );
+            return;
+        }
+    }
+
+    event.Skip();
+}
+
+
 void PANEL_TOOLBAR_CUSTOMIZATION::onTreeEndLabelEdit( wxTreeEvent& event )
 {
+    if( event.IsEditCancelled() )
+        return;
 
+    wxTreeItemId id = event.GetItem();
+
+    if( auto* tbData = dynamic_cast<TOOLBAR_TREE_ITEM_DATA*>( m_toolbarTree->GetItemData( id ) ) )
+    {
+        if( tbData->GetType() == TOOLBAR_ITEM_TYPE::TB_GROUP )
+        {
+            if( event.GetLabel().Strip( wxString::both ).IsEmpty() )
+            {
+                event.Veto();
+                return;
+            }
+
+            tbData->SetName( event.GetLabel() );
+        }
+    }
+
+    event.Skip();
 }
 
 
