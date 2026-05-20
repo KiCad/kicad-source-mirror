@@ -775,8 +775,24 @@ void PANEL_PACKAGES_VIEW::OnURLClicked( wxHtmlLinkEvent& aEvent )
 
 void PANEL_PACKAGES_VIEW::OnInfoMouseWheel( wxMouseEvent& event )
 {
-    // Transfer scrolling from the info window to its parent scroll window
-    m_infoScrollWindow->HandleOnMouseWheel( event );
+    if( event.GetWheelAxis() != wxMOUSE_WHEEL_VERTICAL )
+        return;
+
+    // Accumulate so high-resolution wheels and trackpads aren't truncated.
+    m_infoWheelRotation += event.GetWheelRotation();
+
+    int lines = m_infoWheelRotation / event.GetWheelDelta();
+    m_infoWheelRotation -= lines * event.GetWheelDelta();
+
+    if( lines == 0 )
+        return;
+
+    // GetWheelRotation is OS-direction-corrected; negate only to convert
+    // from wx's wheel convention (positive = up) to ScrollLines (positive = down).
+    if( event.IsPageScroll() )
+        m_infoScrollWindow->ScrollPages( -lines );
+    else
+        m_infoScrollWindow->ScrollLines( -lines * event.GetLinesPerAction() );
 }
 
 
