@@ -23,6 +23,8 @@
 
 #include "dialogs/dialog_create_array.h"
 
+#include <set>
+
 #include <wx/msgdlg.h>
 
 #include <base_units.h>
@@ -412,6 +414,28 @@ static bool validateAxisOptions( const wxTextCtrl& offsetEntry, const wxChoice& 
 }
 
 
+/**
+ * Detect whether the array configuration would produce two or more items at the same
+ * position and rotation, i.e. visually stacked on top of one another. Uses the same
+ * transform path that array creation will use so partial-row/column overlaps and
+ * circular full-circle layouts are all classified correctly.
+ */
+static bool arrayHasStackedPositions( const ARRAY_OPTIONS& aOptions, const VECTOR2I& aPos )
+{
+    std::set<std::pair<VECTOR2I, EDA_ANGLE>> placements;
+
+    for( int ii = 0; ii < aOptions.GetArraySize(); ++ii )
+    {
+        const ARRAY_OPTIONS::TRANSFORM xf = aOptions.GetTransform( ii, aPos );
+
+        if( !placements.emplace( xf.m_offset, xf.m_rotation ).second )
+            return true;
+    }
+
+    return false;
+}
+
+
 bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 {
     std::unique_ptr<ARRAY_OPTIONS> newSettings;
@@ -430,18 +454,6 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
         newGrid->m_delta.x = m_hSpacing.GetIntValue();
         newGrid->m_delta.y = m_vSpacing.GetIntValue();
-
-        if( ( newGrid->m_nx > 1 ) && ( newGrid->m_delta.x == 0 ) )
-        {
-            errors.Add( wxString::Format( _( "horizontal delta of zero with %ld objects" ), newGrid->m_nx ) );
-            ok = false;
-        }
-
-        if( ( newGrid->m_ny > 1 ) && ( newGrid->m_delta.y == 0 ) )
-        {
-            errors.Add( wxString::Format( _( "vertical delta of zero with %ld objects" ), newGrid->m_ny ) );
-            ok = false;
-        }
 
         newGrid->m_offset.x = m_hOffset.GetIntValue();
         newGrid->m_offset.y = m_vOffset.GetIntValue();
@@ -512,12 +524,6 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         newCirc->m_rotateItems = m_entryRotateItemsCb->GetValue();
         newCirc->SetShouldNumber( m_isFootprintEditor );
 
-        if( ( newCirc->m_nPts > 1 ) && newCirc->m_angle.IsZero() )
-        {
-            errors.Add( wxString::Format( _( "angular delta of zero with %ld objects" ), newCirc->m_nPts ) );
-            ok = false;
-        }
-
         if( m_isFootprintEditor )
         {
             newCirc->SetNumberingStartIsSpecified( m_rbCircStartNumberingOpt->GetSelection() == 1 );
@@ -541,6 +547,24 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
     }
 
     bool ret = false;
+
+    // Warn (but don't block) when the array would stack items on top of one another.
+    // Zero-spacing arrays are legitimate when intentionally duplicating in place, but
+    // accidental zero spacing on a large count can stamp out thousands of overlapping
+    // objects (see issue 22669). Confirm the user wants to do this.
+    if( newSettings
+        && newSettings->GetArraySize() > 1
+        && arrayHasStackedPositions( *newSettings, m_originalItemPosition ) )
+    {
+        wxString msg = wxString::Format( _( "The array configuration would place %d "
+                                            "items at the same position and rotation, "
+                                            "stacking them on top of one another.\n\n"
+                                            "Proceed anyway?" ),
+                                         newSettings->GetArraySize() );
+
+        if( wxMessageBox( msg, _( "Confirm Array" ), wxYES_NO | wxICON_QUESTION, this ) != wxYES )
+            return false;
+    }
 
     // If we got good settings, send them out and finish
     if( newSettings )
