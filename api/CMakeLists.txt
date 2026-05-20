@@ -115,6 +115,28 @@ target_include_directories( kiapi SYSTEM PUBLIC ${Protobuf_INCLUDE_DIRS} )
 
 target_link_libraries( kiapi protobuf::libprotobuf )
 
+# Protobuf 4.0+ generated code uses Abseil symbols.  The upstream
+# protobuf-config.cmake propagates Abseil through protobuf::libprotobuf
+# (its protobuf_ABSL_USED_TARGETS list); the bundled FindProtobuf does not.
+# Link Abseil explicitly so linkers using --as-needed find all DSOs.
+if( KICAD_USE_CMAKE_FINDPROTOBUF
+    AND Protobuf_VERSION
+    AND Protobuf_VERSION VERSION_GREATER_EQUAL 4.0 )
+
+    if( NOT TARGET absl::strings )
+        find_package( absl CONFIG )
+    endif()
+
+    if( NOT TARGET absl::strings )
+        message( FATAL_ERROR
+                 "Protobuf ${Protobuf_VERSION} requires Abseil, but no Abseil "
+                 "installation was found. Install abseil-cpp-devel (Fedora) "
+                 "or libabsl-dev (Debian/Ubuntu), or set absl_DIR." )
+    endif()
+
+    target_link_libraries( kiapi absl::hash )
+endif()
+
 target_include_directories( kiapi INTERFACE
     ${CMAKE_CURRENT_BINARY_DIR}/${KICMAKE_CFG_INTDIR}/cpp     # Leaving off the /api/ to make #include statments less ambiguous
     )
