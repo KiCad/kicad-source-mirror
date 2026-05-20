@@ -530,12 +530,29 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
 
                     case PAD_SHAPE::ROUNDRECT:
                     {
-                        // rounding is stored as a percent, but we have to update this ratio
-                        // to force recalculation of other values after size changing (we do not
-                        // really change the rounding percent value)
-                        double radius_ratio = pad->GetRoundRectRadiusRatio( aLayer );
-                        pad->SetSize( aLayer, padPlotsSize );
-                        pad->SetRoundRectRadiusRatio( aLayer, radius_ratio );
+                        // The Minkowski sum of a rounded rectangle with a disk of radius R is
+                        // another rounded rectangle whose sides grow by 2R and whose corner
+                        // radius grows by R. Preserving the original radius_ratio instead
+                        // produces visibly inconsistent expansion at the corners (issue 24327).
+                        if( sameXYClearance )
+                        {
+                            int originalRadius = pad->GetRoundRectCornerRadius( aLayer );
+                            int newRadius      = std::max( 0, originalRadius + mask_clearance );
+                            pad->SetSize( aLayer, padPlotsSize );
+                            pad->SetRoundRectCornerRadius( aLayer, newRadius );
+                        }
+                        else
+                        {
+                            // Asymmetric X/Y clearance (e.g. solder paste ratio on a
+                            // non-square pad) is not a Minkowski sum with a disk. Fall back
+                            // to the historical behavior of scaling both axes by the per-axis
+                            // margin while keeping the radius_ratio. This is approximate at
+                            // the corners but preserves the bounding box, which is the
+                            // dimension users rely on for paste apertures.
+                            double radiusRatio = pad->GetRoundRectRadiusRatio( aLayer );
+                            pad->SetSize( aLayer, padPlotsSize );
+                            pad->SetRoundRectRadiusRatio( aLayer, radiusRatio );
+                        }
 
                         itemplotter.PlotPad( pad, aLayer, color, doSketchPads );
                         break;
