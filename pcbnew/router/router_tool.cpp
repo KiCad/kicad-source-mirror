@@ -713,7 +713,7 @@ void ROUTER_TOOL::saveRouterDebugLog()
 
         if( saveDlg.ShowModal() == wxID_OK )
         {
-            wxFileName path( testCaseDir );
+            wxFileName path = wxFileName::DirName( testCaseDir );
             path.AppendDir( saveDlg.getTestCaseName() );
             logData.m_TestCaseType = saveDlg.getTestCaseType();
 
@@ -723,7 +723,7 @@ void ROUTER_TOOL::saveRouterDebugLog()
             }
             else
             {
-                wxMkdir( path.GetFullPath() );
+                path.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
             }
 
             path.SetName( wxT("pns") );
@@ -775,6 +775,13 @@ void ROUTER_TOOL::saveRouterDebugLog()
     fname_settings.SetExt( "settings" );
 
     FILE* settings_f = wxFopen( fname_settings.GetAbsolutePath(), "wb" );
+
+    if( !settings_f )
+    {
+        DisplayError( frame(), wxString::Format( _( "Unable to write '%s'." ), fname_settings.GetAbsolutePath() ) );
+        return;
+    }
+
     std::string settingsStr = m_router->Settings().FormatAsString();
     fprintf( settings_f, "%s\n", settingsStr.c_str() );
     fclose( settings_f );
