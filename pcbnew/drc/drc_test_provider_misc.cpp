@@ -163,8 +163,15 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
             shapeA = static_cast<PCB_SHAPE*>( itemA );
             shapeB = static_cast<PCB_SHAPE*>( itemB );
         }
+        else if( itemA && !itemB && itemA->Type() == PCB_SHAPE_T )
+        {
+            // A single item was flagged (e.g. a degenerate shape).  Keep the marker
+            // at that item so the user can locate the bad geometry.
+            shapeA = static_cast<PCB_SHAPE*>( itemA );
+        }
         else
         {
+            // No usable item pair identified.  Look for the most likely culprits.
             findClosestOutlineGap( m_board, shapeA, shapeB, markerPos, gap );
             itemA = shapeA;
             itemB = shapeB;
