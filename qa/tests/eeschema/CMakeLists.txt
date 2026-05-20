@@ -179,6 +179,7 @@ set( QA_EESCHEMA_SRCS
     net_chains/test_net_chain_recalc_refresh.cpp
     net_chains/test_net_chain_synthetic_filter.cpp
     net_chains/test_net_chain_rollback.cpp
+    net_chains/test_net_chain_ordered_nets.cpp
 )
 
 if( WIN32 )

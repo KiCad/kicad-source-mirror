@@ -407,6 +407,8 @@ public:
         m_schematic = aSchematic;
     }
 
+    SCHEMATIC* GetSchematic() const { return m_schematic; }
+
     void SetLastCodes( const CONNECTION_GRAPH* aOther )
     {
         m_last_net_code = aOther->m_last_net_code;
@@ -553,6 +555,20 @@ public:
      * @return Netname string usable with m_net_name_to_subgraphs_map.
      */
     wxString GetResolvedSubgraphName( const CONNECTION_SUBGRAPH* aSubGraph ) const;
+
+    /**
+     * Map a subgraph's raw net name and code to the stable key used as a SCH_NETCHAIN
+     * member.  Drivers without a label (empty or "<NO NET>") collapse to a synthetic
+     * key prefixed with #SCH_NETCHAIN::SYNTHETIC_NET_PREFIX so that consumers can
+     * distinguish unnamed subgraphs.  This is the same keying used internally by
+     * RebuildNetChains so that callers reasoning about chain members key identically.
+     */
+    static wxString MakeNetChainKey( const wxString& aRawNetName, long aSubgraphCode );
+
+    /**
+     * Convenience overload that reads the raw name and code from a subgraph.
+     */
+    static wxString MakeNetChainKey( const CONNECTION_SUBGRAPH* aSubGraph );
 
     /**
      * For a set of items, this will remove the connected items and their

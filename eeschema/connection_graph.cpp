@@ -79,16 +79,28 @@ static const wxChar DanglingProfileMask[] = wxT( "CONN_PROFILE" );
 static const wxChar ConnTrace[] = wxT( "CONN" );
 
 
-// Resolve a subgraph's raw name + code to a stable, non-empty net-chain key.  Drivers without
-// a label produce empty names or the placeholder "<NO NET>"; both cases collapse to a synthetic
-// key prefixed so consumers like the netlist exporter recognise them via
-// SCH_NETCHAIN::SYNTHETIC_NET_PREFIX.
-static wxString netChainKeyFor( const wxString& aRawNetName, long aSubgraphCode )
+wxString CONNECTION_GRAPH::MakeNetChainKey( const wxString& aRawNetName, long aSubgraphCode )
 {
     if( !aRawNetName.IsEmpty() && aRawNetName.Find( wxS( "<NO NET>" ) ) == wxNOT_FOUND )
         return aRawNetName;
 
     return wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) << aSubgraphCode;
+}
+
+
+wxString CONNECTION_GRAPH::MakeNetChainKey( const CONNECTION_SUBGRAPH* aSubGraph )
+{
+    if( !aSubGraph )
+        return wxEmptyString;
+
+    return MakeNetChainKey( aSubGraph->GetNetName(), aSubGraph->m_code );
+}
+
+
+// Internal shim so the existing private call sites read unchanged.
+static inline wxString netChainKeyFor( const wxString& aRawNetName, long aSubgraphCode )
+{
+    return CONNECTION_GRAPH::MakeNetChainKey( aRawNetName, aSubgraphCode );
 }
 
 

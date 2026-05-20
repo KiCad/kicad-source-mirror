@@ -415,6 +415,7 @@ set( EESCHEMA_SRCS
     sch_label.cpp
     sch_line.cpp
     sch_marker.cpp
+    sch_netchain.cpp
     sch_no_connect.cpp
     sch_painter.cpp
     sch_pin.cpp
