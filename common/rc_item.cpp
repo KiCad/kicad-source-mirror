@@ -102,8 +102,9 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
                               const std::map<KIID, EDA_ITEM*>& aItemMap ) const
 {
     wxString severity = getSeverityString( aSeverity );
+    bool     excluded = m_parent && m_parent->IsTreatedAsExcluded();
 
-    if( m_parent && m_parent->IsExcluded() )
+    if( excluded )
         severity += wxT( " (excluded)" );
 
     EDA_ITEM* mainItem = nullptr;
@@ -148,7 +149,7 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
         msg.Printf( wxT( "[%s]: %s\n    %s; %s\n" ), GetSettingsKey(), errorMessage, ruleDesc, severity );
     }
 
-    if( m_parent && m_parent->IsExcluded() && !m_parent->GetComment().IsEmpty() )
+    if( excluded && m_parent && !m_parent->GetComment().IsEmpty() )
         msg += wxString::Format( wxS( "    %s\n" ), m_parent->GetComment() );
 
     return msg;
@@ -162,7 +163,7 @@ void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* 
     aViolation.description = HYPERLINK_DV_RENDERER::StripMarkup( GetErrorMessage( false ) );
     aViolation.type = GetSettingsKey();
 
-    if( m_parent && m_parent->IsExcluded() )
+    if( m_parent && m_parent->IsTreatedAsExcluded() )
     {
         aViolation.excluded = true;
         aViolation.comment = m_parent->GetComment();
