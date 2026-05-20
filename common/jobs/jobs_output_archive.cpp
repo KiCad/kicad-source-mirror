@@ -19,6 +19,7 @@
  */
 
 #include <jobs/jobs_output_archive.h>
+#include <wx/filename.h>
 #include <wx/fs_zip.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
@@ -59,6 +60,20 @@ bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString&                baseTemp
         outputPath.Replace( "~", wxGetHomeDir(), false );
 
     outputPath = EnsureFileExtension( outputPath, FILEEXT::ArchiveFileExtension );
+
+    // Ensure parent directory exists; matches the behavior of the folder output handler
+    // so that nested destination paths can be created on demand.
+    wxFileName outputFileName( outputPath );
+    wxString   parentDir = outputFileName.GetPath();
+
+    if( !parentDir.IsEmpty() && !wxFileName::DirExists( parentDir ) )
+    {
+        if( !wxFileName::Mkdir( parentDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        {
+            aResolvedOutputPath.reset();
+            return false;
+        }
+    }
 
     wxFFileOutputStream ostream( outputPath );
 
