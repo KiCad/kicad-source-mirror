@@ -1502,6 +1502,18 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
     bool reachesEnd = route( aP );
 
+    // When the user enables via placement (e.g. pressing 'V') and the cursor has not moved
+    // from the routing start, the pushout-force algorithm in buildInitialLine cannot resolve
+    // a collision because the lead vector is zero. The trace head then does not carry a via
+    // and a subsequent commit click silently drops the via. Force-attach the via to the head
+    // at the requested position so the via is part of the trace and can be committed.
+    if( m_placingVia && aP == m_p_start && !m_head.EndsWithVia() )
+    {
+        VIA fallbackVia = makeVia( aP );
+        fallbackVia.SetNet( m_currentNet );
+        m_head.AppendVia( fallbackVia );
+    }
+
     current = Trace();
 
     VECTOR2I splitPoint = current.PointCount() ? current.CLine().CLastPoint() : m_p_start;
