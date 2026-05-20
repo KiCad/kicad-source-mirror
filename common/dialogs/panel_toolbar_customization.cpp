@@ -426,7 +426,8 @@ std::optional<TOOLBAR_CONFIGURATION> PANEL_TOOLBAR_CUSTOMIZATION::parseToolbarTr
                 }
             }
 
-            config.AppendGroup( grpConfig );
+            if( !grpConfig.GetGroupItems().empty() )
+                config.AppendGroup( grpConfig );
         }
 
         mainId = m_toolbarTree->GetNextChild( rootId, mainCookie );

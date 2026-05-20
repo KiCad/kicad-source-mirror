@@ -346,6 +346,10 @@ void ACTION_TOOLBAR::ApplyConfiguration( const TOOLBAR_CONFIGURATION& aConfig )
                 }
             }
 
+            // A group needs at least one action
+            if( tools.empty() )
+                continue;
+
             std::unique_ptr<ACTION_GROUP> group = std::make_unique<ACTION_GROUP>( groupName, tools );
 
             if( defaultTool )
