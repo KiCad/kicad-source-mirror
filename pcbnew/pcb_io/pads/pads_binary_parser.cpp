@@ -3188,7 +3188,7 @@ void BINARY_PARSER::parseTextRecords()
 // relative to the type byte's own absolute address T, and is stride-independent (same relative
 // offsets for both the 48 B and 64 B record sizes):
 //   T-27  i32 raw X                    T-23  i32 raw Y
-//   T+0   u8  type (0x0E = via)        T+1   u16 net index (indexes m_sec23IndexToNet)
+//   T+0   u8  type (0x0E = via)        T+1   u16 read below as a net index, but see the note
 //   T+4   u16 sub-type tag; low byte always 0x17, bit 0x0200 marks a genuine via (some other
 //         0x0E-typed records share the low byte but are not vias)
 // Phase is found the same way as PADS_SDB::locateOrigin: score every phase by how many records
@@ -3196,6 +3196,15 @@ void BINARY_PARSER::parseTextRecords()
 // scores 0 on all but one of 66 QA corpus files, where it scores 1). Verified 99.99% recall /
 // 100% precision across all 66 QA corpus files (14,632/14,634 ground-truth vias; the 2 misses
 // are two isolated via points in one file that aren't present in the node arena at any phase).
+//
+// The T+1 u16 does NOT actually resolve a net, despite the lookup below reading it as one.
+// Every via imports netless on both BR350430B (42 vias) and OC_LTE_BASEBAND (3943), and no u16
+// field anywhere in the record resolves to the correct net on more than 2.4% of vias, against a
+// section-23 name map independently verified as 979 of 980 real net names and a 0.13%
+// random-assignment control. Nor does any u32 field resolve through the section-23 self-pointer.
+// Section 60 carries no per-node net membership for ANY row type, vias included. That is why the
+// vias import geometrically exact but unconnected, and it is also what blocks per-net grouping of
+// route nodes -- the net has to come from somewhere else, not from this table.
 static constexpr int VIA_TYPE = 0x0E;
 
 
