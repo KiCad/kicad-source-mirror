@@ -423,6 +423,9 @@ protected:
 
     std::map<int, std::unique_ptr<ACTION_GROUP>> m_actionGroups;
     std::map<int, std::unique_ptr<ACTION_MENU>>  m_toolMenus;
+
+    /// Selected action per group name
+    std::map<std::string, std::string> m_groupSelections;
 };
 
 /**
