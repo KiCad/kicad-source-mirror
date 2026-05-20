@@ -1,0 +1,12 @@
+(version 1)
+
+# Source: buck_feedback_away_from_switch_node
+(rule "pcblint_buck_feedback_away_from_switch_node"
+  (constraint clearance (min 8mm))
+  (condition "A.hasNetclass('FeedbackNet') && B.hasNetclass('SwitchingNode')"))
+
+
+# Source: inductor_sensitive_trace_keepout
+(rule "pcblint_inductor_sensitive_trace_keepout_no_track"
+  (constraint clearance (min 20mm))
+  (condition "A.hasComponentClass('Inductor') && B.Type == 'Track' && (!(B.hasComponentClass('Inductor')) && !(B.hasNetclass('GroundNet')) && !(B.NetName == 'GND')) && (B.hasNetclass('FeedbackNet') || B.hasNetclass('CrystalNet') || B.hasNetclass('SensitiveNet'))"))

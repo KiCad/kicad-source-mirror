@@ -57,6 +57,7 @@
 #include <settings/settings_manager.h>
 #include <specctra.h>
 #include <project/project_local_settings.h>
+#include <unordered_set>
 #include <wildcards_and_files_ext.h>
 #include <wx/app.h>
 #include <wx/crt.h>
@@ -258,6 +259,13 @@ BOARD* LoadBoard( const wxString& aFileName, PCB_IO_MGR::PCB_FILE_T aFormat, boo
         brd->BuildConnectivity();
         brd->BuildListOfNets();
         brd->SynchronizeNetsAndNetClasses( true );
+
+        // Apply component class assignment rules from the project. Without this, conditions like
+        // A.hasComponentClass('Inductor') in custom DRC rules never match because no footprints
+        // have any dynamic component class assigned. The interactive load path does this in
+        // PCB_EDIT_FRAME::OpenProjectFiles; CLI and API consumers go through here.
+        brd->SynchronizeComponentClasses( std::unordered_set<wxString>() );
+
         brd->UpdateUserUnits( brd, nullptr );
     }
 
