@@ -124,6 +124,7 @@ private:
     PANEL_PACKAGE*                               m_currentSelected;
     std::unordered_set<wxString>                 m_updateablePackages;
     std::shared_ptr<PLUGIN_CONTENT_MANAGER>      m_pcm;
+    int                                          m_infoWheelRotation = 0;
 
     enum PACKAGE_VERSIONS_GRID_COLUMNS
     {
