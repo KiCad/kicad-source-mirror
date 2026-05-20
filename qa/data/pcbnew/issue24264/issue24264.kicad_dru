@@ -1,0 +1,6 @@
+(version 1)
+(rule "courtyard1"
+(severity exclusion)
+(constraint courtyard_clearance)
+(condition "A.Reference == 'R1' && B.Reference == 'C1'")
+)

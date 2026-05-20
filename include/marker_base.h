@@ -102,6 +102,15 @@ public:
     virtual SEVERITY GetSeverity() const { return RPT_SEVERITY_UNDEFINED; }
 
     /**
+     * A marker is treated as excluded when the user has dismissed it through the DRC UI
+     * (m_excluded) or when a custom rule has pinned its severity to "exclusion".
+     */
+    bool IsTreatedAsExcluded() const
+    {
+        return m_excluded || GetSeverity() == RPT_SEVERITY_EXCLUSION;
+    }
+
+    /**
      * @return the #RC_ITEM held within this marker so that its interface may be used.
      */
     std::shared_ptr<RC_ITEM> GetRCItem() const { return m_rcItem; }
