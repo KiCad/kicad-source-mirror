@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-19 20:14+0000\n"
+"PO-Revision-Date: 2026-05-21 01:11+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -4988,7 +4988,7 @@ msgstr "Verzeichnis \"%s\" ist nicht beschreibbar."
 #: common/dialogs/panel_embedded_files.cpp:495
 #, c-format
 msgid "Folder '%s' is not writable."
-msgstr "Verzeichnis \"%s\" ist nicht beschreibbar."
+msgstr "Ordner \"%s\" ist nicht beschreibbar."
 
 #: common/dialogs/panel_embedded_files.cpp:499
 msgid "Retry"
@@ -13207,7 +13207,7 @@ msgstr "Aktualisieren"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:459
 msgid "Update Symbols"
-msgstr "Symbol aktualisieren"
+msgstr "Symbole aktualisieren"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:565
 msgid "*** No symbols matching criteria found ***"
@@ -15269,7 +15269,8 @@ msgid ""
 "They will not be included in the BOM and cannot be assigned a footprint."
 msgstr ""
 "Spannungssymbole definieren ein globales Netz mit dem Wert als Name.\n"
-"Bauteilliste (BoM) aufgenommen und es kann kein Footprint zugewiesen werden."
+"Sie werden nicht in die Stückliste (BOM) aufgenommen und können keinem \n"
+"Footprint zugewiesen werden."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
 msgid "Define as local power symbol"
@@ -21315,8 +21316,8 @@ msgid ""
 "schematic design so cannot be imported/opened in this way."
 msgstr ""
 "Die gewählte Datei ist eine CADSTAR-Symbolbibliothek. Sie enthält keinen "
-"Schaltplanentwurf und kann deshalb nicht auf dieses Weise importiert/"
-"geöffnet werden."
+"Schaltplanentwurf und kann deshalb nicht auf diese Weise importiert/geöffnet "
+"werden."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:608
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
@@ -21476,8 +21477,8 @@ msgid ""
 msgstr ""
 "Name der Footprint-Bibliothek, die zu den in dieser Bibliothek verwendeten "
 "Symbolen gehört. Sie sollten in der Footprint-Bibliothekstabelle einen "
-"separaten Eintrag für die CADSTAR-PCB-Archivdatei (*.cpa). Sofern keine "
-"angegeben ist, wird \"cadstarpcblib\" angenommen."
+"separaten Eintrag für die CADSTAR-PCB-Archivdatei (*.cpa) erstellen. Sofern "
+"keine angegeben ist, wird \"cadstarpcblib\" angenommen."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:279
 #, c-format
