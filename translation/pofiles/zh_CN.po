@@ -46,7 +46,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-19 20:14+0000\n"
+"PO-Revision-Date: 2026-05-21 01:11+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hans/>\n"
@@ -29178,7 +29178,7 @@ msgstr "仅生成没有元件的电路板"
 #: kicad/cli/command_pcb_export_3d.cpp:120
 #: pcbnew/dialogs/dialog_export_step_base.cpp:78
 msgid "Cut via holes in board body even if conductor layers are not exported."
-msgstr "即使未导出导体 (铜层), 也在电路板主体中切割过孔。"
+msgstr "即使不导出导电层 (铜箔层), 也在板体上切出过孔。"
 
 #: kicad/cli/command_pcb_export_3d.cpp:125
 msgid "Exclude board body"
@@ -29228,7 +29228,7 @@ msgstr "融合重叠的图形"
 #: kicad/cli/command_pcb_export_3d.cpp:167
 #: pcbnew/dialogs/dialog_export_step_base.cpp:154
 msgid "Don't cut via holes in conductor layers."
-msgstr "不在导体 (铜层) 中切割过孔。"
+msgstr "不要在导电层（铜箔层）中切出/生成过孔孔径。"
 
 #: kicad/cli/command_pcb_export_3d.cpp:171
 msgid "Disable extra pad thickness (pads will have normal thickness)"
@@ -37955,7 +37955,7 @@ msgstr "导出电路板主体"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:77
 msgid "Cut vias in board body"
-msgstr "在电路板主体中切割过孔"
+msgstr "在板体上切出/钻出过孔"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:82
 msgid "Export silkscreen"
