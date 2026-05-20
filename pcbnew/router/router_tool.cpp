@@ -21,6 +21,7 @@
  */
 
 #include <wx/filedlg.h>
+#include <wx/filefn.h>
 #include <wx/hyperlink.h>
 #include <advanced_config.h>
 #include <kiplatform/ui.h>
@@ -49,6 +50,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_router_save_test_case.h>
 #include <math/vector2wx.h>
 #include <paths.h>
+#include <wildcards_and_files_ext.h>
 #include <confirm.h>
 #include <kidialog.h>
 #include <widgets/wx_infobar.h>
@@ -796,6 +798,19 @@ void ROUTER_TOOL::saveRouterDebugLog()
     PROJECT* prj = m_iface->GetBoard()->GetProject();
     prj->GetProjectFile().SaveAs( fname_dump.GetPath(), fname_dump.GetName() );
     prj->GetLocalSettings().SaveAs( fname_dump.GetPath(), fname_dump.GetName() );
+
+    // Copy the project's custom DRC rules
+    if( PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>() )
+    {
+        wxString srcRules = editFrame->GetDesignRulesPath();
+
+        if( !srcRules.IsEmpty() && wxFileName::FileExists( srcRules ) )
+        {
+            wxFileName fname_rules( fname_dump );
+            fname_rules.SetExt( FILEEXT::DesignRulesFileExtension );
+            wxCopyFile( srcRules, fname_rules.GetAbsolutePath() );
+        }
+    }
 
     // Build log file:
     std::vector<PNS::ITEM*> removed;
