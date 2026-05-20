@@ -101,6 +101,10 @@ set( EESCHEMA_SCH_IO
     # DipTrace IO plugin
     sch_io/diptrace/sch_io_diptrace.cpp
     sch_io/diptrace/diptrace_sch_parser.cpp
+
+    # P-CAD 2006 ASCII IO plugin
+    sch_io/pcad/sch_io_pcad.cpp
+    sch_io/pcad/pcad_sch_parser.cpp
     )
 
 set( EESCHEMA_DLGS
