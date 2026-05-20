@@ -34,6 +34,7 @@
 #include <properties/property.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
+#include <unordered_set>
 #include <wx/image.h>
 #include <wx/log.h>
 
@@ -148,6 +149,18 @@ void BOARD_LOADER::initializeLoadedBoard( BOARD* aBoard, const wxString& aFileNa
     aBoard->BuildConnectivity();
     aBoard->BuildListOfNets();
     aBoard->SynchronizeNetsAndNetClasses( true );
+
+    // Apply component class assignment rules from the project. Without this, conditions like
+    // A.hasComponentClass('Inductor') in custom DRC rules never match because no footprints
+    // have any dynamic component class assigned. The interactive load path does this in
+    // PCB_EDIT_FRAME::OpenProjectFiles; CLI and API consumers go through here.
+    if( !aBoard->SynchronizeComponentClasses( std::unordered_set<wxString>() )
+        && aOptions.reporter )
+    {
+        aOptions.reporter->Report( _( "Could not load component class assignment rules" ),
+                                   RPT_SEVERITY_WARNING );
+    }
+
     aBoard->UpdateUserUnits( aBoard, nullptr );
 }
 
