@@ -42,6 +42,7 @@
 
 #include <project.h>
 #include <project/project_local_settings.h>
+#include <wildcards_and_files_ext.h>
 
 #include <../../tests/common/console_log.h>
 
@@ -502,7 +503,15 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt, const wx
         drcEngine->SetBoard( m_board.get() );
         drcEngine->SetDesignSettings( &bds );
         drcEngine->SetLogReporter( aRpt );
-        drcEngine->InitEngine( wxFileName() );
+
+        // Load the test case's custom DRC rules if it ships any.
+        wxFileName fname_rules( logFileName );
+        fname_rules.SetExt( FILEEXT::DesignRulesFileExtension );
+
+        if( fname_rules.FileExists() )
+            drcEngine->InitEngine( fname_rules );
+        else
+            drcEngine->InitEngine( wxFileName() );
     }
     catch( const PARSE_ERROR& parse_error )
     {
