@@ -32,6 +32,7 @@
 #include "pcb_track.h"
 #include "pcb_textbox.h"
 #include "pcb_table.h"
+#include "pcb_barcode.h"
 #include "zone.h"
 #include "board.h"
 #include "board_design_settings.h"
@@ -866,8 +867,19 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
             break;
 
         case PCB_BARCODE_T:
-            //TODO: Add support for barcodes
+        {
+            const PCB_BARCODE* barcode = static_cast<const PCB_BARCODE*>( item );
+            SHAPE_POLY_SET     poly_set;
+
+            barcode->TransformShapeToPolygon( poly_set, aLayer, 0, m_board->GetDesignSettings().m_MaxError,
+                                              ERROR_INSIDE );
+            poly_set.Fracture();
+
+            for( int ii = 0; ii < poly_set.OutlineCount(); ++ii )
+                AddContour( poly_set, ii, FILL_T::FILLED_SHAPE );
+
             break;
+        }
 
         default:
             break;
