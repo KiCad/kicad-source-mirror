@@ -26,6 +26,7 @@
 #include <wx/msgdlg.h>
 
 #include <base_units.h>
+#include <confirm.h>
 #include <footprint.h>
 #include <pcb_edit_frame.h>
 #include <tools/pcb_actions.h>
@@ -417,6 +418,7 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
     std::unique_ptr<ARRAY_OPTIONS> newSettings;
 
     wxArrayString   errors;
+    wxArrayString   stackWarnings;
     const wxWindow* page = m_gridTypeNotebook->GetCurrentPage();
 
     if( page == m_gridPanel )
@@ -431,20 +433,22 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         newGrid->m_delta.x = m_hSpacing.GetIntValue();
         newGrid->m_delta.y = m_vSpacing.GetIntValue();
 
-        if( ( newGrid->m_nx > 1 ) && ( newGrid->m_delta.x == 0 ) )
-        {
-            errors.Add( wxString::Format( _( "horizontal delta of zero with %ld objects" ), newGrid->m_nx ) );
-            ok = false;
-        }
-
-        if( ( newGrid->m_ny > 1 ) && ( newGrid->m_delta.y == 0 ) )
-        {
-            errors.Add( wxString::Format( _( "vertical delta of zero with %ld objects" ), newGrid->m_ny ) );
-            ok = false;
-        }
-
         newGrid->m_offset.x = m_hOffset.GetIntValue();
         newGrid->m_offset.y = m_vOffset.GetIntValue();
+
+        // Collect (but don't block on) configurations that would stack items in place.
+        // The user is warned and asked to confirm after all settings are validated.
+        if( newGrid->m_nx > 1 && newGrid->m_delta.x == 0 && newGrid->m_offset.x == 0 )
+        {
+            stackWarnings.Add( wxString::Format( _( "horizontal delta of zero with %ld objects" ),
+                                                 newGrid->m_nx ) );
+        }
+
+        if( newGrid->m_ny > 1 && newGrid->m_delta.y == 0 && newGrid->m_offset.y == 0 )
+        {
+            stackWarnings.Add( wxString::Format( _( "vertical delta of zero with %ld objects" ),
+                                                 newGrid->m_ny ) );
+        }
 
         newGrid->m_centred = m_rbCentreOnSource->GetValue();
 
@@ -512,10 +516,10 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         newCirc->m_rotateItems = m_entryRotateItemsCb->GetValue();
         newCirc->SetShouldNumber( m_isFootprintEditor );
 
-        if( ( newCirc->m_nPts > 1 ) && newCirc->m_angle.IsZero() )
+        if( newCirc->m_nPts > 1 && newCirc->m_angle.IsZero() )
         {
-            errors.Add( wxString::Format( _( "angular delta of zero with %ld objects" ), newCirc->m_nPts ) );
-            ok = false;
+            stackWarnings.Add( wxString::Format( _( "angular delta of zero with %ld objects" ),
+                                                 newCirc->m_nPts ) );
         }
 
         if( m_isFootprintEditor )
@@ -541,6 +545,21 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
     }
 
     bool ret = false;
+
+    // Warn (but don't block) when the array would stack items on top of one another.
+    // Zero-spacing arrays are legitimate when intentionally duplicating in place, but
+    // accidental zero spacing on a large count can stamp out thousands of overlapping
+    // objects. Confirm before proceeding.
+    if( newSettings && !stackWarnings.IsEmpty() )
+    {
+        wxString msg;
+
+        for( const wxString& warning : stackWarnings )
+            msg << warning << wxT( "\n" );
+
+        if( !IsOK( this, msg ) )
+            return false;
+    }
 
     // If we got good settings, send them out and finish
     if( newSettings )
