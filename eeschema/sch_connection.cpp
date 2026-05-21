@@ -563,7 +563,14 @@ static bool isSuperSubOverbar( wxChar c )
 
 wxString SCH_CONNECTION::PrintBusForUI( const wxString& aGroup )
 {
-    size_t   groupLen = aGroup.length();
+    // Net names are stored escaped (e.g. '/' is encoded as "{slash}") so that they round-trip
+    // through the s-expression parser.  The unfold-from-bus menu and similar UI surfaces want
+    // the human-readable form, so unescape before walking the formatting markup.  Otherwise
+    // the "{slash}" sequence is mis-parsed as an opening overbar/sub/super group and the
+    // trailing '}' is silently dropped.
+    wxString unescaped = UnescapeString( aGroup );
+
+    size_t   groupLen = unescaped.length();
     size_t   i = 0;
     wxString ret;
 
@@ -571,28 +578,28 @@ wxString SCH_CONNECTION::PrintBusForUI( const wxString& aGroup )
     //
     for( ; i < groupLen; ++i )
     {
-        if( isSuperSubOverbar( aGroup[i] ) && i + 1 < groupLen && aGroup[i+1] == '{' )
+        if( isSuperSubOverbar( unescaped[i] ) && i + 1 < groupLen && unescaped[i+1] == '{' )
         {
-            ret += aGroup[i];
+            ret += unescaped[i];
             i++;
             continue;
         }
-        else if( aGroup[i] == '}' )
+        else if( unescaped[i] == '}' )
         {
             continue;
         }
 
         // Handle backslash-escaped spaces (display without the backslash)
-        if( aGroup[i] == '\\' && i + 1 < groupLen && aGroup[i + 1] == ' ' )
+        if( unescaped[i] == '\\' && i + 1 < groupLen && unescaped[i + 1] == ' ' )
         {
             ret += ' ';
             i++;
             continue;
         }
 
-        ret += aGroup[i];
+        ret += unescaped[i];
 
-        if( aGroup[i] == '{' )
+        if( unescaped[i] == '{' )
             break;
     }
 
@@ -602,28 +609,28 @@ wxString SCH_CONNECTION::PrintBusForUI( const wxString& aGroup )
 
     for( ; i < groupLen; ++i )
     {
-        if( isSuperSubOverbar( aGroup[i] ) && i + 1 < groupLen && aGroup[i+1] == '{' )
+        if( isSuperSubOverbar( unescaped[i] ) && i + 1 < groupLen && unescaped[i+1] == '{' )
         {
-            ret += aGroup[i];
+            ret += unescaped[i];
             i++;
             continue;
         }
-        else if( aGroup[i] == '}' )
+        else if( unescaped[i] == '}' )
         {
             continue;
         }
 
         // Handle backslash-escaped spaces (display without the backslash)
-        if( aGroup[i] == '\\' && i + 1 < groupLen && aGroup[i + 1] == ' ' )
+        if( unescaped[i] == '\\' && i + 1 < groupLen && unescaped[i + 1] == ' ' )
         {
             ret += ' ';
             i++;
             continue;
         }
 
-        ret += aGroup[i];
+        ret += unescaped[i];
 
-        if( aGroup[i] == '}' )
+        if( unescaped[i] == '}' )
             break;
     }
 
