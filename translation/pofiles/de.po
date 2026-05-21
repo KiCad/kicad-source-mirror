@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-21 01:11+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-05-22 10:11+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -16305,6 +16305,8 @@ msgstr "; "
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:84
 msgid "String inserted between values when the \"Join\" action is selected."
 msgstr ""
+"Zeichenkette, die zwischen die Werte eingefügt wird, wenn die Aktion \"Werte "
+"zusammenführen\" ausgewählt wird."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.h:57
 #, fuzzy
@@ -35654,24 +35656,34 @@ msgid ""
 "'Constant': εr and tan δ applied at all frequencies.\n"
 "'Djordjevic-Sarkar': causal wideband Debye anchored at the spec frequency."
 msgstr ""
+"\"Konstant\": εr und tan δ gelten frequenzunabhängig.\n"
+"\"Djordjevic-Sarkar\": kausales Breitband-Debye-Modell, verankert an "
+"Spezifikationsfrequenz."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:65
 msgid ""
 "Enable solder resist / LPI overlay correction.  Affects εeff, Z0, and "
 "dielectric loss for microstrip, coupled microstrip, CPW, and CBCPW."
 msgstr ""
+"Lötstopplack-/LPI-Korrektur aktivieren.  Beeinflusst εeff, Z0 und den "
+"dielektrische Verluste bei Microstrips, gekoppelten Microstrips, CPW und "
+"CBCPW."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:69
 msgid ""
 "Cured mask thickness.  Typical LPI is 15-30 um; set to 0 or uncheck to "
 "disable."
 msgstr ""
+"Dicke des ausgehärtete Lötstopplacks.  Für LPI typisch: 15–30µm; auf 0 "
+"setzen oder das Feld abwählen, um die Funktion zu deaktivieren."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:74
 msgid ""
 "Mask relative permittivity.  Default 3.5 for standard green LPI.  Range "
 "3.3-3.8 for typical resins."
 msgstr ""
+"Rel. Dielektrizitätskonstante des Lötstopplacks.  Standard: 3,5 für grün-"
+"LPI.  3,3–3,8 für typische Harze."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:79
 #, fuzzy
@@ -35683,6 +35695,8 @@ msgid ""
 "Enable when the mask fills the CPW slots (standard LPI process).\n"
 "Disable for selective mask that covers only the traces."
 msgstr ""
+"Aktivieren, wenn Lötstopp die CPW-Spalte ausfüllt (Standard-LPI-Verfahren).\n"
+"Deaktivieren bei selektivem Lötstopplack, der nur die Leiterbahnen abdeckt."
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:22
 msgid "Microstrip Line"
@@ -35735,11 +35749,11 @@ msgstr "Dielektrische Verluste:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:50
 msgid "Constant (εr, tan δ)"
-msgstr ""
+msgstr "Konstante (εr, tan δ)"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:50
 msgid "Djordjevic-Sarkar causal"
-msgstr ""
+msgstr "Djordjevic-Sarkar-Kausal"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:62
 #, fuzzy
@@ -35748,7 +35762,7 @@ msgstr "Lötstoppmaske"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:65
 msgid "Mask fills gaps"
-msgstr ""
+msgstr "Lötstopp füllt Spalt"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:78
 #, fuzzy
@@ -35757,15 +35771,15 @@ msgstr "Leiterbahndicke:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:85
 msgid "µm"
-msgstr ""
+msgstr "µm"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:89
 msgid "Mask εr:"
-msgstr ""
+msgstr "Lötstopp εr:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:99
 msgid "Mask tan δ:"
-msgstr ""
+msgstr "Lötstopp tan δ:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:118
 msgid "Er:"
@@ -36379,6 +36393,8 @@ msgid ""
 "Height from substrate top to grounded cover. Leave at the large default "
 "value for no cover."
 msgstr ""
+"Höhe von Substratoberseite bis zur Masseabdeckung. Ohne Abdeckung den großen "
+"Standardwert verwenden."
 
 #: pcb_calculator/transline_ident.cpp:102
 msgid "Substrate relative permittivity (dielectric constant)"
@@ -39361,12 +39377,12 @@ msgstr "Designregeln anzeigen."
 
 #: pcbnew/dialogs/dialog_drc.cpp:457
 msgid "Elapsed: 0 s"
-msgstr ""
+msgstr "Verstrichen: 0 s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:472
 #, c-format
 msgid "%1$d min %2$d s"
-msgstr ""
+msgstr "%1$d min %2$d s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:474
 #, fuzzy, c-format
