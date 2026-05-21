@@ -63,9 +63,9 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		WX_INFOBAR* m_infoBar;
 		wxBoxSizer* m_ruleAreaSizer;
 		wxCheckBox* m_cbExcludeFromSim;
-		wxCheckBox* m_cbExcludeFromBom;
 		wxCheckBox* m_cbExcludeFromBoard;
 		wxCheckBox* m_cbDNP;
+		wxCheckBox* m_cbExcludeFromBom;
 		wxGridBagSizer* m_borderSizer;
 		wxCheckBox* m_borderCheckbox;
 		wxStaticText* m_borderWidthLabel;

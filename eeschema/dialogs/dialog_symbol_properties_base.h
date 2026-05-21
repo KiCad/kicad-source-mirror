@@ -64,10 +64,10 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxCheckBox* m_ShowPinNumButt;
 		wxCheckBox* m_ShowPinNameButt;
 		wxCheckBox* m_cbExcludeFromSim;
-		wxCheckBox* m_cbExcludeFromBom;
 		wxCheckBox* m_cbExcludeFromBoard;
-		wxCheckBox* m_cbExcludeFromPosFiles;
 		wxCheckBox* m_cbDNP;
+		wxCheckBox* m_cbExcludeFromBom;
+		wxCheckBox* m_cbExcludeFromPosFiles;
 		wxChoice* m_choicePassthrough;
 		wxButton* m_updateSymbolBtn;
 		wxButton* m_changeSymbolBtn;

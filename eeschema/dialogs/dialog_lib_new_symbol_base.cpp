@@ -86,11 +86,11 @@ DIALOG_LIB_NEW_SYMBOL_BASE::DIALOG_LIB_NEW_SYMBOL_BASE( wxWindow* parent, wxWind
 	m_checkIsPowerSymbol = new wxCheckBox( this, wxID_ANY, _("Create symbol as power symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer17->Add( m_checkIsPowerSymbol, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	m_excludeFromBomCheckBox = new wxCheckBox( this, wxID_ANY, _("Exclude from bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer17->Add( m_excludeFromBomCheckBox, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
-
 	m_excludeFromBoardCheckBox = new wxCheckBox( this, wxID_ANY, _("Exclude from board"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer17->Add( m_excludeFromBoardCheckBox, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	m_excludeFromBomCheckBox = new wxCheckBox( this, wxID_ANY, _("Exclude from bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer17->Add( m_excludeFromBomCheckBox, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
 	m_checkKeepDatasheet = new wxCheckBox( this, wxID_ANY, _("Keep linked datasheet"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer17->Add( m_checkKeepDatasheet, 0, wxLEFT|wxRIGHT|wxTOP, 5 );

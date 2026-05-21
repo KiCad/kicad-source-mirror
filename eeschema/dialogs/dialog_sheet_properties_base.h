@@ -55,9 +55,9 @@ class DIALOG_SHEET_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_pageNumberStaticText;
 		wxTextCtrl* m_pageNumberTextCtrl;
 		wxCheckBox* m_cbExcludeFromSim;
-		wxCheckBox* m_cbExcludeFromBom;
 		wxCheckBox* m_cbExcludeFromBoard;
 		wxCheckBox* m_cbDNP;
+		wxCheckBox* m_cbExcludeFromBom;
 		wxStaticText* m_borderLabel;
 		wxStaticText* m_borderWidthLabel;
 		wxTextCtrl* m_borderWidthCtrl;

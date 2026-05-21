@@ -61,9 +61,9 @@ class DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR_BASE : public DIALOG_SHIM
 		wxStaticText* m_componentTypeLabel;
 		wxChoice* m_componentType;
 		wxCheckBox* m_boardOnly;
-		wxCheckBox* m_excludeFromPosFiles;
-		wxCheckBox* m_excludeFromBOM;
 		wxCheckBox* m_cbDNP;
+		wxCheckBox* m_excludeFromBOM;
+		wxCheckBox* m_excludeFromPosFiles;
 		wxPanel* m_LayersPanel;
 		wxCheckBox* m_cbCustomLayers;
 		wxStaticText* m_copperLayerCountLabel;

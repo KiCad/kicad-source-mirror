@@ -46,18 +46,18 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 
 	m_ruleAreaSizer->Add( 0, 10, 0, wxEXPAND, 5 );
 
-	m_cbExcludeFromBom = new wxCheckBox( this, wxID_ANY, _("Exclude from bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbExcludeFromBom->SetToolTip( _("This is useful for adding symbols for board footprints such as fiducials\nand logos that you do not want to appear in the bill of materials export") );
-
-	m_ruleAreaSizer->Add( m_cbExcludeFromBom, 0, wxALL, 5 );
-
 	m_cbExcludeFromBoard = new wxCheckBox( this, wxID_ANY, _("Exclude from board"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExcludeFromBoard->SetToolTip( _("This is useful for adding symbols that only get exported to the bill of materials but\nnot required to layout the board such as mechanical fasteners and enclosures") );
 
-	m_ruleAreaSizer->Add( m_cbExcludeFromBoard, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_ruleAreaSizer->Add( m_cbExcludeFromBoard, 0, wxALL, 5 );
 
 	m_cbDNP = new wxCheckBox( this, wxID_ANY, _("Do not populate"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_ruleAreaSizer->Add( m_cbDNP, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	m_ruleAreaSizer->Add( m_cbDNP, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_cbExcludeFromBom = new wxCheckBox( this, wxID_ANY, _("Exclude from bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbExcludeFromBom->SetToolTip( _("This is useful for adding symbols for board footprints such as fiducials\nand logos that you do not want to appear in the bill of materials export") );
+
+	m_ruleAreaSizer->Add( m_cbExcludeFromBom, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_ruleAreaSizer->Add( 0, 5, 1, wxEXPAND, 5 );

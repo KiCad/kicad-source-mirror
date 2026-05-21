@@ -56,8 +56,8 @@ class DIALOG_LIB_NEW_SYMBOL_BASE : public DIALOG_SHIM
 		wxCheckBox* m_checkUnitsInterchangeable;
 		wxCheckBox* m_checkHasAlternateBodyStyle;
 		wxCheckBox* m_checkIsPowerSymbol;
-		wxCheckBox* m_excludeFromBomCheckBox;
 		wxCheckBox* m_excludeFromBoardCheckBox;
+		wxCheckBox* m_excludeFromBomCheckBox;
 		wxCheckBox* m_checkKeepDatasheet;
 		wxCheckBox* m_checkKeepFootprint;
 		wxCheckBox* m_checkTransferUserFields;

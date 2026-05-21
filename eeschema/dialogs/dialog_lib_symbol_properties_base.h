@@ -73,8 +73,8 @@ class DIALOG_LIB_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_nameOffsetCtrl;
 		wxStaticText* m_nameOffsetUnits;
 		wxCheckBox* m_excludeFromSimCheckBox;
-		wxCheckBox* m_excludeFromBomCheckBox;
 		wxCheckBox* m_excludeFromBoardCheckBox;
+		wxCheckBox* m_excludeFromBomCheckBox;
 		wxCheckBox* m_excludeFromPosFilesCheckBox;
 		wxPanel* m_PanelUnitsAndBodyStyles;
 		wxStaticText* m_staticTextNbUnits;
