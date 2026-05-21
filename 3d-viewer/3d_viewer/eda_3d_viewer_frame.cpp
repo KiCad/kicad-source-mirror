@@ -617,7 +617,9 @@ void EDA_3D_VIEWER_FRAME::CommonSettingsChanged( int aFlags )
     loadCommonSettings();
 
     EDA_3D_VIEWER_SETTINGS* cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
-    applySettings( cfg );
+
+    if( cfg )
+        applySettings( cfg );
 
     if( EDA_3D_CONTROLLER* ctrlTool = GetToolManager()->GetTool<EDA_3D_CONTROLLER>() )
         ctrlTool->SetRotationIncrement( cfg ? cfg->m_Camera.rotation_increment : 10.0 );
