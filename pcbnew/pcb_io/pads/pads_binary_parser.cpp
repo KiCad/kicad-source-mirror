@@ -3245,23 +3245,26 @@ void BINARY_PARSER::parseRouteVertices()
 
     uint32_t stride = entry60->stride;
 
-    // The node arena can spill past section 60's declared bounds in either direction (observed
-    // before its start inside section 59, after its end inside section 61, and -- on boards with
-    // only a handful of nodes, e.g. Seth's hand-built simple3.pcb, 2 vias -- displaced far enough
-    // back to land inside section 57's declared byte range) -- the same class of directory-offset
-    // unreliability already handled for section 1's origin. Anchor the scan's start on section 57
-    // rather than 59 to cover that case; the phase-scoring argmax below is robust to the wider net
-    // since section 57 is a string/byte pool that essentially never scores a false via/corner match.
-    const SDB_SECTION* sec57 = getSection( 57 );
-    const SDB_SECTION* sec59 = getSection( 59 );
-    const SDB_SECTION* sec61 = getSection( 61 );
+    // The directory's per-section offsets are not stored values -- they are RECONSTRUCTED by
+    // summing every preceding section's declared totalBytes (see PADS_SDB::parseDirectory()),
+    // and the 16-byte directory entry has no other field: the trailing 8 bytes are verified zero
+    // on every file checked. So a section boundary is only as trustworthy as the cumulative sum
+    // up to it, and any earlier section whose true physical size doesn't match its declared
+    // totalBytes throws off every boundary after it. That is what happens here: on Seth's
+    // hand-built simple3.pcb (2 vias), the real node records sit at a byte offset inside what the
+    // directory calls section 57's range, 372 B before the reconstructed section 59 boundary this
+    // scan used to start from -- section 59, 60 and 61's computed offsets are simply wrong on this
+    // file, not just imprecise. Rather than pick another section boundary to trust in its place,
+    // scan the entire payload region once: the phase-scoring argmax below already discriminates a
+    // real via/corner cluster from everything else in the file with a wide, verified margin (the
+    // runner-up phase scores 0 on all but one of 66 QA corpus files, where it scores 1), so a wider
+    // net costs a few million extra byte comparisons -- unmeasurable next to file I/O -- and removes
+    // the boundary dependency entirely instead of shifting it to a different guess.
+    const SDB_SECTION* firstSection = getSection( 1 );
+    constexpr size_t   FOOTER_BYTES = 46;
 
-    size_t scanStart = sec57 ? sec57->dataOffset
-                              : ( sec59 ? sec59->dataOffset : entry60->dataOffset );
-    size_t scanEnd = sec61 ? sec61->End() : entry60->End();
-
-    if( scanEnd > m_data.size() )
-        scanEnd = m_data.size();
+    size_t scanStart = firstSection ? firstSection->dataOffset : entry60->dataOffset;
+    size_t scanEnd = m_data.size() > FOOTER_BYTES ? m_data.size() - FOOTER_BYTES : m_data.size();
 
     if( scanStart >= scanEnd || scanEnd - scanStart < stride )
         return;
