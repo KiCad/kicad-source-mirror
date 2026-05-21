@@ -339,6 +339,8 @@ sheetfile
 sheetname
 silk_line_width
 silk_text_dims
+sim_electrical_type
+sink
 size
 smd
 smoothing
@@ -348,6 +350,7 @@ solder_paste_margin
 solder_paste_margin_ratio
 solder_paste_ratio
 solid
+source
 span
 spec_frequency
 stackup

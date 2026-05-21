@@ -51,6 +51,16 @@ namespace KIGFX
     class VIEW;
 }
 
+
+/// The electrical type of a pad
+enum class PAD_SIM_ELECTRICAL_TYPE : int
+{
+    NONE = 0,
+    SOURCE,
+    SINK
+};
+
+
 class PAD : public BOARD_CONNECTED_ITEM
 {
 public:
@@ -581,6 +591,9 @@ public:
     {
         return ( m_padStack.LayerSet() & LSET::AllCuMask() ).none();
     }
+
+    void                    SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE aType ) { m_simElectricalType = aType; }
+    PAD_SIM_ELECTRICAL_TYPE GetSimElectricalType() const { return m_simElectricalType; }
 
     bool IsNPTHWithNoCopper() const;
 
@@ -1132,6 +1145,8 @@ private:
 
     int               m_lengthPadToDie;     // Length net from pad to die, inside the package
     int               m_delayPadToDie;      // Propagation delay from pad to die
+
+    PAD_SIM_ELECTRICAL_TYPE m_simElectricalType{ PAD_SIM_ELECTRICAL_TYPE::NONE };
 
     // Bools at the end for better memory layout
     mutable bool m_polyDirty[2];

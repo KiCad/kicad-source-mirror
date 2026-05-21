@@ -1821,6 +1821,15 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                                           aPad->GetProperty() ) );
     }
 
+    const char* simElectricalType = nullptr;
+
+    switch( aPad->GetSimElectricalType() )
+    {
+    case PAD_SIM_ELECTRICAL_TYPE::SOURCE: simElectricalType = "source"; break;
+    case PAD_SIM_ELECTRICAL_TYPE::SINK: simElectricalType = "sink"; break;
+    default: simElectricalType = nullptr; break;
+    }
+
     m_out->Print( "(pad %s %s %s",
                   m_out->Quotew( aPad->GetNumber() ).c_str(),
                   type,
@@ -1920,6 +1929,9 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
     // Add pad property, if exists.
     if( property )
         m_out->Print( "(property %s)", property );
+
+    if( simElectricalType )
+        m_out->Print( "(sim_electrical_type %s)", simElectricalType );
 
     formatLayers( aPad->GetLayerSet(), false /* enumerate layers */ );
 

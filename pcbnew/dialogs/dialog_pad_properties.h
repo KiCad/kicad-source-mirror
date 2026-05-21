@@ -91,6 +91,7 @@ private:
     void onTeardropsUpdateUi( wxUpdateUIEvent& event ) override;
     void OnPadstackModeChanged( wxCommandEvent& event ) override;
     void OnEditLayerChanged( wxCommandEvent& event ) override;
+    void OnElectricalTypeChaged( wxCommandEvent& event ) override;
 
     void OnUpdateUINonCopperWarning( wxUpdateUIEvent& event ) override;
 

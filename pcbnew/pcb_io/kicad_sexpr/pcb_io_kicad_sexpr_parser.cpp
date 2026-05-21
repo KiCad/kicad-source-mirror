@@ -6532,6 +6532,21 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             NeedRIGHT();
             break;
 
+        case T_sim_electrical_type:
+        {
+            token = NextTok();
+
+            switch( token )
+            {
+            case T_source: pad->SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE::SOURCE ); break;
+            case T_sink: pad->SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE::SINK ); break;
+            default: Expecting( "sink or source" );
+            }
+
+            NeedRIGHT();
+            break;
+        }
+
         case T_die_length:
             pad->SetPadToDieLength( parseBoardUnits( T_die_length ) );
             NeedRIGHT();

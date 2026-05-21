@@ -18,6 +18,9 @@
  */
 
 #include <api/api_enums.h>
+
+#include "pad.h"
+
 #include <import_export.h>
 #include <api/common/types/base_types.pb.h>
 #include <api/common/types/enums.pb.h>
@@ -662,6 +665,38 @@ types::ElectricalPinType ToProtoEnum( ELECTRICAL_PINTYPE aValue )
     default:
         wxCHECK_MSG( false, types::ElectricalPinType::EPT_UNKNOWN,
                      "Unhandled case in ToProtoEnum<ELECTRICAL_PINTYPE>");
+    }
+}
+
+
+template <>
+PAD_SIM_ELECTRICAL_TYPE FromProtoEnum( board::types::PadSimElectricalType aValue )
+{
+    switch( aValue )
+    {
+    case board::types::PadSimElectricalType::PSET_NONE: return PAD_SIM_ELECTRICAL_TYPE::NONE;
+    case board::types::PadSimElectricalType::PSET_SOURCE: return PAD_SIM_ELECTRICAL_TYPE::SOURCE;
+    case board::types::PadSimElectricalType::PSET_SINK: return PAD_SIM_ELECTRICAL_TYPE::SINK;
+
+    default:
+        wxCHECK_MSG( false, PAD_SIM_ELECTRICAL_TYPE::NONE,
+                     "Unhandled case in FromProtoEnum<types::PadSimElectricalType>" );
+    }
+}
+
+
+template <>
+board::types::PadSimElectricalType ToProtoEnum( PAD_SIM_ELECTRICAL_TYPE aValue )
+{
+    switch( aValue )
+    {
+    case PAD_SIM_ELECTRICAL_TYPE::NONE: return board::types::PadSimElectricalType::PSET_NONE;
+    case PAD_SIM_ELECTRICAL_TYPE::SOURCE: return board::types::PadSimElectricalType::PSET_SOURCE;
+    case PAD_SIM_ELECTRICAL_TYPE::SINK: return board::types::PadSimElectricalType::PSET_SINK;
+
+    default:
+        wxCHECK_MSG( false, board::types::PadSimElectricalType::PSET_NONE,
+                     "Unhandled case in ToProtoEnum<PAD_SIM_ELECTRICAL_TYPE>" );
     }
 }
 

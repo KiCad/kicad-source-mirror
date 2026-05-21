@@ -132,6 +132,7 @@ PAD& PAD::operator=( const PAD &aOther )
     BOARD_CONNECTED_ITEM::operator=( aOther );
 
     ImportSettingsFrom( aOther );
+    SetSimElectricalType( aOther.GetSimElectricalType() );
     SetPadToDieLength( aOther.GetPadToDieLength() );
     SetPadToDieDelay( aOther.GetPadToDieDelay() );
     SetPosition( aOther.GetPosition() );
@@ -211,6 +212,8 @@ void PAD::Serialize( google::protobuf::Any &aContainer ) const
         pad.mutable_symbol_pin()->set_no_connect( pt->second );
     }
 
+    pad.set_sim_electrical_type( ToProtoEnum<PAD_SIM_ELECTRICAL_TYPE, PadSimElectricalType>( GetSimElectricalType() ) );
+
     aContainer.PackFrom( pad );
 }
 
@@ -230,6 +233,7 @@ bool PAD::Deserialize( const google::protobuf::Any &aContainer )
     SetNumber( wxString::FromUTF8( pad.number() ) );
     SetPadToDieLength( pad.pad_to_die_length().value_nm() );
     SetPadToDieDelay( pad.pad_to_die_delay().value_as() );
+    SetSimElectricalType( FromProtoEnum<PAD_SIM_ELECTRICAL_TYPE>( pad.sim_electrical_type() ) );
 
     google::protobuf::Any padStackWrapper;
     padStackWrapper.PackFrom( pad.pad_stack() );
@@ -3350,6 +3354,11 @@ static struct PAD_DESC
                 .Map( PAD_DRILL_SHAPE::CIRCLE,     _HKI( "Round" ) )
                 .Map( PAD_DRILL_SHAPE::OBLONG,     _HKI( "Oblong" ) );
 
+        ENUM_MAP<PAD_SIM_ELECTRICAL_TYPE>::Instance()
+                .Map( PAD_SIM_ELECTRICAL_TYPE::NONE, _HKI( "None" ) )
+                .Map( PAD_SIM_ELECTRICAL_TYPE::SOURCE, _HKI( "Source" ) )
+                .Map( PAD_SIM_ELECTRICAL_TYPE::SINK, _HKI( "Sink" ) );
+
         // Ensure post-machining mode enum choices are defined before properties use them
         {
             ENUM_MAP<PAD_DRILL_POST_MACHINING_MODE>& pmMap =
@@ -3463,6 +3472,7 @@ static struct PAD_DESC
                     &PAD::SetPinFunction, &PAD::GetPinFunction ),
                     groupPad )
                 .SetIsHiddenFromLibraryEditors();
+
         propMgr.AddProperty( new PROPERTY<PAD, wxString>( _HKI( "Pin Type" ),
                     &PAD::SetPinType, &PAD::GetPinType ),
                     groupPad )
@@ -3476,6 +3486,11 @@ static struct PAD_DESC
 
                         return choices;
                     } );
+
+        propMgr.AddProperty( new PROPERTY_ENUM<PAD, PAD_SIM_ELECTRICAL_TYPE>( _HKI( "Simulation Electrical Type" ),
+                                                                              &PAD::SetSimElectricalType,
+                                                                              &PAD::GetSimElectricalType ),
+                             groupPad );
 
         propMgr.AddProperty( new PROPERTY<PAD, int>( _HKI( "Size X" ),
                     &PAD::SetSizeX, &PAD::GetSizeX, PROPERTY_DISPLAY::PT_SIZE ),
@@ -3818,3 +3833,4 @@ ENUM_TO_WXANY( PAD_ATTRIB );
 ENUM_TO_WXANY( PAD_SHAPE );
 ENUM_TO_WXANY( PAD_PROP );
 ENUM_TO_WXANY( PAD_DRILL_SHAPE );
+ENUM_TO_WXANY( PAD_SIM_ELECTRICAL_TYPE );

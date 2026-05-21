@@ -389,6 +389,12 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
 }
 
 
+void DIALOG_PAD_PROPERTIES::OnElectricalTypeChaged( wxCommandEvent& event )
+{
+    transferDataToPad( m_previewPad );
+}
+
+
 void DIALOG_PAD_PROPERTIES::OnPadstackModeChanged( wxCommandEvent& aEvent )
 {
     transferDataToPad( m_previewPad );
@@ -882,6 +888,12 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_bottomPostMachineSize2Binder.SetValue( backPostMachining.depth );
     }
 
+    switch( m_previewPad->GetSimElectricalType() )
+    {
+    case PAD_SIM_ELECTRICAL_TYPE::NONE: m_simElectricalTypeCtrl->SetSelection( 0 ); break;
+    case PAD_SIM_ELECTRICAL_TYPE::SOURCE: m_simElectricalTypeCtrl->SetSelection( 1 ); break;
+    case PAD_SIM_ELECTRICAL_TYPE::SINK: m_simElectricalTypeCtrl->SetSelection( 2 ); break;
+    }
 
     updatePadLayersList( m_previewPad->GetLayerSet(), m_previewPad->GetRemoveUnconnected(),
                          m_previewPad->GetKeepTopBottom() );
@@ -1746,6 +1758,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetPadstack( m_previewPad->Padstack() );
 
     m_currentPad->SetAttribute( m_masterPad->GetAttribute() );
+    m_currentPad->SetSimElectricalType( m_masterPad->GetSimElectricalType() );
     m_currentPad->SetFPRelativeOrientation( m_masterPad->GetOrientation() );
     m_currentPad->SetPadToDieLength( m_masterPad->GetPadToDieLength() );
     m_currentPad->SetPadToDieDelay( m_masterPad->GetPadToDieDelay() );
@@ -2056,6 +2069,14 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
             delta.y = aPad->GetSize( m_editLayer ).x - 2;
             error = true;
         }
+    }
+
+    switch( m_simElectricalTypeCtrl->GetSelection() )
+    {
+    case 0: aPad->SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE::NONE ); break;
+    case 1: aPad->SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE::SOURCE ); break;
+    case 2: aPad->SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE::SINK ); break;
+    default: aPad->SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE::NONE ); break;
     }
 
     aPad->SetDelta( m_editLayer, delta );

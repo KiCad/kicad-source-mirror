@@ -69,6 +69,8 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_posYLabel;
 		wxTextCtrl* m_posYCtrl;
 		wxStaticText* m_posYUnits;
+		wxStaticText* m_simElectricalTypeLabel;
+		wxChoice* m_simElectricalTypeCtrl;
 		wxStaticLine* m_staticline5;
 		wxBoxSizer* m_padstackControls;
 		wxStaticText* m_staticText891;
@@ -294,6 +296,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void PadTypeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnValuesChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnElectricalTypeChaged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPadstackModeChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditLayerChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPadShapeSelection( wxCommandEvent& event ) { event.Skip(); }
@@ -319,7 +322,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_DIALOG_EDIT_PAD, const wxString& title = _("Pad Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1004,695 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_PAD_PROPERTIES_BASE();
 
