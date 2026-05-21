@@ -723,7 +723,7 @@ void EDA_DRAW_FRAME::updateStatusBarWidths()
 
     std::vector<int> dims = {
         // remainder of status bar on far left is set to a default or whatever is left over.
-        -3,
+        -2,
 
         // When using GetTextSize() remember the width of character '1' is not the same
         // as the width of '0' unless the font is fixed width, and it usually won't be.

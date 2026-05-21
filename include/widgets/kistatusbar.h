@@ -138,6 +138,8 @@ public:
      */
     size_t GetLoadWarningCount() const;
 
+    virtual void SetStatusWidths( int aSize, const int* aWidths ) override;
+
 private:
     void onSize( wxSizeEvent& aEvent );
     void onBackgroundProgressClick( wxMouseEvent& aEvent );

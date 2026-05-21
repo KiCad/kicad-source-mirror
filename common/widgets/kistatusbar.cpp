@@ -111,7 +111,7 @@ KISTATUSBAR::KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id, ST
 
     // Make the first pane wider.
     if( aNumberFields )
-        m_fieldWidths[0] = -3;
+        m_fieldWidths[0] = -2;
 
     int padding = KIUI::GetTextSize( wxT( "M" ), this ).x;
 
@@ -704,4 +704,13 @@ std::optional<int> KISTATUSBAR::fieldIndex( FIELD aField ) const
     }
 
     return std::nullopt;
+}
+
+
+void KISTATUSBAR::SetStatusWidths( int aSize, const int* aWidths )
+{
+    wxStatusBar::SetStatusWidths( aSize, aWidths );
+
+    for( int i = 0; ( i < aSize ) && ( i < static_cast<int>( m_fieldWidths.size() ) ); i++ )
+        m_fieldWidths[i] = *( aWidths + i );
 }

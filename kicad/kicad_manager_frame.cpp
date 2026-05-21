@@ -379,10 +379,23 @@ void KICAD_MANAGER_FRAME::onNotebookPageCloseRequest( wxAuiNotebookEvent& evt )
 wxStatusBar* KICAD_MANAGER_FRAME::OnCreateStatusBar( int number, long style, wxWindowID id,
                                                      const wxString& name )
 {
-    return new KISTATUSBAR( number, this, id,
-                            static_cast<KISTATUSBAR::STYLE_FLAGS>(  KISTATUSBAR::NOTIFICATION_ICON
-                                                                  | KISTATUSBAR::CANCEL_BUTTON
-                                                                  | KISTATUSBAR::WARNING_ICON ) );
+    KISTATUSBAR* sb = new KISTATUSBAR( number, this, id,
+                                       static_cast<KISTATUSBAR::STYLE_FLAGS>( KISTATUSBAR::NOTIFICATION_ICON
+                                                                            | KISTATUSBAR::CANCEL_BUTTON
+                                                                            | KISTATUSBAR::WARNING_ICON ) );
+
+    size_t sbFieldCnt = static_cast<size_t>( sb->GetFieldsCount() );
+    std::vector<int> sbFieldSizes( sbFieldCnt );
+
+    for( size_t i = 0; i < sbFieldCnt; i++ )
+        sbFieldSizes[i] = sb->GetStatusWidth( static_cast<int>( i ) );
+
+    if( sbFieldCnt )
+        sbFieldSizes[0] = -3;
+
+    sb->SetStatusWidths( sbFieldCnt, sbFieldSizes.data() );
+
+    return sb;
 }
 
 
