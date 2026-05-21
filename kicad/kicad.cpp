@@ -35,6 +35,7 @@
 #include <wx/msgdlg.h>
 #include <wx/cmdline.h>
 
+#include <common.h>
 #include <env_vars.h>
 #include <file_history.h>
 #include <hotkeys_basic.h>
@@ -214,23 +215,36 @@ bool PGM_KICAD::OnPgmInit()
                 m_bm.m_search.AddPaths( fn.GetPath() );
         }
 
+        auto insertExpanded = [&]( const wxString& aValue )
+        {
+            wxString resolved = ExpandEnvVarSubstitutions( aValue, nullptr );
+
+            // Skip values that still contain unresolved variable references so we don't
+            // pollute the search stack with paths like "${MISSING}/templates".
+            if( resolved.Contains( wxT( "${" ) ) || resolved.Contains( wxT( "$(" ) ) )
+                return;
+
+            m_bm.m_search.Insert( resolved, 0 );
+        };
+
         // The versioned TEMPLATE_DIR takes precedence over the search stack template path.
         if( std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( GetLocalEnvVariables(),
                                                                           wxT( "TEMPLATE_DIR" ) ) )
         {
             if( !v->IsEmpty() )
-                m_bm.m_search.Insert( *v, 0 );
+                insertExpanded( *v );
         }
 
         // We've been adding system (installed default) search paths so far, now for user paths
         // The default user search path is inside KIPLATFORM::ENV::GetDocumentsPath()
         m_bm.m_search.Insert( PATHS::GetUserTemplatesPath(), 0 );
 
-        // ...but the user can override that default with the KICAD_USER_TEMPLATE_DIR env var
+        // ...but the user can override that default with the KICAD_USER_TEMPLATE_DIR env var.
+        // The value may itself reference other KiCad path variables, so expand them here.
         ENV_VAR_MAP_CITER it = GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
 
         if( it != GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
-            m_bm.m_search.Insert( it->second.GetValue(), 0 );
+            insertExpanded( it->second.GetValue() );
     }
 
     wxFrame*      frame = nullptr;
