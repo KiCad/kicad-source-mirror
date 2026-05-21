@@ -442,6 +442,24 @@ BOOST_AUTO_TEST_CASE( PrintBusForUIHandlesMixedFormatting )
 }
 
 
+BOOST_AUTO_TEST_CASE( PrintBusForUIUnescapesNetNameTokens )
+{
+    // Regression test for issue #24153: bus member names containing '/' are stored
+    // escaped as "{slash}" (CTX_NETNAME).  PrintBusForUI must unescape those tokens
+    // before parsing formatting markup or the '{' opens a phantom overbar group and
+    // the matching '}' gets dropped.
+
+    // Slash plus overbar (R/~{W}): escaped form has the slash token before the overbar.
+    BOOST_CHECK_EQUAL( SCH_CONNECTION::PrintBusForUI( wxS( "R{slash}~{W}" ) ), wxS( "R/~W" ) );
+
+    // Plain slash by itself round-trips to '/'.
+    BOOST_CHECK_EQUAL( SCH_CONNECTION::PrintBusForUI( wxS( "A{slash}B" ) ), wxS( "A/B" ) );
+
+    // Already-unescaped overbar still works (defensive: PrintBusForUI accepts either form).
+    BOOST_CHECK_EQUAL( SCH_CONNECTION::PrintBusForUI( wxS( "R/~{W}" ) ), wxS( "R/~W" ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( ParsesOverbarWrappingNameAndRange )
 {
     // Regression test for issue #23827: ~{BE[0..3]} where the overbar wraps
