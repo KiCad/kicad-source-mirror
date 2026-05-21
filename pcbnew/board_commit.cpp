@@ -729,6 +729,10 @@ void BOARD_COMMIT::Revert()
                     if( FOOTPRINT* parentFP = board->GetFirstFootprint() )
                         parentFP->Remove( boardItem );
                 }
+                else if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
+                {
+                    parentFP->Remove( boardItem );
+                }
                 else
                 {
                     board->Remove( boardItem, REMOVE_MODE::BULK );
@@ -754,6 +758,10 @@ void BOARD_COMMIT::Revert()
             {
                 if( FOOTPRINT* parentFP = board->GetFirstFootprint() )
                     parentFP->Add( boardItem, ADD_MODE::INSERT );
+            }
+            else if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
+            {
+                parentFP->Add( boardItem, ADD_MODE::INSERT );
             }
             else
             {
