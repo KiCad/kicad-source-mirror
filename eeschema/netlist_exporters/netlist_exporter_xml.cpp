@@ -40,6 +40,8 @@
 #include <project_sch.h>
 #include <sch_rule_area.h>
 #include <trace_helpers.h>
+#include <project/project_file.h>
+#include <project/net_settings.h>
 
 #include <map>
 #include <set>
