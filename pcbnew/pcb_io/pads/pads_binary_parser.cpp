@@ -3246,12 +3246,18 @@ void BINARY_PARSER::parseRouteVertices()
     uint32_t stride = entry60->stride;
 
     // The node arena can spill past section 60's declared bounds in either direction (observed
-    // both before its start, inside section 59, and after its end, inside section 61) -- the
-    // same class of directory-offset unreliability already handled for section 1's origin.
+    // before its start inside section 59, after its end inside section 61, and -- on boards with
+    // only a handful of nodes, e.g. Seth's hand-built simple3.pcb, 2 vias -- displaced far enough
+    // back to land inside section 57's declared byte range) -- the same class of directory-offset
+    // unreliability already handled for section 1's origin. Anchor the scan's start on section 57
+    // rather than 59 to cover that case; the phase-scoring argmax below is robust to the wider net
+    // since section 57 is a string/byte pool that essentially never scores a false via/corner match.
+    const SDB_SECTION* sec57 = getSection( 57 );
     const SDB_SECTION* sec59 = getSection( 59 );
     const SDB_SECTION* sec61 = getSection( 61 );
 
-    size_t scanStart = sec59 ? sec59->dataOffset : entry60->dataOffset;
+    size_t scanStart = sec57 ? sec57->dataOffset
+                              : ( sec59 ? sec59->dataOffset : entry60->dataOffset );
     size_t scanEnd = sec61 ? sec61->End() : entry60->End();
 
     if( scanEnd > m_data.size() )
