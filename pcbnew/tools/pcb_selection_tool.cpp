@@ -123,6 +123,7 @@ PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
         m_enteredGroup( nullptr ),
         m_selectionMode( SELECTION_MODE::INSIDE_RECTANGLE ),
         m_lockedItemsFiltered( false ),
+        m_previousFirstCell( nullptr ),
         m_priv( std::make_unique<PRIV>() )
 {
     m_filter.lockedItems = false;
@@ -324,7 +325,17 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 else
                 {
                     m_frame->ClearFocus();
-                    selectPoint( evt->Position() );
+
+                    // Handle shift+click range selection within a PCB_TABLE before falling
+                    // back to a normal point selection.  Mirrors eeschema's SCH_TABLE behaviour.
+                    if( !extendTableCellSelectionTo( evt->Position() ) )
+                    {
+                        // Reset the range-selection anchor when the user does anything other
+                        // than extend a table-cell selection
+                        m_previousFirstCell = nullptr;
+
+                        selectPoint( evt->Position() );
+                    }
                 }
             }
 
@@ -590,6 +601,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     }
 
     // Shutting down; clear the selection
+    m_previousFirstCell = nullptr;
     m_selection.Clear();
     m_disambiguateTimer.Stop();
 
@@ -934,11 +946,8 @@ static void passEvent( TOOL_EVENT* const aEvent, const TOOL_ACTION* const aAllow
 }
 
 
-bool PCB_SELECTION_TOOL::selectTableCells( PCB_TABLE* aTable )
+void PCB_SELECTION_TOOL::initializeTableCellSelectionState( PCB_TABLE* aTable )
 {
-    bool cancelled = false;     // Was the tool canceled while it was running?
-    m_multiple = true;          // Multiple selection mode is active
-
     for( PCB_TABLECELL* cell : aTable->GetCells() )
     {
         if( cell->IsSelected() )
@@ -946,6 +955,139 @@ bool PCB_SELECTION_TOOL::selectTableCells( PCB_TABLE* aTable )
         else
             cell->ClearFlags( CANDIDATE );
     }
+}
+
+
+void PCB_SELECTION_TOOL::selectCellsBetween( const VECTOR2D& aStart, const VECTOR2D& aEnd,
+                                             PCB_TABLE* aTable )
+{
+    BOX2I selectionRect( aStart, aEnd );
+    selectionRect.Normalize();
+
+    auto wasSelected =
+            []( EDA_ITEM* aItem )
+            {
+                return ( aItem->GetFlags() & CANDIDATE ) > 0;
+            };
+
+    for( PCB_TABLECELL* cell : aTable->GetCells() )
+    {
+        bool doSelect = false;
+
+        if( cell->HitTest( selectionRect, false ) )
+        {
+            if( m_subtractive )
+                doSelect = false;
+            else if( m_exclusive_or )
+                doSelect = !wasSelected( cell );
+            else
+                doSelect = true;
+        }
+        else if( wasSelected( cell ) )
+        {
+            doSelect = m_additive || m_subtractive || m_exclusive_or;
+        }
+
+        if( doSelect && !cell->IsSelected() )
+            select( cell );
+        else if( !doSelect && cell->IsSelected() )
+            unselect( cell );
+    }
+}
+
+
+bool PCB_SELECTION_TOOL::extendTableCellSelectionTo( const VECTOR2I& aPosition )
+{
+    if( !m_additive || m_selection.GetSize() == 0
+        || !dynamic_cast<PCB_TABLECELL*>( m_selection.GetItem( 0 ) ) )
+    {
+        return false;
+    }
+
+    GENERAL_COLLECTOR clickCells;
+
+    if( m_isFootprintEditor && board()->GetFirstFootprint() )
+    {
+        clickCells.Collect( board()->GetFirstFootprint(), { PCB_TABLECELL_T }, aPosition,
+                            getCollectorsGuide() );
+    }
+    else
+    {
+        clickCells.Collect( board(), { PCB_TABLECELL_T }, aPosition, getCollectorsGuide() );
+    }
+
+    if( clickCells.GetCount() != 1 )
+        return false;
+
+    PCB_TABLECELL* clickedCell  = static_cast<PCB_TABLECELL*>( clickCells[0] );
+    PCB_TABLECELL* firstCell    = static_cast<PCB_TABLECELL*>( m_selection.GetItem( 0 ) );
+    PCB_TABLE*     parentTable  = static_cast<PCB_TABLE*>( clickedCell->GetParent() );
+
+    // Anchor on the first cell of the current selection (or refresh the anchor when
+    // the selection has been reset to a single cell).
+    if( m_previousFirstCell == nullptr || m_selection.GetSize() == 1 )
+        m_previousFirstCell = firstCell;
+
+    for( EDA_ITEM* item : m_selection )
+    {
+        if( !dynamic_cast<PCB_TABLECELL*>( item ) || item->GetParent() != parentTable )
+            return false;
+    }
+
+    if( !m_previousFirstCell || m_previousFirstCell->GetParent() != parentTable )
+        return false;
+
+    // Snapshot the prior selection so we can fire SelectedEvent/UnselectedEvent based
+    // on the net delta rather than on every range change.
+    std::set<EDA_ITEM*> previousSelection;
+
+    for( EDA_ITEM* item : m_selection )
+        previousSelection.insert( item );
+
+    // Restore main-view visibility of the previously-selected cells via the overlay
+    // mechanism; ClearSelected() alone would leave them hidden because
+    // highlightInternal/unhighlightInternal toggle view()->Hide.
+    while( m_selection.GetSize() )
+        unselect( m_selection.Front() );
+
+    initializeTableCellSelectionState( parentTable );
+
+    VECTOR2D start = m_previousFirstCell->GetCenter();
+    VECTOR2D end   = clickedCell->GetCenter();
+    VECTOR2D topLeft( std::min( start.x, end.x ), std::min( start.y, end.y ) );
+    VECTOR2D bottomRight( std::max( start.x, end.x ), std::max( start.y, end.y ) );
+
+    selectCellsBetween( topLeft, bottomRight - topLeft, parentTable );
+
+    bool anyAdded = false;
+    bool anySubtracted = false;
+
+    for( PCB_TABLECELL* cell : parentTable->GetCells() )
+    {
+        bool wasInPrevious = previousSelection.count( cell ) > 0;
+
+        if( cell->IsSelected() && !wasInPrevious )
+            anyAdded = true;
+        else if( wasInPrevious && !cell->IsSelected() )
+            anySubtracted = true;
+    }
+
+    if( anyAdded )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+    if( anySubtracted )
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+
+    return true;
+}
+
+
+bool PCB_SELECTION_TOOL::selectTableCells( PCB_TABLE* aTable )
+{
+    bool cancelled = false;     // Was the tool canceled while it was running?
+    m_multiple = true;          // Multiple selection mode is active
+
+    initializeTableCellSelectionState( aTable );
 
     auto wasSelected =
             []( EDA_ITEM* aItem )
@@ -963,33 +1105,7 @@ bool PCB_SELECTION_TOOL::selectTableCells( PCB_TABLE* aTable )
         else if( evt->IsDrag( BUT_LEFT ) )
         {
             getViewControls()->SetAutoPan( true );
-
-            BOX2I selectionRect( evt->DragOrigin(), evt->Position() - evt->DragOrigin() );
-            selectionRect.Normalize();
-
-            for( PCB_TABLECELL* cell : aTable->GetCells() )
-            {
-                bool doSelect = false;
-
-                if( cell->HitTest( selectionRect, false ) )
-                {
-                    if( m_subtractive )
-                        doSelect = false;
-                    else if( m_exclusive_or )
-                        doSelect = !wasSelected( cell );
-                    else
-                        doSelect = true;
-                }
-                else if( wasSelected( cell ) )
-                {
-                    doSelect = m_additive || m_subtractive || m_exclusive_or;
-                }
-
-                if( doSelect && !cell->IsSelected() )
-                    select( cell );
-                else if( !doSelect && cell->IsSelected() )
-                    unselect( cell );
-            }
+            selectCellsBetween( evt->DragOrigin(), evt->Position() - evt->DragOrigin(), aTable );
         }
         else if( evt->IsMouseUp( BUT_LEFT ) )
         {
@@ -3308,6 +3424,10 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
 
 void PCB_SELECTION_TOOL::ClearSelection( bool aQuietMode )
 {
+    // Drop any table-cell range anchor along with the selection itself (do this even when the
+    // selection is already empty so that the cached pointer is not left stranded)
+    m_previousFirstCell = nullptr;
+
     if( m_selection.Empty() )
         return;
 
@@ -3330,6 +3450,10 @@ void PCB_SELECTION_TOOL::ClearSelection( bool aQuietMode )
 
 void PCB_SELECTION_TOOL::RebuildSelection()
 {
+    // Drop the table-cell range anchor; the board may have been reloaded and any cached
+    // pointer is no longer guaranteed to be valid.
+    m_previousFirstCell = nullptr;
+
     m_selection.Clear();
 
     bool enteredGroupFound = false;
