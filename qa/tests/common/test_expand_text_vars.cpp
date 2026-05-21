@@ -22,6 +22,7 @@
 #include <boost/test/unit_test.hpp>
 #include <atomic>
 #include <filesystem>
+#include <optional>
 #include <thread>
 #include <vector>
 #include <common.h>
@@ -366,6 +367,91 @@ BOOST_AUTO_TEST_CASE( ParallelResolveTextVarsWithMathExpressions )
 
     BOOST_CHECK( !failed.load() );
     BOOST_CHECK_EQUAL( totalRuns.load(), static_cast<int>( numThreads ) * iterations );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+/**
+ * Regression test for KiCad GitLab issue #24244.
+ *
+ * When KICAD_USER_TEMPLATE_DIR (or any path env var) itself references another env var
+ * (e.g. value "${KICAD_CONFIG_HOME}/templates"), the value must be recursively expanded
+ * before being treated as a filesystem path.  In v10 the new-project flow used the raw
+ * value, which caused KiCad to create directories literally named "${KICAD_CONFIG_HOME}"
+ * relative to the working directory.
+ */
+struct EnvVarRecursiveExpansionFixture
+{
+    wxString                innerPath;
+    std::optional<wxString> oldInner;
+    std::optional<wxString> oldOuter;
+
+    EnvVarRecursiveExpansionFixture()
+    {
+        wxString existing;
+
+        if( wxGetEnv( wxS( "KICAD_QA_INNER" ), &existing ) )
+            oldInner = existing;
+
+        if( wxGetEnv( wxS( "KICAD_QA_OUTER" ), &existing ) )
+            oldOuter = existing;
+
+        innerPath = wxString::FromUTF8(
+                ( std::filesystem::temp_directory_path() / "kicad-qa-24244" ).generic_string() );
+
+        wxSetEnv( wxS( "KICAD_QA_INNER" ), innerPath );
+        wxSetEnv( wxS( "KICAD_QA_OUTER" ), wxS( "${KICAD_QA_INNER}/templates" ) );
+    }
+
+    ~EnvVarRecursiveExpansionFixture()
+    {
+        if( oldInner )
+            wxSetEnv( wxS( "KICAD_QA_INNER" ), *oldInner );
+        else
+            wxUnsetEnv( wxS( "KICAD_QA_INNER" ) );
+
+        if( oldOuter )
+            wxSetEnv( wxS( "KICAD_QA_OUTER" ), *oldOuter );
+        else
+            wxUnsetEnv( wxS( "KICAD_QA_OUTER" ) );
+    }
+};
+
+BOOST_FIXTURE_TEST_SUITE( EnvVarRecursiveExpansion, EnvVarRecursiveExpansionFixture )
+
+BOOST_AUTO_TEST_CASE( ExpandsNestedReferences )
+{
+    wxString rawValue;
+    BOOST_REQUIRE( wxGetEnv( wxS( "KICAD_QA_OUTER" ), &rawValue ) );
+
+    // The raw value should still contain the unexpanded reference.
+    BOOST_CHECK( rawValue.Contains( wxS( "${KICAD_QA_INNER}" ) ) );
+
+    wxString expanded = ExpandEnvVarSubstitutions( rawValue, nullptr );
+    wxString expected = innerPath + wxS( "/templates" );
+
+    // After expansion the inner reference must be resolved to its concrete path.
+    BOOST_CHECK_MESSAGE( expanded == expected,
+                         wxString::Format( wxS( "Expected '%s', got '%s'" ), expected, expanded ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( UndefinedReferenceLeavesLiteralMarker )
+{
+    // If a referenced variable is undefined, ExpandEnvVarSubstitutions preserves the
+    // original token.  Callers that then mkdir the result would create a literal
+    // "${MISSING}" directory; production code must detect this and bail out.
+    wxUnsetEnv( wxS( "KICAD_QA_INNER" ) );
+
+    wxString rawValue;
+    BOOST_REQUIRE( wxGetEnv( wxS( "KICAD_QA_OUTER" ), &rawValue ) );
+
+    wxString expanded = ExpandEnvVarSubstitutions( rawValue, nullptr );
+    BOOST_CHECK( expanded.Contains( wxS( "${" ) ) );
+
+    // Restore so the fixture destructor sees a known state.
+    wxSetEnv( wxS( "KICAD_QA_INNER" ), innerPath );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

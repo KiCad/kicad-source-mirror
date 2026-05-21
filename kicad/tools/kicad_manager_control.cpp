@@ -19,6 +19,7 @@
  */
 
 #include <wildcards_and_files_ext.h>
+#include <common.h>
 #include <env_vars.h>
 #include <executable_names.h>
 #include <pgm_base.h>
@@ -150,8 +151,19 @@ static wxFileName ensureDefaultProjectTemplate()
     if( it == Pgm().GetLocalEnvVariables().end() || it->second.GetValue() == wxEmptyString )
         return wxFileName();
 
+    // The value may itself reference other environment variables (e.g. ${KICAD_CONFIG_HOME}).
+    // Expand them before touching the filesystem, otherwise we create directories literally
+    // named "${OTHER_VAR}".
+    wxString resolved = ExpandEnvVarSubstitutions( it->second.GetValue(), nullptr );
+
+    // If expansion left an unresolved variable reference in the path, bail out rather than
+    // mkdir a literal "${MISSING}" directory under cwd.
+    if( resolved.Contains( wxT( "${" ) ) || resolved.Contains( wxT( "$(" ) ) )
+        return wxFileName();
+
     wxFileName templatePath;
-    templatePath.AssignDir( it->second.GetValue() );
+    templatePath.AssignDir( resolved );
+    templatePath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
     templatePath.AppendDir( "default" );
 
     if( !templatePath.DirExists() && !templatePath.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
@@ -219,26 +231,31 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
     wxString userTemplatesPath;
     wxString systemTemplatesPath;
 
+    auto resolveTemplateDir = []( const wxString& aValue ) -> wxString
+    {
+        wxString resolved = ExpandEnvVarSubstitutions( aValue, nullptr );
+
+        // Skip values with unresolved references so we don't seed the selector with a
+        // bogus path that doesn't exist on disk.
+        if( resolved.Contains( wxT( "${" ) ) || resolved.Contains( wxT( "$(" ) ) )
+            return wxEmptyString;
+
+        wxFileName templatePath;
+        templatePath.AssignDir( resolved );
+        templatePath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+        return templatePath.GetFullPath();
+    };
+
     ENV_VAR_MAP_CITER itUser = Pgm().GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
 
     if( itUser != Pgm().GetLocalEnvVariables().end() && itUser->second.GetValue() != wxEmptyString )
-    {
-        wxFileName templatePath;
-        templatePath.AssignDir( itUser->second.GetValue() );
-        templatePath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
-        userTemplatesPath = templatePath.GetFullPath();
-    }
+        userTemplatesPath = resolveTemplateDir( itUser->second.GetValue() );
 
     std::optional<wxString> v = ENV_VAR::GetVersionedEnvVarValue( Pgm().GetLocalEnvVariables(),
                                                                   wxT( "TEMPLATE_DIR" ) );
 
     if( v && !v->IsEmpty() )
-    {
-        wxFileName templatePath;
-        templatePath.AssignDir( *v );
-        templatePath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
-        systemTemplatesPath = templatePath.GetFullPath();
-    }
+        systemTemplatesPath = resolveTemplateDir( *v );
 
     // Use RunMainStack to show the dialog on the main stack instead of the coroutine stack.
     // This is necessary because the template selector uses a WebView which triggers WebKit's
