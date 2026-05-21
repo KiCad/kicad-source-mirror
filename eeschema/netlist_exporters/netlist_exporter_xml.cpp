@@ -37,6 +37,8 @@
 #include <wx/wfstream.h>
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
 #include <json_common.h>
+#include <project/net_settings.h>
+#include <project/project_file.h>
 #include <project_sch.h>
 #include <sch_rule_area.h>
 #include <trace_helpers.h>
