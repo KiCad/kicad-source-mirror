@@ -1,0 +1,6 @@
+(version 1)
+
+(rule "track_via_phys"
+	(condition "A.Type == 'track' && B.Type == 'via'")
+	(constraint physical_clearance (min 2mm))
+)
