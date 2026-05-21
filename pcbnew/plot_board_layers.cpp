@@ -1367,6 +1367,8 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
     renderSettings->LoadColors( aPlotOpts->ColorSettings() );
     renderSettings->SetDefaultPenWidth( pcbIUScale.mmToIU( 0.0212 ) );  // Hairline at 1200dpi
     renderSettings->SetLayerName( aLayerName );
+    renderSettings->SetDashLengthRatio( aPlotOpts->GetDashedLineDashRatio() );
+    renderSettings->SetGapLengthRatio( aPlotOpts->GetDashedLineGapRatio() );
 
     plotter->SetRenderSettings( renderSettings );
 
