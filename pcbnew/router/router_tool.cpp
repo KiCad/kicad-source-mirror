@@ -819,6 +819,9 @@ void ROUTER_TOOL::saveRouterDebugLog()
 
     for( auto item : removed )
     {
+        if( item->OfKind( PNS::ITEM::HOLE_T ) )
+            continue;
+
         wxASSERT_MSG( item->Parent() != nullptr, "removed an item with no parent uuid?" );
 
         if( item->Parent() )
