@@ -604,6 +604,12 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
     static const wxString c_datasheetFieldName( wxS( "Datasheet" ) );
     static const wxString c_footprintFieldName( wxS( "Footprint" ) );
 
+    // User fields produced from the database mapping must appear in the order they are
+    // declared in the .kicad_dbl file, not in lexicographic order of their values. Start
+    // assigning ordinals above whatever the source LIB_SYMBOL already uses so that any
+    // pre-existing user fields keep their relative position before the database fields.
+    int dbFieldOrdinal = symbol->GetNextFieldOrdinal();
+
     for( const DATABASE_FIELD_MAPPING& mapping : aTable.fields )
     {
         if( !aRow.count( mapping.column ) )
@@ -673,6 +679,15 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
             isNew = true;
             fieldsMap[mapping.name_wx] = field;
         }
+
+        // Assign a sort-order ordinal so the property editor and BOM see the fields in the
+        // order declared in the .kicad_dbl file. Without this, all USER fields share the
+        // same FIELD_T::USER id and fall through to value-based comparison in operator<.
+        // SetOrdinal forces m_id to FIELD_T::USER, so only apply it to non-mandatory fields
+        // - a DB mapping that lands on a mandatory field by name (e.g. Reference or
+        // Description) must keep its FIELD_T identity for downstream lookups.
+        if( !field->IsMandatory() )
+            field->SetOrdinal( dbFieldOrdinal++ );
 
         if( !mapping.inherit_properties || isNew )
         {
