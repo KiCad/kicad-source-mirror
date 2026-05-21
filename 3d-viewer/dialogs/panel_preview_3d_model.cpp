@@ -26,6 +26,8 @@
 
 #include <3d_rendering/opengl/render_3d_opengl.h> // Must be included before any GL header
 
+#include <cmath>
+
 #include "panel_preview_3d_model.h"
 #include <dialogs/dialog_unit_entry.h>
 #include <libeval/numeric_evaluator.h>
@@ -77,26 +79,32 @@ static wxString evaluateTextCtrl( const wxString& aValue )
 
 
 /**
- * Ensure -MAX_ROTATION <= rotation <= MAX_ROTATION.
+ * Normalize a rotation in degrees to the half-open range (-MAX_ROTATION, MAX_ROTATION].
  *
- * @param \a aRotation will be normalized between -MAX_ROTATION and MAX_ROTATION.
+ * Matches the convention used by EDA_ANGLE::Normalize180(), so 198 maps to -162
+ * and 540 maps to 180.
  */
+static double normalizeRotation( double aRotation )
+{
+    double normalized = std::fmod( aRotation, 2.0 * MAX_ROTATION );
+
+    if( normalized <= -MAX_ROTATION )
+        normalized += 2.0 * MAX_ROTATION;
+    else if( normalized > MAX_ROTATION )
+        normalized -= 2.0 * MAX_ROTATION;
+
+    if( normalized == -0.0 )
+        normalized = 0.0;
+
+    return normalized;
+}
+
+
 static double rotationFromString( const wxString& aValue )
 {
     double rotation = EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, EDA_UNITS::DEGREES, aValue );
 
-    if( rotation > MAX_ROTATION )
-    {
-        int n = KiROUND( rotation / MAX_ROTATION );
-        rotation -= MAX_ROTATION * n;
-    }
-    else if( rotation < -MAX_ROTATION )
-    {
-        int n = KiROUND( -rotation / MAX_ROTATION );
-        rotation += MAX_ROTATION * n;
-    }
-
-    return rotation;
+    return normalizeRotation( rotation );
 }
 
 
@@ -518,7 +526,7 @@ void PANEL_PREVIEW_3D_MODEL::doIncrementRotation( wxSpinEvent& aEvent, double aS
 
     double value = rotationFromString( textCtrl->GetValue() );
 
-    value += ( step * aSign );
+    value = normalizeRotation( value + step * aSign );
 
     textCtrl->SetValue( formatRotationValue( value ) );
 }
@@ -601,7 +609,7 @@ void PANEL_PREVIEW_3D_MODEL::onMouseWheelRot( wxMouseEvent& event )
 
     double value = rotationFromString( textCtrl->GetValue() );
 
-    value += step;
+    value = normalizeRotation( value + step );
 
     textCtrl->SetValue( formatRotationValue( value ) );
 }
