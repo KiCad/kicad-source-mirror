@@ -52,6 +52,7 @@ private:
     void OnErrorLinkClicked( wxHtmlLinkEvent& event ) override;
     void onCharHook( wxKeyEvent& aEvent );
     void OnContextMenu( wxMouseEvent& event ) override;
+    void OnShowMatching();
 
     void checkPlausibility( const std::vector<std::shared_ptr<DRC_RULE>>& aRules );
 
