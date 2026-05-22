@@ -342,9 +342,53 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
 
     KIGIT::GitIndexPtr indexPtr( index );
 
+    git_commit* parentCommit = nullptr;
+
+    if( git_commit_parentcount( headCommit ) > 0 && git_commit_parent( &parentCommit, headCommit, 0 ) != 0 )
+    {
+        aHandler->AddErrorString(
+                wxString::Format( _( "Failed to get parent commit: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        return CommitResult::Error;
+    }
+
+    KIGIT::GitCommitPtr parentCommitPtr( parentCommit );
+
+    if( parentCommit )
+    {
+        git_tree* parentTree = nullptr;
+
+        if( git_commit_tree( &parentTree, parentCommit ) != 0 )
+        {
+            aHandler->AddErrorString(
+                    wxString::Format( _( "Failed to get parent tree: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+            return CommitResult::Error;
+        }
+
+        KIGIT::GitTreePtr parentTreePtr( parentTree );
+
+        if( git_index_read_tree( index, parentTree ) != 0 )
+        {
+            aHandler->AddErrorString(
+                    wxString::Format( _( "Failed to reset index: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+            return CommitResult::Error;
+        }
+    }
+    else
+    {
+        // Amending the very first commit: start from an empty tree.
+        git_index_clear( index );
+    }
+
+    const char* workdir = git_repository_workdir( repo );
+
     for( const wxString& file : aFiles )
     {
-        if( git_index_add_bypath( index, file.mb_str() ) != 0 )
+        bool onDisk = workdir && wxFileName::FileExists( wxString::FromUTF8( workdir ) + file );
+
+        int rc =
+                onDisk ? git_index_add_bypath( index, file.mb_str() ) : git_index_remove_bypath( index, file.mb_str() );
+
+        if( rc != 0 )
         {
             aHandler->AddErrorString(
                     wxString::Format( _( "Failed to add file to index: %s" ), KIGIT_COMMON::GetLastGitError() ) );

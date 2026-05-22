@@ -2748,6 +2748,15 @@ void PROJECT_TREE_PANE::onGitAmendCommit( wxCommandEvent& aEvent )
         return;
     }
 
+    wxString reopenPath = Prj().GetProjectPath();
+
+    if( git_repository* fresh = KIGIT::PROJECT_GIT_UTILS::GetRepositoryForFile( reopenPath.c_str() ) )
+    {
+        m_TreeProject->SetGitRepo( fresh );
+        git_repository_free( repo );
+        repo = fresh;
+    }
+
     if( git_repository_head_unborn( repo ) != 0 )
     {
         DisplayErrorMessage( wxGetTopLevelParent( this ), _( "Cannot amend: the branch has no commits yet." ) );
@@ -2921,6 +2930,58 @@ void PROJECT_TREE_PANE::onGitAmendCommit( wxCommandEvent& aEvent )
             continue;
 
         modifiedFiles.emplace( relativePath, fileStatus.gitStatus );
+    }
+
+    if( git_reference* headRefForDiff = nullptr; git_repository_head( &headRefForDiff, repo ) == GIT_OK )
+    {
+        KIGIT::GitReferencePtr headRefForDiffPtr( headRefForDiff );
+        git_commit*            lastCommit = nullptr;
+
+        if( git_reference_peel( (git_object**) &lastCommit, headRefForDiff, GIT_OBJECT_COMMIT ) == GIT_OK )
+        {
+            KIGIT::GitCommitPtr lastCommitPtr( lastCommit );
+            git_commit*         parentCommit = nullptr;
+            git_tree*           parentTree = nullptr;
+            git_tree*           lastTree = nullptr;
+
+            if( git_commit_parentcount( lastCommit ) > 0
+                && git_commit_parent( &parentCommit, lastCommit, 0 ) == GIT_OK )
+            {
+                git_commit_tree( &parentTree, parentCommit );
+            }
+
+            KIGIT::GitCommitPtr parentCommitPtr( parentCommit );
+            KIGIT::GitTreePtr   parentTreePtr( parentTree );
+
+            if( git_commit_tree( &lastTree, lastCommit ) == GIT_OK )
+            {
+                KIGIT::GitTreePtr lastTreePtr( lastTree );
+                git_diff*         diff = nullptr;
+
+                if( git_diff_tree_to_tree( &diff, repo, parentTree, lastTree, nullptr ) == GIT_OK )
+                {
+                    KIGIT::GitDiffPtr diffPtr( diff );
+
+                    for( size_t ii = 0; ii < git_diff_num_deltas( diff ); ++ii )
+                    {
+                        const git_diff_delta* delta = git_diff_get_delta( diff, ii );
+                        const char*           path = delta->new_file.path ? delta->new_file.path : delta->old_file.path;
+
+                        if( !path )
+                            continue;
+
+                        int flag = GIT_STATUS_INDEX_MODIFIED;
+
+                        if( delta->status == GIT_DELTA_ADDED )
+                            flag = GIT_STATUS_INDEX_NEW;
+                        else if( delta->status == GIT_DELTA_DELETED )
+                            flag = GIT_STATUS_INDEX_DELETED;
+
+                        modifiedFiles[wxString::FromUTF8( path )] |= flag;
+                    }
+                }
+            }
+        }
     }
 
     DIALOG_GIT_COMMIT dlg( wxGetTopLevelParent( this ), repo, userConfig.authorName, userConfig.authorEmail,
