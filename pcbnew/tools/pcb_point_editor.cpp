@@ -2486,7 +2486,11 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 }
             }
 
-            if( !m_angleSnapActive && m_editPoints->PointsSize() > 2 && !evt->Modifier( MD_SHIFT ) )
+            bool isFreePolygon =
+                    item->Type() == PCB_ZONE_T
+                    || ( item->Type() == PCB_SHAPE_T && static_cast<PCB_SHAPE*>( item )->GetShape() == SHAPE_T::POLY );
+
+            if( isFreePolygon && !m_angleSnapActive && m_editPoints->PointsSize() > 2 && !evt->Modifier( MD_SHIFT ) )
             {
                 int idx = getEditedPointIndex();
 
@@ -2503,10 +2507,23 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
                     if( std::abs( ang - snapAng ) < 2.0 )
                     {
-                        m_angleSnapPos = snapCorner( prev, next, pos, snapAng );
-                        m_angleSnapActive = true;
-                        m_stickyDisplacement = evt->Position() - m_angleSnapPos;
-                        pos = m_angleSnapPos;
+                        VECTOR2I snapped = snapCorner( prev, next, pos, snapAng );
+
+                        if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID && grid.GetSnap() )
+                        {
+                            VECTOR2I gridded = grid.BestSnapAnchor( snapped, {}, grid.GetItemGrid( item ), { item } );
+                            double   griddedAng = SEG( gridded, prev ).Angle( SEG( gridded, next ) ).AsDegrees();
+
+                            snapped = std::abs( griddedAng - snapAng ) < 2.0 ? gridded : pos;
+                        }
+
+                        if( snapped != pos )
+                        {
+                            m_angleSnapPos = snapped;
+                            m_angleSnapActive = true;
+                            m_stickyDisplacement = evt->Position() - m_angleSnapPos;
+                            pos = m_angleSnapPos;
+                        }
                     }
                 }
             }
