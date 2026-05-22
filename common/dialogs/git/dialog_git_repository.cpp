@@ -318,8 +318,10 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
     // If we have, the server may come back to offer another connection
     // type, so we need to keep track of how many times we have tried.
 
+    wxString fullURL = m_fullURL.IsEmpty() ? m_txtURL->GetValue() : m_fullURL;
+
     KIGIT_COMMON common( m_repository );
-    common.SetRemote( m_txtURL->GetValue() );
+    common.SetRemote( fullURL );
     callbacks.credentials = credentials_cb;
     common.SetPassword( m_txtPassword->GetValue() );
     common.SetUsername( m_txtUsername->GetValue() );
@@ -327,8 +329,7 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
     KIGIT_REPO_MIXIN repoMixin( &common );
     callbacks.payload = &repoMixin;
 
-    wxString txtURL = m_txtURL->GetValue();
-    git_remote_create_anonymous( &remote, m_repository, txtURL.mbc_str() );
+    git_remote_create_anonymous( &remote, m_repository, fullURL.mbc_str() );
     KIGIT::GitRemotePtr remotePtr( remote );
 
     if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &callbacks, nullptr, nullptr ) == GIT_OK )
