@@ -638,16 +638,24 @@ bool LIBGIT_BACKEND::SetupRemote( GIT_INIT_HANDLER* aHandler, const RemoteConfig
         fullURL = aConfig.url;
     }
 
-    int error = git_remote_create_with_fetchspec( &remote, repo, "origin",
-                                                  fullURL.ToStdString().c_str(),
-                                                  "+refs/heads/*:refs/remotes/origin/*" );
+    int error;
 
-    KIGIT::GitRemotePtr remotePtr( remote );
+    if( git_remote_lookup( &remote, repo, "origin" ) == GIT_OK )
+    {
+        KIGIT::GitRemotePtr remotePtr( remote );
+        error = git_remote_set_url( repo, "origin", fullURL.ToStdString().c_str() );
+    }
+    else
+    {
+        error = git_remote_create_with_fetchspec( &remote, repo, "origin", fullURL.ToStdString().c_str(),
+                                                  "+refs/heads/*:refs/remotes/origin/*" );
+        KIGIT::GitRemotePtr remotePtr( remote );
+    }
 
     if( error != GIT_OK )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to create remote: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        aHandler->AddErrorString(
+                wxString::Format( _( "Failed to set up remote: %s" ), KIGIT_COMMON::GetLastGitError() ) );
         return false;
     }
 
