@@ -807,7 +807,11 @@ void KIGIT_COMMON::updateConnectionType()
 int KIGIT_COMMON::HandleSSHKeyAuthentication( git_cred** aOut, const wxString& aUsername )
 {
     if( !( m_testedTypes & KIGIT_CREDENTIAL_SSH_AGENT ) )
-        return HandleSSHAgentAuthentication( aOut, aUsername );
+    {
+        if( HandleSSHAgentAuthentication( aOut, aUsername ) == GIT_OK )
+            return GIT_OK;
+        // Agent unavailable or has no matching key; fall through to configured key.
+    }
 
     // SSH key authentication with password
     wxString sshKey = GetNextPublicKey();
@@ -849,6 +853,8 @@ int KIGIT_COMMON::HandlePlaintextAuthentication( git_cred** aOut, const wxString
 
 int KIGIT_COMMON::HandleSSHAgentAuthentication( git_cred** aOut, const wxString& aUsername )
 {
+    m_testedTypes |= KIGIT_CREDENTIAL_SSH_AGENT;
+
     if( git_credential_ssh_key_from_agent( aOut, aUsername.mbc_str() ) != GIT_OK )
     {
         wxLogTrace( traceGit, "Failed to create SSH agent credential for %s: %s",
@@ -856,7 +862,6 @@ int KIGIT_COMMON::HandleSSHAgentAuthentication( git_cred** aOut, const wxString&
         return GIT_PASSTHROUGH;
     }
 
-    m_testedTypes |= KIGIT_CREDENTIAL_SSH_AGENT;
     return GIT_OK;
 }
 
