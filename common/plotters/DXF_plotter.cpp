@@ -810,7 +810,7 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
                 "  9\n"
                 "$HANDSEED\n"
                 "  5\n"
-                "FFFFFFFFFFFFFFFF\n"
+                "FFFFFFFF\n"
                 "  9\n"
                 "$ANGBASE\n"
                 "  50\n"
@@ -878,13 +878,16 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
         const char* dashes;
     };
 
-    static const LtypePattern ltypes[] =
-    {
-        { "CONTINUOUS", "Solid line",             0, 0.0,  ""                                  },
-        { "DASHDOT",    "Dash Dot ____ _ ____ _", 4, 2.0,  " 49\n1.25\n 49\n-0.25\n"
-                                                          " 49\n0.25\n 49\n-0.25\n"            },
-        { "DASHED",     "Dashed __ __ __ __ __",  2, 0.75, " 49\n0.5\n 49\n-0.25\n"             },
-        { "DOTTED",     "Dotted .  .  .  .",      2, 0.2,  " 49\n0.0\n 49\n-0.2\n"              },
+    static const LtypePattern ltypes[] = {
+        { "CONTINUOUS", "Solid line", 0, 0.0, "" },
+
+        { "DASHDOT", "Dash Dot ____ _ ____ _", 4, 2.0,
+          " 49\n1.25\n 74\n0\n 49\n-0.25\n 74\n0\n"
+          " 49\n0.25\n 74\n0\n 49\n-0.25\n 74\n0\n" },
+
+        { "DASHED", "Dashed __ __ __ __ __", 2, 0.75, " 49\n0.5\n 74\n0\n 49\n-0.25\n 74\n0\n" },
+
+        { "DOTTED", "Dotted .  .  .  .", 2, 0.2, " 49\n0.0\n 74\n0\n 49\n-0.2\n 74\n0\n" },
     };
 
     std::string ltypeTableHandle = nextHandle();
