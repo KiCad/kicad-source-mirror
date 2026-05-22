@@ -253,7 +253,7 @@ wxString SCH_FIELD::GetFullText( int unit ) const
     text << wxT( "?" );
 
     if( GetParentSymbol() && GetParentSymbol()->IsMultiUnit() )
-        text << LIB_SYMBOL::LetterSubReference( unit, 'A' );
+        text << GetParentSymbol()->GetUnitDisplayName( unit, false );
 
     return text;
 }

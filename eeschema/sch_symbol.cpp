@@ -1131,6 +1131,29 @@ void SCH_SYMBOL::UpdatePrefix()
 
 wxString SCH_SYMBOL::SubReference( int aUnit, bool aAddSeparator ) const
 {
+    // A custom unit display name overrides the default A/B/C (or numeric) suffix.
+    if( m_part )
+    {
+        const std::map<int, wxString>& names = m_part->GetUnitDisplayNames();
+        auto                           it = names.find( aUnit );
+
+        if( it != names.end() && !it->second.IsEmpty() )
+        {
+            wxString subRef;
+
+            if( SCHEMATIC* schematic = Schematic() )
+            {
+                int sep = schematic->Settings().m_SubpartIdSeparator;
+
+                if( sep != 0 && aAddSeparator )
+                    subRef << wxChar( sep );
+            }
+
+            subRef << it->second;
+            return subRef;
+        }
+    }
+
     if( SCHEMATIC* schematic = Schematic() )
         return schematic->Settings().SubReference( aUnit, aAddSeparator );
 

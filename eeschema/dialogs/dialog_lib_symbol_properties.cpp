@@ -490,6 +490,29 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
         }
     }
 
+    if( !m_unitNamesGrid->CommitPendingChanges() )
+        return false;
+
+    std::set<wxString> seenSubRefs;
+
+    for( int row = 0; row < m_unitNamesGrid->GetNumberRows(); ++row )
+    {
+        wxString subRef = m_unitNamesGrid->GetCellValue( row, 1 );
+
+        if( subRef.IsEmpty() )
+            subRef = LIB_SYMBOL::LetterSubReference( row + 1, 'A' );
+
+        if( !seenSubRefs.insert( subRef.Upper() ).second )
+        {
+            m_delayedErrorMessage = wxString::Format( _( "The unit name '%s' is already in use." ), subRef );
+            m_delayedFocusGrid = m_unitNamesGrid;
+            m_delayedFocusColumn = 1;
+            m_delayedFocusRow = row;
+            m_delayedFocusPage = 1;
+            return false;
+        }
+    }
+
     /*
      * Confirm destructive actions.
      */
