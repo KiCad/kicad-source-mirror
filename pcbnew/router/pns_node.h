@@ -61,7 +61,8 @@ enum class CONSTRAINT_TYPE
     CT_HOLE_TO_HOLE = 9,
     CT_DIFF_PAIR_SKEW = 10,
     CT_MAX_UNCOUPLED = 11,
-    CT_PHYSICAL_CLEARANCE = 12
+    CT_PHYSICAL_CLEARANCE = 12,
+    CT_PHYSICAL_HOLE_CLEARANCE = 13
 };
 
 /**
@@ -141,6 +142,7 @@ public:
     virtual ~RULE_RESOLVER() {}
 
     virtual int Clearance( const ITEM* aA, const ITEM* aB, bool aUseClearanceEpsilon = true ) = 0;
+    virtual bool HasUserDefinedPhysicalConstraint() { return false; }
 
     virtual NET_HANDLE DpCoupledNet( NET_HANDLE aNet ) = 0;
     virtual int DpNetPolarity( NET_HANDLE aNet ) = 0;

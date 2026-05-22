@@ -107,44 +107,72 @@ public:
         // Normalize layer range (no -1 magic numbers)
         layers = layers.Intersection( PNS_LAYER_RANGE( PCBNEW_LAYER_ID_START, PCB_LAYER_ID_COUNT - 1 ) );
 
+        // electrical clearances are net-aware; physical clearances are net-blind; same-net or
+        // free-pad pairs with no positive physical rule fall back to -1.
+        const bool sameNet = aA && aB && aA->Net() && aA->Net() == aB->Net();
+        const bool freePad = aA && aB && ( aA->IsFreePad() || aB->IsFreePad() );
+
         for( int layer = layers.Start(); layer <= layers.End(); ++layer )
         {
-            if( isHole( aA ) && isHole( aB) )
+            if( !sameNet && !freePad )
             {
-                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, layer, &constraint ) )
+                if( isHole( aA ) && isHole( aB ) )
+                {
+                    if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, layer, &constraint ) )
+                    {
+                        if( constraint.m_Value.Min() > rv )
+                            rv = constraint.m_Value.Min();
+                    }
+                }
+                else if( isHole( aA ) || isHole( aB ) )
+                {
+                    if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, layer, &constraint ) )
+                    {
+                        if( constraint.m_Value.Min() > rv )
+                            rv = constraint.m_Value.Min();
+                    }
+                }
+                else if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
+                {
+                    if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint ) )
+                    {
+                        if( constraint.m_Value.Min() > rv )
+                            rv = constraint.m_Value.Min();
+                    }
+                }
+                else if( isEdge( aA ) || ( aB && isEdge( aB ) ) )
+                {
+                    if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
+                    {
+                        if( constraint.m_Value.Min() > rv )
+                            rv = constraint.m_Value.Min();
+                    }
+                }
+            }
+
+            if( isHole( aA ) || isHole( aB ) )
+            {
+                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_PHYSICAL_HOLE_CLEARANCE, aA, aB, layer, &constraint ) )
                 {
                     if( constraint.m_Value.Min() > rv )
                         rv = constraint.m_Value.Min();
                 }
             }
-            else if( isHole( aA ) || isHole( aB ) )
+
+            if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_PHYSICAL_CLEARANCE, aA, aB, layer, &constraint ) )
             {
-                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, layer, &constraint ) )
-                {
-                    if( constraint.m_Value.Min() > rv )
-                        rv = constraint.m_Value.Min();
-                }
-            }
-            else if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
-            {
-                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, layer, &constraint ) )
-                {
-                    if( constraint.m_Value.Min() > rv )
-                        rv = constraint.m_Value.Min();
-                }
-            }
-            else if( isEdge( aA ) || ( aB && isEdge( aB ) ) )
-            {
-                if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, layer, &constraint ) )
-                {
-                    if( constraint.m_Value.Min() > rv )
-                        rv = constraint.m_Value.Min();
-                }
+                if( constraint.m_Value.Min() > rv )
+                    rv = constraint.m_Value.Min();
             }
         }
 
+        if( ( sameNet || freePad ) && rv == 0 )
+            rv = -1;
+
         return rv;
     }
+
+    bool HasUserDefinedPhysicalConstraint() override { return m_hasUserPhysicalRules; }
 
     virtual PNS::NET_HANDLE DpCoupledNet( PNS::NET_HANDLE aNet ) override { return nullptr; }
     virtual int DpNetPolarity( PNS::NET_HANDLE aNet ) override { return -1; }
@@ -185,6 +213,16 @@ public:
             case PNS::CONSTRAINT_TYPE::CT_CLEARANCE:      cl = m_defaultClearance;   break;
             case PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE:   cl = m_defaultHole2Hole;   break;
             case PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE: cl = m_defaultHole2Copper; break;
+            case PNS::CONSTRAINT_TYPE::CT_PHYSICAL_CLEARANCE:
+                if( m_defaultPhysicalClearance == 0 )
+                    return false;
+                cl = m_defaultPhysicalClearance;
+                break;
+            case PNS::CONSTRAINT_TYPE::CT_PHYSICAL_HOLE_CLEARANCE:
+                if( m_defaultPhysicalHoleClearance == 0 )
+                    return false;
+                cl = m_defaultPhysicalHoleClearance;
+                break;
             default: return false;
             }
 
@@ -263,9 +301,12 @@ public:
         m_ruleMap[key] = aConstraint;
     }
 
-    int m_defaultClearance = 200000;
-    int m_defaultHole2Hole = 220000;
-    int m_defaultHole2Copper = 210000;
+    int  m_defaultClearance = 200000;
+    int  m_defaultHole2Hole = 220000;
+    int  m_defaultHole2Copper = 210000;
+    int  m_defaultPhysicalClearance = 0;     // 0 means "rule does not match this pair"
+    int  m_defaultPhysicalHoleClearance = 0; // 0 means "rule does not match this pair"
+    bool m_hasUserPhysicalRules = false;
 
 private:
     std::map<ITEM_KEY, PNS::CONSTRAINT> m_ruleMap;
@@ -814,3 +855,243 @@ BOOST_FIXTURE_TEST_CASE( PNSComponentDraggerBasicDrag, PNS_TEST_FIXTURE )
     world->KillChildren();
 }
 
+
+// Regression tests for issues #18658 and #24132. Physical clearance rules must be
+// enforced for same-net and free-pad pairs without disturbing the fast path on
+// boards that do not define them.
+
+namespace
+{
+PNS::VIA* makeVia( const VECTOR2I& aPos, PNS::NET_HANDLE aNet )
+{
+    PNS::VIA* v = new PNS::VIA( aPos, PNS_LAYER_RANGE( F_Cu, B_Cu ), 50000, 10000 );
+    v->SetNet( aNet );
+    return v;
+}
+
+PNS::SOLID* makePad( const VECTOR2I& aPos, PNS::NET_HANDLE aNet, bool aFreePad = false )
+{
+    PNS::SOLID* s = new PNS::SOLID;
+    s->SetShape( new SHAPE_CIRCLE( aPos, 250000 ) );
+    s->SetPos( aPos );
+    s->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    s->SetNet( aNet );
+    s->SetIsFreePad( aFreePad );
+    return s;
+}
+} // namespace
+
+
+// Cross-net via vs via with no physical rules: ordinary CT_CLEARANCE applies.
+BOOST_FIXTURE_TEST_CASE( PNSCrossNetViaViaElectricalClearanceBaseline, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( &m_ruleResolver );
+
+    PNS::VIA* v1 = makeVia( VECTOR2I( 0, 0 ), (PNS::NET_HANDLE) 1 );
+    PNS::VIA* v2 = makeVia( VECTOR2I( 0, 100000 ), (PNS::NET_HANDLE) 2 );
+    world->AddRaw( v1 );
+    world->AddRaw( v2 );
+
+    m_ruleResolver.m_defaultClearance = 1000000;
+
+    PNS::NODE::OBSTACLES obstacles;
+    world->QueryColliding( v1, obstacles );
+
+    BOOST_CHECK_GE( obstacles.size(), (size_t) 1 );
+}
+
+
+// Same-net via vs via with no physical rules: fast path keeps clearance = -1.
+BOOST_FIXTURE_TEST_CASE( PNSSameNetNoPhysicalRulesFastPathNoCollision, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( &m_ruleResolver );
+
+    PNS::NET_HANDLE net = (PNS::NET_HANDLE) 1;
+    world->AddRaw( makeVia( VECTOR2I( 0, 0 ), net ) );
+    PNS::VIA* v1 = makeVia( VECTOR2I( 0, 100000 ), net );
+    world->AddRaw( v1 );
+
+    m_ruleResolver.m_hasUserPhysicalRules = false;
+    m_ruleResolver.m_defaultClearance = 1000000;
+
+    PNS::NODE::OBSTACLES obstacles;
+    world->QueryColliding( v1, obstacles );
+
+    BOOST_CHECK_EQUAL( obstacles.size(), (size_t) 0 );
+}
+
+
+// Same-net via vs via with a matching physical_clearance rule: collision reported.
+// Regression scenario for issues #18658 and #24132.
+BOOST_FIXTURE_TEST_CASE( PNSSameNetWithPhysicalRuleCollides, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( &m_ruleResolver );
+
+    PNS::NET_HANDLE net = (PNS::NET_HANDLE) 1;
+    world->AddRaw( makeVia( VECTOR2I( 0, 0 ), net ) );
+    PNS::VIA* v1 = makeVia( VECTOR2I( 0, 100000 ), net );
+    world->AddRaw( v1 );
+
+    m_ruleResolver.m_hasUserPhysicalRules = true;
+    m_ruleResolver.m_defaultPhysicalClearance = 1000000;
+
+    PNS::NODE::OBSTACLES obstacles;
+    world->QueryColliding( v1, obstacles );
+
+    BOOST_CHECK_GE( obstacles.size(), (size_t) 1 );
+    if( !obstacles.empty() )
+        BOOST_CHECK_EQUAL( obstacles.begin()->m_clearance, 1000000 );
+}
+
+
+// Free pad vs cross-net pair, no physical rules: fast path applies.
+BOOST_FIXTURE_TEST_CASE( PNSFreePadNoPhysicalRulesFastPath, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( &m_ruleResolver );
+
+    PNS::SOLID* freePad = makePad( VECTOR2I( 0, 0 ), (PNS::NET_HANDLE) 1, /*aFreePad=*/true );
+    PNS::VIA*   v = makeVia( VECTOR2I( 0, 100000 ), (PNS::NET_HANDLE) 2 );
+    world->AddRaw( freePad );
+    world->AddRaw( v );
+
+    m_ruleResolver.m_hasUserPhysicalRules = false;
+    m_ruleResolver.m_defaultClearance = 1000000;
+
+    PNS::NODE::OBSTACLES obstacles;
+    world->QueryColliding( v, obstacles );
+
+    BOOST_CHECK_EQUAL( obstacles.size(), (size_t) 0 );
+}
+
+
+// Free pad vs cross-net pair, physical rules present but no match: safety net must
+// keep free pads from reporting collisions just because the board has a physical
+// rule somewhere.
+BOOST_FIXTURE_TEST_CASE( PNSFreePadSafetyNet, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( &m_ruleResolver );
+
+    PNS::SOLID* freePad = makePad( VECTOR2I( 0, 0 ), (PNS::NET_HANDLE) 1, /*aFreePad=*/true );
+    PNS::VIA*   v = makeVia( VECTOR2I( 0, 100000 ), (PNS::NET_HANDLE) 2 );
+    world->AddRaw( freePad );
+    world->AddRaw( v );
+
+    m_ruleResolver.m_hasUserPhysicalRules = true;
+    m_ruleResolver.m_defaultPhysicalClearance = 0; // rule does not match
+    m_ruleResolver.m_defaultClearance = 1000000;   // would collide if !sameNet block runs
+
+    PNS::NODE::OBSTACLES obstacles;
+    world->QueryColliding( v, obstacles );
+
+    BOOST_CHECK_EQUAL( obstacles.size(), (size_t) 0 );
+}
+
+
+// Free pad with a matching physical_clearance rule: collision reported.
+BOOST_FIXTURE_TEST_CASE( PNSFreePadPhysicalRuleEnforced, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( &m_ruleResolver );
+
+    PNS::SOLID* freePad = makePad( VECTOR2I( 0, 0 ), (PNS::NET_HANDLE) 1, /*aFreePad=*/true );
+    PNS::VIA*   v = makeVia( VECTOR2I( 0, 100000 ), (PNS::NET_HANDLE) 2 );
+    world->AddRaw( freePad );
+    world->AddRaw( v );
+
+    m_ruleResolver.m_hasUserPhysicalRules = true;
+    m_ruleResolver.m_defaultPhysicalClearance = 1000000;
+
+    PNS::NODE::OBSTACLES obstacles;
+    world->QueryColliding( v, obstacles );
+
+    BOOST_CHECK_GE( obstacles.size(), (size_t) 1 );
+}
+
+
+// Same-net via vs pad with a matching physical_hole_clearance rule. Covers the
+// drill-into-pad half of issue #24132 and exercises CT_PHYSICAL_HOLE_CLEARANCE.
+BOOST_FIXTURE_TEST_CASE( PNSSameNetPhysicalHoleClearance, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( &m_ruleResolver );
+
+    PNS::NET_HANDLE net = (PNS::NET_HANDLE) 1;
+    PNS::SOLID*     pad = makePad( VECTOR2I( 0, 0 ), net );
+    PNS::VIA*       via = makeVia( VECTOR2I( 0, 100000 ), net );
+    world->AddRaw( pad );
+    world->AddRaw( via );
+
+    m_ruleResolver.m_hasUserPhysicalRules = true;
+    m_ruleResolver.m_defaultPhysicalHoleClearance = 1000000;
+
+    PNS::NODE::OBSTACLES obstacles;
+    world->QueryColliding( via, obstacles );
+
+    BOOST_CHECK_GE( obstacles.size(), (size_t) 1 );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( PNSSameNetSafetyNetOnOverlap, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( &m_ruleResolver );
+
+    PNS::NET_HANDLE net = (PNS::NET_HANDLE) 1;
+    world->AddRaw( makeVia( VECTOR2I( 0, 0 ), net ) );
+    PNS::VIA* v1 = makeVia( VECTOR2I( 0, 30000 ), net ); // overlaps the first via
+    world->AddRaw( v1 );
+
+    m_ruleResolver.m_hasUserPhysicalRules = true;
+    m_ruleResolver.m_defaultPhysicalClearance = 0;
+
+    PNS::NODE::OBSTACLES obstacles;
+    world->QueryColliding( v1, obstacles );
+
+    BOOST_CHECK_EQUAL( obstacles.size(), (size_t) 0 );
+}
+
+
+// Same-net pad+via with both physical_clearance and physical_hole_clearance
+// matching: the resolver returns max across the two query points.
+BOOST_FIXTURE_TEST_CASE( PNSBothPhysicalConstraintsMaxWins, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( &m_ruleResolver );
+
+    PNS::NET_HANDLE net = (PNS::NET_HANDLE) 1;
+    PNS::SOLID*     pad = makePad( VECTOR2I( 0, 0 ), net );
+    PNS::VIA*       via = makeVia( VECTOR2I( 0, 100000 ), net );
+    world->AddRaw( pad );
+    world->AddRaw( via );
+
+    m_ruleResolver.m_hasUserPhysicalRules = true;
+    m_ruleResolver.m_defaultPhysicalClearance = 100000;
+    m_ruleResolver.m_defaultPhysicalHoleClearance = 2000000;
+
+    PNS::NODE::OBSTACLES obstacles;
+    world->QueryColliding( via, obstacles );
+
+    BOOST_CHECK_GE( obstacles.size(), (size_t) 1 );
+
+    // The recursive collideSimple call for the via's hole inserts a separate OBSTACLE
+    // with the max-accumulated clearance, so look across all entries rather than
+    // relying on std::set ordering (which is by pointer).
+    int maxClearance = 0;
+    for( const PNS::OBSTACLE& obs : obstacles )
+        maxClearance = std::max( maxClearance, obs.m_clearance );
+    BOOST_CHECK_EQUAL( maxClearance, 2000000 );
+}
