@@ -226,7 +226,7 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
                 switch( print_ter )
                 {
                 case 0:
-                    InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
+                    InitNetDescLine.Printf( wxT( "\n%s   %s   %s     %s" ),
                                             InitNetDesc,
                                             refText,
                                             pinText,
@@ -236,7 +236,7 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
 
                 case 1:
                     fmt::print( f, "{}\n", TO_UTF8( InitNetDescLine ) );
-                    fmt::print( f, "{}       {}   {:.4s}\n",
+                    fmt::print( f, "{}       {}   {}\n",
                                     TO_UTF8( StartNetDesc ),
                                     TO_UTF8( refText ),
                                     TO_UTF8( pinText ) );
@@ -244,7 +244,7 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
                     break;
 
                 default:
-                    fmt::print( f, "            {}   {:.4s}\n",
+                    fmt::print( f, "            {}   {}\n",
                                     TO_UTF8( refText ),
                                     TO_UTF8( pinText ) );
                     break;
