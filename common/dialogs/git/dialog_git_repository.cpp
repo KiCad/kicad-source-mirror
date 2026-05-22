@@ -77,6 +77,14 @@ DIALOG_GIT_REPOSITORY::DIALOG_GIT_REPOSITORY( wxWindow* aParent, git_repository*
     finishDialogSettings();
 
     updateAuthControls();
+
+    m_txtURL->Bind( wxEVT_TEXT,
+                    [this]( wxCommandEvent& aEvent )
+                    {
+                        updateURLData();
+                        updateAuthControls();
+                        aEvent.Skip();
+                    } );
 }
 
 
@@ -262,7 +270,7 @@ void DIALOG_GIT_REPOSITORY::updateURLData()
             m_ConnType->SetSelection( static_cast<int>( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS ) );
             SetUsername( username );
             SetPassword( password );
-            m_txtURL->SetValue( repoAddress );
+            m_txtURL->ChangeValue( repoAddress );
 
             m_txtName->SetValue( get_repo_name( repoAddress ) );
         }
@@ -276,7 +284,7 @@ void DIALOG_GIT_REPOSITORY::updateURLData()
             m_fullURL = url;
             m_ConnType->SetSelection( static_cast<int>( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH ) );
             m_txtUsername->SetValue( username );
-            m_txtURL->SetValue( repoAddress );
+            m_txtURL->ChangeValue( repoAddress );
 
             m_txtName->SetValue( get_repo_name( repoAddress ) );
 
