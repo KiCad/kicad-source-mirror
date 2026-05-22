@@ -213,138 +213,8 @@ void PANEL_SETUP_RULES::OnShowMatching()
 
     const wxString text = m_textEditor->GetText();
     const int      cursorPos = m_textEditor->GetCurrentPos();
-    const int      len = (int) text.length();
-
-    struct ParenFrame
-    {
-        int      start;
-        wxString token;
-        wxString ruleName;
-    };
-
-    std::vector<ParenFrame> stack;
-    bool                    inString = false;
-    bool                    inEscape = false;
-    wxString                targetRuleName;
-    bool                    foundRule = false;
-
-    for( int i = 0; i < len; ++i )
-    {
-        wxChar c = text[i];
-
-        if( inEscape )
-        {
-            inEscape = false;
-            continue;
-        }
-
-        if( c == '\\' )
-        {
-            inEscape = true;
-            continue;
-        }
-
-        if( inString )
-        {
-            if( c == '"' )
-                inString = false;
-
-            continue;
-        }
-
-        if( c == '"' )
-        {
-            inString = true;
-            continue;
-        }
-
-        if( c == '(' )
-        {
-            int j = i + 1;
-
-            while( j < len && wxIsspace( text[j] ) )
-                j++;
-
-            int tokStart = j;
-
-            while( j < len && !wxIsspace( text[j] ) && text[j] != '(' && text[j] != ')' )
-                j++;
-
-            wxString token = text.Mid( tokStart, j - tokStart );
-            wxString ruleName;
-
-            if( token == wxT( "rule" ) )
-            {
-                int k = j;
-
-                while( k < len && wxIsspace( text[k] ) )
-                    k++;
-
-                if( k < len && text[k] == '"' )
-                {
-                    k++;
-                    int  nameStart = k;
-                    bool esc = false;
-
-                    while( k < len )
-                    {
-                        if( esc )
-                        {
-                            esc = false;
-                            k++;
-                            continue;
-                        }
-                        if( text[k] == '\\' )
-                        {
-                            esc = true;
-                            k++;
-                            continue;
-                        }
-                        if( text[k] == '"' )
-                            break;
-                        k++;
-                    }
-
-                    ruleName = text.Mid( nameStart, k - nameStart );
-                }
-            }
-
-            stack.push_back( { i, token, ruleName } );
-        }
-        else if( c == ')' )
-        {
-            if( stack.empty() )
-                continue;
-
-            ParenFrame opened = stack.back();
-            stack.pop_back();
-
-            if( opened.token == wxT( "rule" ) && opened.start <= cursorPos && i >= cursorPos )
-            {
-                targetRuleName = opened.ruleName;
-                foundRule = true;
-                break;
-            }
-        }
-    }
-
-    if( !foundRule )
-    {
-        m_errorsReport->Report( _( "Place the cursor inside a (rule ...) block to show matching "
-                                   "items." ),
-                                RPT_SEVERITY_ACTION );
-        m_errorsReport->Flush();
-        return;
-    }
-
-    if( targetRuleName.IsEmpty() )
-    {
-        m_errorsReport->Report( _( "The rule under the cursor has no name; add a name to identify "
-                                   "it." ),
-                                RPT_SEVERITY_ERROR );
-        m_errorsReport->Flush();
-        return;
-    }
+    const int      cursorLine = m_textEditor->LineFromPosition( cursorPos ) + 1;
+    const int      cursorCol = cursorPos - m_textEditor->PositionFromLine( cursorLine - 1 ) + 1;
 
     std::vector<std::shared_ptr<DRC_RULE>> rules;
 
@@ -365,6 +235,115 @@ void PANEL_SETUP_RULES::OnShowMatching()
     {
         m_errorsReport->Report( wxString::Format( wxT( "%s <a href='%d:%d'>%s</a>%s" ), _( "ERROR:" ), pe.lineNumber,
                                                   pe.byteIndex, pe.ParseProblem(), wxEmptyString ),
+                                RPT_SEVERITY_ERROR );
+        m_errorsReport->Flush();
+        return;
+    }
+
+    wxString targetRuleName;
+    bool     foundRule = false;
+
+    try
+    {
+        std::string     utf8( text.mb_str( wxConvUTF8 ) );
+        DRC_RULES_LEXER lex( utf8, _( "DRC rules" ) );
+
+        struct RuleFrame
+        {
+            int      depth;
+            int      startLine;
+            int      startCol;
+            wxString name;
+        };
+
+        std::vector<RuleFrame> ruleStack;
+        int                    depth = 0;
+
+        for( ;; )
+        {
+            int tok = lex.NextTok();
+
+            if( tok == DSN_EOF )
+                break;
+
+            if( tok == DSN_LEFT )
+            {
+                int leftLine = lex.CurLineNumber();
+                int leftCol = lex.CurOffset();
+
+                depth++;
+
+                int sub = lex.NextTok();
+
+                if( sub == DRCRULE_T::T_rule )
+                {
+                    wxString name;
+
+                    if( lex.NextTok() == DSN_STRING )
+                        name = wxString::FromUTF8( lex.CurText() );
+
+                    ruleStack.push_back( { depth, leftLine, leftCol, name } );
+                }
+                else if( sub == DSN_LEFT )
+                {
+                    depth++;
+                }
+                else if( sub == DSN_RIGHT )
+                {
+                    depth--;
+                }
+                else if( sub == DSN_EOF )
+                {
+                    break;
+                }
+            }
+            else if( tok == DSN_RIGHT )
+            {
+                if( !ruleStack.empty() && ruleStack.back().depth == depth )
+                {
+                    RuleFrame opened = ruleStack.back();
+                    ruleStack.pop_back();
+
+                    int endLine = lex.CurLineNumber();
+                    int endCol = lex.CurOffset();
+
+                    bool afterStart = cursorLine > opened.startLine
+                                      || ( cursorLine == opened.startLine && cursorCol >= opened.startCol );
+                    bool beforeEnd = cursorLine < endLine || ( cursorLine == endLine && cursorCol <= endCol );
+
+                    if( afterStart && beforeEnd )
+                    {
+                        targetRuleName = opened.name;
+                        foundRule = true;
+                        break;
+                    }
+                }
+
+                depth--;
+            }
+        }
+    }
+    catch( IO_ERROR& e )
+    {
+        m_errorsReport->Report( wxString::Format( _( "Could not scan rules text: %s" ), e.What() ),
+                                RPT_SEVERITY_ERROR );
+        m_errorsReport->Flush();
+        return;
+    }
+
+    if( !foundRule )
+    {
+        m_errorsReport->Report( _( "Place the cursor inside a (rule ...) block to show matching "
+                                   "items." ),
+                                RPT_SEVERITY_ACTION );
+        m_errorsReport->Flush();
+        return;
+    }
+
+    if( targetRuleName.IsEmpty() )
+    {
+        m_errorsReport->Report( _( "The rule under the cursor has no name; add a name to identify "
+                                   "it." ),
                                 RPT_SEVERITY_ERROR );
         m_errorsReport->Flush();
         return;
