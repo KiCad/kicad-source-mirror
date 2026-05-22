@@ -1598,6 +1598,9 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddReferences( const SCH_REFERENCE_LIST& aRe
                 }
             }
 
+            for( const DATA_MODEL_COL& col : m_cols )
+                m_dataStore[key].try_emplace( col.m_fieldName, wxEmptyString );
+
             refListChanged = true;
         }
     }
