@@ -498,18 +498,23 @@ protected:
     void plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor, const wxString& aText,
                             const TEXT_ATTRIBUTES& aAttrs );
 
-    // Allocate the next DXF object handle.  Handle 0 is reserved by the spec, so the
-    // first allocation returns 1.
+    // Allocate the next DXF object handle.  Handle 0 is reserved by the spec.
     std::string nextHandle();
 
-    // Emit a complete R2000 entity prologue (opcode + handle + owner + AcDbEntity/layer
-    // + entity-specific subclass marker) and return the allocated handle.  An empty
-    // aOwner defaults to the *Model_Space BLOCK_RECORD; the SEQEND closing a POLYLINE
-    // and the VERTEX records inside it override the owner to the POLYLINE's handle.
-    // Pass nullptr for aSubclass on SEQEND, which has no second AcDb marker.
+    // Emit the R2000 entity prologue (opcode + handle + owner + AcDbEntity/layer +
+    // optional subclass) and return the allocated handle.  Empty aOwner defaults to
+    // the *Model_Space BLOCK_RECORD.  Pass nullptr for aSubclass on SEQEND.
     std::string emitEntityHandle( const char* aEntityType, const char* aSubclass,
                                   const std::string& aLayerName,
                                   const std::string& aOwner = "" );
+
+    // Writes the OBJECTS section that closes the BLOCK_RECORD 340 references.  Called
+    // from EndPlot() between ENTITIES/ENDSEC and EOF.
+    void writeObjectsSection();
+
+    // Emit the standard symbol-table header (TABLE, name, handle, owner, subclass,
+    // count) and return the table handle for use as the 330 owner of child records.
+    std::string emitSymbolTableHeader( const char* aTableName, int aCount );
 
     bool         m_textAsLines;
     COLOR4D      m_currentColor;
@@ -527,4 +532,21 @@ protected:
     // BLOCK_RECORD handle for the *Model_Space layout; cached so every entity can
     // reference it as its 330 owner tag.
     std::string  m_modelSpaceHandle;
+
+    // Layout bookkeeping carried from StartPlot to EndPlot so the OBJECTS section can
+    // emit one LAYOUT object per BLOCK_RECORD with the matching 330 back-pointer.
+    struct DxfLayout
+    {
+        std::string name;              // "Model" / "Layout1" / "Layout2"
+        std::string blockName;         // "*Model_Space" / "*Paper_Space" / "*Paper_Space0"
+        std::string blockRecordHandle; // BLOCK_RECORD entry handle
+        std::string layoutHandle;      // LAYOUT object handle (in OBJECTS section)
+        bool        isPaperSpace;
+    };
+
+    std::vector<DxfLayout> m_dxfLayouts;
+    std::string            m_namedObjectDictHandle;
+    std::string            m_layoutDictHandle;
+    std::string            m_plotStyleNameDictHandle;
+    std::string            m_plotStyleNormalHandle;
 };
