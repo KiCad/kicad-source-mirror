@@ -277,7 +277,12 @@ public:
     {
         if( aX > 0 )
         {
-            m_padStack.SetSize( { aX, m_padStack.Size( PADSTACK::ALL_LAYERS ).y }, PADSTACK::ALL_LAYERS );
+            int y = m_padStack.Size( PADSTACK::ALL_LAYERS ).y;
+
+            if( GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
+                y = aX;
+
+            m_padStack.SetSize( { aX, y }, PADSTACK::ALL_LAYERS );
             SetDirty();
         }
     }
@@ -288,7 +293,12 @@ public:
     {
         if( aY > 0 )
         {
-            m_padStack.SetSize( { m_padStack.Size( PADSTACK::ALL_LAYERS ).x, aY }, PADSTACK::ALL_LAYERS );
+            int x = m_padStack.Size( PADSTACK::ALL_LAYERS ).x;
+
+            if( GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
+                x = aY;
+
+            m_padStack.SetSize( { x, aY }, PADSTACK::ALL_LAYERS );
             SetDirty();
         }
     }
