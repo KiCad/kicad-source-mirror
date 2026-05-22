@@ -252,8 +252,10 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
 
     m_gitSyncTimer.SetOwner( this );
     m_gitStatusTimer.SetOwner( this );
+    m_gitFeedbackTimer.SetOwner( this );
     Bind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitSyncTimer ), this, m_gitSyncTimer.GetId() );
     Bind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitStatusTimer ), this, m_gitStatusTimer.GetId() );
+    Bind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitFeedbackTimer ), this, m_gitFeedbackTimer.GetId() );
     /*
      * Filtering is now inverted: the filters are actually used to _enable_ support
      * for a given file type.
@@ -276,8 +278,10 @@ PROJECT_TREE_PANE::~PROJECT_TREE_PANE()
 
     m_gitSyncTimer.Stop();
     m_gitStatusTimer.Stop();
+    m_gitFeedbackTimer.Stop();
     Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitSyncTimer ), this, m_gitSyncTimer.GetId() );
     Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitStatusTimer ), this, m_gitStatusTimer.GetId() );
+    Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitFeedbackTimer ), this, m_gitFeedbackTimer.GetId() );
     shutdownFileWatcher();
 
     if( m_gitSyncTask.valid() )
@@ -2003,12 +2007,24 @@ void PROJECT_TREE_PANE::onGitPullProject( wxCommandEvent& aEvent )
         handler.SetProgressReporter(
                 std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetch Remote" ), 1, PR_NO_ABORT ) );
 
-        if( handler.PerformPull() >= PullResult::Success )
+        PullResult pullResult = handler.PerformPull();
+
+        if( pullResult >= PullResult::Success )
+        {
+            switch( pullResult )
+            {
+            case PullResult::UpToDate:    showGitFeedback( _( "Already up to date." ) ); break;
+            case PullResult::FastForward: showGitFeedback( _( "Pulled changes (fast-forward)." ) ); break;
+            default:                      showGitFeedback( _( "Pulled changes." ) ); break;
+            }
+
             break;
+        }
 
         if( common->WasAuthFailure() && promptForGitCredentials( m_parent, common ) )
             continue;
 
+        showGitFeedback( _( "Pull failed." ) );
         DisplayErrorMessage( m_parent, _( "Failed to pull project" ), handler.GetErrorString() );
         break;
     }
@@ -2035,11 +2051,15 @@ void PROJECT_TREE_PANE::onGitPushProject( wxCommandEvent& aEvent )
                 std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetch Remote" ), 1, PR_NO_ABORT ) );
 
         if( handler.PerformPush() == PushResult::Success )
+        {
+            showGitFeedback( _( "Pushed to remote." ) );
             break;
+        }
 
         if( common->WasAuthFailure() && promptForGitCredentials( m_parent, common ) )
             continue;
 
+        showGitFeedback( _( "Push failed." ) );
         DisplayErrorMessage( m_parent, _( "Failed to push project" ), handler.GetErrorString() );
         break;
     }
@@ -2636,11 +2656,15 @@ void PROJECT_TREE_PANE::onGitFetch( wxCommandEvent& aEvent )
         GIT_PULL_HANDLER handler( gitCommon );
 
         if( handler.PerformFetch() )
+        {
+            showGitFeedback( _( "Fetched from remote." ) );
             break;
+        }
 
         if( gitCommon->WasAuthFailure() && promptForGitCredentials( m_parent, gitCommon ) )
             continue;
 
+        showGitFeedback( _( "Fetch failed." ) );
         break;
     }
 
@@ -2756,4 +2780,21 @@ void PROJECT_TREE_PANE::onGitStatusTimer( wxTimerEvent& aEvent )
         return;
 
     gitStatusTimerHandler();
+}
+
+
+void PROJECT_TREE_PANE::showGitFeedback( const wxString& aText )
+{
+    if( KISTATUSBAR* sb = dynamic_cast<KISTATUSBAR*>( m_Parent->GetStatusBar() ) )
+    {
+        sb->SetEllipsedTextField( aText, 0 );
+        m_gitFeedbackTimer.Start( 8000, wxTIMER_ONE_SHOT );
+    }
+}
+
+
+void PROJECT_TREE_PANE::onGitFeedbackTimer( wxTimerEvent& aEvent )
+{
+    if( m_Parent )
+        m_Parent->PrintPrjInfo();
 }

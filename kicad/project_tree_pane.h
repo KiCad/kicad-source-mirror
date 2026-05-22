@@ -311,6 +311,11 @@ private:
 
     void gitStatusTimerHandler();
 
+    /// Show a short message in the project status bar after a git operation.
+    void showGitFeedback( const wxString& aText );
+
+    void onGitFeedbackTimer( wxTimerEvent& event );
+
 public:
     KICAD_MANAGER_FRAME*    m_Parent;
     PROJECT_TREE*           m_TreeProject;
@@ -328,6 +333,7 @@ private:
     wxString                m_gitCurrentBranchName;
     wxTimer                 m_gitSyncTimer;
     wxTimer                 m_gitStatusTimer;
+    wxTimer                 m_gitFeedbackTimer;
     std::future<void>       m_gitSyncTask;
     std::future<void>       m_gitStatusIconTask;
 
