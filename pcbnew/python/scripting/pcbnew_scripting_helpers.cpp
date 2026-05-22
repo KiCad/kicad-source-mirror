@@ -43,6 +43,7 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <footprint_library_adapter.h>
+#include <scoped_set_reset.h>
 #include <core/ignore.h>
 #include <pcb_io/pcb_io_mgr.h>
 #include <string_utils.h>
@@ -623,6 +624,17 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
 
     engine->SetDrawingSheet( drawingSheet.get() );
 
+    // RAII: the engine outlives this function on BOARD_DESIGN_SETTINGS::m_DRCEngine
+    // and must not be left holding pointers to the local drawing sheet or the
+    // local violation-handler lambdas, even if RunTests throws.
+    SCOPED_EXECUTION<std::function<void()>> engineStateCleanup(
+            []() {},
+            [&engine]()
+            {
+                engine->ClearViolationHandler();
+                engine->SetDrawingSheet( nullptr );
+            } );
+
     engine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2D& aPos, int aLayer,
                  const std::function<void( PCB_MARKER* )>& aPathGenerator )
@@ -653,13 +665,6 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
     // snapshots), and deleting them out from under those snapshots produces dangling
     // pointers that crash on the next event loop iteration.
     engine->RunTests( aUnits, aReportAllTrackErrors, false );
-    engine->ClearViolationHandler();
-
-    // Clear the engine's drawing-sheet pointer before the local unique_ptr
-    // goes out of scope: the engine outlives this function on
-    // BOARD_DESIGN_SETTINGS::m_DRCEngine and must not be left holding a
-    // dangling pointer.
-    engine->SetDrawingSheet( nullptr );
 
     // TODO: Unify this with DIALOG_DRC::writeReport
 

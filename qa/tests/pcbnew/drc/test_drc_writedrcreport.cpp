@@ -123,12 +123,26 @@ BOOST_FIXTURE_TEST_CASE( WriteDRCReportClearsStaleDrawingSheet, WRITE_DRC_REPORT
     auto staleProxy = std::make_unique<DS_PROXY_VIEW_ITEM>( pcbIUScale, &m_board->GetPageSettings(),
                                                             m_board->GetProject(), &m_board->GetTitleBlock(), nullptr );
 
-    bds.m_DRCEngine->SetDrawingSheet( staleProxy.get() );
-    BOOST_REQUIRE( bds.m_DRCEngine->GetDrawingSheet() != nullptr );
+    DS_PROXY_VIEW_ITEM* staleAddress = staleProxy.get();
+    bds.m_DRCEngine->SetDrawingSheet( staleAddress );
+    BOOST_REQUIRE_EQUAL( bds.m_DRCEngine->GetDrawingSheet(), staleAddress );
+
+    // Destroy the owner of the proxy AFTER the engine has captured its pointer.
+    // This is the exact lifetime that PCB_EDIT_FRAME::SetPageSettings produces
+    // post-plugin: the canvas's DS_PROXY_VIEW_ITEM is destroyed while the
+    // engine still holds the borrowed pointer. The engine's GetDrawingSheet()
+    // address-compare confirms the engine has not been notified.
+    staleProxy.reset();
+    BOOST_REQUIRE_EQUAL( bds.m_DRCEngine->GetDrawingSheet(), staleAddress );
 
     wxString outPath = wxFileName::CreateTempFileName( wxT( "kicad-drc-report" ) );
     BOOST_REQUIRE( !outPath.IsEmpty() );
 
+    // Without the fix, WriteDRCReport reaches testTextVars while the engine
+    // still holds the dangling pointer above, and BuildDrawItemsList crashes
+    // on PAGE_INFO::GetTypeAsString with a null this. With the fix, the
+    // engine's pointer is overwritten with a fresh proxy bound to this board
+    // before RunTests runs.
     bool ok = WriteDRCReport( m_board.get(), outPath, EDA_UNITS::MM, false );
     BOOST_CHECK_MESSAGE( ok, "WriteDRCReport returned false" );
 
