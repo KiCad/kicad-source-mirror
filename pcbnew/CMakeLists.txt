@@ -411,6 +411,7 @@ set( PCBNEW_CLASS_SRCS
     initpcb.cpp
     layer_pairs.cpp
     load_select_footprint.cpp
+    net_chain_bridging.cpp
     menubar_footprint_editor.cpp
     menubar_pcb_editor.cpp
     padstack.cpp

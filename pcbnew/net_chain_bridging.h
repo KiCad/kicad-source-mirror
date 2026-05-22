@@ -23,18 +23,15 @@
 
 #include <algorithm>
 #include <limits>
+#include <set>
 #include <tuple>
 #include <vector>
 
 #include <wx/string.h>
 
-#include <base_units.h>
-#include <board.h>
-#include <footprint.h>
-#include <math/vector2d.h>
-#include <netinfo.h>
-#include <pad.h>
-#include <pcb_track.h>
+class BOARD;
+class FOOTPRINT;
+class PAD;
 
 
 constexpr double DEFAULT_PROPAGATION_DELAY_PS_PER_MM = 5.9;  // 150 ps/in fallback when no track delay sample is available
@@ -55,67 +52,22 @@ constexpr double DEFAULT_PROPAGATION_DELAY_PS_PER_MM = 5.9;  // 150 ps/in fallba
  * The DRC matched-length provider and the tuning pattern generator share this predicate
  * so they always agree on which footprints bridge a chain and by how much.
  */
-inline double FootprintChainBridgingLength( const FOOTPRINT* aFootprint, const wxString& aNetChain )
-{
-    if( !aFootprint || aNetChain.IsEmpty() )
-        return 0.0;
-
-    std::vector<const PAD*> chainPads;
-
-    for( const PAD* pad : aFootprint->Pads() )
-    {
-        const NETINFO_ITEM* pn = pad->GetNet();
-
-        if( !pn || pn->GetNetChain() != aNetChain )
-            continue;
-
-        chainPads.push_back( pad );
-    }
-
-    if( chainPads.size() < 2 )
-        return 0.0;
-
-    int firstNet = chainPads.front()->GetNetCode();
-
-    auto crossesNet = [firstNet]( const PAD* p ) { return p->GetNetCode() != firstNet; };
-
-    if( !std::any_of( chainPads.begin() + 1, chainPads.end(), crossesNet ) )
-        return 0.0;
-
-    double maxSpan = 0.0;
-
-    for( size_t i = 0; i < chainPads.size(); ++i )
-    {
-        for( size_t j = i + 1; j < chainPads.size(); ++j )
-        {
-            if( chainPads[i]->GetNetCode() == chainPads[j]->GetNetCode() )
-                continue;
-
-            VECTOR2D delta = VECTOR2D( chainPads[i]->GetCenter() )
-                           - VECTOR2D( chainPads[j]->GetCenter() );
-            maxSpan = std::max( maxSpan, delta.EuclideanNorm() );
-        }
-    }
-
-    return maxSpan;
-}
+double FootprintChainBridgingLength( const FOOTPRINT* aFootprint, const wxString& aNetChain );
 
 
 /**
  * Sum chain bridging length across every footprint on the board.
  */
-inline double BoardChainBridgingLength( const BOARD* aBoard, const wxString& aNetChain )
-{
-    if( !aBoard || aNetChain.IsEmpty() )
-        return 0.0;
+double BoardChainBridgingLength( const BOARD* aBoard, const wxString& aNetChain );
 
-    double total = 0.0;
 
-    for( const FOOTPRINT* fp : aBoard->Footprints() )
-        total += FootprintChainBridgingLength( fp, aNetChain );
-
-    return total;
-}
+/**
+ * Pick a single per-IU-per-mm delay for a given chain.  Walks the chain's tracks until it
+ * finds one with a measurable per-mm propagation delay; falls back to the default constant
+ * if none.  Shared between the aggregate and per-edge bridge helpers so they always
+ * apply the same scaling.
+ */
+double ChainBridgingDelayPerMm( const BOARD* aBoard, const wxString& aNetChain );
 
 
 /**
@@ -128,25 +80,7 @@ inline double BoardChainBridgingLength( const BOARD* aBoard, const wxString& aNe
  * time-domain DRC verdict and the tuner's per-net budget agree on bridging delay.  The
  * returned tuple is (lengthIU, delayIU).
  */
-// Forward declaration; defined below.
-inline double ChainBridgingDelayPerMm( const BOARD* aBoard, const wxString& aNetChain );
-
-
-inline std::tuple<double, double> BoardChainBridging( const BOARD* aBoard, const wxString& aNetChain )
-{
-    if( !aBoard || aNetChain.IsEmpty() )
-        return { 0.0, 0.0 };
-
-    double lengthIU = BoardChainBridgingLength( aBoard, aNetChain );
-
-    if( lengthIU <= 0.0 )
-        return { 0.0, 0.0 };
-
-    double delayIU = ChainBridgingDelayPerMm( aBoard, aNetChain ) * lengthIU
-                     / pcbIUScale.IU_PER_MM;
-
-    return { lengthIU, delayIU };
-}
+std::tuple<double, double> BoardChainBridging( const BOARD* aBoard, const wxString& aNetChain );
 
 
 /**
@@ -182,96 +116,67 @@ struct CHAIN_BRIDGE
 
 
 /**
- * Pick a single per-IU-per-mm delay for a given chain.  Walks the chain's tracks until it
- * finds one with a measurable per-mm propagation delay; falls back to the default constant
- * if none.  Shared between the aggregate and per-edge bridge helpers so they always
- * apply the same scaling.
- */
-inline double ChainBridgingDelayPerMm( const BOARD* aBoard, const wxString& aNetChain )
-{
-    double delayIUPerMm = DEFAULT_PROPAGATION_DELAY_PS_PER_MM * pcbIUScale.IU_PER_PS;
-
-    if( !aBoard || aNetChain.IsEmpty() )
-        return delayIUPerMm;
-
-    for( const PCB_TRACK* track : aBoard->Tracks() )
-    {
-        const NETINFO_ITEM* ninfo = track->GetNet();
-
-        if( !ninfo || ninfo->GetNetChain() != aNetChain )
-            continue;
-
-        double tLen = 0.0;
-        double tDelay = 0.0;
-
-        std::tie( std::ignore, tLen, std::ignore, tDelay, std::ignore ) =
-                aBoard->GetTrackLength( *track );
-
-        if( tLen > 0.0 && tDelay > 0.0 )
-        {
-            delayIUPerMm = tDelay / ( tLen / pcbIUScale.IU_PER_MM );
-            break;
-        }
-    }
-
-    return delayIUPerMm;
-}
-
-
-/**
  * Enumerate every per-pad-pair bridge edge contributed by every footprint on the board to
  * the named chain.  Unlike FootprintChainBridgingLength (which returns a single max-span
  * scalar per footprint), this returns one edge per qualifying cross-net pad pair, which is
  * what the CHAIN_TOPOLOGY graph builder needs to compute trunk paths through series
  * passives.
  */
-inline std::vector<CHAIN_BRIDGE>
-EnumerateChainBridges( const BOARD* aBoard, const wxString& aNetChain )
+std::vector<CHAIN_BRIDGE> EnumerateChainBridges( const BOARD* aBoard, const wxString& aNetChain );
+
+
+/**
+ * Status returned by PartitionNetChainAroundNet().
+ */
+enum class NET_CHAIN_PARTITION_STATUS
 {
-    std::vector<CHAIN_BRIDGE> bridges;
+    OK,
+    INVALID_INPUT,            // null board, equal pads, etc.
+    QUERY_NET_NOT_IN_CHAIN,   // aQueryNet has no chain assignment
+    START_PAD_NOT_ON_QUERY,   // aStartPad's netcode != aQueryNet
+    END_PAD_NOT_ON_QUERY,
+    NO_CHAIN_BRIDGES,         // the query net has no series-passive bridge in the chain
+    AMBIGUOUS_OVERLAP         // the two sides share at least one netcode (cycle)
+};
 
-    if( !aBoard || aNetChain.IsEmpty() )
-        return bridges;
 
-    const double delayIUPerMm = ChainBridgingDelayPerMm( aBoard, aNetChain );
+/**
+ * Result of PartitionNetChainAroundNet().
+ *
+ * On AMBIGUOUS_OVERLAP both sets are populated so the caller can inspect the
+ * overlap; on all other non-OK statuses both sets are empty.
+ */
+struct NET_CHAIN_PARTITION
+{
+    NET_CHAIN_PARTITION_STATUS status = NET_CHAIN_PARTITION_STATUS::INVALID_INPUT;
+    std::set<int>              beforeStart;
+    std::set<int>              afterEnd;
+};
 
-    for( FOOTPRINT* fp : aBoard->Footprints() )
-    {
-        if( !fp )
-            continue;
 
-        std::vector<PAD*> chainPads;
-
-        for( PAD* pad : fp->Pads() )
-        {
-            const NETINFO_ITEM* pn = pad->GetNet();
-
-            if( pn && pn->GetNetChain() == aNetChain )
-                chainPads.push_back( pad );
-        }
-
-        if( chainPads.size() < 2 )
-            continue;
-
-        for( size_t i = 0; i < chainPads.size(); ++i )
-        {
-            for( size_t j = i + 1; j < chainPads.size(); ++j )
-            {
-                if( chainPads[i]->GetNetCode() == chainPads[j]->GetNetCode() )
-                    continue;
-
-                VECTOR2D delta = VECTOR2D( chainPads[i]->GetCenter() )
-                               - VECTOR2D( chainPads[j]->GetCenter() );
-                double   length = delta.EuclideanNorm();
-                double   delay = delayIUPerMm * length / pcbIUScale.IU_PER_MM;
-
-                bridges.push_back( CHAIN_BRIDGE{ chainPads[i], chainPads[j], length, delay } );
-            }
-        }
-    }
-
-    return bridges;
-}
+/**
+ * Partition the chain containing @p aQueryNet around it, cut at the bridges incident on
+ * @p aStartPad and @p aEndPad.
+ *
+ * The chain bridge graph (nodes = chain netcodes, edges = CHAIN_BRIDGE) is built from
+ * EnumerateChainBridges() with aQueryNet's node and every incident edge removed.  Multi-
+ * source BFS seeds from every non-query bridge neighbor of aStartPad to fill
+ * `beforeStart`, and from every non-query bridge neighbor of aEndPad to fill `afterEnd`.
+ * Footprints that place several chain pads on distinct nets therefore contribute every
+ * such neighbor on the seeded side, not just one.
+ *
+ * If aQueryNet is the chain terminal, one side may legitimately be empty; status is
+ * still OK.  If the two sets overlap, the chain has a cycle that does not pass through
+ * aQueryNet and the partition is ambiguous; both sets are still populated and status is
+ * AMBIGUOUS_OVERLAP.
+ *
+ * Multi-pad parts (transformers, beads) are represented by EnumerateChainBridges() as a
+ * complete cross-net pad-pair graph per footprint.  When the chain spans more than two
+ * nets through one footprint the resulting clique is treated as fully connected, which
+ * is consistent with how the DRC trunk-length topology consumes the same edges.
+ */
+NET_CHAIN_PARTITION PartitionNetChainAroundNet( const BOARD* aBoard, int aQueryNet,
+                                                const PAD* aStartPad, const PAD* aEndPad );
 
 
 #endif // PCBNEW_NET_CHAIN_BRIDGING_H

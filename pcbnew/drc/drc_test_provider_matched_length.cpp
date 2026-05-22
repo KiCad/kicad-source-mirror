@@ -23,6 +23,7 @@
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <pad.h>
+#include <pcb_track.h>
 #include <zone.h>
 #include <drc/drc_item.h>
 #include <drc/drc_test_provider.h>
