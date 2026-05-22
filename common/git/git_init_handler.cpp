@@ -26,7 +26,73 @@
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
 #include <trace_helpers.h>
+#include <set>
+#include <wx/ffile.h>
+#include <wx/filename.h>
 #include <wx/log.h>
+#include <wx/tokenzr.h>
+
+
+// Seed the project .gitignore with KiCad-generated paths that should never be
+// committed (local history, backups, autosaves, lock files, footprint cache).
+// Append-only: existing entries are preserved.
+static void ensureProjectGitignore( const wxString& aProjectPath )
+{
+    static const wxString kicadEntries[] = {
+        wxS( ".history/" ), wxS( "*-backups/" ), wxS( "_autosave-*" ), wxS( "fp-info-cache" ), wxS( "~*.lck" ),
+    };
+
+    wxFileName         ignoreFile( aProjectPath, wxS( ".gitignore" ) );
+    std::set<wxString> existing;
+    bool               fileExists = ignoreFile.FileExists();
+    bool               hasTrailingNewline = true;
+
+    if( fileExists )
+    {
+        wxFFile  in( ignoreFile.GetFullPath(), wxT( "r" ) );
+        wxString contents;
+
+        if( !in.IsOpened() || !in.ReadAll( &contents ) )
+            return;
+
+        hasTrailingNewline = contents.empty() || contents.EndsWith( wxS( "\n" ) );
+
+        wxStringTokenizer tok( contents, wxS( "\n" ) );
+
+        while( tok.HasMoreTokens() )
+        {
+            wxString line = tok.GetNextToken();
+            line.Trim().Trim( false );
+
+            if( !line.empty() && !line.StartsWith( wxS( "#" ) ) )
+                existing.insert( line );
+        }
+    }
+
+    wxString missing;
+
+    for( const wxString& entry : kicadEntries )
+    {
+        if( existing.find( entry ) == existing.end() )
+            missing += entry + wxS( "\n" );
+    }
+
+    if( missing.empty() )
+        return;
+
+    wxFFile out( ignoreFile.GetFullPath(), wxT( "a" ) );
+
+    if( !out.IsOpened() )
+        return;
+
+    if( !fileExists )
+        out.Write( wxS( "# KiCad-generated files and directories.\n" ) );
+    else if( !hasTrailingNewline )
+        out.Write( wxS( "\n" ) );
+
+    out.Write( missing );
+}
+
 
 GIT_INIT_HANDLER::GIT_INIT_HANDLER( KIGIT_COMMON* aCommon ) : KIGIT_REPO_MIXIN( aCommon )
 {}
@@ -44,7 +110,12 @@ bool GIT_INIT_HANDLER::IsRepository( const wxString& aPath )
 
 InitResult GIT_INIT_HANDLER::InitializeRepository( const wxString& aPath )
 {
-    return GetGitBackend()->InitializeRepository( this, aPath );
+    InitResult result = GetGitBackend()->InitializeRepository( this, aPath );
+
+    if( result == InitResult::Success )
+        ensureProjectGitignore( aPath );
+
+    return result;
 }
 
 
