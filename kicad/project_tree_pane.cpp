@@ -2684,6 +2684,14 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
 
         if( aEvent.GetId() == ID_GIT_COMMIT_PROJECT )
         {
+            // Don't add an untracked project-local settings file to the repo on its own
+            // Only commit it if it's already tracked, or if the user selects it explicitly.
+            if( fn.GetExt().CmpNoCase( FILEEXT::ProjectLocalSettingsFileExtension ) == 0
+                && fileStatus.status == KIGIT_COMMON::GIT_STATUS::GIT_STATUS_UNTRACKED )
+            {
+                continue;
+            }
+
             modifiedFiles.emplace( relativePath, fileStatus.gitStatus );
         }
         else if( selected_files.count( absPath ) )
