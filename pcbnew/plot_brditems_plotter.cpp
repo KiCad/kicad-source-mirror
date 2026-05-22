@@ -1312,6 +1312,9 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
             if( pad->GetDrillSize().x == 0 )
                 continue;
 
+            if( ( pad->GetLayerSet() & m_layerMask ).none() )
+                continue;
+
             if( m_plotter->GetPlotterType() != PLOT_FORMAT::DXF || GetDXFPlotMode() == FILLED )
             {
                 // Drill mark is in black unless we can find something to knock it out of
