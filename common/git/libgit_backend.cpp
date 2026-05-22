@@ -175,6 +175,7 @@ bool LIBGIT_BACKEND::Clone( GIT_CLONE_HANDLER* aHandler )
     cloneOptions.fetch_opts.callbacks.transfer_progress = transfer_progress_cb;
     cloneOptions.fetch_opts.callbacks.credentials = credentials_cb;
     cloneOptions.fetch_opts.callbacks.payload = aHandler;
+    cloneOptions.fetch_opts.proxy_opts.type = GIT_PROXY_AUTO;
 
     aHandler->TestedTypes() = 0;
     aHandler->ResetNextKey();
@@ -518,12 +519,16 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
     remoteCallbacks.push_transfer_progress = push_transfer_progress_cb;
     remoteCallbacks.credentials = credentials_cb;
     remoteCallbacks.payload = aHandler;
+
+    git_proxy_options proxyOpts;
+    git_proxy_init_options( &proxyOpts, GIT_PROXY_OPTIONS_VERSION );
+    proxyOpts.type = GIT_PROXY_AUTO;
     common->SetCancelled( false );
 
     aHandler->TestedTypes() = 0;
     aHandler->ResetNextKey();
 
-    if( git_remote_connect( remote, GIT_DIRECTION_PUSH, &remoteCallbacks, nullptr, nullptr ) )
+    if( git_remote_connect( remote, GIT_DIRECTION_PUSH, &remoteCallbacks, &proxyOpts, nullptr ) )
     {
         aHandler->AddErrorString( wxString::Format( _( "Could not connect to remote: %s" ),
                                                     KIGIT_COMMON::GetLastGitError() ) );
@@ -533,6 +538,7 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
     git_push_options pushOptions;
     git_push_init_options( &pushOptions, GIT_PUSH_OPTIONS_VERSION );
     pushOptions.callbacks = remoteCallbacks;
+    pushOptions.proxy_opts.type = GIT_PROXY_AUTO;
 
     git_reference* head = nullptr;
 
@@ -1091,13 +1097,17 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
     remoteCallbacks.credentials = credentials_cb;
     remoteCallbacks.payload = aHandler;
 
+    git_proxy_options proxyOpts;
+    git_proxy_init_options( &proxyOpts, GIT_PROXY_OPTIONS_VERSION );
+    proxyOpts.type = GIT_PROXY_AUTO;
+
     // Do not SetCancelled( false ) here.  A close or a preference change can raise the flag
     // after this fetch starts, and clearing it would strand the caller on the transfer.
 
     aHandler->TestedTypes() = 0;
     aHandler->ResetNextKey();
 
-    if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &remoteCallbacks, nullptr, nullptr ) )
+    if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &remoteCallbacks, &proxyOpts, nullptr ) )
     {
         wxString errorMsg = KIGIT_COMMON::GetLastGitError();
         wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Failed to connect to remote: %s", errorMsg );
