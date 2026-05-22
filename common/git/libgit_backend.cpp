@@ -885,14 +885,60 @@ BranchResult LIBGIT_BACKEND::SwitchToBranch( GIT_BRANCH_HANDLER* aHandler, const
 
     KIGIT::GitObjectPtr branchObjPtr( branchObj );
 
-    if( git_checkout_tree( repo, branchObj, nullptr ) != GIT_OK )
+
+    git_checkout_options checkoutOpts;
+    git_checkout_init_options( &checkoutOpts, GIT_CHECKOUT_OPTIONS_VERSION );
+    checkoutOpts.checkout_strategy = GIT_CHECKOUT_SAFE;
+
+    if( git_checkout_tree( repo, branchObj, &checkoutOpts ) != GIT_OK )
     {
         aHandler->AddErrorString( wxString::Format( _( "Failed to switch to branch '%s': %s" ),
                                                     aBranchName, KIGIT_COMMON::GetLastGitError() ) );
         return BranchResult::CheckoutFailed;
     }
 
-    if( git_repository_set_head( repo, branchRefName ) != GIT_OK )
+    KIGIT::GitReferencePtr localBranchPtr;
+    const char*            headTarget = branchRefName;
+
+    if( git_reference_is_remote( branchRef ) )
+    {
+        wxString localName = wxString::FromUTF8( git_reference_shorthand( branchRef ) );
+        size_t   slash = localName.find( '/' );
+
+        if( slash != wxString::npos )
+            localName = localName.Mid( slash + 1 );
+
+        std::string    localNameUtf8 = localName.utf8_string();
+        git_reference* localBranch = nullptr;
+
+        if( git_branch_lookup( &localBranch, repo, localNameUtf8.c_str(), GIT_BRANCH_LOCAL ) != GIT_OK )
+        {
+            git_commit* target = nullptr;
+
+            if( git_commit_lookup( &target, repo, git_object_id( branchObj ) ) != GIT_OK )
+            {
+                aHandler->AddErrorString( wxString::Format( _( "Failed to switch to branch '%s': %s" ), aBranchName,
+                                                            KIGIT_COMMON::GetLastGitError() ) );
+                return BranchResult::Error;
+            }
+
+            KIGIT::GitCommitPtr targetPtr( target );
+
+            if( git_branch_create( &localBranch, repo, localNameUtf8.c_str(), target, 0 ) != GIT_OK )
+            {
+                aHandler->AddErrorString( wxString::Format( _( "Failed to create local branch '%s': %s" ), localName,
+                                                            KIGIT_COMMON::GetLastGitError() ) );
+                return BranchResult::Error;
+            }
+
+            git_branch_set_upstream( localBranch, git_reference_shorthand( branchRef ) );
+        }
+
+        localBranchPtr.reset( localBranch );
+        headTarget = git_reference_name( localBranch );
+    }
+
+    if( git_repository_set_head( repo, headTarget ) != GIT_OK )
     {
         aHandler->AddErrorString( wxString::Format( _( "Failed to update HEAD reference for branch '%s': %s" ),
                                                     aBranchName, KIGIT_COMMON::GetLastGitError() ) );
