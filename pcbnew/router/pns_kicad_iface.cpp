@@ -679,6 +679,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW:
         case PNS::CONSTRAINT_TYPE::CT_MAX_UNCOUPLED:
         case PNS::CONSTRAINT_TYPE::CT_PHYSICAL_CLEARANCE:
+        case PNS::CONSTRAINT_TYPE::CT_PHYSICAL_HOLE_CLEARANCE:
             aConstraint->m_Value = hostConstraint.GetValue();
             aConstraint->m_RuleName = hostConstraint.GetName();
             aConstraint->m_Type = aType;
