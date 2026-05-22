@@ -280,7 +280,7 @@ void PANEL_SETUP_RULES::OnShowMatching()
                     wxString name;
                     int      nameTok = lex.NextTok();
 
-                    if( nameTok == DSN_STRING )
+                    if( DSNLEXER::IsSymbol( nameTok ) )
                         name = wxString::FromUTF8( lex.CurText() );
 
                     ruleStack.push_back( { depth, leftLine, leftCol, name } );
