@@ -79,6 +79,17 @@ public:
     virtual bool IsExpanderColumn( int aCol ) const { return false; }
     virtual GROUP_TYPE GetGroupType( int aRow ) const { return GROUP_SINGLETON; }
 
+    /**
+     * Optional identity-based serialization for the host dialog's Ctrl+Z/Ctrl+Y.
+     *
+     * The dialog's generic grid undo snapshots cells by (row, col) position, which is wrong for
+     * tables whose rows can regroup/sort/reorder.  A table that returns true here is asked to
+     * serialize and restore its own state by stable identity instead.
+     */
+    virtual bool     HasUndoStateSerialization() const { return false; }
+    virtual wxString SerializeUndoState() const { return wxEmptyString; }
+    virtual void     RestoreUndoState( const wxString& aState ) {}
+
     void Clear() override
     {
         if( GetNumberRows() )

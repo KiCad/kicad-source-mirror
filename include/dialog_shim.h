@@ -30,6 +30,7 @@
 #include <kiway_holder.h>
 #include <wx/dialog.h>
 #include <map>
+#include <set>
 #include <vector>
 #include <wx/variant.h>
 #include <core/raii.h>
@@ -153,6 +154,15 @@ public:
      * @param aWindow can be either a specific control, or the whole dialog
      */
     void OptOut( wxWindow* aWindow );
+
+    /**
+     * Opt a control out of the dialog's generic Ctrl+Z/Ctrl+Y undo/redo.
+     *
+     * The generic handler snapshots a control's value and restores it by position.  That is
+     * wrong for grids whose rows can be regrouped, sorted, or reordered while the dialog is open
+     * (and which manage their own undo), so such controls must opt out.
+     */
+    void ExcludeFromControlUndoRedo( wxWindow* aWindow );
 
     /**
      * Register a UNIT_BINDER so that it can handle units in control-state save/restore
@@ -321,6 +331,7 @@ protected:
     std::vector<UNDO_STEP>            m_undoStack;
     std::vector<UNDO_STEP>            m_redoStack;
     std::map<wxWindow*, wxVariant>    m_currentValues;
+    std::set<wxWindow*>               m_noControlUndoRedo;
     bool                              m_handlingUndoRedo;
     bool                              m_childReleased;
 };
