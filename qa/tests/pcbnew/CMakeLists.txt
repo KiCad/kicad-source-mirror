@@ -122,6 +122,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_issue24264.cpp
     drc/test_drc_issue24211.cpp
     drc/test_drc_annular_overlap_issue24340.cpp
+    drc/test_drc_hole_clearance_issue24355.cpp
     drc/test_drc_physical_clearance.cpp
     drc/test_drc_rule_editor.cpp
     drc/test_drc_bitmap_overlay_panel.cpp
