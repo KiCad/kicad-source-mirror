@@ -44,6 +44,9 @@ public:
 
     wxString GetCommitMessage() const;
 
+    /// Pre-fill the commit message.
+    void SetCommitMessage( const wxString& aMessage );
+
     wxString GetAuthorName() const;
 
     wxString GetAuthorEmail() const;

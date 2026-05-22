@@ -436,6 +436,22 @@ std::pair<std::set<wxString>, std::set<wxString>> KIGIT_COMMON::GetDifferentFile
     collect_paths( base_tree, head_tree, modified_files.first );    // AHEAD
     collect_paths( base_tree, remote_tree, modified_files.second ); // BEHIND
 
+    // Filter both sets to files whose content actually differs between HEAD and remote.
+    // Without this, a file touched by a commit that has since been replaced with an
+    // identical-tree commit (e.g. a message-only amend) keeps an AHEAD marker even
+    // though its blob matches the remote's blob.
+    std::set<wxString> actuallyDifferent;
+    collect_paths( head_tree, remote_tree, actuallyDifferent );
+
+    auto filterToDifferent = [&]( std::set<wxString>& aSet )
+    {
+        for( auto it = aSet.begin(); it != aSet.end(); )
+            it = actuallyDifferent.count( *it ) ? std::next( it ) : aSet.erase( it );
+    };
+
+    filterToDifferent( modified_files.first );
+    filterToDifferent( modified_files.second );
+
     return modified_files;
 }
 

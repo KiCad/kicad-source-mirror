@@ -35,6 +35,7 @@ class KIGIT_COMMON;
 enum class PushResult
 {
     Success,
+    NonFastForward,
     Error
 };
 
@@ -44,7 +45,7 @@ public:
     GIT_PUSH_HANDLER( KIGIT_COMMON* aCommon );
     ~GIT_PUSH_HANDLER();
 
-    PushResult PerformPush();
+    PushResult PerformPush( bool aForce = false );
 
     // Virtual method for progress reporting
     virtual void ReportProgress( int aCurrent, int aTotal, const wxString& aMessage ) {}

@@ -174,6 +174,7 @@ enum project_tree_ids
     ID_GIT_CLONE_PROJECT,      // Clone a project from a remote repository
     ID_GIT_COMMIT_PROJECT,     // Commit all files in the project
     ID_GIT_COMMIT_FILE,        // Commit a single file
+    ID_GIT_AMEND_COMMIT,       // Amend the last commit on HEAD
     ID_GIT_SYNC_PROJECT,       // Sync the project with the remote repository (pull and push -- same as Update)
     ID_GIT_FETCH,              // Fetch the remote repository (without merging -- this is the same as Refresh)
     ID_GIT_PUSH,               // Push the local repository to the remote repository
@@ -210,6 +211,7 @@ BEGIN_EVENT_TABLE( PROJECT_TREE_PANE, wxSashLayoutWindow )
     EVT_MENU( ID_GIT_REMOTE_SETTINGS, PROJECT_TREE_PANE::onGitRemoteSettings )
     EVT_MENU( ID_GIT_COMMIT_PROJECT, PROJECT_TREE_PANE::onGitCommit )
     EVT_MENU( ID_GIT_COMMIT_FILE, PROJECT_TREE_PANE::onGitCommit )
+    EVT_MENU( ID_GIT_AMEND_COMMIT, PROJECT_TREE_PANE::onGitAmendCommit )
     EVT_MENU( ID_GIT_SYNC_PROJECT, PROJECT_TREE_PANE::onGitSyncProject )
     EVT_MENU( ID_GIT_FETCH, PROJECT_TREE_PANE::onGitFetch )
     EVT_MENU( ID_GIT_PUSH, PROJECT_TREE_PANE::onGitPushProject )
@@ -833,6 +835,7 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
     bool vcs_can_commit  = hasChangedFiles();
     bool vcs_can_init    = !vcs_has_repo;
     bool vcs_can_set_remote = vcs_has_repo;
+    bool vcs_can_amend = vcs_has_repo && git_repository_head_unborn( m_TreeProject->GetGitRepo() ) == 0;
     bool gitIntegrationDisabled = Prj().GetLocalSettings().m_GitIntegrationDisabled;
     // Disable/Enable is a per-project preference toggle, so it's available whenever we
     // detected a repository for this project or integration is currently disabled.
@@ -1043,6 +1046,10 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
         vcs_menuitem = vcs_submenu->Append( ID_GIT_COMMIT_PROJECT, _( "Commit Project..." ),
                                             _( "Commit changes to the local repository" ) );
         vcs_menuitem->Enable( vcs_can_commit );
+
+        vcs_menuitem = vcs_submenu->Append( ID_GIT_AMEND_COMMIT, _( "Amend Last Commit..." ),
+                                            _( "Rewrite the most recent commit on the current branch" ) );
+        vcs_menuitem->Enable( vcs_can_amend );
 
         wxString pushLabel = _( "Push" );
         wxString pullLabel = _( "Pull" );
@@ -2088,6 +2095,7 @@ void PROJECT_TREE_PANE::onGitPushProject( wxCommandEvent& aEvent )
         return;
 
     KIGIT_COMMON* common = m_TreeProject->GitCommon();
+    bool          force = false;
 
     while( true )
     {
@@ -2097,7 +2105,9 @@ void PROJECT_TREE_PANE::onGitPushProject( wxCommandEvent& aEvent )
         handler.SetProgressReporter(
                 std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetch Remote" ), 1, PR_NO_ABORT ) );
 
-        if( handler.PerformPush() == PushResult::Success )
+        PushResult pushResult = handler.PerformPush( force );
+
+        if( pushResult == PushResult::Success )
         {
             wxString upstream = common->GetUpstreamShorthand();
             wxString branch = common->GetCurrentBranchName();
@@ -2110,6 +2120,29 @@ void PROJECT_TREE_PANE::onGitPushProject( wxCommandEvent& aEvent )
 
         if( common->WasAuthFailure() && promptForGitCredentials( m_parent, common ) )
             continue;
+
+        if( pushResult == PushResult::NonFastForward && !force )
+        {
+            wxString upstream = common->GetUpstreamShorthand();
+
+            wxRichMessageDialog dlg(
+                    wxGetTopLevelParent( this ),
+                    wxString::Format( _( "Push rejected: your local branch and %s have diverged.\n\n"
+                                         "This usually happens after amending or rewriting a commit "
+                                         "that was already pushed.  Force push to overwrite the remote?\n\n"
+                                         "Anyone who already pulled the previous version will need to "
+                                         "reset their copy." ),
+                                      upstream.empty() ? wxString( "the remote" ) : upstream ),
+                    _( "Force Push?" ), wxYES_NO | wxNO_DEFAULT | wxICON_WARNING | wxCENTER );
+
+            dlg.SetYesNoLabels( _( "&Force Push" ), _( "Cancel" ) );
+
+            if( dlg.ShowModal() == wxID_YES )
+            {
+                force = true;
+                continue;
+            }
+        }
 
         showGitFeedback( _( "Push failed." ) );
         DisplayErrorMessage( m_parent, _( "Failed to push project" ), handler.GetErrorString() );
@@ -2646,6 +2679,220 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
     }
 
     wxLogTrace( traceGit, wxS( "Created commit" ) );
+    m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
+}
+
+
+void PROJECT_TREE_PANE::onGitAmendCommit( wxCommandEvent& aEvent )
+{
+    git_repository* repo = m_TreeProject->GetGitRepo();
+
+    if( repo == nullptr )
+    {
+        wxMessageBox( _( "The selected directory is not a Git project." ) );
+        return;
+    }
+
+    if( git_repository_head_unborn( repo ) != 0 )
+    {
+        DisplayErrorMessage( wxGetTopLevelParent( this ), _( "Cannot amend: the branch has no commits yet." ) );
+        return;
+    }
+
+    // Look up HEAD commit so we can pre-fill the message and check whether HEAD has
+    // already been published to the upstream branch.
+    git_reference* headRef = nullptr;
+
+    if( git_repository_head( &headRef, repo ) != GIT_OK )
+        return;
+
+    KIGIT::GitReferencePtr headRefPtr( headRef );
+    git_commit*            headCommit = nullptr;
+
+    if( git_reference_peel( (git_object**) &headCommit, headRef, GIT_OBJECT_COMMIT ) != GIT_OK )
+        return;
+
+    KIGIT::GitCommitPtr headCommitPtr( headCommit );
+    wxString            headMessage = wxString::FromUTF8( git_commit_message( headCommit ) );
+    const git_oid*      headOid = git_commit_id( headCommit );
+
+    // Detect whether HEAD has already been pushed: head is published when it is the
+    // upstream OID or an ancestor of it.
+    bool           headIsPublished = false;
+    git_reference* upstreamRef = nullptr;
+
+    if( git_branch_upstream( &upstreamRef, headRef ) == GIT_OK )
+    {
+        KIGIT::GitReferencePtr upstreamRefPtr( upstreamRef );
+        git_oid                upstreamOid;
+
+        if( git_reference_name_to_id( &upstreamOid, repo, git_reference_name( upstreamRef ) ) == GIT_OK )
+        {
+            headIsPublished = git_oid_equal( headOid, &upstreamOid )
+                              || git_graph_descendant_of( repo, &upstreamOid, headOid ) == 1;
+        }
+    }
+
+    if( headIsPublished )
+    {
+        wxString upstreamName = m_TreeProject->GitCommon()->GetUpstreamShorthand();
+
+        wxRichMessageDialog dlg( wxGetTopLevelParent( this ),
+                                 wxString::Format( _( "The last commit has already been pushed to %s.\n\n"
+                                                      "Amending rewrites public history.  Anyone who pulled "
+                                                      "this commit will need to reset their copy." ),
+                                                   upstreamName ),
+                                 _( "Amend Published Commit?" ), wxYES_NO | wxNO_DEFAULT | wxICON_WARNING | wxCENTER );
+
+        dlg.SetYesNoLabels( _( "Amend &Anyway" ), _( "Cancel" ) );
+
+        if( dlg.ShowModal() != wxID_YES )
+            return;
+    }
+
+    // Flush in-memory editor and project state so the amend captures the user's actual
+    // work instead of a stale on-disk version.
+    {
+        struct DirtyEditor
+        {
+            FRAME_T  frameType;
+            MAIL_T   saveMail;
+            wxString label;
+        };
+
+        const DirtyEditor candidates[] = {
+            { FRAME_SCH, MAIL_SCH_SAVE, _( "Schematic Editor" ) },
+            { FRAME_PCB_EDITOR, MAIL_PCB_SAVE, _( "PCB Editor" ) },
+        };
+
+        std::vector<const DirtyEditor*> dirty;
+
+        for( const DirtyEditor& d : candidates )
+        {
+            KIWAY_PLAYER* frame = m_Parent->Kiway().Player( d.frameType, false );
+
+            if( frame && frame->IsContentModified() )
+                dirty.push_back( &d );
+        }
+
+        if( !dirty.empty() )
+        {
+            wxString listed;
+
+            for( const DirtyEditor* d : dirty )
+                listed += wxString::Format( wxS( "\n    • %s" ), d->label );
+
+            wxRichMessageDialog dlg( wxGetTopLevelParent( this ),
+                                     wxString::Format( _( "The following editors have unsaved changes:%s\n\n"
+                                                          "Save them before amending?" ),
+                                                       listed ),
+                                     _( "Unsaved Changes" ),
+                                     wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
+
+            dlg.SetYesNoCancelLabels( _( "&Save and Amend" ), _( "Amend &Anyway" ), _( "Cancel" ) );
+
+            int answer = dlg.ShowModal();
+
+            if( answer == wxID_CANCEL )
+                return;
+
+            if( answer == wxID_YES )
+            {
+                for( const DirtyEditor* d : dirty )
+                {
+                    std::string payload;
+                    m_Parent->Kiway().ExpressMail( d->frameType, d->saveMail, payload );
+
+                    if( payload != "success" )
+                    {
+                        DisplayErrorMessage( wxGetTopLevelParent( this ),
+                                             wxString::Format( _( "Could not save %s." ), d->label ) );
+                        return;
+                    }
+                }
+            }
+        }
+
+        m_Parent->GetSettingsManager()->SaveProject();
+    }
+
+    // Collect modified files for the dialog's checklist.
+    GIT_CONFIG_HANDLER configHandler( m_TreeProject->GitCommon() );
+    GitUserConfig      userConfig = configHandler.GetUserConfig();
+
+    GIT_STATUS_HANDLER statusHandler( m_TreeProject->GitCommon() );
+    auto               fileStatusMap = statusHandler.GetFileStatus();
+    wxString           repoWorkDir = statusHandler.GetWorkingDirectory();
+    wxString           projectPath = Prj().GetProjectPath();
+
+#ifdef _WIN32
+    projectPath.Replace( wxS( "\\" ), wxS( "/" ) );
+#endif
+
+    std::map<wxString, int> modifiedFiles;
+
+    for( const auto& [absPath, fileStatus] : fileStatusMap )
+    {
+        if( fileStatus.status == KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CURRENT
+            || fileStatus.status == KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CONFLICTED
+            || fileStatus.status == KIGIT_COMMON::GIT_STATUS::GIT_STATUS_IGNORED )
+        {
+            continue;
+        }
+
+        wxFileName fn( absPath );
+        wxString   relativePath = absPath;
+
+        if( relativePath.StartsWith( repoWorkDir ) )
+        {
+            relativePath = relativePath.Mid( repoWorkDir.length() );
+#ifdef _WIN32
+            relativePath.Replace( wxS( "\\" ), wxS( "/" ) );
+#endif
+        }
+
+        if( !absPath.StartsWith( projectPath ) )
+            continue;
+
+        if( fn.GetExt().CmpNoCase( FILEEXT::LockFileExtension ) == 0 )
+            continue;
+
+        if( fn.GetName().StartsWith( FILEEXT::LockFilePrefix ) || fn.GetName().EndsWith( FILEEXT::BackupFileSuffix ) )
+        {
+            continue;
+        }
+
+        if( fn.GetPath().Contains( Prj().GetProjectName() + wxT( "-backups" ) ) )
+            continue;
+
+        modifiedFiles.emplace( relativePath, fileStatus.gitStatus );
+    }
+
+    DIALOG_GIT_COMMIT dlg( wxGetTopLevelParent( this ), repo, userConfig.authorName, userConfig.authorEmail,
+                           modifiedFiles );
+    dlg.SetTitle( _( "Amend Last Commit" ) );
+    dlg.SetCommitMessage( headMessage );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    if( dlg.GetCommitMessage().IsEmpty() )
+    {
+        wxMessageBox( _( "Discarding amend due to empty commit message." ) );
+        return;
+    }
+
+    GIT_COMMIT_HANDLER commitHandler( repo );
+    CommitResult       result = commitHandler.PerformAmend( dlg.GetSelectedFiles(), dlg.GetCommitMessage(),
+                                                            dlg.GetAuthorName(), dlg.GetAuthorEmail() );
+
+    if( result != CommitResult::Success )
+    {
+        wxMessageBox( wxString::Format( _( "Failed to amend commit: %s" ), commitHandler.GetErrorString() ) );
+        return;
+    }
+
+    wxLogTrace( traceGit, wxS( "Amended commit" ) );
     m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
 }
 
