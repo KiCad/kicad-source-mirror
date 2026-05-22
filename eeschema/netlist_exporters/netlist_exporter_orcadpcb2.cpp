@@ -131,7 +131,8 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
                     netName = pin.netName;
                     netName.Replace( wxT( " " ), wxT( "_" ) );
 
-                    fmt::print( f, "  ( {:>4.4} {} )\n", TO_UTF8( pin.num ), TO_UTF8( netName ) );
+                    // Legacy OrcadPCB2 right-aligns the pin number in a 4-column field.
+                    fmt::print( f, "  ( {:>4} {} )\n", TO_UTF8( pin.num ), TO_UTF8( netName ) );
                 }
 
                 fmt::print( f, " )\n" );

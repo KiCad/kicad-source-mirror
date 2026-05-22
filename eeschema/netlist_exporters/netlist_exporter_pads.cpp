@@ -209,7 +209,7 @@ bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
                 if( refText[0] == wxChar( '#' ) )
                     continue;
 
-                netConns.push_back( wxString::Format( "%s.%.4s", refText, pinText ) );
+                netConns.push_back( wxString::Format( "%s.%s", refText, pinText ) );
             }
 
             // format it such that there are 6 net connections per line
