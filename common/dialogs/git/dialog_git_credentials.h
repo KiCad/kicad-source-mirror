@@ -21,39 +21,29 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef GIT_REPOSITORY_DIALOG_H
-#define GIT_REPOSITORY_DIALOG_H
+#ifndef DIALOG_GIT_CREDENTIALS_H
+#define DIALOG_GIT_CREDENTIALS_H
 
-#include <wx/button.h>
-#include <wx/choice.h>
-#include <wx/filepicker.h>
-#include <wx/textctrl.h>
-#include <wx/wx.h>
+#include <dialogs/git/dialog_git_credentials_base.h>
+#include <git/kicad_git_common.h>
 
-#include <dialog_shim.h>
-
-class DIALOG_GIT_AUTH : public DIALOG_SHIM
+class DIALOG_GIT_CREDENTIALS : public DIALOG_GIT_CREDENTIALS_BASE
 {
 public:
-    DIALOG_GIT_AUTH( wxWindow* parent );
-    virtual ~DIALOG_GIT_AUTH();
+    DIALOG_GIT_CREDENTIALS( wxWindow* aParent, const wxString& aUrl, KIGIT_COMMON::GIT_CONN_TYPE aConnType,
+                            const wxString& aDefaultUsername, const wxString& aDefaultSSHKey );
+
+    wxString                    GetUsername() const;
+    wxString                    GetPassword() const;
+    wxString                    GetSSHKey() const;
+    KIGIT_COMMON::GIT_CONN_TYPE GetConnType() const;
+    bool                        SaveCredentials() const;
+
+protected:
+    void OnConnTypeChanged( wxCommandEvent& aEvent ) override;
 
 private:
-    void CreateControls();
-    void onAuthChoiceChanged( wxCommandEvent& event );
-    void onTestClick( wxCommandEvent& aEvent );
-    void onOKClick( wxCommandEvent& aEvent );
-    void onCancelClick( wxCommandEvent& aEvent );
-
-    wxTextCtrl*       m_NameTextCtrl;
-    wxTextCtrl*       m_UrlTextCtrl;
-    wxChoice*         m_AuthChoice;
-    wxTextCtrl*       m_UserNameTextCtrl;
-    wxTextCtrl*       m_PasswordTextCtrl;
-    wxButton*         m_TestButton;
-    wxButton*         m_OkButton;
-    wxButton*         m_CancelButton;
-    wxFilePickerCtrl* m_PublicKeyPicker;
+    void updateFieldsForConnType();
 };
 
-#endif // GIT_REPOSITORY_DIALOG_H
+#endif // DIALOG_GIT_CREDENTIALS_H
