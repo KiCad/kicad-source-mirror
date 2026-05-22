@@ -1112,7 +1112,8 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
     }
     else if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS
                 && ( aAllowedTypes & GIT_CREDENTIAL_USERPASS_PLAINTEXT )
-                && !( parent->TestedTypes() & GIT_CREDENTIAL_USERPASS_PLAINTEXT ) )
+                && !( parent->TestedTypes() & GIT_CREDENTIAL_USERPASS_PLAINTEXT )
+                && !parent->GetUsername().IsEmpty() )
     {
         // Plaintext authentication
         wxLogTrace( traceGit, "Plaintext authentication for %s at %s with allowed type %d",

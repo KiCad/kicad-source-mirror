@@ -337,10 +337,14 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
     KIGIT_REPO_MIXIN repoMixin( &common );
     callbacks.payload = &repoMixin;
 
+    git_proxy_options proxyOpts;
+    git_proxy_init_options( &proxyOpts, GIT_PROXY_OPTIONS_VERSION );
+    proxyOpts.type = GIT_PROXY_AUTO;
+
     git_remote_create_anonymous( &remote, m_repository, fullURL.mbc_str() );
     KIGIT::GitRemotePtr remotePtr( remote );
 
-    if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &callbacks, nullptr, nullptr ) == GIT_OK )
+    if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &callbacks, &proxyOpts, nullptr ) == GIT_OK )
         success = true;
     else
         error = KIGIT_COMMON::GetLastGitError();
