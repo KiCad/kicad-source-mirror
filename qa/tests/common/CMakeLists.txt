@@ -97,6 +97,7 @@ set( QA_COMMON_SRCS
     io/pads/test_pads_common.cpp
     io/pads/test_pads_unit_converter.cpp
 
+    test_kigit_common.cpp
     test_kigit_orphan_registry.cpp
     test_throttle.cpp
     view/test_zoom_controller.cpp
