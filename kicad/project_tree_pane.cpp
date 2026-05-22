@@ -2188,7 +2188,11 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
     if( branchHandler.SwitchToBranch( branchName ) != BranchResult::Success )
     {
         DisplayError( m_parent, branchHandler.GetErrorString() );
+        return;
     }
+
+    m_TreeProject->GitCommon()->UpdateCurrentBranchInfo();
+    m_gitStatusTimer.Start( 500, wxTIMER_ONE_SHOT );
 }
 
 
@@ -2469,7 +2473,12 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap()
     }
 
     // Get the current branch name
-    m_gitCurrentBranchName = statusHandler.GetCurrentBranchName();
+    wxString branchName = statusHandler.GetCurrentBranchName();
+
+    if( branchName != m_gitCurrentBranchName )
+        updated = true;
+
+    m_gitCurrentBranchName = branchName;
     m_gitCurrentUpstream = m_TreeProject->GitCommon()->GetUpstreamShorthand();
 
     wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: Updated git status icons" ) );
