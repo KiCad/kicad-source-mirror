@@ -49,6 +49,9 @@
 #include <kiplatform/environment.h>
 #include <locale_io.h>
 
+#include <git/git_backend.h>
+#include <git/libgit_backend.h>
+
 #include "cli/command_jobset.h"
 #include "cli/command_jobset_run.h"
 #include "cli/command_pcb.h"
@@ -475,6 +478,10 @@ bool PGM_KICAD::OnPgmInit()
     }
 #endif
 
+    // Initialize the git backend so VCS text-eval functions work in CLI mode
+    SetGitBackend( new LIBGIT_BACKEND() );
+    GetGitBackend()->Init();
+
     if( !InitPgm( true ) )
         return false;
 
@@ -624,6 +631,13 @@ void PGM_KICAD::OnPgmExit()
     {
         SaveCommonSettings();
         m_settings_manager->Save();
+    }
+
+    if( GetGitBackend() )
+    {
+        GetGitBackend()->Shutdown();
+        delete GetGitBackend();
+        SetGitBackend( nullptr );
     }
 
     // Destroy everything in PGM_KICAD,
