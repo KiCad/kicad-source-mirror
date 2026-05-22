@@ -124,8 +124,15 @@ bool LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& a
     else if( aNode2.m_Pinned && !aNode1.m_Pinned )
         return false;
 
-    if( aUseScores && aNode1.m_Score != aNode2.m_Score )
-        return aNode1.m_Score > aNode2.m_Score;
+    if( aUseScores )
+    {
+        // Exact matches form a strictly higher tier than any accumulation of partial matches.
+        if( aNode1.m_ExactMatch != aNode2.m_ExactMatch )
+            return aNode1.m_ExactMatch;
+
+        if( aNode1.m_Score != aNode2.m_Score )
+            return aNode1.m_Score > aNode2.m_Score;
+    }
 
     if( aNode1.m_IntrinsicRank != aNode2.m_IntrinsicRank )
         return aNode1.m_IntrinsicRank > aNode2.m_IntrinsicRank;
@@ -134,18 +141,19 @@ bool LIB_TREE_NODE::Compare( LIB_TREE_NODE const& aNode1, LIB_TREE_NODE const& a
 }
 
 
-LIB_TREE_NODE::LIB_TREE_NODE()
-    : m_Parent( nullptr ),
-      m_Type( TYPE::INVALID ),
-      m_IntrinsicRank( 0 ),
-      m_Score( 0 ),
-      m_Pinned( false ),
-      m_PinCount( 0 ),
-      m_Unit( 0 ),
-      m_IsRoot( false ),
-      m_IsPower( false ),
-      m_IsRecentlyUsedGroup( false ),
-      m_IsAlreadyPlacedGroup( false )
+LIB_TREE_NODE::LIB_TREE_NODE() :
+        m_Parent( nullptr ),
+        m_Type( TYPE::INVALID ),
+        m_IntrinsicRank( 0 ),
+        m_Score( 0 ),
+        m_ExactMatch( false ),
+        m_Pinned( false ),
+        m_PinCount( 0 ),
+        m_Unit( 0 ),
+        m_IsRoot( false ),
+        m_IsPower( false ),
+        m_IsRecentlyUsedGroup( false ),
+        m_IsAlreadyPlacedGroup( false )
 {}
 
 
@@ -166,10 +174,14 @@ void LIB_TREE_NODE_UNIT::UpdateScore( const std::vector<std::unique_ptr<EDA_COMB
                                       std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
     m_Score = 1;
+    m_ExactMatch = false;
 
     // aMatchers test results are inherited from parent
     if( !aMatchers.empty() )
+    {
         m_Score = m_Parent->m_Score;
+        m_ExactMatch = m_Parent->m_ExactMatch;
+    }
 
     if( aFilter && !(*aFilter)(*this) )
         m_Score = 0;
@@ -237,18 +249,22 @@ void LIB_TREE_NODE_ITEM::UpdateScore( const std::vector<std::unique_ptr<EDA_COMB
                                       std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
     m_Score = 1;
+    m_ExactMatch = false;
 
     for( const std::unique_ptr<EDA_COMBINED_MATCHER>& matcher : aMatchers )
     {
-        int score = matcher->ScoreTerms( m_SearchTerms );
+        bool exact = false;
+        int  score = matcher->ScoreTerms( m_SearchTerms, &exact );
 
         if( score == 0 )
         {
             m_Score = 0;
+            m_ExactMatch = false;
             break;
         }
 
         m_Score += score;
+        m_ExactMatch |= exact;
     }
 
     if( aFilter && !(*aFilter)(*this) )
@@ -286,28 +302,34 @@ void LIB_TREE_NODE_LIBRARY::UpdateScore( const std::vector<std::unique_ptr<EDA_C
     if( m_Children.empty() )
     {
         m_Score = 1;
+        m_ExactMatch = false;
 
         for( const std::unique_ptr<EDA_COMBINED_MATCHER>& matcher : aMatchers )
         {
-            int score = matcher->ScoreTerms( m_SearchTerms );
+            bool exact = false;
+            int  score = matcher->ScoreTerms( m_SearchTerms, &exact );
 
             if( score == 0 )
             {
                 m_Score = 0;
+                m_ExactMatch = false;
                 break;
             }
 
             m_Score += score;
+            m_ExactMatch |= exact;
         }
     }
     else
     {
         m_Score = 0;
+        m_ExactMatch = false;
 
         for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
         {
             child->UpdateScore( aMatchers, aFilter );
             m_Score = std::max( m_Score, child->m_Score );
+            m_ExactMatch |= child->m_ExactMatch;
         }
     }
 }

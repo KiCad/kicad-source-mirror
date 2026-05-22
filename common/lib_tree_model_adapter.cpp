@@ -801,9 +801,14 @@ const LIB_TREE_NODE* LIB_TREE_MODEL_ADAPTER::showResults()
             {
                 if( n->m_Type == LIB_TREE_NODE::TYPE::ITEM && n->m_Score > 1 )
                 {
+                    // Mirror the sort order (see LIB_TREE_NODE::Compare): an exact match
+                    // outranks any score, otherwise the higher score wins.  Otherwise the
+                    // view would scroll to a high-scoring item that isn't at the top.
                     if( !firstMatch )
                         firstMatch = n;
-                    else if( n->m_Score > firstMatch->m_Score )
+                    else if( n->m_ExactMatch && !firstMatch->m_ExactMatch )
+                        firstMatch = n;
+                    else if( n->m_ExactMatch == firstMatch->m_ExactMatch && n->m_Score > firstMatch->m_Score )
                         firstMatch = n;
 
                     m_widget->ExpandAncestors( ToItem( n ) );
