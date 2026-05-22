@@ -32,7 +32,7 @@ SHAPE_POLY_SET ConvertGerberToPolySet( GERBER_FILE_IMAGE* aImage, int aTolerance
         return mergedPolygons;
 
     // Accumulate positive and negative items separately, then perform a single boolean
-    // pass for each. This is O(N log N) vs O(N²) for per-item BooleanAdd.
+    // pass for each negative object: a negative object erase only previously drawn items.
     SHAPE_POLY_SET positivePolygons;
     SHAPE_POLY_SET negativePolygons;
 
@@ -102,16 +102,17 @@ SHAPE_POLY_SET ConvertGerberToPolySet( GERBER_FILE_IMAGE* aImage, int aTolerance
                     dest.Append( item->GetABPosition( hole.CPoint( j ) + offset ) );
             }
         }
+
+        // Handle negative polygons: they are subtracted to previous polygons
+        if( negativePolygons.OutlineCount() > 0 )
+        {
+            positivePolygons.BooleanSubtract( negativePolygons );
+            negativePolygons.RemoveAllContours();
+        }
     }
 
     // Single-pass union of all positive items
     positivePolygons.Simplify();
-
-    if( negativePolygons.OutlineCount() > 0 )
-    {
-        negativePolygons.Simplify();
-        positivePolygons.BooleanSubtract( negativePolygons );
-    }
 
     mergedPolygons = std::move( positivePolygons );
 
