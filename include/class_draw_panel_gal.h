@@ -43,6 +43,7 @@ class BOARD;
 class EDA_DRAW_FRAME;
 class TOOL_DISPATCHER;
 class PROF_COUNTER;
+class wxImage;
 
 namespace KIGFX
 {
@@ -137,6 +138,14 @@ public:
     {
         return (KIGFX::VIEW_CONTROLS*)( m_viewControls );
     }
+
+    /**
+     * Capture the current canvas contents into aDstImage.
+     *
+     * @return true on success, false if the backend can't be captured this way (the caller
+     *         should fall back to a DC blit).
+     */
+    bool GetScreenshot( wxImage& aDstImage );
 
     /// @copydoc wxWindow::Refresh()
     virtual void Refresh( bool aEraseBackground = true, const wxRect* aRect = nullptr ) override;

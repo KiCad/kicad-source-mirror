@@ -53,6 +53,7 @@
 #define SEG_PER_CIRCLE_COUNT  64
 
 class GLUtesselator;
+class wxImage;
 
 struct bitmap_glyph;
 
@@ -323,6 +324,8 @@ public:
 
     /// @copydoc GAL::EndDrawing()
     void EndDrawing() override;
+
+    bool GetScreenshot( wxImage& aDstImage );
 
     ///< Parameters passed to the GLU tesselator
     struct TessParams

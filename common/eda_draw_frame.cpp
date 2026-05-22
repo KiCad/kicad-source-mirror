@@ -1414,20 +1414,22 @@ void EDA_DRAW_FRAME::onActivate( wxActivateEvent& aEvent )
 
 bool EDA_DRAW_FRAME::SaveCanvasImageToFile( const wxString& aFileName, BITMAP_TYPE aBitmapType )
 {
-    bool retv = true;
+    wxImage image;
 
-    // Make a screen copy of the canvas:
-    wxSize image_size = GetCanvas()->GetClientSize();
 
-    wxClientDC dc( GetCanvas() );
-    wxBitmap   bitmap( image_size.x, image_size.y );
-    wxMemoryDC memdc;
+    if( !GetCanvas()->GetScreenshot( image ) )
+    {
+        wxSize     image_size = GetCanvas()->GetClientSize();
+        wxClientDC dc( GetCanvas() );
+        wxBitmap   bitmap( image_size.x, image_size.y );
+        wxMemoryDC memdc;
 
-    memdc.SelectObject( bitmap );
-    memdc.Blit( 0, 0, image_size.x, image_size.y, &dc, 0, 0 );
-    memdc.SelectObject( wxNullBitmap );
+        memdc.SelectObject( bitmap );
+        memdc.Blit( 0, 0, image_size.x, image_size.y, &dc, 0, 0 );
+        memdc.SelectObject( wxNullBitmap );
 
-    wxImage image = bitmap.ConvertToImage();
+        image = bitmap.ConvertToImage();
+    }
 
     wxBitmapType type = wxBITMAP_TYPE_PNG;
     switch( aBitmapType )
@@ -1437,8 +1439,7 @@ bool EDA_DRAW_FRAME::SaveCanvasImageToFile( const wxString& aFileName, BITMAP_TY
     case BITMAP_TYPE::JPG: type = wxBITMAP_TYPE_JPEG; break;
     }
 
-    if( !image.SaveFile( aFileName, type ) )
-        retv = false;
+    bool retv = image.SaveFile( aFileName, type );
 
     image.Destroy();
     return retv;
