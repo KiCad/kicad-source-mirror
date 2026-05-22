@@ -275,12 +275,16 @@ protected:
         }
 
         SCH_SELECTION_TOOL* selTool = static_cast<SCH_SELECTION_TOOL*>( m_tool );
-        SCH_EDIT_FRAME*      frame   = static_cast<SCH_EDIT_FRAME*>( toolMgr->GetToolHolder() );
-        if( !selTool || !frame )
+        EDA_BASE_FRAME*     baseFrame = static_cast<EDA_BASE_FRAME*>( toolMgr->GetToolHolder() );
+
+        if( !selTool || !baseFrame || !baseFrame->IsType( FRAME_SCH ) )
         {
-            wxLogTrace( "KICAD_NET_CHAIN_MENU", "[NetChainMenu] abort: selTool=%p frame=%p", (void*) selTool, (void*) frame );
+            wxLogTrace( "KICAD_NET_CHAIN_MENU", "[NetChainMenu] abort: selTool=%p baseFrame=%p", (void*) selTool,
+                        (void*) baseFrame );
             return;
         }
+
+        SCH_EDIT_FRAME* frame = static_cast<SCH_EDIT_FRAME*>( baseFrame );
 
         const SCH_SELECTION& sel = selTool->GetSelection();
         if( sel.Empty() )
