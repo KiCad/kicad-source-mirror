@@ -40,6 +40,16 @@
 #include <git2.h>
 
 
+// Strip the "* " / "  " prefix used to mark the current branch in the list.
+static wxString stripBranchMarker( const wxString& aName )
+{
+    if( aName.StartsWith( wxS( "* " ) ) || aName.StartsWith( wxS( "  " ) ) )
+        return aName.Mid( 2 );
+
+    return aName;
+}
+
+
 DIALOG_GIT_SWITCH::DIALOG_GIT_SWITCH( wxWindow* aParent, git_repository* aRepository ) :
         DIALOG_SHIM( aParent, wxID_ANY, _( "Git Branch Switch" ), wxDefaultPosition, wxDefaultSize,
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
@@ -107,21 +117,33 @@ void DIALOG_GIT_SWITCH::PopulateBranchList()
     // Get the branches
     GetBranches();
 
+    long currentIndex = -1;
+
     // Populate the list
     for( auto& [ name, data ] : m_branches )
     {
         wxDateTime lastUpdated( data.lastUpdated );
         wxString   lastUpdatedString = lastUpdated.Format();
+        wxString   displayName = ( name == m_currentBranch ? wxS( "* " ) : wxS( "  " ) ) + name;
 
-        long itemIndex = m_branchList->InsertItem( m_branchList->GetItemCount(), name );
+        long itemIndex = m_branchList->InsertItem( m_branchList->GetItemCount(), displayName );
         m_branchList->SetItem( itemIndex, 1, data.commitString );
         m_branchList->SetItem( itemIndex, 2, lastUpdatedString );
+
+        if( name == m_currentBranch )
+            currentIndex = itemIndex;
     }
 
     m_branchList->SetColumnWidth( 0, wxLIST_AUTOSIZE );
     m_branchList->SetColumnWidth( 1, wxLIST_AUTOSIZE );
     m_branchList->SetColumnWidth( 2, wxLIST_AUTOSIZE );
 
+    if( currentIndex >= 0 )
+    {
+        m_branchList->Select( currentIndex );
+        m_branchList->EnsureVisible( currentIndex );
+        m_branchNameText->SetValue( m_currentBranch );
+    }
 }
 
 
@@ -131,7 +153,7 @@ void DIALOG_GIT_SWITCH::OnBranchListDClick( wxListEvent& aEvent )
 
     if( selection != wxNOT_FOUND )
     {
-        wxString branchName = m_branchList->GetItemText( selection );
+        wxString branchName = stripBranchMarker( m_branchList->GetItemText( selection ) );
         m_branchNameText->SetValue( branchName );
 
         if( branchName != m_currentBranch )
@@ -146,7 +168,7 @@ void DIALOG_GIT_SWITCH::OnBranchListSelection( wxListEvent& aEvent )
 
     if( selection != wxNOT_FOUND )
     {
-        wxString branchName = m_branchList->GetItemText( selection );
+        wxString branchName = stripBranchMarker( m_branchList->GetItemText( selection ) );
         m_branchNameText->SetValue( branchName );
         m_switchButton->SetLabel( _( "Switch" ) );
         m_switchButton->Enable( branchName != m_currentBranch );
