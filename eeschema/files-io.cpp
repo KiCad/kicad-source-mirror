@@ -720,14 +720,17 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // instead of the default one.
         LoadDrawingSheet();
 
-        schematic.PruneOrphanedSymbolInstances( Prj().GetProjectName(), sheetList );
-        schematic.PruneOrphanedSheetInstances( Prj().GetProjectName(), sheetList );
-
         wxLogTrace( traceSchCurrentSheet,
                    "Before CheckForMissingSymbolInstances: Current sheet path='%s', size=%zu",
                    GetCurrentSheet().Path().AsString(),
                    GetCurrentSheet().size() );
+
+        // Check must run before pruning so variant data on a stale instance path is migrated
+        // onto the new instance before the orphan is removed.
         sheetList.CheckForMissingSymbolInstances( Prj().GetProjectName() );
+
+        schematic.PruneOrphanedSymbolInstances( Prj().GetProjectName(), sheetList );
+        schematic.PruneOrphanedSheetInstances( Prj().GetProjectName(), sheetList );
 
         Schematic().ConnectionGraph()->Reset();
 
