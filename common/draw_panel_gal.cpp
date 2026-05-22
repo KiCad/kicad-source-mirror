@@ -569,6 +569,17 @@ void EDA_DRAW_PANEL_GAL::ForceRefresh()
 }
 
 
+bool EDA_DRAW_PANEL_GAL::GetScreenshot( wxImage& aDstImage )
+{
+    if( m_backend != GAL_TYPE_OPENGL || !m_gal )
+        return false;
+
+    DoRePaint( false );
+
+    return static_cast<KIGFX::OPENGL_GAL*>( m_gal )->GetScreenshot( aDstImage );
+}
+
+
 void EDA_DRAW_PANEL_GAL::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
 {
     m_eventDispatcher = aEventDispatcher;

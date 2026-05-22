@@ -45,6 +45,7 @@
 
 #include <wx/app.h>
 #include <wx/frame.h>
+#include <wx/image.h>
 
 #include <macros.h>
 #include <optional>
@@ -58,6 +59,7 @@
 #include <limits>
 #include <memory>
 #include <list>
+#include <vector>
 using namespace std::placeholders;
 using namespace KIGFX;
 
@@ -802,6 +804,60 @@ void OPENGL_GAL::EndDrawing()
               cntEndCached.to_string(), cntEndNoncached.to_string(), cntEndOverlay.to_string(),
               cntComposite.to_string(), cntSwap.to_string() );
 #endif
+}
+
+
+bool OPENGL_GAL::GetScreenshot( wxImage& aDstImage )
+{
+    if( !IsInitialized() || !m_compositor )
+        return false;
+
+    GAL_CONTEXT_LOCKER locker( this );
+
+    m_compositor->SetBuffer( m_mainBuffer );
+
+    GLint viewport[4];
+    glGetIntegerv( GL_VIEWPORT, viewport );
+
+    const int w = viewport[2];
+    const int h = viewport[3];
+
+    GLint readBuffer = GL_COLOR_ATTACHMENT0;
+    glGetIntegerv( GL_DRAW_BUFFER, &readBuffer );
+
+    bool ok = false;
+
+    if( w > 0 && h > 0 )
+    {
+        std::vector<unsigned char> rgba( (size_t) w * h * 4 );
+
+        glFinish();
+        glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+        glReadBuffer( (GLenum) readBuffer );
+        glReadPixels( 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, rgba.data() );
+
+        // wxImage wants separate RGB and alpha buffers and takes ownership of them.
+        unsigned char* rgb = (unsigned char*) malloc( (size_t) w * h * 3 );
+        unsigned char* alpha = (unsigned char*) malloc( (size_t) w * h );
+
+        for( int i = 0; i < w * h; ++i )
+        {
+            rgb[i * 3 + 0] = rgba[i * 4 + 0];
+            rgb[i * 3 + 1] = rgba[i * 4 + 1];
+            rgb[i * 3 + 2] = rgba[i * 4 + 2];
+            alpha[i] = rgba[i * 4 + 3];
+        }
+
+        aDstImage.SetData( rgb, w, h, false );
+        aDstImage.SetAlpha( alpha, false );
+
+        aDstImage = aDstImage.Mirror( false );
+        ok = true;
+    }
+
+    m_compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
+
+    return ok;
 }
 
 
