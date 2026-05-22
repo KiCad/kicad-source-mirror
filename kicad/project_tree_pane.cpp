@@ -2075,6 +2075,44 @@ void PROJECT_TREE_PANE::onGitPullProject( wxCommandEvent& aEvent )
             break;
         }
 
+        if( pullResult == PullResult::Conflict )
+        {
+            wxRichMessageDialog dlg( wxGetTopLevelParent( this ),
+                                     _( "Your local changes and the remote changes conflict, so the pull was "
+                                        "cancelled and nothing was changed.\n\n"
+                                        "You can discard your local commits and use the remote version, or "
+                                        "rebase your commits on top of the remote." ),
+                                     _( "Pull Conflict" ),
+                                     wxYES_NO | wxCANCEL | wxCANCEL_DEFAULT | wxICON_WARNING | wxCENTER );
+
+            dlg.SetYesNoCancelLabels( _( "&Use Remote (discard my changes)" ), _( "&Rebase" ), _( "Cancel" ) );
+
+            int choice = dlg.ShowModal();
+
+            if( choice == wxID_YES )
+            {
+                if( handler.ResetToUpstream() )
+                    showGitFeedback( _( "Reset to the remote version." ) );
+                else
+                    DisplayErrorMessage( m_parent, _( "Failed to reset to remote" ), handler.GetErrorString() );
+            }
+            else if( choice == wxID_NO )
+            {
+                PullResult rebaseResult = handler.RebaseOntoUpstream();
+
+                if( rebaseResult == PullResult::Success )
+                    showGitFeedback( _( "Rebased your changes onto the remote." ) );
+                else
+                    DisplayErrorMessage( m_parent, _( "Could not rebase" ), handler.GetErrorString() );
+            }
+            else
+            {
+                showGitFeedback( _( "Pull cancelled." ) );
+            }
+
+            break;
+        }
+
         if( common->WasAuthFailure() && promptForGitCredentials( m_parent, common ) )
             continue;
 

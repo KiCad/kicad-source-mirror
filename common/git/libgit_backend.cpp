@@ -1377,13 +1377,100 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler,
         return PullResult::DirtyWorkdir;
     }
 
-    if( git_merge( aHandler->GetRepo(), aMergeHeads, aMergeHeadsCount, nullptr, nullptr ) )
+    git_repository* repo = aHandler->GetRepo();
+
+    if( git_merge( repo, aMergeHeads, aMergeHeadsCount, nullptr, nullptr ) )
     {
         wxString errorMsg = KIGIT_COMMON::GetLastGitError();
         aHandler->AddErrorString( wxString::Format( _( "Merge failed: %s" ), errorMsg ) );
         return PullResult::MergeFailed;
     }
 
+    git_index* index = nullptr;
+
+    if( git_repository_index( &index, repo ) != GIT_OK )
+    {
+        aHandler->AddErrorString( _( "Could not read repository index after merge." ) );
+        return PullResult::MergeFailed;
+    }
+
+    KIGIT::GitIndexPtr indexPtr( index );
+
+    if( git_index_has_conflicts( index ) )
+    {
+        // Abort the merge and restore the pre-pull state
+        git_object* head_obj = nullptr;
+
+        if( git_revparse_single( &head_obj, repo, "HEAD" ) == GIT_OK )
+        {
+            KIGIT::GitObjectPtr headObjPtr( head_obj );
+            git_reset( repo, head_obj, GIT_RESET_HARD, nullptr );
+        }
+
+        git_repository_state_cleanup( repo );
+
+        return PullResult::Conflict;
+    }
+
+    git_oid        tree_oid;
+    git_tree*      tree = nullptr;
+    git_reference* head_ref = nullptr;
+    git_oid        head_oid;
+    git_commit*    head_commit = nullptr;
+    git_commit*    merge_commit = nullptr;
+    git_signature* signature = nullptr;
+
+    if( git_index_write_tree( &tree_oid, index ) != GIT_OK || git_tree_lookup( &tree, repo, &tree_oid ) != GIT_OK )
+    {
+        aHandler->AddErrorString( _( "Could not write the merge result." ) );
+        return PullResult::MergeFailed;
+    }
+
+    KIGIT::GitTreePtr treePtr( tree );
+
+    if( git_repository_head( &head_ref, repo ) != GIT_OK )
+    {
+        aHandler->AddErrorString( _( "Could not get the repository head." ) );
+        return PullResult::MergeFailed;
+    }
+
+    KIGIT::GitReferencePtr headRefPtr( head_ref );
+
+    if( git_reference_name_to_id( &head_oid, repo, "HEAD" ) != GIT_OK
+        || git_commit_lookup( &head_commit, repo, &head_oid ) != GIT_OK
+        || git_commit_lookup( &merge_commit, repo, git_annotated_commit_id( aMergeHeads[0] ) ) != GIT_OK )
+    {
+        aHandler->AddErrorString( _( "Could not look up the commits to merge." ) );
+        return PullResult::MergeFailed;
+    }
+
+    KIGIT::GitCommitPtr headCommitPtr( head_commit );
+    KIGIT::GitCommitPtr mergeCommitPtr( merge_commit );
+
+    if( git_signature_default( &signature, repo ) != GIT_OK )
+    {
+        aHandler->AddErrorString( _( "Could not create a commit signature.  Set user.name "
+                                     "and user.email in your git configuration." ) );
+        return PullResult::MergeFailed;
+    }
+
+    KIGIT::GitSignaturePtr signaturePtr( signature );
+
+    const git_commit* parents[] = { head_commit, merge_commit };
+    wxString          message =
+            wxString::Format( _( "Merge remote-tracking branch into %s" ), git_reference_shorthand( head_ref ) );
+    git_oid merge_commit_oid;
+
+    if( git_commit_create( &merge_commit_oid, repo, "HEAD", signature, signature, nullptr,
+                           message.utf8_string().c_str(), tree, 2, parents )
+        != GIT_OK )
+    {
+        aHandler->AddErrorString(
+                wxString::Format( _( "Could not create merge commit: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        return PullResult::MergeFailed;
+    }
+
+    git_repository_state_cleanup( repo );
     return PullResult::Success;
 }
 
@@ -1435,6 +1522,172 @@ PullResult LIBGIT_BACKEND::handleRebase( GIT_PULL_HANDLER* aHandler,
         wxString errorMsg = KIGIT_COMMON::GetLastGitError();
         aHandler->AddErrorString( wxString::Format( _( "Rebase finish failed: %s" ), errorMsg ) );
         return PullResult::MergeFailed;
+    }
+
+    return PullResult::Success;
+}
+
+
+static bool lookup_upstream_ref( GIT_PULL_HANDLER* aHandler, git_reference** aUpstreamRef )
+{
+    git_repository* repo = aHandler->GetRepo();
+    git_reference*  head_ref = nullptr;
+
+    if( git_repository_head( &head_ref, repo ) != GIT_OK )
+        return false;
+
+    KIGIT::GitReferencePtr headRefPtr( head_ref );
+    wxString               remoteName = aHandler->GetCommon()->GetRemoteNameOrDefault();
+    wxString remoteRef = wxString::Format( "refs/remotes/%s/%s", remoteName, git_reference_shorthand( head_ref ) );
+
+    return git_reference_lookup( aUpstreamRef, repo, remoteRef.utf8_string().c_str() ) == GIT_OK;
+}
+
+
+bool LIBGIT_BACKEND::ResetToUpstream( GIT_PULL_HANDLER* aHandler )
+{
+    git_repository* repo = aHandler->GetRepo();
+
+    if( !repo )
+        return false;
+
+    std::unique_lock<std::mutex> lock( aHandler->GetCommon()->m_gitActionMutex, std::try_to_lock );
+
+    if( !lock.owns_lock() )
+    {
+        aHandler->AddErrorString( _( "Another git operation is in progress." ) );
+        return false;
+    }
+
+    git_reference* upstream_ref = nullptr;
+
+    if( !lookup_upstream_ref( aHandler, &upstream_ref ) )
+    {
+        aHandler->AddErrorString( _( "Could not find the matching remote branch." ) );
+        return false;
+    }
+
+    KIGIT::GitReferencePtr upstreamRefPtr( upstream_ref );
+    git_object*            target = nullptr;
+
+    if( git_reference_peel( &target, upstream_ref, GIT_OBJECT_COMMIT ) != GIT_OK )
+    {
+        aHandler->AddErrorString( _( "Could not read the remote branch." ) );
+        return false;
+    }
+
+    KIGIT::GitObjectPtr targetPtr( target );
+
+    if( git_reset( repo, target, GIT_RESET_HARD, nullptr ) != GIT_OK )
+    {
+        aHandler->AddErrorString(
+                wxString::Format( _( "Could not reset to the remote branch: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        return false;
+    }
+
+    git_repository_state_cleanup( repo );
+    return true;
+}
+
+
+PullResult LIBGIT_BACKEND::RebaseOntoUpstream( GIT_PULL_HANDLER* aHandler )
+{
+    git_repository* repo = aHandler->GetRepo();
+
+    if( !repo )
+        return PullResult::Error;
+
+    std::unique_lock<std::mutex> lock( aHandler->GetCommon()->m_gitActionMutex, std::try_to_lock );
+
+    if( !lock.owns_lock() )
+    {
+        aHandler->AddErrorString( _( "Another git operation is in progress." ) );
+        return PullResult::Error;
+    }
+
+    if( hasUnstagedChanges( repo ) )
+    {
+        aHandler->AddErrorString( _( "Cannot rebase: you have unstaged changes.  Please commit "
+                                     "or stash them first." ) );
+        return PullResult::DirtyWorkdir;
+    }
+
+    git_reference* upstream_ref = nullptr;
+
+    if( !lookup_upstream_ref( aHandler, &upstream_ref ) )
+    {
+        aHandler->AddErrorString( _( "Could not find the matching remote branch." ) );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitReferencePtr upstreamRefPtr( upstream_ref );
+    git_annotated_commit*  onto = nullptr;
+
+    if( git_annotated_commit_from_ref( &onto, repo, upstream_ref ) != GIT_OK )
+    {
+        aHandler->AddErrorString( _( "Could not read the remote branch." ) );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitAnnotatedCommitPtr ontoPtr( onto );
+    git_signature*               signature = nullptr;
+
+    if( git_signature_default( &signature, repo ) != GIT_OK )
+    {
+        aHandler->AddErrorString( _( "Could not create a commit signature.  Set user.name and "
+                                     "user.email in your git configuration." ) );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitSignaturePtr signaturePtr( signature );
+    git_rebase_options     rebase_opts;
+    git_rebase_init_options( &rebase_opts, GIT_REBASE_OPTIONS_VERSION );
+    git_rebase* rebase = nullptr;
+
+    if( git_rebase_init( &rebase, repo, nullptr, onto, nullptr, &rebase_opts ) != GIT_OK )
+    {
+        aHandler->AddErrorString(
+                wxString::Format( _( "Rebase failed to start: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitRebasePtr   rebasePtr( rebase );
+    git_rebase_operation* op = nullptr;
+
+    while( git_rebase_next( &op, rebase ) == GIT_OK )
+    {
+        git_index* index = nullptr;
+
+        if( git_repository_index( &index, repo ) == GIT_OK )
+        {
+            KIGIT::GitIndexPtr indexPtr( index );
+
+            if( git_index_has_conflicts( index ) )
+            {
+                git_rebase_abort( rebase );
+                aHandler->AddErrorString( _( "The rebase ran into conflicts.  This is best "
+                                             "resolved from a git command line." ) );
+                return PullResult::Conflict;
+            }
+        }
+
+        git_oid commit_oid;
+
+        if( git_rebase_commit( &commit_oid, rebase, nullptr, signature, nullptr, nullptr ) != GIT_OK )
+        {
+            git_rebase_abort( rebase );
+            aHandler->AddErrorString( _( "The rebase ran into conflicts.  This is best "
+                                         "resolved from a git command line." ) );
+            return PullResult::Conflict;
+        }
+    }
+
+    if( git_rebase_finish( rebase, signature ) != GIT_OK )
+    {
+        git_rebase_abort( rebase );
+        aHandler->AddErrorString(
+                wxString::Format( _( "Rebase finish failed: %s" ), KIGIT_COMMON::GetLastGitError() ) );
+        return PullResult::Error;
     }
 
     return PullResult::Success;
