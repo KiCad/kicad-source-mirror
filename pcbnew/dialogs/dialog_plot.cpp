@@ -1019,6 +1019,9 @@ void DIALOG_PLOT::applyPlotSettings()
     REPORTER&       reporter = m_messagesPanel->Reporter();
     PCB_PLOT_PARAMS tempOptions;
 
+    tempOptions.SetDashedLineDashRatio( m_plotOpts.GetDashedLineDashRatio() );
+    tempOptions.SetDashedLineGapRatio( m_plotOpts.GetDashedLineGapRatio() );
+
     tempOptions.SetSubtractMaskFromSilk( m_subtractMaskFromSilk->GetValue() );
     tempOptions.SetPlotFrameRef( m_plotSheetRef->GetValue() );
     tempOptions.SetSketchPadsOnFabLayers( m_sketchPadsOnFabLayers->GetValue() );
