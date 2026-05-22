@@ -34,12 +34,14 @@
 
 
 // Seed the project .gitignore with KiCad-generated paths that should never be
-// committed (local history, backups, autosaves, lock files, footprint cache).
+// committed (local history, backups, autosaves, lock files, footprint cache,
+// project-local settings which may hold remote URLs and usernames).
 // Append-only: existing entries are preserved.
 static void ensureProjectGitignore( const wxString& aProjectPath )
 {
     static const wxString kicadEntries[] = {
-        wxS( ".history/" ), wxS( "*-backups/" ), wxS( "_autosave-*" ), wxS( "fp-info-cache" ), wxS( "~*.lck" ),
+        wxS( ".history/" ),     wxS( "*-backups/" ), wxS( "_autosave-*" ),
+        wxS( "fp-info-cache" ), wxS( "~*.lck" ),     wxS( "*.kicad_prl" ),
     };
 
     wxFileName         ignoreFile( aProjectPath, wxS( ".gitignore" ) );
