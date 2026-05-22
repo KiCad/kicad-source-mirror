@@ -328,8 +328,7 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
     callbacks.payload = &repoMixin;
 
     wxString txtURL = m_txtURL->GetValue();
-    git_remote_create_with_fetchspec( &remote, m_repository, "origin", txtURL.mbc_str(),
-                                      "+refs/heads/*:refs/remotes/origin/*" );
+    git_remote_create_anonymous( &remote, m_repository, txtURL.mbc_str() );
     KIGIT::GitRemotePtr remotePtr( remote );
 
     if( git_remote_connect( remote, GIT_DIRECTION_FETCH, &callbacks, nullptr, nullptr ) == GIT_OK )
