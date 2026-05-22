@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include "plotter.h"
 
 /**
@@ -496,6 +498,19 @@ protected:
     void plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor, const wxString& aText,
                             const TEXT_ATTRIBUTES& aAttrs );
 
+    // Allocate the next DXF object handle.  Handle 0 is reserved by the spec, so the
+    // first allocation returns 1.
+    std::string nextHandle();
+
+    // Emit a complete R2000 entity prologue (opcode + handle + owner + AcDbEntity/layer
+    // + entity-specific subclass marker) and return the allocated handle.  An empty
+    // aOwner defaults to the *Model_Space BLOCK_RECORD; the SEQEND closing a POLYLINE
+    // and the VERTEX records inside it override the owner to the POLYLINE's handle.
+    // Pass nullptr for aSubclass on SEQEND, which has no second AcDb marker.
+    std::string emitEntityHandle( const char* aEntityType, const char* aSubclass,
+                                  const std::string& aLayerName,
+                                  const std::string& aOwner = "" );
+
     bool         m_textAsLines;
     COLOR4D      m_currentColor;
     LINE_STYLE   m_currentLineType;
@@ -504,4 +519,12 @@ protected:
     double       m_unitScalingFactor;
     unsigned int m_measurementDirective;
     unsigned int m_insUnits;
+
+    // Monotonic handle counter; zero is reserved by the DXF spec.  64-bit so even
+    // pathological multi-million-entity exports cannot wrap into the reserved 0 handle.
+    uint64_t     m_handle = 0;
+
+    // BLOCK_RECORD handle for the *Model_Space layout; cached so every entity can
+    // reference it as its 330 owner tag.
+    std::string  m_modelSpaceHandle;
 };
