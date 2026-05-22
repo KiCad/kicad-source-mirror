@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6ab)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -57,7 +57,7 @@ PANEL_ELECTRICAL_SPACING_IPC2221_BASE::PANEL_ELECTRICAL_SPACING_IPC2221_BASE( wx
 	m_gridElectricalSpacingValues = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_gridElectricalSpacingValues->CreateGrid( 10, 7 );
+	m_gridElectricalSpacingValues->CreateGrid( 10, 8 );
 	m_gridElectricalSpacingValues->EnableEditing( false );
 	m_gridElectricalSpacingValues->EnableGridLines( true );
 	m_gridElectricalSpacingValues->EnableDragGridSize( false );
@@ -71,15 +71,17 @@ PANEL_ELECTRICAL_SPACING_IPC2221_BASE::PANEL_ELECTRICAL_SPACING_IPC2221_BASE( wx
 	m_gridElectricalSpacingValues->SetColSize( 4, 100 );
 	m_gridElectricalSpacingValues->SetColSize( 5, 100 );
 	m_gridElectricalSpacingValues->SetColSize( 6, 100 );
+	m_gridElectricalSpacingValues->SetColSize( 7, 100 );
 	m_gridElectricalSpacingValues->EnableDragColMove( false );
 	m_gridElectricalSpacingValues->EnableDragColSize( true );
 	m_gridElectricalSpacingValues->SetColLabelValue( 0, _("B1") );
 	m_gridElectricalSpacingValues->SetColLabelValue( 1, _("B2") );
 	m_gridElectricalSpacingValues->SetColLabelValue( 2, _("B3") );
 	m_gridElectricalSpacingValues->SetColLabelValue( 3, _("B4") );
-	m_gridElectricalSpacingValues->SetColLabelValue( 4, _("A5") );
+	m_gridElectricalSpacingValues->SetColLabelValue( 4, _("B5") );
 	m_gridElectricalSpacingValues->SetColLabelValue( 5, _("A6") );
 	m_gridElectricalSpacingValues->SetColLabelValue( 6, _("A7") );
+	m_gridElectricalSpacingValues->SetColLabelValue( 7, _("A8") );
 	m_gridElectricalSpacingValues->SetColLabelSize( 30 );
 	m_gridElectricalSpacingValues->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
@@ -114,7 +116,7 @@ PANEL_ELECTRICAL_SPACING_IPC2221_BASE::PANEL_ELECTRICAL_SPACING_IPC2221_BASE( wx
 	m_gridElectricalSpacingValues->SetDefaultCellAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 	m_electricalSpacingSizer->Add( m_gridElectricalSpacingValues, 0, wxALL, 5 );
 
-	m_stHelp = new wxStaticText( this, wxID_ANY, _("*  B1 - Internal Conductors\n*  B2 - External Conductors, uncoated, sea level to 3050 m\n*  B3 - External Conductors, uncoated, over 3050 m\n*  B4 - External Conductors, with permanent polymer coating (any elevation)\n*  A5 - External Conductors, with conformal coating over assembly (any elevation)\n*  A6 - External Component lead/termination, uncoated\n*  A7 - External Component lead termination, with conformal coating (any elevation)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stHelp = new wxStaticText( this, wxID_ANY, _("*  B1 - Internal Conductors\n*  B2 - External Conductors, uncoated, sea level to 3050 m \n*  B3 - External Conductors, uncoated, over 3050 m or a vacuum\n*  B4 - External Conductors, with permanent polymer coating (any elevation)\n*  B5 - External Conductors, with conformal (any elevation or in a vacuum)\n*  A6 - External Component lead termination, with conformal coating (any elevation or in a vacuum)\n*  A7 - External Component lead/termination, uncoated, sea level to 3050 m \n*  A8 - External Component lead/termination, uncoated, over 3050m or in a vacuum"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stHelp->Wrap( -1 );
 	m_electricalSpacingSizer->Add( m_stHelp, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 

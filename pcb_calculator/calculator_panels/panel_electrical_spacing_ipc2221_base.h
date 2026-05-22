@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6ab)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,7 +32,6 @@ class UNIT_SELECTOR_LEN;
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_ELECTRICAL_SPACING_IPC2221_BASE
 ///////////////////////////////////////////////////////////////////////////////
@@ -59,7 +58,7 @@ class PANEL_ELECTRICAL_SPACING_IPC2221_BASE : public CALCULATOR_PANEL
 
 	public:
 
-		PANEL_ELECTRICAL_SPACING_IPC2221_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 551,450 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+		PANEL_ELECTRICAL_SPACING_IPC2221_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1300,450 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_ELECTRICAL_SPACING_IPC2221_BASE();
 
