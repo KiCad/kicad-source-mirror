@@ -148,6 +148,19 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
         screen->MigrateSimModels();
 
+    schematic->LoadVariants();
+
+    wxString projectName = project->GetProjectName();
+
+    if( projectName.IsEmpty() )
+        projectName = schFile.GetName();
+
+    // Check must run before pruning so variant data on a stale instance path is migrated
+    // onto the new instance before the orphan is removed.
+    sheetList.CheckForMissingSymbolInstances( projectName );
+    screens.PruneOrphanedSymbolInstances( projectName, sheetList );
+    screens.PruneOrphanedSheetInstances( projectName, sheetList );
+
     sheetList.AnnotatePowerSymbols();
 
     schematic->ConnectionGraph()->Reset();

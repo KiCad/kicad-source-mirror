@@ -901,16 +901,27 @@ void SCH_SHEET_PATH::CheckForMissingSymbolInstances( const wxString& aProjectNam
             }
             else if( !symbol->GetInstances().empty() )
             {
-                // When a schematic is opened as a different project (e.g., a subsheet opened
-                // directly from File Browser), use the first available instance data.
-                // This provides better UX than showing unannotated references.
-                const SCH_SYMBOL_INSTANCE& firstInstance = symbol->GetInstances()[0];
-                symbolInstance.m_Reference = firstInstance.m_Reference;
-                symbolInstance.m_Unit = firstInstance.m_Unit;
+                // Prefer an instance from the current project; shared schematics may carry
+                // instance data for several projects.  Copying the full instance carries
+                // variant DNP / value / field overrides across when v9-imported files have
+                // been re-rooted and their stored paths no longer match.
+                const std::vector<SCH_SYMBOL_INSTANCE>& instances = symbol->GetInstances();
+
+                auto sourceIt = std::find_if( instances.begin(), instances.end(),
+                        [&aProjectName]( const SCH_SYMBOL_INSTANCE& aInstance )
+                        {
+                            return aInstance.m_ProjectName == aProjectName;
+                        } );
+
+                if( sourceIt == instances.end() )
+                    sourceIt = instances.begin();
+
+                symbolInstance = *sourceIt;
 
                 wxLogTrace( traceSchSheetPaths,
-                           "  Using first available instance: ref=%s, unit=%d",
-                           symbolInstance.m_Reference, symbolInstance.m_Unit );
+                           "  Using available instance (project '%s'): ref=%s, unit=%d, variants=%zu",
+                           sourceIt->m_ProjectName, symbolInstance.m_Reference,
+                           symbolInstance.m_Unit, symbolInstance.m_Variants.size() );
             }
             else
             {
