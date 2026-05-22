@@ -77,6 +77,8 @@ public:
 
     bool PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock ) override;
     PullResult PerformPull( GIT_PULL_HANDLER* aHandler ) override;
+    bool       ResetToUpstream( GIT_PULL_HANDLER* aHandler ) override;
+    PullResult RebaseOntoUpstream( GIT_PULL_HANDLER* aHandler ) override;
 
     void PerformRevert( GIT_REVERT_HANDLER* aHandler ) override;
 

@@ -43,6 +43,7 @@ struct CommitDetails
 // Enum for result codes, error codes are negative, success codes are positive
 enum class PullResult : int
 {
+    Conflict = -4,
     DirtyWorkdir = -3,
     MergeFailed = -2,
     Error = -1,
@@ -62,6 +63,12 @@ public:
 
     bool       PerformFetch( bool aSkipLock = false );
     PullResult PerformPull();
+
+    // Conflict-recovery actions, offered after PerformPull() returns Conflict.
+    // ResetToUpstream discards local commits and matches the remote branch.
+    // RebaseOntoUpstream replays local commits on top of the remote branch.
+    bool       ResetToUpstream();
+    PullResult RebaseOntoUpstream();
 
     const std::vector<std::pair<std::string, std::vector<CommitDetails>>>& GetFetchResults() const;
 

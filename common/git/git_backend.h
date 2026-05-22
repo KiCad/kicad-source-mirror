@@ -120,6 +120,8 @@ public:
 
     virtual bool PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock ) = 0;
     virtual PullResult PerformPull( GIT_PULL_HANDLER* aHandler ) = 0;
+    virtual bool       ResetToUpstream( GIT_PULL_HANDLER* aHandler ) = 0;
+    virtual PullResult RebaseOntoUpstream( GIT_PULL_HANDLER* aHandler ) = 0;
 
     virtual void PerformRevert( GIT_REVERT_HANDLER* aHandler ) = 0;
 
