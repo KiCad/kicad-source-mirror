@@ -345,6 +345,12 @@ public:
     void RemoveSymbol( const SCH_SYMBOL& aSymbol );
     void UpdateReferences( const SCH_REFERENCE_LIST& aRefs, const wxString& aVariantName );
 
+    // Identity-based undo serialization (keyed by symbol, not row position) for the dialog's
+    // Ctrl+Z, so it stays correct as rows are grouped/sorted/reordered.
+    bool     HasUndoStateSerialization() const override { return true; }
+    wxString SerializeUndoState() const override;
+    void     RestoreUndoState( const wxString& aState ) override;
+
     bool DeleteRows( size_t aPosition = 0, size_t aNumRows = 1 ) override;
 
     const SCH_REFERENCE_LIST& GetReferenceList() const { return m_symbolsList; }

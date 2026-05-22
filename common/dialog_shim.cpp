@@ -43,6 +43,7 @@
 #include <wx/app.h>
 #include <wx/event.h>
 #include <wx/grid.h>
+#include <widgets/wx_grid.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/checklst.h>
 #include <wx/dataview.h>
@@ -845,6 +846,12 @@ void DIALOG_SHIM::OptOut( wxWindow* aWindow )
 }
 
 
+void DIALOG_SHIM::ExcludeFromControlUndoRedo( wxWindow* aWindow )
+{
+    m_noControlUndoRedo.insert( aWindow );
+}
+
+
 void DIALOG_SHIM::RegisterUnitBinder( UNIT_BINDER* aUnitBinder, wxWindow* aWindow )
 {
     m_unitBinders[ aWindow ] = aUnitBinder;
@@ -929,6 +936,9 @@ void DIALOG_SHIM::registerUndoRedoHandlers( wxWindowList& children )
 {
     for( wxWindow* child : children )
     {
+        if( m_noControlUndoRedo.count( child ) )
+            continue;
+
         if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( child ) )
         {
             textCtrl->Bind( wxEVT_TEXT, &DIALOG_SHIM::onCommandEvent, this );
@@ -1101,6 +1111,13 @@ wxVariant DIALOG_SHIM::getControlValue( wxWindow* aCtrl )
         return wxVariant( (long) radioBox->GetSelection() );
     else if( wxGrid* grid = dynamic_cast<wxGrid*>( aCtrl ) )
     {
+        // Tables with regroupable/sortable rows serialize by identity instead of row position.
+        if( auto* table = dynamic_cast<WX_GRID_TABLE_BASE*>( grid->GetTable() );
+            table && table->HasUndoStateSerialization() )
+        {
+            return wxVariant( table->SerializeUndoState() );
+        }
+
         nlohmann::json j = nlohmann::json::array();
         int rows = grid->GetNumberRows();
         int cols = grid->GetNumberCols();
@@ -1191,6 +1208,13 @@ void DIALOG_SHIM::setControlValue( wxWindow* aCtrl, const wxVariant& aValue )
         radioBox->SetSelection( (int) aValue.GetLong() );
     else if( wxGrid* grid = dynamic_cast<wxGrid*>( aCtrl ) )
     {
+        if( auto* table = dynamic_cast<WX_GRID_TABLE_BASE*>( grid->GetTable() );
+            table && table->HasUndoStateSerialization() )
+        {
+            table->RestoreUndoState( aValue.GetString() );
+            return;
+        }
+
         nlohmann::json j = nlohmann::json::parse( aValue.GetString().ToStdString(), nullptr, false );
 
         if( j.is_array() )

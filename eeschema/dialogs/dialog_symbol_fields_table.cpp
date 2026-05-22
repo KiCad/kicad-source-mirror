@@ -274,6 +274,10 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
     m_grid->UseNativeColHeader( true );
     m_grid->SetTable( m_dataModel, true );
 
+    // The field-list grid regroups its rows, so the dialog's position-based Ctrl+Z would shift
+    // values onto the wrong field.
+    ExcludeFromControlUndoRedo( m_viewControlsGrid );
+
     // must be done after SetTable(), which appears to re-set it
     m_grid->SetSelectionMode( wxGrid::wxGridSelectCells );
 

@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <nlohmann/json.hpp>
 #include <wx/string.h>
 #include <wx/debug.h>
 #include <wx/grid.h>
@@ -662,6 +663,9 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString
     {
         return;
     }
+
+    if( aValue == INDETERMINATE_STATE )
+        return;
 
     DATA_MODEL_ROW& rowGroup = m_rows[aRow];
 
@@ -1682,6 +1686,51 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::UpdateReferences( const SCH_REFERENCE_LIST& 
 
     if( refListChanged )
         m_symbolsList.SortBySymbolPtr();
+}
+
+
+wxString FIELDS_EDITOR_GRID_DATA_MODEL::SerializeUndoState() const
+{
+    // Serialize the un-applied edit store keyed by symbol identity (sheet path + UUID), so that
+    // restoring it is independent of the current row grouping/order.
+    nlohmann::json j = nlohmann::json::object();
+
+    for( const auto& [key, fields] : m_dataStore )
+    {
+        nlohmann::json jfields = nlohmann::json::object();
+
+        for( const auto& [name, value] : fields )
+            jfields[std::string( name.ToUTF8() )] = std::string( value.ToUTF8() );
+
+        j[std::string( key.AsString().ToUTF8() )] = jfields;
+    }
+
+    return wxString( j.dump() );
+}
+
+
+void FIELDS_EDITOR_GRID_DATA_MODEL::RestoreUndoState( const wxString& aState )
+{
+    nlohmann::json j = nlohmann::json::parse( aState.ToStdString(), nullptr, false );
+
+    if( !j.is_object() )
+        return;
+
+    for( auto it = j.begin(); it != j.end(); ++it )
+    {
+        KIID_PATH                     key( wxString::FromUTF8( it.key().c_str() ) );
+        std::map<wxString, wxString>& fields = m_dataStore[key];
+
+        for( auto fit = it.value().begin(); fit != it.value().end(); ++fit )
+            fields[wxString::FromUTF8( fit.key().c_str() )] =
+                    wxString::FromUTF8( fit.value().get<std::string>().c_str() );
+    }
+
+    m_edited = true;
+    RebuildRows();
+
+    if( GetView() )
+        GetView()->ForceRefresh();
 }
 
 
