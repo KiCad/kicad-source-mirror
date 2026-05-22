@@ -27,6 +27,7 @@
 #include <git/git_backend.h>
 
 #include <wx/regex.h>
+#include <wx/richmsgdlg.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 #include <wx/msgdlg.h>
@@ -34,6 +35,11 @@
 #include <wx/timer.h>
 #include <wx/wupdlock.h>
 #include <wx/log.h>
+
+#include <frame_type.h>
+#include <kiway.h>
+#include <mail_type.h>
+#include <settings/settings_manager.h>
 
 #include <settings/common_settings.h>
 #include <advanced_config.h>
@@ -2321,6 +2327,72 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
     {
         wxMessageBox( _( "The selected directory is not a Git project." ) );
         return;
+    }
+
+    // Flush in-memory editor and project state so the index snapshots the user's
+    // actual work instead of a stale on-disk version.
+    {
+        struct DirtyEditor
+        {
+            FRAME_T  frameType;
+            MAIL_T   saveMail;
+            wxString label;
+        };
+
+        const DirtyEditor candidates[] = {
+            { FRAME_SCH, MAIL_SCH_SAVE, _( "Schematic Editor" ) },
+            { FRAME_PCB_EDITOR, MAIL_PCB_SAVE, _( "PCB Editor" ) },
+        };
+
+        std::vector<const DirtyEditor*> dirty;
+
+        for( const DirtyEditor& d : candidates )
+        {
+            KIWAY_PLAYER* frame = m_Parent->Kiway().Player( d.frameType, false );
+
+            if( frame && frame->IsContentModified() )
+                dirty.push_back( &d );
+        }
+
+        if( !dirty.empty() )
+        {
+            wxString listed;
+
+            for( const DirtyEditor* d : dirty )
+                listed += wxString::Format( wxS( "\n    • %s" ), d->label );
+
+            wxRichMessageDialog dlg( wxGetTopLevelParent( this ),
+                                     wxString::Format( _( "The following editors have unsaved changes:%s\n\n"
+                                                          "Save them before committing?" ),
+                                                       listed ),
+                                     _( "Unsaved Changes" ),
+                                     wxYES_NO | wxCANCEL | wxYES_DEFAULT | wxICON_WARNING | wxCENTER );
+
+            dlg.SetYesNoCancelLabels( _( "&Save and Commit" ), _( "Commit &Anyway" ), _( "Cancel" ) );
+
+            int answer = dlg.ShowModal();
+
+            if( answer == wxID_CANCEL )
+                return;
+
+            if( answer == wxID_YES )
+            {
+                for( const DirtyEditor* d : dirty )
+                {
+                    std::string payload;
+                    m_Parent->Kiway().ExpressMail( d->frameType, d->saveMail, payload );
+
+                    if( payload != "success" )
+                    {
+                        DisplayErrorMessage( wxGetTopLevelParent( this ),
+                                             wxString::Format( _( "Could not save %s." ), d->label ) );
+                        return;
+                    }
+                }
+            }
+        }
+
+        m_Parent->GetSettingsManager()->SaveProject();
     }
 
     // Get git configuration
