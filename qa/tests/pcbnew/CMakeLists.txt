@@ -70,6 +70,7 @@ set( QA_PCBNEW_SRCS
     test_pad_size_setters.cpp
     test_pad_swap_positions.cpp
     test_pad_tenting.cpp
+    test_plot_edge_cuts_drill_marks.cpp
     test_plot_pad_mask.cpp
     test_pcb_textbox.cpp
     test_prettifier.cpp
