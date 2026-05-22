@@ -331,6 +331,7 @@ private:
                                                 // the main loop event handler is started
     int                     m_gitLastError;
     wxString                m_gitCurrentBranchName;
+    wxString                m_gitCurrentUpstream;
     wxTimer                 m_gitSyncTimer;
     wxTimer                 m_gitStatusTimer;
     wxTimer                 m_gitFeedbackTimer;

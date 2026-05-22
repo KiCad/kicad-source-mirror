@@ -281,7 +281,8 @@ PROJECT_TREE_PANE::~PROJECT_TREE_PANE()
     m_gitFeedbackTimer.Stop();
     Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitSyncTimer ), this, m_gitSyncTimer.GetId() );
     Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitStatusTimer ), this, m_gitStatusTimer.GetId() );
-    Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitFeedbackTimer ), this, m_gitFeedbackTimer.GetId() );
+    Unbind( wxEVT_TIMER, wxTimerEventHandler( PROJECT_TREE_PANE::onGitFeedbackTimer ), this,
+            m_gitFeedbackTimer.GetId() );
     shutdownFileWatcher();
 
     if( m_gitSyncTask.valid() )
@@ -1043,12 +1044,21 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
                                             _( "Commit changes to the local repository" ) );
         vcs_menuitem->Enable( vcs_can_commit );
 
-        vcs_menuitem = vcs_submenu->Append( ID_GIT_PUSH, _( "Push" ),
-                                            _( "Push committed local changes to remote repository" ) );
+        wxString pushLabel = _( "Push" );
+        wxString pullLabel = _( "Pull" );
+
+        if( !m_gitCurrentUpstream.empty() && !m_gitCurrentBranchName.empty() )
+        {
+            pushLabel = wxString::Format( _( "Push %s to %s" ), m_gitCurrentBranchName, m_gitCurrentUpstream );
+            pullLabel = wxString::Format( _( "Pull from %s" ), m_gitCurrentUpstream );
+        }
+
+        vcs_menuitem =
+                vcs_submenu->Append( ID_GIT_PUSH, pushLabel, _( "Push committed local changes to remote repository" ) );
         vcs_menuitem->Enable( vcs_can_push );
 
-        vcs_menuitem = vcs_submenu->Append( ID_GIT_PULL, _( "Pull" ),
-                                            _( "Pull changes from remote repository into local" ) );
+        vcs_menuitem =
+                vcs_submenu->Append( ID_GIT_PULL, pullLabel, _( "Pull changes from remote repository into local" ) );
         vcs_menuitem->Enable( vcs_can_pull );
 
         vcs_submenu->AppendSeparator();
@@ -2031,11 +2041,28 @@ void PROJECT_TREE_PANE::onGitPullProject( wxCommandEvent& aEvent )
 
         if( pullResult >= PullResult::Success )
         {
+            wxString upstream = common->GetUpstreamShorthand();
+            wxString branch = common->GetCurrentBranchName();
+
             switch( pullResult )
             {
-            case PullResult::UpToDate:    showGitFeedback( _( "Already up to date." ) ); break;
-            case PullResult::FastForward: showGitFeedback( _( "Pulled changes (fast-forward)." ) ); break;
-            default:                      showGitFeedback( _( "Pulled changes." ) ); break;
+            case PullResult::UpToDate:
+                showGitFeedback( upstream.empty() ? _( "Already up to date." )
+                                                  : wxString::Format( _( "Already up to date with %s." ), upstream ) );
+                break;
+
+            case PullResult::FastForward:
+                showGitFeedback(
+                        upstream.empty() || branch.empty()
+                                ? _( "Pulled changes (fast-forward)." )
+                                : wxString::Format( _( "Pulled %s into %s (fast-forward)." ), upstream, branch ) );
+                break;
+
+            default:
+                showGitFeedback( upstream.empty() || branch.empty()
+                                         ? _( "Pulled changes." )
+                                         : wxString::Format( _( "Pulled %s into %s." ), upstream, branch ) );
+                break;
             }
 
             break;
@@ -2072,7 +2099,12 @@ void PROJECT_TREE_PANE::onGitPushProject( wxCommandEvent& aEvent )
 
         if( handler.PerformPush() == PushResult::Success )
         {
-            showGitFeedback( _( "Pushed to remote." ) );
+            wxString upstream = common->GetUpstreamShorthand();
+            wxString branch = common->GetCurrentBranchName();
+
+            showGitFeedback( upstream.empty() || branch.empty()
+                                     ? _( "Pushed to remote." )
+                                     : wxString::Format( _( "Pushed %s to %s." ), branch, upstream ) );
             break;
         }
 
@@ -2405,6 +2437,7 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap()
 
     // Get the current branch name
     m_gitCurrentBranchName = statusHandler.GetCurrentBranchName();
+    m_gitCurrentUpstream = m_TreeProject->GitCommon()->GetUpstreamShorthand();
 
     wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: Updated git status icons" ) );
 
@@ -2677,7 +2710,10 @@ void PROJECT_TREE_PANE::onGitFetch( wxCommandEvent& aEvent )
 
         if( handler.PerformFetch() )
         {
-            showGitFeedback( _( "Fetched from remote." ) );
+            wxString remoteName = gitCommon->GetRemoteNameOrDefault();
+
+            showGitFeedback( remoteName.empty() ? _( "Fetched from remote." )
+                                                : wxString::Format( _( "Fetched from %s." ), remoteName ) );
             break;
         }
 
