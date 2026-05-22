@@ -476,7 +476,7 @@ bool EDA_COMBINED_MATCHER::StartsWith( const wxString& aTerm )
 }
 
 
-int EDA_COMBINED_MATCHER::ScoreTerms( std::vector<SEARCH_TERM>& aWeightedTerms )
+int EDA_COMBINED_MATCHER::ScoreTerms( std::vector<SEARCH_TERM>& aWeightedTerms, bool* aExactMatch )
 {
     int score = 0;
 
@@ -500,6 +500,9 @@ int EDA_COMBINED_MATCHER::ScoreTerms( std::vector<SEARCH_TERM>& aWeightedTerms )
         if( GetPattern() == term.Text )
         {
             score += 8 * term.Score;
+
+            if( aExactMatch )
+                *aExactMatch = true;
         }
         else if( Find( term.Text, matchers_fired, found_pos ) )
         {

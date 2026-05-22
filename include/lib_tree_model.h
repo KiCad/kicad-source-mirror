@@ -132,6 +132,7 @@ public:
     int         m_IntrinsicRank;
 
     int         m_Score;       // The score of an item resulting from the search algorithm.
+    bool        m_ExactMatch;  // True if a search term exactly matched one of this node's fields.
     bool        m_Pinned;      // Item should appear at top when there is no search string
 
     wxString    m_Name;        // Actual name of the part

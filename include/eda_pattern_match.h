@@ -242,7 +242,7 @@ public:
 
     const wxString& GetPattern() const;
 
-    int ScoreTerms( std::vector<SEARCH_TERM>& aWeightedTerms );
+    int ScoreTerms( std::vector<SEARCH_TERM>& aWeightedTerms, bool* aExactMatch = nullptr );
 
 private:
     /// Add matcher if it can compile the pattern.
