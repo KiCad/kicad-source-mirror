@@ -375,6 +375,12 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
         {
             const LENGTH_DELAY_CALCULATION_ITEM& item = aItems[i];
 
+            if( item.GetMergeStatus() == LENGTH_DELAY_CALCULATION_ITEM::MERGE_STATUS::MERGED_RETIRED
+                || item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::UNKNOWN )
+            {
+                continue;
+            }
+
             if( item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::LINE )
             {
                 details.TrackDelay += itemDelays[i];
