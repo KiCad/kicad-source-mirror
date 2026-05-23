@@ -47,7 +47,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-21 01:11+0000\n"
+"PO-Revision-Date: 2026-05-24 03:21+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -36086,7 +36086,7 @@ msgstr "起始层"
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:246
 #: pcbnew/widgets/search_handlers.cpp:637
 msgid "Stop Layer"
-msgstr "停止层"
+msgstr "终止层"
 
 #: pcbnew/board_statistics_report.cpp:675
 #: pcbnew/board_statistics_report.cpp:847
