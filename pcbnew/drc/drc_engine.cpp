@@ -432,6 +432,7 @@ void DRC_ENGINE::loadImplicitRules()
                 }
             };
 
+    m_board->SynchronizeTuningProfileProperties();
     m_board->SynchronizeNetsAndNetClasses( false );
     makeNetclassRules( bds.m_NetSettings->GetDefaultNetclass(), true );
 
