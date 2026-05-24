@@ -187,60 +187,82 @@ bool extractProxyFromDict( CFDictionaryRef aProxy, KIPLATFORM::ENV::PROXY_CONFIG
 // Evaluate a PAC script and extract proxy configuration
 bool evaluatePACScript( CFURLRef aPacUrl, CFURLRef aTargetUrl, KIPLATFORM::ENV::PROXY_CONFIG& aCfg )
 {
-    // Synchronously fetch the PAC script
-    NSURLRequest* request = [NSURLRequest requestWithURL:(__bridge NSURL*) aPacUrl
-                                             cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                         timeoutInterval:10.0];
-
-    __block NSData*  scriptData = nil;
-    __block NSError* fetchError = nil;
-
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create( 0 );
-
-    NSURLSessionDataTask* task =
-            [[NSURLSession sharedSession] dataTaskWithRequest:request
-                                            completionHandler:^( NSData* data, NSURLResponse* response,
-                                                                 NSError* error ) {
-                                                scriptData = data;
-                                                fetchError = error;
-                                                dispatch_semaphore_signal( semaphore );
-                                            }];
-
-    [task resume];
-    dispatch_semaphore_wait( semaphore, dispatch_time( DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC ) );
-
-    if( fetchError || !scriptData )
-        return false;
-
-    NSString* scriptString = [[NSString alloc] initWithData:scriptData encoding:NSUTF8StringEncoding];
-
-    if( !scriptString )
-        return false;
-
-    CFErrorRef  error = nullptr;
-    CFArrayRef  pacProxies = CFNetworkCopyProxiesForAutoConfigurationScript(
-            (__bridge CFStringRef) scriptString, aTargetUrl, &error );
-
-    if( error )
+    // The caller may be a non-Cocoa std::thread, which has no top-level
+    // autorelease pool. Wrap autoreleased Objective-C objects so they are
+    // drained before returning, otherwise NSURLSession internals can hit
+    // strict pool checks on macOS 26 ARM64 and trigger SIGTRAP.
+    @autoreleasepool
     {
-        CFRelease( error );
-        return false;
+        // Synchronously fetch the PAC script
+        NSURLRequest* request = [NSURLRequest requestWithURL:(__bridge NSURL*) aPacUrl
+                                                 cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                                             timeoutInterval:10.0];
+
+        __block NSData*  scriptData = nil;
+        __block NSError* fetchError = nil;
+
+        // The completion handler may run after dispatch_semaphore_wait times out, so
+        // the semaphore must outlive both paths. Block capture retains the semaphore
+        // automatically (OS_OBJECT_USE_OBJC), so releasing our own reference after the
+        // wait is safe even if the block has not yet fired.
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create( 0 );
+
+        NSURLSessionDataTask* task = [[NSURLSession sharedSession]
+                  dataTaskWithRequest:request
+                    completionHandler:^( NSData* data, NSURLResponse* response, NSError* error ) {
+                        scriptData = data;
+                        fetchError = error;
+                        dispatch_semaphore_signal( semaphore );
+                    }];
+
+        [task resume];
+
+        dispatch_time_t deadline = dispatch_time( DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC );
+        long            waitResult = dispatch_semaphore_wait( semaphore, deadline );
+        dispatch_release( semaphore );
+
+        if( waitResult != 0 )
+        {
+            // Timed out. Cancel the task so its completion block can fire and release
+            // its captured semaphore reference, otherwise the block leaks until it runs.
+            [task cancel];
+            return false;
+        }
+
+        if( fetchError || !scriptData )
+            return false;
+
+        NSString* scriptString = [[[NSString alloc] initWithData:scriptData
+                                                        encoding:NSUTF8StringEncoding] autorelease];
+
+        if( !scriptString )
+            return false;
+
+        CFErrorRef error = nullptr;
+        CFArrayRef pacProxies = CFNetworkCopyProxiesForAutoConfigurationScript(
+                (__bridge CFStringRef) scriptString, aTargetUrl, &error );
+
+        if( error )
+        {
+            CFRelease( error );
+            return false;
+        }
+
+        if( !pacProxies )
+            return false;
+
+        bool success = false;
+
+        for( CFIndex i = 0; i < CFArrayGetCount( pacProxies ) && !success; i++ )
+        {
+            CFDictionaryRef proxy = (CFDictionaryRef) CFArrayGetValueAtIndex( pacProxies, i );
+            success = extractProxyFromDict( proxy, aCfg );
+        }
+
+        CFRelease( pacProxies );
+
+        return success;
     }
-
-    if( !pacProxies )
-        return false;
-
-    bool success = false;
-
-    for( CFIndex i = 0; i < CFArrayGetCount( pacProxies ) && !success; i++ )
-    {
-        CFDictionaryRef proxy = (CFDictionaryRef) CFArrayGetValueAtIndex( pacProxies, i );
-        success = extractProxyFromDict( proxy, aCfg );
-    }
-
-    CFRelease( pacProxies );
-
-    return success;
 }
 
 } // anonymous namespace
@@ -248,58 +270,67 @@ bool evaluatePACScript( CFURLRef aPacUrl, CFURLRef aTargetUrl, KIPLATFORM::ENV::
 
 bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& aCfg )
 {
-    CFURLRef url = CFURLCreateWithString( kCFAllocatorDefault,
-                                          wxCFStringRef( aURL ),
-                                          nullptr );
-    if( !url )
-        return false;
-
-    CFDictionaryRef proxySettings = CFNetworkCopySystemProxySettings();
-
-    if( !proxySettings )
+    // Background update threads (PCM, UPDATE_MANAGER) reach this function
+    // from a bare std::thread that has no Cocoa autorelease pool installed.
+    // CFNetworkCopySystemProxySettings / CFNetworkCopyProxiesForURL produce
+    // autoreleased Objective-C objects internally; without a pool macOS 26
+    // ARM64 trips a SIGTRAP shortly after launch. Install a pool for the
+    // whole call so the platform code is safe regardless of the caller.
+    @autoreleasepool
     {
-        CFRelease( url );
-        return false;
-    }
+        CFURLRef url = CFURLCreateWithString( kCFAllocatorDefault, wxCFStringRef( aURL ), nullptr );
 
-    CFArrayRef proxies = CFNetworkCopyProxiesForURL( url, proxySettings );
-    CFRelease( proxySettings );
+        if( !url )
+            return false;
 
-    if( !proxies )
-    {
-        CFRelease( url );
-        return false;
-    }
+        CFDictionaryRef proxySettings = CFNetworkCopySystemProxySettings();
 
-    bool success = false;
-
-    for( CFIndex i = 0; i < CFArrayGetCount( proxies ) && !success; i++ )
-    {
-        CFDictionaryRef proxy = (CFDictionaryRef) CFArrayGetValueAtIndex( proxies, i );
-        CFStringRef     proxyType = (CFStringRef) CFDictionaryGetValue( proxy, kCFProxyTypeKey );
-
-        if( !proxyType )
-            continue;
-
-        // Handle PAC (Proxy Auto-Configuration) URLs
-        if( CFEqual( proxyType, kCFProxyTypeAutoConfigurationURL ) )
+        if( !proxySettings )
         {
-            CFURLRef pacUrl = (CFURLRef) CFDictionaryGetValue( proxy,
-                                                               kCFProxyAutoConfigurationURLKey );
-
-            if( pacUrl )
-                success = evaluatePACScript( pacUrl, url, aCfg );
-
-            continue;
+            CFRelease( url );
+            return false;
         }
 
-        success = extractProxyFromDict( proxy, aCfg );
+        CFArrayRef proxies = CFNetworkCopyProxiesForURL( url, proxySettings );
+        CFRelease( proxySettings );
+
+        if( !proxies )
+        {
+            CFRelease( url );
+            return false;
+        }
+
+        bool success = false;
+
+        for( CFIndex i = 0; i < CFArrayGetCount( proxies ) && !success; i++ )
+        {
+            CFDictionaryRef proxy = (CFDictionaryRef) CFArrayGetValueAtIndex( proxies, i );
+            CFStringRef     proxyType =
+                    (CFStringRef) CFDictionaryGetValue( proxy, kCFProxyTypeKey );
+
+            if( !proxyType )
+                continue;
+
+            // Handle PAC (Proxy Auto-Configuration) URLs
+            if( CFEqual( proxyType, kCFProxyTypeAutoConfigurationURL ) )
+            {
+                CFURLRef pacUrl = (CFURLRef) CFDictionaryGetValue( proxy,
+                                                                   kCFProxyAutoConfigurationURLKey );
+
+                if( pacUrl )
+                    success = evaluatePACScript( pacUrl, url, aCfg );
+
+                continue;
+            }
+
+            success = extractProxyFromDict( proxy, aCfg );
+        }
+
+        CFRelease( proxies );
+        CFRelease( url );
+
+        return success;
     }
-
-    CFRelease( proxies );
-    CFRelease( url );
-
-    return success;
 }
 
 
