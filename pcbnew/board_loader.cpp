@@ -161,6 +161,8 @@ void BOARD_LOADER::initializeLoadedBoard( BOARD* aBoard, const wxString& aFileNa
                                    RPT_SEVERITY_WARNING );
     }
 
+    aBoard->SynchronizeTuningProfileProperties();
+
     aBoard->UpdateUserUnits( aBoard, nullptr );
 }
 

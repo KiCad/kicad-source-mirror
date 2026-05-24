@@ -1,0 +1,12 @@
+(version 1)
+(rule diff_100_routing
+	(constraint track_width (min 0.127mm) (opt 0.1524mm) (max 0.1778mm))
+	(constraint diff_pair_gap (min 0.127mm) (opt 0.1524mm) (max 0.1778mm))
+	(constraint diff_pair_uncoupled (max 5mm))
+	(condition "A.hasNetclass('DIFF_100')")
+)
+(rule diff_propagation_delay
+	# RMII TRACE LENGTH LIMITS (TIME DOMAIN)
+	(constraint length (min 85ps) (max 1020ps))
+	(condition "A.hasNetclass('DIFF_100')")
+)
