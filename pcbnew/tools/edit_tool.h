@@ -240,6 +240,7 @@ private:
 private:
     PCB_SELECTION_TOOL*   m_selectionTool;
     bool                  m_dragging;         // Indicates objects are currently being dragged
+    bool                  m_inMoveWithReference; // True while doMoveSelection runs a Move with Reference
     VECTOR2I              m_cursor;           // Last cursor position (so getModificationPoint()
                                               // can avoid changes of edit reference point).
     std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;

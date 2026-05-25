@@ -132,7 +132,8 @@ static const std::vector<KICAD_T> routableTypes = { PCB_TRACE_T, PCB_ARC_T, PCB_
 EDIT_TOOL::EDIT_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InteractiveEdit" ),
         m_selectionTool( nullptr ),
-        m_dragging( false )
+        m_dragging( false ),
+        m_inMoveWithReference( false )
 {
 }
 
@@ -140,6 +141,7 @@ EDIT_TOOL::EDIT_TOOL() :
 void EDIT_TOOL::Reset( RESET_REASON aReason )
 {
     m_dragging = false;
+    m_inMoveWithReference = false;
 
     m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( getEditFrame<PCB_BASE_EDIT_FRAME>() );
 }
@@ -2832,14 +2834,18 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     // Flip around the anchor for footprints, and the bounding box center for board items
     VECTOR2I refPt = IsFootprintEditor() ? VECTOR2I( 0, 0 ) : selection.GetCenter();
 
-    // If only one item selected, flip around the selection or item anchor point (instead
-    // of the bounding box center) to avoid moving the item anchor
-    // but only if the item is not a PCB_SHAPE with SHAPE_T::RECTANGLE shape, because
-    // for this shape the flip transform swap start and end coordinates and move the shape.
-    // So using the center of the shape is better (the shape does not move)
-    // (Tables are a bunch of rectangles, so exclude them too)
-    if( selection.GetSize() == 1 )
+    if( m_dragging && m_inMoveWithReference && oldRefPt )
     {
+        refPt = *oldRefPt;
+    }
+    else if( selection.GetSize() == 1 )
+    {
+        // If only one item selected, flip around the selection or item anchor point (instead
+        // of the bounding box center) to avoid moving the item anchor
+        // but only if the item is not a PCB_SHAPE with SHAPE_T::RECTANGLE shape, because
+        // for this shape the flip transform swap start and end coordinates and move the shape.
+        // So using the center of the shape is better (the shape does not move)
+        // (Tables are a bunch of rectangles, so exclude them too)
         PCB_SHAPE* rect = dynamic_cast<PCB_SHAPE*>( selection.GetItem( 0 ) );
         PCB_TABLE* table = dynamic_cast<PCB_TABLE*>( selection.GetItem( 0 ) );
 
