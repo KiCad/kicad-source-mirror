@@ -19,6 +19,8 @@
 
 #include <regex>
 #include <algorithm>
+#include <cctype>
+#include <charconv>
 #include <iostream>
 
 #include <sch_reference_list.h>
@@ -196,26 +198,28 @@ std::pair<std::string, int> REFDES_TRACKER::parseRefDes( const std::string& aRef
     if( aRefDes.empty() )
         return { "", 0 };
 
-    // Find the last sequence of digits at the end
-    std::regex pattern( R"(^([A-Za-z]+)(\d+)?$)" );
-    std::smatch match;
+    // Split on the trailing run of digits so any non-digit prefix (including '#'
+    // used by power and flag symbols) is preserved as the map key.
+    size_t pos = aRefDes.size();
 
-    if( std::regex_match( aRefDes, match, pattern ) )
-    {
-        std::string prefix = match[1].str();
-        if( match[2].matched )
-        {
-            int number = std::stoi( match[2].str() );
-            return { prefix, number };
-        }
-        else
-        {
-            return { prefix, 0 };  // No number suffix
-        }
-    }
+    while( pos > 0 && std::isdigit( static_cast<unsigned char>( aRefDes[pos - 1] ) ) )
+        pos--;
 
-    // If it doesn't match our expected pattern, treat the whole thing as prefix
-    return { aRefDes, 0 };
+    if( pos == 0 )
+        return { aRefDes, 0 };
+
+    if( pos == aRefDes.size() )
+        return { aRefDes, 0 };
+
+    int number = 0;
+    const char* first = aRefDes.data() + pos;
+    const char* last = aRefDes.data() + aRefDes.size();
+    auto [ptr, ec] = std::from_chars( first, last, number );
+
+    if( ec != std::errc() || ptr != last )
+        return { aRefDes, 0 };
+
+    return { aRefDes.substr( 0, pos ), number };
 }
 
 void REFDES_TRACKER::updateBaseNext( PREFIX_DATA& aData ) const
@@ -406,38 +410,68 @@ bool REFDES_TRACKER::Deserialize( const std::string& aData )
 
     auto parts = splitString( aData, ',' );
 
+    // A malformed project file must fail Deserialize cleanly rather than throw,
+    // since QA builds install wxAssertThrower around the calling load path.
+    auto parsePositiveInt = []( const std::ssub_match& aMatch, int& aOut ) -> bool
+    {
+        const char* first = std::to_address( aMatch.first );
+        const char* last = std::to_address( aMatch.second );
+        int value = 0;
+        auto [ptr, ec] = std::from_chars( first, last, value );
+
+        if( ec != std::errc() || ptr != last || value <= 0 )
+            return false;
+
+        aOut = value;
+        return true;
+    };
+
+    // Prefix may contain any non-digit characters, including '#' for power flags
+    // and embedded digits (e.g. "U1U2"), so anchor on the final non-digit before
+    // the trailing digit run.  Hoisted out of the loop because std::regex
+    // construction dominates the per-part match cost.
+    const std::regex rangePattern( R"(^(.*\D)(\d+)-(\d+)$)" );
+    const std::regex numberedPattern( R"(^(.*\D)(\d+)$)" );
+    const std::regex prefixOnlyPattern( R"(^(.+)$)" );
+
     for( const std::string& part : parts )
     {
         std::string unescaped = unescapeFromSerialization( part );
-
-        // Parse each part
-        std::regex rangePattern( R"(^([A-Za-z]+)(\d+)(?:-(\d+))?$)" );
-        std::regex prefixOnlyPattern( R"(^([A-Za-z]+)$)" );
         std::smatch match;
 
         if( std::regex_match( unescaped, match, rangePattern ) )
         {
             std::string prefix = match[1].str();
-            int start = std::stoi( match[2].str() );
-            int end = match[3].matched ? std::stoi( match[3].str() ) : start;
+            int start = 0;
+            int end = 0;
+
+            if( !parsePositiveInt( match[2], start ) || !parsePositiveInt( match[3], end ) )
+            {
+                clearImpl();
+                return false;
+            }
 
             for( int i = start; i <= end; ++i )
+                insertImpl( prefix + std::to_string( i ) );
+        }
+        else if( std::regex_match( unescaped, match, numberedPattern ) )
+        {
+            std::string prefix = match[1].str();
+            int number = 0;
+
+            if( !parsePositiveInt( match[2], number ) )
             {
-                if( !insertImpl( prefix + std::to_string( i ) ) )
-                {
-                    // Note: insertImpl might fail if number already exists for prefix
-                    // but that's okay during deserialization of valid data
-                }
+                clearImpl();
+                return false;
             }
+
+            insertImpl( prefix + std::to_string( number ) );
         }
         else if( std::regex_match( unescaped, match, prefixOnlyPattern ) )
         {
             std::string prefix = match[1].str();
-            if( !insertImpl( prefix ) )
-            {
-                // Note: insertImpl might fail if prefix already exists
-                // but that's okay during deserialization of valid data
-            }
+
+            insertImpl( prefix );
         }
         else
         {
