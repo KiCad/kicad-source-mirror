@@ -33,6 +33,7 @@
 #include <rc_json_schema.h>
 #include <eda_item.h>
 #include <base_units.h>
+#include <units_provider.h>
 
 #define WX_DATAVIEW_WINDOW_PADDING 6
 
@@ -76,6 +77,13 @@ void RC_ITEM::SetItems( const EDA_ITEM* aItem, const EDA_ITEM* bItem,
 
     if( dItem )
         m_ids.push_back( dItem->m_Uuid );
+}
+
+
+wxString RC_ITEM::getItemDescription( EDA_ITEM* aItem, int /*aIndex*/,
+                                      UNITS_PROVIDER* aUnitsProvider ) const
+{
+    return aItem->GetItemDescription( aUnitsProvider, true );
 }
 
 
@@ -134,15 +142,15 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
     {
         msg.Printf( wxT( "[%s]: %s\n    %s; %s\n    %s: %s\n    %s: %s\n" ), GetSettingsKey(), errorMessage, ruleDesc,
                     severity, showCoord( aUnitsProvider, mainItem->GetPosition() ),
-                    mainItem->GetItemDescription( aUnitsProvider, true ),
+                    getItemDescription( mainItem, 0, aUnitsProvider ),
                     showCoord( aUnitsProvider, auxItem->GetPosition() ),
-                    auxItem->GetItemDescription( aUnitsProvider, true ) );
+                    getItemDescription( auxItem, 1, aUnitsProvider ) );
     }
     else if( mainItem )
     {
         msg.Printf( wxT( "[%s]: %s\n    %s; %s\n    %s: %s\n" ), GetSettingsKey(), errorMessage, ruleDesc, severity,
                     showCoord( aUnitsProvider, mainItem->GetPosition() ),
-                    mainItem->GetItemDescription( aUnitsProvider, true ) );
+                    getItemDescription( mainItem, 0, aUnitsProvider ) );
     }
     else
     {
@@ -189,7 +197,7 @@ void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* 
     if( mainItem )
     {
         RC_JSON::AFFECTED_ITEM item;
-        item.description = mainItem->GetItemDescription( aUnitsProvider, true );
+        item.description = getItemDescription( mainItem, 0, aUnitsProvider );
         item.uuid = mainItem->m_Uuid.AsString();
         item.pos.x = EDA_UNIT_UTILS::UI::ToUserUnit( aUnitsProvider->GetIuScale(),
                                                      aUnitsProvider->GetUserUnits(),
@@ -203,7 +211,7 @@ void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* 
     if( auxItem )
     {
         RC_JSON::AFFECTED_ITEM item;
-        item.description = auxItem->GetItemDescription( aUnitsProvider, true );
+        item.description = getItemDescription( auxItem, 1, aUnitsProvider );
         item.uuid = auxItem->m_Uuid.AsString();
         item.pos.x = EDA_UNIT_UTILS::UI::ToUserUnit( aUnitsProvider->GetIuScale(),
                                                      aUnitsProvider->GetUserUnits(),

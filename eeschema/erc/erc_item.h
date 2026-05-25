@@ -178,6 +178,15 @@ public:
      */
     bool AuxItemHasSheetPath() { return m_auxItemSheet.has_value(); }
 
+protected:
+    /**
+     * Resolve the affected-item description in the per-instance SCH_SHEET_PATH context
+     * stored on this marker, so headless callers (e.g. kicad-cli) show the same per-sheet
+     * symbol references the GUI ERC dialog shows on hierarchical schematics.
+     */
+    wxString getItemDescription( EDA_ITEM* aItem, int aIndex,
+                                 UNITS_PROVIDER* aUnitsProvider ) const override;
+
 private:
     ERC_ITEM( int aErrorCode = 0, const wxString& aTitle = "", const wxString& aSettingsKey = "" )
     {
