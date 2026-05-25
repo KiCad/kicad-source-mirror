@@ -763,4 +763,151 @@ BOOST_AUTO_TEST_CASE( BackdrillSpecEncoding )
 }
 
 
+/**
+ * Test that SMD pads without F.Paste in their layer set are not added to the
+ * solder paste layer (Issue #24318).
+ *
+ * Exposed-pad QFN/QFP footprints commonly use a copper-only thermal pad
+ * (F.Cu + F.Mask, no F.Paste) plus several separate paste-only apertures.
+ * The earlier #16658 fix implicitly added every copper SMD pad to the paste
+ * layer, which contaminated the stencil for these footprints. Mask is still
+ * implicit for SMD pads (every copper pad needs a mask opening), but paste
+ * must be respected exactly as authored.
+ */
+BOOST_AUTO_TEST_CASE( ExposedPadPasteRespected_Issue24318 )
+{
+    BOARD board;
+
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    fp->SetReference( wxT( "U1" ) );
+    fp->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ) );
+    board.Add( fp );
+
+    // Copper-only thermal pad: F.Cu + F.Mask, deliberately NOT on F.Paste.
+    PAD* thermalPad = new PAD( fp );
+    thermalPad->SetNumber( wxT( "33" ) );
+    thermalPad->SetAttribute( PAD_ATTRIB::SMD );
+    thermalPad->SetProperty( PAD_PROP::HEATSINK );
+    thermalPad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+    thermalPad->SetSize( PADSTACK::ALL_LAYERS,
+                         VECTOR2I( pcbIUScale.mmToIU( 3.45 ), pcbIUScale.mmToIU( 3.45 ) ) );
+    thermalPad->SetLayerSet( LSET( { F_Cu, F_Mask } ) );
+    fp->Add( thermalPad );
+
+    // Paste-only aperture pad, models a stencil opening for the thermal pad.
+    PAD* pasteAperture = new PAD( fp );
+    pasteAperture->SetNumber( wxEmptyString );
+    pasteAperture->SetAttribute( PAD_ATTRIB::SMD );
+    pasteAperture->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+    pasteAperture->SetSize( PADSTACK::ALL_LAYERS,
+                            VECTOR2I( pcbIUScale.mmToIU( 0.93 ),
+                                      pcbIUScale.mmToIU( 0.93 ) ) );
+    pasteAperture->SetPosition( fp->GetPosition()
+                                + VECTOR2I( pcbIUScale.mmToIU( 1.15 ),
+                                            pcbIUScale.mmToIU( 1.15 ) ) );
+    pasteAperture->SetLayerSet( LSET( { F_Paste } ) );
+    fp->Add( pasteAperture );
+
+    // Add a control pad whose paste IS authored (F.Cu + F.Mask + F.Paste). It must still
+    // appear on the paste layer, confirming the fix doesn't suppress legitimate paste pads.
+    FOOTPRINT* fp2 = new FOOTPRINT( &board );
+    fp2->SetReference( wxT( "R1" ) );
+    fp2->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 60 ), pcbIUScale.mmToIU( 60 ) ) );
+    board.Add( fp2 );
+
+    PAD* normalSmd = new PAD( fp2 );
+    normalSmd->SetNumber( wxT( "1" ) );
+    normalSmd->SetAttribute( PAD_ATTRIB::SMD );
+    normalSmd->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+    normalSmd->SetSize( PADSTACK::ALL_LAYERS,
+                        VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+    normalSmd->SetLayerSet( LSET( { F_Cu, F_Mask, F_Paste } ) );
+    fp2->Add( normalSmd );
+
+    // Implicit-mask control pad: F.Cu only. Mask must be added implicitly by the exporter,
+    // matching the #16658 fix. This guards against accidental removal of the mask code path.
+    PAD* implicitMaskSmd = new PAD( fp2 );
+    implicitMaskSmd->SetNumber( wxT( "2" ) );
+    implicitMaskSmd->SetAttribute( PAD_ATTRIB::SMD );
+    implicitMaskSmd->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+    implicitMaskSmd->SetSize( PADSTACK::ALL_LAYERS,
+                              VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+    implicitMaskSmd->SetPosition( fp2->GetPosition()
+                                  + VECTOR2I( pcbIUScale.mmToIU( 2.0 ), 0 ) );
+    implicitMaskSmd->SetLayerSet( LSET( { F_Cu } ) );
+    fp2->Add( implicitMaskSmd );
+
+    wxString tempPath = CreateTempFile();
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["version"] = "C";
+    props["sigfig"] = "4";
+
+    BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, &board, &props ) );
+    BOOST_REQUIRE( wxFileExists( tempPath ) );
+
+    std::ifstream xmlFile( tempPath.ToStdString() );
+    BOOST_REQUIRE( xmlFile.is_open() );
+
+    std::string xml( ( std::istreambuf_iterator<char>( xmlFile ) ),
+                     std::istreambuf_iterator<char>() );
+
+    // Locate the F.Paste LayerFeature block, if any.
+    const std::string pasteOpen = "<LayerFeature layerRef=\"F.Paste\"";
+    size_t pasteStart = xml.find( pasteOpen );
+
+    if( pasteStart != std::string::npos )
+    {
+        size_t pasteEnd = xml.find( "</LayerFeature>", pasteStart );
+        BOOST_REQUIRE( pasteEnd != std::string::npos );
+
+        std::string pasteRegion = xml.substr( pasteStart, pasteEnd - pasteStart );
+
+        // The exposed thermal pad (U1 pin 33) must NOT appear on F.Paste.
+        BOOST_CHECK_MESSAGE(
+                pasteRegion.find( "<PinRef componentRef=\"U1\" pin=\"33\"" ) == std::string::npos,
+                "Copper-only thermal pad U1.33 must not appear on F.Paste layer feature" );
+
+        // The normal SMD pad (R1 pin 1) SHOULD still appear on F.Paste.
+        BOOST_CHECK_MESSAGE(
+                pasteRegion.find( "<PinRef componentRef=\"R1\" pin=\"1\"" ) != std::string::npos,
+                "Normal SMD pad with explicit F.Paste in layer set should still emit a paste "
+                "feature" );
+
+        // The implicit-mask control pad (R1 pin 2) had F.Cu only and must NOT have paste.
+        BOOST_CHECK_MESSAGE(
+                pasteRegion.find( "<PinRef componentRef=\"R1\" pin=\"2\"" ) == std::string::npos,
+                "Copper-only SMD pad R1.2 must not appear on F.Paste layer feature" );
+    }
+    else
+    {
+        // If no F.Paste layer feature was emitted at all the regression would be hidden, so
+        // require its presence (R1 must drive its creation).
+        BOOST_FAIL( "Expected an F.Paste LayerFeature for the explicitly-pasted control pad" );
+    }
+
+    // Mask must still be added implicitly for the thermal pad. Confirm an F.Mask
+    // LayerFeature exists with U1 pin 33 so the #16658 behavior is preserved for mask.
+    const std::string maskOpen = "<LayerFeature layerRef=\"F.Mask\"";
+    size_t maskStart = xml.find( maskOpen );
+    BOOST_REQUIRE_MESSAGE( maskStart != std::string::npos,
+                           "F.Mask LayerFeature should still be emitted for SMD copper pads" );
+
+    size_t maskEnd = xml.find( "</LayerFeature>", maskStart );
+    BOOST_REQUIRE( maskEnd != std::string::npos );
+
+    std::string maskRegion = xml.substr( maskStart, maskEnd - maskStart );
+
+    BOOST_CHECK_MESSAGE(
+            maskRegion.find( "<PinRef componentRef=\"U1\" pin=\"33\"" ) != std::string::npos,
+            "Thermal pad with explicit F.Mask should appear on F.Mask layer feature" );
+
+    // The truly implicit case: R1 pin 2 had F.Cu only and must still acquire an F.Mask
+    // entry. This is the actual regression guard for the #16658 implicit-mask behavior.
+    BOOST_CHECK_MESSAGE(
+            maskRegion.find( "<PinRef componentRef=\"R1\" pin=\"2\"" ) != std::string::npos,
+            "SMD copper pad without explicit F.Mask must get an implicit F.Mask opening" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
