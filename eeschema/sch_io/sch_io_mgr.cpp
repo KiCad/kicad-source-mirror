@@ -226,6 +226,12 @@ bool SCH_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
     if( oldFileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
         return false;
 
+    // Live backends are not convertible to a static .kicad_sym snapshot.  HTTP requires a
+    // library manager adapter that ConvertLibrary cannot provide, and DATABASE has the same
+    // semantic mismatch.  Without this guard the call silently produces an empty library.
+    if( oldFileType == SCH_IO_MGR::SCH_HTTP || oldFileType == SCH_IO_MGR::SCH_DATABASE )
+        return false;
+
     IO_RELEASER<SCH_IO>                oldFilePI( SCH_IO_MGR::FindPlugin( oldFileType ) );
     IO_RELEASER<SCH_IO>                kicadPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
 
