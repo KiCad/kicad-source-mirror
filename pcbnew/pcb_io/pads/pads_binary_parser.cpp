@@ -404,7 +404,22 @@ void BINARY_PARSER::parsePartPlacements()
                                        layout.nameOff, refDes );
 
         // The parttype index lives in the NEXT physical record's @+4 field (a +1 block-
-        // interleave lag); linkPartsToDecals resolves it to the decal name.
+        // interleave lag); linkPartsToDecals resolves it to the decal name. For the LAST part
+        // "the next record" falls outside this section's own declared totalBytes.
+        //
+        // Tried reading past the section boundary into the file's next physical bytes instead of
+        // stopping there (on the theory that PADS writes one contiguous stream and the directory's
+        // section split is a KiCad-side bookkeeping artifact, not a real storage gap). REVERTED:
+        // measured directly on Seth's hand-built simple1.pcb, section 22 (Placements, count=2) is
+        // immediately followed by section 23 (Nets, a 424 B/record table). The "next record" read
+        // for the last placement lands exactly on section 23's first record and reads its bytes as
+        // a parttype index -- 65536 here, meaningless, silently out of range of the 1-entry
+        // parttype table so it happened not to visibly break anything, but for the wrong reason:
+        // sections really do hold semantically distinct tables in this format, and spilling past
+        // one into whatever the next happens to be is exactly the "guess past the edge" behavior
+        // that produces wrong-but-plausible data on some other file rather than a clean failure.
+        // The correct fix needs the real place this format stores the last placement's parttype --
+        // not found yet -- so leave this at the safe, honest "we don't know" for now.
         if( layout.parttypeIndexNextRecord && i + 1 < entry->count )
         {
             size_t nextOff = ( static_cast<size_t>( i ) + 1 ) * recSize;
@@ -414,10 +429,11 @@ void BINARY_PARSER::parsePartPlacements()
         }
 
         // Old dialects have no working parttype-index chain for placements; the decal index is
-        // direct, in the NEXT record at layout.directDecalOff.
+        // direct, in the NEXT record at layout.directDecalOff. Same last-part gap, same reason for
+        // not spilling past the section -- see the comment above.
         if( layout.directDecalOff && i + 1 < entry->count )
         {
-            size_t nextOff = ( static_cast<size_t>( i ) + 1 ) * recSize;
+            size_t   nextOff = ( static_cast<size_t>( i ) + 1 ) * recSize;
             uint32_t fieldOff = static_cast<uint32_t>( *layout.directDecalOff );
 
             if( nextOff + fieldOff + 4 <= entry->totalBytes )
