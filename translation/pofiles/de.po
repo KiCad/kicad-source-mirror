@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-07 21:05+0300\n"
-"PO-Revision-Date: 2026-05-22 10:11+0000\n"
+"PO-Revision-Date: 2026-05-26 02:02+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -16007,7 +16007,6 @@ msgstr "DPI:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:191
 #: pcbnew/dialogs/dialog_plot_base.cpp:465
-#, fuzzy
 msgid "Anti-alias"
 msgstr "Anti-Aliasing"
 
@@ -16280,19 +16279,17 @@ msgid "Resolve duplicate field names"
 msgstr "Doppelte Feldnamen auflösen"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:19
-#, fuzzy
 msgid ""
 "Some symbols have user fields whose names differ only in case. Choose how to "
 "resolve each before opening the table."
 msgstr ""
-"Einige Symbole haben Benutzerfelder, deren Namen sich nur in einem Fall "
-"unterscheiden. Wählen Sie vor dem Öffnen der Tabelle, wie jeder aufgelöst "
-"werden soll."
+"Einige Symbole haben Benutzerfelder, deren Namen sich nur in Groß-/"
+"Kleinschreibung unterscheiden. Wählen Sie vor dem Öffnen der Tabelle, wie "
+"jedes Feld aufgelöst werden soll."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:64
-#, fuzzy
 msgid "Apply same choice to all conflicts of the same field name"
-msgstr "Dieselbe Wahl auf alle Konflikte mit demselben Feldnamen anwenden"
+msgstr "Auswahl auf alle Konflikte mit dem selben Feldnamen anwenden"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:71
 msgid "Join separator:"
@@ -16309,9 +16306,8 @@ msgstr ""
 "zusammenführen\" ausgewählt wird."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.h:57
-#, fuzzy
 msgid "Resolve Field Name Conflicts"
-msgstr "Konflikte von Feldnamen auflösen"
+msgstr "Feldnamenskonflikte lösen"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:31
 msgid "&Search for:"
@@ -19171,9 +19167,9 @@ msgstr ""
 "überschrieben wird."
 
 #: eeschema/eeschema_config.cpp:215
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save drawing sheet '%s': %s"
-msgstr "Fehler beim Laden der Seite \"%s\": %s"
+msgstr "Fehler beim Speichern des Zeichnungsblattes \"%s\": %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:142 pcbnew/pcbnew_jobs_handler.cpp:313
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
@@ -26719,9 +26715,8 @@ msgid "Save selected group to linked design block"
 msgstr "Gewählte Gruppe als verknüpften Designblock speichern"
 
 #: eeschema/tools/sch_actions.cpp:520
-#, fuzzy
 msgid "Place/Remove No Connect Flags"
-msgstr "\"keine Verbindung\"-Kennzeichnungen einfügen"
+msgstr "\"keine Verbindung\"-Kennzeichnungen einfügen/entfernen"
 
 #: eeschema/tools/sch_actions.cpp:531
 msgid "Place Junctions"
@@ -27967,9 +27962,8 @@ msgid "Add Wire to Bus Entry"
 msgstr "Buszugang für Verbindung hinzufügen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1672
-#, fuzzy
 msgid "Remove No Connect Flag"
-msgstr "\"keine Verbindung\"-Kennzeichnung hinzufügen"
+msgstr "\"keine Verbindung\"-Kennzeichnungen entfernen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1681
 msgid "Junction location contains no joinable wires and/or pins."
