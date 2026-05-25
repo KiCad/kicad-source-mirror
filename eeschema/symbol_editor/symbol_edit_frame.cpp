@@ -1777,14 +1777,19 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         if( !symbol )
             break;
 
-        // If the frame is disabled then a modal/quasi-modal dialog (such as the symbol
-        // properties dialog) is editing the current LIB_SYMBOL.  Refreshing it here would
-        // delete the symbol out from under the dialog and crash on dismissal.  The file
-        // watcher timer will retry the reload once the dialog has closed.
+        // If the frame is disabled then a modal/quasi-modal dialog (such as the symbol properties dialog) is
+        // editing the current LIB_SYMBOL.  Refreshing it here would delete the symbol out from under the dialog
+        // and crash on dismissal.  The file watcher timer will retry the reload once the dialog has closed.
         if( !IsEnabled() )
         {
-            wxLogTrace( traceLibWatch,
-                        "Deferring symbol refresh; dialog is open on the symbol editor." );
+            wxLogTrace( traceLibWatch, "Deferring symbol refresh; dialog is open on the symbol editor." );
+            break;
+        }
+        // Same issue exists for the move tool (SENTRY KICAD-8X8).
+        else if( m_toolManager && m_toolManager->GetTool<SYMBOL_EDITOR_MOVE_TOOL>()
+                               && m_toolManager->GetTool<SYMBOL_EDITOR_MOVE_TOOL>()->IsToolActive() )
+        {
+            wxLogTrace( traceLibWatch, "Deferring symbol refresh; symbol editor is in move tool." );
             break;
         }
 

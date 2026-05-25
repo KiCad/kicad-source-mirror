@@ -125,10 +125,9 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
 
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
-    SCH_SELECTION& selection = m_frame->IsSymbolAlias()
-                                            ? m_selectionTool->RequestSelection( { SCH_FIELD_T } )
-                                            : m_selectionTool->RequestSelection();
-    bool          unselect = selection.IsHover();
+    SCH_SELECTION& selection = m_frame->IsSymbolAlias() ? m_selectionTool->RequestSelection( { SCH_FIELD_T } )
+                                                        : m_selectionTool->RequestSelection();
+    bool           unselect = selection.IsHover();
 
     if( !m_frame->IsSymbolEditable() || selection.Empty() )
         return false;
