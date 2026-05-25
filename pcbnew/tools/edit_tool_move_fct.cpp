@@ -952,6 +952,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         return false;
     }
 
+    m_inMoveWithReference = moveWithReference;
+
     if( moveIndividually )
     {
         orig_items.clear();
@@ -1520,5 +1522,6 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     editFrame->PopTool( pushedEvent );
     editFrame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
+    m_inMoveWithReference = false;
     return !restore_state;
 }
