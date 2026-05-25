@@ -3585,25 +3585,16 @@ void PCB_IO_IPC2581::generateLayerFeatures( wxXmlNode* aStepNode )
                     elements[layer][pad->GetNetCode()].push_back( pad );
             }
 
-            // SMD pads have implicit solder mask and paste openings that are not in the layer
-            // set. Add them to the corresponding tech layers if the pad is on a copper layer.
-            if( pad->IsOnLayer( F_Cu ) && pad->FlashLayer( F_Cu ) )
-            {
-                if( !pad->IsOnLayer( F_Mask ) )
-                    elements[F_Mask][pad->GetNetCode()].push_back( pad );
+            // Some SMD pad definitions omit the mask layer even though their copper needs a
+            // mask opening. Add those implicit mask features on the corresponding copper side.
+            // Solder paste is intentionally NOT added here. Absence of F.Paste/B.Paste in the
+            // pad's layer set means "no paste" and must be respected, e.g. for thermal/exposed
+            // pads whose stencil apertures are modeled as separate paste-only pads.
+            if( pad->IsOnLayer( F_Cu ) && pad->FlashLayer( F_Cu ) && !pad->IsOnLayer( F_Mask ) )
+                elements[F_Mask][pad->GetNetCode()].push_back( pad );
 
-                if( !pad->IsOnLayer( F_Paste ) )
-                    elements[F_Paste][pad->GetNetCode()].push_back( pad );
-            }
-
-            if( pad->IsOnLayer( B_Cu ) && pad->FlashLayer( B_Cu ) )
-            {
-                if( !pad->IsOnLayer( B_Mask ) )
-                    elements[B_Mask][pad->GetNetCode()].push_back( pad );
-
-                if( !pad->IsOnLayer( B_Paste ) )
-                    elements[B_Paste][pad->GetNetCode()].push_back( pad );
-            }
+            if( pad->IsOnLayer( B_Cu ) && pad->FlashLayer( B_Cu ) && !pad->IsOnLayer( B_Mask ) )
+                elements[B_Mask][pad->GetNetCode()].push_back( pad );
         }
     }
 
