@@ -2682,6 +2682,12 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
         if( fn.GetPath().Contains( Prj().GetProjectName() + wxT( "-backups" ) ) )
             continue;
 
+        // Skip local project history (which is also a submodule, we don't support for the time)
+        if( fn.IsDir() && fn.GetDirs().Last().StartsWith( wxS( ".history" ) ) )
+        {
+            continue;
+        }
+
         if( aEvent.GetId() == ID_GIT_COMMIT_PROJECT )
         {
             // Don't add an untracked project-local settings file to the repo on its own
