@@ -3065,6 +3065,8 @@ void SCH_EDIT_FRAME::SetSchematic( SCHEMATIC* aSchematic )
         // Detach before the outgoing schematic (and its tracker) is freed.
         if( GetCanvas() && GetCanvas()->GetView() )
             GetCanvas()->GetView()->DetachTextVarTracker();
+
+        Kiway().LocalHistory().UnregisterSaver( m_schematic );
     }
 
     aSchematic->SetProject( &Prj() );

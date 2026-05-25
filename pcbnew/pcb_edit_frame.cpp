@@ -822,14 +822,14 @@ void PCB_EDIT_FRAME::detachTextVarTracker()
 }
 
 
-void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard, bool aBuildConnectivity,
-                               PROGRESS_REPORTER* aReporter )
+void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard, bool aBuildConnectivity, PROGRESS_REPORTER* aReporter )
 {
-    // PCB_BASE_FRAME::SetBoard deletes m_pcb; detach tracker consumers first.
+    // PCB_BASE_FRAME::SetBoard() deletes m_pcb; detach tracker consumers first.
     if( m_pcb )
     {
         detachTextVarTracker();
         m_pcb->ClearProject();
+        Kiway().LocalHistory().UnregisterSaver( m_pcb );
     }
 
     PCB_BASE_EDIT_FRAME::SetBoard( aBoard, aReporter );
