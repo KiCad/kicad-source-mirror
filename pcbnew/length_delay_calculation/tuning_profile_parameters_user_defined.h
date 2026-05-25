@@ -62,6 +62,19 @@ public:
                                  const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) override;
 
     /**
+     * Gets the via propagation delay for the given via layer geometry
+     *
+     * @param aSignalStartLayer The start signal layer for the via
+     * @param aSignalEndLayer The end signal layer for the via
+     * @param aViaStartLayer The start physical / drill layer for the via
+     * @param aViaEndLayer The end physical / drill layer for the via
+     * @param aContext The geometry context to use to query via data
+     */
+    int64_t GetViaPropagationDelay( const PCB_LAYER_ID aSignalStartLayer, const PCB_LAYER_ID aSignalEndLayer,
+                                    const PCB_LAYER_ID aViaStartLayer, const PCB_LAYER_ID aViaEndLayer,
+                                    const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) const override;
+
+    /**
      * Gets the track length (in internal distance units) required for the given propagation delay (in internal time
      * units). The track length should be calculated with the given geometry context.
      *
@@ -126,12 +139,25 @@ private:
                                  const TUNING_PROFILE*                  aDelayProfile ) const;
 
     /**
+     * Gets the via propagation delay for the given via layer geometry
+     *
+     * @param aSignalStartLayer The start signal layer for the via
+     * @param aSignalEndLayer The end signal layer for the via
+     * @param aViaStartLayer The start physical / drill layer for the via
+     * @param aViaEndLayer The end physical / drill layer for the via
+     * @param aTuningProfile The tuning profile to use for the via delay lookup
+     */
+    int64_t getViaPropagationDelay( const PCB_LAYER_ID aSignalStartLayer, const PCB_LAYER_ID aSignalEndLayer,
+                                    const PCB_LAYER_ID aViaStartLayer, const PCB_LAYER_ID aViaEndLayer,
+                                    const TUNING_PROFILE* aTuningProfile ) const;
+
+    /**
      * Gets the tuning profile pointer for the given tuning profile name
      *
      * @param aDelayProfileName the tuning profile name to return
      * @returns Valid pointer to a tuning profile, or nullptr if no profile found
      */
-    const TUNING_PROFILE* GetTuningProfile( const wxString& aDelayProfileName );
+    const TUNING_PROFILE* GetTuningProfile( const wxString& aDelayProfileName ) const;
 
     /// Cached map of tuning profile names to per-layer time domain parameters
     std::map<wxString, const TUNING_PROFILE*> m_delayProfilesCache;

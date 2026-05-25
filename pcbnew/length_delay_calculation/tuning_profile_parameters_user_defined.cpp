@@ -108,18 +108,7 @@ int64_t TUNING_PROFILE_PARAMETERS_USER_DEFINED::getPropagationDelay( const LENGT
         const PCB_LAYER_ID viaStartLayer = aItem.GetVia()->Padstack().StartLayer();
         const PCB_LAYER_ID viaEndLayer = aItem.GetVia()->Padstack().EndLayer();
 
-        // First check for a layer-to-layer override - this assumes that the layers are already in CuStack() order
-        auto& viaOverrides = m_viaOverridesCache.at( aDelayProfile->m_ProfileName );
-
-        const auto viaItr = viaOverrides.find(
-                VIA_OVERRIDE_CACHE_KEY{ signalStartLayer, signalEndLayer, viaStartLayer, viaEndLayer } );
-
-        if( viaItr != viaOverrides.end() )
-            return viaItr->second;
-
-        // Otherwise, return the tuning profile default
-        const double distance = m_lengthCalculation->StackupHeight( signalStartLayer, signalEndLayer );
-        return static_cast<int64_t>( aDelayProfile->m_ViaPropagationDelay * ( distance / PCB_IU_PER_MM ) );
+        return getViaPropagationDelay( signalStartLayer, signalEndLayer, viaStartLayer, viaEndLayer, aDelayProfile );
     }
 
     if( itemType == LENGTH_DELAY_CALCULATION_ITEM::TYPE::PAD )
@@ -131,7 +120,43 @@ int64_t TUNING_PROFILE_PARAMETERS_USER_DEFINED::getPropagationDelay( const LENGT
 }
 
 
-const TUNING_PROFILE* TUNING_PROFILE_PARAMETERS_USER_DEFINED::GetTuningProfile( const wxString& aDelayProfileName )
+int64_t TUNING_PROFILE_PARAMETERS_USER_DEFINED::GetViaPropagationDelay(
+        const PCB_LAYER_ID aSignalStartLayer, const PCB_LAYER_ID aSignalEndLayer, const PCB_LAYER_ID aViaStartLayer,
+        const PCB_LAYER_ID aViaEndLayer, const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) const
+{
+    const wxString        tuningProfileName = aContext.NetClass->GetTuningProfile();
+    const TUNING_PROFILE* tuningProfile = GetTuningProfile( tuningProfileName );
+
+    if( !tuningProfile )
+        return 0;
+
+    return getViaPropagationDelay( aSignalStartLayer, aSignalEndLayer, aViaStartLayer, aViaEndLayer, tuningProfile );
+}
+
+
+int64_t TUNING_PROFILE_PARAMETERS_USER_DEFINED::getViaPropagationDelay( const PCB_LAYER_ID    aSignalStartLayer,
+                                                                        const PCB_LAYER_ID    aSignalEndLayer,
+                                                                        const PCB_LAYER_ID    aViaStartLayer,
+                                                                        const PCB_LAYER_ID    aViaEndLayer,
+                                                                        const TUNING_PROFILE* aTuningProfile ) const
+{
+    // First check for a layer-to-layer override - this assumes that the layers are already in CuStack() order
+    auto& viaOverrides = m_viaOverridesCache.at( aTuningProfile->m_ProfileName );
+
+    const auto viaItr = viaOverrides.find(
+            VIA_OVERRIDE_CACHE_KEY{ aSignalStartLayer, aSignalEndLayer, aViaStartLayer, aViaEndLayer } );
+
+    if( viaItr != viaOverrides.end() )
+        return viaItr->second;
+
+    // Otherwise, return the tuning profile default
+    const double distance = m_lengthCalculation->StackupHeight( aSignalStartLayer, aSignalEndLayer );
+    return static_cast<int64_t>( aTuningProfile->m_ViaPropagationDelay * ( distance / PCB_IU_PER_MM ) );
+}
+
+
+const TUNING_PROFILE*
+TUNING_PROFILE_PARAMETERS_USER_DEFINED::GetTuningProfile( const wxString& aDelayProfileName ) const
 {
     auto itr = m_delayProfilesCache.find( aDelayProfileName );
 

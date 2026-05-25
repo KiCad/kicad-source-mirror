@@ -291,8 +291,9 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
         if( doTrace )
             wxLogTrace( wxT( "PNS_TUNE" ), wxT( "CalculateLengthDetails: inferring vias in pads" ) );
 
-        inferViaInPad( aStartPad, aItems.front(), details );
-        inferViaInPad( aEndPad, aItems.back(), details );
+        const bool withDelayDetail = aDomain == LENGTH_DELAY_DOMAIN_OPT::WITH_DELAY_DETAIL;
+        inferViaInPad( aStartPad, aItems.front(), details, withDelayDetail );
+        inferViaInPad( aEndPad, aItems.back(), details, withDelayDetail );
     }
 
     // Add stats for each item
@@ -420,7 +421,7 @@ LENGTH_DELAY_STATS LENGTH_DELAY_CALCULATION::CalculateLengthDetails( std::vector
 
 
 void LENGTH_DELAY_CALCULATION::inferViaInPad( const PAD* aPad, const LENGTH_DELAY_CALCULATION_ITEM& aItem,
-                                              LENGTH_DELAY_STATS& aDetails ) const
+                                              LENGTH_DELAY_STATS& aDetails, const bool aWithDelayDetail ) const
 {
     if( aPad && aItem.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::LINE )
     {
@@ -434,6 +435,20 @@ void LENGTH_DELAY_CALCULATION::inferViaInPad( const PAD* aPad, const LENGTH_DELA
 
             aDetails.NumVias += 1;
             aDetails.ViaLength += StackupHeight( startBottomLayer, padLayer );
+
+            // Look up via delay details if required
+            if( aWithDelayDetail )
+            {
+                TUNING_PROFILE_GEOMETRY_CONTEXT ctx;
+                ctx.NetClass = aItem.GetEffectiveNetClass();
+                const PCB_LAYER_ID signalStartLayer = aItem.GetStartLayer();
+                const PCB_LAYER_ID signalEndLayer = aItem.GetEndLayer();
+                const PCB_LAYER_ID viaStartLayer = aItem.GetVia()->Padstack().StartLayer();
+                const PCB_LAYER_ID viaEndLayer = aItem.GetVia()->Padstack().EndLayer();
+                const int64_t      delay = m_tuningProfileParameters->GetViaPropagationDelay(
+                        signalStartLayer, signalEndLayer, viaStartLayer, viaEndLayer, ctx );
+                aDetails.ViaDelay += delay;
+            }
         }
     }
 }
