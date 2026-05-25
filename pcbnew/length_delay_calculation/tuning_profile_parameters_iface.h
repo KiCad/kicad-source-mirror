@@ -99,6 +99,19 @@ public:
                                          const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) = 0;
 
     /**
+     * Gets the via propagation delay for the given via layer geometry
+     *
+     * @param aSignalStartLayer The start signal layer for the via
+     * @param aSignalEndLayer The end signal layer for the via
+     * @param aViaStartLayer The start physical / drill layer for the via
+     * @param aViaEndLayer The end physical / drill layer for the via
+     * @param aContext The geometry context to use to query via data
+     */
+    virtual int64_t GetViaPropagationDelay( const PCB_LAYER_ID aSignalStartLayer, const PCB_LAYER_ID aSignalEndLayer,
+                                            const PCB_LAYER_ID aViaStartLayer, const PCB_LAYER_ID aViaEndLayer,
+                                            const TUNING_PROFILE_GEOMETRY_CONTEXT& aContext ) const = 0;
+
+    /**
      * Gets the track length (in internal distance units) required for the given propagation delay (in internal time
      * units). The track length should be calculated with the given geometry context.
      *

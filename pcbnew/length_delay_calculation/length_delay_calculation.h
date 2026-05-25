@@ -270,8 +270,8 @@ protected:
     /**
      * Infers if there is a via in the given pad. Adds via details to the length details data structure if found.
      */
-    void inferViaInPad( const PAD* aPad, const LENGTH_DELAY_CALCULATION_ITEM& aItem,
-                        LENGTH_DELAY_STATS& aDetails ) const;
+    void inferViaInPad( const PAD* aPad, const LENGTH_DELAY_CALCULATION_ITEM& aItem, LENGTH_DELAY_STATS& aDetails,
+                        bool aWithDelayDetail ) const;
 
     /**
      * Finds the intersection point between an arc and a pad shape.
