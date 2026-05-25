@@ -74,6 +74,7 @@ set( QA_EESCHEMA_SRCS
 
     test_annotation_refdes_tracker_units.cpp
     test_annotation_units_conflicts.cpp
+    test_issue24314_power_flag_designators.cpp
     test_annotation_units_integration.cpp
     test_connectivity_algo.cpp
     test_issue18119_bus_hierarchy.cpp
