@@ -189,6 +189,18 @@ public:
 protected:
     static wxString getSeverityString( SEVERITY aSeverity );
 
+    /**
+     * Resolve the description string used for an affected item in ShowReport and
+     * GetJsonViolation.  Subclasses that need per-context formatting (e.g. ERC's
+     * per-sheet-instance symbol references) override this rather than reimplementing
+     * the surrounding report layout.
+     *
+     * @param aItem is the affected item being described
+     * @param aIndex is 0 for the main item and 1 for the aux item
+     */
+    virtual wxString getItemDescription( EDA_ITEM* aItem, int aIndex,
+                                         UNITS_PROVIDER* aUnitsProvider ) const;
+
     int           m_errorCode;         ///< The error code's numeric value
     wxString      m_errorMessage;      ///< A message describing the details of this specific error
     wxString      m_errorTitle;        ///< The string describing the type of error

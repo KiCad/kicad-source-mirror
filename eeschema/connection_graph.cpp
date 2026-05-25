@@ -1507,10 +1507,45 @@ void CONNECTION_GRAPH::buildItemSubGraphs()
             m_bus_alias_cache[alias->GetName()] = alias;
     }
 
-    // Build subgraphs from items (on a per-sheet basis)
+    // Hash position in m_sheetList for each sheet path so that subgraphs are
+    // created in a deterministic order matching the sheet hierarchy
+    // https://gitlab.com/kicad/code/kicad/-/issues/24409
+    std::unordered_map<SCH_SHEET_PATH, size_t> sheetOrder;
+    sheetOrder.reserve( m_sheetList.size() );
+
+    for( size_t i = 0; i < m_sheetList.size(); ++i )
+        sheetOrder.emplace( m_sheetList[i], i );
+
+    auto sheetRank =
+            [&]( const SCH_SHEET_PATH& aSheet ) -> size_t
+            {
+                auto it = sheetOrder.find( aSheet );
+
+                return ( it == sheetOrder.end() ) ? std::numeric_limits<size_t>::max()
+                                                  : it->second;
+            };
+
+    // Build subgraphs from items (on a per-sheet basis).  Reuse the vector across
+    // items so a flat schematic doesn't allocate per item.
+    std::vector<std::tuple<size_t, SCH_SHEET_PATH, SCH_CONNECTION*>> ordered;
+
     for( SCH_ITEM* item : m_items )
     {
+        ordered.clear();
+        ordered.reserve( item->m_connection_map.size() );
+
+        // Precompute sheet rank into the tuple so the comparator never re-hashes
+        // the (vector-backed) SCH_SHEET_PATH keys.
         for( const auto& [sheet, connection] : item->m_connection_map )
+            ordered.emplace_back( sheetRank( sheet ), sheet, connection );
+
+        std::sort( ordered.begin(), ordered.end(),
+                   []( const auto& a, const auto& b )
+                   {
+                       return std::get<0>( a ) < std::get<0>( b );
+                   } );
+
+        for( const auto& [rank, sheet, connection] : ordered )
         {
             if( connection->SubgraphCode() == 0 )
             {
