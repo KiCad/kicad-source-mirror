@@ -225,6 +225,8 @@ private:
     SCH_SHEET* getCurrentSheet();
     SCH_SCREEN* getCurrentScreen();
 
+    VECTOR2I getLastSymbolFieldPosition( const LIB_SYMBOL* aPart );
+
     // Describe missing units containing pins creating implicit connections
     // (named power pins in Eagle).
     struct EAGLE_MISSING_CMP

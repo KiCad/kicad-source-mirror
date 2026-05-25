@@ -1948,19 +1948,33 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     std::vector<SCH_FIELD*> partFields;
     part->GetFields( partFields );
 
+    VECTOR2I nextFieldPosition = getLastSymbolFieldPosition( part ) + symbol->GetPosition();
+
     for( const SCH_FIELD* partField : partFields )
     {
-        SCH_FIELD* symbolField;
+        SCH_FIELD* symbolField = nullptr;
 
         if( partField->IsMandatory() )
             symbolField = symbol->GetField( partField->GetId() );
         else
             symbolField = symbol->GetField( partField->GetName() );
 
-        wxCHECK2( symbolField, continue );
+        if( !symbolField )
+        {
+            SCH_FIELD newField( symbol.get(), FIELD_T::USER, partField->GetName() );
 
-        symbolField->ImportValues( *partField );
-        symbolField->SetTextPos( symbol->GetPosition() + partField->GetTextPos() );
+            newField.SetVisible( false );
+            newField.SetText( partField->GetText() );
+
+            nextFieldPosition.y += newField.GetTextHeight() + schIUScale.MilsToIU( 10 );
+            newField.SetPosition( nextFieldPosition );
+            symbol->AddField( newField );
+        }
+        else
+        {
+            symbolField->ImportValues( *partField );
+            symbolField->SetTextPos( symbol->GetPosition() + partField->GetTextPos() );
+        }
     }
 
     // If there is no footprint assigned, then prepend the reference value
@@ -2055,13 +2069,11 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
         else
         {
             field = symbol->GetField( eattr->name );
-
-            if( field )
-                field->SetVisible( false );
         }
 
         if( field )
         {
+            field->SetVisible( true );
             field->SetPosition( VECTOR2I( eattr->x->ToSchUnits(), -eattr->y->ToSchUnits() ) );
             int  align      = eattr->align ? *eattr->align : ETEXT::BOTTOM_LEFT;
             int  absdegrees = eattr->rot ? eattr->rot->degrees : 0;
@@ -2192,6 +2204,34 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                 ispower = loadSymbol( it->second, libSymbol, edevice, gateindex, egate->name );
 
                 gateindex++;
+            }
+
+            VECTOR2I nextFieldPosition = getLastSymbolFieldPosition( libSymbol.get() );
+
+            for( const std::unique_ptr<ETECHNOLOGY>& technology : edevice->technologies )
+            {
+                for( const std::unique_ptr<EATTR>& attr : technology->attributes )
+                {
+                    if( !attr->value )
+                        continue;
+
+                    SCH_FIELD* field = libSymbol->FindFieldCaseInsensitive( attr->name );
+
+                    if( field )
+                    {
+                        field->SetText( *attr->value );
+                    }
+                    else
+                    {
+                        SCH_FIELD* newField = new SCH_FIELD( libSymbol.get(), FIELD_T::USER, attr->name );
+
+                        nextFieldPosition.y += newField->GetTextHeight() + schIUScale.MilsToIU( 10 );
+                        newField->SetText( *attr->value );
+                        newField->SetVisible( false );
+                        newField->SetPosition( nextFieldPosition );
+                        libSymbol->AddField( newField );
+                    }
+                }
             }
 
             libSymbol->SetUnitCount( gate_count, true );
@@ -2366,6 +2406,23 @@ bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol,
 
             // Show Value field if Eagle reference was uppercase
             showValue = etext->text == wxT( ">VALUE" );
+        }
+        else if( etext->text.StartsWith( ">" ) )
+        {
+            // Text values that start with '>' are place holders for fields defined later
+            // in library deviceset objects.
+            wxString fieldName = etext->text.Mid( 1 );
+
+            if( !fieldName.IsEmpty() )
+            {
+                SCH_FIELD* field = new SCH_FIELD( aSymbol.get(), FIELD_T::USER, fieldName );
+
+                loadFieldAttributes( field, libtext.get() );
+
+                // Field visibility is determined by the symbol instance attributes.
+                field->SetVisible( false );
+                aSymbol->AddField( field );
+            }
         }
         else
         {
@@ -3669,4 +3726,29 @@ void SCH_IO_EAGLE::getEagleSymbolFieldAttributes( const std::unique_ptr<EINSTANC
             }
         }
     }
+}
+
+
+VECTOR2I SCH_IO_EAGLE::getLastSymbolFieldPosition( const LIB_SYMBOL* aPart )
+{
+    VECTOR2I retv;
+
+    std::vector<SCH_FIELD*> fields;
+    aPart->GetFields( fields );
+
+    if( fields.size() )
+    {
+        retv = fields[0]->GetPosition();
+
+        for( size_t i = 1; i < fields.size(); i++ )
+        {
+            if( fields[i]->GetPosition().x > retv.x )
+                retv.x = fields[i]->GetPosition().x;
+
+            if( fields[i]->GetPosition().y > retv.y )
+                retv.y = fields[i]->GetPosition().y;
+        }
+    }
+
+    return retv;
 }
