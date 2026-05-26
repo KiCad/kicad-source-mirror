@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:04+0300\n"
-"PO-Revision-Date: 2026-05-21 01:11+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-05-27 08:11+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -33365,14 +33365,15 @@ msgid "The selected directory is not a Git project."
 msgstr "Das ausgewählt Verzeichnis ist kein Git-Projekt."
 
 #: kicad/project_tree_pane.cpp:2581
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before committing?"
 msgstr ""
-"Die folgenden Regeln enthalten ungespeicherte Änderungen:\n"
+"Folgende Editoren enthalten ungespeicherte Änderungen: %s\n"
 "\n"
+"Sollen diese vor dem Commit gespeichert werden?"
 
 #: kicad/project_tree_pane.cpp:2584 kicad/project_tree_pane.cpp:2853
 #, fuzzy
