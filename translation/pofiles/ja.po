@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:03+0300\n"
-"PO-Revision-Date: 2026-05-08 23:11+0000\n"
+"PO-Revision-Date: 2026-05-26 11:52+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.5-dev\n"
+"X-Generator: Weblate 2026.6.dev0\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -8074,7 +8074,7 @@ msgstr "リモート '%s' に接続できません"
 
 #: common/git/libgit_backend.cpp:533 common/git/libgit_backend.cpp:1262
 msgid "Could not get repository head"
-msgstr "リポジトリのheadを取得できません"
+msgstr "リポジトリのHEADを取得できません"
 
 #: common/git/libgit_backend.cpp:548
 #, c-format
@@ -8209,9 +8209,8 @@ msgid "Merge failed: %s"
 msgstr "マージが失敗しました: %s"
 
 #: common/git/libgit_backend.cpp:1472
-#, fuzzy
 msgid "Could not read repository index after merge."
-msgstr "リポジトリのインデックスを取得できません"
+msgstr "マージ後にリポジトリインデックスを読み取ることができませんでした。"
 
 #: common/git/libgit_backend.cpp:1504
 #, fuzzy
@@ -8219,14 +8218,12 @@ msgid "Could not write the merge result."
 msgstr "フォルダー '%s' へプロット ファイルを書き込めませんでした。"
 
 #: common/git/libgit_backend.cpp:1512
-#, fuzzy
 msgid "Could not get the repository head."
-msgstr "リポジトリのheadを取得できません"
+msgstr "リポジトリのHEADを取得できません。"
 
 #: common/git/libgit_backend.cpp:1522
-#, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "ターゲットコミットを検索できませんでした"
+msgstr "マージするコミットを検索できませんでした。"
 
 #: common/git/libgit_backend.cpp:1531 common/git/libgit_backend.cpp:1716
 msgid ""
@@ -8235,14 +8232,14 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1540
-#, fuzzy, c-format
+#, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "重なっている図形をパッドに結合"
+msgstr "リモート追跡ブランチを %s にマージします"
 
 #: common/git/libgit_backend.cpp:1548
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create merge commit: %s"
-msgstr "コミットをマージできません"
+msgstr "マージコミットを作成できませんでした: %s"
 
 #: common/git/libgit_backend.cpp:1565
 msgid ""
@@ -8269,9 +8266,8 @@ msgid "Rebase finish failed: %s"
 msgstr "リベースの完了に失敗しました: %s"
 
 #: common/git/libgit_backend.cpp:1637 common/git/libgit_backend.cpp:1683
-#, fuzzy
 msgid "Another git operation is in progress."
-msgstr "作成中のゾーンの外形を閉じる"
+msgstr "別のGit操作が進行中です。"
 
 #: common/git/libgit_backend.cpp:1645 common/git/libgit_backend.cpp:1698
 #, fuzzy
@@ -8279,9 +8275,8 @@ msgid "Could not find the matching remote branch."
 msgstr "インポートしたライブラリ内で '%s' を見つけることができません。"
 
 #: common/git/libgit_backend.cpp:1654 common/git/libgit_backend.cpp:1707
-#, fuzzy
 msgid "Could not read the remote branch."
-msgstr "テンプレート パス '%s' を開くことができました"
+msgstr "リモートブランチを読み取ることができませんでした。"
 
 #: common/git/libgit_backend.cpp:1663
 #, fuzzy, c-format
