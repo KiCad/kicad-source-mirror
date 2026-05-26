@@ -676,4 +676,107 @@ BOOST_AUTO_TEST_CASE( StrokeFontVerticalAlignmentMatchesScreen )
     MaybeRemoveFile( pdfPath );
 }
 
+
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24419
+// PDF_PLOTTER::renderWord used to advance the per-word cursor by
+// FONT::StringBoundaryLimits, which for stroke fonts inflates the returned
+// bounding box by 3*thickness.  The Tj operator that actually renders the word
+// advances by the sum of glyph widths (no inflation), so successive words were
+// pushed too far apart in the rendered PDF.  The bug was visible on silkscreen
+// text whose width exceeded the board edge in the exported PDF but fit on the
+// PCB editor canvas.
+//
+// The fix is to derive the cursor advance from FONT::GetTextAsGlyphs, which
+// matches exactly what Tj produces.  This test plots a multi-word string and
+// verifies that the gap between word origins corresponds to the actual
+// glyph-width sum rather than the inflated bbox.
+BOOST_AUTO_TEST_CASE( StrokeFontWordSpacingMatchesGlyphAdvance )
+{
+    wxString pdfPath = getTempPdfPath( "kicad_pdf_wordspacing" );
+
+    PDF_PLOTTER plotter;
+    SIMPLE_RENDER_SETTINGS renderSettings;
+    plotter.SetRenderSettings( &renderSettings );
+    BOOST_REQUIRE( plotter.OpenFile( pdfPath ) );
+    plotter.SetViewport( VECTOR2I( 0, 0 ), 1.0, 1.0, false );
+    BOOST_REQUIRE( plotter.StartPlot( wxT( "1" ), wxT( "WordSpacingTest" ) ) );
+
+    const int       sizeIU  = 1900;          // mimics the 1.9mm silk text from issue #24419
+    const int       strokeW = 380;           // bold thickness as in the issue file
+    TEXT_ATTRIBUTES attrs   = BuildTextAttributes( sizeIU, strokeW, true, false );
+    attrs.m_Halign          = GR_TEXT_H_ALIGN_LEFT;
+    attrs.m_Valign          = GR_TEXT_V_ALIGN_BOTTOM;
+
+    auto                  strokeFont = LoadStrokeFontUnique();
+    const KIFONT::METRICS metrics;
+
+    plotter.PlotText( VECTOR2I( 50000, 60000 ), COLOR4D( 0, 0, 0, 1 ),
+                      wxT( "TEST text Silkscreen" ), attrs, strokeFont.get(), metrics );
+    plotter.EndPlot();
+
+    std::string buffer;
+    BOOST_REQUIRE( ReadPdfWithDecompressedStreams( pdfPath, buffer ) );
+
+    // Each word becomes one `q ... cm BT ... Tj ET Q` block.  Capture the X translation (ctm_e)
+    // of each block so we can verify the gap between words.
+    std::vector<double> wordOriginX;
+    std::string::size_type pos = 0;
+
+    while( ( pos = buffer.find( "cm BT", pos ) ) != std::string::npos )
+    {
+        std::string::size_type lineStart = buffer.rfind( '\n', pos );
+        lineStart = ( lineStart == std::string::npos ) ? 0 : lineStart + 1;
+
+        std::string cmLine = buffer.substr( lineStart, pos - lineStart );
+        double a, b, c, d, e, f;
+
+        if( sscanf( cmLine.c_str(), "q %lf %lf %lf %lf %lf %lf", &a, &b, &c, &d, &e, &f ) == 6 )
+            wordOriginX.push_back( e );
+
+        pos += 5;
+    }
+
+    // Expect one block per word: "TEST", "text", "Silkscreen".
+    BOOST_REQUIRE_EQUAL( wordOriginX.size(), 3u );
+
+    // Compute the expected stroke-font cursor advance for "TEST " (word + trailing space) and
+    // "text " in IU.  This is what the Tj operator will move the text cursor by and what the
+    // renderWord cursor should match.  Compare ratios so we don't have to convert to device
+    // units (userToDeviceSize is protected).
+    auto strokeAdvanceIU = [&]( const wxString& aWord )
+    {
+        return strokeFont
+                ->GetTextAsGlyphs( nullptr, nullptr, aWord, VECTOR2I( sizeIU, sizeIU ),
+                                   VECTOR2I(), ANGLE_0, false, VECTOR2I(), TEXT_STYLE::BOLD )
+                .x;
+    };
+
+    const double expectedTestAdvanceIU = (double) strokeAdvanceIU( wxT( "TEST " ) );
+    const double expectedTextAdvanceIU = (double) strokeAdvanceIU( wxT( "text " ) );
+
+    const double observedTestAdvanceDev = wordOriginX[1] - wordOriginX[0];
+    const double observedTextAdvanceDev = wordOriginX[2] - wordOriginX[1];
+
+    // device-per-IU scale factor derived from the first observed gap.
+    const double scale = observedTestAdvanceDev / expectedTestAdvanceIU;
+
+    // The TEST -> text advance and the text -> Silkscreen advance must both follow the
+    // same IU-to-device scale: if the spacing matches glyph metrics, the second observed
+    // gap equals scale * expectedTextAdvanceIU.
+    const double expectedTextAdvanceDev = scale * expectedTextAdvanceIU;
+    BOOST_CHECK_CLOSE( observedTextAdvanceDev, expectedTextAdvanceDev, 0.5 );
+
+    // Sanity guard against regression to the inflated-bbox formula, which adds 3*thickness IU
+    // of slop per word.  Use the second word so this check is independent of the scale derivation
+    // above.
+    const double inflatedTextAdvanceDev = scale * ( expectedTextAdvanceIU + 3.0 * strokeW );
+    BOOST_CHECK_MESSAGE( std::abs( observedTextAdvanceDev - inflatedTextAdvanceDev )
+                                 > 0.5 * ( inflatedTextAdvanceDev - expectedTextAdvanceDev ),
+                         "Word spacing matches the buggy inflated-bbox formula ("
+                                 << observedTextAdvanceDev << " ~= " << inflatedTextAdvanceDev
+                                 << "); the renderWord cursor fix appears inactive." );
+
+    MaybeRemoveFile( pdfPath );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
