@@ -237,7 +237,13 @@ private:
     {
         git_repository* repo = nullptr;
 
-        if( git_repository_init( &repo, m_repoPath.ToUTF8().data(), 0 ) != 0 )
+        // Force "master" as the initial branch so the tests are independent of the
+        // user's init.defaultBranch (often "main") in system or global gitconfig.
+        git_repository_init_options initOpts;
+        git_repository_init_options_init( &initOpts, GIT_REPOSITORY_INIT_OPTIONS_VERSION );
+        initOpts.initial_head = "master";
+
+        if( git_repository_init_ext( &repo, m_repoPath.ToUTF8().data(), &initOpts ) != 0 )
             return false;
 
         git_config* cfg = nullptr;
