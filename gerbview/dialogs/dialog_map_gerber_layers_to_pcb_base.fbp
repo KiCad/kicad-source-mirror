@@ -177,7 +177,7 @@
                         <property name="name">m_flexLeftColumnBoxSizer</property>
                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                         <property name="permission">protected</property>
-                        <property name="rows">16</property>
+                        <property name="rows">32</property>
                         <property name="vgap">0</property>
                       </object>
                     </object>
@@ -254,7 +254,7 @@
                         <property name="name">m_flexRightColumnBoxSizer</property>
                         <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
                         <property name="permission">protected</property>
-                        <property name="rows">16</property>
+                        <property name="rows">32</property>
                         <property name="vgap">0</property>
                       </object>
                     </object>
