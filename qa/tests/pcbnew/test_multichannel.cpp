@@ -26,6 +26,8 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <pad.h>
+#include <pcb_group.h>
+#include <pcb_shape.h>
 #include <pcb_track.h>
 #include <pcb_text.h>
 #include <pcb_field.h>
@@ -35,6 +37,8 @@
 #include <settings/settings_manager.h>
 #include <tools/multichannel_tool.h>
 #include <connectivity/topo_match.h>
+#include <geometry/shape_line_chain.h>
+#include <geometry/shape_utils.h>
 #include <lib_id.h>
 #include <atomic>
 
@@ -868,6 +872,188 @@ BOOST_FIXTURE_TEST_CASE( TopoMatchGlobalNetHierarchicalPins, MULTICHANNEL_TEST_F
     BOOST_CHECK_MESSAGE( status,
                          "Topology match failed for channels with hierarchical pins "
                          "tied to global nets (issue 21739)" );
+}
+
+
+/**
+ * Apply Design Block Layout must copy silkscreen graphics that are not associated with any
+ * footprint from the design block source to the destination group (issue 24372).
+ *
+ * The bug was that copyRuleAreaContents filtered "other items" by the rule area zone's
+ * LayerSet, but the synthetic rule area zones created for the design block / group placement
+ * flow always use LSET::AllCuMask(). That filter rejected silkscreen, fab and user-layer
+ * graphics even though they were explicitly enumerated in m_designBlockItems.
+ */
+BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutCopiesSilkscreen, MULTICHANNEL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetEnabledLayers( LSET::AllCuMask() | LSET::AllTechMask() );
+
+    // Net for the single connection between the two footprints in each block.
+    NETINFO_ITEM* net = new NETINFO_ITEM( m_board.get(), wxT( "NET1" ), 1 );
+    m_board->Add( net );
+
+    auto makeFootprint =
+            [&]( const wxString& aRef, const VECTOR2I& aPos ) -> FOOTPRINT*
+            {
+                FOOTPRINT* fp = new FOOTPRINT( m_board.get() );
+                fp->SetFPID( LIB_ID( wxT( "TestLib" ), wxT( "R" ) ) );
+                fp->SetReference( aRef );
+                fp->SetPosition( aPos );
+
+                PAD* pad = new PAD( fp );
+                pad->SetNumber( wxT( "1" ) );
+                pad->SetNet( net );
+                pad->SetPosition( aPos );
+                pad->SetSize( F_Cu,
+                              VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+                pad->SetLayerSet( LSET( { F_Cu } ) );
+                fp->Add( pad );
+
+                m_board->Add( fp );
+                return fp;
+            };
+
+    // Source: a "design block" with two matched footprints and a silkscreen rectangle that
+    // is not associated with any footprint.
+    FOOTPRINT* refFp1 = makeFootprint( wxT( "R1" ),
+                                       VECTOR2I( pcbIUScale.mmToIU( 0 ), pcbIUScale.mmToIU( 0 ) ) );
+    FOOTPRINT* refFp2 = makeFootprint( wxT( "R2" ),
+                                       VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 0 ) ) );
+
+    PCB_SHAPE* silkRect = new PCB_SHAPE( m_board.get(), SHAPE_T::RECTANGLE );
+    silkRect->SetStart( VECTOR2I( pcbIUScale.mmToIU( -2 ), pcbIUScale.mmToIU( -2 ) ) );
+    silkRect->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 12 ), pcbIUScale.mmToIU( 2 ) ) );
+    silkRect->SetLayer( F_SilkS );
+    silkRect->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.15 ), LINE_STYLE::SOLID ) );
+    m_board->Add( silkRect );
+
+    // Destination: a group containing the matched pair so RepeatLayout can find a parent group.
+    FOOTPRINT* destFp1 = makeFootprint( wxT( "R3" ),
+                                        VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ) );
+    FOOTPRINT* destFp2 = makeFootprint( wxT( "R4" ),
+                                        VECTOR2I( pcbIUScale.mmToIU( 60 ), pcbIUScale.mmToIU( 50 ) ) );
+
+    PCB_GROUP* destGroup = new PCB_GROUP( m_board.get() );
+    destGroup->SetName( wxT( "design-block-dest" ) );
+    destGroup->AddItem( destFp1 );
+    destGroup->AddItem( destFp2 );
+    m_board->Add( destGroup );
+
+    // Unrelated silkscreen drawing inside the destination bounding box but not part of the
+    // destination group. Apply Design Block Layout must not delete or claim this item.
+    PCB_SHAPE* unrelatedSilk = new PCB_SHAPE( m_board.get(), SHAPE_T::SEGMENT );
+    unrelatedSilk->SetStart( VECTOR2I( pcbIUScale.mmToIU( 52 ), pcbIUScale.mmToIU( 52 ) ) );
+    unrelatedSilk->SetEnd( VECTOR2I( pcbIUScale.mmToIU( 58 ), pcbIUScale.mmToIU( 52 ) ) );
+    unrelatedSilk->SetLayer( F_SilkS );
+    unrelatedSilk->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.15 ), LINE_STYLE::SOLID ) );
+    m_board->Add( unrelatedSilk );
+
+    int silkBefore = 0;
+
+    for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        if( item->Type() == PCB_SHAPE_T && item->GetLayer() == F_SilkS )
+            silkBefore++;
+    }
+
+    BOOST_REQUIRE_EQUAL( silkBefore, 2 );
+
+    RULE_AREA dbRA;
+    dbRA.m_sourceType = PLACEMENT_SOURCE_T::DESIGN_BLOCK;
+    dbRA.m_components.insert( refFp1 );
+    dbRA.m_components.insert( refFp2 );
+    dbRA.m_designBlockItems.insert( refFp1 );
+    dbRA.m_designBlockItems.insert( refFp2 );
+    dbRA.m_designBlockItems.insert( silkRect );
+
+    // The Apply Design Block flow uses a synthetic copper-only rule area zone. The destination
+    // zone is a temporary zone never added to the board.
+    dbRA.m_zone = new ZONE( m_board.get() );
+    dbRA.m_zone->SetIsRuleArea( true );
+    dbRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    dbRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain(
+            BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( -5 ), pcbIUScale.mmToIU( -5 ) ),
+                              VECTOR2I( pcbIUScale.mmToIU( 15 ), pcbIUScale.mmToIU( 5 ) ) ) ) );
+
+    RULE_AREA destRA;
+    destRA.m_sourceType = PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+    destRA.m_components.insert( destFp1 );
+    destRA.m_components.insert( destFp2 );
+
+    destRA.m_zone = new ZONE( m_board.get() );
+    destRA.m_zone->SetIsRuleArea( true );
+    destRA.m_zone->SetLayerSet( LSET::AllCuMask() );
+    destRA.m_zone->AddPolygon( KIGEOM::BoxToLineChain(
+            BOX2I::ByCorners( VECTOR2I( pcbIUScale.mmToIU( 45 ), pcbIUScale.mmToIU( 45 ) ),
+                              VECTOR2I( pcbIUScale.mmToIU( 65 ), pcbIUScale.mmToIU( 55 ) ) ) ) );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    REPEAT_LAYOUT_OPTIONS opts = { .m_copyRouting = true,
+                                   .m_connectedRoutingOnly = false,
+                                   .m_copyPlacement = true,
+                                   .m_copyOtherItems = true,
+                                   .m_groupItems = false,
+                                   .m_includeLockedItems = true,
+                                   .m_anchorFp = nullptr };
+
+    int result = mtTool->RepeatLayout( TOOL_EVENT(), dbRA, destRA, opts );
+    BOOST_CHECK_MESSAGE( result >= 0, "RepeatLayout failed" );
+
+    delete dbRA.m_zone;
+    delete destRA.m_zone;
+
+    // Verify a third silkscreen shape (the duplicated rectangle) was added and grouped under
+    // the destination group, that the unrelated silk segment was preserved, and that the
+    // duplicated rectangle landed inside the destination region.
+    int        silkAfter = 0;
+    int        silkInGroup = 0;
+    bool       unrelatedSurvived = false;
+    PCB_SHAPE* copiedRect = nullptr;
+
+    for( BOARD_ITEM* item : m_board->Drawings() )
+    {
+        if( item->Type() != PCB_SHAPE_T || item->GetLayer() != F_SilkS )
+            continue;
+
+        silkAfter++;
+
+        if( item == unrelatedSilk )
+            unrelatedSurvived = true;
+
+        if( item->GetParentGroup() == destGroup )
+        {
+            silkInGroup++;
+
+            PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( item );
+
+            if( shape->GetShape() == SHAPE_T::RECTANGLE )
+                copiedRect = shape;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( silkAfter == 3,
+                         wxString::Format( "Expected 3 silkscreen shapes after Apply Design Block "
+                                           "Layout (2 original + 1 copy), found %d (issue 24372)",
+                                           silkAfter ) );
+    BOOST_CHECK_MESSAGE( silkInGroup == 1,
+                         wxString::Format( "Expected 1 silkscreen shape in destination group, "
+                                           "found %d (issue 24372)",
+                                           silkInGroup ) );
+    BOOST_CHECK_MESSAGE( unrelatedSurvived,
+                         "Unrelated silkscreen drawing outside the design block group was "
+                         "deleted by Apply Design Block Layout (issue 24372)" );
+    BOOST_REQUIRE( copiedRect != nullptr );
+
+    // The copied rectangle should sit near the destination footprints (offset by ~50mm from
+    // the source position), not at the original source location.
+    BOOST_CHECK_GT( copiedRect->GetStart().x, pcbIUScale.mmToIU( 30 ) );
 }
 
 
