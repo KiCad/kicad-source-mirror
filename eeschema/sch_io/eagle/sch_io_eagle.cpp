@@ -751,8 +751,9 @@ void SCH_IO_EAGLE::loadSchematic( const ESCHEMATIC& aSchematic )
         m_pi->SaveLibrary( getLibFileName().GetFullPath() );
     }
 
-    // find all nets and count how many sheets they appear on.
-    // local labels will be used for nets found only on that sheet.
+    // Count how many sheets each named net appears on.  Used by the fallback-label path
+    // in loadSegments to decide whether to add an extra label on otherwise-unlabelled
+    // segments of nets that span multiple sheets.
     countNets( aSchematic );
 
     // Create all Eagle pages as top-level sheets (direct children of the virtual root).
@@ -979,7 +980,7 @@ void SCH_IO_EAGLE::loadSheet( const std::unique_ptr<ESHEET>& aSheet )
         wxString busName = translateEagleBusName( ebus->name );
 
         // Load segments of this bus
-        loadSegments( ebus->segments, busName, wxString() );
+        loadSegments( ebus->segments, busName, wxString(), /* aIsBus */ true );
     }
 
     for( const std::unique_ptr<ENET>& enet : aSheet->nets )
@@ -1436,7 +1437,8 @@ void SCH_IO_EAGLE::loadFrame( const std::unique_ptr<EFRAME>& aFrame,
 
 void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& aSegments,
                                  const wxString& netName,
-                                 const wxString& aNetClass )
+                                 const wxString& aNetClass,
+                                 bool aIsBus )
 {
     // Loop through all segments
     SCH_SCREEN* screen         = getCurrentScreen();
@@ -1493,7 +1495,7 @@ void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& a
 
         for( const std::unique_ptr<ELABEL>& elabel : esegment->labels )
         {
-            SCH_LABEL_BASE* label = loadLabel( elabel, netName );
+            SCH_LABEL_BASE* label = loadLabel( elabel, netName, aIsBus );
             screen->Append( label );
 
             wxASSERT( segDesc.labels.empty()
@@ -1524,11 +1526,23 @@ void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& a
         {
             std::unique_ptr<SCH_LABEL_BASE> label;
 
-            // Add a global label if the net appears on more than one Eagle sheet
-            if( m_netCounts[netName.ToStdString()] > 1 )
-                label.reset( new SCH_GLOBALLABEL );
-            else if( segmentCount > 1 )
-                label.reset( new SCH_LABEL );
+            // Eagle uses a flat net namespace, so a named net should retain its name across
+            // every segment and every sheet.  The PCB importer carries Eagle signal names
+            // through verbatim, so we must use a global label here too: a local SCH_LABEL
+            // would prepend the sheet path (e.g. "/+24V_SWD") and split the net from the
+            // matching PCB signal on net update.
+            //
+            // Two exceptions: (1) buses are conceptual groupings in Eagle, not electrical
+            // signals, so a global bus label would join same-named buses project-wide where
+            // Eagle only had visual grouping; (2) nets inside module instances are scoped
+            // by the module's ports, so a global label would punch through the hierarchy.
+            if( segmentCount > 1 || m_netCounts[netName] > 1 )
+            {
+                if( aIsBus || !m_modules.empty() )
+                    label.reset( new SCH_LABEL );
+                else
+                    label.reset( new SCH_GLOBALLABEL );
+            }
 
             if( label )
             {
@@ -1692,66 +1706,69 @@ SCH_JUNCTION* SCH_IO_EAGLE::loadJunction( const std::unique_ptr<EJUNCTION>&  aJu
 }
 
 
-SCH_LABEL_BASE* SCH_IO_EAGLE::loadLabel( const std::unique_ptr<ELABEL>& aLabel, const wxString& aNetName )
+SCH_LABEL_BASE* SCH_IO_EAGLE::loadLabel( const std::unique_ptr<ELABEL>& aLabel,
+                                         const wxString& aNetName, bool aIsBus )
 {
     VECTOR2I elabelpos( aLabel->x.ToSchUnits(), -aLabel->y.ToSchUnits() );
 
-    // Determine if the label is local or global depending on
-    // the number of sheets the net appears in
-    bool                            global = m_netCounts[aNetName] > 1;
+    // Label-kind decision mirrors loadSegments(): SCH_HIERLABEL for module ports,
+    // SCH_LABEL for buses and module-internal nets, SCH_GLOBALLABEL otherwise so the
+    // Eagle flat net namespace round-trips through the matching PCB signal name.
     std::unique_ptr<SCH_LABEL_BASE> label;
 
     VECTOR2I textSize = KiROUND( aLabel->size.ToSchUnits() * 0.7, aLabel->size.ToSchUnits() * 0.7 );
 
-    if( m_modules.size() )
+    auto findModulePort =
+            [&]() -> const EPORT*
+            {
+                if( m_modules.empty() )
+                    return nullptr;
+
+                const auto& ports = m_modules.back()->ports;
+                const auto  it    = ports.find( aNetName );
+                return it == ports.end() ? nullptr : it->second.get();
+            };
+
+    const EPORT* port = findModulePort();
+
+    if( port )
     {
-        if(  m_modules.back()->ports.find( aNetName ) != m_modules.back()->ports.end() )
+        auto hierLabel = std::make_unique<SCH_HIERLABEL>();
+
+        if( port->direction )
         {
-            label = std::make_unique<SCH_HIERLABEL>();
-            label->SetText( escapeName( aNetName ) );
-
-            const auto it = m_modules.back()->ports.find( aNetName );
-
+            wxString direction = *port->direction;
             LABEL_SHAPE type;
 
-            if( it->second->direction )
-            {
-                wxString direction = *it->second->direction;
+            if( direction == "in" )
+                type = LABEL_SHAPE::LABEL_INPUT;
+            else if( direction == "out" )
+                type = LABEL_SHAPE::LABEL_OUTPUT;
+            else if( direction == "io" )
+                type = LABEL_SHAPE::LABEL_BIDI;
+            else if( direction == "hiz" )
+                type = LABEL_SHAPE::LABEL_TRISTATE;
+            else
+                type = LABEL_SHAPE::LABEL_PASSIVE;
 
-                if( direction == "in" )
-                    type = LABEL_SHAPE::LABEL_INPUT;
-                else if( direction == "out" )
-                    type = LABEL_SHAPE::LABEL_OUTPUT;
-                else if( direction == "io" )
-                    type = LABEL_SHAPE::LABEL_BIDI;
-                else if( direction == "hiz" )
-                    type = LABEL_SHAPE::LABEL_TRISTATE;
-                else
-                    type = LABEL_SHAPE::LABEL_PASSIVE;
+            // KiCad does not support passive, power, open collector, or no-connect sheet
+            // pins that Eagle ports support.  They are set to unspecified to minimize
+            // ERC issues.
+            hierLabel->SetLabelShape( type );
+        }
 
-                // KiCad does not support passive, power, open collector, or no-connect sheet
-                // pins that Eagle ports support.  They are set to unspecified to minimize
-                // ERC issues.
-                label->SetLabelShape( type );
-            }
-        }
-        else
-        {
-            label = std::make_unique<SCH_LABEL>();
-            label->SetText( escapeName( aNetName ) );
-        }
+        label = std::move( hierLabel );
     }
-    else if( global )
+    else if( aIsBus || !m_modules.empty() )
     {
-        label = std::make_unique<SCH_GLOBALLABEL>();
-        label->SetText( escapeName( aNetName ) );
+        label = std::make_unique<SCH_LABEL>();
     }
     else
     {
-        label = std::make_unique<SCH_LABEL>();
-        label->SetText( escapeName( aNetName ) );
+        label = std::make_unique<SCH_GLOBALLABEL>();
     }
 
+    label->SetText( escapeName( aNetName ) );
     label->SetPosition( elabelpos );
     label->SetTextSize( textSize );
     label->SetSpinStyle( SPIN_STYLE::RIGHT );
