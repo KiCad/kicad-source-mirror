@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:03+0300\n"
-"PO-Revision-Date: 2026-05-26 02:02+0000\n"
+"PO-Revision-Date: 2026-05-26 11:52+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -34421,14 +34421,15 @@ msgid "The selected directory is not a Git project."
 msgstr "Das ausgewählt Verzeichnis ist kein Git-Projekt."
 
 #: kicad/project_tree_pane.cpp:2581
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before committing?"
 msgstr ""
-"Die folgenden Regeln enthalten ungespeicherte Änderungen:\n"
+"Folgende Editoren enthalten ungespeicherte Änderungen: %s\n"
 "\n"
+"Sollen diese vor dem Commit gespeichert werden?"
 
 #: kicad/project_tree_pane.cpp:2584 kicad/project_tree_pane.cpp:2859
 #, fuzzy
@@ -50714,9 +50715,9 @@ msgid "Net chain '%s' has no copper return path on reference layer '%s'."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid " (net '%s')"
-msgstr "Text \"%s\""
+msgstr " (Netz \"%s\")"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:215
 #, c-format
