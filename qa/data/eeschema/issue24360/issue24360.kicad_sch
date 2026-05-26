@@ -1,0 +1,16 @@
+(kicad_sch
+	(version 20260101)
+	(generator "eeschema")
+	(generator_version "9.99")
+	(uuid "c0ffee01-2436-0001-0000-000000000000")
+	(paper "A4")
+	(title_block
+		(title "Issue 24360 root SHEETNAME")
+	)
+	(lib_symbols)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

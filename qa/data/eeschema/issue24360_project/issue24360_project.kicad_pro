@@ -1,0 +1,14 @@
+{
+  "schematic": {
+    "meta": {
+      "version": 1
+    },
+    "top_level_sheets": [
+      {
+        "uuid": "c0ffee01-2436-0002-0000-000000000000",
+        "name": "Custom Display Name",
+        "filename": "issue24360_project.kicad_sch"
+      }
+    ]
+  }
+}
