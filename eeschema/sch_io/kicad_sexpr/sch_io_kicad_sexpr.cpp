@@ -1104,12 +1104,11 @@ void SCH_IO_KICAD_SEXPR::saveField( SCH_FIELD* aField )
 {
     wxCHECK_RET( aField != nullptr && m_out != nullptr, "" );
 
-    wxString fieldName;
-
-    if( aField->IsMandatory() )
-        fieldName = aField->GetCanonicalName();
-    else
-        fieldName = aField->GetName();
+    // Always write the canonical, language-neutral name. SCH_FIELD::GetCanonicalName() returns
+    // the mandatory-field token, the well-known directive-label token ("Netclass"), or the raw
+    // user-supplied name. Using GetName() here would emit the translated form for label fields,
+    // which broke cross-language collaboration (issue #24403).
+    wxString fieldName = aField->GetCanonicalName();
 
     m_out->Print( "(property %s %s %s (at %s %s %s)",
                   aField->IsPrivate() ? "private" : "",

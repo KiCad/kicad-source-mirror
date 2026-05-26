@@ -116,6 +116,13 @@ public:
      */
     wxString GetCanonicalName() const;
 
+    /**
+     * Test whether @a aName is one of the known translations of the directive-label net class
+     * field name (used to recognise legacy/cross-locale files where the field name was saved as
+     * a translated string instead of the canonical "Netclass" token).
+     */
+    static bool IsNetclassLabelFieldName( const wxString& aName );
+
     void SetName( const wxString& aName );
 
     void SetText( const wxString& aText ) override;
