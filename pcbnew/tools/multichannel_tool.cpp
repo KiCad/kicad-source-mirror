@@ -1243,6 +1243,17 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
         findOtherItemsInRuleArea( aRefArea, sourceItems );
         findOtherItemsInRuleArea( aTargetArea, targetItems );
 
+        // Apply Design Block Layout uses synthetic copper-only rule area zones that don't
+        // reflect the layers the user actually drew on. The source items were collected by
+        // explicit enumeration (m_designBlockItems) and the destination is a group bounding
+        // box, so the per-item layer filter would incorrectly reject silkscreen, fab and
+        // user drawings. Skip the layer filter only when both halves are the synthetic
+        // design-block-to-group flow; regular GROUP_PLACEMENT rule areas have user-authored
+        // layer sets that must still be honored.
+        const bool skipLayerFilter = aRefArea->m_sourceType == PLACEMENT_SOURCE_T::DESIGN_BLOCK
+                                     && aTargetArea->m_sourceType
+                                                == PLACEMENT_SOURCE_T::GROUP_PLACEMENT;
+
         for( BOARD_ITEM* item : targetItems )
         {
             if( item->Type() == PCB_TEXT_T && item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
@@ -1260,7 +1271,8 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 ZONE* zone = static_cast<ZONE*>( item );
 
                 // Check all zone layers are included in the target rule area.
-                if( aTargetArea->m_zone->GetLayerSet().ContainsAll( zone->GetLayerSet() ) )
+                if( skipLayerFilter
+                    || aTargetArea->m_zone->GetLayerSet().ContainsAll( zone->GetLayerSet() ) )
                 {
                     aCompatData.m_affectedItems.insert( zone );
                     aCommit->Remove( zone );
@@ -1268,7 +1280,8 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             }
             else
             {
-                if( aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
+                if( skipLayerFilter
+                    || aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
                 {
                     aCompatData.m_affectedItems.insert( item );
                     aCommit->Remove( item );
@@ -1289,11 +1302,16 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             if( item->Type() == PCB_ZONE_T )
             {
                 ZONE* zone = static_cast<ZONE*>( item );
-                LSET  allowedLayers = aRefArea->m_zone->GetLayerSet() & aTargetArea->m_zone->GetLayerSet();
 
-                // Check all zone layers are included in both source and target rule areas.
-                if( !allowedLayers.ContainsAll( zone->GetLayerSet() ) )
-                    continue;
+                if( !skipLayerFilter )
+                {
+                    LSET allowedLayers =
+                            aRefArea->m_zone->GetLayerSet() & aTargetArea->m_zone->GetLayerSet();
+
+                    // Check all zone layers are included in both source and target rule areas.
+                    if( !allowedLayers.ContainsAll( zone->GetLayerSet() ) )
+                        continue;
+                }
 
                 ZONE* targetZone = static_cast<ZONE*>( item->Duplicate( false ) );
                 fixupNet( zone, targetZone, aCompatData.m_matchingComponents );
@@ -1302,11 +1320,14 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             }
             else
             {
-                if( !aRefArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
-                    continue;
+                if( !skipLayerFilter )
+                {
+                    if( !aRefArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
+                        continue;
 
-                if( !aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
-                    continue;
+                    if( !aTargetArea->m_zone->GetLayerSet().Contains( item->GetLayer() ) )
+                        continue;
+                }
 
                 copied = static_cast<BOARD_ITEM*>( item->Clone() );
             }
