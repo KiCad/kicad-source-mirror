@@ -134,12 +134,19 @@ int64_t TUNING_PROFILE_PARAMETERS_USER_DEFINED::GetViaPropagationDelay(
 }
 
 
-int64_t TUNING_PROFILE_PARAMETERS_USER_DEFINED::getViaPropagationDelay( const PCB_LAYER_ID    aSignalStartLayer,
-                                                                        const PCB_LAYER_ID    aSignalEndLayer,
-                                                                        const PCB_LAYER_ID    aViaStartLayer,
-                                                                        const PCB_LAYER_ID    aViaEndLayer,
+int64_t TUNING_PROFILE_PARAMETERS_USER_DEFINED::getViaPropagationDelay( PCB_LAYER_ID          aSignalStartLayer,
+                                                                        PCB_LAYER_ID          aSignalEndLayer,
+                                                                        PCB_LAYER_ID          aViaStartLayer,
+                                                                        PCB_LAYER_ID          aViaEndLayer,
                                                                         const TUNING_PROFILE* aTuningProfile ) const
 {
+    // Ensure ordering as per the via save order
+    if( IsCopperLayerLowerThan( aSignalStartLayer, aSignalEndLayer ) )
+        std::swap( aSignalStartLayer, aSignalEndLayer );
+
+    if( IsCopperLayerLowerThan( aViaStartLayer, aViaEndLayer ) )
+        std::swap( aViaStartLayer, aViaEndLayer );
+
     // First check for a layer-to-layer override - this assumes that the layers are already in CuStack() order
     auto& viaOverrides = m_viaOverridesCache.at( aTuningProfile->m_ProfileName );
 

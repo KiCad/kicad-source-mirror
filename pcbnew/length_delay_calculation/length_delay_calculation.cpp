@@ -441,12 +441,8 @@ void LENGTH_DELAY_CALCULATION::inferViaInPad( const PAD* aPad, const LENGTH_DELA
             {
                 TUNING_PROFILE_GEOMETRY_CONTEXT ctx;
                 ctx.NetClass = aItem.GetEffectiveNetClass();
-                const PCB_LAYER_ID signalStartLayer = aItem.GetStartLayer();
-                const PCB_LAYER_ID signalEndLayer = aItem.GetEndLayer();
-                const PCB_LAYER_ID viaStartLayer = aItem.GetVia()->Padstack().StartLayer();
-                const PCB_LAYER_ID viaEndLayer = aItem.GetVia()->Padstack().EndLayer();
-                const int64_t      delay = m_tuningProfileParameters->GetViaPropagationDelay(
-                        signalStartLayer, signalEndLayer, viaStartLayer, viaEndLayer, ctx );
+                const int64_t delay = m_tuningProfileParameters->GetViaPropagationDelay( startBottomLayer, padLayer,
+                                                                                         F_Cu, B_Cu, ctx );
                 aDetails.ViaDelay += delay;
             }
         }
