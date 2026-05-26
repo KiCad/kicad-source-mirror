@@ -21,6 +21,7 @@
 #include <kiplatform/ui.h>
 
 #include <wx/choice.h>
+#include <wx/dataview.h>
 #include <wx/dialog.h>
 #include <wx/nonownedwnd.h>
 #include <wx/settings.h>
@@ -438,6 +439,38 @@ void KIPLATFORM::UI::AllowNetworkFileSystems( wxDialog* aDialog )
 
     if( widget && GTK_IS_FILE_CHOOSER( widget ) )
         gtk_file_chooser_set_local_only( GTK_FILE_CHOOSER( widget ), FALSE );
+}
+
+
+void KIPLATFORM::UI::CancelPendingScroll( wxDataViewCtrl* aCtrl )
+{
+    if( !aCtrl )
+        return;
+
+    GtkWidget* widget = aCtrl->GtkGetTreeView();
+
+    if( !widget || !GTK_IS_TREE_VIEW( widget ) )
+        return;
+
+    GtkTreeView* view = GTK_TREE_VIEW( widget );
+
+    // Need a live model and rbtree for the assertions in scroll_to_cell.
+    if( !gtk_tree_view_get_model( view ) )
+        return;
+
+    GtkTreeViewColumn* column = gtk_tree_view_get_column( view, 0 );
+
+    if( !column )
+        return;
+
+    // A column-only scroll_to_cell enters GTK's deferred-scroll path, which frees
+    // priv->scroll_to_path and only installs scroll_to_column.  That breaks the race
+    // where validate_visible_area dereferences a stale row reference after a model
+    // reset.  The deferred branch is taken when the widget is not yet allocated, when
+    // alloc is pending, or when rows are invalid -- queue_resize forces the latter so
+    // a steady-state widget also takes that branch and actually clears the reference.
+    gtk_widget_queue_resize( widget );
+    gtk_tree_view_scroll_to_cell( view, nullptr, column, FALSE, 0.0, 0.0 );
 }
 
 //

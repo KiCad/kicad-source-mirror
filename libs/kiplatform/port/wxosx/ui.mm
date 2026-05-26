@@ -260,3 +260,9 @@ void KIPLATFORM::UI::AllowNetworkFileSystems( wxDialog* aDialog )
 {
     // Not needed on macOS - file dialogs show network filesystems by default
 }
+
+
+void KIPLATFORM::UI::CancelPendingScroll( wxDataViewCtrl* aCtrl )
+{
+    // Not needed on this platform; the native control does not race on model resets.
+}

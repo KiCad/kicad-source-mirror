@@ -312,6 +312,10 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool a
                 m_widget->Collapse( wxDataViewItem( &*child ) );
         }
 
+        // Drop any pending scroll target before BeforeReset/AfterReset tears down the rows
+        // it points at.  See KIPLATFORM::UI::CancelPendingScroll and #24433.
+        KIPLATFORM::UI::CancelPendingScroll( m_widget );
+
         // DO NOT REMOVE THE FREEZE/THAW. This freeze/thaw is a flag for this model adapter
         // that tells it when it shouldn't trust any of the data in the model. When set, it will
         // not return invalid data to the UI, since this invalid data can cause crashes.
@@ -410,6 +414,10 @@ void LIB_TREE_MODEL_ADAPTER::createMissingColumns()
 
 void LIB_TREE_MODEL_ADAPTER::resortTree()
 {
+    // See UpdateSearchString -- the resort tears down rows that any queued GtkTreeView
+    // scroll target may still reference (#24433).
+    KIPLATFORM::UI::CancelPendingScroll( m_widget );
+
     Freeze();
     BeforeReset();
 
