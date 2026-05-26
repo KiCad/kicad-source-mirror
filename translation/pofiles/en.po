@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 21:05+0300\n"
+"POT-Creation-Date: 2026-05-26 05:04+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1603,6 +1603,64 @@ msgstr ""
 msgid "Add Netclass Assignment"
 msgstr "Add Netclass Assignment"
 
+msgid "(missing)"
+msgstr "(missing)"
+
+msgid "File"
+msgstr "File"
+
+msgid "Saved version"
+msgstr "Saved version"
+
+msgid "Auto-saved copy"
+msgstr "Auto-saved copy"
+
+msgid ""
+"KiCad found auto-saved changes from a previous session. This usually means "
+"KiCad closed unexpectedly while you had unsaved work."
+msgstr ""
+"KiCad found auto-saved changes from a previous session. This usually means "
+"KiCad closed unexpectedly while you had unsaved work."
+
+msgid "Restore auto-saved"
+msgstr "Restore auto-saved"
+
+msgid ""
+"Replaces your saved file with the auto-saved version. The previous saved "
+"content is discarded."
+msgstr ""
+"Replaces your saved file with the auto-saved version. The previous saved "
+"content is discarded."
+
+msgid "Keep current"
+msgstr "Keep current"
+
+msgid "Keeps your saved file as-is and discards the auto-saved changes."
+msgstr "Keeps your saved file as-is and discards the auto-saved changes."
+
+msgid "Keep both"
+msgstr "Keep both"
+
+msgid ""
+"Keeps your saved file and writes the auto-saved version alongside it as a "
+"separate timestamped file you can review later."
+msgstr ""
+"Keeps your saved file and writes the auto-saved version alongside it as a "
+"separate timestamped file you can review later."
+
+msgid "Cancel open"
+msgstr "Cancel open"
+
+msgid ""
+"Closes this dialog without making any changes. The auto-saved files stay on "
+"disk and will be offered again next time you open the project."
+msgstr ""
+"Closes this dialog without making any changes. The auto-saved files stay on "
+"disk and will be offered again next time you open the project."
+
+msgid "Auto-Save Recovery"
+msgstr "Auto-Save Recovery"
+
 msgid "Clear Color"
 msgstr "Clear Color"
 
@@ -2169,33 +2227,6 @@ msgstr "Move down"
 msgid "View Preset Switcher"
 msgstr "View Preset Switcher"
 
-msgid "Connection"
-msgstr "Connection"
-
-msgid "Basic"
-msgstr "Basic"
-
-msgid "SSH"
-msgstr "SSH"
-
-msgid "Test"
-msgstr "Test"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "Cancel"
-msgstr "Cancel"
-
-msgid "Url"
-msgstr "Url"
-
-msgid "Authentication"
-msgstr "Authentication"
-
-msgid "User Name"
-msgstr "User Name"
-
 msgid "Commit Changes"
 msgstr "Commit Changes"
 
@@ -2220,11 +2251,53 @@ msgstr "Commit Message:"
 msgid "Author:"
 msgstr "Author:"
 
+msgid "OK"
+msgstr "OK"
+
+msgid "Cancel"
+msgstr "Cancel"
+
 msgid "C&ommit"
 msgstr "C&ommit"
 
 msgid "Commit message cannot be empty"
 msgstr "Commit message cannot be empty"
+
+msgid "Key passphrase:"
+msgstr "Key passphrase:"
+
+msgid "Password / token:"
+msgstr "Password / token:"
+
+msgid "Authentication is required to access:"
+msgstr "Authentication is required to access:"
+
+msgid "Username and password"
+msgstr "Username and password"
+
+msgid "SSH key"
+msgstr "SSH key"
+
+msgid "Authentication"
+msgstr "Authentication"
+
+msgid "Username:"
+msgstr "Username:"
+
+msgid "SSH key:"
+msgstr "SSH key:"
+
+msgid "Select SSH private key"
+msgstr "Select SSH private key"
+
+msgid "*"
+msgstr "*"
+
+msgid "Save credentials"
+msgstr "Save credentials"
+
+msgid "Git Authentication Required"
+msgstr "Git Authentication Required"
 
 msgid "Enter the password for the SSH key"
 msgstr "Enter the password for the SSH key"
@@ -2262,6 +2335,9 @@ msgstr "SSH key password:"
 msgid "Password:"
 msgstr "Password:"
 
+msgid "Connection"
+msgstr "Connection"
+
 msgid "Location:"
 msgstr "Location:"
 
@@ -2271,6 +2347,9 @@ msgstr "Connection type:"
 msgid "HTTPS"
 msgstr "HTTPS"
 
+msgid "SSH"
+msgstr "SSH"
+
 msgid "Local"
 msgstr "Local"
 
@@ -2279,9 +2358,6 @@ msgstr "SSH private key:     "
 
 msgid "Select SSH private key file"
 msgstr "Select SSH private key file"
-
-msgid "*"
-msgstr "*"
 
 msgid "User name:"
 msgstr "User name:"
@@ -3848,23 +3924,12 @@ msgid "Invalid floating point number"
 msgstr "Invalid floating point number"
 
 #, c-format
-msgid ""
-"Auto-saved file(s) exist that are newer than the saved project files:\n"
-"\n"
-"%s\n"
-"Recover the auto-saved data?"
-msgstr ""
-"Auto-saved file(s) exist that are newer than the saved project files:\n"
-"\n"
-"%s\n"
-"Recover the auto-saved data?"
-
-msgid "Auto-Save Recovery"
-msgstr "Auto-Save Recovery"
-
-#, c-format
 msgid "Failed to recover auto-saved file '%s'."
 msgstr "Failed to recover auto-saved file '%s'."
+
+#, c-format
+msgid "Failed to write recovered file '%s'."
+msgstr "Failed to write recovered file '%s'."
 
 msgid "Undo"
 msgstr "Undo"
@@ -4622,8 +4687,36 @@ msgstr "Failed to create author signature: %s"
 msgid "Failed to create commit: %s"
 msgstr "Failed to create commit: %s"
 
-msgid "Could not lookup remote"
-msgstr "Could not lookup remote"
+msgid "Cannot amend: the branch has no commits yet."
+msgstr "Cannot amend: the branch has no commits yet."
+
+#, c-format
+msgid "Failed to get HEAD commit: %s"
+msgstr "Failed to get HEAD commit: %s"
+
+#, c-format
+msgid "Failed to get parent commit: %s"
+msgstr "Failed to get parent commit: %s"
+
+#, c-format
+msgid "Failed to get HEAD tree: %s"
+msgstr "Failed to get HEAD tree: %s"
+
+#, c-format
+msgid "Failed to reset index: %s"
+msgstr "Failed to reset index: %s"
+
+#, c-format
+msgid "Failed to get parent tree: %s"
+msgstr "Failed to get parent tree: %s"
+
+#, c-format
+msgid "Failed to amend commit: %s"
+msgstr "Failed to amend commit: %s"
+
+#, c-format
+msgid "Could not lookup remote '%s'"
+msgstr "Could not lookup remote '%s'"
 
 #, c-format
 msgid "Could not connect to remote: %s"
@@ -4644,8 +4737,8 @@ msgid "No repository available to set up remote"
 msgstr "No repository available to set up remote"
 
 #, c-format
-msgid "Failed to create remote: %s"
-msgstr "Failed to create remote: %s"
+msgid "Failed to set up remote: %s"
+msgstr "Failed to set up remote: %s"
 
 msgid "No repository available"
 msgstr "No repository available"
@@ -4663,12 +4756,12 @@ msgid "Failed to switch to branch '%s': %s"
 msgstr "Failed to switch to branch '%s': %s"
 
 #, c-format
-msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "Failed to update HEAD reference for branch '%s': %s"
+msgid "Failed to create local branch '%s': %s"
+msgstr "Failed to create local branch '%s': %s"
 
 #, c-format
-msgid "Could not lookup remote '%s'"
-msgstr "Could not lookup remote '%s'"
+msgid "Failed to update HEAD reference for branch '%s': %s"
+msgstr "Failed to update HEAD reference for branch '%s': %s"
 
 #, c-format
 msgid "Could not connect to remote '%s': %s"
@@ -4680,6 +4773,11 @@ msgstr "Could not fetch data from remote '%s': %s"
 
 msgid "Could not read 'FETCH_HEAD'"
 msgstr "Could not read 'FETCH_HEAD'"
+
+msgid ""
+"Nothing to pull: the remote has no branch matching the current local branch."
+msgstr ""
+"Nothing to pull: the remote has no branch matching the current local branch."
 
 msgid "Could not lookup commit"
 msgstr "Could not lookup commit"
@@ -4731,6 +4829,33 @@ msgstr ""
 msgid "Merge failed: %s"
 msgstr "Merge failed: %s"
 
+msgid "Could not read repository index after merge."
+msgstr "Could not read repository index after merge."
+
+msgid "Could not write the merge result."
+msgstr "Could not write the merge result."
+
+msgid "Could not get the repository head."
+msgstr "Could not get the repository head."
+
+msgid "Could not look up the commits to merge."
+msgstr "Could not look up the commits to merge."
+
+msgid ""
+"Could not create a commit signature.  Set user.name and user.email in your "
+"git configuration."
+msgstr ""
+"Could not create a commit signature.  Set user.name and user.email in your "
+"git configuration."
+
+#, c-format
+msgid "Merge remote-tracking branch into %s"
+msgstr "Merge remote-tracking branch into %s"
+
+#, c-format
+msgid "Could not create merge commit: %s"
+msgstr "Could not create merge commit: %s"
+
 msgid ""
 "Cannot pull with rebase: you have unstaged changes. Please commit or stash "
 "them before pulling."
@@ -4749,6 +4874,31 @@ msgstr "Rebase commit failed: %s"
 #, c-format
 msgid "Rebase finish failed: %s"
 msgstr "Rebase finish failed: %s"
+
+msgid "Another git operation is in progress."
+msgstr "Another git operation is in progress."
+
+msgid "Could not find the matching remote branch."
+msgstr "Could not find the matching remote branch."
+
+msgid "Could not read the remote branch."
+msgstr "Could not read the remote branch."
+
+#, c-format
+msgid "Could not reset to the remote branch: %s"
+msgstr "Could not reset to the remote branch: %s"
+
+msgid ""
+"Cannot rebase: you have unstaged changes.  Please commit or stash them first."
+msgstr ""
+"Cannot rebase: you have unstaged changes.  Please commit or stash them first."
+
+msgid ""
+"The rebase ran into conflicts.  This is best resolved from a git command "
+"line."
+msgstr ""
+"The rebase ran into conflicts.  This is best resolved from a git command "
+"line."
 
 msgid "Cut"
 msgstr "Cut"
@@ -6508,6 +6658,9 @@ msgstr "Turn merged table cells back into separate cells."
 
 msgid "Edit Table..."
 msgstr "Edit Table..."
+
+msgid "Export Table to CSV"
+msgstr "Export Table to CSV"
 
 msgid "Export Table to CSV..."
 msgstr "Export Table to CSV..."
@@ -8463,11 +8616,11 @@ msgstr "Loaded %zu libraries"
 msgid "DSN:"
 msgstr "DSN:"
 
-msgid "Username:"
-msgstr "Username:"
-
 msgid "Connection String:"
 msgstr "Connection String:"
+
+msgid "Test"
+msgstr "Test"
 
 msgid "Reload Configuration"
 msgstr "Reload Configuration"
@@ -9500,6 +9653,10 @@ msgstr "Fields must have a name."
 
 msgid "Derived symbol must have a parent selected"
 msgstr "Derived symbol must have a parent selected"
+
+#, c-format
+msgid "The unit name '%s' is already in use."
+msgstr "The unit name '%s' is already in use."
 
 msgid "Delete extra units from symbol?"
 msgstr "Delete extra units from symbol?"
@@ -18690,9 +18847,6 @@ msgstr "Modify schematic item"
 msgid "No sub schematic found in the current project"
 msgstr "No sub schematic found in the current project"
 
-msgid "Export Table to CSV"
-msgstr "Export Table to CSV"
-
 msgid "CSV files (*.csv)|*.csv"
 msgstr "CSV files (*.csv)|*.csv"
 
@@ -18892,8 +19046,8 @@ msgstr "Reached end of schematic."
 msgid "Reached end of sheet."
 msgstr "Reached end of sheet."
 
-msgid "Find again to wrap around to the start."
-msgstr "Find again to wrap around to the start."
+msgid "No matches found."
+msgstr "No matches found."
 
 msgid "Click on new member..."
 msgstr "Click on new member..."
@@ -20782,6 +20936,9 @@ msgstr "Plot the layers to individual PDF files"
 msgid "Plot the layers to a single PDF file with multiple pages"
 msgstr "Plot the layers to a single PDF file with multiple pages"
 
+msgid "Suppress footprint property popups"
+msgstr "Suppress footprint property popups"
+
 msgid "Cannot use more than one mode flag\n"
 msgstr "Cannot use more than one mode flag\n"
 
@@ -22309,20 +22466,40 @@ msgstr "Add Project to Version Control..."
 msgid "Initialize a new repository"
 msgstr "Initialize a new repository"
 
+msgid "Configure Default Remote..."
+msgstr "Configure Default Remote..."
+
+msgid "Set or change the default remote URL and credentials"
+msgstr "Set or change the default remote URL and credentials"
+
 msgid "Commit Project..."
 msgstr "Commit Project..."
 
 msgid "Commit changes to the local repository"
 msgstr "Commit changes to the local repository"
 
+msgid "Amend Last Commit..."
+msgstr "Amend Last Commit..."
+
+msgid "Rewrite the most recent commit on the current branch"
+msgstr "Rewrite the most recent commit on the current branch"
+
 msgid "Push"
 msgstr "Push"
 
-msgid "Push committed local changes to remote repository"
-msgstr "Push committed local changes to remote repository"
-
 msgid "Pull"
 msgstr "Pull"
+
+#, c-format
+msgid "Push %s to %s"
+msgstr "Push %s to %s"
+
+#, c-format
+msgid "Pull from %s"
+msgstr "Pull from %s"
+
+msgid "Push committed local changes to remote repository"
+msgstr "Push committed local changes to remote repository"
 
 msgid "Pull changes from remote repository into local"
 msgstr "Pull changes from remote repository into local"
@@ -22404,8 +22581,107 @@ msgstr "Failed to set default remote."
 msgid "Fetch Remote"
 msgstr "Fetch Remote"
 
+msgid "Configure Default Remote"
+msgstr "Configure Default Remote"
+
+msgid "Failed to configure remote."
+msgstr "Failed to configure remote."
+
+msgid "Already up to date."
+msgstr "Already up to date."
+
+#, c-format
+msgid "Already up to date with %s."
+msgstr "Already up to date with %s."
+
+msgid "Pulled changes (fast-forward)."
+msgstr "Pulled changes (fast-forward)."
+
+#, c-format
+msgid "Pulled %s into %s (fast-forward)."
+msgstr "Pulled %s into %s (fast-forward)."
+
+msgid "Pulled changes."
+msgstr "Pulled changes."
+
+#, c-format
+msgid "Pulled %s into %s."
+msgstr "Pulled %s into %s."
+
+msgid ""
+"Your local changes and the remote changes conflict, so the pull was "
+"cancelled and nothing was changed.\n"
+"\n"
+"You can discard your local commits and use the remote version, or rebase "
+"your commits on top of the remote."
+msgstr ""
+"Your local changes and the remote changes conflict, so the pull was "
+"cancelled and nothing was changed.\n"
+"\n"
+"You can discard your local commits and use the remote version, or rebase "
+"your commits on top of the remote."
+
+msgid "Pull Conflict"
+msgstr "Pull Conflict"
+
+msgid "&Use Remote (discard my changes)"
+msgstr "&Use Remote (discard my changes)"
+
+msgid "&Rebase"
+msgstr "&Rebase"
+
+msgid "Reset to the remote version."
+msgstr "Reset to the remote version."
+
+msgid "Failed to reset to remote"
+msgstr "Failed to reset to remote"
+
+msgid "Rebased your changes onto the remote."
+msgstr "Rebased your changes onto the remote."
+
+msgid "Could not rebase"
+msgstr "Could not rebase"
+
+msgid "Pull cancelled."
+msgstr "Pull cancelled."
+
+msgid "Pull failed."
+msgstr "Pull failed."
+
 msgid "Failed to pull project"
 msgstr "Failed to pull project"
+
+msgid "Pushed to remote."
+msgstr "Pushed to remote."
+
+#, c-format
+msgid "Pushed %s to %s."
+msgstr "Pushed %s to %s."
+
+#, c-format
+msgid ""
+"Push rejected: your local branch and %s have diverged.\n"
+"\n"
+"This usually happens after amending or rewriting a commit that was already "
+"pushed.  Force push to overwrite the remote?\n"
+"\n"
+"Anyone who already pulled the previous version will need to reset their copy."
+msgstr ""
+"Push rejected: your local branch and %s have diverged.\n"
+"\n"
+"This usually happens after amending or rewriting a commit that was already "
+"pushed.  Force push to overwrite the remote?\n"
+"\n"
+"Anyone who already pulled the previous version will need to reset their copy."
+
+msgid "Force Push?"
+msgstr "Force Push?"
+
+msgid "&Force Push"
+msgstr "&Force Push"
+
+msgid "Push failed."
+msgstr "Push failed."
 
 msgid "Failed to push project"
 msgstr "Failed to push project"
@@ -22413,11 +22689,81 @@ msgstr "Failed to push project"
 msgid "The selected directory is not a Git project."
 msgstr "The selected directory is not a Git project."
 
+#, c-format
+msgid ""
+"The following editors have unsaved changes:%s\n"
+"\n"
+"Save them before committing?"
+msgstr ""
+"The following editors have unsaved changes:%s\n"
+"\n"
+"Save them before committing?"
+
+msgid "Unsaved Changes"
+msgstr "Unsaved Changes"
+
+msgid "&Save and Commit"
+msgstr "&Save and Commit"
+
+msgid "Commit &Anyway"
+msgstr "Commit &Anyway"
+
+#, c-format
+msgid "Could not save %s."
+msgstr "Could not save %s."
+
 msgid "Discarding commit due to empty commit message."
 msgstr "Discarding commit due to empty commit message."
 
 msgid "Discarding commit due to empty file selection."
 msgstr "Discarding commit due to empty file selection."
+
+#, c-format
+msgid ""
+"The last commit has already been pushed to %s.\n"
+"\n"
+"Amending rewrites public history.  Anyone who pulled this commit will need "
+"to reset their copy."
+msgstr ""
+"The last commit has already been pushed to %s.\n"
+"\n"
+"Amending rewrites public history.  Anyone who pulled this commit will need "
+"to reset their copy."
+
+msgid "Amend Published Commit?"
+msgstr "Amend Published Commit?"
+
+msgid "Amend &Anyway"
+msgstr "Amend &Anyway"
+
+#, c-format
+msgid ""
+"The following editors have unsaved changes:%s\n"
+"\n"
+"Save them before amending?"
+msgstr ""
+"The following editors have unsaved changes:%s\n"
+"\n"
+"Save them before amending?"
+
+msgid "&Save and Amend"
+msgstr "&Save and Amend"
+
+msgid "Amend Last Commit"
+msgstr "Amend Last Commit"
+
+msgid "Discarding amend due to empty commit message."
+msgstr "Discarding amend due to empty commit message."
+
+msgid "Fetched from remote."
+msgstr "Fetched from remote."
+
+#, c-format
+msgid "Fetched from %s."
+msgstr "Fetched from %s."
+
+msgid "Fetch failed."
+msgstr "Fetch failed."
 
 #, c-format
 msgid "Cannot copy folder '%s'."
@@ -23409,6 +23755,9 @@ msgstr ""
 
 msgid "Functional"
 msgstr "Functional"
+
+msgid "Basic"
+msgstr "Basic"
 
 msgid "Reinforced"
 msgstr "Reinforced"
@@ -26476,6 +26825,10 @@ msgstr "Dimension Properties"
 msgid "Run DRC"
 msgstr "Run DRC"
 
+#, c-format
+msgid "Elapsed: %s"
+msgstr "Elapsed: %s"
+
 msgid "Report All Errors for Each Track"
 msgstr "Report All Errors for Each Track"
 
@@ -26491,8 +26844,27 @@ msgstr "DRC incomplete: could not compile custom design rules."
 msgid "Show design rules."
 msgstr "Show design rules."
 
+msgid "Elapsed: 0 s"
+msgstr "Elapsed: 0 s"
+
+#, c-format
+msgid "%1$d min %2$d s"
+msgstr "%1$d min %2$d s"
+
+#, c-format
+msgid "%.2f s"
+msgstr "%.2f s"
+
 msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- DRC canceled by user.<br><br>"
+
+#, c-format
+msgid "Canceled after %s"
+msgstr "Canceled after %s"
+
+#, c-format
+msgid "Completed in %s"
+msgstr "Completed in %s"
 
 #, c-format
 msgid "Remove all exclusions for violations of rule '%s'"
@@ -27635,8 +28007,17 @@ msgstr "Chamfered rectangle"
 msgid "Custom shape"
 msgstr "Custom shape"
 
-msgid "Pad Table"
-msgstr "Pad Table"
+msgid "Through-hole"
+msgstr "Through-hole"
+
+msgid "Connector"
+msgstr "Connector"
+
+msgid "Aperture"
+msgstr "Aperture"
+
+msgid "Edit Pads"
+msgstr "Edit Pads"
 
 msgid "Pad numbers:"
 msgstr "Pad numbers:"
@@ -27665,17 +28046,8 @@ msgstr "Pad->Die Length"
 msgid "Pad->Die Delay"
 msgstr "Pad->Die Delay"
 
-msgid "Through-hole"
-msgstr "Through-hole"
-
-msgid "Connector"
-msgstr "Connector"
-
-msgid "Aperture"
-msgstr "Aperture"
-
-msgid "Edit Pads"
-msgstr "Edit Pads"
+msgid "Pad Table"
+msgstr "Pad Table"
 
 msgid "Use a relative path?"
 msgstr "Use a relative path?"
@@ -31015,11 +31387,38 @@ msgstr ""
 msgid "Cancel Changes?"
 msgstr "Cancel Changes?"
 
+msgid "Show Matching Items"
+msgstr "Show Matching Items"
+
+msgid "Cannot show matching items without an open project."
+msgstr "Cannot show matching items without an open project."
+
 msgid "DRC rules"
 msgstr "DRC rules"
 
 msgid "ERROR:"
 msgstr "ERROR:"
+
+#, c-format
+msgid "Could not scan rules text: %s"
+msgstr "Could not scan rules text: %s"
+
+msgid "Place the cursor inside a (rule ...) block to show matching items."
+msgstr "Place the cursor inside a (rule ...) block to show matching items."
+
+msgid "The rule under the cursor has no name; add a name to identify it."
+msgstr "The rule under the cursor has no name; add a name to identify it."
+
+#, c-format
+msgid "Rule '%s' could not be located after parsing."
+msgstr "Rule '%s' could not be located after parsing."
+
+msgid "DRC engine not available."
+msgstr "DRC engine not available."
+
+#, c-format
+msgid "Rule '%s': %zu matching item(s)."
+msgstr "Rule '%s': %zu matching item(s)."
 
 #, c-format
 msgid "Rules '%s' and '%s' share the same condition."
@@ -41818,6 +42217,9 @@ msgstr "Generators Manager"
 msgid "Show a manager dialog for Generator objects"
 msgstr "Show a manager dialog for Generator objects"
 
+msgid "Length Tuning Settings"
+msgstr "Length Tuning Settings"
+
 msgid "Length Tuning Settings..."
 msgstr "Length Tuning Settings…"
 
@@ -43189,6 +43591,34 @@ msgstr "Process could not be created"
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "Could not create user scripting path %s."
+
+#~ msgid "Url"
+#~ msgstr "Url"
+
+#~ msgid "User Name"
+#~ msgstr "User Name"
+
+#, c-format
+#~ msgid ""
+#~ "Auto-saved file(s) exist that are newer than the saved project files:\n"
+#~ "\n"
+#~ "%s\n"
+#~ "Recover the auto-saved data?"
+#~ msgstr ""
+#~ "Auto-saved file(s) exist that are newer than the saved project files:\n"
+#~ "\n"
+#~ "%s\n"
+#~ "Recover the auto-saved data?"
+
+#~ msgid "Could not lookup remote"
+#~ msgstr "Could not lookup remote"
+
+#, c-format
+#~ msgid "Failed to create remote: %s"
+#~ msgstr "Failed to create remote: %s"
+
+#~ msgid "Find again to wrap around to the start."
+#~ msgstr "Find again to wrap around to the start."
 
 #~ msgid ""
 #~ "### More Examples\n"
@@ -71595,9 +72025,6 @@ msgstr "Could not create user scripting path %s."
 
 #~ msgid "Show Cursor"
 #~ msgstr "Show Cursor"
-
-#~ msgid "File"
-#~ msgstr "File"
 
 #~ msgid "Add Signals..."
 #~ msgstr "Add Signals…"
