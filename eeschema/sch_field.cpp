@@ -46,6 +46,78 @@
 static const std::vector<KICAD_T> labelTypes = { SCH_LABEL_LOCATE_ANY_T };
 
 
+/**
+ * Translations of "Net Class" extracted from KiCad's .po catalogs.
+ *
+ * The directive-label net class field used to be saved as `_( "Net Class" )` which embedded the
+ * UI-language translation into the .kicad_sch file. Files written by a non-English UI lost the
+ * canonical token when re-opened in another language, so the rule resolver could no longer locate
+ * the field. We now save the canonical name, but we still need to recognise the translated form
+ * when migrating older / cross-locale files.
+ */
+static const std::vector<wxString>& GetKnownNetclassFieldTranslations()
+{
+    static const std::vector<wxString> translations = {
+            wxString::FromUTF8( "Net Class" ),
+            wxString::FromUTF8( "صنف الشبكة" ),       // ar
+            wxString::FromUTF8( "Верига Клас" ),       // bg
+            wxString::FromUTF8( "Classe de xarxa" ),   // ca
+            wxString::FromUTF8( "Třídy spojů" ),       // cs
+            wxString::FromUTF8( "Netklasse" ),         // da, nl
+            wxString::FromUTF8( "Netzklasse" ),        // de
+            wxString::FromUTF8( "Κλάση Δικτύου" ),     // el
+            wxString::FromUTF8( "Clase de red" ),      // es, es_MX
+            wxString::FromUTF8( "Ühendusniidiklass" ), // et
+            wxString::FromUTF8( "Verkkoluokka" ),      // fi
+            wxString::FromUTF8( "Classe d'Equipot" ),  // fr
+            wxString::FromUTF8( "מחלקת רשת" ),         // he
+            wxString::FromUTF8( "नेट क्लास" ),            // hi
+            wxString::FromUTF8( "Hálózatosztály" ),    // hu
+            wxString::FromUTF8( "Kelas Net" ),         // id
+            wxString::FromUTF8( "Netclass" ),          // it, ro (same as canonical)
+            wxString::FromUTF8( "ネットクラス" ),          // ja
+            wxString::FromUTF8( "ქსელის კლასი" ),      // ka
+            wxString::FromUTF8( "네트 클래스" ),           // ko
+            wxString::FromUTF8( "Grandinių klasė" ),   // lt
+            wxString::FromUTF8( "Tīklu klase" ),       // lv
+            wxString::FromUTF8( "Nettklasse" ),        // no
+            wxString::FromUTF8( "Klasy sieci" ),       // pl
+            wxString::FromUTF8( "Classes da rede" ),   // pt_BR
+            wxString::FromUTF8( "Classe de Rede" ),    // pt
+            wxString::FromUTF8( "Класс цепей" ),       // ru
+            wxString::FromUTF8( "Triedy spojov" ),     // sk
+            wxString::FromUTF8( "Razred vozlišča" ),   // sl
+            wxString::FromUTF8( "Класа везе" ),        // sr
+            wxString::FromUTF8( "Nätklass" ),          // sv
+            wxString::FromUTF8( "நிகர வகுப்பு" ),       // ta
+            wxString::FromUTF8( "నెట్ క్లాస్" ),           // te
+            wxString::FromUTF8( "เน็ตคลาส" ),            // th
+            wxString::FromUTF8( "Ağ Sınıfı" ),         // tr
+            wxString::FromUTF8( "Клас зв'язків" ),     // uk
+            wxString::FromUTF8( "Lớp mạng" ),          // vi
+            wxString::FromUTF8( "网络类" ),               // zh_CN
+            wxString::FromUTF8( "網路類" )                // zh_TW
+    };
+
+    return translations;
+}
+
+
+bool SCH_FIELD::IsNetclassLabelFieldName( const wxString& aName )
+{
+    if( aName == wxT( "Netclass" ) )
+        return true;
+
+    for( const wxString& candidate : GetKnownNetclassFieldTranslations() )
+    {
+        if( aName == candidate )
+            return true;
+    }
+
+    return false;
+}
+
+
 SCH_FIELD::SCH_FIELD() :
         SCH_ITEM( nullptr, SCH_FIELD_T ),
         EDA_TEXT( schIUScale, wxEmptyString ),
@@ -1103,8 +1175,9 @@ wxString SCH_FIELD::GetCanonicalName() const
 {
     if( m_parent && m_parent->IsType( labelTypes ) )
     {
-        // These should be stored in canonical format, but just in case:
-        if( m_name == _( "Net Class" ) || m_name == wxT( "Net Class" ) )
+        // These should be stored in canonical format, but recover translated forms written by
+        // older versions or by cross-language collaboration via Git.
+        if( IsNetclassLabelFieldName( m_name ) )
             return wxT( "Netclass" );
     }
 

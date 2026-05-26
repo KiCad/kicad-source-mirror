@@ -97,6 +97,7 @@ set( QA_EESCHEMA_SRCS
     test_issue24409_cli_hierarchical_instances.cpp
     test_issue16915_bus_netclass.cpp
     test_issue24220_hierarchical_bus_netclass.cpp
+    test_issue24403_directive_label_i18n.cpp
     test_nc_pin_connectivity.cpp
     test_crossing_label.cpp
     test_eagle_plugin.cpp

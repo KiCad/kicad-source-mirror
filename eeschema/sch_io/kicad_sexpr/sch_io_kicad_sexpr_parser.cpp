@@ -2306,6 +2306,13 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseSchField( SCH_ITEM* aParent )
                            CurOffset() );
     }
 
+    // Normalise legacy/cross-locale directive-label net class field names to the canonical
+    // "Netclass" token as early as possible so every downstream consumer (including ones that
+    // call GetName() directly instead of GetCanonicalName()) sees a consistent in-memory model.
+    // See issue #24403.
+    if( dynamic_cast<SCH_LABEL_BASE*>( aParent ) && SCH_FIELD::IsNetclassLabelFieldName( name ) )
+        name = wxT( "Netclass" );
+
     token = NextTok();
 
     if( !IsSymbol( token ) )
