@@ -1,13 +1,13 @@
-ERC report (2026-02-11T17:46:46, Encoding UTF8)
+ERC report (2026-05-26T16:40:38, Encoding UTF8)
 Report includes: Errors, Warnings
 
 ***** Sheet /
 [power_pin_not_driven]: Input Power pin not driven by any Output Power pins
     ; error
-    @(5.550 in, 2.800 in): Symbol U1 Pin 5 [V+, Power input, Line]
+    @(4.700 in, 3.800 in): Symbol #PWR01 Hidden pin 1 [GND, Power input, Line]
 [power_pin_not_driven]: Input Power pin not driven by any Output Power pins
     ; error
-    @(5.550 in, 3.400 in): Symbol U1 Pin 2 [V-, Power input, Line]
+    @(5.550 in, 2.800 in): Symbol U1 Pin 5 [V+, Power input, Line]
 [lib_symbol_issues]: The current configuration does not include the symbol library 'Connector'
     ; warning
     @(4.150 in, 2.500 in): Symbol J1 [Conn_01x01_Pin]

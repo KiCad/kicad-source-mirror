@@ -164,7 +164,7 @@ BOOST_AUTO_TEST_CASE( TranslatedFieldNameRoundTripsAsCanonical )
         BOOST_REQUIRE( out.IsOpened() );
 
         const wxString body = wxT(
-                "(kicad_sch (version 20260512) (generator \"qa_test\") (generator_version \"9.99\")\n"
+                "(kicad_sch (version 20260306) (generator \"qa_test\") (generator_version \"9.99\")\n"
                 "  (paper \"A4\")\n"
                 "  (lib_symbols)\n"
                 "  (directive_label \"\" (length 2.54) (shape round)\n"

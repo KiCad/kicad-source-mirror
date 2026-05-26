@@ -237,7 +237,14 @@ private:
     {
         git_repository* repo = nullptr;
 
-        if( git_repository_init( &repo, m_repoPath.ToUTF8().data(), 0 ) != 0 )
+        // Force the initial branch to "master" regardless of the user's global
+        // init.defaultBranch setting, since the regression tests below pin upstream
+        // configuration on that branch name.
+        git_repository_init_options initOpts = GIT_REPOSITORY_INIT_OPTIONS_INIT;
+        initOpts.flags = GIT_REPOSITORY_INIT_MKPATH;
+        initOpts.initial_head = "master";
+
+        if( git_repository_init_ext( &repo, m_repoPath.ToUTF8().data(), &initOpts ) != 0 )
             return false;
 
         git_config* cfg = nullptr;
