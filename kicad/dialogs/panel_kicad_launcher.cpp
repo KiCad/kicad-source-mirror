@@ -57,6 +57,12 @@ PANEL_KICAD_LAUNCHER::~PANEL_KICAD_LAUNCHER()
 
 void PANEL_KICAD_LAUNCHER::onLauncherButtonClick( wxCommandEvent& aEvent )
 {
+    BITMAP_BUTTON*     button = (BITMAP_BUTTON*) aEvent.GetEventObject();
+    const TOOL_ACTION* action = static_cast<const TOOL_ACTION*>( button->GetClientData() );
+
+    if( !action )
+        return;
+
     // Don't accept clicks processed during wxProgressReporter updating.  In particular, the wxSafeYield()
     // call below will puke.
     if( m_frame->GetToolManager()->GetTool<KICAD_MANAGER_CONTROL>()->InShowPlayer() )
@@ -69,12 +75,6 @@ void PANEL_KICAD_LAUNCHER::onLauncherButtonClick( wxCommandEvent& aEvent )
     // Gives a slice of time to update the button state (mandatory on GTK, useful on MSW to avoid some
     // cosmetic issues).
     wxSafeYield();
-
-    BITMAP_BUTTON*     button = (BITMAP_BUTTON*) aEvent.GetEventObject();
-    const TOOL_ACTION* action = static_cast<const TOOL_ACTION*>( button->GetClientData() );
-
-    if( action == nullptr )
-        return;
 
     OPT_TOOL_EVENT evt = action->MakeEvent();
     evt->SetHasPosition( false );
