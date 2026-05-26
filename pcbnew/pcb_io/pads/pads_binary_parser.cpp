@@ -760,11 +760,21 @@ void BINARY_PARSER::recoverOmittedPlacements()
                                        layout.nameOff, refDes );
 
         // The parttype index (new) / decal index (v2021) lives in the NEXT physical record (the
-        // +1 lag). Trust it only when that record is itself a placement so a gap record above
-        // the block cannot supply a bogus index.
+        // +1 lag). That record is the index CARRIER, not itself a placement -- it need not (and
+        // for the last recovered placement in a run, does not) score as one, so gating on
+        // score(next) >= SCORE_PLACEMENT drops the index for exactly that case. Verified on
+        // Seth's hand-built simple1.pcb: two placements L1/L2 recovered via this back-walk; L1's
+        // carrier happens to double as L2's own placement record so the old gate passed by
+        // accident, but L2's carrier (one stride further, past the end of the recovered run) is
+        // a bare index slot with no refdes/coords and always failed the gate, leaving L2 with no
+        // parttype index and a fallback self-name/zero-pad decal. An in-bounds-only read matches
+        // the sibling +1-lag call sites in parsePartPlacements() above, which never gated on
+        // score() at all -- linkPartsToDecals() already bounds-checks the index against the real
+        // parttype/decal tables, so a genuinely bogus value here fails to resolve rather than
+        // producing a wrong-but-plausible decal.
         size_t next = base + stride;
 
-        if( score( next ) >= SCORE_PLACEMENT && m_cursor.InBounds( next + 4, 4 ) )
+        if( m_cursor.InBounds( next + 4, 4 ) )
             m_partTypeIndex[m_parts.size()] = m_sdb.RecordAt( next + 4 ).U32( 0 );
 
         m_parts.push_back( std::move( part ) );
