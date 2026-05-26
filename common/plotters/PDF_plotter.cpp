@@ -2201,11 +2201,32 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
     if( aWord.empty() )
         return aPosition;
 
+    // Compute the per-word cursor advance via the font's own glyph metrics so the gap between
+    // words matches what the PDF Tj operator further down will produce.  StringBoundaryLimits
+    // would inflate the stroke-font bbox by 3*thickness, opening spurious whitespace between
+    // words (issue #24419).
+    //
+    // Only BOLD/ITALIC from the caller are forwarded; SUPERSCRIPT/SUBSCRIPT in aTextStyle have
+    // already been baked into aSize by renderMarkupNode, and Tj renders with that reduced Tf
+    // size, so GetTextAsGlyphs must not apply the SUPER_SUB_SIZE_MULTIPLIER a second time.
+    TEXT_STYLE_FLAGS metricsStyle = 0;
+
+    if( aBold )
+        metricsStyle |= TEXT_STYLE::BOLD;
+
+    if( aItalic )
+        metricsStyle |= TEXT_STYLE::ITALIC;
+
+    auto cursorAdvanceX = [&]( const wxString& aText )
+    {
+        return aFont->GetTextAsGlyphs( nullptr, nullptr, aText, aSize, VECTOR2I(), ANGLE_0,
+                                       false, VECTOR2I(), metricsStyle ).x;
+    };
+
     // If the word is just a space character, advance position by space width and continue
     if( aWord == wxT( " " ) )
     {
-        // Calculate space width and advance position
-        VECTOR2I spaceBox( aFont->StringBoundaryLimits( "n", aSize, aWidth, aBold, aItalic, aFontMetrics ).x / 2, 0 );
+        VECTOR2I spaceBox( cursorAdvanceX( wxT( " " ) ), 0 );
 
         if( aTextMirrored )
             spaceBox.x *= -1;
@@ -2268,8 +2289,7 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
                            GR_TEXT_V_ALIGN_BOTTOM, aWidth, aItalic, aBold, &wideningFactor,
                            &ctm_a, &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
 
-    // Calculate next position for word spacing
-    VECTOR2I bbox( aFont->StringBoundaryLimits( aWord, aSize, aWidth, aBold, aItalic, aFontMetrics ).x, 0 );
+    VECTOR2I bbox( cursorAdvanceX( aWord ), 0 );
 
     if( aTextMirrored )
         bbox.x *= -1;
