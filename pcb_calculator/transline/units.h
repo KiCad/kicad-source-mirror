@@ -59,13 +59,34 @@ inline double atanh( double x )
 
 #define MU0  12.566370614e-7          // magnetic constant
 #define C0   299792458.0              // speed of light in vacuum
-#define ZF0  376.730313668           // wave resistance in vacuum
+
+// wave resistance in vacuum
+//
+// - From 1948 to 2019, Z₀ was defined to be exactly π*119.9169832 Ω (≈376.730_313_462 Ω).
+//
+// - The 2019 revision to SI changed it from a defined value to a measured value.  In accordance
+//   with this, the "2018" revision (based on 2018 measurements, values published 2019, rationale
+//   published 2021) of the "CODATA Recommended Values of the Fundamental Physical Constants"
+//   (<https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=931443>) gave the accepted measured
+//   value as 376.730_313_668(57) Ω (the number in parenthesis is the margin of error).
+//
+// - The "2022" revision (based on 2022 measurements, values published 2024, rationale published
+//   2025) of CODATA (<https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=958143>) gave the
+//   accepted measured value as 376.730_313_412(59) Ω.
+//
+// The most recent CODATA value can always be found at
+// <https://physics.nist.gov/cgi-bin/cuu/Value?z0>.
+//
+// - From its first use in 2011 (pre-v4), KiCad used the value 376.730_313_469_585_043_649_63, which
+//   mysteriously doesn't quite match any of the above.
+//
+// - In 2021 (v6), KiCad updated to the 2018 CODATA value.
+//
+// - In 2026, KiCad updated to the 2022 CODATA value.
+#define ZF0 376.730313412
 
 // const to convert a attenuation / loss from log (Neper) to decibel
 // (1 Np = 8.68589 dB)
 const double LOG2DB = 20.0 / log( 10.0 );
-
-// ZF0 value update:
-// https://physics.nist.gov/cgi-bin/cuu/Value?z0
 
 #endif /* __UNITS_H */
