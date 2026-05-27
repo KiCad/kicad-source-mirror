@@ -1,0 +1,106 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "53bb6e89-5f4d-4dd9-b79b-a31ac29c364c")
+	(paper "A4")
+	(lib_symbols)
+	(sheet
+		(at 106.68 101.6)
+		(size 62.23 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "74fb69ed-1d71-4936-80fe-f4ed0ad391da")
+		(property "Sheetname" "SheetB"
+			(at 106.68 100.8884 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "SheetB.kicad_sch"
+			(at 106.68 127.5846 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "BusHierLabels"
+				(path "/53bb6e89-5f4d-4dd9-b79b-a31ac29c364c"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 106.68 67.31)
+		(size 62.23 26.67)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "774277f8-0ee1-4070-849e-7250fef811e7")
+		(property "Sheetname" "SheetA"
+			(at 106.68 66.5984 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "SheetA.kicad_sch"
+			(at 106.68 94.5646 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "BusHierLabels"
+				(path "/53bb6e89-5f4d-4dd9-b79b-a31ac29c364c"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

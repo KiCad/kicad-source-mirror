@@ -29,6 +29,7 @@
 #include <set>
 #include <tuple>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include <app_monitor.h>
@@ -5708,6 +5709,28 @@ bool CONNECTION_GRAPH::ercCheckFloatingWires( const CONNECTION_SUBGRAPH* aSubgra
 }
 
 
+void CONNECTION_GRAPH::collectBusMemberSiblings( const CONNECTION_SUBGRAPH* aBusParent, const wxString& aMemberName,
+                                                 std::unordered_set<const CONNECTION_SUBGRAPH*>& aOut ) const
+{
+    auto busBucket = m_net_name_to_subgraphs_map.find( aBusParent->m_driver_connection->Name() );
+
+    if( busBucket == m_net_name_to_subgraphs_map.end() )
+        return;
+
+    for( const CONNECTION_SUBGRAPH* siblingBus : busBucket->second )
+    {
+        for( const auto& [sibMemberConn, sibMembers] : siblingBus->m_bus_neighbors )
+        {
+            if( sibMemberConn->Name() != aMemberName )
+                continue;
+
+            for( const CONNECTION_SUBGRAPH* sibling : sibMembers )
+                aOut.insert( sibling );
+        }
+    }
+}
+
+
 bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
 {
     // Label connection rules:
@@ -5791,30 +5814,27 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     if( label_map.empty() )
         return true;
 
-    // No-connects on net neighbors will be noticed before, but to notice them on bus parents we
-    // need to walk the graph
-    for( auto& [ connection, subgraphs ] : aSubgraph->m_bus_parents )
+    // Walk m_bus_parents once. Bus parents may carry a no-connect that suppresses
+    // an unconnected-label error, and they're how we reach bus members on other
+    // sheets that share this net.
+    std::unordered_set<const CONNECTION_SUBGRAPH*> busMemberSiblings;
+
+    for( auto& [memberConn, busParents] : aSubgraph->m_bus_parents )
     {
-        for( CONNECTION_SUBGRAPH* busParent : subgraphs )
+        wxString memberName = memberConn->Name();
+
+        for( CONNECTION_SUBGRAPH* busParent : busParents )
         {
             if( busParent->m_no_connect )
-            {
                 has_nc = true;
-                break;
-            }
 
-            CONNECTION_SUBGRAPH* hp = busParent->m_hier_parent;
-
-            while( hp )
+            for( CONNECTION_SUBGRAPH* hp = busParent->m_hier_parent; hp; hp = hp->m_hier_parent )
             {
                 if( hp->m_no_connect )
-                {
                     has_nc = true;
-                    break;
-                }
-
-                hp = hp->m_hier_parent;
             }
+
+            collectBusMemberSiblings( busParent, memberName, busMemberSiblings );
         }
     }
 
@@ -5870,33 +5890,41 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
                 }
             }
 
+            std::unordered_set<const CONNECTION_SUBGRAPH*> creditedNeighbors;
+            creditedNeighbors.insert( aSubgraph );
+
+            auto creditNeighbor = [&]( const CONNECTION_SUBGRAPH* neighbor )
+            {
+                if( !creditedNeighbors.insert( neighbor ).second )
+                    return;
+
+                if( neighbor->m_no_connect )
+                    has_nc = true;
+
+                size_t neighborPins = hasPins( neighbor );
+                allPins += neighborPins;
+
+                if( neighbor->m_sheet == sheet )
+                {
+                    localPins += neighborPins;
+
+                    if( !neighbor->m_hier_pins.empty() || !neighbor->m_hier_ports.empty() )
+                    {
+                        hasLocalHierarchy = true;
+                    }
+                }
+            };
+
             auto it = m_net_name_to_subgraphs_map.find( netName );
 
             if( it != m_net_name_to_subgraphs_map.end() )
             {
                 for( const CONNECTION_SUBGRAPH* neighbor : it->second )
-                {
-                    if( neighbor == aSubgraph )
-                        continue;
-
-                    if( neighbor->m_no_connect )
-                        has_nc = true;
-
-                    size_t neighborPins = hasPins( neighbor );
-                    allPins += neighborPins;
-
-                    if( neighbor->m_sheet == sheet )
-                    {
-                        localPins += neighborPins;
-
-                        if( !neighbor->m_hier_pins.empty()
-                            || !neighbor->m_hier_ports.empty() )
-                        {
-                            hasLocalHierarchy = true;
-                        }
-                    }
-                }
+                    creditNeighbor( neighbor );
             }
+
+            for( const CONNECTION_SUBGRAPH* sibling : busMemberSiblings )
+                creditNeighbor( sibling );
 
             if( allPins == 1 && !has_nc )
             {
