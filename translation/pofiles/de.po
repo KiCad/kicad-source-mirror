@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:04+0300\n"
 "PO-Revision-Date: 2026-05-27 08:11+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -26162,7 +26162,7 @@ msgstr "Footprint \"%s\" hat kein zugeordnetes Symbol."
 #: eeschema/tools/backannotate.cpp:378
 #, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
-msgstr "Footprints \"%s\" und \"%s\" sind mit dem selben Symbol verknüpft."
+msgstr "Footprints \"%s\" und \"%s\" sind mit demselben Symbol verknüpft."
 
 #: eeschema/tools/backannotate.cpp:440
 #, c-format
