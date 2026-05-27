@@ -976,8 +976,10 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
 
         for( const SCH_SYMBOL_INSTANCE& inst : aSymbol->GetInstances() )
         {
-            // Zero length KIID_PATH objects are not valid and will cause a crash below.
-            wxCHECK2( inst.m_Path.size(), continue );
+            // During a check-point save, the symbol might not yet have instance data.  Just skip
+            // it; don't assert.
+            if( inst.m_Path.empty() )
+                continue;
 
             // If the instance data is part of this design but no longer has an associated sheet
             // path, don't save it.  This prevents large amounts of orphaned instance data for the
