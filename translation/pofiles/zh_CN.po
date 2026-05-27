@@ -47,7 +47,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:03+0300\n"
-"PO-Revision-Date: 2026-05-24 03:21+0000\n"
+"PO-Revision-Date: 2026-05-27 12:11+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
@@ -4641,9 +4641,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:449
-#, fuzzy
 msgid "Project directory"
-msgstr "直接发送工程"
+msgstr "工程目录"
 
 #: common/dialogs/panel_common_settings_base.cpp:449
 msgid "User data directory"
@@ -8904,9 +8903,8 @@ msgid "Gerber Info Job Settings"
 msgstr "导出 Gerber 作业设置"
 
 #: common/jobs/job_gerber_info.cpp:49
-#, fuzzy
 msgid "Gerber: Info"
-msgstr "Gerber 文件"
+msgstr "Gerber: 信息"
 
 #: common/jobs/job_pcb_drc.cpp:42
 msgid "Perform DRC"
