@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:04+0300\n"
-"PO-Revision-Date: 2026-05-27 08:11+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-05-28 10:11+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -33304,9 +33304,8 @@ msgstr ""
 "Änderungen konnten nicht zum Remote-Repository übertragen werden (push)."
 
 #: kicad/project_tree_pane.cpp:2106
-#, fuzzy
 msgid "Could not rebase"
-msgstr "Konnte Datei nicht lesen "
+msgstr "Rebase nicht möglich"
 
 #: kicad/project_tree_pane.cpp:2110
 #, fuzzy
@@ -33381,19 +33380,17 @@ msgid "Unsaved Changes"
 msgstr "Änderungen rückgängig machen"
 
 #: kicad/project_tree_pane.cpp:2587
-#, fuzzy
 msgid "&Save and Commit"
-msgstr "Kopie speichern ..."
+msgstr "&Speichern und committen"
 
 #: kicad/project_tree_pane.cpp:2587
-#, fuzzy
 msgid "Commit &Anyway"
-msgstr "(%s um trotzdem zu committen.)"
+msgstr "Trotzdem committen"
 
 #: kicad/project_tree_pane.cpp:2604 kicad/project_tree_pane.cpp:2873
-#, fuzzy, c-format
+#, c-format
 msgid "Could not save %s."
-msgstr "Konnte Datei nicht lesen: %s"
+msgstr "Konnte %s nicht speichern."
 
 #: kicad/project_tree_pane.cpp:2715
 msgid "Discarding commit due to empty commit message."
