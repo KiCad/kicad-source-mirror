@@ -2249,6 +2249,11 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
         {
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
+            // A sheet inside a selected group moves with the group, so its pins should not be
+            // treated as fixed connection anchors.
+            if( sheet->HasSelectedAncestorGroup() )
+                continue;
+
             for( SCH_SHEET_PIN* pin : sheet->GetPins() )
             {
                 if( !pin->IsSelected()
@@ -2263,9 +2268,11 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
         }
 
         // Skip ourselves, skip already selected items (but not lines, they need both ends tested)
-        // and skip unconnectable items
+        // and skip unconnectable items. Items inside a selected group are also moving with the
+        // selection even though they do not carry the SELECTED flag themselves; treating them as
+        // fixed anchors causes spurious stub wires to be created at the group boundary.
         if( item == aSelectedItem
-            || ( item->Type() != SCH_LINE_T && item->IsSelected() )
+            || ( item->Type() != SCH_LINE_T && ( item->IsSelected() || item->HasSelectedAncestorGroup() ) )
             || !item->CanConnect( aSelectedItem ) )
         {
             continue;
@@ -2300,15 +2307,21 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
 
             SCH_LINE* line = static_cast<SCH_LINE*>( test );
 
+            // A line that is itself a member of a selected group is already moving with that
+            // group; do not add it as a drag attachment or it will move twice.
+            bool lineInSelectedGroup = line->HasSelectedAncestorGroup();
+
             if( line->GetStartPoint() == aPoint )
             {
                 // It's possible to manually select one end of a line and get a drag
                 // connected other end, so we set the flag and then early exit the loop
                 // later if the other drag items like labels attached to the line have
                 // already been grabbed during the partial selection process.
-                line->SetFlags( STARTPOINT );
+                if( !lineInSelectedGroup )
+                    line->SetFlags( STARTPOINT );
 
-                if( line->HasFlag( SELECTED ) || line->HasFlag( SELECTED_BY_DRAG ) )
+                if( line->HasFlag( SELECTED ) || line->HasFlag( SELECTED_BY_DRAG )
+                    || lineInSelectedGroup )
                 {
                     continue;
                 }
@@ -2320,9 +2333,11 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
             }
             else if( line->GetEndPoint() == aPoint )
             {
-                line->SetFlags( ENDPOINT );
+                if( !lineInSelectedGroup )
+                    line->SetFlags( ENDPOINT );
 
-                if( line->HasFlag( SELECTED ) || line->HasFlag( SELECTED_BY_DRAG ) )
+                if( line->HasFlag( SELECTED ) || line->HasFlag( SELECTED_BY_DRAG )
+                    || lineInSelectedGroup )
                 {
                     continue;
                 }

@@ -107,6 +107,25 @@ KIID EDA_ITEM::GetParentGroupId() const
 }
 
 
+bool EDA_ITEM::HasSelectedAncestorGroup() const
+{
+    // Walk up via both the parent-item and parent-group chains so that child items (sheet pins,
+    // symbol pins, fields) whose logical owner is in a selected group are also recognised as
+    // moving with that group.
+    for( const EDA_ITEM* item = this; item; item = item->GetParent() )
+    {
+        for( EDA_GROUP* group = item->GetParentGroup(); group;
+             group = group->AsEdaItem()->GetParentGroup() )
+        {
+            if( group->AsEdaItem()->IsSelected() )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+
 void EDA_ITEM::SetModified()
 {
     SetFlags( IS_CHANGED );

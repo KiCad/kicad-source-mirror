@@ -119,6 +119,13 @@ public:
 
     KIID GetParentGroupId() const;
 
+    /**
+     * @return true if any ancestor group (recursively) of this item is currently selected.
+     *         Group members do not carry the SELECTED flag themselves, so callers that need to
+     *         know whether an item is moving as part of a group selection should use this helper.
+     */
+    bool HasSelectedAncestorGroup() const;
+
     virtual bool IsLocked() const { return false; }
     virtual void SetLocked( bool aLocked ) {}
 
