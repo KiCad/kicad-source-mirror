@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:04+0300\n"
 "PO-Revision-Date: 2026-05-28 10:11+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -30473,7 +30473,7 @@ msgid ""
 "Stops processing jobs as they are executed sequentially on the first failure "
 "of a job"
 msgstr ""
-"Stoppt die Verarbeitung der nacheinander ausgeführte Aufträge bei Auftritt "
+"Stoppt die Verarbeitung der nacheinander ausgeführten Aufträge bei Auftritt "
 "eines Fehlers"
 
 #: kicad/cli/command_jobset_run.cpp:53
@@ -33361,7 +33361,7 @@ msgstr "Konnte Projekt nicht übertragen (push)"
 
 #: kicad/project_tree_pane.cpp:2544 kicad/project_tree_pane.cpp:2747
 msgid "The selected directory is not a Git project."
-msgstr "Das ausgewählt Verzeichnis ist kein Git-Projekt."
+msgstr "Das ausgewählte Verzeichnis ist kein Git-Projekt."
 
 #: kicad/project_tree_pane.cpp:2581
 #, c-format
@@ -39218,9 +39218,9 @@ msgid "Run DRC"
 msgstr "DRC starten"
 
 #: pcbnew/dialogs/dialog_drc.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Elapsed: %s"
-msgstr "Regel: %s"
+msgstr "Verstrichen: %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:313
 msgid "Report All Errors for Each Track"
@@ -39258,9 +39258,9 @@ msgid "%1$d min %2$d s"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_drc.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f s"
-msgstr "%.2f"
+msgstr "%.2f s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:479
 msgid "-------- DRC canceled by user.<br><br>"
@@ -40676,7 +40676,7 @@ msgstr "Benutzerdef. Lagen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:197
 msgid "Use custom stackup"
-msgstr "Verwende Benutzerdefinierten Lagenaufbau"
+msgstr "Verwende benutzerdefinierten Lagenaufbau"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:200
 msgid "Copper layers"
@@ -42019,7 +42019,7 @@ msgstr "Möglicher Ersatz:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
 msgid "Add Search Directory..."
-msgstr "Suchverzeichnis hinzufügen..."
+msgstr "Suchverzeichnis hinzufügen ..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:67
 msgid "Open External File..."
@@ -44906,7 +44906,7 @@ msgstr "Kann Datei nicht öffnen"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:44
 msgid "3D Model(s)"
-msgstr "3D-Modelle"
+msgstr "3D-Modell(e)"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names.cpp:292
 #, c-format
@@ -59187,8 +59187,7 @@ msgstr "Interaktives Verschiebewerkzeug"
 #: pcbnew/tools/pcb_actions.cpp:2359
 msgid "Interactive tool for offsetting items by exact amounts"
 msgstr ""
-"Interaktives Werkzeug um Verschieben ausgewählter Elemente um einen exakten "
-"Wert"
+"Interaktives Werkzeug zum Verschieben von Elementen um einen exakten Wert"
 
 #: pcbnew/tools/pcb_actions.cpp:2381
 msgid ""
