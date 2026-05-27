@@ -499,13 +499,13 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
                 BOARD_ITEM*           image = static_cast<BOARD_ITEM*>( aList->GetPickedItemLink( ii ) );
                 BOARD_ITEM_CONTAINER* parent = GetBoard();
 
+                // The stored pointer can be stale if a swap (e.g. ExchangeFootprint)
+                // replaced the live item earlier. Resolve by UUID to find the current one.
+                if( BOARD_ITEM* resolved = GetBoard()->ResolveItem( item->m_Uuid, true ) )
+                    item = resolved;
+
                 if( item->GetParentFootprint() )
-                {
-                    // We need the current item and it's parent, which may be different from what
-                    // was stored if we're multiple frames up the undo stack.
-                    item = GetBoard()->ResolveItem( item->m_Uuid );
                     parent = item->GetParentFootprint();
-                }
 
                 view->Remove( item );
                 parent->Remove( item, REMOVE_MODE::BULK );
