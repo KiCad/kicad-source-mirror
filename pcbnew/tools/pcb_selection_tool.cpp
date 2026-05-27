@@ -440,21 +440,22 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 // Single click? Select single object
                 if( m_highlight_modifier && brd_editor )
                 {
-                    m_toolMgr->RunAction( PCB_ACTIONS::highlightNet );
+                    if( !toggleTableCellSelection( evt->Position() ) )
+                        m_toolMgr->RunAction( PCB_ACTIONS::highlightNet );
                 }
                 else
                 {
                     m_frame->ClearFocus();
 
-                    // Handle shift+click range selection within a PCB_TABLE before falling
-                    // back to a normal point selection.  Mirrors eeschema's SCH_TABLE behaviour.
+                    // Mirrors eeschema's SCH_TABLE shift+click range select.
                     if( !extendTableCellSelectionTo( evt->Position() ) )
                     {
-                        // Reset the range-selection anchor when the user does anything other
-                        // than extend a table-cell selection
-                        m_previousFirstCell = nullptr;
-
                         selectPoint( evt->Position() );
+
+                        // Anchor for a subsequent shift+click or shift+drag whose IsClick
+                        // jitter could otherwise promote into IsDrag, collapsing the range
+                        // rectangle to (DragOrigin, Position) at the press point.
+                        m_previousFirstCell = singleSelectedCell();
                     }
                 }
             }
@@ -548,16 +549,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             m_toolMgr->ProcessEvent( EVENTS::InhibitSelectionEditing );
 
             GENERAL_COLLECTOR hoverCells;
-
-            if( m_isFootprintEditor && board()->GetFirstFootprint() )
-            {
-                hoverCells.Collect( board()->GetFirstFootprint(), { PCB_TABLECELL_T }, evt->DragOrigin(),
-                                    getCollectorsGuide() );
-            }
-            else
-            {
-                hoverCells.Collect( board(), { PCB_TABLECELL_T }, evt->DragOrigin(), getCollectorsGuide() );
-            }
+            collectTableCellsAt( evt->DragOrigin(), hoverCells );
 
             if( hoverCells.GetCount() )
             {
@@ -1125,16 +1117,7 @@ bool PCB_SELECTION_TOOL::extendTableCellSelectionTo( const VECTOR2I& aPosition )
     }
 
     GENERAL_COLLECTOR clickCells;
-
-    if( m_isFootprintEditor && board()->GetFirstFootprint() )
-    {
-        clickCells.Collect( board()->GetFirstFootprint(), { PCB_TABLECELL_T }, aPosition,
-                            getCollectorsGuide() );
-    }
-    else
-    {
-        clickCells.Collect( board(), { PCB_TABLECELL_T }, aPosition, getCollectorsGuide() );
-    }
+    collectTableCellsAt( aPosition, clickCells );
 
     if( clickCells.GetCount() != 1 )
         return false;
@@ -1143,19 +1126,27 @@ bool PCB_SELECTION_TOOL::extendTableCellSelectionTo( const VECTOR2I& aPosition )
     PCB_TABLECELL* firstCell    = static_cast<PCB_TABLECELL*>( m_selection.GetItem( 0 ) );
     PCB_TABLE*     parentTable  = static_cast<PCB_TABLE*>( clickedCell->GetParent() );
 
-    // Anchor on the first cell of the current selection (or refresh the anchor when
-    // the selection has been reset to a single cell).
-    if( m_previousFirstCell == nullptr || m_selection.GetSize() == 1 )
-        m_previousFirstCell = firstCell;
-
+    // Drop the cached anchor when the selection no longer holds only cells of the
+    // clicked table, so it cannot survive into a later shift+drag on a different table.
     for( EDA_ITEM* item : m_selection )
     {
         if( !dynamic_cast<PCB_TABLECELL*>( item ) || item->GetParent() != parentTable )
+        {
+            m_previousFirstCell = nullptr;
             return false;
+        }
     }
 
-    if( !m_previousFirstCell || m_previousFirstCell->GetParent() != parentTable )
+    // Contains() prevents reading GetCenter() on a cell freed by an external mutation
+    // that did not clear the cached anchor.
+    if( !m_previousFirstCell || !m_selection.Contains( m_previousFirstCell ) )
+        m_previousFirstCell = firstCell;
+
+    if( m_previousFirstCell->GetParent() != parentTable )
+    {
+        m_previousFirstCell = nullptr;
         return false;
+    }
 
     // Snapshot the prior selection so we can fire SelectedEvent/UnselectedEvent based
     // on the net delta rather than on every range change.
@@ -1202,10 +1193,98 @@ bool PCB_SELECTION_TOOL::extendTableCellSelectionTo( const VECTOR2I& aPosition )
 }
 
 
+void PCB_SELECTION_TOOL::collectTableCellsAt( const VECTOR2I& aPosition,
+                                              GENERAL_COLLECTOR& aCollector )
+{
+    BOARD_ITEM* scope = ( m_isFootprintEditor && board()->GetFirstFootprint() )
+                                ? static_cast<BOARD_ITEM*>( board()->GetFirstFootprint() )
+                                : static_cast<BOARD_ITEM*>( board() );
+
+    aCollector.Collect( scope, { PCB_TABLECELL_T }, aPosition, getCollectorsGuide() );
+}
+
+
+PCB_TABLECELL* PCB_SELECTION_TOOL::singleSelectedCell() const
+{
+    if( m_selection.GetSize() != 1 )
+        return nullptr;
+
+    return dynamic_cast<PCB_TABLECELL*>( m_selection.GetItem( 0 ) );
+}
+
+
+bool PCB_SELECTION_TOOL::toggleTableCellSelection( const VECTOR2I& aPosition )
+{
+    if( m_selection.GetSize() == 0 )
+        return false;
+
+    PCB_TABLECELL* firstCell = dynamic_cast<PCB_TABLECELL*>( m_selection.GetItem( 0 ) );
+
+    if( !firstCell )
+        return false;
+
+    // Suppress highlightNet only when every selected item is a cell of the same table;
+    // a mixed selection must fall through to the usual Ctrl+click action.
+    PCB_TABLE* selectedTable = static_cast<PCB_TABLE*>( firstCell->GetParent() );
+
+    for( EDA_ITEM* item : m_selection )
+    {
+        PCB_TABLECELL* cell = dynamic_cast<PCB_TABLECELL*>( item );
+
+        if( !cell || cell->GetParent() != selectedTable )
+            return false;
+    }
+
+    GENERAL_COLLECTOR clickCells;
+    collectTableCellsAt( aPosition, clickCells );
+
+    if( clickCells.GetCount() != 1 )
+        return false;
+
+    PCB_TABLECELL* clickedCell = static_cast<PCB_TABLECELL*>( clickCells[0] );
+
+    if( clickedCell->GetParent() != selectedTable )
+        return false;
+
+    if( clickedCell->IsSelected() )
+    {
+        unselect( clickedCell );
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+    }
+    else
+    {
+        select( clickedCell );
+        m_toolMgr->ProcessEvent( EVENTS::PointSelectedEvent );
+    }
+
+    // A toggle breaks the contiguous-rectangle invariant the anchor represents.
+    m_previousFirstCell = nullptr;
+
+    return true;
+}
+
+
 bool PCB_SELECTION_TOOL::selectTableCells( PCB_TABLE* aTable )
 {
     bool cancelled = false;     // Was the tool canceled while it was running?
     m_multiple = true;          // Multiple selection mode is active
+
+    // Shift+click can jitter into IsDrag, collapsing DragOrigin..Position to the press
+    // point; honour the cached anchor instead.  Snapshot its coordinate so the drag loop
+    // never dereferences a cell that an external mutation could free underneath us.
+    bool     haveAnchorStart = false;
+    VECTOR2D anchorStart;
+
+    if( m_additive && m_previousFirstCell && m_selection.Contains( m_previousFirstCell )
+        && m_previousFirstCell->GetParent() == aTable )
+    {
+        anchorStart = VECTOR2D( m_previousFirstCell->GetCenter() );
+        haveAnchorStart = true;
+    }
+    else if( m_previousFirstCell && !m_selection.Contains( m_previousFirstCell ) )
+    {
+        m_previousFirstCell = nullptr;
+    }
 
     initializeTableCellSelectionState( aTable );
 
@@ -1225,7 +1304,11 @@ bool PCB_SELECTION_TOOL::selectTableCells( PCB_TABLE* aTable )
         else if( evt->IsDrag( BUT_LEFT ) )
         {
             getViewControls()->SetAutoPan( true );
-            selectCellsBetween( evt->DragOrigin(), evt->Position() - evt->DragOrigin(), aTable );
+
+            VECTOR2D start = haveAnchorStart ? anchorStart : VECTOR2D( evt->DragOrigin() );
+            VECTOR2D end   = VECTOR2D( evt->Position() );
+
+            selectCellsBetween( start, end - start, aTable );
         }
         else if( evt->IsMouseUp( BUT_LEFT ) )
         {
