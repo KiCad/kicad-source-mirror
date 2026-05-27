@@ -358,6 +358,29 @@ private:
     bool extendTableCellSelectionTo( const VECTOR2I& aPosition );
 
     /**
+     * When the user Ctrl-clicks inside a PCB_TABLE whose cells are already in the selection,
+     * toggle that cell into or out of the selection instead of triggering the net-highlight
+     * action.  Matches eeschema's table behaviour and mirrors eeschema 10.0.1, where Ctrl-
+     * (then Shift-) click could be used to build a discontinuous cell selection.
+     *
+     * @return true if a toggle was performed; false if the caller should fall back to the
+     *         usual Ctrl-click action (net highlight).
+     */
+    bool toggleTableCellSelection( const VECTOR2I& aPosition );
+
+    /**
+     * Collect PCB_TABLECELL items at @p aPosition into @p aCollector, scoped to either
+     * the active footprint (in the footprint editor) or the full board.
+     */
+    void collectTableCellsAt( const VECTOR2I& aPosition, GENERAL_COLLECTOR& aCollector );
+
+    /**
+     * @return the single PCB_TABLECELL in the current selection, or nullptr if the
+     *         selection is empty, has more than one item, or holds something else.
+     */
+    PCB_TABLECELL* singleSelectedCell() const;
+
+    /**
      * Handle disambiguation actions including displaying the menu.
      */
     int disambiguateCursor( const TOOL_EVENT& aEvent );
