@@ -42,6 +42,7 @@
 #include <pcb_shape.h>
 #include <macros.h>
 #include <algorithm>
+#include <cstdlib>
 #include <widgets/unit_binder.h>
 
 #include <tools/drawing_tool.h>
@@ -200,6 +201,10 @@ public:
 
         return true;
     }
+
+    int GetRectangleWidth() const { return std::abs( GetIntValue( END_X ) - GetIntValue( START_X ) ); }
+
+    int GetRectangleHeight() const { return std::abs( GetIntValue( END_Y ) - GetIntValue( START_Y ) ); }
 
     void updateAll() override
     {
@@ -1256,7 +1261,8 @@ bool DIALOG_SHAPE_PROPERTIES::Validate()
         if( m_fillCtrl->GetSelection() != UI_FILL_MODE::SOLID && m_thickness.GetValue() <= 0 )
             errors.Add( _( "Line width must be greater than zero for an unfilled rectangle." ) );
 
-        int shortSide = std::min( m_item->GetRectangleWidth(), m_item->GetRectangleHeight() );
+        const RECTANGLE_GEOM_SYNCER* rectGeomSync = static_cast<RECTANGLE_GEOM_SYNCER*>( m_geomSync.get() );
+        int shortSide = std::min( rectGeomSync->GetRectangleWidth(), rectGeomSync->GetRectangleHeight() );
 
         if( m_cbRoundRect->GetValue() && m_cornerRadius.GetIntValue() * 2 > shortSide )
         {
