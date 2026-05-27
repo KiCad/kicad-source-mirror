@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:03+0300\n"
-"PO-Revision-Date: 2026-05-26 11:52+0000\n"
+"PO-Revision-Date: 2026-05-27 12:11+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -7481,14 +7481,12 @@ msgid "Ellipse Rotation"
 msgstr "Drehung"
 
 #: common/eda_shape.cpp:3552
-#, fuzzy
 msgid "Arc Start Angle"
-msgstr "Anfangswinkel"
+msgstr "Bogen-Anfangswinkel"
 
 #: common/eda_shape.cpp:3558
-#, fuzzy
 msgid "Arc End Angle"
-msgstr "Bogenwinkel:"
+msgstr "Bogen-Endwinkel"
 
 #: common/eda_shape.cpp:3563 common/stroke_params.cpp:403
 #: eeschema/sch_bus_entry.cpp:714 eeschema/sch_line.cpp:1338
@@ -13751,9 +13749,8 @@ msgid "Update Symbols from Library"
 msgstr "Aktualisiere Symbole aus der Bibliothek"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:63
-#, fuzzy
 msgid "Filter chains by name or net..."
-msgstr "Felder nach Name filtern:"
+msgstr "Ketten nach Name oder Netz filtern ..."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:77
 #, fuzzy
@@ -13948,9 +13945,8 @@ msgid "Find net chain path between the two components"
 msgstr "Nur Platine ohne Bauteile ausgeben"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:131
-#, fuzzy
 msgid "Chain Name:"
-msgstr "Pinname"
+msgstr "Kettenname:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:145
 #, fuzzy
@@ -19595,9 +19591,8 @@ msgid "Class Name"
 msgstr "Aliasname"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:164
-#, fuzzy
 msgid "Add a new net chain class"
-msgstr "Neue Netzklasse:"
+msgstr "Neue Netzkettenklasse hinzufügen"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:169
 msgid "Rename the selected class (updates every chain that uses it)"
@@ -26240,17 +26235,19 @@ msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
 msgstr "<b>Grafisches Rechteck hat Größe 0</b> an Position <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Graphic ellipse has null or negative radii</b> at location <b>(%s, %s)</"
 "b>."
-msgstr "<b>Grafisches Rechteck hat Größe 0</b> an Position <b>(%s, %s)</b>."
+msgstr ""
+"<b>Grafische Ellipse</b> an Position <b>(%s, %s) hat keinen oder negative/-n "
+"Radien/-us</b>."
 
 #: eeschema/symbol_checker.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Graphic elliptical arc has zero sweep</b> at location <b>(%s, %s)</b>."
-msgstr "<b>Grafisches Rechteck hat Größe 0</b> an Position <b>(%s, %s)</b>."
+msgstr "<b>Grafischer Bogen </b> an Position <b>(%s, %s) hat keine Wölbung</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:72
 msgid "Symbol Chooser"
@@ -34360,9 +34357,8 @@ msgstr ""
 "Änderungen konnten nicht zum Remote-Repository übertragen werden (push)."
 
 #: kicad/project_tree_pane.cpp:2106
-#, fuzzy
 msgid "Could not rebase"
-msgstr "Konnte Datei nicht lesen "
+msgstr "Rebase nicht möglich"
 
 #: kicad/project_tree_pane.cpp:2110
 #, fuzzy
@@ -34437,19 +34433,17 @@ msgid "Unsaved Changes"
 msgstr "Änderungen rückgängig machen"
 
 #: kicad/project_tree_pane.cpp:2587
-#, fuzzy
 msgid "&Save and Commit"
-msgstr "Kopie speichern ..."
+msgstr "&Speichern und committen"
 
 #: kicad/project_tree_pane.cpp:2587
-#, fuzzy
 msgid "Commit &Anyway"
-msgstr "(%s um trotzdem zu committen.)"
+msgstr "Trotzdem committen"
 
 #: kicad/project_tree_pane.cpp:2604 kicad/project_tree_pane.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid "Could not save %s."
-msgstr "Konnte Datei nicht lesen: %s"
+msgstr "Konnte %s nicht speichern."
 
 #: kicad/project_tree_pane.cpp:2721
 msgid "Discarding commit due to empty commit message."
@@ -38332,14 +38326,12 @@ msgid "Id"
 msgstr "ID"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
-#, fuzzy
 msgid "Spec Freq"
-msgstr "Endfrequenz:"
+msgstr "Spez. Freq."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:121
-#, fuzzy
 msgid "Dielectric Model"
-msgstr "Dielektrische Verluste:"
+msgstr "Dielektrisches Modell"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:148
 msgid "Board thickness from stackup:"
@@ -52442,9 +52434,9 @@ msgid "current length"
 msgstr "Aktuelle Länge"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2228
-#, fuzzy, c-format
+#, c-format
 msgid "Net: %s"
-msgstr "Netz:"
+msgstr "Netz: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2290
 #, fuzzy, c-format
@@ -62830,9 +62822,8 @@ msgid "Zone '%s' %s %s, priority %d"
 msgstr "Zone \"%s\" %s %s, Priorität %d"
 
 #: pcbnew/zone.cpp:2006
-#, fuzzy
 msgid "Copper thieving"
-msgstr "Kupferwiderstand:"
+msgstr "Copper Thieving"
 
 #: pcbnew/zone.cpp:2015
 msgid "Squares"
