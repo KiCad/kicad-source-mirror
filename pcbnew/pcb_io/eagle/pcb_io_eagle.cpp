@@ -1168,10 +1168,15 @@ void PCB_IO_EAGLE::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 
     wxString urn = aLib->GetAttribute( "urn" );
 
-    wxString urnOrdinal;
+    // Parse the URN with EURN so the asset id matches the one extracted by
+    // EELEMENT in loadElements(); using raw urn.AfterLast(':') would leave the
+    // version component attached for URNs like
+    // "urn:adsk.eagle:library:38243636/1", and the two halves would build
+    // keys that no longer compare equal.
+    EURN libraryUrn;
 
     if( !urn.IsEmpty() )
-        urnOrdinal = urn.AfterLast( ':' );
+        libraryUrn.Parse( urn );
 
     // library will have <xmlattr> node, skip that and get the single packages node
     wxXmlNode* packages = MapChildren( aLib )["packages"];
@@ -1180,6 +1185,21 @@ void PCB_IO_EAGLE::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
         return;
 
     m_xpath->push( "packages" );
+
+    // Build the per-library half of the m_templates key once. Eagle managed
+    // libraries can carry the same library name at multiple URN versions in
+    // the same board; the URN asset id disambiguates them. The package name
+    // itself is left untouched so the FPID written into the board (and the
+    // .pretty filename) matches the schematic importer's footprint field.
+    wxString libKey;
+
+    if( aLibName )
+    {
+        libKey = *aLibName;
+
+        if( libraryUrn.IsValid() )
+            libKey += wxS( "_" ) + libraryUrn.assetId;
+    }
 
     // Create a FOOTPRINT for all the eagle packages, for use later via a copy constructor
     // to instantiate needed footprints in our BOARD.  Save the FOOTPRINT templates in
@@ -1196,14 +1216,11 @@ void PCB_IO_EAGLE::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 
         wxString pack_ref = package->GetAttribute( "name" );
 
-        if( !urnOrdinal.IsEmpty() )
-            pack_ref += wxS( "_" ) + urnOrdinal;
-
         ReplaceIllegalFileNameChars( pack_ref, '_' );
 
         m_xpath->Value( pack_ref.ToUTF8() );
 
-        wxString key = aLibName ? makeKey( *aLibName, pack_ref ) : pack_ref;
+        wxString key = aLibName ? makeKey( libKey, pack_ref ) : pack_ref;
 
         FOOTPRINT* footprint = makeFootprint( package, pack_ref );
 
@@ -1287,18 +1304,21 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
 
         m_xpath->Value( e.name.c_str() );
 
-        wxString packageName = e.package;
+        // Mirror loadLibrary(): the package name is taken verbatim from Eagle,
+        // and the library key is disambiguated with the library URN ordinal so
+        // multiple managed-library versions resolve to the right footprint.
+        wxString libKey = e.library;
 
         if( e.library_urn )
-            packageName = e.package + wxS( "_" ) + e.library_urn->assetId;
+            libKey += wxS( "_" ) + e.library_urn->assetId;
 
-        wxString pkg_key = makeKey( e.library, packageName );
+        wxString pkg_key = makeKey( libKey, e.package );
         auto     it = m_templates.find( pkg_key );
 
         if( it == m_templates.end() )
         {
             wxString emsg = wxString::Format( _( "No '%s' package in library '%s'." ),
-                                              packageName, e.library );
+                                              e.package, e.library );
             THROW_IO_ERROR( emsg );
         }
 
