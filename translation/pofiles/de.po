@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:03+0300\n"
-"PO-Revision-Date: 2026-05-27 12:11+0000\n"
+"PO-Revision-Date: 2026-05-28 04:00+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -31497,7 +31497,7 @@ msgid ""
 "Stops processing jobs as they are executed sequentially on the first failure "
 "of a job"
 msgstr ""
-"Stoppt die Verarbeitung der nacheinander ausgeführte Aufträge bei Auftritt "
+"Stoppt die Verarbeitung der nacheinander ausgeführten Aufträge bei Auftritt "
 "eines Fehlers"
 
 #: kicad/cli/command_jobset_run.cpp:53
@@ -34416,7 +34416,7 @@ msgstr "Konnte Projekt nicht übertragen (push)"
 
 #: kicad/project_tree_pane.cpp:2544 kicad/project_tree_pane.cpp:2753
 msgid "The selected directory is not a Git project."
-msgstr "Das ausgewählt Verzeichnis ist kein Git-Projekt."
+msgstr "Das ausgewählte Verzeichnis ist kein Git-Projekt."
 
 #: kicad/project_tree_pane.cpp:2581
 #, c-format
