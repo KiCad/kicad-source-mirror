@@ -77,7 +77,7 @@ bool SCH_EDIT_FRAME::CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* 
 
     // SCH_SCREEN object file paths are expected to be absolute.  If this assert fires,
     // something is seriously broken.
-    wxASSERT( wxFileName( destFilePath ).IsAbsolute() );
+    wxASSERT_MSG( wxFileName( destFilePath ).IsAbsolute(), destFilePath + wxS( " is not absolute" ) );
 
     if( schematicSheets.TestForRecursion( loadedSheets, destFilePath ) )
     {
