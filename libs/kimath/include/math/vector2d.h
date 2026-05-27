@@ -88,12 +88,12 @@ public:
     template <typename CastingType>
     constexpr VECTOR2( const VECTOR2<CastingType>& aVec )
     {
-        if( std::is_floating_point<T>() )
+        if constexpr( std::is_floating_point<T>() )
         {
             x = static_cast<T>( aVec.x );
             y = static_cast<T>( aVec.y );
         }
-        else if( std::is_floating_point<CastingType>() )
+        else if constexpr( std::is_floating_point<CastingType>() )
         {
             CastingType minI = static_cast<CastingType>( std::numeric_limits<T>::min() );
             CastingType maxI = static_cast<CastingType>( std::numeric_limits<T>::max() );
@@ -101,7 +101,7 @@ public:
             x = static_cast<T>( std::clamp( aVec.x, minI, maxI ) );
             y = static_cast<T>( std::clamp( aVec.y, minI, maxI ) );
         }
-        else if( std::is_integral<T>() && std::is_integral<CastingType>() )
+        else if constexpr( std::is_integral<T>() && std::is_integral<CastingType>() )
         {
             int64_t minI = static_cast<int64_t>( std::numeric_limits<T>::min() );
             int64_t maxI = static_cast<int64_t>( std::numeric_limits<T>::max() );
@@ -127,21 +127,21 @@ public:
     template <typename U>
     constexpr VECTOR2<U> operator()() const
     {
-        if( std::is_floating_point<U>::value )
+        if constexpr( std::is_floating_point<U>::value )
         {
             return VECTOR2<U>( static_cast<U>( x ), static_cast<U>( y ) );
         }
-        else if( std::is_floating_point<T>() )
+        else if constexpr( std::is_floating_point<T>() )
         {
-            T minI = static_cast<T>( std::numeric_limits<U>::min() );
-            T maxI = static_cast<T>( std::numeric_limits<U>::max() );
+            constexpr T minI = static_cast<T>( std::numeric_limits<U>::min() );
+            constexpr T maxI = static_cast<T>( std::numeric_limits<U>::max() );
             return VECTOR2<U>( static_cast<U>( std::clamp( x, minI, maxI ) ),
                                static_cast<U>( std::clamp( y, minI, maxI ) ) );
         }
-        else if( std::is_integral<T>() && std::is_integral<U>() )
+        else if constexpr( std::is_integral<T>() && std::is_integral<U>() )
         {
-            int64_t minI = static_cast<int64_t>( std::numeric_limits<U>::min() );
-            int64_t maxI = static_cast<int64_t>( std::numeric_limits<U>::max() );
+            constexpr int64_t minI = static_cast<int64_t>( std::numeric_limits<U>::min() );
+            constexpr int64_t maxI = static_cast<int64_t>( std::numeric_limits<U>::max() );
             int64_t x64 = static_cast<int64_t>( x );
             int64_t y64 = static_cast<int64_t>( y );
 
@@ -285,7 +285,7 @@ T VECTOR2<T>::EuclideanNorm() const
     // 45° are common in KiCad, so we can optimize the calculation
     if( std::abs( x ) == std::abs( y ) )
     {
-        if( std::is_integral<T>::value )
+         if constexpr( std::is_integral<T>::value )
             return KiROUND<double, T>( std::abs( x ) * M_SQRT2 );
 
         return static_cast<T>( std::abs( x ) * M_SQRT2 );
@@ -296,7 +296,7 @@ T VECTOR2<T>::EuclideanNorm() const
     if( y == 0 )
         return static_cast<T>( std::abs( x ) );
 
-    if( std::is_integral<T>::value )
+    if constexpr( std::is_integral<T>::value )
         return KiROUND<double, T>( std::hypot( x, y ) );
 
     return static_cast<T>( std::hypot( x, y ) );
@@ -404,7 +404,7 @@ VECTOR2<T> VECTOR2<T>::Resize( T aNewLength ) const
         newY = std::sqrt( rescale( newLength_sq, y_sq, l_sq ) );
     }
 
-    if( std::is_integral<T>::value )
+    if constexpr( std::is_integral<T>::value )
     {
         return VECTOR2<T>( static_cast<T>( x < 0 ? -KiROUND( newX ) : KiROUND( newX ) ),
                            static_cast<T>( y < 0 ? -KiROUND( newY ) : KiROUND( newY ) ) )
@@ -527,7 +527,7 @@ constexpr VECTOR2<std::common_type_t<T, U>> operator*( const T& aScalar, const V
 template <class T>
 constexpr VECTOR2<T> VECTOR2<T>::operator/( double aFactor ) const
 {
-    if( std::is_integral<T>::value )
+    if constexpr( std::is_integral<T>::value )
         return VECTOR2<T>( KiROUND( x / aFactor ), KiROUND( y / aFactor ) );
     else
         return VECTOR2<T>( static_cast<T>( x / aFactor ), static_cast<T>( y / aFactor ) );
