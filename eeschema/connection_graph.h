@@ -766,6 +766,12 @@ private:
     bool ercCheckDanglingWireEndpoints( const CONNECTION_SUBGRAPH* aSubgraph );
 
     /**
+     * Find bus members on other sheets that share aBusParent's bus and member name.
+     */
+    void collectBusMemberSiblings( const CONNECTION_SUBGRAPH* aBusParent, const wxString& aMemberName,
+                                   std::unordered_set<const CONNECTION_SUBGRAPH*>& aOut ) const;
+
+    /**
      * Check one subgraph for proper connection of labels.
      *
      * Labels should be connected to something.

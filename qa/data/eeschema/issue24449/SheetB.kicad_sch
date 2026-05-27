@@ -1,0 +1,482 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "f9f01f82-1dd3-4cab-ab58-528a55232311")
+	(paper "A4")
+	(lib_symbols)
+	(bus_entry
+		(at 73.66 128.27)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "60ab63df-28c6-4b48-8baf-5bff4e5e00dd")
+	)
+	(bus_entry
+		(at 73.66 130.81)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8f4b8c71-40b5-476b-a364-d125a906b44b")
+	)
+	(bus_entry
+		(at 73.66 123.19)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b3549d54-0ae5-48c2-b8ec-2363ed613348")
+	)
+	(bus_entry
+		(at 73.66 125.73)
+		(size 2.54 -2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f1598ef2-ccf3-4a0b-bf7f-73cf204c8102")
+	)
+	(wire
+		(pts
+			(xy 185.42 124.46) (xy 185.42 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1046bdf0-a457-49d5-b602-c2848a3c3bde")
+	)
+	(wire
+		(pts
+			(xy 187.96 124.46) (xy 185.42 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "16a45420-68d4-4027-818c-205b81fb1173")
+	)
+	(wire
+		(pts
+			(xy 76.2 125.73) (xy 81.28 125.73)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37aab59e-04ab-4138-8528-f007d243c1ff")
+	)
+	(wire
+		(pts
+			(xy 110.49 91.44) (xy 116.84 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3d06cea4-eb1e-4b5a-a8c7-91a8c707a73a")
+	)
+	(bus
+		(pts
+			(xy 73.66 123.19) (xy 73.66 156.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3f1b247d-4925-44a9-b275-cfbed53ff228")
+	)
+	(wire
+		(pts
+			(xy 76.2 123.19) (xy 81.28 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7178b939-178a-4ee4-91fe-73615a92f854")
+	)
+	(wire
+		(pts
+			(xy 110.49 124.46) (xy 116.84 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7bbdd179-caac-4282-8b87-3266bbc8329b")
+	)
+	(wire
+		(pts
+			(xy 185.42 73.66) (xy 185.42 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c183d1ca-a049-42e7-84f4-d7579e29e03c")
+	)
+	(wire
+		(pts
+			(xy 76.2 128.27) (xy 81.28 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c817986b-a349-4003-ae87-93e406ca7dfd")
+	)
+	(wire
+		(pts
+			(xy 187.96 91.44) (xy 185.42 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ce6c9da8-2e87-44c2-a312-b214f7fe8644")
+	)
+	(wire
+		(pts
+			(xy 76.2 120.65) (xy 81.28 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eb8cea7f-c113-429c-90ba-e85e6bc58185")
+	)
+	(label "PINS2"
+		(at 185.42 73.66 90)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "196a119c-15d2-493e-bf55-565cc1ca9dfa")
+	)
+	(label "PINS1"
+		(at 81.28 120.65 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "245fbef1-60b3-4f28-b8e7-da480fb9bb87")
+	)
+	(label "PINS4"
+		(at 81.28 128.27 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "602bcf21-88df-4026-9c56-1c7a9be2e0db")
+	)
+	(label "PINS2"
+		(at 81.28 123.19 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "733577eb-4905-4c41-8525-21f62dacd736")
+	)
+	(label "PINS1"
+		(at 110.49 91.44 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "7b297b41-ff09-45f6-932c-b9d36239d6b2")
+	)
+	(label "PINS3"
+		(at 81.28 125.73 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "942793b1-a8b0-40b5-8f45-3294b0027714")
+	)
+	(label "PINS4"
+		(at 185.42 147.32 270)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a514db93-6a30-465b-a5ff-6088fae0df8e")
+	)
+	(label "PINS3"
+		(at 110.49 124.46 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d7cc4491-e9a8-437d-9cab-98abd8c1b98d")
+	)
+	(global_label "PINS[1..4]"
+		(shape output)
+		(at 73.66 156.21 270)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "2312b584-a65d-4e45-9cb7-1bcdb1f4162c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 73.66 168.932 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+	)
+	(sheet
+		(at 187.96 111.76)
+		(size 66.04 27.94)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "14ad3eb9-1818-4f17-a08a-c8563cc93fb0")
+		(property "Sheetname" "Child3"
+			(at 187.96 111.0484 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "child.kicad_sch"
+			(at 187.96 140.2846 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "OUT" output
+			(at 187.96 124.46 180)
+			(uuid "eb29fd2a-412b-4aee-9d5a-5165423a19c8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "BusHierLabels"
+				(path "/53bb6e89-5f4d-4dd9-b79b-a31ac29c364c/74fb69ed-1d71-4936-80fe-f4ed0ad391da"
+					(page "7")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 116.84 78.74)
+		(size 66.04 27.94)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "3830d2fa-f99e-446d-912d-7a66a232d860")
+		(property "Sheetname" "Child"
+			(at 116.84 78.0284 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "child.kicad_sch"
+			(at 116.84 107.2646 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "OUT" output
+			(at 116.84 91.44 180)
+			(uuid "a467fa09-5aaa-45a8-a57d-3e910e398756")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "BusHierLabels"
+				(path "/53bb6e89-5f4d-4dd9-b79b-a31ac29c364c/74fb69ed-1d71-4936-80fe-f4ed0ad391da"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 116.84 111.76)
+		(size 66.04 27.94)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "8a3c792e-9831-4a0f-8bed-897a61cde920")
+		(property "Sheetname" "Child2"
+			(at 116.84 111.0484 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "child.kicad_sch"
+			(at 116.84 140.2846 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "OUT" output
+			(at 116.84 124.46 180)
+			(uuid "a9dc8b80-3d67-40e1-8c4b-9236e0bb5736")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "BusHierLabels"
+				(path "/53bb6e89-5f4d-4dd9-b79b-a31ac29c364c/74fb69ed-1d71-4936-80fe-f4ed0ad391da"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 187.96 78.74)
+		(size 66.04 27.94)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "b719f085-d937-42b3-a41d-52a0a3e8fd91")
+		(property "Sheetname" "Child1"
+			(at 187.96 78.0284 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "child.kicad_sch"
+			(at 187.96 107.2646 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "OUT" output
+			(at 187.96 91.44 180)
+			(uuid "4839faeb-d70c-40b9-9840-399e152baa57")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(instances
+			(project "BusHierLabels"
+				(path "/53bb6e89-5f4d-4dd9-b79b-a31ac29c364c/74fb69ed-1d71-4936-80fe-f4ed0ad391da"
+					(page "5")
+				)
+			)
+		)
+	)
+)
