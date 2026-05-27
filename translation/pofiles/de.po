@@ -37,7 +37,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:03+0300\n"
 "PO-Revision-Date: 2026-05-27 12:11+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -16792,7 +16792,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:64
 msgid "Apply same choice to all conflicts of the same field name"
-msgstr "Auswahl auf alle Konflikte mit dem selben Feldnamen anwenden"
+msgstr "Auswahl auf alle Konflikte mit demselben Feldnamen anwenden"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:71
 msgid "Join separator:"
@@ -26247,7 +26247,9 @@ msgstr ""
 #, c-format
 msgid ""
 "<b>Graphic elliptical arc has zero sweep</b> at location <b>(%s, %s)</b>."
-msgstr "<b>Grafischer Bogen </b> an Position <b>(%s, %s) hat keine Wölbung</b>."
+msgstr ""
+"<b>Grafischer elliptischer Bogen </b> an Position <b>(%s, %s) hat keine "
+"Wölbung</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:72
 msgid "Symbol Chooser"
@@ -26874,7 +26876,7 @@ msgstr "Footprint \"%s\" hat kein zugeordnetes Symbol."
 #: eeschema/tools/backannotate.cpp:378
 #, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
-msgstr "Footprints \"%s\" und \"%s\" sind mit dem selben Symbol verknüpft."
+msgstr "Footprints \"%s\" und \"%s\" sind mit demselben Symbol verknüpft."
 
 #: eeschema/tools/backannotate.cpp:440
 #, c-format
@@ -36819,9 +36821,8 @@ msgid "Substrate Parameters"
 msgstr "Parameter Trägermaterial"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:46
-#, fuzzy
 msgid "Dielectric model:"
-msgstr "Dielektrische Verluste:"
+msgstr "Dielektrisches Modell:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:50
 msgid "Constant (εr, tan δ)"
@@ -40446,9 +40447,9 @@ msgid "Run DRC"
 msgstr "DRC starten"
 
 #: pcbnew/dialogs/dialog_drc.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "Elapsed: %s"
-msgstr "Regel: %s"
+msgstr "Verstrichen: %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:378
 msgid "Report All Errors for Each Track"
@@ -40486,9 +40487,9 @@ msgid "%1$d min %2$d s"
 msgstr "%1$d min %2$d s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:539
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f s"
-msgstr "%.2f"
+msgstr "%.2f s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:544
 msgid "-------- DRC canceled by user.<br><br>"
@@ -42019,7 +42020,7 @@ msgstr "Benutzerdef. Lagen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:197
 msgid "Use custom stackup"
-msgstr "Verwende Benutzerdefinierten Lagenaufbau"
+msgstr "Verwende benutzerdefinierten Lagenaufbau"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:200
 msgid "Copper layers"
@@ -43350,7 +43351,7 @@ msgstr "Möglicher Ersatz:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
 msgid "Add Search Directory..."
-msgstr "Suchverzeichnis hinzufügen..."
+msgstr "Suchverzeichnis hinzufügen ..."
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:67
 msgid "Open External File..."
@@ -46297,9 +46298,8 @@ msgstr "Fertigungs-Lage"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:214
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:143
-#, fuzzy
 msgid "Silkscreen layer"
-msgstr "Bestückungsdruck-Freiraum"
+msgstr "Bestückungsdruck-Lage"
 
 # Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:215
@@ -46372,7 +46372,7 @@ msgstr "Konnte Datei \"%s\" nicht schreiben."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:45
 msgid "3D Model(s)"
-msgstr "3D-Modelle"
+msgstr "3D-Modell(e)"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:92
 msgid "Enable extruded 3D model for this footprint"
@@ -56146,7 +56146,7 @@ msgstr "Unerwartetes Ende der Sprint Layout-Datei"
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:200
 msgid "Invalid string length in Sprint Layout file"
-msgstr "Ungültiger Zeichenkettelänge in Sprint Layout-Datei"
+msgstr "Ungültige Zeichenkettenlänge in Sprint Layout-Datei"
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:225
 #, fuzzy
@@ -57212,9 +57212,9 @@ msgid "Missing diff-pair name argument to %s."
 msgstr "Fehlendes Diff-Paar-Name-Argument für %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1330 pcbnew/pcbexpr_functions.cpp:1402
-#, fuzzy, c-format
+#, c-format
 msgid "Missing argument to '%s'"
-msgstr "Fehlendes Lagenname-Argument für %s."
+msgstr "Fehlendes Argument für \"%s\""
 
 #: pcbnew/pcbexpr_functions.cpp:1463
 #, c-format
@@ -59603,7 +59603,7 @@ msgstr "Im Footprinteditor öffnen"
 
 #: pcbnew/tools/pcb_actions.cpp:600
 msgid "Find by Properties..."
-msgstr "Nach Eigenschaften suchen..."
+msgstr "Nach Eigenschaften suchen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:601
 msgid "Find board items matching property criteria or expressions"
@@ -60917,8 +60917,7 @@ msgstr "Interaktives Verschiebewerkzeug"
 #: pcbnew/tools/pcb_actions.cpp:2399
 msgid "Interactive tool for offsetting items by exact amounts"
 msgstr ""
-"Interaktives Werkzeug um Verschieben ausgewählter Elemente um einen exakten "
-"Wert"
+"Interaktives Werkzeug zum Verschieben von Elementen um einen exakten Wert"
 
 #: pcbnew/tools/pcb_actions.cpp:2421
 msgid ""
