@@ -28,6 +28,7 @@
 #include <footprint.h>
 #include <zone.h>
 #include <font/fontconfig.h>
+#include <gestfich.h>
 #include <reporter.h>
 
 #include <ranges>
@@ -56,7 +57,7 @@ void PCB_IO_SPRINT_LAYOUT::FootprintEnumerate( wxArrayString& aFootprintNames, c
     if( wxDir::Exists( aLibraryPath ) )
     {
         wxArrayString files;
-        wxDir::GetAllFiles( aLibraryPath, &files, wxEmptyString, wxDIR_FILES | wxDIR_DIRS );
+        CollectFilesLoopSafe( aLibraryPath, files, wxEmptyString, wxDIR_FILES | wxDIR_DIRS );
 
         for( const wxString& filePath : files )
         {

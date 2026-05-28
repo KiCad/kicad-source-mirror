@@ -48,6 +48,7 @@
 #include <board_design_settings.h>
 #include <font/fontconfig.h>
 #include <footprint.h>
+#include <gestfich.h>
 #include <netinfo.h>
 #include <pad.h>
 #include <macros.h>
@@ -1005,7 +1006,7 @@ bool PCB_IO_GEDA::DeleteLibrary( const wxString& aLibraryPath, const std::map<st
         wxFileName    tmp;
         wxArrayString files;
 
-        wxDir::GetAllFiles( aLibraryPath, &files );
+        CollectFilesLoopSafe( aLibraryPath, files );
 
         for( i = 0;  i < files.GetCount();  i++ )
         {

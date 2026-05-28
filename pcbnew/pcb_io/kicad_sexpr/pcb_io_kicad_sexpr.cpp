@@ -37,6 +37,7 @@
 #include <fmt/core.h>
 #include <font/fontconfig.h>
 #include <footprint.h>
+#include <gestfich.h>
 #include <io/kicad/kicad_io_utils.h>
 #include <kiface_base.h>
 #include <kiplatform/io.h>
@@ -3721,7 +3722,7 @@ bool PCB_IO_KICAD_SEXPR::DeleteLibrary( const wxString& aLibraryPath,
         wxFileName    tmp;
         wxArrayString files;
 
-        wxDir::GetAllFiles( aLibraryPath, &files );
+        CollectFilesLoopSafe( aLibraryPath, files );
 
         for( i = 0;  i < files.GetCount();  i++ )
         {
