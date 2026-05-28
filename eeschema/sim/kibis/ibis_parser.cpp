@@ -453,6 +453,14 @@ bool IbisRamp::Check()
 
 
 
+bool IbisSeriesData::isPopulated() const
+{
+    return !m_Rseries.isNA() || !m_Lseries.isNA() || !m_Cseries.isNA()
+           || !m_RlSeries.isNA() || !m_RcSeries.isNA() || !m_LcSeries.isNA()
+           || !m_seriesCurrent.m_entries.empty() || !m_seriesMosfet.empty();
+}
+
+
 bool IbisModel::Check()
 {
     bool status = true;
@@ -678,22 +686,76 @@ bool IbisModel::Check()
         status = false;
     }
 
-    if( !m_series.m_seriesCurrent.Check() )
-    {
-        Report( _( "Invalid Series Current table." ), RPT_SEVERITY_ERROR );
-        status = false;
-    }
+    const bool isSeries = ( m_type == IBIS_MODEL_TYPE::SERIES );
+    const bool isSeriesSwitch = ( m_type == IBIS_MODEL_TYPE::SERIES_SWITCH );
 
-    if( !m_seriesOn.m_seriesCurrent.Check() )
+    auto checkSeriesData = [&]( IbisSeriesData& aData, const wxString& aLabel )
     {
-        Report( _( "Invalid Series Current table in [On] block." ), RPT_SEVERITY_ERROR );
-        status = false;
-    }
+        auto report = [&]( const wxString& aMsg )
+        {
+            Report( wxString::Format( aMsg, aLabel ).ToStdString(), RPT_SEVERITY_ERROR );
+            status = false;
+        };
 
-    if( !m_seriesOff.m_seriesCurrent.Check() )
+        if( !aData.m_seriesCurrent.Check() )
+            report( _( "Invalid Series Current table in %s." ) );
+
+        for( IbisMosfetEntry& mosfet : aData.m_seriesMosfet )
+        {
+            if( !mosfet.m_table.Check() )
+                report( _( "Invalid Series MOSFET table in %s." ) );
+
+            if( isNumberNA( mosfet.m_Vds ) || mosfet.m_Vds <= 0.0 )
+                report( _( "Series MOSFET Vds must be > 0 in %s." ) );
+        }
+
+        if( !aData.m_RlSeries.isNA() && aData.m_Lseries.isNA() )
+            report( _( "Rl Series requires L Series in %s." ) );
+
+        if( ( !aData.m_RcSeries.isNA() || !aData.m_LcSeries.isNA() ) && aData.m_Cseries.isNA() )
+            report( _( "Rc/Lc Series requires C Series in %s." ) );
+    };
+
+    if( isSeries )
     {
-        Report( _( "Invalid Series Current table in [Off] block." ), RPT_SEVERITY_ERROR );
-        status = false;
+        checkSeriesData( m_series, wxT( "[Model]" ) );
+
+        if( m_seriesOn.m_seen || m_seriesOff.m_seen )
+        {
+            Report( _( "[On] and [Off] are only allowed in Series_switch models." ),
+                    RPT_SEVERITY_ERROR );
+            status = false;
+        }
+
+        if( !m_series.isPopulated() )
+        {
+            Report( _( "Series model has no series elements." ), RPT_SEVERITY_ERROR );
+            status = false;
+        }
+    }
+    else if( isSeriesSwitch )
+    {
+        checkSeriesData( m_seriesOn, wxT( "[On]" ) );
+        checkSeriesData( m_seriesOff, wxT( "[Off]" ) );
+
+        if( !m_seriesOn.m_seen )
+        {
+            Report( _( "Series_switch model is missing the [On] block." ), RPT_SEVERITY_ERROR );
+            status = false;
+        }
+
+        if( !m_seriesOff.m_seen )
+        {
+            Report( _( "Series_switch model is missing the [Off] block." ), RPT_SEVERITY_ERROR );
+            status = false;
+        }
+
+        if( m_series.isPopulated() )
+        {
+            Report( _( "Series_switch model has series elements outside [On]/[Off]." ),
+                    RPT_SEVERITY_ERROR );
+            status = false;
+        }
     }
 
     if( !m_POWERClamp.Check() )
@@ -1537,6 +1599,7 @@ bool IbisParser::changeContext( std::string& aKeyword )
             m_ibisFile.m_models.push_back( model );
             m_currentModel = &( m_ibisFile.m_models.back() );
             m_currentSeriesData = nullptr;
+            m_currentMosfetEntry = nullptr;
             m_context = IBIS_PARSER_CONTEXT::MODEL;
             m_continue = IBIS_PARSER_CONTINUE::MODEL;
         }
@@ -1677,6 +1740,41 @@ bool IbisParser::readRamp()
         }
     }
 
+    return status;
+}
+
+
+bool IbisParser::readSeriesMosfet()
+{
+    bool status = true;
+
+    if( m_continue != IBIS_PARSER_CONTINUE::SERIES_MOSFET )
+    {
+        IbisSeriesData* data = currentSeriesData();
+
+        if( !data )
+        {
+            Report( _( "[Series MOSFET] outside of [Model] context." ), RPT_SEVERITY_ERROR );
+            return false;
+        }
+
+        data->m_seriesMosfet.emplace_back( m_Reporter );
+        m_currentMosfetEntry = &data->m_seriesMosfet.back();
+        m_currentIVtable = &m_currentMosfetEntry->m_table;
+        m_continue = IBIS_PARSER_CONTINUE::SERIES_MOSFET;
+        return true;
+    }
+
+    if( !m_currentMosfetEntry )
+    {
+        Report( _( "Internal error: no current [Series MOSFET] entry." ), RPT_SEVERITY_ERROR );
+        return false;
+    }
+
+    if( !readNumericSubparam( std::string( "Vds" ), m_currentMosfetEntry->m_Vds ) )
+        status = readIVtableEntry( m_currentMosfetEntry->m_table );
+
+    m_continue = IBIS_PARSER_CONTINUE::SERIES_MOSFET;
     return status;
 }
 
@@ -1839,27 +1937,33 @@ bool IbisParser::parseModel( std::string& aKeyword )
     else if( compareIbisWord( aKeyword.c_str(), "On" ) )
     {
         m_currentSeriesData = &m_currentModel->m_seriesOn;
+        m_currentSeriesData->m_seen = true;
+        m_currentMosfetEntry = nullptr;
         status = true;
     }
     else if( compareIbisWord( aKeyword.c_str(), "Off" ) )
     {
         m_currentSeriesData = &m_currentModel->m_seriesOff;
+        m_currentSeriesData->m_seen = true;
+        m_currentMosfetEntry = nullptr;
         status = true;
     }
     else if( compareIbisWord( aKeyword.c_str(), "R_Series" ) )
-        status = readTypMinMaxValue( currentSeriesData()->m_Rseries );
+        status = currentSeriesData() && readTypMinMaxValue( currentSeriesData()->m_Rseries );
     else if( compareIbisWord( aKeyword.c_str(), "L_Series" ) )
-        status = readTypMinMaxValue( currentSeriesData()->m_Lseries );
+        status = currentSeriesData() && readTypMinMaxValue( currentSeriesData()->m_Lseries );
     else if( compareIbisWord( aKeyword.c_str(), "C_Series" ) )
-        status = readTypMinMaxValue( currentSeriesData()->m_Cseries );
+        status = currentSeriesData() && readTypMinMaxValue( currentSeriesData()->m_Cseries );
     else if( compareIbisWord( aKeyword.c_str(), "Rl_Series" ) )
-        status = readTypMinMaxValue( currentSeriesData()->m_RlSeries );
+        status = currentSeriesData() && readTypMinMaxValue( currentSeriesData()->m_RlSeries );
     else if( compareIbisWord( aKeyword.c_str(), "Lc_Series" ) )
-        status = readTypMinMaxValue( currentSeriesData()->m_LcSeries );
+        status = currentSeriesData() && readTypMinMaxValue( currentSeriesData()->m_LcSeries );
     else if( compareIbisWord( aKeyword.c_str(), "Rc_Series" ) )
-        status = readTypMinMaxValue( currentSeriesData()->m_RcSeries );
+        status = currentSeriesData() && readTypMinMaxValue( currentSeriesData()->m_RcSeries );
     else if( compareIbisWord( aKeyword.c_str(), "Series_Current" ) )
-        status = readIVtableEntry( currentSeriesData()->m_seriesCurrent );
+        status = currentSeriesData() && readIVtableEntry( currentSeriesData()->m_seriesCurrent );
+    else if( compareIbisWord( aKeyword.c_str(), "Series_MOSFET" ) )
+        status = readSeriesMosfet();
     else if( compareIbisWord( aKeyword.c_str(), "Algorithmic_Model" ) )
     {
         m_context = IBIS_PARSER_CONTEXT::ALGORITHMIC_MODEL;
@@ -3120,6 +3224,9 @@ bool IbisParser::onNewLine()
             break;
         case IBIS_PARSER_CONTINUE::RAMP:
             status &= readRamp();
+            break;
+        case IBIS_PARSER_CONTINUE::SERIES_MOSFET:
+            status &= readSeriesMosfet();
             break;
         case IBIS_PARSER_CONTINUE::MODEL_SPEC:
             status &= readModelSpec();

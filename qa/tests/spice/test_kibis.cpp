@@ -25,6 +25,13 @@
 
 #include <sim/kibis/kibis.h>
 #include <sim/kibis/ibis_parser.h>
+#include <sim/sim_library_ibis.h>
+#include <sim/sim_model_ibis.h>
+#include <sim/spice_generator.h>
+#include <sim/spice_simulator.h>
+#include <sim/simulator_reporter.h>
+#include <sch_pin.h>
+#include <wx/utils.h>
 
 namespace
 {
@@ -587,11 +594,7 @@ BOOST_AUTO_TEST_CASE( Load_v4_1_SeriesPinMapping )
 }
 
 
-// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24228
-// IBIS [R Series], [L Series], [C Series], [Rl Series], [Rc Series],
-// [Lc Series] and [Series Current] keywords appearing inside a [Model] block,
-// along with the [On] / [Off] sub-blocks used by Series_switch models,
-// previously produced "Unknown keyword in MODEL context" errors.
+// Regression test for #24228: parse → KIBIS_MODEL → writeSpiceDevice.
 BOOST_AUTO_TEST_CASE( Load_v4_1_RSeries, *boost::unit_test::tolerance( 1e-15 ) )
 {
     WX_STRING_REPORTER reporter;
@@ -614,14 +617,16 @@ BOOST_AUTO_TEST_CASE( Load_v4_1_RSeries, *boost::unit_test::tolerance( 1e-15 ) )
     BOOST_REQUIRE( swModel != nullptr );
     BOOST_TEST( (int) swModel->m_type == (int) IBIS_MODEL_TYPE::SERIES_SWITCH );
 
-    /* KIBIS_MODEL is a stripped copy of IbisModel that the simulator consumes.
-     * Series RLC values are not yet promoted to KIBIS_MODEL, so verify them
-     * directly against the underlying IbisParser representation. */
+    KIBIS_MODEL* mosfetModel = top.GetModel( "series_mosfet" );
+    BOOST_REQUIRE( mosfetModel != nullptr );
+    BOOST_TEST( (int) mosfetModel->m_type == (int) IBIS_MODEL_TYPE::SERIES_SWITCH );
+
     IbisParser parser( &reporter );
     BOOST_REQUIRE( parser.ParseFile( path ) );
 
     const IbisModel* parsedSeries = nullptr;
     const IbisModel* parsedSwitch = nullptr;
+    const IbisModel* parsedMosfet = nullptr;
 
     for( const IbisModel& m : parser.m_ibisFile.m_models )
     {
@@ -629,6 +634,8 @@ BOOST_AUTO_TEST_CASE( Load_v4_1_RSeries, *boost::unit_test::tolerance( 1e-15 ) )
             parsedSeries = &m;
         else if( m.m_name == "series_sw" )
             parsedSwitch = &m;
+        else if( m.m_name == "series_mosfet" )
+            parsedMosfet = &m;
     }
 
     BOOST_REQUIRE( parsedSeries != nullptr );
@@ -653,6 +660,418 @@ BOOST_AUTO_TEST_CASE( Load_v4_1_RSeries, *boost::unit_test::tolerance( 1e-15 ) )
     BOOST_TEST( parsedSwitch->m_seriesOn.m_seriesCurrent.m_entries.size() == 3 );
     BOOST_TEST( parsedSwitch->m_seriesOn.m_seriesCurrent.m_entries[0].I.value[0] == -200.0e-3 );
     BOOST_TEST( parsedSwitch->m_seriesOff.m_seriesCurrent.m_entries.size() == 0 );
+
+    BOOST_REQUIRE( parsedMosfet != nullptr );
+    BOOST_REQUIRE( parsedMosfet->m_seriesOn.m_seriesMosfet.size() == 1 );
+
+    const IbisMosfetEntry& mosfet = parsedMosfet->m_seriesOn.m_seriesMosfet[0];
+    BOOST_TEST( mosfet.m_Vds == 1.0 );
+    BOOST_REQUIRE( mosfet.m_table.m_entries.size() == 4 );
+    BOOST_TEST( mosfet.m_table.m_entries[0].V == 0.0 );
+    BOOST_TEST( mosfet.m_table.m_entries[3].V == 3.3 );
+    BOOST_TEST( mosfet.m_table.m_entries[3].I.value[0] == 180.0e-3 );
+
+    KIBIS_COMPONENT* comp = top.GetComponent( "SeriesDevice" );
+    BOOST_REQUIRE( comp != nullptr );
+    BOOST_REQUIRE( comp->m_seriesPinMappings.size() == 3 );
+    BOOST_TEST( comp->m_seriesPinMappings[0].m_pin1 == "1" );
+    BOOST_TEST( comp->m_seriesPinMappings[0].m_pin2 == "2" );
+    BOOST_TEST( comp->m_seriesPinMappings[0].m_modelName == "series_r" );
+    BOOST_TEST( comp->m_seriesPinMappings[1].m_modelName == "series_sw" );
+    BOOST_TEST( comp->m_seriesPinMappings[1].m_groupName == "group_a" );
+
+    KIBIS_PIN* pin1 = comp->GetPin( "1" );
+    BOOST_REQUIRE( pin1 != nullptr );
+
+    std::string seriesModelName;
+    KIBIS_PIN* partner = pin1->SeriesPartner( &seriesModelName );
+    BOOST_REQUIRE( partner != nullptr );
+    BOOST_TEST( partner->m_pinNumber == "2" );
+    BOOST_TEST( seriesModelName == "series_r" );
+
+    BOOST_TEST( model->m_series.m_Rseries.value[0] == 25.0 );
+    BOOST_TEST( swModel->m_seriesOn.m_Rseries.value[0] == 5.0 );
+    BOOST_TEST( swModel->m_seriesOff.m_Rseries.value[0] == 1.0e6 );
+    BOOST_TEST( mosfetModel->m_seriesOn.m_seriesMosfet.size() == 1 );
+
+    std::string netlist;
+    KIBIS_PARAMETER kparams;
+    BOOST_REQUIRE( pin1->writeSpiceDevice( netlist, "DEVICE_R", *model, kparams ) );
+
+    BOOST_TEST_INFO( "Emitted netlist for series_r:\n" << netlist );
+    BOOST_TEST( netlist.find( ".SUBCKT DEVICE_R PIN_A PIN_B" ) != std::string::npos );
+    BOOST_TEST( netlist.find( "R_S0 DIE_A " ) != std::string::npos );
+    BOOST_TEST( netlist.find( "L_S0 DIE_A " ) != std::string::npos );
+    BOOST_TEST( netlist.find( "C_S0 " ) != std::string::npos );
+    BOOST_TEST( netlist.find( "B_SC0 " ) != std::string::npos );
+    BOOST_TEST( netlist.find( ".ENDS DEVICE" ) != std::string::npos );
+    BOOST_TEST( netlist.find( "SW_STATE" ) == std::string::npos );
+
+    KIBIS_PIN* pin3 = comp->GetPin( "3" );
+    BOOST_REQUIRE( pin3 != nullptr );
+
+    netlist.clear();
+    BOOST_REQUIRE( pin3->writeSpiceDevice( netlist, "DEVICE_SW", *swModel, kparams ) );
+
+    BOOST_TEST_INFO( "Emitted netlist for series_sw:\n" << netlist );
+    BOOST_TEST( netlist.find( ".SUBCKT DEVICE_SW PIN_A PIN_B" ) != std::string::npos );
+    BOOST_TEST( netlist.find( ".param SW_STATE=1" ) != std::string::npos );
+    BOOST_TEST( netlist.find( "R_S1 DIE_A ARM_OUT1" ) != std::string::npos );
+    BOOST_TEST( netlist.find( "R_S2 DIE_A ARM_OUT2" ) != std::string::npos );
+    BOOST_TEST( netlist.find( "R_G1 ARM_OUT1 DIE_B R='0.001 / ((SW_STATE)" ) != std::string::npos );
+    BOOST_TEST( netlist.find( "R_G2 ARM_OUT2 DIE_B R='0.001 / (((1 - SW_STATE))" )
+                != std::string::npos );
+
+    KIBIS_PIN* pin5 = comp->GetPin( "5" );
+    BOOST_REQUIRE( pin5 != nullptr );
+
+    netlist.clear();
+    BOOST_REQUIRE( pin5->writeSpiceDevice( netlist, "DEVICE_M", *mosfetModel, kparams ) );
+
+    BOOST_TEST_INFO( "Emitted netlist for series_mosfet:\n" << netlist );
+    BOOST_TEST( netlist.find( "B_M1_0" ) != std::string::npos );
+    BOOST_TEST( netlist.find( "pwl(" ) != std::string::npos );
+}
+
+
+namespace
+{
+class CAPTURE_REPORTER : public SIMULATOR_REPORTER
+{
+public:
+    REPORTER& Report( const wxString& aText,
+                      SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override
+    {
+        m_messages << aText.ToStdString() << "\n";
+        return *this;
+    }
+
+    bool HasMessage() const override { return !m_messages.str().empty(); }
+
+    void OnSimStateChange( SIMULATOR* aObject, SIM_STATE aNewState ) override {}
+
+    std::stringstream m_messages;
+};
+
+
+// Wrap an emitted SUBCKT in a 1V .op rig.  Returns NaN if ngspice fails.
+double RunSeriesOP( const std::string& aSubckt, const std::string& aSubcktName,
+                    const std::string& aExtraParams = "" )
+{
+    auto sim = SPICE_SIMULATOR::CreateInstance( "ngspice" );
+
+    if( !sim )
+    {
+        BOOST_TEST_MESSAGE( "RunSeriesOP: CreateInstance(ngspice) returned null" );
+        return std::nan( "" );
+    }
+
+    CAPTURE_REPORTER reporter;
+    sim->SetReporter( &reporter );
+
+    // ngspice is a singleton; clear prior plots/circuits.
+    sim->Command( "bg_halt" );
+    sim->Command( "remcirc" );
+    sim->Command( "destroy all" );
+
+    // 1Ω sense resistor exposes current as a node-voltage delta.
+    std::string deck = "* KiCad QA Series harness\n";
+    deck += "V1 SRC 0 1\n";
+    deck += "R_sense SRC PIN_A 1\n";
+    deck += "V2 PIN_B 0 0\n";
+    deck += "X_dut PIN_A PIN_B " + aSubcktName;
+
+    if( !aExtraParams.empty() )
+        deck += " PARAMS: " + aExtraParams;
+
+    deck += "\n";
+    deck += aSubckt;
+    deck += "\n.save all\n.op\n.end\n";
+
+    if( !sim->LoadNetlist( deck ) )
+    {
+        BOOST_TEST_MESSAGE( "RunSeriesOP: LoadNetlist failed for deck:\n" << deck );
+        return std::nan( "" );
+    }
+
+    if( !sim->Run() )
+    {
+        BOOST_TEST_MESSAGE( "RunSeriesOP: Run() failed" );
+        return std::nan( "" );
+    }
+
+    while( sim->IsRunning() )
+        wxMilliSleep( 20 );
+
+    // bg callbacks may still fire briefly after IsRunning() flips.
+    sim->SetReporter( nullptr );
+
+    BOOST_TEST_MESSAGE( "RunSeriesOP: ngspice log:\n" << reporter.m_messages.str() );
+    BOOST_TEST_MESSAGE( "RunSeriesOP: current plot = " << sim->CurrentPlotName().ToStdString() );
+
+    // Node voltages survive plot indirection that branch currents do not.
+    std::vector<double> vSrc = sim->GetRealVector( "src" );
+    std::vector<double> vPinA = sim->GetRealVector( "pin_a" );
+
+    if( vSrc.empty() || vPinA.empty() )
+    {
+        BOOST_TEST_MESSAGE( "RunSeriesOP: node-voltage vectors unavailable.  Available:" );
+
+        for( const std::string& name : sim->AllVectors() )
+            BOOST_TEST_MESSAGE( "  " << name );
+
+        return std::nan( "" );
+    }
+
+    return ( vSrc.back() - vPinA.back() ) / 1.0;
+}
+} // namespace
+
+
+// End-to-end ngspice .op against the emitted SUBCKT.  Disabled by default;
+// ngspice singleton state from prior suites can segfault subsequent runs.
+BOOST_AUTO_TEST_CASE( Run_v4_1_RSeries_Ngspice, * boost::unit_test::disabled() )
+{
+    WX_STRING_REPORTER reporter;
+    std::string path = GetLibraryPath( "ibis_v4_1_r_series" );
+    KIBIS top( path, &reporter );
+
+    BOOST_REQUIRE( top.m_valid );
+
+    KIBIS_COMPONENT* comp = top.GetComponent( "SeriesDevice" );
+    BOOST_REQUIRE( comp );
+
+    KIBIS_PARAMETER kparams;
+
+    // Cold-start warmup: ngspice singleton can drop the first .op otherwise.
+    {
+        auto warmup = SPICE_SIMULATOR::CreateInstance( "ngspice" );
+
+        if( warmup && warmup->LoadNetlist( "* warmup\nR1 1 0 1k\nV1 1 0 1\n.op\n.end\n" )
+            && warmup->Run() )
+        {
+            while( warmup->IsRunning() )
+                wxMilliSleep( 20 );
+        }
+    }
+
+    // Branches parallel per BIRD 41.8; L+Rl path (Rl=0.1Ω) dominates DC.
+    // Expect 0 < I < ~2A; exact value covered by static asserts.
+    {
+        KIBIS_PIN* pinA = comp->GetPin( "1" );
+        KIBIS_MODEL* model = top.GetModel( "series_r" );
+        BOOST_REQUIRE( pinA && model );
+
+        std::string subckt;
+        BOOST_REQUIRE( pinA->writeSpiceDevice( subckt, "DEV_R", *model, kparams ) );
+
+        double iSeries = RunSeriesOP( subckt, "DEV_R" );
+
+        if( std::isnan( iSeries ) )
+        {
+            BOOST_TEST_MESSAGE( "ngspice unavailable; skipping Series .op" );
+        }
+        else
+        {
+            BOOST_TEST_INFO( "Series device .op current = " << iSeries );
+            BOOST_TEST( iSeries > 0.0 );
+            BOOST_TEST( iSeries < 2.0 );
+        }
+    }
+
+    // Series_switch: On state 5Ω + 200 mA IV table; Off state 1 MΩ.
+    {
+        KIBIS_PIN* pinB = comp->GetPin( "3" );
+        KIBIS_MODEL* model = top.GetModel( "series_sw" );
+        BOOST_REQUIRE( pinB && model );
+
+        std::string subckt;
+        BOOST_REQUIRE( pinB->writeSpiceDevice( subckt, "DEV_SW", *model, kparams ) );
+
+        double iOn = RunSeriesOP( subckt, "DEV_SW", "SW_STATE=1" );
+        double iOff = RunSeriesOP( subckt, "DEV_SW", "SW_STATE=0" );
+
+        if( std::isnan( iOn ) || std::isnan( iOff ) )
+        {
+            BOOST_TEST_MESSAGE( "ngspice unavailable; skipping Series_switch .op" );
+        }
+        else
+        {
+            BOOST_TEST_INFO( "SW On current = " << iOn << ", Off current = " << iOff );
+            BOOST_TEST( iOn > 0.1 );
+            BOOST_TEST( iOff < 1.0e-5 );
+            BOOST_TEST( iOn / iOff > 1.0e4 );
+        }
+    }
+}
+
+
+namespace
+{
+// Load fixture and return the SeriesDevice's SIM_MODEL_IBIS.
+std::unique_ptr<SIM_LIBRARY_IBIS> MakeLoadedSeriesLibrary( const std::string& aIbsPath,
+                                                          SIM_MODEL_IBIS** aOutModel )
+{
+    auto lib = std::make_unique<SIM_LIBRARY_IBIS>();
+    WX_STRING_REPORTER reporter;
+    lib->ReadFile( aIbsPath, reporter );
+
+    if( reporter.HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )
+        return nullptr;
+
+    for( const SIM_LIBRARY::MODEL& sm : lib->GetModels() )
+    {
+        SIM_MODEL_IBIS* candidate = dynamic_cast<SIM_MODEL_IBIS*>( &sm.model );
+
+        if( candidate && candidate->GetComponentName() == "SeriesDevice" )
+        {
+            *aOutModel = candidate;
+            return lib;
+        }
+    }
+
+    return nullptr;
+}
+} // namespace
+
+
+// SetIbisModel picks SERIES IO mode and resolves the [Series Pin Mapping] partner.
+BOOST_AUTO_TEST_CASE( Dialog_Series_PinMap_v4_1 )
+{
+    SIM_MODEL_IBIS* ibisModel = nullptr;
+    auto lib = MakeLoadedSeriesLibrary( GetLibraryPath( "ibis_v4_1_r_series" ), &ibisModel );
+
+    BOOST_REQUIRE( lib );
+    BOOST_REQUIRE( ibisModel );
+
+    BOOST_REQUIRE( ibisModel->ChangePin( *lib, "1" ) );
+
+    BOOST_TEST( !ibisModel->IsSeries() );
+    BOOST_TEST( ibisModel->GetPinCount() == 2 );
+    BOOST_TEST( ibisModel->GetPin( 0 ).modelPinName == "GND" );
+    BOOST_TEST( ibisModel->GetPin( 1 ).modelPinName == "IN/OUT" );
+
+    BOOST_REQUIRE( ibisModel->SetIbisModel( *lib, "1", "series_r" ) );
+
+    BOOST_TEST( ibisModel->IsSeries() );
+    BOOST_TEST( (int) ibisModel->GetIOMode() == (int) IBIS_IO_MODE::SERIES );
+    BOOST_TEST( ibisModel->GetPinCount() == 2 );
+    BOOST_TEST( ibisModel->GetPin( 0 ).modelPinName == "PIN_A" );
+    BOOST_TEST( ibisModel->GetPin( 1 ).modelPinName == "PIN_B" );
+    BOOST_TEST( ibisModel->GetSeriesPartnerPin() == "2" );
+    BOOST_TEST( ibisModel->FindParam( "sw_state" ) == nullptr );
+
+    // Series → single-ended round-trip must drop the SERIES layout.
+    BOOST_REQUIRE( ibisModel->SetIbisModel( *lib, "1", "series_r" ) );
+    ibisModel->SwitchSingleEndedDiff( false );
+    BOOST_TEST( !ibisModel->IsSeries() );
+    BOOST_TEST( ibisModel->GetPin( 0 ).modelPinName == "GND" );
+    BOOST_TEST( ibisModel->FindParam( "sw_state" ) == nullptr );
+}
+
+
+// Series_switch carries a sw_state instance param (default 1) onto the X-line.
+BOOST_AUTO_TEST_CASE( Dialog_Series_Switch_Params_v4_1 )
+{
+    SIM_MODEL_IBIS* ibisModel = nullptr;
+    auto lib = MakeLoadedSeriesLibrary( GetLibraryPath( "ibis_v4_1_r_series" ), &ibisModel );
+
+    BOOST_REQUIRE( lib );
+    BOOST_REQUIRE( ibisModel );
+    BOOST_REQUIRE( ibisModel->ChangePin( *lib, "3" ) );
+    BOOST_REQUIRE( ibisModel->SetIbisModel( *lib, "3", "series_sw" ) );
+
+    BOOST_TEST( ibisModel->IsSeries() );
+    BOOST_TEST( ibisModel->GetSeriesPartnerPin() == "4" );
+
+    const SIM_MODEL::PARAM* sw = ibisModel->FindParam( "sw_state" );
+    BOOST_REQUIRE( sw != nullptr );
+    BOOST_TEST( sw->info.isSpiceInstanceParam );
+    BOOST_TEST( sw->info.spiceInstanceName == "SW_STATE" );
+    BOOST_TEST( sw->info.defaultValue == "1" );
+
+    ibisModel->SetParamValue( "sw_state", "0.5" );
+
+    std::string itemParams = ibisModel->SpiceGenerator().ItemParams();
+    BOOST_TEST_INFO( "Emitted ItemParams: " << itemParams );
+    BOOST_TEST( itemParams.find( "SW_STATE=0.5" ) != std::string::npos );
+
+    // Waveform-choice path copy-constructs the model; sw_state must come along.
+    {
+        ibisModel->SetParamValue( "sw_state", "0.25" );
+        SIM_MODEL_IBIS copy( SIM_MODEL::TYPE::KIBIS_DEVICE, *ibisModel );
+
+        BOOST_TEST( copy.IsSeries() );
+        BOOST_TEST( copy.GetSeriesPartnerPin() == "4" );
+
+        const SIM_MODEL::PARAM* copiedSw = copy.FindParam( "sw_state" );
+        BOOST_REQUIRE( copiedSw != nullptr );
+        BOOST_TEST( copiedSw->value == "0.25" );
+    }
+
+    BOOST_REQUIRE( ibisModel->SetIbisModel( *lib, "1", "series_r" ) );
+    BOOST_TEST( ibisModel->FindParam( "sw_state" ) == nullptr );
+}
+
+
+// Two-port SUBCKT round-trip through ngspice.  Disabled by default — see
+// Run_v4_1_RSeries_Ngspice.
+BOOST_AUTO_TEST_CASE( Run_Series_Schematic_Ngspice, * boost::unit_test::disabled() )
+{
+    WX_STRING_REPORTER reporter;
+    std::string path = GetLibraryPath( "ibis_v4_1_r_series" );
+    KIBIS top( path, &reporter );
+    BOOST_REQUIRE( top.m_valid );
+
+    KIBIS_COMPONENT* comp = top.GetComponent( "SeriesDevice" );
+    KIBIS_PIN* pinA = comp ? comp->GetPin( "1" ) : nullptr;
+    KIBIS_MODEL* model = top.GetModel( "series_r" );
+    BOOST_REQUIRE( pinA && model );
+
+    KIBIS_PARAMETER kparams;
+    std::string subckt;
+    BOOST_REQUIRE( pinA->writeSpiceDevice( subckt, "DEV_R", *model, kparams ) );
+
+    // Header must be two-port; a stray GND there breaks X-line port mapping.
+    BOOST_TEST( subckt.find( ".SUBCKT DEV_R PIN_A PIN_B" ) != std::string::npos );
+    BOOST_TEST( subckt.find( ".SUBCKT DEV_R GND" ) == std::string::npos );
+
+    auto sim = SPICE_SIMULATOR::CreateInstance( "ngspice" );
+    BOOST_REQUIRE( sim );
+
+    std::string deck = "* QA harness for two-port Series subckt\n";
+    deck += "V1 SRC 0 1\n";
+    deck += "R_sense SRC PIN_A 1\n";
+    deck += "X_dut PIN_A 0 DEV_R\n";   // PIN_B tied to global ground via 0
+    deck += subckt;
+    deck += "\n.save all\n.op\n.end\n";
+
+    sim->Command( "bg_halt" );
+    sim->Command( "remcirc" );
+    sim->Command( "destroy all" );
+
+    if( !sim->LoadNetlist( deck ) || !sim->Run() )
+    {
+        BOOST_TEST_MESSAGE( "ngspice unavailable; skipping Run_Series_Schematic_Ngspice .op" );
+        return;
+    }
+
+    while( sim->IsRunning() )
+        wxMilliSleep( 20 );
+
+    std::vector<double> vSrc = sim->GetRealVector( "src" );
+    std::vector<double> vA = sim->GetRealVector( "pin_a" );
+
+    if( vSrc.empty() || vA.empty() )
+    {
+        BOOST_TEST_MESSAGE( "ngspice OP vectors unavailable; skipping current check" );
+        return;
+    }
+
+    double iDevice = ( vSrc.back() - vA.back() ) / 1.0;
+    BOOST_TEST_INFO( "Two-port Series .op current = " << iDevice );
+    BOOST_TEST( iDevice > 0.0 );
+    BOOST_TEST( iDevice < 2.0 );
 }
 
 

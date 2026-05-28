@@ -46,6 +46,14 @@ public:
                             const wxString& aCacheDir, REPORTER& aReporter ) const;
 };
 
+enum class IBIS_IO_MODE
+{
+    SINGLE_ENDED,    // GND + signal pin
+    DIFFERENTIAL,    // GND + positive + negative
+    SERIES           // PIN_A + PIN_B, no GND port
+};
+
+
 class SIM_MODEL_IBIS : public SIM_MODEL
 {
     friend class SIM_LIBRARY_IBIS;
@@ -80,14 +88,29 @@ public:
      */
     bool ChangePin( const SIM_LIBRARY_IBIS& aLib, const std::string& aPinNumber );
 
+    /** Bind to a KIBIS model, set IO mode from its type, manage sw_state. */
+    bool SetIbisModel( const SIM_LIBRARY_IBIS& aLib, const std::string& aPinNumber,
+                       const std::string& aModelName );
+
     void SetBaseModel( const SIM_MODEL& aBaseModel ) override;
 
     void SwitchSingleEndedDiff( bool aDiff ) override;
+
+    void SetIOMode( IBIS_IO_MODE aMode );
+
+    IBIS_IO_MODE GetIOMode() const { return m_ioMode; }
+    bool IsSeries() const { return m_ioMode == IBIS_IO_MODE::SERIES; }
     bool CanDifferential() const { return m_enableDiff; } ;
+
+    const std::string& GetSeriesPartnerPin() const { return m_partnerPin; }
+
     bool m_enableDiff;
 
 private:
     bool requiresSpiceModelLine( const SPICE_ITEM& aItem ) const override { return true; }
+
+    void addSwitchStateParam();
+    void removeSwitchStateParam();
 
     static std::vector<PARAM::INFO> makeParamInfos( TYPE aType );
     static std::vector<PARAM::INFO> makeDcWaveformParamInfos();
@@ -98,6 +121,8 @@ private:
     std::vector<std::string>                         m_ibisModels;
     std::vector<std::pair<std::string, std::string>> m_ibisPins;
     std::string                                      m_componentName;
+    IBIS_IO_MODE                                     m_ioMode = IBIS_IO_MODE::SINGLE_ENDED;
+    std::string                                      m_partnerPin;
 };
 
 #endif // SIM_MODEL_KIBIS_H

@@ -1,12 +1,13 @@
 [IBIS Ver]      4.1
 [File name]     ibis_v4_1_r_series.ibs
-[File Rev]      1.0
-[Date]          20/05/2026
+[File Rev]      1.1
+[Date]          28/05/2026
 [Source]        Artificial data for KiCad QA (issue #24228)
 [Notes]         Covers the [R Series], [L Series], [C Series], [Rl Series],
-[Notes]         [Rc Series], [Lc Series] and [Series Current] keywords inside
-[Notes]         a [Model] block, and the [On] / [Off] sub-blocks used by
-[Notes]         Series_switch models.
+[Notes]         [Rc Series], [Lc Series], [Series Current] and [Series MOSFET]
+[Notes]         keywords inside a [Model] block, plus the [On] / [Off]
+[Notes]         sub-blocks used by Series_switch models and the component-level
+[Notes]         [Series Pin Mapping] table.
 [Disclaimer]    This is NOT a valid component
 
 [Component]     SeriesDevice
@@ -18,10 +19,17 @@ L_pkg           2n              NA              NA
 C_pkg           10p             NA              NA
 
 [Pin]   signal_name     model_name      R_pin   L_pin   C_pin
-  1     IN_A            series_r         55m      NA      0.2p
-  2     OUT_A           series_r         55m      NA      0.2p
-  3     IN_B            series_sw        55m      NA      0.2p
-  4     OUT_B           series_sw        55m      NA      0.2p
+  1     IN_A            NC               55m      NA      0.2p
+  2     OUT_A           NC               55m      NA      0.2p
+  3     IN_B            NC               55m      NA      0.2p
+  4     OUT_B           NC               55m      NA      0.2p
+  5     IN_C            NC               55m      NA      0.2p
+  6     OUT_C           NC               55m      NA      0.2p
+
+[Series Pin Mapping]  pin_2    model_name              function_table_group
+  1                    2       series_r
+  3                    4       series_sw               group_a
+  5                    6       series_mosfet           group_a
 
 |
 | A series-element model exercising the [R Series], [L Series], [C Series],
@@ -62,6 +70,29 @@ C_comp          0pF             0pF             0pF
    -1.0V    -200.0m   -180.0m   -220.0m
     0.0V      0.0m      0.0m      0.0m
     1.0V     200.0m    180.0m    220.0m
+
+[Off]
+[R Series]        1.0Meg        0.9Meg          1.1Meg
+
+|
+| A series-switch model exercising the [Series MOSFET] keyword.  Single Vds
+| table per BIRD 41.8 §5; [On] holds the MOSFET turn-on characteristic,
+| [Off] is an essentially-open 1 MΩ resistance.
+|
+[Model]         series_mosfet
+Model_type      Series_switch
+C_comp          0pF             0pF             0pF
+
+[Voltage range]   3.3V          3.0V            3.6V
+
+[On]
+[Series MOSFET]
+Vds = 1.0
+|  Voltage   I(typ)    I(min)    I(max)
+    0.0V      0.0m       0.0m      0.0m
+    1.0V      50.0m      40.0m     60.0m
+    2.0V     100.0m      80.0m    120.0m
+    3.3V     180.0m     150.0m    210.0m
 
 [Off]
 [R Series]        1.0Meg        0.9Meg          1.1Meg

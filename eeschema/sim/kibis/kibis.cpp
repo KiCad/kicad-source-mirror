@@ -277,7 +277,10 @@ KIBIS_MODEL::KIBIS_MODEL( KIBIS& aTopLevel, const IbisModel& aSource, IbisParser
         m_POWERClamp( aTopLevel.m_Reporter ),
         m_pullup( aTopLevel.m_Reporter ),
         m_pulldown( aTopLevel.m_Reporter ),
-        m_ramp( aTopLevel.m_Reporter )
+        m_ramp( aTopLevel.m_Reporter ),
+        m_series( aTopLevel.m_Reporter ),
+        m_seriesOn( aTopLevel.m_Reporter ),
+        m_seriesOff( aTopLevel.m_Reporter )
 {
     bool status = true;
 
@@ -339,6 +342,10 @@ KIBIS_MODEL::KIBIS_MODEL( KIBIS& aTopLevel, const IbisModel& aSource, IbisParser
     m_pullup = aSource.m_pullup;
     m_pulldown = aSource.m_pulldown;
 
+    m_series = aSource.m_series;
+    m_seriesOn = aSource.m_seriesOn;
+    m_seriesOff = aSource.m_seriesOff;
+
     for( const IbisSubmodelMode& submodel : aSource.m_submodels )
     {
         auto it = aParser.m_ibisFile.m_submodels.find( submodel.m_name );
@@ -383,7 +390,42 @@ KIBIS_COMPONENT::KIBIS_COMPONENT( KIBIS& aTopLevel, const IbisComponent& aSource
         m_pins.push_back( kPin );
     }
 
+    for( const IbisComponentSeriesPinMapping& iPair : aSource.m_seriesPinMappings )
+    {
+        m_seriesPinMappings.push_back( { iPair.m_pin1, iPair.m_pin2, iPair.m_modelName,
+                                         iPair.m_functionTableGroup } );
+    }
+
     m_valid = status;
+}
+
+
+KIBIS_PIN* KIBIS_PIN::SeriesPartner( std::string* aModelName, std::string* aGroupName ) const
+{
+    if( !m_parent )
+        return nullptr;
+
+    for( const KIBIS_SERIES_PAIR& pair : m_parent->m_seriesPinMappings )
+    {
+        const std::string* other = nullptr;
+
+        if( pair.m_pin1 == m_pinNumber )
+            other = &pair.m_pin2;
+        else if( pair.m_pin2 == m_pinNumber )
+            other = &pair.m_pin1;
+        else
+            continue;
+
+        if( aModelName )
+            *aModelName = pair.m_modelName;
+
+        if( aGroupName )
+            *aGroupName = pair.m_groupName;
+
+        return m_parent->GetPin( *other );
+    }
+
+    return nullptr;
 }
 
 
@@ -521,6 +563,126 @@ std::string KIBIS_MODEL::SpiceDie( const KIBIS_PARAMETER& aParam, int aIndex, bo
             result += submodel.m_POWERClamp.Spice( aIndex * 4 + 2, PC_PWR, DIE, true, PC, supply );
             result += "Vmeas" + PC + " POWER " + PC_PWR + " 0\n";
         }
+    }
+
+    return result;
+}
+
+
+std::string KIBIS_MODEL::SpiceSeriesDie( const KIBIS_PARAMETER& aParam, int aIndex,
+                                         const std::string& aPort1, const std::string& aPort2,
+                                         const IbisSeriesData& aData,
+                                         const std::string& aGate ) const
+{
+    std::string result;
+    IBIS_CORNER corner = aParam.m_supply;
+    std::string idx = std::to_string( aIndex );
+
+    // Gated arms terminate at ARM_OUT; a parametric resistor bridges it to
+    // aPort2 with ~mΩ when aGate ~= 1 and ~TΩ when ~= 0.
+    const bool gated = !aGate.empty();
+    std::string p2 = gated ? ( "ARM_OUT" + idx ) : aPort2;
+
+    if( !aData.m_Rseries.isNA() )
+    {
+        result += "R_S" + idx + " " + aPort1 + " " + p2 + " ";
+        result += doubleToString( aData.m_Rseries.value[corner] );
+        result += "\n";
+    }
+
+    if( !aData.m_Lseries.isNA() )
+    {
+        std::string nL = "n_L" + idx;
+        result += "L_S" + idx + " " + aPort1 + " " + nL + " ";
+        result += doubleToString( aData.m_Lseries.value[corner] );
+        result += "\n";
+
+        double rl = aData.m_RlSeries.isNA() ? 0.0 : aData.m_RlSeries.value[corner];
+        result += "R_Sl" + idx + " " + nL + " " + p2 + " ";
+        result += doubleToString( rl );
+        result += "\n";
+    }
+
+    if( !aData.m_Cseries.isNA() )
+    {
+        std::string node1 = aPort1;
+        int subnode = 0;
+
+        if( !aData.m_RcSeries.isNA() )
+        {
+            std::string n = "n_Cr" + idx + "_" + std::to_string( subnode++ );
+            result += "R_Sc" + idx + " " + node1 + " " + n + " ";
+            result += doubleToString( aData.m_RcSeries.value[corner] );
+            result += "\n";
+            node1 = n;
+        }
+
+        if( !aData.m_LcSeries.isNA() )
+        {
+            std::string n = "n_Cl" + idx + "_" + std::to_string( subnode++ );
+            result += "L_Sc" + idx + " " + node1 + " " + n + " ";
+            result += doubleToString( aData.m_LcSeries.value[corner] );
+            result += "\n";
+            node1 = n;
+        }
+
+        result += "C_S" + idx + " " + node1 + " " + p2 + " ";
+        result += doubleToString( aData.m_Cseries.value[corner] );
+        result += "\n";
+    }
+
+    // Use B-source pwl() instead of IVtable::Spice's xspice 'a' device:
+    // XSPICE code models (pwl.cm) aren't always loaded in embedded ngspice.
+    if( !aData.m_seriesCurrent.m_entries.empty() )
+    {
+        std::string expr = "pwl(v(" + aPort1 + "," + p2 + ")";
+
+        for( const IVtableEntry& e : aData.m_seriesCurrent.m_entries )
+        {
+            if( std::isnan( e.I.value[corner] ) )
+                continue;
+
+            expr += "," + doubleToString( e.V ) + "," + doubleToString( e.I.value[corner] );
+        }
+
+        expr += ")";
+        result += "B_SC" + idx + " " + aPort1 + " " + p2 + " i = " + expr + "\n";
+    }
+
+    // BIRD 41.8 §5: ids = Ids(Vgs, Vds_fixed) × vds / Vds_fixed.
+    // Vgs = m_voltageRange[supply] − min(V(P1), V(P2)).
+    int mIdx = 0;
+    const double vcc = m_voltageRange.value[corner];
+
+    for( const IbisMosfetEntry& mosfet : aData.m_seriesMosfet )
+    {
+        if( mosfet.m_table.m_entries.empty() || std::isnan( mosfet.m_Vds ) || mosfet.m_Vds <= 0.0 )
+            continue;
+
+        std::string suffix = idx + "_" + std::to_string( mIdx++ );
+        std::string tableExpr = "pwl(" + doubleToString( vcc ) + "-min(v(" + aPort1 + "),v("
+                                + aPort2 + "))";
+
+        for( const IVtableEntry& e : mosfet.m_table.m_entries )
+        {
+            if( std::isnan( e.I.value[corner] ) )
+                continue;
+
+            tableExpr += "," + doubleToString( e.V ) + "," + doubleToString( e.I.value[corner] );
+        }
+
+        tableExpr += ")";
+
+        result += "B_M" + suffix + " " + aPort1 + " " + p2 + " i = ";
+        result += "(" + tableExpr + ") * (v(" + aPort1 + "," + p2 + ") / "
+                  + doubleToString( mosfet.m_Vds ) + ")";
+        result += "\n";
+    }
+
+    if( gated )
+    {
+        result += "R_G" + idx + " " + p2 + " " + aPort2 + " R='0.001 / ((" + aGate + ") + 1e-12)'";
+        result += "\n";
     }
 
     return result;
@@ -1324,7 +1486,17 @@ bool KIBIS_PIN::writeSpiceDriver( std::string& aDest, const std::string& aName, 
         break;
     }
     default:
-        Report( _( "Invalid model type for a driver." ), RPT_SEVERITY_ERROR );
+        if( aModel.m_type == IBIS_MODEL_TYPE::SERIES
+            || aModel.m_type == IBIS_MODEL_TYPE::SERIES_SWITCH )
+        {
+            Report( _( "Series and Series_switch models are passive devices, not drivers." ),
+                    RPT_SEVERITY_ERROR );
+        }
+        else
+        {
+            Report( _( "Invalid model type for a driver." ), RPT_SEVERITY_ERROR );
+        }
+
         status = false;
     }
 
@@ -1366,6 +1538,64 @@ bool KIBIS_PIN::writeSpiceDevice( std::string& aDest, const std::string& aName, 
         result += "\n";
 
         result += aModel.SpiceDie( aParam, 0, false );
+
+        result += "\n.ENDS DEVICE\n\n";
+
+        aDest = std::move( result );
+        break;
+    }
+    case IBIS_MODEL_TYPE::SERIES:
+    case IBIS_MODEL_TYPE::SERIES_SWITCH:
+    {
+        KIBIS_PIN* partner = SeriesPartner();
+
+        if( !partner )
+        {
+            Report( _( "Series model has no [Series Pin Mapping] partner pin." ),
+                    RPT_SEVERITY_ERROR );
+            status = false;
+            break;
+        }
+
+        std::string result = "\n*Series device model generated by KiCad using IBIS data.\n";
+
+        // CPIN ties to ngspice's global 0 net so GND need not be a subckt port.
+        result += ".SUBCKT ";
+        result += aName;
+        result += " PIN_A PIN_B\n";
+
+        if( aModel.m_type == IBIS_MODEL_TYPE::SERIES_SWITCH )
+            result += ".param SW_STATE=1\n";
+
+        auto emitPinParasitics = [&]( const std::string& aSuffix, const KIBIS_PIN& aPin,
+                                      const std::string& aPin_ext, const std::string& aDie )
+        {
+            std::string n1 = "n_pin" + aSuffix;
+            result += "RPIN" + aSuffix + " " + n1 + " " + aPin_ext + " ";
+            result += doubleToString( aPin.m_Rpin.value[aParam.m_Rpin] );
+            result += "\n";
+            result += "LPIN" + aSuffix + " " + aDie + " " + n1 + " ";
+            result += doubleToString( aPin.m_Lpin.value[aParam.m_Lpin] );
+            result += "\n";
+            result += "CPIN" + aSuffix + " " + aPin_ext + " 0 ";
+            result += doubleToString( aPin.m_Cpin.value[aParam.m_Cpin] );
+            result += "\n";
+        };
+
+        emitPinParasitics( "A", *this, "PIN_A", "DIE_A" );
+        emitPinParasitics( "B", *partner, "PIN_B", "DIE_B" );
+
+        if( aModel.m_type == IBIS_MODEL_TYPE::SERIES )
+        {
+            result += aModel.SpiceSeriesDie( aParam, 0, "DIE_A", "DIE_B", aModel.m_series, "" );
+        }
+        else
+        {
+            result += aModel.SpiceSeriesDie( aParam, 1, "DIE_A", "DIE_B", aModel.m_seriesOn,
+                                             "SW_STATE" );
+            result += aModel.SpiceSeriesDie( aParam, 2, "DIE_A", "DIE_B", aModel.m_seriesOff,
+                                             "(1 - SW_STATE)" );
+        }
 
         result += "\n.ENDS DEVICE\n\n";
 

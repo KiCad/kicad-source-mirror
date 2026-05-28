@@ -304,6 +304,17 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
                     ibismodel->SwitchSingleEndedDiff( false );
                     m_differentialCheckbox->SetValue( false );
                 }
+
+                // SetIbisModel derives the IO mode from KIBIS_MODEL::m_type
+                // (Series / Series_switch override the differential layout).
+                auto ibisLibrary = static_cast<const SIM_LIBRARY_IBIS*>( library() );
+                std::string pinNum = GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::PIN_FIELD,
+                                                    true, 0 );
+                std::string modelNm = GetFieldValue( &m_fields, SIM_LIBRARY_IBIS::MODEL_FIELD,
+                                                     true, 0 );
+
+                if( ibisLibrary && !pinNum.empty() && !modelNm.empty() )
+                    ibismodel->SetIbisModel( *ibisLibrary, pinNum, modelNm );
             }
         }
     }
@@ -1488,6 +1499,24 @@ void DIALOG_SIM_MODEL<T>::onPinComboboxTextEnter( wxCommandEvent& aEvent )
 template <typename T>
 void DIALOG_SIM_MODEL<T>::onPinModelCombobox( wxCommandEvent& aEvent )
 {
+    if( SIM_MODEL_IBIS* ibismodel = dynamic_cast<SIM_MODEL_IBIS*>( &curModel() ) )
+    {
+        const SIM_LIBRARY_IBIS* ibisLibrary = dynamic_cast<const SIM_LIBRARY_IBIS*>( library() );
+
+        // Skip uncommitted combobox text so SetIbisModel doesn't silently fail.
+        if( ibisLibrary
+            && m_pinCombobox->GetSelection() >= 0
+            && m_pinModelCombobox->GetSelection() >= 0 )
+        {
+            std::string pinNumber = ibismodel->GetIbisPins()
+                                            .at( m_pinCombobox->GetSelection() )
+                                            .first;
+            std::string modelName = m_pinModelCombobox->GetStringSelection().ToStdString();
+
+            ibismodel->SetIbisModel( *ibisLibrary, pinNumber, modelName );
+        }
+    }
+
     updateWidgets();
 }
 

@@ -251,19 +251,120 @@ SIM_MODEL_IBIS::SIM_MODEL_IBIS( TYPE aType ) :
 
 void SIM_MODEL_IBIS::SwitchSingleEndedDiff( bool aDiff )
 {
+    SetIOMode( aDiff ? IBIS_IO_MODE::DIFFERENTIAL : IBIS_IO_MODE::SINGLE_ENDED );
+}
+
+
+void SIM_MODEL_IBIS::SetIOMode( IBIS_IO_MODE aMode )
+{
+    m_ioMode = aMode;
     ClearPins();
 
-    if( aDiff )
+    switch( aMode )
     {
+    case IBIS_IO_MODE::SINGLE_ENDED:
+        AddPin( { "GND", "1" } );
+        AddPin( { "IN/OUT", "2" } );
+        removeSwitchStateParam();
+        break;
+
+    case IBIS_IO_MODE::DIFFERENTIAL:
         AddPin( { "GND", "1" } );
         AddPin( { "+", "2" } );
         AddPin( { "-", "3" } );
+        removeSwitchStateParam();
+        break;
+
+    case IBIS_IO_MODE::SERIES:
+        AddPin( { "PIN_A", "1" } );
+        AddPin( { "PIN_B", "2" } );
+        break;
     }
-    else
+}
+
+
+void SIM_MODEL_IBIS::addSwitchStateParam()
+{
+    if( FindParam( "sw_state" ) )
+        return;
+
+    // INFO must outlive every PARAM that references it (PARAM stores const INFO&).
+    static const PARAM::INFO info = [&]
     {
-        AddPin( { "GND", "1" } );
-        AddPin( { "IN/OUT", "2" } );
+        PARAM::INFO i;
+        i.name = "sw_state";
+        i.type = SIM_VALUE::TYPE_FLOAT;
+        i.unit = "";
+        i.category = PARAM::CATEGORY::PRINCIPAL;
+        i.defaultValue = "1";
+        i.description = _( "Switch state (1 = on, 0 = off)" ).ToStdString();
+        i.isSpiceInstanceParam = true;
+        i.spiceInstanceName = "SW_STATE";
+        return i;
+    }();
+
+    AddParam( info );
+}
+
+
+void SIM_MODEL_IBIS::removeSwitchStateParam()
+{
+    // PARAM is not assignable; erase-from-middle is illegal.  sw_state is
+    // the only post-construction append, so back() is safe.
+    if( !m_params.empty() && m_params.back().info.name == "sw_state" )
+        m_params.pop_back();
+}
+
+
+bool SIM_MODEL_IBIS::SetIbisModel( const SIM_LIBRARY_IBIS& aLib, const std::string& aPinNumber,
+                                   const std::string& aModelName )
+{
+    KIBIS_COMPONENT* kcomp = aLib.m_kibis.GetComponent( GetComponentName() );
+
+    if( !kcomp )
+        return false;
+
+    KIBIS_MODEL* kmodel = aLib.m_kibis.GetModel( aModelName );
+
+    if( !kmodel )
+        return false;
+
+    KIBIS_PIN* kpin = kcomp->GetPin( aPinNumber );
+
+    switch( kmodel->m_type )
+    {
+    case IBIS_MODEL_TYPE::SERIES:
+    case IBIS_MODEL_TYPE::SERIES_SWITCH:
+    {
+        SetIOMode( IBIS_IO_MODE::SERIES );
+
+        m_partnerPin.clear();
+
+        if( kpin )
+        {
+            if( KIBIS_PIN* partner = kpin->SeriesPartner() )
+                m_partnerPin = partner->m_pinNumber;
+        }
+
+        if( kmodel->m_type == IBIS_MODEL_TYPE::SERIES_SWITCH )
+            addSwitchStateParam();
+        else
+            removeSwitchStateParam();
+
+        break;
     }
+
+    default:
+        m_partnerPin.clear();
+        removeSwitchStateParam();
+
+        if( m_ioMode == IBIS_IO_MODE::SERIES )
+            SetIOMode( IBIS_IO_MODE::SINGLE_ENDED );
+
+        break;
+    }
+
+    return true;
 }
 
 SIM_MODEL_IBIS::SIM_MODEL_IBIS( TYPE aType, const SIM_MODEL_IBIS& aSource ) :
@@ -286,6 +387,19 @@ SIM_MODEL_IBIS::SIM_MODEL_IBIS( TYPE aType, const SIM_MODEL_IBIS& aSource ) :
     m_ibisModels = aSource.GetIbisModels();
 
     m_enableDiff = aSource.CanDifferential();
+    m_partnerPin = aSource.m_partnerPin;
+
+    // SetIOMode does not touch sw_state; re-add it for SERIES_SWITCH sources.
+    SetIOMode( aSource.m_ioMode );
+
+    if( aSource.IsSeries() )
+    {
+        if( const PARAM* srcSwState = aSource.FindParam( "sw_state" ) )
+        {
+            addSwitchStateParam();
+            SetParamValue( "sw_state", srcSwState->value );
+        }
+    }
 }
 
 

@@ -301,6 +301,11 @@ public:
     IbisRamp                    m_ramp;
     std::vector<KIBIS_SUBMODEL> m_submodels;
 
+    // m_series for Series models, m_seriesOn/m_seriesOff for Series_switch.
+    IbisSeriesData              m_series;
+    IbisSeriesData              m_seriesOn;
+    IbisSeriesData              m_seriesOff;
+
     /** @brief Return true if the model has a pulldown transistor */
     bool HasPulldown() const;
     /** @brief Return true if the model has a pullup transistor */
@@ -318,6 +323,12 @@ public:
      *  @return A multiline string with spice directives
      */
     std::string SpiceDie( const KIBIS_PARAMETER& aParam, int aIndex, bool aDriver ) const;
+
+    /** @brief Emit the two-port Series die.  aGate gates one arm of a
+     *  Series_switch ("SW_STATE" or "(1 - SW_STATE)"); empty for plain Series. */
+    std::string SpiceSeriesDie( const KIBIS_PARAMETER& aParam, int aIndex,
+                                const std::string& aPort1, const std::string& aPort2,
+                                const IbisSeriesData& aData, const std::string& aGate ) const;
 
     /** @brief Create waveform pairs
      *
@@ -463,6 +474,19 @@ public:
     KIBIS_PIN* m_complementaryPin = nullptr;
 
     bool isDiffPin() const { return m_complementaryPin != nullptr; };
+
+    /** @brief Partner pin from [Series Pin Mapping], or nullptr.  Model name
+     *  and switch-group label come back via the out-params. */
+    KIBIS_PIN* SeriesPartner( std::string* aModelName = nullptr,
+                              std::string* aGroupName = nullptr ) const;
+};
+
+struct KIBIS_SERIES_PAIR
+{
+    std::string m_pin1;
+    std::string m_pin2;
+    std::string m_modelName;
+    std::string m_groupName;
 };
 
 class KIBIS_COMPONENT : public KIBIS_BASE
@@ -474,7 +498,8 @@ public:
     /** @brief Name of the manufacturer */
     std::string m_manufacturer;
 
-    std::vector<KIBIS_PIN> m_pins;
+    std::vector<KIBIS_PIN>          m_pins;
+    std::vector<KIBIS_SERIES_PAIR>  m_seriesPinMappings;
 
     /** @brief Get a pin by its number ( 1, 2, A1, A2, ... )
      *
