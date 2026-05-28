@@ -24,6 +24,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <sim/kibis/kibis.h>
+#include <sim/kibis/ibis_parser.h>
 
 namespace
 {
@@ -583,6 +584,75 @@ BOOST_AUTO_TEST_CASE( Load_v4_1_SeriesPinMapping )
     BOOST_REQUIRE( comp != nullptr );
     BOOST_TEST( comp->m_name == "SeriesSwitchDevice" );
     BOOST_TEST( comp->m_pins.size() == 4 );
+}
+
+
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24228
+// IBIS [R Series], [L Series], [C Series], [Rl Series], [Rc Series],
+// [Lc Series] and [Series Current] keywords appearing inside a [Model] block,
+// along with the [On] / [Off] sub-blocks used by Series_switch models,
+// previously produced "Unknown keyword in MODEL context" errors.
+BOOST_AUTO_TEST_CASE( Load_v4_1_RSeries, *boost::unit_test::tolerance( 1e-15 ) )
+{
+    WX_STRING_REPORTER reporter;
+
+    std::string path = GetLibraryPath( "ibis_v4_1_r_series" );
+    KIBIS       top( path, &reporter );
+
+    BOOST_TEST_INFO( "Parsed: " << path );
+    BOOST_TEST_INFO( "Reported: " << reporter.GetMessages() );
+
+    BOOST_TEST( top.m_valid );
+    BOOST_TEST( !reporter.HasMessageOfSeverity( RPT_SEVERITY_ERROR ) );
+
+    KIBIS_MODEL* model = top.GetModel( "series_r" );
+    BOOST_REQUIRE( model != nullptr );
+    BOOST_TEST( model->m_name == "series_r" );
+    BOOST_TEST( (int) model->m_type == (int) IBIS_MODEL_TYPE::SERIES );
+
+    KIBIS_MODEL* swModel = top.GetModel( "series_sw" );
+    BOOST_REQUIRE( swModel != nullptr );
+    BOOST_TEST( (int) swModel->m_type == (int) IBIS_MODEL_TYPE::SERIES_SWITCH );
+
+    /* KIBIS_MODEL is a stripped copy of IbisModel that the simulator consumes.
+     * Series RLC values are not yet promoted to KIBIS_MODEL, so verify them
+     * directly against the underlying IbisParser representation. */
+    IbisParser parser( &reporter );
+    BOOST_REQUIRE( parser.ParseFile( path ) );
+
+    const IbisModel* parsedSeries = nullptr;
+    const IbisModel* parsedSwitch = nullptr;
+
+    for( const IbisModel& m : parser.m_ibisFile.m_models )
+    {
+        if( m.m_name == "series_r" )
+            parsedSeries = &m;
+        else if( m.m_name == "series_sw" )
+            parsedSwitch = &m;
+    }
+
+    BOOST_REQUIRE( parsedSeries != nullptr );
+    BOOST_TEST( parsedSeries->m_series.m_Rseries.value[0] == 25.0 );
+    BOOST_TEST( parsedSeries->m_series.m_Rseries.value[1] == 22.0 );
+    BOOST_TEST( parsedSeries->m_series.m_Rseries.value[2] == 28.0 );
+    BOOST_TEST( parsedSeries->m_series.m_Lseries.value[0] == 1.0e-9 );
+    BOOST_TEST( parsedSeries->m_series.m_Cseries.value[0] == 0.5e-12 );
+    BOOST_TEST( parsedSeries->m_series.m_RlSeries.value[0] == 0.1 );
+    BOOST_TEST( parsedSeries->m_series.m_RcSeries.value[0] == 1.0 );
+    BOOST_TEST( parsedSeries->m_series.m_LcSeries.value[0] == 0.5e-9 );
+
+    BOOST_TEST( parsedSeries->m_series.m_seriesCurrent.m_entries.size() == 3 );
+    BOOST_TEST( parsedSeries->m_series.m_seriesCurrent.m_entries[0].V == -1.0 );
+    BOOST_TEST( parsedSeries->m_series.m_seriesCurrent.m_entries[0].I.value[0] == -40.0e-3 );
+    BOOST_TEST( parsedSeries->m_series.m_seriesCurrent.m_entries[2].V == 1.0 );
+    BOOST_TEST( parsedSeries->m_series.m_seriesCurrent.m_entries[2].I.value[0] == 40.0e-3 );
+
+    BOOST_REQUIRE( parsedSwitch != nullptr );
+    BOOST_TEST( parsedSwitch->m_seriesOn.m_Rseries.value[0] == 5.0 );
+    BOOST_TEST( parsedSwitch->m_seriesOff.m_Rseries.value[0] == 1.0e6 );
+    BOOST_TEST( parsedSwitch->m_seriesOn.m_seriesCurrent.m_entries.size() == 3 );
+    BOOST_TEST( parsedSwitch->m_seriesOn.m_seriesCurrent.m_entries[0].I.value[0] == -200.0e-3 );
+    BOOST_TEST( parsedSwitch->m_seriesOff.m_seriesCurrent.m_entries.size() == 0 );
 }
 
 

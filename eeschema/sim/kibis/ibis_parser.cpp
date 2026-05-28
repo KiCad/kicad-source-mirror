@@ -678,6 +678,24 @@ bool IbisModel::Check()
         status = false;
     }
 
+    if( !m_series.m_seriesCurrent.Check() )
+    {
+        Report( _( "Invalid Series Current table." ), RPT_SEVERITY_ERROR );
+        status = false;
+    }
+
+    if( !m_seriesOn.m_seriesCurrent.Check() )
+    {
+        Report( _( "Invalid Series Current table in [On] block." ), RPT_SEVERITY_ERROR );
+        status = false;
+    }
+
+    if( !m_seriesOff.m_seriesCurrent.Check() )
+    {
+        Report( _( "Invalid Series Current table in [Off] block." ), RPT_SEVERITY_ERROR );
+        status = false;
+    }
+
     if( !m_POWERClamp.Check() )
     {
         Report( _( "Invalid POWER Clamp table." ), RPT_SEVERITY_ERROR );
@@ -1518,6 +1536,7 @@ bool IbisParser::changeContext( std::string& aKeyword )
             status &= storeString( model.m_name, false );
             m_ibisFile.m_models.push_back( model );
             m_currentModel = &( m_ibisFile.m_models.back() );
+            m_currentSeriesData = nullptr;
             m_context = IBIS_PARSER_CONTEXT::MODEL;
             m_continue = IBIS_PARSER_CONTINUE::MODEL;
         }
@@ -1817,6 +1836,30 @@ bool IbisParser::parseModel( std::string& aKeyword )
         status = readTypMinMaxValue( m_currentModel->m_Rpower );
     else if( compareIbisWord( aKeyword.c_str(), "Rgnd" ) )
         status = readTypMinMaxValue( m_currentModel->m_Rgnd );
+    else if( compareIbisWord( aKeyword.c_str(), "On" ) )
+    {
+        m_currentSeriesData = &m_currentModel->m_seriesOn;
+        status = true;
+    }
+    else if( compareIbisWord( aKeyword.c_str(), "Off" ) )
+    {
+        m_currentSeriesData = &m_currentModel->m_seriesOff;
+        status = true;
+    }
+    else if( compareIbisWord( aKeyword.c_str(), "R_Series" ) )
+        status = readTypMinMaxValue( currentSeriesData()->m_Rseries );
+    else if( compareIbisWord( aKeyword.c_str(), "L_Series" ) )
+        status = readTypMinMaxValue( currentSeriesData()->m_Lseries );
+    else if( compareIbisWord( aKeyword.c_str(), "C_Series" ) )
+        status = readTypMinMaxValue( currentSeriesData()->m_Cseries );
+    else if( compareIbisWord( aKeyword.c_str(), "Rl_Series" ) )
+        status = readTypMinMaxValue( currentSeriesData()->m_RlSeries );
+    else if( compareIbisWord( aKeyword.c_str(), "Lc_Series" ) )
+        status = readTypMinMaxValue( currentSeriesData()->m_LcSeries );
+    else if( compareIbisWord( aKeyword.c_str(), "Rc_Series" ) )
+        status = readTypMinMaxValue( currentSeriesData()->m_RcSeries );
+    else if( compareIbisWord( aKeyword.c_str(), "Series_Current" ) )
+        status = readIVtableEntry( currentSeriesData()->m_seriesCurrent );
     else if( compareIbisWord( aKeyword.c_str(), "Algorithmic_Model" ) )
     {
         m_context = IBIS_PARSER_CONTEXT::ALGORITHMIC_MODEL;

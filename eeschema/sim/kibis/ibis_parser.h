@@ -558,6 +558,33 @@ public:
 };
 
 
+/* Container for the per-path series RLC + IV data used by Series and Series_switch
+ * model types.  For a Series model only IbisModel::m_series is populated.  For
+ * Series_switch, the [On] and [Off] sub-blocks fill m_seriesOn and m_seriesOff. */
+class IbisSeriesData : public IBIS_INPUT
+{
+public:
+    IbisSeriesData( REPORTER* aReporter ) :
+            IBIS_INPUT( aReporter ),
+            m_Rseries( aReporter ),
+            m_Lseries( aReporter ),
+            m_Cseries( aReporter ),
+            m_RlSeries( aReporter ),
+            m_LcSeries( aReporter ),
+            m_RcSeries( aReporter ),
+            m_seriesCurrent( aReporter )
+    {};
+
+    TypMinMaxValue m_Rseries;
+    TypMinMaxValue m_Lseries;
+    TypMinMaxValue m_Cseries;
+    TypMinMaxValue m_RlSeries;
+    TypMinMaxValue m_LcSeries;
+    TypMinMaxValue m_RcSeries;
+    IVtable        m_seriesCurrent;
+};
+
+
 class IbisModel : IBIS_INPUT
 {
 public:
@@ -585,7 +612,10 @@ public:
             m_ISSO_PU( aReporter ),
             m_ISSO_PD( aReporter ),
             m_compositeCurrent( aReporter ),
-            m_ramp( aReporter )
+            m_ramp( aReporter ),
+            m_series( aReporter ),
+            m_seriesOn( aReporter ),
+            m_seriesOff( aReporter )
     {};
 
     virtual ~IbisModel() = default;
@@ -629,6 +659,14 @@ public:
     std::vector<IbisWaveform*> m_risingWaveforms;
     std::vector<IbisWaveform*> m_fallingWaveforms;
     IbisRamp                   m_ramp;
+
+    /* Series and Series_switch model data.  For Series models, m_series holds
+     * the [R/L/C/Rl/Lc/Rc Series] and [Series Current] values that appear
+     * directly inside [Model].  For Series_switch models, the data inside the
+     * [On] and [Off] sub-blocks goes into m_seriesOn and m_seriesOff. */
+    IbisSeriesData             m_series;
+    IbisSeriesData             m_seriesOn;
+    IbisSeriesData             m_seriesOff;
 
     std::vector<IbisSubmodelMode> m_submodels;
 
@@ -798,6 +836,7 @@ public:
     IVtable*           m_currentIVtable = nullptr;
     VTtable*           m_currentVTtable = nullptr;
     IbisWaveform*      m_currentWaveform = nullptr;
+    IbisSeriesData*    m_currentSeriesData = nullptr;
 
     /** @brief Parse a file
      *
@@ -848,6 +887,18 @@ private:
      * @return True in case of success
      */
     bool parseModel( std::string& aKeyword );
+
+    /** @brief Return the IbisSeriesData currently being populated.
+     *
+     * Inside a [Model] block, series-element keywords (e.g. [R Series]) write
+     * to m_currentModel->m_series by default.  When the parser encounters [On]
+     * or [Off] inside a Series_switch model, m_currentSeriesData is redirected
+     * to m_seriesOn or m_seriesOff for the remainder of that sub-block.
+     */
+    IbisSeriesData* currentSeriesData()
+    {
+        return m_currentSeriesData ? m_currentSeriesData : &m_currentModel->m_series;
+    }
 
     /** @brief Parse a single keyword in the submodel context
      *

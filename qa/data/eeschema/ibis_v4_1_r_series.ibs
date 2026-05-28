@@ -1,0 +1,69 @@
+[IBIS Ver]      4.1
+[File name]     ibis_v4_1_r_series.ibs
+[File Rev]      1.0
+[Date]          20/05/2026
+[Source]        Artificial data for KiCad QA (issue #24228)
+[Notes]         Covers the [R Series], [L Series], [C Series], [Rl Series],
+[Notes]         [Rc Series], [Lc Series] and [Series Current] keywords inside
+[Notes]         a [Model] block, and the [On] / [Off] sub-blocks used by
+[Notes]         Series_switch models.
+[Disclaimer]    This is NOT a valid component
+
+[Component]     SeriesDevice
+[Manufacturer]  KiCad
+
+[Package]
+R_pkg           50m             40m             60m
+L_pkg           2n              NA              NA
+C_pkg           10p             NA              NA
+
+[Pin]   signal_name     model_name      R_pin   L_pin   C_pin
+  1     IN_A            series_r         55m      NA      0.2p
+  2     OUT_A           series_r         55m      NA      0.2p
+  3     IN_B            series_sw        55m      NA      0.2p
+  4     OUT_B           series_sw        55m      NA      0.2p
+
+|
+| A series-element model exercising the [R Series], [L Series], [C Series],
+| [Rl Series], [Rc Series], [Lc Series] and [Series Current] keywords.
+|
+[Model]         series_r
+Model_type      Series
+C_comp          0pF             0pF             0pF
+
+[Voltage range]   3.3V          3.0V            3.6V
+
+[R Series]        25.0          22.0            28.0
+[L Series]        1.0n          0.8n            1.2n
+[C Series]        0.5p          0.4p            0.6p
+[Rl Series]       0.1           0.09            0.11
+[Rc Series]       1.0           0.9             1.1
+[Lc Series]       0.5n          0.4n            0.6n
+
+[Series Current]
+|  Voltage   I(typ)    I(min)    I(max)
+   -1.0V    -40.0m    -36.0m    -44.0m
+    0.0V      0.0m      0.0m      0.0m
+    1.0V     40.0m     36.0m     44.0m
+
+|
+| A series-switch model exercising the [On] and [Off] sub-blocks.
+|
+[Model]         series_sw
+Model_type      Series_switch
+C_comp          0pF             0pF             0pF
+
+[Voltage range]   3.3V          3.0V            3.6V
+
+[On]
+[R Series]        5.0           4.5             5.5
+
+[Series Current]
+   -1.0V    -200.0m   -180.0m   -220.0m
+    0.0V      0.0m      0.0m      0.0m
+    1.0V     200.0m    180.0m    220.0m
+
+[Off]
+[R Series]        1.0Meg        0.9Meg          1.1Meg
+
+[END]
