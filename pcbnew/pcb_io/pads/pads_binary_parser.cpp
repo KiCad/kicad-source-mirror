@@ -194,10 +194,20 @@ static bool placementCoordPlausible( const SDB_RECORD& aRec, int aXOff, std::opt
 {
     static constexpr int32_t MIN_PLAUSIBLE_RAW_COORD = 100000;
 
+    // Matches recoverOmittedPlacements()'s COORD_ABS_MAX: a real placement's raw coordinate
+    // never approaches INT32_MAX. Without this, a byte-scan false positive with a garbage
+    // (e.g. reinterpreted-string) coordinate passes here purely because it isn't near zero --
+    // found on P2007_0000_RBCS_RC_AdC_MAIS_000.pcb (v0x2021), where a stray "I" record with raw
+    // X=-453602671 satisfied the old min-only check and was imported as a phantom footprint.
+    static constexpr int32_t MAX_PLAUSIBLE_RAW_COORD = 1500000000;
+
     int32_t rawX = aRec.I32( aXOff );
     int32_t rawY = aYOff ? aRec.I32( *aYOff ) : 0;
 
-    return std::abs( rawX ) >= MIN_PLAUSIBLE_RAW_COORD || std::abs( rawY ) >= MIN_PLAUSIBLE_RAW_COORD;
+    bool minOk = std::abs( rawX ) >= MIN_PLAUSIBLE_RAW_COORD || std::abs( rawY ) >= MIN_PLAUSIBLE_RAW_COORD;
+    bool maxOk = std::abs( rawX ) <= MAX_PLAUSIBLE_RAW_COORD && std::abs( rawY ) <= MAX_PLAUSIBLE_RAW_COORD;
+
+    return minOk && maxOk;
 }
 
 
@@ -482,6 +492,16 @@ void BINARY_PARSER::parsePartPlacements()
             // verified against a real false positive (a stray "A"/"A1" text fragment with
             // near-zero raw X/Y immediately preceding a board's genuine 13-record leading run).
             if( !placementCoordPlausible( rec, layout.xOff, layout.yOff ) )
+                break;
+
+            // A second false positive on P2007_0000_RBCS_RC_AdC_MAIS_000.pcb (v0x2021): a stray
+            // "I" text fragment with a raw X (-720754006) that satisfies placementCoordPlausible
+            // (well under its 1.5e9 ceiling, sized for legitimate large panels) but whose angle
+            // field is not a whole number of degrees (18.27078944 deg raw). Every genuine
+            // placement observed in this codebase's corpus rotates in whole degrees; verified via
+            // the full 66-board regression (compare_corpus.py) that this does not drop any of the
+            // 2FOC_4.pcb / NEI2_2.pcb leading-block records this loop was originally added for.
+            if( rec.I32( layout.angleOff ) % ANGLE_SCALE != 0 )
                 break;
 
             PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
