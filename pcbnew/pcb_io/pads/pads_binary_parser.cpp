@@ -162,11 +162,17 @@ constexpr uint32_t LINE_ITEM     = 0x00004D00;  // line/outline item (board outl
 } // namespace DRW_TAG
 
 
-// A reference designator is plausible when it is non-empty and starts with an alphanumeric (a
-// numeric lead is legal, so this is isalnum, not isalpha).
+// A reference designator is plausible when it is non-empty, starts with an alphanumeric (a
+// numeric lead is legal, so this is isalnum, not isalpha), and contains no '+' -- no PADS
+// reference designator convention ever uses '+', but the placements table's declared array can
+// legitimately hold non-component entries (power/net-name label symbols, e.g. "P1_+5V",
+// "LED_+5-CAN1") that share the placement record shape and would otherwise import as phantom
+// footprints. Found on 2FOC-AdC_2.pcb: 6 such labels at real, in-bounds indices within section
+// 22's own declared count, not a misaligned/recovered false positive.
 static bool refdesFirstCharOk( const std::string& aRef )
 {
-    return !aRef.empty() && std::isalnum( static_cast<unsigned char>( aRef[0] ) );
+    return !aRef.empty() && std::isalnum( static_cast<unsigned char>( aRef[0] ) )
+           && aRef.find( '+' ) == std::string::npos;
 }
 
 
