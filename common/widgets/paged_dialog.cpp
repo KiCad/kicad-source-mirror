@@ -26,6 +26,7 @@
 #include <widgets/ui_common.h>
 
 #include <wx/button.h>
+#include <wx/display.h>
 #include <wx/grid.h>
 #include <wx/sizer.h>
 #include <wx/treebook.h>
@@ -427,6 +428,18 @@ void PAGED_DIALOG::onPageChanged( wxBookCtrlEvent& event )
     wxSize minSize = GetBestSize();
     minSize.IncTo( FromDIP( wxSize( 600, 500 ) ) );
     minSize.DecTo( FromDIP( wxSize( 1500, 900 ) ) ); // Failsafe
+
+    // Clamp to the current display so the resize border stays reachable (#24408).
+    int displayIdx = wxDisplay::GetFromWindow( this );
+
+    if( displayIdx == wxNOT_FOUND )
+        displayIdx = 0;
+
+    wxRect displayArea = wxDisplay( (unsigned int) displayIdx ).GetClientArea();
+    wxSize maxSize( std::max( 0, displayArea.width  - FromDIP( 40 ) ),
+                    std::max( 0, displayArea.height - FromDIP( 80 ) ) );
+    minSize.DecTo( maxSize );
+
     SetMinSize( minSize );
 
     wxSize currentSize = GetSize();
