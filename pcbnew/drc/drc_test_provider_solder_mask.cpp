@@ -126,6 +126,11 @@ private:
 
 void DRC_TEST_PROVIDER_SOLDER_MASK::addItemToRTrees( BOARD_ITEM* aItem )
 {
+    // Rule areas are purely logical: no copper, no mask, no silk.  Skip them entirely
+    // so they cannot contribute to solder-mask bridge or silk-to-mask collisions.
+    if( aItem->Type() == PCB_ZONE_T && static_cast<ZONE*>( aItem )->GetIsRuleArea() )
+        return;
+
     for( PCB_LAYER_ID layer : { F_Mask, B_Mask } )
     {
         if( !aItem->IsOnLayer( layer ) )
