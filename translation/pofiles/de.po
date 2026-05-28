@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:04+0300\n"
 "PO-Revision-Date: 2026-05-29 12:01+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -23861,7 +23861,7 @@ msgstr "\"%s\" mit dieser Datei verknüpfen?"
 #, c-format
 msgid "Failed to copy schematic file '%s' to destination '%s'."
 msgstr ""
-"Das Kopieren der Schaltplandatei ‚%s‘ zum Ziel ‚%s‘ ist fehlgeschlagen."
+"Das Kopieren der Schaltplandatei \"%s\" zum Ziel \"%s\" ist fehlgeschlagen."
 
 #: eeschema/sheet.cpp:284
 #, c-format
@@ -37616,7 +37616,7 @@ msgstr ""
 #, c-format
 msgid "Component %s expects %lu matching pads but candidate %s provides %lu."
 msgstr ""
-"Das Bauteil %s erwartet %lu passende Pads, aber der das in Frage kommende "
+"Das Bauteil %s erwartet %lu passende Pads, aber das in Frage kommende "
 "Bauteil %s bietet %lu."
 
 #: pcbnew/connectivity/topo_match.cpp:220
