@@ -1056,8 +1056,8 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
             }
         };
 
-    thread_pool& tp = GetKiCadThreadPool();
-    m_libraryPreloadReturn = tp.submit_task( preload );
+    std::future<void> preloadFuture = std::async( std::launch::async, preload );
+    m_libraryPreloadReturn = std::move( preloadFuture );
 }
 
 
