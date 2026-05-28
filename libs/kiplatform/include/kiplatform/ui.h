@@ -197,6 +197,18 @@ namespace KIPLATFORM
         void EnsureVisible( wxWindow* aWindow );
 
         /**
+         * Prepare a top-level window for reliable position round-tripping.
+         *
+         * On GTK/X11, default window gravity lets window-manager decorations affect the
+         * coordinates returned by wxWindow::GetPosition().  Some window managers, notably
+         * i3, can then shift a restored top-level window each time it is shown.  Other
+         * platforms are nops.
+         *
+         * @param aWindow window to prepare
+         */
+        void StabilizeWindowPosition( wxWindow* aWindow );
+
+        /**
          * Intended to set the floating window level in macOS on a window
          */
         void SetFloatLevel( wxWindow* aWindow );

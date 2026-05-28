@@ -104,6 +104,12 @@ void KIPLATFORM::UI::EnsureVisible( wxWindow* aWindow )
 }
 
 
+void KIPLATFORM::UI::StabilizeWindowPosition( wxWindow* aWindow )
+{
+    // Not needed on this platform
+}
+
+
 void KIPLATFORM::UI::ReparentWindow( wxNonOwnedWindow* aWindow, wxTopLevelWindow* aParent )
 {
     NSWindow* parentWindow = aParent->GetWXWindow();

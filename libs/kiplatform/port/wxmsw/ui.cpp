@@ -83,6 +83,12 @@ void KIPLATFORM::UI::EnsureVisible( wxWindow* aWindow )
 }
 
 
+void KIPLATFORM::UI::StabilizeWindowPosition( wxWindow* aWindow )
+{
+    // Not needed on this platform
+}
+
+
 void KIPLATFORM::UI::ReparentModal( wxNonOwnedWindow* aWindow )
 {
     // Not needed on this platform

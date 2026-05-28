@@ -166,6 +166,18 @@ void KIPLATFORM::UI::EnsureVisible( wxWindow* aWindow )
 }
 
 
+void KIPLATFORM::UI::StabilizeWindowPosition( wxWindow* aWindow )
+{
+    if( !aWindow )
+        return;
+
+    GtkWidget* widget = static_cast<GtkWidget*>( aWindow->GetHandle() );
+
+    if( widget && GTK_IS_WINDOW( widget ) )
+        gtk_window_set_gravity( GTK_WINDOW( widget ), GDK_GRAVITY_STATIC );
+}
+
+
 void KIPLATFORM::UI::ReparentModal( wxNonOwnedWindow* aWindow )
 {
     // Not needed on this platform
