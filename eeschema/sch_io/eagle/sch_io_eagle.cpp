@@ -1878,7 +1878,14 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     wxString gatename    = epart->deviceset + wxS( "_" ) + epart->device + wxS( "_" ) +
                            aInstance->gate;
     wxString symbolname  = wxString( epart->deviceset + epart->device );
+    wxString kiPackageName = epart->deviceset;
+
+    if( epart->technology )
+        symbolname += *epart->technology;
+
     symbolname.Replace( wxT( "*" ), wxEmptyString );
+    kiPackageName.Replace( wxT( "*" ), wxEmptyString );
+
     wxString kisymbolname = EscapeString( symbolname, CTX_LIBID );
 
     // Eagle schematics can have multiple libraries containing symbols with duplicate symbol
@@ -1919,7 +1926,16 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     auto p = elib->package.find( kisymbolname );
 
     if( p != elib->package.end() )
+    {
         package = p->second;
+    }
+    else
+    {
+        p = elib->package.find( kiPackageName );
+
+        if( p != elib->package.end() )
+            package = p->second;
+    }
 
     // set properties to prevent save file on every symbol save
     std::map<std::string, UTF8> properties;
@@ -2138,7 +2154,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     // Use the already-loaded `part` directly rather than re-fetching through the adapter,
     // because the .kicad_sym library is still buffered in m_pi and has not yet been saved to
     // disk at the time loadInstance runs.
-    symbol->SetLibSymbol( new LIB_SYMBOL( *part ) );
+    symbol->SetLibSymbol( part->Flatten().release() );
 
     for( const SCH_PIN* pin : symbol->GetLibPins() )
         m_connPoints[symbol->GetPinPhysicalPosition( pin )].emplace( pin );
@@ -2155,6 +2171,8 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
 EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRARY* aEagleLibrary )
 {
     wxCHECK( aLibrary && aEagleLibrary, nullptr );
+
+    std::vector<std::unique_ptr<LIB_SYMBOL>> derivedSymbols;
 
     // Loop through the device sets and load each of them
     for( const auto& [name, edeviceset] : aLibrary->devicesets )
@@ -2227,12 +2245,22 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
 
             for( const std::unique_ptr<ETECHNOLOGY>& technology : edevice->technologies )
             {
+                std::unique_ptr<LIB_SYMBOL> derivedSymbol;
+
+                if( !technology->name.IsEmpty() )
+                    derivedSymbol = std::make_unique<LIB_SYMBOL>( symbolName + technology->name, libSymbol.get() );
+
                 for( const std::unique_ptr<EATTR>& attr : technology->attributes )
                 {
                     if( !attr->value )
                         continue;
 
-                    SCH_FIELD* field = libSymbol->FindFieldCaseInsensitive( attr->name );
+                    SCH_FIELD* field = nullptr;
+
+                    if( !derivedSymbol )
+                        field = libSymbol->FindFieldCaseInsensitive( attr->name );
+                    else
+                        field = derivedSymbol->FindFieldCaseInsensitive( attr->name );
 
                     if( field )
                     {
@@ -2240,15 +2268,23 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                     }
                     else
                     {
-                        SCH_FIELD* newField = new SCH_FIELD( libSymbol.get(), FIELD_T::USER, attr->name );
+                        SCH_FIELD* newField = new SCH_FIELD( derivedSymbol ? derivedSymbol.get() : libSymbol.get(),
+                                                             FIELD_T::USER, attr->name );
 
                         nextFieldPosition.y += newField->GetTextHeight() + schIUScale.MilsToIU( 10 );
                         newField->SetText( *attr->value );
                         newField->SetVisible( false );
                         newField->SetPosition( nextFieldPosition );
-                        libSymbol->AddField( newField );
+
+                        if( !derivedSymbol )
+                            libSymbol->AddField( newField );
+                        else
+                            derivedSymbol->AddField( newField );
                     }
                 }
+
+                if( derivedSymbol )
+                    derivedSymbols.push_back( std::move( derivedSymbol ) );
             }
 
             libSymbol->SetUnitCount( gate_count, true );
@@ -2297,8 +2333,23 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                     std::map<std::string, UTF8> properties;
                     properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, wxEmptyString );
 
-                    m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_SYMBOL( *libSymbol.get() ),
-                                      &properties );
+                    LIB_SYMBOL* parentSymbol = new LIB_SYMBOL( *libSymbol.get() );
+                    m_pi->SaveSymbol( getLibFileName().GetFullPath(), parentSymbol, &properties );
+
+                    for( std::unique_ptr<LIB_SYMBOL>& symbol : derivedSymbols )
+                    {
+                        if( m_pi->LoadSymbol( getLibFileName().GetFullPath(), symbol->GetName() ) )
+                        {
+                            wxString tmp = aEagleLibrary->name + wxT( "_" ) + symbol->GetName();
+                            tmp = EscapeString( tmp, CTX_LIBID );
+                            symbol->SetName( tmp );
+                        }
+
+                        LIB_SYMBOL* derivedSymbol = new LIB_SYMBOL( *symbol.get() );
+
+                        derivedSymbol->SetParent( parentSymbol );
+                        m_pi->SaveSymbol( getLibFileName().GetFullPath(), derivedSymbol, &properties );
+                    }
                 }
                 catch(...)
                 {
@@ -2313,7 +2364,15 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
             // Store information on whether the value of FIELD_T::VALUE for a part should be
             // part/@value or part/@deviceset + part/@device.
             m_userValue.emplace( std::make_pair( libName, edeviceset->uservalue == true ) );
+
+            for( std::unique_ptr<LIB_SYMBOL>& symbol : derivedSymbols )
+            {
+                m_userValue.emplace( std::make_pair( symbol->GetName(), edeviceset->uservalue == true ) );
+                aEagleLibrary->KiCadSymbols[symbol->GetName()] = std::move( symbol );
+            }
         }
+
+        derivedSymbols.clear();
     }
 
     return aEagleLibrary;
