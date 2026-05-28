@@ -30,6 +30,7 @@
 #include <wx/filename.h>
 
 #include <filename_resolver.h>
+#include <gestfich.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 
@@ -200,7 +201,7 @@ void STEP_CATALOG::Build( const wxString& aProjectPath, const FILENAME_RESOLVER*
     for( const wxString& dir : gatherScanDirs( aProjectPath, aResolver ) )
     {
         wxArrayString files;
-        wxDir::GetAllFiles( dir, &files, wxEmptyString, wxDIR_FILES | wxDIR_DIRS );
+        ::CollectFilesLoopSafe( dir, files, wxEmptyString, wxDIR_FILES | wxDIR_DIRS );
 
         for( const wxString& file : files )
         {

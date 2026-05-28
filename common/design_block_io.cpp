@@ -23,6 +23,7 @@
  */
 
 #include <common.h>
+#include <gestfich.h>
 #include <json_common.h>
 #include <i18n_utility.h>
 #include <kiplatform/io.h>
@@ -230,7 +231,7 @@ bool DESIGN_BLOCK_IO::DeleteLibrary( const wxString&                    aLibrary
         wxArrayString dirs;
 
         // Get all sub-directories in the library path
-        dir.GetAllFiles( aLibraryPath, &dirs, wxEmptyString, wxDIR_DIRS );
+        CollectSubdirsLoopSafe( aLibraryPath, dirs );
 
         for( size_t i = 0; i < dirs.GetCount(); i++ )
         {

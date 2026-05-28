@@ -51,6 +51,7 @@ set( QA_COMMON_SRCS
     test_increment.cpp
     test_ki_any.cpp
     test_library_tables.cpp
+    test_loop_safe_collect.cpp
     test_markup_parser.cpp
     test_kicad_string.cpp
     test_kicad_stroke_font.cpp

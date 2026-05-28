@@ -47,6 +47,9 @@
 #include <wx/zipstrm.h>
 
 #include <filesystem>
+#include <string>
+#include <system_error>
+#include <unordered_set>
 #include <core/kicad_algo.h>
 
 void QuoteString( wxString& string )
@@ -660,4 +663,158 @@ bool AddDirectoryToZip( wxZipOutputStream& aZip, const wxString& aSourceDir, wxS
     }
 
     return true;
+}
+
+
+namespace
+{
+
+std::filesystem::path toFsPath( const wxString& aPath )
+{
+#ifdef __WXMSW__
+    return std::filesystem::path( std::wstring( aPath.wc_str() ) );
+#else
+    return std::filesystem::path( aPath.utf8_string() );
+#endif
+}
+
+
+// Best-effort canonicalisation.  Empty path means "couldn't resolve"
+// (broken symlink, ELOOP, etc.); callers treat that as "skip rather than
+// risk recursing".
+std::filesystem::path canonicalPath( const std::filesystem::path& aPath )
+{
+    std::error_code ec;
+    std::filesystem::path canon = std::filesystem::weakly_canonical( aPath, ec );
+
+    return ec ? std::filesystem::path() : canon;
+}
+
+
+// True if @p aAncestor is equal to or an ancestor of @p aDescendant.  Both
+// must already be canonical so that "/a/b" and "/a/b/c" share a prefix
+// component-wise.
+bool isAncestorOrSame( const std::filesystem::path& aAncestor,
+                       const std::filesystem::path& aDescendant )
+{
+    auto a = aAncestor.begin();
+    auto d = aDescendant.begin();
+
+    for( ; a != aAncestor.end() && d != aDescendant.end(); ++a, ++d )
+    {
+        if( *a != *d )
+            return false;
+    }
+
+    return a == aAncestor.end();
+}
+
+
+// Shared traverser for CollectFilesLoopSafe / CollectSubdirsLoopSafe.  Records
+// files, directories, or both into @p aOutput while deduplicating visited
+// directories by canonical path so recursive symlinks terminate.
+class LOOP_SAFE_COLLECTOR : public wxDirTraverser
+{
+public:
+    LOOP_SAFE_COLLECTOR( wxArrayString& aOutput, const wxString& aRoot, bool aCollectFiles,
+                         bool aCollectDirs ) :
+            m_output( aOutput ),
+            m_root( canonicalPath( toFsPath( aRoot ) ) ),
+            m_collectFiles( aCollectFiles ),
+            m_collectDirs( aCollectDirs )
+    {
+        m_visited.reserve( 256 );
+
+        if( !m_root.empty() )
+            m_visited.insert( m_root.generic_string() );
+    }
+
+    wxDirTraverseResult OnFile( const wxString& aFilename ) override
+    {
+        if( m_collectFiles )
+            m_output.Add( aFilename );
+
+        return wxDIR_CONTINUE;
+    }
+
+    wxDirTraverseResult OnDir( const wxString& aDirname ) override
+    {
+        const std::filesystem::path raw = toFsPath( aDirname );
+
+        // Fast path: a real (non-symlink) subdir can't introduce a cycle by
+        // itself, so skip the per-component weakly_canonical and use the
+        // string-only lexically_normal as the dedup key.  Cold-cache walks
+        // of large model libraries pay one lstat per dir instead of one per
+        // path component.
+        std::error_code ec;
+        const bool isLink = std::filesystem::is_symlink( raw, ec );
+
+        std::filesystem::path key;
+
+        if( isLink && !ec )
+        {
+            const std::filesystem::path canon = canonicalPath( raw );
+
+            if( canon.empty() )
+                return wxDIR_IGNORE;
+
+            // Refuse to escape the scan tree.  Stops Wine 'dosdevices/z: -> /'
+            // and similar root-escape symlinks from walking the whole disk
+            // before the visited-set catches the eventual re-entry.
+            if( !m_root.empty() && isAncestorOrSame( canon, m_root ) )
+                return wxDIR_IGNORE;
+
+            key = canon;
+        }
+        else
+        {
+            key = raw.lexically_normal();
+        }
+
+        if( !m_visited.insert( key.generic_string() ).second )
+            return wxDIR_IGNORE;
+
+        if( m_collectDirs )
+            m_output.Add( aDirname );
+
+        return wxDIR_CONTINUE;
+    }
+
+private:
+    wxArrayString&                  m_output;
+    std::filesystem::path           m_root;
+    bool                            m_collectFiles;
+    bool                            m_collectDirs;
+    std::unordered_set<std::string> m_visited;
+};
+
+
+void traverseLoopSafe( const wxString& aRoot, wxArrayString& aOutput, bool aCollectFiles,
+                       bool aCollectDirs, const wxString& aFileSpec, int aFlags )
+{
+    wxDir dir( aRoot );
+
+    if( !dir.IsOpened() )
+        return;
+
+    LOOP_SAFE_COLLECTOR collector( aOutput, aRoot, aCollectFiles, aCollectDirs );
+    dir.Traverse( collector, aFileSpec, aFlags );
+}
+
+}  // namespace
+
+
+void CollectFilesLoopSafe( const wxString& aRoot, wxArrayString& aFiles, const wxString& aFileSpec,
+                           int aFlags )
+{
+    // Force wxDIR_FILES so files are reported and wxDIR_DIRS so Traverse descends
+    // into subdirectories; the collector keeps directories out of the file list
+    // and breaks loops.  aFlags carries the caller's wxDIR_HIDDEN choice.
+    traverseLoopSafe( aRoot, aFiles, true, false, aFileSpec, aFlags | wxDIR_FILES | wxDIR_DIRS );
+}
+
+
+void CollectSubdirsLoopSafe( const wxString& aRoot, wxArrayString& aDirs, int aFlags )
+{
+    traverseLoopSafe( aRoot, aDirs, false, true, wxEmptyString, aFlags | wxDIR_DIRS );
 }

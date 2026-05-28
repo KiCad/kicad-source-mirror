@@ -50,6 +50,7 @@
 #include <common_ogl/ogl_attr_list.h>
 #include <3d_viewer/eda_3d_viewer_settings.h>
 #include <filename_resolver.h>
+#include <gestfich.h>
 
 
 namespace
@@ -559,7 +560,7 @@ void DIALOG_MIGRATE_3D_MODELS::scanDirectory( const wxString& aDir )
         return;
 
     wxArrayString files;
-    wxDir::GetAllFiles( normFn.GetPath(), &files, wxEmptyString, wxDIR_FILES | wxDIR_DIRS );
+    CollectFilesLoopSafe( normFn.GetPath(), files, wxEmptyString, wxDIR_FILES | wxDIR_DIRS );
 
     // Collect duplicate-detection set by absolute-path key so re-scanning
     // the same tree (e.g. through a different env var alias) doesn't add

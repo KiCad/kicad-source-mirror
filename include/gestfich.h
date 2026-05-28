@@ -26,6 +26,8 @@
 
 #include <map>
 #include <kicommon.h>
+#include <wx/arrstr.h>
+#include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/process.h>
 #include <wx/zipstrm.h>
@@ -144,3 +146,37 @@ KICOMMON_API bool CopyFilesOrDirectory( const wxString& aSourceDir, const wxStri
  */
 KICOMMON_API bool AddDirectoryToZip( wxZipOutputStream& aZip, const wxString& aSourceDir, wxString& aErrors,
                                      const wxString& aParentDir = "" );
+
+/**
+ * Recursively collect every file under \a aRoot, deduplicating subdirectories by
+ * their resolved path.  Legitimate one-level symlinks resolve normally, but
+ * recursive symlinks (a Wine `dosdevices/z: -> /` loop, a self-referencing `.`
+ * link, etc.) are visited at most once instead of recursing until OOM.  This is
+ * a loop-safe replacement for wxDir::GetAllFiles() when scanning user-controlled
+ * directory trees.
+ *
+ * @param aRoot is the directory to walk.
+ * @param aFiles receives the full path of every matching file found.
+ * @param aFileSpec is an optional wildcard filter (e.g. `*.step`); empty matches all.
+ * @param aFlags is the wxDir traversal flag set; defaults to wxDIR_DEFAULT to match
+ *               wxDir::GetAllFiles().  Pass `wxDIR_FILES | wxDIR_DIRS` to exclude
+ *               hidden entries.  wxDIR_FILES and wxDIR_DIRS are always implied so
+ *               recursion and file collection happen regardless.
+ */
+KICOMMON_API void CollectFilesLoopSafe( const wxString& aRoot, wxArrayString& aFiles,
+                                        const wxString& aFileSpec = wxEmptyString,
+                                        int aFlags = wxDIR_DEFAULT );
+
+/**
+ * Recursively collect every subdirectory under \a aRoot using the same loop
+ * detection as CollectFilesLoopSafe().  Loop-safe replacement for
+ * wxDir::GetAllFiles() called with the wxDIR_DIRS flag.
+ *
+ * @param aRoot is the directory to walk.
+ * @param aDirs receives the full path of every subdirectory found.
+ * @param aFlags is the wxDir traversal flag set; defaults to wxDIR_DIRS (hidden
+ *               directories excluded).  Pass `wxDIR_DIRS | wxDIR_HIDDEN` to include
+ *               them.  wxDIR_DIRS is always implied.
+ */
+KICOMMON_API void CollectSubdirsLoopSafe( const wxString& aRoot, wxArrayString& aDirs,
+                                          int aFlags = wxDIR_DIRS );
