@@ -117,7 +117,14 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
         gridSize = getView()->GetGAL()->GetGridSize();
 
     bool     mirroredX = getView()->IsMirroredX();
-    VECTOR2D cursor = getViewControls()->GetRawCursorPosition( false );
+    VECTOR2D cursor = getViewControls()->GetCursorPosition( false );
+
+    SELECTION& selection = m_frame->GetCurrentSelection();
+
+    if( !getViewControls()->GetSettings().m_lastKeyboardCursorPositionValid && selection.HasReferencePoint() )
+    {
+        cursor = selection.GetReferencePoint();
+    }
 
     switch( type )
     {
