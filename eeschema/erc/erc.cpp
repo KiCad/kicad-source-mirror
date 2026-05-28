@@ -1986,6 +1986,12 @@ int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
 {
     wxCHECK( m_schematic, 0 );
 
+    if( std::optional<LIBRARY_MANAGER_ADAPTER*> adapter =
+                Pgm().GetLibraryManager().Adapter( LIBRARY_TABLE_TYPE::FOOTPRINT ) )
+    {
+        ( *adapter )->BlockUntilLoaded();
+    }
+
     wxString msg;
     int      err_count = 0;
 
