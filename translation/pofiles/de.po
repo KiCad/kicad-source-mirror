@@ -37,7 +37,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:03+0300\n"
 "PO-Revision-Date: 2026-05-29 08:01+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -2780,43 +2780,41 @@ msgid "Add Netclass Assignment"
 msgstr "Netzklassenzuweisung hinzufügen"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:33
-#, fuzzy
 msgid "(missing)"
-msgstr "(Datei fehlt)"
+msgstr "(fehlend)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:45
 msgid "File"
 msgstr "Datei"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:46
-#, fuzzy
 msgid "Saved version"
-msgstr "Alle Versionen zeigen"
+msgstr "Gespeicherte Version"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:47
-#, fuzzy
 msgid "Auto-saved copy"
-msgstr "Wiederherstellung aus automatischer Sicherung"
+msgstr "Automatisch gespeicherte Kopie"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
-#, fuzzy
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
-"KiCad hat ungespeicherte Änderungen aus der letzten Sitzung gefunden, die "
-"neuer als die gespeicherten Projektdateien sind."
+"KiCad hat automatisch gespeicherte Änderungen einer vorherigen Sitzung "
+"gefunden. Das heißt normalerweise, dass KiCad unerwartet geschlossen wurde "
+"ohne alle Änderungen zu speichern."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore auto-saved"
-msgstr "Standardeinstellungen wiederherstellen"
+msgstr "Automatisch gespeicherte(s) wiederherstellen"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 msgstr ""
+"Ersetzt die gespeicherte Datei durch die automatisch gespeicherte Version. "
+"Zuvor gespeicherter Inhalt wird verworfen."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
 #, fuzzy
@@ -13830,9 +13828,9 @@ msgid "From and To must be different components."
 msgstr "Quelle 1 und Quelle 2 müssen unterschiedlich sein."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find component '%s' or '%s'."
-msgstr "Konnte IBIS-Bauteil \"%s\" nicht finden"
+msgstr "Konnte Bauteil \"%s\" oder \"%s\" nicht finden."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:401
 #, c-format
