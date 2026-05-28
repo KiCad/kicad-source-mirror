@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:03+0300\n"
-"PO-Revision-Date: 2026-05-28 04:00+0000\n"
+"PO-Revision-Date: 2026-05-29 08:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -24571,7 +24571,7 @@ msgstr "\"%s\" mit dieser Datei verknüpfen?"
 #, c-format
 msgid "Failed to copy schematic file '%s' to destination '%s'."
 msgstr ""
-"Das Kopieren der Schaltplandatei ‚%s‘ zum Ziel ‚%s‘ ist fehlgeschlagen."
+"Das Kopieren der Schaltplandatei \"%s\" zum Ziel \"%s\" ist fehlgeschlagen."
 
 #: eeschema/sheet.cpp:284
 #, c-format
@@ -38853,7 +38853,7 @@ msgstr ""
 #, c-format
 msgid "Component %s expects %lu matching pads but candidate %s provides %lu."
 msgstr ""
-"Das Bauteil %s erwartet %lu passende Pads, aber der das in Frage kommende "
+"Das Bauteil %s erwartet %lu passende Pads, aber das in Frage kommende "
 "Bauteil %s bietet %lu."
 
 #: pcbnew/connectivity/topo_match.cpp:220
@@ -62953,6 +62953,11 @@ msgid ""
 "This can happen with complex overlapping zones.  Consider simplifying your "
 "zones."
 msgstr ""
+"Zonenfüllungen könnten fehlerhaft sein: Das iterative Neufüllen ist nach %d "
+"Durchgängen nicht konvergiert.\n"
+"\n"
+"Dies kann bei komplexen, sich überlappenden Zonen passieren.  Ziehen Sie "
+"eine Vereinfachung ihrer Zonen in Betracht."
 
 #: pcbnew/zone_filler.cpp:1528
 msgid "Prototype zone fill enabled. Disable setting and refill?"
