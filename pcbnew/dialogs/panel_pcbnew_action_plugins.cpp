@@ -44,6 +44,8 @@
 #include <widgets/wx_html_report_box.h>
 #include <wx/app.h>
 
+#include <algorithm>
+
 
 #define GRID_CELL_MARGIN 4
 
@@ -122,6 +124,9 @@ PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( wxWindow* aParent ) :
     m_genericIcon = KiBitmapBundle( BITMAPS::puzzle_piece );
     m_grid->PushEventHandler( new PLUGINS_GRID_TRICKS( m_grid ) );
     m_grid->SetUseNativeColLabels();
+
+    // Pin best size before TransferDataToWindow grows columns past the screen (#24408).
+    m_grid->OverrideMinSize( 1.0, 1.0 );
 
     m_moveUpButton->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_moveDownButton->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
@@ -340,19 +345,21 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
         }
     }
 
+    const int colMaxWidth = FromDIP( 400 );
+
     for( int col = 0; col < m_grid->GetNumberCols(); col++ )
     {
         const wxString& heading = m_grid->GetColLabelValue( col );
         int             headingWidth = GetTextExtent( heading ).x + 2 * GRID_CELL_MARGIN;
 
-        // Set the minimal width to the column label size.
         m_grid->SetColMinimalWidth( col, headingWidth );
-        // Set the width to see the full contents
-        m_grid->SetColSize( col, m_grid->GetVisibleWidth( col ) );
+        int width = std::min( m_grid->GetVisibleWidth( col ), colMaxWidth );
+        m_grid->SetColSize( col, std::max( headingWidth, width ) );
     }
 
     m_grid->AutoSizeRows();
-    m_grid->AutoSizeColumns();
+    // AutoSizeColumns() would re-expand columns to full content width (setAsMin=true) and undo
+    // the cap above (#24408).
     m_grid->HideCol( COLUMN_SETTINGS_IDENTIFIER );
 
     m_grid->Thaw();
