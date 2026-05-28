@@ -27,6 +27,7 @@
 #include <board.h>
 #include <pcb_board_outline.h>
 #include <pcb_track.h>
+#include <zone.h>
 #include <geometry/shape_segment.h>
 #include <geometry/seg.h>
 #include <drc/drc_engine.h>
@@ -105,11 +106,24 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
                 return true;
             };
 
+    // Rule areas are purely logical (no physical copper, mask, or silk) so they must never
+    // participate in silk-clearance collisions.  Their effective shape now follows the
+    // outline (so disallow checks can collide against them), which would otherwise cause
+    // false silk-to-rule-area violations.
+    auto isRuleArea =
+            [&]( BOARD_ITEM* item ) -> bool
+            {
+                return item->Type() == PCB_ZONE_T && static_cast<ZONE*>( item )->GetIsRuleArea();
+            };
+
     auto addToSilkTree =
             [&]( BOARD_ITEM* item ) -> bool
             {
                 if( !reportProgress( ii++, items, progressDelta ) )
                     return false;
+
+                if( isRuleArea( item ) )
+                    return true;
 
                 for( PCB_LAYER_ID layer : { F_SilkS, B_SilkS } )
                 {
@@ -125,6 +139,9 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
             {
                 if( !reportProgress( ii++, items, progressDelta ) )
                     return false;
+
+                if( isRuleArea( item ) )
+                    return true;
 
                 for( PCB_LAYER_ID layer : LSET( item->GetLayerSet() & targetLayers ) )
                     targetTree.Insert( item, layer, 0, ATOMIC_TABLES );
