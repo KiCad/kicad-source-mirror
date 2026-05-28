@@ -854,9 +854,21 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
             if( !m_cursor.InBounds( base, fieldSpan ) )
                 continue;
 
-            std::string refDes = m_sdb.RecordAt( base ).Str( layout.nameOff, 16 );
+            SDB_RECORD  candidateRec = m_sdb.RecordAt( base );
+            std::string refDes = candidateRec.Str( layout.nameOff, 16 );
 
             if( !refdesPlausibleForByteScan( refDes ) )
+                continue;
+
+            // This is the byte-granular 0xFEFF scan the class comment above already calls "far
+            // more prone to landing on a misaligned false positive than the grid-aligned main
+            // scan" -- yet unlike every other placement-accepting site in this file, it had no
+            // coordinate or angle check at all. Found on 2FOC-AdC_2.pcb: refdes "1" (angle
+            // 112.7274589 deg raw, not a whole degree) and, via the lead-block path below,
+            // "AGOD0-9" (angle 165.0525867 deg raw) both false positives, matching neither a real
+            // PADS placement's coordinate nor its whole-degree rotation convention.
+            if( !placementCoordPlausible( candidateRec, layout.xOff, layout.yOff )
+                || candidateRec.I32( layout.angleOff ) % ANGLE_SCALE != 0 )
                 continue;
 
             // Emit the leading (anchor) block once, only after the first genuine placement is
@@ -872,6 +884,8 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
                     std::string leadRef = leadRec.Str( layout.nameOff, 16 );
 
                     if( m_cursor.InBounds( leadBase, fieldSpan ) && refdesPlausibleForByteScan( leadRef )
+                        && placementCoordPlausible( leadRec, layout.xOff, layout.yOff )
+                        && leadRec.I32( layout.angleOff ) % ANGLE_SCALE == 0
                         && !existingRefs.count( leadRef ) )
                     {
                         PART lead = makePlacementPart( leadRec, layout.xOff, layout.yOff,
@@ -891,7 +905,7 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
             if( existingRefs.count( refDes ) )
                 continue;
 
-            SDB_RECORD partRec = m_sdb.RecordAt( base );
+            const SDB_RECORD& partRec = candidateRec;
 
             PART part = makePlacementPart( partRec, layout.xOff, layout.yOff, layout.angleOff,
                                            layout.nameOff, refDes );
