@@ -1878,7 +1878,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     wxString gatename    = epart->deviceset + wxS( "_" ) + epart->device + wxS( "_" ) +
                            aInstance->gate;
     wxString symbolname  = wxString( epart->deviceset + epart->device );
-    wxString kiPackageName = epart->deviceset;
+    wxString kiPackageName = epart->deviceset + epart->device;
 
     if( epart->technology )
         symbolname += *epart->technology;
