@@ -48,19 +48,19 @@
 void ApplyAltiumProjectVariantsToBoard( BOARD* aBoard,
                                         const std::vector<ALTIUM_PROJECT_VARIANT>& aVariants )
 {
-    std::map<wxString, FOOTPRINT*> fpByRef;
-    std::map<KIID, FOOTPRINT*>     fpByUid;
+    std::map<wxString, FOOTPRINT*>          fpByRef;
+    std::map<KIID, std::vector<FOOTPRINT*>> fpByUid;
 
     for( FOOTPRINT* fp : aBoard->Footprints() )
     {
         fpByRef[fp->GetReference()] = fp;
 
-        // The Altium PCB importer stores sourceUniqueID as the last element of the
-        // footprint path. Use it to disambiguate repeated designators.
+        // The importer stores the component unique id as the last path element. Repeated
+        // channels share one id across footprints, so collect all of them to detect ambiguity.
         const KIID_PATH& path = fp->GetPath();
 
         if( path.size() >= 2 )
-            fpByUid[path.back()] = fp;
+            fpByUid[path.back()].push_back( fp );
     }
 
     for( const ALTIUM_PROJECT_VARIANT& pv : aVariants )
@@ -74,18 +74,14 @@ void ApplyAltiumProjectVariantsToBoard( BOARD* aBoard,
         {
             FOOTPRINT* target = nullptr;
 
-            // Prefer UniqueId matching to handle repeated designators correctly
+            // Prefer unique-id matching, but only when it resolves to a single footprint. A
+            // shared id (repeated channels) is ambiguous, so fall back to the designator.
             if( !entry.uniqueId.empty() )
             {
-                wxString normalizedUid = entry.uniqueId;
+                auto it = fpByUid.find( AltiumUniqueIdToKiid( entry.uniqueId ) );
 
-                if( normalizedUid.starts_with( wxT( "\\" ) ) )
-                    normalizedUid = normalizedUid.Mid( 1 );
-
-                auto it = fpByUid.find( KIID( normalizedUid ) );
-
-                if( it != fpByUid.end() )
-                    target = it->second;
+                if( it != fpByUid.end() && it->second.size() == 1 )
+                    target = it->second.front();
             }
 
             if( !target )

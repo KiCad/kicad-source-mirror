@@ -685,31 +685,48 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
                 {
                     SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-                    const ENTRY_LIST* entries = nullptr;
+                    ENTRY_LIST applicable;
 
-                    auto symUidIt = m_altiumSymbolToUid.find( symbol );
+                    const ENTRY_LIST* uidEntries = nullptr;
+                    auto              symUidIt = m_altiumSymbolToUid.find( symbol );
 
                     if( symUidIt != m_altiumSymbolToUid.end() )
                     {
                         auto varIt = variantsByUid.find( symUidIt->second );
 
                         if( varIt != variantsByUid.end() )
-                            entries = &varIt->second;
+                            uidEntries = &varIt->second;
                     }
 
-                    if( !entries )
+                    if( uidEntries && uidEntries->size() == 1 )
+                    {
+                        applicable = *uidEntries;
+                    }
+                    else if( uidEntries )
+                    {
+                        // A unique id shared by several variations (repeated channels) is
+                        // ambiguous; disambiguate with the per-channel designator.
+                        wxString ref = symbol->GetRef( &path );
+
+                        for( const auto& namedEntry : *uidEntries )
+                        {
+                            if( namedEntry.second->designator == ref )
+                                applicable.push_back( namedEntry );
+                        }
+                    }
+                    else
                     {
                         wxString ref = symbol->GetRef( &path );
                         auto     varIt = variantsByDesignator.find( ref );
 
                         if( varIt != variantsByDesignator.end() )
-                            entries = &varIt->second;
+                            applicable = varIt->second;
                     }
 
-                    if( !entries )
+                    if( applicable.empty() )
                         continue;
 
-                    for( const auto& [variantName, entry] : *entries )
+                    for( const auto& [variantName, entry] : applicable )
                     {
                         SCH_SYMBOL_VARIANT variant( variantName );
                         variant.InitializeAttributes( *symbol );

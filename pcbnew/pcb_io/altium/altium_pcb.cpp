@@ -27,6 +27,7 @@
 #include <altium_pcb_compound_file.h>
 #include <io/altium/altium_binary_parser.h>
 #include <io/altium/altium_parser_utils.h>
+#include <io/altium/altium_project_variants.h>
 
 #include <board.h>
 #include <board_design_settings.h>
@@ -1559,7 +1560,7 @@ void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_PCB_COMPOUND_FILE& aAltiumPc
 
         footprint->SetReference( reference );
 
-        KIID id( elem.sourceUniqueID );
+        KIID id = AltiumUniqueIdToKiid( elem.sourceUniqueID );
         KIID pathid( elem.sourceHierachicalPath );
         KIID_PATH path;
         path.push_back( pathid );
