@@ -253,12 +253,18 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
             if( m_pcbModel->AddHole( *holeShape, platingThickness, F_Cu, B_Cu, false, aOrigin, true, true ) )
                 hasdata = true;
 
-            //// Cut holes in silkscreen (buggy: insufficient polyset self-intersection checking)
-            //if( m_layersToExport.Contains( F_SilkS ) || m_layersToExport.Contains( B_SilkS ) )
-            //{
-            //    m_poly_holes[F_SilkS].Append( holePoly );
-            //    m_poly_holes[B_SilkS].Append( holePoly );
-            //}
+            // Use the drill shape directly. holePoly is shrunk to fit the copper barrel.
+            if( m_layersToExport.Contains( F_SilkS ) || m_layersToExport.Contains( B_SilkS ) )
+            {
+                SHAPE_POLY_SET silkHole;
+                holeShape->TransformToPolygon( silkHole, pad->GetMaxError(), ERROR_INSIDE );
+
+                if( m_layersToExport.Contains( F_SilkS ) )
+                    m_poly_holes[F_SilkS].Append( silkHole );
+
+                if( m_layersToExport.Contains( B_SilkS ) )
+                    m_poly_holes[B_SilkS].Append( silkHole );
+            }
 
             // Handle backdrills - secondary and tertiary drills defined in the padstack
             const PADSTACK& padstack = pad->Padstack();
@@ -703,12 +709,18 @@ bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, const VECTOR2D& aOrigi
             m_pcbModel->AddBarrel( *holeShape, top_layer, bot_layer, true, aOrigin, via->GetNetname() );
         }
 
-        //// Cut holes in silkscreen (buggy: insufficient polyset self-intersection checking)
-        //if( m_layersToExport.Contains( F_SilkS ) || m_layersToExport.Contains( B_SilkS ) )
-        //{
-        //    m_poly_holes[F_SilkS].Append( holePoly );
-        //    m_poly_holes[B_SilkS].Append( holePoly );
-        //}
+        // Use the drill shape directly. holePoly is shrunk to fit the copper barrel.
+        if( m_layersToExport.Contains( F_SilkS ) || m_layersToExport.Contains( B_SilkS ) )
+        {
+            SHAPE_POLY_SET silkHole;
+            holeShape->TransformToPolygon( silkHole, via->GetMaxError(), ERROR_INSIDE );
+
+            if( top_layer == F_Cu && m_layersToExport.Contains( F_SilkS ) )
+                m_poly_holes[F_SilkS].Append( silkHole );
+
+            if( bot_layer == B_Cu && m_layersToExport.Contains( B_SilkS ) )
+                m_poly_holes[B_SilkS].Append( silkHole );
+        }
 
         // Cut via holes in soldermask when the via is not tented.
         // This ensures the mask has a proper hole through the via drill, not just the annular ring opening.
