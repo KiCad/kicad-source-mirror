@@ -24,6 +24,8 @@
 
 #include <set>
 
+#include <wx/string.h>
+
 #include <eda_draw_frame.h>
 #include <kiplatform/ui.h>
 #include <tool/actions.h>
@@ -199,6 +201,7 @@ int GROUP_TOOL::AddToGroup( const TOOL_EVENT& aEvent )
 
     EDA_GROUP* group = nullptr;
     EDA_ITEMS  toAdd;
+    wxString   errorMsg;
 
     for( EDA_ITEM* item : selection )
     {
@@ -210,14 +213,19 @@ int GROUP_TOOL::AddToGroup( const TOOL_EVENT& aEvent )
 
             group = dynamic_cast<EDA_GROUP*>( item );
         }
-        else if( !item->GetParentGroup() )
+        else if( !item->GetParentGroup() && canGroupItem( item, errorMsg ) )
         {
             toAdd.push_back( item );
         }
     }
 
     if( !group || toAdd.empty() )
+    {
+        if( !errorMsg.IsEmpty() )
+            m_frame->ShowInfoBarWarning( errorMsg );
+
         return 0;
+    }
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
 
@@ -243,6 +251,9 @@ int GROUP_TOOL::AddToGroup( const TOOL_EVENT& aEvent )
     m_selectionTool->AddItemToSel( group->AsEdaItem() );
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
     m_frame->OnModify();
+
+    if( !errorMsg.IsEmpty() )
+        m_frame->ShowInfoBarWarning( errorMsg );
 
     return 0;
 }

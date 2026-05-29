@@ -37,6 +37,8 @@ public:
     int Group( const TOOL_EVENT& aEvent ) override;
 
 protected:
+    bool canGroupItem( EDA_ITEM* aItem, wxString& aErrorMsg ) const override;
+
     std::shared_ptr<COMMIT> createCommit() override;
 
     EDA_GROUP* getGroupFromItem( EDA_ITEM* aItem ) override

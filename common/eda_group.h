@@ -55,6 +55,11 @@ public:
     const std::unordered_set<EDA_ITEM*>& GetItems() const { return m_items; }
 
     /**
+     * Test if an item is a direct or nested member of this group.
+     */
+    bool ContainsItem( const EDA_ITEM* aItem ) const;
+
+    /**
      * Add item to group. Does not take ownership of item.
      */
     void AddItem( EDA_ITEM* aItem );

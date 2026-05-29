@@ -36,6 +36,45 @@
 #include <dialogs/dialog_group_properties.h>
 #include <sch_group.h>
 #include <symbol.h>
+#include <wx/string.h>
+
+
+bool SCH_GROUP_TOOL::canGroupItem( EDA_ITEM* aItem, wxString& aErrorMsg ) const
+{
+    if( !aItem || !aItem->IsSCH_ITEM() )
+    {
+        aErrorMsg = _( "Some selected items cannot be grouped." );
+        return false;
+    }
+
+    bool      isSymbolEditor = m_frame->GetFrameType() == FRAME_SCH_SYMBOL_EDITOR;
+    SCH_ITEM* schItem = static_cast<SCH_ITEM*>( aItem );
+
+    if( isSymbolEditor )
+    {
+        if( schItem->GetParentSymbol() )
+        {
+            aErrorMsg = _( "Child items cannot be grouped separately from their parent item." );
+            return false;
+        }
+    }
+    else
+    {
+        if( schItem->GetParent() && schItem->GetParent()->Type() != SCH_SCREEN_T )
+        {
+            aErrorMsg = _( "Child items cannot be grouped separately from their parent item." );
+            return false;
+        }
+    }
+
+    if( !schItem->IsGroupableType() )
+    {
+        aErrorMsg = _( "Some selected items cannot be grouped." );
+        return false;
+    }
+
+    return true;
+}
 
 
 int SCH_GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent )
@@ -131,27 +170,24 @@ int SCH_GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
     bool                isSymbolEditor = m_frame->GetFrameType() == FRAME_SCH_SYMBOL_EDITOR;
     SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
     SCH_SELECTION       selection = selTool->RequestSelection();
+    wxString            errorMsg;
 
     // Iterate from the back so we don't have to worry about removals.
     for( int ii = selection.GetSize() - 1; ii >= 0; --ii )
     {
-        if( !selection[ii]->IsSCH_ITEM() )
-        {
-            selection.Remove( selection[ii] );
-            continue;
-        }
+        EDA_ITEM* item = selection[ii];
 
-        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( selection[ii] );
-
-        if( schItem->GetParentSymbol() )
-            selection.Remove( schItem );
-
-        if( !schItem->IsGroupableType() )
-            selection.Remove( schItem );
+        if( !canGroupItem( item, errorMsg ) )
+            selection.Remove( item );
     }
 
     if( selection.GetSize() < 2 )
+    {
+        if( !errorMsg.IsEmpty() )
+            m_frame->ShowInfoBarWarning( errorMsg );
+
         return 0;
+    }
 
     SCH_GROUP*  group = new SCH_GROUP;
     SCH_SCREEN* screen = static_cast<SCH_BASE_FRAME*>( m_frame )->GetScreen();
@@ -178,6 +214,9 @@ int SCH_GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
     m_frame->OnModify();
+
+    if( !errorMsg.IsEmpty() )
+        m_frame->ShowInfoBarWarning( errorMsg );
 
     return 0;
 }
