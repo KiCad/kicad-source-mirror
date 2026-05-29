@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:04+0300\n"
-"PO-Revision-Date: 2026-05-29 12:01+0000\n"
+"PO-Revision-Date: 2026-05-29 23:52+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v10/tr/>\n"
 "Language: tr\n"
@@ -32713,6 +32713,8 @@ msgstr "Varsayılan Uzak Yapılandırma..."
 #: kicad/project_tree_pane.cpp:1043
 msgid "Set or change the default remote URL and credentials"
 msgstr ""
+"Varsayılan uzakyol adresini (URL) ve kimlik bilgilerini ayarlayın veya "
+"değiştirin"
 
 #: kicad/project_tree_pane.cpp:1046
 msgid "Commit Project..."
@@ -32728,7 +32730,7 @@ msgstr "Son İşlemi Düzelt..."
 
 #: kicad/project_tree_pane.cpp:1051
 msgid "Rewrite the most recent commit on the current branch"
-msgstr ""
+msgstr "Geçerli daldaki en son işlemi yeniden yazın"
 
 #: kicad/project_tree_pane.cpp:1054
 msgid "Push"
@@ -32877,12 +32879,12 @@ msgstr "%s ile zaten güncel."
 
 #: kicad/project_tree_pane.cpp:2064
 msgid "Pulled changes (fast-forward)."
-msgstr ""
+msgstr "Değişiklikler çekildi (hızlı-ileri)."
 
 #: kicad/project_tree_pane.cpp:2065
 #, c-format
 msgid "Pulled %s into %s (fast-forward)."
-msgstr ""
+msgstr "%s, %s içine çekildi (hızlı-ileri)."
 
 #: kicad/project_tree_pane.cpp:2070
 msgid "Pulled changes."
@@ -32901,6 +32903,11 @@ msgid ""
 "You can discard your local commits and use the remote version, or rebase "
 "your commits on top of the remote."
 msgstr ""
+"Yerel değişiklikleriniz ve uzakyol değişiklikleri çakışıyor, bu nedenle "
+"çekme iptal edildi ve hiçbir şey değiştirilmedi.\n"
+"\n"
+"Yerel işlemlerinizi atıp uzakyol sürümünü kullanabilir veya işlemlerinizi "
+"uzakyolun üzerine yeniden temellendirebilirsiniz."
 
 #: kicad/project_tree_pane.cpp:2085
 msgid "Pull Conflict"
@@ -32908,11 +32915,11 @@ msgstr "Çekme Çakışması"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Use Remote (discard my changes)"
-msgstr ""
+msgstr "&Uzakyolu Kullan (değişikliklerimi at)"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Rebase"
-msgstr ""
+msgstr "&Yeniden Temellendir"
 
 #: kicad/project_tree_pane.cpp:2095
 msgid "Reset to the remote version."
@@ -32961,14 +32968,21 @@ msgid ""
 "\n"
 "Anyone who already pulled the previous version will need to reset their copy."
 msgstr ""
+"Gönderme reddedildi: yerel dalınız ve %s ayrıştı.\n"
+"\n"
+"Bu genellikle, zaten gönderilmiş bir işlem düzeltildikten veya yeniden "
+"yazıldıktan sonra olur. Uzakyolun üzerine yazmak için zorla gönderme "
+"yapılsın mı?\n"
+"\n"
+"Önceki sürümü çekmiş olan herkesin kendi kopyasını sıfırlaması gerekecektir."
 
 #: kicad/project_tree_pane.cpp:2174
 msgid "Force Push?"
-msgstr ""
+msgstr "Zorla Gönderme Yapılsın mı?"
 
 #: kicad/project_tree_pane.cpp:2176
 msgid "&Force Push"
-msgstr ""
+msgstr "&Zorla Gönderme"
 
 #: kicad/project_tree_pane.cpp:2185
 msgid "Push failed."
@@ -33026,10 +33040,14 @@ msgid ""
 "Amending rewrites public history.  Anyone who pulled this commit will need "
 "to reset their copy."
 msgstr ""
+"Son işlem zaten %s uzakyoluna gönderilmişti.\n"
+"\n"
+"Düzeltme, kamuya açık geçmişi yeniden yazar. Bu işlemi çekmiş olan herkesin "
+"kendi kopyasını sıfırlaması gerekecektir."
 
 #: kicad/project_tree_pane.cpp:2809
 msgid "Amend Published Commit?"
-msgstr ""
+msgstr "Yayınlanmış İşlem Düzeltilsin mi?"
 
 #: kicad/project_tree_pane.cpp:2811 kicad/project_tree_pane.cpp:2856
 msgid "Amend &Anyway"
@@ -33048,7 +33066,7 @@ msgstr ""
 
 #: kicad/project_tree_pane.cpp:2856
 msgid "&Save and Amend"
-msgstr ""
+msgstr "&Kaydet ve Düzelt"
 
 #: kicad/project_tree_pane.cpp:2989
 msgid "Amend Last Commit"
@@ -38795,9 +38813,9 @@ msgid "Run DRC"
 msgstr "DRC (Tasarım Kuralı Kontrolü) Çalıştır"
 
 #: pcbnew/dialogs/dialog_drc.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Elapsed: %s"
-msgstr "Kural: %s"
+msgstr "Geçen Süre: %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:313
 msgid "Report All Errors for Each Track"
@@ -38825,17 +38843,17 @@ msgstr "Tasarım kurallarını göster."
 
 #: pcbnew/dialogs/dialog_drc.cpp:457
 msgid "Elapsed: 0 s"
-msgstr ""
+msgstr "Geçen Süre: 0 s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:472
 #, c-format
 msgid "%1$d min %2$d s"
-msgstr ""
+msgstr "%1$d dak %2$d s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f s"
-msgstr "Yakınlaştırma: %.2f"
+msgstr "%.2f s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:479
 msgid "-------- DRC canceled by user.<br><br>"
@@ -38844,14 +38862,14 @@ msgstr ""
 "<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "Canceled after %s"
-msgstr "Değişikliklerden vazgeç"
+msgstr "%s sonra iptal edildi"
 
 #: pcbnew/dialogs/dialog_drc.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "Completed in %s"
-msgstr "Seçili Bacakları Gruplandır"
+msgstr "%s içinde tamamlandı"
 
 #: pcbnew/dialogs/dialog_drc.cpp:817
 #, c-format
@@ -45222,7 +45240,7 @@ msgstr "Eşleşen Ögeleri Göster"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:209
 msgid "Cannot show matching items without an open project."
-msgstr ""
+msgstr "Açık bir proje olmadan eşleşen ögeler gösterilemez."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:231
 #: pcbnew/dialogs/panel_setup_rules.cpp:249
@@ -45244,11 +45262,11 @@ msgstr "Kurallar metni taranamadı: %s"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:337
 msgid "Place the cursor inside a (rule ...) block to show matching items."
-msgstr ""
+msgstr "Eşleşen ögeleri göstermek için imleci bir bloğunun içine yerleştirin."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:346
 msgid "The rule under the cursor has no name; add a name to identify it."
-msgstr ""
+msgstr "İmlecin altındaki kuralın adı yok; tanımlamak için bir ad ekleyin."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:366
 #, c-format
@@ -45257,12 +45275,12 @@ msgstr "'%s' kuralı ayrıştırma sonrasında bulunamadı."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:385
 msgid "DRC engine not available."
-msgstr ""
+msgstr "DRC motoru mevcut değil."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:408
 #, c-format
 msgid "Rule '%s': %zu matching item(s)."
-msgstr ""
+msgstr "'%s' kuralı: %zu eşleşen öge."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:998
 #, c-format
