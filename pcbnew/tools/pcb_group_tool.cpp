@@ -32,12 +32,40 @@
 #include <pcb_group.h>
 #include <collectors.h>
 #include <footprint.h>
+#include <wx/string.h>
 
 
 std::shared_ptr<COMMIT> PCB_GROUP_TOOL::createCommit()
 {
     return std::make_shared<BOARD_COMMIT>( m_toolMgr, m_frame->IsType( FRAME_PCB_EDITOR ),
                                                       m_frame->IsType( FRAME_FOOTPRINT_EDITOR ) );
+}
+
+
+bool PCB_GROUP_TOOL::canGroupItem( EDA_ITEM* aItem, wxString& aErrorMsg ) const
+{
+    if( !aItem || !aItem->IsBOARD_ITEM() )
+    {
+        aErrorMsg = _( "Some selected items cannot be grouped." );
+        return false;
+    }
+
+    bool        isFootprintEditor = m_frame->GetFrameType() == FRAME_FOOTPRINT_EDITOR;
+    BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( aItem );
+
+    if( !isFootprintEditor && boardItem->GetParentFootprint() )
+    {
+        aErrorMsg = _( "Footprint items cannot be grouped separately from their parent footprint." );
+        return false;
+    }
+
+    if( !boardItem->IsGroupableType() )
+    {
+        aErrorMsg = _( "Some selected items cannot be grouped." );
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -140,44 +168,28 @@ int PCB_GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 {
     bool                isFootprintEditor = m_frame->GetFrameType() == FRAME_FOOTPRINT_EDITOR;
     PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-    PCB_SELECTION       selection;
+    wxString            errorMsg;
 
-    if( isFootprintEditor )
-    {
-        selection = selTool->RequestSelection(
-                []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* )
+    PCB_SELECTION selection = selTool->RequestSelection(
+            [&]( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* )
+            {
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
                 {
-                    // Iterate from the back so we don't have to worry about removals.
-                    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                    {
-                        BOARD_ITEM* item = aCollector[i];
+                    BOARD_ITEM* item = aCollector[i];
 
-                        if( !item->IsGroupableType() )
-                            aCollector.Remove( item );
-                    }
-                } );
-    }
-    else
-    {
-        selection = selTool->RequestSelection(
-                []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* )
-                {
-                    // Iterate from the back so we don't have to worry about removals.
-                    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                    {
-                        BOARD_ITEM* item = aCollector[i];
-
-                        if( item->GetParentFootprint() )
-                            aCollector.Remove( item );
-
-                        if( !item->IsGroupableType() )
-                            aCollector.Remove( item );
-                    }
-                } );
-    }
+                    if( !canGroupItem( item, errorMsg ) )
+                        aCollector.Remove( item );
+                }
+            } );
 
     if( selection.GetSize() < 2 )
+    {
+        if( !errorMsg.IsEmpty() )
+            m_frame->ShowInfoBarWarning( errorMsg );
+
         return 0;
+    }
 
     BOARD*       board = getModel<BOARD>();
     PCB_GROUP*   group = nullptr;
@@ -216,6 +228,9 @@ int PCB_GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
     m_frame->OnModify();
+
+    if( !errorMsg.IsEmpty() )
+        m_frame->ShowInfoBarWarning( errorMsg );
 
     return 0;
 }

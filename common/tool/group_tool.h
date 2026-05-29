@@ -30,6 +30,7 @@ class DIALOG_GROUP_PROPERTIES;
 class EDA_DRAW_FRAME;
 class EDA_GROUP;
 class SELECTION_TOOL;
+class wxString;
 
 
 class GROUP_TOOL : public TOOL_INTERACTIVE
@@ -70,6 +71,9 @@ public:
 protected:
     ///< Set up handlers for various events.
     void setTransitions() override;
+
+    ///< Check if an item can be a direct member of a group.
+    virtual bool canGroupItem( EDA_ITEM* aItem, wxString& aErrorMsg ) const = 0;
 
     ///< Get the correctly casted group type from the item.
     /// Works around our lack of working dynamic_cast.

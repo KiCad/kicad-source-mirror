@@ -173,7 +173,19 @@ void DIALOG_GROUP_PROPERTIES::DoAddMember( EDA_ITEM* aItem )
     }
 
     if( aItem == m_group->AsEdaItem() )
+    {
+        m_frame->ShowInfoBarWarning( _( "A group cannot contain itself." ) );
         return;
+    }
+
+    if( const EDA_GROUP* group = dynamic_cast<const EDA_GROUP*>( aItem ) )
+    {
+        if( group->ContainsItem( m_group->AsEdaItem() ) )
+        {
+            m_frame->ShowInfoBarWarning( _( "Cannot add this group because it already contains the current group." ) );
+            return;
+        }
+    }
 
     m_membersList->Append( aItem->GetItemDescription( m_frame, true ), aItem );
 }
@@ -189,5 +201,3 @@ void DIALOG_GROUP_PROPERTIES::OnRemoveMember( wxCommandEvent& event )
     m_frame->ClearFocus();
     m_frame->GetCanvas()->Refresh();
 }
-
-
