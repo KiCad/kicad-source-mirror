@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:04+0300\n"
-"PO-Revision-Date: 2026-05-28 10:11+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-05-29 12:01+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2747,57 +2747,53 @@ msgid "Add Netclass Assignment"
 msgstr "Netzklassenzuweisung hinzufügen"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:33
-#, fuzzy
 msgid "(missing)"
-msgstr "(Datei fehlt)"
+msgstr "(fehlend)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:45
 msgid "File"
 msgstr "Datei"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:46
-#, fuzzy
 msgid "Saved version"
-msgstr "Alle Versionen zeigen"
+msgstr "Gespeicherte Version"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:47
-#, fuzzy
 msgid "Auto-saved copy"
-msgstr "Wiederherstellung aus automatischer Sicherung"
+msgstr "Automatisch gespeicherte Kopie"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
-#, fuzzy
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
-"KiCad hat ungespeicherte Änderungen aus der letzten Sitzung gefunden, die "
-"neuer als die gespeicherten Projektdateien sind."
+"KiCad hat automatisch gespeicherte Änderungen einer vorherigen Sitzung "
+"gefunden. Das heißt normalerweise, dass KiCad unerwartet geschlossen wurde "
+"ohne alle Änderungen zu speichern."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore auto-saved"
-msgstr "Standardeinstellungen wiederherstellen"
+msgstr "Automatisch gespeicherte(s) wiederherstellen"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 msgstr ""
+"Ersetzt die gespeicherte Datei durch die automatisch gespeicherte Version. "
+"Zuvor gespeicherter Inhalt wird verworfen."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep current"
-msgstr "Strom"
+msgstr "Aktuelle behalten"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr ""
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep both"
-msgstr "Sperrflächen"
+msgstr "Beide behalten"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
@@ -2806,9 +2802,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel open"
-msgstr "Laden abbrechen"
+msgstr "Öffnen abbrechen"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:49
 msgid ""
@@ -4040,9 +4035,8 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
-#, fuzzy
 msgid "Password / token:"
-msgstr "Passwort:"
+msgstr "Passwort / Token:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
@@ -4067,14 +4061,12 @@ msgid "Username:"
 msgstr "Benutzername:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:63
-#, fuzzy
 msgid "SSH key:"
-msgstr "SSH-Schlüsselpasswort:"
+msgstr "SSH-Schlüssel:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "Private SSH-Schlüsseldatei wählen"
+msgstr "Privaten SSH-Schlüssel wählen"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -4082,14 +4074,12 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:74
-#, fuzzy
 msgid "Save credentials"
-msgstr "Alle Ströme speichern"
+msgstr "Zugangsdaten speichern"
 
 #: common/dialogs/git/dialog_git_credentials_base.h:57
-#, fuzzy
 msgid "Git Authentication Required"
-msgstr "Authentifizierung"
+msgstr "Git-Authentifizierung erforderlich"
 
 #: common/dialogs/git/dialog_git_repository.cpp:178
 #: common/dialogs/git/dialog_git_repository.cpp:401
@@ -6679,9 +6669,9 @@ msgid "Failed to recover auto-saved file '%s'."
 msgstr "Konnte automatisch gespeicherte Datei \"%s\" nicht erstellen."
 
 #: common/eda_base_frame.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write recovered file '%s'."
-msgstr "Konnte Datei \"%s\" nicht schreiben."
+msgstr "Konnte wiederhergestellte Datei \"%s\" nicht schreiben."
 
 #: common/eda_base_frame.cpp:609 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:135
@@ -8024,34 +8014,34 @@ msgid "Cannot amend: the branch has no commits yet."
 msgstr ""
 
 #: common/git/libgit_backend.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD commit: %s"
-msgstr "Konnte Commit nicht abrufen: %s"
+msgstr "Konnte HEAD Commit nicht abrufen: %s"
 
 #: common/git/libgit_backend.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent commit: %s"
-msgstr "Konnte Commit nicht abrufen: %s"
+msgstr "Konnte übergeordneten Commit nicht abrufen: %s"
 
 #: common/git/libgit_backend.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD tree: %s"
-msgstr "Konnte HEAD-Referenz nicht abrufen: %s"
+msgstr "Konnte HEAD-Baum nicht abrufen: %s"
 
 #: common/git/libgit_backend.cpp:372 common/git/libgit_backend.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reset index: %s"
-msgstr "Konnte Index nicht schreiben: %s"
+msgstr "Konnte Index nicht zurücksetzen: %s"
 
 #: common/git/libgit_backend.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent tree: %s"
-msgstr "Konnte Baum nicht schreiben: %s"
+msgstr "Konnte übergeordneten Baum nicht abrufen: %s"
 
 #: common/git/libgit_backend.cpp:464 kicad/project_tree_pane.cpp:3007
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to amend commit: %s"
-msgstr "Konnte Commit nicht abrufen: %s"
+msgstr "Konnte Commit nicht abändern: %s"
 
 #: common/git/libgit_backend.cpp:491 common/git/libgit_backend.cpp:1064
 #, c-format
@@ -8082,9 +8072,9 @@ msgid "No repository available to set up remote"
 msgstr "Kein Repository verfügbar, um Remote einzurichten"
 
 #: common/git/libgit_backend.cpp:898
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set up remote: %s"
-msgstr "Konnte Remote nicht erstellen: %s"
+msgstr "Konnte Remote nicht einrichten: %s"
 
 #: common/git/libgit_backend.cpp:930
 msgid "No repository available"
@@ -8106,9 +8096,9 @@ msgid "Failed to switch to branch '%s': %s"
 msgstr "Fehler beim Wechsel zu Branch \"%s\": %s"
 
 #: common/git/libgit_backend.cpp:997
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create local branch '%s': %s"
-msgstr "Konnte Branch \"%s\": %s nicht auflösen"
+msgstr "Konnte lokalen Branch \"%s\": %s nicht erstellen"
 
 #: common/git/libgit_backend.cpp:1011
 #, c-format
@@ -8200,19 +8190,16 @@ msgid "Merge failed: %s"
 msgstr "Merge fehlgeschlagen: %s"
 
 #: common/git/libgit_backend.cpp:1461
-#, fuzzy
 msgid "Could not read repository index after merge."
-msgstr "Konnte Repository-Index nicht abrufen"
+msgstr "Konnte Repository-Index nach Zusammenführung nicht lesen."
 
 #: common/git/libgit_backend.cpp:1493
-#, fuzzy
 msgid "Could not write the merge result."
-msgstr "Konnte die Plotdateien nicht im Ordner \"%s\" anlegen."
+msgstr "Konnte Zusammenführungsergebnis nicht schreiben."
 
 #: common/git/libgit_backend.cpp:1501
-#, fuzzy
 msgid "Could not get the repository head."
-msgstr "Konnte Repository-Head nicht abrufen"
+msgstr "Konnte Repository-Head nicht abrufen."
 
 #: common/git/libgit_backend.cpp:1511
 #, fuzzy
@@ -8231,9 +8218,9 @@ msgid "Merge remote-tracking branch into %s"
 msgstr "Überlappende Grafiken zu Pads vereinen"
 
 #: common/git/libgit_backend.cpp:1537
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create merge commit: %s"
-msgstr "Konnte Commits nicht mergen"
+msgstr "Konnte Zusammenführungs-Commit nicht anlegen: %s"
 
 #: common/git/libgit_backend.cpp:1554
 msgid ""
@@ -33107,9 +33094,9 @@ msgid "Pull"
 msgstr "Pullen"
 
 #: kicad/project_tree_pane.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Push %s to %s"
-msgstr "%s %s auf %s"
+msgstr "%s nach %s schieben"
 
 #: kicad/project_tree_pane.cpp:1060
 #, fuzzy, c-format
@@ -33419,14 +33406,15 @@ msgid "Amend &Anyway"
 msgstr "Trotzdem hinzufügen"
 
 #: kicad/project_tree_pane.cpp:2850
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before amending?"
 msgstr ""
-"Die folgenden Regeln enthalten ungespeicherte Änderungen:\n"
+"Die folgenden Editoren enthalten ungespeicherte Änderungen: %s\n"
 "\n"
+"Diese Änderungen vor dem Abändern speichern?"
 
 #: kicad/project_tree_pane.cpp:2856
 #, fuzzy
