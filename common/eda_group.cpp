@@ -65,7 +65,9 @@ void EDA_GROUP::AddItem( EDA_ITEM* aItem )
     wxCHECK_RET( aItem != AsEdaItem(), wxT( "Group added to itself." ) );
 
     if( EDA_GROUP* group = dynamic_cast<EDA_GROUP*>( aItem ) )
+    {
         wxCHECK_RET( !group->ContainsItem( AsEdaItem() ), wxT( "Ancestor group added to group." ) );
+    }
 
     // Items can only be in one group at a time
     if( EDA_GROUP* parentGroup = aItem->GetParentGroup() )
