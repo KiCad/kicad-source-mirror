@@ -48,8 +48,10 @@
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
+#include <iomanip>
 #include <map>
 #include <set>
+#include <sstream>
 #include <tuple>
 #include <utility>
 #include <vector>
@@ -254,6 +256,78 @@ static wxString JoinNetSet( const std::set<wxString>& aNames )
 }
 
 
+static std::vector<std::string> CanonicalGeometryRows( const BOARD* aBoard )
+{
+    std::vector<std::string> rows;
+
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        for( PAD* pad : fp->Pads() )
+        {
+            const VECTOR2I drill = pad->GetDrillSize();
+            std::ostringstream row;
+
+            row << "PAD " << std::quoted( fp->GetReference().ToStdString() ) << " "
+                << std::quoted( pad->GetNumber().ToStdString() ) << " " << pad->GetPosition().x
+                << " " << pad->GetPosition().y << " "
+                << pad->GetOrientation().AsTenthsOfADegree() << " "
+                << static_cast<int>( pad->GetAttribute() ) << " " << drill.x << " " << drill.y
+                << " " << static_cast<int>( pad->GetDrillShape() ) << " "
+                << std::quoted( pad->GetLayerSet().FmtHex() ) << " "
+                << std::quoted( pad->GetNetname().ToStdString() );
+
+            for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
+            {
+                const VECTOR2I size = pad->GetSize( layer );
+                const VECTOR2I offset = pad->GetOffset( layer );
+
+                row << " " << static_cast<int>( layer ) << ":"
+                    << static_cast<int>( pad->GetShape( layer ) ) << ":" << size.x << ":"
+                    << size.y << ":" << offset.x << ":" << offset.y << ":"
+                    << pad->GetRoundRectCornerRadius( layer ) << ":"
+                    << pad->GetChamferPositions( layer );
+            }
+
+            rows.push_back( row.str() );
+        }
+    }
+
+    for( PCB_TRACK* track : aBoard->Tracks() )
+    {
+        std::ostringstream row;
+
+        if( PCB_VIA* via = dynamic_cast<PCB_VIA*>( track ) )
+        {
+            row << "VIA " << std::quoted( via->GetNetname().ToStdString() ) << " "
+                << via->GetPosition().x << " " << via->GetPosition().y << " "
+                << via->GetWidth( via->TopLayer() ) << " " << via->GetDrillValue() << " "
+                << static_cast<int>( via->GetViaType() ) << " "
+                << static_cast<int>( via->TopLayer() ) << " "
+                << static_cast<int>( via->BottomLayer() );
+        }
+        else if( PCB_ARC* arc = dynamic_cast<PCB_ARC*>( track ) )
+        {
+            row << "ARC " << std::quoted( arc->GetNetname().ToStdString() ) << " "
+                << static_cast<int>( arc->GetLayer() ) << " " << arc->GetStart().x << " "
+                << arc->GetStart().y << " " << arc->GetMid().x << " " << arc->GetMid().y << " "
+                << arc->GetEnd().x << " " << arc->GetEnd().y << " " << arc->GetWidth();
+        }
+        else
+        {
+            row << "TRACK " << std::quoted( track->GetNetname().ToStdString() ) << " "
+                << static_cast<int>( track->GetLayer() ) << " " << track->GetStart().x << " "
+                << track->GetStart().y << " " << track->GetEnd().x << " " << track->GetEnd().y
+                << " " << track->GetWidth();
+        }
+
+        rows.push_back( row.str() );
+    }
+
+    std::sort( rows.begin(), rows.end() );
+    return rows;
+}
+
+
 /**
  * Compare counts with tolerance for binary/ASC differences.
  * Different-revision files get BOOST_WARN only. Same-revision files allow
@@ -349,6 +423,30 @@ static void RunStructuralChecks( const PADS_BINARY_BOARD_INFO& aBoard,
 
 
 BOOST_AUTO_TEST_SUITE( PadsBinaryImport )
+
+
+BOOST_AUTO_TEST_CASE( CanonicalGeometryRowsCoverPadsTracksAndVias )
+{
+    auto board = LoadAsc( PADS_BINARY_BOARDS[3] );
+
+    BOOST_REQUIRE( board );
+
+    const std::vector<std::string> rows = CanonicalGeometryRows( board.get() );
+    size_t                         pads = 0;
+    size_t                         tracks = 0;
+    size_t                         vias = 0;
+
+    for( const std::string& row : rows )
+    {
+        pads += row.rfind( "PAD ", 0 ) == 0;
+        tracks += row.rfind( "TRACK ", 0 ) == 0 || row.rfind( "ARC ", 0 ) == 0;
+        vias += row.rfind( "VIA ", 0 ) == 0;
+    }
+
+    BOOST_CHECK_GT( pads, 0u );
+    BOOST_CHECK_GT( tracks, 0u );
+    BOOST_CHECK_GT( vias, 0u );
+}
 
 
 BOOST_AUTO_TEST_CASE( BinaryFileDetection )
