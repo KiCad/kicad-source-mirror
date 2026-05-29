@@ -2172,8 +2172,6 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
 {
     wxCHECK( aLibrary && aEagleLibrary, nullptr );
 
-    std::vector<std::unique_ptr<LIB_SYMBOL>> derivedSymbols;
-
     // Loop through the device sets and load each of them
     for( const auto& [name, edeviceset] : aLibrary->devicesets )
     {
@@ -2187,6 +2185,8 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
         // For each device in the device set:
         for( const std::unique_ptr<EDEVICE>& edevice : edeviceset->devices )
         {
+            std::vector<std::unique_ptr<LIB_SYMBOL>> derivedSymbols;
+
             // Create symbol name from deviceset and device names.
             wxString symbolName = edeviceset->name + edevice->name;
             symbolName.Replace( wxT( "*" ), wxEmptyString );
@@ -2375,8 +2375,6 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                 aEagleLibrary->KiCadSymbols[symbol->GetName()] = std::move( symbol );
             }
         }
-
-        derivedSymbols.clear();
     }
 
     return aEagleLibrary;
