@@ -3488,6 +3488,34 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
                     poly.BooleanAdd( layerPoly );
                 } );
     }
+    else if( aItem->Type() == PCB_ZONE_T )
+    {
+        const ZONE* zone = static_cast<const ZONE*>( aItem );
+
+        if( zone->GetIsRuleArea() )
+        {
+            // Rule areas are never filled, so TransformShapeToPolygon would report a zero coverage
+            // area and make them appear as the smallest item under the cursor.  That incorrectly
+            // gives them selection precedence over the pads, tracks and footprints they enclose.
+            // Use the outline area so an enclosed item is selected first while the rule area stays
+            // available via its border and the disambiguation menu.
+            poly = *zone->Outline();
+        }
+        else
+        {
+            for( PCB_LAYER_ID layer : zone->GetLayerSet() )
+            {
+                SHAPE_POLY_SET layerPoly;
+                zone->TransformShapeToPolygon( layerPoly, layer, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
+                poly.BooleanAdd( layerPoly );
+            }
+
+            // An unfilled zone has no filled polygons; fall back to the outline so it does not
+            // collapse to a zero coverage area and steal precedence like a rule area would.
+            if( poly.OutlineCount() == 0 )
+                poly = *zone->Outline();
+        }
+    }
     else
     {
         aItem->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
