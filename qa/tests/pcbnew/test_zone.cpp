@@ -25,6 +25,7 @@
 #include <pcbnew_utils/board_test_utils.h>
 
 #include <board.h>
+#include <collectors.h>
 #include <footprint.h>
 #include <geometry/shape_utils.h>
 #include <netinfo.h>
@@ -561,6 +562,103 @@ BOOST_AUTO_TEST_CASE( AutoPriority_SameNetGroupInheritsEdge )
 
     // B shares A's priority because they are same-net and overlap
     BOOST_TEST( ptrA->GetAssignedPriority() == ptrB->GetAssignedPriority() );
+}
+
+
+/**
+ * Minimal COLLECTORS_GUIDE so GetCoverageArea() can be exercised headlessly.
+ * Only Accuracy()/OnePixelInIU() are read for the cases under test.
+ */
+class STUB_COLLECTORS_GUIDE : public COLLECTORS_GUIDE
+{
+public:
+    bool         IsLayerVisible( PCB_LAYER_ID ) const override { return true; }
+    PCB_LAYER_ID GetPreferredLayer() const override { return F_Cu; }
+    bool         IgnoreLockedItems() const override { return false; }
+    bool         IncludeSecondary() const override { return true; }
+    bool         IgnoreFPTextOnBack() const override { return false; }
+    bool         IgnoreFPTextOnFront() const override { return false; }
+    bool         IgnoreFootprintsOnBack() const override { return false; }
+    bool         IgnoreFootprintsOnFront() const override { return false; }
+    bool         IgnorePadsOnBack() const override { return false; }
+    bool         IgnorePadsOnFront() const override { return false; }
+    bool         IgnoreThroughHolePads() const override { return false; }
+    bool         IgnoreFPValues() const override { return false; }
+    bool         IgnoreFPReferences() const override { return false; }
+    bool         IgnoreThroughVias() const override { return false; }
+    bool         IgnoreBlindBuriedVias() const override { return false; }
+    bool         IgnoreMicroVias() const override { return false; }
+    bool         IgnoreTracks() const override { return false; }
+    bool         IgnoreZoneFills() const override { return true; }
+    bool         IgnoreNoNets() const override { return false; }
+    int          Accuracy() const override { return 0; }
+    double       OnePixelInIU() const override { return 1.0; }
+};
+
+
+/**
+ * A rule area has no filled polygons, so its coverage area must be derived from its outline.
+ * Otherwise it reports a zero area and wins selection precedence over every enclosed item.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24464
+ */
+BOOST_AUTO_TEST_CASE( RuleAreaCoverageAreaNotZero )
+{
+    STUB_COLLECTORS_GUIDE guide;
+    GENERAL_COLLECTOR     collector;
+    collector.SetGuide( &guide );
+
+    auto ruleArea = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( 0, 0 ),
+                   VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) ),
+            F_Cu );
+    ruleArea->SetIsRuleArea( true );
+
+    double zoneArea = FOOTPRINT::GetCoverageArea( ruleArea.get(), collector );
+
+    // The rule area covers a 20 mm x 20 mm region.  Its coverage area must reflect that, not 0.
+    BOOST_TEST( zoneArea > 0.0 );
+
+    double expected = (double) pcbIUScale.mmToIU( 20 ) * pcbIUScale.mmToIU( 20 );
+    BOOST_TEST( zoneArea == expected, boost::test_tools::tolerance( 0.001 ) );
+
+    // A small pad enclosed by the rule area must read as much smaller, so the disambiguation
+    // heuristic in GuessSelectionCandidates() will prefer it over the enclosing rule area.
+    PAD* pad = AddPadToBoard( m_board, VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ),
+                              0, F_Cu );
+
+    double padArea = FOOTPRINT::GetCoverageArea( pad, collector );
+
+    BOOST_TEST( padArea > 0.0 );
+    BOOST_TEST( padArea < zoneArea );
+}
+
+
+/**
+ * A filled (non-rule-area) zone must continue to report its coverage area from its filled
+ * polygons, not its outline, so a sparsely-filled zone keeps its existing selection behaviour.
+ */
+BOOST_AUTO_TEST_CASE( FilledZoneCoverageUsesFilledPolygons )
+{
+    STUB_COLLECTORS_GUIDE guide;
+    GENERAL_COLLECTOR     collector;
+    collector.SetGuide( &guide );
+
+    auto zone = CreateSquareZone( m_board,
+            BOX2I( VECTOR2I( 0, 0 ),
+                   VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) ),
+            F_Cu );
+
+    // Fill only a small 2 mm x 2 mm island, far smaller than the 20 mm x 20 mm outline.
+    SHAPE_POLY_SET fill;
+    fill.AddOutline( KIGEOM::BoxToLineChain(
+            BOX2I( VECTOR2I( 0, 0 ),
+                   VECTOR2I( pcbIUScale.mmToIU( 2 ), pcbIUScale.mmToIU( 2 ) ) ) ) );
+    zone->SetFilledPolysList( F_Cu, fill );
+
+    double expected = (double) pcbIUScale.mmToIU( 2 ) * pcbIUScale.mmToIU( 2 );
+    BOOST_TEST( FOOTPRINT::GetCoverageArea( zone.get(), collector ) == expected,
+                boost::test_tools::tolerance( 0.001 ) );
 }
 
 
