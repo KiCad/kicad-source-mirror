@@ -27,8 +27,10 @@
 #include <vector>
 #include <common.h>
 #include <env_paths.h>
+#include <jobs/job_export_pcb_stats.h>
 #include <pgm_base.h>
 #include <settings/environment.h>
+#include <title_block.h>
 #include <wx/filename.h>
 #include <wx/utils.h>
 
@@ -182,6 +184,92 @@ BOOST_AUTO_TEST_CASE( ConsecutiveEscaped )
     }
 
     BOOST_CHECK_EQUAL( dollarCount, 2 );
+}
+
+// Issue 23599: backslash path separator before text variable should NOT be treated as an escape.
+// This test documents the ExpandTextVars behavior: \${ IS treated as an escape at this level.
+// The fix is applied at call sites that deal with file paths, which normalize backslashes to
+// forward slashes before calling ExpandTextVars.
+BOOST_AUTO_TEST_CASE( BackslashBeforeVariableIsEscape )
+{
+    wxString result = ExpandTextVars( wxT( "subdir\\${VAR}_file.txt" ), &resolver );
+
+    // ExpandTextVars treats \${ as an escape, so VAR is NOT expanded
+    BOOST_CHECK( result.Contains( wxT( "<<<ESC_DOLLAR:" ) ) );
+}
+
+
+// With forward slashes the variable is expanded normally
+BOOST_AUTO_TEST_CASE( ForwardSlashBeforeVariableExpands )
+{
+    wxString result = ExpandTextVars( wxT( "subdir/${VAR}_file.txt" ), &resolver );
+
+    BOOST_CHECK( result == wxT( "subdir/value_file.txt" ) );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+// Issue 23599: JOB::ResolveOutputPath must expand text variables even when preceded by backslash
+// path separators. This suite tests the fix in ResolveOutputPath that normalizes backslashes
+// before calling ExpandTextVars.
+BOOST_AUTO_TEST_SUITE( JobResolveOutputPath )
+
+BOOST_AUTO_TEST_CASE( BackslashPathSeparatorBeforeTextVar )
+{
+    JOB_EXPORT_PCB_STATS job;
+
+    TITLE_BLOCK titleBlock;
+    titleBlock.SetRevision( wxT( "RevA" ) );
+    job.SetTitleBlock( titleBlock );
+
+    // Simulates Windows path with text variable immediately after backslash separator
+    wxString path = wxT( "Board Stats\\${REVISION}_Stats.txt" );
+    wxString result = job.ResolveOutputPath( path, false, nullptr );
+
+    // The variable should be expanded, not escaped
+    BOOST_CHECK_MESSAGE( !result.Contains( wxT( "<<<ESC_DOLLAR:" ) ),
+                         "Text variable after backslash path separator should not be escaped. Got: "
+                                 + result );
+    BOOST_CHECK_MESSAGE( result.Contains( wxT( "RevA" ) ),
+                         "Expected resolved REVISION in path. Got: " + result );
+}
+
+
+BOOST_AUTO_TEST_CASE( BackslashPathSeparatorBeforeMultipleTextVars )
+{
+    JOB_EXPORT_PCB_STATS job;
+
+    TITLE_BLOCK titleBlock;
+    titleBlock.SetRevision( wxT( "B" ) );
+    titleBlock.SetComment( 0, wxT( "DWG-001" ) );
+    job.SetTitleBlock( titleBlock );
+
+    // The COMMENT1 variable maps to Comment(0) in TITLE_BLOCK
+    wxString path = wxT( "Output\\${COMMENT1}_${REVISION}_file.txt" );
+    wxString result = job.ResolveOutputPath( path, false, nullptr );
+
+    BOOST_CHECK_MESSAGE( result.Contains( wxT( "DWG-001" ) ),
+                         "Expected COMMENT1 expanded in path. Got: " + result );
+    BOOST_CHECK_MESSAGE( result.Contains( wxT( "_B_" ) ),
+                         "Expected REVISION expanded in path. Got: " + result );
+}
+
+
+BOOST_AUTO_TEST_CASE( TextVarNotFirstInFilename )
+{
+    JOB_EXPORT_PCB_STATS job;
+
+    TITLE_BLOCK titleBlock;
+    titleBlock.SetRevision( wxT( "C" ) );
+    job.SetTitleBlock( titleBlock );
+
+    // When there's literal text between the backslash and the variable, it always worked
+    wxString path = wxT( "Output\\Generated_${REVISION}_file.txt" );
+    wxString result = job.ResolveOutputPath( path, false, nullptr );
+
+    BOOST_CHECK_MESSAGE( result.Contains( wxT( "Generated_C_file.txt" ) ),
+                         "Expected variable expansion with preceding literal text. Got: " + result );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

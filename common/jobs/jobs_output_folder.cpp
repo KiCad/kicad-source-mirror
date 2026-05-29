@@ -38,7 +38,9 @@ bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString&                baseTempP
 {
     aResolvedOutputPath.reset();
 
-    wxString outputPath = ExpandTextVars( m_outputPath, aProject );
+    wxString outputPath = m_outputPath;
+    outputPath.Replace( wxT( "\\" ), wxT( "/" ) );
+    outputPath = ExpandTextVars( outputPath, aProject );
     outputPath = ExpandEnvVarSubstitutions( outputPath, aProject );
 
     if( outputPath.StartsWith( "~" ) )
