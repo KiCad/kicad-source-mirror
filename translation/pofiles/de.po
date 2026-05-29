@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:04+0300\n"
-"PO-Revision-Date: 2026-05-29 12:01+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-05-29 23:52+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2790,6 +2790,8 @@ msgstr "Aktuelle behalten"
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr ""
+"Behält die gespeicherte Datei bei und verwirft automatisch gespeicherte "
+"Änderungen."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
 msgid "Keep both"
@@ -2800,6 +2802,9 @@ msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 msgstr ""
+"Behält die gespeicherte Datei bei und schreibt die automatisch gespeicherte "
+"Version als zursätzliche, separate Datei mit Zeitstempel für spätere "
+"Überprüfung."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
 msgid "Cancel open"
@@ -2810,6 +2815,9 @@ msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"Diesen Dialog ohne Änderungen schließen. Automatisch gespeicherte Dateien "
+"verbleiben auf der Platte und werden beim nächsten Öffnen des Projekts "
+"erneut angeboten."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
@@ -4031,7 +4039,7 @@ msgstr "Commit-Nachricht darf nicht leer sein"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
-msgstr ""
+msgstr "Schlüsselkennwort:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
@@ -4040,15 +4048,15 @@ msgstr "Passwort / Token:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
-msgstr ""
+msgstr "Authentifizierung für Zugriff erforderlich:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "Username and password"
-msgstr ""
+msgstr "Benutzername und Passwort"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr ""
+msgstr "SSH-Schlüssel"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -8011,7 +8019,7 @@ msgstr "Konnte Commit nicht erstellen: %s"
 
 #: common/git/libgit_backend.cpp:310 kicad/project_tree_pane.cpp:2762
 msgid "Cannot amend: the branch has no commits yet."
-msgstr ""
+msgstr "Konnte nicht abändern: Bisher noch keine Commits im Branch."
 
 #: common/git/libgit_backend.cpp:329
 #, c-format
@@ -8246,9 +8254,8 @@ msgid "Rebase finish failed: %s"
 msgstr "Rebase-Abschluss fehlgeschlagen: %s"
 
 #: common/git/libgit_backend.cpp:1626 common/git/libgit_backend.cpp:1672
-#, fuzzy
 msgid "Another git operation is in progress."
-msgstr "Schließen des Flächenumriss ist im Gang"
+msgstr "Eine andere Git-Operation wird gerade ausgeführt."
 
 #: common/git/libgit_backend.cpp:1634 common/git/libgit_backend.cpp:1687
 #, fuzzy
