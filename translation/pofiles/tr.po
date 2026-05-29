@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:03+0300\n"
-"PO-Revision-Date: 2026-05-18 10:11+0000\n"
+"PO-Revision-Date: 2026-05-29 23:52+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
 "source/tr/>\n"
@@ -2736,74 +2736,76 @@ msgid "Add Netclass Assignment"
 msgstr "Malzeme Ataması Ekle"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:33
-#, fuzzy
 msgid "(missing)"
-msgstr "(dosya eksik)"
+msgstr "(eksik)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:45
 msgid "File"
 msgstr "Dosya"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:46
-#, fuzzy
 msgid "Saved version"
-msgstr "Tüm sürümleri göster"
+msgstr "Kaydedilmiş sürüm"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:47
-#, fuzzy
 msgid "Auto-saved copy"
-msgstr "Otomatik Kaydetme Kurtarma"
+msgstr "Otomatik kaydedilmiş kopya"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
-#, fuzzy
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
-"KiCad, son oturumunuzdan bu yana kaydedilmemiş ve kaydedilmiş proje "
-"dosyalarından daha yeni olan değişiklikler buldu."
+"KiCad önceki bir oturumdan otomatik kaydedilmiş değişiklikler buldu. Bu "
+"genellikle, kaydedilmemiş işleriniz varken KiCad'in beklenmedik şekilde "
+"kapandığı anlamına gelir."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore auto-saved"
-msgstr "Varsayılanları Geri Yükle"
+msgstr "Otomatik kaydedileni geri yükle"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 msgstr ""
+"Kaydedilmiş dosyanızı otomatik kaydedilmiş sürümle değiştirir. Önceki "
+"kaydedilmiş içerik atılır."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep current"
-msgstr "Akım"
+msgstr "Geçerli olanı sakla"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr ""
+"Kaydedilmiş dosyanızı olduğu gibi tutar ve otomatik kaydedilmiş "
+"değişiklikleri atar."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep both"
-msgstr "Sakınım"
+msgstr "İkisini de sakla"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 msgstr ""
+"Kaydedilmiş dosyanızı tutar ve otomatik kaydedilmiş sürümü yanında, daha "
+"sonra inceleyebileceğiniz ayrı bir zaman damgalı dosya olarak yazar."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel open"
-msgstr "Yüklemeyi İptal Et"
+msgstr "Açmayı iptal et"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:49
 msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"Bu iletişim kutusunu herhangi bir değişiklik yapmadan kapatır. Otomatik "
+"kaydedilmiş dosyalar diskte kalır ve projeyi bir sonraki açışınızda tekrar "
+"sunulur."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
@@ -4033,25 +4035,24 @@ msgstr "Kabul mesajı boş olamaz"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
-msgstr ""
+msgstr "Anahtar parolası:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
-#, fuzzy
 msgid "Password / token:"
-msgstr "Şifre:"
+msgstr "Şifre / belirteç:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
-msgstr ""
+msgstr "Erişim için kimlik doğrulaması gereklidir:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "Username and password"
-msgstr ""
+msgstr "Kullanıcı adı ve şifre"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr ""
+msgstr "SSH anahtarı"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -4064,14 +4065,12 @@ msgid "Username:"
 msgstr "Kullanıcı adı:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:63
-#, fuzzy
 msgid "SSH key:"
-msgstr "SSH Anahtar Şifresi:"
+msgstr "SSH Anahtarı:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "SSH özel anahtar dosyasını seç"
+msgstr "SSH özel anahtarını seçin"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -4079,14 +4078,12 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:74
-#, fuzzy
 msgid "Save credentials"
-msgstr "Tüm akımları kaydet"
+msgstr "Kimlik bilgilerini kaydet"
 
 #: common/dialogs/git/dialog_git_credentials_base.h:57
-#, fuzzy
 msgid "Git Authentication Required"
-msgstr "Kimlik Doğrulama"
+msgstr "Git Kimlik Doğrulaması Gerekli"
 
 #: common/dialogs/git/dialog_git_repository.cpp:178
 #: common/dialogs/git/dialog_git_repository.cpp:405
@@ -6648,9 +6645,9 @@ msgid "Failed to recover auto-saved file '%s'."
 msgstr "Otomatik kaydedilmiş '%s' dosyası kurtarılamadı."
 
 #: common/eda_base_frame.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write recovered file '%s'."
-msgstr "Dosya '%s' yazılamadı."
+msgstr "Kurtarılan dosya '%s' yazılamadı."
 
 #: common/eda_base_frame.cpp:609 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:136
@@ -7196,13 +7193,12 @@ msgstr "Çokgen"
 #: common/eda_shape.cpp:473 common/eda_shape.cpp:1462 common/eda_shape.cpp:3370
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:213
 msgid "Ellipse"
-msgstr ""
+msgstr "Elips"
 
 #: common/eda_shape.cpp:474 common/eda_shape.cpp:1463 common/eda_shape.cpp:3371
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:229
-#, fuzzy
 msgid "Elliptical Arc"
-msgstr "Bölünmüş Yay"
+msgstr "Elips Yayı"
 
 #: common/eda_shape.cpp:1447
 msgid "Pad Number Box"
@@ -7265,25 +7261,22 @@ msgstr "Açı"
 #: common/eda_shape.cpp:1498 common/eda_shape.cpp:1505
 #: common/eda_shape.cpp:3533 pcbnew/dialogs/dialog_shape_properties.cpp:1138
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1155
-#, fuzzy
 msgid "Major Radius"
-msgstr "Köşe Yarıçapı"
+msgstr "Büyük Yarıçap"
 
 #: common/eda_shape.cpp:1499 common/eda_shape.cpp:1506
 #: common/eda_shape.cpp:3539 pcbnew/dialogs/dialog_shape_properties.cpp:1140
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1157
-#, fuzzy
 msgid "Minor Radius"
-msgstr "Köşe Yarıçapı"
+msgstr "Küçük Yarıçap"
 
 #: common/eda_shape.cpp:1508 pcbnew/dialogs/dialog_shape_properties.cpp:1161
 msgid "Start Angle"
 msgstr "Başlangıç Açısı"
 
 #: common/eda_shape.cpp:1509 pcbnew/dialogs/dialog_shape_properties.cpp:1163
-#, fuzzy
 msgid "End Angle"
-msgstr "Açı"
+msgstr "Bitiş Açısı"
 
 #: common/eda_shape.cpp:1514 common/layer_id.cpp:147
 #: eeschema/sch_rule_area.cpp:395 pcbnew/widgets/appearance_controls.cpp:356
@@ -7399,19 +7392,16 @@ msgid "Corner Radius"
 msgstr "Köşe Yarıçapı"
 
 #: common/eda_shape.cpp:3546
-#, fuzzy
 msgid "Ellipse Rotation"
-msgstr "Döndürme"
+msgstr "Elips Dönüşü"
 
 #: common/eda_shape.cpp:3552
-#, fuzzy
 msgid "Arc Start Angle"
-msgstr "Başlangıç Açısı"
+msgstr "Yay Başlangıç Açısı"
 
 #: common/eda_shape.cpp:3558
-#, fuzzy
 msgid "Arc End Angle"
-msgstr "Açı:"
+msgstr "Yay Bitiş Açısı"
 
 #: common/eda_shape.cpp:3563 common/stroke_params.cpp:403
 #: eeschema/sch_bus_entry.cpp:714 eeschema/sch_line.cpp:1338
@@ -8049,37 +8039,37 @@ msgstr "Taahhüt oluşturulamadı: %s"
 
 #: common/git/libgit_backend.cpp:311 kicad/project_tree_pane.cpp:2768
 msgid "Cannot amend: the branch has no commits yet."
-msgstr ""
+msgstr "Düzeltilemiyor : dalda henüz hiçbir işlem yok."
 
 #: common/git/libgit_backend.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD commit: %s"
-msgstr "Commit alınamadı: %s"
+msgstr "HEAD işlemi alınamadı: %s"
 
 #: common/git/libgit_backend.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent commit: %s"
-msgstr "Commit alınamadı: %s"
+msgstr "Üst işlem alınamadı: %s"
 
 #: common/git/libgit_backend.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD tree: %s"
-msgstr "HEAD referansı alınamadı: %s"
+msgstr "HEAD ağacı alınamadı: %s"
 
 #: common/git/libgit_backend.cpp:373 common/git/libgit_backend.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reset index: %s"
-msgstr "Dizin yazılamadı: %s"
+msgstr "Dizin sıfırlanamadı: %s"
 
 #: common/git/libgit_backend.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent tree: %s"
-msgstr "Ağaç yazılamadı: %s"
+msgstr "Üst ağaç alınamadı: %s"
 
 #: common/git/libgit_backend.cpp:465 kicad/project_tree_pane.cpp:3013
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to amend commit: %s"
-msgstr "Commit alınamadı: %s"
+msgstr "İşlem düzeltilemedi: %s"
 
 #: common/git/libgit_backend.cpp:492 common/git/libgit_backend.cpp:1071
 #, c-format
@@ -8110,9 +8100,9 @@ msgid "No repository available to set up remote"
 msgstr "Uzak bağlantı kurmak için depo mevcut değil"
 
 #: common/git/libgit_backend.cpp:905
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set up remote: %s"
-msgstr "Uzak bağlantı oluşturma başarısız oldu: %s"
+msgstr "Uzak bağlantı ayarlanamadı: %s"
 
 #: common/git/libgit_backend.cpp:937
 msgid "No repository available"
@@ -8134,9 +8124,9 @@ msgid "Failed to switch to branch '%s': %s"
 msgstr "'%s' dalına geçiş yapılamadı: %s"
 
 #: common/git/libgit_backend.cpp:1004
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create local branch '%s': %s"
-msgstr "'%s' dalı aranamadı: %s"
+msgstr "Yerel dal '%s' oluşturulamadı: %s"
 
 #: common/git/libgit_backend.cpp:1018
 #, c-format
@@ -8161,6 +8151,7 @@ msgstr "'FETCH_HEAD' okunamadı"
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
+"Çekilecek bir şey yok: Uzakyolda geçerli yerel dal ile eşleşen bir dal yok."
 
 #: common/git/libgit_backend.cpp:1189
 msgid "Could not lookup commit"
@@ -8227,40 +8218,38 @@ msgid "Merge failed: %s"
 msgstr "Birleştirme başarısız: %s"
 
 #: common/git/libgit_backend.cpp:1472
-#, fuzzy
 msgid "Could not read repository index after merge."
-msgstr "Depo dizin bilgisi alınamadı"
+msgstr "Birleştirme sonrasında depo dizini okunamadı."
 
 #: common/git/libgit_backend.cpp:1504
-#, fuzzy
 msgid "Could not write the merge result."
-msgstr "'%s' klasörüne çizim dosyaları yazılamadı."
+msgstr "Birleştirme sonucu yazılamadı."
 
 #: common/git/libgit_backend.cpp:1512
-#, fuzzy
 msgid "Could not get the repository head."
-msgstr "Depo başlığı alınamadı"
+msgstr "Depo başlığı alınamadı."
 
 #: common/git/libgit_backend.cpp:1522
-#, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "Hedef işleme bulunamadı"
+msgstr "Birleştirilecek işlemler bulunamadı."
 
 #: common/git/libgit_backend.cpp:1531 common/git/libgit_backend.cpp:1716
 msgid ""
 "Could not create a commit signature.  Set user.name and user.email in your "
 "git configuration."
 msgstr ""
+"Bir işlem imzası oluşturulamadı.  Git yapılandırmanıza user.name ve "
+"user.email değerlerini ayarlayın."
 
 #: common/git/libgit_backend.cpp:1540
-#, fuzzy, c-format
+#, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "Üst üste binen grafikleri pedlerle birleştir"
+msgstr "Uzaktan izlenen dalı %s içine birleştir"
 
 #: common/git/libgit_backend.cpp:1548
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create merge commit: %s"
-msgstr "Yapılar birleştirilemedi"
+msgstr "Birleştirme işlemi oluşturulamadı: %s"
 
 #: common/git/libgit_backend.cpp:1565
 msgid ""
@@ -8287,36 +8276,35 @@ msgstr "Yeniden temellendirme tamamlaması başarısız: %s"
 
 #: common/git/libgit_backend.cpp:1637 common/git/libgit_backend.cpp:1683
 msgid "Another git operation is in progress."
-msgstr ""
+msgstr "Başka bir git işlemi devam ediyor."
 
 #: common/git/libgit_backend.cpp:1645 common/git/libgit_backend.cpp:1698
-#, fuzzy
 msgid "Could not find the matching remote branch."
-msgstr "İçe aktarılan kütüphanede '%s' bulunamadı."
+msgstr "Eşleşen uzak dal bulunamadı."
 
 #: common/git/libgit_backend.cpp:1654 common/git/libgit_backend.cpp:1707
-#, fuzzy
 msgid "Could not read the remote branch."
-msgstr "Şablon yolu '%s' açılamadı"
+msgstr "Uzak dal okunamadı."
 
 #: common/git/libgit_backend.cpp:1663
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reset to the remote branch: %s"
-msgstr "Uzaktan gönderilemedi: %s"
+msgstr "Uzak dala sıfırlanamadı: %s"
 
 #: common/git/libgit_backend.cpp:1689
-#, fuzzy
 msgid ""
 "Cannot rebase: you have unstaged changes.  Please commit or stash them first."
 msgstr ""
-"Birleştirilemiyor: Henüz aşamalandırılmamış değişiklikleriniz var. Lütfen "
-"çekme işleminden önce kaydedin veya saklayın."
+"Yeniden temellendirme yapılamıyor: Kaydedilmemiş değişiklikleriniz var. "
+"Lütfen önce bunları işleyin veya saklayın."
 
 #: common/git/libgit_backend.cpp:1747 common/git/libgit_backend.cpp:1758
 msgid ""
 "The rebase ran into conflicts.  This is best resolved from a git command "
 "line."
 msgstr ""
+"Yeniden temellendirme çakışmalarla karşılaştı. Bunu bir git komut satırından "
+"çözmeniz en iyisidir."
 
 #: common/grid_tricks.cpp:395 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -12931,12 +12919,16 @@ msgid ""
 "Net chain rebuild failed: %s.  The schematic may have stale chain data; "
 "reload to recover."
 msgstr ""
+"Ağ zinciri yeniden oluşturma başarısız: %s.  Şematikte eski zincir verileri "
+"olabilir; kurtarmak için yeniden yükleyin."
 
 #: eeschema/connection_graph.cpp:3777
 msgid ""
 "Net chain rebuild failed with an unknown error.  The schematic may have "
 "stale chain data; reload to recover."
 msgstr ""
+"Ağ zinciri yeniden oluşturma bilinmeyen bir hatayla başarısız oldu.  "
+"Şematikte eski zincir verileri olabilir; kurtarmak için yeniden yükleyin."
 
 #: eeschema/connection_graph.cpp:5057
 #, c-format
@@ -13101,7 +13093,7 @@ msgstr "Şemayı Numaralandır"
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:92
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:121
 msgid "Generate"
-msgstr "Oluştur"
+msgstr "Üret"
 
 #: eeschema/dialogs/dialog_bom.cpp:167
 msgid "(file missing)"
@@ -13606,24 +13598,21 @@ msgid "Update Symbols from Library"
 msgstr "Sembolleri Kütüphaneden Güncelle"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:63
-#, fuzzy
 msgid "Filter chains by name or net..."
-msgstr "Alan adlarına göre filtrele:"
+msgstr "Zincirleri ada veya ağa göre filtrele..."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:77
-#, fuzzy
 msgid "Create"
-msgstr "Baskı Devre Oluştur"
+msgstr "Oluştur"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:129
 #, c-format
 msgid "Chain created (%d total). Select another or close."
-msgstr ""
+msgstr "Zincir oluşturuldu (toplam %d). Başka bir tane seçin veya kapatın."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:142
-#, fuzzy
 msgid "Please select a chain from the list."
-msgstr "Lütfen %s listesinden en az bir seçenek seçin."
+msgstr "Lütfen listeden bir zincir seçin."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:142
 #: eeschema/dialogs/dialog_create_net_chain.cpp:162
@@ -13634,43 +13623,37 @@ msgstr "Lütfen %s listesinden en az bir seçenek seçin."
 #: eeschema/dialogs/dialog_create_net_chain.cpp:222
 #: eeschema/dialogs/dialog_create_net_chain_base.h:79
 #: eeschema/tools/sch_editor_control.cpp:1931
-#, fuzzy
 msgid "Create Net Chain"
-msgstr "Yeni Sayfa Oluştur"
+msgstr "Ağ Zinciri Oluştur"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:162
-#, fuzzy
 msgid "Please enter a name for the net chain."
-msgstr "Lütfen depo için bir ad girin"
+msgstr "Lütfen ağ zinciri için bir ad girin."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:169
-#, fuzzy
 msgid "Chain name cannot contain spaces, quotes, or parentheses."
-msgstr "Sinyal adları boşluk içeremez"
+msgstr "Zincir adı boşluk, tırnak veya parantez içeremez."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:178
 msgid "Connection graph not available."
-msgstr ""
+msgstr "Bağlantı grafiği mevcut değil."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid "A net chain named '%s' already exists."
-msgstr "'%s' takma adlı bir öge zaten var."
+msgstr "'%s' adında bir ağ zinciri zaten mevcut."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:197
-#, fuzzy
 msgid "Failed to create the net chain."
-msgstr "Etiket oluşturma başarısız oldu."
+msgstr "Ağ zinciri oluşturulamadı."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:222
-#, fuzzy
 msgid "Failed to create the manual net chain."
-msgstr "Dal oluşturma başarısız oldu."
+msgstr "Elle ağ zinciri oluşturulamadı."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:314
-#, fuzzy
 msgid "Please select both a From and To component."
-msgstr "Lütfen içe aktarılacak bir dosya seçin."
+msgstr "Lütfen hem bir Kaynak hem de Hedef bileşen seçin."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:314
 #: eeschema/dialogs/dialog_create_net_chain.cpp:321
@@ -13678,19 +13661,17 @@ msgstr "Lütfen içe aktarılacak bir dosya seçin."
 #: eeschema/dialogs/dialog_create_net_chain.cpp:406
 #: eeschema/dialogs/dialog_create_net_chain.cpp:439
 #: eeschema/dialogs/dialog_create_net_chain.cpp:513
-#, fuzzy
 msgid "Find Path"
-msgstr "Sonrakini Bul"
+msgstr "Yol Bul"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:321
-#, fuzzy
 msgid "From and To must be different components."
-msgstr "Kaynak 1 ve Kaynak 2 farklı olmalıdır."
+msgstr "Kaynak ve Hedef bileşenler farklı olmalıdır."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find component '%s' or '%s'."
-msgstr "IBIS bileşeni '%s' bulunamadı"
+msgstr "'%s' veya '%s' bileşeni bulunamadı."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:401
 #, c-format
@@ -13699,15 +13680,22 @@ msgid ""
 "\n"
 "Would you like to force-create a manual chain link between these components?"
 msgstr ""
+"%s ve %s arasında aktarma bileşenleri üzerinden bir ağ zinciri yolu "
+"bulunamadı.\n"
+"\n"
+"Bu bileşenler arasında manuel bir zincir bağlantısı oluşturmak istiyor "
+"musunuz?"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:438
 msgid "Selected components have no connected pins to anchor a manual chain."
-msgstr ""
+msgstr "Seçili bileşenlerin manuel bir zinciri sabitleyecek bağlı pinleri yok."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:470
 #, c-format
 msgid "Showing manual chain between %s and %s. Use Refresh to restore all."
 msgstr ""
+"%s ve %s arasındaki manuel zincir gösteriliyor. Tümünü geri yüklemek için "
+"Yenile'yi kullanın."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:510
 #, c-format
@@ -13715,42 +13703,45 @@ msgid ""
 "All %zu net chain paths between %s and %s are already committed as net "
 "chains."
 msgstr ""
+"%zu ağ zinciri yolunun tümü %s ve %s arasındaki zaten ağ zinciri olarak "
+"işlenmiş."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:546
 #, c-format
 msgid "Showing %zu path(s) between %s and %s. Use Refresh to restore all."
 msgstr ""
+"%zu , %s ve %s arasındaki yolu gösteriliyor. Tümünü geri yüklemek için "
+"Yenile'yi kullanın."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:767
 #: eeschema/dialogs/dialog_create_net_chain.cpp:784
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:80
 #: eeschema/dialogs/panel_setup_net_chains.cpp:646
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:87
-#, fuzzy
 msgid "Member Nets"
-msgstr "Üye Adı"
+msgstr "Üye Ağlar"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:794
 #, c-format
 msgid "Member Nets — %s (%zu) [%s]"
-msgstr ""
+msgstr "Üye Ağlar — %s (%zu) [%s]"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:799
 #: eeschema/dialogs/panel_setup_net_chains.cpp:654
 #, c-format
 msgid "Member Nets — %s (%zu)"
-msgstr ""
+msgstr "Üye Ağlar — %s (%zu)"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1079
-#, fuzzy, c-format
+#, c-format
 msgid "net '%s'"
-msgstr "Metin '%s'"
+msgstr "'%s' ağı"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1084
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1089
-#, fuzzy, c-format
+#, c-format
 msgid "component %s"
-msgstr "Elemanlar"
+msgstr "bileşen %s"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1108
 #, c-format
@@ -13758,16 +13749,19 @@ msgid ""
 "No uncommitted chains match the selected %s. Use Refresh to restore the full "
 "list."
 msgstr ""
+"Seçili %s ile eşleşen işlenmemiş zincir yok. Tam listeyi geri yüklemek için "
+"Yenile'yi kullanın."
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:22
 msgid ""
 " Select a detected net chain path and assign a name to create a net chain."
 msgstr ""
+" Algılanan bir ağ zinciri yolu seçin ve bir ağ zinciri oluşturmak için bir "
+"ad atayın."
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:53
-#, fuzzy
 msgid "Suggested Name"
-msgstr "Sayfa Adı"
+msgstr "Önerilen Ad"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:54
 #: eeschema/net_navigator.cpp:384 pcbnew/board.cpp:2450
@@ -13782,9 +13776,8 @@ msgid "Nets"
 msgstr "Ağlar"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:97
-#, fuzzy
 msgid "Manual endpoint selection"
-msgstr "Seçim dönüştürülemedi"
+msgstr "Manuel uç nokta seçimi"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:106
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:270
@@ -13793,24 +13786,20 @@ msgid "From:"
 msgstr "Buradan:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:113
-#, fuzzy
 msgid "To:"
-msgstr "Üst:"
+msgstr "Hedef:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:121
-#, fuzzy
 msgid "Find net chain path between the two components"
-msgstr "Sadece bileşenleri olmayan bir tahta oluşturun"
+msgstr "İki bileşen arasındaki ağ zinciri yolunu bul"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:131
-#, fuzzy
 msgid "Chain Name:"
-msgstr "Pin Adı"
+msgstr "Zincir Adı:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:145
-#, fuzzy
 msgid "Re-detect potential net chains from the schematic"
-msgstr "Şematikten mevcut bir tasarım değişkenini kaldır."
+msgstr "Şematikten potansiyel ağ zincirlerini yeniden algıla"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
 msgid "Connected to database successfully"
@@ -15629,9 +15618,9 @@ msgid "Derived symbol must have a parent selected"
 msgstr "Türetilmiş sembolün bir ana sembolü seçilmiş olmalıdır"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:507
-#, fuzzy, c-format
+#, c-format
 msgid "The unit name '%s' is already in use."
-msgstr "'%s' adı zaten kullanılıyor."
+msgstr "'%s' birim adı zaten kullanımda."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:522
 msgid "Delete extra units from symbol?"
@@ -16839,9 +16828,8 @@ msgstr "Veriyolu Takma Ad Tanımları"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:351
 #: eeschema/dialogs/panel_setup_net_chains.cpp:359
 #: eeschema/dialogs/panel_setup_net_chains.cpp:367
-#, fuzzy
 msgid "Net Chains"
-msgstr "Ağ Sınıfı"
+msgstr "Ağ Zincirleri"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:141
 #: pcbnew/dialogs/dialog_board_setup.cpp:161
@@ -18089,18 +18077,16 @@ msgstr ""
 "kullanışlıdır"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:231
-#, fuzzy
 msgid "Passthrough"
-msgstr "İçinden"
+msgstr "Aktarma"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:235
-#, fuzzy
 msgid "Block"
-msgstr "Saat"
+msgstr "Blok"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:235
 msgid "Force"
-msgstr ""
+msgstr "Zorla"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:253
 #: eeschema/sch_edit_frame.cpp:2424
@@ -19263,115 +19249,107 @@ msgid "PA"
 msgstr "PA"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:48
-#, fuzzy
 msgid "Committed"
-msgstr "Yorum"
+msgstr "İşlendi"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:49
-#, fuzzy
 msgid "Potential"
-msgstr "Üssel"
+msgstr "Potansiyel"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Name '%s' contains invalid characters."
-msgstr "%s sembolü geçersiz '%c' karakterini içeriyor"
+msgstr "'%s' adı geçersiz karakterler içeriyor."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "%d net chain(s)"
-msgstr ": (değişiklik yok)"
+msgstr "%d ağ zinciri"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:242
 #, c-format
 msgid "%zu nets"
-msgstr ""
+msgstr "%zu ağ"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:349
 #, c-format
 msgid "Net chain on row %zu cannot have an empty name."
-msgstr ""
+msgstr "%zu satırındaki ağ zinciri boş bir ada sahip olamaz."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "Net chain name '%s' contains invalid characters."
-msgstr "%s sembolü geçersiz '%c' karakterini içeriyor"
+msgstr "Ağ zinciri adı '%s' geçersiz karakterler içeriyor."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate net chain name '%s' on row %zu."
-msgstr "Yinelenen öğeler %s%s\n"
+msgstr "'%s' ağ zinciri adı %zu satırında yineleniyor."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:382
 #, c-format
 msgid "Class on row %zu cannot have an empty name."
-msgstr ""
+msgstr "%zu satırındaki sınıf boş bir ada sahip olamaz."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:384
 #: eeschema/dialogs/panel_setup_net_chains.cpp:392
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:185
-#, fuzzy
 msgid "Net Chain Classes"
-msgstr "Ağ Sınıfları"
+msgstr "Ağ Zinciri Sınıfları"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:390
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate class name '%s' on row %zu."
-msgstr "Yinelenen öğeler %s%s\n"
+msgstr "'%s' sınıf adı %zu satırında yineleniyor."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:618
-#, fuzzy, c-format
+#, c-format
 msgid "Delete net chain '%s'?"
-msgstr "%s' grubundaki tüm ağlar silinsin mi?"
+msgstr "'%s' ağ zinciri silinsin mi?"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:619
-#, fuzzy
 msgid "Delete Net Chain"
-msgstr "Sayfa Pinlerini Sil"
+msgstr "Ağ Zincirini Sil"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:653
-#, fuzzy, c-format
+#, c-format
 msgid "Member Nets (%zu)"
-msgstr "Üye Adı"
+msgstr "Üye Ağlar (%zu)"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:672
-#, fuzzy
 msgid "New net chain class name:"
-msgstr "Yeni net sınıfı:"
+msgstr "Yeni ağ zinciri sınıfı adı:"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:672
 #: eeschema/dialogs/panel_setup_net_chains.cpp:682
-#, fuzzy
 msgid "Add Class"
-msgstr "Sınıf"
+msgstr "Sınıf Ekle"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:681
 #: eeschema/dialogs/panel_setup_net_chains.cpp:715
-#, fuzzy
 msgid "That class name is empty or already in use."
-msgstr "Ağ sınıfı adı zaten kullanılıyor."
+msgstr "Bu sınıf adı boş veya zaten kullanımda."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:705
-#, fuzzy
 msgid "Rename net chain class:"
-msgstr "Yeni net sınıfı:"
+msgstr "Ağ zinciri sınıfını yeniden adlandır:"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:705
 #: eeschema/dialogs/panel_setup_net_chains.cpp:716
-#, fuzzy
 msgid "Rename Class"
-msgstr "Dosyayı yeniden adlandır"
+msgstr "Sınıfı Yeniden Adlandır"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:744
 #, c-format
 msgid ""
 "Delete net chain class '%s'?  Chains assigned to it will become unclassified."
 msgstr ""
+"'%s' ağ zinciri sınıfı silinsin mi? Bu sınıfa atanmış zincirler "
+"sınıflandırılmamış hale gelecektir."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:747
-#, fuzzy
 msgid "Delete Class"
-msgstr "Sütunları Sil"
+msgstr "Sınıfı Sil"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:59
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:143
@@ -19380,47 +19358,44 @@ msgid "Members"
 msgstr "Üyeler"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:60
-#, fuzzy
 msgid "Net Chain Class"
-msgstr "Ağ Sınıfı"
+msgstr "Ağ Zinciri Sınıfı"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:62
-#, fuzzy
 msgid "Colour"
 msgstr "Renk"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:105
-#, fuzzy
 msgid "Delete the selected committed net chain"
-msgstr "Seçili ayak izi atamalarını sil"
+msgstr "Seçili işlenmiş ağ zincirini sil"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:116
 msgid "Chains"
-msgstr ""
+msgstr "Zincirler"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:121
 msgid ""
 "Group net chains under a class label so DRC rules can target the whole group "
 "via inNetChainClass('name')."
 msgstr ""
+"Ağ zincirlerini bir sınıf etiketi altında gruplandırın, böylece DRC "
+"kuralları inNetChainClass('name') ile tüm grubu hedef alabilir."
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:142
-#, fuzzy
 msgid "Class Name"
-msgstr "Takma ad"
+msgstr "Sınıf Adı"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:164
-#, fuzzy
 msgid "Add a new net chain class"
-msgstr "Yeni net sınıfı:"
+msgstr "Yeni bir ağ zinciri sınıfı ekle"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:169
 msgid "Rename the selected class (updates every chain that uses it)"
-msgstr ""
+msgstr "Seçili sınıfı yeniden adlandırır (onu kullanan her zinciri günceller)"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:174
 msgid "Delete the selected class (chains revert to no class)"
-msgstr ""
+msgstr "Seçili sınıfı siler (zincirler sınıfsız duruma döner)"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:228
 msgid "No error or warning"
@@ -19968,9 +19943,9 @@ msgid "Pins of type %s and %s are connected"
 msgstr "%s ve %s tipi pimler bağlı"
 
 #: eeschema/erc/erc.cpp:1402
-#, fuzzy, c-format
+#, c-format
 msgid "Pins of type %s and %s are connected via net chain %s"
-msgstr "%s ve %s tipi pimler bağlı"
+msgstr "%s ve %s tipindeki pinler, %s ağ zinciri aracılığıyla bağlanmıştır"
 
 #: eeschema/erc/erc.cpp:1451
 #, c-format
@@ -20540,7 +20515,7 @@ msgstr ""
 #: eeschema/files-io.cpp:1306
 #, c-format
 msgid "Failed to save %s."
-msgstr "%s kaydedilemedi."
+msgstr "%s kaydedilme hatası."
 
 #: eeschema/files-io.cpp:1308
 msgid "Locked File Warning"
@@ -21635,9 +21610,9 @@ msgid "[no schematic loaded]"
 msgstr "[şematik yüklenmedi]"
 
 #: eeschema/sch_edit_frame.cpp:2108
-#, fuzzy, c-format
+#, c-format
 msgid "Net chain members: %s"
-msgstr "Veri yolunun üyesi yok"
+msgstr "Ağ zinciri üyeleri: %s"
 
 #: eeschema/sch_edit_frame.cpp:2116
 #, c-format
@@ -22984,9 +22959,8 @@ msgstr "ağ sınıfından"
 #: eeschema/sch_line.cpp:1027 pcbnew/generators/pcb_tuning_pattern.cpp:2364
 #: pcbnew/pad.cpp:1914 pcbnew/pcb_track.cpp:2471
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:115
-#, fuzzy
 msgid "Net Chain"
-msgstr "Ağ Sınıfı"
+msgstr "Ağ Zinciri"
 
 #: eeschema/sch_marker.cpp:360 pcbnew/pcb_marker.cpp:231
 msgid "Violation"
@@ -23176,14 +23150,14 @@ msgid "Bezier Curve, %d points"
 msgstr "Bezier Eğrisi, %d puan"
 
 #: eeschema/sch_shape.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Ellipse, %s x %s"
-msgstr "%s, %s ve %s"
+msgstr "Elips, %s x %s"
 
 #: eeschema/sch_shape.cpp:473
 #, c-format
 msgid "Elliptical Arc, %s x %s"
-msgstr ""
+msgstr "Elips Yayı, %s x %s"
 
 #: eeschema/sch_shape.cpp:620
 msgid "Body outline color"
@@ -25953,17 +25927,19 @@ msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
 msgstr "<b>Grafiksel dikdörtgenin boyutu 0</b>, <b>(%s, %s)</b> konumunda."
 
 #: eeschema/symbol_checker.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Graphic ellipse has null or negative radii</b> at location <b>(%s, %s)</"
 "b>."
-msgstr "<b>Grafiksel dikdörtgenin boyutu 0</b>, <b>(%s, %s)</b> konumunda."
+msgstr ""
+"<b>Grafik elipsin sıfır veya negatif yarıçapları var</b>, konum <b>(%s, %s)</"
+"b>."
 
 #: eeschema/symbol_checker.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Graphic elliptical arc has zero sweep</b> at location <b>(%s, %s)</b>."
-msgstr "<b>Grafiksel dikdörtgenin boyutu 0</b>, <b>(%s, %s)</b> konumunda."
+msgstr "<b>Grafik elips yayının tarama açısı sıfır</b>, konum <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:72
 msgid "Symbol Chooser"
@@ -27232,14 +27208,12 @@ msgid "Draw Circles"
 msgstr "Çemberleri Çiz"
 
 #: eeschema/tools/sch_actions.cpp:703
-#, fuzzy
 msgid "Draw Ellipses"
-msgstr "Çizgileri Çiz"
+msgstr "Elipsler Çiz"
 
 #: eeschema/tools/sch_actions.cpp:712 pcbnew/tools/pcb_actions.cpp:156
-#, fuzzy
 msgid "Draw Elliptical Arcs"
-msgstr "Yayları Çiz"
+msgstr "Elips Yayları Çiz"
 
 #: eeschema/tools/sch_actions.cpp:721 pcbnew/tools/pcb_actions.cpp:167
 msgid "Draw Arcs"
@@ -27580,59 +27554,55 @@ msgid "Highlight wires and pins of a net"
 msgstr "Bir ağın yollarını ve pinlerini vurgula"
 
 #: eeschema/tools/sch_actions.cpp:1103 pcbnew/tools/pcb_actions.cpp:1621
-#, fuzzy
 msgid "Highlight Net Chain"
-msgstr "%s içindeki ağları vurgula"
+msgstr "Ağ Zincirini Vurgula"
 
 #: eeschema/tools/sch_actions.cpp:1104
-#, fuzzy
 msgid "Highlight the net chain under the cursor"
-msgstr "İmleç altındaki ağı vurgula"
+msgstr "İmlecin altındaki ağ zincirini vurgula"
 
 #: eeschema/tools/sch_actions.cpp:1110
-#, fuzzy
 msgid "Remove from Net Chain"
-msgstr "Seçimden Kaldır"
+msgstr "Ağ Zincirinden Kaldır"
 
 #: eeschema/tools/sch_actions.cpp:1111
 msgid ""
 "Remove the selected net from its net chain by disabling propagation on the "
 "bridging component(s)"
 msgstr ""
+"Köprüleme bileşen(ler)i üzerinde yayılımı devre dışı bırakarak seçili ağı ağ "
+"zincirinden çıkarın"
 
 #: eeschema/tools/sch_actions.cpp:1116
-#, fuzzy
 msgid "Replace Terminal Pin"
-msgstr "Tüm mevcut pinleri değiştir"
+msgstr "Uç Pini Değiştir"
 
 #: eeschema/tools/sch_actions.cpp:1121
 #: eeschema/tools/sch_editor_control.cpp:1849
-#, fuzzy
 msgid "Name Net Chain"
-msgstr "Ad Metin Boyutu"
+msgstr "Ağ Zincirini Adlandır"
 
 #: eeschema/tools/sch_actions.cpp:1122
-#, fuzzy
 msgid "Assign a name to the net chain"
-msgstr "Bir desenle eşleşen ağlara bir ağ sınıfı atayın"
+msgstr "Ağ zincirine bir ad ata"
 
 #: eeschema/tools/sch_actions.cpp:1127
 msgid "Create Net Chain Between Pins"
-msgstr ""
+msgstr "Pinler Arasında Ağ Zinciri Oluştur"
 
 #: eeschema/tools/sch_actions.cpp:1128
-#, fuzzy
 msgid "Create a new net chain connecting the two selected pins"
-msgstr "Seçili poligonların kesişimini oluşturur"
+msgstr "Seçili iki pini birbirine bağlayan yeni bir ağ zinciri oluştur"
 
 #: eeschema/tools/sch_actions.cpp:1133
-#, fuzzy
 msgid "Create Net Chain..."
-msgstr "Ayak İzi Oluştur..."
+msgstr "Ağ Zinciri Oluştur..."
 
 #: eeschema/tools/sch_actions.cpp:1134
 msgid "Detect net chain paths through passives and create a named net chain"
 msgstr ""
+"Pasifler üzerinden ağ zinciri yollarını algılayın ve adlandırılmış bir ağ "
+"zinciri oluşturun"
 
 #: eeschema/tools/sch_actions.cpp:1140
 msgid "Show/hide the net navigator"
@@ -28712,20 +28682,18 @@ msgid "No connected net selected."
 msgstr "Bağlı bir ağ seçilmedi."
 
 #: eeschema/tools/sch_editor_control.cpp:1849
-#, fuzzy
 msgid "Net chain name:"
-msgstr "Ağ adı:"
+msgstr "Ağ zinciri adı:"
 
 #: eeschema/tools/sch_editor_control.cpp:1885
-#, fuzzy
 msgid "No potential net chain connects the selected pins."
-msgstr "Seçili çizgilere chamfer uygulanamıyor."
+msgstr "Seçili pinleri bağlayan potansiyel bir ağ zinciri yok."
 
 #: eeschema/tools/sch_editor_control.cpp:1893
 #: eeschema/tools/sch_selection_tool.cpp:432
-#, fuzzy, c-format
+#, c-format
 msgid "Create Net Chain between %s:%s and %s:%s"
-msgstr "Değer %s ile %s arasında olmalıdır."
+msgstr "%s:%s ile %s:%s arasında Ağ Zinciri Oluştur"
 
 #: eeschema/tools/sch_editor_control.cpp:2520 pcbnew/tools/pcb_control.cpp:1188
 msgid ""
@@ -28779,9 +28747,8 @@ msgid "Reached end of sheet."
 msgstr "Sayfanın sonuna ulaştı."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:389
-#, fuzzy
 msgid "No matches found."
-msgstr "Hiçbir Şablon Bulunamadı"
+msgstr "Eşleşme bulunamadı."
 
 #: eeschema/tools/sch_group_tool.cpp:55 pcbnew/tools/pcb_group_tool.cpp:58
 msgid "Click on new member..."
@@ -28917,30 +28884,26 @@ msgid "Add Corner"
 msgstr "Köşe Ekle"
 
 #: eeschema/tools/sch_selection_tool.cpp:173
-#, fuzzy
 msgid "Replace terminal pin"
-msgstr "Tüm mevcut pinleri değiştir"
+msgstr "Uç pini değiştir"
 
 #: eeschema/tools/sch_selection_tool.cpp:211
 #: pcbnew/tools/pcb_selection_tool.cpp:157
-#, fuzzy
 msgid "Terminal A"
-msgstr "3 Terminal Tipi"
+msgstr "Uç A"
 
 #: eeschema/tools/sch_selection_tool.cpp:212
 #: pcbnew/tools/pcb_selection_tool.cpp:158
-#, fuzzy
 msgid "Terminal B"
-msgstr "3 Terminal Tipi"
+msgstr "Uç B"
 
 #: eeschema/tools/sch_selection_tool.cpp:255
-#, fuzzy
 msgid "Net Chain..."
-msgstr "Döndürme..."
+msgstr "Ağ Zinciri..."
 
 #: eeschema/tools/sch_selection_tool.cpp:408
 msgid "(No net chain actions)"
-msgstr ""
+msgstr "(Ağ zinciri eylemi yok)"
 
 #: eeschema/tools/simulator_control.cpp:110
 msgid "Open Simulation Workbook"
@@ -31709,9 +31672,8 @@ msgid "Plot the layers to a single PDF file with multiple pages"
 msgstr "Katmanları birden çok sayfalı tek bir PDF dosyasına çiz"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:128
-#, fuzzy
 msgid "Suppress footprint property popups"
-msgstr "Özellik açılır pencereleri oluştur"
+msgstr "Ayak izi özellik açılır pencerelerini engelle"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:192
 msgid "Cannot use more than one mode flag\n"
@@ -33764,13 +33726,14 @@ msgid "Initialize a new repository"
 msgstr "Yeni bir depo başlat"
 
 #: kicad/project_tree_pane.cpp:1042
-#, fuzzy
 msgid "Configure Default Remote..."
-msgstr "Yolları Yapılandır..."
+msgstr "Varsayılan Uzak Yapılandırma..."
 
 #: kicad/project_tree_pane.cpp:1043
 msgid "Set or change the default remote URL and credentials"
 msgstr ""
+"Varsayılan uzakyol adresini (URL) ve kimlik bilgilerini ayarlayın veya "
+"değiştirin"
 
 #: kicad/project_tree_pane.cpp:1046
 msgid "Commit Project..."
@@ -33781,13 +33744,12 @@ msgid "Commit changes to the local repository"
 msgstr "Değişiklikleri yerel depoya aktarın"
 
 #: kicad/project_tree_pane.cpp:1050
-#, fuzzy
 msgid "Amend Last Commit..."
-msgstr "Son Onay"
+msgstr "Son İşlemi Düzelt..."
 
 #: kicad/project_tree_pane.cpp:1051
 msgid "Rewrite the most recent commit on the current branch"
-msgstr ""
+msgstr "Geçerli daldaki en son işlemi yeniden yazın"
 
 #: kicad/project_tree_pane.cpp:1054
 msgid "Push"
@@ -33798,14 +33760,14 @@ msgid "Pull"
 msgstr "Çek"
 
 #: kicad/project_tree_pane.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Push %s to %s"
-msgstr "%s %s %s üzerinde"
+msgstr "%s'yi %s'ye it"
 
 #: kicad/project_tree_pane.cpp:1060
-#, fuzzy, c-format
+#, c-format
 msgid "Pull from %s"
-msgstr "%s'den"
+msgstr "%s üzerinden çek"
 
 #: kicad/project_tree_pane.cpp:1064
 msgid "Push committed local changes to remote repository"
@@ -33918,43 +33880,39 @@ msgid "Fetch Remote"
 msgstr "Uzak Sunucudan Getir"
 
 #: kicad/project_tree_pane.cpp:1988
-#, fuzzy
 msgid "Configure Default Remote"
-msgstr "Varsayılan uzaktan ayarla"
+msgstr "Varsayılan Uzak Yapılandırma"
 
 #: kicad/project_tree_pane.cpp:2004
-#, fuzzy
 msgid "Failed to configure remote."
-msgstr "Uzak bağlantı oluşturma başarısız oldu: %s"
+msgstr "Uzak yapılandırılamadı."
 
 #: kicad/project_tree_pane.cpp:2057
-#, fuzzy
 msgid "Already up to date."
-msgstr "Zaten Yerleştirildi"
+msgstr "Zaten güncel."
 
 #: kicad/project_tree_pane.cpp:2058
-#, fuzzy, c-format
+#, c-format
 msgid "Already up to date with %s."
-msgstr "Çözümlenen bağlantı kolu genişliği: %s."
+msgstr "%s ile zaten güncel."
 
 #: kicad/project_tree_pane.cpp:2064
 msgid "Pulled changes (fast-forward)."
-msgstr ""
+msgstr "Değişiklikler çekildi (hızlı-ileri)."
 
 #: kicad/project_tree_pane.cpp:2065
 #, c-format
 msgid "Pulled %s into %s (fast-forward)."
-msgstr ""
+msgstr "%s, %s içine çekildi (hızlı-ileri)."
 
 #: kicad/project_tree_pane.cpp:2070
-#, fuzzy
 msgid "Pulled changes."
-msgstr "Değişiklikleri Oluştur"
+msgstr "Değişiklikler çekildi."
 
 #: kicad/project_tree_pane.cpp:2071
-#, fuzzy, c-format
+#, c-format
 msgid "Pulled %s into %s."
-msgstr "%s pedi, %s üzerinde"
+msgstr "%s, %s içine çekildi."
 
 #: kicad/project_tree_pane.cpp:2081
 msgid ""
@@ -33964,63 +33922,60 @@ msgid ""
 "You can discard your local commits and use the remote version, or rebase "
 "your commits on top of the remote."
 msgstr ""
+"Yerel değişiklikleriniz ve uzakyol değişiklikleri çakışıyor, bu nedenle "
+"çekme iptal edildi ve hiçbir şey değiştirilmedi.\n"
+"\n"
+"Yerel işlemlerinizi atıp uzakyol sürümünü kullanabilir veya işlemlerinizi "
+"uzakyolun üzerine yeniden temellendirebilirsiniz."
 
 #: kicad/project_tree_pane.cpp:2085
-#, fuzzy
 msgid "Pull Conflict"
-msgstr "Çakışma"
+msgstr "Çekme Çakışması"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Use Remote (discard my changes)"
-msgstr ""
+msgstr "&Uzakyolu Kullan (değişikliklerimi at)"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Rebase"
-msgstr ""
+msgstr "&Yeniden Temellendir"
 
 #: kicad/project_tree_pane.cpp:2095
-#, fuzzy
 msgid "Reset to the remote version."
-msgstr "Referans konumundan geçerli açıya sıfırla."
+msgstr "Uzak sürümüne sıfırla."
 
 #: kicad/project_tree_pane.cpp:2097
-#, fuzzy
 msgid "Failed to reset to remote"
-msgstr "Varsayılan uzaktan ayarlanamadı."
+msgstr "Uzağa sıfırlanamadı"
 
 #: kicad/project_tree_pane.cpp:2104
-#, fuzzy
 msgid "Rebased your changes onto the remote."
-msgstr "Uzak depodan değişiklikleri çekme başarısız oldu."
+msgstr "Değişiklikleriniz uzakyol üzerine yeniden temellendirildi."
 
 #: kicad/project_tree_pane.cpp:2106
-#, fuzzy
 msgid "Could not rebase"
-msgstr "Dosya okunamadı "
+msgstr "Yeniden temellendirme yapılamadı"
 
 #: kicad/project_tree_pane.cpp:2110
-#, fuzzy
 msgid "Pull cancelled."
-msgstr "İptal Edildi"
+msgstr "Çekme iptal edildi."
 
 #: kicad/project_tree_pane.cpp:2119
-#, fuzzy
 msgid "Pull failed."
-msgstr "Tüm dosyalar"
+msgstr "Çekme başarısız oldu."
 
 #: kicad/project_tree_pane.cpp:2120
 msgid "Failed to pull project"
 msgstr "Proje çekilemedi"
 
 #: kicad/project_tree_pane.cpp:2154
-#, fuzzy
 msgid "Pushed to remote."
-msgstr "Uzak bağlantı sorgulanamadı"
+msgstr "Uzakyola gönderildi."
 
 #: kicad/project_tree_pane.cpp:2155
-#, fuzzy, c-format
+#, c-format
 msgid "Pushed %s to %s."
-msgstr "%s pedi, %s üzerinde"
+msgstr "%s, %s uzakyoluna gönderildi."
 
 #: kicad/project_tree_pane.cpp:2168
 #, c-format
@@ -34032,19 +33987,25 @@ msgid ""
 "\n"
 "Anyone who already pulled the previous version will need to reset their copy."
 msgstr ""
+"Gönderme reddedildi: yerel dalınız ve %s ayrıştı.\n"
+"\n"
+"Bu genellikle, zaten gönderilmiş bir işlem düzeltildikten veya yeniden "
+"yazıldıktan sonra olur. Uzakyolun üzerine yazmak için zorla gönderme "
+"yapılsın mı?\n"
+"\n"
+"Önceki sürümü çekmiş olan herkesin kendi kopyasını sıfırlaması gerekecektir."
 
 #: kicad/project_tree_pane.cpp:2174
 msgid "Force Push?"
-msgstr ""
+msgstr "Zorla Gönderme Yapılsın mı?"
 
 #: kicad/project_tree_pane.cpp:2176
 msgid "&Force Push"
-msgstr ""
+msgstr "&Zorla Gönderme"
 
 #: kicad/project_tree_pane.cpp:2185
-#, fuzzy
 msgid "Push failed."
-msgstr "İş başarısız"
+msgstr "Gönderme başarısız oldu."
 
 #: kicad/project_tree_pane.cpp:2186
 msgid "Failed to push project"
@@ -34055,34 +34016,32 @@ msgid "The selected directory is not a Git project."
 msgstr "Seçilen dizin bir Git projesi değil."
 
 #: kicad/project_tree_pane.cpp:2581
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before committing?"
 msgstr ""
-"Aşağıdaki kuralların kaydedilmemiş değişiklikleri var:\n"
+"Aşağıdaki düzenleyicilerde kaydedilmemiş değişiklikler var:%s\n"
 "\n"
+"Bunları işlemeden önce kaydedeyim mi?"
 
 #: kicad/project_tree_pane.cpp:2584 kicad/project_tree_pane.cpp:2859
-#, fuzzy
 msgid "Unsaved Changes"
-msgstr "Değişiklikleri Geri Al"
+msgstr "Kaydedilmemiş Değişiklikler"
 
 #: kicad/project_tree_pane.cpp:2587
-#, fuzzy
 msgid "&Save and Commit"
-msgstr "Bir Kopyasını kaydet.."
+msgstr "&Kaydet ve İşle"
 
 #: kicad/project_tree_pane.cpp:2587
-#, fuzzy
 msgid "Commit &Anyway"
-msgstr "(%s zaten işlenecek.)"
+msgstr "Yine de &İşle"
 
 #: kicad/project_tree_pane.cpp:2604 kicad/project_tree_pane.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid "Could not save %s."
-msgstr "Dosya okunamadı: %s"
+msgstr "%s kaydedilemedi."
 
 #: kicad/project_tree_pane.cpp:2721
 msgid "Discarding commit due to empty commit message."
@@ -34100,54 +34059,54 @@ msgid ""
 "Amending rewrites public history.  Anyone who pulled this commit will need "
 "to reset their copy."
 msgstr ""
+"Son işlem zaten %s uzakyoluna gönderilmişti.\n"
+"\n"
+"Düzeltme, kamuya açık geçmişi yeniden yazar. Bu işlemi çekmiş olan herkesin "
+"kendi kopyasını sıfırlaması gerekecektir."
 
 #: kicad/project_tree_pane.cpp:2815
 msgid "Amend Published Commit?"
-msgstr ""
+msgstr "Yayınlanmış İşlem Düzeltilsin mi?"
 
 #: kicad/project_tree_pane.cpp:2817 kicad/project_tree_pane.cpp:2862
-#, fuzzy
 msgid "Amend &Anyway"
-msgstr "Yine de Ekle"
+msgstr "Yine de &Düzelt"
 
 #: kicad/project_tree_pane.cpp:2856
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before amending?"
 msgstr ""
-"Aşağıdaki kuralların kaydedilmemiş değişiklikleri var:\n"
+"Aşağıdaki düzenleyicilerde kaydedilmemiş değişiklikler var:%s\n"
 "\n"
+"Bunları düzeltmeden önce kaydedeyim mi?"
 
 #: kicad/project_tree_pane.cpp:2862
 msgid "&Save and Amend"
-msgstr ""
+msgstr "&Kaydet ve Düzelt"
 
 #: kicad/project_tree_pane.cpp:2995
-#, fuzzy
 msgid "Amend Last Commit"
-msgstr "Son Onay"
+msgstr "Son İşlemi Düzelt"
 
 #: kicad/project_tree_pane.cpp:3003
-#, fuzzy
 msgid "Discarding amend due to empty commit message."
-msgstr "Boş işlem mesajı nedeniyle işlem reddediliyor."
+msgstr "Boş işlem mesajı nedeniyle düzeltme iptal ediliyor."
 
 #: kicad/project_tree_pane.cpp:3084
-#, fuzzy
 msgid "Fetched from remote."
-msgstr "Uzak Sunucudan Getir"
+msgstr "Uzakyoldan getirildi."
 
 #: kicad/project_tree_pane.cpp:3085
-#, fuzzy, c-format
+#, c-format
 msgid "Fetched from %s."
-msgstr "%s'den"
+msgstr "Şuradan alındı %s."
 
 #: kicad/project_tree_pane.cpp:3092
-#, fuzzy
 msgid "Fetch failed."
-msgstr "İş başarısız"
+msgstr "Getirme başarısız oldu."
 
 #: kicad/project_tree_traverser.cpp:216
 #, c-format
@@ -37728,14 +37687,12 @@ msgid "Options for edge card connectors."
 msgstr "Kenar kartı konektörleri için seçenekler."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:80
-#, fuzzy
 msgid "Constant"
-msgstr "Kısıtlama"
+msgstr "Sabit"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:80
-#, fuzzy
 msgid "Djordjevic-Sarkar"
-msgstr "Djordjevic-Sarkar nedensel"
+msgstr "Djordjevic-Sarkar"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:139
 msgid "Core"
@@ -37811,12 +37768,11 @@ msgstr ""
 "olmalıdır)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1322
-#, fuzzy
 msgid ""
 "Incorrect value for specified frequency (must be positive or null if not "
 "used)"
 msgstr ""
-"Kayıp tg için yanlış değer (Kayıp tg kullanılmazsa pozitif veya boş "
+"Belirtilen frekans için yanlış değer (kullanılmıyorsa pozitif veya sıfır "
 "olmalıdır)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1368
@@ -37924,14 +37880,12 @@ msgid "Id"
 msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
-#, fuzzy
 msgid "Spec Freq"
-msgstr "Belirtilen frekans:"
+msgstr "Belirtilen Frekans"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:121
-#, fuzzy
 msgid "Dielectric Model"
-msgstr "Dielektrik model:"
+msgstr "Dielektrik Modeli"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:148
 msgid "Board thickness from stackup:"
@@ -38556,9 +38510,11 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr "(yay boyutu sıfır veya çok küçük: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:1208
-#, fuzzy, c-format
+#, c-format
 msgid "(ellipse has null or very small radii: major=%d nm, minor=%d nm)"
-msgstr "(dairenin yarıçapı sıfır veya çok küçük: %d nm)"
+msgstr ""
+"(elipsin sıfır veya çok küçük yarıçapları var: büyük eksen=%d nm, küçük "
+"eksen=%d nm)"
 
 #: pcbnew/cross-probing.cpp:109 pcbnew/dialogs/dialog_board_setup.cpp:236
 #: pcbnew/dialogs/dialog_drc.cpp:415 pcbnew/pcb_edit_frame.cpp:3227
@@ -39399,11 +39355,14 @@ msgid ""
 "\n"
 "Proceed anyway?"
 msgstr ""
+"Dizi yapılandırması, %d ögeyi aynı konum ve dönüşte birbirinin üzerine "
+"istifleyerek yerleştirecektir.\n"
+"\n"
+"Yine de devam edilsin mi?"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:565
-#, fuzzy
 msgid "Confirm Array"
-msgstr "Değişikliği Onayla"
+msgstr "Diziyi Onayla"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:588
 msgid "Bad parameters"
@@ -40042,7 +40001,7 @@ msgstr "DRC (Tasarım Kuralı Kontrolü) Çalıştır"
 #: pcbnew/dialogs/dialog_drc.cpp:327
 #, c-format
 msgid "Elapsed: %s"
-msgstr "Geçen süre: %s"
+msgstr "Geçen Süre: %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:378
 msgid "Report All Errors for Each Track"
@@ -40070,12 +40029,12 @@ msgstr "Tasarım kurallarını göster."
 
 #: pcbnew/dialogs/dialog_drc.cpp:522
 msgid "Elapsed: 0 s"
-msgstr "Geçen süre: 0 s"
+msgstr "Geçen Süre: 0 s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:537
 #, c-format
 msgid "%1$d min %2$d s"
-msgstr "%1$d min %2$d s"
+msgstr "%1$d dak %2$d s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:539
 #, c-format
@@ -44817,15 +44776,13 @@ msgstr "Yarıçap 0'dan büyük olmalıdır"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:677
 #: pcbnew/dialogs/dialog_shape_properties.cpp:755
-#, fuzzy
 msgid "Major radius must be greater than 0"
-msgstr "Yarıçap 0'dan büyük olmalıdır"
+msgstr "Büyük yarıçap 0'dan büyük olmalıdır"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:683
 #: pcbnew/dialogs/dialog_shape_properties.cpp:761
-#, fuzzy
 msgid "Minor radius must be greater than 0"
-msgstr "Yarıçap 0'dan büyük olmalıdır"
+msgstr "Küçük yarıçap 0'dan büyük olmalıdır"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1045
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1048
@@ -44899,9 +44856,8 @@ msgid "Line width must be greater than zero for an unfilled curve."
 msgstr "Doldurulmamış bir eğri için çizgi genişliği sıfırdan büyük olmalı."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1489
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled ellipse."
-msgstr "Doldurulmamış bir çember için çizgi genişliği sıfırdan büyük olmalı."
+msgstr "Doldurulmamış bir elips için çizgi genişliği sıfırdan büyük olmalıdır."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1506
 msgid "Error List"
@@ -46733,13 +46689,12 @@ msgid "Cancel Changes?"
 msgstr "Değişikliklerden Vazgeçilsin mi?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:157
-#, fuzzy
 msgid "Show Matching Items"
-msgstr "Eşleşmeleri Göster"
+msgstr "Eşleşen Ögeleri Göster"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:210
 msgid "Cannot show matching items without an open project."
-msgstr ""
+msgstr "Açık bir proje olmadan eşleşen ögeler gösterilemez."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:232
 #: pcbnew/dialogs/panel_setup_rules.cpp:250
@@ -46755,31 +46710,31 @@ msgid "ERROR:"
 msgstr "HATA:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Could not scan rules text: %s"
-msgstr "Uzaktan gönderilemedi: %s"
+msgstr "Kurallar metni taranamadı: %s"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:338
 msgid "Place the cursor inside a (rule ...) block to show matching items."
-msgstr ""
+msgstr "Eşleşen ögeleri göstermek için imleci bir bloğunun içine yerleştirin."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:347
 msgid "The rule under the cursor has no name; add a name to identify it."
-msgstr ""
+msgstr "İmlecin altındaki kuralın adı yok; tanımlamak için bir ad ekleyin."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' could not be located after parsing."
-msgstr "Dosya '%s' oluşturulamadı."
+msgstr "'%s' kuralı ayrıştırma sonrasında bulunamadı."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:386
 msgid "DRC engine not available."
-msgstr ""
+msgstr "DRC motoru mevcut değil."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:409
 #, c-format
 msgid "Rule '%s': %zu matching item(s)."
-msgstr ""
+msgstr "'%s' kuralı: %zu eşleşen öge."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:999
 #, c-format
@@ -46873,7 +46828,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
-#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -47159,268 +47113,300 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
-"### Kısıtlamalarf\n"
+"### Kısıtlamalar\n"
 "\n"
-"| Kısıtlama türü            | Argüman "
-"türü                                                                                                          "
-"| "
-"Açıklama                                                                                                                                                                                                                                                                                                                                                                                                                                                "
+"| Kısıtlama Türü           | Argüman Türü"
+"                                                                                                        "
+"| Açıklama"
+"                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
 "|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/"
-"max                                                                                                               "
-"| Via'lardaki halka (annular ring) genişliklerini kontrol eder."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
+"|---------------------------"
+"|-----------------------------------------------------------------------------------------------------------------------"
+"|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
-"| Verilen ifadeyi kontrol eder."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                       "
+"| `annular_width`           | min/maks"
+"                                                                                                               "
+"| Geçitlerdeki halka genişliklerini kontrol eder.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                                          "
+"|\n"
+"| `assertion`               | \"&lt;ifade>"
+"\"                                                                                                     "
+"| Verilen ifadeyi kontrol eder.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `bridged_mask`            "
 "|                                                                                                                       "
-"| Bakır öğeler arasındaki lehim maskesi köprülerini kontrol eder.  Bu "
-"kısıtlama min/opt/max değeri almaz.  Bir severity (önem) hükmüyle birlikte "
-"kullanıldığında, çeşitli koşullarda lehim maskesi köprülenmesine izin vermek "
-"veya yasaklamak için kullanılabilir."
-"<br>                                                                                                                                                                                    "
+"| Bakır nesneler arasındaki lehim maskesi köprülerini kontrol eder. Bu "
+"kısıtlama bir min/opt/maks değeri almaz. Bir şiddet ifadesiyle birlikte, bu "
+"kısıtlama çeşitli koşullarda lehim maskesi köprüsüne izin vermek veya izin "
+"vermemek için kullanılabilir.<br>"
+"                                                                                                                                                                                                       "
 "|\n"
-"| `clearance`               | "
-"min                                                                                                                   "
-"| Farklı netlerdeki bakır nesneler arasındaki **elektriksel** açıklığı "
-"belirtir.  (Netten bağımsız nesneler arası açıklık belirtmek için "
-"`physical_clearance` bölümüne bakın.)<br><br>Bakır nesnelerin üst üste "
-"binmesine (çakışmasına) izin vermek için, `min` değeri sıfırdan küçük (örn. "
-"`-1`) bir `clearance` kısıtlaması oluşturun."
-"<br>                                                                                                              "
+"| `clearance`               | min"
+"                                                                                                                   "
+"| Farklı ağlardaki bakır nesneler arasındaki **elektriksel** açıklığı "
+"belirtir. (Ağdan bağımsız olarak nesneler arasındaki açıklığı belirtmek "
+"istiyorsanız `physical_clearance` kısmına bakın).<br><br>Bakır nesnelerin "
+"çakışmasına (birbiriyle temas etmesine) izin vermek için `min` değeri "
+"sıfırdan küçük (örneğin `-1`) olan bir `clearance` kısıtlaması oluşturun.<br>"
+"                                                                                                                      "
 "|\n"
-"| `connection_width`        | "
-"min                                                                                                                   "
-"| Pedler ile bölgeler (zones) arasındaki bağlantıların genişliğini kontrol "
-"eder.  `min` değerinden daha dar olan her ped bağlantısı için bir hata "
-"üretilir."
-"<br>                                                                                                                                                                           "
+"| `connection_width`        | min"
+"                                                                                                                   "
+"| Pedler ve bölgeler arasındaki bağlantıların genişliğini kontrol eder. "
+"`min` değerinden daha dar olan her ped bağlantısı için bir hata "
+"oluşturulur.<br>"
+"                                                                                                                                                                                  "
 "|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                   "
-"| Ayak izi avluları (courtyard) arasındaki açıklığı kontrol eder ve herhangi "
-"iki avlu `min` mesafesinden daha yakınsa hata üretir.  Bir ayak izinin avlu "
-"şekli yoksa, bu kısıtlamadan hata üretilmez."
-"<br>                                                                                                                                                                                                                                                 "
+"| `courtyard_clearance`     | min"
+"                                                                                                                   "
+"| Ayak izi avluları arasındaki açıklığı kontrol eder ve herhangi iki avlu "
+"`min` mesafeden daha yakınsa bir hata oluşturur. Bir ayak izinin avlu şekli "
+"yoksa, bu kısıtlamadan herhangi bir hata oluşmaz.<br>"
+"                                                                                                                                                                                                                                               "
 "|\n"
-"| `creepage`                | "
-"min                                                                                                                   "
-"| Farklı netlerdeki bakır nesneler arasındaki yüzey kaçak (creepage) "
-"mesafesini belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                                             "
+"| `creepage`                | min"
+"                                                                                                                   "
+"| Farklı ağlardaki bakır nesneler arasındaki kaçak akım yolunu (creepage) "
+"belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                           "
-"| Bir diferansiyel çiftteki paralel yollar arasındaki boşluğu kontrol eder.  "
-"`opt` ayarı, etkileşimli yönlendiricinin yeni diferansiyel çiftler "
-"yerleştirirken kullandığı değerdir.  Bir diferansiyel çiftteki yollar arası "
-"boşluk `min` ve `max` ayarları dışına çıkarsa hata üretilir.  Diferansiyel "
-"çiftin paralel olmayan kısımları (örn. bir bileşenden yapılan fan-out) için "
-"boşluk test edilmez."
-"<br>                                                                                                                                                                                                                                                                                       "
+"| `diff_pair_gap`           | min/opt/maks"
+"                                                                                                           "
+"| Bir diferansiyel çiftteki paralel yollar arasındaki aralığı kontrol eder. "
+"`opt` ayarı, etkileşimli yönlendirici tarafından yeni diferansiyel çiftleri "
+"yerleştirmek için kullanılır. Bir diferansiyel çiftteki yollar arasındaki "
+"mesafe `min` ve `maks` ayarlarının dışındaysa bir hata oluşturulur. "
+"Diferansiyel çift aralığı, bir diferansiyel çiftin paralel olmayan "
+"kısımlarında (örneğin, bir bileşenden çıkış) test edilmez.<br>"
+"                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                   "
-"| Bir diferansiyel çift yolunun, çiftteki diğer polariteli yoldan eşleşmemiş "
-"(uncoupled) olarak yönlendirildiği mesafeyi kontrol eder (örn. çiftin bir "
-"bileşenden fan-out yaptığı ya da via gibi bir nesnenin etrafından geçmek "
-"için eşleşmeden çıktığı yerler)."
-"<br>                                                                                                                                                                                      "
+"| `diff_pair_uncoupled`     | maks"
+"                                                                                                                   "
+"| Bir diferansiyel çift yolunun, çiftteki diğer kutup yolundan ne kadar "
+"mesafe boyunca eşleşmemiş olarak yönlendirildiğini kontrol eder (örneğin, "
+"çiftin bir bileşenden çıktığı veya bir geçit gibi başka bir nesneyi geçmek "
+"için eşleşmesinin bozulduğu yer).<br>"
+"                                                                                                                                                                                                         "
 "|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Yasaklanacak bir veya daha fazla nesne türünü, aralarına boşluk koyarak "
-"belirtin.  Örneğin, `(constraint disallow track)` ya da `(constraint "
-"disallow track via pad)`.  Bu türden bir nesne kural koşuluyla eşleşirse bir "
-"DRC hatası oluşturulur.<br><br>Bu kısıtlama esasen bir keepout (yasak bölge) "
-"kural alanıyla aynıdır, ancak daha belirli yasak bölge kısıtlamaları "
-"oluşturmak için kullanılabilir.<br>                                         "
+"| `disallow`                | `track`<br>`via`<br>`through_via`<br>"
+"`blind_via`<br>`buried_via`<br>`micro_via`<br>`pad`<br>`zone`<br>`text`<br>"
+"`graphic`<br>`hole`<br>`footprint`<br> | Boşluklarla ayrılmış bir veya daha "
+"fazla yasaklanacak nesne türünü belirtin. Örneğin, `(constraint disallow "
+"track)` veya `(constraint disallow track via pad)`. Bu türde bir nesne kural "
+"koşuluyla eşleşirse, bir DRC hatası oluşturulur.<br><br>Bu kısıtlama, "
+"temelde bir yasaklama kural alanıyla (keepout rule area) aynıdır, ancak daha "
+"spesifik yasaklama kısıtlamaları oluşturmak için kullanılabilir.<br>"
+"                                  |\n"
+"| `edge_clearance`          | min"
+"                                                                                                                   "
+"| Nesneler ile kart kenarı arasındaki açıklığı kontrol eder.<br><br>Bu aynı "
+"zamanda \"frezeleme toleransı\" olarak da düşünülebilir, çünkü kart kenarı, "
+"`Edge.Cuts` katmanındaki tüm grafik nesneleri ve *oval* ped deliklerini "
+"içerecektir. (Delme toleransı için `physical_hole_clearance` kısmına bakın.)"
+"<br>"
+"                                                                                                                                                    "
 "|\n"
-"| `edge_clearance`          | "
-"min                                                                                                                   "
-"| Nesneler ile kart kenarı arasındaki açıklığı kontrol eder.<br><br>Kart "
-"kenarı `Edge.Cuts` katmanındaki tüm grafik öğelerini ve tüm *oval* ped "
-"deliklerini içerdiğinden bu, ``frezeleme toleransı`` olarak da "
-"düşünülebilir.  (Delme toleransı için `physical_hole_clearance` bölümüne "
-"bakın.)<br>                                                                                                                                                       "
+"| `net_chain_length`        | min/maks"
+"                                                                                                               "
+"| Zincirin iki uç pedi (şematikte belirlenir) arasındaki ana gövde "
+"uzunluğunu ölçer ve `min`/`maks` değerlerine karşı kontrol eder. Ana "
+"gövdeden ayrılan kollar, `stub_length` tarafından ayrı sınırlandırılır ve "
+"burada sayılmaz. Zincirin uç pedleri yoksa veya yönlendirilmiş bakır bir "
+"döngü içeriyorsa, kontrol, her üye ağın toplamı artı seri pasif köprüleme "
+"(series-passive bridging) yöntemine geri döner. Hem `length` hem de "
+"`net_chain_length` aynı ögeyle eşleştiğinde, `net_chain_length` kazanır. |\n"
+"| `hole_clearance`          | min"
+"                                                                                                                   "
+"| Bir ped veya geçitteki delinmiş bir delik ile farklı bir ağdaki bakır "
+"nesneler arasındaki açıklığı kontrol eder. Açıklık, deliğin merkezinden "
+"değil, çapından ölçülür.<br>"
+"                                                                                                                                                                                                                                                                        "
 "|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                   "
-"| Bir ped veya via üzerindeki delinmiş delik ile farklı netteki bakır "
-"nesneler arasındaki açıklığı kontrol eder.  Açıklık, deliğin merkezinden "
-"değil çapından itibaren ölçülür."
-"<br>                                                                                                                                                                                                                                                                       "
+"| `hole_size`               | min/opt/maks"
+"                                                                                                           "
+"| Bir ped veya geçitteki delinmiş bir deliğin boyutunu (çapını) kontrol "
+"eder. Oval delikler için, daha küçük (küçük) çap `min` değerine "
+"(belirtilmişse) karşı test edilir ve daha büyük (büyük) çap `maks` değerine "
+"(belirtilmişse) karşı test edilir. `opt` değeri, etkileşimli yönlendirici "
+"tarafından kural koşuluyla eşleşen ağlar için varsayılan geçit delik boyutu "
+"olarak kullanılır.<br>"
+"                                                                    |\n"
+"| `hole_to_hole`            | min"
+"                                                                                                                   "
+"| Pedler ve geçitlerdeki mekanik olarak delinmiş delikler arasındaki "
+"açıklığı kontrol eder. Açıklık, deliklerin merkezleri arasında değil, "
+"çapları arasında ölçülür.<br><br>Bu kısıtlama yalnızca matkap uçlarının "
+"korunması içindir. **Lazerle delinmiş** (mikro geçitler) ve diğer mekanik "
+"olmayan delinmiş delikler arasındaki açıklık kontrol edilmez; **freze** "
+"(oval şekilli) ve diğer mekanik olmayan delinmiş delikler arasındaki açıklık "
+"da kontrol edilmez.<br> |\n"
+"| `length`                  | min/opt/maks"
+"                                                                                                           "
+"| Kural koşuluyla eşleşen ağların toplam yönlendirilmiş uzunluğunu kontrol "
+"eder ve kısıtlamanın `min` değerinin (belirtilmişse) altında veya `maks` "
+"değerinin (belirtilmişse) üstünde olan her ağ için bir hata oluşturur.<br>"
+"`opt` değeri, kural koşuluyla eşleşen herhangi bir ağ için uzunluk ayarlama "
+"aracı tarafından kullanılan bir hedef uzunluk belirler.<br>"
+"                                                                                                    "
 "|\n"
-"| `hole_size`               | min/opt/"
-"max                                                                                                           "
-"| Bir ped veya via üzerindeki delinmiş deliğin boyutunu (çapını) kontrol "
-"eder.  Oval delikler için küçük (minör) çap `min` değerine (belirtilmişse), "
-"büyük (majör) çap ise `max` değerine (belirtilmişse) göre test edilir.  "
-"`opt` değeri, etkileşimli yönlendirici tarafından kural koşuluyla eşleşen "
-"netler için varsayılan via delik boyutu olarak kullanılır."
-"<br>                                                                                     "
+"| `min_resolved_spokes`     | `0`<br>`1`<br>`2`<br>`3`<br>`4`<br>"
+"                                                                                   "
+"| Bir pede olan toplam bağlantı (kol) sayısını kontrol eder. Belirtilen kol "
+"sayısından daha az kol sayısına sahip olan her ped için bir hata "
+"oluşturulur.<br>"
+"                                                                                                                                                                                 "
 "|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                   "
-"| Ped ve via'lardaki mekanik delinmiş delikler arasındaki açıklığı kontrol "
-"eder.  Açıklık, deliklerin çapları arasında ölçülür (merkezleri değil)."
-"<br><br>Yalnızca matkap ucu korumasına yöneliktir.  **Lazerle delinmiş** "
-"(microvia) ve **frezelenmiş** (oval) delikler ile diğer mekanik olmayan "
-"delikler arasındaki açıklık kontrol edilmez."
-"<br>                                                                                                       "
-"|\n"
-"| `length`                  | min/opt/"
-"max                                                                                                           "
-"| Kural koşuluyla eşleşen netler için toplam yönlendirilmiş uzunluğu kontrol "
-"eder ve kısıtlamanın `min` değerinin (belirtilmişse) altında ya da `max` "
-"değerinin (belirtilmişse) üstünde kalan her net için hata üretir.<br>`opt` "
-"değeri, kural koşuluyla eşleşen netler için uzunluk ayarlama (tuning) "
-"aracının kullandığı hedef uzunluğu belirler."
-"<br>                                                                                                   "
-"|\n"
-"| `min_resolved_spokes`     | "
-"`0`<br>`1`<br>`2`<br>`3`<br>`4`<br>                                                                                   "
-"| Bir pede yapılan toplam bağlantı (spoke / konuşma) sayısını kontrol eder.  "
-"Belirtilen sayıdan daha az konuşmaya sahip her ped için hata üretilir."
-"<br>                                                                                                                                                                                   "
-"|\n"
-"| `physical_clearance`      | "
-"min                                                                                                                   "
+"| `physical_clearance`      | min"
+"                                                                                                                   "
 "| Belirli bir katmandaki (bakır olmayan katmanlar dahil) iki nesne "
-"arasındaki açıklığı kontrol eder.<br><br>Bu kontrol `clearance`'a göre daha "
-"genel amaçlı olsa da çok daha yavaştır.  Mümkün olduğunda `clearance` "
-"kullanın."
-"<br>                                                                                                                                                                                                                        "
+"arasındaki açıklığı kontrol eder.<br><br>Bu, `clearance` kısıtlamasından "
+"daha genel amaçlı kontroller yapabilse de, çok daha yavaştır. Mümkün "
+"olduğunda `clearance` kullanın.<br>"
+"                                                                                                                                                                                                                            "
 "|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                   "
-"| Nete bakılmaksızın bir ped veya via üzerindeki delinmiş delik ile başka "
+"| `physical_hole_clearance` | min"
+"                                                                                                                   "
+"| Bir ped veya geçitteki delinmiş bir delik ile ağdan bağımsız olarak başka "
 "bir nesne arasındaki açıklığı kontrol eder. Açıklık, deliğin merkezinden "
-"değil çapından itibaren ölçülür.<br><br>Yalnızca **yuvarlak** delikleri "
-"kapsadığından bu, ``delme toleransı`` olarak da düşünülebilir (frezeleme "
-"toleransı için `edge_clearance` bölümüne bakın)."
-"<br>                                                                                                  "
+"değil, çapından ölçülür.<br><br>Bu aynı zamanda \"delme toleransı\" olarak "
+"da düşünülebilir, çünkü yalnızca **yuvarlak** delikleri içerir (frezeleme "
+"toleransı için `edge_clearance` kısmına bakın).<br>"
+"                                                                                                                    "
 "|\n"
-"| `silk_clearance`          | "
-"min                                                                                                                   "
-"| İpek baskı (silkscreen) katmanlarındaki nesneler ile diğer nesneler "
-"arasındaki açıklığı kontrol eder."
-"<br>                                                                                                                                                                                                                                                                                                                                               "
+"| `silk_clearance`          | min"
+"                                                                                                                   "
+"| İpek ekran katmanlarındaki nesneler ile diğer nesneler arasındaki açıklığı "
+"kontrol eder.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
-"| `skew`                    | min/opt/max/"
-"within\\_diff\\_pairs                                                                                       "
-"| Kural koşuluyla eşleşen netler için toplam skew'i, yani her netin uzunluğu "
-"ile kuralla eşleşen en uzun netin uzunluğu arasındaki farkı kontrol eder.  "
-"En uzun net ile herhangi bir net arasındaki fark, kısıtlamanın `max` "
-"değerinin üzerindeyse hata üretilir.<br>Bu kısıtlama ayrıca, kural koşuluyla "
-"eşleşen netler için skew ayarlama aracının kullandığı bir hedef skew değeri "
-"belirler.  Hedef skew, belirtilmişse `opt` değeri; belirtilmemişse `min` "
-"değeridir.  Hiçbiri belirtilmemişse hedef skew `0`'dır.<brwithin_diff_pairs` "
-"seçeneği belirtilirse skew, kuralla eşleşen her diferansiyel çift için ayrı "
-"test edilir.  `within_diff_pairs` belirtilmezse skew, eşleşen tüm netler "
-"için birlikte test edilir (örn. bir veri yolu için skew ayarlama)."
-"<br>                                                                                                                                           "
+"| `stub_length`             | min/maks"
+"                                                                                                               "
+"| Çok ağlı bir zincirdeki kol (stub) üye ağların uzunluğunu sınırlar. Kol, "
+"zincirin iki uç pedinden hiçbirine dokunmayan, dolayısıyla bir uçtan "
+"diğerine uzanan ana gövdenin dışında kalan bir üye ağdır. Toplam "
+"yönlendirilmiş uzunluğu `min`/`maks` ile karşılaştırılır.<br> |\n"
+"| `return_path`             | `(layer \"<katman_adı>\")`<br>`(net "
+"\"<ağ_adı_veya_deseni>\")"
+"`                                                            | Zincir "
+"üzerindeki her yol ve yayın, referans katmanında bir bölge tarafından "
+"gölgelenmesini (üzerinin kaplanmasını) zorunlu kılar. Kapsanmayan her "
+"çalışma (run), boşluğun üzerine sabitlenmiş bir işaretçi (marker) üretir. "
+"İsteğe bağlı `(net …)` filtresi, uygun bölgeyi belirli bir ağla (yaygın "
+"olarak `\"GND\"`) sınırlandırır; joker karakterler kabul edilir. Bu filtre "
+"olmadan, referans katmanındaki herhangi bir bölge uygun kabul edilir. Örnek: "
+"`(constraint return_path (layer \"B.Cu\") (net \"GND\"))`<br> |\n"
+"| `skew`                    | min/opt/maks/within\\_diff\\_pairs"
+"                                                                                       "
+"| Kural koşuluyla eşleşen ağlar için toplam kaymayı (skew), yani her bir "
+"ağın uzunluğu ile kural tarafından eşleştirilen en uzun ağ arasındaki farkı "
+"kontrol eder. En uzun ağ ile herhangi bir ağ arasındaki fark, kısıtlamanın "
+"`maks` değerinin üzerindeyse bir hata oluşturulur.<br>Bu kısıtlama ayrıca, "
+"kural koşuluyla eşleşen herhangi bir ağ için kayma ayarlama aracı tarafından "
+"kullanılan bir hedef kayma belirler. Hedef kayma, belirtilmişse `opt` "
+"değeridir, belirtilmemişse `min` değeridir. Ne `min` ne de `opt` "
+"belirtilmemişse, hedef kayma `0`'dır.<br>`within_diff_pairs` seçeneği "
+"belirtilmişse, kayma, kuralla eşleşen ağlardaki her diferansiyel çift için "
+"ayrı test edilir. `within_diff_pairs` belirtilmemişse, kayma eşleşen tüm "
+"ağlar için test edilir (örneğin, bir veriyolu için kayma ayarlama).<br>"
+"                                                          |\n"
+"| `solder_mask_expansion`   | opt"
+"                                                                                                                   "
+"| Pedler, şekiller ve yollar için lehim maskesi büyütmesini (solder mask "
+"expansion) "
+"belirtir.                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
-"| `solder_mask_expansion`   | "
-"opt                                                                                                                   "
-"| Pedler, şekiller ve yollar için lehim maskesi genişlemesini (expansion) "
-"belirtir.                                                                                                                                                                                                                                                                                                                                                                       "
+"| `solder_paste_abs_margin` | opt"
+"                                                                                                                   "
+"| Pedler için mutlak lehim pastası açıklığını (solder paste clearance) "
+"belirtir. Genellikle pastayı içe çekmek için negatif değer verilir.<br><br>"
+"Nihai lehim pastası açıklığı, mutlak açıklık ile göreceli açıklığın toplamı "
+"olacaktır.                                                                                                                                                                                                                                                        "
 "|\n"
-"| `solder_paste_abs_margin` | "
-"opt                                                                                                                   "
-"| Pedler için mutlak lehim pastası açıklığını belirtir.  Pasta alanını içeri "
-"çekmek için genellikle negatif olur.<br><br>Nihai lehim pastası açıklığı, "
-"mutlak açıklık ile göreli açıklığın toplamı "
-"olacaktır.                                                                                                                                                                                                                                              "
+"| `solder_paste_rel_margin` | opt"
+"                                                                                                                   "
+"| Pedler için göreceli lehim pastası açıklığını belirtir. Genellikle pastayı "
+"içe çekmek için negatif değer verilir.<br><br>Nihai lehim pastası açıklığı, "
+"mutlak açıklık ile göreceli açıklığın toplamı "
+"olacaktır.                                                                                                                                                                                                                                                        "
 "|\n"
-"| `solder_paste_rel_margin` | "
-"opt                                                                                                                   "
-"| Pedler için göreli lehim pastası açıklığını belirtir.  Pasta alanını içeri "
-"çekmek için genellikle negatif olur.<br><br>Nihai lehim pastası açıklığı, "
-"mutlak açıklık ile göreli açıklığın toplamı "
-"olacaktır.                                                                                                                                                                                                                                              "
+"| `text_height`             | min/maks"
+"                                                                                                               "
+"| Metin kutuları dahil olmak üzere metnin yüksekliğini kontrol eder. "
+"Yüksekliği `min` değerinin (belirtilmişse) altında veya `maks` değerinin "
+"(belirtilmişse) üstünde olan her metin ögesi için bir hata oluşturulur.<br>"
+"                                                                                                                                                                                                                                                     "
 "|\n"
-"| `text_height`             | min/"
-"max                                                                                                               "
-"| Metin kutuları dahil olmak üzere metinlerin yüksekliğini kontrol eder.  "
-"Yüksekliği `min` değerinin (belirtilmişse) altında ya da `max` değerinin "
-"(belirtilmişse) üstünde olan her metin öğesi için hata üretilir."
-"<br>                                                                                                                                                                                                                                   "
+"| `text_thickness`          | min/maks"
+"                                                                                                               "
+"| Metin kutuları dahil olmak üzere metnin kalınlığını kontrol eder. "
+"Kalınlığı `min` değerinin (belirtilmişse) altında veya `maks` değerinin "
+"(belirtilmişse) üstünde olan her metin ögesi için bir hata oluşturulur.<br>"
+"                                                                                                                                                                                                                                               "
 "|\n"
-"| `text_thickness`          | min/"
-"max                                                                                                               "
-"| Metin kutuları dahil olmak üzere metinlerin kalınlığını kontrol eder.  "
-"Kalınlığı `min` değerinin (belirtilmişse) altında ya da `max` değerinin "
-"(belirtilmişse) üstünde olan her metin öğesi için hata üretilir."
-"<br>                                                                                                                                                                                                                                     "
+"| `thermal_relief_gap`      | min"
+"                                                                                                                   "
+"| Bir ped ile termal rölyef bağlantılı bir bölge arasındaki boşluğun "
+"genişliğini belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                   "
-"| Termal rahatlatma (thermal-relief) bağlantısıyla bağlanan bir ped ile "
-"bölge arasındaki boşluğun genişliğini belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                               "
+"| `thermal_spoke_width`     | opt"
+"                                                                                                                   "
+"| Bir pedi termal rölyef bağlantılı bir bölgeye bağlayan kolların "
+"genişliğini belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                   "
-"| Termal rahatlatma bağlantısıyla bir pedi bir bölgeye bağlayan konuşmaların "
-"(spoke) genişliğini belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                            "
+"| `track_angle`             | min/maks"
+"                                                                                                               "
+"| Birbirine bağlı iki yol parçası arasındaki açıyı kontrol eder. Açısı `min` "
+"değerinin (belirtilmişse) altında veya `maks` değerinin (belirtilmişse) "
+"üstünde olan her bağlı çift için bir hata oluşturulur.<br>"
+"                                                                                                                                                                                                                                              "
 "|\n"
-"| `track_angle`             | min/"
-"max                                                                                                               "
-"| Birbirine bağlı iki yol parçası arasındaki açıyı kontrol eder.  Açısı "
-"`min` değerinin (belirtilmişse) altında ya da `max` değerinin "
-"(belirtilmişse) üstünde olan her bağlı çift için hata üretilir."
-"<br>                                                                                                                                                                                                                                                 "
+"| `track_segment_length`    | min/maks"
+"                                                                                                               "
+"| Yol ve yay parçalarının uzunluğunu kontrol eder. Uzunluğu `min` değerinin "
+"(belirtilmişse) altında veya `maks` değerinin (belirtilmişse) üstünde olan "
+"her parça için bir hata oluşturulur.<br>"
+"                                                                                                                                                                                                                                                           "
 "|\n"
-"| `track_segment_length`    | min/"
-"max                                                                                                               "
-"| Yol ve yay parçalarının uzunluğunu kontrol eder.  Uzunluğu `min` değerinin "
-"(belirtilmişse) altında ya da `max` değerinin (belirtilmişse) üstünde olan "
-"her parça için hata üretilir."
-"<br>                                                                                                                                                                                                                                                                 "
+"| `track_width`             | min/opt/maks"
+"                                                                                                           "
+"| Yol ve yay parçalarının genişliğini kontrol eder. Genişliği `min` "
+"değerinin (belirtilmişse) altında veya `maks` değerinin (belirtilmişse) "
+"üstünde olan her parça için bir hata oluşturulur. `opt` değeri, etkileşimli "
+"yönlendirici tarafından kural koşuluyla eşleşen ağlar için varsayılan yol "
+"genişliği olarak kullanılır.<br>"
+"                                                                                                                                       "
 "|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                           "
-"| Yol ve yay parçalarının genişliğini kontrol eder.  Genişliği `min` "
-"değerinin (belirtilmişse) altında ya da `max` değerinin (belirtilmişse) "
-"üstünde olan her parça için hata üretilir.  `opt` değeri, etkileşimli "
-"yönlendirici tarafından kural koşuluyla eşleşen netler için varsayılan yol "
-"genişliği olarak kullanılır."
-"<br>                                                                                                                            "
-"|\n"
-"| `via_count`               | min/"
-"max                                                                                                               "
-"| Kural koşuluyla eşleşen her netteki via sayısını sayar.  `min` değerinden "
-"(belirtilmişse) daha az ya da `max` değerinden (belirtilmişse) daha fazla "
-"via içeren her net için hata üretilir."
-"<br>                                                                                                                                                                                                                                                          "
+"| `via_count`               | min/maks"
+"                                                                                                               "
+"| Kural koşuluyla eşleşen her ağdaki geçit sayısını sayar. `min` değerinden "
+"(belirtilmişse) daha az veya `maks` değerinden (belirtilmişse) daha fazla "
+"geçide sahip olan her ağ için bir hata oluşturulur.<br>"
+"                                                                                                                                                                                                                                 "
 "|\n"
 "| `via_dangling`            "
 "|                                                                                                                       "
-"| Bağlı olmayan veya yalnızca tek bir katmanda bağlı olan via'ları kontrol "
-"eder.  Bu kısıtlama min/opt/max değeri almaz.  Bir severity (önem) hükmüyle "
-"birlikte kullanıldığında, çeşitli koşullarda sarkan via'lara izin vermek "
-"veya yasaklamak için kullanılabilir."
-"<br>                                                                                                                                                                                  "
+"| Bağlantısız veya yalnızca tek bir katmana bağlı olan geçitleri kontrol "
+"eder. Bu kısıtlama bir min/opt/maks değeri almaz. Bir şiddet ifadesiyle "
+"birlikte, bu kısıtlama çeşitli koşullarda bağlantısız geçitlere (dangling "
+"vias) izin vermek veya izin vermemek için kullanılabilir.<br>"
+"                                                                                                                                                                                              "
 "|\n"
-"| `via_diameter`            | min/opt/"
-"max                                                                                                           "
-"| Via'ların çapını kontrol eder.  Çapı `min` değerinin (belirtilmişse) "
-"altında ya da `max` değerinin (belirtilmişse) üstünde olan her via için hata "
-"üretilir.  `opt` değeri, etkileşimli yönlendirici tarafından kural koşuluyla "
-"eşleşen netler için varsayılan via çapı olarak kullanılır."
-"<br>                                                                                                                                                           "
+"| `via_diameter`            | min/opt/maks"
+"                                                                                                           "
+"| Geçitlerin çapını kontrol eder. Çapı `min` değerinin (belirtilmişse) "
+"altında veya `maks` değerinin (belirtilmişse) üstünde olan her geçit için "
+"bir hata oluşturulur. `opt` değeri, etkileşimli yönlendirici tarafından "
+"kural koşuluyla eşleşen ağlar için varsayılan geçit çapı olarak "
+"kullanılır.<br>"
+"                                                                                                                                                      "
 "|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
-"| Bir bölge ile bir ped arasında yapılacak bağlantıyı belirtir."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>"
+"`none`                                                                                "
+"| Bir bölge ile bir ped arasında yapılacak bağlantı türünü belirtir.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "\n"
 "\n"
@@ -47535,9 +47521,77 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"### Örnekler\n"
+"\n"
+"    (version 1)\n"
+"\n"
+"    (rule HV\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.hasNetclass('HV')\"))\n"
+"\n"
+"\n"
+"    (rule HV\n"
+"       (layer outer)\n"
+"       (constraint clearance (min 1.5mm))\n"
+"       (condition \"A.hasNetclass('HV')\"))\n"
+"\n"
+"\n"
+"    (rule HV_HV\n"
+"       # HV hatları arasında daha geniş boşluk\n"
+"       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+"       (condition \"A.hasNetclass('HV') && B.hasNetclass('HV')\"))\n"
+"\n"
+"\n"
+"    (rule HV_unshielded\n"
+"       (constraint clearance (min 2mm))\n"
+"       (condition \"A.hasNetclass('HV') && !A.enclosedByArea('Shield*')\"))\n"
+"\n"
+"\n"
+"    (rule heavy_thermals\n"
+"       (constraint thermal_spoke_width (min 0.5mm))\n"
+"       (condition \"A.hasNetclass('HV')\"))\n"
+"\n"
+"    # SIG_A zincirindeki her ağın toplam yönlendirilen uzunluğu\n"
+"    (rule sig_group_length\n"
+"       (constraint net_chain_length (min 40mm) (max 60mm))\n"
+"       (condition \"A.Net.NetChain == 'SIG_A'\") )\n"
+"\n"
+"    # CLK_GRP zincirindeki her ağın toplam yayılım gecikmesi\n"
+"    (rule sig_group_delay\n"
+"       (constraint net_chain_length (min 180ps) (max 220ps) (time_domain "
+"yes))\n"
+"       (condition \"A.Net.NetChain == 'CLK_GRP'\") )\n"
+"\n"
+"    # --- Ağ zinciri kuralları: seri pasifler üzerinden çok ağlı "
+"sinyaller ---\n"
+"\n"
+"    # sig_group_length ile aynı etki, bunun yerine inNetChain() ile "
+"kapsanmış.\n"
+"    (rule \"DDR_DQ chain length\"\n"
+"       (constraint net_chain_length (min 40mm) (max 60mm))\n"
+"       (condition \"A.inNetChain('DDR_DQ*')\") )\n"
+"\n"
+"    # Herhangi bir DDR zincirinin gövdesinden ayrılan stub dalları 2 mm'yi "
+"aşamaz.\n"
+"    (rule \"DDR stub length\"\n"
+"       (constraint stub_length (max 2mm))\n"
+"       (condition \"A.inNetChain('DDR_*')\") )\n"
+"\n"
+"    # HighSpeed sınıfındaki her zincir kesintisiz bir B.Cu dönüş hattına "
+"ihtiyaç duyar.\n"
+"    (rule \"HS return path\"\n"
+"       (constraint return_path (layer \"B.Cu\"))\n"
+"       (condition \"A.inNetChainClass('HighSpeed')\") )\n"
+"\n"
+"    # Bir zincire ait herhangi bir ağ için daha sıkı boşluk.\n"
+"    (rule \"chain members tighter clearance\"\n"
+"       (constraint clearance (min 0.2mm))\n"
+"       (condition \"A.hasNetChain()\") )\n"
+"<br><br>\n"
+"\n"
+"\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_6notes.h:2
-#, fuzzy
 msgid ""
 "### Notes\n"
 "\n"
@@ -47592,16 +47646,13 @@ msgid ""
 msgstr ""
 "### Notlar\n"
 "\n"
-"Sürüm (Version) ifadesi ilk sırada yer almalıdır.  Bu ifade, dosyanın "
-"sözdizim sürümünü\n"
-"belirtir, böylece gelecekteki kural ayrıştırıcıları otomatik güncellemeler  "
-"yapabilir.\n"
-"\"1\" olarak ayarlanmalıdır.\n"
+"Sürüm (Version) ifadesi ilk sırada yer almalıdır. Bu ifade, dosyanın "
+"sözdizim sürümünü belirtir, böylece gelecekteki kural ayrıştırıcıları "
+"otomatik güncellemeler yapabilir. \"1\" olarak ayarlanmalıdır.\n"
 "\n"
-"Kurallar özgüllüklerine göre sıralanmalıdır.\n"
-"Sonraki kurallar önceki kurallara göre önceliklidir eşleşen bir kural "
-"bulunduğunda\n"
-"daha fazla kural kontrol edilmez.\n"
+"Kurallar özgüllüklerine göre sıralanmalıdır. Sonraki kurallar önceki "
+"kurallara göre önceliklidir; eşleşen bir kural bulunduğunda daha fazla kural "
+"kontrol edilmez.\n"
 "\n"
 "Satır(lar)ı yorum satırı yapmak veya yorum satırını kaldırmak için Ctrl+/ "
 "kullanın.\n"
@@ -47609,21 +47660,40 @@ msgstr ""
 "### Grafik Kural Düzenleyici\n"
 "\n"
 "Kurallar grafik düzenleyiciye yüklendiğinde, kısıtlamalar otomatik olarak "
-"uygun\n"
-"düzenleme panellerine eşlenir. Birden çok kısıtlamaya sahip kurallar, her "
-"biri kuralın\n"
-"kısıtlamalarının bir alt kümesini gösteren paneller arasında bölünebilir.\n"
+"uygun düzenleme panellerine eşlenir. Birden çok kısıtlamaya sahip kurallar, "
+"her biri kuralın kısıtlamalarının bir alt kümesini gösteren paneller "
+"arasında bölünebilir.\n"
 "\n"
-"Geçit Stili (via_diameter + hole_size) ve Diferansiyel Çift İzleme\n"
-"(track_width + diff_pair_gap) gibi çok kısıtlamalı paneller öncelikli olarak "
-"eşleştirilir.\n"
-"Tek kısıtlamalı paneller kalanları işler. Eşlenmemiş kısıtlamalar\n"
-"Özel Kural panelinde görünür.\n"
+"Via Stili (`via_diameter` + `hole_size`) ve Diferansiyel Çift İzleme "
+"(`track_width` + `diff_pair_gap`) gibi çok kısıtlamalı paneller öncelikli "
+"olarak eşleştirilir. Tek kısıtlamalı paneller kalanları işler. Eşlenmemiş "
+"kısıtlamalar Özel Kural panelinde görünür.\n"
 "\n"
-"Grafik düzenleyicide değiştirilmeyen kurallar, kaydedildiklerinde\n"
-"orijinal metin biçimlendirmelerini korur.\n"
+"Grafik düzenleyicide değiştirilmeyen kurallar, kaydedildiklerinde orijinal "
+"metin biçimlendirmelerini korur.\n"
 "<br><br><br>\n"
 "\n"
+"`net_chain_length` ve `length` karşılaştırması:\n"
+"\n"
+"Bir ağ bir zincire ait olduğunda ve her iki kısıtlama da eşleştiğinde, "
+"`net_chain_length` ana gövdeye (iki uç ped arasındaki benzersiz yol) karşı "
+"kontrol edilir ve `length` yoksayılır. Ana gövdeden ayrılan kollar (stubs) "
+"ana gövde uzunluğuna dahil edilmez; onları sınırlamak için `stub_length` "
+"kullanın. Zincirin uç pedleri yoksa veya yönlendirilmiş bakır bir döngü "
+"içeriyorsa, `net_chain_length` her üye ağın toplamı artı seri pasif "
+"köprüleme yöntemine geri döner. Bir zincire ait olmayan ağlar `length` "
+"kısıtlamasını kullanmaya devam eder.\n"
+"\n"
+"Zaman alanı hedefleri:\n"
+"\n"
+"Her iki kısıtlama da fiziksel uzunluk yerine yayılma gecikmesini sınırlamak "
+"için `(time_domain yes)` kabul eder. Zaman alanı modunda `net_chain_length` "
+"için gecikme penceresi bir bütün olarak zincire uygulanır; ayarlama aracı, "
+"ayarlanmakta olan ağ için geriye ne kaldığını bulmak üzere diğer üye ağların "
+"yönlendirilmiş gecikmesini çıkartır.\n"
+"\n"
+"\n"
+"<br><br><br>"
 
 #: pcbnew/dialogs/panel_setup_rules_help_7properties.h:2
 msgid ""
@@ -47646,7 +47716,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_8expression_functions.h:2
-#, fuzzy
 msgid ""
 "### Expression functions\n"
 "\n"
@@ -47843,121 +47912,147 @@ msgid ""
 msgstr ""
 "### İfade Fonksiyonları\n"
 "\n"
-"Tüm fonksiyon parametreleri basit joker karakterleri destekler (`*` ve `?"
-"`).\n"
+"Tüm fonksiyon parametreleri basit joker karakterleri (`*` ve `?`) "
+"destekler.\n"
 "\n"
 "\n"
 "```\n"
 "    A.enclosedByArea('<zone_name>')\n"
 "```\n"
-"> `A`'nın tamamı verilen zone'un dış hattı içinde kalıyorsa doğrudur.\n"
+"> `A`'nın tamamı verilen bölgenin sınırları içinde kalıyorsa doğrudur.\n"
 "\n"
-"> NB: bu, `intersectsArea()` çağrısından potansiyel olarak daha "
-"maliyetlidir.\n"
-"Mümkün olduğunda `intersectsArea()` kullanın.\n"
+"> NOT: Bu, `intersectsArea()` işlevinden potansiyel olarak daha maliyetli "
+"bir çağrıdır.\n"
+"Mümkün olan yerlerde `intersectsArea()` kullanın.\n"
 "\n"
 "\n"
 "```\n"
 "    A.existsOnLayer('<layer_name>')\n"
 "```\n"
-"> `A` verilen katmanda bulunuyorsa doğrudur.  Katman adı\n"
-"Board Setup > Board Editor Layers içinde atanan ad veya\n"
-"kurallı ad olabilir (örn: `F.Cu`).\n"
+"> `A` verilen katmanda mevcutsa doğrudur.  Katman adı,\n"
+"Board Setup > Board Editor Layers bölümünde atanan ad veya\n"
+"kurallı ad (örn: `F.Cu`) olabilir.\n"
 "\n"
-"> NB: bu, kuralın o katman için değerlendirilip değerlendirilmediğinden\n"
-"bağımsız olarak `A` verilen katmandaysa doğru döndürür.\n"
-"İkincisi için kuralda bir `(layer \"layer_name\")` maddesi kullanın.\n"
+"> NOT: Bu, `A`'nın verilen katmanda olup olmadığını döndürür; bağımsız "
+"olarak\n"
+"kuralın o katman için değerlendirilip değerlendirilmediğinden.\n"
+"İkincisi için kuralda bir `(layer \"layer_name\")` cümlesi kullanın.\n"
 "\n"
 "\n"
 "```\n"
 "    A.fromTo('x', 'y')\n"
 "```\n"
-"> Nesne, verilen pad'ler arasındaki bakır yol üzerinde bulunuyorsa "
-"doğrudur.\n"
-"`x` ve `y`, tasarımdaki pad'lerin tam adlarıdır; örneğin\n"
+"> Nesne verilen\n"
+"padler arasındaki bakır yolda mevcutsa doğrudur. `x` ve `y`, tasarımdaki "
+"padlerin tam adlarıdır, örneğin\n"
 "`R1-Pad1`.\n"
 "\n"
 "\n"
 "```\n"
 "    A.getField('<field_name>')\n"
 "```\n"
-"> Verilen alanın değeri. Yalnızca footprint'lerin alanları vardır; bu yüzden "
+"> Verilen alanın değeri. Yalnızca footprintlerin alanları olduğundan, bir "
 "alan yalnızca\n"
-"`A` bir footprint ise döndürülür.\n"
+"`A` bir footprintse döndürülür.\n"
 "\n"
 "\n"
 "```\n"
 "    A.hasComponentClass('<component_class_name>')\n"
 "```\n"
-"> `A`'ya atanmış bileşen sınıfları kümesi, adı verilen\n"
+"> `A`'ya atanan bileşen sınıfları kümesi adlandırılmış\n"
 "bileşen sınıfını içeriyorsa doğrudur.\n"
 "\n"
 "\n"
 "```\n"
 "    A.hasNetclass('<netclass_name>')\n"
 "```\n"
-"> `A`'ya verilen netclass atanmışsa doğrudur; bu atama açık bir netclass "
-"etiketiyle\n"
-"ya da desen eşleşmesi ataması yoluyla yapılmış olabilir.\n"
+"> `A`'ya verilen ağ sınıfı atanmışsa doğrudur; açık bir ağ sınıfı etiketi\n"
+"veya bir desen eşleşmesi ataması yoluyla.\n"
 "\n"
 "\n"
 "```\n"
 "    A.inDiffPair('<net_name>')\n"
 "```\n"
-"> `A`, belirtilen diferansiyel çiftin parçası olan bir nete sahipse "
+"> `A`'nın belirtilen diferansiyel çiftin bir parçası olan bir ağı varsa "
 "doğrudur.\n"
 "`<net_name>`, diferansiyel çiftin temel adıdır.\n"
-"Örneğin, `inDiffPair('/CLK')` `/CLK_P` ve `/CLK_N` netlerindeki öğelerle "
+"Örneğin, `inDiffPair('/CLK')`, `/CLK_P` ve `/CLK_N` ağlarındaki öğelerle "
 "eşleşir.\n"
+"\n"
+"\n"
+"\n"
+"```\n"
+"    A.inNetChain('<chain_name>')\n"
+"```\n"
+"> `A`'nın ağı adlandırılmış zincirin bir üyesiyse doğrudur.  `<chain_name>`\n"
+"joker karakterleri kabul eder: `inNetChain('DDR_*')`, adı\n"
+"`DDR_` ile başlayan her zincirle eşleşir.\n"
+"\n"
+"\n"
+"\n"
+"```\n"
+"    A.hasNetChain()\n"
+"```\n"
+"> `A`'nın ağı herhangi bir zincire aitse doğrudur.\n"
+"\n"
+"\n"
+"\n"
+"```\n"
+"    A.inNetChainClass('<class_name>')\n"
+"```\n"
+"> `A`'nın ağı, atanan zincir sınıfı\n"
+"`<class_name>` ile eşleşen bir zincire aitse doğrudur.  Sınıf atamaları "
+"projenin\n"
+"`net_chain_classes` haritasında bulunur.  `<class_name>` joker karakterleri "
+"kabul eder.\n"
 "\n"
 "\n"
 "\n"
 "```\n"
 "    A.intersectsArea('<zone_name>')\n"
 "```\n"
-"> `A`'nın herhangi bir kısmı verilen zone'un dış hattı içinde kalıyorsa "
+"> `A`'nın herhangi bir parçası verilen bölgenin sınırları içinde kalıyorsa "
 "doğrudur.\n"
 "\n"
 "\n"
 "```\n"
 "    A.intersectsCourtyard('<footprint_identifier>')\n"
 "```\n"
-"> `A`'nın herhangi bir kısmı verilen footprint'in ana courtyard alanında "
-"kalıyorsa doğrudur.\n"
+"> `A`'nın herhangi bir parçası verilen footprintin ana courtyard alanı "
+"içinde kalıyorsa doğrudur.\n"
 "\n"
 "\n"
 "```\n"
 "    A.intersectsFrontCourtyard('<footprint_identifier>')\n"
 "```\n"
-"> `A`'nın herhangi bir kısmı verilen footprint'in ön courtyard alanında "
+"> `A`'nın herhangi bir parçası verilen footprintin ön courtyard alanı içinde "
 "kalıyorsa doğrudur.\n"
 "\n"
 "\n"
 "```\n"
 "    A.intersectsBackCourtyard('<footprint_identifier>')\n"
 "```\n"
-"> `A`'nın herhangi bir kısmı verilen footprint'in arka courtyard alanında "
-"kalıyorsa doğrudur.\n"
+"> `A`'nın herhangi bir parçası verilen footprintin arka courtyard alanı "
+"içinde kalıyorsa doğrudur.\n"
 "\n"
 "\n"
 "> Yukarıda listelenen `footprint_identifier` aşağıdakilerden biri olabilir:\n"
 "\n"
-"> 1. `*` ve `?` joker karakterlerini içerebilen bir referans tanımlayıcısı\n"
+"> 1. Joker karakter `*` ve `?` içerebilecek bir referans tanımlayıcısı\n"
 "> 2. `LibName:FootprintName` gibi bir footprint kütüphane tanımlayıcısı. Bu "
 "durumda,\n"
-"   kütüphane tanımlayıcısı, kütüphane adını footprint adından ayırmak için `:"
-"` karakterini\n"
-"   içermelidir ve her iki ad da joker karakterler içerebilir.\n"
+"   kütüphane tanımlayıcısı, kütüphane adını footprint adından ayırmak için "
+"`:` karakterini içermelidir\n"
+"   ve her iki ad da joker karakterler içerebilir.\n"
 "> 3. `${Class:ClassName}` biçiminde bir bileşen sınıfı.  `Class` anahtar "
-"sözcüğü büyük/küçük\n"
-"   harfe duyarlı değildir, ancak bileşen sınıfı adları büyük/küçük harfe "
-"duyarlıdır.\n"
+"sözcüğü büyük/küçük harf duyarsızdır,\n"
+"   ancak bileşen sınıfı adları büyük/küçük harf duyarlıdır.\n"
 "\n"
 "\n"
 "```\n"
 "    AB.isCoupledDiffPair()\n"
 "```\n"
-"> `A` ve `B` aynı diferansiyel çiftin üyeleriyse doğrudur.\n"
+"> `A` ve `B` aynı diff pair'in üyeleriyse doğrudur.\n"
 "\n"
 "\n"
 "```\n"
@@ -47969,48 +48064,48 @@ msgstr ""
 "```\n"
 "    A.isBlindVia()\n"
 "```\n"
-"> `A` bir kör via ise doğrudur.\n"
+"> `A` kör bir via ise doğrudur.\n"
 "\n"
 "\n"
 "```\n"
 "    A.isBuriedVia()\n"
 "```\n"
-"> `A` bir gömülü via ise doğrudur.\n"
+"> `A` gömülü bir via ise doğrudur.\n"
 "\n"
 "\n"
 "```\n"
 "    A.isPlated()\n"
 "```\n"
-"> `A`'nın kaplamalı bir deliği varsa doğrudur.\n"
+"> `A`'nın kaplanmış bir deliği varsa doğrudur.\n"
 "\n"
 "\n"
 "```\n"
 "    A.memberOfGroup('<group_name>')\n"
 "```\n"
-"> `A`, verilen grubun bir üyesiyse doğrudur.\n"
+"> `A` verilen grubun üyesiyse doğrudur.\n"
 "Ad joker karakterler içerebilir.\n"
-"İç içe üyelikler dahildir.\n"
+"İç içe üyeliği içerir.\n"
 "\n"
 "\n"
 "```\n"
 "    A.memberOfFootprint('<footprint_identifier>')\n"
 "```\n"
-"> `A`, verilen footprint'in bir üyesiyse doğrudur\n"
-"(örneğin, o footprint içinde tanımlı bir pad veya grafik şekil).\n"
+"> `A` verilen bir footprintin üyesiyse doğrudur.\n"
+"(örneğin, o footprint içinde tanımlanmış bir pad veya grafik şekil).\n"
 "`footprint_identifier` belirtmenin çeşitli yolları yukarıda açıklanmıştır.\n"
 "\n"
 "\n"
 "```\n"
 "    A.memberOfSheet('<sheet_path>')\n"
 "```\n"
-"> `A`, verilen şematik sayfanın bir üyesiyse doğrudur.\n"
+"> `A` verilen şematik sayfanın üyesiyse doğrudur.\n"
 "Sayfa yolu joker karakterler içerebilir.\n"
 "\n"
 "\n"
 "```\n"
 "    A.memberOfSheetOrChildren('<sheet_path>')\n"
 "```\n"
-"> `A`, verilen şematik sayfanın veya alt hiyerarşik sayfalarının herhangi "
+"> `A` verilen şematik sayfanın veya alt hiyerarşik sayfalarından herhangi "
 "birinin üyesiyse doğrudur.\n"
 "Sayfa yolu joker karakterler içerebilir.\n"
 "\n"
@@ -48545,9 +48640,8 @@ msgid "Enable time domain tuning"
 msgstr "Zaman alanı ayarlamasını etkinleştir"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:127
-#, fuzzy
 msgid "Model Solder Mask"
-msgstr "Üst Lehim Maskesi"
+msgstr "Model Lehim Maskesi"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:147
 msgid "Track Propagation"
@@ -49383,14 +49477,14 @@ msgid "Track length out of range"
 msgstr "Yol uzunluğu aralık dışında"
 
 #: pcbnew/drc/drc_item.cpp:269
-#, fuzzy
 msgid "Net chain stub length out of range"
-msgstr "Yol uzunluğu aralık dışında"
+msgstr "Ağ zinciri kol uzunluğu aralık dışında"
 
 #: pcbnew/drc/drc_item.cpp:273
 msgid ""
 "Net chain routed without continuous copper on the required reference layer"
 msgstr ""
+"Ağ zinciri, gerekli referans katmanında sürekli bakır olmadan yönlendirilmiş"
 
 #: pcbnew/drc/drc_item.cpp:277
 msgid "Skew between tracks out of range"
@@ -50247,22 +50341,22 @@ msgstr "Uzunluk kısıtlamaları kontrol ediliyor..."
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:775
 #, c-format
 msgid "Stub length (%s) out of range for net chain '%s'."
-msgstr ""
+msgstr "Ağ zinciri '%s' için kol uzunluğu (%s) aralık dışında."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:818
 #, c-format
 msgid "Stub length (%s) out of range for net chain '%s' on net '%s'."
-msgstr ""
+msgstr "'%s' ağındaki '%s' ağ zinciri için kol uzunluğu (%s) aralık dışında."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:1013
 #, c-format
 msgid "Net chain '%s' has no copper return path on reference layer '%s'."
-msgstr ""
+msgstr "'%s' ağ zincirinin '%s' referans katmanında bakır dönüş yolu yok."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid " (net '%s')"
-msgstr "Metin '%s'"
+msgstr " ('ağ %s')"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:215
 #, c-format
@@ -50887,7 +50981,7 @@ msgstr "Koşullar"
 
 #: pcbnew/edit_zone_helpers.cpp:45
 msgid "Edit copper-thieving parameters in the Properties panel."
-msgstr ""
+msgstr "Özellikler panelinde bakır aşırma parametrelerini düzenleyin."
 
 #: pcbnew/edit_zone_helpers.cpp:92
 msgid "Edit Zone Properties"
@@ -51942,7 +52036,7 @@ msgstr "Ayarlama Desenini Düzenle"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2114
 #, c-format
 msgid "%s | %s"
-msgstr ""
+msgstr "%s | %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2218
 msgid "current skew"
@@ -51957,14 +52051,14 @@ msgid "current length"
 msgstr "mevcut uzunluk"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2228
-#, fuzzy, c-format
+#, c-format
 msgid "Net: %s"
-msgstr "Ağ:"
+msgstr "Ağ: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2290
-#, fuzzy, c-format
+#, c-format
 msgid "Chain: %s"
-msgstr "Çalıştır: %s"
+msgstr "Zincir: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2396
 msgid "Routed Lengths"
@@ -52001,14 +52095,12 @@ msgid "Full Delay"
 msgstr "Tam Gecikme"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2477
-#, fuzzy
 msgid "Net Chain Full Length"
-msgstr "Tam Uzunluk"
+msgstr "Ağ Zinciri Tam Uzunluğu"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2485
-#, fuzzy
 msgid "Net Chain Full Delay"
-msgstr "Tam Gecikme"
+msgstr "Ağ Zinciri Tam Gecikmesi"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2501
 #, c-format
@@ -52456,6 +52548,7 @@ msgstr "Ağ Gecikmesi"
 #, c-format
 msgid "Net chain assignment '%s' on net '%s' cleared by netlist update."
 msgstr ""
+"'%s' ağındaki '%s' ağ zinciri ataması ağ listesi güncellemesiyle temizlendi."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:188
 #, c-format
@@ -56653,9 +56746,9 @@ msgid "Missing diff-pair name argument to %s."
 msgstr "%s için eksik fark çifti adı bağımsız değişkeni."
 
 #: pcbnew/pcbexpr_functions.cpp:1330 pcbnew/pcbexpr_functions.cpp:1402
-#, fuzzy, c-format
+#, c-format
 msgid "Missing argument to '%s'"
-msgstr "%s için katman adı argümanı eksik."
+msgstr "'%s' için eksik argüman"
 
 #: pcbnew/pcbexpr_functions.cpp:1463
 #, c-format
@@ -58148,14 +58241,12 @@ msgid "Draw Circle"
 msgstr "Çember Çiz"
 
 #: pcbnew/tools/drawing_tool.cpp:484 pcbnew/tools/pcb_actions.cpp:147
-#, fuzzy
 msgid "Draw Ellipse"
-msgstr "Çizim"
+msgstr "Elips Çiz"
 
 #: pcbnew/tools/drawing_tool.cpp:493
-#, fuzzy
 msgid "Draw Elliptical Arc"
-msgstr "Yay çiz"
+msgstr "Elips Yayı Çiz"
 
 #: pcbnew/tools/drawing_tool.cpp:531
 msgid "Draw Arc"
@@ -58778,14 +58869,12 @@ msgid "Create outset lines from the selected item"
 msgstr "Seçili ögeden dış çizgiler oluşturur"
 
 #: pcbnew/tools/pcb_actions.cpp:148
-#, fuzzy
 msgid "Draw an ellipse"
-msgstr "Çizim"
+msgstr "Bir elips çiz"
 
 #: pcbnew/tools/pcb_actions.cpp:157
-#, fuzzy
 msgid "Draw an elliptical arc"
-msgstr "Yay çiz"
+msgstr "Elips yayı çiz"
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Add Barcode"
@@ -58888,13 +58977,13 @@ msgid "Draw Filled Zones"
 msgstr "Dolu Bölgeleri Çiz"
 
 #: pcbnew/tools/pcb_actions.cpp:351
-#, fuzzy
 msgid "Draw Copper Thieving Zone"
-msgstr "Bakır Bölge"
+msgstr "Bakır Aşırma Bölgesi Çiz"
 
 #: pcbnew/tools/pcb_actions.cpp:352
 msgid "Add a non-electrical thieving zone for plating-balance copper"
 msgstr ""
+"Kaplama dengesi bakırı için elektriksel olmayan bir aşırma bölgesi ekleyin"
 
 #: pcbnew/tools/pcb_actions.cpp:363
 msgid "Place Vias"
@@ -59803,14 +59892,12 @@ msgid "Highlight all copper items on the selected net(s)"
 msgstr "Seçili ağ(lar)daki tüm bakır ögeleri vurgula"
 
 #: pcbnew/tools/pcb_actions.cpp:1622
-#, fuzzy
 msgid "Highlight every net in the net chain"
-msgstr "Bir ağın yollarını ve pinlerini vurgula"
+msgstr "Ağ zincirindeki her bir ağı vurgula"
 
 #: pcbnew/tools/pcb_actions.cpp:1629
-#, fuzzy
 msgid "Set Terminal Pad"
-msgstr "3 Terminal Tipi"
+msgstr "Uç Pedini Ayarla"
 
 #: pcbnew/tools/pcb_actions.cpp:1638
 msgid "Hide Net in Ratsnest"
@@ -60345,16 +60432,16 @@ msgid "Deselects all tracks & vias belonging to the same net."
 msgstr "Aynı ağa ait tüm yolları ve geçitleri seçimi kaldırır."
 
 #: pcbnew/tools/pcb_actions.cpp:2464
-#, fuzzy
 msgid "Select All Tracks in Net Chain"
-msgstr "Ağdaki Tüm Yolları Seç"
+msgstr "Ağ Zincirindeki Tüm Yolları Seç"
 
 #: pcbnew/tools/pcb_actions.cpp:2465
-#, fuzzy
 msgid ""
 "Selects all tracks & vias belonging to every net in the same net chain (nets "
 "joined through series passives)."
-msgstr "Aynı ağa ait tüm yolları ve geçitleri seçer."
+msgstr ""
+"Aynı ağ zincirindeki her ağa ait tüm yolları ve geçitleri seçer (ağlar seri "
+"pasifler aracılığıyla birleştirilir)."
 
 #: pcbnew/tools/pcb_actions.cpp:2472
 msgid "Select All Unconnected Footprints"
@@ -60670,9 +60757,8 @@ msgid "Show a manager dialog for Generator objects"
 msgstr "Jeneratör nesneleri için bir yönetici iletişim kutusu göster"
 
 #: pcbnew/tools/pcb_actions.cpp:2849
-#, fuzzy
 msgid "Length Tuning Settings"
-msgstr "Uzunluk Ayarlama Ayarları..."
+msgstr "Uzunluk Ayarlama Ayarları"
 
 #: pcbnew/tools/pcb_actions.cpp:2850
 msgid "Length Tuning Settings..."
@@ -60924,14 +61010,12 @@ msgid "Select"
 msgstr "Seç"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:120
-#, fuzzy
 msgid "Set terminal pad"
-msgstr "3 Terminal Tipi"
+msgstr "Uç pedini ayarla"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:200
-#, fuzzy
 msgid "Net Chains..."
-msgstr "Ayarlar..."
+msgstr "Ağ Zincirleri..."
 
 #: pcbnew/tools/pcb_selection_tool.cpp:2072
 msgid "Select/Expand Connection..."
@@ -61880,9 +61964,8 @@ msgid "Total Length"
 msgstr "Toplam Uzunluk"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:129
-#, fuzzy
 msgid "Net Chain Length"
-msgstr "Ağ Uzunluğu"
+msgstr "Ağ Zinciri Uzunluğu"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:132
 msgid "Via Count"
@@ -61978,9 +62061,8 @@ msgid "Group by Netclass"
 msgstr "Ağ Sınıfına Göre Grupla"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1341
-#, fuzzy
 msgid "Group by Net Chain"
-msgstr "Ağ Sınıfına Göre Grupla"
+msgstr "Ağ Zincirine Göre Gruplandır"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1348
 msgid "Add Custom Group..."
@@ -62189,13 +62271,12 @@ msgid "Zone '%s' %s %s, priority %d"
 msgstr "Bölge '%s' %s %s, öncelik %d"
 
 #: pcbnew/zone.cpp:2006
-#, fuzzy
 msgid "Copper thieving"
-msgstr "Bakır direnci:"
+msgstr "Bakır aşırma"
 
 #: pcbnew/zone.cpp:2015
 msgid "Squares"
-msgstr ""
+msgstr "Kareler"
 
 #: pcbnew/zone.cpp:2161
 msgid "Keepout"
@@ -62258,31 +62339,28 @@ msgid "Smoothing Amount"
 msgstr "Yumuşatma Miktarı"
 
 #: pcbnew/zone.cpp:2268
-#, fuzzy
 msgid "Thieving Pattern"
-msgstr "Ayarlama Deseni"
+msgstr "Aşırma Deseni"
 
 #: pcbnew/zone.cpp:2273
 msgid "Thieving Element Size"
-msgstr ""
+msgstr "Aşırma Öge Boyutu"
 
 #: pcbnew/zone.cpp:2283
 msgid "Thieving Gap"
-msgstr ""
+msgstr "Aşırma Aralığı"
 
 #: pcbnew/zone.cpp:2289
-#, fuzzy
 msgid "Thieving Line Width"
-msgstr "Çizgi Genişliği"
+msgstr "Aşırma Çizgi Genişliği"
 
 #: pcbnew/zone.cpp:2297
 msgid "Thieving Stagger"
-msgstr ""
+msgstr "Aşırma Kaydırma"
 
 #: pcbnew/zone.cpp:2302
-#, fuzzy
 msgid "Thieving Orientation"
-msgstr "Metin yönü"
+msgstr "Aşırma Yönelimi"
 
 #: pcbnew/zone.cpp:2308
 msgid "Remove Islands"
@@ -62321,6 +62399,11 @@ msgid ""
 "This can happen with complex overlapping zones.  Consider simplifying your "
 "zones."
 msgstr ""
+"Bölge dolguları hatalı olabilir: %d geçişten sonra yinelemeli yeniden "
+"doldurma yakınsamadı.\n"
+"\n"
+"Bu, karmaşık çakışan bölgelerle meydana gelebilir. Bölgelerinizi "
+"basitleştirmeyi düşünün."
 
 #: pcbnew/zone_filler.cpp:1528
 msgid "Prototype zone fill enabled. Disable setting and refill?"
