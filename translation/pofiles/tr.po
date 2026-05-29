@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:04+0300\n"
-"PO-Revision-Date: 2026-05-18 11:11+0000\n"
+"PO-Revision-Date: 2026-05-29 12:01+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v10/tr/>\n"
 "Language: tr\n"
@@ -2704,74 +2704,76 @@ msgid "Add Netclass Assignment"
 msgstr "Malzeme Ataması Ekle"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:33
-#, fuzzy
 msgid "(missing)"
-msgstr "(dosya eksik)"
+msgstr "(eksik)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:45
 msgid "File"
 msgstr "Dosya"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:46
-#, fuzzy
 msgid "Saved version"
-msgstr "Tüm sürümleri göster"
+msgstr "Kaydedilmiş sürüm"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:47
-#, fuzzy
 msgid "Auto-saved copy"
-msgstr "Otomatik Kaydetme Kurtarma"
+msgstr "Otomatik kaydedilmiş kopya"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
-#, fuzzy
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
-"KiCad, son oturumunuzdan bu yana kaydedilmemiş ve kaydedilmiş proje "
-"dosyalarından daha yeni olan değişiklikler buldu."
+"KiCad önceki bir oturumdan otomatik kaydedilmiş değişiklikler buldu. Bu "
+"genellikle, kaydedilmemiş işleriniz varken KiCad'in beklenmedik şekilde "
+"kapandığı anlamına gelir."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore auto-saved"
-msgstr "Varsayılanları Geri Yükle"
+msgstr "Otomatik kaydedileni geri yükle"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 msgstr ""
+"Kaydedilmiş dosyanızı otomatik kaydedilmiş sürümle değiştirir. Önceki "
+"kaydedilmiş içerik atılır."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep current"
-msgstr "Akım"
+msgstr "Geçerli olanı sakla"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr ""
+"Kaydedilmiş dosyanızı olduğu gibi tutar ve otomatik kaydedilmiş "
+"değişiklikleri atar."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep both"
-msgstr "Sakınım"
+msgstr "İkisini de sakla"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 msgstr ""
+"Kaydedilmiş dosyanızı tutar ve otomatik kaydedilmiş sürümü yanında, daha "
+"sonra inceleyebileceğiniz ayrı bir zaman damgalı dosya olarak yazar."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel open"
-msgstr "Yüklemeyi İptal Et"
+msgstr "Açmayı iptal et"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:49
 msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"Bu iletişim kutusunu herhangi bir değişiklik yapmadan kapatır. Otomatik "
+"kaydedilmiş dosyalar diskte kalır ve projeyi bir sonraki açışınızda tekrar "
+"sunulur."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
@@ -3991,25 +3993,24 @@ msgstr "Kabul mesajı boş olamaz"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
-msgstr ""
+msgstr "Anahtar parolası:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
-#, fuzzy
 msgid "Password / token:"
-msgstr "Şifre:"
+msgstr "Şifre / belirteç:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
-msgstr ""
+msgstr "Erişim için kimlik doğrulaması gereklidir:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "Username and password"
-msgstr ""
+msgstr "Kullanıcı adı ve şifre"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr ""
+msgstr "SSH anahtarı"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -4022,14 +4023,12 @@ msgid "Username:"
 msgstr "Kullanıcı adı:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:63
-#, fuzzy
 msgid "SSH key:"
-msgstr "SSH Anahtar Şifresi:"
+msgstr "SSH Anahtarı:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "SSH özel anahtar dosyasını seç"
+msgstr "SSH özel anahtarını seçin"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -4037,14 +4036,12 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:74
-#, fuzzy
 msgid "Save credentials"
-msgstr "Tüm akımları kaydet"
+msgstr "Kimlik bilgilerini kaydet"
 
 #: common/dialogs/git/dialog_git_credentials_base.h:57
-#, fuzzy
 msgid "Git Authentication Required"
-msgstr "Kimlik Doğrulama"
+msgstr "Git Kimlik Doğrulaması Gerekli"
 
 #: common/dialogs/git/dialog_git_repository.cpp:178
 #: common/dialogs/git/dialog_git_repository.cpp:401
@@ -6603,9 +6600,9 @@ msgid "Failed to recover auto-saved file '%s'."
 msgstr "Otomatik kaydedilmiş '%s' dosyası kurtarılamadı."
 
 #: common/eda_base_frame.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write recovered file '%s'."
-msgstr "Dosya '%s' yazılamadı."
+msgstr "Kurtarılan dosya '%s' yazılamadı."
 
 #: common/eda_base_frame.cpp:609 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:135
@@ -7938,37 +7935,37 @@ msgstr "Taahhüt oluşturulamadı: %s"
 
 #: common/git/libgit_backend.cpp:310 kicad/project_tree_pane.cpp:2762
 msgid "Cannot amend: the branch has no commits yet."
-msgstr ""
+msgstr "Düzeltilemiyor : dalda henüz hiçbir işlem yok."
 
 #: common/git/libgit_backend.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD commit: %s"
-msgstr "Commit alınamadı: %s"
+msgstr "HEAD işlemi alınamadı: %s"
 
 #: common/git/libgit_backend.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent commit: %s"
-msgstr "Commit alınamadı: %s"
+msgstr "Üst işlem alınamadı: %s"
 
 #: common/git/libgit_backend.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD tree: %s"
-msgstr "HEAD referansı alınamadı: %s"
+msgstr "HEAD ağacı alınamadı: %s"
 
 #: common/git/libgit_backend.cpp:372 common/git/libgit_backend.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reset index: %s"
-msgstr "Dizin yazılamadı: %s"
+msgstr "Dizin sıfırlanamadı: %s"
 
 #: common/git/libgit_backend.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent tree: %s"
-msgstr "Ağaç yazılamadı: %s"
+msgstr "Üst ağaç alınamadı: %s"
 
 #: common/git/libgit_backend.cpp:464 kicad/project_tree_pane.cpp:3007
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to amend commit: %s"
-msgstr "Commit alınamadı: %s"
+msgstr "İşlem düzeltilemedi: %s"
 
 #: common/git/libgit_backend.cpp:491 common/git/libgit_backend.cpp:1064
 #, c-format
@@ -7999,9 +7996,9 @@ msgid "No repository available to set up remote"
 msgstr "Uzak bağlantı kurmak için depo mevcut değil"
 
 #: common/git/libgit_backend.cpp:898
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set up remote: %s"
-msgstr "Uzak bağlantı oluşturma başarısız oldu: %s"
+msgstr "Uzak bağlantı ayarlanamadı: %s"
 
 #: common/git/libgit_backend.cpp:930
 msgid "No repository available"
@@ -8023,9 +8020,9 @@ msgid "Failed to switch to branch '%s': %s"
 msgstr "'%s' dalına geçiş yapılamadı: %s"
 
 #: common/git/libgit_backend.cpp:997
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create local branch '%s': %s"
-msgstr "'%s' dalı aranamadı: %s"
+msgstr "Yerel dal '%s' oluşturulamadı: %s"
 
 #: common/git/libgit_backend.cpp:1011
 #, c-format
@@ -8050,6 +8047,7 @@ msgstr "'FETCH_HEAD' okunamadı"
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
+"Çekilecek bir şey yok: Uzakyolda geçerli yerel dal ile eşleşen bir dal yok."
 
 #: common/git/libgit_backend.cpp:1178
 msgid "Could not lookup commit"
@@ -8116,40 +8114,38 @@ msgid "Merge failed: %s"
 msgstr "Birleştirme başarısız: %s"
 
 #: common/git/libgit_backend.cpp:1461
-#, fuzzy
 msgid "Could not read repository index after merge."
-msgstr "Depo dizin bilgisi alınamadı"
+msgstr "Birleştirme sonrasında depo dizini okunamadı."
 
 #: common/git/libgit_backend.cpp:1493
-#, fuzzy
 msgid "Could not write the merge result."
-msgstr "'%s' klasörüne çizim dosyaları yazılamadı."
+msgstr "Birleştirme sonucu yazılamadı."
 
 #: common/git/libgit_backend.cpp:1501
-#, fuzzy
 msgid "Could not get the repository head."
-msgstr "Depo başlığı alınamadı"
+msgstr "Depo başlığı alınamadı."
 
 #: common/git/libgit_backend.cpp:1511
-#, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "Hedef işleme bulunamadı"
+msgstr "Birleştirilecek işlemler bulunamadı."
 
 #: common/git/libgit_backend.cpp:1520 common/git/libgit_backend.cpp:1705
 msgid ""
 "Could not create a commit signature.  Set user.name and user.email in your "
 "git configuration."
 msgstr ""
+"Bir işlem imzası oluşturulamadı.  Git yapılandırmanıza user.name ve "
+"user.email değerlerini ayarlayın."
 
 #: common/git/libgit_backend.cpp:1529
-#, fuzzy, c-format
+#, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "Üst üste binen grafikleri pedlerle birleştir"
+msgstr "Uzaktan izlenen dalı %s içine birleştir"
 
 #: common/git/libgit_backend.cpp:1537
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create merge commit: %s"
-msgstr "Yapılar birleştirilemedi"
+msgstr "Birleştirme işlemi oluşturulamadı: %s"
 
 #: common/git/libgit_backend.cpp:1554
 msgid ""
@@ -8176,36 +8172,35 @@ msgstr "Yeniden temellendirme tamamlaması başarısız: %s"
 
 #: common/git/libgit_backend.cpp:1626 common/git/libgit_backend.cpp:1672
 msgid "Another git operation is in progress."
-msgstr ""
+msgstr "Başka bir git işlemi devam ediyor."
 
 #: common/git/libgit_backend.cpp:1634 common/git/libgit_backend.cpp:1687
-#, fuzzy
 msgid "Could not find the matching remote branch."
-msgstr "İçe aktarılan kütüphanede '%s' bulunamadı."
+msgstr "Eşleşen uzak dal bulunamadı."
 
 #: common/git/libgit_backend.cpp:1643 common/git/libgit_backend.cpp:1696
-#, fuzzy
 msgid "Could not read the remote branch."
-msgstr "Şablon yolu '%s' açılamadı"
+msgstr "Uzak dal okunamadı."
 
 #: common/git/libgit_backend.cpp:1652
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reset to the remote branch: %s"
-msgstr "Uzaktan gönderilemedi: %s"
+msgstr "Uzak dala sıfırlanamadı: %s"
 
 #: common/git/libgit_backend.cpp:1678
-#, fuzzy
 msgid ""
 "Cannot rebase: you have unstaged changes.  Please commit or stash them first."
 msgstr ""
-"Birleştirilemiyor: Henüz aşamalandırılmamış değişiklikleriniz var. Lütfen "
-"çekme işleminden önce kaydedin veya saklayın."
+"Yeniden temellendirme yapılamıyor: Kaydedilmemiş değişiklikleriniz var. "
+"Lütfen önce bunları işleyin veya saklayın."
 
 #: common/git/libgit_backend.cpp:1736 common/git/libgit_backend.cpp:1747
 msgid ""
 "The rebase ran into conflicts.  This is best resolved from a git command "
 "line."
 msgstr ""
+"Yeniden temellendirme çakışmalarla karşılaştı. Bunu bir git komut satırından "
+"çözmeniz en iyisidir."
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -12906,7 +12901,7 @@ msgstr "Şemayı Numaralandır"
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:92
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:121
 msgid "Generate"
-msgstr "Oluştur"
+msgstr "Üret"
 
 #: eeschema/dialogs/dialog_bom.cpp:167
 msgid "(file missing)"
@@ -15223,9 +15218,9 @@ msgid "Derived symbol must have a parent selected"
 msgstr "Türetilmiş sembolün bir ana sembolü seçilmiş olmalıdır"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:507
-#, fuzzy, c-format
+#, c-format
 msgid "The unit name '%s' is already in use."
-msgstr "'%s' adı zaten kullanılıyor."
+msgstr "'%s' birim adı zaten kullanımda."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:522
 msgid "Delete extra units from symbol?"
@@ -19857,7 +19852,7 @@ msgstr ""
 #: eeschema/files-io.cpp:1303
 #, c-format
 msgid "Failed to save %s."
-msgstr "%s kaydedilemedi."
+msgstr "%s kaydedilme hatası."
 
 #: eeschema/files-io.cpp:1305
 msgid "Locked File Warning"
@@ -27948,9 +27943,8 @@ msgid "Reached end of sheet."
 msgstr "Sayfanın sonuna ulaştı."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:389
-#, fuzzy
 msgid "No matches found."
-msgstr "Hiçbir Şablon Bulunamadı"
+msgstr "Eşleşme bulunamadı."
 
 #: eeschema/tools/sch_group_tool.cpp:55 pcbnew/tools/pcb_group_tool.cpp:58
 msgid "Click on new member..."
@@ -30685,9 +30679,8 @@ msgid "Plot the layers to a single PDF file with multiple pages"
 msgstr "Katmanları birden çok sayfalı tek bir PDF dosyasına çiz"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:128
-#, fuzzy
 msgid "Suppress footprint property popups"
-msgstr "Özellik açılır pencereleri oluştur"
+msgstr "Ayak izi özellik açılır pencerelerini engelle"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:192
 msgid "Cannot use more than one mode flag\n"
@@ -32714,9 +32707,8 @@ msgid "Initialize a new repository"
 msgstr "Yeni bir depo başlat"
 
 #: kicad/project_tree_pane.cpp:1042
-#, fuzzy
 msgid "Configure Default Remote..."
-msgstr "Yolları Yapılandır..."
+msgstr "Varsayılan Uzak Yapılandırma..."
 
 #: kicad/project_tree_pane.cpp:1043
 msgid "Set or change the default remote URL and credentials"
@@ -32731,9 +32723,8 @@ msgid "Commit changes to the local repository"
 msgstr "Değişiklikleri yerel depoya aktarın"
 
 #: kicad/project_tree_pane.cpp:1050
-#, fuzzy
 msgid "Amend Last Commit..."
-msgstr "Son Onay"
+msgstr "Son İşlemi Düzelt..."
 
 #: kicad/project_tree_pane.cpp:1051
 msgid "Rewrite the most recent commit on the current branch"
@@ -32748,14 +32739,14 @@ msgid "Pull"
 msgstr "Çek"
 
 #: kicad/project_tree_pane.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Push %s to %s"
-msgstr "%s %s %s üzerinde"
+msgstr "%s'yi %s'ye it"
 
 #: kicad/project_tree_pane.cpp:1060
-#, fuzzy, c-format
+#, c-format
 msgid "Pull from %s"
-msgstr "%s'den"
+msgstr "%s üzerinden çek"
 
 #: kicad/project_tree_pane.cpp:1064
 msgid "Push committed local changes to remote repository"
@@ -32868,24 +32859,21 @@ msgid "Fetch Remote"
 msgstr "Uzak Sunucudan Getir"
 
 #: kicad/project_tree_pane.cpp:1988
-#, fuzzy
 msgid "Configure Default Remote"
-msgstr "Varsayılan uzaktan ayarla"
+msgstr "Varsayılan Uzak Yapılandırma"
 
 #: kicad/project_tree_pane.cpp:2004
-#, fuzzy
 msgid "Failed to configure remote."
-msgstr "Uzak bağlantı oluşturma başarısız oldu: %s"
+msgstr "Uzak yapılandırılamadı."
 
 #: kicad/project_tree_pane.cpp:2057
-#, fuzzy
 msgid "Already up to date."
-msgstr "Zaten Yerleştirildi"
+msgstr "Zaten güncel."
 
 #: kicad/project_tree_pane.cpp:2058
-#, fuzzy, c-format
+#, c-format
 msgid "Already up to date with %s."
-msgstr "Çözümlenen bağlantı kolu genişliği: %s."
+msgstr "%s ile zaten güncel."
 
 #: kicad/project_tree_pane.cpp:2064
 msgid "Pulled changes (fast-forward)."
@@ -32897,14 +32885,13 @@ msgid "Pulled %s into %s (fast-forward)."
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2070
-#, fuzzy
 msgid "Pulled changes."
-msgstr "Değişiklikleri Oluştur"
+msgstr "Değişiklikler çekildi."
 
 #: kicad/project_tree_pane.cpp:2071
-#, fuzzy, c-format
+#, c-format
 msgid "Pulled %s into %s."
-msgstr "%s pedi, %s üzerinde"
+msgstr "%s, %s içine çekildi."
 
 #: kicad/project_tree_pane.cpp:2081
 msgid ""
@@ -32916,9 +32903,8 @@ msgid ""
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2085
-#, fuzzy
 msgid "Pull Conflict"
-msgstr "Çakışma"
+msgstr "Çekme Çakışması"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Use Remote (discard my changes)"
@@ -32929,48 +32915,41 @@ msgid "&Rebase"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2095
-#, fuzzy
 msgid "Reset to the remote version."
-msgstr "Referans konumundan geçerli açıya sıfırla."
+msgstr "Uzak sürümüne sıfırla."
 
 #: kicad/project_tree_pane.cpp:2097
-#, fuzzy
 msgid "Failed to reset to remote"
-msgstr "Varsayılan uzaktan ayarlanamadı."
+msgstr "Uzağa sıfırlanamadı"
 
 #: kicad/project_tree_pane.cpp:2104
-#, fuzzy
 msgid "Rebased your changes onto the remote."
-msgstr "Uzak depodan değişiklikleri çekme başarısız oldu."
+msgstr "Değişiklikleriniz uzakyol üzerine yeniden temellendirildi."
 
 #: kicad/project_tree_pane.cpp:2106
-#, fuzzy
 msgid "Could not rebase"
-msgstr "Dosya okunamadı "
+msgstr "Yeniden temellendirme yapılamadı"
 
 #: kicad/project_tree_pane.cpp:2110
-#, fuzzy
 msgid "Pull cancelled."
-msgstr "İptal Edildi"
+msgstr "Çekme iptal edildi."
 
 #: kicad/project_tree_pane.cpp:2119
-#, fuzzy
 msgid "Pull failed."
-msgstr "Tüm dosyalar"
+msgstr "Çekme başarısız oldu."
 
 #: kicad/project_tree_pane.cpp:2120
 msgid "Failed to pull project"
 msgstr "Proje çekilemedi"
 
 #: kicad/project_tree_pane.cpp:2154
-#, fuzzy
 msgid "Pushed to remote."
-msgstr "Uzak bağlantı sorgulanamadı"
+msgstr "Uzakyola gönderildi."
 
 #: kicad/project_tree_pane.cpp:2155
-#, fuzzy, c-format
+#, c-format
 msgid "Pushed %s to %s."
-msgstr "%s pedi, %s üzerinde"
+msgstr "%s, %s uzakyoluna gönderildi."
 
 #: kicad/project_tree_pane.cpp:2168
 #, c-format
@@ -32992,9 +32971,8 @@ msgid "&Force Push"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2185
-#, fuzzy
 msgid "Push failed."
-msgstr "İş başarısız"
+msgstr "Gönderme başarısız oldu."
 
 #: kicad/project_tree_pane.cpp:2186
 msgid "Failed to push project"
@@ -33005,34 +32983,32 @@ msgid "The selected directory is not a Git project."
 msgstr "Seçilen dizin bir Git projesi değil."
 
 #: kicad/project_tree_pane.cpp:2581
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before committing?"
 msgstr ""
-"Aşağıdaki kuralların kaydedilmemiş değişiklikleri var:\n"
+"Aşağıdaki düzenleyicilerde kaydedilmemiş değişiklikler var:%s\n"
 "\n"
+"Bunları işlemeden önce kaydedeyim mi?"
 
 #: kicad/project_tree_pane.cpp:2584 kicad/project_tree_pane.cpp:2853
-#, fuzzy
 msgid "Unsaved Changes"
-msgstr "Değişiklikleri Geri Al"
+msgstr "Kaydedilmemiş Değişiklikler"
 
 #: kicad/project_tree_pane.cpp:2587
-#, fuzzy
 msgid "&Save and Commit"
-msgstr "Bir Kopyasını kaydet.."
+msgstr "&Kaydet ve İşle"
 
 #: kicad/project_tree_pane.cpp:2587
-#, fuzzy
 msgid "Commit &Anyway"
-msgstr "(%s zaten işlenecek.)"
+msgstr "Yine de &İşle"
 
 #: kicad/project_tree_pane.cpp:2604 kicad/project_tree_pane.cpp:2873
-#, fuzzy, c-format
+#, c-format
 msgid "Could not save %s."
-msgstr "Dosya okunamadı: %s"
+msgstr "%s kaydedilemedi."
 
 #: kicad/project_tree_pane.cpp:2715
 msgid "Discarding commit due to empty commit message."
@@ -33056,48 +33032,44 @@ msgid "Amend Published Commit?"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2811 kicad/project_tree_pane.cpp:2856
-#, fuzzy
 msgid "Amend &Anyway"
-msgstr "Yine de Ekle"
+msgstr "Yine de &Düzelt"
 
 #: kicad/project_tree_pane.cpp:2850
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before amending?"
 msgstr ""
-"Aşağıdaki kuralların kaydedilmemiş değişiklikleri var:\n"
+"Aşağıdaki düzenleyicilerde kaydedilmemiş değişiklikler var:%s\n"
 "\n"
+"Bunları düzeltmeden önce kaydedeyim mi?"
 
 #: kicad/project_tree_pane.cpp:2856
 msgid "&Save and Amend"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2989
-#, fuzzy
 msgid "Amend Last Commit"
-msgstr "Son Onay"
+msgstr "Son İşlemi Düzelt"
 
 #: kicad/project_tree_pane.cpp:2997
-#, fuzzy
 msgid "Discarding amend due to empty commit message."
-msgstr "Boş işlem mesajı nedeniyle işlem reddediliyor."
+msgstr "Boş işlem mesajı nedeniyle düzeltme iptal ediliyor."
 
 #: kicad/project_tree_pane.cpp:3078
-#, fuzzy
 msgid "Fetched from remote."
-msgstr "Uzak Sunucudan Getir"
+msgstr "Uzakyoldan getirildi."
 
 #: kicad/project_tree_pane.cpp:3079
-#, fuzzy, c-format
+#, c-format
 msgid "Fetched from %s."
-msgstr "%s'den"
+msgstr "Şuradan alındı %s."
 
 #: kicad/project_tree_pane.cpp:3086
-#, fuzzy
 msgid "Fetch failed."
-msgstr "İş başarısız"
+msgstr "Getirme başarısız oldu."
 
 #: kicad/project_tree_traverser.cpp:216
 #, c-format
@@ -45245,9 +45217,8 @@ msgid "Cancel Changes?"
 msgstr "Değişikliklerden Vazgeçilsin mi?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:156
-#, fuzzy
 msgid "Show Matching Items"
-msgstr "Eşleşmeleri Göster"
+msgstr "Eşleşen Ögeleri Göster"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:209
 msgid "Cannot show matching items without an open project."
@@ -45267,9 +45238,9 @@ msgid "ERROR:"
 msgstr "HATA:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Could not scan rules text: %s"
-msgstr "Uzaktan gönderilemedi: %s"
+msgstr "Kurallar metni taranamadı: %s"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:337
 msgid "Place the cursor inside a (rule ...) block to show matching items."
@@ -45280,9 +45251,9 @@ msgid "The rule under the cursor has no name; add a name to identify it."
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:366
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' could not be located after parsing."
-msgstr "Dosya '%s' oluşturulamadı."
+msgstr "'%s' kuralı ayrıştırma sonrasında bulunamadı."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:385
 msgid "DRC engine not available."
@@ -58954,9 +58925,8 @@ msgid "Show a manager dialog for Generator objects"
 msgstr "Jeneratör nesneleri için bir yönetici iletişim kutusu göster"
 
 #: pcbnew/tools/pcb_actions.cpp:2802
-#, fuzzy
 msgid "Length Tuning Settings"
-msgstr "Uzunluk Ayarlama Ayarları..."
+msgstr "Uzunluk Ayarlama Ayarları"
 
 #: pcbnew/tools/pcb_actions.cpp:2803
 msgid "Length Tuning Settings..."
