@@ -531,7 +531,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
 
             m_bodyStyle = static_cast<int>( tmp );
 
-            if( m_bodyStyle > 1 )
+            if( m_bodyStyle > symbol->GetBodyStyleCount() )
                 symbol->SetBodyStyleCount( m_bodyStyle, false, false );
 
             if( m_unit > symbol->GetUnitCount() )
