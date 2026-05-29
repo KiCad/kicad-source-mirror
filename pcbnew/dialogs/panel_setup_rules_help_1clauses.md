@@ -1,6 +1,6 @@
 ### Top-level Clauses
 
-    (version 1)
+    (version 2)
 
     (rule <rule_name> <rule_clause> ...)
 

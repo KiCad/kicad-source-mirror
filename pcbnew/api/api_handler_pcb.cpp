@@ -1027,7 +1027,7 @@ HANDLER_RESULT<CustomRulesResponse> API_HANDLER_PCB::handleSetCustomDesignRules(
     }
 
     wxString rulesText;
-    rulesText << "(version 1)\n";
+    rulesText << "(version 2)\n";
 
     for( const board::CustomRule& rule : aCtx.Request.rules() )
     {

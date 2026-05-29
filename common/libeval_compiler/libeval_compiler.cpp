@@ -820,6 +820,37 @@ static std::vector<TREE_NODE*> squashParamList( TREE_NODE* root )
 }
 
 
+// Flatten a pure identifier chain (e.g. "A" or "A.Parent") that forms the receiver of a
+// property or method access into a dotted variable name.  Returns false when the receiver
+// is anything else (for example the result of another method call), which is unsupported.
+// Every node consumed is marked visited so the code generator does not re-process it.
+static bool flattenVarChain( TREE_NODE* aNode, wxString& aResult )
+{
+    if( aNode->op == TR_IDENTIFIER )
+    {
+        aResult = formatNode( aNode );
+        aNode->isVisited = true;
+        return true;
+    }
+
+    if( aNode->op == TR_STRUCT_REF && aNode->leaf[0] && aNode->leaf[1]
+            && aNode->leaf[1]->op == TR_IDENTIFIER )
+    {
+        wxString base;
+
+        if( !flattenVarChain( aNode->leaf[0], base ) )
+            return false;
+
+        aResult = base + wxT( "." ) + formatNode( aNode->leaf[1] );
+        aNode->leaf[1]->isVisited = true;
+        aNode->isVisited = true;
+        return true;
+    }
+
+    return false;
+}
+
+
 bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 {
     std::vector<TREE_NODE*> stack;
@@ -869,10 +900,12 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
 
         case TR_STRUCT_REF:
         {
-            // leaf[0]: object
+            // leaf[0]: object (a variable name, or a "." chain such as "A.Parent")
             // leaf[1]: field (TR_IDENTIFIER) or TR_OP_FUNC_CALL
 
-            if( node->leaf[0]->op != TR_IDENTIFIER )
+            wxString itemName;
+
+            if( !flattenVarChain( node->leaf[0], itemName ) )
             {
                 int pos = node->leaf[0]->srcPos;
 
@@ -896,7 +929,6 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     // leaf[0]: object
                     // leaf[1]: field
 
-                    wxString itemName = formatNode( node->leaf[0] );
                     wxString propName = formatNode( node->leaf[1] );
                     std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( itemName, propName );
 
@@ -911,7 +943,6 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                         reportError( CST_CODEGEN, msg, node->leaf[1]->srcPos - (int) propName.length() );
                     }
 
-                    node->leaf[0]->isVisited = true;
                     node->leaf[1]->isVisited = true;
 
                     node->SetUop( TR_UOP_PUSH_VAR, std::move( vref ) );
@@ -925,7 +956,6 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     //    leaf[0]: function name
                     //    leaf[1]: parameter
 
-                    wxString                 itemName = formatNode( node->leaf[0] );
                     std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( itemName, "" );
 
                     if( !vref )
@@ -997,7 +1027,6 @@ bool COMPILER::generateUCode( UCODE* aCode, CONTEXT* aPreflightContext )
                     // leaf[0]: object
                     // leaf[1]: malformed syntax
 
-                    wxString itemName = formatNode( node->leaf[0] );
                     wxString propName = formatNode( node->leaf[1] );
                     std::unique_ptr<VAR_REF> vref = aCode->CreateVarRef( itemName, propName );
 

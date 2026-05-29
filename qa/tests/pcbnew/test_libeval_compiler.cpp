@@ -32,6 +32,8 @@
 #include <pcbnew/board.h>
 #include <board_design_settings.h>
 #include <pcbnew/pcb_track.h>
+#include <pcbnew/footprint.h>
+#include <pcbnew/pcb_text.h>
 #include <project/net_settings.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
@@ -236,6 +238,64 @@ BOOST_AUTO_TEST_CASE( InNetChainClassWildcard )
                   &trackClassified );
     testEvalExpr( wxT( "A.inNetChainClass('LowSpeed')" ), VAL( 0.0 ), false, &trackClassified,
                   &trackClassified );
+}
+
+BOOST_AUTO_TEST_CASE( ParentNavigation )
+{
+    PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+    propMgr.Rebuild();
+
+    BOARD brd;
+
+    FOOTPRINT fp( &brd );
+    fp.SetReference( wxT( "J1" ) );
+
+    // A text item living inside the footprint.  Its direct parent is the footprint, so
+    // "A.Parent" navigates to J1.
+    PCB_TEXT* text = new PCB_TEXT( &fp );
+    text->SetText( wxT( "J1" ) );
+    fp.Add( text );
+
+    // The headline capability: getField() only returns a value when its receiver is a
+    // footprint, so this passes solely because navigation steps from the text to its parent.
+    testEvalExpr( wxT( "A.Parent.getField('Reference') == 'J1'" ), VAL( 1.0 ), false, text, text );
+
+    // The exact pattern from the issue (parent field compared to the text's own value).
+    testEvalExpr( wxT( "A.Parent.getField('Reference') == A.Text" ), VAL( 1.0 ), false, text, text );
+
+    // The parent resolves to a footprint object that can be type-queried.
+    testEvalExpr( wxT( "A.Parent.Type == 'Footprint'" ), VAL( 1.0 ), false, text, text );
+
+    // Regression: the terminal "Parent" string still yields the parent footprint reference,
+    // i.e. the object and the string refer to the same parent.
+    testEvalExpr( wxT( "A.Parent == 'J1'" ), VAL( 1.0 ), false, text, text );
+
+    // Without navigation getField() has a non-footprint receiver and returns "", so this must
+    // NOT match - it guards against the navigation silently applying to the base item.
+    testEvalExpr( wxT( "A.getField('Reference') == 'J1'" ), VAL( 0.0 ), false, text, text );
+
+    // Error cases.  These are code-generation errors (not parse errors), which the shared
+    // testEvalExpr does not observe through Compile()'s return value, so check the pending-error
+    // status directly.  None of these expressions contain a bare number, so the only error that
+    // can be raised is the unrecognized item/property we are testing for.
+    auto expectCompileError =
+            []( const wxString& aExpr )
+            {
+                PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER() );
+                PCBEXPR_UCODE    ucode;
+                PCBEXPR_CONTEXT  preflight( NULL_CONSTRAINT, UNDEFINED_LAYER );
+
+                compiler.Compile( aExpr, &ucode, &preflight );
+
+                BOOST_CHECK_MESSAGE( compiler.IsErrorPending(),
+                                     "Expected a compile error for: " << aExpr.mb_str() );
+            };
+
+    // An unknown property on the parent, an unknown navigation step, and navigation on the
+    // layer pseudo-item (which has no parent).
+    expectCompileError( wxT( "A.Parent.bogusProperty" ) );
+    expectCompileError( wxT( "A.bogus.Reference == 'J1'" ) );
+    expectCompileError( wxT( "L.Parent.Type == 'Footprint'" ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

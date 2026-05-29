@@ -681,7 +681,7 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadFromString( const wx
     wxString rulesText = aRulesText;
 
     if( !rulesText.Contains( "(version" ) )
-        rulesText.Prepend( "(version 1)\n" );
+        rulesText.Prepend( "(version 2)\n" );
 
     try
     {

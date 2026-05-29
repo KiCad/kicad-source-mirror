@@ -71,7 +71,7 @@ bool DRC_RULE_SAVER::SaveFile( const wxString&                               aPa
 wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANEL_ENTRY>& aEntries,
                                              const BOARD*                                  aBoard )
 {
-    wxString result = "(version 1)\n";
+    wxString result = "(version 2)\n";
 
     // Group entries by (ruleName, condition, layerSource) for merging same-rule constraints.
     // Including the layer source prevents rules with different layer scopes from being

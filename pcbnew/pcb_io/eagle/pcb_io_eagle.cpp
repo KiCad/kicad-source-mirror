@@ -2739,7 +2739,7 @@ void PCB_IO_EAGLE::loadClasses( wxXmlNode* aClasses )
         classNode = classNode->GetNext();
     }
 
-    m_customRules = wxT( "(version 1)" );
+    m_customRules = wxT( "(version 2)" );
 
     for( ECLASS& eClass : eClasses )
     {

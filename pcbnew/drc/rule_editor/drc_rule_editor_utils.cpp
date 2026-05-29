@@ -709,7 +709,7 @@ std::vector<std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA>> DRC_RULE_EDITOR_UTILS:
 
     wxString rulesText = aRules;
     if( !rulesText.Contains( "(version" ) )
-        rulesText.Prepend( "(version 1)\n" );
+        rulesText.Prepend( "(version 2)\n" );
 
     try
     {
@@ -751,7 +751,7 @@ bool DRC_RULE_EDITOR_UTILS::SaveRules( const wxString& aFilename,
                                        const std::vector<std::shared_ptr<DRC_RE_BASE_CONSTRAINT_DATA>>& aRules,
                                        const BOARD* aBoard )
 {
-    wxString content = wxT( "(version 1)\n" );
+    wxString content = wxT( "(version 2)\n" );
 
     for( const auto& data : aRules )
     {

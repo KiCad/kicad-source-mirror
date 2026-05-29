@@ -1,4 +1,4 @@
-(version 1)
+(version 2)
 
 (rule "DiffPair_D1_gap"
   (condition "A.NetName == 'TXN2' && B.NetName == 'TXP2'")

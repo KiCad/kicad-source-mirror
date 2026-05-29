@@ -2386,7 +2386,7 @@ void PCB_IO_PADS::generateDrcRules( const wxString& aFileName )
     wxFileName fn( aFileName );
     fn.SetExt( wxT( "kicad_dru" ) );
 
-    wxString customRules = wxT( "(version 1)\n" );
+    wxString customRules = wxT( "(version 2)\n" );
 
     const auto& diffPairs = m_parser->GetDiffPairs();
 

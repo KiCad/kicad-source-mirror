@@ -1,6 +1,6 @@
 ### Examples
 
-    (version 1)
+    (version 2)
 
     (rule HV
        (constraint clearance (min 1.5mm))

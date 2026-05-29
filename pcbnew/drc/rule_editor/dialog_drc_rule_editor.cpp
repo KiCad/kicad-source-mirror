@@ -959,7 +959,7 @@ int DIALOG_DRC_RULE_EDITOR::highlightMatchingItems( int aNodeId )
         return 0;
     }
 
-    wxString fullText = wxS( "(version 1)\n" ) + ruleText;
+    wxString fullText = wxS( "(version 2)\n" ) + ruleText;
 
     try
     {

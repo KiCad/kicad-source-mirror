@@ -945,7 +945,7 @@ void PANEL_DRC_RULE_EDITOR::onCheckSyntax( wxCommandEvent& event )
     try
     {
         std::vector<std::shared_ptr<DRC_RULE>> dummyRules;
-        wxString ruleTemplate = L"(version 1)\n(rule default\n   (condition \"%s\")\n)";
+        wxString ruleTemplate = L"(version 2)\n(rule default\n   (condition \"%s\")\n)";
         wxString formattedRule = wxString::Format( ruleTemplate, condition );
         DRC_RULES_PARSER ruleParser( formattedRule, _( "DRC rule" ) );
         ruleParser.Parse( dummyRules, m_syntaxErrorReport );

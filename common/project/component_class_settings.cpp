@@ -233,7 +233,7 @@ wxString COMPONENT_CLASS_ASSIGNMENT_DATA::GetAssignmentInDRCLanguage() const
     if( m_conditions.empty() )
     {
         // A condition which always applies the netclass
-        return wxString::Format( wxT( "(version 1) (assign_component_class \"%s\")" ), m_componentClass );
+        return wxString::Format( wxT( "(version 2) (assign_component_class \"%s\")" ), m_componentClass );
     }
 
     // Lambda to format a comma-separated list of references in to a DRC expression
@@ -375,7 +375,7 @@ wxString COMPONENT_CLASS_ASSIGNMENT_DATA::GetAssignmentInDRCLanguage() const
     }
 
     if( conditionsExprs.empty() )
-        return wxString::Format( wxT( "(version 1) (assign_component_class \"%s\")" ), m_componentClass );
+        return wxString::Format( wxT( "(version 2) (assign_component_class \"%s\")" ), m_componentClass );
 
     wxString allConditionsExpr = conditionsExprs[0];
 
@@ -387,7 +387,7 @@ wxString COMPONENT_CLASS_ASSIGNMENT_DATA::GetAssignmentInDRCLanguage() const
             allConditionsExpr = allConditionsExpr + operatorExpr + *itr;
     }
 
-    return wxString::Format( wxT( "(version 1) (assign_component_class \"%s\" (condition \"%s\" ) )" ),
+    return wxString::Format( wxT( "(version 2) (assign_component_class \"%s\" (condition \"%s\" ) )" ),
                              m_componentClass,
                              allConditionsExpr );
 }
