@@ -28,6 +28,8 @@
 #include <vector>
 #include <wx/string.h>
 
+#include <kiid.h>
+
 /**
  * A single component variation within an Altium project variant.
  *
@@ -38,7 +40,10 @@
 struct ALTIUM_VARIANT_ENTRY
 {
     wxString                         designator;
+
+    // Component's own unique id (final segment of the Altium path); the value used for matching.
     wxString                         uniqueId;
+
     int                              kind = 0;
     std::map<wxString, wxString>     alternateFields;
 };
@@ -64,5 +69,17 @@ struct ALTIUM_PROJECT_VARIANT
  * @return Vector of project variants with their per-component entries.
  */
 std::vector<ALTIUM_PROJECT_VARIANT> ParseAltiumProjectVariants( const wxString& aPrjPcbPath );
+
+
+/**
+ * Derive a stable KIID from an Altium component unique id.
+ *
+ * Altium unique ids are not hexadecimal, so KIID's string constructor cannot parse them and
+ * returns a fresh random uuid each call. This maps equal id strings to equal KIIDs.
+ *
+ * @param aUniqueId Altium component unique id.
+ * @return A KIID that is identical for identical input strings.
+ */
+KIID AltiumUniqueIdToKiid( const wxString& aUniqueId );
 
 #endif // ALTIUM_PROJECT_VARIANTS_H

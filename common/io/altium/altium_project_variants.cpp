@@ -23,8 +23,26 @@
 
 #include <io/altium/altium_project_variants.h>
 
+#include <boost/uuid/name_generator_sha1.hpp>
+#include <boost/uuid/string_generator.hpp>
+#include <boost/uuid/uuid_io.hpp>
+
 #include <wx/fileconf.h>
 #include <wx/log.h>
+
+
+KIID AltiumUniqueIdToKiid( const wxString& aUniqueId )
+{
+    // Fixed namespace so a given id always maps to the same KIID. Must never change or
+    // previously stamped footprint paths would stop matching.
+    static const boost::uuids::uuid s_namespace =
+            boost::uuids::string_generator()( "6f9619ff-8b86-d011-b42d-00cf4fc964ff" );
+
+    boost::uuids::name_generator_sha1 generator( s_namespace );
+    boost::uuids::uuid                uuid = generator( aUniqueId.utf8_string() );
+
+    return KIID( wxString::FromUTF8( boost::uuids::to_string( uuid ) ) );
+}
 
 
 static ALTIUM_VARIANT_ENTRY ParseVariationString( const wxString& aValue )
@@ -47,7 +65,14 @@ static ALTIUM_VARIANT_ENTRY ParseVariationString( const wxString& aValue )
         }
         else if( key.CmpNoCase( wxS( "UniqueId" ) ) == 0 )
         {
-            entry.uniqueId = val;
+            // The target is a backslash-delimited path; only the final segment is the
+            // component's own unique id, which is what symbol and footprint records store.
+            int sep = val.Find( '\\', true );
+
+            if( sep != wxNOT_FOUND )
+                entry.uniqueId = val.Mid( sep + 1 );
+            else
+                entry.uniqueId = val;
         }
         else if( key.CmpNoCase( wxS( "Kind" ) ) == 0 )
         {
