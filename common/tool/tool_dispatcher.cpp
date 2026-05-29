@@ -639,6 +639,12 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         }
 
         evt = GetToolEvent( ke, &keyIsSpecial );
+
+        if( evt && !evt->IsCancel() && m_toolMgr->GetViewControls() )
+        {
+            evt->SetMousePosition( m_lastMousePos );
+            evt->SetHasPosition( true );
+        }
     }
     else if( type == wxEVT_MENU_OPEN || type == wxEVT_MENU_CLOSE || type == wxEVT_MENU_HIGHLIGHT )
     {

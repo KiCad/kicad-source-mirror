@@ -680,6 +680,10 @@ private:
     /// Right click context menu position.
     VECTOR2D m_menuCursor;
 
+    /// Mouse position captured at hotkey time, used to avoid the delay between keypress
+    /// and action dispatch causing the wrong position to be used.
+    std::optional<VECTOR2D> m_hotKeyPos;
+
     bool m_warpMouseAfterContextMenu;
 
     /// Flag indicating whether a context menu is currently displayed.
