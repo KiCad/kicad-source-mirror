@@ -25,6 +25,7 @@
 
 #include <list>
 #include <map>
+#include <optional>
 #include <string>
 #include <set>
 #include <vector>
@@ -64,15 +65,41 @@ struct ACTION_CONDITIONS
         return *this;
     }
 
+    /**
+     * Set a separate condition for direct command dispatch (hotkeys and navlib buttons). When set,
+     * it is used instead of enableCondition, allowing menu items to appear disabled while the
+     * action still fires for immediate-mode operations like rotate and mirror.
+     */
+    ACTION_CONDITIONS& HotkeyEnable( const SELECTION_CONDITION& aCondition )
+    {
+        hotkeyCondition = aCondition;
+        return *this;
+    }
+
     ACTION_CONDITIONS& Show( const SELECTION_CONDITION& aCondition )
     {
         showCondition = aCondition;
         return *this;
     }
 
+    /**
+     * Return the condition that direct command dispatch should use, falling back to
+     * enableCondition when no separate dispatch condition has been set.
+     */
+    const SELECTION_CONDITION& GetHotkeyCondition() const
+    {
+        if( hotkeyCondition )
+            return *hotkeyCondition;
+
+        return enableCondition;
+    }
+
     SELECTION_CONDITION checkCondition;     ///< Returns true if the UI control should be checked
     SELECTION_CONDITION enableCondition;    ///< Returns true if the UI control should be enabled
     SELECTION_CONDITION showCondition;      ///< Returns true if the UI control should be shown
+
+    /// Optional separate condition for hotkey dispatch (when empty, enableCondition is used)
+    std::optional<SELECTION_CONDITION> hotkeyCondition;
 };
 
 /**

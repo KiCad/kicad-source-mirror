@@ -218,7 +218,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
         bool runAction = true;
 
         if( const ACTION_CONDITIONS* aCond = GetCondition( *context ) )
-            runAction = aCond->enableCondition( sel );
+            runAction = aCond->GetHotkeyCondition()( sel );
 
         wxLogTrace( kicadTraceToolStack,
                     wxS( "ACTION_MANAGER::RunHotKey %s context action: %s for hotkey %s" ),
@@ -236,7 +236,7 @@ bool ACTION_MANAGER::RunHotKey( int aHotKey ) const
             bool runAction = true;
 
             if( const ACTION_CONDITIONS* aCond = GetCondition( *act ) )
-                runAction = aCond->enableCondition( sel );
+                runAction = aCond->GetHotkeyCondition()( sel );
 
             wxLogTrace( kicadTraceToolStack,
                         wxS( "ACTION_MANAGER::RunHotKey %s global action: %s for hotkey %s" ),

@@ -1107,6 +1107,24 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::doDelete,     ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::duplicate,    ENABLE( cond.HasItems() ) );
 
+    // Keep immediate-mode dispatch alive while a tool is mid-edit on an empty board, where
+    // HasItems() is still false but an item is under construction under the cursor.
+    auto hasElements =
+            [ this ] ( const SELECTION& aSel )
+            {
+                return GetBoard() &&
+                        ( !GetBoard()->IsEmpty() || !SELECTION_CONDITIONS::Idle( aSel ) );
+            };
+
+    mgr->SetConditions( PCB_ACTIONS::rotateCw,
+                        ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( hasElements ) );
+    mgr->SetConditions( PCB_ACTIONS::rotateCcw,
+                        ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( hasElements ) );
+    mgr->SetConditions( PCB_ACTIONS::mirrorH,
+                        ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( hasElements ) );
+    mgr->SetConditions( PCB_ACTIONS::mirrorV,
+                        ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( hasElements ) );
+
     static const std::vector<KICAD_T> groupTypes = { PCB_GROUP_T, PCB_GENERATOR_T };
 
     mgr->SetConditions( ACTIONS::group,        ENABLE( SELECTION_CONDITIONS::MoreThan( 1 ) ) );
@@ -1144,13 +1162,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
                         .Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_TRIANGULATION ) ) );
 
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes, CHECK( cond.BoundingBoxes() ) );
-
-    auto hasElements =
-            [ this ] ( const SELECTION& aSel )
-            {
-                return GetBoard() &&
-                        ( !GetBoard()->IsEmpty() || !SELECTION_CONDITIONS::Idle( aSel ) );
-            };
 
     auto boardFlippedCond =
             [this]( const SELECTION& )

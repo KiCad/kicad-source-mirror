@@ -22,6 +22,8 @@
 #include <vector>
 
 #include <tool/action_manager.h>
+#include <tool/selection.h>
+#include <tool/selection_conditions.h>
 #include <tool/tool_action.h>
 
 BOOST_AUTO_TEST_SUITE( ActionManagerDispatch )
@@ -151,6 +153,35 @@ BOOST_AUTO_TEST_CASE( Promotion_DefaultBindingLeavesOrderUnchanged )
     ACTION_MANAGER::PromoteUserBoundFrameAction( global, FRAME_PCB_EDITOR, 'C' );
 
     BOOST_CHECK_EQUAL( global.front()->GetName(), "common.Interactive.copy" );
+}
+
+BOOST_AUTO_TEST_CASE( HotkeyCondition_FallsBackToEnableWhenUnset )
+{
+    // Without a separate hotkey condition, RunHotKey() must reuse enableCondition,
+    // preserving behavior for the vast majority of actions.
+    ACTION_CONDITIONS cond;
+    cond.Enable( SELECTION_CONDITIONS::NotEmpty );
+
+    SELECTION empty;
+
+    BOOST_CHECK( !cond.enableCondition( empty ) );
+    BOOST_CHECK( !cond.GetHotkeyCondition()( empty ) );
+}
+
+BOOST_AUTO_TEST_CASE( HotkeyCondition_DivergesFromEnableWhenSet )
+{
+    // The #13366 fix greys out the menu (enableCondition) on an empty selection while
+    // immediate-mode rotate/mirror still fire (hotkeyCondition). The two conditions must
+    // be evaluated independently for the same selection.
+    auto alwaysTrue = []( const SELECTION& ) { return true; };
+
+    ACTION_CONDITIONS cond;
+    cond.Enable( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( alwaysTrue );
+
+    SELECTION empty;
+
+    BOOST_CHECK( !cond.enableCondition( empty ) );  // menu item greyed out
+    BOOST_CHECK( cond.GetHotkeyCondition()( empty ) );  // hotkey still fires
 }
 
 BOOST_AUTO_TEST_SUITE_END()
