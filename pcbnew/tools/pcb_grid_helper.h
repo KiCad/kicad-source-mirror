@@ -32,6 +32,7 @@
 
 
 class LSET;
+class PCB_ARC;
 class SHAPE_ARC;
 class TOOL_MANAGER;
 struct MAGNETIC_SETTINGS;
@@ -101,6 +102,26 @@ public:
      */
     void AddConstructionItems( std::vector<BOARD_ITEM*> aItems, bool aExtensionOnly,
                                bool aIsPersistent );
+
+    /// A single anchor point contributed by an item, before it is registered with the helper.
+    struct ANCHOR_SPEC
+    {
+        VECTOR2I pos;
+        int      flags;
+        int      pointType;
+    };
+
+    /**
+     * Return the snap/drag anchor points that a track arc contributes.
+     *
+     * The arc's derived geometric center is rarely grid-aligned, so it is never offered as the
+     * arc's own drag origin. The stored start/mid/end points (grid-aligned when the arc is)
+     * carry the drag-origin role instead, keeping pasted arcs on grid.
+     *
+     * @param aArc The arc for which to compute anchors.
+     * @param aFrom True when the arc is the drag source (its own points may become the origin).
+     */
+    static std::vector<ANCHOR_SPEC> GetArcAnchors( const PCB_ARC& aArc, bool aFrom );
 
 private:
     std::vector<BOARD_ITEM*> queryVisible( const BOX2I&                    aArea,
