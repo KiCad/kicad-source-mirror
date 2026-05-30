@@ -24,9 +24,15 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <eda_item.h>
+#include <import_gfx/dxf_import_plugin.h>
 #include <import_gfx/graphics_importer_buffer.h>
 #include <base_units.h>
+#include <algorithm>
+#include <cstring>
 #include <limits>
+#include <wx/ffile.h>
+#include <wx/filefn.h>
+#include <wx/filename.h>
 
 
 class TEST_GRAPHICS_IMPORTER : public GRAPHICS_IMPORTER
@@ -41,7 +47,19 @@ public:
                   const IMPORTED_STROKE& aStroke ) override
     {
         m_lines.push_back( { aStart, aEnd } );
+        m_lineSourceLayers.push_back( m_currentSourceLayer );
     }
+
+    bool CanImportSourceLayer( const wxString& aSourceLayer ) const override
+    {
+        if( m_enabledSourceLayers.empty() )
+            return true;
+
+        return std::find( m_enabledSourceLayers.begin(), m_enabledSourceLayers.end(), aSourceLayer )
+               != m_enabledSourceLayers.end();
+    }
+
+    void SetCurrentSourceLayer( const wxString& aSourceLayer ) override { m_currentSourceLayer = aSourceLayer; }
 
     void AddCircle( const VECTOR2D& aCenter, double aRadius, const IMPORTED_STROKE& aStroke,
                     bool aFilled, const COLOR4D& aFillColor ) override {}
@@ -72,6 +90,9 @@ public:
     }
 
     std::vector<std::pair<VECTOR2D, VECTOR2D>> m_lines;
+    std::vector<wxString>                      m_lineSourceLayers;
+    std::vector<wxString>                      m_enabledSourceLayers;
+    wxString                                   m_currentSourceLayer;
 };
 
 
@@ -150,6 +171,147 @@ BOOST_AUTO_TEST_CASE( NormalCoordinatesNoOffset )
     VECTOR2D offset = importer.GetImportOffsetMM();
     BOOST_CHECK_MESSAGE( offset == VECTOR2D( 0, 0 ),
                          "Normal coordinates should not trigger auto-offset" );
+}
+
+
+BOOST_AUTO_TEST_CASE( SourceLayersAreReportedAndCanBeSkipped )
+{
+    GRAPHICS_IMPORTER_BUFFER buffer;
+    TEST_GRAPHICS_IMPORTER   importer;
+
+    IMPORTED_STROKE stroke( 0.1 );
+
+    buffer.SetCurrentSourceLayer( wxS( "Outline" ) );
+    buffer.AddLine( VECTOR2D( 0.0, 0.0 ), VECTOR2D( 10.0, 0.0 ), stroke );
+
+    buffer.SetCurrentSourceLayer( wxS( "Guide" ) );
+    buffer.AddLine( VECTOR2D( 0.0, 1.0 ), VECTOR2D( 10.0, 1.0 ), stroke );
+
+    std::vector<wxString> sourceLayers = buffer.GetSourceLayers();
+
+    BOOST_CHECK( std::find( sourceLayers.begin(), sourceLayers.end(), wxS( "Outline" ) ) != sourceLayers.end() );
+    BOOST_CHECK( std::find( sourceLayers.begin(), sourceLayers.end(), wxS( "Guide" ) ) != sourceLayers.end() );
+
+    importer.m_enabledSourceLayers.push_back( wxS( "Outline" ) );
+
+    buffer.ImportTo( importer );
+
+    BOOST_REQUIRE_EQUAL( importer.m_lines.size(), 1 );
+    BOOST_REQUIRE_EQUAL( importer.m_lineSourceLayers.size(), 1 );
+    BOOST_CHECK_EQUAL( importer.m_lineSourceLayers[0], wxS( "Outline" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( DxfSourceLayersArePreserved )
+{
+    const char* dxf =
+        "0\n"
+        "SECTION\n"
+        "2\n"
+        "HEADER\n"
+        "9\n"
+        "$INSUNITS\n"
+        "70\n"
+        "4\n"
+        "0\n"
+        "ENDSEC\n"
+        "0\n"
+        "SECTION\n"
+        "2\n"
+        "TABLES\n"
+        "0\n"
+        "TABLE\n"
+        "2\n"
+        "LAYER\n"
+        "70\n"
+        "2\n"
+        "0\n"
+        "LAYER\n"
+        "2\n"
+        "Outline\n"
+        "70\n"
+        "0\n"
+        "62\n"
+        "7\n"
+        "6\n"
+        "Continuous\n"
+        "0\n"
+        "LAYER\n"
+        "2\n"
+        "Guide\n"
+        "70\n"
+        "0\n"
+        "62\n"
+        "7\n"
+        "6\n"
+        "Continuous\n"
+        "0\n"
+        "ENDTAB\n"
+        "0\n"
+        "ENDSEC\n"
+        "0\n"
+        "SECTION\n"
+        "2\n"
+        "ENTITIES\n"
+        "0\n"
+        "LINE\n"
+        "8\n"
+        "Outline\n"
+        "10\n"
+        "0\n"
+        "20\n"
+        "0\n"
+        "11\n"
+        "10\n"
+        "21\n"
+        "0\n"
+        "0\n"
+        "LINE\n"
+        "8\n"
+        "Guide\n"
+        "10\n"
+        "0\n"
+        "20\n"
+        "1\n"
+        "11\n"
+        "10\n"
+        "21\n"
+        "1\n"
+        "0\n"
+        "ENDSEC\n"
+        "0\n"
+        "EOF\n";
+
+    wxString dxfPath = wxFileName::CreateTempFileName( wxS( "kicad_dxf_layers" ) );
+    BOOST_REQUIRE( !dxfPath.IsEmpty() );
+
+    {
+        wxFFile file( dxfPath, wxT( "wb" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE_EQUAL( file.Write( dxf, strlen( dxf ) ), strlen( dxf ) );
+    }
+
+    DXF_IMPORT_PLUGIN      plugin;
+    TEST_GRAPHICS_IMPORTER importer;
+
+    plugin.SetUnit( DXF_IMPORT_UNITS::MM );
+    plugin.SetImporter( &importer );
+
+    BOOST_REQUIRE( plugin.Load( dxfPath ) );
+    wxRemoveFile( dxfPath );
+
+    std::vector<wxString> sourceLayers = plugin.GetSourceLayers();
+
+    BOOST_CHECK( std::find( sourceLayers.begin(), sourceLayers.end(), wxS( "Outline" ) ) != sourceLayers.end() );
+    BOOST_CHECK( std::find( sourceLayers.begin(), sourceLayers.end(), wxS( "Guide" ) ) != sourceLayers.end() );
+
+    importer.m_enabledSourceLayers.push_back( wxS( "Outline" ) );
+
+    BOOST_REQUIRE( plugin.Import() );
+
+    BOOST_REQUIRE_EQUAL( importer.m_lines.size(), 1 );
+    BOOST_REQUIRE_EQUAL( importer.m_lineSourceLayers.size(), 1 );
+    BOOST_CHECK_EQUAL( importer.m_lineSourceLayers[0], wxS( "Outline" ) );
 }
 
 

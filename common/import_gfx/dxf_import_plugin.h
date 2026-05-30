@@ -68,6 +68,7 @@ public:
         m_EntityType = DL_UNKNOWN;
         m_EntityParseStatus = 0;
         m_EntityFlag = 0;
+        m_LayerName.clear();
         m_SplineDegree = 1;
         m_SplineKnotsCount = 0;
         m_SplineControlCount = 0;
@@ -88,6 +89,8 @@ public:
                                 // 1 = first item of entity
                                 // 2 = entity in progress
     int m_EntityFlag;           // a info flag to parse entities
+                                //
+    wxString m_LayerName;       // the source DXF layer for the current entity
 
     VECTOR2D m_LastCoordinate;  // the last vertex coordinate read (unit = mm)
     VECTOR2D m_PolylineStart;   // The first point of the polyline entity, when reading a
@@ -235,6 +238,8 @@ public:
     double GetImageHeight() const override;
     BOX2D GetImageBBox() const override;
 
+    std::vector<wxString> GetSourceLayers() const { return m_internalImporter.GetSourceLayers(); }
+
     void updateImageLimits( const VECTOR2D& aPoint );
 
     virtual void SetImporter( GRAPHICS_IMPORTER* aImporter ) override;
@@ -331,6 +336,7 @@ private:
     double mapDim( double aDxfValue );
     double lineWeightToWidth( int lw, DXF_IMPORT_LAYER* aLayer );
     double getCurrentUnitScale();
+    wxString getDxfLayerName( const std::string& aLayerName ) const;
 
     MATRIX3x3D getArbitraryAxis( DL_Extrusion* aData );
 

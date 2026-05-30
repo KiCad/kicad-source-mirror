@@ -29,6 +29,7 @@
 
 #include <import_gfx/graphics_importer.h>
 #include <layer_ids.h>
+#include <map>
 
 class BOARD_ITEM_CONTAINER;
 
@@ -37,8 +38,19 @@ class GRAPHICS_IMPORTER_PCBNEW : public GRAPHICS_IMPORTER
 public:
     GRAPHICS_IMPORTER_PCBNEW( BOARD_ITEM_CONTAINER* aParent );
 
-    void SetLayer( PCB_LAYER_ID aLayer ) { m_layer = aLayer; }
+    void SetLayer( PCB_LAYER_ID aLayer )
+    {
+        m_layer = aLayer;
+        m_defaultLayer = aLayer;
+    }
+
     PCB_LAYER_ID GetLayer() const { return m_layer; }
+
+    void SetLayerMap( const std::map<wxString, PCB_LAYER_ID>& aLayerMap );
+    void ClearLayerMap();
+
+    bool CanImportSourceLayer( const wxString& aSourceLayer ) const override;
+    void SetCurrentSourceLayer( const wxString& aSourceLayer ) override;
 
     void AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd,
                   const IMPORTED_STROKE& aStroke ) override;
@@ -90,7 +102,10 @@ public:
 protected:
     ///< Target layer for the imported shapes.
     PCB_LAYER_ID          m_layer;
+    PCB_LAYER_ID                     m_defaultLayer;
     BOARD_ITEM_CONTAINER* m_parent;
+    bool                             m_useLayerMap;
+    std::map<wxString, PCB_LAYER_ID> m_layerMap;
 };
 
 

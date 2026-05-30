@@ -37,7 +37,52 @@ GRAPHICS_IMPORTER_PCBNEW::GRAPHICS_IMPORTER_PCBNEW( BOARD_ITEM_CONTAINER* aParen
         m_parent( aParent )
 {
     m_layer = Dwgs_User;
+    m_defaultLayer = Dwgs_User;
+    m_useLayerMap = false;
     m_millimeterToIu = pcbIUScale.mmToIU( 1.0 );
+}
+
+
+void GRAPHICS_IMPORTER_PCBNEW::SetLayerMap( const std::map<wxString, PCB_LAYER_ID>& aLayerMap )
+{
+    m_layerMap = aLayerMap;
+    m_useLayerMap = true;
+}
+
+
+void GRAPHICS_IMPORTER_PCBNEW::ClearLayerMap()
+{
+    m_layerMap.clear();
+    m_useLayerMap = false;
+}
+
+
+bool GRAPHICS_IMPORTER_PCBNEW::CanImportSourceLayer( const wxString& aSourceLayer ) const
+{
+    if( !m_useLayerMap )
+        return true;
+
+    auto it = m_layerMap.find( aSourceLayer );
+
+    return it != m_layerMap.end() && it->second != PCB_LAYER_ID::UNDEFINED_LAYER
+           && it->second != PCB_LAYER_ID::UNSELECTED_LAYER;
+}
+
+
+void GRAPHICS_IMPORTER_PCBNEW::SetCurrentSourceLayer( const wxString& aSourceLayer )
+{
+    m_layer = m_defaultLayer;
+
+    if( !m_useLayerMap )
+        return;
+
+    auto it = m_layerMap.find( aSourceLayer );
+
+    if( it != m_layerMap.end() && it->second != PCB_LAYER_ID::UNDEFINED_LAYER
+        && it->second != PCB_LAYER_ID::UNSELECTED_LAYER )
+    {
+        m_layer = it->second;
+    }
 }
 
 

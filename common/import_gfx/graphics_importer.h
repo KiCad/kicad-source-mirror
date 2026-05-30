@@ -239,6 +239,18 @@ public:
     virtual void NewShape( POLY_FILL_RULE aFillRule = PF_NONZERO );
 
     /**
+     * Return true if shapes from a given source layer should be imported.
+     *
+     * This is used by buffered importers that preserve source-format layer names.
+     */
+    virtual bool CanImportSourceLayer( const wxString& ) const { return true; }
+
+    /**
+     * Set the source layer for the next buffered shape to be imported.
+     */
+    virtual void SetCurrentSourceLayer( const wxString& ) {}
+
+    /**
      * Create an object representing a line segment.
      *
      * @param aOrigin is the segment origin point expressed in mm.

@@ -148,7 +148,8 @@ void DIALOG_MAP_LAYERS::AddMappings()
     DeleteListItems( rowsToDelete, m_unmatched_layers_list );
 
     // Auto select the first item to improve ease-of-use
-    m_unmatched_layers_list->SetItemState( 0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+    if( m_unmatched_layers_list->GetItemCount() > 0 )
+        m_unmatched_layers_list->SetItemState( 0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 }
 
 

@@ -101,7 +101,7 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 
 	m_xLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_xLabel->Wrap( -1 );
-	gbSizer2->Add( m_xLabel, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	gbSizer2->Add( m_xLabel, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_xCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
@@ -137,14 +137,21 @@ DIALOG_IMPORT_GRAPHICS_BASE::DIALOG_IMPORT_GRAPHICS_BASE( wxWindow* parent, wxWi
 	m_yUnits->Wrap( -1 );
 	gbSizer2->Add( m_yUnits, wxGBPosition( 0, 5 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	m_setLayerCheckbox = new wxCheckBox( this, wxID_ANY, _("Layer:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_setLayerCheckbox->SetValue(true);
-	m_setLayerCheckbox->SetToolTip( _("If checked, use the selected layer in this dialog\nIf unchecked, use the Board Editor active layer") );
+	m_radioBtnCurrentLayer = new wxRadioButton( this, wxID_ANY, _("Current Layer"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+	m_radioBtnCurrentLayer->SetValue( true );
+	gbSizer2->Add( m_radioBtnCurrentLayer, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
-	gbSizer2->Add( m_setLayerCheckbox, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	m_radioBtnMapLayers = new wxRadioButton( this, wxID_ANY, _("Map Layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_radioBtnMapLayers, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+
+	m_radioBtnSingleLayer = new wxRadioButton( this, wxID_ANY, _("Single Layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_radioBtnSingleLayer, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
 	m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	gbSizer2->Add( m_SelLayerBox, wxGBPosition( 1, 2 ), wxGBSpan( 1, 3 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	gbSizer2->Add( m_SelLayerBox, wxGBPosition( 1, 3 ), wxGBSpan( 1, 2 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	gbSizer2->Add( 0, 5, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 
 
 	gbSizer2->AddGrowableCol( 2 );

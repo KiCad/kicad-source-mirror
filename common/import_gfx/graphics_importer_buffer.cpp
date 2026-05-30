@@ -30,6 +30,8 @@
 
 #include "graphics_importer_buffer.h"
 
+#include <algorithm>
+
 using namespace std;
 
 template <typename T, typename... Args>
@@ -42,6 +44,7 @@ void GRAPHICS_IMPORTER_BUFFER::AddLine( const VECTOR2D& aStart, const VECTOR2D& 
                                         const IMPORTED_STROKE& aStroke )
 {
     m_shapes.push_back( make_shape<IMPORTED_LINE>( aStart, aEnd, aStroke ) );
+    m_shapes.back()->SetSourceLayer( m_currentSourceLayer );
 }
 
 
@@ -51,6 +54,7 @@ void GRAPHICS_IMPORTER_BUFFER::AddCircle( const VECTOR2D& aCenter, double aRadiu
 {
     m_shapes.push_back(
             make_shape<IMPORTED_CIRCLE>( aCenter, aRadius, aStroke, aFilled, aFillColor ) );
+    m_shapes.back()->SetSourceLayer( m_currentSourceLayer );
 }
 
 
@@ -58,6 +62,7 @@ void GRAPHICS_IMPORTER_BUFFER::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
                                        const EDA_ANGLE& aAngle, const IMPORTED_STROKE& aStroke )
 {
     m_shapes.push_back( make_shape<IMPORTED_ARC>( aCenter, aStart, aAngle, aStroke ) );
+    m_shapes.back()->SetSourceLayer( m_currentSourceLayer );
 }
 
 
@@ -66,6 +71,7 @@ void GRAPHICS_IMPORTER_BUFFER::AddPolygon( const std::vector<VECTOR2D>& aVertice
                                            const COLOR4D& aFillColor )
 {
     m_shapes.push_back( make_shape<IMPORTED_POLYGON>( aVertices, aStroke, aFilled, aFillColor ) );
+    m_shapes.back()->SetSourceLayer( m_currentSourceLayer );
 
     m_shapes.back()->SetParentShapeIndex( m_shapeFillRules.size() - 1 );
 }
@@ -78,6 +84,7 @@ void GRAPHICS_IMPORTER_BUFFER::AddText( const VECTOR2D& aOrigin, const wxString&
 {
     m_shapes.push_back( make_shape<IMPORTED_TEXT>( aOrigin, aText, aHeight, aWidth, aThickness,
                                                    aOrientation, aHJustify, aVJustify, aColor ) );
+    m_shapes.back()->SetSourceLayer( m_currentSourceLayer );
 }
 
 
@@ -87,6 +94,7 @@ void GRAPHICS_IMPORTER_BUFFER::AddSpline( const VECTOR2D& aStart, const VECTOR2D
 {
     m_shapes.push_back( make_shape<IMPORTED_SPLINE>( aStart, aBezierControl1, aBezierControl2, aEnd,
                                                      aStroke ) );
+    m_shapes.back()->SetSourceLayer( m_currentSourceLayer );
 }
 
 
@@ -96,6 +104,7 @@ void GRAPHICS_IMPORTER_BUFFER::AddEllipse( const VECTOR2D& aCenter, double aMajo
 {
     m_shapes.push_back( make_shape<IMPORTED_ELLIPSE>( aCenter, aMajorRadius, aMinorRadius, aRotation, aStroke, aFilled,
                                                       aFillColor ) );
+    m_shapes.back()->SetSourceLayer( m_currentSourceLayer );
 }
 
 
@@ -105,12 +114,35 @@ void GRAPHICS_IMPORTER_BUFFER::AddEllipseArc( const VECTOR2D& aCenter, double aM
 {
     m_shapes.push_back( make_shape<IMPORTED_ELLIPSE_ARC>( aCenter, aMajorRadius, aMinorRadius, aRotation, aStartAngle,
                                                           aEndAngle, aStroke ) );
+    m_shapes.back()->SetSourceLayer( m_currentSourceLayer );
 }
 
 
 void GRAPHICS_IMPORTER_BUFFER::AddShape( std::unique_ptr<IMPORTED_SHAPE>& aShape )
 {
+    if( aShape && aShape->GetSourceLayer().IsEmpty() )
+        aShape->SetSourceLayer( m_currentSourceLayer );
+
     m_shapes.push_back( std::move( aShape ) );
+}
+
+
+std::vector<wxString> GRAPHICS_IMPORTER_BUFFER::GetSourceLayers() const
+{
+    std::vector<wxString> sourceLayers;
+
+    for( const std::unique_ptr<IMPORTED_SHAPE>& shape : m_shapes )
+    {
+        const wxString& sourceLayer = shape->GetSourceLayer();
+
+        if( sourceLayer.IsEmpty() )
+            continue;
+
+        if( std::find( sourceLayers.begin(), sourceLayers.end(), sourceLayer ) == sourceLayers.end() )
+            sourceLayers.push_back( sourceLayer );
+    }
+
+    return sourceLayers;
 }
 
 
@@ -120,11 +152,17 @@ void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
 
     for( std::unique_ptr<IMPORTED_SHAPE>& shape : m_shapes )
     {
+        if( !aImporter.CanImportSourceLayer( shape->GetSourceLayer() ) )
+            continue;
+
         BOX2D box = shape->GetBoundingBox();
 
         if( box.IsValid() )
             boundingBox.Merge( box );
     }
+
+    if( !boundingBox.IsValid() )
+        return;
 
     boundingBox.SetOrigin( boundingBox.GetPosition().x * aImporter.GetScale().x,
                            boundingBox.GetPosition().y * aImporter.GetScale().y );
@@ -205,7 +243,15 @@ void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
     }
 
     for( std::unique_ptr<IMPORTED_SHAPE>& shape : m_shapes )
+    {
+        if( !aImporter.CanImportSourceLayer( shape->GetSourceLayer() ) )
+            continue;
+
+        aImporter.SetCurrentSourceLayer( shape->GetSourceLayer() );
         shape->ImportTo( aImporter );
+    }
+
+    aImporter.SetCurrentSourceLayer( wxEmptyString );
 }
 
 // converts a single SVG-style polygon (multiple outlines, hole detection based on orientation,

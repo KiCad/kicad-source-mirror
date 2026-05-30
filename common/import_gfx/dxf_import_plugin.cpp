@@ -270,6 +270,7 @@ void DXF_IMPORT_PLUGIN::addSpline( const DL_SplineData& aData )
     m_curr_entity.m_SplineKnotsCount = aData.nKnots;
     m_curr_entity.m_SplineControlCount = aData.nControl;
     m_curr_entity.m_SplineFitCount = aData.nFit;
+    m_curr_entity.m_LayerName = getDxfLayerName( attributes.getLayer() );
 }
 
 
@@ -355,6 +356,17 @@ DXF_IMPORT_LAYER* DXF_IMPORT_PLUGIN::getImportLayer( const std::string& aLayerNa
 }
 
 
+wxString DXF_IMPORT_PLUGIN::getDxfLayerName( const std::string& aLayerName ) const
+{
+    wxString layerName = wxString::FromUTF8( aLayerName.c_str() );
+
+    if( layerName.IsEmpty() )
+        layerName = wxS( "0" );
+
+    return layerName;
+}
+
+
 DXF_IMPORT_BLOCK* DXF_IMPORT_PLUGIN::getImportBlock( const std::string& aBlockName )
 {
     DXF_IMPORT_BLOCK* block     = nullptr;
@@ -401,12 +413,14 @@ void DXF_IMPORT_PLUGIN::addLine( const DL_LineData& aData )
 {
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
+    wxString          sourceLayer = getDxfLayerName( attributes.getLayer() );
 
     VECTOR2D start( mapX( aData.x1 ), mapY( aData.y1 ) );
     VECTOR2D end( mapX( aData.x2 ), mapY( aData.y2 ) );
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
                                                            : &m_internalImporter;
+    bufferToUse->SetCurrentSourceLayer( sourceLayer );
     bufferToUse->AddLine( start, end, lineWidth );
 
     updateImageLimits( start );
@@ -426,6 +440,7 @@ void DXF_IMPORT_PLUGIN::addPolyline(const DL_PolylineData& aData )
     m_curr_entity.m_EntityParseStatus = 1;
     m_curr_entity.m_EntityFlag = aData.flags;
     m_curr_entity.m_EntityType = DL_ENTITY_POLYLINE;
+    m_curr_entity.m_LayerName = getDxfLayerName( attributes.getLayer() );
 }
 
 
@@ -528,6 +543,8 @@ void DXF_IMPORT_PLUGIN::addInsert( const DL_InsertData& aData )
     if( block == nullptr )
         return;
 
+    wxString insertLayer = getDxfLayerName( attributes.getLayer() );
+
     MATRIX3x3D arbAxis = getArbitraryAxis( getExtrusion() );
 
     MATRIX3x3D rot;
@@ -548,6 +565,9 @@ void DXF_IMPORT_PLUGIN::addInsert( const DL_InsertData& aData )
 
         newShape->Transform( trans, translation );
 
+        if( newShape->GetSourceLayer().IsEmpty() || newShape->GetSourceLayer() == wxS( "0" ) )
+            newShape->SetSourceLayer( insertLayer );
+
         m_internalImporter.AddShape( newShape );
     }
 }
@@ -561,9 +581,11 @@ void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
     VECTOR2D          center( mapX( centerCoords.x ), mapY( centerCoords.y ) );
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
+    wxString          sourceLayer = getDxfLayerName( attributes.getLayer() );
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
                                                            : &m_internalImporter;
+    bufferToUse->SetCurrentSourceLayer( sourceLayer );
     bufferToUse->AddCircle( center, mapDim( aData.radius ), lineWidth, false );
 
     VECTOR2D radiusDelta( mapDim( aData.radius ), mapDim( aData.radius ) );
@@ -606,9 +628,11 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
 
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
+    wxString          sourceLayer = getDxfLayerName( attributes.getLayer() );
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
                                                            : &m_internalImporter;
+    bufferToUse->SetCurrentSourceLayer( sourceLayer );
     bufferToUse->AddArc( center, arcStart, angle, lineWidth );
 
     VECTOR2D radiusDelta( mapDim( aData.radius ), mapDim( aData.radius ) );
@@ -670,9 +694,11 @@ void DXF_IMPORT_PLUGIN::addEllipse( const DL_EllipseData& aData )
 
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
+    wxString          sourceLayer = getDxfLayerName( attributes.getLayer() );
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
                                                            : &m_internalImporter;
+    bufferToUse->SetCurrentSourceLayer( sourceLayer );
 
     double    majorRadius = major.EuclideanNorm();
     double    minorRadius = majorRadius * aData.ratio;
@@ -821,6 +847,7 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
                                                            : &m_internalImporter;
+    bufferToUse->SetCurrentSourceLayer( getDxfLayerName( attributes.getLayer() ) );
     bufferToUse->AddText( refPoint, text, textHeight, charWidth, textThickness, angle_degree,
                           hJustify, vJustify );
 
@@ -976,6 +1003,7 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
                                                            : &m_internalImporter;
+    bufferToUse->SetCurrentSourceLayer( getDxfLayerName( attributes.getLayer() ) );
     bufferToUse->AddText( textpos, text, textHeight, charWidth, textThickness, angle_degree,
                           hJustify, vJustify );
 
@@ -1379,6 +1407,7 @@ void DXF_IMPORT_PLUGIN::addPoint( const DL_PointData& aData )
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
                                                            : &m_internalImporter;
+    bufferToUse->SetCurrentSourceLayer( getDxfLayerName( attributes.getLayer() ) );
     bufferToUse->AddCircle( center, thickness, lineWidth, true );
 
     VECTOR2D radiusDelta( SCALE_FACTOR( thickness ), SCALE_FACTOR( thickness ) );
@@ -1396,6 +1425,7 @@ void DXF_IMPORT_PLUGIN::insertLine( const VECTOR2D& aSegStart,
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
                                                            : &m_internalImporter;
+    bufferToUse->SetCurrentSourceLayer( m_curr_entity.m_LayerName );
     bufferToUse->AddLine( origin, end, aWidth );
 
     updateImageLimits( origin );
@@ -1476,6 +1506,7 @@ void DXF_IMPORT_PLUGIN::insertArc( const VECTOR2D& aSegStart, const VECTOR2D& aS
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
                                                            : &m_internalImporter;
+    bufferToUse->SetCurrentSourceLayer( m_curr_entity.m_LayerName );
     bufferToUse->AddArc( center, arc_start, angle, aWidth );
 
     VECTOR2D radiusDelta( SCALE_FACTOR( radius ), SCALE_FACTOR( radius ) );
@@ -1582,6 +1613,7 @@ void DXF_IMPORT_PLUGIN::insertSpline( double aWidth )
 
         GRAPHICS_IMPORTER_BUFFER* bufferToUse = m_currentBlock ? &m_currentBlock->m_buffer
                                                                : &m_internalImporter;
+        bufferToUse->SetCurrentSourceLayer( m_curr_entity.m_LayerName );
         bufferToUse->AddSpline( start, bezierControl1, bezierControl2, end, aWidth );
     }
 #endif

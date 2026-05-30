@@ -31,6 +31,7 @@ class STD_BITMAP_BUTTON;
 #include <wx/statline.h>
 #include <wx/checkbox.h>
 #include <wx/valtext.h>
+#include <wx/radiobut.h>
 #include <wx/bmpcbox.h>
 #include <wx/gbsizer.h>
 #include <wx/dialog.h>
@@ -62,7 +63,9 @@ class DIALOG_IMPORT_GRAPHICS_BASE : public DIALOG_SHIM
 		wxStaticText* m_yLabel;
 		wxTextCtrl* m_yCtrl;
 		wxStaticText* m_yUnits;
-		wxCheckBox* m_setLayerCheckbox;
+		wxRadioButton* m_radioBtnCurrentLayer;
+		wxRadioButton* m_radioBtnMapLayers;
+		wxRadioButton* m_radioBtnSingleLayer;
 		PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;
 		wxCheckBox* m_cbGroupItems;
 		wxStaticLine* m_staticline3;
