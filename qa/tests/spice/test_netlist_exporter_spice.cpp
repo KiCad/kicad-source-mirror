@@ -24,6 +24,7 @@
 #include <mock_pgm_base.h>
 #include <locale_io.h>
 
+#include <wx/tokenzr.h>
 
 
 BOOST_FIXTURE_TEST_SUITE( NetlistExporterSpice, TEST_NETLIST_EXPORTER_SPICE_FIXTURE )
@@ -279,6 +280,84 @@ BOOST_AUTO_TEST_CASE( LegacyOpamp )
     TestTranPoint( 500e-6, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
     TestTranPoint( 750e-6, { { "V(/in)", -500e-3 }, { "V(/out)", -1 } } );
     TestTranPoint( 1e-3, { { "V(/in)", 0 }, { "V(/out)", 0 } } );
+}
+
+
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/1779
+// Multi-unit symbols should emit a single subcircuit instance whose pin map
+// is the union of the Sim.Pins fields collected from every unit, even when
+// each individual unit only carries a partial Sim.Pins mapping.
+BOOST_AUTO_TEST_CASE( MultiUnitSplitPinMap )
+{
+    LOCALE_IO dummy;
+
+    LoadSchematic( SchematicQAPath( "multiunit_pinmap_split" ) );
+    WriteNetlist();
+
+    wxString netlistPath = GetNetlistPath( true );
+    wxFFile  netlistFile( netlistPath, "rt" );
+    BOOST_REQUIRE( netlistFile.IsOpened() );
+
+    wxString netlist;
+    netlistFile.ReadAll( &netlist );
+    netlistFile.Close();
+
+    BOOST_TEST_INFO( "Netlist:\n" << netlist );
+
+    wxString          xu1Line;
+    wxStringTokenizer lines( netlist, wxS( "\n" ) );
+
+    while( lines.HasMoreTokens() )
+    {
+        wxString line = lines.GetNextToken();
+
+        if( line.StartsWith( wxS( "XU1 " ) ) )
+        {
+            BOOST_REQUIRE_MESSAGE( xu1Line.IsEmpty(),
+                                   "Multiple XU1 lines found; multi-unit symbols must emit a "
+                                   "single subcircuit instance, not one per unit" );
+            xu1Line = line;
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( !xu1Line.IsEmpty(),
+                           "XU1 subcircuit instance was not generated" );
+
+    wxStringTokenizer     tokens( xu1Line, wxS( " \t" ), wxTOKEN_STRTOK );
+    std::vector<wxString> parts;
+
+    while( tokens.HasMoreTokens() )
+        parts.push_back( tokens.GetNextToken() );
+
+    // The uopamp_lvl2_2x subckt declares its nodes in the order
+    // VCC VEE +IN1 -IN1 OUT1 +IN2 -IN2 OUT2. The merged Sim.Pins maps every model
+    // node to a specific symbol pin number, so each position in the instance line is
+    // determined by the schematic's connection on that symbol pin. Validating the
+    // full token list catches regressions in any unit's merge behavior independently.
+    const std::vector<wxString> expectedParts = {
+        wxS( "XU1" ),
+        wxS( "Net-_U1C-V+_" ),   // VCC <- symbol pin 8 (unit 3 V+)
+        wxS( "Net-_U1C-V-_" ),   // VEE <- symbol pin 4 (unit 3 V-)
+        wxS( "Net-_U1A-+_" ),    // +IN1 <- symbol pin 3 (unit 1 +IN)
+        wxS( "Net-_U1A--_" ),    // -IN1 <- symbol pin 2 (unit 1 -IN)
+        wxS( "/out" ),           // OUT1 <- symbol pin 1 (unit 1 OUT, labeled /out)
+        wxS( "Net-_U1B-+_" ),    // +IN2 <- symbol pin 5 (unit 2 +IN)
+        wxS( "Net-_U1A--_" ),    // -IN2 <- symbol pin 6 (unit 2 -IN, tied to unit 1 -IN)
+        wxS( "Net-_C2-Pad1_" ),  // OUT2 <- symbol pin 7 (unit 2 OUT)
+        wxS( "uopamp_lvl2_2x" )
+    };
+
+    BOOST_REQUIRE_EQUAL( parts.size(), expectedParts.size() );
+
+    for( size_t ii = 0; ii < expectedParts.size(); ++ii )
+    {
+        BOOST_CHECK_MESSAGE( parts[ii] == expectedParts[ii],
+                             "Expected XU1 token " << ii << " to be '" << expectedParts[ii]
+                             << "', got '" << parts[ii]
+                             << "'. Per-unit Sim.Pins merge is missing or incorrect" );
+    }
+
+    Cleanup();
 }
 
 
