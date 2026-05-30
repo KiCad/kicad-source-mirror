@@ -330,4 +330,107 @@ BOOST_AUTO_TEST_CASE( HierLabelBodyBoundingBoxOutlineFont )
 }
 
 
+/**
+ * Test that GetOffsetToMatchSCH_FIELD() returns zero for stroke fonts.
+ */
+BOOST_AUTO_TEST_CASE( TextOffsetStrokeFontIsZero )
+{
+    SCH_TEXT text( VECTOR2I( 0, 0 ), wxS( "TEST_TEXT" ) );
+    text.SetTextSize( VECTOR2I( 1000, 1000 ) );
+    text.SetFont( nullptr ); // KiCad stroke font
+
+    VECTOR2I offset = text.GetOffsetToMatchSCH_FIELD( nullptr );
+
+    BOOST_CHECK_EQUAL( offset.x, 0 );
+    BOOST_CHECK_EQUAL( offset.y, 0 );
+}
+
+
+/**
+ * Test that GetOffsetToMatchSCH_FIELD() returns a non-zero offset for outline fonts, and
+ * that applying it to GetBoundingBox() moves the box upward (toward the actual text position).
+ */
+BOOST_AUTO_TEST_CASE( TextOffsetOutlineFontIsNonZero )
+{
+    KIFONT::FONT* font = GetFirstExistingOutlineFont();
+
+    if( !font )
+    {
+        BOOST_TEST_MESSAGE( "Outline font not available, skipping test" );
+        return;
+    }
+
+    SCH_TEXT text( VECTOR2I( 0, 0 ), wxS( "Line 1\nLine 2\nLine 3" ) );
+    text.SetTextSize( VECTOR2I( 1000, 1000 ) );
+    text.SetFont( font );
+    text.SetMultilineAllowed( true );
+
+    VECTOR2I offset = text.GetOffsetToMatchSCH_FIELD( nullptr );
+
+    // For outline fonts, the offset must shift the bounding box upward (negative Y) to
+    // match the actual rendered position.
+    BOOST_CHECK_MESSAGE( offset.y < 0,
+                         "Outline font offset Y should be negative (upward shift), got: "
+                         + std::to_string( offset.y ) );
+
+    // The unshifted bounding box should start below where the text actually renders.
+    // After applying the offset, the box top should move up.
+    BOX2I rawBBox = text.GetBoundingBox();
+    BOX2I shiftedBBox = rawBBox;
+    shiftedBBox.Offset( offset );
+
+    BOOST_CHECK_MESSAGE( shiftedBBox.GetTop() < rawBBox.GetTop(),
+                         "Shifted bounding box top should be above raw bounding box top" );
+}
+
+
+/**
+ * Regression test for issue #23310.
+ *
+ * The bbox cache is keyed on draw position, not on the font, so resolving a lazily-loaded font
+ * must invalidate it.  Otherwise the selection highlight stays sized for the stroke fallback until
+ * an unrelated setter clears the cache (the original report: first line excluded until the text
+ * was moved or its dialog opened).
+ */
+BOOST_AUTO_TEST_CASE( BoundingBoxRefreshedAfterFontResolve )
+{
+    KIFONT::FONT* outlineFont = GetFirstExistingOutlineFont();
+
+    if( !outlineFont )
+    {
+        BOOST_TEST_MESSAGE( "Outline font not available, skipping test" );
+        return;
+    }
+
+    const wxString fontName = outlineFont->GetName();
+    const wxString body = wxS( "Line 1\nLine 2\nLine 3" );
+
+    // Steady-state reference with the font assigned directly.
+    SCH_TEXT reference( VECTOR2I( 0, 0 ), body );
+    reference.SetTextSize( VECTOR2I( 1000, 1000 ) );
+    reference.SetMultilineAllowed( true );
+    reference.SetFont( outlineFont );
+
+    BOX2I expected = reference.GetBoundingBox();
+
+    // Same text, but the font arrives via deferred resolution instead of SetFont().
+    SCH_TEXT deferred( VECTOR2I( 0, 0 ), body );
+    deferred.SetTextSize( VECTOR2I( 1000, 1000 ) );
+    deferred.SetMultilineAllowed( true );
+    deferred.SetUnresolvedFontName( fontName );
+
+    // Measure (and cache) the box while the name is still resolving to the stroke fallback.
+    BOX2I fallbackBox = deferred.GetBoundingBox();
+
+    BOOST_REQUIRE( deferred.ResolveFont( nullptr ) );
+
+    BOX2I resolved = deferred.GetBoundingBox();
+
+    BOOST_CHECK_MESSAGE( resolved == expected,
+                         "Bounding box after ResolveFont() must match the outline-font box; the "
+                         "stale fallback-font box ("
+                         + std::to_string( fallbackBox.GetHeight() ) + " tall) was not invalidated" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
