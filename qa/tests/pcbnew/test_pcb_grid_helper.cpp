@@ -407,4 +407,77 @@ BOOST_FIXTURE_TEST_CASE( ZeroLengthSegment, PCBGridHelperTestFixture )
     BOOST_CHECK_EQUAL( result.y, 100 );
 }
 
+/**
+ * Regression test for issue 22945: pasting a grid-aligned arc landed it off grid because the
+ * grid helper offered the arc's derived (off-grid) geometric center as the drag/paste origin.
+ *
+ * Drive PCB_GRID_HELPER::GetArcAnchors directly (the anchor-selection logic BestDragOrigin relies
+ * on) so the test needs no GAL/view. The arc is built with grid-aligned start/mid/end whose
+ * circumcenter is deliberately off grid, matching the arc from the report.
+ */
+BOOST_AUTO_TEST_CASE( ArcDragOriginStaysOnGrid )
+{
+    const int grid = pcbIUScale.mmToIU( 1.0 );
+    VECTOR2I  arcStart( grid * 30, grid * 50 );
+    VECTOR2I  arcMid( grid * 35, grid * 47 );
+    VECTOR2I  arcEnd( grid * 45, grid * 50 );
+
+    PCB_ARC arc( nullptr );
+    arc.SetStart( arcStart );
+    arc.SetMid( arcMid );
+    arc.SetEnd( arcEnd );
+
+    const VECTOR2I center = arc.GetCenter();
+
+    // Guard the fixture premise: the center must be off grid for this arc, otherwise the
+    // regression could not be exercised.
+    BOOST_REQUIRE( center.x % grid != 0 || center.y % grid != 0 );
+
+    auto onGrid = []( const VECTOR2I& aPt, int aGrid )
+    {
+        return aPt.x % aGrid == 0 && aPt.y % aGrid == 0;
+    };
+
+    // Drag-source path: no anchor may carry ORIGIN, so BestDragOrigin falls back to the
+    // grid-aligned start/end/mid corners instead of the off-grid center.
+    for( const PCB_GRID_HELPER::ANCHOR_SPEC& spec : PCB_GRID_HELPER::GetArcAnchors( arc, true ) )
+    {
+        BOOST_CHECK_MESSAGE( ( spec.flags & GRID_HELPER::ORIGIN ) == 0,
+                             "Arc drag source must not offer an ORIGIN anchor at (" << spec.pos.x
+                             << ", " << spec.pos.y << ")" );
+
+        if( spec.flags & GRID_HELPER::ORIGIN )
+            BOOST_CHECK_MESSAGE( onGrid( spec.pos, grid ), "ORIGIN anchor off grid" );
+    }
+
+    // The stored midpoint is exposed as a grid-aligned corner drag reference.
+    bool midOffered = false;
+
+    for( const PCB_GRID_HELPER::ANCHOR_SPEC& spec : PCB_GRID_HELPER::GetArcAnchors( arc, true ) )
+    {
+        if( spec.pos == arcMid && ( spec.flags & GRID_HELPER::CORNER ) )
+            midOffered = true;
+    }
+
+    BOOST_CHECK( midOffered );
+
+    // Snap-target path (aFrom=false): the center is still offered as a drag origin for other
+    // items, but must not be a magnetic snap target (would pull snaps to the off-grid center,
+    // unlike a straight track's midpoint).
+    bool centerAsOrigin = false;
+
+    for( const PCB_GRID_HELPER::ANCHOR_SPEC& spec : PCB_GRID_HELPER::GetArcAnchors( arc, false ) )
+    {
+        if( spec.pos == center )
+        {
+            centerAsOrigin = true;
+            BOOST_CHECK( spec.flags & GRID_HELPER::ORIGIN );
+            BOOST_CHECK_EQUAL( spec.flags & GRID_HELPER::SNAPPABLE, 0 );
+        }
+    }
+
+    BOOST_CHECK( centerAsOrigin );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
