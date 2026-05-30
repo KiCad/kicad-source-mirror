@@ -1256,7 +1256,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
         for( BOARD_ITEM* item : targetItems )
         {
-            if( item->Type() == PCB_TEXT_T && item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
+            if( item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
                 continue;
 
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
@@ -1291,7 +1291,7 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
 
         for( BOARD_ITEM* item : sourceItems )
         {
-            if( item->Type() == PCB_TEXT_T && item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
+            if( item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
                 continue;
 
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
