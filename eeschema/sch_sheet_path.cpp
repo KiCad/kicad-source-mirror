@@ -155,6 +155,8 @@ SCH_SHEET_PATH& SCH_SHEET_PATH::operator=( SCH_SHEET_PATH&& aOther )
     m_virtualPageNumber  = aOther.m_virtualPageNumber;
     m_current_hash       = aOther.m_current_hash;
     m_cached_page_number = aOther.m_cached_page_number;
+    m_cached_path_valid  = aOther.m_cached_path_valid;
+    m_cached_path        = std::move( aOther.m_cached_path );
 
     m_recursion_test_cache = std::move( aOther.m_recursion_test_cache );
 
@@ -181,6 +183,8 @@ void SCH_SHEET_PATH::initFromOther( const SCH_SHEET_PATH& aOther )
     m_virtualPageNumber  = aOther.m_virtualPageNumber;
     m_current_hash       = aOther.m_current_hash;
     m_cached_page_number = aOther.m_cached_page_number;
+    m_cached_path_valid  = aOther.m_cached_path_valid;
+    m_cached_path        = aOther.m_cached_path;
 
     // Note: don't copy m_recursion_test_cache as it is slow and we want std::vector<SCH_SHEET_PATH>
     // to be very fast to construct for use in the connectivity algorithm.
@@ -190,6 +194,7 @@ void SCH_SHEET_PATH::initFromOther( const SCH_SHEET_PATH& aOther )
 void SCH_SHEET_PATH::Rehash()
 {
     m_current_hash = 0;
+    m_cached_path_valid = false;
 
     for( SCH_SHEET* sheet : m_sheets )
         hash_combine( m_current_hash, sheet->m_Uuid.Hash() );
@@ -439,27 +444,34 @@ wxString SCH_SHEET_PATH::PathAsString() const
 
 KIID_PATH SCH_SHEET_PATH::Path() const
 {
-    KIID_PATH path;
+    if( m_cached_path_valid )
+        return m_cached_path;
+
+    m_cached_path.clear();
     size_t size = m_sheets.size();
 
     if( m_sheets.empty() )
-        return path;
+    {
+        m_cached_path_valid = true;
+        return m_cached_path;
+    }
 
     if( m_sheets[0]->m_Uuid != niluuid )
     {
-        path.reserve( size );
-        path.push_back( m_sheets[0]->m_Uuid );
+        m_cached_path.reserve( size );
+        m_cached_path.push_back( m_sheets[0]->m_Uuid );
     }
     else
     {
         // Skip the virtual root
-        path.reserve( size - 1 );
+        m_cached_path.reserve( size - 1 );
     }
 
     for( size_t i = 1; i < size; i++ )
-        path.push_back( m_sheets[i]->m_Uuid );
+        m_cached_path.push_back( m_sheets[i]->m_Uuid );
 
-    return path;
+    m_cached_path_valid = true;
+    return m_cached_path;
 }
 
 
@@ -536,18 +548,13 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
                         || aItem->Type() == SCH_SHAPE_T );
             } );
 
-    std::optional<wxString> variantName;
-    const SCHEMATIC* schematic = LastScreen()->Schematic();
-
-    if( schematic )
-        variantName = schematic->GetCurrentVariant();
-
     for( SCH_ITEM* item : items )
     {
         if( item->Type() == SCH_SYMBOL_T )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
+            // GetRef() and GetUnitSelection() are O(1) via the symbol's instance path index.
             symbol->GetField( FIELD_T::REFERENCE )->SetText( symbol->GetRef( this ) );
             symbol->SetUnit( symbol->GetUnitSelection( this ) );
             LastScreen()->Update( item, false );

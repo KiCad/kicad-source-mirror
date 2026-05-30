@@ -1035,6 +1035,14 @@ private:
      */
     std::vector<SCH_SYMBOL_INSTANCE>       m_instances;
 
+    /**
+     * Index from an instance's sheet path to its position in m_instances for O(1) lookups.
+     * Maintained by AddHierarchicalReference() and RemoveInstance().
+     */
+    std::unordered_map<KIID_PATH, size_t>  m_instancePathIndex;
+
+    void rebuildInstancePathIndex();
+
     /// @see SCH_SYMBOL::GetOrientation
     static std::unordered_map<TRANSFORM, int> s_transformToOrientationCache;
 };

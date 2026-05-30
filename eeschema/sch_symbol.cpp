@@ -145,6 +145,7 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
     m_transform = aSymbol.m_transform;
     m_prefix = aSymbol.m_prefix;
     m_instances = aSymbol.m_instances;
+    m_instancePathIndex = aSymbol.m_instancePathIndex;
     m_fields = aSymbol.m_fields;
 
     // Re-parent the fields, which before this had aSymbol as parent
@@ -537,17 +538,22 @@ wxString SCH_SYMBOL::GetBodyStyleDescription( int aBodyStyle, bool aLabel ) cons
 
 bool SCH_SYMBOL::GetInstance( SCH_SYMBOL_INSTANCE& aInstance, const KIID_PATH& aSheetPath, bool aTestFromEnd ) const
 {
+    if( !aTestFromEnd )
+    {
+        auto it = m_instancePathIndex.find( aSheetPath );
+
+        if( it != m_instancePathIndex.end() )
+        {
+            aInstance = m_instances[it->second];
+            return true;
+        }
+
+        return false;
+    }
+
     for( const SCH_SYMBOL_INSTANCE& instance : m_instances )
     {
-        if( !aTestFromEnd )
-        {
-            if( instance.m_Path == aSheetPath )
-            {
-                aInstance = instance;
-                return true;
-            }
-        }
-        else if( instance.m_Path.EndsWith( aSheetPath ) )
+        if( instance.m_Path.EndsWith( aSheetPath ) )
         {
             aInstance = instance;
             return true;
@@ -566,6 +572,8 @@ void SCH_SYMBOL::RemoveInstance( const SCH_SHEET_PATH& aInstancePath )
 
 void SCH_SYMBOL::RemoveInstance( const KIID_PATH& aInstancePath )
 {
+    bool removed = false;
+
     // Search for an existing path and remove it if found
     // (search from back to avoid invalidating iterator on remove)
     for( int ii = m_instances.size() - 1; ii >= 0; --ii )
@@ -580,8 +588,22 @@ void SCH_SYMBOL::RemoveInstance( const KIID_PATH& aInstancePath )
                         m_Uuid.AsString() );
 
             m_instances.erase( m_instances.begin() + ii );
+            removed = true;
         }
     }
+
+    if( removed )
+        rebuildInstancePathIndex();
+}
+
+
+void SCH_SYMBOL::rebuildInstancePathIndex()
+{
+    m_instancePathIndex.clear();
+    m_instancePathIndex.reserve( m_instances.size() );
+
+    for( size_t i = 0; i < m_instances.size(); ++i )
+        m_instancePathIndex[m_instances[i].m_Path] = i;
 }
 
 
@@ -609,6 +631,7 @@ void SCH_SYMBOL::AddHierarchicalReference( const SCH_SYMBOL_INSTANCE& aInstance 
                      "    unit %d\n" ),
                 m_Uuid.AsString(), instance.m_Path.AsString(), instance.m_Reference, instance.m_Unit );
 
+    m_instancePathIndex[instance.m_Path] = m_instances.size();
     m_instances.push_back( instance );
 
     // This should set the default instance to the first saved instance data for each symbol
@@ -627,23 +650,18 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
     wxString  ref;
     wxString  subRef;
 
-    wxLogTrace( traceSchSymbolRef, "GetRef for symbol %s on path %s (sheet path has %zu sheets)", m_Uuid.AsString(),
-                path.AsString(), sheet->size() );
+    wxLogTrace( traceSchSymbolRef, "GetRef for symbol %s on path %s (sheet path has %zu sheets)",
+                m_Uuid.AsString(), path.AsString(), sheet->size() );
 
     wxLogTrace( traceSchSymbolRef, "  Symbol has %zu instance references", m_instances.size() );
 
-    for( const SCH_SYMBOL_INSTANCE& instance : m_instances )
+    if( auto it = m_instancePathIndex.find( path ); it != m_instancePathIndex.end() )
     {
-        wxLogTrace( traceSchSymbolRef, "    Instance: path=%s, ref=%s", instance.m_Path.AsString(),
-                    instance.m_Reference );
+        const SCH_SYMBOL_INSTANCE& instance = m_instances[it->second];
 
-        if( instance.m_Path == path )
-        {
-            ref = instance.m_Reference;
-            subRef = SubReference( instance.m_Unit );
-            wxLogTrace( traceSchSymbolRef, "  MATCH FOUND: ref=%s", ref );
-            break;
-        }
+        ref = instance.m_Reference;
+        subRef = SubReference( instance.m_Unit );
+        wxLogTrace( traceSchSymbolRef, "  MATCH FOUND: ref=%s", ref );
     }
 
     // If it was not found in m_Paths array, then see if it is in m_Field[REFERENCE] -- if so,
@@ -690,20 +708,10 @@ void SCH_SYMBOL::SetValueProp( const wxString& aValue )
 void SCH_SYMBOL::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 {
     KIID_PATH path = sheet->Path();
-    bool      found = false;
 
-    // check to see if it is already there before inserting it
-    for( SCH_SYMBOL_INSTANCE& instance : m_instances )
-    {
-        if( instance.m_Path == path )
-        {
-            found = true;
-            instance.m_Reference = ref;
-            break;
-        }
-    }
-
-    if( !found )
+    if( auto it = m_instancePathIndex.find( path ); it != m_instancePathIndex.end() )
+        m_instances[it->second].m_Reference = ref;
+    else
         AddHierarchicalReference( path, ref, m_unit );
 
     for( std::unique_ptr<SCH_PIN>& pin : m_pins )
@@ -905,11 +913,8 @@ int SCH_SYMBOL::GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const
 {
     KIID_PATH path = aSheet->Path();
 
-    for( const SCH_SYMBOL_INSTANCE& instance : m_instances )
-    {
-        if( instance.m_Path == path )
-            return instance.m_Unit;
-    }
+    if( auto it = m_instancePathIndex.find( path ); it != m_instancePathIndex.end() )
+        return m_instances[it->second].m_Unit;
 
     // If it was not found in m_Paths array, then use m_unit.  This will happen if we load a
     // version 1 schematic file.
@@ -921,14 +926,10 @@ void SCH_SYMBOL::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelect
 {
     KIID_PATH path = aSheet->Path();
 
-    // check to see if it is already there before inserting it
-    for( SCH_SYMBOL_INSTANCE& instance : m_instances )
+    if( auto it = m_instancePathIndex.find( path ); it != m_instancePathIndex.end() )
     {
-        if( instance.m_Path == path )
-        {
-            instance.m_Unit = aUnitSelection;
-            return;
-        }
+        m_instances[it->second].m_Unit = aUnitSelection;
+        return;
     }
 
     // didn't find it; better add it
@@ -1774,6 +1775,7 @@ void SCH_SYMBOL::swapData( SCH_ITEM* aItem )
     std::swap( m_excludedFromPosFiles, symbol->m_excludedFromPosFiles );
 
     std::swap( m_instances, symbol->m_instances );
+    std::swap( m_instancePathIndex, symbol->m_instancePathIndex );
     std::swap( m_schLibSymbolName, symbol->m_schLibSymbolName );
 }
 
@@ -3201,6 +3203,7 @@ SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_SYMBOL& aSymbol )
         m_transform = aSymbol.m_transform;
 
         m_instances = aSymbol.m_instances;
+        m_instancePathIndex = aSymbol.m_instancePathIndex;
 
         m_fields = aSymbol.m_fields; // std::vector's assignment operator
 
@@ -3881,11 +3884,8 @@ void SCH_SYMBOL::BuildLocalPowerIconShape( std::vector<SCH_SHAPE>& aShapeList, c
 
 SCH_SYMBOL_INSTANCE* SCH_SYMBOL::getInstance( const KIID_PATH& aSheetPath )
 {
-    for( SCH_SYMBOL_INSTANCE& instance : m_instances )
-    {
-        if( instance.m_Path == aSheetPath )
-            return &instance;
-    }
+    if( auto it = m_instancePathIndex.find( aSheetPath ); it != m_instancePathIndex.end() )
+        return &m_instances[it->second];
 
     return nullptr;
 }
@@ -3893,11 +3893,8 @@ SCH_SYMBOL_INSTANCE* SCH_SYMBOL::getInstance( const KIID_PATH& aSheetPath )
 
 const SCH_SYMBOL_INSTANCE* SCH_SYMBOL::getInstance( const KIID_PATH& aSheetPath ) const
 {
-    for( const SCH_SYMBOL_INSTANCE& instance : m_instances )
-    {
-        if( instance.m_Path == aSheetPath )
-            return &instance;
-    }
+    if( auto it = m_instancePathIndex.find( aSheetPath ); it != m_instancePathIndex.end() )
+        return &m_instances[it->second];
 
     return nullptr;
 }
