@@ -353,28 +353,10 @@ bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, ITEM* aStartItem, 
             return false;
         }
 
-        // Check if the gap at the start point is compatible with the configured diff pair settings.
-        // This only applies when starting from track segments, where the gap between existing
-        // tracks should match the configured diff pair gap. When starting from pads or vias,
-        // the anchor-to-anchor distance is determined by pad/via placement, not routing rules.
-        if( aStartItem->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
-        {
-            int actualGap = ( dpPair.AnchorP() - dpPair.AnchorN() ).EuclideanNorm();
-            int configuredGap = m_sizes.DiffPairGap() + m_sizes.DiffPairWidth();
-
-            // Allow some tolerance (10%) for minor differences, but warn about significant mismatches
-            int tolerance = configuredGap / 10;
-
-            if( std::abs( actualGap - configuredGap ) > tolerance )
-            {
-                SetFailureReason(
-                        _( "The differential pair gap at the start point does not match "
-                           "the configured gap. This can occur in neckdown areas where tracks "
-                           "have narrower width and spacing. Adjust the differential pair "
-                           "settings or start from a location with the correct gap." ) );
-                return false;
-            }
-        }
+        // We intentionally do not reject a start point whose existing gap differs from the
+        // configured diff pair gap. Starting inside a neckdown area (e.g. a narrowed gap under a
+        // BGA) and widening out to the netclass gap is a legitimate workflow. The placer fits the
+        // widening transition starting from the existing anchor pair.
 
         SHAPE_LINE_CHAIN dummyStartSegA;
         SHAPE_LINE_CHAIN dummyStartSegB;

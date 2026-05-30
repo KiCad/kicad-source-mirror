@@ -179,17 +179,38 @@ static DIRECTION_45::AngleType angle( const VECTOR2I &a, const VECTOR2I &b )
 }
 
 
-static bool checkGap( const SHAPE_LINE_CHAIN &p, const SHAPE_LINE_CHAIN &n, int gap )
+static bool checkGap( const SHAPE_LINE_CHAIN& p, const SHAPE_LINE_CHAIN& n, int gap, int aEntryGap = -1,
+                      const VECTOR2I& aEntryMid = VECTOR2I( 0, 0 ), int aTransitionRadius = 0 )
 {
     SEG::ecoord gap_sq = SEG::Square( gap - 100 );
 
+    // Inside the entry transition window the pair may legitimately hold a gap as small as the
+    // existing anchor pair (e.g. starting in a neckdown area) while it widens out to the configured
+    // gap. Outside the window the full configured gap is enforced.
+    bool        relaxEntry = aEntryGap >= 0 && aEntryGap < gap;
+    SEG::ecoord entryGap_sq = relaxEntry ? SEG::Square( aEntryGap - 100 ) : gap_sq;
+    SEG::ecoord radius_sq = SEG::Square( aTransitionRadius );
+
     for( int i = 0; i < p.SegmentCount(); i++ )
     {
-        for( int j = 0; j < n.SegmentCount() ; j++ )
-        {
-            SEG::ecoord dist_sq = p.CSegment( i ).SquaredDistance( n.CSegment( j ) );
+        const SEG& sp = p.CSegment( i );
+        bool pNearEntry = relaxEntry
+                          && ( ( sp.A + sp.B ) / 2 - aEntryMid ).SquaredEuclideanNorm() <= radius_sq;
 
-            if( dist_sq < gap_sq )
+        for( int j = 0; j < n.SegmentCount(); j++ )
+        {
+            const SEG& sn = n.CSegment( j );
+
+            SEG::ecoord dist_sq = sp.SquaredDistance( sn );
+            SEG::ecoord limit_sq = gap_sq;
+
+            if( pNearEntry
+                && ( ( sn.A + sn.B ) / 2 - aEntryMid ).SquaredEuclideanNorm() <= radius_sq )
+            {
+                limit_sq = entryGap_sq;
+            }
+
+            if( dist_sq < limit_sq )
                 return false;
         }
     }
@@ -248,7 +269,21 @@ bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY &aTarge
         m_n.Append( t.Entry().CN() );
     }
 
-    if( !checkGap( p, n, m_gapConstraint ) )
+    // The trace may start from an existing anchor pair that is narrower than the configured gap
+    // (e.g. a neckdown area inside a BGA). In that case the entry region legitimately holds a
+    // smaller gap than the netclass value while the pair widens out towards the target. Allow the
+    // narrower gap only within a transition window around the entry anchor; the rest of the trace
+    // must still satisfy the configured gap.
+
+    int      configuredGap = m_gapConstraint;
+    int      entryGap = ( aEntry.AnchorP() - aEntry.AnchorN() ).EuclideanNorm();
+    VECTOR2I entryMid = ( aEntry.AnchorP() + aEntry.AnchorN() ) / 2;
+
+    // A 45-degree widening from the entry gap to the configured gap completes within roughly the
+    // difference of the two gaps; allow a generous window so the transition segments are accepted.
+    int transitionRadius = 4 * configuredGap;
+
+    if( !checkGap( p, n, configuredGap, entryGap, entryMid, transitionRadius ) )
         return false;
 
     if( p.SelfIntersecting() || n.SelfIntersecting() )
