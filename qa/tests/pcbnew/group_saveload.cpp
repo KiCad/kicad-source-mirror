@@ -76,7 +76,7 @@ static PCB_GROUP* s_removedGroup = nullptr;
  * Each group is a vector of which ItemTypes to put in the group.
  * The first group corresponds to GROUP0, the second to GROUP1, and os on.
  */
-std::unique_ptr<BOARD> createBoard( const std::vector<std::vector<ItemType>>& spec )
+std::unique_ptr<BOARD> createBoard( const std::vector<std::vector<ItemType>>& spec, bool aAllowInvalidGroups = false )
 {
     std::unique_ptr<BOARD>   board = std::make_unique<BOARD>();
     std::vector<BOARD_ITEM*> items;
@@ -126,7 +126,18 @@ std::unique_ptr<BOARD> createBoard( const std::vector<std::vector<ItemType>>& sp
             for( ItemType item : groupSpec )
             {
                 used.set( static_cast<size_t>( item ) );
-                group->AddItem( items[item] );
+
+                if( aAllowInvalidGroups )
+                {
+                    // The invalid-group tests intentionally build graphs that AddItem()
+                    // rejects so GroupsSanityCheck() can verify diagnostics.
+                    group->GetItems().insert( items[item] );
+                    items[item]->SetParentGroup( group );
+                }
+                else
+                {
+                    group->AddItem( items[item] );
+                }
             }
 
             BOOST_CHECK_EQUAL( group->GetItems().size(), groupSpec.size() );
@@ -256,15 +267,17 @@ BOOST_AUTO_TEST_CASE( SingleMemberGroupsSaved )
 }
 
 
+// TODO: this is *probably* not needed any more as long as nothing is bypassing AddItem's
+// check for cyclic group membership, but it doesn't hurt to have it as a sanity check for the groups graph.
 BOOST_AUTO_TEST_CASE( InvalidGroups )
 {
     // A cycle
-    std::unique_ptr<BOARD> board1 = createBoard( { { TEXT0, GROUP1 }, { TEXT2, GROUP0 } } );
+    std::unique_ptr<BOARD> board1 = createBoard( { { TEXT0, GROUP1 }, { TEXT2, GROUP0 } }, true );
     BOOST_CHECK_EQUAL( board1->GroupsSanityCheck(), "Cycle detected in group membership" );
 
     // More complex cycle
-    board1 = createBoard( { { TEXT0, GROUP1 }, { TEXT1 }, { TEXT2, NAME_GROUP4 },
-                            { TEXT3, GROUP2 }, { TEXT4, NAME_GROUP3 } } );
+    board1 = createBoard(
+            { { TEXT0, GROUP1 }, { TEXT1 }, { TEXT2, NAME_GROUP4 }, { TEXT3, GROUP2 }, { TEXT4, NAME_GROUP3 } }, true );
     BOOST_CHECK_EQUAL( board1->GroupsSanityCheck(), "Cycle detected in group membership" );
 
     // Delete the removed group since the test is over
