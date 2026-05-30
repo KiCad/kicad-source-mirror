@@ -279,7 +279,12 @@ public:
 
     std::vector<SCH_SHEET*>::iterator erase( std::vector<SCH_SHEET*>::const_iterator aPosition )
     {
-        return m_sheets.erase( aPosition );
+        std::vector<SCH_SHEET*>::iterator ret = m_sheets.erase( aPosition );
+
+        // Rehash to keep m_current_hash and the cached path consistent with the shortened list.
+        Rehash();
+
+        return ret;
     }
 
     void Rehash();
@@ -552,6 +557,8 @@ protected:
 
     size_t                  m_current_hash;
     mutable wxString        m_cached_page_number;
+    mutable bool            m_cached_path_valid = false;
+    mutable KIID_PATH       m_cached_path;
 
     int m_virtualPageNumber;           ///< Page numbers are maintained by the sheet load order.
 

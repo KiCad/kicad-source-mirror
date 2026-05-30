@@ -277,4 +277,18 @@ template<> struct KICOMMON_API std::hash<KIID>
     }
 };
 
+
+template<> struct std::hash<KIID_PATH>
+{
+    std::size_t operator()( const KIID_PATH& aPath ) const
+    {
+        std::size_t seed = 0;
+
+        for( const KIID& kiid : aPath )
+            seed ^= std::hash<KIID>()( kiid ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
+
+        return seed;
+    }
+};
+
 #endif // KIID_H
