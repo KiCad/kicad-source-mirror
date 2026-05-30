@@ -3356,6 +3356,17 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
     SIM_TYPE simType = simTab->GetSimType();
     wxString msg;
 
+    // FFT is run synchronously in StartSimulation(), which stores the new FFT plot name before
+    // refreshing.  Ensure ngspice is on that plot before accessing its vectors.  Other simulation
+    // refreshes must not run setplot here, or a rerun would switch ngspice back to a stale plot.
+    if( aFinal && simType == ST_FFT )
+    {
+        const wxString spicePlotName = simTab->GetSpicePlotName();
+
+        if( !spicePlotName.IsEmpty() )
+            simulator()->Command( "setplot " + spicePlotName.ToStdString() );
+    }
+
     if( aFinal )
     {
         applyUserDefinedSignals();
