@@ -251,6 +251,7 @@ set( QA_PCBNEW_SRCS
     pcb_io/altium/test_altium_rule_transformer.cpp
     pcb_io/altium/test_altium_pcblib_import.cpp
     pcb_io/altium/test_altium_pcb_import.cpp
+    pcb_io/altium/test_altium_custom_pad_issue23933.cpp
     pcb_io/cadstar/test_cadstar_footprints.cpp
     pcb_io/eagle/test_eagle_board_import.cpp
     pcb_io/eagle/test_eagle_binary_import.cpp

@@ -72,6 +72,9 @@
 #include <magic_enum.hpp>
 #include <thread_pool.h>
 
+#include <limits>
+#include <unordered_set>
+
 
 constexpr double BOLD_FACTOR = 1.75;    // CSS font-weight-normal is 400; bold is 700
 
@@ -1014,6 +1017,180 @@ std::unique_ptr<FOOTPRINT> ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE&
         }
     }
 
+
+    // Altium splits a custom-shape pad into a numbered placeholder and an unnumbered region outline
+    // fold the region whose outline contains the placeholder anchor; others pass through unchanged
+    auto isRegionPad =
+            []( PAD* aPad )
+            {
+                if( !aPad->GetNumber().IsEmpty() )
+                    return false;
+
+                for( PCB_LAYER_ID layer : { PADSTACK::ALL_LAYERS, F_Cu, B_Cu } )
+                {
+                    if( aPad->GetShape( layer ) == PAD_SHAPE::CUSTOM
+                        && !aPad->GetPrimitives( layer ).empty() )
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
+    auto commonCopperLayer =
+            []( PAD* aRegionPad, PAD* aNamedPad ) -> PCB_LAYER_ID
+            {
+                if( aRegionPad->IsOnLayer( F_Cu ) && aNamedPad->IsOnLayer( F_Cu ) )
+                    return F_Cu;
+
+                if( aRegionPad->IsOnLayer( B_Cu ) && aNamedPad->IsOnLayer( B_Cu ) )
+                    return B_Cu;
+
+                return PADSTACK::ALL_LAYERS;
+            };
+
+    auto mergeRegionPadInto =
+            [&]( PAD* aNamedPad, PAD* aRegionPad )
+            {
+                PCB_LAYER_ID layer = commonCopperLayer( aRegionPad, aNamedPad );
+
+                // CIRCLE/RECTANGLE bodies become the anchor as-is; others are demoted to a polygon
+                // primitive over a small circular anchor so their copper is not discarded
+                PAD_SHAPE namedShape = aNamedPad->GetShape( layer );
+
+                if( namedShape == PAD_SHAPE::CIRCLE || namedShape == PAD_SHAPE::RECTANGLE )
+                {
+                    aNamedPad->SetAnchorPadShape( layer, namedShape );
+                    aNamedPad->SetShape( layer, PAD_SHAPE::CUSTOM );
+                }
+                else if( namedShape != PAD_SHAPE::CUSTOM )
+                {
+                    int maxError = m_board ? m_board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
+
+                    SHAPE_POLY_SET body;
+                    aNamedPad->TransformShapeToPolygon( body, layer, 0, maxError, ERROR_INSIDE );
+
+                    int minExtent = std::min( aNamedPad->GetSize( layer ).x,
+                                              aNamedPad->GetSize( layer ).y );
+
+                    aNamedPad->SetAnchorPadShape( layer, PAD_SHAPE::CIRCLE );
+                    aNamedPad->SetSize( layer, VECTOR2I( minExtent, minExtent ) );
+                    aNamedPad->SetShape( layer, PAD_SHAPE::CUSTOM );
+
+                    PCB_SHAPE* bodyPrim = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
+                    bodyPrim->SetFilled( true );
+                    bodyPrim->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
+                    bodyPrim->SetPolyShape( body );
+                    bodyPrim->Move( -aNamedPad->ShapePos( layer ) );
+                    bodyPrim->Rotate( VECTOR2I( 0, 0 ), -aNamedPad->GetOrientation() );
+                    aNamedPad->AddPrimitive( layer, bodyPrim );
+                }
+
+                // Region primitives are in the region pad's local frame; re-express in the named
+                // pad's frame, undoing the orientation GetEffectivePolygon will later re-apply
+                EDA_ANGLE namedAngle = aNamedPad->GetOrientation();
+                VECTOR2I  anchorShift = aRegionPad->ShapePos( PADSTACK::ALL_LAYERS )
+                                        - aNamedPad->ShapePos( layer );
+
+                for( PCB_LAYER_ID primLayer : { PADSTACK::ALL_LAYERS, F_Cu, B_Cu } )
+                {
+                    const std::vector<std::shared_ptr<PCB_SHAPE>>& prims =
+                            aRegionPad->GetPrimitives( primLayer );
+
+                    for( const std::shared_ptr<PCB_SHAPE>& src : prims )
+                    {
+                        PCB_SHAPE* copy = static_cast<PCB_SHAPE*>( src->Clone() );
+
+                        copy->Rotate( VECTOR2I( 0, 0 ), aRegionPad->GetOrientation() );
+                        copy->Move( anchorShift );
+                        copy->Rotate( VECTOR2I( 0, 0 ), -namedAngle );
+
+                        aNamedPad->AddPrimitive( layer, copy );
+                    }
+                }
+
+                if( aRegionPad->GetLocalSolderMaskMargin().has_value()
+                    && !aNamedPad->GetLocalSolderMaskMargin().has_value() )
+                {
+                    aNamedPad->SetLocalSolderMaskMargin(
+                            aRegionPad->GetLocalSolderMaskMargin().value() );
+                }
+
+                if( aRegionPad->GetLocalSolderPasteMargin().has_value()
+                    && !aNamedPad->GetLocalSolderPasteMargin().has_value() )
+                {
+                    aNamedPad->SetLocalSolderPasteMargin(
+                            aRegionPad->GetLocalSolderPasteMargin().value() );
+                }
+
+                aNamedPad->SetLayerSet( aNamedPad->GetLayerSet() | aRegionPad->GetLayerSet() );
+            };
+
+    std::vector<PAD*> regionPads;
+    std::vector<PAD*> namedPads;
+
+    for( PAD* pad : footprint->Pads() )
+    {
+        if( isRegionPad( pad ) )
+            regionPads.push_back( pad );
+        else if( !pad->GetNumber().IsEmpty() )
+            namedPads.push_back( pad );
+    }
+
+    // A placeholder pad owns at most one region outline; consume matched pads so a second region
+    // never folds into a pad whose shape already grew from an earlier merge
+    std::unordered_set<PAD*> consumedNamed;
+
+    for( PAD* regionPad : regionPads )
+    {
+        PCB_LAYER_ID regionCu = regionPad->IsOnLayer( F_Cu )    ? F_Cu
+                                : regionPad->IsOnLayer( B_Cu )  ? B_Cu
+                                                                : PADSTACK::ALL_LAYERS;
+
+        std::shared_ptr<SHAPE_POLY_SET> outline =
+                regionPad->GetEffectivePolygon( regionCu, ERROR_INSIDE );
+
+        if( !outline || outline->OutlineCount() == 0 )
+            continue;
+
+        // Claim the closest numbered pad sharing a copper layer whose anchor sits inside the outline
+        // containment is the signal it's the Altium placeholder for this region, not an overlap
+        PAD*    bestNamed = nullptr;
+        int64_t bestDistSq = std::numeric_limits<int64_t>::max();
+
+        for( PAD* namedPad : namedPads )
+        {
+            if( consumedNamed.count( namedPad ) )
+                continue;
+
+            if( commonCopperLayer( regionPad, namedPad ) == PADSTACK::ALL_LAYERS
+                && !( namedPad->GetLayerSet() & regionPad->GetLayerSet() & LSET::AllCuMask() ).any() )
+            {
+                continue;
+            }
+
+            if( !outline->Contains( namedPad->GetPosition(), -1, 0 ) )
+                continue;
+
+            VECTOR2I delta = namedPad->GetPosition() - regionPad->GetPosition();
+            int64_t  distSq = (int64_t) delta.x * delta.x + (int64_t) delta.y * delta.y;
+
+            if( distSq < bestDistSq )
+            {
+                bestDistSq = distSq;
+                bestNamed = namedPad;
+            }
+        }
+
+        if( bestNamed )
+        {
+            mergeRegionPadInto( bestNamed, regionPad );
+            consumedNamed.insert( bestNamed );
+            footprint->Remove( regionPad );
+            delete regionPad;
+        }
+    }
 
     // Loop over this multiple times to catch pads that are jumpered to each other by multiple shapes
     for( bool changes = true; changes; )
