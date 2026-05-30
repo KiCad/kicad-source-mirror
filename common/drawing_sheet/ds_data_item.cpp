@@ -543,7 +543,11 @@ void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
         multilines = ReplaceAntiSlashSequence();
     }
 
-    if( pensize == 0 )
+    // Feed bold worksheet text an auto width so its Bold flag reproduces the historical bold
+    // pen size through the render-time multiplier; otherwise fall back to the default.
+    if( m_Bold )
+        pensize = 0;
+    else if( pensize == 0 )
         pensize = aCollector ? aCollector->GetDefaultPenSize() : 1;
 
     SetConstrainedTextSize();
@@ -551,9 +555,6 @@ void DS_DATA_ITEM_TEXT::SyncDrawItems( DS_DRAW_ITEM_LIST* aCollector, KIGFX::VIE
 
     textsize.x = KiROUND( m_ConstrainedTextSize.x * DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu );
     textsize.y = KiROUND( m_ConstrainedTextSize.y * DS_DATA_MODEL::GetTheInstance().m_WSunits2Iu );
-
-    if( m_Bold )
-        pensize = GetPenSizeForBold( std::min( textsize.x, textsize.y ) );
 
     std::map<size_t, EDA_ITEM_FLAGS> itemFlags;
     DS_DRAW_ITEM_TEXT*               text = nullptr;

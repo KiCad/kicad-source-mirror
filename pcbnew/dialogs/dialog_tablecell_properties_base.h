@@ -84,10 +84,8 @@ class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxHyperlinkCtrl* m_syntaxHelp;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void onBoldToggle( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTextSize( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onThickness( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onAutoTextThickness( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onEditTable( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSyntaxHelp( wxHyperlinkEvent& event ) { event.Skip(); }

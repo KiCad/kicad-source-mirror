@@ -5382,6 +5382,10 @@ void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT& 
 
     aEdaText.SetTextThickness( aElem.strokewidth );
     aEdaText.SetBoldFlag( aElem.isBold );
+
+    // The imported width is already bolded; store the base so the Bold flag doesn't double it.
+    aEdaText.MigrateLegacyBoldStrokeWidth();
+
     aEdaText.SetItalic( aElem.isItalic );
     aEdaText.SetMirrored( aElem.isMirrored );
 }

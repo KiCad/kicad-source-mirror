@@ -1011,7 +1011,6 @@
                     <property name="window_extra_style"></property>
                     <property name="window_name"></property>
                     <property name="window_style"></property>
-                    <event name="OnButtonClick">onBoldToggle</event>
                   </object>
                 </object>
                 <object class="sizeritem" expanded="false">
@@ -3051,7 +3050,6 @@
                 <property name="window_extra_style"></property>
                 <property name="window_name"></property>
                 <property name="window_style"></property>
-                <event name="OnText">onThickness</event>
               </object>
             </object>
           </object>

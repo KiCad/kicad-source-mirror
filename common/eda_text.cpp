@@ -240,7 +240,10 @@ void EDA_TEXT::SetTextThickness( int aWidth )
 void EDA_TEXT::SetAutoThickness( bool aAuto )
 {
     if( GetAutoThickness() != aAuto )
-        SetTextThickness( aAuto ? 0 : GetEffectiveTextPenWidth() );
+    {
+        // Freeze the base width, not the effective one; Bold still multiplies at render time.
+        SetTextThickness( aAuto ? 0 : GetPenSizeForNormal( GetTextWidth() ) );
+    }
 }
 
 
@@ -252,21 +255,27 @@ void EDA_TEXT::SetTextAngle( const EDA_ANGLE& aAngle )
 }
 
 
+bool EDA_TEXT::isStrokeFont() const
+{
+    if( const KIFONT::FONT* font = GetFont() )
+        return font->IsStroke();
+
+    // The font is usually unresolved during load; key off the stored face name so callers
+    // that run before font resolution (e.g. migration) still classify correctly.
+    if( !m_unresolvedFontName.IsEmpty() )
+        return KIFONT::FONT::IsStroke( m_unresolvedFontName );
+
+    return true;
+}
+
+
 void EDA_TEXT::SetItalic( bool aItalic )
 {
     if( m_attributes.m_Italic != aItalic )
     {
-        const KIFONT::FONT* font = GetFont();
-
-        if( !font || font->IsStroke() )
-        {
-            // For stroke fonts, just need to set the attribute.
-        }
-        else
-        {
-            // For outline fonts, italic-ness is determined by the font itself.
+        // For outline fonts, italic-ness is determined by the font itself.
+        if( const KIFONT::FONT* font = GetFont(); font && !isStrokeFont() )
             SetFont( KIFONT::FONT::GetFont( font->GetName(), IsBold(), aItalic ) );
-        }
     }
 
     SetItalicFlag( aItalic );
@@ -284,39 +293,10 @@ void EDA_TEXT::SetBold( bool aBold )
 {
     if( m_attributes.m_Bold != aBold )
     {
-        const KIFONT::FONT* font = GetFont();
-
-        if( !font || font->IsStroke() )
-        {
-            // For stroke fonts, boldness is determined by the pen size.
-            const int size = std::min( m_attributes.m_Size.x, m_attributes.m_Size.y );
-
-            if( aBold )
-            {
-                m_attributes.m_StoredStrokeWidth = m_attributes.m_StrokeWidth;
-                m_attributes.m_StrokeWidth = GetPenSizeForBold( size );
-            }
-            else
-            {
-                // Restore the original stroke width from `m_StoredStrokeWidth` if it was
-                // previously stored, resetting the width after unbolding.
-                if( m_attributes.m_StoredStrokeWidth )
-                    m_attributes.m_StrokeWidth = m_attributes.m_StoredStrokeWidth;
-                else
-                {
-                    m_attributes.m_StrokeWidth = GetPenSizeForNormal( size );
-                    // Sets `m_StrokeWidth` to the normal pen size and stores it in
-                    // `m_StoredStrokeWidth` as the default, but only if the bold option was
-                    // applied before this feature was implemented.
-                    m_attributes.m_StoredStrokeWidth = m_attributes.m_StrokeWidth;
-                }
-            }
-        }
-        else
-        {
-            // For outline fonts, boldness is determined by the font itself.
+        // Outline fonts carry weight in the typeface; switch variant. Stroke fonts leave the
+        // stored width alone and scale it at render time.
+        if( const KIFONT::FONT* font = GetFont(); font && !isStrokeFont() )
             SetFont( KIFONT::FONT::GetFont( font->GetName(), aBold, IsItalic() ) );
-        }
     }
 
     SetBoldFlag( aBold );
@@ -328,6 +308,21 @@ void EDA_TEXT::SetBoldFlag( bool aBold )
     m_attributes.m_Bold = aBold;
     ClearRenderCache();
     ClearBoundingBoxCache();
+}
+
+
+void EDA_TEXT::MigrateLegacyBoldStrokeWidth()
+{
+    int thickness = GetTextThickness();
+
+    // Outline faces never baked bold into the width; skip them.
+    if( !IsBold() || thickness <= 1 || !isStrokeFont() )
+        return;
+
+    // Keep the base above the auto threshold so a very thin width doesn't become auto. Legacy
+    // widths below ~3 IU (well under any physically meaningful stroke) can't round-trip exactly
+    // through this floor; the effective width comes out slightly larger than before migration.
+    SetTextThickness( std::max( 2, KiROUND( thickness / BOLD_STROKE_MULTIPLIER ) ) );
 }
 
 
@@ -424,6 +419,8 @@ int EDA_TEXT::GetEffectiveTextPenWidth( int aDefaultPenWidth ) const
         else if( penWidth <= 1 )
             penWidth = GetPenSizeForNormal( GetTextWidth() );
     }
+    else if( IsBold() && isStrokeFont() )
+        penWidth = KiROUND( penWidth * BOLD_STROKE_MULTIPLIER );
 
     // Clip pen size for small texts:
     penWidth = ClampTextPenSize( penWidth, GetTextSize() );

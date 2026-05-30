@@ -100,12 +100,10 @@ class DIALOG_TEXT_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void OnSetFocusText( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFontSelected( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onBoldToggle( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onAlignButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onValignButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTextSize( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onAutoTextThickness( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onThickness( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

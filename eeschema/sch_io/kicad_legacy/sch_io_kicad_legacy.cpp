@@ -1087,8 +1087,9 @@ SCH_TEXT* SCH_IO_KICAD_LEGACY::loadText( LINE_READER& aReader )
             penWidth = parseInt( aReader, line, &line );
     }
 
+    // Legacy bold is a non-zero pen width; store auto thickness and let the Bold flag drive it.
     text->SetBoldFlag( penWidth != 0 );
-    text->SetTextThickness( penWidth != 0 ? GetPenSizeForBold( size ) : 0 );
+    text->SetTextThickness( 0 );
 
     // Read the text string for the text.
     char* tmp = aReader.ReadLine();

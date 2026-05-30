@@ -855,6 +855,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
 
         aText->SetTextSize( VECTOR2I( defaultTextSize, defaultTextSize ) );
     }
+
+    if( m_requiredVersion < 20260826 )
+        aText->MigrateLegacyBoldStrokeWidth();
 }
 
 

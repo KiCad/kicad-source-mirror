@@ -58,7 +58,6 @@ private:
     void onVAlignButton( wxCommandEvent& aEvent );
     void onTextSize( wxCommandEvent& aEvent ) override;
     void onAutoTextThickness( wxCommandEvent& aEvent ) override;
-    void onBoldToggle( wxCommandEvent& aEvent ) override;
     void onEditTable( wxCommandEvent& aEvent ) override;
 
     virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }

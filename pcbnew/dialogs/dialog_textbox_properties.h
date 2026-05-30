@@ -42,10 +42,8 @@ public:
 
 private:
     void onFontSelected( wxCommandEvent& aEvent ) override;
-    void onBoldToggle( wxCommandEvent& aEvent ) override;
     void onHalignButton( wxCommandEvent& aEvent ) override;
     void onValignButton( wxCommandEvent& aEvent ) override;
-    void onThickness( wxCommandEvent& aEvent ) override;
     void onBorderChecked( wxCommandEvent& event ) override;
     void onTextSize( wxCommandEvent& aEvent ) override;
     void onAutoTextThickness( wxCommandEvent& aEvent ) override;

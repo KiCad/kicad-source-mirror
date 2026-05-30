@@ -3425,6 +3425,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER:: applyTextCode( EDA_TEXT* aKiCadText, const TEX
 
     if( font )
         aKiCadText->SetFont( font );
+
+    // The line width is the intended rendered stroke; store the base so Bold doesn't double
+    // it. Must run after SetFont() so the stroke-vs-outline check below sees the real font.
+    aKiCadText->MigrateLegacyBoldStrokeWidth();
 }
 
 

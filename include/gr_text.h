@@ -75,14 +75,11 @@ int GetPenSizeForDemiBold( const wxSize& aTextSize );
 int GetPenSizeForNormal( int aTextSize );
 int GetPenSizeForNormal( const wxSize& aTextSize );
 
-inline void InferBold( TEXT_ATTRIBUTES* aAttrs )
-{
-    int    penSize( aAttrs->m_StrokeWidth );
-    wxSize textSize( aAttrs->m_Size.x, aAttrs->m_Size.y );
-
-    aAttrs->m_Bold = abs( penSize - GetPenSizeForBold( textSize ) )
-                   < abs( penSize - GetPenSizeForNormal( textSize ) );
-}
+/**
+ * Factor a bold stroke font applies to its base pen width. Chosen as 8/5 so that a bolded
+ * auto-thickness text (base = size/8) matches the historical bold pen size (size/5).
+ */
+constexpr double BOLD_STROKE_MULTIPLIER = 1.6;
 
 
 /**

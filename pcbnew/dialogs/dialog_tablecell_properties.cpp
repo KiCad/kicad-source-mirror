@@ -162,7 +162,7 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
     GR_TEXT_H_ALIGN_T hAlign = GR_TEXT_H_ALIGN_INDETERMINATE;
     GR_TEXT_V_ALIGN_T vAlign = GR_TEXT_V_ALIGN_INDETERMINATE;
     int               textThickness = 0;
-    int               effectivePenWidth = 0;
+    int               basePenWidth = 0;
 
     for( PCB_TABLECELL* cell : m_cells )
     {
@@ -174,7 +174,7 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
             m_textWidth.SetValue( cell->GetTextWidth() );
             m_textHeight.SetValue( cell->GetTextHeight() );
             textThickness = cell->GetTextThickness();
-            effectivePenWidth = cell->GetEffectiveTextPenWidth();
+            basePenWidth = GetPenSizeForNormal( cell->GetTextWidth() );
 
             hAlign = cell->GetHorizJustify();
             vAlign = cell->GetVertJustify();
@@ -211,8 +211,8 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
             if( cell->GetTextThickness() != textThickness )
                 textThickness = -1;
 
-            if( cell->GetEffectiveTextPenWidth() != effectivePenWidth )
-                effectivePenWidth = -1;
+            if( GetPenSizeForNormal( cell->GetTextWidth() ) != basePenWidth )
+                basePenWidth = -1;
 
             if( cell->GetHorizJustify() != hAlign )
                 hAlign = GR_TEXT_H_ALIGN_INDETERMINATE;
@@ -255,8 +255,9 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
 
     if( textThickness == 0 )
     {
-        if( effectivePenWidth > 0 )
-            m_textThickness.SetValue( effectivePenWidth );
+        // Show the base width (frozen if auto is unchecked); Bold scales it at render time.
+        if( basePenWidth > 0 )
+            m_textThickness.SetValue( basePenWidth );
 
         m_autoTextThickness->Check( true );
         m_textThickness.Enable( false );
@@ -269,33 +270,10 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
     return true;
 }
 
-void DIALOG_TABLECELL_PROPERTIES::onBoldToggle( wxCommandEvent& aEvent )
-{
-    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
-
-    if( aEvent.IsChecked() )
-        m_textThickness.ChangeValue( GetPenSizeForBold( textSize ) );
-    else
-        m_textThickness.ChangeValue( GetPenSizeForNormal( textSize ) );
-
-    aEvent.Skip();
-}
-
 void DIALOG_TABLECELL_PROPERTIES::onTextSize( wxCommandEvent& aEvent )
 {
     if( m_autoTextThickness->IsChecked() )
-    {
-        int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
-        int thickness;
-
-        // Calculate the "best" thickness from text size and bold option:
-        if( m_bold->IsChecked() )
-            thickness = GetPenSizeForBold( textSize );
-        else
-            thickness = GetPenSizeForNormal( textSize );
-
-        m_textThickness.SetValue( thickness );
-    }
+        m_textThickness.SetValue( GetPenSizeForNormal( m_textWidth.GetValue() ) );
 }
 
 

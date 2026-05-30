@@ -50,9 +50,7 @@ protected:
 
 private:
     void onFontSelected( wxCommandEvent &aEvent ) override;
-    void onBoldToggle( wxCommandEvent &aEvent ) override;
     void onAlignButton( wxCommandEvent &aEvent ) override;
-    void onThickness( wxCommandEvent &aEvent ) override;
 
     void updateDimensionFromDialog( PCB_DIMENSION_BASE* aTarget );
 

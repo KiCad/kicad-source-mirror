@@ -212,8 +212,11 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
 
     if( m_textBox->GetAutoThickness() )
     {
+        // Show the base width (frozen if auto is unchecked); Bold scales it at render time.
+        // Must match EDA_TEXT::SetAutoThickness()'s formula so unchecking auto doesn't
+        // silently change the stored width.
         m_autoTextThickness->Check( m_textBox->GetAutoThickness() );
-        m_thickness.SetValue( m_textBox->GetEffectiveTextPenWidth() );
+        m_thickness.SetValue( GetPenSizeForNormal( m_textBox->GetTextWidth() ) );
         m_thickness.Enable( false );
     }
     else
@@ -277,33 +280,7 @@ void DIALOG_TEXTBOX_PROPERTIES::onValignButton( wxCommandEvent& aEvent )
 
 void DIALOG_TEXTBOX_PROPERTIES::onFontSelected( wxCommandEvent& aEvent )
 {
-    if( KIFONT::FONT::IsStroke( aEvent.GetString() ) )
-    {
-        m_thickness.Show( true );
-
-        int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
-        int thickness = m_thickness.GetValue();
-
-        m_bold->Check( abs( thickness - GetPenSizeForBold( textSize ) )
-                       < abs( thickness - GetPenSizeForNormal( textSize ) ) );
-    }
-    else
-    {
-        m_thickness.Show( false );
-    }
-}
-
-
-void DIALOG_TEXTBOX_PROPERTIES::onBoldToggle( wxCommandEvent& aEvent )
-{
-    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
-
-    if( aEvent.IsChecked() )
-        m_thickness.ChangeValue( GetPenSizeForBold( textSize ) );
-    else
-        m_thickness.ChangeValue( GetPenSizeForNormal( textSize ) );
-
-    aEvent.Skip();
+    m_thickness.Show( KIFONT::FONT::IsStroke( aEvent.GetString() ) );
 }
 
 
@@ -317,31 +294,10 @@ void DIALOG_TEXTBOX_PROPERTIES::onHalignButton( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_TEXTBOX_PROPERTIES::onThickness( wxCommandEvent& event )
-{
-    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
-    int thickness = m_thickness.GetValue();
-
-    m_bold->Check( abs( thickness - GetPenSizeForBold( textSize ) )
-                   < abs( thickness - GetPenSizeForNormal( textSize ) ) );
-}
-
-
 void DIALOG_TEXTBOX_PROPERTIES::onTextSize( wxCommandEvent& aEvent )
 {
     if( m_autoTextThickness->IsChecked() )
-    {
-        int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
-        int thickness;
-
-        // Calculate the "best" thickness from text size and bold option:
-        if( m_bold->IsChecked() )
-            thickness = GetPenSizeForBold( textSize );
-        else
-            thickness = GetPenSizeForNormal( textSize );
-
-        m_thickness.SetValue( thickness );
-    }
+        m_thickness.SetValue( GetPenSizeForNormal( m_textWidth.GetValue() ) );
 }
 
 

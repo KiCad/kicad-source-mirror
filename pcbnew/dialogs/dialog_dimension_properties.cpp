@@ -531,33 +531,7 @@ void DIALOG_DIMENSION_PROPERTIES::resolveDrivingConstraint( PCB_CONSTRAINT* aCon
 
 void DIALOG_DIMENSION_PROPERTIES::onFontSelected( wxCommandEvent & aEvent )
 {
-    if( KIFONT::FONT::IsStroke( aEvent.GetString() ) )
-    {
-        m_textThickness.Show( true );
-
-        int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
-        int thickness = m_textThickness.GetValue();
-
-        m_bold->Check( abs( thickness - GetPenSizeForBold( textSize ) )
-                        < abs( thickness - GetPenSizeForNormal( textSize ) ) );
-    }
-    else
-    {
-        m_textThickness.Show( false );
-    }
-}
-
-
-void DIALOG_DIMENSION_PROPERTIES::onBoldToggle( wxCommandEvent & aEvent )
-{
-    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
-
-    if( aEvent.IsChecked() )
-        m_textThickness.ChangeValue( GetPenSizeForBold( textSize ) );
-    else
-        m_textThickness.ChangeValue( GetPenSizeForNormal( textSize ) );
-
-    aEvent.Skip();
+    m_textThickness.Show( KIFONT::FONT::IsStroke( aEvent.GetString() ) );
 }
 
 
@@ -568,16 +542,6 @@ void DIALOG_DIMENSION_PROPERTIES::onAlignButton( wxCommandEvent& aEvent )
         if( btn->IsChecked() && btn != aEvent.GetEventObject() )
             btn->Check( false );
     }
-}
-
-
-void DIALOG_DIMENSION_PROPERTIES::onThickness( wxCommandEvent& event )
-{
-    int textSize = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
-    int thickness = m_textThickness.GetValue();
-
-    m_bold->Check( abs( thickness - GetPenSizeForBold( textSize ) )
-                    < abs( thickness - GetPenSizeForNormal( textSize ) ) );
 }
 
 
@@ -651,7 +615,7 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
         aTarget->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(), m_italic->IsChecked() ) );
 
     // Must come after SetTextWidth/Height()
-    aTarget->SetBold( m_bold->IsChecked() );
+    aTarget->SetBoldFlag( m_bold->IsChecked() );
     aTarget->SetItalic( m_italic->IsChecked() );
 
     if( m_alignLeft->IsChecked() )

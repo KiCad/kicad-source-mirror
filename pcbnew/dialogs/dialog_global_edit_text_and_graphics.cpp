@@ -349,11 +349,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::onTextSize( wxCommandEvent& aEvent )
     if( m_textWidth.IsIndeterminate() || m_textHeight.IsIndeterminate() )
         return;
 
-    int  size = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
-    bool bold = ( m_bold->Get3StateValue() == wxCHK_CHECKED );
+    int size = std::min( m_textWidth.GetValue(), m_textHeight.GetValue() );
 
-    m_thickness.SetValue( bold ? GetPenSizeForBold( size )
-                                : GetPenSizeForNormal( size ) );
+    m_thickness.SetValue( GetPenSizeForNormal( size ) );
 }
 
 

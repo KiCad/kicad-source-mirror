@@ -35,8 +35,7 @@ TEXT_ATTRIBUTES::TEXT_ATTRIBUTES( KIFONT::FONT* aFont ) :
     m_Color( KIGFX::COLOR4D::UNSPECIFIED ),
     m_Mirrored( false ),
     m_Multiline( true ),
-    m_KeepUpright( false ),
-    m_StoredStrokeWidth( 0 )
+    m_KeepUpright( false )
 {
 }
 

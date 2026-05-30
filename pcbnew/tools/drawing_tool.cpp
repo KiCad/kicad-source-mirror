@@ -437,7 +437,6 @@ void DRAWING_TOOL::Reset( RESET_REASON aReason )
 
     m_textAttrs.m_Size = bds.GetTextSize( m_layer );
     m_textAttrs.m_StrokeWidth = bds.GetTextThickness( m_layer );
-    InferBold( &m_textAttrs );
     m_textAttrs.m_Italic = bds.GetTextItalic( m_layer );
     m_textAttrs.m_KeepUpright = bds.GetTextUpright( m_layer );
     m_textAttrs.m_Mirrored = m_board->IsBackLayer( m_layer );
@@ -1237,7 +1236,6 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
                 textAttrs.m_Size = bds.GetTextSize( layer );
                 textAttrs.m_StrokeWidth = bds.GetTextThickness( layer );
-                InferBold( &textAttrs );
                 textAttrs.m_Italic = bds.GetTextItalic( layer );
                 textAttrs.m_KeepUpright = bds.GetTextUpright( layer );
                 textAttrs.m_Mirrored = m_board->IsBackLayer( layer );
@@ -2768,7 +2766,6 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 
         m_textAttrs.m_Size = bds.GetTextSize( m_layer );
         m_textAttrs.m_StrokeWidth = bds.GetTextThickness( m_layer );
-        InferBold( &m_textAttrs );
         m_textAttrs.m_Italic = bds.GetTextItalic( m_layer );
         m_textAttrs.m_KeepUpright = bds.GetTextUpright( m_layer );
         m_textAttrs.m_Mirrored = m_board->IsBackLayer( m_layer );
@@ -2912,7 +2909,6 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
 
                 m_textAttrs.m_Size = bds.GetTextSize( m_layer );
                 m_textAttrs.m_StrokeWidth = bds.GetTextThickness( m_layer );
-                InferBold( &m_textAttrs );
                 m_textAttrs.m_Italic = bds.GetTextItalic( m_layer );
                 m_textAttrs.m_KeepUpright = bds.GetTextUpright( m_layer );
                 m_textAttrs.m_Mirrored = m_board->IsBackLayer( m_layer );
