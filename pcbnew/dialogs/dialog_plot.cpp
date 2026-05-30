@@ -484,6 +484,7 @@ void DIALOG_PLOT::transferPlotParamsToJob()
                                                                              : JOB_EXPORT_PCB_DXF::DXF_UNITS::MM;
         dxfJob->m_plotGraphicItemsUsingContours = m_plotOpts.GetDXFPlotMode() == DXF_OUTLINE_MODE::SKETCH;
         dxfJob->m_polygonMode = m_plotOpts.GetDXFPlotPolygonMode();
+        dxfJob->m_useKiCadFont = m_plotOpts.GetTextMode() != PLOT_TEXT_MODE::NATIVE;
         dxfJob->m_genMode = m_plotOpts.GetDXFMultiLayeredExportOption() ? JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE
                                                                         : JOB_EXPORT_PCB_DXF::GEN_MODE::MULTI;
     }

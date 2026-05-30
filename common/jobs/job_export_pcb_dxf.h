@@ -49,6 +49,7 @@ public:
 public:
     bool      m_plotGraphicItemsUsingContours;
     bool      m_polygonMode;
+    bool      m_useKiCadFont;
     DXF_UNITS m_dxfUnits;
 
     GEN_MODE  m_genMode;

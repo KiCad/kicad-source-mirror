@@ -38,6 +38,7 @@ JOB_EXPORT_PCB_DXF::JOB_EXPORT_PCB_DXF() :
         JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::DXF, "dxf", false ),
         m_plotGraphicItemsUsingContours( true ),
         m_polygonMode( true ),
+        m_useKiCadFont( true ),
         m_dxfUnits( DXF_UNITS::INCH ),
         m_genMode( GEN_MODE::MULTI )
 {
@@ -47,6 +48,7 @@ JOB_EXPORT_PCB_DXF::JOB_EXPORT_PCB_DXF() :
     m_params.emplace_back( new JOB_PARAM<bool>( "plot_graphic_items_using_contours",
                                                 &m_plotGraphicItemsUsingContours,
                                                 m_plotGraphicItemsUsingContours ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "use_kicad_font", &m_useKiCadFont, m_useKiCadFont ) );
     m_params.emplace_back( new JOB_PARAM<DXF_UNITS>( "units", &m_dxfUnits, m_dxfUnits ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "polygon_mode", &m_polygonMode, m_polygonMode ) );
     m_params.emplace_back( new JOB_PARAM<GEN_MODE>( "gen_mode", &m_genMode, m_genMode ) );
