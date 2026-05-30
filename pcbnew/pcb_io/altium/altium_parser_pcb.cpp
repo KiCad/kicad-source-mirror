@@ -22,7 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <cmath>
 #include <map>
+#include <set>
 #include <unordered_map>
 
 #include <ki_exception.h>
@@ -441,6 +443,65 @@ ABOARD6_LAYER_STACKUP::ABOARD6_LAYER_STACKUP( const std::map<wxString, wxString>
 }
 
 
+static wxString MakeAltiumDielectricKey( const wxString& aMaterial, int32_t aHeight, double aConst )
+{
+    return wxString::Format( wxT( "%s|%d|%d" ), aMaterial, aHeight,
+                             static_cast<int>( std::lround( aConst * 1000.0 ) ) );
+}
+
+
+// Build a lookup from the modern physical stackup keys (LAYER_V8_<n> / V9_STACK_LAYER<n>) so we
+// can recover dielectric properties that the legacy LAYER<n> keys do not carry. Currently only the
+// loss tangent is missing from the legacy records, so we key the lookup on the dielectric material,
+// height and permittivity that both formats share. If two distinct dielectrics share the same key
+// but report different loss tangents the mapping is ambiguous, so we flag it and skip the backfill
+// for that key rather than guess.
+static std::map<wxString, double> ReadAltiumDielectricLossTangents( const std::map<wxString, wxString>& aProps )
+{
+    std::map<wxString, double> tangents;
+    std::set<wxString>         ambiguous;
+
+    auto scan = [&]( const wxString& aFamily )
+    {
+        for( size_t i = 0; i < std::numeric_limits<size_t>::max(); i++ )
+        {
+            const wxString prefix = aFamily + std::to_string( i );
+
+            if( aProps.find( prefix + wxT( "NAME" ) ) == aProps.end() )
+                break;
+
+            if( aProps.find( prefix + wxT( "DIELLOSSTANGENT" ) ) == aProps.end() )
+                continue;
+
+            wxString material = ALTIUM_PROPS_UTILS::ReadString( aProps, prefix + wxT( "DIELMATERIAL" ),
+                                                                wxT( "" ) );
+            int32_t  height = ALTIUM_PROPS_UTILS::ReadKicadUnit( aProps, prefix + wxT( "DIELHEIGHT" ),
+                                                                 wxT( "0mil" ) );
+            double   diconst = ALTIUM_PROPS_UTILS::ReadDouble( aProps, prefix + wxT( "DIELCONST" ), 0. );
+            double   tangent = ALTIUM_PROPS_UTILS::ReadDouble( aProps, prefix + wxT( "DIELLOSSTANGENT" ),
+                                                               0. );
+
+            wxString key = MakeAltiumDielectricKey( material, height, diconst );
+
+            auto [it, inserted] = tangents.insert( { key, tangent } );
+
+            if( !inserted && std::abs( it->second - tangent ) > 1e-9 )
+                ambiguous.insert( key );
+        }
+    };
+
+    // Prefer V9 keys (most recent); fall back to the V8 physical stackup keys only for dielectrics
+    // the V9 scan did not already provide.
+    scan( wxT( "V9_STACK_LAYER" ) );
+    scan( wxT( "LAYER_V8_" ) );
+
+    for( const wxString& key : ambiguous )
+        tangents.erase( key );
+
+    return tangents;
+}
+
+
 static std::vector<ABOARD6_LAYER_STACKUP> ReadAltiumStackupFromProperties( const std::map<wxString, wxString>& aProps )
 {
     std::vector<ABOARD6_LAYER_STACKUP> stackup;
@@ -472,6 +533,24 @@ static std::vector<ABOARD6_LAYER_STACKUP> ReadAltiumStackupFromProperties( const
 
         ABOARD6_LAYER_STACKUP l( aProps, layeri, 0 );
         stackup.push_back( l );
+    }
+
+    // The legacy LAYER<n> records do not store the dielectric loss tangent, but the modern V8/V9
+    // physical stackup keys do. Backfill it onto the matching dielectric records.
+    std::map<wxString, double> tangents = ReadAltiumDielectricLossTangents( aProps );
+
+    if( !tangents.empty() )
+    {
+        for( ABOARD6_LAYER_STACKUP& l : stackup )
+        {
+            wxString key = MakeAltiumDielectricKey( l.dielectricmaterial, l.dielectricthick,
+                                                    l.dielectricconst );
+
+            auto it = tangents.find( key );
+
+            if( it != tangents.end() )
+                l.dielectriclosstangent = it->second;
+        }
     }
 
     return stackup;

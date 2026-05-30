@@ -473,6 +473,7 @@ struct ABOARD6_LAYER_STACKUP
     double   dielectricconst;
     int32_t  dielectricthick;
     wxString dielectricmaterial;
+    double   dielectriclosstangent = 0.;
 
     bool            mechenabled = false;
     ALTIUM_MECHKIND mechkind = ALTIUM_MECHKIND::UNKNOWN;

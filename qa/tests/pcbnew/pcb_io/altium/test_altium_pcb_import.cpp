@@ -33,22 +33,21 @@
 #include <pcbnew/pcb_io/altium/pcb_io_altium_designer.h>
 #include <pcbnew/pcb_io/altium/altium_parser_pcb.h>
 
-#include <common/io/altium/altium_binary_parser.h>
-
 #include <board.h>
 #include <board_design_settings.h>
+#include <board_stackup_manager/board_stackup.h>
 #include <netinfo.h>
 #include <netclass.h>
+#include <pcb_track.h>
 #include <project/net_settings.h>
 #include <zone.h>
 
-#include <cstring>
 #include <vector>
 
 
 struct ALTIUM_PCB_IMPORT_FIXTURE
 {
-    ALTIUM_PCB_IMPORT_FIXTURE() {}
+    ALTIUM_PCB_IMPORT_FIXTURE() = default;
 
     PCB_IO_ALTIUM_DESIGNER m_altiumPlugin;
 };
@@ -286,165 +285,133 @@ BOOST_AUTO_TEST_CASE( SelectAltiumPolygonRule_PriorityOrder )
 
 
 /**
- * Build a synthetic Vias6 binary record so the AVIA6 parser can be exercised without a full
- * compound file.  The layout mirrors the extended (subrecord1 > 74) via record format.
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24458
  *
- * Altium stores lengths in 0.1uinch units; the helpers below take raw Altium units so the
- * resulting AVIA6 fields are already converted to KiCad nm by the parser.
+ * The Fastino board references every via's solder mask expansion from the hole edge.  KiCad vias
+ * cannot represent a hole-referenced opening, so when the resulting opening does not clear the via
+ * land the importer must tent the side instead of leaving the copper exposed.  Before the fix these
+ * vias were imported untented, so verify the imported board tents both sides of every via.
+ *
+ * This is the same board used by the issue 24456 stackup test.
  */
-static std::vector<char> buildExtendedViaRecord( int32_t aDiameterAu, int32_t aHoleAu,
-                                                 int32_t aMaskFrontAu, bool aManual,
-                                                 bool aFromHole )
+BOOST_AUTO_TEST_CASE( Via_HoleReferencedMaskTenting )
 {
-    auto appendU8 = []( std::vector<char>& aBuf, uint8_t aVal )
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/altium/issue24456/Fastino_Ground_Isolator.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+
+    int viaCount = 0;
+    int frontExposed = 0;
+    int backExposed = 0;
+
+    for( PCB_TRACK* track : board->Tracks() )
     {
-        aBuf.push_back( static_cast<char>( aVal ) );
-    };
+        if( track->Type() != PCB_VIA_T )
+            continue;
 
-    auto appendI32 = []( std::vector<char>& aBuf, int32_t aVal )
-    {
-        for( int ii = 0; ii < 4; ++ii )
-            aBuf.push_back( static_cast<char>( ( aVal >> ( 8 * ii ) ) & 0xff ) );
-    };
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
+        viaCount++;
 
-    auto appendU16 = []( std::vector<char>& aBuf, uint16_t aVal )
-    {
-        aBuf.push_back( static_cast<char>( aVal & 0xff ) );
-        aBuf.push_back( static_cast<char>( ( aVal >> 8 ) & 0xff ) );
-    };
+        if( via->GetFrontTentingMode() != TENTING_MODE::TENTED )
+            frontExposed++;
 
-    std::vector<char> payload;
+        if( via->GetBackTentingMode() != TENTING_MODE::TENTED )
+            backExposed++;
+    }
 
-    appendU8( payload, 0 );          // unknown skip byte
-    appendU8( payload, 0x00 );       // flags1: not tented, not test/fab
-    appendU8( payload, 0x00 );       // flags2
-    appendU16( payload, 0 );         // net
+    BOOST_REQUIRE_GT( viaCount, 0 );
 
-    for( int ii = 0; ii < 8; ++ii ) // skip 8
-        appendU8( payload, 0 );
+    // Every via on this board carries a hole-referenced mask opening narrower than its land, so the
+    // importer must tent both sides of all of them.
+    BOOST_CHECK_MESSAGE( frontExposed == 0,
+                         wxString::Format( "%d of %d vias left front-exposed despite a "
+                                           "hole-referenced mask",
+                                           frontExposed, viaCount ) );
+    BOOST_CHECK_MESSAGE( backExposed == 0,
+                         wxString::Format( "%d of %d vias left back-exposed despite a "
+                                           "hole-referenced mask",
+                                           backExposed, viaCount ) );
 
-    appendI32( payload, 0 );         // position x
-    appendI32( payload, 0 );         // position y
-    appendI32( payload, aDiameterAu );
-    appendI32( payload, aHoleAu );
-    appendU8( payload, 1 );          // layer_start TOP_LAYER
-    appendU8( payload, 32 );         // layer_end BOTTOM_LAYER
+    // Guard the tenting heuristic's boundary cases directly.  A wide hole-referenced opening that
+    // clears the land must NOT tent, a land-referenced via must NOT be silently tented, and an
+    // explicit Altium tent flag must always tent regardless of expansion mode.
+    const uint32_t holeSize = 300000;     // 0.3mm
+    const int      landWidth = 600000;    // 0.6mm
 
-    appendU8( payload, 0 );          // temp_byte (unknown)
-    appendI32( payload, 0 );         // thermal_relief_airgap
-    appendU8( payload, 0 );          // thermal_relief_conductorcount
-    appendU8( payload, 0 );          // skip
-    appendI32( payload, 0 );         // thermal_relief_conductorwidth
-    appendI32( payload, 0 );         // unknown
-    appendI32( payload, 0 );         // unknown
+    BOOST_CHECK( !altiumViaSideIsTented( /*tentFlag*/ false, /*manual*/ true, /*fromHole*/ true,
+                                         holeSize, /*expansion*/ 500000, landWidth ) );
+    BOOST_CHECK( !altiumViaSideIsTented( /*tentFlag*/ false, /*manual*/ true, /*fromHole*/ false,
+                                         holeSize, /*expansion*/ 30000, landWidth ) );
+    BOOST_CHECK( altiumViaSideIsTented( /*tentFlag*/ true, /*manual*/ false, /*fromHole*/ false,
+                                        holeSize, /*expansion*/ 0, landWidth ) );
 
-    for( int ii = 0; ii < 4; ++ii ) // skip 4
-        appendU8( payload, 0 );
-
-    appendI32( payload, aMaskFrontAu );
-
-    for( int ii = 0; ii < 8; ++ii ) // skip 8
-        appendU8( payload, 0 );
-
-    appendU8( payload, aManual ? 0x02 : 0x00 );    // soldermask_expansion_manual
-    appendU8( payload, aFromHole ? 0x01 : 0x00 );  // soldermask_expansion_from_hole
-
-    for( int ii = 0; ii < 6; ++ii ) // skip 6
-        appendU8( payload, 0 );
-
-    appendU8( payload, 0 );          // viamode SIMPLE
-
-    for( int ii = 0; ii < 32; ++ii )
-        appendI32( payload, aDiameterAu ); // diameter_by_layer
-
-    std::vector<char> record;
-    record.push_back( static_cast<char>( 3 ) ); // ALTIUM_RECORD::VIA
-
-    uint32_t len = static_cast<uint32_t>( payload.size() );
-
-    for( int ii = 0; ii < 4; ++ii )
-        record.push_back( static_cast<char>( ( len >> ( 8 * ii ) ) & 0xff ) );
-
-    record.insert( record.end(), payload.begin(), payload.end() );
-
-    return record;
-}
-
-
-static AVIA6 parseViaRecord( const std::vector<char>& aRecord )
-{
-    auto buf = std::make_unique<char[]>( aRecord.size() );
-    std::memcpy( buf.get(), aRecord.data(), aRecord.size() );
-
-    ALTIUM_BINARY_PARSER reader( buf, aRecord.size() );
-    return AVIA6( reader );
+    // A narrow hole-referenced opening (hole + 2 * expansion <= land) tents the side.
+    BOOST_CHECK( altiumViaSideIsTented( /*tentFlag*/ false, /*manual*/ true, /*fromHole*/ true,
+                                        holeSize, /*expansion*/ 30000, landWidth ) );
 }
 
 
 /**
- * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24458
+ * Verify that the dielectric loss tangent is imported from the modern Altium physical stackup
+ * (LAYER_V8_/V9_STACK_LAYER keys). The legacy LAYER<n> records used to build the stackup do not
+ * carry the loss tangent, so it must be backfilled from the modern keys.
  *
- * Altium vias that reference their solder mask expansion from the hole edge were imported with
- * no mask coverage at all.  Verify the from-hole flag is decoded and the geometry fields needed
- * to derive tenting are read correctly.
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24456
  */
-BOOST_AUTO_TEST_CASE( Via_SolderMaskFromHole_Parsing )
+BOOST_AUTO_TEST_CASE( StackupDielectricLossTangent )
 {
-    // 0.6mm land, 0.3mm hole, 0.03mm expansion from the hole edge (Altium units are 0.1uinch).
-    const int32_t diameterAu = 236220; // 0.6mm
-    const int32_t holeAu     = 118110; // 0.3mm
-    const int32_t maskAu     = 11811;  // 0.03mm
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/altium/issue24456/Fastino_Ground_Isolator.PcbDoc";
 
-    AVIA6 fromHole = parseViaRecord(
-            buildExtendedViaRecord( diameterAu, holeAu, maskAu, /*manual*/ true,
-                                    /*fromHole*/ true ) );
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
 
-    BOOST_CHECK( fromHole.soldermask_expansion_manual );
-    BOOST_CHECK( fromHole.soldermask_expansion_from_hole );
-    BOOST_CHECK( !fromHole.is_tent_top );
-    BOOST_CHECK( !fromHole.is_tent_bottom );
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
 
-    // The decoded values are in KiCad nm.
-    BOOST_CHECK_EQUAL( fromHole.diameter, 600000u );
-    BOOST_CHECK_EQUAL( fromHole.holesize, 300000u );
-    BOOST_CHECK_EQUAL( fromHole.soldermask_expansion_front, 30000 );
+    BOOST_REQUIRE( board );
 
-    // Records without an explicit back field mirror the front expansion.
-    BOOST_CHECK_EQUAL( fromHole.soldermask_expansion_back, 30000 );
+    const BOARD_STACKUP& stackup = board->GetDesignSettings().GetStackupDescriptor();
 
-    // The hole-referenced mask opening (hole + 2 * expansion) is smaller than the via land, so both
-    // sides of the via are tented by the importer's tenting heuristic.
-    BOOST_CHECK( altiumViaSideIsTented( fromHole.is_tent_top, fromHole.soldermask_expansion_manual,
-                                        fromHole.soldermask_expansion_from_hole, fromHole.holesize,
-                                        fromHole.soldermask_expansion_front,
-                                        static_cast<int>( fromHole.diameter ) ) );
-    BOOST_CHECK( altiumViaSideIsTented( fromHole.is_tent_bottom,
-                                        fromHole.soldermask_expansion_manual,
-                                        fromHole.soldermask_expansion_from_hole, fromHole.holesize,
-                                        fromHole.soldermask_expansion_back,
-                                        static_cast<int>( fromHole.diameter ) ) );
+    int dielectricCount = 0;
+    int dielectricWithTangent = 0;
 
-    // A land-referenced via must not set the from-hole flag and must not be silently tented.
-    AVIA6 fromLand = parseViaRecord(
-            buildExtendedViaRecord( diameterAu, holeAu, maskAu, /*manual*/ true,
-                                    /*fromHole*/ false ) );
+    for( const BOARD_STACKUP_ITEM* item : stackup.GetList() )
+    {
+        if( item->GetType() != BS_ITEM_TYPE_DIELECTRIC )
+            continue;
 
-    BOOST_CHECK( fromLand.soldermask_expansion_manual );
-    BOOST_CHECK( !fromLand.soldermask_expansion_from_hole );
-    BOOST_CHECK( !altiumViaSideIsTented( fromLand.is_tent_top, fromLand.soldermask_expansion_manual,
-                                         fromLand.soldermask_expansion_from_hole, fromLand.holesize,
-                                         fromLand.soldermask_expansion_front,
-                                         static_cast<int>( fromLand.diameter ) ) );
+        for( int sub = 0; sub < item->GetSublayersCount(); sub++ )
+        {
+            // Only count dielectric sublayers that carry a real dielectric (non-zero thickness)
+            if( item->GetThickness( sub ) <= 0 )
+                continue;
 
-    // A wide hole-referenced opening that clears the land must NOT tent the via.
-    BOOST_CHECK( !altiumViaSideIsTented( /*tentFlag*/ false, /*manual*/ true, /*fromHole*/ true,
-                                         fromHole.holesize, /*expansion*/ 500000,
-                                         static_cast<int>( fromHole.diameter ) ) );
+            dielectricCount++;
 
-    // An explicit Altium tent flag always tents regardless of expansion mode.
-    BOOST_CHECK( altiumViaSideIsTented( /*tentFlag*/ true, /*manual*/ false, /*fromHole*/ false,
-                                        fromHole.holesize, /*expansion*/ 0,
-                                        static_cast<int>( fromHole.diameter ) ) );
+            double tangent = item->GetLossTangent( sub );
+
+            if( tangent > 0. )
+            {
+                dielectricWithTangent++;
+
+                // Every prepreg/core dielectric in this board uses a 0.020 loss tangent.
+                BOOST_CHECK_CLOSE( tangent, 0.020, 1e-6 );
+            }
+        }
+    }
+
+    BOOST_REQUIRE_GT( dielectricCount, 0 );
+
+    // All of the board's substantive dielectrics carry a loss tangent in the Altium source, so
+    // every imported dielectric sublayer must receive it.
+    BOOST_CHECK_MESSAGE( dielectricWithTangent == dielectricCount,
+                         wxString::Format( "Only %d of %d dielectric sublayers received a loss "
+                                           "tangent from the Altium stackup",
+                                           dielectricWithTangent, dielectricCount ) );
 }
 
 
