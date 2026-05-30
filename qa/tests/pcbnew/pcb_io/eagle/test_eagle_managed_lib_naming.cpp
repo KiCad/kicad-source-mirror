@@ -43,6 +43,7 @@
 #include <footprint.h>
 #include <lib_id.h>
 
+#include <wx/filefn.h>
 #include <wx/filename.h>
 
 
@@ -56,6 +57,15 @@ BOOST_AUTO_TEST_CASE( FootprintNamesHaveNoUrnSuffix )
 
     BOOST_REQUIRE_MESSAGE( wxFileName::FileExists( dataPath ),
                            "Test board file not found: " + dataPath );
+
+    // This board carries no Eagle clearance matrix, so loading it must not leave an
+    // empty .kicad_dru sidecar behind in the source tree.
+    wxFileName rulesFn( dataPath );
+    rulesFn.SetExt( wxT( "kicad_dru" ) );
+
+    BOOST_REQUIRE_MESSAGE( !rulesFn.FileExists(),
+                           "Stale rules sidecar present before load: "
+                                   + rulesFn.GetFullPath().ToStdString() );
 
     PCB_IO_EAGLE eaglePlugin;
     BOARD*       rawBoard = nullptr;
@@ -102,6 +112,15 @@ BOOST_AUTO_TEST_CASE( FootprintNamesHaveNoUrnSuffix )
 
     BOOST_CHECK_MESSAGE( sawLed, "Expected footprint named 'LED-0603' (no URN suffix)" );
     BOOST_CHECK_MESSAGE( sawRes, "Expected footprint named 'R0603' (no URN suffix)" );
+
+    // With no clearance matrix to convert, the importer must not write an empty
+    // rules sidecar into the source tree.
+    if( rulesFn.FileExists() )
+    {
+        wxRemoveFile( rulesFn.GetFullPath() );
+        BOOST_ERROR( "Importer wrote an empty rules sidecar: "
+                     + rulesFn.GetFullPath().ToStdString() );
+    }
 }
 
 
