@@ -513,6 +513,10 @@ bool EDA_TEXT::ResolveFont( const std::vector<wxString>* aEmbeddedFonts )
         if( m_render_cache && !m_render_cache->glyphs.empty() )
             m_render_cache->font = m_attributes.m_Font;
 
+        // The bbox cache isn't keyed on the font, so a box measured against the fallback font
+        // before resolution would otherwise survive until the next setter.
+        ClearBoundingBoxCache();
+
         m_unresolvedFontName = wxEmptyString;
         return true;
     }

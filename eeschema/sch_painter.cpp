@@ -2327,6 +2327,10 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
         // Use GetBoundingBox() which correctly handles multiline text dimensions.
         BOX2I bbox = aText->GetBoundingBox();
 
+        // SCH_TEXT glyphs are drawn shifted by GetOffsetToMatchSCH_FIELD(); shift the box to match.
+        if( aText->Type() == SCH_TEXT_T )
+            bbox.Offset( aText->GetOffsetToMatchSCH_FIELD( nullptr ) );
+
         bbox.Inflate( attrs.m_StrokeWidth / 2, attrs.m_StrokeWidth * 2 );
 
         m_gal->SetIsFill( true );
