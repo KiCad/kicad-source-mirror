@@ -1108,6 +1108,9 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcb
                                               wxString( layer.dielectricmaterial ) );
         ( *it )->SetEpsilonR( layer.dielectricconst, 0 );
 
+        if( layer.dielectriclosstangent > 0. )
+            ( *it )->SetLossTangent( layer.dielectriclosstangent, 0 );
+
         ++it;
     }
 
