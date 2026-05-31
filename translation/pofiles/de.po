@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:03+0300\n"
-"PO-Revision-Date: 2026-05-31 16:38+0000\n"
+"PO-Revision-Date: 2026-06-01 04:38+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -47261,12 +47261,18 @@ msgid "Could not scan rules text: %s"
 msgstr "Konnte nicht zu Remote übertragen: %s"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:338
+#, fuzzy
 msgid "Place the cursor inside a (rule ...) block to show matching items."
 msgstr ""
+"Platzieren Sie den Zeiger innerhalb eines (Regel ...) Blocks, um "
+"übereinstimmende Elemente anzuzeigen."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:347
+#, fuzzy
 msgid "The rule under the cursor has no name; add a name to identify it."
 msgstr ""
+"Die Regel unter dem Zeiger hat keinen Namen; fügen Sie einen Namen zur "
+"Identifizierung hinzu."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:367
 #, fuzzy, c-format
@@ -49984,12 +49990,15 @@ msgstr "Leiterbahnlänge außerhalb des zulässigen Bereichs"
 #: pcbnew/drc/drc_item.cpp:269
 #, fuzzy
 msgid "Net chain stub length out of range"
-msgstr "Leiterbahnlänge außerhalb des zulässigen Bereichs"
+msgstr "Stichlänge der Netzkette außerhalb des zulässigen Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:273
+#, fuzzy
 msgid ""
 "Net chain routed without continuous copper on the required reference layer"
 msgstr ""
+"Netzkette ohne durchgehendes Kupfer auf der erforderlichen Referenzlage "
+"geroutet"
 
 #: pcbnew/drc/drc_item.cpp:277
 msgid "Skew between tracks out of range"
@@ -60571,7 +60580,7 @@ msgstr "Hebt alle Verbindungen und Pins hervor, die zu einem Netz gehören"
 #: pcbnew/tools/pcb_actions.cpp:1629
 #, fuzzy
 msgid "Set Terminal Pad"
-msgstr "Typ mit 3 Anschlüssen"
+msgstr "Terminalpad setzen"
 
 #: pcbnew/tools/pcb_actions.cpp:1638
 msgid "Hide Net in Ratsnest"
