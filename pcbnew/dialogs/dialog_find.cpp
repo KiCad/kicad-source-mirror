@@ -134,6 +134,7 @@ void DIALOG_FIND::onShowSearchPanel( wxHyperlinkEvent& event )
 {
     m_frame->GetToolManager()->RunAction( ACTIONS::showSearch );
 
+    Show( false );
     EndModal( wxID_CANCEL );
 
     CallAfter(
