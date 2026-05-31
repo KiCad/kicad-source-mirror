@@ -420,6 +420,30 @@ void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 }
 
 
+void PCB_TABLE::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
+{
+    // Mirror is Flip with the layer restored. TOP_BOTTOM needs a 180 deg pre-rotation
+    // because rotate-then-LR-flip equals TB-flip.
+    PCB_LAYER_ID              origLayer = GetLayer();
+    std::vector<PCB_LAYER_ID> origCellLayers;
+
+    origCellLayers.reserve( m_cells.size() );
+
+    for( PCB_TABLECELL* cell : m_cells )
+        origCellLayers.push_back( cell->GetLayer() );
+
+    if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
+        Rotate( aCentre, ANGLE_180 );
+
+    Flip( aCentre, FLIP_DIRECTION::LEFT_RIGHT );
+
+    SetLayer( origLayer );
+
+    for( size_t i = 0; i < m_cells.size(); ++i )
+        m_cells[i]->SetLayer( origCellLayers[i] );
+}
+
+
 void PCB_TABLE::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFunction, RECURSE_MODE aMode ) const
 {
     for( PCB_TABLECELL* cell : m_cells )

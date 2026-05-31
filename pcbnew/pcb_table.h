@@ -219,6 +219,8 @@ public:
 
     void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
+    void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
+
     const BOX2I GetBoundingBox() const override;
 
     void DrawBorders( const std::function<void( const VECTOR2I& aPt1, const VECTOR2I& aPt2,
