@@ -510,7 +510,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
                 view->Remove( item );
                 parent->Remove( item, REMOVE_MODE::BULK );
 
-                item->SwapItemData( image );
+                if( item->Type() != PCB_MARKER_T )
+                    item->SwapItemData( image );
 
                 clear_local_ratsnest_flags( item );
                 item->ClearFlags( UR_TRANSIENT );

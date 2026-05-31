@@ -143,7 +143,7 @@ EDA_ITEM* PCB_TARGET::Clone() const
 
 void PCB_TARGET::swapData( BOARD_ITEM* aImage )
 {
-    assert( aImage->Type() == PCB_TARGET_T );
+    wxASSERT( aImage->Type() == PCB_TARGET_T );
 
     std::swap( *((PCB_TARGET*) this), *((PCB_TARGET*) aImage) );
 }

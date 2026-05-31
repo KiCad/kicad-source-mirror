@@ -529,7 +529,7 @@ EDA_ITEM* PCB_TEXT::Clone() const
 
 void PCB_TEXT::swapData( BOARD_ITEM* aImage )
 {
-    assert( aImage->Type() == PCB_TEXT_T );
+    wxASSERT( aImage->Type() == PCB_TEXT_T );
 
     std::swap( *( (PCB_TEXT*) this ), *( (PCB_TEXT*) aImage ) );
 }

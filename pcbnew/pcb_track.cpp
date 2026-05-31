@@ -2643,23 +2643,26 @@ BITMAPS PCB_TRACK::GetMenuImage() const
     return BITMAPS::add_tracks;
 }
 
+
 void PCB_TRACK::swapData( BOARD_ITEM* aImage )
 {
-    assert( aImage->Type() == PCB_TRACE_T );
+    wxASSERT( aImage->Type() == PCB_TRACE_T );
 
     std::swap( *((PCB_TRACK*) this), *((PCB_TRACK*) aImage) );
 }
 
+
 void PCB_ARC::swapData( BOARD_ITEM* aImage )
 {
-    assert( aImage->Type() == PCB_ARC_T );
+    wxASSERT( aImage->Type() == PCB_ARC_T );
 
     std::swap( *this, *static_cast<PCB_ARC*>( aImage ) );
 }
 
+
 void PCB_VIA::swapData( BOARD_ITEM* aImage )
 {
-    assert( aImage->Type() == PCB_VIA_T );
+    wxASSERT( aImage->Type() == PCB_VIA_T );
 
     std::swap( *((PCB_VIA*) this), *((PCB_VIA*) aImage) );
 }

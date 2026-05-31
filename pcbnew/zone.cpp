@@ -1441,7 +1441,7 @@ BITMAPS ZONE::GetMenuImage() const
 
 void ZONE::swapData( BOARD_ITEM* aImage )
 {
-    assert( aImage->Type() == PCB_ZONE_T );
+    wxASSERT( aImage->Type() == PCB_ZONE_T );
 
     std::swap( *static_cast<ZONE*>( this ), *static_cast<ZONE*>( aImage) );
 }

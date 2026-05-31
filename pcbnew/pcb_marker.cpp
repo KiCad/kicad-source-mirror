@@ -225,6 +225,14 @@ PCB_MARKER* PCB_MARKER::DeserializeFromString( const wxString& data )
 }
 
 
+void PCB_MARKER::swapData( BOARD_ITEM* aImage )
+{
+    wxASSERT( aImage->Type() == PCB_MARKER_T );
+
+    std::swap( *((PCB_MARKER*) this), *((PCB_MARKER*) aImage) );
+}
+
+
 void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.emplace_back( _( "Type" ), _( "Marker" ) );
