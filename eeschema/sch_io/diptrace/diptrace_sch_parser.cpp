@@ -1731,8 +1731,8 @@ LIB_SYMBOL* SCH_PARSER::getOrCreateLibSymbol( const DCH_COMPONENT& aComp, int aU
     {
         auto pin = std::make_unique<SCH_PIN>( libSymbol.get() );
 
-        pin->SetName( dchPin.name.IsEmpty() ? wxT( "~" ) : dchPin.name );
-        pin->SetNumber( dchPin.number.IsEmpty() ? wxT( "1" ) : dchPin.number );
+        pin->SetName( dchPin.name.IsEmpty() ? wxString( wxT( "~" ) ) : dchPin.name );
+        pin->SetNumber( dchPin.number.IsEmpty() ? wxString( wxT( "1" ) ) : dchPin.number );
         pin->SetPosition( VECTOR2I( toKiCadCoordX( dchPin.x ),
                                     toKiCadCoordY( dchPin.y ) ) );
         pin->SetLength( static_cast<int>( static_cast<int64_t>( abs( dchPin.length ) ) * 100 / 3 ) );
