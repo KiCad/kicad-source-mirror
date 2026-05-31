@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-26 05:03+0300\n"
-"PO-Revision-Date: 2026-05-31 09:57+0000\n"
+"PO-Revision-Date: 2026-05-31 16:38+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -7271,13 +7271,12 @@ msgstr "Polygon"
 #: common/eda_shape.cpp:473 common/eda_shape.cpp:1462 common/eda_shape.cpp:3370
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:213
 msgid "Ellipse"
-msgstr ""
+msgstr "Ellipse"
 
 #: common/eda_shape.cpp:474 common/eda_shape.cpp:1463 common/eda_shape.cpp:3371
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:229
-#, fuzzy
 msgid "Elliptical Arc"
-msgstr "Bogen teilen"
+msgstr "Elliptischer Bogen"
 
 #: common/eda_shape.cpp:1447
 msgid "Pad Number Box"
@@ -7356,9 +7355,8 @@ msgid "Start Angle"
 msgstr "Anfangswinkel"
 
 #: common/eda_shape.cpp:1509 pcbnew/dialogs/dialog_shape_properties.cpp:1163
-#, fuzzy
 msgid "End Angle"
-msgstr "Winkel"
+msgstr "Endwinkel"
 
 #: common/eda_shape.cpp:1514 common/layer_id.cpp:147
 #: eeschema/sch_rule_area.cpp:395 pcbnew/widgets/appearance_controls.cpp:356
@@ -7476,7 +7474,7 @@ msgstr "Eckradius"
 #: common/eda_shape.cpp:3546
 #, fuzzy
 msgid "Ellipse Rotation"
-msgstr "Drehung"
+msgstr "Ellipsen-Drehung"
 
 #: common/eda_shape.cpp:3552
 msgid "Arc Start Angle"
@@ -8325,10 +8323,13 @@ msgid "Could not look up the commits to merge."
 msgstr "Konnte Ziel-Commit nicht auflösen"
 
 #: common/git/libgit_backend.cpp:1531 common/git/libgit_backend.cpp:1716
+#, fuzzy
 msgid ""
 "Could not create a commit signature.  Set user.name and user.email in your "
 "git configuration."
 msgstr ""
+"Die Commit-Signatur konnte nicht erstellt werden.  Setzen Sie user.name und "
+"user.email in Ihrer Git-Konfiguration."
 
 #: common/git/libgit_backend.cpp:1540
 #, fuzzy, c-format
@@ -13054,17 +13055,23 @@ msgstr ""
 "wurde nicht gefunden. Skript ist nicht verfügbar."
 
 #: eeschema/connection_graph.cpp:3763
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Net chain rebuild failed: %s.  The schematic may have stale chain data; "
 "reload to recover."
 msgstr ""
+"Erneuter Netzkettenaufbau gescheitert: %s.  Der Schaltplan enthält "
+"möglicherweise veraltete Kettendaten; Für eine Wiederherstellung neu laden."
 
 #: eeschema/connection_graph.cpp:3777
+#, fuzzy
 msgid ""
 "Net chain rebuild failed with an unknown error.  The schematic may have "
 "stale chain data; reload to recover."
 msgstr ""
+"Erneuter Netzkettenaufbau ist mit unbekannten Fehler gescheitert.  Der "
+"Schaltplan enthält möglicherweise veraltete Kettendaten; Für eine "
+"Wiederherstellung neu laden."
 
 #: eeschema/connection_graph.cpp:5057
 #, c-format
@@ -13747,19 +13754,19 @@ msgid "Filter chains by name or net..."
 msgstr "Ketten nach Name oder Netz filtern ..."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:77
-#, fuzzy
 msgid "Create"
-msgstr "Leiterplatte erzeugen"
+msgstr "Erstellen"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:129
-#, c-format
+#, c-format, fuzzy
 msgid "Chain created (%d total). Select another or close."
 msgstr ""
+"Kette erstellt (%d insgesamt). Wählen Sie eine andere oder schließen Sie sie."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:142
 #, fuzzy
 msgid "Please select a chain from the list."
-msgstr "Bitte mindestens eine Option aus der Liste %s auswählen."
+msgstr "Bitte eine Netzkette aus der Liste auswählen."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:142
 #: eeschema/dialogs/dialog_create_net_chain.cpp:162
@@ -13772,41 +13779,44 @@ msgstr "Bitte mindestens eine Option aus der Liste %s auswählen."
 #: eeschema/tools/sch_editor_control.cpp:1931
 #, fuzzy
 msgid "Create Net Chain"
-msgstr "Neues Blatt anlegen"
+msgstr "Netzkette anlegen"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:162
 #, fuzzy
 msgid "Please enter a name for the net chain."
-msgstr "Bitte geben Sie einen Namen für das Repository ein"
+msgstr "Bitte geben Sie einen Namen für die Netzkette ein."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:169
 #, fuzzy
 msgid "Chain name cannot contain spaces, quotes, or parentheses."
-msgstr "Signalnamen dürfen keine Leerzeichen enthalten"
+msgstr ""
+"Kettennamen dürfen keine Leerzeichen, Anführungszeichen oder Klammern "
+"enthalten."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:178
+#, fuzzy
 msgid "Connection graph not available."
-msgstr ""
+msgstr "Verbindungsgraph nicht verfügbar."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:184
 #, fuzzy, c-format
 msgid "A net chain named '%s' already exists."
-msgstr "Eine Element mit Aliasname \"%s\" existiert bereits."
+msgstr "Eine Netzkette namens \"%s\" existiert bereits."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:197
 #, fuzzy
 msgid "Failed to create the net chain."
-msgstr "Tag konnte nicht erstellt werden."
+msgstr "Netzkette konnte nicht erstellt werden."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:222
 #, fuzzy
 msgid "Failed to create the manual net chain."
-msgstr "Branch konnte nicht erstellt werden."
+msgstr "Manuelle Netzkette konnte nicht erstellt werden."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:314
 #, fuzzy
 msgid "Please select both a From and To component."
-msgstr "Bitte eine zu importierende Datei wählen."
+msgstr "Bitte wählen Sie beides, ein Von- und ein Zu-Bauteil."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:314
 #: eeschema/dialogs/dialog_create_net_chain.cpp:321
@@ -13816,12 +13826,12 @@ msgstr "Bitte eine zu importierende Datei wählen."
 #: eeschema/dialogs/dialog_create_net_chain.cpp:513
 #, fuzzy
 msgid "Find Path"
-msgstr "Nächstes Element suchen"
+msgstr "Pfad finden"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:321
 #, fuzzy
 msgid "From and To must be different components."
-msgstr "Quelle 1 und Quelle 2 müssen unterschiedlich sein."
+msgstr "Von und Zu müssen unterschiedliche Bauteile sein."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:351
 #, c-format
@@ -13829,33 +13839,46 @@ msgid "Could not find component '%s' or '%s'."
 msgstr "Konnte Bauteil \"%s\" oder \"%s\" nicht finden."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:401
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "No net chain path found between %s and %s through passthrough components.\n"
 "\n"
 "Would you like to force-create a manual chain link between these components?"
 msgstr ""
+"Kein Netzkettenpfad zwischen %s und %s über Durchgangsbauteile gefunden.\n"
+"\n"
+"Möchten Sie eine Erstellung der manuellen Kettenverbindung zwischen diesen "
+"Bauteilen erzwingen?"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:438
+#, fuzzy
 msgid "Selected components have no connected pins to anchor a manual chain."
 msgstr ""
+"Ausgewählte Bauteile haben keine verbundenen Pins, um eine manuelle Kette zu "
+"verankern."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:470
-#, c-format
+#, c-format, fuzzy
 msgid "Showing manual chain between %s and %s. Use Refresh to restore all."
 msgstr ""
+"Zeige manuelle Kette zwischen %s und %s an. Klicken Sie auf Aktualisieren, "
+"um alles zurückzusetzen."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:510
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "All %zu net chain paths between %s and %s are already committed as net "
 "chains."
 msgstr ""
+"Alle %zu Netzkettenpfade zwischen %s und %s sind bereits als Netzketten "
+"committet."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:546
-#, c-format
+#, c-format, fuzzy
 msgid "Showing %zu path(s) between %s and %s. Use Refresh to restore all."
 msgstr ""
+"Zeige %zu Pfad(e) zwischen %s und %s an. Klicken Sie auf Aktualisieren, um "
+"alles zurückzusetzen."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:767
 #: eeschema/dialogs/dialog_create_net_chain.cpp:784
@@ -13864,23 +13887,23 @@ msgstr ""
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:87
 #, fuzzy
 msgid "Member Nets"
-msgstr "Mitgliedsname"
+msgstr "Mitgliedsnetze"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:794
-#, c-format
+#, c-format, fuzzy
 msgid "Member Nets — %s (%zu) [%s]"
-msgstr ""
+msgstr "Mitgliedsnetze — %s (%zu) [%s]"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:799
 #: eeschema/dialogs/panel_setup_net_chains.cpp:654
-#, c-format
+#, c-format, fuzzy
 msgid "Member Nets — %s (%zu)"
-msgstr ""
+msgstr "Mitgliedsnetze — %s (%zu)"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1079
 #, fuzzy, c-format
 msgid "net '%s'"
-msgstr "Text \"%s\""
+msgstr "Netz \"%s\""
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1084
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1089
@@ -13889,21 +13912,26 @@ msgid "component %s"
 msgstr "Bauteil %s"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1108
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "No uncommitted chains match the selected %s. Use Refresh to restore the full "
 "list."
 msgstr ""
+"Keine nicht-comittete Kette stimmt mit dem selektierten %s überein. Klicken "
+"Sie auf Aktualisieren, um alles zurückzusetzen."
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:22
+#, fuzzy
 msgid ""
 " Select a detected net chain path and assign a name to create a net chain."
 msgstr ""
+" Selektieren Sie einen erkannten Netzkettenpfad und weisen Sie ihm für die "
+"Erstellung einer Netzkette einen Namen zu."
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:53
 #, fuzzy
 msgid "Suggested Name"
-msgstr "Schaltplanname"
+msgstr "Vorgeschlagener Name"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:54
 #: eeschema/net_navigator.cpp:384 pcbnew/board.cpp:2450
@@ -13920,7 +13948,7 @@ msgstr "Netze"
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:97
 #, fuzzy
 msgid "Manual endpoint selection"
-msgstr "Kann Auswahl nicht umwandeln"
+msgstr "Manuelle Endpunktauswahl"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:106
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:270
@@ -13931,12 +13959,12 @@ msgstr "Von:"
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:113
 #, fuzzy
 msgid "To:"
-msgstr "Oben:"
+msgstr "Zu:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:121
 #, fuzzy
 msgid "Find net chain path between the two components"
-msgstr "Nur Platine ohne Bauteile ausgeben"
+msgstr "Netzkettenpfad zwischen den zwei Bauteilen finden"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:131
 msgid "Chain Name:"
@@ -13945,7 +13973,7 @@ msgstr "Kettenname:"
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:145
 #, fuzzy
 msgid "Re-detect potential net chains from the schematic"
-msgstr "Eine bestehende Designvariante aus dem Schaltplan entfernen."
+msgstr "Potentielle Netzketten aus dem Schaltplan erneut erkennen"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
 msgid "Connected to database successfully"
@@ -23425,7 +23453,7 @@ msgstr "Ellipse, %s x %s"
 #: eeschema/sch_shape.cpp:473
 #, c-format
 msgid "Elliptical Arc, %s x %s"
-msgstr ""
+msgstr "Elliptischer Bogen, %s x %s"
 
 #: eeschema/sch_shape.cpp:620
 msgid "Body outline color"
@@ -27531,14 +27559,12 @@ msgid "Draw Circles"
 msgstr "Kreise zeichnen"
 
 #: eeschema/tools/sch_actions.cpp:703
-#, fuzzy
 msgid "Draw Ellipses"
-msgstr "Linien zeichnen"
+msgstr "Ellipsen zeichnen"
 
 #: eeschema/tools/sch_actions.cpp:712 pcbnew/tools/pcb_actions.cpp:156
-#, fuzzy
 msgid "Draw Elliptical Arcs"
-msgstr "Kreisbögen zeichnen"
+msgstr "Elliptische Bögen zeichnen"
 
 #: eeschema/tools/sch_actions.cpp:721 pcbnew/tools/pcb_actions.cpp:167
 msgid "Draw Arcs"
@@ -38955,7 +38981,8 @@ msgstr "(Bogen hat keine oder sehr kleine Größe: %d nm)"
 #: pcbnew/convert_shape_list_to_polygon.cpp:1208
 #, fuzzy, c-format
 msgid "(ellipse has null or very small radii: major=%d nm, minor=%d nm)"
-msgstr "(Kreis hat keinen oder sehr kleinen Radius: %d nm)"
+msgstr ""
+"(Ellipse hat keinen oder sehr kleine Radien: großer=%d nm, kleiner=%d nm)"
 
 #: pcbnew/cross-probing.cpp:109 pcbnew/dialogs/dialog_board_setup.cpp:236
 #: pcbnew/dialogs/dialog_drc.cpp:415 pcbnew/pcb_edit_frame.cpp:3227
@@ -45340,9 +45367,8 @@ msgid "Line width must be greater than zero for an unfilled curve."
 msgstr "Linienbreite für eine ungefüllte Kurve muss größer als Null sein."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1489
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled ellipse."
-msgstr "Linienbreite für einen ungefüllten Kreis muss größer als Null sein."
+msgstr "Linienbreite für eine ungefüllte Ellipse muss größer als Null sein."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1506
 msgid "Error List"
@@ -58856,14 +58882,12 @@ msgid "Draw Circle"
 msgstr "Kreis zeichnen"
 
 #: pcbnew/tools/drawing_tool.cpp:484 pcbnew/tools/pcb_actions.cpp:147
-#, fuzzy
 msgid "Draw Ellipse"
-msgstr "Eine Linie zeichnen"
+msgstr "Ellipse zeichnen"
 
 #: pcbnew/tools/drawing_tool.cpp:493
-#, fuzzy
 msgid "Draw Elliptical Arc"
-msgstr "Einen Kreisbogen zeichnen"
+msgstr "Elliptischen Bogen zeichnen"
 
 #: pcbnew/tools/drawing_tool.cpp:531
 msgid "Draw Arc"
@@ -59492,14 +59516,12 @@ msgid "Create outset lines from the selected item"
 msgstr "Außenlinien um gewähltes Element erzeugen"
 
 #: pcbnew/tools/pcb_actions.cpp:148
-#, fuzzy
 msgid "Draw an ellipse"
-msgstr "Eine Linie zeichnen"
+msgstr "Eine Ellipse zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:157
-#, fuzzy
 msgid "Draw an elliptical arc"
-msgstr "Einen Kreisbogen zeichnen"
+msgstr "Einen elliptischen Bogen zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Add Barcode"
@@ -61089,16 +61111,17 @@ msgid "Deselects all tracks & vias belonging to the same net."
 msgstr "Wählt alle Leiterbahnen und Vias ab, die zum selben Netz gehören."
 
 #: pcbnew/tools/pcb_actions.cpp:2464
-#, fuzzy
 msgid "Select All Tracks in Net Chain"
-msgstr "Alle Leiterbahnen eines Netzes auswählen"
+msgstr "Alle Leiterbahnen der Netzkette auswählen"
 
 #: pcbnew/tools/pcb_actions.cpp:2465
 #, fuzzy
 msgid ""
 "Selects all tracks & vias belonging to every net in the same net chain (nets "
 "joined through series passives)."
-msgstr "Wählt alle Leiterbahnen und Vias aus, die zum selben Netz gehören."
+msgstr ""
+"Wählt alle Leiterbahnen und Vias aus, die zu jedem Netz derselben Netzkette "
+"gehören (Netze, die über passive Reihenschaltungen verbunden sind)."
 
 #: pcbnew/tools/pcb_actions.cpp:2472
 msgid "Select All Unconnected Footprints"
@@ -61428,9 +61451,8 @@ msgid "Show a manager dialog for Generator objects"
 msgstr "Einen Verwaltungsdialog for Generatoren-Objekte anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:2849
-#, fuzzy
 msgid "Length Tuning Settings"
-msgstr "Einstellungen für Tuning von Leiterbahnlängen ..."
+msgstr "Einstellungen für Tuning von Leiterbahnlängen"
 
 #: pcbnew/tools/pcb_actions.cpp:2850
 msgid "Length Tuning Settings..."
@@ -61683,14 +61705,12 @@ msgid "Select"
 msgstr "Auswählen"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:120
-#, fuzzy
 msgid "Set terminal pad"
-msgstr "Typ mit 3 Anschlüssen"
+msgstr "Terminalpad setzen"
 
 #: pcbnew/tools/pcb_selection_tool.cpp:200
-#, fuzzy
 msgid "Net Chains..."
-msgstr "Einstellungen..."
+msgstr "Netzketten ..."
 
 #: pcbnew/tools/pcb_selection_tool.cpp:2072
 msgid "Select/Expand Connection..."
