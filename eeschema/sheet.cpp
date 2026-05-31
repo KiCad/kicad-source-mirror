@@ -836,8 +836,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
     else
         aSheet->GetScreen()->Append( newScreen );
 
-    SCH_SCREENS allLoadedScreens( aSheet );
-    allLoadedScreens.ReplaceDuplicateTimeStamps();
+    SCH_SCREENS allProjectScreens( &Schematic().Root() );
+    allProjectScreens.ReplaceDuplicateTimeStamps();
 
     return true;
 }
