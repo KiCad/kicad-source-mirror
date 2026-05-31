@@ -37,6 +37,7 @@ class DIALOG_UPDATE_PCB_BASE : public DIALOG_SHIM
 	protected:
 		wxCheckBox* m_cbRelinkFootprints;
 		wxCheckBox* m_cbTransferGroups;
+		wxCheckBox* m_cbApplyDesignBlockLayouts;
 		wxCheckBox* m_cbUpdateFootprints;
 		wxCheckBox* m_cbDeleteExtraFootprints;
 		wxCheckBox* m_cbOverrideLocks;
