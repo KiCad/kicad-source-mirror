@@ -142,8 +142,11 @@ DIALOG_FP_EDIT_PAD_TABLE::DIALOG_FP_EDIT_PAD_TABLE( PCB_BASE_FRAME* aParent, FOO
     m_grid->SetUnitsProvider( m_unitsProvider.get(), COL_SIZE_Y );
     m_grid->SetUnitsProvider( m_unitsProvider.get(), COL_DRILL_X );
     m_grid->SetUnitsProvider( m_unitsProvider.get(), COL_DRILL_Y );
-    m_grid->SetAutoEvalCols(
-            { COL_POS_X, COL_POS_Y, COL_SIZE_X, COL_SIZE_Y, COL_DRILL_X, COL_DRILL_Y, COL_P2D_LENGTH, COL_P2D_DELAY } );
+    m_grid->SetAutoEvalCols( { COL_POS_X, COL_POS_Y,
+                               COL_SIZE_X, COL_SIZE_Y,
+                               COL_DRILL_X, COL_DRILL_Y,
+                               COL_P2D_LENGTH,
+                               COL_P2D_DELAY } );
 
     // add Cut, Copy, and Paste to wxGrid
     m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
@@ -339,13 +342,14 @@ bool DIALOG_FP_EDIT_PAD_TABLE::TransferDataToWindow()
 void DIALOG_FP_EDIT_PAD_TABLE::setRowNullableEditors( int aRowId ) const
 {
     // Set nullable editors
-    auto setCellEditor = [this, aRowId]( int aCol )
-    {
-        GRID_CELL_MARK_AS_NULLABLE* cellEditor = new GRID_CELL_MARK_AS_NULLABLE( true );
-        wxGridCellAttr*             attr = m_grid->GetOrCreateCellAttr( aRowId, aCol );
-        attr->SetEditor( cellEditor );
-        attr->DecRef();
-    };
+    auto setCellEditor =
+            [this, aRowId]( int aCol )
+            {
+                GRID_CELL_MARK_AS_NULLABLE* cellEditor = new GRID_CELL_MARK_AS_NULLABLE( true );
+                wxGridCellAttr*             attr = m_grid->GetOrCreateCellAttr( aRowId, aCol );
+                attr->SetEditor( cellEditor );
+                attr->DecRef();
+            };
 
     setCellEditor( COL_P2D_LENGTH );
     setCellEditor( COL_P2D_DELAY );
