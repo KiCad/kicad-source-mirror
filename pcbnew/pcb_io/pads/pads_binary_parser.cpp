@@ -25,8 +25,9 @@
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
-#include <fstream>
 #include <limits>
+#include <numbers>
+#include <numeric>
 #include <optional>
 #include <set>
 #include <unordered_set>
@@ -46,6 +47,17 @@ static const std::map<uint8_t, std::string> PAD_SHAPE_NAMES = {
     { 0x02, "R" },
     { 0x03, "S" },
 };
+
+
+// A placement's serialized object ID is its section-22 record ordinal plus a fixed per-dialect
+// bias. v0x2021 biases by 13, measured against 2FOC-001.pcb's ASCII netlist: of the 68 B
+// connection records' endpoint pairs, 523 resolve to a refdes pair present in the export at bias
+// 13 versus 88 and 87 at the neighbouring biases, so the value is a sharp structural fit rather
+// than the peak of a smooth curve. v0x2022 derives its own bias from the leading-placement run.
+static uint32_t placementObjectBias( uint16_t aVersion )
+{
+    return aVersion == 0x2021 ? 13 : 11;
+}
 
 
 // Per-version field layout for the part-placement records. The old format (v0x2021/0x2022)
@@ -77,8 +89,9 @@ static const PLACEMENT_LAYOUT& placementLayout( uint16_t aVersion )
 {
     // v0x2021 anchors refdes at +76, with X/Y/angle/side at +92/+96/+100/+104 (partly past the
     // 96 B stride, spilling into the next physical record -- the format's usual field lag).
-    static constexpr PLACEMENT_LAYOUT v2021{ .nameOff = 76, .xOff = 92, .yOff = 96, .angleOff = 100,
-                                             .feffOff = 28, .scanStride = 96, .directDecalOff = 56 };
+    static constexpr PLACEMENT_LAYOUT v2021{
+        .nameOff = 76, .xOff = 92, .yOff = 96, .angleOff = 100, .feffOff = 28, .scanStride = 96, .directDecalOff = 56
+    };
     // v0x2022 uses a DIFFERENT anchor (+60) despite sharing v0x2021's 96 B stride, with X/Y/angle
     // at +76/+80/+84. Verified against 2FOC_4.pcb ground truth (J13/J4/J5 zero-rotation parts,
     // U19/U20/U21 at 270/270/90 degrees) -- all six match exactly with this layout under the
@@ -88,10 +101,15 @@ static const PLACEMENT_LAYOUT& placementLayout( uint16_t aVersion )
     // parttype-index chain), but at the next record's +40 rather than +56; verified against 337
     // of 2FOC_4.pcb's 340 placements (the rest resolve to a plausible sibling decal, e.g.
     // FIDUCIAL/FIDTOP, so are ground-truth parsing noise, not real misses).
-    static constexpr PLACEMENT_LAYOUT v2022{ .nameOff = 60, .xOff = 76, .yOff = 80, .angleOff = 84,
-                                             .feffOff = 28, .scanStride = 96, .directDecalOff = 40 };
-    static constexpr PLACEMENT_LAYOUT vNew{ .nameOff = 44, .xOff = 60, .yOff = 64, .angleOff = 68,
-                                            .feffOff = 92, .scanStride = 94,
+    static constexpr PLACEMENT_LAYOUT v2022{
+        .nameOff = 60, .xOff = 76, .yOff = 80, .angleOff = 84, .feffOff = 28, .scanStride = 96, .directDecalOff = 40
+    };
+    static constexpr PLACEMENT_LAYOUT vNew{ .nameOff = 44,
+                                            .xOff = 60,
+                                            .yOff = 64,
+                                            .angleOff = 68,
+                                            .feffOff = 92,
+                                            .scanStride = 94,
                                             .parttypeIndexNextRecord = true };
 
     if( aVersion == 0x2021 )
@@ -111,20 +129,52 @@ struct PADSTACK_LAYOUT
     int padWidthOff = 0;
     int drillOff = 0;
     int finLenOff = 0;
+    int cornerOff = 0;
     int angleOff = 0;
+    int layerStartOff = 0;
     int markerOff = 0;
     int shapeOff = 0;
+    int layerCountOff = 0;
 };
 
 
-static const PADSTACK_LAYOUT& padstackLayout( bool aIsOld )
+static const PADSTACK_LAYOUT& padstackLayout( uint16_t aVersion )
 {
-    static constexpr PADSTACK_LAYOUT vOld{ .padWidthOff = 24, .drillOff = 28, .finLenOff = 32,
-                                           .angleOff = 40, .markerOff = 48, .shapeOff = 49 };
-    static constexpr PADSTACK_LAYOUT vNew{ .padWidthOff = 28, .drillOff = 32, .finLenOff = 36,
-                                           .angleOff = 48, .markerOff = 56, .shapeOff = 57 };
+    static constexpr PADSTACK_LAYOUT v2021{ .padWidthOff = 24,
+                                           .drillOff = 28,
+                                           .finLenOff = 32,
+                                           .cornerOff = 36,
+                                           .angleOff = 40,
+                                           .layerStartOff = 44,
+                                           .markerOff = 48,
+                                           .shapeOff = 49,
+                                           .layerCountOff = 50 };
+    static constexpr PADSTACK_LAYOUT v2022{ .padWidthOff = 20,
+                                            .drillOff = 24,
+                                            .finLenOff = 28,
+                                            .cornerOff = 32,
+                                            .angleOff = 40,
+                                            .layerStartOff = 44,
+                                            .markerOff = 48,
+                                            .shapeOff = 49,
+                                            .layerCountOff = 50 };
+    static constexpr PADSTACK_LAYOUT vNew{ .padWidthOff = 28,
+                                           .drillOff = 32,
+                                           .finLenOff = 36,
+                                           .cornerOff = 44,
+                                           .angleOff = 48,
+                                           .layerStartOff = 52,
+                                           .markerOff = 56,
+                                           .shapeOff = 57,
+                                           .layerCountOff = 58 };
 
-    return aIsOld ? vOld : vNew;
+    if( aVersion == 0x2021 )
+        return v2021;
+
+    if( aVersion == 0x2022 )
+        return v2022;
+
+    return vNew;
 }
 
 
@@ -288,6 +338,10 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     parseNetClasses();
     parseDiffPairs();
 
+    // Route-cell orientation uses placed terminal centers as anchors, so placements must have
+    // their physical decals before structural route geometry is decoded.
+    linkPartsToDecals();
+
     // Structural geometry. computeSec12Base and buildOwnerRuns establish the sec12 vertex base and
     // the owner-run cursors that the keepout, copper-shape and dimension decoders walk (the first
     // two through fetchOwnerLoop).
@@ -301,11 +355,13 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     parseDimensions();
     parseLayerStackup();
 
-    // Link each placement to its decal now that both the parts and the decals exist.
-    linkPartsToDecals();
+    resolveNetAnchors();
 
     m_parts.erase( std::remove_if( m_parts.begin(), m_parts.end(),
-                                   []( const PART& p ) { return p.name.empty(); } ),
+                                   []( const PART& p )
+                                   {
+                                       return p.name.empty();
+                                   } ),
                    m_parts.end() );
 }
 
@@ -365,8 +421,8 @@ void BINARY_PARSER::parseBoardSetup()
 }
 
 
-PART BINARY_PARSER::makePlacementPart( const SDB_RECORD& aRec, int aXOff, std::optional<int> aYOff,
-                                      int aAngleOff, int aNameOff, const std::string& aRefDes ) const
+PART BINARY_PARSER::makePlacementPart( const SDB_RECORD& aRec, int aXOff, std::optional<int> aYOff, int aAngleOff,
+                                       int aNameOff, const std::string& aRefDes ) const
 {
     PART part;
     part.name = aRefDes;
@@ -397,6 +453,29 @@ void BINARY_PARSER::parsePartPlacements()
 
     // The old framing reads the side flag at nameOff+28, past its 96 B stride.
     size_t fieldSpan = std::max<size_t>( recSize, static_cast<size_t>( layout.nameOff ) + 29 );
+    uint32_t leadingPlacementCount = 0;
+
+    if( m_version == 0x2022 )
+    {
+        for( uint32_t k = 1; k <= entry->count; ++k )
+        {
+            size_t candidateBase = static_cast<size_t>( entry->dataOffset ) - static_cast<size_t>( k ) * recSize;
+
+            if( entry->dataOffset < k * recSize || !m_cursor.InBounds( candidateBase, fieldSpan ) )
+                break;
+
+            SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( candidateBase ) );
+
+            if( !refdesFirstCharOk( rec.Str( layout.nameOff, 16 ) )
+                || !placementCoordPlausible( rec, layout.xOff, layout.yOff )
+                || rec.I32( layout.angleOff ) % ANGLE_SCALE != 0 )
+            {
+                break;
+            }
+
+            ++leadingPlacementCount;
+        }
+    }
 
     for( uint32_t i = 0; i < entry->count; ++i )
     {
@@ -416,8 +495,7 @@ void BINARY_PARSER::parsePartPlacements()
         if( !placementCoordPlausible( rec, layout.xOff, layout.yOff ) )
             continue;
 
-        PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
-                                       layout.nameOff, refDes );
+        PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff, layout.nameOff, refDes );
 
         // The parttype index lives in the NEXT physical record's @+4 field (a +1 block-
         // interleave lag); linkPartsToDecals resolves it to the decal name. For the LAST part
@@ -440,8 +518,12 @@ void BINARY_PARSER::parsePartPlacements()
         {
             size_t nextOff = ( static_cast<size_t>( i ) + 1 ) * recSize;
 
-            if( nextOff + 8 <= entry->totalBytes )
-                m_partTypeIndex[m_parts.size()] = m_sdb.Record( *entry, i + 1, recSize ).U32( 4 );
+            if( nextOff + 18 <= entry->totalBytes )
+            {
+                SDB_RECORD next = m_sdb.Record( *entry, i + 1, recSize );
+                m_partTypeIndex[m_parts.size()] = next.U32( 4 );
+                m_partDecalAlternate[m_parts.size()] = next.U8( 17 );
+            }
         }
 
         // Old dialects have no working parttype-index chain for placements; the decal index is
@@ -458,8 +540,7 @@ void BINARY_PARSER::parsePartPlacements()
 
         // Cluster membership is the 1-based CLSTID at nameOff+64 (=+108), present only in the
         // new 112-byte layout; -1 means the part is in no cluster.
-        if( !isOld && layout.nameOff == 44
-            && off + static_cast<size_t>( layout.nameOff ) + 68 <= entry->totalBytes )
+        if( !isOld && layout.nameOff == 44 && off + static_cast<size_t>( layout.nameOff ) + 68 <= entry->totalBytes )
         {
             int32_t clstid = rec.I32( layout.nameOff + 64 );
 
@@ -467,6 +548,9 @@ void BINARY_PARSER::parsePartPlacements()
                 m_partClusterId[m_parts.size()] = clstid;
         }
 
+        uint32_t objectId =
+                m_version == 0x2022 ? i + leadingPlacementCount : i + placementObjectBias( m_version );
+        m_placementObjectToPart[objectId] = m_parts.size();
         m_parts.push_back( part );
     }
 
@@ -510,8 +594,7 @@ void BINARY_PARSER::parsePartPlacements()
             if( rec.I32( layout.angleOff ) % ANGLE_SCALE != 0 )
                 break;
 
-            PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
-                                           layout.nameOff, refDes );
+            PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff, layout.nameOff, refDes );
 
             size_t nextBase = candidateBase + recSize;
 
@@ -526,8 +609,17 @@ void BINARY_PARSER::parsePartPlacements()
                 }
             }
 
-            if( layout.parttypeIndexNextRecord && m_cursor.InBounds( nextBase, 8 ) )
-                m_partTypeIndex[m_parts.size()] = m_sdb.RecordAt( static_cast<uint32_t>( nextBase ) ).U32( 4 );
+            if( layout.parttypeIndexNextRecord && m_cursor.InBounds( nextBase, 18 ) )
+            {
+                SDB_RECORD next = m_sdb.RecordAt( static_cast<uint32_t>( nextBase ) );
+                m_partTypeIndex[m_parts.size()] = next.U32( 4 );
+                m_partDecalAlternate[m_parts.size()] = next.U8( 17 );
+            }
+
+            if( m_version == 0x2022 && k <= leadingPlacementCount )
+                m_placementObjectToPart[leadingPlacementCount - k] = m_parts.size();
+            else if( k <= placementObjectBias( m_version ) )
+                m_placementObjectToPart[placementObjectBias( m_version ) - k] = m_parts.size();
 
             m_parts.push_back( part );
         }
@@ -573,8 +665,7 @@ void BINARY_PARSER::parsePartPlacements()
                 size_t      recBase = base + static_cast<size_t>( i ) * recSize;
                 SDB_RECORD  rec     = m_sdb.RecordAt( static_cast<uint32_t>( recBase ) );
                 std::string refDes  = rec.Str( layout.nameOff, 16 );
-                PART        part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
-                                                       layout.nameOff, refDes );
+                PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff, layout.nameOff, refDes );
 
                 if( layout.directDecalOff )
                 {
@@ -774,16 +865,16 @@ void BINARY_PARSER::recoverOmittedPlacements()
     for( const PART& p : m_parts )
         existingRefs.insert( p.name );
 
-    for( size_t base : bases )
+    for( size_t baseIndex = 0; baseIndex < bases.size(); ++baseIndex )
     {
+        size_t      base = bases[baseIndex];
         SDB_RECORD  rec = m_sdb.RecordAt( base );
         std::string refDes = rec.Str( layout.nameOff, 16 );
 
         if( refDes.empty() || existingRefs.count( refDes ) )
             continue;
 
-        PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff,
-                                       layout.nameOff, refDes );
+        PART part = makePlacementPart( rec, layout.xOff, layout.yOff, layout.angleOff, layout.nameOff, refDes );
 
         // The parttype index (new) / decal index (v2021) lives in the NEXT physical record (the
         // +1 lag). That record is the index CARRIER, not itself a placement -- it need not (and
@@ -800,8 +891,15 @@ void BINARY_PARSER::recoverOmittedPlacements()
         // producing a wrong-but-plausible decal.
         size_t next = base + stride;
 
-        if( m_cursor.InBounds( next + 4, 4 ) )
-            m_partTypeIndex[m_parts.size()] = m_sdb.RecordAt( next + 4 ).U32( 0 );
+        if( m_cursor.InBounds( next, 18 ) )
+        {
+            SDB_RECORD carrier = m_sdb.RecordAt( next );
+            m_partTypeIndex[m_parts.size()] = carrier.U32( 4 );
+            m_partDecalAlternate[m_parts.size()] = carrier.U8( 17 );
+        }
+
+        if( bases.size() <= placementObjectBias( m_version ) )
+            m_placementObjectToPart[placementObjectBias( m_version ) - bases.size() + baseIndex] = m_parts.size();
 
         m_parts.push_back( std::move( part ) );
         existingRefs.insert( refDes );
@@ -885,11 +983,10 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
 
                     if( m_cursor.InBounds( leadBase, fieldSpan ) && refdesPlausibleForByteScan( leadRef )
                         && placementCoordPlausible( leadRec, layout.xOff, layout.yOff )
-                        && leadRec.I32( layout.angleOff ) % ANGLE_SCALE == 0
-                        && !existingRefs.count( leadRef ) )
+                        && leadRec.I32( layout.angleOff ) % ANGLE_SCALE == 0 && !existingRefs.count( leadRef ) )
                     {
-                        PART lead = makePlacementPart( leadRec, layout.xOff, layout.yOff,
-                                                       layout.angleOff, layout.nameOff, leadRef );
+                        PART lead = makePlacementPart( leadRec, layout.xOff, layout.yOff, layout.angleOff,
+                                                       layout.nameOff, leadRef );
 
                         size_t leadField = base + static_cast<size_t>( *layout.directDecalOff );
 
@@ -907,8 +1004,7 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
 
             const SDB_RECORD& partRec = candidateRec;
 
-            PART part = makePlacementPart( partRec, layout.xOff, layout.yOff, layout.angleOff,
-                                           layout.nameOff, refDes );
+            PART part = makePlacementPart( partRec, layout.xOff, layout.yOff, layout.angleOff, layout.nameOff, refDes );
 
             // The decal index is in the NEXT 96 B block's @+directDecalOff. Gate on that block's
             // own 0xFEFF marker so trailing section data cannot supply a bogus index.
@@ -917,8 +1013,8 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
                 size_t nextMarker = markerBase + OLD_REC_SIZE;
                 size_t nextField = base + OLD_REC_SIZE + static_cast<size_t>( *layout.directDecalOff );
 
-                if( m_cursor.InBounds( nextMarker, 2 ) && m_data[nextMarker] == 0xFE
-                    && m_data[nextMarker + 1] == 0xFF && m_cursor.InBounds( nextField, 4 ) )
+                if( m_cursor.InBounds( nextMarker, 2 ) && m_data[nextMarker] == 0xFE && m_data[nextMarker + 1] == 0xFF
+                    && m_cursor.InBounds( nextField, 4 ) )
                 {
                     m_partDecalIndex[m_parts.size()] = m_sdb.RecordAt( nextField ).U32( 0 );
                 }
@@ -934,14 +1030,15 @@ void BINARY_PARSER::recoverOmittedPlacementsOld()
 void BINARY_PARSER::parsePadStacks()
 {
     const SDB_SECTION* entry = getSection( SECTION::PadStacks );
+    const SDB_SECTION* layerSection = getSection( SECTION::PadShapes );
 
-    if( !entry || entry->count == 0 || entry->stride == 0 )
+    if( !entry || !layerSection || entry->count == 0 || entry->stride == 0 )
         return;
 
-    if( entry->End() > m_data.size() )
+    if( entry->End() > m_data.size() || layerSection->dataOffset > m_data.size() )
         return;
 
-    const PADSTACK_LAYOUT& layout = padstackLayout( isOldFormat() );
+    const PADSTACK_LAYOUT& layout = padstackLayout( m_version );
     uint32_t               recSize = entry->stride;
 
     // Read one padstack record's default (layer 0) geometry. For finger pads (RF, OF, RC)
@@ -960,14 +1057,26 @@ void BINARY_PARSER::parsePadStacks()
         int32_t finLength = rec.I32( layout.finLenOff );
 
         PAD_STACK_LAYER psl;
-        psl.layer = 0;
+        psl.layer = -2;
         psl.shape = shapeName;
         psl.sizeA = static_cast<double>( padWidth );
         psl.drill = static_cast<double>( drill );
-        psl.plated = ( drill > 0 );
-        psl.rotation = toBasicAngle( rec.I32( layout.angleOff ) );
+        psl.corner_radius = std::max( rec.I32( layout.cornerOff ), 0 );
+
+        if( isOldFormat() )
+        {
+            constexpr int OLD_NPTH_CLEARANCE = 4 * static_cast<int>( SDB_BASIC_PER_MIL );
+            psl.plated = drill > 0 && padWidth - drill > OLD_NPTH_CLEARANCE;
+        }
+        else
+        {
+            psl.plated = drill > 0 && drill < padWidth;
+        }
 
         bool isFinger = ( shapeName == "RF" || shapeName == "OF" || shapeName == "RC" );
+
+        if( isFinger )
+            psl.rotation = toBasicAngle( rec.I32( layout.angleOff ) );
 
         if( isFinger && finLength > 0 )
             psl.sizeB = static_cast<double>( finLength );
@@ -977,67 +1086,150 @@ void BINARY_PARSER::parsePadStacks()
         return psl;
     };
 
-    // Pad stacks are indexed by their position in section 4; part decals reference them by index.
+    // Section 4 describes the padstack controller, but its directory payload begins after the
+    // controller's 64-byte object array. Locate that array by its exact section-5 ownership
+    // invariant: every live record starts at the accumulated layer cursor and the final cursor is
+    // section 5's count. Zero-layer records are aliases or retired entries and do not advance it.
+    uint32_t poolStart = 0;
+    uint32_t scanStart = getSection( 1 ) ? getSection( 1 )->dataOffset : 0;
+    uint64_t poolBytes = static_cast<uint64_t>( entry->count ) * recSize;
+
+    for( uint32_t candidate = scanStart;
+         candidate <= layerSection->dataOffset && poolBytes <= layerSection->dataOffset - candidate; ++candidate )
+    {
+        uint32_t layerCursor = m_sdb.RecordAt( candidate ).I32( layout.layerStartOff );
+
+        if( m_sdb.RecordAt( candidate ).U8( layout.markerOff ) != 0xFE || layerCursor > layerSection->count )
+        {
+            continue;
+        }
+
+        bool valid = true;
+
     for( uint32_t i = 0; i < entry->count; ++i )
     {
-        if( ( i + 1 ) * recSize > entry->totalBytes )
+            SDB_RECORD rec = m_sdb.RecordAt( candidate + i * recSize );
+
+            if( rec.U8( layout.markerOff ) != 0xFE )
+            {
+                valid = false;
             break;
+            }
 
-        uint32_t base = entry->dataOffset + i * recSize;
+            uint8_t layerCount = rec.U8( layout.layerCountOff );
 
-        if( m_sdb.RecordAt( base ).U8( layout.markerOff ) != 0xFE )
+            if( layerCount == 0 )
             continue;
 
-        m_padStackCache[static_cast<int>( i )].push_back( readLayer( base ) );
+            if( rec.I32( layout.layerStartOff ) != static_cast<int32_t>( layerCursor )
+                || layerCount > layerSection->count - layerCursor )
+            {
+                valid = false;
+                break;
+            }
+
+            layerCursor += layerCount;
     }
 
-    // The directory points partway into the padstack table: a run of de-duplicated library
-    // padstacks precedes section-4 dataOffset and the directory never indexes it. Recover the
-    // true pool start by walking back over the contiguous 0xFE / shape<=3 records, then read the
-    // full pool 0-based; the section-15 tail (pin, ref) pairs index this extended pool.
-    auto isPoolMember = [&]( size_t aOff )
+        if( valid && layerCursor == layerSection->count )
     {
-        SDB_RECORD rec = m_sdb.RecordAt( aOff );
-        return rec.U8( layout.markerOff ) == 0xFE && rec.U8( layout.shapeOff ) <= 3;
-    };
-
-    uint32_t head = 0;
-
-    if( entry->dataOffset >= recSize && isPoolMember( entry->dataOffset - recSize ) )
-    {
-        STRIDE_RUN run = extendStrideRun( entry->dataOffset - recSize, recSize, 0,
-                                          entry->dataOffset, isPoolMember );
-        head = static_cast<uint32_t>( run.count );
+            poolStart = candidate;
+            break;
+        }
     }
 
-    uint32_t poolStart = entry->dataOffset - head * recSize;
-    uint32_t poolCount = head + entry->count;
+    if( poolStart == 0 )
+        return;
 
-    m_padStackPool.assign( poolCount, {} );
+    m_padStackPool.assign( entry->count, {} );
+    m_padStackCache.clear();
+    m_viaStackByIndex.clear();
+    std::vector<int32_t> maxPadDiameter( entry->count, 0 );
 
-    for( uint32_t i = 0; i < poolCount; ++i )
+    const uint32_t layerRecordSize = m_version == 0x2022 ? 24 : isOldFormat() ? 20 : 24;
+    const uint32_t layerTableHeaderSize = m_version == 0x2022 ? 64 : isOldFormat() ? 20 : 24;
+    uint64_t       layerTableStart64 = static_cast<uint64_t>( poolStart ) + poolBytes + layerTableHeaderSize;
+    bool           haveLayerTable =
+            layerTableStart64 <= m_data.size()
+            && static_cast<uint64_t>( layerSection->count ) * layerRecordSize <= m_data.size() - layerTableStart64;
+    uint32_t layerTableStart = haveLayerTable ? static_cast<uint32_t>( layerTableStart64 ) : 0;
+
+    // Pad stacks are indexed by their position in the object array; part decals reference them by
+    // that stable index.
+    for( uint32_t i = 0; i < entry->count; ++i )
     {
         uint32_t base = poolStart + i * recSize;
 
-        if( base + recSize > m_data.size() )
-            break;
-
         if( m_sdb.RecordAt( base ).U8( layout.markerOff ) != 0xFE )
             continue;
 
-        m_padStackPool[i].push_back( readLayer( base ) );
+        PAD_STACK_LAYER               defaultLayer = readLayer( base );
+
+        // Slotted-drill metadata is carried by the following physical padstack record. Bit 3
+        // marks the carrier; +8 is the preceding stack's slot length and +12 its orientation.
+        if( !isOldFormat() && defaultLayer.drill > 0 && i + 1 < entry->count )
+        {
+            SDB_RECORD nextRec = m_sdb.RecordAt( base + recSize );
+
+            if( ( nextRec.U32( 0 ) & 8U ) != 0 )
+            {
+                defaultLayer.slot_length = nextRec.I32( 8 );
+                defaultLayer.slot_orientation = toBasicAngle( nextRec.I32( 12 ) );
+            }
+        }
+
+        std::vector<PAD_STACK_LAYER>& layers = m_padStackPool[i];
+        layers.push_back( defaultLayer );
+        maxPadDiameter[i] = static_cast<int32_t>( defaultLayer.sizeA );
+
+        if( haveLayerTable )
+    {
+            SDB_RECORD stackRec = m_sdb.RecordAt( base );
+            uint32_t   layerStart = stackRec.U32( layout.layerStartOff );
+            uint8_t    layerCount = stackRec.U8( layout.layerCountOff );
+
+            for( uint32_t layerIdx = 0; layerIdx < layerCount; ++layerIdx )
+            {
+                uint32_t   rowBase = layerTableStart + ( layerStart + layerIdx ) * layerRecordSize;
+                SDB_RECORD rowRec = m_sdb.RecordAt( rowBase );
+                uint32_t   geometryBase = rowBase;
+
+                if( m_version == 0x2022 && layerStart + layerIdx > 0 )
+                    geometryBase -= layerRecordSize;
+
+                SDB_RECORD geometryRec = m_sdb.RecordAt( geometryBase );
+                uint8_t    selector = rowRec.U8( 0 );
+                uint8_t    shapeCode = rowRec.U8( 1 );
+                auto       shapeIt = PAD_SHAPE_NAMES.find( shapeCode );
+                maxPadDiameter[i] = std::max( maxPadDiameter[i], geometryRec.I32( 4 ) );
+
+                if( shapeIt == PAD_SHAPE_NAMES.end() )
+            continue;
+
+                PAD_STACK_LAYER layer = defaultLayer;
+                layer.layer = selector == 0 ? 0
+                                            : selector == 0xFF ? -1
+                                                               : static_cast<int>( selector )
+                                                                         + ( m_version == 0x2022 ? 0 : 1 );
+                layer.shape = shapeIt->second;
+                layer.sizeA = static_cast<double>( geometryRec.I32( 4 ) );
+                int32_t sizeB = geometryRec.I32( 8 );
+                layer.sizeB = sizeB > 0 ? static_cast<double>( sizeB ) : layer.sizeA;
+                layers.push_back( std::move( layer ) );
+            }
+        }
+
+        m_padStackCache[static_cast<int>( i )] = layers;
     }
 
-    // Via pad stacks have drill > 0; exclude JMPVIA entries (drill > 1400000).
+    // Via pad stacks have a positive drill. Named JMPVIA and STANDARDVIA definitions may share
+    // the same drill, so dimensions cannot be classified by an arbitrary size cutoff.
     std::map<std::pair<double, double>, int> viaDimCounts;
 
     for( const auto& [idx, layers] : m_padStackCache )
     {
-        for( const auto& psl : layers )
-        {
-            if( psl.drill > 0 && psl.drill < 1400000.0 )
-                viaDimCounts[{ psl.sizeA, psl.drill }]++;
-        }
+        if( !layers.empty() && layers.front().drill > 0 )
+            viaDimCounts[{ layers.front().sizeA, layers.front().drill }]++;
     }
 
     int bestCount = 0;
@@ -1050,6 +1242,103 @@ void BINARY_PARSER::parsePadStacks()
             m_defaultViaSize = dims.first;
             m_defaultViaDrill = dims.second;
         }
+    }
+
+    const size_t extentRecordSize = isOldFormat() ? 100 : 112;
+    const size_t extentNameOffset = isOldFormat() ? 16 : 44;
+    const size_t extentBboxOffset = isOldFormat() ? 64 : 92;
+    const size_t extentSentinelOffset = isOldFormat() ? 80 : 108;
+
+    auto extentDiameter = [&]( size_t aBase ) -> int32_t
+    {
+        if( !m_cursor.InBounds( aBase, extentRecordSize ) || m_cursor.U16At( aBase + extentSentinelOffset ) != 0xFFFE )
+        {
+            return 0;
+        }
+
+        size_t nameLength = 0;
+
+        while( nameLength < 40 && m_cursor.U8At( aBase + extentNameOffset + nameLength ) != 0 )
+        {
+            uint8_t ch = m_cursor.U8At( aBase + extentNameOffset + nameLength );
+
+            if( ch < 0x20 || ch >= 0x7F )
+                return 0;
+
+            ++nameLength;
+        }
+
+        if( nameLength == 0 || nameLength == 40 )
+            return 0;
+
+        int32_t xMin = m_cursor.I32At( aBase + extentBboxOffset );
+        int32_t yMin = m_cursor.I32At( aBase + extentBboxOffset + 4 );
+        int32_t xMax = m_cursor.I32At( aBase + extentBboxOffset + 8 );
+        int32_t yMax = m_cursor.I32At( aBase + extentBboxOffset + 12 );
+
+        if( xMin != -xMax || yMin != -yMax || xMax <= 0 || yMax <= 0 || xMax - xMin != yMax - yMin )
+        {
+            return 0;
+        }
+
+        return xMax - xMin;
+    };
+
+    std::set<size_t> usedStacks;
+    size_t           extentRun = 0;
+
+    auto matchesViaStack = [&]( int32_t aDiameter )
+    {
+        for( size_t i = 0; i < m_padStackPool.size(); ++i )
+        {
+            if( !m_padStackPool[i].empty() && m_padStackPool[i].front().drill > 0 && maxPadDiameter[i] == aDiameter )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    if( entry->count >= 2 )
+    {
+        for( size_t off = scanStart; off + 2 * extentRecordSize <= m_data.size(); ++off )
+        {
+            if( matchesViaStack( extentDiameter( off ) )
+                && matchesViaStack( extentDiameter( off + extentRecordSize ) ) )
+            {
+                extentRun = off;
+                break;
+            }
+        }
+    }
+
+    for( int viaIndex = 0; extentRun != 0; ++viaIndex )
+    {
+        int32_t diameter = extentDiameter( extentRun + static_cast<size_t>( viaIndex ) * extentRecordSize );
+
+        if( diameter <= 0 )
+            break;
+
+        size_t matchedStack = m_padStackPool.size();
+
+        for( size_t stackIndex = 0; stackIndex < m_padStackPool.size(); ++stackIndex )
+        {
+            if( usedStacks.count( stackIndex ) || m_padStackPool[stackIndex].empty()
+                || m_padStackPool[stackIndex].front().drill <= 0 || maxPadDiameter[stackIndex] != diameter )
+            {
+                continue;
+            }
+
+            matchedStack = stackIndex;
+            break;
+        }
+
+        if( matchedStack == m_padStackPool.size() )
+            break;
+
+        m_viaStackByIndex[viaIndex] = matchedStack;
+        usedStacks.insert( matchedStack );
     }
 }
 
@@ -1071,6 +1360,7 @@ void BINARY_PARSER::parseDecalNameTable()
 
     static constexpr int DECAL_HDR_OFFSET = 1188;
     static constexpr int REC_SIZE = 112;
+    static constexpr int STACK_START_OFFSET = 44;
     static constexpr int SENTINEL_OFFSET = 64;
     static constexpr int START_OFFSET = 68;
     static constexpr int COUNT_OFFSET = 72;
@@ -1120,7 +1410,14 @@ void BINARY_PARSER::parseDecalNameTable()
             int32_t stackCount = rec.I32( STACK_COUNT_OFFSET );
 
             if( stackCount > 0 && stackCount <= 1000 )
+            {
                 m_decalStackCount.emplace( name, stackCount );
+
+                int32_t stackStart = rec.I32( STACK_START_OFFSET );
+
+                if( stackStart >= 0 )
+                    m_decalStackStart.emplace( name, stackStart );
+            }
         }
     }
 }
@@ -1138,10 +1435,11 @@ void BINARY_PARSER::parseDecalNameTableOld()
         return;
 
     static constexpr int REC_SIZE = 100;
+    static constexpr int STACK_START_OFFSET = 44;
     static constexpr int SENTINEL_OFFSET = 64;
+    static constexpr int                 START_OFFSET = 68;
     static constexpr int COUNT_OFFSET = 72;
-    static const std::array<uint8_t, 12> SIGNATURE = { 'J', 'M', 'P', 'V', 'I', 'A',
-                                                       '_', 'A', 'A', 'A', 'A', 'A' };
+    static const std::array<uint8_t, 12> SIGNATURE = { 'J', 'M', 'P', 'V', 'I', 'A', '_', 'A', 'A', 'A', 'A', 'A' };
 
     // The table is the first signature occurrence whose 100-byte run validates (record 0 ==
     // JMPVIA_AAAAA with a 0xFFFE sentinel), guarding against a stray earlier occurrence.
@@ -1150,6 +1448,9 @@ void BINARY_PARSER::parseDecalNameTableOld()
     {
         std::vector<std::string>        table;
         std::map<std::string, uint32_t> counts;
+        std::map<std::string, int32_t>  starts;
+        std::map<std::string, int32_t>  stackCounts;
+        std::map<std::string, int32_t>  stackStarts;
 
         for( size_t k = 0;; ++k )
         {
@@ -1169,9 +1470,26 @@ void BINARY_PARSER::parseDecalNameTableOld()
             if( off + COUNT_OFFSET + 4 <= m_data.size() )
             {
                 int32_t count = rec.I32( COUNT_OFFSET );
+                int32_t cursor = rec.I32( START_OFFSET );
+                int32_t stackCount = rec.I32( 88 );
 
                 if( !name.empty() && count > 0 && count <= 1000 )
+                {
                     counts.emplace( name, static_cast<uint32_t>( count ) );
+
+                    if( cursor >= 0 )
+                        starts.emplace( name, cursor );
+
+                    if( stackCount > 0 && stackCount <= 1000 )
+                    {
+                        stackCounts.emplace( name, stackCount );
+
+                        int32_t stackStart = rec.I32( STACK_START_OFFSET );
+
+                        if( m_version == 0x2022 && stackStart >= 0 )
+                            stackStarts.emplace( name, stackStart );
+                    }
+                }
             }
         }
 
@@ -1179,6 +1497,9 @@ void BINARY_PARSER::parseDecalNameTableOld()
         {
             m_decalNameTable = std::move( table );
             m_decalTerminalCount = std::move( counts );
+            m_decalTerminalStart = std::move( starts );
+            m_decalStackCount = std::move( stackCounts );
+            m_decalStackStart = std::move( stackStarts );
             return;
         }
     }
@@ -1223,6 +1544,8 @@ void BINARY_PARSER::parsePartTypeTable()
 
     m_partTypeDecalIndex.clear();
     m_partTypeDecalIndex.reserve( sec17->count );
+    m_partTypeDecalIndices.clear();
+    m_partTypeDecalIndices.reserve( sec17->count );
     m_partTypeNames.clear();
 
     if( hasName )
@@ -1235,6 +1558,7 @@ void BINARY_PARSER::parsePartTypeTable()
         if( off + decalOff + 4 > m_data.size() )
         {
             m_partTypeDecalIndex.push_back( -1 );
+            m_partTypeDecalIndices.emplace_back();
 
             if( hasName )
                 m_partTypeNames.emplace_back();
@@ -1242,11 +1566,27 @@ void BINARY_PARSER::parsePartTypeTable()
             continue;
         }
 
-        m_partTypeDecalIndex.push_back( m_sdb.RecordAt( off ).I32( decalOff ) );
+        SDB_RECORD          record = m_sdb.RecordAt( off );
+        std::vector<int32_t> decalIndices;
+
+        for( uint32_t indexOff = decalOff; !isV2022 && indexOff + 8 <= recSize; indexOff += 8 )
+        {
+            int32_t decalIndex = record.I32( indexOff );
+
+            if( decalIndex < 0 || record.I32( indexOff + 4 ) != decalIndex )
+                break;
+
+            decalIndices.push_back( decalIndex );
+        }
+
+        if( isV2022 && record.I32( decalOff ) >= 0 )
+            decalIndices.push_back( record.I32( decalOff ) );
+
+        m_partTypeDecalIndex.push_back( decalIndices.empty() ? -1 : decalIndices.front() );
+        m_partTypeDecalIndices.push_back( std::move( decalIndices ) );
 
         if( hasName )
-            m_partTypeNames.push_back( off + nameOff + 32 <= m_data.size()
-                                                ? m_sdb.RecordAt( off ).Str( nameOff, 32 )
+            m_partTypeNames.push_back( off + nameOff + 32 <= m_data.size() ? m_sdb.RecordAt( off ).Str( nameOff, 32 )
                                                 : std::string() );
     }
 }
@@ -1328,14 +1668,22 @@ void BINARY_PARSER::parseTerminals()
     static constexpr int TERM_SIZE = 36;
     static constexpr int POOL_SIZE = 33;
 
-    std::vector<std::pair<int32_t, int32_t>> stream;
+    struct SERIALIZED_TERMINAL
+    {
+        int32_t     x;
+        int32_t     y;
+        std::string name;
+    };
+
+    std::vector<SERIALIZED_TERMINAL> stream;
+    size_t                           inlinePairBase = 0;
 
     const SDB_SECTION* sec14 = getSection( SECTION::DecalHeader );
 
     if( sec14 && sec14->count >= 11 )
     {
-        size_t poolBase = static_cast<size_t>( sec14->dataOffset )
-                          + static_cast<size_t>( sec14->count - 11 ) * 112 + 44;
+        size_t poolBase =
+                static_cast<size_t>( sec14->dataOffset ) + static_cast<size_t>( sec14->count - 11 ) * 112 + 44;
 
         for( int i = 0; i < POOL_SIZE; ++i )
         {
@@ -1344,18 +1692,110 @@ void BINARY_PARSER::parseTerminals()
             if( off + 8 <= m_data.size() )
             {
                 SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( off ) );
-                stream.emplace_back( rec.I32( 0 ), rec.I32( 4 ) );
+                stream.push_back( { rec.I32( 0 ), rec.I32( 4 ), rec.Str( 20, 4 ) } );
             }
             else
             {
-                stream.emplace_back( 0, 0 );
+                stream.push_back( { 0, 0, {} } );
             }
         }
     }
 
     const SDB_SECTION* sec15 = getSection( SECTION::TerminalPool );
 
-    if( sec15 && sec15->totalBytes > 0 && sec15->stride == TERM_SIZE )
+    // Small designs omit POOL33 and serialize one unified terminal stream across the nominal
+    // section-5/8 boundary. Its 36-byte records duplicate the local coordinates at +0/+8 and
+    // +4/+12 and carry an object pointer at +20. The decal header cursors slice this stream.
+    if( stream.empty() )
+    {
+        size_t streamCount = 0;
+
+        for( const auto& [name, start] : m_decalTerminalStart )
+        {
+            auto countIt = m_decalTerminalCount.find( name );
+
+            if( start >= 0 && countIt != m_decalTerminalCount.end() )
+                streamCount = std::max( streamCount, static_cast<size_t>( start ) + countIt->second );
+        }
+
+        const SDB_SECTION* sec5 = getSection( SECTION::PadShapes );
+        const SDB_SECTION* sec10 = getSection( SECTION::DrwItems );
+        size_t             bytes = streamCount * TERM_SIZE;
+
+        // Small v0x2024 databases serialize the unified terminal stream directly after the
+        // complete 112-byte decal-name table. Their terminal object pointer is at +16 rather
+        // than +20; the following +20 word is pin-name metadata.
+        if( m_version == 0x2024 && sec14 && sec14->count < 11 && sec14->dataOffset >= 1188 )
+        {
+            size_t base = static_cast<size_t>( sec14->dataOffset ) - 1188
+                          + static_cast<size_t>( sec14->count ) * 112;
+
+            if( base <= m_data.size() && bytes <= m_data.size() - base )
+            {
+                bool valid = true;
+
+                for( size_t i = 0; i < streamCount; ++i )
+                {
+                    SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( base + i * TERM_SIZE ) );
+                    uint32_t   objectPtr = rec.U32( 16 );
+
+                    if( rec.I32( 0 ) != rec.I32( 8 ) || rec.I32( 4 ) != rec.I32( 12 )
+                        || objectPtr < 0x01000000 || objectPtr >= 0x80000000 )
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+
+                if( valid )
+                {
+                    for( size_t i = 0; i < streamCount; ++i )
+                    {
+                        SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( base + i * TERM_SIZE ) );
+                        stream.push_back( { rec.I32( 0 ), rec.I32( 4 ), {} } );
+                    }
+
+                    inlinePairBase = base + bytes + 4;
+                }
+            }
+        }
+
+        if( stream.empty() && streamCount > 0 && sec5 && sec10 && sec5->dataOffset <= sec10->End()
+            && bytes <= sec10->End() - sec5->dataOffset )
+        {
+            for( size_t base = sec5->dataOffset; base + bytes <= sec10->End(); ++base )
+            {
+                bool valid = true;
+
+                for( size_t i = 0; i < streamCount; ++i )
+                {
+                    SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( base + i * TERM_SIZE ) );
+                    uint32_t   objectPtr = rec.U32( 20 );
+
+                    if( rec.I32( 0 ) != rec.I32( 8 ) || rec.I32( 4 ) != rec.I32( 12 ) || rec.I32( 16 ) != 0
+                        || objectPtr < 0x10000000 || objectPtr >= 0x80000000 )
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+
+                if( !valid )
+                    continue;
+
+                for( size_t i = 0; i < streamCount; ++i )
+                {
+                    SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( base + i * TERM_SIZE ) );
+                    stream.push_back( { rec.I32( 4 ), rec.I32( 0 ), rec.Str( 20, 4 ) } );
+                }
+
+                inlinePairBase = base + bytes + 4;
+                break;
+            }
+        }
+    }
+
+    if( inlinePairBase == 0 && sec15 && sec15->totalBytes > 0 && sec15->stride == TERM_SIZE )
     {
         for( uint32_t i = 0; i < sec15->count; ++i )
         {
@@ -1369,7 +1809,7 @@ void BINARY_PARSER::parseTerminals()
             if( rec.I32( 24 ) != 0 || rec.I32( 28 ) != 0 || rec.I32( 32 ) != 0 )
                 break;
 
-            stream.emplace_back( rec.I32( 0 ), rec.I32( 4 ) );
+            stream.push_back( { rec.I32( 0 ), rec.I32( 4 ), rec.Str( 20, 4 ) } );
         }
     }
 
@@ -1393,9 +1833,9 @@ void BINARY_PARSER::parseTerminals()
         for( uint32_t t = 0; t < count; ++t )
         {
             TERMINAL term;
-            term.x = toBasicCoordX( stream[start + t].first );
-            term.y = toBasicCoordY( stream[start + t].second );
-            term.name = std::to_string( t + 1 );
+            term.x = toBasicCoordX( stream[start + t].x );
+            term.y = toBasicCoordY( stream[start + t].y );
+            term.name = stream[start + t].name.empty() ? std::to_string( t + 1 ) : stream[start + t].name;
             decal.terminals.push_back( term );
         }
     }
@@ -1404,17 +1844,243 @@ void BINARY_PARSER::parseTerminals()
     // back to the count-correct placeholder layout.
     synthesizePlaceholderTerminals();
     assignDefaultPadStacks();
-    parsePerPinPadstacks();
+
+    if( inlinePairBase > 0 )
+    {
+        for( auto& [name, decal] : m_decals )
+        {
+            auto startIt = m_decalStackStart.find( name );
+            auto countIt = m_decalStackCount.find( name );
+
+            if( startIt == m_decalStackStart.end() || countIt == m_decalStackCount.end() || startIt->second < 0
+                || countIt->second <= 0 )
+            {
+                continue;
+            }
+
+            size_t end = inlinePairBase + ( static_cast<size_t>( startIt->second ) + countIt->second ) * 8;
+
+            if( end > m_data.size() )
+                continue;
+
+            std::vector<std::pair<int32_t, int32_t>> pairs;
+
+            for( int32_t i = 0; i < countIt->second; ++i )
+            {
+                size_t     off = inlinePairBase + ( static_cast<size_t>( startIt->second ) + i ) * 8;
+                SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( off ) );
+
+                if( m_version == 0x2024 )
+                    pairs.emplace_back( rec.I32( 4 ), rec.I32( 0 ) );
+                else
+                    pairs.emplace_back( rec.I32( 0 ), rec.I32( 4 ) );
+            }
+
+            applyPadstackPairs( decal, pairs, 0, countIt->second );
+        }
+    }
+
+    if( inlinePairBase == 0 )
+        parsePerPinPadstacks();
 }
 
 
 void BINARY_PARSER::parseTerminalsOld()
 {
-    // v0x2021 carries the per-decal terminal count in the decal-name table (record +72), but no
-    // per-terminal positions, so synthesize a placeholder layout of the correct count. Decals
-    // with no recorded count get no terminals.
+    static constexpr size_t TERM_SIZE = 36;
+    const SDB_SECTION*      sec12 = getSection( SECTION::Vertices );
+    const SDB_SECTION*      sec15 = getSection( SECTION::TerminalPool );
+
+    std::set<int32_t> terminalCursors;
+    int32_t           maxCursor = 0;
+
+    for( const auto& [name, start] : m_decalTerminalStart )
+    {
+        auto countIt = m_decalTerminalCount.find( name );
+
+        if( countIt == m_decalTerminalCount.end() || start < 0 )
+            continue;
+
+        maxCursor = std::max( maxCursor, start + static_cast<int32_t>( countIt->second ) );
+
+        for( uint32_t i = 0; i < countIt->second; ++i )
+            terminalCursors.insert( start + static_cast<int32_t>( i ) );
+    }
+
+    auto terminalValid = [&]( size_t aBase, int32_t aCursor )
+    {
+        size_t off = aBase + static_cast<size_t>( aCursor ) * TERM_SIZE;
+
+        if( !m_cursor.InBounds( off, TERM_SIZE ) )
+            return false;
+
+        SDB_RECORD rec = m_sdb.RecordAt( off );
+        bool       nameEnded = false;
+
+        for( int i = 0; i < 4; ++i )
+        {
+            uint8_t ch = rec.U8( 24 + i );
+
+            if( ch == 0 )
+            {
+                nameEnded = true;
+            }
+            else if( nameEnded || ch < 0x20 || ch > 0x7E )
+            {
+                return false;
+            }
+        }
+
+        return rec.I32( 0 ) == 0 && rec.I32( 4 ) == rec.I32( 12 ) && rec.I32( 8 ) == rec.I32( 16 ) && rec.I32( 20 ) != 0
+               && rec.I32( 28 ) == 0 && rec.I32( 32 ) == 0;
+    };
+
+    size_t streamBase = 0;
+    size_t bestCompleteDecals = 0;
+    size_t bestScore = 0;
+
+    if( sec12 && sec15 && maxCursor > 0 )
+    {
+        size_t scanStart = sec12->dataOffset;
+        size_t scanEnd = std::min( static_cast<size_t>( sec15->End() ), m_data.size() );
+        size_t streamBytes = static_cast<size_t>( maxCursor ) * TERM_SIZE;
+
+        for( size_t candidate = scanStart; candidate <= scanEnd && streamBytes <= scanEnd - candidate; candidate += 4 )
+        {
+            size_t completeDecals = 0;
+            size_t score = 0;
+
+            for( int32_t cursor : terminalCursors )
+                score += terminalValid( candidate, cursor );
+
+            for( const auto& [name, start] : m_decalTerminalStart )
+            {
+                auto countIt = m_decalTerminalCount.find( name );
+
+                if( countIt == m_decalTerminalCount.end() || start < 0 )
+                    continue;
+
+                bool complete = true;
+
+                for( uint32_t i = 0; i < countIt->second; ++i )
+                {
+                    if( !terminalValid( candidate, start + static_cast<int32_t>( i ) ) )
+                    {
+                        complete = false;
+                        break;
+                    }
+                }
+
+                completeDecals += complete;
+            }
+
+            if( std::tie( completeDecals, score ) > std::tie( bestCompleteDecals, bestScore ) )
+            {
+                bestCompleteDecals = completeDecals;
+                bestScore = score;
+                streamBase = candidate;
+            }
+        }
+    }
+
+    if( streamBase != 0 )
+    {
+        for( auto& [name, decal] : m_decals )
+        {
+            auto startIt = m_decalTerminalStart.find( name );
+            auto countIt = m_decalTerminalCount.find( name );
+
+            if( startIt == m_decalTerminalStart.end() || countIt == m_decalTerminalCount.end() )
+                continue;
+
+            std::vector<TERMINAL> terminals;
+
+            for( uint32_t i = 0; i < countIt->second; ++i )
+            {
+                int32_t cursor = startIt->second + static_cast<int32_t>( i );
+
+                if( !terminalValid( streamBase, cursor ) )
+                    break;
+
+                SDB_RECORD rec = m_sdb.RecordAt( streamBase + static_cast<size_t>( cursor ) * TERM_SIZE );
+                TERMINAL   terminal;
+                terminal.x = rec.I32( 4 );
+                terminal.y = rec.I32( 8 );
+                terminal.name = rec.Str( 24, 4 );
+
+                if( terminal.name.empty() )
+                    terminal.name = std::to_string( i + 1 );
+
+                terminals.push_back( terminal );
+            }
+
+            if( terminals.size() == countIt->second )
+                decal.terminals = std::move( terminals );
+        }
+    }
+
     synthesizePlaceholderTerminals();
     assignDefaultPadStacks();
+
+    size_t pairCount = 0;
+
+    for( const std::string& name : m_decalNameTable )
+    {
+        auto countIt = m_decalStackCount.find( name );
+
+        if( countIt != m_decalStackCount.end() )
+            pairCount += static_cast<size_t>( countIt->second );
+    }
+
+    if( streamBase == 0 || maxCursor <= 0 || pairCount == 0 || m_padStackPool.empty() )
+        return;
+
+    size_t pairBase = streamBase + static_cast<size_t>( maxCursor ) * TERM_SIZE;
+
+    if( m_version == 0x2022 )
+        pairBase += 4;
+    else
+        pairBase -= 4;
+
+    if( !m_cursor.InBounds( pairBase, pairCount * 8 ) )
+        return;
+
+    std::vector<std::pair<int32_t, int32_t>> pairs;
+    pairs.reserve( pairCount );
+
+    for( size_t i = 0; i < pairCount; ++i )
+    {
+        SDB_RECORD rec = m_sdb.RecordAt( pairBase + i * 8 );
+        int32_t    pin = rec.I32( 0 );
+        int32_t    ref = rec.I32( 4 );
+
+        if( pin < 0 || static_cast<size_t>( ref ) >= m_padStackPool.size() || m_padStackPool[ref].empty() )
+        {
+            return;
+        }
+
+        pairs.emplace_back( pin, ref );
+    }
+
+    int32_t pairCursor = 0;
+
+    for( const std::string& name : m_decalNameTable )
+    {
+        auto countIt = m_decalStackCount.find( name );
+        auto decalIt = m_decals.find( name );
+
+        if( countIt == m_decalStackCount.end() )
+            continue;
+
+        if( decalIt != m_decals.end() )
+        {
+            auto startIt = m_decalStackStart.find( name );
+            int32_t start = startIt != m_decalStackStart.end() ? startIt->second : pairCursor;
+            applyPadstackPairs( decalIt->second, pairs, start, countIt->second );
+        }
+
+        pairCursor += countIt->second;
+    }
 }
 
 
@@ -1516,13 +2182,104 @@ void BINARY_PARSER::parsePerPinPadstacks()
     }
 
     if( pairs.empty() )
+    {
+        size_t pairSpan = 0;
+
+        for( const auto& [name, start] : m_decalStackStart )
+        {
+            auto countIt = m_decalStackCount.find( name );
+
+            if( start >= 0 && countIt != m_decalStackCount.end() )
+                pairSpan = std::max( pairSpan, static_cast<size_t>( start ) + countIt->second );
+        }
+
+        size_t bestScore = 0;
+
+        if( pairSpan > 0 && pairSpan * 8 <= sec14->totalBytes )
+        {
+            size_t scanEnd = static_cast<size_t>( sec14->dataOffset ) + sec14->totalBytes - pairSpan * 8;
+
+            for( size_t base = sec14->dataOffset; base <= scanEnd; ++base )
+            {
+                std::vector<std::pair<int32_t, int32_t>> candidate;
+                std::set<int32_t>                       refs;
+                size_t                                  nonzeroPins = 0;
+                bool                                    valid = true;
+
+                for( size_t i = 0; i < pairSpan; ++i )
+                {
+                    SDB_RECORD rec = m_sdb.RecordAt( base + i * 8 );
+                    int32_t    pin = rec.I32( 0 );
+                    int32_t    ref = rec.I32( 4 );
+
+                    if( pin < 0 || ref < 0 || static_cast<size_t>( ref ) >= m_padStackPool.size()
+                        || m_padStackPool[ref].empty() )
+                    {
+                        valid = false;
+                        break;
+                    }
+
+                    candidate.emplace_back( pin, ref );
+                    refs.insert( ref );
+                    nonzeroPins += pin != 0;
+                }
+
+                for( const auto& [name, start] : m_decalStackStart )
+                {
+                    auto stackCountIt = m_decalStackCount.find( name );
+                    auto terminalCountIt = m_decalTerminalCount.find( name );
+
+                    if( !valid || start < 0 || stackCountIt == m_decalStackCount.end()
+                        || terminalCountIt == m_decalTerminalCount.end() )
+                    {
+                        continue;
+                    }
+
+                    for( int32_t i = 0; i < stackCountIt->second; ++i )
+                    {
+                        int32_t pin = candidate[static_cast<size_t>( start ) + i].first;
+
+                        if( pin > static_cast<int32_t>( terminalCountIt->second ) )
+                        {
+                            valid = false;
+                            break;
+                        }
+                    }
+                }
+
+                if( !valid || ( refs.size() == 1 && *refs.begin() == 0 ) )
+                    continue;
+
+                size_t score = refs.size() * 1000 + nonzeroPins;
+
+                if( score > bestScore )
+                {
+                    bestScore = score;
+                    pairs = std::move( candidate );
+                }
+            }
+        }
+    }
+
+    if( pairs.empty() )
         return;
+
+    // The complete decal header directly slices the pair pool. This includes via definitions
+    // and small de-duplicated libraries that have no section-14 descriptor or section-13 row.
+    for( const auto& [name, start] : m_decalStackStart )
+    {
+        auto decalIt = m_decals.find( name );
+        auto countIt = m_decalStackCount.find( name );
+
+        if( decalIt != m_decals.end() && countIt != m_decalStackCount.end() )
+            applyPadstackPairs( decalIt->second, pairs, start, countIt->second );
+    }
 
     // The section-14 descriptor table is the section data itself, distinct from the -1188 header
     // used for terminal positions: 112-byte records with a 0xFFFE sentinel at +108, the decal
-    // NAME at +44, the pair count at +20 and the pair-pool start cursor at +88.
+    // NAME at +44 and the pair-pool start cursor at +88. The pair count comes from the complete
+    // decal-name table; +20 is the decal's drawing-line count.
     static constexpr size_t DESC_SIZE = 112;
-    static constexpr size_t DESC_COUNT_OFF = 20;
     static constexpr size_t DESC_NAME_OFF = 44;
     static constexpr size_t DESC_START_OFF = 88;
     static constexpr size_t DESC_SENTINEL_OFF = 108;
@@ -1544,20 +2301,21 @@ void BINARY_PARSER::parsePerPinPadstacks()
             continue;
 
         auto decalIt = m_decals.find( name );
+        auto countIt = m_decalStackCount.find( name );
 
-        if( decalIt == m_decals.end() )
+        if( decalIt == m_decals.end() || countIt == m_decalStackCount.end() )
             continue;
 
         descriptorDecals.insert( name );
-        applyPadstackPairs( decalIt->second, pairs, desc.I32( DESC_START_OFF ),
-                            desc.I32( DESC_COUNT_OFF ) );
+        applyPadstackPairs( decalIt->second, pairs, desc.I32( DESC_START_OFF ), countIt->second );
     }
 
     // The de-duplicated library decals carry no section-14 descriptor. Their pair-pool start
-    // cursor lives in a trailing section-13 table of 112-byte records, each tagged with a 0x4D00
-    // marker at +40 and the decal NAME at +0; the start cursor is the i32 at +44. The slice
-    // length is the decal's pad-stack count from m_decalStackCount.
-    static constexpr int32_t LIB_MARKER = 0x4D00;
+    // cursor lives in a trailing section-13 table of 112-byte records. The +40 marker is the
+    // decal's unit byte shifted by eight (0x4900 inch, 0x4D00 metric), the NAME is at +0, and the
+    // start cursor is the i32 at +44. The slice length is the decal's pad-stack count.
+    static constexpr int32_t LIB_INCH_MARKER = 0x4900;
+    static constexpr int32_t LIB_METRIC_MARKER = 0x4D00;
     static constexpr size_t  LIB_STRIDE = 112;
     static constexpr size_t  LIB_MARKER_OFF = 40;
     static constexpr size_t  LIB_START_OFF = 44;
@@ -1573,7 +2331,9 @@ void BINARY_PARSER::parsePerPinPadstacks()
     {
         SDB_RECORD lib = m_sdb.RecordAt( off );
 
-        if( lib.I32( LIB_MARKER_OFF ) != LIB_MARKER )
+        int32_t marker = lib.I32( LIB_MARKER_OFF );
+
+        if( marker != LIB_INCH_MARKER && marker != LIB_METRIC_MARKER )
             continue;
 
         std::string name = lib.Str( 0, 40 );
@@ -1587,18 +2347,15 @@ void BINARY_PARSER::parsePerPinPadstacks()
         if( decalIt == m_decals.end() || countIt == m_decalStackCount.end() )
             continue;
 
-        applyPadstackPairs( decalIt->second, pairs, lib.I32( LIB_START_OFF ),
-                            countIt->second );
+        applyPadstackPairs( decalIt->second, pairs, lib.I32( LIB_START_OFF ), countIt->second );
     }
 }
 
 
-void BINARY_PARSER::applyPadstackPairs( PART_DECAL&                                     aDecal,
-                                        const std::vector<std::pair<int32_t, int32_t>>& aPairs,
+void BINARY_PARSER::applyPadstackPairs( PART_DECAL& aDecal, const std::vector<std::pair<int32_t, int32_t>>& aPairs,
                                         int32_t aStart, int32_t aCount )
 {
-    if( aStart < 0 || aCount <= 0
-        || static_cast<size_t>( aStart ) + static_cast<size_t>( aCount ) > aPairs.size() )
+    if( aStart < 0 || aCount <= 0 || static_cast<size_t>( aStart ) + static_cast<size_t>( aCount ) > aPairs.size() )
         return;
 
     for( int32_t p = 0; p < aCount; ++p )
@@ -1775,7 +2532,6 @@ bool BINARY_PARSER::parseArcBoardOutline()
     constexpr int    MAX_CORNERS = 256;
 
 
-
     struct RunCandidate
     {
         std::vector<ARC_VERTEX> verts;
@@ -1930,18 +2686,15 @@ bool BINARY_PARSER::parseArcBoardOutline()
             // tolerance absorbs arc bulge beyond the chord vertices and rounding.
             for( const ARC_DRAWING_ITEM& item : drawingItems )
             {
-                int64_t err = std::abs( item.localMinX - minX )
-                              + std::abs( item.localMinY - minY )
-                              + std::abs( item.localMaxX - maxX )
-                              + std::abs( item.localMaxY - maxY );
+                int64_t err = std::abs( item.localMinX - minX ) + std::abs( item.localMinY - minY )
+                              + std::abs( item.localMaxX - maxX ) + std::abs( item.localMaxY - maxY );
 
                 if( err > 3000000 )
                     continue;
 
                 double centerDist = 0.0;
 
-                if( nPlacedParts >= 2 && placeW > 0 && placeH > 0
-                    && placeW <= span * 4 && placeH <= span * 4 )
+                if( nPlacedParts >= 2 && placeW > 0 && placeH > 0 && placeW <= span * 4 && placeH <= span * 4 )
                 {
                     double cx = ( (double) minX + maxX ) / 2.0 + item.originX;
                     double cy = ( (double) minY + maxY ) / 2.0 + item.originY;
@@ -2093,8 +2846,7 @@ std::vector<ARC_DRAWING_ITEM> BINARY_PARSER::collectArcDrawingItems()
                 item.localMinY = (int64_t) rec.I32( DRW_ITEM::BBOX_MIN_Y ) - item.originY;
                 item.localMaxX = (int64_t) rec.I32( DRW_ITEM::BBOX_MAX_X ) - item.originX;
                 item.localMaxY = (int64_t) rec.I32( DRW_ITEM::BBOX_MAX_Y ) - item.originY;
-                item.span = std::max( item.localMaxX - item.localMinX,
-                                      item.localMaxY - item.localMinY );
+                item.span = std::max( item.localMaxX - item.localMinX, item.localMaxY - item.localMinY );
                 item.preferred = rec.U32( DRW_ITEM::TYPE_TAG ) == DRW_TAG::LINE_ITEM;
                 items.push_back( item );
                 pos += DRW_ITEM::SIZE;
@@ -2109,8 +2861,7 @@ std::vector<ARC_DRAWING_ITEM> BINARY_PARSER::collectArcDrawingItems()
 }
 
 
-int64_t BINARY_PARSER::findArcParameterTable( const std::vector<ARC_VERTEX>& verts,
-                                              const std::vector<size_t>& arcIdx )
+int64_t BINARY_PARSER::findArcParameterTable( const std::vector<ARC_VERTEX>& verts, const std::vector<size_t>& arcIdx )
 {
     constexpr size_t ARC_REC = 20;
 
@@ -2184,10 +2935,9 @@ bool BINARY_PARSER::isValidNetName( const std::string& aName ) const
 
     char first = aName[0];
 
-    return std::isalpha( static_cast<unsigned char>( first ) )
-           || std::isdigit( static_cast<unsigned char>( first ) )
-           || first == '+' || first == '-' || first == '$' || first == '~'
-           || first == '_' || first == '/' || first == '\\';
+    return std::isalpha( static_cast<unsigned char>( first ) ) || std::isdigit( static_cast<unsigned char>( first ) )
+           || first == '+' || first == '-' || first == '$' || first == '~' || first == '_' || first == '/'
+           || first == '\\';
 }
 
 
@@ -2223,6 +2973,32 @@ void BINARY_PARSER::parseNetNamesDirect()
 
     std::unordered_set<std::string> existing;
 
+    const uint32_t leadingNetCount = m_version == 0x2022 ? 9 : 3;
+
+    if( nets->dataOffset >= leadingNetCount * netRecordSize )
+    {
+        size_t leadingBase = nets->dataOffset - leadingNetCount * netRecordSize;
+
+        for( uint32_t i = 0; i < leadingNetCount; ++i )
+        {
+            SDB_RECORD  rec = m_sdb.RecordAt( leadingBase + i * netRecordSize );
+            std::string name = rec.Str( netNameOff, netNameLen );
+
+            if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
+                continue;
+
+            NET net;
+            net.name = name;
+            m_nets.push_back( net );
+            if( m_version == 0x2024 )
+                m_netAnchors.push_back( { m_nets.size() - 1, rec.U32( 80 ), rec.U32( 84 ) } );
+            else
+                m_netAnchors.push_back( { m_nets.size() - 1, rec.U32( 128 ), rec.U32( 132 ) } );
+            existing.insert( name );
+            m_sec23IndexToNet[i] = name;
+        }
+    }
+
     for( uint32_t i = 0; i < nets->count; ++i )
     {
         if( ( i + 1 ) * netRecordSize > nets->totalBytes )
@@ -2237,9 +3013,18 @@ void BINARY_PARSER::parseNetNamesDirect()
         NET net;
         net.name = name;
         m_nets.push_back( net );
+        m_sec23RecordToNet[i] = m_nets.size() - 1;
+
+        if( m_version == 0x2024 )
+            m_netAnchors.push_back( { m_nets.size() - 1, rec.U32( 80 ), rec.U32( 84 ) } );
+        else
+            m_netAnchors.push_back( { m_nets.size() - 1, rec.U32( 128 ), rec.U32( 132 ) } );
+
         existing.insert( name );
-        m_sec23IndexToNet[i] = name;
+        m_sec23IndexToNet[i + leadingNetCount] = name;
     }
+
+    parseNetConnectionsNew();
 }
 
 
@@ -2260,6 +3045,38 @@ void BINARY_PARSER::parseNetNamesNew()
 
     if( nets && nets->count > 0 && nets->stride == NET_RECORD_SIZE )
     {
+        // Net indices 0-2 are three full records immediately preceding the nominal section-23
+        // array. Their 3*424-byte footprint is the exact displacement into the section-22 tail,
+        // and explains the +3 route-net index bias used below.
+        constexpr uint32_t LEADING_NET_COUNT = 3;
+
+        if( nets->dataOffset >= LEADING_NET_COUNT * NET_RECORD_SIZE )
+        {
+            size_t leadingBase = nets->dataOffset - LEADING_NET_COUNT * NET_RECORD_SIZE;
+
+            for( uint32_t i = 0; i < LEADING_NET_COUNT; ++i )
+            {
+                SDB_RECORD  rec = m_sdb.RecordAt( leadingBase + i * NET_RECORD_SIZE );
+                std::string name = rec.Str( NET_NAME, NET_NAME_LEN );
+
+                if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
+                    continue;
+
+                NET net;
+                net.name = name;
+                m_nets.push_back( net );
+                m_netAnchors.push_back( { m_nets.size() - 1, rec.U32( 104 ), rec.U32( 108 ) } );
+                existing.insert( name );
+                m_sec23IndexToNet[i] = name;
+
+                if( uint32_t owner = rec.U32( NET_CLASS_PTR ) )
+                    m_netClassOwner[name] = owner;
+
+                if( uint32_t selfPtr = rec.U32( NET_SELF_PTR ) )
+                    m_netSelfPtrToName[selfPtr] = name;
+            }
+        }
+
         for( uint32_t i = 0; i < nets->count; ++i )
         {
             if( ( i + 1 ) * NET_RECORD_SIZE > nets->totalBytes )
@@ -2274,6 +3091,8 @@ void BINARY_PARSER::parseNetNamesNew()
             NET net;
             net.name = name;
             m_nets.push_back( net );
+            m_sec23RecordToNet[i] = m_nets.size() - 1;
+            m_netAnchors.push_back( { m_nets.size() - 1, rec.U32( 104 ), rec.U32( 108 ) } );
             existing.insert( name );
 
             // Route/via records index nets through a table whose first three slots belong to
@@ -2291,7 +3110,41 @@ void BINARY_PARSER::parseNetNamesNew()
             if( uint32_t selfPtr = rec.U32( NET_SELF_PTR ) )
                 m_netSelfPtrToName[selfPtr] = name;
         }
+
+        // The directory offset is reconstructed from declared byte counts and can land past the
+        // physical net array. Net records retain four invariant sentinels around the name, so use
+        // those to recover any records the nominal walk missed.
+        if( existing.size() < nets->count )
+        {
+            for( size_t off = 0; off + NET_RECORD_SIZE <= m_data.size(); ++off )
+            {
+                SDB_RECORD rec = m_sdb.RecordAt( off );
+
+                if( rec.U32( 20 ) != 0x0000FFFE || rec.U32( 36 ) != SDB_FIELD_UNSET || rec.U32( 64 ) != SDB_FIELD_UNSET
+                    || rec.U32( 92 ) != 0xFFFFFFFE )
+                {
+                    continue;
+                }
+
+                std::string name = rec.Str( NET_NAME, NET_NAME_LEN );
+
+                if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
+                    continue;
+
+                NET net;
+                net.name = name;
+                m_nets.push_back( net );
+                m_netAnchors.push_back( { m_nets.size() - 1, rec.U32( 104 ), rec.U32( 108 ) } );
+                existing.insert( name );
+                m_sec23IndexToNet[existing.size() - 1 + NET_INDEX_BIAS] = name;
+
+                if( existing.size() == nets->count )
+                    break;
+            }
+        }
     }
+
+    parseNetConnectionsNew();
 
     // Placements fill in power/ground nets: each record may carry up to three net names at
     // +28/+52/+76 (24 chars), each preceded by a 4-byte net index that must look real (small
@@ -2328,6 +3181,225 @@ void BINARY_PARSER::parseNetNamesNew()
             }
         }
     }
+}
+
+
+void BINARY_PARSER::parseNetConnectionsNew()
+{
+    constexpr size_t   RECORD_SIZE = 68;
+    constexpr uint32_t MARKER = 0xFE000000;
+    constexpr uint32_t FLAG = 0x0000FFFE;
+
+    const SDB_SECTION* connections = getSection( SECTION::Connections );
+    const SDB_SECTION* nets = getSection( SECTION::Nets );
+
+    const bool   isV2022 = m_version == 0x2022;
+    const bool   isV2024 = m_version == 0x2024;
+    const size_t netRecordSize = isV2022 ? 144 : isV2024 ? 416 : 424;
+    const size_t netNameOff = isV2022 ? 140 : isV2024 ? 92 : 116;
+    const size_t netCountOff = isV2022 ? 124 : isV2024 ? 76 : 100;
+    const size_t netAnchorAOff = isV2022 ? 128 : isV2024 ? 80 : 104;
+    const size_t netStartOff = isV2022 ? 136 : isV2024 ? 88 : 112;
+
+    if( !connections || !nets || connections->count == 0 || nets->stride != netRecordSize )
+        return;
+
+    auto validRecord = [&]( size_t aOffset )
+    {
+        if( !m_cursor.InBounds( aOffset, RECORD_SIZE ) )
+            return false;
+
+        SDB_RECORD rec = m_sdb.RecordAt( aOffset );
+        return ( rec.U32( 20 ) & 0xFFFFFFC0U ) == MARKER && ( rec.U32( 52 ) & 0xFFFFU ) == FLAG;
+    };
+
+    size_t runBase = 0;
+    size_t runCount = 0;
+
+    for( size_t off = 0; off + RECORD_SIZE <= m_data.size(); ++off )
+    {
+        if( !validRecord( off ) )
+            continue;
+
+        size_t count = 1;
+
+        while( validRecord( off + count * RECORD_SIZE ) )
+            ++count;
+
+        if( count > runCount )
+        {
+            runBase = off;
+            runCount = count;
+        }
+
+        off += count * RECORD_SIZE - 1;
+    }
+
+    if( runCount == 0 )
+        return;
+
+    struct NET_RANGE
+    {
+        size_t   netIndex;
+        uint32_t start;
+        uint32_t count;
+        uint32_t anchorObject;
+    };
+
+    std::vector<NET_RANGE> ranges;
+
+    const uint32_t leadingNetCount = isV2022 ? 9 : 3;
+
+    if( nets->dataOffset >= leadingNetCount * netRecordSize )
+    {
+        size_t leadingBase = nets->dataOffset - leadingNetCount * netRecordSize;
+
+        for( uint32_t i = 0; i < leadingNetCount; ++i )
+        {
+            SDB_RECORD  rec = m_sdb.RecordAt( leadingBase + i * netRecordSize );
+            std::string name = rec.Str( netNameOff, 48 );
+            auto netIt = std::find_if( m_nets.begin(), m_nets.end(),
+                                       [&]( const NET& aNet ) { return aNet.name == name; } );
+            uint32_t count = rec.U32( netCountOff );
+
+            if( netIt != m_nets.end() && count > 0 && count <= connections->count )
+                ranges.push_back( { static_cast<size_t>( std::distance( m_nets.begin(), netIt ) ),
+                                    rec.U32( netStartOff ), count, rec.U32( netAnchorAOff ) } );
+        }
+    }
+
+    for( const auto& [recordIndex, netIndex] : m_sec23RecordToNet )
+    {
+        if( recordIndex >= nets->count || netIndex >= m_nets.size() )
+            continue;
+
+        SDB_RECORD rec = m_sdb.Record( *nets, recordIndex, netRecordSize );
+        uint32_t   count = rec.U32( netCountOff );
+
+        if( count == 0 || count > connections->count )
+            continue;
+
+        ranges.push_back( { netIndex, rec.U32( netStartOff ), count, rec.U32( netAnchorAOff ) } );
+    }
+
+    int    bestShift = 0;
+    size_t bestAnchorHits = 0;
+    size_t bestValidRecords = 0;
+
+    for( int shift = -128; shift <= 128; ++shift )
+    {
+        size_t anchorHits = 0;
+        size_t validRecords = 0;
+
+        for( const NET_RANGE& range : ranges )
+        {
+            bool anchorSeen = false;
+
+            for( uint32_t i = 0; i < range.count; ++i )
+            {
+                int64_t physicalIndex = static_cast<int64_t>( range.start ) + i + shift;
+
+                if( physicalIndex < -1 || physicalIndex >= static_cast<int64_t>( runCount ) )
+                    continue;
+
+                size_t recordOffset = static_cast<size_t>( static_cast<int64_t>( runBase )
+                                                           + physicalIndex * RECORD_SIZE );
+                SDB_RECORD rec = m_sdb.RecordAt( recordOffset );
+                ++validRecords;
+                anchorSeen |= rec.U32( 60 ) == range.anchorObject || rec.U32( 64 ) == range.anchorObject;
+            }
+
+            anchorHits += anchorSeen;
+        }
+
+        if( anchorHits > bestAnchorHits
+            || ( anchorHits == bestAnchorHits && validRecords > bestValidRecords )
+            || ( anchorHits == bestAnchorHits && validRecords == bestValidRecords
+                 && std::abs( shift ) < std::abs( bestShift ) ) )
+        {
+            bestShift = shift;
+            bestAnchorHits = anchorHits;
+            bestValidRecords = validRecords;
+        }
+    }
+
+    for( const NET_RANGE& range : ranges )
+    {
+        NET& net = m_nets[range.netIndex];
+
+        for( uint32_t i = 0; i < range.count; ++i )
+        {
+            int64_t physicalIndex = static_cast<int64_t>( range.start ) + i + bestShift;
+
+            if( physicalIndex < -1 || physicalIndex >= static_cast<int64_t>( runCount ) )
+                continue;
+
+            size_t recordOffset = static_cast<size_t>( static_cast<int64_t>( runBase ) + physicalIndex * RECORD_SIZE );
+            SDB_RECORD rec = m_sdb.RecordAt( recordOffset );
+
+            size_t nextRecordOffset = recordOffset + RECORD_SIZE;
+
+            if( m_cursor.InBounds( nextRecordOffset, 8 ) )
+            {
+                SDB_RECORD pinRec = m_sdb.RecordAt( nextRecordOffset );
+                m_netConnectionEndpoints.push_back( { range.netIndex, rec.U32( 60 ), pinRec.U32( 0 ) } );
+                m_netConnectionEndpoints.push_back( { range.netIndex, rec.U32( 64 ), pinRec.U32( 4 ) } );
+            }
+
+            for( uint32_t objectId : { rec.U32( 60 ), rec.U32( 64 ) } )
+            {
+                auto partIt = m_placementObjectToPart.find( objectId );
+
+                if( partIt != m_placementObjectToPart.end() && partIt->second < m_parts.size() )
+                    net.component_refs.push_back( m_parts[partIt->second].name );
+            }
+        }
+    }
+
+}
+
+
+void BINARY_PARSER::resolveNetAnchors()
+{
+    std::vector<std::set<std::pair<std::string, std::string>>> existingPins( m_nets.size() );
+
+    auto resolve = [&]( const NET_ANCHOR& anchor )
+    {
+        if( anchor.netIndex >= m_nets.size() || anchor.terminalOrdinal == 0 )
+            return;
+
+        auto partIt = m_placementObjectToPart.find( anchor.placementObject );
+
+        if( partIt == m_placementObjectToPart.end() || partIt->second >= m_parts.size() )
+            return;
+
+        const PART& part = m_parts[partIt->second];
+        auto        decalIt = m_decals.find( part.decal );
+
+        if( decalIt == m_decals.end() || anchor.terminalOrdinal > decalIt->second.terminals.size() )
+            return;
+
+        const std::string& terminalName = decalIt->second.terminals[anchor.terminalOrdinal - 1].name;
+
+        if( terminalName.empty() )
+            return;
+
+        auto key = std::make_pair( part.name, terminalName );
+
+        if( !existingPins[anchor.netIndex].insert( key ).second )
+            return;
+
+        NET_PIN pin;
+        pin.ref_des = part.name;
+        pin.pin_name = terminalName;
+        m_nets[anchor.netIndex].pins.push_back( std::move( pin ) );
+    };
+
+    for( const NET_ANCHOR& anchor : m_netAnchors )
+        resolve( anchor );
+
+    for( const NET_ANCHOR& endpoint : m_netConnectionEndpoints )
+        resolve( endpoint );
 }
 
 
@@ -2444,8 +3516,7 @@ void BINARY_PARSER::parseNetNamesOld()
             uint32_t    netIdx = rec.U32( 8 );
             std::string name   = rec.Str( 12, 48 );
 
-            if( !name.empty() && isValidNetName( name ) && netIdx < 100000
-                && !existing.count( name ) )
+            if( !name.empty() && isValidNetName( name ) && netIdx < 100000 && !existing.count( name ) )
             {
                 indexedNets.push_back( { netIdx, name } );
                 existing.insert( name );
@@ -2478,6 +3549,251 @@ void BINARY_PARSER::parseNetNamesOld()
         NET net;
         net.name = entry.name;
         m_nets.push_back( net );
+    }
+
+    // Route and via records address nets by a dense ordinal into the serialized net table, not by
+    // the stored net ID the name passes above sort on. Rebuild the index from that table so a via
+    // resolves the net PADS wrote: verified against the ASCII exports' own via nets, 2533 of 2533
+    // vias across the v0x2021 corpus resolve to the right name, none to a wrong one.
+    m_sec23IndexToNet.clear();
+
+    const std::vector<size_t> netOffsets = oldNetRecordOffsets();
+
+    for( size_t i = 0; i < netOffsets.size(); ++i )
+    {
+        std::string name = m_sdb.RecordAt( static_cast<uint32_t>( netOffsets[i] ) ).Str( 12, 48 );
+
+        if( name.empty() || !isValidNetName( name ) )
+            continue;
+
+        m_sec23IndexToNet[static_cast<uint32_t>( i )] = name;
+
+        if( existing.insert( name ).second )
+        {
+            NET net;
+            net.name = name;
+            m_nets.push_back( net );
+        }
+    }
+
+    parseNetConnectionsOld();
+}
+
+
+std::vector<size_t> BINARY_PARSER::oldNetRecordOffsets() const
+{
+    constexpr uint32_t NET_RECORD_SIZE = 144;
+    constexpr size_t   LEADING_NET_RECORDS = 8;
+
+    std::vector<size_t> offsets;
+    const SDB_SECTION*  nets = getSection( SECTION::Nets );
+
+    if( !nets || nets->stride != NET_RECORD_SIZE || nets->dataOffset < LEADING_NET_RECORDS * NET_RECORD_SIZE )
+        return offsets;
+
+    for( size_t i = LEADING_NET_RECORDS; i >= 1; --i )
+        offsets.push_back( nets->dataOffset - i * NET_RECORD_SIZE );
+
+    for( uint32_t i = 0; i < nets->count; ++i )
+        offsets.push_back( nets->dataOffset + static_cast<size_t>( i ) * NET_RECORD_SIZE );
+
+    return offsets;
+}
+
+
+void BINARY_PARSER::parseNetConnectionsOld()
+{
+    constexpr size_t   RECORD_SIZE     = 68;
+    constexpr uint32_t ENDPOINT_FLAG   = 0x0000FFFE;   // low half of the record's u32 @ +0
+    constexpr uint32_t MARKER          = 0xFE000000;   // u32 @ +36, low 6 bits carry a subtype
+    constexpr uint32_t NET_RECORD_SIZE = 144;
+    constexpr uint32_t NET_FIRST       = 8;    // index of this net's first connection record
+    constexpr uint32_t NET_NAME        = 12;
+    constexpr uint32_t NET_COUNT       = 92;   // number of connection records in this net
+
+    const SDB_SECTION* connections = getSection( SECTION::Connections );
+    const SDB_SECTION* nets = getSection( SECTION::Nets );
+
+    if( !connections || !nets || connections->count == 0 || nets->stride != NET_RECORD_SIZE )
+        return;
+
+    auto validConnection = [&]( size_t aOffset )
+    {
+        if( !m_cursor.InBounds( aOffset, RECORD_SIZE ) )
+            return false;
+
+        SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( aOffset ) );
+
+        return ( rec.U32( 0 ) & 0xFFFFU ) == ENDPOINT_FLAG && ( rec.U32( 36 ) & 0xFFFFFFC0U ) == MARKER;
+    };
+
+    if( !validConnection( connections->dataOffset ) )
+        return;
+
+    // Like the net table, the connection stream begins before the section's declared dataOffset;
+    // walking back to the first non-record recovers a run whose length equals the directory's own
+    // count on every v0x2021 corpus file, which is what confirms the run is the whole stream.
+    size_t leading = 0;
+
+    while( connections->dataOffset >= ( leading + 1 ) * RECORD_SIZE
+           && validConnection( connections->dataOffset - ( leading + 1 ) * RECORD_SIZE ) )
+    {
+        ++leading;
+    }
+
+    size_t base = connections->dataOffset - leading * RECORD_SIZE;
+    size_t total = leading;
+
+    while( validConnection( base + total * RECORD_SIZE ) )
+        ++total;
+
+    // Union-find over pin identities, so each net becomes one connected component of the graph
+    // the connection records span.
+    std::map<std::pair<uint32_t, uint32_t>, size_t> pinIndex;
+    std::vector<size_t>                             parent;
+
+    auto intern = [&]( uint32_t aObject, uint32_t aOrdinal )
+    {
+        auto [it, inserted] = pinIndex.emplace( std::make_pair( aObject, aOrdinal ), parent.size() );
+
+        if( inserted )
+            parent.push_back( parent.size() );
+
+        return it->second;
+    };
+
+    auto findRoot = [&]( size_t aNode )
+    {
+        while( parent[aNode] != aNode )
+        {
+            parent[aNode] = parent[parent[aNode]];
+            aNode = parent[aNode];
+        }
+
+        return aNode;
+    };
+
+    struct CONNECTION
+    {
+        uint32_t objectA;
+        uint32_t ordinalA;
+        uint32_t objectB;
+        uint32_t ordinalB;
+        size_t   pinA;
+    };
+
+    std::vector<CONNECTION> stream;
+    stream.reserve( total );
+
+    for( size_t i = 0; i < total; ++i )
+    {
+        SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( base + i * RECORD_SIZE ) );
+        CONNECTION conn{ rec.U32( 8 ), rec.U32( 16 ), rec.U32( 12 ), rec.U32( 20 ), 0 };
+
+        conn.pinA = intern( conn.objectA, conn.ordinalA );
+        size_t pinB = intern( conn.objectB, conn.ordinalB );
+
+        size_t rootA = findRoot( conn.pinA );
+        size_t rootB = findRoot( pinB );
+
+        if( rootA != rootB )
+            parent[rootA] = rootB;
+
+        stream.push_back( conn );
+    }
+
+    std::map<size_t, size_t> componentFirst;
+    std::map<size_t, size_t> componentSize;
+
+    for( size_t i = 0; i < stream.size(); ++i )
+    {
+        size_t root = findRoot( stream[i].pinA );
+
+        componentFirst.emplace( root, i );
+        ++componentSize[root];
+    }
+
+    // Net record keyed by the connection index it names as its first member.
+    struct NET_RANGE
+    {
+        std::string name;
+        uint32_t    count;
+    };
+
+    std::map<uint32_t, NET_RANGE> netByFirst;
+
+    // A net record only counts as one when its name is a plausible net name and its connection
+    // count fits the stream, because the backward walk has no other way to know it has stepped
+    // off the head of the table into the preceding section's bytes.
+    auto netRecordName = [&]( size_t aOffset, std::string& aName, uint32_t& aCount, uint32_t& aFirst )
+    {
+        if( !m_cursor.InBounds( aOffset, NET_RECORD_SIZE ) )
+            return false;
+
+        SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( aOffset ) );
+
+        aName = rec.Str( NET_NAME, 48 );
+        aCount = rec.U32( NET_COUNT );
+        aFirst = rec.U32( NET_FIRST );
+
+        if( aName.empty() || aCount == 0 || aCount > connections->count )
+            return false;
+
+        bool allDigits = true;
+
+        for( char c : aName )
+        {
+            if( !std::isalnum( static_cast<unsigned char>( c ) ) && c != '_' && c != '$' && c != '+' && c != '-'
+                && c != '.' && c != '/' )
+            {
+                return false;
+            }
+
+            allDigits &= std::isdigit( static_cast<unsigned char>( c ) ) != 0;
+        }
+
+        return !allDigits;
+    };
+
+    // Storage order decides ownership: where two records name the same first connection, the
+    // earlier one owns it, so the table is replayed forwards and a later record never displaces it.
+    for( size_t offset : oldNetRecordOffsets() )
+    {
+        std::string name;
+        uint32_t    count = 0;
+        uint32_t    first = 0;
+
+        if( netRecordName( offset, name, count, first ) && first < total )
+            netByFirst.emplace( first, NET_RANGE{ name, count } );
+    }
+
+    std::map<std::string, size_t> netIndexByName;
+
+    for( size_t i = 0; i < m_nets.size(); ++i )
+        netIndexByName.emplace( m_nets[i].name, i );
+
+    for( const auto& [root, first] : componentFirst )
+    {
+        auto rangeIt = netByFirst.find( static_cast<uint32_t>( first ) );
+
+        // The stored count is an independent witness for the same net, so requiring it to equal
+        // the component size keeps an unrecognized layout from attributing pins to a wrong net.
+        if( rangeIt == netByFirst.end() || rangeIt->second.count != componentSize[root] )
+            continue;
+
+        auto netIt = netIndexByName.find( rangeIt->second.name );
+
+        if( netIt == netIndexByName.end() )
+            continue;
+
+        for( const CONNECTION& conn : stream )
+        {
+            if( findRoot( conn.pinA ) != root )
+                continue;
+
+            m_netConnectionEndpoints.push_back( { netIt->second, conn.objectA, conn.ordinalA } );
+            m_netConnectionEndpoints.push_back( { netIt->second, conn.objectB, conn.ordinalB } );
+        }
     }
 }
 
@@ -2519,8 +3835,7 @@ void BINARY_PARSER::parseDftConfig( size_t aStart, size_t aEnd )
 
     for( size_t pos = aStart; pos + markerLen + 1 < aEnd; ++pos )
     {
-        if( std::memcmp( &m_data[pos], DFT_MARKER, markerLen ) == 0
-            && m_data[pos + markerLen] == 0 )
+        if( std::memcmp( &m_data[pos], DFT_MARKER, markerLen ) == 0 && m_data[pos + markerLen] == 0 )
         {
             size_t configStart = pos + markerLen + 1;
 
@@ -2532,8 +3847,7 @@ void BINARY_PARSER::parseDftConfig( size_t aStart, size_t aEnd )
                     continue;
                 }
 
-                if( configStart + 7 <= aEnd
-                    && std::memcmp( &m_data[configStart], "PARENT\0", 7 ) == 0 )
+                if( configStart + 7 <= aEnd && std::memcmp( &m_data[configStart], "PARENT\0", 7 ) == 0 )
                 {
                     configStart += 7;
                     continue;
@@ -2592,8 +3906,7 @@ void BINARY_PARSER::parseDftConfig( size_t aStart, size_t aEnd )
 }
 
 
-std::map<std::string, std::string>
-BINARY_PARSER::parseDftDotPadded( size_t aPos, size_t aEnd ) const
+std::map<std::string, std::string> BINARY_PARSER::parseDftDotPadded( size_t aPos, size_t aEnd ) const
 {
     std::map<std::string, std::string> config;
 
@@ -2641,16 +3954,14 @@ BINARY_PARSER::parseDftDotPadded( size_t aPos, size_t aEnd ) const
 
         if( aPos > valStart )
         {
-            std::string value( reinterpret_cast<const char*>( &m_data[valStart] ),
-                               aPos - valStart );
+            std::string value( reinterpret_cast<const char*>( &m_data[valStart] ), aPos - valStart );
             config[key] = value;
         }
 
         if( aPos < aEnd )
             ++aPos;
 
-        if( aPos + 7 <= aEnd
-            && std::memcmp( &m_data[aPos], "PARENT\0", 7 ) == 0 )
+        if( aPos + 7 <= aEnd && std::memcmp( &m_data[aPos], "PARENT\0", 7 ) == 0 )
         {
             aPos += 7;
         }
@@ -2660,8 +3971,7 @@ BINARY_PARSER::parseDftDotPadded( size_t aPos, size_t aEnd ) const
 }
 
 
-std::map<std::string, std::string>
-BINARY_PARSER::parseDftNullSeparated( size_t aPos, size_t aEnd ) const
+std::map<std::string, std::string> BINARY_PARSER::parseDftNullSeparated( size_t aPos, size_t aEnd ) const
 {
     std::map<std::string, std::string> config;
 
@@ -2781,14 +4091,12 @@ void BINARY_PARSER::parseNetClasses()
     {
         std::sort( nc.nets.begin(), nc.nets.end() );
         std::sort( nc.ruleLayers.begin(), nc.ruleLayers.end() );
-        nc.ruleLayers.erase( std::unique( nc.ruleLayers.begin(), nc.ruleLayers.end() ),
-                             nc.ruleLayers.end() );
+        nc.ruleLayers.erase( std::unique( nc.ruleLayers.begin(), nc.ruleLayers.end() ), nc.ruleLayers.end() );
     }
 }
 
 
-std::vector<NET_CLASS_RULE_EDGE>
-BINARY_PARSER::collectNetClassRuleEdges( const std::set<uint32_t>& aOwnerSet )
+std::vector<NET_CLASS_RULE_EDGE> BINARY_PARSER::collectNetClassRuleEdges( const std::set<uint32_t>& aOwnerSet )
 {
     // The type-66 rule table is 24-byte records with tag 0x42 at +4 and a net-class owner
     // pointer at +8 (== a net's +188), a rule-detail page at +0 and a layer at +20.
@@ -2816,8 +4124,7 @@ BINARY_PARSER::collectNetClassRuleEdges( const std::set<uint32_t>& aOwnerSet )
 
         uint32_t rulePtr = rec.U32( EDGE_RULE_PTR );
 
-        edges.push_back( { owner, rulePtr & RULE_PAGE_MASK, rulePtr,
-                           static_cast<int>( rec.U32( EDGE_LAYER ) ), off } );
+        edges.push_back( { owner, rulePtr & RULE_PAGE_MASK, rulePtr, static_cast<int>( rec.U32( EDGE_LAYER ) ), off } );
     }
 
     return edges;
@@ -2888,7 +4195,10 @@ void BINARY_PARSER::applyNetClassClearances( const std::vector<NET_CLASS_RULE_ED
         }
 
         std::sort( layer0Edges.begin(), layer0Edges.end(),
-                   []( const NET_CLASS_RULE_EDGE* a, const NET_CLASS_RULE_EDGE* b ) { return a->rulePtr < b->rulePtr; } );
+                   []( const NET_CLASS_RULE_EDGE* a, const NET_CLASS_RULE_EDGE* b )
+                   {
+                       return a->rulePtr < b->rulePtr;
+                   } );
 
         // The value arena sits in a broader MFC blob outside the sec49 directory byte-range, so
         // the scan covers the whole file, seeded on the marker value (12 mil, the TRACK_TO_TRACK
@@ -2911,8 +4221,7 @@ void BINARY_PARSER::applyNetClassClearances( const std::vector<NET_CLASS_RULE_ED
 
         std::vector<ValueRec> values;
 
-        for( size_t off = 0;
-             off + VALUE_CORE_OFF + VALUE_CORE_COUNT * sizeof( int32_t ) <= m_data.size(); ++off )
+        for( size_t off = 0; off + VALUE_CORE_OFF + VALUE_CORE_COUNT * sizeof( int32_t ) <= m_data.size(); ++off )
         {
             SDB_RECORD rec = m_sdb.RecordAt( off );
 
@@ -2944,7 +4253,10 @@ void BINARY_PARSER::applyNetClassClearances( const std::vector<NET_CLASS_RULE_ED
         }
 
         std::sort( values.begin(), values.end(),
-                   []( const ValueRec& a, const ValueRec& b ) { return a.selfPtr < b.selfPtr; } );
+                   []( const ValueRec& a, const ValueRec& b )
+                   {
+                       return a.selfPtr < b.selfPtr;
+                   } );
 
         // Equal counts are required for a sound positional join; otherwise leave values unset so
         // membership still ships.
@@ -3124,8 +4436,8 @@ void BINARY_PARSER::parseTextRecords()
     size_t          poolHi = hi;
     const SDB_SECTION* s9     = getSection( SECTION::StringPool );
 
-    if( s9 && s9->totalBytes > 0 && s9->stride == 1 && s9->dataOffset == hi
-        && s9->dataOffset <= m_data.size() && s9->totalBytes <= m_data.size() - s9->dataOffset )
+    if( s9 && s9->totalBytes > 0 && s9->stride == 1 && s9->dataOffset == hi && s9->dataOffset <= m_data.size()
+        && s9->totalBytes <= m_data.size() - s9->dataOffset )
     {
         poolHi = s9->dataOffset + s9->totalBytes;
     }
@@ -3201,8 +4513,7 @@ void BINARY_PARSER::parseTextRecords()
         {
             size_t soff = base + c.strOffset;
 
-            if( soff >= lo && soff < poolHi && ( soff == base || m_data[soff - 1] == 0 )
-                && cStringStartAt( soff ) )
+            if( soff >= lo && soff < poolHi && ( soff == base || m_data[soff - 1] == 0 ) && cStringStartAt( soff ) )
                 ++good;
         }
 
@@ -3222,8 +4533,7 @@ void BINARY_PARSER::parseTextRecords()
 
         // Str clamps only to the buffer end, so without this guard a false candidate could read
         // printable bytes out of a neighbouring section.
-        if( soff < lo || soff >= poolHi || ( soff != poolBase && m_data[soff - 1] != 0 )
-            || !cStringStartAt( soff ) )
+        if( soff < lo || soff >= poolHi || ( soff != poolBase && m_data[soff - 1] != 0 ) || !cStringStartAt( soff ) )
             continue;
 
         std::string content = m_sdb.RecordAt( soff ).Str( 0, poolHi - soff );
@@ -3295,11 +4605,15 @@ static bool viaRecordValid( const BINARY_CURSOR& aCur, size_t aTypeByte )
 
 void BINARY_PARSER::parseRouteVertices()
 {
+    // Section 60 identifies via instances and their net/via-definition ordinals. Sections
+    // 62-64 store routed copper as 48-byte object descriptors, a layer table, and compressed
+    // 12-byte geometry cells; a separate 32-byte header arena carries width, layer, and links.
     struct ViaLocation
     {
         int32_t     x = 0;
         int32_t     y = 0;
         std::string netName;
+        int         viaIndex = -1;
     };
 
     std::vector<ViaLocation> viaLocations;
@@ -3369,10 +4683,15 @@ void BINARY_PARSER::parseRouteVertices()
         return;
 
     std::set<std::pair<int32_t, int32_t>> seenVias;
+    std::set<std::pair<int32_t, int32_t>> routeAnchorPoints;
 
     for( size_t typeByte = scanStart + bestPhase; typeByte + 6 <= scanEnd; typeByte += stride )
     {
-        if( m_cursor.U8At( typeByte ) != VIA_TYPE || !viaRecordValid( m_cursor, typeByte ) )
+        uint8_t type = m_cursor.U8At( typeByte );
+        bool    isVia = type == VIA_TYPE && viaRecordValid( m_cursor, typeByte );
+        bool    isCorner = type == CORNER_TYPE && m_cursor.U8At( typeByte + 6 ) == 1;
+
+        if( !isVia && !isCorner )
             continue;
 
         if( typeByte < 27 || !m_cursor.InBounds( typeByte - 27, 8 ) )
@@ -3380,8 +4699,9 @@ void BINARY_PARSER::parseRouteVertices()
 
         int32_t vx = m_cursor.I32At( typeByte - 27 );
         int32_t vy = m_cursor.I32At( typeByte - 23 );
+        routeAnchorPoints.emplace( vx, vy );
 
-        if( !seenVias.insert( { vx, vy } ).second )
+        if( !isVia )
             continue;
 
         std::string netName;
@@ -3391,33 +4711,1486 @@ void BINARY_PARSER::parseRouteVertices()
         if( it != m_sec23IndexToNet.end() )
             netName = it->second;
 
+        if( netName.empty() && m_nets.size() == 1 )
+            netName = m_nets.front().name;
+
+        if( !seenVias.insert( { vx, vy } ).second )
+            continue;
+
         ViaLocation via;
         via.x       = vx;
         via.y       = vy;
         via.netName = netName;
+        via.viaIndex = m_cursor.U8At( typeByte - 3 );
         viaLocations.push_back( via );
     }
 
-    if( viaLocations.empty() )
-        return;
-
-    // Emit a ROUTE per net carrying only its vias.
-    std::map<std::string, std::vector<const ViaLocation*>> netVias;
-
-    for( const auto& via : viaLocations )
-        netVias[via.netName].push_back( &via );
-
-    for( const auto& [netName, vias] : netVias )
+    for( const PART& part : m_parts )
     {
-        ROUTE route;
-        route.net_name = netName;
+        auto decalIt = m_decals.find( part.decal );
 
-        for( const auto* via : vias )
+        if( decalIt == m_decals.end() )
+            continue;
+
+        double radians = part.rotation * std::numbers::pi / 180.0;
+        double cosine = std::cos( radians );
+        double sine = std::sin( radians );
+
+        for( const TERMINAL& terminal : decalIt->second.terminals )
         {
-            VIA viaDef;
-            viaDef.location.x = static_cast<double>( via->x );
-            viaDef.location.y = static_cast<double>( via->y );
-            route.vias.push_back( std::move( viaDef ) );
+            double dx = terminal.x * cosine - terminal.y * sine;
+            double dy = terminal.x * sine + terminal.y * cosine;
+
+            if( part.bottom_layer )
+                dx = -dx;
+
+            routeAnchorPoints.emplace( static_cast<int32_t>( std::llround( part.location.x + dx ) ),
+                                       static_cast<int32_t>( std::llround( part.location.y + dy ) ) );
+        }
+    }
+
+    std::map<std::string, ROUTE> routes;
+
+    for( const ViaLocation& via : viaLocations )
+    {
+        ROUTE& route = routes[via.netName];
+        route.net_name = via.netName;
+
+        VIA viaDef;
+        viaDef.location.x = static_cast<double>( via.x );
+        viaDef.location.y = static_cast<double>( via.y );
+
+        bool stackResolved = false;
+
+        if( via.viaIndex >= 0 && static_cast<size_t>( via.viaIndex ) < m_decalNameTable.size() )
+        {
+            auto decalIt = m_decals.find( m_decalNameTable[via.viaIndex] );
+
+            if( decalIt != m_decals.end() )
+            {
+                auto stackIt = decalIt->second.pad_stacks.find( 1 );
+
+                if( stackIt == decalIt->second.pad_stacks.end() )
+                    stackIt = decalIt->second.pad_stacks.find( 0 );
+
+                if( stackIt != decalIt->second.pad_stacks.end() && !stackIt->second.empty() )
+                {
+                    viaDef.stack = stackIt->second;
+                    stackResolved = true;
+                }
+            }
+        }
+
+        auto stackIt = m_viaStackByIndex.find( via.viaIndex );
+
+        if( !stackResolved && stackIt != m_viaStackByIndex.end() )
+            viaDef.stack = m_padStackPool[stackIt->second];
+
+        route.vias.push_back( std::move( viaDef ) );
+    }
+
+    const SDB_SECTION* routeObjects = getSection( SECTION::RouteObjects );
+    const SDB_SECTION* routeLayers = getSection( SECTION::RouteLayers );
+    const SDB_SECTION* routeCells = getSection( SECTION::RouteCells );
+
+    if( routeObjects && routeLayers && routeCells && routeObjects->count > 0
+        && ( routeObjects->stride == 36 || routeObjects->stride == 48 ) && routeLayers->stride == 2
+        && routeCells->stride == 12 && routeLayers->count > 0 )
+    {
+        struct ROUTE_OBJECT
+        {
+            int32_t  width = 0;
+            int32_t  boundLo = 0;
+            int32_t  boundHi = 0;
+            uint32_t style = 0;
+            uint32_t cellCount = 0;
+        };
+
+        size_t objectBytes = routeObjects->totalBytes;
+        size_t layerBytes = routeLayers->totalBytes;
+        size_t cellBytes = routeCells->totalBytes;
+        size_t bestLayerTable = 0;
+        size_t bestTagMatches = 0;
+        std::vector<int> bestLayerOrder;
+        bool   legacyObjects = routeObjects->stride == 36;
+        size_t objectStride = legacyObjects ? 36 : 48;
+        size_t widthOffset = legacyObjects ? 8 : 20;
+        size_t boundLoOffset = legacyObjects ? 12 : 24;
+        size_t boundHiOffset = legacyObjects ? 16 : 28;
+        size_t cellCountOffset = legacyObjects ? 24 : 36;
+        size_t trailingTagOffset = legacyObjects ? 32 : 44;
+
+        auto ringU32 = [&]( size_t aRingStart, size_t aOffset )
+        {
+            uint32_t value = 0;
+
+            for( size_t byte = 0; byte < 4; ++byte )
+            {
+                size_t physical = aRingStart + ( aOffset + byte ) % objectBytes;
+                value |= static_cast<uint32_t>( m_cursor.U8At( physical ) ) << ( byte * 8 );
+            }
+
+            return value;
+        };
+
+        for( size_t pos = scanStart; pos + layerBytes + cellBytes <= scanEnd; ++pos )
+        {
+            if( pos < objectBytes )
+                continue;
+
+            bool             layerTableMatches = true;
+            std::set<uint16_t> seenLayers;
+            std::vector<int> layerOrder;
+
+            for( uint32_t layer = 0; layer < routeLayers->count; ++layer )
+            {
+                uint16_t serializedLayer = m_cursor.U16At( pos + layer * 2 );
+
+                if( serializedLayer >= routeLayers->count || !seenLayers.insert( serializedLayer ).second )
+                {
+                    layerTableMatches = false;
+                    break;
+                }
+
+                layerOrder.push_back( serializedLayer );
+            }
+
+            if( !layerTableMatches )
+                continue;
+
+            size_t   ringStart = pos - objectBytes;
+            uint64_t totalCells = 0;
+            size_t   tagMatches = 0;
+            bool     valid = true;
+
+            for( uint32_t i = 0; i < routeObjects->count; ++i )
+            {
+                size_t  base = ( 32 + static_cast<size_t>( i ) * objectStride ) % objectBytes;
+                int32_t quarterWidth = static_cast<int32_t>( ringU32( ringStart, base + widthOffset ) );
+                int32_t count = static_cast<int32_t>( ringU32( ringStart, base + cellCountOffset ) );
+
+                if( quarterWidth < 0 || quarterWidth > 20000000 || count <= 0 || count > 100000 )
+                {
+                    valid = false;
+                    break;
+                }
+
+                totalCells += static_cast<uint32_t>( count );
+                tagMatches += ringU32( ringStart, base ) == ringU32( ringStart, base + trailingTagOffset );
+            }
+
+            if( !valid || totalCells != routeCells->count )
+            {
+                continue;
+            }
+
+            if( tagMatches > bestTagMatches )
+            {
+                bestLayerTable = pos;
+                bestTagMatches = tagMatches;
+                bestLayerOrder = std::move( layerOrder );
+            }
+        }
+
+        if( bestLayerTable != 0 )
+        {
+            if( bestLayerOrder.size() != routeLayers->count )
+            {
+                bestLayerOrder.resize( routeLayers->count );
+                std::iota( bestLayerOrder.begin(), bestLayerOrder.end(), 0 );
+            }
+
+            auto padsLayerForSerializedIndex = [&]( size_t aIndex )
+            {
+                return aIndex < bestLayerOrder.size() ? bestLayerOrder[aIndex] + 1
+                                                     : static_cast<int>( aIndex ) + 1;
+            };
+
+            size_t                    ringStart = bestLayerTable - objectBytes;
+            std::vector<ROUTE_OBJECT> objects;
+
+            for( uint32_t i = 0; i < routeObjects->count; ++i )
+            {
+                size_t       base = ( 32 + static_cast<size_t>( i ) * objectStride ) % objectBytes;
+                ROUTE_OBJECT object;
+
+                object.width = static_cast<int32_t>( ringU32( ringStart, base + widthOffset ) ) * 4;
+                object.boundLo = static_cast<int32_t>( ringU32( ringStart, base + boundLoOffset ) );
+                object.boundHi = static_cast<int32_t>( ringU32( ringStart, base + boundHiOffset ) );
+                object.style = ringU32( ringStart, base + ( legacyObjects ? 20 : 32 ) );
+                object.cellCount = ringU32( ringStart, base + cellCountOffset );
+                objects.push_back( object );
+            }
+
+            struct ROUTE_HEADER
+            {
+                uint32_t self = 0;
+                uint32_t link = 0;
+                int32_t  width = 0;
+                int      layer = 0;
+            };
+
+            std::vector<std::vector<ROUTE_HEADER>> headerChains;
+            std::vector<ROUTE_HEADER>              headerSequence;
+            std::multiset<int32_t>                 objectWidths;
+            std::vector<size_t>                    serializedLayerCounts( routeLayers->count );
+            std::vector<size_t>                    serializedPositiveLayerCounts( routeLayers->count );
+            size_t                                 headerMarkerOffset = m_version == 0x2024 ? 0 : 8;
+            size_t                                 headerWidthOffset = m_version == 0x2024 ? 4 : 12;
+            size_t                                 headerLayerOffset = m_version == 0x2024 ? 8 : 16;
+            size_t                                 headerFlagsOffset = m_version == 0x2024 ? 16 : 24;
+
+            for( const ROUTE_OBJECT& object : objects )
+            {
+                if( object.width > 0 )
+                    objectWidths.insert( object.width );
+            }
+
+            auto matchingObjectWidth = [&]( int32_t aWidth ) -> std::optional<int32_t>
+            {
+                auto widthIt = objectWidths.lower_bound( aWidth - 4 );
+
+                if( widthIt != objectWidths.end() && std::abs( *widthIt - aWidth ) <= 4 )
+                    return *widthIt;
+
+                return std::nullopt;
+            };
+
+            for( size_t pos = scanStart; !legacyObjects && pos + 32 <= scanEnd; ++pos )
+            {
+                uint32_t layer = m_cursor.U32At( pos + headerLayerOffset );
+                uint32_t flags = m_cursor.U32At( pos + headerFlagsOffset );
+
+                if( m_cursor.U32At( pos + headerMarkerOffset ) == 0x2001 && layer < routeLayers->count
+                    && ( flags & ~0x80000000U ) == 0 )
+                {
+                    ++serializedLayerCounts[layer];
+
+                    if( m_cursor.I32At( pos + headerWidthOffset ) > 0 )
+                    {
+                        ++serializedPositiveLayerCounts[layer];
+
+                        if( m_version == 0x2024 )
+                        {
+                            auto width = matchingObjectWidth( m_cursor.I32At( pos + headerWidthOffset ) * 2 );
+
+                            if( width )
+                            {
+                                ROUTE_HEADER header;
+                                header.width = *width;
+                                header.layer = padsLayerForSerializedIndex( layer );
+                                headerSequence.push_back( header );
+                            }
+                        }
+                    }
+                }
+            }
+
+            auto validHeaderAt = [&]( size_t aBase )
+            {
+                if( aBase + 32 > scanEnd || m_cursor.U32At( aBase + 8 ) != 0x2001 )
+                    return false;
+
+                int32_t  halfWidth = m_cursor.I32At( aBase + 12 );
+                uint32_t layer = m_cursor.U32At( aBase + 16 );
+                uint32_t flags = m_cursor.U32At( aBase + 24 );
+                return halfWidth > 0 && layer < routeLayers->count && ( flags & ~0x80000000U ) == 0
+                       && matchingObjectWidth( halfWidth * 2 ).has_value();
+            };
+
+            for( size_t pos = scanStart; !legacyObjects && m_version != 0x2024 && pos + 32 <= scanEnd; ++pos )
+            {
+                if( !validHeaderAt( pos ) || ( pos >= scanStart + 32 && validHeaderAt( pos - 32 ) ) )
+                    continue;
+
+                std::vector<ROUTE_HEADER>  headers;
+                std::map<uint32_t, size_t> selfToHeader;
+                size_t                     linkMatches = 0;
+
+                for( size_t base = pos; validHeaderAt( base ); base += 32 )
+                {
+                    int32_t  halfWidth = m_cursor.I32At( base + 12 );
+                    uint32_t layer = m_cursor.U32At( base + 16 );
+
+                    ROUTE_HEADER header;
+                    header.self = m_cursor.U32At( base );
+                    header.link = m_cursor.U32At( base + 4 );
+                    header.width = *matchingObjectWidth( halfWidth * 2 );
+                    header.layer = padsLayerForSerializedIndex( layer );
+                    selfToHeader.emplace( header.self, headers.size() );
+                    headers.push_back( header );
+                }
+
+                std::multiset<int32_t> remainingWidths = objectWidths;
+                bool                   widthsAvailable = true;
+
+                for( const ROUTE_HEADER& header : headers )
+                {
+                    auto widthIt = remainingWidths.find( header.width );
+
+                    if( widthIt == remainingWidths.end() )
+                    {
+                        widthsAvailable = false;
+                        break;
+                    }
+
+                    remainingWidths.erase( widthIt );
+                }
+
+                if( !widthsAvailable )
+                    continue;
+
+                headerSequence.insert( headerSequence.end(), headers.begin(), headers.end() );
+
+                if( selfToHeader.size() != headers.size() )
+                    continue;
+
+                std::set<uint32_t> referenced;
+
+                for( const ROUTE_HEADER& header : headers )
+                {
+                    if( selfToHeader.count( header.link ) )
+                    {
+                        referenced.insert( header.link );
+                        ++linkMatches;
+                    }
+                }
+
+                if( referenced.size() != linkMatches )
+                    continue;
+
+                std::vector<size_t> heads;
+
+                for( size_t i = 0; i < headers.size(); ++i )
+                {
+                    if( !referenced.count( headers[i].self ) )
+                        heads.push_back( i );
+                }
+
+                if( heads.empty() || linkMatches + heads.size() != headers.size() )
+                    continue;
+
+                std::set<size_t> visited;
+                size_t           chainsBefore = headerChains.size();
+
+                for( size_t head : heads )
+                {
+                    std::vector<ROUTE_HEADER> chain;
+
+                    while( head < headers.size() && visited.insert( head ).second )
+                    {
+                        chain.push_back( headers[head] );
+                        auto next = selfToHeader.find( headers[head].link );
+                        head = next == selfToHeader.end() ? headers.size() : next->second;
+                    }
+
+                    if( !chain.empty() )
+                        headerChains.push_back( std::move( chain ) );
+                }
+
+                if( visited.size() != headers.size() )
+                    headerChains.resize( chainsBefore );
+            }
+
+            struct ROUTE_CELL
+            {
+                int32_t x1 = 0;
+                int32_t y = 0;
+                int32_t x2 = 0;
+            };
+
+            size_t                  cellStart = bestLayerTable + layerBytes;
+            std::vector<ROUTE_CELL> cells;
+
+            for( uint32_t i = 0; i < routeCells->count; ++i )
+            {
+                size_t  base = cellStart + static_cast<size_t>( i ) * 12;
+                int32_t first = m_cursor.I32At( base );
+                int32_t second = m_cursor.I32At( base + 4 );
+                int32_t third = m_cursor.I32At( base + 8 );
+
+                cells.push_back( { first, second, third } );
+            }
+
+            std::set<std::pair<int32_t, int32_t>> viaPoints;
+
+            for( const ViaLocation& via : viaLocations )
+                viaPoints.emplace( via.x, via.y );
+
+            size_t globalXyAnchorHits = 0;
+            size_t globalYxAnchorHits = 0;
+
+            for( const ROUTE_CELL& cell : cells )
+            {
+                globalXyAnchorHits += routeAnchorPoints.count( { cell.x1, cell.y } );
+                globalXyAnchorHits += routeAnchorPoints.count( { cell.x2, cell.y } );
+                globalYxAnchorHits += routeAnchorPoints.count( { cell.y, cell.x1 } );
+                globalYxAnchorHits += routeAnchorPoints.count( { cell.y, cell.x2 } );
+            }
+
+            bool fileFixedIsX = globalXyAnchorHits >= globalYxAnchorHits;
+
+            size_t             cursor = 0;
+            std::vector<TRACK> decodedPieces;
+            std::vector<size_t> decodedObjectIndices;
+
+            std::vector<size_t> objectRuns( objects.size(), std::numeric_limits<size_t>::max() );
+            size_t              runCount = 0;
+            bool                inRun = false;
+            std::vector<size_t> runSizes;
+
+            for( size_t i = 0; i < objects.size(); ++i )
+            {
+                if( objects[i].width <= 0 )
+                {
+                    inRun = false;
+                    continue;
+                }
+
+                if( !inRun )
+                {
+                    inRun = true;
+                    ++runCount;
+                    runSizes.push_back( 0 );
+                }
+
+                objectRuns[i] = runCount - 1;
+                ++runSizes.back();
+            }
+
+            std::vector<int> runLayers( runCount, 1 );
+            bool v2022NeedsHeaderLayerRecovery = m_version == 0x2022 && legacyObjects
+                                                 && runCount > routeLayers->count + 1;
+
+            if( ( legacyObjects || m_version == 0x2024 ) && runCount == routeLayers->count )
+            {
+                for( size_t run = 0; run < runCount; ++run )
+                    runLayers[run] = padsLayerForSerializedIndex( run );
+            }
+            else if( legacyObjects && runCount == routeLayers->count + 1 && !objects.empty()
+                     && objects.front().width > 0 && objects.back().width > 0 )
+            {
+                for( size_t run = 0; run + 1 < runCount; ++run )
+                    runLayers[run] = padsLayerForSerializedIndex( run );
+
+                runLayers.back() = 1;
+            }
+
+            if( !legacyObjects && runCount > 0
+                && std::any_of( serializedLayerCounts.begin(), serializedLayerCounts.end(),
+                                []( size_t aCount )
+                                {
+                                    return aCount > 0;
+                                } ) )
+            {
+                bool allLayersPresent =
+                        std::all_of( serializedPositiveLayerCounts.begin(), serializedPositiveLayerCounts.end(),
+                                     []( size_t aCount )
+                                     {
+                                         return aCount > 0;
+                                     } );
+                size_t overhead = allLayersPresent && m_version != 0x2024 && m_version != 0x2026
+                                          ? *std::min_element( serializedPositiveLayerCounts.begin(),
+                                                               serializedPositiveLayerCounts.end() )
+                                          : 0;
+                size_t partitionRunCount = runCount;
+
+                if( !objects.empty() && objects.front().width > 0 && objects.back().width > 0
+                    && objectRuns.back() + 1 == runCount )
+                {
+                    --partitionRunCount;
+                }
+
+                struct PARTITION_PARENT
+                {
+                    size_t previousRun = 0;
+                    bool   valid = false;
+                };
+
+                size_t layerCount = serializedLayerCounts.size();
+                double infinity = std::numeric_limits<double>::infinity();
+                std::vector<std::vector<double>> costs(
+                        layerCount + 1, std::vector<double>( partitionRunCount + 1, infinity ) );
+                std::vector<std::vector<PARTITION_PARENT>> parents(
+                        layerCount + 1, std::vector<PARTITION_PARENT>( partitionRunCount + 1 ) );
+                costs[0][0] = 0.0;
+
+                for( size_t layer = 0; layer < layerCount; ++layer )
+                {
+                    size_t expectedSize = serializedLayerCounts[layer] > overhead
+                                                  ? serializedLayerCounts[layer] - overhead
+                                                  : 0;
+
+                    for( size_t run = 0; run <= partitionRunCount; ++run )
+                    {
+                        if( !std::isfinite( costs[layer][run] ) )
+                            continue;
+
+                        double skippedCost = costs[layer][run] + 1.0;
+
+                        if( skippedCost < costs[layer + 1][run] )
+                        {
+                            costs[layer + 1][run] = skippedCost;
+                            parents[layer + 1][run] = { run, true };
+                        }
+
+                        size_t actualSize = 0;
+
+                        for( size_t endRun = run; endRun < partitionRunCount; ++endRun )
+                        {
+                            actualSize += runSizes[endRun];
+                            double difference = std::abs( static_cast<double>( actualSize ) - expectedSize );
+                            double scale = std::max<size_t>( expectedSize, 1 );
+                            double matchedCost = costs[layer][run] + difference / scale;
+
+                            if( matchedCost < costs[layer + 1][endRun + 1] )
+                            {
+                                costs[layer + 1][endRun + 1] = matchedCost;
+                                parents[layer + 1][endRun + 1] = { run, true };
+                            }
+                        }
+                    }
+                }
+
+                if( std::isfinite( costs[layerCount][partitionRunCount] ) )
+                {
+                    size_t run = partitionRunCount;
+
+                    for( size_t layer = layerCount; layer > 0; --layer )
+                    {
+                        const PARTITION_PARENT& parent = parents[layer][run];
+
+                        if( !parent.valid )
+                            break;
+
+                        for( size_t matchedRun = parent.previousRun; matchedRun < run; ++matchedRun )
+                            runLayers[matchedRun] = padsLayerForSerializedIndex( layer - 1 );
+
+                        run = parent.previousRun;
+                    }
+                }
+            }
+
+            // Descriptor storage is a ring: the last physical descriptor precedes descriptor 0.
+            // Positive runs crossing that seam therefore share one serialized layer.
+            if( !objects.empty() && objects.front().width > 0 && objects.back().width > 0
+                && objectRuns.front() < runLayers.size() && objectRuns.back() < runLayers.size() )
+            {
+                runLayers[objectRuns.back()] = runLayers[objectRuns.front()];
+            }
+
+            std::vector<int> objectLayers( objects.size(), 1 );
+
+            for( size_t object = 0; object < objects.size(); ++object )
+            {
+                size_t run = objectRuns[object];
+
+                if( run < runLayers.size() )
+                    objectLayers[object] = runLayers[run];
+            }
+
+            if( m_version == 0x2026 && !objects.empty() && !headerSequence.empty() )
+            {
+                struct LAYER_WIDTH
+                {
+                    int32_t width = 0;
+                    int     layer = 1;
+                };
+
+                std::vector<size_t> logicalObjects;
+
+                for( size_t sequence = 0; sequence < objects.size(); ++sequence )
+                {
+                    size_t object = ( sequence + objects.size() - 1 ) % objects.size();
+
+                    if( objects[object].width > 0 )
+                        logicalObjects.push_back( object );
+                }
+
+                std::vector<LAYER_WIDTH> logicalHeaders;
+
+                for( size_t serializedLayer = 0; serializedLayer < routeLayers->count; ++serializedLayer )
+                {
+                    int padsLayer = padsLayerForSerializedIndex( serializedLayer );
+
+                    for( const ROUTE_HEADER& header : headerSequence )
+                    {
+                        if( header.layer == padsLayer )
+                            logicalHeaders.push_back( { header.width, header.layer } );
+                    }
+                }
+
+                if( !logicalObjects.empty() && !logicalHeaders.empty() )
+                {
+                    enum class ALIGNMENT : uint8_t
+                    {
+                        DIAGONAL,
+                        OBJECT_ONLY,
+                        HEADER_ONLY
+                    };
+
+                    size_t objectCount = logicalObjects.size();
+                    size_t headerCount = logicalHeaders.size();
+                    std::vector<size_t> previous( headerCount + 1 );
+                    std::vector<size_t> current( headerCount + 1 );
+                    std::vector<ALIGNMENT> parents( ( objectCount + 1 ) * ( headerCount + 1 ),
+                                                    ALIGNMENT::DIAGONAL );
+                    std::iota( previous.begin(), previous.end(), 0 );
+
+                    for( size_t object = 1; object <= objectCount; ++object )
+                    {
+                        current[0] = object;
+                        parents[object * ( headerCount + 1 )] = ALIGNMENT::OBJECT_ONLY;
+
+                        for( size_t header = 1; header <= headerCount; ++header )
+                        {
+                            int32_t objectWidth = objects[logicalObjects[object - 1]].width;
+                            size_t diagonal = previous[header - 1]
+                                              + ( objectWidth == logicalHeaders[header - 1].width ? 0 : 2 );
+                            size_t objectOnly = previous[header] + 1;
+                            size_t headerOnly = current[header - 1] + 1;
+                            ALIGNMENT parent = ALIGNMENT::DIAGONAL;
+                            size_t    cost = diagonal;
+
+                            if( objectOnly < cost )
+                            {
+                                cost = objectOnly;
+                                parent = ALIGNMENT::OBJECT_ONLY;
+                            }
+
+                            if( headerOnly < cost )
+                            {
+                                cost = headerOnly;
+                                parent = ALIGNMENT::HEADER_ONLY;
+                            }
+
+                            current[header] = cost;
+                            parents[object * ( headerCount + 1 ) + header] = parent;
+                        }
+
+                        std::swap( previous, current );
+                    }
+
+                    std::vector<std::optional<int>> alignedLayers( objectCount );
+                    size_t exactMatches = 0;
+                    size_t object = objectCount;
+                    size_t header = headerCount;
+
+                    while( object > 0 || header > 0 )
+                    {
+                        ALIGNMENT parent = parents[object * ( headerCount + 1 ) + header];
+
+                        if( object > 0 && header > 0 && parent == ALIGNMENT::DIAGONAL )
+                        {
+                            alignedLayers[object - 1] = logicalHeaders[header - 1].layer;
+                            exactMatches += objects[logicalObjects[object - 1]].width
+                                            == logicalHeaders[header - 1].width;
+                            --object;
+                            --header;
+                        }
+                        else if( object > 0 && ( header == 0 || parent == ALIGNMENT::OBJECT_ONLY ) )
+                        {
+                            --object;
+                        }
+                        else
+                        {
+                            --header;
+                        }
+                    }
+
+                    size_t comparable = std::min( objectCount, headerCount );
+
+                    if( exactMatches * 4 >= comparable * 3 )
+                    {
+                        std::optional<int> currentLayer;
+
+                        for( size_t sequence = 0; sequence < objectCount; ++sequence )
+                        {
+                            if( alignedLayers[sequence] )
+                                currentLayer = alignedLayers[sequence];
+
+                            if( currentLayer )
+                                objectLayers[logicalObjects[sequence]] = *currentLayer;
+                        }
+
+                        currentLayer.reset();
+
+                        for( size_t sequence = objectCount; sequence > 0; --sequence )
+                        {
+                            if( alignedLayers[sequence - 1] )
+                                currentLayer = alignedLayers[sequence - 1];
+
+                            if( currentLayer && !alignedLayers[sequence - 1] )
+                                objectLayers[logicalObjects[sequence - 1]] = *currentLayer;
+                        }
+                    }
+                }
+            }
+
+
+            struct ROUTE_CHUNK
+            {
+                size_t objectIndex = 0;
+                size_t cellStart = 0;
+                size_t xyAnchorHits = 0;
+                size_t yxAnchorHits = 0;
+            };
+
+            std::vector<ROUTE_CHUNK>               chunks;
+            std::vector<std::pair<size_t, size_t>> runAnchorHits( runCount );
+
+            // The object array is a ring whose logical base is 32 bytes into its physical
+            // storage. Its last descriptor therefore owns the first cell chunk, followed by
+            // descriptors 0..N-2. The descriptor cell counts partition the cell stream exactly.
+            for( size_t sequence = 0; sequence < objects.size(); ++sequence )
+            {
+                size_t match = ( sequence + objects.size() - 1 ) % objects.size();
+
+                if( cursor + objects[match].cellCount > cells.size() )
+                    break;
+
+                const ROUTE_OBJECT& object = objects[match];
+                size_t              xyAnchorHits = 0;
+                size_t              yxAnchorHits = 0;
+                int32_t             minVariable = std::numeric_limits<int32_t>::max();
+                int32_t             maxVariable = std::numeric_limits<int32_t>::lowest();
+
+                for( size_t j = 0; j < object.cellCount; ++j )
+                {
+                    const ROUTE_CELL& cell = cells[cursor + j];
+                    minVariable = std::min( minVariable, std::min( cell.x1, cell.x2 ) );
+                    maxVariable = std::max( maxVariable, std::max( cell.x1, cell.x2 ) );
+                    xyAnchorHits += routeAnchorPoints.count( { cell.x1, cell.y } );
+                    xyAnchorHits += routeAnchorPoints.count( { cell.x2, cell.y } );
+                    yxAnchorHits += routeAnchorPoints.count( { cell.y, cell.x1 } );
+                    yxAnchorHits += routeAnchorPoints.count( { cell.y, cell.x2 } );
+                }
+
+                if( object.width > 0 && minVariable == std::min( object.boundLo, object.boundHi )
+                    && maxVariable == std::max( object.boundLo, object.boundHi ) )
+                {
+                    chunks.push_back( { match, cursor, xyAnchorHits, yxAnchorHits } );
+                    size_t run = objectRuns[match];
+                    runAnchorHits[run].first += xyAnchorHits;
+                    runAnchorHits[run].second += yxAnchorHits;
+                }
+
+                cursor += object.cellCount;
+            }
+
+            for( const ROUTE_CHUNK& chunk : chunks )
+            {
+                const ROUTE_OBJECT& object = objects[chunk.objectIndex];
+
+                if( ( object.style & 0x1000 ) != 0 )
+                    continue;
+
+                const auto& runHits = runAnchorHits[objectRuns[chunk.objectIndex]];
+                bool        fixedIsX;
+
+                if( chunk.xyAnchorHits != chunk.yxAnchorHits )
+                    fixedIsX = chunk.xyAnchorHits > chunk.yxAnchorHits;
+                else if( runHits.first != runHits.second )
+                    fixedIsX = runHits.first > runHits.second;
+                else
+                    fixedIsX = fileFixedIsX;
+
+                TRACK  track;
+                size_t objectRun = objectRuns[chunk.objectIndex];
+                track.layer = chunk.objectIndex < objectLayers.size() ? objectLayers[chunk.objectIndex]
+                                                                      : ( objectRun < runLayers.size()
+                                                                                  ? runLayers[objectRun]
+                                                                                  : 1 );
+                track.width = object.width;
+
+                for( size_t j = 0; j < object.cellCount; ++j )
+                {
+                    const ROUTE_CELL& cell = cells[chunk.cellStart + j];
+                    double            x1 = fixedIsX ? cell.x1 : cell.y;
+                    double            y1 = fixedIsX ? cell.y : cell.x1;
+                    double            x2 = fixedIsX ? cell.x2 : cell.y;
+                    double            y2 = fixedIsX ? cell.y : cell.x2;
+
+                    if( track.points.empty() || track.points.back().x != x1 || track.points.back().y != y1 )
+                    {
+                        track.points.emplace_back( x1, y1 );
+                    }
+
+                    if( x1 != x2 || y1 != y2 )
+                        track.points.emplace_back( x2, y2 );
+                }
+
+                decodedPieces.push_back( std::move( track ) );
+                decodedObjectIndices.push_back( chunk.objectIndex );
+            }
+
+            std::vector<bool> v2022HeaderMatched( decodedPieces.size(), false );
+
+            if( m_version == 0x2022 && legacyObjects && !decodedPieces.empty() )
+            {
+                const SDB_SECTION* routeHeaders = getSection( 59 );
+
+                struct V2022_ROUTE_HEADER
+                {
+                    size_t  sequence = 0;
+                    int32_t halfWidth = 0;
+                    int     rawLayer = 0;
+                    uint32_t nodeA = 0;
+                    uint32_t nodeB = 0;
+                };
+
+                if( routeHeaders && routeHeaders->stride == 24 && routeHeaders->count > 1
+                    && routeHeaders->totalBytes >= routeHeaders->stride )
+                {
+                    auto headerU32 = [&]( size_t aPhase, size_t aSequence, size_t aField )
+                    {
+                        uint32_t value = 0;
+                        size_t   offset = aPhase + aSequence * 24 + aField;
+
+                        for( size_t byte = 0; byte < 4; ++byte )
+                        {
+                            size_t physical = routeHeaders->dataOffset
+                                              + ( offset + byte ) % routeHeaders->totalBytes;
+                            value |= static_cast<uint32_t>( m_cursor.U8At( physical ) ) << ( byte * 8 );
+                        }
+
+                        return value;
+                    };
+
+                    size_t bestHeaderPhase = 0;
+                    size_t bestHeaderScore = 0;
+
+                    for( size_t phase = 0; phase < 24; ++phase )
+                    {
+                        size_t score = 0;
+
+                        for( size_t i = 0; i < routeHeaders->count; ++i )
+                        {
+                            int32_t  halfWidth = static_cast<int32_t>( headerU32( phase, i, 0 ) );
+                            uint32_t layer = headerU32( phase, i, 4 );
+                            uint32_t nodeA = headerU32( phase, i, 12 );
+                            uint32_t nodeB = headerU32( phase, i, 16 );
+                            uint32_t flags = headerU32( phase, i, 20 );
+                            uint32_t distance = nodeA > nodeB ? nodeA - nodeB : nodeB - nodeA;
+
+                            if( halfWidth > 0 && halfWidth < 20000000 && layer < routeLayers->count
+                                && ( flags == 1 || flags == 32 || flags == 1024 ) && nodeA != 0
+                                && nodeB != 0 && distance % 72 == 0
+                                && distance < static_cast<uint64_t>( entry60->count ) * 72 )
+                            {
+                                ++score;
+                            }
+                        }
+
+                        if( score > bestHeaderScore )
+                        {
+                            bestHeaderScore = score;
+                            bestHeaderPhase = phase;
+                        }
+                    }
+
+                    std::vector<V2022_ROUTE_HEADER> headers;
+                    uint32_t                        vertexBase = std::numeric_limits<uint32_t>::max();
+
+                    for( size_t i = 0; i < routeHeaders->count; ++i )
+                    {
+                        int32_t  halfWidth = static_cast<int32_t>( headerU32( bestHeaderPhase, i, 0 ) );
+                        uint32_t layer = headerU32( bestHeaderPhase, i, 4 );
+                        uint32_t nodeA = headerU32( bestHeaderPhase, i, 12 );
+                        uint32_t nodeB = headerU32( bestHeaderPhase, i, 16 );
+                        uint32_t flags = headerU32( bestHeaderPhase, i, 20 );
+                        uint32_t distance = nodeA > nodeB ? nodeA - nodeB : nodeB - nodeA;
+
+                        if( halfWidth > 0 && halfWidth < 20000000 && layer < routeLayers->count
+                            && ( flags == 1 || flags == 32 || flags == 1024 ) && nodeA != 0 && nodeB != 0
+                            && distance % 72 == 0
+                            && distance < static_cast<uint64_t>( entry60->count ) * 72 )
+                        {
+                            vertexBase = std::min( vertexBase, std::min( nodeA, nodeB ) );
+                        }
+                    }
+
+                    if( vertexBase != std::numeric_limits<uint32_t>::max() )
+                    {
+                        for( size_t i = 0; i < routeHeaders->count; ++i )
+                        {
+                            int32_t  halfWidth = static_cast<int32_t>( headerU32( bestHeaderPhase, i, 0 ) );
+                            uint32_t layer = headerU32( bestHeaderPhase, i, 4 );
+                            uint32_t nodeA = headerU32( bestHeaderPhase, i, 12 );
+                            uint32_t nodeB = headerU32( bestHeaderPhase, i, 16 );
+                            uint32_t flags = headerU32( bestHeaderPhase, i, 20 );
+
+                            if( halfWidth <= 0 || halfWidth >= 20000000 || layer >= routeLayers->count
+                                || ( flags != 1 && flags != 32 && flags != 1024 ) || nodeA < vertexBase
+                                || nodeB < vertexBase || ( nodeA - vertexBase ) % 72 != 0
+                                || ( nodeB - vertexBase ) % 72 != 0 )
+                            {
+                                continue;
+                            }
+
+                            uint32_t ordinalA = ( nodeA - vertexBase ) / 72;
+                            uint32_t ordinalB = ( nodeB - vertexBase ) / 72;
+
+                            if( ordinalA < entry60->count && ordinalB < entry60->count )
+                            {
+                                headers.push_back( { i, halfWidth, static_cast<int>( layer ), ordinalA,
+                                                     ordinalB } );
+                            }
+                        }
+                    }
+
+                    using ENDPOINT_KEY = std::tuple<int32_t, int32_t, int32_t, int32_t>;
+
+                    auto endpointKey = []( int32_t aX1, int32_t aY1, int32_t aX2, int32_t aY2 )
+                    {
+                        if( std::tie( aX2, aY2 ) < std::tie( aX1, aY1 ) )
+                        {
+                            std::swap( aX1, aX2 );
+                            std::swap( aY1, aY2 );
+                        }
+
+                        return ENDPOINT_KEY( aX1, aY1, aX2, aY2 );
+                    };
+
+                    std::set<ENDPOINT_KEY> pieceEndpoints;
+
+                    for( const TRACK& track : decodedPieces )
+                    {
+                        pieceEndpoints.insert(
+                                endpointKey( static_cast<int32_t>( std::llround( track.points.front().x ) ),
+                                             static_cast<int32_t>( std::llround( track.points.front().y ) ),
+                                             static_cast<int32_t>( std::llround( track.points.back().x ) ),
+                                             static_cast<int32_t>( std::llround( track.points.back().y ) ) ) );
+                    }
+
+                    size_t recordResidue = ( ( scanStart + bestPhase ) % stride + stride - 27 % stride ) % stride;
+                    size_t nodeBase = entry60->dataOffset;
+                    nodeBase -= ( nodeBase % stride + stride - recordResidue ) % stride;
+                    size_t bestRotation = 0;
+                    size_t bestRotationScore = 0;
+
+                    for( size_t rotation = 0; rotation < std::min<size_t>( entry60->count, 128 ); ++rotation )
+                    {
+                        size_t score = 0;
+
+                        for( const V2022_ROUTE_HEADER& header : headers )
+                        {
+                            size_t indexA = header.nodeA + rotation;
+                            size_t indexB = header.nodeB + rotation;
+
+                            if( indexA >= entry60->count || indexB >= entry60->count )
+                                continue;
+
+                            size_t offsetA = nodeBase + indexA * stride;
+                            size_t offsetB = nodeBase + indexB * stride;
+
+                            if( !m_cursor.InBounds( offsetA, 8 ) || !m_cursor.InBounds( offsetB, 8 ) )
+                                continue;
+
+                            ENDPOINT_KEY key = endpointKey( m_cursor.I32At( offsetA ), m_cursor.I32At( offsetA + 4 ),
+                                                            m_cursor.I32At( offsetB ), m_cursor.I32At( offsetB + 4 ) );
+                            score += pieceEndpoints.count( key );
+                        }
+
+                        if( score > bestRotationScore )
+                        {
+                            bestRotationScore = score;
+                            bestRotation = rotation;
+                        }
+                    }
+
+                    using HEADER_MATCH_KEY = std::tuple<ENDPOINT_KEY, int32_t>;
+                    std::map<HEADER_MATCH_KEY, std::vector<size_t>> pieceGroups;
+                    std::map<HEADER_MATCH_KEY, std::vector<std::pair<size_t, int>>> headerGroups;
+
+                    for( size_t piece = 0; piece < decodedPieces.size(); ++piece )
+                    {
+                        const TRACK& track = decodedPieces[piece];
+                        ENDPOINT_KEY key = endpointKey(
+                                static_cast<int32_t>( std::llround( track.points.front().x ) ),
+                                static_cast<int32_t>( std::llround( track.points.front().y ) ),
+                                static_cast<int32_t>( std::llround( track.points.back().x ) ),
+                                static_cast<int32_t>( std::llround( track.points.back().y ) ) );
+                        pieceGroups[{ key, track.width }].push_back( piece );
+                    }
+
+                    auto padsLayer = []( int aRawLayer )
+                    {
+                        return aRawLayer + 1;
+                    };
+
+                    for( size_t i = 0; i + 1 < headers.size(); ++i )
+                    {
+                        const V2022_ROUTE_HEADER& header = headers[i];
+                        const V2022_ROUTE_HEADER& style = headers[i + 1];
+                        size_t indexA = header.nodeA + bestRotation;
+                        size_t indexB = header.nodeB + bestRotation;
+
+                        if( indexA >= entry60->count || indexB >= entry60->count )
+                            continue;
+
+                        size_t offsetA = nodeBase + indexA * stride;
+                        size_t offsetB = nodeBase + indexB * stride;
+
+                        if( !m_cursor.InBounds( offsetA, 8 ) || !m_cursor.InBounds( offsetB, 8 ) )
+                            continue;
+
+                        ENDPOINT_KEY key = endpointKey( m_cursor.I32At( offsetA ), m_cursor.I32At( offsetA + 4 ),
+                                                        m_cursor.I32At( offsetB ), m_cursor.I32At( offsetB + 4 ) );
+                        headerGroups[{ key, style.halfWidth * 2 }].push_back(
+                                { header.sequence, padsLayer( style.rawLayer ) } );
+                    }
+
+                    for( auto& [key, pieces] : pieceGroups )
+                    {
+                        auto matches = headerGroups.find( key );
+
+                        if( matches == headerGroups.end() )
+                            continue;
+
+                        for( size_t piece : pieces )
+                            v2022HeaderMatched[piece] = true;
+
+                        std::sort( matches->second.begin(), matches->second.end() );
+                        std::set<int> candidateLayers;
+
+                        for( const auto& [sequence, layer] : matches->second )
+                            candidateLayers.insert( layer );
+
+                        std::set<int> pieceLayers;
+
+                        for( size_t piece : pieces )
+                            pieceLayers.insert( decodedPieces[piece].layer );
+
+                        if( v2022NeedsHeaderLayerRecovery && candidateLayers.size() > 1 )
+                        {
+                            for( size_t piece : pieces )
+                            {
+                                size_t object = decodedObjectIndices[piece];
+                                int serializedLayer = objectRuns[object] == 0 ? 1
+                                                                            : static_cast<int>( objectRuns[object] );
+
+                                if( candidateLayers.count( serializedLayer ) )
+                                    decodedPieces[piece].layer = serializedLayer;
+                            }
+                        }
+
+                        size_t count = std::min( pieces.size(), matches->second.size() );
+
+                        for( size_t piece : pieces )
+                        {
+                            if( candidateLayers.count( decodedPieces[piece].layer ) )
+                                continue;
+
+                            if( candidateLayers.size() == 1 && pieceLayers.size() == 1 )
+                                decodedPieces[piece].layer = *candidateLayers.begin();
+                        }
+
+                        if( pieces.size() == matches->second.size() )
+                        {
+                            for( size_t i = 0; i < count; ++i )
+                            {
+                                if( !candidateLayers.count( decodedPieces[pieces[i]].layer ) )
+                                    decodedPieces[pieces[i]].layer = matches->second[i].second;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            if( !decodedPieces.empty() && ( m_version == 0x2024 || objects.size() <= 64 )
+                && decodedPieces.size() == headerSequence.size() )
+            {
+                std::map<int32_t, std::map<int, size_t>> layerCounts;
+
+                for( const ROUTE_HEADER& header : headerSequence )
+                    ++layerCounts[header.width][header.layer];
+
+                for( const auto& [width, counts] : layerCounts )
+                {
+                    int    modalLayer = 1;
+                    size_t modalCount = 0;
+
+                    for( const auto& [layer, count] : counts )
+                    {
+                        if( count > modalCount )
+                        {
+                            modalLayer = layer;
+                            modalCount = count;
+                        }
+                    }
+
+                    std::vector<size_t> candidates;
+
+                    for( size_t piece = 0; piece < decodedPieces.size(); ++piece )
+                    {
+                        if( decodedPieces[piece].width == width )
+                        {
+                            decodedPieces[piece].layer = modalLayer;
+                            candidates.push_back( piece );
+                        }
+                    }
+
+                    std::sort( candidates.begin(), candidates.end(),
+                               [&]( size_t aLeft, size_t aRight )
+                               {
+                                   auto viaHits = [&]( size_t aPiece )
+                                   {
+                                       const TRACK& piece = decodedPieces[aPiece];
+                                       return viaPoints.count( { static_cast<int32_t>( piece.points.front().x ),
+                                                                 static_cast<int32_t>( piece.points.front().y ) } )
+                                              + viaPoints.count( { static_cast<int32_t>( piece.points.back().x ),
+                                                                   static_cast<int32_t>( piece.points.back().y ) } );
+                                   };
+
+                                   return viaHits( aLeft ) > viaHits( aRight );
+                               } );
+
+                    size_t candidate = 0;
+
+                    for( const auto& [layer, count] : counts )
+                    {
+                        if( layer == modalLayer )
+                            continue;
+
+                        for( size_t i = 0; i < count && candidate < candidates.size(); ++i )
+                            decodedPieces[candidates[candidate++]].layer = layer;
+                    }
+                }
+            }
+
+            if( m_version == 0x2024 )
+            {
+                using ENDPOINT = std::pair<int32_t, int32_t>;
+                std::map<ENDPOINT, std::map<int, size_t>> endpointLayerCounts;
+
+                auto endpoint = []( const ARC_POINT& aPoint )
+                {
+                    return ENDPOINT( static_cast<int32_t>( std::llround( aPoint.x ) ),
+                                     static_cast<int32_t>( std::llround( aPoint.y ) ) );
+                };
+
+                for( const TRACK& track : decodedPieces )
+                {
+                    for( size_t point = 0; point + 1 < track.points.size(); ++point )
+                    {
+                        ++endpointLayerCounts[endpoint( track.points[point] )][track.layer];
+                        ++endpointLayerCounts[endpoint( track.points[point + 1] )][track.layer];
+                    }
+                }
+
+                std::vector<std::optional<int>> repairedLayers( decodedPieces.size() );
+
+                for( size_t piece = 0; piece < decodedPieces.size(); ++piece )
+                {
+                    const TRACK&          track = decodedPieces[piece];
+                    std::map<int, size_t> adjacentLayerCounts;
+                    bool                  sameLayerNeighbor = false;
+                    const ENDPOINT endpoints[] = { endpoint( track.points.front() ),
+                                                   endpoint( track.points.back() ) };
+
+                    for( const ENDPOINT& point : endpoints )
+                    {
+                        if( viaPoints.count( point ) || routeAnchorPoints.count( point ) )
+                            continue;
+
+                        auto counts = endpointLayerCounts.find( point );
+
+                        if( counts == endpointLayerCounts.end() )
+                            continue;
+
+                        for( const auto& [layer, count] : counts->second )
+                        {
+                            size_t neighbors = count - ( layer == track.layer ? 1 : 0 );
+
+                            if( layer == track.layer )
+                                sameLayerNeighbor |= neighbors > 0;
+                            else
+                                adjacentLayerCounts[layer] += neighbors;
+                        }
+                    }
+
+                    if( !sameLayerNeighbor && adjacentLayerCounts.size() == 1
+                        && adjacentLayerCounts.begin()->second >= 2 )
+                    {
+                        repairedLayers[piece] = adjacentLayerCounts.begin()->first;
+                    }
+                }
+
+                for( size_t piece = 0; piece < decodedPieces.size(); ++piece )
+                {
+                    if( repairedLayers[piece] )
+                        decodedPieces[piece].layer = *repairedLayers[piece];
+                }
+            }
+
+            if( v2022NeedsHeaderLayerRecovery )
+            {
+                using ENDPOINT = std::pair<double, double>;
+                std::map<ENDPOINT, std::set<int>> matchedEndpointLayers;
+
+                for( size_t piece = 0; piece < decodedPieces.size(); ++piece )
+                {
+                    if( !v2022HeaderMatched[piece] )
+                        continue;
+
+                    const TRACK& track = decodedPieces[piece];
+                    matchedEndpointLayers[{ track.points.front().x, track.points.front().y }].insert( track.layer );
+                    matchedEndpointLayers[{ track.points.back().x, track.points.back().y }].insert( track.layer );
+                }
+
+                for( size_t piece = 0; piece < decodedPieces.size(); ++piece )
+                {
+                    if( v2022HeaderMatched[piece] || decodedPieces[piece].layer != 1 )
+                        continue;
+
+                    const TRACK& track = decodedPieces[piece];
+                    std::set<int> adjacentLayers;
+                    const ENDPOINT endpoints[] = {
+                        { track.points.front().x, track.points.front().y },
+                        { track.points.back().x, track.points.back().y }
+                    };
+
+                    for( const ENDPOINT& endpoint : endpoints )
+                    {
+                        auto layers = matchedEndpointLayers.find( endpoint );
+
+                        if( layers != matchedEndpointLayers.end() )
+                            adjacentLayers.insert( layers->second.begin(), layers->second.end() );
+                    }
+
+                    if( adjacentLayers.size() == 1 )
+                        decodedPieces[piece].layer = *adjacentLayers.begin();
+                }
+            }
+
+            if( !decodedPieces.empty() && !headerChains.empty() )
+            {
+                auto pointsEqual = []( const ARC_POINT& aLeft, const ARC_POINT& aRight )
+                {
+                    return aLeft.x == aRight.x && aLeft.y == aRight.y;
+                };
+
+                using ENDPOINT = std::pair<double, double>;
+                std::map<ENDPOINT, std::vector<size_t>> endpointPieces;
+
+                for( size_t piece = 0; piece < decodedPieces.size(); ++piece )
+                {
+                    const TRACK& track = decodedPieces[piece];
+                    endpointPieces[{ track.points.front().x, track.points.front().y }].push_back( piece );
+                    endpointPieces[{ track.points.back().x, track.points.back().y }].push_back( piece );
+                }
+
+                std::vector<std::vector<size_t>> pieceComponents;
+                std::vector<bool>                componentSeen( decodedPieces.size(), false );
+
+                for( size_t i = 0; i < decodedPieces.size(); ++i )
+                {
+                    if( componentSeen[i] )
+                        continue;
+
+                    std::vector<size_t> component;
+                    std::vector<size_t> pending = { i };
+                    componentSeen[i] = true;
+
+                    while( !pending.empty() )
+                    {
+                        size_t current = pending.back();
+                        pending.pop_back();
+                        component.push_back( current );
+
+                        const TRACK& currentTrack = decodedPieces[current];
+                        const ENDPOINT endpoints[] = {
+                            { currentTrack.points.front().x, currentTrack.points.front().y },
+                            { currentTrack.points.back().x, currentTrack.points.back().y }
+                        };
+
+                        for( const ENDPOINT& endpoint : endpoints )
+                        {
+                            for( size_t piece : endpointPieces[endpoint] )
+                            {
+                                if( !componentSeen[piece] )
+                                {
+                                    componentSeen[piece] = true;
+                                    pending.push_back( piece );
+                                }
+                            }
+                        }
+                    }
+
+                    pieceComponents.push_back( std::move( component ) );
+                }
+
+                std::vector<bool> chainUsed( headerChains.size(), false );
+
+                for( const std::vector<size_t>& component : pieceComponents )
+                {
+                    std::multiset<int32_t> componentWidths;
+
+                    for( size_t piece : component )
+                        componentWidths.insert( decodedPieces[piece].width );
+
+                    size_t chainIndex = headerChains.size();
+
+                    for( size_t i = 0; i < headerChains.size(); ++i )
+                    {
+                        if( chainUsed[i] || headerChains[i].size() != component.size() )
+                            continue;
+
+                        std::multiset<int32_t> chainWidths;
+
+                        for( const ROUTE_HEADER& header : headerChains[i] )
+                            chainWidths.insert( header.width );
+
+                        if( chainWidths == componentWidths )
+                        {
+                            chainIndex = i;
+                            break;
+                        }
+                    }
+
+                    if( chainIndex == headerChains.size() )
+                        continue;
+
+                    chainUsed[chainIndex] = true;
+                    std::vector<size_t> pieceOrder;
+                    std::set<size_t>    ordered;
+                    size_t              current = component.front();
+
+                    for( size_t piece : component )
+                    {
+                        std::set<size_t> neighbors;
+                        const TRACK&     track = decodedPieces[piece];
+                        const ENDPOINT endpoints[] = {
+                            { track.points.front().x, track.points.front().y },
+                            { track.points.back().x, track.points.back().y }
+                        };
+
+                        for( const ENDPOINT& endpoint : endpoints )
+                        {
+                            for( size_t other : endpointPieces[endpoint] )
+                            {
+                                if( piece != other )
+                                    neighbors.insert( other );
+                            }
+                        }
+
+                        if( neighbors.size() <= 1 )
+                        {
+                            current = piece;
+                            break;
+                        }
+                    }
+
+                    size_t startConnections = 0;
+                    const ENDPOINT start = { decodedPieces[current].points.front().x,
+                                             decodedPieces[current].points.front().y };
+
+                    for( size_t piece : endpointPieces[start] )
+                    {
+                        if( piece == current )
+                            continue;
+
+                        startConnections += pointsEqual( decodedPieces[current].points.front(),
+                                                         decodedPieces[piece].points.front() );
+                        startConnections += pointsEqual( decodedPieces[current].points.front(),
+                                                         decodedPieces[piece].points.back() );
+                    }
+
+                    if( startConnections != 0 )
+                    {
+                        std::reverse( decodedPieces[current].points.begin(), decodedPieces[current].points.end() );
+                    }
+
+                    while( ordered.insert( current ).second )
+                    {
+                        pieceOrder.push_back( current );
+                        size_t next = decodedPieces.size();
+                        const ENDPOINT end = { decodedPieces[current].points.back().x,
+                                               decodedPieces[current].points.back().y };
+
+                        for( size_t piece : endpointPieces[end] )
+                        {
+                            if( ordered.count( piece ) )
+                                continue;
+
+                            if( pointsEqual( decodedPieces[current].points.back(),
+                                             decodedPieces[piece].points.front() ) )
+                            {
+                                next = piece;
+                                break;
+                            }
+
+                            if( pointsEqual( decodedPieces[current].points.back(),
+                                             decodedPieces[piece].points.back() ) )
+                            {
+                                std::reverse( decodedPieces[piece].points.begin(), decodedPieces[piece].points.end() );
+                                next = piece;
+                                break;
+                            }
+                        }
+
+                        if( next == decodedPieces.size() )
+                            break;
+
+                        current = next;
+                    }
+
+                    if( pieceOrder.size() != component.size() )
+                        continue;
+
+                    std::vector<ROUTE_HEADER>& headers = headerChains[chainIndex];
+                    bool                       forwardMatches = true;
+                    bool                       reverseMatches = true;
+
+                    for( size_t i = 0; i < component.size(); ++i )
+                    {
+                        forwardMatches &= decodedPieces[pieceOrder[i]].width == headers[i].width;
+                        reverseMatches &= decodedPieces[pieceOrder[i]].width == headers[headers.size() - i - 1].width;
+                    }
+
+                    if( !forwardMatches && reverseMatches )
+                        std::reverse( headers.begin(), headers.end() );
+
+                }
+            }
+
+            std::string trackNet = m_nets.size() == 1 ? m_nets.front().name : std::string();
+            ROUTE&      trackRoute = routes[trackNet];
+            trackRoute.net_name = trackNet;
+
+            for( TRACK& track : decodedPieces )
+                trackRoute.tracks.push_back( std::move( track ) );
+        }
+    }
+
+    for( auto& [netName, route] : routes )
+    {
+        if( route.tracks.empty() && route.vias.empty() )
+            continue;
+
+        for( VIA& via : route.vias )
+        {
+            std::set<int> connectedLayers;
+
+            for( const TRACK& track : route.tracks )
+            {
+                for( const ARC_POINT& point : track.points )
+                {
+                    if( point.x == via.location.x && point.y == via.location.y )
+                    {
+                        connectedLayers.insert( track.layer );
+                        break;
+                    }
+                }
+            }
+
+            if( connectedLayers.size() >= 2 )
+            {
+                via.start_layer = *connectedLayers.begin();
+                via.end_layer = *connectedLayers.rbegin();
+            }
         }
 
         m_routes.push_back( std::move( route ) );
@@ -3431,8 +6204,7 @@ void BINARY_PARSER::parseCopperShapes()
     const SDB_SECTION* sec11 = getSection( SECTION::GraphicPieces );
     const SDB_SECTION* sec12 = getSection( SECTION::Vertices );
 
-    if( !sec10 || !sec11 || !sec12 || sec10->stride < 112
-        || sec11->stride < 20 || sec12->stride < 12 )
+    if( !sec10 || !sec11 || !sec12 || sec10->stride < 112 || sec11->stride < 20 || sec12->stride < 12 )
     {
         return;
     }
@@ -3484,8 +6256,8 @@ void BINARY_PARSER::parseCopperShapes()
         uint32_t blockTag = hdr.U32( DRW_ITEM::TYPE_TAG );
         bool legacyCopper = ( ( blockTag == DRW_TAG::COPPER_FILL || blockTag == DRW_TAG::COPPER_FILL_B )
                               && classWord == CLASS_FILLED );
-        bool v2026LineCopper = ( m_version == 0x2026 && blockTag == DRW_TAG::LINE_ITEM
-                                 && classWord == CLASS_LINE && subtypeWord == SUBTYPE_PLAIN_LINE );
+        bool     v2026LineCopper = ( m_version == 0x2026 && blockTag == DRW_TAG::LINE_ITEM && classWord == CLASS_LINE
+                                 && subtypeWord == SUBTYPE_PLAIN_LINE );
 
         if( !legacyCopper && !v2026LineCopper )
             continue;
@@ -3530,8 +6302,7 @@ void BINARY_PARSER::parseCopperShapes()
                 loopMaxY = std::max<int64_t>( loopMaxY, pt.y );
             }
 
-            if( loopMinX != localMinX || loopMinY != localMinY || loopMaxX != localMaxX
-                || loopMaxY != localMaxY )
+            if( loopMinX != localMinX || loopMinY != localMinY || loopMaxX != localMaxX || loopMaxY != localMaxY )
             {
                 continue;
             }
@@ -3636,8 +6407,7 @@ void BINARY_PARSER::parseDimensions()
 
         int32_t bp1x = 0, bp1y = 0, bp2x = 0, bp2y = 0, arwx = 0, arwy = 0, attr = 0;
 
-        if( !sec12Vertex( startRow + 0, bp1x, bp1y, attr )
-            || !sec12Vertex( startRow + 2, bp2x, bp2y, attr )
+        if( !sec12Vertex( startRow + 0, bp1x, bp1y, attr ) || !sec12Vertex( startRow + 2, bp2x, bp2y, attr )
             || !sec12Vertex( startRow + 4, arwx, arwy, attr ) )
         {
             continue;
@@ -3704,8 +6474,7 @@ void BINARY_PARSER::buildOwnerRuns()
         return;
 
     size_t start = sec8->dataOffset;
-    size_t end = std::min( static_cast<size_t>( sec10->dataOffset )
-                                   + static_cast<size_t>( sec10->totalBytes ),
+    size_t end = std::min( static_cast<size_t>( sec10->dataOffset ) + static_cast<size_t>( sec10->totalBytes ),
                            m_data.size() );
 
     if( start >= end )
@@ -3737,8 +6506,7 @@ void BINARY_PARSER::buildOwnerRuns()
         int32_t vertexStart = rec.I32( DRW_ITEM::VERTEX_START );
         int32_t pieceCount = rec.I32( DRW_ITEM::PIECE_COUNT );
 
-        return vertexStart >= 0 && vertexStart < ( 1 << 24 ) && pieceCount >= 0
-               && pieceCount < ( 1 << 16 );
+        return vertexStart >= 0 && vertexStart < ( 1 << 24 ) && pieceCount >= 0 && pieceCount < ( 1 << 16 );
     };
 
     auto readRun = [&]( size_t aLagOff, size_t aOwnOff ) -> OWNER_RUN
@@ -3809,8 +6577,7 @@ bool BINARY_PARSER::sec12Vertex( int32_t aRow, int32_t& aX, int32_t& aY, int32_t
 }
 
 
-bool BINARY_PARSER::fetchOwnerLoop( const std::string& aName, size_t aMaxVerts,
-                                    std::vector<VECTOR2I>& aOut ) const
+bool BINARY_PARSER::fetchOwnerLoop( const std::string& aName, size_t aMaxVerts, std::vector<VECTOR2I>& aOut ) const
 {
     aOut.clear();
 
@@ -3970,8 +6737,7 @@ void BINARY_PARSER::parseKeepouts()
 
         for( int i = 0; i < ELLIPSE_SEGMENTS; ++i )
         {
-            double angle = ( 2.0 * M_PI * static_cast<double>( i ) )
-                           / static_cast<double>( ELLIPSE_SEGMENTS );
+            double  angle = ( 2.0 * M_PI * static_cast<double>( i ) ) / static_cast<double>( ELLIPSE_SEGMENTS );
             int32_t rawX = owner.originX + static_cast<int32_t>( std::lround( cx + radius * std::cos( angle ) ) );
             int32_t rawY = owner.originY + static_cast<int32_t>( std::lround( cy + radius * std::sin( angle ) ) );
             keepout.outline.emplace_back( toBasicCoordX( rawX ), toBasicCoordY( rawY ) );
@@ -4134,8 +6900,7 @@ void BINARY_PARSER::parseCopperPours()
                 int32_t localX = m_cursor.I32At( o );
                 int32_t localY = m_cursor.I32At( o + 4 );
 
-                pour.points.emplace_back( toBasicCoordX( owner.rawX + localX ),
-                                          toBasicCoordY( owner.rawY + localY ) );
+                pour.points.emplace_back( toBasicCoordX( owner.rawX + localX ), toBasicCoordY( owner.rawY + localY ) );
             }
         }
 
@@ -4166,8 +6931,7 @@ void BINARY_PARSER::parseLayerStackup()
 
     // The "(All layers)" string anchors the first record; the directory data_offset overflows
     // the indexed region on large boards.
-    size_t recordBase = findSignature( m_data, reinterpret_cast<const uint8_t*>( ANCHOR.data() ),
-                                       ANCHOR.size() );
+    size_t recordBase = findSignature( m_data, reinterpret_cast<const uint8_t*>( ANCHOR.data() ), ANCHOR.size() );
 
     if( recordBase == SIGNATURE_NOT_FOUND )
         return;
@@ -4203,8 +6967,7 @@ void BINARY_PARSER::parseLayerStackup()
 
         if( info.is_copper )
         {
-            info.layer_type = ( routingDir == 2 ) ? PADS_LAYER_FUNCTION::PLANE
-                                                  : PADS_LAYER_FUNCTION::ROUTING;
+            info.layer_type = ( routingDir == 2 ) ? PADS_LAYER_FUNCTION::PLANE : PADS_LAYER_FUNCTION::ROUTING;
         }
         else
         {
@@ -4374,7 +7137,19 @@ void BINARY_PARSER::linkPartsToDecals()
         if( partTypeIdx >= m_partTypeDecalIndex.size() )
             continue;
 
+        uint8_t alternate = 0;
+        auto    alternateIt = m_partDecalAlternate.find( partIdx );
+
+        if( alternateIt != m_partDecalAlternate.end() )
+            alternate = alternateIt->second;
+
         int32_t decalIndex = m_partTypeDecalIndex[partTypeIdx];
+
+        if( partTypeIdx < m_partTypeDecalIndices.size()
+            && alternate < m_partTypeDecalIndices[partTypeIdx].size() )
+        {
+            decalIndex = m_partTypeDecalIndices[partTypeIdx][alternate];
+        }
 
         if( decalIndex < 0 || static_cast<size_t>( decalIndex ) >= m_decalNameTable.size() )
             continue;

@@ -67,9 +67,27 @@ struct ARC_POINT
     bool   is_arc;
     ARC    arc;          ///< Only valid when is_arc is true
 
-    ARC_POINT() : x( 0 ), y( 0 ), is_arc( false ), arc{ 0, 0, 0, 0, 0 } {}
-    ARC_POINT( double aX, double aY ) : x( aX ), y( aY ), is_arc( false ), arc{ 0, 0, 0, 0, 0 } {}
-    ARC_POINT( double aX, double aY, const ARC& aArc ) : x( aX ), y( aY ), is_arc( true ), arc( aArc ) {}
+    ARC_POINT() :
+            x( 0 ),
+            y( 0 ),
+            is_arc( false ),
+            arc{ 0, 0, 0, 0, 0 }
+    {
+    }
+    ARC_POINT( double aX, double aY ) :
+            x( aX ),
+            y( aY ),
+            is_arc( false ),
+            arc{ 0, 0, 0, 0, 0 }
+    {
+    }
+    ARC_POINT( double aX, double aY, const ARC& aArc ) :
+            x( aX ),
+            y( aY ),
+            is_arc( true ),
+            arc( aArc )
+    {
+    }
 };
 
 enum class PADS_FILE_TYPE
@@ -178,6 +196,7 @@ struct NET
 {
     std::string name;
     std::vector<NET_PIN> pins;
+    std::vector<std::string> component_refs; ///< Section-24 endpoints whose terminal is unresolved
 };
 
 struct NET_CLASS_DEF
@@ -297,6 +316,9 @@ struct VIA
 {
     std::string name;
     POINT location;
+    std::vector<PAD_STACK_LAYER> stack;
+    int                          start_layer = 0;
+    int                          end_layer = 0;
 };
 
 enum class POUR_STYLE

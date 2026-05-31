@@ -35,7 +35,13 @@ class FOOTPRINT;
 class PAD;
 class EDA_ANGLE;
 
-namespace PADS_IO { class BINARY_PARSER; struct ARC_POINT; struct PART_DECAL; struct PAD_STACK_LAYER; }
+namespace PADS_IO
+{
+class BINARY_PARSER;
+struct ARC_POINT;
+struct PART_DECAL;
+struct PAD_STACK_LAYER;
+} // namespace PADS_IO
 
 /**
  * PCB I/O plugin for importing the native PADS Layout binary .pcb format, distinct from
@@ -55,11 +61,11 @@ public:
     bool CanReadBoard( const wxString& aFileName ) const override;
     bool CanReadLibrary( const wxString& aFileName ) const override;
 
-    BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
-                      const std::map<std::string, UTF8>* aProperties, PROJECT* aProject ) override;
+    BOARD* LoadBoard( const wxString& aFileName, BOARD* aAppendToMe, const std::map<std::string, UTF8>* aProperties,
+                      PROJECT* aProject ) override;
 
-    std::map<wxString, PCB_LAYER_ID> DefaultLayerMappingCallback(
-            const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector );
+    std::map<wxString, PCB_LAYER_ID>
+    DefaultLayerMappingCallback( const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector );
 
 private:
     int          scaleSize( double aVal ) const;
@@ -80,15 +86,14 @@ private:
                    const EDA_ANGLE& aPartOrient );
 
     /// Apply a pad-stack layer's shape, size and finger offset to @p aPad.
-    void applyPadShape( PAD* aPad, const PADS_IO::PAD_STACK_LAYER& aLayer );
+    void applyPadShape( PAD* aPad, const PADS_IO::PAD_STACK_LAYER& aLayer, PCB_LAYER_ID aKiCadLayer );
 
     /// Build one PCB_GROUP per PADS part cluster and add each footprint to the group named
     /// by its part's CLSTID. Must run after loadFootprints().
     void loadClusterGroups();
 
     void loadBoardOutline();
-    void setBoardOutlineArc( PCB_SHAPE* aShape, const PADS_IO::ARC_POINT& aPrev,
-                             const PADS_IO::ARC_POINT& aCurr );
+    void setBoardOutlineArc( PCB_SHAPE* aShape, const PADS_IO::ARC_POINT& aPrev, const PADS_IO::ARC_POINT& aCurr );
     void loadTracksAndVias();
     void loadTexts();
     void loadCopperShapes();
@@ -113,6 +118,7 @@ private:
     double                              m_scaleFactor = 0.0;
     double                              m_originX = 0.0;
     double                              m_originY = 0.0;
+    int                                m_minObjectSize = 1000;
     std::map<std::string, std::string>  m_pinToNetMap;
 
     // One footprint per parser part index, so loadClusterGroups() can resolve the

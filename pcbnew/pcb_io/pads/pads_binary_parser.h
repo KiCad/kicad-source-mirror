@@ -60,12 +60,16 @@ enum class SECTION : int
     PartPins       = 19,   // PARTTYPE pin-definition table (88 B)
     Placements     = 22,   // part placements (112 B)
     Nets           = 23,   // net records (424 B)
+    Connections    = 24,   // pin-pair topology records (68 B)
     ClearanceRules = 49,   // clearance/design-rule heap
     PourTokensA    = 52,   // pour-relation token streams
     PourTokensB    = 53,
     PourTokensC    = 54,
     PourTokensD    = 55,   // pour arc records (16 B)
     Vias           = 60,   // route-junction / via records (64 B)
+    RouteObjects = 62, // routed-subpath descriptors (48 B)
+    RouteLayers = 63,  // active copper-layer ordinals (2 B)
+    RouteCells = 64,   // routed-subpath point cells (12 B)
     Clusters       = 68,   // part-cluster (*CLUSTER*) controller (60 B/rec)
     LayerTable     = 69,   // ODBLayer physical-stackup table (152 B/rec)
 };
@@ -188,6 +192,7 @@ public:
     const std::map<size_t, int>& GetPartClusterIds() const { return m_partClusterId; }
 
     int GetLayerCount() const { return m_parameters.layer_count; }
+    uint16_t GetVersion() const { return m_version; }
     bool IsBasicUnits() const { return true; }
 
     double GetDefaultViaSize() const { return m_defaultViaSize; }
@@ -239,8 +244,8 @@ private:
     void recoverOmittedPlacementsOld();
 
     // Build a PART from a placement record's refdes and its coordinate, rotation and side fields.
-    PART makePlacementPart( const SDB_RECORD& aRec, int aXOff, std::optional<int> aYOff,
-                            int aAngleOff, int aNameOff, const std::string& aRefDes ) const;
+    PART makePlacementPart( const SDB_RECORD& aRec, int aXOff, std::optional<int> aYOff, int aAngleOff, int aNameOff,
+                            const std::string& aRefDes ) const;
     void parsePadStacks();
     void parsePartDecals();
     void parseDecalNameTable();
@@ -250,12 +255,26 @@ private:
     void parseBoardOutline();
     bool parseArcBoardOutline();
     std::vector<ARC_DRAWING_ITEM> collectArcDrawingItems();
-    int64_t findArcParameterTable( const std::vector<ARC_VERTEX>& aVerts,
-                                   const std::vector<size_t>& aArcIdx );
+    int64_t findArcParameterTable( const std::vector<ARC_VERTEX>& aVerts, const std::vector<size_t>& aArcIdx );
     void parseNetNames();
     void parseNetNamesNew();
     void parseNetNamesOld();
     void parseNetNamesDirect();
+    void parseNetConnectionsNew();
+
+    // Offsets of the v0x2021 serialized net table in dense-index order. The table starts eight
+    // 144-byte records ahead of section 23's declared dataOffset and runs through the section's
+    // own records; a record's position in this sequence IS the net ordinal that route and via
+    // records reference, so the sequence must stay unfiltered even where a record is unusable.
+    std::vector<size_t> oldNetRecordOffsets() const;
+
+    // Recover v0x2021 pin-to-net membership from the section-24 connection stream. The stream is
+    // not partitioned into per-net runs, so a net's members are the connected component of the
+    // pin graph reached from the net record's first-connection index (record +8); the record's
+    // connection count (+92) corroborates the join before any pin is attributed.
+    void parseNetConnectionsOld();
+
+    void resolveNetAnchors();
 
     // Recover part clusters. Membership itself is captured during parsePartPlacements into
     // m_partClusterId; a record's 1-based ordinal is the CLSTID that sec22 +108 references.
@@ -293,9 +312,8 @@ private:
 
     // Apply one decal's (pin, ref) pair slice: pin 0 sets the decal default, pin>0 overrides
     // that terminal. Shared by the descriptor and library passes.
-    void applyPadstackPairs( PART_DECAL& aDecal,
-                             const std::vector<std::pair<int32_t, int32_t>>& aPairs,
-                             int32_t aStart, int32_t aCount );
+    void applyPadstackPairs( PART_DECAL& aDecal, const std::vector<std::pair<int32_t, int32_t>>& aPairs, int32_t aStart,
+                             int32_t aCount );
     void parseKeepouts();
     void parseCopperShapes();
     void parseCopperPours();
@@ -347,8 +365,7 @@ private:
     // vertices until the run returns to the start point. Returns the design-coordinate vertices
     // (excluding the duplicate close point) and true on a clean closure; false when no run
     // exists, the cursor is out of the clean prefix, or the run does not close within aMaxVerts.
-    bool fetchOwnerLoop( const std::string& aName, size_t aMaxVerts,
-                         std::vector<VECTOR2I>& aOut ) const;
+    bool fetchOwnerLoop( const std::string& aName, size_t aMaxVerts, std::vector<VECTOR2I>& aOut ) const;
 
     // A circular piece (PADS' COPCIR convention) stores exactly two diametrically opposite
     // endpoints, not a closed loop -- fetchOwnerLoop's closure search never terminates cleanly
@@ -402,10 +419,14 @@ private:
     // minus the de-duplicated library head the directory does not index). The section-15 tail
     // (pin, ref) pairs index this pool directly.
     std::vector<std::vector<PAD_STACK_LAYER>> m_padStackPool;
+    std::map<int, size_t>                     m_viaStackByIndex;
 
     // Part index -> parttype index from the NEXT section 22 record (@+4 with +1 block lag).
     // Indexes into m_partTypeDecalIndex.
     std::map<size_t, uint32_t> m_partTypeIndex;
+
+    // Part index -> zero-based alternate decal selector from the NEXT placement record @+17.
+    std::map<size_t, uint8_t> m_partDecalAlternate;
 
     // Part index -> direct decal index for v0x2021, which carries no parttype layer; the decal
     // is selected from the NEXT 96 B placement record's @+56 field. Indexes m_decalNameTable.
@@ -414,6 +435,10 @@ private:
     // Parttype-definition table (sec17.dataOffset - 1232, 224 B records). Each parttype carries
     // a decal_index at payload +96 that indexes m_decalNameTable.
     std::vector<int32_t> m_partTypeDecalIndex;
+
+    // All decal indices for each parttype: primary, then alternates. New-format parttype records
+    // store duplicate index pairs at +96/+100, +104/+108, ... until -1.
+    std::vector<std::vector<int32_t>> m_partTypeDecalIndices;
 
     // The parttype's own alias name (payload +44, non-v2022 dialects only), parallel to
     // m_partTypeDecalIndex. This is the *PARTTYPE name a part references directly -- often a
@@ -437,8 +462,27 @@ private:
     // Decal name -> pad-stack count (i32 @ +88), the length of its (pin, ref) pair slice.
     std::map<std::string, int32_t> m_decalStackCount;
 
+    // Decal name -> start cursor (i32 @ +44) into the section-15 (pin, padstack-ref) pool.
+    std::map<std::string, int32_t> m_decalStackStart;
+
     // Section 23 array index -> net name, used to attribute structural vias to nets.
     std::map<uint32_t, std::string> m_sec23IndexToNet;
+    std::map<uint32_t, size_t>      m_sec23RecordToNet;
+
+    struct NET_ANCHOR
+    {
+        size_t   netIndex;
+        uint32_t placementObject;
+        uint32_t terminalOrdinal;
+    };
+
+    std::vector<NET_ANCHOR> m_netAnchors;
+    std::vector<NET_ANCHOR> m_netConnectionEndpoints;
+
+    // The serialized placement object ID is the nominal section-22 record ordinal plus 11.
+    // Keep the object identity separate from m_parts order because invalid directory records
+    // are skipped and omitted placements are recovered later.
+    std::map<uint32_t, size_t> m_placementObjectToPart;
 
     // Net name -> its net-class object pointer (record +188); zero/absent for unclassed nets.
     // Nets sharing a value are one class.
