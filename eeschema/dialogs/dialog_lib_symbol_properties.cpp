@@ -375,46 +375,44 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     if( m_libEntry->IsDerived() )
     {
         wxArrayString symbolNames;
-        wxString libName = m_Parent->GetCurLib();
+        wxString libName = m_libEntry->GetLibNickname();
 
-        // Someone forgot to set the current library in the editor frame window.
-        wxCHECK( !libName.empty(), false );
-
-        m_Parent->GetLibManager().GetSymbolNames( libName, symbolNames );
-
-        // Sort the list of symbols for easier search
-        symbolNames.Sort(
-                []( const wxString& a, const wxString& b ) -> int
-                {
-                    return StrNumCmp( a, b, true );
-                } );
-
-        // Don't allow a symbol to be derived from itself
-        if( symbolNames.Index( m_libEntry->GetName() ) != wxNOT_FOUND )
-            symbolNames.Remove( m_libEntry->GetName() );
-
-        // Don't allow a symbol to be derived from any of its descendants (would create
-        // circular inheritance)
-        wxArrayString descendants;
-        m_Parent->GetLibManager().GetDerivedSymbolNames( m_libEntry->GetName(), libName, descendants );
-
-        for( const wxString& descendant : descendants )
+        if( !libName.empty() )
         {
-            if( symbolNames.Index( descendant ) != wxNOT_FOUND )
-                symbolNames.Remove( descendant );
-        }
+            m_Parent->GetLibManager().GetSymbolNames( libName, symbolNames );
 
-        m_inheritanceSelectCombo->Append( symbolNames );
+            // Sort the list of symbols for easier search
+            symbolNames.Sort(
+                    []( const wxString& a, const wxString& b ) -> int
+                    {
+                        return StrNumCmp( a, b, true );
+                    } );
 
-        if( std::shared_ptr<LIB_SYMBOL> rootSymbol = m_libEntry->GetParent().lock() )
-        {
-            wxString parentName = UnescapeString( rootSymbol->GetName() );
-            int selection = m_inheritanceSelectCombo->FindString( parentName );
+            // Don't allow a symbol to be derived from itself
+            if( symbolNames.Index( m_libEntry->GetName() ) != wxNOT_FOUND )
+                symbolNames.Remove( m_libEntry->GetName() );
 
-            if( selection == wxNOT_FOUND )
-                return false;
+            // Don't allow a symbol to be derived from any of its descendants (would create
+            // circular inheritance)
+            wxArrayString descendants;
+            m_Parent->GetLibManager().GetDerivedSymbolNames( m_libEntry->GetName(), libName, descendants );
 
-            m_inheritanceSelectCombo->SetSelection( selection );
+            for( const wxString& descendant : descendants )
+            {
+                if( symbolNames.Index( descendant ) != wxNOT_FOUND )
+                    symbolNames.Remove( descendant );
+            }
+
+            m_inheritanceSelectCombo->Append( symbolNames );
+
+            if( std::shared_ptr<LIB_SYMBOL> rootSymbol = m_libEntry->GetParent().lock() )
+            {
+                wxString parentName = UnescapeString( rootSymbol->GetName() );
+                int selection = m_inheritanceSelectCombo->FindString( parentName );
+
+                if( selection != wxNOT_FOUND )
+                    m_inheritanceSelectCombo->SetSelection( selection );
+            }
         }
 
         m_lastOpenedPage = 0;
@@ -582,9 +580,9 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     if( oldName != newName )
     {
-        wxString libName = m_Parent->GetCurLib();
+        wxString libName = m_libEntry->GetLibNickname();
 
-        if( m_Parent->GetLibManager().SymbolNameInUse( newName, libName ) )
+        if( !libName.empty() && m_Parent->GetLibManager().SymbolNameInUse( newName, libName ) )
         {
             wxString msg;
 
@@ -633,12 +631,10 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     m_libEntry->SetFields( fieldsToSave );
 
     // Update the parent for inherited symbols
-    if( m_libEntry->IsDerived() )
+    if( m_libEntry->IsDerived() && !m_libEntry->GetLibNickname().empty() )
     {
         wxString parentName = EscapeString( m_inheritanceSelectCombo->GetValue(), CTX_LIBID );
-
-        // The parentName was verified to be non-empty in the Validator
-        wxString libName = m_Parent->GetCurLib();
+        wxString libName = m_libEntry->GetLibNickname();
 
         // Get the parent from the libManager based on the name set in the inheritance combo box.
         LIB_SYMBOL* newParent = m_Parent->GetLibManager().GetSymbol( parentName, libName );

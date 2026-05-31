@@ -96,11 +96,10 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromRedoList()
 
     if( undoRedoType == UNDO_REDO::LIB_RENAME )
     {
-        wxString lib = GetCurLib();
-        m_libMgr->UpdateSymbolAfterRename( symbol, oldSymbol->GetName(), lib );
+        m_libMgr->UpdateSymbolAfterRename( symbol, oldSymbol->GetName(), oldSymbol->GetLibNickname() );
 
         // Reselect the renamed symbol
-        m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, symbol->GetName() ) );
+        m_treePane->GetLibTree()->SelectLibId( LIB_ID( symbol->GetLibNickname(), symbol->GetName() ) );
     }
 
     RebuildSymbolUnitAndBodyStyleLists();
@@ -146,11 +145,10 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromUndoList()
 
     if( undoRedoType == UNDO_REDO::LIB_RENAME )
     {
-        wxString lib = GetCurLib();
-        m_libMgr->UpdateSymbolAfterRename( symbol, oldSymbol->GetName(), lib );
+        m_libMgr->UpdateSymbolAfterRename( symbol, oldSymbol->GetName(), oldSymbol->GetLibNickname() );
 
         // Reselect the renamed symbol
-        m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, symbol->GetName() ) );
+        m_treePane->GetLibTree()->SelectLibId( LIB_ID( symbol->GetLibNickname(), symbol->GetName() ) );
     }
 
     RebuildSymbolUnitAndBodyStyleLists();

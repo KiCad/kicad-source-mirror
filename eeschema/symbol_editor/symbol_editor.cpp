@@ -226,8 +226,7 @@ void SYMBOL_EDIT_FRAME::centerItemIdleHandler( wxIdleEvent& aEvent )
 }
 
 
-bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aSymbolName, int aUnit,
-                                                  int aBodyStyle )
+bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aSymbolName, int aUnit, int aBodyStyle )
 {
     LIB_SYMBOL* symbol = nullptr;
 
@@ -1210,7 +1209,7 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
 {
     wxCHECK( m_symbol, /* void */ );
 
-    wxString lib = GetCurLib();
+    wxString lib = m_symbol->GetLibNickname();
 
     if( !lib.IsEmpty() && aOldName && *aOldName != m_symbol->GetName() )
     {
