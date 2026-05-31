@@ -5400,6 +5400,22 @@ void BINARY_PARSER::parseRouteVertices()
 
                     size_t comparable = std::min( objectCount, headerCount );
 
+                    // The header arena does not always describe every width the board routes: on
+                    // MMSP_L_1 all 124 headers carry width 300000 and the 546 tracks of width
+                    // 200000 have no header at all. An object whose width never appears in the
+                    // arena has no alignment evidence behind it, so letting it inherit a
+                    // neighbour's layer would spread a guess over most of the board. Those keep
+                    // the run-level layer instead.
+                    std::set<int32_t> headerWidths;
+
+                    for( const LAYER_WIDTH& layerWidth : logicalHeaders )
+                        headerWidths.insert( layerWidth.width );
+
+                    auto alignmentApplies = [&]( size_t aSequence )
+                    {
+                        return headerWidths.count( objects[logicalObjects[aSequence]].width ) != 0;
+                    };
+
                     if( exactMatches * 4 >= comparable * 3 )
                     {
                         std::optional<int> currentLayer;
@@ -5409,7 +5425,7 @@ void BINARY_PARSER::parseRouteVertices()
                             if( alignedLayers[sequence] )
                                 currentLayer = alignedLayers[sequence];
 
-                            if( currentLayer )
+                            if( currentLayer && alignmentApplies( sequence ) )
                                 objectLayers[logicalObjects[sequence]] = *currentLayer;
                         }
 
@@ -5420,7 +5436,7 @@ void BINARY_PARSER::parseRouteVertices()
                             if( alignedLayers[sequence - 1] )
                                 currentLayer = alignedLayers[sequence - 1];
 
-                            if( currentLayer && !alignedLayers[sequence - 1] )
+                            if( currentLayer && !alignedLayers[sequence - 1] && alignmentApplies( sequence - 1 ) )
                                 objectLayers[logicalObjects[sequence - 1]] = *currentLayer;
                         }
                     }
