@@ -51,6 +51,7 @@
 #include <stroke_params.h>
 
 #include <wx/log.h>
+#include <trace_helpers.h>
 
 #include <array>
 #include <algorithm>
@@ -318,7 +319,8 @@ static void DumpComponentHeader( const DT_COMPONENT& aComp, int aFieldA, int aFi
     if( !ShouldDumpComponentHeader( aComp.refdes ) )
         return;
 
-    wxLogDebug( wxT( "DipTrace: component ref=%s value=%s pat=%s lib=%s flags=[%u,%u,%u,%u] "
+    wxLogTrace( traceDiptraceIo,
+                wxT( "DipTrace: component ref=%s value=%s pat=%s lib=%s flags=[%u,%u,%u,%u] "
                      "layer=%d pos=(%d,%d) rot=%d fieldA=%d fieldB=%d fieldC=%d fieldD=%d "
                      "fieldE=%d fieldF=%d sep=[%u,%u,%u] bbox=(%d,%d) "
                      "qturns=%d hasQ=%d "
@@ -327,15 +329,11 @@ static void DumpComponentHeader( const DT_COMPONENT& aComp, int aFieldA, int aFi
                 static_cast<unsigned int>( aComp.flags.size() > 0 ? aComp.flags[0] : 0 ),
                 static_cast<unsigned int>( aComp.flags.size() > 1 ? aComp.flags[1] : 0 ),
                 static_cast<unsigned int>( aComp.flags.size() > 2 ? aComp.flags[2] : 0 ),
-                static_cast<unsigned int>( aComp.flags.size() > 3 ? aComp.flags[3] : 0 ),
-                aComp.layer, aComp.positionX, aComp.positionY, aComp.rotation,
-                aFieldA, aFieldB, aFieldC, aFieldD, aFieldE, aFieldF,
-                static_cast<unsigned int>( aSep1 ),
-                static_cast<unsigned int>( aSep2 ),
-                static_cast<unsigned int>( aSep3 ),
-                aComp.bboxWidth, aComp.bboxHeight,
-                aComp.placementQuarterTurns, aComp.hasPlacementQuarterTurns ? 1 : 0,
-                aComp.boundaryOffset, aComp.stringStartOffset,
+                static_cast<unsigned int>( aComp.flags.size() > 3 ? aComp.flags[3] : 0 ), aComp.layer, aComp.positionX,
+                aComp.positionY, aComp.rotation, aFieldA, aFieldB, aFieldC, aFieldD, aFieldE, aFieldF,
+                static_cast<unsigned int>( aSep1 ), static_cast<unsigned int>( aSep2 ),
+                static_cast<unsigned int>( aSep3 ), aComp.bboxWidth, aComp.bboxHeight, aComp.placementQuarterTurns,
+                aComp.hasPlacementQuarterTurns ? 1 : 0, aComp.boundaryOffset, aComp.stringStartOffset,
                 aComp.headerEndOffset, aComp.regionEndOffset );
 }
 
@@ -376,11 +374,11 @@ static void DumpComponentRawFields( const DT_COMPONENT& aComp, const uint8_t* aD
     {
         wxString hex = BytesToHex( aData + aPos, 4 );
         int32_t leI32 = ReadRawLE32( aData, aPos );
-        float leF32 = ReadRawLEFloat32( aData, aPos );
-        wxLogDebug( wxT( "DipTrace: component raw ref=%s field=%s off=0x%06zX bytes=[%s] "
-                         "le_i32=%d le_f32=%g int4=%d" ),
-                    aComp.refdes, aName, aPos, hex, leI32, leF32,
-                    ReadInt4At( aData, aPos ) );
+        wxString leF32 = wxString::FromCDouble( ReadRawLEFloat32( aData, aPos ) );
+        wxLogTrace( traceDiptraceIo,
+                    wxT( "DipTrace: component raw ref=%s field=%s off=0x%06zX bytes=[%s] "
+                         "le_i32=%d le_f32=%s int4=%d" ),
+                    aComp.refdes, aName, aPos, hex, leI32, leF32, ReadInt4At( aData, aPos ) );
     };
 
     dumpOne( wxT( "posX" ), aPosXPos );
@@ -444,10 +442,11 @@ static void DumpComponentBinaryScan( const DT_COMPONENT& aComp, const uint8_t* a
     if( scanEnd <= scanStart + 4 )
         return;
 
-    wxLogDebug( wxT( "DipTrace: comp-scan ref=%s pat=%s boundary=0x%06zX str=0x%06zX "
+    wxLogTrace( traceDiptraceIo,
+                wxT( "DipTrace: comp-scan ref=%s pat=%s boundary=0x%06zX str=0x%06zX "
                      "headerEnd=0x%06zX regionEnd=0x%06zX full=%d scan=[0x%06zX..0x%06zX)" ),
-                aComp.refdes, aComp.patternName, aComp.boundaryOffset, aComp.stringStartOffset,
-                aComp.headerEndOffset, aComp.regionEndOffset, fullScan ? 1 : 0, scanStart, scanEnd );
+                aComp.refdes, aComp.patternName, aComp.boundaryOffset, aComp.stringStartOffset, aComp.headerEndOffset,
+                aComp.regionEndOffset, fullScan ? 1 : 0, scanStart, scanEnd );
 
     for( size_t off = scanStart; off + 3 <= scanEnd; off++ )
     {
@@ -457,7 +456,7 @@ static void DumpComponentBinaryScan( const DT_COMPONENT& aComp, const uint8_t* a
             continue;
 
         wxString hex = BytesToHex( aData + off, 3 );
-        wxLogDebug( wxT( "DipTrace: comp-scan-hit-i3 ref=%s off=0x%06zX rel=%lld bytes=[%s] int3=%d" ),
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: comp-scan-hit-i3 ref=%s off=0x%06zX rel=%lld bytes=[%s] int3=%d" ),
                     aComp.refdes, off, static_cast<long long>( off - scanStart ), hex, i3 );
     }
 
@@ -470,7 +469,8 @@ static void DumpComponentBinaryScan( const DT_COMPONENT& aComp, const uint8_t* a
             continue;
 
         wxString hex = BytesToHex( aData + off, 4 );
-        wxLogDebug( wxT( "DipTrace: comp-scan-hit ref=%s off=0x%06zX rel=%lld bytes=[%s] "
+        wxLogTrace( traceDiptraceIo,
+                    wxT( "DipTrace: comp-scan-hit ref=%s off=0x%06zX rel=%lld bytes=[%s] "
                          "int4=%d le_i32=%d" ),
                     aComp.refdes, off, static_cast<long long>( off - scanStart ), hex, i4, leI32 );
     }
@@ -494,16 +494,14 @@ static void DumpPadPostBlock( const DT_COMPONENT& aComp, const DT_PAD& aPad,
     int fieldN = ( aPostDimSize >= 34 ) ? ReadInt4At( aData, aPostDimPos + 30 ) : 0;
     wxString hex = BytesToHex( aData + aPostDimPos, aPostDimSize );
 
-    wxLogDebug( wxT( "DipTrace: pad-post ref=%s pad=%s label=%s idx=%d net=%d xy=(%d,%d) wh=(%d,%d) "
+    wxLogTrace( traceDiptraceIo,
+                wxT( "DipTrace: pad-post ref=%s pad=%s label=%s idx=%d net=%d xy=(%d,%d) wh=(%d,%d) "
                      "drill=(%d,%d) mount=%u orient=%u len=%lu "
                      "A=%d C=%d E=%d G=%d H=%d I=%d J=%d M=%d N=%d hex=[%s]" ),
-                aComp.refdes, aPad.number, aPad.label, aPad.index, aPad.netIndex,
-                aPad.x, aPad.y, aPad.width, aPad.height, aPad.drillWidth, aPad.drillHeight,
-                static_cast<unsigned int>( aPad.mountType ),
-                static_cast<unsigned int>( aPad.orientClass ),
-                static_cast<unsigned long>( aPostDimSize ),
-                fieldA, fieldC, fieldE, fieldG, fieldH, fieldI, fieldJ, fieldM, fieldN,
-                hex );
+                aComp.refdes, aPad.number, aPad.label, aPad.index, aPad.netIndex, aPad.x, aPad.y, aPad.width,
+                aPad.height, aPad.drillWidth, aPad.drillHeight, static_cast<unsigned int>( aPad.mountType ),
+                static_cast<unsigned int>( aPad.orientClass ), static_cast<unsigned long>( aPostDimSize ), fieldA,
+                fieldC, fieldE, fieldG, fieldH, fieldI, fieldJ, fieldM, fieldN, hex );
 }
 
 
@@ -515,8 +513,8 @@ static void DumpPadGap( const DT_COMPONENT& aComp, const uint8_t* aData,
 
     if( aGapEnd <= aGapStart )
     {
-        wxLogDebug( wxT( "DipTrace: pad-gap ref=%s start=0x%06zX end=0x%06zX len=0" ),
-                    aComp.refdes, aGapStart, aGapEnd );
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: pad-gap ref=%s start=0x%06zX end=0x%06zX len=0" ), aComp.refdes,
+                    aGapStart, aGapEnd );
         return;
     }
 
@@ -548,10 +546,10 @@ static void DumpPadGap( const DT_COMPONENT& aComp, const uint8_t* aData,
                                      ReadInt4At( aData, aGapStart + i * 4 ) );
     }
 
-    wxLogDebug( wxT( "DipTrace: pad-gap ref=%s start=0x%06zX end=0x%06zX len=%lu "
+    wxLogTrace( traceDiptraceIo,
+                wxT( "DipTrace: pad-gap ref=%s start=0x%06zX end=0x%06zX len=%lu "
                      "int3=[%s] int4=[%s] hex[%lu]=[%s]" ),
-                aComp.refdes, aGapStart, aGapEnd,
-                static_cast<unsigned long>( gapLen ), int3Seq, int4Seq,
+                aComp.refdes, aGapStart, aGapEnd, static_cast<unsigned long>( gapLen ), int3Seq, int4Seq,
                 static_cast<unsigned long>( sampleLen ), hex );
 }
 
@@ -567,14 +565,12 @@ static void DumpComponentTail( const DT_COMPONENT& aComp, const uint8_t* aData,
 
     wxString hex = BytesToHex( aData + aTailStart, COMPONENT_TAIL_SIZE );
 
-    wxLogDebug( wxT( "DipTrace: component-tail ref=%s off=0x%06zX vis=%d side=[%u,%u] "
+    wxLogTrace( traceDiptraceIo,
+                wxT( "DipTrace: component-tail ref=%s off=0x%06zX vis=%d side=[%u,%u] "
                      "order=%d yoff=[%d,%d] hasOffset=%u term=%u hex=[%s]" ),
-                aComp.refdes, aTailStart, aVisibility,
-                static_cast<unsigned int>( aSideFlag1 ),
-                static_cast<unsigned int>( aSideFlag2 ),
-                aOrderIdx, aRefdesYOffset, aValueYOffset,
-                static_cast<unsigned int>( aHasOffset ),
-                static_cast<unsigned int>( aTailTerm ), hex );
+                aComp.refdes, aTailStart, aVisibility, static_cast<unsigned int>( aSideFlag1 ),
+                static_cast<unsigned int>( aSideFlag2 ), aOrderIdx, aRefdesYOffset, aValueYOffset,
+                static_cast<unsigned int>( aHasOffset ), static_cast<unsigned int>( aTailTerm ), hex );
 }
 
 
@@ -594,8 +590,8 @@ static void DumpRulesetBlock( int aRuleSetIndex, const wxString& aRuleSetName, i
         values += wxString::Format( wxT( "%d" ), aValues[i] );
     }
 
-    wxLogDebug( wxT( "DipTrace: ruleset[%d] '%s' block[%d] values=[%s]" ),
-                aRuleSetIndex, aRuleSetName, aBlockIndex, values );
+    wxLogTrace( traceDiptraceIo, wxT( "DipTrace: ruleset[%d] '%s' block[%d] values=[%s]" ), aRuleSetIndex, aRuleSetName,
+                aBlockIndex, values );
 }
 
 
@@ -609,11 +605,12 @@ static void DumpZoneHeader( int aZoneIndex, size_t aHeaderPos, const uint8_t* aD
 
     wxString headerHex = BytesToHex( aData + aHeaderPos, 30 );
 
-    wxLogDebug( wxT( "DipTrace: zone[%d] hdr=0x%06zX fieldA=%d flags=[%d,%d,%d] "
+    wxLogTrace( traceDiptraceIo,
+                wxT( "DipTrace: zone[%d] hdr=0x%06zX fieldA=%d flags=[%d,%d,%d] "
                      "lineWidth=%d clearance=%d minimumArea=%d sep=%d layer=%d net=%d('%s') vtx=%d "
                      "hdrHex=[%s]" ),
-                aZoneIndex, aHeaderPos, aFieldA, aFlags1, aFlags2, aFlags3, aMinWidth, aClearance,
-                aMinimumArea, aSeparator, aLayer, aFieldB, aNetName, aVtxCount, headerHex );
+                aZoneIndex, aHeaderPos, aFieldA, aFlags1, aFlags2, aFlags3, aMinWidth, aClearance, aMinimumArea,
+                aSeparator, aLayer, aFieldB, aNetName, aVtxCount, headerHex );
 }
 
 
@@ -650,9 +647,10 @@ static void DumpZoneGap( int aZoneIndex, size_t aGapStart, size_t aGapEnd, const
                                       ReadInt4At( aData, aGapStart + i * 4 ) );
     }
 
-    wxLogDebug( wxT( "DipTrace: zone[%d] gap start=0x%06zX end=0x%06zX len=%lu int3=[%s] int4=[%s] hex[%lu]=[%s]" ),
-                aZoneIndex, aGapStart, aGapEnd, static_cast<unsigned long>( gapLen ),
-                int3Vals, int4Vals, static_cast<unsigned long>( sampleLen ), hex );
+    wxLogTrace( traceDiptraceIo,
+                wxT( "DipTrace: zone[%d] gap start=0x%06zX end=0x%06zX len=%lu int3=[%s] int4=[%s] hex[%lu]=[%s]" ),
+                aZoneIndex, aGapStart, aGapEnd, static_cast<unsigned long>( gapLen ), int3Vals, int4Vals,
+                static_cast<unsigned long>( sampleLen ), hex );
 }
 
 
@@ -689,9 +687,10 @@ static void DumpZoneTail( int aZoneIndex, size_t aTailStart, size_t aSearchEnd, 
                                       ReadInt4At( aData, aTailStart + i * 4 ) );
     }
 
-    wxLogDebug( wxT( "DipTrace: zone[%d] tail start=0x%06zX end=0x%06zX len=%lu int3=[%s] int4=[%s] hex[%lu]=[%s]" ),
-                aZoneIndex, aTailStart, aTailStart + tailLen, static_cast<unsigned long>( tailLen ),
-                int3Vals, int4Vals, static_cast<unsigned long>( sampleLen ), hex );
+    wxLogTrace( traceDiptraceIo,
+                wxT( "DipTrace: zone[%d] tail start=0x%06zX end=0x%06zX len=%lu int3=[%s] int4=[%s] hex[%lu]=[%s]" ),
+                aZoneIndex, aTailStart, aTailStart + tailLen, static_cast<unsigned long>( tailLen ), int3Vals, int4Vals,
+                static_cast<unsigned long>( sampleLen ), hex );
 }
 
 
@@ -885,13 +884,13 @@ void PCB_PARSER::Parse()
                 oyMax = std::max( oyMax, v.y );
             }
 
-            wxLogDebug( wxT( "DipTrace: board bbox=(%d,%d)-(%d,%d), outline verts=%zu bounds=(%d,%d)-(%d,%d)" ),
-                        m_bboxXMin, m_bboxYMin, m_bboxXMax, m_bboxYMax, m_outline.size(),
-                        oxMin, oyMin, oxMax, oyMax );
+            wxLogTrace( traceDiptraceIo,
+                        wxT( "DipTrace: board bbox=(%d,%d)-(%d,%d), outline verts=%zu bounds=(%d,%d)-(%d,%d)" ),
+                        m_bboxXMin, m_bboxYMin, m_bboxXMax, m_bboxYMax, m_outline.size(), oxMin, oyMin, oxMax, oyMax );
         }
         else
         {
-            wxLogDebug( wxT( "DipTrace: board bbox=(%d,%d)-(%d,%d), no parsed outline vertices" ),
+            wxLogTrace( traceDiptraceIo, wxT( "DipTrace: board bbox=(%d,%d)-(%d,%d), no parsed outline vertices" ),
                         m_bboxXMin, m_bboxYMin, m_bboxXMax, m_bboxYMax );
         }
         ParsePostOutline();
@@ -902,14 +901,15 @@ void PCB_PARSER::Parse()
         m_postDesignRulesOffset = m_reader.GetOffset();
         FindAndParseComponents();
         ParsePostComponentSections();
-        wxLogDebug( wxT( "DipTrace: post-component sections parsed; inferring routing-ref pad nets" ) );
+        wxLogTrace( traceDiptraceIo,
+                    wxT( "DipTrace: post-component sections parsed; inferring routing-ref pad nets" ) );
         InferPadNetsFromRoutingRefs();
 
-        wxLogDebug( wxT( "DipTrace: applying board settings" ) );
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: applying board settings" ) );
         ApplyBoardSettings();
-        wxLogDebug( wxT( "DipTrace: creating board outline" ) );
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: creating board outline" ) );
         CreateBoardOutline();
-        wxLogDebug( wxT( "DipTrace: creating nets" ) );
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: creating nets" ) );
         CreateNets();
 
         size_t footprintCompCount = 0;
@@ -923,7 +923,8 @@ void PCB_PARSER::Parse()
                 footprintCompCount++;
         }
 
-        wxLogDebug( wxT( "DipTrace: creating %zu footprints (skipping %zu standalone-via components)" ),
+        wxLogTrace( traceDiptraceIo,
+                    wxT( "DipTrace: creating %zu footprints (skipping %zu standalone-via components)" ),
                     footprintCompCount, standaloneViaCompCount );
 
         for( const DT_COMPONENT& comp : m_components )
@@ -934,14 +935,14 @@ void PCB_PARSER::Parse()
             CreateFootprint( comp );
         }
 
-        wxLogDebug( wxT( "DipTrace: creating %zu text objects" ), m_textObjects.size() );
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: creating %zu text objects" ), m_textObjects.size() );
         for( const DT_TEXT_OBJECT& text : m_textObjects )
             CreateTextObject( text );
 
-        wxLogDebug( wxT( "DipTrace: creating tracks and vias (%zu chains)" ), m_trackChains.size() );
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: creating tracks and vias (%zu chains)" ), m_trackChains.size() );
         CreateTracksAndVias();
         CreateStandaloneVias();
-        wxLogDebug( wxT( "DipTrace: creating zones (%zu)" ), m_zones.size() );
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: creating zones (%zu)" ), m_zones.size() );
         CreateZones();
 
         size_t compsWithPads = 0;
@@ -956,10 +957,11 @@ void PCB_PARSER::Parse()
                 compsWithShapes++;
         }
 
-        wxLogDebug( wxT( "DipTrace v%d: %zu components (%zu with pads, %zu with shapes), "
+        wxLogTrace( traceDiptraceIo,
+                    wxT( "DipTrace v%d: %zu components (%zu with pads, %zu with shapes), "
                          "%zu nets, %zu track chains, %zu zones" ),
-                    m_version, m_components.size(), compsWithPads, compsWithShapes,
-                    m_nets.size(), m_trackChains.size(), m_zones.size() );
+                    m_version, m_components.size(), compsWithPads, compsWithShapes, m_nets.size(), m_trackChains.size(),
+                    m_zones.size() );
     }
     catch( const IO_ERROR& )
     {
@@ -1072,7 +1074,7 @@ void PCB_PARSER::ParseBoardProperties()
     m_version = m_reader.ReadInt3();
     m_reader.SetVersion( m_version );
 
-    wxLogDebug( wxT( "DipTrace: file version %d" ), m_version );
+    wxLogTrace( traceDiptraceIo, wxT( "DipTrace: file version %d" ), m_version );
 
     /* int field0b = */ m_reader.ReadInt4();
     /* int field0f = */ m_reader.ReadInt3();
@@ -1252,13 +1254,10 @@ void PCB_PARSER::ParseDesignRules()
 
             if( dumpRuleSets )
             {
-                wxLogDebug( wxT( "DipTrace: ruleset[%d] '%s' fieldA=%d flags=[%u,%u,%u,%u] blocks=%d" ),
-                            i, setName, setFieldA,
-                            static_cast<unsigned int>( flags[0] ),
-                            static_cast<unsigned int>( flags[1] ),
-                            static_cast<unsigned int>( flags[2] ),
-                            static_cast<unsigned int>( flags[3] ),
-                            blockCount );
+                wxLogTrace( traceDiptraceIo,
+                            wxT( "DipTrace: ruleset[%d] '%s' fieldA=%d flags=[%u,%u,%u,%u] blocks=%d" ), i, setName,
+                            setFieldA, static_cast<unsigned int>( flags[0] ), static_cast<unsigned int>( flags[1] ),
+                            static_cast<unsigned int>( flags[2] ), static_cast<unsigned int>( flags[3] ), blockCount );
             }
 
             for( int b = 0; b < blockCount; b++ )
@@ -1570,7 +1569,7 @@ void PCB_PARSER::FindAndParseComponents()
         }
     }
 
-    wxLogDebug( wxT( "DipTrace: parsed %zu components" ), m_components.size() );
+    wxLogTrace( traceDiptraceIo, wxT( "DipTrace: parsed %zu components" ), m_components.size() );
 }
 
 
@@ -1752,7 +1751,7 @@ void PCB_PARSER::FindPadsInRegion( DT_COMPONENT& aComp, size_t aRegionStart, siz
 
     if( chainPos == 0 )
     {
-        wxLogDebug( wxT( "DipTrace: pad 1 not found in region 0x%06zX-0x%06zX for '%s'" ),
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: pad 1 not found in region 0x%06zX-0x%06zX for '%s'" ),
                     aRegionStart, aRegionEnd, aComp.patternName );
         return;
     }
@@ -2051,8 +2050,8 @@ void PCB_PARSER::FindMountHolesInRegion( DT_COMPONENT& aComp, size_t aRegionStar
 
     if( ShouldDumpComponentHeader( aComp.refdes ) )
     {
-        wxLogDebug( wxT( "DipTrace: mount-holes ref=%s count=%zu off=0x%06zX" ),
-                    aComp.refdes, aComp.holes.size(), best->offset );
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: mount-holes ref=%s count=%zu off=0x%06zX" ), aComp.refdes,
+                    aComp.holes.size(), best->offset );
     }
 }
 
@@ -2119,7 +2118,7 @@ void PCB_PARSER::FindShapesInRegion( DT_COMPONENT& aComp, size_t aRegionStart, s
     // Use the chain-derived pad region end position for shape lookup
     if( aComp.padRegionEnd == 0 || aComp.pads.empty() )
     {
-        wxLogDebug( wxT( "DipTrace: no pad region end for shape finding in '%s'" ),
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: no pad region end for shape finding in '%s'" ),
                     aComp.patternName );
         return;
     }
@@ -2128,7 +2127,7 @@ void PCB_PARSER::FindShapesInRegion( DT_COMPONENT& aComp, size_t aRegionStart, s
 
     if( padRegionEnd + FP_SHAPE_DATA_OFFSET > aRegionEnd )
     {
-        wxLogDebug( wxT( "DipTrace: shape region beyond component bounds for '%s'" ),
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: shape region beyond component bounds for '%s'" ),
                     aComp.patternName );
         return;
     }
@@ -2488,10 +2487,10 @@ void PCB_PARSER::ParseComponentTail( DT_COMPONENT& aComp, size_t aRegionEnd )
         size_t dumpStart = aRegionEnd - dumpLen;
         wxString hex = BytesToHex( data + dumpStart, dumpLen );
 
-        wxLogDebug( wxT( "DipTrace: component-tail-missing ref=%s regionEnd=0x%06zX "
+        wxLogTrace( traceDiptraceIo,
+                    wxT( "DipTrace: component-tail-missing ref=%s regionEnd=0x%06zX "
                          "tailHexStart=0x%06zX len=%lu hex=[%s]" ),
-                    aComp.refdes, aRegionEnd, dumpStart,
-                    static_cast<unsigned long>( dumpLen ), hex );
+                    aComp.refdes, aRegionEnd, dumpStart, static_cast<unsigned long>( dumpLen ), hex );
     }
 
     m_reader.SetOffset( savedOffset );
@@ -2723,8 +2722,8 @@ void PCB_PARSER::FindAndParseNets( size_t aSearchStart, size_t aSearchEnd )
 
             if( ShouldDumpNets() )
             {
-                wxLogDebug( wxT( "DipTrace: net idx=%d name=%s width1=%d width2=%d" ),
-                            netIndex, name, width1, width2 );
+                wxLogTrace( traceDiptraceIo, wxT( "DipTrace: net idx=%d name=%s width1=%d width2=%d" ), netIndex, name,
+                            width1, width2 );
             }
 
             try
@@ -2796,12 +2795,13 @@ void PCB_PARSER::FindAndParseNets( size_t aSearchStart, size_t aSearchEnd )
         }
     }
 
-    wxLogDebug( wxT( "DipTrace: parsed %zu net names, %zu track chains, %zu nodes "
+    wxLogTrace( traceDiptraceIo,
+                wxT( "DipTrace: parsed %zu net names, %zu track chains, %zu nodes "
                      "(viaStyle=%zu, routeFlag=%zu, both=%zu, flagOnly=%zu, "
                      "routeMode[0]=%zu, routeMode[1]=%zu, routeMode[3]=%zu, routeMode[other]=%zu)" ),
-                m_nets.size(), m_trackChains.size(), totalNodes,
-                viaStyleNodes, routeFlagNodes, viaStyleAndRouteFlagNodes, routeFlagOnlyNodes,
-                routeMode0Nodes, routeMode1Nodes, routeMode3Nodes, routeModeOtherNodes );
+                m_nets.size(), m_trackChains.size(), totalNodes, viaStyleNodes, routeFlagNodes,
+                viaStyleAndRouteFlagNodes, routeFlagOnlyNodes, routeMode0Nodes, routeMode1Nodes, routeMode3Nodes,
+                routeModeOtherNodes );
 }
 
 
@@ -3049,7 +3049,7 @@ void PCB_PARSER::InferPadNetsFromRoutingRefs()
 
     if( totalRefs > maxReasonableRefs )
     {
-        wxLogDebug( wxT( "DipTrace: skipping routing-ref pad inference (%zu refs exceeds %zu cap)" ),
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: skipping routing-ref pad inference (%zu refs exceeds %zu cap)" ),
                     totalRefs, maxReasonableRefs );
         return;
     }
@@ -3162,7 +3162,8 @@ void PCB_PARSER::InferPadNetsFromRoutingRefs()
 
     if( assigned > 0 || conflicts > 0 )
     {
-        wxLogDebug( wxT( "DipTrace: routing-ref pad net inference (base=%d): %d refs, %d hits, "
+        wxLogTrace( traceDiptraceIo,
+                    wxT( "DipTrace: routing-ref pad net inference (base=%d): %d refs, %d hits, "
                          "%d assigned, %d conflicts" ),
                     best.base, best.refs, best.hits, assigned, conflicts );
     }
@@ -3417,20 +3418,16 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
 
             if( ShouldDumpZones() )
             {
-                wxLogDebug( wxT( "DipTrace: zone[%d] trailer off=0x%06zX regionsCounted=%d "
+                wxLogTrace( traceDiptraceIo,
+                            wxT( "DipTrace: zone[%d] trailer off=0x%06zX regionsCounted=%d "
                                  "cachedBytes=%d cachedRecords=%d boardClr=%d "
                                  "islands=[%u,%u,%u] id=%d viaDirect=%u smdSeparate=%u "
                                  "smdSpokeMode=%d smdSpokeWidth=%d ratMode=%u done=%u" ),
                             aZoneIndex, trailerPos, lead, cachedBytes, cachedRecords, boardClr,
-                            static_cast<unsigned int>( islandR ),
-                            static_cast<unsigned int>( islandI ),
-                            static_cast<unsigned int>( islandC ),
-                            zoneId,
-                            static_cast<unsigned int>( viaDir ),
-                            static_cast<unsigned int>( smdSep ),
-                            smdSpokeMode, smdSpokeW,
-                            static_cast<unsigned int>( ratMode ),
-                            static_cast<unsigned int>( doneFlag ) );
+                            static_cast<unsigned int>( islandR ), static_cast<unsigned int>( islandI ),
+                            static_cast<unsigned int>( islandC ), zoneId, static_cast<unsigned int>( viaDir ),
+                            static_cast<unsigned int>( smdSep ), smdSpokeMode, smdSpokeW,
+                            static_cast<unsigned int>( ratMode ), static_cast<unsigned int>( doneFlag ) );
 
                 if( !aZone.cachedFillRecords.empty() )
                 {
@@ -3504,23 +3501,22 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
                         }
                     }
 
-                    wxLogDebug( wxT( "DipTrace: zone[%d] cached-range "
+                    wxLogTrace( traceDiptraceIo,
+                                wxT( "DipTrace: zone[%d] cached-range "
                                      "f0=[%d,%d] f1=[%d,%d] f2=[%d,%d] f3=[%d,%d] f4=[%d,%d] f5=[%d,%d]" ),
-                                aZoneIndex,
-                                minVals[0], maxVals[0], minVals[1], maxVals[1], minVals[2], maxVals[2],
+                                aZoneIndex, minVals[0], maxVals[0], minVals[1], maxVals[1], minVals[2], maxVals[2],
                                 minVals[3], maxVals[3], minVals[4], maxVals[4], minVals[5], maxVals[5] );
 
-                    wxLogDebug( wxT( "DipTrace: zone[%d] cached-hits "
+                    wxLogTrace( traceDiptraceIo,
+                                wxT( "DipTrace: zone[%d] cached-hits "
                                      "xHits=[%d,%d,%d,%d,%d,%d] yHits=[%d,%d,%d,%d,%d,%d] "
                                      "nonNeg=[%d,%d,%d,%d,%d,%d]" ),
-                                aZoneIndex,
-                                inXHits[0], inXHits[1], inXHits[2], inXHits[3], inXHits[4], inXHits[5],
-                                inYHits[0], inYHits[1], inYHits[2], inYHits[3], inYHits[4], inYHits[5],
-                                nonNegHits[0], nonNegHits[1], nonNegHits[2], nonNegHits[3],
-                                nonNegHits[4], nonNegHits[5] );
+                                aZoneIndex, inXHits[0], inXHits[1], inXHits[2], inXHits[3], inXHits[4], inXHits[5],
+                                inYHits[0], inYHits[1], inYHits[2], inYHits[3], inYHits[4], inYHits[5], nonNegHits[0],
+                                nonNegHits[1], nonNegHits[2], nonNegHits[3], nonNegHits[4], nonNegHits[5] );
 
-                    wxLogDebug( wxT( "DipTrace: zone[%d] cached-zone-bbox=[%d,%d,%d,%d]" ),
-                                aZoneIndex, zoneXMin, zoneXMax, zoneYMin, zoneYMax );
+                    wxLogTrace( traceDiptraceIo, wxT( "DipTrace: zone[%d] cached-zone-bbox=[%d,%d,%d,%d]" ), aZoneIndex,
+                                zoneXMin, zoneXMax, zoneYMin, zoneYMax );
 
                     auto histToString = []( const std::map<int, int>& aHist ) -> wxString
                     {
@@ -3539,12 +3535,10 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
                         return out;
                     };
 
-                    wxLogDebug( wxT( "DipTrace: zone[%d] cached-hist f0={%s} f5={%s} "
+                    wxLogTrace( traceDiptraceIo,
+                                wxT( "DipTrace: zone[%d] cached-hist f0={%s} f5={%s} "
                                      "f0EqRegions=%d xEq=%d yEq=%d bothEq=%d" ),
-                                aZoneIndex,
-                                histToString( field0Hist ),
-                                histToString( field5Hist ),
-                                f0EqRegions,
+                                aZoneIndex, histToString( field0Hist ), histToString( field5Hist ), f0EqRegions,
                                 xEqualCount, yEqualCount, bothEqualCount );
 
                     size_t sampleCount = std::min<size_t>( 6, aZone.cachedFillRecords.size() );
@@ -3552,10 +3546,9 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
                     for( size_t ri = 0; ri < sampleCount; ri++ )
                     {
                         const DT_ZONE_CACHED_FILL_RECORD& rec = aZone.cachedFillRecords[ri];
-                        wxLogDebug( wxT( "DipTrace: zone[%d] cached-rec[%zu]={%d,%d,%d,%d,%d,%d}" ),
-                                    aZoneIndex, ri,
-                                    rec.field0, rec.field1, rec.field2,
-                                    rec.field3, rec.field4, rec.field5 );
+                        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: zone[%d] cached-rec[%zu]={%d,%d,%d,%d,%d,%d}" ),
+                                    aZoneIndex, ri, rec.field0, rec.field1, rec.field2, rec.field3, rec.field4,
+                                    rec.field5 );
                     }
                 }
             }
@@ -3572,7 +3565,7 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
         if( headerLooksPlausible( scanPos, true ) )
         {
             zoneHeaderStart = scanPos;
-            wxLogDebug( wxT( "DipTrace: zone section found by structural scan at 0x%06zX" ),
+            wxLogTrace( traceDiptraceIo, wxT( "DipTrace: zone section found by structural scan at 0x%06zX" ),
                         zoneHeaderStart );
             break;
         }
@@ -3669,7 +3662,7 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
 
             if( zoneHeaderStart != NOT_FOUND )
             {
-                wxLogDebug( wxT( "DipTrace: zone section found by font fallback at 0x%06zX" ),
+                wxLogTrace( traceDiptraceIo, wxT( "DipTrace: zone section found by font fallback at 0x%06zX" ),
                             zoneHeaderStart );
             }
         }
@@ -3803,8 +3796,8 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
 
         if( ShouldDumpZones() )
         {
-            wxLogDebug( wxT( "DipTrace: zone[%d] fill-segments off=0x%06zX count=%d" ),
-                        zi, pos, fillSegCount );
+            wxLogTrace( traceDiptraceIo, wxT( "DipTrace: zone[%d] fill-segments off=0x%06zX count=%d" ), zi, pos,
+                        fillSegCount );
         }
 
         pos += 3 + static_cast<size_t>( fillSegCount ) * 19;
@@ -3820,8 +3813,8 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
 
         if( ShouldDumpZones() )
         {
-            wxLogDebug( wxT( "DipTrace: zone[%d] fill-polys off=0x%06zX count=%d" ),
-                        zi, pos, fillPolyCount );
+            wxLogTrace( traceDiptraceIo, wxT( "DipTrace: zone[%d] fill-polys off=0x%06zX count=%d" ), zi, pos,
+                        fillPolyCount );
         }
 
         pos += 3;
@@ -3874,8 +3867,9 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
 
                 if( ShouldDumpZones() )
                 {
-                    wxLogDebug( wxT( "DipTrace: zone[%d] style lead=%d spokeMode=%d lineSpacing=%d spokeWidth=%d" ),
-                                zi, styleLead, spokeMode, lineSpacing, spokeWidth );
+                    wxLogTrace( traceDiptraceIo,
+                                wxT( "DipTrace: zone[%d] style lead=%d spokeMode=%d lineSpacing=%d spokeWidth=%d" ), zi,
+                                styleLead, spokeMode, lineSpacing, spokeWidth );
                 }
             }
         }
@@ -3915,7 +3909,7 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
 
     if( !m_zones.empty() )
     {
-        wxLogDebug( wxT( "DipTrace: parsed %zu copper zones" ), m_zones.size() );
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: parsed %zu copper zones" ), m_zones.size() );
     }
 }
 
@@ -4455,9 +4449,8 @@ void PCB_PARSER::CreateFootprint( const DT_COMPONENT& aComp )
 
     if( ShouldDumpFootprintOrientation( aComp.refdes ) )
     {
-        wxLogDebug( wxT( "DipTrace: fp-orient ref=%s pat=%s qturn=%d hasQ=%d rotRaw=%d chosen=%d" ),
-                    aComp.refdes, aComp.patternName, orientationQuarterTurns,
-                    aComp.hasPlacementQuarterTurns ? 1 : 0,
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: fp-orient ref=%s pat=%s qturn=%d hasQ=%d rotRaw=%d chosen=%d" ),
+                    aComp.refdes, aComp.patternName, orientationQuarterTurns, aComp.hasPlacementQuarterTurns ? 1 : 0,
                     aComp.rotation, orientationDeg );
     }
 
@@ -4674,7 +4667,8 @@ void PCB_PARSER::CreateStandaloneVias()
 
     if( created > 0 || duplicates > 0 || missingGeometry > 0 )
     {
-        wxLogDebug( wxT( "DipTrace: created %d standalone vias from component records "
+        wxLogTrace( traceDiptraceIo,
+                    wxT( "DipTrace: created %d standalone vias from component records "
                          "(duplicates=%d, missingGeometry=%d)" ),
                     created, duplicates, missingGeometry );
     }
@@ -5005,12 +4999,13 @@ void PCB_PARSER::CreateTracksAndVias()
         }
     }
 
-    wxLogDebug( wxT( "DipTrace: created %d tracks and %d vias (%d chains with unresolved nets, "
+    wxLogTrace( traceDiptraceIo,
+                wxT( "DipTrace: created %d tracks and %d vias (%d chains with unresolved nets, "
                      "%d non-copper tracks skipped, %d non-copper vias skipped, "
                      "%d style vias, %d inferred layer-change vias, %d duplicate vias skipped, "
                      "%d cross-net vias skipped)" ),
-                trackCount, viaCount, missingChainNets, nonCopperTrackSkips, nonCopperViaSkips,
-                explicitViaStyleVias, inferredLayerChangeVias, duplicateViaSkips, crossNetViaSkips );
+                trackCount, viaCount, missingChainNets, nonCopperTrackSkips, nonCopperViaSkips, explicitViaStyleVias,
+                inferredLayerChangeVias, duplicateViaSkips, crossNetViaSkips );
 }
 
 
@@ -5164,7 +5159,7 @@ void PCB_PARSER::CreateZones()
 
     if( adjustedPadThermalAngles > 0 )
     {
-        wxLogDebug( wxT( "DipTrace: applied thermal spoke angle overrides to %d pads" ),
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: applied thermal spoke angle overrides to %d pads" ),
                     adjustedPadThermalAngles );
     }
 }

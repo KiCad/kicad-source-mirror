@@ -288,6 +288,13 @@ extern KICOMMON_API const wxChar* const traceGit;
 extern KICOMMON_API const wxChar* const traceEagleIo;
 
 /*
+ * Flag to enable DipTrace I/O debug tracing.
+ *
+ * Use "KICAD_DIPTRACE_IO" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceDiptraceIo;
+
+/*
  * Flag to enable Design Block O debug tracing.
  *
  * Use "KICAD_EAGLE_IO" to enable.
