@@ -1484,9 +1484,15 @@ void BINARY_PARSER::parseDecalNameTableOld()
                     {
                         stackCounts.emplace( name, stackCount );
 
+                        // Both old dialects store this cursor, and it has to be read rather than
+                        // re-derived by accumulating counts in decal-table order: the slices form
+                        // a ring, so the table's first decals do not sit at the front of the pair
+                        // pool. On PSTAGE-002 the 36 decals tile 64 slots with STANDARDVIA at 0,
+                        // S2 last at 61, then THERMALVIA at 62 and JMPVIA_AAAAA at 63 wrapping
+                        // back to 0.
                         int32_t stackStart = rec.I32( STACK_START_OFFSET );
 
-                        if( m_version == 0x2022 && stackStart >= 0 )
+                        if( stackStart >= 0 )
                             stackStarts.emplace( name, stackStart );
                     }
                 }
@@ -2035,12 +2041,11 @@ void BINARY_PARSER::parseTerminalsOld()
     if( streamBase == 0 || maxCursor <= 0 || pairCount == 0 || m_padStackPool.empty() )
         return;
 
-    size_t pairBase = streamBase + static_cast<size_t>( maxCursor ) * TERM_SIZE;
-
-    if( m_version == 0x2022 )
-        pairBase += 4;
-    else
-        pairBase -= 4;
+    // Both old dialects put the pair pool at the same place. v0x2021 used to be read one pair
+    // earlier, which only looked right because it also accumulated its slice starts in decal-table
+    // order instead of reading the stored cursor; the two errors cancelled on boards whose ring
+    // happens to be table order rotated by one, and compounded on the rest.
+    size_t pairBase = streamBase + static_cast<size_t>( maxCursor ) * TERM_SIZE + 4;
 
     if( !m_cursor.InBounds( pairBase, pairCount * 8 ) )
         return;
