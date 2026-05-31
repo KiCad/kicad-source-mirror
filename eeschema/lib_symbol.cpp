@@ -1912,11 +1912,13 @@ int LIB_SYMBOL::GetUnitCount() const
 
 void LIB_SYMBOL::SetBodyStyleCount( int aCount, bool aDuplicateDrawItems, bool aDuplicatePins )
 {
-    if( GetBodyStyleCount() == aCount )
+    int prevCount = GetBodyStyleCount();
+
+    if( prevCount == aCount )
         return;
 
     // Duplicate items to create the converted shape
-    if( GetBodyStyleCount() < aCount )
+    if( prevCount < aCount )
     {
         if( aDuplicateDrawItems || aDuplicatePins )
         {
@@ -1929,9 +1931,12 @@ void LIB_SYMBOL::SetBodyStyleCount( int aCount, bool aDuplicateDrawItems, bool a
 
                 if( item.m_bodyStyle == 1 )
                 {
-                    SCH_ITEM* newItem = item.Duplicate( IGNORE_PARENT_GROUP );
-                    newItem->m_bodyStyle = 2;
-                    tmp.push_back( newItem );
+                    for( int j = prevCount + 1; j <= aCount; j++ )
+                    {
+                        SCH_ITEM* newItem = item.Duplicate( IGNORE_PARENT_GROUP );
+                        newItem->m_bodyStyle = j;
+                        tmp.push_back( newItem );
+                    }
                 }
             }
 
@@ -1947,7 +1952,7 @@ void LIB_SYMBOL::SetBodyStyleCount( int aCount, bool aDuplicateDrawItems, bool a
 
         while( i != m_drawings.end() )
         {
-            if( i->m_bodyStyle > 1 )
+            if( i->m_bodyStyle > aCount )
                 i = m_drawings.erase( i );
             else
                 ++i;
