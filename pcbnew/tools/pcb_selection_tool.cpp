@@ -42,6 +42,7 @@ using namespace std::placeholders;
 #include <pcb_marker.h>
 #include <pad.h>
 #include <pcb_generator.h>
+#include <pcb_group.h>
 #include <pcb_base_edit_frame.h>
 #include <zone.h>
 #include <collectors.h>
@@ -296,6 +297,19 @@ bool PCB_SELECTION_TOOL::Init()
     auto groupEnterCondition =
             SELECTION_CONDITIONS::Count( 1 ) && SELECTION_CONDITIONS::HasType( PCB_GROUP_T );
 
+    auto applyDesignBlockLayoutCondition = []( const SELECTION& aSel )
+    {
+        for( EDA_ITEM* item : aSel )
+        {
+            if( item->Type() == PCB_GROUP_T && static_cast<PCB_GROUP*>( item )->HasDesignBlockLink() )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    };
+
     auto inGroupCondition =
             [this] ( const SELECTION& )
             {
@@ -325,7 +339,7 @@ bool PCB_SELECTION_TOOL::Init()
     menu.AddItem( ACTIONS::cancelInteractive,           activeToolCondition, 1 );
     menu.AddItem( ACTIONS::groupEnter,                  groupEnterCondition, 1 );
     menu.AddItem( ACTIONS::groupLeave,                  inGroupCondition,    1 );
-    menu.AddItem( PCB_ACTIONS::applyDesignBlockLayout,  groupEnterCondition, 1 );
+    menu.AddItem( PCB_ACTIONS::applyDesignBlockLayout, applyDesignBlockLayoutCondition, 1 );
     menu.AddItem( PCB_ACTIONS::placeLinkedDesignBlock,  groupEnterCondition, 1 );
     menu.AddItem( PCB_ACTIONS::saveToLinkedDesignBlock, groupEnterCondition, 1 );
     menu.AddItem( PCB_ACTIONS::clearHighlight,          haveHighlight,       1 );
