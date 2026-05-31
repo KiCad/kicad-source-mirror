@@ -63,6 +63,7 @@ BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBo
     m_replaceFootprints = true;
     m_lookupByTimestamp = false;
     m_transferGroups = false;
+    m_applyDesignBlockLayouts = false;
     m_overrideLocks = false;
     m_updateFields = false;
     m_removeExtraFields = false;
@@ -1007,6 +1008,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
                 // board groups for later footprints that are checking for existing groups
                 m_board->Add( newGroup );
                 m_commit.Added( newGroup );
+                m_addedGroups.push_back( newGroup );
             }
             else
             {
