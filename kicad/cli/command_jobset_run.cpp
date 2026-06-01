@@ -30,6 +30,7 @@
 #include <settings/settings_manager.h>
 
 #include <macros.h>
+#include <wx/filename.h>
 #include <wx/tokenzr.h>
 #include <jobs_runner.h>
 #include <reporter.h>
@@ -68,6 +69,10 @@ int CLI::JOBSET_RUN_COMMAND::doPerform( KIWAY& aKiway )
     wxString  projectFile = m_argInput.ToStdString();
 
     wxString outputKey = From_UTF8( m_argParser.get<std::string>( ARG_OUTPUT ).c_str() );
+
+    wxFileName projectFn( projectFile );
+    projectFn.MakeAbsolute();
+    projectFile = projectFn.GetFullPath();
 
     if( !Pgm().GetSettingsManager().LoadProject( projectFile ) )
     {

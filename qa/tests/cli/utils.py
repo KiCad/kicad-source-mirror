@@ -70,7 +70,7 @@ def _get_cached_kicad_major_version() -> int:
     return _kicad_major_version
 
 
-def run_and_capture( command: list[str] ) -> Tuple[ str, str, int ]:
+def run_and_capture( command: list[str], cwd: Optional[Path] = None ) -> Tuple[ str, str, int ]:
     command = [str( c ) for c in command]
     logger.info("Executing command \"%s\"", " ".join( command ))
 
@@ -81,13 +81,16 @@ def run_and_capture( command: list[str] ) -> Tuple[ str, str, int ]:
         if 'QA_DATA_ROOT' in env:
             base_path = Path( env.get('QA_DATA_ROOT') )
         else:
-            cwd = Path.cwd()
+            # Derive the QA data path from the directory the tests run from. This is a
+            # separate concept from the subprocess working directory in `cwd`; do not
+            # reuse that name here or it would clobber the caller's requested cwd.
+            test_cwd = Path.cwd()
             base_path = None
 
             try:
-                if 'qa' in cwd.parts:
-                    idx = cwd.parts.index('qa')
-                    base_path = cwd.parents[len(cwd.parents) - idx - 1] / 'data'
+                if 'qa' in test_cwd.parts:
+                    idx = test_cwd.parts.index('qa')
+                    base_path = test_cwd.parents[len(test_cwd.parents) - idx - 1] / 'data'
             except ValueError:
                 pass
 
@@ -98,13 +101,14 @@ def run_and_capture( command: list[str] ) -> Tuple[ str, str, int ]:
             env[f'KICAD{ver}_SYMBOL_DIR'] = str(base_path / 'libraries')
             env[f'KICAD{ver}_FOOTPRINT_DIR'] = str(base_path / 'libraries')
         else:
-            logger.warning("Unexpected cwd '%s', tests will likely fail", cwd)
+            logger.warning("Unexpected cwd '%s', tests will likely fail", Path.cwd())
 
     proc = subprocess.Popen( command,
         stdout = subprocess.PIPE,
         stderr = subprocess.PIPE,
         encoding = 'utf-8',
-        env = env
+        env = env,
+        cwd = str( cwd ) if cwd is not None else None
     )
 
     out,err = proc.communicate()

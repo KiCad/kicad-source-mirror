@@ -30,6 +30,7 @@
 #include <project/project_file.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/filename.h>
 
 #include <filesystem>
 #include <fstream>
@@ -228,6 +229,60 @@ BOOST_AUTO_TEST_CASE( LoadPreservesValidTopLevelSheetReferences )
     // References should be unchanged
     BOOST_CHECK_EQUAL( sheets[0].filename, wxS( "valid_project.kicad_sch" ) );
     BOOST_CHECK_EQUAL( sheets[0].name, wxS( "valid_project" ) );
+}
+
+
+/**
+ * Test that loading a project by an absolute path is idempotent and does not evict (and free) the
+ * already-loaded project when the same project is loaded again by its absolute path.
+ *
+ * This guards the invariant relied upon by `kicad-cli jobset run`. The jobset runner loads the
+ * project once and holds the resulting PROJECT* across many kiface job calls. Each kiface board
+ * loader looks the project up by its absolute path and loads it if not already present. If the
+ * jobset runner had loaded the project by a relative path, the two paths would key different map
+ * entries, the second (active) load would evict and free the first, and the held PROJECT* would
+ * dangle, crashing in JOBS_OUTPUT_ARCHIVE::HandleOutputs.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24474
+ */
+BOOST_AUTO_TEST_CASE( LoadProjectByAbsolutePathIsStable )
+{
+    fs::path projectDir = m_tempDir / "jobset_project";
+    fs::create_directories( projectDir );
+
+    std::string proContent = R"({
+        "meta": {
+            "filename": "jobset_project.kicad_pro",
+            "version": 3
+        }
+    })";
+
+    fs::path proPath = projectDir / "jobset_project.kicad_pro";
+    std::ofstream proFile( proPath );
+    proFile << proContent;
+    proFile.close();
+
+    wxFileName absFn( wxString( proPath.string() ) );
+    absFn.MakeAbsolute();
+    wxString absPath = absFn.GetFullPath();
+
+    SETTINGS_MANAGER settingsManager;
+
+    // Load as the fixed jobset runner does: by absolute path.
+    BOOST_REQUIRE( settingsManager.LoadProject( absPath ) );
+
+    PROJECT* heldProject = settingsManager.GetProject( absPath );
+    BOOST_REQUIRE( heldProject != nullptr );
+
+    // Simulate the kiface board loader resolving and (re)loading the project by its absolute path.
+    BOOST_REQUIRE( settingsManager.LoadProject( absPath, true ) );
+
+    // The second load must be a no-op for the held pointer; the project must not have been evicted.
+    PROJECT* afterReload = settingsManager.GetProject( absPath );
+    BOOST_CHECK( afterReload == heldProject );
+
+    // The held pointer must still resolve to the same project name (i.e. it was not freed).
+    BOOST_CHECK_EQUAL( heldProject->GetProjectFullName(), absPath );
 }
 
 
