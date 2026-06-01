@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
 #include <advanced_config.h>
 #include <base_units.h>
 #include <kiplatform/io.h>
@@ -46,6 +47,7 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <widgets/wx_infobar.h>
+#include <string_utils.h>
 #include <confirm.h>
 #include <preview_items/selection_area.h>
 #include <project_sch.h>
@@ -688,6 +690,18 @@ void SCH_BASE_FRAME::GetLibraryItemsForListDialog( wxArrayString& aHeaders,
             unpinned.push_back( item );
         }
     }
+
+    std::sort( aItemsToDisplay.begin(), aItemsToDisplay.end(),
+               []( const wxArrayString& a, const wxArrayString& b )
+               {
+                   return StrNumCmp( a[0], b[0], true ) < 0;
+               } );
+
+    std::sort( unpinned.begin(), unpinned.end(),
+               []( const wxArrayString& a, const wxArrayString& b )
+               {
+                   return StrNumCmp( a[0], b[0], true ) < 0;
+               } );
 
     std::ranges::copy( unpinned, std::back_inserter( aItemsToDisplay ) );
 }
