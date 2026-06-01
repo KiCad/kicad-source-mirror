@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
 #include <memory>
 #include <wx/ffile.h>
 #include <pgm_base.h>
@@ -28,6 +29,7 @@
 #include <confirm.h>
 #include <kidialog.h>
 #include <macros.h>
+#include <string_utils.h>
 #include <pcb_edit_frame.h>
 #include <eda_list_dialog.h>
 #include <filter_reader.h>
@@ -1359,6 +1361,18 @@ void PCB_BASE_FRAME::GetLibraryItemsForListDialog( wxArrayString& aHeaders,
             unpinned.push_back( item );
         }
     }
+
+    std::sort( aItemsToDisplay.begin(), aItemsToDisplay.end(),
+               []( const wxArrayString& a, const wxArrayString& b )
+               {
+                   return StrNumCmp( a[0], b[0], true ) < 0;
+               } );
+
+    std::sort( unpinned.begin(), unpinned.end(),
+               []( const wxArrayString& a, const wxArrayString& b )
+               {
+                   return StrNumCmp( a[0], b[0], true ) < 0;
+               } );
 
     std::ranges::copy( unpinned, std::back_inserter( aItemsToDisplay ) );
 }
