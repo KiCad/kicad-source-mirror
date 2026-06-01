@@ -163,6 +163,9 @@ set( QA_COMMON_SRCS
     test_job_sch_erc.cpp
     test_jobs_runner.cpp
     test_jobs_output_archive.cpp
+
+    # Translation integrity tests
+    test_translation_format_strings.cpp
 )
 
 if( KICAD_TEST_DATABASE_LIBRARIES )
@@ -213,7 +216,8 @@ include_directories(
     ${INC_AFTER}
 )
 
-set_source_files_properties( test_remote_provider_metadata.cpp test_remote_provider_client.cpp PROPERTIES
+set_source_files_properties( test_remote_provider_metadata.cpp test_remote_provider_client.cpp
+        test_translation_format_strings.cpp PROPERTIES
         COMPILE_DEFINITIONS "QA_SRC_ROOT=(\"${CMAKE_SOURCE_DIR}\")"
         )
 
