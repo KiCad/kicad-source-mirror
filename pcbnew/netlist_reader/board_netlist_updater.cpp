@@ -846,8 +846,8 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
-    if( aNetlistComponent->GetDuplicatePadNumbersAreJumpers()
-        != aFootprint->GetDuplicatePadNumbersAreJumpers() )
+    if( m_updateFields
+        && aNetlistComponent->GetDuplicatePadNumbersAreJumpers() != aFootprint->GetDuplicatePadNumbersAreJumpers() )
     {
         bool value = aNetlistComponent->GetDuplicatePadNumbersAreJumpers();
 
@@ -884,7 +884,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
     }
 
-    if( aNetlistComponent->JumperPadGroups() != aFootprint->JumperPadGroups() )
+    if( m_updateFields && aNetlistComponent->JumperPadGroups() != aFootprint->JumperPadGroups() )
     {
         if( !m_isDryRun )
         {
