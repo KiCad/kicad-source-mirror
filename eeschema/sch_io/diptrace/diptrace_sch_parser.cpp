@@ -304,7 +304,7 @@ void SCH_PARSER::parseDisplaySettings()
         // Some modern files store an optional UTF-16 payload (e.g. "url")
         // after this 4-byte raw length field.
         if( extraChars > 0 && extraChars < 1000 )
-            m_reader.Skip( extraChars * 2 );
+            m_reader.Skip( static_cast<size_t>( extraChars ) * 2 );
     }
 
     m_reader.ReadByte();
@@ -482,7 +482,7 @@ std::vector<size_t> SCH_PARSER::scanComponentBoundaries( size_t aFirstComp,
 
         for( int i = 0; i < 4; i++ )
         {
-            size_t p = off + i * 4;
+            size_t p = off + static_cast<size_t>( i ) * 4;
 
             if( p + 4 > fileSize )
             {
@@ -577,8 +577,8 @@ std::vector<size_t> SCH_PARSER::scanComponentBoundaries( size_t aFirstComp,
                     {
                         wxMBConvUTF16BE conv;
                         strings[si] = wxString( reinterpret_cast<const char*>( data + pos ),
-                                                conv, n * 2 );
-                        pos += n * 2;
+                                                conv, static_cast<size_t>( n ) * 2 );
+                        pos += static_cast<size_t>( n ) * 2;
                         nonEmpty++;
                     }
                 }
@@ -678,6 +678,7 @@ bool SCH_PARSER::isShapeStart( size_t aOffset ) const
 void SCH_PARSER::parseComponents( size_t aBusSectionOffset )
 {
     size_t compSectionStart = m_reader.GetOffset();
+    m_componentSectionStart = compSectionStart;
 
     if( m_componentCount >= 0 )
     {
@@ -1415,7 +1416,7 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
 
         for( int extraInt3s = 0; extraInt3s <= kMaxExtraInt3; extraInt3s++ )
         {
-            size_t nameEnd = anchor - kBaseGap - extraInt3s * 3;
+            size_t nameEnd = anchor - kBaseGap - static_cast<size_t>( extraInt3s ) * 3;
 
             if( nameEnd < startOffset + 2 )
                 break;
@@ -1621,8 +1622,8 @@ void SCH_PARSER::parseNetSection()
 
             for( int i = 0; i < n; i++ )
             {
-                uint8_t hi = data[strOff + 2 + i * 2];
-                uint8_t lo = data[strOff + 2 + i * 2 + 1];
+                uint8_t hi = data[strOff + 2 + static_cast<size_t>( i ) * 2];
+                uint8_t lo = data[strOff + 2 + static_cast<size_t>( i ) * 2 + 1];
 
                 if( hi != 0 || lo < 0x20 || lo > 0x7E )
                 {
@@ -1636,8 +1637,8 @@ void SCH_PARSER::parseNetSection()
 
             wxMBConvUTF16BE conv;
             wxString        name( reinterpret_cast<const char*>( data + strOff + 2 ), conv,
-                                  n * 2 );
-            size_t          afterStr = strOff + 2 + n * 2;
+                                  static_cast<size_t>( n ) * 2 );
+            size_t          afterStr = strOff + 2 + static_cast<size_t>( n ) * 2;
 
             DCH_NET_ENTRY entry;
             entry.name = name;
@@ -1808,7 +1809,280 @@ LIB_SYMBOL* SCH_PARSER::getOrCreateLibSymbol( const DCH_COMPONENT& aComp, int aU
 }
 
 
-void SCH_PARSER::createSymbolInstance( const DCH_COMPONENT& aComp, SCH_SCREEN* aScreen )
+void SCH_PARSER::buildWirePointSheets()
+{
+    m_wirePointSheets.clear();
+    m_pointPartSheets.clear();
+
+    std::map<int, std::map<int, int>> partSheetVotes;   // partId -> sheet -> count
+
+    for( const DCH_WIRE& wire : m_wires )
+    {
+        int sheetIdx = wire.sheetIndex;
+
+        if( sheetIdx < 0 || sheetIdx >= m_numSheets )
+            sheetIdx = 0;
+
+        for( const VECTOR2I& pt : wire.points )
+            m_wirePointSheets[{ pt.x, pt.y }].insert( sheetIdx );
+
+        // The two endpoints carry the part each end connects to (object1 at the first point,
+        // object2 at the last); record them with the sheet for exact part-id recovery.
+        if( wire.points.size() >= 2 )
+        {
+            if( wire.object1 >= 0 )
+            {
+                const VECTOR2I& a = wire.points.front();
+                m_pointPartSheets[{ a.x, a.y }].emplace_back( wire.object1, sheetIdx );
+                partSheetVotes[wire.object1][sheetIdx]++;
+            }
+
+            if( wire.object2 >= 0 )
+            {
+                const VECTOR2I& b = wire.points.back();
+                m_pointPartSheets[{ b.x, b.y }].emplace_back( wire.object2, sheetIdx );
+                partSheetVotes[wire.object2][sheetIdx]++;
+            }
+        }
+    }
+
+    // Resolve each part's sheet as the one most of its wires sit on.
+    m_partIdSheet.clear();
+
+    for( const auto& [partId, sheets] : partSheetVotes )
+    {
+        int bestSheet = 0;
+        int bestCount = -1;
+
+        for( const auto& [sheet, count] : sheets )
+        {
+            if( count > bestCount )
+            {
+                bestCount = count;
+                bestSheet = sheet;
+            }
+        }
+
+        m_partIdSheet[partId] = bestSheet;
+    }
+}
+
+
+bool SCH_PARSER::isComponentHeaderAt( size_t aOffset ) const
+{
+    const uint8_t* data     = m_reader.GetData();
+    size_t         fileSize = m_reader.GetFileSize();
+
+    if( aOffset + 16 > fileSize )
+        return false;
+
+    // Four leading int4: the placement (centerX, centerY) followed by width/height. Reject values
+    // that are out of range or essentially at the origin (which only mid-record noise produces).
+    int bbox[4];
+
+    for( int i = 0; i < 4; i++ )
+    {
+        size_t   p = aOffset + static_cast<size_t>( i ) * 4;
+        uint32_t raw = ( static_cast<uint32_t>( data[p] ) << 24 )
+                       | ( static_cast<uint32_t>( data[p + 1] ) << 16 )
+                       | ( static_cast<uint32_t>( data[p + 2] ) << 8 ) | data[p + 3];
+        bbox[i] = static_cast<int>( static_cast<int64_t>( raw ) - INT4_BIAS );
+
+        if( std::abs( bbox[i] ) > 50000000 )
+            return false;
+    }
+
+    if( std::abs( bbox[0] ) <= 50000 && std::abs( bbox[1] ) <= 50000 )
+        return false;
+
+    // Five header strings (compName, refdes, value, prefix, nameDup). Each is empty or a short
+    // printable token; the first (compName) must be non-empty.
+    size_t p = aOffset + 16;
+
+    for( int si = 0; si < 5; si++ )
+    {
+        int charCount = 0;
+        size_t dataStart = 0;
+        bool   ascii = ( m_version <= LEGACY_STRING_VERSION );
+
+        if( ascii )
+        {
+            if( p + 3 > fileSize )
+                return false;
+
+            charCount = ( ( data[p] << 16 ) | ( data[p + 1] << 8 ) | data[p + 2] ) - INT3_BIAS;
+            dataStart = p + 3;
+        }
+        else
+        {
+            if( p + 2 > fileSize )
+                return false;
+
+            charCount = ( data[p] << 8 ) | data[p + 1];
+            dataStart = p + 2;
+        }
+
+        if( charCount == 0 )
+        {
+            if( si == 0 )
+                return false;
+
+            p = dataStart;
+            continue;
+        }
+
+        if( charCount < 0 || charCount > 64 )
+            return false;
+
+        size_t byteCount = ascii ? static_cast<size_t>( charCount )
+                                 : static_cast<size_t>( charCount ) * 2;
+
+        if( dataStart + byteCount > fileSize )
+            return false;
+
+        for( int k = 0; k < charCount; k++ )
+        {
+            unsigned ch = ascii
+                                  ? data[dataStart + k]
+                                  : ( ( data[dataStart + static_cast<size_t>( k ) * 2] << 8 )
+                                      | data[dataStart + static_cast<size_t>( k ) * 2 + 1] );
+
+            if( ch < 0x20 )
+                return false;
+        }
+
+        p = dataStart + byteCount;
+    }
+
+    return true;
+}
+
+
+void SCH_PARSER::buildComponentPartIds()
+{
+    m_offsetToPartId.clear();
+
+    if( m_componentSectionStart == 0 || m_busSectionOffset <= m_componentSectionStart )
+        return;
+
+    int    partId = 0;
+    size_t off = m_componentSectionStart;
+
+    while( off + 20 < m_busSectionOffset )
+    {
+        if( isComponentHeaderAt( off ) )
+        {
+            m_offsetToPartId[off] = partId++;
+            off += 16;
+        }
+        else
+        {
+            off++;
+        }
+    }
+}
+
+
+int SCH_PARSER::resolveSheetTally( const std::map<std::pair<int, int>, int>& aTally )
+{
+    if( aTally.empty() )
+        return -1;
+
+    int bestCount = 0;
+
+    for( const auto& [ps, count] : aTally )
+        bestCount = std::max( bestCount, count );
+
+    // First choice: a top-tally part id strictly greater than the last assigned (monotonic; the
+    // file stores components in part-id order, which disambiguates identical duplicate sheets).
+    for( const auto& [ps, count] : aTally )   // std::map iterates by ascending part id
+    {
+        if( count == bestCount && ps.first > m_lastSymbolPartId )
+        {
+            m_lastSymbolPartId = ps.first;
+            return ps.second;
+        }
+    }
+
+    // Otherwise take any top-tally pair (smallest part id).
+    for( const auto& [ps, count] : aTally )
+    {
+        if( count == bestCount )
+        {
+            m_lastSymbolPartId = ps.first;
+            return ps.second;
+        }
+    }
+
+    return -1;
+}
+
+
+int SCH_PARSER::sheetForComponentPins( const std::vector<VECTOR2I>& aConnectionPoints )
+{
+    // Tally the (partId, sheet) pairs found at the symbol's connection points. The pair matching
+    // the most pins is the symbol's part.
+    std::map<std::pair<int, int>, int> tally;
+
+    for( const VECTOR2I& p : aConnectionPoints )
+    {
+        auto it = m_pointPartSheets.find( { p.x, p.y } );
+
+        if( it == m_pointPartSheets.end() )
+            continue;
+
+        std::set<std::pair<int, int>> seenHere;   // count each (part, sheet) once per point
+
+        for( const std::pair<int, int>& ps : it->second )
+            if( seenHere.insert( ps ).second )
+                tally[ps]++;
+    }
+
+    int sheet = resolveSheetTally( tally );
+
+    if( sheet >= 0 )
+        return sheet;
+
+    // No endpoint matched a part; fall back to plain position voting.
+    return sheetForPositions( aConnectionPoints, -1 );
+}
+
+
+int SCH_PARSER::sheetForPositions( const std::vector<VECTOR2I>& aPositions, int aFallback ) const
+{
+    std::map<int, int> votes;
+
+    for( const VECTOR2I& p : aPositions )
+    {
+        auto it = m_wirePointSheets.find( { p.x, p.y } );
+
+        if( it == m_wirePointSheets.end() )
+            continue;
+
+        for( int sheet : it->second )
+            votes[sheet]++;
+    }
+
+    if( votes.empty() )
+        return aFallback;
+
+    int bestSheet = aFallback;
+    int bestVotes = -1;
+
+    for( const auto& [sheet, count] : votes )
+    {
+        if( count > bestVotes )
+        {
+            bestVotes = count;
+            bestSheet = sheet;
+        }
+    }
+
+    return bestSheet;
+}
+
+
+void SCH_PARSER::createSymbolInstance( const DCH_COMPONENT& aComp, SCH_SCREEN* aFallbackScreen )
 {
     if( aComp.refdes.IsEmpty() && aComp.compName.IsEmpty() )
         return;
@@ -1847,10 +2121,8 @@ void SCH_PARSER::createSymbolInstance( const DCH_COMPONENT& aComp, SCH_SCREEN* a
 
     LIB_ID libId( getLibName(), symName );
 
-    int centerX = ( aComp.bboxX1 + aComp.bboxX2 ) / 2;
-    int centerY = ( aComp.bboxY1 + aComp.bboxY2 ) / 2;
-
-    VECTOR2I pos( toKiCadCoordX( centerX ), toKiCadCoordY( centerY ) );
+    // The header bbox is [centerX, centerY, width, height]; the first pair is the placement point.
+    VECTOR2I pos( toKiCadCoordX( aComp.bboxX1 ), toKiCadCoordY( aComp.bboxY1 ) );
 
     SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSym, libId, &m_schematic->CurrentSheet(), unit, 0,
                                           pos );
@@ -1884,21 +2156,81 @@ void SCH_PARSER::createSymbolInstance( const DCH_COMPONENT& aComp, SCH_SCREEN* a
             valField->SetText( aComp.compName );
     }
 
-    aScreen->Append( symbol );
+    // DipTrace stores no per-component sheet field; recover it from connectivity. The header bbox
+    // is [centerX, centerY, width, height]; each pin's connection point (where a wire ends) is the
+    // pin coordinate offset from that center, extended outward by the pin length along its dominant
+    // axis. Matching those connection points against the decoded wire geometry yields the owning
+    // sheet without needing the component rotation (which is not parsed). Falls back to the supplied
+    // screen when no pin coincides with a wire.
+    VECTOR2I              center( toKiCadCoordX( aComp.bboxX1 ), toKiCadCoordY( aComp.bboxY1 ) );
+    std::vector<VECTOR2I> connectionPoints;
+
+    for( const DCH_PIN& dchPin : aComp.pins )
+    {
+        VECTOR2I off( toKiCadCoordX( dchPin.x ), toKiCadCoordY( dchPin.y ) );
+        int      len = static_cast<int>( static_cast<int64_t>( std::abs( dchPin.length ) ) * 100 / 3 );
+        VECTOR2I dir( 0, 0 );
+
+        if( std::abs( off.x ) >= std::abs( off.y ) )
+            dir.x = ( off.x >= 0 ) ? 1 : -1;
+        else
+            dir.y = ( off.y >= 0 ) ? 1 : -1;
+
+        connectionPoints.emplace_back( center.x + off.x + dir.x * len, center.y + off.y + dir.y * len );
+    }
+
+    // Primary: match the pin connection points against the wire geometry (precise per-sheet). When
+    // the heuristic parser mis-read the pins so nothing matches, fall back to the component's file
+    // position, which gives its DipTrace part id, and the wire connectivity gives that part's sheet
+    // exactly regardless of the bad pin data.
+    int votedSheet = sheetForComponentPins( connectionPoints );
+
+    if( votedSheet < 0 )
+    {
+        auto offsetIt = m_offsetToPartId.find( aComp.fileOffset );
+
+        if( offsetIt != m_offsetToPartId.end() )
+        {
+            int partId = offsetIt->second;
+
+            // The part itself may have no wire (e.g. an unconnected unit of a multi-unit part), so
+            // search the nearest part ids too: components on a sheet have consecutive part ids, so a
+            // neighbour's sheet is the right one.
+            for( int d = 0; d <= 12 && votedSheet < 0; d++ )
+            {
+                for( int candidate : { partId - d, partId + d } )
+                {
+                    auto sheetIt = m_partIdSheet.find( candidate );
+
+                    if( sheetIt != m_partIdSheet.end() )
+                    {
+                        votedSheet = sheetIt->second;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    SCH_SCREEN* screen = ( votedSheet >= 0 ) ? getOrCreateSheet( votedSheet ) : aFallbackScreen;
+
+    screen->Append( symbol );
 }
 
 
 void SCH_PARSER::createNetLabels()
 {
-    for( const DCH_NET_ENTRY& net : m_nets )
+    // Labels are derived from the net/wire section (one per net per sheet, anchored on a wire),
+    // which carries reliable positions and sheet membership. The legacy net-name marker scan
+    // (m_nets) yields only a constant placeholder position, so it is not used for placement.
+    for( const DCH_NET_LABEL& net : m_netLabels )
     {
         if( net.name.IsEmpty() )
             continue;
 
-        SCH_SCREEN* screen = m_rootSheet->GetScreen();
-        VECTOR2I    pos( toKiCadCoordX( net.coordX ), toKiCadCoordY( net.coordY ) );
+        SCH_SCREEN* screen = getOrCreateSheet( net.sheetIndex );
 
-        SCH_GLOBALLABEL* label = new SCH_GLOBALLABEL( pos, net.name );
+        SCH_GLOBALLABEL* label = new SCH_GLOBALLABEL( net.pos, net.name );
         label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
         screen->Append( label );
     }
@@ -1925,8 +2257,8 @@ static bool isPlausibleNetName( const uint8_t* aData, size_t aPos, size_t aSecti
 
     for( int i = 0; i < cnt; i++ )
     {
-        unsigned hi = aData[aPos + 2 + i * 2];
-        unsigned lo = aData[aPos + 2 + i * 2 + 1];
+        unsigned hi = aData[aPos + 2 + static_cast<size_t>( i ) * 2];
+        unsigned lo = aData[aPos + 2 + static_cast<size_t>( i ) * 2 + 1];
         unsigned ch = ( hi << 8 ) | lo;
 
         bool ok = ( ch >= 0x20 && ch < 0x7F )            // ASCII printable
@@ -1998,14 +2330,24 @@ void SCH_PARSER::parseWireSection()
     if( pos == 0 )
         return;
 
-    int safetyNets = 0;
+    int                                  safetyNets = 0;
+    std::set<std::pair<wxString, int>>    seenNetSheets;
 
     while( pos != 0 && pos < sectionEnd && safetyNets++ < 100000 )
     {
         size_t o = pos;
 
         // Net name (UTF-16-BE), then labelX(int4) labelY(int4) pad(int3) flag(byte).
-        int nameLen = ( data[o] << 8 ) | data[o + 1];
+        int      nameLen = ( data[o] << 8 ) | data[o + 1];
+        wxString netName;
+
+        if( nameLen > 0 && o + 2 + static_cast<size_t>( nameLen ) * 2 <= sectionEnd )
+        {
+            wxMBConvUTF16BE conv;
+            netName = wxString( reinterpret_cast<const char*>( data + o + 2 ), conv,
+                                static_cast<size_t>( nameLen ) * 2 );
+        }
+
         o += 2 + static_cast<size_t>( nameLen ) * 2;
         o += 4 + 4 + 3 + 1;
 
@@ -2076,7 +2418,23 @@ void SCH_PARSER::parseWireSection()
             o += 8;   // per-wire trailer
 
             if( wire.points.size() >= 2 )
+            {
+                // Emit one net-name label per sheet the net appears on, anchored at a wire
+                // endpoint so it labels the actual conductor (DipTrace net ports have no usable
+                // stored position).
+                int sheetIdx = wire.sheetIndex;
+
+                if( sheetIdx < 0 || sheetIdx >= m_numSheets )
+                    sheetIdx = 0;
+
+                if( !netName.IsEmpty()
+                    && seenNetSheets.insert( { netName, sheetIdx } ).second )
+                {
+                    m_netLabels.push_back( { netName, wire.points.front(), sheetIdx } );
+                }
+
                 m_wires.push_back( std::move( wire ) );
+            }
         }
 
         if( brokeEarly )
@@ -2174,18 +2532,17 @@ void SCH_PARSER::createKiCadObjects()
             getOrCreateSheet( i );
     }
 
+    // Index the decoded wire geometry by position so each symbol and label can be routed to the
+    // sheet it connects to (DipTrace does not record sheet membership on components).
+    buildWirePointSheets();
+    buildComponentPartIds();
+    m_lastSymbolPartId = -1;
+
     for( const DCH_COMPONENT& comp : m_components )
     {
-        int sheetIdx = comp.sheetIndex;
-
-        if( sheetIdx < 0 || sheetIdx >= m_numSheets )
-            sheetIdx = 0;
-
-        SCH_SCREEN* screen = getOrCreateSheet( sheetIdx );
-
         try
         {
-            createSymbolInstance( comp, screen );
+            createSymbolInstance( comp, m_rootSheet->GetScreen() );
         }
         catch( const std::exception& e )
         {
@@ -2327,7 +2684,7 @@ void SCH_PARSER::createKiCadObjects()
         m_reporter->Report(
                 wxString::Format( _( "DipTrace import: loaded %zu components, %zu buses, "
                                      "%zu net labels from version %d file with %d sheets." ),
-                                  m_components.size(), m_buses.size(), m_nets.size(), m_version,
+                                  m_components.size(), m_buses.size(), m_netLabels.size(), m_version,
                                   m_numSheets ),
                 RPT_SEVERITY_INFO );
     }

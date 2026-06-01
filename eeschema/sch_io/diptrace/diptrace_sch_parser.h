@@ -150,6 +150,15 @@ struct DCH_NET_ENTRY
 };
 
 
+/// A net-name label to place on a specific sheet, derived from the net/wire section.
+struct DCH_NET_LABEL
+{
+    wxString name;
+    VECTOR2I pos;                ///< KiCad nm, a wire endpoint carrying the net
+    int      sheetIndex = 0;
+};
+
+
 /// A single schematic wire decoded from the net/wire section.
 struct DCH_WIRE
 {
@@ -274,7 +283,7 @@ private:
     /**
      * Create a SCH_SYMBOL instance on the given screen from a DipTrace component.
      */
-    void createSymbolInstance( const DCH_COMPONENT& aComp, SCH_SCREEN* aScreen );
+    void createSymbolInstance( const DCH_COMPONENT& aComp, SCH_SCREEN* aFallbackScreen );
 
     /**
      * Create net label objects from parsed net entries.
@@ -286,6 +295,38 @@ private:
 
     /// Synthesize junctions where conductors coincide (DipTrace stores none explicitly).
     void createJunctions();
+
+    /// Build the maps from wire-point position to the sheet(s) and part(s) connecting there, and
+    /// the part-id -> sheet map used for deterministic sheet assignment.
+    void buildWirePointSheets();
+
+    /// Enumerate every component header in the file (real components and net ports alike) so each
+    /// component's file offset maps to its DipTrace part id.  Fills m_offsetToPartId.
+    void buildComponentPartIds();
+
+    /// True if a component record header (placement + five header strings) starts at aOffset.
+    /// Looser than scanComponentBoundaries so net ports are enumerated too.
+    bool isComponentHeaderAt( size_t aOffset ) const;
+
+    /**
+     * Pick the sheet a placed item belongs to by matching its connection points against the
+     * decoded wire geometry (DipTrace does not store a per-component sheet field).  Returns the
+     * majority-voted sheet, or aFallback when no point coincides with a wire.
+     */
+    int sheetForPositions( const std::vector<VECTOR2I>& aPositions, int aFallback ) const;
+
+    /**
+     * Resolve a symbol's sheet from its pin connection points.  Wire endpoints carry both a part
+     * id and a sheet, so the candidate (partId, sheet) pairs are tallied; on identical/duplicate
+     * sheets the tie is broken by the monotonic part-id order (components are stored in part-id
+     * order), which selects the correct one of the duplicated sheets.  Falls back to position
+     * voting, then to the root sheet.  Updates m_lastSymbolPartId.
+     */
+    int sheetForComponentPins( const std::vector<VECTOR2I>& aConnectionPoints );
+
+    /// Resolve a (partId, sheet) -> hit-count tally to a sheet, preferring the highest-count pair
+    /// with a part id greater than the last assigned (monotonic).  Updates m_lastSymbolPartId.
+    int resolveSheetTally( const std::map<std::pair<int, int>, int>& aTally );
 
     /**
      * Determine the pin orientation from the stub direction vector.
@@ -328,6 +369,31 @@ private:
     std::vector<DCH_BUS_ENTRY>   m_buses;
     std::vector<DCH_NET_ENTRY>   m_nets;
     std::vector<DCH_WIRE>        m_wires;
+
+    /// Wire-point position (KiCad nm) -> set of sheet indices carrying a wire there.  Used to
+    /// recover each symbol's / label's owning sheet, which DipTrace stores only implicitly.
+    std::map<std::pair<int, int>, std::set<int>> m_wirePointSheets;
+
+    /// Wire-endpoint position (KiCad nm) -> (partId, sheet) pairs of the parts connecting there.
+    /// Lets a symbol recover its exact part id and disambiguate duplicate sheets.
+    std::map<std::pair<int, int>, std::vector<std::pair<int, int>>> m_pointPartSheets;
+
+    /// Largest part id assigned to a symbol so far; enforces the monotonic part-id order used to
+    /// disambiguate identical duplicate sheets.
+    int                          m_lastSymbolPartId = -1;
+
+    /// File offset of the component section start, used to enumerate components in part-id order.
+    size_t                       m_componentSectionStart = 0;
+
+    /// Component start offset -> DipTrace part id (its index in the in-file component order).
+    std::map<size_t, int>        m_offsetToPartId;
+
+    /// DipTrace part id -> sheet index, resolved from the wire connectivity.  This places a symbol
+    /// on its true sheet even when its pin geometry was mis-parsed.
+    std::map<int, int>           m_partIdSheet;
+
+    /// Net-name labels (one per net per sheet) derived from the net/wire section.
+    std::vector<DCH_NET_LABEL>   m_netLabels;
 
     // KiCad object management
     std::vector<SCH_SHEET*>                         m_sheets;       ///< One per DipTrace sheet
