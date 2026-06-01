@@ -218,12 +218,15 @@ void COMPONENT::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 
         aOut->Print( 0, ")\n" );
 
-        // Add DNP and Exclude from BOM properties if we have them
+        // Add DNP, Exclude from BOM, and Exclude from Position Files properties if we have them
         if( m_properties.count( "dnp" ) )
             aOut->Print( nl + 1, "(property (name \"dnp\"))\n" );
 
         if( m_properties.count( "exclude_from_bom" ) )
             aOut->Print( nl + 1, "(property (name \"exclude_from_bom\"))\n" );
+
+        if( m_properties.count( "exclude_from_pos_files" ) )
+            aOut->Print( nl + 1, "(property (name \"exclude_from_pos_files\"))\n" );
 
         if( !m_variants.empty() )
         {

@@ -566,7 +566,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
             component->SetFields( fields );
 
-            // Add DNP and Exclude from BOM properties
+            // Add DNP, Exclude from BOM, and Exclude from Position Files properties
             std::map<wxString, wxString> properties;
 
             if( footprint->GetAttributes() & FP_DNP )
@@ -574,6 +574,9 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
             if( footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM )
                 properties.emplace( "exclude_from_bom", "" );
+
+            if( footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES )
+                properties.emplace( "exclude_from_pos_files", "" );
 
             component->SetProperties( properties );
 
