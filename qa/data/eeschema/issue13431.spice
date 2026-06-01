@@ -4,8 +4,8 @@ KiCad schematic
 .tran 10us 20ms uic
 .option INTERP
 .subckt OPAMP INon IInv out Vp Vm g=100k
-  bGain gain gnd v={g*v(INon, IInv)}
-  bOut out gnd v={v(gain)> v(Vp) ? v(Vp) : v(gain) < v(Vm) ? v(Vm) : v(gain)}
+  bGain gain 0 v={g*v(INon, IInv)}
+  bOut out 0 v={v(gain)> v(Vp) ? v(Vp) : v(gain) < v(Vm) ? v(Vm) : v(gain)}
 .ends OPAMP
 
 
