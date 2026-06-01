@@ -63,6 +63,21 @@ struct SDB_SECTION
     uint32_t dataOffset = 0;
     uint32_t stride = 0;
 
+    /// Where the payload really starts.
+    ///
+    /// Section 3 declares its in-memory size, which counts the section directory and a 48-byte
+    /// header that are written once as the file header and never repeated in its payload. So
+    /// @c dataOffset, which accumulates declared sizes, overshoots by that amount for every
+    /// section after it. Verified on all 91 corpus files: the decal-name table's JMPVIA_AAAAA
+    /// signature lands on section 14's @c payloadOffset + 44 -- its record's own name field --
+    /// on every one of them.
+    ///
+    /// Readers are being migrated onto this one at a time, each verified against the corpus,
+    /// because the scattered -1188 / -1232 / (count - 11) * 112 constants elsewhere already
+    /// cancel the same overshoot; switching a reader means deleting its constant in the same
+    /// edit. Do not swap them wholesale -- an attempt to do so broke every old-format board.
+    uint32_t payloadOffset = 0;
+
     bool     IsEmpty() const { return totalBytes == 0; }
     uint32_t End() const { return dataOffset + totalBytes; }
 };
@@ -158,6 +173,9 @@ private:
     static constexpr int     HEADER_SIZE = 10;
     static constexpr int     FOOTER_SIZE = 46;
     static constexpr int     DIR_ENTRY_SIZE = 16;
+
+    /// Fixed part of section 3's over-declaration, on top of the directory itself.
+    static constexpr int     SECTION3_HEADER_BYTES = 48;
 
     std::vector<uint8_t> m_data;
 

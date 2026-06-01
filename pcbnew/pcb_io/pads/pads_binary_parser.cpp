@@ -22,6 +22,8 @@
 #include <algorithm>
 #include <array>
 #include <cctype>
+#include <chrono>
+#include <cstdio>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
@@ -312,50 +314,54 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     m_parameters.origin.x = static_cast<double>( m_originX );
     m_parameters.origin.y = static_cast<double>( m_originY );
 
+#define KITIME( call ) do { auto _t0 = std::chrono::steady_clock::now(); call; \
+    fprintf( stderr, "PROF %-32s %8.1f ms\n", #call, \
+             std::chrono::duration<double, std::milli>( std::chrono::steady_clock::now() - _t0 ).count() ); } while( 0 )
+
     // The call order below is load-bearing; the dependency edges noted at each group fix it.
 
     // Container state loads the version, origin and parameter block.
-    parseBoardSetup();
-    parseMetadataRegion();
+    KITIME( parseBoardSetup() );
+    KITIME( parseMetadataRegion() );
 
     // Part placements, the part-cluster groups, and the recovery pass that adds omitted placements.
-    parsePartPlacements();
-    parseClusters();
-    recoverOmittedPlacements();
+    KITIME( parsePartPlacements() );
+    KITIME( parseClusters() );
+    KITIME( recoverOmittedPlacements() );
 
     // Padstacks and the decal / part-type tables that linkPartsToDecals joins at the end.
-    parsePadStacks();
-    parseDecalNameTable();
-    parsePartTypeTable();
-    parsePartDecals();
+    KITIME( parsePadStacks() );
+    KITIME( parseDecalNameTable() );
+    KITIME( parsePartTypeTable() );
+    KITIME( parsePartDecals() );
 
     // The outline origin must resolve before the outline, whose vertices are DRW-origin-relative.
-    parseBoardOutlineDrwOrigin();
-    parseBoardOutline();
+    KITIME( parseBoardOutlineDrwOrigin() );
+    KITIME( parseBoardOutline() );
 
     // Net names first; the net-class and diff-pair passes key off the net records they produce.
-    parseNetNames();
-    parseNetClasses();
-    parseDiffPairs();
+    KITIME( parseNetNames() );
+    KITIME( parseNetClasses() );
+    KITIME( parseDiffPairs() );
 
     // Route-cell orientation uses placed terminal centers as anchors, so placements must have
     // their physical decals before structural route geometry is decoded.
-    linkPartsToDecals();
+    KITIME( linkPartsToDecals() );
 
     // Structural geometry. computeSec12Base and buildOwnerRuns establish the sec12 vertex base and
     // the owner-run cursors that the keepout, copper-shape and dimension decoders walk (the first
     // two through fetchOwnerLoop).
-    parseTextRecords();
-    parseRouteVertices();
-    computeSec12Base();
-    buildOwnerRuns();
-    parseKeepouts();
-    parseCopperShapes();
-    parseCopperPours();
-    parseDimensions();
-    parseLayerStackup();
+    KITIME( parseTextRecords() );
+    KITIME( parseRouteVertices() );
+    KITIME( computeSec12Base() );
+    KITIME( buildOwnerRuns() );
+    KITIME( parseKeepouts() );
+    KITIME( parseCopperShapes() );
+    KITIME( parseCopperPours() );
+    KITIME( parseDimensions() );
+    KITIME( parseLayerStackup() );
 
-    resolveNetAnchors();
+    KITIME( resolveNetAnchors() );
 
     m_parts.erase( std::remove_if( m_parts.begin(), m_parts.end(),
                                    []( const PART& p )
@@ -1358,7 +1364,9 @@ void BINARY_PARSER::parseDecalNameTable()
         return;
     }
 
-    static constexpr int DECAL_HDR_OFFSET = 1188;
+    // The table is section 14's own records; +44 is the NAME field within one. Reached from the
+    // corrected payload offset, so no header-size constant is needed.
+    static constexpr int DECAL_NAME_OFFSET = 44;
     static constexpr int REC_SIZE = 112;
     static constexpr int STACK_START_OFFSET = 44;
     static constexpr int SENTINEL_OFFSET = 64;
@@ -1368,10 +1376,10 @@ void BINARY_PARSER::parseDecalNameTable()
 
     const SDB_SECTION* sec14 = getSection( SECTION::DecalHeader );
 
-    if( !sec14 || sec14->count == 0 || sec14->dataOffset < DECAL_HDR_OFFSET )
+    if( !sec14 || sec14->count == 0 )
         return;
 
-    uint32_t start = sec14->dataOffset - DECAL_HDR_OFFSET;
+    uint32_t start = sec14->payloadOffset + DECAL_NAME_OFFSET;
 
     if( start + 12 > m_data.size() || m_sdb.RecordAt( start ).Str( 0, 12 ) != "JMPVIA_AAAAA" )
         return;
@@ -1528,16 +1536,17 @@ void BINARY_PARSER::parsePartTypeTable()
 
     const bool isV2022 = ( m_version == 0x2022 );
 
-    const uint32_t hdrOffset = isV2022 ? 0 : 1232;
+    // The modern table's old "-1232" was the section-3 overshoot; the corrected payload offset
+    // expresses it structurally. v0x2022 indexes from its declared offset instead.
     const uint32_t recSize   = isV2022 ? 208 : 224;
     const uint32_t decalOff  = isV2022 ? 112 : 96;
 
     const SDB_SECTION* sec17 = getSection( SECTION::ParttypeDefs );
 
-    if( !sec17 || sec17->count == 0 || sec17->dataOffset < hdrOffset )
+    if( !sec17 || sec17->count == 0 )
         return;
 
-    uint32_t start = sec17->dataOffset - hdrOffset;
+    uint32_t start = isV2022 ? sec17->dataOffset : sec17->payloadOffset;
 
     // The parttype's own name (the *PARTTYPE alias, e.g. a manufacturer part number such as
     // GRM15XR71C103KA86D that resolves to a generic decal like C-0402) sits at +44 in the
@@ -1693,8 +1702,11 @@ void BINARY_PARSER::parseTerminals()
     // 8) is one: its stream began at pin 31, so J31/J32 decoded 172 terminals starting at pin 34
     // and 277 of 634 pins landed on the wrong net. Signed arithmetic plus a bounds check keeps
     // the wrap impossible without discarding those designs.
-    int64_t signedPoolBase = static_cast<int64_t>( sec14 ? sec14->dataOffset : 0 )
-                             + ( static_cast<int64_t>( sec14 ? sec14->count : 0 ) - 11 ) * 112 + 44;
+    // The pool follows section 14's records: its old "-11 records" term was 11 * 112 = 1232,
+    // i.e. the section-3 overshoot, so from the corrected payload offset it is simply the record
+    // after the last one, +44.
+    int64_t signedPoolBase = static_cast<int64_t>( sec14 ? sec14->payloadOffset : 0 )
+                             + static_cast<int64_t>( sec14 ? sec14->count : 0 ) * 112 + 44;
 
     bool poolInBounds = sec14 && signedPoolBase >= 0
                         && signedPoolBase + static_cast<int64_t>( POOL_SIZE ) * TERM_SIZE
@@ -1762,9 +1774,9 @@ void BINARY_PARSER::parseTerminals()
         // Small v0x2024 databases serialize the unified terminal stream directly after the
         // complete 112-byte decal-name table. Their terminal object pointer is at +16 rather
         // than +20; the following +20 word is pin-name metadata.
-        if( m_version == 0x2024 && sec14 && sec14->count < 11 && sec14->dataOffset >= 1188 )
+        if( m_version == 0x2024 && sec14 && sec14->count < 11 )
         {
-            size_t base = static_cast<size_t>( sec14->dataOffset ) - 1188
+            size_t base = static_cast<size_t>( sec14->payloadOffset ) + 44
                           + static_cast<size_t>( sec14->count ) * 112;
 
             if( base <= m_data.size() && bytes <= m_data.size() - base )
@@ -3154,9 +3166,12 @@ void BINARY_PARSER::parseNetNamesNew()
         {
             for( size_t off = 0; off + NET_RECORD_SIZE <= m_data.size(); ++off )
             {
+                if( m_cursor.U32At( off + 20 ) != 0x0000FFFE )
+                    continue;
+
                 SDB_RECORD rec = m_sdb.RecordAt( off );
 
-                if( rec.U32( 20 ) != 0x0000FFFE || rec.U32( 36 ) != SDB_FIELD_UNSET || rec.U32( 64 ) != SDB_FIELD_UNSET
+                if( rec.U32( 36 ) != SDB_FIELD_UNSET || rec.U32( 64 ) != SDB_FIELD_UNSET
                     || rec.U32( 92 ) != 0xFFFFFFFE )
                 {
                     continue;
@@ -3240,13 +3255,13 @@ void BINARY_PARSER::parseNetConnectionsNew()
     if( !connections || !nets || connections->count == 0 || nets->stride != netRecordSize )
         return;
 
+    // Called at every byte offset in the file, so both reads are short-circuited behind the
+    // marker rather than issued up front.
     auto validRecord = [&]( size_t aOffset )
     {
-        if( !m_cursor.InBounds( aOffset, RECORD_SIZE ) )
-            return false;
-
-        SDB_RECORD rec = m_sdb.RecordAt( aOffset );
-        return ( rec.U32( 20 ) & 0xFFFFFFC0U ) == MARKER && ( rec.U32( 52 ) & 0xFFFFU ) == FLAG;
+        return m_cursor.InBounds( aOffset, RECORD_SIZE )
+               && ( m_cursor.U32At( aOffset + 20 ) & 0xFFFFFFC0U ) == MARKER
+               && ( m_cursor.U32At( aOffset + 52 ) & 0xFFFFU ) == FLAG;
     };
 
     size_t runBase = 0;
@@ -4148,12 +4163,11 @@ std::vector<NET_CLASS_RULE_EDGE> BINARY_PARSER::collectNetClassRuleEdges( const 
 
     for( size_t off = 0; off + EDGE_SIZE <= m_data.size(); ++off )
     {
-        SDB_RECORD rec = m_sdb.RecordAt( off );
-
-        if( rec.U32( EDGE_TAG ) != EDGE_TAG_VALUE )
+        if( m_cursor.U32At( off + EDGE_TAG ) != EDGE_TAG_VALUE )
             continue;
 
-        uint32_t owner = rec.U32( EDGE_OWNER );
+        SDB_RECORD rec = m_sdb.RecordAt( off );
+        uint32_t   owner = rec.U32( EDGE_OWNER );
 
         if( !aOwnerSet.count( owner ) )
             continue;
@@ -4694,6 +4708,7 @@ void BINARY_PARSER::parseRouteVertices()
     uint32_t             bestPhase = 0;
     size_t               bestScore = 0;
 
+    auto _pt_phaseScan = std::chrono::steady_clock::now();
     for( uint32_t phase = 0; phase < stride; ++phase )
     {
         size_t score = 0;
@@ -4714,6 +4729,7 @@ void BINARY_PARSER::parseRouteVertices()
             bestPhase = phase;
         }
     }
+    fprintf( stderr, "  PROF.%s %8.1f ms\n", "phaseScan", std::chrono::duration<double,std::milli>( std::chrono::steady_clock::now() - _pt_phaseScan ).count() );
 
     if( bestScore == 0 )
         return;
@@ -4721,6 +4737,7 @@ void BINARY_PARSER::parseRouteVertices()
     std::set<std::pair<int32_t, int32_t>> seenVias;
     std::set<std::pair<int32_t, int32_t>> routeAnchorPoints;
 
+    auto _pt_emitPass = std::chrono::steady_clock::now();
     for( size_t typeByte = scanStart + bestPhase; typeByte + 6 <= scanEnd; typeByte += stride )
     {
         uint8_t type = m_cursor.U8At( typeByte );
@@ -4760,6 +4777,7 @@ void BINARY_PARSER::parseRouteVertices()
         via.viaIndex = m_cursor.U8At( typeByte - 3 );
         viaLocations.push_back( via );
     }
+    fprintf( stderr, "  PROF.%s %8.1f ms\n", "emitPass", std::chrono::duration<double,std::milli>( std::chrono::steady_clock::now() - _pt_emitPass ).count() );
 
     for( const PART& part : m_parts )
     {
@@ -4869,25 +4887,40 @@ void BINARY_PARSER::parseRouteVertices()
             return value;
         };
 
-        for( size_t pos = scanStart; pos + layerBytes + cellBytes <= scanEnd; ++pos )
+        auto _pt_layerTableScan = std::chrono::steady_clock::now();
+        // This tests every byte position in the payload, so its per-position cost sets the
+        // decoder's runtime on large files. seenLayers is a generation-stamped table reused
+        // across positions rather than a set built and torn down at each one, and layerOrder
+        // is cleared rather than reallocated.
+        std::vector<uint64_t> seenLayers( routeLayers->count, 0 );
+        std::vector<int>      layerOrder;
+        uint64_t              generation = 0;
+
+        layerOrder.reserve( routeLayers->count );
+
+        for( size_t pos = std::max( scanStart, objectBytes ); pos + layerBytes + cellBytes <= scanEnd; ++pos )
         {
-            if( pos < objectBytes )
+            // A layer table opens with a serialized index inside the layer count, which rejects
+            // nearly every position before any per-position bookkeeping runs.
+            if( m_cursor.U16At( pos ) >= routeLayers->count )
                 continue;
 
-            bool             layerTableMatches = true;
-            std::set<uint16_t> seenLayers;
-            std::vector<int> layerOrder;
+            bool layerTableMatches = true;
+
+            ++generation;
+            layerOrder.clear();
 
             for( uint32_t layer = 0; layer < routeLayers->count; ++layer )
             {
                 uint16_t serializedLayer = m_cursor.U16At( pos + layer * 2 );
 
-                if( serializedLayer >= routeLayers->count || !seenLayers.insert( serializedLayer ).second )
+                if( serializedLayer >= routeLayers->count || seenLayers[serializedLayer] == generation )
                 {
                     layerTableMatches = false;
                     break;
                 }
 
+                seenLayers[serializedLayer] = generation;
                 layerOrder.push_back( serializedLayer );
             }
 
@@ -4924,9 +4957,10 @@ void BINARY_PARSER::parseRouteVertices()
             {
                 bestLayerTable = pos;
                 bestTagMatches = tagMatches;
-                bestLayerOrder = std::move( layerOrder );
+                bestLayerOrder = layerOrder;
             }
         }
+        fprintf( stderr, "  PROF.%s %8.1f ms\n", "layerTableScan", std::chrono::duration<double,std::milli>( std::chrono::steady_clock::now() - _pt_layerTableScan ).count() );
 
         if( bestLayerTable != 0 )
         {
@@ -4992,13 +5026,18 @@ void BINARY_PARSER::parseRouteVertices()
                 return std::nullopt;
             };
 
+            auto _pt_headerScan2024 = std::chrono::steady_clock::now();
             for( size_t pos = scanStart; !legacyObjects && pos + 32 <= scanEnd; ++pos )
             {
+                // The 0x2001 marker is what discriminates a header; reading layer and flags
+                // ahead of it costs two whole-file passes' worth of loads for nothing.
+                if( m_cursor.U32At( pos + headerMarkerOffset ) != 0x2001 )
+                    continue;
+
                 uint32_t layer = m_cursor.U32At( pos + headerLayerOffset );
                 uint32_t flags = m_cursor.U32At( pos + headerFlagsOffset );
 
-                if( m_cursor.U32At( pos + headerMarkerOffset ) == 0x2001 && layer < routeLayers->count
-                    && ( flags & ~0x80000000U ) == 0 )
+                if( layer < routeLayers->count && ( flags & ~0x80000000U ) == 0 )
                 {
                     ++serializedLayerCounts[layer];
 
@@ -5021,6 +5060,7 @@ void BINARY_PARSER::parseRouteVertices()
                     }
                 }
             }
+            fprintf( stderr, "  PROF.%s %8.1f ms\n", "headerScan2024", std::chrono::duration<double,std::milli>( std::chrono::steady_clock::now() - _pt_headerScan2024 ).count() );
 
             auto validHeaderAt = [&]( size_t aBase )
             {
@@ -5034,6 +5074,7 @@ void BINARY_PARSER::parseRouteVertices()
                        && matchingObjectWidth( halfWidth * 2 ).has_value();
             };
 
+            auto _pt_headerChainScan = std::chrono::steady_clock::now();
             for( size_t pos = scanStart; !legacyObjects && m_version != 0x2024 && pos + 32 <= scanEnd; ++pos )
             {
                 if( !validHeaderAt( pos ) || ( pos >= scanStart + 32 && validHeaderAt( pos - 32 ) ) )
@@ -5127,6 +5168,7 @@ void BINARY_PARSER::parseRouteVertices()
                 if( visited.size() != headers.size() )
                     headerChains.resize( chainsBefore );
             }
+            fprintf( stderr, "  PROF.%s %8.1f ms\n", "headerChainScan", std::chrono::duration<double,std::milli>( std::chrono::steady_clock::now() - _pt_headerChainScan ).count() );
 
             struct ROUTE_CELL
             {
@@ -5746,7 +5788,10 @@ void BINARY_PARSER::parseRouteVertices()
                     size_t bestRotation = 0;
                     size_t bestRotationScore = 0;
 
-                    for( size_t rotation = 0; rotation < std::min<size_t>( entry60->count, 128 ); ++rotation )
+                    // The rotation is the offset between the header's node ordinals and the section-60 node
+                    // array, so its range is a property of the board's node count, not a constant. The
+                    // old 128 bound simply ran out on larger boards.
+                    for( size_t rotation = 0; rotation < std::min<size_t>( entry60->count, 4096 ); ++rotation )
                     {
                         size_t score = 0;
 

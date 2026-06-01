@@ -123,6 +123,15 @@ void PADS_SDB::parseDirectory()
         {
             section.dataOffset = payloadOffset;
 
+            // Sections up to and including 3 precede the over-declaration, so their declared
+            // offset is already correct; everything after it is short by the directory plus a
+            // 48-byte header. See SDB_SECTION::payloadOffset.
+            size_t overshoot = dirSize + SECTION3_HEADER_BYTES;
+
+            section.payloadOffset = ( i > 3 && payloadOffset >= overshoot )
+                                            ? static_cast<uint32_t>( payloadOffset - overshoot )
+                                            : payloadOffset;
+
             if( section.count > 0 && section.totalBytes > 0 )
                 section.stride = section.totalBytes / section.count;
 
