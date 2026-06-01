@@ -21,7 +21,7 @@
 #     the post-component gap for `text_section`, `net_record`, and `copper_pour`
 #     records.
 # Because the locations are content-found rather than length-prefixed, the tail
-# of the file is exposed as `post_design_rules_tail` (a raw substream) and EVERY
+# of the file is exposed as `post_via_styles_tail` (a raw substream) and EVERY
 # structure the reader decodes is given a named type below.  A reader of this
 # .ksy therefore has a named type for every byte structure the C++ decodes; the
 # top-level stream simply does not chain them because the importer does not.
@@ -77,9 +77,12 @@ seq:
     repeat-expr: layer_count.value
   - id: font_style
     type: font_style(version.value)
-  - id: design_rules
-    type: design_rules(version.value, font_style.rule_name_count.value)
-  - id: post_design_rules_tail
+  - id: via_styles
+    type: via_styles(version.value)
+  - id: netclasses
+    type: netclasses(version.value)
+
+  - id: post_via_styles_tail
     size-eos: true
     doc: |
       Raw substream holding all boundary-scanned records.  The importer does not
@@ -255,24 +258,20 @@ types:
         type: int3
       - id: field_d
         type: int3
-      - id: rule_name_count
-        type: int3
 
-  design_rules:
+  via_styles:
     params:
       - id: version
         type: s4
-      - id: num_entries
-        type: s4
     seq:
-      - id: entries
-        type: design_rule_entry(version)
-        repeat: expr
-        repeat-expr: num_entries
-      - id: rule_set_count
+      - id: num_entries
         type: int3
+      - id: entries
+        type: via_style_entry(version)
+        repeat: expr
+        repeat-expr: num_entries.value
     types:
-      design_rule_entry:
+      via_style_entry:
         params:
           - id: version
             type: s4
@@ -289,8 +288,20 @@ types:
             type: int3
           - id: field_b
             type: int3
-
-      rule_set:
+            
+  netclasses:
+    params:
+      - id: version
+        type: s4
+    seq:
+      - id: num_entries
+        type: int3
+      - id: entries
+        type: netclass_entry(version)
+        repeat: expr
+        repeat-expr: num_entries.value
+    types:
+      netclass_entry:
         params:
           - id: version
             type: s4
@@ -299,26 +310,72 @@ types:
             type: dt_string(version)
           - id: field_a
             type: int3
-          - id: flags
-            type: u1
-            repeat: expr
-            repeat-expr: 4
+          - id: value_1
+            type: int4
           - id: block_count
             type: int3
+            valid:
+              expr: 
+                _.value < 10
           - id: blocks
-            type: rule_set_block
+            type: netclass_block
             repeat: expr
             repeat-expr: block_count.value
+          
+          - id: trailer_a
+            type: s4
+            valid: 1000000000
+          - id: trailer_b
+            type: s4
+            valid: 1000000000
+            
+          - id: unk1_count
+            type: int3
+                
+          - id: unk1_data
+            type: int3
+            repeat: expr
+            repeat-expr: unk1_count.value
+                
+          - id: unk1_pad_1
+            type: s4
+          - id: unk2_count
+            type: int3
+            valid: 
+              expr:
+                _.value == 0
+            
+          - id: unk3_sth
+            type: int3
+            valid: 
+              expr:
+                _.value == 10000
+            
+          - id: unk_pos_a
+            type: int4
+          - id: unk_pos_b
+            type: int4
+          - id: unk_pos_c
+            type: int4
+            
+          - id: unk4_count
+            type: int3
+            valid: 
+              expr:
+                _.value == 0
+                
+          - id: unk5_count
+            type: int3
 
-      rule_set_block:
+      netclass_block:
         seq:
           - id: values
             type: int4
             repeat: expr
-            repeat-expr: 26
+            repeat-expr: 25
 
   # ----------------------------------------------------------------------------
-  # Boundary-scanned tail records (post_design_rules_tail).
+  # Boundary-scanned tail records (post_via_styles_tail).
   # ----------------------------------------------------------------------------
 
   component_boundary:
