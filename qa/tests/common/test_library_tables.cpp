@@ -28,6 +28,9 @@
 #include <settings/settings_manager.h>
 #include <pegtl/contrib/analyze.hpp>
 
+#include <env_vars.h>
+#include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <libraries/library_manager.h>
 #include <libraries/library_table.h>
 #include <libraries/library_table_parser.h>
@@ -411,6 +414,46 @@ BOOST_AUTO_TEST_CASE( LibOverrideSettings )
     BOOST_REQUIRE( settings->m_LibOverrides.count( tablePath ) == 1 );
     manager.SetLibOverride( tablePath, nickname1, false, false );
     BOOST_REQUIRE( settings->m_LibOverrides.count( tablePath ) == 0 );
+}
+
+
+/**
+ * The stock-table reference URI written into a freshly created global table must only use the
+ * env-var token when the template-dir variable is defined externally (the relocatable-install
+ * case from https://gitlab.com/kicad/code/kicad/-/issues/23081). When the variable is at its
+ * built-in default the standard, resolved absolute path is preserved.
+ */
+BOOST_AUTO_TEST_CASE( StockTableReferenceURIHonorsExternalDefinition )
+{
+    const wxString   templateVar = ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) );
+    COMMON_SETTINGS* common = Pgm().GetCommonSettings();
+
+    BOOST_REQUIRE( common != nullptr );
+
+    ENV_VAR_MAP& vars = common->m_Env.vars;
+
+    // Preserve and restore the original entry so neighbouring tests are unaffected.
+    const bool         hadEntry = vars.count( templateVar ) > 0;
+    const ENV_VAR_ITEM savedEntry = hadEntry ? vars[templateVar] : ENV_VAR_ITEM();
+
+    for( LIBRARY_TABLE_TYPE type : { LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_TYPE::FOOTPRINT,
+                                     LIBRARY_TABLE_TYPE::DESIGN_BLOCK } )
+    {
+        ENV_VAR_ITEM& entry = vars[templateVar];
+
+        entry.SetDefinedExternally( false );
+        BOOST_CHECK_EQUAL( LIBRARY_MANAGER::StockTableReferenceURI( type ),
+                           LIBRARY_MANAGER::StockTablePath( type ) );
+
+        entry.SetDefinedExternally( true );
+        BOOST_CHECK_EQUAL( LIBRARY_MANAGER::StockTableReferenceURI( type ),
+                           LIBRARY_MANAGER::StockTableTokenizedURI( type ) );
+    }
+
+    if( hadEntry )
+        vars[templateVar] = savedEntry;
+    else
+        vars.erase( templateVar );
 }
 
 

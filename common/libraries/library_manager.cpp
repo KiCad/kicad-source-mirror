@@ -36,6 +36,7 @@
 #include <libraries/library_manager.h>
 
 using namespace std::chrono_literals;
+#include <settings/common_settings.h>
 #include <settings/kicad_settings.h>
 #include <settings/settings_manager.h>
 #include <wx/dir.h>
@@ -435,6 +436,34 @@ wxString LIBRARY_MANAGER::StockTablePath( LIBRARY_TABLE_TYPE aType )
 }
 
 
+wxString LIBRARY_MANAGER::StockTableTokenizedURI( LIBRARY_TABLE_TYPE aType )
+{
+    wxString templateDirVar = ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) );
+
+    return wxString::Format( wxS( "${%s}/%s" ), templateDirVar, tableFileName( aType ) );
+}
+
+
+wxString LIBRARY_MANAGER::StockTableReferenceURI( LIBRARY_TABLE_TYPE aType )
+{
+    const wxString templateDirVar = ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) );
+
+    // Only relocatable installs (AppImage, Nix) export the template-dir variable so the stock
+    // path follows the remounted prefix. There we store the unresolved token, which re-resolves
+    // each launch instead of dangling. A standard install leaves the variable at its built-in
+    // default, so we keep the historical resolved absolute path.
+    if( COMMON_SETTINGS* common = Pgm().GetCommonSettings() )
+    {
+        auto it = common->m_Env.vars.find( templateDirVar );
+
+        if( it != common->m_Env.vars.end() && it->second.GetDefinedExternally() )
+            return StockTableTokenizedURI( aType );
+    }
+
+    return StockTablePath( aType );
+}
+
+
 bool LIBRARY_MANAGER::IsTableValid( const wxString& aPath )
 {
     if( wxFileName fn( aPath ); fn.IsFileReadable() )
@@ -496,7 +525,7 @@ bool LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE aType, bool aPopulat
         chained.SetType( LIBRARY_TABLE_ROW::TABLE_TYPE_NAME );
         chained.SetNickname( wxT( "KiCad" ) );
         chained.SetDescription( _( "KiCad Default Libraries" ) );
-        chained.SetURI( defaultLib.GetFullPath() );
+        chained.SetURI( StockTableReferenceURI( aType ) );
     }
 
     try
