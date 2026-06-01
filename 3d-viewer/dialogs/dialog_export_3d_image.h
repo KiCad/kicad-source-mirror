@@ -25,6 +25,7 @@
 
 #include "dialog_shim.h"
 #include <3d_viewer/eda_3d_viewer_frame.h> // for EDA_3D_VIEWER_EXPORT_FORMAT
+#include <3d_viewer/eda_3d_viewer_settings.h>
 #include <wx/spinctrl.h>
 #include <wx/choice.h>
 #include <wx/stattext.h>
@@ -47,14 +48,15 @@ enum class RESOLUTION_UNITS
 class DIALOG_EXPORT_3D_IMAGE : public DIALOG_SHIM
 {
 public:
-    DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent,
-                            const wxSize& aSize );
+    DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize& aCanvasSize,
+                            EDA_3D_VIEWER_SETTINGS::EXPORT_IMAGE_SETTINGS* aCfg );
 
     wxSize GetSize() const { return wxSize( m_width, m_height ); }
     double GetXResolution() const { return m_xResolution; }
     double GetYResolution() const { return m_yResolution; }
 
 private:
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     void OnLockToggle( wxCommandEvent& aEvent );
@@ -72,6 +74,7 @@ private:
     void ConvertResolutionUnits( RESOLUTION_UNITS aFromUnit, RESOLUTION_UNITS aToUnit );
 
 private:
+    EDA_3D_VIEWER_SETTINGS::EXPORT_IMAGE_SETTINGS* m_cfg;
     EDA_3D_VIEWER_EXPORT_FORMAT m_format;
     wxSize m_originalSize;
     int m_width;

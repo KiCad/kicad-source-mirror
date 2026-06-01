@@ -178,6 +178,17 @@ public:
         int    projection_mode;
     };
 
+    struct EXPORT_IMAGE_SETTINGS
+    {
+        int    width;
+        int    height;
+        double x_resolution;
+        double y_resolution;
+        int    size_units;
+        int    resolution_units;
+        bool   lock_aspect_ratio;
+    };
+
     EDA_3D_VIEWER_SETTINGS();
 
     virtual ~EDA_3D_VIEWER_SETTINGS() {}
@@ -187,9 +198,10 @@ public:
     virtual bool MigrateFromLegacy( wxConfigBase* aLegacyConfig ) override;
 
 public:
-    AUI_PANELS      m_AuiPanels;
-    RENDER_SETTINGS m_Render;
-    CAMERA_SETTINGS m_Camera;
+    AUI_PANELS            m_AuiPanels;
+    RENDER_SETTINGS       m_Render;
+    CAMERA_SETTINGS       m_Camera;
+    EXPORT_IMAGE_SETTINGS m_ExportImage;
 
     bool                         m_UseStackupColors;
     std::vector<LAYER_PRESET_3D> m_LayerPresets;

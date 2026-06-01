@@ -28,6 +28,8 @@
 #include <tool/tool_manager.h>
 #include <eda_3d_canvas.h>
 #include <eda_3d_viewer_frame.h>
+#include <eda_3d_viewer_settings.h>
+#include <settings/settings_manager.h>
 #include <id.h>
 #include <kiface_base.h>
 #include <tools/eda_3d_controller.h>
@@ -411,12 +413,11 @@ int EDA_3D_CONTROLLER::ExportImage( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    static wxSize lastSize( viewer->GetCanvas()->GetClientSize() );
-    static EDA_3D_VIEWER_EXPORT_FORMAT lastFormat = EDA_3D_VIEWER_EXPORT_FORMAT::PNG;
-    DIALOG_EXPORT_3D_IMAGE dlg( viewer, currentSize );
+    EDA_3D_VIEWER_SETTINGS* cfg = GetAppSettings<EDA_3D_VIEWER_SETTINGS>( "3d_viewer" );
+    DIALOG_EXPORT_3D_IMAGE  dlg( viewer, currentSize, cfg ? &cfg->m_ExportImage : nullptr );
 
     if( dlg.ShowModal() == wxID_OK )
-        viewer->ExportImage( lastFormat, dlg.GetSize() );
+        viewer->ExportImage( fmt, dlg.GetSize() );
 
     return 0;
 }

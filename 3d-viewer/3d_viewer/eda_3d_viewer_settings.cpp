@@ -418,6 +418,15 @@ EDA_3D_VIEWER_SETTINGS::EDA_3D_VIEWER_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "camera.projection_mode",
                                            &m_Camera.projection_mode, 1 ) );
 
+    m_params.emplace_back( new PARAM<int>( "export_image.width", &m_ExportImage.width, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "export_image.height", &m_ExportImage.height, 0 ) );
+    m_params.emplace_back( new PARAM<double>( "export_image.x_resolution", &m_ExportImage.x_resolution, 300.0 ) );
+    m_params.emplace_back( new PARAM<double>( "export_image.y_resolution", &m_ExportImage.y_resolution, 300.0 ) );
+    m_params.emplace_back( new PARAM<int>( "export_image.size_units", &m_ExportImage.size_units, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "export_image.resolution_units", &m_ExportImage.resolution_units, 0 ) );
+    m_params.emplace_back(
+            new PARAM<bool>( "export_image.lock_aspect_ratio", &m_ExportImage.lock_aspect_ratio, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "use_stackup_colors",
                                             &m_UseStackupColors, true ) );
     m_params.emplace_back( new PARAM_LAYER_PRESET_3D( "layer_presets",
