@@ -30,7 +30,9 @@
 #include <symbol_editor/lib_symbol_library_manager.h>
 #include <sch_field.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.h>
 #include <sch_io/sch_io_mgr.h>
+#include <richio.h>
 
 #include <wx/filename.h>
 
@@ -439,6 +441,136 @@ BOOST_AUTO_TEST_CASE( SaveLibraryAsToNewFile )
 
         if( derived )
             BOOST_CHECK( derived->IsDerived() );
+    }
+
+    if( wxFileName::DirExists( tempDir ) )
+        wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+/**
+ * Test that SetParent keeps the recorded parent name in sync.
+ *
+ * The "Save As" / "Save Copy As" crash (issue #24412) happened because the SEXPR writer
+ * dereferenced the live parent pointer to obtain the parent name. That pointer can dangle (the
+ * parent LIB_SYMBOL uses a null_deleter shared_ptr whose control block can outlive the object),
+ * so the writer now serializes the recorded parent name instead. For that to be correct, the
+ * recorded name must track the live parent.
+ */
+BOOST_AUTO_TEST_CASE( SetParentKeepsParentNameInSync )
+{
+    auto parent = std::make_unique<LIB_SYMBOL>( wxS( "BaseSymbol" ) );
+
+    LIB_SYMBOL derived( wxS( "DerivedSymbol" ) );
+    BOOST_CHECK( derived.GetParentName().IsEmpty() );
+
+    derived.SetParent( parent.get() );
+    BOOST_CHECK( derived.IsDerived() );
+    BOOST_CHECK_EQUAL( derived.GetParentName(), wxS( "BaseSymbol" ) );
+
+    // Detaching the live pointer must not erase the recorded name, so a derived symbol whose live
+    // parent has been lost can still be serialized by name.
+    derived.SetParent( static_cast<LIB_SYMBOL*>( nullptr ) );
+    BOOST_CHECK_EQUAL( derived.GetParent().lock(), nullptr );
+    BOOST_CHECK_EQUAL( derived.GetParentName(), wxS( "BaseSymbol" ) );
+}
+
+
+/**
+ * Test that serializing a derived symbol uses the recorded parent name rather than dereferencing
+ * the live parent pointer.
+ *
+ * This guards the "Save As" / "Save Copy As" crash from the symbol editor: a derived symbol (e.g.
+ * an STM32 part inheriting from a base symbol) is copied to another library and the buffered parent
+ * can be freed before the child is written out. In release builds the writer dereferenced the
+ * (dangling) parent pointer and crashed; debug builds only tripped a wxASSERT, which is why the
+ * issue was "not reproducible" for testers using debug builds.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24412
+ */
+BOOST_AUTO_TEST_CASE( SerializeDerivedSymbolUsesParentName )
+{
+    auto parent = std::make_unique<LIB_SYMBOL>( wxS( "BaseSymbol" ) );
+    parent->GetValueField().SetText( wxS( "BaseSymbol" ) );
+    parent->GetReferenceField().SetText( wxS( "U" ) );
+
+    LIB_SYMBOL derived( wxS( "DerivedSymbol" ) );
+    derived.SetParent( parent.get() );
+    derived.GetValueField().SetText( wxS( "DerivedSymbol" ) );
+
+    BOOST_REQUIRE( derived.IsDerived() );
+
+    // Force the recorded name to differ from the live parent's name. The writer must emit the
+    // recorded name, proving it does not read through the live (potentially dangling) pointer.
+    derived.SetParentName( wxS( "RecordedParent" ) );
+
+    STRING_FORMATTER formatter;
+
+    BOOST_REQUIRE_NO_THROW(
+            SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( &derived, formatter, wxEmptyString, true ) );
+
+    const std::string out = formatter.GetString();
+
+    BOOST_CHECK_MESSAGE( out.find( "(extends \"RecordedParent\")" ) != std::string::npos,
+                         "Derived symbol should serialize (extends ...) using the recorded parent name" );
+}
+
+
+/**
+ * Test that "Save Copy As" of a derived symbol to a new library produces a valid, round-trippable
+ * result where the copied child keeps a valid parent link and parent name.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24412
+ */
+BOOST_AUTO_TEST_CASE( SaveCopyAsDerivedSymbolToNewLibrary )
+{
+    wxString tempDir = wxFileName::CreateTempFileName( wxS( "kicad_test_" ) );
+    wxRemoveFile( tempDir );
+    wxFileName::Mkdir( tempDir );
+
+    wxString dstPath = wxFileName( tempDir, wxS( "copy_target.kicad_sym" ) ).GetFullPath();
+
+    // Build an in-memory parent/derived pair like the symbol editor holds while editing.
+    auto parent = std::make_unique<LIB_SYMBOL>( wxS( "BaseSymbol" ) );
+    parent->GetValueField().SetText( wxS( "BaseSymbol" ) );
+    parent->GetReferenceField().SetText( wxS( "U" ) );
+
+    auto derived = std::make_unique<LIB_SYMBOL>( wxS( "DerivedSymbol" ) );
+    derived->SetParent( parent.get() );
+    derived->SetParentName( parent->GetName() );
+    derived->GetValueField().SetText( wxS( "DerivedSymbol" ) );
+
+    // Save the parent then the child to a brand new library, mirroring SYMBOL_SAVE_AS_HANDLER.
+    {
+        IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        std::map<std::string, UTF8> properties;
+        properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, "" );
+
+        BOOST_CHECK_NO_THROW(
+                plugin->SaveSymbol( dstPath, new LIB_SYMBOL( *parent ), &properties ) );
+
+        LIB_SYMBOL* dstParent = plugin->LoadSymbol( dstPath, wxS( "BaseSymbol" ), &properties );
+        BOOST_REQUIRE( dstParent != nullptr );
+
+        LIB_SYMBOL* newChild = new LIB_SYMBOL( *derived );
+        newChild->SetParent( dstParent );
+        newChild->SetParentName( dstParent->GetName() );
+
+        BOOST_CHECK_NO_THROW( plugin->SaveSymbol( dstPath, newChild, &properties ) );
+        BOOST_CHECK_NO_THROW( plugin->SaveLibrary( dstPath ) );
+    }
+
+    // Reload and verify the derived symbol survived with a valid parent.
+    {
+        IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+
+        LIB_SYMBOL* reloadedParent = plugin->LoadSymbol( dstPath, wxS( "BaseSymbol" ) );
+        LIB_SYMBOL* reloadedChild = plugin->LoadSymbol( dstPath, wxS( "DerivedSymbol" ) );
+
+        BOOST_CHECK( reloadedParent != nullptr );
+        BOOST_REQUIRE( reloadedChild != nullptr );
+        BOOST_CHECK( reloadedChild->IsDerived() );
+        BOOST_CHECK_EQUAL( reloadedChild->GetParent().lock().get(), reloadedParent );
     }
 
     if( wxFileName::DirExists( tempDir ) )

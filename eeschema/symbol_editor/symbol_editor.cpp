@@ -478,6 +478,12 @@ static std::vector<std::shared_ptr<LIB_SYMBOL>> GetParentChain( const LIB_SYMBOL
     while( sym->IsDerived() )
     {
         std::shared_ptr<LIB_SYMBOL> parent = sym->GetParent().lock();
+
+        // A symbol can report itself as derived while its parent pointer has already expired.
+        // Stop walking rather than push a null entry and dereference it on the next iteration.
+        if( !parent )
+            break;
+
         chain.push_back( parent );
         sym = parent;
     }
@@ -693,6 +699,11 @@ public:
                 // We should have stored this already, why didn't we get it back?
                 wxASSERT( newParent );
                 new_symbol.SetParent( newParent );
+
+                // Keep the recorded parent name in sync with the (possibly renamed) buffered
+                // parent so serialization has a valid fallback if the live pointer is lost.
+                if( newParent )
+                    new_symbol.SetParentName( newParent->GetName() );
             }
 
             newNames.push_back( newName );

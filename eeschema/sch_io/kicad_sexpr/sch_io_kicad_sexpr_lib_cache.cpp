@@ -550,9 +550,21 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
 
         wxASSERT( parent );
 
+        // Prefer the recorded parent name over dereferencing the live parent pointer. The parent
+        // LIB_SYMBOL uses a null_deleter shared_ptr, so the weak_ptr's control block can outlive the
+        // parent object (for example when a derived symbol is copied to another library and the
+        // buffered parent is freed before this symbol is serialized). In that state GetParent().lock()
+        // can return a non-null but dangling pointer, and reading parent->GetName() is a use-after-
+        // free that crashes release builds while only tripping the assertion above in debug builds.
+        // The recorded parent name is a value member and is always safe to read.
+        wxString parentName = aSymbol->GetParentName();
+
+        if( parentName.IsEmpty() && parent )
+            parentName = parent->GetName();
+
         aFormatter.Print( "(symbol %s (extends %s)",
                           name.c_str(),
-                          aFormatter.Quotew( parent->GetName() ).c_str() );
+                          aFormatter.Quotew( parentName ).c_str() );
 
         aSymbol->GetFields( orderedFields );
 

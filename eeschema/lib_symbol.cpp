@@ -527,9 +527,15 @@ void LIB_SYMBOL::SetParent( LIB_SYMBOL* aParent )
         }
 
         m_parent = aParent->SharedPtr();
+
+        // Keep the recorded parent name in sync so serialization never has to dereference the live
+        // parent pointer (which can dangle, see SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol).
+        m_parentName = aParent->GetName();
     }
     else
     {
+        // Only drop the live pointer. The recorded parent name is left untouched so a derived
+        // symbol whose live parent has been lost can still be serialized by name.
         m_parent.reset();
     }
 }
