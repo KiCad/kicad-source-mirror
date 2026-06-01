@@ -3097,6 +3097,9 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     }
     else
     {
+        // Hover-pick is only a fallback for an empty selection.
+        const bool hadInitialSelection = !m_selectionTool->GetSelection().Empty();
+
         // When not in free-pad mode we normally auto-promote selected pads to their parent
         // footprints.  But this is probably a little too dangerous for a destructive operation,
         // so we just do the promotion but not the deletion (allowing for a second delete to do
@@ -3109,6 +3112,12 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                 } );
 
         m_selectionTool->ReportFilteredLockedItems();
+
+        if( hadInitialSelection && selectionCopy.Empty() )
+        {
+            editFrame->PopTool( aEvent );
+            return 0;
+        }
 
         size_t beforeFPCount = selectionCopy.CountType( PCB_FOOTPRINT_T );
 
