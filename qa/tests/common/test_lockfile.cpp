@@ -63,7 +63,7 @@ void writeRaw( const wxString& aPath, const std::string& aContent )
 } // anonymous namespace
 
 
-BOOST_AUTO_TEST_SUITE( LockFile )
+BOOST_AUTO_TEST_SUITE( LockFileTests )
 
 
 BOOST_AUTO_TEST_CASE( AcquireFreshLock )
