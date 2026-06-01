@@ -4246,13 +4246,22 @@ void ALTIUM_PCB::ParseVias6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbF
         }
         }
 
-        if( elem.soldermask_expansion_manual )
-        {
-            via->SetFrontTentingMode( elem.is_tent_top ? TENTING_MODE::TENTED
-                                                       : TENTING_MODE::NOT_TENTED );
-            via->SetBackTentingMode( elem.is_tent_bottom ? TENTING_MODE::TENTED
-                                                         : TENTING_MODE::NOT_TENTED );
-        }
+        // Altium can size the solder mask opening from the hole edge instead of the via land.
+        // KiCad vias cannot represent a hole-referenced opening, so when the resulting opening
+        // does not clear the via land the pad copper is covered and the via is effectively tented.
+        bool tentTop = altiumViaSideIsTented( elem.is_tent_top, elem.soldermask_expansion_manual,
+                                              elem.soldermask_expansion_from_hole, elem.holesize,
+                                              elem.soldermask_expansion_front,
+                                              via->GetWidth( F_Cu ) );
+
+        bool tentBottom = altiumViaSideIsTented( elem.is_tent_bottom,
+                                                 elem.soldermask_expansion_manual,
+                                                 elem.soldermask_expansion_from_hole, elem.holesize,
+                                                 elem.soldermask_expansion_back,
+                                                 via->GetWidth( B_Cu ) );
+
+        via->SetFrontTentingMode( tentTop ? TENTING_MODE::TENTED : TENTING_MODE::NOT_TENTED );
+        via->SetBackTentingMode( tentBottom ? TENTING_MODE::TENTED : TENTING_MODE::NOT_TENTED );
 
         m_board->Add( via.release(), ADD_MODE::APPEND );
     }

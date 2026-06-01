@@ -841,6 +841,10 @@ struct AVIA6
     bool    soldermask_expansion_manual = false;
     bool    soldermask_expansion_linked = false;
 
+    // When true, the manual solder mask expansion is measured outward from the hole edge rather
+    // than from the via land (copper) edge.  Altium "Solder Mask Expansion From The Hole Edge".
+    bool    soldermask_expansion_from_hole = false;
+
     ALTIUM_LAYER    layer_start;
     ALTIUM_LAYER    layer_end;
     ALTIUM_PAD_MODE viamode;
@@ -972,6 +976,25 @@ bool altiumScopeExprMatchesPolygon( const wxString& aExpr );
  * Returns nullptr if no rule references polygons.
  */
 const ARULE6* selectAltiumPolygonRule( const std::vector<ARULE6>& aRulesByPriorityAsc );
+
+
+/**
+ * Decide whether one side of an Altium via should be tented when imported into KiCad.
+ *
+ * Returns the explicit Altium tent flag, except when the via uses a manual solder mask expansion
+ * measured from the hole edge.  KiCad vias cannot represent a hole-referenced opening, so when the
+ * resulting opening (hole + 2 * expansion) does not clear the via land the pad copper is covered
+ * and the side is treated as tented.
+ *
+ * @param aTentFlag      explicit Altium tent flag for this side
+ * @param aManual        true if the via carries a manual solder mask expansion
+ * @param aFromHole      true if the manual expansion is measured from the hole edge
+ * @param aHoleSize      via hole diameter (KiCad nm)
+ * @param aMaskExpansion solder mask expansion for this side (KiCad nm, may be negative)
+ * @param aLandDiameter  via land (copper) diameter for this side (KiCad nm)
+ */
+bool altiumViaSideIsTented( bool aTentFlag, bool aManual, bool aFromHole, uint32_t aHoleSize,
+                            int32_t aMaskExpansion, int aLandDiameter );
 
 
 #endif //ALTIUM_PARSER_PCB_H

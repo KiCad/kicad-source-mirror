@@ -81,6 +81,23 @@ const ARULE6* selectAltiumPolygonRule( const std::vector<ARULE6>& aRulesByPriori
 }
 
 
+bool altiumViaSideIsTented( bool aTentFlag, bool aManual, bool aFromHole, uint32_t aHoleSize,
+                            int32_t aMaskExpansion, int aLandDiameter )
+{
+    if( aTentFlag )
+        return true;
+
+    if( aManual && aFromHole )
+    {
+        int64_t opening = static_cast<int64_t>( aHoleSize ) + 2LL * aMaskExpansion;
+
+        return opening <= static_cast<int64_t>( aLandDiameter );
+    }
+
+    return false;
+}
+
+
 /*
  * Returns V7 layer ids for Mechanical 17 and above. Otherwise, V6 layer ids.
  */
@@ -1136,12 +1153,18 @@ AVIA6::AVIA6( ALTIUM_BINARY_PARSER& aReader )
 
         aReader.Skip( 4 );
         soldermask_expansion_front = aReader.ReadKicadUnit();
+
+        // Records that don't carry an explicit back expansion mirror the front value.
+        soldermask_expansion_back = soldermask_expansion_front;
+
         aReader.Skip( 8 );
 
         temp_byte = aReader.Read<uint8_t>();
         soldermask_expansion_manual = temp_byte & 0x02;
 
-        aReader.Skip( 7 );
+        soldermask_expansion_from_hole = aReader.Read<uint8_t>() & 0x01;
+
+        aReader.Skip( 6 );
 
         viamode = static_cast<ALTIUM_PAD_MODE>( aReader.Read<uint8_t>() );
 
@@ -1156,6 +1179,9 @@ AVIA6::AVIA6( ALTIUM_BINARY_PARSER& aReader )
         aReader.Skip( 38 );
         soldermask_expansion_linked = aReader.Read<uint8_t>() & 0x01;
         soldermask_expansion_back = aReader.ReadKicadUnit();
+
+        if( soldermask_expansion_linked )
+            soldermask_expansion_back = soldermask_expansion_front;
     }
 
     if( subrecord1 >= 307 )
