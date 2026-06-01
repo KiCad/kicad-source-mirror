@@ -322,8 +322,8 @@ wxSize DIALOG_EXPORT_3D_IMAGE::GetPixelSize( double aWidth, double aHeight, doub
     case SIZE_UNITS::PIXELS:
         return wxSize( static_cast<int>( aWidth ), static_cast<int>( aHeight ) );
     case SIZE_UNITS::PERCENT:
-        return wxSize( static_cast<int>( 100.0 * m_originalSize.GetWidth() ),
-                       static_cast<int>( 100.0 * m_originalSize.GetHeight() ) );
+        return wxSize( static_cast<int>( aWidth * m_originalSize.GetWidth() / 100.0 ),
+                       static_cast<int>( aHeight * m_originalSize.GetHeight() / 100.0 ) );
     case SIZE_UNITS::MM:
         return wxSize( static_cast<int>( aWidth * aXResolution / 25.4 ),
                        static_cast<int>( aHeight * aYResolution / 25.4 ) );
