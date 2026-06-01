@@ -92,6 +92,44 @@ static wxString joinHistoryDestination( const wxString& aHistoryRoot,
 static const wxString AUTOSAVE_PREFIX = wxS( "_autosave-" );
 
 
+// Compare two files byte-for-byte.
+static bool filesContentEqual( const wxString& aPathA, const wxString& aPathB )
+{
+    wxFFile fileA( aPathA, wxS( "rb" ) );
+    wxFFile fileB( aPathB, wxS( "rb" ) );
+
+    if( !fileA.IsOpened() || !fileB.IsOpened() )
+        return false;
+
+    wxFileOffset lenA = fileA.Length();
+    wxFileOffset lenB = fileB.Length();
+
+    if( lenA < 0 || lenB < 0 || lenA != lenB )
+        return false;
+
+    constexpr size_t  chunkSize = 64 * 1024;
+    std::vector<char> bufA( chunkSize );
+    std::vector<char> bufB( chunkSize );
+
+    while( !fileA.Eof() )
+    {
+        size_t readA = fileA.Read( bufA.data(), chunkSize );
+        size_t readB = fileB.Read( bufB.data(), chunkSize );
+
+        if( readA != readB )
+            return false;
+
+        if( readA > 0 && std::memcmp( bufA.data(), bufB.data(), readA ) != 0 )
+            return false;
+
+        if( fileA.Error() || fileB.Error() )
+            return false;
+    }
+
+    return true;
+}
+
+
 // Resolve the autosave-file destination for a given relative path.  In PROJECT_DIR
 // mode the file lives next to the original (or under the same subdir for nested
 // schematic sheets) with an "_autosave-" prefix on the basename.  In USER_DIR mode
@@ -537,7 +575,13 @@ LOCAL_HISTORY::FindStaleAutosaveFiles( const wxString& aProjectPath, const std::
 
         wxDateTime autosaveTime = wxFileName( pair.first ).GetModificationTime();
 
-        if( !srcTime.IsValid() || autosaveTime.IsLaterThan( srcTime ) )
+        // mtime is only a pre-filter; cloud-sync clients bump the byte-identical autosave's
+        // mtime past the source, so confirm the content actually diverges (issue 24126).
+        bool stale = !srcTime.IsValid()
+                     || ( autosaveTime.IsLaterThan( srcTime )
+                          && !filesContentEqual( pair.first, pair.second ) );
+
+        if( stale )
             results.emplace_back( std::move( pair ) );
     }
 
