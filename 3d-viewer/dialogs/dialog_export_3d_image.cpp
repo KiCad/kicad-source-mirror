@@ -178,32 +178,20 @@ bool DIALOG_EXPORT_3D_IMAGE::TransferDataToWindow()
 
 bool DIALOG_EXPORT_3D_IMAGE::TransferDataFromWindow()
 {
-    // Convert current values back to pixels if needed
     double width = m_spinWidth->GetValue();
     double height = m_spinHeight->GetValue();
+    double xRes = m_spinXResolution->GetValue();
+    double yRes = m_spinYResolution->GetValue();
 
-    switch( m_sizeUnits )
+    if( m_resolutionUnits == RESOLUTION_UNITS::PIXELS_PER_MM )
     {
-    case SIZE_UNITS::PIXELS:
-        m_width = static_cast<int>( width );
-        m_height = static_cast<int>( height );
-        break;
-    case SIZE_UNITS::PERCENT:
-        // Assume 100% = original size
-        m_width = static_cast<int>( width * m_originalSize.GetWidth() / 100.0 );
-        m_height = static_cast<int>( height * m_originalSize.GetHeight() / 100.0 );
-        break;
-    case SIZE_UNITS::MM:
-        // Convert mm to pixels using resolution
-        m_width = static_cast<int>( width * m_xResolution / 25.4 );
-        m_height = static_cast<int>( height * m_yResolution / 25.4 );
-        break;
-    case SIZE_UNITS::INCHES:
-        // Convert inches to pixels using resolution
-        m_width = static_cast<int>( width * m_xResolution );
-        m_height = static_cast<int>( height * m_yResolution );
-        break;
+        xRes *= 25.4;
+        yRes *= 25.4;
     }
+
+    wxSize pixelSize = GetPixelSize( width, height, xRes, yRes, m_sizeUnits );
+    m_width = pixelSize.GetWidth();
+    m_height = pixelSize.GetHeight();
 
     m_xResolution = m_spinXResolution->GetValue();
     m_yResolution = m_spinYResolution->GetValue();
