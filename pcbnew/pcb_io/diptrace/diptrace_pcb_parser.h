@@ -73,6 +73,8 @@ struct DT_LAYER
     int      index = 0;
     uint32_t color = 0;    ///< 0x00RRGGBB
     wxString name;
+    int      type = 0;     ///< Layer type from record field_a (0 = Signal, 1 = Plane)
+    int      planeNetIndex = -1; ///< Plane net DipTrace index from record field_c (-1 = none/Signal)
     int      fieldD = 0;   ///< Possibly default trace width
 };
 
@@ -328,6 +330,9 @@ private:
     bool ParseSingleComponent( size_t aBoundaryOffset, size_t aUpperBound,
                                DT_COMPONENT& aComp );
 
+    /// Decide whether a parsed component is a standalone via rather than a placed footprint.
+    static bool ClassifyStandaloneVia( const DT_COMPONENT& aComp );
+
     /// Search a component's data region for pad records using pad name anchors.
     void FindPadsInRegion( DT_COMPONENT& aComp, size_t aRegionStart, size_t aRegionEnd );
 
@@ -363,6 +368,9 @@ private:
     void CreateNets();
     void CreateTracksAndVias();
     void CreateZones();
+
+    /// Synthesize board-outline-bounded plane fills for negative/solid-plane copper layers.
+    void CreatePlaneZones();
 
     /// Resolve a DipTrace net index to the corresponding KiCad net object.
     NETINFO_ITEM* ResolveNetByIndex( int aDipTraceNetIndex ) const;

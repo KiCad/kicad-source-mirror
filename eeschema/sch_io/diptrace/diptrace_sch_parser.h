@@ -150,6 +150,20 @@ struct DCH_NET_ENTRY
 };
 
 
+/// A single schematic wire decoded from the net/wire section.
+struct DCH_WIRE
+{
+    int                   sheetIndex = 0;   ///< DipTrace sheet index
+    std::vector<VECTOR2I> points;           ///< KiCad nm, ready for SCH_LINE
+    int                   object1    = 0;   ///< Connected item id at endpoint 1
+    int                   subObject1 = 0;   ///< Pin/sub index at endpoint 1
+    int                   bus1       = -1;  ///< Bus index at endpoint 1 (-1 = none)
+    int                   object2    = 0;
+    int                   subObject2 = 0;
+    int                   bus2       = -1;
+};
+
+
 // ---------------------------------------------------------------------------
 // Parser class
 // ---------------------------------------------------------------------------
@@ -201,6 +215,7 @@ private:
     void parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd );
     void parseBusSection();
     void parseNetSection();
+    void parseWireSection();
 
     // -- Structural scanning --------------------------------------------------
 
@@ -266,6 +281,12 @@ private:
      */
     void createNetLabels();
 
+    /// Emit SCH_LINE wire segments decoded from the net/wire section.
+    void createWires();
+
+    /// Synthesize junctions where conductors coincide (DipTrace stores none explicitly).
+    void createJunctions();
+
     /**
      * Determine the pin orientation from the stub direction vector.
      */
@@ -306,6 +327,7 @@ private:
     std::vector<DCH_COMPONENT>   m_components;
     std::vector<DCH_BUS_ENTRY>   m_buses;
     std::vector<DCH_NET_ENTRY>   m_nets;
+    std::vector<DCH_WIRE>        m_wires;
 
     // KiCad object management
     std::vector<SCH_SHEET*>                         m_sheets;       ///< One per DipTrace sheet

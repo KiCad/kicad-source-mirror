@@ -944,6 +944,7 @@ void PCB_PARSER::Parse()
         CreateStandaloneVias();
         wxLogTrace( traceDiptraceIo, wxT( "DipTrace: creating zones (%zu)" ), m_zones.size() );
         CreateZones();
+        CreatePlaneZones();
 
         size_t compsWithPads = 0;
         size_t compsWithShapes = 0;
@@ -1147,9 +1148,13 @@ void PCB_PARSER::ParseLayers()
         layer.index = m_reader.ReadInt3();
         layer.color = ReadColorPacked( m_reader );
         layer.name = m_reader.ReadString();
-        m_reader.ReadInt3();    // field_a
-        m_reader.ReadInt3();    // field_b
-        m_reader.ReadInt3();    // field_c
+
+        // field_a encodes the layer Type (0 = Signal, 1 = Plane); field_c carries the plane net
+        // DipTrace index when the layer is a solid/negative plane (-1 otherwise). Matches the
+        // CopperLayers <Lay Type=.. NetId=..> oracle.
+        layer.type = m_reader.ReadInt3();    // field_a
+        m_reader.ReadInt3();                 // field_b
+        layer.planeNetIndex = m_reader.ReadInt3();  // field_c
         layer.fieldD = m_reader.ReadInt4();
         m_reader.ReadByte();    // separator
 
@@ -1540,16 +1545,7 @@ void PCB_PARSER::FindAndParseComponents()
             FindMountHolesInRegion( comp, vb.boundaryOffset, regionEnd );
             FindShapesInRegion( comp, vb.boundaryOffset, regionEnd );
 
-            // Standalone via components appear in two serialized forms:
-            //  1) fieldF=1 with empty pattern name (older/other samples),
-            //  2) fieldA=1, fieldF=0, empty pattern name, one pad, no mount-hole payload
-            //     ("StaticVia*" records in CNC_controller).
-            // Classify only after pad/hole scanning so the discriminator uses explicit record data.
-            bool emptyPattern = comp.patternName.empty();
-            bool viaByFieldF = ( comp.fieldF == 1 );
-            bool viaByStaticRecord = ( comp.fieldA == 1 && comp.fieldF == 0
-                                       && !comp.pads.empty() );
-            comp.isStandaloneVia = emptyPattern && ( viaByFieldF || viaByStaticRecord );
+            comp.isStandaloneVia = ClassifyStandaloneVia( comp );
 
             ParseComponentTail( comp, regionEnd );
             DumpComponentBinaryScan( comp, m_reader.GetData(), m_reader.GetFileSize() );
@@ -1570,6 +1566,29 @@ void PCB_PARSER::FindAndParseComponents()
     }
 
     wxLogTrace( traceDiptraceIo, wxT( "DipTrace: parsed %zu components" ), m_components.size() );
+}
+
+
+bool PCB_PARSER::ClassifyStandaloneVia( const DT_COMPONENT& aComp )
+{
+    // A DipTrace board serializes three "padstack-only" object kinds with an empty pattern
+    // name and empty library path: Static Vias, single-pad Pads, and Fiducials. Only the
+    // Static Via is a true KiCad via; the other kinds must become one-pad footprints so the
+    // 1662 placed footprints (668 real + 990 Pad + 4 Fiducial in DrvModBoard) are not lost.
+    //
+    // The component's display name carries DipTrace's internal object name and is the only
+    // reliable discriminator (verified field-by-field against DrvModBoard.dipxml: 1102 vias
+    // carry "Static Via", 990 Pads carry "Pad", 4 carry "Fiducial"; older boards such as
+    // keyboard.dip name the same object "Via"). Mount holes carry "Hole" and must stay
+    // footprints. A real footprint always has a non-empty pattern name and library path, so
+    // the leading guards reject it.
+    if( !aComp.patternName.empty() || !aComp.libraryPath.empty() )
+        return false;
+
+    if( aComp.displayName != wxT( "Static Via" ) && aComp.displayName != wxT( "Via" ) )
+        return false;
+
+    return true;
 }
 
 
@@ -2450,6 +2469,15 @@ void PCB_PARSER::ParseComponentTail( DT_COMPONENT& aComp, size_t aRegionEnd )
             aComp.refdesVisible = ( visibility != -1 );
             aComp.valueVisible = ( visibility != -1 );
             aComp.hasTailData = true;
+
+            // The component side is carried by the tail mirror flags, not the
+            // header flag byte (which is always 0 in v49+ files). Both flags are
+            // set together for bottom-side parts. Only promote to bottom here;
+            // never override a header-determined bottom back to top, so older
+            // files that did populate the header flag are never regressed.
+            if( sideFlag1 == 1 && sideFlag2 == 1 )
+                aComp.layer = 1;
+
             DumpComponentTail( aComp, data, aTailStart, visibility, sideFlag1, sideFlag2,
                                orderIdx, refdesYOffset, valueYOffset, hasOffset, tailTerm );
             return true;
@@ -4373,8 +4401,11 @@ void PCB_PARSER::CreateFootprint( const DT_COMPONENT& aComp )
             PCB_LAYER_ID shapeLayer = MapLayer( dtShape.layer );
 
             // Shapes default to silkscreen when the source layer is copper or undefined.
+            // Always assign the top-relative silk layer here; Flip() below mirrors the
+            // whole footprint (and its layers) for bottom-side components, so assigning
+            // B_SilkS here as well would double-flip the silk back onto the front.
             if( shapeLayer == UNDEFINED_LAYER || IsCopperLayer( shapeLayer ) )
-                shapeLayer = ( aComp.layer == 1 ) ? B_SilkS : F_SilkS;
+                shapeLayer = F_SilkS;
 
             shape->SetLayer( shapeLayer );
 
@@ -5161,6 +5192,82 @@ void PCB_PARSER::CreateZones()
     {
         wxLogTrace( traceDiptraceIo, wxT( "DipTrace: applied thermal spoke angle overrides to %d pads" ),
                     adjustedPadThermalAngles );
+    }
+}
+
+
+void PCB_PARSER::CreatePlaneZones()
+{
+    // DipTrace negative/solid planes are described at the layer level (CopperLayers <Lay
+    // Type="Plane" NetId=..>) rather than as stored CopperPour records, so they never appear in
+    // m_zones. Synthesize a board-outline-bounded ZONE on each plane layer, tied to the plane net.
+    // Build the bounding polygon once: prefer the real outline, else fall back to the board bbox
+    // rectangle (mirroring CreateBoardOutline so plane fills are not lost on bbox-only boards).
+    SHAPE_POLY_SET planeOutline;
+    planeOutline.NewOutline();
+
+    if( m_outline.size() >= 3 )
+    {
+        for( const DT_VERTEX& v : m_outline )
+            planeOutline.Append( ToKiCadCoord( v.x ), ToKiCadCoord( v.y ) );
+    }
+    else if( m_bboxXMin != 0 || m_bboxXMax != 0 )
+    {
+        int x1 = ToKiCadCoord( m_bboxXMin );
+        int y1 = ToKiCadCoord( m_bboxYMin );
+        int x2 = ToKiCadCoord( m_bboxXMax );
+        int y2 = ToKiCadCoord( m_bboxYMax );
+
+        planeOutline.Append( x1, y1 );
+        planeOutline.Append( x2, y1 );
+        planeOutline.Append( x2, y2 );
+        planeOutline.Append( x1, y2 );
+    }
+
+    if( planeOutline.OutlineCount() == 0 || planeOutline.COutline( 0 ).PointCount() < 3 )
+        return;
+
+    for( const DT_LAYER& layer : m_layers )
+    {
+        if( layer.type != 1 || layer.planeNetIndex < 0 )
+            continue;
+
+        PCB_LAYER_ID kiLayer = MapCopperLayer( layer.index );
+
+        if( kiLayer == UNDEFINED_LAYER )
+            continue;
+
+        NETINFO_ITEM* netinfo = ResolveNetByIndex( layer.planeNetIndex );
+
+        if( !netinfo )
+        {
+            wxLogTrace( traceDiptraceIo,
+                        wxT( "DipTrace: plane layer %d references unresolved net index %d; skipping" ),
+                        layer.index, layer.planeNetIndex );
+            continue;
+        }
+
+        SHAPE_POLY_SET outline = planeOutline;
+
+        ZONE* zone = new ZONE( m_board );
+        zone->SetLayer( kiLayer );
+        zone->SetNet( netinfo );
+        zone->SetAssignedPriority( 0 );
+        zone->SetIslandRemovalMode( ISLAND_REMOVAL_MODE::NEVER );
+
+        // Mark this as a synthesized plane fill (not a stored CopperPour) so consumers can tell
+        // it apart from explicit pours.
+        zone->SetZoneName( wxT( "DipTrace Plane" ) );
+
+        zone->AddPolygon( outline.COutline( 0 ) );
+        zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
+                                     ZONE::GetDefaultHatchPitch(), true );
+
+        m_board->Add( zone, ADD_MODE::APPEND );
+
+        wxLogTrace( traceDiptraceIo,
+                    wxT( "DipTrace: synthesized plane zone on layer %d net '%s' (dt net %d)" ),
+                    layer.index, netinfo->GetNetname(), layer.planeNetIndex );
     }
 }
 

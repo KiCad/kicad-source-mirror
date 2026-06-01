@@ -838,8 +838,9 @@ BOOST_FIXTURE_TEST_SUITE( DipTraceBenchmarks, DIPTRACE_BENCHMARK_FIXTURE )
 
 /**
  * Verify that the Z80 board produces a substantial pad count.
- * 104 components with ICs averaging 14-40 pins and discretes at 2 pins
- * should yield well over 500 total pads.
+ * The footprints (ICs averaging 14-40 pins and discretes at 2 pins) yield well over 400 pads.
+ * Standalone Static Via components are imported as vias rather than single-pad footprints, so
+ * they no longer contribute to this count (observed 480 footprint pads after that fix).
  */
 BOOST_AUTO_TEST_CASE( TotalPadCount )
 {
@@ -851,7 +852,7 @@ BOOST_AUTO_TEST_CASE( TotalPadCount )
     for( const FOOTPRINT* fp : board->Footprints() )
         totalPads += static_cast<int>( fp->Pads().size() );
 
-    BOOST_CHECK_MESSAGE( totalPads > 500, "Z80 board should have >500 total pads, got " + std::to_string( totalPads ) );
+    BOOST_CHECK_MESSAGE( totalPads > 400, "Z80 board should have >400 total pads, got " + std::to_string( totalPads ) );
 }
 
 
@@ -1146,6 +1147,9 @@ BOOST_AUTO_TEST_CASE( ViaCounts )
         int         maxVias;
     };
 
+    // After the standalone-via classification fix, single-pad Pad/Fiducial components become
+    // footprints instead of bare vias, and Static Via components remain vias. Observed counts
+    // stay inside these ranges (project4=63, z80=463, logic_probe=90, 156bus=0, keyboard=20).
     std::vector<TestCase> cases = {
         { "project4.dip", 50, 200 },   { "z80_board.dip", 400, 1000 }, { "logic_probe.dip", 10, 100 },
         { "156bus_narrow.dip", 0, 5 }, { "keyboard.dip", 10, 40 },
@@ -1953,7 +1957,10 @@ BOOST_AUTO_TEST_CASE( ViewerExamplesOptional )
     BOOST_CHECK_EQUAL( pcb6->GetLayerName( In1_Cu ), wxString( "Gnd" ) );
     BOOST_CHECK_EQUAL( pcb6->GetLayerName( In2_Cu ), wxString( "Pwr" ) );
     BOOST_CHECK_EQUAL( pcb6->GetLayerName( B_Cu ), wxString( "Bottom" ) );
-    BOOST_CHECK_EQUAL( pcb6->Zones().size(), 5u );
+
+    // 5 stored CopperPours plus 2 synthesized fills for the Gnd (Lay1) and Pwr (Lay2) plane
+    // layers, which DipTrace describes at the layer level rather than as pours.
+    BOOST_CHECK_EQUAL( pcb6->Zones().size(), 7u );
 
     int pwrZones = 0;
     int pwr3V3 = 0;
@@ -1982,11 +1989,13 @@ BOOST_AUTO_TEST_CASE( ViewerExamplesOptional )
         }
     }
 
-    BOOST_CHECK_EQUAL( pwrZones, 4 );
-    BOOST_CHECK_EQUAL( pwr3V3, 1 );
+    // In2_Cu (Pwr plane) carries 4 stored pours plus the synthesized Pwr plane fill (net 3V3);
+    // In1_Cu (Gnd plane) carries 1 stored GND pour plus the synthesized GND plane fill.
+    BOOST_CHECK_EQUAL( pwrZones, 5 );
+    BOOST_CHECK_EQUAL( pwr3V3, 2 );
     BOOST_CHECK_EQUAL( pwr5V, 2 );
     BOOST_CHECK_EQUAL( pwrVCC, 1 );
-    BOOST_CHECK_EQUAL( gndInnerZones, 1 );
+    BOOST_CHECK_EQUAL( gndInnerZones, 2 );
 
     int pcb6ThermalZones = 0;
     int pcb6SpokeWidthMatches = 0;
@@ -2000,7 +2009,8 @@ BOOST_AUTO_TEST_CASE( ViewerExamplesOptional )
             pcb6SpokeWidthMatches++;
     }
 
-    BOOST_CHECK_EQUAL( pcb6ThermalZones, 5 );
+    // 5 stored pours + 2 synthesized plane fills, all defaulting to thermal pad connection.
+    BOOST_CHECK_EQUAL( pcb6ThermalZones, 7 );
     BOOST_CHECK_EQUAL( pcb6SpokeWidthMatches, 5 );
 
     int pcb6PowerNetPthPads = 0;
@@ -2377,6 +2387,11 @@ BOOST_AUTO_TEST_CASE( ViewerExamplesDipXmlParityOptional )
 
             for( const ZONE* zone : board->Zones() )
             {
+                // Synthesized plane fills are layer-level constructs, not stored CopperPours, so
+                // they have no XML pour to compare against; skip them in this parity check.
+                if( zone->GetZoneName() == wxString( "DipTrace Plane" ) )
+                    continue;
+
                 int dipLayer = DipLayerIndexFromKiCadLayer( *board, zone->GetLayer() );
 
                 if( dipLayer < 0 )

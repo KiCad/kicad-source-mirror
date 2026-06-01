@@ -27,8 +27,10 @@
 #include <cctype>
 #include <cstdlib>
 #include <cstring>
+#include <deque>
 #include <memory>
 #include <regex>
+#include <set>
 
 #include <wx/filename.h>
 #include <wx/log.h>
@@ -40,6 +42,7 @@
 #include <project_sch.h>
 #include <reporter.h>
 #include <sch_bus_entry.h>
+#include <sch_junction.h>
 #include <sch_label.h>
 #include <sch_line.h>
 #include <sch_pin.h>
@@ -169,6 +172,7 @@ void SCH_PARSER::Parse()
         }
 
         parseNetSection();
+        parseWireSection();
     }
     catch( const IO_ERROR& )
     {
@@ -329,6 +333,13 @@ void SCH_PARSER::parseTextStyles()
         m_reader.ReadInt3();
         m_reader.ReadInt4();
         m_reader.ReadInt4();
+
+        // v38+ (UTF-16) files carry a trailing int3 per text style. In older
+        // single-style files this same byte was historically consumed as the
+        // leading "pad" int3 in parsePreComponentSettings(); reading it here is
+        // byte-identical for one style but keeps multi-style v46 files in sync.
+        if( m_version > LEGACY_STRING_VERSION )
+            m_reader.ReadInt3();
     }
 }
 
@@ -351,7 +362,13 @@ void SCH_PARSER::parsePreComponentSettings()
     }
     else
     {
-        m_reader.ReadInt3();
+        // For v38+ the per-style trailing int3 consumed in parseTextStyles() is
+        // the same byte that single-style legacy files exposed here as a leading
+        // pad int3, so the component count is the first int3 of this section.
+        // For v37 and below (no per-style trailer) the leading pad is still here.
+        if( m_version <= LEGACY_STRING_VERSION )
+            m_reader.ReadInt3();
+
         m_componentCount = m_reader.ReadInt3();
         m_reader.ReadByte();
         m_reader.ReadByte();
@@ -461,6 +478,7 @@ std::vector<size_t> SCH_PARSER::scanComponentBoundaries( size_t aFirstComp,
     while( off < aBusSectionOffset - 20 )
     {
         bool ok = true;
+        int  bboxVal[4] = { 0, 0, 0, 0 };
 
         for( int i = 0; i < 4; i++ )
         {
@@ -475,12 +493,21 @@ std::vector<size_t> SCH_PARSER::scanComponentBoundaries( size_t aFirstComp,
             int raw = ( data[p] << 24 ) | ( data[p + 1] << 16 ) | ( data[p + 2] << 8 )
                       | data[p + 3];
 
-            if( abs( raw - INT4_BIAS ) > 50000000 )
+            bboxVal[i] = raw - INT4_BIAS;
+
+            if( abs( bboxVal[i] ) > 50000000 )
             {
                 ok = false;
                 break;
             }
         }
+
+        // The first two int4 are the component's placement coordinate on the sheet, which is a
+        // real position several mm from the origin. False boundary matches inside a component's
+        // graphics tail carry only tiny local coordinates (|v| <= ~0.33 mm), so reject boundaries
+        // whose placement sits essentially at the origin.
+        if( ok && abs( bboxVal[0] ) <= 50000 && abs( bboxVal[1] ) <= 50000 )
+            ok = false;
 
         if( ok )
         {
@@ -1786,6 +1813,12 @@ void SCH_PARSER::createSymbolInstance( const DCH_COMPONENT& aComp, SCH_SCREEN* a
     if( aComp.refdes.IsEmpty() && aComp.compName.IsEmpty() )
         return;
 
+    // DipTrace net ports (auto_net_ports library) are connection markers, not real symbols; they
+    // are imported as global net labels by createNetLabels(), so skip them here to avoid drawing a
+    // redundant symbol on top of the label.
+    if( aComp.libPath.Contains( wxT( "auto_net_ports" ) ) )
+        return;
+
     int unit = 1;
 
     if( !aComp.refdes.IsEmpty() )
@@ -1872,6 +1905,262 @@ void SCH_PARSER::createNetLabels()
 }
 
 
+// True if the UTF-16-BE string at aData[aPos] is a plausible net name immediately followed by a
+// labelX/labelY pair that look like real coordinates. This discriminates real net names from
+// 'Tahoma' font blocks and binary noise inside the net-section preambles.
+static bool isPlausibleNetName( const uint8_t* aData, size_t aPos, size_t aSectionEnd )
+{
+    if( aPos + 2 > aSectionEnd )
+        return false;
+
+    int cnt = ( aData[aPos] << 8 ) | aData[aPos + 1];
+
+    if( cnt < 1 || cnt > 64 )
+        return false;
+
+    size_t end = aPos + 2 + static_cast<size_t>( cnt ) * 2;
+
+    if( end + 8 > aSectionEnd )
+        return false;
+
+    for( int i = 0; i < cnt; i++ )
+    {
+        unsigned hi = aData[aPos + 2 + i * 2];
+        unsigned lo = aData[aPos + 2 + i * 2 + 1];
+        unsigned ch = ( hi << 8 ) | lo;
+
+        bool ok = ( ch >= 0x20 && ch < 0x7F )            // ASCII printable
+                  || ( ch >= 0x00A0 && ch <= 0x024F )    // Latin-1 / Latin Extended
+                  || ( ch >= 0x0400 && ch <= 0x04FF );   // Cyrillic
+
+        if( !ok )
+            return false;
+    }
+
+    auto rdInt4 = [&]( size_t o ) -> int
+    {
+        uint32_t raw = ( static_cast<uint32_t>( aData[o] ) << 24 )
+                       | ( static_cast<uint32_t>( aData[o + 1] ) << 16 )
+                       | ( static_cast<uint32_t>( aData[o + 2] ) << 8 )
+                       | static_cast<uint32_t>( aData[o + 3] );
+        return static_cast<int>( static_cast<int64_t>( raw ) - INT4_BIAS );
+    };
+
+    int lx = rdInt4( end );
+    int ly = rdInt4( end + 4 );
+
+    return lx > -2000000 && lx < 2000000 && ly > -2000000 && ly < 2000000;
+}
+
+
+void SCH_PARSER::parseWireSection()
+{
+    // Only the modern UTF-16 string format carries the structured wire layout decoded here; the
+    // net-name scan below assumes 2-byte-prefixed UTF-16-BE strings. Legacy (<= v37) files use
+    // ASCII strings and keep the net-label-only import from parseNetSection().
+    if( m_version <= LEGACY_STRING_VERSION )
+        return;
+
+    const uint8_t* data         = m_reader.GetData();
+    size_t         fileSize     = m_reader.GetFileSize();
+    size_t         sectionEnd   = m_tailOffset > 0 ? m_tailOffset : fileSize;
+    size_t         sectionStart = m_busSectionOffset;
+
+    if( sectionStart == 0 || sectionStart >= sectionEnd )
+        return;
+
+    auto rdInt3 = [&]( size_t o ) -> int
+    {
+        return ( ( data[o] << 16 ) | ( data[o + 1] << 8 ) | data[o + 2] ) - INT3_BIAS;
+    };
+
+    auto rdInt4 = [&]( size_t o ) -> int
+    {
+        uint32_t raw = ( static_cast<uint32_t>( data[o] ) << 24 )
+                       | ( static_cast<uint32_t>( data[o + 1] ) << 16 )
+                       | ( static_cast<uint32_t>( data[o + 2] ) << 8 )
+                       | static_cast<uint32_t>( data[o + 3] );
+        return static_cast<int>( static_cast<int64_t>( raw ) - INT4_BIAS );
+    };
+
+    // Locate the first net name within the section header.
+    size_t pos = 0;
+
+    for( size_t p = sectionStart; p + 2 < sectionEnd; p++ )
+    {
+        if( isPlausibleNetName( data, p, sectionEnd ) )
+        {
+            pos = p;
+            break;
+        }
+    }
+
+    if( pos == 0 )
+        return;
+
+    int safetyNets = 0;
+
+    while( pos != 0 && pos < sectionEnd && safetyNets++ < 100000 )
+    {
+        size_t o = pos;
+
+        // Net name (UTF-16-BE), then labelX(int4) labelY(int4) pad(int3) flag(byte).
+        int nameLen = ( data[o] << 8 ) | data[o + 1];
+        o += 2 + static_cast<size_t>( nameLen ) * 2;
+        o += 4 + 4 + 3 + 1;
+
+        if( o + 3 > sectionEnd )
+            break;
+
+        int pinCount = rdInt3( o );
+        o += 3;
+
+        if( pinCount < 0 || pinCount > 4000 || o + static_cast<size_t>( pinCount ) * 6 + 3 > sectionEnd )
+            break;
+
+        o += static_cast<size_t>( pinCount ) * 6;
+
+        int wireCount = rdInt3( o );
+        o += 3;
+
+        if( wireCount < 0 || wireCount > 100000 )
+            break;
+
+        bool brokeEarly = false;
+
+        for( int w = 0; w < wireCount; w++ )
+        {
+            if( o + 36 + 1 + 3 > sectionEnd )
+            {
+                brokeEarly = true;
+                break;
+            }
+
+            DCH_WIRE wire;
+            wire.object1    = rdInt3( o + 0 );
+            wire.object2    = rdInt3( o + 3 );
+            wire.subObject1 = rdInt3( o + 6 );
+            wire.subObject2 = rdInt3( o + 9 );
+            wire.bus1       = rdInt3( o + 12 );
+            wire.bus2       = rdInt3( o + 15 );
+            wire.sheetIndex = rdInt3( o + 18 );
+
+            o += 36;   // 12 int3 header tokens
+            o += 1;    // flag byte
+
+            int pointCount = rdInt3( o );
+            o += 3;
+
+            if( pointCount < 0 || pointCount > 4000
+                || o + static_cast<size_t>( pointCount ) * 11 + 8 > sectionEnd )
+            {
+                brokeEarly = true;
+                break;
+            }
+
+            wire.points.reserve( pointCount );
+
+            for( int p = 0; p < pointCount; p++ )
+            {
+                int dtX = rdInt4( o );
+                int dtY = rdInt4( o + 4 );
+
+                // On-disk wire X/Y use the same convention as pins, so feed the raw DipTrace ints
+                // directly through the existing transforms. This lands wire endpoints exactly on
+                // imported pin positions.
+                wire.points.emplace_back( toKiCadCoordX( dtX ), toKiCadCoordY( dtY ) );
+
+                o += 11;   // X(int4) Y(int4) Dir(int3)
+            }
+
+            o += 8;   // per-wire trailer
+
+            if( wire.points.size() >= 2 )
+                m_wires.push_back( std::move( wire ) );
+        }
+
+        if( brokeEarly )
+            break;
+
+        // Find the next net name (skips the variable-length net preamble).
+        size_t next = 0;
+
+        for( size_t q = o; q + 2 < sectionEnd && q < o + 400; q++ )
+        {
+            if( isPlausibleNetName( data, q, sectionEnd ) )
+            {
+                next = q;
+                break;
+            }
+        }
+
+        pos = next;
+    }
+}
+
+
+void SCH_PARSER::createWires()
+{
+    for( const DCH_WIRE& wire : m_wires )
+    {
+        int sheetIdx = wire.sheetIndex;
+
+        if( sheetIdx < 0 || sheetIdx >= m_numSheets )
+            sheetIdx = 0;
+
+        SCH_SCREEN* screen = getOrCreateSheet( sheetIdx );
+
+        if( !screen )
+            continue;
+
+        for( size_t i = 1; i < wire.points.size(); i++ )
+        {
+            const VECTOR2I& a = wire.points[i - 1];
+            const VECTOR2I& b = wire.points[i];
+
+            if( a == b )
+                continue;
+
+            SCH_LINE* line = new SCH_LINE( a, LAYER_WIRE );
+            line->SetEndPoint( b );
+            screen->Append( line );
+        }
+    }
+}
+
+
+void SCH_PARSER::createJunctions()
+{
+    // DipTrace stores no explicit junctions; reuse KiCad's own rule (>=3 conductor ends coincide,
+    // or a wire end lands on another wire's interior, including symbol-pin taps). Must run after
+    // wires, labels and symbols are placed.
+    std::set<SCH_SCREEN*> screens;
+
+    if( m_rootSheet && m_rootSheet->GetScreen() )
+        screens.insert( m_rootSheet->GetScreen() );
+
+    for( SCH_SHEET* sheet : m_sheets )
+    {
+        if( sheet && sheet->GetScreen() )
+            screens.insert( sheet->GetScreen() );
+    }
+
+    for( SCH_SCREEN* screen : screens )
+    {
+        std::deque<EDA_ITEM*> items;
+
+        for( SCH_ITEM* item : screen->Items() )
+            items.push_back( item );
+
+        for( const VECTOR2I& pt : screen->GetNeededJunctions( items ) )
+        {
+            SCH_JUNCTION* junction = new SCH_JUNCTION( pt );
+            screen->Append( junction );
+        }
+    }
+}
+
+
 void SCH_PARSER::createKiCadObjects()
 {
     m_sheets.resize( m_numSheets, nullptr );
@@ -1913,12 +2202,30 @@ void SCH_PARSER::createKiCadObjects()
     }
 
     createNetLabels();
+    createWires();
+    createJunctions();
 
     if( !m_libSymbols.empty() )
     {
         wxFileName libFileName;
-        libFileName.Assign( m_schematic->Project().GetProjectPath(), getLibName(),
-                            FILEEXT::KiCadSymbolLibFileExtension );
+        wxString   projectPath = m_schematic->Project().GetProjectPath();
+
+        // In headless/library-less import there is no project on disk, so the project
+        // path is empty and Assign() would yield a relative path. The sexpr library
+        // cache rejects relative paths (wxCHECK m_libFileName.IsAbsolute()), so anchor
+        // the library to the absolute root-sheet directory instead.
+        if( projectPath.IsEmpty() )
+        {
+            libFileName.Assign( m_rootSheet->GetFileName() );
+            libFileName.SetName( getLibName() );
+            libFileName.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
+            libFileName.MakeAbsolute();
+        }
+        else
+        {
+            libFileName.Assign( projectPath, getLibName(),
+                                FILEEXT::KiCadSymbolLibFileExtension );
+        }
 
         bool libSaved = false;
 
@@ -1973,8 +2280,12 @@ void SCH_PARSER::createKiCadObjects()
 
                     if( table && !table->HasRow( getLibName() ) )
                     {
+                        // ${KIPRJMOD} is undefined without a project on disk, so point the
+                        // row at the absolute file actually saved above in that case.
                         wxString libTableUri =
-                                wxT( "${KIPRJMOD}/" ) + libFileName.GetFullName();
+                                projectPath.IsEmpty()
+                                        ? libFileName.GetFullPath()
+                                        : wxT( "${KIPRJMOD}/" ) + libFileName.GetFullName();
 
                         LIBRARY_TABLE_ROW& row = table->InsertRow();
                         row.SetNickname( getLibName() );
