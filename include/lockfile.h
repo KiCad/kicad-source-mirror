@@ -81,7 +81,6 @@ public:
 
             if( lock_success )
             {
-                // Lock file doesn't exist, create one
                 m_fileCreated = true;
                 m_status = true;
                 m_username = wxGetUserId();
@@ -96,13 +95,26 @@ public:
             }
             else if( rw_success )
             {
-                // Lock file already exists, read the details
                 wxString lock_info;
                 file.ReadAll( &lock_info );
-                nlohmann::json j = nlohmann::json::parse( std::string( lock_info.mb_str() ) );
-                m_username = wxString( j["username"].get<std::string>() );
-                m_hostname = wxString( j["hostname"].get<std::string>() );
                 file.Close();
+
+                // Cloud-synced drives can present a lock file before its contents finish syncing.
+                // Treat an empty or corrupt file as unknown-owner stale rather than a hard error.
+                try
+                {
+                    nlohmann::json j = nlohmann::json::parse( std::string( lock_info.mb_str() ) );
+                    m_username = wxString( j.at( "username" ).get<std::string>() );
+                    m_hostname = wxString( j.at( "hostname" ).get<std::string>() );
+                }
+                catch( const std::exception& parseError )
+                {
+                    m_username = wxEmptyString;
+                    m_hostname = wxEmptyString;
+                    wxLogTrace( LCK, "Unreadable lock contents for %s: %s", filename,
+                                parseError.what() );
+                }
+
                 m_errorMsg = _( "Lock file already exists" );
                 wxLogTrace( LCK, "Existing Lock for %s", filename );
             }
@@ -115,11 +127,10 @@ public:
         {
             wxLogError( "Got an error trying to lock %s: %s", filename, e.what() );
 
-            // Delete lock file if it was created above but we threw an exception somehow
             if( m_fileCreated )
             {
                 wxRemoveFile( m_lockFilename );
-                m_fileCreated = false; // Reset the flag since file has been deleted manually
+                m_fileCreated = false;
             }
 
             m_errorMsg = _( "Failed to access lock file" );
@@ -153,14 +164,12 @@ public:
     {
         wxLogTrace( LCK, "Unlocking %s", m_lockFilename );
 
-        // Delete lock file only if the file was created in the constructor and if the file
-        // contains the correct user and host names.
         if( m_fileCreated && checkUserAndHost() )
         {
             if( m_removeOnRelease )
                 wxRemoveFile( m_lockFilename );
 
-            m_fileCreated = false; // Reset the flag since file has been deleted manually
+            m_fileCreated = false;
             m_status = false;
             m_errorMsg = wxEmptyString;
         }
@@ -226,6 +235,11 @@ public:
 
     bool IsLockedByMe()
     {
+        // Empty owner means the lock file could not be parsed (e.g. partial cloud sync).
+        // We cannot prove another user owns it, so treat it as reclaimable.
+        if( m_username.IsEmpty() && m_hostname.IsEmpty() )
+            return true;
+
         return m_username == wxGetUserId() && m_hostname == wxGetHostName();
     }
 
