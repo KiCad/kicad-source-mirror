@@ -193,6 +193,34 @@ BOOST_AUTO_TEST_CASE( Issue23625_CorruptedStackupCapped )
 
 
 /**
+ * Verify that a file whose stackup was duplicated (the whole layer sequence repeated several
+ * times, as could happen after a board append in older versions) is reconciled on load so the
+ * board thickness is not inflated by the number of copies.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24133
+ */
+BOOST_AUTO_TEST_CASE( Issue24133_DuplicatedStackupNotInflated )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/kicad_sexpr/Issue24133_DuplicatedStackup/";
+
+    std::unique_ptr<BOARD> testBoard = std::make_unique<BOARD>();
+
+    BOOST_CHECK_NO_THROW( kicadPlugin.LoadBoard( dataPath + "duplicated_stackup.kicad_pcb",
+                                                 testBoard.get() ) );
+
+    const BOARD_STACKUP& stackup = testBoard->GetDesignSettings().GetStackupDescriptor();
+
+    // The file repeats the 9-item layer sequence three times.  Only the first copy must be kept.
+    BOOST_CHECK_EQUAL( stackup.GetCount(), 9 );
+
+    // A single copy is a standard 1.6 mm two-layer board.  Without dedup the three copies would
+    // sum to 4.8 mm.
+    BOOST_CHECK_EQUAL( stackup.BuildBoardThicknessFromStackup(), pcbIUScale.mmToIU( 1.6 ) );
+}
+
+
+/**
  * Verify that append-board preserves the destination stackup while still
  * growing it to match a source board with more copper layers.
  *
