@@ -31,18 +31,21 @@
 #include <wx/bmpbuttn.h>
 #include <wx/statline.h>
 
-DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize& aSize ) :
+DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize& aCanvasSize,
+                                                EDA_3D_VIEWER_SETTINGS::EXPORT_IMAGE_SETTINGS* aCfg ) :
         DIALOG_SHIM( aParent, wxID_ANY, _( "Export 3D View" ), wxDefaultPosition, wxDefaultSize,
                      wxDEFAULT_DIALOG_STYLE ),
+        m_cfg( aCfg ),
         m_format( EDA_3D_VIEWER_EXPORT_FORMAT::PNG ),
-        m_originalSize( aSize ),
-        m_width( aSize.GetWidth() ),
-        m_height( aSize.GetHeight() ),
-        m_xResolution( 300.0 ),
-        m_yResolution( 300.0 ),
-        m_lockAspectRatio( true ),
-        m_sizeUnits( SIZE_UNITS::PIXELS ),
-        m_resolutionUnits( RESOLUTION_UNITS::PIXELS_PER_INCH )
+        m_originalSize( aCanvasSize ),
+        m_width( aCfg && aCfg->width > 0 ? aCfg->width : aCanvasSize.GetWidth() ),
+        m_height( aCfg && aCfg->height > 0 ? aCfg->height : aCanvasSize.GetHeight() ),
+        m_xResolution( aCfg ? aCfg->x_resolution : 300.0 ),
+        m_yResolution( aCfg ? aCfg->y_resolution : 300.0 ),
+        m_lockAspectRatio( aCfg ? aCfg->lock_aspect_ratio : true ),
+        m_sizeUnits( aCfg ? static_cast<SIZE_UNITS>( aCfg->size_units ) : SIZE_UNITS::PIXELS ),
+        m_resolutionUnits( aCfg ? static_cast<RESOLUTION_UNITS>( aCfg->resolution_units )
+                                : RESOLUTION_UNITS::PIXELS_PER_INCH )
 {
     m_aspectRatio = static_cast<double>(m_width) / static_cast<double>(m_height);
 
@@ -64,7 +67,8 @@ DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize&
     sizeGrid->Add( m_spinWidth, 1, wxEXPAND );
 
     // Lock button - will span 2 rows
-    m_lockButton = new wxBitmapButton( this, wxID_ANY, KiBitmapBundle( BITMAPS::locked ) );
+    m_lockButton = new wxBitmapButton( this, wxID_ANY,
+                                       KiBitmapBundle( m_lockAspectRatio ? BITMAPS::locked : BITMAPS::unlocked ) );
     sizeGrid->Add( m_lockButton, 0, wxALIGN_CENTER | wxALL, 2 );
 
     // Size units choice
@@ -73,7 +77,7 @@ DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize&
     m_choiceSizeUnits->Append( _( "%" ) );
     m_choiceSizeUnits->Append( _( "mm" ) );
     m_choiceSizeUnits->Append( _( "in" ) );
-    m_choiceSizeUnits->SetSelection( 0 ); // pixels
+    m_choiceSizeUnits->SetSelection( static_cast<int>( m_sizeUnits ) );
     sizeGrid->Add( m_choiceSizeUnits, 0, wxEXPAND );
 
     // Height row
@@ -116,7 +120,7 @@ DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize&
     m_choiceResolutionUnits = new wxChoice( this, wxID_ANY );
     m_choiceResolutionUnits->Append( _( "pixels/in" ) );
     m_choiceResolutionUnits->Append( _( "pixels/mm" ) );
-    m_choiceResolutionUnits->SetSelection( 0 ); // pixels/in
+    m_choiceResolutionUnits->SetSelection( static_cast<int>( m_resolutionUnits ) );
     resGrid->Add( m_choiceResolutionUnits, 0, wxEXPAND );
 
     // Y Resolution row
@@ -154,6 +158,24 @@ DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize&
 }
 
 
+bool DIALOG_EXPORT_3D_IMAGE::TransferDataToWindow()
+{
+    m_spinWidth->SetValue( m_width );
+    m_spinHeight->SetValue( m_height );
+    m_spinXResolution->SetValue( m_xResolution );
+    m_spinYResolution->SetValue( m_yResolution );
+
+    m_choiceSizeUnits->SetSelection( static_cast<int>( m_sizeUnits ) );
+    m_choiceResolutionUnits->SetSelection( static_cast<int>( m_resolutionUnits ) );
+
+    m_lockButton->SetBitmap( KiBitmapBundle( m_lockAspectRatio ? BITMAPS::locked : BITMAPS::unlocked ) );
+
+    UpdateAspectRatio();
+    UpdatePixelSize();
+    return true;
+}
+
+
 bool DIALOG_EXPORT_3D_IMAGE::TransferDataFromWindow()
 {
     // Convert current values back to pixels if needed
@@ -185,6 +207,17 @@ bool DIALOG_EXPORT_3D_IMAGE::TransferDataFromWindow()
 
     m_xResolution = m_spinXResolution->GetValue();
     m_yResolution = m_spinYResolution->GetValue();
+
+    if( m_cfg )
+    {
+        m_cfg->width = m_width;
+        m_cfg->height = m_height;
+        m_cfg->x_resolution = m_xResolution;
+        m_cfg->y_resolution = m_yResolution;
+        m_cfg->size_units = static_cast<int>( m_sizeUnits );
+        m_cfg->resolution_units = static_cast<int>( m_resolutionUnits );
+        m_cfg->lock_aspect_ratio = m_lockAspectRatio;
+    }
 
     return true;
 }
