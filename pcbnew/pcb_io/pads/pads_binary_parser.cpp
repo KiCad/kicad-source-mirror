@@ -1349,6 +1349,11 @@ void BINARY_PARSER::parsePadStacks()
 }
 
 
+/// Offset of a decal record's NAME field, and so of record 0, from section 14's payload start.
+/// The same on every dialect.
+static constexpr int DECAL_NAME_OFFSET = 44;
+
+
 void BINARY_PARSER::parseDecalNameTable()
 {
     // The complete decal-name table sits in a fixed-size header immediately before section 14,
@@ -1364,9 +1369,8 @@ void BINARY_PARSER::parseDecalNameTable()
         return;
     }
 
-    // The table is section 14's own records; +44 is the NAME field within one. Reached from the
-    // corrected payload offset, so no header-size constant is needed.
-    static constexpr int DECAL_NAME_OFFSET = 44;
+    // The table is section 14's own records, reached from the corrected payload offset, so no
+    // header-size constant is needed.
     static constexpr int REC_SIZE = 112;
     static constexpr int STACK_START_OFFSET = 44;
     static constexpr int SENTINEL_OFFSET = 64;
@@ -1433,90 +1437,94 @@ void BINARY_PARSER::parseDecalNameTable()
 
 void BINARY_PARSER::parseDecalNameTableOld()
 {
-    // Neither old dialect (v0x2021 or v0x2022) stores the 1188-byte sec14 header the newer
-    // dialects use. Both share the same complete decal-name table instead: a run of 100-byte
-    // records anchored at the JMPVIA_AAAAA signature in the section 12 tail, each carrying
-    // NAME @ +0 (null-terminated), a 0xFFFE sentinel @ +64 that terminates the table, and a
-    // terminal count @ +72. Located by signature rather than a fixed offset because the old
-    // dialects' section framing differs from the newer ones.
+    // Both old dialects (v0x2021 and v0x2022) carry the same complete decal-name table the newer
+    // ones do, at the same place in their section 14: record 0 starts at payloadOffset + 44, past
+    // the section's own 44-byte lead-in. Each record holds NAME @ +0 (null-terminated), a 0xFFFE
+    // sentinel @ +64 that terminates the table, and a terminal count @ +72.
+    //
+    // The stride is the section's own declared stride, so the 100-byte old and 112-byte new
+    // records need no version branch. Verified against all 165 corpus files of every version --
+    // the JMPVIA_AAAAA name of record 0 lands exactly on this offset on every one of them, which
+    // is what retired the whole-file signature scan this used to do.
     if( !isOldFormat() )
         return;
 
-    static constexpr int REC_SIZE = 100;
+    const SDB_SECTION* sec14 = m_sdb.Section( 14 );
+
+    if( !sec14 || sec14->stride == 0 )
+        return;
+
     static constexpr int STACK_START_OFFSET = 44;
     static constexpr int SENTINEL_OFFSET = 64;
-    static constexpr int                 START_OFFSET = 68;
+    static constexpr int START_OFFSET = 68;
     static constexpr int COUNT_OFFSET = 72;
-    static const std::array<uint8_t, 12> SIGNATURE = { 'J', 'M', 'P', 'V', 'I', 'A', '_', 'A', 'A', 'A', 'A', 'A' };
 
-    // The table is the first signature occurrence whose 100-byte run validates (record 0 ==
-    // JMPVIA_AAAAA with a 0xFFFE sentinel), guarding against a stray earlier occurrence.
-    for( size_t start = findSignature( m_data, SIGNATURE ); start != SIGNATURE_NOT_FOUND;
-         start = findSignature( m_data, SIGNATURE, start + 1 ) )
+    size_t start = static_cast<size_t>( sec14->payloadOffset ) + DECAL_NAME_OFFSET;
+    size_t stride = sec14->stride;
+
+    std::vector<std::string>        table;
+    std::map<std::string, uint32_t> counts;
+    std::map<std::string, int32_t>  starts;
+    std::map<std::string, int32_t>  stackCounts;
+    std::map<std::string, int32_t>  stackStarts;
+
+    for( size_t k = 0;; ++k )
     {
-        std::vector<std::string>        table;
-        std::map<std::string, uint32_t> counts;
-        std::map<std::string, int32_t>  starts;
-        std::map<std::string, int32_t>  stackCounts;
-        std::map<std::string, int32_t>  stackStarts;
+        size_t off = start + k * stride;
 
-        for( size_t k = 0;; ++k )
+        if( off + SENTINEL_OFFSET + 2 > m_data.size() )
+            break;
+
+        SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( off ) );
+
+        if( rec.U16( SENTINEL_OFFSET ) != SDB_RECORD_SENTINEL )
+            break;
+
+        std::string name = rec.Str( 0, 40 );
+        table.push_back( name );
+
+        if( off + COUNT_OFFSET + 4 <= m_data.size() )
         {
-            size_t off = start + k * REC_SIZE;
+            int32_t count = rec.I32( COUNT_OFFSET );
+            int32_t cursor = rec.I32( START_OFFSET );
+            int32_t stackCount = rec.I32( 88 );
 
-            if( off + SENTINEL_OFFSET + 2 > m_data.size() )
-                break;
-
-            SDB_RECORD rec = m_sdb.RecordAt( static_cast<uint32_t>( off ) );
-
-            if( rec.U16( SENTINEL_OFFSET ) != SDB_RECORD_SENTINEL )
-                break;
-
-            std::string name = rec.Str( 0, 40 );
-            table.push_back( name );
-
-            if( off + COUNT_OFFSET + 4 <= m_data.size() )
+            if( !name.empty() && count > 0 && count <= 1000 )
             {
-                int32_t count = rec.I32( COUNT_OFFSET );
-                int32_t cursor = rec.I32( START_OFFSET );
-                int32_t stackCount = rec.I32( 88 );
+                counts.emplace( name, static_cast<uint32_t>( count ) );
 
-                if( !name.empty() && count > 0 && count <= 1000 )
+                if( cursor >= 0 )
+                    starts.emplace( name, cursor );
+
+                if( stackCount > 0 && stackCount <= 1000 )
                 {
-                    counts.emplace( name, static_cast<uint32_t>( count ) );
+                    stackCounts.emplace( name, stackCount );
 
-                    if( cursor >= 0 )
-                        starts.emplace( name, cursor );
+                    // Both old dialects store this cursor, and it has to be read rather than
+                    // re-derived by accumulating counts in decal-table order: the slices form
+                    // a ring, so the table's first decals do not sit at the front of the pair
+                    // pool. On PSTAGE-002 the 36 decals tile 64 slots with STANDARDVIA at 0,
+                    // S2 last at 61, then THERMALVIA at 62 and JMPVIA_AAAAA at 63 wrapping
+                    // back to 0.
+                    int32_t stackStart = rec.I32( STACK_START_OFFSET );
 
-                    if( stackCount > 0 && stackCount <= 1000 )
-                    {
-                        stackCounts.emplace( name, stackCount );
-
-                        // Both old dialects store this cursor, and it has to be read rather than
-                        // re-derived by accumulating counts in decal-table order: the slices form
-                        // a ring, so the table's first decals do not sit at the front of the pair
-                        // pool. On PSTAGE-002 the 36 decals tile 64 slots with STANDARDVIA at 0,
-                        // S2 last at 61, then THERMALVIA at 62 and JMPVIA_AAAAA at 63 wrapping
-                        // back to 0.
-                        int32_t stackStart = rec.I32( STACK_START_OFFSET );
-
-                        if( stackStart >= 0 )
-                            stackStarts.emplace( name, stackStart );
-                    }
+                    if( stackStart >= 0 )
+                        stackStarts.emplace( name, stackStart );
                 }
             }
         }
-
-        if( !table.empty() && table[0] == "JMPVIA_AAAAA" )
-        {
-            m_decalNameTable = std::move( table );
-            m_decalTerminalCount = std::move( counts );
-            m_decalTerminalStart = std::move( starts );
-            m_decalStackCount = std::move( stackCounts );
-            m_decalStackStart = std::move( stackStarts );
-            return;
-        }
     }
+
+    // Record 0 is always the JMPVIA_AAAAA pseudo-decal, so its name doubles as a check that the
+    // structural offset landed on the table rather than on unrelated bytes.
+    if( table.empty() || table[0] != "JMPVIA_AAAAA" )
+        return;
+
+    m_decalNameTable = std::move( table );
+    m_decalTerminalCount = std::move( counts );
+    m_decalTerminalStart = std::move( starts );
+    m_decalStackCount = std::move( stackCounts );
+    m_decalStackStart = std::move( stackStarts );
 }
 
 
