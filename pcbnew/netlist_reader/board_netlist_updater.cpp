@@ -769,7 +769,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
     if( firstAssociatedVariant != nullptr && firstAssociatedVariant->m_hasExcludedFromBOM )
         netlistExcludeFromBOM = firstAssociatedVariant->m_excludedFromBOM;
 
-    if( netlistExcludeFromBOM != ( ( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_BOM ) > 0 ) )
+    if( m_updateFields && netlistExcludeFromBOM != ( ( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_BOM ) > 0 ) )
     {
         if( m_isDryRun )
         {
@@ -805,7 +805,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
     if( firstAssociatedVariant != nullptr && firstAssociatedVariant->m_hasDnp )
         netlistDNP = firstAssociatedVariant->m_dnp;
 
-    if( netlistDNP != ( ( aFootprint->GetAttributes() & FP_DNP ) > 0 ) )
+    if( m_updateFields && netlistDNP != ( ( aFootprint->GetAttributes() & FP_DNP ) > 0 ) )
     {
         if( m_isDryRun )
         {
@@ -841,7 +841,8 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
     if( firstAssociatedVariant != nullptr && firstAssociatedVariant->m_hasExcludedFromPosFiles )
         netlistExcludeFromPosFiles = firstAssociatedVariant->m_excludedFromPosFiles;
 
-    if( netlistExcludeFromPosFiles != ( ( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES ) > 0 ) )
+    if( m_updateFields
+        && netlistExcludeFromPosFiles != ( ( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES ) > 0 ) )
     {
         if( m_isDryRun )
         {

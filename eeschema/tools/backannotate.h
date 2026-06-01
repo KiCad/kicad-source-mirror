@@ -94,15 +94,15 @@ public:
      */
     struct PCB_FP_DATA
     {
-        PCB_FP_DATA( const wxString& aRef, const wxString& aFootprint, const wxString& aValue,
-                     bool aDNP, bool aExcludeFromBOM,
-                     const std::map<wxString, wxString>& aPinMap,
+        PCB_FP_DATA( const wxString& aRef, const wxString& aFootprint, const wxString& aValue, bool aDNP,
+                     bool aExcludeFromBOM, bool aExcludeFromPosFiles, const std::map<wxString, wxString>& aPinMap,
                      const std::map<wxString, wxString>& aFieldsMap ) :
                 m_ref( aRef ),
                 m_footprint( aFootprint ),
                 m_value( aValue ),
                 m_DNP( aDNP ),
                 m_excludeFromBOM( aExcludeFromBOM ),
+                m_excludeFromPosFiles( aExcludeFromPosFiles ),
                 m_pinMap( aPinMap ),
                 m_fieldsMap( aFieldsMap )
         {}
@@ -112,6 +112,7 @@ public:
         wxString                     m_value;
         bool                         m_DNP;
         bool                         m_excludeFromBOM;
+        bool                         m_excludeFromPosFiles;
         std::map<wxString, wxString> m_pinMap;
         std::map<wxString, wxString> m_fieldsMap;
     };
