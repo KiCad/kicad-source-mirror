@@ -31,6 +31,7 @@
 #include <wx/gauge.h>
 #include <wx/appprogress.h>
 
+#include <core/throttle.h>
 #include <widgets/progress_reporter_base.h>
 
 #define PR_NO_ABORT 0
@@ -80,12 +81,25 @@ public:
         WX_PROGRESS_REPORTER_BASE::SetTitle( aTitle );
     }
 
+    ///< Gate expensive dialog work while always allowing the final tick.
+    static bool shouldRefresh( int aProgress, int aMaxProgress, int aPhase, int aNumPhases,
+                               THROTTLE& aThrottle )
+    {
+        bool finalTick = aMaxProgress > 0 && aProgress >= aMaxProgress && aPhase + 1 >= aNumPhases;
+
+        return finalTick || aThrottle.Ready();
+    }
+
 private:
     bool updateUI() override;
 
 private:
     wxAppProgressIndicator m_appProgressIndicator;
     int                    m_messageWidth;
+
+    // Rate-limit expensive dialog repaint and event draining.
+    THROTTLE               m_updateThrottle;
+    std::atomic_bool       m_lastUpdateResult;
 };
 
 

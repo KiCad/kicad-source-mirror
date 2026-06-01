@@ -125,6 +125,13 @@ bool PROGRESS_REPORTER_BASE::KeepRefreshing( bool aWait )
             wxMilliSleep( 33 /* 30 FPS refresh rate */ );
         }
 
+        // Force one terminal refresh after throttled updates.
+        if( m_maxProgress > 0 && !updateUI() )
+        {
+            m_cancelled.store( true );
+            return false;
+        }
+
         return true;
     }
     else
@@ -138,5 +145,4 @@ bool PROGRESS_REPORTER_BASE::KeepRefreshing( bool aWait )
         return true;
     }
 }
-
 
