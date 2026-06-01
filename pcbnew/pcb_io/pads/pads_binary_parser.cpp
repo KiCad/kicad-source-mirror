@@ -5198,18 +5198,28 @@ void BINARY_PARSER::parseRouteVertices()
             bool v2022NeedsHeaderLayerRecovery = m_version == 0x2022 && legacyObjects
                                                  && runCount > routeLayers->count + 1;
 
-            if( ( legacyObjects || m_version == 0x2024 ) && runCount == routeLayers->count )
+            // The router emits route descriptors grouped by the layer it is working on, so one
+            // run per routed layer is a property of how routing is generated, not of the record
+            // size. v0x2026 grew the descriptor from 36 to 48 bytes but did not change that
+            // grouping, so it takes the same run-to-layer mapping whenever the run count lines up.
+            bool runsMapToLayers = legacyObjects || m_version == 0x2024 || m_version == 0x2026;
+            bool runLayersResolved = false;
+
+            if( runsMapToLayers && runCount == routeLayers->count )
             {
                 for( size_t run = 0; run < runCount; ++run )
                     runLayers[run] = padsLayerForSerializedIndex( run );
+
+                runLayersResolved = true;
             }
-            else if( legacyObjects && runCount == routeLayers->count + 1 && !objects.empty()
+            else if( runsMapToLayers && runCount == routeLayers->count + 1 && !objects.empty()
                      && objects.front().width > 0 && objects.back().width > 0 )
             {
                 for( size_t run = 0; run + 1 < runCount; ++run )
                     runLayers[run] = padsLayerForSerializedIndex( run );
 
                 runLayers.back() = 1;
+                runLayersResolved = true;
             }
             else if( legacyObjects && runCount >= 2 && runCount < routeLayers->count )
             {
@@ -5340,7 +5350,7 @@ void BINARY_PARSER::parseRouteVertices()
                     objectLayers[object] = runLayers[run];
             }
 
-            if( m_version == 0x2026 && !objects.empty() && !headerSequence.empty() )
+            if( m_version == 0x2026 && !runLayersResolved && !objects.empty() && !headerSequence.empty() )
             {
                 struct LAYER_WIDTH
                 {
