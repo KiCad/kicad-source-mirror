@@ -260,6 +260,27 @@ public:
 
     static wxString StockTablePath( LIBRARY_TABLE_TYPE aType );
 
+    /**
+     * @return the stock library-table path for @p aType against the versioned template-dir env
+     *         var, e.g. ${KICAD10_TEMPLATE_DIR}/sym-lib-table.
+     *
+     * Unlike StockTablePath() this URI stays unresolved, so it survives the per-launch prefix
+     * change of relocatable installs (AppImage, Nix).
+     */
+    static wxString StockTableTokenizedURI( LIBRARY_TABLE_TYPE aType );
+
+    /**
+     * @return the URI to use when referencing the stock table from a freshly created global
+     *         table.
+     *
+     * When the versioned template-dir env var is defined externally to the process -- as
+     * relocatable installs (AppImage, Nix) do at launch -- this returns the unresolved
+     * StockTableTokenizedURI() so the reference re-resolves on every launch. Otherwise the
+     * variable is at its built-in default and this returns the resolved StockTablePath(),
+     * preserving the historical absolute-path behavior of standard installs.
+     */
+    static wxString StockTableReferenceURI( LIBRARY_TABLE_TYPE aType );
+
     static bool IsTableValid( const wxString& aPath );
 
     /// @return true if all required global tables are present on disk and valid
