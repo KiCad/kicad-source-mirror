@@ -49,7 +49,7 @@ seq:
     type: int3
     if: version.value <= 37
   - id: schematic_path
-    type: dt_string(version.value)
+    type: dt_string
     if: version.value > 37
   - id: flag_byte
     type: u1
@@ -72,15 +72,15 @@ seq:
   - id: layer_count
     type: int3
   - id: layers
-    type: layer(version.value)
+    type: layer
     repeat: expr
     repeat-expr: layer_count.value
   - id: font_style
-    type: font_style(version.value)
+    type: font_style
   - id: via_styles
-    type: via_styles(version.value)
+    type: via_styles
   - id: netclasses
-    type: netclasses(version.value)
+    type: netclasses
 
   - id: post_via_styles_tail
     size-eos: true
@@ -93,6 +93,10 @@ seq:
       `fp_font_block`, `fp_chain_shape`, `mount_hole_block`, `text_section`,
       `net_record`, `net_routing_preamble`, `track_chain`, `track_node`, and
       `copper_pour` below.
+      
+instances:
+  ver:
+    value: version.value
 
 types:
   int3:
@@ -121,26 +125,23 @@ types:
 
   dt_string:
     doc: Version-dependent DipTrace string.
-    params:
-      - id: version
-        type: s4
     seq:
       - id: len_ascii
         type: int3
-        if: version <= 37
+        if: _root.ver <= 37
       - id: text_ascii
         type: str
         size: len_ascii.value
         encoding: ASCII
-        if: version <= 37
+        if: _root.ver <= 37
       - id: len_utf16
         type: u2
-        if: version > 37
+        if: _root.ver > 37
       - id: text_utf16
         type: str
         size: len_utf16 * 2
         encoding: UTF-16BE
-        if: version > 37
+        if: _root.ver > 37
 
   rgb_color:
     seq:
@@ -188,9 +189,6 @@ types:
       One copper-layer record (ParseLayers, parser ~1137-1165).  Each record is
       exactly: flag u1, index int3, color rgb(3), name dt_string, layer_type
       int3, field_b int3, plane_net_index int3, field_d int4, separator u1.
-    params:
-      - id: version
-        type: s4
     seq:
       - id: flag
         type: u1
@@ -199,7 +197,7 @@ types:
       - id: color
         type: rgb_color
       - id: name
-        type: dt_string(version)
+        type: dt_string
       - id: layer_type
         type: int3
         doc: Layer Type from record field_a (0 = Signal, 1 = Plane).
@@ -219,16 +217,13 @@ types:
         type: u1
 
   font_style:
-    params:
-      - id: version
-        type: s4
     seq:
       - id: prefix_fields
         type: int3
         repeat: expr
         repeat-expr: 6
       - id: font_name
-        type: dt_string(version)
+        type: dt_string
       - id: field_a
         type: int4
       - id: field_b
@@ -241,43 +236,37 @@ types:
         type: int4
       - id: v37_padding
         size: 5
-        if: version <= 37
+        if: _root.ver <= 37
       - id: v37_extra_a
         type: int3
-        if: version <= 37
+        if: _root.ver <= 37
       - id: v37_extra_b
         type: int3
-        if: version <= 37
+        if: _root.ver <= 37
       - id: v37_extra_flag
         type: u1
-        if: version <= 37
+        if: _root.ver <= 37
       - id: modern_padding
         size: 10
-        if: version > 37
+        if: _root.ver > 37
       - id: field_c
         type: int3
       - id: field_d
         type: int3
 
   via_styles:
-    params:
-      - id: version
-        type: s4
     seq:
       - id: num_entries
         type: int3
       - id: entries
-        type: via_style_entry(version)
+        type: via_style_entry
         repeat: expr
         repeat-expr: num_entries.value
     types:
       via_style_entry:
-        params:
-          - id: version
-            type: s4
         seq:
           - id: name
-            type: dt_string(version)
+            type: dt_string
           - id: flag
             type: u1
           - id: value_1
@@ -290,24 +279,18 @@ types:
             type: int3
             
   netclasses:
-    params:
-      - id: version
-        type: s4
     seq:
       - id: num_entries
         type: int3
       - id: entries
-        type: netclass_entry(version)
+        type: netclass_entry
         repeat: expr
         repeat-expr: num_entries.value
     types:
       netclass_entry:
-        params:
-          - id: version
-            type: s4
         seq:
           - id: name
-            type: dt_string(version)
+            type: dt_string
           - id: field_a
             type: int3
           - id: value_1
@@ -417,12 +400,9 @@ types:
       mirrored exactly; `placement_quarter_turns` lives 59 bytes BEFORE the
       boundary marker (int3 read at boundaryOffset-59) and so is not part of this
       forward-read structure.
-    params:
-      - id: version
-        type: s4
     seq:
       - id: library_path
-        type: dt_string(version)
+        type: dt_string
       - id: field_a
         type: int3
         doc: Raw header int3 field A.
@@ -464,7 +444,7 @@ types:
         type: int3
         doc: Component kind discriminator (used in standalone-via classification).
       - id: pattern_name
-        type: dt_string(version)
+        type: dt_string
       - id: bbox_width
         type: int4
         doc: Footprint X extent in DipTrace units (for shape scaling).
@@ -484,13 +464,13 @@ types:
       - id: field_h
         type: int3
       - id: display_name
-        type: dt_string(version)
+        type: dt_string
       - id: refdes
-        type: dt_string(version)
+        type: dt_string
       - id: value
-        type: dt_string(version)
+        type: dt_string
       - id: extra_string
-        type: dt_string(version)
+        type: dt_string
         doc: Trailing string after value; always empty in observed files.
 
   component_tail:
@@ -549,9 +529,6 @@ types:
       pre-header(14) + number string + label string + dimensions(16) +
       post-dimension block (fixed 36 bytes, or 11-byte header + N polygon
       vertices + 25-byte tail when style_code == 3).
-    params:
-      - id: version
-        type: s4
     seq:
       - id: index
         type: int3
@@ -566,10 +543,10 @@ types:
         type: int4
         doc: Y offset from component origin in DipTrace units.
       - id: number
-        type: dt_string(version)
+        type: dt_string
         doc: Pad number/name (e.g. "1", "2").
       - id: label
-        type: dt_string(version)
+        type: dt_string
         doc: Functional label (e.g. "POS", "GND").
       - id: width
         type: int4
@@ -584,7 +561,7 @@ types:
         type: int4
         doc: Drill height in DipTrace units (0 for SMD).
       - id: post_dim
-        type: pad_post_dim(version)
+        type: pad_post_dim
         doc: Post-dimension block; see pad_post_dim.
 
   pad_post_dim:
@@ -594,9 +571,6 @@ types:
       block (PAD_POST_DIM_FIXED_SIZE) or, for polygon pads, the 11-byte header +
       vertex run + 25-byte tail.  Field_a is read by the optional pad-post dump
       but otherwise unused.
-    params:
-      - id: version
-        type: s4
     seq:
       - id: field_a
         type: int3
@@ -878,9 +852,6 @@ types:
       per-net mode flag validated to [0,10]), int4(trace_width), int4(width_2),
       string(net_name).  Routing data (net_routing_preamble + track_chains)
       follows in the same net body, located by ParseNetRouting.
-    params:
-      - id: version
-        type: s4
     seq:
       - id: sentinel
         type: net_sentinel
@@ -894,7 +865,7 @@ types:
       - id: width_2
         type: int4
       - id: name
-        type: dt_string(version)
+        type: dt_string
 
   net_routing_preamble:
     doc: |
@@ -1001,9 +972,6 @@ types:
       Text-object section (FindAndParseTextObjects, parser ~2574-2611).  Anchored
       on 3x int3(0) (TEXT_SECTION_ZEROS), then int3(count), flag_1 u1 (= 1),
       flag_2 u1 (= 0), then count text_record entries.
-    params:
-      - id: version
-        type: s4
     seq:
       - id: zeros
         contents: [0x0f, 0x42, 0x40, 0x0f, 0x42, 0x40, 0x0f, 0x42, 0x40]
@@ -1016,7 +984,7 @@ types:
         type: u1
         doc: Validated to be 0.
       - id: records
-        type: text_record(version, count.value)
+        type: text_record(count.value)
         repeat: expr
         repeat-expr: count.value
 
@@ -1027,8 +995,6 @@ types:
       record except the last; modeled by record_separator with the
       is_last/count gate.
     params:
-      - id: version
-        type: s4
       - id: count
         type: s4
     seq:
@@ -1062,9 +1028,9 @@ types:
       - id: y2
         type: int4
       - id: text
-        type: dt_string(version)
+        type: dt_string
       - id: font_name
-        type: dt_string(version)
+        type: dt_string
       - id: separator
         type: u1
       - id: field_pf_1
