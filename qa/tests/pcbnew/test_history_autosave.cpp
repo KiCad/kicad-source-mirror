@@ -31,6 +31,7 @@
 
 #include <vector>
 
+#include <wx/datetime.h>
 #include <wx/dir.h>
 #include <wx/ffile.h>
 #include <wx/filefn.h>
@@ -56,6 +57,37 @@ struct SCOPED_BOOL_OVERRIDE
 
     bool& m_flag;
     bool  m_original;
+};
+
+
+// Restore the backup location on destruction so a thrown BOOST_REQUIRE cannot leak the
+// override into later tests.
+struct SCOPED_BACKUP_LOCATION_OVERRIDE
+{
+    explicit SCOPED_BACKUP_LOCATION_OVERRIDE( BACKUP_LOCATION& aLocation ) :
+            m_location( aLocation ), m_original( aLocation )
+    {
+    }
+
+    ~SCOPED_BACKUP_LOCATION_OVERRIDE() { m_location = m_original; }
+
+    BACKUP_LOCATION& m_location;
+    BACKUP_LOCATION  m_original;
+};
+
+
+// Load a project into the settings manager and unload it on destruction, keeping the global
+// active-project state isolated even when a test aborts partway through.
+struct SCOPED_PROJECT_LOAD
+{
+    SCOPED_PROJECT_LOAD( SETTINGS_MANAGER& aMgr, const wxString& aProjectFile ) : m_mgr( aMgr )
+    {
+        m_mgr.LoadProject( aProjectFile.ToStdString() );
+    }
+
+    ~SCOPED_PROJECT_LOAD() { m_mgr.UnloadProject( &m_mgr.Prj(), false ); }
+
+    SETTINGS_MANAGER& m_mgr;
 };
 
 
@@ -607,6 +639,95 @@ BOOST_AUTO_TEST_CASE( FirstManualSaveAlwaysCommitsOnFreshProject )
     BOOST_CHECK_MESSAGE( !head.IsEmpty(), "manual save on a fresh project must commit even when staged matches disk" );
 
     history.UnregisterSaver( &history );
+}
+
+
+// A content-identical autosave with a newer mtime (cloud-sync touch) must not be flagged
+// stale, or recovery prompts fire on every open with nothing to restore (issue 24126).
+BOOST_AUTO_TEST_CASE( CloudSyncTouchedAutosaveFalselyFlaggedStale )
+{
+    bool&                backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
+    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
+    backupEnabled = true;
+
+    BACKUP_LOCATION& location = Pgm().GetCommonSettings()->m_Backup.location;
+    SCOPED_BACKUP_LOCATION_OVERRIDE restoreLocation( location );
+    location = BACKUP_LOCATION::PROJECT_DIR;
+
+    SCOPED_TEMP_DIR project( wxS( "kicad_qa_cloudsync_autosave" ) );
+    const wxString& path = project.Path();
+    const wxString  sep = wxFileName::GetPathSeparator();
+
+    // FindStaleAutosaveFiles resolves the autosave root through the active project, so it must
+    // be loaded; the .kicad_pro must exist on disk first for LoadProject to succeed.
+    writeTextFile( path + sep + wxS( "p.kicad_pro" ), wxS( "{}\n" ) );
+
+    SETTINGS_MANAGER&   mgr = Pgm().GetSettingsManager();
+    SCOPED_PROJECT_LOAD loadedProject( mgr, path + sep + wxS( "p.kicad_pro" ) );
+
+    const wxString sourcePath = path + sep + wxS( "p.kicad_pcb" );
+    const wxString autosavePath = path + sep + wxS( "_autosave-p.kicad_pcb" );
+    const wxString boardContent = wxS( "(kicad_pcb (version 20240108))\n" );
+
+    // Byte-identical source and "_autosave-" companion, mirroring a clean save.
+    writeTextFile( sourcePath, boardContent );
+    writeTextFile( autosavePath, boardContent );
+
+    LOCAL_HISTORY history;
+
+    // Cloud-sync touch gives the identical autosave a strictly newer mtime.
+    wxDateTime srcMtime = wxFileName( sourcePath ).GetModificationTime();
+    wxDateTime newerMtime = srcMtime + wxTimeSpan::Seconds( 60 );
+    BOOST_REQUIRE( wxFileName( autosavePath ).SetTimes( &newerMtime, &newerMtime, nullptr ) );
+
+    std::vector<wxString> exts{ wxS( "kicad_pcb" ) };
+    auto                  stale = history.FindStaleAutosaveFiles( path, exts );
+
+    BOOST_CHECK_MESSAGE( stale.empty(),
+                         "Content-identical autosave with newer mtime was flagged stale, "
+                         "triggering a spurious recovery prompt (issue 24126)" );
+}
+
+
+// Counterpart to the above: an autosave whose content genuinely differs (a real unsaved edit)
+// must still be flagged stale so recovery continues to fire.
+BOOST_AUTO_TEST_CASE( DivergentAutosaveStillFlaggedStale )
+{
+    bool&                backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
+    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
+    backupEnabled = true;
+
+    BACKUP_LOCATION& location = Pgm().GetCommonSettings()->m_Backup.location;
+    SCOPED_BACKUP_LOCATION_OVERRIDE restoreLocation( location );
+    location = BACKUP_LOCATION::PROJECT_DIR;
+
+    SCOPED_TEMP_DIR project( wxS( "kicad_qa_divergent_autosave" ) );
+    const wxString& path = project.Path();
+    const wxString  sep = wxFileName::GetPathSeparator();
+
+    writeTextFile( path + sep + wxS( "p.kicad_pro" ), wxS( "{}\n" ) );
+
+    SETTINGS_MANAGER&   mgr = Pgm().GetSettingsManager();
+    SCOPED_PROJECT_LOAD loadedProject( mgr, path + sep + wxS( "p.kicad_pro" ) );
+
+    const wxString sourcePath = path + sep + wxS( "p.kicad_pcb" );
+    const wxString autosavePath = path + sep + wxS( "_autosave-p.kicad_pcb" );
+
+    // Autosave content diverges from the source, a genuine unsaved edit to recover.
+    writeTextFile( sourcePath, wxS( "(kicad_pcb (version 20240108))\n" ) );
+    writeTextFile( autosavePath, wxS( "(kicad_pcb (version 20240108) (edited yes))\n" ) );
+
+    LOCAL_HISTORY history;
+
+    wxDateTime srcMtime = wxFileName( sourcePath ).GetModificationTime();
+    wxDateTime newerMtime = srcMtime + wxTimeSpan::Seconds( 60 );
+    BOOST_REQUIRE( wxFileName( autosavePath ).SetTimes( &newerMtime, &newerMtime, nullptr ) );
+
+    std::vector<wxString> exts{ wxS( "kicad_pcb" ) };
+    auto                  stale = history.FindStaleAutosaveFiles( path, exts );
+
+    BOOST_CHECK_MESSAGE( stale.size() == 1,
+                         "Genuinely divergent autosave must still be flagged stale for recovery" );
 }
 
 
