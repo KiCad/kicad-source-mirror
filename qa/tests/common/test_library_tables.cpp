@@ -157,6 +157,27 @@ BOOST_AUTO_TEST_CASE( Manager )
 }
 
 
+// Regression coverage for the LoadGlobalTables guard: when a global library
+// table file does not exist on disk, loadTables() never inserts an entry for
+// that type into m_tables, so Table( aType, GLOBAL ) must return std::nullopt
+// instead of an entry holding a null pointer. The cleanupRemovedPCMLibraries
+// lambda inside LoadGlobalTables relies on this contract via .value_or(
+// nullptr ) and must not dereference the result. Exercising the full PCM
+// cleanup path requires extensive environment setup (3RD_PARTY env var plus
+// PCM auto-remove enabled in user settings), so we test the underlying
+// contract directly here.
+BOOST_AUTO_TEST_CASE( ManagerTableReturnsNulloptForUnloadedType )
+{
+    LIBRARY_MANAGER manager;
+
+    auto result = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::GLOBAL );
+    BOOST_REQUIRE( !result.has_value() );
+
+    LIBRARY_TABLE* table = result.value_or( nullptr );
+    BOOST_REQUIRE( table == nullptr );
+}
+
+
 BOOST_AUTO_TEST_CASE( NestedTablesDisabledHidden )
 {
     // Test that disabled and hidden nested library table rows are parsed correctly
