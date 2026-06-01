@@ -1559,6 +1559,14 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
 
         break;
 
+    case PCB_MARKER_T:
+        wxFAIL_MSG( wxT( "FOOTPRINT::Remove(): Markers go at the board level, even in the footprint editor" ) );
+        break;
+
+    case PCB_FOOTPRINT_T:
+        wxFAIL_MSG( wxT( "FOOTPRINT::Remove(): Nested footprints not supported" ) );
+        break;
+
     case PCB_POINT_T:
         for( auto it = m_points.begin(); it != m_points.end(); ++it )
         {
@@ -1572,12 +1580,8 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
         break;
 
     default:
-    {
-        wxString msg;
-        msg.Printf( wxT( "FOOTPRINT::Remove() needs work: BOARD_ITEM type (%d) not handled" ),
-                    aBoardItem->Type() );
-        wxFAIL_MSG( msg );
-    }
+        wxFAIL_MSG( wxString::Format( wxT( "FOOTPRINT::Remove() needs work: BOARD_ITEM type (%d) not handled" ),
+                                      aBoardItem->Type() ) );
     }
 
     // If this footprint is on a board, update the board's item-by-id cache

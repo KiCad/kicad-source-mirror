@@ -327,7 +327,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( !( changeFlags & CHT_DONE ) )
             {
-                if( m_isFootprintEditor )
+                // Markers are always stored at the board level, even in the footprint editor
+                if( m_isFootprintEditor && boardItem->Type() != PCB_MARKER_T )
                 {
                     if( FOOTPRINT* parentFP = board->GetFirstFootprint() )
                         parentFP->Add( boardItem );
@@ -398,7 +399,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
             case PCB_TARGET_T:
-            case PCB_MARKER_T:
             case PCB_POINT_T:
             case PCB_ZONE_T:
             case PCB_FOOTPRINT_T:
@@ -408,7 +408,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
                 if( !( changeFlags & CHT_DONE ) )
                 {
-                    if( m_isFootprintEditor )
+                    if( m_isFootprintEditor && boardItem->Type() != PCB_MARKER_T )
                     {
                         if( FOOTPRINT* parentFP = board->GetFirstFootprint() )
                             parentFP->Remove( boardItem );
@@ -422,6 +422,19 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                         board->Remove( boardItem, REMOVE_MODE::BULK );
                         bulkRemovedItems.push_back( boardItem );
                     }
+                }
+
+                break;
+
+            case PCB_MARKER_T:
+                if( view )
+                    view->Remove( boardItem );
+
+                if( !( changeFlags & CHT_DONE ) )
+                {
+                    // Markers are always stored at the board level, even in the footprint editor
+                    board->Remove( boardItem, REMOVE_MODE::BULK );
+                    bulkRemovedItems.push_back( boardItem );
                 }
 
                 break;
