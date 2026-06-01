@@ -1686,10 +1686,41 @@ void BINARY_PARSER::parseTerminals()
 
     const SDB_SECTION* sec14 = getSection( SECTION::DecalHeader );
 
-    if( sec14 && sec14->count >= 11 )
+    // The -11 is a record offset into the section-14 trailer, not a count floor: a design with
+    // fewer than 11 decal headers puts the pool BEFORE the section's dataOffset, and the count
+    // >= 11 guard that avoided the unsigned wrap also skipped the pool entirely on those boards,
+    // leaving the terminal stream to a fallback that starts mid-decal. UZCB_Adapter (sec14 count
+    // 8) is one: its stream began at pin 31, so J31/J32 decoded 172 terminals starting at pin 34
+    // and 277 of 634 pins landed on the wrong net. Signed arithmetic plus a bounds check keeps
+    // the wrap impossible without discarding those designs.
+    int64_t signedPoolBase = static_cast<int64_t>( sec14 ? sec14->dataOffset : 0 )
+                             + ( static_cast<int64_t>( sec14 ? sec14->count : 0 ) - 11 ) * 112 + 44;
+
+    bool poolInBounds = sec14 && signedPoolBase >= 0
+                        && signedPoolBase + static_cast<int64_t>( POOL_SIZE ) * TERM_SIZE
+                                   <= static_cast<int64_t>( m_data.size() );
+
+    // Designs with fewer than 11 decal headers are the ones that used to skip the pool, and some
+    // of them genuinely have none -- they serialize a single unified stream instead, which the
+    // fallback below reads. Only trust a pool found below that threshold when every one of its
+    // records satisfies the terminal-record shape the fallback itself keys on (local coordinates
+    // duplicated at +0/+8 and +4/+12). UZCB_Adapter passes 33 of 33 and needs the pool; NEI2_2
+    // passes 30 of 33 and is correct without it.
+    bool poolUsable = poolInBounds;
+
+    if( poolInBounds && sec14->count < 11 )
     {
-        size_t poolBase =
-                static_cast<size_t>( sec14->dataOffset ) + static_cast<size_t>( sec14->count - 11 ) * 112 + 44;
+        for( int i = 0; i < POOL_SIZE && poolUsable; ++i )
+        {
+            SDB_RECORD rec =
+                    m_sdb.RecordAt( static_cast<uint32_t>( signedPoolBase + i * TERM_SIZE ) );
+            poolUsable = rec.I32( 0 ) == rec.I32( 8 ) && rec.I32( 4 ) == rec.I32( 12 );
+        }
+    }
+
+    if( poolUsable )
+    {
+        size_t poolBase = static_cast<size_t>( signedPoolBase );
 
         for( int i = 0; i < POOL_SIZE; ++i )
         {
