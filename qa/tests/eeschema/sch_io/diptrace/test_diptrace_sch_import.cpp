@@ -42,8 +42,42 @@
 #include <set>
 #include <vector>
 
+#include <reporter.h>
+
 #include <wx/filefn.h>
 #include <wx/xml/xml.h>
+
+
+/// Reporter that records the severity of every message so a test can assert that an import ran
+/// without warnings or errors.
+class DIPTRACE_COUNTING_REPORTER : public REPORTER
+{
+public:
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override
+    {
+        m_messages.emplace_back( aSeverity, aText );
+        return *this;
+    }
+
+    bool HasMessage() const override { return !m_messages.empty(); }
+
+    int CountOfSeverity( int aSeverityMask ) const
+    {
+        int n = 0;
+
+        for( const auto& [sev, text] : m_messages )
+        {
+            if( sev & aSeverityMask )
+                n++;
+        }
+
+        return n;
+    }
+
+    void Clear() override { m_messages.clear(); }
+
+    std::vector<std::pair<SEVERITY, wxString>> m_messages;
+};
 
 
 struct DIPTRACE_SCH_IMPORT_FIXTURE
@@ -61,6 +95,7 @@ struct DIPTRACE_SCH_IMPORT_FIXTURE
     std::unique_ptr<SCHEMATIC> m_schematic;
     SETTINGS_MANAGER m_manager;
     SCH_SHEET* m_loadedRoot = nullptr;
+    DIPTRACE_COUNTING_REPORTER m_reporter;
 
     std::string GetTestDataDir()
     {
@@ -324,6 +359,8 @@ struct DIPTRACE_SCH_IMPORT_FIXTURE
         m_schematic->CurrentSheet().clear();
         m_schematic->CurrentSheet().push_back( &m_schematic->Root() );
 
+        m_reporter.Clear();
+        m_plugin.SetReporter( &m_reporter );
         m_loadedRoot = m_plugin.LoadSchematicFile( aFilePath, m_schematic.get() );
         return m_loadedRoot;
     }
@@ -342,6 +379,47 @@ BOOST_AUTO_TEST_CASE( CanReadSchematic )
     BOOST_CHECK( m_plugin.CanReadSchematicFile( GetTestDataDir() + "z80_board.dch" ) );
     BOOST_CHECK( m_plugin.CanReadSchematicFile( GetTestDataDir() + "power_supply.dch" ) );
     BOOST_CHECK( m_plugin.CanReadSchematicFile( GetTestDataDir() + "pppp.dch" ) );
+}
+
+
+/**
+ * Importing a well-formed DipTrace schematic must run the full import chain without emitting any
+ * warnings or errors. Component records are split by their header signature and parsed within
+ * fixed bounds, so a recognised file should never fall back, mis-parse a record, or fail to save
+ * its generated library. This guards against regressions in the component boundary detector.
+ *
+ * z80_board.dch (v38) exercises the modern UTF-16 string path; pppp.dch (v31) exercises the legacy
+ * ASCII string path. power_supply.dch (v37) is intentionally excluded: it carries UTF-16 header
+ * strings despite its version, which the shared reader's ASCII-at-or-below-37 cutoff mis-decodes.
+ * That is a distinct pre-existing string-encoding issue, not a boundary-detection regression.
+ */
+BOOST_AUTO_TEST_CASE( ImportChainIsClean )
+{
+    for( const char* file : { "z80_board.dch", "pppp.dch" } )
+    {
+        const std::string path = GetTestDataDir() + file;
+
+        if( !wxFileExists( path ) )
+            continue;
+
+        SCH_SHEET* root = nullptr;
+        BOOST_REQUIRE_NO_THROW( root = LoadDipTraceSchematic( path ) );
+        BOOST_REQUIRE( root );
+
+        BOOST_CHECK_MESSAGE( m_reporter.CountOfSeverity( RPT_SEVERITY_ERROR ) == 0,
+                             "Import of " << file << " reported errors" );
+        BOOST_CHECK_MESSAGE( m_reporter.CountOfSeverity( RPT_SEVERITY_WARNING ) == 0,
+                             "Import of " << file << " reported warnings" );
+
+        // The import writes a generated symbol library next to the source schematic. Remove it so
+        // the test data directory is left pristine.
+        wxFileName genLib( path );
+        genLib.SetName( genLib.GetName() + wxT( "-diptrace-import" ) );
+        genLib.SetExt( wxT( "kicad_sym" ) );
+
+        if( genLib.FileExists() )
+            wxRemoveFile( genLib.GetFullPath() );
+    }
 }
 
 

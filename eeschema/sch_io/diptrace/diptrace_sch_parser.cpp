@@ -29,7 +29,6 @@
 #include <cstring>
 #include <deque>
 #include <memory>
-#include <regex>
 #include <set>
 
 #include <wx/filename.h>
@@ -450,167 +449,32 @@ size_t SCH_PARSER::findTailStart() const
 }
 
 
-bool SCH_PARSER::isValidRefdes( const wxString& aRefdes )
-{
-    if( aRefdes.IsEmpty() )
-        return true;
-
-    if( aRefdes.StartsWith( wxT( "NetPort" ) ) )
-        return true;
-
-    static const std::regex refdesRegex( "^[A-Z]{1,4}[0-9]{1,4}[A-Za-z]?$" );
-    return std::regex_match( aRefdes.ToStdString(), refdesRegex );
-}
-
-
 std::vector<size_t> SCH_PARSER::scanComponentBoundaries( size_t aFirstComp,
                                                          size_t aBusSectionOffset ) const
 {
-    const uint8_t* data     = m_reader.GetData();
-    size_t         fileSize = m_reader.GetFileSize();
-    int            version  = m_reader.GetVersion();
-
+    // Every component record starts with a placement bbox followed by five short header strings.
+    // isComponentHeaderAt() validates that signature using the correct version-specific string
+    // encoding, so walking the section byte-by-byte and accepting each header it recognises yields
+    // the exact set of record starts. A recognised header advances by its fixed 16-byte bbox so the
+    // scan cannot re-match inside it; everything else advances one byte to stay aligned.
     std::vector<size_t> boundaries;
-    boundaries.push_back( aFirstComp );
 
-    size_t off = aFirstComp + 16;
+    size_t off = aFirstComp;
+    size_t end = ( aBusSectionOffset > 20 ) ? aBusSectionOffset - 20 : 0;
 
-    while( off < aBusSectionOffset - 20 )
+    while( off < end )
     {
-        bool ok = true;
-        int  bboxVal[4] = { 0, 0, 0, 0 };
-
-        for( int i = 0; i < 4; i++ )
+        if( isComponentHeaderAt( off ) )
         {
-            size_t p = off + static_cast<size_t>( i ) * 4;
-
-            if( p + 4 > fileSize )
-            {
-                ok = false;
-                break;
-            }
-
-            int raw = ( data[p] << 24 ) | ( data[p + 1] << 16 ) | ( data[p + 2] << 8 )
-                      | data[p + 3];
-
-            bboxVal[i] = raw - INT4_BIAS;
-
-            if( abs( bboxVal[i] ) > 50000000 )
-            {
-                ok = false;
-                break;
-            }
+            boundaries.push_back( off );
+            off += 16;
         }
-
-        // The first two int4 are the component's placement coordinate on the sheet, which is a
-        // real position several mm from the origin. False boundary matches inside a component's
-        // graphics tail carry only tiny local coordinates (|v| <= ~0.33 mm), so reject boundaries
-        // whose placement sits essentially at the origin.
-        if( ok && abs( bboxVal[0] ) <= 50000 && abs( bboxVal[1] ) <= 50000 )
-            ok = false;
-
-        if( ok )
+        else
         {
-            size_t   pos = off + 16;
-            int      nonEmpty = 0;
-            bool     valid = true;
-            wxString strings[5];
-
-            for( int si = 0; si < 5; si++ )
-            {
-                if( version < V31_CUTOVER )
-                {
-                    if( pos + 3 > fileSize )
-                    {
-                        valid = false;
-                        break;
-                    }
-
-                    int n = ( ( data[pos] << 16 ) | ( data[pos + 1] << 8 ) | data[pos + 2] )
-                            - INT3_BIAS;
-                    pos += 3;
-
-                    if( n < 0 || n > 5000 )
-                    {
-                        if( n != 0 ) { valid = false; break; }
-                        continue;
-                    }
-
-                    if( pos + (size_t) n > fileSize )
-                    {
-                        valid = false;
-                        break;
-                    }
-
-                    if( n > 0 )
-                    {
-                        strings[si] = wxString::From8BitData(
-                                reinterpret_cast<const char*>( data + pos ), n );
-                        pos += n;
-                        nonEmpty++;
-                    }
-                }
-                else
-                {
-                    if( pos + 2 > fileSize )
-                    {
-                        valid = false;
-                        break;
-                    }
-
-                    int n = ( data[pos] << 8 ) | data[pos + 1];
-                    pos += 2;
-
-                    if( n < 0 || n > 5000 )
-                    {
-                        if( n != 0 ) { valid = false; break; }
-                        continue;
-                    }
-
-                    if( pos + (size_t)( n * 2 ) > fileSize )
-                    {
-                        valid = false;
-                        break;
-                    }
-
-                    if( n > 0 )
-                    {
-                        wxMBConvUTF16BE conv;
-                        strings[si] = wxString( reinterpret_cast<const char*>( data + pos ),
-                                                conv, static_cast<size_t>( n ) * 2 );
-                        pos += static_cast<size_t>( n ) * 2;
-                        nonEmpty++;
-                    }
-                }
-            }
-
-            if( valid && nonEmpty >= 2 )
-            {
-                bool accepted = false;
-
-                if( strings[0] == strings[4] && isValidRefdes( strings[1] ) )
-                    accepted = true;
-
-                if( !accepted && !strings[1].IsEmpty() && !strings[0].IsEmpty()
-                    && isValidRefdes( strings[1] ) )
-                {
-                    accepted = true;
-                }
-
-                if( accepted )
-                {
-                    boundaries.push_back( off );
-                    off += 16;
-                    continue;
-                }
-            }
+            off++;
         }
-
-        off++;
     }
 
-    std::sort( boundaries.begin(), boundaries.end() );
-    boundaries.erase( std::unique( boundaries.begin(), boundaries.end() ), boundaries.end() );
     return boundaries;
 }
 
@@ -680,9 +544,15 @@ void SCH_PARSER::parseComponents( size_t aBusSectionOffset )
     size_t compSectionStart = m_reader.GetOffset();
     m_componentSectionStart = compSectionStart;
 
+    // First attempt a sequential, count-guided decode. This fully consumes each record and works
+    // for legacy formats. Modern (v34+) records embed a marking/pattern tail that is not consumed
+    // field-by-field, so the sequential walk desyncs partway through; that is expected and silent,
+    // and we fall through to the structural boundary scan below. No warning is emitted because the
+    // boundary scan is the authoritative decoder, not a degraded last resort.
     if( m_componentCount >= 0 )
     {
-        int parsedCount = 0;
+        int  parsedCount = 0;
+        bool desynced    = false;
 
         while( parsedCount < m_componentCount && m_reader.GetOffset() < aBusSectionOffset )
         {
@@ -693,42 +563,29 @@ void SCH_PARSER::parseComponents( size_t aBusSectionOffset )
                 parseOneComponent( aBusSectionOffset, false );
                 parsedCount++;
             }
-            catch( const std::exception& e )
+            catch( const std::exception& )
             {
-                if( m_reporter )
-                {
-                    m_reporter->Report(
-                            wxString::Format( _( "DipTrace import: failed to parse component "
-                                                 "%d/%d at offset 0x%06zX: %s" ),
-                                              parsedCount + 1, m_componentCount, compStart,
-                                              wxString::FromUTF8( e.what() ) ),
-                            RPT_SEVERITY_WARNING );
-                }
-
+                desynced = true;
                 break;
             }
 
             if( m_reader.GetOffset() <= compStart )
+            {
+                desynced = true;
                 break;
+            }
         }
 
-        if( parsedCount == m_componentCount )
+        if( parsedCount == m_componentCount && !desynced )
             return;
-
-        if( m_reporter )
-        {
-            m_reporter->Report(
-                    wxString::Format( _( "DipTrace import: parsed %d/%d components with "
-                                         "count-guided decoding; falling back to "
-                                         "boundary scan." ),
-                                      parsedCount, m_componentCount ),
-                    RPT_SEVERITY_WARNING );
-        }
 
         m_components.clear();
         m_reader.SetOffset( compSectionStart );
     }
 
+    // Structural boundary scan: locate every component header and decode each record within its
+    // [start, next) bounds. parseOneComponent() resyncs to the record end even when its variable
+    // tail is not fully understood, so a recognised header always yields a placed component.
     std::vector<size_t> compStarts =
             scanComponentBoundaries( compSectionStart, aBusSectionOffset );
 
@@ -752,6 +609,23 @@ void SCH_PARSER::parseComponents( size_t aBusSectionOffset )
                                           ci, compStarts[ci], wxString::FromUTF8( e.what() ) ),
                         RPT_SEVERITY_WARNING );
             }
+        }
+    }
+
+    // Surface a single diagnostic if the recovered placement count diverges materially from the
+    // count the file's own header advertised, which would indicate the header signature missed or
+    // over-matched records.
+    if( m_componentCount > 0 && m_reporter )
+    {
+        int found = static_cast<int>( m_components.size() );
+
+        if( std::abs( found - m_componentCount ) > m_componentCount / 20 )
+        {
+            m_reporter->Report(
+                    wxString::Format( _( "DipTrace import: recovered %d of %d components declared "
+                                         "in the file header." ),
+                                      found, m_componentCount ),
+                    RPT_SEVERITY_WARNING );
         }
     }
 }
@@ -2594,6 +2468,12 @@ void SCH_PARSER::createKiCadObjects()
 
             if( pi )
             {
+                // CreateLibrary refuses to overwrite. The import-generated library is named after
+                // the schematic and is wholly derived from it, so a stale copy from a previous
+                // import of the same file must be replaced rather than aborting the save.
+                if( libFileName.FileExists() )
+                    wxRemoveFile( libFileName.GetFullPath() );
+
                 pi->CreateLibrary( libFileName.GetFullPath() );
 
                 std::map<std::string, UTF8> properties;

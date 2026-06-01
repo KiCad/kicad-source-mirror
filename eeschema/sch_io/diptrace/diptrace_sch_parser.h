@@ -247,11 +247,6 @@ private:
     std::vector<size_t> scanComponentBoundaries( size_t aFirstComp,
                                                  size_t aBusSectionOffset ) const;
 
-    /**
-     * Validate that a refdes string matches expected patterns.
-     */
-    static bool isValidRefdes( const wxString& aRefdes );
-
     // -- Shape detection helpers -----------------------------------------------
 
     /**
