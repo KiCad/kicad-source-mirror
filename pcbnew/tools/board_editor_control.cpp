@@ -1549,12 +1549,18 @@ int BOARD_EDITOR_CONTROL::UnlockSelected( const TOOL_EVENT& aEvent )
 
 int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 {
-    PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-    const PCB_SELECTION& selection = selTool->GetSelection();
-    BOARD_COMMIT         commit( m_frame );
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+
+    // RequestSelection populates from the cursor when empty and marks it IsHover(), letting us
+    // clear it afterwards without disturbing a pre-existing selection.
+    const PCB_SELECTION& selection = selTool->RequestSelection( nullptr );
+
+    BOARD_COMMIT commit( m_frame );
 
     if( selection.Empty() )
-        m_toolMgr->RunAction( ACTIONS::selectionCursor );
+        return 0;
+
+    const bool isHover = selection.IsHover();
 
     // Resolve TOGGLE mode
     if( aMode == TOGGLE )
@@ -1618,6 +1624,9 @@ int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
         m_toolMgr->PostEvent( EVENTS::SelectedEvent );
         m_frame->OnModify();
     }
+
+    if( isHover )
+        m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     return 0;
 }
