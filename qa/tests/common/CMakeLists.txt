@@ -114,6 +114,9 @@ set( QA_COMMON_SRCS
     # GAL tests
     test_gal_xor_mode.cpp
 
+    # Preview item / drawing utility tests
+    test_dashed_line.cpp
+
     # Graphics import tests
     test_graphics_importer_buffer.cpp
 
