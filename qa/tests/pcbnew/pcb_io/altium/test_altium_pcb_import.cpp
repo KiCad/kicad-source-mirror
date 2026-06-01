@@ -33,12 +33,17 @@
 #include <pcbnew/pcb_io/altium/pcb_io_altium_designer.h>
 #include <pcbnew/pcb_io/altium/altium_parser_pcb.h>
 
+#include <common/io/altium/altium_binary_parser.h>
+
 #include <board.h>
 #include <board_design_settings.h>
 #include <netinfo.h>
 #include <netclass.h>
 #include <project/net_settings.h>
 #include <zone.h>
+
+#include <cstring>
+#include <vector>
 
 
 struct ALTIUM_PCB_IMPORT_FIXTURE
@@ -277,6 +282,169 @@ BOOST_AUTO_TEST_CASE( SelectAltiumPolygonRule_PriorityOrder )
     BOOST_CHECK( selectAltiumPolygonRule( rules ) == nullptr );
 
     BOOST_CHECK( selectAltiumPolygonRule( {} ) == nullptr );
+}
+
+
+/**
+ * Build a synthetic Vias6 binary record so the AVIA6 parser can be exercised without a full
+ * compound file.  The layout mirrors the extended (subrecord1 > 74) via record format.
+ *
+ * Altium stores lengths in 0.1uinch units; the helpers below take raw Altium units so the
+ * resulting AVIA6 fields are already converted to KiCad nm by the parser.
+ */
+static std::vector<char> buildExtendedViaRecord( int32_t aDiameterAu, int32_t aHoleAu,
+                                                 int32_t aMaskFrontAu, bool aManual,
+                                                 bool aFromHole )
+{
+    auto appendU8 = []( std::vector<char>& aBuf, uint8_t aVal )
+    {
+        aBuf.push_back( static_cast<char>( aVal ) );
+    };
+
+    auto appendI32 = []( std::vector<char>& aBuf, int32_t aVal )
+    {
+        for( int ii = 0; ii < 4; ++ii )
+            aBuf.push_back( static_cast<char>( ( aVal >> ( 8 * ii ) ) & 0xff ) );
+    };
+
+    auto appendU16 = []( std::vector<char>& aBuf, uint16_t aVal )
+    {
+        aBuf.push_back( static_cast<char>( aVal & 0xff ) );
+        aBuf.push_back( static_cast<char>( ( aVal >> 8 ) & 0xff ) );
+    };
+
+    std::vector<char> payload;
+
+    appendU8( payload, 0 );          // unknown skip byte
+    appendU8( payload, 0x00 );       // flags1: not tented, not test/fab
+    appendU8( payload, 0x00 );       // flags2
+    appendU16( payload, 0 );         // net
+
+    for( int ii = 0; ii < 8; ++ii ) // skip 8
+        appendU8( payload, 0 );
+
+    appendI32( payload, 0 );         // position x
+    appendI32( payload, 0 );         // position y
+    appendI32( payload, aDiameterAu );
+    appendI32( payload, aHoleAu );
+    appendU8( payload, 1 );          // layer_start TOP_LAYER
+    appendU8( payload, 32 );         // layer_end BOTTOM_LAYER
+
+    appendU8( payload, 0 );          // temp_byte (unknown)
+    appendI32( payload, 0 );         // thermal_relief_airgap
+    appendU8( payload, 0 );          // thermal_relief_conductorcount
+    appendU8( payload, 0 );          // skip
+    appendI32( payload, 0 );         // thermal_relief_conductorwidth
+    appendI32( payload, 0 );         // unknown
+    appendI32( payload, 0 );         // unknown
+
+    for( int ii = 0; ii < 4; ++ii ) // skip 4
+        appendU8( payload, 0 );
+
+    appendI32( payload, aMaskFrontAu );
+
+    for( int ii = 0; ii < 8; ++ii ) // skip 8
+        appendU8( payload, 0 );
+
+    appendU8( payload, aManual ? 0x02 : 0x00 );    // soldermask_expansion_manual
+    appendU8( payload, aFromHole ? 0x01 : 0x00 );  // soldermask_expansion_from_hole
+
+    for( int ii = 0; ii < 6; ++ii ) // skip 6
+        appendU8( payload, 0 );
+
+    appendU8( payload, 0 );          // viamode SIMPLE
+
+    for( int ii = 0; ii < 32; ++ii )
+        appendI32( payload, aDiameterAu ); // diameter_by_layer
+
+    std::vector<char> record;
+    record.push_back( static_cast<char>( 3 ) ); // ALTIUM_RECORD::VIA
+
+    uint32_t len = static_cast<uint32_t>( payload.size() );
+
+    for( int ii = 0; ii < 4; ++ii )
+        record.push_back( static_cast<char>( ( len >> ( 8 * ii ) ) & 0xff ) );
+
+    record.insert( record.end(), payload.begin(), payload.end() );
+
+    return record;
+}
+
+
+static AVIA6 parseViaRecord( const std::vector<char>& aRecord )
+{
+    auto buf = std::make_unique<char[]>( aRecord.size() );
+    std::memcpy( buf.get(), aRecord.data(), aRecord.size() );
+
+    ALTIUM_BINARY_PARSER reader( buf, aRecord.size() );
+    return AVIA6( reader );
+}
+
+
+/**
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24458
+ *
+ * Altium vias that reference their solder mask expansion from the hole edge were imported with
+ * no mask coverage at all.  Verify the from-hole flag is decoded and the geometry fields needed
+ * to derive tenting are read correctly.
+ */
+BOOST_AUTO_TEST_CASE( Via_SolderMaskFromHole_Parsing )
+{
+    // 0.6mm land, 0.3mm hole, 0.03mm expansion from the hole edge (Altium units are 0.1uinch).
+    const int32_t diameterAu = 236220; // 0.6mm
+    const int32_t holeAu     = 118110; // 0.3mm
+    const int32_t maskAu     = 11811;  // 0.03mm
+
+    AVIA6 fromHole = parseViaRecord(
+            buildExtendedViaRecord( diameterAu, holeAu, maskAu, /*manual*/ true,
+                                    /*fromHole*/ true ) );
+
+    BOOST_CHECK( fromHole.soldermask_expansion_manual );
+    BOOST_CHECK( fromHole.soldermask_expansion_from_hole );
+    BOOST_CHECK( !fromHole.is_tent_top );
+    BOOST_CHECK( !fromHole.is_tent_bottom );
+
+    // The decoded values are in KiCad nm.
+    BOOST_CHECK_EQUAL( fromHole.diameter, 600000u );
+    BOOST_CHECK_EQUAL( fromHole.holesize, 300000u );
+    BOOST_CHECK_EQUAL( fromHole.soldermask_expansion_front, 30000 );
+
+    // Records without an explicit back field mirror the front expansion.
+    BOOST_CHECK_EQUAL( fromHole.soldermask_expansion_back, 30000 );
+
+    // The hole-referenced mask opening (hole + 2 * expansion) is smaller than the via land, so both
+    // sides of the via are tented by the importer's tenting heuristic.
+    BOOST_CHECK( altiumViaSideIsTented( fromHole.is_tent_top, fromHole.soldermask_expansion_manual,
+                                        fromHole.soldermask_expansion_from_hole, fromHole.holesize,
+                                        fromHole.soldermask_expansion_front,
+                                        static_cast<int>( fromHole.diameter ) ) );
+    BOOST_CHECK( altiumViaSideIsTented( fromHole.is_tent_bottom,
+                                        fromHole.soldermask_expansion_manual,
+                                        fromHole.soldermask_expansion_from_hole, fromHole.holesize,
+                                        fromHole.soldermask_expansion_back,
+                                        static_cast<int>( fromHole.diameter ) ) );
+
+    // A land-referenced via must not set the from-hole flag and must not be silently tented.
+    AVIA6 fromLand = parseViaRecord(
+            buildExtendedViaRecord( diameterAu, holeAu, maskAu, /*manual*/ true,
+                                    /*fromHole*/ false ) );
+
+    BOOST_CHECK( fromLand.soldermask_expansion_manual );
+    BOOST_CHECK( !fromLand.soldermask_expansion_from_hole );
+    BOOST_CHECK( !altiumViaSideIsTented( fromLand.is_tent_top, fromLand.soldermask_expansion_manual,
+                                         fromLand.soldermask_expansion_from_hole, fromLand.holesize,
+                                         fromLand.soldermask_expansion_front,
+                                         static_cast<int>( fromLand.diameter ) ) );
+
+    // A wide hole-referenced opening that clears the land must NOT tent the via.
+    BOOST_CHECK( !altiumViaSideIsTented( /*tentFlag*/ false, /*manual*/ true, /*fromHole*/ true,
+                                         fromHole.holesize, /*expansion*/ 500000,
+                                         static_cast<int>( fromHole.diameter ) ) );
+
+    // An explicit Altium tent flag always tents regardless of expansion mode.
+    BOOST_CHECK( altiumViaSideIsTented( /*tentFlag*/ true, /*manual*/ false, /*fromHole*/ false,
+                                        fromHole.holesize, /*expansion*/ 0,
+                                        static_cast<int>( fromHole.diameter ) ) );
 }
 
 
