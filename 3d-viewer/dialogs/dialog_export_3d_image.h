@@ -75,7 +75,6 @@ private:
 
 private:
     EDA_3D_VIEWER_SETTINGS::EXPORT_IMAGE_SETTINGS* m_cfg;
-    EDA_3D_VIEWER_EXPORT_FORMAT m_format;
     wxSize m_originalSize;
     int m_width;
     int m_height;
