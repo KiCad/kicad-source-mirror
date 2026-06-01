@@ -42,6 +42,11 @@ WX_TEXT_ENTRY_DIALOG::WX_TEXT_ENTRY_DIALOG( wxWindow* aParent, const wxString& a
     // usage cases.
     m_hash_key = TO_UTF8( aCaption + aFieldLabel );
 
+    // The text value is always supplied by the caller through aDefaultValue and is specific to the
+    // item being edited.  Persisting and restoring it would clobber that value with whatever was last
+    // entered, so opt the control out of DIALOG_SHIM state save/restore.
+    OptOut( m_textCtrl );
+
     SetupStandardButtons();
 
     SetInitialFocus( m_textCtrl );
