@@ -1766,6 +1766,8 @@ bool STEP_PCB_MODEL::AddComponent( const wxString& aBaseName, const wxString& aF
         return false;
     }
 
+    m_pcb_labels.push_back( llabel );
+
     // attach the RefDes name
     TCollection_ExtendedString refdes( aRefDes.utf8_str() );
     TDataStd_Name::Set( llabel, refdes );
