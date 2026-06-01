@@ -5180,6 +5180,21 @@ void BINARY_PARSER::parseRouteVertices()
 
                 runLayers.back() = 1;
             }
+            else if( legacyObjects && runCount >= 2 && runCount < routeLayers->count )
+            {
+                // A layer carrying no routes at all contributes no run, so a board that leaves
+                // one empty has fewer runs than layers and the 1:1 case above does not fire --
+                // which used to leave every track on layer 1. The runs still follow layer order
+                // with the outer layers at the ends, so the surviving runs are the top layer,
+                // then inner layers in order, then the bottom layer. Verified against the ASCII
+                // exports' own route-point layers on every corpus board where runs are short:
+                // PSTAGE-002 uses layers 1,2,3,4,6 of 6 and PSTAGE-003/-004 use 1,2,3,6, each
+                // matching this assignment exactly.
+                for( size_t run = 0; run + 1 < runCount; ++run )
+                    runLayers[run] = padsLayerForSerializedIndex( run );
+
+                runLayers.back() = padsLayerForSerializedIndex( routeLayers->count - 1 );
+            }
 
             if( !legacyObjects && runCount > 0
                 && std::any_of( serializedLayerCounts.begin(), serializedLayerCounts.end(),
