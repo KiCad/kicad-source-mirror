@@ -34,6 +34,8 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <pad.h>
+#include <padstack.h>
 #include <zone.h>
 
 
@@ -121,6 +123,128 @@ BOOST_AUTO_TEST_CASE( StaticShapesPreserved )
     // redundant fills. With the fix, unmatched static shapes are preserved.
     BOOST_CHECK_MESSAGE( zonesWithNets > 0,
                          "Static shape zones with nets should be preserved" );
+}
+
+
+/**
+ * Helper to find a pad by its number within a footprint.
+ */
+static const PAD* findPadByNumber( const FOOTPRINT* aFp, const wxString& aNumber )
+{
+    for( const PAD* pad : aFp->Pads() )
+    {
+        if( pad->GetNumber() == aNumber )
+            return pad;
+    }
+
+    return nullptr;
+}
+
+
+/**
+ * Test that pad-stacks with different shapes on front and back copper layers
+ * are imported using FRONT_INNER_BACK padstack mode.
+ *
+ * The test file contains:
+ *   DIFF_PAD  - CIRCLE on TOP (2.0mm), RECTANGLE on BOTTOM (1.5x3.0mm) with drill
+ *   SAME_PAD  - RECTANGLE on both TOP and BOTTOM (1.0x2.0mm) with drill
+ *   SMD_DIFF  - OVAL on TOP only (0.8x1.6mm), SMD pad
+ */
+BOOST_AUTO_TEST_CASE( PadStackDifferentLayers )
+{
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/fabmaster/cds2f_padstack_test.txt";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    m_fabmasterPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+    BOOST_REQUIRE_GT( board->Footprints().size(), 0 );
+
+    const FOOTPRINT* fp = board->Footprints().front();
+    BOOST_REQUIRE_EQUAL( fp->Pads().size(), 3 );
+
+    // Pin 1 uses DIFF_PAD which has CIRCLE on TOP and RECTANGLE on BOTTOM.
+    // This should use FRONT_INNER_BACK padstack mode.
+    const PAD* pad1 = findPadByNumber( fp, wxT( "1" ) );
+    BOOST_REQUIRE( pad1 );
+    BOOST_CHECK_EQUAL( static_cast<int>( pad1->Padstack().Mode() ),
+                       static_cast<int>( PADSTACK::MODE::FRONT_INNER_BACK ) );
+    BOOST_CHECK_EQUAL( static_cast<int>( pad1->GetShape( F_Cu ) ),
+                       static_cast<int>( PAD_SHAPE::CIRCLE ) );
+    BOOST_CHECK_EQUAL( static_cast<int>( pad1->GetShape( B_Cu ) ),
+                       static_cast<int>( PAD_SHAPE::RECTANGLE ) );
+
+    // Verify front layer size (2.0mm circle)
+    VECTOR2I pad1_front_size = pad1->GetSize( F_Cu );
+    BOOST_CHECK_GT( pad1_front_size.x, 0 );
+    BOOST_CHECK_EQUAL( pad1_front_size.x, pad1_front_size.y );
+
+    // Verify back layer size (1.5x3.0mm rectangle, height > width)
+    VECTOR2I pad1_back_size = pad1->GetSize( B_Cu );
+    BOOST_CHECK_GT( pad1_back_size.x, 0 );
+    BOOST_CHECK_GT( pad1_back_size.y, pad1_back_size.x );
+
+    // Verify drill is present
+    BOOST_CHECK_EQUAL( static_cast<int>( pad1->GetAttribute() ),
+                       static_cast<int>( PAD_ATTRIB::PTH ) );
+    BOOST_CHECK_GT( pad1->GetDrillSizeX(), 0 );
+}
+
+
+/**
+ * Test that pad-stacks with the same shape on all layers remain in NORMAL mode.
+ */
+BOOST_AUTO_TEST_CASE( PadStackSameLayers )
+{
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/fabmaster/cds2f_padstack_test.txt";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    m_fabmasterPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+    BOOST_REQUIRE_GT( board->Footprints().size(), 0 );
+
+    const FOOTPRINT* fp = board->Footprints().front();
+
+    // Pin 2 uses SAME_PAD which has RECTANGLE 1.0x2.0 on both TOP and BOTTOM.
+    // This should stay in NORMAL mode since shapes are identical.
+    const PAD* pad2 = findPadByNumber( fp, wxT( "2" ) );
+    BOOST_REQUIRE( pad2 );
+    BOOST_CHECK_EQUAL( static_cast<int>( pad2->Padstack().Mode() ),
+                       static_cast<int>( PADSTACK::MODE::NORMAL ) );
+    BOOST_CHECK_EQUAL( static_cast<int>( pad2->GetShape( F_Cu ) ),
+                       static_cast<int>( PAD_SHAPE::RECTANGLE ) );
+}
+
+
+/**
+ * Test SMD pads (top-only, no drill) are imported correctly.
+ */
+BOOST_AUTO_TEST_CASE( PadStackSmdPad )
+{
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/fabmaster/cds2f_padstack_test.txt";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    m_fabmasterPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+    BOOST_REQUIRE_GT( board->Footprints().size(), 0 );
+
+    const FOOTPRINT* fp = board->Footprints().front();
+
+    // Pin 3 uses SMD_DIFF which is an OVAL on TOP only (no BOTTOM pad, no drill).
+    const PAD* pad3 = findPadByNumber( fp, wxT( "3" ) );
+    BOOST_REQUIRE( pad3 );
+    BOOST_CHECK_EQUAL( static_cast<int>( pad3->GetAttribute() ),
+                       static_cast<int>( PAD_ATTRIB::SMD ) );
+    BOOST_CHECK_EQUAL( static_cast<int>( pad3->GetShape( F_Cu ) ),
+                       static_cast<int>( PAD_SHAPE::OVAL ) );
 }
 
 
