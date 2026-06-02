@@ -29,6 +29,7 @@
 #include <footprint.h>
 #include <length_delay_calculation/length_delay_calculation.h>
 #include <length_delay_calculation/length_delay_calculation_item.h>
+#include <net_chain_bridging.h>
 #include <pad.h>
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
@@ -126,8 +127,16 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
                                 true );
     }
 
-    m_columns.emplace_back( 4u, UNDEFINED_LAYER, _( "Net Chain Length" ), _( "Net Chain Length" ), CSV_COLUMN_DESC::CSV_NONE,
-                            true );
+    if( m_showTimeDomainDetails )
+    {
+        m_columns.emplace_back( 4u, UNDEFINED_LAYER, _( "Net Chain Delay" ), _( "Net Chain Delay" ),
+                                CSV_COLUMN_DESC::CSV_NONE, true );
+    }
+    else
+    {
+        m_columns.emplace_back( 4u, UNDEFINED_LAYER, _( "Net Chain Length" ), _( "Net Chain Length" ),
+                                CSV_COLUMN_DESC::CSV_NONE, true );
+    }
 
     m_columns.emplace_back( 5u, UNDEFINED_LAYER, _( "Via Count" ), _( "Via Count" ), CSV_COLUMN_DESC::CSV_NONE, false );
 
@@ -773,6 +782,7 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
 
                     new_item->SetNetChainName( foundNets[i]->GetNetChain() );
                     new_item->SetNetChainLength( lengthDetails.TotalLength() );
+                    new_item->SetNetChainDelay( lengthDetails.TotalDelay() );
 
                     std::scoped_lock lock( resultsMutex );
                     results.emplace_back( std::move( new_item ) );
@@ -782,12 +792,33 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
     resultsFuture.get();
 
     std::map<wxString, int64_t> netChainLengths;
+    std::map<wxString, int64_t> netChainDelays;
 
     for( const std::unique_ptr<LIST_ITEM>& item : results )
     {
         if( !item->GetNetChainName().IsEmpty() )
+        {
             netChainLengths[item->GetNetChainName()] += item->GetTotalLength();
+
+            if( m_showTimeDomainDetails )
+                netChainDelays[item->GetNetChainName()] += item->GetTotalDelay();
+        }
     }
+
+    // Cache per-chain delay-per-mm so we only sample the chain tracks once.
+    std::map<wxString, double> chainDelayPerIU;
+
+    auto delayPerIUFor = [&]( const wxString& aChain ) -> double
+    {
+        auto it = chainDelayPerIU.find( aChain );
+
+        if( it != chainDelayPerIU.end() )
+            return it->second;
+
+        double perIU = ChainBridgingDelayPerMm( m_board, aChain ) / pcbIUScale.IU_PER_MM;
+        chainDelayPerIU.emplace( aChain, perIU );
+        return perIU;
+    };
 
     for( FOOTPRINT* fp : m_board->Footprints() )
     {
@@ -814,7 +845,12 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
                     int64_t dx = p1.x - p2.x;
                     int64_t dy = p1.y - p2.y;
                     int64_t dist = KiROUND( std::hypot( (double) dx, (double) dy ) );
-                    netChainLengths[netA->GetNetChain()] += dist;
+                    const wxString& chain = netA->GetNetChain();
+
+                    netChainLengths[chain] += dist;
+
+                    if( m_showTimeDomainDetails )
+                        netChainDelays[chain] += KiROUND( delayPerIUFor( chain ) * (double) dist );
                 }
             }
         }
@@ -823,7 +859,12 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
     for( std::unique_ptr<LIST_ITEM>& item : results )
     {
         if( !item->GetNetChainName().IsEmpty() )
+        {
             item->SetNetChainLength( netChainLengths[item->GetNetChainName()] );
+
+            if( m_showTimeDomainDetails )
+                item->SetNetChainDelay( netChainDelays[item->GetNetChainName()] );
+        }
     }
 
     return results;
@@ -1035,6 +1076,7 @@ void PCB_NET_INSPECTOR_PANEL::updateNets( const std::vector<NETINFO_ITEM*>& aNet
             curListItem->SetLayerWireLengths( newListItem->GetLayerWireLengths() );
             curListItem->SetNetChainName( newListItem->GetNetChainName() );
             curListItem->SetNetChainLength( newListItem->GetNetChainLength() );
+            curListItem->SetNetChainDelay( newListItem->GetNetChainDelay() );
 
             if( m_showTimeDomainDetails )
                 curListItem->SetLayerWireDelays( newListItem->GetLayerWireDelays() );

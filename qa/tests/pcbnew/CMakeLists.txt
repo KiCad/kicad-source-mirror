@@ -105,6 +105,7 @@ set( QA_PCBNEW_SRCS
     net_chains/test_net_chain_total_length_sexpr.cpp
     net_chains/test_net_chain_bridging_delay.cpp
     net_chains/test_net_chain_partition.cpp
+    net_chains/test_net_chain_trunk_delay.cpp
     net_chains/test_tuning_bridging_clamp.cpp
 
     drc/test_custom_rule_severities.cpp
