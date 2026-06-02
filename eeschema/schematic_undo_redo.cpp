@@ -472,6 +472,9 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
     // We have now swapped all the group parent and group member pointers.  But it is a
     // risky proposition to bet on the pointers being invariant, so validate them all.
+    //
+    // Two passes: restore each item's parent group first, then rebuild each group's members. The
+    // rebuild comes last so a member keeps its group even if its item was restored before it.
     for( int ii = 0; ii < (int) aList->GetCount(); ++ii )
     {
         ITEM_PICKER& wrapper = aList->GetItemWrapper( ii );
@@ -481,10 +484,19 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
         SCH_ITEM* parentGroup = Schematic().ResolveItem( wrapper.GetGroupId(), nullptr, true );
         wrapper.GetItem()->SetParentGroup( dynamic_cast<SCH_GROUP*>( parentGroup ) );
+    }
+
+    for( int ii = 0; ii < (int) aList->GetCount(); ++ii )
+    {
+        ITEM_PICKER& wrapper = aList->GetItemWrapper( ii );
+
+        if( wrapper.GetStatus() == UNDO_REDO::DELETED )
+            continue;
 
         if( EDA_GROUP* group = dynamic_cast<SCH_GROUP*>( wrapper.GetItem() ) )
         {
-            // Items list may contain dodgy pointers, so don't use RemoveAll()
+            // Items list may contain dodgy pointers, so don't use RemoveAll().  AddItem() also
+            // re-links each member back to the group.
             group->GetItems().clear();
 
             for( const KIID& member : wrapper.GetGroupMembers() )
