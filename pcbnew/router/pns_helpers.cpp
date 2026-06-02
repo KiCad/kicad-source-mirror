@@ -21,9 +21,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <board.h>
+#include <geometry/shape_line_chain.h>
+#include <math/vector2d.h>
+#include <netinfo.h>
+#include <pcb_track.h>
 #include <router/pns_helpers.h>
 #include <router/pns_arc.h>
-#include <pcb_track.h>
 
 
 PNS::LINKED_ITEM* PNS::HELPERS::PickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhere, int aLayer,
