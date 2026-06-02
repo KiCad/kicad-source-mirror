@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-26 05:04+0300\n"
+"POT-Creation-Date: 2026-06-03 00:30+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1855,6 +1855,12 @@ msgstr "Invalid library link: '%s'"
 
 msgid "Edit Group Properties"
 msgstr "Edit Group Properties"
+
+msgid "A group cannot contain itself."
+msgstr "A group cannot contain itself."
+
+msgid "Cannot add this group because it already contains the current group."
+msgstr "Cannot add this group because it already contains the current group."
 
 msgid "Group name:"
 msgstr "Group name:"
@@ -12244,6 +12250,9 @@ msgid ""
 msgstr ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
 
+msgid "Root"
+msgstr "Root"
+
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
 msgstr "Plotting to HPGL is no longer supported as of KiCad 10.0."
 
@@ -12728,9 +12737,6 @@ msgid ""
 msgstr ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
-
-msgid "Root"
-msgstr "Root"
 
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
@@ -17566,6 +17572,10 @@ msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 
 #, c-format
+msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
+msgstr "Change %s 'Exclude from position files' from '%s' to '%s'."
+
+#, c-format
 msgid "Cannot find %s pin '%s'."
 msgstr "Cannot find %s pin '%s'."
 
@@ -19048,6 +19058,12 @@ msgstr "Reached end of sheet."
 
 msgid "No matches found."
 msgstr "No matches found."
+
+msgid "Some selected items cannot be grouped."
+msgstr "Some selected items cannot be grouped."
+
+msgid "Child items cannot be grouped separately from their parent item."
+msgstr "Child items cannot be grouped separately from their parent item."
 
 msgid "Click on new member..."
 msgstr "Click on new member..."
@@ -42381,6 +42397,11 @@ msgstr "Embed 3D Models"
 #, c-format
 msgid "%d 3D model(s) successfully embedded."
 msgstr "%d 3D model(s) successfully embedded."
+
+msgid ""
+"Footprint items cannot be grouped separately from their parent footprint."
+msgstr ""
+"Footprint items cannot be grouped separately from their parent footprint."
 
 msgid "Resize Table Cells"
 msgstr "Resize Table Cells"
