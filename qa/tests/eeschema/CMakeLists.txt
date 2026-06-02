@@ -71,6 +71,7 @@ set( QA_EESCHEMA_SRCS
     erc/test_erc_bus_member_label_local_pins.cpp
     erc/test_erc_marker_deduplication.cpp
     erc/test_erc_power_pin_marker_location.cpp
+    erc/test_erc_lib_symbol_mismatch.cpp
 
     test_annotation_refdes_tracker_units.cpp
     test_annotation_units_conflicts.cpp

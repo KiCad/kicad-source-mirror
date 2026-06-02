@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "74xx")(type "Legacy")(uri "${KIPRJMOD}/lib.sch/74xx.lib")(options "")(descr ""))
+)
