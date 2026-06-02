@@ -949,6 +949,16 @@ public:
     /** Return user-created (committed) net chains (legacy accessor retained under net-chain API). */
     const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetCommittedNetChains() const { return m_committedNetChains; }
 
+    /**
+     * Mirror each committed net chain's netclass override into the project NET_SETTINGS as a
+     * chain-derived pattern assignment, so SCH_ITEM::GetEffectiveNetClass() resolves the chain's
+     * netclass for member nets the same way board_netlist_updater does on the PCB side.  Existing
+     * chain-derived assignments are cleared first so removed or renamed chains leave no stale
+     * entries.  Synthetic per-run member keys can't be matched against a resolved net name and
+     * are skipped, and a chain whose netclass no longer exists is ignored.
+     */
+    void ApplyNetChainNetclasses();
+
     /** Returns true once RebuildNetChains() has completed at least once on this graph. */
     bool NetChainsBuilt() const { return m_netChainsBuilt; }
 

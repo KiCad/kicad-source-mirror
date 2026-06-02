@@ -2950,6 +2950,8 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
     }
 
     RebuildNetChains();
+
+    ApplyNetChainNetclasses();
 }
 
 std::function<void( CONNECTION_GRAPH& )>& CONNECTION_GRAPH::RebuildNetChainsTestHook()
@@ -4153,6 +4155,51 @@ SCH_NETCHAIN* CONNECTION_GRAPH::GetNetChainForNet( const wxString& aNet )
 
     wxLogTrace( traceSchNetChain, "GetNetChainForNet: no chain found" );
     return nullptr;
+}
+
+
+void CONNECTION_GRAPH::ApplyNetChainNetclasses()
+{
+    if( !m_schematic )
+        return;
+
+    std::shared_ptr<NET_SETTINGS> netSettings = m_schematic->Project().GetProjectFile().NetSettings();
+
+    if( !netSettings )
+        return;
+
+    bool anyOverride = std::any_of( m_committedNetChains.begin(), m_committedNetChains.end(),
+                                    []( const std::unique_ptr<SCH_NETCHAIN>& aChain )
+                                    {
+                                        return aChain && !aChain->GetNetClass().IsEmpty();
+                                    } );
+
+    // The common no-chain path must not wipe the effective-netclass cache on every connectivity
+    // rebuild.  Only rebuild when a chain carries an override or a prior pass left stale entries.
+    if( !anyOverride && !netSettings->HasChainPatternAssignments() )
+        return;
+
+    netSettings->ClearChainPatternAssignments();
+
+    for( const std::unique_ptr<SCH_NETCHAIN>& chain : m_committedNetChains )
+    {
+        if( !chain )
+            continue;
+
+        const wxString& netclass = chain->GetNetClass();
+
+        if( netclass.IsEmpty() || !netSettings->HasNetclass( netclass ) )
+            continue;
+
+        for( const wxString& net : chain->GetNets() )
+        {
+            // Synthetic per-run keys embed a subgraph code and never match a resolved net name.
+            if( net.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) )
+                continue;
+
+            netSettings->SetChainPatternAssignment( net, netclass );
+        }
+    }
 }
 
 

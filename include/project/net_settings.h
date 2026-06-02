@@ -130,6 +130,9 @@ public:
     /// Calling this method will reset the effective netclass calculation caches.
     void ClearChainPatternAssignments();
 
+    /// @brief Returns true if any chain-derived pattern assignment is present.
+    bool HasChainPatternAssignments() const { return !m_netClassChainPatternAssignments.empty(); }
+
     /// @brief Clears effective netclass cache for the given net
     void ClearCacheForNet( const wxString& netName );
 
