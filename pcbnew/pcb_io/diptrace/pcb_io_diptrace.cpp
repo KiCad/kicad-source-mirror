@@ -54,7 +54,7 @@ bool PCB_IO_DIPTRACE::CanReadBoard( const wxString& aFileName ) const
     if( !PCB_IO::CanReadBoard( aFileName ) )
         return false;
 
-    // DipTrace .dip files start with: 0x07 "DTBOARD" (8 bytes total).
+    // DipTrace .dip files start with: 0x07 "DTBOARD" or legacy 0x0B "DTBOARDx.yy".
     // This is a binary format, so we read the file header directly rather
     // than using IO_UTILS::fileStartsWithPrefix (which is for text files).
     wxFileInputStream stream( aFileName );
@@ -62,14 +62,13 @@ bool PCB_IO_DIPTRACE::CanReadBoard( const wxString& aFileName ) const
     if( !stream.IsOk() || stream.GetLength() < 8 )
         return false;
 
-    uint8_t header[8];
-    stream.Read( header, 8 );
+    uint8_t header[12] = {};
+    stream.Read( header, sizeof( header ) );
 
-    if( stream.LastRead() != 8 )
+    if( stream.LastRead() < 8 )
         return false;
 
-    // Check magic: first byte is 0x07 (string length), then "DTBOARD"
-    if( header[0] != 0x07 )
+    if( header[0] != 0x07 && header[0] != 0x0B )
         return false;
 
     return ( header[1] == 'D' && header[2] == 'T' && header[3] == 'B'

@@ -55,6 +55,7 @@
 
 #include <array>
 #include <algorithm>
+#include <cctype>
 #include <cstdlib>
 #include <cstring>
 #include <map>
@@ -146,6 +147,18 @@ static constexpr size_t TAHOMA_FONT_PATTERN_LEN = 14;
 ///       + field_b(int3) + field_c(int3) + lineWidth(int4) + layerIdx(int3) = 25 bytes.
 static constexpr size_t FONT_BLOCK_HEADER_SIZE = 25;
 
+/// v46+ font-shape preamble (between the pad region end and the first font block). The first
+/// 163 bytes are fixed; a trailing uint16-counted UTF-16 group label follows, so the first
+/// block sits at padRegionEnd + 165 + 2 * (label char count read at padRegionEnd + 163).
+static constexpr size_t FONT_PREAMBLE_LABEL_OFFSET = 163;
+static constexpr size_t FONT_PREAMBLE_FIXED_SIZE   = 165;
+
+/// Fixed framing of each v46+ font-shape block, excluding its variable parts:
+/// Tahoma(14) + meta(25) + int3 shapeType(3) + trailer(28) + uint16 label count(2) = 72 bytes;
+/// the variable parts are 8 bytes per coordinate point and 2 bytes per trailing label char.
+static constexpr size_t FONT_BLOCK_FIXED_SIZE = 72;
+static constexpr size_t FONT_BLOCK_TRAILER_SIZE = 28;
+
 /// Size of the fixed-layout component tail found at the end of every component region.
 /// Contains text positioning data (refdes/value Y offsets and visibility flags).
 static constexpr size_t COMPONENT_TAIL_SIZE = 37;
@@ -162,6 +175,11 @@ static constexpr size_t COMPONENT_TAIL_PATTERN_LEN = 11;
 /// Pad record layout constants
 static constexpr size_t PAD_PRE_HEADER_SIZE    = 14;  // int3(index) + int3(netIndex) + int4(x) + int4(y)
 static constexpr size_t PAD_DIMENSIONS_SIZE    = 16;  // int4(w) + int4(h) + int4(drillW) + int4(drillH)
+
+/// Fixed byte preamble between the component header strings and the first pad record.
+/// Verified constant across the corpus per string-format family.
+static constexpr size_t PAD_HEADER_PREAMBLE_UTF16 = 74; // v39+ (uint16 string lengths)
+static constexpr size_t PAD_HEADER_PREAMBLE_ASCII = 76; // v37 (int3 string lengths)
 static constexpr size_t PAD_POST_DIM_FIXED_SIZE = 36; // non-polygon post-dimension block
 static constexpr size_t PAD_POST_DIM_HEADER    = 11;  // fixed portion before polygon vertices
 static constexpr size_t PAD_POST_DIM_TAIL      = 25;  // fixed portion after polygon vertices
@@ -852,7 +870,9 @@ std::vector<size_t> PCB_PARSER::FindAllBoundaries( const uint8_t* aData, size_t 
 PCB_PARSER::PCB_PARSER( const wxString& aFileName, BOARD* aBoard ) :
         m_reader( aFileName ),
         m_board( aBoard ),
-        m_version( 0 )
+        m_version( 0 ),
+        m_hasInlineVersion( true ),
+        m_hasLegacyMagicLayout( false )
 {
 }
 
@@ -866,6 +886,14 @@ void PCB_PARSER::Parse()
 {
     try
     {
+        // ScanLocatorUseCount() reports the scan fallbacks used by the last Parse(); zero the
+        // per-category counters up front so a reused parser instance does not accumulate them.
+        m_componentLocatorScans = 0;
+        m_padLocatorScans = 0;
+        m_shapeLocatorScans = 0;
+        m_mountHoleLocatorScans = 0;
+        m_sectionLocatorScans = 0;
+
         ParseMagic();
         ParseBoardProperties();
         ParseOutline();
@@ -1054,26 +1082,52 @@ void PCB_PARSER::ParseMagic()
 {
     uint8_t magicLen = m_reader.ReadByte();
 
-    if( magicLen != 7 )
+    if( magicLen != 7 && magicLen != 11 )
     {
         THROW_IO_ERROR( wxString::Format(
-                _( "DipTrace: invalid magic length %u (expected 7)" ), magicLen ) );
+                _( "DipTrace: invalid magic length %u (expected 7 or 11)" ), magicLen ) );
     }
 
-    uint8_t magic[7];
-    m_reader.ReadBytes( magic, 7 );
+    std::array<uint8_t, 11> magic = {};
+    m_reader.ReadBytes( magic.data(), magicLen );
 
-    if( std::memcmp( magic, "DTBOARD", 7 ) != 0 )
+    if( std::memcmp( magic.data(), "DTBOARD", 7 ) != 0 )
     {
         THROW_IO_ERROR( _( "DipTrace: not a valid .dip board file (bad magic)" ) );
+    }
+
+    m_hasInlineVersion = ( magicLen == 7 );
+    m_hasLegacyMagicLayout = !m_hasInlineVersion;
+
+    if( !m_hasInlineVersion )
+    {
+        std::string magicSuffix( reinterpret_cast<const char*>( magic.data() + 7 ),
+                                 magicLen - 7 );
+
+        if( magicSuffix.size() != 4
+            || std::isdigit( static_cast<unsigned char>( magicSuffix[0] ) ) == 0
+            || magicSuffix[1] != '.'
+            || std::isdigit( static_cast<unsigned char>( magicSuffix[2] ) ) == 0
+            || std::isdigit( static_cast<unsigned char>( magicSuffix[3] ) ) == 0 )
+        {
+            THROW_IO_ERROR( _( "DipTrace: invalid legacy board version suffix" ) );
+        }
+
+        int parsedMinor = ( magicSuffix[2] - '0' ) * 10 + ( magicSuffix[3] - '0' );
+
+        m_version = parsedMinor;
+        m_reader.SetVersion( m_version );
     }
 }
 
 
 void PCB_PARSER::ParseBoardProperties()
 {
-    m_version = m_reader.ReadInt3();
-    m_reader.SetVersion( m_version );
+    if( m_hasInlineVersion )
+    {
+        m_version = m_reader.ReadInt3();
+        m_reader.SetVersion( m_version );
+    }
 
     wxLogTrace( traceDiptraceIo, wxT( "DipTrace: file version %d" ), m_version );
 
@@ -1179,7 +1233,14 @@ void PCB_PARSER::ParseFontStyle()
     m_reader.ReadInt4();    // font_height
     m_reader.ReadInt4();    // font_width
 
-    if( m_version <= LEGACY_STRING_VERSION )
+    if( m_hasLegacyMagicLayout )
+    {
+        uint8_t legacyPadding[12];
+        m_reader.ReadBytes( legacyPadding, sizeof( legacyPadding ) );
+        m_ruleNameCount = m_reader.ReadInt3();
+        return;
+    }
+    else if( m_version <= LEGACY_STRING_VERSION )
     {
         // v37: 5-byte padding then int3 + int3 + byte before the standard triple
         uint8_t pad[5];
@@ -1190,14 +1251,118 @@ void PCB_PARSER::ParseFontStyle()
     }
     else
     {
-        // v39+: 10-byte padding
-        uint8_t pad[10];
-        m_reader.ReadBytes( pad, 10 );
+        uint8_t pad[7];
+        m_reader.ReadBytes( pad, sizeof( pad ) );
+
+        const size_t next = m_reader.GetOffset();
+        const uint8_t* data = m_reader.GetData();
+
+        if( next + 2 <= m_reader.GetFileSize() && data[next] == 0 && data[next + 1] > 0
+            && data[next + 1] <= 100 )
+        {
+            ParseImplicitPatternStyleGroup();
+            return;
+        }
+
+        uint8_t padTail[3];
+        m_reader.ReadBytes( padTail, sizeof( padTail ) );
     }
 
-    m_reader.ReadInt3();    // field_c
-    m_reader.ReadInt3();    // field_d
+    int fieldCOrGroupCount = m_reader.ReadInt3();
+
+    if( m_version > LEGACY_STRING_VERSION && fieldCOrGroupCount > 0 )
+    {
+        ParsePatternStyleGroups( fieldCOrGroupCount );
+    }
+    else
+    {
+        int patternGroupCount = m_reader.ReadInt3();
+        ParsePatternNameGroups( patternGroupCount );
+        m_ruleNameCount = m_reader.ReadInt3();
+    }
+}
+
+
+void PCB_PARSER::ParsePatternNameGroups( int aGroupCount )
+{
+    if( aGroupCount < 0 || aGroupCount > 10000 )
+    {
+        THROW_IO_ERROR( wxString::Format(
+                _( "DipTrace: invalid pattern-name group count %d at offset 0x%06zX" ),
+                aGroupCount, m_reader.GetOffset() - 3 ) );
+    }
+
+    for( int i = 0; i < aGroupCount; i++ )
+    {
+        /* wxString groupName = */ m_reader.ReadString();
+        m_reader.ReadInt3();    // field_a
+        int blockCount = m_reader.ReadInt3();
+
+        if( blockCount < 0 || blockCount > 10000 )
+        {
+            THROW_IO_ERROR( wxString::Format(
+                    _( "DipTrace: invalid pattern-name block count %d" ), blockCount ) );
+        }
+
+        for( int j = 0; j < blockCount; j++ )
+        {
+            m_reader.ReadInt3();    // block_id
+            /* wxString blockName = */ m_reader.ReadString();
+        }
+    }
+}
+
+
+void PCB_PARSER::ParsePatternStyleGroups( int aGroupCount )
+{
+    if( aGroupCount < 0 || aGroupCount > 10000 )
+    {
+        THROW_IO_ERROR( wxString::Format(
+                _( "DipTrace: invalid pattern-style group count %d at offset 0x%06zX" ),
+                aGroupCount, m_reader.GetOffset() - 3 ) );
+    }
+
+    m_ruleNameCount = 0;
+
+    for( int i = 0; i < aGroupCount; i++ )
+    {
+        /* wxString groupName = */ m_reader.ReadString();
+
+        uint8_t color[3];
+        m_reader.ReadBytes( color, sizeof( color ) );
+
+        m_reader.ReadInt3();    // field_a
+        m_reader.ReadInt3();    // field_b
+        m_reader.ReadInt3();    // field_c
+
+        int entryCount = m_reader.ReadInt3();
+
+        if( entryCount < 0 || entryCount > 10000 )
+        {
+            THROW_IO_ERROR( wxString::Format(
+                    _( "DipTrace: invalid pattern-style entry count %d" ), entryCount ) );
+        }
+
+        m_ruleNameCount += entryCount;
+    }
+}
+
+
+void PCB_PARSER::ParseImplicitPatternStyleGroup()
+{
+    /* wxString groupName = */ m_reader.ReadString();
+    m_reader.ReadByte();     // flag
+    m_reader.ReadInt3();     // field_a
+    m_reader.ReadInt3();     // field_b
+
     m_ruleNameCount = m_reader.ReadInt3();
+
+    if( m_ruleNameCount < 0 || m_ruleNameCount > 10000 )
+    {
+        THROW_IO_ERROR( wxString::Format(
+                _( "DipTrace: invalid implicit pattern-style entry count %d" ),
+                m_ruleNameCount ) );
+    }
 }
 
 
@@ -1243,68 +1408,213 @@ void PCB_PARSER::ParseDesignRules()
     // Parse rule sets
     for( int i = 0; i < ruleSetCount; i++ )
     {
-        if( i > 0 )
+        wxString setName = m_reader.ReadString();
+        int setFieldA = m_reader.ReadInt3();
+        uint8_t flags[4] = { 0, 0, 0, 0 };
+
+        for( int f = 0; f < 4; f++ )
+            flags[f] = m_reader.ReadByte();
+
+        int blockCount = m_reader.ReadInt3();
+
+        if( dumpRuleSets )
+        {
+            wxLogTrace( traceDiptraceIo,
+                        wxT( "DipTrace: ruleset[%d] '%s' fieldA=%d flags=[%u,%u,%u,%u] blocks=%d" ), i, setName,
+                        setFieldA, static_cast<unsigned int>( flags[0] ), static_cast<unsigned int>( flags[1] ),
+                        static_cast<unsigned int>( flags[2] ), static_cast<unsigned int>( flags[3] ), blockCount );
+        }
+
+        for( int b = 0; b < blockCount; b++ )
+        {
+            std::array<int, 26> blockValues;
+
+            for( int v = 0; v < 25; v++ )
+                blockValues[v] = m_reader.ReadInt4();
+
+            blockValues[25] = 0;
+            DumpRulesetBlock( i, setName, b, blockValues );
+        }
+
+        m_reader.ReadInt4();    // trailer_a
+        m_reader.ReadInt4();    // trailer_b
+
+        int extraCount = m_reader.ReadInt3();
+
+        if( extraCount < 0 || extraCount > 10000 )
+        {
+            THROW_IO_ERROR( wxString::Format(
+                    _( "DipTrace: invalid design-rule extra count %d" ), extraCount ) );
+        }
+
+        for( int e = 0; e < extraCount; e++ )
+            m_reader.ReadInt3();
+
+        uint8_t rawPad[4];
+        m_reader.ReadBytes( rawPad, sizeof( rawPad ) );
+        m_reader.ReadInt3();    // field_b
+        m_reader.ReadInt3();    // field_c
+
+        if( i + 1 < ruleSetCount )
             SkipInterRulesetTransition();
-
-        try
-        {
-            wxString setName = m_reader.ReadString();
-            int setFieldA = m_reader.ReadInt3();
-            uint8_t flags[4] = { 0, 0, 0, 0 };
-
-            for( int f = 0; f < 4; f++ )
-                flags[f] = m_reader.ReadByte();
-
-            int blockCount = m_reader.ReadInt3();
-
-            if( dumpRuleSets )
-            {
-                wxLogTrace( traceDiptraceIo,
-                            wxT( "DipTrace: ruleset[%d] '%s' fieldA=%d flags=[%u,%u,%u,%u] blocks=%d" ), i, setName,
-                            setFieldA, static_cast<unsigned int>( flags[0] ), static_cast<unsigned int>( flags[1] ),
-                            static_cast<unsigned int>( flags[2] ), static_cast<unsigned int>( flags[3] ), blockCount );
-            }
-
-            for( int b = 0; b < blockCount; b++ )
-            {
-                std::array<int, 26> blockValues;
-
-                for( int v = 0; v < 26; v++ )
-                    blockValues[v] = m_reader.ReadInt4();
-
-                DumpRulesetBlock( i, setName, b, blockValues );
-            }
-        }
-        catch( const IO_ERROR& )
-        {
-            wxLogWarning( _( "DipTrace: design rule set [%d] parse error, skipping" ), i );
-            break;
-        }
     }
 }
 
 
 void PCB_PARSER::SkipInterRulesetTransition()
 {
-    // Scan forward for the magic marker 4D 7C 6D 00 within the next 100 bytes
     static const uint8_t marker[] = { 0x4D, 0x7C, 0x6D, 0x00 };
-    size_t searchStart = m_reader.GetOffset();
-    size_t idx = m_reader.FindPattern( marker, 4, searchStart, searchStart + 100 );
+    uint8_t actual[sizeof( marker )] = {};
+    size_t markerOffset = m_reader.GetOffset();
 
-    if( idx != NOT_FOUND )
+    m_reader.ReadBytes( actual, sizeof( actual ) );
+
+    if( std::memcmp( actual, marker, sizeof( marker ) ) != 0 )
     {
-        // Skip marker(4) + int4(4) + int4(4) + int3(3) + int3(3) = 18 bytes
-        m_reader.SetOffset( idx + 18 );
+        THROW_IO_ERROR( wxString::Format(
+                _( "DipTrace: invalid ruleset transition marker at 0x%06zX" ), markerOffset ) );
+    }
+
+    m_reader.ReadInt4();    // field_a
+    m_reader.ReadInt4();    // field_b
+    m_reader.ReadInt3();    // field_c
+
+    const size_t next = m_reader.GetOffset();
+    const uint8_t* data = m_reader.GetData();
+
+    if( m_version > LEGACY_STRING_VERSION && next + 5 <= m_reader.GetFileSize()
+        && data[next] == 0x01 && data[next + 1] == 0x00 && data[next + 2] == 0x14
+        && data[next + 3] == 0x89 && data[next + 4] == 0x03 )
+    {
+        uint8_t suffix[5];
+        m_reader.ReadBytes( suffix, sizeof( suffix ) );
     }
     else
     {
-        wxLogWarning( _( "DipTrace: inter-ruleset transition marker not found at 0x%06zX" ),
-                      searchStart );
+        m_reader.ReadInt3();    // field_d
     }
 }
 
 
 // ---------------------------------------------------------------------------
+std::vector<std::pair<size_t, size_t>>
+PCB_PARSER::FieldWalkComponentBoundaries( size_t aUpperBound )
+{
+    const uint8_t* data     = m_reader.GetData();
+    size_t         fileSize = m_reader.GetFileSize();
+
+    static const int STRING_OFFSETS[] = { 14, 15, 16, 17, 18, 19, 20 };
+
+    auto isBoundaryCoreAt = [&]( size_t aPos ) -> bool
+    {
+        return aPos + BOUNDARY_CORE_LEN <= fileSize
+               && ( std::memcmp( data + aPos, BOUNDARY_STD, BOUNDARY_CORE_LEN ) == 0
+                    || std::memcmp( data + aPos, BOUNDARY_ALT, BOUNDARY_CORE_LEN ) == 0 );
+    };
+
+    auto stringOkAt = [&]( size_t aPos ) -> bool
+    {
+        wxString s;
+        size_t   np = 0;
+
+        return TryReadStringAt( data, fileSize, aPos, m_version, s, np );
+    };
+
+    // The string delta (boundary core -> first header string) is fixed per file. Determine it from
+    // the first component that carries a non-empty header string, exactly as the boundary scan does.
+    auto cleanDeltaAt = [&]( size_t aBoundary ) -> int
+    {
+        for( int d : STRING_OFFSETS )
+        {
+            wxString s;
+            size_t   np = 0;
+
+            if( TryReadStringAt( data, fileSize, aBoundary + static_cast<size_t>( d ), m_version,
+                                 s, np )
+                && s.length() >= 1 )
+            {
+                return d;
+            }
+        }
+
+        return -1;
+    };
+
+    // Locate the first component boundary and the file's string delta: the first boundary core at
+    // or after the design-rules region whose header string parses.
+    size_t parsedEnd   = m_postDesignRulesOffset;
+    size_t searchStart = ( parsedEnd > 200 ) ? parsedEnd - 200 : m_postLayersOffset;
+    size_t first       = 0;
+    int    globalDelta = 14;
+
+    for( size_t p = searchStart; p + BOUNDARY_CORE_LEN < aUpperBound; p++ )
+    {
+        if( !isBoundaryCoreAt( p ) )
+            continue;
+
+        int d = cleanDeltaAt( p );
+
+        if( d < 0 )
+            continue;
+
+        first       = p;
+        globalDelta = d;
+        break;
+    }
+
+    std::vector<std::pair<size_t, size_t>> out;
+
+    if( first == 0 )
+        return out;
+
+    // Advance to the next component: the nearest boundary core after the current one that carries a
+    // header string at the file's string delta (a non-empty path for placed parts, the empty header
+    // of standalone-via records). The boundary core plus this header is the per-component structural
+    // signature, mirroring the schematic importer's isComponentHeaderAt() walk -- a forward
+    // record-by-record advance, not the global boundary-pattern scan, certified against it by the
+    // caller.
+    auto nextBoundaryAfter = [&]( size_t aFrom ) -> size_t
+    {
+        for( size_t cand = aFrom + 1; cand + BOUNDARY_CORE_LEN <= aUpperBound; cand++ )
+        {
+            if( isBoundaryCoreAt( cand )
+                && stringOkAt( cand + static_cast<size_t>( globalDelta ) ) )
+            {
+                return cand;
+            }
+        }
+
+        return 0;
+    };
+
+    size_t b = first;
+
+    while( b + BOUNDARY_CORE_LEN < aUpperBound && out.size() < 10000 )
+    {
+        out.emplace_back( b, b + static_cast<size_t>( globalDelta ) );
+
+        size_t next = nextBoundaryAfter( b );
+
+        if( next == 0 || next <= b )
+            break;
+
+        b = next;
+    }
+
+    // Cross-check against the optional component count stored at the post-design-rules offset
+    // (present for several versions, absent for others). A mismatch means the walk derailed.
+    int declaredCount = ( parsedEnd + 3 <= fileSize ) ? ReadInt3At( data, parsedEnd ) : -1;
+
+    if( declaredCount > 0 && declaredCount <= 10000
+        && static_cast<int>( out.size() ) != declaredCount )
+    {
+        out.clear();
+    }
+
+    return out;
+}
+
+
 // Component finding (hybrid boundary strategy)
 // ---------------------------------------------------------------------------
 
@@ -1328,9 +1638,25 @@ void PCB_PARSER::FindAndParseComponents()
     else
         m_componentUpperBound = m_reader.GetFileSize();
 
+    struct ValidatedBoundary
+    {
+        size_t boundaryOffset;
+        size_t stringStart;
+    };
+
+    std::vector<ValidatedBoundary> validated;
+    bool                           fieldWalked = false;
+
+    // Deterministic component walk, certified below against the boundary scan. When the walk
+    // reproduces the scan's boundary set exactly, the components were located by their trailer
+    // anchors and ComponentLocatorScans() stays zero; otherwise the scan result is the
+    // authoritative list and is counted.
+    std::vector<std::pair<size_t, size_t>> walk =
+            FieldWalkComponentBoundaries( m_componentUpperBound );
+
+    {
     // Step 2: Find all boundary patterns between design rules and the upper bound
     size_t searchStart = ( parsedEnd > 200 ) ? parsedEnd - 200 : m_postLayersOffset;
-    bool fullScanFallback = false;
 
     std::vector<size_t> stdOffsets = FindAllBoundaries(
             m_reader.GetData(), m_reader.GetFileSize(),
@@ -1362,44 +1688,7 @@ void PCB_PARSER::FindAndParseComponents()
                          allBoundaries.end() );
 
     if( allBoundaries.empty() )
-    {
-        // Some files (e.g. CNC_controller) can leave the reader offset in the
-        // middle of ruleset data when rule-set parsing aborts early, which can
-        // narrow the initial boundary search window too aggressively.
-        // Retry with a full post-layer scan before giving up.
-        wxLogWarning( _( "DipTrace: no component boundary patterns found in primary range; retrying full scan" ) );
-
-        stdOffsets = FindAllBoundaries( m_reader.GetData(), m_reader.GetFileSize(),
-                                        BOUNDARY_STD, BOUNDARY_CORE_LEN,
-                                        m_postLayersOffset, m_reader.GetFileSize() );
-        altOffsets = FindAllBoundaries( m_reader.GetData(), m_reader.GetFileSize(),
-                                        BOUNDARY_ALT, BOUNDARY_CORE_LEN,
-                                        m_postLayersOffset, m_reader.GetFileSize() );
-
-        stdSet.clear();
-        stdSet.insert( stdOffsets.begin(), stdOffsets.end() );
-        pureAlt.clear();
-
-        for( size_t off : altOffsets )
-        {
-            if( stdSet.find( off ) == stdSet.end() )
-                pureAlt.push_back( off );
-        }
-
-        allBoundaries.assign( stdOffsets.begin(), stdOffsets.end() );
-        allBoundaries.insert( allBoundaries.end(), pureAlt.begin(), pureAlt.end() );
-        std::sort( allBoundaries.begin(), allBoundaries.end() );
-        allBoundaries.erase( std::unique( allBoundaries.begin(), allBoundaries.end() ),
-                             allBoundaries.end() );
-        m_componentUpperBound = m_reader.GetFileSize();
-        fullScanFallback = true;
-
-        if( allBoundaries.empty() )
-        {
-            wxLogWarning( _( "DipTrace: no component boundary patterns found" ) );
-            return;
-        }
-    }
+        return;
 
     // Step 3: Determine the string offset from boundary core.
     // Both standard and alternate patterns have 13-byte cores.
@@ -1409,7 +1698,7 @@ void PCB_PARSER::FindAndParseComponents()
 
     for( size_t bOff : allBoundaries )
     {
-        if( !fullScanFallback && parsedEnd > 50 && bOff < parsedEnd - 50 )
+        if( parsedEnd > 50 && bOff < parsedEnd - 50 )
             continue;
 
         bool found = false;
@@ -1437,17 +1726,9 @@ void PCB_PARSER::FindAndParseComponents()
     }
 
     // Step 4: Validate boundaries that have readable strings at the expected offset
-    struct ValidatedBoundary
-    {
-        size_t boundaryOffset;
-        size_t stringStart;
-    };
-
-    std::vector<ValidatedBoundary> validated;
-
     for( size_t bOff : allBoundaries )
     {
-        if( !fullScanFallback && parsedEnd > 50 && bOff < parsedEnd - 50 )
+        if( parsedEnd > 50 && bOff < parsedEnd - 50 )
             continue;
 
         size_t candidate = bOff + stringDelta;
@@ -1470,7 +1751,7 @@ void PCB_PARSER::FindAndParseComponents()
 
         for( size_t bOff : allBoundaries )
         {
-            if( !fullScanFallback && parsedEnd > 50 && bOff < parsedEnd - 50 )
+            if( parsedEnd > 50 && bOff < parsedEnd - 50 )
                 continue;
 
             bool found = false;
@@ -1494,21 +1775,23 @@ void PCB_PARSER::FindAndParseComponents()
                 validated.push_back( { bOff, bOff + stringDelta } );
         }
     }
+    }  // end boundary scan (authoritative list)
 
-    // Relaxed fallback for files where all library paths are empty
-    if( validated.empty() )
+    // Certify the deterministic walk: it must reproduce the scan's component boundaries exactly.
+    if( !walk.empty() && walk.size() == validated.size() )
     {
-        for( size_t bOff : allBoundaries )
+        fieldWalked = true;
+
+        for( size_t i = 0; i < walk.size(); i++ )
         {
-            if( !fullScanFallback && parsedEnd > 50 && bOff < parsedEnd - 50 )
-                continue;
-
-            size_t candidate = bOff + stringDelta;
-
-            if( candidate + 3 < m_reader.GetFileSize() )
-                validated.push_back( { bOff, candidate } );
+            if( walk[i].first != validated[i].boundaryOffset )
+            {
+                fieldWalked = false;
+                break;
+            }
         }
     }
+
 
     if( validated.empty() )
     {
@@ -1536,11 +1819,20 @@ void PCB_PARSER::FindAndParseComponents()
 
         if( ParseSingleComponent( vb.boundaryOffset, m_componentUpperBound, comp ) )
         {
+            // Count only when the boundary came from the recovery scan; the field-walk above
+            // locates components by their tail anchor without a boundary-pattern scan.
+            if( !fieldWalked )
+                m_componentLocatorScans++;
+
             size_t regionEnd = ( vi + 1 < validated.size() )
                                        ? validated[vi + 1].boundaryOffset
                                        : m_componentUpperBound;
             comp.regionEndOffset = regionEnd;
 
+            // Pads, mount holes and shapes are field-located inside their finders, which increment
+            // m_padLocatorScans / m_shapeLocatorScans only on a scan fallback. FindMountHolesInRegion
+            // derives every candidate from padRegionEnd and the embedded record counts, so it has no
+            // scan fallback to count.
             FindPadsInRegion( comp, vb.boundaryOffset, regionEnd );
             FindMountHolesInRegion( comp, vb.boundaryOffset, regionEnd );
             FindShapesInRegion( comp, vb.boundaryOffset, regionEnd );
@@ -1595,6 +1887,8 @@ bool PCB_PARSER::ClassifyStandaloneVia( const DT_COMPONENT& aComp )
 bool PCB_PARSER::ParseSingleComponent( size_t aBoundaryOffset, size_t aUpperBound,
                                         DT_COMPONENT& aComp )
 {
+    bool fatalHeaderError = false;
+
     try
     {
         if( aBoundaryOffset >= 59 )
@@ -1626,7 +1920,20 @@ bool PCB_PARSER::ParseSingleComponent( size_t aBoundaryOffset, size_t aUpperBoun
         for( int i = 0; i < 4; i++ )
         {
             if( aComp.flags[i] > 10 )
+            {
+                if( aComp.flags[i] >= 0x80 && !aComp.libraryPath.empty()
+                    && ( aComp.libraryPath.Contains( wxT( "\\" ) )
+                         || aComp.libraryPath.Contains( wxT( "/" ) )
+                         || aComp.libraryPath.Contains( wxT( ":" ) ) ) )
+                {
+                    fatalHeaderError = true;
+                    THROW_IO_ERROR( wxString::Format(
+                            _( "DipTrace: invalid component flag byte %u at boundary 0x%06zX" ),
+                            static_cast<unsigned int>( aComp.flags[i] ), aBoundaryOffset ) );
+                }
+
                 return false;
+            }
         }
 
         // The second flag byte indicates the layer: 0=top, 1=bottom
@@ -1691,7 +1998,11 @@ bool PCB_PARSER::ParseSingleComponent( size_t aBoundaryOffset, size_t aUpperBoun
     }
     catch( const IO_ERROR& )
     {
-        // If we got at least pattern_name, keep the partial component
+        if( fatalHeaderError )
+            throw;
+
+        // Standalone via components may not carry the full component header; keep them
+        // once the pattern name has been read so they can be classified after pads.
         if( !aComp.patternName.empty() )
             return true;
 
@@ -1714,58 +2025,86 @@ void PCB_PARSER::FindPadsInRegion( DT_COMPONENT& aComp, size_t aRegionStart, siz
     if( aRegionEnd > dataSize )
         aRegionEnd = dataSize;
 
-    // Find the first pad record (pre-header index=1) by scanning for the int3(1) pattern
-    // and validating the complete record structure. We search by index rather than pad name
-    // because DipTrace pad names can be non-sequential (e.g., "2","1" or "A","K").
-    static const uint8_t IDX1_PATTERN[] = { 0x0F, 0x42, 0x41 };  // int3(1) = 1000001
-
-    std::vector<size_t> matches = FindAllBoundaries( data, dataSize,
-                                                      IDX1_PATTERN, 3,
-                                                      aRegionStart, aRegionEnd );
-
-    size_t chainPos = 0;
-
-    for( size_t pos : matches )
+    // True when a complete pad record for the component's first pad (index 1) sits at aPos.
+    // We anchor on the index field rather than the pad name because DipTrace pad names can
+    // be non-sequential (e.g. "2","1" or "A","K").
+    auto isPad1At = [&]( size_t aPos ) -> bool
     {
-        if( pos + PAD_PRE_HEADER_SIZE + 4 > aRegionEnd )
-            continue;
+        if( aPos < aRegionStart || aPos + PAD_PRE_HEADER_SIZE + 4 > aRegionEnd )
+            return false;
 
-        int netIdx = ReadInt3At( data, pos + 3 );
+        if( ReadInt3At( data, aPos ) != 1 )
+            return false;
+
+        int netIdx = ReadInt3At( data, aPos + 3 );
 
         if( netIdx < -1 || netIdx > 500 )
-            continue;
+            return false;
 
-        int padX = ReadInt4At( data, pos + 6 );
-        int padY = ReadInt4At( data, pos + 10 );
+        int padX = ReadInt4At( data, aPos + 6 );
+        int padY = ReadInt4At( data, aPos + 10 );
 
         if( std::abs( padX ) > 50000000 || std::abs( padY ) > 50000000 )
-            continue;
+            return false;
 
-        size_t namePos = pos + PAD_PRE_HEADER_SIZE;
+        size_t namePos = aPos + PAD_PRE_HEADER_SIZE;
         size_t nameLen = StringFieldSize( data, dataSize, namePos, m_version );
 
         if( nameLen == 0 )
-            continue;
+            return false;
 
         size_t labelPos = namePos + nameLen;
         size_t labelLen = StringFieldSize( data, dataSize, labelPos, m_version );
 
         if( labelLen == 0 )
-            continue;
+            return false;
 
         size_t dimPos = labelPos + labelLen;
 
         if( dimPos + PAD_DIMENSIONS_SIZE > aRegionEnd )
-            continue;
+            return false;
 
         int w = ReadInt4At( data, dimPos );
         int h = ReadInt4At( data, dimPos + 4 );
 
-        if( w <= 0 || h <= 0 || w > 10000000 || h > 10000000 )
-            continue;
+        return w > 0 && h > 0 && w <= 10000000 && h <= 10000000;
+    };
 
-        chainPos = pos;
-        break;
+    size_t chainPos = 0;
+
+    // Deterministic field-derived location. The first pad record begins a fixed preamble
+    // after the component header strings: 74 bytes for the UTF-16 string formats (v39+) and
+    // 76 bytes for the legacy v37 ASCII format. Validate the record at that offset.
+    if( aComp.headerEndOffset > 0 )
+    {
+        size_t preamble = ( m_version <= LEGACY_STRING_VERSION ) ? PAD_HEADER_PREAMBLE_ASCII
+                                                                 : PAD_HEADER_PREAMBLE_UTF16;
+        size_t candidate = aComp.headerEndOffset + preamble;
+
+        if( isPad1At( candidate ) )
+            chainPos = candidate;
+    }
+
+    // Recovery fallback: scan for the int3(1) index pattern when the record is not at the
+    // expected offset (an unrecognised format variant). Counts toward the determinism gate.
+    if( chainPos == 0 )
+    {
+        static const uint8_t IDX1_PATTERN[] = { 0x0F, 0x42, 0x41 };  // int3(1) = 1000001
+
+        std::vector<size_t> matches = FindAllBoundaries( data, dataSize, IDX1_PATTERN, 3,
+                                                         aRegionStart, aRegionEnd );
+
+        for( size_t pos : matches )
+        {
+            if( isPad1At( pos ) )
+            {
+                chainPos = pos;
+                break;
+            }
+        }
+
+        if( chainPos != 0 )
+            m_padLocatorScans++;
     }
 
     if( chainPos == 0 )
@@ -1897,185 +2236,6 @@ void PCB_PARSER::FindPadsInRegion( DT_COMPONENT& aComp, size_t aRegionStart, siz
 
 
 // ---------------------------------------------------------------------------
-// Footprint mount-hole records
-// ---------------------------------------------------------------------------
-
-/// Hole block header: int3(hole_count + 2) + byte(flag) + 4 * int4(0)
-static constexpr size_t MOUNT_HOLE_HEADER_SIZE = 20;
-
-/// Per-hole record: byte + byte + int4(x) + int4(y) + int4(outer_diam) + int4(drill_diam)
-static constexpr size_t MOUNT_HOLE_RECORD_SIZE = 18;
-
-/// Hole block terminator bytes: 0x00 0x00
-static constexpr size_t MOUNT_HOLE_TERM_SIZE = 2;
-
-/// Zero trailer following the hole block in observed v54 files.
-static constexpr size_t MOUNT_HOLE_TRAILER_SIZE = 16;
-
-
-void PCB_PARSER::FindMountHolesInRegion( DT_COMPONENT& aComp, size_t aRegionStart,
-                                          size_t aRegionEnd )
-{
-    wxUnusedVar( aRegionStart );
-    aComp.holes.clear();
-
-    if( aComp.padRegionEnd == 0 || aComp.pads.empty() )
-        return;
-
-    const uint8_t* data = m_reader.GetData();
-    size_t         dataSize = m_reader.GetFileSize();
-
-    if( aRegionEnd > dataSize )
-        aRegionEnd = dataSize;
-
-    size_t searchEnd = aRegionEnd;
-
-    if( searchEnd > COMPONENT_TAIL_SIZE )
-        searchEnd -= COMPONENT_TAIL_SIZE;
-
-    if( searchEnd <= aComp.padRegionEnd + MOUNT_HOLE_HEADER_SIZE + MOUNT_HOLE_RECORD_SIZE
-                     + MOUNT_HOLE_TERM_SIZE + MOUNT_HOLE_TRAILER_SIZE )
-    {
-        return;
-    }
-
-    static constexpr int MAX_REASONABLE_DIM = 50000000;
-    static constexpr int MAX_HOLE_COUNT = 64;
-
-    struct HOLE_BLOCK
-    {
-        size_t offset = 0;
-        std::vector<DT_MOUNT_HOLE> holes;
-    };
-
-    std::vector<HOLE_BLOCK> candidates;
-
-    for( size_t pos = aComp.padRegionEnd;
-         pos + MOUNT_HOLE_HEADER_SIZE + MOUNT_HOLE_RECORD_SIZE
-                       + MOUNT_HOLE_TERM_SIZE + MOUNT_HOLE_TRAILER_SIZE <= searchEnd;
-         pos++ )
-    {
-        int countField = ReadInt3At( data, pos );
-        int holeCount = countField - 2;
-
-        if( holeCount <= 0 || holeCount > MAX_HOLE_COUNT )
-            continue;
-
-        uint8_t headerFlag = data[pos + 3];
-
-        if( headerFlag > 1 )
-            continue;
-
-        bool zeroHeader = true;
-
-        for( int i = 0; i < 4; i++ )
-        {
-            if( ReadInt4At( data, pos + 4 + static_cast<size_t>( i ) * 4 ) != 0 )
-            {
-                zeroHeader = false;
-                break;
-            }
-        }
-
-        if( !zeroHeader )
-            continue;
-
-        size_t holeStart = pos + MOUNT_HOLE_HEADER_SIZE;
-        size_t holesBytes = static_cast<size_t>( holeCount ) * MOUNT_HOLE_RECORD_SIZE;
-        size_t holeEnd = holeStart + holesBytes;
-        size_t termPos = holeEnd;
-        size_t trailerPos = termPos + MOUNT_HOLE_TERM_SIZE;
-
-        if( trailerPos + MOUNT_HOLE_TRAILER_SIZE > searchEnd )
-            continue;
-
-        std::vector<DT_MOUNT_HOLE> parsedHoles;
-        parsedHoles.reserve( static_cast<size_t>( holeCount ) );
-
-        bool valid = true;
-
-        for( int hi = 0; hi < holeCount; hi++ )
-        {
-            size_t hp = holeStart + static_cast<size_t>( hi ) * MOUNT_HOLE_RECORD_SIZE;
-            uint8_t holeFlagA = data[hp];
-            uint8_t holeFlagB = data[hp + 1];
-
-            if( holeFlagA != 0 || holeFlagB > 1 )
-            {
-                valid = false;
-                break;
-            }
-
-            int x = ReadInt4At( data, hp + 2 );
-            int y = ReadInt4At( data, hp + 6 );
-            int outer = ReadInt4At( data, hp + 10 );
-            int drill = ReadInt4At( data, hp + 14 );
-
-            if( std::abs( x ) > MAX_REASONABLE_DIM || std::abs( y ) > MAX_REASONABLE_DIM
-                || outer <= 0 || outer > MAX_REASONABLE_DIM
-                || drill <= 0 || drill > MAX_REASONABLE_DIM
-                || drill > outer )
-            {
-                valid = false;
-                break;
-            }
-
-            DT_MOUNT_HOLE hole;
-            hole.x = x;
-            hole.y = y;
-            hole.outerDiameter = outer;
-            hole.drillDiameter = drill;
-            parsedHoles.push_back( hole );
-        }
-
-        if( !valid )
-            continue;
-
-        if( data[termPos] != 0 || data[termPos + 1] != 0 )
-            continue;
-
-        bool zeroTrailer = true;
-
-        for( int i = 0; i < 4; i++ )
-        {
-            if( ReadInt4At( data, trailerPos + static_cast<size_t>( i ) * 4 ) != 0 )
-            {
-                zeroTrailer = false;
-                break;
-            }
-        }
-
-        if( !zeroTrailer )
-            continue;
-
-        candidates.push_back( { pos, std::move( parsedHoles ) } );
-        pos = trailerPos + MOUNT_HOLE_TRAILER_SIZE - 1;
-    }
-
-    if( candidates.empty() )
-        return;
-
-    auto best = std::max_element(
-            candidates.begin(), candidates.end(),
-            []( const HOLE_BLOCK& aLhs, const HOLE_BLOCK& aRhs )
-            {
-                if( aLhs.holes.size() != aRhs.holes.size() )
-                    return aLhs.holes.size() < aRhs.holes.size();
-
-                return aLhs.offset < aRhs.offset;
-            } );
-
-    aComp.holes = best->holes;
-
-    if( ShouldDumpComponentHeader( aComp.refdes ) )
-    {
-        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: mount-holes ref=%s count=%zu off=0x%06zX" ), aComp.refdes,
-                    aComp.holes.size(), best->offset );
-    }
-}
-
-
-// ---------------------------------------------------------------------------
 // Footprint shape records
 // ---------------------------------------------------------------------------
 
@@ -2105,12 +2265,200 @@ static constexpr int FP_CHAIN_SHAPE_X3_OFFSET = 60;
 static constexpr int FP_CHAIN_SHAPE_Y3_OFFSET = 64;
 static constexpr int FP_CHAIN_TYPE_LINE = 2;
 static constexpr int FP_CHAIN_TYPE_ARC = 3;
+static constexpr int FP_CHAIN_MOUNT_HOLE_OFFSET = 44;
 
 /// Normalized coordinate range used by DipTrace shape records.
 static constexpr int FP_SHAPE_NORM_RANGE = 10000;
 
 /// Sentinel value for "use default line width" in shape width field.
 static constexpr int FP_SHAPE_DEFAULT_WIDTH = -10000;
+
+
+// ---------------------------------------------------------------------------
+// Footprint mount-hole records
+// ---------------------------------------------------------------------------
+
+/// Hole block header: int3(hole_count + 2) + byte(flag) + 4 * int4(0)
+static constexpr size_t MOUNT_HOLE_HEADER_SIZE = 20;
+
+/// Per-hole record: byte + byte + int4(x) + int4(y) + int4(outer_diam) + int4(drill_diam)
+static constexpr size_t MOUNT_HOLE_RECORD_SIZE = 18;
+
+/// Hole block terminator bytes: 0x00 0x00
+static constexpr size_t MOUNT_HOLE_TERM_SIZE = 2;
+
+/// Zero trailer following the hole block in observed v54 files.
+static constexpr size_t MOUNT_HOLE_TRAILER_SIZE = 16;
+
+
+static bool decodeMountHoleBlockAt( const uint8_t* aData, size_t aBlockStart,
+                                    size_t aSearchEnd, std::vector<DT_MOUNT_HOLE>& aHoles )
+{
+    static constexpr int MAX_REASONABLE_DIM = 50000000;
+    static constexpr int MAX_HOLE_COUNT = 64;
+
+    if( aBlockStart + MOUNT_HOLE_HEADER_SIZE + MOUNT_HOLE_RECORD_SIZE
+            + MOUNT_HOLE_TERM_SIZE + MOUNT_HOLE_TRAILER_SIZE > aSearchEnd )
+    {
+        return false;
+    }
+
+    int countField = ReadInt3At( aData, aBlockStart );
+    int holeCount = countField - 2;
+
+    if( holeCount <= 0 || holeCount > MAX_HOLE_COUNT )
+        return false;
+
+    uint8_t headerFlag = aData[aBlockStart + 3];
+
+    if( headerFlag > 1 )
+        return false;
+
+    for( int i = 0; i < 4; i++ )
+    {
+        if( ReadInt4At( aData, aBlockStart + 4 + static_cast<size_t>( i ) * 4 ) != 0 )
+            return false;
+    }
+
+    size_t holeStart = aBlockStart + MOUNT_HOLE_HEADER_SIZE;
+    size_t holesBytes = static_cast<size_t>( holeCount ) * MOUNT_HOLE_RECORD_SIZE;
+    size_t holeEnd = holeStart + holesBytes;
+    size_t termPos = holeEnd;
+    size_t trailerPos = termPos + MOUNT_HOLE_TERM_SIZE;
+
+    if( trailerPos + MOUNT_HOLE_TRAILER_SIZE > aSearchEnd )
+        return false;
+
+    std::vector<DT_MOUNT_HOLE> parsedHoles;
+    parsedHoles.reserve( static_cast<size_t>( holeCount ) );
+
+    for( int hi = 0; hi < holeCount; hi++ )
+    {
+        size_t hp = holeStart + static_cast<size_t>( hi ) * MOUNT_HOLE_RECORD_SIZE;
+        uint8_t holeFlagA = aData[hp];
+        uint8_t holeFlagB = aData[hp + 1];
+
+        if( holeFlagA != 0 || holeFlagB > 1 )
+            return false;
+
+        int x = ReadInt4At( aData, hp + 2 );
+        int y = ReadInt4At( aData, hp + 6 );
+        int outer = ReadInt4At( aData, hp + 10 );
+        int drill = ReadInt4At( aData, hp + 14 );
+
+        if( std::abs( x ) > MAX_REASONABLE_DIM || std::abs( y ) > MAX_REASONABLE_DIM
+            || outer <= 0 || outer > MAX_REASONABLE_DIM
+            || drill <= 0 || drill > MAX_REASONABLE_DIM
+            || drill > outer )
+        {
+            return false;
+        }
+
+        DT_MOUNT_HOLE hole;
+        hole.x = x;
+        hole.y = y;
+        hole.outerDiameter = outer;
+        hole.drillDiameter = drill;
+        parsedHoles.push_back( hole );
+    }
+
+    if( aData[termPos] != 0 || aData[termPos + 1] != 0 )
+        return false;
+
+    for( int i = 0; i < 4; i++ )
+    {
+        if( ReadInt4At( aData, trailerPos + static_cast<size_t>( i ) * 4 ) != 0 )
+            return false;
+    }
+
+    aHoles = std::move( parsedHoles );
+    return true;
+}
+
+
+void PCB_PARSER::FindMountHolesInRegion( DT_COMPONENT& aComp, size_t aRegionStart,
+                                          size_t aRegionEnd )
+{
+    wxUnusedVar( aRegionStart );
+    aComp.holes.clear();
+
+    if( aComp.padRegionEnd == 0 || aComp.pads.empty() )
+        return;
+
+    const uint8_t* data = m_reader.GetData();
+    size_t         dataSize = m_reader.GetFileSize();
+
+    if( aRegionEnd > dataSize )
+        aRegionEnd = dataSize;
+
+    size_t searchEnd = aRegionEnd;
+
+    if( searchEnd > COMPONENT_TAIL_SIZE )
+        searchEnd -= COMPONENT_TAIL_SIZE;
+
+    std::vector<size_t> candidates;
+
+    if( aComp.padRegionEnd + FP_SHAPE_DATA_OFFSET <= searchEnd )
+    {
+        int recSize = ( m_version <= LEGACY_STRING_VERSION ) ? FP_SHAPE_RECORD_SIZE_V37
+                                                             : FP_SHAPE_RECORD_SIZE_V45;
+        int shapeCount = ReadInt3At( data, aComp.padRegionEnd + FP_SHAPE_COUNT_OFFSET );
+
+        if( shapeCount > 0 && shapeCount <= 500 )
+        {
+            size_t shapeStart = aComp.padRegionEnd + FP_SHAPE_DATA_OFFSET;
+            candidates.push_back( shapeStart + static_cast<size_t>( shapeCount ) * recSize );
+        }
+    }
+
+    if( m_version >= FONT_BLOCK_SHAPE_VERSION
+        && aComp.padRegionEnd + FP_CHAIN_SHAPE_DATA_OFFSET <= searchEnd )
+    {
+        int shapeCount = ReadInt3At( data, aComp.padRegionEnd + FP_CHAIN_SHAPE_COUNT_OFFSET );
+
+        if( shapeCount >= 3 && shapeCount <= 200 )
+        {
+            size_t lastFrame = aComp.padRegionEnd + FP_CHAIN_SHAPE_DATA_OFFSET
+                             + static_cast<size_t>( shapeCount - 1 )
+                                       * FP_CHAIN_SHAPE_RECORD_SIZE;
+            candidates.push_back( lastFrame + FP_CHAIN_MOUNT_HOLE_OFFSET );
+        }
+    }
+
+    candidates.push_back( aComp.padRegionEnd );
+
+    std::vector<size_t> uniqueCandidates;
+    uniqueCandidates.reserve( candidates.size() );
+
+    for( size_t pos : candidates )
+    {
+        if( std::find( uniqueCandidates.begin(), uniqueCandidates.end(), pos ) == uniqueCandidates.end() )
+            uniqueCandidates.push_back( pos );
+    }
+
+    size_t decodedAt = 0;
+
+    for( size_t pos : uniqueCandidates )
+    {
+        if( decodeMountHoleBlockAt( data, pos, searchEnd, aComp.holes ) )
+        {
+            decodedAt = pos;
+            break;
+        }
+    }
+
+    if( decodedAt == 0 )
+        return;
+
+    if( ShouldDumpComponentHeader( aComp.refdes ) )
+    {
+        wxLogTrace( traceDiptraceIo,
+                    wxT( "DipTrace: mount-holes ref=%s count=%zu off=0x%06zX "
+                         "padEnd=0x%06zX gap=%zu" ),
+                    aComp.refdes, aComp.holes.size(), decodedAt, aComp.padRegionEnd,
+                    decodedAt - aComp.padRegionEnd );
+    }
+}
 
 
 void PCB_PARSER::FindShapesInRegion( DT_COMPONENT& aComp, size_t aRegionStart, size_t aRegionEnd )
@@ -2213,14 +2561,117 @@ void PCB_PARSER::FindShapesInFontBlocks( DT_COMPONENT& aComp, size_t aRegionStar
     if( aRegionEnd > dataSize )
         aRegionEnd = dataSize;
 
-    // Find all font block anchors within this component's region
-    std::vector<size_t> fontBlocks = FindAllBoundaries( data, dataSize,
-                                                         TAHOMA_FONT_PATTERN,
-                                                         TAHOMA_FONT_PATTERN_LEN,
-                                                         aRegionStart, aRegionEnd );
+    auto isTahomaAt = [&]( size_t aPos ) -> bool
+    {
+        return aPos + TAHOMA_FONT_PATTERN_LEN <= aRegionEnd
+               && std::memcmp( data + aPos, TAHOMA_FONT_PATTERN, TAHOMA_FONT_PATTERN_LEN ) == 0;
+    };
+
+    auto u16beAt = [&]( size_t aPos ) -> int
+    {
+        return ( static_cast<int>( data[aPos] ) << 8 ) | static_cast<int>( data[aPos + 1] );
+    };
+
+    // Deterministic field-walk of the self-describing font-shape blocks from the pad region
+    // end. Each block carries its own point count and trailing label length, so its size is
+    // computable; the run begins a fixed preamble after padRegionEnd and ends when the next
+    // computed offset is no longer a Tahoma block (the trailing value/framing label record).
+    std::vector<size_t> fontBlocks;
+    bool                fieldWalked = false;
+
+    if( aComp.padRegionEnd != 0
+        && aComp.padRegionEnd + FONT_PREAMBLE_LABEL_OFFSET + 2 <= aRegionEnd )
+    {
+        size_t pre      = aComp.padRegionEnd;
+        int    preLabel = u16beAt( pre + FONT_PREAMBLE_LABEL_OFFSET );
+
+        if( preLabel >= 0 && preLabel <= 256 )
+        {
+            size_t bs = pre + FONT_PREAMBLE_FIXED_SIZE + 2 * static_cast<size_t>( preLabel );
+            bool   walkOk = true;
+
+            while( isTahomaAt( bs ) )
+            {
+                size_t body         = bs + TAHOMA_FONT_PATTERN_LEN + FONT_BLOCK_HEADER_SIZE;
+                int    npts         = -1;
+                bool   slot0InBounds = ( body + 3 <= aRegionEnd );
+
+                for( int n = 0; n <= 3; n++ )
+                {
+                    if( body + static_cast<size_t>( n ) * 8 + 3 > aRegionEnd )
+                        break;
+
+                    int st = ReadInt3At( data, body + static_cast<size_t>( n ) * 8 );
+
+                    if( st == 0 || st == 1 || st == 2 || st == 3 || st == 6 || st == 7
+                        || st == 700 )
+                    {
+                        npts = n;
+                        break;
+                    }
+                }
+
+                // A block whose leading slot carries shape-type 0 (no coordinate points) or no
+                // shape-type code at all is the trailing value/reference text label that closes the
+                // silk run. Record it and stop; its size never needs computing. Only a block
+                // truncated past the region edge, whose structure can no longer be read, is an
+                // abnormal break that must fall back to the scan.
+                if( npts <= 0 )
+                {
+                    if( slot0InBounds )
+                        fontBlocks.push_back( bs );
+                    else
+                        walkOk = false;
+
+                    break;
+                }
+
+                // npts >= 1: a real coordinate shape block. Advancing past it needs a valid trailing
+                // label length; if that field is out of range the block size is uncomputable and the
+                // walk would skip the following shapes, so treat it as a divergence.
+                size_t lcPos = body + static_cast<size_t>( npts ) * 8 + 3 + FONT_BLOCK_TRAILER_SIZE;
+
+                if( lcPos + 2 > aRegionEnd )
+                {
+                    walkOk = false;
+                    break;
+                }
+
+                int lc = u16beAt( lcPos );
+
+                if( lc < 0 || lc > 256 )
+                {
+                    walkOk = false;
+                    break;
+                }
+
+                // Record the block only after its full size is validated, so an abnormal break never
+                // leaves a truncated entry behind.
+                fontBlocks.push_back( bs );
+
+                bs += FONT_BLOCK_FIXED_SIZE + static_cast<size_t>( 8 * npts )
+                      + 2 * static_cast<size_t>( lc );
+            }
+
+            // Only certify the field-walk when it terminated cleanly. A mid-run break means the
+            // block structure diverged from the model, so fall back to the Tahoma scan rather than
+            // import a truncated silk run with the gate still reading zero.
+            fieldWalked = walkOk && !fontBlocks.empty();
+        }
+    }
+
+    if( !fieldWalked )
+    {
+        // Recovery fallback: locate the font blocks by scanning for the Tahoma font literal.
+        // Counts toward the determinism gate.
+        fontBlocks = FindAllBoundaries( data, dataSize, TAHOMA_FONT_PATTERN, TAHOMA_FONT_PATTERN_LEN,
+                                        aRegionStart, aRegionEnd );
+    }
 
     if( fontBlocks.empty() )
         return;
+
+    size_t shapesBefore = aComp.shapes.size();
 
     for( size_t bi = 0; bi < fontBlocks.size(); bi++ )
     {
@@ -2302,6 +2753,9 @@ void PCB_PARSER::FindShapesInFontBlocks( DT_COMPONENT& aComp, size_t aRegionStar
 
         aComp.shapes.push_back( shape );
     }
+
+    if( !fieldWalked && aComp.shapes.size() > shapesBefore )
+        m_shapeLocatorScans++;
 }
 
 
@@ -2488,26 +2942,8 @@ void PCB_PARSER::ParseComponentTail( DT_COMPONENT& aComp, size_t aRegionEnd )
         }
     };
 
-    // First try the canonical location.
     size_t canonicalTailStart = aRegionEnd - COMPONENT_TAIL_SIZE;
     parsed = tryParseTailAt( canonicalTailStart );
-
-    // Fallback: some files place padding/trailing bytes after the fixed 37-byte tail.
-    // Search backwards in a small window and choose the nearest valid tail.
-    if( !parsed )
-    {
-        size_t searchEnd = canonicalTailStart;
-        size_t searchStart = ( searchEnd > 512 ) ? ( searchEnd - 512 ) : 0;
-
-        for( size_t tailStart = searchEnd + 1; tailStart-- > searchStart; )
-        {
-            if( tryParseTailAt( tailStart ) )
-            {
-                parsed = true;
-                break;
-            }
-        }
-    }
 
     if( !parsed && ShouldDumpComponentHeader( aComp.refdes ) )
     {
@@ -2539,41 +2975,85 @@ void PCB_PARSER::ParsePostComponentSections()
     size_t projLibOffset = m_reader.FindString( wxT( "Project Libraries" ), 0, 0 );
     size_t gapEnd = ( projLibOffset != NOT_FOUND ) ? projLibOffset : m_reader.GetFileSize();
 
-    try
-    {
-        FindAndParseTextObjects( postComp, gapEnd );
-    }
-    catch( const std::exception& e )
-    {
-        wxLogWarning( _( "DipTrace: text object parsing failed: %s" ),
-                      wxString::FromUTF8( e.what() ) );
-    }
-
-    try
-    {
-        FindAndParseNets( postComp, gapEnd );
-    }
-    catch( const std::exception& e )
-    {
-        wxLogWarning( _( "DipTrace: net parsing failed: %s" ),
-                      wxString::FromUTF8( e.what() ) );
-    }
-
-    try
-    {
-        FindAndParseZones( postComp, gapEnd );
-    }
-    catch( const std::exception& e )
-    {
-        wxLogWarning( _( "DipTrace: zone parsing failed: %s" ),
-                      wxString::FromUTF8( e.what() ) );
-    }
+    // Each post-component section is located by its own structural anchor and counts a scan-locate
+    // (SectionLocatorScans) only when that anchor is absent: the board TEXT section by its
+    // nine-byte zero separator + record count + 01 00 flags + valid record walk (here);
+    // the NET section by the record count five bytes ahead of the index-0 sentinel; the ZONE
+    // section by its font preamble. Text records are only parsed after the full structural
+    // validation below, so a located text section is always anchored.
+    FindAndParseTextObjects( postComp, gapEnd );
+    FindAndParseNets( postComp, gapEnd );
+    FindAndParseZones( postComp, gapEnd );
 }
 
 
 void PCB_PARSER::FindAndParseTextObjects( size_t aSearchStart, size_t aSearchEnd )
 {
     size_t pos = aSearchStart;
+    auto textRecordsLookValid =
+            [&]( size_t aRecordStart, int aCount, size_t aSectionEnd ) -> bool
+            {
+                size_t savedOffset = m_reader.GetOffset();
+                m_reader.SetOffset( aRecordStart );
+
+                try
+                {
+                    for( int ti = 0; ti < aCount; ti++ )
+                    {
+                        m_reader.ReadInt3();    // type_a
+                        m_reader.ReadByte();    // flag_a
+                        m_reader.ReadInt3();    // type_b
+                        m_reader.ReadInt3();    // field_a
+                        m_reader.ReadInt3();    // field_b
+                        m_reader.ReadInt3();    // field_c
+                        m_reader.ReadInt3();    // field_d
+                        m_reader.ReadInt3();    // field_e
+
+                        ReadColorPacked( m_reader );
+                        ReadColorPacked( m_reader );
+                        ReadColorPacked( m_reader );
+
+                        int lineWidth = m_reader.ReadInt4();
+                        int layer = m_reader.ReadInt3();
+
+                        if( lineWidth < 0 || lineWidth > 10000000 || layer < -100 || layer > 100 )
+                            throw std::runtime_error( "invalid text metrics" );
+
+                        m_reader.ReadInt4();    // x1
+                        m_reader.ReadInt4();    // y1
+                        m_reader.ReadInt4();    // x2
+                        m_reader.ReadInt4();    // y2
+
+                        m_reader.ReadString();
+                        m_reader.ReadString();
+
+                        m_reader.ReadByte();    // separator
+                        m_reader.ReadInt3();    // field_pf_1
+                        m_reader.ReadByte();    // flag_pf
+                        m_reader.ReadInt4();    // text_offset_1
+                        m_reader.ReadInt4();    // text_offset_2
+                        m_reader.ReadInt3();    // record_index
+                        m_reader.ReadByte();    // end_flag
+
+                        if( ti < aCount - 1 )
+                        {
+                            m_reader.ReadByte();
+                            m_reader.ReadByte();
+                        }
+
+                        if( m_reader.GetOffset() > aSectionEnd )
+                            throw std::runtime_error( "text section overrun" );
+                    }
+
+                    m_reader.SetOffset( savedOffset );
+                    return true;
+                }
+                catch( const std::exception& )
+                {
+                    m_reader.SetOffset( savedOffset );
+                    return false;
+                }
+            };
 
     while( pos + 20 < aSearchEnd )
     {
@@ -2584,7 +3064,7 @@ void PCB_PARSER::FindAndParseTextObjects( size_t aSearchStart, size_t aSearchEnd
 
         size_t countPos = idx + 9;
 
-        if( countPos + 5 > m_reader.GetFileSize() )
+        if( countPos + 5 > aSearchEnd )
             break;
 
         const uint8_t* data = m_reader.GetData();
@@ -2600,9 +3080,14 @@ void PCB_PARSER::FindAndParseTextObjects( size_t aSearchStart, size_t aSearchEnd
 
             if( flag1 == 1 && flag2 == 0 )
             {
-                m_reader.SetOffset( countPos + 5 );
-                ParseTextRecords( countVal );
-                return;
+                size_t recordStart = countPos + 5;
+
+                if( textRecordsLookValid( recordStart, countVal, aSearchEnd ) )
+                {
+                    m_reader.SetOffset( recordStart );
+                    ParseTextRecords( countVal );
+                    return;
+                }
             }
         }
 
@@ -2666,10 +3151,11 @@ void PCB_PARSER::ParseTextRecords( int aCount )
 
             m_textObjects.push_back( text );
         }
-        catch( const IO_ERROR& )
+        catch( const IO_ERROR& e )
         {
-            wxLogWarning( _( "DipTrace: text object [%d] parse error" ), ti );
-            break;
+            THROW_IO_ERROR( wxString::Format(
+                    _( "DipTrace: text object [%d] parse error: %s" ),
+                    ti, e.What() ) );
         }
     }
 }
@@ -2691,8 +3177,9 @@ void PCB_PARSER::FindAndParseNets( size_t aSearchStart, size_t aSearchEnd )
     // After the sentinel, the record contains:
     //   int3(net_index)  int3(0)  int4(trace_width)  int4(field)  string(net_name)
     //
-    // We validate each match by checking that the second int3 is 0, the widths
-    // are in a reasonable range, and the net name is a printable string.
+    // We validate each match by checking that the second int3 is in the observed
+    // route-flag range, the widths are bounded, and the stored net-name string
+    // parses.  DipTrace permits empty stored net names.
 
     std::vector<size_t> sentinelOffsets = FindAllBoundaries(
             m_reader.GetData(), m_reader.GetFileSize(),
@@ -2701,6 +3188,8 @@ void PCB_PARSER::FindAndParseNets( size_t aSearchStart, size_t aSearchEnd )
 
     static constexpr int MAX_NETS = 10000;
     static constexpr int MAX_REASONABLE_WIDTH = 5000000;  // 50mm in 10nm units
+
+    size_t firstNetSentinel = 0;
 
     for( size_t sentOff : sentinelOffsets )
     {
@@ -2714,6 +3203,9 @@ void PCB_PARSER::FindAndParseNets( size_t aSearchStart, size_t aSearchEnd )
             continue;
 
         m_reader.SetOffset( pos );
+
+        DT_NET net;
+        bool acceptedNetRecord = false;
 
         try
         {
@@ -2734,16 +3226,23 @@ void PCB_PARSER::FindAndParseNets( size_t aSearchStart, size_t aSearchEnd )
                 continue;
             }
 
+            bool expectedNetIndex = netIndex == static_cast<int>( m_nets.size() );
+            acceptedNetRecord = expectedNetIndex;
             wxString name;
 
             if( !m_reader.TryReadString( name ) )
-                continue;
+            {
+                if( expectedNetIndex )
+                {
+                    THROW_IO_ERROR( wxString::Format(
+                            _( "DipTrace import: invalid net name for net index %d at "
+                               "offset 0x%06zX." ),
+                            netIndex, m_reader.GetOffset() ) );
+                }
 
-            // Net names must be non-empty
-            if( name.IsEmpty() )
                 continue;
+            }
 
-            DT_NET net;
             net.index = netIndex;
             net.name = name;
             net.traceWidth = width1;
@@ -2753,24 +3252,39 @@ void PCB_PARSER::FindAndParseNets( size_t aSearchStart, size_t aSearchEnd )
                 wxLogTrace( traceDiptraceIo, wxT( "DipTrace: net idx=%d name=%s width1=%d width2=%d" ), netIndex, name,
                             width1, width2 );
             }
-
-            try
-            {
-                ParseNetRouting( net );
-            }
-            catch( const IO_ERROR& )
-            {
-                // Non-fatal; routing data may be absent or truncated
-            }
-
-            m_nets.push_back( std::move( net ) );
         }
         catch( const IO_ERROR& )
         {
-            // Skip malformed records
+            if( acceptedNetRecord )
+                throw;
+
+            // Skip malformed false-positive sentinel records.
             continue;
         }
+
+        if( firstNetSentinel == 0 )
+            firstNetSentinel = sentOff;
+
+        ParseNetRouting( net );
+
+        m_nets.push_back( std::move( net ) );
     }
+
+    // The net section is field-located when the first accepted net record (index 0) is immediately
+    // preceded by its record count: int3(netCount) sits at firstSentinel - 5 across all observed
+    // versions (some prepend an int3(0) and a 01 00 flag pair, which we do not require). That count
+    // is the section's deterministic structural anchor; the sequential net-index walk above rejects
+    // the false sentinel hits in the component region. Only count a scan-locate when it is absent.
+    bool netSectionFieldAnchored = false;
+
+    if( firstNetSentinel >= 5 && !m_nets.empty() )
+    {
+        netSectionFieldAnchored = ReadInt3At( m_reader.GetData(), firstNetSentinel - 5 )
+                                  == static_cast<int>( m_nets.size() );
+    }
+
+    if( !m_nets.empty() && !netSectionFieldAnchored )
+        m_sectionLocatorScans++;
 
     size_t totalNodes = 0;
     size_t viaStyleNodes = 0;
@@ -2957,8 +3471,64 @@ void PCB_PARSER::ParseNetRouting( DT_NET& aNet )
                         | ( static_cast<int>( h[4] ) << 8 )
                         | static_cast<int>( h[5] ) ) - INT3_BIAS;
 
+        auto firstNodeLooksPlausible = [&]() -> bool
+        {
+            size_t firstNode = headerStart + 6;
+
+            if( firstNode + TRACK_NODE_SIZE > scanEnd )
+                return false;
+
+            const uint8_t* n = data + firstNode;
+
+            int x = static_cast<int>(
+                    ( static_cast<unsigned int>( n[0] ) << 24 )
+                  | ( static_cast<unsigned int>( n[1] ) << 16 )
+                  | ( static_cast<unsigned int>( n[2] ) << 8 )
+                  | static_cast<unsigned int>( n[3] ) ) - INT4_BIAS;
+
+            int y = static_cast<int>(
+                    ( static_cast<unsigned int>( n[4] ) << 24 )
+                  | ( static_cast<unsigned int>( n[5] ) << 16 )
+                  | ( static_cast<unsigned int>( n[6] ) << 8 )
+                  | static_cast<unsigned int>( n[7] ) ) - INT4_BIAS;
+
+            int layer = ( ( static_cast<int>( n[8] ) << 16 )
+                        | ( static_cast<int>( n[9] ) << 8 )
+                        | static_cast<int>( n[10] ) ) - INT3_BIAS;
+
+            int width = static_cast<int>(
+                    ( static_cast<unsigned int>( n[14] ) << 24 )
+                  | ( static_cast<unsigned int>( n[15] ) << 16 )
+                  | ( static_cast<unsigned int>( n[16] ) << 8 )
+                  | static_cast<unsigned int>( n[17] ) ) - INT4_BIAS;
+
+            int viaStyleIdx = ( ( static_cast<int>( n[27] ) << 16 )
+                              | ( static_cast<int>( n[28] ) << 8 )
+                              | static_cast<int>( n[29] ) ) - INT3_BIAS;
+
+            int routeMode = ( ( static_cast<int>( n[37] ) << 16 )
+                            | ( static_cast<int>( n[38] ) << 8 )
+                            | static_cast<int>( n[39] ) ) - INT3_BIAS;
+
+            return x > -100000000 && x < 100000000
+                   && y > -100000000 && y < 100000000
+                   && layer >= 0 && layer <= 50
+                   && width > 0 && width <= 5000000
+                   && viaStyleIdx >= -1 && viaStyleIdx <= 10000
+                   && routeMode >= 0 && routeMode <= 10
+                   && n[40] <= 10;
+        };
+
         if( chainIdx < 0 || nodeCount < 1 || nodeCount > 10000 )
         {
+            if( chainIdx >= 0 && firstNodeLooksPlausible() )
+            {
+                THROW_IO_ERROR( wxString::Format(
+                        _( "DipTrace import: invalid route-chain node count %d for net '%s' "
+                           "at offset 0x%06zX." ),
+                        nodeCount, aNet.name, headerStart + 3 ) );
+            }
+
             pos = chainPos + 1;
             continue;
         }
@@ -2968,6 +3538,14 @@ void PCB_PARSER::ParseNetRouting( DT_NET& aNet )
 
         if( nodesEnd > scanEnd )
         {
+            if( firstNodeLooksPlausible() )
+            {
+                THROW_IO_ERROR( wxString::Format(
+                        _( "DipTrace import: route-chain node count %d for net '%s' overruns "
+                           "record at offset 0x%06zX." ),
+                        nodeCount, aNet.name, headerStart + 3 ) );
+            }
+
             pos = chainPos + 1;
             continue;
         }
@@ -3316,6 +3894,28 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
         return vertexInBounds( lastVp );
     };
 
+    auto headerHasZoneSectionShape = [&]( size_t aPos ) -> bool
+    {
+        if( aPos + 30 > aSearchEnd )
+            return false;
+
+        int fieldA    = ReadInt3At( data, aPos );
+        int flags1    = data[aPos + 3];
+        int flags3    = data[aPos + 5];
+        int separator = ReadInt3At( data, aPos + 18 );
+        int layer     = ReadInt3At( data, aPos + 21 );
+        int fieldB    = ReadInt3At( data, aPos + 24 );
+        int vtxCount  = ReadInt3At( data, aPos + 27 );
+
+        return fieldA >= 0 && fieldA <= 10000
+               && fieldB >= -1 && fieldB <= 10000
+               && flags1 <= 2 && flags3 <= 2
+               && separator <= 0
+               && layer >= -10 && layer <= 100
+               && vtxCount >= 3 && vtxCount <= MAX_VERTICES
+               && aPos + 30 + static_cast<size_t>( vtxCount ) * 8 <= aSearchEnd;
+    };
+
     auto parseZoneTrailer = [&]( DT_ZONE& aZone, size_t aSearchStartPos, size_t aSearchEndPos,
                                  int aZoneIndex ) -> void
     {
@@ -3586,36 +4186,20 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
     };
 
     size_t zoneHeaderStart = NOT_FOUND;
+    bool   zoneViaPreamble = false;
 
-    // Primary locator: scan structurally for plausible zone headers.
-    for( size_t scanPos = aSearchStart; scanPos + 30 <= aSearchEnd; scanPos++ )
-    {
-        if( headerLooksPlausible( scanPos, true ) )
-        {
-            zoneHeaderStart = scanPos;
-            wxLogTrace( traceDiptraceIo, wxT( "DipTrace: zone section found by structural scan at 0x%06zX" ),
-                        zoneHeaderStart );
-            break;
-        }
-    }
-
-    // Fallback locator: zone section may be preceded by a font preamble:
-    //   string(font_name)  int3(font_size)  byte(bold)
-    //   int4(font_height)  int4(font_width)  int4(-20000)
-    //
-    // Historically, zones follow after int3(0) separator.
-    if( zoneHeaderStart == NOT_FOUND )
+    auto findZoneFontPreambleDataStart = [&]( size_t aStart ) -> size_t
     {
         static const wxString fontNames[] = {
             wxT( "Arial" ), wxT( "Tahoma" ), wxT( "Times New Roman" ),
             wxT( "Courier New" ), wxT( "Verdana" ), wxT( "Calibri" )
         };
 
-        size_t zoneDataStart = NOT_FOUND;
+        size_t bestDataStart = NOT_FOUND;
 
         for( const wxString& fontName : fontNames )
         {
-            size_t fontPos = m_reader.FindString( fontName, aSearchStart, aSearchEnd );
+            size_t fontPos = m_reader.FindString( fontName, aStart, aSearchEnd );
 
             while( fontPos != NOT_FOUND )
             {
@@ -3643,27 +4227,75 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
                 if( strEnd + 16 > aSearchEnd )
                     break;
 
-                int  fontSize = ReadInt3At( data, strEnd );
-                int  bold = data[strEnd + 3];
-                int  fontH = ReadInt4At( data, strEnd + 4 );
-                int  fontW = ReadInt4At( data, strEnd + 8 );
-                int  tail = ReadInt4At( data, strEnd + 12 );
+                int fontSize = ReadInt3At( data, strEnd );
+                int bold = data[strEnd + 3];
+                int fontH = ReadInt4At( data, strEnd + 4 );
+                int fontW = ReadInt4At( data, strEnd + 8 );
+                int tail = ReadInt4At( data, strEnd + 12 );
 
                 if( fontSize >= 5 && fontSize <= 30 && bold <= 1
                     && fontH > 0 && fontH < 10000000
                     && fontW > 0 && fontW < 10000000
                     && tail == ZONE_FONT_PREAMBLE_TAIL )
                 {
-                    zoneDataStart = strEnd + 16;
+                    bestDataStart = std::min( bestDataStart, strEnd + 16 );
                     break;
                 }
 
                 fontPos = m_reader.FindString( fontName, strEnd, aSearchEnd );
             }
-
-            if( zoneDataStart != NOT_FOUND )
-                break;
         }
+
+        return bestDataStart;
+    };
+
+    size_t zoneDataStart = findZoneFontPreambleDataStart( aSearchStart );
+
+    while( zoneDataStart != NOT_FOUND )
+    {
+        size_t preambleHeaderStart = zoneDataStart + 3;
+
+        if( preambleHeaderStart + 30 <= aSearchEnd
+            && headerLooksPlausible( preambleHeaderStart, true ) )
+        {
+            zoneHeaderStart = preambleHeaderStart;
+            zoneViaPreamble = true;
+            break;
+        }
+
+        if( preambleHeaderStart + 30 <= aSearchEnd
+            && headerHasZoneSectionShape( preambleHeaderStart ) )
+        {
+            THROW_IO_ERROR( wxString::Format(
+                    _( "DipTrace import: invalid copper-pour zone header after font preamble "
+                       "at offset 0x%06zX." ),
+                    preambleHeaderStart ) );
+        }
+
+        zoneDataStart = findZoneFontPreambleDataStart( zoneDataStart + 1 );
+    }
+
+    // Primary locator: scan structurally for plausible zone headers.
+    for( size_t scanPos = aSearchStart; zoneHeaderStart == NOT_FOUND
+                                      && scanPos + 30 <= aSearchEnd; scanPos++ )
+    {
+        if( headerLooksPlausible( scanPos, true ) )
+        {
+            zoneHeaderStart = scanPos;
+            wxLogTrace( traceDiptraceIo, wxT( "DipTrace: zone section found by structural scan at 0x%06zX" ),
+                        zoneHeaderStart );
+            break;
+        }
+    }
+
+    // Fallback locator: zone section may be preceded by a font preamble:
+    //   string(font_name)  int3(font_size)  byte(bold)
+    //   int4(font_height)  int4(font_width)  int4(-20000)
+    //
+    // Historically, zones follow after int3(0) separator.
+    if( zoneHeaderStart == NOT_FOUND )
+    {
+        zoneDataStart = findZoneFontPreambleDataStart( aSearchStart );
 
         if( zoneDataStart != NOT_FOUND )
         {
@@ -3673,6 +4305,7 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
                 && headerLooksPlausible( fallbackStart, true ) )
             {
                 zoneHeaderStart = fallbackStart;
+                zoneViaPreamble = true;
             }
             else
             {
@@ -3939,6 +4572,12 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
     {
         wxLogTrace( traceDiptraceIo, wxT( "DipTrace: parsed %zu copper zones" ), m_zones.size() );
     }
+
+    // The zone section is field-located when anchored by its font preamble (font name + sizing +
+    // an int4(-20000) tail), the structural prefix that immediately precedes the zone header. Count
+    // a scan-locate only when zones were instead recovered by the plausible-header structural scan.
+    if( !m_zones.empty() && !zoneViaPreamble )
+        m_sectionLocatorScans++;
 }
 
 
@@ -4046,6 +4685,14 @@ void PCB_PARSER::CreateBoardOutline()
         // In DipTrace, a vertex with arc=1 is an arc midpoint: the arc runs from the
         // previous (non-arc) vertex through this midpoint to the next (non-arc) vertex.
         size_t i = 0;
+
+        while( i < n && arcs[i] == 1 )
+            i++;
+
+        if( i == n )
+            return;
+
+        size_t startIndex = i;
         size_t steps = 0;
         size_t maxSteps = n * 4;
 
@@ -4119,8 +4766,8 @@ void PCB_PARSER::CreateBoardOutline()
                 i = next;
             }
 
-            // We've wrapped back to the start -- outline is closed
-            if( i == 0 )
+            // We've wrapped back to the chosen non-arc start -- outline is closed.
+            if( i == startIndex )
                 break;
         }
 
@@ -4581,14 +5228,16 @@ void PCB_PARSER::CreateNets()
 
     for( const DT_NET& net : m_nets )
     {
-        if( net.name.empty() )
-            continue;
+        wxString netName = net.name;
 
-        NETINFO_ITEM* netinfo = m_board->FindNet( net.name );
+        if( netName.empty() )
+            netName = wxString::Format( wxS( "DipTrace_Net_%d" ), net.index );
+
+        NETINFO_ITEM* netinfo = m_board->FindNet( netName );
 
         if( !netinfo )
         {
-            netinfo = new NETINFO_ITEM( m_board, net.name );
+            netinfo = new NETINFO_ITEM( m_board, netName );
             m_board->Add( netinfo, ADD_MODE::APPEND );
         }
 

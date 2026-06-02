@@ -34,6 +34,13 @@
 namespace DIPTRACE
 {
 
+enum class STRING_ENCODING
+{
+    BY_VERSION,
+    LEGACY_ASCII,
+    UTF16_BE
+};
+
 /// Bias value added to stored 3-byte unsigned integers.
 /// Stored 0x0F4240 decodes to logical 0.
 constexpr int INT3_BIAS = 1000000;
@@ -123,8 +130,9 @@ public:
     /**
      * Set the DipTrace format version.
      *
-     * The version affects string decoding: versions <= 37 use the legacy
-     * int3+ASCII encoding while versions >= 39 use uint16+UTF-16-BE.
+     * The version affects default string decoding: versions <= 37 use the
+     * legacy int3+ASCII encoding while versions >= 39 use uint16+UTF-16-BE.
+     * File-family parsers can override this with SetStringEncoding().
      *
      * @param aVersion DipTrace format version number.
      */
@@ -132,6 +140,12 @@ public:
 
     /** Return the currently configured format version. */
     int GetVersion() const { return m_version; }
+
+    /**
+     * Override DipTrace string decoding when a file family has a deterministic
+     * string-encoding cutover that differs from the shared version threshold.
+     */
+    void SetStringEncoding( STRING_ENCODING aEncoding ) { m_stringEncoding = aEncoding; }
 
     // -- Primitive readers ---------------------------------------------------
 
@@ -166,11 +180,10 @@ public:
     int ReadInt4();
 
     /**
-     * Read a string using the encoding appropriate for the current format
-     * version.
+     * Read a string using the configured encoding.
      *
-     * - v37 and earlier: int3(byte_count) + ASCII bytes
-     * - v39 and later:   uint16-BE(char_count) + UTF-16-BE data
+     * - legacy ASCII: int3(byte_count) + ASCII bytes
+     * - UTF-16-BE:    uint16-BE(char_count) + UTF-16-BE data
      *
      * @return the decoded wxString.
      * @throw IO_ERROR on read past end of file or corrupt string data.
@@ -322,6 +335,7 @@ private:
     std::vector<uint8_t> m_data;      ///< Entire file contents loaded into memory.
     size_t               m_offset;    ///< Current read position (byte offset).
     int                  m_version;   ///< DipTrace format version.
+    STRING_ENCODING      m_stringEncoding; ///< Explicit string encoding override.
 };
 
 } // namespace DIPTRACE

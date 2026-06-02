@@ -211,7 +211,7 @@ struct DT_PAD_REF
 struct DT_NET
 {
     int      index = 0;        ///< Sequential net index from the DipTrace file
-    wxString name;             ///< Net name (e.g. "GND", "A0", "Net 5")
+    wxString name;             ///< Stored net name; may be empty in DipTrace files
     int      traceWidth = 0;   ///< Default trace width in DipTrace units; parsed but not yet used
     int      defaultViaOuterDiam = 0;  ///< Default via OD from net routing preamble
     int      defaultViaDrillDiam = 0;  ///< Default via drill from net routing preamble
@@ -305,6 +305,24 @@ public:
     void Parse();
 
     /**
+     * Number of objects or sections that were located by byte-pattern scanning rather
+     * than a deterministic field-derived offset during the last Parse(). Zero means the
+     * decode was fully deterministic; the remaining pattern scanners act only as recovery
+     * fallbacks. Mirrors the schematic importer's ComponentBoundaryScanCount() invariant.
+     */
+    int ScanLocatorUseCount() const
+    {
+        return m_componentLocatorScans + m_padLocatorScans + m_shapeLocatorScans
+               + m_mountHoleLocatorScans + m_sectionLocatorScans;
+    }
+
+    int ComponentLocatorScans() const { return m_componentLocatorScans; }
+    int PadLocatorScans() const { return m_padLocatorScans; }
+    int ShapeLocatorScans() const { return m_shapeLocatorScans; }
+    int MountHoleLocatorScans() const { return m_mountHoleLocatorScans; }
+    int SectionLocatorScans() const { return m_sectionLocatorScans; }
+
+    /**
      * Build a KiCad custom design-rule (.kicad_dru) document for the per-zone
      * DipTrace properties that have no native KiCad zone equivalent.
      *
@@ -322,9 +340,18 @@ private:
     void ParsePostOutline();
     void ParseLayers();
     void ParseFontStyle();
+    void ParsePatternNameGroups( int aGroupCount );
+    void ParsePatternStyleGroups( int aGroupCount );
+    void ParseImplicitPatternStyleGroup();
     void ParseDesignRules();
     void FindAndParseComponents();
     void ParsePostComponentSections();
+
+    /// Deterministically walk the component boundaries from the design-rules end, anchoring on
+    /// each component's 37-byte tail (followed by a boundary core) instead of scanning the whole
+    /// region for boundary patterns. Returns (boundaryOffset, stringStart) per component, or an
+    /// empty vector when the walk cannot be trusted (the caller then falls back to the scan).
+    std::vector<std::pair<size_t, size_t>> FieldWalkComponentBoundaries( size_t aUpperBound );
 
     // --- Component parsing helpers ---
     bool ParseSingleComponent( size_t aBoundaryOffset, size_t aUpperBound,
@@ -392,7 +419,7 @@ private:
     /// Convert a DipTrace angle value to degrees (tenths of degree).
     static double ToKiCadAngleDeg( int aDipTraceAngle );
 
-    /// Skip an inter-ruleset transition block.
+    /// Read an inter-ruleset transition block.
     void SkipInterRulesetTransition();
 
     /// Try to read a string at a given raw data position.
@@ -409,6 +436,8 @@ private:
     BINARY_READER           m_reader;
     BOARD*                  m_board;
     int                     m_version;
+    bool                    m_hasInlineVersion;
+    bool                    m_hasLegacyMagicLayout;
 
     // Parsed intermediate data
     std::vector<DT_VERTEX>      m_outline;
@@ -439,6 +468,16 @@ private:
     size_t m_postLayersOffset = 0;
     size_t m_postDesignRulesOffset = 0;
     size_t m_componentUpperBound = 0;
+
+    // Determinism instrumentation. Each counter records how many objects/sections of its
+    // category were located by byte-pattern scanning rather than a field-derived offset.
+    // The determinism work drives every category to zero, one at a time, while keeping the
+    // scanners as recovery fallbacks. See ScanLocatorUseCount().
+    int m_componentLocatorScans = 0;
+    int m_padLocatorScans = 0;
+    int m_shapeLocatorScans = 0;
+    int m_mountHoleLocatorScans = 0;
+    int m_sectionLocatorScans = 0;
 };
 
 }  // namespace DIPTRACE

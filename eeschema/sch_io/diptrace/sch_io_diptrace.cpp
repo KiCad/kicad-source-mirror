@@ -81,12 +81,18 @@ SCH_SHEET* SCH_IO_DIPTRACE::LoadSchematicFile( const wxString& aFileName,
     }
     else
     {
+        // The content root carries a real UUID so SetTopLevelSheets() accepts it as a top-level
+        // sheet. A nil UUID marks the schematic's virtual root, which SetTopLevelSheets() skips,
+        // leaving the imported sheets orphaned and the editor blank.
         rootSheet = new SCH_SHEET( aSchematic );
-        const_cast<KIID&>( rootSheet->m_Uuid ) = niluuid;
 
         wxFileName newFilename( aFileName );
         newFilename.SetExt( FILEEXT::KiCadSchematicFileExtension );
         rootSheet->SetFileName( newFilename.GetFullPath() );
+
+        SCH_SCREEN* screen = new SCH_SCREEN( aSchematic );
+        screen->SetFileName( newFilename.GetFullPath() );
+        rootSheet->SetScreen( screen );
 
         aSchematic->SetTopLevelSheets( { rootSheet } );
     }
@@ -100,12 +106,16 @@ SCH_SHEET* SCH_IO_DIPTRACE::LoadSchematicFile( const wxString& aFileName,
         screen->SetFileName( newFilename.GetFullPath() );
 
         rootSheet->SetScreen( screen );
-        const_cast<KIID&>( rootSheet->m_Uuid ) = niluuid;
     }
 
     DIPTRACE::SCH_PARSER parser( aFileName, aSchematic, rootSheet,
                                  m_progressReporter, m_reporter );
     parser.Parse();
+
+    // The parser appends sub-sheets to the root screen after SetTopLevelSheets() built the
+    // hierarchy, so rebuild it now to expose every sheet to headless and CLI consumers that
+    // do not run the editor's post-import refresh.
+    aSchematic->RefreshHierarchy();
 
     return rootSheet;
 }

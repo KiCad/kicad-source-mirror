@@ -38,7 +38,6 @@
 #include <lib_symbol.h>
 #include <progress_reporter.h>
 #include <project.h>
-#include <project_sch.h>
 #include <reporter.h>
 #include <sch_bus_entry.h>
 #include <sch_junction.h>
@@ -53,8 +52,6 @@
 #include <schematic.h>
 #include <string_utils.h>
 #include <wildcards_and_files_ext.h>
-#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
-#include <libraries/symbol_library_adapter.h>
 
 
 using namespace DIPTRACE;
@@ -66,11 +63,11 @@ using namespace DIPTRACE;
 /// sections: extra int3 fields, different padding, and alternate single-part
 /// encoding.  This controls structural byte-layout differences only.
 ///
-/// This is independent of LEGACY_STRING_VERSION (37) in the shared binary
-/// reader, which controls string encoding (ASCII vs UTF-16-BE).  A file can
-/// be above V31_CUTOVER (modern layout) but still at or below
-/// LEGACY_STRING_VERSION (legacy strings), e.g. versions 34-37.
+/// This is independent of schematic string encoding, which switches to UTF-16-BE
+/// at v34 while PCB keeps the shared legacy <=37 ASCII threshold.
 static constexpr int V31_CUTOVER = 34;
+
+static constexpr int SCHEMATIC_UTF16_STRING_VERSION = V31_CUTOVER;
 
 
 SCH_PARSER::SCH_PARSER( const wxString& aFileName, SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
@@ -133,6 +130,9 @@ void SCH_PARSER::Parse()
     {
         parseHeader();
         m_reader.SetVersion( m_version );
+        m_reader.SetStringEncoding( m_version >= SCHEMATIC_UTF16_STRING_VERSION
+                                            ? STRING_ENCODING::UTF16_BE
+                                            : STRING_ENCODING::LEGACY_ASCII );
 
         if( m_version < 1 )
         {
@@ -147,24 +147,28 @@ void SCH_PARSER::Parse()
         parsePreComponentSettings();
 
         size_t compSectionStart = m_reader.GetOffset();
-        m_busSectionOffset = findBusSection( compSectionStart );
         m_tailOffset = findTailStart();
+        bool hasBusSection = false;
 
-        if( m_busSectionOffset == 0 || m_busSectionOffset >= m_reader.GetFileSize() )
+        if( m_magicMajor == 1 )
         {
-            if( m_reporter )
-            {
-                m_reporter->Report( _( "DipTrace import: could not locate bus section; "
-                                       "using tail offset as boundary." ),
-                                    RPT_SEVERITY_WARNING );
-            }
+            m_busSectionOffset = m_tailOffset;
+        }
+        else
+        {
+            m_busSectionOffset = findBusSection( compSectionStart );
+            hasBusSection = m_busSectionOffset > 0 && m_busSectionOffset < m_reader.GetFileSize();
+        }
 
+        if( m_magicMajor != 1
+            && ( m_busSectionOffset == 0 || m_busSectionOffset >= m_reader.GetFileSize() ) )
+        {
             m_busSectionOffset = m_tailOffset;
         }
 
         parseComponents( m_busSectionOffset );
 
-        if( m_busSectionOffset > 0 && m_busSectionOffset < m_reader.GetFileSize() )
+        if( hasBusSection )
         {
             m_reader.SetOffset( m_busSectionOffset );
             parseBusSection();
@@ -213,43 +217,16 @@ void SCH_PARSER::parseHeader()
     else
     {
         // Legacy files encode the version in the magic suffix ("DTSCHEMx.yy").
-        std::string magicSuffix( reinterpret_cast<const char*>( magicBuf.data() + 7 ),
-                                 magicLen - 7 );
-        int         parsedMajor = 0;
-        int         parsedMinor = 0;
-        size_t      dotPos = magicSuffix.find( '.' );
+        const uint8_t* suffix = magicBuf.data() + 7;
 
-        if( dotPos != std::string::npos )
+        if( !std::isdigit( suffix[0] ) || suffix[1] != '.'
+            || !std::isdigit( suffix[2] ) || !std::isdigit( suffix[3] ) )
         {
-            std::string major = magicSuffix.substr( 0, dotPos );
-            std::string minor = magicSuffix.substr( dotPos + 1 );
-
-            bool validMajor = !major.empty() && std::all_of( major.begin(), major.end(),
-                                                             []( unsigned char c ) {
-                                                                 return std::isdigit( c ) != 0;
-                                                             } );
-            bool validMinor = !minor.empty() && std::all_of( minor.begin(), minor.end(),
-                                                             []( unsigned char c ) {
-                                                                 return std::isdigit( c ) != 0;
-                                                             } );
-
-            if( validMajor )
-                parsedMajor = std::stoi( major );
-
-            if( validMinor )
-            {
-                parsedMinor = std::stoi( minor );
-            }
+            THROW_IO_ERROR( _( "Invalid DipTrace schematic file: bad legacy version suffix." ) );
         }
 
-        if( parsedMajor <= 0 || parsedMajor > 9 )
-            parsedMajor = 2;
-
-        if( parsedMinor <= 0 || parsedMinor > LEGACY_STRING_VERSION )
-            parsedMinor = 33;
-
-        m_magicMajor = parsedMajor;
-        m_version = parsedMinor;
+        m_magicMajor = suffix[0] - '0';
+        m_version = ( suffix[2] - '0' ) * 10 + ( suffix[3] - '0' );
     }
 
     m_reader.ReadInt4();  // field_0B
@@ -333,10 +310,10 @@ void SCH_PARSER::parseTextStyles()
         m_reader.ReadInt4();
         m_reader.ReadInt4();
 
-        // v38+ (UTF-16) files carry a trailing int3 per text style. In older
-        // single-style files this same byte was historically consumed as the
-        // leading "pad" int3 in parsePreComponentSettings(); reading it here is
-        // byte-identical for one style but keeps multi-style v46 files in sync.
+        // v38+ files carry a trailing int3 per text style. In older single-style
+        // files this same byte was historically consumed as the leading "pad" int3
+        // in parsePreComponentSettings(); reading it here is byte-identical for
+        // one style but keeps multi-style v46 files in sync.
         if( m_version > LEGACY_STRING_VERSION )
             m_reader.ReadInt3();
     }
@@ -381,16 +358,8 @@ void SCH_PARSER::parsePreComponentSettings()
 
     if( m_componentCount < 0 || m_componentCount > 100000 )
     {
-        if( m_reporter )
-        {
-            m_reporter->Report( wxString::Format(
-                                        _( "DipTrace import: invalid component count %d; "
-                                           "falling back to boundary scan." ),
-                                        m_componentCount ),
-                                RPT_SEVERITY_WARNING );
-        }
-
-        m_componentCount = -1;
+        THROW_IO_ERROR( wxString::Format(
+                _( "DipTrace import: invalid component count %d." ), m_componentCount ) );
     }
 }
 
@@ -415,8 +384,14 @@ size_t SCH_PARSER::findBusSection( size_t aSearchStart ) const
                           | data[off + 12] )
                         - INT3_BIAS;
 
-            if( count >= 0 && count <= 200 )
+            if( count >= 0 && count <= 1000 )
                 return off;
+
+            if( count > 1000 && count <= 10000 )
+            {
+                THROW_IO_ERROR( wxString::Format(
+                        _( "DipTrace import: invalid bus count %d." ), count ) );
+            }
         }
     }
 
@@ -586,6 +561,8 @@ void SCH_PARSER::parseComponents( size_t aBusSectionOffset )
     // Structural boundary scan: locate every component header and decode each record within its
     // [start, next) bounds. parseOneComponent() resyncs to the record end even when its variable
     // tail is not fully understood, so a recognised header always yields a placed component.
+    m_componentBoundaryScanCount++;
+
     std::vector<size_t> compStarts =
             scanComponentBoundaries( compSectionStart, aBusSectionOffset );
 
@@ -599,34 +576,23 @@ void SCH_PARSER::parseComponents( size_t aBusSectionOffset )
             m_reader.SetOffset( compStarts[ci] );
             parseOneComponent( compEnd, true );
         }
+        catch( const IO_ERROR& )
+        {
+            throw;
+        }
         catch( const std::exception& e )
         {
-            if( m_reporter )
-            {
-                m_reporter->Report(
-                        wxString::Format( _( "DipTrace import: failed to parse component "
-                                             "%zu at offset 0x%06zX: %s" ),
-                                          ci, compStarts[ci], wxString::FromUTF8( e.what() ) ),
-                        RPT_SEVERITY_WARNING );
-            }
+            THROW_IO_ERROR( wxString::Format(
+                    _( "DipTrace import: failed to parse component %zu at offset 0x%06zX: %s" ),
+                    ci, compStarts[ci], wxString::FromUTF8( e.what() ) ) );
         }
     }
 
-    // Surface a single diagnostic if the recovered placement count diverges materially from the
-    // count the file's own header advertised, which would indicate the header signature missed or
-    // over-matched records.
-    if( m_componentCount > 0 && m_reporter )
+    if( m_componentCount >= 0 && static_cast<int>( m_components.size() ) != m_componentCount )
     {
-        int found = static_cast<int>( m_components.size() );
-
-        if( std::abs( found - m_componentCount ) > m_componentCount / 20 )
-        {
-            m_reporter->Report(
-                    wxString::Format( _( "DipTrace import: recovered %d of %d components declared "
-                                         "in the file header." ),
-                                      found, m_componentCount ),
-                    RPT_SEVERITY_WARNING );
-        }
+        THROW_IO_ERROR( wxString::Format(
+                _( "DipTrace import: found %zu components, but the file header declares %d." ),
+                m_components.size(), m_componentCount ) );
     }
 }
 
@@ -640,6 +606,27 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
 
     DCH_COMPONENT comp;
     comp.fileOffset = m_reader.GetOffset();
+
+    // The next component header bounds this record. Variable-length fields decoded
+    // below (the modern extra-tail, shapes, and the embedded pattern) must not run
+    // past it, and where field decoding cannot resolve the exact end the record still
+    // lands here deterministically. The boundary scan already supplies the true next
+    // start via aCompEnd; the count-guided sequential walk passes the far bus-section
+    // offset, so locate the boundary structurally with the same signature used to
+    // enumerate every component.
+    size_t componentCeiling = aCompEnd > 0 ? aCompEnd : m_reader.GetFileSize();
+
+    if( !aUseCompEnd )
+    {
+        for( size_t p = comp.fileOffset + 16; p < componentCeiling; p++ )
+        {
+            if( isComponentHeaderAt( p ) )
+            {
+                componentCeiling = p;
+                break;
+            }
+        }
+    }
 
     auto dumpDetail = [&]( const wxString& aMsg )
     {
@@ -797,15 +784,35 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
     int      pinMetaF  = 0;
     int      pinHdrByte = 0;
     int      numPins   = 0;
+    bool     simpleModernTail = false;
 
     if( m_version < V31_CUTOVER )
     {
-        // Legacy v1/v2 uses an int3+byte+int3 pre-pin metadata tuple.
-        // This must be consumed before the pin count.
-        pinMetaA = m_reader.ReadInt3();
-        pinMetaF = m_reader.ReadByte();
-        pinMetaB = m_reader.ReadInt3();
-        numPins  = m_reader.ReadInt3();
+        // The legacy pre-pin metadata tuple precedes the pin count, but its layout
+        // shifted across early format revisions. v22 packs two single meta bytes then
+        // the count (one int3 shorter); v23 places the count first; v24+ (incl. v31)
+        // use an int3 + byte + int3 tuple followed by the count.
+        if( m_version <= 22 )
+        {
+            pinMetaA = m_reader.ReadInt3();
+            pinMetaF = m_reader.ReadByte();
+            pinMetaB = m_reader.ReadByte();
+            numPins  = m_reader.ReadInt3();
+        }
+        else if( m_version == 23 )
+        {
+            numPins  = m_reader.ReadInt3();
+            pinMetaF = m_reader.ReadByte();
+            pinMetaA = m_reader.ReadInt3();
+            pinMetaB = m_reader.ReadInt3();
+        }
+        else
+        {
+            pinMetaA = m_reader.ReadInt3();
+            pinMetaF = m_reader.ReadByte();
+            pinMetaB = m_reader.ReadInt3();
+            numPins  = m_reader.ReadInt3();
+        }
 
         if( s_dumpComponentDetail )
         {
@@ -820,7 +827,11 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
     }
     else
     {
-        auto readModernExtraAndPins = [&]( wxString& aExtraTail, int& aNumPins, int& aPinHdr ) -> bool
+        bool usedPinSeparatorFallback = false;
+
+        auto readModernExtraAndPins =
+                [&]( wxString& aExtraTail, int& aNumPins, int& aPinHdr,
+                     bool& aUsedPinSeparatorFallback ) -> bool
         {
             size_t extraStart = m_reader.GetOffset();
             uint8_t extraHdr[4] = {};
@@ -829,12 +840,21 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
             uint32_t extraChars = ( extraHdr[0] << 24 ) | ( extraHdr[1] << 16 )
                                   | ( extraHdr[2] << 8 ) | extraHdr[3];
 
+            if( extraChars >= 10000 && extraHdr[0] == 0 && extraHdr[1] == 0 )
+            {
+                THROW_IO_ERROR( wxString::Format(
+                        _( "DipTrace import: invalid component extra-tail length %u at "
+                           "offset 0x%06zX." ),
+                        extraChars, extraStart ) );
+            }
+
             if( extraChars > 0 )
             {
                 size_t extraBytes = static_cast<size_t>( extraChars ) * 2;
+                bool   fitsFile = m_reader.GetOffset() + extraBytes <= m_reader.GetFileSize();
 
-                if( extraChars < 10000
-                    && m_reader.GetOffset() + extraBytes <= m_reader.GetFileSize() )
+                if( extraChars < 10000 && fitsFile
+                    && m_reader.GetOffset() + extraBytes <= componentCeiling )
                 {
                     wxMBConvUTF16BE conv;
                     aExtraTail = wxString(
@@ -842,6 +862,13 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
                                                            + m_reader.GetOffset() ),
                             conv, extraBytes );
                     m_reader.Skip( extraBytes );
+                }
+                else if( extraChars < 10000 && fitsFile )
+                {
+                    // Length is plausible but the field would run into the next
+                    // component, so this record has no extra tail (e.g. net ports).
+                    // Leave the bytes for the pin-count read below.
+                    m_reader.SetOffset( extraStart );
                 }
                 else
                 {
@@ -877,6 +904,7 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
                     {
                         aNumPins = sepPins;
                         aPinHdr  = sepHdr;
+                        aUsedPinSeparatorFallback = true;
                     }
                     else
                     {
@@ -893,10 +921,19 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
         };
 
         bool usedTaillessFallback = false;
+        bool canonicalPinSeparatorFallback = false;
+        bool readCanonicalPins = readModernExtraAndPins( extraTail, numPins, pinHdrByte,
+                                                        canonicalPinSeparatorFallback );
+        usedPinSeparatorFallback = canonicalPinSeparatorFallback;
 
-        if( !readModernExtraAndPins( extraTail, numPins, pinHdrByte )
-            || ( numPins < 0 || numPins > 500 ) )
+        if( !readCanonicalPins || ( numPins < 0 || numPins > 500 ) )
         {
+            size_t   canonicalEnd = m_reader.GetOffset();
+            wxString canonicalTailStrA = tailStrA;
+            wxString canonicalExtraTail = extraTail;
+            int      canonicalNumPins = numPins;
+            int      canonicalPinHdrByte = pinHdrByte;
+
             // Some v41 files omit tailStrA and place the int4-length extra tail
             // directly after tailB.
             m_reader.SetOffset( tailAfterB );
@@ -905,7 +942,25 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
             numPins = 0;
             pinHdrByte = 0;
             usedTaillessFallback = true;
-            readModernExtraAndPins( extraTail, numPins, pinHdrByte );
+
+            bool fallbackPinSeparatorFallback = false;
+            bool readFallbackPins = readModernExtraAndPins( extraTail, numPins, pinHdrByte,
+                                                           fallbackPinSeparatorFallback );
+
+            if( readFallbackPins && numPins >= 0 && numPins <= 500 )
+            {
+                usedPinSeparatorFallback = fallbackPinSeparatorFallback;
+            }
+            else
+            {
+                m_reader.SetOffset( canonicalEnd );
+                tailStrA = canonicalTailStrA;
+                extraTail = canonicalExtraTail;
+                numPins = canonicalNumPins;
+                pinHdrByte = canonicalPinHdrByte;
+                usedTaillessFallback = false;
+                usedPinSeparatorFallback = canonicalPinSeparatorFallback;
+            }
         }
 
         if( s_dumpComponentDetail )
@@ -913,12 +968,17 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
             dumpDetail( wxString::Format( wxT( "pre-pin-hdr end=0x%06zX fieldF=%d fieldG=%d "
                                                "byte4=%d libId=%d libPath='%s' tailA=%d tailB=%d "
                                                "tailStrA='%s' extraTail='%s' numPins=%d pinHdr=%d "
-                                               "taillessFallback=%d" ),
+                                               "taillessFallback=%d pinSeparatorFallback=%d" ),
                                           m_reader.GetOffset(), fieldF, fieldG, byte4, comp.libId,
                                           comp.libPath, tailA, tailB, tailStrA, extraTail,
                                           numPins, pinHdrByte,
-                                          usedTaillessFallback ? 1 : 0 ) );
+                                          usedTaillessFallback ? 1 : 0,
+                                          usedPinSeparatorFallback ? 1 : 0 ) );
         }
+
+        simpleModernTail = tailA == 0 && tailB == 0 && tailStrA.IsEmpty()
+                           && extraTail.IsEmpty() && !usedTaillessFallback
+                           && !usedPinSeparatorFallback;
     }
 
     dumpDetail( wxString::Format( wxT( "pre-pin end=0x%06zX numPins=%d" ),
@@ -926,7 +986,7 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
 
     if( numPins < 0 || numPins > 500 )
     {
-        if( aUseCompEnd )
+        if( aUseCompEnd && !simpleModernTail )
         {
             m_reader.SetOffset( aCompEnd );
             m_components.push_back( comp );
@@ -940,31 +1000,136 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
 
     for( int pinIdx = 0; pinIdx < numPins; pinIdx++ )
     {
+        auto consumeLaterPinSeparatorIfPresent = [&]() -> bool
+        {
+            if( m_version < V31_CUTOVER || pinIdx == 0 )
+                return false;
+
+            size_t start = m_reader.GetOffset();
+
+            if( start + 2 >= componentCeiling )
+                return false;
+
+            const uint8_t* data = m_reader.GetData();
+
+            if( data[start] != 0 || data[start + 1] != 0 )
+                return false;
+
+            bool currentRecordValid = false;
+
+            try
+            {
+                DCH_COMPONENT probeComp;
+                m_reader.SetOffset( start );
+                parsePin( pinIdx, probeComp );
+                currentRecordValid = m_reader.GetOffset() <= componentCeiling;
+            }
+            catch( const std::exception& )
+            {
+                currentRecordValid = false;
+            }
+
+            m_reader.SetOffset( start );
+
+            if( currentRecordValid )
+                return false;
+
+            bool shiftedRecordValid = false;
+
+            try
+            {
+                DCH_COMPONENT probeComp;
+                m_reader.SetOffset( start + 2 );
+                parsePin( pinIdx, probeComp );
+                shiftedRecordValid = m_reader.GetOffset() <= componentCeiling;
+            }
+            catch( const std::exception& )
+            {
+                shiftedRecordValid = false;
+            }
+
+            m_reader.SetOffset( start );
+
+            if( !shiftedRecordValid )
+                return false;
+
+            m_reader.Skip( 2 );
+            return true;
+        };
+
+        if( consumeLaterPinSeparatorIfPresent() )
+            simpleModernTail = false;
+
         try
         {
             parsePin( pinIdx, comp );
         }
         catch( const std::exception& e )
         {
-            if( s_dumpComponentDetail && m_reporter )
-            {
-                m_reporter->Report(
-                        wxString::Format( wxT( "DipTrace SCH detail @0x%06zX: pin %d parse "
-                                               "failed at 0x%06zX: %s" ),
-                                          comp.fileOffset, pinIdx, m_reader.GetOffset(),
-                                          wxString::FromUTF8( e.what() ) ),
-                        RPT_SEVERITY_INFO );
-            }
+            if( aUseCompEnd && !simpleModernTail )
+                break;
 
-            if( !aUseCompEnd )
-                throw;
-
-            break;
+            THROW_IO_ERROR( wxString::Format(
+                    _( "DipTrace import: failed to parse pin %d in component at 0x%06zX "
+                       "(offset 0x%06zX): %s" ),
+                    pinIdx, comp.fileOffset, m_reader.GetOffset(), wxString::FromUTF8( e.what() ) ) );
         }
     }
 
-    while( m_reader.GetOffset() < aCompEnd && isShapeStart( m_reader.GetOffset() ) )
+    // Recognise a shape-record prefix carrying an out-of-range point count. For the
+    // well-framed modern formats this signals a corrupt file and must fail the load;
+    // legacy records can false-match the embedded-pattern header here, so they simply
+    // end the shape list and resync through the pattern/ceiling handling below.
+    auto readShapePointCountIfHeaderPrefix = [&]( size_t aOffset, int& aPointCount ) -> bool
     {
+        const uint8_t* data     = m_reader.GetData();
+        size_t         fileSize = m_reader.GetFileSize();
+        size_t         limit    = std::min( fileSize, aCompEnd );
+
+        if( aOffset + 17 > limit )
+            return false;
+
+        if( data[aOffset + 6] != 0 || data[aOffset + 7] != 0 || data[aOffset + 8] != 0
+            || data[aOffset + 9] != 0 )
+        {
+            return false;
+        }
+
+        int width = ( ( data[aOffset + 10] << 24 ) | ( data[aOffset + 11] << 16 )
+                      | ( data[aOffset + 12] << 8 ) | data[aOffset + 13] )
+                    - INT4_BIAS;
+
+        if( width < 0 || width > 200000 )
+            return false;
+
+        aPointCount = ( ( data[aOffset + 14] << 16 ) | ( data[aOffset + 15] << 8 )
+                        | data[aOffset + 16] )
+                      - INT3_BIAS;
+        return true;
+    };
+
+    while( m_reader.GetOffset() < aCompEnd && m_reader.GetOffset() < componentCeiling )
+    {
+        size_t shapeOffset = m_reader.GetOffset();
+        int    shapePointCount = 0;
+
+        if( !isShapeStart( shapeOffset ) )
+        {
+            if( m_version >= V31_CUTOVER
+                && readShapePointCountIfHeaderPrefix( shapeOffset, shapePointCount )
+                && ( shapePointCount < 1 || shapePointCount > 100 ) )
+            {
+                THROW_IO_ERROR( wxString::Format(
+                        _( "DipTrace import: invalid component shape point count %d at "
+                           "offset 0x%06zX." ),
+                        shapePointCount, shapeOffset ) );
+            }
+
+            // End of the shape list (or a record layout not fully understood). The
+            // embedded-pattern and end-of-record handling resync to the next header.
+            break;
+        }
+
         try
         {
             parseShape( comp );
@@ -980,7 +1145,21 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
     // the pattern bytes so count-guided parsing can advance to the next component.
     try
     {
+        while( parseComponentTextField( comp, componentCeiling ) )
+        {
+        }
+
         parseEmbeddedPattern( comp, aCompEnd );
+
+        if( m_reader.GetOffset() < aCompEnd && m_reader.GetOffset() != m_busSectionOffset
+            && !isComponentHeaderAt( m_reader.GetOffset() ) )
+        {
+            size_t afterFirstPattern = m_reader.GetOffset();
+            parseEmbeddedPattern( comp, aCompEnd );
+
+            if( m_reader.GetOffset() == afterFirstPattern )
+                m_reader.SetOffset( afterFirstPattern );
+        }
     }
     catch( const std::exception& e )
     {
@@ -1009,7 +1188,18 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
     }
 
     if( aUseCompEnd )
+    {
         m_reader.SetOffset( aCompEnd );
+    }
+    else if( m_reader.GetOffset() != componentCeiling
+             && ( componentCeiling == m_busSectionOffset
+                  || isComponentHeaderAt( componentCeiling ) ) )
+    {
+        // The field decoder did not consume exactly to the next component. The
+        // boundary is structurally known, so land on it to keep the count-guided
+        // sequential walk deterministic without the global boundary scan.
+        m_reader.SetOffset( componentCeiling );
+    }
 
     m_components.push_back( comp );
 
@@ -1034,7 +1224,17 @@ void SCH_PARSER::parsePin( int aPinIndex, DCH_COMPONENT& aComp )
     {
         pin.hasHeader = true;
 
-        if( m_version < V31_CUTOVER )
+        if( m_version <= 22 )
+        {
+            // v22 prefixes the first pin with a lead byte and four int3 header
+            // fields; reading the wrong width misaligns every later pin field.
+            m_reader.ReadByte();
+            pin.headerA  = m_reader.ReadInt3();
+            pin.headerB  = m_reader.ReadInt3();
+            pin.headerC  = m_reader.ReadInt3();
+            pin.typeCode = m_reader.ReadInt3();
+        }
+        else if( m_version < V31_CUTOVER )
         {
             // Legacy v1/v2 schematic files use a shorter first-pin preamble.
             // Reading 4 int3 fields here misaligns all subsequent pin fields.
@@ -1075,7 +1275,21 @@ void SCH_PARSER::parsePin( int aPinIndex, DCH_COMPONENT& aComp )
     }
     else
     {
-        m_reader.Skip( 5 );
+        size_t         midTailStart = m_reader.GetOffset();
+        const uint8_t* data = m_reader.GetData();
+
+        if( midTailStart + 5 <= m_reader.GetFileSize()
+            && data[midTailStart] == 0 && data[midTailStart + 1] == 0 )
+        {
+            m_reader.Skip( 2 );
+            pin.midTailText = m_reader.ReadString();
+            m_reader.ReadByte();
+        }
+        else
+        {
+            m_reader.Skip( 5 );
+        }
+
         m_reader.ReadInt3();
     }
 
@@ -1131,6 +1345,67 @@ void SCH_PARSER::parseShape( DCH_COMPONENT& aComp )
     m_reader.ReadInt3();
 
     aComp.shapes.push_back( shape );
+}
+
+
+bool SCH_PARSER::parseComponentTextField( DCH_COMPONENT& aComp, size_t aCompEnd )
+{
+    size_t         startOffset = m_reader.GetOffset();
+    const uint8_t* data        = m_reader.GetData();
+    size_t         limit       = std::min( aCompEnd > 0 ? aCompEnd : m_reader.GetFileSize(),
+                                           m_reader.GetFileSize() );
+
+    if( startOffset + 6 > limit || data[startOffset] != 0 || data[startOffset + 1] != 0
+        || data[startOffset + 2] != 0 )
+    {
+        return false;
+    }
+
+    int fieldType = ( ( data[startOffset + 3] << 16 ) | ( data[startOffset + 4] << 8 )
+                      | data[startOffset + 5] )
+                    - INT3_BIAS;
+
+    if( fieldType < 0 || fieldType > 100 )
+        return false;
+
+    DCH_COMPONENT_TEXT text;
+
+    try
+    {
+        m_reader.ReadBytes( text.flags, 3 );
+        text.type     = m_reader.ReadInt3();
+        text.fontName = m_reader.ReadString();
+        text.text     = m_reader.ReadString();
+
+        if( text.fontName.IsEmpty() || text.fontName.size() > 128 || text.text.size() > 512 )
+            throw std::runtime_error( "invalid component text field string" );
+
+        text.fontSize = m_reader.ReadInt4();
+        text.fieldA   = m_reader.ReadInt3();
+        text.coordX   = m_reader.ReadInt4();
+        text.coordY   = m_reader.ReadInt4();
+        text.fieldB   = m_reader.ReadInt4();
+        text.fieldC   = m_reader.ReadInt4();
+        text.flagA    = m_reader.ReadByte();
+        text.flagB    = m_reader.ReadByte();
+        text.fieldD   = m_reader.ReadInt4();
+        text.fieldE   = m_reader.ReadInt4();
+        text.fieldF   = m_reader.ReadInt3();
+        text.fieldG   = m_reader.ReadInt3();
+        m_reader.ReadBytes( text.flags2, 4 );
+        text.fieldH   = m_reader.ReadInt3();
+
+        if( m_reader.GetOffset() > limit )
+            throw std::runtime_error( "component text field overruns component" );
+    }
+    catch( const std::exception& )
+    {
+        m_reader.SetOffset( startOffset );
+        return false;
+    }
+
+    aComp.texts.push_back( text );
+    return true;
 }
 
 
@@ -1243,83 +1518,78 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
     }
     else
     {
-        // Modern format (v34+). The embedded pattern section is much larger than
-        // the legacy format, containing full library metadata (3D models, library
-        // references, etc.). Rather than parsing field-by-field, we locate the
-        // pattern name by scanning for a reliable anchor: the UTF-16-BE string
-        // "Case Info" which always appears at a known structural distance after
-        // the pattern name.
-        //
-        // Layout before "Case Info":
-        //   str(patternName) + 4*int4 + byte + N*int3 + int3(18) + uint16(9) + "Case Info"
-        //
-        // The int3(18) is always at ciPos-5, but N varies (typically 0 for
-        // non-empty patterns, 2 for empty patterns). We anchor on int3(18)
-        // and try several gap sizes.
+        // Modern v34+ embedded patterns extend the legacy header with an
+        // additional drill field and a pre-name tail.  They then store counted
+        // pad, drawing, and 3D-model records, so the component record can be
+        // consumed without scanning for the next component.
 
-        const uint8_t* data = m_reader.GetData();
+        // Hard ceiling for this pattern body: the next component header. Nothing in
+        // the record can legitimately reach it, so it bounds every model-tail search
+        // and keeps the decoder from consuming into a following component. The
+        // sequential walk passes aCompEnd as the far bus-section offset, so without
+        // this bound an unframed scan can latch onto a later record's 3D-model tail
+        // and swallow whole components. isComponentHeaderAt() is the same structural
+        // signature used to enumerate every component, so the nearest match is this
+        // record's true end.
+        size_t patternCeiling = std::min( aCompEnd > 0 ? aCompEnd : m_reader.GetFileSize(),
+                                          m_reader.GetFileSize() );
 
-        // "Case Info" in UTF-16-BE
-        static const uint8_t kCaseInfo[] = {
-            0x00, 0x43, 0x00, 0x61, 0x00, 0x73, 0x00, 0x65,
-            0x00, 0x20, 0x00, 0x49, 0x00, 0x6E, 0x00, 0x66, 0x00, 0x6F
-        };
-        static constexpr size_t kCaseInfoLen = sizeof( kCaseInfo );
-
-        // Limit the search to the current component's boundary so we don't
-        // accidentally match a "Case Info" from the next component.
-        // Also cap at 16 KB from the current position since the largest observed
-        // component record is ~14.5 KB.
-        static constexpr size_t kMaxPatternSearch = 16384;
-        size_t searchEnd = std::min( startOffset + kMaxPatternSearch,
-                                     aCompEnd > 0 ? aCompEnd : m_reader.GetFileSize() );
-        size_t ciPos     = m_reader.FindPattern( kCaseInfo, kCaseInfoLen,
-                                                 startOffset, searchEnd );
-
-        if( ciPos == std::string::npos || ciPos < startOffset + 30 )
-            return;
-
-        // int3(18) anchor is always 5 bytes before "Case Info" text
-        size_t anchor = ciPos - 5;
-
-        // The gap between pattern name end and anchor is:
-        //   4*int4(16) + byte(1) + N*int3(N*3) = 17 + N*3
-        // where N is 0, 1, or 2 extra int3 fields.
-        static constexpr int kMaxExtraInt3 = 4;
-        static constexpr int kBaseGap      = 17;   // 4*int4 + byte
-
-        for( int extraInt3s = 0; extraInt3s <= kMaxExtraInt3; extraInt3s++ )
+        for( size_t p = startOffset + 16; p < patternCeiling; p++ )
         {
-            size_t nameEnd = anchor - kBaseGap - static_cast<size_t>( extraInt3s ) * 3;
-
-            if( nameEnd < startOffset + 2 )
-                break;
-
-            // Try to find a valid UTF-16-BE string ending at nameEnd
-            for( int tryLen = 0; tryLen <= 50; tryLen++ )
+            if( isComponentHeaderAt( p ) )
             {
-                size_t strStart = nameEnd - static_cast<size_t>( tryLen ) * 2 - 2;
+                patternCeiling = p;
+                break;
+            }
+        }
 
-                if( strStart < startOffset )
-                    break;
+        // The record end when field decoding cannot resolve the model tail. Prefer
+        // the detected next-component boundary; only fall back to leaving the pattern
+        // unconsumed if no boundary was identified (which would surface as a desync
+        // rather than a silent overconsumption).
+        auto landingForCeiling = [&]() -> size_t
+        {
+            if( patternCeiling == aCompEnd || patternCeiling == m_busSectionOffset
+                || isComponentHeaderAt( patternCeiling ) )
+            {
+                return patternCeiling;
+            }
 
-                int charCount = ( data[strStart] << 8 ) | data[strStart + 1];
+            return startOffset;
+        };
 
-                if( charCount != tryLen )
+        if( m_reader.PeekInt3() != 0 )
+        {
+            const uint8_t* data  = m_reader.GetData();
+            size_t         limit = patternCeiling;
+
+            if( startOffset + 63 <= limit && data[startOffset] == 0 && data[startOffset + 1] == 0 )
+            {
+                size_t tailEnd = startOffset + 63;
+
+                if( tailEnd == aCompEnd || tailEnd == m_busSectionOffset
+                    || isComponentHeaderAt( tailEnd ) )
+                {
+                    m_reader.SetOffset( tailEnd );
+                    return;
+                }
+            }
+
+            for( size_t pos = startOffset; pos + 2 <= limit; pos++ )
+            {
+                int charCount = ( data[pos] << 8 ) | data[pos + 1];
+
+                if( charCount < 0 || charCount > 512 )
                     continue;
 
-                if( charCount == 0 )
-                    break;  // empty string = no pattern name
+                size_t strEnd = pos + 2 + static_cast<size_t>( charCount ) * 2;
 
-                size_t strDataStart = strStart + 2;
-                size_t strDataEnd   = strDataStart + static_cast<size_t>( charCount ) * 2;
-
-                if( strDataEnd != nameEnd )
+                if( strEnd > limit )
                     continue;
 
                 bool valid = true;
 
-                for( size_t i = strDataStart; i < strDataEnd; i += 2 )
+                for( size_t i = pos + 2; i < strEnd; i += 2 )
                 {
                     if( data[i] != 0x00 || data[i + 1] < 0x20 || data[i + 1] > 0x7E )
                     {
@@ -1328,20 +1598,307 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
                     }
                 }
 
-                if( valid )
+                if( !valid )
+                    continue;
+
+                wxMBConvUTF16BE conv;
+                wxString modelName( reinterpret_cast<const char*>( data + pos + 2 ), conv,
+                                    static_cast<size_t>( charCount ) * 2 );
+                wxString lowerModel = modelName.Lower();
+
+                if( !modelName.IsEmpty()
+                    && !lowerModel.EndsWith( wxT( ".step" ) )
+                    && !lowerModel.EndsWith( wxT( ".wrl" ) ) )
                 {
-                    wxMBConvUTF16BE conv;
-                    aComp.patternName = wxString(
-                            reinterpret_cast<const char*>( data + strDataStart ),
-                            conv, static_cast<size_t>( charCount ) * 2 );
+                    continue;
                 }
 
-                break;
+                for( size_t tailSize : { static_cast<size_t>( 61 ), static_cast<size_t>( 28 ) } )
+                {
+                    size_t tailEnd = strEnd + tailSize;
+
+                    if( tailEnd <= limit
+                        && ( tailEnd == aCompEnd || tailEnd == m_busSectionOffset
+                             || isComponentHeaderAt( tailEnd ) ) )
+                    {
+                        m_reader.SetOffset( tailEnd );
+                        return;
+                    }
+                }
             }
 
-            if( !aComp.patternName.IsEmpty() )
+            // The model string is not always stored in a form this scan recognises
+            // (some v41 records use little-endian paths or omit the model entirely).
+            // The next component header is reliably known, so land there: it is the
+            // record's true end and keeps the sequential walk deterministic without
+            // resorting to the global boundary scan.
+            m_reader.SetOffset( landingForCeiling() );
+            return;
+        }
+
+        auto readCount = [&]( const char* aName, int aMax ) -> int
+        {
+            int count = m_reader.ReadInt3();
+
+            if( count < 0 || count > aMax )
+            {
+                THROW_IO_ERROR( wxString::Format(
+                        _( "DipTrace import: invalid embedded pattern %s count %d at "
+                           "offset 0x%06zX." ),
+                        wxString::FromUTF8( aName ), count, startOffset ) );
+            }
+
+            return count;
+        };
+
+        auto isValidUtf16StringAt = [&]( size_t aOffset ) -> bool
+        {
+            const uint8_t* data = m_reader.GetData();
+            size_t         size = std::min( patternCeiling, m_reader.GetFileSize() );
+
+            if( aOffset + 2 > size )
+                return false;
+
+            int charCount = ( data[aOffset] << 8 ) | data[aOffset + 1];
+
+            if( charCount < 0 || charCount > 512 )
+                return false;
+
+            size_t stringEnd = aOffset + 2 + static_cast<size_t>( charCount ) * 2;
+
+            if( stringEnd > size )
+                return false;
+
+            for( size_t i = aOffset + 2; i < stringEnd; i += 2 )
+            {
+                if( data[i] != 0x00 || data[i + 1] < 0x20 || data[i + 1] > 0x7E )
+                    return false;
+            }
+
+            return true;
+        };
+
+        // Pre-name header: legacy preamble plus modern drill fields. Some
+        // v41 records store the pattern name immediately after the extra drill
+        // field; others add an int3 tail before the name.
+        m_reader.ReadInt3();
+        m_reader.ReadInt3();
+        m_reader.ReadInt4();
+        m_reader.ReadInt4();
+        m_reader.ReadByte();
+        m_reader.ReadInt4();
+        m_reader.ReadByte();
+        m_reader.ReadInt3();
+        m_reader.ReadInt4();
+        m_reader.ReadInt4();
+        m_reader.ReadInt4();
+        m_reader.ReadInt4();
+        m_reader.ReadInt3();
+        m_reader.ReadByte();
+        m_reader.ReadInt4();
+        m_reader.ReadInt4();
+
+        if( !isValidUtf16StringAt( m_reader.GetOffset() ) )
+            m_reader.ReadInt3();
+
+        aComp.patternName = m_reader.ReadString();
+
+        // Post-name fields: origin/options followed by the pad record count.
+        m_reader.ReadInt4();
+        m_reader.ReadInt4();
+        m_reader.ReadInt4();
+        m_reader.ReadInt4();
+        m_reader.ReadByte();
+
+        // The counted alias/pad/drawing fields are not yet decoded field-by-field for
+        // every pattern variant (notably connectors and some v41 records). Walk them
+        // best-effort only to detect the empty-pattern footer; any desync is recovered
+        // by the authoritative 3D-model tail scanner below, which re-locates the record
+        // end structurally from the pattern start.
+        try
+        {
+            int aliasCount = readCount( "alias", 100 );
+
+            for( int i = 0; i < aliasCount; i++ )
+            {
+                m_reader.ReadString();
+                m_reader.ReadString();
+            }
+
+            m_reader.ReadInt3();
+
+            if( aliasCount > 0 )
+                m_reader.ReadInt3();
+
+            int padCount = readCount( "pad", 500 );
+
+            if( padCount == 0 )
+            {
+                // Empty modern patterns use the same short zero footer as legacy
+                // empty patterns.
+                m_reader.ReadInt3();
+                m_reader.ReadInt3();
+                m_reader.ReadInt3();
+                return;
+            }
+
+            auto readModernPadRecord = [&]()
+            {
+                m_reader.ReadByte();
+                m_reader.ReadInt3();
+                m_reader.ReadInt4();
+                m_reader.ReadInt4();
+                m_reader.ReadString();
+                m_reader.ReadString();
+                m_reader.ReadInt4();
+                m_reader.ReadInt4();
+                m_reader.ReadInt4();
+                m_reader.ReadInt4();
+                m_reader.ReadInt3();
+            };
+
+            auto canReadModernPadRecordAt = [&]( size_t aOffset ) -> bool
+            {
+                size_t save = m_reader.GetOffset();
+                bool   ok   = false;
+
+                try
+                {
+                    m_reader.SetOffset( aOffset );
+                    readModernPadRecord();
+                    ok = m_reader.GetOffset() <= patternCeiling;
+                }
+                catch( const std::exception& )
+                {
+                    ok = false;
+                }
+
+                m_reader.SetOffset( save );
+                return ok;
+            };
+
+            for( int i = 0; i < padCount; i++ )
+            {
+                if( m_reader.GetOffset() >= patternCeiling
+                    || !canReadModernPadRecordAt( m_reader.GetOffset() ) )
+                {
+                    break;
+                }
+
+                readModernPadRecord();
+
+                if( i + 1 < padCount )
+                {
+                    size_t tailStart = m_reader.GetOffset();
+
+                    if( tailStart + 22 <= patternCeiling
+                        && canReadModernPadRecordAt( tailStart + 22 ) )
+                    {
+                        m_reader.Skip( 22 );
+                    }
+                }
+            }
+        }
+        catch( const std::exception& )
+        {
+            // Best-effort walk only; the model-tail scan below recovers the end.
+        }
+
+        m_reader.SetOffset( startOffset );
+
+        auto readInt3At = [&]( size_t aOffset ) -> int
+        {
+            const uint8_t* data = m_reader.GetData();
+
+            return ( ( data[aOffset] << 16 ) | ( data[aOffset + 1] << 8 ) | data[aOffset + 2] )
+                   - INT3_BIAS;
+        };
+
+        auto validUtf16StringAt = [&]( size_t aOffset, size_t aLimit, size_t& aEnd ) -> bool
+        {
+            const uint8_t* data = m_reader.GetData();
+
+            if( aOffset + 2 > aLimit )
+                return false;
+
+            int charCount = ( data[aOffset] << 8 ) | data[aOffset + 1];
+
+            if( charCount < 0 || charCount > 512 )
+                return false;
+
+            size_t strEnd = aOffset + 2 + static_cast<size_t>( charCount ) * 2;
+
+            if( strEnd > aLimit )
+                return false;
+
+            for( size_t i = aOffset + 2; i < strEnd; i += 2 )
+            {
+                if( data[i] != 0x00 )
+                    return false;
+
+                if( charCount > 0 && ( data[i + 1] < 0x20 || data[i + 1] > 0x7E ) )
+                    return false;
+            }
+
+            aEnd = strEnd;
+            return true;
+        };
+
+        size_t modelSectionStart = std::string::npos;
+        size_t modelStringStart  = std::string::npos;
+        size_t patternEnd        = std::string::npos;
+        size_t limit = std::min( patternCeiling, m_reader.GetFileSize() );
+
+        for( size_t pos = m_reader.GetOffset(); pos + 3 <= limit; pos++ )
+        {
+            int modelPlacementCount = readInt3At( pos );
+
+            if( modelPlacementCount < 0 || modelPlacementCount > 1000 )
+                continue;
+
+            size_t afterPlacements = pos + 3 + static_cast<size_t>( modelPlacementCount ) * 18;
+
+            if( afterPlacements + 3 > limit || readInt3At( afterPlacements ) != 0 )
+                continue;
+
+            size_t strStart = afterPlacements + 3;
+            size_t strEnd = 0;
+
+            if( !validUtf16StringAt( strStart, limit, strEnd ) )
+                continue;
+
+            for( size_t tailSize : { static_cast<size_t>( 61 ), static_cast<size_t>( 28 ) } )
+            {
+                size_t tailEnd = strEnd + tailSize;
+
+                if( tailEnd > limit )
+                    continue;
+
+                if( tailEnd == aCompEnd || tailEnd == m_busSectionOffset
+                    || isComponentHeaderAt( tailEnd ) )
+                {
+                    modelSectionStart = pos;
+                    modelStringStart  = strStart;
+                    patternEnd        = tailEnd;
+                    break;
+                }
+            }
+
+            if( modelSectionStart != std::string::npos )
                 break;
         }
+
+        if( modelSectionStart == std::string::npos )
+        {
+            // No decodable model tail. The next component header is reliably known,
+            // so land there to keep the sequential walk deterministic.
+            m_reader.SetOffset( landingForCeiling() );
+            return;
+        }
+
+        m_reader.SetOffset( modelStringStart );
+        m_reader.ReadString();
+        m_reader.SetOffset( patternEnd );
     }
 }
 
@@ -1356,7 +1913,10 @@ void SCH_PARSER::parseBusSection()
     int busCount = m_reader.ReadInt3();
 
     if( busCount < 0 || busCount > 1000 )
-        return;
+    {
+        THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid bus count %d." ),
+                                          busCount ) );
+    }
 
     for( int i = 0; i < busCount; i++ )
     {
@@ -1379,16 +1939,9 @@ void SCH_PARSER::parseBusSection()
 
             if( terminator != -1 )
             {
-                if( m_reporter )
-                {
-                    m_reporter->Report(
-                            wxString::Format( _( "DipTrace import: bus entry %d has "
-                                                 "unexpected terminator %d." ),
-                                              i, terminator ),
-                            RPT_SEVERITY_WARNING );
-                }
-
-                break;
+                THROW_IO_ERROR( wxString::Format( _( "DipTrace import: bus entry %d has "
+                                                     "unexpected terminator %d." ),
+                                                  i, terminator ) );
             }
 
             entry.name = m_reader.ReadString();
@@ -1396,18 +1949,15 @@ void SCH_PARSER::parseBusSection()
 
             m_buses.push_back( entry );
         }
+        catch( const IO_ERROR& )
+        {
+            throw;
+        }
         catch( const std::exception& e )
         {
-            if( m_reporter )
-            {
-                m_reporter->Report(
-                        wxString::Format( _( "DipTrace import: failed to parse bus entry "
-                                             "%d: %s" ),
-                                          i, wxString::FromUTF8( e.what() ) ),
-                        RPT_SEVERITY_WARNING );
-            }
-
-            break;
+            THROW_IO_ERROR( wxString::Format( _( "DipTrace import: failed to parse bus entry "
+                                                 "%d: %s" ),
+                                              i, wxString::FromUTF8( e.what() ) ) );
         }
     }
 }
@@ -1750,8 +2300,8 @@ bool SCH_PARSER::isComponentHeaderAt( size_t aOffset ) const
     if( aOffset + 16 > fileSize )
         return false;
 
-    // Four leading int4: the placement (centerX, centerY) followed by width/height. Reject values
-    // that are out of range or essentially at the origin (which only mid-record noise produces).
+    // Four leading int4: the placement (centerX, centerY) followed by width/height. Origin is a
+    // valid placement, so the string header below is the record discriminator.
     int bbox[4];
 
     for( int i = 0; i < 4; i++ )
@@ -1766,18 +2316,15 @@ bool SCH_PARSER::isComponentHeaderAt( size_t aOffset ) const
             return false;
     }
 
-    if( std::abs( bbox[0] ) <= 50000 && std::abs( bbox[1] ) <= 50000 )
-        return false;
-
-    // Five header strings (compName, refdes, value, prefix, nameDup). Each is empty or a short
-    // printable token; the first (compName) must be non-empty.
+    // Five header strings (compName, refdes, value, prefix, nameDup). Some valid connector and
+    // net-port records leave compName empty, so the fixed five-string layout is the discriminator.
     size_t p = aOffset + 16;
 
     for( int si = 0; si < 5; si++ )
     {
         int charCount = 0;
         size_t dataStart = 0;
-        bool   ascii = ( m_version <= LEGACY_STRING_VERSION );
+        bool   ascii = ( m_version < SCHEMATIC_UTF16_STRING_VERSION );
 
         if( ascii )
         {
@@ -1798,9 +2345,6 @@ bool SCH_PARSER::isComponentHeaderAt( size_t aOffset ) const
 
         if( charCount == 0 )
         {
-            if( si == 0 )
-                return false;
-
             p = dataStart;
             continue;
         }
@@ -2111,9 +2655,9 @@ void SCH_PARSER::createNetLabels()
 }
 
 
-// True if the UTF-16-BE string at aData[aPos] is a plausible net name immediately followed by a
-// labelX/labelY pair that look like real coordinates. This discriminates real net names from
-// 'Tahoma' font blocks and binary noise inside the net-section preambles.
+// True if the UTF-16-BE string at aData[aPos] is a plausible net name immediately followed by
+// the fixed net-record header fields. This discriminates real net names from font blocks,
+// footprint names, and binary noise inside the net-section preambles.
 static bool isPlausibleNetName( const uint8_t* aData, size_t aPos, size_t aSectionEnd )
 {
     if( aPos + 2 > aSectionEnd )
@@ -2126,7 +2670,7 @@ static bool isPlausibleNetName( const uint8_t* aData, size_t aPos, size_t aSecti
 
     size_t end = aPos + 2 + static_cast<size_t>( cnt ) * 2;
 
-    if( end + 8 > aSectionEnd )
+    if( end + 8 + 3 + 1 + 3 > aSectionEnd )
         return false;
 
     for( int i = 0; i < cnt; i++ )
@@ -2155,16 +2699,25 @@ static bool isPlausibleNetName( const uint8_t* aData, size_t aPos, size_t aSecti
     int lx = rdInt4( end );
     int ly = rdInt4( end + 4 );
 
-    return lx > -2000000 && lx < 2000000 && ly > -2000000 && ly < 2000000;
+    auto rdInt3 = [&]( size_t o ) -> int
+    {
+        return ( ( aData[o] << 16 ) | ( aData[o + 1] << 8 ) | aData[o + 2] ) - INT3_BIAS;
+    };
+
+    int pad = rdInt3( end + 8 );
+    int flag = aData[end + 11];
+
+    return lx > -2000000 && lx < 2000000 && ly > -2000000 && ly < 2000000
+           && pad == 0 && ( flag == 0 || flag == 1 );
 }
 
 
 void SCH_PARSER::parseWireSection()
 {
-    // Only the modern UTF-16 string format carries the structured wire layout decoded here; the
-    // net-name scan below assumes 2-byte-prefixed UTF-16-BE strings. Legacy (<= v37) files use
-    // ASCII strings and keep the net-label-only import from parseNetSection().
-    if( m_version <= LEGACY_STRING_VERSION )
+    // Accepted wire-net records use a marker lead-in followed by a 2-byte-prefixed
+    // UTF-16-BE name. Older ASCII-string files keep the net-label-only import from
+    // parseNetSection().
+    if( m_version < SCHEMATIC_UTF16_STRING_VERSION )
         return;
 
     const uint8_t* data         = m_reader.GetData();
@@ -2189,58 +2742,173 @@ void SCH_PARSER::parseWireSection()
         return static_cast<int>( static_cast<int64_t>( raw ) - INT4_BIAS );
     };
 
-    // Locate the first net name within the section header.
-    size_t pos = 0;
+    static constexpr uint8_t WIRE_NET_MARKER[] = { 0x0F, 0x42, 0x3F };
+    static constexpr size_t  WIRE_NET_MARKER_LEN = sizeof( WIRE_NET_MARKER );
 
-    for( size_t p = sectionStart; p + 2 < sectionEnd; p++ )
+    auto isExpectedWireNetMarker = [&]( size_t aMarkerOffset, int aExpectedIndex ) -> bool
     {
-        if( isPlausibleNetName( data, p, sectionEnd ) )
+        if( aMarkerOffset < 13 || aMarkerOffset + WIRE_NET_MARKER_LEN > sectionEnd )
+            return false;
+
+        if( memcmp( data + aMarkerOffset, WIRE_NET_MARKER, WIRE_NET_MARKER_LEN ) != 0 )
+            return false;
+
+        if( data[aMarkerOffset - 13] != 0x01 )
+            return false;
+
+        int fieldA = rdInt3( aMarkerOffset - 9 );
+        int fieldB = rdInt3( aMarkerOffset - 6 );
+        int netIndex = rdInt3( aMarkerOffset - 3 );
+
+        if( netIndex != aExpectedIndex )
+            return false;
+
+        return fieldA >= -1 && fieldA <= 100000 && fieldB >= 0 && fieldB <= 100000;
+    };
+
+    auto decodeWireNetName = [&]( size_t aNameOffset, wxString& aName, size_t& aAfterName,
+                                  wxString& aError ) -> bool
+    {
+        if( aNameOffset + 2 > sectionEnd )
         {
-            pos = p;
-            break;
+            aError = wxT( "missing UTF-16 length" );
+            return false;
         }
-    }
+
+        int nameLen = ( data[aNameOffset] << 8 ) | data[aNameOffset + 1];
+
+        if( nameLen < 1 || nameLen > 64 )
+        {
+            aError = wxString::Format( wxT( "invalid UTF-16 length %d" ), nameLen );
+            return false;
+        }
+
+        aAfterName = aNameOffset + 2 + static_cast<size_t>( nameLen ) * 2;
+
+        if( aAfterName + 8 + 3 + 1 + 3 > sectionEnd )
+        {
+            aError = wxT( "name overruns wire-net record" );
+            return false;
+        }
+
+        for( int i = 0; i < nameLen; i++ )
+        {
+            unsigned hi = data[aNameOffset + 2 + static_cast<size_t>( i ) * 2];
+            unsigned lo = data[aNameOffset + 2 + static_cast<size_t>( i ) * 2 + 1];
+            unsigned ch = ( hi << 8 ) | lo;
+
+            bool valid = ( ch >= 0x20 && ch < 0x7F )
+                         || ( ch >= 0x00A0 && ch <= 0x024F )
+                         || ( ch >= 0x0400 && ch <= 0x04FF );
+
+            if( !valid )
+            {
+                aError = wxString::Format( wxT( "invalid UTF-16 character 0x%04X" ), ch );
+                return false;
+            }
+        }
+
+        wxMBConvUTF16BE conv;
+        aName = wxString( reinterpret_cast<const char*>( data + aNameOffset + 2 ), conv,
+                          static_cast<size_t>( nameLen ) * 2 );
+
+        return true;
+    };
+
+    auto findNextWireNetName = [&]( size_t aSearchStart, size_t aSearchEnd,
+                                    int aExpectedIndex ) -> size_t
+    {
+        if( aSearchStart >= aSearchEnd )
+            return 0;
+
+        for( size_t marker = aSearchStart; marker + WIRE_NET_MARKER_LEN <= aSearchEnd;
+             marker++ )
+        {
+            if( memcmp( data + marker, WIRE_NET_MARKER, WIRE_NET_MARKER_LEN ) != 0 )
+                continue;
+
+            if( !isExpectedWireNetMarker( marker, aExpectedIndex ) )
+                continue;
+
+            size_t   nameOffset = marker + WIRE_NET_MARKER_LEN;
+            wxString candidateName;
+            wxString nameError;
+            size_t   afterName = 0;
+
+            if( !decodeWireNetName( nameOffset, candidateName, afterName, nameError ) )
+            {
+                THROW_IO_ERROR( wxString::Format(
+                        _( "DipTrace import: invalid wire-net name for net index %d at "
+                           "offset 0x%06zX: %s." ),
+                        aExpectedIndex, nameOffset, nameError ) );
+            }
+
+            if( isPlausibleNetName( data, nameOffset, sectionEnd ) )
+                return nameOffset;
+        }
+
+        return 0;
+    };
+
+    // Locate the first wire-net name within the section header.
+    int    expectedWireNetIndex = 0;
+    size_t pos = findNextWireNetName( sectionStart, sectionEnd, expectedWireNetIndex );
 
     if( pos == 0 )
         return;
 
-    int                                  safetyNets = 0;
-    std::set<std::pair<wxString, int>>    seenNetSheets;
+    int                                safetyNets = 0;
+    std::set<std::pair<wxString, int>> seenNetSheets;
 
     while( pos != 0 && pos < sectionEnd && safetyNets++ < 100000 )
     {
         size_t o = pos;
 
         // Net name (UTF-16-BE), then labelX(int4) labelY(int4) pad(int3) flag(byte).
-        int      nameLen = ( data[o] << 8 ) | data[o + 1];
         wxString netName;
+        wxString nameError;
+        size_t   afterName = 0;
 
-        if( nameLen > 0 && o + 2 + static_cast<size_t>( nameLen ) * 2 <= sectionEnd )
+        if( !decodeWireNetName( o, netName, afterName, nameError ) )
         {
-            wxMBConvUTF16BE conv;
-            netName = wxString( reinterpret_cast<const char*>( data + o + 2 ), conv,
-                                static_cast<size_t>( nameLen ) * 2 );
+            THROW_IO_ERROR( wxString::Format(
+                    _( "DipTrace import: invalid wire-net name for net index %d at "
+                       "offset 0x%06zX: %s." ),
+                    expectedWireNetIndex, o, nameError ) );
         }
 
-        o += 2 + static_cast<size_t>( nameLen ) * 2;
+        o = afterName;
         o += 4 + 4 + 3 + 1;
 
         if( o + 3 > sectionEnd )
             break;
 
         int pinCount = rdInt3( o );
+        size_t pinCountOffset = o;
         o += 3;
 
-        if( pinCount < 0 || pinCount > 4000 || o + static_cast<size_t>( pinCount ) * 6 + 3 > sectionEnd )
-            break;
+        if( pinCount < 0 || pinCount > 4000
+            || o + static_cast<size_t>( pinCount ) * 6 + 3 > sectionEnd )
+        {
+            THROW_IO_ERROR( wxString::Format(
+                    _( "DipTrace import: invalid wire-net pin count %d for net '%s' at "
+                       "offset 0x%06zX." ),
+                    pinCount, netName, pinCountOffset ) );
+        }
 
         o += static_cast<size_t>( pinCount ) * 6;
 
         int wireCount = rdInt3( o );
+        size_t wireCountOffset = o;
         o += 3;
 
         if( wireCount < 0 || wireCount > 100000 )
-            break;
+        {
+            THROW_IO_ERROR( wxString::Format(
+                    _( "DipTrace import: invalid wire count %d for net '%s' at offset "
+                       "0x%06zX." ),
+                    wireCount, netName, wireCountOffset ) );
+        }
 
         bool brokeEarly = false;
 
@@ -2265,13 +2933,16 @@ void SCH_PARSER::parseWireSection()
             o += 1;    // flag byte
 
             int pointCount = rdInt3( o );
+            size_t pointCountOffset = o;
             o += 3;
 
             if( pointCount < 0 || pointCount > 4000
                 || o + static_cast<size_t>( pointCount ) * 11 + 8 > sectionEnd )
             {
-                brokeEarly = true;
-                break;
+                THROW_IO_ERROR( wxString::Format(
+                        _( "DipTrace import: invalid wire point count %d for net '%s' at "
+                           "offset 0x%06zX." ),
+                        pointCount, netName, pointCountOffset ) );
             }
 
             wire.points.reserve( pointCount );
@@ -2314,19 +2985,11 @@ void SCH_PARSER::parseWireSection()
         if( brokeEarly )
             break;
 
+        expectedWireNetIndex++;
+
         // Find the next net name (skips the variable-length net preamble).
-        size_t next = 0;
-
-        for( size_t q = o; q + 2 < sectionEnd && q < o + 400; q++ )
-        {
-            if( isPlausibleNetName( data, q, sectionEnd ) )
-            {
-                next = q;
-                break;
-            }
-        }
-
-        pos = next;
+        pos = findNextWireNetName( o, std::min( sectionEnd, o + 400 ),
+                                   expectedWireNetIndex );
     }
 }
 
@@ -2436,128 +3099,9 @@ void SCH_PARSER::createKiCadObjects()
     createWires();
     createJunctions();
 
-    if( !m_libSymbols.empty() )
-    {
-        wxFileName libFileName;
-        wxString   projectPath = m_schematic->Project().GetProjectPath();
-
-        // In headless/library-less import there is no project on disk, so the project
-        // path is empty and Assign() would yield a relative path. The sexpr library
-        // cache rejects relative paths (wxCHECK m_libFileName.IsAbsolute()), so anchor
-        // the library to the absolute root-sheet directory instead.
-        if( projectPath.IsEmpty() )
-        {
-            libFileName.Assign( m_rootSheet->GetFileName() );
-            libFileName.SetName( getLibName() );
-            libFileName.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
-            libFileName.MakeAbsolute();
-        }
-        else
-        {
-            libFileName.Assign( projectPath, getLibName(),
-                                FILEEXT::KiCadSymbolLibFileExtension );
-        }
-
-        bool libSaved = false;
-
-        // Step 1: Save the symbol library file. This is independent of table registration
-        // and should succeed even in headless/CLI contexts.
-        try
-        {
-            IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-
-            if( pi )
-            {
-                // CreateLibrary refuses to overwrite. The import-generated library is named after
-                // the schematic and is wholly derived from it, so a stale copy from a previous
-                // import of the same file must be replaced rather than aborting the save.
-                if( libFileName.FileExists() )
-                    wxRemoveFile( libFileName.GetFullPath() );
-
-                pi->CreateLibrary( libFileName.GetFullPath() );
-
-                std::map<std::string, UTF8> properties;
-                properties.emplace( SCH_IO_KICAD_SEXPR::PropBuffering, wxEmptyString );
-
-                for( auto& [name, libSym] : m_libSymbols )
-                {
-                    pi->SaveSymbol( libFileName.GetFullPath(),
-                                    new LIB_SYMBOL( *libSym.get() ), &properties );
-                }
-
-                pi->SaveLibrary( libFileName.GetFullPath() );
-                libSaved = true;
-            }
-        }
-        catch( const std::exception& e )
-        {
-            if( m_reporter )
-            {
-                m_reporter->Report(
-                        wxString::Format( _( "DipTrace import: failed to save symbol "
-                                             "library: %s" ),
-                                          wxString::FromUTF8( e.what() ) ),
-                        RPT_SEVERITY_WARNING );
-            }
-        }
-
-        // Step 2: Register the library in the project symbol library table. This may fail
-        // in headless/import contexts where the UI adapter is not available. The symbols
-        // are already embedded in the schematic, so the library file is supplementary.
-        if( libSaved )
-        {
-            try
-            {
-                SYMBOL_LIBRARY_ADAPTER* adapter =
-                        PROJECT_SCH::SymbolLibAdapter( &m_schematic->Project() );
-
-                if( adapter )
-                {
-                    LIBRARY_TABLE* table = adapter->ProjectTable().value_or( nullptr );
-
-                    if( table && !table->HasRow( getLibName() ) )
-                    {
-                        // ${KIPRJMOD} is undefined without a project on disk, so point the
-                        // row at the absolute file actually saved above in that case.
-                        wxString libTableUri =
-                                projectPath.IsEmpty()
-                                        ? libFileName.GetFullPath()
-                                        : wxT( "${KIPRJMOD}/" ) + libFileName.GetFullName();
-
-                        LIBRARY_TABLE_ROW& row = table->InsertRow();
-                        row.SetNickname( getLibName() );
-                        row.SetURI( libTableUri );
-                        row.SetType( "KiCad" );
-                        table->Save();
-
-                        adapter->LoadOne( getLibName() );
-                    }
-                }
-                else
-                {
-                    if( m_reporter )
-                    {
-                        m_reporter->Report(
-                                _( "DipTrace import: symbol library saved but could not "
-                                   "register in project library table (no adapter available)." ),
-                                RPT_SEVERITY_WARNING );
-                    }
-                }
-            }
-            catch( const std::exception& e )
-            {
-                if( m_reporter )
-                {
-                    m_reporter->Report(
-                            wxString::Format(
-                                    _( "DipTrace import: symbol library saved but failed "
-                                       "to register in project library table: %s" ),
-                                    wxString::FromUTF8( e.what() ) ),
-                            RPT_SEVERITY_WARNING );
-                }
-            }
-        }
-    }
+    // The decoded symbols are embedded directly in the schematic (each SCH_SYMBOL carries a
+    // flattened LIB_SYMBOL via SetLibSymbol), so the import deliberately does not write a
+    // standalone .kicad_sym library or register one in the project symbol library table.
 
     if( m_reporter )
     {

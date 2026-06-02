@@ -37,7 +37,8 @@ using namespace DIPTRACE;
 
 BINARY_READER::BINARY_READER( const wxString& aFileName ) :
         m_offset( 0 ),
-        m_version( 0 )
+        m_version( 0 ),
+        m_stringEncoding( STRING_ENCODING::BY_VERSION )
 {
     FILE* fp = wxFopen( aFileName, wxT( "rb" ) );
 
@@ -144,10 +145,16 @@ int BINARY_READER::ReadInt4()
 
 wxString BINARY_READER::ReadString()
 {
-    if( m_version <= LEGACY_STRING_VERSION )
-        return ReadStringASCII();
-    else
+    if( m_stringEncoding == STRING_ENCODING::UTF16_BE )
         return ReadStringUTF16();
+
+    if( m_stringEncoding == STRING_ENCODING::LEGACY_ASCII
+        || m_version <= LEGACY_STRING_VERSION )
+    {
+        return ReadStringASCII();
+    }
+
+    return ReadStringUTF16();
 }
 
 
@@ -300,10 +307,16 @@ size_t BINARY_READER::FindString( const wxString& aStr, size_t aStart, size_t aE
 
 bool BINARY_READER::TryReadString( wxString& aResult )
 {
-    if( m_version <= LEGACY_STRING_VERSION )
-        return TryReadStringASCII( aResult );
-    else
+    if( m_stringEncoding == STRING_ENCODING::UTF16_BE )
         return TryReadStringUTF16( aResult );
+
+    if( m_stringEncoding == STRING_ENCODING::LEGACY_ASCII
+        || m_version <= LEGACY_STRING_VERSION )
+    {
+        return TryReadStringASCII( aResult );
+    }
+
+    return TryReadStringUTF16( aResult );
 }
 
 

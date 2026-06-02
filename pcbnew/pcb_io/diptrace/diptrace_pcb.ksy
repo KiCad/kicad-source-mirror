@@ -9,22 +9,37 @@
 #
 # Everything after the design-rules block (components, pads, footprint shapes,
 # mount holes, the component tail, text objects, net records + routing, track
-# chains, and copper-pour zones) is NOT a single clean top-level repeat in the
-# reader.  The importer locates these records heuristically:
-#   * FindAndParseComponents() byte-scans for the 13/14-byte boundary marker and
-#     parses one `component` record per match.
-#   * FindPadsInRegion() / FindMountHolesInRegion() / FindShapesInRegion() scan
-#     each component's data region for `pad`, `mount_hole`, and `fp_shape`
-#     records anchored on index/font/count patterns.
-#   * ParseComponentTail() locates the fixed 37-byte `component_tail`.
-#   * FindAndParseTextObjects() / FindAndParseNets() / FindAndParseZones() scan
-#     the post-component gap for `text_section`, `net_record`, and `copper_pour`
-#     records.
-# Because the locations are content-found rather than length-prefixed, the tail
-# of the file is exposed as `post_via_styles_tail` (a raw substream) and EVERY
-# structure the reader decodes is given a named type below.  A reader of this
-# .ksy therefore has a named type for every byte structure the C++ decodes; the
-# top-level stream simply does not chain them because the importer does not.
+# chains, and copper-pour zones) is now decoded by a DETERMINISTIC FIELD-WALK:
+# each record's position is derived from a fixed offset or the preceding record's
+# length, anchored on a per-record structural signature, rather than scanned for.
+# The qa test ObjectsAreFieldLocatedNotScanned asserts PCB_PARSER::
+# ScanLocatorUseCount() == 0, i.e. no object or section is located by the legacy
+# byte-pattern scan (which is retained only as a recovery fallback).  The walk:
+#   * Components: from the post-design-rules offset, FieldWalkComponentBoundaries()
+#     advances to the nearest following boundary core (int3(0) int3(-1) int3(-1)
+#     int4(0), or the all-zero alt variant) that carries a header string at the
+#     file's global string delta (any length, incl. the empty header of
+#     standalone-via records).  No global boundary scan; the result is
+#     cross-validated against the legacy scan.  High-bit invalid header flag bytes
+#     are fatal.
+#   * Pads: the first pad record begins a fixed preamble after the component
+#     header strings -- headerEndOffset + 74 (v39+ uint16 strings) or + 76 (v37
+#     ASCII) -- then a chain-walk of `pad` records to padRegionEnd.
+#   * Footprint shapes: v46+ `fp_font_block` records are field-walked from
+#     padRegionEnd + 165 + 2*u16(padRegionEnd+163); each block is self-sized as
+#     72 + 8*point_count + 2*label_chars and the run ends at the value/framing
+#     block.  v<46 `fp_shape`/`fp_chain_shape` records are count-guided from
+#     padRegionEnd + fixed offsets.
+#   * ParseComponentTail() consumes the fixed 37-byte `component_tail`.
+#   * Sections: each is located by its own structural prefix -- the board TEXT
+#     section by a nine-byte zero separator + int3 count + 01 00 flags; the NET
+#     section by the int3 record count five bytes ahead of the index-0 sentinel
+#     (`net_record` walked by sequential index); the ZONE section by its font
+#     preamble ending int4(-20000) ahead of a 30-byte zone header.
+# The post-design-rules tail is still exposed as `post_via_styles_tail` (a raw
+# substream) with a named type for every decoded structure, because Kaitai cannot
+# express the content-anchored offsets the field-walk computes at runtime; the
+# named types below document the true sequential record layouts.
 
 meta:
   id: diptrace_pcb
@@ -34,11 +49,28 @@ meta:
 seq:
   - id: magic_len
     type: u1
-    valid: 7
+    valid:
+      any-of: [7, 11]
   - id: magic
     contents: [0x44, 0x54, 0x42, 0x4f, 0x41, 0x52, 0x44] # "DTBOARD"
+  - id: legacy_major_digit
+    type: u1
+    doc: Legacy "x.yy" major-version digit.
+    if: magic_len == 11
+  - id: legacy_dot
+    contents: [0x2e] # "."
+    if: magic_len == 11
+  - id: legacy_minor_tens
+    type: u1
+    doc: Legacy "x.yy" minor-version tens digit.
+    if: magic_len == 11
+  - id: legacy_minor_ones
+    type: u1
+    doc: Legacy "x.yy" minor-version ones digit.
+    if: magic_len == 11
   - id: version
     type: int3
+    if: magic_len == 7
   - id: field_0b
     type: int4
   - id: field_0f
@@ -47,10 +79,10 @@ seq:
     type: int3
   - id: legacy_schematic_placeholder
     type: int3
-    if: version.value <= 37
+    if: ver <= 37
   - id: schematic_path
     type: dt_string
-    if: version.value > 37
+    if: ver > 37
   - id: flag_byte
     type: u1
   - id: bbox_x_min
@@ -85,18 +117,18 @@ seq:
   - id: post_via_styles_tail
     size-eos: true
     doc: |
-      Raw substream holding all boundary-scanned records.  The importer does not
-      parse this region sequentially; it byte-scans for the record anchors
-      described in the file-level documentation.  The deterministic byte layout
-      of each record located inside this region is fully modeled by the types
+      Raw substream holding all anchored records after the design-rule section.
+      The importer does not parse this region as one repeat; it searches bounded
+      regions for the record anchors described in the file-level documentation.
+      The deterministic byte layout of each accepted record is fully modeled by the types
       `component`, `component_tail`, `pad`, `fp_shape`, `fp_shape_v37`,
       `fp_font_block`, `fp_chain_shape`, `mount_hole_block`, `text_section`,
-      `net_record`, `net_routing_preamble`, `track_chain`, `track_node`, and
-      `copper_pour` below.
+      `net_record`, `net_routing_preamble`, `track_chain`, `track_node`,
+      `copper_pour_font_preamble`, and `copper_pour` below.
       
 instances:
   ver:
-    value: version.value
+    value: 'magic_len == 7 ? version.value : (legacy_minor_tens - 48) * 10 + (legacy_minor_ones - 48)'
 
 types:
   int3:
@@ -234,24 +266,117 @@ types:
         type: int4
       - id: font_width
         type: int4
+      - id: legacy_magic_padding
+        size: 12
+        doc: DTBOARDx.yy legacy files store twelve bytes here, followed directly by the rule-name count.
+        if: _root.magic_len == 11
       - id: v37_padding
         size: 5
-        if: _root.ver <= 37
+        if: _root.magic_len == 7 and _root.ver <= 37
       - id: v37_extra_a
         type: int3
-        if: _root.ver <= 37
+        if: _root.magic_len == 7 and _root.ver <= 37
       - id: v37_extra_b
         type: int3
-        if: _root.ver <= 37
+        if: _root.magic_len == 7 and _root.ver <= 37
       - id: v37_extra_flag
         type: u1
-        if: _root.ver <= 37
+        if: _root.magic_len == 7 and _root.ver <= 37
       - id: modern_padding
         size: 10
+        doc: |
+          Standard v38+ post-font padding.  Most modern files then store a zero
+          field_c followed by a pattern-name group count.  Some v49+ files store
+          the pattern-style group count directly in field_c.  Files with the
+          compact implicit-style variant use only the first seven bytes of this
+          padding and then `implicit_pattern_style_group`.
         if: _root.ver > 37
       - id: field_c
         type: int3
+        doc: Zero for pattern-name groups; nonzero v49+ value is a pattern-style group count.
+        if: _root.magic_len == 7
       - id: field_d
+        type: int3
+        doc: Pattern-name group count when field_c is zero.
+        if: _root.magic_len == 7 and (_root.ver <= 37 or field_c.value == 0)
+      - id: pattern_groups
+        type: pattern_name_groups
+        if: _root.magic_len == 7 and (_root.ver <= 37 or field_c.value == 0)
+      - id: style_groups
+        type: pattern_style_groups
+        if: _root.magic_len == 7 and _root.ver > 37 and field_c.value > 0
+      - id: rule_name_count
+        type: int3
+        doc: Number of following design-rule/via-style entries for the pattern-name group layout.
+        if: _root.magic_len == 7 and (_root.ver <= 37 or field_c.value == 0)
+
+  pattern_name_groups:
+    seq:
+      - id: groups
+        type: pattern_name_group
+        repeat: expr
+        repeat-expr: _parent.field_d.value
+
+  pattern_name_group:
+    seq:
+      - id: name
+        type: dt_string
+      - id: field_a
+        type: int3
+      - id: block_count
+        type: int3
+      - id: blocks
+        type: pattern_name_block
+        repeat: expr
+        repeat-expr: block_count.value
+
+  pattern_name_block:
+    seq:
+      - id: block_id
+        type: int3
+      - id: name
+        type: dt_string
+
+  pattern_style_groups:
+    doc: |
+      v49+ style/category groups.  The group count is stored in font_style.field_c.
+      Each group contributes entry_count following design-rule/via-style entries.
+    seq:
+      - id: groups
+        type: pattern_style_group
+        repeat: expr
+        repeat-expr: _parent.field_c.value
+
+  pattern_style_group:
+    seq:
+      - id: name
+        type: dt_string
+      - id: color
+        type: rgb_color
+      - id: field_a
+        type: int3
+      - id: field_b
+        type: int3
+      - id: field_c
+        type: int3
+      - id: entry_count
+        type: int3
+
+  implicit_pattern_style_group:
+    doc: |
+      Compact v49+ style group observed with @MingLiU-ExtB files.  It follows a
+      seven-byte post-font padding prefix instead of the standard ten-byte
+      padding and has no explicit group-count int3.
+    seq:
+      - id: name
+        type: dt_string
+      - id: flag
+        type: u1
+      - id: field_a
+        type: int3
+      - id: field_b
+        type: int3
+      - id: entry_count
         type: int3
 
   via_styles:
@@ -293,62 +418,40 @@ types:
             type: dt_string
           - id: field_a
             type: int3
-          - id: value_1
-            type: int4
+          - id: flags
+            type: u1
+            repeat: expr
+            repeat-expr: 4
           - id: block_count
             type: int3
             valid:
               expr: 
-                _.value < 10
+                _.value < 10000
           - id: blocks
             type: netclass_block
             repeat: expr
             repeat-expr: block_count.value
-          
           - id: trailer_a
-            type: s4
-            valid: 1000000000
+            type: int4
           - id: trailer_b
-            type: s4
-            valid: 1000000000
-            
+            type: int4
           - id: unk1_count
             type: int3
-                
           - id: unk1_data
             type: int3
             repeat: expr
             repeat-expr: unk1_count.value
-                
-          - id: unk1_pad_1
+          - id: raw_pad_1
             type: s4
           - id: unk2_count
             type: int3
-            valid: 
-              expr:
-                _.value == 0
-            
           - id: unk3_sth
             type: int3
             valid: 
               expr:
                 _.value == 10000
-            
-          - id: unk_pos_a
-            type: int4
-          - id: unk_pos_b
-            type: int4
-          - id: unk_pos_c
-            type: int4
-            
-          - id: unk4_count
-            type: int3
-            valid: 
-              expr:
-                _.value == 0
-                
-          - id: unk5_count
-            type: int3
+          - id: transition
+            type: ruleset_transition
 
       netclass_block:
         seq:
@@ -357,17 +460,41 @@ types:
             repeat: expr
             repeat-expr: 25
 
+      ruleset_transition:
+        doc: |
+          Inter-ruleset separator.  Most files end with field_d as int3.  Some
+          v54+ DT_PAD files instead store the five-byte suffix
+          01 00 14 89 03 before the next UTF-16 ruleset name.
+        seq:
+          - id: marker
+            contents: [0x4d, 0x7c, 0x6d, 0x00]
+          - id: field_a
+            type: int4
+          - id: field_b
+            type: int4
+          - id: field_c
+            type: int3
+          - id: field_d
+            type: int3
+          - id: dt_pad_suffix
+            contents: [0x01, 0x00, 0x14, 0x89, 0x03]
+            doc: Alternative to field_d in DT_PAD-style v54+ files; documented here as the named fixed suffix consumed by the importer.
+            if: false
+
   # ----------------------------------------------------------------------------
-  # Boundary-scanned tail records (post_via_styles_tail).
+  # Field-walked tail records (post_via_styles_tail).
   # ----------------------------------------------------------------------------
 
   component_boundary:
     doc: |
       Standard component boundary marker: int3(0) int3(-1) int3(-1) int4(0)
-      (BOUNDARY_STD).  FindAndParseComponents() scans for this 13-byte core; a
-      `component` record begins ~14 bytes later (the component library-path
-      string).  The alternate v41 nameplate marker swaps the two int3(-1) for
-      int3(0) (see component_boundary_alt).
+      (BOUNDARY_STD).  FieldWalkComponentBoundaries() advances to each next
+      component as the nearest following 13-byte core carrying a header string at
+      the file's global boundary delta, so the markers form a deterministic
+      sequential chain (no global pattern scan; cross-validated against the legacy
+      scan).  For a component with a plausible library path, high-bit invalid
+      header flag bytes are fatal.  The alternate v41 nameplate marker swaps the
+      two int3(-1) fields for int3(0) (see component_boundary_alt).
     seq:
       - id: field_a
         contents: [0x0f, 0x42, 0x40]
@@ -399,7 +526,9 @@ types:
       marker) and reads this structure sequentially.  Field order and sizes are
       mirrored exactly; `placement_quarter_turns` lives 59 bytes BEFORE the
       boundary marker (int3 read at boundaryOffset-59) and so is not part of this
-      forward-read structure.
+      forward-read structure.  Standalone-via component records can truncate
+      after `pattern_name`; the importer keeps those partial records so the pad
+      data can classify them as standalone vias.
     seq:
       - id: library_path
         type: dt_string
@@ -477,8 +606,8 @@ types:
     doc: |
       Fixed 37-byte component tail carrying refdes/value text positioning
       (ParseComponentTail / tryParseTailAt, parser ~2405-2489).  Located at the
-      end of each component region (or within a 512-byte backward search window).
-      The first 11 bytes are a constant pattern (COMPONENT_TAIL_PATTERN).
+      end of each component region.  The first 11 bytes are a constant pattern
+      (COMPONENT_TAIL_PATTERN).
     seq:
       - id: lead
         contents: [0x0f, 0x42, 0x40]      # int3(0)
@@ -524,11 +653,13 @@ types:
 
   pad:
     doc: |
-      One pad record (FindPadsInRegion, parser ~1709-1896).  Pads are walked
-      sequentially from index 1; each record anchors on int3(index).  Layout is
-      pre-header(14) + number string + label string + dimensions(16) +
+      One pad record (FindPadsInRegion).  The first pad is field-located at
+      component header_end + 74 (v39+ uint16 strings) or + 76 (v37 ASCII), then
+      pads are walked sequentially; each record begins with int3(index).  Layout
+      is pre-header(14) + number string + label string + dimensions(16) +
       post-dimension block (fixed 36 bytes, or 11-byte header + N polygon
-      vertices + 25-byte tail when style_code == 3).
+      vertices + 25-byte tail when style_code == 3).  The int3(1) index scan is a
+      recovery fallback only.
     seq:
       - id: index
         type: int3
@@ -623,10 +754,12 @@ types:
   mount_hole_block:
     doc: |
       Footprint mount-hole (NPTH) block (FindMountHolesInRegion, parser
-      ~1916-2074).  The block is content-found in the post-pad region: a 20-byte
-      header (int3(hole_count + 2) + flag u1 + 4 zero int4) followed by
-      hole_count 18-byte records, a 2-byte 0x00 0x00 terminator, and a 16-byte
-      zero trailer.
+      ~1916-2074).  The importer checks explicit modeled positions only:
+      immediately after the pad chain, after a fixed-size footprint-shape block,
+      and at byte +44 of the final v46+ chained-shape framing record
+      (`fp_chain_shape_mount_hole_overlay`).  The block is a 20-byte header
+      (int3(hole_count + 2) + flag u1 + 4 zero int4) followed by hole_count
+      18-byte records, a 2-byte 0x00 0x00 terminator, and a 16-byte zero trailer.
     seq:
       - id: count_field
         type: int3
@@ -750,12 +883,18 @@ types:
 
   fp_font_block:
     doc: |
-      v46+ per-layer font-block shape (FindShapesInFontBlocks, parser
-      ~2207-2305).  Each block is anchored on the UTF-16BE "Tahoma" pattern
-      (14 bytes), followed by a 25-byte metadata header
-      (FONT_BLOCK_HEADER_SIZE) and then the geometry body.  line_width and layer
-      are read from inside the metadata header; the shape body provides the
-      coordinates and shape-type discriminator.
+      v46+ per-layer font-block shape (FindShapesInFontBlocks).  The first block
+      is field-located at padRegionEnd + 165 + 2*u16(padRegionEnd + 163); each
+      block is self-sized as 72 + 8*point_count + 2*label_chars (point_count =
+      smallest leading slot in 0..3 whose int3 holds a valid shape-type code, one
+      of 0, 1, 2, 3, 6, 7, 700), so the blocks form a deterministic chain.  The run
+      ends at the trailing value/framing text label -- the first block whose
+      leading slot carries shape-type 0 (point_count == 0) or no shape-type code at
+      all; a block that instead runs past the region edge is a truncation that
+      reverts to the Tahoma scan.  Each block begins with the UTF-16BE "Tahoma"
+      pattern (14 bytes) + a 25-byte metadata header (FONT_BLOCK_HEADER_SIZE) + the
+      geometry body; line_width and layer are read from inside the metadata header.
+      The Tahoma scan is a fallback.
     seq:
       - id: font_pattern
         contents: [0x00, 0x06, 0x00, 0x54, 0x00, 0x61, 0x00, 0x68, 0x00, 0x6f, 0x00, 0x6d, 0x00, 0x61]
@@ -786,14 +925,16 @@ types:
       - id: shape_type
         type: int3
         doc: |
-          Shape-type discriminator at body +16 (0 = rect, 1 = line, 2 = arc,
-          3 = circle; 700 = skip).  For arcs, mid_x/mid_y follow at body +35/+39.
+          Shape-type discriminator at body +16.  In the font-block decode 0 = rect,
+          1 = line, 3 = circle, and both 2 and 6 (DT_SHAPE_ARC) = arc; 7 is accepted
+          as a block-sizing code but emits no shape, and 700 = skip.  For arcs,
+          mid_x/mid_y follow at body +35/+39.
       - id: arc_body
         size: 24
-        if: shape_type.value == 2
+        if: shape_type.value == 2 or shape_type.value == 6
         doc: |
-          Bytes body +19..+42 for arc records; the arc midpoint (mid_x at
-          body +35, mid_y at body +39) lives inside this run (the importer
+          Bytes body +19..+42 for arc records (shape_type 2 or 6); the arc midpoint
+          (mid_x at body +35, mid_y at body +39) lives inside this run (the importer
           requires body +43 <= next boundary).  Absent for non-arc shapes.
 
   fp_chain_shape:
@@ -802,7 +943,8 @@ types:
       ~2308-2398; FP_CHAIN_SHAPE_RECORD_SIZE = 76).  The block starts at
       padRegionEnd + 72 (FP_CHAIN_SHAPE_DATA_OFFSET) with the count at
       padRegionEnd + 69.  Records 0 and N-1 are framing entries; only the named
-      fields are decoded.
+      fields are decoded.  For footprints with NPTH mounting holes, the final
+      framing entry can carry a mount_hole_block overlay at byte +44.
     seq:
       - id: head
         size: 37
@@ -835,6 +977,18 @@ types:
         size: 8
         doc: Bytes +68..+75 not assigned by the importer.
 
+  fp_chain_shape_mount_hole_overlay:
+    doc: |
+      Overlay for final v46+ chained-shape framing entries that carry footprint
+      mounting holes.  The mount_hole_block starts at byte +44 of the 76-byte
+      final framing record, sharing bytes with the otherwise-unassigned framing
+      payload.
+    seq:
+      - id: prefix
+        size: 44
+      - id: mount_holes
+        type: mount_hole_block
+
   net_sentinel:
     doc: int3(0), int3(-1), int3(-1), immediately before a net record (NET_SENTINEL).
     seq:
@@ -847,11 +1001,17 @@ types:
 
   net_record:
     doc: |
-      Net record (FindAndParseNets, parser ~2682-2773).  Anchored on the 9-byte
-      net_sentinel.  After the sentinel: int3(net_index), int3(field_0, a small
-      per-net mode flag validated to [0,10]), int4(trace_width), int4(width_2),
-      string(net_name).  Routing data (net_routing_preamble + track_chains)
-      follows in the same net body, located by ParseNetRouting.
+      Net record (FindAndParseNets).  The net section is field-anchored by its
+      record count: an int3(net_count) sits five bytes ahead of the index-0
+      net_sentinel (some versions prepend int3(0) and a 01 00 flag pair).  Each
+      record begins with the 9-byte net_sentinel, then int3(net_index),
+      int3(field_0, a per-net mode flag in [0,10]), int4(trace_width),
+      int4(width_2), string(net_name).  Routing (net_routing_preamble +
+      track_chains) follows in the same net body (ParseNetRouting).  The records
+      are walked by sequential net index, which rejects the false net_sentinel
+      hits inside the component region.
+      DipTrace permits empty stored names; the importer synthesizes stable KiCad
+      names from the DipTrace net index for those records.
     seq:
       - id: sentinel
         type: net_sentinel
@@ -906,7 +1066,10 @@ types:
     doc: |
       Routing track chain (ParseNetRouting, parser ~2940-3058).  Anchored on the
       6-byte CHAIN_HEADER (00 00 00 + int3(-1)), then int3(chain_index),
-      int3(node_count), then node_count fixed 41-byte track_node records.
+      int3(node_count), then node_count fixed 41-byte track_node records.  The parser
+      scans for CHAIN_HEADER; false hits are ignored unless the first following
+      track_node is structurally plausible.  For a real chain, node_count must be
+      [1,10000] and must not overrun the net record.
     seq:
       - id: chain_marker
         contents: [0x00, 0x00, 0x00, 0x0f, 0x42, 0x3f]
@@ -914,6 +1077,9 @@ types:
         type: int3
       - id: node_count
         type: int3
+        valid:
+          min: 1
+          max: 10000
       - id: nodes
         type: track_node
         repeat: expr
@@ -969,9 +1135,13 @@ types:
 
   text_section:
     doc: |
-      Text-object section (FindAndParseTextObjects, parser ~2574-2611).  Anchored
-      on 3x int3(0) (TEXT_SECTION_ZEROS), then int3(count), flag_1 u1 (= 1),
-      flag_2 u1 (= 0), then count text_record entries.
+      Board TEXT-object section (FindAndParseTextObjects).  The section's
+      structural anchor is 3x int3(0) (TEXT_SECTION_ZEROS) + int3(count) +
+      flag_1 u1 (= 1) + flag_2 u1 (= 0); the count text_record entries are then
+      walked and must all decode inside the post-component section before the
+      anchor is accepted (so the section is field-located, not pattern-matched).
+      Most boards carry no board TEXT section -- footprint refdes/value text is
+      per-component.
     seq:
       - id: zeros
         contents: [0x0f, 0x42, 0x40, 0x0f, 0x42, 0x40, 0x0f, 0x42, 0x40]
@@ -1050,13 +1220,47 @@ types:
         if: _index < count - 1
         doc: 2-byte inter-record separator (observed 0x01 0x00); absent after the last record.
 
+  copper_pour_font_preamble:
+    doc: |
+      Zone-section lead-in consumed by FindAndParseZones before a `copper_pour`
+      record.  This font preamble (font name + size + height/width + a trailing
+      int4(-20000)) is the ZONE section's deterministic structural anchor: it is
+      accepted only when followed immediately by a strictly valid 30-byte
+      `copper_pour` header (and a zone-shaped-but-invalid header is fatal).  Font
+      blocks not followed by a zone-shaped header are unrelated post-component
+      data and skipped.  A zone section located through this preamble is treated
+      as field-anchored; the plausible-header structural scan is the fallback.
+    seq:
+      - id: font_name
+        type: dt_string
+      - id: font_size
+        type: int3
+        doc: Validated by parser as 5..30.
+      - id: bold
+        type: u1
+        doc: Validated by parser as 0 or 1.
+      - id: font_height
+        type: int4
+        doc: Positive font height, validated below 10,000,000.
+      - id: font_width
+        type: int4
+        doc: Positive font width, validated below 10,000,000.
+      - id: tail
+        type: int4
+        doc: Zone font-preamble tail, validated as -20000.
+      - id: zone_separator
+        type: int3
+        doc: Separator between the font preamble and zone header; observed int3(0).
+
   copper_pour:
     doc: |
       Copper-pour zone (FindAndParseZones, parser ~3205-3936; CreateZones source
-      record).  Located by structural scan (headerLooksPlausible) or a font
-      preamble fallback.  Layout is a 30-byte header, then the outline vertex
-      run, a fill-segment block, a fill-polygon block, an optional post-fill
-      style block, and (inside the inter-zone gap) an optional zone trailer.
+      record).  Located by a validated `copper_pour_font_preamble` immediately
+      before the header, or by structural scan of the post-component gap when no
+      accepted preamble is present.  Layout is a 30-byte header, then the outline
+      vertex run, a fill-segment block, a fill-polygon block, an optional
+      post-fill style block, and (inside the inter-zone gap) an optional zone
+      trailer.
     seq:
       - id: field_a
         type: int3

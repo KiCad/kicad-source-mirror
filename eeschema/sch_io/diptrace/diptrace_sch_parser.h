@@ -83,6 +83,7 @@ struct DCH_PIN
     int      labelYOff  = 0;
     int      numXOff    = 0;
     int      numYOff    = 0;
+    wxString midTailText;
     int      stubDx     = 0;
     int      stubDy     = 0;
     int      tailByte   = 0;
@@ -98,6 +99,30 @@ struct DCH_SHAPE
     std::vector<VECTOR2I> points;        ///< Points in DipTrace coord units
     int                   fontX      = 0;
     int                   fontY      = 0;
+};
+
+
+/// A stored component text field record that precedes the embedded footprint pattern.
+struct DCH_COMPONENT_TEXT
+{
+    uint8_t  flags[3] = {};
+    int      type     = 0;
+    wxString fontName;
+    wxString text;
+    int      fontSize = 0;
+    int      fieldA   = 0;
+    int      coordX   = 0;
+    int      coordY   = 0;
+    int      fieldB   = 0;
+    int      fieldC   = 0;
+    uint8_t  flagA    = 0;
+    uint8_t  flagB    = 0;
+    int      fieldD   = 0;
+    int      fieldE   = 0;
+    int      fieldF   = 0;
+    int      fieldG   = 0;
+    uint8_t  flags2[4] = {};
+    int      fieldH   = 0;
 };
 
 
@@ -125,6 +150,7 @@ struct DCH_COMPONENT
 
     std::vector<DCH_PIN>   pins;
     std::vector<DCH_SHAPE> shapes;
+    std::vector<DCH_COMPONENT_TEXT> texts;
 };
 
 
@@ -210,6 +236,8 @@ public:
      */
     void Parse();
 
+    int ComponentBoundaryScanCount() const { return m_componentBoundaryScanCount; }
+
 private:
     // -- Binary format parsing ------------------------------------------------
 
@@ -222,6 +250,7 @@ private:
     void parseOneComponent( size_t aCompEnd, bool aUseCompEnd = true );
     void parsePin( int aPinIndex, DCH_COMPONENT& aComp );
     void parseShape( DCH_COMPONENT& aComp );
+    bool parseComponentTextField( DCH_COMPONENT& aComp, size_t aCompEnd );
     void parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd );
     void parseBusSection();
     void parseNetSection();
@@ -356,6 +385,7 @@ private:
     int                  m_version;
     int                  m_magicMajor;
     int                  m_componentCount;
+    int                  m_componentBoundaryScanCount = 0;
     wxString             m_fileName;
 
     // Parsed intermediate data

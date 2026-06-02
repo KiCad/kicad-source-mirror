@@ -31,6 +31,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <pcbnew/pcb_io/diptrace/pcb_io_diptrace.h>
+#include <pcbnew/pcb_io/diptrace/diptrace_pcb_parser.h>
 
 #include <board.h>
 #include <board_design_settings.h>
@@ -40,6 +41,10 @@
 #include <pad.h>
 #include <pcb_track.h>
 #include <pcb_shape.h>
+
+#include <wx/ffile.h>
+#include <wx/filefn.h>
+#include <wx/filename.h>
 
 
 struct DIPTRACE_PCB_IMPORT_FIXTURE
@@ -69,6 +74,136 @@ BOOST_AUTO_TEST_CASE( CanReadBoard )
     BOOST_CHECK( m_plugin.CanReadBoard( GetTestDataDir() + "z80_board.dip" ) );
     BOOST_CHECK( m_plugin.CanReadBoard( GetTestDataDir() + "logic_probe.dip" ) );
     BOOST_CHECK( m_plugin.CanReadBoard( GetTestDataDir() + "project4.dip" ) );
+
+    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_legacy_" ) );
+    wxRemoveFile( tempBase );
+    wxString legacyPath = tempBase + wxS( ".dip" );
+
+    {
+        const uint8_t legacyHeader[] = {
+            0x0B, 'D', 'T', 'B', 'O', 'A', 'R', 'D', '2', '.', '2', '1'
+        };
+
+        wxFFile file( legacyPath, wxS( "wb" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE_EQUAL( file.Write( legacyHeader, sizeof( legacyHeader ) ),
+                             sizeof( legacyHeader ) );
+    }
+
+    BOOST_CHECK( m_plugin.CanReadBoard( legacyPath ) );
+    wxRemoveFile( legacyPath );
+}
+
+
+BOOST_AUTO_TEST_CASE( InvalidComponentHeaderFailsDeterministically )
+{
+    const std::string sourcePath = GetTestDataDir() + "z80_board.dip";
+    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_pcb_comp_" ) );
+    wxRemoveFile( tempBase );
+    wxString tempPath = tempBase + wxS( ".dip" );
+
+    BOOST_REQUIRE( wxCopyFile( sourcePath, tempPath ) );
+
+    {
+        static constexpr wxFileOffset FIRST_COMPONENT_FLAGS_OFFSET = 0x491;
+        const uint8_t invalidFlags[] = { 0xFF, 0x00, 0x00, 0x00 };
+
+        wxFFile file( tempPath, wxS( "r+b" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE( file.Seek( FIRST_COMPONENT_FLAGS_OFFSET ) );
+        BOOST_REQUIRE_EQUAL( file.Write( invalidFlags, sizeof( invalidFlags ) ),
+                             sizeof( invalidFlags ) );
+    }
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    BOOST_CHECK_THROW( m_plugin.LoadBoard( tempPath.ToStdString(), board.get() ), IO_ERROR );
+
+    wxRemoveFile( tempPath );
+}
+
+
+BOOST_AUTO_TEST_CASE( InvalidRouteChainNodeCountFailsDeterministically )
+{
+    const std::string sourcePath = GetTestDataDir() + "z80_board.dip";
+    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_route_chain_" ) );
+    wxRemoveFile( tempBase );
+    wxString tempPath = tempBase + wxS( ".dip" );
+
+    BOOST_REQUIRE( wxCopyFile( sourcePath, tempPath ) );
+
+    {
+        static constexpr wxFileOffset FIRST_ROUTE_CHAIN_NODE_COUNT_OFFSET = 0x1CEA7;
+        const uint8_t invalidNodeCount[] = { 0x0F, 0x69, 0x51 }; // int3 value 10001
+
+        wxFFile file( tempPath, wxS( "r+b" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE( file.Seek( FIRST_ROUTE_CHAIN_NODE_COUNT_OFFSET ) );
+        BOOST_REQUIRE_EQUAL( file.Write( invalidNodeCount, sizeof( invalidNodeCount ) ),
+                             sizeof( invalidNodeCount ) );
+    }
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    BOOST_CHECK_THROW( m_plugin.LoadBoard( tempPath.ToStdString(), board.get() ), IO_ERROR );
+
+    wxRemoveFile( tempPath );
+}
+
+
+BOOST_AUTO_TEST_CASE( InvalidNetNameLengthFailsDeterministically )
+{
+    const std::string sourcePath = GetTestDataDir() + "z80_board.dip";
+    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_net_name_" ) );
+    wxRemoveFile( tempBase );
+    wxString tempPath = tempBase + wxS( ".dip" );
+
+    BOOST_REQUIRE( wxCopyFile( sourcePath, tempPath ) );
+
+    {
+        static constexpr wxFileOffset FIRST_NET_NAME_LENGTH_OFFSET = 0x1CE2D;
+        const uint8_t invalidNameLength[] = { 0x01, 0xF5 }; // UTF-16 char count 501
+
+        wxFFile file( tempPath, wxS( "r+b" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE( file.Seek( FIRST_NET_NAME_LENGTH_OFFSET ) );
+        BOOST_REQUIRE_EQUAL( file.Write( invalidNameLength, sizeof( invalidNameLength ) ),
+                             sizeof( invalidNameLength ) );
+    }
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    BOOST_CHECK_THROW( m_plugin.LoadBoard( tempPath.ToStdString(), board.get() ), IO_ERROR );
+
+    wxRemoveFile( tempPath );
+}
+
+
+BOOST_AUTO_TEST_CASE( InvalidZoneMinWidthFailsDeterministically )
+{
+    const std::string sourcePath = GetTestDataDir() + "z80_board.dip";
+    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_zone_width_" ) );
+    wxRemoveFile( tempBase );
+    wxString tempPath = tempBase + wxS( ".dip" );
+
+    BOOST_REQUIRE( wxCopyFile( sourcePath, tempPath ) );
+
+    {
+        static constexpr wxFileOffset FIRST_ZONE_MIN_WIDTH_OFFSET = 0x382CB;
+        const uint8_t zeroMinWidth[] = { 0x3B, 0x9A, 0xCA, 0x00 }; // int4 value 0
+
+        wxFFile file( tempPath, wxS( "r+b" ) );
+        BOOST_REQUIRE( file.IsOpened() );
+        BOOST_REQUIRE( file.Seek( FIRST_ZONE_MIN_WIDTH_OFFSET ) );
+        BOOST_REQUIRE_EQUAL( file.Write( zeroMinWidth, sizeof( zeroMinWidth ) ),
+                             sizeof( zeroMinWidth ) );
+    }
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    BOOST_CHECK_THROW( m_plugin.LoadBoard( tempPath.ToStdString(), board.get() ), IO_ERROR );
+
+    wxRemoveFile( tempPath );
 }
 
 
@@ -90,6 +225,66 @@ BOOST_AUTO_TEST_CASE( LoadKeyboard )
 
     // keyboard.dip has ~70 nets (key matrix: col1-6, row1-8, diode nets, etc.)
     BOOST_CHECK_GT( board->GetNetCount(), 20 );
+}
+
+
+/**
+ * Determinism gate for the DipTrace PCB importer.
+ *
+ * Every component, pad, shape, mount hole, and post-component section must be located
+ * by a field-derived offset, not by byte-pattern scanning. PCB_PARSER::ScanLocatorUseCount()
+ * counts the scan-based locates; a fully deterministic decode reports zero. This mirrors the
+ * schematic importer's ComponentBoundaryScanCount() == 0 invariant. The remaining pattern
+ * scanners are retained only as recovery fallbacks.
+ *
+ * This is the gate for the staged determinism work (see
+ * ~/Developer/AGENT/plans/2026-06-01-diptrace-pcb-deterministic-import.md). It currently fails
+ * because object/section location is still scan-based; it is driven to zero category-by-category.
+ */
+BOOST_AUTO_TEST_CASE( ObjectsAreFieldLocatedNotScanned )
+{
+    const std::vector<std::string> files = {
+        "keyboard.dip", "156bus_narrow.dip", "logic_probe.dip", "project4.dip", "z80_board.dip"
+    };
+
+    for( const std::string& name : files )
+    {
+        const std::string path = GetTestDataDir() + name;
+        std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+        board->SetFileName( wxString::FromUTF8( path ) );
+
+        DIPTRACE::PCB_PARSER parser( wxString::FromUTF8( path ), board.get() );
+        parser.Parse();
+
+        // Per-category regression guards for the categories already converted to a
+        // deterministic field-walk. Pad records are field-located from the component
+        // header; mount holes carry no scan in this corpus.
+        BOOST_CHECK_MESSAGE( parser.PadLocatorScans() == 0,
+                             name + ": pad located by scan (" + std::to_string( parser.PadLocatorScans() )
+                                     + ")" );
+        BOOST_CHECK_MESSAGE( parser.MountHoleLocatorScans() == 0,
+                             name + ": mount hole located by scan ("
+                                     + std::to_string( parser.MountHoleLocatorScans() ) + ")" );
+        BOOST_CHECK_MESSAGE( parser.ShapeLocatorScans() == 0,
+                             name + ": shape located by scan ("
+                                     + std::to_string( parser.ShapeLocatorScans() ) + ")" );
+        BOOST_CHECK_MESSAGE( parser.ComponentLocatorScans() == 0,
+                             name + ": component located by scan ("
+                                     + std::to_string( parser.ComponentLocatorScans() ) + ")" );
+        BOOST_CHECK_MESSAGE( parser.SectionLocatorScans() == 0,
+                             name + ": section located by scan ("
+                                     + std::to_string( parser.SectionLocatorScans() ) + ")" );
+
+        BOOST_CHECK_MESSAGE(
+                parser.ScanLocatorUseCount() == 0,
+                name + ": object/section located by byte-pattern scan (total="
+                        + std::to_string( parser.ScanLocatorUseCount() )
+                        + " components=" + std::to_string( parser.ComponentLocatorScans() )
+                        + " pads=" + std::to_string( parser.PadLocatorScans() )
+                        + " shapes=" + std::to_string( parser.ShapeLocatorScans() )
+                        + " holes=" + std::to_string( parser.MountHoleLocatorScans() )
+                        + " sections=" + std::to_string( parser.SectionLocatorScans() ) + ")" );
+    }
 }
 
 
