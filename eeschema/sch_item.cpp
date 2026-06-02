@@ -646,7 +646,9 @@ void SCH_ITEM::SwapItemData( SCH_ITEM* aImage )
     std::swap( m_bodyStyle, aImage->m_bodyStyle );
     std::swap( m_private, aImage->m_private );
     std::swap( m_fieldsAutoplaced, aImage->m_fieldsAutoplaced );
-    std::swap( m_group, aImage->m_group );
+
+    // Don't swap m_group. Group membership is restored by SCH_GROUP::swapData, and the undo copy
+    // has no group, so swapping it here would drop the item out of its group.
     std::swap( m_isLocked, aImage->m_isLocked );
     swapData( aImage );
 

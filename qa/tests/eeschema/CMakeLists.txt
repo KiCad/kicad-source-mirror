@@ -88,6 +88,7 @@ set( QA_EESCHEMA_SRCS
     test_issue22286_pin_alternate.cpp
     test_issue22620_group_annotation.cpp
     test_issue24335_group_move_ancestor.cpp
+    test_sch_item_swap_group.cpp
     test_issue22651_sheet_annotation.cpp
     test_issue22864_align_sheet_pins.cpp
     test_issue22938_local_power.cpp
