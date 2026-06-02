@@ -2467,3 +2467,58 @@ BOOST_FIXTURE_TEST_CASE( HatchZoneViaConnectionRespectsSetting, ZONE_FILL_TEST_F
                                  "added for FULL connection (issue 23516 regression).",
                                  thermalFillArea * areaIU2toMM2, fullFillArea * areaIU2toMM2 ) );
 }
+
+
+/**
+ * Regression test for issue 24089: refilling a non-copper (e.g. silkscreen) zone whose
+ * outline is split into multiple islands by keepout rule areas dropped the first stored
+ * island.  The cause was FillIsolatedIslandsMap unconditionally pushing outline 0 into
+ * the isolated list when a zone had no connectivity entries; non-copper zones never
+ * appear in connectivity, so this fired on every refill of a multi-island silk fill.
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionNonCopperZoneKeepoutIslands, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue24089/issue24089", m_board );
+
+    auto countIslands =
+            [this]() -> int
+            {
+                int total = 0;
+
+                for( ZONE* zone : m_board->Zones() )
+                {
+                    if( zone->GetIsRuleArea() )
+                        continue;
+
+                    for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+                    {
+                        if( !zone->HasFilledPolysForLayer( layer ) )
+                            continue;
+
+                        std::shared_ptr<SHAPE_POLY_SET> fill = zone->GetFilledPolysList( layer );
+
+                        if( fill )
+                            total += fill->OutlineCount();
+                    }
+                }
+
+                return total;
+            };
+
+    int storedIslands = countIslands();
+
+    BOOST_REQUIRE_MESSAGE( storedIslands >= 3,
+                           wxString::Format( "Stored v9 fill should have at least 3 silk islands; "
+                                             "found %d",
+                                             storedIslands ) );
+
+    KI_TEST::FillZones( m_board.get() );
+
+    int refilledIslands = countIslands();
+
+    BOOST_CHECK_MESSAGE( refilledIslands == storedIslands,
+                         wxString::Format( "Refill lost silk islands: stored=%d, refilled=%d. "
+                                           "Outline 0 of every non-copper multi-island zone "
+                                           "was being incorrectly removed (issue 24089).",
+                                           storedIslands, refilledIslands ) );
+}
