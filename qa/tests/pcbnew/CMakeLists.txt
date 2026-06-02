@@ -150,6 +150,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_creepage_issue23389.cpp
     drc/test_drc_creepage_issue23576.cpp
     drc/test_drc_creepage_issue23658.cpp
+    drc/test_drc_creepage_issue23578.cpp
     drc/test_drc_invalid_outline_issue24078.cpp
     drc/test_drc_invalid_outline_issue24241.cpp
     drc/test_drc_silk_rule_area_issue24177.cpp

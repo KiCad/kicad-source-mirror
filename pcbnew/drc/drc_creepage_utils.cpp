@@ -544,18 +544,72 @@ void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
 
         case SHAPE_T::RECTANGLE:
         {
-            BE_SHAPE_POINT* a = new BE_SHAPE_POINT( d->GetStart() );
-            a->SetParent( d );
-            m_shapeCollection.push_back( a );
-            a = new BE_SHAPE_POINT( d->GetEnd() );
-            a->SetParent( d );
-            m_shapeCollection.push_back( a );
-            a = new BE_SHAPE_POINT( VECTOR2I( d->GetEnd().x, d->GetStart().y ) );
-            a->SetParent( d );
-            m_shapeCollection.push_back( a );
-            a = new BE_SHAPE_POINT( VECTOR2I( d->GetStart().x, d->GetEnd().y ) );
-            a->SetParent( d );
-            m_shapeCollection.push_back( a );
+            int r = d->GetCornerRadius();
+
+            if( r > 0 )
+            {
+                // Rounded rectangle: decompose into arcs.
+                // Normalize coordinates so x1 < x2 and y1 < y2.
+                int x1 = std::min( d->GetStart().x, d->GetEnd().x );
+                int y1 = std::min( d->GetStart().y, d->GetEnd().y );
+                int x2 = std::max( d->GetStart().x, d->GetEnd().x );
+                int y2 = std::max( d->GetStart().y, d->GetEnd().y );
+
+                int w = x2 - x1;
+                int h = y2 - y1;
+
+                auto addArc = [&]( const VECTOR2I& center, const VECTOR2I& startPt,
+                                   const VECTOR2I& endPt )
+                {
+                    EDA_ANGLE startAngle( VECTOR2D( startPt - center ) );
+                    EDA_ANGLE endAngle( VECTOR2D( endPt - center ) );
+
+                    while( endAngle < startAngle )
+                        endAngle += ANGLE_360;
+
+                    BE_SHAPE_ARC* arc = new BE_SHAPE_ARC( center, r, startAngle, endAngle,
+                                                         startPt, endPt );
+                    arc->SetParent( d );
+                    m_shapeCollection.push_back( arc );
+                };
+
+                if( h == 2 * r )
+                {
+                    // Horizontal stadium: left and right semicircles
+                    addArc( { x1 + r, y1 + r }, { x1 + r, y1 }, { x1 + r, y2 } );
+                    addArc( { x2 - r, y1 + r }, { x2 - r, y2 }, { x2 - r, y1 } );
+                }
+                else if( w == 2 * r )
+                {
+                    // Vertical stadium: top and bottom semicircles
+                    addArc( { x1 + r, y1 + r }, { x1, y1 + r }, { x2, y1 + r } );
+                    addArc( { x1 + r, y2 - r }, { x2, y2 - r }, { x1, y2 - r } );
+                }
+                else
+                {
+                    // General rounded rectangle: four quarter-circle arcs
+                    addArc( { x1 + r, y1 + r }, { x1,     y1 + r }, { x1 + r, y1     } );
+                    addArc( { x2 - r, y1 + r }, { x2 - r, y1     }, { x2,     y1 + r } );
+                    addArc( { x2 - r, y2 - r }, { x2,     y2 - r }, { x2 - r, y2     } );
+                    addArc( { x1 + r, y2 - r }, { x1 + r, y2     }, { x1,     y2 - r } );
+                }
+            }
+            else
+            {
+                BE_SHAPE_POINT* a = new BE_SHAPE_POINT( d->GetStart() );
+                a->SetParent( d );
+                m_shapeCollection.push_back( a );
+                a = new BE_SHAPE_POINT( d->GetEnd() );
+                a->SetParent( d );
+                m_shapeCollection.push_back( a );
+                a = new BE_SHAPE_POINT( VECTOR2I( d->GetEnd().x, d->GetStart().y ) );
+                a->SetParent( d );
+                m_shapeCollection.push_back( a );
+                a = new BE_SHAPE_POINT( VECTOR2I( d->GetStart().x, d->GetEnd().y ) );
+                a->SetParent( d );
+                m_shapeCollection.push_back( a );
+            }
+
             break;
         }
 
@@ -1738,19 +1792,113 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
 
         case SHAPE_T::RECTANGLE:
         {
-            VECTOR2I c1 = d->GetStart();
-            VECTOR2I c2( d->GetStart().x, d->GetEnd().y );
-            VECTOR2I c3 = d->GetEnd();
-            VECTOR2I c4( d->GetEnd().x, d->GetStart().y );
+            int r = d->GetCornerRadius();
 
-            bool intersects = false;
-            intersects |= segments_intersect( aP1, aP2, c1, c2, intersectionPoints );
-            intersects |= segments_intersect( aP1, aP2, c2, c3, intersectionPoints );
-            intersects |= segments_intersect( aP1, aP2, c3, c4, intersectionPoints );
-            intersects |= segments_intersect( aP1, aP2, c4, c1, intersectionPoints );
+            if( r > 0 )
+            {
+                // Rounded rectangle: four shortened straight sides + four quarter-circle arcs.
+                int x1 = std::min( d->GetStart().x, d->GetEnd().x );
+                int y1 = std::min( d->GetStart().y, d->GetEnd().y );
+                int x2 = std::max( d->GetStart().x, d->GetEnd().x );
+                int y2 = std::max( d->GetStart().y, d->GetEnd().y );
 
-            if( intersects && !TestGrooveWidth )
-                return false;
+                // Straight sides (between arc endpoints). Skip zero-length
+                // sides that occur when one dimension equals 2*r (stadium).
+                int w = x2 - x1;
+                int h = y2 - y1;
+                bool intersects = false;
+
+                if( w > 2 * r )
+                {
+                    intersects |= segments_intersect( aP1, aP2, { x1 + r, y1 }, { x2 - r, y1 },
+                                                      intersectionPoints );
+                    intersects |= segments_intersect( aP1, aP2, { x2 - r, y2 }, { x1 + r, y2 },
+                                                      intersectionPoints );
+                }
+
+                if( h > 2 * r )
+                {
+                    intersects |= segments_intersect( aP1, aP2, { x2, y1 + r }, { x2, y2 - r },
+                                                      intersectionPoints );
+                    intersects |= segments_intersect( aP1, aP2, { x1, y2 - r }, { x1, y1 + r },
+                                                      intersectionPoints );
+                }
+
+                if( intersects && !TestGrooveWidth )
+                    return false;
+
+                // Corner arcs, matching the decomposition in TransformEdgeToCreepShapes.
+                // Stadium shapes get semicircles instead of four quarter-arcs to
+                // avoid duplicate centers that cause division by zero in Paths().
+                struct CornerArcRange
+                {
+                    VECTOR2I  center;
+                    EDA_ANGLE startAngle;
+                    EDA_ANGLE endAngle;
+                };
+
+                std::vector<CornerArcRange> arcs;
+
+                if( h == 2 * r )
+                {
+                    // Horizontal stadium: left and right semicircles
+                    arcs.push_back( { { x1 + r, y1 + r },
+                                      EDA_ANGLE( -90.0, DEGREES_T ),
+                                      EDA_ANGLE( 90.0, DEGREES_T ) } );
+                    arcs.push_back( { { x2 - r, y1 + r },
+                                      EDA_ANGLE( 90.0, DEGREES_T ),
+                                      EDA_ANGLE( 270.0, DEGREES_T ) } );
+                }
+                else if( w == 2 * r )
+                {
+                    // Vertical stadium: top and bottom semicircles
+                    arcs.push_back( { { x1 + r, y1 + r },
+                                      EDA_ANGLE( -180.0, DEGREES_T ),
+                                      EDA_ANGLE( 0.0, DEGREES_T ) } );
+                    arcs.push_back( { { x1 + r, y2 - r },
+                                      EDA_ANGLE( 0.0, DEGREES_T ),
+                                      EDA_ANGLE( 180.0, DEGREES_T ) } );
+                }
+                else
+                {
+                    arcs = {
+                        { { x1 + r, y1 + r }, EDA_ANGLE( -180.0, DEGREES_T ),
+                          EDA_ANGLE( -90.0, DEGREES_T ) },
+                        { { x2 - r, y1 + r }, EDA_ANGLE( -90.0, DEGREES_T ),
+                          EDA_ANGLE( 0.0, DEGREES_T ) },
+                        { { x2 - r, y2 - r }, EDA_ANGLE( 0.0, DEGREES_T ),
+                          EDA_ANGLE( 90.0, DEGREES_T ) },
+                        { { x1 + r, y2 - r }, EDA_ANGLE( 90.0, DEGREES_T ),
+                          EDA_ANGLE( 180.0, DEGREES_T ) },
+                    };
+                }
+
+                for( const CornerArcRange& ca : arcs )
+                {
+                    bool arcIntersects = segmentIntersectsArc( aP1, aP2, ca.center, r,
+                                                               ca.startAngle, ca.endAngle,
+                                                               &intersectionPoints );
+
+                    if( arcIntersects && !TestGrooveWidth )
+                        return false;
+                }
+            }
+            else
+            {
+                VECTOR2I c1 = d->GetStart();
+                VECTOR2I c2( d->GetStart().x, d->GetEnd().y );
+                VECTOR2I c3 = d->GetEnd();
+                VECTOR2I c4( d->GetEnd().x, d->GetStart().y );
+
+                bool intersects = false;
+                intersects |= segments_intersect( aP1, aP2, c1, c2, intersectionPoints );
+                intersects |= segments_intersect( aP1, aP2, c2, c3, intersectionPoints );
+                intersects |= segments_intersect( aP1, aP2, c3, c4, intersectionPoints );
+                intersects |= segments_intersect( aP1, aP2, c4, c1, intersectionPoints );
+
+                if( intersects && !TestGrooveWidth )
+                    return false;
+            }
 
             break;
         }
