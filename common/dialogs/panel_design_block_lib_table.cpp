@@ -254,6 +254,8 @@ protected:
         wxFileName fn( LIBRARY_MANAGER::ExpandURI( aRow.URI(), Pgm().GetSettingsManager().Prj() ) );
         std::shared_ptr<LIBRARY_TABLE> child = std::make_shared<LIBRARY_TABLE>( fn, LIBRARY_TABLE_SCOPE::GLOBAL, LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
 
+        Pgm().GetLibraryManager().ApplyLibOverrides( *child );
+
         m_panel->OpenTable( child, aRow.Nickname() );
     }
 
@@ -274,9 +276,14 @@ protected:
 
 void PANEL_DESIGN_BLOCK_LIB_TABLE::OpenTable( const std::shared_ptr<LIBRARY_TABLE>& aTable, const wxString& aTitle )
 {
+    wxString tabTitle = aTitle;
+
+    if( aTable->IsReadOnly() )
+        tabTitle += wxS( " " ) + _( "(read-only)" );
+
     for( int ii = 2; ii < (int) m_notebook->GetPageCount(); ++ii )
     {
-        if( m_notebook->GetPageText( ii ) == aTitle )
+        if( m_notebook->GetPageText( ii ) == tabTitle )
         {
             // Something is pretty fishy with wxAuiNotebook::ChangeSelection(); on Mac at least it
             // results in a re-entrant call where the second call is one page behind.
@@ -288,7 +295,7 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::OpenTable( const std::shared_ptr<LIBRARY_TABL
     }
 
     m_nestedTables.push_back( aTable );
-    AddTable( aTable.get(), aTitle, true );
+    AddTable( aTable.get(), tabTitle, true );
 
     // Something is pretty fishy with wxAuiNotebook::ChangeSelection(); on Mac at least it
     // results in a re-entrant call where the second call is one page behind.

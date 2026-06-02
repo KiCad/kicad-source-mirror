@@ -21,8 +21,22 @@
 #ifndef _KICAD_SETTINGS_H
 #define _KICAD_SETTINGS_H
 
+#include <map>
+#include <set>
 #include <settings/app_settings.h>
 #define PCM_DEFAULT_REPOSITORY_URL "https://repository.kicad.org/repository.json"
+
+
+/**
+ * Per-library override flags for libraries in read-only nested tables.
+ * These are keyed by the table file path and library nickname so they survive
+ * table updates while preserving user choices.
+ */
+struct LIB_OVERRIDE
+{
+    bool disabled = false;
+    bool hidden = false;
+};
 
 
 class KICOMMON_API KICAD_SETTINGS : public APP_SETTINGS_BASE
@@ -70,6 +84,10 @@ public:
 
     std::vector<wxString> m_RecentTemplates;
     int                   m_TemplateFilterChoice = 0;
+
+    /// Overrides for libraries in read-only nested tables.
+    /// Outer key is normalized table file path, inner key is library nickname.
+    std::map<wxString, std::map<wxString, LIB_OVERRIDE>> m_LibOverrides;
 
 protected:
     virtual std::string getLegacyFrameName() const override { return "KicadFrame"; }

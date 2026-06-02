@@ -66,6 +66,9 @@ public:
     void MarkDirty();
     void ClearDirty();
 
+    /// Save enable/visible overrides for a read-only nested table to user settings
+    bool SaveOverrides();
+
     static void AddTable( wxAuiNotebook* aNotebook, const wxString& aTitle, bool aClosable );
 
 private:

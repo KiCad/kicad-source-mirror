@@ -129,6 +129,7 @@ protected:
     wxGridCellAttr* m_uriEditor;
     wxGridCellAttr* m_typesEditor;
     wxGridCellAttr* m_boolAttr;
+    wxGridCellAttr* m_readOnlyAttr;
     wxGridCellAttr* m_warningAttr;
     wxGridCellAttr* m_noStatusAttr;
     wxGridCellAttr* m_editSettingsAttr;

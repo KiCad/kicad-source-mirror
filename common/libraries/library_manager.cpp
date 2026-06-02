@@ -159,12 +159,90 @@ void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
                             row.SetErrorDescription( child->ErrorDescription() );
                         }
 
+                        applyLibOverrides( *child );
+
                         m_childTables.insert_or_assign( row.URI(), std::move( child ) );
                     }
                 }
             };
 
     processOneTable( aRootTable );
+}
+
+
+void LIBRARY_MANAGER::ApplyLibOverrides( LIBRARY_TABLE& aTable )
+{
+    if( !aTable.IsReadOnly() )
+        return;
+
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
+
+    if( !settings )
+        return;
+
+    wxString tablePath = aTable.Path();
+
+    auto it = settings->m_LibOverrides.find( tablePath );
+
+    if( it == settings->m_LibOverrides.end() )
+        return;
+
+    const std::map<wxString, LIB_OVERRIDE>& overrides = it->second;
+
+    for( LIBRARY_TABLE_ROW& row : aTable.Rows() )
+    {
+        auto overIt = overrides.find( row.Nickname() );
+
+        if( overIt != overrides.end() )
+        {
+            row.SetDisabled( overIt->second.disabled );
+            row.SetHidden( overIt->second.hidden );
+        }
+    }
+}
+
+
+void LIBRARY_MANAGER::applyLibOverrides( LIBRARY_TABLE& aTable )
+{
+    ApplyLibOverrides( aTable );
+}
+
+
+void LIBRARY_MANAGER::SetLibOverride( const wxString& aTablePath, const wxString& aNickname,
+                                      bool aDisabled, bool aHidden )
+{
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
+
+    wxCHECK( settings, /* void */ );
+
+    if( !aDisabled && !aHidden )
+    {
+        ClearLibOverride( aTablePath, aNickname );
+        return;
+    }
+
+    settings->m_LibOverrides[aTablePath][aNickname] = { aDisabled, aHidden };
+}
+
+
+void LIBRARY_MANAGER::ClearLibOverride( const wxString& aTablePath, const wxString& aNickname )
+{
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>( "kicad" );
+
+    wxCHECK( settings, /* void */ );
+
+    auto tableIt = settings->m_LibOverrides.find( aTablePath );
+
+    if( tableIt == settings->m_LibOverrides.end() )
+        return;
+
+    tableIt->second.erase( aNickname );
+
+    if( tableIt->second.empty() )
+        settings->m_LibOverrides.erase( tableIt );
 }
 
 
