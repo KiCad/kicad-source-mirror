@@ -101,6 +101,18 @@ private:
     bool has_pins;
 
 
+    /// Per-layer pad geometry within a pad stack
+    struct FM_PAD_LAYER
+    {
+        PAD_SHAPE   shape = PAD_SHAPE::CIRCLE;
+        std::string custom_name;
+        bool        is_octogon = false;
+        int         width = 0;
+        int         height = 0;
+        int         x_offset = 0;
+        int         y_offset = 0;
+    };
+
     struct FM_PAD
     {
         std::string name;
@@ -127,6 +139,7 @@ private:
         int y_offset;
         int antipad_size;
         std::set<std::string> copper_layers;  ///< Copper layers with non-zero annular ring
+        std::map<std::string, FM_PAD_LAYER> layer_shapes;  ///< Per-layer shape overrides
 
         struct HASH
         {
