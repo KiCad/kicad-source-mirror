@@ -20,6 +20,7 @@
 #include "dialog_diff_phase_skew_properties.h"
 
 #include "widgets/color_swatch.h"
+#include <pcb_base_edit_frame.h>
 
 
 DIALOG_DIFF_PHASE_SKEW_PROPERTIES::DIALOG_DIFF_PHASE_SKEW_PROPERTIES(

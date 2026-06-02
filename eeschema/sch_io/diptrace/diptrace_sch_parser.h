@@ -29,6 +29,7 @@
 #include <map>
 #include <memory>
 #include <vector>
+#include <set>
 
 #include <math/vector2d.h>
 #include <wx/string.h>
