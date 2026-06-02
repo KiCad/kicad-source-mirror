@@ -113,11 +113,11 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
                             entry["hidden"] = true;
 
                         if( !entry.empty() )
-                            tableJs[nickname.ToStdString()] = entry;
+                            tableJs[std::string( nickname.ToUTF8() )] = entry;
                     }
 
                     if( !tableJs.empty() )
-                        js[tablePath.ToStdString()] = tableJs;
+                        js[std::string( tablePath.ToUTF8() )] = tableJs;
                 }
 
                 return js;

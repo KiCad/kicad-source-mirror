@@ -124,6 +124,10 @@ protected:
     /// Working copy of a table
     LIBRARY_TABLE m_table;
 
+    /// Cached read-only state of the underlying table file.  Computed once at
+    /// construction to avoid filesystem stat() calls during grid rendering.
+    bool m_readOnly;
+
     std::function<void()> m_changeCallback;
 
     wxGridCellAttr* m_uriEditor;

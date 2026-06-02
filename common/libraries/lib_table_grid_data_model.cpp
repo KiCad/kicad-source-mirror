@@ -31,6 +31,7 @@ LIB_TABLE_GRID_DATA_MODEL::LIB_TABLE_GRID_DATA_MODEL( DIALOG_SHIM* aDialog, WX_G
                                                       const wxArrayString& aPluginChoices,
                                                       wxString* aMRUDirectory, const wxString& aProjectPath ) :
         m_table( aTableToEdit ),
+        m_readOnly( m_table.IsReadOnly() ),
         m_adapter( aAdapter )
 {
     m_uriEditor = new wxGridCellAttr;
@@ -138,7 +139,7 @@ wxGridCellAttr* LIB_TABLE_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCe
         return enhanceAttr( nullptr, aRow, aCol, aKind );
 
     LIBRARY_TABLE_ROW& tableRow = at( aRow );
-    bool               readOnly = m_table.IsReadOnly();
+    bool               readOnly = m_readOnly;
 
     switch( aCol )
     {
@@ -240,7 +241,7 @@ void LIB_TABLE_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxString& aV
         return;
 
     // For read-only tables, only enable/visible changes are allowed
-    if( m_table.IsReadOnly() && aCol != COL_ENABLED && aCol != COL_VISIBLE )
+    if( m_readOnly && aCol != COL_ENABLED && aCol != COL_VISIBLE )
         return;
 
     LIBRARY_TABLE_ROW& lrow = at( aRow );
@@ -295,7 +296,7 @@ void LIB_TABLE_GRID_DATA_MODEL::SetValueAsBool( int aRow, int aCol, bool aValue 
 
 bool LIB_TABLE_GRID_DATA_MODEL::InsertRows( size_t aPos, size_t aNumRows  )
 {
-    if( m_table.IsReadOnly() )
+    if( m_readOnly )
         return false;
 
     if( aPos < size() )
@@ -322,7 +323,7 @@ bool LIB_TABLE_GRID_DATA_MODEL::InsertRows( size_t aPos, size_t aNumRows  )
 
 bool LIB_TABLE_GRID_DATA_MODEL::AppendRows( size_t aNumRows )
 {
-    if( m_table.IsReadOnly() )
+    if( m_readOnly )
         return false;
 
     // do not modify aNumRows, original value needed for wxGridTableMessage below
@@ -344,7 +345,7 @@ bool LIB_TABLE_GRID_DATA_MODEL::AppendRows( size_t aNumRows )
 
 bool LIB_TABLE_GRID_DATA_MODEL::DeleteRows( size_t aPos, size_t aNumRows )
 {
-    if( m_table.IsReadOnly() )
+    if( m_readOnly )
         return false;
 
     // aPos may be a large positive, e.g. size_t(-1), and the sum of
