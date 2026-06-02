@@ -27,6 +27,9 @@
 #include <board.h>
 #include <collectors.h>
 #include <footprint.h>
+#include <geometry/shape_arc.h>
+#include <geometry/shape_line_chain.h>
+#include <geometry/shape_poly_set.h>
 #include <geometry/shape_utils.h>
 #include <netinfo.h>
 #include <pad.h>
@@ -158,6 +161,69 @@ BOOST_AUTO_TEST_CASE( RuleAreaInnerLayersExpandMode )
     usedLayers &= ~LSET::UserMask();
 
     BOOST_TEST( usedLayers.none() );
+}
+
+/**
+ * Zones created by converting a circle shape carry arc metadata in their outline.
+ * Clipper2 cannot preserve arcs across boolean operations once either operand has
+ * a hole or the clip operand has outlines (see SHAPE_POLY_SET::booleanOp's assertion).
+ * Historically the "Add a Zone Cutout" tool fed arc-bearing outlines straight into
+ * BooleanSubtract, which produced point/arc metadata that disagreed after serialization
+ * and rendered as corrupt zones on reload.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24053
+ */
+BOOST_AUTO_TEST_CASE( CircleZoneCutoutRoundTrip )
+{
+    // Build a circular zone outline the same way convert_tool.cpp does for CIRCLE shapes
+    VECTOR2I  center( 0, 0 );
+    int       radius = pcbIUScale.mmToIU( 10.0 );
+    SHAPE_ARC fullCircle( center - VECTOR2I( radius, 0 ), center + VECTOR2I( radius, 0 ),
+                          center - VECTOR2I( radius, 0 ), 0 );
+
+    SHAPE_POLY_SET sourceOutline;
+    sourceOutline.NewOutline();
+    sourceOutline.Append( fullCircle );
+
+    BOOST_TEST_REQUIRE( sourceOutline.ArcCount() > 0 );
+    double sourceArea = sourceOutline.Area();
+    BOOST_TEST_REQUIRE( sourceArea > 0.0 );
+
+    // Draw a small rectangular cutout well inside the circle
+    SHAPE_POLY_SET cutoutOutline;
+    cutoutOutline.NewOutline();
+    int cutoutHalf = pcbIUScale.mmToIU( 1.0 );
+    cutoutOutline.Append( VECTOR2I( -cutoutHalf, -cutoutHalf ) );
+    cutoutOutline.Append( VECTOR2I( cutoutHalf, -cutoutHalf ) );
+    cutoutOutline.Append( VECTOR2I( cutoutHalf, cutoutHalf ) );
+    cutoutOutline.Append( VECTOR2I( -cutoutHalf, cutoutHalf ) );
+
+    // Mirror the fix applied in ZONE_CREATE_HELPER::performZoneCutout: drop arcs before
+    // the boolean so the saved outline cannot reference stale arc endpoints.
+    SHAPE_POLY_SET working( sourceOutline );
+    working.ClearArcs();
+
+    SHAPE_POLY_SET cutout( cutoutOutline );
+    cutout.ClearArcs();
+
+    working.BooleanSubtract( cutout );
+
+    BOOST_TEST( working.ArcCount() == 0 );
+    BOOST_TEST_REQUIRE( working.OutlineCount() == 1 );
+    BOOST_TEST_REQUIRE( working.HoleCount( 0 ) == 1 );
+
+    double expectedArea = sourceArea - cutoutOutline.Area();
+    BOOST_CHECK_CLOSE( working.Area(), expectedArea, 0.1 );
+
+    // Outline must be a simple closed curve with reasonable point count
+    const SHAPE_LINE_CHAIN& outerChain = working.COutline( 0 );
+    BOOST_TEST( outerChain.IsClosed() );
+    BOOST_TEST( outerChain.PointCount() >= 8 );
+    BOOST_TEST( outerChain.SelfIntersecting().has_value() == false );
+
+    const SHAPE_LINE_CHAIN& holeChain = working.CHole( 0, 0 );
+    BOOST_TEST( holeChain.IsClosed() );
+    BOOST_TEST( holeChain.PointCount() == 4 );
 }
 
 /**

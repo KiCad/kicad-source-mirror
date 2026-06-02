@@ -179,7 +179,16 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE& aZone, const ZONE& aCutout )
     toolMgr->RunAction( ACTIONS::selectionClear );
 
     SHAPE_POLY_SET originalOutline( *aZone.Outline() );
-    originalOutline.BooleanSubtract( *aCutout.Outline() );
+    SHAPE_POLY_SET cutoutOutline( *aCutout.Outline() );
+
+    // Clipper2 cannot carry arcs through boolean operations when either operand has holes or
+    // the clip side has outlines, so strip arc metadata first. Without this, zones built from
+    // circles (or any arc-bearing outline) get corrupt arc endpoints written to disk and
+    // render as garbage after reload. See SHAPE_POLY_SET::booleanOp.
+    originalOutline.ClearArcs();
+    cutoutOutline.ClearArcs();
+
+    originalOutline.BooleanSubtract( cutoutOutline );
 
     // After substracting the hole, originalOutline can have more than one main outline.
     // But a zone can have only one main outline, so create as many zones as originalOutline
