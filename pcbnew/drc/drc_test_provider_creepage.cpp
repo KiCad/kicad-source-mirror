@@ -379,9 +379,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
         return 0;
 
     SHAPE_POLY_SET outline;
-
-    if( !m_board->GetBoardPolygonOutlines( outline, false ) )
-        return -1;
+    bool           hasValidOutline = m_board->GetBoardPolygonOutlines( outline, false );
 
     const DRAWINGS drawings = m_board->Drawings();
     CREEPAGE_GRAPH graph( *m_board );
@@ -391,7 +389,7 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
     else
         graph.m_minGrooveWidth = 0;
 
-    graph.m_boardOutline = &outline;
+    graph.m_boardOutline = hasValidOutline ? &outline : nullptr;
 
     this->CollectBoardEdges( graph.m_boardEdge, graph.m_ownedBoardEdges );
     graph.TransformEdgeToCreepShapes();
