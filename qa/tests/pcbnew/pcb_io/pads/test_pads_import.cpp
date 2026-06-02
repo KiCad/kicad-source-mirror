@@ -1639,4 +1639,109 @@ BOOST_AUTO_TEST_CASE( ImportIssue23391 )
 }
 
 
+/**
+ * Verify in-circuit test point import (issue 23637).
+ *
+ * In-circuit test points are zero-drill vias placed on a route layer and tagged
+ * in the *TESTPOINT* section.  Two bugs existed before the fix:
+ *   1. The test point via was also emitted as a bare PCB_VIA by loadTracksAndVias(),
+ *      creating a duplicate object and a DRC open-connection error.
+ *   2. loadTestPoints() always placed the footprint on F.Cu when side=0 ("through"),
+ *      even though the pad definition's soldermask layer indicates B.Cu.
+ *
+ * synthetic_testpoint.asc defines two test point via types:
+ *   TP_BOTTOM_SMD  drill=0, routing-layer pad (layer 0) + soldermask bottom (28)
+ *                  -> SMD footprint on B.Cu, pad ~0.8mm
+ *   TP_TOP_SMD     drill=0, top copper pad (layer -2) + soldermask top (25)
+ *                  -> SMD footprint on F.Cu, pad ~0.8mm
+ */
+BOOST_AUTO_TEST_CASE( InCircuitTestPointImport )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/synthetic_testpoint.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    // R1 (1 part) + 2 test point footprints = 3 total
+    BOOST_CHECK_EQUAL( board->Footprints().size(), 3u );
+
+    FOOTPRINT* tpBottom = nullptr;
+    FOOTPRINT* tpTop    = nullptr;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        if( fp->GetValue() == wxT( "TP_BOTTOM_SMD" ) )
+            tpBottom = fp;
+        else if( fp->GetValue() == wxT( "TP_TOP_SMD" ) )
+            tpTop = fp;
+    }
+
+    // TP_BOTTOM_SMD: stack has soldermask bottom (layer 28) -> must land on B.Cu
+    BOOST_REQUIRE_MESSAGE( tpBottom, "TP_BOTTOM_SMD test point footprint should exist" );
+    BOOST_CHECK_EQUAL( tpBottom->Pads().size(), 1u );
+
+    if( tpBottom->Pads().size() == 1 )
+    {
+        PAD* pad = tpBottom->Pads().front();
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( B_Cu ),
+                             "TP_BOTTOM_SMD pad should be on B.Cu" );
+        BOOST_CHECK_MESSAGE( !pad->IsOnLayer( F_Cu ),
+                             "TP_BOTTOM_SMD pad should not be on F.Cu" );
+
+        // Pad size: 1200000 BASIC * 2/3 = 800000 nm (0.8mm).  Allow 5% tolerance.
+        int padSize = pad->GetSize( PADSTACK::ALL_LAYERS ).x;
+        BOOST_CHECK_MESSAGE( padSize > 700000 && padSize < 900000,
+                             "TP_BOTTOM_SMD pad size " << padSize << " should be ~800000 nm" );
+    }
+
+    // TP_TOP_SMD: explicit top copper pad (layer -2) -> must land on F.Cu
+    BOOST_REQUIRE_MESSAGE( tpTop, "TP_TOP_SMD test point footprint should exist" );
+    BOOST_CHECK_EQUAL( tpTop->Pads().size(), 1u );
+
+    if( tpTop->Pads().size() == 1 )
+    {
+        PAD* pad = tpTop->Pads().front();
+        BOOST_CHECK_MESSAGE( pad->IsOnLayer( F_Cu ),
+                             "TP_TOP_SMD pad should be on F.Cu" );
+        BOOST_CHECK_MESSAGE( !pad->IsOnLayer( B_Cu ),
+                             "TP_TOP_SMD pad should not be on B.Cu" );
+
+        int padSize = pad->GetSize( PADSTACK::ALL_LAYERS ).x;
+        BOOST_CHECK_MESSAGE( padSize > 700000 && padSize < 900000,
+                             "TP_TOP_SMD pad size " << padSize << " should be ~800000 nm" );
+    }
+
+    // Test point positions must NOT also appear as bare PCB_VIA objects.
+    // Before the fix, loadTracksAndVias() placed a PCB_VIA at each test point
+    // position, creating a duplicate and causing DRC open-connection errors.
+    VECTOR2I tpBottomPos( 0, 0 );
+    VECTOR2I tpTopPos( 0, 0 );
+
+    if( tpBottom )
+        tpBottomPos = tpBottom->GetPosition();
+
+    if( tpTop )
+        tpTopPos = tpTop->GetPosition();
+
+    for( PCB_TRACK* trk : board->Tracks() )
+    {
+        PCB_VIA* via = dynamic_cast<PCB_VIA*>( trk );
+
+        if( !via )
+            continue;
+
+        VECTOR2I pos = via->GetPosition();
+
+        BOOST_CHECK_MESSAGE( pos != tpBottomPos,
+                             "TP_BOTTOM_SMD position should not have a bare PCB_VIA" );
+        BOOST_CHECK_MESSAGE( pos != tpTopPos,
+                             "TP_TOP_SMD position should not have a bare PCB_VIA" );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

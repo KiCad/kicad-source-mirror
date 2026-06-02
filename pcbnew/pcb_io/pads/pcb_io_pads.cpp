@@ -1219,6 +1219,7 @@ void PCB_IO_PADS::loadReuseBlockGroups()
 void PCB_IO_PADS::loadTestPoints()
 {
     const auto& test_points = m_parser->GetTestPoints();
+    const auto& via_defs = m_parser->GetViaDefs();
 
     for( const auto& tp : test_points )
     {
@@ -1231,18 +1232,72 @@ void PCB_IO_PADS::loadTestPoints()
         VECTOR2I pos( scaleCoord( tp.x, true ), scaleCoord( tp.y, false ) );
         footprint->SetPosition( pos );
 
-        PCB_LAYER_ID layer = F_Cu;
+        // Default layer and size; refined below from the via definition.
+        PCB_LAYER_ID layer = ( tp.side == 2 ) ? B_Cu : F_Cu;
+        int tpSize = std::max( scaleSize( 50.0 ), m_minObjectSize );
 
-        if( tp.side == 2 )
-            layer = B_Cu;
+        auto it = via_defs.find( tp.symbol_name );
 
-        footprint->SetLayer( ( layer == B_Cu ) ? B_Cu : F_Cu );
+        if( it != via_defs.end() )
+        {
+            const PADS_IO::VIA_DEF& def = it->second;
+
+            // Inspect the pad stack once to recover both the pad size and the
+            // board side.  A non-zero pad on copper layer -2 (top) or -1 (bottom)
+            // takes first priority for the side; when those are both zero (an
+            // in-circuit test point) the soldermask layers (25=top, 28=bottom)
+            // indicate the side instead.  The pad size falls back to the largest
+            // stack entry when the via definition carries no explicit size.
+            double stackSize    = def.size;
+            bool   hasTopPad    = false;
+            bool   hasBottomPad = false;
+            bool   hasMaskTop   = false;
+            bool   hasMaskBot   = false;
+
+            for( const auto& stackLayer : def.stack )
+            {
+                if( def.size <= 0.0 && stackLayer.sizeA > stackSize )
+                    stackSize = stackLayer.sizeA;
+
+                if( stackLayer.layer == PADS_LAYER_MAPPER::LAYER_PAD_STACK_TOP
+                    && stackLayer.sizeA > 0.0 )
+                {
+                    hasTopPad = true;
+                }
+                else if( stackLayer.layer == PADS_LAYER_MAPPER::LAYER_PAD_STACK_BOTTOM
+                         && stackLayer.sizeA > 0.0 )
+                {
+                    hasBottomPad = true;
+                }
+                else if( stackLayer.layer == PADS_LAYER_MAPPER::LAYER_SOLDERMASK_TOP )
+                {
+                    hasMaskTop = true;
+                }
+                else if( stackLayer.layer == PADS_LAYER_MAPPER::LAYER_SOLDERMASK_BOTTOM )
+                {
+                    hasMaskBot = true;
+                }
+            }
+
+            if( stackSize > 0.0 )
+                tpSize = std::max( scaleSize( stackSize ), m_minObjectSize );
+
+            if( hasTopPad && !hasBottomPad )
+                layer = F_Cu;
+            else if( hasBottomPad && !hasTopPad )
+                layer = B_Cu;
+            else if( hasMaskBot && !hasMaskTop )
+                layer = B_Cu;
+            else if( hasMaskTop && !hasMaskBot )
+                layer = F_Cu;
+        }
+
+        footprint->SetLayer( layer );
 
         PAD* pad = new PAD( footprint );
         pad->SetNumber( wxT( "1" ) );
         pad->SetPosition( pos );
         pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-        int tpSize = std::max( scaleSize( 50.0 ), m_minObjectSize );
         pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( tpSize, tpSize ) );
         pad->SetAttribute( PAD_ATTRIB::SMD );
         pad->SetLayerSet( layer == B_Cu ? LSET( { B_Cu } ) : LSET( { F_Cu } ) );
@@ -1341,6 +1396,19 @@ void PCB_IO_PADS::loadTracksAndVias()
     const auto& routes = m_parser->GetRoutes();
     std::set<std::pair<int, int>> placedThroughVias;
 
+    // Build a position set for test-point vias so we don't also place a bare
+    // PCB_VIA at those locations; loadTestPoints() already creates footprints.
+    std::set<std::pair<int, int>> testPointPositions;
+
+    for( const auto& tp : m_parser->GetTestPoints() )
+    {
+        if( tp.type == "VIA" )
+        {
+            testPointPositions.emplace( scaleCoord( tp.x, true ),
+                                        scaleCoord( tp.y, false ) );
+        }
+    }
+
     for( const auto& route : routes )
     {
         NETINFO_ITEM* net = m_loadBoard->FindNet( PADS_COMMON::ConvertInvertedNetName( route.net_name ) );
@@ -1409,6 +1477,10 @@ void PCB_IO_PADS::loadTracksAndVias()
         {
             VECTOR2I pos( scaleCoord( via_def.location.x, true ),
                           scaleCoord( via_def.location.y, false ) );
+
+            // Test-point vias are imported as footprints by loadTestPoints().
+            if( testPointPositions.count( { pos.x, pos.y } ) )
+                continue;
 
             VIATYPE viaType = VIATYPE::THROUGH;
             auto it = m_parser->GetViaDefs().find( via_def.name );
