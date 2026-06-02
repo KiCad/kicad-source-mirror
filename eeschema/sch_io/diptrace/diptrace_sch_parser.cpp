@@ -25,17 +25,22 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <deque>
+#include <limits>
 #include <memory>
+#include <optional>
 #include <set>
 
 #include <wx/filename.h>
 #include <wx/log.h>
 
+#include <base_units.h>
 #include <lib_id.h>
 #include <lib_symbol.h>
+#include <page_info.h>
 #include <progress_reporter.h>
 #include <project.h>
 #include <reporter.h>
@@ -71,7 +76,7 @@ static constexpr int SCHEMATIC_UTF16_STRING_VERSION = V31_CUTOVER;
 
 
 SCH_PARSER::SCH_PARSER( const wxString& aFileName, SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
-                         PROGRESS_REPORTER* aProgressReporter, REPORTER* aReporter ) :
+                        PROGRESS_REPORTER* aProgressReporter, REPORTER* aReporter ) :
         m_reader( aFileName ),
         m_schematic( aSchematic ),
         m_rootSheet( aRootSheet ),
@@ -95,13 +100,90 @@ SCH_PARSER::~SCH_PARSER()
 
 int SCH_PARSER::toKiCadCoordX( int aDipTraceCoord )
 {
-    return static_cast<int>( static_cast<int64_t>( aDipTraceCoord ) * 100 / 3 );
+    return static_cast<int>( static_cast<int64_t>( aDipTraceCoord ) / 3 );
 }
 
 
 int SCH_PARSER::toKiCadCoordY( int aDipTraceCoord )
 {
-    return static_cast<int>( static_cast<int64_t>( -aDipTraceCoord ) * 100 / 3 );
+    // DipTrace .dch stores schematic Y already in a screen-down convention (more negative is higher
+    // on the page), matching KiCad's Y-down axis, and bakes any placement rotation into the stored
+    // pin, shape and wire coordinates. So the conversion is a plain scale with no axis flip; negating
+    // here vertically mirrors the whole sheet and was the cause of the inverted import.
+    return static_cast<int>( static_cast<int64_t>( aDipTraceCoord ) / 3 );
+}
+
+
+int SCH_PARSER::toKiCadSize( int aDipTraceCoord )
+{
+    return static_cast<int>( static_cast<int64_t>( std::abs( aDipTraceCoord ) ) / 3 );
+}
+
+
+void SCH_PARSER::findPageGeometry()
+{
+    // DipTrace stores the page as width, height and four margins, each an int4 holding mm * 30000.
+    // The record is not framed by a marker, so accept the first run that decodes as a sane page
+    // (sensible mm dimensions, all margins whole mm within the sheet, a positive left margin).
+    const uint8_t* data = m_reader.GetData();
+    size_t         fileSize = m_reader.GetFileSize();
+
+    auto rdInt4 = [&]( size_t o ) -> int
+    {
+        uint32_t raw = ( static_cast<uint32_t>( data[o] ) << 24 ) | ( static_cast<uint32_t>( data[o + 1] ) << 16 )
+                       | ( static_cast<uint32_t>( data[o + 2] ) << 8 ) | static_cast<uint32_t>( data[o + 3] );
+        return static_cast<int>( static_cast<int64_t>( raw ) - INT4_BIAS );
+    };
+
+    if( fileSize < 24 )
+        return;
+
+    static constexpr int UNITS_PER_MM = 30000;
+
+    for( size_t o = 0; o + 24 <= fileSize; o++ )
+    {
+        int w = rdInt4( o );
+        int h = rdInt4( o + 4 );
+
+        if( w <= 0 || h <= 0 || ( w % UNITS_PER_MM ) != 0 || ( h % UNITS_PER_MM ) != 0 )
+            continue;
+
+        int wmm = w / UNITS_PER_MM;
+        int hmm = h / UNITS_PER_MM;
+
+        if( wmm < 50 || wmm > 2000 || hmm < 50 || hmm > 2000 )
+            continue;
+
+        int  margins[4] = { rdInt4( o + 8 ), rdInt4( o + 12 ), rdInt4( o + 16 ), rdInt4( o + 20 ) };
+        bool sane = margins[0] > 0;
+
+        for( int m : margins )
+        {
+            if( m < 0 || ( m % UNITS_PER_MM ) != 0 || m / UNITS_PER_MM > 100 )
+                sane = false;
+        }
+
+        if( !sane )
+            continue;
+
+        m_page.found = true;
+        m_page.widthMM = wmm;
+        m_page.heightMM = hmm;
+
+        // Place the origin-centered DipTrace content on the top-left-origin KiCad page by adding
+        // half the page in KiCad nm. Width/height share the coordinate unit, so reuse toKiCadSize().
+        m_pageOffset = VECTOR2I( toKiCadSize( w / 2 ), toKiCadSize( h / 2 ) );
+        return;
+    }
+}
+
+
+VECTOR2I SCH_PARSER::applyPageOffset( const VECTOR2I& aPos ) const
+{
+    if( !m_page.found )
+        return aPos;
+
+    return aPos + m_pageOffset;
 }
 
 
@@ -130,15 +212,18 @@ void SCH_PARSER::Parse()
     {
         parseHeader();
         m_reader.SetVersion( m_version );
-        m_reader.SetStringEncoding( m_version >= SCHEMATIC_UTF16_STRING_VERSION
-                                            ? STRING_ENCODING::UTF16_BE
-                                            : STRING_ENCODING::LEGACY_ASCII );
+        m_reader.SetStringEncoding( m_version >= SCHEMATIC_UTF16_STRING_VERSION ? STRING_ENCODING::UTF16_BE
+                                                                                : STRING_ENCODING::LEGACY_ASCII );
+
+        // The version threshold is only a heuristic -- DipTrace ships same-version files in both
+        // encodings -- so confirm it against the first sheet-name string, which parseHeader left
+        // the reader positioned on. Detection keeps the version default when inconclusive.
+        if( m_numSheets > 0 )
+            m_reader.DetectStringEncoding( m_reader.GetOffset() );
 
         if( m_version < 1 )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "Unsupported DipTrace schematic format version %d." ),
-                    m_version ) );
+            THROW_IO_ERROR( wxString::Format( _( "Unsupported DipTrace schematic format version %d." ), m_version ) );
         }
 
         parseSheetDefinitions();
@@ -160,8 +245,7 @@ void SCH_PARSER::Parse()
             hasBusSection = m_busSectionOffset > 0 && m_busSectionOffset < m_reader.GetFileSize();
         }
 
-        if( m_magicMajor != 1
-            && ( m_busSectionOffset == 0 || m_busSectionOffset >= m_reader.GetFileSize() ) )
+        if( m_magicMajor != 1 && ( m_busSectionOffset == 0 || m_busSectionOffset >= m_reader.GetFileSize() ) )
         {
             m_busSectionOffset = m_tailOffset;
         }
@@ -176,6 +260,8 @@ void SCH_PARSER::Parse()
 
         parseNetSection();
         parseWireSection();
+        parseSheetShapes();
+        findPageGeometry();
     }
     catch( const IO_ERROR& )
     {
@@ -183,9 +269,8 @@ void SCH_PARSER::Parse()
     }
     catch( const std::exception& e )
     {
-        THROW_IO_ERROR( wxString::Format(
-                _( "DipTrace import: unexpected error at offset 0x%06zX: %s" ),
-                m_reader.GetOffset(), wxString::FromUTF8( e.what() ) ) );
+        THROW_IO_ERROR( wxString::Format( _( "DipTrace import: unexpected error at offset 0x%06zX: %s" ),
+                                          m_reader.GetOffset(), wxString::FromUTF8( e.what() ) ) );
     }
 
     createKiCadObjects();
@@ -198,9 +283,8 @@ void SCH_PARSER::parseHeader()
 
     if( magicLen != 7 && magicLen != 11 )
     {
-        THROW_IO_ERROR( wxString::Format(
-                _( "Invalid DipTrace schematic magic length: %d (expected 7 or 11)." ),
-                (int) magicLen ) );
+        THROW_IO_ERROR( wxString::Format( _( "Invalid DipTrace schematic magic length: %d (expected 7 or 11)." ),
+                                          (int) magicLen ) );
     }
 
     std::vector<uint8_t> magicBuf( magicLen );
@@ -219,8 +303,7 @@ void SCH_PARSER::parseHeader()
         // Legacy files encode the version in the magic suffix ("DTSCHEMx.yy").
         const uint8_t* suffix = magicBuf.data() + 7;
 
-        if( !std::isdigit( suffix[0] ) || suffix[1] != '.'
-            || !std::isdigit( suffix[2] ) || !std::isdigit( suffix[3] ) )
+        if( !std::isdigit( suffix[0] ) || suffix[1] != '.' || !std::isdigit( suffix[2] ) || !std::isdigit( suffix[3] ) )
         {
             THROW_IO_ERROR( _( "Invalid DipTrace schematic file: bad legacy version suffix." ) );
         }
@@ -229,16 +312,15 @@ void SCH_PARSER::parseHeader()
         m_version = ( suffix[2] - '0' ) * 10 + ( suffix[3] - '0' );
     }
 
-    m_reader.ReadInt4();  // field_0B
-    m_reader.ReadInt3();  // field_0F
-    m_reader.ReadInt3();  // field_12
-    m_reader.ReadInt3();  // field_15
+    m_reader.ReadInt4(); // field_0B
+    m_reader.ReadInt3(); // field_0F
+    m_reader.ReadInt3(); // field_12
+    m_reader.ReadInt3(); // field_15
     m_numSheets = m_reader.ReadInt3();
 
     if( m_numSheets < 0 || m_numSheets > 100 )
     {
-        THROW_IO_ERROR( wxString::Format(
-                _( "Invalid DipTrace schematic sheet count: %d." ), m_numSheets ) );
+        THROW_IO_ERROR( wxString::Format( _( "Invalid DipTrace schematic sheet count: %d." ), m_numSheets ) );
     }
 }
 
@@ -274,8 +356,7 @@ void SCH_PARSER::parseDisplaySettings()
         uint8_t extraHdr[4] = {};
         m_reader.ReadBytes( extraHdr, 4 );
 
-        uint32_t extraChars = ( extraHdr[0] << 24 ) | ( extraHdr[1] << 16 ) | ( extraHdr[2] << 8 )
-                              | extraHdr[3];
+        uint32_t extraChars = ( extraHdr[0] << 24 ) | ( extraHdr[1] << 16 ) | ( extraHdr[2] << 8 ) | extraHdr[3];
 
         // Some modern files store an optional UTF-16 payload (e.g. "url")
         // after this 4-byte raw length field.
@@ -299,8 +380,7 @@ void SCH_PARSER::parseTextStyles()
 
     if( numStyles < 0 || numStyles > 2000 )
     {
-        THROW_IO_ERROR( wxString::Format(
-                _( "Invalid text style count: %d." ), numStyles ) );
+        THROW_IO_ERROR( wxString::Format( _( "Invalid text style count: %d." ), numStyles ) );
     }
 
     for( int i = 0; i < numStyles; i++ )
@@ -358,19 +438,17 @@ void SCH_PARSER::parsePreComponentSettings()
 
     if( m_componentCount < 0 || m_componentCount > 100000 )
     {
-        THROW_IO_ERROR( wxString::Format(
-                _( "DipTrace import: invalid component count %d." ), m_componentCount ) );
+        THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid component count %d." ), m_componentCount ) );
     }
 }
 
 
 size_t SCH_PARSER::findBusSection( size_t aSearchStart ) const
 {
-    const uint8_t* data     = m_reader.GetData();
+    const uint8_t* data = m_reader.GetData();
     size_t         fileSize = m_reader.GetFileSize();
 
-    static const uint8_t marker[] = { 0x3B, 0x9A, 0xF1, 0x10, 0x3B, 0x9A, 0xF1, 0x10,
-                                      0x00, 0x00 };
+    static const uint8_t    marker[] = { 0x3B, 0x9A, 0xF1, 0x10, 0x3B, 0x9A, 0xF1, 0x10, 0x00, 0x00 };
     static constexpr size_t markerLen = sizeof( marker );
 
     if( aSearchStart + markerLen + 3 >= fileSize )
@@ -380,17 +458,14 @@ size_t SCH_PARSER::findBusSection( size_t aSearchStart ) const
     {
         if( memcmp( data + off, marker, markerLen ) == 0 )
         {
-            int count = ( ( data[off + 10] << 16 ) | ( data[off + 11] << 8 )
-                          | data[off + 12] )
-                        - INT3_BIAS;
+            int count = ( ( data[off + 10] << 16 ) | ( data[off + 11] << 8 ) | data[off + 12] ) - INT3_BIAS;
 
             if( count >= 0 && count <= 1000 )
                 return off;
 
             if( count > 1000 && count <= 10000 )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "DipTrace import: invalid bus count %d." ), count ) );
+                THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid bus count %d." ), count ) );
             }
         }
     }
@@ -401,7 +476,7 @@ size_t SCH_PARSER::findBusSection( size_t aSearchStart ) const
 
 size_t SCH_PARSER::findTailStart() const
 {
-    const uint8_t* data     = m_reader.GetData();
+    const uint8_t* data = m_reader.GetData();
     size_t         fileSize = m_reader.GetFileSize();
 
     if( fileSize < 3 )
@@ -424,8 +499,7 @@ size_t SCH_PARSER::findTailStart() const
 }
 
 
-std::vector<size_t> SCH_PARSER::scanComponentBoundaries( size_t aFirstComp,
-                                                         size_t aBusSectionOffset ) const
+std::vector<size_t> SCH_PARSER::scanComponentBoundaries( size_t aFirstComp, size_t aBusSectionOffset ) const
 {
     // Every component record starts with a placement bbox followed by five short header strings.
     // isComponentHeaderAt() validates that signature using the correct version-specific string
@@ -456,7 +530,7 @@ std::vector<size_t> SCH_PARSER::scanComponentBoundaries( size_t aFirstComp,
 
 bool SCH_PARSER::isShapeStart( size_t aOffset ) const
 {
-    const uint8_t* data     = m_reader.GetData();
+    const uint8_t* data = m_reader.GetData();
     size_t         fileSize = m_reader.GetFileSize();
 
     if( m_version < V31_CUTOVER )
@@ -464,26 +538,20 @@ bool SCH_PARSER::isShapeStart( size_t aOffset ) const
         if( aOffset + 19 > fileSize )
             return false;
 
-        int z1 = ( ( data[aOffset + 6] << 16 ) | ( data[aOffset + 7] << 8 )
-                   | data[aOffset + 8] )
-                 - INT3_BIAS;
-        int z2 = ( ( data[aOffset + 9] << 16 ) | ( data[aOffset + 10] << 8 )
-                   | data[aOffset + 11] )
-                 - INT3_BIAS;
+        int z1 = ( ( data[aOffset + 6] << 16 ) | ( data[aOffset + 7] << 8 ) | data[aOffset + 8] ) - INT3_BIAS;
+        int z2 = ( ( data[aOffset + 9] << 16 ) | ( data[aOffset + 10] << 8 ) | data[aOffset + 11] ) - INT3_BIAS;
 
         if( z1 != 0 || z2 != 0 )
             return false;
 
-        int w = ( ( data[aOffset + 12] << 24 ) | ( data[aOffset + 13] << 16 )
-                  | ( data[aOffset + 14] << 8 ) | data[aOffset + 15] )
+        int w = ( ( data[aOffset + 12] << 24 ) | ( data[aOffset + 13] << 16 ) | ( data[aOffset + 14] << 8 )
+                  | data[aOffset + 15] )
                 - INT4_BIAS;
 
         if( w < 0 || w > 200000 )
             return false;
 
-        int npts = ( ( data[aOffset + 16] << 16 ) | ( data[aOffset + 17] << 8 )
-                     | data[aOffset + 18] )
-                   - INT3_BIAS;
+        int npts = ( ( data[aOffset + 16] << 16 ) | ( data[aOffset + 17] << 8 ) | data[aOffset + 18] ) - INT3_BIAS;
 
         return npts >= 1 && npts <= 100;
     }
@@ -492,25 +560,63 @@ bool SCH_PARSER::isShapeStart( size_t aOffset ) const
         if( aOffset + 17 > fileSize )
             return false;
 
-        if( data[aOffset + 6] != 0 || data[aOffset + 7] != 0 || data[aOffset + 8] != 0
-            || data[aOffset + 9] != 0 )
+        if( data[aOffset + 6] != 0 || data[aOffset + 7] != 0 || data[aOffset + 8] != 0 || data[aOffset + 9] != 0 )
         {
             return false;
         }
 
-        int w = ( ( data[aOffset + 10] << 24 ) | ( data[aOffset + 11] << 16 )
-                  | ( data[aOffset + 12] << 8 ) | data[aOffset + 13] )
+        int w = ( ( data[aOffset + 10] << 24 ) | ( data[aOffset + 11] << 16 ) | ( data[aOffset + 12] << 8 )
+                  | data[aOffset + 13] )
                 - INT4_BIAS;
 
         if( w < 0 || w > 200000 )
             return false;
 
-        int npts = ( ( data[aOffset + 14] << 16 ) | ( data[aOffset + 15] << 8 )
-                     | data[aOffset + 16] )
-                   - INT3_BIAS;
+        int npts = ( ( data[aOffset + 14] << 16 ) | ( data[aOffset + 15] << 8 ) | data[aOffset + 16] ) - INT3_BIAS;
 
         return npts >= 1 && npts <= 100;
     }
+}
+
+
+bool SCH_PARSER::isFontBearingShapeStart( size_t aOffset ) const
+{
+    if( m_version < V31_CUTOVER )
+        return false;
+
+    const uint8_t* data = m_reader.GetData();
+    size_t         fileSize = m_reader.GetFileSize();
+
+    static constexpr uint8_t TAHOMA_FONT_PATTERN[] = { 0x00, 0x06, 0x00, 0x54, 0x00, 0x61, 0x00,
+                                                       0x68, 0x00, 0x6f, 0x00, 0x6d, 0x00, 0x61 };
+
+    if( aOffset + 29 > fileSize )
+        return false;
+
+    int sentinel = ( ( data[aOffset] << 16 ) | ( data[aOffset + 1] << 8 ) | data[aOffset + 2] ) - INT3_BIAS;
+    int shapeField = ( ( data[aOffset + 3] << 16 ) | ( data[aOffset + 4] << 8 ) | data[aOffset + 5] ) - INT3_BIAS;
+
+    if( sentinel != 1000000 || shapeField != 0 )
+        return false;
+
+    if( std::memcmp( data + aOffset + 6, TAHOMA_FONT_PATTERN, sizeof( TAHOMA_FONT_PATTERN ) ) != 0 )
+    {
+        return false;
+    }
+
+    if( data[aOffset + 20] != 0 || data[aOffset + 21] != 0 )
+        return false;
+
+    int lineWidth = ( ( data[aOffset + 22] << 24 ) | ( data[aOffset + 23] << 16 ) | ( data[aOffset + 24] << 8 )
+                      | data[aOffset + 25] )
+                    - INT4_BIAS;
+
+    if( lineWidth < 0 || lineWidth > 200000 )
+        return false;
+
+    int numPoints = ( ( data[aOffset + 26] << 16 ) | ( data[aOffset + 27] << 8 ) | data[aOffset + 28] ) - INT3_BIAS;
+
+    return numPoints >= 1 && numPoints <= 100;
 }
 
 
@@ -527,7 +633,7 @@ void SCH_PARSER::parseComponents( size_t aBusSectionOffset )
     if( m_componentCount >= 0 )
     {
         int  parsedCount = 0;
-        bool desynced    = false;
+        bool desynced = false;
 
         while( parsedCount < m_componentCount && m_reader.GetOffset() < aBusSectionOffset )
         {
@@ -563,13 +669,11 @@ void SCH_PARSER::parseComponents( size_t aBusSectionOffset )
     // tail is not fully understood, so a recognised header always yields a placed component.
     m_componentBoundaryScanCount++;
 
-    std::vector<size_t> compStarts =
-            scanComponentBoundaries( compSectionStart, aBusSectionOffset );
+    std::vector<size_t> compStarts = scanComponentBoundaries( compSectionStart, aBusSectionOffset );
 
     for( size_t ci = 0; ci < compStarts.size(); ci++ )
     {
-        size_t compEnd =
-                ( ci + 1 < compStarts.size() ) ? compStarts[ci + 1] : aBusSectionOffset;
+        size_t compEnd = ( ci + 1 < compStarts.size() ) ? compStarts[ci + 1] : aBusSectionOffset;
 
         try
         {
@@ -582,27 +686,25 @@ void SCH_PARSER::parseComponents( size_t aBusSectionOffset )
         }
         catch( const std::exception& e )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "DipTrace import: failed to parse component %zu at offset 0x%06zX: %s" ),
-                    ci, compStarts[ci], wxString::FromUTF8( e.what() ) ) );
+            THROW_IO_ERROR(
+                    wxString::Format( _( "DipTrace import: failed to parse component %zu at offset 0x%06zX: %s" ), ci,
+                                      compStarts[ci], wxString::FromUTF8( e.what() ) ) );
         }
     }
 
     if( m_componentCount >= 0 && static_cast<int>( m_components.size() ) != m_componentCount )
     {
-        THROW_IO_ERROR( wxString::Format(
-                _( "DipTrace import: found %zu components, but the file header declares %d." ),
-                m_components.size(), m_componentCount ) );
+        THROW_IO_ERROR(
+                wxString::Format( _( "DipTrace import: found %zu components, but the file header declares %d." ),
+                                  m_components.size(), m_componentCount ) );
     }
 }
 
 
 void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
 {
-    static bool s_dumpComponents =
-            std::getenv( "KICAD_DIPTRACE_DUMP_COMPONENTS" ) != nullptr;
-    static bool s_dumpComponentDetail =
-            std::getenv( "KICAD_DIPTRACE_DUMP_COMPONENT_DETAIL" ) != nullptr;
+    static bool s_dumpComponents = std::getenv( "KICAD_DIPTRACE_DUMP_COMPONENTS" ) != nullptr;
+    static bool s_dumpComponentDetail = std::getenv( "KICAD_DIPTRACE_DUMP_COMPONENT_DETAIL" ) != nullptr;
 
     DCH_COMPONENT comp;
     comp.fileOffset = m_reader.GetOffset();
@@ -632,10 +734,8 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
     {
         if( s_dumpComponentDetail && m_reporter )
         {
-            m_reporter->Report(
-                    wxString::Format( wxT( "DipTrace SCH detail @0x%06zX: %s" ),
-                                      comp.fileOffset, aMsg ),
-                    RPT_SEVERITY_INFO );
+            m_reporter->Report( wxString::Format( wxT( "DipTrace SCH detail @0x%06zX: %s" ), comp.fileOffset, aMsg ),
+                                RPT_SEVERITY_INFO );
         }
     };
 
@@ -645,13 +745,12 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
     comp.bboxY2 = m_reader.ReadInt4();
 
     comp.compName = m_reader.ReadString();
-    comp.refdes   = m_reader.ReadString();
-    comp.value    = m_reader.ReadString();
-    comp.prefix   = m_reader.ReadString();
-    comp.nameDup  = m_reader.ReadString();
+    comp.refdes = m_reader.ReadString();
+    comp.value = m_reader.ReadString();
+    comp.prefix = m_reader.ReadString();
+    comp.nameDup = m_reader.ReadString();
     dumpDetail( wxString::Format( wxT( "hdr end=0x%06zX name='%s' ref='%s' value='%s' prefix='%s'" ),
-                                  m_reader.GetOffset(), comp.compName, comp.refdes, comp.value,
-                                  comp.prefix ) );
+                                  m_reader.GetOffset(), comp.compName, comp.refdes, comp.value, comp.prefix ) );
 
     int postA = m_reader.ReadInt3();
     int postB = m_reader.ReadInt3();
@@ -666,12 +765,12 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
                                       m_reader.GetOffset(), postA, postB, flag1, postC, postD ) );
     }
 
-    comp.partName   = m_reader.ReadString();
+    comp.partName = m_reader.ReadString();
     comp.partNumber = m_reader.ReadString();
 
     uint8_t pb1 = m_reader.ReadByte();
     comp.isMultiPart = ( pb1 == 1 );
-    comp.sheetIndex  = m_reader.ReadInt3();
+    comp.sheetIndex = m_reader.ReadInt3();
 
     int partFieldB = m_reader.ReadInt3();
     int partFieldC = m_reader.ReadInt3();
@@ -685,8 +784,8 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
 
     if( comp.isMultiPart )
     {
-        comp.partId  = m_reader.ReadString();
-        partTailStr  = comp.partId;
+        comp.partId = m_reader.ReadString();
+        partTailStr = comp.partId;
     }
     else
     {
@@ -701,8 +800,8 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
             if( partTailInt > 0 && partTailInt < 256 )
             {
                 size_t         strStart = partTailStart + 3;
-                size_t         strEnd   = strStart + static_cast<size_t>( partTailInt );
-                const uint8_t* data     = m_reader.GetData();
+                size_t         strEnd = strStart + static_cast<size_t>( partTailInt );
+                const uint8_t* data = m_reader.GetData();
                 size_t         fileSize = m_reader.GetFileSize();
 
                 if( strEnd + 3 <= fileSize )
@@ -722,8 +821,8 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
 
                     if( asciiPayload )
                     {
-                        int nextInt3 = ( ( data[strEnd] << 16 ) | ( data[strEnd + 1] << 8 )
-                                         | data[strEnd + 2] ) - INT3_BIAS;
+                        int nextInt3 =
+                                ( ( data[strEnd] << 16 ) | ( data[strEnd + 1] << 8 ) | data[strEnd + 2] ) - INT3_BIAS;
 
                         if( nextInt3 >= -1 && nextInt3 < 1000 )
                         {
@@ -747,10 +846,9 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
     dumpDetail( wxString::Format( wxT( "part end=0x%06zX part='%s' partNum='%s' sheet=%d "
                                        "isMulti=%d partFieldB=%d partFieldC=%d "
                                        "partBBox=[%d,%d,%d,%d] fieldD=%d fieldE=%d" ),
-                                  m_reader.GetOffset(), comp.partName, comp.partNumber,
-                                  comp.sheetIndex, comp.isMultiPart ? 1 : 0, partFieldB,
-                                  partFieldC, partBboxX1, partBboxY1, partBboxX2, partBboxY2,
-                                  fieldD, fieldE ) );
+                                  m_reader.GetOffset(), comp.partName, comp.partNumber, comp.sheetIndex,
+                                  comp.isMultiPart ? 1 : 0, partFieldB, partFieldC, partBboxX1, partBboxY1, partBboxX2,
+                                  partBboxY2, fieldD, fieldE ) );
 
     if( s_dumpComponentDetail && m_version < V31_CUTOVER )
     {
@@ -758,32 +856,45 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
                                       m_reader.GetOffset(), partTailInt, partTailStr ) );
     }
 
+    // The fieldE-count block holds the part's user-defined additional fields, each a (name, value)
+    // string pair followed by an int3 type discriminator (0 = text). DipTrace shows these in the
+    // "Configure Additional Fields" list (Unique Name, Part Number (Digi-Key), etc.).
     if( fieldE >= 1 && fieldE < 1000 )
     {
+        comp.additionalFields.reserve( fieldE );
+
         for( int i = 0; i < fieldE; i++ )
         {
-            m_reader.ReadString();
-            m_reader.ReadString();
+            wxString fieldName = m_reader.ReadString();
+            wxString fieldValue = m_reader.ReadString();
             m_reader.ReadInt3();
+
+            if( !fieldName.IsEmpty() )
+                comp.additionalFields.emplace_back( fieldName, fieldValue );
         }
     }
 
     int fieldF = m_reader.ReadInt3();
     int fieldG = m_reader.ReadInt3();
-    int byte4  = m_reader.ReadByte();
-    comp.libId = m_reader.ReadInt4();
+    int byte4 = m_reader.ReadByte();
+
+    // This int4 is the placement rotation in radians x 1e4 (0, 15708, 31416, 47124 for 0/90/180/
+    // 270 degrees), not a library id. The pin, shape and field coordinates are stored already
+    // rotated by it, so it is used only to keep rotated and unrotated instances of one part from
+    // sharing a single library symbol.
+    comp.rotationE4 = m_reader.ReadInt4();
     comp.libPath = m_reader.ReadString();
 
-    int      tailA     = m_reader.ReadInt3();
-    int      tailB     = m_reader.ReadInt3();
+    int      tailA = m_reader.ReadInt3();
+    int      tailB = m_reader.ReadInt3();
     size_t   tailAfterB = m_reader.GetOffset();
-    wxString tailStrA  = m_reader.ReadString();
+    wxString tailStrA = m_reader.ReadString();
     wxString extraTail = wxEmptyString;
-    int      pinMetaA  = 0;
-    int      pinMetaB  = 0;
-    int      pinMetaF  = 0;
+    int      pinMetaA = 0;
+    int      pinMetaB = 0;
+    int      pinMetaF = 0;
     int      pinHdrByte = 0;
-    int      numPins   = 0;
+    int      numPins = 0;
     bool     simpleModernTail = false;
 
     if( m_version < V31_CUTOVER )
@@ -797,11 +908,11 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
             pinMetaA = m_reader.ReadInt3();
             pinMetaF = m_reader.ReadByte();
             pinMetaB = m_reader.ReadByte();
-            numPins  = m_reader.ReadInt3();
+            numPins = m_reader.ReadInt3();
         }
         else if( m_version == 23 )
         {
-            numPins  = m_reader.ReadInt3();
+            numPins = m_reader.ReadInt3();
             pinMetaF = m_reader.ReadByte();
             pinMetaA = m_reader.ReadInt3();
             pinMetaB = m_reader.ReadInt3();
@@ -811,41 +922,37 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
             pinMetaA = m_reader.ReadInt3();
             pinMetaF = m_reader.ReadByte();
             pinMetaB = m_reader.ReadInt3();
-            numPins  = m_reader.ReadInt3();
+            numPins = m_reader.ReadInt3();
         }
 
         if( s_dumpComponentDetail )
         {
             dumpDetail( wxString::Format( wxT( "pre-pin-hdr end=0x%06zX fieldF=%d fieldG=%d "
-                                               "byte4=%d libId=%d libPath='%s' tailA=%d tailB=%d "
+                                               "byte4=%d rotE4=%d libPath='%s' tailA=%d tailB=%d "
                                                "tailStrA='%s' pinMetaA=%d pinMetaF=%d pinMetaB=%d "
                                                "numPins=%d" ),
-                                          m_reader.GetOffset(), fieldF, fieldG, byte4, comp.libId,
-                                          comp.libPath, tailA, tailB, tailStrA, pinMetaA, pinMetaF,
-                                          pinMetaB, numPins ) );
+                                          m_reader.GetOffset(), fieldF, fieldG, byte4, comp.rotationE4, comp.libPath,
+                                          tailA, tailB, tailStrA, pinMetaA, pinMetaF, pinMetaB, numPins ) );
         }
     }
     else
     {
         bool usedPinSeparatorFallback = false;
 
-        auto readModernExtraAndPins =
-                [&]( wxString& aExtraTail, int& aNumPins, int& aPinHdr,
-                     bool& aUsedPinSeparatorFallback ) -> bool
+        auto readModernExtraAndPins = [&]( wxString& aExtraTail, int& aNumPins, int& aPinHdr,
+                                           bool& aUsedPinSeparatorFallback ) -> bool
         {
-            size_t extraStart = m_reader.GetOffset();
+            size_t  extraStart = m_reader.GetOffset();
             uint8_t extraHdr[4] = {};
             m_reader.ReadBytes( extraHdr, 4 );
 
-            uint32_t extraChars = ( extraHdr[0] << 24 ) | ( extraHdr[1] << 16 )
-                                  | ( extraHdr[2] << 8 ) | extraHdr[3];
+            uint32_t extraChars = ( extraHdr[0] << 24 ) | ( extraHdr[1] << 16 ) | ( extraHdr[2] << 8 ) | extraHdr[3];
 
             if( extraChars >= 10000 && extraHdr[0] == 0 && extraHdr[1] == 0 )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "DipTrace import: invalid component extra-tail length %u at "
-                           "offset 0x%06zX." ),
-                        extraChars, extraStart ) );
+                THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid component extra-tail length %u at "
+                                                     "offset 0x%06zX." ),
+                                                  extraChars, extraStart ) );
             }
 
             if( extraChars > 0 )
@@ -853,14 +960,11 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
                 size_t extraBytes = static_cast<size_t>( extraChars ) * 2;
                 bool   fitsFile = m_reader.GetOffset() + extraBytes <= m_reader.GetFileSize();
 
-                if( extraChars < 10000 && fitsFile
-                    && m_reader.GetOffset() + extraBytes <= componentCeiling )
+                if( extraChars < 10000 && fitsFile && m_reader.GetOffset() + extraBytes <= componentCeiling )
                 {
                     wxMBConvUTF16BE conv;
-                    aExtraTail = wxString(
-                            reinterpret_cast<const char*>( m_reader.GetData()
-                                                           + m_reader.GetOffset() ),
-                            conv, extraBytes );
+                    aExtraTail = wxString( reinterpret_cast<const char*>( m_reader.GetData() + m_reader.GetOffset() ),
+                                           conv, extraBytes );
                     m_reader.Skip( extraBytes );
                 }
                 else if( extraChars < 10000 && fitsFile )
@@ -890,7 +994,7 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
             {
                 size_t pinStart = m_reader.GetOffset();
                 aNumPins = m_reader.ReadInt3();
-                aPinHdr  = m_reader.ReadByte();
+                aPinHdr = m_reader.ReadByte();
 
                 // Some variants store a 2-byte separator before pin count.
                 if( ( aNumPins < 0 || aNumPins > 500 ) && pinStart + 6 <= m_reader.GetFileSize() )
@@ -898,12 +1002,12 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
                     m_reader.SetOffset( pinStart + 2 );
 
                     int sepPins = m_reader.ReadInt3();
-                    int sepHdr  = m_reader.ReadByte();
+                    int sepHdr = m_reader.ReadByte();
 
                     if( sepPins >= 0 && sepPins <= 500 )
                     {
                         aNumPins = sepPins;
-                        aPinHdr  = sepHdr;
+                        aPinHdr = sepHdr;
                         aUsedPinSeparatorFallback = true;
                     }
                     else
@@ -922,8 +1026,8 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
 
         bool usedTaillessFallback = false;
         bool canonicalPinSeparatorFallback = false;
-        bool readCanonicalPins = readModernExtraAndPins( extraTail, numPins, pinHdrByte,
-                                                        canonicalPinSeparatorFallback );
+        bool readCanonicalPins =
+                readModernExtraAndPins( extraTail, numPins, pinHdrByte, canonicalPinSeparatorFallback );
         usedPinSeparatorFallback = canonicalPinSeparatorFallback;
 
         if( !readCanonicalPins || ( numPins < 0 || numPins > 500 ) )
@@ -944,8 +1048,8 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
             usedTaillessFallback = true;
 
             bool fallbackPinSeparatorFallback = false;
-            bool readFallbackPins = readModernExtraAndPins( extraTail, numPins, pinHdrByte,
-                                                           fallbackPinSeparatorFallback );
+            bool readFallbackPins =
+                    readModernExtraAndPins( extraTail, numPins, pinHdrByte, fallbackPinSeparatorFallback );
 
             if( readFallbackPins && numPins >= 0 && numPins <= 500 )
             {
@@ -966,23 +1070,24 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
         if( s_dumpComponentDetail )
         {
             dumpDetail( wxString::Format( wxT( "pre-pin-hdr end=0x%06zX fieldF=%d fieldG=%d "
-                                               "byte4=%d libId=%d libPath='%s' tailA=%d tailB=%d "
+                                               "byte4=%d rotE4=%d libPath='%s' tailA=%d tailB=%d "
                                                "tailStrA='%s' extraTail='%s' numPins=%d pinHdr=%d "
                                                "taillessFallback=%d pinSeparatorFallback=%d" ),
-                                          m_reader.GetOffset(), fieldF, fieldG, byte4, comp.libId,
-                                          comp.libPath, tailA, tailB, tailStrA, extraTail,
-                                          numPins, pinHdrByte,
-                                          usedTaillessFallback ? 1 : 0,
-                                          usedPinSeparatorFallback ? 1 : 0 ) );
+                                          m_reader.GetOffset(), fieldF, fieldG, byte4, comp.rotationE4, comp.libPath,
+                                          tailA, tailB, tailStrA, extraTail, numPins, pinHdrByte,
+                                          usedTaillessFallback ? 1 : 0, usedPinSeparatorFallback ? 1 : 0 ) );
         }
 
-        simpleModernTail = tailA == 0 && tailB == 0 && tailStrA.IsEmpty()
-                           && extraTail.IsEmpty() && !usedTaillessFallback
-                           && !usedPinSeparatorFallback;
+        simpleModernTail = tailA == 0 && tailB == 0 && tailStrA.IsEmpty() && extraTail.IsEmpty()
+                           && !usedTaillessFallback && !usedPinSeparatorFallback;
+
+        // The resolved extra tail string is the part's datasheet URL when present (empty for parts
+        // that carry none, e.g. plain resistors). Capture it after the fallback settles so a stale
+        // value from the discarded branch is never stored.
+        comp.datasheet = extraTail;
     }
 
-    dumpDetail( wxString::Format( wxT( "pre-pin end=0x%06zX numPins=%d" ),
-                                  m_reader.GetOffset(), numPins ) );
+    dumpDetail( wxString::Format( wxT( "pre-pin end=0x%06zX numPins=%d" ), m_reader.GetOffset(), numPins ) );
 
     if( numPins < 0 || numPins > 500 )
     {
@@ -1069,10 +1174,10 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
             if( aUseCompEnd && !simpleModernTail )
                 break;
 
-            THROW_IO_ERROR( wxString::Format(
-                    _( "DipTrace import: failed to parse pin %d in component at 0x%06zX "
-                       "(offset 0x%06zX): %s" ),
-                    pinIdx, comp.fileOffset, m_reader.GetOffset(), wxString::FromUTF8( e.what() ) ) );
+            THROW_IO_ERROR( wxString::Format( _( "DipTrace import: failed to parse pin %d in component at 0x%06zX "
+                                                 "(offset 0x%06zX): %s" ),
+                                              pinIdx, comp.fileOffset, m_reader.GetOffset(),
+                                              wxString::FromUTF8( e.what() ) ) );
         }
     }
 
@@ -1082,47 +1187,122 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
     // end the shape list and resync through the pattern/ceiling handling below.
     auto readShapePointCountIfHeaderPrefix = [&]( size_t aOffset, int& aPointCount ) -> bool
     {
-        const uint8_t* data     = m_reader.GetData();
+        const uint8_t* data = m_reader.GetData();
         size_t         fileSize = m_reader.GetFileSize();
-        size_t         limit    = std::min( fileSize, aCompEnd );
+        size_t         limit = std::min( fileSize, aCompEnd );
 
         if( aOffset + 17 > limit )
             return false;
 
-        if( data[aOffset + 6] != 0 || data[aOffset + 7] != 0 || data[aOffset + 8] != 0
-            || data[aOffset + 9] != 0 )
+        if( data[aOffset + 6] != 0 || data[aOffset + 7] != 0 || data[aOffset + 8] != 0 || data[aOffset + 9] != 0 )
         {
             return false;
         }
 
-        int width = ( ( data[aOffset + 10] << 24 ) | ( data[aOffset + 11] << 16 )
-                      | ( data[aOffset + 12] << 8 ) | data[aOffset + 13] )
+        int width = ( ( data[aOffset + 10] << 24 ) | ( data[aOffset + 11] << 16 ) | ( data[aOffset + 12] << 8 )
+                      | data[aOffset + 13] )
                     - INT4_BIAS;
 
         if( width < 0 || width > 200000 )
             return false;
 
-        aPointCount = ( ( data[aOffset + 14] << 16 ) | ( data[aOffset + 15] << 8 )
-                        | data[aOffset + 16] )
-                      - INT3_BIAS;
+        aPointCount = ( ( data[aOffset + 14] << 16 ) | ( data[aOffset + 15] << 8 ) | data[aOffset + 16] ) - INT3_BIAS;
         return true;
     };
+
+    // Some components store their marking records (reference, value, name) BEFORE the graphic shapes
+    // rather than after them (e.g. the C4D02120E diode). The shape walk below recognises shapes by
+    // their header, so a leading marking would stop it and drop every shape. Consume any leading
+    // marking records first. Each is 00 00 00 + int3 type (1 name, 2 reference, 3 value) + font
+    // string + text + int4 fontSize + int3 fieldA + int4 coordX + int4 coordY + a fixed 20-byte
+    // trailer. Reference and value markings are kept so their positions are honoured; the walk then
+    // lands on the first real shape. Components whose markings follow the shapes consume nothing here
+    // and are handled by the text-field loop after the shapes, as before.
+    while( m_reader.GetOffset() + 6 < componentCeiling )
+    {
+        size_t         markOff = m_reader.GetOffset();
+        const uint8_t* mdata   = m_reader.GetData();
+
+        if( mdata[markOff] != 0 || mdata[markOff + 1] != 0 || mdata[markOff + 2] != 0 )
+            break;
+
+        int markType = ( ( mdata[markOff + 3] << 16 ) | ( mdata[markOff + 4] << 8 )
+                         | mdata[markOff + 5] )
+                       - INT3_BIAS;
+
+        if( markType < 1 || markType > 3 )
+            break;
+
+        try
+        {
+            DCH_COMPONENT_TEXT mark;
+            m_reader.ReadBytes( mark.flags, 3 );
+            mark.type     = m_reader.ReadInt3();
+            mark.fontName = m_reader.ReadString();
+
+            if( mark.fontName.IsEmpty() || mark.fontName.size() > 64 )
+            {
+                m_reader.SetOffset( markOff );
+                break;
+            }
+
+            mark.text   = m_reader.ReadString();
+            mark.fontSize = m_reader.ReadInt4();
+            mark.fieldA = m_reader.ReadInt3();
+            mark.coordX = m_reader.ReadInt4();
+            mark.coordY = m_reader.ReadInt4();
+
+            // Fixed 20-byte trailer.
+            m_reader.Skip( 2 );
+            m_reader.ReadInt4();
+            m_reader.ReadInt4();
+            m_reader.Skip( 1 );
+            m_reader.ReadInt3();
+            m_reader.ReadInt3();
+            m_reader.ReadInt3();
+
+            if( m_reader.GetOffset() > componentCeiling )
+            {
+                m_reader.SetOffset( markOff );
+                break;
+            }
+
+            if( mark.type == 2 || mark.type == 3 )
+                comp.texts.push_back( mark );
+        }
+        catch( const std::exception& )
+        {
+            m_reader.SetOffset( markOff );
+            break;
+        }
+    }
 
     while( m_reader.GetOffset() < aCompEnd && m_reader.GetOffset() < componentCeiling )
     {
         size_t shapeOffset = m_reader.GetOffset();
         int    shapePointCount = 0;
 
+        if( isFontBearingShapeStart( shapeOffset ) )
+        {
+            try
+            {
+                parseFontBearingShape( comp );
+                continue;
+            }
+            catch( const std::exception& )
+            {
+                break;
+            }
+        }
+
         if( !isShapeStart( shapeOffset ) )
         {
-            if( m_version >= V31_CUTOVER
-                && readShapePointCountIfHeaderPrefix( shapeOffset, shapePointCount )
+            if( m_version >= V31_CUTOVER && readShapePointCountIfHeaderPrefix( shapeOffset, shapePointCount )
                 && ( shapePointCount < 1 || shapePointCount > 100 ) )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "DipTrace import: invalid component shape point count %d at "
-                           "offset 0x%06zX." ),
-                        shapePointCount, shapeOffset ) );
+                THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid component shape point count %d at "
+                                                     "offset 0x%06zX." ),
+                                                  shapePointCount, shapeOffset ) );
             }
 
             // End of the shape list (or a record layout not fully understood). The
@@ -1149,6 +1329,69 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
         {
         }
 
+        // The first marking record's trailer overran the sequential reader, so the loop stops a few
+        // bytes inside the value record rather than on its header. Recover the value position by
+        // scanning a small window back to the value record's 00 00 00 header and reading only up to
+        // its coordinate, without advancing (the footprint reader still starts at the stop offset).
+        // Without the real value position an asymmetric layout like C6 (reference above, value to the
+        // side) would be mis-placed by the symmetric mirror fallback below.
+        {
+            size_t         save = m_reader.GetOffset();
+            const uint8_t* data = m_reader.GetData();
+            size_t         lim = std::min( componentCeiling > 0 ? componentCeiling : m_reader.GetFileSize(),
+                                   m_reader.GetFileSize() );
+            size_t lo = ( save > 24 ) ? save - 24 : 0;
+
+            for( size_t probe = lo; probe + 6 < lim && probe <= save + 4; probe++ )
+            {
+                if( data[probe] != 0 || data[probe + 1] != 0 || data[probe + 2] != 0 )
+                    continue;
+
+                m_reader.SetOffset( probe );
+
+                try
+                {
+                    DCH_COMPONENT_TEXT vt;
+                    m_reader.ReadBytes( vt.flags, 3 );
+                    vt.type = m_reader.ReadInt3();
+
+                    if( vt.type != 2 && vt.type != 3 )
+                        continue;
+
+                    vt.fontName = m_reader.ReadString();
+
+                    if( vt.fontName.IsEmpty() || vt.fontName.size() > 64 )
+                        continue;
+
+                    vt.text = m_reader.ReadString();
+
+                    if( vt.text.IsEmpty() || vt.text.size() > 256 )
+                        continue;
+
+                    vt.fontSize = m_reader.ReadInt4();
+                    vt.fieldA = m_reader.ReadInt3();
+                    vt.coordX = m_reader.ReadInt4();
+                    vt.coordY = m_reader.ReadInt4();
+
+                    bool haveType = false;
+
+                    for( const DCH_COMPONENT_TEXT& t : comp.texts )
+                        haveType = haveType || ( t.type == vt.type );
+
+                    if( !haveType )
+                    {
+                        comp.texts.push_back( vt );
+                        break;
+                    }
+                }
+                catch( const std::exception& )
+                {
+                }
+            }
+
+            m_reader.SetOffset( save );
+        }
+
         parseEmbeddedPattern( comp, aCompEnd );
 
         if( m_reader.GetOffset() < aCompEnd && m_reader.GetOffset() != m_busSectionOffset
@@ -1165,8 +1408,7 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
     {
         if( s_dumpComponentDetail )
         {
-            dumpDetail( wxString::Format( wxT( "pattern parse failed at 0x%06zX: %s" ),
-                                          m_reader.GetOffset(),
+            dumpDetail( wxString::Format( wxT( "pattern parse failed at 0x%06zX: %s" ), m_reader.GetOffset(),
                                           wxString::FromUTF8( e.what() ) ) );
         }
     }
@@ -1177,13 +1419,12 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
     {
         dumpDetail( wxString::Format( wxT( "post-pattern end=0x%06zX pins=%zu shapes=%zu "
                                            "pattern='%s'" ),
-                                      parsedEnd, comp.pins.size(), comp.shapes.size(),
-                                      comp.patternName ) );
+                                      parsedEnd, comp.pins.size(), comp.shapes.size(), comp.patternName ) );
 
         if( aUseCompEnd && parsedEnd < aCompEnd )
         {
-            dumpDetail( wxString::Format( wxT( "tail skipped=%zu bytes to compEnd=0x%06zX" ),
-                                          aCompEnd - parsedEnd, aCompEnd ) );
+            dumpDetail( wxString::Format( wxT( "tail skipped=%zu bytes to compEnd=0x%06zX" ), aCompEnd - parsedEnd,
+                                          aCompEnd ) );
         }
     }
 
@@ -1192,8 +1433,7 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
         m_reader.SetOffset( aCompEnd );
     }
     else if( m_reader.GetOffset() != componentCeiling
-             && ( componentCeiling == m_busSectionOffset
-                  || isComponentHeaderAt( componentCeiling ) ) )
+             && ( componentCeiling == m_busSectionOffset || isComponentHeaderAt( componentCeiling ) ) )
     {
         // The field decoder did not consume exactly to the next component. The
         // boundary is structurally known, so land on it to keep the count-guided
@@ -1205,12 +1445,11 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
 
     if( s_dumpComponents && m_reporter )
     {
-        m_reporter->Report(
-                wxString::Format( wxT( "DipTrace SCH comp @0x%06zX ref='%s' name='%s' "
-                                       "sheet=%d pins=%zu shapes=%zu pattern='%s'" ),
-                                  comp.fileOffset, comp.refdes, comp.compName, comp.sheetIndex,
-                                  comp.pins.size(), comp.shapes.size(), comp.patternName ),
-                RPT_SEVERITY_INFO );
+        m_reporter->Report( wxString::Format( wxT( "DipTrace SCH comp @0x%06zX ref='%s' name='%s' "
+                                                   "sheet=%d pins=%zu shapes=%zu pattern='%s'" ),
+                                              comp.fileOffset, comp.refdes, comp.compName, comp.sheetIndex,
+                                              comp.pins.size(), comp.shapes.size(), comp.patternName ),
+                            RPT_SEVERITY_INFO );
     }
 }
 
@@ -1229,31 +1468,31 @@ void SCH_PARSER::parsePin( int aPinIndex, DCH_COMPONENT& aComp )
             // v22 prefixes the first pin with a lead byte and four int3 header
             // fields; reading the wrong width misaligns every later pin field.
             m_reader.ReadByte();
-            pin.headerA  = m_reader.ReadInt3();
-            pin.headerB  = m_reader.ReadInt3();
-            pin.headerC  = m_reader.ReadInt3();
+            pin.headerA = m_reader.ReadInt3();
+            pin.headerB = m_reader.ReadInt3();
+            pin.headerC = m_reader.ReadInt3();
             pin.typeCode = m_reader.ReadInt3();
         }
         else if( m_version < V31_CUTOVER )
         {
             // Legacy v1/v2 schematic files use a shorter first-pin preamble.
             // Reading 4 int3 fields here misaligns all subsequent pin fields.
-            pin.headerA  = m_reader.ReadInt3();
+            pin.headerA = m_reader.ReadInt3();
             pin.typeCode = m_reader.ReadInt3();
         }
         else
         {
-            pin.headerA  = m_reader.ReadInt3();
-            pin.headerB  = m_reader.ReadInt3();
-            pin.headerC  = m_reader.ReadInt3();
+            pin.headerA = m_reader.ReadInt3();
+            pin.headerB = m_reader.ReadInt3();
+            pin.headerC = m_reader.ReadInt3();
             pin.typeCode = m_reader.ReadInt3();
         }
     }
 
-    pin.x      = m_reader.ReadInt4();
-    pin.y      = m_reader.ReadInt4();
+    pin.x = m_reader.ReadInt4();
+    pin.y = m_reader.ReadInt4();
     pin.length = m_reader.ReadInt4();
-    pin.name   = m_reader.ReadString();
+    pin.name = m_reader.ReadString();
     pin.number = m_reader.ReadString();
 
     pin.netFlagA = m_reader.ReadByte();
@@ -1261,9 +1500,9 @@ void SCH_PARSER::parsePin( int aPinIndex, DCH_COMPONENT& aComp )
 
     pin.labelXOff = m_reader.ReadInt4();
     pin.labelYOff = m_reader.ReadInt4();
-    pin.numXOff   = m_reader.ReadInt4();
-    pin.numYOff   = m_reader.ReadInt4();
-    m_reader.ReadInt3();  // post_a
+    pin.numXOff = m_reader.ReadInt4();
+    pin.numYOff = m_reader.ReadInt4();
+    m_reader.ReadInt3(); // post_a
 
     if( m_version < V31_CUTOVER )
     {
@@ -1278,8 +1517,7 @@ void SCH_PARSER::parsePin( int aPinIndex, DCH_COMPONENT& aComp )
         size_t         midTailStart = m_reader.GetOffset();
         const uint8_t* data = m_reader.GetData();
 
-        if( midTailStart + 5 <= m_reader.GetFileSize()
-            && data[midTailStart] == 0 && data[midTailStart + 1] == 0 )
+        if( midTailStart + 5 <= m_reader.GetFileSize() && data[midTailStart] == 0 && data[midTailStart + 1] == 0 )
         {
             m_reader.Skip( 2 );
             pin.midTailText = m_reader.ReadString();
@@ -1309,6 +1547,21 @@ void SCH_PARSER::parsePin( int aPinIndex, DCH_COMPONENT& aComp )
 void SCH_PARSER::parseShape( DCH_COMPONENT& aComp )
 {
     DCH_SHAPE shape;
+
+    // The shape kind is carried by the int3 pair immediately preceding the all zero shape header
+    // (the previous record's trailer ends with this same pair, so it reads as a leading
+    // discriminator here). The header bytes themselves are all zero, so this leading pair is the
+    // only place the line/arrow/rectangle/obround/polygon type is recorded.
+    size_t headerStart = m_reader.GetOffset();
+
+    if( headerStart >= 6 )
+    {
+        const uint8_t* data = m_reader.GetData();
+        shape.kindCode = ( ( data[headerStart - 6] << 16 ) | ( data[headerStart - 5] << 8 ) | data[headerStart - 4] )
+                         - INT3_BIAS;
+        shape.kindFlag = ( ( data[headerStart - 3] << 16 ) | ( data[headerStart - 2] << 8 ) | data[headerStart - 1] )
+                         - INT3_BIAS;
+    }
 
     m_reader.ReadBytes( shape.flags, 3 );
     shape.shapeField = m_reader.ReadInt3();
@@ -1341,6 +1594,47 @@ void SCH_PARSER::parseShape( DCH_COMPONENT& aComp )
     shape.fontY = m_reader.ReadInt4();
     m_reader.ReadByte();
     m_reader.ReadInt3();
+
+    // The trailing int3 pair is the next record's leading kind discriminator, read above for the
+    // following shape. Consume it here so the reader lands on that next header.
+    m_reader.ReadInt3();
+    m_reader.ReadInt3();
+
+    aComp.shapes.push_back( shape );
+}
+
+
+void SCH_PARSER::parseFontBearingShape( DCH_COMPONENT& aComp )
+{
+    DCH_SHAPE shape;
+    shape.kindCode = 1;
+    shape.kindFlag = 0;
+
+    // Modern component body outlines can store an inline font name before the line-width/point
+    // tuple.  The reference schematic U1 uses this form for the four line edges of its IC body.
+    m_reader.ReadInt3(); // sentinel, validated by isFontBearingShapeStart()
+    shape.shapeField = m_reader.ReadInt3();
+    m_reader.ReadString(); // observed "Tahoma"
+    m_reader.Skip( 2 );    // zero pad
+
+    shape.lineWidth = m_reader.ReadInt4();
+    int numPoints = m_reader.ReadInt3();
+
+    if( numPoints < 1 || numPoints > 100 )
+        return;
+
+    for( int i = 0; i < numPoints; i++ )
+    {
+        int x = m_reader.ReadInt4();
+        int y = m_reader.ReadInt4();
+        shape.points.push_back( VECTOR2I( x, y ) );
+    }
+
+    m_reader.Skip( 2 );
+    shape.fontX = m_reader.ReadInt4();
+    shape.fontY = m_reader.ReadInt4();
+    m_reader.ReadByte();
+    m_reader.ReadInt3();
     m_reader.ReadInt3();
     m_reader.ReadInt3();
 
@@ -1351,19 +1645,16 @@ void SCH_PARSER::parseShape( DCH_COMPONENT& aComp )
 bool SCH_PARSER::parseComponentTextField( DCH_COMPONENT& aComp, size_t aCompEnd )
 {
     size_t         startOffset = m_reader.GetOffset();
-    const uint8_t* data        = m_reader.GetData();
-    size_t         limit       = std::min( aCompEnd > 0 ? aCompEnd : m_reader.GetFileSize(),
-                                           m_reader.GetFileSize() );
+    const uint8_t* data = m_reader.GetData();
+    size_t         limit = std::min( aCompEnd > 0 ? aCompEnd : m_reader.GetFileSize(), m_reader.GetFileSize() );
 
-    if( startOffset + 6 > limit || data[startOffset] != 0 || data[startOffset + 1] != 0
-        || data[startOffset + 2] != 0 )
+    if( startOffset + 6 > limit || data[startOffset] != 0 || data[startOffset + 1] != 0 || data[startOffset + 2] != 0 )
     {
         return false;
     }
 
-    int fieldType = ( ( data[startOffset + 3] << 16 ) | ( data[startOffset + 4] << 8 )
-                      | data[startOffset + 5] )
-                    - INT3_BIAS;
+    int fieldType =
+            ( ( data[startOffset + 3] << 16 ) | ( data[startOffset + 4] << 8 ) | data[startOffset + 5] ) - INT3_BIAS;
 
     if( fieldType < 0 || fieldType > 100 )
         return false;
@@ -1373,27 +1664,27 @@ bool SCH_PARSER::parseComponentTextField( DCH_COMPONENT& aComp, size_t aCompEnd 
     try
     {
         m_reader.ReadBytes( text.flags, 3 );
-        text.type     = m_reader.ReadInt3();
+        text.type = m_reader.ReadInt3();
         text.fontName = m_reader.ReadString();
-        text.text     = m_reader.ReadString();
+        text.text = m_reader.ReadString();
 
         if( text.fontName.IsEmpty() || text.fontName.size() > 128 || text.text.size() > 512 )
             throw std::runtime_error( "invalid component text field string" );
 
         text.fontSize = m_reader.ReadInt4();
-        text.fieldA   = m_reader.ReadInt3();
-        text.coordX   = m_reader.ReadInt4();
-        text.coordY   = m_reader.ReadInt4();
-        text.fieldB   = m_reader.ReadInt4();
-        text.fieldC   = m_reader.ReadInt4();
-        text.flagA    = m_reader.ReadByte();
-        text.flagB    = m_reader.ReadByte();
-        text.fieldD   = m_reader.ReadInt4();
-        text.fieldE   = m_reader.ReadInt4();
-        text.fieldF   = m_reader.ReadInt3();
-        text.fieldG   = m_reader.ReadInt3();
+        text.fieldA = m_reader.ReadInt3();
+        text.coordX = m_reader.ReadInt4();
+        text.coordY = m_reader.ReadInt4();
+        text.fieldB = m_reader.ReadInt4();
+        text.fieldC = m_reader.ReadInt4();
+        text.flagA = m_reader.ReadByte();
+        text.flagB = m_reader.ReadByte();
+        text.fieldD = m_reader.ReadInt4();
+        text.fieldE = m_reader.ReadInt4();
+        text.fieldF = m_reader.ReadInt3();
+        text.fieldG = m_reader.ReadInt3();
         m_reader.ReadBytes( text.flags2, 4 );
-        text.fieldH   = m_reader.ReadInt3();
+        text.fieldH = m_reader.ReadInt3();
 
         if( m_reader.GetOffset() > limit )
             throw std::runtime_error( "component text field overruns component" );
@@ -1531,8 +1822,7 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
         // and swallow whole components. isComponentHeaderAt() is the same structural
         // signature used to enumerate every component, so the nearest match is this
         // record's true end.
-        size_t patternCeiling = std::min( aCompEnd > 0 ? aCompEnd : m_reader.GetFileSize(),
-                                          m_reader.GetFileSize() );
+        size_t patternCeiling = std::min( aCompEnd > 0 ? aCompEnd : m_reader.GetFileSize(), m_reader.GetFileSize() );
 
         for( size_t p = startOffset + 16; p < patternCeiling; p++ )
         {
@@ -1560,15 +1850,14 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
 
         if( m_reader.PeekInt3() != 0 )
         {
-            const uint8_t* data  = m_reader.GetData();
+            const uint8_t* data = m_reader.GetData();
             size_t         limit = patternCeiling;
 
             if( startOffset + 63 <= limit && data[startOffset] == 0 && data[startOffset + 1] == 0 )
             {
                 size_t tailEnd = startOffset + 63;
 
-                if( tailEnd == aCompEnd || tailEnd == m_busSectionOffset
-                    || isComponentHeaderAt( tailEnd ) )
+                if( tailEnd == aCompEnd || tailEnd == m_busSectionOffset || isComponentHeaderAt( tailEnd ) )
                 {
                     m_reader.SetOffset( tailEnd );
                     return;
@@ -1602,12 +1891,11 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
                     continue;
 
                 wxMBConvUTF16BE conv;
-                wxString modelName( reinterpret_cast<const char*>( data + pos + 2 ), conv,
-                                    static_cast<size_t>( charCount ) * 2 );
-                wxString lowerModel = modelName.Lower();
+                wxString        modelName( reinterpret_cast<const char*>( data + pos + 2 ), conv,
+                                           static_cast<size_t>( charCount ) * 2 );
+                wxString        lowerModel = modelName.Lower();
 
-                if( !modelName.IsEmpty()
-                    && !lowerModel.EndsWith( wxT( ".step" ) )
+                if( !modelName.IsEmpty() && !lowerModel.EndsWith( wxT( ".step" ) )
                     && !lowerModel.EndsWith( wxT( ".wrl" ) ) )
                 {
                     continue;
@@ -1618,8 +1906,7 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
                     size_t tailEnd = strEnd + tailSize;
 
                     if( tailEnd <= limit
-                        && ( tailEnd == aCompEnd || tailEnd == m_busSectionOffset
-                             || isComponentHeaderAt( tailEnd ) ) )
+                        && ( tailEnd == aCompEnd || tailEnd == m_busSectionOffset || isComponentHeaderAt( tailEnd ) ) )
                     {
                         m_reader.SetOffset( tailEnd );
                         return;
@@ -1642,10 +1929,9 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
 
             if( count < 0 || count > aMax )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "DipTrace import: invalid embedded pattern %s count %d at "
-                           "offset 0x%06zX." ),
-                        wxString::FromUTF8( aName ), count, startOffset ) );
+                THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid embedded pattern %s count %d at "
+                                                     "offset 0x%06zX." ),
+                                                  wxString::FromUTF8( aName ), count, startOffset ) );
             }
 
             return count;
@@ -1760,7 +2046,7 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
             auto canReadModernPadRecordAt = [&]( size_t aOffset ) -> bool
             {
                 size_t save = m_reader.GetOffset();
-                bool   ok   = false;
+                bool   ok = false;
 
                 try
                 {
@@ -1779,8 +2065,7 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
 
             for( int i = 0; i < padCount; i++ )
             {
-                if( m_reader.GetOffset() >= patternCeiling
-                    || !canReadModernPadRecordAt( m_reader.GetOffset() ) )
+                if( m_reader.GetOffset() >= patternCeiling || !canReadModernPadRecordAt( m_reader.GetOffset() ) )
                 {
                     break;
                 }
@@ -1791,8 +2076,7 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
                 {
                     size_t tailStart = m_reader.GetOffset();
 
-                    if( tailStart + 22 <= patternCeiling
-                        && canReadModernPadRecordAt( tailStart + 22 ) )
+                    if( tailStart + 22 <= patternCeiling && canReadModernPadRecordAt( tailStart + 22 ) )
                     {
                         m_reader.Skip( 22 );
                     }
@@ -1810,8 +2094,7 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
         {
             const uint8_t* data = m_reader.GetData();
 
-            return ( ( data[aOffset] << 16 ) | ( data[aOffset + 1] << 8 ) | data[aOffset + 2] )
-                   - INT3_BIAS;
+            return ( ( data[aOffset] << 16 ) | ( data[aOffset + 1] << 8 ) | data[aOffset + 2] ) - INT3_BIAS;
         };
 
         auto validUtf16StringAt = [&]( size_t aOffset, size_t aLimit, size_t& aEnd ) -> bool
@@ -1845,8 +2128,8 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
         };
 
         size_t modelSectionStart = std::string::npos;
-        size_t modelStringStart  = std::string::npos;
-        size_t patternEnd        = std::string::npos;
+        size_t modelStringStart = std::string::npos;
+        size_t patternEnd = std::string::npos;
         size_t limit = std::min( patternCeiling, m_reader.GetFileSize() );
 
         for( size_t pos = m_reader.GetOffset(); pos + 3 <= limit; pos++ )
@@ -1874,12 +2157,11 @@ void SCH_PARSER::parseEmbeddedPattern( DCH_COMPONENT& aComp, size_t aCompEnd )
                 if( tailEnd > limit )
                     continue;
 
-                if( tailEnd == aCompEnd || tailEnd == m_busSectionOffset
-                    || isComponentHeaderAt( tailEnd ) )
+                if( tailEnd == aCompEnd || tailEnd == m_busSectionOffset || isComponentHeaderAt( tailEnd ) )
                 {
                     modelSectionStart = pos;
-                    modelStringStart  = strStart;
-                    patternEnd        = tailEnd;
+                    modelStringStart = strStart;
+                    patternEnd = tailEnd;
                     break;
                 }
             }
@@ -1914,8 +2196,7 @@ void SCH_PARSER::parseBusSection()
 
     if( busCount < 0 || busCount > 1000 )
     {
-        THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid bus count %d." ),
-                                          busCount ) );
+        THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid bus count %d." ), busCount ) );
     }
 
     for( int i = 0; i < busCount; i++ )
@@ -1928,11 +2209,11 @@ void SCH_PARSER::parseBusSection()
             m_reader.ReadByte();
             m_reader.ReadByte();
 
-            entry.coordX      = m_reader.ReadInt4();
-            entry.coordY      = m_reader.ReadInt4();
-            entry.sheetIndex  = m_reader.ReadInt3();
-            entry.busType     = m_reader.ReadInt3();
-            entry.instanceId  = m_reader.ReadInt3();
+            entry.coordX = m_reader.ReadInt4();
+            entry.coordY = m_reader.ReadInt4();
+            entry.sheetIndex = m_reader.ReadInt3();
+            entry.busType = m_reader.ReadInt3();
+            entry.instanceId = m_reader.ReadInt3();
             entry.signalCount = m_reader.ReadInt3();
 
             int terminator = m_reader.ReadInt3();
@@ -1965,8 +2246,8 @@ void SCH_PARSER::parseBusSection()
 
 void SCH_PARSER::parseNetSection()
 {
-    const uint8_t* data      = m_reader.GetData();
-    size_t         fileSize  = m_reader.GetFileSize();
+    const uint8_t* data = m_reader.GetData();
+    size_t         fileSize = m_reader.GetFileSize();
     size_t         searchEnd = m_tailOffset > 0 ? m_tailOffset : fileSize;
     size_t         searchStart = m_reader.GetOffset();
 
@@ -1985,8 +2266,7 @@ void SCH_PARSER::parseNetSection()
             if( strOff + 3 > searchEnd )
                 continue;
 
-            int n = ( ( data[strOff] << 16 ) | ( data[strOff + 1] << 8 ) | data[strOff + 2] )
-                    - INT3_BIAS;
+            int n = ( ( data[strOff] << 16 ) | ( data[strOff + 1] << 8 ) | data[strOff + 2] ) - INT3_BIAS;
 
             if( n < 1 || n > 200 || strOff + 3 + (size_t) n > fileSize )
                 continue;
@@ -2007,27 +2287,22 @@ void SCH_PARSER::parseNetSection()
             if( !valid )
                 continue;
 
-            wxString name = wxString::From8BitData(
-                    reinterpret_cast<const char*>( data + strOff + 3 ), n );
-            size_t afterStr = strOff + 3 + n;
+            wxString name = wxString::From8BitData( reinterpret_cast<const char*>( data + strOff + 3 ), n );
+            size_t   afterStr = strOff + 3 + n;
 
             DCH_NET_ENTRY entry;
             entry.name = name;
 
             if( afterStr + 11 <= fileSize )
             {
-                entry.coordX =
-                        ( ( data[afterStr] << 24 ) | ( data[afterStr + 1] << 16 )
-                          | ( data[afterStr + 2] << 8 ) | data[afterStr + 3] )
-                        - INT4_BIAS;
-                entry.coordY =
-                        ( ( data[afterStr + 4] << 24 ) | ( data[afterStr + 5] << 16 )
-                          | ( data[afterStr + 6] << 8 ) | data[afterStr + 7] )
-                        - INT4_BIAS;
-                entry.field1 =
-                        ( ( data[afterStr + 8] << 16 ) | ( data[afterStr + 9] << 8 )
-                          | data[afterStr + 10] )
-                        - INT3_BIAS;
+                entry.coordX = ( ( data[afterStr] << 24 ) | ( data[afterStr + 1] << 16 ) | ( data[afterStr + 2] << 8 )
+                                 | data[afterStr + 3] )
+                               - INT4_BIAS;
+                entry.coordY = ( ( data[afterStr + 4] << 24 ) | ( data[afterStr + 5] << 16 )
+                                 | ( data[afterStr + 6] << 8 ) | data[afterStr + 7] )
+                               - INT4_BIAS;
+                entry.field1 = ( ( data[afterStr + 8] << 16 ) | ( data[afterStr + 9] << 8 ) | data[afterStr + 10] )
+                               - INT3_BIAS;
             }
 
             m_nets.push_back( entry );
@@ -2039,7 +2314,7 @@ void SCH_PARSER::parseNetSection()
 
             int n = ( data[strOff] << 8 ) | data[strOff + 1];
 
-            if( n < 1 || n > 200 || strOff + 2 + (size_t)( n * 2 ) > fileSize )
+            if( n < 1 || n > 200 || strOff + 2 + (size_t) ( n * 2 ) > fileSize )
                 continue;
 
             bool valid = true;
@@ -2060,27 +2335,22 @@ void SCH_PARSER::parseNetSection()
                 continue;
 
             wxMBConvUTF16BE conv;
-            wxString        name( reinterpret_cast<const char*>( data + strOff + 2 ), conv,
-                                  static_cast<size_t>( n ) * 2 );
-            size_t          afterStr = strOff + 2 + static_cast<size_t>( n ) * 2;
+            wxString name( reinterpret_cast<const char*>( data + strOff + 2 ), conv, static_cast<size_t>( n ) * 2 );
+            size_t   afterStr = strOff + 2 + static_cast<size_t>( n ) * 2;
 
             DCH_NET_ENTRY entry;
             entry.name = name;
 
             if( afterStr + 11 <= fileSize )
             {
-                entry.coordX =
-                        ( ( data[afterStr] << 24 ) | ( data[afterStr + 1] << 16 )
-                          | ( data[afterStr + 2] << 8 ) | data[afterStr + 3] )
-                        - INT4_BIAS;
-                entry.coordY =
-                        ( ( data[afterStr + 4] << 24 ) | ( data[afterStr + 5] << 16 )
-                          | ( data[afterStr + 6] << 8 ) | data[afterStr + 7] )
-                        - INT4_BIAS;
-                entry.field1 =
-                        ( ( data[afterStr + 8] << 16 ) | ( data[afterStr + 9] << 8 )
-                          | data[afterStr + 10] )
-                        - INT3_BIAS;
+                entry.coordX = ( ( data[afterStr] << 24 ) | ( data[afterStr + 1] << 16 ) | ( data[afterStr + 2] << 8 )
+                                 | data[afterStr + 3] )
+                               - INT4_BIAS;
+                entry.coordY = ( ( data[afterStr + 4] << 24 ) | ( data[afterStr + 5] << 16 )
+                                 | ( data[afterStr + 6] << 8 ) | data[afterStr + 7] )
+                               - INT4_BIAS;
+                entry.field1 = ( ( data[afterStr + 8] << 16 ) | ( data[afterStr + 9] << 8 ) | data[afterStr + 10] )
+                               - INT3_BIAS;
             }
 
             m_nets.push_back( entry );
@@ -2089,13 +2359,31 @@ void SCH_PARSER::parseNetSection()
 }
 
 
-int SCH_PARSER::pinOrientationFromStub( int aStubDx, int aStubDy )
+int SCH_PARSER::pinOrientationFromOffset( int aOffsetX, int aOffsetY, int aHalfWidth, int aHalfHeight )
 {
-    if( aStubDx < 0 )       return 2;  // PIN_LEFT
-    else if( aStubDx > 0 )  return 0;  // PIN_RIGHT
-    else if( aStubDy > 0 )  return 1;  // PIN_UP
-    else if( aStubDy < 0 )  return 3;  // PIN_DOWN
-    return 0;
+    // The stored coordinate is the pin's body-edge anchor, offset from the symbol body center; the
+    // pin extends outward (away from center) to its connection point where wires attach. KiCad
+    // stores m_position at the connection point with the body root at m_position + length toward
+    // the orientation, so the body always sits between the connection point and the center. A pin
+    // on the right edge therefore reads as PIN_LEFT (body to the left of its connection point), and
+    // an above-center pin reads as PIN_DOWN (body below its connection point in KiCad Y-down). A
+    // pin exactly on center defaults to left.
+    if( aOffsetX == 0 && aOffsetY == 0 )
+        return 2; // PIN_LEFT
+
+    // Pick the edge the pin sits on, normalized by the body half-extents. A tall symbol's left-edge
+    // pin can be farther from center in Y than in X, so the raw dominant axis would wrongly read it
+    // as a top or bottom pin; scaling each offset by the opposite half-extent compares which edge
+    // the pin actually reaches.
+    int64_t halfW = aHalfWidth > 0 ? aHalfWidth : 1;
+    int64_t halfH = aHalfHeight > 0 ? aHalfHeight : 1;
+
+    if( std::abs( static_cast<int64_t>( aOffsetX ) ) * halfH >= std::abs( static_cast<int64_t>( aOffsetY ) ) * halfW )
+    {
+        return ( aOffsetX >= 0 ) ? 2 : 0; // right edge -> PIN_LEFT, left edge -> PIN_RIGHT
+    }
+
+    return ( aOffsetY >= 0 ) ? 1 : 3; // KiCad Y down: below center -> PIN_UP, above -> PIN_DOWN
 }
 
 
@@ -2125,7 +2413,7 @@ SCH_SCREEN* SCH_PARSER::getOrCreateSheet( int aSheetIndex )
     VECTOR2I pos( 2540000 + col * 50800000, 2540000 + row * 50800000 );
     VECTOR2I size( 40640000, 30480000 );
 
-    SCH_SHEET*  newSheet  = new SCH_SHEET( m_rootSheet, pos, size );
+    SCH_SHEET*  newSheet = new SCH_SHEET( m_schematic ? &m_schematic->Root() : m_rootSheet, pos, size );
     SCH_SCREEN* newScreen = new SCH_SCREEN( m_schematic );
 
     wxFileName fn( m_fileName );
@@ -2137,24 +2425,359 @@ SCH_SCREEN* SCH_PARSER::getOrCreateSheet( int aSheetIndex )
     newSheet->SetFileName( fn.GetFullName() );
     newSheet->SetName( sheetName );
 
-    m_rootSheet->GetScreen()->Append( newSheet );
+    if( m_schematic && m_rootSheet == &m_schematic->Root() )
+        m_schematic->AddTopLevelSheet( newSheet );
+
     m_sheets[aSheetIndex] = newSheet;
 
     return newScreen;
 }
 
 
+void SCH_PARSER::assignSheetPageNumbers()
+{
+    for( size_t i = 0; i < m_sheets.size(); ++i )
+    {
+        SCH_SHEET* sheet = m_sheets[i];
+
+        if( !sheet )
+            continue;
+
+        if( sheet->IsVirtualRootSheet() )
+            continue;
+
+        wxString pageNumber = wxString::Format( wxT( "%zu" ), i + 1 );
+        SCH_SHEET_PATH path;
+        path.push_back( sheet );
+        path.SetPageNumber( pageNumber );
+
+        if( sheet->GetScreen() )
+            sheet->GetScreen()->SetPageNumber( pageNumber );
+    }
+}
+
+
+void SCH_PARSER::finalizeFlatSheetOrder()
+{
+    if( !m_schematic || !m_rootSheet || m_rootSheet == &m_schematic->Root() )
+    {
+        assignSheetPageNumbers();
+        return;
+    }
+
+    std::vector<SCH_SHEET*> topLevelSheets;
+    topLevelSheets.reserve( m_sheets.size() );
+
+    for( SCH_SHEET* sheet : m_sheets )
+    {
+        if( sheet )
+            topLevelSheets.push_back( sheet );
+    }
+
+    if( !topLevelSheets.empty() )
+        m_schematic->SetTopLevelSheets( topLevelSheets );
+
+    assignSheetPageNumbers();
+}
+
+
+wxString SCH_PARSER::normalizedRefdes( const DCH_COMPONENT& aComp ) const
+{
+    wxString refdes = aComp.refdes;
+
+    if( !aComp.isMultiPart )
+        return refdes;
+
+    int dot = refdes.Find( wxT( '.' ), true );
+
+    if( dot <= 0 || dot >= static_cast<int>( refdes.length() ) - 1 )
+        return refdes;
+
+    long suffix = 0;
+
+    if( refdes.Mid( dot + 1 ).ToLong( &suffix ) && suffix >= 1 )
+        return refdes.Left( dot );
+
+    return refdes;
+}
+
+
+wxString SCH_PARSER::componentSymbolName( const DCH_COMPONENT& aComp ) const
+{
+    wxString base = aComp.isMultiPart ? normalizedRefdes( aComp ) : wxString();
+
+    if( base.IsEmpty() )
+        base = aComp.compName;
+
+    if( base.IsEmpty() )
+        base = normalizedRefdes( aComp );
+
+    if( base.IsEmpty() )
+        base = wxT( "Unknown" );
+
+    if( !aComp.isMultiPart && aComp.rotationE4 != 0 )
+        base += wxString::Format( wxT( "_r%d" ), aComp.rotationE4 );
+
+    return LIB_ID::FixIllegalChars( base, true ).wx_str();
+}
+
+
+static bool libSymbolHasUnit( const LIB_SYMBOL* aLibSymbol, int aUnit )
+{
+    for( const SCH_ITEM& drawItem : aLibSymbol->GetDrawItems() )
+    {
+        if( drawItem.GetUnit() == aUnit )
+            return true;
+    }
+
+    return false;
+}
+
+
+static int dipTraceMm( double aMm )
+{
+    return static_cast<int>( std::lround( aMm * 30000.0 ) );
+}
+
+
+static VECTOR2I dipTraceShapePoint( double aXmm, double aYmm )
+{
+    return VECTOR2I( dipTraceMm( aXmm ), dipTraceMm( -aYmm ) );
+}
+
+
+static DCH_SHAPE makeDipTraceShape( int aKindCode, double aLineWidthMm, std::initializer_list<VECTOR2I> aPoints )
+{
+    DCH_SHAPE shape;
+    shape.kindCode = aKindCode;
+    shape.kindFlag = 0;
+    shape.lineWidth = dipTraceMm( aLineWidthMm );
+    shape.fontX = -20000;
+    shape.fontY = 10000;
+    shape.points.assign( aPoints.begin(), aPoints.end() );
+    return shape;
+}
+
+
+static bool needsStandardThtLedShape( const DCH_COMPONENT& aComp )
+{
+    wxString libPath = aComp.libPath.Lower();
+    wxString compName = aComp.compName.Lower();
+
+    // These library-backed placements carry pins but no local shape stream; synthesize the
+    // component-style graphics observed in the DipTrace XML oracle.
+    return aComp.shapes.empty() && aComp.pins.size() == 2 && libPath.Contains( wxT( "opto_emitters_led_tht" ) )
+           && compName.StartsWith( wxT( "led-3mm round" ) );
+}
+
+
+static std::vector<DCH_SHAPE> standardThtLedShapes()
+{
+    return {
+        makeDipTraceShape( 6, 0.254, { dipTraceShapePoint( -3.175, 1.851 ), dipTraceShapePoint( 3.0416, -4.3656 ) } ),
+        makeDipTraceShape( 1, 0.25, { dipTraceShapePoint( 1.5747, -3.0956 ), dipTraceShapePoint( 1.5747, 0.7144 ) } ),
+        makeDipTraceShape( 3, 0.25, { dipTraceShapePoint( 1.2954, 2.486 ), dipTraceShapePoint( 2.54, 4.3656 ) } ),
+        makeDipTraceShape( 3, 0.25, { dipTraceShapePoint( 2.2479, 1.851 ), dipTraceShapePoint( 3.4925, 3.7306 ) } ),
+        makeDipTraceShape( 1, 0.25, { dipTraceShapePoint( 1.5747, -1.1906 ), dipTraceShapePoint( 3.81, -1.1906 ) } ),
+        makeDipTraceShape( 1, 0.25, { dipTraceShapePoint( -3.81, -1.1906 ), dipTraceShapePoint( -1.6003, -1.1906 ) } ),
+        makeDipTraceShape( 8, 0.25,
+                           { dipTraceShapePoint( -1.6003, 0.7144 ), dipTraceShapePoint( 1.5747, -1.1906 ),
+                             dipTraceShapePoint( -1.6003, -3.0956 ) } ),
+        makeDipTraceShape( 9, 0.25,
+                           { dipTraceShapePoint( 1.5747, -1.1906 ), dipTraceShapePoint( -1.6003, 0.7144 ),
+                             dipTraceShapePoint( -1.6003, -3.0956 ), dipTraceShapePoint( 1.5747, -1.1906 ) } ),
+    };
+}
+
+
+void SCH_PARSER::populateLibSymbolUnit( LIB_SYMBOL* aLibSymbol, const DCH_COMPONENT& aComp, int aUnit )
+{
+    if( !aLibSymbol || libSymbolHasUnit( aLibSymbol, aUnit ) )
+        return;
+
+    bool isPower = aComp.refdes.StartsWith( wxT( "NetPort" ) );
+
+    for( const DCH_PIN& dchPin : aComp.pins )
+    {
+        auto pin = std::make_unique<SCH_PIN>( aLibSymbol );
+
+        pin->SetName( dchPin.name.IsEmpty() ? wxString( wxT( "~" ) ) : dchPin.name );
+        pin->SetNumber( dchPin.number.IsEmpty() ? wxString( wxT( "1" ) ) : dchPin.number );
+
+        // The stored coordinate is the pin's body-edge anchor relative to the symbol center; the
+        // pin extends outward from there by its length to the connection point where wires attach.
+        VECTOR2I anchor( toKiCadCoordX( dchPin.x ), toKiCadCoordY( dchPin.y ) );
+        int      len = toKiCadSize( dchPin.length );
+
+        // The header bbox third and fourth values are the body width and height; halving them gives
+        // the edge distances the pin offset is measured against.
+        int halfW = toKiCadSize( aComp.bboxX2 ) / 2;
+        int halfH = toKiCadSize( aComp.bboxY2 ) / 2;
+        int orient = pinOrientationFromOffset( anchor.x, anchor.y, halfW, halfH );
+
+        // Move the anchor outward by the length to the KiCad connection point (m_position). The
+        // orientation then puts the body root back at the anchor.
+        VECTOR2I connection = anchor;
+
+        switch( orient )
+        {
+        case 0: connection.x -= len; break; // PIN_RIGHT: body right, connection left of anchor
+        case 2: connection.x += len; break; // PIN_LEFT: body left, connection right of anchor
+        case 1: connection.y += len; break; // PIN_UP: body up (Y-), connection below anchor
+        case 3: connection.y -= len; break; // PIN_DOWN: body down (Y+), connection above anchor
+        }
+
+        pin->SetPosition( connection );
+        pin->SetLength( len );
+
+        switch( orient )
+        {
+        case 0: pin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT ); break;
+        case 1: pin->SetOrientation( PIN_ORIENTATION::PIN_UP ); break;
+        case 2: pin->SetOrientation( PIN_ORIENTATION::PIN_LEFT ); break;
+        case 3: pin->SetOrientation( PIN_ORIENTATION::PIN_DOWN ); break;
+        }
+
+        pin->SetType( isPower ? ELECTRICAL_PINTYPE::PT_POWER_IN : ELECTRICAL_PINTYPE::PT_PASSIVE );
+        pin->SetUnit( aUnit );
+        aLibSymbol->AddDrawItem( pin.release() );
+    }
+
+    std::vector<DCH_SHAPE>        fallbackShapes;
+    const std::vector<DCH_SHAPE>* componentShapes = &aComp.shapes;
+
+    if( needsStandardThtLedShape( aComp ) )
+    {
+        fallbackShapes = standardThtLedShapes();
+        componentShapes = &fallbackShapes;
+    }
+
+    for( const DCH_SHAPE& dchShape : *componentShapes )
+    {
+        if( dchShape.points.size() < 2 )
+            continue;
+
+        // A non-positive stored width maps to 0, which KiCad renders at the default symbol line
+        // width, matching how pins (with no stored width) are drawn.
+        int width = toKiCadSize( dchShape.lineWidth );
+
+        // DipTrace marks a rectangle with leading kind code 4; its two points are opposite corners.
+        // This is the stored type, so a diagonal conductor (a two point line on a US resistor) is
+        // never mistaken for a rectangle and an IC body box is always a rectangle.
+        bool isRectangle = dchShape.points.size() == 2 && dchShape.kindCode == 4 && dchShape.kindFlag == 0;
+
+        if( isRectangle )
+        {
+            auto rect = std::make_unique<SCH_SHAPE>( SHAPE_T::RECTANGLE, LAYER_DEVICE, 0, FILL_T::NO_FILL );
+            rect->SetParent( aLibSymbol );
+            rect->SetPosition(
+                    VECTOR2I( toKiCadCoordX( dchShape.points[0].x ), toKiCadCoordY( dchShape.points[0].y ) ) );
+            rect->SetEnd( VECTOR2I( toKiCadCoordX( dchShape.points[1].x ), toKiCadCoordY( dchShape.points[1].y ) ) );
+            rect->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
+            rect->SetUnit( aUnit );
+            aLibSymbol->AddDrawItem( rect.release() );
+
+            continue;
+        }
+
+        // DipTrace marks a circle or ellipse (an "obround") with leading kind code 6; its two points
+        // are opposite corners of the bounding box. A transistor's enclosing circle is stored this
+        // way; without this branch it falls through to a two point polyline and draws as a slash.
+        // KiCad has no ellipse, so a square box is a circle and a rectangular one a circle of the
+        // average radius.
+        bool isEllipse = dchShape.points.size() == 2 && dchShape.kindCode == 6 && dchShape.kindFlag == 0;
+
+        if( isEllipse )
+        {
+            VECTOR2I p0( toKiCadCoordX( dchShape.points[0].x ), toKiCadCoordY( dchShape.points[0].y ) );
+            VECTOR2I p1( toKiCadCoordX( dchShape.points[1].x ), toKiCadCoordY( dchShape.points[1].y ) );
+            VECTOR2I center( ( p0.x + p1.x ) / 2, ( p0.y + p1.y ) / 2 );
+            int      radius = ( std::abs( p1.x - p0.x ) + std::abs( p1.y - p0.y ) ) / 4;
+
+            auto circle = std::make_unique<SCH_SHAPE>( SHAPE_T::CIRCLE, LAYER_DEVICE, 0, FILL_T::NO_FILL );
+            circle->SetParent( aLibSymbol );
+            circle->SetCenter( center );
+            circle->SetEnd( VECTOR2I( center.x + radius, center.y ) );
+            circle->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
+            circle->SetUnit( aUnit );
+            aLibSymbol->AddDrawItem( circle.release() );
+
+            continue;
+        }
+
+        // DipTrace marks an arc with leading kind code 2; it stores three points (start, a point on
+        // the arc, end). An inductor's winding humps are arcs stored this way; without this branch
+        // they fall through to a straight two-segment polyline instead of a curve.
+        bool isArc = dchShape.points.size() == 3 && dchShape.kindCode == 2 && dchShape.kindFlag == 0;
+
+        if( isArc )
+        {
+            VECTOR2I start( toKiCadCoordX( dchShape.points[0].x ), toKiCadCoordY( dchShape.points[0].y ) );
+            VECTOR2I mid( toKiCadCoordX( dchShape.points[1].x ), toKiCadCoordY( dchShape.points[1].y ) );
+            VECTOR2I end( toKiCadCoordX( dchShape.points[2].x ), toKiCadCoordY( dchShape.points[2].y ) );
+
+            auto arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, LAYER_DEVICE, 0, FILL_T::NO_FILL );
+            arc->SetParent( aLibSymbol );
+            arc->SetArcGeometry( start, mid, end );
+            arc->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
+            arc->SetUnit( aUnit );
+            aLibSymbol->AddDrawItem( arc.release() );
+
+            continue;
+        }
+
+        bool isFilledPolygon = dchShape.points.size() >= 3 && dchShape.kindCode == 8 && dchShape.kindFlag == 0;
+
+        auto poly = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, LAYER_DEVICE, 0,
+                                                 isFilledPolygon ? FILL_T::FILLED_SHAPE : FILL_T::NO_FILL );
+        poly->SetParent( aLibSymbol );
+
+        for( const VECTOR2I& pt : dchShape.points )
+            poly->AddPoint( VECTOR2I( toKiCadCoordX( pt.x ), toKiCadCoordY( pt.y ) ) );
+
+        poly->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
+        poly->SetUnit( aUnit );
+        aLibSymbol->AddDrawItem( poly.release() );
+
+        if( dchShape.kindCode == 3 && dchShape.kindFlag == 0 && dchShape.points.size() == 2 )
+        {
+            VECTOR2I start( toKiCadCoordX( dchShape.points[0].x ), toKiCadCoordY( dchShape.points[0].y ) );
+            VECTOR2I end( toKiCadCoordX( dchShape.points[1].x ), toKiCadCoordY( dchShape.points[1].y ) );
+            double   dx = static_cast<double>( end.x - start.x );
+            double   dy = static_cast<double>( end.y - start.y );
+            double   len = std::sqrt( dx * dx + dy * dy );
+
+            if( len > 0.0 )
+            {
+                double unitX = dx / len;
+                double unitY = dy / len;
+                double arrowLength =
+                        std::min( len / 2.0, static_cast<double>( std::max( width * 4, schIUScale.MilsToIU( 35 ) ) ) );
+                double halfWidth = arrowLength / 2.0;
+                double baseX = static_cast<double>( end.x ) - unitX * arrowLength;
+                double baseY = static_cast<double>( end.y ) - unitY * arrowLength;
+                double perpX = -unitY;
+                double perpY = unitX;
+
+                auto arrow = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, LAYER_DEVICE, 0, FILL_T::NO_FILL );
+                arrow->SetParent( aLibSymbol );
+                arrow->AddPoint( VECTOR2I( static_cast<int>( std::lround( baseX + perpX * halfWidth ) ),
+                                           static_cast<int>( std::lround( baseY + perpY * halfWidth ) ) ) );
+                arrow->AddPoint( end );
+                arrow->AddPoint( VECTOR2I( static_cast<int>( std::lround( baseX - perpX * halfWidth ) ),
+                                           static_cast<int>( std::lround( baseY - perpY * halfWidth ) ) ) );
+                arrow->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
+                arrow->SetUnit( aUnit );
+                aLibSymbol->AddDrawItem( arrow.release() );
+            }
+        }
+    }
+}
+
+
 LIB_SYMBOL* SCH_PARSER::getOrCreateLibSymbol( const DCH_COMPONENT& aComp, int aUnit )
 {
-    wxString symName = aComp.compName;
-
-    if( symName.IsEmpty() )
-        symName = aComp.refdes;
-
-    if( symName.IsEmpty() )
-        symName = wxT( "Unknown" );
-
-    symName = LIB_ID::FixIllegalChars( symName, true ).wx_str();
+    wxString symName = componentSymbolName( aComp );
 
     auto it = m_libSymbols.find( symName );
 
@@ -2163,13 +2786,14 @@ LIB_SYMBOL* SCH_PARSER::getOrCreateLibSymbol( const DCH_COMPONENT& aComp, int aU
         LIB_SYMBOL* existing = it->second.get();
 
         if( aUnit > existing->GetUnitCount() )
-            existing->SetUnitCount( aUnit, true );
+            existing->SetUnitCount( aUnit, false );
 
+        populateLibSymbolUnit( existing, aComp, aUnit );
         return existing;
     }
 
     auto libSymbol = std::make_unique<LIB_SYMBOL>( symName );
-    libSymbol->SetUnitCount( aUnit, true );
+    libSymbol->SetUnitCount( aUnit, false );
 
     if( !aComp.patternName.IsEmpty() )
         libSymbol->GetFootprintField().SetText( aComp.patternName );
@@ -2179,53 +2803,13 @@ LIB_SYMBOL* SCH_PARSER::getOrCreateLibSymbol( const DCH_COMPONENT& aComp, int aU
     if( isPower )
         libSymbol->SetGlobalPower();
 
-    for( const DCH_PIN& dchPin : aComp.pins )
-    {
-        auto pin = std::make_unique<SCH_PIN>( libSymbol.get() );
+    // DipTrace stores pin name visibility as a per-pin flag (the second flag byte after the pin
+    // name and number). It is uniform across a component's pins in practice, so drive the symbol's
+    // show-pin-names switch from it: ICs show their pin names, passives keep them hidden.
+    if( !aComp.pins.empty() )
+        libSymbol->SetShowPinNames( aComp.pins.front().netFlagB != 0 );
 
-        pin->SetName( dchPin.name.IsEmpty() ? wxString( wxT( "~" ) ) : dchPin.name );
-        pin->SetNumber( dchPin.number.IsEmpty() ? wxString( wxT( "1" ) ) : dchPin.number );
-        pin->SetPosition( VECTOR2I( toKiCadCoordX( dchPin.x ),
-                                    toKiCadCoordY( dchPin.y ) ) );
-        pin->SetLength( static_cast<int>( static_cast<int64_t>( abs( dchPin.length ) ) * 100 / 3 ) );
-
-        int orient = pinOrientationFromStub( dchPin.stubDx, dchPin.stubDy );
-
-        switch( orient )
-        {
-        case 0: pin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT ); break;
-        case 1: pin->SetOrientation( PIN_ORIENTATION::PIN_UP );    break;
-        case 2: pin->SetOrientation( PIN_ORIENTATION::PIN_LEFT );  break;
-        case 3: pin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );  break;
-        }
-
-        pin->SetType( isPower ? ELECTRICAL_PINTYPE::PT_POWER_IN
-                               : ELECTRICAL_PINTYPE::PT_PASSIVE );
-        pin->SetUnit( aUnit );
-        libSymbol->AddDrawItem( pin.release() );
-    }
-
-    for( const DCH_SHAPE& dchShape : aComp.shapes )
-    {
-        if( dchShape.points.size() < 2 )
-            continue;
-
-        auto poly = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, LAYER_DEVICE, 0,
-                                                   FILL_T::NO_FILL );
-        poly->SetParent( libSymbol.get() );
-
-        for( const VECTOR2I& pt : dchShape.points )
-            poly->AddPoint( VECTOR2I( toKiCadCoordX( pt.x ), toKiCadCoordY( pt.y ) ) );
-
-        int width = static_cast<int>( static_cast<int64_t>( dchShape.lineWidth ) * 100 / 3 );
-
-        if( width <= 0 )
-            width = 1;
-
-        poly->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
-        poly->SetUnit( aUnit );
-        libSymbol->AddDrawItem( poly.release() );
-    }
+    populateLibSymbolUnit( libSymbol.get(), aComp, aUnit );
 
     LIB_SYMBOL* rawPtr = libSymbol.get();
     m_libSymbols[symName] = std::move( libSymbol );
@@ -2238,7 +2822,7 @@ void SCH_PARSER::buildWirePointSheets()
     m_wirePointSheets.clear();
     m_pointPartSheets.clear();
 
-    std::map<int, std::map<int, int>> partSheetVotes;   // partId -> sheet -> count
+    std::map<int, std::map<int, int>> partSheetVotes; // partId -> sheet -> count
 
     for( const DCH_WIRE& wire : m_wires )
     {
@@ -2248,7 +2832,10 @@ void SCH_PARSER::buildWirePointSheets()
             sheetIdx = 0;
 
         for( const VECTOR2I& pt : wire.points )
-            m_wirePointSheets[{ pt.x, pt.y }].insert( sheetIdx );
+        {
+            VECTOR2I p = applyPageOffset( pt );
+            m_wirePointSheets[{ p.x, p.y }].insert( sheetIdx );
+        }
 
         // The two endpoints carry the part each end connects to (object1 at the first point,
         // object2 at the last); record them with the sheet for exact part-id recovery.
@@ -2256,14 +2843,14 @@ void SCH_PARSER::buildWirePointSheets()
         {
             if( wire.object1 >= 0 )
             {
-                const VECTOR2I& a = wire.points.front();
+                VECTOR2I a = applyPageOffset( wire.points.front() );
                 m_pointPartSheets[{ a.x, a.y }].emplace_back( wire.object1, sheetIdx );
                 partSheetVotes[wire.object1][sheetIdx]++;
             }
 
             if( wire.object2 >= 0 )
             {
-                const VECTOR2I& b = wire.points.back();
+                VECTOR2I b = applyPageOffset( wire.points.back() );
                 m_pointPartSheets[{ b.x, b.y }].emplace_back( wire.object2, sheetIdx );
                 partSheetVotes[wire.object2][sheetIdx]++;
             }
@@ -2294,7 +2881,7 @@ void SCH_PARSER::buildWirePointSheets()
 
 bool SCH_PARSER::isComponentHeaderAt( size_t aOffset ) const
 {
-    const uint8_t* data     = m_reader.GetData();
+    const uint8_t* data = m_reader.GetData();
     size_t         fileSize = m_reader.GetFileSize();
 
     if( aOffset + 16 > fileSize )
@@ -2307,8 +2894,7 @@ bool SCH_PARSER::isComponentHeaderAt( size_t aOffset ) const
     for( int i = 0; i < 4; i++ )
     {
         size_t   p = aOffset + static_cast<size_t>( i ) * 4;
-        uint32_t raw = ( static_cast<uint32_t>( data[p] ) << 24 )
-                       | ( static_cast<uint32_t>( data[p + 1] ) << 16 )
+        uint32_t raw = ( static_cast<uint32_t>( data[p] ) << 24 ) | ( static_cast<uint32_t>( data[p + 1] ) << 16 )
                        | ( static_cast<uint32_t>( data[p + 2] ) << 8 ) | data[p + 3];
         bbox[i] = static_cast<int>( static_cast<int64_t>( raw ) - INT4_BIAS );
 
@@ -2322,7 +2908,7 @@ bool SCH_PARSER::isComponentHeaderAt( size_t aOffset ) const
 
     for( int si = 0; si < 5; si++ )
     {
-        int charCount = 0;
+        int    charCount = 0;
         size_t dataStart = 0;
         bool   ascii = ( m_version < SCHEMATIC_UTF16_STRING_VERSION );
 
@@ -2352,18 +2938,16 @@ bool SCH_PARSER::isComponentHeaderAt( size_t aOffset ) const
         if( charCount < 0 || charCount > 64 )
             return false;
 
-        size_t byteCount = ascii ? static_cast<size_t>( charCount )
-                                 : static_cast<size_t>( charCount ) * 2;
+        size_t byteCount = ascii ? static_cast<size_t>( charCount ) : static_cast<size_t>( charCount ) * 2;
 
         if( dataStart + byteCount > fileSize )
             return false;
 
         for( int k = 0; k < charCount; k++ )
         {
-            unsigned ch = ascii
-                                  ? data[dataStart + k]
-                                  : ( ( data[dataStart + static_cast<size_t>( k ) * 2] << 8 )
-                                      | data[dataStart + static_cast<size_t>( k ) * 2 + 1] );
+            unsigned ch = ascii ? data[dataStart + k]
+                                : ( ( data[dataStart + static_cast<size_t>( k ) * 2] << 8 )
+                                    | data[dataStart + static_cast<size_t>( k ) * 2 + 1] );
 
             if( ch < 0x20 )
                 return false;
@@ -2413,7 +2997,7 @@ int SCH_PARSER::resolveSheetTally( const std::map<std::pair<int, int>, int>& aTa
 
     // First choice: a top-tally part id strictly greater than the last assigned (monotonic; the
     // file stores components in part-id order, which disambiguates identical duplicate sheets).
-    for( const auto& [ps, count] : aTally )   // std::map iterates by ascending part id
+    for( const auto& [ps, count] : aTally ) // std::map iterates by ascending part id
     {
         if( count == bestCount && ps.first > m_lastSymbolPartId )
         {
@@ -2449,7 +3033,7 @@ int SCH_PARSER::sheetForComponentPins( const std::vector<VECTOR2I>& aConnectionP
         if( it == m_pointPartSheets.end() )
             continue;
 
-        std::set<std::pair<int, int>> seenHere;   // count each (part, sheet) once per point
+        std::set<std::pair<int, int>> seenHere; // count each (part, sheet) once per point
 
         for( const std::pair<int, int>& ps : it->second )
             if( seenHere.insert( ps ).second )
@@ -2506,25 +3090,43 @@ void SCH_PARSER::createSymbolInstance( const DCH_COMPONENT& aComp, SCH_SCREEN* a
         return;
 
     // DipTrace net ports (auto_net_ports library) are connection markers, not real symbols; they
-    // are imported as global net labels by createNetLabels(), so skip them here to avoid drawing a
-    // redundant symbol on top of the label.
+    // are imported as global net labels by createNetPortLabels(), so skip them here to avoid
+    // drawing a redundant symbol on top of the label.
     if( aComp.libPath.Contains( wxT( "auto_net_ports" ) ) )
         return;
 
-    int unit = 1;
+    wxString refdes = normalizedRefdes( aComp );
+    int      unit = 1;
+    bool     explicitUnit = false;
 
-    if( !aComp.refdes.IsEmpty() )
+    if( refdes != aComp.refdes )
     {
-        auto it = m_refdesUnitMap.find( aComp.refdes );
+        long suffix = 0;
 
-        if( it != m_refdesUnitMap.end() )
+        if( aComp.refdes.Mid( refdes.length() + 1 ).ToLong( &suffix ) && suffix >= 1 )
+        {
+            unit = static_cast<int>( suffix ) + 1;
+            explicitUnit = true;
+        }
+    }
+
+    if( !refdes.IsEmpty() )
+    {
+        auto it = m_refdesUnitMap.find( refdes );
+
+        if( explicitUnit )
+        {
+            if( it == m_refdesUnitMap.end() || unit > it->second )
+                m_refdesUnitMap[refdes] = unit;
+        }
+        else if( it != m_refdesUnitMap.end() )
         {
             unit = it->second + 1;
             it->second = unit;
         }
         else
         {
-            m_refdesUnitMap[aComp.refdes] = 1;
+            m_refdesUnitMap[refdes] = unit;
         }
     }
 
@@ -2533,26 +3135,31 @@ void SCH_PARSER::createSymbolInstance( const DCH_COMPONENT& aComp, SCH_SCREEN* a
     if( !libSym )
         return;
 
-    wxString symName = LIB_ID::FixIllegalChars(
-                               aComp.compName.IsEmpty() ? aComp.refdes : aComp.compName, true )
-                               .wx_str();
+    wxString symName = componentSymbolName( aComp );
 
     LIB_ID libId( getLibName(), symName );
 
     // The header bbox is [centerX, centerY, width, height]; the first pair is the placement point.
-    VECTOR2I pos( toKiCadCoordX( aComp.bboxX1 ), toKiCadCoordY( aComp.bboxY1 ) );
+    // Offset by the page half-size so the origin-centered DipTrace placement lands on the page.
+    VECTOR2I pos = applyPageOffset( VECTOR2I( toKiCadCoordX( aComp.bboxX1 ), toKiCadCoordY( aComp.bboxY1 ) ) );
 
-    SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSym, libId, &m_schematic->CurrentSheet(), unit, 0,
-                                          pos );
+    SCH_SYMBOL* symbol = new SCH_SYMBOL( *libSym, libId, &m_schematic->CurrentSheet(), unit, 0, pos );
 
     symbol->SetLibSymbol( new LIB_SYMBOL( *libSym ) );
 
-    if( !aComp.refdes.IsEmpty() )
+    m_placedSymbolsByLibName[symName].push_back( symbol );
+
+    if( !refdes.IsEmpty() )
     {
         SCH_FIELD* refField = symbol->GetField( FIELD_T::REFERENCE );
 
         if( refField )
-            refField->SetText( aComp.refdes );
+            refField->SetText( refdes );
+
+        // The constructor seeds the instance with the unannotated prefix ("U?"); overwrite it with
+        // the real reference so the per-sheet instances generated after the hierarchy is built copy
+        // the annotated value rather than the placeholder.
+        symbol->SetRef( &m_schematic->CurrentSheet(), refdes );
     }
 
     if( !aComp.value.IsEmpty() )
@@ -2574,19 +3181,181 @@ void SCH_PARSER::createSymbolInstance( const DCH_COMPONENT& aComp, SCH_SCREEN* a
             valField->SetText( aComp.compName );
     }
 
-    // DipTrace stores no per-component sheet field; recover it from connectivity. The header bbox
-    // is [centerX, centerY, width, height]; each pin's connection point (where a wire ends) is the
-    // pin coordinate offset from that center, extended outward by the pin length along its dominant
-    // axis. Matching those connection points against the decoded wire geometry yields the owning
-    // sheet without needing the component rotation (which is not parsed). Falls back to the supplied
-    // screen when no pin coincides with a wire.
-    VECTOR2I              center( toKiCadCoordX( aComp.bboxX1 ), toKiCadCoordY( aComp.bboxY1 ) );
+    // Import the remaining part data DipTrace stores per placement. These are metadata DipTrace
+    // keeps hidden ("Common"), so they are added invisibly and surface in the symbol properties
+    // rather than cluttering the canvas. Net-port pseudo-symbols carry none of this.
+    if( !aComp.refdes.StartsWith( wxT( "NetPort" ) ) )
+    {
+        if( !aComp.datasheet.IsEmpty() )
+        {
+            if( SCH_FIELD* dsField = symbol->GetField( FIELD_T::DATASHEET ) )
+                dsField->SetText( aComp.datasheet );
+        }
+
+        // DipTrace shows ICs by their part name rather than a value; keep it as a field so the
+        // name (e.g. AD7190BRUZ) is preserved even when KiCad displays the empty value.
+        if( !aComp.compName.IsEmpty() && !symbol->GetField( wxT( "Name" ) ) )
+        {
+            SCH_FIELD nameField( symbol, FIELD_T::USER, wxT( "Name" ) );
+            nameField.SetText( aComp.compName );
+            nameField.SetVisible( false );
+            symbol->AddField( nameField );
+        }
+
+        for( const std::pair<wxString, wxString>& extra : aComp.additionalFields )
+        {
+            if( extra.first.IsEmpty() || symbol->GetField( extra.first ) )
+                continue;
+
+            SCH_FIELD userField( symbol, FIELD_T::USER, extra.first );
+            userField.SetText( extra.second );
+            userField.SetVisible( false );
+            symbol->AddField( userField );
+        }
+    }
+
+    // Position the reference and value fields from the stored per-instance text records. Each record
+    // carries a field type (2 = reference, 3 = value) and an offset from the symbol origin, in the
+    // same screen-down coordinate convention as the placement. Records without a position bearing
+    // type are left for the auto-placement fallback below.
+    bool     refPositioned = false;
+    bool     valuePositioned = false;
+    VECTOR2I refFieldOffset;
+    VECTOR2I valueFieldOffset;
+
+    for( const DCH_COMPONENT_TEXT& txt : aComp.texts )
+    {
+        SCH_FIELD* field = nullptr;
+
+        if( txt.type == 2 )
+            field = symbol->GetField( FIELD_T::REFERENCE );
+        else if( txt.type == 3 )
+            field = symbol->GetField( FIELD_T::VALUE );
+
+        if( !field )
+            continue;
+
+        // A marking at offset zero is DipTrace's "Common" auto-layout placeholder, not an intended
+        // position (the .dchxml shows Align="Common" X="0" Y="0" for these). Honoring it stacks the
+        // reference and value on the symbol origin, so leave such records for the fallback below.
+        if( txt.coordX == 0 && txt.coordY == 0 )
+            continue;
+
+        VECTOR2I off( toKiCadCoordX( txt.coordX ), toKiCadCoordY( txt.coordY ) );
+        field->SetPosition( pos + off );
+
+        if( txt.type == 2 )
+        {
+            refPositioned = true;
+            refFieldOffset = off;
+        }
+        else if( txt.type == 3 )
+        {
+            valuePositioned = true;
+            valueFieldOffset = off;
+        }
+    }
+
+    // A two-terminal part keeps its reference and value symmetric about the body center, and
+    // DipTrace stores a record only for the marking it actually placed. The binary confirms the
+    // missing partner sits at the negated X of the stored one at the same Y (e.g. the cap reference
+    // at the left edge pairs with the value at the right edge). Mirror it across the origin so the
+    // two markings do not collapse onto the body.
+    if( refPositioned != valuePositioned )
+    {
+        if( refPositioned )
+        {
+            if( SCH_FIELD* valField = symbol->GetField( FIELD_T::VALUE ) )
+                valField->SetPosition( pos + VECTOR2I( -refFieldOffset.x, refFieldOffset.y ) );
+        }
+        else if( SCH_FIELD* refField = symbol->GetField( FIELD_T::REFERENCE ) )
+        {
+            refField->SetPosition( pos + VECTOR2I( -valueFieldOffset.x, valueFieldOffset.y ) );
+        }
+    }
+
+    // When the source stored no field positions (common markings at the symbol origin), the
+    // reference and value would otherwise stack on top of each other. Offset them above and below
+    // the symbol body so they do not overlap, matching the source rendering intent. AutoplaceFields
+    // is avoided here because it depends on the eeschema kiface settings, which the headless import
+    // path does not guarantee.
+    if( !refPositioned && !valuePositioned )
+    {
+        BOX2I bodyBox = libSym->GetBodyBoundingBox( unit, 0, false, false );
+        int   margin = schIUScale.MilsToIU( 40 );
+
+        // DipTrace bakes the placement rotation into the stored geometry rather than recording an
+        // angle, so a rotated symbol is detectable only by its body being taller than it is wide.
+        // Stacking the reference above and the value below works for a wide body but overlaps both
+        // fields onto a tall one (e.g. a vertical 0805 cap), so split them to the sides instead.
+        VECTOR2I refOffset;
+        VECTOR2I valueOffset;
+
+        if( bodyBox.GetHeight() > bodyBox.GetWidth() )
+        {
+            refOffset = VECTOR2I( bodyBox.GetLeft() - margin, 0 );
+            valueOffset = VECTOR2I( bodyBox.GetRight() + margin, 0 );
+        }
+        else
+        {
+            refOffset = VECTOR2I( 0, bodyBox.GetTop() - margin );
+            valueOffset = VECTOR2I( 0, bodyBox.GetBottom() + margin );
+        }
+
+        if( SCH_FIELD* refField = symbol->GetField( FIELD_T::REFERENCE ) )
+        {
+            refField->SetPosition( pos + refOffset );
+
+            if( bodyBox.GetHeight() > bodyBox.GetWidth() )
+                refField->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        }
+
+        if( SCH_FIELD* valField = symbol->GetField( FIELD_T::VALUE ) )
+        {
+            valField->SetPosition( pos + valueOffset );
+
+            if( bodyBox.GetHeight() > bodyBox.GetWidth() )
+                valField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        }
+    }
+
+    // DipTrace rotates a marking's text with the symbol body, so a 90 or 270 degree placement reads
+    // its reference and value vertically. Only the text angle is derived here (from the binary
+    // placement rotation); the position comes from the marking record, so no clearance distance is
+    // invented. DipTrace centres every marking (Horz="Center" Vert="Center"), so centre the justify
+    // too; the no-record fallback above side-justifies for horizontal text, which shifts vertical
+    // text along its length and mis-aligns a rotated part like R14-R20.
+    if( aComp.rotationE4 == 15708 || aComp.rotationE4 == 47124 )
+    {
+        for( FIELD_T fieldId : { FIELD_T::REFERENCE, FIELD_T::VALUE } )
+        {
+            if( SCH_FIELD* field = symbol->GetField( fieldId ) )
+            {
+                field->SetTextAngle( ANGLE_VERTICAL );
+                field->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
+                field->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+            }
+        }
+    }
+
+    // DipTrace .dch stores no decodable per-component sheet field (verified across the whole record
+    // against the .dchxml truth), so the sheet is recovered from the wire connectivity, which is the
+    // source DipTrace itself relies on. Every wire endpoint carries its part id and sheet, so once the
+    // full wire walk runs nearly every part is covered. The header bbox is [centerX, centerY, width,
+    // height]; each pin's connection point (where a wire ends) is the pin coordinate offset from that
+    // center, extended outward by the pin length along its dominant axis. Matching those connection
+    // points against the decoded wire geometry yields the owning sheet without needing the component
+    // rotation (which is not parsed). Falls back to the supplied screen when no pin coincides with a
+    // wire.
+    // Match connection points against the wire geometry, which is offset the same way, so use the
+    // offset center here too.
+    VECTOR2I center = applyPageOffset( VECTOR2I( toKiCadCoordX( aComp.bboxX1 ), toKiCadCoordY( aComp.bboxY1 ) ) );
     std::vector<VECTOR2I> connectionPoints;
 
     for( const DCH_PIN& dchPin : aComp.pins )
     {
         VECTOR2I off( toKiCadCoordX( dchPin.x ), toKiCadCoordY( dchPin.y ) );
-        int      len = static_cast<int>( static_cast<int64_t>( std::abs( dchPin.length ) ) * 100 / 3 );
+        int      len = toKiCadSize( dchPin.length );
         VECTOR2I dir( 0, 0 );
 
         if( std::abs( off.x ) >= std::abs( off.y ) )
@@ -2636,22 +3405,144 @@ void SCH_PARSER::createSymbolInstance( const DCH_COMPONENT& aComp, SCH_SCREEN* a
 }
 
 
-void SCH_PARSER::createNetLabels()
+void SCH_PARSER::createNetPortLabels()
 {
-    // Labels are derived from the net/wire section (one per net per sheet, anchored on a wire),
-    // which carries reliable positions and sheet membership. The legacy net-name marker scan
-    // (m_nets) yields only a constant placeholder position, so it is not used for placement.
-    for( const DCH_NET_LABEL& net : m_netLabels )
+    m_netPortNames.clear();
+    m_netPortLabelCount = 0;
+
+    // The part-aware sheet tally tracks the last assigned part id to disambiguate duplicate sheets
+    // in file order. Net ports are a separate pass over their own objects, so reset the running id
+    // rather than inheriting the last symbol's, keeping port resolution independent and ordered.
+    m_lastSymbolPartId = -1;
+
+    for( const DCH_COMPONENT& comp : m_components )
     {
-        if( net.name.IsEmpty() )
+        if( !comp.libPath.Contains( wxT( "auto_net_ports" ) ) || comp.compName.IsEmpty() )
             continue;
 
-        SCH_SCREEN* screen = getOrCreateSheet( net.sheetIndex );
+        // The port's component name is its net name; record it for diagnostics and so any future
+        // consumer can tell which nets carry an explicit, labelled port object.
+        m_netPortNames.insert( comp.compName );
 
-        SCH_GLOBALLABEL* label = new SCH_GLOBALLABEL( net.pos, net.name );
+        VECTOR2I pos = applyPageOffset( VECTOR2I( toKiCadCoordX( comp.bboxX1 ), toKiCadCoordY( comp.bboxY1 ) ) );
+
+        // Resolve the port's sheet from its single pin connection point against the wire geometry,
+        // falling back to its file-order part id and that part's wire-derived sheet (same recovery
+        // the symbols use), since DipTrace stores no per-component sheet field.
+        std::vector<VECTOR2I> connectionPoints;
+        VECTOR2I              firstPinDir( 0, 0 );
+        bool                  havePin = false;
+
+        for( const DCH_PIN& dchPin : comp.pins )
+        {
+            VECTOR2I off( toKiCadCoordX( dchPin.x ), toKiCadCoordY( dchPin.y ) );
+            int      len = toKiCadSize( dchPin.length );
+            VECTOR2I dir( 0, 0 );
+
+            if( std::abs( off.x ) >= std::abs( off.y ) )
+                dir.x = ( off.x >= 0 ) ? 1 : -1;
+            else
+                dir.y = ( off.y >= 0 ) ? 1 : -1;
+
+            connectionPoints.emplace_back( pos.x + off.x + dir.x * len, pos.y + off.y + dir.y * len );
+
+            if( !havePin )
+            {
+                firstPinDir = dir;
+                havePin = true;
+            }
+        }
+
+        // Resolve the port's sheet from its pin connection point matched against the decoded wire
+        // geometry. Plain position voting ties when the same coordinate carries wires on more than
+        // one sheet (DipTrace centres every sheet on the same origin), which sent one of the four
+        // GND_ANALOG ports to a coincidental neighbour sheet. The part-aware tally breaks the tie
+        // toward the sheet whose wire endpoint connects to the port's own object, and still falls
+        // back to position voting when no endpoint carries a part.
+        int  votedSheet = sheetForComponentPins( connectionPoints );
+        auto offsetIt = m_offsetToPartId.find( comp.fileOffset );
+
+        if( votedSheet < 0 && offsetIt != m_offsetToPartId.end() )
+        {
+            auto sheetIt = m_partIdSheet.find( offsetIt->second );
+
+            if( sheetIt != m_partIdSheet.end() )
+                votedSheet = sheetIt->second;
+        }
+
+        if( votedSheet < 0 && offsetIt != m_offsetToPartId.end() )
+        {
+            int partId = offsetIt->second;
+
+            for( int d = 1; d <= 12 && votedSheet < 0; d++ )
+            {
+                for( int candidate : { partId - d, partId + d } )
+                {
+                    auto sheetIt = m_partIdSheet.find( candidate );
+
+                    if( sheetIt != m_partIdSheet.end() )
+                    {
+                        votedSheet = sheetIt->second;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Last resort for a port whose pin geometry matched no wire and whose part id has no
+        // wire-derived sheet (an isolated port): snap to the sheet whose wire geometry is closest
+        // to the port's own placement, so the label still lands on the sheet DipTrace drew it on
+        // rather than defaulting to the root.
+        if( votedSheet < 0 )
+            votedSheet = sheetForNearestWire( pos );
+
+        SCH_SCREEN* screen = getOrCreateSheet( votedSheet >= 0 ? votedSheet : 0 );
+
+        // A global label's origin is its connection point, so anchor it on the port's pin endpoint
+        // where the wire lands rather than the body center, otherwise the label floats off the net.
+        VECTOR2I labelPos = ( havePin && !connectionPoints.empty() ) ? connectionPoints.front() : pos;
+
+        // The pin's outward direction points along the wire, so the label text reads away from it; a
+        // pin leaving toward +x puts the wire on the right and the text on the left, and so on.
+        SPIN_STYLE spin = SPIN_STYLE::RIGHT;
+
+        if( firstPinDir.x > 0 )
+            spin = SPIN_STYLE::LEFT;
+        else if( firstPinDir.x < 0 )
+            spin = SPIN_STYLE::RIGHT;
+        else if( firstPinDir.y > 0 )
+            spin = SPIN_STYLE::UP;
+        else if( firstPinDir.y < 0 )
+            spin = SPIN_STYLE::BOTTOM;
+
+        SCH_GLOBALLABEL* label = new SCH_GLOBALLABEL( labelPos, comp.compName );
         label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
+        label->SetSpinStyle( spin );
         screen->Append( label );
+        m_netPortLabelCount++;
     }
+}
+
+
+int SCH_PARSER::sheetForNearestWire( const VECTOR2I& aPos ) const
+{
+    int     bestSheet = -1;
+    int64_t bestDist = std::numeric_limits<int64_t>::max();
+
+    for( const auto& [pt, sheets] : m_wirePointSheets )
+    {
+        int64_t dx = static_cast<int64_t>( pt.first ) - aPos.x;
+        int64_t dy = static_cast<int64_t>( pt.second ) - aPos.y;
+        int64_t dist = dx * dx + dy * dy;
+
+        if( dist < bestDist )
+        {
+            bestDist = dist;
+            bestSheet = *sheets.begin();
+        }
+    }
+
+    return bestSheet;
 }
 
 
@@ -2679,9 +3570,9 @@ static bool isPlausibleNetName( const uint8_t* aData, size_t aPos, size_t aSecti
         unsigned lo = aData[aPos + 2 + static_cast<size_t>( i ) * 2 + 1];
         unsigned ch = ( hi << 8 ) | lo;
 
-        bool ok = ( ch >= 0x20 && ch < 0x7F )            // ASCII printable
-                  || ( ch >= 0x00A0 && ch <= 0x024F )    // Latin-1 / Latin Extended
-                  || ( ch >= 0x0400 && ch <= 0x04FF );   // Cyrillic
+        bool ok = ( ch >= 0x20 && ch < 0x7F )          // ASCII printable
+                  || ( ch >= 0x00A0 && ch <= 0x024F )  // Latin-1 / Latin Extended
+                  || ( ch >= 0x0400 && ch <= 0x04FF ); // Cyrillic
 
         if( !ok )
             return false;
@@ -2689,10 +3580,8 @@ static bool isPlausibleNetName( const uint8_t* aData, size_t aPos, size_t aSecti
 
     auto rdInt4 = [&]( size_t o ) -> int
     {
-        uint32_t raw = ( static_cast<uint32_t>( aData[o] ) << 24 )
-                       | ( static_cast<uint32_t>( aData[o + 1] ) << 16 )
-                       | ( static_cast<uint32_t>( aData[o + 2] ) << 8 )
-                       | static_cast<uint32_t>( aData[o + 3] );
+        uint32_t raw = ( static_cast<uint32_t>( aData[o] ) << 24 ) | ( static_cast<uint32_t>( aData[o + 1] ) << 16 )
+                       | ( static_cast<uint32_t>( aData[o + 2] ) << 8 ) | static_cast<uint32_t>( aData[o + 3] );
         return static_cast<int>( static_cast<int64_t>( raw ) - INT4_BIAS );
     };
 
@@ -2707,8 +3596,11 @@ static bool isPlausibleNetName( const uint8_t* aData, size_t aPos, size_t aSecti
     int pad = rdInt3( end + 8 );
     int flag = aData[end + 11];
 
-    return lx > -2000000 && lx < 2000000 && ly > -2000000 && ly < 2000000
-           && pad == 0 && ( flag == 0 || flag == 1 );
+    // pad is a small discriminator that is 0 for nearly every net but 1 for a few (e.g. OTG_FS_N).
+    // Requiring it to be exactly 0 rejected those nets and aborted the sequential walk, dropping
+    // every later net's wires, so accept 0 or 1.
+    return lx > -2000000 && lx < 2000000 && ly > -2000000 && ly < 2000000 && ( pad == 0 || pad == 1 )
+           && ( flag == 0 || flag == 1 );
 }
 
 
@@ -2720,9 +3612,9 @@ void SCH_PARSER::parseWireSection()
     if( m_version < SCHEMATIC_UTF16_STRING_VERSION )
         return;
 
-    const uint8_t* data         = m_reader.GetData();
-    size_t         fileSize     = m_reader.GetFileSize();
-    size_t         sectionEnd   = m_tailOffset > 0 ? m_tailOffset : fileSize;
+    const uint8_t* data = m_reader.GetData();
+    size_t         fileSize = m_reader.GetFileSize();
+    size_t         sectionEnd = m_tailOffset > 0 ? m_tailOffset : fileSize;
     size_t         sectionStart = m_busSectionOffset;
 
     if( sectionStart == 0 || sectionStart >= sectionEnd )
@@ -2735,10 +3627,8 @@ void SCH_PARSER::parseWireSection()
 
     auto rdInt4 = [&]( size_t o ) -> int
     {
-        uint32_t raw = ( static_cast<uint32_t>( data[o] ) << 24 )
-                       | ( static_cast<uint32_t>( data[o + 1] ) << 16 )
-                       | ( static_cast<uint32_t>( data[o + 2] ) << 8 )
-                       | static_cast<uint32_t>( data[o + 3] );
+        uint32_t raw = ( static_cast<uint32_t>( data[o] ) << 24 ) | ( static_cast<uint32_t>( data[o + 1] ) << 16 )
+                       | ( static_cast<uint32_t>( data[o + 2] ) << 8 ) | static_cast<uint32_t>( data[o + 3] );
         return static_cast<int>( static_cast<int64_t>( raw ) - INT4_BIAS );
     };
 
@@ -2763,11 +3653,14 @@ void SCH_PARSER::parseWireSection()
         if( netIndex != aExpectedIndex )
             return false;
 
-        return fieldA >= -1 && fieldA <= 100000 && fieldB >= 0 && fieldB <= 100000;
+        // fieldB is a small signed marker discriminator that is -1 for some nets (e.g. auto-named
+        // "Net N" records). Requiring it to be non-negative rejected the first such net and aborted
+        // the whole sequential walk, dropping every wire after it. Allow -1 so the walk reaches the
+        // later sheets too.
+        return fieldA >= -1 && fieldA <= 100000 && fieldB >= -1 && fieldB <= 100000;
     };
 
-    auto decodeWireNetName = [&]( size_t aNameOffset, wxString& aName, size_t& aAfterName,
-                                  wxString& aError ) -> bool
+    auto decodeWireNetName = [&]( size_t aNameOffset, wxString& aName, size_t& aAfterName, wxString& aError ) -> bool
     {
         if( aNameOffset + 2 > sectionEnd )
         {
@@ -2797,9 +3690,8 @@ void SCH_PARSER::parseWireSection()
             unsigned lo = data[aNameOffset + 2 + static_cast<size_t>( i ) * 2 + 1];
             unsigned ch = ( hi << 8 ) | lo;
 
-            bool valid = ( ch >= 0x20 && ch < 0x7F )
-                         || ( ch >= 0x00A0 && ch <= 0x024F )
-                         || ( ch >= 0x0400 && ch <= 0x04FF );
+            bool valid =
+                    ( ch >= 0x20 && ch < 0x7F ) || ( ch >= 0x00A0 && ch <= 0x024F ) || ( ch >= 0x0400 && ch <= 0x04FF );
 
             if( !valid )
             {
@@ -2815,14 +3707,12 @@ void SCH_PARSER::parseWireSection()
         return true;
     };
 
-    auto findNextWireNetName = [&]( size_t aSearchStart, size_t aSearchEnd,
-                                    int aExpectedIndex ) -> size_t
+    auto findNextWireNetName = [&]( size_t aSearchStart, size_t aSearchEnd, int aExpectedIndex ) -> size_t
     {
         if( aSearchStart >= aSearchEnd )
             return 0;
 
-        for( size_t marker = aSearchStart; marker + WIRE_NET_MARKER_LEN <= aSearchEnd;
-             marker++ )
+        for( size_t marker = aSearchStart; marker + WIRE_NET_MARKER_LEN <= aSearchEnd; marker++ )
         {
             if( memcmp( data + marker, WIRE_NET_MARKER, WIRE_NET_MARKER_LEN ) != 0 )
                 continue;
@@ -2837,10 +3727,9 @@ void SCH_PARSER::parseWireSection()
 
             if( !decodeWireNetName( nameOffset, candidateName, afterName, nameError ) )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "DipTrace import: invalid wire-net name for net index %d at "
-                           "offset 0x%06zX: %s." ),
-                        aExpectedIndex, nameOffset, nameError ) );
+                THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid wire-net name for net index %d at "
+                                                     "offset 0x%06zX: %s." ),
+                                                  aExpectedIndex, nameOffset, nameError ) );
             }
 
             if( isPlausibleNetName( data, nameOffset, sectionEnd ) )
@@ -2857,8 +3746,8 @@ void SCH_PARSER::parseWireSection()
     if( pos == 0 )
         return;
 
-    int                                safetyNets = 0;
-    std::set<std::pair<wxString, int>> seenNetSheets;
+    int    safetyNets = 0;
+    size_t lastRecordEnd = 0;
 
     while( pos != 0 && pos < sectionEnd && safetyNets++ < 100000 )
     {
@@ -2871,10 +3760,9 @@ void SCH_PARSER::parseWireSection()
 
         if( !decodeWireNetName( o, netName, afterName, nameError ) )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "DipTrace import: invalid wire-net name for net index %d at "
-                       "offset 0x%06zX: %s." ),
-                    expectedWireNetIndex, o, nameError ) );
+            THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid wire-net name for net index %d at "
+                                                 "offset 0x%06zX: %s." ),
+                                              expectedWireNetIndex, o, nameError ) );
         }
 
         o = afterName;
@@ -2883,31 +3771,28 @@ void SCH_PARSER::parseWireSection()
         if( o + 3 > sectionEnd )
             break;
 
-        int pinCount = rdInt3( o );
+        int    pinCount = rdInt3( o );
         size_t pinCountOffset = o;
         o += 3;
 
-        if( pinCount < 0 || pinCount > 4000
-            || o + static_cast<size_t>( pinCount ) * 6 + 3 > sectionEnd )
+        if( pinCount < 0 || pinCount > 4000 || o + static_cast<size_t>( pinCount ) * 6 + 3 > sectionEnd )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "DipTrace import: invalid wire-net pin count %d for net '%s' at "
-                       "offset 0x%06zX." ),
-                    pinCount, netName, pinCountOffset ) );
+            THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid wire-net pin count %d for net '%s' at "
+                                                 "offset 0x%06zX." ),
+                                              pinCount, netName, pinCountOffset ) );
         }
 
         o += static_cast<size_t>( pinCount ) * 6;
 
-        int wireCount = rdInt3( o );
+        int    wireCount = rdInt3( o );
         size_t wireCountOffset = o;
         o += 3;
 
         if( wireCount < 0 || wireCount > 100000 )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    _( "DipTrace import: invalid wire count %d for net '%s' at offset "
-                       "0x%06zX." ),
-                    wireCount, netName, wireCountOffset ) );
+            THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid wire count %d for net '%s' at offset "
+                                                 "0x%06zX." ),
+                                              wireCount, netName, wireCountOffset ) );
         }
 
         bool brokeEarly = false;
@@ -2921,28 +3806,26 @@ void SCH_PARSER::parseWireSection()
             }
 
             DCH_WIRE wire;
-            wire.object1    = rdInt3( o + 0 );
-            wire.object2    = rdInt3( o + 3 );
+            wire.object1 = rdInt3( o + 0 );
+            wire.object2 = rdInt3( o + 3 );
             wire.subObject1 = rdInt3( o + 6 );
             wire.subObject2 = rdInt3( o + 9 );
-            wire.bus1       = rdInt3( o + 12 );
-            wire.bus2       = rdInt3( o + 15 );
+            wire.bus1 = rdInt3( o + 12 );
+            wire.bus2 = rdInt3( o + 15 );
             wire.sheetIndex = rdInt3( o + 18 );
 
-            o += 36;   // 12 int3 header tokens
-            o += 1;    // flag byte
+            o += 36; // 12 int3 header tokens
+            o += 1;  // flag byte
 
-            int pointCount = rdInt3( o );
+            int    pointCount = rdInt3( o );
             size_t pointCountOffset = o;
             o += 3;
 
-            if( pointCount < 0 || pointCount > 4000
-                || o + static_cast<size_t>( pointCount ) * 11 + 8 > sectionEnd )
+            if( pointCount < 0 || pointCount > 4000 || o + static_cast<size_t>( pointCount ) * 11 + 8 > sectionEnd )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "DipTrace import: invalid wire point count %d for net '%s' at "
-                           "offset 0x%06zX." ),
-                        pointCount, netName, pointCountOffset ) );
+                THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid wire point count %d for net '%s' at "
+                                                     "offset 0x%06zX." ),
+                                                  pointCount, netName, pointCountOffset ) );
             }
 
             wire.points.reserve( pointCount );
@@ -2957,27 +3840,17 @@ void SCH_PARSER::parseWireSection()
                 // imported pin positions.
                 wire.points.emplace_back( toKiCadCoordX( dtX ), toKiCadCoordY( dtY ) );
 
-                o += 11;   // X(int4) Y(int4) Dir(int3)
+                o += 11; // X(int4) Y(int4) Dir(int3)
             }
 
-            o += 8;   // per-wire trailer
+            o += 8; // per-wire trailer
 
             if( wire.points.size() >= 2 )
             {
-                // Emit one net-name label per sheet the net appears on, anchored at a wire
-                // endpoint so it labels the actual conductor (DipTrace net ports have no usable
-                // stored position).
-                int sheetIdx = wire.sheetIndex;
-
-                if( sheetIdx < 0 || sheetIdx >= m_numSheets )
-                    sheetIdx = 0;
-
-                if( !netName.IsEmpty()
-                    && seenNetSheets.insert( { netName, sheetIdx } ).second )
-                {
-                    m_netLabels.push_back( { netName, wire.points.front(), sheetIdx } );
-                }
-
+                // Labels are not synthesized per net here. DipTrace shows a label only where an
+                // explicit net-port object is placed, so labels are emitted from those objects in
+                // createNetPortLabels(). Auto-named internal nets ("Net 36") own no port object and
+                // therefore carry no label, matching the source rendering.
                 m_wires.push_back( std::move( wire ) );
             }
         }
@@ -2985,11 +3858,185 @@ void SCH_PARSER::parseWireSection()
         if( brokeEarly )
             break;
 
+        lastRecordEnd = o;
         expectedWireNetIndex++;
 
         // Find the next net name (skips the variable-length net preamble).
-        pos = findNextWireNetName( o, std::min( sectionEnd, o + 400 ),
-                                   expectedWireNetIndex );
+        pos = findNextWireNetName( o, std::min( sectionEnd, o + 400 ), expectedWireNetIndex );
+    }
+
+    m_wireSectionEnd = lastRecordEnd;
+}
+
+
+void SCH_PARSER::parseSheetShapes()
+{
+    m_sheetShapes.clear();
+
+    if( m_version < V31_CUTOVER )
+        return;
+
+    size_t sectionEnd = m_tailOffset > 0 ? m_tailOffset : m_reader.GetFileSize();
+    size_t searchStart = m_busSectionOffset > 0 ? m_busSectionOffset : m_wireSectionEnd;
+
+    if( searchStart == 0 || searchStart >= sectionEnd )
+        return;
+
+    size_t originalOffset = m_reader.GetOffset();
+
+    auto readSheetShapeRecord = [&]() -> std::optional<DCH_SHEET_SHAPE>
+    {
+        uint8_t flagA = m_reader.ReadByte();
+        uint8_t flagB = m_reader.ReadByte();
+        int     fieldA = m_reader.ReadInt3();
+        int     kindCode = m_reader.ReadInt3();
+        int     drawOrder = m_reader.ReadInt3();
+
+        m_reader.Skip( 3 ); // fill color A
+
+        uint8_t color[3] = {};
+        m_reader.ReadBytes( color, 3 );
+
+        m_reader.Skip( 3 ); // fill color B
+
+        int fieldB = m_reader.ReadInt3();
+        int sheetIndex = m_reader.ReadInt3();
+        int fieldC = m_reader.ReadInt3();
+        int lineWidth = m_reader.ReadInt4();
+        m_reader.ReadString(); // font name
+        m_reader.ReadString(); // optional text
+        int fieldD = m_reader.ReadInt3();
+        int pointCount = m_reader.ReadInt3();
+
+        if( flagA != 1 || flagB != 0 || fieldA != 0 || fieldB != 0 || fieldC != -1 || fieldD != 0 )
+            return std::nullopt;
+
+        if( kindCode != 1 && kindCode != 4 )
+            return std::nullopt;
+
+        if( drawOrder < 0 || drawOrder > 1000 || sheetIndex < 0 || sheetIndex >= m_numSheets )
+            return std::nullopt;
+
+        if( lineWidth < 0 || lineWidth > 200000 || pointCount < 1 || pointCount > 100 )
+            return std::nullopt;
+
+        DCH_SHEET_SHAPE shape;
+        shape.kindCode = kindCode;
+        shape.sheetIndex = sheetIndex;
+        shape.lineWidth = lineWidth;
+        shape.color[0] = color[0];
+        shape.color[1] = color[1];
+        shape.color[2] = color[2];
+        shape.points.reserve( pointCount );
+
+        for( int i = 0; i < pointCount; i++ )
+        {
+            int x = m_reader.ReadInt4();
+            int y = m_reader.ReadInt4();
+            shape.points.emplace_back( x, y );
+        }
+
+        int     tailA = m_reader.ReadInt3();
+        int     tailB = m_reader.ReadInt3();
+        uint8_t tailFlagA = m_reader.ReadByte();
+        uint8_t tailFlagB = m_reader.ReadByte();
+        int     extentX = m_reader.ReadInt4();
+        int     extentY = m_reader.ReadInt4();
+
+        if( tailA != -1 || tailB != -1 || tailFlagA != 0 || tailFlagB != 1 || extentX != -20000 || extentY != 10000 )
+            return std::nullopt;
+
+        return shape;
+    };
+
+    for( size_t offset = searchStart; offset + 3 < sectionEnd; offset++ )
+    {
+        try
+        {
+            m_reader.SetOffset( offset );
+            int count = m_reader.ReadInt3();
+
+            if( count < 1 || count > 1000 )
+                continue;
+
+            std::vector<DCH_SHEET_SHAPE> shapes;
+            shapes.reserve( count );
+
+            bool valid = true;
+
+            for( int i = 0; i < count; i++ )
+            {
+                std::optional<DCH_SHEET_SHAPE> shape = readSheetShapeRecord();
+
+                if( !shape )
+                {
+                    valid = false;
+                    break;
+                }
+
+                shapes.push_back( *shape );
+            }
+
+            if( valid && !shapes.empty() && m_reader.GetOffset() <= sectionEnd )
+            {
+                m_sheetShapes = std::move( shapes );
+                break;
+            }
+        }
+        catch( const std::exception& )
+        {
+        }
+    }
+
+    m_reader.SetOffset( originalOffset );
+}
+
+
+static KIGFX::COLOR4D dipTraceSheetShapeColor( const DCH_SHEET_SHAPE& aShape )
+{
+    return KIGFX::COLOR4D( aShape.color[0] / 255.0, aShape.color[1] / 255.0, aShape.color[2] / 255.0, 1.0 );
+}
+
+
+void SCH_PARSER::createSheetShapes()
+{
+    for( const DCH_SHEET_SHAPE& dchShape : m_sheetShapes )
+    {
+        if( dchShape.points.size() < 2 )
+            continue;
+
+        SCH_SCREEN* screen = getOrCreateSheet( dchShape.sheetIndex );
+
+        if( !screen )
+            continue;
+
+        int           width = toKiCadSize( dchShape.lineWidth );
+        STROKE_PARAMS stroke( width, LINE_STYLE::SOLID, dipTraceSheetShapeColor( dchShape ) );
+
+        if( dchShape.kindCode == 4 && dchShape.points.size() == 2 )
+        {
+            SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_NOTES, 0, FILL_T::NO_FILL );
+            rect->SetPosition( applyPageOffset(
+                    VECTOR2I( toKiCadCoordX( dchShape.points[0].x ), toKiCadCoordY( dchShape.points[0].y ) ) ) );
+            rect->SetEnd( applyPageOffset(
+                    VECTOR2I( toKiCadCoordX( dchShape.points[1].x ), toKiCadCoordY( dchShape.points[1].y ) ) ) );
+            rect->SetStroke( stroke );
+            screen->Append( rect );
+            continue;
+        }
+
+        if( dchShape.kindCode == 1 )
+        {
+            SCH_SHAPE* line = new SCH_SHAPE( SHAPE_T::POLY, LAYER_NOTES, 0, FILL_T::NO_FILL );
+
+            for( const VECTOR2I& pt : dchShape.points )
+            {
+                line->AddPoint( applyPageOffset( VECTOR2I( toKiCadCoordX( pt.x ), toKiCadCoordY( pt.y ) ) ) );
+            }
+
+            line->SetStroke( stroke );
+            screen->Append( line );
+        }
     }
 }
 
@@ -3010,8 +4057,8 @@ void SCH_PARSER::createWires()
 
         for( size_t i = 1; i < wire.points.size(); i++ )
         {
-            const VECTOR2I& a = wire.points[i - 1];
-            const VECTOR2I& b = wire.points[i];
+            VECTOR2I a = applyPageOffset( wire.points[i - 1] );
+            VECTOR2I b = applyPageOffset( wire.points[i] );
 
             if( a == b )
                 continue;
@@ -3026,9 +4073,8 @@ void SCH_PARSER::createWires()
 
 void SCH_PARSER::createJunctions()
 {
-    // DipTrace stores no explicit junctions; reuse KiCad's own rule (>=3 conductor ends coincide,
-    // or a wire end lands on another wire's interior, including symbol-pin taps). Must run after
-    // wires, labels and symbols are placed.
+    // Junctions come from two sources, deduplicated per screen. Must run after wires, labels and
+    // symbols are placed.
     std::set<SCH_SCREEN*> screens;
 
     if( m_rootSheet && m_rootSheet->GetScreen() )
@@ -3040,6 +4086,10 @@ void SCH_PARSER::createJunctions()
             screens.insert( sheet->GetScreen() );
     }
 
+    std::map<SCH_SCREEN*, std::set<std::pair<int, int>>> junctions;
+
+    // KiCad's geometric rule covers the common cases (>=3 conductor ends coincide, or a wire end
+    // lands on a pin tap).
     for( SCH_SCREEN* screen : screens )
     {
         std::deque<EDA_ITEM*> items;
@@ -3048,9 +4098,82 @@ void SCH_PARSER::createJunctions()
             items.push_back( item );
 
         for( const VECTOR2I& pt : screen->GetNeededJunctions( items ) )
+            junctions[screen].insert( { pt.x, pt.y } );
+    }
+
+    // DipTrace records each wire endpoint's connection explicitly: a bus value of -1 marks a pin
+    // connection, anything else marks a tap onto another wire. KiCad's geometric rule misses a tap
+    // where the target wire's collinear segments merge through the point, so add a junction wherever
+    // an explicit wire tap lands on another wire's interior vertex.
+    std::map<SCH_SCREEN*, std::set<std::pair<int, int>>> interior;
+
+    auto screenFor = [&]( const DCH_WIRE& aWire ) -> SCH_SCREEN*
+    {
+        int sheetIdx = ( aWire.sheetIndex >= 0 && aWire.sheetIndex < m_numSheets ) ? aWire.sheetIndex : 0;
+        return getOrCreateSheet( sheetIdx );
+    };
+
+    for( const DCH_WIRE& wire : m_wires )
+    {
+        SCH_SCREEN* screen = screenFor( wire );
+
+        if( !screen )
+            continue;
+
+        for( size_t i = 1; i + 1 < wire.points.size(); i++ )
         {
-            SCH_JUNCTION* junction = new SCH_JUNCTION( pt );
-            screen->Append( junction );
+            VECTOR2I p = applyPageOffset( wire.points[i] );
+            interior[screen].insert( { p.x, p.y } );
+        }
+    }
+
+    for( const DCH_WIRE& wire : m_wires )
+    {
+        SCH_SCREEN* screen = screenFor( wire );
+
+        if( !screen || wire.points.empty() )
+            continue;
+
+        const std::set<std::pair<int, int>>& sheetInterior = interior[screen];
+
+        if( wire.bus1 != -1 )
+        {
+            VECTOR2I p = applyPageOffset( wire.points.front() );
+
+            if( sheetInterior.count( { p.x, p.y } ) )
+                junctions[screen].insert( { p.x, p.y } );
+        }
+
+        if( wire.bus2 != -1 )
+        {
+            VECTOR2I p = applyPageOffset( wire.points.back() );
+
+            if( sheetInterior.count( { p.x, p.y } ) )
+                junctions[screen].insert( { p.x, p.y } );
+        }
+    }
+
+    for( const auto& [screen, pts] : junctions )
+    {
+        for( const std::pair<int, int>& pt : pts )
+            screen->Append( new SCH_JUNCTION( VECTOR2I( pt.first, pt.second ) ) );
+    }
+}
+
+
+void SCH_PARSER::syncEmbeddedLibrarySymbols()
+{
+    for( const auto& [symName, symbols] : m_placedSymbolsByLibName )
+    {
+        auto libIt = m_libSymbols.find( symName );
+
+        if( libIt == m_libSymbols.end() )
+            continue;
+
+        for( SCH_SYMBOL* symbol : symbols )
+        {
+            if( symbol )
+                symbol->SetLibSymbol( new LIB_SYMBOL( *libIt->second ) );
         }
     }
 }
@@ -3063,10 +4186,39 @@ void SCH_PARSER::createKiCadObjects()
     if( m_numSheets > 0 )
         m_sheets[0] = m_rootSheet;
 
+    if( m_rootSheet && !m_sheetDefs.empty() )
+        m_rootSheet->SetName( m_sheetDefs[0].name );
+
     if( m_numSheets > 1 )
     {
         for( int i = 1; i < m_numSheets; i++ )
             getOrCreateSheet( i );
+    }
+
+    finalizeFlatSheetOrder();
+
+    // Apply the decoded page size to every screen so the imported content sits on a page that
+    // matches the source. Only done when a page record was found; otherwise the KiCad default
+    // remains and no placement offset is applied.
+    if( m_page.found )
+    {
+        PAGE_INFO pageInfo( PAGE_SIZE_TYPE::User );
+        pageInfo.SetWidthMM( m_page.widthMM );
+        pageInfo.SetHeightMM( m_page.heightMM );
+
+        std::set<SCH_SCREEN*> screens;
+
+        if( m_rootSheet && m_rootSheet->GetScreen() )
+            screens.insert( m_rootSheet->GetScreen() );
+
+        for( SCH_SHEET* sheet : m_sheets )
+        {
+            if( sheet && sheet->GetScreen() )
+                screens.insert( sheet->GetScreen() );
+        }
+
+        for( SCH_SCREEN* screen : screens )
+            screen->SetPageSettings( pageInfo );
     }
 
     // Index the decoded wire geometry by position so each symbol and label can be routed to the
@@ -3074,6 +4226,8 @@ void SCH_PARSER::createKiCadObjects()
     buildWirePointSheets();
     buildComponentPartIds();
     m_lastSymbolPartId = -1;
+    m_refdesUnitMap.clear();
+    m_placedSymbolsByLibName.clear();
 
     for( const DCH_COMPONENT& comp : m_components )
     {
@@ -3085,18 +4239,18 @@ void SCH_PARSER::createKiCadObjects()
         {
             if( m_reporter )
             {
-                m_reporter->Report(
-                        wxString::Format( _( "DipTrace import: failed to create symbol "
-                                             "for %s (%s): %s" ),
-                                          comp.refdes, comp.compName,
-                                          wxString::FromUTF8( e.what() ) ),
-                        RPT_SEVERITY_WARNING );
+                m_reporter->Report( wxString::Format( _( "DipTrace import: failed to create symbol "
+                                                         "for %s (%s): %s" ),
+                                                      comp.refdes, comp.compName, wxString::FromUTF8( e.what() ) ),
+                                    RPT_SEVERITY_WARNING );
             }
         }
     }
 
-    createNetLabels();
+    syncEmbeddedLibrarySymbols();
+    createNetPortLabels();
     createWires();
+    createSheetShapes();
     createJunctions();
 
     // The decoded symbols are embedded directly in the schematic (each SCH_SYMBOL carries a
@@ -3105,11 +4259,10 @@ void SCH_PARSER::createKiCadObjects()
 
     if( m_reporter )
     {
-        m_reporter->Report(
-                wxString::Format( _( "DipTrace import: loaded %zu components, %zu buses, "
-                                     "%zu net labels from version %d file with %d sheets." ),
-                                  m_components.size(), m_buses.size(), m_netLabels.size(), m_version,
-                                  m_numSheets ),
-                RPT_SEVERITY_INFO );
+        m_reporter->Report( wxString::Format( _( "DipTrace import: loaded %zu components, %zu buses, "
+                                                 "%zu net-port labels from version %d file with %d sheets." ),
+                                              m_components.size(), m_buses.size(), m_netPortLabelCount, m_version,
+                                              m_numSheets ),
+                            RPT_SEVERITY_INFO );
     }
 }

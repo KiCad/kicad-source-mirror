@@ -31,67 +31,7 @@
  * known gaps to be closed.
  */
 
-#include <pcbnew_utils/board_test_utils.h>
-#include <pcbnew_utils/board_file_utils.h>
-#include <qa_utils/wx_utils/unit_test_utils.h>
-
-#include <pcbnew/pcb_io/diptrace/pcb_io_diptrace.h>
-#include <pcbnew/pcb_io/diptrace/diptrace_pcb_parser.h>
-#include <pcbnew/drc/drc_rule_parser.h>
-#include <pcbnew/drc/drc_rule.h>
-
-#include <reporter.h>
-#include <board.h>
-#include <ki_exception.h>
-#include <footprint.h>
-#include <pad.h>
-#include <pcb_track.h>
-#include <pcb_shape.h>
-#include <zone.h>
-#include <netinfo.h>
-#include <layer_ids.h>
-#include <base_units.h>
-#include <geometry/shape_poly_set.h>
-#include <wx/log.h>
-#include <wx/xml/xml.h>
-
-#include <algorithm>
-#include <array>
-#include <cctype>
-#include <cmath>
-#include <cstdint>
-#include <cstdlib>
-#include <filesystem>
-#include <functional>
-#include <map>
-#include <set>
-#include <string>
-#include <unordered_map>
-#include <vector>
-
-
-struct DIPTRACE_BENCHMARK_FIXTURE
-{
-    DIPTRACE_BENCHMARK_FIXTURE() {}
-
-    PCB_IO_DIPTRACE m_plugin;
-
-    std::string GetTestDataDir() { return KI_TEST::GetPcbnewTestDataDir() + "plugins/diptrace/"; }
-
-    std::unique_ptr<BOARD> LoadBoard( const std::string& aFileName )
-    {
-        std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-        m_plugin.LoadBoard( GetTestDataDir() + aFileName, board.get() );
-        return board;
-    }
-
-    std::unique_ptr<BOARD> LoadBoardFromPath( const std::string& aPath )
-    {
-        std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
-        m_plugin.LoadBoard( aPath, board.get() );
-        return board;
-    }
-};
+#include "test_diptrace_benchmarks_fixture.h"
 
 
 namespace
@@ -2910,6 +2850,51 @@ BOOST_AUTO_TEST_CASE( ZoneDesignRulesParityOptional )
 
     BOOST_CHECK_SMALL( std::abs( pcbIUScale.IUTomm( edgeClearanceIU ) - 0.66 ), 0.01 );
     BOOST_CHECK_GT( solidViaRules, 0 );
+}
+
+
+/**
+ * The exact placement rotation of every component lives in a dedicated placement section,
+ * stored as a biased int4 of radians x 1e4. These two fixtures each hold four identical
+ * capacitors rotated to known angles, so the importer must reproduce each cardinal AND each
+ * arbitrary angle exactly (not snapped to 90 degrees). rotate.dip is a v60 file and rotate4.dip
+ * a v54 file, proving the encoding is version-independent.
+ */
+BOOST_AUTO_TEST_CASE( PlacementRotationAngles )
+{
+    struct CASE
+    {
+        std::string file;
+        std::map<std::string, double> expected; // refdes -> degrees
+    };
+
+    const std::vector<CASE> cases = {
+        { "rotate.dip",  { { "C1", 0.0 }, { "C2", 45.0 }, { "C3", 90.0 }, { "C4", 309.33 } } },
+        { "rotate4.dip", { { "C1", 0.0 }, { "C2", 90.0 }, { "C3", 45.0 }, { "C4", 327.96 } } },
+    };
+
+    for( const CASE& tc : cases )
+    {
+        auto board = LoadBoard( tc.file );
+        BOOST_REQUIRE( board );
+
+        std::map<std::string, double> seen;
+
+        for( FOOTPRINT* fp : board->Footprints() )
+            seen[fp->GetReference().ToStdString()] = fp->GetOrientation().Normalize().AsDegrees();
+
+        for( const auto& [ref, deg] : tc.expected )
+        {
+            BOOST_REQUIRE_MESSAGE( seen.count( ref ), tc.file + ": missing " + ref );
+
+            double got = seen[ref];
+            double gap = std::abs( got - deg );
+            gap = std::min( gap, 360.0 - gap );
+
+            BOOST_CHECK_MESSAGE( gap < 0.1, tc.file + ": " + ref + " orientation " + std::to_string( got )
+                                                    + " deg, expected " + std::to_string( deg ) );
+        }
+    }
 }
 
 

@@ -23,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
+
 #include <core/json_serializers.h>
 #include <pgm_base.h>
 #include <kiface_base.h>
@@ -124,7 +126,13 @@ static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFil
     if( !rootSheet )
         return nullptr;
 
-    schematic->SetTopLevelSheets( { rootSheet } );
+    std::vector<SCH_SHEET*> topLevelSheets = schematic->GetTopLevelSheets();
+    bool rootIsTopLevel = std::find( topLevelSheets.begin(), topLevelSheets.end(), rootSheet )
+                          != topLevelSheets.end();
+    bool rootIsVirtualRoot = rootSheet == &schematic->Root() || rootSheet->IsVirtualRootSheet();
+
+    if( !rootIsTopLevel && !rootIsVirtualRoot )
+        schematic->SetTopLevelSheets( { rootSheet } );
 
     SCH_SCREENS screens( schematic->Root() );
 

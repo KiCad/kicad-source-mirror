@@ -36,10 +36,11 @@
 #     section by the int3 record count five bytes ahead of the index-0 sentinel
 #     (`net_record` walked by sequential index); the ZONE section by its font
 #     preamble ending int4(-20000) ahead of a 30-byte zone header.
-# The post-design-rules tail is still exposed as `post_via_styles_tail` (a raw
+# The post-design-rules tail is exposed as `post_via_styles_tail` (a typed bounded
 # substream) with a named type for every decoded structure, because Kaitai cannot
 # express the content-anchored offsets the field-walk computes at runtime; the
-# named types below document the true sequential record layouts.
+# named types below document the true sequential record layouts; bytes between
+# content-derived anchors are modeled as one-byte anchor-scan advances.
 
 meta:
   id: diptrace_pcb
@@ -115,9 +116,10 @@ seq:
     type: netclasses
 
   - id: post_via_styles_tail
+    type: post_via_styles_tail(ver)
     size-eos: true
     doc: |
-      Raw substream holding all anchored records after the design-rule section.
+      Bounded substream holding all anchored records after the design-rule section.
       The importer does not parse this region as one repeat; it searches bounded
       regions for the record anchors described in the file-level documentation.
       The deterministic byte layout of each accepted record is fully modeled by the types
@@ -131,6 +133,650 @@ instances:
     value: 'magic_len == 7 ? version.value : (legacy_minor_tens - 48) * 10 + (legacy_minor_ones - 48)'
 
 types:
+  post_via_styles_tail:
+    doc: |
+      Bounded PCB stream after the design-rule section.  The importer derives
+      section and object offsets from anchored structural signatures rather than
+      a single sequential repeat that Kaitai can express.  This container exposes
+      recognized anchors plus one-byte anchor-scan advances; the concrete anchored
+      layouts are modeled by the component, pad, footprint-shape, mount-hole,
+      text, net, track, and copper-pour types below.
+    params:
+      - id: version
+        type: s4
+    seq:
+      - id: tokens
+        type: post_via_styles_tail_token(version)
+        repeat: eos
+
+  post_via_styles_tail_token:
+    doc: |
+      One token in the bounded PCB stream after design rules.  Known structural
+      anchors are parsed at their marker; all other bytes are explicit one-byte
+      anchor-scan advances because the importer derives object and section
+      offsets from field-walked anchors.
+    params:
+      - id: version
+        type: s4
+    seq:
+      - id: component_record_std
+        type: component_record_anchor(false)
+        if: is_component_boundary_std
+      - id: component_record_alt
+        type: component_record_anchor(true)
+        if: 'not is_component_boundary_std and is_component_boundary_alt'
+      - id: net
+        type: net_record
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and is_net_record_start'
+      - id: component_tail_record
+        type: component_tail
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and is_component_tail_start'
+      - id: pad_record
+        type: pad
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and not is_component_tail_start and is_pad_start'
+      - id: mount_hole_record
+        type: mount_hole_block
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and not is_component_tail_start and not is_pad_start and is_mount_hole_block_start'
+      - id: footprint_shape_v37
+        type: fp_shape_v37
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and not is_component_tail_start and not is_pad_start and not is_mount_hole_block_start and is_fp_shape_v37_start'
+      - id: footprint_shape
+        type: fp_shape
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and not is_component_tail_start and not is_pad_start and not is_mount_hole_block_start and not is_fp_shape_v37_start and is_fp_shape_start'
+      - id: footprint_font_block
+        type: fp_font_block
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and not is_component_tail_start and not is_pad_start and not is_mount_hole_block_start and not is_fp_shape_v37_start and not is_fp_shape_start and is_fp_font_block_start'
+      - id: footprint_chain_shape
+        type: fp_chain_shape
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and not is_component_tail_start and not is_pad_start and not is_mount_hole_block_start and not is_fp_shape_v37_start and not is_fp_shape_start and not is_fp_font_block_start and is_fp_chain_shape_start'
+      - id: copper_pour_font
+        type: copper_pour_font_preamble
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and not is_component_tail_start and not is_pad_start and not is_mount_hole_block_start and not is_fp_shape_v37_start and not is_fp_shape_start and not is_fp_font_block_start and not is_fp_chain_shape_start and is_copper_pour_font_preamble_start'
+      - id: copper_pour_record
+        type: copper_pour
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and not is_component_tail_start and not is_pad_start and not is_mount_hole_block_start and not is_fp_shape_v37_start and not is_fp_shape_start and not is_fp_font_block_start and not is_fp_chain_shape_start and not is_copper_pour_font_preamble_start and is_copper_pour_start'
+      - id: copper_pour_style_record
+        type: copper_pour_style
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and not is_component_tail_start and not is_pad_start and not is_mount_hole_block_start and not is_fp_shape_v37_start and not is_fp_shape_start and not is_fp_font_block_start and not is_fp_chain_shape_start and not is_copper_pour_font_preamble_start and not is_copper_pour_start and is_copper_pour_style_start'
+      - id: copper_pour_cached_fill_record
+        type: copper_pour_cached_fill
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and not is_component_tail_start and not is_pad_start and not is_mount_hole_block_start and not is_fp_shape_v37_start and not is_fp_shape_start and not is_fp_font_block_start and not is_fp_chain_shape_start and not is_copper_pour_font_preamble_start and not is_copper_pour_start and not is_copper_pour_style_start and is_copper_pour_cached_fill_start'
+      - id: copper_pour_trailer_record
+        type: copper_pour_trailer
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and not is_component_tail_start and not is_pad_start and not is_mount_hole_block_start and not is_fp_shape_v37_start and not is_fp_shape_start and not is_fp_font_block_start and not is_fp_chain_shape_start and not is_copper_pour_font_preamble_start and not is_copper_pour_start and not is_copper_pour_style_start and not is_copper_pour_cached_fill_start and is_copper_pour_trailer_start'
+      - id: track
+        type: track_chain
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and not is_component_tail_start and not is_pad_start and not is_mount_hole_block_start and not is_fp_shape_v37_start and not is_fp_shape_start and not is_fp_font_block_start and not is_fp_chain_shape_start and not is_copper_pour_font_preamble_start and not is_copper_pour_start and not is_copper_pour_style_start and not is_copper_pour_cached_fill_start and not is_copper_pour_trailer_start and is_track_chain_start'
+      - id: text
+        type: text_section
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and not is_component_tail_start and not is_pad_start and not is_mount_hole_block_start and not is_fp_shape_v37_start and not is_fp_shape_start and not is_fp_font_block_start and not is_fp_chain_shape_start and not is_copper_pour_font_preamble_start and not is_copper_pour_start and not is_copper_pour_style_start and not is_copper_pour_cached_fill_start and not is_copper_pour_trailer_start and not is_track_chain_start and is_text_section_start'
+      - id: anchor_scan_byte
+        type: u1
+        doc: One byte advanced while the importer walks toward the next content-derived anchor.
+        if: 'not is_component_boundary_std and not is_component_boundary_alt and not is_net_record_start and not is_component_tail_start and not is_pad_start and not is_mount_hole_block_start and not is_fp_shape_v37_start and not is_fp_shape_start and not is_fp_font_block_start and not is_fp_chain_shape_start and not is_copper_pour_font_preamble_start and not is_copper_pour_start and not is_copper_pour_style_start and not is_copper_pour_cached_fill_start and not is_copper_pour_trailer_start and not is_track_chain_start and not is_text_section_start'
+    instances:
+      b0:
+        pos: _io.pos
+        type: u1
+        if: _io.size - _io.pos >= 1
+      b1:
+        pos: _io.pos + 1
+        type: u1
+        if: _io.size - _io.pos >= 2
+      b2:
+        pos: _io.pos + 2
+        type: u1
+        if: _io.size - _io.pos >= 3
+      b3:
+        pos: _io.pos + 3
+        type: u1
+        if: _io.size - _io.pos >= 4
+      b4:
+        pos: _io.pos + 4
+        type: u1
+        if: _io.size - _io.pos >= 5
+      b5:
+        pos: _io.pos + 5
+        type: u1
+        if: _io.size - _io.pos >= 6
+      b6:
+        pos: _io.pos + 6
+        type: u1
+        if: _io.size - _io.pos >= 7
+      b7:
+        pos: _io.pos + 7
+        type: u1
+        if: _io.size - _io.pos >= 8
+      b8:
+        pos: _io.pos + 8
+        type: u1
+        if: _io.size - _io.pos >= 9
+      b9:
+        pos: _io.pos + 9
+        type: u1
+        if: _io.size - _io.pos >= 10
+      b10:
+        pos: _io.pos + 10
+        type: u1
+        if: _io.size - _io.pos >= 11
+      b11:
+        pos: _io.pos + 11
+        type: u1
+        if: _io.size - _io.pos >= 12
+      b12:
+        pos: _io.pos + 12
+        type: u1
+        if: _io.size - _io.pos >= 13
+      b13:
+        pos: _io.pos + 13
+        type: u1
+        if: _io.size - _io.pos >= 14
+      text_count_probe:
+        pos: _io.pos + 9
+        type: int3
+        if: _io.size - _io.pos >= 14
+      track_node_count_probe:
+        pos: _io.pos + 9
+        type: int3
+        if: _io.size - _io.pos >= 12
+      component_tail_check_int4_a:
+        pos: _io.pos + 11
+        type: int4
+        if: _io.size - _io.pos >= 37
+      component_tail_check_int4_b:
+        pos: _io.pos + 15
+        type: int4
+        if: _io.size - _io.pos >= 37
+      component_tail_side_flag_1:
+        pos: _io.pos + 19
+        type: u1
+        if: _io.size - _io.pos >= 37
+      component_tail_visibility:
+        pos: _io.pos + 20
+        type: int3
+        if: _io.size - _io.pos >= 37
+      component_tail_side_flag_2:
+        pos: _io.pos + 23
+        type: u1
+        if: _io.size - _io.pos >= 37
+      component_tail_has_offset:
+        pos: _io.pos + 35
+        type: u1
+        if: _io.size - _io.pos >= 37
+      component_tail_terminator:
+        pos: _io.pos + 36
+        type: u1
+        if: _io.size - _io.pos >= 37
+      pad_index_probe:
+        pos: _io.pos
+        type: int3
+        if: _io.size - _io.pos >= 18
+      pad_net_index_probe:
+        pos: _io.pos + 3
+        type: int3
+        if: _io.size - _io.pos >= 18
+      pad_x_probe:
+        pos: _io.pos + 6
+        type: int4
+        if: _io.size - _io.pos >= 18
+      pad_y_probe:
+        pos: _io.pos + 10
+        type: int4
+        if: _io.size - _io.pos >= 18
+      pad_number_len_utf16:
+        pos: _io.pos + 14
+        type: u2
+        if: _root.ver > 37 and _io.size - _io.pos >= 16
+      pad_label_len_utf16:
+        pos: _io.pos + 16 + pad_number_len_utf16 * 2
+        type: u2
+        if: _root.ver > 37 and _io.size - _io.pos >= 18 + pad_number_len_utf16 * 2 and pad_number_len_utf16 <= 64
+      pad_width_utf16:
+        pos: _io.pos + 18 + pad_number_len_utf16 * 2 + pad_label_len_utf16 * 2
+        type: int4
+        if: _root.ver > 37 and _io.size - _io.pos >= 22 + pad_number_len_utf16 * 2 + pad_label_len_utf16 * 2 and pad_number_len_utf16 <= 64 and pad_label_len_utf16 <= 64
+      pad_height_utf16:
+        pos: _io.pos + 22 + pad_number_len_utf16 * 2 + pad_label_len_utf16 * 2
+        type: int4
+        if: _root.ver > 37 and _io.size - _io.pos >= 26 + pad_number_len_utf16 * 2 + pad_label_len_utf16 * 2 and pad_number_len_utf16 <= 64 and pad_label_len_utf16 <= 64
+      pad_number_len_ascii:
+        pos: _io.pos + 14
+        type: int3
+        if: _root.ver <= 37 and _io.size - _io.pos >= 17
+      pad_label_len_ascii:
+        pos: _io.pos + 17 + pad_number_len_ascii.value
+        type: int3
+        if: _root.ver <= 37 and _io.size - _io.pos >= 20 + pad_number_len_ascii.value and pad_number_len_ascii.value >= 0 and pad_number_len_ascii.value <= 64
+      pad_width_ascii:
+        pos: _io.pos + 20 + pad_number_len_ascii.value + pad_label_len_ascii.value
+        type: int4
+        if: _root.ver <= 37 and _io.size - _io.pos >= 24 + pad_number_len_ascii.value + pad_label_len_ascii.value and pad_number_len_ascii.value >= 0 and pad_number_len_ascii.value <= 64 and pad_label_len_ascii.value >= 0 and pad_label_len_ascii.value <= 64
+      pad_height_ascii:
+        pos: _io.pos + 24 + pad_number_len_ascii.value + pad_label_len_ascii.value
+        type: int4
+        if: _root.ver <= 37 and _io.size - _io.pos >= 28 + pad_number_len_ascii.value + pad_label_len_ascii.value and pad_number_len_ascii.value >= 0 and pad_number_len_ascii.value <= 64 and pad_label_len_ascii.value >= 0 and pad_label_len_ascii.value <= 64
+      mount_hole_count_field:
+        pos: _io.pos
+        type: int3
+        if: _io.size - _io.pos >= 56
+      mount_hole_header_flag:
+        pos: _io.pos + 3
+        type: u1
+        if: _io.size - _io.pos >= 56
+      mount_hole_zero_a:
+        pos: _io.pos + 4
+        type: int4
+        if: _io.size - _io.pos >= 56
+      mount_hole_zero_b:
+        pos: _io.pos + 8
+        type: int4
+        if: _io.size - _io.pos >= 56
+      mount_hole_zero_c:
+        pos: _io.pos + 12
+        type: int4
+        if: _io.size - _io.pos >= 56
+      mount_hole_zero_d:
+        pos: _io.pos + 16
+        type: int4
+        if: _io.size - _io.pos >= 56
+      mount_hole_first_flag_a:
+        pos: _io.pos + 20
+        type: u1
+        if: _io.size - _io.pos >= 56
+      mount_hole_first_flag_b:
+        pos: _io.pos + 21
+        type: u1
+        if: _io.size - _io.pos >= 56
+      mount_hole_first_outer:
+        pos: _io.pos + 38
+        type: int4
+        if: _io.size - _io.pos >= 56
+      mount_hole_first_drill:
+        pos: _io.pos + 42
+        type: int4
+        if: _io.size - _io.pos >= 56
+      fp_shape_type:
+        pos: _io.pos
+        type: int3
+        if: _io.size - _io.pos >= 60
+      fp_shape_x1:
+        pos: _io.pos + 3
+        type: int4
+        if: _io.size - _io.pos >= 60
+      fp_shape_y1:
+        pos: _io.pos + 7
+        type: int4
+        if: _io.size - _io.pos >= 60
+      fp_shape_x2:
+        pos: _io.pos + 11
+        type: int4
+        if: _io.size - _io.pos >= 60
+      fp_shape_y2:
+        pos: _io.pos + 15
+        type: int4
+        if: _io.size - _io.pos >= 60
+      fp_shape_style_flag:
+        pos: _io.pos + 27
+        type: u1
+        if: _io.size - _io.pos >= 60
+      fp_shape_v45_width:
+        pos: _io.pos + 53
+        type: int4
+        if: _io.size - _io.pos >= 60
+      fp_shape_v45_layer:
+        pos: _io.pos + 57
+        type: int3
+        if: _io.size - _io.pos >= 60
+      fp_shape_v37_width:
+        pos: _io.pos + 55
+        type: int4
+        if: _io.size - _io.pos >= 62
+      fp_shape_v37_layer:
+        pos: _io.pos + 59
+        type: int3
+        if: _io.size - _io.pos >= 62
+      fp_font_meta_flag:
+        pos: _io.pos + 14
+        type: u1
+        if: _io.size - _io.pos >= 58
+      fp_font_size:
+        pos: _io.pos + 15
+        type: int3
+        if: _io.size - _io.pos >= 58
+      fp_font_height:
+        pos: _io.pos + 18
+        type: int4
+        if: _io.size - _io.pos >= 58
+      fp_font_width:
+        pos: _io.pos + 22
+        type: int4
+        if: _io.size - _io.pos >= 58
+      fp_font_line_width:
+        pos: _io.pos + 32
+        type: int4
+        if: _io.size - _io.pos >= 58
+      fp_font_layer:
+        pos: _io.pos + 36
+        type: int3
+        if: _io.size - _io.pos >= 58
+      fp_font_x1:
+        pos: _io.pos + 39
+        type: int4
+        if: _io.size - _io.pos >= 58
+      fp_font_y1:
+        pos: _io.pos + 43
+        type: int4
+        if: _io.size - _io.pos >= 58
+      fp_font_x2:
+        pos: _io.pos + 47
+        type: int4
+        if: _io.size - _io.pos >= 58
+      fp_font_y2:
+        pos: _io.pos + 51
+        type: int4
+        if: _io.size - _io.pos >= 58
+      fp_font_shape_type:
+        pos: _io.pos + 55
+        type: int3
+        if: _io.size - _io.pos >= 58
+      fp_chain_pad_a:
+        pos: _io.pos + 3
+        type: u1
+        if: _io.size - _io.pos >= 76
+      fp_chain_pad_b:
+        pos: _io.pos + 4
+        type: u1
+        if: _io.size - _io.pos >= 76
+      fp_chain_font_len:
+        pos: _io.pos + 5
+        type: u2
+        if: _io.size - _io.pos >= 76
+      fp_chain_font_t:
+        pos: _io.pos + 7
+        type: u2
+        if: _io.size - _io.pos >= 76
+      fp_chain_font_a:
+        pos: _io.pos + 9
+        type: u2
+        if: _io.size - _io.pos >= 76
+      fp_chain_font_h:
+        pos: _io.pos + 11
+        type: u2
+        if: _io.size - _io.pos >= 76
+      fp_chain_font_o:
+        pos: _io.pos + 13
+        type: u2
+        if: _io.size - _io.pos >= 76
+      fp_chain_font_m:
+        pos: _io.pos + 15
+        type: u2
+        if: _io.size - _io.pos >= 76
+      fp_chain_font_a2:
+        pos: _io.pos + 17
+        type: u2
+        if: _io.size - _io.pos >= 76
+      fp_chain_width:
+        pos: _io.pos + 37
+        type: int4
+        if: _io.size - _io.pos >= 76
+      fp_chain_shape_type:
+        pos: _io.pos + 41
+        type: int3
+        if: _io.size - _io.pos >= 76
+      fp_chain_x1:
+        pos: _io.pos + 44
+        type: int4
+        if: _io.size - _io.pos >= 76
+      fp_chain_y1:
+        pos: _io.pos + 48
+        type: int4
+        if: _io.size - _io.pos >= 76
+      fp_chain_x2:
+        pos: _io.pos + 52
+        type: int4
+        if: _io.size - _io.pos >= 76
+      fp_chain_y2:
+        pos: _io.pos + 56
+        type: int4
+        if: _io.size - _io.pos >= 76
+      copper_font_len_utf16:
+        pos: _io.pos
+        type: u2
+        if: _root.ver > 37 and _io.size - _io.pos >= 2
+      copper_font_size_utf16:
+        pos: _io.pos + 2 + copper_font_len_utf16 * 2
+        type: int3
+        if: _root.ver > 37 and _io.size - _io.pos >= 5 + copper_font_len_utf16 * 2 and copper_font_len_utf16 >= 1 and copper_font_len_utf16 <= 64
+      copper_font_bold_utf16:
+        pos: _io.pos + 5 + copper_font_len_utf16 * 2
+        type: u1
+        if: _root.ver > 37 and _io.size - _io.pos >= 6 + copper_font_len_utf16 * 2 and copper_font_len_utf16 >= 1 and copper_font_len_utf16 <= 64
+      copper_font_height_utf16:
+        pos: _io.pos + 6 + copper_font_len_utf16 * 2
+        type: int4
+        if: _root.ver > 37 and _io.size - _io.pos >= 10 + copper_font_len_utf16 * 2 and copper_font_len_utf16 >= 1 and copper_font_len_utf16 <= 64
+      copper_font_width_utf16:
+        pos: _io.pos + 10 + copper_font_len_utf16 * 2
+        type: int4
+        if: _root.ver > 37 and _io.size - _io.pos >= 14 + copper_font_len_utf16 * 2 and copper_font_len_utf16 >= 1 and copper_font_len_utf16 <= 64
+      copper_font_tail_utf16:
+        pos: _io.pos + 14 + copper_font_len_utf16 * 2
+        type: int4
+        if: _root.ver > 37 and _io.size - _io.pos >= 18 + copper_font_len_utf16 * 2 and copper_font_len_utf16 >= 1 and copper_font_len_utf16 <= 64
+      copper_font_separator_utf16:
+        pos: _io.pos + 18 + copper_font_len_utf16 * 2
+        type: int3
+        if: _root.ver > 37 and _io.size - _io.pos >= 21 + copper_font_len_utf16 * 2 and copper_font_len_utf16 >= 1 and copper_font_len_utf16 <= 64
+      copper_font_len_ascii:
+        pos: _io.pos
+        type: int3
+        if: _root.ver <= 37 and _io.size - _io.pos >= 3
+      copper_font_size_ascii:
+        pos: _io.pos + 3 + copper_font_len_ascii.value
+        type: int3
+        if: _root.ver <= 37 and _io.size - _io.pos >= 6 + copper_font_len_ascii.value and copper_font_len_ascii.value >= 1 and copper_font_len_ascii.value <= 64
+      copper_font_bold_ascii:
+        pos: _io.pos + 6 + copper_font_len_ascii.value
+        type: u1
+        if: _root.ver <= 37 and _io.size - _io.pos >= 7 + copper_font_len_ascii.value and copper_font_len_ascii.value >= 1 and copper_font_len_ascii.value <= 64
+      copper_font_height_ascii:
+        pos: _io.pos + 7 + copper_font_len_ascii.value
+        type: int4
+        if: _root.ver <= 37 and _io.size - _io.pos >= 11 + copper_font_len_ascii.value and copper_font_len_ascii.value >= 1 and copper_font_len_ascii.value <= 64
+      copper_font_width_ascii:
+        pos: _io.pos + 11 + copper_font_len_ascii.value
+        type: int4
+        if: _root.ver <= 37 and _io.size - _io.pos >= 15 + copper_font_len_ascii.value and copper_font_len_ascii.value >= 1 and copper_font_len_ascii.value <= 64
+      copper_font_tail_ascii:
+        pos: _io.pos + 15 + copper_font_len_ascii.value
+        type: int4
+        if: _root.ver <= 37 and _io.size - _io.pos >= 19 + copper_font_len_ascii.value and copper_font_len_ascii.value >= 1 and copper_font_len_ascii.value <= 64
+      copper_font_separator_ascii:
+        pos: _io.pos + 19 + copper_font_len_ascii.value
+        type: int3
+        if: _root.ver <= 37 and _io.size - _io.pos >= 22 + copper_font_len_ascii.value and copper_font_len_ascii.value >= 1 and copper_font_len_ascii.value <= 64
+      copper_pour_fill_mode:
+        pos: _io.pos + 3
+        type: u1
+        if: _io.size - _io.pos >= 30
+      copper_pour_connection_mode:
+        pos: _io.pos + 5
+        type: u1
+        if: _io.size - _io.pos >= 30
+      copper_pour_min_width:
+        pos: _io.pos + 6
+        type: int4
+        if: _io.size - _io.pos >= 30
+      copper_pour_clearance:
+        pos: _io.pos + 10
+        type: int4
+        if: _io.size - _io.pos >= 30
+      copper_pour_min_area:
+        pos: _io.pos + 14
+        type: int4
+        if: _io.size - _io.pos >= 30
+      copper_pour_separator:
+        pos: _io.pos + 18
+        type: int3
+        if: _io.size - _io.pos >= 30
+      copper_pour_layer:
+        pos: _io.pos + 21
+        type: int3
+        if: _io.size - _io.pos >= 30
+      copper_pour_vertex_count:
+        pos: _io.pos + 27
+        type: int3
+        if: _io.size - _io.pos >= 30
+      copper_style_lead:
+        pos: _io.pos
+        type: int3
+        if: _io.size - _io.pos >= 14
+      copper_style_spoke_mode:
+        pos: _io.pos + 3
+        type: int3
+        if: _io.size - _io.pos >= 14
+      copper_style_line_spacing:
+        pos: _io.pos + 6
+        type: int4
+        if: _io.size - _io.pos >= 14
+      copper_style_spoke_width:
+        pos: _io.pos + 10
+        type: int4
+        if: _io.size - _io.pos >= 14
+      copper_cached_field0:
+        pos: _io.pos
+        type: int3
+        if: _io.size - _io.pos >= 23
+      copper_cached_field1:
+        pos: _io.pos + 3
+        type: int4
+        if: _io.size - _io.pos >= 23
+      copper_cached_field2:
+        pos: _io.pos + 7
+        type: int4
+        if: _io.size - _io.pos >= 23
+      copper_cached_field3:
+        pos: _io.pos + 11
+        type: int4
+        if: _io.size - _io.pos >= 23
+      copper_cached_field4:
+        pos: _io.pos + 15
+        type: int4
+        if: _io.size - _io.pos >= 23
+      copper_cached_field5:
+        pos: _io.pos + 19
+        type: int4
+        if: _io.size - _io.pos >= 23
+      copper_trailer_regions_counted:
+        pos: _io.pos
+        type: int3
+        if: _io.size - _io.pos >= 28
+      copper_trailer_zero:
+        pos: _io.pos + 3
+        type: int4
+        if: _io.size - _io.pos >= 28
+      copper_trailer_board_clearance:
+        pos: _io.pos + 7
+        type: int4
+        if: _io.size - _io.pos >= 28
+      copper_trailer_island_region:
+        pos: _io.pos + 11
+        type: u1
+        if: _io.size - _io.pos >= 28
+      copper_trailer_island_internal:
+        pos: _io.pos + 12
+        type: u1
+        if: _io.size - _io.pos >= 28
+      copper_trailer_island_connection:
+        pos: _io.pos + 13
+        type: u1
+        if: _io.size - _io.pos >= 28
+      copper_trailer_zone_id:
+        pos: _io.pos + 14
+        type: int3
+        if: _io.size - _io.pos >= 28
+      copper_trailer_via_direct:
+        pos: _io.pos + 17
+        type: u1
+        if: _io.size - _io.pos >= 28
+      copper_trailer_smd_separate:
+        pos: _io.pos + 18
+        type: u1
+        if: _io.size - _io.pos >= 28
+      copper_trailer_smd_spoke_mode:
+        pos: _io.pos + 19
+        type: int3
+        if: _io.size - _io.pos >= 28
+      copper_trailer_smd_spoke_width:
+        pos: _io.pos + 22
+        type: int4
+        if: _io.size - _io.pos >= 28
+      copper_trailer_ratline_mode:
+        pos: _io.pos + 26
+        type: u1
+        if: _io.size - _io.pos >= 28
+      copper_trailer_regions_done:
+        pos: _io.pos + 27
+        type: u1
+        if: _io.size - _io.pos >= 28
+      is_component_boundary_std:
+        value: '_io.size - _io.pos >= 13 and b0 == 0x0f and b1 == 0x42 and b2 == 0x40 and b3 == 0x0f and b4 == 0x42 and b5 == 0x3f and b6 == 0x0f and b7 == 0x42 and b8 == 0x3f and b9 == 0x3b and b10 == 0x9a and b11 == 0xca and b12 == 0x00'
+      is_component_boundary_alt:
+        value: '_io.size - _io.pos >= 13 and b0 == 0x0f and b1 == 0x42 and b2 == 0x40 and b3 == 0x0f and b4 == 0x42 and b5 == 0x40 and b6 == 0x0f and b7 == 0x42 and b8 == 0x40 and b9 == 0x3b and b10 == 0x9a and b11 == 0xca and b12 == 0x00'
+      is_net_record_start:
+        value: '_io.size - _io.pos >= 12 and b0 == 0x0f and b1 == 0x42 and b2 == 0x40 and b3 == 0x0f and b4 == 0x42 and b5 == 0x3f and b6 == 0x0f and b7 == 0x42 and b8 == 0x3f'
+      is_component_tail_start:
+        value: '_io.size - _io.pos >= 37 and b0 == 0x0f and b1 == 0x42 and b2 == 0x40 and b3 == 0x3b and b4 == 0x9a and b5 == 0xca and b6 == 0x00 and b7 == 0x3b and b8 == 0x9a and b9 == 0xca and b10 == 0x00 and component_tail_check_int4_a.value == 0 and component_tail_check_int4_b.value == 0 and component_tail_side_flag_1 <= 1 and (component_tail_visibility.value == 0 or component_tail_visibility.value == -1) and component_tail_side_flag_2 <= 1 and component_tail_has_offset <= 1 and component_tail_terminator == 0'
+      is_pad_start:
+        value: '_io.size - _io.pos >= 18 and pad_index_probe.value >= 1 and pad_index_probe.value < 500 and pad_net_index_probe.value >= -1 and pad_net_index_probe.value <= 500 and pad_x_probe.value >= -50000000 and pad_x_probe.value <= 50000000 and pad_y_probe.value >= -50000000 and pad_y_probe.value <= 50000000 and (_root.ver > 37 ? (pad_number_len_utf16 <= 64 and pad_label_len_utf16 <= 64 and pad_width_utf16.value > 0 and pad_width_utf16.value <= 10000000 and pad_height_utf16.value > 0 and pad_height_utf16.value <= 10000000) : (pad_number_len_ascii.value >= 0 and pad_number_len_ascii.value <= 64 and pad_label_len_ascii.value >= 0 and pad_label_len_ascii.value <= 64 and pad_width_ascii.value > 0 and pad_width_ascii.value <= 10000000 and pad_height_ascii.value > 0 and pad_height_ascii.value <= 10000000))'
+      is_mount_hole_block_start:
+        value: '_io.size - _io.pos >= 56 and mount_hole_count_field.value >= 3 and mount_hole_count_field.value <= 66 and mount_hole_header_flag <= 1 and mount_hole_zero_a.value == 0 and mount_hole_zero_b.value == 0 and mount_hole_zero_c.value == 0 and mount_hole_zero_d.value == 0 and mount_hole_first_flag_a == 0 and mount_hole_first_flag_b <= 1 and mount_hole_first_outer.value > 0 and mount_hole_first_outer.value <= 50000000 and mount_hole_first_drill.value > 0 and mount_hole_first_drill.value <= mount_hole_first_outer.value'
+      is_fp_shape_start:
+        value: '_root.ver > 37 and _io.size - _io.pos >= 60 and (fp_shape_type.value == -1 or fp_shape_type.value == 0 or fp_shape_type.value == 1 or fp_shape_type.value == 2 or fp_shape_type.value == 3 or fp_shape_type.value == 6) and fp_shape_x1.value >= -20000 and fp_shape_x1.value <= 20000 and fp_shape_y1.value >= -20000 and fp_shape_y1.value <= 20000 and fp_shape_x2.value >= -20000 and fp_shape_x2.value <= 20000 and fp_shape_y2.value >= -20000 and fp_shape_y2.value <= 20000 and fp_shape_style_flag <= 1 and fp_shape_v45_width.value >= -10000 and fp_shape_v45_width.value <= 5000000 and fp_shape_v45_layer.value >= -1 and fp_shape_v45_layer.value <= 100'
+      is_fp_shape_v37_start:
+        value: '_root.ver <= 37 and _io.size - _io.pos >= 62 and (fp_shape_type.value == -1 or fp_shape_type.value == 0 or fp_shape_type.value == 1 or fp_shape_type.value == 2 or fp_shape_type.value == 3 or fp_shape_type.value == 6) and fp_shape_x1.value >= -20000 and fp_shape_x1.value <= 20000 and fp_shape_y1.value >= -20000 and fp_shape_y1.value <= 20000 and fp_shape_x2.value >= -20000 and fp_shape_x2.value <= 20000 and fp_shape_y2.value >= -20000 and fp_shape_y2.value <= 20000 and fp_shape_style_flag <= 1 and fp_shape_v37_width.value >= -10000 and fp_shape_v37_width.value <= 5000000 and fp_shape_v37_layer.value >= -1 and fp_shape_v37_layer.value <= 100'
+      is_fp_font_block_start:
+        value: '_root.ver >= 46 and _io.size - _io.pos >= 58 and b0 == 0x00 and b1 == 0x06 and b2 == 0x00 and b3 == 0x54 and b4 == 0x00 and b5 == 0x61 and b6 == 0x00 and b7 == 0x68 and b8 == 0x00 and b9 == 0x6f and b10 == 0x00 and b11 == 0x6d and b12 == 0x00 and b13 == 0x61 and fp_font_meta_flag <= 1 and fp_font_size.value >= 1 and fp_font_size.value <= 100000 and fp_font_height.value >= -10000000 and fp_font_height.value <= 10000000 and fp_font_width.value >= -10000000 and fp_font_width.value <= 10000000 and fp_font_line_width.value >= -10000 and fp_font_line_width.value <= 5000000 and fp_font_layer.value >= -1 and fp_font_layer.value <= 100 and fp_font_x1.value >= -50000000 and fp_font_x1.value <= 50000000 and fp_font_y1.value >= -50000000 and fp_font_y1.value <= 50000000 and fp_font_x2.value >= -50000000 and fp_font_x2.value <= 50000000 and fp_font_y2.value >= -50000000 and fp_font_y2.value <= 50000000 and (fp_font_shape_type.value == 0 or fp_font_shape_type.value == 1 or fp_font_shape_type.value == 2 or fp_font_shape_type.value == 3 or fp_font_shape_type.value == 5 or fp_font_shape_type.value == 6 or fp_font_shape_type.value == 7 or fp_font_shape_type.value == 700)'
+      is_fp_chain_shape_start:
+        value: '_root.ver >= 46 and _io.size - _io.pos >= 76 and fp_chain_pad_a == 0 and fp_chain_pad_b == 0 and fp_chain_font_len == 6 and fp_chain_font_t == 0x0054 and fp_chain_font_a == 0x0061 and fp_chain_font_h == 0x0068 and fp_chain_font_o == 0x006f and fp_chain_font_m == 0x006d and fp_chain_font_a2 == 0x0061 and fp_chain_width.value >= -10000 and fp_chain_width.value <= 5000000 and (fp_chain_shape_type.value == 2 or fp_chain_shape_type.value == 3) and fp_chain_x1.value >= -50000000 and fp_chain_x1.value <= 50000000 and fp_chain_y1.value >= -50000000 and fp_chain_y1.value <= 50000000 and fp_chain_x2.value >= -50000000 and fp_chain_x2.value <= 50000000 and fp_chain_y2.value >= -50000000 and fp_chain_y2.value <= 50000000'
+      is_copper_pour_font_preamble_start:
+        value: '_root.ver > 37 ? (copper_font_len_utf16 >= 1 and copper_font_len_utf16 <= 64 and copper_font_size_utf16.value >= 5 and copper_font_size_utf16.value <= 30 and copper_font_bold_utf16 <= 1 and copper_font_height_utf16.value > 0 and copper_font_height_utf16.value < 10000000 and copper_font_width_utf16.value > 0 and copper_font_width_utf16.value < 10000000 and copper_font_tail_utf16.value == -20000 and copper_font_separator_utf16.value == 0) : (copper_font_len_ascii.value >= 1 and copper_font_len_ascii.value <= 64 and copper_font_size_ascii.value >= 5 and copper_font_size_ascii.value <= 30 and copper_font_bold_ascii <= 1 and copper_font_height_ascii.value > 0 and copper_font_height_ascii.value < 10000000 and copper_font_width_ascii.value > 0 and copper_font_width_ascii.value < 10000000 and copper_font_tail_ascii.value == -20000 and copper_font_separator_ascii.value == 0)'
+      is_copper_pour_start:
+        value: '_io.size - _io.pos >= 30 and copper_pour_fill_mode <= 2 and copper_pour_connection_mode <= 2 and copper_pour_min_width.value > 0 and copper_pour_min_width.value <= 10000000 and copper_pour_clearance.value >= 0 and copper_pour_clearance.value <= 10000000 and copper_pour_min_area.value >= 0 and copper_pour_min_area.value <= 100000000 and copper_pour_separator.value <= 0 and copper_pour_layer.value >= 0 and copper_pour_layer.value <= 100 and copper_pour_vertex_count.value >= 3 and copper_pour_vertex_count.value <= 50000'
+      is_copper_pour_style_start:
+        value: '_io.size - _io.pos >= 14 and copper_style_lead.value == 0 and copper_style_spoke_mode.value >= 0 and copper_style_spoke_mode.value <= 4 and copper_style_line_spacing.value > 0 and copper_style_line_spacing.value <= 10000000 and copper_style_spoke_width.value > 0 and copper_style_spoke_width.value <= 10000000'
+      is_copper_pour_cached_fill_start:
+        value: '_io.size - _io.pos >= 23 and copper_cached_field0.value >= 0 and copper_cached_field0.value <= 100000 and copper_cached_field1.value >= -100000000 and copper_cached_field1.value <= 100000000 and copper_cached_field2.value >= -100000000 and copper_cached_field2.value <= 100000000 and copper_cached_field3.value >= -100000000 and copper_cached_field3.value <= 100000000 and copper_cached_field4.value >= -100000000 and copper_cached_field4.value <= 100000000 and copper_cached_field5.value >= -100000000 and copper_cached_field5.value <= 100000000'
+      is_copper_pour_trailer_start:
+        value: '_io.size - _io.pos >= 28 and copper_trailer_regions_counted.value >= 0 and copper_trailer_regions_counted.value <= 100000 and copper_trailer_zero.value == 0 and copper_trailer_board_clearance.value >= 0 and copper_trailer_board_clearance.value <= 10000000 and copper_trailer_island_region <= 1 and copper_trailer_island_internal <= 1 and copper_trailer_island_connection <= 1 and copper_trailer_zone_id.value >= 0 and copper_trailer_zone_id.value <= 100000 and copper_trailer_via_direct <= 1 and copper_trailer_smd_separate <= 1 and copper_trailer_smd_spoke_mode.value >= 0 and copper_trailer_smd_spoke_mode.value <= 4 and copper_trailer_smd_spoke_width.value > 0 and copper_trailer_smd_spoke_width.value <= 10000000 and copper_trailer_ratline_mode <= 2 and copper_trailer_regions_done <= 1'
+      is_track_chain_start:
+        value: '_io.size - _io.pos >= 12 and b0 == 0x00 and b1 == 0x00 and b2 == 0x00 and b3 == 0x0f and b4 == 0x42 and b5 == 0x3f and track_node_count_probe.value >= 1 and track_node_count_probe.value <= 10000'
+      is_text_section_start:
+        value: '_io.size - _io.pos >= 14 and b0 == 0x0f and b1 == 0x42 and b2 == 0x40 and b3 == 0x0f and b4 == 0x42 and b5 == 0x40 and b6 == 0x0f and b7 == 0x42 and b8 == 0x40 and text_count_probe.value >= 0 and text_count_probe.value <= 10000 and b12 == 0x01 and b13 == 0x00'
+
+  component_record_anchor:
+    doc: |
+      Component boundary marker plus the following one-byte separator and forward
+      component header.  FieldWalkComponentBoundaries() validates a boundary core
+      with a header string at the file's global boundary delta; observed accepted
+      records use delta 14, represented here as the 13-byte core plus
+      boundary_suffix byte before `component`.
+    params:
+      - id: is_alt
+        type: bool
+    seq:
+      - id: std_boundary
+        type: component_boundary
+        if: not is_alt
+      - id: alt_boundary
+        type: component_boundary_alt
+        if: is_alt
+      - id: boundary_suffix
+        type: u1
+        doc: Byte between the 13-byte boundary core and component library_path.
+      - id: header
+        type: component
+
   int3:
     doc: 3-byte unsigned big-endian integer biased by 1,000,000.
     seq:
@@ -141,19 +787,19 @@ types:
       - id: byte2
         type: u1
     instances:
-      raw:
+      stored:
         value: byte0 * 65536 + byte1 * 256 + byte2
       value:
-        value: raw - 1000000
+        value: stored - 1000000
 
   int4:
     doc: 4-byte unsigned big-endian integer biased by 1,000,000,000.
     seq:
-      - id: raw
+      - id: stored
         type: u4
     instances:
       value:
-        value: raw - 1000000000
+        value: stored - 1000000000
 
   dt_string:
     doc: Version-dependent DipTrace string.
@@ -266,12 +912,36 @@ types:
         type: int4
       - id: font_width
         type: int4
-      - id: legacy_magic_padding
-        size: 12
-        doc: DTBOARDx.yy legacy files store twelve bytes here, followed directly by the rule-name count.
+      - id: legacy_magic_tail_a
+        type: u1
+        doc: First byte of the DTBOARDx.yy legacy post-font tail.
+        if: _root.magic_len == 11
+      - id: legacy_magic_tail_b
+        type: u1
+        if: _root.magic_len == 11
+      - id: legacy_magic_tail_c
+        type: u1
+        if: _root.magic_len == 11
+      - id: legacy_magic_tail_d
+        type: u1
+        if: _root.magic_len == 11
+      - id: legacy_magic_tail_e
+        type: u1
+        if: _root.magic_len == 11
+      - id: legacy_magic_tail_field_a
+        type: int3
+        doc: Observed 0 in DTBOARDx.yy legacy files.
+        if: _root.magic_len == 11
+      - id: legacy_magic_tail_field_b
+        type: int3
+        doc: Observed 0 in DTBOARDx.yy legacy files.
+        if: _root.magic_len == 11
+      - id: legacy_magic_tail_flag
+        type: u1
+        doc: Final legacy post-font tail byte before the rule-name count.
         if: _root.magic_len == 11
       - id: v37_padding
-        size: 5
+        contents: [0x00, 0x00, 0x00, 0x00, 0x00]
         if: _root.magic_len == 7 and _root.ver <= 37
       - id: v37_extra_a
         type: int3
@@ -282,14 +952,25 @@ types:
       - id: v37_extra_flag
         type: u1
         if: _root.magic_len == 7 and _root.ver <= 37
-      - id: modern_padding
-        size: 10
+      - id: modern_post_font_flags
+        type: u1
+        repeat: expr
+        repeat-expr: 7
         doc: |
-          Standard v38+ post-font padding.  Most modern files then store a zero
-          field_c followed by a pattern-name group count.  Some v49+ files store
-          the pattern-style group count directly in field_c.  Files with the
-          compact implicit-style variant use only the first seven bytes of this
-          padding and then `implicit_pattern_style_group`.
+          Seven post-font flag bytes read before the pattern/style group selector.
+          Sampled modern files use combinations such as 00 00 00 00 00 00 00,
+          00 00 00 01 00 00 00, and 01 01 00 00 01 00 00.  Files with the compact
+          implicit-style variant use only these seven bytes and then
+          `implicit_pattern_style_group`.
+        if: _root.ver > 37
+      - id: modern_post_font_tail
+        type: u1
+        repeat: expr
+        repeat-expr: 3
+        doc: |
+          Standard v38+ tail bytes after modern_post_font_flags.  Observed as
+          00 00 00 in non-implicit files; omitted by the compact implicit-style
+          variant selected by the C++ parser when a UTF-16 group name begins here.
         if: _root.ver > 37
       - id: field_c
         type: int3
@@ -441,7 +1122,7 @@ types:
             type: int3
             repeat: expr
             repeat-expr: unk1_count.value
-          - id: raw_pad_1
+          - id: transition_pad
             type: s4
           - id: unk2_count
             type: int3
@@ -524,11 +1205,25 @@ types:
       One placed component / footprint record (ParseSingleComponent, parser
       ~1595-1702).  The reader seeks to boundaryOffset+14 (past the boundary
       marker) and reads this structure sequentially.  Field order and sizes are
-      mirrored exactly; `placement_quarter_turns` lives 59 bytes BEFORE the
-      boundary marker (int3 read at boundaryOffset-59) and so is not part of this
-      forward-read structure.  Standalone-via component records can truncate
-      after `pattern_name`; the importer keeps those partial records so the pad
-      data can classify them as standalone vias.
+      mirrored exactly.  The placement rotation is NOT in this forward-read
+      record: pads and footprint graphics are stored canonical (unrotated).  A
+      90-degree-snapped quarter-turn count lives in a small metadata block that
+      precedes the boundary marker, anchored by the component Id; it is recovered
+      by scanning backwards for the zero-run `int3(0)*4 int4(0)*4` that trails the
+      Id and reading the biased int3 six bytes before the Id (FindComponentRotation).
+      The EXACT placement angle (biased int4 of radians * 1e4, allowing diagonal
+      placements the 90-snap cannot express) lives in a separate placement section
+      (ApplyPlacementAngles).  Each placement entry opens with a header that carries
+      the angle as the biased int4 at header-4; there are two header kinds, both
+      followed by three small int3 fields (high two bytes 0x0F42):
+        FULL    -- byte(1) byte(1), the first placement of a pattern.
+        COMPACT -- byte(0) byte(0) then nine 0x00 bytes + 0x0F42, a reused pattern.
+      The entry ends with its refdes string; mapping each refdes to the nearest
+      preceding header keys the angle to its component (validated 668/668 on
+      the reference board; the unmapped objects are exactly the rotation-agnostic
+      via/pad/fiducial records that carry no refdes).  Standalone-via component
+      records can truncate after `pattern_name`; the importer keeps those partial
+      records so the pad data can classify them as standalone vias.
     seq:
       - id: library_path
         type: dt_string
@@ -537,7 +1232,7 @@ types:
         doc: Raw header int3 field A.
       - id: field_b
         type: int3
-        doc: Raw header int3 field B (unused by importer).
+        doc: Stored header int3 field B; parsed but not used by the importer.
       - id: flags
         type: u1
         repeat: expr
@@ -714,14 +1409,14 @@ types:
         doc: |
           Pad style at post-dim +4 (0 = Ellipse, 1 = Obround, 2 = Rectangle,
           3 = Polygon).
-      - id: unknown_7
+      - id: filler_flag
         type: u1
-        doc: Filler byte at post-dim +7 (not assigned a meaning).
+        doc: Filler byte at post-dim +7; observed as a structural separator before polygon_vertex_count.
       - id: polygon_vertex_count
         type: int3
         doc: |
           Polygon vertex count at post-dim +8.  Only meaningful when
-          shape_code == 3; for the fixed block it is part of the unassigned
+          shape_code == 3; for the fixed block it is part of the fixed
           remainder.
       - id: polygon_vertices
         type: pad_polygon_vertex
@@ -731,17 +1426,42 @@ types:
           Inline polygon vertices relative to pad center, present only when
           shape_code == 3 (PAD_POST_DIM_HEADER = 11 bytes precede this run).
       - id: fixed_tail
-        size: 25
+        type: pad_post_dim_tail
         if: shape_code.value == 3
         doc: |
           25-byte tail (PAD_POST_DIM_TAIL) after the polygon vertices.  The last
           byte is the pad orientation class (orientClass).
       - id: fixed_block_tail
-        size: 25
+        type: pad_post_dim_tail
         if: shape_code.value != 3
         doc: |
           Remainder of the 36-byte fixed block (11-byte header already consumed
           above).  The last byte is the pad orientation class (orientClass).
+
+  pad_post_dim_tail:
+    doc: |
+      Tail of the pad post-dimension block.  The first 24 bytes are stored
+      scalar/flag slots preserved by DipTrace before the orientation class byte;
+      byte 24 is consumed as orientClass by the importer.
+    seq:
+      - id: tail_field_a
+        type: int3
+      - id: tail_flag_a
+        type: u1
+      - id: tail_field_b
+        type: int3
+      - id: tail_flag_b
+        type: u1
+      - id: tail_field_c
+        type: int4
+      - id: tail_field_d
+        type: int4
+      - id: tail_field_e
+        type: int4
+      - id: tail_field_f
+        type: int3
+      - id: orientation_class
+        type: u1
 
   pad_polygon_vertex:
     doc: One polygon vertex relative to pad center (PAD_POLYGON_VERTEX_SIZE = 8).
@@ -777,7 +1497,7 @@ types:
         repeat: expr
         repeat-expr: count_field.value - 2
       - id: terminator
-        size: 2
+        contents: [0x00, 0x00]
         doc: Two 0x00 bytes (MOUNT_HOLE_TERM_SIZE).
       - id: trailer_zeros
         type: int4
@@ -839,9 +1559,9 @@ types:
       - id: mid_y
         type: int4
         doc: Arc midpoint Y at record +23.
-      - id: gap_27
-        size: 26
-        doc: Bytes +27..+52 are not assigned by the importer.
+      - id: style
+        type: fp_shape_style_v45
+        doc: Bytes +27..+52, fixed style/paint payload before width.
       - id: width
         type: int4
         doc: Line width at record +53 (-10000 = use default).
@@ -871,9 +1591,9 @@ types:
         type: int4
       - id: mid_y
         type: int4
-      - id: gap_27
-        size: 28
-        doc: Bytes +27..+54 are not assigned by the importer.
+      - id: style
+        type: fp_shape_style_v37
+        doc: Bytes +27..+54, legacy fixed style/paint payload before width.
       - id: width
         type: int4
         doc: Line width at record +55.
@@ -881,13 +1601,67 @@ types:
         type: int3
         doc: DipTrace layer index at record +59.
 
+  fp_shape_style_v45:
+    doc: |
+      v38..v45 fixed footprint-shape style payload at record +27..+52.  Project4
+      v37 uses the wider fp_shape_style_v37 variant; v38 example_routed and v45
+      Z80 Board records show this 26-byte payload as:
+      byte(0), int3(0), five zero bytes, int3(0), int4(0), int4(0),
+      int3(0), int3(0).  Width and layer follow immediately.
+    seq:
+      - id: style_flag_a
+        type: u1
+      - id: style_field_a
+        type: int3
+      - id: zero_run
+        contents: [0x00, 0x00, 0x00, 0x00, 0x00]
+        doc: Five structural zero bytes in observed v38/v45 records.
+      - id: style_field_b
+        type: int3
+      - id: style_field_c
+        type: int4
+      - id: style_field_d
+        type: int4
+      - id: style_field_e
+        type: int3
+      - id: style_field_f
+        type: int3
+
+  fp_shape_style_v37:
+    doc: |
+      v37 legacy fixed footprint-shape style payload at record +27..+54.  Verified
+      in qa/data/pcbnew/plugins/diptrace/project4.dip: byte(0), int3(0),
+      int3(0), int3(0), byte(0), int3(0), int4(0), int4(0), int3(0), int3(0).
+      Width and layer follow immediately at +55/+59.
+    seq:
+      - id: style_flag_a
+        type: u1
+      - id: style_field_a
+        type: int3
+      - id: style_field_b
+        type: int3
+      - id: style_field_c
+        type: int3
+      - id: style_flag_b
+        type: u1
+      - id: style_field_d
+        type: int3
+      - id: style_field_e
+        type: int4
+      - id: style_field_f
+        type: int4
+      - id: style_field_g
+        type: int3
+      - id: style_field_h
+        type: int3
+
   fp_font_block:
     doc: |
       v46+ per-layer font-block shape (FindShapesInFontBlocks).  The first block
       is field-located at padRegionEnd + 165 + 2*u16(padRegionEnd + 163); each
       block is self-sized as 72 + 8*point_count + 2*label_chars (point_count =
       smallest leading slot in 0..3 whose int3 holds a valid shape-type code, one
-      of 0, 1, 2, 3, 6, 7, 700), so the blocks form a deterministic chain.  The run
+      of 0, 1, 2, 3, 5, 6, 7, 700), so the blocks form a deterministic chain.  The run
       ends at the trailing value/framing text label -- the first block whose
       leading slot carries shape-type 0 (point_count == 0) or no shape-type code at
       all; a block that instead runs past the region edge is a truncation that
@@ -899,17 +1673,34 @@ types:
       - id: font_pattern
         contents: [0x00, 0x06, 0x00, 0x54, 0x00, 0x61, 0x00, 0x68, 0x00, 0x6f, 0x00, 0x6d, 0x00, 0x61]
         doc: UTF-16BE "Tahoma" (TAHOMA_FONT_PATTERN).
-      - id: meta_head
-        size: 18
-        doc: |
-          First 18 bytes of the 25-byte metadata header
-          (flag u1 + fontSize int3 + fontH int4 + fontW int4 + field_b int3).
+      - id: meta_flag
+        type: u1
+        doc: First byte of the 25-byte metadata header.
+      - id: font_size
+        type: int3
+        doc: Font size at meta +1.
+      - id: font_height
+        type: int4
+        doc: Font height at meta +4.
+      - id: font_width
+        type: int4
+        doc: Font width at meta +8.
+      - id: meta_field_a
+        type: int3
+        doc: Metadata field at meta +12.
+      - id: meta_field_b
+        type: int3
+        doc: Metadata field at meta +15.
       - id: line_width
         type: int4
         doc: Line width at meta +18.
-      - id: layer
+      - id: meta_field_c
         type: int3
-        doc: DipTrace layer index at meta +22 (end of the 25-byte header).
+        doc: |
+          Metadata field at meta +22 (end of the 25-byte header); constant, NOT the
+          graphic layer. The footprint-graphic layer is the int3 stored 5 bytes ahead
+          of this block's "Tahoma" pattern (0 Top Silk, 1 Top Assembly, 2 Top Mask,
+          3 Top Paste, 16 Top Courtyard, 18 Top Outline).
       - id: x1
         type: int4
         doc: Start X (normalized, +/-10000) at body +0.
@@ -926,16 +1717,35 @@ types:
         type: int3
         doc: |
           Shape-type discriminator at body +16.  In the font-block decode 0 = rect,
-          1 = line, 3 = circle, and both 2 and 6 (DT_SHAPE_ARC) = arc; 7 is accepted
-          as a block-sizing code but emits no shape, and 700 = skip.  For arcs,
+          1 and 5 = line, 3 = circle, and both 2 and 6 (DT_SHAPE_ARC) = arc; 700 =
+          filled obround marker (the diode cathode / pin-1 dot, rendered as a filled
+          circle); 7 is accepted as a block-sizing code but emits no shape.  For arcs,
           mid_x/mid_y follow at body +35/+39.
       - id: arc_body
-        size: 24
+        type: fp_font_arc_body
         if: shape_type.value == 2 or shape_type.value == 6
         doc: |
           Bytes body +19..+42 for arc records (shape_type 2 or 6); the arc midpoint
           (mid_x at body +35, mid_y at body +39) lives inside this run (the importer
           requires body +43 <= next boundary).  Absent for non-arc shapes.
+
+  fp_font_arc_body:
+    doc: Arc-only body extension in fp_font_block; last two int4 fields are midpoint X/Y.
+    seq:
+      - id: arc_field_a
+        type: int4
+      - id: arc_field_b
+        type: int4
+      - id: arc_field_c
+        type: int4
+      - id: arc_field_d
+        type: int4
+      - id: mid_x
+        type: int4
+        doc: Arc midpoint X at body +35.
+      - id: mid_y
+        type: int4
+        doc: Arc midpoint Y at body +39.
 
   fp_chain_shape:
     doc: |
@@ -946,9 +1756,9 @@ types:
       fields are decoded.  For footprints with NPTH mounting holes, the final
       framing entry can carry a mount_hole_block overlay at byte +44.
     seq:
-      - id: head
-        size: 37
-        doc: Bytes +0..+36 not assigned by the importer.
+      - id: frame
+        type: fp_chain_shape_frame
+        doc: Bytes +0..+36, chained-record framing/style payload before width.
       - id: width
         type: int4
         doc: Line width at record +37 (FP_CHAIN_SHAPE_WIDTH_OFFSET).
@@ -974,20 +1784,72 @@ types:
         type: int4
         doc: Y3 at record +64 (arc end Y; only used for arcs).
       - id: tail
-        size: 8
-        doc: Bytes +68..+75 not assigned by the importer.
+        type: fp_chain_shape_tail
+        doc: Bytes +68..+75, chained-record trailer.
+
+  fp_chain_shape_frame:
+    doc: |
+      Chained fixed-size footprint-shape framing/style payload at record +0..+36.
+      This is a Tahoma font/style header: int3 field, two-byte pad, UTF-16BE
+      "Tahoma", font flag/size/dimensions, and two int3 fields.  The importer does
+      not consume these fields when emitting KiCad graphics, but the 37-byte payload
+      is part of every 76-byte record and precedes the width at +37.
+    seq:
+      - id: frame_field_a
+        type: int3
+      - id: pad
+        contents: [0x00, 0x00]
+        doc: Observed 00 00 before the UTF-16BE font string.
+      - id: font_pattern
+        contents: [0x00, 0x06, 0x00, 0x54, 0x00, 0x61, 0x00, 0x68, 0x00, 0x6f, 0x00, 0x6d, 0x00, 0x61]
+        doc: UTF-16BE length-prefixed "Tahoma" bytes (00 06 + 12 text bytes).
+      - id: font_flag
+        type: u1
+      - id: font_size
+        type: int3
+      - id: font_height
+        type: int4
+      - id: font_width
+        type: int4
+      - id: frame_field_b
+        type: int3
+      - id: frame_field_c
+        type: int3
+
+  fp_chain_shape_tail:
+    doc: |
+      Chained fixed-size footprint-shape trailer at record +68..+75.  Real chain
+      records store x3/y3 for arcs at +60/+64; this 8-byte trailer closes the
+      fixed 76-byte record.
+    seq:
+      - id: tail_field_a
+        type: int3
+      - id: tail_field_b
+        type: int4
+      - id: tail_flag
+        type: u1
 
   fp_chain_shape_mount_hole_overlay:
     doc: |
       Overlay for final v46+ chained-shape framing entries that carry footprint
       mounting holes.  The mount_hole_block starts at byte +44 of the 76-byte
-      final framing record, sharing bytes with the otherwise-unassigned framing
+      final framing record, sharing bytes with the stored framing
       payload.
     seq:
       - id: prefix
-        size: 44
+        type: fp_chain_shape_overlay_prefix
       - id: mount_holes
         type: mount_hole_block
+
+  fp_chain_shape_overlay_prefix:
+    doc: First 44 bytes of a chained-shape record before the mount-hole overlay at +44.
+    seq:
+      - id: frame
+        type: fp_chain_shape_frame
+      - id: width
+        type: int4
+      - id: shape_type
+        type: int3
 
   net_sentinel:
     doc: int3(0), int3(-1), int3(-1), immediately before a net record (NET_SENTINEL).
@@ -1042,7 +1904,7 @@ types:
         type: u1
         doc: Validated to be <= 1.
       - id: zeros
-        size: 7
+        contents: [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
         doc: 7 bytes validated to be 0 (zeroBlock at startPos+9..+15).
       - id: separator
         type: int3
@@ -1078,8 +1940,7 @@ types:
       - id: node_count
         type: int3
         valid:
-          min: 1
-          max: 10000
+          expr: _.value >= 1 and _.value <= 10000
       - id: nodes
         type: track_node
         repeat: expr
@@ -1088,8 +1949,8 @@ types:
   track_node:
     doc: |
       Fixed 41-byte routing point (TRACK_NODE_SIZE = 41; parser ~2981-3051).
-      Only the fields the importer assigns are named; the gaps are read-and-
-      discarded filler.
+      XML Point@Id is stored at +11 as an int3.  The +23..+26 block is int3(0)
+      plus a one-byte auxiliary flag in the sampled corpus; +34 is int3(0).
     seq:
       - id: x
         type: int4
@@ -1100,9 +1961,9 @@ types:
       - id: layer
         type: int3
         doc: Copper layer index at +8 (0 = top, 1 = bottom, 14+ = inner).
-      - id: unknown_11
-        size: 3
-        doc: Bytes +11..+13 not assigned by the importer.
+      - id: point_id
+        type: int3
+        doc: XML Point@Id at +11.
       - id: width
         type: int4
         doc: Track width at +14.
@@ -1111,10 +1972,13 @@ types:
         doc: Via outer diameter at +18.
       - id: route_flag
         type: u1
-        doc: Raw routing-point flag at +22 (semantics unresolved).
-      - id: unknown_23
-        size: 4
-        doc: Bytes +23..+26 not assigned by the importer.
+        doc: Stored routing-point flag at +22; observed 0 or 1 in sampled files.
+      - id: aux_zero
+        type: int3
+        doc: Auxiliary int3 at +23; observed 0 in sampled files.
+      - id: aux_flag
+        type: u1
+        doc: Auxiliary flag byte at +26; observed 0 or 1 in sampled files.
       - id: via_style_index
         type: int3
         doc: |
@@ -1123,12 +1987,12 @@ types:
       - id: via_drill_diameter
         type: int4
         doc: Via drill diameter at +30.
-      - id: unknown_34
-        size: 3
-        doc: Bytes +34..+36 not assigned by the importer.
+      - id: via_tail_zero
+        type: int3
+        doc: Post-via-diameter int3 at +34; observed 0 in sampled files.
       - id: route_mode
         type: int3
-        doc: Raw routing-point mode at +37 (observed values 0, 1, 3).
+        doc: Raw routing-point mode at +37 (observed values 0, 1, 3, 5).
       - id: tail
         type: u1
         doc: Trailing byte at +40 (0 in sampled files).
@@ -1216,7 +2080,7 @@ types:
       - id: end_flag
         type: u1
       - id: record_separator
-        size: 2
+        contents: [0x01, 0x00]
         if: _index < count - 1
         doc: 2-byte inter-record separator (observed 0x01 0x00); absent after the last record.
 
@@ -1265,14 +2129,13 @@ types:
       - id: field_a
         type: int3
         doc: |
-          Filled-region count at +0 (NOT the CopperPour priority; true priority
-          storage is not yet located).
+          Filled-region count at +0 (not the DipTrace CopperPour priority).
       - id: fill_mode
         type: u1
         doc: Zone flag byte at +3 (validated <= 2).
-      - id: raw_flag_2
+      - id: header_flag_2
         type: u1
-        doc: Zone flag byte at +4 (semantics unknown).
+        doc: Zone header flag byte at +4; stored separately from fill_mode and connection_mode.
       - id: connection_mode
         type: u1
         doc: Zone flag byte at +5 (validated <= 2).
@@ -1304,17 +2167,17 @@ types:
       - id: fill_segment_count
         type: int3
       - id: fill_segments
-        size: 19
+        type: copper_pour_fill_segment
         repeat: expr
         repeat-expr: fill_segment_count.value
-        doc: Cached fill segments (19 bytes each); skipped by the importer.
+        doc: Cached fill segments (19 bytes each); stored fill cache, not emitted as KiCad items.
       - id: fill_poly_count
         type: int3
       - id: fill_polys
         type: copper_pour_fill_poly
         repeat: expr
         repeat-expr: fill_poly_count.value
-        doc: Cached fill polygons; skipped by the importer.
+        doc: Cached fill polygons; stored fill cache, not emitted as KiCad items.
       - id: style_block
         type: copper_pour_style
         doc: |
@@ -1330,6 +2193,25 @@ types:
       - id: y
         type: int4
 
+  copper_pour_fill_segment:
+    doc: |
+      One cached filled-copper segment (19 bytes): endpoint coordinates plus a small
+      int3 classification field.  The importer skips these stored fill-cache records
+      and lets KiCad refill the zone, but the bytes are deterministic; sampled Z80,
+      logic-probe, the reference board, Banana_Pi, and BeagleBone files decode as plausible
+      board coordinates.
+    seq:
+      - id: x1
+        type: int4
+      - id: y1
+        type: int4
+      - id: x2
+        type: int4
+      - id: y2
+        type: int4
+      - id: segment_class
+        type: int3
+
   copper_pour_fill_poly:
     doc: |
       One cached fill polygon (parser ~3850-3872): int3(vertex_count) + vertices
@@ -1342,7 +2224,8 @@ types:
         repeat: expr
         repeat-expr: vertex_count.value
       - id: trailer
-        size: 3
+        type: int3
+        doc: Per-polygon trailer field.
 
   copper_pour_style:
     doc: |
@@ -1411,10 +2294,10 @@ types:
 
   copper_pour_cached_fill:
     doc: |
-      Raw 23-byte cached-fill record (CACHED_RECORD_LEN = 23; parser
+      Structural 23-byte cached-fill record (CACHED_RECORD_LEN = 23; parser
       ~3411-3425), present in the inter-zone gap when the payload between the
-      style block and the trailer is 23-byte aligned.  All fields are raw,
-      unassigned scalars.
+      style block and the trailer is 23-byte aligned.  The importer preserves
+      these as cached fill geometry and does not emit KiCad items from them.
     seq:
       - id: field0
         type: int3

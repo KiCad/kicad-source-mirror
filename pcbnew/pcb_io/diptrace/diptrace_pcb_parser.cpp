@@ -185,6 +185,12 @@ static constexpr size_t PAD_POST_DIM_HEADER    = 11;  // fixed portion before po
 static constexpr size_t PAD_POST_DIM_TAIL      = 25;  // fixed portion after polygon vertices
 static constexpr size_t PAD_POLYGON_VERTEX_SIZE = 8;  // int4(x) + int4(y) per vertex
 
+/// Upper bound for a plausible pad net index, used as a chain-walk desync guard. DipTrace net
+/// indices run 0..netCount-1 (or -1 for unconnected); nets are parsed after components, so this
+/// must comfortably exceed the largest board's net count (the reference board has 568) without admitting
+/// the multi-million garbage a desynced read would produce.
+static constexpr int PAD_MAX_NET_INDEX = 10000;
+
 
 /**
  * Read a 3-byte RGB color from the reader and return it packed as 0x00RRGGBB.
@@ -220,6 +226,62 @@ static int ReadInt4At( const uint8_t* aData, size_t aPos )
                      | ( static_cast<unsigned int>( aData[aPos + 2] ) << 8 )
                      | static_cast<unsigned int>( aData[aPos + 3] );
     return static_cast<int>( raw ) - INT4_BIAS;
+}
+
+
+/**
+ * Recover a placed component's rotation, expressed in 90-degree quarter turns.
+ *
+ * DipTrace does not store the rotation inside the component geometry record; pads and
+ * footprint shapes are serialized in their canonical (unrotated) frame. The placement
+ * angle lives in a small per-component metadata block that precedes the boundary core
+ * by a variable distance. The block is anchored by the component Id (a biased int3),
+ * recognised here by its structural neighbourhood: a 28-byte zero run
+ * (int3(0) x4 followed by int4(0) x4) sits 7 bytes after the Id, and an int3(-1)
+ * sentinel sits 3 bytes before it. The rotation quarter-turn count is the biased int3
+ * stored 6 bytes before the Id. The count is cumulative and may exceed three full turns;
+ * callers reduce it modulo four.
+ *
+ * @return true and sets aQuarterTurns when the metadata anchor is found, false otherwise.
+ */
+static bool FindComponentRotation( const uint8_t* aData, size_t aDataSize, size_t aBoundaryOffset,
+                                   int& aQuarterTurns )
+{
+    // int3(0) x4 then int4(0) x4 -- the zero run that trails the metadata Id field.
+    static const uint8_t ZERO_RUN[] = {
+        0x0F, 0x42, 0x40, 0x0F, 0x42, 0x40, 0x0F, 0x42, 0x40, 0x0F, 0x42, 0x40,
+        0x3B, 0x9A, 0xCA, 0x00, 0x3B, 0x9A, 0xCA, 0x00, 0x3B, 0x9A, 0xCA, 0x00, 0x3B, 0x9A, 0xCA, 0x00,
+    };
+    static constexpr size_t ZERO_RUN_LEN = sizeof( ZERO_RUN );
+    static constexpr size_t MAX_LOOKBACK = 4096;
+
+    if( aBoundaryOffset < ZERO_RUN_LEN + 7 )
+        return false;
+
+    size_t scanStart = aBoundaryOffset > MAX_LOOKBACK ? aBoundaryOffset - MAX_LOOKBACK : 0;
+
+    // Walk backwards from the boundary core and take the nearest zero run. The metadata
+    // block always sits just ahead of its component, so the nearest match belongs to it.
+    for( size_t p = aBoundaryOffset - ZERO_RUN_LEN; p + ZERO_RUN_LEN <= aDataSize; p-- )
+    {
+        if( std::memcmp( aData + p, ZERO_RUN, ZERO_RUN_LEN ) == 0 )
+        {
+            size_t idPos = p - 7;
+
+            // The sentinel int3(-1) immediately precedes the Id; require it so a stray
+            // zero run inside pad data cannot be mistaken for the metadata anchor.
+            if( idPos >= 6 && ReadInt3At( aData, idPos - 3 ) == -1 )
+            {
+                aQuarterTurns = ReadInt3At( aData, idPos - 6 );
+                return true;
+            }
+        }
+
+        if( p == scanStart )
+            break;
+    }
+
+    return false;
 }
 
 
@@ -928,6 +990,7 @@ void PCB_PARSER::Parse()
         ParseDesignRules();
         m_postDesignRulesOffset = m_reader.GetOffset();
         FindAndParseComponents();
+        ApplyPlacementAngles();
         ParsePostComponentSections();
         wxLogTrace( traceDiptraceIo,
                     wxT( "DipTrace: post-component sections parsed; inferring routing-ref pad nets" ) );
@@ -1861,15 +1924,132 @@ void PCB_PARSER::FindAndParseComponents()
 }
 
 
+void PCB_PARSER::ApplyPlacementAngles()
+{
+    if( m_components.empty() )
+        return;
+
+    const uint8_t* data = m_reader.GetData();
+    size_t         dataSize = m_reader.GetFileSize();
+
+    static constexpr double RAD_FIXED_TO_DEG = ( 180.0 / M_PI ) / 1.0e4;
+    static constexpr int    MAX_ANGLE_FIXED = 200000; // ~11.4 rad of cumulative turns
+
+    // The placement section stores one self-delimiting entry per placed object, each opening with
+    // a header that carries the exact angle as a biased int4 (radians x 1e4) at header-4. There are
+    // two header kinds, both followed by three small int3 fields (high two bytes 0x0F42):
+    //   FULL    -- byte(1) byte(1), used by the first placement of a pattern.
+    //   COMPACT -- byte(0) byte(0) then nine zero bytes + 0x0F42, used when a pattern is reused
+    //              (this kind is why D2/D21, both reusing the SK54C pattern, key correctly).
+    // Collect every header offset and its angle.
+    auto isThreeInt3 = [&]( size_t aPos ) -> bool
+    {
+        return aPos + 9 <= dataSize
+               && data[aPos] == 0x0F && data[aPos + 1] == 0x42
+               && data[aPos + 3] == 0x0F && data[aPos + 4] == 0x42
+               && data[aPos + 6] == 0x0F && data[aPos + 7] == 0x42;
+    };
+
+    std::vector<std::pair<size_t, double>> headers;
+
+    for( size_t off = 4; off + 32 <= dataSize; off++ )
+    {
+        bool full = data[off] == 0x01 && data[off + 1] == 0x01 && isThreeInt3( off + 2 );
+        bool compact = data[off] == 0x00 && data[off + 1] == 0x00 && isThreeInt3( off + 2 )
+                       && off + 22 <= dataSize
+                       && std::memcmp( data + off + 11, "\0\0\0\0\0\0\0\0\0", 9 ) == 0
+                       && data[off + 20] == 0x0F && data[off + 21] == 0x42;
+
+        if( !full && !compact )
+            continue;
+
+        int fixed = ReadInt4At( data, off - 4 );
+
+        if( fixed >= -MAX_ANGLE_FIXED && fixed <= MAX_ANGLE_FIXED )
+            headers.emplace_back( off, static_cast<double>( fixed ) * RAD_FIXED_TO_DEG );
+    }
+
+    if( headers.empty() )
+        return;
+
+    // Map each refdes to the angle of the nearest preceding header (first occurrence wins). A
+    // refdes string is a UTF-16-BE record (uint16 length 1..12) that begins with a letter and
+    // contains a digit; this skips the pattern-name and field strings the entries also carry.
+    std::map<wxString, double> refdesAngle;
+
+    for( size_t off = 0; off + 4 <= dataSize; off++ )
+    {
+        size_t len = ( static_cast<size_t>( data[off] ) << 8 ) | data[off + 1];
+
+        if( len < 1 || len > 12 || off + 2 + 2 * len > dataSize )
+            continue;
+
+        std::string refdes;
+        bool        asciiUtf16 = true;
+        bool        firstAlpha = false;
+        bool        hasDigit = false;
+
+        for( size_t c = 0; c < len; c++ )
+        {
+            uint8_t hi = data[off + 2 + 2 * c];
+            uint8_t lo = data[off + 3 + 2 * c];
+
+            if( hi != 0 || lo < 0x20 || lo > 0x7E )
+            {
+                asciiUtf16 = false;
+                break;
+            }
+
+            if( c == 0 )
+                firstAlpha = std::isalpha( lo );
+
+            if( std::isdigit( lo ) )
+                hasDigit = true;
+
+            refdes += static_cast<char>( lo );
+        }
+
+        if( !asciiUtf16 || !firstAlpha || !hasDigit )
+            continue;
+
+        // Nearest header strictly preceding this refdes.
+        auto it = std::upper_bound( headers.begin(), headers.end(), off,
+                                    []( size_t aPos, const std::pair<size_t, double>& aHdr )
+                                    { return aPos < aHdr.first; } );
+
+        if( it == headers.begin() )
+            continue;
+
+        refdesAngle.emplace( wxString::FromUTF8( refdes ), ( it - 1 )->second );
+    }
+
+    size_t applied = 0;
+
+    for( DT_COMPONENT& comp : m_components )
+    {
+        auto it = refdesAngle.find( comp.refdes );
+
+        if( it != refdesAngle.end() )
+        {
+            comp.placementAngleDeg = it->second;
+            comp.hasPlacementAngle = true;
+            applied++;
+        }
+    }
+
+    wxLogTrace( traceDiptraceIo, wxT( "DipTrace: keyed %zu exact placement angles by refdes" ), applied );
+}
+
+
 bool PCB_PARSER::ClassifyStandaloneVia( const DT_COMPONENT& aComp )
 {
     // A DipTrace board serializes three "padstack-only" object kinds with an empty pattern
     // name and empty library path: Static Vias, single-pad Pads, and Fiducials. Only the
     // Static Via is a true KiCad via; the other kinds must become one-pad footprints so the
-    // 1662 placed footprints (668 real + 990 Pad + 4 Fiducial in DrvModBoard) are not lost.
+    // 1662 placed footprints (668 real + 990 Pad + 4 Fiducial in the reference board) are not lost.
     //
     // The component's display name carries DipTrace's internal object name and is the only
-    // reliable discriminator (verified field-by-field against DrvModBoard.dipxml: 1102 vias
+    // reliable discriminator (verified field-by-field against the reference board XML oracle: 1102 vias
     // carry "Static Via", 990 Pads carry "Pad", 4 carry "Fiducial"; older boards such as
     // keyboard.dip name the same object "Via"). Mount holes carry "Hole" and must stay
     // footprints. A real footprint always has a non-empty pattern name and library path, so
@@ -1891,15 +2071,13 @@ bool PCB_PARSER::ParseSingleComponent( size_t aBoundaryOffset, size_t aUpperBoun
 
     try
     {
-        if( aBoundaryOffset >= 59 )
-        {
-            size_t qturnPos = aBoundaryOffset - 59;
+        int quarterTurns = 0;
 
-            if( qturnPos + 3 <= m_reader.GetFileSize() )
-            {
-                aComp.placementQuarterTurns = ReadInt3At( m_reader.GetData(), qturnPos );
-                aComp.hasPlacementQuarterTurns = true;
-            }
+        if( FindComponentRotation( m_reader.GetData(), m_reader.GetFileSize(), aBoundaryOffset,
+                                   quarterTurns ) )
+        {
+            aComp.placementQuarterTurns = quarterTurns;
+            aComp.hasPlacementQuarterTurns = true;
         }
 
         // Library path (may be empty for embedded components)
@@ -2038,7 +2216,7 @@ void PCB_PARSER::FindPadsInRegion( DT_COMPONENT& aComp, size_t aRegionStart, siz
 
         int netIdx = ReadInt3At( data, aPos + 3 );
 
-        if( netIdx < -1 || netIdx > 500 )
+        if( netIdx < -1 || netIdx > PAD_MAX_NET_INDEX )
             return false;
 
         int padX = ReadInt4At( data, aPos + 6 );
@@ -2131,7 +2309,7 @@ void PCB_PARSER::FindPadsInRegion( DT_COMPONENT& aComp, size_t aRegionStart, siz
         if( padIndex != padNum )
             break;
 
-        if( padNetIndex < -1 || padNetIndex > 500 )
+        if( padNetIndex < -1 || padNetIndex > PAD_MAX_NET_INDEX )
             break;
 
         if( std::abs( padX ) > 50000000 || std::abs( padY ) > 50000000 )
@@ -2272,6 +2450,15 @@ static constexpr int FP_SHAPE_NORM_RANGE = 10000;
 
 /// Sentinel value for "use default line width" in shape width field.
 static constexpr int FP_SHAPE_DEFAULT_WIDTH = -10000;
+
+/// DipTrace footprint-graphic layer enum (int3 stored 5 bytes ahead of each shape's font block).
+static constexpr int DT_FP_LAYER_TOP_SILK      = 0;
+static constexpr int DT_FP_LAYER_TOP_ASSY      = 1;
+static constexpr int DT_FP_LAYER_TOP_MASK      = 2;
+static constexpr int DT_FP_LAYER_TOP_PASTE     = 3;
+static constexpr int DT_FP_LAYER_TOP_KEEPOUT   = 9;
+static constexpr int DT_FP_LAYER_TOP_COURTYARD = 16;
+static constexpr int DT_FP_LAYER_TOP_OUTLINE   = 18;
 
 
 // ---------------------------------------------------------------------------
@@ -2603,7 +2790,7 @@ void PCB_PARSER::FindShapesInFontBlocks( DT_COMPONENT& aComp, size_t aRegionStar
 
                     int st = ReadInt3At( data, body + static_cast<size_t>( n ) * 8 );
 
-                    if( st == 0 || st == 1 || st == 2 || st == 3 || st == 6 || st == 7
+                    if( st == 0 || st == 1 || st == 2 || st == 3 || st == 5 || st == 6 || st == 7
                         || st == 700 )
                     {
                         npts = n;
@@ -2686,7 +2873,11 @@ void PCB_PARSER::FindShapesInFontBlocks( DT_COMPONENT& aComp, size_t aRegionStar
 
         size_t metaStart = blockStart + TAHOMA_FONT_PATTERN_LEN;
         int lineWidth = ReadInt4At( data, metaStart + 18 );
-        int layerIdx = ReadInt3At( data, metaStart + 22 );
+
+        // The footprint-graphic layer is a small int3 enum stored 5 bytes ahead of the block's
+        // "Tahoma" font literal (0 Top Silk, 1 Top Assembly, 2 Top Mask, 3 Top Paste,
+        // 16 Top Courtyard, 18 Top Outline). The metaStart+22 field is unrelated and constant.
+        int layerIdx = ( blockStart >= 5 ) ? ReadInt3At( data, blockStart - 5 ) : 0;
 
         size_t bodyPos = headerEnd;
 
@@ -2708,9 +2899,6 @@ void PCB_PARSER::FindShapesInFontBlocks( DT_COMPONENT& aComp, size_t aRegionStar
 
         int shapeType = ReadInt3At( data, bodyPos + 16 );
 
-        if( shapeType == 700 )
-            continue;
-
         DT_FP_SHAPE shape;
         shape.x1 = x1;
         shape.y1 = y1;
@@ -2719,20 +2907,21 @@ void PCB_PARSER::FindShapesInFontBlocks( DT_COMPONENT& aComp, size_t aRegionStar
         shape.width = lineWidth;
         shape.layer = layerIdx;
 
+        // v46+ font-block shape-type codes: 0 = axis-aligned rectangle, 1/5 = line,
+        // 2/6 = arc, 3 = circle, 700 = filled obround marker (polarity / pin-1 dot).
         if( shapeType == 0 )
         {
-            // v46+ font blocks use type 0 for axis-aligned rectangle outlines.
             shape.type = DT_SHAPE_RECT;
         }
-        else if( shapeType == DT_SHAPE_LINE || shapeType == 1 )
+        else if( shapeType == 1 || shapeType == 5 )
         {
             shape.type = DT_SHAPE_LINE;
         }
-        else if( shapeType == DT_SHAPE_CIRCLE || shapeType == 3 )
+        else if( shapeType == 3 )
         {
             shape.type = DT_SHAPE_CIRCLE;
         }
-        else if( shapeType == DT_SHAPE_ARC || shapeType == 2 )
+        else if( shapeType == 2 || shapeType == DT_SHAPE_ARC )
         {
             shape.type = DT_SHAPE_ARC;
 
@@ -2745,6 +2934,10 @@ void PCB_PARSER::FindShapesInFontBlocks( DT_COMPONENT& aComp, size_t aRegionStar
             {
                 continue;
             }
+        }
+        else if( shapeType == DT_SHAPE_FILLOBROUND )
+        {
+            shape.type = DT_SHAPE_FILLOBROUND;
         }
         else
         {
@@ -4987,42 +5180,66 @@ void PCB_PARSER::CreateFootprint( const DT_COMPONENT& aComp )
         footprint->Add( holePad, ADD_MODE::APPEND );
     }
 
+    // When a footprint carries a Top Assembly body outline, DipTrace treats it as the body
+    // graphic and suppresses the redundant Top Silk outline, leaving only silk markers such as
+    // the polarity dot. Footprints without an assembly outline (e.g. two-terminal caps) keep
+    // their silk outline. Detect the assembly outline up front so the silk lines can be dropped.
+    bool hasAssemblyOutline = false;
+
+    for( const DT_FP_SHAPE& s : aComp.shapes )
+    {
+        if( s.layer == DT_FP_LAYER_TOP_ASSY )
+        {
+            hasAssemblyOutline = true;
+            break;
+        }
+    }
+
     // Add footprint outline shapes (silkscreen / fab layer graphics)
     if( !aComp.shapes.empty() && aComp.bboxWidth != 0 && aComp.bboxHeight != 0 )
     {
         int scaleX = aComp.bboxWidth;
         int scaleY = aComp.bboxHeight;
 
-        // Heuristic for bbox axis swap detection.
-        // Shapes always use their largest extent along the Y axis (normalized ±5000).
-        // If the physical result has an extreme aspect ratio (< 0.2), the bbox axes
-        // are swapped relative to the shape coordinate frame.
-        int shapeXRange = 0;
-        int shapeYRange = 0;
-        int minSX = INT_MAX, maxSX = INT_MIN;
-        int minSY = INT_MAX, maxSY = INT_MIN;
-
-        for( const DT_FP_SHAPE& s : aComp.shapes )
+        // The bbox stores the PLACED (rotated) extent while the shape coordinates are canonical
+        // (the unrotated pattern frame). A 90/270-degree placement transposes the bbox width and
+        // height, so restore the canonical axes before scaling; SetOrientation() then rotates the
+        // shapes into place alongside the pads. Without this, a rotated connector's silk lands 90
+        // degrees off its pad field. The quarter-turn parity drives the swap exactly.
+        if( aComp.hasPlacementQuarterTurns )
         {
-            minSX = std::min( { minSX, s.x1, s.x2 } );
-            maxSX = std::max( { maxSX, s.x1, s.x2 } );
-            minSY = std::min( { minSY, s.y1, s.y2 } );
-            maxSY = std::max( { maxSY, s.y1, s.y2 } );
-        }
-
-        shapeXRange = maxSX - minSX;
-        shapeYRange = maxSY - minSY;
-
-        if( shapeXRange > 0 && shapeYRange > 0 )
-        {
-            double physX = static_cast<double>( shapeXRange ) * std::abs( scaleX )
-                           / FP_SHAPE_NORM_RANGE;
-            double physY = static_cast<double>( shapeYRange ) * std::abs( scaleY )
-                           / FP_SHAPE_NORM_RANGE;
-            double aspect = physX / physY;
-
-            if( aspect < 0.2 || aspect > 5.0 )
+            if( ( ( aComp.placementQuarterTurns % 2 ) + 2 ) % 2 == 1 )
                 std::swap( scaleX, scaleY );
+        }
+        else
+        {
+            // Legacy fallback when the placement metadata is absent: detect a transposed bbox from
+            // an extreme physical aspect ratio relative to the normalized shape extents.
+            int minSX = INT_MAX, maxSX = INT_MIN;
+            int minSY = INT_MAX, maxSY = INT_MIN;
+
+            for( const DT_FP_SHAPE& s : aComp.shapes )
+            {
+                minSX = std::min( { minSX, s.x1, s.x2 } );
+                maxSX = std::max( { maxSX, s.x1, s.x2 } );
+                minSY = std::min( { minSY, s.y1, s.y2 } );
+                maxSY = std::max( { maxSY, s.y1, s.y2 } );
+            }
+
+            int shapeXRange = maxSX - minSX;
+            int shapeYRange = maxSY - minSY;
+
+            if( shapeXRange > 0 && shapeYRange > 0 )
+            {
+                double physX = static_cast<double>( shapeXRange ) * std::abs( scaleX )
+                               / FP_SHAPE_NORM_RANGE;
+                double physY = static_cast<double>( shapeYRange ) * std::abs( scaleY )
+                               / FP_SHAPE_NORM_RANGE;
+                double aspect = physX / physY;
+
+                if( aspect < 0.2 || aspect > 5.0 )
+                    std::swap( scaleX, scaleY );
+            }
         }
 
         // Default line width when shape record uses the sentinel value
@@ -5045,14 +5262,32 @@ void PCB_PARSER::CreateFootprint( const DT_COMPONENT& aComp )
 
             shape->SetWidth( lineWidth );
 
-            PCB_LAYER_ID shapeLayer = MapLayer( dtShape.layer );
+            // Drop the redundant Top Silk OUTLINE when the assembly outline already describes the
+            // body, but keep silk fill markers such as the polarity dot. Footprints without an
+            // assembly outline (e.g. two-terminal caps) keep their silk outline.
+            if( hasAssemblyOutline && dtShape.layer == DT_FP_LAYER_TOP_SILK
+                && dtShape.type != DT_SHAPE_FILLOBROUND )
+            {
+                delete shape;
+                continue;
+            }
 
-            // Shapes default to silkscreen when the source layer is copper or undefined.
-            // Always assign the top-relative silk layer here; Flip() below mirrors the
-            // whole footprint (and its layers) for bottom-side components, so assigning
-            // B_SilkS here as well would double-flip the silk back onto the front.
-            if( shapeLayer == UNDEFINED_LAYER || IsCopperLayer( shapeLayer ) )
-                shapeLayer = F_SilkS;
+            // Map the DipTrace footprint-graphic layer enum to a top-relative KiCad layer.
+            // Bottom-side footprints are mirrored wholesale by Flip() below, so always assign
+            // the front layer here; assigning the back layer too would double-flip it.
+            PCB_LAYER_ID shapeLayer;
+
+            switch( dtShape.layer )
+            {
+            case DT_FP_LAYER_TOP_ASSY:      shapeLayer = F_Fab;   break;
+            case DT_FP_LAYER_TOP_MASK:      shapeLayer = F_Mask;  break;
+            case DT_FP_LAYER_TOP_PASTE:     shapeLayer = F_Paste; break;
+            case DT_FP_LAYER_TOP_KEEPOUT:   shapeLayer = F_CrtYd; break;
+            case DT_FP_LAYER_TOP_COURTYARD: shapeLayer = F_CrtYd; break;
+            case DT_FP_LAYER_TOP_OUTLINE:   shapeLayer = F_Fab;   break;
+            case DT_FP_LAYER_TOP_SILK:
+            default:                        shapeLayer = F_SilkS; break;
+            }
 
             shape->SetLayer( shapeLayer );
 
@@ -5103,8 +5338,39 @@ void PCB_PARSER::CreateFootprint( const DT_COMPONENT& aComp )
             {
                 VECTOR2I mid( scaleShapeCoord( dtShape.midX, scaleX ),
                               scaleShapeCoord( dtShape.midY, scaleY ) );
-                shape->SetShape( SHAPE_T::ARC );
-                shape->SetArcGeometry( p1, mid, p2 );
+
+                // A collinear midpoint yields a degenerate arc whose centre runs off to infinity
+                // (DipTrace stores some straight edges as a zero-bulge arc). Such a centre overflows
+                // the integer rotation math on a non-cardinal placement angle, so emit a segment.
+                int64_t cross = static_cast<int64_t>( p2.x - p1.x ) * ( mid.y - p1.y )
+                                - static_cast<int64_t>( p2.y - p1.y ) * ( mid.x - p1.x );
+                int64_t chordSq = static_cast<int64_t>( p2.x - p1.x ) * ( p2.x - p1.x )
+                                  + static_cast<int64_t>( p2.y - p1.y ) * ( p2.y - p1.y );
+
+                if( chordSq == 0 || std::abs( cross ) * 1000 < chordSq )
+                {
+                    shape->SetShape( SHAPE_T::SEGMENT );
+                    shape->SetStart( p1 );
+                    shape->SetEnd( p2 );
+                }
+                else
+                {
+                    shape->SetShape( SHAPE_T::ARC );
+                    shape->SetArcGeometry( p1, mid, p2 );
+                }
+            }
+            else if( dtShape.type == DT_SHAPE_FILLOBROUND )
+            {
+                // A small filled obround marker (the diode cathode / pin-1 dot). The two points
+                // are the bounding box corners; render it as a filled circle of that diameter.
+                VECTOR2I center( ( p1.x + p2.x ) / 2, ( p1.y + p2.y ) / 2 );
+                int radius = std::min( std::abs( p2.x - p1.x ), std::abs( p2.y - p1.y ) ) / 2;
+
+                shape->SetShape( SHAPE_T::CIRCLE );
+                shape->SetCenter( center );
+                shape->SetEnd( VECTOR2I( center.x + radius, center.y ) );
+                shape->SetFilled( true );
+                shape->SetWidth( 0 );
             }
             else
             {
@@ -5118,18 +5384,40 @@ void PCB_PARSER::CreateFootprint( const DT_COMPONENT& aComp )
 
     VECTOR2I pos( ToKiCadCoord( aComp.positionX ), ToKiCadCoord( aComp.positionY ) );
 
-    int orientationQuarterTurns = aComp.hasPlacementQuarterTurns
-                                          ? aComp.placementQuarterTurns
-                                          : static_cast<int>( std::lround(
-                                                  ToKiCadAngleDeg( aComp.rotation ) / 90.0 ) );
-    int orientationDeg = ( ( orientationQuarterTurns % 4 ) + 4 ) % 4;
-    orientationDeg *= 90;
+    // Prefer the exact placement-section angle; otherwise snap to the metadata quarter turn.
+    double orientationDeg;
+
+    if( aComp.hasPlacementAngle )
+    {
+        // The stored angle is cumulative (it can exceed a full turn, e.g. 630 or 990 degrees);
+        // reduce to a single turn for placement.
+        orientationDeg = std::fmod( aComp.placementAngleDeg, 360.0 );
+
+        if( orientationDeg < 0.0 )
+            orientationDeg += 360.0;
+
+        // The angle is recovered from a rounded-radian field, so a quarter-turn lands a hair off
+        // an exact multiple of 90 (e.g. 269.9994). Snap those back to the cardinal value so the
+        // footprint rotation takes the exact axis-swap path rather than a floating-point rotation.
+        double nearest90 = std::round( orientationDeg / 90.0 ) * 90.0;
+
+        if( std::abs( orientationDeg - nearest90 ) < 0.02 )
+            orientationDeg = std::fmod( nearest90, 360.0 );
+    }
+    else
+    {
+        int orientationQuarterTurns = aComp.hasPlacementQuarterTurns
+                                              ? aComp.placementQuarterTurns
+                                              : static_cast<int>( std::lround(
+                                                      ToKiCadAngleDeg( aComp.rotation ) / 90.0 ) );
+        orientationDeg = ( ( orientationQuarterTurns % 4 ) + 4 ) % 4 * 90.0;
+    }
 
     if( ShouldDumpFootprintOrientation( aComp.refdes ) )
     {
-        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: fp-orient ref=%s pat=%s qturn=%d hasQ=%d rotRaw=%d chosen=%d" ),
-                    aComp.refdes, aComp.patternName, orientationQuarterTurns, aComp.hasPlacementQuarterTurns ? 1 : 0,
-                    aComp.rotation, orientationDeg );
+        wxLogTrace( traceDiptraceIo, wxT( "DipTrace: fp-orient ref=%s pat=%s qturn=%d hasQ=%d exact=%d chosen=%.2f" ), // format:allow
+                    aComp.refdes, aComp.patternName, aComp.placementQuarterTurns,
+                    aComp.hasPlacementQuarterTurns ? 1 : 0, aComp.hasPlacementAngle ? 1 : 0, orientationDeg );
     }
 
     // Set layer before orientation so bottom-side flip is handled first

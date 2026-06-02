@@ -25,6 +25,8 @@
  */
 
 
+#include <algorithm>
+
 #include <confirm.h>
 #include <common.h>
 #include <connection_graph.h>
@@ -1541,7 +1543,16 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 
             if( loadedSheet )
             {
-                Schematic().SetTopLevelSheets( { loadedSheet } );
+                std::vector<SCH_SHEET*> topLevelSheets = Schematic().GetTopLevelSheets();
+                bool loadedIsTopLevel = std::find( topLevelSheets.begin(), topLevelSheets.end(), loadedSheet )
+                                        != topLevelSheets.end();
+                bool loadedIsVirtualRoot = loadedSheet == &Schematic().Root()
+                                           || loadedSheet->IsVirtualRootSheet();
+
+                // Some importers create the full top-level sheet set themselves.  Do not collapse
+                // that back to the returned sheet.
+                if( !loadedIsTopLevel && !loadedIsVirtualRoot )
+                    Schematic().SetTopLevelSheets( { loadedSheet } );
 
                 if( errorReporter.m_Reporter->HasMessage() )
                 {

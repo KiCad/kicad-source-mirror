@@ -195,6 +195,12 @@ set( QA_EESCHEMA_SRCS
     net_chains/test_net_chain_ordered_nets.cpp
 )
 
+# DipTrace schematic import tests that exercise proprietary reference designs kept outside the
+# source tree. The file is intentionally not committed; include it only when a developer has it.
+if( EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sch_io/diptrace/test_diptrace_sch_import_local.cpp" )
+    list( APPEND QA_EESCHEMA_SRCS sch_io/diptrace/test_diptrace_sch_import_local.cpp )
+endif()
+
 if( WIN32 )
     # We want to declare a resource manifest on Windows to enable UTF8 mode
     # Without UTF8 mode, some random IO tests may fail, we set the active code page on normal

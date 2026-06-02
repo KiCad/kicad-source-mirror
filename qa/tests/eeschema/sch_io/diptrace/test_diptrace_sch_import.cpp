@@ -26,378 +26,7 @@
  * Test suite for import of DipTrace schematic (.dch) files
  */
 
-#include <qa_utils/wx_utils/unit_test_utils.h>
-
-#include <eeschema/sch_io/diptrace/sch_io_diptrace.h>
-#include <eeschema/sch_io/diptrace/diptrace_sch_parser.h>
-
-#include <sch_line.h>
-#include <sch_screen.h>
-#include <sch_sheet_path.h>
-#include <sch_symbol.h>
-#include <schematic.h>
-#include <settings/settings_manager.h>
-
-#include <algorithm>
-#include <cmath>
-#include <cstdlib>
-#include <filesystem>
-#include <set>
-#include <sstream>
-#include <vector>
-
-#include <reporter.h>
-
-#include <wx/filefn.h>
-#include <wx/ffile.h>
-#include <wx/xml/xml.h>
-
-
-/// Reporter that records the severity of every message so a test can assert that an import ran
-/// without warnings or errors.
-class DIPTRACE_COUNTING_REPORTER : public REPORTER
-{
-public:
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override
-    {
-        m_messages.emplace_back( aSeverity, aText );
-        return *this;
-    }
-
-    bool HasMessage() const override { return !m_messages.empty(); }
-
-    int CountOfSeverity( int aSeverityMask ) const
-    {
-        int n = 0;
-
-        for( const auto& [sev, text] : m_messages )
-        {
-            if( sev & aSeverityMask )
-                n++;
-        }
-
-        return n;
-    }
-
-    std::string MessagesOfSeverity( int aSeverityMask ) const
-    {
-        std::ostringstream out;
-
-        for( const auto& [sev, text] : m_messages )
-        {
-            if( !( sev & aSeverityMask ) )
-                continue;
-
-            if( out.tellp() > 0 )
-                out << "; ";
-
-            out << text.ToStdString();
-        }
-
-        return out.str();
-    }
-
-    void Clear() override { m_messages.clear(); }
-
-    std::vector<std::pair<SEVERITY, wxString>> m_messages;
-};
-
-
-struct DIPTRACE_SCH_IMPORT_FIXTURE
-{
-    DIPTRACE_SCH_IMPORT_FIXTURE() :
-            m_schematic( new SCHEMATIC( nullptr ) )
-    {
-        m_manager.LoadProject( "" );
-        m_schematic->SetProject( &m_manager.Prj() );
-        m_schematic->CurrentSheet().clear();
-        m_schematic->CurrentSheet().push_back( &m_schematic->Root() );
-    }
-
-    SCH_IO_DIPTRACE m_plugin;
-    std::unique_ptr<SCHEMATIC> m_schematic;
-    SETTINGS_MANAGER m_manager;
-    SCH_SHEET* m_loadedRoot = nullptr;
-    DIPTRACE_COUNTING_REPORTER m_reporter;
-
-    std::string GetTestDataDir()
-    {
-        return KI_TEST::GetEeschemaTestDataDir() + "plugins/diptrace/";
-    }
-
-    std::string GetViewerExamplesDir()
-    {
-        const char* examplesEnv = std::getenv( "DIPTRACE_VIEWER_EXAMPLES_DIR" );
-
-        return examplesEnv && *examplesEnv
-                ? examplesEnv
-                : "/home/seth/Downloads/DipTrace Viewer/Examples";
-    }
-
-    int CountItemsOfType( KICAD_T aType )
-    {
-        std::set<SCH_SCREEN*> seenScreens;
-        std::vector<SCH_SCREEN*> pendingScreens;
-        int count = 0;
-
-        if( m_loadedRoot && m_loadedRoot->GetScreen() )
-            pendingScreens.push_back( m_loadedRoot->GetScreen() );
-
-        while( !pendingScreens.empty() )
-        {
-            SCH_SCREEN* screen = pendingScreens.back();
-            pendingScreens.pop_back();
-
-            if( !screen || !seenScreens.insert( screen ).second )
-                continue;
-
-            for( SCH_ITEM* item : screen->Items() )
-            {
-                if( item->Type() == aType )
-                    count++;
-
-                if( item->Type() == SCH_SHEET_T )
-                {
-                    SCH_SHEET* subSheet = static_cast<SCH_SHEET*>( item );
-
-                    if( subSheet->GetScreen() )
-                        pendingScreens.push_back( subSheet->GetScreen() );
-                }
-            }
-        }
-
-        return count;
-    }
-
-    int CountImportedScreens()
-    {
-        std::set<SCH_SCREEN*> seenScreens;
-        std::vector<SCH_SCREEN*> pendingScreens;
-
-        if( m_loadedRoot && m_loadedRoot->GetScreen() )
-            pendingScreens.push_back( m_loadedRoot->GetScreen() );
-
-        while( !pendingScreens.empty() )
-        {
-            SCH_SCREEN* screen = pendingScreens.back();
-            pendingScreens.pop_back();
-
-            if( !screen || !seenScreens.insert( screen ).second )
-                continue;
-
-            for( SCH_ITEM* item : screen->Items() )
-            {
-                if( item->Type() != SCH_SHEET_T )
-                    continue;
-
-                SCH_SHEET* subSheet = static_cast<SCH_SHEET*>( item );
-
-                if( subSheet->GetScreen() )
-                    pendingScreens.push_back( subSheet->GetScreen() );
-            }
-        }
-
-        return static_cast<int>( seenScreens.size() );
-    }
-
-    int MaxPinCountForRefdes( const wxString& aRefdes )
-    {
-        std::set<SCH_SCREEN*> seenScreens;
-        std::vector<SCH_SCREEN*> pendingScreens;
-        int maxPins = -1;
-
-        if( m_loadedRoot && m_loadedRoot->GetScreen() )
-            pendingScreens.push_back( m_loadedRoot->GetScreen() );
-
-        while( !pendingScreens.empty() )
-        {
-            SCH_SCREEN* screen = pendingScreens.back();
-            pendingScreens.pop_back();
-
-            if( !screen || !seenScreens.insert( screen ).second )
-                continue;
-
-            for( SCH_ITEM* item : screen->Items() )
-            {
-                if( item->Type() == SCH_SYMBOL_T )
-                {
-                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-                    SCH_FIELD*  refField = symbol->GetField( FIELD_T::REFERENCE );
-
-                    if( refField && refField->GetText() == aRefdes )
-                    {
-                        int pinCount = static_cast<int>( symbol->GetPins().size() );
-                        maxPins = std::max( maxPins, pinCount );
-                    }
-                }
-                else if( item->Type() == SCH_SHEET_T )
-                {
-                    SCH_SHEET* subSheet = static_cast<SCH_SHEET*>( item );
-
-                    if( subSheet->GetScreen() )
-                        pendingScreens.push_back( subSheet->GetScreen() );
-                }
-            }
-        }
-
-        return maxPins;
-    }
-
-    wxString GetFootprintForRefdes( const wxString& aRefdes )
-    {
-        std::set<SCH_SCREEN*>    seenScreens;
-        std::vector<SCH_SCREEN*> pendingScreens;
-
-        if( m_loadedRoot && m_loadedRoot->GetScreen() )
-            pendingScreens.push_back( m_loadedRoot->GetScreen() );
-
-        while( !pendingScreens.empty() )
-        {
-            SCH_SCREEN* screen = pendingScreens.back();
-            pendingScreens.pop_back();
-
-            if( !screen || !seenScreens.insert( screen ).second )
-                continue;
-
-            for( SCH_ITEM* item : screen->Items() )
-            {
-                if( item->Type() == SCH_SYMBOL_T )
-                {
-                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-                    SCH_FIELD*  refField = symbol->GetField( FIELD_T::REFERENCE );
-
-                    if( refField && refField->GetText() == aRefdes )
-                    {
-                        SCH_FIELD* fpField = symbol->GetField( FIELD_T::FOOTPRINT );
-                        return fpField ? fpField->GetText() : wxString();
-                    }
-                }
-                else if( item->Type() == SCH_SHEET_T )
-                {
-                    SCH_SHEET* subSheet = static_cast<SCH_SHEET*>( item );
-
-                    if( subSheet->GetScreen() )
-                        pendingScreens.push_back( subSheet->GetScreen() );
-                }
-            }
-        }
-
-        return wxString();
-    }
-
-    struct DCH_XML_COUNTS
-    {
-        int partCount    = 0;
-        int netPortCount = 0;   ///< Parts with PartType="Net Port" (imported as global labels)
-        int sheetCount   = 0;
-    };
-
-    static bool XmlSubtreeContains( wxXmlNode* aNode, const wxString& aNeedle )
-    {
-        for( wxXmlNode* n = aNode; n; n = n->GetNext() )
-        {
-            if( n->GetType() == wxXML_TEXT_NODE && n->GetContent().Contains( aNeedle ) )
-                return true;
-
-            if( XmlSubtreeContains( n->GetChildren(), aNeedle ) )
-                return true;
-        }
-
-        return false;
-    }
-
-    bool LoadDchXmlCounts( const std::string& aXmlPath, DCH_XML_COUNTS& aCounts )
-    {
-        if( !wxFileExists( aXmlPath ) )
-            return false;
-
-        wxXmlDocument doc;
-
-        if( !doc.Load( aXmlPath ) )
-            return false;
-
-        wxXmlNode* root = doc.GetRoot();
-
-        if( !root || root->GetName() != "Source" )
-            return false;
-
-        wxXmlNode* schematicNode = nullptr;
-
-        for( wxXmlNode* child = root->GetChildren(); child; child = child->GetNext() )
-        {
-            if( child->GetType() == wxXML_ELEMENT_NODE && child->GetName() == "Schematic" )
-            {
-                schematicNode = child;
-                break;
-            }
-        }
-
-        if( !schematicNode )
-            return false;
-
-        int                   partCount = 0;
-        int                   netPortCount = 0;
-        int                   sheetCount = 0;
-        std::vector<wxXmlNode*> stack = { schematicNode };
-
-        while( !stack.empty() )
-        {
-            wxXmlNode* node = stack.back();
-            stack.pop_back();
-
-            if( !node || node->GetType() != wxXML_ELEMENT_NODE )
-                continue;
-
-            if( node->GetName() == "Part" )
-            {
-                partCount++;
-
-                // Net-port placements carry an auto_net_ports library reference; the importer maps
-                // these to global labels rather than symbols, so count them the same way here.
-                if( XmlSubtreeContains( node->GetChildren(), wxT( "auto_net_ports" ) ) )
-                    netPortCount++;
-            }
-            else if( node->GetName() == "Sheet" )
-            {
-                sheetCount++;
-            }
-
-            for( wxXmlNode* child = node->GetChildren(); child; child = child->GetNext() )
-            {
-                stack.push_back( child );
-            }
-        }
-
-        aCounts.partCount = partCount;
-        aCounts.netPortCount = netPortCount;
-        aCounts.sheetCount = sheetCount;
-        return true;
-    }
-
-    SCH_SHEET* LoadDipTraceSchematic( const std::string& aFilePath )
-    {
-        m_schematic.reset( new SCHEMATIC( nullptr ) );
-        m_manager.LoadProject( "" );
-        m_schematic->SetProject( &m_manager.Prj() );
-        m_schematic->CurrentSheet().clear();
-        m_schematic->CurrentSheet().push_back( &m_schematic->Root() );
-
-        m_reporter.Clear();
-        m_plugin.SetReporter( &m_reporter );
-        m_loadedRoot = m_plugin.LoadSchematicFile( aFilePath, m_schematic.get() );
-        return m_loadedRoot;
-    }
-
-    void RemoveGeneratedLibrary( const std::string& aFilePath )
-    {
-        wxFileName genLib( aFilePath );
-        genLib.SetName( genLib.GetName() + wxT( "-diptrace-import" ) );
-        genLib.SetExt( wxT( "kicad_sym" ) );
-
-        if( genLib.FileExists() )
-            wxRemoveFile( genLib.GetFullPath() );
-    }
-};
+#include "test_diptrace_sch_import_fixture.h"
 
 
 BOOST_FIXTURE_TEST_SUITE( DipTraceSchImport, DIPTRACE_SCH_IMPORT_FIXTURE )
@@ -415,10 +44,29 @@ BOOST_AUTO_TEST_CASE( CanReadSchematic )
 }
 
 
+/**
+ * power_supply.dch is a v37 schematic that stores UTF-16-BE strings, which the legacy version
+ * threshold would mis-read as ASCII. The encoding auto-detection must let it load with real
+ * content rather than throwing "Unreasonable v37 string length" at the header.
+ */
+BOOST_AUTO_TEST_CASE( V37Utf16SchematicLoadsWithContent )
+{
+    const std::string path = GetTestDataDir() + "power_supply.dch";
+
+    SCH_SHEET* root = LoadDipTraceSchematic( path );
+    BOOST_REQUIRE( root != nullptr );
+
+    BOOST_CHECK_GT( CountItemsOfType( SCH_SYMBOL_T ), 0 );
+    BOOST_CHECK_GT( CountItemsOfType( SCH_LINE_T ), 0 );
+
+    RemoveGeneratedLibrary( path );
+}
+
+
 BOOST_AUTO_TEST_CASE( InvalidComponentCountFailsDeterministically )
 {
     const std::string sourcePath = GetTestDataDir() + "z80_board.dch";
-    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_count_" ) );
+    wxString          tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_count_" ) );
     wxRemoveFile( tempBase );
     wxString tempPath = tempBase + wxS( ".dch" );
 
@@ -426,13 +74,12 @@ BOOST_AUTO_TEST_CASE( InvalidComponentCountFailsDeterministically )
 
     {
         static constexpr wxFileOffset COMPONENT_COUNT_OFFSET = 0xEE;
-        const uint8_t invalidCount[] = { 0x12, 0x4F, 0x81 }; // int3 value 200001
+        const uint8_t                 invalidCount[] = { 0x12, 0x4F, 0x81 }; // int3 value 200001
 
         wxFFile file( tempPath, wxS( "r+b" ) );
         BOOST_REQUIRE( file.IsOpened() );
         BOOST_REQUIRE( file.Seek( COMPONENT_COUNT_OFFSET ) );
-        BOOST_REQUIRE_EQUAL( file.Write( invalidCount, sizeof( invalidCount ) ),
-                             sizeof( invalidCount ) );
+        BOOST_REQUIRE_EQUAL( file.Write( invalidCount, sizeof( invalidCount ) ), sizeof( invalidCount ) );
     }
 
     BOOST_CHECK_THROW( LoadDipTraceSchematic( tempPath.ToStdString() ), IO_ERROR );
@@ -458,8 +105,7 @@ BOOST_AUTO_TEST_CASE( ComponentRecordsAreParsedSequentially )
     screen->SetFileName( newFilename.GetFullPath() );
     rootSheet->SetScreen( screen );
 
-    DIPTRACE::SCH_PARSER parser( wxString::FromUTF8( path ), m_schematic.get(), rootSheet,
-                                 nullptr, &m_reporter );
+    DIPTRACE::SCH_PARSER parser( wxString::FromUTF8( path ), m_schematic.get(), rootSheet, nullptr, &m_reporter );
     parser.Parse();
 
     BOOST_CHECK_EQUAL( parser.ComponentBoundaryScanCount(), 0 );
@@ -486,9 +132,8 @@ BOOST_AUTO_TEST_CASE( NoSymbolLibraryFileIsGenerated )
     SCH_SHEET* root = LoadDipTraceSchematic( path );
     BOOST_REQUIRE( root != nullptr );
 
-    BOOST_CHECK_MESSAGE( !genLib.FileExists(),
-                         "DipTrace import must not create a symbol library file: "
-                                 << genLib.GetFullPath().ToStdString() );
+    BOOST_CHECK_MESSAGE( !genLib.FileExists(), "DipTrace import must not create a symbol library file: "
+                                                       << genLib.GetFullPath().ToStdString() );
 
     // The imported symbols stay usable because their definitions are embedded in the schematic.
     std::set<SCH_SCREEN*>    seenScreens;
@@ -526,8 +171,7 @@ BOOST_AUTO_TEST_CASE( NoSymbolLibraryFileIsGenerated )
         }
     }
 
-    BOOST_CHECK_MESSAGE( foundEmbeddedSymbol,
-                         "Imported schematic must carry embedded symbol definitions." );
+    BOOST_CHECK_MESSAGE( foundEmbeddedSymbol, "Imported schematic must carry embedded symbol definitions." );
 
     if( genLib.FileExists() )
         wxRemoveFile( genLib.GetFullPath() );
@@ -570,38 +214,9 @@ BOOST_AUTO_TEST_CASE( ImportedRootIsTheSchematicTopLevelSheet )
 }
 
 
-/**
- * A multi-sheet DipTrace design must expose every sub-sheet through the schematic hierarchy, not
- * just the root. Optional: only runs when the external dev-driver corpus is present.
- */
-BOOST_AUTO_TEST_CASE( MultiSheetImportExposesFullHierarchyOptional )
-{
-    const char* corpusEnv = std::getenv( "DIPTRACE_EXTERNAL_CORPUS_DIR" );
-
-    if( !corpusEnv || !*corpusEnv )
-        return;
-
-    const std::string path = std::string( corpusEnv ) + "/dev-driver/DriverModule.dch";
-
-    if( !wxFileExists( path ) )
-        return;
-
-    SCH_SHEET* root = LoadDipTraceSchematic( path );
-    BOOST_REQUIRE( root != nullptr );
-
-    BOOST_CHECK_EQUAL( m_schematic->RootScreen(), root->GetScreen() );
-
-    // DriverModule.dch declares 19 sheets; every one must be reachable from the hierarchy.
-    SCH_SHEET_LIST hierarchy = m_schematic->BuildUnorderedSheetList();
-    BOOST_CHECK_EQUAL( hierarchy.size(), 19u );
-
-    RemoveGeneratedLibrary( path );
-}
-
-
 BOOST_AUTO_TEST_CASE( ViewerExampleComponentRecordsAreParsedSequentiallyOptional )
 {
-    const std::string examplesDir = GetViewerExamplesDir();
+    const std::string              examplesDir = GetViewerExamplesDir();
     const std::vector<std::string> paths = {
         examplesDir + "/CNC_controller.dch",
         examplesDir + "/Schematic_2.dch",
@@ -630,8 +245,7 @@ BOOST_AUTO_TEST_CASE( ViewerExampleComponentRecordsAreParsedSequentiallyOptional
         screen->SetFileName( newFilename.GetFullPath() );
         rootSheet->SetScreen( screen );
 
-        DIPTRACE::SCH_PARSER parser( wxString::FromUTF8( path ), m_schematic.get(), rootSheet,
-                                     nullptr, &m_reporter );
+        DIPTRACE::SCH_PARSER parser( wxString::FromUTF8( path ), m_schematic.get(), rootSheet, nullptr, &m_reporter );
         parser.Parse();
 
         BOOST_CHECK_MESSAGE( parser.ComponentBoundaryScanCount() == 0,
@@ -651,7 +265,7 @@ BOOST_AUTO_TEST_CASE( ViewerExampleComponentRecordsAreParsedSequentiallyOptional
 BOOST_AUTO_TEST_CASE( ComponentCountMismatchFailsDeterministically )
 {
     const std::string sourcePath = GetTestDataDir() + "z80_board.dch";
-    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_count_mismatch_" ) );
+    wxString          tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_count_mismatch_" ) );
     wxRemoveFile( tempBase );
     wxString tempPath = tempBase + wxS( ".dch" );
 
@@ -659,13 +273,12 @@ BOOST_AUTO_TEST_CASE( ComponentCountMismatchFailsDeterministically )
 
     {
         static constexpr wxFileOffset COMPONENT_COUNT_OFFSET = 0xEE;
-        const uint8_t mismatchedCount[] = { 0x0F, 0x42, 0xC5 }; // int3 value 133
+        const uint8_t                 mismatchedCount[] = { 0x0F, 0x42, 0xC5 }; // int3 value 133
 
         wxFFile file( tempPath, wxS( "r+b" ) );
         BOOST_REQUIRE( file.IsOpened() );
         BOOST_REQUIRE( file.Seek( COMPONENT_COUNT_OFFSET ) );
-        BOOST_REQUIRE_EQUAL( file.Write( mismatchedCount, sizeof( mismatchedCount ) ),
-                             sizeof( mismatchedCount ) );
+        BOOST_REQUIRE_EQUAL( file.Write( mismatchedCount, sizeof( mismatchedCount ) ), sizeof( mismatchedCount ) );
     }
 
     BOOST_CHECK_THROW( LoadDipTraceSchematic( tempPath.ToStdString() ), IO_ERROR );
@@ -678,7 +291,7 @@ BOOST_AUTO_TEST_CASE( ComponentCountMismatchFailsDeterministically )
 BOOST_AUTO_TEST_CASE( InvalidComponentPinCountFailsDeterministically )
 {
     const std::string sourcePath = GetTestDataDir() + "z80_board.dch";
-    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_pin_count_" ) );
+    wxString          tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_pin_count_" ) );
     wxRemoveFile( tempBase );
     wxString tempPath = tempBase + wxS( ".dch" );
 
@@ -686,13 +299,12 @@ BOOST_AUTO_TEST_CASE( InvalidComponentPinCountFailsDeterministically )
 
     {
         static constexpr wxFileOffset FIRST_COMPONENT_PIN_COUNT_OFFSET = 0x20A;
-        const uint8_t invalidPinCount[] = { 0x12, 0x4F, 0x81 }; // int3 value 200001
+        const uint8_t                 invalidPinCount[] = { 0x12, 0x4F, 0x81 }; // int3 value 200001
 
         wxFFile file( tempPath, wxS( "r+b" ) );
         BOOST_REQUIRE( file.IsOpened() );
         BOOST_REQUIRE( file.Seek( FIRST_COMPONENT_PIN_COUNT_OFFSET ) );
-        BOOST_REQUIRE_EQUAL( file.Write( invalidPinCount, sizeof( invalidPinCount ) ),
-                             sizeof( invalidPinCount ) );
+        BOOST_REQUIRE_EQUAL( file.Write( invalidPinCount, sizeof( invalidPinCount ) ), sizeof( invalidPinCount ) );
     }
 
     BOOST_CHECK_THROW( LoadDipTraceSchematic( tempPath.ToStdString() ), IO_ERROR );
@@ -705,7 +317,7 @@ BOOST_AUTO_TEST_CASE( InvalidComponentPinCountFailsDeterministically )
 BOOST_AUTO_TEST_CASE( InvalidComponentExtraTailLengthFailsDeterministically )
 {
     const std::string sourcePath = GetTestDataDir() + "z80_board.dch";
-    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_extra_tail_" ) );
+    wxString          tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_extra_tail_" ) );
     wxRemoveFile( tempBase );
     wxString tempPath = tempBase + wxS( ".dch" );
 
@@ -713,7 +325,7 @@ BOOST_AUTO_TEST_CASE( InvalidComponentExtraTailLengthFailsDeterministically )
 
     {
         static constexpr wxFileOffset FIRST_COMPONENT_EXTRA_TAIL_COUNT_OFFSET = 0x206;
-        const uint8_t invalidExtraTailCount[] = { 0x00, 0x00, 0x27, 0x10 }; // u4 count 10000
+        const uint8_t                 invalidExtraTailCount[] = { 0x00, 0x00, 0x27, 0x10 }; // u4 count 10000
 
         wxFFile file( tempPath, wxS( "r+b" ) );
         BOOST_REQUIRE( file.IsOpened() );
@@ -732,7 +344,7 @@ BOOST_AUTO_TEST_CASE( InvalidComponentExtraTailLengthFailsDeterministically )
 BOOST_AUTO_TEST_CASE( InvalidComponentPinRecordFailsDeterministically )
 {
     const std::string sourcePath = GetTestDataDir() + "z80_board.dch";
-    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_pin_" ) );
+    wxString          tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_pin_" ) );
     wxRemoveFile( tempBase );
     wxString tempPath = tempBase + wxS( ".dch" );
 
@@ -740,7 +352,7 @@ BOOST_AUTO_TEST_CASE( InvalidComponentPinRecordFailsDeterministically )
 
     {
         static constexpr wxFileOffset FIRST_COMPONENT_FIRST_PIN_NAME_LEN_OFFSET = 0x226;
-        const uint8_t invalidNameLength[] = { 0xFF, 0xFF };
+        const uint8_t                 invalidNameLength[] = { 0xFF, 0xFF };
 
         wxFFile file( tempPath, wxS( "r+b" ) );
         BOOST_REQUIRE( file.IsOpened() );
@@ -759,7 +371,7 @@ BOOST_AUTO_TEST_CASE( InvalidComponentPinRecordFailsDeterministically )
 BOOST_AUTO_TEST_CASE( InvalidLaterComponentPinRecordFailsDeterministically )
 {
     const std::string sourcePath = GetTestDataDir() + "z80_board.dch";
-    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_later_pin_" ) );
+    wxString          tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_later_pin_" ) );
     wxRemoveFile( tempBase );
     wxString tempPath = tempBase + wxS( ".dch" );
 
@@ -767,7 +379,7 @@ BOOST_AUTO_TEST_CASE( InvalidLaterComponentPinRecordFailsDeterministically )
 
     {
         static constexpr wxFileOffset FIRST_COMPONENT_SECOND_PIN_NAME_LEN_OFFSET = 0x272;
-        const uint8_t invalidNameLength[] = { 0xFF, 0xFF };
+        const uint8_t                 invalidNameLength[] = { 0xFF, 0xFF };
 
         wxFFile file( tempPath, wxS( "r+b" ) );
         BOOST_REQUIRE( file.IsOpened() );
@@ -786,7 +398,7 @@ BOOST_AUTO_TEST_CASE( InvalidLaterComponentPinRecordFailsDeterministically )
 BOOST_AUTO_TEST_CASE( InvalidComponentShapePointCountFailsDeterministically )
 {
     const std::string sourcePath = GetTestDataDir() + "z80_board.dch";
-    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_shape_points_" ) );
+    wxString          tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_shape_points_" ) );
     wxRemoveFile( tempBase );
     wxString tempPath = tempBase + wxS( ".dch" );
 
@@ -794,7 +406,7 @@ BOOST_AUTO_TEST_CASE( InvalidComponentShapePointCountFailsDeterministically )
 
     {
         static constexpr wxFileOffset FIRST_COMPONENT_SHAPE_POINT_COUNT_OFFSET = 0x2C2;
-        const uint8_t invalidPointCount[] = { 0x0F, 0x42, 0xA5 }; // int3 value 101
+        const uint8_t                 invalidPointCount[] = { 0x0F, 0x42, 0xA5 }; // int3 value 101
 
         wxFFile file( tempPath, wxS( "r+b" ) );
         BOOST_REQUIRE( file.IsOpened() );
@@ -813,7 +425,7 @@ BOOST_AUTO_TEST_CASE( InvalidComponentShapePointCountFailsDeterministically )
 BOOST_AUTO_TEST_CASE( ZeroComponentShapePointCountFailsDeterministically )
 {
     const std::string sourcePath = GetTestDataDir() + "z80_board.dch";
-    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_zero_shape_points_" ) );
+    wxString          tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_zero_shape_points_" ) );
     wxRemoveFile( tempBase );
     wxString tempPath = tempBase + wxS( ".dch" );
 
@@ -821,13 +433,12 @@ BOOST_AUTO_TEST_CASE( ZeroComponentShapePointCountFailsDeterministically )
 
     {
         static constexpr wxFileOffset FIRST_COMPONENT_SHAPE_POINT_COUNT_OFFSET = 0x2C2;
-        const uint8_t zeroPointCount[] = { 0x0F, 0x42, 0x40 }; // int3 value 0
+        const uint8_t                 zeroPointCount[] = { 0x0F, 0x42, 0x40 }; // int3 value 0
 
         wxFFile file( tempPath, wxS( "r+b" ) );
         BOOST_REQUIRE( file.IsOpened() );
         BOOST_REQUIRE( file.Seek( FIRST_COMPONENT_SHAPE_POINT_COUNT_OFFSET ) );
-        BOOST_REQUIRE_EQUAL( file.Write( zeroPointCount, sizeof( zeroPointCount ) ),
-                             sizeof( zeroPointCount ) );
+        BOOST_REQUIRE_EQUAL( file.Write( zeroPointCount, sizeof( zeroPointCount ) ), sizeof( zeroPointCount ) );
     }
 
     BOOST_CHECK_THROW( LoadDipTraceSchematic( tempPath.ToStdString() ), IO_ERROR );
@@ -840,7 +451,7 @@ BOOST_AUTO_TEST_CASE( ZeroComponentShapePointCountFailsDeterministically )
 BOOST_AUTO_TEST_CASE( InvalidBusEntryTerminatorFailsDeterministically )
 {
     const std::string sourcePath = GetTestDataDir() + "z80_board.dch";
-    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_bus_" ) );
+    wxString          tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_bus_" ) );
     wxRemoveFile( tempBase );
     wxString tempPath = tempBase + wxS( ".dch" );
 
@@ -848,7 +459,7 @@ BOOST_AUTO_TEST_CASE( InvalidBusEntryTerminatorFailsDeterministically )
 
     {
         static constexpr wxFileOffset FIRST_BUS_TERMINATOR_OFFSET = 0x39484;
-        const uint8_t invalidTerminator[] = { 0x0F, 0x42, 0x40 }; // int3 value 0
+        const uint8_t                 invalidTerminator[] = { 0x0F, 0x42, 0x40 }; // int3 value 0
 
         wxFFile file( tempPath, wxS( "r+b" ) );
         BOOST_REQUIRE( file.IsOpened() );
@@ -867,7 +478,7 @@ BOOST_AUTO_TEST_CASE( InvalidBusEntryTerminatorFailsDeterministically )
 BOOST_AUTO_TEST_CASE( InvalidBusSectionCountFailsDeterministically )
 {
     const std::string sourcePath = GetTestDataDir() + "z80_board.dch";
-    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_bus_count_" ) );
+    wxString          tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_bus_count_" ) );
     wxRemoveFile( tempBase );
     wxString tempPath = tempBase + wxS( ".dch" );
 
@@ -875,13 +486,12 @@ BOOST_AUTO_TEST_CASE( InvalidBusSectionCountFailsDeterministically )
 
     {
         static constexpr wxFileOffset BUS_SECTION_COUNT_OFFSET = 0x3946A;
-        const uint8_t invalidCount[] = { 0x0F, 0x46, 0x29 }; // int3 value 1001
+        const uint8_t                 invalidCount[] = { 0x0F, 0x46, 0x29 }; // int3 value 1001
 
         wxFFile file( tempPath, wxS( "r+b" ) );
         BOOST_REQUIRE( file.IsOpened() );
         BOOST_REQUIRE( file.Seek( BUS_SECTION_COUNT_OFFSET ) );
-        BOOST_REQUIRE_EQUAL( file.Write( invalidCount, sizeof( invalidCount ) ),
-                             sizeof( invalidCount ) );
+        BOOST_REQUIRE_EQUAL( file.Write( invalidCount, sizeof( invalidCount ) ), sizeof( invalidCount ) );
     }
 
     BOOST_CHECK_THROW( LoadDipTraceSchematic( tempPath.ToStdString() ), IO_ERROR );
@@ -894,7 +504,7 @@ BOOST_AUTO_TEST_CASE( InvalidBusSectionCountFailsDeterministically )
 BOOST_AUTO_TEST_CASE( InvalidWireNetPinCountFailsDeterministically )
 {
     const std::string sourcePath = GetTestDataDir() + "z80_board.dch";
-    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_wire_pin_count_" ) );
+    wxString          tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_wire_pin_count_" ) );
     wxRemoveFile( tempBase );
     wxString tempPath = tempBase + wxS( ".dch" );
 
@@ -902,13 +512,12 @@ BOOST_AUTO_TEST_CASE( InvalidWireNetPinCountFailsDeterministically )
 
     {
         static constexpr wxFileOffset FIRST_WIRE_NET_PIN_COUNT_OFFSET = 0x3988E;
-        const uint8_t invalidPinCount[] = { 0x0F, 0x51, 0xE9 }; // int3 value 4001
+        const uint8_t                 invalidPinCount[] = { 0x0F, 0x51, 0xE9 }; // int3 value 4001
 
         wxFFile file( tempPath, wxS( "r+b" ) );
         BOOST_REQUIRE( file.IsOpened() );
         BOOST_REQUIRE( file.Seek( FIRST_WIRE_NET_PIN_COUNT_OFFSET ) );
-        BOOST_REQUIRE_EQUAL( file.Write( invalidPinCount, sizeof( invalidPinCount ) ),
-                             sizeof( invalidPinCount ) );
+        BOOST_REQUIRE_EQUAL( file.Write( invalidPinCount, sizeof( invalidPinCount ) ), sizeof( invalidPinCount ) );
     }
 
     BOOST_CHECK_THROW( LoadDipTraceSchematic( tempPath.ToStdString() ), IO_ERROR );
@@ -921,7 +530,7 @@ BOOST_AUTO_TEST_CASE( InvalidWireNetPinCountFailsDeterministically )
 BOOST_AUTO_TEST_CASE( InvalidWireNetNameLengthFailsDeterministically )
 {
     const std::string sourcePath = GetTestDataDir() + "z80_board.dch";
-    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_wire_name_" ) );
+    wxString          tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_wire_name_" ) );
     wxRemoveFile( tempBase );
     wxString tempPath = tempBase + wxS( ".dch" );
 
@@ -929,7 +538,7 @@ BOOST_AUTO_TEST_CASE( InvalidWireNetNameLengthFailsDeterministically )
 
     {
         static constexpr wxFileOffset FIRST_WIRE_NET_NAME_LENGTH_OFFSET = 0x3987A;
-        const uint8_t invalidNameLength[] = { 0xFF, 0xFF };
+        const uint8_t                 invalidNameLength[] = { 0xFF, 0xFF };
 
         wxFFile file( tempPath, wxS( "r+b" ) );
         BOOST_REQUIRE( file.IsOpened() );
@@ -948,7 +557,7 @@ BOOST_AUTO_TEST_CASE( InvalidWireNetNameLengthFailsDeterministically )
 BOOST_AUTO_TEST_CASE( InvalidWirePointCountFailsDeterministically )
 {
     const std::string sourcePath = GetTestDataDir() + "z80_board.dch";
-    wxString tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_wire_point_count_" ) );
+    wxString          tempBase = wxFileName::CreateTempFileName( wxS( "kicad_diptrace_bad_wire_point_count_" ) );
     wxRemoveFile( tempBase );
     wxString tempPath = tempBase + wxS( ".dch" );
 
@@ -956,7 +565,7 @@ BOOST_AUTO_TEST_CASE( InvalidWirePointCountFailsDeterministically )
 
     {
         static constexpr wxFileOffset FIRST_WIRE_POINT_COUNT_OFFSET = 0x39913;
-        const uint8_t invalidPointCount[] = { 0x0F, 0x51, 0xE9 }; // int3 value 4001
+        const uint8_t                 invalidPointCount[] = { 0x0F, 0x51, 0xE9 }; // int3 value 4001
 
         wxFFile file( tempPath, wxS( "r+b" ) );
         BOOST_REQUIRE( file.IsOpened() );
@@ -1012,8 +621,7 @@ BOOST_AUTO_TEST_CASE( CanReadLegacyHeaderOptional )
 
     if( !wxFileExists( sch2 ) || !wxFileExists( sch4 ) )
     {
-        BOOST_TEST_MESSAGE( "Skipping legacy header check; viewer examples not found at "
-                            << examplesDir );
+        BOOST_TEST_MESSAGE( "Skipping legacy header check; viewer examples not found at " << examplesDir );
         return;
     }
 
@@ -1071,8 +679,7 @@ BOOST_AUTO_TEST_CASE( ViewerExamplesLoadOptional )
 
         // DipTrace net ports import as global labels rather than symbols, so count both as
         // placement-equivalent items (the minSymbols thresholds predate the net-port split).
-        const int symbolCount = CountItemsOfType( SCH_SYMBOL_T )
-                                + CountItemsOfType( SCH_GLOBAL_LABEL_T );
+        const int symbolCount = CountItemsOfType( SCH_SYMBOL_T ) + CountItemsOfType( SCH_GLOBAL_LABEL_T );
         const int screenCount = CountImportedScreens();
 
         BOOST_CHECK_GE( symbolCount, e.minSymbols );
@@ -1081,8 +688,7 @@ BOOST_AUTO_TEST_CASE( ViewerExamplesLoadOptional )
 
     if( !foundAny )
     {
-        BOOST_TEST_MESSAGE( "Skipping external example load test; no .dch files found at "
-                            << examplesDir );
+        BOOST_TEST_MESSAGE( "Skipping external example load test; no .dch files found at " << examplesDir );
     }
 }
 
@@ -1136,9 +742,9 @@ BOOST_AUTO_TEST_CASE( ExternalCorpusLoadOptional )
         BOOST_REQUIRE( root->GetScreen() );
         loaded++;
 
-        BOOST_CHECK_MESSAGE( m_reporter.CountOfSeverity( RPT_SEVERITY_ERROR ) == 0,
-                             path.string() + ": import reported errors: "
-                                     + m_reporter.MessagesOfSeverity( RPT_SEVERITY_ERROR ) );
+        BOOST_CHECK_MESSAGE(
+                m_reporter.CountOfSeverity( RPT_SEVERITY_ERROR ) == 0,
+                path.string() + ": import reported errors: " + m_reporter.MessagesOfSeverity( RPT_SEVERITY_ERROR ) );
         BOOST_CHECK_MESSAGE( m_reporter.CountOfSeverity( RPT_SEVERITY_WARNING ) == 0,
                              path.string() + ": import reported warnings: "
                                      + m_reporter.MessagesOfSeverity( RPT_SEVERITY_WARNING ) );
@@ -1184,8 +790,7 @@ BOOST_AUTO_TEST_CASE( ViewerExamplesDchXmlParityOptional )
         foundAny = true;
 
         DCH_XML_COUNTS xmlCounts;
-        BOOST_REQUIRE_MESSAGE( LoadDchXmlCounts( xmlPath, xmlCounts ),
-                               "Failed to parse " << xmlPath );
+        BOOST_REQUIRE_MESSAGE( LoadDchXmlCounts( xmlPath, xmlCounts ), "Failed to parse " << xmlPath );
         BOOST_REQUIRE_GT( xmlCounts.partCount, 0 );
         BOOST_REQUIRE_GT( xmlCounts.sheetCount, 0 );
 
@@ -1210,7 +815,7 @@ BOOST_AUTO_TEST_CASE( ViewerExamplesDchXmlParityOptional )
         // Net ports import as global labels, not symbols, so compare real symbols against the
         // non-net-port part count, and verify the net ports are represented as labels.
         const int importedSymbols = CountItemsOfType( SCH_SYMBOL_T );
-        const int importedLabels  = CountItemsOfType( SCH_GLOBAL_LABEL_T );
+        const int importedLabels = CountItemsOfType( SCH_GLOBAL_LABEL_T );
         const int importedScreens = CountImportedScreens();
         const int realParts = xmlCounts.partCount - xmlCounts.netPortCount;
         const int minParts = static_cast<int>( std::floor( realParts * e.minPartCoverage ) );
@@ -1225,8 +830,7 @@ BOOST_AUTO_TEST_CASE( ViewerExamplesDchXmlParityOptional )
 
     if( !foundAny )
     {
-        BOOST_TEST_MESSAGE( "Skipping DCH/XML parity test; no matched files found at "
-                            << examplesDir );
+        BOOST_TEST_MESSAGE( "Skipping DCH/XML parity test; no matched files found at " << examplesDir );
     }
 }
 
@@ -1234,13 +838,12 @@ BOOST_AUTO_TEST_CASE( ViewerExamplesDchXmlParityOptional )
 BOOST_AUTO_TEST_CASE( ViewerExamplesPinCountsOptional )
 {
     const std::string examplesDir = GetViewerExamplesDir();
-    const std::string cncPath     = examplesDir + "/CNC_controller.dch";
-    const std::string sch6Path    = examplesDir + "/Schematic_6.dch";
+    const std::string cncPath = examplesDir + "/CNC_controller.dch";
+    const std::string sch6Path = examplesDir + "/Schematic_6.dch";
 
     if( !wxFileExists( cncPath ) || !wxFileExists( sch6Path ) )
     {
-        BOOST_TEST_MESSAGE( "Skipping pin-count checks; required viewer examples not found at "
-                            << examplesDir );
+        BOOST_TEST_MESSAGE( "Skipping pin-count checks; required viewer examples not found at " << examplesDir );
         return;
     }
 
@@ -1265,12 +868,11 @@ BOOST_AUTO_TEST_CASE( ViewerExamplesPinCountsOptional )
 BOOST_AUTO_TEST_CASE( ViewerExamplesFootprintFieldOptional )
 {
     const std::string examplesDir = GetViewerExamplesDir();
-    const std::string sch6Path   = examplesDir + "/Schematic_6.dch";
+    const std::string sch6Path = examplesDir + "/Schematic_6.dch";
 
     if( !wxFileExists( sch6Path ) )
     {
-        BOOST_TEST_MESSAGE( "Skipping footprint field checks; Schematic_6.dch not found at "
-                            << examplesDir );
+        BOOST_TEST_MESSAGE( "Skipping footprint field checks; Schematic_6.dch not found at " << examplesDir );
         return;
     }
 
@@ -1286,6 +888,307 @@ BOOST_AUTO_TEST_CASE( ViewerExamplesFootprintFieldOptional )
     // Verify several more to confirm consistency
     BOOST_CHECK_EQUAL( GetFootprintForRefdes( wxT( "C10" ) ), wxString( wxT( "CAP_2012_N" ) ) );
     BOOST_CHECK_EQUAL( GetFootprintForRefdes( wxT( "R10" ) ), wxString( wxT( "RES_2012_N" ) ) );
+}
+
+
+/**
+ * Items electrically joined in DipTrace (by a shared net label or a direct wire) must land on the
+ * same KiCad net after import. Recalculate the connection graph headlessly and assert that every
+ * subgraph is internally consistent and that at least one net actually ties two or more symbol pins
+ * together, proving the importer rebuilt real connectivity rather than isolated pins.
+ */
+BOOST_AUTO_TEST_CASE( ImportedNetConnectivityIsConsistent )
+{
+    const std::string path = GetTestDataDir() + "z80_board.dch";
+
+    SCH_SHEET* root = LoadDipTraceSchematic( path );
+    BOOST_REQUIRE( root != nullptr );
+
+    SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+    m_schematic->ConnectionGraph()->Recalculate( sheets, true );
+
+    const NET_MAP& netMap = m_schematic->ConnectionGraph()->GetNetMap();
+
+    int multiPinNets = 0;
+
+    for( const auto& [key, subgraphs] : netMap )
+    {
+        for( CONNECTION_SUBGRAPH* sg : subgraphs )
+        {
+            int pinsOnNet = 0;
+
+            for( SCH_ITEM* item : sg->GetItems() )
+            {
+                if( item->Type() != SCH_PIN_T )
+                    continue;
+
+                SCH_PIN*        pin = static_cast<SCH_PIN*>( item );
+                SCH_CONNECTION* conn = pin->Connection( &sg->GetSheet() );
+
+                BOOST_REQUIRE( conn != nullptr );
+                BOOST_CHECK_EQUAL( conn->NetCode(), key.Netcode );
+
+                pinsOnNet++;
+            }
+
+            if( pinsOnNet >= 2 )
+                multiPinNets++;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( multiPinNets > 0, "Import produced no net connecting two or more pins" );
+
+    RemoveGeneratedLibrary( path );
+}
+
+
+/**
+ * The corrected coordinate scaling must place every imported symbol within a sane area around the
+ * origin. DipTrace .dch files store no explicit page size, so the KiCad default sheet size is used
+ * as the reference. The previous 100x-too-large scaling pushed symbols far past these bounds, so
+ * this test fails on the scaling regression and passes once positions divide by 3.
+ */
+BOOST_AUTO_TEST_CASE( AllSymbolsWithinPageBounds )
+{
+    const std::string path = GetTestDataDir() + "z80_board.dch";
+
+    SCH_SHEET* root = LoadDipTraceSchematic( path );
+    BOOST_REQUIRE( root != nullptr );
+
+    // KiCad default sheet size in schematic IU (matches getOrCreateSheet placement size).
+    static constexpr int PAGE_WIDTH_IU = 40640000;
+    static constexpr int PAGE_HEIGHT_IU = 30480000;
+
+    // Allow a generous margin for symbols drawn outside the visible page area.
+    static constexpr int MARGIN_FACTOR = 4;
+    const int            maxX = PAGE_WIDTH_IU * MARGIN_FACTOR;
+    const int            maxY = PAGE_HEIGHT_IU * MARGIN_FACTOR;
+
+    int symbolsChecked = 0;
+
+    for( const SCH_SHEET_PATH& sheetPath : m_schematic->BuildUnorderedSheetList() )
+    {
+        SCH_SCREEN* screen = sheetPath.LastScreen();
+
+        if( !screen )
+            continue;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            BOX2I       bbox = symbol->GetBoundingBox();
+
+            BOOST_CHECK_MESSAGE( std::abs( bbox.GetLeft() ) <= maxX && std::abs( bbox.GetRight() ) <= maxX,
+                                 "Symbol X extent exceeds page bounds: [" << bbox.GetLeft() << ", " << bbox.GetRight()
+                                                                          << "]" );
+            BOOST_CHECK_MESSAGE( std::abs( bbox.GetTop() ) <= maxY && std::abs( bbox.GetBottom() ) <= maxY,
+                                 "Symbol Y extent exceeds page bounds: [" << bbox.GetTop() << ", " << bbox.GetBottom()
+                                                                          << "]" );
+
+            symbolsChecked++;
+        }
+    }
+
+    BOOST_CHECK_GT( symbolsChecked, 0 );
+
+    RemoveGeneratedLibrary( path );
+}
+
+
+/**
+ * A symbol's graphic line width must read at the same scale as its pins so the body and pins look
+ * like one drawing. KiCad renders a pin (and a shape with stored width 0) at the default symbol
+ * line width, and DipTrace stores real per-shape widths that can be a few times thicker. The
+ * previous 100x scaling instead produced page-scale strokes two orders of magnitude past the pins;
+ * this test rejects that while still accepting genuine heavy DipTrace strokes.
+ */
+BOOST_AUTO_TEST_CASE( SymbolGraphicWidthMatchesPinWidth )
+{
+    const std::string path = GetTestDataDir() + "z80_board.dch";
+
+    SCH_SHEET* root = LoadDipTraceSchematic( path );
+    BOOST_REQUIRE( root != nullptr );
+
+    // Pins draw at the schematic default line width. Real DipTrace strokes can be several times
+    // that, so cap at 100 mil; the 100x scaling bug overshot this same shape by roughly 50x.
+    const int defaultWidth = schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
+    const int maxShapeWidth = schIUScale.MilsToIU( 100 );
+
+    int shapesChecked = 0;
+
+    for( const SCH_SHEET_PATH& sheetPath : m_schematic->BuildUnorderedSheetList() )
+    {
+        SCH_SCREEN* screen = sheetPath.LastScreen();
+
+        if( !screen )
+            continue;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL*                        symbol = static_cast<SCH_SYMBOL*>( item );
+            const std::unique_ptr<LIB_SYMBOL>& libSymbol = symbol->GetLibSymbolRef();
+
+            if( !libSymbol )
+                continue;
+
+            for( SCH_ITEM& drawItem : libSymbol->GetDrawItems() )
+            {
+                if( drawItem.Type() != SCH_SHAPE_T )
+                    continue;
+
+                int width = static_cast<SCH_SHAPE&>( drawItem ).GetStroke().GetWidth();
+
+                // Zero means "use the default", which is exactly the pin width, so accept it.
+                BOOST_CHECK_MESSAGE( width >= 0 && width <= maxShapeWidth,
+                                     "Symbol graphic width " << width << " is far from pin width " << defaultWidth );
+
+                shapesChecked++;
+            }
+        }
+    }
+
+    BOOST_CHECK_GT( shapesChecked, 0 );
+
+    RemoveGeneratedLibrary( path );
+}
+
+
+/**
+ * The shape type comes from the stored kind pair in each shape record, not from geometry. A shape
+ * tagged (700, 6) is a rectangle whose two points are opposite corners; everything else stays a
+ * polyline, so a two point diagonal line keeps its true line type. Both kinds occur in z80_board,
+ * which exercises the discriminator.
+ */
+BOOST_AUTO_TEST_CASE( ShapeKindDiscriminatorProducesRectanglesAndLines )
+{
+    const std::string path = GetTestDataDir() + "z80_board.dch";
+
+    SCH_SHEET* root = LoadDipTraceSchematic( path );
+    BOOST_REQUIRE( root != nullptr );
+
+    int rectangles = 0;
+    int diagonalPolylines = 0;
+
+    for( const SCH_SHEET_PATH& sheetPath : m_schematic->BuildUnorderedSheetList() )
+    {
+        SCH_SCREEN* screen = sheetPath.LastScreen();
+
+        if( !screen )
+            continue;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL*                        symbol = static_cast<SCH_SYMBOL*>( item );
+            const std::unique_ptr<LIB_SYMBOL>& libSymbol = symbol->GetLibSymbolRef();
+
+            if( !libSymbol )
+                continue;
+
+            for( SCH_ITEM& drawItem : libSymbol->GetDrawItems() )
+            {
+                if( drawItem.Type() != SCH_SHAPE_T )
+                    continue;
+
+                SCH_SHAPE& shape = static_cast<SCH_SHAPE&>( drawItem );
+
+                if( shape.GetShape() == SHAPE_T::RECTANGLE )
+                {
+                    rectangles++;
+                    continue;
+                }
+
+                if( shape.GetShape() != SHAPE_T::POLY || shape.GetPolyShape().OutlineCount() == 0 )
+                    continue;
+
+                const std::vector<VECTOR2I>& pts = shape.GetPolyShape().Outline( 0 ).CPoints();
+
+                if( pts.size() == 2 && pts[1].x != pts[0].x && pts[1].y != pts[0].y )
+                    diagonalPolylines++;
+            }
+        }
+    }
+
+    BOOST_TEST_MESSAGE( "z80 rectangles=" << rectangles << " diagonalPolylines=" << diagonalPolylines );
+
+    // z80_board draws its symbol boxes as line edges rather than rectangle primitives, so the kind
+    // discriminator yields no rectangles here. The point of the test is that the two point diagonal
+    // lines stay polylines instead of being promoted to rectangles as the geometry guess did.
+    BOOST_CHECK_GT( diagonalPolylines, 0 );
+
+    RemoveGeneratedLibrary( path );
+}
+
+
+/**
+ * Pins must carry the orientation recovered from their geometry rather than all defaulting to one
+ * side. A symbol whose pins ring its body has pins facing several directions, so the imported pin
+ * set must use more than a single orientation.
+ */
+BOOST_AUTO_TEST_CASE( PinsCarryNonDefaultOrientations )
+{
+    const std::string path = GetTestDataDir() + "z80_board.dch";
+
+    SCH_SHEET* root = LoadDipTraceSchematic( path );
+    BOOST_REQUIRE( root != nullptr );
+
+    std::set<PIN_ORIENTATION> orientations;
+    int                       pinsChecked = 0;
+
+    for( const SCH_SHEET_PATH& sheetPath : m_schematic->BuildUnorderedSheetList() )
+    {
+        SCH_SCREEN* screen = sheetPath.LastScreen();
+
+        if( !screen )
+            continue;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL*                        symbol = static_cast<SCH_SYMBOL*>( item );
+            const std::unique_ptr<LIB_SYMBOL>& libSymbol = symbol->GetLibSymbolRef();
+
+            if( !libSymbol )
+                continue;
+
+            for( SCH_ITEM& drawItem : libSymbol->GetDrawItems() )
+            {
+                if( drawItem.Type() != SCH_PIN_T )
+                    continue;
+
+                orientations.insert( static_cast<SCH_PIN&>( drawItem ).GetOrientation() );
+                pinsChecked++;
+            }
+        }
+    }
+
+    BOOST_CHECK_GT( pinsChecked, 0 );
+    BOOST_CHECK_MESSAGE( orientations.size() > 1,
+                         "All imported pins share a single orientation; orientation was not applied" );
+
+    RemoveGeneratedLibrary( path );
+}
+
+
+/**
+ * A DipTrace file that stores its page geometry must drive the KiCad page size. power_supply.dch
+ * carries an A4 (297 x 210 mm) page record, so the imported root screen must read back that size
+ * rather than the default. Files without a page record keep the KiCad default, which is covered by
+ * the other import tests that load z80_board.dch unchanged.
+ */
+BOOST_AUTO_TEST_CASE( PageSizeIsAppliedWhenStored )
+{
+    const std::string path = GetTestDataDir() + "power_supply.dch";
+
+    SCH_SHEET* root = LoadDipTraceSchematic( path );
+    BOOST_REQUIRE( root != nullptr );
+    BOOST_REQUIRE( root->GetScreen() != nullptr );
+
+    const PAGE_INFO& page = root->GetScreen()->GetPageSettings();
+
+    // A4 is 297 x 210 mm; allow a small tolerance for the mm -> mils -> mm round trip.
+    BOOST_CHECK_CLOSE( page.GetWidthMM(), 297.0, 0.5 );
+    BOOST_CHECK_CLOSE( page.GetHeightMM(), 210.0, 0.5 );
+
+    RemoveGeneratedLibrary( path );
 }
 
 

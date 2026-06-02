@@ -320,6 +320,34 @@ bool BINARY_READER::TryReadString( wxString& aResult )
 }
 
 
+void BINARY_READER::DetectStringEncoding( size_t aProbeOffset )
+{
+    size_t          savedOffset = m_offset;
+    STRING_ENCODING savedEncoding = m_stringEncoding;
+
+    // The probe helpers below dispatch on m_stringEncoding, so force each framing explicitly.
+    m_offset = aProbeOffset;
+    m_stringEncoding = STRING_ENCODING::LEGACY_ASCII;
+    wxString asciiStr;
+    bool     asciiOk = TryReadStringASCII( asciiStr ) && !asciiStr.IsEmpty();
+
+    m_offset = aProbeOffset;
+    m_stringEncoding = STRING_ENCODING::UTF16_BE;
+    wxString utf16Str;
+    bool     utf16Ok = TryReadStringUTF16( utf16Str ) && !utf16Str.IsEmpty();
+
+    m_offset = savedOffset;
+    m_stringEncoding = savedEncoding;
+
+    // Only commit when exactly one framing yields a printable string; otherwise leave the
+    // version-based default in place.
+    if( asciiOk && !utf16Ok )
+        m_stringEncoding = STRING_ENCODING::LEGACY_ASCII;
+    else if( utf16Ok && !asciiOk )
+        m_stringEncoding = STRING_ENCODING::UTF16_BE;
+}
+
+
 // --- Private string readers -------------------------------------------------
 
 

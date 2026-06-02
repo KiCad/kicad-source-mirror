@@ -147,6 +147,20 @@ public:
      */
     void SetStringEncoding( STRING_ENCODING aEncoding ) { m_stringEncoding = aEncoding; }
 
+    /**
+     * Detect the string encoding from the bytes at @p aProbeOffset, which must sit at the start
+     * of a non-empty DipTrace string, and pin the encoding override accordingly.
+     *
+     * DipTrace ships files of the same format version in both encodings (e.g. v37 schematics exist
+     * as legacy ASCII and as UTF-16-BE), so the version threshold alone is not reliable. The two
+     * framings are mutually exclusive on real string bytes -- the ASCII length is the int3 bias
+     * 0x0F42xx while a small UTF-16 char count starts 0x00xx -- so exactly one parses as a printable
+     * string. The encoding is left unchanged when the probe is inconclusive.
+     *
+     * @param aProbeOffset file offset of a known non-empty string field.
+     */
+    void DetectStringEncoding( size_t aProbeOffset );
+
     // -- Primitive readers ---------------------------------------------------
 
     /**

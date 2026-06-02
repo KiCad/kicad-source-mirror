@@ -204,6 +204,12 @@ set( QA_PCBNEW_SRCS
     group_saveload.cpp
 )
 
+# DipTrace PCB benchmark tests that exercise proprietary reference designs kept outside the source
+# tree. The file is intentionally not committed; include it only when a developer has it.
+if( EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/pcb_io/diptrace/test_diptrace_benchmarks_local.cpp" )
+    list( APPEND QA_PCBNEW_SRCS pcb_io/diptrace/test_diptrace_benchmarks_local.cpp )
+endif()
+
 if( WIN32 )
     # We want to declare a resource manifest on Windows to enable UTF8 mode
     # Without UTF8 mode, some random IO tests may fail, we set the active code page on normal kicad to UTF8 as well
