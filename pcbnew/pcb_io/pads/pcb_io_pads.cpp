@@ -742,10 +742,6 @@ void PCB_IO_PADS::loadFootprints()
                     {
                         std::string front_shape;
                         std::string back_shape;
-                        double front_sizeA = 0;
-                        double back_sizeA = 0;
-                        double front_sizeB = 0;
-                        double back_sizeB = 0;
 
                         for( const auto& layer_def : stack )
                         {
@@ -761,27 +757,28 @@ void PCB_IO_PADS::loadFootprints()
                             PCB_LAYER_ID mapped = mapPadsLayer( layer_def.layer );
 
                             if( mapped == F_Cu && front_shape.empty() )
-                            {
                                 front_shape = layer_def.shape;
-                                front_sizeA = layer_def.sizeA;
-                                front_sizeB = layer_def.sizeB;
-                            }
                             else if( mapped == B_Cu && back_shape.empty() )
-                            {
                                 back_shape = layer_def.shape;
-                                back_sizeA = layer_def.sizeA;
-                                back_sizeB = layer_def.sizeB;
-                            }
                         }
 
+                        // Only switch to FRONT_INNER_BACK when the pad shape itself
+                        // differs between front and back copper.  Size-only differences
+                        // (e.g. different annular ring diameters) are represented in
+                        // NORMAL mode using the primary (front/component-side) shape, which
+                        // keeps mirrored placements visually consistent with the original.
                         if( !front_shape.empty() && !back_shape.empty()
-                            && ( front_shape != back_shape
-                                 || front_sizeA != back_sizeA
-                                 || front_sizeB != back_sizeB ) )
+                            && front_shape != back_shape )
                         {
                             pad->Padstack().SetMode( PADSTACK::MODE::FRONT_INNER_BACK );
                         }
                     }
+
+                    // Tracks whether convertPadShape has already been called for a copper
+                    // layer in NORMAL mode.  In NORMAL mode all copper layers map to the
+                    // same ALL_LAYERS slot, so a second call would overwrite the first.
+                    // The primary (layer -2, component-side) entry must win.
+                    bool normal_copper_set = false;
 
                     for( const auto& layer_def : stack )
                     {
@@ -859,7 +856,24 @@ void PCB_IO_PADS::loadFootprints()
                         else if( kicad_layer != UNDEFINED_LAYER )
                         {
                             layer_set.set( kicad_layer );
+
+                            // In NORMAL mode, all copper entries map to the same ALL_LAYERS
+                            // slot.  Only the first (primary/component-side) entry sets the
+                            // shape; later entries for secondary copper are skipped so they
+                            // do not overwrite the primary size.
+                            bool is_copper = IsCopperLayer( kicad_layer );
+
+                            if( is_copper
+                                && normal_copper_set
+                                && pad->Padstack().Mode() == PADSTACK::MODE::NORMAL )
+                            {
+                                continue;
+                            }
+
                             convertPadShape( layer_def, pad, kicad_layer, part_orient );
+
+                            if( is_copper )
+                                normal_copper_set = true;
                         }
                     }
 

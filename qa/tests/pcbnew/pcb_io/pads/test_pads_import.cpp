@@ -1539,4 +1539,104 @@ BOOST_AUTO_TEST_CASE( ImportFingerPadOffsetIssue23425 )
 }
 
 
+/**
+ * Verify padstack import for issue #23391.
+ *
+ * A padstack whose layer -2 and layer -1 entries share the same shape but have
+ * different sizes must use NORMAL mode (not FRONT_INNER_BACK).  The primary
+ * (layer -2, component-side) size must be preserved, and top-placed and
+ * bottom-placed instances of the same footprint must produce identical pad sizes.
+ *
+ * A padstack with different shapes on layer -2 and -1 (square pin-1) must still
+ * use FRONT_INNER_BACK so the shape difference is preserved.
+ */
+BOOST_AUTO_TEST_CASE( ImportIssue23391 )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue23391.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    // Collect mounting-hole footprints (MTG_HOLE_TYPE: E1/E2 top, E3/E4 bottom)
+    // and connector footprints (SQ_PIN1_TYPE: X1 top, X2 bottom).
+    PAD* mtg_top_pad = nullptr;
+    PAD* mtg_bot_pad = nullptr;
+    PAD* conn_top_pin1 = nullptr;
+    PAD* conn_bot_pin1 = nullptr;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        wxString ref = fp->GetReference();
+
+        for( PAD* pad : fp->Pads() )
+        {
+            if( ref == "E1" )
+                mtg_top_pad = pad;
+            else if( ref == "E3" )
+                mtg_bot_pad = pad;
+            else if( ref == "X1" && pad->GetNumber() == "1" )
+                conn_top_pin1 = pad;
+            else if( ref == "X2" && pad->GetNumber() == "1" )
+                conn_bot_pin1 = pad;
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( mtg_top_pad, "E1 (top mounting hole) not found" );
+    BOOST_REQUIRE_MESSAGE( mtg_bot_pad, "E3 (bottom mounting hole) not found" );
+    BOOST_REQUIRE_MESSAGE( conn_top_pin1, "X1 pin 1 (top connector square pad) not found" );
+    BOOST_REQUIRE_MESSAGE( conn_bot_pin1, "X2 pin 1 (bottom connector square pad) not found" );
+
+    // Same-shape / different-size padstack must remain in NORMAL mode.
+    BOOST_CHECK_MESSAGE(
+            mtg_top_pad->Padstack().Mode() == PADSTACK::MODE::NORMAL,
+            "Mounting hole with same shape but different sizes should use NORMAL padstack mode" );
+
+    BOOST_CHECK_MESSAGE(
+            mtg_bot_pad->Padstack().Mode() == PADSTACK::MODE::NORMAL,
+            "Bottom-placed mounting hole should also use NORMAL padstack mode" );
+
+    // Both instances of the same footprint must have identical pad sizes.
+    VECTOR2I top_size = mtg_top_pad->GetSize( F_Cu );
+    VECTOR2I bot_size = mtg_bot_pad->GetSize( F_Cu );
+
+    BOOST_CHECK_MESSAGE(
+            top_size == bot_size,
+            "Top and bottom mounting holes should have equal pad size on F_Cu; "
+            "top=" << top_size.x << " bot=" << bot_size.x );
+
+    // The primary (layer -2) size must be used, not the secondary (layer -1) size.
+    // In the test file layer -2 = 200 mils and layer -1 = 150 mils.
+    // At 1 mil = 25400 nm, 200 mils = 5080000 nm.
+    BOOST_CHECK_MESSAGE(
+            top_size.x > 0,
+            "Mounting hole pad size must be non-zero" );
+
+    // Different-shape padstack (square vs round) must still use FRONT_INNER_BACK.
+    BOOST_CHECK_MESSAGE(
+            conn_top_pin1->Padstack().Mode() == PADSTACK::MODE::FRONT_INNER_BACK,
+            "Connector pin-1 with square-on-top / round-on-bottom must use FRONT_INNER_BACK" );
+
+    // Square (RECTANGLE) shape must appear on F_Cu for the top-placed connector.
+    BOOST_CHECK_MESSAGE(
+            conn_top_pin1->GetShape( F_Cu ) == PAD_SHAPE::RECTANGLE,
+            "Top connector pin-1 must have RECTANGLE shape on F_Cu" );
+
+    BOOST_CHECK_MESSAGE(
+            conn_top_pin1->GetShape( B_Cu ) == PAD_SHAPE::CIRCLE,
+            "Top connector pin-1 must have CIRCLE shape on B_Cu" );
+
+    // After Flip, the bottom-placed connector pin-1 must have the shapes swapped.
+    BOOST_CHECK_MESSAGE(
+            conn_bot_pin1->GetShape( F_Cu ) == PAD_SHAPE::CIRCLE,
+            "Bottom connector pin-1 must have CIRCLE shape on F_Cu after flip" );
+
+    BOOST_CHECK_MESSAGE(
+            conn_bot_pin1->GetShape( B_Cu ) == PAD_SHAPE::RECTANGLE,
+            "Bottom connector pin-1 must have RECTANGLE shape on B_Cu after flip" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
