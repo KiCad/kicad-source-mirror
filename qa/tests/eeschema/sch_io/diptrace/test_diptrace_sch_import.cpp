@@ -640,7 +640,11 @@ BOOST_AUTO_TEST_CASE( ViewerExampleComponentRecordsAreParsedSequentiallyOptional
         RemoveGeneratedLibrary( path );
     }
 
-    BOOST_CHECK_MESSAGE( foundAny, "No DipTrace viewer example schematics found" );
+    if( !foundAny )
+    {
+        BOOST_TEST_MESSAGE( "Skipping sequential component record check; no viewer examples found at "
+                            << examplesDir );
+    }
 }
 
 
