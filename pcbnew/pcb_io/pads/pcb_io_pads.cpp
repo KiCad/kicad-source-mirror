@@ -615,27 +615,11 @@ void PCB_IO_PADS::loadFootprints()
                 {
                     pad->SetShape( kicad_layer, PAD_SHAPE::RECTANGLE );
                     pad->SetSize( kicad_layer, size );
-
-                    if( layer_def.finger_offset != 0 )
-                    {
-                        int offset = decalScaler( layer_def.finger_offset );
-                        VECTOR2I pad_offset( offset, 0 );
-                        RotatePoint( pad_offset, EDA_ANGLE( layer_def.rotation, DEGREES_T ) );
-                        pad->SetOffset( kicad_layer, pad_offset );
-                    }
                 }
                 else if( shape == "OF" )
                 {
                     pad->SetShape( kicad_layer, PAD_SHAPE::OVAL );
                     pad->SetSize( kicad_layer, size );
-
-                    if( layer_def.finger_offset != 0 )
-                    {
-                        int offset = decalScaler( layer_def.finger_offset );
-                        VECTOR2I pad_offset( offset, 0 );
-                        RotatePoint( pad_offset, EDA_ANGLE( layer_def.rotation, DEGREES_T ) );
-                        pad->SetOffset( kicad_layer, pad_offset );
-                    }
                 }
                 else if( shape == "RC" || shape == "OC" )
                 {
@@ -654,19 +638,21 @@ void PCB_IO_PADS::loadFootprints()
                     {
                         pad->SetRoundRectRadiusRatio( kicad_layer, 0.25 );
                     }
-
-                    if( layer_def.finger_offset != 0 )
-                    {
-                        int offset = decalScaler( layer_def.finger_offset );
-                        VECTOR2I pad_offset( offset, 0 );
-                        RotatePoint( pad_offset, EDA_ANGLE( layer_def.rotation, DEGREES_T ) );
-                        pad->SetOffset( kicad_layer, pad_offset );
-                    }
                 }
                 else
                 {
                     pad->SetShape( kicad_layer, PAD_SHAPE::CIRCLE );
                     pad->SetSize( kicad_layer, VECTOR2I( size.x, size.x ) );
+                }
+
+                if( layer_def.finger_offset != 0 )
+                {
+                    // finger_offset runs along the finger's long axis (pad-local X before
+                    // rotation).  PAD::ShapePos() rotates the offset by GetOrientation(), so
+                    // store it unrotated; pre-rotating by layer_def.rotation here would
+                    // double-apply the rotation.
+                    pad->SetOffset( kicad_layer,
+                                    VECTOR2I( decalScaler( layer_def.finger_offset ), 0 ) );
                 }
 
                 pad->SetOrientation( part_orient + EDA_ANGLE( layer_def.rotation, DEGREES_T ) );
