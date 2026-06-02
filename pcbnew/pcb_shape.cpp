@@ -367,8 +367,10 @@ SHAPE_POLY_SET PCB_SHAPE::getHatchingKnockouts() const
         if( footprint == GetParentFootprint() )
             continue;
 
-        // Knockout footprint courtyard
-        knockouts.Append( footprint->GetCourtyard( layer ) );
+        // GetCourtyard() returns the front courtyard for any non-back layer, so only knock it
+        // out when the hatched shape actually lives on a courtyard layer.
+        if( layer == F_CrtYd || layer == B_CrtYd )
+            knockouts.Append( footprint->GetCourtyard( layer ) );
 
         // Knockout footprint fields
         footprint->RunOnChildren(
