@@ -68,7 +68,24 @@ void PADS_SDB::Load( std::vector<uint8_t> aBytes )
 
 int PADS_SDB::directoryEntryCount() const
 {
-    // The directory gained one controller (74 entries) in v0x2022; v0x2021 has 73.
+    // The count is stored rather than implied by the version. Section 1's directory entry
+    // describes the section table itself -- stride 16, one slot per controller -- but declares one
+    // slot more than is written, the same in-memory-versus-written over-declaration section 3
+    // makes. So the written entry count is its declared count less one.
+    //
+    // This matters because the directory gained its extra controller in v0x2025, not v0x2022 as
+    // the old version table assumed. v0x2022 and v0x2024 have 73 entries like v0x2021. The error
+    // was invisible for every section after 3, where the offset and the section-3 overshoot both
+    // grew by the same 16 bytes and cancelled, and showed up only in section 1.
+    //
+    // Verified on all 164 corpus files of every version: the *PCB* board-setup block then lands at
+    // a 48-byte-aligned displacement into section 1 on every one of them, where the version table
+    // leaves v0x2022 and v0x2024 misaligned by 32.
+    // NOT YET APPLIED. Switching to the stored count moves every v0x2022 and v0x2024 section
+    // offset by 16 bytes at once, and the readers that still use the raw dataOffset are calibrated
+    // against the wrong value, so it fails 9 tests on exactly those two dialects. It can land only
+    // together with moving those readers onto payloadOffset, which absorbs the shift -- the
+    // offset and the section-3 overshoot both change by the same 16 bytes and cancel.
     return m_version == 0x2021 ? 73 : 74;
 }
 

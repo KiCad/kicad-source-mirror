@@ -41,7 +41,8 @@ namespace PADS_IO
  *
  * File anatomy:
  *   [Header]    10 B  magic 00 FF, version u16 @ +2.
- *   [Directory] N x 16 B @ +10  one entry per database controller's record stream.
+ *   [Directory] N x 16 B @ +10  one entry per database controller's record stream. N is read
+ *               from entry 1, which describes the table itself; see directoryEntryCount().
  *   [Sections]  the controllers' payloads, laid out contiguously in index order.
  *   [Footer]    46 B  GUID + a stored size check.
  *
