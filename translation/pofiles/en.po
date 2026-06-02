@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-26 05:03+0300\n"
+"POT-Creation-Date: 2026-06-03 00:29+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1871,6 +1871,12 @@ msgstr "Invalid library link: '%s'"
 
 msgid "Edit Group Properties"
 msgstr "Edit Group Properties"
+
+msgid "A group cannot contain itself."
+msgstr "A group cannot contain itself."
+
+msgid "Cannot add this group because it already contains the current group."
+msgstr "Cannot add this group because it already contains the current group."
 
 msgid "Group name:"
 msgstr "Group name:"
@@ -5151,6 +5157,52 @@ msgid "Unable to parse '%s' in '%s'"
 msgstr "Unable to parse '%s' in '%s'"
 
 #, c-format
+msgid "Cannot determine length of file '%s'."
+msgstr "Cannot determine length of file '%s'."
+
+#, c-format
+msgid "Error reading file '%s'."
+msgstr "Error reading file '%s'."
+
+#, c-format
+msgid "Seek past end of file (offset %zu, size %zu)."
+msgstr "Seek past end of file (offset %zu, size %zu)."
+
+#, c-format
+msgid ""
+"Unexpected end of file at offset 0x%06zX: need 3 bytes for int3, have %zu "
+"remaining."
+msgstr ""
+"Unexpected end of file at offset 0x%06zX: need 3 bytes for int3, have %zu "
+"remaining."
+
+#, c-format
+msgid ""
+"Unexpected end of file at offset 0x%06zX: need 4 bytes for int4, have %zu "
+"remaining."
+msgstr ""
+"Unexpected end of file at offset 0x%06zX: need 4 bytes for int4, have %zu "
+"remaining."
+
+#, c-format
+msgid "Unexpected end of file at offset 0x%06zX: need 1 byte."
+msgstr "Unexpected end of file at offset 0x%06zX: need 1 byte."
+
+#, c-format
+msgid "Unreasonable string length %d at offset 0x%06zX."
+msgstr "Unreasonable string length %d at offset 0x%06zX."
+
+#, c-format
+msgid "Unreasonable v37 string length %d at offset 0x%06zX."
+msgstr "Unreasonable v37 string length %d at offset 0x%06zX."
+
+#, c-format
+msgid ""
+"Unexpected end of file at offset 0x%06zX: need %zu bytes, have %zu remaining."
+msgstr ""
+"Unexpected end of file at offset 0x%06zX: need %zu bytes, have %zu remaining."
+
+#, c-format
 msgid "Invalid size %lld: too large"
 msgstr "Invalid size %lld: too large"
 
@@ -5869,6 +5921,10 @@ msgstr "The library table path '%s' does not exist"
 
 msgid "The library table is of wrong type"
 msgstr "The library table is of wrong type"
+
+#, c-format
+msgid "Library table '%s' is read-only"
+msgstr "Library table '%s' is read-only"
 
 #, c-format
 msgid "An unexpected error occurred while reading library table %s "
@@ -7707,6 +7763,9 @@ msgstr "EasyEDA (JLCEDA) Std backup archive"
 
 msgid "EasyEDA (JLCEDA) Pro files"
 msgstr "EasyEDA (JLCEDA) Pro files"
+
+msgid "DipTrace files"
+msgstr "DipTrace files"
 
 msgid "KiCad printed circuit board files"
 msgstr "KiCad printed circuit board files"
@@ -12669,6 +12728,9 @@ msgstr ""
 msgid "Failed to save drawing sheet '%s': %s"
 msgstr "Failed to save drawing sheet '%s': %s"
 
+msgid "Root"
+msgstr "Root"
+
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
 msgstr "Plotting to HPGL is no longer supported as of KiCad 10.0."
 
@@ -13160,9 +13222,6 @@ msgid ""
 msgstr ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
-
-msgid "Root"
-msgstr "Root"
 
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
@@ -14469,6 +14528,131 @@ msgid "KiCad database library files"
 msgstr "KiCad database library files"
 
 #, c-format
+msgid "Unsupported DipTrace schematic format version %d."
+msgstr "Unsupported DipTrace schematic format version %d."
+
+#, c-format
+msgid "DipTrace import: unexpected error at offset 0x%06zX: %s"
+msgstr "DipTrace import: unexpected error at offset 0x%06zX: %s"
+
+#, c-format
+msgid "Invalid DipTrace schematic magic length: %d (expected 7 or 11)."
+msgstr "Invalid DipTrace schematic magic length: %d (expected 7 or 11)."
+
+msgid "Invalid DipTrace schematic file: bad magic header."
+msgstr "Invalid DipTrace schematic file: bad magic header."
+
+msgid "Invalid DipTrace schematic file: bad legacy version suffix."
+msgstr "Invalid DipTrace schematic file: bad legacy version suffix."
+
+#, c-format
+msgid "Invalid DipTrace schematic sheet count: %d."
+msgstr "Invalid DipTrace schematic sheet count: %d."
+
+#, c-format
+msgid "Invalid text style count: %d."
+msgstr "Invalid text style count: %d."
+
+#, c-format
+msgid "DipTrace import: invalid component count %d."
+msgstr "DipTrace import: invalid component count %d."
+
+#, c-format
+msgid "DipTrace import: invalid bus count %d."
+msgstr "DipTrace import: invalid bus count %d."
+
+#, c-format
+msgid "DipTrace import: failed to parse component %zu at offset 0x%06zX: %s"
+msgstr "DipTrace import: failed to parse component %zu at offset 0x%06zX: %s"
+
+#, c-format
+msgid "DipTrace import: found %zu components, but the file header declares %d."
+msgstr ""
+"DipTrace import: found %zu components, but the file header declares %d."
+
+#, c-format
+msgid ""
+"DipTrace import: invalid component extra-tail length %u at offset 0x%06zX."
+msgstr ""
+"DipTrace import: invalid component extra-tail length %u at offset 0x%06zX."
+
+#, c-format
+msgid "Invalid pin count %d at component offset 0x%06zX."
+msgstr "Invalid pin count %d at component offset 0x%06zX."
+
+#, c-format
+msgid ""
+"DipTrace import: failed to parse pin %d in component at 0x%06zX (offset "
+"0x%06zX): %s"
+msgstr ""
+"DipTrace import: failed to parse pin %d in component at 0x%06zX (offset "
+"0x%06zX): %s"
+
+#, c-format
+msgid ""
+"DipTrace import: invalid component shape point count %d at offset 0x%06zX."
+msgstr ""
+"DipTrace import: invalid component shape point count %d at offset 0x%06zX."
+
+#, c-format
+msgid ""
+"DipTrace import: invalid embedded pattern %s count %d at offset 0x%06zX."
+msgstr ""
+"DipTrace import: invalid embedded pattern %s count %d at offset 0x%06zX."
+
+#, c-format
+msgid "DipTrace import: bus entry %d has unexpected terminator %d."
+msgstr "DipTrace import: bus entry %d has unexpected terminator %d."
+
+#, c-format
+msgid "DipTrace import: failed to parse bus entry %d: %s"
+msgstr "DipTrace import: failed to parse bus entry %d: %s"
+
+#, c-format
+msgid ""
+"DipTrace import: invalid wire-net name for net index %d at offset 0x%06zX: "
+"%s."
+msgstr ""
+"DipTrace import: invalid wire-net name for net index %d at offset 0x%06zX: "
+"%s."
+
+#, c-format
+msgid ""
+"DipTrace import: invalid wire-net pin count %d for net '%s' at offset "
+"0x%06zX."
+msgstr ""
+"DipTrace import: invalid wire-net pin count %d for net '%s' at offset "
+"0x%06zX."
+
+#, c-format
+msgid "DipTrace import: invalid wire count %d for net '%s' at offset 0x%06zX."
+msgstr "DipTrace import: invalid wire count %d for net '%s' at offset 0x%06zX."
+
+#, c-format
+msgid ""
+"DipTrace import: invalid wire point count %d for net '%s' at offset 0x%06zX."
+msgstr ""
+"DipTrace import: invalid wire point count %d for net '%s' at offset 0x%06zX."
+
+#, c-format
+msgid "DipTrace import: failed to create symbol for %s (%s): %s"
+msgstr "DipTrace import: failed to create symbol for %s (%s): %s"
+
+#, c-format
+msgid ""
+"DipTrace import: loaded %zu components, %zu buses, %zu net labels from "
+"version %d file with %d sheets."
+msgstr ""
+"DipTrace import: loaded %zu components, %zu buses, %zu net labels from "
+"version %d file with %d sheets."
+
+msgid "Open canceled by user."
+msgstr "Open canceled by user."
+
+msgid "DipTrace schematic files"
+msgstr "DipTrace schematic files"
+
+#, c-format
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
@@ -14610,9 +14794,6 @@ msgstr "Error retrieving data from HTTP library %s: %s"
 
 msgid "KiCad HTTP library files"
 msgstr "KiCad HTTP library files"
-
-msgid "Open canceled by user."
-msgstr "Open canceled by user."
 
 #, c-format
 msgid "'%s' does not appear to be an Eeschema file."
@@ -16544,6 +16725,41 @@ msgstr "Invalid ISSO_PU table."
 msgid "Invalid Composite Current table."
 msgstr "Invalid Composite Current table."
 
+#, c-format
+msgid "Invalid Series Current table in %s."
+msgstr "Invalid Series Current table in %s."
+
+#, c-format
+msgid "Invalid Series MOSFET table in %s."
+msgstr "Invalid Series MOSFET table in %s."
+
+#, c-format
+msgid "Series MOSFET Vds must be > 0 in %s."
+msgstr "Series MOSFET Vds must be > 0 in %s."
+
+#, c-format
+msgid "Rl Series requires L Series in %s."
+msgstr "Rl Series requires L Series in %s."
+
+#, c-format
+msgid "Rc/Lc Series requires C Series in %s."
+msgstr "Rc/Lc Series requires C Series in %s."
+
+msgid "[On] and [Off] are only allowed in Series_switch models."
+msgstr "[On] and [Off] are only allowed in Series_switch models."
+
+msgid "Series model has no series elements."
+msgstr "Series model has no series elements."
+
+msgid "Series_switch model is missing the [On] block."
+msgstr "Series_switch model is missing the [On] block."
+
+msgid "Series_switch model is missing the [Off] block."
+msgstr "Series_switch model is missing the [Off] block."
+
+msgid "Series_switch model has series elements outside [On]/[Off]."
+msgstr "Series_switch model has series elements outside [On]/[Off]."
+
 msgid "Invalid POWER Clamp table."
 msgstr "Invalid POWER Clamp table."
 
@@ -16687,6 +16903,12 @@ msgstr " context: "
 
 msgid "Invalid ramp data"
 msgstr "Invalid ramp data"
+
+msgid "[Series MOSFET] outside of [Model] context."
+msgstr "[Series MOSFET] outside of [Model] context."
+
+msgid "Internal error: no current [Series MOSFET] entry."
+msgstr "Internal error: no current [Series MOSFET] entry."
 
 msgid "The submodel name is missing."
 msgstr "The submodel name is missing."
@@ -16840,8 +17062,14 @@ msgstr "Model has no waveform pair, using [Ramp] instead, poor accuracy"
 msgid "Model has more than 2 waveform pairs, using the first two."
 msgstr "Model has more than 2 waveform pairs, using the first two."
 
+msgid "Series and Series_switch models are passive devices, not drivers."
+msgstr "Series and Series_switch models are passive devices, not drivers."
+
 msgid "Invalid model type for a driver."
 msgstr "Invalid model type for a driver."
+
+msgid "Series model has no [Series Pin Mapping] partner pin."
+msgstr "Series model has no [Series Pin Mapping] partner pin."
 
 msgid "Invalid model type for a device"
 msgstr "Invalid model type for a device"
@@ -17000,6 +17228,9 @@ msgstr "Could not find IBIS model '%s'"
 #, c-format
 msgid "Invalid IBIS model '%s'"
 msgstr "Invalid IBIS model '%s'"
+
+msgid "Switch state (1 = on, 0 = off)"
+msgstr "Switch state (1 = on, 0 = off)"
 
 msgid "Power supply"
 msgstr "Power supply"
@@ -18019,6 +18250,10 @@ msgstr "Change %s 'Do not populate' from '%s' to '%s'."
 #, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
+
+#, c-format
+msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
+msgstr "Change %s 'Exclude from position files' from '%s' to '%s'."
 
 #, c-format
 msgid "Cannot find %s pin '%s'."
@@ -19580,6 +19815,12 @@ msgstr "Reached end of sheet."
 
 msgid "No matches found."
 msgstr "No matches found."
+
+msgid "Some selected items cannot be grouped."
+msgstr "Some selected items cannot be grouped."
+
+msgid "Child items cannot be grouped separately from their parent item."
+msgstr "Child items cannot be grouped separately from their parent item."
 
 msgid "Click on new member..."
 msgstr "Click on new member..."
@@ -22451,6 +22692,9 @@ msgstr "Import PADS Project Files"
 msgid "Import gEDA / Lepton EDA Project Files"
 msgstr "Import gEDA / Lepton EDA Project Files"
 
+msgid "Import DipTrace Project Files"
+msgstr "Import DipTrace Project Files"
+
 #, c-format
 msgid "Running job %d: %s"
 msgstr "Running job %d: %s"
@@ -22624,6 +22868,12 @@ msgstr "gEDA / Lepton EDA Project..."
 
 msgid "Import gEDA or Lepton EDA schematic and PCB layout"
 msgstr "Import gEDA or Lepton EDA schematic and PCB layout"
+
+msgid "DipTrace Project..."
+msgstr "DipTrace Project..."
+
+msgid "Import DipTrace schematic and PCB (*.dch, *.dip)"
+msgstr "Import DipTrace schematic and PCB (*.dch, *.dip)"
 
 msgid "Edit Advanced Config..."
 msgstr "Edit Advanced Config..."
@@ -24577,14 +24827,17 @@ msgstr "B3"
 msgid "B4"
 msgstr "B4"
 
-msgid "A5"
-msgstr "A5"
+msgid "B5"
+msgstr "B5"
 
 msgid "A6"
 msgstr "A6"
 
 msgid "A7"
 msgstr "A7"
+
+msgid "A8"
+msgstr "A8"
 
 msgid "0 .. 15 V"
 msgstr "0 .. 15 V"
@@ -24618,24 +24871,26 @@ msgstr " > 500 V"
 
 msgid ""
 "*  B1 - Internal Conductors\n"
-"*  B2 - External Conductors, uncoated, sea level to 3050 m\n"
-"*  B3 - External Conductors, uncoated, over 3050 m\n"
+"*  B2 - External Conductors, uncoated, sea level to 3050 m \n"
+"*  B3 - External Conductors, uncoated, over 3050 m or a vacuum\n"
 "*  B4 - External Conductors, with permanent polymer coating (any elevation)\n"
-"*  A5 - External Conductors, with conformal coating over assembly (any "
-"elevation)\n"
-"*  A6 - External Component lead/termination, uncoated\n"
-"*  A7 - External Component lead termination, with conformal coating (any "
-"elevation)"
+"*  B5 - External Conductors, with conformal (any elevation or in a vacuum)\n"
+"*  A6 - External Component lead termination, with conformal coating (any "
+"elevation or in a vacuum)\n"
+"*  A7 - External Component lead/termination, uncoated, sea level to 3050 m \n"
+"*  A8 - External Component lead/termination, uncoated, over 3050m or in a "
+"vacuum"
 msgstr ""
 "*  B1 - Internal Conductors\n"
-"*  B2 - External Conductors, uncoated, sea level to 3050 m\n"
-"*  B3 - External Conductors, uncoated, over 3050 m\n"
+"*  B2 - External Conductors, uncoated, sea level to 3050 m \n"
+"*  B3 - External Conductors, uncoated, over 3050 m or a vacuum\n"
 "*  B4 - External Conductors, with permanent polymer coating (any elevation)\n"
-"*  A5 - External Conductors, with conformal coating over assembly (any "
-"elevation)\n"
-"*  A6 - External Component lead/termination, uncoated\n"
-"*  A7 - External Component lead termination, with conformal coating (any "
-"elevation)"
+"*  B5 - External Conductors, with conformal (any elevation or in a vacuum)\n"
+"*  A6 - External Component lead termination, with conformal coating (any "
+"elevation or in a vacuum)\n"
+"*  A7 - External Component lead/termination, uncoated, sea level to 3050 m \n"
+"*  A8 - External Component lead/termination, uncoated, over 3050m or in a "
+"vacuum"
 
 msgid "E24,E48,E96"
 msgstr "E24,E48,E96"
@@ -27431,6 +27686,24 @@ msgstr "Assign unique reference designators"
 msgid "Create Array"
 msgstr "Create Array"
 
+msgid "Zero skew color:"
+msgstr "Zero skew color:"
+
+msgid "Negative skew color:"
+msgstr "Negative skew color:"
+
+msgid "Positive skew color:"
+msgstr "Positive skew color:"
+
+msgid "Unknown skew color:"
+msgstr "Unknown skew color:"
+
+msgid "Logarithmic color scale"
+msgstr "Logarithmic color scale"
+
+msgid "Differential Skew Display Properties"
+msgstr "Differential Skew Display Properties"
+
 msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
@@ -29971,6 +30244,16 @@ msgstr "Pad number:"
 msgid "Net name:"
 msgstr "Net name:"
 
+msgid ""
+"Simulation\n"
+"Electrical type:"
+msgstr ""
+"Simulation\n"
+"Electrical type:"
+
+msgid "Sink"
+msgstr "Sink"
+
 msgid "Padstack mode:"
 msgstr "Padstack mode:"
 
@@ -31342,6 +31625,16 @@ msgstr "Keep &outside layers"
 
 msgid "Unused Pads"
 msgstr "Unused Pads"
+
+msgid "Apply design block layouts to new groups"
+msgstr "Apply design block layouts to new groups"
+
+msgid ""
+"For each new group created from a design block, apply the block's saved "
+"footprint placement and routing automatically."
+msgstr ""
+"For each new group created from a design block, apply the block's saved "
+"footprint placement and routing automatically."
 
 msgid "Update Footprints"
 msgstr "Update Footprints"
@@ -36914,12 +37207,14 @@ msgstr "Place at:"
 msgid "If not checked: use interactive placement."
 msgstr "If not checked: use interactive placement."
 
-msgid ""
-"If checked, use the selected layer in this dialog\n"
-"If unchecked, use the Board Editor active layer"
-msgstr ""
-"If checked, use the selected layer in this dialog\n"
-"If unchecked, use the Board Editor active layer"
+msgid "Current Layer"
+msgstr "Current Layer"
+
+msgid "Map Layers"
+msgstr "Map Layers"
+
+msgid "Single Layer"
+msgstr "Single Layer"
 
 msgid "Group imported items"
 msgstr "Group imported items"
@@ -37824,6 +38119,9 @@ msgstr "Pad Shape"
 
 msgid "Pad Number"
 msgstr "Pad Number"
+
+msgid "Simulation Electrical Type"
+msgstr "Simulation Electrical Type"
 
 msgid "Corner Radius Ratio"
 msgstr "Corner Radius Ratio"
@@ -38872,6 +39170,102 @@ msgid "CADSTAR PCB Archive files"
 msgstr "CADSTAR PCB Archive files"
 
 #, c-format
+msgid "DipTrace parse error at offset 0x%06zX: %s"
+msgstr "DipTrace parse error at offset 0x%06zX: %s"
+
+#, c-format
+msgid "DipTrace: invalid magic length %u (expected 7 or 11)"
+msgstr "DipTrace: invalid magic length %u (expected 7 or 11)"
+
+msgid "DipTrace: not a valid .dip board file (bad magic)"
+msgstr "DipTrace: not a valid .dip board file (bad magic)"
+
+msgid "DipTrace: invalid legacy board version suffix"
+msgstr "DipTrace: invalid legacy board version suffix"
+
+#, c-format
+msgid "DipTrace: invalid pattern-name group count %d at offset 0x%06zX"
+msgstr "DipTrace: invalid pattern-name group count %d at offset 0x%06zX"
+
+#, c-format
+msgid "DipTrace: invalid pattern-name block count %d"
+msgstr "DipTrace: invalid pattern-name block count %d"
+
+#, c-format
+msgid "DipTrace: invalid pattern-style group count %d at offset 0x%06zX"
+msgstr "DipTrace: invalid pattern-style group count %d at offset 0x%06zX"
+
+#, c-format
+msgid "DipTrace: invalid pattern-style entry count %d"
+msgstr "DipTrace: invalid pattern-style entry count %d"
+
+#, c-format
+msgid "DipTrace: invalid implicit pattern-style entry count %d"
+msgstr "DipTrace: invalid implicit pattern-style entry count %d"
+
+#, c-format
+msgid "DipTrace: invalid design-rule extra count %d"
+msgstr "DipTrace: invalid design-rule extra count %d"
+
+#, c-format
+msgid "DipTrace: invalid ruleset transition marker at 0x%06zX"
+msgstr "DipTrace: invalid ruleset transition marker at 0x%06zX"
+
+msgid "DipTrace: no validated component boundaries found"
+msgstr "DipTrace: no validated component boundaries found"
+
+#, c-format
+msgid "DipTrace: invalid component flag byte %u at boundary 0x%06zX"
+msgstr "DipTrace: invalid component flag byte %u at boundary 0x%06zX"
+
+#, c-format
+msgid "DipTrace: text object [%d] parse error: %s"
+msgstr "DipTrace: text object [%d] parse error: %s"
+
+#, c-format
+msgid "DipTrace import: invalid net name for net index %d at offset 0x%06zX."
+msgstr "DipTrace import: invalid net name for net index %d at offset 0x%06zX."
+
+#, c-format
+msgid ""
+"DipTrace import: invalid route-chain node count %d for net '%s' at offset "
+"0x%06zX."
+msgstr ""
+"DipTrace import: invalid route-chain node count %d for net '%s' at offset "
+"0x%06zX."
+
+#, c-format
+msgid ""
+"DipTrace import: route-chain node count %d for net '%s' overruns record at "
+"offset 0x%06zX."
+msgstr ""
+"DipTrace import: route-chain node count %d for net '%s' overruns record at "
+"offset 0x%06zX."
+
+#, c-format
+msgid ""
+"DipTrace import: invalid copper-pour zone header after font preamble at "
+"offset 0x%06zX."
+msgstr ""
+"DipTrace import: invalid copper-pour zone header after font preamble at "
+"offset 0x%06zX."
+
+#, c-format
+msgid "DipTrace: outline traversal aborted after %zu steps (%zu vertices)"
+msgstr "DipTrace: outline traversal aborted after %zu steps (%zu vertices)"
+
+#, c-format
+msgid "DipTrace: net index %d maps to multiple net names (%s, %s)"
+msgstr "DipTrace: net index %d maps to multiple net names (%s, %s)"
+
+#, c-format
+msgid "DipTrace: duplicate net metadata for net index %d"
+msgstr "DipTrace: duplicate net metadata for net index %d"
+
+msgid "DipTrace PCB files"
+msgstr "DipTrace PCB files"
+
+#, c-format
 msgid "<package> '%s' duplicated in <library> '%s'"
 msgstr "<package> '%s' duplicated in <library> '%s'"
 
@@ -39046,6 +39440,14 @@ msgstr ""
 #, c-format
 msgid "Unable to locate padstack %s in file %s\n"
 msgstr "Unable to locate padstack %s in file %s\n"
+
+#, c-format
+msgid ""
+"Pad '%s' has custom shape with per-layer geometry; custom primitives not "
+"supported in padstack mode."
+msgstr ""
+"Pad '%s' has custom shape with per-layer geometry; custom primitives not "
+"supported in padstack mode."
 
 #, c-format
 msgid "Invalid custom pad '%s'. Replacing with circular pad."
@@ -41622,6 +42024,42 @@ msgstr "Create Lines"
 msgid "Create Arc"
 msgstr "Create Arc"
 
+msgid "Net A Name"
+msgstr "Net A Name"
+
+msgid "Net B Name"
+msgstr "Net B Name"
+
+msgid "Net P Name"
+msgstr "Net P Name"
+
+msgid "Net N Name"
+msgstr "Net N Name"
+
+msgid "Max Skew"
+msgstr "Max Skew"
+
+msgid "Local Skew"
+msgstr "Local Skew"
+
+#, c-format
+msgid "Net %s has multiple simulation electrical source pads"
+msgstr "Net %s has multiple simulation electrical source pads"
+
+#, c-format
+msgid "Differential pair %s / %s is missing start and / or end pads"
+msgstr "Differential pair %s / %s is missing start and / or end pads"
+
+#, c-format
+msgid "Net %s is missing electrical simulation source pad"
+msgstr "Net %s is missing electrical simulation source pad"
+
+msgid "Phase skew initial selection failed"
+msgstr "Phase skew initial selection failed"
+
+msgid "Differential pair identification failed"
+msgstr "Differential pair identification failed"
+
 msgid "Select Via Size"
 msgstr "Select Via Size"
 
@@ -41766,6 +42204,13 @@ msgstr "Simplify Polygons"
 
 msgid "Heal Shapes"
 msgstr "Heal Shapes"
+
+msgid ""
+"Footprints cannot be mirrored. Use Flip to move them to the other side of "
+"the board."
+msgstr ""
+"Footprints cannot be mirrored. Use Flip to move them to the other side of "
+"the board."
 
 msgid "Change Side / Flip"
 msgstr "Change Side / Flip"
@@ -43553,6 +43998,9 @@ msgstr "Reset wizard parameters to default"
 msgid "Export footprint to editor"
 msgstr "Export footprint to editor"
 
+msgid "Show relative skew of diff pair tracks"
+msgstr "Show relative skew of diff pair tracks"
+
 msgid "Add Footprint Library"
 msgstr "Add Footprint Library"
 
@@ -43600,19 +44048,65 @@ msgstr "Invalid clipboard contents"
 msgid "Design block has no layout to place."
 msgstr "Design block has no layout to place."
 
+msgid "No groups with a linked design block are selected."
+msgstr "No groups with a linked design block are selected."
+
+msgid ""
+"Selection contains locked items. Enable 'Override locks' to operate on them."
+msgstr ""
+"Selection contains locked items. Enable 'Override locks' to operate on them."
+
+msgid "Applying Design Block Layouts"
+msgstr "Applying Design Block Layouts"
+
+msgid "design block is not in the loaded libraries"
+msgstr "design block is not in the loaded libraries"
+
+msgid "design block has no saved PCB layout"
+msgstr "design block has no saved PCB layout"
+
+msgid "could not load the design block's layout"
+msgstr "could not load the design block's layout"
+
+msgid "design block layout could not be loaded"
+msgstr "design block layout could not be loaded"
+
+msgid "group has no footprints"
+msgstr "group has no footprints"
+
+msgid "layout copy failed"
+msgstr "layout copy failed"
+
+#, c-format
+msgid "Applying layout to group %zu of %zu..."
+msgstr "Applying layout to group %zu of %zu..."
+
+msgid "Apply design block layout cancelled."
+msgstr "Apply design block layout cancelled."
+
+#, c-format
+msgid "Apply design block layout to %d group(s)"
+msgstr "Apply design block layout to %d group(s)"
+
+#, c-format
+msgid "Applied design block layout to %d of %d group(s)."
+msgstr "Applied design block layout to %d of %d group(s)."
+
+#, c-format
+msgid ""
+"Skipped %d selected item(s) that are not groups linked to a design block."
+msgstr ""
+"Skipped %d selected item(s) that are not groups linked to a design block."
+
+msgid "The following groups could not be processed:"
+msgstr "The following groups could not be processed:"
+
+msgid "(unnamed group)"
+msgstr "(unnamed group)"
+
 #, c-format
 msgid "Design block %s does not have a board file."
 msgstr "Design block %s does not have a board file."
-
-msgid "Design block placement failed - no footprints were placed."
-msgstr "Design block placement failed - no footprints were placed."
-
-#, c-format
-msgid "Footprint %s is locked and cannot be placed."
-msgstr "Footprint %s is locked and cannot be placed."
-
-msgid "Selected group contains no footprints to place."
-msgstr "Selected group contains no footprints to place."
 
 msgid "Error loading board."
 msgstr "Error loading board."
@@ -43682,6 +44176,11 @@ msgstr "Embed 3D Models"
 msgid "%d 3D model(s) successfully embedded."
 msgstr "%d 3D model(s) successfully embedded."
 
+msgid ""
+"Footprint items cannot be grouped separately from their parent footprint."
+msgstr ""
+"Footprint items cannot be grouped separately from their parent footprint."
+
 msgid "Resize Table Cells"
 msgstr "Resize Table Cells"
 
@@ -43729,11 +44228,6 @@ msgstr "Net Chains..."
 
 msgid "Select/Expand Connection..."
 msgstr "Select/Expand Connection..."
-
-msgid ""
-"Selection contains locked items. Enable 'Override locks' to operate on them."
-msgstr ""
-"Selection contains locked items. Enable 'Override locks' to operate on them."
 
 msgid "Select the reference point on the item to move."
 msgstr "Select the reference point on the item to move."
@@ -43875,8 +44369,8 @@ msgstr "Type IV-b (plugged and tented both sides)"
 msgid "Type IV-a (plugged and tented bottom)"
 msgstr "Type IV-a (plugged and tented bottom)"
 
-msgid "Type V (filled )"
-msgstr "Type V (filled )"
+msgid "Type V (filled)"
+msgstr "Type V (filled)"
 
 msgid "Type VI-a (filled and tented top)"
 msgstr "Type VI-a (filled and tented top)"
@@ -44422,6 +44916,9 @@ msgstr "Total Delay"
 msgid "Total Length"
 msgstr "Total Length"
 
+msgid "Net Chain Delay"
+msgstr "Net Chain Delay"
+
 msgid "Net Chain Length"
 msgstr "Net Chain Length"
 
@@ -44931,6 +45428,52 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "A5"
+#~ msgstr "A5"
+
+#~ msgid ""
+#~ "*  B1 - Internal Conductors\n"
+#~ "*  B2 - External Conductors, uncoated, sea level to 3050 m\n"
+#~ "*  B3 - External Conductors, uncoated, over 3050 m\n"
+#~ "*  B4 - External Conductors, with permanent polymer coating (any "
+#~ "elevation)\n"
+#~ "*  A5 - External Conductors, with conformal coating over assembly (any "
+#~ "elevation)\n"
+#~ "*  A6 - External Component lead/termination, uncoated\n"
+#~ "*  A7 - External Component lead termination, with conformal coating (any "
+#~ "elevation)"
+#~ msgstr ""
+#~ "*  B1 - Internal Conductors\n"
+#~ "*  B2 - External Conductors, uncoated, sea level to 3050 m\n"
+#~ "*  B3 - External Conductors, uncoated, over 3050 m\n"
+#~ "*  B4 - External Conductors, with permanent polymer coating (any "
+#~ "elevation)\n"
+#~ "*  A5 - External Conductors, with conformal coating over assembly (any "
+#~ "elevation)\n"
+#~ "*  A6 - External Component lead/termination, uncoated\n"
+#~ "*  A7 - External Component lead termination, with conformal coating (any "
+#~ "elevation)"
+
+#~ msgid ""
+#~ "If checked, use the selected layer in this dialog\n"
+#~ "If unchecked, use the Board Editor active layer"
+#~ msgstr ""
+#~ "If checked, use the selected layer in this dialog\n"
+#~ "If unchecked, use the Board Editor active layer"
+
+#~ msgid "Design block placement failed - no footprints were placed."
+#~ msgstr "Design block placement failed - no footprints were placed."
+
+#, c-format
+#~ msgid "Footprint %s is locked and cannot be placed."
+#~ msgstr "Footprint %s is locked and cannot be placed."
+
+#~ msgid "Selected group contains no footprints to place."
+#~ msgstr "Selected group contains no footprints to place."
+
+#~ msgid "Type V (filled )"
+#~ msgstr "Type V (filled )"
 
 #~ msgid "Url"
 #~ msgstr "Url"
