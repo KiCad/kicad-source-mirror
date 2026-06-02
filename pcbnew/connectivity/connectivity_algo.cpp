@@ -746,7 +746,11 @@ void CN_CONNECTIVITY_ALGO::FillIsolatedIslandsMap( std::map<ZONE*, std::map<PCB_
                 }
             }
 
-            if( notInConnectivity )
+            // Non-copper zones (silk, mask, etc.) are never added to the connectivity graph,
+            // so notInConnectivity is always true for them.  Without the IsCopperLayer guard
+            // outline 0 of every non-copper multi-island fill gets dropped on every refill
+            // (issue 24089).
+            if( notInConnectivity && IsCopperLayer( layer ) )
                 layerIslands.m_IsolatedOutlines.push_back( 0 );
         }
     }
