@@ -24,6 +24,7 @@
 #include <lib_table_grid_data_model.h>
 #include <lib_table_notebook_panel.h>
 #include <libraries/library_manager.h>
+#include <pgm_base.h>
 
 
 LIB_TABLE_NOTEBOOK_PANEL::~LIB_TABLE_NOTEBOOK_PANEL()
@@ -122,10 +123,34 @@ void LIB_TABLE_NOTEBOOK_PANEL::ClearDirty()
 
 bool LIB_TABLE_NOTEBOOK_PANEL::TableModified()
 {
-    wxFileName                     file( GetModel()->Table().Path() );
-    std::unique_ptr<LIBRARY_TABLE> sourceTable = std::make_unique<LIBRARY_TABLE>( file, LIBRARY_TABLE_SCOPE::GLOBAL );
+    LIBRARY_TABLE& table = GetModel()->Table();
+    wxFileName     file( table.Path() );
 
-    return GetModel()->Table() != *sourceTable;
+    std::unique_ptr<LIBRARY_TABLE> sourceTable =
+            std::make_unique<LIBRARY_TABLE>( file, LIBRARY_TABLE_SCOPE::GLOBAL );
+
+    if( table.IsReadOnly() )
+    {
+        // Apply stored overrides to the source table so we compare against the
+        // "loaded with overrides" state, not the raw on-disk state.
+        Pgm().GetLibraryManager().ApplyLibOverrides( *sourceTable );
+
+        if( sourceTable->Rows().size() != table.Rows().size() )
+            return false;
+
+        for( size_t i = 0; i < table.Rows().size(); ++i )
+        {
+            const LIBRARY_TABLE_ROW& current = table.Rows()[i];
+            const LIBRARY_TABLE_ROW& source  = sourceTable->Rows()[i];
+
+            if( current.Disabled() != source.Disabled() || current.Hidden() != source.Hidden() )
+                return true;
+        }
+
+        return false;
+    }
+
+    return table != *sourceTable;
 }
 
 
@@ -162,9 +187,21 @@ void LIB_TABLE_NOTEBOOK_PANEL::onGridCellChanging( wxGridEvent& aEvent )
 
 bool LIB_TABLE_NOTEBOOK_PANEL::SaveTable()
 {
+    LIBRARY_TABLE& table = GetModel()->Table();
+
+    if( table.IsReadOnly() )
+    {
+        bool retVal = SaveOverrides();
+
+        if( retVal )
+            ClearDirty();
+
+        return retVal;
+    }
+
     bool retVal = true;
 
-    GetModel()->Table().Save().map_error(
+    table.Save().map_error(
             [&]( const LIBRARY_ERROR& aError )
             {
                 wxMessageBox( _( "Error saving nested library table:\n\n" ) + aError.message,
@@ -177,6 +214,25 @@ bool LIB_TABLE_NOTEBOOK_PANEL::SaveTable()
         ClearDirty();
 
     return retVal;
+}
+
+
+bool LIB_TABLE_NOTEBOOK_PANEL::SaveOverrides()
+{
+    LIBRARY_TABLE& table     = GetModel()->Table();
+    wxString       tablePath = table.Path();
+
+    LIBRARY_MANAGER& libMgr = Pgm().GetLibraryManager();
+
+    for( const LIBRARY_TABLE_ROW& row : table.Rows() )
+    {
+        if( row.Disabled() || row.Hidden() )
+            libMgr.SetLibOverride( tablePath, row.Nickname(), row.Disabled(), row.Hidden() );
+        else
+            libMgr.ClearLibOverride( tablePath, row.Nickname() );
+    }
+
+    return true;
 }
 
 

@@ -283,8 +283,25 @@ std::optional<const LIBRARY_TABLE_ROW*> LIBRARY_TABLE::Row( const wxString& aNic
 }
 
 
+bool LIBRARY_TABLE::IsReadOnly() const
+{
+    if( m_path.IsEmpty() )
+        return false;
+
+    wxFileName fn( m_path );
+
+    return fn.FileExists() && !fn.IsFileWritable();
+}
+
+
 LIBRARY_RESULT<void> LIBRARY_TABLE::Save()
 {
+    if( IsReadOnly() )
+    {
+        return tl::unexpected( LIBRARY_ERROR(
+                wxString::Format( _( "Library table '%s' is read-only" ), Path() ) ) );
+    }
+
     wxLogTrace( traceLibraries, "Saving %s", Path() );
     wxFileName fn( Path() );
     // This should already be normalized, but just in case...

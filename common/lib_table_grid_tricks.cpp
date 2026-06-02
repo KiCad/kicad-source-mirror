@@ -94,17 +94,22 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
 
     LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
     const LIBRARY_TABLE_ROW&   firstRow = tbl->at( m_sel_row_start );
+    bool                       readOnly = tbl->Table().IsReadOnly();
 
     bool showSettings = false;
     bool showOpen = false;
-    if( LIBRARY_MANAGER_ADAPTER* adapter = tbl->Adapter() )
-    {
-        wxString nickname = tbl->GetValue( m_sel_row_start, COL_NICKNAME );
 
-        if( m_sel_row_count == 1 && adapter->SupportsConfigurationDialog( nickname ) )
+    if( !readOnly )
+    {
+        if( LIBRARY_MANAGER_ADAPTER* adapter = tbl->Adapter() )
         {
-            showSettings = true;
-            menu.Append( LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS, _( "Edit Settings..." ) );
+            wxString nickname = tbl->GetValue( m_sel_row_start, COL_NICKNAME );
+
+            if( m_sel_row_count == 1 && adapter->SupportsConfigurationDialog( nickname ) )
+            {
+                showSettings = true;
+                menu.Append( LIB_TABLE_GRID_TRICKS_LIBRARY_SETTINGS, _( "Edit Settings..." ) );
+            }
         }
     }
 
@@ -154,7 +159,7 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
             menu.Append( LIB_TABLE_GRID_TRICKS_UNSET_VISIBLE, _( "Unset Visible Flag" ) );
     }
 
-    if( m_sel_row_count == 1 && firstRow.Type() != LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
+    if( !readOnly && m_sel_row_count == 1 && firstRow.Type() != LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
     {
         showOptions = true;
         menu.Append( LIB_TABLE_GRID_TRICKS_OPTIONS_EDITOR, _( "Edit Options..." ),
@@ -164,7 +169,9 @@ void LIB_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
     if( showActivate || showDeactivate || showSetVisible || showUnsetVisible || showOptions )
         menu.AppendSeparator();
 
-    GRID_TRICKS::showPopupMenu( menu, aEvent );
+    // For read-only tables, only show activate/deactivate and visible options (no cut/paste/delete)
+    if( !readOnly )
+        GRID_TRICKS::showPopupMenu( menu, aEvent );
 }
 
 
@@ -282,6 +289,12 @@ void LIB_TABLE_GRID_TRICKS::paste_text( const wxString& cb_text )
 {
     LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
 
+    if( tbl->Table().IsReadOnly() )
+    {
+        wxBell();
+        return;
+    }
+
     if( size_t ndx = cb_text.find( getTablePreamble() ); ndx != std::string::npos )
     {
         // paste the LIB_TABLE_ROWs of s-expr, starting at column 0 regardless of current cursor column.
@@ -339,8 +352,21 @@ bool LIB_TABLE_GRID_TRICKS::handleDoubleClick( wxGridEvent& aEvent )
 }
 
 
+static bool isGridReadOnly( WX_GRID* aGrid )
+{
+    LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( aGrid->GetTable() );
+    return tbl && tbl->Table().IsReadOnly();
+}
+
+
 void LIB_TABLE_GRID_TRICKS::AppendRowHandler( WX_GRID* aGrid )
 {
+    if( isGridReadOnly( aGrid ) )
+    {
+        wxBell();
+        return;
+    }
+
     aGrid->OnAddRow(
             [&]() -> std::pair<int, int>
             {
@@ -352,6 +378,12 @@ void LIB_TABLE_GRID_TRICKS::AppendRowHandler( WX_GRID* aGrid )
 
 void LIB_TABLE_GRID_TRICKS::DeleteRowHandler( WX_GRID* aGrid )
 {
+    if( isGridReadOnly( aGrid ) )
+    {
+        wxBell();
+        return;
+    }
+
     if( !aGrid->CommitPendingChanges() )
         return;
 
@@ -418,6 +450,12 @@ void LIB_TABLE_GRID_TRICKS::DeleteRowHandler( WX_GRID* aGrid )
 
 void LIB_TABLE_GRID_TRICKS::MoveUpHandler( WX_GRID* aGrid )
 {
+    if( isGridReadOnly( aGrid ) )
+    {
+        wxBell();
+        return;
+    }
+
     aGrid->OnMoveRowUp(
             [&]( int row )
             {
@@ -440,6 +478,12 @@ void LIB_TABLE_GRID_TRICKS::MoveUpHandler( WX_GRID* aGrid )
 
 void LIB_TABLE_GRID_TRICKS::MoveDownHandler( WX_GRID* aGrid )
 {
+    if( isGridReadOnly( aGrid ) )
+    {
+        wxBell();
+        return;
+    }
+
     aGrid->OnMoveRowDown(
             [&]( int row )
             {

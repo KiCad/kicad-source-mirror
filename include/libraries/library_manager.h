@@ -368,11 +368,33 @@ public:
      */
     static bool IsPcmManagedRow( const LIBRARY_TABLE_ROW& aRow );
 
+    /// Applies stored user overrides (disabled/hidden) to rows of a read-only table.
+    /// Call this after constructing a LIBRARY_TABLE from a read-only file before
+    /// displaying it in the UI.
+    void ApplyLibOverrides( LIBRARY_TABLE& aTable );
+
+    /**
+     * Set a user override for a library in a read-only nested table.
+     * The override is saved to user settings so it persists across sessions.
+     * @param aTablePath normalized path of the read-only library table file
+     * @param aNickname the library nickname to override
+     * @param aDisabled true to mark the library as disabled
+     * @param aHidden true to mark the library as hidden
+     */
+    void SetLibOverride( const wxString& aTablePath, const wxString& aNickname,
+                         bool aDisabled, bool aHidden );
+
+    /// Removes any override for a library that no longer needs one
+    void ClearLibOverride( const wxString& aTablePath, const wxString& aNickname );
+
 private:
     void loadTables( const wxString& aTablePath, LIBRARY_TABLE_SCOPE aScope,
                      std::vector<LIBRARY_TABLE_TYPE> aTablesToLoad = {} );
 
     void loadNestedTables( LIBRARY_TABLE& aTable );
+
+    /// Applies user overrides (disabled/hidden) to rows of a read-only nested table
+    void applyLibOverrides( LIBRARY_TABLE& aTable );
 
     static wxString tableFileName( LIBRARY_TABLE_TYPE aType );
 

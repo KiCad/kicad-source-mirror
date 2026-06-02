@@ -186,6 +186,9 @@ public:
     bool IsOk() const { return m_ok; }
     const wxString& ErrorDescription() const { return m_errorDescription; }
 
+    /// Returns true if the underlying file exists but is not writable
+    bool IsReadOnly() const;
+
     const std::deque<LIBRARY_TABLE_ROW>& Rows() const { return m_rows; }
     std::deque<LIBRARY_TABLE_ROW>& Rows() { return m_rows; }
 

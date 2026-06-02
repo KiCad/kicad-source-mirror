@@ -92,6 +92,70 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
             },
             PCM_DEFAULT_REPOSITORIES ) );
 
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
+            "libraries.overrides",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json js = nlohmann::json::object();
+
+                for( const auto& [tablePath, libs] : m_LibOverrides )
+                {
+                    nlohmann::json tableJs = nlohmann::json::object();
+
+                    for( const auto& [nickname, override_] : libs )
+                    {
+                        nlohmann::json entry = nlohmann::json::object();
+
+                        if( override_.disabled )
+                            entry["disabled"] = true;
+
+                        if( override_.hidden )
+                            entry["hidden"] = true;
+
+                        if( !entry.empty() )
+                            tableJs[nickname.ToStdString()] = entry;
+                    }
+
+                    if( !tableJs.empty() )
+                        js[tablePath.ToStdString()] = tableJs;
+                }
+
+                return js;
+            },
+            [&]( const nlohmann::json& aObj )
+            {
+                m_LibOverrides.clear();
+
+                if( !aObj.is_object() )
+                    return;
+
+                for( const auto& [tablePath, tableObj] : aObj.items() )
+                {
+                    if( !tableObj.is_object() )
+                        continue;
+
+                    std::map<wxString, LIB_OVERRIDE>& libs =
+                            m_LibOverrides[wxString::FromUTF8( tablePath )];
+
+                    for( const auto& [nickname, entry] : tableObj.items() )
+                    {
+                        if( !entry.is_object() )
+                            continue;
+
+                        LIB_OVERRIDE override_;
+
+                        if( entry.contains( "disabled" ) && entry["disabled"].is_boolean() )
+                            override_.disabled = entry["disabled"].get<bool>();
+
+                        if( entry.contains( "hidden" ) && entry["hidden"].is_boolean() )
+                            override_.hidden = entry["hidden"].get<bool>();
+
+                        libs[wxString::FromUTF8( nickname )] = override_;
+                    }
+                }
+            },
+            nlohmann::json::object() ) );
+
     m_params.emplace_back(
             new PARAM<wxString>( "pcm.last_download_dir", &m_PcmLastDownloadDir, "" ) );
 
