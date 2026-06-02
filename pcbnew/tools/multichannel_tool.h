@@ -103,7 +103,8 @@ public:
 
     int RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone );
     int RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefArea, RULE_AREA& aTargetArea,
-                      REPEAT_LAYOUT_OPTIONS& aOptions );
+                      REPEAT_LAYOUT_OPTIONS& aOptions, BOARD_COMMIT* aExternalCommit = nullptr,
+                      wxString* aErrorOut = nullptr );
     int AutogenerateRuleAreas( const TOOL_EVENT& aEvent );
 
     void UpdatePickedPoint( const std::optional<VECTOR2I>& aPoint ) override {};

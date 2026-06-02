@@ -776,16 +776,31 @@ int MULTICHANNEL_TOOL::CheckRACompatibility( ZONE *aRefZone )
 
 
 int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefArea, RULE_AREA& aTargetArea,
-                                     REPEAT_LAYOUT_OPTIONS& aOptions )
+                                     REPEAT_LAYOUT_OPTIONS& aOptions, BOARD_COMMIT* aExternalCommit,
+                                     wxString* aErrorOut )
 {
     wxCHECK_MSG( aRefArea.m_zone, -1, wxT( "Reference Rule Area has no zone." ) );
     wxCHECK_MSG( aTargetArea.m_zone, -1, wxT( "Target Rule Area has no zone." ) );
+
+    const bool silent = aErrorOut != nullptr;
+
+    auto reportError = [&]( const wxString& aMsg )
+    {
+        if( aErrorOut )
+            *aErrorOut = aMsg;
+        else if( Pgm().IsGUI() )
+            frame()->ShowInfoBarError( aMsg, true );
+    };
 
     RULE_AREA_COMPAT_DATA compat;
 
     if( !resolveConnectionTopology( &aRefArea, &aTargetArea, compat ) )
     {
-        if( Pgm().IsGUI() )
+        if( silent )
+        {
+            *aErrorOut = compat.m_errorMsg;
+        }
+        else if( Pgm().IsGUI() )
         {
             wxString summary = wxString::Format( _( "Rule Area topologies do not match: %s" ), compat.m_errorMsg );
             ShowTopologyMismatchReasons( frame(), summary, compat.m_mismatchReasons );
@@ -794,7 +809,12 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
         return -1;
     }
 
-    BOARD_COMMIT commit( GetManager(), true, false );
+    std::optional<BOARD_COMMIT> localCommit;
+
+    if( !aExternalCommit )
+        localCommit.emplace( GetManager(), true, false );
+
+    BOARD_COMMIT& commit = aExternalCommit ? *aExternalCommit : *localCommit;
 
     // If no anchor is provided, pick the first matched pair to avoid center-alignment shifting
     // the whole group. This keeps Apply Design Block Layout from moving the group to wherever
@@ -810,10 +830,10 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
         auto errMsg = wxString::Format( _( "Copy Rule Area contents failed between rule areas '%s' and '%s'." ),
                                         aRefArea.m_zone->GetZoneName(), aTargetArea.m_zone->GetZoneName() );
 
-        commit.Revert();
+        if( !aExternalCommit )
+            commit.Revert();
 
-        if( Pgm().IsGUI() )
-            frame()->ShowInfoBarError( errMsg, true );
+        reportError( errMsg );
 
         return -1;
     }
@@ -822,10 +842,10 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
     {
         if( aTargetArea.m_components.size() == 0 || !( *aTargetArea.m_components.begin() )->GetParentGroup() )
         {
-            commit.Revert();
+            if( !aExternalCommit )
+                commit.Revert();
 
-            if( Pgm().IsGUI() )
-                frame()->ShowInfoBarError( _( "Target group does not have a group." ), true );
+            reportError( _( "Target group does not have a group." ) );
 
             return -1;
         }
@@ -841,7 +861,8 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
         }
     }
 
-    commit.Push( _( "Repeat layout" ) );
+    if( !aExternalCommit )
+        commit.Push( _( "Repeat layout" ) );
 
     return 0;
 }
