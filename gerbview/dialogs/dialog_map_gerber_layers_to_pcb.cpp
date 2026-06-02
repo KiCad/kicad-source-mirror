@@ -216,7 +216,7 @@ void DIALOG_MAP_GERBER_LAYERS_TO_PCB::initDialog()
                                               + wxT( "\n\n" ) + _( "Assign to matching PCB layers?" ),
                                     _( "Automatic Layer Assignment" ), wxOK | wxCANCEL | wxOK_DEFAULT );
 
-        if( dlg.ShowModal() == wxOK )
+        if( dlg.ShowModal() == wxID_OK )
         {
             int total_copper = 0;
 
