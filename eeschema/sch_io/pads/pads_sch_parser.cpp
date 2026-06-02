@@ -638,6 +638,7 @@ size_t PADS_SCH_PARSER::parseSectionTEXT( const std::vector<std::string>& aLines
 
         // Each text item is two lines: attribute line + content line
         TEXT_ITEM item;
+        item.sheet_number = m_currentSheet;
         std::istringstream iss( line );
 
         int x = 0, y = 0;
@@ -706,6 +707,7 @@ size_t PADS_SCH_PARSER::parseSectionLINES( const std::vector<std::string>& aLine
                 item.name = name;
                 item.origin.x = x;
                 item.origin.y = y;
+                item.sheet_number = m_currentSheet;
 
                 i++;
 
@@ -759,6 +761,7 @@ size_t PADS_SCH_PARSER::parseSectionLINES( const std::vector<std::string>& aLine
                     {
                         // Text attribute line
                         TEXT_ITEM text;
+                        text.sheet_number = m_currentSheet;
                         std::istringstream tiss( pline );
                         int tx = 0, ty = 0;
 

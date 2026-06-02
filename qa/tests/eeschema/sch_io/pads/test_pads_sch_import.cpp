@@ -24,11 +24,17 @@
 #include <schematic.h>
 #include <sch_io/pads/sch_io_pads.h>
 #include <sch_io/sch_io_mgr.h>
+#include <sch_line.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
+#include <sch_text.h>
 #include <settings/settings_manager.h>
+
+#include <algorithm>
+#include <map>
+#include <vector>
 
 
 namespace
@@ -263,6 +269,64 @@ BOOST_AUTO_TEST_CASE( IsLibraryNotWritable )
             KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/symbols_schematic.txt" );
 
     BOOST_CHECK( !plugin.IsLibraryWritable( padsFile ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( Issue24284_TextItemsPlacedOnCorrectSheet )
+{
+    // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24284
+    // Multi-sheet PADS Logic schematics have one *TEXT* and *LINES* block per
+    // *SHT*. Before the fix every text/line item was placed on the first
+    // sheet, causing page-number text from all sheets to stack on top of each
+    // other and border graphics to overlap.
+    SCH_IO_PADS plugin;
+
+    wxString padsFile = wxString::FromUTF8(
+            KI_TEST::GetEeschemaTestDataDir()
+            + "/plugins/pads/issue24284_multisheet_text.txt" );
+
+    BOOST_REQUIRE( plugin.CanReadSchematicFile( padsFile ) );
+
+    SCH_SHEET* rootSheet = plugin.LoadSchematicFile( padsFile, &m_schematic );
+    BOOST_REQUIRE( rootSheet );
+    BOOST_REQUIRE( rootSheet->GetScreen() );
+
+    // Collect text and line content keyed by hierarchical sheet name.
+    std::map<wxString, std::vector<wxString>> textBySheet;
+    std::map<wxString, int>                   lineCountBySheet;
+
+    for( SCH_ITEM* item : rootSheet->GetScreen()->Items().OfType( SCH_SHEET_T ) )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+        wxString   sheetName = sheet->GetField( FIELD_T::SHEET_NAME )->GetText();
+
+        for( SCH_ITEM* screenItem : sheet->GetScreen()->Items().OfType( SCH_TEXT_T ) )
+        {
+            SCH_TEXT* txt = static_cast<SCH_TEXT*>( screenItem );
+            textBySheet[sheetName].push_back( txt->GetText() );
+        }
+
+        for( SCH_ITEM* screenItem : sheet->GetScreen()->Items().OfType( SCH_LINE_T ) )
+        {
+            (void) screenItem;
+            lineCountBySheet[sheetName]++;
+        }
+    }
+
+    for( int sheetNum = 1; sheetNum <= 3; ++sheetNum )
+    {
+        wxString sheetName = wxString::Format( wxT( "Page%d" ), sheetNum );
+        wxString pageText = wxString::Format( wxT( "PAGE %d OF 3" ), sheetNum );
+        wxString bodyText = wxString::Format( wxT( "TEXT ON SHEET %d" ), sheetNum );
+
+        BOOST_REQUIRE_EQUAL( textBySheet.count( sheetName ), 1u );
+        BOOST_CHECK_EQUAL( textBySheet[sheetName].size(), 2u );
+        BOOST_CHECK( std::find( textBySheet[sheetName].begin(), textBySheet[sheetName].end(),
+                                pageText ) != textBySheet[sheetName].end() );
+        BOOST_CHECK( std::find( textBySheet[sheetName].begin(), textBySheet[sheetName].end(),
+                                bodyText ) != textBySheet[sheetName].end() );
+        BOOST_CHECK_EQUAL( lineCountBySheet[sheetName], 1 );
+    }
 }
 
 

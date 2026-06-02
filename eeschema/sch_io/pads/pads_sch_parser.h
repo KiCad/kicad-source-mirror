@@ -431,6 +431,7 @@ struct TEXT_ITEM
     int         height = 0;
     int         width_factor = 0;
     int         attr_flag = 0;
+    int         sheet_number = 0;
     std::string font_name;
     std::string content;
 };
@@ -445,6 +446,7 @@ struct LINES_ITEM
     POINT                       origin;
     int                         param1 = 0;
     int                         param2 = 0;
+    int                         sheet_number = 0;
     std::vector<SYMBOL_GRAPHIC> primitives;
     std::vector<TEXT_ITEM>      texts;
 };
