@@ -1465,4 +1465,78 @@ BOOST_AUTO_TEST_CASE( Issue23540_RouteArcSemicircle )
 }
 
 
+/**
+ * Verify RF finger pad offsets are not double-rotated on import (issue #23425).
+ *
+ * The reporter's board ({TXN004} controlCARD docking station) has a 180-pin HSEC8
+ * edge connector (J3) whose finger pads are defined with FINORI 90 and a non-zero
+ * FINOFFSET. In PADS, finger_offset runs along the finger's long axis and is stored
+ * in the pad-local coordinate system (before rotation). PAD::ShapePos() applies the
+ * full pad orientation when computing the shape center, so the importer must NOT
+ * pre-rotate the offset vector by layer_def.rotation. Doing so rotated the offset
+ * twice, shifting every finger pad sideways and visibly misaligning the connector.
+ *
+ * After the fix the stored offset is purely along pad-local X (offset.y == 0); a
+ * double rotation by 90 degrees would instead leave offset.x == 0 and put the
+ * magnitude on offset.y, which these checks reject.
+ */
+BOOST_AUTO_TEST_CASE( ImportFingerPadOffsetIssue23425 )
+{
+    PCB_IO_PADS plugin;
+
+    wxString filename = KI_TEST::GetPcbnewTestDataDir()
+                        + "plugins/pads/issue23425/controlCARDDockingStation.asc";
+
+    std::unique_ptr<BOARD> board( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+
+    BOOST_REQUIRE( board != nullptr );
+
+    FOOTPRINT* j3 = nullptr;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        if( fp->GetReference() == wxT( "J3" ) )
+        {
+            j3 = fp;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE_MESSAGE( j3, "J3 (HSEC8 edge connector) not found on board" );
+
+    // FINOFFSET 1143000 BASIC units * (25400 / 38100) = 762000 nm (30 mil)
+    const int expectedOffset = 762000;
+    const int tolerance = 1000;   // 1um
+
+    int offsetPadCount = 0;
+
+    for( PAD* pad : j3->Pads() )
+    {
+        VECTOR2I offset = pad->GetOffset( F_Cu );
+
+        if( offset == VECTOR2I( 0, 0 ) )
+            continue;
+
+        offsetPadCount++;
+
+        // Stored unrotated in pad-local space: all magnitude on X, none on Y.
+        BOOST_CHECK_MESSAGE( offset.y == 0,
+                "J3 pad " << pad->GetNumber()
+                << " offset Y should be 0 (unrotated pad-local), got " << offset.y );
+
+        BOOST_CHECK_MESSAGE( std::abs( std::abs( offset.x ) - expectedOffset ) < tolerance,
+                "J3 pad " << pad->GetNumber()
+                << " offset X magnitude " << std::abs( offset.x )
+                << " should be ~" << expectedOffset );
+    }
+
+    // The connector's signal fingers all carry the offset; before the fix none of
+    // them satisfied the checks above. Require a substantial number so a parser
+    // change that stops applying the offset entirely cannot pass silently.
+    BOOST_CHECK_MESSAGE( offsetPadCount >= 90,
+            "expected the HSEC8 finger pads to carry a finger offset; got "
+            << offsetPadCount );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
