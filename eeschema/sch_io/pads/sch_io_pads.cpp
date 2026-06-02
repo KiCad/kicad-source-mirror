@@ -1171,15 +1171,28 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
         }
     }
 
-    // Place free text items from *TEXT* section on the first (or only) sheet
+    // Resolve a parsed item's sheet number to its screen, falling back to the
+    // first sheet when the number is unknown. Each *SHT* section in PADS Logic
+    // is followed by its own *TEXT* and *LINES* blocks, so items are tagged with
+    // the sheet number current at parse time.
+    auto screenForSheet =
+            [&]( int aSheetNumber ) -> SCH_SCREEN*
+            {
+                auto ctxIt = sheetContexts.find( aSheetNumber );
+
+                return ctxIt != sheetContexts.end() ? ctxIt->second.screen
+                                                    : sheetContexts.begin()->second.screen;
+            };
+
+    // Place free text items from *TEXT* section on the correct sheet.
     if( !sheetContexts.empty() )
     {
-        SCH_SCREEN* textScreen = sheetContexts.begin()->second.screen;
-
         for( const PADS_SCH::TEXT_ITEM& textItem : parser.GetTextItems() )
         {
             if( textItem.content.empty() )
                 continue;
+
+            SCH_SCREEN* textScreen = screenForSheet( textItem.sheet_number );
 
             VECTOR2I pos( schIUScale.MilsToIU( KiROUND( textItem.position.x ) ),
                           pageHeightIU
@@ -1189,15 +1202,16 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString&                    aF
         }
     }
 
-    // Place graphic lines from *LINES* section (skip the border template)
+    // Place graphic lines from *LINES* section (skip the border template) on
+    // the sheet they belong to.
     if( !sheetContexts.empty() )
     {
-        SCH_SCREEN* linesScreen = sheetContexts.begin()->second.screen;
-
         for( const PADS_SCH::LINES_ITEM& linesItem : parser.GetLinesItems() )
         {
             if( linesItem.name == params.border_template )
                 continue;
+
+            SCH_SCREEN* linesScreen = screenForSheet( linesItem.sheet_number );
 
             double ox = linesItem.origin.x;
             double oy = linesItem.origin.y;
