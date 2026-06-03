@@ -914,9 +914,10 @@ void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         {
             value = EscapeString( value, CTX_LIBID );
         }
-
-        if( m_frame )
+        else if( m_frame )
+        {
             value = ConvertPathToFileUri( value, &m_frame->Prj() );
+        }
 
         field.SetText( UnescapeString( value ) );
         break;
