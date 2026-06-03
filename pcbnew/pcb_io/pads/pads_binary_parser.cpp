@@ -1353,6 +1353,22 @@ void BINARY_PARSER::parsePadStacks()
 /// The same on every dialect.
 static constexpr int DECAL_NAME_OFFSET = 44;
 
+/// Fixed lead-in before section 24's first connection record, measured from its payload start.
+static constexpr int CONNECTION_LEAD_IN = 76;
+
+
+static void logResolvedBase( int aSection, const char* aWhat, size_t aResolved, uint32_t aDeclared,
+                             uint32_t aPayload )
+{
+    static const bool enabled = getenv( "KICAD_PADS_SECBASE" ) != nullptr;
+
+    if( !enabled )
+        return;
+
+    fprintf( stderr, "SECBASE %d %s resolved=%zu declared=%u payload=%u\n", aSection, aWhat,
+             aResolved, aDeclared, aPayload );
+}
+
 
 void BINARY_PARSER::parseDecalNameTable()
 {
@@ -3272,30 +3288,25 @@ void BINARY_PARSER::parseNetConnectionsNew()
                && ( m_cursor.U32At( aOffset + 52 ) & 0xFFFFU ) == FLAG;
     };
 
-    size_t runBase = 0;
-    size_t runCount = 0;
+    // Section 24's records start 76 bytes into its payload, past a fixed lead-in, and there are
+    // exactly as many as the directory declares -- the nets' (start, count) ranges tile that span
+    // with no gaps, so the declared count here is the live count, not a container capacity.
+    //
+    // Harvested from the corpus by logging where the byte-by-byte scan this replaces converged
+    // (KICAD_PADS_SECBASE): resolved - payloadOffset was 76 on all 46 boards that reach this path,
+    // with no exceptions, and declared - resolved was 1156 on all of them, 1156 being 1232 - 76.
+    size_t runBase = static_cast<size_t>( connections->payloadOffset ) + CONNECTION_LEAD_IN;
+    size_t runCount = connections->count;
 
-    for( size_t off = 0; off + RECORD_SIZE <= m_data.size(); ++off )
-    {
-        if( !validRecord( off ) )
-            continue;
-
-        size_t count = 1;
-
-        while( validRecord( off + count * RECORD_SIZE ) )
-            ++count;
-
-        if( count > runCount )
-        {
-            runBase = off;
-            runCount = count;
-        }
-
-        off += count * RECORD_SIZE - 1;
-    }
-
-    if( runCount == 0 )
+    if( runCount == 0 || !m_cursor.InBounds( runBase, runCount * RECORD_SIZE ) )
         return;
+
+    // The first record must carry both framing marks, which is what the old scan searched for.
+    if( !validRecord( runBase ) )
+        return;
+
+    logResolvedBase( 24, "connRun", runBase, connections ? connections->dataOffset : 0,
+                     connections ? connections->payloadOffset : 0 );
 
     struct NET_RANGE
     {
@@ -4742,6 +4753,9 @@ void BINARY_PARSER::parseRouteVertices()
     if( bestScore == 0 )
         return;
 
+    logResolvedBase( 60, "viaPhase", scanStart + bestPhase, entry60->dataOffset,
+                     entry60->payloadOffset );
+
     std::set<std::pair<int32_t, int32_t>> seenVias;
     std::set<std::pair<int32_t, int32_t>> routeAnchorPoints;
 
@@ -5715,6 +5729,9 @@ void BINARY_PARSER::parseRouteVertices()
                             bestHeaderPhase = phase;
                         }
                     }
+
+                    logResolvedBase( 59, "hdrPhase", routeHeaders->dataOffset + bestHeaderPhase,
+                                     routeHeaders->dataOffset, routeHeaders->payloadOffset );
 
                     std::vector<V2022_ROUTE_HEADER> headers;
                     uint32_t                        vertexBase = std::numeric_limits<uint32_t>::max();
