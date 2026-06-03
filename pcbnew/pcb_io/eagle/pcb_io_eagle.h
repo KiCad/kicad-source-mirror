@@ -134,7 +134,8 @@ class PCB_IO_EAGLE : public PCB_IO, public LAYER_MAPPABLE_PLUGIN
 public:
     const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( _HKI( "Eagle ver. 6.x XML PCB files" ), { "brd" } );
+        return IO_BASE::IO_FILE_DESC( _HKI( "Eagle PCB files (6.x XML and pre-v6 binary)" ),
+                                      { "brd" } );
     }
 
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override

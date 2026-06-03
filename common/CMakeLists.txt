@@ -1048,6 +1048,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/eagle/pcb_io_eagle.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/eagle/eagle_bin_parser.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_io/geda/pcb_io_geda.cpp
 
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_grid_helper.cpp

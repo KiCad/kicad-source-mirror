@@ -82,6 +82,7 @@ Load() TODO's
 
 #include <pcb_io/pcb_io.h>
 #include <pcb_io/eagle/pcb_io_eagle.h>
+#include <pcb_io/eagle/eagle_bin_parser.h>
 
 using namespace std;
 
@@ -279,6 +280,12 @@ bool PCB_IO_EAGLE::checkHeader(const wxString& aFileName) const
     if( !input.IsOk() )
         return false;
 
+    // Pre-v6 boards are a binary stream identified by a two-byte magic.
+    if( EAGLE_BIN_PARSER::IsBinaryEagle( input ) )
+        return true;
+
+    input.SeekI( 0 );
+
     wxTextInputStream text( input );
 
     for( int i = 0; i < 8; i++ )
@@ -354,15 +361,49 @@ BOARD* PCB_IO_EAGLE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe,
 
         // Load the document
         wxFFileInputStream stream( fn.GetFullPath() );
-        wxXmlDocument xmlDocument;
 
-        if( !stream.IsOk() || !xmlDocument.Load( stream ) )
+        if( !stream.IsOk() )
         {
             THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ),
                                               fn.GetFullPath() ) );
         }
 
-        doc = xmlDocument.GetRoot();
+        // The binary parser synthesizes a DOM identical to what the XML loader
+        // produces; both paths then share the common tail below. The document
+        // must outlive loadAllSections(), so keep it in this scope.
+        wxXmlDocument                  xmlDocument;
+        std::unique_ptr<wxXmlDocument> binDocument;
+
+        // IsBinaryEagle consumes the two-byte magic, so rewind before reading on.
+        bool isBinary = EAGLE_BIN_PARSER::IsBinaryEagle( stream );
+        stream.SeekI( 0 );
+
+        if( isBinary )
+        {
+            std::vector<uint8_t> bytes;
+            bytes.resize( static_cast<size_t>( stream.GetLength() ) );
+            stream.Read( bytes.data(), bytes.size() );
+
+            if( stream.LastRead() != bytes.size() )
+            {
+                THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ),
+                                                  fn.GetFullPath() ) );
+            }
+
+            EAGLE_BIN_PARSER binParser;
+            binDocument = binParser.Parse( bytes );
+            doc = binDocument->GetRoot();
+        }
+        else
+        {
+            if( !xmlDocument.Load( stream ) )
+            {
+                THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ),
+                                                  fn.GetFullPath() ) );
+            }
+
+            doc = xmlDocument.GetRoot();
+        }
 
         m_min_trace    = INT_MAX;
         m_min_hole     = INT_MAX;
