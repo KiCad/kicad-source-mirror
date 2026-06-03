@@ -4461,16 +4461,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTextBoxContent( PCB_TEXTBOX* aTextBox )
             break;
 
         case T_knockout:
-            if( [[maybe_unused]] PCB_TABLECELL* cell = dynamic_cast<PCB_TABLECELL*>( aTextBox ) )
-            {
-                Expecting( "locked, start, pts, angle, width, margins, layer, effects, span, "
-                           "render_cache, uuid or tstamp" );
-            }
-            else
-            {
-                aTextBox->SetIsKnockout( parseBool() );
-            }
-
+            aTextBox->SetIsKnockout( parseBool() );
             NeedRIGHT();
             break;
 
@@ -4507,8 +4498,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTextBoxContent( PCB_TEXTBOX* aTextBox )
         default:
             if( dynamic_cast<PCB_TABLECELL*>( aTextBox ) != nullptr )
             {
-                Expecting( "locked, start, pts, angle, width, margins, layer, effects, span, "
-                           "render_cache, uuid or tstamp" );
+                Expecting( "locked, start, pts, angle, width, margins, knockout, layer, effects, "
+                           "span, render_cache, uuid or tstamp" );
             }
             else
             {

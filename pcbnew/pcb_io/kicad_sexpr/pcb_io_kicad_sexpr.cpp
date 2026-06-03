@@ -2532,9 +2532,9 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXTBOX* aTextBox ) const
     {
         KICAD_FORMAT::FormatBool( m_out, "border", aTextBox->IsBorderEnabled() );
         aTextBox->GetStroke().Format( m_out, pcbIUScale );
-
-        KICAD_FORMAT::FormatBool( m_out, "knockout", aTextBox->IsKnockout() );
     }
+
+    KICAD_FORMAT::FormatBool( m_out, "knockout", aTextBox->IsKnockout() );
 
     if( aTextBox->GetFont() && aTextBox->GetFont()->IsOutline() )
         formatRenderCache( aTextBox );

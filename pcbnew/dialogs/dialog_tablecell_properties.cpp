@@ -189,6 +189,8 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
             // wxCheckBoxState italic = cell->IsItalic() ? wxCHK_CHECKED : wxCHK_UNCHECKED;
             m_italic->Check( cell->IsItalic() );
 
+            m_cbKnockout->SetValue( cell->IsKnockout() );
+
             firstCell = false;
         }
         else
@@ -375,6 +377,7 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
 
         cell->SetBold( m_bold->IsChecked() );
         cell->SetItalic( m_italic->IsChecked() );
+        cell->SetIsKnockout( m_cbKnockout->IsChecked() );
 
         if( m_fontCtrl->HaveFontSelection() )
             cell->SetFont( m_fontCtrl->GetFontSelection( cell->IsBold(), cell->IsItalic() ) );

@@ -206,7 +206,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20260511  // Dielectric frequency-dependent models in board stackup
 //#define SEXPR_BOARD_FILE_VERSION    20260512  // Net chains
 //#define SEXPR_BOARD_FILE_VERSION    20260513  // Copper thieving zone fill mode
-#define SEXPR_BOARD_FILE_VERSION      20260521  // Pad simulation electrical types
+//#define SEXPR_BOARD_FILE_VERSION    20260521  // Pad simulation electrical types
+#define SEXPR_BOARD_FILE_VERSION      20260603  // Knockout flag on table cells
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

@@ -288,7 +288,6 @@ static struct PCB_TABLECELL_DESC
 
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ) );
 
-        propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( PCB_TEXTBOX ), _HKI( "Knockout" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( PCB_TEXTBOX ), _HKI( "Border" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( PCB_TEXTBOX ), _HKI( "Border Style" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( PCB_TEXTBOX ), _HKI( "Border Width" ) );
