@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:30+0300\n"
-"PO-Revision-Date: 2026-05-15 04:11+0000\n"
+"PO-Revision-Date: 2026-06-04 07:01+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v10/sr/>\n"
 "Language: sr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.5.dev0\n"
+"X-Generator: Weblate 2026.6\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -2678,71 +2678,73 @@ msgid "Add Netclass Assignment"
 msgstr "Додај доделу класе мреже"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:33
-#, fuzzy
 msgid "(missing)"
-msgstr "Недостаје.\n"
+msgstr "(недостаје)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:45
 msgid "File"
 msgstr "Фајл"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:46
-#, fuzzy
 msgid "Saved version"
-msgstr "Прикажи"
+msgstr "Сачувана верзија"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:47
-#, fuzzy
 msgid "Auto-saved copy"
-msgstr "Опоравак аутоматски сачуваних датотека"
+msgstr "Аутоматски-сачувана копија"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
+"KiCad је пронашао аутоматски сачуване измјене од претходне сесије. Ово "
+"обично значи да је KiCad затворен неправилно у порцесу рада који није "
+"сачуван."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore auto-saved"
-msgstr "Враћање на подразумијевано"
+msgstr "Врати се на аутоматски-сачувано"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 msgstr ""
+"Замени тренутну датотеку са аутоматски сачуваном верзијом. Претходно "
+"сачувани садржај ће бити одбачен."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep current"
-msgstr "Струја"
+msgstr "Задржи тренутно"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
-msgstr ""
+msgstr "Чување датотеке каква јесте и одбацује аутоматски сачуване измене."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep both"
-msgstr "Сачувај нуле"
+msgstr "Сачувај оба"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 msgstr ""
+"Задржава сачувану датотеку и чува аутоматски сачувану верзију поред тренутне "
+"као посебну временски означену датотеку која може касније да се прегледа."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel open"
-msgstr "Прекид"
+msgstr "Прекини отварање"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:49
 msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"Затвара овај дијалог без икаквих измена. Аутоматски сачуване датотеке остају "
+"на диску корисник добија опцију да их учита приликом поновног покретања."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
@@ -3178,11 +3180,11 @@ msgstr "Уреди својства групе"
 
 #: common/dialogs/dialog_group_properties.cpp:177
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "Група не може да садржи саму себе."
 
 #: common/dialogs/dialog_group_properties.cpp:185
 msgid "Cannot add this group because it already contains the current group."
-msgstr ""
+msgstr "Није могуће додати ову групу јер је она већ садржана у тренутној групи."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -3969,25 +3971,24 @@ msgstr "Комит порука не може бити празна"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
-msgstr ""
+msgstr "Кључ:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
-#, fuzzy
 msgid "Password / token:"
-msgstr "Лозинка:"
+msgstr "Лозинка / токен:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
-msgstr ""
+msgstr "Аутентикација је потребна за приступ:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "Username and password"
-msgstr ""
+msgstr "Корисничко име и лозинка"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr ""
+msgstr "SSH кључ"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -3996,19 +3997,16 @@ msgstr "Аутентикација"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:43
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
-#, fuzzy
 msgid "Username:"
-msgstr "Име:"
+msgstr "Корисничко име:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:63
-#, fuzzy
 msgid "SSH key:"
-msgstr "Лозинка SSH кључа:"
+msgstr "SSH кључ:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "Изабери фајл SSH приватног кључа"
+msgstr "Изабери приватни SSH кључа"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -4016,14 +4014,12 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:74
-#, fuzzy
 msgid "Save credentials"
-msgstr "Сачувај све струје"
+msgstr "Сачувај креденцијале"
 
 #: common/dialogs/git/dialog_git_credentials_base.h:57
-#, fuzzy
 msgid "Git Authentication Required"
-msgstr "Аутентикација"
+msgstr "Потребна је гит аутентикација"
 
 #: common/dialogs/git/dialog_git_repository.cpp:178
 #: common/dialogs/git/dialog_git_repository.cpp:401
@@ -6572,9 +6568,9 @@ msgid "Failed to recover auto-saved file '%s'."
 msgstr "Грешка у опоравку аутоматски сачуване датотеке '%s'."
 
 #: common/eda_base_frame.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write recovered file '%s'."
-msgstr "Грешка у писању фајла '%s'."
+msgstr "Грешка у писању опорављеног директоријума '%s'."
 
 #: common/eda_base_frame.cpp:609 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:135
@@ -7671,7 +7667,7 @@ msgstr "Проблем током рада PDF прегледника '%s'."
 #: common/gestfich.cpp:303 common/gestfich.cpp:378 eeschema/eeschema.cpp:741
 #: gerbview/gerbview.cpp:262 kicad/project_template.cpp:367
 #: pcbnew/pcbnew.cpp:749
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy file '%s'."
 msgstr "Немогуће копирати датотеку \"%s\"."
 
@@ -7856,29 +7852,29 @@ msgid "Could not create directory '%s'"
 msgstr "Немогуће направити директоријум %s."
 
 #: common/git/libgit_backend.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s' : %s"
-msgstr "Отвори"
+msgstr "Немогуће клониирати репозиторијум '%s' : %s"
 
 #: common/git/libgit_backend.cpp:197 common/git/libgit_backend.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get repository index: %s"
-msgstr "Попуњавање зона"
+msgstr "Немогуће добавити индекс репозиторијума: %s"
 
 #: common/git/libgit_backend.cpp:208 common/git/libgit_backend.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file to index: %s"
-msgstr "Немогуће сачувати фајл %s."
+msgstr "Немогуће додати датотеку у индекс %s."
 
 #: common/git/libgit_backend.cpp:216 common/git/libgit_backend.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write index: %s"
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка у писању индекса '%s'."
 
 #: common/git/libgit_backend.cpp:225 common/git/libgit_backend.cpp:435
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write tree: %s"
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка у писању стабла датотека '%s'."
 
 #: common/git/libgit_backend.cpp:234 common/git/libgit_backend.cpp:444
 #, fuzzy, c-format
@@ -7886,58 +7882,58 @@ msgid "Failed to lookup tree: %s"
 msgstr "Попуњавање зона"
 
 #: common/git/libgit_backend.cpp:248 common/git/libgit_backend.cpp:319
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD reference: %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у добављању HEAD референце: %s"
 
 #: common/git/libgit_backend.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get commit: %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у добављању комита: %s"
 
 #: common/git/libgit_backend.cpp:269 common/git/libgit_backend.cpp:454
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create author signature: %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у изради потписа аутора: %s"
 
 #: common/git/libgit_backend.cpp:290 kicad/project_tree_pane.cpp:2731
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create commit: %s"
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка у креирању комита '%s'."
 
 #: common/git/libgit_backend.cpp:310 kicad/project_tree_pane.cpp:2762
 msgid "Cannot amend: the branch has no commits yet."
-msgstr ""
+msgstr "Немогуће допунити: грана не садржи ни један комит."
 
 #: common/git/libgit_backend.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD commit: %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у добављању HEAD комита: %s"
 
 #: common/git/libgit_backend.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent commit: %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у добављању родитељског комита: %s"
 
 #: common/git/libgit_backend.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD tree: %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у добављању HEADа стабла: %s"
 
 #: common/git/libgit_backend.cpp:372 common/git/libgit_backend.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reset index: %s"
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка у ресетовању индекса '%s'."
 
 #: common/git/libgit_backend.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent tree: %s"
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка у добављању родитељског стабла: '%s'."
 
 #: common/git/libgit_backend.cpp:464 kicad/project_tree_pane.cpp:3007
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to amend commit: %s"
-msgstr "Попуњавање зона"
+msgstr "Грепка у допуни комита: %s"
 
 #: common/git/libgit_backend.cpp:491 common/git/libgit_backend.cpp:1064
 #, c-format
@@ -7959,48 +7955,48 @@ msgid "Could not push to remote: %s"
 msgstr "Немогуће слање на удаљени репозиторијум: %s"
 
 #: common/git/libgit_backend.cpp:804
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to initialize Git repository: %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у иницијализацији Гит репозиторијума: %s"
 
 #: common/git/libgit_backend.cpp:825
 msgid "No repository available to set up remote"
 msgstr ""
+"Нема доступног репозиторијума који се може подесити као удаљени репозиторијум"
 
 #: common/git/libgit_backend.cpp:898
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set up remote: %s"
-msgstr "Грешка у креирању датотеке '%s'."
+msgstr "Грешка у успостављању удаљеног репозиторијума: '%s'"
 
 #: common/git/libgit_backend.cpp:930
-#, fuzzy
 msgid "No repository available"
-msgstr "Нема конекције"
+msgstr "Нема доступног репозиторијума"
 
 #: common/git/libgit_backend.cpp:938
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup branch '%s': %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у претрази гране '%s': %s"
 
 #: common/git/libgit_backend.cpp:949
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "Немогуће пронаћи PDF посматрач за \"%s\""
+msgstr "Немогуће пронаћи почетак гране за '%s': %s"
 
 #: common/git/libgit_backend.cpp:963 common/git/libgit_backend.cpp:988
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s': %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у промени гране '%s': %s"
 
 #: common/git/libgit_backend.cpp:997
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create local branch '%s': %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у стварању локалне гране '%s': %s"
 
 #: common/git/libgit_backend.cpp:1011
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "потребан је број за '%s'"
+msgstr "Грешка у ажурирању HEAD референце за грану '%s': %s"
 
 #: common/git/libgit_backend.cpp:1086
 #, c-format
@@ -8020,6 +8016,8 @@ msgstr "Немогуће прочитати 'FETCH_HEAD'"
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
+"Нема ништа за повући: удаљени репозиторијум нема грану која одговара "
+"тренутној локалној грани."
 
 #: common/git/libgit_backend.cpp:1178
 msgid "Could not lookup commit"
@@ -8034,9 +8032,8 @@ msgid "Invalid HEAD.  Cannot merge."
 msgstr "Неважећи HEAD. Није могуће објединити."
 
 #: common/git/libgit_backend.cpp:1221
-#, fuzzy
 msgid "Could not access repository configuration"
-msgstr "Отвори"
+msgstr "Немогуће приступути конфигурацији репозиторијума"
 
 #: common/git/libgit_backend.cpp:1265
 #, c-format
@@ -8082,99 +8079,97 @@ msgstr ""
 "стеширајте их прије новог повлачења."
 
 #: common/git/libgit_backend.cpp:1453
-#, fuzzy, c-format
+#, c-format
 msgid "Merge failed: %s"
-msgstr "Job фајлови"
+msgstr "Грешка током спајања: %s"
 
 #: common/git/libgit_backend.cpp:1461
-#, fuzzy
 msgid "Could not read repository index after merge."
-msgstr "Отвори"
+msgstr "Није могуће прочитати индекс репозиторијума након спајања."
 
 #: common/git/libgit_backend.cpp:1493
-#, fuzzy
 msgid "Could not write the merge result."
-msgstr "Немогуће сачувати фајл %s."
+msgstr "Није могуће записати резултат спајања."
 
 #: common/git/libgit_backend.cpp:1501
-#, fuzzy
 msgid "Could not get the repository head."
-msgstr "Немогуће добавити главу репозиторијума"
+msgstr "Немогуће добавити главу репозиторијума."
 
 #: common/git/libgit_backend.cpp:1511
-#, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "Није могуће потражити циљани комит"
+msgstr "Немогуће пронаћи комит за спајање"
 
 #: common/git/libgit_backend.cpp:1520 common/git/libgit_backend.cpp:1705
 msgid ""
 "Could not create a commit signature.  Set user.name and user.email in your "
 "git configuration."
 msgstr ""
+"Немогуће направити потпис комита. Потребно је подесити user.name и "
+"user.email у гит конфигурацији."
 
 #: common/git/libgit_backend.cpp:1529
-#, fuzzy, c-format
+#, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "Креирање зона"
+msgstr "Споји удаљену-праћену грану у %s"
 
 #: common/git/libgit_backend.cpp:1537
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create merge commit: %s"
-msgstr "Отвори"
+msgstr "Немогуће направити комит након спајања: %s"
 
 #: common/git/libgit_backend.cpp:1554
 msgid ""
 "Cannot pull with rebase: you have unstaged changes. Please commit or stash "
 "them before pulling."
 msgstr ""
+"Немогуће повући са ребазирањем: постоје комити који нису на сцени. Молим "
+"комитујте или складиштите (стеш) их прије повлачења најновијих измена."
 
 #: common/git/libgit_backend.cpp:1567 common/git/libgit_backend.cpp:1718
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed to start: %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у старту приликом ребазирања: %s"
 
 #: common/git/libgit_backend.cpp:1583
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase commit failed: %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у ребазирању комита: %s"
 
 #: common/git/libgit_backend.cpp:1591 common/git/libgit_backend.cpp:1757
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase finish failed: %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у ребазирању на крају: %s"
 
 #: common/git/libgit_backend.cpp:1626 common/git/libgit_backend.cpp:1672
 msgid "Another git operation is in progress."
-msgstr ""
+msgstr "Већ постоји гит операција која је у току."
 
 #: common/git/libgit_backend.cpp:1634 common/git/libgit_backend.cpp:1687
-#, fuzzy
 msgid "Could not find the matching remote branch."
-msgstr "Немогуће пронаћи %s пин '%s'."
+msgstr "Немогуће пронаћи одговарајућу удаљену грану."
 
 #: common/git/libgit_backend.cpp:1643 common/git/libgit_backend.cpp:1696
-#, fuzzy
 msgid "Could not read the remote branch."
-msgstr "Немогуће пронаћи %s пин '%s'."
+msgstr "Немогуће читање удаљене гране."
 
 #: common/git/libgit_backend.cpp:1652
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reset to the remote branch: %s"
-msgstr "Немогуће слање на удаљени репозиторијум: %s"
+msgstr "Немогуће ресетовање на удаљену грану: %s"
 
 #: common/git/libgit_backend.cpp:1678
-#, fuzzy
 msgid ""
 "Cannot rebase: you have unstaged changes.  Please commit or stash them first."
 msgstr ""
-"Немогуће обједињење: Имате измјене које нису у стејџу. Молим комитујте или "
-"стеширајте их прије новог повлачења."
+"Немогуће обједињење: Имате измене које нису на сцени. Молим комитујте или "
+"складиштите (стејџ) их прије новог повлачења."
 
 #: common/git/libgit_backend.cpp:1736 common/git/libgit_backend.cpp:1747
 msgid ""
 "The rebase ran into conflicts.  This is best resolved from a git command "
 "line."
 msgstr ""
+"Обједињење је довело до конфликта. Ово је најбоље решити из гит терминала."
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -8253,38 +8248,38 @@ msgid "Select all cells"
 msgstr "Изабери све ћелије"
 
 #: common/history_lock.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create history directory: %s"
-msgstr "Немогуће направити излазни директоријум '%s'."
+msgstr "Немогуће направити директоријум за чување историје: %s"
 
 #: common/history_lock.cpp:157
 #, c-format
 msgid "History repository is locked by %s@%s"
-msgstr ""
+msgstr "Репозиторијум за чување историје је закључао %s@%s"
 
 #: common/history_lock.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "History directory does not exist: %s"
-msgstr "\"%s\" већ постоји."
+msgstr "Директоријум за чување историје не постоји: %s"
 
 #: common/history_lock.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open git repository: %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у отварању гит репозиторијума: %s"
 
 #: common/history_lock.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set git repository workdir to %s: %s"
-msgstr "Попуњавање зона"
+msgstr "Грешка у успостављању радног директоријума гит репозиторијума на %s: %s"
 
 #: common/history_lock.cpp:221
 msgid "Cannot acquire index lock: repository not open"
-msgstr ""
+msgstr "Немогуће добавити кључ индекса: репозитоијум није отворен"
 
 #: common/history_lock.cpp:232
 #, c-format
 msgid "Failed to acquire git index lock (another operation in progress?): %s"
-msgstr ""
+msgstr "Грешка у добављању кључа индекса (друга операција је можда у току?): %s"
 
 #: common/hotkey_store.cpp:44
 msgid "Accept Autocomplete"
@@ -8299,14 +8294,12 @@ msgid "Toggle Checkbox"
 msgstr "Измени Чекбокс"
 
 #: common/hotkey_store.cpp:47
-#, fuzzy
 msgid "Pan Left/Right"
-msgstr "Дужина чиоде:"
+msgstr "Померање лево/десно"
 
 #: common/hotkey_store.cpp:48
-#, fuzzy
 msgid "Pan Up/Down"
-msgstr "Доле"
+msgstr "Померање горе/доле"
 
 #: common/hotkey_store.cpp:49
 msgid "Finish Drawing"
@@ -8319,9 +8312,8 @@ msgstr "Додај у селекцију"
 #: common/hotkey_store.cpp:51 eeschema/tools/sch_actions.cpp:1037
 #: gerbview/tools/gerbview_actions.cpp:133 pcbnew/tools/pcb_actions.cpp:1548
 #: pcbnew/tools/pcb_actions.cpp:1578
-#, fuzzy
 msgid "Highlight Net"
-msgstr "компонента"
+msgstr "Осветли Мрежу"
 
 #: common/hotkey_store.cpp:52
 msgid "Remove from Selection"
@@ -8370,7 +8362,7 @@ msgstr "API одговор: %s"
 
 #: common/http_lib/http_lib_connection.cpp:322
 #: common/http_lib/http_lib_connection.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "API Response: %s"
 msgstr "API одговор: %s"
 
@@ -8446,24 +8438,22 @@ msgstr ""
 
 #: common/io/altium/altium_binary_parser.cpp:62 common/richio.cpp:65
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4555
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file '%s'."
-msgstr "Немогуће сачувати фајл %s."
+msgstr "Немогуће отворити датотеку %s."
 
 #: common/io/altium/altium_binary_parser.cpp:71
-#, fuzzy
 msgid "Error reading file: cannot determine length."
-msgstr "фајл не постоји"
+msgstr "Грешка у читању директоријума: немогуће одредити његову величину."
 
 #: common/io/altium/altium_binary_parser.cpp:84
-#, fuzzy
 msgid "Error reading file."
-msgstr "фајл не постоји"
+msgstr "Грешка у читању датотеке."
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:2472
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file '%s'"
-msgstr "Немогуће сачувати фајл %s."
+msgstr "Немогуће отворити датотеку '%s'"
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:2495
 #: common/io/cadstar/cadstar_archive_parser.cpp:2819 eeschema/files-io.cpp:1572
@@ -8475,9 +8465,8 @@ msgstr "Немогуће сачувати фајл %s."
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:120
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:83
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:117
-#, fuzzy
 msgid "File import canceled by user."
-msgstr "Попуњавање зона"
+msgstr "Увоз датотеке прекинут од стране корисника."
 
 #: common/io/cadstar/cadstar_archive_parser.cpp:2513
 #: common/io/cadstar/cadstar_archive_parser.cpp:2536
@@ -8493,14 +8482,14 @@ msgid "Unexpected number of points in '%s'. Found %d but expected %d."
 msgstr "Неочекивани број тачака у \"%s\", Пронађено %d али очекивано %d."
 
 #: common/io/cadstar/cadstar_archive_parser.h:43
-#, fuzzy, c-format
+#, c-format
 msgid "Missing node '%s' in '%s'"
-msgstr "Недостаје параметар '%s' у '%s'"
+msgstr "Недостаје чвор '%s' у '%s'"
 
 #: common/io/cadstar/cadstar_archive_parser.h:46
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr "Непознат токен \"%s\""
+msgstr "Непознат чвор %s' у '%s'"
 
 #: common/io/cadstar/cadstar_archive_parser.h:49
 #, c-format
@@ -8513,36 +8502,36 @@ msgid "Unknown Parameter '%s' in '%s'"
 msgstr "Непознат параметар '%s' у '%s'"
 
 #: common/io/cadstar/cadstar_archive_parser.h:55
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr "Попуњавање зона"
+msgstr "Немогуће парсирати '%s' у '%s'"
 
 #: common/io/eagle/eagle_parser.cpp:288
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid size %lld: too large"
-msgstr "Учитавање  "
+msgstr "Неважећа величина %lld: превелико"
 
 #: common/io/eagle/eagle_parser.cpp:528
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Arc with radius %0.2f and angle %0.2f"
-msgstr "Невалидан лук са радијусом %f и углом %f"
+msgstr "Невалидан лук са радијусом %0.2f и углом %0.2f"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:38
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "потребан је број за '%s'"
+msgstr "Грешка у парсирању броја из '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:181
 #: common/io/easyedapro/easyedapro_import_utils.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error reading '%s': %s"
-msgstr "Грешка: "
+msgstr "JSON грешка током читања '%s': %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:185
 #: common/io/easyedapro/easyedapro_import_utils.cpp:240
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading '%s': %s"
-msgstr "Грешка: "
+msgstr "Грешка у читању '%s': %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:204
 #, c-format
@@ -8554,61 +8543,52 @@ msgstr ""
 "Не могу да пронађем project.json нити device.json."
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:220
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read ZIP archive '%s'"
-msgstr "Немогуће сачувати фајл %s."
+msgstr "Немогуће прочитати ZIP архиву '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:272
 #: common/io/easyedapro/easyedapro_import_utils.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "Немогуће пронаћи %s пин '%s'."
+msgstr "Немогуће парсирати JSON линију %d у '%s': %s"
 
 #: common/io/io_base.cpp:139
-#, fuzzy
 msgid "Loading file canceled by user."
-msgstr "Попуњавање зона"
+msgstr "Учитавање прекинуо корисник."
 
 #: common/jobs/job.cpp:82
-#, fuzzy
 msgid "Job Settings"
-msgstr "Поставке"
+msgstr "Поставке посла"
 
 #: common/jobs/job_export_pcb_3d.cpp:155
-#, fuzzy
 msgid "3D model export"
-msgstr "Не попуњавати"
+msgstr "Извоз 3Д модела"
 
 #: common/jobs/job_export_pcb_3d.cpp:161
-#, fuzzy
 msgid "Export 3D Model Job Settings"
-msgstr "Избор 3D модела"
+msgstr "Поставке посла за извоз 3Д модела"
 
 #: common/jobs/job_export_pcb_3d.cpp:183
-#, fuzzy
 msgid "PCB: Export 3D Model"
-msgstr "Избор 3D модела"
+msgstr "Штампана плоча: Извоз 3Д модела"
 
 #: common/jobs/job_export_pcb_drill.cpp:137
-#, fuzzy
 msgid "Export drill data"
-msgstr "Залијепи"
+msgstr "Извези податке о бушењу"
 
 #: common/jobs/job_export_pcb_drill.cpp:143
-#, fuzzy
 msgid "Export Drill Data Job Settings"
-msgstr "Уреди опције"
+msgstr "Поставке посла за извоз података о бушењу"
 
 #: common/jobs/job_export_pcb_drill.cpp:146
-#, fuzzy
 msgid "PCB: Export Drill Data"
-msgstr "Залијепи"
+msgstr "Штампана плоча: Извези податке о бушењу"
 
 #: common/jobs/job_export_pcb_dxf.cpp:58
 #: common/jobs/job_export_sch_plot.cpp:133 kicad/kicad_cli.cpp:163
-#, fuzzy
 msgid "Export DXF"
-msgstr "фајл не постоји"
+msgstr "Извези у DXF формату"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:139
