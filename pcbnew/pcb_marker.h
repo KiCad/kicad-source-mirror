@@ -159,6 +159,8 @@ public:
         m_pathEnd = aEnd;
     }
 
+    const std::vector<PCB_SHAPE>& GetPath() const { return m_pathShapes; }
+
 protected:
     KIGFX::COLOR4D getColor() const override;
 
