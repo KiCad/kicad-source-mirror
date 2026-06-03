@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:29+0300\n"
-"PO-Revision-Date: 2026-06-02 21:28+0000\n"
+"PO-Revision-Date: 2026-06-03 14:26+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -2837,7 +2837,7 @@ msgid ""
 "separate timestamped file you can review later."
 msgstr ""
 "Behält die gespeicherte Datei bei und schreibt die automatisch gespeicherte "
-"Version als zursätzliche, separate Datei mit Zeitstempel für spätere "
+"Version als zusätzliche, separate Datei mit Zeitstempel für spätere "
 "Überprüfung."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
@@ -8765,7 +8765,7 @@ msgstr "Kann Protokoll nicht in Datei \"%s\" schreiben."
 #: common/io/diptrace/diptrace_binary_reader.cpp:69
 #, fuzzy, c-format
 msgid "Error reading file '%s'."
-msgstr "Fehler beim Lesen der Datei."
+msgstr "Fehler beim Lesen der Datei \"%s\"."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:86
 #, c-format
@@ -18370,8 +18370,9 @@ msgid "Block"
 msgstr "Taktanschluss"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:235
+#, fuzzy
 msgid "Force"
-msgstr ""
+msgstr "Erzwingen"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:253
 #: eeschema/sch_edit_frame.cpp:2424
@@ -22547,7 +22548,9 @@ msgstr ""
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:586
 #, fuzzy, c-format
 msgid "DipTrace import: failed to parse component %zu at offset 0x%06zX: %s"
-msgstr "Komponentenliste konnte nicht geparst werden: %s"
+msgstr ""
+"DipTrace-Import: Parsen des Bauteils %zu bei Offset 0x%06zX ist gescheitert: "
+"%s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:594
 #, c-format
@@ -22647,7 +22650,7 @@ msgstr "Öffnen durch Benutzer abgebrochen."
 #: eeschema/sch_io/diptrace/sch_io_diptrace.h:58
 #, fuzzy
 msgid "DipTrace schematic files"
-msgstr "LTspice Schaltplandateien"
+msgstr "DipTrace Schaltplandateien"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:603
 #, c-format
@@ -36368,9 +36371,8 @@ msgid "B4"
 msgstr "B4"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:81
-#, fuzzy
 msgid "B5"
-msgstr "5"
+msgstr "B5"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:82
 msgid "A6"
@@ -36381,9 +36383,8 @@ msgid "A7"
 msgstr "A7"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:84
-#, fuzzy
 msgid "A8"
-msgstr "A"
+msgstr "A8"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:100
 msgid "0 .. 15 V"
@@ -36441,11 +36442,15 @@ msgid ""
 msgstr ""
 "*  B1 - Innenleiter\n"
 "*  B2 - Außenleiter, unisoliert, bis 3050 m über Meereshöhe\n"
-"*  B3 - Außenleiter, unisoliert, über 3050 m\n"
+"*  B3 - Außenleiter, unisoliert, über 3050 m oder im Vakuum\n"
 "*  B4 - Außenleiter, mit Schutzschicht (jede Höhe)\n"
-"*  A5 - Außenleiter, mit Schutzlack über Montage (jede Höhe)\n"
-"*  A6 - externe Komponente Leitungsanschluss, unisoliert\n"
-"*  A7 - externe Komponente Leitungsanschluss, mit Schutzlack (jede Höhe)"
+"*  B5 - Außenleiter, mit Schutzlack über Montage (jede Höhe oder im Vakuum)\n"
+"*  A6 - externe Komponente Leitungsanschluss, mit Schutzlack (jede Höhe oder "
+"im Vakuum)\n"
+"*  A7 - externe Komponente Leitungsanschluss, unisoliert, bis 3050 m über "
+"Meereshöhe\n"
+"*  A8 - externe Komponente Leitungsanschluss, unisoliert, über 3050 m oder "
+"im Vakuum"
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:21
 msgid "E24,E48,E96"
@@ -44252,7 +44257,9 @@ msgstr "Netzname:"
 msgid ""
 "Simulation\n"
 "Electrical type:"
-msgstr "Elektrischer Typ:"
+msgstr ""
+"Simulation\n"
+"Elektrischer Typ:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:85 pcbnew/pad.cpp:3360
 msgid "Sink"
@@ -48850,8 +48857,8 @@ msgstr ""
 "```\n"
 "> Wahr, wenn `A` vollständig innerhalb des Zonenumrisses liegt.\n"
 "\n"
-"> Anmerkung: Dies ist ein potentiell aufwendigerer Aufruf als "
-"`intersectsArea()`.\n"
+"> Anmerkung: Dies ist ein potentiell aufwendigerer Aufruf als `intersectsArea"
+"()`.\n"
 "Wenn möglich, sollte letzteres verwendet werden.\n"
 "\n"
 "\n"
@@ -48908,6 +48915,34 @@ msgstr ""
 "\n"
 "\n"
 "```\n"
+"    A.inNetChain('<Kettenname>')\n"
+"```\n"
+"> Wahr, wenn das Netz von `A` Teil der genannten Kette ist.  `<chain_name>`\n"
+"unterstützt Wildcards: `inNetChain('DDR_*')` stimmt mit jeder Kette "
+"überein,\n"
+"deren Name mit `DDR_` beginnt.\n"
+"\n"
+"\n"
+"\n"
+"```\n"
+"    A.hasNetChain()\n"
+"```\n"
+"> > Wahr, wenn das Netz von `A` jeder beliebigen Kette angehört.\n"
+"\n"
+"\n"
+"\n"
+"```\n"
+"    A.inNetChainClass('<Klassenname>')\n"
+"```\n"
+"> Wahr, wenn das Netz von `A`zu einer Kette gehört, deren zugewiesene "
+"Kettenklasse\n"
+"mit `<class_name>` übereinstimmt.  Klassenzuweisungen befinden sich in der\n"
+"`net_chain_classes`-Map des Projekts.  `<class_name>` unterstützen "
+"Wildcards.\n"
+"\n"
+"\n"
+"\n"
+"```\n"
 "    A.intersectsArea('<Zonenname>')\n"
 "```\n"
 "> Wahr, wenn ein Teil von `A` innerhalb des Zonenumrisses liegt.\n"
@@ -48936,8 +48971,8 @@ msgstr ""
 "\n"
 "> Die oben aufgeführte Footprintreferenz kann folgendes sein:\n"
 "\n"
-"> 1. Ein Referenzbezeichner, möglicherweise mit den Platzhaltern `*` und `?"
-"`\n"
+"> 1. Ein Referenzbezeichner, möglicherweise mit den Platzhaltern `*` und "
+"`?`\n"
 "> 2. Ein Footprint-Bibliotheksbezeichner wie z.B. `LibName:FootprintName`. "
 "In diesem Fall\n"
 "   muss der Bibliotheksbezeichner einen Doppelpunkt `:` enthalten, um den "
@@ -62167,7 +62202,7 @@ msgstr "Designblock-Layout verwenden"
 #: pcbnew/tools/pcb_control.cpp:1572
 #, fuzzy
 msgid "design block is not in the loaded libraries"
-msgstr "Designblock hat keine gültige Bibliotheks-ID."
+msgstr "Designblock befindet sich nicht in den geladenen Bibliotheken"
 
 #: pcbnew/tools/pcb_control.cpp:1578
 #, fuzzy
@@ -62207,23 +62242,25 @@ msgstr "Designblock-Layout verwenden"
 #: pcbnew/tools/pcb_control.cpp:1752
 #, fuzzy, c-format
 msgid "Apply design block layout to %d group(s)"
-msgstr "Verknüpftes Designblock-Layout auf ausgewählte Gruppe anwenden"
+msgstr "Designblock-Layout auf %d Gruppe(n) anwenden"
 
 #: pcbnew/tools/pcb_control.cpp:1764
 #, fuzzy, c-format
 msgid "Applied design block layout to %d of %d group(s)."
-msgstr "Verknüpftes Designblock-Layout auf ausgewählte Gruppe anwenden"
+msgstr "Designblock-Layout auf %d von %d Gruppe(n) anwenden."
 
 #: pcbnew/tools/pcb_control.cpp:1771
 #, fuzzy, c-format
 msgid ""
 "Skipped %d selected item(s) that are not groups linked to a design block."
-msgstr "Gewählte Gruppe als verknüpften Designblock speichern"
+msgstr ""
+"%d ausgewählte(s) Element(e), die keine mit einem Designblock verknüpften "
+"Gruppen sind, wurde(n) übersprungen."
 
 #: pcbnew/tools/pcb_control.cpp:1779
 #, fuzzy
 msgid "The following groups could not be processed:"
-msgstr "Die folgenden Verzeichnisse konnten nicht geöffnet werden:\n"
+msgstr "Die folgenden Gruppen konnten nicht verarbeitet werden:"
 
 #: pcbnew/tools/pcb_control.cpp:1783
 #, fuzzy
