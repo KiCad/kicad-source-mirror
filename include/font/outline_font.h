@@ -121,6 +121,16 @@ public:
 
     const FT_Face& GetFace() const { return m_face; }
 
+    /**
+     * Select the charmap used to map characters to glyphs for @p aFace.
+     *
+     * Prefers a Unicode charmap, but legacy "symbol" fonts place their glyphs in the
+     * U+F000..U+F0FF private-use range and expose no Unicode charmap that maps Basic Latin. For
+     * those, select the Microsoft Symbol charmap so HarfBuzz applies its U+F000 offset remapping
+     * and the font renders instead of producing .notdef boxes.
+     */
+    static void SelectCharmap( FT_Face aFace );
+
 #if 0
     void RenderToOpenGLCanvas( KIGFX::OPENGL_FREETYPE& aTarget, const wxString& aString,
                                const VECTOR2D& aSize, const wxPoint& aPosition,
