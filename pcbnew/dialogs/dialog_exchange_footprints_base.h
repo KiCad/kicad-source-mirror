@@ -69,6 +69,7 @@ class DIALOG_EXCHANGE_FOOTPRINTS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_resetFabricationAttrs;
 		wxCheckBox* m_resetClearanceOverrides;
 		wxCheckBox* m_reset3DModels;
+		wxCheckBox* m_resetTransform;
 		wxCheckBox* m_matchPadPositions;
 		wxButton* m_uncheckAll;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;

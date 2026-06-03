@@ -68,6 +68,13 @@ public:
     VECTOR2I GetTopLeft() const override;
     VECTOR2I GetBotRight() const override;
 
+    std::vector<VECTOR2I> GetCorners() const override;
+
+    std::vector<VECTOR2I> GetCornersInSequence( EDA_ANGLE angle ) const override;
+
+    // Keep the lib shape as RECTANGLE even if a runtime polygon conversion happens.
+    void SetShape( SHAPE_T aShape ) override;
+
     /**
      * Return the minimum height needed to contain the textbox's wrapped text content
      * plus margins. Width is unconstrained (returns 0) so text freely rewraps.
@@ -97,7 +104,19 @@ public:
     VECTOR2I GetDrawPos() const override;
     VECTOR2I GetDrawPos( bool aIsFlipped ) const;
 
-    void SetTextAngle( const EDA_ANGLE& aAngle ) override;
+    EDA_ANGLE GetTextAngle() const override;
+    void      SetTextAngle( const EDA_ANGLE& aAngle ) override;
+
+    /**
+     * Text angle in the parent footprint's lib frame, or absolute when not
+     * in a footprint.
+     */
+    const EDA_ANGLE& GetLibTextAngle() const { return m_libTextAngle; }
+    void             SetLibTextAngle( const EDA_ANGLE& aAngle )
+    {
+        m_libTextAngle = aAngle;
+        m_libTextAngle.Normalize();
+    }
 
     wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
 
@@ -110,6 +129,17 @@ public:
     void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
     void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
+
+    void OnFootprintTransformed() override;
+
+    void OnFootprintRescaled( double aRatioX, double aRatioY, double aLinearFactor, const VECTOR2I& aAnchor,
+                              const EDA_ANGLE& aParentRotate ) override;
+
+    VECTOR2I GetTextSize() const override;
+    void     SetTextSize( VECTOR2I aNewSize, bool aEnforceMinTextSize = true ) override;
+
+    int  GetTextThickness() const override;
+    void SetTextThickness( int aWidth ) override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
@@ -179,10 +209,11 @@ protected:
     bool m_borderEnabled; ///< Controls drawing the border (as defined by the stroke members)
 
 private:
-    int  m_marginLeft;
-    int  m_marginTop;
-    int  m_marginRight;
-    int  m_marginBottom;
+    int       m_marginLeft;
+    int       m_marginTop;
+    int       m_marginRight;
+    int       m_marginBottom;
+    EDA_ANGLE m_libTextAngle; // Text angle in parent footprint's lib frame
 };
 
 #endif  // #define PCB_TEXTBOX_H

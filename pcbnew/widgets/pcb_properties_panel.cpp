@@ -57,6 +57,10 @@
 #include <vector>
 #include <wx/combobox.h>
 
+#include <wx/msgdlg.h>
+
+#include <cmath>
+
 static const wxString MISSING_FIELD_SENTINEL = wxS( "\uE000" );
 
 class PCB_FOOTPRINT_FIELD_PROPERTY : public PROPERTY_BASE
@@ -228,7 +232,6 @@ public:
 
 
 const wxString PG_NET_SELECTOR_EDITOR::EDITOR_NAME = wxS( "PG_NET_SELECTOR_EDITOR" );
-
 
 class PG_TRACK_WIDTH_EDITOR : public wxPGEditor
 {
@@ -422,11 +425,11 @@ private:
 
 const wxString PG_TRACK_WIDTH_EDITOR::EDITOR_NAME = wxS( "PG_TRACK_WIDTH_EDITOR" );
 
-
 PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRAME* aFrame ) :
         PROPERTIES_PANEL( aParent, aFrame ),
         m_frame( aFrame ),
-        m_propMgr( PROPERTY_MANAGER::Instance() )
+        m_propMgr( PROPERTY_MANAGER::Instance() ),
+        m_scaleConfirmPending( false )
 {
     m_propMgr.Rebuild();
     bool found = false;
@@ -739,7 +742,87 @@ void PCB_PROPERTIES_PANEL::valueChanging( wxPropertyGridEvent& aEvent )
         return;
     }
 
+    // Scaling a footprint that has pads is dangerous (the physical
+    // part keeps its original size), so confirm before applying.
+    const wxString propName = aEvent.GetPropertyName();
+
+    if( propName == _HKI( "Scale X" ) || propName == _HKI( "Scale Y" ) )
+    {
+        const double newScale = newValue.GetDouble();
+
+        // Zero, negative, and non-finite scales make the footprint transform degenerate.
+        if( !std::isfinite( newScale ) || newScale <= 0.0 )
+        {
+            m_frame->ShowInfoBarError( _( "Scale must be a positive number." ) );
+            aEvent.Veto();
+            return;
+        }
+
+        if( newScale != 1.0 )
+        {
+            SELECTION        fallbackSelection;
+            const SELECTION& selection = getSelection( fallbackSelection );
+            int              fpWithPads = 0;
+
+            for( EDA_ITEM* edaItem : selection )
+            {
+                if( edaItem->IsBOARD_ITEM() && static_cast<BOARD_ITEM*>( edaItem )->Type() == PCB_FOOTPRINT_T
+                    && !static_cast<FOOTPRINT*>( edaItem )->Pads().empty() )
+                {
+                    fpWithPads++;
+                }
+            }
+
+            if( fpWithPads > 0 )
+            {
+                // A modal dialog must not be shown from this synchronous grid handler.
+                // Veto the edit and re-drive it from the main loop once confirmed.
+                aEvent.Veto();
+
+                if( m_scaleConfirmPending )
+                    return;
+
+                m_scaleConfirmPending = true;
+
+                wxString msg = wxString::Format( _( "%d footprint(s) in the selection have pads. Scaling changes "
+                                                    "the drawn pad positions but not the physical part. Continue?" ),
+                                                 fpWithPads );
+
+                CallAfter(
+                        [this, msg, propName, newValue]()
+                        {
+                            if( wxMessageBox( msg, _( "Scale footprint with pads?" ), wxYES_NO | wxICON_WARNING, this )
+                                == wxYES )
+                            {
+                                applyConfirmedScale( propName, newValue );
+                            }
+
+                            m_scaleConfirmPending = false;
+                        } );
+
+                return;
+            }
+        }
+    }
+
     aEvent.Skip();
+}
+
+
+void PCB_PROPERTIES_PANEL::applyConfirmedScale( const wxString& aPropName, const wxVariant& aValue )
+{
+    wxPGProperty* pgProp = m_grid->GetPropertyByName( aPropName );
+
+    if( !pgProp )
+        return;
+
+    // Re-drive the normal changed path now that we are back in the main loop.
+    wxPropertyGridEvent evt( wxEVT_PG_CHANGED );
+    evt.SetEventObject( m_grid );
+    evt.SetProperty( pgProp );
+    evt.SetPropertyValue( aValue );
+
+    valueChanged( evt );
 }
 
 
@@ -757,6 +840,30 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
     BOARD_COMMIT changes( m_frame );
 
     PROPERTY_COMMIT_HANDLER handler( &changes );
+
+    // Multi-footprint scale: rescale each footprint around the selection's
+    // geometric (bbox) center instead of around its own anchor. Single-fp
+    // edits go through the regular setter path (anchored at the fp itself).
+    const wxString propName = aEvent.GetPropertyName();
+    const bool     isScaleX = ( propName == _HKI( "Scale X" ) );
+    const bool     isScaleY = ( propName == _HKI( "Scale Y" ) );
+    int            fpInSelection = 0;
+    BOX2I          selectionBBox;
+
+    if( isScaleX || isScaleY )
+    {
+        for( EDA_ITEM* edaItem : selection )
+        {
+            if( edaItem->IsBOARD_ITEM() && static_cast<BOARD_ITEM*>( edaItem )->Type() == PCB_FOOTPRINT_T )
+            {
+                fpInSelection++;
+                selectionBBox.Merge( static_cast<FOOTPRINT*>( edaItem )->GetBoundingBox() );
+            }
+        }
+    }
+
+    const bool     useSelectionCenter = fpInSelection > 1;
+    const VECTOR2I selectionCenter = useSelectionCenter ? selectionBBox.GetCenter() : VECTOR2I( 0, 0 );
 
     for( EDA_ITEM* edaItem : selection )
     {
@@ -817,8 +924,6 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
             if( !variantName.IsEmpty() )
             {
-                wxString propName = aEvent.GetPropertyName();
-
                 if( propName == _HKI( "Do not Populate" )
                     || propName == _HKI( "Exclude From Bill of Materials" )
                     || propName == _HKI( "Exclude From Position Files" ) )
@@ -843,6 +948,17 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
                     }
                 }
             }
+        }
+
+        if( useSelectionCenter && item->Type() == PCB_FOOTPRINT_T )
+        {
+            FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
+            double     newScale = newValue.GetDouble();
+            double     relSx = isScaleX ? newScale / fp->GetScaleX() : 1.0;
+            double     relSy = isScaleY ? newScale / fp->GetScaleY() : 1.0;
+
+            fp->RescaleAroundPoint( selectionCenter, relSx, relSy );
+            continue;
         }
 
         item->Set( property, newValue );

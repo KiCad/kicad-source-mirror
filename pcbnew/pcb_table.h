@@ -217,6 +217,8 @@ public:
 
     void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
+    void OnFootprintTransformed() override;
+
     const BOX2I GetBoundingBox() const override;
 
     double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;

@@ -34,9 +34,11 @@
 #include <lset.h>
 #include <pad.h>
 #include <base_units.h>
+#include <trigo.h>
 #include <drc/drc_engine.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_compound.h>
+#include <geometry/shape_ellipse.h>
 #include <geometry/point_types.h>
 #include <geometry/shape_utils.h>
 #include <pcb_painter.h>
@@ -47,17 +49,129 @@
 #include <properties/property_mgr.h>
 
 
+namespace
+{
+struct BOARD_ELLIPSE
+{
+    double    major;
+    double    minor;
+    EDA_ANGLE rotation;
+    EDA_ANGLE startShift;
+};
+
+
+// SVD of M = R(theta) * diag(sx, sy) * R(phi) * diag(a, b). Returns the board
+// ellipse's major / minor / rotation plus the parametric angle shift to apply
+// to lib start / end angles (for ELLIPSE_ARC).
+static BOARD_ELLIPSE decomposeBoardEllipse( const TRANSFORM_TRS& aXform, int aLibMajor, int aLibMinor,
+                                            const EDA_ANGLE& aLibRotation )
+{
+    const double sx = aXform.GetScaleX();
+    const double sy = aXform.GetScaleY();
+    // Lib rotation and xform rotation use opposite signs, negate to match.
+    const double theta = -aXform.GetRotate().AsRadians();
+    const double phi = aLibRotation.AsRadians();
+    const double cTheta = std::cos( theta );
+    const double sTheta = std::sin( theta );
+    const double cPhi = std::cos( phi );
+    const double sPhi = std::sin( phi );
+    const double a = aLibMajor;
+    const double b = aLibMinor;
+
+    const double m00 = a * ( sx * cTheta * cPhi - sy * sTheta * sPhi );
+    const double m01 = -b * ( sx * cTheta * sPhi + sy * sTheta * cPhi );
+    const double m10 = a * ( sx * sTheta * cPhi + sy * cTheta * sPhi );
+    const double m11 = b * ( -sx * sTheta * sPhi + sy * cTheta * cPhi );
+
+    const double A = m00 * m00 + m10 * m10;
+    const double B = m00 * m01 + m10 * m11;
+    const double C = m01 * m01 + m11 * m11;
+
+    const double diff = A - C;
+    const double rad = std::hypot( diff, 2.0 * B );
+    const double lambda1 = ( A + C + rad ) * 0.5;
+    const double lambda2 = ( A + C - rad ) * 0.5;
+
+    const double sigma1 = std::sqrt( std::max( 0.0, lambda1 ) );
+    const double sigma2 = std::sqrt( std::max( 0.0, lambda2 ) );
+
+    double v0x;
+    double v0y;
+
+    if( std::abs( B ) > 1e-12 )
+    {
+        v0x = lambda1 - C;
+        v0y = B;
+    }
+    else if( A >= C )
+    {
+        v0x = 1.0;
+        v0y = 0.0;
+    }
+    else
+    {
+        v0x = 0.0;
+        v0y = 1.0;
+    }
+
+    const double vn = std::hypot( v0x, v0y );
+    v0x /= vn;
+    v0y /= vn;
+
+    double u0x = 1.0;
+    double u0y = 0.0;
+
+    if( sigma1 > 1e-12 )
+    {
+        u0x = ( m00 * v0x + m01 * v0y ) / sigma1;
+        u0y = ( m10 * v0x + m11 * v0y ) / sigma1;
+    }
+
+    BOARD_ELLIPSE out;
+    out.major = sigma1;
+    out.minor = sigma2;
+    out.rotation = EDA_ANGLE( std::atan2( u0y, u0x ), RADIANS_T );
+    out.startShift = EDA_ANGLE( -std::atan2( v0y, v0x ), RADIANS_T );
+    return out;
+}
+} // namespace
+
+
 PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T aItemType, SHAPE_T aShapeType ) :
-    BOARD_CONNECTED_ITEM( aParent, aItemType ),
-    EDA_SHAPE( aShapeType, pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ), FILL_T::NO_FILL )
+        BOARD_CONNECTED_ITEM( aParent, aItemType ),
+        EDA_SHAPE( aShapeType, pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ), FILL_T::NO_FILL ),
+        m_libStart( 0, 0 ),
+        m_libEnd( 0, 0 ),
+        m_libArcMid( 0, 0 ),
+        m_libBezierC1( 0, 0 ),
+        m_libBezierC2( 0, 0 ),
+        m_libEllipseCenter( 0, 0 ),
+        m_libEllipseMajorRadius( 0 ),
+        m_libEllipseMinorRadius( 0 ),
+        m_libEllipseRotation( ANGLE_0 ),
+        m_libEllipseStartAngle( ANGLE_0 ),
+        m_libEllipseEndAngle( ANGLE_0 ),
+        m_libShape( aShapeType )
 {
     m_hasSolderMask = false;
 }
 
 
 PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, SHAPE_T shapetype ) :
-    BOARD_CONNECTED_ITEM( aParent, PCB_SHAPE_T ),
-    EDA_SHAPE( shapetype, pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ), FILL_T::NO_FILL )
+        BOARD_CONNECTED_ITEM( aParent, PCB_SHAPE_T ),
+        EDA_SHAPE( shapetype, pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ), FILL_T::NO_FILL ),
+        m_libStart( 0, 0 ),
+        m_libEnd( 0, 0 ),
+        m_libArcMid( 0, 0 ),
+        m_libBezierC1( 0, 0 ),
+        m_libBezierC2( 0, 0 ),
+        m_libEllipseCenter( 0, 0 ),
+        m_libEllipseMajorRadius( 0 ),
+        m_libEllipseMinorRadius( 0 ),
+        m_libEllipseRotation( ANGLE_0 ),
+        m_libEllipseStartAngle( ANGLE_0 ),
+        m_libEllipseEndAngle( ANGLE_0 ),
+        m_libShape( shapetype )
 {
     m_hasSolderMask = false;
 }
@@ -312,7 +426,6 @@ std::vector<VECTOR2I> PCB_SHAPE::GetConnectionPoints() const
 
     case SHAPE_T::ELLIPSE:
     {
-        // +/- major and +/- minor axis endpoints.
         const double   phi = GetEllipseRotation().AsRadians();
         const double   cosPhi = std::cos( phi );
         const double   sinPhi = std::sin( phi );
@@ -329,7 +442,6 @@ std::vector<VECTOR2I> PCB_SHAPE::GetConnectionPoints() const
 
     case SHAPE_T::ELLIPSE_ARC:
     {
-        // Start, end, and midpoint of the arc curve.
         const double   a = GetEllipseMajorRadius();
         const double   b = GetEllipseMinorRadius();
         const double   phi = GetEllipseRotation().AsRadians();
@@ -437,13 +549,32 @@ SHAPE_POLY_SET PCB_SHAPE::getHatchingKnockouts() const
 }
 
 
+static double fpScaleLinear( const FOOTPRINT* aFp )
+{
+    if( !aFp )
+        return 1.0;
+
+    const TRANSFORM_TRS& xform = aFp->GetTransform();
+    return ( xform.GetScaleX() + xform.GetScaleY() ) * 0.5;
+}
+
+
+const FOOTPRINT* PCB_SHAPE::transformFp() const
+{
+    if( GetParent() && GetParent()->Type() == PCB_PAD_T )
+        return nullptr;
+
+    return GetParentFootprint();
+}
+
+
 int PCB_SHAPE::GetWidth() const
 {
-    // A stroke width of 0 in PCBNew means no-border, but negative stroke-widths are only used
-    // in EEschema (see SCH_SHAPE::GetPenWidth()).
-    // Since negative stroke widths can trip up down-stream code (such as the Gerber plotter), we
-    // weed them out here.
-    return std::max( EDA_SHAPE::GetWidth(), 0 );
+    // Clamp negative widths to zero. They mean something in eeschema but break
+    // plotters and exporters here.
+    const int    lib = std::max( EDA_SHAPE::GetWidth(), 0 );
+    const double s = fpScaleLinear( transformFp() );
+    return s == 1.0 ? lib : KiROUND( lib * s );
 }
 
 
@@ -526,6 +657,7 @@ std::vector<VECTOR2I> PCB_SHAPE::GetCorners() const
 void PCB_SHAPE::Move( const VECTOR2I& aMoveVector )
 {
     move( aMoveVector );
+    syncLibCoords();
 }
 
 
@@ -598,17 +730,15 @@ void PCB_SHAPE::NormalizeForCompare()
 {
     if( m_shape == SHAPE_T::SEGMENT )
     {
-        // we want start point the top left point and end point the bottom right
-        // (more easy to compare 2 segments: we are seeing them as equivalent if
-        // they have the same end points, not necessary the same order)
-        VECTOR2I start = GetStart();
-        VECTOR2I end = GetEnd();
+        VECTOR2I libStart = GetLibraryStart();
+        VECTOR2I libEnd = GetLibraryEnd();
 
-        if( ( start.x > end.x )
-            || ( start.x == end.x && start.y < end.y ) )
+        if( ( libStart.x > libEnd.x ) || ( libStart.x == libEnd.x && libStart.y < libEnd.y ) )
         {
-            SetStart( end );
-            SetEnd( start );
+            VECTOR2I s = GetStart();
+            VECTOR2I e = GetEnd();
+            SetStart( e );
+            SetEnd( s );
         }
     }
     else
@@ -619,14 +749,579 @@ void PCB_SHAPE::NormalizeForCompare()
 void PCB_SHAPE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
     rotate( aRotCentre, aAngle );
+    syncLibCoords();
 }
 
 
 void PCB_SHAPE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
+    const FOOTPRINT* fp = GetParentFootprint();
+
+    if( fp
+        && ( m_libShape == SHAPE_T::SEGMENT || m_libShape == SHAPE_T::CIRCLE || m_libShape == SHAPE_T::ARC
+             || m_libShape == SHAPE_T::RECTANGLE || m_libShape == SHAPE_T::BEZIER || m_libShape == SHAPE_T::POLY ) )
+    {
+        const VECTOR2I libCenter = fp->GetTransform().InverseApply( aCentre );
+
+        auto mirrorPt = [&]( VECTOR2I& p )
+        {
+            if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+                p.x = 2 * libCenter.x - p.x;
+            else
+                p.y = 2 * libCenter.y - p.y;
+        };
+
+        if( m_libShape == SHAPE_T::ARC )
+        {
+            mirrorPt( m_libStart );
+            mirrorPt( m_libEnd );
+            mirrorPt( m_libArcMid );
+            std::swap( m_libStart, m_libEnd );
+        }
+        else
+        {
+            mirrorPt( m_libStart );
+            mirrorPt( m_libEnd );
+        }
+
+        if( m_libShape == SHAPE_T::BEZIER )
+        {
+            mirrorPt( m_libBezierC1 );
+            mirrorPt( m_libBezierC2 );
+        }
+
+        if( m_libShape == SHAPE_T::POLY )
+        {
+            for( auto it = m_libPoly.IterateWithHoles(); it; it++ )
+            {
+                VECTOR2I p = *it;
+                mirrorPt( p );
+                m_libPoly.SetVertex( it.GetIndex(), p );
+            }
+        }
+
+        SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+        RebakeFromLib();
+        return;
+    }
+
+    if( fp && ( m_libShape == SHAPE_T::ELLIPSE || m_libShape == SHAPE_T::ELLIPSE_ARC ) )
+    {
+        const VECTOR2I libCenter = fp->GetTransform().InverseApply( aCentre );
+
+        if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+            m_libEllipseCenter.x = 2 * libCenter.x - m_libEllipseCenter.x;
+        else
+            m_libEllipseCenter.y = 2 * libCenter.y - m_libEllipseCenter.y;
+
+        m_libEllipseRotation = -m_libEllipseRotation;
+
+        const EDA_ANGLE oldStart = m_libEllipseStartAngle;
+        const EDA_ANGLE oldEnd = m_libEllipseEndAngle;
+
+        if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+        {
+            m_libEllipseStartAngle = ANGLE_180 - oldEnd;
+            m_libEllipseEndAngle = ANGLE_180 - oldStart;
+        }
+        else
+        {
+            m_libEllipseStartAngle = -oldEnd;
+            m_libEllipseEndAngle = -oldStart;
+        }
+
+        SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+        RebakeFromLib();
+        return;
+    }
+
     flip( aCentre, aFlipDirection );
 
     SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+    syncLibCoords();
+}
+
+
+void PCB_SHAPE::SetStart( const VECTOR2I& aStart )
+{
+    EDA_SHAPE::SetStart( aStart );
+    syncLibCoords();
+}
+
+
+void PCB_SHAPE::SetEnd( const VECTOR2I& aEnd )
+{
+    EDA_SHAPE::SetEnd( aEnd );
+    syncLibCoords();
+}
+
+
+void PCB_SHAPE::OnFootprintRescaled( double aRatioX, double aRatioY, double aLinearFactor, const VECTOR2I& aAnchor,
+                                     const EDA_ANGLE& aParentRotate )
+{
+    RebakeFromLib();
+}
+
+
+void PCB_SHAPE::SetWidth( int aWidth )
+{
+    const double s = fpScaleLinear( transformFp() );
+
+    if( s == 1.0 )
+        m_stroke.SetWidth( aWidth );
+    else
+        m_stroke.SetWidth( KiROUND( aWidth / s ) );
+
+    m_hatchingDirty = true;
+}
+
+
+STROKE_PARAMS PCB_SHAPE::GetStroke() const
+{
+    STROKE_PARAMS s = m_stroke;
+    s.SetWidth( GetWidth() );
+    return s;
+}
+
+
+void PCB_SHAPE::SetStroke( const STROKE_PARAMS& aStroke )
+{
+    m_stroke = aStroke;
+    SetWidth( aStroke.GetWidth() );
+}
+
+
+void PCB_SHAPE::RebakeFromLib()
+{
+    const FOOTPRINT* fp = transformFp();
+
+    if( !fp )
+        return;
+
+    const TRANSFORM_TRS& xform = fp->GetTransform();
+    const bool           nonUniform = xform.GetScaleX() != xform.GetScaleY();
+
+    if( m_libShape == SHAPE_T::CIRCLE )
+    {
+        VECTOR2I libCenter = m_libStart;
+        int      libRadius = ( m_libEnd - m_libStart ).EuclideanNorm();
+        VECTOR2I newCenter = xform.Apply( libCenter );
+
+        if( nonUniform )
+        {
+            int       majorRadius = std::abs( KiROUND( libRadius * xform.GetScaleX() ) );
+            int       minorRadius = std::abs( KiROUND( libRadius * xform.GetScaleY() ) );
+
+            EDA_ANGLE rotation = -xform.GetRotate();
+
+            if( minorRadius > majorRadius )
+            {
+                std::swap( majorRadius, minorRadius );
+                rotation += EDA_ANGLE( 90.0, DEGREES_T );
+            }
+
+            m_shape = SHAPE_T::ELLIPSE;
+            SetEllipseCenter( newCenter );
+            SetEllipseMajorRadius( majorRadius );
+            SetEllipseMinorRadius( minorRadius );
+            SetEllipseRotation( rotation );
+        }
+        else
+        {
+            m_shape = SHAPE_T::CIRCLE;
+            EDA_SHAPE::SetStart( newCenter );
+            EDA_SHAPE::SetEnd( xform.Apply( m_libEnd ) );
+        }
+
+        return;
+    }
+
+    if( m_libShape == SHAPE_T::ARC )
+    {
+        VECTOR2I libCenter = CalcArcCenter( m_libStart, m_libArcMid, m_libEnd );
+        int      libRadius = ( m_libStart - libCenter ).EuclideanNorm();
+        VECTOR2I newCenter = xform.Apply( libCenter );
+
+        if( nonUniform )
+        {
+            int       majorRadius = std::abs( KiROUND( libRadius * xform.GetScaleX() ) );
+            int       minorRadius = std::abs( KiROUND( libRadius * xform.GetScaleY() ) );
+
+            EDA_ANGLE rotation = -xform.GetRotate();
+            EDA_ANGLE startAngle( VECTOR2D( m_libStart - libCenter ) );
+            EDA_ANGLE midAngle( VECTOR2D( m_libArcMid - libCenter ) );
+            EDA_ANGLE endAngle( VECTOR2D( m_libEnd - libCenter ) );
+
+            auto wrap = []( EDA_ANGLE a, EDA_ANGLE base )
+            {
+                while( a < base )
+                    a += ANGLE_360;
+                return a;
+            };
+
+            if( wrap( midAngle, startAngle ) > wrap( endAngle, startAngle ) )
+                std::swap( startAngle, endAngle );
+
+            while( endAngle < startAngle )
+                endAngle += ANGLE_360;
+
+            if( minorRadius > majorRadius )
+            {
+                std::swap( majorRadius, minorRadius );
+                rotation += EDA_ANGLE( 90.0, DEGREES_T );
+                startAngle -= EDA_ANGLE( 90.0, DEGREES_T );
+                endAngle -= EDA_ANGLE( 90.0, DEGREES_T );
+            }
+
+            m_shape = SHAPE_T::ELLIPSE_ARC;
+            SetEllipseCenter( newCenter );
+            SetEllipseMajorRadius( majorRadius );
+            SetEllipseMinorRadius( minorRadius );
+            SetEllipseRotation( rotation );
+            SetEllipseStartAngle( startAngle );
+            SetEllipseEndAngle( endAngle );
+        }
+        else
+        {
+            m_shape = SHAPE_T::ARC;
+            EDA_SHAPE::SetArcGeometry( xform.Apply( m_libStart ), xform.Apply( m_libArcMid ), xform.Apply( m_libEnd ) );
+        }
+
+        return;
+    }
+
+    if( m_libShape == SHAPE_T::ELLIPSE || m_libShape == SHAPE_T::ELLIPSE_ARC )
+    {
+        // The linear transform preserves ellipse-ness only when scale is uniform
+        // or the lib ellipse's axes are aligned with the scale axes (cardinal lib
+        // rotation). Otherwise the result is a sheared shape that no standard
+        // ellipse can represent; tessellate to POLY in that case.
+        const bool keepNative = xform.IsUniformScale() || m_libEllipseRotation.IsCardinal();
+
+        if( keepNative )
+        {
+            m_shape = m_libShape;
+            EDA_SHAPE::SetEllipseCenter( xform.Apply( m_libEllipseCenter ) );
+
+            if( xform.IsUniformScale() )
+            {
+                double absScale = std::abs( xform.GetScaleX() );
+                EDA_SHAPE::SetEllipseMajorRadius( KiROUND( m_libEllipseMajorRadius * absScale ) );
+                EDA_SHAPE::SetEllipseMinorRadius( KiROUND( m_libEllipseMinorRadius * absScale ) );
+                EDA_SHAPE::SetEllipseRotation( m_libEllipseRotation - xform.GetRotate() );
+
+                if( m_libShape == SHAPE_T::ELLIPSE_ARC )
+                {
+                    EDA_SHAPE::SetEllipseStartAngle( m_libEllipseStartAngle );
+                    EDA_SHAPE::SetEllipseEndAngle( m_libEllipseEndAngle );
+                }
+            }
+            else
+            {
+                BOARD_ELLIPSE be = decomposeBoardEllipse( xform, m_libEllipseMajorRadius,
+                                                          m_libEllipseMinorRadius,
+                                                          m_libEllipseRotation );
+
+                EDA_SHAPE::SetEllipseMajorRadius( KiROUND( be.major ) );
+                EDA_SHAPE::SetEllipseMinorRadius( KiROUND( be.minor ) );
+                EDA_SHAPE::SetEllipseRotation( be.rotation );
+
+                if( m_libShape == SHAPE_T::ELLIPSE_ARC )
+                {
+                    EDA_SHAPE::SetEllipseStartAngle( m_libEllipseStartAngle + be.startShift );
+                    EDA_SHAPE::SetEllipseEndAngle( m_libEllipseEndAngle + be.startShift );
+                }
+            }
+        }
+        else
+        {
+            const bool isArc = ( m_libShape == SHAPE_T::ELLIPSE_ARC );
+
+            std::unique_ptr<SHAPE_ELLIPSE> libEllipse;
+
+            if( isArc )
+            {
+                libEllipse = std::make_unique<SHAPE_ELLIPSE>(
+                        m_libEllipseCenter, m_libEllipseMajorRadius, m_libEllipseMinorRadius,
+                        m_libEllipseRotation, m_libEllipseStartAngle, m_libEllipseEndAngle );
+            }
+            else
+            {
+                libEllipse = std::make_unique<SHAPE_ELLIPSE>(
+                        m_libEllipseCenter, m_libEllipseMajorRadius, m_libEllipseMinorRadius,
+                        m_libEllipseRotation );
+            }
+
+            SHAPE_LINE_CHAIN chain = libEllipse->ConvertToPolyline( getMaxError() );
+
+            m_shape = SHAPE_T::POLY;
+            SHAPE_POLY_SET& poly = GetPolyShape();
+            poly.RemoveAllContours();
+            poly.NewOutline();
+
+            for( int ii = 0; ii < chain.PointCount(); ++ii )
+                poly.Append( xform.Apply( chain.CPoint( ii ) ) );
+
+            poly.Outline( 0 ).SetClosed( !isArc );
+        }
+
+        return;
+    }
+
+    if( m_libShape == SHAPE_T::RECTANGLE )
+    {
+        const VECTOR2I c1 = xform.Apply( m_libStart );
+        const VECTOR2I c2 = xform.Apply( VECTOR2I( m_libEnd.x, m_libStart.y ) );
+        const VECTOR2I c3 = xform.Apply( m_libEnd );
+        const VECTOR2I c4 = xform.Apply( VECTOR2I( m_libStart.x, m_libEnd.y ) );
+
+        if( xform.GetRotate().IsCardinal() )
+        {
+            m_shape = SHAPE_T::RECTANGLE;
+            BOX2I bbox( c1, VECTOR2I( 0, 0 ) );
+            bbox.Merge( c2 );
+            bbox.Merge( c3 );
+            bbox.Merge( c4 );
+            EDA_SHAPE::SetStart( bbox.GetOrigin() );
+            EDA_SHAPE::SetEnd( bbox.GetEnd() );
+        }
+        else
+        {
+            m_shape = SHAPE_T::POLY;
+            SHAPE_POLY_SET& poly = GetPolyShape();
+            poly.RemoveAllContours();
+            poly.NewOutline();
+            poly.Append( c1 );
+            poly.Append( c2 );
+            poly.Append( c3 );
+            poly.Append( c4 );
+
+            EDA_SHAPE::SetStart( c1 );
+            EDA_SHAPE::SetEnd( c3 );
+        }
+
+        return;
+    }
+
+    EDA_SHAPE::SetStart( xform.Apply( m_libStart ) );
+    EDA_SHAPE::SetEnd( xform.Apply( m_libEnd ) );
+
+    if( m_libShape == SHAPE_T::BEZIER )
+    {
+        EDA_SHAPE::SetBezierC1( xform.Apply( m_libBezierC1 ) );
+        EDA_SHAPE::SetBezierC2( xform.Apply( m_libBezierC2 ) );
+        RebuildBezierToSegmentsPointsList( getMaxError() );
+    }
+
+    if( m_libShape == SHAPE_T::POLY )
+    {
+        SHAPE_POLY_SET& poly = GetPolyShape();
+        poly = m_libPoly;
+
+        for( auto it = poly.IterateWithHoles(); it; it++ )
+            poly.SetVertex( it.GetIndex(), xform.Apply( *it ) );
+    }
+}
+
+
+VECTOR2I PCB_SHAPE::GetLibraryArcMid() const
+{
+    if( m_libShape == SHAPE_T::ARC )
+        return m_libArcMid;
+
+    if( const FOOTPRINT* fp = transformFp() )
+        return fp->GetTransform().InverseApply( GetArcMid() );
+
+    return GetArcMid();
+}
+
+
+VECTOR2I PCB_SHAPE::GetLibraryBezierC1() const
+{
+    if( const FOOTPRINT* fp = transformFp() )
+        return fp->GetTransform().InverseApply( GetBezierC1() );
+
+    return GetBezierC1();
+}
+
+
+VECTOR2I PCB_SHAPE::GetLibraryBezierC2() const
+{
+    if( const FOOTPRINT* fp = transformFp() )
+        return fp->GetTransform().InverseApply( GetBezierC2() );
+
+    return GetBezierC2();
+}
+
+
+SHAPE_POLY_SET PCB_SHAPE::GetLibraryPolyShape() const
+{
+    SHAPE_POLY_SET poly = GetPolyShape();
+
+    if( const FOOTPRINT* fp = transformFp() )
+    {
+        const TRANSFORM_TRS& xform = fp->GetTransform();
+
+        for( auto it = poly.IterateWithHoles(); it; it++ )
+            poly.SetVertex( it.GetIndex(), xform.InverseApply( *it ) );
+    }
+
+    return poly;
+}
+
+
+void PCB_SHAPE::SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
+{
+    EDA_SHAPE::SetArcGeometry( aStart, aMid, aEnd );
+    syncLibCoords();
+}
+
+
+void PCB_SHAPE::SetBezierC1( const VECTOR2I& aPt )
+{
+    EDA_SHAPE::SetBezierC1( aPt );
+    syncLibCoords();
+}
+
+
+void PCB_SHAPE::SetBezierC2( const VECTOR2I& aPt )
+{
+    EDA_SHAPE::SetBezierC2( aPt );
+    syncLibCoords();
+}
+
+
+void PCB_SHAPE::SetPolyShape( const SHAPE_POLY_SET& aShape )
+{
+    EDA_SHAPE::SetPolyShape( aShape );
+    syncLibCoords();
+}
+
+
+void PCB_SHAPE::SetEllipseCenter( const VECTOR2I& aPt )
+{
+    EDA_SHAPE::SetEllipseCenter( aPt );
+    syncLibCoords();
+}
+
+
+void PCB_SHAPE::SetEllipseMajorRadius( int aR )
+{
+    EDA_SHAPE::SetEllipseMajorRadius( aR );
+    syncLibCoords();
+}
+
+
+void PCB_SHAPE::SetEllipseMinorRadius( int aR )
+{
+    EDA_SHAPE::SetEllipseMinorRadius( aR );
+    syncLibCoords();
+}
+
+
+void PCB_SHAPE::SetEllipseRotation( const EDA_ANGLE& aA )
+{
+    EDA_SHAPE::SetEllipseRotation( aA );
+    syncLibCoords();
+}
+
+
+void PCB_SHAPE::SetEllipseStartAngle( const EDA_ANGLE& aA )
+{
+    EDA_SHAPE::SetEllipseStartAngle( aA );
+    syncLibCoords();
+}
+
+
+void PCB_SHAPE::SetEllipseEndAngle( const EDA_ANGLE& aA )
+{
+    EDA_SHAPE::SetEllipseEndAngle( aA );
+    syncLibCoords();
+}
+
+
+void PCB_SHAPE::syncLibCoords()
+{
+    const FOOTPRINT* fp = transformFp();
+
+    if( m_shape == SHAPE_T::ELLIPSE || m_shape == SHAPE_T::ELLIPSE_ARC )
+    {
+        if( fp )
+        {
+            const TRANSFORM_TRS& xform = fp->GetTransform();
+
+            m_libEllipseCenter = xform.InverseApply( GetEllipseCenter() );
+
+            if( xform.IsUniformScale() )
+            {
+                double invScale = 1.0 / std::abs( xform.GetScaleX() );
+                m_libEllipseMajorRadius = KiROUND( GetEllipseMajorRadius() * invScale );
+                m_libEllipseMinorRadius = KiROUND( GetEllipseMinorRadius() * invScale );
+                m_libEllipseRotation = GetEllipseRotation() + xform.GetRotate();
+                m_libEllipseStartAngle = GetEllipseStartAngle();
+                m_libEllipseEndAngle = GetEllipseEndAngle();
+            }
+        }
+        else
+        {
+            m_libEllipseCenter = GetEllipseCenter();
+            m_libEllipseMajorRadius = GetEllipseMajorRadius();
+            m_libEllipseMinorRadius = GetEllipseMinorRadius();
+            m_libEllipseRotation = GetEllipseRotation();
+            m_libEllipseStartAngle = GetEllipseStartAngle();
+            m_libEllipseEndAngle = GetEllipseEndAngle();
+        }
+
+        return;
+    }
+
+    if( m_shape == SHAPE_T::POLY )
+    {
+        if( fp )
+        {
+            const TRANSFORM_TRS& xform = fp->GetTransform();
+
+            m_libPoly = GetPolyShape();
+
+            for( auto it = m_libPoly.IterateWithHoles(); it; it++ )
+                m_libPoly.SetVertex( it.GetIndex(), xform.InverseApply( *it ) );
+        }
+        else
+        {
+            m_libPoly = GetPolyShape();
+        }
+
+        return;
+    }
+
+    if( fp )
+    {
+        m_libStart = fp->GetTransform().InverseApply( GetStart() );
+        m_libEnd = fp->GetTransform().InverseApply( GetEnd() );
+
+        if( m_shape == SHAPE_T::ARC )
+            m_libArcMid = fp->GetTransform().InverseApply( GetArcMid() );
+
+        if( m_shape == SHAPE_T::BEZIER )
+        {
+            m_libBezierC1 = fp->GetTransform().InverseApply( GetBezierC1() );
+            m_libBezierC2 = fp->GetTransform().InverseApply( GetBezierC2() );
+        }
+    }
+    else
+    {
+        m_libStart = GetStart();
+        m_libEnd = GetEnd();
+
+        if( m_shape == SHAPE_T::ARC )
+            m_libArcMid = GetArcMid();
+
+        if( m_shape == SHAPE_T::BEZIER )
+        {
+            m_libBezierC1 = GetBezierC1();
+            m_libBezierC2 = GetBezierC2();
+        }
+    }
 }
 
 
@@ -1024,7 +1719,6 @@ static struct PCB_SHAPE_DESC
 
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ), layerProperty );
 
-        // Polygons and ellipses have Position properties (first vertex / center).
         auto isPolygonOrEllipse = []( INSPECTABLE* aItem ) -> bool
         {
             if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )
@@ -1043,8 +1737,6 @@ static struct PCB_SHAPE_DESC
         propMgr.Mask( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Color" ) );
         propMgr.Mask( TYPE_HASH( PCB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Fill Color" ) );
 
-        // BEZIER curves and ELLIPTICAL_ARC are not closed shapes, and fill
-        // is not supported in board editor, only in schematic editor.
         auto isNotBezierOrEllipseArc = []( INSPECTABLE* aItem ) -> bool
         {
             if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aItem ) )

@@ -311,8 +311,66 @@ void PCB_TABLE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
+void PCB_TABLE::OnFootprintTransformed()
+{
+    for( PCB_TABLECELL* cell : m_cells )
+        cell->OnFootprintTransformed();
+}
+
+
 void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
+    // FP-child path keeps cells in lib frame, the standalone path below
+    // would corrupt them because FOOTPRINT::Flip zeroes the FP rotation.
+    if( GetParentFootprint() )
+    {
+        for( PCB_TABLECELL* cell : m_cells )
+            cell->Flip( aCentre, aFlipDirection );
+
+        std::vector<PCB_TABLECELL*> oldCells = m_cells;
+
+        if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+        {
+            int rowOffset = 0;
+
+            for( int row = 0; row < GetRowCount(); ++row )
+            {
+                for( int col = 0; col < GetColCount(); ++col )
+                    m_cells[rowOffset + col] = oldCells[rowOffset + GetColCount() - 1 - col];
+
+                rowOffset += GetColCount();
+            }
+
+            std::map<int, int> newColWidths;
+
+            for( int col = 0; col < GetColCount(); ++col )
+                newColWidths[col] = m_colWidths[GetColCount() - 1 - col];
+
+            m_colWidths = std::move( newColWidths );
+        }
+        else // TOP_BOTTOM
+        {
+            for( int row = 0; row < GetRowCount(); ++row )
+            {
+                for( int col = 0; col < GetColCount(); ++col )
+                {
+                    int oldRow = GetRowCount() - 1 - row;
+                    m_cells[row * GetColCount() + col] = oldCells[oldRow * GetColCount() + col];
+                }
+            }
+
+            std::map<int, int> newRowHeights;
+
+            for( int row = 0; row < GetRowCount(); ++row )
+                newRowHeights[row] = m_rowHeights[GetRowCount() - 1 - row];
+
+            m_rowHeights = std::move( newRowHeights );
+        }
+
+        SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+        return;
+    }
+
     BOX2I originalBBox = GetBoundingBox();
 
     VECTOR2I targetPos;

@@ -46,7 +46,8 @@
 PCB_TEXTBOX::PCB_TEXTBOX( BOARD_ITEM* aParent, KICAD_T aType ) :
         PCB_SHAPE( aParent, aType, SHAPE_T::RECTANGLE ),
         EDA_TEXT( pcbIUScale ),
-        m_borderEnabled( true )
+        m_borderEnabled( true ),
+        m_libTextAngle( ANGLE_0 )
 {
     SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
@@ -219,6 +220,49 @@ VECTOR2I PCB_TEXTBOX::GetMinSize() const
 }
 
 
+void PCB_TEXTBOX::SetShape( SHAPE_T aShape )
+{
+    EDA_SHAPE::SetShape( aShape );
+}
+
+
+std::vector<VECTOR2I> PCB_TEXTBOX::GetCorners() const
+{
+    return GetCornersInSequence( GetDrawRotation() );
+}
+
+
+std::vector<VECTOR2I> PCB_TEXTBOX::GetCornersInSequence( EDA_ANGLE angle ) const
+{
+    if( m_shape != SHAPE_T::RECTANGLE )
+        return EDA_SHAPE::GetCornersInSequence( angle );
+
+    const int left = std::min( m_start.x, m_end.x );
+    const int right = std::max( m_start.x, m_end.x );
+    const int top = std::min( m_start.y, m_end.y );
+    const int bottom = std::max( m_start.y, m_end.y );
+
+    const VECTOR2I center( ( left + right ) / 2, ( top + bottom ) / 2 );
+
+    std::vector<VECTOR2I> pts = {
+        VECTOR2I( left, top ),
+        VECTOR2I( right, top ),
+        VECTOR2I( right, bottom ),
+        VECTOR2I( left, bottom ),
+    };
+
+    angle.Normalize();
+
+    if( !angle.IsZero() )
+    {
+        for( VECTOR2I& p : pts )
+            RotatePoint( p, center, angle );
+    }
+
+    return pts;
+}
+
+
 VECTOR2I PCB_TEXTBOX::GetTopLeft() const
 {
     EDA_ANGLE rotation = GetDrawRotation();
@@ -290,6 +334,15 @@ void PCB_TEXTBOX::SetRight( int aVal )
         SetStartX( aVal );
     else
         SetEndX( aVal );
+}
+
+
+EDA_ANGLE PCB_TEXTBOX::GetTextAngle() const
+{
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        return m_libTextAngle + fp->GetOrientation();
+
+    return m_libTextAngle;
 }
 
 
@@ -522,36 +575,83 @@ void PCB_TEXTBOX::Move( const VECTOR2I& aMoveVector )
 }
 
 
+VECTOR2I PCB_TEXTBOX::GetTextSize() const
+{
+    VECTOR2I libSize = EDA_TEXT::GetTextSize();
+
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+    {
+        const TRANSFORM_TRS& xf = fp->GetTransform();
+        return { KiROUND( libSize.x * std::abs( xf.GetScaleX() ) ), KiROUND( libSize.y * std::abs( xf.GetScaleY() ) ) };
+    }
+
+    return libSize;
+}
+
+
+void PCB_TEXTBOX::SetTextSize( VECTOR2I aNewSize, bool aEnforceMinTextSize )
+{
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+    {
+        const TRANSFORM_TRS& xf = fp->GetTransform();
+        aNewSize = { KiROUND( aNewSize.x / std::abs( xf.GetScaleX() ) ),
+                     KiROUND( aNewSize.y / std::abs( xf.GetScaleY() ) ) };
+    }
+
+    EDA_TEXT::SetTextSize( aNewSize, aEnforceMinTextSize );
+}
+
+
+int PCB_TEXTBOX::GetTextThickness() const
+{
+    int libThickness = EDA_TEXT::GetTextThickness();
+
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+    {
+        const TRANSFORM_TRS& xf = fp->GetTransform();
+        const double         factor = ( std::abs( xf.GetScaleX() ) + std::abs( xf.GetScaleY() ) ) * 0.5;
+        return KiROUND( libThickness * factor );
+    }
+
+    return libThickness;
+}
+
+
+void PCB_TEXTBOX::SetTextThickness( int aWidth )
+{
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+    {
+        const TRANSFORM_TRS& xf = fp->GetTransform();
+        const double         factor = ( std::abs( xf.GetScaleX() ) + std::abs( xf.GetScaleY() ) ) * 0.5;
+        aWidth = KiROUND( aWidth / factor );
+    }
+
+    EDA_TEXT::SetTextThickness( aWidth );
+}
+
+
 void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
-    PCB_SHAPE::Rotate( aRotCentre, aAngle );
-    EDA_TEXT::SetTextAngle( ( GetTextAngle() + aAngle ).Normalize() );
+    // Slide the axis-aligned box, rotation lives in the text angle.
+    const VECTOR2D oldCenter( ( m_start.x + m_end.x ) * 0.5, ( m_start.y + m_end.y ) * 0.5 );
+    VECTOR2D       newCenter = oldCenter;
+    RotatePoint( newCenter, VECTOR2D( aRotCentre.x, aRotCentre.y ), aAngle );
 
-    if( GetTextAngle().IsCardinal() && GetShape() != SHAPE_T::RECTANGLE )
-    {
-        // To convert the polygon to its equivalent rectangle, we use GetCornersInSequence( drawAngle )
-        // but this method uses the polygon bounding box.
-        // set the line thickness to 0 to get the actual rectangle corner
-        int lineWidth = GetWidth();
-        SetWidth( 0 );
-        EDA_ANGLE             drawAngle = GetDrawRotation();
-        std::vector<VECTOR2I> corners = GetCornersInSequence( drawAngle );
-        SetWidth( lineWidth );
-        VECTOR2I  diag = corners[2] - corners[0];
-        EDA_ANGLE angle = GetTextAngle();
+    const VECTOR2I delta( KiROUND( newCenter.x - oldCenter.x ), KiROUND( newCenter.y - oldCenter.y ) );
+    EDA_SHAPE::SetStart( m_start + delta );
+    EDA_SHAPE::SetEnd( m_end + delta );
 
-        SetShape( SHAPE_T::RECTANGLE );
-        SetStart( corners[0] );
+    syncLibCoords();
 
-        if( angle == ANGLE_90 )
-            SetEnd( VECTOR2I( corners[0].x + abs( diag.x ), corners[0].y - abs( diag.y ) ) );
-        else if( angle == ANGLE_180 )
-            SetEnd( VECTOR2I( corners[0].x - abs( diag.x ), corners[0].y - abs( diag.y ) ) );
-        else if( angle == ANGLE_270 )
-            SetEnd( VECTOR2I( corners[0].x - abs( diag.x ), corners[0].y + abs( diag.y ) ) );
-        else
-            SetEnd( VECTOR2I( corners[0].x + abs( diag.x ), corners[0].y + abs( diag.y ) ) );
-    }
+    EDA_ANGLE newAbs = ( GetTextAngle() + aAngle ).Normalize();
+    EDA_TEXT::SetTextAngle( newAbs );
+
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        m_libTextAngle = newAbs - fp->GetOrientation();
+    else
+        m_libTextAngle = newAbs;
+
+    m_libTextAngle.Normalize();
 }
 
 
@@ -561,9 +661,12 @@ void PCB_TEXTBOX::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection
     PCB_SHAPE::Mirror( aCentre, aFlipDirection );
 
     if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
-        EDA_TEXT::SetTextAngle( ANGLE_180 - GetTextAngle() );
+        m_libTextAngle = ANGLE_180 - m_libTextAngle;
     else
-        EDA_TEXT::SetTextAngle( -GetTextAngle() );
+        m_libTextAngle = -m_libTextAngle;
+
+    m_libTextAngle.Normalize();
+    EDA_TEXT::SetTextAngle( GetTextAngle() );
 }
 
 
@@ -572,12 +675,52 @@ void PCB_TEXTBOX::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     PCB_SHAPE::Flip( aCentre, aFlipDirection );
 
     if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
-        EDA_TEXT::SetTextAngle( -GetTextAngle() );
+        m_libTextAngle = -m_libTextAngle;
     else
-        EDA_TEXT::SetTextAngle( ANGLE_180 - GetTextAngle() );
+        m_libTextAngle = ANGLE_180 - m_libTextAngle;
+
+    m_libTextAngle.Normalize();
+    EDA_TEXT::SetTextAngle( GetTextAngle() );
 
     if( IsSideSpecific() )
         SetMirrored( !IsMirrored() );
+}
+
+
+void PCB_TEXTBOX::OnFootprintTransformed()
+{
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+    {
+        const TRANSFORM_TRS& xform = fp->GetTransform();
+        m_shape = SHAPE_T::RECTANGLE;
+
+        const VECTOR2I libCenter( ( m_libStart.x + m_libEnd.x ) / 2, ( m_libStart.y + m_libEnd.y ) / 2 );
+        const int      libHalfW = std::abs( m_libEnd.x - m_libStart.x ) / 2;
+        const int      libHalfH = std::abs( m_libEnd.y - m_libStart.y ) / 2;
+
+        const VECTOR2I newCenter = xform.Apply( libCenter );
+        const int      newHalfW = std::abs( KiROUND( libHalfW * xform.GetScaleX() ) );
+        const int      newHalfH = std::abs( KiROUND( libHalfH * xform.GetScaleY() ) );
+
+        EDA_SHAPE::SetStart( VECTOR2I( newCenter.x - newHalfW, newCenter.y - newHalfH ) );
+        EDA_SHAPE::SetEnd( VECTOR2I( newCenter.x + newHalfW, newCenter.y + newHalfH ) );
+    }
+    else
+    {
+        PCB_SHAPE::OnFootprintTransformed();
+    }
+
+    EDA_TEXT::SetTextAngle( GetTextAngle() );
+    ClearRenderCache();
+    ClearBoundingBoxCache();
+}
+
+
+void PCB_TEXTBOX::OnFootprintRescaled( double aRatioX, double aRatioY, double aLinearFactor, const VECTOR2I& aAnchor,
+                                       const EDA_ANGLE& aParentRotate )
+{
+    PCB_SHAPE::OnFootprintRescaled( aRatioX, aRatioY, aLinearFactor, aAnchor, aParentRotate );
+    OnFootprintTransformed();
 }
 
 

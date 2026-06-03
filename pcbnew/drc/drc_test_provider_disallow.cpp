@@ -126,7 +126,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     // Collisions include touching, so we need to deflate outline by enough to
                     // exclude it.  This is particularly important for detecting copper fills as
                     // they will be exactly touching along the entire exclusion border.
-                    SHAPE_POLY_SET areaPoly = ruleArea->Outline()->CloneDropTriangulation();
+                    SHAPE_POLY_SET areaPoly = ruleArea->GetBoardOutline();
                     areaPoly.Fracture();
                     areaPoly.Deflate( epsilon, CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
 
@@ -273,8 +273,9 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                                     int                    dummyActual;
                                     VECTOR2I               pos;
 
-                                    if( static_cast<ZONE*>( other )->Outline()->Collide( shape.get(), 0, &dummyActual,
-                                                                                         &pos ) )
+                                    SHAPE_POLY_SET zoneOutline = static_cast<ZONE*>( other )->GetBoardOutline();
+
+                                    if( zoneOutline.Collide( shape.get(), 0, &dummyActual, &pos ) )
                                     {
                                         std::shared_ptr<DRC_ITEM> drcItem =
                                                 DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
@@ -324,7 +325,8 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                                                 item->GetEffectiveShape( layer );
                                         int dummyActual;
 
-                                        keepout->Outline()->Collide( shape.get(), 0, &dummyActual, &pos );
+                                        SHAPE_POLY_SET keepoutOutline = keepout->GetBoardOutline();
+                                        keepoutOutline.Collide( shape.get(), 0, &dummyActual, &pos );
                                     }
                                 }
 

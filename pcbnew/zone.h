@@ -420,6 +420,10 @@ public:
 
     void SetOutline( SHAPE_POLY_SET* aOutline ) { m_Poly = aOutline; }
 
+    SHAPE_POLY_SET GetLibraryOutline() const;
+
+    SHAPE_POLY_SET GetBoardOutline() const;
+
     // @copydoc BOARD_ITEM::GetEffectiveShape
     virtual std::shared_ptr<SHAPE>
     GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
@@ -579,6 +583,15 @@ public:
      * @param aFlipDirection is the direction of the flip.
      */
     virtual void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
+
+    void OnFootprintRescaled( double aRatioX, double aRatioY, double aLinearFactor, const VECTOR2I& aAnchor,
+                              const EDA_ANGLE& aParentRotate ) override;
+
+    void OnFootprintTransformed() override
+    {
+        SetNeedRefill( true );
+        UnFill();
+    }
 
     /**
      * Mirror the outlines relative to a given horizontal axis the layer is not changed.
@@ -861,7 +874,7 @@ public:
      */
     void HatchBorder();
 
-    const std::vector<SEG>& GetHatchLines() const { return m_borderHatchLines; }
+    std::vector<SEG> GetHatchLines() const;
 
     /**
      * Build the hash value of m_FilledPolysList, and store it internally in m_filledPolysHash.

@@ -26,6 +26,7 @@
 #include "layer_ids.h"
 #include <cerrno>
 #include <charconv>
+#include <cmath>
 #include <confirm.h>
 #include <macros.h>
 #include <fmt/format.h>
@@ -3539,6 +3540,13 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
     STROKE_PARAMS              stroke( 0, LINE_STYLE::SOLID );
     std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( aParent );
 
+    VECTOR2I  ellipseCenter( 0, 0 );
+    int       ellipseMajor = 0;
+    int       ellipseMinor = 0;
+    EDA_ANGLE ellipseRotation = ANGLE_0;
+    EDA_ANGLE ellipseStart = ANGLE_0;
+    EDA_ANGLE ellipseEnd = ANGLE_0;
+
     switch( CurTok() )
     {
     case T_gr_arc:
@@ -3921,34 +3929,33 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
             break;
 
         case T_center:
-            pt.x = parseBoardUnits( "X coordinate" );
-            pt.y = parseBoardUnits( "Y coordinate" );
-            shape->SetEllipseCenter( pt );
+            ellipseCenter.x = parseBoardUnits( "X coordinate" );
+            ellipseCenter.y = parseBoardUnits( "Y coordinate" );
             NeedRIGHT();
             break;
 
         case T_major_radius:
-            shape->SetEllipseMajorRadius( parseBoardUnits( "major radius" ) );
+            ellipseMajor = parseBoardUnits( "major radius" );
             NeedRIGHT();
             break;
 
         case T_minor_radius:
-            shape->SetEllipseMinorRadius( parseBoardUnits( "minor radius" ) );
+            ellipseMinor = parseBoardUnits( "minor radius" );
             NeedRIGHT();
             break;
 
         case T_rotation_angle:
-            shape->SetEllipseRotation( EDA_ANGLE( parseDouble( "rotation angle" ), DEGREES_T ) );
+            ellipseRotation = EDA_ANGLE( parseDouble( "rotation angle" ), DEGREES_T );
             NeedRIGHT();
             break;
 
         case T_start_angle:
-            shape->SetEllipseStartAngle( EDA_ANGLE( parseDouble( "start angle" ), DEGREES_T ) );
+            ellipseStart = EDA_ANGLE( parseDouble( "start angle" ), DEGREES_T );
             NeedRIGHT();
             break;
 
         case T_end_angle:
-            shape->SetEllipseEndAngle( EDA_ANGLE( parseDouble( "end angle" ), DEGREES_T ) );
+            ellipseEnd = EDA_ANGLE( parseDouble( "end angle" ), DEGREES_T );
             NeedRIGHT();
             break;
 
@@ -3984,10 +3991,29 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
 
     shape->SetStroke( stroke );
 
-    if( FOOTPRINT* parentFP = shape->GetParentFootprint() )
+    if( shape->GetShape() == SHAPE_T::ELLIPSE || shape->GetShape() == SHAPE_T::ELLIPSE_ARC )
     {
-        shape->Rotate( { 0, 0 }, parentFP->GetOrientation() );
-        shape->Move( parentFP->GetPosition() );
+        shape->SetLibraryEllipse( ellipseCenter, ellipseMajor, ellipseMinor, ellipseRotation, ellipseStart,
+                                  ellipseEnd );
+
+        if( shape->GetParentFootprint() )
+            shape->RebakeFromLib();
+    }
+    else if( shape->GetParentFootprint() )
+    {
+        const VECTOR2I libStart = shape->GetStart();
+        const VECTOR2I libEnd = shape->GetEnd();
+        const VECTOR2I libArcMid = shape->GetShape() == SHAPE_T::ARC ? shape->GetArcMid() : VECTOR2I( 0, 0 );
+
+        shape->OverrideLibCoords( libStart, libEnd, libArcMid );
+
+        if( shape->GetShape() == SHAPE_T::BEZIER )
+            shape->OverrideLibBezier( shape->GetBezierC1(), shape->GetBezierC2() );
+
+        if( shape->GetShape() == SHAPE_T::POLY )
+            shape->OverrideLibPoly( shape->GetPolyShape() );
+
+        shape->RebakeFromLib();
     }
 
     return shape.release();
@@ -4198,7 +4224,11 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText, PCB_TEXT
             hasPos = true;
             pt.x = parseBoardUnits( "X coordinate" );
             pt.y = parseBoardUnits( "Y coordinate" );
-            aText->SetTextPos( pt );
+
+            if( parentFP && m_requiredVersion >= FIRST_FP_AFFINE_TRANSFORM )
+                aText->SetLibTextPos( pt );
+            else
+                aText->SetTextPos( pt );
             token = NextTok();
 
             if( CurTok() == T_NUMBER )
@@ -4294,21 +4324,18 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText, PCB_TEXT
     if( !hasAngle )
         aText->SetTextAngle( ANGLE_0 );
 
-    if( parentFP && !dynamic_cast<PCB_DIMENSION_BASE*>( aBaseText ) )
+    if( parentFP && !dynamic_cast<PCB_DIMENSION_BASE*>( aBaseText ) && m_requiredVersion < FIRST_FP_AFFINE_TRANSFORM )
     {
-        // make PCB_TEXT rotation relative to the parent footprint.
-        // It was read as absolute rotation from file
-        // Note: this is not rue for PCB_DIMENSION items that use the board
-        // coordinates
+        // Legacy files stored an absolute board-frame angle and an FP-relative
+        // position with the parent FP transform un-applied. Rotate and move
+        // the text into board coordinates.
         aText->SetTextAngle( aText->GetTextAngle() - parentFP->GetOrientation() );
-
-        // Move and rotate the text to its board coordinates
         aText->Rotate( { 0, 0 }, parentFP->GetOrientation() );
 
         // Only move offset from parent position if we read a position from the file.
         // These positions are relative to the parent footprint. If we don't have a position
         // then the text defaults to the parent position and moving again will double it.
-        if (hasPos)
+        if( hasPos )
             aText->Move( parentFP->GetPosition() );
     }
 }
@@ -4457,6 +4484,30 @@ PCB_BARCODE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_BARCODE( BOARD_ITEM* aParent )
 }
 
 
+/**
+ * Lift disk-parsed values into PCB_TEXTBOX lib storage for new format files.
+ * Legacy files use a separate compat path in parseTextBoxContent.
+ */
+void PCB_IO_KICAD_SEXPR_PARSER::bakeTextBoxLib( PCB_TEXTBOX* aTextBox )
+{
+    if( m_requiredVersion < FIRST_FP_AFFINE_TRANSFORM )
+        return;
+
+    aTextBox->SetLibTextAngle( aTextBox->EDA_TEXT::GetTextAngle() );
+
+    if( aTextBox->GetShape() == SHAPE_T::RECTANGLE )
+        aTextBox->OverrideLibCoords( aTextBox->GetStart(), aTextBox->GetEnd() );
+    else if( aTextBox->GetShape() == SHAPE_T::POLY )
+        aTextBox->OverrideLibPoly( aTextBox->GetPolyShape() );
+
+    if( aTextBox->GetParentFootprint() )
+        aTextBox->OnFootprintTransformed();
+
+    // Sync the EDA_TEXT angle cache to the absolute board angle.
+    aTextBox->EDA_TEXT::SetTextAngle( aTextBox->GetTextAngle() );
+}
+
+
 PCB_TEXTBOX* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
 {
     wxCHECK_MSG( CurTok() == T_gr_text_box || CurTok() == T_fp_text_box, nullptr,
@@ -4465,6 +4516,7 @@ PCB_TEXTBOX* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
     std::unique_ptr<PCB_TEXTBOX> textbox = std::make_unique<PCB_TEXTBOX>( aParent );
 
     parseTextBoxContent( textbox.get() );
+    bakeTextBoxLib( textbox.get() );
 
     return textbox.release();
 }
@@ -4478,6 +4530,7 @@ PCB_TABLECELL* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLECELL( BOARD_ITEM* aParen
     std::unique_ptr<PCB_TABLECELL> cell = std::make_unique<PCB_TABLECELL>( aParent );
 
     parseTextBoxContent( cell.get() );
+    bakeTextBoxLib( cell.get() );
 
     return cell.release();
 }
@@ -4653,8 +4706,13 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTextBoxContent( PCB_TEXTBOX* aTextBox )
 
     if( FOOTPRINT* parentFP = aTextBox->GetParentFootprint() )
     {
-        aTextBox->Rotate( { 0, 0 }, parentFP->GetOrientation() );
-        aTextBox->Move( parentFP->GetPosition() );
+        // Legacy files stored FP-child coords in un-applied board frame.
+        // New format files use lib frame and don't need this manual reapply.
+        if( m_requiredVersion < FIRST_FP_AFFINE_TRANSFORM )
+        {
+            aTextBox->Rotate( { 0, 0 }, parentFP->GetOrientation() );
+            aTextBox->Move( parentFP->GetPosition() );
+        }
     }
 }
 
@@ -5323,6 +5381,8 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
     T        token;
     LIB_ID   fpid;
     int      attributes = 0;
+    double   parsedScaleX = 1.0;
+    double   parsedScaleY = 1.0;
 
     std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( m_board );
 
@@ -5453,6 +5513,57 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             }
 
             break;
+
+        case T_transform:
+        {
+            VECTOR2I  trsTranslate( 0, 0 );
+            EDA_ANGLE trsRotate = ANGLE_0;
+
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_translate:
+                    trsTranslate.x = parseBoardUnits( "translate X" );
+                    trsTranslate.y = parseBoardUnits( "translate Y" );
+                    NeedRIGHT();
+                    break;
+
+                case T_rotate:
+                    trsRotate = EDA_ANGLE( parseDouble( "rotate angle" ), DEGREES_T );
+                    NeedRIGHT();
+                    break;
+
+                case T_scale:
+                    parsedScaleX = parseDouble( "scale X" );
+                    parsedScaleY = parseDouble( "scale Y" );
+
+                    // Guard against corrupt files: a zero, negative, or non-finite
+                    // scale would make the footprint transform degenerate.
+                    if( !std::isfinite( parsedScaleX ) || parsedScaleX <= 0.0 )
+                        parsedScaleX = 1.0;
+
+                    if( !std::isfinite( parsedScaleY ) || parsedScaleY <= 0.0 )
+                        parsedScaleY = 1.0;
+
+                    NeedRIGHT();
+                    break;
+
+                default:
+                    Expecting( "translate, rotate, or scale" );
+                }
+            }
+
+            footprint->SetPosition( trsTranslate );
+            footprint->SetOrientation( trsRotate );
+            footprint->SetTransformScale( parsedScaleX, parsedScaleY );
+            break;
+        }
 
         case T_descr:
             NeedSYMBOLorNUMBER(); // some symbols can be 0508, so a number is also a symbol here
@@ -6092,6 +6203,16 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                 break;
             }
 
+            // Legacy footprint zone outlines were in board frame. Convert to lib.
+            if( m_requiredVersion < FIRST_FP_AFFINE_TRANSFORM && zone->Outline() )
+            {
+                const TRANSFORM_TRS& xform = footprint->GetTransform();
+                SHAPE_POLY_SET&      poly = *zone->Outline();
+
+                for( auto it = poly.IterateWithHoles(); it; it++ )
+                    poly.SetVertex( it.GetIndex(), xform.InverseApply( *it ) );
+            }
+
             footprint->Add( zone, ADD_MODE::APPEND, true );
             break;
         }
@@ -6398,7 +6519,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
         case T_size:
             sz.x = parseBoardUnits( "width value" );
             sz.y = parseBoardUnits( "height value" );
-            pad->SetSize( PADSTACK::ALL_LAYERS, sz );
+            pad->SetLibSize( PADSTACK::ALL_LAYERS, sz );
             NeedRIGHT();
             break;
 
@@ -6408,12 +6529,19 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             pad->SetFPRelativePosition( pt );
             token = NextTok();
 
+            // The pad angle in the file is a board frame absolute value. If it is
+            // missing, the pad is axis aligned regardless of the parent footprint
+            // orientation, matching the pre affine transform behavior.
             if( token == T_NUMBER )
             {
                 pad->SetOrientation( EDA_ANGLE( parseDouble(), DEGREES_T ) );
                 NeedRIGHT();
             }
-            else if( token != T_RIGHT )
+            else if( token == T_RIGHT )
+            {
+                pad->SetOrientation( ANGLE_0 );
+            }
+            else
             {
                 Expecting( ") or angle value" );
             }
@@ -6465,7 +6593,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                 case T_offset:
                     pt.x = parseBoardUnits( "drill offset x" );
                     pt.y = parseBoardUnits( "drill offset y" );
-                    pad->SetOffset( PADSTACK::ALL_LAYERS, pt );
+                    pad->SetLibOffset( PADSTACK::ALL_LAYERS, pt );
                     NeedRIGHT();
                     break;
 
@@ -6479,9 +6607,9 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
             // through hole pad.  Wouldn't a though hole pad with no drill be a surface mount
             // pad (or a conn pad which is a smd pad with no solder paste)?
             if( pad->GetAttribute() != PAD_ATTRIB::SMD && pad->GetAttribute() != PAD_ATTRIB::CONN )
-                pad->SetDrillSize( drillSize );
+                pad->SetLibDrillSize( drillSize );
             else
-                pad->SetDrillSize( VECTOR2I( 0, 0 ) );
+                pad->SetLibDrillSize( VECTOR2I( 0, 0 ) );
 
             break;
         }
@@ -7191,7 +7319,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
             }
 
             // Reset layer properties to default that are omitted when default in the formatter
-            aPad->SetOffset( curLayer, VECTOR2I( 0, 0 ) );
+            aPad->SetLibOffset( curLayer, VECTOR2I( 0, 0 ) );
             aPad->SetDelta( curLayer, VECTOR2I( 0, 0 ) );
 
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
@@ -7246,7 +7374,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
                     VECTOR2I sz;
                     sz.x = parseBoardUnits( "width value" );
                     sz.y = parseBoardUnits( "height value" );
-                    aPad->SetSize( curLayer, sz );
+                    aPad->SetLibSize( curLayer, sz );
                     NeedRIGHT();
                     break;
                 }
@@ -7256,7 +7384,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePadstack( PAD* aPad )
                     VECTOR2I pt;
                     pt.x = parseBoardUnits( "drill offset x" );
                     pt.y = parseBoardUnits( "drill offset y" );
-                    aPad->SetOffset( curLayer, pt );
+                    aPad->SetLibOffset( curLayer, pt );
                     NeedRIGHT();
                     break;
                 }

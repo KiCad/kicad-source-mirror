@@ -115,11 +115,12 @@ std::vector<ZONE*> getOverlappingZones( BOARD* aBoard, ZONE* aZone )
             continue;
 
         // Check edge collision and containment (one zone entirely inside another)
-        if( aZone->Outline()->Collide( candidate->Outline() )
-            || ( candidate->Outline()->TotalVertices() > 0
-                 && aZone->Outline()->Contains( candidate->Outline()->CVertex( 0 ) ) )
-            || ( aZone->Outline()->TotalVertices() > 0
-                 && candidate->Outline()->Contains( aZone->Outline()->CVertex( 0 ) ) ) )
+        SHAPE_POLY_SET aOutline = aZone->GetBoardOutline();
+        SHAPE_POLY_SET candidateOutline = candidate->GetBoardOutline();
+
+        if( aOutline.Collide( &candidateOutline )
+            || ( candidateOutline.TotalVertices() > 0 && aOutline.Contains( candidateOutline.CVertex( 0 ) ) )
+            || ( aOutline.TotalVertices() > 0 && candidateOutline.Contains( aOutline.CVertex( 0 ) ) ) )
         {
             overlapping.push_back( candidate );
         }

@@ -381,29 +381,19 @@ std::shared_ptr<SHAPE_SEGMENT> BOARD_ITEM::GetEffectiveHoleShape() const
 
 VECTOR2I BOARD_ITEM::GetFPRelativePosition() const
 {
-    VECTOR2I pos = GetPosition();
-
     if( FOOTPRINT* parentFP = GetParentFootprint() )
-    {
-        pos -= parentFP->GetPosition();
-        RotatePoint( pos, -parentFP->GetOrientation() );
-    }
+        return parentFP->GetTransform().InverseApply( GetPosition() );
 
-    return pos;
+    return GetPosition();
 }
 
 
 void BOARD_ITEM::SetFPRelativePosition( const VECTOR2I& aPos )
 {
-    VECTOR2I pos( aPos );
-
     if( FOOTPRINT* parentFP = GetParentFootprint() )
-    {
-        RotatePoint( pos, parentFP->GetOrientation() );
-        pos += parentFP->GetPosition();
-    }
-
-    SetPosition( pos );
+        SetPosition( parentFP->GetTransform().Apply( aPos ) );
+    else
+        SetPosition( aPos );
 }
 
 

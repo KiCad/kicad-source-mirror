@@ -142,6 +142,11 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 	m_reset3DModels = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset 3D models"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer6->Add( m_reset3DModels, 0, wxBOTTOM|wxRIGHT, 5 );
 
+	m_resetTransform = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset scale"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetTransform->SetToolTip( _("Reset the footprint scale to 1 when changing to a different library footprint. Unchecked: keep the existing scale.") );
+
+	bSizer6->Add( m_resetTransform, 0, wxBOTTOM|wxRIGHT, 5 );
+
 	m_matchPadPositions = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Match pad positions"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_matchPadPositions->SetToolTip( _("Attempt to match pad positions even if the footprint origin or rotation has changed.") );
 

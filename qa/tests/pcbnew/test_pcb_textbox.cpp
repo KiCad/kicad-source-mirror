@@ -42,10 +42,7 @@ struct PCB_TEXTBOX_FIXTURE
 BOOST_FIXTURE_TEST_SUITE( PcbTextbox, PCB_TEXTBOX_FIXTURE )
 
 
-/**
- * Verify that GetMinSize() returns height-only constraint for non-empty text.
- * Width should be 0 (unconstrained) so text can rewrap freely.
- */
+// Width is unconstrained so text can rewrap, height is bounded by the wrapped content.
 BOOST_AUTO_TEST_CASE( GetMinSizeReturnsHeightOnly )
 {
     VECTOR2I minSize = m_textbox.GetMinSize();
@@ -55,9 +52,6 @@ BOOST_AUTO_TEST_CASE( GetMinSizeReturnsHeightOnly )
 }
 
 
-/**
- * Verify that GetMinSize() height grows when more text is added.
- */
 BOOST_AUTO_TEST_CASE( GetMinSizeGrowsWithMoreText )
 {
     VECTOR2I minSizeShort = m_textbox.GetMinSize();
@@ -71,9 +65,6 @@ BOOST_AUTO_TEST_CASE( GetMinSizeGrowsWithMoreText )
 }
 
 
-/**
- * Verify that GetMinSize() height grows when vertical margins are increased.
- */
 BOOST_AUTO_TEST_CASE( GetMinSizeIncludesMargins )
 {
     m_textbox.SetText( wxT( "A" ) );
@@ -100,9 +91,6 @@ BOOST_AUTO_TEST_CASE( GetMinSizeIncludesMargins )
 }
 
 
-/**
- * Verify that GetMinSize() height is at least the text height for a single line of text.
- */
 BOOST_AUTO_TEST_CASE( GetMinSizeHeightAtLeastTextHeight )
 {
     m_textbox.SetText( wxT( "A" ) );
@@ -114,9 +102,6 @@ BOOST_AUTO_TEST_CASE( GetMinSizeHeightAtLeastTextHeight )
 }
 
 
-/**
- * Verify that GetMinSize() returns zero for both axes with empty text.
- */
 BOOST_AUTO_TEST_CASE( GetMinSizeEmptyText )
 {
     m_textbox.SetText( wxT( "" ) );
@@ -130,10 +115,7 @@ BOOST_AUTO_TEST_CASE( GetMinSizeEmptyText )
 }
 
 
-/**
- * Verify that GetMinSize() swaps the constrained axis for 90-degree rotation.
- * At 0 degrees the height constraint is on y. At 90 degrees it moves to x.
- */
+// At 0 degrees the bound is on y, at 90 degrees it moves to x.
 BOOST_AUTO_TEST_CASE( GetMinSizeRotated90 )
 {
     m_textbox.SetText( wxT( "Wide Text" ) );
@@ -155,9 +137,6 @@ BOOST_AUTO_TEST_CASE( GetMinSizeRotated90 )
 }
 
 
-/**
- * Verify that width is always unconstrained regardless of text content.
- */
 BOOST_AUTO_TEST_CASE( GetMinSizeAllowsWidthReduction )
 {
     m_textbox.SetText( wxT( "This is a very long line of text that should exceed the box width" ) );
@@ -168,6 +147,77 @@ BOOST_AUTO_TEST_CASE( GetMinSizeAllowsWidthReduction )
 
     BOOST_CHECK_EQUAL( minSize.x, 0 );
     BOOST_CHECK_GT( minSize.y, 0 );
+}
+
+
+// Guards a past snap-back where 3x30 degrees landed on cardinal and
+// GetCornersInSequence returned an un-rotated AABB.
+BOOST_AUTO_TEST_CASE( ThirtyDegreeIncrementsToCardinalKeepsVisualRotated )
+{
+    for( int i = 0; i < 3; ++i )
+        m_textbox.Rotate( VECTOR2I( 0, 0 ), EDA_ANGLE( 30.0, DEGREES_T ) );
+
+    BOOST_REQUIRE_CLOSE( m_textbox.GetTextAngle().AsDegrees(), 90.0, 1e-6 );
+
+    std::vector<VECTOR2I> corners = m_textbox.GetCorners();
+    BOOST_REQUIRE_EQUAL( corners.size(), 4u );
+
+    BOX2I visual;
+    for( const VECTOR2I& p : corners )
+        visual.Merge( p );
+
+    const int origW = pcbIUScale.mmToIU( 20.0 );
+    const int origH = pcbIUScale.mmToIU( 5.0 );
+    BOOST_CHECK_MESSAGE( std::abs( visual.GetWidth() - origH ) <= 1,
+                         "visual width " << visual.GetWidth() << " expected " << origH );
+    BOOST_CHECK_MESSAGE( std::abs( visual.GetHeight() - origW ) <= 1,
+                         "visual height " << visual.GetHeight() << " expected " << origW );
+}
+
+
+// Guards a past crash where rendering a RECTANGLE textbox at a non-cardinal
+// angle walked an empty polygon vector.
+BOOST_AUTO_TEST_CASE( NonCardinalRotationDoesNotCrash )
+{
+    m_textbox.Rotate( VECTOR2I( 0, 0 ), EDA_ANGLE( 30.0, DEGREES_T ) );
+
+    std::vector<VECTOR2I> corners = m_textbox.GetCorners();
+    BOOST_REQUIRE_EQUAL( corners.size(), 4u );
+
+    BOX2I bbox;
+    for( const VECTOR2I& p : corners )
+        bbox.Merge( p );
+
+    BOOST_CHECK_GT( bbox.GetWidth(), 0 );
+    BOOST_CHECK_GT( bbox.GetHeight(), 0 );
+
+    BOOST_CHECK_NO_THROW( m_textbox.GetDrawPos() );
+}
+
+
+BOOST_AUTO_TEST_CASE( CardinalRotationsRoundTrip )
+{
+    VECTOR2I origStart = m_textbox.GetStart();
+    VECTOR2I origEnd = m_textbox.GetEnd();
+
+    VECTOR2I pivot( pcbIUScale.mmToIU( 7.0 ), pcbIUScale.mmToIU( 11.0 ) );
+
+    for( int i = 0; i < 4; ++i )
+        m_textbox.Rotate( pivot, EDA_ANGLE( 90.0, DEGREES_T ) );
+
+    BOOST_CHECK_EQUAL( m_textbox.GetStart().x, origStart.x );
+    BOOST_CHECK_EQUAL( m_textbox.GetStart().y, origStart.y );
+    BOOST_CHECK_EQUAL( m_textbox.GetEnd().x, origEnd.x );
+    BOOST_CHECK_EQUAL( m_textbox.GetEnd().y, origEnd.y );
+}
+
+
+// The on-disk form must stay a rectangle even after a tilted rotation.
+BOOST_AUTO_TEST_CASE( NonCardinalRotationKeepsLibShapeRectangle )
+{
+    m_textbox.Rotate( VECTOR2I( 0, 0 ), EDA_ANGLE( 30.0, DEGREES_T ) );
+
+    BOOST_CHECK( m_textbox.GetLibraryShape() == SHAPE_T::RECTANGLE );
 }
 
 

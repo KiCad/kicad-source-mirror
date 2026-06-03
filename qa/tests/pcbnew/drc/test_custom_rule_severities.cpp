@@ -66,7 +66,12 @@ BOOST_FIXTURE_TEST_CASE( DRCCustomRuleSeverityTest, DRC_REGRESSION_TEST_FIXTURE 
                 PCB_MARKER temp( aItem, aPos );
 
                 if( bds.m_DrcExclusions.find( temp.SerializeToString() ) == bds.m_DrcExclusions.end() )
+                {
                     violations.push_back( *aItem );
+                    // temp goes out of scope after the lambda. The copy in `violations`
+                    // would otherwise carry a dangling marker pointer.
+                    violations.back().SetParent( nullptr );
+                }
             } );
 
     bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, false );

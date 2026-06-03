@@ -118,6 +118,11 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
     // A board-sourced footprint follows the board, not the library, so do not watch a lib file.
     setFPWatcher( nullptr );
 
+    // Show a scaled placement in its library (unscaled) frame in the editor. The board scale is
+    // re-applied on save via ExchangeFootprint. Only a freshly opened tab needs this reset.
+    if( createdNewTab )
+        newFootprint->SetTransformScale( 1.0, 1.0 );
+
     Zoom_Automatique( false );
 
     m_adapter->SetPreselectNode( newFootprint->GetFPID(), 0 );

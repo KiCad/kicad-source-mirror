@@ -61,6 +61,8 @@ protected:
     void valueChanging( wxPropertyGridEvent& aEvent ) override;
     void valueChanged( wxPropertyGridEvent& aEvent ) override;
 
+    void applyConfirmedScale( const wxString& aPropName, const wxVariant& aValue );
+
     ///< Regenerates caches storing layer and net names
     void updateLists( const BOARD* aBoard );
 
@@ -95,6 +97,8 @@ protected:
 
     static std::set<wxString> m_currentFieldNames;
     wxPGChoices m_nets;
+
+    bool m_scaleConfirmPending;
 };
 
 #endif /* PCB_PROPERTIES_PANEL_H */

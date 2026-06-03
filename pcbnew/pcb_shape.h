@@ -76,11 +76,38 @@ public:
 
     VECTOR2I GetCenter() const override { return getCenter(); }
 
-    void BeginEdit( const VECTOR2I& aStartPoint ) { beginEdit( aStartPoint ); }
-    bool ContinueEdit( const VECTOR2I& aPosition ) { return continueEdit( aPosition ); }
-    void CalcEdit( const VECTOR2I& aPosition ) { calcEdit( aPosition ); }
-    void EndEdit( bool aClosed = true ) { endEdit( aClosed ); }
+    void BeginEdit( const VECTOR2I& aStartPoint )
+    {
+        beginEdit( aStartPoint );
+        syncLibCoords();
+    }
+
+    bool ContinueEdit( const VECTOR2I& aPosition )
+    {
+        bool result = continueEdit( aPosition );
+        syncLibCoords();
+        return result;
+    }
+
+    void CalcEdit( const VECTOR2I& aPosition )
+    {
+        calcEdit( aPosition );
+        syncLibCoords();
+    }
+
+    void EndEdit( bool aClosed = true )
+    {
+        endEdit( aClosed );
+        syncLibCoords();
+    }
+
     void SetEditState( int aState ) { setEditState( aState ); }
+
+    void SetArcAngleAndEnd( const EDA_ANGLE& aAngle, bool aCheckNegativeAngle = false )
+    {
+        EDA_SHAPE::SetArcAngleAndEnd( aAngle, aCheckNegativeAngle );
+        syncLibCoords();
+    }
 
     /**
      * @return a list of connection points (may be empty): points where this shape can form
@@ -90,8 +117,8 @@ public:
 
     bool HasLineStroke() const override { return true; }
 
-    STROKE_PARAMS GetStroke() const override { return m_stroke; }
-    void SetStroke( const STROKE_PARAMS& aStroke ) override { m_stroke = aStroke; }
+    STROKE_PARAMS GetStroke() const override;
+    void          SetStroke( const STROKE_PARAMS& aStroke ) override;
 
     int GetWidth() const override;
 
@@ -152,7 +179,95 @@ public:
 
     void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
+    void OnFootprintRescaled( double aRatioX, double aRatioY, double aLinearFactor, const VECTOR2I& aAnchor,
+                              const EDA_ANGLE& aParentRotate ) override;
+
+    void OnFootprintTransformed() override { RebakeFromLib(); }
+
     virtual void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
+
+    void SetStart( const VECTOR2I& aStart ) override;
+    void SetEnd( const VECTOR2I& aEnd ) override;
+
+    // Stroke width is stored in lib units. Scale-aware accessors apply the
+    // parent footprint scale on read / strip it on write so callers see the
+    // runtime width as before.
+    void SetWidth( int aWidth ) override;
+
+    void SetShape( SHAPE_T aShape ) override
+    {
+        EDA_SHAPE::SetShape( aShape );
+        m_libShape = aShape;
+    }
+
+    void SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
+
+    void SetBezierC1( const VECTOR2I& aPt ) override;
+    void SetBezierC2( const VECTOR2I& aPt ) override;
+
+    void SetPolyShape( const SHAPE_POLY_SET& aShape ) override;
+
+    void SetEllipseCenter( const VECTOR2I& aPt ) override;
+    void SetEllipseMajorRadius( int aR ) override;
+    void SetEllipseMinorRadius( int aR ) override;
+    void SetEllipseRotation( const EDA_ANGLE& aA ) override;
+    void SetEllipseStartAngle( const EDA_ANGLE& aA ) override;
+    void SetEllipseEndAngle( const EDA_ANGLE& aA ) override;
+
+    VECTOR2I GetLibraryStart() const { return m_libStart; }
+    VECTOR2I GetLibraryEnd() const { return m_libEnd; }
+    SHAPE_T  GetLibraryShape() const { return m_libShape; }
+
+    VECTOR2I  GetLibraryEllipseCenter() const      { return m_libEllipseCenter; }
+    int       GetLibraryEllipseMajorRadius() const { return m_libEllipseMajorRadius; }
+    int       GetLibraryEllipseMinorRadius() const { return m_libEllipseMinorRadius; }
+    EDA_ANGLE GetLibraryEllipseRotation() const    { return m_libEllipseRotation; }
+    EDA_ANGLE GetLibraryEllipseStartAngle() const  { return m_libEllipseStartAngle; }
+    EDA_ANGLE GetLibraryEllipseEndAngle() const    { return m_libEllipseEndAngle; }
+
+    void SetLibraryEllipse( const VECTOR2I& aCenter, int aMajor, int aMinor, const EDA_ANGLE& aRotation,
+                            const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle )
+    {
+        m_libEllipseCenter = aCenter;
+        m_libEllipseMajorRadius = aMajor;
+        m_libEllipseMinorRadius = aMinor;
+        m_libEllipseRotation = aRotation;
+        m_libEllipseStartAngle = aStartAngle;
+        m_libEllipseEndAngle = aEndAngle;
+
+        EDA_SHAPE::SetEllipseCenter( aCenter );
+        EDA_SHAPE::SetEllipseMajorRadius( aMajor );
+        EDA_SHAPE::SetEllipseMinorRadius( aMinor );
+        EDA_SHAPE::SetEllipseRotation( aRotation );
+        EDA_SHAPE::SetEllipseStartAngle( aStartAngle );
+        EDA_SHAPE::SetEllipseEndAngle( aEndAngle );
+    }
+
+    VECTOR2I       GetLibraryArcMid() const;
+    VECTOR2I       GetLibraryBezierC1() const;
+    VECTOR2I       GetLibraryBezierC2() const;
+    SHAPE_POLY_SET GetLibraryPolyShape() const;
+
+    void RebakeFromLib();
+
+    void OverrideLibCoords( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aArcMid = VECTOR2I( 0, 0 ) )
+    {
+        m_libStart = aStart;
+        m_libEnd = aEnd;
+
+        if( m_libShape == SHAPE_T::ARC )
+            m_libArcMid = aArcMid;
+    }
+
+    void OverrideLibBezier( const VECTOR2I& aC1, const VECTOR2I& aC2 )
+    {
+        m_libBezierC1 = aC1;
+        m_libBezierC2 = aC2;
+    }
+
+    void OverrideLibPoly( const SHAPE_POLY_SET& aPoly ) { m_libPoly = aPoly; }
+
+    const SHAPE_POLY_SET& GetLibPoly() const { return m_libPoly; }
 
     void Scale( double aScale );
 
@@ -222,6 +337,13 @@ protected:
 
     bool isMoving() const override { return IsMoving(); }
 
+    void syncLibCoords();
+
+    // Returns the parent footprint to use for lib/board frame conversion. Pad primitives
+    // are stored pad-local so they get nullptr (the pad applies its own transform when
+    // building the effective shape).
+    const FOOTPRINT* transformFp() const;
+
     int getMaxError() const override;
 
     SHAPE_POLY_SET getHatchingKnockouts() const override;
@@ -234,4 +356,23 @@ protected:
 protected:
     bool               m_hasSolderMask;
     std::optional<int> m_solderMaskMargin;
+
+    VECTOR2I m_libStart;
+    VECTOR2I m_libEnd;
+
+    VECTOR2I m_libArcMid;
+
+    VECTOR2I m_libBezierC1;
+    VECTOR2I m_libBezierC2;
+
+    SHAPE_POLY_SET m_libPoly;
+
+    VECTOR2I  m_libEllipseCenter;
+    int       m_libEllipseMajorRadius;
+    int       m_libEllipseMinorRadius;
+    EDA_ANGLE m_libEllipseRotation;
+    EDA_ANGLE m_libEllipseStartAngle;
+    EDA_ANGLE m_libEllipseEndAngle;
+
+    SHAPE_T m_libShape;
 };

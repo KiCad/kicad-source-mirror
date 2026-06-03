@@ -537,8 +537,8 @@ bool shapeNeedsUpdate( const PCB_SHAPE& curr_shape, const PCB_SHAPE& ref_shape )
     {
     case SHAPE_T::RECTANGLE:
     {
-        BOX2I aRect( curr_shape.GetStart(), curr_shape.GetEnd() - curr_shape.GetStart() );
-        BOX2I bRect( ref_shape.GetStart(), ref_shape.GetEnd() - ref_shape.GetStart() );
+        BOX2I aRect( curr_shape.GetLibraryStart(), curr_shape.GetLibraryEnd() - curr_shape.GetLibraryStart() );
+        BOX2I bRect( ref_shape.GetLibraryStart(), ref_shape.GetLibraryEnd() - ref_shape.GetLibraryStart() );
 
         aRect.Normalize();
         bRect.Normalize();
@@ -550,26 +550,25 @@ bool shapeNeedsUpdate( const PCB_SHAPE& curr_shape, const PCB_SHAPE& ref_shape )
 
     case SHAPE_T::SEGMENT:
     case SHAPE_T::CIRCLE:
-        TEST_PT( curr_shape.GetStart(), ref_shape.GetStart(), "" );
-        TEST_PT( curr_shape.GetEnd(), ref_shape.GetEnd(), "" );
+        TEST_PT( curr_shape.GetLibraryStart(), ref_shape.GetLibraryStart(), "" );
+        TEST_PT( curr_shape.GetLibraryEnd(), ref_shape.GetLibraryEnd(), "" );
         break;
 
     case SHAPE_T::ARC:
-        TEST_PT( curr_shape.GetStart(), ref_shape.GetStart(), "" );
-        TEST_PT( curr_shape.GetEnd(), ref_shape.GetEnd(), "" );
+        TEST_PT( curr_shape.GetLibraryStart(), ref_shape.GetLibraryStart(), "" );
+        TEST_PT( curr_shape.GetLibraryEnd(), ref_shape.GetLibraryEnd(), "" );
 
-        // Arc center is calculated and so may have round-off errors when parents are
-        // differentially rotated.
-        if( ( curr_shape.GetArcMid() - ref_shape.GetArcMid() ).EuclideanNorm() > pcbIUScale.mmToIU( 0.0005 ) )
+        if( ( curr_shape.GetLibraryArcMid() - ref_shape.GetLibraryArcMid() ).EuclideanNorm()
+            > pcbIUScale.mmToIU( 0.0005 ) )
             return true;
 
         break;
 
     case SHAPE_T::BEZIER:
-        TEST_PT( curr_shape.GetStart(), ref_shape.GetStart(), "" );
-        TEST_PT( curr_shape.GetEnd(), ref_shape.GetEnd(), "" );
-        TEST_PT( curr_shape.GetBezierC1(), ref_shape.GetBezierC1(), "" );
-        TEST_PT( curr_shape.GetBezierC2(), ref_shape.GetBezierC2(), "" );
+        TEST_PT( curr_shape.GetLibraryStart(), ref_shape.GetLibraryStart(), "" );
+        TEST_PT( curr_shape.GetLibraryEnd(), ref_shape.GetLibraryEnd(), "" );
+        TEST_PT( curr_shape.GetLibraryBezierC1(), ref_shape.GetLibraryBezierC1(), "" );
+        TEST_PT( curr_shape.GetLibraryBezierC2(), ref_shape.GetLibraryBezierC2(), "" );
         break;
 
     case SHAPE_T::ELLIPSE:
@@ -588,12 +587,16 @@ bool shapeNeedsUpdate( const PCB_SHAPE& curr_shape, const PCB_SHAPE& ref_shape )
 
     case SHAPE_T::POLY:
     {
-        TEST( curr_shape.GetPolyShape().TotalVertices(), ref_shape.GetPolyShape().TotalVertices(), "" );
+        SHAPE_POLY_SET aLib = curr_shape.GetLibraryPolyShape();
+        SHAPE_POLY_SET bLib = ref_shape.GetLibraryPolyShape();
 
-        for( int poly = 0; poly < static_cast<int>( curr_shape.GetPolyShape().CPolygons().size() ); poly++ )
+        TEST( aLib.TotalVertices(), bLib.TotalVertices(), "" );
+
+        for( int poly = 0; poly < static_cast<int>( aLib.CPolygons().size() ); poly++ )
         {
-            const SHAPE_POLY_SET::POLYGON curr_polygon = curr_shape.GetPolyShape().CPolygon( poly );
-            const SHAPE_POLY_SET::POLYGON ref_polygon  = ref_shape.GetPolyShape().CPolygon( poly );
+            const SHAPE_POLY_SET::POLYGON curr_polygon = aLib.CPolygon( poly );
+            const SHAPE_POLY_SET::POLYGON ref_polygon = bLib.CPolygon( poly );
+
             if( curr_polygon.size() == 0 || ref_polygon.size() == 0
                 || !curr_polygon[0].CompareGeometry( ref_polygon[0], true, EPSILON ) )
             {
@@ -699,15 +702,18 @@ bool zoneNeedsUpdate( const ZONE* a, const ZONE* b, REPORTER* aReporter )
     // This is just a display property
     // TEST( a->GetHatchBorderAlgorithm(), b->GetHatchBorderAlgorithm() );
 
-    TEST( a->Outline()->TotalVertices(), b->Outline()->TotalVertices(),
+    SHAPE_POLY_SET aLibOutline = a->GetLibraryOutline();
+    SHAPE_POLY_SET bLibOutline = b->GetLibraryOutline();
+
+    TEST( aLibOutline.TotalVertices(), bLibOutline.TotalVertices(),
           wxString::Format( _( "%s outline corner count differs." ), ITEM_DESC( a ) ) );
 
     bool cornersDiffer = false;
 
-    for( int poly = 0; poly < static_cast<int>( a->Outline()->CPolygons().size() ); poly++ )
+    for( int poly = 0; poly < static_cast<int>( aLibOutline.CPolygons().size() ); poly++ )
     {
-        const SHAPE_POLY_SET::POLYGON aPolygon = a->Outline()->CPolygon( poly );
-        const SHAPE_POLY_SET::POLYGON bPolygon = b->Outline()->CPolygon( poly );
+        const SHAPE_POLY_SET::POLYGON aPolygon = aLibOutline.CPolygon( poly );
+        const SHAPE_POLY_SET::POLYGON bPolygon = bLibOutline.CPolygon( poly );
 
         if( aPolygon.size() == 0 || bPolygon.size() == 0
             || !aPolygon[0].CompareGeometry( bPolygon[0], true, EPSILON ) )
@@ -799,27 +805,9 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
     wxASSERT( aLibFP );
     bool diff = false;
 
-    // To avoid issues when comparing the footprint on board and the footprint in library
-    // use the footprint from lib flipped, rotated and at same position as this.
-    // And using the footprint from lib with same changes as this minimize the issues
-    // due to rounding and shape modifications
-
     std::unique_ptr<FOOTPRINT> temp( static_cast<FOOTPRINT*>( aLibFP->Clone() ) );
 
-    temp->SetParent( GetBoard() );  // Needed to know the copper layer count;
-
-    if( !( aCompareFlags & COMPARE_FLAGS::INSTANCE_TO_INSTANCE ) )
-    {
-        if( IsFlipped() != temp->IsFlipped() )
-            temp->Flip( { 0, 0 }, FLIP_DIRECTION::TOP_BOTTOM );
-
-        // Set position first before rotating to minimize rounding errors.
-        if( GetPosition() != temp->GetPosition() )
-            temp->SetPosition( GetPosition() );
-
-        if( GetOrientation() != temp->GetOrientation() )
-            temp->SetOrientation( GetOrientation() );
-    }
+    temp->SetParent( GetBoard() );
 
     for( BOARD_ITEM* item : temp->GraphicalItems() )
         item->NormalizeForCompare();

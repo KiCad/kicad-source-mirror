@@ -32,7 +32,8 @@
     - DRCE_PADSTACK,
     - DRCE_PADSTACK_INVALID,
     - DRCE_FOOTPRINT (unknown or duplicate pads in net-tie pad groups),
-    - DRCE_SHORTING_ITEMS
+    - DRCE_SHORTING_ITEMS,
+    - DRCE_FOOTPRINT_SCALED_WITH_PADS
 */
 
 class DRC_TEST_PROVIDER_FOOTPRINT_CHECKS : public DRC_TEST_PROVIDER
@@ -79,6 +80,20 @@ bool DRC_TEST_PROVIDER_FOOTPRINT_CHECKS::Run()
                         errorHandler( footprint, nullptr, nullptr, DRCE_FOOTPRINT_TYPE_MISMATCH,
                                       aMsg, footprint->GetPosition(), footprint->GetLayer() );
                     } );
+        }
+
+        if( !m_drcEngine->IsErrorLimitExceeded( DRCE_FOOTPRINT_SCALED_WITH_PADS ) )
+        {
+            const TRANSFORM_TRS& xform = footprint->GetTransform();
+
+            if( !xform.IsUniformScale() || xform.GetScaleX() != 1.0 )
+            {
+                if( !footprint->Pads().empty() )
+                {
+                    errorHandler( footprint, nullptr, nullptr, DRCE_FOOTPRINT_SCALED_WITH_PADS, wxEmptyString,
+                                  footprint->GetPosition(), footprint->GetLayer() );
+                }
+            }
         }
 
         if( !m_drcEngine->IsErrorLimitExceeded( DRCE_PAD_TH_WITH_NO_HOLE )

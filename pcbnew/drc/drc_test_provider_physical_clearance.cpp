@@ -786,7 +786,8 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
             }
             else
             {
-                colliding = zone->Outline()->Collide( itemShape.get(), clearance, &actual, &pos );
+                SHAPE_POLY_SET boardOutline = zone->GetBoardOutline();
+                colliding = boardOutline.Collide( itemShape.get(), clearance, &actual, &pos );
             }
 
             if( colliding )
@@ -830,7 +831,8 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
                     }
                     else
                     {
-                        colliding = zone->Outline()->Collide( holeShape.get(), clearance, &actual, &pos );
+                        SHAPE_POLY_SET boardOutline = zone->GetBoardOutline();
+                        colliding = boardOutline.Collide( holeShape.get(), clearance, &actual, &pos );
                     }
 
                     if( colliding )

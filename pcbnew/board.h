@@ -644,6 +644,7 @@ public:
                             bool resetTextEffects = true, bool resetTextPositions = true,
                             bool resetTextContent = true, bool resetFabricationAttrs = true,
                             bool resetClearanceOverrides = true, bool reset3DModels = true,
+                            bool resetTransform = false,
                             bool* aUpdated = nullptr );
 
     /**

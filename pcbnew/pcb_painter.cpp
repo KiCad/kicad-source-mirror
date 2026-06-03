@@ -2695,6 +2695,9 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 
     const KIFONT::METRICS& metrics = aText->GetFontMetrics();
     TEXT_ATTRIBUTES        attrs = aText->GetAttributes();
+    // Raw attrs are lib frame for FP children, pull scaled values for render.
+    attrs.m_Size = aText->GetTextSize();
+    attrs.m_StrokeWidth = aText->GetTextThickness();
     const COLOR4D&         color = m_pcbSettings.GetColor( aText, aLayer );
     bool                   outline_mode = !viewer_settings()->m_ViewersDisplay.m_DisplayTextFill;
 
@@ -2884,6 +2887,8 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
 
         const KIFONT::METRICS& metrics = aTextBox->GetFontMetrics();
         TEXT_ATTRIBUTES        attrs = aTextBox->GetAttributes();
+        // Raw attrs are lib frame for FP children, pull scaled size for render.
+        attrs.m_Size = aTextBox->GetTextSize();
         attrs.m_StrokeWidth = getLineThickness( aTextBox->GetEffectiveTextPenWidth() );
 
         if( m_gal->IsFlippedX() && !aTextBox->IsSideSpecific() )
@@ -3121,7 +3126,7 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
             m_gal->SetIsStroke( false );
             m_gal->SetFillColor( color );
 
-            m_gal->DrawPolygon( aZone->Outline()->Outline( 0 ) );
+            m_gal->DrawPolygon( aZone->GetBoardOutline().Outline( 0 ) );
         }
 
         return;
@@ -3153,7 +3158,8 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
     // Draw the outline
     if( !IsZoneFillLayer( aLayer ) )
     {
-        const SHAPE_POLY_SET* outline = aZone->Outline();
+        const SHAPE_POLY_SET  boardOutline = aZone->GetBoardOutline();
+        const SHAPE_POLY_SET* outline = &boardOutline;
         bool allowDrawOutline = aZone->GetHatchStyle() != ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER;
 
         if( allowDrawOutline && !m_pcbSettings.m_isPrinting && outline && outline->OutlineCount() > 0 )

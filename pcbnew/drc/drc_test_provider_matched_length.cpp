@@ -712,7 +712,7 @@ DRC_TEST_PROVIDER_MATCHED_LENGTH::zoneUnionFor( PCB_LAYER_ID aRefLayer,
         }
         else if( zone->Outline() )
         {
-            refUnion.BooleanAdd( *zone->Outline() );
+            refUnion.BooleanAdd( zone->GetBoardOutline() );
         }
     }
 

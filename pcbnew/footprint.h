@@ -23,6 +23,7 @@
 
 #include <deque>
 #include <mutex>
+#include <optional>
 #include <unordered_set>
 
 #include <template_fieldnames.h>
@@ -43,6 +44,7 @@
 #include <functional>
 #include <math/vector3.h>
 #include <case_insensitive_map.h>
+#include <geometry/transform_trs.h>
 #include <gal/color4d.h>
 
 class LINE_READER;
@@ -398,10 +400,10 @@ public:
     void                    ClearExtrudedBody() { m_extrudedBody.reset(); }
 
     void     SetPosition( const VECTOR2I& aPos ) override;
-    VECTOR2I GetPosition() const override { return m_pos; }
+    VECTOR2I GetPosition() const override { return m_transform.GetTranslate(); }
 
     void SetOrientation( const EDA_ANGLE& aNewAngle );
-    EDA_ANGLE GetOrientation() const { return m_orient; }
+    EDA_ANGLE GetOrientation() const { return m_transform.GetRotate(); }
 
     /**
      * Used as Layer property setter -- performs a flip if necessary to set the footprint layer
@@ -409,17 +411,31 @@ public:
      */
     void SetLayerAndFlip( PCB_LAYER_ID aLayer );
 
+    void SetLayer( PCB_LAYER_ID aLayer ) override;
+
     // to make property magic work
     PCB_LAYER_ID GetLayer() const override { return BOARD_ITEM::GetLayer(); }
 
-    // For property system:
+    const TRANSFORM_TRS& GetTransform() const { return m_transform; }
+
+    void SetTransformScale( double aScaleX, double aScaleY );
+
+    double GetScaleX() const { return m_transform.GetScaleX(); }
+    double GetScaleY() const { return m_transform.GetScaleY(); }
+
+    void SetScaleX( double aScaleX ) { SetTransformScale( aScaleX, m_transform.GetScaleY() ); }
+
+    void SetScaleY( double aScaleY ) { SetTransformScale( m_transform.GetScaleX(), aScaleY ); }
+
+    void RescaleAroundPoint( const VECTOR2I& aCenter, double aSx, double aSy );
+
     void SetOrientationDegrees( double aOrientation )
     {
         SetOrientation( EDA_ANGLE( aOrientation, DEGREES_T ) );
     }
     double GetOrientationDegrees() const
     {
-        return m_orient.AsDegrees();
+        return m_transform.GetRotate().AsDegrees();
     }
 
     const LIB_ID& GetFPID() const { return m_fpid; }
@@ -1391,9 +1407,9 @@ private:
     std::deque<PCB_GROUP*>  m_groups;    // Groups, owned by pointer
     std::deque<PCB_POINT*>  m_points;    // Points, owned by pointer
 
-    EDA_ANGLE       m_orient;            // Orientation
-    VECTOR2I        m_pos;               // Position of footprint on the board in internal units.
-    LIB_ID          m_fpid;              // The #LIB_ID of the FOOTPRINT.
+    TRANSFORM_TRS   m_transform;
+    bool            m_flipped = false;
+    LIB_ID          m_fpid;
     int             m_attributes;        // Flag bits (see FOOTPRINT_ATTR_T)
     int             m_fpStatus;          // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
     int             m_fileFormatVersionAtLoad;

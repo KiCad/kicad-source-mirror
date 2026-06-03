@@ -25,12 +25,14 @@
 #include <bitmaps.h>
 #include <board.h>
 #include <eda_draw_frame.h>
+#include <footprint.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_rect.h>
 #include <pcb_shape.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
+#include <trigo.h>
 #include <view/view.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
@@ -41,17 +43,54 @@ static const double DEFAULT_PT_SIZE_MM = 1.0;
 
 PCB_POINT::PCB_POINT( BOARD_ITEM* aParent ) :
         BOARD_ITEM( aParent, PCB_POINT_T ),
+        m_libPos( 0, 0 ),
         m_pos( 0, 0 ),
         m_size( pcbIUScale.mmToIU( DEFAULT_PT_SIZE_MM ) )
 {
+    recomputePosition();
 }
 
 
 PCB_POINT::PCB_POINT( BOARD_ITEM* aParent, const VECTOR2I& aPos, int aSize ) :
-    BOARD_ITEM( aParent, PCB_POINT_T ),
-    m_pos( aPos ),
-    m_size( aSize )
+        BOARD_ITEM( aParent, PCB_POINT_T ),
+        m_libPos( 0, 0 ),
+        m_pos( 0, 0 ),
+        m_size( aSize )
 {
+    SetPosition( aPos );
+}
+
+
+void PCB_POINT::recomputePosition()
+{
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        m_pos = fp->GetTransform().Apply( m_libPos );
+    else
+        m_pos = m_libPos;
+}
+
+
+void PCB_POINT::SetPosition( const VECTOR2I& aPos )
+{
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        m_libPos = fp->GetTransform().InverseApply( aPos );
+    else
+        m_libPos = aPos;
+
+    recomputePosition();
+}
+
+
+void PCB_POINT::SetParent( EDA_ITEM* aParent )
+{
+    BOARD_ITEM::SetParent( aParent );
+    recomputePosition();
+}
+
+
+void PCB_POINT::OnFootprintTransformed()
+{
+    recomputePosition();
 }
 
 
@@ -79,12 +118,13 @@ bool PCB_POINT::cmp_points::operator()( const PCB_POINT* a, const PCB_POINT* b )
 bool PCB_POINT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     // Compute the hit on the bars of the X
-    const int size = GetSize() / 2;
-    const SEG loc = SEG( aPosition, aPosition );
+    const int      size = GetSize() / 2;
+    const VECTOR2I pos = GetPosition();
+    const SEG      loc = SEG( aPosition, aPosition );
 
-    const SEG          seg1 = SEG( m_pos - VECTOR2I{ size, size }, m_pos + VECTOR2I{ size, size } );
-    const SEG          seg2 = SEG( m_pos - VECTOR2I{ size, -size }, m_pos + VECTOR2I{ size, -size } );
-    const SHAPE_CIRCLE circle( m_pos, size / 2 );
+    const SEG          seg1 = SEG( pos - VECTOR2I{ size, size }, pos + VECTOR2I{ size, size } );
+    const SEG          seg2 = SEG( pos - VECTOR2I{ size, -size }, pos + VECTOR2I{ size, -size } );
+    const SHAPE_CIRCLE circle( pos, size / 2 );
 
     bool hit = seg1.Collide( loc, aAccuracy ) || seg2.Collide( loc, aAccuracy ) || circle.Collide( loc, aAccuracy );
 
@@ -129,13 +169,27 @@ double PCB_POINT::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 
 void PCB_POINT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
-    RotatePoint( m_pos, aRotCentre, aAngle );
+    VECTOR2I newPos = GetPosition();
+    RotatePoint( newPos, aRotCentre, aAngle );
+    SetPosition( newPos );
 }
 
 
 void PCB_POINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    MIRROR(m_pos, aCentre, aFlipDirection);
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+    {
+        // Mirror the library-frame position (rotation-independent).
+        const VECTOR2I libAxis = fp->GetTransform().InverseApply( aCentre );
+        MIRROR( m_libPos, libAxis, aFlipDirection );
+        recomputePosition();
+    }
+    else
+    {
+        VECTOR2I newPos = GetPosition();
+        MIRROR( newPos, aCentre, aFlipDirection );
+        SetPosition( newPos );
+    }
 
     SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
 }
@@ -143,8 +197,7 @@ void PCB_POINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
 const BOX2I PCB_POINT::GetBoundingBox() const
 {
-    BOX2I bbox = BOX2I::ByCenter( m_pos, VECTOR2I{ m_size, m_size } );
-    return bbox;
+    return BOX2I::ByCenter( GetPosition(), VECTOR2I{ m_size, m_size } );
 }
 
 
@@ -211,7 +264,7 @@ bool PCB_POINT::operator==( const BOARD_ITEM& aBoardItem ) const
 
 bool PCB_POINT::operator==( const PCB_POINT& aOther ) const
 {
-    return m_pos == aOther.m_pos && m_size == aOther.m_size;
+    return GetPosition() == aOther.GetPosition() && m_size == aOther.m_size;
 }
 
 
@@ -224,7 +277,7 @@ double PCB_POINT::Similarity( const BOARD_ITEM& aOther ) const
 
     double similarity = 1.0;
 
-    if( m_pos == other.m_pos )
+    if( GetPosition() == other.GetPosition() )
         similarity *= 0.9;
 
     if( m_size != other.m_size )

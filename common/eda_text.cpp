@@ -575,19 +575,20 @@ void EDA_TEXT::SetTextHeight( int aHeight )
 
 void EDA_TEXT::SetTextPos( const VECTOR2I& aPoint )
 {
-    Offset( VECTOR2I( aPoint.x - m_pos.x, aPoint.y - m_pos.y ) );
+    VECTOR2I current = GetTextPos();
+    Offset( VECTOR2I( aPoint.x - current.x, aPoint.y - current.y ) );
 }
 
 
 void EDA_TEXT::SetTextX( int aX )
 {
-    Offset( VECTOR2I( aX - m_pos.x, 0 ) );
+    Offset( VECTOR2I( aX - GetTextPos().x, 0 ) );
 }
 
 
 void EDA_TEXT::SetTextY( int aY )
 {
-    Offset( VECTOR2I( 0, aY - m_pos.y ) );
+    Offset( VECTOR2I( 0, aY - GetTextPos().y ) );
 }
 
 

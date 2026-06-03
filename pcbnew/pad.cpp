@@ -74,6 +74,7 @@ using KIGFX::PCB_RENDER_SETTINGS;
 
 PAD::PAD( FOOTPRINT* parent ) :
         BOARD_CONNECTED_ITEM( parent, PCB_PAD_T ),
+        m_libOrientation( ANGLE_0 ),
         m_padStack( this )
 {
     VECTOR2I& drill = m_padStack.Drill().size;
@@ -82,9 +83,6 @@ PAD::PAD( FOOTPRINT* parent ) :
     drill.x = drill.y = EDA_UNIT_UTILS::Mils2IU( pcbIUScale, 30 );       // Default drill size 30 mils.
     m_lengthPadToDie = 0;
     m_delayPadToDie = 0;
-
-    if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
-        m_pos = GetParent()->GetPosition();
 
     SetShape( F_Cu, PAD_SHAPE::CIRCLE );          // Default pad shape is PAD_CIRCLE.
     SetAnchorPadShape( F_Cu, PAD_SHAPE::CIRCLE ); // Default anchor shape for custom shaped pads is PAD_CIRCLE.
@@ -115,11 +113,224 @@ PAD::PAD( FOOTPRINT* parent ) :
 
 PAD::PAD( const PAD& aOther ) :
         BOARD_CONNECTED_ITEM( aOther.GetParent(), PCB_PAD_T ),
+        m_libOrientation( ANGLE_0 ),
         m_padStack( this )
 {
     PAD::operator=( aOther );
 
     SetUuidDirect( aOther.m_Uuid );
+}
+
+
+namespace
+{
+
+static int scaleLength( int aLength, double aFactor )
+{
+    return KiROUND( aLength * aFactor );
+}
+
+
+/// Express a footprint-frame (Sx, Sy) scale in a frame rotated by aRelOrient (diagonal part).
+static void scaleInChildFrame( double aSx, double aSy, const EDA_ANGLE& aRelOrient, double& aLocalSx, double& aLocalSy )
+{
+    const double c = aRelOrient.Cos();
+    const double s = aRelOrient.Sin();
+    aLocalSx = aSx * c * c + aSy * s * s;
+    aLocalSy = aSx * s * s + aSy * c * c;
+}
+
+
+/// Circular pads use a uniform mean of Sx and Sy so they stay circular under non-uniform scale.
+static VECTOR2I derivePadBoardSize( const VECTOR2I& aLibSize, PAD_SHAPE aShape, const TRANSFORM_TRS& aXform,
+                                    const EDA_ANGLE& aRelOrient )
+{
+    const double sx = std::abs( aXform.GetScaleX() );
+    const double sy = std::abs( aXform.GetScaleY() );
+
+    if( aShape == PAD_SHAPE::CIRCLE )
+    {
+        const double uniform = ( sx + sy ) * 0.5;
+        return { scaleLength( aLibSize.x, uniform ), scaleLength( aLibSize.y, uniform ) };
+    }
+
+    // Size is in the pad frame, so conjugate the footprint scale by the pad orientation.
+    double localSx, localSy;
+    scaleInChildFrame( sx, sy, aRelOrient, localSx, localSy );
+    return { scaleLength( aLibSize.x, localSx ), scaleLength( aLibSize.y, localSy ) };
+}
+
+
+/// Inverse of derivePadBoardSize.
+static VECTOR2I derivePadLibSize( const VECTOR2I& aBoardSize, PAD_SHAPE aShape, const TRANSFORM_TRS& aXform,
+                                  const EDA_ANGLE& aRelOrient )
+{
+    const double sx = std::abs( aXform.GetScaleX() );
+    const double sy = std::abs( aXform.GetScaleY() );
+
+    if( aShape == PAD_SHAPE::CIRCLE )
+    {
+        const double uniform = ( sx + sy ) * 0.5;
+        return { scaleLength( aBoardSize.x, 1.0 / uniform ), scaleLength( aBoardSize.y, 1.0 / uniform ) };
+    }
+
+    double localSx, localSy;
+    scaleInChildFrame( sx, sy, aRelOrient, localSx, localSy );
+    return { scaleLength( aBoardSize.x, 1.0 / localSx ), scaleLength( aBoardSize.y, 1.0 / localSy ) };
+}
+
+
+/// Circular drills use a uniform mean so they stay circular.
+static VECTOR2I derivePadBoardDrill( const VECTOR2I& aLibDrill, PAD_DRILL_SHAPE aDrillShape,
+                                     const TRANSFORM_TRS& aXform )
+{
+    const double sx = std::abs( aXform.GetScaleX() );
+    const double sy = std::abs( aXform.GetScaleY() );
+
+    if( aDrillShape == PAD_DRILL_SHAPE::CIRCLE )
+    {
+        const double uniform = ( sx + sy ) * 0.5;
+        return { scaleLength( aLibDrill.x, uniform ), scaleLength( aLibDrill.y, uniform ) };
+    }
+
+    return { scaleLength( aLibDrill.x, sx ), scaleLength( aLibDrill.y, sy ) };
+}
+
+
+/// Inverse of derivePadBoardDrill.
+static VECTOR2I derivePadLibDrill( const VECTOR2I& aBoardDrill, PAD_DRILL_SHAPE aDrillShape,
+                                   const TRANSFORM_TRS& aXform )
+{
+    const double sx = std::abs( aXform.GetScaleX() );
+    const double sy = std::abs( aXform.GetScaleY() );
+
+    if( aDrillShape == PAD_DRILL_SHAPE::CIRCLE )
+    {
+        const double uniform = ( sx + sy ) * 0.5;
+        return { scaleLength( aBoardDrill.x, 1.0 / uniform ), scaleLength( aBoardDrill.y, 1.0 / uniform ) };
+    }
+
+    return { scaleLength( aBoardDrill.x, 1.0 / sx ), scaleLength( aBoardDrill.y, 1.0 / sy ) };
+}
+
+
+static VECTOR2I derivePadBoardOffset( const VECTOR2I& aLibOffset, const TRANSFORM_TRS& aXform )
+{
+    return { scaleLength( aLibOffset.x, std::abs( aXform.GetScaleX() ) ),
+             scaleLength( aLibOffset.y, std::abs( aXform.GetScaleY() ) ) };
+}
+
+
+/// Inverse of derivePadBoardOffset.
+static VECTOR2I derivePadLibOffset( const VECTOR2I& aBoardOffset, const TRANSFORM_TRS& aXform )
+{
+    return { scaleLength( aBoardOffset.x, 1.0 / std::abs( aXform.GetScaleX() ) ),
+             scaleLength( aBoardOffset.y, 1.0 / std::abs( aXform.GetScaleY() ) ) };
+}
+
+} // namespace
+
+
+void PAD::SetPosition( const VECTOR2I& aPos )
+{
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        m_libPos = fp->GetTransform().InverseApply( aPos );
+    else
+        m_libPos = aPos;
+
+    SetDirty();
+}
+
+
+VECTOR2I PAD::GetPosition() const
+{
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        return fp->GetTransform().Apply( m_libPos );
+
+    return m_libPos;
+}
+
+
+void PAD::SetSize( PCB_LAYER_ID aLayer, const VECTOR2I& aSize )
+{
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        m_padStack.SetSize(
+                derivePadLibSize( aSize, GetShape( aLayer ), fp->GetTransform(), GetFPRelativeOrientation() ), aLayer );
+    else
+        m_padStack.SetSize( aSize, aLayer );
+
+    SetDirty();
+}
+
+
+void PAD::SetLibSize( PCB_LAYER_ID aLayer, const VECTOR2I& aSize )
+{
+    m_padStack.SetSize( aSize, aLayer );
+    SetDirty();
+}
+
+
+void PAD::SetLibDrillSize( const VECTOR2I& aSize )
+{
+    m_padStack.Drill().size = aSize;
+    SetDirty();
+}
+
+
+void PAD::SetLibOffset( PCB_LAYER_ID aLayer, const VECTOR2I& aOffset )
+{
+    m_padStack.Offset( aLayer ) = aOffset;
+    SetDirty();
+}
+
+
+VECTOR2I PAD::GetSize( PCB_LAYER_ID aLayer ) const
+{
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        return derivePadBoardSize( m_padStack.Size( aLayer ), GetShape( aLayer ), fp->GetTransform(),
+                                   GetFPRelativeOrientation() );
+
+    return m_padStack.Size( aLayer );
+}
+
+
+void PAD::SetSizeX( int aX )
+{
+    if( aX <= 0 )
+        return;
+
+    int y = GetSize( PADSTACK::ALL_LAYERS ).y;
+
+    if( GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
+        y = aX;
+
+    SetSize( PADSTACK::ALL_LAYERS, { aX, y } );
+}
+
+
+int PAD::GetSizeX() const
+{
+    return GetSize( PADSTACK::ALL_LAYERS ).x;
+}
+
+
+void PAD::SetSizeY( int aY )
+{
+    if( aY <= 0 )
+        return;
+
+    int x = GetSize( PADSTACK::ALL_LAYERS ).x;
+
+    if( GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
+        x = aY;
+
+    SetSize( PADSTACK::ALL_LAYERS, { x, aY } );
+}
+
+
+int PAD::GetSizeY() const
+{
+    return GetSize( PADSTACK::ALL_LAYERS ).y;
 }
 
 
@@ -521,19 +732,33 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
 
 void PAD::SetPrimaryDrillSize( const VECTOR2I& aSize )
 {
-    m_padStack.Drill().size = aSize;
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        m_padStack.Drill().size = derivePadLibDrill( aSize, GetPrimaryDrillShape(), fp->GetTransform() );
+    else
+        m_padStack.Drill().size = aSize;
+
     SetDirty();
+}
+
+
+VECTOR2I PAD::GetPrimaryDrillSize() const
+{
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        return derivePadBoardDrill( m_padStack.Drill().size, GetPrimaryDrillShape(), fp->GetTransform() );
+
+    return m_padStack.Drill().size;
 }
 
 
 void PAD::SetPrimaryDrillSizeX( const int aX )
 {
-    m_padStack.Drill().size.x = aX;
+    VECTOR2I drill = GetPrimaryDrillSize();
+    drill.x = aX;
 
     if( GetPrimaryDrillShape() == PAD_DRILL_SHAPE::CIRCLE )
-        m_padStack.Drill().size.y = aX;
+        drill.y = aX;
 
-    SetDirty();
+    SetPrimaryDrillSize( drill );
 }
 
 
@@ -545,14 +770,35 @@ void PAD::SetDrillSizeX( const int aX )
 
 void PAD::SetPrimaryDrillSizeY( const int aY )
 {
-    m_padStack.Drill().size.y = aY;
-    SetDirty();
+    VECTOR2I drill = GetPrimaryDrillSize();
+    drill.y = aY;
+    SetPrimaryDrillSize( drill );
 }
 
 
 void PAD::SetDrillSizeY( const int aY )
 {
     SetPrimaryDrillSizeY( aY );
+}
+
+
+void PAD::SetOffset( PCB_LAYER_ID aLayer, const VECTOR2I& aOffset )
+{
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        m_padStack.Offset( aLayer ) = derivePadLibOffset( aOffset, fp->GetTransform() );
+    else
+        m_padStack.Offset( aLayer ) = aOffset;
+
+    SetDirty();
+}
+
+
+VECTOR2I PAD::GetOffset( PCB_LAYER_ID aLayer ) const
+{
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        return derivePadBoardOffset( m_padStack.Offset( aLayer ), fp->GetTransform() );
+
+    return m_padStack.Offset( aLayer );
 }
 
 
@@ -919,7 +1165,7 @@ void PAD::SetFrontRoundRectRadiusRatio( double aRadiusScale )
 
 void PAD::SetFrontRoundRectRadiusSize( int aRadius )
 {
-    const VECTOR2I size = m_padStack.Size( F_Cu );
+    const VECTOR2I size = GetSize( F_Cu );
     const int      minSize = std::min( size.x, size.y );
     const double   newRatio = aRadius / double( minSize );
 
@@ -929,7 +1175,7 @@ void PAD::SetFrontRoundRectRadiusSize( int aRadius )
 
 int PAD::GetFrontRoundRectRadiusSize() const
 {
-    const VECTOR2I size = m_padStack.Size( F_Cu );
+    const VECTOR2I size = GetSize( F_Cu );
     const int      minSize = std::min( size.x, size.y );
     const double   ratio = GetFrontRoundRectRadiusRatio();
 
@@ -1114,7 +1360,7 @@ void PAD::BuildEffectiveShapes() const
     // Hole shape
     drawCache.m_effectiveHoleShape = nullptr;
 
-    VECTOR2I half_size = m_padStack.Drill().size / 2;
+    VECTOR2I half_size = GetDrillSize() / 2;
     int      half_width;
     VECTOR2I half_len;
 
@@ -1130,9 +1376,8 @@ void PAD::BuildEffectiveShapes() const
 
     RotatePoint( half_len, GetOrientation() );
 
-    drawCache.m_effectiveHoleShape = std::make_shared<SHAPE_SEGMENT>( m_pos - half_len,
-                                                                       m_pos + half_len,
-                                                                       half_width * 2 );
+    VECTOR2I pos = GetPosition();
+    drawCache.m_effectiveHoleShape = std::make_shared<SHAPE_SEGMENT>( pos - half_len, pos + half_len, half_width * 2 );
     drawCache.m_effectiveBoundingBox.Merge( drawCache.m_effectiveHoleShape->BBox() );
 
     // All done
@@ -1153,7 +1398,7 @@ const SHAPE_COMPOUND& PAD::buildEffectiveShape( PCB_LAYER_ID aLayer ) const
 
     VECTOR2I  shapePos = ShapePos( aLayer ); // Fetch only once; rotation involves trig
     PAD_SHAPE effectiveShape = GetShape( aLayer );
-    const VECTOR2I& size = m_padStack.Size( aLayer );
+    const VECTOR2I size = GetSize( aLayer );
 
     if( effectiveShape == PAD_SHAPE::CUSTOM )
         effectiveShape = GetAnchorPadShape( aLayer );
@@ -1336,7 +1581,7 @@ void PAD::BuildEffectivePolygon( ERROR_LOC aErrorLoc ) const
 
                     for( int ii = 0; ii < poly.PointCount(); ++ii )
                     {
-                        int dist = KiROUND( ( poly.CPoint( ii ) - m_pos ).EuclideanNorm() );
+                        int dist = KiROUND( ( poly.CPoint( ii ) - GetPosition() ).EuclideanNorm() );
                         m_effectiveBoundingRadius = std::max( m_effectiveBoundingRadius, dist );
                     }
                 }
@@ -1450,6 +1695,12 @@ void PAD::SetProperty( PAD_PROP aProperty )
 
 void PAD::SetOrientation( const EDA_ANGLE& aAngle )
 {
+    if( const FOOTPRINT* parentFP = GetParentFootprint() )
+        m_libOrientation = aAngle - parentFP->GetOrientation();
+    else
+        m_libOrientation = aAngle;
+
+    m_libOrientation.Normalize();
     m_padStack.SetOrientation( aAngle );
     SetDirty();
 }
@@ -1457,25 +1708,47 @@ void PAD::SetOrientation( const EDA_ANGLE& aAngle )
 
 void PAD::SetFPRelativeOrientation( const EDA_ANGLE& aAngle )
 {
-    if( FOOTPRINT* parentFP = GetParentFootprint() )
-        SetOrientation( aAngle + parentFP->GetOrientation() );
+    m_libOrientation = aAngle;
+    m_libOrientation.Normalize();
+
+    if( const FOOTPRINT* parentFP = GetParentFootprint() )
+        m_padStack.SetOrientation( aAngle + parentFP->GetOrientation() );
     else
-        SetOrientation( aAngle );
+        m_padStack.SetOrientation( aAngle );
+
+    SetDirty();
+}
+
+
+EDA_ANGLE PAD::GetOrientation() const
+{
+    if( const FOOTPRINT* parentFP = GetParentFootprint() )
+        return m_libOrientation + parentFP->GetOrientation();
+
+    return m_libOrientation;
 }
 
 
 EDA_ANGLE PAD::GetFPRelativeOrientation() const
 {
-    if( FOOTPRINT* parentFP = GetParentFootprint() )
-        return GetOrientation() - parentFP->GetOrientation();
-    else
-        return GetOrientation();
+    return m_libOrientation;
 }
 
 
 void PAD::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    MIRROR( m_pos, aCentre, aFlipDirection );
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+    {
+        // Mirror in the footprint's library frame (rotation-independent).
+        VECTOR2I libCentre = fp->GetTransform().InverseApply( aCentre );
+        MIRROR( m_libPos, libCentre, aFlipDirection );
+    }
+    else
+    {
+        VECTOR2I newPos = GetPosition();
+        MIRROR( newPos, aCentre, aFlipDirection );
+        SetPosition( newPos );
+    }
 
     m_padStack.ForEachUniqueLayer(
             [&]( PCB_LAYER_ID aLayer )
@@ -1557,16 +1830,15 @@ void PAD::FlipPrimitives( FLIP_DIRECTION aFlipDirection )
 
 VECTOR2I PAD::ShapePos( PCB_LAYER_ID aLayer ) const
 {
-    VECTOR2I loc_offset = m_padStack.Offset( aLayer );
+    VECTOR2I pos = GetPosition();
+    VECTOR2I loc_offset = GetOffset( aLayer );
 
     if( loc_offset.x == 0 && loc_offset.y == 0 )
-        return m_pos;
+        return pos;
 
     RotatePoint( loc_offset, GetOrientation() );
 
-    VECTOR2I shape_pos = m_pos + loc_offset;
-
-    return shape_pos;
+    return pos + loc_offset;
 }
 
 
@@ -1825,7 +2097,7 @@ VECTOR2I PAD::GetSolderPasteMargin( PCB_LAYER_ID aLayer ) const
     }
 
     PCB_LAYER_ID cuLayer = ( aLayer == B_Paste ) ? B_Cu : F_Cu;
-    VECTOR2I padSize = m_padStack.Size( cuLayer );
+    VECTOR2I     padSize = GetSize( cuLayer );
 
     VECTOR2I pad_margin;
     pad_margin.x = margin.value_or( 0 ) + KiROUND( padSize.x * mratio.value_or( 0 ) );
@@ -1959,7 +2231,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     aList.emplace_back( ShowPadShape( PADSTACK::ALL_LAYERS ), props );
 
     PAD_SHAPE padShape = GetShape( PADSTACK::ALL_LAYERS );
-    VECTOR2I padSize = m_padStack.Size( PADSTACK::ALL_LAYERS );
+    VECTOR2I  padSize = GetSize( PADSTACK::ALL_LAYERS );
 
     if( ( padShape == PAD_SHAPE::CIRCLE || padShape == PAD_SHAPE::OVAL )
             && padSize.x == padSize.y )
@@ -1989,7 +2261,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
                             aFrame->MessageTextFromValue( GetPadToDieLength() ) );
     }
 
-    const VECTOR2I& drill = m_padStack.Drill().size;
+    const VECTOR2I drill = GetDrillSize();
 
     if( drill.x > 0 || drill.y > 0 )
     {
@@ -2162,9 +2434,39 @@ int PAD::Compare( const PAD* aPadRef, const PAD* aPadCmp )
 
 void PAD::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
-    RotatePoint( m_pos, aRotCentre, aAngle );
-    m_padStack.SetOrientation( m_padStack.GetOrientation() + aAngle );
+    VECTOR2I newPos = GetPosition();
+    RotatePoint( newPos, aRotCentre, aAngle );
+    SetPosition( newPos );
 
+    SetOrientation( GetOrientation() + aAngle );
+}
+
+
+void PAD::OnFootprintRescaled( double aRatioX, double aRatioY, double aLinearFactor, const VECTOR2I& aAnchor,
+                               const EDA_ANGLE& aParentRotate )
+{
+    // Pad size, drill, and offset auto-derive from lib-frame padstack values
+    // through the parent transform on read. The only work needed is rescaling
+    // primitive shapes (which carry their own geometry).
+    Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                for( const std::shared_ptr<PCB_SHAPE>& prim : Padstack().Primitives( aLayer ) )
+                    prim->OnFootprintRescaled( aRatioX, aRatioY, aLinearFactor, aAnchor, aParentRotate );
+            } );
+
+    OnFootprintTransformed();
+}
+
+
+void PAD::OnFootprintTransformed()
+{
+    EDA_ANGLE parentOrient = ANGLE_0;
+
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        parentOrient = fp->GetOrientation();
+
+    Padstack().SetOrientation( GetFPRelativeOrientation() + parentOrient );
     SetDirty();
 }
 
@@ -2616,8 +2918,9 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
     // This minimal value is mainly for very small pads, like SM0402.
     // Most of time pads are using the segment count given by aError value.
     const int pad_min_seg_per_circle_count = 16;
-    int       dx = m_padStack.Size( aLayer ).x / 2;
-    int       dy = m_padStack.Size( aLayer ).y / 2;
+    const VECTOR2I padSize = GetSize( aLayer );
+    int            dx = padSize.x / 2;
+    int            dy = padSize.y / 2;
 
     VECTOR2I padShapePos = ShapePos( aLayer ); // Note: for pad having a shape offset, the pad
                                                // position is NOT the shape position
@@ -2654,8 +2957,8 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
         int  ddy = shape == PAD_SHAPE::TRAPEZOID ? trapDelta.y / 2 : 0;
 
         SHAPE_POLY_SET outline;
-        TransformTrapezoidToPolygon( outline, padShapePos, m_padStack.Size( aLayer ), GetOrientation(),
-                                     ddx, ddy, aClearance, aMaxError, aErrorLoc );
+        TransformTrapezoidToPolygon( outline, padShapePos, padSize, GetOrientation(), ddx, ddy, aClearance, aMaxError,
+                                     aErrorLoc );
         aBuffer.Append( outline );
         break;
     }
@@ -2666,11 +2969,10 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
         bool doChamfer = shape == PAD_SHAPE::CHAMFERED_RECT;
 
         SHAPE_POLY_SET outline;
-        TransformRoundChamferedRectToPolygon( outline, padShapePos, m_padStack.Size( aLayer ),
-                                              GetOrientation(), GetRoundRectCornerRadius( aLayer ),
-                                              doChamfer ? GetChamferRectRatio( aLayer ) : 0,
-                                              doChamfer ? GetChamferPositions( aLayer ) : 0,
-                                              aClearance, aMaxError, aErrorLoc );
+        TransformRoundChamferedRectToPolygon(
+                outline, padShapePos, padSize, GetOrientation(), GetRoundRectCornerRadius( aLayer ),
+                doChamfer ? GetChamferRectRatio( aLayer ) : 0, doChamfer ? GetChamferPositions( aLayer ) : 0,
+                aClearance, aMaxError, aErrorLoc );
         aBuffer.Append( outline );
         break;
     }
@@ -3247,6 +3549,21 @@ void PAD::AppendPrimitives( PCB_LAYER_ID aLayer, const std::vector<std::shared_p
 void PAD::AddPrimitive( PCB_LAYER_ID aLayer, PCB_SHAPE* aPrimitive )
 {
     aPrimitive->SetParent( this );
+
+    // Seed lib state from the primitive's current values, then rebake so the
+    // runtime cache reflects the parent FP transform reachable via the pad.
+    aPrimitive->OverrideLibCoords( aPrimitive->GetStart(), aPrimitive->GetEnd(),
+                                   aPrimitive->GetShape() == SHAPE_T::ARC ? aPrimitive->GetArcMid()
+                                                                          : VECTOR2I( 0, 0 ) );
+
+    if( aPrimitive->GetShape() == SHAPE_T::BEZIER )
+        aPrimitive->OverrideLibBezier( aPrimitive->GetBezierC1(), aPrimitive->GetBezierC2() );
+
+    if( aPrimitive->GetShape() == SHAPE_T::POLY )
+        aPrimitive->OverrideLibPoly( aPrimitive->GetPolyShape() );
+
+    aPrimitive->OnFootprintTransformed();
+
     m_padStack.AddPrimitive( aPrimitive, aLayer );
 
     SetDirty();

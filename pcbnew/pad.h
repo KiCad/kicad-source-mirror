@@ -206,13 +206,9 @@ public:
 
     PAD_SHAPE GetFrontShape() const { return m_padStack.Shape( F_Cu ); }
 
-    void SetPosition( const VECTOR2I& aPos ) override
-    {
-        m_pos = aPos;
-        SetDirty();
-    }
-
-    VECTOR2I GetPosition() const override { return m_pos; }
+    void     SetPosition( const VECTOR2I& aPos ) override;
+    VECTOR2I GetPosition() const override;
+    VECTOR2I GetLibraryPosition() const { return m_libPos; }
 
     /**
      * @return the shape of the anchor pad shape, for custom shaped pads.
@@ -259,15 +255,27 @@ public:
      */
     bool IsOnCopperLayer() const override;
 
-    void SetY( int y )                          { m_pos.y = y; SetDirty(); }
-    void SetX( int x )                          { m_pos.x = x; SetDirty(); }
-
-    void SetSize( PCB_LAYER_ID aLayer, const VECTOR2I& aSize )
+    void SetY( int y )
     {
-        m_padStack.SetSize( aSize, aLayer );
-        SetDirty();
+        VECTOR2I p = GetPosition();
+        p.y = y;
+        SetPosition( p );
     }
-    const VECTOR2I& GetSize( PCB_LAYER_ID aLayer ) const { return m_padStack.Size( aLayer ); }
+    void SetX( int x )
+    {
+        VECTOR2I p = GetPosition();
+        p.x = x;
+        SetPosition( p );
+    }
+
+    void     SetSize( PCB_LAYER_ID aLayer, const VECTOR2I& aSize );
+    VECTOR2I GetSize( PCB_LAYER_ID aLayer ) const;
+
+    // Lib-frame setters used by the parser. These store the value as-is in the
+    // padstack without inverse-scaling against the parent FP transform.
+    void SetLibSize( PCB_LAYER_ID aLayer, const VECTOR2I& aSize );
+    void SetLibDrillSize( const VECTOR2I& aSize );
+    void SetLibOffset( PCB_LAYER_ID aLayer, const VECTOR2I& aOffset );
 
     bool HasExplicitDefinitionForLayer( PCB_LAYER_ID aLayer ) const
     {
@@ -279,37 +287,11 @@ public:
     // in the GUI when the padstack mode is set to anything other than NORMAL, but so that the code
     // compiles, these are set up to work with the front layer (in other words, assume the mode is
     // NORMAL, where F_Cu stores the whole padstack data)
-    void SetSizeX( const int aX )
-    {
-        if( aX > 0 )
-        {
-            int y = m_padStack.Size( PADSTACK::ALL_LAYERS ).y;
+    void SetSizeX( int aX );
+    int  GetSizeX() const;
 
-            if( GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
-                y = aX;
-
-            m_padStack.SetSize( { aX, y }, PADSTACK::ALL_LAYERS );
-            SetDirty();
-        }
-    }
-
-    int GetSizeX() const { return m_padStack.Size( PADSTACK::ALL_LAYERS ).x; }
-
-    void SetSizeY( const int aY )
-    {
-        if( aY > 0 )
-        {
-            int x = m_padStack.Size( PADSTACK::ALL_LAYERS ).x;
-
-            if( GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE )
-                x = aY;
-
-            m_padStack.SetSize( { x, aY }, PADSTACK::ALL_LAYERS );
-            SetDirty();
-        }
-    }
-
-    int GetSizeY() const { return m_padStack.Size( PADSTACK::ALL_LAYERS ).y; }
+    void SetSizeY( int aY );
+    int  GetSizeY() const;
 
     void SetDelta( PCB_LAYER_ID aLayer, const VECTOR2I& aSize )
     {
@@ -322,27 +304,22 @@ public:
         return m_padStack.TrapezoidDeltaSize( aLayer );
     }
 
-    void SetPrimaryDrillSize( const VECTOR2I& aSize );
-    const VECTOR2I& GetPrimaryDrillSize() const { return m_padStack.Drill().size; }
-    void SetPrimaryDrillSizeX( int aX );
-    int GetPrimaryDrillSizeX() const            { return m_padStack.Drill().size.x; }
-    void SetPrimaryDrillSizeY( int aY );
-    int GetPrimaryDrillSizeY() const            { return m_padStack.Drill().size.y; }
+    void     SetPrimaryDrillSize( const VECTOR2I& aSize );
+    VECTOR2I GetPrimaryDrillSize() const;
+    void     SetPrimaryDrillSizeX( int aX );
+    int      GetPrimaryDrillSizeX() const { return GetPrimaryDrillSize().x; }
+    void     SetPrimaryDrillSizeY( int aY );
+    int      GetPrimaryDrillSizeY() const { return GetPrimaryDrillSize().y; }
 
-    void SetDrillSize( const VECTOR2I& aSize )  { SetPrimaryDrillSize( aSize ); }
-    const VECTOR2I& GetDrillSize() const        { return GetPrimaryDrillSize(); }
-    void SetDrillSizeX( int aX );
-    int GetDrillSizeX() const                   { return GetPrimaryDrillSizeX(); }
-    void SetDrillSizeY( int aY );
-    int GetDrillSizeY() const                   { return GetPrimaryDrillSizeY(); }
+    void     SetDrillSize( const VECTOR2I& aSize ) { SetPrimaryDrillSize( aSize ); }
+    VECTOR2I GetDrillSize() const { return GetPrimaryDrillSize(); }
+    void     SetDrillSizeX( int aX );
+    int      GetDrillSizeX() const { return GetPrimaryDrillSizeX(); }
+    void     SetDrillSizeY( int aY );
+    int      GetDrillSizeY() const { return GetPrimaryDrillSizeY(); }
 
-    void SetOffset( PCB_LAYER_ID aLayer, const VECTOR2I& aOffset )
-    {
-        m_padStack.Offset( aLayer ) = aOffset;
-        SetDirty();
-    }
-
-    const VECTOR2I& GetOffset( PCB_LAYER_ID aLayer ) const { return m_padStack.Offset( aLayer ); }
+    void     SetOffset( PCB_LAYER_ID aLayer, const VECTOR2I& aOffset );
+    VECTOR2I GetOffset( PCB_LAYER_ID aLayer ) const;
 
     VECTOR2I GetCenter() const override           { return GetPosition(); }
 
@@ -433,7 +410,7 @@ public:
     /**
      * Return the rotation angle of the pad.
      */
-    EDA_ANGLE GetOrientation() const { return m_padStack.GetOrientation(); }
+    EDA_ANGLE GetOrientation() const;
     EDA_ANGLE GetFPRelativeOrientation() const;
 
     // For property system
@@ -441,10 +418,7 @@ public:
     {
         SetOrientation( EDA_ANGLE( aOrientation, DEGREES_T ) );
     }
-    double GetOrientationDegrees() const
-    {
-        return m_padStack.GetOrientation().AsDegrees();
-    }
+    double GetOrientationDegrees() const { return GetOrientation().AsDegrees(); }
 
     void SetPrimaryDrillShape( PAD_DRILL_SHAPE aShape );
     PAD_DRILL_SHAPE GetPrimaryDrillShape() const { return m_padStack.Drill().shape; }
@@ -1006,13 +980,16 @@ public:
      */
     static int Compare( const PAD* aPadRef, const PAD* aPadCmp );
 
-    void Move( const VECTOR2I& aMoveVector ) override
-    {
-        m_pos += aMoveVector;
-        SetDirty();
+    void Move( const VECTOR2I& aMoveVector ) override {
+        SetPosition( GetPosition() + aMoveVector );
     }
 
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
+
+    void OnFootprintRescaled( double aRatioX, double aRatioY, double aLinearFactor, const VECTOR2I& aAnchor,
+                              const EDA_ANGLE& aParentRotate ) override;
+
+    void OnFootprintTransformed() override;
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
@@ -1121,7 +1098,8 @@ private:
     wxString          m_pinFunction;        // Pin name in schematic
     wxString          m_pinType;            // Pin electrical type in schematic
 
-    VECTOR2I          m_pos;                // Pad Position on board
+    VECTOR2I  m_libPos;         // Pad position in parent footprint's library frame
+    EDA_ANGLE m_libOrientation; // Pad orientation in parent footprint's library frame
 
     PADSTACK          m_padStack;
 

@@ -169,7 +169,7 @@ public:
     COLOR4D GetFillColor() const               { return m_fillColor; }
     void SetFillColor( const COLOR4D& aColor ) { m_fillColor = aColor; }
 
-    void SetWidth( int aWidth );
+    virtual void SetWidth( int aWidth );
     virtual int GetWidth() const               { return m_stroke.GetWidth(); }
     virtual int GetEffectiveWidth() const      { return GetWidth(); }
     virtual int GetHatchLineWidth() const      { return GetEffectiveWidth(); }
@@ -181,8 +181,8 @@ public:
     void    SetLineColor( const COLOR4D& aColor ) { m_stroke.SetColor( aColor ); }
     COLOR4D GetLineColor() const                  { return m_stroke.GetColor(); }
 
-    void SetShape( SHAPE_T aShape )            { m_shape = aShape; }
-    SHAPE_T GetShape() const                   { return m_shape; }
+    virtual void SetShape( SHAPE_T aShape )    { m_shape = aShape; }
+    SHAPE_T      GetShape() const              { return m_shape; }
 
     /**
      * Return the starting point of the graphic.
@@ -191,7 +191,7 @@ public:
     int             GetStartY() const { return m_start.y; }
     int             GetStartX() const { return m_start.x; }
 
-    void SetStart( const VECTOR2I& aStart )
+    virtual void SetStart( const VECTOR2I& aStart )
     {
         m_start = aStart;
         m_endsSwapped = false;
@@ -200,29 +200,37 @@ public:
 
     void SetStartY( int y )
     {
-        m_start.y = y;
-        m_endsSwapped = false;
-        m_hatchingDirty = true;
+        VECTOR2I s = m_start;
+        s.y = y;
+        SetStart( s );
     }
 
     void SetStartX( int x )
     {
-        m_start.x = x;
-        m_endsSwapped = false;
-        m_hatchingDirty = true;
+        VECTOR2I s = m_start;
+        s.x = x;
+        SetStart( s );
     }
 
     void SetCenterY( int y )
     {
-        m_end.y += y - m_start.y;
-        m_start.y = y;
+        VECTOR2I newStart = m_start;
+        VECTOR2I newEnd = m_end;
+        newEnd.y += y - m_start.y;
+        newStart.y = y;
+        SetStart( newStart );
+        SetEnd( newEnd );
         m_hatchingDirty = true;
     }
 
     void SetCenterX( int x )
     {
-        m_end.x += x - m_start.x;
-        m_start.x = x;
+        VECTOR2I newStart = m_start;
+        VECTOR2I newEnd = m_end;
+        newEnd.x += x - m_start.x;
+        newStart.x = x;
+        SetStart( newStart );
+        SetEnd( newEnd );
         m_hatchingDirty = true;
     }
 
@@ -233,7 +241,7 @@ public:
     int             GetEndY() const { return m_end.y; }
     int             GetEndX() const { return m_end.x; }
 
-    void SetEnd( const VECTOR2I& aEnd )
+    virtual void SetEnd( const VECTOR2I& aEnd )
     {
         m_end = aEnd;
         m_endsSwapped = false;
@@ -242,21 +250,21 @@ public:
 
     void SetEndY( int aY )
     {
-        m_end.y = aY;
-        m_endsSwapped = false;
-        m_hatchingDirty = true;
+        VECTOR2I e = m_end;
+        e.y = aY;
+        SetEnd( e );
     }
 
     void SetEndX( int aX )
     {
-        m_end.x = aX;
-        m_endsSwapped = false;
-        m_hatchingDirty = true;
+        VECTOR2I e = m_end;
+        e.x = aX;
+        SetEnd( e );
     }
 
     void SetRadius( int aX )
     {
-        m_end = m_start + VECTOR2I( aX, 0 );
+        SetEnd( m_start + VECTOR2I( aX, 0 ) );
         m_hatchingDirty = true;
     }
 
@@ -268,13 +276,13 @@ public:
     virtual void SetRight( int val ) { SetEndX( val ); }
     virtual void SetBottom( int val ) { SetEndY( val ); }
 
-    void            SetBezierC1( const VECTOR2I& aPt ) { m_bezierC1 = aPt; }
+    virtual void    SetBezierC1( const VECTOR2I& aPt ) { m_bezierC1 = aPt; }
     const VECTOR2I& GetBezierC1() const { return m_bezierC1; }
 
-    void            SetBezierC2( const VECTOR2I& aPt ) { m_bezierC2 = aPt; }
+    virtual void    SetBezierC2( const VECTOR2I& aPt ) { m_bezierC2 = aPt; }
     const VECTOR2I& GetBezierC2() const { return m_bezierC2; }
 
-    void SetEllipseCenter( const VECTOR2I& aPt )
+    virtual void SetEllipseCenter( const VECTOR2I& aPt )
     {
         m_ellipse.Center = aPt;
         m_hatchingDirty = true;
@@ -283,7 +291,7 @@ public:
 
     const VECTOR2I& GetEllipseCenter() const { return m_ellipse.Center; }
 
-    void SetEllipseMajorRadius( int aR )
+    virtual void SetEllipseMajorRadius( int aR )
     {
         m_ellipse.MajorRadius = aR;
         m_hatchingDirty = true;
@@ -292,7 +300,7 @@ public:
 
     int GetEllipseMajorRadius() const { return m_ellipse.MajorRadius; }
 
-    void SetEllipseMinorRadius( int aR )
+    virtual void SetEllipseMinorRadius( int aR )
     {
         m_ellipse.MinorRadius = aR;
         m_hatchingDirty = true;
@@ -301,7 +309,7 @@ public:
 
     int GetEllipseMinorRadius() const { return m_ellipse.MinorRadius; }
 
-    void SetEllipseRotation( const EDA_ANGLE& aA )
+    virtual void SetEllipseRotation( const EDA_ANGLE& aA )
     {
         m_ellipse.Rotation = aA;
         m_hatchingDirty = true;
@@ -311,7 +319,7 @@ public:
     EDA_ANGLE GetEllipseRotation() const { return m_ellipse.Rotation; }
 
     // Meaningful only when m_shape == SHAPE_T::ELLIPSE_ARC.
-    void SetEllipseStartAngle( const EDA_ANGLE& aA )
+    virtual void SetEllipseStartAngle( const EDA_ANGLE& aA )
     {
         m_ellipse.StartAngle = aA;
         m_hatchingDirty = true;
@@ -320,7 +328,7 @@ public:
 
     EDA_ANGLE GetEllipseStartAngle() const { return m_ellipse.StartAngle; }
 
-    void SetEllipseEndAngle( const EDA_ANGLE& aA )
+    virtual void SetEllipseEndAngle( const EDA_ANGLE& aA )
     {
         m_ellipse.EndAngle = aA;
         m_hatchingDirty = true;
@@ -361,7 +369,7 @@ public:
 
     VECTOR2I              GetArcMid() const;
     std::vector<VECTOR2I> GetRectCorners() const;
-    std::vector<VECTOR2I> GetCornersInSequence( EDA_ANGLE angle ) const;
+    virtual std::vector<VECTOR2I> GetCornersInSequence( EDA_ANGLE angle ) const;
 
     /**
      * Calc arc start and end angles such that aStartAngle < aEndAngle.  Each may be between
@@ -416,7 +424,7 @@ public:
      */
     bool IsPolyShapeValid() const;
 
-    void SetPolyShape( const SHAPE_POLY_SET& aShape )
+    virtual void SetPolyShape( const SHAPE_POLY_SET& aShape )
     {
         GetPolyShape() = aShape;
 
@@ -441,6 +449,7 @@ public:
      * @param aMinSegLen is the max deviation between the polyline and the curve.
      */
     void RebuildBezierToSegmentsPointsList( int aMaxError );
+    void RebuildBezierToSegmentsPointsList() { RebuildBezierToSegmentsPointsList( getMaxError() ); }
 
     /**
      * Make a set of SHAPE objects representing the #EDA_SHAPE.

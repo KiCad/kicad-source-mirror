@@ -31,6 +31,7 @@
 #include <api/board/board_types.pb.h>
 #include <pcb_barcode.h>
 #include <board.h>
+#include <footprint.h>
 #include <geometry/shape_poly_set.h>
 #include <pcb_text.h>
 #include <view/view.h>
@@ -60,10 +61,10 @@ PCB_BARCODE::PCB_BARCODE( BOARD_ITEM* aParent ) :
         BOARD_ITEM( aParent, PCB_BARCODE_T ),
         m_width( pcbIUScale.mmToIU( 40 ) ),
         m_height( pcbIUScale.mmToIU( 40 ) ),
-        m_pos( 0, 0 ),
+        m_libPos( 0, 0 ),
         m_text( this ),
         m_kind( BARCODE_T::QR_CODE ),
-        m_angle( 0 ),
+        m_libAngle( 0 ),
         m_errorCorrection( BARCODE_ECC_T::L )
 {
     m_layer = Dwgs_User;
@@ -79,11 +80,11 @@ PCB_BARCODE::PCB_BARCODE( const PCB_BARCODE& aOther ) :
         BOARD_ITEM( aOther ),
         m_width( aOther.m_width ),
         m_height( aOther.m_height ),
-        m_pos( aOther.m_pos ),
+        m_libPos( aOther.m_libPos ),
         m_margin( aOther.m_margin ),
         m_text( aOther.m_text ),
         m_kind( aOther.m_kind ),
-        m_angle( aOther.m_angle ),
+        m_libAngle( aOther.m_libAngle ),
         m_errorCorrection( aOther.m_errorCorrection )
 {
     m_text.SetParent( this );
@@ -98,11 +99,11 @@ PCB_BARCODE& PCB_BARCODE::operator=( const PCB_BARCODE& aOther )
 
         m_width = aOther.m_width;
         m_height = aOther.m_height;
-        m_pos = aOther.m_pos;
+        m_libPos = aOther.m_libPos;
         m_margin = aOther.m_margin;
         m_text = aOther.m_text;
         m_kind = aOther.m_kind;
-        m_angle = aOther.m_angle;
+        m_libAngle = aOther.m_libAngle;
         m_errorCorrection = aOther.m_errorCorrection;
 
         m_cache.reset();
@@ -116,14 +117,26 @@ PCB_BARCODE& PCB_BARCODE::operator=( const PCB_BARCODE& aOther )
 
 void PCB_BARCODE::SetPosition( const VECTOR2I& aPos )
 {
-    VECTOR2I delta = aPos - m_pos;
+    VECTOR2I delta = aPos - GetPosition();
     Move( delta );
 }
 
 
 VECTOR2I PCB_BARCODE::GetPosition() const
 {
-    return m_pos;
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        return fp->GetTransform().Apply( m_libPos );
+
+    return m_libPos;
+}
+
+
+EDA_ANGLE PCB_BARCODE::GetAngle() const
+{
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        return ( m_libAngle + fp->GetOrientation() ).Normalize();
+
+    return m_libAngle;
 }
 
 
@@ -171,8 +184,8 @@ void PCB_BARCODE::Serialize( google::protobuf::Any& aContainer ) const
     case BARCODE_ECC_T::H: barcode.set_error_correction( BEC_H ); break;
     }
 
-    kiapi::common::PackVector2( *barcode.mutable_position(), m_pos );
-    barcode.mutable_orientation()->set_value_degrees( m_angle.AsDegrees() );
+    kiapi::common::PackVector2( *barcode.mutable_position(), GetPosition() );
+    barcode.mutable_orientation()->set_value_degrees( GetAngle().AsDegrees() );
     barcode.set_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( GetLayer() ) );
 
     barcode.mutable_width()->set_value_nm( m_width );
@@ -222,8 +235,17 @@ bool PCB_BARCODE::Deserialize( const google::protobuf::Any& aContainer )
     default:    SetErrorCorrection( BARCODE_ECC_T::L ); break;
     }
 
-    m_pos = kiapi::common::UnpackVector2( barcode.position() );
-    m_angle = EDA_ANGLE( barcode.orientation().value_degrees(), DEGREES_T );
+    SetPosition( kiapi::common::UnpackVector2( barcode.position() ) );
+
+    EDA_ANGLE newAngle( barcode.orientation().value_degrees(), DEGREES_T );
+
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        m_libAngle = newAngle - fp->GetOrientation();
+    else
+        m_libAngle = newAngle;
+
+    m_libAngle.Normalize();
+
     m_layer = FromProtoEnum<PCB_LAYER_ID, BoardLayer>( barcode.layer() );
 
     m_width = barcode.width().value_nm();
@@ -273,37 +295,83 @@ int PCB_BARCODE::GetTextSize() const
 
 void PCB_BARCODE::Move( const VECTOR2I& offset )
 {
-    m_pos += offset;
-    m_text.Move( offset );
-
-    if( m_cache )
+    if( const FOOTPRINT* fp = GetParentFootprint() )
     {
-        m_cache->symbolPoly.Move( offset );
-        m_cache->textPoly.Move( offset );
-        m_cache->poly.Move( offset );
-        m_cache->bbox.Move( offset );
-        m_cache->keyHash = computeCacheKey();
+        const TRANSFORM_TRS& xform = fp->GetTransform();
+        VECTOR2I             libOffset = xform.InverseApply( offset ) - xform.InverseApply( VECTOR2I( 0, 0 ) );
+        m_libPos += libOffset;
     }
+    else
+    {
+        m_libPos += offset;
+    }
+
+    // m_text is intentionally not moved, ComputeTextPoly repositions it
+    // under the symbol on the next AssembleBarcode.
 }
 
 
 void PCB_BARCODE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 {
-    RotatePoint( m_pos, aRotCentre, aAngle );
-    m_angle += aAngle;
+    VECTOR2I boardPos = GetPosition();
+    RotatePoint( boardPos, aRotCentre, aAngle );
+
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        m_libPos = fp->GetTransform().InverseApply( boardPos );
+    else
+        m_libPos = boardPos;
+
+    m_libAngle += aAngle;
+    m_libAngle.Normalize();
+
     AssembleBarcode();
 }
 
 
 void PCB_BARCODE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    MIRROR( m_pos, aCentre, aFlipDirection );
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+    {
+        const VECTOR2I libAxis = fp->GetTransform().InverseApply( aCentre );
+
+        if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+            m_libPos.x = 2 * libAxis.x - m_libPos.x;
+        else
+            m_libPos.y = 2 * libAxis.y - m_libPos.y;
+
+        // Reflect the library-frame angle (rotation-independent).
+        if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
+            m_libAngle = ANGLE_180 - m_libAngle;
+        else
+            m_libAngle = -m_libAngle;
+
+        m_libAngle.Normalize();
+
+        SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+        AssembleBarcode();
+        return;
+    }
+
+    VECTOR2I boardPos = GetPosition();
+    MIRROR( boardPos, aCentre, aFlipDirection );
+    m_libPos = boardPos;
 
     if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
-        m_angle += ANGLE_180;
+        m_libAngle = ANGLE_180 - m_libAngle;
+    else
+        m_libAngle = -m_libAngle;
+
+    m_libAngle.Normalize();
 
     SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
     AssembleBarcode();
+}
+
+
+void PCB_BARCODE::OnFootprintRescaled( double /* aRatioX */, double /* aRatioY */, double /* aLinearFactor */,
+                                       const VECTOR2I& /* aAnchor */, const EDA_ANGLE& /* aParentRotate */ )
+{
+    // Board values derive on read, AssembleBarcode rebuilds on next access.
 }
 
 
@@ -315,8 +383,11 @@ void PCB_BARCODE::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool
 
 size_t PCB_BARCODE::computeCacheKey() const
 {
-    return hash_val( GetShownText(), m_width, m_height, m_pos.x, m_pos.y, m_margin.x, m_margin.y,
-                     static_cast<int>( m_kind ), m_angle.AsDegrees(), static_cast<int>( m_errorCorrection ),
+    const VECTOR2I  pos = GetPosition();
+    const EDA_ANGLE angle = GetAngle();
+
+    return hash_val( GetShownText(), m_width, m_height, pos.x, pos.y, m_margin.x, m_margin.y,
+                     static_cast<int>( m_kind ), angle.AsDegrees(), static_cast<int>( m_errorCorrection ),
                      m_text.IsVisible(), m_text.GetTextHeight(), IsKnockout(), static_cast<int>( m_layer ) );
 }
 
@@ -333,8 +404,10 @@ void PCB_BARCODE::AssembleBarcode() const
 
     ComputeBarcode();
 
-    // Scale the symbol polygon to the desired barcode width/height and center it at m_pos
-    rescaleSymbolPoly( m_pos - VECTOR2I( m_width / 2, m_height / 2 ), m_pos + VECTOR2I( m_width / 2, m_height / 2 ) );
+    const VECTOR2I pos = GetPosition();
+
+    // Scale the symbol polygon to the desired barcode width/height and center it at pos.
+    rescaleSymbolPoly( pos - VECTOR2I( m_width / 2, m_height / 2 ), pos + VECTOR2I( m_width / 2, m_height / 2 ) );
 
     ComputeTextPoly();
 
@@ -375,10 +448,12 @@ void PCB_BARCODE::AssembleBarcode() const
     }
 
     if( IsSideSpecific() && GetBoard() && GetBoard()->IsBackLayer( m_layer ) )
-        m_cache->poly.Mirror( m_pos, FLIP_DIRECTION::LEFT_RIGHT );
+        m_cache->poly.Mirror( pos, FLIP_DIRECTION::LEFT_RIGHT );
 
-    if( !m_angle.IsZero() )
-        m_cache->poly.Rotate( m_angle, m_pos );
+    const EDA_ANGLE angle = GetAngle();
+
+    if( !angle.IsZero() )
+        m_cache->poly.Rotate( angle, pos );
 
     m_cache->poly.CacheTriangulation();
     m_cache->bbox = m_cache->poly.BBox();
@@ -398,6 +473,22 @@ void PCB_BARCODE::ComputeTextPoly() const
 
     if( textPoly.OutlineCount() == 0 )
         return;
+
+    // PCB_TEXT::GetDrawRotation now includes the parent FP orientation, so
+    // TransformTextToPolySet rendered the glyphs already rotated by the FP
+    // angle. The final AssembleBarcode rotation (m_cache->poly.Rotate by
+    // GetAngle = lib_angle + FP_orient) would then rotate the glyphs a
+    // second time, producing twice the intended visual rotation. Undo the
+    // m_text-side rotation here so the glyph-orientation contribution is
+    // only the lib_angle, and the final poly rotation applies the FP-orient
+    // part uniformly with the symbol.
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+    {
+        EDA_ANGLE fpOrient = fp->GetOrientation();
+
+        if( !fpOrient.IsZero() )
+            textPoly.Rotate( -fpOrient, m_text.GetTextPos() );
+    }
 
     if( m_cache->symbolPoly.OutlineCount() == 0 )
         return;
@@ -560,7 +651,7 @@ void PCB_BARCODE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
 
     aList.emplace_back( _( "Layer" ), GetLayerName() );
 
-    aList.emplace_back( _( "Angle" ), wxString::Format( wxT( "%g" ), m_angle.AsDegrees() ) );
+    aList.emplace_back( _( "Angle" ), wxString::Format( wxT( "%g" ), GetAngle().AsDegrees() ) );
 
     aList.emplace_back( _( "Text Height" ), aFrame->MessageTextFromValue( m_text.GetTextHeight() ) );
 }
@@ -630,8 +721,7 @@ void PCB_BARCODE::rescaleSymbolPoly( const VECTOR2I& aTopLeft, const VECTOR2I& a
 
 const BOX2I PCB_BARCODE::GetBoundingBox() const
 {
-    if( !m_cache )
-        AssembleBarcode();
+    AssembleBarcode();
     return m_cache->bbox;
 }
 
@@ -650,8 +740,7 @@ BITMAPS PCB_BARCODE::GetMenuImage() const
 
 const BOX2I PCB_BARCODE::ViewBBox() const
 {
-    if( !m_cache )
-        AssembleBarcode();
+    AssembleBarcode();
     return m_cache->bbox;
 }
 
@@ -719,9 +808,12 @@ void PCB_BARCODE::GetBoundingHull( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
 
                 aLocBuffer.NewOutline();
 
+                const VECTOR2I  pos = GetPosition();
+                const EDA_ANGLE angle = GetAngle();
+
                 for( VECTOR2I& corner : corners )
                 {
-                    RotatePoint( corner, m_pos, m_angle );
+                    RotatePoint( corner, pos, angle );
                     aLocBuffer.Append( corner.x, corner.y );
                 }
             };
@@ -813,11 +905,11 @@ void PCB_BARCODE::swapData( BOARD_ITEM* aImage )
     std::swap( m_isLocked, other->m_isLocked );
     std::swap( m_width, other->m_width );
     std::swap( m_height, other->m_height );
-    std::swap( m_pos, other->m_pos );
+    std::swap( m_libPos, other->m_libPos );
     std::swap( m_margin, other->m_margin );
     std::swap( m_text, other->m_text );
     std::swap( m_kind, other->m_kind );
-    std::swap( m_angle, other->m_angle );
+    std::swap( m_libAngle, other->m_libAngle );
     std::swap( m_errorCorrection, other->m_errorCorrection );
     std::swap( m_cache, other->m_cache );
 
@@ -877,7 +969,7 @@ int PCB_BARCODE::Compare( const PCB_BARCODE* aBarcode, const PCB_BARCODE* aOther
     if( ( diff = (int) aBarcode->GetKind() - (int) aOther->GetKind() ) != 0 )
         return diff;
 
-    if( ( diff = aBarcode->m_angle.AsTenthsOfADegree() - aOther->m_angle.AsTenthsOfADegree() ) != 0 )
+    if( ( diff = aBarcode->GetAngle().AsTenthsOfADegree() - aOther->GetAngle().AsTenthsOfADegree() ) != 0 )
         return diff;
 
     if( ( diff = (int) aBarcode->GetErrorCorrection() - (int) aOther->GetErrorCorrection() ) != 0 )

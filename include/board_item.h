@@ -381,6 +381,27 @@ public:
     virtual void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle );
 
     /**
+     * Apply a parent footprint scale to this item. Default is a no-op. Items
+     * with sizable geometry (PAD, PCB_SHAPE, PCB_TEXT, ZONE) override.
+     *
+     * @param aRatioX        new Sx / old Sx (multiply X-axis-aligned values by this).
+     * @param aRatioY        same for Y.
+     * @param aLinearFactor  weighted factor for stroke / thickness.
+     * @param aAnchor        scale anchor (the parent footprint's translate).
+     * @param aParentRotate  current parent rotation. Needed by POLY / BEZIER
+     *                       to unrotate before scaling and rotate back.
+     */
+    virtual void OnFootprintRescaled( double aRatioX, double aRatioY, double aLinearFactor, const VECTOR2I& aAnchor,
+                                      const EDA_ANGLE& aParentRotate )
+    {}
+
+    /**
+     * Hook for items inside a footprint to refresh after the FP transform
+     * changes (translate, rotate, flip). Scaling uses OnFootprintRescaled.
+     */
+    virtual void OnFootprintTransformed() {}
+
+    /**
      * Flip this object, i.e. change the board side for this object.
      *
      * @param aCentre the rotation point.

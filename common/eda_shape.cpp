@@ -1060,9 +1060,9 @@ void EDA_SHAPE::rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
         }
         else
         {
-            // Convert non-cardinally-rotated rect to a diamond
+            // Convert non-cardinally-rotated rect to a polygon.
             ROUNDRECT rr( SHAPE_RECT( GetStart(), GetRectangleWidth(), GetRectangleHeight() ), m_cornerRadius );
-            m_shape = SHAPE_T::POLY;
+            SetShape( SHAPE_T::POLY );
             rr.TransformToPolygon( GetPolyShape(), getMaxError() );
             GetPolyShape().Rotate( aAngle, aRotCentre );
         }
@@ -1270,9 +1270,14 @@ void EDA_SHAPE::SetCenter( const VECTOR2I& aCenter )
         break;
 
     case SHAPE_T::CIRCLE:
-        m_start = aCenter;
+    {
+        // Route through SetStart / SetEnd so subclasses sync lib coords.
+        const VECTOR2I delta = aCenter - m_start;
+        SetEnd( m_end + delta );
+        SetStart( aCenter );
         m_hatchingDirty = true;
         break;
+    }
 
     case SHAPE_T::ELLIPSE:
     case SHAPE_T::ELLIPSE_ARC:
@@ -2059,6 +2064,26 @@ std::vector<VECTOR2I> EDA_SHAPE::GetCornersInSequence( EDA_ANGLE angle ) const
             pts.emplace_back( VECTOR2I( bbox.GetLeft(), bbox.GetTop() ) );
         }
     }
+    else if( m_shape == SHAPE_T::RECTANGLE )
+    {
+        // Axis-aligned rectangle with non-cardinal rotation (used by textboxes).
+        VECTOR2I center = bbox.GetCenter();
+
+        VECTOR2I tl( bbox.GetLeft(), bbox.GetTop() );
+        VECTOR2I tr( bbox.GetRight(), bbox.GetTop() );
+        VECTOR2I br( bbox.GetRight(), bbox.GetBottom() );
+        VECTOR2I bl( bbox.GetLeft(), bbox.GetBottom() );
+
+        RotatePoint( tl, center, angle );
+        RotatePoint( tr, center, angle );
+        RotatePoint( br, center, angle );
+        RotatePoint( bl, center, angle );
+
+        pts.emplace_back( tl );
+        pts.emplace_back( tr );
+        pts.emplace_back( br );
+        pts.emplace_back( bl );
+    }
     else
     {
         // This function was originally located in pcb_textbox.cpp and was later moved to eda_shape.cpp.
@@ -2077,6 +2102,9 @@ std::vector<VECTOR2I> EDA_SHAPE::GetCornersInSequence( EDA_ANGLE angle ) const
             for( const VECTOR2I& pt : GetPolyShape().Outline( ii ).CPoints() )
                 corners.emplace_back( pt );
         }
+
+        if( corners.empty() )
+            return pts;
 
         while( corners.size() < 4 )
             corners.emplace_back( corners.back() + VECTOR2I( 10, 10 ) );

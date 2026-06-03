@@ -239,6 +239,8 @@ private:
 
     void parseTextBoxContent( PCB_TEXTBOX* aTextBox );
 
+    void bakeTextBoxLib( PCB_TEXTBOX* aTextBox );
+
     PCB_SHAPE*           parsePCB_SHAPE( BOARD_ITEM* aParent );
     PCB_TEXT*            parsePCB_TEXT( BOARD_ITEM* aParent, PCB_TEXT* aBaseText = nullptr );
     void                 parsePCB_TEXT_effects( PCB_TEXT* aText, PCB_TEXT* aBaseText = nullptr );

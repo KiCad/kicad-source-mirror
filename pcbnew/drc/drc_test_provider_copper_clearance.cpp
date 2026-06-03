@@ -1277,7 +1277,10 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
 
                 if( sameNet && testIntersects )
                 {
-                    if( zoneA->Outline()->Collide( zoneB->Outline(), 0, &actual, &pt ) )
+                    SHAPE_POLY_SET zoneAOutline = zoneA->GetBoardOutline();
+                    SHAPE_POLY_SET zoneBOutline = zoneB->GetBoardOutline();
+
+                    if( zoneAOutline.Collide( &zoneBOutline, 0, &actual, &pt ) )
                     {
                         done.fetch_add( 1 );
                         reportZoneZoneViolation( zoneA, zoneB, pt, actual, DRC_CONSTRAINT(), layer );
@@ -1423,13 +1426,19 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testZonesToZones()
                     continue;
 
                 // Examine a candidate zone: compare zoneB to zoneA
+                SHAPE_POLY_SET  zoneAOutline;
+                SHAPE_POLY_SET  zoneBOutline;
                 SHAPE_POLY_SET* polyA = nullptr;
                 SHAPE_POLY_SET* polyB = nullptr;
 
                 if( sameNet )
                 {
-                    polyA = zoneA->Outline();
-                    polyB = zoneB->Outline();
+                    zoneAOutline = zoneA->GetBoardOutline();
+                    zoneBOutline = zoneB->GetBoardOutline();
+                    zoneAOutline.BuildBBoxCaches();
+                    zoneBOutline.BuildBBoxCaches();
+                    polyA = &zoneAOutline;
+                    polyB = &zoneBOutline;
                 }
                 else
                 {

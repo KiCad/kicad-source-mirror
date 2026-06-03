@@ -297,6 +297,10 @@ DRC_ITEM DRC_ITEM::footprintTHPadhasNoHole( DRCE_PAD_TH_WITH_NO_HOLE,
         _HKI( "Through hole pad has no hole" ),
         wxT( "through_hole_pad_without_hole" ) );
 
+DRC_ITEM DRC_ITEM::footprintScaledWithPads( DRCE_FOOTPRINT_SCALED_WITH_PADS,
+        _HKI( "Footprint with pads is scaled (physical part size unchanged)" ),
+        wxT( "footprint_scaled_with_pads" ) );
+
 DRC_ITEM DRC_ITEM::mirroredTextOnFrontLayer( DRCE_MIRRORED_TEXT_ON_FRONT_LAYER,
         _HKI( "Mirrored text on front layer" ),
         wxT( "mirrored_text_on_front_layer" ) );
@@ -398,6 +402,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
         DRC_ITEM::libFootprintIssues,
         DRC_ITEM::libFootprintMismatch,
         DRC_ITEM::footprintTHPadhasNoHole,
+        DRC_ITEM::footprintScaledWithPads,
         DRC_ITEM::missingTuningProfile,
 
         // DRC_ITEM types with no user-editable severities
@@ -477,6 +482,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_FOOTPRINT:                return std::make_shared<DRC_ITEM>( footprint );
     case DRCE_FOOTPRINT_TYPE_MISMATCH:  return std::make_shared<DRC_ITEM>( footprintTypeMismatch );
     case DRCE_PAD_TH_WITH_NO_HOLE:      return std::make_shared<DRC_ITEM>( footprintTHPadhasNoHole );
+    case DRCE_FOOTPRINT_SCALED_WITH_PADS: return std::make_shared<DRC_ITEM>( footprintScaledWithPads );
     case DRCE_MIRRORED_TEXT_ON_FRONT_LAYER:        return std::make_shared<DRC_ITEM>( mirroredTextOnFrontLayer );
     case DRCE_NONMIRRORED_TEXT_ON_BACK_LAYER:      return std::make_shared<DRC_ITEM>( nonMirroredTextOnBackLayer );
     case DRCE_MISSING_TUNING_PROFILE:   return std::make_shared<DRC_ITEM>( missingTuningProfile );

@@ -366,10 +366,10 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
                 zone->TransformShapeToPolygon( itemPoly, aLayer, 0, pcbIUScale.mmToIU( 0.1 ), ERROR_INSIDE );
 
                 if( itemPoly.IsEmpty() )
-                    itemPoly = *zone->Outline();
+                    itemPoly = zone->GetBoardOutline();
 #else
                 // much faster calculation time when using only the zone outlines
-                itemPoly = *zone->Outline();
+                itemPoly = zone->GetBoardOutline();
 #endif
 
                 break;

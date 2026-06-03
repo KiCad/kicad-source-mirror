@@ -173,6 +173,7 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
                                         bool resetFabricationAttrs,
                                         bool resetClearanceOverrides,
                                         bool reset3DModels,
+                                        bool resetTransform,
                                         bool* aUpdated )
 {
     EDA_GROUP* parentGroup = aExisting->GetParentGroup();
@@ -214,6 +215,18 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
 
     if( aNew->GetOrientation() != orientation )
         aNew->SetOrientation( orientation );
+
+    if( !resetTransform )
+    {
+        const double existingScaleX = aExisting->GetTransform().GetScaleX();
+        const double existingScaleY = aExisting->GetTransform().GetScaleY();
+
+        if( existingScaleX != aNew->GetTransform().GetScaleX()
+            || existingScaleY != aNew->GetTransform().GetScaleY() )
+        {
+            aNew->SetTransformScale( existingScaleX, existingScaleY );
+        }
+    }
 
     aNew->SetLocked( aExisting->IsLocked() );
 

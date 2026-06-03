@@ -324,14 +324,11 @@ bool isZoneFillKeepout( const ZONE* aZone, PCB_LAYER_ID aLayer, const BOX2I& aBB
 
 void appendZoneOutlineWithoutArcs( const ZONE* aZone, SHAPE_POLY_SET& aPolys )
 {
-    if( aZone->Outline()->ArcCount() == 0 )
-    {
-        aPolys.Append( *aZone->Outline() );
-        return;
-    }
+    SHAPE_POLY_SET outline = aZone->GetBoardOutline();
 
-    SHAPE_POLY_SET outline( *aZone->Outline() );
-    outline.ClearArcs();
+    if( outline.ArcCount() != 0 )
+        outline.ClearArcs();
+
     aPolys.Append( outline );
 }
 
@@ -441,7 +438,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
         if( zone->GetNumCorners() <= 2 )
             continue;
 
-        zoneOutlineIndices[zone].Build( *zone->Outline() );
+        zoneOutlineIndices[zone].Build( zone->GetBoardOutline() );
     }
 
     // Prefer any same-net zone over a higher-priority different-net zone.  A higher-priority
@@ -562,11 +559,10 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
             LSET     layers = via->GetLayerSet() & boardCuMask;
 
             // Checking if the via hole touches the zone outline
-            auto viaTestFn =
-                    [&]( const ZONE* aZone ) -> bool
-                    {
-                        return aZone->Outline()->Contains( center, -1, holeRadius );
-                    };
+            auto viaTestFn = [&]( const ZONE* aZone ) -> bool
+            {
+                return aZone->GetBoardOutline().Contains( center, -1, holeRadius );
+            };
 
             for( PCB_LAYER_ID layer : layers )
             {
@@ -620,7 +616,7 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                         if( it != zoneOutlineIndices.end() )
                             return it->second.Contains( center );
 
-                        return aZone->Outline()->Contains( center );
+                        return aZone->GetBoardOutline().Contains( center );
                     };
 
             for( PCB_LAYER_ID layer : layers )
@@ -719,7 +715,9 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 if( !inflatedBBox.Intersects( aOtherZone->GetBoundingBox() ) )
                     return false;
 
-                return aZone->Outline()->Collide( aOtherZone->Outline(), m_worstClearance );
+                SHAPE_POLY_SET aOutline = aZone->GetBoardOutline();
+                SHAPE_POLY_SET bOutline = aOtherZone->GetBoardOutline();
+                return aOutline.Collide( &bOutline, m_worstClearance );
             };
 
     auto check_fill_dependency =
@@ -4105,7 +4103,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
     holes.BooleanIntersection( deflatedFilledPolys );
     DUMP_POLYS_TO_COPPER_LAYER( holes, In11_Cu, wxT( "fill-clipped-hatch-holes" ) );
 
-    SHAPE_POLY_SET deflatedOutline = aZone->Outline()->CloneDropTriangulation();
+    SHAPE_POLY_SET deflatedOutline = aZone->GetBoardOutline();
     deflatedOutline.ClearArcs();
     deflatedOutline.Deflate( aZone->GetMinThickness(), CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
     holes.BooleanIntersection( deflatedOutline );

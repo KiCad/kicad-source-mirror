@@ -145,8 +145,8 @@ public:
      * The TextThickness is that set by the user.  The EffectiveTextPenWidth also factors
      * in bold text and thickness clamping.
      */
-    void SetTextThickness( int aWidth );
-    int GetTextThickness() const                { return m_attributes.m_StrokeWidth; };
+    virtual void SetTextThickness( int aWidth );
+    virtual int  GetTextThickness() const { return m_attributes.m_StrokeWidth; };
 
     int GetTextThicknessProperty() const
     {
@@ -164,8 +164,8 @@ public:
      */
     int GetEffectiveTextPenWidth( int aDefaultPenWidth = 0 ) const;
 
-    virtual void SetTextAngle( const EDA_ANGLE& aAngle );
-    const EDA_ANGLE& GetTextAngle() const       { return m_attributes.m_Angle; }
+    virtual void      SetTextAngle( const EDA_ANGLE& aAngle );
+    virtual EDA_ANGLE GetTextAngle() const { return m_attributes.m_Angle; }
 
     // For property system:
     void SetTextAngleDegrees( double aOrientation )
@@ -278,27 +278,27 @@ public:
     void SetLineSpacing( double aLineSpacing );
     double GetLineSpacing() const               { return m_attributes.m_LineSpacing; }
 
-    void SetTextSize( VECTOR2I aNewSize, bool aEnforceMinTextSize = true );
-    VECTOR2I GetTextSize() const                { return m_attributes.m_Size; }
+    virtual void     SetTextSize( VECTOR2I aNewSize, bool aEnforceMinTextSize = true );
+    virtual VECTOR2I GetTextSize() const { return m_attributes.m_Size; }
 
-    void SetTextWidth( int aWidth );
-    int GetTextWidth() const                    { return m_attributes.m_Size.x; }
+    virtual void SetTextWidth( int aWidth );
+    virtual int  GetTextWidth() const { return GetTextSize().x; }
 
-    void SetTextHeight( int aHeight );
-    int GetTextHeight() const                   { return m_attributes.m_Size.y; }
+    virtual void SetTextHeight( int aHeight );
+    virtual int  GetTextHeight() const { return GetTextSize().y; }
 
     void SetTextColor( const COLOR4D& aColor )  { m_attributes.m_Color = aColor; }
     COLOR4D GetTextColor() const                { return m_attributes.m_Color; }
 
-    void SetTextPos( const VECTOR2I& aPoint );
-    const VECTOR2I& GetTextPos() const          { return m_pos; }
+    virtual void     SetTextPos( const VECTOR2I& aPoint );
+    virtual VECTOR2I GetTextPos() const { return m_pos; }
 
-    void SetTextX( int aX );
-    void SetTextY( int aY );
+    virtual void SetTextX( int aX );
+    virtual void SetTextY( int aY );
 
     inline void SetActiveUrl( const wxString& aUrl ) const { m_activeUrl = aUrl; }
 
-    void Offset( const VECTOR2I& aOffset );
+    virtual void Offset( const VECTOR2I& aOffset );
 
     void Empty();
 

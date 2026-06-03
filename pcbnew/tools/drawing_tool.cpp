@@ -3928,7 +3928,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                                 if( hit )
                                     return;
 
-                                if( zone->Outline()->Collide( aVia->GetPosition(), aVia->GetWidth( aLayer ) / 2 ) )
+                                SHAPE_POLY_SET zoneOutline = zone->GetBoardOutline();
+
+                                if( zoneOutline.Collide( aVia->GetPosition(), aVia->GetWidth( aLayer ) / 2 ) )
                                     hit = true;
                             } );
 

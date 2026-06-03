@@ -736,6 +736,14 @@ bool ZONE::IsOnLayer( PCB_LAYER_ID aLayer ) const
 
 const BOX2I ZONE::GetBoundingBox() const
 {
+    auto computeBBox = [&]() -> BOX2I
+    {
+        if( GetParentFootprint() )
+            return GetBoardOutline().BBox();
+
+        return m_Poly->BBox();
+    };
+
     if( const BOARD* board = GetBoard() )
     {
         std::unordered_map<const ZONE*, BOX2I>& cache = board->m_ZoneBBoxCache;
@@ -749,7 +757,7 @@ const BOX2I ZONE::GetBoundingBox() const
                 return cacheIter->second;
         }
 
-        BOX2I bbox = m_Poly->BBox();
+        BOX2I bbox = computeBBox();
 
         {
             std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
@@ -759,7 +767,7 @@ const BOX2I ZONE::GetBoundingBox() const
         return bbox;
     }
 
-    return m_Poly->BBox();
+    return computeBBox();
 }
 
 
@@ -818,6 +826,28 @@ void ZONE::BuildHashValue( PCB_LAYER_ID aLayer )
 }
 
 
+SHAPE_POLY_SET ZONE::GetLibraryOutline() const
+{
+    return m_Poly ? *m_Poly : SHAPE_POLY_SET();
+}
+
+
+SHAPE_POLY_SET ZONE::GetBoardOutline() const
+{
+    SHAPE_POLY_SET poly = m_Poly ? *m_Poly : SHAPE_POLY_SET();
+
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+    {
+        const TRANSFORM_TRS& xform = fp->GetTransform();
+
+        for( auto it = poly.IterateWithHoles(); it; it++ )
+            poly.SetVertex( it.GetIndex(), xform.Apply( *it ) );
+    }
+
+    return poly;
+}
+
+
 bool ZONE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     // When looking for an "exact" hit aAccuracy will be 0 which works poorly for very thin
@@ -831,14 +861,24 @@ bool ZONE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 bool ZONE::HitTestForCorner( const VECTOR2I& refPos, int aAccuracy,
                              SHAPE_POLY_SET::VERTEX_INDEX* aCornerHit ) const
 {
-    return m_Poly->CollideVertex( VECTOR2I( refPos ), aCornerHit, aAccuracy );
+    VECTOR2I libPos = refPos;
+
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        libPos = fp->GetTransform().InverseApply( refPos );
+
+    return m_Poly->CollideVertex( libPos, aCornerHit, aAccuracy );
 }
 
 
 bool ZONE::HitTestForEdge( const VECTOR2I& refPos, int aAccuracy,
                            SHAPE_POLY_SET::VERTEX_INDEX* aCornerHit ) const
 {
-    return m_Poly->CollideEdge( VECTOR2I( refPos ), aCornerHit, aAccuracy );
+    VECTOR2I libPos = refPos;
+
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        libPos = fp->GetTransform().InverseApply( refPos );
+
+    return m_Poly->CollideEdge( libPos, aCornerHit, aAccuracy );
 }
 
 
@@ -862,12 +902,13 @@ bool ZONE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
         if( !arect.Intersects( bbox ) )
             return false;
 
-        int count = m_Poly->TotalVertices();
+        SHAPE_POLY_SET boardOutline = GetBoardOutline();
+        int            count = boardOutline.TotalVertices();
 
         for( int ii = 0; ii < count; ii++ )
         {
-            VECTOR2I vertex = m_Poly->CVertex( ii );
-            VECTOR2I vertexNext = m_Poly->CVertex( ( ii + 1 ) % count );
+            VECTOR2I vertex = boardOutline.CVertex( ii );
+            VECTOR2I vertexNext = boardOutline.CVertex( ( ii + 1 ) % count );
 
             // Test if the point is within the rect
             if( arect.Contains( vertex ) )
@@ -885,27 +926,27 @@ bool ZONE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 
 bool ZONE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
 {
+    SHAPE_POLY_SET boardOutline = GetBoardOutline();
+
     if( aContained )
     {
-        auto outlineIntersectingSelection =
-                [&]()
-                {
-                    for( auto segment = m_Poly->IterateSegments(); segment; segment++ )
-                    {
-                        if( aPoly.Intersects( *segment ) )
-                            return true;
-                    }
+        auto outlineIntersectingSelection = [&]()
+        {
+            for( auto segment = boardOutline.IterateSegments(); segment; segment++ )
+            {
+                if( aPoly.Intersects( *segment ) )
+                    return true;
+            }
 
-                    return false;
-                };
+            return false;
+        };
 
         // In the case of contained selection, all vertices of the zone outline must be inside
         // the selection polygon, so we can check only the first vertex.
-        auto vertexInsideSelection =
-                [&]()
-                {
-                    return aPoly.PointInside( m_Poly->CVertex( 0 ) );
-                };
+        auto vertexInsideSelection = [&]()
+        {
+            return aPoly.PointInside( boardOutline.CVertex( 0 ) );
+        };
 
         return vertexInsideSelection() && !outlineIntersectingSelection();
     }
@@ -913,7 +954,7 @@ bool ZONE::HitTest( const SHAPE_LINE_CHAIN& aPoly, bool aContained ) const
     {
         // Touching selection - check if any segment of the zone contours collides with the
         // selection shape.
-        for( auto segment = m_Poly->IterateSegmentsWithHoles(); segment; segment++ )
+        for( auto segment = boardOutline.IterateSegmentsWithHoles(); segment; segment++ )
         {
             if( aPoly.PointInside( ( *segment ).A ) )
                 return true;
@@ -940,7 +981,14 @@ bool ZONE::HitTestFilledArea( PCB_LAYER_ID aLayer, const VECTOR2I& aRefPos, int 
     // Rule areas have no filled area, but it's generally nice to treat their interior as if it were
     // filled so that people don't have to select them by their outline (which is min-width)
     if( GetIsRuleArea() )
-        return m_Poly->Contains( aRefPos, -1, aAccuracy );
+    {
+        VECTOR2I libPos = aRefPos;
+
+        if( const FOOTPRINT* fp = GetParentFootprint() )
+            libPos = fp->GetTransform().InverseApply( aRefPos );
+
+        return m_Poly->Contains( libPos, -1, aAccuracy );
+    }
 
     std::shared_ptr<SHAPE_POLY_SET> fillPolys;
 
@@ -959,13 +1007,18 @@ bool ZONE::HitTestFilledArea( PCB_LAYER_ID aLayer, const VECTOR2I& aRefPos, int 
 
 bool ZONE::HitTestCutout( const VECTOR2I& aRefPos, int* aOutlineIdx, int* aHoleIdx ) const
 {
+    VECTOR2I libPos = aRefPos;
+
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        libPos = fp->GetTransform().InverseApply( aRefPos );
+
     // Iterate over each outline polygon in the zone and then iterate over
     // each hole it has to see if the point is in it.
     for( int i = 0; i < m_Poly->OutlineCount(); i++ )
     {
         for( int j = 0; j < m_Poly->HoleCount( i ); j++ )
         {
-            if( m_Poly->Hole( i, j ).PointInside( aRefPos ) )
+            if( m_Poly->Hole( i, j ).PointInside( libPos ) )
             {
                 if( aOutlineIdx )
                     *aOutlineIdx = i;
@@ -1113,16 +1166,23 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
 
 void ZONE::Move( const VECTOR2I& offset )
 {
-    /* move outlines */
-    m_Poly->Move( offset );
+    VECTOR2I outlineOffset = offset;
+
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+    {
+        const TRANSFORM_TRS& xform = fp->GetTransform();
+        outlineOffset = xform.InverseApply( offset ) - xform.InverseApply( VECTOR2I( 0, 0 ) );
+    }
+
+    m_Poly->Move( outlineOffset );
 
     // Translate existing hatch lines instead of regenerating them. HatchBorder() is expensive
     // (O(n*m) segment intersections + point-in-polygon tests) and the hatch pattern is
     // invariant under translation.
     for( SEG& seg : m_borderHatchLines )
     {
-        seg.A += offset;
-        seg.B += offset;
+        seg.A += outlineOffset;
+        seg.B += outlineOffset;
     }
 
     /* move fills */
@@ -1164,8 +1224,16 @@ void ZONE::MoveEdge( const VECTOR2I& offset, int aEdge )
 
     if( m_Poly->GetNeighbourIndexes( aEdge, nullptr, &next_corner ) )
     {
-        m_Poly->SetVertex( aEdge, m_Poly->CVertex( aEdge ) + VECTOR2I( offset ) );
-        m_Poly->SetVertex( next_corner, m_Poly->CVertex( next_corner ) + VECTOR2I( offset ) );
+        VECTOR2I libOffset = offset;
+
+        if( const FOOTPRINT* fp = GetParentFootprint() )
+        {
+            const TRANSFORM_TRS& xform = fp->GetTransform();
+            libOffset = xform.InverseApply( offset ) - xform.InverseApply( VECTOR2I( 0, 0 ) );
+        }
+
+        m_Poly->SetVertex( aEdge, m_Poly->CVertex( aEdge ) + libOffset );
+        m_Poly->SetVertex( next_corner, m_Poly->CVertex( next_corner ) + libOffset );
         HatchBorder();
 
         SetNeedRefill( true );
@@ -1175,12 +1243,30 @@ void ZONE::MoveEdge( const VECTOR2I& offset, int aEdge )
 
 void ZONE::Rotate( const VECTOR2I& aCentre, const EDA_ANGLE& aAngle )
 {
-    m_Poly->Rotate( aAngle, aCentre );
+    VECTOR2I outlineCentre = aCentre;
+
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        outlineCentre = fp->GetTransform().InverseApply( aCentre );
+
+    m_Poly->Rotate( aAngle, outlineCentre );
     HatchBorder();
 
     /* rotate filled areas: */
     for( std::pair<const PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>>& pair : m_FilledPolysList )
         pair.second->Rotate( aAngle, aCentre );
+}
+
+
+void ZONE::OnFootprintRescaled( double aRatioX, double aRatioY, double /* aLinearFactor */,
+                                const VECTOR2I& /* aAnchor */, const EDA_ANGLE& /* aParentRotate */ )
+{
+    if( aRatioX == 1.0 && aRatioY == 1.0 )
+        return;
+
+    // Zone outline auto-derives from lib storage through the parent transform.
+    // Just invalidate the fill since geometry-on-screen has changed.
+    SetNeedRefill( true );
+    UnFill();
 }
 
 
@@ -1218,7 +1304,12 @@ void ZONE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
 void ZONE::Mirror( const VECTOR2I& aMirrorRef, FLIP_DIRECTION aFlipDirection )
 {
-    m_Poly->Mirror( aMirrorRef, aFlipDirection );
+    VECTOR2I outlineRef = aMirrorRef;
+
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        outlineRef = fp->GetTransform().InverseApply( aMirrorRef );
+
+    m_Poly->Mirror( outlineRef, aFlipDirection );
 
     HatchBorder();
 
@@ -1423,6 +1514,24 @@ void ZONE::HatchBorder()
 }
 
 
+std::vector<SEG> ZONE::GetHatchLines() const
+{
+    const FOOTPRINT* fp = GetParentFootprint();
+
+    if( !fp )
+        return m_borderHatchLines;
+
+    const TRANSFORM_TRS& xform = fp->GetTransform();
+    std::vector<SEG>     result;
+    result.reserve( m_borderHatchLines.size() );
+
+    for( const SEG& seg : m_borderHatchLines )
+        result.emplace_back( xform.Apply( seg.A ), xform.Apply( seg.B ) );
+
+    return result;
+}
+
+
 int ZONE::GetDefaultHatchPitch()
 {
     return pcbIUScale.mmToIU( ZONE_BORDER_HATCH_DIST_MM );
@@ -1512,7 +1621,10 @@ void ZONE::GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aSameNe
 
         if( candidate->GetNetCode() == GetNetCode() )
         {
-            if( m_Poly->Collide( candidate->m_Poly ) )
+            SHAPE_POLY_SET selfBoard = GetBoardOutline();
+            SHAPE_POLY_SET candidateBoard = candidate->GetBoardOutline();
+
+            if( selfBoard.Collide( &candidateBoard ) )
                 aSameNetCollidingZones->push_back( candidate );
         }
         else
@@ -1532,7 +1644,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
 
     // Processing of arc shapes in zones is not yet supported because Clipper can't do boolean
     // operations on them.  The poly outline must be converted to segments first.
-    SHAPE_POLY_SET flattened = m_Poly->CloneDropTriangulation();
+    SHAPE_POLY_SET flattened = GetBoardOutline();
     flattened.ClearArcs();
 
     if( GetIsRuleArea() )
@@ -1611,7 +1723,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
         // in #16095.
         // (And we wouldn't need to collect all the diffNetIntersectingZones either.)
 
-        SHAPE_POLY_SET sameNetPoly = sameNetZone->Outline()->CloneDropTriangulation();
+        SHAPE_POLY_SET sameNetPoly = sameNetZone->GetBoardOutline();
         sameNetPoly.ClearArcs();
 
         SHAPE_POLY_SET diffNetPoly;
@@ -1623,7 +1735,7 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
             if( diffNetZone->HigherPriority( sameNetZone )
                     && diffNetZone->GetBoundingBox().Intersects( sameNetBoundingBox ) )
             {
-                SHAPE_POLY_SET diffNetOutline = diffNetZone->Outline()->CloneDropTriangulation();
+                SHAPE_POLY_SET diffNetOutline = diffNetZone->GetBoardOutline();
                 diffNetOutline.ClearArcs();
 
                 diffNetPoly.BooleanAdd( diffNetOutline );
@@ -1731,7 +1843,7 @@ std::shared_ptr<SHAPE> ZONE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aF
     // Rule areas are never filled, so fall back to the outline.  DRC relies on this
     // to collide tracks, vias and pads against keepout areas.
     if( GetIsRuleArea() )
-        return std::make_shared<SHAPE_POLY_SET>( *Outline() );
+        return std::make_shared<SHAPE_POLY_SET>( GetBoardOutline() );
 
     std::lock_guard<std::mutex> lock( m_filledPolysListMutex );
 

@@ -204,7 +204,7 @@ bool collidesWithCourtyard( BOARD_ITEM* aItem, std::shared_ptr<SHAPE>& aItemShap
         // Since rules are used for zone filling we can't rely on the filled shapes.
         // Use the zone outline instead.
         if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
-            aItemShape.reset( zone->Outline()->Clone() );
+            aItemShape.reset( zone->GetBoardOutline().Clone() );
         else
             aItemShape = aItem->GetEffectiveShape( aCtx->GetLayer() );
     }
@@ -896,7 +896,7 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
                             if( item->Type() == PCB_ZONE_T )
                             {
-                                itemShape = *static_cast<ZONE*>( item )->Outline();
+                                itemShape = static_cast<ZONE*>( item )->GetBoardOutline();
                             }
                             else if( item->Type() == PCB_FOOTPRINT_T )
                             {
