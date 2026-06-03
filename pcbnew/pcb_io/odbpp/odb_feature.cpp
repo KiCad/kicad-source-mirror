@@ -33,10 +33,15 @@
 #include "pcb_textbox.h"
 #include "pcb_table.h"
 #include "pcb_barcode.h"
+#include "pcb_dimension.h"
 #include "zone.h"
 #include "board.h"
 #include "board_design_settings.h"
 #include "geometry/eda_angle.h"
+#include "geometry/shape_circle.h"
+#include "geometry/shape_line_chain.h"
+#include "geometry/shape_segment.h"
+#include "geometry/shape_poly_set.h"
 #include "odb_eda_data.h"
 #include "pcb_io_odbpp.h"
 #include <callback_gal.h>
@@ -685,6 +690,52 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
         AddShape( *shape, aLayer );
     };
 
+    auto add_dimension = [&]( PCB_DIMENSION_BASE* dimension )
+    {
+        // A dimension is a PCB_TEXT subclass, so the value text is plotted via add_text.
+
+        add_text( dimension );
+
+        PCB_SHAPE temp_shape;
+        temp_shape.SetStroke( STROKE_PARAMS( dimension->GetLineThickness(), LINE_STYLE::SOLID ) );
+        temp_shape.SetLayer( dimension->GetLayer() );
+
+        for( const std::shared_ptr<SHAPE>& shape : dimension->GetShapes() )
+        {
+            switch( shape->Type() )
+            {
+            case SH_SEGMENT:
+            {
+                const SEG& seg = static_cast<const SHAPE_SEGMENT*>( shape.get() )->GetSeg();
+
+                temp_shape.SetShape( SHAPE_T::SEGMENT );
+                temp_shape.SetStart( seg.A );
+                temp_shape.SetEnd( seg.B );
+
+                add_shape( &temp_shape );
+                break;
+            }
+
+            case SH_CIRCLE:
+            {
+                VECTOR2I center( shape->Centre() );
+                int      radius = static_cast<const SHAPE_CIRCLE*>( shape.get() )->GetRadius();
+
+                temp_shape.SetShape( SHAPE_T::CIRCLE );
+                temp_shape.SetFilled( false );
+                temp_shape.SetStart( center );
+                temp_shape.SetEnd( VECTOR2I( center.x + radius, center.y ) );
+
+                add_shape( &temp_shape );
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    };
+
     auto add_pad = [&]( PAD* pad )
     {
         auto iter = GetODBPlugin()->GetPadSubnetMap().find( pad );
@@ -803,14 +854,16 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
             break;
         }
 
-        case PCB_DIMENSION_T:
-        case PCB_TARGET_T:
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_LEADER_T:
         case PCB_DIM_CENTER_T:
         case PCB_DIM_RADIAL_T:
         case PCB_DIM_ORTHOGONAL_T:
-            //TODO: Add support for dimensions
+            add_dimension( static_cast<PCB_DIMENSION_BASE*>( item ) );
+            break;
+
+        case PCB_TARGET_T:
+            //TODO: Add support for targets
             break;
 
         case PCB_BARCODE_T:
