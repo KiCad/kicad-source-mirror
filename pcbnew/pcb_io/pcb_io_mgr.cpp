@@ -51,6 +51,7 @@
 #include <pcb_io/pads/pcb_io_pads.h>
 #include <pcb_io/sprint_layout/pcb_io_sprint_layout.h>
 #include <pcb_io/diptrace/pcb_io_diptrace.h>
+#include <pcb_io/autotrax/pcb_io_autotrax.h>
 #include <reporter.h>
 #include <libraries/library_table_parser.h>
 
@@ -369,4 +370,9 @@ static PCB_IO_MGR::REGISTER_PLUGIN registerDipTracePlugin(
         PCB_IO_MGR::DIPTRACE,
         wxT( "DipTrace" ),
         []() -> PCB_IO* { return new PCB_IO_DIPTRACE; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerAutotraxPlugin(
+        PCB_IO_MGR::AUTOTRAX,
+        wxT( "Protel Autotrax" ),
+        []() -> PCB_IO* { return new PCB_IO_AUTOTRAX; } );
 // clang-format on

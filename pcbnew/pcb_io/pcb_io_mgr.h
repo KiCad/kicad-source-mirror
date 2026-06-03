@@ -74,6 +74,7 @@ public:
         PADS,
         SPRINT_LAYOUT,
         DIPTRACE,
+        AUTOTRAX,
         // add your type here.
 
         // etc.
