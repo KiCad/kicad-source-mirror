@@ -231,9 +231,8 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent, 
 
     m_sidebarButton->SetBitmap( KiBitmapBundle( BITMAPS::left ) );
 
-    // The active notebook page is dictated by the tool that opens this dialog
-    // (EditSymbolFields vs GenerateBOM), so suppress DIALOG_SHIM's tab persistence.
-    OptOut( m_nbPages );
+    // Do not OptOut the notebook. That would also exclude its child controls such as the
+    // scope selector from being persisted. The active page is forced by the opening tool.
 
     m_viewControlsDataModel = new VIEW_CONTROLS_GRID_DATA_MODEL( true );
 
@@ -608,8 +607,7 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataToWindow()
 
     m_dataModel->SetGroupingEnabled( m_groupSymbolsBox->GetValue() );
 
-    wxCommandEvent dummy;
-    OnScope( dummy );
+    setScope( static_cast<SCOPE>( m_scope->GetSelection() ) );
 
     if( selection.GetSize() == 1 )
     {
