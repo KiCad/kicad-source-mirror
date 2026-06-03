@@ -123,6 +123,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_creepage_issue23389.cpp
     drc/test_drc_creepage_issue23576.cpp
     drc/test_drc_creepage_issue23578.cpp
+    drc/test_drc_creepage_issue24286.cpp
     drc/test_drc_invalid_outline_issue24078.cpp
     drc/test_drc_issue24264.cpp
     drc/test_drc_issue24211.cpp

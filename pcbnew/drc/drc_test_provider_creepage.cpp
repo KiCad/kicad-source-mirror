@@ -350,7 +350,12 @@ int DRC_TEST_PROVIDER_CREEPAGE::testCreepage()
         return 0;
 
     SHAPE_POLY_SET outline;
-    bool           hasValidOutline = m_board->GetBoardPolygonOutlines( outline, false );
+
+    // Subtract NPTH holes from the outline polygon so candidate-path midpoint tests
+    // reject creepage segments routed through slot interiors. Without subtraction,
+    // a midpoint inside an NPTH oval still counts as "inside the board" and the
+    // creepage validator accepts straight-through-slot paths (issue #24286).
+    bool hasValidOutline = m_board->GetBoardPolygonOutlines( outline, false, nullptr, false, true );
 
     const DRAWINGS drawings = m_board->Drawings();
     CREEPAGE_GRAPH graph( *m_board );

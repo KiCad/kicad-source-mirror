@@ -2648,21 +2648,29 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer )
                 {
                     std::vector<const BOARD_ITEM*> IgnoreForTest;
 
-                    // Both segments_intersect and segmentIntersectsArc exclude
-                    // shared-endpoint intersections, so POINT and ARC shapes don't
-                    // need their parent skipped during board edge intersection
-                    // testing. Only CIRCLE shapes need parent suppression because
-                    // segmentIntersectsCircle has no endpoint exclusion.
+                    // For CIRCLE and ARC shapes the candidate path ends ON the shape's
+                    // boundary at a tangent point. segmentIntersectsCircle has no
+                    // endpoint exclusion, and segmentIntersectsArc only excludes when
+                    // the shared point is also an arc endpoint, so a tangent point
+                    // lying mid-arc registers as an intersection. Without suppressing
+                    // the parent here, the tangent path is wrongly rejected and
+                    // Dijkstra is forced onto a longer route around the obstacle
+                    // (issue #24286).
                     //
-                    // Previously both parents were always added, which caused paths
-                    // between corners of different Edge.Cuts rectangles to skip both
-                    // rectangles entirely, allowing invalid paths through slot
-                    // interiors.
-                    if( shape1->GetType() == CREEP_SHAPE::TYPE::CIRCLE )
+                    // POINT shapes don't need suppression because segments_intersect
+                    // excludes shared segment endpoints, so paths ending at a POINT
+                    // already get correct exclusion from its parent's other edges.
+                    if( shape1->GetType() == CREEP_SHAPE::TYPE::CIRCLE
+                        || shape1->GetType() == CREEP_SHAPE::TYPE::ARC )
+                    {
                         IgnoreForTest.push_back( shape1->GetParent() );
+                    }
 
-                    if( shape2->GetType() == CREEP_SHAPE::TYPE::CIRCLE )
+                    if( shape2->GetType() == CREEP_SHAPE::TYPE::CIRCLE
+                        || shape2->GetType() == CREEP_SHAPE::TYPE::ARC )
+                    {
                         IgnoreForTest.push_back( shape2->GetParent() );
+                    }
 
                     bool valid = pc.isValid( m_board, aLayer, m_boardEdge, IgnoreForTest, m_boardOutline,
                                      { false, true }, m_minGrooveWidth, &trackIndex );
