@@ -135,7 +135,7 @@ FT_Error OUTLINE_FONT::loadFace( const wxString& aFontFileName, int aFaceIndex )
 
     if( !e )
     {
-        FT_Select_Charmap( m_face, FT_Encoding::FT_ENCODING_UNICODE );
+        SelectCharmap( m_face );
         // params:
         // m_face = handle to face object
         // 0 = char width in 1/64th of points ( 0 = same as char height )
@@ -146,6 +146,34 @@ FT_Error OUTLINE_FONT::loadFace( const wxString& aFontFileName, int aFaceIndex )
     }
 
     return e;
+}
+
+
+void OUTLINE_FONT::SelectCharmap( FT_Face aFace )
+{
+    // A normal text font carries a Unicode charmap that maps the Basic Latin block directly.
+    // Keep it when present.
+    if( FT_Select_Charmap( aFace, FT_ENCODING_UNICODE ) == 0 )
+    {
+        // Some legacy "symbol" fonts expose a Unicode charmap that only mirrors their private-use
+        // (U+F000..U+F0FF) glyph layout, leaving ASCII unmapped. Probe a few common characters to
+        // tell a usable Unicode charmap apart from such a font.
+        static const FT_ULong probes[] = { 'A', 'a', '0', ' ' };
+
+        for( FT_ULong codepoint : probes )
+        {
+            if( FT_Get_Char_Index( aFace, codepoint ) != 0 )
+                return;
+        }
+    }
+
+    // No Unicode charmap can resolve ASCII. If the font carries a Microsoft Symbol charmap,
+    // select it so HarfBuzz applies its U+F000 offset remapping and the glyphs become reachable.
+    if( FT_Select_Charmap( aFace, FT_ENCODING_MS_SYMBOL ) == 0 )
+        return;
+
+    // Otherwise fall back to the Unicode charmap (e.g. a CJK-only font with no Basic Latin).
+    FT_Select_Charmap( aFace, FT_ENCODING_UNICODE );
 }
 
 
