@@ -1985,6 +1985,9 @@ void BOARD::UncacheItemById( const KIID& aId ) const
 
 BOARD_ITEM* BOARD::CacheAndReturnItemById( const KIID& aId, BOARD_ITEM* aItem ) const
 {
+    if( IsFootprintHolder() )
+        return aItem;
+
     if( auto prev = m_cachedIdByItem.find( aItem );
         prev != m_cachedIdByItem.end() && prev->second != aId )
     {

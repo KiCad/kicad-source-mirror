@@ -201,4 +201,40 @@ BOOST_AUTO_TEST_CASE( RepairDuplicateItemUuidsKeepsEarlierTraversalWinner )
 }
 
 
+BOOST_AUTO_TEST_CASE( RemovingResolvedChildEvictsCacheOnFootprintHolder )
+{
+    // Regression for the RC_TREE_MODEL::GetValue use-after-free: ResolveItem() caches a
+    // footprint child on demand, but the cache eviction in FOOTPRINT::Remove is gated on the
+    // parent footprint being indexed.  A footprint-holder board never indexes anything (
+    // CacheItemById early-returns), yet ResolveItem still caches children, so removing and
+    // freeing a resolved child leaves a dangling id in the cache.  A later resolve then hands
+    // back the freed pointer.
+    BOARD* board = new BOARD();
+    board->SetBoardUse( BOARD_USE::FPHOLDER );
+
+    auto footprint = std::make_unique<FOOTPRINT>( board );
+    auto pad = new PAD( footprint.get() );
+    pad->SetNumber( "1" );
+
+    const KIID padId = pad->m_Uuid;
+    footprint->Add( pad );
+
+    FOOTPRINT* liveFootprint = footprint.get();
+    board->Add( footprint.release() );
+
+    // Resolve the pad the way a results-tree row does.  On the buggy code this caches the pad
+    // even though the holder board never indexed its parent footprint.
+    BOOST_REQUIRE_EQUAL( board->ResolveItem( padId, true ), pad );
+
+    // Remove and destroy the pad through the footprint, as a footprint edit does.
+    liveFootprint->Remove( pad );
+    const bool staleEntrySurvived = board->GetItemByIdCache().contains( padId );
+
+    delete pad;
+    delete board;
+
+    BOOST_CHECK( !staleEntrySurvived );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
