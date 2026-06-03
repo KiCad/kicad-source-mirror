@@ -896,7 +896,7 @@ void PCB_EDIT_FRAME::ToggleLibraryTree()
                                           cfg->m_AuiPanels.design_blocks_panel_float_height );
             m_auimgr.Update();
         }
-        else if( cfg->m_AuiPanels.design_blocks_panel_docked_width > 0 )
+        else
         {
             // SetAuiPaneSize also updates m_auimgr
             SetAuiPaneSize( m_auimgr, db_library_pane, cfg->m_AuiPanels.design_blocks_panel_docked_width, -1 );
