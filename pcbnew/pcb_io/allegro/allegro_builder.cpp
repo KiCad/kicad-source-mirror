@@ -1116,7 +1116,7 @@ void BOARD_BUILDER::reportUnexpectedBlockType( uint8_t aGot, uint8_t aExpected, 
 {
     wxString name = aName.IsEmpty() ? wxString( "Object" ) : aName;
     wxString withKey = ( aKey == 0 ) ? wxString( "" ) : wxString::Format( ", with key %#010x ", aKey );
-    wxString withOffset = ( aOffset == 0 ) ? wxString( "" ) : wxString::Format( ", at offset %#lx ", aOffset );
+    wxString withOffset = ( aOffset == 0 ) ? wxString( "" ) : wxString::Format( ", at offset %#zx ", aOffset );
 
     wxString s = wxString::Format( "%s has unexpected type %#04x (expected %#04x)%s%s", name, aGot, aExpected, withKey,
                                    withOffset );
