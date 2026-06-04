@@ -1141,47 +1141,45 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
     int offset = pcbIUScale.mmToIU( 0.001 );
 
     // For non-round pads, clamp effectiveDist so pointD stays within the pad outline.
-    // When a track enters an elongated pad at a steep angle, the projection along the
-    // track axis can extend well beyond the narrow side of the pad.
+    // pointD is placed at effectiveDist from the intersection along -vecVia (into the pad).
+    // The intersection lies on the pad edge, so the segment from the intersection into the pad
+    // must exit again through the far edge. Clamp effectiveDist to that far edge so pointD can
+    // never escape the pad outline. This is essential for oblique connections where the track
+    // only grazes a corner of an elongated pad. There the track axis crosses the pad rather
+    // than entering its body, and an unclamped projection sends pointD spiking out the side.
     if( !IsRound( aOther, layer ) && aOther->Type() == PCB_PAD_T )
     {
-        PAD* pad = static_cast<PAD*>( aOther );
-        VECTOR2I candidateD = intersection
-                              + VECTOR2I( KiROUND( -vecVia.x * ( effectiveDist + offset ) ),
-                                          KiROUND( -vecVia.y * ( effectiveDist + offset ) ) );
+        PAD*           pad = static_cast<PAD*>( aOther );
+        int            maxError = m_board->GetDesignSettings().m_MaxError;
+        SHAPE_POLY_SET padPoly;
+        pad->TransformShapeToPolygon( padPoly, layer, 0, maxError, ERROR_INSIDE );
 
-        if( !pad->HitTest( candidateD, 0, layer ) )
+        SHAPE_LINE_CHAIN& padOutline = padPoly.Outline( 0 );
+        padOutline.SetClosed( true );
+
+        // Cast the into-pad ray from the intersection well past the candidate point so a chord
+        // through the pad always produces a far-edge crossing to clamp against.
+        double   reach = effectiveDist + 2.0 * padRadius + offset;
+        VECTOR2I rayEnd = intersection + VECTOR2I( KiROUND( -vecVia.x * reach ),
+                                                   KiROUND( -vecVia.y * reach ) );
+
+        SHAPE_LINE_CHAIN::INTERSECTIONS hits;
+        padOutline.Intersect( SEG( intersection, rayEnd ), hits );
+
+        double farEdge = 0;
+
+        for( const SHAPE_LINE_CHAIN::INTERSECTION& hit : hits )
         {
-            int maxError = m_board->GetDesignSettings().m_MaxError;
-            SHAPE_POLY_SET padPoly;
-            pad->TransformShapeToPolygon( padPoly, layer, 0, maxError, ERROR_INSIDE );
+            // Ignore the crossing at the intersection point itself.
+            double d = ( hit.p - intersection ).EuclideanNorm();
 
-            SHAPE_LINE_CHAIN& padOutline = padPoly.Outline( 0 );
-            padOutline.SetClosed( true );
-
-            // Shoot a ray from just inside the pad at the entry to beyond the candidate point
-            VECTOR2I rayStart = intersection
-                                + VECTOR2I( KiROUND( -vecVia.x * offset ),
-                                            KiROUND( -vecVia.y * offset ) );
-
-            SHAPE_LINE_CHAIN::INTERSECTIONS hits;
-            padOutline.Intersect( SEG( rayStart, candidateD ), hits );
-
-            if( !hits.empty() )
-            {
-                double maxExitDist = 0;
-
-                for( const SHAPE_LINE_CHAIN::INTERSECTION& hit : hits )
-                {
-                    double d = ( hit.p - intersection ).EuclideanNorm();
-
-                    if( d > maxExitDist )
-                        maxExitDist = d;
-                }
-
-                effectiveDist = std::max( 0.0, maxExitDist - 2.0 * offset );
-            }
+            if( d > offset )
+                farEdge = std::max( farEdge, d );
         }
+
+        // farEdge == 0 means -vecVia does not penetrate the pad (a tangential graze); collapse
+        // pointD onto the entry so the teardrop simply flares from the track to the pad edge.
+        effectiveDist = std::min( effectiveDist, std::max( 0.0, farEdge - 2.0 * offset ) );
     }
     else
     {

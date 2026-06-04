@@ -1032,6 +1032,98 @@ BOOST_FIXTURE_TEST_CASE( RegressionRoundRectTeardropGeometry, ZONE_FILL_TEST_FIX
 
 
 /**
+ * Reproduction for the teardrop "spike" bug: a track entering a long thin roundrect pad
+ * nearly parallel to the pad's long axis, then bending into a second segment toward a via,
+ * must not produce a teardrop polygon with a vertex spiking far outside the track/pad corridor.
+ */
+BOOST_FIXTURE_TEST_CASE( RegressionTeardropSpike, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "teardrop_spike", m_board );
+
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, nullptr );
+
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    toolMgr.RegisterTool( dummyTool );
+
+    BOARD_COMMIT commit( dummyTool );
+    TEARDROP_MANAGER teardropMgr( m_board.get(), &toolMgr );
+    teardropMgr.UpdateTeardrops( commit, nullptr, nullptr, true );
+
+    if( !commit.Empty() )
+        commit.Push( _( "Add teardrops" ), SKIP_UNDO | SKIP_SET_DIRTY );
+
+    int  teardropCount = 0;
+    bool foundSpike = false;
+
+    const int maxError = m_board->GetDesignSettings().m_MaxError;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( !zone->IsTeardropArea() )
+            continue;
+
+        teardropCount++;
+
+        PCB_LAYER_ID layer = zone->GetFirstLayer();
+        int          netcode = zone->GetNetCode();
+
+        // A well-formed teardrop only ever covers the copper it bridges: the pads/vias it
+        // anchors on and the track(s) it follows. Build that corridor from all copper on the
+        // teardrop's net and layer (generously inflated) and require the teardrop to lie
+        // inside it. A spike sweeps area outside the corridor.
+        SHAPE_POLY_SET corridor;
+
+        for( FOOTPRINT* fp : m_board->Footprints() )
+        {
+            for( PAD* pad : fp->Pads() )
+            {
+                if( pad->GetNetCode() == netcode && pad->IsOnLayer( layer ) )
+                    pad->TransformShapeToPolygon( corridor, layer, 0, maxError, ERROR_OUTSIDE );
+            }
+        }
+
+        for( PCB_TRACK* track : m_board->Tracks() )
+        {
+            if( track->GetNetCode() == netcode && track->IsOnLayer( layer ) )
+                track->TransformShapeToPolygon( corridor, layer, 0, maxError, ERROR_OUTSIDE );
+        }
+
+        // Inflate by a full track width so the teardrop's flare toward the pad, which is
+        // legitimately wider than the bare track, is comfortably inside the corridor.
+        corridor.Inflate( pcbIUScale.mmToIU( 0.127 ), CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                          maxError );
+        corridor.Simplify();
+
+        SHAPE_POLY_SET outside = *zone->Outline();
+        outside.BooleanSubtract( corridor );
+
+        double tdArea = std::abs( zone->Outline()->Area() );
+        double outArea = std::abs( outside.Area() );
+        double ratio = tdArea > 0 ? outArea / tdArea : 0.0;
+
+        BOOST_TEST_MESSAGE( wxString::Format(
+                "Teardrop on layer %d: area %.0f, area outside corridor %.0f (%.1f%%)",
+                (int) layer, tdArea, outArea, ratio * 100.0 ) );
+
+        if( ratio > 0.02 )
+        {
+            foundSpike = true;
+            BOOST_TEST_MESSAGE( wxString::Format(
+                    "Teardrop on layer %d sweeps %.1f%% of its area outside the track/pad "
+                    "corridor (spike)",
+                    (int) layer, ratio * 100.0 ) );
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( teardropCount > 0, "Expected at least one teardrop zone" );
+    BOOST_CHECK_MESSAGE( !foundSpike,
+                         "A teardrop vertex spikes outside the track/pad corridor it should "
+                         "follow" );
+}
+
+
+/**
  * Test that teardrops connecting to oval pads at their curved ends have proper tangent curves.
  *
  * Oval pads have semicircular ends. When a track connects to the curved end, the teardrop
