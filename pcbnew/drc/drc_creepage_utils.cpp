@@ -49,10 +49,25 @@ bool segmentIntersectsArc( const VECTOR2I& p1, const VECTOR2I& p2, const VECTOR2
     // arc endpoint, matching the endpoint exclusion in segments_intersect.
     std::vector<VECTOR2I> filtered;
 
+    // arcStart and arcEnd are reconstructed from the arc angles via cos/sin and
+    // truncated to integer, so they land a couple of IU away from the stored
+    // corner coordinates of an adjoining edge. The intersection solver rounds
+    // similarly. An exact equality test therefore misses the shared corner where
+    // a segment endpoint meets the arc endpoint and reports a phantom crossing,
+    // which rejects legitimate creepage paths threading the gap between two
+    // adjacent slot end caps. Compare with a small rounding-scale tolerance.
+    const VECTOR2I::extended_type tolerance = 50;
+    const VECTOR2I::extended_type toleranceSq = tolerance * tolerance;
+
+    auto coincident = [&]( const VECTOR2I& a, const VECTOR2I& b )
+    {
+        return ( a - b ).SquaredEuclideanNorm() <= toleranceSq;
+    };
+
     for( const VECTOR2I& ip : rawPoints )
     {
-        bool atSharedEndpoint = ( ip == arcStart || ip == arcEnd )
-                                && ( ip == p1 || ip == p2 );
+        bool atSharedEndpoint = ( coincident( ip, arcStart ) || coincident( ip, arcEnd ) )
+                                && ( coincident( ip, p1 ) || coincident( ip, p2 ) );
 
         if( !atSharedEndpoint )
             filtered.push_back( ip );

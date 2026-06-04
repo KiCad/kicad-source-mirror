@@ -154,6 +154,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_creepage_issue23658.cpp
     drc/test_drc_creepage_issue23578.cpp
     drc/test_drc_creepage_issue24286.cpp
+    drc/test_drc_creepage_issue24523.cpp
     drc/test_drc_invalid_outline_issue24078.cpp
     drc/test_drc_invalid_outline_issue24241.cpp
     drc/test_drc_silk_rule_area_issue24177.cpp
@@ -359,7 +360,8 @@ set( PCBNEW_CREEPAGE_TESTS
 :CreepagePerformanceIssue21482\
 :CreepageDualSlotsIssue23364\
 :CreepageNPTHSlotIssue23389\
-:CreepagePathStartPointIssue23576" )
+:CreepagePathStartPointIssue23576\
+:CreepageTwoNPTHSlotsIssue24523" )
 
 # IPC-2581 export tests (~15s)
 set( PCBNEW_IPC2581_TESTS "Ipc2581Export" )
@@ -439,6 +441,7 @@ set( PCBNEW_EXCLUDED_FROM_OTHER
 :!CreepageDualSlotsIssue23364\
 :!CreepageNPTHSlotIssue23389\
 :!CreepagePathStartPointIssue23576\
+:!CreepageTwoNPTHSlotsIssue24523\
 :!Ipc2581Export\
 :!FailedToCleanRegressionTests\
 :!TrackCleanerRegressionTests\
