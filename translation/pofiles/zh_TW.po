@@ -22,8 +22,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:30+0300\n"
-"PO-Revision-Date: 2026-04-24 15:07+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-06-05 08:01+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.6\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -6074,13 +6074,12 @@ msgid ""
 "loaded. Global libraries are available in every project, and you may also "
 "add project-specific libraries if desired."
 msgstr ""
-"$\\text{KiCad}$ 的程式庫說明$\\text{KiCad}$ 隨附了大量由 $\\text{KiCad}$ 程式"
-"庫團隊維護的符號程式庫與封裝程式庫。\n"
-"您也可以建立自己的程式庫，或透過外掛與內容管理器或其他來源安裝第三方程式"
-"庫。\n"
-"程式庫表（$\\text{Library tables}$）是列出要載入程式庫的組態檔案。全域程式庫"
-"（$\\text{Global libraries}$）在所有專案中皆可用，您也可以依需求新增專案專屬"
-"的程式庫。"
+"KiCad 的程式庫說明KiCad 隨附了大量由 KiCad 程式庫團隊維護的符號程式庫與封裝程"
+"式庫。\n"
+"您也可以建立自己的程式庫，或透過外掛與內容管理器或其他來源安裝第三方程式庫"
+"。\n"
+"程式庫表（Library tables）是列出要載入程式庫的組態檔案。全域程式庫（Global "
+"libraries）在所有專案中皆可用，您也可以依需求新增專案專屬的程式庫。"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:24
 #: common/dialogs/panel_startwizard_libraries_base.cpp:25
@@ -6093,9 +6092,8 @@ msgid "How would you like KiCad to create them?"
 msgstr "您想如何配置 KiCad?"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:41
-#, fuzzy
 msgid "Start with the built-in KiCad libraries"
-msgstr "從 $\\text{KiCad}$ 內建程式庫開始（建議）"
+msgstr "從 KiCad 內建程式庫開始（建議）"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:45
 #, fuzzy
@@ -6108,13 +6106,12 @@ msgid ""
 "previous step.  Any tables that cannot be imported will be created with the "
 "default KiCad libraries."
 msgstr ""
-"程式庫表將從您上一步驟選取的版本匯入。任何無法匯入的程式庫表，將會使用 $"
-"\\text{KiCad}$ 的預設程式庫建立。"
+"程式庫表將從您上一步驟選取的版本匯入。任何無法匯入的程式庫表，將會使用 KiCad "
+"的預設程式庫建立。"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:53
-#, fuzzy
 msgid "Migrate built-in libraries to the latest version (recommended)"
-msgstr "從 $\\text{KiCad}$ 內建程式庫開始（建議）"
+msgstr "從 KiCad 內建程式庫開始（建議）"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:55
 msgid ""
@@ -6133,8 +6130,8 @@ msgid ""
 "installing the libraries. You can proceed with setup, but you will need to "
 "install the libraries separately in order for them to be available."
 msgstr ""
-"無法在預期位置找到內建程式庫表。這通常表示您在安裝 $\\text{KiCad}$ 軟體時並未"
-"同時安裝程式庫。您可以繼續設定，但若要使用程式庫，則需要另外安裝。"
+"無法在預期位置找到內建程式庫表。這通常表示您在安裝 KiCad 軟體時並未同時安裝程"
+"式庫。您可以繼續設定，但若要使用程式庫，則需要另外安裝。"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:21
 #, fuzzy
@@ -6146,8 +6143,8 @@ msgid ""
 "Allow connections to the Internet to check for updated versions of KiCad and "
 "packages installed through the Plugin and Content Manager?"
 msgstr ""
-"是否允許連線至網際網路，以檢查 $\\text{KiCad}$ 及透過外掛與內容管理器(PCM)所"
-"安裝套件的更新版本？"
+"是否允許連線至網際網路，以檢查 KiCad 及透過外掛與內容管理器(PCM)所安裝套件的"
+"更新版本？"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:36
 #: common/eda_base_frame.cpp:1557
@@ -6166,13 +6163,12 @@ msgid ""
 "files such as schematics, PCBs, and libraries are never shared as part of "
 "this process."
 msgstr ""
-"KiCad 數據收集聲明翻譯$\\text{KiCad}$ 可以匿名地將當機或其他事件資料回報給開"
-"發團隊，以協助識別並修復錯誤，並改善軟體效能。\n"
+"KiCad 數據收集聲明翻譯KiCad 可以匿名地將當機或其他事件資料回報給開發團隊，以"
+"協助識別並修復錯誤，並改善軟體效能。\n"
 "\n"
-"當資料收集功能啟用時，$\\text{KiCad}$ 會在發生當機或其他值得注意的事件時，自"
-"動傳送報告。這些報告包含回報當時 $\\text{KiCad}$ 軟體狀態的技術細節。我們不會"
-"收集任何個人身份資訊 ($\\text{PII}$)，且您的設計檔案（如原理圖、$"
-"\\text{PCB}$ 或程式庫）絕不會在此流程中被分享。"
+"當資料收集功能啟用時，KiCad 會在發生當機或其他值得注意的事件時，自動傳送報告"
+"。這些報告包含回報當時 KiCad 軟體狀態的技術細節。我們不會收集任何個人身份資"
+"訊 (PII)，且您的設計檔案（如原理圖、PCB 或程式庫）絕不會在此流程中被分享。"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:42
 msgid "Enable anonymous data collection"
@@ -9224,7 +9220,7 @@ msgstr "DRC 錯誤"
 
 #: common/layer_id.cpp:142
 msgid "DRC shapes"
-msgstr "$\\text{DRC}$ 圖形"
+msgstr "DRC 圖形"
 
 #: common/layer_id.cpp:143
 msgid "DRC exclusions"
@@ -9270,12 +9266,12 @@ msgstr "庫名稱中包含非法字符"
 #: common/lib_table_grid_tricks.cpp:61
 #, c-format
 msgid "Error loading library table '%s'"
-msgstr "載入元件庫表格「$\\text{\\%s}$」時發生錯誤"
+msgstr "載入元件庫表格「%s」時發生錯誤"
 
 #: common/lib_table_grid_tricks.cpp:62
 #, c-format
 msgid "Error loading library '%s'"
-msgstr "載入元件庫「$\\text{\\%s}$」時發生錯誤"
+msgstr "載入元件庫「%s」時發生錯誤"
 
 #: common/lib_table_grid_tricks.cpp:107
 #, fuzzy
@@ -10212,7 +10208,7 @@ msgid ""
 "Let's take a moment to configure some basic settings.  You can always modify "
 "these settings later by opening the Preferences dialog."
 msgstr ""
-"$\\text{KiCad}$ 正在首次啟動，或部分組態檔案遺失。\n"
+"KiCad 正在首次啟動，或部分組態檔案遺失。\n"
 "請讓我們花一點時間設定一些基本參數。您隨時可以透過開啟「偏好設定」對話框來修"
 "改這些設定。"
 
@@ -11441,9 +11437,9 @@ msgid ""
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"說明檔案「$\\text{\\%s}$」或\n"
-"「$\\text{\\%s}$」找不到。\n"
-"您是否要存取 $\\text{KiCad}$ 線上說明？"
+"說明檔案「%s」或\n"
+"「%s」找不到。\n"
+"您是否要存取 KiCad 線上說明？"
 
 #: common/tool/common_control.cpp:332 common/tool/common_control.cpp:352
 msgid "File Not Found"
@@ -11455,8 +11451,8 @@ msgid ""
 "Help file '%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
 msgstr ""
-"說明檔案「$\\text{\\%s}$」找不到。\n"
-"您是否要存取 $\\text{KiCad}$ 線上說明？"
+"說明檔案「%s」找不到。\n"
+"您是否要存取 KiCad 線上說明？"
 
 #: common/tool/common_control.cpp:387
 #, c-format
@@ -11547,7 +11543,7 @@ msgstr "欄位的值不能為空。"
 
 #: common/validators.cpp:316
 msgid "carriage return"
-msgstr "歸位（$\\text{Enter}$）"
+msgstr "歸位（Enter）"
 
 #: common/validators.cpp:318
 msgid "line feed"
@@ -12170,7 +12166,7 @@ msgstr "繪圖頁面檔案"
 
 #: common/wildcards_and_files_ext.cpp:400
 msgid "KiCad symbol footprint link files"
-msgstr "$\\text{KiCad}$ 符號與封裝連結檔案"
+msgstr "KiCad 符號與封裝連結檔案"
 
 #: common/wildcards_and_files_ext.cpp:408 gerbview/files.cpp:66
 msgid "Drill files"
@@ -13478,7 +13474,7 @@ msgstr "候選項目數量: %d， "
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:658
 #, c-format
 msgid "%u link(s) mapped, %u not found"
-msgstr "已對應 $\\text{\\%u}$ 個連結，$\\text{\\%u}$ 個找不到"
+msgstr "已對應 %u 個連結，%u 個找不到"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:664
 #, c-format
@@ -13539,7 +13535,7 @@ msgstr "符號庫參考"
 
 #: eeschema/dialogs/dialog_erc.cpp:124
 msgid "Run ERC"
-msgstr "執行 $\\text{ERC}$"
+msgstr "執行 ERC"
 
 #: eeschema/dialogs/dialog_erc.cpp:185
 msgid "Show Annotation dialog"
@@ -13555,7 +13551,7 @@ msgstr "交叉探測選取項目"
 
 #: eeschema/dialogs/dialog_erc.cpp:234
 msgid "Highlight corresponding items on canvas when selected in the ERC list"
-msgstr "在 $\\text{ERC}$ 清單中選取時，高亮顯示畫布上的對應項目"
+msgstr "在 ERC 清單中選取時，高亮顯示畫布上的對應項目"
 
 #: eeschema/dialogs/dialog_erc.cpp:238 pcbnew/dialogs/dialog_drc.cpp:325
 msgid "Center on Cross-probe"
@@ -13647,7 +13643,7 @@ msgstr "編輯排除註釋..."
 #: eeschema/dialogs/dialog_erc.cpp:780 pcbnew/dialogs/dialog_drc.cpp:860
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr "將所有「$\\text{\\%s}$」違規的嚴重程度變更為錯誤"
+msgstr "將所有「%s」違規的嚴重程度變更為錯誤"
 
 #: eeschema/dialogs/dialog_erc.cpp:782 eeschema/dialogs/dialog_erc.cpp:789
 #, fuzzy
@@ -13657,7 +13653,7 @@ msgstr "違規嚴重程度也可以在「原理圖設定...」對話框中進行
 #: eeschema/dialogs/dialog_erc.cpp:787 pcbnew/dialogs/dialog_drc.cpp:867
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr "將所有「$\\text{\\%s}$」違規的嚴重程度變更為警告"
+msgstr "將所有「%s」違規的嚴重程度變更為警告"
 
 #: eeschema/dialogs/dialog_erc.cpp:793 pcbnew/dialogs/dialog_drc.cpp:873
 #, c-format
@@ -14748,8 +14744,7 @@ msgstr "主體樣式"
 msgid ""
 "The value '%s' can't be converted to boolean correctly, it has been "
 "interpreted as 'False'"
-msgstr ""
-"值「$\\text{\\%s}$」無法正確轉換為布林值，已將其解釋為「$\\text{False}$」。"
+msgstr "值「%s」無法正確轉換為布林值，已將其解釋為「False」。"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1016
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1584
@@ -14955,7 +14950,7 @@ msgstr "收起左側面板"
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:556
 #, c-format
 msgid "No related symbols found in library '%s'."
-msgstr "在元件庫「$\\text{\\%s}$」中找不到相關符號。"
+msgstr "在元件庫「%s」中找不到相關符號。"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:558
 #, c-format
@@ -14965,7 +14960,7 @@ msgstr "符號在元件庫中 '%s' 找不到。"
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:582
 #, c-format
 msgid "Error loading symbol '%s': %s"
-msgstr "載入符號「$\\text{\\%s}$」時發生錯誤：%s"
+msgstr "載入符號「%s」時發生錯誤：%s"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:590
 msgid "No related symbols could be loaded from the library."
@@ -15006,7 +15001,7 @@ msgstr "重新命名欄位"
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:773
 #, c-format
 msgid "Field name '%s' already exists."
-msgstr "欄位名稱「$\\text{\\%s}$」已存在。"
+msgstr "欄位名稱「%s」已存在。"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:820
 #: eeschema/dialogs/dialog_lib_fields_table_base.h:94
@@ -15463,7 +15458,7 @@ msgid ""
 "starting by sm."
 msgstr ""
 "可用於此符號的封裝名稱清單。\n"
-"封裝名稱可使用萬用字元，例如 $\\text{sm}$ 來允許所有以 sm* 開頭的封裝名稱。"
+"封裝名稱可使用萬用字元，例如 sm 來允許所有以 sm* 開頭的封裝名稱。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:457
 msgid "Add footprint filter"
@@ -15744,7 +15739,7 @@ msgstr "退回到使用者路徑 '%s'。"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:452
 #, c-format
 msgid "Cannot normalize path '%s'."
-msgstr "無法正規化路徑「$\\text{\\%s}$」。"
+msgstr "無法正規化路徑「%s」。"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:435
 msgid "No project or path defined for the current schematic."
@@ -17216,7 +17211,7 @@ msgstr "#"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:882
 #, c-format
 msgid "The first %d fields are mandatory and names cannot be changed."
-msgstr "前 $\\text{\\%d}$ 個欄位為必填項目，且名稱無法變更。"
+msgstr "前 %d 個欄位為必填項目，且名稱無法變更。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:909
 #, c-format
@@ -17225,27 +17220,27 @@ msgstr "欄位名稱 %s 已存在。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:994
 msgid "Include 'DNP' Symbols"
-msgstr "包含「$\\text{DNP}$」符號"
+msgstr "包含「DNP」符號"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:995
 msgid ""
 "Show symbols marked 'DNP' in the table.  This setting also controls whether "
 "or not 'DNP' symbols are included on export."
 msgstr ""
-"在表格中顯示標記為「$\\text{DNP}$」的符號。此設定也控制「$\\text{DNP}$」符號"
-"是否包含在匯出資料中。"
+"在表格中顯示標記為「DNP」的符號。此設定也控制「DNP」符號是否包含在匯出資料中"
+"。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1000
 msgid "Include 'Exclude from BOM' Symbols"
-msgstr "包含「排除於 $\\text{BOM}$」符號"
+msgstr "包含「排除於 BOM」符號"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1001
 msgid ""
 "Show symbols marked 'Exclude from BOM' in the table.  Symbols marked "
 "'Exclude from BOM' are never included on export."
 msgstr ""
-"在表格中顯示標記為「排除於 $\\text{BOM}$」的符號。標記為「排除於 $"
-"\\text{BOM}$(零件清單)」的符號永遠不會包含在匯出資料中。"
+"在表格中顯示標記為「排除於 BOM」的符號。標記為「排除於 BOM(零件清單)」的符號"
+"永遠不會包含在匯出資料中。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1009
 msgid "Highlight corresponding item on canvas when it is selected in the table"
@@ -18001,11 +17996,11 @@ msgstr "連線 & 匯流排屬性"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
 msgid "Bill of Materials Presets"
-msgstr "$\\text{BOM}$（物料清單）預設集"
+msgstr "BOM（物料清單）預設集"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:63
 msgid "Bill of Materials Formatting Presets"
-msgstr "$\\text{BOM}$（物料清單）格式預設集"
+msgstr "BOM（物料清單）格式預設集"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:30
 msgid "Symbol unit notation:"
@@ -18236,11 +18231,11 @@ msgstr "保持圓心和半徑，調整終點"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 msgid "Mouse drag performs Drag (G) operation"
-msgstr "滑鼠拖曳執行「拖曳」 ($\\text{G}$) 操作"
+msgstr "滑鼠拖曳執行「拖曳」 (G) 操作"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:57
 msgid "If unchecked, mouse drag will perform move (M) operation"
-msgstr "若未勾選，滑鼠拖曳將執行移動 ($\\text{M}$) 操作"
+msgstr "若未勾選，滑鼠拖曳將執行移動 (M) 操作"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:61
 msgid "Automatically start wires on unconnected pins"
@@ -18954,7 +18949,7 @@ msgstr "根目錄"
 
 #: eeschema/eeschema_jobs_handler.cpp:138 pcbnew/pcbnew_jobs_handler.cpp:299
 msgid "Plotting to HPGL is no longer supported as of KiCad 10.0."
-msgstr "自 $\\text{KiCad}$ 10.0 版起，不再支援匯出 $\\text{HPGL}$ 格式。"
+msgstr "自 KiCad 10.0 版起，不再支援匯出 HPGL 格式。"
 
 #: eeschema/eeschema_jobs_handler.cpp:210
 msgid "Failed to load schematic\n"
@@ -21170,9 +21165,9 @@ msgid "File not found %s."
 msgstr "找不到檔案 %s。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5240
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "載入元件庫「$\\text{\\%s}$」時發生錯誤"
+msgstr "載入元件庫「%s」時發生錯誤"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5263
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -21811,9 +21806,9 @@ msgid "Cannot create symbol library path '%s'."
 msgstr "無法建立全域程式庫表路徑 '%s'。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s found in library '%s'"
-msgstr "在元件庫「$\\text{\\%s}$」中找不到相關符號。"
+msgstr "在元件庫「%s」中找不到相關符號。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:260
 #, c-format
@@ -23530,9 +23525,9 @@ msgid ""
 "'%s'."
 msgstr ""
 "無法針對父圖頁原理圖檔案路徑\n"
-"「$\\text{\\%s}$」\n"
+"「%s」\n"
 "正規化新圖頁原理圖檔案路徑\n"
-"「$\\text{\\%s}$」。"
+"「%s」。"
 
 #: eeschema/sheet.cpp:237 kicad/tools/kicad_manager_control.cpp:710
 #, c-format
@@ -23552,8 +23547,7 @@ msgstr "無法將原理圖檔案‘%s’複製到目標‘%s’。"
 #: eeschema/sheet.cpp:284
 #, c-format
 msgid "Change '%s' link from '%s' to '%s'?"
-msgstr ""
-"是否將「$\\text{\\%s}$」的連結從「$\\text{\\%s}$」變更為「$\\text{\\%s}$」？"
+msgstr "是否將「%s」的連結從「%s」變更為「%s」？"
 
 #: eeschema/sheet.cpp:289 eeschema/sheet.cpp:307
 msgid "This action cannot be undone."
@@ -23562,7 +23556,7 @@ msgstr "此動作無法復原。"
 #: eeschema/sheet.cpp:302
 #, c-format
 msgid "Create new file '%s' with contents of '%s'?"
-msgstr "是否建立內容為「$\\text{\\%s}$」的新檔案「$\\text{\\%s}$」？"
+msgstr "是否建立內容為「%s」的新檔案「%s」？"
 
 #: eeschema/sheet.cpp:331
 #, c-format
@@ -24920,9 +24914,9 @@ msgid "Format"
 msgstr "格式"
 
 #: eeschema/sim/spice_library_parser.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing SPICE library '%s': %s"
-msgstr "載入元件庫「$\\text{\\%s}$」時發生錯誤"
+msgstr "解析 SPICE 元件庫 '%s' 時發生錯誤：%s"
 
 #: eeschema/sim/spice_model_parser.cpp:101
 #: eeschema/sim/spice_model_parser.cpp:215
@@ -30786,9 +30780,8 @@ msgid "No drawing sheet"
 msgstr "無繪圖圖紙"
 
 #: kicad/cli/command_pcb_import.cpp:40
-#, fuzzy
 msgid "Import a non-KiCad PCB file to KiCad format"
-msgstr "以 $\\text{KiCad}$ 格式匯出網路表"
+msgstr "以 KiCad 格式匯出網路表"
 
 #: kicad/cli/command_pcb_import.cpp:44
 msgid ""
