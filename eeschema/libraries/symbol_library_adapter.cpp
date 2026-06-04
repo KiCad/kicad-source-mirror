@@ -293,19 +293,10 @@ void SYMBOL_LIBRARY_ADAPTER::DeleteSymbol( const wxString& aNickname, const wxSt
 
 bool SYMBOL_LIBRARY_ADAPTER::IsSymbolLibWritable( const wxString& aLib )
 {
-    {
-        std::shared_lock lock( m_librariesMutex );
-
-        if( auto it = m_libraries.find( aLib ); it != m_libraries.end() )
-            return it->second.plugin->IsLibraryWritable( getUri( it->second.row ) );
-    }
-
-    {
-        std::shared_lock lock( GlobalLibraryMutex );
-
-        if( auto it = GlobalLibraries.Get().find( aLib ); it != GlobalLibraries.Get().end() )
-            return it->second.plugin->IsLibraryWritable( getUri( it->second.row ) );
-    }
+    // Route through fetchIfLoaded() so LOAD_ERROR sentinel entries, which carry a null
+    // plugin, are filtered out instead of dereferenced.
+    if( std::optional<const LIB_DATA*> lib = fetchIfLoaded( aLib ) )
+        return ( *lib )->plugin->IsLibraryWritable( getUri( ( *lib )->row ) );
 
     return false;
 }
