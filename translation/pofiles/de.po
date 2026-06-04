@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:30+0300\n"
-"PO-Revision-Date: 2026-06-01 11:01+0000\n"
+"PO-Revision-Date: 2026-06-04 07:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -2803,7 +2803,7 @@ msgid ""
 "separate timestamped file you can review later."
 msgstr ""
 "Behält die gespeicherte Datei bei und schreibt die automatisch gespeicherte "
-"Version als zursätzliche, separate Datei mit Zeitstempel für spätere "
+"Version als zusätzliche, separate Datei mit Zeitstempel für spätere "
 "Überprüfung."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
@@ -3252,8 +3252,9 @@ msgid "Edit Group Properties"
 msgstr "Gruppeneigenschaften bearbeiten"
 
 #: common/dialogs/dialog_group_properties.cpp:177
+#, fuzzy
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "Eine Gruppe kann sich nicht selbst beinhalten."
 
 #: common/dialogs/dialog_group_properties.cpp:185
 msgid "Cannot add this group because it already contains the current group."
