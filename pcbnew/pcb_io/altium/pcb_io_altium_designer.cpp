@@ -26,9 +26,12 @@
  * @brief Pcbnew PLUGIN for Altium *.PcbDoc format.
  */
 
+#include <set>
+
 #include <wx/string.h>
 
 #include <font/fontconfig.h>
+#include <project.h>
 #include <pcb_io_altium_designer.h>
 #include <altium_pcb.h>
 #include <altium_pcb_compound_file.h>
@@ -121,6 +124,50 @@ void ApplyAltiumProjectVariantsToBoard( BOARD* aBoard,
         }
     }
 }
+
+void ApplyAltiumProjectParametersToProject( PROJECT* aProject,
+                                            const std::map<wxString, wxString>& aParameters )
+{
+    if( !aProject )
+        return;
+
+    // Names KiCad resolves contextually (board fields, title block, special strings). Importing
+    // them as project variables would shadow nothing useful and could surprise the user, so they
+    // are left to native resolution.
+    static const std::set<wxString> reserved = {
+        wxS( "LAYER" ),         wxS( "FILENAME" ),      wxS( "FILEPATH" ),
+        wxS( "PROJECTNAME" ),   wxS( "VARIANT" ),       wxS( "VARIANT_DESC" ),
+        wxS( "ISSUE_DATE" ),    wxS( "CURRENT_DATE" ),  wxS( "CURRENT_TIME_LOCALE" ),
+        wxS( "CURRENT_TIME_HH_MM_SS" ), wxS( "REVISION" ), wxS( "TITLE" ),
+        wxS( "COMPANY" ),       wxS( "COMMENT1" ),      wxS( "COMMENT2" ),
+        wxS( "COMMENT3" ),      wxS( "COMMENT4" ),      wxS( "COMMENT5" ),
+        wxS( "COMMENT6" ),      wxS( "COMMENT7" ),      wxS( "COMMENT8" ),
+        wxS( "COMMENT9" ),      wxS( "VCSHASH" ),       wxS( "VCSSHORTHASH" ),
+        wxS( "KICAD_VERSION" ), wxS( "PAPER" ),         wxS( "SHEETNAME" ),
+        wxS( "SHEETPATH" ),     wxS( "DRC_WARNING" ),   wxS( "DRC_ERROR" ),
+        wxS( "ERC_WARNING" ),   wxS( "ERC_ERROR" )
+    };
+
+    std::map<wxString, wxString>& textVars = aProject->GetTextVars();
+    bool                          added = false;
+
+    for( const auto& [name, value] : aParameters )
+    {
+        if( reserved.count( name ) )
+            continue;
+
+        // Don't clobber a variable the user (or a prior import step) already set.
+        if( textVars.count( name ) )
+            continue;
+
+        textVars[name] = value;
+        added = true;
+    }
+
+    if( added )
+        aProject->IncrementTextVarsTicker();
+}
+
 
 PCB_IO_ALTIUM_DESIGNER::PCB_IO_ALTIUM_DESIGNER() :
         PCB_IO( wxS( "Altium Designer" ) )
@@ -232,10 +279,15 @@ BOARD* PCB_IO_ALTIUM_DESIGNER::LoadBoard( const wxString& aFileName, BOARD* aApp
 
     if( m_props && m_props->count( "project_file" ) )
     {
-        auto variants = ParseAltiumProjectVariants( m_props->at( "project_file" ) );
+        const wxString& projectFile = m_props->at( "project_file" );
+
+        auto variants = ParseAltiumProjectVariants( projectFile );
 
         if( !variants.empty() )
             ApplyAltiumProjectVariantsToBoard( m_board, variants );
+
+        ApplyAltiumProjectParametersToProject( aProject,
+                                               ParseAltiumProjectParameters( projectFile ) );
     }
 
     return m_board;

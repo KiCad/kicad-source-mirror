@@ -36,12 +36,19 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <board_stackup_manager/board_stackup.h>
+#include <common.h>
+#include <core/utf8.h>
+#include <eda_text.h>
 #include <netinfo.h>
 #include <netclass.h>
 #include <pcb_track.h>
+#include <project.h>
 #include <project/net_settings.h>
+#include <settings/settings_manager.h>
 #include <zone.h>
 
+#include <map>
+#include <string>
 #include <vector>
 
 
@@ -412,6 +419,99 @@ BOOST_AUTO_TEST_CASE( StackupDielectricLossTangent )
                          wxString::Format( "Only %d of %d dielectric sublayers received a loss "
                                            "tangent from the Altium stackup",
                                            dielectricWithTangent, dielectricCount ) );
+}
+
+
+/**
+ * Test that Altium project parameters (special strings) are imported as KiCad project text
+ * variables so that board text such as ".PCB_Revision" resolves to its value.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24455
+ */
+BOOST_AUTO_TEST_CASE( ProjectParametersToTextVars )
+{
+    std::string dataDir = KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/issue24456/";
+    std::string pcbDoc = dataDir + "Fastino_Ground_Isolator.PcbDoc";
+    std::string prjPcb = dataDir + "Fastino_Ground_Isolator.PrjPcb";
+
+    SETTINGS_MANAGER settingsManager;
+    settingsManager.LoadProject( "" );
+    PROJECT& project = settingsManager.Prj();
+
+    std::map<std::string, UTF8> props;
+    props["project_file"] = prjPcb;
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    m_altiumPlugin.LoadBoard( pcbDoc, board.get(), &props, &project );
+
+    const std::map<wxString, wxString>& textVars = project.GetTextVars();
+
+    // The parameter that the issue reports as broken must resolve to its value.
+    BOOST_REQUIRE( textVars.count( wxS( "PCB_REVISION" ) ) );
+    BOOST_CHECK_EQUAL( textVars.at( wxS( "PCB_REVISION" ) ), wxS( "A" ) );
+
+    // A representative sample of the remaining project parameters must all be present.
+    BOOST_CHECK_EQUAL( textVars.at( wxS( "COMPANY_NAME" ) ), wxS( "ETH Zurich" ) );
+    BOOST_CHECK_EQUAL( textVars.at( wxS( "PROJECT_NAME" ) ), wxS( "Fastino Ground Isolator" ) );
+    BOOST_CHECK_EQUAL( textVars.at( wxS( "REVISION_MAJOR" ) ), wxS( "1" ) );
+    BOOST_CHECK_EQUAL( textVars.at( wxS( "YEAR" ) ), wxS( "2026" ) );
+
+    // Board text referencing the special string now resolves through the project variable.
+    wxString resolved = ExpandTextVars( wxS( "${PCB_REVISION}" ), &project );
+    BOOST_CHECK_EQUAL( resolved, wxS( "A" ) );
+
+    // End-to-end: an actual imported board text that references ${PCB_REVISION} must render its
+    // value once the board is linked to the project carrying the variable. This guards against a
+    // regression in the Altium special-string conversion as well as the variable registration.
+    board->SetProject( &project, true /* reference only */ );
+
+    bool sawResolvedBoardText = false;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        const EDA_TEXT* text = dynamic_cast<const EDA_TEXT*>( item );
+
+        if( text && text->GetText().Contains( wxS( "${PCB_REVISION}" ) ) )
+        {
+            wxString shown = text->GetShownText( false );
+            BOOST_CHECK( !shown.Contains( wxS( "${PCB_REVISION}" ) ) );
+            BOOST_CHECK( shown.Contains( wxS( "A" ) ) );
+            sawResolvedBoardText = true;
+        }
+    }
+
+    BOOST_CHECK( sawResolvedBoardText );
+}
+
+
+/**
+ * Test that importing project parameters does not overwrite text variables that already exist
+ * on the project, and that names reserved for KiCad's contextual resolution are not imported.
+ */
+BOOST_AUTO_TEST_CASE( ProjectParametersPreserveExisting )
+{
+    std::string dataDir = KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/issue24456/";
+    std::string pcbDoc = dataDir + "Fastino_Ground_Isolator.PcbDoc";
+    std::string prjPcb = dataDir + "Fastino_Ground_Isolator.PrjPcb";
+
+    SETTINGS_MANAGER settingsManager;
+    settingsManager.LoadProject( "" );
+    PROJECT& project = settingsManager.Prj();
+    project.GetTextVars()[wxS( "PCB_REVISION" )] = wxS( "user-set" );
+
+    std::map<std::string, UTF8> props;
+    props["project_file"] = prjPcb;
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    m_altiumPlugin.LoadBoard( pcbDoc, board.get(), &props, &project );
+
+    // A pre-existing variable wins over the imported parameter.
+    BOOST_CHECK_EQUAL( project.GetTextVars().at( wxS( "PCB_REVISION" ) ), wxS( "user-set" ) );
+
+    // Other parameters are still imported.
+    BOOST_CHECK_EQUAL( project.GetTextVars().at( wxS( "COMPANY_NAME" ) ), wxS( "ETH Zurich" ) );
 }
 
 

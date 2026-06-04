@@ -72,6 +72,20 @@ std::vector<ALTIUM_PROJECT_VARIANT> ParseAltiumProjectVariants( const wxString& 
 
 
 /**
+ * Parse all [ParameterN] sections from an Altium .PrjPcb project file.
+ *
+ * Altium stores project-wide special strings (PCB_Revision, Company_Name, ...) here as
+ * Name/Value pairs. They are what board text such as ".PCB_Revision" resolves against, so
+ * they map to KiCad project text variables.
+ *
+ * @param aPrjPcbPath Full path to the .PrjPcb file.
+ * @return Map of upper-cased parameter name to value, matching the case-insensitive variable
+ *         references emitted by AltiumPcbSpecialStringsToKiCadStrings.
+ */
+std::map<wxString, wxString> ParseAltiumProjectParameters( const wxString& aPrjPcbPath );
+
+
+/**
  * Derive a stable KIID from an Altium component unique id.
  *
  * Altium unique ids are not hexadecimal, so KIID's string constructor cannot parse them and

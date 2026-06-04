@@ -119,10 +119,15 @@ BOARD* PCB_IO_ALTIUM_CIRCUIT_MAKER::LoadBoard( const wxString& aFileName, BOARD*
 
     if( m_props && m_props->count( "project_file" ) )
     {
-        auto variants = ParseAltiumProjectVariants( m_props->at( "project_file" ) );
+        const wxString& projectFile = m_props->at( "project_file" );
+
+        auto variants = ParseAltiumProjectVariants( projectFile );
 
         if( !variants.empty() )
             ApplyAltiumProjectVariantsToBoard( m_board, variants );
+
+        ApplyAltiumProjectParametersToProject( aProject,
+                                               ParseAltiumProjectParameters( projectFile ) );
     }
 
     return m_board;
