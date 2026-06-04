@@ -214,23 +214,24 @@ void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( const wxDir& aDir, bool aRecursiv
         {
             wxFileName path( aDir.GetName(), filename );
 
-            auto logToMap = [&]( std::map<wxString, wxString>& aMapToLogTo, const wxString& aKey )
-            {
-                if( aMapToLogTo.count( aKey ) )
-                {
-                    if( m_reporter )
+            auto logToMap =
+                    [&]( std::map<wxString, wxString>& aMapToLogTo, const wxString& aKey )
                     {
-                        m_reporter->Report( wxString::Format( _( "File at '%s' was ignored. Using previously "
-                                                                 "found file at '%s' instead." ),
-                                                              path.GetFullPath(),
-                                                              aMapToLogTo.at( aKey ) ) );
-                    }
-                }
-                else
-                {
-                    aMapToLogTo.emplace( aKey, path.GetFullPath() );
-                }
-            };
+                        if( aMapToLogTo.count( aKey ) )
+                        {
+                            if( m_reporter )
+                            {
+                                m_reporter->Report( wxString::Format( _( "File at '%s' was ignored. Using previously "
+                                                                         "found file at '%s' instead." ),
+                                                                      path.GetFullPath(),
+                                                                      aMapToLogTo.at( aKey ) ) );
+                            }
+                        }
+                        else
+                        {
+                            aMapToLogTo.emplace( aKey, path.GetFullPath() );
+                        }
+                    };
 
             // Add dir1/dir2/cmp, dir2/cmp, cmp
             wxString extension = path.GetExt().Lower();
