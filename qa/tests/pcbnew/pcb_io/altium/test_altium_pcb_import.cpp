@@ -43,6 +43,7 @@
 #include <netclass.h>
 #include <pcb_track.h>
 #include <project.h>
+#include <pcb_text.h>
 #include <project/net_settings.h>
 #include <settings/settings_manager.h>
 #include <zone.h>
@@ -512,6 +513,84 @@ BOOST_AUTO_TEST_CASE( ProjectParametersPreserveExisting )
 
     // Other parameters are still imported.
     BOOST_CHECK_EQUAL( project.GetTextVars().at( wxS( "COMPANY_NAME" ) ), wxS( "ETH Zurich" ) );
+}
+
+
+/**
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24504
+ *
+ * The Fastino board places several labels as a coincident pair of free strings, one on a copper
+ * layer and one on the matching soldermask layer.  Altium auto-sizes each string's bounding box
+ * from its own rasterizer and may store a different box width (and stroke width) for the two
+ * copies, so anchoring the imported KiCad text to that per-record box width pushed the copper and
+ * mask copies apart.  Verify that every copper-layer free string that has a matching soldermask
+ * free string (same text, mirroring and rotation) is imported to the same position.
+ */
+BOOST_AUTO_TEST_CASE( CopperAndMaskTextCoincide )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir()
+                           + "plugins/altium/issue24456/Fastino_Ground_Isolator.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+    BOOST_REQUIRE( board );
+
+    std::vector<PCB_TEXT*> copperTexts;
+    std::vector<PCB_TEXT*> maskTexts;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        if( item->Type() != PCB_TEXT_T )
+            continue;
+
+        PCB_TEXT*    text = static_cast<PCB_TEXT*>( item );
+        PCB_LAYER_ID layer = text->GetLayer();
+
+        if( IsCopperLayer( layer ) )
+            copperTexts.push_back( text );
+        else if( layer == F_Mask || layer == B_Mask )
+            maskTexts.push_back( text );
+    }
+
+    BOOST_REQUIRE_MESSAGE( !copperTexts.empty(), "Board must contain copper-layer text" );
+    BOOST_REQUIRE_MESSAGE( !maskTexts.empty(), "Board must contain soldermask-layer text" );
+
+    // A copper string and a mask string are the same logical label when they share text, rotation
+    // and mirroring.  KiCad's IU tolerance for "coincident" is tight; before the fix the gap was
+    // 50000-75000 IU (0.05-0.075 mm).
+    const int tolerance = 1000; // 1 micron
+
+    int matchedPairs = 0;
+
+    for( PCB_TEXT* copper : copperTexts )
+    {
+        for( PCB_TEXT* mask : maskTexts )
+        {
+            if( copper->GetText() != mask->GetText()
+                || copper->GetTextAngle() != mask->GetTextAngle()
+                || copper->IsMirrored() != mask->IsMirrored() )
+            {
+                continue;
+            }
+
+            // Only treat them as the same label when they are already near each other; distinct
+            // labels that happen to share a glyph (e.g. several "+" pads) must not be cross-matched.
+            VECTOR2I delta = copper->GetTextPos() - mask->GetTextPos();
+
+            if( std::abs( delta.x ) > 500000 || std::abs( delta.y ) > 500000 )
+                continue;
+
+            matchedPairs++;
+
+            BOOST_CHECK_MESSAGE(
+                    std::abs( delta.x ) <= tolerance && std::abs( delta.y ) <= tolerance,
+                    wxString::Format( "Copper/mask copies of '%s' diverge by (%d, %d) IU",
+                                      copper->GetText(), delta.x, delta.y ) );
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( matchedPairs > 0,
+                         "Expected at least one coincident copper/soldermask text pair" );
 }
 
 
