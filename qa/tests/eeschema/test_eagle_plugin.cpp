@@ -25,6 +25,9 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <map>
+#include <set>
+
 #include <core/ignore.h>
 #include <kiway.h>
 #include <pgm_base.h>
@@ -33,6 +36,7 @@
 #include <sch_sheet.h>
 #include <sch_screen.h>
 #include <sch_symbol.h>
+#include <sch_pin.h>
 #include <sch_label.h>
 #include <sch_sheet_path.h>
 #include <settings/settings_manager.h>
@@ -267,4 +271,88 @@ BOOST_AUTO_TEST_CASE( LabelsRemainGlobalForFlatNamespace )
                              "Found global SCH_GLOBALLABEL '" << busName.ToStdString()
                              << "' — Eagle bus should remain a local SCH_LABEL." );
     }
+}
+
+
+/**
+ * Verify that the Eagle "@<tag>" linking hint on a pin name is stripped from the displayed
+ * pin name while still resolving the device <connect> mapping correctly.
+ *
+ * Regression test for issue #24483: Eagle disambiguates duplicate pin names within a symbol
+ * with a trailing "@<tag>" (e.g. "IN@1", "IN@2", "NC@3").  This tag is metadata used only to
+ * link pins to pads via <connect>; it should not appear as visible pin text.  The importer
+ * was setting the raw Eagle name as the KiCad pin name, leaking "@1"/"@2"/"@3" into the
+ * schematic.
+ */
+BOOST_AUTO_TEST_CASE( PinNameTagStripped )
+{
+    const wxFileName eagleFn = getEagleTestSchematic( "issue24483_pin_tag.sch" );
+    BOOST_REQUIRE( wxFileExists( eagleFn.GetFullPath() ) );
+
+    std::unique_ptr<SCHEMATIC> schematic;
+    loadEagleSchematic( eagleFn, wxS( "eagle_pin_tag" ), schematic );
+
+    SCH_SHEET_LIST hierarchy = schematic->BuildSheetListSortedByPageNumbers();
+
+    // Key symbols by their library item name (e.g. "tagtest_MYDEV"); the annotated reference
+    // is unreliable here because the no-connect device is annotated with a '#' power prefix.
+    std::map<wxString, const SCH_SYMBOL*> symbolByLibItem;
+
+    for( const SCH_SHEET_PATH& sheetPath : hierarchy )
+    {
+        SCH_SCREEN* screen = sheetPath.LastScreen();
+
+        if( !screen )
+            continue;
+
+        for( const EDA_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            const SCH_SYMBOL* sym = static_cast<const SCH_SYMBOL*>( item );
+            symbolByLibItem[sym->GetLibId().GetLibItemName().wx_str()] = sym;
+        }
+    }
+
+    // The connected device maps pins to pads through <connect>; the no-connect device has no
+    // <connect> so pins are auto-numbered. Both paths must strip the tag from the display name.
+    BOOST_REQUIRE( symbolByLibItem.count( wxS( "tagtest_MYDEV" ) ) == 1 );
+    BOOST_REQUIRE( symbolByLibItem.count( wxS( "tagtest_MYDEV_NC" ) ) == 1 );
+
+    auto collectNames = []( const SCH_SYMBOL* aSym )
+    {
+        std::multiset<wxString> names;
+
+        for( const SCH_PIN* pin : aSym->GetAllLibPins() )
+            names.insert( pin->GetName() );
+
+        return names;
+    };
+
+    // No display name on either symbol may retain the "@<tag>" suffix.
+    for( const auto& [libItem, sym] : symbolByLibItem )
+    {
+        for( const SCH_PIN* pin : sym->GetAllLibPins() )
+        {
+            BOOST_CHECK_MESSAGE( pin->GetName().Find( '@' ) == wxNOT_FOUND,
+                                 libItem.ToStdString() << " pin kept Eagle tag '"
+                                 << pin->GetName().ToStdString() << "'." );
+        }
+    }
+
+    // For the connected device, the two "IN@n" pins must both display as "IN" yet keep their
+    // distinct pad mapping, and "NC@3" must strip to "NC".
+    std::map<wxString, wxString> nameByPad;
+
+    for( const SCH_PIN* pin : symbolByLibItem[wxS( "tagtest_MYDEV" )]->GetAllLibPins() )
+        nameByPad[pin->GetNumber()] = pin->GetName();
+
+    BOOST_CHECK_EQUAL( nameByPad["1"], wxString( wxS( "IN" ) ) );
+    BOOST_CHECK_EQUAL( nameByPad["2"], wxString( wxS( "IN" ) ) );
+    BOOST_CHECK_EQUAL( nameByPad["3"], wxString( wxS( "GND" ) ) );
+    BOOST_CHECK_EQUAL( nameByPad["4"], wxString( wxS( "NC" ) ) );
+
+    // The no-connect device keeps every pin, so both tagged "IN" pins survive the strip.
+    std::multiset<wxString> ncNames = collectNames( symbolByLibItem[wxS( "tagtest_MYDEV_NC" )] );
+    BOOST_CHECK_EQUAL( ncNames.count( wxS( "IN" ) ), 2 );
+    BOOST_CHECK_EQUAL( ncNames.count( wxS( "GND" ) ), 1 );
+    BOOST_CHECK_EQUAL( ncNames.count( wxS( "NC" ) ), 1 );
 }

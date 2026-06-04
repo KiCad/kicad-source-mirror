@@ -94,7 +94,7 @@ static BOX2I getSheetBbox( SCH_SHEET* aSheet )
 }
 
 
-///< Extract the net name part from a pin name (e.g. return 'GND' for pin named 'GND@2')
+///< Strip the Eagle "@<tag>" linking hint from a pin name (e.g. return 'GND' for 'GND@2')
 static inline wxString extractNetName( const wxString& aPinName )
 {
     return aPinName.BeforeFirst( '@' );
@@ -2426,7 +2426,10 @@ bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol,
         {
             for( const std::unique_ptr<ECONNECT>& connect : aDevice->connects )
             {
-                if( connect->gate == aGateName && pin->GetName() == connect->pin )
+                // Eagle <connect> references the full pin name including any "@<tag>"
+                // linking hint, so match against the raw Eagle name rather than the
+                // stripped display name set on the pin.
+                if( connect->gate == aGateName && epin->name == connect->pin )
                 {
                     wxArrayString pads = wxSplit( wxString( connect->pad ), ' ' );
 
@@ -2695,7 +2698,11 @@ SCH_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 
     std::unique_ptr<SCH_PIN> pin = std::make_unique<SCH_PIN>( aSymbol.get() );
     pin->SetPosition( VECTOR2I( aPin->x.ToSchUnits(), -aPin->y.ToSchUnits() ) );
-    pin->SetName( aPin->name );
+
+    // Eagle pin names may carry a trailing "@<tag>" linking hint that disambiguates
+    // duplicate names within a symbol. It is metadata, not visible text, so strip it
+    // from the displayed name. The full Eagle name is still used to match <connect>.
+    pin->SetName( extractNetName( aPin->name ) );
     pin->SetUnit( aGateNumber );
 
     int roti = aPin->rot ? aPin->rot->degrees : 0;
