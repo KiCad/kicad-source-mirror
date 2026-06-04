@@ -1,6 +1,7 @@
 #include <boost/test/unit_test.hpp>
 #include <footprint.h>
 #include <pcbnew_utils/board_file_utils.h>
+#include <pcbnew_utils/board_test_utils.h>
 #include <settings/settings_manager.h>
 #include <filesystem>
 
@@ -22,8 +23,8 @@ BOOST_AUTO_TEST_CASE( FullRoundTrip )
     body.m_rotation = VECTOR3D( 10.0, 20.0, 45.0 );
     body.m_show = false;
 
-    const auto savePath = std::filesystem::temp_directory_path() / "extruded_body_roundtrip.kicad_mod";
-    std::filesystem::remove( savePath );
+    KI_TEST::TEMPORARY_DIRECTORY tempLib( "kicad_qa_extruded_body_roundtrip", ".pretty" );
+    const auto savePath = tempLib.GetPath() / "extruded_body_roundtrip.kicad_mod";
     KI_TEST::DumpFootprintToFile( footprint, savePath.string() );
 
     std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );
@@ -63,8 +64,8 @@ BOOST_AUTO_TEST_CASE( DefaultsRoundTrip )
     body.m_height = pcbIUScale.mmToIU( 5.0 );
     // Leave everything else at defaults
 
-    const auto savePath = std::filesystem::temp_directory_path() / "extruded_body_defaults_roundtrip.kicad_mod";
-    std::filesystem::remove( savePath );
+    KI_TEST::TEMPORARY_DIRECTORY tempLib( "kicad_qa_extruded_body_defaults_roundtrip", ".pretty" );
+    const auto savePath = tempLib.GetPath() / "extruded_body_defaults_roundtrip.kicad_mod";
     KI_TEST::DumpFootprintToFile( footprint, savePath.string() );
 
     std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );
@@ -97,8 +98,8 @@ BOOST_AUTO_TEST_CASE( NoExtrudedBodyRoundTrip )
 
     FOOTPRINT footprint( nullptr );
 
-    const auto savePath = std::filesystem::temp_directory_path() / "extruded_body_none_roundtrip.kicad_mod";
-    std::filesystem::remove( savePath );
+    KI_TEST::TEMPORARY_DIRECTORY tempLib( "kicad_qa_extruded_body_none_roundtrip", ".pretty" );
+    const auto savePath = tempLib.GetPath() / "extruded_body_none_roundtrip.kicad_mod";
     KI_TEST::DumpFootprintToFile( footprint, savePath.string() );
 
     std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );

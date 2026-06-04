@@ -56,9 +56,9 @@ BOOST_AUTO_TEST_CASE( BarcodeWriteRead )
 
     board->Add( barcode, ADD_MODE::APPEND, true );
 
-    const std::filesystem::path savePath = std::filesystem::temp_directory_path() / "barcode_roundtrip.kicad_pcb";
+    KI_TEST::TEMPORARY_DIRECTORY tempDir( "kicad_qa_barcode_roundtrip", "" );
+    const std::filesystem::path  savePath = tempDir.GetPath() / "barcode_roundtrip.kicad_pcb";
 
-    std::filesystem::remove( savePath );
     KI_TEST::DumpBoardToFile( *board, savePath.string() );
     std::unique_ptr<BOARD> board2 = KI_TEST::ReadBoardFromFileOrStream( savePath.string() );
     BOARD_ITEM&            item2 = KI_TEST::RequireBoardItemWithTypeAndId( *board2, PCB_BARCODE_T, id );
@@ -95,9 +95,11 @@ BOOST_AUTO_TEST_CASE( BarcodeFootprintWriteRead )
 
     footprint.Add( barcode, ADD_MODE::APPEND, true );
 
-    const std::filesystem::path savePath = std::filesystem::temp_directory_path() / "barcode_roundtrip.kicad_mod";
+    // Saving a footprint validates its whole containing directory as a library, so use a private
+    // temp directory rather than littering (and reading stray files from) the system temp root.
+    KI_TEST::TEMPORARY_DIRECTORY tempLib( "kicad_qa_barcode_roundtrip", ".pretty" );
+    const std::filesystem::path  savePath = tempLib.GetPath() / "barcode_roundtrip.kicad_mod";
 
-    std::filesystem::remove( savePath );
     KI_TEST::DumpFootprintToFile( footprint, savePath.string() );
     std::unique_ptr<FOOTPRINT> footprint2 = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );
 
