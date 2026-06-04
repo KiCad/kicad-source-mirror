@@ -122,6 +122,101 @@ namespace std
 }
 
 
+// Identifies a pair of items for the temporary clearance cache by their properties (net, layers,
+// kind) instead of their memory address. Items with the same properties get the same clearance
+// from the rules, so they share one cache entry.
+struct TEMP_CLEARANCE_CACHE_KEY
+{
+    struct SIDE
+    {
+        const void* boardItem;
+        const void* net;
+        int         layerStart;
+        int         layerEnd;
+        int         kind;
+        bool        freePad;
+
+        bool operator==( const SIDE& o ) const
+        {
+            return boardItem == o.boardItem && net == o.net && layerStart == o.layerStart && layerEnd == o.layerEnd
+                   && kind == o.kind && freePad == o.freePad;
+        }
+
+        bool operator<( const SIDE& o ) const
+        {
+            if( boardItem != o.boardItem )
+                return boardItem < o.boardItem;
+            if( net != o.net )
+                return net < o.net;
+            if( layerStart != o.layerStart )
+                return layerStart < o.layerStart;
+            if( layerEnd != o.layerEnd )
+                return layerEnd < o.layerEnd;
+            if( kind != o.kind )
+                return kind < o.kind;
+            return freePad < o.freePad;
+        }
+    };
+
+    SIDE A;
+    SIDE B;
+    bool Flag;
+
+    static SIDE makeSide( const PNS::ITEM* aItem )
+    {
+        return SIDE{ (const void*) aItem->BoardItem(),
+                     (const void*) aItem->Net(),
+                     aItem->Layers().Start(),
+                     aItem->Layers().End(),
+                     (int) aItem->Kind(),
+                     aItem->IsFreePad() };
+    }
+
+    TEMP_CLEARANCE_CACHE_KEY( const PNS::ITEM* aA, const PNS::ITEM* aB, bool aFlag ) :
+            Flag( aFlag )
+    {
+        SIDE sa = makeSide( aA );
+        SIDE sb = makeSide( aB );
+
+        // Canonical order so the key is symmetric in (A, B)
+        if( sb < sa )
+        {
+            A = sb;
+            B = sa;
+        }
+        else
+        {
+            A = sa;
+            B = sb;
+        }
+    }
+
+    bool operator==( const TEMP_CLEARANCE_CACHE_KEY& o ) const { return A == o.A && B == o.B && Flag == o.Flag; }
+};
+
+namespace std
+{
+template <>
+struct hash<TEMP_CLEARANCE_CACHE_KEY>
+{
+    std::size_t operator()( const TEMP_CLEARANCE_CACHE_KEY& k ) const
+    {
+        size_t retval = 0xBADC0FFEE0DDF00D;
+
+        for( const TEMP_CLEARANCE_CACHE_KEY::SIDE* s : { &k.A, &k.B } )
+        {
+            hash_combine( retval, hash<const void*>()( s->boardItem ), hash<const void*>()( s->net ),
+                          hash<int>()( s->layerStart ), hash<int>()( s->layerEnd ), hash<int>()( s->kind ),
+                          hash<bool>()( s->freePad ) );
+        }
+
+        hash_combine( retval, hash<bool>()( k.Flag ) );
+        return retval;
+    }
+};
+} // namespace std
+
+
 struct HULL_CACHE_KEY
 {
     const PNS::ITEM* item;
@@ -215,7 +310,7 @@ private:
     std::optional<bool> m_hasUserPhysicalConstraint;
 
     std::unordered_map<CLEARANCE_CACHE_KEY, int> m_clearanceCache;
-    std::unordered_map<CLEARANCE_CACHE_KEY, int> m_tempClearanceCache;
+    std::unordered_map<TEMP_CLEARANCE_CACHE_KEY, int>    m_tempClearanceCache;
     std::unordered_map<HULL_CACHE_KEY, SHAPE_LINE_CHAIN> m_hullCache;
 };
 
@@ -768,19 +863,24 @@ bool PNS_PCBNEW_RULE_RESOLVER::HasUserDefinedPhysicalConstraint()
 int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB,
                                          bool aUseClearanceEpsilon )
 {
-    CLEARANCE_CACHE_KEY key( aA, aB, aUseClearanceEpsilon );
+    const bool bothOwned = aA && aB && aA->Owner() && aB->Owner();
 
-    // Search cache (used for actual board items)
-    auto it = m_clearanceCache.find( key );
+    if( bothOwned )
+    {
+        // Search cache (used for actual board items)
+        auto it = m_clearanceCache.find( CLEARANCE_CACHE_KEY( aA, aB, aUseClearanceEpsilon ) );
 
-    if( it != m_clearanceCache.end() )
-        return it->second;
+        if( it != m_clearanceCache.end() )
+            return it->second;
+    }
+    else if( aA && aB )
+    {
+        // Search cache (used for temporary items within an algorithm)
+        auto it = m_tempClearanceCache.find( TEMP_CLEARANCE_CACHE_KEY( aA, aB, aUseClearanceEpsilon ) );
 
-    // Search cache (used for temporary items within an algorithm)
-    it = m_tempClearanceCache.find( key );
-
-    if( it != m_tempClearanceCache.end() )
-        return it->second;
+        if( it != m_tempClearanceCache.end() )
+            return it->second;
+    }
 
     PNS::CONSTRAINT constraint;
     int             rv = 0;
@@ -867,24 +967,13 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
     if( aUseClearanceEpsilon && rv > 0 )
         rv = std::max( 0, rv - m_clearanceEpsilon );
 
-    /*
-     * It makes no sense to put items that have no owning NODE in the cache - they can be
-     * allocated on stack and we can't really invalidate them in the cache when they are
-     * destroyed.  Probably a better idea would be to use a static unique counter in PNS::ITEM
-     * constructor to generate the cache keys.
-     *
-     * However, algorithms DO greatly benefit from using the cache, so ownerless items need to be
-     * cached.  In order to easily clear those only, a temporary cache is created. If this doesn't
-     * seem nice, an alternative is clearing the full cache once it reaches a certain size. Also
-     * not pretty, but VERY effective to keep things interactive.
-     */
-    if( aA && aB )
-    {
-        if ( aA->Owner() && aB->Owner() )
-            m_clearanceCache[ key ] = rv;
-        else
-            m_tempClearanceCache[ key ] = rv;
-    }
+    // Remember this result so we don't recompute it. Real board items go in the long-lived
+    // cache. Temporary items the router creates while routing go in a separate cache we can
+    // clear on their own.
+    if( bothOwned )
+        m_clearanceCache[CLEARANCE_CACHE_KEY( aA, aB, aUseClearanceEpsilon )] = rv;
+    else if( aA && aB )
+        m_tempClearanceCache[TEMP_CLEARANCE_CACHE_KEY( aA, aB, aUseClearanceEpsilon )] = rv;
 
     return rv;
 }
