@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:29+0300\n"
-"PO-Revision-Date: 2026-05-12 15:11+0000\n"
+"PO-Revision-Date: 2026-06-04 07:53+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.5-dev\n"
+"X-Generator: Weblate 2026.6\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -13746,9 +13746,8 @@ msgid "Filter chains by name or net..."
 msgstr "Filtrowane pól na podstawie nazwy:"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:77
-#, fuzzy
 msgid "Create"
-msgstr "Utwórz PCB"
+msgstr "Utwórz"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:129
 #, c-format
@@ -13823,9 +13822,9 @@ msgid "From and To must be different components."
 msgstr "Źródło 1 oraz Źródło 2 muszą być różne."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find component '%s' or '%s'."
-msgstr "Nie można odnaleźć komponentu IBIS '%s'"
+msgstr "Nie można odnaleźć komponentu '%s' lub '%s'."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:401
 #, c-format
@@ -22379,9 +22378,9 @@ msgid "KiCad database library files"
 msgstr "Bazodanowe pliki bibliotek symboli"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:140
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported DipTrace schematic format version %d."
-msgstr "Niewspierane RPC wersja %d."
+msgstr "Niewspierany format schematu DipTrace w wersji %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:187
 #, c-format
@@ -22524,9 +22523,8 @@ msgid "Open canceled by user."
 msgstr "Otwieranie zostało anulowane przez użytkownika."
 
 #: eeschema/sch_io/diptrace/sch_io_diptrace.h:58
-#, fuzzy
 msgid "DipTrace schematic files"
-msgstr "Pliki schematu programu LTSpice"
+msgstr "Pliki schematu programu DipTrace"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:603
 #, c-format
@@ -26401,19 +26399,20 @@ msgstr ""
 "<b>Prostokąt (grafika) ma rozmiar równy 0</b> na pozycji <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Graphic ellipse has null or negative radii</b> at location <b>(%s, %s)</"
 "b>."
 msgstr ""
-"<b>Prostokąt (grafika) ma rozmiar równy 0</b> na pozycji <b>(%s, %s)</b>."
+"<b>Elipsa ma ujemny promień lub jego brak</b> na pozycji <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Graphic elliptical arc has zero sweep</b> at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>Prostokąt (grafika) ma rozmiar równy 0</b> na pozycji <b>(%s, %s)</b>."
+"<b>Łuk eliptyczny (grafika) posiada zerowy zasięg</b> na pozycji <b>(%s, %s)"
+"</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:72
 msgid "Symbol Chooser"
@@ -27093,9 +27092,9 @@ msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "Zmień %s z ustawieniem 'Wyklucz z BOM' z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
-msgstr "Zmień %s z ustawieniem 'Wyklucz z BOM' z '%s' na '%s'."
+msgstr "Zmień %s z ustawieniem 'Wyklucz z plików położeń' z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:925
 #, c-format
@@ -34488,9 +34487,8 @@ msgid "Rebased your changes onto the remote."
 msgstr "Nie udało się wypchnąć zmian do zdalnego repozytorium."
 
 #: kicad/project_tree_pane.cpp:2106
-#, fuzzy
 msgid "Could not rebase"
-msgstr "Nie można odczytać pliku "
+msgstr "Nie można zmienić bazy"
 
 #: kicad/project_tree_pane.cpp:2110
 #, fuzzy
@@ -34549,14 +34547,15 @@ msgid "The selected directory is not a Git project."
 msgstr "Zaznaczony folder nie jest projektem Git."
 
 #: kicad/project_tree_pane.cpp:2581
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before committing?"
 msgstr ""
-"Następujące reguły posiadają niezapisane zmiany:\n"
+"Następujące edycje maja niezapisane zmiany:%s\n"
 "\n"
+"Zapisać je przed zatwierdzeniem?"
 
 #: kicad/project_tree_pane.cpp:2584 kicad/project_tree_pane.cpp:2859
 #, fuzzy
@@ -34605,14 +34604,15 @@ msgid "Amend &Anyway"
 msgstr "Dodaj mimo to"
 
 #: kicad/project_tree_pane.cpp:2856
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before amending?"
 msgstr ""
-"Następujące reguły posiadają niezapisane zmiany:\n"
+"Następujące edycje mają niezapisane zmiany:%s\n"
 "\n"
+"Zapisać je przed wprowadzeniem zmian?"
 
 #: kicad/project_tree_pane.cpp:2862
 #, fuzzy
@@ -36215,7 +36215,6 @@ msgid " > 500 V"
 msgstr " > 500 V"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:119
-#, fuzzy
 msgid ""
 "*  B1 - Internal Conductors\n"
 "*  B2 - External Conductors, uncoated, sea level to 3050 m \n"
@@ -36228,17 +36227,19 @@ msgid ""
 "*  A8 - External Component lead/termination, uncoated, over 3050m or in a "
 "vacuum"
 msgstr ""
-"*  B1 - Połączenia wewnętrzne\n"
-"*  B2 - Połączenia zewnętrzne, niepowlekana, do pracy na wysokości do 3050 "
-"m\n"
-"*  B3 - Połączenia zewnętrzne, niepowlekana, do pracy ponad wysokość 3050 m\n"
-"*  B4 - Połączenia zewnętrzne, ze stałą powłoką polimerową (na dowolnej "
-"wysokości)\n"
-"*  A5 - Połączenia zewnętrzne, z powłoką ochronną na montaż (na dowolnej "
-"wysokości)\n"
-"*  A6 - Zewnętrzny element wyprowadzenia/zakończenia, niepowlekana\n"
-"*  A7 - Zewnętrzny element wyprowadzenia/zakończenia, z ochronną powłoką (na "
-"dowolnej wysokości)"
+"* B1 - Połączenia wewnętrzne\n"
+"* B2 - Połączenia zewnętrzne, bez powłoki, na poziomie morza do 3050 m\n"
+"* B3 - Połączenia zewnętrzne, bez powłoki, powyżej 3050 m lub w próżni\n"
+"* B4 - Połączenia zewnętrzne, z trwałą powłoką polimerową (dowolna wysokość)"
+"\n"
+"* B5 - Połączenia zewnętrzne, z powłoką konforemną (dowolna wysokość lub w "
+"próżni)\n"
+"* A6 - Końcówka elementu zewnętrznego, z powłoką konforemną (dowolna "
+"wysokość lub w próżni)\n"
+"* A7 - Końcówka/zakończenie elementu zewnętrznego, bez powłoki, na poziomie "
+"morza do 3050 m\n"
+"* A8 - Końcówka/zakończenie elementu zewnętrznego, bez powłoki, powyżej 3050 "
+"m lub w próżni"
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:21
 msgid "E24,E48,E96"
@@ -43997,11 +43998,12 @@ msgid "Net name:"
 msgstr "Nazwa sieci:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:81
-#, fuzzy
 msgid ""
 "Simulation\n"
 "Electrical type:"
-msgstr "Typ elektryczny:"
+msgstr ""
+"Symulacja\n"
+"Typ elektryczny:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:85 pcbnew/pad.cpp:3360
 msgid "Sink"
@@ -50870,9 +50872,9 @@ msgid "Net chain '%s' has no copper return path on reference layer '%s'."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid " (net '%s')"
-msgstr "Tekst '%s'"
+msgstr " (sieć '%s')"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:215
 #, c-format
@@ -61733,9 +61735,8 @@ msgid "Applying Design Block Layouts"
 msgstr "Zastosuj układ ścieżek bloku projektowego"
 
 #: pcbnew/tools/pcb_control.cpp:1572
-#, fuzzy
 msgid "design block is not in the loaded libraries"
-msgstr "Blok projektowy nie posiada prawidłowego ID biblioteki."
+msgstr "blok projektowy nie znajduje się w załadowanych bibliotekach"
 
 #: pcbnew/tools/pcb_control.cpp:1578
 #, fuzzy
@@ -61791,9 +61792,8 @@ msgid ""
 msgstr "Zapisuje zaznaczoną grupę w połączonym z nim blokiem projektowym"
 
 #: pcbnew/tools/pcb_control.cpp:1779
-#, fuzzy
 msgid "The following groups could not be processed:"
-msgstr "Następujące foldery nie mogły zostać otwarte: \n"
+msgstr "Następujące grupy nie mogły zostać przetworzone:"
 
 #: pcbnew/tools/pcb_control.cpp:1783
 #, fuzzy
