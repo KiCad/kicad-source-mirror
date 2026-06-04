@@ -154,6 +154,7 @@ set( QA_EESCHEMA_SRCS
     test_sch_ellipse_roundtrip.cpp
     test_project_name_instances.cpp
     test_legacy_load.cpp
+    test_symbol_library_adapter.cpp
     test_symbol_library_manager.cpp
     test_symbol_import_manager.cpp
     test_stacked_pin_nomenclature.cpp
