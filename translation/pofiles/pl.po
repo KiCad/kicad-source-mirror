@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:30+0300\n"
-"PO-Revision-Date: 2026-05-12 15:11+0000\n"
+"PO-Revision-Date: 2026-06-04 07:01+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.5-dev\n"
+"X-Generator: Weblate 2026.6\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -26104,9 +26104,9 @@ msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "Zmień %s z ustawieniem 'Wyklucz z BOM' z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
-msgstr "Zmień %s z ustawieniem 'Wyklucz z BOM' z '%s' na '%s'."
+msgstr "Zmień %s z ustawieniem 'Wyklucz z plików położeń' z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:925
 #, c-format
@@ -33147,9 +33147,8 @@ msgid "Rebased your changes onto the remote."
 msgstr "Nie udało się wypchnąć zmian do zdalnego repozytorium."
 
 #: kicad/project_tree_pane.cpp:2106
-#, fuzzy
 msgid "Could not rebase"
-msgstr "Nie można odczytać pliku "
+msgstr "Nie można zmienić bazy"
 
 #: kicad/project_tree_pane.cpp:2110
 #, fuzzy
@@ -33208,14 +33207,15 @@ msgid "The selected directory is not a Git project."
 msgstr "Zaznaczony folder nie jest projektem Git."
 
 #: kicad/project_tree_pane.cpp:2581
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before committing?"
 msgstr ""
-"Następujące reguły posiadają niezapisane zmiany:\n"
+"Następujące edycje maja niezapisane zmiany:%s\n"
 "\n"
+"Zapisać je przed zatwierdzeniem?"
 
 #: kicad/project_tree_pane.cpp:2584 kicad/project_tree_pane.cpp:2853
 #, fuzzy
@@ -33264,14 +33264,15 @@ msgid "Amend &Anyway"
 msgstr "Dodaj mimo to"
 
 #: kicad/project_tree_pane.cpp:2850
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before amending?"
 msgstr ""
-"Następujące reguły posiadają niezapisane zmiany:\n"
+"Następujące edycje mają niezapisane zmiany:%s\n"
 "\n"
+"Zapisać je przed wprowadzeniem zmian?"
 
 #: kicad/project_tree_pane.cpp:2856
 #, fuzzy
