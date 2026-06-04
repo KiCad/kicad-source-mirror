@@ -2347,8 +2347,8 @@ void PROJECT_TREE_PANE::updateGitStatusIcons()
 
     if( !m_gitCurrentBranchName.empty() )
     {
-        wxTreeItemId kid = m_TreeProject->GetRootItem();
-        PROJECT_TREE_ITEM* rootItem = GetItemIdData( kid );
+        wxTreeItemId       kid = m_TreeProject->GetRootItem();
+        PROJECT_TREE_ITEM* rootItem = kid.IsOk() ? GetItemIdData( kid ) : nullptr;
 
         if( rootItem )
         {
