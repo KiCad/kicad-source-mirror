@@ -85,12 +85,17 @@
 #include <wx/crt.h>
 
 #if defined( KICAD_IPC_API )
+#include <api/api_handler_footprint.h>
 #include <api/api_handler_pcb.h>
 #include <api/api_server.h>
 #include <api/api_utils.h>
-#include <api/headless_board_context.h>
+#include <api/headless_footprint_context.h>
+#include <api/headless_pcb_context.h>
 #include <board.h>
 #include <board_loader.h>
+#include <footprint_library_adapter.h>
+#include <lib_id.h>
+#include <project_pcb.h>
 #endif
 
 
@@ -571,6 +576,11 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
     bool HandleApiCloseDocument( const wxString& aBoardFileName,
                                  KICAD_API_SERVER* aServer,
                                  wxString* aError ) override;
+
+    bool handleOpenPcb( const wxString& aPath, KICAD_API_SERVER* aServer, wxString* aError );
+
+    bool handleOpenFootprint( const wxString& aProjectPath, const wxString& aLibIdStr, KICAD_API_SERVER* aServer,
+                              wxString* aError );
 #endif
 
     void PreloadLibraries( KIWAY* aKiway ) override;
@@ -588,8 +598,10 @@ private:
     void closeCurrentDocument( KICAD_API_SERVER* aServer );
 
     KIWAY* m_kiway = nullptr;
-    std::shared_ptr<HEADLESS_BOARD_CONTEXT> m_openContext;
-    std::unique_ptr<API_HANDLER_PCB>        m_openHandler;
+    std::shared_ptr<HEADLESS_PCB_CONTEXT>       m_openContext;
+    std::unique_ptr<API_HANDLER_PCB>            m_openHandler;
+    std::shared_ptr<HEADLESS_FOOTPRINT_CONTEXT> m_openFpContext;
+    std::unique_ptr<API_HANDLER_FOOTPRINT>      m_openFpHandler;
 #endif
 
 } kiface( "pcbnew", KIWAY::FACE_PCB );
@@ -804,6 +816,16 @@ void IFACE::closeCurrentDocument( KICAD_API_SERVER* aServer )
     // The jobs handler caches the last-loaded board. Clear it so the next job
     // uses the board from the newly opened document rather than a stale copy.
     m_jobHandler->ClearCachedBoard();
+
+    if( m_openFpHandler )
+    {
+        if( aServer )
+            aServer->DeregisterHandler( m_openFpHandler.get() );
+
+        m_openFpHandler.reset();
+    }
+
+    m_openFpContext.reset();
 }
 
 
@@ -819,6 +841,83 @@ bool IFACE::HandleApiOpenDocument( const wxString& aPath, KICAD_API_SERVER* aSer
         return false;
     }
 
+    return handleOpenPcb( aPath, aServer, aError );
+}
+
+
+bool IFACE::handleOpenFootprint( const wxString& aProjectPath, const wxString& aLibIdStr, KICAD_API_SERVER* aServer,
+                                 wxString* aError )
+{
+    LIB_ID fpid;
+
+    if( fpid.Parse( aLibIdStr ) >= 0 )
+    {
+        if( aError )
+            *aError = wxString::Format( wxS( "Invalid footprint LIB_ID: %s" ), aLibIdStr );
+
+        return false;
+    }
+
+    wxFileName projectPath( aProjectPath );
+    projectPath.MakeAbsolute();
+
+    SETTINGS_MANAGER& settingsManager = Pgm().GetSettingsManager();
+
+    if( !settingsManager.LoadProject( projectPath.GetFullPath(), true ) )
+    {
+        wxLogTrace( traceApi, "Warning: no project file found for %s", aProjectPath );
+    }
+
+    PROJECT* project = settingsManager.GetProject( projectPath.GetFullPath() );
+
+    if( !project )
+    {
+        if( aError )
+            *aError = wxString::Format( wxS( "Error loading project for %s" ), aProjectPath );
+
+        return false;
+    }
+
+    std::shared_ptr<HEADLESS_FOOTPRINT_CONTEXT> newContext;
+
+    try
+    {
+        FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( project );
+        adapter->AsyncLoad();
+        adapter->BlockUntilLoaded();
+        std::unique_ptr<FOOTPRINT> footprint( adapter->LoadFootprintWithOptionalNickname( fpid, true ) );
+
+        if( !footprint )
+        {
+            if( aError )
+                *aError = wxString::Format( wxS( "Footprint not found: %s" ), aLibIdStr );
+
+            return false;
+        }
+
+        newContext = std::make_shared<HEADLESS_FOOTPRINT_CONTEXT>(
+                std::move( footprint ), fpid, project, GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ), m_kiway );
+    }
+    catch( ... )
+    {
+        if( aError )
+            *aError = wxString::Format( wxS( "Failed to load footprint: %s" ), aLibIdStr );
+
+        return false;
+    }
+
+    closeCurrentDocument( aServer );
+    m_openFpContext = std::move( newContext );
+
+    m_openFpHandler = std::make_unique<API_HANDLER_FOOTPRINT>( m_openFpContext, nullptr );
+    aServer->RegisterHandler( m_openFpHandler.get() );
+
+    return true;
+}
+
+
+bool IFACE::handleOpenPcb( const wxString& aPath, KICAD_API_SERVER* aServer, wxString* aError )
+{
     wxFileName projectPath( aPath );
 
     if( projectPath.GetExt() == FILEEXT::KiCadPcbFileExtension )
@@ -872,7 +971,7 @@ bool IFACE::HandleApiOpenDocument( const wxString& aPath, KICAD_API_SERVER* aSer
         return false;
     }
 
-    std::shared_ptr<HEADLESS_BOARD_CONTEXT> newContext;
+    std::shared_ptr<HEADLESS_PCB_CONTEXT> newContext;
 
     try
     {
@@ -886,9 +985,8 @@ bool IFACE::HandleApiOpenDocument( const wxString& aPath, KICAD_API_SERVER* aSer
             return false;
         }
 
-        newContext = std::make_shared<HEADLESS_BOARD_CONTEXT>( std::move( loadedBoard ), project,
-                                       GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ),
-                                       m_kiway );
+        newContext = std::make_shared<HEADLESS_PCB_CONTEXT>( std::move( loadedBoard ), project,
+                                                             GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ), m_kiway );
     }
     catch( ... )
     {
@@ -911,7 +1009,7 @@ bool IFACE::HandleApiCloseDocument( const wxString& aFileName, KICAD_API_SERVER*
 {
     wxCHECK( aServer, false );
 
-    if( !m_openContext )
+    if( !m_openContext && !m_openFpContext )
     {
         if( aError )
             *aError = wxS( "No document is currently open" );
@@ -919,7 +1017,7 @@ bool IFACE::HandleApiCloseDocument( const wxString& aFileName, KICAD_API_SERVER*
         return false;
     }
 
-    if( !aFileName.IsEmpty() )
+    if( !aFileName.IsEmpty() && m_openContext )
     {
         wxFileName currentBoard( m_openContext->GetCurrentFileName() );
 

@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
- * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,30 +17,30 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_BOARD_CONTEXT_H
-#define KICAD_BOARD_CONTEXT_H
+#ifndef KICAD_FOOTPRINT_CONTEXT_H
+#define KICAD_FOOTPRINT_CONTEXT_H
 
-class BOARD;
-class KIWAY;
-class PROJECT;
-class TOOL_MANAGER;
+#include <memory>
+#include <wx/string.h>
+
+#include <api/board_context.h>
+
+class FOOTPRINT;
+class FOOTPRINT_EDIT_FRAME;
+class LIB_ID;
 
 
-/// Base interface for board-level API contexts; shared by PCB editor and footprint editor
-class BOARD_CONTEXT
+class FOOTPRINT_CONTEXT : public BOARD_CONTEXT
 {
 public:
-    virtual ~BOARD_CONTEXT() = default;
+    virtual LIB_ID GetLoadedFPID() const = 0;
 
-    virtual BOARD* GetBoard() const = 0;
+    virtual bool SaveFootprint( FOOTPRINT* aFootprint ) = 0;
 
-    virtual PROJECT& Prj() const = 0;
-
-    virtual TOOL_MANAGER* GetToolManager() const = 0;
-
-    virtual KIWAY* GetKiway() const = 0;
-
-    virtual bool CanAcceptApiCommands() const = 0;
+    virtual bool SaveFootprintInLibrary( FOOTPRINT* aFootprint, const wxString& aLibraryName ) = 0;
 };
 
-#endif // KICAD_BOARD_CONTEXT_H
+
+std::shared_ptr<FOOTPRINT_CONTEXT> CreateFootprintFrameContext( FOOTPRINT_EDIT_FRAME* aFrame );
+
+#endif

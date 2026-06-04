@@ -2,7 +2,6 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright The KiCad Developers, see AUTHORS.txt for contributors.
- * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,14 +17,14 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_HEADLESS_BOARD_CONTEXT_H
-#define KICAD_HEADLESS_BOARD_CONTEXT_H
+#ifndef KICAD_HEADLESS_FOOTPRINT_CONTEXT_H
+#define KICAD_HEADLESS_FOOTPRINT_CONTEXT_H
 
 #include <memory>
 
-#include <wx/string.h>
+#include <lib_id.h>
 
-#include <api/board_context.h>
+#include <api/footprint_context.h>
 
 class APP_SETTINGS_BASE;
 class BOARD;
@@ -34,13 +33,14 @@ class PROJECT;
 class TOOL_MANAGER;
 
 
-class HEADLESS_BOARD_CONTEXT : public BOARD_CONTEXT
+class HEADLESS_FOOTPRINT_CONTEXT : public FOOTPRINT_CONTEXT
 {
 public:
-    HEADLESS_BOARD_CONTEXT( std::unique_ptr<BOARD> aBoard, PROJECT* aProject,
-                            APP_SETTINGS_BASE* aSettings, KIWAY* aKiway = nullptr );
+    HEADLESS_FOOTPRINT_CONTEXT( std::unique_ptr<FOOTPRINT> aFootprint, const LIB_ID& aFPID,
+                                PROJECT* aProject, APP_SETTINGS_BASE* aSettings,
+                                KIWAY* aKiway = nullptr );
 
-    ~HEADLESS_BOARD_CONTEXT() override;
+    ~HEADLESS_FOOTPRINT_CONTEXT() override;
 
     BOARD* GetBoard() const override;
 
@@ -50,18 +50,19 @@ public:
 
     KIWAY* GetKiway() const override { return m_kiway; }
 
-    wxString GetCurrentFileName() const override;
-
     bool CanAcceptApiCommands() const override { return true; }
 
-    bool SaveBoard() override;
+    LIB_ID GetLoadedFPID() const override;
 
-    bool SavePcbCopy( const wxString& aFileName, bool aCreateProject, bool aHeadless ) override;
+    bool SaveFootprint( FOOTPRINT* aFootprint ) override;
+
+    bool SaveFootprintInLibrary( FOOTPRINT* aFootprint, const wxString& aLibraryName ) override;
 
 private:
     std::unique_ptr<BOARD> m_board;
-    PROJECT* m_project;
-    KIWAY* m_kiway;
+    LIB_ID                 m_fpid;
+    PROJECT*               m_project;
+    KIWAY*                 m_kiway;
     std::unique_ptr<TOOL_MANAGER> m_toolManager;
 };
 

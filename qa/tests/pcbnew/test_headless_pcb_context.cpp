@@ -20,7 +20,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <api/headless_board_context.h>
+#include <api/headless_pcb_context.h>
 #include <board.h>
 #include <board_loader.h>
 #include <pcb_io/pcb_io_mgr.h>
@@ -30,7 +30,7 @@
 #include <wx/filename.h>
 
 
-struct HEADLESS_BOARD_CONTEXT_TEST_FIXTURE
+struct HEADLESS_PCB_CONTEXT_TEST_FIXTURE
 {
     PROJECT* loadProject( const wxString& aBoardName )
     {
@@ -54,7 +54,7 @@ struct HEADLESS_BOARD_CONTEXT_TEST_FIXTURE
 };
 
 
-BOOST_FIXTURE_TEST_CASE( HeadlessBoardContextBasics, HEADLESS_BOARD_CONTEXT_TEST_FIXTURE )
+BOOST_FIXTURE_TEST_CASE( HeadlessBoardContextBasics, HEADLESS_PCB_CONTEXT_TEST_FIXTURE )
 {
     PROJECT* project = loadProject( "reference_images_load_save" );
 
@@ -65,7 +65,7 @@ BOOST_FIXTURE_TEST_CASE( HeadlessBoardContextBasics, HEADLESS_BOARD_CONTEXT_TEST
 
     BOOST_REQUIRE( board );
 
-    HEADLESS_BOARD_CONTEXT context( std::move( board ), project, nullptr );
+    HEADLESS_PCB_CONTEXT context( std::move( board ), project, nullptr );
 
     BOOST_CHECK( context.GetBoard() );
     BOOST_CHECK_EQUAL( context.GetBoard()->GetProject(), project );

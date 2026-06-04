@@ -18,30 +18,30 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_BOARD_CONTEXT_H
-#define KICAD_BOARD_CONTEXT_H
+#ifndef KICAD_PCB_CONTEXT_H
+#define KICAD_PCB_CONTEXT_H
 
-class BOARD;
-class KIWAY;
-class PROJECT;
-class TOOL_MANAGER;
+#include <memory>
+
+#include <wx/string.h>
+
+#include <api/board_context.h>
+
+class PCB_EDIT_FRAME;
 
 
-/// Base interface for board-level API contexts; shared by PCB editor and footprint editor
-class BOARD_CONTEXT
+/// PCB-editor-specific context; extends BOARD_CONTEXT with save/filename operations
+class PCB_CONTEXT : public BOARD_CONTEXT
 {
 public:
-    virtual ~BOARD_CONTEXT() = default;
+    virtual wxString GetCurrentFileName() const = 0;
 
-    virtual BOARD* GetBoard() const = 0;
+    virtual bool SaveBoard() = 0;
 
-    virtual PROJECT& Prj() const = 0;
-
-    virtual TOOL_MANAGER* GetToolManager() const = 0;
-
-    virtual KIWAY* GetKiway() const = 0;
-
-    virtual bool CanAcceptApiCommands() const = 0;
+    virtual bool SavePcbCopy( const wxString& aFileName, bool aCreateProject, bool aHeadless ) = 0;
 };
 
-#endif // KICAD_BOARD_CONTEXT_H
+
+std::shared_ptr<PCB_CONTEXT> CreatePcbFrameContext( PCB_EDIT_FRAME* aFrame );
+
+#endif

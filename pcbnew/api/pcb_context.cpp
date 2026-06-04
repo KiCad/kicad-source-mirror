@@ -18,12 +18,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <api/board_context.h>
+#include <api/pcb_context.h>
 
 #include <pcb_edit_frame.h>
 
 
-class PCB_EDIT_FRAME_CONTEXT : public BOARD_CONTEXT
+class PCB_EDIT_FRAME_CONTEXT : public PCB_CONTEXT
 {
 public:
     explicit PCB_EDIT_FRAME_CONTEXT( PCB_EDIT_FRAME* aFrame ) :
@@ -76,7 +76,7 @@ private:
 };
 
 
-std::shared_ptr<BOARD_CONTEXT> CreatePcbFrameContext( PCB_EDIT_FRAME* aFrame )
+std::shared_ptr<PCB_CONTEXT> CreatePcbFrameContext( PCB_EDIT_FRAME* aFrame )
 {
     return std::make_shared<PCB_EDIT_FRAME_CONTEXT>( aFrame );
 }

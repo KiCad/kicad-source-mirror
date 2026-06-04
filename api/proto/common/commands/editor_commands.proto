@@ -35,6 +35,13 @@ message RefreshEditor
   kiapi.common.types.FrameType frame = 1;
 }
 
+// Opens a specific item from a library by identifier
+message OpenLibraryItem
+{
+  kiapi.common.types.DocumentType type = 1;
+  kiapi.common.types.LibraryIdentifier identifier = 2;
+}
+
 // Retrieves a list of open documents of the given type
 message GetOpenDocuments
 {

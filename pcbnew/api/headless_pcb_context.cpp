@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <api/headless_board_context.h>
+#include <api/headless_pcb_context.h>
 #include <board.h>
 #include <board_loader.h>
 #include <project.h>
@@ -27,7 +27,7 @@
 #include <wx/debug.h>
 
 
-HEADLESS_BOARD_CONTEXT::HEADLESS_BOARD_CONTEXT( std::unique_ptr<BOARD> aBoard, PROJECT* aProject,
+HEADLESS_PCB_CONTEXT::HEADLESS_PCB_CONTEXT( std::unique_ptr<BOARD> aBoard, PROJECT* aProject,
                         APP_SETTINGS_BASE* aSettings,
                         KIWAY* aKiway ) :
         m_board( std::move( aBoard ) ),
@@ -43,7 +43,7 @@ HEADLESS_BOARD_CONTEXT::HEADLESS_BOARD_CONTEXT( std::unique_ptr<BOARD> aBoard, P
 }
 
 
-HEADLESS_BOARD_CONTEXT::~HEADLESS_BOARD_CONTEXT()
+HEADLESS_PCB_CONTEXT::~HEADLESS_PCB_CONTEXT()
 {
     // Sever the board↔project linkage before destruction. The PROJECT holds a raw pointer
     // (m_BoardSettings) to the board's design settings. If the board is destroyed while the
@@ -53,13 +53,13 @@ HEADLESS_BOARD_CONTEXT::~HEADLESS_BOARD_CONTEXT()
 }
 
 
-BOARD* HEADLESS_BOARD_CONTEXT::GetBoard() const
+BOARD* HEADLESS_PCB_CONTEXT::GetBoard() const
 {
     return m_board.get();
 }
 
 
-PROJECT& HEADLESS_BOARD_CONTEXT::Prj() const
+PROJECT& HEADLESS_PCB_CONTEXT::Prj() const
 {
     // Shouldn't be able to construct this without a project
     wxASSERT( m_project );
@@ -67,13 +67,13 @@ PROJECT& HEADLESS_BOARD_CONTEXT::Prj() const
 }
 
 
-TOOL_MANAGER* HEADLESS_BOARD_CONTEXT::GetToolManager() const
+TOOL_MANAGER* HEADLESS_PCB_CONTEXT::GetToolManager() const
 {
     return m_toolManager.get();
 }
 
 
-wxString HEADLESS_BOARD_CONTEXT::GetCurrentFileName() const
+wxString HEADLESS_PCB_CONTEXT::GetCurrentFileName() const
 {
     if( !m_board )
         return wxEmptyString;
@@ -82,7 +82,7 @@ wxString HEADLESS_BOARD_CONTEXT::GetCurrentFileName() const
 }
 
 
-bool HEADLESS_BOARD_CONTEXT::SaveBoard()
+bool HEADLESS_PCB_CONTEXT::SaveBoard()
 {
     if( !m_board )
         return false;
@@ -107,7 +107,7 @@ bool HEADLESS_BOARD_CONTEXT::SaveBoard()
 }
 
 
-bool HEADLESS_BOARD_CONTEXT::SavePcbCopy( const wxString& aFileName, bool aCreateProject, bool aHeadless )
+bool HEADLESS_PCB_CONTEXT::SavePcbCopy( const wxString& aFileName, bool aCreateProject, bool aHeadless )
 {
     if( !m_board || aFileName.IsEmpty() )
         return false;

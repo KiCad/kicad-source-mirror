@@ -24,6 +24,7 @@
 #include <api/api_handler_common.h>
 #include <api/api_server.h>
 #include <cli/exit_codes.h>
+#include <lib_id.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/app.h>
@@ -84,6 +85,7 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
         {
         case types::DOCTYPE_SCHEMATIC:  return KIWAY::FACE_SCH;
         case types::DOCTYPE_PCB:        return KIWAY::FACE_PCB;
+        case types::DOCTYPE_FOOTPRINT: return KIWAY::FACE_PCB;
         default:                        return KIWAY::KIWAY_FACE_COUNT;
         }
     };
@@ -124,13 +126,12 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
     {
         types::DocumentType requestType = aRequest.type();
 
-        if( requestType != types::DOCTYPE_PCB
-            && requestType != types::DOCTYPE_SCHEMATIC
-            && requestType != types::DOCTYPE_PROJECT )
+        if( requestType != types::DOCTYPE_PCB && requestType != types::DOCTYPE_SCHEMATIC
+            && requestType != types::DOCTYPE_PROJECT && requestType != types::DOCTYPE_FOOTPRINT )
         {
             ApiResponseStatus e;
             e.set_status( ApiStatusCode::AS_UNIMPLEMENTED );
-            e.set_error_message( "Only PCB, schematic, and project document types are supported" );
+            e.set_error_message( "Only PCB, schematic, footprint, and project document types are supported" );
             return tl::unexpected( e );
         }
 
@@ -143,15 +144,6 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
             e.set_error_message( "OpenDocument requires a non-empty path" );
             return tl::unexpected( e );
         }
-
-        wxFileName projectPath( inputPath );
-
-        // TODO(JE) if the API client just gives a project path rather than sch/board,
-        // we won't dispatch correctly.  We could instead try both handlers until one
-        // succeeds, like we do with other API calls.
-
-        projectPath.SetExt( FILEEXT::ProjectFileExtension );
-        projectPath.MakeAbsolute();
 
         closeCurrentDocument();
 
@@ -166,7 +158,20 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
             return tl::unexpected( e );
         }
 
-        if( !aKiway.ProcessApiOpenDocument( face, projectPath.GetFullPath(), server.get(), &error ) )
+        wxFileName projectPath;
+        wxString   openPath;
+
+        projectPath = wxFileName( inputPath );
+
+        // TODO(JE) if the API client just gives a project path rather than sch/board,
+        // we won't dispatch correctly.  We could instead try both handlers until one
+        // succeeds, like we do with other API calls.
+
+        projectPath.SetExt( FILEEXT::ProjectFileExtension );
+        projectPath.MakeAbsolute();
+        openPath = projectPath.GetFullPath();
+
+        if( !aKiway.ProcessApiOpenDocument( face, openPath, server.get(), &error ) )
         {
             ApiResponseStatus e;
             e.set_status( ApiStatusCode::AS_BAD_REQUEST );
