@@ -230,24 +230,29 @@ wxString BOARD_ITEM::LayerMaskDescribe() const
 {
     const BOARD* board = GetBoard();
     LSET         layers = GetLayerSet();
+    int          copperLayerCount = MAX_CU_LAYERS;
 
     if( board )
+    {
         layers &= board->GetEnabledLayers();
+        copperLayerCount = board->GetCopperLayerCount();
+    }
 
     LSET copperLayers = layers & LSET::AllCuMask();
     LSET techLayers = layers & LSET::AllTechMask();
 
     // Try to be smart and useful.  Check all copper first.
-    if( (int) copperLayers.count() == board->GetCopperLayerCount() )
+    if( (int) copperLayers.count() == copperLayerCount )
         return _( "all copper layers" );
 
     for( LSET testLayers : { copperLayers, techLayers, layers } )
     {
-        for( int bit = PCBNEW_LAYER_ID_START; bit < PCB_LAYER_ID_COUNT; ++bit )
+        for( int layer = PCBNEW_LAYER_ID_START; layer < PCB_LAYER_ID_COUNT; ++layer )
         {
-            if( testLayers[ bit ] )
+            if( testLayers[ layer ] )
             {
-                wxString layerInfo = board->GetLayerName( static_cast<PCB_LAYER_ID>( bit ) );
+                wxString layerInfo = board ? board->GetLayerName( ToLAYER_ID( layer ) )
+                                           : LayerName( ToLAYER_ID( layer ) );
 
                 if( testLayers.count() > 1 )
                     layerInfo << wxS( " " ) + _( "and others" );
