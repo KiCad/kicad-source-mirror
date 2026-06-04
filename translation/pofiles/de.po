@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:30+0300\n"
-"PO-Revision-Date: 2026-06-04 07:01+0000\n"
+"PO-Revision-Date: 2026-06-05 08:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -3257,8 +3257,11 @@ msgid "A group cannot contain itself."
 msgstr "Eine Gruppe kann sich nicht selbst beinhalten."
 
 #: common/dialogs/dialog_group_properties.cpp:185
+#, fuzzy
 msgid "Cannot add this group because it already contains the current group."
 msgstr ""
+"Diese Gruppe kann nicht hinzugefügt werden, weil sie bereits die aktuelle "
+"Gruppe enthält."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -8137,9 +8140,12 @@ msgid "Could not read 'FETCH_HEAD'"
 msgstr "Konnte \"FETCH_HEAD\" nicht lesen"
 
 #: common/git/libgit_backend.cpp:1169
+#, fuzzy
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
+"Es gibt nichts abzurufen: der Remote hat keinen Branch, der zu dem "
+"aktuellen, lokalen Branch passt."
 
 #: common/git/libgit_backend.cpp:1178
 msgid "Could not lookup commit"
@@ -8293,10 +8299,13 @@ msgstr ""
 "committen oder stashen."
 
 #: common/git/libgit_backend.cpp:1736 common/git/libgit_backend.cpp:1747
+#, fuzzy
 msgid ""
 "The rebase ran into conflicts.  This is best resolved from a git command "
 "line."
 msgstr ""
+"Beim Rebase sind Konflikte aufgetreten.  Dies wird am besten von einer Git-"
+"Kommandozeile aus behoben."
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
