@@ -25,6 +25,8 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <drc/drc_engine.h>
+#include <drc/drc_rule.h>
 #include <settings/settings_manager.h>
 #include <pcbnew_utils/board_test_utils.h>
 
@@ -70,6 +72,36 @@ BOOST_AUTO_TEST_CASE( NegativeSilkClearanceRoundTrip )
     bds.Load();
 
     BOOST_CHECK_EQUAL( bds.m_SilkClearance, negativeValue );
+}
+
+
+/**
+ * Regression test: physical_hole_clearance must count toward the worst-case clearance.
+ *
+ * GetBiggestClearanceValue() seeds the interactive router's broad-phase search radius.
+ * It previously omitted PHYSICAL_HOLE_CLEARANCE_CONSTRAINT, so a physical_hole_clearance
+ * rule did not widen that radius. The router then discovered the hole only once a track
+ * was already well inside the rule distance, reacting far too late. The worst-case value
+ * must be at least the rule's minimum.
+ */
+BOOST_AUTO_TEST_CASE( BiggestClearanceIncludesPhysicalHoleClearance )
+{
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    // Larger than any default clearance, so it can only come from the rule below.
+    const int ruleClearance = pcbIUScale.mmToIU( 4.0 );
+
+    auto rule = std::make_shared<DRC_RULE>( wxT( "NPTH Hole to Track Clearance" ) );
+
+    DRC_CONSTRAINT constraint( PHYSICAL_HOLE_CLEARANCE_CONSTRAINT );
+    constraint.Value().SetMin( ruleClearance );
+    rule->AddConstraint( constraint );
+
+    auto engine = std::make_shared<DRC_ENGINE>( m_board.get(), &bds );
+    engine->InitEngine( rule );
+    bds.m_DRCEngine = engine;
+
+    BOOST_CHECK_GE( bds.GetBiggestClearanceValue(), ruleClearance );
 }
 
 
