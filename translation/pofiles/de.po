@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:29+0300\n"
-"PO-Revision-Date: 2026-06-03 14:26+0000\n"
+"PO-Revision-Date: 2026-06-04 07:53+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -3290,12 +3290,16 @@ msgid "Edit Group Properties"
 msgstr "Gruppeneigenschaften bearbeiten"
 
 #: common/dialogs/dialog_group_properties.cpp:177
+#, fuzzy
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "Eine Gruppe kann sich nicht selbst beinhalten."
 
 #: common/dialogs/dialog_group_properties.cpp:185
+#, fuzzy
 msgid "Cannot add this group because it already contains the current group."
 msgstr ""
+"Diese Gruppe kann nicht hinzugefügt werden, weil sie bereits die aktuelle "
+"Gruppe enthält."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -8249,9 +8253,12 @@ msgid "Could not read 'FETCH_HEAD'"
 msgstr "Konnte \"FETCH_HEAD\" nicht lesen"
 
 #: common/git/libgit_backend.cpp:1180
+#, fuzzy
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
+"Es gibt nichts abzurufen: der Remote hat keinen Branch, der zu dem "
+"aktuellen, lokalen Branch passt."
 
 #: common/git/libgit_backend.cpp:1189
 msgid "Could not lookup commit"
@@ -8405,10 +8412,13 @@ msgstr ""
 "committen oder stashen."
 
 #: common/git/libgit_backend.cpp:1747 common/git/libgit_backend.cpp:1758
+#, fuzzy
 msgid ""
 "The rebase ran into conflicts.  This is best resolved from a git command "
 "line."
 msgstr ""
+"Beim Rebase sind Konflikte aufgetreten.  Dies wird am besten von einer Git-"
+"Kommandozeile aus behoben."
 
 #: common/grid_tricks.cpp:395 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -8768,44 +8778,50 @@ msgid "Error reading file '%s'."
 msgstr "Fehler beim Lesen der Datei \"%s\"."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:86
-#, c-format
+#, c-format, fuzzy
 msgid "Seek past end of file (offset %zu, size %zu)."
-msgstr ""
+msgstr "Über das Dateiende hinaus suchen (Offset %zu, Größe %zu)."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:187
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Unexpected end of file at offset 0x%06zX: need 3 bytes for int3, have %zu "
 "remaining."
 msgstr ""
+"Unerwartetes Dateiende bei Offset 0x%06zX: für int3 werden 3 Bytes benötigt, "
+"%zu sind noch übrig."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:205
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Unexpected end of file at offset 0x%06zX: need 4 bytes for int4, have %zu "
 "remaining."
 msgstr ""
+"Unerwartetes Dateiende bei Offset 0x%06zX: für int4 werden 4 Bytes benötigt, "
+"%zu sind noch übrig."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:224
-#, c-format
+#, c-format, fuzzy
 msgid "Unexpected end of file at offset 0x%06zX: need 1 byte."
-msgstr ""
+msgstr "Unerwartetes Dateiende bei Offset 0x%06zX: es wird 1 Bytes benötigt."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:341
-#, c-format
+#, c-format, fuzzy
 msgid "Unreasonable string length %d at offset 0x%06zX."
-msgstr ""
+msgstr "Unpassende Zeichenkettenlänge %d bei Offset 0x%06zX."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:370
-#, c-format
+#, c-format, fuzzy
 msgid "Unreasonable v37 string length %d at offset 0x%06zX."
-msgstr ""
+msgstr "Unpassende v37-Zeichenkettenlänge %d bei Offset 0x%06zX."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:504
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Unexpected end of file at offset 0x%06zX: need %zu bytes, have %zu remaining."
 msgstr ""
+"Unerwartetes Dateiende bei Offset 0x%06zX: %zu Bytes werden benötigt, %zu "
+"sind noch übrig."
 
 #: common/io/eagle/eagle_parser.cpp:288
 #, c-format
@@ -19564,12 +19580,12 @@ msgstr "%d Netzkette(n)"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:242
 #, c-format
 msgid "%zu nets"
-msgstr ""
+msgstr "%zu Netze"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:349
-#, c-format
+#, c-format, fuzzy
 msgid "Net chain on row %zu cannot have an empty name."
-msgstr ""
+msgstr "Netzkette in Zeile %zu kann keinen leeren Namen haben."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:357
 #, c-format
@@ -19582,16 +19598,16 @@ msgid "Duplicate net chain name '%s' on row %zu."
 msgstr "Doppelter Netzkettenname \"%s\" in Zeile %zu."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:382
-#, c-format
+#, c-format, fuzzy
 msgid "Class on row %zu cannot have an empty name."
-msgstr ""
+msgstr "Klasse in Zeile %zu kann keinen leeren Namen haben."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:384
 #: eeschema/dialogs/panel_setup_net_chains.cpp:392
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:185
 #, fuzzy
 msgid "Net Chain Classes"
-msgstr "Netzklassen"
+msgstr "Netzkettenklassen"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:390
 #, c-format
@@ -19601,12 +19617,12 @@ msgstr "Doppelter Netzklassenname \"%s\" in Zeile %zu."
 #: eeschema/dialogs/panel_setup_net_chains.cpp:618
 #, fuzzy, c-format
 msgid "Delete net chain '%s'?"
-msgstr "Alle Netze in Gruppe \"%s\" löschen?"
+msgstr "Netzkette \"%s\" löschen?"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:619
 #, fuzzy
 msgid "Delete Net Chain"
-msgstr "Schaltplanpins löschen"
+msgstr "Netzkette löschen"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:653
 #, c-format
@@ -19616,41 +19632,43 @@ msgstr "Mitgliedsnetze (%zu)"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:672
 #, fuzzy
 msgid "New net chain class name:"
-msgstr "Neue Netzklasse:"
+msgstr "Neuer Netzkettenklassenname:"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:672
 #: eeschema/dialogs/panel_setup_net_chains.cpp:682
 #, fuzzy
 msgid "Add Class"
-msgstr "Alias hinzufügen"
+msgstr "Klasse hinzufügen"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:681
 #: eeschema/dialogs/panel_setup_net_chains.cpp:715
 #, fuzzy
 msgid "That class name is empty or already in use."
-msgstr "Name der Netzklasse wird bereits benutzt."
+msgstr "Dieser Klassenname ist leer oder wird bereits verwendet."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:705
 #, fuzzy
 msgid "Rename net chain class:"
-msgstr "Neue Netzklasse:"
+msgstr "Netzkettenklasse umbenennen:"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:705
 #: eeschema/dialogs/panel_setup_net_chains.cpp:716
 #, fuzzy
 msgid "Rename Class"
-msgstr "Dateien umbenennen"
+msgstr "Klasse umbenennen"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:744
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Delete net chain class '%s'?  Chains assigned to it will become unclassified."
 msgstr ""
+"Netzkettenklasse \\\"%s\\\" löschen?  Die ihr zugeordneten Ketten werden als "
+"nicht klassifiziert eingestuft."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:747
 #, fuzzy
 msgid "Delete Class"
-msgstr "Spalten löschen"
+msgstr "Klasse löschen"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:59
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:143
@@ -19661,7 +19679,7 @@ msgstr "Mitglieder"
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:60
 #, fuzzy
 msgid "Net Chain Class"
-msgstr "Netzklasse"
+msgstr "Netzkettenklasse"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:62
 #, fuzzy
@@ -19671,17 +19689,21 @@ msgstr "Farbe"
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:105
 #, fuzzy
 msgid "Delete the selected committed net chain"
-msgstr "Ausgewählte Footprintzuordnungen entfernen"
+msgstr "Die ausgewählte committete Netzkette löschen"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:116
+#, fuzzy
 msgid "Chains"
-msgstr ""
+msgstr "Ketten"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:121
+#, fuzzy
 msgid ""
 "Group net chains under a class label so DRC rules can target the whole group "
 "via inNetChainClass('name')."
 msgstr ""
+"Netzketten unter einem Klassenlabel gruppieren, damit DRC-Regeln die ganze "
+"Gruppe über inNetChainClass(\\\"name\\\") ansprechen können."
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:142
 #, fuzzy
@@ -19693,12 +19715,18 @@ msgid "Add a new net chain class"
 msgstr "Neue Netzkettenklasse hinzufügen"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:169
+#, fuzzy
 msgid "Rename the selected class (updates every chain that uses it)"
 msgstr ""
+"Die ausgewählte Klasse umbenennen (aktualisiert jede Kette, die diesen "
+"verwendet)"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:174
+#, fuzzy
 msgid "Delete the selected class (chains revert to no class)"
 msgstr ""
+"Die ausgewählte Klasse löschen (Ketten fallen auf \\\"keine Klasse\\\" "
+"zurück)"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:228
 msgid "No error or warning"
