@@ -40,18 +40,31 @@ void boost_test_inject_committed_net_chain( CONNECTION_GRAPH& aGraph,
                                             std::unique_ptr<SCH_NETCHAIN> aChain );
 
 
+// Silent no-op assert handler.  wxFAIL_MSG routes through wxTheAssertHandler;
+// returning without side effects swallows the assertion so execution continues.
+static void swallowWxAssert( const wxString&, int, const wxString&, const wxString&,
+                             const wxString& )
+{
+}
+
+
 // RAII swap of the wx assert handler.  The eeschema test_module installs
 // KI_TEST::wxAssertThrower, which converts every wxFAIL_MSG into a thrown
 // WX_ASSERT_ERROR.  RebuildNetChains()'s catch block opens with wxFAIL_MSG;
 // under the throwing handler that fires before the rollback statements run,
-// hiding the very behaviour this test is trying to validate.  Restore the
-// default (silent) handler for the duration of the throw test, then put the
+// hiding the very behaviour this test is trying to validate.  Install a
+// guaranteed-silent handler for the duration of the throw test, then put the
 // throwing handler back.
+//
+// Do not use wxSetDefaultAssertHandler() here.  The default handler is not
+// silent across environments: headless CI builds trap/abort on the wxFAIL_MSG,
+// which Boost's signal monitor reports as a failed test, while interactive
+// builds merely log and continue.
 struct ASSERT_HANDLER_SCOPE
 {
     ASSERT_HANDLER_SCOPE()
     {
-        wxSetDefaultAssertHandler();
+        wxSetAssertHandler( &swallowWxAssert );
     }
 
     ~ASSERT_HANDLER_SCOPE()
