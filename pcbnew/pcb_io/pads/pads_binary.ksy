@@ -48,7 +48,37 @@ doc: |
 
   The one place accumulation breaks is section 56, which writes fewer 16-byte
   records than it declares, so the string pool is located by its own terminator
-  rather than by arithmetic -- see `string_index_entry`. Section 0 has no data
+  rather than by arithmetic -- see `string_index_entry`.
+
+  LOCATORS NOT YET STRUCTURAL. The reader still finds these by scanning; each
+  entry says what is missing. BINARY_PARSER::ScanLocatorUseCount() counts them
+  and the ScanLocatorRatchet QA test holds the line.
+
+  * section 60 (vias) -- found by scoring every phase in [0, stride) across the
+    whole payload. The record framing IS known: the type byte sits at
+    `record + stride - 4`, which reproduces the scan on 144/165 files. What is
+    missing is the base. Predicting it as
+    `pool_end + total_bytes(58) + total_bytes(59)` is wrong on every file, but
+    every difference is congruent to 1 modulo 16, so the formula is right up to
+    the pool_start +17/+16 convention and a whole number of 16-byte records.
+    That residue means section 58 or 59 also writes fewer records than it
+    declares, exactly as section 56 does. Establishing that count retires this
+    scan, the most expensive in the importer.
+
+  * section 68 (clusters) -- found by a unique `Top` frame signature, then
+    stepping back one 152-byte layer record. Needs section 69's base.
+
+  * section 69 (layer stackup, v0x2027 only) -- found by the `(All layers)`
+    string. That string is NOT section 69 record 0; it lives past the section
+    data, and its offset relative to `pool_end` is not constant (measured across
+    41 v0x2027 boards), so the pool does not locate it either.
+
+  * three unbounded record walks (edges, net records, value cores) that test
+    every byte offset in the file for a valid record.
+
+  * several section-bounded walks that search within one section's own declared
+    extent. These are bounded parses rather than file scans, but they are still
+    searches and are not counted by ScanLocatorUseCount() yet. Section 0 has no data
   region; its directory slot is a file-global object-count / payload-size
   header. The file ends with the footer GUID
   `{2FE18320-6448-11d1-A412-000000000000}` and a u32 size check.
