@@ -220,6 +220,19 @@ public:
         return fetchOwnerLoop( aName, 200, aOut );
     }
 
+    /**
+     * Number of objects or sections located by byte-pattern scanning rather than by a
+     * deterministic offset derived from the section directory during the last Parse().
+     * Zero means the decode was fully structural. Mirrors DipTrace's
+     * PCB_PARSER::ScanLocatorUseCount().
+     *
+     * The container rules that let a scan be retired are in pads_binary.ksy; the ones
+     * still counted here are the sections whose written length is not yet derived.
+     */
+    int ScanLocatorUseCount() const { return m_scanLocatorUses; }
+
+    void NoteScanLocatorUse() const { ++m_scanLocatorUses; }
+
 private:
     static constexpr int32_t  ANGLE_SCALE = 1800000;
 
@@ -389,6 +402,10 @@ private:
 
     // Owns the file bytes and decodes the container; the section readers work through it.
     PADS_SDB             m_sdb;
+
+    /// Counts scan-located objects for ScanLocatorUseCount(); mutable so the locators that
+    /// still scan can report from const paths.
+    mutable int          m_scanLocatorUses = 0;
 
     // m_data aliases the SDB's bytes for the absolute-offset readers; m_cursor follows it.
     // Both are declared after m_sdb so their references bind to its live buffer.

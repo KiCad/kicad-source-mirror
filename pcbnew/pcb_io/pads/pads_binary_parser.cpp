@@ -723,6 +723,7 @@ void BINARY_PARSER::parseClusters()
     if( !signatureIsUnique( m_data, TOP_FRAME, sizeof( TOP_FRAME ) ) )
         return;
 
+    NoteScanLocatorUse();
     size_t matchOff = findSignature( m_data, TOP_FRAME, sizeof( TOP_FRAME ) );
 
     // Use division rather than multiplication so a malformed count cannot overflow.
@@ -3188,6 +3189,7 @@ void BINARY_PARSER::parseNetNamesNew()
         // those to recover any records the nominal walk missed.
         if( existing.size() < nets->count )
         {
+            NoteScanLocatorUse();
             for( size_t off = 0; off + NET_RECORD_SIZE <= m_data.size(); ++off )
             {
                 if( m_cursor.U32At( off + 20 ) != 0x0000FFFE )
@@ -4180,6 +4182,7 @@ std::vector<NET_CLASS_RULE_EDGE> BINARY_PARSER::collectNetClassRuleEdges( const 
 
     std::vector<NET_CLASS_RULE_EDGE> edges;
 
+    NoteScanLocatorUse();
     for( size_t off = 0; off + EDGE_SIZE <= m_data.size(); ++off )
     {
         if( m_cursor.U32At( off + EDGE_TAG ) != EDGE_TAG_VALUE )
@@ -4290,6 +4293,7 @@ void BINARY_PARSER::applyNetClassClearances( const std::vector<NET_CLASS_RULE_ED
 
         std::vector<ValueRec> values;
 
+        NoteScanLocatorUse();
         for( size_t off = 0; off + VALUE_CORE_OFF + VALUE_CORE_COUNT * sizeof( int32_t ) <= m_data.size(); ++off )
         {
             SDB_RECORD rec = m_sdb.RecordAt( off );
@@ -4753,6 +4757,7 @@ void BINARY_PARSER::parseRouteVertices()
     if( bestScore == 0 )
         return;
 
+    NoteScanLocatorUse();
     logResolvedBase( 60, "viaPhase", scanStart + bestPhase, entry60->dataOffset,
                      entry60->payloadOffset );
 
@@ -7078,6 +7083,7 @@ void BINARY_PARSER::parseLayerStackup()
 
     // The "(All layers)" string anchors the first record; the directory data_offset overflows
     // the indexed region on large boards.
+    NoteScanLocatorUse();
     size_t recordBase = findSignature( m_data, reinterpret_cast<const uint8_t*>( ANCHOR.data() ), ANCHOR.size() );
 
     if( recordBase == SIGNATURE_NOT_FOUND )

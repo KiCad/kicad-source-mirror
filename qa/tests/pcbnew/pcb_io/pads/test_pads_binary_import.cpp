@@ -2177,4 +2177,53 @@ BOOST_AUTO_TEST_CASE( ViaSpanSurvivesOnlyWhenTypeSetFirst )
 }
 
 
+/**
+ * Ratchet on how much of the decode is still located by scanning for byte patterns rather
+ * than by a structural offset derived from the section directory.
+ *
+ * The container rules that let a locator be retired are recorded in pads_binary.ksy. Every
+ * scan removed should lower MAX_SCAN_LOCATORS here; the target is zero, matching DipTrace's
+ * ObjectsAreFieldLocatedNotScanned. The test exists so that a change which reintroduces a
+ * scan, or a new section decoded by scanning, fails rather than passing quietly.
+ *
+ * The counter currently covers the whole-file locators -- the cluster and layer-stackup
+ * signature searches, the via phase scan, and the three unbounded record walks. The
+ * section-bounded walks that search within one section's own declared extent are not counted
+ * yet, so this number is a floor on the remaining work, not the whole of it.
+ */
+BOOST_AUTO_TEST_CASE( ScanLocatorRatchet )
+{
+    // Lower this as locators become structural. Do not raise it. Measured 2, 2 and 1 on the
+    // three boards below at the time of writing.
+    constexpr int MAX_SCAN_LOCATORS = 2;
+
+    struct BOARD_CASE
+    {
+        std::string dir;
+        std::string file;
+    };
+
+    const std::vector<BOARD_CASE> boards = {
+        { "Ems4_Rev2", "Ems4_Rev2.pcb" },
+        { "LCORE_2", "LCORE_2.pcb" },
+        { "MAIS_FC", "MAIS_FC.pcb" },
+    };
+
+    for( const BOARD_CASE& bc : boards )
+    {
+        PADS_IO::BINARY_PARSER parser;
+        wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/" + bc.dir + "/" + bc.file;
+
+        parser.Parse( filename );
+
+        int uses = parser.ScanLocatorUseCount();
+
+        BOOST_TEST_MESSAGE( bc.file << " scan locators: " << uses );
+        BOOST_CHECK_MESSAGE( uses <= MAX_SCAN_LOCATORS,
+                             bc.file << " uses " << uses << " scan locators, above the ratchet of "
+                                     << MAX_SCAN_LOCATORS );
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
