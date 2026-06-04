@@ -91,7 +91,7 @@ DIALOG_PRINT_GENERIC::DIALOG_PRINT_GENERIC( EDA_DRAW_FRAME* aParent, PRINTOUT_SE
         m_settings( aSettings )
 {
     // Show m_panelPrinters only if there are printers to list:
-    m_panelPrinters->Show( m_panelPrinters->AsPrintersAvailable() );
+    m_panelPrinters->Show( m_panelPrinters->HasPrintersAvailable() );
 
     SetupStandardButtons( { { wxID_OK,     _( "Print" )         },
                             { wxID_APPLY,  _( "Print Preview" ) },

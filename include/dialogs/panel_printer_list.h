@@ -19,8 +19,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_PRINTER_LIST_H
-#define PANEL_PRINTER_LIST_H
+#pragma once
 
 #include <panel_printer_list_base.h>
 
@@ -35,12 +34,11 @@ public:
 
     ~PANEL_PRINTER_LIST();
 
-    /// @return the selected printer name or a empty name
-    /// for the default printer
+    /// @return the selected printer name or an empty name for the default printer
     wxString GetSelectedPrinterName();
 
     /// @return false if no printer in list
-    bool AsPrintersAvailable();
+    bool HasPrintersAvailable();
 
 private:
 	void onPrinterChoice( wxCommandEvent& event ) override;
@@ -53,5 +51,3 @@ private:
     // The list of available printer names
     wxArrayString m_printer_list;
 };
-
-#endif
