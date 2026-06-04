@@ -36,6 +36,7 @@
 #include <drc/drc_engine.h>
 #include <tools/pcb_tool_base.h>
 
+#include <optional>
 #include <vector>
 
 class TOOL_EVENT;
@@ -102,6 +103,15 @@ struct PARALLEL_RUN
     /// Cumulative delay of track A at the start of the parallel run
     double endDelayB;
 
+    std::optional<double> startViaLengthA;
+    std::optional<double> endViaLengthA;
+    std::optional<double> startViaLengthB;
+    std::optional<double> endViaLengthB;
+    std::optional<double> startViaDelayA;
+    std::optional<double> endViaDelayA;
+    std::optional<double> startViaDelayB;
+    std::optional<double> endViaDelayB;
+
     /// Calculate the fraction of track A that overlaps track B
     double overlapFractionA() const { return std::abs( ta1 - ta0 ); }
 
@@ -130,10 +140,16 @@ struct KNOWN_RELATIVE_POINT
     double LinearDistance;
 
     /// The length relative to the coupled track
-    double RelativeLength;
+    double RelativeLengthBefore;
 
     /// The propagation delay relative to the coupled track
-    double RelativeDelay;
+    double RelativeDelayBefore;
+
+    /// The length relative to the coupled track
+    double RelativeLengthAfter;
+
+    /// The propagation delay relative to the coupled track
+    double RelativeDelayAfter;
 };
 
 
@@ -176,7 +192,7 @@ public:
         if( m_idx + 1 >= m_pts.size() )
         {
             const auto& p = m_pts.back();
-            return std::pair{ p.RelativeLength, p.RelativeDelay };
+            return std::pair{ p.RelativeLengthBefore, p.RelativeDelayBefore };
         }
 
         // Interpolate between known points
@@ -188,12 +204,12 @@ public:
         // Degenerate interval
         if( len <= EPS )
         {
-            return std::pair{ a.RelativeLength, a.RelativeDelay };
+            return std::pair{ a.RelativeLengthBefore, a.RelativeDelayBefore };
         }
 
         const double t = ( s - a.LinearDistance ) / len;
-        const double relativeLength = a.RelativeLength + t * ( b.RelativeLength - a.RelativeLength );
-        const double relativeDelay = a.RelativeDelay + t * ( b.RelativeDelay - a.RelativeDelay );
+        const double relativeLength = a.RelativeLengthAfter + t * ( b.RelativeLengthBefore - a.RelativeLengthAfter );
+        const double relativeDelay = a.RelativeDelayAfter + t * ( b.RelativeDelayBefore - a.RelativeDelayAfter );
 
         return std::pair{ relativeLength, relativeDelay };
     }
@@ -285,9 +301,11 @@ protected:
     ///< Struct to represent one cumulative length and delay point
     struct CUMULATIVE_ENTRY
     {
-        int64_t     m_Length{ 0 };
-        int64_t     m_Delay{ 0 };
+        int64_t                             m_Length{ 0 };
+        int64_t                             m_Delay{ 0 };
         LENGTH_DELAY_CALCULATION_ITEM::TYPE m_SourceType{ LENGTH_DELAY_CALCULATION_ITEM::TYPE::UNKNOWN };
+        VECTOR2I                            m_Start{ 0, 0 };
+        VECTOR2I                            m_End{ 0, 0 };
     };
 
     ///< Builds the length / delay calculation items from a given path
@@ -295,7 +313,7 @@ protected:
                                 const NETINFO_ITEM* aNet, std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aItems,
                                 LENGTH_DELAY_ITEM_DETAILS& aItemDetails ) const;
 
-    ///< Start and end pad lengths and delays (pad-to-die + infered via-in-pad)
+    ///< Start and end pad lengths and delays (pad-to-die + inferred via-in-pad)
     struct START_END_DETAILS
     {
         int64_t StartPadLength{ 0 };
@@ -316,14 +334,11 @@ protected:
     static void splitLengthItems( std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aItems );
 
     ///< Finds all parallel segment runs in the selected and coupled tracks
-    std::vector<PARALLEL_RUN> findParallelRuns( const std::vector<CUMULATIVE_ENTRY>& aSelectedCumulative,
-                                                const std::vector<CUMULATIVE_ENTRY>& aCoupledCumulative ) const;
+    std::vector<PARALLEL_RUN> findParallelRuns() const;
 
     ///< Finds all parallel segment runs in the selected and coupled tracks within the given segment ranges and
     ///< track spacing
-    void findParallelRunsImpl( const std::vector<CUMULATIVE_ENTRY>& aSelectedCumulative,
-                               const std::vector<CUMULATIVE_ENTRY>& aCoupledCumulative,
-                               std::pair<std::size_t, std::size_t> aRangeA, std::pair<std::size_t, std::size_t> aRangeB,
+    void findParallelRunsImpl( std::pair<std::size_t, std::size_t> aRangeA, std::pair<std::size_t, std::size_t> aRangeB,
                                double aMaxSpacing, std::vector<PARALLEL_RUN>& aRuns ) const;
 
     ///< Linear interpolate from point A to B at line fraction T
@@ -364,16 +379,15 @@ protected:
     };
 
     ///< Builds the final overlay output segments for plotting
-    std::vector<OUTPUT_SEGMENT> buildDiffOverlaySegments( const std::vector<CUMULATIVE_ENTRY>& aSegments,
-                                                          const LENGTH_DELAY_ITEM_DETAILS&     aSourceItemDetails,
-                                                          const std::vector<PARALLEL_RUN>&     aKnownRuns,
-                                                          double aTargetSubsegmentSize, bool isCoupledTrack );
+    void buildDiffOverlaySegments( double aTargetSubsegmentSize );
 
-    ///< Builds a vector of known relative points for the given track and identified parallel segments
-    std::vector<KNOWN_RELATIVE_POINT> buildKnownRelativePoints( const std::vector<CUMULATIVE_ENTRY>& aSegments,
-                                                                const LENGTH_DELAY_ITEM_DETAILS&     aSourceItemDetails,
-                                                                const std::vector<PARALLEL_RUN>&     aKnownRuns,
-                                                                bool isCoupledTrack ) const;
+    std::vector<OUTPUT_SEGMENT>
+    buildDiffOverlaySegmentsImpl( const std::vector<CUMULATIVE_ENTRY>&              aSegments,
+                                  const std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aSourceItemDetails,
+                                  const std::vector<KNOWN_RELATIVE_POINT>& aKnownPoints, double aTargetSubsegmentSize );
+
+    ///< Builds a vector of known relative skew points on each track
+    void buildKnownRelativePoints( const std::vector<PARALLEL_RUN>& aKnownRuns );
 
     ///< Determines where to apply overlay segment subsections on the source segments
     static std::vector<double> buildSplitPositions( const std::vector<CUMULATIVE_ENTRY>& aSegments,
@@ -462,6 +476,14 @@ private:
     // Length and delay details for start and end pads
     START_END_DETAILS m_selectedStartEndDetails;
     START_END_DETAILS m_coupledStartEndDetails;
+
+    // Cumulative length and delay details for each track
+    std::vector<CUMULATIVE_ENTRY> m_selectedCumulative;
+    std::vector<CUMULATIVE_ENTRY> m_coupledCumulative;
+
+    // The known relative delay points for each track
+    std::vector<KNOWN_RELATIVE_POINT> m_selectedKnownPoints;
+    std::vector<KNOWN_RELATIVE_POINT> m_coupledKnownPoints;
 
     // The final calculated path diffs
     std::vector<OUTPUT_SEGMENT> m_selectedDiffs;

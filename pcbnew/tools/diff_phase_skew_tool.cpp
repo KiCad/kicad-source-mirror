@@ -406,84 +406,156 @@ void DIFF_PHASE_SKEW_TOOL::doDisplayOverlay()
                            m_coupledLengthDelayItems, m_coupledLengthDelayDetails );
 
     // Build the cumulative length / delay structures
-    const std::vector<CUMULATIVE_ENTRY> selectedCumulative =
+    m_selectedCumulative =
             buildCumulativeLengthsAndDelays( m_selectedLengthDelayItems, m_selectedLengthDelayDetails,
                                              m_selectedStartPad, m_selectedEndPad, m_selectedStartEndDetails );
-    const std::vector<CUMULATIVE_ENTRY> coupledCumulative =
+    m_coupledCumulative =
             buildCumulativeLengthsAndDelays( m_coupledLengthDelayItems, m_coupledLengthDelayDetails, m_coupledStartPad,
                                              m_coupledEndPad, m_coupledStartEndDetails );
 
     // Walk the two tracks and construct the localised phase differences
-    const std::vector<PARALLEL_RUN> parallelRuns = findParallelRuns( selectedCumulative, coupledCumulative );
+    const std::vector<PARALLEL_RUN> parallelRuns = findParallelRuns();
+
+    // Build the known delay reference points for each track
+    buildKnownRelativePoints( parallelRuns );
 
     m_maxSkew.reset();
-    m_selectedDiffs = buildDiffOverlaySegments( selectedCumulative, m_selectedLengthDelayDetails, parallelRuns,
-                                                m_targetDiffSegmentSize, false );
-    m_coupledDiffs = buildDiffOverlaySegments( coupledCumulative, m_coupledLengthDelayDetails, parallelRuns,
-                                               m_targetDiffSegmentSize, true );
+    buildDiffOverlaySegments( m_targetDiffSegmentSize );
 
     // Finally draw the overlay
     drawDiffOverlay();
 }
 
 
-std::vector<KNOWN_RELATIVE_POINT> DIFF_PHASE_SKEW_TOOL::buildKnownRelativePoints(
-        const std::vector<CUMULATIVE_ENTRY>& aSegments, const LENGTH_DELAY_ITEM_DETAILS& aSourceItemDetails,
-        const std::vector<PARALLEL_RUN>& aKnownRuns, const bool isCoupledTrack ) const
+void DIFF_PHASE_SKEW_TOOL::buildKnownRelativePoints( const std::vector<PARALLEL_RUN>& aKnownRuns )
 {
-    std::vector<KNOWN_RELATIVE_POINT> pts;
-    pts.reserve( aKnownRuns.size() * 2 );
+    m_selectedKnownPoints.clear();
+    m_coupledKnownPoints.clear();
+
+    const double padLenDiff =
+            static_cast<double>( m_selectedStartEndDetails.StartPadLength - m_coupledStartEndDetails.StartPadLength );
+    const double padDelayDiff =
+            static_cast<double>( m_selectedStartEndDetails.StartPadDelay - m_coupledStartEndDetails.StartPadDelay );
+
+    struct RELATIVE_PAIR
+    {
+        double len;
+        double delay;
+    };
+
+    auto opposite = []( const RELATIVE_PAIR& a )
+    {
+        return RELATIVE_PAIR{ -a.len, -a.delay };
+    };
 
     for( const auto& r : aKnownRuns )
     {
-        const std::size_t segIdx = isCoupledTrack ? r.segB : r.segA;
-        const double      segStart = segIdx == 0 ? 0.0 : static_cast<double>( aSegments[segIdx - 1].m_Length );
-        const double      segLen = static_cast<double>( aSourceItemDetails.LengthsAndDelays[segIdx].first );
+        const std::size_t segIdxA = r.segA;
+        const std::size_t segIdxB = r.segB;
 
-        double s0;
-        double s1;
+        const double segStartA = segIdxA == 0 ? 0.0 : static_cast<double>( m_selectedCumulative[segIdxA - 1].m_Length );
+        const double segStartB = segIdxB == 0 ? 0.0 : static_cast<double>( m_coupledCumulative[segIdxB - 1].m_Length );
+        const double segLenA = static_cast<double>( m_selectedLengthDelayDetails.LengthsAndDelays[segIdxA].first );
+        const double segLenB = static_cast<double>( m_coupledLengthDelayDetails.LengthsAndDelays[segIdxB].first );
 
-        if( isCoupledTrack )
+        const double s0A = segStartA + r.ta0 * segLenA;
+        const double s1A = segStartA + r.ta1 * segLenA;
+        const double s0B = segStartB + r.tb0 * segLenB;
+        const double s1B = segStartB + r.tb1 * segLenB;
+
+        const RELATIVE_PAIR startRel{ ( r.startLenA - r.startLenB ) + padLenDiff,
+                                      ( r.startDelayA - r.startDelayB ) + padDelayDiff };
+        const RELATIVE_PAIR endRel{ ( r.endLenA - r.endLenB ) + padLenDiff,
+                                    ( r.endDelayA - r.endDelayB ) + padDelayDiff };
+        const RELATIVE_PAIR startRelB = opposite( startRel );
+        const RELATIVE_PAIR endRelB = opposite( endRel );
+
+        const bool hasStartViaA = r.startViaLengthA.has_value();
+        const bool hasEndViaA = r.endViaLengthA.has_value();
+        const bool hasStartViaB = r.startViaLengthB.has_value();
+        const bool hasEndViaB = r.endViaLengthB.has_value();
+
+        const double startViaLenA = r.startViaLengthA.value_or( 0.0 );
+        const double endViaLenA = r.endViaLengthA.value_or( 0.0 );
+        const double startViaLenB = r.startViaLengthB.value_or( 0.0 );
+        const double endViaLenB = r.endViaLengthB.value_or( 0.0 );
+
+        const double startViaDelayA = r.startViaDelayA.value_or( 0.0 );
+        const double endViaDelayA = r.endViaDelayA.value_or( 0.0 );
+        const double startViaDelayB = r.startViaDelayB.value_or( 0.0 );
+        const double endViaDelayB = r.endViaDelayB.value_or( 0.0 );
+
+        // Injected start-via points
+        if( hasStartViaA && hasStartViaB )
         {
-            s0 = segStart + r.tb0 * segLen;
-            s1 = segStart + r.tb1 * segLen;
+            const RELATIVE_PAIR rel{ startRel.len - startViaLenA + startViaLenB,
+                                     startRel.delay - startViaDelayA + startViaDelayB };
+            const RELATIVE_PAIR relB = opposite( rel );
+            m_selectedKnownPoints.push_back( { s0A - startViaLenA, rel.len, rel.delay, rel.len, rel.delay } );
+            m_coupledKnownPoints.push_back( { s0B - startViaLenB, relB.len, relB.delay, relB.len, relB.delay } );
         }
-        else
+
+        // Maybe-modified values used for interpolation around via discontinuities
+        RELATIVE_PAIR startBeforeA = startRel;
+        RELATIVE_PAIR startBeforeB = startRelB;
+
+        if( hasStartViaA && !hasStartViaB )
         {
-            s0 = segStart + r.ta0 * segLen;
-            s1 = segStart + r.ta1 * segLen;
+            startBeforeB.len += startViaLenA;
+            startBeforeB.delay += startViaDelayA;
+            m_selectedKnownPoints.push_back( { s0A - startViaLenA, startRel.len - startViaLenA,
+                                               startRel.delay - startViaDelayA, startRel.len - startViaLenA,
+                                               startRel.delay - startViaDelayA } );
+        }
+        else if( !hasStartViaA && hasStartViaB )
+        {
+            startBeforeA.len += startViaLenB;
+            startBeforeA.delay += startViaDelayB;
+            m_coupledKnownPoints.push_back( { s0B - startViaLenB, startRelB.len - startViaLenB,
+                                              startRelB.delay - startViaDelayB, startRelB.len - startViaLenB,
+                                              startRelB.delay - startViaDelayB } );
         }
 
-        const double startPadsLengthDiff =
-                isCoupledTrack ? m_coupledStartEndDetails.StartPadLength - m_selectedStartEndDetails.StartPadLength
-                               : m_selectedStartEndDetails.StartPadLength - m_coupledStartEndDetails.StartPadLength;
-        const double startPadsDelayDiff =
-                isCoupledTrack ? m_coupledStartEndDetails.StartPadDelay - m_selectedStartEndDetails.StartPadDelay
-                               : m_selectedStartEndDetails.StartPadDelay - m_coupledStartEndDetails.StartPadDelay;
+        // Maybe-modified values used for interpolation around via discontinuities
+        RELATIVE_PAIR endAfterA = endRel;
+        RELATIVE_PAIR endAfterB = endRelB;
 
-        double startLen = isCoupledTrack ? r.startLenB - r.startLenA : r.startLenA - r.startLenB;
-        startLen += startPadsLengthDiff;
+        if( hasEndViaA && !hasEndViaB )
+        {
+            endAfterB.len -= endViaLenA;
+            endAfterB.delay -= endViaDelayA;
+        }
+        else if( !hasEndViaA && hasEndViaB )
+        {
+            endAfterA.len -= endViaLenB;
+            endAfterA.delay -= endViaDelayB;
+        }
 
-        double endLen = isCoupledTrack ? r.endLenB - r.endLenA : r.endLenA - r.endLenB;
-        endLen += startPadsLengthDiff;
+        // Main known points
+        m_selectedKnownPoints.push_back( { s0A, startBeforeA.len, startBeforeA.delay, startRel.len, startRel.delay } );
+        m_selectedKnownPoints.push_back( { s1A, endRel.len, endRel.delay, endAfterA.len, endAfterA.delay } );
+        m_coupledKnownPoints.push_back( { s0B, startBeforeB.len, startBeforeB.delay, startRelB.len, startRelB.delay } );
+        m_coupledKnownPoints.push_back( { s1B, endRelB.len, endRelB.delay, endAfterB.len, endAfterB.delay } );
 
-        double startDelay = isCoupledTrack ? r.startDelayB - r.startDelayA : r.startDelayA - r.startDelayB;
-        startDelay += startPadsDelayDiff;
-
-        double endDelay = isCoupledTrack ? r.endDelayB - r.endDelayA : r.endDelayA - r.endDelayB;
-        endDelay += startPadsDelayDiff;
-
-        pts.push_back( { s0, startLen, startDelay } );
-        pts.push_back( { s1, endLen, endDelay } );
+        // Injected end-via points
+        if( hasEndViaA && hasEndViaB )
+        {
+            const RELATIVE_PAIR rel{ endRel.len + endViaLenA - endViaLenB, endRel.delay + endViaDelayA - endViaDelayB };
+            const RELATIVE_PAIR relB = opposite( rel );
+            m_selectedKnownPoints.push_back( { s1A + endViaLenA, rel.len, rel.delay, rel.len, rel.delay } );
+            m_coupledKnownPoints.push_back( { s1B + endViaLenB, relB.len, relB.delay, relB.len, relB.delay } );
+        }
+        else if( hasEndViaA && !hasEndViaB )
+        {
+            m_selectedKnownPoints.push_back( { s1A + endViaLenA, endRel.len + endViaLenA, endRel.delay + endViaDelayA,
+                                               endRel.len + endViaLenA, endRel.delay + endViaDelayA } );
+        }
+        else if( !hasEndViaA && hasEndViaB )
+        {
+            m_coupledKnownPoints.push_back( { s1B + endViaLenB, endRelB.len + endViaLenB, endRelB.delay + endViaDelayB,
+                                              endRelB.len + endViaLenB, endRelB.delay + endViaDelayB } );
+        }
     }
-
-    std::ranges::sort( pts,
-                       []( const auto& a, const auto& b )
-                       {
-                           return a.LinearDistance < b.LinearDistance;
-                       } );
-
-    return pts;
 }
 
 
@@ -601,9 +673,19 @@ COLOR4D DIFF_PHASE_SKEW_TOOL::interpolateColours( const COLOR4D& aColour1, const
 }
 
 
-std::vector<DIFF_PHASE_SKEW_TOOL::OUTPUT_SEGMENT> DIFF_PHASE_SKEW_TOOL::buildDiffOverlaySegments(
-        const std::vector<CUMULATIVE_ENTRY>& aSegments, const LENGTH_DELAY_ITEM_DETAILS& aSourceItemDetails,
-        const std::vector<PARALLEL_RUN>& aKnownRuns, const double aTargetSubsegmentSize, const bool isCoupledTrack )
+void DIFF_PHASE_SKEW_TOOL::buildDiffOverlaySegments( const double aTargetSubsegmentSize )
+{
+    m_selectedDiffs = buildDiffOverlaySegmentsImpl( m_selectedCumulative, m_selectedLengthDelayItems,
+                                                    m_selectedKnownPoints, aTargetSubsegmentSize );
+    m_coupledDiffs = buildDiffOverlaySegmentsImpl( m_coupledCumulative, m_coupledLengthDelayItems, m_coupledKnownPoints,
+                                                   aTargetSubsegmentSize );
+}
+
+
+std::vector<DIFF_PHASE_SKEW_TOOL::OUTPUT_SEGMENT> DIFF_PHASE_SKEW_TOOL::buildDiffOverlaySegmentsImpl(
+        const std::vector<CUMULATIVE_ENTRY>&              aSegments,
+        const std::vector<LENGTH_DELAY_CALCULATION_ITEM>& aSourceItemDetails,
+        const std::vector<KNOWN_RELATIVE_POINT>& aKnownPoints, double aTargetSubsegmentSize )
 {
     std::vector<OUTPUT_SEGMENT> result;
 
@@ -613,22 +695,18 @@ std::vector<DIFF_PHASE_SKEW_TOOL::OUTPUT_SEGMENT> DIFF_PHASE_SKEW_TOOL::buildDif
     PCBNEW_SETTINGS*                           cfg = m_frame->GetPcbNewSettings();
     PCBNEW_SETTINGS::DIFF_PHASE_SKEW_SETTINGS& settings = cfg->m_DiffPhaseSkewSettings;
 
-    // Build ordered known value control points
-    const std::vector<KNOWN_RELATIVE_POINT> knownPoints =
-            buildKnownRelativePoints( aSegments, aSourceItemDetails, aKnownRuns, isCoupledTrack );
-
     // Get min and max values
     double minLen = 0.0;
     double maxLen = 0.0;
     double minDelay = 0.0;
     double maxDelay = 0.0;
 
-    for( const auto& [_, relLen, relDelay] : knownPoints )
+    for( const auto& [_1, relLenBefore, relDelayBefore, relLenAfter, relDelayAfter] : aKnownPoints )
     {
-        minLen = std::min( minLen, relLen );
-        maxLen = std::max( maxLen, relLen );
-        minDelay = std::min( minDelay, relDelay );
-        maxDelay = std::max( maxDelay, relDelay );
+        minLen = std::min( minLen, std::min( relLenBefore, relLenAfter ) );
+        maxLen = std::max( maxLen, std::max( relLenBefore, relLenAfter ) );
+        minDelay = std::min( minDelay, std::min( relDelayBefore, relDelayAfter ) );
+        maxDelay = std::max( maxDelay, std::max( relDelayBefore, relDelayAfter ) );
     }
 
     int maxSkew = m_maxSkew.value_or( 0 );
@@ -641,7 +719,7 @@ std::vector<DIFF_PHASE_SKEW_TOOL::OUTPUT_SEGMENT> DIFF_PHASE_SKEW_TOOL::buildDif
     // Build all subdivision boundaries
     const auto splits = buildSplitPositions( aSegments, aTargetSubsegmentSize );
 
-    KnownValueInterpolator interp( knownPoints );
+    KnownValueInterpolator interp( aKnownPoints );
 
     // Emit subdivided segments
     for( std::size_t i = 0; i + 1 < splits.size(); ++i )
@@ -655,13 +733,10 @@ std::vector<DIFF_PHASE_SKEW_TOOL::OUTPUT_SEGMENT> DIFF_PHASE_SKEW_TOOL::buildDif
 
         OUTPUT_SEGMENT out;
 
-        const std::vector<LENGTH_DELAY_CALCULATION_ITEM>& items =
-                isCoupledTrack ? m_coupledLengthDelayItems : m_selectedLengthDelayItems;
-
-        auto [startPoint, segIdx] = pointAtDistance( aSegments, items, s0 );
-        out.Width = items[segIdx].GetWidth() * m_overlayTrackInflation;
+        auto [startPoint, segIdx] = pointAtDistance( aSegments, aSourceItemDetails, s0 );
+        out.Width = static_cast<int>( aSourceItemDetails[segIdx].GetWidth() * m_overlayTrackInflation );
         out.Start = startPoint;
-        auto [endPoint, _] = pointAtDistance( aSegments, items, s1 );
+        auto [endPoint, _] = pointAtDistance( aSegments, aSourceItemDetails, s1 );
         out.End = endPoint;
 
         const double sMid = ( s0 + s1 ) / 2.0;
@@ -707,7 +782,7 @@ std::vector<DIFF_PHASE_SKEW_TOOL::OUTPUT_SEGMENT> DIFF_PHASE_SKEW_TOOL::buildDif
         }
         else
         {
-            out.Colour = COLOR4D( 1.0, 1.0, 1.0, 1.0 );
+            out.Colour = settings.m_ZeroSkewColor;
         }
 
         result.push_back( out );
@@ -865,9 +940,7 @@ int DIFF_PHASE_SKEW_TOOL::getMaxDiffPairGap( const BOARD_CONNECTED_ITEM* aItem )
 }
 
 
-void DIFF_PHASE_SKEW_TOOL::findParallelRunsImpl( const std::vector<CUMULATIVE_ENTRY>& aSelectedCumulative,
-                                                 const std::vector<CUMULATIVE_ENTRY>& aCoupledCumulative,
-                                                 std::pair<std::size_t, std::size_t>  aRangeA,
+void DIFF_PHASE_SKEW_TOOL::findParallelRunsImpl( std::pair<std::size_t, std::size_t> aRangeA,
                                                  std::pair<std::size_t, std::size_t> aRangeB, double aMaxSpacing,
                                                  std::vector<PARALLEL_RUN>& aRuns ) const
 {
@@ -894,6 +967,9 @@ void DIFF_PHASE_SKEW_TOOL::findParallelRunsImpl( const std::vector<CUMULATIVE_EN
             const LENGTH_DELAY_CALCULATION_ITEM& coupledItem = m_coupledLengthDelayItems[ib];
 
             if( coupledItem.Type() != LENGTH_DELAY_CALCULATION_ITEM::TYPE::LINE )
+                continue;
+
+            if( selectedItem.GetStartLayer() != coupledItem.GetStartLayer() )
                 continue;
 
             const SHAPE_LINE_CHAIN& lineB = coupledItem.GetLine();
@@ -988,6 +1064,31 @@ void DIFF_PHASE_SKEW_TOOL::findParallelRunsImpl( const std::vector<CUMULATIVE_EN
             tB0 = std::clamp( tB0, 0.0, 1.0 );
             tB1 = std::clamp( tB1, 0.0, 1.0 );
 
+            const CUMULATIVE_ENTRY& thisSelCumItem = m_selectedCumulative[ia];
+            const CUMULATIVE_ENTRY& thisCoupledCumItem = m_coupledCumulative[ib];
+
+            auto HasStartingVia = []( const std::vector<CUMULATIVE_ENTRY>& cumulative, const std::size_t index,
+                                      const CUMULATIVE_ENTRY& current )
+            {
+                if( index == 0 )
+                    return false;
+
+                const auto& prev = cumulative[index - 1];
+
+                return prev.m_SourceType == LENGTH_DELAY_CALCULATION_ITEM::TYPE::VIA && current.m_Start == prev.m_End;
+            };
+
+            auto HasEndingVia = []( const std::vector<CUMULATIVE_ENTRY>& cumulative, const std::size_t index,
+                                    const CUMULATIVE_ENTRY& current )
+            {
+                if( index + 1 >= cumulative.size() )
+                    return false;
+
+                const auto& next = cumulative[index + 1];
+
+                return next.m_SourceType == LENGTH_DELAY_CALCULATION_ITEM::TYPE::VIA && current.m_End == next.m_Start;
+            };
+
             // Emit the parallel run
             PARALLEL_RUN run;
 
@@ -1007,24 +1108,49 @@ void DIFF_PHASE_SKEW_TOOL::findParallelRunsImpl( const std::vector<CUMULATIVE_EN
 
             // Calculate cumulative values for deltas
             auto [length1, delay1] = getCumulativeLengthAndDelayAt(
-                    m_selectedLengthDelayDetails, m_selectedStartEndDetails, aSelectedCumulative, ia, run.ta0 );
+                    m_selectedLengthDelayDetails, m_selectedStartEndDetails, m_selectedCumulative, ia, run.ta0 );
             run.startLenA = length1;
             run.startDelayA = delay1;
 
             auto [length2, delay2] = getCumulativeLengthAndDelayAt(
-                    m_selectedLengthDelayDetails, m_selectedStartEndDetails, aSelectedCumulative, ia, run.ta1 );
+                    m_selectedLengthDelayDetails, m_selectedStartEndDetails, m_selectedCumulative, ia, run.ta1 );
             run.endLenA = length2;
             run.endDelayA = delay2;
 
             auto [length3, delay3] = getCumulativeLengthAndDelayAt(
-                    m_coupledLengthDelayDetails, m_coupledStartEndDetails, aCoupledCumulative, ib, run.tb0 );
+                    m_coupledLengthDelayDetails, m_coupledStartEndDetails, m_coupledCumulative, ib, run.tb0 );
             run.startLenB = length3;
             run.startDelayB = delay3;
 
             auto [length4, delay4] = getCumulativeLengthAndDelayAt(
-                    m_coupledLengthDelayDetails, m_coupledStartEndDetails, aCoupledCumulative, ib, run.tb1 );
+                    m_coupledLengthDelayDetails, m_coupledStartEndDetails, m_coupledCumulative, ib, run.tb1 );
             run.endLenB = length4;
             run.endDelayB = delay4;
+
+            // Add start / end via length and delay information
+            if( std::abs( tA0 ) < EPS && HasStartingVia( m_selectedCumulative, ia, thisSelCumItem ) )
+            {
+                run.startViaLengthA = m_selectedLengthDelayDetails.LengthsAndDelays[ia - 1].first;
+                run.startViaDelayA = m_selectedLengthDelayDetails.LengthsAndDelays[ia - 1].second;
+            }
+
+            if( std::abs( tB0 ) < EPS && HasStartingVia( m_coupledCumulative, ib, thisCoupledCumItem ) )
+            {
+                run.startViaLengthB = m_coupledLengthDelayDetails.LengthsAndDelays[ib - 1].first;
+                run.startViaDelayB = m_coupledLengthDelayDetails.LengthsAndDelays[ib - 1].second;
+            }
+
+            if( std::abs( tA1 - 1.0 ) < EPS && HasEndingVia( m_selectedCumulative, ia, thisSelCumItem ) )
+            {
+                run.endViaLengthA = m_selectedLengthDelayDetails.LengthsAndDelays[ia + 1].first;
+                run.endViaDelayA = m_selectedLengthDelayDetails.LengthsAndDelays[ia + 1].second;
+            }
+
+            if( std::abs( tB1 - 1.0 ) < EPS && HasEndingVia( m_coupledCumulative, ib, thisCoupledCumItem ) )
+            {
+                run.endViaLengthB = m_coupledLengthDelayDetails.LengthsAndDelays[ib + 1].first;
+                run.endViaDelayB = m_coupledLengthDelayDetails.LengthsAndDelays[ib + 1].second;
+            }
 
             aRuns.push_back( run );
         }
@@ -1032,16 +1158,13 @@ void DIFF_PHASE_SKEW_TOOL::findParallelRunsImpl( const std::vector<CUMULATIVE_EN
 }
 
 
-std::vector<PARALLEL_RUN>
-DIFF_PHASE_SKEW_TOOL::findParallelRuns( const std::vector<CUMULATIVE_ENTRY>& aSelectedCumulative,
-                                        const std::vector<CUMULATIVE_ENTRY>& aCoupledCumulative ) const
+std::vector<PARALLEL_RUN> DIFF_PHASE_SKEW_TOOL::findParallelRuns() const
 {
     std::vector<PARALLEL_RUN> runs;
     const double              maxGap = getMaxDiffPairGap( m_pickerItemFirst );
 
     // First find runs with regular spacing
-    findParallelRunsImpl( aSelectedCumulative, aCoupledCumulative, { 0, aSelectedCumulative.size() },
-                          { 0, aCoupledCumulative.size() }, maxGap, runs );
+    findParallelRunsImpl( { 0, m_selectedCumulative.size() }, { 0, m_coupledCumulative.size() }, maxGap, runs );
 
     if( runs.empty() )
         return {};
@@ -1074,21 +1197,20 @@ DIFF_PHASE_SKEW_TOOL::findParallelRuns( const std::vector<CUMULATIVE_ENTRY>& aSe
         const VECTOR2D distVec = selPadLocn - coupledPadLocn;
         const double   padSeparation = distVec.EuclideanNorm();
 
-        findParallelRunsImpl( aSelectedCumulative, aCoupledCumulative, { 0, firstSegA }, { 0, firstSegB },
-                              padSeparation, runs );
+        findParallelRunsImpl( { 0, firstSegA }, { 0, firstSegB }, padSeparation, runs );
     }
 
     // Assume that tracks end in parallel from pads that are wider than the diff pair spacing. Use the pad separation
     // to search for end tracks from the end of the identified existing parallel segments
-    if( lastSegA < aSelectedCumulative.size() || lastSegB > aCoupledCumulative.size() )
+    if( lastSegA < m_selectedCumulative.size() || lastSegB > m_coupledCumulative.size() )
     {
         const VECTOR2I selPadLocn = m_selectedEndPad->Pos();
         const VECTOR2I coupledPadLocn = m_coupledEndPad->Pos();
         const VECTOR2D distVec = selPadLocn - coupledPadLocn;
         const double   padSeparation = distVec.EuclideanNorm();
 
-        findParallelRunsImpl( aSelectedCumulative, aCoupledCumulative, { lastSegA, aSelectedCumulative.size() },
-                              { lastSegB, aCoupledCumulative.size() }, padSeparation, runs );
+        findParallelRunsImpl( { lastSegA, m_selectedCumulative.size() }, { lastSegB, m_coupledCumulative.size() },
+                              padSeparation, runs );
     }
 
     std::ranges::sort( runs,
@@ -1151,9 +1273,22 @@ std::vector<DIFF_PHASE_SKEW_TOOL::CUMULATIVE_ENTRY> DIFF_PHASE_SKEW_TOOL::buildC
         const auto [itemLen, itemDly] = aLengthDelayDetails.LengthsAndDelays[i];
         const LENGTH_DELAY_CALCULATION_ITEM& item = aItems[i];
 
+        VECTOR2I start, end;
+
+        if( item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::LINE )
+        {
+            start = item.GetLine().CPoint( 0 );
+            end = item.GetLine().CLastPoint();
+        }
+        else if( item.Type() == LENGTH_DELAY_CALCULATION_ITEM::TYPE::VIA )
+        {
+            start = item.GetVia()->GetPosition();
+            end = start;
+        }
+
         totalLength += itemLen;
         totalDelay += itemDly;
-        cumulative.emplace_back( totalLength, totalDelay, item.Type() );
+        cumulative.emplace_back( totalLength, totalDelay, item.Type(), start, end );
     }
 
     return cumulative;
