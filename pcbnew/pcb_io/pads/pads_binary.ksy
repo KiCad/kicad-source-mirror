@@ -70,9 +70,21 @@ doc: |
     convention. The remaining residue is a multiple of 16, but section 59's own
     stride is 24 or 32 depending on the board, so the missing bytes are NOT
     section 59 records -- something 16-byte-strided between the pool and section
-    60 is unaccounted for, most likely a continuation of the same index
-    machinery section 56 carries. Identifying it retires this scan, the most
-    expensive in the importer.
+    60 is unaccounted for.
+
+    Section 59's base IS pool_end -- dumping there on MAIS_FC shows records at
+    exactly its declared 24-byte stride, each a triple of in-memory pointers
+    followed by a flag:
+
+        00000000 034d20a0 034d1710 00000001 00000000 00000000
+        0465c430 034d1908 034d22e0 00000001 00000000 00000000
+
+    so `base(59) = pool_end`, and the gap from there to section 60 is section
+    59's WRITTEN length -- smaller than its declared total and not a whole
+    number of 24-byte records (271 bytes against a declared 1392 on that board).
+    Section 59's live count is therefore the last unresolved quantity between the
+    pool and section 60, and resolving it retires this scan, the most expensive
+    in the importer.
 
   * section 68 (clusters) -- found by a unique `Top` frame signature, then
     stepping back one 152-byte layer record. Needs section 69's base.
