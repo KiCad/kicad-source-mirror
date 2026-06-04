@@ -4581,18 +4581,21 @@ void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER
     {
         item = pcbTextbox.get();
         text = pcbTextbox.get();
-
-        ConvertTexts6ToEdaTextSettings( aElem, *text );
-        HelperSetTextboxAlignmentAndPos( aElem, pcbTextbox.get() );
-    }
-    else
-    {
-        ConvertTexts6ToEdaTextSettings( aElem, *text );
-        HelperSetTextAlignmentAndPos( aElem, text );
     }
 
     text->SetText( kicadText );
+
+    // Set the layer before the alignment helpers run.  HelperSetTextAlignmentAndPos measures the
+    // text via GetTextBox(), which resolves layer-dependent special strings such as ${LAYER}.
     item->SetLayer( aLayer );
+
+    ConvertTexts6ToEdaTextSettings( aElem, *text );
+
+    if( isTextbox )
+        HelperSetTextboxAlignmentAndPos( aElem, pcbTextbox.get() );
+    else
+        HelperSetTextAlignmentAndPos( aElem, text );
+
     item->SetIsKnockout( aElem.isInverted );
 
     if( isTextbox )
@@ -4643,21 +4646,24 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     {
         item = fpTextbox.get();
         text = fpTextbox.get();
-
-        ConvertTexts6ToEdaTextSettings( aElem, *text );
-        HelperSetTextboxAlignmentAndPos( aElem, fpTextbox.get() );
-    }
-    else
-    {
-        ConvertTexts6ToEdaTextSettings( aElem, *text );
-        HelperSetTextAlignmentAndPos( aElem, text );
     }
 
     wxString kicadText = AltiumPcbSpecialStringsToKiCadStrings( aElem.text, variableMap );
 
     text->SetText( kicadText );
-    text->SetKeepUpright( false );
+
+    // Set the layer before the alignment helpers run.  HelperSetTextAlignmentAndPos measures the
+    // text via GetTextBox(), which resolves layer-dependent special strings such as ${LAYER}.
     item->SetLayer( aLayer );
+
+    ConvertTexts6ToEdaTextSettings( aElem, *text );
+
+    if( isTextbox )
+        HelperSetTextboxAlignmentAndPos( aElem, fpTextbox.get() );
+    else
+        HelperSetTextAlignmentAndPos( aElem, text );
+
+    text->SetKeepUpright( false );
     item->SetIsKnockout( aElem.isInverted );
 
     if( toAdd )
@@ -4814,6 +4820,21 @@ void ALTIUM_PCB::HelperSetTextAlignmentAndPos( const ATEXT6& aElem, EDA_TEXT* aT
     int margin = aElem.isOffsetBorder ? aElem.text_offset_width : aElem.margin_border_width;
     int rectWidth = aElem.textbox_rect_width - margin * 2;
     int rectHeight = aElem.height;
+
+    // Altium auto-sizes the bounding box of a free string (non-frame text) from its own glyph
+    // rasterizer, and stores a slightly different width for otherwise identical strings placed on
+    // different layers (e.g. the copper and soldermask copies of the same label, which Altium may
+    // also give different stroke widths).  Anchoring the KiCad text to that per-record width drives
+    // the two copies apart.  Center the text on its bare glyph run instead, measured from the
+    // already-populated EDA_TEXT with the pen inflation removed, so copies that share a glyph run
+    // stay coincident regardless of stroke width.
+    if( !aElem.isFrame )
+    {
+        rectWidth = aText->GetTextBox( nullptr ).GetWidth();
+
+        if( KIFONT::FONT* font = aText->GetFont(); !font || font->IsStroke() )
+            rectWidth -= 3 * aText->GetEffectiveTextPenWidth();
+    }
 
     if( aElem.isMirrored )
         rectWidth = -rectWidth;
