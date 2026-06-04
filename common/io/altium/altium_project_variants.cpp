@@ -129,6 +129,49 @@ static ALTIUM_VARIANT_ENTRY ParseVariationString( const wxString& aValue )
 }
 
 
+std::map<wxString, wxString> ParseAltiumProjectParameters( const wxString& aPrjPcbPath )
+{
+    std::map<wxString, wxString> parameters;
+
+    wxFileConfig config( wxEmptyString, wxEmptyString, wxEmptyString, aPrjPcbPath,
+                         wxCONFIG_USE_NO_ESCAPE_CHARACTERS );
+
+    wxString groupname;
+    long     groupid;
+
+    for( bool more = config.GetFirstGroup( groupname, groupid ); more;
+         more = config.GetNextGroup( groupname, groupid ) )
+    {
+        if( !groupname.StartsWith( wxS( "Parameter" ) ) )
+            continue;
+
+        // Only numbered [ParameterN] sections hold the project parameters; reject look-alikes
+        // such as [ParameterEngine] by requiring a trailing integer.
+        wxString numStr = groupname.Mid( 9 );
+        long     num;
+
+        if( !numStr.ToLong( &num ) )
+            continue;
+
+        wxString name = config.Read( groupname + wxS( "/Name" ), wxEmptyString );
+
+        if( name.empty() )
+            continue;
+
+        wxString value = config.Read( groupname + wxS( "/Value" ), wxEmptyString );
+
+        // KiCad variable references are matched case-insensitively by resolving to upper case,
+        // which is what AltiumPcbSpecialStringsToKiCadStrings emits, so key on the upper-cased
+        // name to keep ${PCB_REVISION} and friends resolvable.
+        name.UpperCase();
+
+        parameters[name] = value;
+    }
+
+    return parameters;
+}
+
+
 std::vector<ALTIUM_PROJECT_VARIANT> ParseAltiumProjectVariants( const wxString& aPrjPcbPath )
 {
     std::vector<ALTIUM_PROJECT_VARIANT> variants;

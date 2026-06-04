@@ -139,10 +139,15 @@ BOARD* PCB_IO_SOLIDWORKS::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
 
     if( m_props && m_props->count( "project_file" ) )
     {
-        auto variants = ParseAltiumProjectVariants( m_props->at( "project_file" ) );
+        const wxString& projectFile = m_props->at( "project_file" );
+
+        auto variants = ParseAltiumProjectVariants( projectFile );
 
         if( !variants.empty() )
             ApplyAltiumProjectVariantsToBoard( m_board, variants );
+
+        ApplyAltiumProjectParametersToProject( aProject,
+                                               ParseAltiumProjectParameters( projectFile ) );
     }
 
     return m_board;

@@ -1,0 +1,42 @@
+[Design]
+Version=1.0
+
+[Parameter1]
+Name=Company_Name
+Value=ETH Zurich
+
+[Parameter2]
+Name=Customer_Name
+Value=TIQI
+
+[Parameter3]
+Name=Designer
+Value=P. Clements
+
+[Parameter4]
+Name=Distribution
+Value=Confidential
+
+[Parameter5]
+Name=PCB_Revision
+Value=A
+
+[Parameter6]
+Name=Project_Name
+Value=Fastino Ground Isolator
+
+[Parameter7]
+Name=Project_Number
+Value=0000
+
+[Parameter8]
+Name=Revision_Major
+Value=1
+
+[Parameter9]
+Name=Revision_Minor
+Value=0
+
+[Parameter10]
+Name=Year
+Value=2026
