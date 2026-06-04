@@ -61,9 +61,18 @@ doc: |
     `pool_end + total_bytes(58) + total_bytes(59)` is wrong on every file, but
     every difference is congruent to 1 modulo 16, so the formula is right up to
     the pool_start +17/+16 convention and a whole number of 16-byte records.
-    That residue means section 58 or 59 also writes fewer records than it
-    declares, exactly as section 56 does. Establishing that count retires this
-    scan, the most expensive in the importer.
+    Measured against the located pool on 142 files with verified section 60
+    anchors, the shortfall
+
+        (total_bytes(58) + total_bytes(59)) - (base(60) - pool_end)
+
+    is congruent to 1 modulo 16 on ALL 142, the 1 being the pool_start +17
+    convention. The remaining residue is a multiple of 16, but section 59's own
+    stride is 24 or 32 depending on the board, so the missing bytes are NOT
+    section 59 records -- something 16-byte-strided between the pool and section
+    60 is unaccounted for, most likely a continuation of the same index
+    machinery section 56 carries. Identifying it retires this scan, the most
+    expensive in the importer.
 
   * section 68 (clusters) -- found by a unique `Top` frame signature, then
     stepping back one 152-byte layer record. Needs section 69's base.
