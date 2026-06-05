@@ -196,9 +196,13 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     auto checkTextOnEdgeCuts =
             [&]( BOARD_ITEM* item )
             {
+                // Tables and barcodes also plot geometry onto Edge.Cuts and corrupt the
+                // board outline. Reference images are excluded since they are never plotted.
                 if( item->Type() == PCB_FIELD_T
                         || item->Type() == PCB_TEXT_T
                         || item->Type() == PCB_TEXTBOX_T
+                        || item->Type() == PCB_TABLE_T
+                        || item->Type() == PCB_BARCODE_T
                         || BaseType( item->Type() ) == PCB_DIMENSION_T )
                 {
                     if( item->GetLayer() == Edge_Cuts )
