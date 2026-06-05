@@ -71,7 +71,7 @@ ZONE* TEARDROP_MANAGER::createTeardrop( TEARDROP_VARIANT aTeardropVariant,
     teardrop->SetTeardropAreaType( aTeardropVariant == TD_TYPE_PADVIA ? TEARDROP_TYPE::TD_VIAPAD
                                                                       : TEARDROP_TYPE::TD_TRACKEND );
     teardrop->SetLayer( aTrack->GetLayer() );
-    teardrop->SetNetCode( aTrack->GetNetCode() );
+    teardrop->SetNetCode( aTrack->GetNetCode(), /* aNoAssert */ true );
     teardrop->SetLocalClearance( 0 );
     teardrop->SetMinThickness( pcbIUScale.mmToIU( 0.0254 ) );  // The minimum zone thickness
     teardrop->SetPadConnection( ZONE_CONNECTION::FULL );
