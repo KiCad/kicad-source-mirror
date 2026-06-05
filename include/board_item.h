@@ -30,6 +30,7 @@
 #include <lset.h>
 #include <stroke_params.h>
 #include <geometry/eda_angle.h>
+#include "macros.h"
 
 class BOARD;
 class BOARD_DESIGN_SETTINGS;
@@ -297,7 +298,7 @@ public:
             return;
         }
 
-        wxFAIL_MSG( wxT( "Attempted to SetLayerSet() on a single-layer object." ) );
+        UNIMPLEMENTED_FOR( GetClass() );
 
         // Derived classes which support multiple layers must implement this
     }

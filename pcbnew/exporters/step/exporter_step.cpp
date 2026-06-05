@@ -1127,7 +1127,8 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, const VECTOR2D& aOri
         break;
     }
 
-    default: wxFAIL_MSG( "buildGraphic3DShape: unhandled item type" );
+    default:
+        UNIMPLEMENTED_FOR( aItem->GetClass() );
     }
 
     return true;
