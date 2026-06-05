@@ -23,6 +23,17 @@ PANEL_SETUP_ZONES_BASE::PANEL_SETUP_ZONES_BASE( wxWindow* parent, wxWindowID id,
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	m_mainSizer->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 5 );
 
+	m_scrolledWindow = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL );
+	m_scrolledWindow->SetScrollRate( 0, 5 );
+	wxBoxSizer* bSizer2;
+	bSizer2 = new wxBoxSizer( wxVERTICAL );
+
+
+	m_scrolledWindow->SetSizer( bSizer2 );
+	m_scrolledWindow->Layout();
+	bSizer2->Fit( m_scrolledWindow );
+	m_mainSizer->Add( m_scrolledWindow, 1, wxEXPAND, 5 );
+
 
 	this->SetSizer( m_mainSizer );
 	this->Layout();

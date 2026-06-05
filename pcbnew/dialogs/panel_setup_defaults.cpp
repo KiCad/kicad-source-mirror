@@ -26,7 +26,6 @@
 #include <board_design_settings.h>
 #include <dialogs/panel_setup_text_and_graphics.h>
 #include <dialogs/panel_setup_dimensions.h>
-#include <dialogs/panel_setup_zones.h>
 #include <pcb_edit_frame.h>
 
 #include <kidialog.h>
@@ -37,17 +36,14 @@ PANEL_SETUP_DEFAULTS::PANEL_SETUP_DEFAULTS( wxWindow* aParentWindow, PCB_EDIT_FR
         m_Frame( aFrame ),
         m_BrdSettings( &m_Frame->GetBoard()->GetDesignSettings() ),
         m_textAndGraphicsPanel( new PANEL_SETUP_TEXT_AND_GRAPHICS( m_scrolledWindow, aFrame, m_BrdSettings ) ),
-        m_dimensionsPanel( new PANEL_SETUP_DIMENSIONS( m_scrolledWindow, *aFrame, *m_BrdSettings ) ),
-        m_zonesPanel( new PANEL_SETUP_ZONES( m_scrolledWindow, aFrame, *m_BrdSettings ) )
+        m_dimensionsPanel( new PANEL_SETUP_DIMENSIONS( m_scrolledWindow, *aFrame, *m_BrdSettings ) )
 {
     m_scrollSizer->Add( m_textAndGraphicsPanel, 0, wxEXPAND, 5 );
     m_scrollSizer->AddSpacer( 10 );
     m_scrollSizer->Add( m_dimensionsPanel, 0, wxEXPAND, 5 );
-    m_scrollSizer->AddSpacer( 10 );
-    m_scrollSizer->Add( m_zonesPanel, 0, wxEXPAND, 5 );
 
-	Layout();
-	GetSizer()->Fit( this );
+    Layout();
+    GetSizer()->Fit( this );
 }
 
 
@@ -55,7 +51,6 @@ bool PANEL_SETUP_DEFAULTS::TransferDataToWindow()
 {
     m_textAndGraphicsPanel->TransferDataToWindow();
     m_dimensionsPanel->TransferDataToWindow();
-    m_zonesPanel->TransferDataToWindow();
 
     Layout();
 
@@ -71,9 +66,6 @@ bool PANEL_SETUP_DEFAULTS::TransferDataFromWindow()
     if( !m_dimensionsPanel->TransferDataFromWindow() )
         return false;
 
-    if( !m_zonesPanel->TransferDataFromWindow() )
-        return false;
-
     return true;
 }
 
@@ -84,9 +76,6 @@ void PANEL_SETUP_DEFAULTS::ImportSettingsFrom( BOARD* aBoard )
         return;
 
     if( !m_dimensionsPanel->CommitPendingChanges() )
-        return;
-
-    if( !m_zonesPanel->CommitPendingChanges() )
         return;
 
     BOARD_DESIGN_SETTINGS* savedSettings = m_BrdSettings;

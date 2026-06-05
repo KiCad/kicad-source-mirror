@@ -22,7 +22,6 @@
 #include <panel_setup_constraints.h>
 #include <panel_setup_tracks_and_vias.h>
 #include <panel_setup_mask_and_paste.h>
-#include <panel_setup_zone_hatch_offsets.h>
 #include <../board_stackup_manager/panel_board_stackup.h>
 #include <../board_stackup_manager/panel_board_finish.h>
 #include <confirm.h>
@@ -37,6 +36,7 @@
 #include <dialogs/panel_setup_severities.h>
 #include <dialogs/panel_setup_rules.h>
 #include <dialogs/panel_setup_teardrops.h>
+#include <dialogs/panel_setup_zones.h>
 #include <dialogs/panel_setup_tuning_patterns.h>
 #include <dialogs/panel_setup_netclasses.h>
 #include <dialogs/panel_assign_component_classes.h>
@@ -65,7 +65,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
         m_layers( nullptr ),
         m_boardFinish( nullptr ),
         m_physicalStackup( nullptr ),
-        m_zoneHatchOffsets( nullptr ),
+        m_zones( nullptr ),
         m_tuningProfiles( nullptr ),
         m_netClasses( nullptr ),
         m_currentPage( 0 ),
@@ -75,7 +75,6 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
         m_defaultsPage( 0 ),
         m_formattingPage( 0 ),
         m_maskAndPastePage( 0 ),
-        m_zoneHatchOffsetsPage( 0 ),
         m_constraintsPage( 0 ),
         m_tracksAndViasPage( 0 ),
         m_teardropsPage( 0 ),
@@ -129,15 +128,6 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
                 return new PANEL_SETUP_MASK_AND_PASTE( aParent, m_frame );
             }, _( "Solder Mask/Paste" ) );
 
-    m_zoneHatchOffsetsPage = m_treebook->GetPageCount();
-    m_treebook->AddLazySubPage(
-            [this]( wxWindow* aParent ) -> wxWindow*
-            {
-                BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
-
-                return new PANEL_SETUP_ZONE_HATCH_OFFSETS( aParent, m_frame, bds );
-            }, _( "Zone Hatch Offsets" ) );
-
     m_treebook->AddPage( new wxPanel( GetTreebook() ), _( "Text & Graphics" ) );
 
     m_defaultsPage = m_treebook->GetPageCount();
@@ -175,6 +165,14 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
             {
                 return new PANEL_SETUP_TRACKS_AND_VIAS( aParent, m_frame );
             },  _( "Pre-defined Sizes" ) );
+
+    m_zonesPage = m_treebook->GetPageCount();
+    m_treebook->AddLazySubPage(
+            [this]( wxWindow* aParent ) -> wxWindow*
+            {
+                return new PANEL_SETUP_ZONES( aParent, m_frame, m_frame->GetBoard()->GetDesignSettings() );
+            },
+            _( "Zones" ) );
 
     m_teardropsPage = m_treebook->GetPageCount();
     m_treebook->AddLazySubPage(
@@ -294,13 +292,13 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
     if( m_physicalStackupPage > 0 )     // Don't run this during initialization
     {
         if( m_currentPage == m_physicalStackupPage || page == m_physicalStackupPage || page == m_netclassesPage
-            || page == m_tuningProfilesPage || page == m_zoneHatchOffsetsPage )
+            || page == m_tuningProfilesPage || page == m_zonesPage )
         {
             m_layers = RESOLVE_PAGE( PANEL_SETUP_LAYERS, m_layersPage );
             m_physicalStackup = RESOLVE_PAGE( PANEL_SETUP_BOARD_STACKUP, m_physicalStackupPage );
             m_tuningProfiles = RESOLVE_PAGE( PANEL_SETUP_TUNING_PROFILES, m_tuningProfilesPage );
             m_netClasses = RESOLVE_PAGE( PANEL_SETUP_NETCLASSES, m_netclassesPage );
-            m_zoneHatchOffsets = RESOLVE_PAGE( PANEL_SETUP_ZONE_HATCH_OFFSETS, m_zoneHatchOffsetsPage );
+            m_zones = RESOLVE_PAGE( PANEL_SETUP_ZONES, m_zonesPage );
         }
 
         // Ensure layer page always gets updated even if we aren't moving towards it
@@ -324,9 +322,9 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
         {
             m_tuningProfiles->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
         }
-        else if( page == m_zoneHatchOffsetsPage )
+        else if( page == m_zonesPage )
         {
-            m_zoneHatchOffsets->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
+            m_zones->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
         }
 
         if( Prj().IsReadOnly() )
@@ -456,6 +454,9 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
         if( importDlg.m_TracksAndViasOpt->GetValue() )
             RESOLVE_PAGE( PANEL_SETUP_TRACKS_AND_VIAS, m_tracksAndViasPage )->ImportSettingsFrom( otherBoard );
 
+        if( importDlg.m_ZonesOpt->GetValue() )
+            RESOLVE_PAGE( PANEL_SETUP_ZONES, m_zonesPage )->ImportSettingsFrom( otherBoard );
+
         if( importDlg.m_TeardropsOpt->GetValue() )
             RESOLVE_PAGE( PANEL_SETUP_TEARDROPS, m_teardropsPage )->ImportSettingsFrom( otherBoard );
 
@@ -466,7 +467,7 @@ void DIALOG_BOARD_SETUP::onAuxiliaryAction( wxCommandEvent& aEvent )
             RESOLVE_PAGE( PANEL_SETUP_MASK_AND_PASTE, m_maskAndPastePage )->ImportSettingsFrom( otherBoard );
 
         if( importDlg.m_ZoneHatchingOffsetsOpt->GetValue() )
-            RESOLVE_PAGE( PANEL_SETUP_ZONE_HATCH_OFFSETS, m_zoneHatchOffsetsPage )->ImportSettingsFrom( otherBoard );
+            RESOLVE_PAGE( PANEL_SETUP_ZONES, m_zonesPage )->ImportHatchOffsetsFrom( otherBoard );
 
         if( importDlg.m_CustomRulesOpt->GetValue() )
             RESOLVE_PAGE( PANEL_SETUP_RULES, m_customRulesPage )->ImportSettingsFrom( otherBoard );

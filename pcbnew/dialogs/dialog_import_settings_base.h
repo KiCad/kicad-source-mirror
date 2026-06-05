@@ -62,6 +62,7 @@ class DIALOG_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_FormattingOpt;
 		wxCheckBox* m_ConstraintsOpt;
 		wxCheckBox* m_TracksAndViasOpt;
+		wxCheckBox* m_ZonesOpt;
 		wxCheckBox* m_TeardropsOpt;
 		wxCheckBox* m_TuningPatternsOpt;
 		wxCheckBox* m_NetclassesOpt;

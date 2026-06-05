@@ -31,7 +31,6 @@
 class BOARD_DESIGN_SETTINGS;
 class PANEL_SETUP_TEXT_AND_GRAPHICS;
 class PANEL_SETUP_DIMENSIONS;
-class PANEL_SETUP_ZONES;
 class PCB_EDIT_FRAME;
 
 
@@ -52,5 +51,4 @@ private:
 
     PANEL_SETUP_TEXT_AND_GRAPHICS* m_textAndGraphicsPanel;
     PANEL_SETUP_DIMENSIONS*        m_dimensionsPanel;
-    PANEL_SETUP_ZONES*             m_zonesPanel;
 };

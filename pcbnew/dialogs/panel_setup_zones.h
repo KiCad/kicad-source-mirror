@@ -31,6 +31,7 @@
 
 class BOARD_DESIGN_SETTINGS;
 class PANEL_ZONE_PROPERTIES;
+class PANEL_SETUP_ZONE_HATCH_OFFSETS;
 
 
 class PANEL_SETUP_ZONES : public PANEL_SETUP_ZONES_BASE
@@ -44,8 +45,14 @@ public:
 
     bool CommitPendingChanges();
 
+    void ImportSettingsFrom( BOARD* aBoard );
+    void ImportHatchOffsetsFrom( BOARD* aBoard );
+
+    void SyncCopperLayers( int aCopperLayerCount );
+
 private:
-    BOARD_DESIGN_SETTINGS&  m_brdSettings;
-    ZONE_SETTINGS_BAG       m_zoneSettingsBag;
-    PANEL_ZONE_PROPERTIES*  m_panelZoneProperties;
+    BOARD_DESIGN_SETTINGS&          m_brdSettings;
+    ZONE_SETTINGS_BAG               m_zoneSettingsBag;
+    PANEL_ZONE_PROPERTIES*          m_panelZoneProperties;
+    PANEL_SETUP_ZONE_HATCH_OFFSETS* m_panelHatchOffsets;
 };

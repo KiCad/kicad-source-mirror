@@ -18,6 +18,7 @@
 #include <wx/settings.h>
 #include <wx/statline.h>
 #include <wx/sizer.h>
+#include <wx/scrolwin.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -33,6 +34,7 @@ class PANEL_SETUP_ZONES_BASE : public wxPanel
 		wxBoxSizer* m_mainSizer;
 		wxStaticText* m_staticTextDefPropDim;
 		wxStaticLine* m_staticline1;
+		wxScrolledWindow* m_scrolledWindow;
 
 	public:
 

@@ -31,7 +31,7 @@ class PANEL_SETUP_NETCLASSES;
 class PANEL_SETUP_RULES;
 class PANEL_SETUP_TRACKS_AND_VIAS;
 class PANEL_SETUP_MASK_AND_PASTE;
-class PANEL_SETUP_ZONE_HATCH_OFFSETS;
+class PANEL_SETUP_ZONES;
 class PANEL_SETUP_BOARD_STACKUP;
 class PANEL_SETUP_BOARD_FINISH;
 class PANEL_SETUP_SEVERITIES;
@@ -54,7 +54,7 @@ protected:
     PANEL_SETUP_LAYERS*                 m_layers;
     PANEL_SETUP_BOARD_FINISH*           m_boardFinish;
     PANEL_SETUP_BOARD_STACKUP*          m_physicalStackup;
-    PANEL_SETUP_ZONE_HATCH_OFFSETS*     m_zoneHatchOffsets;
+    PANEL_SETUP_ZONES*                  m_zones;
     PANEL_SETUP_TUNING_PROFILES*        m_tuningProfiles;
     PANEL_SETUP_NETCLASSES*             m_netClasses;
 
@@ -66,9 +66,9 @@ private:
     size_t m_defaultsPage;
     size_t m_formattingPage;
     size_t m_maskAndPastePage;
-    size_t m_zoneHatchOffsetsPage;
     size_t m_constraintsPage;
     size_t m_tracksAndViasPage;
+    size_t m_zonesPage;
     size_t m_teardropsPage;
     size_t m_tuningPatternsPage;
     size_t m_netclassesPage;
