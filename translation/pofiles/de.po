@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:29+0300\n"
-"PO-Revision-Date: 2026-06-04 07:53+0000\n"
+"PO-Revision-Date: 2026-06-05 11:40+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -8340,7 +8340,7 @@ msgstr "Konnte Repository-Head nicht abrufen."
 #: common/git/libgit_backend.cpp:1522
 #, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "Konnte Ziel-Commit nicht auflösen"
+msgstr "Konnte nicht in den Commits für die Zusammenführung nachschauen."
 
 #: common/git/libgit_backend.cpp:1531 common/git/libgit_backend.cpp:1716
 #, fuzzy
@@ -8354,7 +8354,7 @@ msgstr ""
 #: common/git/libgit_backend.cpp:1540
 #, fuzzy, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "Überlappende Grafiken zu Pads vereinen"
+msgstr "Den Remote-Tracking-Zweig in %s einbinden"
 
 #: common/git/libgit_backend.cpp:1548
 #, c-format
@@ -8396,7 +8396,7 @@ msgstr "Konnte \"%s\" nicht in der importierten Bibliothek finden."
 #: common/git/libgit_backend.cpp:1654 common/git/libgit_backend.cpp:1707
 #, fuzzy
 msgid "Could not read the remote branch."
-msgstr "Konnte den Vorlagenpfad \"%s\" nicht öffnen"
+msgstr "Konnte den Remote-Zweig nicht lesen."
 
 #: common/git/libgit_backend.cpp:1663
 #, fuzzy, c-format
@@ -8408,7 +8408,7 @@ msgstr "Konnte nicht zu Remote übertragen: %s"
 msgid ""
 "Cannot rebase: you have unstaged changes.  Please commit or stash them first."
 msgstr ""
-"Kann nicht mergen: Sie haben unverarbeitete Änderungen. Bitte vor dem Pull "
+"Rebase geht nicht: Sie haben unverarbeitete Änderungen. Bitte vor dem Pull "
 "committen oder stashen."
 
 #: common/git/libgit_backend.cpp:1747 common/git/libgit_backend.cpp:1758
@@ -22531,137 +22531,160 @@ msgstr "KiCad-Datenbank-Bibliotheksdateien"
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:140
 #, fuzzy, c-format
 msgid "Unsupported DipTrace schematic format version %d."
-msgstr "Nicht unterstützte RPC-Version %d."
+msgstr "Nicht unterstützte Formatversion des DipTrace-Schaltplans %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:187
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace import: unexpected error at offset 0x%06zX: %s"
-msgstr ""
+msgstr "DipTrace-Import: unerwarteter Fehler bei Offset 0x%06zX: %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:202
-#, c-format
+#, c-format, fuzzy
 msgid "Invalid DipTrace schematic magic length: %d (expected 7 or 11)."
 msgstr ""
+"Ungültige \"Magic\"-Länge im DipTrace-Schaltplan: %d (erwartet 7 oder 11)."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:210
 #, fuzzy
 msgid "Invalid DipTrace schematic file: bad magic header."
-msgstr "Ungültiger Sprint Layout-Dateiheader"
+msgstr "Ungültige DipTrace-Schaltplandatei: fehlerhafter \"Magic\"-Header."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:225
+#, fuzzy
 msgid "Invalid DipTrace schematic file: bad legacy version suffix."
 msgstr ""
+"Ungültige DipTrace-Schaltplandatei: fehlerhaftes Suffix in einer veralteten "
+"Version."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:241
-#, c-format
+#, c-format, fuzzy
 msgid "Invalid DipTrace schematic sheet count: %d."
-msgstr ""
+msgstr "Ungültige Blattanzahl im DipTrace-Schaltplan: %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:303
 #, fuzzy, c-format
 msgid "Invalid text style count: %d."
-msgstr "Ungültige Text-Zeichenkette"
+msgstr "Ungültige Anzahl an Textstilen: %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:362
 #, fuzzy, c-format
 msgid "DipTrace import: invalid component count %d."
-msgstr "Gesamtmenge der Bauteile: %d."
+msgstr "DipTrace-Import: ungültige Bauteilanzahl %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:393
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1917
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace import: invalid bus count %d."
-msgstr ""
+msgstr "DipTrace-Import: ungültige Busanzahl %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:586
 #, fuzzy, c-format
 msgid "DipTrace import: failed to parse component %zu at offset 0x%06zX: %s"
 msgstr ""
-"DipTrace-Import: Parsen des Bauteils %zu bei Offset 0x%06zX ist gescheitert: "
+"DipTrace-Import: Parsen des Bauteils %zu mit Offset 0x%06zX ist gescheitert: "
 "%s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:594
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace import: found %zu components, but the file header declares %d."
 msgstr ""
+"DipTrace-Import: %zu Bauteile gefunden, aber der Datei-Header gibt %d vor."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:846
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "DipTrace import: invalid component extra-tail length %u at offset 0x%06zX."
 msgstr ""
+"DipTrace-Import: ungültige Länge des zusätzlichen Endstücks %u von Bauteil "
+"0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:996
-#, c-format
+#, c-format, fuzzy
 msgid "Invalid pin count %d at component offset 0x%06zX."
-msgstr ""
+msgstr "Ungültige Pinanzahl %d im Bauteil mit Offset 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1073
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "DipTrace import: failed to parse pin %d in component at 0x%06zX (offset "
 "0x%06zX): %s"
 msgstr ""
+"DipTrace-Import: Pinanalyse %d im Bauteil bei 0x%06zX ist gescheitert "
+"(Offset 0x%06zX): %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1123
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "DipTrace import: invalid component shape point count %d at offset 0x%06zX."
 msgstr ""
+"DipTrace-Import: ungültige Punktanzahl in Bauteilformen %d mit Offset "
+"0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1646
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "DipTrace import: invalid embedded pattern %s count %d at offset 0x%06zX."
 msgstr ""
+"DipTrace-Import: ungültiges, eingebettetes Muster %s, Anzahl %d mit Offset "
+"0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1942
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace import: bus entry %d has unexpected terminator %d."
-msgstr ""
+msgstr "DipTrace-Import: Buseinstieg %d hat unerwartete Terminierung %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1958
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace import: failed to parse bus entry %d: %s"
-msgstr ""
+msgstr "DipTrace-Import: Parsen des Buseinstiegs %d ist gescheitert: %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:2841
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:2875
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "DipTrace import: invalid wire-net name for net index %d at offset 0x%06zX: "
 "%s."
 msgstr ""
+"DipTrace-Import: ungültiger Leitungsnetzname für Netindex %d mit Offset "
+"0x%06zX: %s."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:2894
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "DipTrace import: invalid wire-net pin count %d for net '%s' at offset "
 "0x%06zX."
 msgstr ""
+"DipTrace-Import: ungültige Anzahl von Leitungsnetzpins %d für Netz \"%s\" "
+"mit Offset 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:2908
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace import: invalid wire count %d for net '%s' at offset 0x%06zX."
 msgstr ""
+"DipTrace-Import: ungültige Leitungsanzahl %d für Netz \\\"%s\\\" mit Offset "
+"0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:2943
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "DipTrace import: invalid wire point count %d for net '%s' at offset 0x%06zX."
 msgstr ""
+"DipTrace-Import: ungültige Anzahl an Leitungspunkten %d für Netz \"%s\" mit "
+"Offset 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3089
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace import: failed to create symbol for %s (%s): %s"
-msgstr ""
+msgstr "DipTrace-Import: Symbolerstellung ist gescheitert für %s (%s): %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3109
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "DipTrace import: loaded %zu components, %zu buses, %zu net labels from "
 "version %d file with %d sheets."
 msgstr ""
+"DipTrace-Import: %zu Bauteile, %zu Busse, %zu Netzbezeichner aus Version %d "
+"mit %d Blättern geladen."
 
 #: eeschema/sch_io/diptrace/sch_io_diptrace.cpp:71
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:118
@@ -25225,7 +25248,7 @@ msgstr "Ungültige zusammengesetzte Stromtabelle."
 #: eeschema/sim/kibis/ibis_parser.cpp:701
 #, fuzzy, c-format
 msgid "Invalid Series Current table in %s."
-msgstr "Ungültige zusammengesetzte Stromtabelle."
+msgstr "Ungültige Reihenstromtabelle in %s."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:706
 #, fuzzy, c-format
@@ -25905,8 +25928,9 @@ msgid "Invalid IBIS model '%s'"
 msgstr "Ungültiges IBIS-Modell \"%s\""
 
 #: eeschema/sim/sim_model_ibis.cpp:300
+#, fuzzy
 msgid "Switch state (1 = on, 0 = off)"
-msgstr ""
+msgstr "Schaltzustand (1 = an, 0 = aus)"
 
 #: eeschema/sim/sim_model_ibis.cpp:447
 msgid "Power supply"
@@ -28238,10 +28262,13 @@ msgid "Remove from Net Chain"
 msgstr "Aus Auswahl entfernen"
 
 #: eeschema/tools/sch_actions.cpp:1111
+#, fuzzy
 msgid ""
 "Remove the selected net from its net chain by disabling propagation on the "
 "bridging component(s)"
 msgstr ""
+"Entfernen Sie das ausgewählte Netz aus seiner Netzkette, indem Sie die "
+"Weiterleitung an der/den Brückenkomponente(n) deaktivieren."
 
 #: eeschema/tools/sch_actions.cpp:1116
 #, fuzzy
@@ -28260,8 +28287,9 @@ msgid "Assign a name to the net chain"
 msgstr "Weist Netzen, die einem Muster entsprechen, eine Netzklasse zu"
 
 #: eeschema/tools/sch_actions.cpp:1127
+#, fuzzy
 msgid "Create Net Chain Between Pins"
-msgstr ""
+msgstr "Netzketten zwischen Pins erstellen"
 
 #: eeschema/tools/sch_actions.cpp:1128
 #, fuzzy
@@ -29463,8 +29491,11 @@ msgid "Some selected items cannot be grouped."
 msgstr "Die ausgewählten Elemente zu einer neuen Gruppe hinzufügen"
 
 #: eeschema/tools/sch_group_tool.cpp:57 eeschema/tools/sch_group_tool.cpp:65
+#, fuzzy
 msgid "Child items cannot be grouped separately from their parent item."
 msgstr ""
+"Kind-Elemente können nicht separat von ihren Eltern-Elementen gruppiert "
+"werden."
 
 #: eeschema/tools/sch_group_tool.cpp:94 pcbnew/tools/pcb_group_tool.cpp:86
 msgid "Click on new member..."
@@ -34494,8 +34525,9 @@ msgid "Configure Default Remote..."
 msgstr "Pfade konfigurieren ..."
 
 #: kicad/project_tree_pane.cpp:1043
+#, fuzzy
 msgid "Set or change the default remote URL and credentials"
-msgstr ""
+msgstr "Die Standard-Remote-URL und Zugangsdaten einstellen oder ändern"
 
 #: kicad/project_tree_pane.cpp:1046
 msgid "Commit Project..."
@@ -34511,8 +34543,9 @@ msgid "Amend Last Commit..."
 msgstr "Letzter Commit"
 
 #: kicad/project_tree_pane.cpp:1051
+#, fuzzy
 msgid "Rewrite the most recent commit on the current branch"
-msgstr ""
+msgstr "Den neuesten Commit vom aktuellen Zweig abändern"
 
 #: kicad/project_tree_pane.cpp:1054
 msgid "Push"
@@ -34682,6 +34715,7 @@ msgid "Pulled %s into %s."
 msgstr "Pad %s auf %s"
 
 #: kicad/project_tree_pane.cpp:2081
+#, fuzzy
 msgid ""
 "Your local changes and the remote changes conflict, so the pull was "
 "cancelled and nothing was changed.\n"
@@ -34689,6 +34723,11 @@ msgid ""
 "You can discard your local commits and use the remote version, or rebase "
 "your commits on top of the remote."
 msgstr ""
+"Ihre lokalen Änderungen und die Remoteänderungen stehen im Konflikt, weshalb "
+"der Abruf abgebrochen und nichts geändert wurde.\n"
+"\n"
+"Sie können ihre lokalen Commits verwerfen und die Remoteversion verwenden "
+"oder ihre Commits als Rebase an erster Stelle von Remote setzen."
 
 #: kicad/project_tree_pane.cpp:2085
 #, fuzzy
@@ -34740,12 +34779,12 @@ msgstr "Konnte Projekt nicht übertragen (pull)"
 #: kicad/project_tree_pane.cpp:2154
 #, fuzzy
 msgid "Pushed to remote."
-msgstr "Konnte Remote-Adresse nicht auflösen"
+msgstr "Auf Remote geschoben (push)."
 
 #: kicad/project_tree_pane.cpp:2155
 #, fuzzy, c-format
 msgid "Pushed %s to %s."
-msgstr "Pad %s auf %s"
+msgstr "%s auf %s abgelegt."
 
 #: kicad/project_tree_pane.cpp:2168
 #, c-format
@@ -34759,8 +34798,9 @@ msgid ""
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2174
+#, fuzzy
 msgid "Force Push?"
-msgstr ""
+msgstr "Ablegen (Push) erzwingen?"
 
 #: kicad/project_tree_pane.cpp:2176
 msgid "&Force Push"
@@ -34769,7 +34809,7 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:2185
 #, fuzzy
 msgid "Push failed."
-msgstr "Auftrag fehlgeschlagen"
+msgstr "Ablegen (Push) gescheitert."
 
 #: kicad/project_tree_pane.cpp:2186
 msgid "Failed to push project"
@@ -34793,7 +34833,7 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:2584 kicad/project_tree_pane.cpp:2859
 #, fuzzy
 msgid "Unsaved Changes"
-msgstr "Änderungen rückgängig machen"
+msgstr "Nicht gespeicherte Änderungen"
 
 #: kicad/project_tree_pane.cpp:2587
 msgid "&Save and Commit"
@@ -34817,13 +34857,17 @@ msgid "Discarding commit due to empty file selection."
 msgstr "Verwerfe Commit, da keine Dateien ausgewählt wurden."
 
 #: kicad/project_tree_pane.cpp:2811
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "The last commit has already been pushed to %s.\n"
 "\n"
 "Amending rewrites public history.  Anyone who pulled this commit will need "
 "to reset their copy."
 msgstr ""
+"Der letzte Commit wurde bereits auf %s abgelegt.\n"
+"\n"
+"Ein Ändern schreibt den öffentlichen Verlauf neu.  Jeder, der diesen Commit "
+"abgeholt hat, wird seine Kopie zurücksetzen müssen."
 
 #: kicad/project_tree_pane.cpp:2815
 msgid "Amend Published Commit?"
@@ -34863,17 +34907,17 @@ msgstr "Verwerfe Commit aufgrund leerer Commit-Nachricht."
 #: kicad/project_tree_pane.cpp:3084
 #, fuzzy
 msgid "Fetched from remote."
-msgstr "Remote abrufen"
+msgstr "Von Remote abgeholt (Fetch)."
 
 #: kicad/project_tree_pane.cpp:3085
 #, fuzzy, c-format
 msgid "Fetched from %s."
-msgstr "aus %s"
+msgstr "Von %s abgeholt (Fetch)."
 
 #: kicad/project_tree_pane.cpp:3092
 #, fuzzy
 msgid "Fetch failed."
-msgstr "sch Dateien"
+msgstr "Abholung (Fetch) gescheitert."
 
 #: kicad/project_tree_traverser.cpp:216
 #, c-format
@@ -40487,31 +40531,31 @@ msgstr "Array erstellen"
 #: pcbnew/dialogs/dialog_diff_phase_skew_properties_base.cpp:30
 #, fuzzy
 msgid "Zero skew color:"
-msgstr "Zurücksetzen auf gespeicherte Farbe"
+msgstr "\"Kein Versatz\"-Farbe:"
 
 #: pcbnew/dialogs/dialog_diff_phase_skew_properties_base.cpp:37
 #, fuzzy
 msgid "Negative skew color:"
-msgstr "Negativer Plot"
+msgstr "\"Negativer Versatz\"-Farbe:"
 
 #: pcbnew/dialogs/dialog_diff_phase_skew_properties_base.cpp:44
 #, fuzzy
 msgid "Positive skew color:"
-msgstr "Farbe zuweisen"
+msgstr "\"Positiver Versatz\"-Farbe:"
 
 #: pcbnew/dialogs/dialog_diff_phase_skew_properties_base.cpp:51
 #, fuzzy
 msgid "Unknown skew color:"
-msgstr "Unbekannter Fehler"
+msgstr "\"Unbekannter Versatz\"-Farbe:"
 
 #: pcbnew/dialogs/dialog_diff_phase_skew_properties_base.cpp:61
 msgid "Logarithmic color scale"
-msgstr ""
+msgstr "Logarithmische Farbskala"
 
 #: pcbnew/dialogs/dialog_diff_phase_skew_properties_base.h:53
 #, fuzzy
 msgid "Differential Skew Display Properties"
-msgstr "Eigenschaften des Anweisungsbezeichners"
+msgstr "Anzeigeeigenschaften für differenziellen Versatz"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:228
 msgid ""
@@ -46211,7 +46255,7 @@ msgstr "Unbenutzte Pads"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:35
 #, fuzzy
 msgid "Apply design block layouts to new groups"
-msgstr "Verknüpftes Designblock-Layout auf ausgewählte Gruppe anwenden"
+msgstr "Designblock-Layout auf neue Gruppe anwenden"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:36
 msgid ""
@@ -53294,19 +53338,17 @@ msgid "If not checked: use interactive placement."
 msgstr "Wenn nicht gewählt: interaktive Platzierung verwenden."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:140
-#, fuzzy
 msgid "Current Layer"
-msgstr "Aktuelle Lage:"
+msgstr "Aktuelle Lage"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:144
-#, fuzzy
 msgid "Map Layers"
-msgstr "Lagen tauschen"
+msgstr "Lagen zuordnen"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:147
 #, fuzzy
 msgid "Single Layer"
-msgstr "Signallage"
+msgstr "Einzige Lage"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:165
 msgid "Group imported items"
@@ -62213,7 +62255,7 @@ msgstr "Designblock hat kein Layout das eingefügt werden könnte."
 #: pcbnew/tools/pcb_control.cpp:1493
 #, fuzzy
 msgid "No groups with a linked design block are selected."
-msgstr "Verknüpftes Designblock-Layout auf ausgewählte Gruppe anwenden"
+msgstr "Keine Gruppen mit einem verknüpften Designblock ausgewählt."
 
 #: pcbnew/tools/pcb_control.cpp:1518 pcbnew/tools/pcb_selection_tool.cpp:4716
 msgid ""
@@ -62235,37 +62277,36 @@ msgstr "Designblock befindet sich nicht in den geladenen Bibliotheken"
 #: pcbnew/tools/pcb_control.cpp:1578
 #, fuzzy
 msgid "design block has no saved PCB layout"
-msgstr "Designblock hat kein Layout das eingefügt werden könnte."
+msgstr "Designblock hat kein gespeichertes PCB-Layout"
 
 #: pcbnew/tools/pcb_control.cpp:1609
 #, fuzzy
 msgid "could not load the design block's layout"
-msgstr "Konnte Designblock %s nicht finden."
+msgstr "Konnte das Layout vom Designblock nicht laden"
 
 #: pcbnew/tools/pcb_control.cpp:1636
 #, fuzzy
 msgid "design block layout could not be loaded"
-msgstr "Aktuelle Platine als Designblock-Layout nutzen"
+msgstr "Designblock-Layout konnte nicht geladen werden"
 
 #: pcbnew/tools/pcb_control.cpp:1669
-#, fuzzy
 msgid "group has no footprints"
-msgstr "Footprints durchsuchen"
+msgstr "Gruppe hat keine Footprints"
 
 #: pcbnew/tools/pcb_control.cpp:1708
 #, fuzzy
 msgid "layout copy failed"
-msgstr "Datei \"%s\" konnte nicht kopiert werden."
+msgstr "Kopieren des Layouts ist gescheitert"
 
 #: pcbnew/tools/pcb_control.cpp:1723
-#, c-format
+#, c-format, fuzzy
 msgid "Applying layout to group %zu of %zu..."
-msgstr ""
+msgstr "Layout auf Gruppe %zu von %zu anwenden ..."
 
 #: pcbnew/tools/pcb_control.cpp:1746
 #, fuzzy
 msgid "Apply design block layout cancelled."
-msgstr "Designblock-Layout verwenden"
+msgstr "\"Designblock-Layout verwenden\" abgebrochen."
 
 #: pcbnew/tools/pcb_control.cpp:1752
 #, fuzzy, c-format
@@ -62293,7 +62334,7 @@ msgstr "Die folgenden Gruppen konnten nicht verarbeitet werden:"
 #: pcbnew/tools/pcb_control.cpp:1783
 #, fuzzy
 msgid "(unnamed group)"
-msgstr "Jumpergruppen:"
+msgstr "(unbenannte Gruppe)"
 
 #: pcbnew/tools/pcb_control.cpp:1834
 #, c-format
