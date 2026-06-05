@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:29+0300\n"
-"PO-Revision-Date: 2026-06-05 11:39+0000\n"
+"PO-Revision-Date: 2026-06-06 10:06+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/master-"
 "source/sr/>\n"
@@ -5581,7 +5581,7 @@ msgstr "Вучење десним дугметом:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:161
 msgid "Pan on mouse movement with key:"
-msgstr ""
+msgstr "Померање миша помоћу тастера:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:165
 #: common/dialogs/panel_mouse_settings_base.cpp:233
@@ -8902,204 +8902,168 @@ msgid "PCB: Export Postscript"
 msgstr "PCB: Извоз Postscript-и"
 
 #: common/jobs/job_export_pcb_stats.cpp:53
-#, fuzzy
 msgid "Export board statistics"
-msgstr "Прикажи"
+msgstr "Извези статистику плоче"
 
 #: common/jobs/job_export_pcb_stats.cpp:59
-#, fuzzy
 msgid "Export Board Statistics Job Settings"
-msgstr "Унеси"
+msgstr "Подешавања за задатке за извоз статистике штампаних плоча"
 
 #: common/jobs/job_export_pcb_stats.cpp:80
-#, fuzzy
 msgid "PCB: Export Board Statistics"
-msgstr "Прикажи"
+msgstr "PCB: Статистика извозних плоча"
 
 #: common/jobs/job_export_pcb_svg.cpp:50
 #: common/jobs/job_export_sch_plot.cpp:154 kicad/kicad_cli.cpp:196
-#, fuzzy
 msgid "Export SVG"
-msgstr "фајл не постоји"
+msgstr "Извези СВГ"
 
 #: common/jobs/job_export_pcb_svg.cpp:56
 #: common/jobs/job_export_sch_plot.cpp:160
-#, fuzzy
 msgid "Export SVG Job Settings"
-msgstr "Уреди опције"
+msgstr "Подешавања за извоз SVG задатака"
 
 #: common/jobs/job_export_pcb_svg.cpp:60
-#, fuzzy
 msgid "PCB: Export SVG"
-msgstr "фајл не постоји"
+msgstr "PCB: Извоз SVG-а"
 
 #: common/jobs/job_export_sch_bom.cpp:93
-#, fuzzy
 msgid "Generate bill of materials"
-msgstr "Сачувај &Као..."
+msgstr "Генеришите листу компоненти"
 
 #: common/jobs/job_export_sch_bom.cpp:99
-#, fuzzy
 msgid "Generate Bill of Materials Job Settings"
-msgstr "Сачувај &Као..."
+msgstr "Подешавања за задатке генерисања листе компоненти"
 
 #: common/jobs/job_export_sch_bom.cpp:103
-#, fuzzy
 msgid "Schematic: Generate Bill of Materials"
-msgstr "Сачувај &Као..."
+msgstr "Шема: Генеришите листу компоненти"
 
 #: common/jobs/job_export_sch_netlist.cpp:84
-#, fuzzy, c-format
+#, c-format
 msgid "Export %s netlist"
-msgstr "Унеси"
+msgstr "Извези %s нетлисту"
 
 #: common/jobs/job_export_sch_netlist.cpp:90
-#, fuzzy
 msgid "Export Netlist Job Settings"
-msgstr "Унеси"
+msgstr "Подешавања за задатке извоза нетлисте"
 
 #: common/jobs/job_export_sch_netlist.cpp:94
-#, fuzzy
 msgid "Schematic: Export Netlist"
-msgstr "Унеси"
+msgstr "Шема: Извоз нетлисте"
 
 #: common/jobs/job_export_sch_plot.cpp:219
-#, fuzzy
 msgid "Schematic: Export SVG"
-msgstr "Додјела шеме"
+msgstr "Шема: Извоз SVG-а"
 
 #: common/jobs/job_export_sch_plot.cpp:221
-#, fuzzy
 msgid "Schematic: Export HPGL"
-msgstr "Додјела шеме"
+msgstr "Шема: Извоз HPGL-а"
 
 #: common/jobs/job_export_sch_plot.cpp:223
-#, fuzzy
 msgid "Schematic: Export Postscript"
-msgstr "Унеси"
+msgstr "Шема: Извоз Postscript-а"
 
 #: common/jobs/job_export_sch_plot.cpp:225
-#, fuzzy
 msgid "Schematic: Export DXF"
-msgstr "Додјела шеме"
+msgstr "Шема: Извоз DXF-а"
 
 #: common/jobs/job_export_sch_plot.cpp:227
-#, fuzzy
 msgid "Schematic: Export PDF"
-msgstr "Додјела шеме"
+msgstr "Шема: Извоз PDF-а"
 
 #: common/jobs/job_export_sch_plot.cpp:229
-#, fuzzy
 msgid "Schematic: Export PNG"
-msgstr "Додјела шеме"
+msgstr "Шема: Извоз PNG-а"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
-#, fuzzy
 msgid "Schematic PythonBOM export"
-msgstr "Додјела шеме"
+msgstr "Шематски извоз PythonBOM-а"
 
 #: common/jobs/job_gerber_diff.cpp:46
-#, fuzzy
 msgid "Gerber Diff"
-msgstr "Gerber фајлови"
+msgstr "Разлика Гербера"
 
 #: common/jobs/job_gerber_diff.cpp:52
-#, fuzzy
 msgid "Gerber Diff Job Settings"
-msgstr "Поставке..."
+msgstr "Подешавања за задатке Гербер диференције"
 
 #: common/jobs/job_gerber_diff.cpp:56
-#, fuzzy
 msgid "Gerber: Diff"
-msgstr "Gerber фајлови"
+msgstr "Гербер: Разлика"
 
 #: common/jobs/job_gerber_export_png.cpp:52
-#, fuzzy
 msgid "Gerber Export PNG"
-msgstr "PCB Текст"
+msgstr "Гербер извоз ПНГ"
 
 #: common/jobs/job_gerber_export_png.cpp:58
-#, fuzzy
 msgid "Gerber Export PNG Job Settings"
-msgstr "Уреди опције"
+msgstr "Подешавања задатака за извоз у PNG формат у Герберу"
 
 #: common/jobs/job_gerber_export_png.cpp:62
-#, fuzzy
 msgid "Gerber: Export PNG"
-msgstr "PCB Текст"
+msgstr "Гербер: Извоз PNG-а"
 
 #: common/jobs/job_gerber_info.cpp:39
-#, fuzzy
 msgid "Gerber Info"
-msgstr "Gerber фајлови"
+msgstr "Гербер информације"
 
 #: common/jobs/job_gerber_info.cpp:45
-#, fuzzy
 msgid "Gerber Info Job Settings"
-msgstr "Поставке..."
+msgstr "Подешавања задатака за задатке у вези са Гербером"
 
 #: common/jobs/job_gerber_info.cpp:49
-#, fuzzy
 msgid "Gerber: Info"
-msgstr "Gerber фајлови"
+msgstr "Гербер: Информације"
 
 #: common/jobs/job_pcb_drc.cpp:42
-#, fuzzy
 msgid "Perform DRC"
-msgstr "Отвори шему"
+msgstr "Извршите проверу правила дизајна"
 
 #: common/jobs/job_pcb_drc.cpp:48 pcbnew/dialogs/dialog_drc_job_config.cpp:24
-#, fuzzy
 msgid "DRC Job Settings"
-msgstr "3D поставке"
+msgstr "Подешавања задатака провере правила дизајна"
 
 #: common/jobs/job_pcb_drc.cpp:52
 msgid "PCB: Perform DRC"
 msgstr "PCB: Изврши DRC"
 
 #: common/jobs/job_pcb_import.cpp:57
-#, fuzzy
 msgid "Import PCB"
-msgstr "Унеси"
+msgstr "Увезите PCB"
 
 #: common/jobs/job_pcb_import.cpp:63
-#, fuzzy
 msgid "PCB Import Job Settings"
-msgstr "Унеси поставке"
+msgstr "Подешавања за задатке увоза штампаних плоча"
 
 #: common/jobs/job_pcb_render.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Render %s"
-msgstr "Окрени"
+msgstr "Рендер %s"
 
 #: common/jobs/job_pcb_render.cpp:140
-#, fuzzy
 msgid "Render PCB Job Settings"
-msgstr "Уреди опције"
+msgstr "Подешавања задатака рендеровања PCB-а"
 
 #: common/jobs/job_pcb_render.cpp:144
 msgid "PCB: Render"
 msgstr "PCB: Исцртај"
 
 #: common/jobs/job_sch_erc.cpp:33
-#, fuzzy
 msgid "Perform ERC"
-msgstr "Отвори шему"
+msgstr "Извршите проверу електричних правила"
 
 #: common/jobs/job_sch_erc.cpp:39
-#, fuzzy
 msgid "Schematic ERC Job Settings"
-msgstr "Унеси"
+msgstr "Подешавања за задатке провере електричних правила шема"
 
 #: common/jobs/job_sch_erc.cpp:43
-#, fuzzy
 msgid "Schematic: Perform ERC"
-msgstr "Отвори шему"
+msgstr "Шема: Извршите проверу електричних правила"
 
 #: common/jobs/job_special_copyfiles.cpp:46
-#, fuzzy
 msgid "Special: Copy Files"
-msgstr "Specctra DSN фајл"
+msgstr "Посебно: Копирај датотеке"
 
 #: common/jobs/job_special_execute.cpp:42
 msgid "Special: Execute Command"
@@ -9110,9 +9074,8 @@ msgid "Archive"
 msgstr "Архива"
 
 #: common/jobs/jobs_output_folder.cpp:95 common/jobs/jobset.cpp:44
-#, fuzzy
 msgid "Folder"
-msgstr "Залијепи"
+msgstr "Директоријум"
 
 #: common/json_schema_validator.cpp:48
 #, fuzzy, c-format
