@@ -82,9 +82,17 @@ doc: |
     so `base(59) = pool_end`, and the gap from there to section 60 is section
     59's WRITTEN length -- smaller than its declared total and not a whole
     number of 24-byte records (271 bytes against a declared 1392 on that board).
-    Section 59's live count is therefore the last unresolved quantity between the
-    pool and section 60, and resolving it retires this scan, the most expensive
-    in the importer.
+    Walking those records from pool_end while the flag word is 1 and the two
+    trailing words are zero, then predicting
+
+        base(60) = pool_end + live59*stride59 + total_bytes(58)
+
+    still misses on all 142 verified boards, and the error is AGAIN congruent to
+    1 modulo 16 (most commonly -63, i.e. -64+1). Two things follow: the constant
+    1 is the pool_start +17 convention, so +16 is the arithmetically clean
+    choice; and a 16-byte-strided run of unknown length still sits between
+    section 59's records and section 60. Identifying that run is the last step,
+    and it retires this scan, the most expensive in the importer.
 
   * section 68 (clusters) -- found by a unique `Top` frame signature, then
     stepping back one 152-byte layer record. Needs section 69's base.
