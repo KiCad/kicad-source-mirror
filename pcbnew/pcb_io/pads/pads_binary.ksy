@@ -94,6 +94,11 @@ doc: |
     section 59's records and section 60. Identifying that run is the last step,
     and it retires this scan, the most expensive in the importer.
 
+    Two dead ends already tried on the walk itself, so they need not be retried:
+    requiring the sixth word to be zero stops the walk early (it is 0 or 1), and
+    relaxing that condition does not move the prediction -- the error histogram
+    is essentially unchanged. The missing bytes are not extra section 59 records.
+
   * section 68 (clusters) -- found by a unique `Top` frame signature, then
     stepping back one 152-byte layer record. Needs section 69's base.
 
