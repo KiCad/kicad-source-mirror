@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:29+0300\n"
-"PO-Revision-Date: 2026-06-05 11:40+0000\n"
+"PO-Revision-Date: 2026-06-06 10:06+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -58845,7 +58845,7 @@ msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:2948 pcbnew/tools/pcb_actions.cpp:709
 msgid "Change Side / Flip"
-msgstr "配置面を変更/反転機能"
+msgstr "配置面を変更/反転"
 
 #: pcbnew/tools/edit_tool.cpp:3141
 msgid "Use the Footprint Properties dialog to remove fields."
