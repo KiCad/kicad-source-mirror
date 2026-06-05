@@ -94,6 +94,7 @@ void InitTables()
         { ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR, { _( "Open collector" ), BITMAPS::pintype_opencoll } },
         { ELECTRICAL_PINTYPE::PT_OPENEMITTER,   { _( "Open emitter" ),   BITMAPS::pintype_openemit } },
         { ELECTRICAL_PINTYPE::PT_NC,            { _( "Unconnected" ),    BITMAPS::pintype_noconnect } },
+        { ELECTRICAL_PINTYPE::PT_INHERIT,       { _( "Unspecified" ),    BITMAPS::pintype_notspecif } },
     };
 
     g_pinShapes = {
@@ -106,13 +107,15 @@ void InitTables()
         { GRAPHIC_PINSHAPE::OUTPUT_LOW,         { _( "Output low" ),         BITMAPS::pinshape_active_low_output } },
         { GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK, { _( "Falling edge clock" ), BITMAPS::pinshape_clock_fall } },
         { GRAPHIC_PINSHAPE::NONLOGIC,           { _( "NonLogic" ),           BITMAPS::pinshape_nonlogic } },
+        { GRAPHIC_PINSHAPE::INHERIT,            { _( "Unspecified" ),        BITMAPS::pintype_notspecif } },
     };
 
     g_pinOrientations = {
-        { PIN_ORIENTATION::PIN_RIGHT, { _( "Right" ), BITMAPS::pinorient_right } },
-        { PIN_ORIENTATION::PIN_LEFT,  { _( "Left" ),  BITMAPS::pinorient_left } },
-        { PIN_ORIENTATION::PIN_UP,    { _( "Up" ),    BITMAPS::pinorient_up } },
-        { PIN_ORIENTATION::PIN_DOWN,  { _( "Down" ),  BITMAPS::pinorient_down } },
+        { PIN_ORIENTATION::PIN_RIGHT, { _( "Right" ),       BITMAPS::pinorient_right } },
+        { PIN_ORIENTATION::PIN_LEFT,  { _( "Left" ),        BITMAPS::pinorient_left } },
+        { PIN_ORIENTATION::PIN_UP,    { _( "Up" ),          BITMAPS::pinorient_up } },
+        { PIN_ORIENTATION::PIN_DOWN,  { _( "Down" ),        BITMAPS::pinorient_down } },
+        { PIN_ORIENTATION::INHERIT,   { _( "Unspecified" ), BITMAPS::pintype_notspecif } },
     };
     // clang-format on
 
