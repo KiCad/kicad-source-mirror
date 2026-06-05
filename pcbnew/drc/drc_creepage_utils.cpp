@@ -591,9 +591,11 @@ void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
 
                 if( h == 2 * r )
                 {
-                    // Horizontal stadium: left and right semicircles
-                    addArc( { x1 + r, y1 + r }, { x1 + r, y1 }, { x1 + r, y2 } );
-                    addArc( { x2 - r, y1 + r }, { x2 - r, y2 }, { x2 - r, y1 } );
+                    // Horizontal stadium: left and right semicircles. The endpoint order
+                    // makes addArc sweep the outer half of each circle so the caps bulge
+                    // away from the slot.
+                    addArc( { x1 + r, y1 + r }, { x1 + r, y2 }, { x1 + r, y1 } );
+                    addArc( { x2 - r, y1 + r }, { x2 - r, y1 }, { x2 - r, y2 } );
                 }
                 else if( w == 2 * r )
                 {
@@ -1857,13 +1859,15 @@ bool SegmentIntersectsBoard( const VECTOR2I& aP1, const VECTOR2I& aP2,
 
                 if( h == 2 * r )
                 {
-                    // Horizontal stadium: left and right semicircles
+                    // Horizontal stadium: left and right semicircles. Each cap spans
+                    // the outer half of its circle so the modeled boundary matches the
+                    // decomposition in TransformEdgeToCreepShapes.
                     arcs.push_back( { { x1 + r, y1 + r },
-                                      EDA_ANGLE( -90.0, DEGREES_T ),
-                                      EDA_ANGLE( 90.0, DEGREES_T ) } );
-                    arcs.push_back( { { x2 - r, y1 + r },
                                       EDA_ANGLE( 90.0, DEGREES_T ),
                                       EDA_ANGLE( 270.0, DEGREES_T ) } );
+                    arcs.push_back( { { x2 - r, y1 + r },
+                                      EDA_ANGLE( -90.0, DEGREES_T ),
+                                      EDA_ANGLE( 90.0, DEGREES_T ) } );
                 }
                 else if( w == 2 * r )
                 {
