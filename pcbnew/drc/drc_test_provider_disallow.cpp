@@ -205,19 +205,19 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
     std::atomic<size_t> itemsDone( 0 );
     size_t              itemCount = allItems.size();
 
-    auto checkTextOnEdgeCuts =
-            []( BOARD_ITEM* item ) -> bool
-            {
-                if( item->Type() == PCB_FIELD_T
-                        || item->Type() == PCB_TEXT_T
-                        || item->Type() == PCB_TEXTBOX_T
-                        || BaseType( item->Type() ) == PCB_DIMENSION_T )
-                {
-                    return item->GetLayer() == Edge_Cuts;
-                }
+    auto checkTextOnEdgeCuts = []( BOARD_ITEM* item ) -> bool
+    {
+        // Items that plot geometry onto Edge.Cuts corrupt the board outline.
+        // Reference images are excluded on purpose because they are never plotted.
+        if( item->Type() == PCB_FIELD_T || item->Type() == PCB_TEXT_T || item->Type() == PCB_TEXTBOX_T
+            || item->Type() == PCB_TABLE_T || item->Type() == PCB_BARCODE_T
+            || BaseType( item->Type() ) == PCB_DIMENSION_T )
+        {
+            return item->GetLayer() == Edge_Cuts;
+        }
 
-                return false;
-            };
+        return false;
+    };
 
     auto processItem =
             [&]( const int idx ) -> size_t

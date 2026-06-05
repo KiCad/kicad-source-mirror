@@ -61,9 +61,8 @@ DRC_ITEM DRC_ITEM::itemsNotAllowed( DRCE_ALLOWED_ITEMS,
         _HKI( "Items not allowed" ),
         wxT( "items_not_allowed" ) );
 
-DRC_ITEM DRC_ITEM::textOnEdgeCuts( DRCE_TEXT_ON_EDGECUTS,
-        _HKI( "Text (or dimension) on Edge.Cuts layer" ),
-        wxT( "text_on_edge_cuts" ) );
+DRC_ITEM DRC_ITEM::textOnEdgeCuts( DRCE_TEXT_ON_EDGECUTS, _HKI( "Text or graphic on Edge.Cuts layer" ),
+                                   wxT( "text_on_edge_cuts" ) );
 
 DRC_ITEM DRC_ITEM::clearance( DRCE_CLEARANCE,
         _HKI( "Clearance violation" ),
