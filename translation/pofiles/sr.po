@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:30+0300\n"
-"PO-Revision-Date: 2026-06-04 07:01+0000\n"
+"PO-Revision-Date: 2026-06-05 08:01+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v10/sr/>\n"
 "Language: sr\n"
@@ -7877,9 +7877,9 @@ msgid "Failed to write tree: %s"
 msgstr "Грешка у писању стабла датотека '%s'."
 
 #: common/git/libgit_backend.cpp:234 common/git/libgit_backend.cpp:444
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup tree: %s"
-msgstr "Попуњавање зона"
+msgstr "Неуспешно претраживање стабла: %s"
 
 #: common/git/libgit_backend.cpp:248 common/git/libgit_backend.cpp:319
 #, c-format
@@ -8592,50 +8592,41 @@ msgstr "Извези у DXF формату"
 
 #: common/jobs/job_export_pcb_dxf.cpp:64
 #: common/jobs/job_export_sch_plot.cpp:139
-#, fuzzy
 msgid "Export DXF Job Settings"
-msgstr "Уреди опције"
+msgstr "Подешавања за извоз DXF задатака"
 
 #: common/jobs/job_export_pcb_dxf.cpp:68
-#, fuzzy
 msgid "PCB: Export DXF"
-msgstr "фајл не постоји"
+msgstr "PCB: Извоз DXF-а"
 
 #: common/jobs/job_export_pcb_gencad.cpp:49
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:123
-#, fuzzy
 msgid "Export GenCAD File"
-msgstr "фајл не постоји"
+msgstr "Извези GenCAD датотеку"
 
 #: common/jobs/job_export_pcb_gencad.cpp:55
-#, fuzzy
 msgid "Export GenCAD Job Settings"
-msgstr "Поставке..."
+msgstr "Подешавања за извоз GenCAD задатака"
 
 #: common/jobs/job_export_pcb_gencad.cpp:59
-#, fuzzy
 msgid "PCB: Export GenCAD"
-msgstr "фајл не постоји"
+msgstr "PCB: Извоз GenCAD-а"
 
 #: common/jobs/job_export_pcb_gerber.cpp:59
-#, fuzzy
 msgid "Export single Gerber"
-msgstr "Боја:"
+msgstr "Извезите јединствену Гербер датотеку"
 
 #: common/jobs/job_export_pcb_gerber.cpp:65
-#, fuzzy
 msgid "Export Single Gerber Job Settings"
-msgstr "Поставке..."
+msgstr "Подешавања за извоз јединствених Гербер задатака"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:37
-#, fuzzy
 msgid "Export Gerbers"
-msgstr "Сви фајлови (*.*)|*.*"
+msgstr "Извоз Гербера"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:43
-#, fuzzy
 msgid "Export Gerbers Job Settings"
-msgstr "Поставке..."
+msgstr "Подешавања за извоз Гербер задатака"
 
 #: common/jobs/job_export_pcb_gerbers.cpp:47
 msgid "PCB: Export Gerbers"
@@ -8643,108 +8634,89 @@ msgstr "PCB: Извези гербере"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:33
 #: common/jobs/job_export_sch_plot.cpp:190 kicad/kicad_cli.cpp:164
-#, fuzzy
 msgid "Export HPGL"
-msgstr "Симбол"
+msgstr "Извези ХПГЛ"
 
 #: common/jobs/job_export_pcb_hpgl.cpp:37
-#, fuzzy
 msgid "PCB: Export HPGL"
-msgstr "фајл не постоји"
+msgstr "PCB: Извоз ХПГЛ-а"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:75
 #: pcbnew/dialogs/dialog_export_2581_base.h:90
-#, fuzzy
 msgid "Export IPC-2581"
-msgstr "Симбол"
+msgstr "Извоз IPC-2581"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:81
-#, fuzzy
 msgid "Export IPC-2581 Job Settings"
-msgstr "фајл не постоји"
+msgstr "Подешавања за извоз IPC-2581 задатака"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:94
-#, fuzzy
 msgid "PCB: Export IPC-2581"
-msgstr "Симбол"
+msgstr "PCB: Извоз IPC-2581"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:35
-#, fuzzy
 msgid "Export IPC-D-356"
-msgstr "Симбол"
+msgstr "Извоз IPC-D-356"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:41
-#, fuzzy
 msgid "Export IPC-D-356 Job Settings"
-msgstr "фајл не постоји"
+msgstr "Подешавања за извоз IPC-D-356 задатака"
 
 #: common/jobs/job_export_pcb_ipcd356.cpp:55
-#, fuzzy
 msgid "PCB: Export IPC-D-356"
-msgstr "Симбол"
+msgstr "PCB: Извоз IPC-D-356"
 
 #: common/jobs/job_export_pcb_odb.cpp:58
 #: pcbnew/dialogs/dialog_export_odbpp_base.h:65
-#, fuzzy
 msgid "Export ODB++"
-msgstr "фајл не постоји"
+msgstr "Извези ODB++"
 
 #: common/jobs/job_export_pcb_odb.cpp:64
-#, fuzzy
 msgid "Export ODB++ Job Settings"
-msgstr "Уреди опције"
+msgstr "Подешавања за извоз ODB++ задатака"
 
 #: common/jobs/job_export_pcb_odb.cpp:77
-#, fuzzy
 msgid "PCB: Export ODB++"
-msgstr "фајл не постоји"
+msgstr "PCB: Извоз ODB++"
 
 #: common/jobs/job_export_pcb_pdf.cpp:63
 #: common/jobs/job_export_sch_plot.cpp:114 kicad/kicad_cli.cpp:142
 #: kicad/kicad_cli.cpp:165
-#, fuzzy
 msgid "Export PDF"
-msgstr "фајл не постоји"
+msgstr "Извези ПДФ"
 
 #: common/jobs/job_export_pcb_pdf.cpp:69
 #: common/jobs/job_export_sch_plot.cpp:120
-#, fuzzy
 msgid "Export PDF Job Settings"
-msgstr "Уреди опције"
+msgstr "Подешавања за задатке извоза PDF-а"
 
 #: common/jobs/job_export_pcb_pdf.cpp:73
-#, fuzzy
 msgid "PCB: Export PDF"
-msgstr "фајл не постоји"
+msgstr "PCB: Извези ПДФ"
 
 #: common/jobs/job_export_pcb_pos.cpp:103
-#, fuzzy
 msgid "Export position data"
-msgstr "Унеси"
+msgstr "Извези податке о позицији"
 
 #: common/jobs/job_export_pcb_pos.cpp:109
-#, fuzzy
 msgid "Export Position Data Job Settings"
-msgstr "Поставке..."
+msgstr "Подешавања за задатке извоза података о позицији"
 
 #: common/jobs/job_export_pcb_pos.cpp:127
 msgid "PCB: Export Position Data"
 msgstr "PCB: Извези податке позиција"
 
 #: common/jobs/job_export_pcb_ps.cpp:57 common/jobs/job_export_sch_plot.cpp:171
-#, fuzzy
 msgid "Export Postscript"
-msgstr "Postscript"
+msgstr "Извези Postscript"
 
 #: common/jobs/job_export_pcb_ps.cpp:63 common/jobs/job_export_sch_plot.cpp:177
-#, fuzzy
 msgid "Export Postscript Job Settings"
-msgstr "Уреди опције"
+msgstr "Подешавања за задатке извоза PostScript-а"
 
 #: common/jobs/job_export_pcb_ps.cpp:67
-#, fuzzy
 msgid "PCB: Export Postscript"
-msgstr "Postscript"
+msgstr "PCB: Извоз Postscript-и"
 
 #: common/jobs/job_export_pcb_stats.cpp:53
 #, fuzzy
