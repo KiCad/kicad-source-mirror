@@ -826,7 +826,7 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
                 "  9\n"
                 "$HANDSEED\n"
                 "  5\n"
-                "FFFFFFFFFFFFFFFF\n"
+                "FFFFFFFF\n"
                 "  9\n"
                 "$ANGBASE\n"
                 "  50\n"
