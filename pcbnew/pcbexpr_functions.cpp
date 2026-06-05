@@ -489,8 +489,8 @@ static SHAPE_POLY_SET getDeflatedZoneOutline( BOARD* aBoard, ZONE* aArea )
     // Cache miss - compute deflated outline
     SHAPE_POLY_SET areaOutline = aArea->Outline()->CloneDropTriangulation();
     areaOutline.ClearArcs();
-    areaOutline.Deflate( aBoard->GetDesignSettings().GetDRCEpsilon(),
-                         CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
+    areaOutline.Deflate( aBoard->GetDesignSettings().GetDRCEpsilon(), CORNER_STRATEGY::ALLOW_ACUTE_CORNERS,
+                         ARC_LOW_DEF );
 
     // Store in cache
     {
@@ -907,16 +907,13 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
                                 for( PCB_LAYER_ID testLayer : aArea->GetLayerSet() )
                                 {
-                                    fp->TransformPadsToPolySet( itemShape, testLayer, 0,
-                                                                maxError, ERROR_OUTSIDE );
-                                    fp->TransformFPShapesToPolySet( itemShape, testLayer, 0,
-                                                                    maxError, ERROR_OUTSIDE );
+                                    fp->TransformPadsToPolySet( itemShape, testLayer, 0, maxError, ERROR_OUTSIDE );
+                                    fp->TransformFPShapesToPolySet( itemShape, testLayer, 0, maxError, ERROR_OUTSIDE );
                                 }
                             }
                             else
                             {
-                                item->TransformShapeToPolygon( itemShape, layer, 0, maxError,
-                                                               ERROR_OUTSIDE );
+                                item->TransformShapeToPolygon( itemShape, layer, 0, maxError, ERROR_OUTSIDE );
                             }
 
                             if( itemShape.IsEmpty() )
@@ -926,6 +923,7 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             }
                             else
                             {
+                                itemShape.ClearArcs();
                                 itemShape.BooleanSubtract( *aArea->Outline() );
 
                                 enclosedByArea = itemShape.IsEmpty();
