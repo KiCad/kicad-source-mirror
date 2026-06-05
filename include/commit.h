@@ -156,6 +156,7 @@ protected:
     /// Should be called in Push() & Revert() methods
     void clear()
     {
+        m_addedItems.clear();
         m_changedItems.clear();
         m_deletedItems.clear();
         m_entries.clear();
