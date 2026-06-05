@@ -128,6 +128,6 @@ void ANCHOR_DEBUG::ViewDraw( int, VIEW* aView ) const
 
     attributes.m_Size = VECTOR2I{ summaryTextHeight, summaryTextHeight };
 
-    wxString totalStr = wxString::Format( "Current snap anchors: %lu", total );
+    wxString totalStr = wxString::Format( "Current snap anchors: %zu", total );
     font.Draw( &gal, totalStr, fontPos, attributes, fontMetrics );
 }
