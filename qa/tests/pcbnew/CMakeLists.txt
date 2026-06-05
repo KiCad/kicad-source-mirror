@@ -199,6 +199,7 @@ set( QA_PCBNEW_SRCS
 
     pcb_io/allegro/allegro_test_utils.cpp
     pcb_io/allegro/test_allegro_boards.cpp
+    pcb_io/allegro/test_allegro_drill_spans.cpp
     pcb_io/allegro/test_allegro_import.cpp
     pcb_io/allegro/test_block_additional.cpp
 
@@ -353,7 +354,7 @@ set( PCBNEW_ZONE_TESTS
 
 # Allegro importer tests (~31s)
 set( PCBNEW_ALLEGRO_TESTS
-    "AllegroBlocks:AllegroBoards:AllegroImport:AllegroComprehensive" )
+    "AllegroBlocks:AllegroBoards:AllegroImport:AllegroComprehensive:AllegroDrillSpans" )
 
 # Creepage DRC tests (~16s, heavily multi-threaded internally)
 set( PCBNEW_CREEPAGE_TESTS
@@ -437,6 +438,7 @@ set( PCBNEW_EXCLUDED_FROM_OTHER
 :!AllegroBoards\
 :!AllegroImport\
 :!AllegroComprehensive\
+:!AllegroDrillSpans\
 :!CreepageHVvsGND\
 :!CreepageAroundSlotIssue20480\
 :!CreepagePerformanceIssue21482\
