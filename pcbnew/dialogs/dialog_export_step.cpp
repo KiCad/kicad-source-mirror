@@ -43,6 +43,7 @@
 #include <locale_io.h>
 #include <math/vector3.h>
 #include <pcb_edit_frame.h>
+#include <pcb_io/pcb_io_mgr.h>
 #include <tools/board_editor_control.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <reporter.h>
@@ -54,6 +55,8 @@
 #include <core/map_helpers.h>
 #include <settings/settings_manager.h>
 #include <jobs/job_export_pcb_3d.h>
+
+#include <wx/filefn.h>
 
 
 // Maps m_choiceFormat selection to extension (and kicad-cli command)
@@ -403,6 +406,85 @@ void DIALOG_EXPORT_STEP::OnComponentModeChange( wxCommandEvent& event )
 }
 
 
+wxString DIALOG_EXPORT_STEP::StageBoardForExport( const wxString& aBoardPath, bool aContentModified, BOARD* aBoard,
+                                                  wxString& aInputPath, std::vector<wxString>& aTempFiles,
+                                                  wxString& aErrorDetail )
+{
+    aErrorDetail = wxEmptyString;
+
+    if( aBoardPath.IsEmpty() )
+        return _( "Please save the board before exporting STEP." );
+
+    // A clean board exports its on-disk file directly, as long as it still exists.
+    if( !aContentModified )
+    {
+        if( !wxFileExists( aBoardPath ) )
+        {
+            return _( "Board file not found on disk.\n"
+                      "Save the board before exporting STEP." );
+        }
+
+        aInputPath = aBoardPath;
+        return wxEmptyString;
+    }
+
+    wxFileName boardFn( aBoardPath );
+
+    if( !boardFn.DirExists() )
+    {
+        return _( "The board directory no longer exists.\n"
+                  "Save the board to a valid location before exporting STEP." );
+    }
+
+    // Reserve a unique stem in the board directory so concurrent exports and stale leftovers from a
+    // crashed run cannot clobber each other.
+    wxString stemPrefix = boardFn.GetName() + wxS( "-unsaved-export-" );
+    wxString reserved = wxFileName::CreateTempFileName( boardFn.GetPathWithSep() + stemPrefix );
+
+    if( reserved.IsEmpty() )
+        return _( "Failed to reserve a temporary filename for STEP export." );
+
+    wxFileName stemFn( reserved );
+    wxFileName tempBoardFn( boardFn.GetPath(), stemFn.GetName(), FILEEXT::KiCadPcbFileExtension );
+    wxFileName tempProjectFn( boardFn.GetPath(), stemFn.GetName(), FILEEXT::ProjectFileExtension );
+
+    // Schedule the placeholder for cleanup. If this initial delete fails the later sweep will
+    // retry; we keep it registered in aTempFiles regardless so it never leaks.
+    aTempFiles.push_back( reserved );
+    wxRemoveFile( reserved );
+
+    try
+    {
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
+        pi->SaveBoard( tempBoardFn.GetFullPath(), aBoard, nullptr );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        aErrorDetail = ioe.What();
+        return _( "Failed to save the current board state for export." );
+    }
+
+    aTempFiles.push_back( tempBoardFn.GetFullPath() );
+
+    wxFileName srcProjectFn = boardFn;
+    srcProjectFn.SetExt( FILEEXT::ProjectFileExtension );
+
+    if( srcProjectFn.FileExists() )
+    {
+        if( !wxCopyFile( srcProjectFn.GetFullPath(), tempProjectFn.GetFullPath(), true ) )
+        {
+            wxRemoveFile( tempBoardFn.GetFullPath() );
+            return _( "Failed to stage the project file for STEP export." );
+        }
+
+        aTempFiles.push_back( tempProjectFn.GetFullPath() );
+    }
+
+    aInputPath = tempBoardFn.GetFullPath();
+    return wxEmptyString;
+}
+
+
 void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 {
     wxString path = m_outputFileName->GetValue();
@@ -623,13 +705,28 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         cmdK2S.Append( wxString::Format( wxT( " -f -o %c%s%c" ),
                                          dblquote, fn.GetFullPath(), dblquote ) );
 
+        // kicad-cli runs in a separate process and reads the board from disk, so an unsaved board
+        // must be staged to a temp file first.  Cleanup is delegated to the process-log dialog so
+        // we can wait for the child to actually exit.
+        wxString              inputPath;
+        std::vector<wxString> tempFiles;
+        wxString              errorDetail;
+        wxString error = StageBoardForExport( m_boardPath, m_editFrame->IsContentModified(), m_editFrame->GetBoard(),
+                                              inputPath, tempFiles, errorDetail );
+
+        if( !error.IsEmpty() )
+        {
+            DisplayErrorMessage( this, error, errorDetail );
+            return;
+        }
 
         // Input file path.
-        cmdK2S.Append( wxString::Format( wxT( " %c%s%c" ), dblquote, m_boardPath, dblquote ) );
+        cmdK2S.Append( wxString::Format( wxT( " %c%s%c" ), dblquote, inputPath, dblquote ) );
 
         wxLogTrace( traceKiCad2Step, wxT( "export step command: %s" ), cmdK2S );
 
         DIALOG_EXPORT_STEP_LOG* log = new DIALOG_EXPORT_STEP_LOG( this, cmdK2S );
+        log->SetTempFilesToCleanup( std::move( tempFiles ) );
         log->ShowModal();
     }
     else

@@ -30,6 +30,7 @@
 #include <wx/timer.h>
 #include <wx/txtstrm.h>
 #include <wx/msgdlg.h>
+#include <wx/filefn.h>
 
 wxDEFINE_EVENT( wxEVT_THREAD_STDIN, wxThreadEvent );
 wxDEFINE_EVENT( wxEVT_THREAD_STDERR, wxThreadEvent );
@@ -204,6 +205,30 @@ void DIALOG_EXPORT_STEP_LOG::onProcessTerminate( wxProcessEvent& aEvent )
             m_activityGauge->SetValue( 1 );
         }
     }
+
+    // The child has exited; it is safe to remove any temp inputs we were keeping alive for it.
+    cleanupTempFiles();
+}
+
+
+void DIALOG_EXPORT_STEP_LOG::SetTempFilesToCleanup( std::vector<wxString> aPaths )
+{
+    m_tempFiles = std::move( aPaths );
+}
+
+
+void DIALOG_EXPORT_STEP_LOG::cleanupTempFiles()
+{
+    if( m_tempFilesCleaned )
+        return;
+
+    for( const wxString& path : m_tempFiles )
+    {
+        if( !path.IsEmpty() && wxFileExists( path ) )
+            wxRemoveFile( path );
+    }
+
+    m_tempFilesCleaned = true;
 }
 
 void DIALOG_EXPORT_STEP_LOG::onThreadInput( wxThreadEvent& aEvent )
@@ -238,6 +263,11 @@ void DIALOG_EXPORT_STEP_LOG::onClose( wxCloseEvent& aEvent )
         m_process->Detach();
     }
 
+    // Best-effort cleanup. If the child was detached above and is still reading the temp files
+    // on Windows, wxRemoveFile will fail and leave them behind; unique filenames per export
+    // keep that from interfering with future runs.
+    cleanupTempFiles();
+
     // Clear log window message, storing the log data in config has no interest.
     m_textCtrlLog->Clear();
 
@@ -246,6 +276,7 @@ void DIALOG_EXPORT_STEP_LOG::onClose( wxCloseEvent& aEvent )
 
 DIALOG_EXPORT_STEP_LOG::~DIALOG_EXPORT_STEP_LOG()
 {
+    cleanupTempFiles();
     delete m_stdioThread;
 }
 

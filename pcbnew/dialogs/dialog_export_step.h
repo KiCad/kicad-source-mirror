@@ -27,6 +27,9 @@
 #include "dialog_export_step_base.h"
 #include <widgets/unit_binder.h>
 
+#include <vector>
+
+class BOARD;
 class PCB_EDIT_FRAME;
 class JOB_EXPORT_PCB_3D;
 
@@ -39,6 +42,28 @@ public:
     ~DIALOG_EXPORT_STEP() = default;
 
     bool TransferDataToWindow() override;
+
+    /**
+     * Resolve the board file to hand to the external 3D/STEP exporter.
+     *
+     * The exporter runs as a child process that reads the board from disk.  When @p
+     * aContentModified is true the live @p aBoard is serialized to a unique temporary .kicad_pcb
+     * beside @p aBoardPath, with a sibling .kicad_pro copy so project-relative paths (3D models,
+     * library tables) resolve identically, and that temporary path is returned through @p
+     * aInputPath.  Otherwise @p aBoardPath is returned unchanged.  Any files that must be removed
+     * once the export process exits are appended to @p aTempFiles.
+     *
+     * @param aBoardPath        the board's on-disk path
+     * @param aContentModified  whether the board has unsaved modifications
+     * @param aBoard            the live board, serialized when modified
+     * @param aInputPath        [out] path to hand to the exporter on success
+     * @param aTempFiles        [out] temporary files to delete after the export process exits
+     * @param aErrorDetail      [out] secondary error text (e.g. an IO_ERROR message) on failure
+     * @return an empty string on success, or a user-facing primary error message on failure
+     */
+    static wxString StageBoardForExport( const wxString& aBoardPath, bool aContentModified, BOARD* aBoard,
+                                         wxString& aInputPath, std::vector<wxString>& aTempFiles,
+                                         wxString& aErrorDetail );
 
 protected:
     void onBrowseClicked( wxCommandEvent& aEvent ) override;
