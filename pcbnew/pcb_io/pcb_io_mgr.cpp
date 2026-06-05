@@ -198,9 +198,8 @@ void PCB_IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* a
 }
 
 
-bool PCB_IO_MGR::ConvertLibrary( const std::map<std::string, UTF8>& aOldFileProps,
-                                 const wxString& aOldFilePath, const wxString& aNewFilePath,
-                                 REPORTER* aReporter )
+bool PCB_IO_MGR::ConvertLibrary( const std::map<std::string, UTF8>& aOldFileProps, const wxString& aOldFilePath,
+                                 const wxString& aNewFilePath, REPORTER* aReporter )
 {
     PCB_IO_MGR::PCB_FILE_T oldFileType = PCB_IO_MGR::GuessPluginTypeFromLibPath( aOldFilePath );
 
@@ -253,18 +252,24 @@ bool PCB_IO_MGR::ConvertLibrary( const std::map<std::string, UTF8>& aOldFileProp
                 // as a fatal error.
                 // this can be just a illegal filename used for the footprint
                 if( aReporter )
+                {
                     aReporter->Report( wxString::Format( "Footprint \"%s\" can't be saved. Skipped",
                                                          fpName ),
                                        SEVERITY::RPT_SEVERITY_WARNING );
+                }
             }
         }
     }
     catch( IO_ERROR& io_err )
     {
         if( aReporter )
+        {
             aReporter->Report( wxString::Format( "Library '%s' Convert err: \"%s\"",
-                                             aOldFilePath, io_err.What() ),
+                                                 aOldFilePath,
+                                                 io_err.What() ),
                                 SEVERITY::RPT_SEVERITY_ERROR );
+        }
+
         return false;
     }
     catch( ... )
