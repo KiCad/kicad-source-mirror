@@ -188,6 +188,7 @@ protected:
 #if !defined( QA_TEST )   // Dynamic casts give the linker a seizure in the test framework
         wxASSERT( dynamic_cast<T*>( getToolHolderInternal() ) );
 #endif
+
         return static_cast<T*>( getToolHolderInternal() );
     }
 
@@ -198,9 +199,12 @@ protected:
     T* getModel() const
     {
         EDA_ITEM* m = getModelInternal();
+
 #if !defined( QA_TEST )   // Dynamic casts give the linker a seizure in the test framework
-        wxASSERT( dynamic_cast<T*>( m ) );
+        if( m )
+            wxASSERT( dynamic_cast<T*>( m ) );
 #endif
+
         return static_cast<T*>( m );
     }
 
