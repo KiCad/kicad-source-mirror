@@ -146,7 +146,6 @@ wxString ElectricalPinTypeGetText( ELECTRICAL_PINTYPE );
 BITMAPS ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE );
 
 wxString PinOrientationName( PIN_ORIENTATION aOrientation );
-BITMAPS PinOrientationGetBitmap( PIN_ORIENTATION aOrientation );
 PIN_ORIENTATION PinOrientationCode( size_t index );
 int PinOrientationIndex( PIN_ORIENTATION code );
 
