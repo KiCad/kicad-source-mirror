@@ -182,6 +182,7 @@ void DIALOG_SCHEMATIC_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
 
 void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
 {
+    SETTINGS_MANAGER*          mgr = m_frame->GetSettingsManager();
     DIALOG_SCH_IMPORT_SETTINGS importDlg( this, m_frame );
 
     if( importDlg.ShowModal() == wxID_CANCEL )
@@ -189,22 +190,21 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
 
     wxFileName projectFn( importDlg.GetFilePath() );
     bool       alreadyLoaded = false;
+    wxString   fullPath = projectFn.GetFullPath();
 
-    if( m_frame->GetSettingsManager()->GetProject( projectFn.GetFullPath() ) )
+    if( mgr->GetProject( fullPath ) )
     {
         alreadyLoaded = true;
     }
-    else if( !m_frame->GetSettingsManager()->LoadProject( projectFn.GetFullPath(), false ) )
+    else if( !mgr->LoadProject( fullPath, false ) || !mgr->GetProject( fullPath ) )
     {
-        wxString msg = wxString::Format( _( "Error importing settings from project:\n"
-                                            "Project file %s could not be loaded." ),
-                                         projectFn.GetFullPath() );
-        DisplayErrorMessage( this, msg );
-
+        DisplayErrorMessage( this, wxString::Format( _( "Error importing settings from project:\n"
+                                                        "Project file %s could not be loaded." ),
+                                                     fullPath ) );
         return;
     }
 
-    PROJECT*      otherPrj = m_frame->GetSettingsManager()->GetProject( projectFn.GetFullPath() );
+    PROJECT*      otherPrj = mgr->GetProject( fullPath );
     SCHEMATIC     otherSch( otherPrj );
     PROJECT_FILE& file = otherPrj->GetProjectFile();
 
