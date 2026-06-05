@@ -489,14 +489,17 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAll( const TOOL_EVENT& aEvent )
 
     if( currentSheetOnly || selectedOnly )
     {
-        SCH_ITEM* item = nextMatch( m_frame->GetScreen(), currentSheet, nullptr, data, false );
-
-        while( item )
+        if( currentSheet )
         {
-            if( !selectedOnly || item->IsSelected() )
-                doReplace( item, currentSheet, data );
+            SCH_ITEM* item = nextMatch( m_frame->GetScreen(), currentSheet, nullptr, data, false );
 
-            item = nextMatch( m_frame->GetScreen(), currentSheet, item, data, false );
+            while( item )
+            {
+                if( !selectedOnly || item->IsSelected() )
+                    doReplace( item, currentSheet, data );
+
+                item = nextMatch( m_frame->GetScreen(), currentSheet, item, data, false );
+            }
         }
     }
     else if( SCH_EDIT_FRAME* schematicFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
