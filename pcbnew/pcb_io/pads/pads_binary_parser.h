@@ -231,7 +231,13 @@ public:
      */
     int ScanLocatorUseCount() const { return m_scanLocatorUses; }
 
-    void NoteScanLocatorUse() const { ++m_scanLocatorUses; }
+    void NoteScanLocatorUse( const char* aWhich ) const
+    {
+        ++m_scanLocatorUses;
+
+        if( getenv( "KICAD_PADS_SECBASE" ) )
+            fprintf( stderr, "SCANLOC %s\n", aWhich );
+    }
 
 private:
     static constexpr int32_t  ANGLE_SCALE = 1800000;

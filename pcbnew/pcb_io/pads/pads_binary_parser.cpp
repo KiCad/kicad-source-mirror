@@ -723,7 +723,7 @@ void BINARY_PARSER::parseClusters()
     if( !signatureIsUnique( m_data, TOP_FRAME, sizeof( TOP_FRAME ) ) )
         return;
 
-    NoteScanLocatorUse();
+    NoteScanLocatorUse( "clusterTopFrame" );
     size_t matchOff = findSignature( m_data, TOP_FRAME, sizeof( TOP_FRAME ) );
 
     // Use division rather than multiplication so a malformed count cannot overflow.
@@ -3184,41 +3184,6 @@ void BINARY_PARSER::parseNetNamesNew()
                 m_netSelfPtrToName[selfPtr] = name;
         }
 
-        // The directory offset is reconstructed from declared byte counts and can land past the
-        // physical net array. Net records retain four invariant sentinels around the name, so use
-        // those to recover any records the nominal walk missed.
-        if( existing.size() < nets->count )
-        {
-            NoteScanLocatorUse();
-            for( size_t off = 0; off + NET_RECORD_SIZE <= m_data.size(); ++off )
-            {
-                if( m_cursor.U32At( off + 20 ) != 0x0000FFFE )
-                    continue;
-
-                SDB_RECORD rec = m_sdb.RecordAt( off );
-
-                if( rec.U32( 36 ) != SDB_FIELD_UNSET || rec.U32( 64 ) != SDB_FIELD_UNSET
-                    || rec.U32( 92 ) != 0xFFFFFFFE )
-                {
-                    continue;
-                }
-
-                std::string name = rec.Str( NET_NAME, NET_NAME_LEN );
-
-                if( name.empty() || !isValidNetName( name ) || existing.count( name ) )
-                    continue;
-
-                NET net;
-                net.name = name;
-                m_nets.push_back( net );
-                m_netAnchors.push_back( { m_nets.size() - 1, rec.U32( 104 ), rec.U32( 108 ) } );
-                existing.insert( name );
-                m_sec23IndexToNet[existing.size() - 1 + NET_INDEX_BIAS] = name;
-
-                if( existing.size() == nets->count )
-                    break;
-            }
-        }
     }
 
     parseNetConnectionsNew();
@@ -4182,7 +4147,7 @@ std::vector<NET_CLASS_RULE_EDGE> BINARY_PARSER::collectNetClassRuleEdges( const 
 
     std::vector<NET_CLASS_RULE_EDGE> edges;
 
-    NoteScanLocatorUse();
+    NoteScanLocatorUse( "edgeWalk" );
     for( size_t off = 0; off + EDGE_SIZE <= m_data.size(); ++off )
     {
         if( m_cursor.U32At( off + EDGE_TAG ) != EDGE_TAG_VALUE )
@@ -4293,7 +4258,7 @@ void BINARY_PARSER::applyNetClassClearances( const std::vector<NET_CLASS_RULE_ED
 
         std::vector<ValueRec> values;
 
-        NoteScanLocatorUse();
+        NoteScanLocatorUse( "valueCoreWalk" );
         for( size_t off = 0; off + VALUE_CORE_OFF + VALUE_CORE_COUNT * sizeof( int32_t ) <= m_data.size(); ++off )
         {
             SDB_RECORD rec = m_sdb.RecordAt( off );
@@ -4757,7 +4722,7 @@ void BINARY_PARSER::parseRouteVertices()
     if( bestScore == 0 )
         return;
 
-    NoteScanLocatorUse();
+    NoteScanLocatorUse( "viaPhase" );
     logResolvedBase( 60, "viaPhase", scanStart + bestPhase, entry60->dataOffset,
                      entry60->payloadOffset );
 
@@ -7083,7 +7048,7 @@ void BINARY_PARSER::parseLayerStackup()
 
     // The "(All layers)" string anchors the first record; the directory data_offset overflows
     // the indexed region on large boards.
-    NoteScanLocatorUse();
+    NoteScanLocatorUse( "layerStackup" );
     size_t recordBase = findSignature( m_data, reinterpret_cast<const uint8_t*>( ANCHOR.data() ), ANCHOR.size() );
 
     if( recordBase == SIGNATURE_NOT_FOUND )

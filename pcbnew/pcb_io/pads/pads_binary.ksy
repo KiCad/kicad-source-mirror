@@ -94,6 +94,21 @@ doc: |
     section 59's records and section 60. Identifying that run is the last step,
     and it retires this scan, the most expensive in the importer.
 
+    With the pool located at +16 and section 59 taken at its declared length,
+
+        base(60) = pool_end + total_bytes(58) + total_bytes(59) - 16*k
+
+    fits within a small window on 142 of 162 boards, and the correction is an
+    EXACT multiple of 16 on every one of them. k is board-family specific -- 254
+    on 43 boards, 2 on 21, 6 on 18, 190 on 10, 1 on 8 -- so it is a real stored
+    quantity, not noise. Identifying what those 16-byte units are is the last
+    step for this locator.
+
+    Note also that the "recovered base" used by an earlier analysis here was
+    wrong: at that offset the bytes are still section 59 pointer records and the
+    type byte reads 0x04, not a via type. Any conclusion drawn from those
+    recovered bases, including an earlier shortfall histogram, is void.
+
     Two dead ends already tried on the walk itself, so they need not be retried:
     requiring the sixth word to be zero stops the walk early (it is 0 or 1), and
     relaxing that condition does not move the prediction -- the error histogram
@@ -230,8 +245,14 @@ types:
 
       is unique, and the pool begins 17 bytes past its start:
 
-          pool_start = terminator_entry_offset + 17
+          pool_start = terminator_entry_offset + 16
           pool_end   = pool_start + section57.total_bytes
+
+      i.e. the pool begins immediately after the terminator's own 16-byte entry.
+      An earlier draft of this spec said +17, from measuring the first PRINTABLE
+      byte and so skipping a leading NUL. The +16 form is the correct one: every
+      section 60 base correction measured against it is an exact multiple of 16,
+      where +17 left them all congruent to -1.
 
       This validates on 162 of 163 corpus files. Two guards must NOT be added,
       both of which were measured and both of which break it:
