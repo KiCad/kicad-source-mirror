@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:30+0300\n"
-"PO-Revision-Date: 2026-06-05 08:01+0000\n"
+"PO-Revision-Date: 2026-06-06 10:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -8227,7 +8227,7 @@ msgstr "Konnte Repository-Head nicht abrufen."
 #: common/git/libgit_backend.cpp:1511
 #, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "Konnte Ziel-Commit nicht auflösen"
+msgstr "Konnte nicht in den Commits für die Zusammenführung nachschauen."
 
 #: common/git/libgit_backend.cpp:1520 common/git/libgit_backend.cpp:1705
 #, fuzzy
@@ -8241,7 +8241,7 @@ msgstr ""
 #: common/git/libgit_backend.cpp:1529
 #, fuzzy, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "Überlappende Grafiken zu Pads vereinen"
+msgstr "Den Remote-Tracking-Zweig in %s einbinden"
 
 #: common/git/libgit_backend.cpp:1537
 #, c-format
@@ -8283,7 +8283,7 @@ msgstr "Konnte \"%s\" nicht in der importierten Bibliothek finden."
 #: common/git/libgit_backend.cpp:1643 common/git/libgit_backend.cpp:1696
 #, fuzzy
 msgid "Could not read the remote branch."
-msgstr "Konnte den Vorlagenpfad \"%s\" nicht öffnen"
+msgstr "Konnte den Remote-Zweig nicht lesen."
 
 #: common/git/libgit_backend.cpp:1652
 #, fuzzy, c-format
@@ -8295,7 +8295,7 @@ msgstr "Konnte nicht zu Remote übertragen: %s"
 msgid ""
 "Cannot rebase: you have unstaged changes.  Please commit or stash them first."
 msgstr ""
-"Kann nicht mergen: Sie haben unverarbeitete Änderungen. Bitte vor dem Pull "
+"Rebase geht nicht: Sie haben unverarbeitete Änderungen. Bitte vor dem Pull "
 "committen oder stashen."
 
 #: common/git/libgit_backend.cpp:1736 common/git/libgit_backend.cpp:1747
@@ -28305,17 +28305,20 @@ msgstr "Ende des Blatts erreicht."
 #: eeschema/tools/sch_find_replace_tool.cpp:389
 #, fuzzy
 msgid "No matches found."
-msgstr "Keine Vorlagen gefunden"
+msgstr "Keine Übereinstimmungen gefunden."
 
 #: eeschema/tools/sch_group_tool.cpp:46 eeschema/tools/sch_group_tool.cpp:72
 #: pcbnew/tools/pcb_group_tool.cpp:49 pcbnew/tools/pcb_group_tool.cpp:64
 #, fuzzy
 msgid "Some selected items cannot be grouped."
-msgstr "Die ausgewählten Elemente zu einer neuen Gruppe hinzufügen"
+msgstr "Einige ausgewählte Elemente können nicht gruppiert werden."
 
 #: eeschema/tools/sch_group_tool.cpp:57 eeschema/tools/sch_group_tool.cpp:65
+#, fuzzy
 msgid "Child items cannot be grouped separately from their parent item."
 msgstr ""
+"Kind-Elemente können nicht separat von ihren Eltern-Elementen gruppiert "
+"werden."
 
 #: eeschema/tools/sch_group_tool.cpp:94 pcbnew/tools/pcb_group_tool.cpp:86
 msgid "Click on new member..."
@@ -33109,8 +33112,9 @@ msgid "Configure Default Remote..."
 msgstr "Pfade konfigurieren ..."
 
 #: kicad/project_tree_pane.cpp:1043
+#, fuzzy
 msgid "Set or change the default remote URL and credentials"
-msgstr ""
+msgstr "Die Standard-Remote-URL und Zugangsdaten einstellen oder ändern"
 
 #: kicad/project_tree_pane.cpp:1046
 msgid "Commit Project..."
@@ -33123,11 +33127,12 @@ msgstr "Änderungen zum lokalen Repository committen"
 #: kicad/project_tree_pane.cpp:1050
 #, fuzzy
 msgid "Amend Last Commit..."
-msgstr "Letzter Commit"
+msgstr "Letzten Commit nachbessern ..."
 
 #: kicad/project_tree_pane.cpp:1051
+#, fuzzy
 msgid "Rewrite the most recent commit on the current branch"
-msgstr ""
+msgstr "Den neuesten Commit vom aktuellen Zweig abändern"
 
 #: kicad/project_tree_pane.cpp:1054
 msgid "Push"
@@ -33265,12 +33270,12 @@ msgstr "Standard-Remote setzen"
 #: kicad/project_tree_pane.cpp:2004
 #, fuzzy
 msgid "Failed to configure remote."
-msgstr "Konnte Remote nicht erstellen: %s"
+msgstr "Konfiguration von Remote ist gescheitert."
 
 #: kicad/project_tree_pane.cpp:2057
 #, fuzzy
 msgid "Already up to date."
-msgstr "Bereits platziert"
+msgstr "Bereits auf dem neuesten Stand."
 
 #: kicad/project_tree_pane.cpp:2058
 #, fuzzy, c-format
@@ -33289,14 +33294,15 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:2070
 #, fuzzy
 msgid "Pulled changes."
-msgstr "Änderungsvorschau"
+msgstr "Abgerufene Änderungen (Pull)."
 
 #: kicad/project_tree_pane.cpp:2071
 #, fuzzy, c-format
 msgid "Pulled %s into %s."
-msgstr "Pad %s auf %s"
+msgstr "%s in %s hinein abgerufen."
 
 #: kicad/project_tree_pane.cpp:2081
+#, fuzzy
 msgid ""
 "Your local changes and the remote changes conflict, so the pull was "
 "cancelled and nothing was changed.\n"
@@ -33304,6 +33310,11 @@ msgid ""
 "You can discard your local commits and use the remote version, or rebase "
 "your commits on top of the remote."
 msgstr ""
+"Ihre lokalen Änderungen und die Remoteänderungen stehen im Konflikt, weshalb "
+"der Abruf abgebrochen und nichts geändert wurde.\n"
+"\n"
+"Sie können ihre lokalen Commits verwerfen und die Remoteversion verwenden "
+"oder ihre Commits als Rebase an erster Stelle von Remote setzen."
 
 #: kicad/project_tree_pane.cpp:2085
 #, fuzzy
@@ -33326,7 +33337,7 @@ msgstr "Auf den aktuellen Winkel von der Referenzposition zurücksetzen."
 #: kicad/project_tree_pane.cpp:2097
 #, fuzzy
 msgid "Failed to reset to remote"
-msgstr "Konnte Standard-Remote nicht setzen."
+msgstr "Zurücksetzen auf Remote ist gescheitert"
 
 #: kicad/project_tree_pane.cpp:2104
 #, fuzzy
@@ -33341,12 +33352,12 @@ msgstr "Rebase nicht möglich"
 #: kicad/project_tree_pane.cpp:2110
 #, fuzzy
 msgid "Pull cancelled."
-msgstr "Abgebrochen"
+msgstr "Abruf (Pull) abgebrochen."
 
 #: kicad/project_tree_pane.cpp:2119
 #, fuzzy
 msgid "Pull failed."
-msgstr "Alle Dateien"
+msgstr "Abruf (Pull) ist gescheitert."
 
 #: kicad/project_tree_pane.cpp:2120
 msgid "Failed to pull project"
@@ -33355,12 +33366,12 @@ msgstr "Konnte Projekt nicht übertragen (pull)"
 #: kicad/project_tree_pane.cpp:2154
 #, fuzzy
 msgid "Pushed to remote."
-msgstr "Konnte Remote-Adresse nicht auflösen"
+msgstr "Auf Remote geschoben (push)."
 
 #: kicad/project_tree_pane.cpp:2155
 #, fuzzy, c-format
 msgid "Pushed %s to %s."
-msgstr "Pad %s auf %s"
+msgstr "%s auf %s abgelegt."
 
 #: kicad/project_tree_pane.cpp:2168
 #, c-format
@@ -33374,8 +33385,9 @@ msgid ""
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2174
+#, fuzzy
 msgid "Force Push?"
-msgstr ""
+msgstr "Ablegen (Push) erzwingen?"
 
 #: kicad/project_tree_pane.cpp:2176
 msgid "&Force Push"
@@ -33384,7 +33396,7 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:2185
 #, fuzzy
 msgid "Push failed."
-msgstr "Auftrag fehlgeschlagen"
+msgstr "Ablegen (Push) gescheitert."
 
 #: kicad/project_tree_pane.cpp:2186
 msgid "Failed to push project"
@@ -33408,7 +33420,7 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:2584 kicad/project_tree_pane.cpp:2853
 #, fuzzy
 msgid "Unsaved Changes"
-msgstr "Änderungen rückgängig machen"
+msgstr "Nicht gespeicherte Änderungen"
 
 #: kicad/project_tree_pane.cpp:2587
 msgid "&Save and Commit"
@@ -33432,13 +33444,17 @@ msgid "Discarding commit due to empty file selection."
 msgstr "Verwerfe Commit, da keine Dateien ausgewählt wurden."
 
 #: kicad/project_tree_pane.cpp:2805
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "The last commit has already been pushed to %s.\n"
 "\n"
 "Amending rewrites public history.  Anyone who pulled this commit will need "
 "to reset their copy."
 msgstr ""
+"Der letzte Commit wurde bereits auf %s abgelegt.\n"
+"\n"
+"Ein Ändern schreibt den öffentlichen Verlauf neu.  Jeder, der diesen Commit "
+"abgeholt hat, wird seine Kopie zurücksetzen müssen."
 
 #: kicad/project_tree_pane.cpp:2809
 msgid "Amend Published Commit?"
@@ -33478,17 +33494,17 @@ msgstr "Verwerfe Commit aufgrund leerer Commit-Nachricht."
 #: kicad/project_tree_pane.cpp:3078
 #, fuzzy
 msgid "Fetched from remote."
-msgstr "Remote abrufen"
+msgstr "Von Remote abgeholt (Fetch)."
 
 #: kicad/project_tree_pane.cpp:3079
 #, fuzzy, c-format
 msgid "Fetched from %s."
-msgstr "aus %s"
+msgstr "Von %s abgeholt (Fetch)."
 
 #: kicad/project_tree_pane.cpp:3086
 #, fuzzy
 msgid "Fetch failed."
-msgstr "sch Dateien"
+msgstr "Abholung (Fetch) gescheitert."
 
 #: kicad/project_tree_traverser.cpp:216
 #, c-format
@@ -39282,12 +39298,12 @@ msgstr "Designregeln anzeigen."
 
 #: pcbnew/dialogs/dialog_drc.cpp:457
 msgid "Elapsed: 0 s"
-msgstr ""
+msgstr "Verstrichen: 0 s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:472
 #, c-format
 msgid "%1$d min %2$d s"
-msgstr ""
+msgstr "%1$d min %2$d s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:474
 #, c-format
@@ -39301,12 +39317,12 @@ msgstr "-------- DRC durch Benutzer abgebrochen. <br><br>"
 #: pcbnew/dialogs/dialog_drc.cpp:482
 #, fuzzy, c-format
 msgid "Canceled after %s"
-msgstr "Änderungen verwerfen"
+msgstr "Nach %s abgebrochen"
 
 #: pcbnew/dialogs/dialog_drc.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "Completed in %s"
-msgstr "Bauteil \"%s\" hinzugefügt zu \"%s\"."
+msgstr "In %s fertiggestellt"
 
 #: pcbnew/dialogs/dialog_drc.cpp:817
 #, c-format
@@ -45738,8 +45754,11 @@ msgid "Show Matching Items"
 msgstr "Übereinstimmungen anzeigen"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:209
+#, fuzzy
 msgid "Cannot show matching items without an open project."
 msgstr ""
+"Übereinstimmende Elemente können ohne geöffnetem Projekt nicht angezeigt "
+"werden."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:231
 #: pcbnew/dialogs/panel_setup_rules.cpp:249
@@ -45781,12 +45800,12 @@ msgstr "Konnte die Datei \"%s\" nicht erstellen."
 #: pcbnew/dialogs/panel_setup_rules.cpp:385
 #, fuzzy
 msgid "DRC engine not available."
-msgstr "Schaltplan Netzliste nicht vorhanden"
+msgstr "DRC nicht verfügbar."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:408
-#, c-format
+#, c-format, fuzzy
 msgid "Rule '%s': %zu matching item(s)."
-msgstr ""
+msgstr "Regel \"%s\": %zu passende(s) Element(e)."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:998
 #, c-format
@@ -59813,9 +59832,12 @@ msgid "%d 3D model(s) successfully embedded."
 msgstr "%d 3D-Modell(e) erfolgreich eingebettet."
 
 #: pcbnew/tools/pcb_group_tool.cpp:58
+#, fuzzy
 msgid ""
 "Footprint items cannot be grouped separately from their parent footprint."
 msgstr ""
+"Footprintelemente können nicht separat von ihrem Eltern-Footprint gruppiert "
+"werden."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2738
 msgid "Resize Table Cells"
