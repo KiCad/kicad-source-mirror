@@ -61,6 +61,8 @@
 #include <jobs/job_export_pcb_svg.h>
 #include <jobs/job_pcb_render.h>
 #include <layer_ids.h>
+#include <netlist_reader/board_netlist_updater.h>
+#include <netlist_reader/pcb_netlist.h>
 #include <project.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
@@ -75,7 +77,6 @@
 #include <widgets/report_severity.h>
 #include <drc/rule_editor/drc_re_rule_loader.h>
 #include <wx/ffile.h>
-#include <wx/filename.h>
 
 using namespace kiapi::common::commands;
 using types::CommandStatus;
@@ -116,6 +117,7 @@ API_HANDLER_PCB::API_HANDLER_PCB( std::shared_ptr<PCB_CONTEXT> aContext, PCB_EDI
     registerHandler<GetNetClassForNets, NetClassForNetsResponse>(
             &API_HANDLER_PCB::handleGetNetClassForNets );
     registerHandler<RefillZones, Empty>( &API_HANDLER_PCB::handleRefillZones );
+    registerHandler<ImportNetlist, ImportNetlistResponse>( &API_HANDLER_PCB::handleImportNetlist );
 
     registerHandler<GetBoardEditorAppearanceSettings, BoardEditorAppearanceSettings>(
             &API_HANDLER_PCB::handleGetBoardEditorAppearanceSettings );
@@ -1552,6 +1554,76 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRefillZones( const HANDLER_CONTEXT<
     }
 
     return Empty();
+}
+
+
+HANDLER_RESULT<ImportNetlistResponse> API_HANDLER_PCB::handleImportNetlist( const HANDLER_CONTEXT<ImportNetlist>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "ImportNetlist" ) )
+        return tl::unexpected( *headless );
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    wxFileName netlistPath( project().AbsolutePath( wxString::FromUTF8( aCtx.Request.netlist_path() ) ) );
+
+    if( !netlistPath.IsOk() || !netlistPath.FileExists() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message(
+                fmt::format( "netlist file '{}' could not be opened", netlistPath.GetFullPath().ToStdString() ) );
+        return tl::unexpected( e );
+    }
+
+    PCB_EDIT_FRAME*    editFrame = frame();
+    WX_STRING_REPORTER reporter;
+
+    const bool lookupByTimestamp = aCtx.Request.match_mode() != NetlistMatchMode::NMM_REFERENCE;
+
+    NETLIST netlist;
+    netlist.SetFindByTimeStamp( lookupByTimestamp );
+    netlist.SetReplaceFootprints( aCtx.Request.update_footprints() );
+
+    if( !editFrame->ReadNetlistFromFile( netlistPath.GetFullPath(), netlist, reporter ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "unable to handle netlist file '{}': {}",
+                                          netlistPath.GetFullPath().ToStdString(),
+                                          reporter.GetMessages().ToStdString() ) );
+        return tl::unexpected( e );
+    }
+
+    BOARD_NETLIST_UPDATER updater( editFrame, editFrame->GetBoard() );
+    updater.SetReporter( &reporter );
+    updater.SetIsDryRun( aCtx.Request.dry_run() );
+    updater.SetLookupByTimestamp( lookupByTimestamp );
+    updater.SetDeleteUnusedFootprints( aCtx.Request.delete_extra_footprints() );
+    updater.SetReplaceFootprints( aCtx.Request.update_footprints() );
+    updater.SetTransferGroups( aCtx.Request.transfer_groups() );
+    updater.SetOverrideLocks( aCtx.Request.override_locks() );
+    updater.SetUpdateFields( true );
+
+    const bool success = updater.UpdateNetlist( netlist );
+
+    if( !aCtx.Request.dry_run() && success )
+    {
+        bool runDragCommand = false;
+        editFrame->OnNetlistChanged( updater, &runDragCommand );
+    }
+
+    ImportNetlistResponse response;
+    response.set_report( reporter.GetMessages().ToUTF8() );
+    response.set_error_count( updater.GetErrorCount() );
+    response.set_warning_count( updater.GetWarningCount() );
+    response.set_new_footprint_count( updater.GetNewFootprintCount() );
+    return response;
 }
 
 

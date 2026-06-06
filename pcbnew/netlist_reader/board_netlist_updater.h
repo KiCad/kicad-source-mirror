@@ -104,6 +104,12 @@ public:
 
     std::vector<PCB_GROUP*> GetAddedGroups() const { return m_addedGroups; }
 
+    int GetErrorCount() const { return m_errorCount; }
+
+    int GetWarningCount() const { return m_warningCount; }
+
+    int GetNewFootprintCount() const { return m_newFootprintsCount; }
+
     /**
      * Apply the netlist's chain assignments to every NETINFO_ITEM on the board.
      *

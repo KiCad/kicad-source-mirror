@@ -256,6 +256,48 @@ message NetClassForNetsResponse
 }
 
 /*
+ * Netlist import
+ */
+
+// How schematic components are matched to board footprints during netlist import.
+enum NetlistMatchMode
+{
+  NMM_UNKNOWN = 0;
+  NMM_UUID = 1;      // Match by unique ID.
+  NMM_REFERENCE = 2; // Match by reference designator.
+}
+
+// Imports a netlist file exported from the schematic and updates the board.
+// Returns ImportNetlistResponse.
+message ImportNetlist
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+
+  // Path to the netlist file.
+  string netlist_path = 2;
+
+  // If true, report planned changes without modifying the board.
+  bool dry_run = 3;
+
+  NetlistMatchMode match_mode = 4;
+
+  bool delete_extra_footprints = 5;
+  bool update_footprints = 6;
+  bool transfer_groups = 7;
+  bool override_locks = 8;
+}
+
+message ImportNetlistResponse
+{
+  uint32 error_count = 1;
+  uint32 warning_count = 2;
+  uint32 new_footprint_count = 3;
+
+  // Human-readable report of changes and any warnings or errors.
+  string report = 4;
+}
+
+/*
  * Blocking operations
  */
 

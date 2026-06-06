@@ -97,6 +97,9 @@ private:
 
     HANDLER_RESULT<Empty> handleRefillZones( const HANDLER_CONTEXT<RefillZones>& aCtx );
 
+    HANDLER_RESULT<ImportNetlistResponse> handleImportNetlist(
+            const HANDLER_CONTEXT<ImportNetlist>& aCtx );
+
     HANDLER_RESULT<BoardEditorAppearanceSettings> handleGetBoardEditorAppearanceSettings(
             const HANDLER_CONTEXT<GetBoardEditorAppearanceSettings>& aCtx );
 
