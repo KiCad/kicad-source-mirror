@@ -467,7 +467,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     auto formatElapsed =
             [&]() -> wxString
             {
-                int totalSeconds = static_cast<int>( elapsedMs / 1000.0 + 0.5 );
+                int totalSeconds = KiROUND( elapsedMs / 1000.0 );
 
                 if( totalSeconds >= 60 )
                     return wxString::Format( _( "%1$d min %2$d s" ), totalSeconds / 60, totalSeconds % 60 );
