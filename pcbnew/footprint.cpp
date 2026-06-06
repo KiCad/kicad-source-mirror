@@ -2948,7 +2948,7 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     SetPosition( finalPos );
 
     // Flip layer
-    BOARD_ITEM::SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+    BOARD_ITEM::SetLayer( GetBoard() ? GetBoard()->FlipLayer( GetLayer() ) : FlipLayer( GetLayer() ) );
 
     // Calculate the new orientation, and then clear it for pad flipping.
     EDA_ANGLE newOrientation = -m_orient;
