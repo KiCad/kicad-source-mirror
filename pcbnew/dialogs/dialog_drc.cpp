@@ -464,30 +464,30 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     double elapsedMs =
             std::chrono::duration<double, std::milli>( std::chrono::steady_clock::now() - m_drcStartTime ).count();
 
-    auto formatElapsed = []( double aMsecs ) -> wxString
-    {
-        int totalSeconds = static_cast<int>( aMsecs / 1000.0 + 0.5 );
+    auto formatElapsed =
+            [&]() -> wxString
+            {
+                int totalSeconds = static_cast<int>( elapsedMs / 1000.0 + 0.5 );
 
-        if( totalSeconds >= 60 )
-            return wxString::Format( _( "%1$d min %2$d s" ), totalSeconds / 60, totalSeconds % 60 );
+                if( totalSeconds >= 60 )
+                    return wxString::Format( _( "%1$d min %2$d s" ), totalSeconds / 60, totalSeconds % 60 );
 
-        return wxString::Format( _( "%.2f s" ), aMsecs / 1000.0 );
-    };
+                return wxString::Format( _( "%.2f s" ), elapsedMs / 1000.0 );
+            };
 
     if( m_cancelled )
     {
         m_messages->Report( _( "-------- DRC canceled by user.<br><br>" ) );
 
         if( m_drcStatusBar )
-            m_drcStatusBar->SetStatusText( wxString::Format( _( "Canceled after %s" ), formatElapsed( elapsedMs ) ),
-                                           1 );
+            m_drcStatusBar->SetStatusText( wxString::Format( _( "Canceled after %s" ), formatElapsed() ), 1 );
     }
     else
     {
         m_messages->Report( _( "Done.<br><br>" ) );
 
         if( m_drcStatusBar )
-            m_drcStatusBar->SetStatusText( wxString::Format( _( "Completed in %s" ), formatElapsed( elapsedMs ) ), 1 );
+            m_drcStatusBar->SetStatusText( wxString::Format( _( "Completed in %s" ), formatElapsed() ), 1 );
     }
 
     Raise();
