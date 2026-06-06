@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:29+0300\n"
-"PO-Revision-Date: 2026-06-05 11:40+0000\n"
+"PO-Revision-Date: 2026-06-06 10:06+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -9861,7 +9861,7 @@ msgstr "Die Bibliothekstabelle hat den falschen Typ"
 #: common/libraries/library_table.cpp:309
 #, fuzzy, c-format
 msgid "Library table '%s' is read-only"
-msgstr "Bibliothek '%s; ist schreibgeschützt."
+msgstr "Bibliothekstabelle \"%s\" ist schreibgeschützt"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -29482,13 +29482,13 @@ msgstr "Ende des Blatts erreicht."
 #: eeschema/tools/sch_find_replace_tool.cpp:389
 #, fuzzy
 msgid "No matches found."
-msgstr "Keine Vorlagen gefunden"
+msgstr "Keine Übereinstimmungen gefunden."
 
 #: eeschema/tools/sch_group_tool.cpp:46 eeschema/tools/sch_group_tool.cpp:72
 #: pcbnew/tools/pcb_group_tool.cpp:49 pcbnew/tools/pcb_group_tool.cpp:64
 #, fuzzy
 msgid "Some selected items cannot be grouped."
-msgstr "Die ausgewählten Elemente zu einer neuen Gruppe hinzufügen"
+msgstr "Einige ausgewählte Elemente können nicht gruppiert werden."
 
 #: eeschema/tools/sch_group_tool.cpp:57 eeschema/tools/sch_group_tool.cpp:65
 #, fuzzy
@@ -29657,7 +29657,7 @@ msgstr "Drehung ..."
 #: eeschema/tools/sch_selection_tool.cpp:408
 #, fuzzy
 msgid "(No net chain actions)"
-msgstr "Port %s ist nicht verbunden."
+msgstr "(Keine Netzkettenaktionen)"
 
 #: eeschema/tools/simulator_control.cpp:110
 msgid "Open Simulation Workbook"
@@ -34540,7 +34540,7 @@ msgstr "Änderungen zum lokalen Repository committen"
 #: kicad/project_tree_pane.cpp:1050
 #, fuzzy
 msgid "Amend Last Commit..."
-msgstr "Letzter Commit"
+msgstr "Letzten Commit nachbessern ..."
 
 #: kicad/project_tree_pane.cpp:1051
 #, fuzzy
@@ -34683,12 +34683,12 @@ msgstr "Standard-Remote setzen"
 #: kicad/project_tree_pane.cpp:2004
 #, fuzzy
 msgid "Failed to configure remote."
-msgstr "Konnte Remote nicht erstellen: %s"
+msgstr "Konfiguration von Remote ist gescheitert."
 
 #: kicad/project_tree_pane.cpp:2057
 #, fuzzy
 msgid "Already up to date."
-msgstr "Bereits platziert"
+msgstr "Bereits auf dem neuesten Stand."
 
 #: kicad/project_tree_pane.cpp:2058
 #, fuzzy, c-format
@@ -34707,12 +34707,12 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:2070
 #, fuzzy
 msgid "Pulled changes."
-msgstr "Änderungsvorschau"
+msgstr "Abgerufene Änderungen (Pull)."
 
 #: kicad/project_tree_pane.cpp:2071
 #, fuzzy, c-format
 msgid "Pulled %s into %s."
-msgstr "Pad %s auf %s"
+msgstr "%s in %s hinein abgerufen."
 
 #: kicad/project_tree_pane.cpp:2081
 #, fuzzy
@@ -34750,7 +34750,7 @@ msgstr "Auf den aktuellen Winkel von der Referenzposition zurücksetzen."
 #: kicad/project_tree_pane.cpp:2097
 #, fuzzy
 msgid "Failed to reset to remote"
-msgstr "Konnte Standard-Remote nicht setzen."
+msgstr "Zurücksetzen auf Remote ist gescheitert"
 
 #: kicad/project_tree_pane.cpp:2104
 #, fuzzy
@@ -34765,12 +34765,12 @@ msgstr "Rebase nicht möglich"
 #: kicad/project_tree_pane.cpp:2110
 #, fuzzy
 msgid "Pull cancelled."
-msgstr "Abgebrochen"
+msgstr "Abruf (Pull) abgebrochen."
 
 #: kicad/project_tree_pane.cpp:2119
 #, fuzzy
 msgid "Pull failed."
-msgstr "Alle Dateien"
+msgstr "Abruf (Pull) ist gescheitert."
 
 #: kicad/project_tree_pane.cpp:2120
 msgid "Failed to pull project"
@@ -40942,7 +40942,7 @@ msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- DRC durch Benutzer abgebrochen. <br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:547
-#, c-format
+#, c-format, fuzzy
 msgid "Canceled after %s"
 msgstr "Nach %s abgebrochen"
 
@@ -47687,8 +47687,11 @@ msgid "Show Matching Items"
 msgstr "Übereinstimmungen anzeigen"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:210
+#, fuzzy
 msgid "Cannot show matching items without an open project."
 msgstr ""
+"Übereinstimmende Elemente können ohne geöffnetem Projekt nicht angezeigt "
+"werden."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:232
 #: pcbnew/dialogs/panel_setup_rules.cpp:250
@@ -47730,12 +47733,12 @@ msgstr "Konnte die Datei \"%s\" nicht erstellen."
 #: pcbnew/dialogs/panel_setup_rules.cpp:386
 #, fuzzy
 msgid "DRC engine not available."
-msgstr "Schaltplan Netzliste nicht vorhanden"
+msgstr "DRC nicht verfügbar."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:409
-#, c-format
+#, c-format, fuzzy
 msgid "Rule '%s': %zu matching item(s)."
-msgstr ""
+msgstr "Regel \"%s\": %zu passende(s) Element(e)."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:999
 #, c-format
@@ -62437,7 +62440,9 @@ msgstr "%d 3D-Modell(e) erfolgreich eingebettet."
 #, fuzzy
 msgid ""
 "Footprint items cannot be grouped separately from their parent footprint."
-msgstr "Nur ein Pad für diesen Footprint."
+msgstr ""
+"Footprintelemente können nicht separat von ihrem Eltern-Footprint gruppiert "
+"werden."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2743
 msgid "Resize Table Cells"
