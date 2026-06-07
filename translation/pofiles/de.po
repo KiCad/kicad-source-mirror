@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:29+0300\n"
-"PO-Revision-Date: 2026-06-06 10:06+0000\n"
+"PO-Revision-Date: 2026-06-07 13:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -12513,9 +12513,8 @@ msgid "EasyEDA (JLCEDA) Pro files"
 msgstr "EasyEDA (JLCEDA) Pro Dateien"
 
 #: common/wildcards_and_files_ext.cpp:358
-#, fuzzy
 msgid "DipTrace files"
-msgstr "Zip-Dateien"
+msgstr "DipTrace-Dateien"
 
 #: common/wildcards_and_files_ext.cpp:364
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:335
@@ -13857,7 +13856,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_create_net_chain.cpp:142
 #, fuzzy
 msgid "Please select a chain from the list."
-msgstr "Bitte eine Netzkette aus der Liste auswählen."
+msgstr "Bitte eine Kette aus der Liste auswählen."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:142
 #: eeschema/dialogs/dialog_create_net_chain.cpp:162
@@ -17116,9 +17115,8 @@ msgstr "Bus-Aliase"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:351
 #: eeschema/dialogs/panel_setup_net_chains.cpp:359
 #: eeschema/dialogs/panel_setup_net_chains.cpp:367
-#, fuzzy
 msgid "Net Chains"
-msgstr "Netzklasse"
+msgstr "Netzketten"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:141
 #: pcbnew/dialogs/dialog_board_setup.cpp:161
@@ -19703,7 +19701,7 @@ msgid ""
 "via inNetChainClass('name')."
 msgstr ""
 "Netzketten unter einem Klassenlabel gruppieren, damit DRC-Regeln die ganze "
-"Gruppe über inNetChainClass(\\\"name\\\") ansprechen können."
+"Gruppe über inNetChainClass(\"name\") ansprechen können."
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:142
 #, fuzzy
@@ -19725,8 +19723,7 @@ msgstr ""
 #, fuzzy
 msgid "Delete the selected class (chains revert to no class)"
 msgstr ""
-"Die ausgewählte Klasse löschen (Ketten fallen auf \\\"keine Klasse\\\" "
-"zurück)"
+"Die ausgewählte Klasse löschen (Ketten fallen auf \"keine Klasse\" zurück)"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:228
 msgid "No error or warning"
@@ -22661,7 +22658,7 @@ msgstr ""
 #, c-format, fuzzy
 msgid "DipTrace import: invalid wire count %d for net '%s' at offset 0x%06zX."
 msgstr ""
-"DipTrace-Import: ungültige Leitungsanzahl %d für Netz \\\"%s\\\" mit Offset "
+"DipTrace-Import: ungültige Leitungsanzahl %d für Netz \"%s\" mit Offset "
 "0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:2943
@@ -48593,6 +48590,7 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_6notes.h:2
+#, fuzzy
 msgid ""
 "### Notes\n"
 "\n"
@@ -48698,8 +48696,8 @@ msgstr ""
 "\n"
 "Beide Einschränkungen akzeptieren `(time_domain yes)`, um die "
 "Verzögerungszeit anstatt der physikalischen Länge zusammenzufassen.  Für "
-"`net_chain_length` im Modus \\\"Zeitdomäne\\\" wird das Verzögerungsfenster "
-"für die Kette als Ganzes angewendet; Beim Abstimmvorgang wird die geroutete "
+"`net_chain_length` im Modus \"Zeitdomäne\" wird das Verzögerungsfenster für "
+"die Kette als Ganzes angewendet; Beim Abstimmvorgang wird die geroutete "
 "Verzögerung von anderen Mitgliedsnetzen abgezogen, um zu ermitteln, was für "
 "das abzustimmende Netz übrig bleibt.\n"
 "\n"
@@ -49002,7 +49000,7 @@ msgstr ""
 "```\n"
 "    A.hasNetChain()\n"
 "```\n"
-"> > Wahr, wenn das Netz von `A` jeder beliebigen Kette angehört.\n"
+"> Wahr, wenn das Netz von `A` jeder beliebigen Kette angehört.\n"
 "\n"
 "\n"
 "\n"
@@ -62297,9 +62295,8 @@ msgid "group has no footprints"
 msgstr "Gruppe hat keine Footprints"
 
 #: pcbnew/tools/pcb_control.cpp:1708
-#, fuzzy
 msgid "layout copy failed"
-msgstr "Kopieren des Layouts ist gescheitert"
+msgstr "Layoutkopie gescheitert"
 
 #: pcbnew/tools/pcb_control.cpp:1723
 #, c-format, fuzzy
