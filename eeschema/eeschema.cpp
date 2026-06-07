@@ -512,7 +512,8 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
 
             SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &aKiway->Prj() );
 
-            int elapsed = 0;
+            int  elapsed = 0;
+            bool aborted = false;
 
             reporter->Report( _( "Loading Symbol Libraries" ) );
             adapter->AsyncLoad();
@@ -522,6 +523,7 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
                 if( m_libraryPreloadAbort.load() )
                 {
                     m_libraryPreloadAbort.store( false );
+                    aborted = true;
                     break;
                 }
 
@@ -547,36 +549,56 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
                     break;
             }
 
-            adapter->BlockUntilLoaded();
+            // AbortAsyncLoad() sets the adapter's worker abort flag and then blocks,
+            // so workers exit at their next checkpoint. BlockUntilLoaded() alone just
+            // waits for each future to complete naturally, which can hang indefinitely
+            // if a worker is stuck on a stalled network or filesystem operation.
+            if( aborted )
+                adapter->AbortAsyncLoad();
+            else
+                adapter->BlockUntilLoaded();
 
-            // Collect library load errors for async reporting
-            wxString errors = adapter->GetLibraryLoadErrors();
-
-            wxLogTrace( traceLibraries, "eeschema PreloadLibraries: errors.IsEmpty()=%d, length=%zu",
-                        errors.IsEmpty(), errors.length() );
-
-            std::vector<LOAD_MESSAGE> messages =
-                    ExtractLibraryLoadErrors( errors, RPT_SEVERITY_ERROR );
-
-            if( !messages.empty() )
+            // If aborted, skip operations that use the adapter since the project may have changed
+            // and the adapter's project reference could be stale. This prevents use-after-free
+            // crashes when switching projects during library preload.
+            if( !aborted )
             {
-                wxLogTrace( traceLibraries, "  -> collected %zu messages, calling AddLibraryLoadMessages",
-                            messages.size() );
-                Pgm().AddLibraryLoadMessages( messages );
+                // Collect library load errors for async reporting
+                wxString errors = adapter->GetLibraryLoadErrors();
+
+                wxLogTrace( traceLibraries, "eeschema PreloadLibraries: errors.IsEmpty()=%d, length=%zu",
+                            errors.IsEmpty(), errors.length() );
+
+                std::vector<LOAD_MESSAGE> messages = ExtractLibraryLoadErrors( errors, RPT_SEVERITY_ERROR );
+
+                if( !messages.empty() )
+                {
+                    wxLogTrace( traceLibraries, "  -> collected %zu messages, calling AddLibraryLoadMessages",
+                                messages.size() );
+                    Pgm().AddLibraryLoadMessages( messages );
+                }
+                else
+                {
+                    wxLogTrace( traceLibraries, "  -> no errors from symbol libraries" );
+                }
             }
             else
             {
-                wxLogTrace( traceLibraries, "  -> no errors from symbol libraries" );
+                wxLogTrace( traceLibraries, "eeschema PreloadLibraries: aborted, skipping symbol processing" );
             }
 
             Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
             m_libraryPreloadBackgroundJob.reset();
             m_libraryPreloadInProgress.store( false );
 
-            std::string payload = "";
-            aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload, nullptr, true );
-            aKiway->ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
-            aKiway->ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload, nullptr, true );
+            // Only send reload notifications if we weren't aborted
+            if( !aborted )
+            {
+                std::string payload = "";
+                aKiway->ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload, nullptr, true );
+                aKiway->ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
+                aKiway->ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload, nullptr, true );
+            }
         };
 
     std::future<void> preloadFuture = std::async( std::launch::async, preload );
