@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:29+0300\n"
-"PO-Revision-Date: 2026-06-04 07:53+0000\n"
+"PO-Revision-Date: 2026-06-08 16:01+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -7451,9 +7451,8 @@ msgid "Arc Start Angle"
 msgstr "Kąt początkowy"
 
 #: common/eda_shape.cpp:3558
-#, fuzzy
 msgid "Arc End Angle"
-msgstr "Kąt łuku:"
+msgstr "Kąt kątowy"
 
 #: common/eda_shape.cpp:3563 common/stroke_params.cpp:403
 #: eeschema/sch_bus_entry.cpp:714 eeschema/sch_line.cpp:1338
@@ -13741,9 +13740,8 @@ msgid "Update Symbols from Library"
 msgstr "Uaktualnij symbole z biblioteki"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:63
-#, fuzzy
 msgid "Filter chains by name or net..."
-msgstr "Filtrowane pól na podstawie nazwy:"
+msgstr "Filtrowane łańcucha na podstawie nazwy lub sieci..."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:77
 msgid "Create"
@@ -13937,9 +13935,8 @@ msgid "Find net chain path between the two components"
 msgstr "Generuj tylko płytkę bez komponentów"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:131
-#, fuzzy
 msgid "Chain Name:"
-msgstr "Nazwa pinu"
+msgstr "Nazwa łańcucha:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:145
 #, fuzzy
@@ -19568,9 +19565,8 @@ msgid "Class Name"
 msgstr "Nazwa aliasu"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:164
-#, fuzzy
 msgid "Add a new net chain class"
-msgstr "Nowa klasa sieci:"
+msgstr "Dodaj nową klasę łańcucha sieci"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:169
 msgid "Rename the selected class (updates every chain that uses it)"
@@ -38440,14 +38436,12 @@ msgid "Id"
 msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:111
-#, fuzzy
 msgid "Spec Freq"
-msgstr "Określona częstotliwość:"
+msgstr "Określona częstotliwość"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:121
-#, fuzzy
 msgid "Dielectric Model"
-msgstr "Model dielektryka:"
+msgstr "Model dielektryka"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:148
 msgid "Board thickness from stackup:"
