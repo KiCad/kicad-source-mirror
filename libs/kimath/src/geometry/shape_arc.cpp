@@ -761,11 +761,37 @@ bool SHAPE_ARC::NearestPoints( const SHAPE_ARC& aArc, VECTOR2I& aPtA, VECTOR2I& 
         }
     }
 
-    // Check for the closest points on the circles
-    VECTOR2I pt1 = circle1.NearestPoint( center2 );
-    VECTOR2I pt2 = circle2.NearestPoint( center1 );
-    bool     pt1InSlice = sliceContainsPoint( pt1 );
-    bool     pt2InSlice = aArc.sliceContainsPoint( pt2 );
+    // Closest pair of points on the two full circles. For external the pair
+    // faces each other between the centers, so each is the nearest point on
+    // its circle to the other center. For one circle strictly inside the
+    // other the pair lies on the same side, so the outer circle's pt is
+    // nearest to the inner center and the inner circle's pt is furthest
+    // from the outer center. Intersecting is handled by Intersect() above.
+    double r1 = GetRadius();
+    double r2 = aArc.GetRadius();
+    bool   contained = double( center_dist_sq ) < ( r1 - r2 ) * ( r1 - r2 );
+
+    VECTOR2I pt1;
+    VECTOR2I pt2;
+
+    if( contained && r1 > r2 )
+    {
+        pt1 = circle1.NearestPoint( center2 );
+        pt2 = circle2.FurthestPoint( center1 );
+    }
+    else if( contained )
+    {
+        pt1 = circle1.FurthestPoint( center2 );
+        pt2 = circle2.NearestPoint( center1 );
+    }
+    else
+    {
+        pt1 = circle1.NearestPoint( center2 );
+        pt2 = circle2.NearestPoint( center1 );
+    }
+
+    bool pt1InSlice = sliceContainsPoint( pt1 );
+    bool pt2InSlice = aArc.sliceContainsPoint( pt2 );
 
     if( pt1InSlice && pt2InSlice )
     {

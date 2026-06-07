@@ -89,6 +89,26 @@ public:
     VECTOR2D NearestPoint( const VECTOR2D& aP ) const;
 
     /**
+     * Compute the point on the circumference of the circle that is the furthest from aP.
+     *
+     * Finds the intersection point of this circle and a line that passes through both this
+     * circle's center and aP, on the side of the center opposite aP.
+     *
+     * @param aP.
+     * @return furthest point from aP.
+     */
+    VECTOR2I FurthestPoint( const VECTOR2I& aP ) const;
+
+    /**
+     * Compute the point (floating point version) on the circumference of the circle that
+     * is the furthest from aP.
+     *
+     * @param aP.
+     * @return furthest point from aP.
+     */
+    VECTOR2D FurthestPoint( const VECTOR2D& aP ) const;
+
+    /**
      * Compute the intersection points between this circle and \a aCircle.
      *
      * @param aCircle The other circle to intersect with this.
