@@ -37,7 +37,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:29+0300\n"
 "PO-Revision-Date: 2026-06-07 13:01+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -3290,12 +3290,10 @@ msgid "Edit Group Properties"
 msgstr "Gruppeneigenschaften bearbeiten"
 
 #: common/dialogs/dialog_group_properties.cpp:177
-#, fuzzy
 msgid "A group cannot contain itself."
 msgstr "Eine Gruppe kann sich nicht selbst beinhalten."
 
 #: common/dialogs/dialog_group_properties.cpp:185
-#, fuzzy
 msgid "Cannot add this group because it already contains the current group."
 msgstr ""
 "Diese Gruppe kann nicht hinzugefügt werden, weil sie bereits die aktuelle "
@@ -7356,16 +7354,14 @@ msgstr "Winkel"
 #: common/eda_shape.cpp:1498 common/eda_shape.cpp:1505
 #: common/eda_shape.cpp:3533 pcbnew/dialogs/dialog_shape_properties.cpp:1143
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1160
-#, fuzzy
 msgid "Major Radius"
-msgstr "Eckradius"
+msgstr "Große Halbachse"
 
 #: common/eda_shape.cpp:1499 common/eda_shape.cpp:1506
 #: common/eda_shape.cpp:3539 pcbnew/dialogs/dialog_shape_properties.cpp:1145
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1162
-#, fuzzy
 msgid "Minor Radius"
-msgstr "Eckradius"
+msgstr "Kleine Halbachse"
 
 #: common/eda_shape.cpp:1508 pcbnew/dialogs/dialog_shape_properties.cpp:1166
 msgid "Start Angle"
@@ -45720,15 +45716,13 @@ msgstr "Radius muss größer als Null sein"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:682
 #: pcbnew/dialogs/dialog_shape_properties.cpp:760
-#, fuzzy
 msgid "Major radius must be greater than 0"
-msgstr "Radius muss größer als Null sein"
+msgstr "Große Halbachse muss größer als Null sein"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:688
 #: pcbnew/dialogs/dialog_shape_properties.cpp:766
-#, fuzzy
 msgid "Minor radius must be greater than 0"
-msgstr "Radius muss größer als Null sein"
+msgstr "Kleine Halbachse muss größer als Null sein"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1050
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1053
