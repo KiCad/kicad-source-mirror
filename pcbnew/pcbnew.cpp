@@ -1074,6 +1074,7 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
             {
                 if( m_libraryPreloadAbort.load() )
                 {
+                    m_libraryPreloadAbort.store( false );
                     aborted = true;
                     break;
                 }
@@ -1100,11 +1101,14 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
                     break;
             }
 
-            adapter->BlockUntilLoaded();
-
-            // Check again after blocking - abort may have been requested while we were waiting
-            if( m_libraryPreloadAbort.load() )
-                aborted = true;
+            // AbortAsyncLoad() sets the adapter's worker abort flag and then blocks,
+            // so workers exit at their next checkpoint. BlockUntilLoaded() alone just
+            // waits for each future to complete naturally, which can hang indefinitely
+            // if a worker is stuck on a stalled network or filesystem operation.
+            if( aborted )
+                adapter->AbortAsyncLoad();
+            else
+                adapter->BlockUntilLoaded();
 
             // If aborted, skip operations that use the adapter since the project may have changed
             // and the adapter's project reference could be stale. This prevents use-after-free

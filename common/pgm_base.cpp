@@ -905,11 +905,10 @@ void PGM_BASE::PreloadDesignBlockLibraries( KIWAY* aKiway )
             DESIGN_BLOCK_LIBRARY_ADAPTER* adapter = aKiway->Prj().DesignBlockLibs();
 
             int elapsed = 0;
+            bool aborted = false;
 
             reporter->Report( _( "Loading Design Block Libraries" ) );
             adapter->AsyncLoad();
-
-            bool aborted = false;
 
             while( true )
             {
