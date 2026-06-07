@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-03 00:30+0300\n"
-"PO-Revision-Date: 2026-05-13 19:11+0000\n"
+"PO-Revision-Date: 2026-06-08 20:26+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.5.dev0\n"
+"X-Generator: Weblate 2026.6\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -2728,6 +2728,8 @@ msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 msgstr ""
+"Nahradí uložený súbor automaticky uloženou verziou. Predchádzajúci uložený "
+"obsah sa zahodí."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
 #, fuzzy
@@ -2736,7 +2738,7 @@ msgstr "Prúd"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
-msgstr ""
+msgstr "Ponechá uložený súbor tak, ako je, a zahodí automaticky uložené zmeny."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
 #, fuzzy
@@ -2748,6 +2750,8 @@ msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 msgstr ""
+"Uchová uložený súbor a automaticky uloženú verziu zapíše vedľa neho ako "
+"samostatný súbor s časovou pečiatkou, ktorý si môžete neskôr pozrieť."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
 #, fuzzy
@@ -2759,6 +2763,9 @@ msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"Zatvorí toto dialógové okno bez vykonania akýchkoľvek zmien. Automaticky "
+"uložené súbory zostanú na disku a budú ponúknuté znova pri ďalšom otvorení "
+"projektu."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
@@ -3195,11 +3202,11 @@ msgstr "Upraviť vlastnosti skupiny"
 
 #: common/dialogs/dialog_group_properties.cpp:177
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "Skupina nemôže obsahovať sama seba."
 
 #: common/dialogs/dialog_group_properties.cpp:185
 msgid "Cannot add this group because it already contains the current group."
-msgstr ""
+msgstr "Nie je možné pridať túto skupinu, pretože už obsahuje aktuálnu skupinu."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -3987,7 +3994,7 @@ msgstr "Správa commit-u nemôže byť prázdna"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
-msgstr ""
+msgstr "Kľúčová prístupová fráza:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
@@ -3997,15 +4004,15 @@ msgstr "Heslo:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
-msgstr ""
+msgstr "Pre prístup je potrebné overenie:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "Username and password"
-msgstr ""
+msgstr "Používateľské meno a heslo"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr ""
+msgstr "SSH kľúč"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -7933,7 +7940,7 @@ msgstr "Nepodarilo sa vytvoriť commit: %s"
 
 #: common/git/libgit_backend.cpp:310 kicad/project_tree_pane.cpp:2762
 msgid "Cannot amend: the branch has no commits yet."
-msgstr ""
+msgstr "Nie je možné zmeniť: vetva ešte nemá žiadne commity."
 
 #: common/git/libgit_backend.cpp:329
 #, fuzzy, c-format
@@ -8045,6 +8052,8 @@ msgstr "Nepodarilo sa načítať 'FETCH_HEAD'"
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
+"Nie je čo načítať: vzdialená vetva nemá žiadnu vetvu zodpovedajúcu aktuálnej "
+"lokálnej vetve."
 
 #: common/git/libgit_backend.cpp:1178
 msgid "Could not lookup commit"
@@ -8135,6 +8144,8 @@ msgid ""
 "Could not create a commit signature.  Set user.name and user.email in your "
 "git configuration."
 msgstr ""
+"Nebolo možné vytvoriť podpis commitu.  Nastavte používateľské meno a e-mail "
+"používateľa v konfigurácii gitu."
 
 #: common/git/libgit_backend.cpp:1529
 #, fuzzy, c-format
@@ -8171,7 +8182,7 @@ msgstr "Zlyhanie ukončenia rebase: %s"
 
 #: common/git/libgit_backend.cpp:1626 common/git/libgit_backend.cpp:1672
 msgid "Another git operation is in progress."
-msgstr ""
+msgstr "Prebieha iná git operácia."
 
 #: common/git/libgit_backend.cpp:1634 common/git/libgit_backend.cpp:1687
 #, fuzzy
@@ -8201,6 +8212,8 @@ msgid ""
 "The rebase ran into conflicts.  This is best resolved from a git command "
 "line."
 msgstr ""
+"Pri rebase došlo ku konfliktom.  Najlepšie sa to dá vyriešiť z príkazového "
+"riadku git."
 
 #: common/grid_tricks.cpp:379 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
