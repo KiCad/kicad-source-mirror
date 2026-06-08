@@ -2641,10 +2641,17 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     FLIP_DIRECTION flipDirection = aEvent.IsAction( &PCB_ACTIONS::mirrorV ) ? FLIP_DIRECTION::TOP_BOTTOM
                                                                             : FLIP_DIRECTION::LEFT_RIGHT;
 
+    int skippedFootprints = 0;
+
     for( EDA_ITEM* item : selection )
     {
         if( !item->IsType( MirrorableItems ) )
+        {
+            if( item->Type() == PCB_FOOTPRINT_T )
+                skippedFootprints++;
+
             continue;
+        }
 
         commit->Modify( item, nullptr, RECURSE_MODE::RECURSE );
 
@@ -2702,6 +2709,12 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     // The parent move will handle the commit.
     if( !localCommit.Empty() && !m_dragging )
         localCommit.Push( _( "Mirror" ) );
+
+    if( skippedFootprints > 0 && !m_dragging )
+    {
+        frame()->ShowInfoBarMsg( _( "Footprints cannot be mirrored. Use Flip to move them to "
+                                    "the other side of the board." ) );
+    }
 
     if( selection.IsHover() && !m_dragging )
         m_toolMgr->RunAction( ACTIONS::selectionClear );
