@@ -382,6 +382,7 @@ target_link_libraries( kicommon
     rapidcsv
     sexpr
     glad
+    thread-pool
     ${ZSTD_LIBRARY}
     ${wxWidgets_LIBRARIES}
     ${LIBGIT2_LIBRARIES}
@@ -459,7 +460,6 @@ target_include_directories( kicommon
         $<TARGET_PROPERTY:kiapi,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:picosha2,INTERFACE_INCLUDE_DIRECTORIES>
         $<TARGET_PROPERTY:nlohmann_json_schema_validator,INTERFACE_INCLUDE_DIRECTORIES>
-        $<TARGET_PROPERTY:thread-pool,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 add_dependencies( kicommon pegtl version_header )
