@@ -57,6 +57,18 @@ bool PG_CELL_RENDERER::Render( wxDC &aDC, const wxRect &aRect, const wxPropertyG
             }
         }
 
+        if( aProperty->HasFlag( wxPG_PROP_READONLY ) && !( aFlags & Selected ) )
+        {
+            wxColour disabledFg = aGrid->GetCellDisabledTextColour();
+
+            if( disabledFg.IsOk() )
+            {
+                aDC.SetTextForeground( disabledFg );
+                return wxPGDefaultRenderer::Render( aDC, aRect, aGrid, aProperty, aColumn, aItem,
+                                                    aFlags | DontUseCellFgCol );
+            }
+        }
+
         // Default behavior for value column
         return wxPGDefaultRenderer::Render( aDC, aRect, aGrid, aProperty, aColumn, aItem, aFlags );
     }
