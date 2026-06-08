@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 00:30+0300\n"
+"POT-Creation-Date: 2026-06-08 23:28+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -5787,6 +5787,10 @@ msgstr "The library table path '%s' does not exist"
 
 msgid "The library table is of wrong type"
 msgstr "The library table is of wrong type"
+
+#, c-format
+msgid "Library table '%s' is read-only"
+msgstr "Library table '%s' is read-only"
 
 #, c-format
 msgid "An unexpected error occurred while reading library table %s "
@@ -27304,6 +27308,32 @@ msgstr "PDF files"
 msgid "3D Model Output File"
 msgstr "3D Model Output File"
 
+msgid "Please save the board before exporting STEP."
+msgstr "Please save the board before exporting STEP."
+
+msgid ""
+"Board file not found on disk.\n"
+"Save the board before exporting STEP."
+msgstr ""
+"Board file not found on disk.\n"
+"Save the board before exporting STEP."
+
+msgid ""
+"The board directory no longer exists.\n"
+"Save the board to a valid location before exporting STEP."
+msgstr ""
+"The board directory no longer exists.\n"
+"Save the board to a valid location before exporting STEP."
+
+msgid "Failed to reserve a temporary filename for STEP export."
+msgstr "Failed to reserve a temporary filename for STEP export."
+
+msgid "Failed to save the current board state for export."
+msgstr "Failed to save the current board state for export."
+
+msgid "Failed to stage the project file for STEP export."
+msgstr "Failed to stage the project file for STEP export."
+
 msgid "No filename for output file"
 msgstr "No filename for output file"
 
@@ -28690,6 +28720,16 @@ msgstr "Auto-Match Layers"
 
 msgid "Automatically match any unmatched layers to their KiCad equivalent."
 msgstr "Automatically match any unmatched layers to their KiCad equivalent."
+
+msgid "Keep KiCad layer names"
+msgstr "Keep KiCad layer names"
+
+msgid ""
+"If checked, layers will keep their standard KiCad names instead of being "
+"renamed to the imported layer names."
+msgstr ""
+"If checked, layers will keep their standard KiCad names instead of being "
+"renamed to the imported layer names."
 
 msgid "Edit Mapping of Imported Layers"
 msgstr "Edit Mapping of Imported Layers"
@@ -30439,6 +30479,16 @@ msgstr "Keep &outside layers"
 
 msgid "Unused Pads"
 msgstr "Unused Pads"
+
+msgid "Apply design block layouts to new groups"
+msgstr "Apply design block layouts to new groups"
+
+msgid ""
+"For each new group created from a design block, apply the block's saved "
+"footprint placement and routing automatically."
+msgstr ""
+"For each new group created from a design block, apply the block's saved "
+"footprint placement and routing automatically."
 
 msgid "Update Footprints"
 msgstr "Update Footprints"
@@ -37792,6 +37842,14 @@ msgid "Unable to locate padstack %s in file %s\n"
 msgstr "Unable to locate padstack %s in file %s\n"
 
 #, c-format
+msgid ""
+"Pad '%s' has custom shape with per-layer geometry; custom primitives not "
+"supported in padstack mode."
+msgstr ""
+"Pad '%s' has custom shape with per-layer geometry; custom primitives not "
+"supported in padstack mode."
+
+#, c-format
 msgid "Invalid custom pad '%s'. Replacing with circular pad."
 msgstr "Invalid custom pad '%s'. Replacing with circular pad."
 
@@ -39521,17 +39579,6 @@ msgstr "The routing start point violates DRC."
 msgid "Cannot start a differential pair in the middle of nowhere."
 msgstr "Cannot start a differential pair in the middle of nowhere."
 
-msgid ""
-"The differential pair gap at the start point does not match the configured "
-"gap. This can occur in neckdown areas where tracks have narrower width and "
-"spacing. Adjust the differential pair settings or start from a location with "
-"the correct gap."
-msgstr ""
-"The differential pair gap at the start point does not match the configured "
-"gap. This can occur in neckdown areas where tracks have narrower width and "
-"spacing. Adjust the differential pair settings or start from a location with "
-"the correct gap."
-
 msgid "Place Through Via"
 msgstr "Place Through Via"
 
@@ -40489,6 +40536,13 @@ msgstr "Simplify Polygons"
 
 msgid "Heal Shapes"
 msgstr "Heal Shapes"
+
+msgid ""
+"Footprints cannot be mirrored. Use Flip to move them to the other side of "
+"the board."
+msgstr ""
+"Footprints cannot be mirrored. Use Flip to move them to the other side of "
+"the board."
 
 msgid "Change Side / Flip"
 msgstr "Change Side / Flip"
@@ -42316,19 +42370,65 @@ msgstr "Invalid clipboard contents"
 msgid "Design block has no layout to place."
 msgstr "Design block has no layout to place."
 
+msgid "No groups with a linked design block are selected."
+msgstr "No groups with a linked design block are selected."
+
+msgid ""
+"Selection contains locked items. Enable 'Override locks' to operate on them."
+msgstr ""
+"Selection contains locked items. Enable 'Override locks' to operate on them."
+
+msgid "Applying Design Block Layouts"
+msgstr "Applying Design Block Layouts"
+
+msgid "design block is not in the loaded libraries"
+msgstr "design block is not in the loaded libraries"
+
+msgid "design block has no saved PCB layout"
+msgstr "design block has no saved PCB layout"
+
+msgid "could not load the design block's layout"
+msgstr "could not load the design block's layout"
+
+msgid "design block layout could not be loaded"
+msgstr "design block layout could not be loaded"
+
+msgid "group has no footprints"
+msgstr "group has no footprints"
+
+msgid "layout copy failed"
+msgstr "layout copy failed"
+
+#, c-format
+msgid "Applying layout to group %zu of %zu..."
+msgstr "Applying layout to group %zu of %zu..."
+
+msgid "Apply design block layout cancelled."
+msgstr "Apply design block layout cancelled."
+
+#, c-format
+msgid "Apply design block layout to %d group(s)"
+msgstr "Apply design block layout to %d group(s)"
+
+#, c-format
+msgid "Applied design block layout to %d of %d group(s)."
+msgstr "Applied design block layout to %d of %d group(s)."
+
+#, c-format
+msgid ""
+"Skipped %d selected item(s) that are not groups linked to a design block."
+msgstr ""
+"Skipped %d selected item(s) that are not groups linked to a design block."
+
+msgid "The following groups could not be processed:"
+msgstr "The following groups could not be processed:"
+
+msgid "(unnamed group)"
+msgstr "(unnamed group)"
+
 #, c-format
 msgid "Design block %s does not have a board file."
 msgstr "Design block %s does not have a board file."
-
-msgid "Design block placement failed - no footprints were placed."
-msgstr "Design block placement failed - no footprints were placed."
-
-#, c-format
-msgid "Footprint %s is locked and cannot be placed."
-msgstr "Footprint %s is locked and cannot be placed."
-
-msgid "Selected group contains no footprints to place."
-msgstr "Selected group contains no footprints to place."
 
 msgid "Error loading board."
 msgstr "Error loading board."
@@ -42444,11 +42544,6 @@ msgstr "Select"
 
 msgid "Select/Expand Connection..."
 msgstr "Select/Expand Connection..."
-
-msgid ""
-"Selection contains locked items. Enable 'Override locks' to operate on them."
-msgstr ""
-"Selection contains locked items. Enable 'Override locks' to operate on them."
 
 msgid "Select the reference point on the item to move."
 msgstr "Select the reference point on the item to move."
@@ -43612,6 +43707,27 @@ msgstr "Process could not be created"
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "Could not create user scripting path %s."
+
+#~ msgid ""
+#~ "The differential pair gap at the start point does not match the "
+#~ "configured gap. This can occur in neckdown areas where tracks have "
+#~ "narrower width and spacing. Adjust the differential pair settings or "
+#~ "start from a location with the correct gap."
+#~ msgstr ""
+#~ "The differential pair gap at the start point does not match the "
+#~ "configured gap. This can occur in neckdown areas where tracks have "
+#~ "narrower width and spacing. Adjust the differential pair settings or "
+#~ "start from a location with the correct gap."
+
+#~ msgid "Design block placement failed - no footprints were placed."
+#~ msgstr "Design block placement failed - no footprints were placed."
+
+#, c-format
+#~ msgid "Footprint %s is locked and cannot be placed."
+#~ msgstr "Footprint %s is locked and cannot be placed."
+
+#~ msgid "Selected group contains no footprints to place."
+#~ msgstr "Selected group contains no footprints to place."
 
 #~ msgid "Url"
 #~ msgstr "Url"
