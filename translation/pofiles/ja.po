@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-06 10:01+0000\n"
+"PO-Revision-Date: 2026-06-09 22:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -9508,9 +9508,9 @@ msgid "The library table is of wrong type"
 msgstr "ライブラリ テーブルのタイプが間違っています"
 
 #: common/libraries/library_table.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Library table '%s' is read-only"
-msgstr "ライブラリ '%s' は読み込み専用です。"
+msgstr "ライブラリ テーブル '%s' は読み込み専用です"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -53174,6 +53174,8 @@ msgid ""
 "Pad '%s' has custom shape with per-layer geometry; custom primitives not "
 "supported in padstack mode."
 msgstr ""
+"パッド '%s' はレイヤーごとにカスタム形状です;カスタム プレミティブはパッドス "
+"タック モードではサポートされていません。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2877
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2909
@@ -58964,9 +58966,8 @@ msgid "Design block has no layout to place."
 msgstr "デザイン ブロックには配置するレイアウトがありません。"
 
 #: pcbnew/tools/pcb_control.cpp:1493
-#, fuzzy
 msgid "No groups with a linked design block are selected."
-msgstr "選択したグループにリンクされたデザインブロックレイアウトを適用"
+msgstr "リンクされたデザインブロックを持つグループは選択されていません。"
 
 #: pcbnew/tools/pcb_control.cpp:1518 pcbnew/tools/pcb_selection_tool.cpp:4552
 msgid ""
@@ -58981,19 +58982,16 @@ msgid "Applying Design Block Layouts"
 msgstr "デザインブロックレイアウトを適用"
 
 #: pcbnew/tools/pcb_control.cpp:1572
-#, fuzzy
 msgid "design block is not in the loaded libraries"
-msgstr "デザイン ブロックに有効なライブラリ ID がありません。"
+msgstr "デザインブロックが読み込まれたライブラリに含まれていません"
 
 #: pcbnew/tools/pcb_control.cpp:1578
-#, fuzzy
 msgid "design block has no saved PCB layout"
-msgstr "デザイン ブロックには配置するレイアウトがありません。"
+msgstr "デザインブロックには保存するレイアウトがありません"
 
 #: pcbnew/tools/pcb_control.cpp:1609
-#, fuzzy
 msgid "could not load the design block's layout"
-msgstr "デザインブロック %s が見つかりませんでした。"
+msgstr "デザインブロックのレイアウトを読み込めませんでした"
 
 #: pcbnew/tools/pcb_control.cpp:1636
 #, fuzzy
@@ -59006,9 +59004,8 @@ msgid "group has no footprints"
 msgstr "フットプリントを参照"
 
 #: pcbnew/tools/pcb_control.cpp:1708
-#, fuzzy
 msgid "layout copy failed"
-msgstr "ファイル '%s' をコピーできません。"
+msgstr "レイアウトのコピーに失敗しました"
 
 #: pcbnew/tools/pcb_control.cpp:1723
 #, c-format
@@ -59016,30 +59013,30 @@ msgid "Applying layout to group %zu of %zu..."
 msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:1746
-#, fuzzy
 msgid "Apply design block layout cancelled."
-msgstr "デザインブロックレイアウトを適用"
+msgstr "デザインブロックレイアウトの適用がキャンセルされました。"
 
 #: pcbnew/tools/pcb_control.cpp:1752
-#, fuzzy, c-format
+#, c-format
 msgid "Apply design block layout to %d group(s)"
-msgstr "選択したグループにリンクされたデザインブロックレイアウトを適用"
+msgstr "デザインブロックのレイアウトを %d 個のグループに適用します"
 
 #: pcbnew/tools/pcb_control.cpp:1764
-#, fuzzy, c-format
+#, c-format
 msgid "Applied design block layout to %d of %d group(s)."
-msgstr "選択したグループにリンクされたデザインブロックレイアウトを適用"
+msgstr "デザインブロックのレイアウトを %d(%d 中)個のグループに適用しました。"
 
 #: pcbnew/tools/pcb_control.cpp:1771
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Skipped %d selected item(s) that are not groups linked to a design block."
-msgstr "選択したグループをリンクされたデザインブロックに保存"
+msgstr ""
+"デザインブロックにリンクされたグループではない、選択されたアイテムのうち%d個"
+"をスキップしました。"
 
 #: pcbnew/tools/pcb_control.cpp:1779
-#, fuzzy
 msgid "The following groups could not be processed:"
-msgstr "以下のディレクトリが開けませんでした: \n"
+msgstr "以下のグループは処理できませんでした:"
 
 #: pcbnew/tools/pcb_control.cpp:1783
 #, fuzzy
