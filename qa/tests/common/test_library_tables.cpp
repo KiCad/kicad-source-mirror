@@ -346,6 +346,16 @@ BOOST_AUTO_TEST_CASE( ReadOnlyTable )
     // Make the file read-only
     tmpFn.SetPermissions( wxS_IRUSR | wxS_IRGRP | wxS_IROTH );
 
+    // CI containers commonly run as root, where access(W_OK) succeeds regardless of the
+    // permission bits, so a read-only file still reports as writable.  IsReadOnly() uses the
+    // same IsFileWritable() check, so when the file remains writable here the read-only
+    // assertions cannot hold and are not meaningful.
+    if( wxFileName( tmpFn.GetFullPath() ).IsFileWritable() )
+    {
+        BOOST_TEST_MESSAGE( "Skipping read-only table checks; file remains writable despite "
+                            "read-only permissions (running as root?)" );
+    }
+    else
     {
         LIBRARY_TABLE roTable( tmpFn, LIBRARY_TABLE_SCOPE::GLOBAL );
         BOOST_REQUIRE( roTable.IsOk() );
