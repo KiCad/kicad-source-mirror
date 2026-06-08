@@ -990,7 +990,46 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
 
     if( IsNetnameLayer( aLayer ) )
     {
-        // Ummm, yeah.  Anyone fancy implementing text on a path?
+        if( !pcbconfig() || pcbconfig()->m_Display.m_NetNames < 2 )
+            return;
+
+        if( aArc->GetNetCode() <= NETINFO_LIST::UNCONNECTED )
+            return;
+
+        wxString netname = aArc->GetDisplayNetname();
+
+        if( netname.IsEmpty() )
+            return;
+
+        // Arc length must accommodate the label width.
+        double arcLen = std::abs( radius * angle.AsRadians() );
+
+        if( arcLen < (double) width * (double) netname.size() )
+            return;
+
+        // Tangent at the arc midpoint is perpendicular to the radius there.
+        VECTOR2I  midPt = aArc->GetMid();
+        VECTOR2D  radial = midPt - aArc->GetCenter();
+        EDA_ANGLE textOrientation( VECTOR2D( -radial.y, radial.x ) );
+        textOrientation = -textOrientation;
+        textOrientation.Normalize90();
+
+        double textSize = width;
+        double penWidth = textSize / 12.0;
+
+        m_gal->SetIsStroke( true );
+        m_gal->SetIsFill( false );
+        m_gal->SetStrokeColor( color );
+        m_gal->SetLineWidth( penWidth );
+        m_gal->SetFontBold( false );
+        m_gal->SetFontItalic( false );
+        m_gal->SetFontUnderlined( false );
+        m_gal->SetTextMirrored( false );
+        m_gal->SetGlyphSize( VECTOR2D( textSize * 0.55, textSize * 0.55 ) );
+        m_gal->SetHorizontalJustify( GR_TEXT_H_ALIGN_CENTER );
+        m_gal->SetVerticalJustify( GR_TEXT_V_ALIGN_CENTER );
+
+        m_gal->BitmapText( netname, midPt, textOrientation );
         return;
     }
     else if( IsCopperLayer( aLayer ) || IsSolderMaskLayer( aLayer ) || aLayer == LAYER_LOCKED_ITEM_SHADOW )
