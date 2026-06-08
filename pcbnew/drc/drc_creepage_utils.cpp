@@ -23,6 +23,7 @@
 #include "drc/drc_creepage_utils.h"
 
 #include <geometry/intersection.h>
+#include <geometry/shape_simple.h>
 #include <pcb_track.h>
 #include <thread_pool.h>
 
@@ -2330,6 +2331,32 @@ void CREEPAGE_GRAPH::Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>&
             SHAPE_SEGMENT segment( point, prevPoint );
             prevPoint = point;
             Addshape( segment, aConnectTo, aParent );
+        }
+
+        break;
+    }
+
+    case SH_SIMPLE:
+    {
+        // SHAPE_SIMPLE is the arbitrary-polygon form used for rectangular, trapezoidal and
+        // chamfered pads when they are not axis-aligned (orthogonal rotations collapse to
+        // SH_RECT instead). Decompose its closed outline into segments so the copper edge
+        // is added to the graph, otherwise the pad contributes no creepage anchor and the
+        // path snaps to the pad hole instead of the copper (issue #24543).
+        const SHAPE_SIMPLE&     simple = dynamic_cast<const SHAPE_SIMPLE&>( aShape );
+        const SHAPE_LINE_CHAIN& vertices = simple.Vertices();
+
+        if( vertices.PointCount() < 3 )
+            break;
+
+        VECTOR2I prevPoint = vertices.CLastPoint();
+
+        for( const VECTOR2I& point : vertices.CPoints() )
+        {
+            if( point != prevPoint )
+                Addshape( SHAPE_SEGMENT( prevPoint, point ), aConnectTo, aParent );
+
+            prevPoint = point;
         }
 
         break;
