@@ -2251,11 +2251,10 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                 gateindex++;
             }
 
-            VECTOR2I nextFieldPosition = getLastSymbolFieldPosition( libSymbol.get() );
-
             for( const std::unique_ptr<ETECHNOLOGY>& technology : edevice->technologies )
             {
                 std::unique_ptr<LIB_SYMBOL> derivedSymbol;
+                VECTOR2I nextFieldPosition = getLastSymbolFieldPosition( libSymbol.get() );
 
                 if( !technology->name.IsEmpty() )
                 {
