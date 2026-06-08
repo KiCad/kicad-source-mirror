@@ -633,6 +633,12 @@ void PCB_SELECTION_TOOL::EnterGroup()
 
     m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
+    // Processing the selection event can re-enter the tool and ExitGroup(), which clears
+    // m_enteredGroup. If that happened, don't operate on the now-stale (possibly null) group
+    // or we would hide/overlay a null item and crash (issue #24391).
+    if( m_enteredGroup != aGroup )
+        return;
+
     view()->Hide( m_enteredGroup, true );
     m_enteredGroupOverlay.Add( m_enteredGroup );
     view()->Update( &m_enteredGroupOverlay );

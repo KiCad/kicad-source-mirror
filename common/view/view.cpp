@@ -1653,6 +1653,9 @@ std::unique_ptr<VIEW> VIEW::DataReference() const
 
 void VIEW::SetVisible( VIEW_ITEM* aItem, bool aIsVisible )
 {
+    if( !aItem )
+        return;
+
     VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
 
     if( !viewData )
@@ -1674,6 +1677,9 @@ void VIEW::SetVisible( VIEW_ITEM* aItem, bool aIsVisible )
 
 void VIEW::Hide( VIEW_ITEM* aItem, bool aHide, bool aHideOverlay )
 {
+    if( !aItem )
+        return;
+
     VIEW_ITEM_DATA* viewData = aItem->viewPrivData();
 
     if( !viewData )
