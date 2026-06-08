@@ -1715,11 +1715,15 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                     }
                 }
                 else if( c->constraint.m_Type == HOLE_TO_HOLE_CONSTRAINT
-                        && ( !a->HasDrilledHole() && !b->HasDrilledHole() ) )
+                        && ( !a->HasHole() || !b->HasHole() ) )
                 {
-                    // Report non-drilled-holes as an implicit condition
-                    REPORT( wxString::Format( _( "%s is not a drilled hole; rule ignored." ),
-                                              a->GetItemDescription( this, true ) ) )
+                    // Hole-to-hole only applies between two mechanical holes; this covers both
+                    // round drilled holes and milled (oval) slots, but not a hole paired with
+                    // a non-hole item.
+                    const BOARD_ITEM* nonHole = a->HasHole() ? b : a;
+
+                    REPORT( wxString::Format( _( "%s does not have a hole; rule ignored." ),
+                                              nonHole->GetItemDescription( this, true ) ) )
                 }
                 else if( !c->condition || c->condition->GetExpression().IsEmpty() )
                 {

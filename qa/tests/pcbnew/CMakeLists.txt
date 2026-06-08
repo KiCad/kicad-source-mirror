@@ -164,6 +164,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_silk_rule_area_issue24177.cpp
     drc/test_drc_annular_overlap_issue24340.cpp
     drc/test_drc_hole_clearance_issue24355.cpp
+    drc/test_drc_hole_to_hole_npth_slot_issue24541.cpp
     drc/test_drc_issue24264.cpp
     drc/test_drc_issue23868.cpp
     drc/test_drc_issue24211.cpp
