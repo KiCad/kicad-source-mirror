@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-06 10:06+0000\n"
+"PO-Revision-Date: 2026-06-09 11:20+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -54595,9 +54595,8 @@ msgid "insufficient via fields"
 msgstr ""
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:191
-#, fuzzy
 msgid "insufficient pad fields"
-msgstr "ファイル '%s' を読み込むための権限がありません。"
+msgstr "パッド フィールドが不足しています"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:223
 msgid "insufficient fill fields"
@@ -54614,9 +54613,9 @@ msgid "insufficient component fields"
 msgstr "全てのコンポーネント フィールドを検索 (&p)"
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file '%s'."
-msgstr "ファイル %s を読み込めません"
+msgstr "ファイル '%s' を読み込めませんでした。"
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:159
 #, fuzzy, c-format
@@ -55206,9 +55205,8 @@ msgid "Eagle binary layout is missing a board/libraries node."
 msgstr ""
 
 #: pcbnew/pcb_io/eagle/eagle_bin_parser.cpp:2109
-#, fuzzy
 msgid "File is too small to be an Eagle binary board."
-msgstr "ファイル '%s' はSprint Layout ファイルとしては小さすぎます"
+msgstr "Eagleバイナリ基板としてはファイル サイズが小さすぎます。"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1282
 #, c-format
