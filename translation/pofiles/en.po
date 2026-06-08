@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 00:29+0300\n"
+"POT-Creation-Date: 2026-06-08 23:28+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -14640,10 +14640,10 @@ msgstr "DipTrace import: failed to create symbol for %s (%s): %s"
 
 #, c-format
 msgid ""
-"DipTrace import: loaded %zu components, %zu buses, %zu net labels from "
+"DipTrace import: loaded %zu components, %zu buses, %zu net-port labels from "
 "version %d file with %d sheets."
 msgstr ""
-"DipTrace import: loaded %zu components, %zu buses, %zu net labels from "
+"DipTrace import: loaded %zu components, %zu buses, %zu net-port labels from "
 "version %d file with %d sheets."
 
 msgid "Open canceled by user."
@@ -27163,9 +27163,6 @@ msgstr "Board Finish"
 msgid "Solder Mask/Paste"
 msgstr "Solder Mask/Paste"
 
-msgid "Zone Hatch Offsets"
-msgstr "Zone Hatch Offsets"
-
 msgid "Text & Graphics"
 msgstr "Text & Graphics"
 
@@ -27177,6 +27174,9 @@ msgstr "Constraints"
 
 msgid "Pre-defined Sizes"
 msgstr "Pre-defined Sizes"
+
+msgid "Zones"
+msgstr "Zones"
 
 msgid "Length-tuning Patterns"
 msgstr "Length-tuning Patterns"
@@ -28379,6 +28379,32 @@ msgstr "PDF files"
 msgid "3D Model Output File"
 msgstr "3D Model Output File"
 
+msgid "Please save the board before exporting STEP."
+msgstr "Please save the board before exporting STEP."
+
+msgid ""
+"Board file not found on disk.\n"
+"Save the board before exporting STEP."
+msgstr ""
+"Board file not found on disk.\n"
+"Save the board before exporting STEP."
+
+msgid ""
+"The board directory no longer exists.\n"
+"Save the board to a valid location before exporting STEP."
+msgstr ""
+"The board directory no longer exists.\n"
+"Save the board to a valid location before exporting STEP."
+
+msgid "Failed to reserve a temporary filename for STEP export."
+msgstr "Failed to reserve a temporary filename for STEP export."
+
+msgid "Failed to save the current board state for export."
+msgstr "Failed to save the current board state for export."
+
+msgid "Failed to stage the project file for STEP export."
+msgstr "Failed to stage the project file for STEP export."
+
 msgid "No filename for output file"
 msgstr "No filename for output file"
 
@@ -29380,9 +29406,6 @@ msgstr "Global Delete"
 msgid "Items to Delete"
 msgstr "Items to Delete"
 
-msgid "Zones"
-msgstr "Zones"
-
 msgid "Board outlines"
 msgstr "Board outlines"
 
@@ -29772,6 +29795,9 @@ msgstr "Design rule constraints"
 
 msgid "Predefined track && via dimensions"
 msgstr "Predefined track && via dimensions"
+
+msgid "Zone defaults"
+msgstr "Zone defaults"
 
 msgid "Teardrop defaults"
 msgstr "Teardrop defaults"
@@ -34975,8 +35001,8 @@ msgstr "Items shorting two nets"
 msgid "Items not allowed"
 msgstr "Items not allowed"
 
-msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr "Text (or dimension) on Edge.Cuts layer"
+msgid "Text or graphic on Edge.Cuts layer"
+msgstr "Text or graphic on Edge.Cuts layer"
 
 msgid "Clearance violation"
 msgstr "Clearance violation"
@@ -38779,6 +38805,42 @@ msgstr "Altium PCB Library or Integrated Library"
 msgid "Solidworks PCB files"
 msgstr "Solidworks PCB files"
 
+#, c-format
+msgid "Autotrax import, line %d: %s"
+msgstr "Autotrax import, line %d: %s"
+
+msgid "insufficient track fields"
+msgstr "insufficient track fields"
+
+msgid "insufficient arc fields"
+msgstr "insufficient arc fields"
+
+msgid "insufficient via fields"
+msgstr "insufficient via fields"
+
+msgid "insufficient pad fields"
+msgstr "insufficient pad fields"
+
+msgid "insufficient fill fields"
+msgstr "insufficient fill fields"
+
+msgid "insufficient text fields"
+msgstr "insufficient text fields"
+
+msgid "insufficient component fields"
+msgstr "insufficient component fields"
+
+#, c-format
+msgid "Could not read file '%s'."
+msgstr "Could not read file '%s'."
+
+#, c-format
+msgid "'%s' is not a valid Protel Autotrax file."
+msgstr "'%s' is not a valid Protel Autotrax file."
+
+msgid "Protel Autotrax / Easytrax PCB files"
+msgstr "Protel Autotrax / Easytrax PCB files"
+
 msgid ""
 "The selected file indicates that nets might be out of synchronisation with "
 "the schematic. It is recommended that you carry out an 'Align Nets' "
@@ -39265,6 +39327,25 @@ msgstr "DipTrace: duplicate net metadata for net index %d"
 msgid "DipTrace PCB files"
 msgstr "DipTrace PCB files"
 
+msgid "Short read in Eagle binary file (field out of bounds)."
+msgstr "Short read in Eagle binary file (field out of bounds)."
+
+msgid "Short read in Eagle binary file (truncated block)."
+msgstr "Short read in Eagle binary file (truncated block)."
+
+#, c-format
+msgid "Unknown Eagle binary block id 0x%02x%02x at offset %zu."
+msgstr "Unknown Eagle binary block id 0x%02x%02x at offset %zu."
+
+msgid "Eagle binary file has no drawing section."
+msgstr "Eagle binary file has no drawing section."
+
+msgid "Eagle binary layout is missing a board/libraries node."
+msgstr "Eagle binary layout is missing a board/libraries node."
+
+msgid "File is too small to be an Eagle binary board."
+msgstr "File is too small to be an Eagle binary board."
+
 #, c-format
 msgid "<package> '%s' duplicated in <library> '%s'"
 msgstr "<package> '%s' duplicated in <library> '%s'"
@@ -39309,8 +39390,8 @@ msgstr "Ignoring a rectangle since Eagle layer '%s' (%d) was not mapped"
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 
-msgid "Eagle ver. 6.x XML PCB files"
-msgstr "Eagle ver. 6.x XML PCB files"
+msgid "Eagle PCB files (6.x XML and pre-v6 binary)"
+msgstr "Eagle PCB files (6.x XML and pre-v6 binary)"
 
 msgid "Eagle ver. 6.x XML library files"
 msgstr "Eagle ver. 6.x XML library files"
@@ -39651,6 +39732,9 @@ msgstr ""
 #, c-format
 msgid "File '%s' is not a legacy library."
 msgstr "File '%s' is not a legacy library."
+
+msgid "Eagle ver. 6.x XML PCB files"
+msgstr "Eagle ver. 6.x XML PCB files"
 
 msgid "Legacy footprint library files"
 msgstr "Legacy footprint library files"
@@ -45428,6 +45512,20 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid ""
+#~ "DipTrace import: loaded %zu components, %zu buses, %zu net labels from "
+#~ "version %d file with %d sheets."
+#~ msgstr ""
+#~ "DipTrace import: loaded %zu components, %zu buses, %zu net labels from "
+#~ "version %d file with %d sheets."
+
+#~ msgid "Zone Hatch Offsets"
+#~ msgstr "Zone Hatch Offsets"
+
+#~ msgid "Text (or dimension) on Edge.Cuts layer"
+#~ msgstr "Text (or dimension) on Edge.Cuts layer"
 
 #~ msgid "A5"
 #~ msgstr "A5"
