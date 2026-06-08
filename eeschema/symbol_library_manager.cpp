@@ -458,6 +458,19 @@ SCH_SCREEN* SYMBOL_LIBRARY_MANAGER::GetScreen( const wxString& aSymbolName, cons
 }
 
 
+SYMBOL_BUFFER* SYMBOL_LIBRARY_MANAGER::GetBuffer( const wxString& aSymbolName,
+                                                  const wxString& aLibrary )
+{
+    if( !LibraryExists( aLibrary ) )
+        return nullptr;
+
+    LIB_BUFFER& libBuf = getLibraryBuffer( aLibrary );
+
+    // Buffers live as long as the manager, so the raw pointer dangles only if a caller outlives it.
+    return libBuf.GetBuffer( aSymbolName ).get();
+}
+
+
 bool SYMBOL_LIBRARY_MANAGER::UpdateSymbol( LIB_SYMBOL* aSymbol, const wxString& aLibrary )
 {
     LIB_BUFFER&                    libBuf = getLibraryBuffer( aLibrary );

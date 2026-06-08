@@ -37,9 +37,12 @@
 #include <pgm_base.h>
 #include <sch_painter.h>
 #include <string_utils.h>
+#include <symbol_edit_frame.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <symbol_tree_model_adapter.h>
 #include <symbol_viewer_frame.h>
+#include <dialogs/hotkey_cycle_popup.h>
+#include <widgets/editor_tabs_panel.h>
 #include <tool/library_editor_control.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
@@ -1004,6 +1007,96 @@ int SYMBOL_EDITOR_CONTROL::ShowLibraryTable( const TOOL_EVENT& aEvent )
 }
 
 
+static void showTabSwitcher( SYMBOL_EDIT_FRAME* aFrame, bool aForward )
+{
+    EDITOR_TABS_PANEL* panel = aFrame->GetTabsPanel();
+
+    if( !panel || panel->Model().Entries().size() < 2 )
+        return;
+
+    if( !aFrame->GetHotkeyPopup() )
+        aFrame->CreateHotkeyPopup();
+
+    HOTKEY_CYCLE_POPUP* popup = aFrame->GetHotkeyPopup();
+
+    if( !popup )
+        return;
+
+    wxArrayString labels;
+
+    for( const EDITOR_TABS_MODEL::ENTRY& entry : panel->Model().Entries() )
+        labels.Add( entry.key.AfterFirst( ':' ) );
+
+    const int count = static_cast<int>( labels.GetCount() );
+    const int active = panel->GetActiveTab();
+    const int next = aForward ? ( active + 1 ) % count : ( active - 1 + count ) % count;
+
+    popup->Popup( _( "Switch to Tab" ), labels, next );
+}
+
+
+int SYMBOL_EDITOR_CONTROL::NextTab( const TOOL_EVENT& aEvent )
+{
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+
+    if( editFrame && editFrame->GetTabsPanel() )
+    {
+        showTabSwitcher( editFrame, true );
+        editFrame->GetTabsPanel()->AdvanceTab( true );
+    }
+
+    return 0;
+}
+
+
+int SYMBOL_EDITOR_CONTROL::PrevTab( const TOOL_EVENT& aEvent )
+{
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+
+    if( editFrame && editFrame->GetTabsPanel() )
+    {
+        showTabSwitcher( editFrame, false );
+        editFrame->GetTabsPanel()->AdvanceTab( false );
+    }
+
+    return 0;
+}
+
+
+int SYMBOL_EDITOR_CONTROL::PinTab( const TOOL_EVENT& aEvent )
+{
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+
+    if( editFrame && editFrame->GetTabsPanel() )
+    {
+        EDITOR_TABS_PANEL* panel = editFrame->GetTabsPanel();
+        const int          active = panel->GetActiveTab();
+
+        if( active >= 0 && active < static_cast<int>( panel->Model().Entries().size() ) )
+        {
+            const bool pinned = panel->Model().Entries()[active].pinned;
+
+            // SetPinned mirrors the change into the tab context (which renders and persists the pin)
+            // through the panel's onPinChanged channel, so this one call keeps both in sync.
+            panel->SetPinned( active, !pinned );
+        }
+    }
+
+    return 0;
+}
+
+
+int SYMBOL_EDITOR_CONTROL::CloseTab( const TOOL_EVENT& aEvent )
+{
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+
+    if( editFrame && editFrame->GetTabsPanel() )
+        editFrame->GetTabsPanel()->CloseTab( editFrame->GetTabsPanel()->GetActiveTab() );
+
+    return 0;
+}
+
+
 void SYMBOL_EDITOR_CONTROL::setTransitions()
 {
     Go( &SYMBOL_EDITOR_CONTROL::AddLibrary,            ACTIONS::newLibrary.MakeEvent() );
@@ -1032,6 +1125,11 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::ExportSymbol,          SCH_ACTIONS::exportSymbol.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::FlattenSymbol,         SCH_ACTIONS::flattenSymbol.MakeEvent() );
+
+    Go( &SYMBOL_EDITOR_CONTROL::NextTab,               SCH_ACTIONS::nextSymbolTab.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::PrevTab,               SCH_ACTIONS::prevSymbolTab.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::PinTab,                SCH_ACTIONS::pinSymbolTab.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::CloseTab,              SCH_ACTIONS::closeSymbolTab.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::OpenWithTextEditor,    ACTIONS::openWithTextEditor.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::OpenDirectory,         ACTIONS::openDirectory.MakeEvent() );

@@ -137,6 +137,12 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( showHidePanels );
     viewMenu->AppendSeparator();
 
+    viewMenu->Add( PCB_ACTIONS::nextFootprintTab );
+    viewMenu->Add( PCB_ACTIONS::prevFootprintTab );
+    viewMenu->Add( PCB_ACTIONS::pinFootprintTab );
+    viewMenu->Add( PCB_ACTIONS::closeFootprintTab );
+    viewMenu->AppendSeparator();
+
     viewMenu->Add( ACTIONS::showFootprintBrowser );
     viewMenu->Add( ACTIONS::show3DViewer );
 

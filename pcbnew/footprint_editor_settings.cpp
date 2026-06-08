@@ -145,6 +145,45 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "pcb_display.active_layer_preset",
             &m_ActiveLayerPreset, "" ) );
 
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "tabs.open",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json js = nlohmann::json::array();
+
+                for( const OPEN_TAB& tab : m_OpenTabs )
+                {
+                    js.push_back( nlohmann::json( { { "lib", tab.m_lib.ToUTF8() },
+                                                    { "fp_name", tab.m_fpName.ToUTF8() },
+                                                    { "pinned", tab.m_pinned } } ) );
+                }
+
+                return js;
+            },
+            [&]( const nlohmann::json& aObj )
+            {
+                m_OpenTabs.clear();
+
+                if( !aObj.is_array() )
+                    return;
+
+                for( const nlohmann::json& entry : aObj )
+                {
+                    if( !entry.is_object() || !entry.contains( "lib" ) || !entry.contains( "fp_name" ) )
+                        continue;
+
+                    OPEN_TAB tab;
+                    tab.m_lib = entry.at( "lib" ).get<wxString>();
+                    tab.m_fpName = entry.at( "fp_name" ).get<wxString>();
+                    tab.m_pinned = entry.contains( "pinned" ) && entry.at( "pinned" ).get<bool>();
+
+                    m_OpenTabs.push_back( std::move( tab ) );
+                }
+            },
+            nlohmann::json::array() ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "tabs.active",
+            &m_ActiveTab, "" ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
             "design_settings.default_footprint_text_items",
             [&] () -> nlohmann::json

@@ -23,6 +23,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include <settings/app_settings.h>
 #include <project/sch_project_settings.h>
 
@@ -65,6 +67,16 @@ public:
         bool crossprobe_on_selection;
     };
 
+    /// One persisted open editor tab, restored on the next session.
+    struct OPEN_TAB
+    {
+        wxString lib;
+        wxString name;
+        int      unit = 1;
+        int      bodyStyle = 1;
+        bool     pinned = false;
+    };
+
     SYMBOL_EDITOR_SETTINGS();
 
     virtual ~SYMBOL_EDITOR_SETTINGS() {}
@@ -98,6 +110,10 @@ public:
     PANEL_LIB_FIELDS_TABLE m_LibFieldEditor;
 
     PIN_TABLE m_PinTable;
+
+    std::vector<OPEN_TAB> m_OpenTabs;
+
+    wxString m_ActiveTabKey;
 
 protected:
 

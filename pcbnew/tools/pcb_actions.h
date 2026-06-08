@@ -583,6 +583,13 @@ public:
     static TOOL_ACTION boardReannotate;
     static TOOL_ACTION repairBoard;
     static TOOL_ACTION repairFootprint;
+
+    // Footprint Editor document tabs
+    static TOOL_ACTION nextFootprintTab;
+    static TOOL_ACTION prevFootprintTab;
+    static TOOL_ACTION pinFootprintTab;
+    static TOOL_ACTION closeFootprintTab;
+
     static TOOL_ACTION inspectClearance;
     static TOOL_ACTION inspectConstraints;
     static TOOL_ACTION diffFootprint;

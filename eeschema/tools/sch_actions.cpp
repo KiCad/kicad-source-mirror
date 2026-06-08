@@ -283,6 +283,31 @@ TOOL_ACTION SCH_ACTIONS::flattenSymbol( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Flatten Symbol" ) )
         .Tooltip( _( "Remove inheritance from symbol" ) ) );
 
+// Not DefaultHotkeys because GTK refuses WXK_TAB as a menu accelerator. Ctrl+Tab uses the char hook.
+TOOL_ACTION SCH_ACTIONS::nextSymbolTab( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.nextSymbolTab" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Next Symbol Tab" ) )
+        .Tooltip( _( "Switch to the next open symbol tab" ) ) );
+
+TOOL_ACTION SCH_ACTIONS::prevSymbolTab( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.prevSymbolTab" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Previous Symbol Tab" ) )
+        .Tooltip( _( "Switch to the previous open symbol tab" ) ) );
+
+TOOL_ACTION SCH_ACTIONS::pinSymbolTab( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.pinSymbolTab" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Pin Symbol Tab" ) )
+        .Tooltip( _( "Pin or unpin the active symbol tab" ) ) );
+
+TOOL_ACTION SCH_ACTIONS::closeSymbolTab( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.closeSymbolTab" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Close Symbol Tab" ) )
+        .Tooltip( _( "Close the active symbol tab" ) ) );
+
 TOOL_ACTION SCH_ACTIONS::showLibFieldsTable( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolLibraryControl.showLibraryFieldsTable" )
         .Scope( AS_GLOBAL )

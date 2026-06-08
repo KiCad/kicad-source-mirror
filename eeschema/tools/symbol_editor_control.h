@@ -81,6 +81,11 @@ public:
 
     int ShowLibraryTable( const TOOL_EVENT& aEvent );
 
+    int NextTab( const TOOL_EVENT& aEvent );
+    int PrevTab( const TOOL_EVENT& aEvent );
+    int PinTab( const TOOL_EVENT& aEvent );
+    int CloseTab( const TOOL_EVENT& aEvent );
+
 private:
     ///< Set up handlers for various events.
     void setTransitions() override;

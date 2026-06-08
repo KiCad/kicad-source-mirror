@@ -29,6 +29,9 @@ include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/pcbnew
+    # symbol_edit_frame.h (white-box tested by the tab regression tests) includes
+    # <symbol_tree_pane.h>, which lives under eeschema/widgets.
+    ${CMAKE_SOURCE_DIR}/eeschema/widgets
     ${CMAKE_SOURCE_DIR}/qa/mocks/include
     ${CMAKE_SOURCE_DIR}/qa/qa_utils
     ${CMAKE_SOURCE_DIR}/qa
@@ -156,6 +159,7 @@ set( QA_EESCHEMA_SRCS
     test_legacy_load.cpp
     test_symbol_library_adapter.cpp
     test_symbol_library_manager.cpp
+    test_symbol_editor_tabs.cpp
     test_symbol_import_manager.cpp
     test_stacked_pin_nomenclature.cpp
     test_stacked_pin_conversion.cpp

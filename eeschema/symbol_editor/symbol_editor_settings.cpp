@@ -162,6 +162,59 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
                 { "otherItems", true }
             } ) );
 
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "open_tabs",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret = nlohmann::json::array();
+
+                for( const OPEN_TAB& tab : m_OpenTabs )
+                {
+                    nlohmann::json entry;
+
+                    entry["lib"]        = tab.lib.ToUTF8();
+                    entry["name"]       = tab.name.ToUTF8();
+                    entry["unit"]       = tab.unit;
+                    entry["body_style"] = tab.bodyStyle;
+                    entry["pinned"]     = tab.pinned;
+
+                    ret.push_back( entry );
+                }
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aVal )
+            {
+                m_OpenTabs.clear();
+
+                if( !aVal.is_array() )
+                    return;
+
+                for( const nlohmann::json& entry : aVal )
+                {
+                    if( !entry.is_object() || !entry.contains( "lib" ) || !entry.contains( "name" ) )
+                        continue;
+
+                    OPEN_TAB tab;
+
+                    tab.lib  = wxString::FromUTF8( entry["lib"].get<std::string>() );
+                    tab.name = wxString::FromUTF8( entry["name"].get<std::string>() );
+
+                    if( entry.contains( "unit" ) )
+                        tab.unit = entry["unit"].get<int>();
+
+                    if( entry.contains( "body_style" ) )
+                        tab.bodyStyle = entry["body_style"].get<int>();
+
+                    if( entry.contains( "pinned" ) )
+                        tab.pinned = entry["pinned"].get<bool>();
+
+                    m_OpenTabs.push_back( tab );
+                }
+            },
+            nlohmann::json::array() ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "active_tab", &m_ActiveTabKey, wxEmptyString ) );
+
     registerMigration( 0, 1,
                        [&]() -> bool
                        {

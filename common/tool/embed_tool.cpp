@@ -52,7 +52,8 @@ bool EMBED_TOOL::Init()
 
 void EMBED_TOOL::Reset( RESET_REASON aReason )
 {
-    m_files = getModel<EDA_ITEM>()->GetEmbeddedFiles();
+    EDA_ITEM* model = getModel<EDA_ITEM>();
+    m_files = model ? model->GetEmbeddedFiles() : nullptr;
 }
 
 

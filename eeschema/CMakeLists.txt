@@ -327,7 +327,9 @@ set ( EESCHEMA_LIBEDIT_SRCS
     symbol_editor/lib_symbol_library_manager.cpp
     symbol_editor/menubar_symbol_editor.cpp
     symbol_editor/symbol_edit_frame.cpp
+    symbol_editor/symbol_edit_frame_tabs.cpp
     symbol_editor/symbol_editor.cpp
+    symbol_editor/symbol_editor_tab_context.cpp
     symbol_editor/symbol_editor_import_export.cpp
     symbol_editor/symbol_editor_plotter.cpp
     symbol_editor/symbol_editor_settings.cpp

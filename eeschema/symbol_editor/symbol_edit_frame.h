@@ -31,7 +31,10 @@
 #include <sch_base_frame.h>
 #include <sch_screen.h>
 #include <symbol_tree_pane.h>
+#include <widgets/editor_tab_context.h>
+#include <memory>
 #include <optional>
+#include <vector>
 
 class SCH_EDIT_FRAME;
 class LIB_SYMBOL;
@@ -39,7 +42,10 @@ class LIB_TREE_NODE;
 class LIB_ID;
 class LIB_SYMBOL_LIBRARY_MANAGER;
 class SYMBOL_EDITOR_SETTINGS;
+class SYMBOL_EDITOR_TAB_CONTEXT;
+class EDITOR_TABS_PANEL;
 class EDA_LIST_DIALOG;
+class UNDO_REDO_CONTAINER;
 
 
 #define UNITS_ALL _HKI( "ALL" )
@@ -53,6 +59,9 @@ class EDA_LIST_DIALOG;
  */
 class SYMBOL_EDIT_FRAME : public SCH_BASE_FRAME
 {
+    // Lets the headless tab tests drive the static undo/redo helpers without a full GUI frame.
+    friend struct SYMBOL_EDITOR_TABS_TEST_FIXTURE;
+
 public:
     SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
@@ -95,6 +104,37 @@ public:
     wxString SetCurLib( const wxString& aLibNickname );
 
     LIB_TREE* GetLibTree() const override { return m_treePane->GetLibTree(); }
+
+    /**
+     * The tab strip fronting the shared canvas, or nullptr before it is mounted.
+     */
+    EDITOR_TABS_PANEL* GetTabsPanel() const { return m_tabsPanel; }
+
+    /**
+     * Cycle symbol tabs from the char hook, since GTK cannot register WXK_TAB as an accelerator.
+     */
+    void OnTabCharHook( wxKeyEvent& aEvent );
+
+    /**
+     * Mirror a tab's pinned flag onto its context so it renders, persists and drives visual state.
+     */
+    void SetSymbolTabPinned( int aIdx, bool aPinned );
+
+    /**
+     * Clear the unsaved-edits flag on every tab in a saved library so its dirty indicator clears.
+     */
+    void clearSymbolTabsModifiedForLibrary( const wxString& aLibrary );
+
+    /**
+     * Free a detached context's undo/redo, which the frame's own teardown path never reaches.
+     */
+    static void clearSymbolTabUndoRedo( SYMBOL_EDITOR_TAB_CONTEXT& aContext );
+
+    /**
+     * Free every command in the list and the UR_TRANSIENT-flagged copies it owns, which the shared
+     * deleters miss. aLiveSymbol is the working symbol, guarded against to avoid a double-free.
+     */
+    static void freeTransientUndoCommands( UNDO_REDO_CONTAINER& aList, const LIB_SYMBOL* aLiveSymbol );
 
     /**
      * Return the LIB_ID of the library or symbol selected in the symbol tree.
@@ -520,6 +560,82 @@ private:
      */
     bool replaceLibTableEntry( const wxString& aLibNickname, const wxString& aLibFile );
 
+    /**
+     * Snapshot the active tab's view and selection into its context without deleting the document.
+     */
+    void detachActiveSymbolTab();
+
+    /**
+     * Make aContext the active tab, borrowing its working symbol, undo/redo, view and selection,
+     * without deleting the previously active document.
+     */
+    void activateSymbolTab( SYMBOL_EDITOR_TAB_CONTEXT* aContext );
+
+    /**
+     * Open aName from aLib in a tab, creating it when absent, and return the activated context.
+     */
+    SYMBOL_EDITOR_TAB_CONTEXT* findOrCreateSymbolTab( const wxString& aLib, const wxString& aName,
+                                                      int aUnit, int aBodyStyle, bool aAsPreview,
+                                                      bool* aWasCreated = nullptr );
+
+    /**
+     * Resolve the tab context for a panel tab index, or nullptr. The panel owns tab order, so the
+     * index maps through the panel's key, not into m_tabContexts directly.
+     */
+    SYMBOL_EDITOR_TAB_CONTEXT* symbolTabContextForIndex( int aIdx ) const;
+
+    /**
+     * Resolve the tab context for a tab key, or nullptr.
+     */
+    SYMBOL_EDITOR_TAB_CONTEXT* symbolTabContextForKey( const wxString& aKey ) const;
+
+    /**
+     * Drop the inactive context for aKey from m_tabContexts, freeing its undo/redo. Used when the
+     * panel evicts a preview tab so its now-orphaned context is not left behind to be persisted.
+     */
+    void dropSymbolTabContext( const wxString& aKey );
+
+    /**
+     * Prompt for unsaved changes on the tab and drop its context. Returns false if the user cancels.
+     */
+    bool promptAndCloseSymbolTab( int aIdx );
+
+    /**
+     * Close every tab without prompting and return the frame to the empty state. Used by the paths
+     * that leave the tab model. The caller handles any unsaved-change prompting.
+     */
+    void closeAllSymbolTabsSilently();
+
+    /**
+     * Capture the current view zoom/center for the active tab's snapshot.
+     */
+    EDITOR_TAB_CONTEXT::VIEW_SNAPSHOT captureSymbolViewSnapshot() const;
+
+    /**
+     * Restore a previously captured view zoom/center.
+     */
+    void restoreSymbolViewSnapshot( const EDITOR_TAB_CONTEXT::VIEW_SNAPSHOT& aSnapshot );
+
+    /**
+     * Capture the KIIDs of the current selection for the active tab's snapshot.
+     */
+    std::vector<KIID> captureSymbolSelectionKiids() const;
+
+    /**
+     * Reselect the items named by aKiids after a reload rebuilt the view.
+     */
+    void restoreSymbolSelectionKiids( const std::vector<KIID>& aKiids );
+
+    /**
+     * Recreate tabs from the persisted open-tab list once the libraries have loaded.
+     */
+    void restoreSymbolTabsFromSettings();
+
+    /**
+     * Write the current tab set into the editor settings for the next session.
+     */
+    void storeSymbolTabsToSettings();
+
     DECLARE_EVENT_TABLE()
 
 public:
@@ -558,6 +674,20 @@ private:
     SYMBOL_TREE_PANE*           m_treePane;      // symbol search tree widget
     LIB_SYMBOL_LIBRARY_MANAGER* m_libMgr;        // manager taking care of temporary modifications
     SYMBOL_EDITOR_SETTINGS*     m_settings;      // Handle to the settings
+
+    // Tabbed editing. One context per open symbol, owning a working symbol/screen copy plus its
+    // per-tab undo/redo and view/selection snapshot. The active tab lends its objects to the frame
+    // and reclaims them on detach. m_activeTab is the context currently bound to the frame.
+    std::vector<std::unique_ptr<SYMBOL_EDITOR_TAB_CONTEXT>> m_tabContexts;
+    SYMBOL_EDITOR_TAB_CONTEXT*                              m_activeTab = nullptr;
+    EDITOR_TABS_PANEL*                                      m_tabsPanel = nullptr;
+
+    // Guards against re-entering tab activation while a tab is being created or restored, since
+    // AddTab() activates synchronously.
+    bool m_loadingSymbolTab = false;
+
+    // While true, promptAndCloseSymbolTab() skips the unsaved-changes dialog.
+    bool m_silentSymbolTabClose = false;
 
     LIB_ID                      m_centerItemOnIdle;
 

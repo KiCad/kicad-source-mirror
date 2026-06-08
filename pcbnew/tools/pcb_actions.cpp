@@ -2276,6 +2276,32 @@ TOOL_ACTION PCB_ACTIONS::repairFootprint( TOOL_ACTION_ARGS()
         .Tooltip( _( "Run various diagnostics and attempt to repair footprint" ) )
         .Icon( BITMAPS::rescue ) );
 
+// These carry no DefaultHotkey because GTK refuses WXK_TAB as a menu accelerator. Ctrl+Tab is
+// routed through a frame char-hook handler instead.
+TOOL_ACTION PCB_ACTIONS::nextFootprintTab( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ModuleEditor.nextFootprintTab" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Next Footprint Tab" ) )
+        .Tooltip( _( "Switch to the next open footprint tab" ) ) );
+
+TOOL_ACTION PCB_ACTIONS::prevFootprintTab( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ModuleEditor.prevFootprintTab" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Previous Footprint Tab" ) )
+        .Tooltip( _( "Switch to the previous open footprint tab" ) ) );
+
+TOOL_ACTION PCB_ACTIONS::pinFootprintTab( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ModuleEditor.pinFootprintTab" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Pin Footprint Tab" ) )
+        .Tooltip( _( "Pin or unpin the active footprint tab" ) ) );
+
+TOOL_ACTION PCB_ACTIONS::closeFootprintTab( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ModuleEditor.closeFootprintTab" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Close Footprint Tab" ) )
+        .Tooltip( _( "Close the active footprint tab" ) ) );
+
 
 // PLACEMENT_TOOL
 //

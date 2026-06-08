@@ -88,6 +88,19 @@ public:
 
     wxString m_ActiveLayerPreset;
 
+    /// One open tab persisted across sessions.
+    struct OPEN_TAB
+    {
+        wxString m_lib;
+        wxString m_fpName;
+        bool     m_pinned = false;
+    };
+
+    std::vector<OPEN_TAB> m_OpenTabs;
+
+    /// Tab key ("lib:fpName") of the tab that was active when the editor last closed.
+    wxString m_ActiveTab;
+
 protected:
 
     virtual std::string getLegacyFrameName() const override { return "ModEditFrame"; }

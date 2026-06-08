@@ -25,9 +25,11 @@
 
 #include "symbol_tree_synchronizing_adapter.h"
 
+#include <wx/log.h>
 #include <wx/settings.h>
 
 #include <core/throttle.h>
+#include <kiplatform/ui.h>
 #include <pgm_base.h>
 #include <project/project_file.h>
 #include <lib_symbol_library_manager.h>
@@ -76,10 +78,22 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
 {
     THROTTLE progressThrottle( std::chrono::milliseconds( 120 ) );
 
+    wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "SymbolSyncAdapter::Sync enter (forceRefresh='%s')" ),
+                aForceRefresh );
+
+    // Cancel any pending GtkTreeView scroll so it cannot touch rows freed by the rebuild below.
+    KIPLATFORM::UI::CancelPendingScroll( m_widget );
+
+    // Detach the GtkTreeView from the model before freeing any node so no deferred tick can
+    // validate stale rows.
+    ResetTreeView resetGuard( *this );
+
     m_lastSyncHash = m_libMgr->GetHash();
     int i = 0, max = GetLibrariesCount();
 
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
+
+    wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "SymbolSyncAdapter::Sync freeing/updating nodes" ) );
 
     // Process already stored libraries
     for( auto it = m_tree.m_Children.begin(); it != m_tree.m_Children.end(); )
@@ -149,6 +163,8 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
     }
 
     m_tree.AssignIntrinsicRanks( m_shownColumns );
+
+    wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "SymbolSyncAdapter::Sync exit" ) );
 }
 
 

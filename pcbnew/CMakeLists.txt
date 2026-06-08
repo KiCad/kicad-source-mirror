@@ -400,6 +400,7 @@ set( PCBNEW_CLASS_SRCS
     footprint_wizard.cpp
     footprint_editor_utils.cpp
     footprint_editor_settings.cpp
+    footprint_editor_tab_context.cpp
     fp_tree_synchronizing_adapter.cpp
     footprint_chooser_frame.cpp
     footprint_edit_frame.cpp

@@ -33,6 +33,9 @@ class FOOTPRINT_TREE_PANE;
 class SYMBOL_LIBRARY_MANAGER;
 class FOOTPRINT_EDITOR_SETTINGS;
 class EDA_LIST_DIALOG;
+class EDITOR_TABS_PANEL;
+class FOOTPRINT_EDITOR_TAB_CONTEXT;
+class UNDO_REDO_CONTAINER;
 
 #ifdef KICAD_IPC_API
 class API_HANDLER_FOOTPRINT;
@@ -307,6 +310,26 @@ public:
 
     void KiwayMailIn( KIWAY_MAIL_EVENT& mail ) override;
 
+    /**
+     * Return the tabbed-document strip, or nullptr if the tabs UI is not mounted.
+     */
+    EDITOR_TABS_PANEL* GetTabsPanel() const { return m_tabsPanel; }
+
+    /**
+     * Advance the active tab forward or backward in MRU order.
+     */
+    void AdvanceFootprintTab( bool aForward );
+
+    /**
+     * Toggle the pinned state of the active tab.
+     */
+    void PinActiveFootprintTab();
+
+    /**
+     * Request closing the active tab, prompting to save if it is modified.
+     */
+    void CloseActiveFootprintTab();
+
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -343,11 +366,90 @@ protected:
 
     void centerItemIdleHandler( wxIdleEvent& aEvent );
 
+    /**
+     * Cycle footprint tabs from the CHAR_HOOK stream, since GTK cannot register WXK_TAB as a menu
+     * accelerator.
+     *
+     * Yields to the appearance panel's preset cycle when that panel holds focus.
+     */
+    void OnTabCharHook( wxKeyEvent& aEvent );
+
 protected:
     FOOTPRINT_EDITOR_SETTINGS*  m_editorSettings;
 
 private:
     friend struct PCB::IFACE;
+
+    /**
+     * Find or create the tab for aLibId over its own fp-holder board and make it the active tab.
+     */
+    FOOTPRINT_EDITOR_TAB_CONTEXT* findOrCreateFootprintTab( const LIB_ID& aLibId, bool aAsPreview );
+
+    /**
+     * Make aCtx the active tab, borrowing its board without deleting the outgoing one.
+     */
+    void activateFootprintTab( FOOTPRINT_EDITOR_TAB_CONTEXT* aCtx );
+
+    /**
+     * Install aBoard as the active document non-destructively, wiring the tool environment and
+     * resetting the tools before the caller frees any outgoing context.
+     *
+     * aCtx is null for a frame-owned empty board. Never calls the base SetBoard or frees a board
+     * m_pcb references.
+     */
+    void installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEXT* aCtx, BOARD* aBoard );
+
+    /**
+     * Snapshot the active tab's view/selection, fold the dirty state back into it, and clear
+     * m_activeTab.
+     *
+     * The board borrow stays until the next borrowBoardNonDestructive swaps it.
+     */
+    void detachActiveFootprintTab();
+
+    /**
+     * Swap the frame's borrowed board pointer to aBoard without deleting the previous board, which
+     * a tab context owns on a tab switch.
+     */
+    void borrowBoardNonDestructive( BOARD* aBoard );
+
+    /**
+     * Prompt to save if needed, then drop the tab context at aIdx. Returns false to veto.
+     */
+    bool promptAndCloseFootprintTab( int aIdx );
+
+    /**
+     * Free the transient board items a detached context's lists own before it is destroyed, which
+     * the bare container destructor leaks.
+     */
+    void freeFootprintTabUndoRedo( FOOTPRINT_EDITOR_TAB_CONTEXT& aCtx );
+
+    /**
+     * Free both the transient board items and the command wrappers in the given lists.
+     *
+     * The frame's ClearUndoRedoList() frees only the wrappers, so use this to discard a tab's
+     * history.
+     */
+    void freeUndoRedoCommandsWithItems( UNDO_REDO_CONTAINER& aUndo, UNDO_REDO_CONTAINER& aRedo );
+
+    /**
+     * Re-query and re-render the tab labels from the active context's modified state.
+     */
+    void refreshFootprintTabState();
+
+    /**
+     * Install aReplacement as the active document non-destructively, then drop every tab context
+     * and free the boards they own.
+     *
+     * Installing the successor before freeing keeps tools off a freed board during a full clear.
+     * The frame owns aReplacement afterwards like the bootstrap board.
+     */
+    void detachTabsForFullClear( BOARD* aReplacement );
+
+    /**
+     * True when a tab context owns the frame's borrowed board, so the frame must not delete it.
+     */
+    bool activeBoardOwnedByTab() const;
 
     FOOTPRINT_TREE_PANE*        m_treePane;
     LIB_ID                      m_centerItemOnIdle;
@@ -359,6 +461,14 @@ private:
     std::unique_ptr<FOOTPRINT>  m_originalFootprintCopy;
     wxString                    m_footprintNameWhenLoaded;
     std::map<KIID, KIID>        m_boardFootprintUuids;
+
+    EDITOR_TABS_PANEL*          m_tabsPanel;
+    FOOTPRINT_EDITOR_TAB_CONTEXT* m_activeTab;
+    std::vector<std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>> m_tabContexts;
+
+    /// Set while a full clear tears the tab strip down so the panel's close-driven re-activation does
+    /// not re-borrow a tab-owned board about to be freed.
+    bool                        m_suppressTabActivation;
 
 #ifdef KICAD_IPC_API
     std::unique_ptr<API_HANDLER_FOOTPRINT> m_apiHandler;

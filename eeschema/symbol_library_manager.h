@@ -277,6 +277,13 @@ public:
     SCH_SCREEN* GetScreen( const wxString& aSymbolName, const wxString& aLibrary );
 
     /**
+     * Return the working buffer holding the symbol/screen pair, or nullptr when none exists.
+     *
+     * The manager retains ownership.
+     */
+    SYMBOL_BUFFER* GetBuffer( const wxString& aSymbolName, const wxString& aLibrary );
+
+    /**
      * Return true if symbol with a specific alias exists in library (either original one or
      * buffered).
      */

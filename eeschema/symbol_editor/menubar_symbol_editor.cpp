@@ -141,6 +141,12 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( SCH_ACTIONS::showHiddenFields,  ACTION_MENU::CHECK );
     viewMenu->Add( SCH_ACTIONS::togglePinAltIcons, ACTION_MENU::CHECK );
 
+    viewMenu->AppendSeparator();
+    viewMenu->Add( SCH_ACTIONS::nextSymbolTab );
+    viewMenu->Add( SCH_ACTIONS::prevSymbolTab );
+    viewMenu->Add( SCH_ACTIONS::pinSymbolTab );
+    viewMenu->Add( SCH_ACTIONS::closeSymbolTab );
+
 
     //-- Place menu -----------------------------------------------
     //

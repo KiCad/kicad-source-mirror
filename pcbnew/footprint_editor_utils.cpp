@@ -43,6 +43,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/footprint_editor_control.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/editor_tabs_panel.h>
 #include <widgets/lib_tree.h>
 #include <pcb_layer_box_selector.h>
 #include <pcb_dimension.h>
@@ -58,16 +59,70 @@ void FOOTPRINT_EDIT_FRAME::LoadFootprintFromLibrary( LIB_ID aFPID )
 {
     bool is_last_fp_from_brd = IsCurrentFPFromBoard();
 
+    // The legacy path wipes the shared board; the tab path leaves other tabs untouched.
+    const bool useTabs = ( m_tabsPanel != nullptr ) && aFPID.IsValid();
+
+    if( useTabs )
+    {
+        const wxString key = aFPID.GetLibNickname() + wxT( ":" ) + aFPID.GetLibItemName();
+
+        // Reactivate rather than reload, which would discard in-tab edits.
+        if( int existing = m_tabsPanel->FindTab( key ); existing >= 0 )
+        {
+            m_tabsPanel->SelectTab( existing );
+
+            m_treePane->GetLibTree()->ExpandLibId( aFPID );
+
+            m_centerItemOnIdle = aFPID;
+            Bind( wxEVT_IDLE, &FOOTPRINT_EDIT_FRAME::centerItemIdleHandler, this );
+
+            m_treePane->GetLibTree()->RefreshLibTree();        // update highlighting
+
+            return;
+        }
+    }
+
     FOOTPRINT* footprint = LoadFootprint( aFPID );
 
     if( !footprint )
         return;
 
-    if( !Clear_Pcb( true ) )
-        return;
+    if( useTabs )
+    {
+        // A board-sourced or new footprint occupies the frame-owned board with no backing tab.
+        // Switching to the library footprint's tab frees that board, so prompt to save those edits
+        // first, the same way the legacy single-board path does. A tab-owned board survives the
+        // switch untouched and needs no prompt.
+        if( !activeBoardOwnedByTab() && IsContentModified() )
+        {
+            if( !HandleUnsavedChanges(
+                        this, _( "The current footprint has been modified.  Save changes?" ),
+                        [&]() -> bool
+                        {
+                            return SaveFootprint( GetBoard()->Footprints().front() );
+                        } ) )
+            {
+                // AddFootprintToBoard would have taken ownership; on cancel we still own the clone.
+                delete footprint;
+                return;
+            }
+        }
 
-    GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-    AddFootprintToBoard( footprint );
+        GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
+        AddFootprintToBoard( footprint );
+    }
+    else
+    {
+        if( !Clear_Pcb( true ) )
+        {
+            // AddFootprintToBoard would have taken ownership; on cancel we still own the clone.
+            delete footprint;
+            return;
+        }
+
+        GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
+        AddFootprintToBoard( footprint );
+    }
 
     footprint->ClearFlags();
 
@@ -108,6 +163,47 @@ void FOOTPRINT_EDIT_FRAME::centerItemIdleHandler( wxIdleEvent& aEvent )
 {
     m_treePane->GetLibTree()->CenterLibId( m_centerItemOnIdle );
     Unbind( wxEVT_IDLE, &FOOTPRINT_EDIT_FRAME::centerItemIdleHandler, this );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::OnTabCharHook( wxKeyEvent& aEvent )
+{
+    const bool isTab = aEvent.GetKeyCode() == WXK_TAB;
+    const bool ctrlOnly = aEvent.ControlDown() && !aEvent.AltDown() && !aEvent.MetaDown();
+
+    // Ctrl+W arrives as 'W' or the control char depending on platform, so accept both.
+    const int  keyCode = aEvent.GetKeyCode();
+    const bool isCtrlW = ctrlOnly && !aEvent.ShiftDown()
+                         && ( keyCode == 'W' || keyCode == ( 'W' - '@' ) );
+
+    if( isCtrlW && m_tabsPanel && m_tabsPanel->Model().Entries().size() >= 1 )
+    {
+        CloseActiveFootprintTab();
+        return;
+    }
+
+    if( !isTab || !ctrlOnly || !m_tabsPanel )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    // The appearance panel owns Ctrl+Tab for its layer-preset cycle while focused, so defer to it.
+    if( APPEARANCE_CONTROLS* appearance = GetAppearancePanel() )
+    {
+        for( wxWindow* focus = wxWindow::FindFocus(); focus; focus = focus->GetParent() )
+        {
+            if( focus == appearance )
+            {
+                aEvent.Skip();
+                return;
+            }
+        }
+    }
+
+    AdvanceFootprintTab( !aEvent.ShiftDown() );
+
+    // Do not Skip, so the GTK default Tab focus-traversal does not also run.
 }
 
 

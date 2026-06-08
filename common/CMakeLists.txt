@@ -602,6 +602,8 @@ set( COMMON_WIDGET_SRCS
     widgets/grid_checkbox.cpp
     widgets/grid_color_swatch_helpers.cpp
     widgets/wx_infobar.cpp
+    widgets/editor_tabs_panel.cpp
+    widgets/kicad_tab_art.cpp
     widgets/layer_box_selector.cpp
     widgets/layer_presentation.cpp
     widgets/lib_tree.cpp

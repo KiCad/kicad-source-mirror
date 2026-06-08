@@ -251,7 +251,6 @@ bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aSymbolName, i
     // Enable synchronized pin edit mode for symbols with interchangeable units
     m_SyncPinEdit = GetCurSymbol()->IsMultiUnit() && !GetCurSymbol()->UnitsLocked();
 
-    ClearUndoRedoList();
     m_toolManager->RunAction( ACTIONS::zoomFitScreen );
 
     RebuildSymbolUnitAndBodyStyleLists();
@@ -295,12 +294,12 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxStr
     m_unit = aUnit > 0 ? aUnit : 1;
     m_bodyStyle = aBodyStyle > 0 ? aBodyStyle : 1;
 
-    // The buffered screen for the symbol
-    SCH_SCREEN* symbol_screen = m_libMgr->GetScreen( lib_symbol->GetName(), aLibrary );
-
-    SetScreen( symbol_screen );
-    SetCurSymbol( new LIB_SYMBOL( *lib_symbol ), true );
-    SetCurLib( aLibrary );
+    // Open as a preview tab that the next library-open reuses until the symbol is edited.
+    bool                       wasCreated = false;
+    SYMBOL_EDITOR_TAB_CONTEXT* ctx = findOrCreateSymbolTab( aLibrary, lib_symbol->GetName(),
+                                                            m_unit, m_bodyStyle, true,
+                                                            &wasCreated );
+    wxCHECK( ctx, false );
 
     if( rebuildMenuAndToolbar )
     {
@@ -312,7 +311,9 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxStr
     UpdateTitle();
     RebuildSymbolUnitAndBodyStyleLists();
 
-    ClearUndoRedoList();
+    // Only a freshly-created tab gets a clean undo history; re-focusing preserves the live stack.
+    if( wasCreated )
+        ClearUndoRedoList();
 
     if( !IsSymbolFromSchematic() )
     {
@@ -320,10 +321,7 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxStr
         setSymWatcher( &libId );
     }
 
-    // Let tools add things to the view if necessary
-    if( m_toolManager )
-        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen );
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
 
     // Display the document information based on the entry selected just in
@@ -1601,6 +1599,8 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     if( !aNewFile )
     {
         m_libMgr->ClearLibraryModified( aLibrary );
+
+        clearSymbolTabsModifiedForLibrary( aLibrary );
 
         // Update the library modification time so that we don't reload based on the watcher
         if( aLibrary == getTargetLib() )

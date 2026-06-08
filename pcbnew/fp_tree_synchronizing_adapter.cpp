@@ -24,6 +24,7 @@
  */
 
 #include <pgm_base.h>
+#include <kiplatform/ui.h>
 #include <project/project_file.h>
 #include <fp_tree_synchronizing_adapter.h>
 #include <footprint_edit_frame.h>
@@ -39,6 +40,7 @@
 
 #include <map>
 
+#include <wx/log.h>
 #include <wx/settings.h>
 
 
@@ -74,6 +76,18 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::IsContainer( const wxDataViewItem& aItem ) c
 void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FOOTPRINT_LIBRARY_ADAPTER* aLibs )
 {
     m_libs = aLibs;
+
+    wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "FpSyncAdapter::Sync enter" ) );
+
+    // The work below frees nodes while the caller yields the event loop, so a GtkTreeView scroll
+    // queued earlier would point at freed rows and crash the next frame-clock tick. Drop it first.
+    KIPLATFORM::UI::CancelPendingScroll( m_widget );
+
+    // Detach the GtkTreeView from the model before freeing any node so the frame-clock tick during
+    // the caller's yield has no stale rows to validate. The RAII guard re-attaches on all paths.
+    ResetTreeView resetGuard( *this );
+
+    wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "FpSyncAdapter::Sync freeing/updating nodes" ) );
 
     // Process already stored libraries
     for( auto it = m_tree.m_Children.begin(); it != m_tree.m_Children.end(); )
@@ -144,6 +158,8 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::Sync( FOOTPRINT_LIBRARY_ADAPTER* aLibs )
 
     if( m_libMap.size() > count )
         m_tree.AssignIntrinsicRanks( m_shownColumns );
+
+    wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "FpSyncAdapter::Sync exit" ) );
 }
 
 
