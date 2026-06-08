@@ -985,42 +985,49 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
     if( fpEditor )
         footprint = fpEditor->GetBoard()->GetFirstFootprint();
 
-    auto handleGraphicSeg =
-            [&]( EDA_ITEM* aItem )
-            {
-                if( aItem->Type() != PCB_SHAPE_T )
-                    return false;
+    auto handleGraphicSeg = [&]( EDA_ITEM* aItem, NETINFO_ITEM* aNet )
+    {
+        if( aItem->Type() != PCB_SHAPE_T )
+            return false;
 
-                PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( aItem );
+        PCB_SHAPE* graphic = static_cast<PCB_SHAPE*>( aItem );
 
-                if( graphic->GetShape() == SHAPE_T::SEGMENT )
-                {
-                    PCB_TRACK* track = new PCB_TRACK( parent );
+        if( graphic->GetShape() == SHAPE_T::SEGMENT )
+        {
+            PCB_TRACK* track = new PCB_TRACK( parent );
 
-                    track->SetLayer( targetLayer );
-                    track->SetStart( graphic->GetStart() );
-                    track->SetEnd( graphic->GetEnd() );
-                    track->SetWidth( graphic->GetWidth() );
-                    commit.Add( track );
+            track->SetLayer( targetLayer );
+            track->SetStart( graphic->GetStart() );
+            track->SetEnd( graphic->GetEnd() );
+            track->SetWidth( graphic->GetWidth() );
 
-                    return true;
-                }
-                else if( graphic->GetShape() == SHAPE_T::ARC )
-                {
-                    PCB_ARC* arc = new PCB_ARC( parent );
+            if( aNet )
+                track->SetNet( aNet );
 
-                    arc->SetLayer( targetLayer );
-                    arc->SetStart( graphic->GetStart() );
-                    arc->SetEnd( graphic->GetEnd() );
-                    arc->SetMid( graphic->GetArcMid() );
-                    arc->SetWidth( graphic->GetWidth() );
-                    commit.Add( arc );
+            commit.Add( track );
 
-                    return true;
-                }
+            return true;
+        }
+        else if( graphic->GetShape() == SHAPE_T::ARC )
+        {
+            PCB_ARC* arc = new PCB_ARC( parent );
 
-                return false;
-            };
+            arc->SetLayer( targetLayer );
+            arc->SetStart( graphic->GetStart() );
+            arc->SetEnd( graphic->GetEnd() );
+            arc->SetMid( graphic->GetArcMid() );
+            arc->SetWidth( graphic->GetWidth() );
+
+            if( aNet )
+                arc->SetNet( aNet );
+
+            commit.Add( arc );
+
+            return true;
+        }
+
+        return false;
+    };
 
     auto addGraphicChain =
             [&]( const SHAPE_LINE_CHAIN& aChain, std::optional<int> aWidth )
@@ -1067,83 +1074,86 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                 }
             };
 
-    auto addTrackChain =
-            [&]( const SHAPE_LINE_CHAIN& aChain, std::optional<int> aWidth )
-            {
-                for( size_t si = 0; si < aChain.GetSegmentCount(); ++si )
-                {
-                    const SEG seg = aChain.GetSegment( si );
+    auto addTrackChain = [&]( const SHAPE_LINE_CHAIN& aChain, std::optional<int> aWidth, NETINFO_ITEM* aNet )
+    {
+        for( size_t si = 0; si < aChain.GetSegmentCount(); ++si )
+        {
+            const SEG seg = aChain.GetSegment( si );
 
-                    if( seg.Length() == 0 )
-                        continue;
+            if( seg.Length() == 0 )
+                continue;
 
-                    if( aChain.IsArcSegment( si ) )
-                        continue;
+            if( aChain.IsArcSegment( si ) )
+                continue;
 
-                    PCB_TRACK* track = new PCB_TRACK( parent );
+            PCB_TRACK* track = new PCB_TRACK( parent );
 
-                    track->SetLayer( targetLayer );
-                    track->SetStart( seg.A );
-                    track->SetEnd( seg.B );
+            track->SetLayer( targetLayer );
+            track->SetStart( seg.A );
+            track->SetEnd( seg.B );
 
-                    if( aWidth && *aWidth > 0 )
-                        track->SetWidth( *aWidth );
+            if( aWidth && *aWidth > 0 )
+                track->SetWidth( *aWidth );
 
-                    commit.Add( track );
-                }
+            if( aNet )
+                track->SetNet( aNet );
 
-                for( size_t ai = 0; ai < aChain.ArcCount(); ++ai )
-                {
-                    const SHAPE_ARC& arc = aChain.Arc( ai );
+            commit.Add( track );
+        }
 
-                    if( arc.GetP0() == arc.GetP1() )
-                        continue;
+        for( size_t ai = 0; ai < aChain.ArcCount(); ++ai )
+        {
+            const SHAPE_ARC& arc = aChain.Arc( ai );
 
-                    PCB_ARC* trackArc = new PCB_ARC( parent );
+            if( arc.GetP0() == arc.GetP1() )
+                continue;
 
-                    trackArc->SetLayer( targetLayer );
-                    trackArc->SetStart( arc.GetP0() );
-                    trackArc->SetEnd( arc.GetP1() );
-                    trackArc->SetMid( arc.GetArcMid() );
+            PCB_ARC* trackArc = new PCB_ARC( parent );
 
-                    if( aWidth && *aWidth > 0 )
-                        trackArc->SetWidth( *aWidth );
+            trackArc->SetLayer( targetLayer );
+            trackArc->SetStart( arc.GetP0() );
+            trackArc->SetEnd( arc.GetP1() );
+            trackArc->SetMid( arc.GetArcMid() );
 
-                    commit.Add( trackArc );
-                }
-            };
+            if( aWidth && *aWidth > 0 )
+                trackArc->SetWidth( *aWidth );
 
-    auto processChain =
-            [&]( const SHAPE_LINE_CHAIN& aChain, std::optional<int> aWidth )
-            {
-                if( aChain.GetSegmentCount() == 0 && aChain.ArcCount() == 0 )
-                    return;
+            if( aNet )
+                trackArc->SetNet( aNet );
 
-                if( aEvent.IsAction( &PCB_ACTIONS::convertToLines ) )
-                {
-                    addGraphicChain( aChain, aWidth );
-                }
-                else if( fpEditor )
-                {
-                    addGraphicChain( aChain, aWidth );
-                }
-                else
-                {
-                    addTrackChain( aChain, aWidth );
-                }
-            };
+            commit.Add( trackArc );
+        }
+    };
 
-    auto processPolySet =
-            [&]( const SHAPE_POLY_SET& aPoly, std::optional<int> aWidth )
-            {
-                for( int oi = 0; oi < aPoly.OutlineCount(); ++oi )
-                {
-                    processChain( aPoly.COutline( oi ), aWidth );
+    auto processChain = [&]( const SHAPE_LINE_CHAIN& aChain, std::optional<int> aWidth, NETINFO_ITEM* aNet )
+    {
+        if( aChain.GetSegmentCount() == 0 && aChain.ArcCount() == 0 )
+            return;
 
-                    for( int hi = 0; hi < aPoly.HoleCount( oi ); ++hi )
-                        processChain( aPoly.CHole( oi, hi ), aWidth );
-                }
-            };
+        if( aEvent.IsAction( &PCB_ACTIONS::convertToLines ) )
+        {
+            addGraphicChain( aChain, aWidth );
+        }
+        else if( fpEditor )
+        {
+            addGraphicChain( aChain, aWidth );
+        }
+        else
+        {
+            addTrackChain( aChain, aWidth, aNet );
+        }
+    };
+
+    auto processPolySet = [&]( const SHAPE_POLY_SET& aPoly, std::optional<int> aWidth, NETINFO_ITEM* aNet )
+    {
+        for( int oi = 0; oi < aPoly.OutlineCount(); ++oi )
+        {
+            processChain( aPoly.COutline( oi ), aWidth, aNet );
+
+            for( int hi = 0; hi < aPoly.HoleCount( oi ); ++hi )
+                processChain( aPoly.CHole( oi, hi ), aWidth, aNet );
+        }
+    };
 
     if( aEvent.IsAction( &PCB_ACTIONS::convertToTracks ) )
     {
@@ -1168,7 +1178,10 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
         if( !item->IsBOARD_ITEM() )
             continue;
 
-        if( handleGraphicSeg( item ) )
+        BOARD_CONNECTED_ITEM* connected = dynamic_cast<BOARD_CONNECTED_ITEM*>( item );
+        NETINFO_ITEM*         sourceNet = connected ? connected->GetNet() : nullptr;
+
+        if( handleGraphicSeg( item, sourceNet ) )
             continue;
 
         BOARD_ITEM& boardItem = static_cast<BOARD_ITEM&>( *item );
@@ -1187,13 +1200,11 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                 SHAPE_POLY_SET poly;
 
                 rrect.TransformToPolygon( poly, graphic->GetMaxError() );
-                processPolySet( poly, itemWidth );
+                processPolySet( poly, itemWidth, sourceNet );
                 break;
             }
 
-            case SHAPE_T::POLY:
-                processPolySet( graphic->GetPolyShape(), itemWidth );
-                break;
+            case SHAPE_T::POLY: processPolySet( graphic->GetPolyShape(), itemWidth, sourceNet ); break;
 
             case SHAPE_T::ELLIPSE:
             case SHAPE_T::ELLIPSE_ARC:
@@ -1209,7 +1220,7 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
                 SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( graphic->GetMaxError() );
                 SHAPE_POLY_SET   poly;
                 poly.AddOutline( chain );
-                processPolySet( poly, itemWidth );
+                processPolySet( poly, itemWidth, sourceNet );
                 break;
             }
 
@@ -1221,7 +1232,7 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
         else if( boardItem.Type() == PCB_ZONE_T )
         {
             ZONE* zone = static_cast<ZONE*>( item );
-            processPolySet( *zone->Outline(), itemWidth );
+            processPolySet( *zone->Outline(), itemWidth, sourceNet );
         }
         else
         {
@@ -1322,6 +1333,7 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
 
         arc->SetLayer( layer );
         arc->SetWidth( line->GetWidth() );
+        arc->SetNet( line->GetNet() );
         arc->SetStart( start );
         arc->SetMid( mid );
         arc->SetEnd( end );
