@@ -214,14 +214,14 @@ void LISTBOX_TRICKS::OnListBoxRDown( wxMouseEvent& aEvent )
     menu.Bind( wxEVT_COMMAND_MENU_SELECTED,
                [&]( wxCommandEvent& aCmd )
                {
-                   switch( aEvent.GetId() )
+                   switch( aCmd.GetId() )
                    {
                    case ID_COPY:      listBoxCopy();              break;
                    case ID_PASTE:     listBoxPaste();             break;
                    case ID_CUT:       listBoxCut();               break;
                    case ID_DELETE:    listBoxDeleteSelected();    break;
                    case ID_DUPLICATE: listBoxDuplicateSelected(); break;
-                   default:           aEvent.Skip();
+                   default: aCmd.Skip();
                    }
                } );
 
