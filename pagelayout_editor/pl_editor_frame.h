@@ -112,7 +112,7 @@ public:
     SELECTION& GetCurrentSelection() override;
 
     const VECTOR2I& GetGridOrigin() const override { return m_grid_origin; }
-    void SetGridOrigin( const VECTOR2I& aPoint ) override { m_grid_origin = aPoint; }
+    void            SetGridOrigin( const VECTOR2I& aPoint ) override;
 
     /**
      * Calculate the position (in page, in iu) of the corner used as coordinate origin
