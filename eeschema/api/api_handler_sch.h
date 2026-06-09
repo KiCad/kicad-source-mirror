@@ -33,6 +33,8 @@
 using namespace kiapi;
 using namespace kiapi::common;
 
+using google::protobuf::Empty;
+
 class SCH_EDIT_FRAME;
 class SCH_ITEM;
 class SCH_SHEET;
@@ -45,6 +47,8 @@ public:
     API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext, SCH_EDIT_FRAME* aFrame = nullptr );
 
 protected:
+    std::optional<ApiResponseStatus> checkForHeadless( const std::string& aCommandName ) const;
+
     std::unique_ptr<COMMIT> createCommit() override;
 
     kiapi::common::types::DocumentType thisDocumentType() const override
@@ -107,6 +111,17 @@ private:
     HANDLER_RESULT<commands::GetItemsResponse>
     handleGetItemsById( const HANDLER_CONTEXT<commands::GetItemsById>& aCtx );
 
+    HANDLER_RESULT<commands::SelectionResponse>
+    handleGetSelection( const HANDLER_CONTEXT<commands::GetSelection>& aCtx );
+
+    HANDLER_RESULT<Empty> handleClearSelection( const HANDLER_CONTEXT<commands::ClearSelection>& aCtx );
+
+    HANDLER_RESULT<commands::SelectionResponse>
+    handleAddToSelection( const HANDLER_CONTEXT<commands::AddToSelection>& aCtx );
+
+    HANDLER_RESULT<commands::SelectionResponse>
+    handleRemoveFromSelection( const HANDLER_CONTEXT<commands::RemoveFromSelection>& aCtx );
+
     HANDLER_RESULT<types::RunJobResponse>
     handleRunSchematicJobExportSvg( const HANDLER_CONTEXT<kiapi::schematic::jobs::RunSchematicJobExportSvg>& aCtx );
 
@@ -130,6 +145,10 @@ private:
 
     void packSheetInstance( kiapi::schematic::types::SheetInstance* aInstance, SCH_SHEET_PATH& aPath,
                             SCH_SHEET* aSheet );
+
+    /// Serializes a schematic item into @p aOut, using path-aware packing for symbols and sheets.
+    /// Returns false if the item could not be packed (e.g. a symbol/sheet missing instance data).
+    bool packSchItem( google::protobuf::Any& aOut, SCH_ITEM* aItem, const SCH_SHEET_PATH& aPath );
 
     HANDLER_RESULT<kiapi::schematic::types::SchematicNetlistResponse>
     handleGetSchematicNetlist( const HANDLER_CONTEXT<kiapi::schematic::types::GetSchematicNetlist>& aCtx );

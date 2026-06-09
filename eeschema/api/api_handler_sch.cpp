@@ -41,6 +41,9 @@
 #include <sch_sheet_pin.h>
 #include <sch_symbol.h>
 #include <schematic.h>
+#include <tool/actions.h>
+#include <tool/tool_manager.h>
+#include <tools/sch_selection_tool.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filename.h>
@@ -123,6 +126,12 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
     registerHandler<GetItems, GetItemsResponse>( &API_HANDLER_SCH::handleGetItems );
     registerHandler<GetItemsById, GetItemsResponse>( &API_HANDLER_SCH::handleGetItemsById );
 
+    registerHandler<GetSelection, SelectionResponse>( &API_HANDLER_SCH::handleGetSelection );
+    registerHandler<ClearSelection, Empty>( &API_HANDLER_SCH::handleClearSelection );
+    registerHandler<AddToSelection, SelectionResponse>( &API_HANDLER_SCH::handleAddToSelection );
+    registerHandler<RemoveFromSelection, SelectionResponse>(
+            &API_HANDLER_SCH::handleRemoveFromSelection );
+
     registerHandler<RunSchematicJobExportSvg, types::RunJobResponse>(
             &API_HANDLER_SCH::handleRunSchematicJobExportSvg );
     registerHandler<RunSchematicJobExportDxf, types::RunJobResponse>(
@@ -155,6 +164,48 @@ SCHEMATIC* API_HANDLER_SCH::schematic() const
 {
     wxCHECK( m_context, nullptr );
     return m_context->GetSchematic();
+}
+
+
+std::optional<ApiResponseStatus> API_HANDLER_SCH::checkForHeadless( const std::string& aCommandName ) const
+{
+    if( m_frame )
+        return std::nullopt;
+
+    ApiResponseStatus e;
+    e.set_status( ApiStatusCode::AS_UNIMPLEMENTED );
+    e.set_error_message( fmt::format( "{} is not available in headless mode", aCommandName ) );
+    return e;
+}
+
+
+bool API_HANDLER_SCH::packSchItem( google::protobuf::Any& aOut, SCH_ITEM* aItem,
+                                   const SCH_SHEET_PATH& aPath )
+{
+    if( aItem->Type() == SCH_SYMBOL_T )
+    {
+        kiapi::schematic::types::SchematicSymbolInstance symbol;
+
+        if( !PackSymbol( &symbol, static_cast<SCH_SYMBOL*>( aItem ), aPath ) )
+            return false;
+
+        aOut.PackFrom( symbol );
+    }
+    else if( aItem->Type() == SCH_SHEET_T )
+    {
+        kiapi::schematic::types::SheetSymbol sheet;
+
+        if( !PackSheet( &sheet, static_cast<SCH_SHEET*>( aItem ), aPath ) )
+            return false;
+
+        aOut.PackFrom( sheet );
+    }
+    else
+    {
+        aItem->Serialize( aOut );
+    }
+
+    return true;
 }
 
 
@@ -418,30 +469,8 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_SCH::handleGetItems( const HANDLER_
 
         for( const auto& [item, itemPath] : itemMap[type] )
         {
-            if( item->Type() == SCH_SYMBOL_T )
-            {
-                kiapi::schematic::types::SchematicSymbolInstance symbol;
-
-                if( !PackSymbol( &symbol, static_cast<SCH_SYMBOL*>( item ), itemPath ) )
-                    continue;
-
-                any.PackFrom( symbol );
-            }
-            else if( item->Type() == SCH_SHEET_T )
-            {
-                kiapi::schematic::types::SheetSymbol sheet;
-
-                if( !PackSheet( &sheet, static_cast<SCH_SHEET*>( item ), itemPath ) )
-                    continue;
-
-                any.PackFrom( sheet );
-            }
-            else
-            {
-                item->Serialize( any );
-            }
-
-            response.mutable_items()->Add( std::move( any ) );
+            if( packSchItem( any, static_cast<SCH_ITEM*>( item ), itemPath ) )
+                response.mutable_items()->Add( std::move( any ) );
         }
     }
 
@@ -529,6 +558,167 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_SCH::handleGetItemsById( const HAND
     }
 
     response.set_status( ItemRequestStatus::IRS_OK );
+    return response;
+}
+
+
+HANDLER_RESULT<SelectionResponse>
+API_HANDLER_SCH::handleGetSelection( const HANDLER_CONTEXT<GetSelection>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "GetSelection" ) )
+        return tl::unexpected( *headless );
+
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
+    {
+        ApiResponseStatus e;
+        // No message needed for AS_UNHANDLED; this is an internal flag for the API server
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+
+    std::set<KICAD_T> filter;
+
+    for( KICAD_T type : parseRequestedItemTypes( aCtx.Request.types() ) )
+        filter.insert( type );
+
+    SCH_SELECTION_TOOL* tool = m_context->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SHEET_PATH path = m_context->GetCurrentSheet().value_or( SCH_SHEET_PATH() );
+
+    SelectionResponse response;
+    google::protobuf::Any any;
+
+    for( EDA_ITEM* item : tool->GetSelection() )
+    {
+        if( filter.empty() || filter.contains( item->Type() ) )
+        {
+            if( packSchItem( any, static_cast<SCH_ITEM*>( item ), path ) )
+                response.mutable_items()->Add( std::move( any ) );
+        }
+    }
+
+    return response;
+}
+
+
+HANDLER_RESULT<Empty>
+API_HANDLER_SCH::handleClearSelection( const HANDLER_CONTEXT<ClearSelection>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "ClearSelection" ) )
+        return tl::unexpected( *headless );
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
+    {
+        ApiResponseStatus e;
+        // No message needed for AS_UNHANDLED; this is an internal flag for the API server
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+
+    m_context->GetToolManager()->RunAction( ACTIONS::selectionClear );
+    m_frame->Refresh();
+
+    return Empty();
+}
+
+
+HANDLER_RESULT<SelectionResponse>
+API_HANDLER_SCH::handleAddToSelection( const HANDLER_CONTEXT<AddToSelection>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "AddToSelection" ) )
+        return tl::unexpected( *headless );
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
+    {
+        ApiResponseStatus e;
+        // No message needed for AS_UNHANDLED; this is an internal flag for the API server
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+
+    SCH_SELECTION_TOOL* tool = m_context->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SHEET_PATH current = m_context->GetCurrentSheet().value_or( SCH_SHEET_PATH() );
+
+    EDA_ITEMS toAdd;
+
+    for( const types::KIID& id : aCtx.Request.items() )
+    {
+        SCH_SHEET_PATH itemPath;
+
+        // Selection only operates on the currently-displayed sheet; off-sheet items are skipped
+        if( std::optional<SCH_ITEM*> item = getItemById( KIID( id.value() ), &itemPath );
+            item && itemPath == current )
+        {
+            toAdd.push_back( *item );
+        }
+    }
+
+    tool->AddItemsToSel( &toAdd );
+    m_frame->Refresh();
+
+    SelectionResponse response;
+    google::protobuf::Any any;
+
+    for( EDA_ITEM* item : tool->GetSelection() )
+    {
+        if( packSchItem( any, static_cast<SCH_ITEM*>( item ), current ) )
+            response.mutable_items()->Add( std::move( any ) );
+    }
+
+    return response;
+}
+
+
+HANDLER_RESULT<SelectionResponse>
+API_HANDLER_SCH::handleRemoveFromSelection( const HANDLER_CONTEXT<RemoveFromSelection>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "RemoveFromSelection" ) )
+        return tl::unexpected( *headless );
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( !validateItemHeaderDocument( aCtx.Request.header() ) )
+    {
+        ApiResponseStatus e;
+        // No message needed for AS_UNHANDLED; this is an internal flag for the API server
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+
+    SCH_SELECTION_TOOL* tool = m_context->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SHEET_PATH current = m_context->GetCurrentSheet().value_or( SCH_SHEET_PATH() );
+
+    EDA_ITEMS toRemove;
+
+    for( const types::KIID& id : aCtx.Request.items() )
+    {
+        SCH_SHEET_PATH itemPath;
+
+        if( std::optional<SCH_ITEM*> item = getItemById( KIID( id.value() ), &itemPath );
+            item && itemPath == current )
+        {
+            toRemove.push_back( *item );
+        }
+    }
+
+    tool->RemoveItemsFromSel( &toRemove );
+    m_frame->Refresh();
+
+    SelectionResponse response;
+    google::protobuf::Any any;
+
+    for( EDA_ITEM* item : tool->GetSelection() )
+    {
+        if( packSchItem( any, static_cast<SCH_ITEM*>( item ), current ) )
+            response.mutable_items()->Add( std::move( any ) );
+    }
+
     return response;
 }
 
