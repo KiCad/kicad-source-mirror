@@ -46,8 +46,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-07 15:27+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2026-06-09 22:01+0000\n"
+"Last-Translator: Stereo Optimal <stereo-optimal0m@icloud.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2098,7 +2098,7 @@ msgstr "插件配置文件错误: %s"
 #: common/api/api_plugin.cpp:165
 #, c-format
 msgid "missing or invalid required keys: %s"
-msgstr ""
+msgstr "所需要的键 '%s' 缺失或无效"
 
 #: common/api/api_plugin.cpp:174
 #, c-format
@@ -2106,9 +2106,9 @@ msgid "identifier '%s' is invalid"
 msgstr "标识符 '%s' 无效"
 
 #: common/api/api_plugin.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "actions section is invalid: %s"
-msgstr "数据库连接失败: %s"
+msgstr "操作节无效: %s"
 
 #: common/api/api_plugin_manager.cpp:98
 #, c-format
@@ -2708,47 +2708,46 @@ msgid "Saved version"
 msgstr "已保存的版本"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:47
-#, fuzzy
 msgid "Auto-saved copy"
-msgstr "自动保存间隔 (&A) :"
+msgstr "自动保存的副本"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
-#, fuzzy
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
-"KiCad 检测到上次会话存在未保存的更改, 这些更改比已保存的工程文件内容更新。"
+"KiCad 检测到来自上次会话的自动保存文件。这通常意味着上次的修改尚未保存，"
+"KiCad 却意外关闭了。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore auto-saved"
-msgstr "还原为默认值"
+msgstr "还原自动保存的版本"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
-msgstr ""
+msgstr "用自动保存的版本替换当前已手动保存的文件。之前手动保存的内容将被丢弃。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
 msgid "Keep current"
-msgstr ""
+msgstr "保留当前版本"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
-msgstr ""
+msgstr "保留当前文件原样，并丢弃自动保存的版本。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep both"
-msgstr "Keepout"
+msgstr "保留两者"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 msgstr ""
+"保持手动保存的版本不变，并将自动保存的版本另存为带时间戳的文件名，以便稍后查"
+"看。"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
 msgid "Cancel open"
@@ -2759,10 +2758,12 @@ msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"关闭此对话框，不作任何修改。自动保存的文件仍留在磁盘上，并在下次打开项目时再"
+"次询问。"
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
-msgstr ""
+msgstr "恢复自动保存的文件"
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
@@ -25874,7 +25875,7 @@ msgstr "从库中分配不同的符号"
 
 #: eeschema/tools/sch_actions.cpp:893
 msgid "Update Symbol..."
-msgstr "与库符号同步..."
+msgstr "更新符号..."
 
 #: eeschema/tools/sch_actions.cpp:894
 msgid "Update symbol to include any changes from the library"
@@ -26042,7 +26043,7 @@ msgstr "显示/隐藏 网络导航"
 
 #: eeschema/tools/sch_actions.cpp:1072
 msgid "Edit with Symbol Editor"
-msgstr "编辑符号"
+msgstr "编辑当前符号"
 
 #: eeschema/tools/sch_actions.cpp:1073
 msgid "Open the selected symbol in the Symbol Editor"
