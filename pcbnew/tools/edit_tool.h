@@ -127,6 +127,8 @@ public:
      */
     int PackAndMoveFootprints( const TOOL_EVENT& aEvent );
 
+    int ToggleFootprintAttribute( const TOOL_EVENT& aEvent );
+
     int ChangeTrackWidth( const TOOL_EVENT& aEvent );
     int ChangeTrackLayer( const TOOL_EVENT& aEvent );
 

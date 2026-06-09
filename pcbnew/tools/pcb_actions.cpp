@@ -594,6 +594,18 @@ TOOL_ACTION PCB_ACTIONS::editLibFpInFpEditor( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Edit Library Footprint..." ) )
         .Icon( BITMAPS::module_editor ) );
 
+TOOL_ACTION PCB_ACTIONS::toggleExcludeFromBOM( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.toggleExcludeFromBOM" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Exclude from Bill of Materials" ) )
+        .Tooltip( _( "Toggle the exclude from bill of materials attribute" ) ) );
+
+TOOL_ACTION PCB_ACTIONS::toggleExcludeFromPosFiles( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.toggleExcludeFromPosFiles" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Exclude from Position Files" ) )
+        .Tooltip( _( "Toggle the exclude from position files attribute" ) ) );
+
 TOOL_ACTION PCB_ACTIONS::findByProperties( TOOL_ACTION_ARGS()
         .Name( "pcbnew.EditorControl.findByProperties" )
         .Scope( AS_GLOBAL )

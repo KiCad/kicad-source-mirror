@@ -501,6 +501,27 @@ bool SCH_EDIT_TOOL::Init()
                 return checked > 0 && unchecked == 0;
             };
 
+    auto attribExcludeFromPosFilesCond = [this]( const SELECTION& aSel )
+    {
+        SCH_SHEET_PATH* sheet = &m_frame->GetCurrentSheet();
+        wxString        variant = m_frame->Schematic().GetCurrentVariant();
+        int             checked = 0;
+        int             unchecked = 0;
+
+        for( EDA_ITEM* item : aSel )
+        {
+            if( item->Type() == SCH_SYMBOL_T )
+            {
+                if( static_cast<const SCH_SYMBOL*>( item )->GetExcludedFromPosFiles( sheet, variant ) )
+                    checked++;
+                else
+                    unchecked++;
+            }
+        }
+
+        return checked > 0 && unchecked == 0;
+    };
+
     auto haveHighlight =
             [this]( const SELECTION& sel )
             {
@@ -762,10 +783,11 @@ bool SCH_EDIT_TOOL::Init()
                 CONDITIONAL_MENU* menu = new CONDITIONAL_MENU( moveTool );
                 menu->SetUntranslatedTitle( _HKI( "Attributes" ) );
 
-                menu->AddCheckItem( SCH_ACTIONS::setExcludeFromSim,   S_C::ShowAlways );
-                menu->AddCheckItem( SCH_ACTIONS::setExcludeFromBOM,   S_C::ShowAlways );
+                menu->AddCheckItem( SCH_ACTIONS::setExcludeFromSim, S_C::ShowAlways );
+                menu->AddCheckItem( SCH_ACTIONS::setExcludeFromBOM, S_C::ShowAlways );
                 menu->AddCheckItem( SCH_ACTIONS::setExcludeFromBoard, S_C::ShowAlways );
-                menu->AddCheckItem( SCH_ACTIONS::setDNP,              S_C::ShowAlways );
+                menu->AddCheckItem( SCH_ACTIONS::setExcludeFromPosFiles, S_C::HasType( SCH_SYMBOL_T ) );
+                menu->AddCheckItem( SCH_ACTIONS::setDNP, S_C::ShowAlways );
 
                 return menu;
             };
@@ -913,10 +935,12 @@ bool SCH_EDIT_TOOL::Init()
 
     ACTION_MANAGER* mgr = m_toolMgr->GetActionManager();
 
-    mgr->SetConditions( SCH_ACTIONS::setDNP,              ACTION_CONDITIONS().Check( attribDNPCond ) );
-    mgr->SetConditions( SCH_ACTIONS::setExcludeFromSim,   ACTION_CONDITIONS().Check( attribExcludeFromSimCond ) );
-    mgr->SetConditions( SCH_ACTIONS::setExcludeFromBOM,   ACTION_CONDITIONS().Check( attribExcludeFromBOMCond ) );
+    mgr->SetConditions( SCH_ACTIONS::setDNP, ACTION_CONDITIONS().Check( attribDNPCond ) );
+    mgr->SetConditions( SCH_ACTIONS::setExcludeFromSim, ACTION_CONDITIONS().Check( attribExcludeFromSimCond ) );
+    mgr->SetConditions( SCH_ACTIONS::setExcludeFromBOM, ACTION_CONDITIONS().Check( attribExcludeFromBOMCond ) );
     mgr->SetConditions( SCH_ACTIONS::setExcludeFromBoard, ACTION_CONDITIONS().Check( attribExcludeFromBoardCond ) );
+    mgr->SetConditions( SCH_ACTIONS::setExcludeFromPosFiles,
+                        ACTION_CONDITIONS().Check( attribExcludeFromPosFilesCond ) );
 
     return true;
 }
@@ -3544,7 +3568,10 @@ int SCH_EDIT_TOOL::DdAddImage( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T, SCH_SHEET_T, SCH_RULE_AREA_T } );
+    SCH_SELECTION& selection =
+            aEvent.IsAction( &SCH_ACTIONS::setExcludeFromPosFiles )
+                    ? m_selectionTool->RequestSelection( { SCH_SYMBOL_T } )
+                    : m_selectionTool->RequestSelection( { SCH_SYMBOL_T, SCH_SHEET_T, SCH_RULE_AREA_T } );
     std::set<std::pair<SCH_ITEM*, SCH_SCREEN*>> collectedItems;
 
     for( EDA_ITEM* item : selection )
@@ -3590,10 +3617,12 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
 
     for( const auto& [item, _] : collectedItems )
     {
-        if( ( aEvent.IsAction( &SCH_ACTIONS::setDNP )              && !item->GetDNP( sheet, variant ) )
-         || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromSim )   && !item->GetExcludedFromSim( sheet, variant ) )
-         || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBOM )   && !item->GetExcludedFromBOM( sheet, variant ) )
-         || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBoard ) && !item->GetExcludedFromBoard( sheet, variant ) ) )
+        if( ( aEvent.IsAction( &SCH_ACTIONS::setDNP ) && !item->GetDNP( sheet, variant ) )
+            || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromSim ) && !item->GetExcludedFromSim( sheet, variant ) )
+            || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBOM ) && !item->GetExcludedFromBOM( sheet, variant ) )
+            || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBoard ) && !item->GetExcludedFromBoard( sheet, variant ) )
+            || ( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromPosFiles )
+                 && !item->GetExcludedFromPosFiles( sheet, variant ) ) )
         {
             new_state = true;
             break;
@@ -3615,6 +3644,9 @@ int SCH_EDIT_TOOL::SetAttribute( const TOOL_EVENT& aEvent )
 
         if( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromBoard ) )
             item->SetExcludedFromBoard( new_state, sheet, variant );
+
+        if( aEvent.IsAction( &SCH_ACTIONS::setExcludeFromPosFiles ) )
+            item->SetExcludedFromPosFiles( new_state, sheet, variant );
     }
 
     if( !commit.Empty() )
@@ -3813,6 +3845,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::SetAttribute,       SCH_ACTIONS::setDNP.MakeEvent() );
     Go( &SCH_EDIT_TOOL::SetAttribute,       SCH_ACTIONS::setExcludeFromBOM.MakeEvent() );
     Go( &SCH_EDIT_TOOL::SetAttribute,       SCH_ACTIONS::setExcludeFromBoard.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::SetAttribute,       SCH_ACTIONS::setExcludeFromPosFiles.MakeEvent() );
     Go( &SCH_EDIT_TOOL::SetAttribute,       SCH_ACTIONS::setExcludeFromSim.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::ToggleLock,         SCH_ACTIONS::toggleLock.MakeEvent() );

@@ -1191,6 +1191,12 @@ TOOL_ACTION SCH_ACTIONS::setExcludeFromBoard( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Exclude from Board" ) )
         .Tooltip( _( "Set the exclude from board attribute" ) ) );
 
+TOOL_ACTION SCH_ACTIONS::setExcludeFromPosFiles( TOOL_ACTION_ARGS()
+        .Name( "eeschema.EditorControl.setExcludeFromPosFiles" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Exclude from Position Files" ) )
+        .Tooltip( _( "Set the exclude from position files attribute" ) ) );
+
 TOOL_ACTION SCH_ACTIONS::setDNP( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.setDNP" )
         .Scope( AS_GLOBAL )
