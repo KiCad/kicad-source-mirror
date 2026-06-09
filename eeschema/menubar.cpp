@@ -164,6 +164,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     submenuAttributes->Add( SCH_ACTIONS::setExcludeFromSim,    ACTION_MENU::CHECK );
     submenuAttributes->Add( SCH_ACTIONS::setExcludeFromBOM,    ACTION_MENU::CHECK );
     submenuAttributes->Add( SCH_ACTIONS::setExcludeFromBoard,  ACTION_MENU::CHECK );
+    submenuAttributes->Add( SCH_ACTIONS::setExcludeFromPosFiles, ACTION_MENU::CHECK );
     submenuAttributes->Add( SCH_ACTIONS::setDNP,               ACTION_MENU::CHECK );
 
     editMenu->Add( submenuAttributes );

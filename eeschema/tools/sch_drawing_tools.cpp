@@ -648,20 +648,16 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
         {
             wxBell();
         }
-        else if( symbol && (   evt->IsAction( &SCH_ACTIONS::properties )
-                            || evt->IsAction( &SCH_ACTIONS::editReference )
-                            || evt->IsAction( &SCH_ACTIONS::editValue )
-                            || evt->IsAction( &SCH_ACTIONS::editFootprint )
-                            || evt->IsAction( &SCH_ACTIONS::autoplaceFields )
-                            || evt->IsAction( &SCH_ACTIONS::cycleBodyStyle )
-                            || evt->IsAction( &SCH_ACTIONS::setExcludeFromBOM )
-                            || evt->IsAction( &SCH_ACTIONS::setExcludeFromBoard )
-                            || evt->IsAction( &SCH_ACTIONS::setExcludeFromSim )
-                            || evt->IsAction( &SCH_ACTIONS::setDNP )
-                            || evt->IsAction( &SCH_ACTIONS::rotateCW )
-                            || evt->IsAction( &SCH_ACTIONS::rotateCCW )
-                            || evt->IsAction( &SCH_ACTIONS::mirrorV )
-                            || evt->IsAction( &SCH_ACTIONS::mirrorH ) ) )
+        else if( symbol
+                 && ( evt->IsAction( &SCH_ACTIONS::properties ) || evt->IsAction( &SCH_ACTIONS::editReference )
+                      || evt->IsAction( &SCH_ACTIONS::editValue ) || evt->IsAction( &SCH_ACTIONS::editFootprint )
+                      || evt->IsAction( &SCH_ACTIONS::autoplaceFields ) || evt->IsAction( &SCH_ACTIONS::cycleBodyStyle )
+                      || evt->IsAction( &SCH_ACTIONS::setExcludeFromBOM )
+                      || evt->IsAction( &SCH_ACTIONS::setExcludeFromBoard )
+                      || evt->IsAction( &SCH_ACTIONS::setExcludeFromSim )
+                      || evt->IsAction( &SCH_ACTIONS::setExcludeFromPosFiles ) || evt->IsAction( &SCH_ACTIONS::setDNP )
+                      || evt->IsAction( &SCH_ACTIONS::rotateCW ) || evt->IsAction( &SCH_ACTIONS::rotateCCW )
+                      || evt->IsAction( &SCH_ACTIONS::mirrorV ) || evt->IsAction( &SCH_ACTIONS::mirrorH ) ) )
         {
             m_toolMgr->PostAction( ACTIONS::refreshPreview );
             evt->SetPassEvent();
