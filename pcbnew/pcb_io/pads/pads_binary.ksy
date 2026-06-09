@@ -99,10 +99,27 @@ doc: |
         base(60) = pool_end + total_bytes(58) + total_bytes(59) - 16*k
 
     fits within a small window on 142 of 162 boards, and the correction is an
-    EXACT multiple of 16 on every one of them. k is board-family specific -- 254
-    on 43 boards, 2 on 21, 6 on 18, 190 on 10, 1 on 8 -- so it is a real stored
-    quantity, not noise. Identifying what those 16-byte units are is the last
-    step for this locator.
+    EXACT multiple of 16 on every one of them.
+
+    SOLVED. The correction is `stride60 - 32`, which splits perfectly by the
+    section's own record stride:
+
+        stride 48 (v0x2021, v0x2022)      correction -16    46 boards, 0 counter
+        stride 64 (v0x2024 and later)     correction -32    94 boards, 0 counter
+
+    so the locator is
+
+        base(60) = pool_end + total_bytes(58) + total_bytes(59) - (stride60 - 32)
+        type byte of record i at base(60) + i*stride60 + stride60 - 4
+
+    matching the whole-file phase scan exactly on 140 of 162 boards, with k = 0
+    and k = 3 scoring zero, i.e. the value is pinned, not fitted.
+
+    Getting there needed a tie-aware search. Taking the first delta that achieves
+    the best score makes k land on whichever end of the range is scanned first --
+    only 16 of 142 boards have a UNIQUE winning delta, 126 tie -- so the via
+    predicate alone cannot pin the base. Among the 16 unique ones k was 2 on 14,
+    which is what suggested testing fixed values.
 
     Note also that the "recovered base" used by an earlier analysis here was
     wrong: at that offset the bytes are still section 59 pointer records and the
