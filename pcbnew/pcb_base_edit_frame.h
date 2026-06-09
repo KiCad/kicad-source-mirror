@@ -233,14 +233,6 @@ public:
 
     void ClearListAndDeleteItems( PICKED_ITEMS_LIST* aList );
 
-    /**
-     * Return the absolute path to the design rules file for the currently-loaded board.
-     *
-     * @note There is no guarantee that this file actually exists and can be opened!  It only
-     *       makes sense from PcbNew but is needed in #PCB_BASE_EDIT_FRAME::SetBoard.
-     */
-    wxString GetDesignRulesPath();
-
     APPEARANCE_CONTROLS* GetAppearancePanel() { return m_appearancePanel; }
 
     /**

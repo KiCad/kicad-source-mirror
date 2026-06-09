@@ -105,7 +105,7 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
 
     try
     {
-        drcTool->GetDRCEngine()->InitEngine( GetDesignRulesPath() );
+        drcTool->GetDRCEngine()->InitEngine( board->GetDesignRulesPath() );
     }
     catch( PARSE_ERROR& )
     {

@@ -3812,7 +3812,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             try
             {
                 if( aFrame )
-                    m_drcEngine->InitEngine( aFrame->GetDesignRulesPath() );
+                    m_drcEngine->InitEngine( aFrame->GetBoard()->GetDesignRulesPath() );
 
                 DRC_CONSTRAINT constraint;
 

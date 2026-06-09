@@ -676,9 +676,7 @@ HANDLER_RESULT<BoardDesignRulesResponse> API_HANDLER_PCB::handleGetBoardDesignRu
 
     response.set_custom_rules_status( CRS_NONE );
 
-    wxFileName fn = pcbContext()->GetBoard()->GetFileName();
-    fn.SetExt( FILEEXT::DesignRulesFileExtension );
-    wxString rulesPath = pcbContext()->Prj().AbsolutePath( fn.GetFullName() );
+    wxString rulesPath = board()->GetDesignRulesPath();
 
     if( !rulesPath.IsEmpty() && wxFileName::IsFileReadable( rulesPath ) )
     {
@@ -918,9 +916,7 @@ HANDLER_RESULT<CustomRulesResponse> API_HANDLER_PCB::handleGetCustomDesignRules(
     CustomRulesResponse response;
     response.set_status( CRS_NONE );
 
-    wxFileName fn = pcbContext()->GetBoard()->GetFileName();
-    fn.SetExt( FILEEXT::DesignRulesFileExtension );
-    wxString rulesPath = pcbContext()->Prj().AbsolutePath( fn.GetFullName() );
+    wxString rulesPath = board()->GetDesignRulesPath();
 
     if( rulesPath.IsEmpty() || !wxFileName::IsFileReadable( rulesPath ) )
         return response;
@@ -1009,9 +1005,7 @@ HANDLER_RESULT<CustomRulesResponse> API_HANDLER_PCB::handleSetCustomDesignRules(
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    wxFileName fn = pcbContext()->GetBoard()->GetFileName();
-    fn.SetExt( FILEEXT::DesignRulesFileExtension );
-    wxString rulesPath = pcbContext()->Prj().AbsolutePath( fn.GetFullName() );
+    wxString rulesPath = board()->GetDesignRulesPath();
 
     if( aCtx.Request.rules_size() == 0 )
     {

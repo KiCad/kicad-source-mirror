@@ -462,7 +462,7 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
     // and that they at least parse.
     try
     {
-        drcTool->GetDRCEngine()->InitEngine( m_frame->GetDesignRulesPath() );
+        drcTool->GetDRCEngine()->InitEngine( m_frame->GetBoard()->GetDesignRulesPath() );
     }
     catch( PARSE_ERROR& )
     {

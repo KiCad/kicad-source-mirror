@@ -359,6 +359,13 @@ public:
 
     const wxString &GetFileName() const { return m_fileName; }
 
+    /**
+     * Return the absolute path to the design rules file for this board.
+     *
+     * @note There is no guarantee that this file actually exists and can be opened.
+     */
+    wxString GetDesignRulesPath() const;
+
     const TRACKS& Tracks() const { return m_tracks; }
 
     const FOOTPRINTS& Footprints() const { return m_footprints; }

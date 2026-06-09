@@ -199,7 +199,10 @@ std::vector<RULE_TREE_NODE> DIALOG_DRC_RULE_EDITOR::GetDefaultRuleTreeItems()
 
 void DIALOG_DRC_RULE_EDITOR::LoadExistingRules()
 {
-    wxFileName rulesFile( m_frame->GetDesignRulesPath() );
+    if( !m_frame->GetBoard() )
+        return;
+
+    wxFileName rulesFile( m_frame->GetBoard()->GetDesignRulesPath() );
 
     if( !rulesFile.FileExists() )
         return;
@@ -1348,12 +1351,11 @@ void DIALOG_DRC_RULE_EDITOR::SaveRulesToFile()
     }
 
     DRC_RULE_SAVER saver;
-    saver.SaveFile( m_frame->GetDesignRulesPath(), entries, m_currentBoard );
+    saver.SaveFile( m_frame->GetBoard()->GetDesignRulesPath(), entries, m_currentBoard );
 
     try
     {
-        m_frame->GetBoard()->GetDesignSettings().m_DRCEngine->InitEngine(
-                m_frame->GetDesignRulesPath() );
+        m_frame->GetBoard()->GetDesignSettings().m_DRCEngine->InitEngine( m_frame->GetBoard()->GetDesignRulesPath() );
     }
     catch( PARSE_ERROR& pe )
     {

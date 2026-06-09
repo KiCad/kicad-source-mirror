@@ -29,6 +29,7 @@
 #include <algorithm>
 
 #include <wx/log.h>
+#include <wx/filename.h>
 
 #include <drc/drc_engine.h>
 #include <drc/drc_rtree.h>
@@ -268,6 +269,17 @@ void BOARD::ClearProject()
     GetDesignSettings().m_NetSettings = nullptr;
     GetDesignSettings().SetParent( nullptr );
     m_project = nullptr;
+}
+
+
+wxString BOARD::GetDesignRulesPath() const
+{
+    if( m_fileName.IsEmpty() || !m_project )
+        return wxEmptyString;
+
+    wxFileName fn( m_fileName );
+    fn.SetExt( FILEEXT::DesignRulesFileExtension );
+    return m_project->AbsolutePath( fn.GetFullName() );
 }
 
 

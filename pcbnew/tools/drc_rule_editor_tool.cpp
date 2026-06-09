@@ -82,6 +82,9 @@ void DRC_RULE_EDITOR_TOOL::updatePointers()
 
 void DRC_RULE_EDITOR_TOOL::ShowDRCRuleEditorDialog( wxWindow* aParent )
 {
+    if( !m_editFrame->GetBoard() )
+        return;
+
     bool show_dlg_modal = true;
 
     // the dialog needs a parent frame. if it is not specified, this is the PCB editor frame
@@ -100,7 +103,7 @@ void DRC_RULE_EDITOR_TOOL::ShowDRCRuleEditorDialog( wxWindow* aParent )
     // Check if the rules file changed on disk since the dialog was last loaded
     if( m_drcRuleEditorDlg )
     {
-        wxFileName rulesFile( m_editFrame->GetDesignRulesPath() );
+        wxFileName rulesFile( m_editFrame->GetBoard()->GetDesignRulesPath() );
         wxDateTime currentModTime;
 
         if( rulesFile.FileExists() )
@@ -115,7 +118,7 @@ void DRC_RULE_EDITOR_TOOL::ShowDRCRuleEditorDialog( wxWindow* aParent )
         m_drcRuleEditorDlg = new DIALOG_DRC_RULE_EDITOR( m_editFrame, aParent );
         updatePointers();
 
-        wxFileName rulesFile( m_editFrame->GetDesignRulesPath() );
+        wxFileName rulesFile( m_editFrame->GetBoard()->GetDesignRulesPath() );
 
         if( rulesFile.FileExists() )
             m_lastRulesFileModTime = rulesFile.GetModificationTime();

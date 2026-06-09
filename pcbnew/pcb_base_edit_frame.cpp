@@ -282,17 +282,6 @@ COLOR_SETTINGS* PCB_BASE_EDIT_FRAME::GetColorSettings( bool aForceRefresh ) cons
 }
 
 
-wxString PCB_BASE_EDIT_FRAME::GetDesignRulesPath()
-{
-    if( !GetBoard() )
-        return wxEmptyString;
-
-    wxFileName fn = GetBoard()->GetFileName();
-    fn.SetExt( FILEEXT::DesignRulesFileExtension );
-    return Prj().AbsolutePath( fn.GetFullName() );
-}
-
-
 void PCB_BASE_EDIT_FRAME::handleActivateEvent( wxActivateEvent& aEvent )
 {
     PCB_BASE_FRAME::handleActivateEvent( aEvent );

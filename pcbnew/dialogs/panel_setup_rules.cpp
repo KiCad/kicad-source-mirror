@@ -1076,7 +1076,10 @@ void PANEL_SETUP_RULES::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 
 bool PANEL_SETUP_RULES::TransferDataToWindow()
 {
-    wxFileName rulesFile( m_frame->GetDesignRulesPath() );
+    if( !m_frame->GetBoard() )
+        return true;
+
+    wxFileName rulesFile( m_frame->GetBoard()->GetDesignRulesPath() );
 
     if( rulesFile.FileExists() )
     {
@@ -1122,7 +1125,10 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
     if( m_frame->Prj().IsNullProject() )
         return true;
 
-    wxString rulesFilepath = m_frame->GetDesignRulesPath();
+    if( !m_frame->GetBoard() )
+        return true;
+
+    wxString rulesFilepath = m_frame->GetBoard()->GetDesignRulesPath();
 
     wxString    content = m_textEditor->GetText();
     std::string utf8 = std::string( content.mb_str( wxConvUTF8 ) );

@@ -164,7 +164,7 @@ std::unique_ptr<DRC_ENGINE> BOARD_INSPECTION_TOOL::makeDRCEngine( bool* aCompile
 
     try
     {
-        engine->InitEngine( m_frame->GetDesignRulesPath() );
+        engine->InitEngine( m_frame->GetBoard()->GetDesignRulesPath() );
     }
     catch( PARSE_ERROR& )
     {

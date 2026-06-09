@@ -802,7 +802,7 @@ void ROUTER_TOOL::saveRouterDebugLog()
     // Copy the project's custom DRC rules
     if( PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>() )
     {
-        wxString srcRules = editFrame->GetDesignRulesPath();
+        wxString srcRules = editFrame->GetBoard()->GetDesignRulesPath();
 
         if( !srcRules.IsEmpty() && wxFileName::FileExists( srcRules ) )
         {

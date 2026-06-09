@@ -2007,7 +2007,7 @@ void PCB_EDIT_FRAME::OnBoardLoaded()
 
     try
     {
-        drcTool->GetDRCEngine()->InitEngine( GetDesignRulesPath() );
+        drcTool->GetDRCEngine()->InitEngine( GetBoard()->GetDesignRulesPath() );
     }
     catch( PARSE_ERROR& )
     {
@@ -3214,7 +3214,7 @@ void PCB_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 
     try
     {
-        drcTool->GetDRCEngine()->InitEngine( GetDesignRulesPath() );
+        drcTool->GetDRCEngine()->InitEngine( GetBoard()->GetDesignRulesPath() );
 
         if( infobar->GetMessageType() == WX_INFOBAR::MESSAGE_TYPE::DRC_RULES_ERROR )
             infobar->Dismiss();
