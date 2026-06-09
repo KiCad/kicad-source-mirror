@@ -27,6 +27,7 @@
 
 #include <algorithm>
 #include <future>
+#include <limits>
 #include <mutex>
 #include <ranges>
 
@@ -328,26 +329,59 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
         // Apply deferred zone net changes, but only for vias that have no non-zone
         // connections.  Tracks and pads take priority over zones for net assignment;
         // cluster-based propagation will handle those vias.
+        //
+        // A single via can touch zones of several different nets (e.g. a through via
+        // crossing a GND plane and a power plane).  The order in which those candidate
+        // nets are collected depends on the parallel search and is not stable across
+        // connectivity rebuilds, so we must not simply pick the first one: doing so makes
+        // the via's net flip arbitrarily on every rebuild (i.e. on every undo/redo).
+        // Instead, if the via's existing net matches any zone it touches, we keep it.
+        // This preserves a deliberately-assigned net and only falls back to a
+        // deterministic choice (lowest net code) when the current net no longer touches
+        // any zone.
         std::sort( deferredNetCodes.begin(), deferredNetCodes.end(),
                    []( const auto& a, const auto& b ) { return a.first < b.first; } );
 
-        CN_ITEM* lastItem = nullptr;
-
-        for( const auto& [cnItem, netCode] : deferredNetCodes )
+        for( auto it = deferredNetCodes.begin(); it != deferredNetCodes.end(); )
         {
-            if( cnItem == lastItem )
-                continue;
+            CN_ITEM* cnItem = it->first;
 
-            lastItem = cnItem;
+            // Entries for the same via are contiguous after the sort above.
+            auto groupEnd = it;
 
-            if( std::ranges::none_of( cnItem->ConnectedItems(),
-                    []( const CN_ITEM* c )
-                    {
-                        return c->Parent()->Type() != PCB_ZONE_T;
-                    } ) )
+            while( groupEnd != deferredNetCodes.end() && groupEnd->first == cnItem )
+                ++groupEnd;
+
+            if( std::ranges::any_of( cnItem->ConnectedItems(),
+                                     []( const CN_ITEM* c )
+                                     {
+                                         return c->Parent()->Type() != PCB_ZONE_T;
+                                     } ) )
             {
-                cnItem->Parent()->SetNetCode( netCode );
+                // Connected to a track or pad, so cluster propagation owns the net.
+                it = groupEnd;
+                continue;
             }
+
+            int  existingNet = cnItem->Parent()->GetNetCode();
+            bool keepExisting = false;
+            int  bestNet = std::numeric_limits<int>::max();
+
+            for( auto entry = it; entry != groupEnd; ++entry )
+            {
+                if( entry->second == existingNet )
+                {
+                    keepExisting = true;
+                    break;
+                }
+
+                bestNet = std::min( bestNet, entry->second );
+            }
+
+            if( !keepExisting )
+                cnItem->Parent()->SetNetCode( bestNet );
+
+            it = groupEnd;
         }
 
         if( m_progressReporter )
