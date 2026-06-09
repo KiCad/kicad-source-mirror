@@ -118,7 +118,7 @@ void DIALOG_CLEANUP_GRAPHICS::doCleanup( bool aDryRun )
     m_items.clear();
 
     // Old model has to be refreshed, GAL normally does not keep updating it
-    m_parentFrame->Compile_Ratsnest( false );
+    m_parentFrame->GetBoard()->CompileRatsnest();
 
     cleaner.CleanupBoard( aDryRun, &m_items, m_createRectanglesOpt->GetValue(),
                           m_deleteRedundantOpt->GetValue(), m_mergePadsOpt->GetValue(),

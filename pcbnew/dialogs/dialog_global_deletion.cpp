@@ -291,7 +291,10 @@ void DIALOG_GLOBAL_DELETION::DoGlobalDeletions()
         board->DeleteMARKERs();
 
     if( gen_rastnest )
-        m_Parent->Compile_Ratsnest( true );
+    {
+        board->CompileRatsnest();
+        m_Parent->SetMsgPanel( board );
+    }
 
     // There is a chance that some of tracks have changed their nets, so rebuild ratsnest
     // from scratch.

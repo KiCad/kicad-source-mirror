@@ -293,16 +293,6 @@ public:
     virtual void AddFootprintToBoard( FOOTPRINT* aFootprint );
 
     /**
-     * Create the entire board ratsnest.
-     *
-     * This must be called after a board change (changes for pads, footprints or a read
-     * netlist ).
-     *
-     * @param aDisplayStatus  if true, display the computation results.
-     */
-    void Compile_Ratsnest( bool aDisplayStatus );
-
-    /**
      * Create a new entry in undo list of commands.
      *
      * @param aItemToCopy is the board item modified by the command to undo.

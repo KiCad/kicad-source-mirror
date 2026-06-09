@@ -158,7 +158,8 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
         *aRunDragCommand = true;
     }
 
-    Compile_Ratsnest( true );
+    board->CompileRatsnest();
+    SetMsgPanel( board );
 
     UpdateVariantSelectionCtrl();
 

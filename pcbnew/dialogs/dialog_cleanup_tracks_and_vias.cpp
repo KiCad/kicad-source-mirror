@@ -220,7 +220,7 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     // Old model has to be refreshed, GAL normally does not keep updating it
     m_reporter->Report( _( "Rebuilding connectivity..." ) );
     wxSafeYield();      // Timeslice to update UI
-    m_parentFrame->Compile_Ratsnest( false );
+    m_parentFrame->GetBoard()->CompileRatsnest();
 
     cleaner.CleanupBoard( aDryRun, &m_items, m_cleanShortCircuitOpt->GetValue(),
                                              m_cleanViasOpt->GetValue(),

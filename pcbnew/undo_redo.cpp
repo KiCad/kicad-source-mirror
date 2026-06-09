@@ -670,7 +670,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         {
             // Connectivity may have changed; rebuild internal caches to remove stale items
             GetBoard()->BuildConnectivity();
-            Compile_Ratsnest( false );
+            GetBoard()->CompileRatsnest();
         }
 
         if( solder_mask_dirty )

@@ -618,6 +618,13 @@ public:
     void UpdateRatsnestExclusions();
 
     /**
+     * Rebuild the entire board ratsnest.
+     *
+     * Must be called after a board change (changes to pads, footprints, or a netlist read).
+     */
+    void CompileRatsnest();
+
+    /**
      * Reset all high light data to the init state
      */
     void ResetNetHighLight();

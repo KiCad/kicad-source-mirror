@@ -447,8 +447,6 @@ set( PCBNEW_CLASS_SRCS
     api/headless_pcb_context.cpp
     api/headless_footprint_context.cpp
 
-    ratsnest/ratsnest.cpp
-
     tools/array_tool.cpp
     tools/board_editor_control.cpp
     tools/board_inspection_tool.cpp

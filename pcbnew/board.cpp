@@ -3544,6 +3544,14 @@ void BOARD::OnRatsnestChanged()
 }
 
 
+void BOARD::CompileRatsnest()
+{
+    GetConnectivity()->RecalculateRatsnest();
+    UpdateRatsnestExclusions();
+    OnRatsnestChanged();
+}
+
+
 void BOARD::ResetNetHighLight()
 {
     m_highLight.Clear();

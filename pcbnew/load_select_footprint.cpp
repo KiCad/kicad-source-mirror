@@ -439,7 +439,7 @@ void PCB_BASE_FRAME::PlaceFootprint( FOOTPRINT* aFootprint, bool aRecreateRatsne
         m_pcb->GetConnectivity()->Update( aFootprint );
 
     if( aRecreateRatsnest )
-        Compile_Ratsnest( true );
+        m_pcb->CompileRatsnest();
 
     SetMsgPanel( aFootprint );
 }
