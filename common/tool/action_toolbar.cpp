@@ -212,6 +212,7 @@ ACTION_TOOLBAR::ACTION_TOOLBAR( EDA_BASE_FRAME* parent, wxWindowID id, const wxP
 
     Connect( wxEVT_COMMAND_TOOL_CLICKED, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolEvent ), nullptr, this );
     Connect( wxEVT_AUITOOLBAR_RIGHT_CLICK, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onRightClick ), nullptr, this );
+    Connect( wxEVT_RIGHT_UP, wxMouseEventHandler( ACTION_TOOLBAR::onRightUp ), nullptr, this );
     Connect( wxEVT_AUITOOLBAR_BEGIN_DRAG, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onItemDrag ), nullptr, this );
     Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ), nullptr, this );
     Connect( wxEVT_LEFT_UP, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ), nullptr, this );
@@ -254,6 +255,7 @@ ACTION_TOOLBAR::~ACTION_TOOLBAR()
 {
     Disconnect( wxEVT_COMMAND_TOOL_CLICKED, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onToolEvent ), nullptr, this );
     Disconnect( wxEVT_AUITOOLBAR_RIGHT_CLICK, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onRightClick ), nullptr, this );
+    Disconnect( wxEVT_RIGHT_UP, wxMouseEventHandler( ACTION_TOOLBAR::onRightUp ), nullptr, this );
     Disconnect( wxEVT_AUITOOLBAR_BEGIN_DRAG, wxAuiToolBarEventHandler( ACTION_TOOLBAR::onItemDrag ), nullptr, this );
     Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ), nullptr, this );
     Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( ACTION_TOOLBAR::onMouseClick ), nullptr, this );
@@ -813,15 +815,39 @@ void ACTION_TOOLBAR::onRightClick( wxAuiToolBarEvent& aEvent )
     if( toolId == -1 )
         return;
 
+    showContextMenu( toolId );
+}
+
+
+void ACTION_TOOLBAR::onRightUp( wxMouseEvent& aEvent )
+{
+    // wxAuiToolBar::OnRightDown() uses horizontal-only geometry to reserve its overflow
+    // dead-zone, which on a vertical toolbar kills right-clicks over part of every button.
+    // Hit-test the tool ourselves so the whole button works.
+    wxAuiToolBarItem* item = FindToolByPosition( aEvent.GetX(), aEvent.GetY() );
+
+    if( !item )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    // Don't Skip(): suppress wx's own OnRightUp() so the menu is shown exactly once.
+    showContextMenu( item->GetId() );
+}
+
+
+void ACTION_TOOLBAR::showContextMenu( int aToolId )
+{
     // Ensure that the ID maps to a proper tool ID. If right-clicked on a group item, this is needed
     // to get the ID of the currently selected action, since the event's ID is that of the group.
-    const auto actionIt = m_toolActions.find( toolId );
+    const auto actionIt = m_toolActions.find( aToolId );
 
     if( actionIt != m_toolActions.end() )
-        toolId = actionIt->second->GetUIId();
+        aToolId = actionIt->second->GetUIId();
 
     // Find the menu for the action
-    const auto menuIt = m_toolMenus.find( toolId );
+    const auto menuIt = m_toolMenus.find( aToolId );
 
     if( menuIt == m_toolMenus.end() )
         return;
