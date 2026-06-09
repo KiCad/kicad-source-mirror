@@ -261,6 +261,15 @@ void SCH_SYMBOL::Serialize( google::protobuf::Any& aContainer ) const
     GetField( FIELD_T::DESCRIPTION )->Serialize( any );
     any.UnpackTo( symbol.mutable_description_field() );
 
+    for( const SCH_FIELD& field : GetFields() )
+    {
+        if( field.IsMandatory() )
+            continue;
+
+        field.Serialize( any );
+        any.UnpackTo( symbol.add_user_fields() );
+    }
+
     if( m_part )
     {
         m_part->GetField( FIELD_T::REFERENCE )->Serialize( any );
@@ -432,6 +441,37 @@ bool SCH_SYMBOL::Deserialize( const google::protobuf::Any& aContainer )
 
     any.PackFrom( symbol.description_field() );
     GetField( FIELD_T::DESCRIPTION )->Deserialize( any );
+
+    std::set<wxString> incoming;
+
+    for( const SchematicField& fieldProto : symbol.user_fields() )
+    {
+        wxString   name = wxString::FromUTF8( fieldProto.name() );
+        SCH_FIELD* existing = GetField( name );
+
+        // Don't duplicate existing or mandatory fields.
+        if( existing && existing->IsMandatory() )
+            continue;
+
+        incoming.insert( name );
+        any.PackFrom( fieldProto );
+
+        if( existing )
+            existing->Deserialize( any );
+        else
+            AddField( SCH_FIELD( this, FIELD_T::USER, name ) )->Deserialize( any );
+    }
+
+    std::vector<wxString> toRemove;
+
+    for( const SCH_FIELD& field : GetFields() )
+    {
+        if( !field.IsMandatory() && !incoming.count( field.GetName( false ) ) )
+            toRemove.push_back( field.GetName( false ) );
+    }
+
+    for( const wxString& name : toRemove )
+        RemoveField( name );
 
     SetShowPinNames( symbol.show_pin_names() );
     SetShowPinNumbers( symbol.show_pin_numbers() );

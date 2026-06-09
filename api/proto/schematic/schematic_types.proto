@@ -424,6 +424,8 @@ message SchematicSymbolInstance
   kiapi.common.types.Distance pin_name_offset = 17;
 
   repeated SchematicSymbolVariant variants = 18;
+
+  repeated SchematicField user_fields = 19;
 }
 
 message SheetInstance
