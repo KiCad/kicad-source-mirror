@@ -131,6 +131,9 @@ void PL_EDITOR_FRAME::doReCreateMenuBar()
     placeMenu->AppendSeparator();
     placeMenu->Add( PL_ACTIONS::appendImportedDrawingSheet );
 
+    placeMenu->AppendSeparator();
+    placeMenu->Add( ACTIONS::gridResetOrigin );
+
     //-- Inspector menu -------------------------------------------------------
     //
     ACTION_MENU* inspectorMenu = new ACTION_MENU( false, selTool );

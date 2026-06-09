@@ -61,6 +61,8 @@ public:
     int ShowInspector( const TOOL_EVENT& aEvent );
     int TitleBlockDisplayMode( const TOOL_EVENT& aEvent );
 
+    int GridResetOrigin( const TOOL_EVENT& aEvent );
+
     /**
      * Update the message panel *and* the Properties frame, after change
      * (selection, move, edit ...) of a wks item

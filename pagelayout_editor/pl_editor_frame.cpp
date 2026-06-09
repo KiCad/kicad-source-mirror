@@ -650,6 +650,18 @@ void PL_EDITOR_FRAME::CommonSettingsChanged( int aFlags )
 }
 
 
+void PL_EDITOR_FRAME::SetGridOrigin( const VECTOR2I& aPoint )
+{
+    m_grid_origin = aPoint;
+
+    if( PL_DRAW_PANEL_GAL* canvas = GetCanvas() )
+    {
+        canvas->GetGAL()->SetGridOrigin( VECTOR2D( aPoint ) );
+        canvas->GetView()->MarkDirty();
+    }
+}
+
+
 VECTOR2I PL_EDITOR_FRAME::ReturnCoordOriginCorner() const
 {
     // calculate the position (in page, in iu) of the corner used as coordinate origin
@@ -717,7 +729,6 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 
     // coordinate origin can be the paper Top Left corner, or each of 4 page corners
     VECTOR2I originCoord = ReturnCoordOriginCorner();
-    SetGridOrigin( originCoord );
 
     // We need the orientation of axis (sign of coordinates)
     int Xsign = 1;
