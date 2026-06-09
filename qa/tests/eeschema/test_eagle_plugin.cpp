@@ -81,9 +81,21 @@ static SCH_SHEET* loadEagleSchematic( const wxFileName& aEagleFn,
                                       const wxString& aProjectStem,
                                       std::unique_ptr<SCHEMATIC>& aSchematic )
 {
-    wxString tempDir = wxStandardPaths::Get().GetTempDir();
-    wxString projectPath = tempDir + wxFileName::GetPathSeparator() + aProjectStem
-                           + wxT( ".kicad_pro" );
+    // Stage the project in a private, freshly-emptied directory.  The Eagle importer writes a
+    // "<stem>-eagle-import.kicad_sym" library plus a sym-lib-table into the project directory and
+    // keys duplicate-symbol-name disambiguation off the on-disk library, so leftover files from a
+    // previous run in the shared temp directory would make the imported symbol names
+    // non-deterministic.
+    wxString sep = wxFileName::GetPathSeparator();
+    wxString projectDir = wxStandardPaths::Get().GetTempDir() + sep + aProjectStem
+                          + wxT( "-eagle-qa" );
+
+    if( wxDirExists( projectDir ) )
+        wxFileName::Rmdir( projectDir, wxPATH_RMDIR_RECURSIVE );
+
+    wxFileName::Mkdir( projectDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+
+    wxString projectPath = projectDir + sep + aProjectStem + wxT( ".kicad_pro" );
 
     Pgm().GetSettingsManager().LoadProject( projectPath );
     PROJECT& project = Pgm().GetSettingsManager().Prj();
@@ -294,8 +306,10 @@ BOOST_AUTO_TEST_CASE( PinNameTagStripped )
 
     SCH_SHEET_LIST hierarchy = schematic->BuildSheetListSortedByPageNumbers();
 
-    // Key symbols by their library item name (e.g. "tagtest_MYDEV"); the annotated reference
-    // is unreliable here because the no-connect device is annotated with a '#' power prefix.
+    // Key symbols by their library item name (e.g. "MYDEV"); the annotated reference is
+    // unreliable here because the no-connect device is annotated with a '#' power prefix.  A
+    // single Eagle library imports without a library-name prefix on the symbol; the prefix is
+    // only added to disambiguate duplicate names across multiple Eagle libraries.
     std::map<wxString, const SCH_SYMBOL*> symbolByLibItem;
 
     for( const SCH_SHEET_PATH& sheetPath : hierarchy )
@@ -314,8 +328,8 @@ BOOST_AUTO_TEST_CASE( PinNameTagStripped )
 
     // The connected device maps pins to pads through <connect>; the no-connect device has no
     // <connect> so pins are auto-numbered. Both paths must strip the tag from the display name.
-    BOOST_REQUIRE( symbolByLibItem.count( wxS( "tagtest_MYDEV" ) ) == 1 );
-    BOOST_REQUIRE( symbolByLibItem.count( wxS( "tagtest_MYDEV_NC" ) ) == 1 );
+    BOOST_REQUIRE( symbolByLibItem.count( wxS( "MYDEV" ) ) == 1 );
+    BOOST_REQUIRE( symbolByLibItem.count( wxS( "MYDEV_NC" ) ) == 1 );
 
     auto collectNames = []( const SCH_SYMBOL* aSym )
     {
@@ -342,7 +356,7 @@ BOOST_AUTO_TEST_CASE( PinNameTagStripped )
     // distinct pad mapping, and "NC@3" must strip to "NC".
     std::map<wxString, wxString> nameByPad;
 
-    for( const SCH_PIN* pin : symbolByLibItem[wxS( "tagtest_MYDEV" )]->GetAllLibPins() )
+    for( const SCH_PIN* pin : symbolByLibItem[wxS( "MYDEV" )]->GetAllLibPins() )
         nameByPad[pin->GetNumber()] = pin->GetName();
 
     BOOST_CHECK_EQUAL( nameByPad["1"], wxString( wxS( "IN" ) ) );
@@ -351,7 +365,7 @@ BOOST_AUTO_TEST_CASE( PinNameTagStripped )
     BOOST_CHECK_EQUAL( nameByPad["4"], wxString( wxS( "NC" ) ) );
 
     // The no-connect device keeps every pin, so both tagged "IN" pins survive the strip.
-    std::multiset<wxString> ncNames = collectNames( symbolByLibItem[wxS( "tagtest_MYDEV_NC" )] );
+    std::multiset<wxString> ncNames = collectNames( symbolByLibItem[wxS( "MYDEV_NC" )] );
     BOOST_CHECK_EQUAL( ncNames.count( wxS( "IN" ) ), 2 );
     BOOST_CHECK_EQUAL( ncNames.count( wxS( "GND" ) ), 1 );
     BOOST_CHECK_EQUAL( ncNames.count( wxS( "NC" ) ), 1 );

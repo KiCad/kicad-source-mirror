@@ -465,6 +465,12 @@ SCH_SHEET* SCH_IO_EAGLE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
     m_pi->SaveLibrary( getLibFileName().GetFullPath() );
 
+    // The project library was created empty and then cached by the adapter (LoadOne above)
+    // before any symbols were written to it. Reload it from disk now that SaveLibrary has
+    // populated the file, otherwise UpdateSymbolLinks resolves against the stale empty cache
+    // and every imported symbol is reported as missing.
+    adapter->ReloadLibraryEntry( getLibName(), LIBRARY_TABLE_SCOPE::PROJECT );
+
     SCH_SCREENS allSheets( m_rootSheet );
     allSheets.UpdateSymbolLinks( &LOAD_INFO_REPORTER::GetInstance() ); // Update all symbol library links for all sheets.
 
