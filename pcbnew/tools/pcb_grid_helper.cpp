@@ -54,6 +54,7 @@
 #include <macros.h>
 #include <math/util.h> // for KiROUND
 #include <gal/painter.h>
+#include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_tool_base.h>
@@ -582,6 +583,10 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* a
     {
         layers = aReferenceItem->GetLayerSet();
         item.push_back( aReferenceItem );
+    }
+    else if( PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() ) )
+    {
+        layers = LSET( { frame->GetActiveLayer() } );
     }
     else
     {
