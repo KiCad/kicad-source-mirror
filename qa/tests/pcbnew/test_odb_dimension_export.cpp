@@ -64,13 +64,22 @@ static int countOdbLineRecords( const fs::path& aFeaturesFile )
 
 
 /**
- * Locate the silkscreen layer "features" file in an ODB++ export tree.
+ * Sum line ("L ") feature records across every silkscreen "features" file in an ODB++ export tree.
  *
- * The layer directory name is derived from the board layer name, so it is matched by substring
- * ("silk") rather than a hard-coded path to stay robust against ODB++ naming changes.
+ * Both front and back silk layers produce a directory whose name contains "silk", so a search that
+ * stops at the first match would depend on std::filesystem directory-iteration order, which is
+ * unspecified.  The dimension under test sits on the front silk, so picking the empty back-silk file
+ * first would spuriously report zero.  Aggregating across all silk layers keeps the check
+ * order-independent while still matching by substring to stay robust against ODB++ naming changes.
+ *
+ * aFoundFile is set when at least one silk features file exists, so the caller can still assert the
+ * export produced a silkscreen layer at all.
  */
-static fs::path findSilkFeaturesFile( const fs::path& aRoot )
+static int countSilkLineRecords( const fs::path& aRoot, bool& aFoundFile )
 {
+    int total = 0;
+    aFoundFile = false;
+
     for( const fs::directory_entry& entry : fs::recursive_directory_iterator( aRoot ) )
     {
         if( !entry.is_regular_file() || entry.path().filename() != "features" )
@@ -78,11 +87,14 @@ static fs::path findSilkFeaturesFile( const fs::path& aRoot )
 
         const std::string layerDir = entry.path().parent_path().filename().string();
 
-        if( layerDir.find( "silk" ) != std::string::npos )
-            return entry.path();
+        if( layerDir.find( "silk" ) == std::string::npos )
+            continue;
+
+        aFoundFile = true;
+        total += countOdbLineRecords( entry.path() );
     }
 
-    return {};
+    return total;
 }
 
 
@@ -142,12 +154,10 @@ BOOST_AUTO_TEST_CASE( OdbDimensionExport )
 
     BOOST_REQUIRE_MESSAGE( fs::exists( outDir ), "ODB++ export produced no output tree" );
 
-    const fs::path silkFeatures = findSilkFeaturesFile( outDir );
+    bool foundSilk = false;
+    int  lineCount = countSilkLineRecords( outDir, foundSilk );
 
-    BOOST_REQUIRE_MESSAGE( !silkFeatures.empty(),
-                           "ODB++ export produced no silkscreen features file" );
-
-    int lineCount = countOdbLineRecords( silkFeatures );
+    BOOST_REQUIRE_MESSAGE( foundSilk, "ODB++ export produced no silkscreen features file" );
 
     BOOST_CHECK_MESSAGE( lineCount > 0,
                          "Dimensions were dropped from the ODB++ export (no line features emitted)" );
