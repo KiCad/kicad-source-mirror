@@ -219,7 +219,16 @@ void SYMBOL_EDIT_FRAME::activateSymbolTab( SYMBOL_EDITOR_TAB_CONTEXT* aContext )
     // MODEL_RELOAD clears the selection, so restore the saved one afterwards.
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-    restoreSymbolViewSnapshot( aContext->ViewSnapshot() );
+    if( aContext->ViewSnapshot().valid )
+    {
+        restoreSymbolViewSnapshot( aContext->ViewSnapshot() );
+    }
+    else
+    {
+        // First time this tab is shown there is no saved view
+        m_toolManager->RunAction( ACTIONS::zoomFitScreen );
+    }
+
     restoreSymbolSelectionKiids( aContext->SavedSelection() );
 
     UpdateTitle();

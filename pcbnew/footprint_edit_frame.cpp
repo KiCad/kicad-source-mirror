@@ -1065,6 +1065,11 @@ void FOOTPRINT_EDIT_FRAME::installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEX
         GetCanvas()->GetView()->SetScale( snap.scale );
         GetCanvas()->GetView()->SetCenter( snap.center );
     }
+    else
+    {
+        // First time this tab is shown there is no saved view
+        m_toolManager->RunAction( ACTIONS::zoomFitScreen );
+    }
 
     if( !aCtx->SavedSelection().empty() )
     {
