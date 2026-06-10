@@ -122,8 +122,8 @@ void LIB_SYMBOL::cacheShownDescription()
 void LIB_SYMBOL::SetDescription( const wxString& aDescription )
 {
     GetDescriptionField().SetText( aDescription );
-    cacheSearchTerms();
     cacheShownDescription();
+    cacheSearchTerms();
 }
 
 
@@ -1466,9 +1466,10 @@ const BOX2I LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aBodyStyle, bool aInc
 
 void LIB_SYMBOL::RefreshLibraryTreeCaches()
 {
+    // cacheSearchTerms() reads the shown-description cache, so refresh it first.
+    cacheShownDescription();
     cacheSearchTerms();
     cachePinCount();
-    cacheShownDescription();
     cacheChooserFields();
 }
 

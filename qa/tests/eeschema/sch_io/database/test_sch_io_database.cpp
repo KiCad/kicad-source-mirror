@@ -17,12 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+#include <memory>
 #include <set>
 #include <vector>
 
-#include <boost/test/unit_test.hpp>
+#include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <database/database_lib_settings.h>
+#include <eda_pattern_match.h>
+#include <ki_exception.h>
 #include <lib_symbol.h>
 #include <libraries/library_manager.h>
 #include <libraries/symbol_library_adapter.h>
@@ -75,6 +79,67 @@ BOOST_AUTO_TEST_CASE( UnchangedDataReusesCache )
 
     for( LIB_SYMBOL* symbol : second )
         BOOST_CHECK( firstSet.count( symbol ) );
+}
+
+
+/**
+ * Regression test for issue #23977.
+ *
+ * The symbol chooser tree column and search read the cached shown description
+ * (LIB_SYMBOL::GetShownDescription), while the details panel reads the live Description field.
+ * When a database library maps the Description through a regular field mapping, the plugin set
+ * the field with SCH_FIELD::SetText, which does not refresh the cache, so the two chooser panels
+ * disagreed.  The plugin must refresh the chooser caches after populating the symbol so both read
+ * the database value.
+ */
+BOOST_AUTO_TEST_CASE( FieldMappedDescriptionMatchesShownDescription )
+{
+    const std::string dblPath =
+            KI_TEST::GetTestDataRootDir() + "dblib/qa_dblib_field_description.kicad_dbl";
+
+    LIBRARY_MANAGER        manager;
+    SYMBOL_LIBRARY_ADAPTER adapter( manager );
+
+    SCH_IO_DATABASE plugin;
+    plugin.SetLibraryManagerAdapter( &adapter );
+
+    LIB_SYMBOL* symbol = nullptr;
+
+    try
+    {
+        symbol = plugin.LoadSymbol( dblPath, wxS( "RES-001" ), nullptr );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        // The database connection needs a working ODBC SQLite driver; skip when it is unavailable
+        // so the test does not fail spuriously on minimal CI images.
+        BOOST_TEST_MESSAGE( "Skipping: database library unavailable: " + ioe.What().ToStdString() );
+        return;
+    }
+
+    BOOST_REQUIRE( symbol );
+
+    std::unique_ptr<LIB_SYMBOL> owned( symbol );
+
+    const wxString liveDescription = owned->GetField( FIELD_T::DESCRIPTION )->GetShownText( false );
+
+    // The database row for RES-001 carries a non-empty Description.
+    BOOST_REQUIRE( !liveDescription.IsEmpty() );
+
+    // The chooser tree / search path must agree with the live field the details panel shows.
+    BOOST_CHECK_EQUAL( owned->GetShownDescription(), liveDescription );
+    BOOST_CHECK_EQUAL( owned->GetDesc(), liveDescription );
+
+    // The search-term cache feeds chooser filtering and is built from the shown description, so it
+    // must reflect the database value too.
+    const std::vector<SEARCH_TERM>& terms = owned->GetSearchTerms();
+    bool descriptionTermPresent = std::any_of( terms.begin(), terms.end(),
+                                               [&]( const SEARCH_TERM& aTerm )
+                                               {
+                                                   return aTerm.Text == liveDescription;
+                                               } );
+
+    BOOST_CHECK( descriptionTermPresent );
 }
 
 
