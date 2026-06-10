@@ -64,7 +64,7 @@ void FOOTPRINT_EDIT_FRAME::LoadFootprintFromLibrary( LIB_ID aFPID )
 
     if( useTabs )
     {
-        const wxString key = aFPID.GetLibNickname() + wxT( ":" ) + aFPID.GetLibItemName();
+        const wxString key = aFPID.GetLibNickname().wx_str() + wxT( ':' ) + aFPID.GetLibItemName().wx_str();
 
         // Reactivate rather than reload, which would discard in-tab edits.
         if( int existing = m_tabsPanel->FindTab( key ); existing >= 0 )

@@ -660,9 +660,10 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
 
                         if( aTab.m_pinned && m_tabsPanel )
                         {
-                            if( int idx = m_tabsPanel->FindTab( id.GetLibNickname()
-                                                                + wxT( ":" ) + id.GetLibItemName() );
-                                idx >= 0 )
+                            int idx = m_tabsPanel->FindTab( id.GetLibNickname().wx_str() + wxT( ':' )
+                                                            + id.GetLibItemName().wx_str() );
+
+                            if( idx >= 0 )
                             {
                                 // SetPinned mirrors into the context through onPinChanged, keeping
                                 // the persisted IsPinned() flag in sync.
