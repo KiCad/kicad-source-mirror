@@ -217,10 +217,7 @@ public:
         SetTooltipEnable( COL_STATUS );
     }
 
-    static bool SupportsVisibilityColumn()
-    {
-        return false;
-    }
+    static bool SupportsVisibilityColumn() { return true; }
 
 protected:
     void optionsEditor( int aRow ) override
