@@ -1420,34 +1420,49 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
                 targetField->SetIsKnockout( refField->IsKnockout() );
             }
 
-            // Copy non-field text items (user-added text on the footprint)
+            // Copy non-field text items. Texts can share content (e.g. "${REFERENCE}" on both
+            // F.SilkS and B.SilkS), so match one-to-one and prefer the same layer. Otherwise both
+            // collapse onto one target item and the other side's text is lost.
+            std::set<PCB_TEXT*> consumedTargets;
+
             for( BOARD_ITEM* refItem : refFP->GraphicalItems() )
             {
                 if( refItem->Type() != PCB_TEXT_T )
                     continue;
 
                 PCB_TEXT* refText = static_cast<PCB_TEXT*>( refItem );
+                PCB_TEXT* targetText = nullptr;
 
                 for( BOARD_ITEM* targetItem : targetFP->GraphicalItems() )
                 {
                     if( targetItem->Type() != PCB_TEXT_T )
                         continue;
 
-                    PCB_TEXT* targetText = static_cast<PCB_TEXT*>( targetItem );
+                    PCB_TEXT* candidate = static_cast<PCB_TEXT*>( targetItem );
 
-                    // Match text items by their text content
-                    if( targetText->GetText() == refText->GetText() )
+                    if( consumedTargets.contains( candidate ) || candidate->GetText() != refText->GetText() )
                     {
-                        targetText->SetLayer( refText->GetLayer() );
-                        targetText->SetVisible( refText->IsVisible() );
-                        targetText->SetAttributes( refText->GetAttributes() );
-                        targetText->SetPosition( refText->GetPosition() );
-                        targetText->Rotate( VECTOR2( 0, 0 ), rot );
-                        targetText->Move( disp );
-                        targetText->SetIsKnockout( refText->IsKnockout() );
-                        break;
+                        continue;
                     }
+
+                    targetText = candidate;
+
+                    if( candidate->GetLayer() == refText->GetLayer() )
+                        break;
                 }
+
+                if( !targetText )
+                    continue;
+
+                consumedTargets.insert( targetText );
+
+                targetText->SetLayer( refText->GetLayer() );
+                targetText->SetVisible( refText->IsVisible() );
+                targetText->SetAttributes( refText->GetAttributes() );
+                targetText->SetPosition( refText->GetPosition() );
+                targetText->Rotate( VECTOR2( 0, 0 ), rot );
+                targetText->Move( disp );
+                targetText->SetIsKnockout( refText->IsKnockout() );
             }
 
             // Copy 3D model settings
