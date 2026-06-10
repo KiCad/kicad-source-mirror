@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
 #include <memory>
 #include <optional>
 #include <wx/dataview.h>
@@ -31,7 +32,10 @@
 #include <wx/wupdlock.h>
 #include <pcb_edit_frame.h>
 #include <wx/string.h>
-#include <board_commit.h>
+#include <pcb_draw_panel_gal.h>
+#include <tool/tool_manager.h>
+#include <tools/pcb_selection_tool.h>
+#include <view/view.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_progress_reporters.h>
 #include <zone.h>
@@ -54,7 +58,8 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
         m_zoneSettingsBag( aParent->GetBoard() ),
         m_priorityDragIndex( {} ),
         m_isFillingZones( false ),
-        m_zoneFillComplete( false )
+        m_zoneFillComplete( false ),
+        m_zonesToDelete()
 {
 #ifdef __APPLE__
     m_sizerZoneOP->InsertSpacer( m_sizerZoneOP->GetItemCount(), 5 );
@@ -64,6 +69,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent ) :
     m_btnMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_btnMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
     m_btnMoveBottom->SetBitmap( KiBitmapBundle( BITMAPS::small_bottom ) );
+    m_btnDelete->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_btnAutoAssign->SetBitmap( KiBitmapBundle( BITMAPS::small_sort_desc ) );
 
     m_panelZoneProperties = new PANEL_ZONE_PROPERTIES( m_zonePanel, aParent, m_zoneSettingsBag );
@@ -390,6 +396,85 @@ void DIALOG_ZONE_MANAGER::OnMoveDownClick( wxCommandEvent& aEvent )
 void DIALOG_ZONE_MANAGER::OnMoveBottomClick( wxCommandEvent& aEvent )
 {
     MoveSelectedZonePriority( ZONE_INDEX_MOVEMENT::MOVE_TO_BOTTOM );
+}
+
+
+void DIALOG_ZONE_MANAGER::OnDeleteClick( wxCommandEvent& aEvent )
+{
+    if( !m_viewZonesOverview->HasSelection() )
+        return;
+
+    const wxDataViewItem selectedItem = m_viewZonesOverview->GetSelection();
+
+    if( !selectedItem.IsOk() )
+        return;
+
+    ZONE* selectedZone = m_modelZonesOverview->GetZone( selectedItem );
+
+    if( !selectedZone )
+        return;
+
+    // Find the original zone from the clone
+    ZONE* originalZone = nullptr;
+
+    for( const auto& [orig, clone] : m_zoneSettingsBag.GetZonesCloneMap() )
+    {
+        if( clone.get() == selectedZone )
+        {
+            originalZone = orig;
+            break;
+        }
+    }
+
+    if( !originalZone )
+        return;
+
+    if( std::find( m_zonesToDelete.begin(), m_zonesToDelete.end(), originalZone )
+        != m_zonesToDelete.end() )
+    {
+        return;
+    }
+
+    wxString msg = wxString::Format( _( "Delete zone '%s'?" ), originalZone->GetZoneName() );
+
+    if( !IsOK( this, msg ) )
+        return;
+
+    m_zonesToDelete.push_back( originalZone );
+
+    m_zoneSettingsBag.RemoveZone( originalZone );
+
+    if( originalZone->IsSelected() )
+    {
+        if( PCB_SELECTION_TOOL* selTool = m_pcbFrame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>() )
+        {
+            selTool->RemoveItemFromSel( originalZone );
+        }
+    }
+
+    if( KIGFX::VIEW* view = m_pcbFrame->GetCanvas()->GetView() )
+        view->Hide( originalZone, true );
+
+    m_pcbFrame->GetCanvas()->Refresh();
+
+    wxString currentFilter = m_filterCtrl->GetValue();
+
+    m_modelZonesOverview = new MODEL_ZONES_OVERVIEW( this, m_pcbFrame, m_zoneSettingsBag );
+    m_viewZonesOverview->AssociateModel( m_modelZonesOverview.get() );
+
+    if( !currentFilter.IsEmpty() )
+        m_modelZonesOverview->ApplyFilter( currentFilter, wxDataViewItem() );
+
+    if( m_modelZonesOverview->GetCount() > 0 )
+    {
+        wxDataViewItem firstItem = m_modelZonesOverview->GetItem( 0 );
+        PostProcessZoneViewSelChange( firstItem );
+    }
+    else
+    {
+        m_zonePreviewNotebook->OnZoneSelectionChanged( nullptr );
+        m_panelZoneProperties->SetZone( nullptr );
+    }
 }
 
 

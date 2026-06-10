@@ -99,6 +99,29 @@ void ZONE_SETTINGS_BAG::SetZonePriority( ZONE* aClone, unsigned aPriority )
 }
 
 
+void ZONE_SETTINGS_BAG::RemoveZone( ZONE* aOriginalZone )
+{
+    auto it = m_zonesCloneMap.find( aOriginalZone );
+
+    if( it != m_zonesCloneMap.end() )
+    {
+        ZONE* clone = it->second.get();
+
+        // Remove from cloned list
+        m_clonedZoneList.erase( std::remove( m_clonedZoneList.begin(), m_clonedZoneList.end(), clone ),
+                                m_clonedZoneList.end() );
+
+
+        // Remove from zone settings and priorities maps
+        m_zoneSettings.erase( clone );
+        m_zonePriorities.erase( clone );
+
+        // Remove from clone map
+        m_zonesCloneMap.erase( it );
+    }
+}
+
+
 void ZONE_SETTINGS_BAG::UpdateClonedZones()
 {
     for( ZONE* zone : m_clonedZoneList )

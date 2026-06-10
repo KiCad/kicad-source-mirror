@@ -254,7 +254,29 @@ int GLOBAL_EDIT_TOOL::ZonesManager( const TOOL_EVENT& aEvent )
         dialogResult = ZONE_MANAGER_REPOUR;
 
     if( dialogResult == wxID_CANCEL )
+    {
+        // The dialog hides zones in the view when they are marked for deletion
+        if( KIGFX::VIEW* view = editFrame->GetCanvas()->GetView() )
+        {
+            for( ZONE* zone : dlg.GetZonesToDelete() )
+                view->Hide( zone, false );
+        }
+
+        editFrame->GetCanvas()->Refresh();
         return 0;
+    }
+
+    // Promote the pre-staged CHT_MODIFY entries for any zone the user marked for deletion
+    if( KIGFX::VIEW* view = editFrame->GetCanvas()->GetView() )
+    {
+        for( ZONE* zone : dlg.GetZonesToDelete() )
+        {
+            view->Hide( zone, false );
+
+            commit.Unmodify( zone, nullptr );
+            commit.Remove( zone );
+        }
+    }
 
     // Ensure all zones are deselected before make any change in view, to avoid
     // dangling pointers in EDIT_POINT

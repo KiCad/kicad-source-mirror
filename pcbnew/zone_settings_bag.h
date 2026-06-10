@@ -54,6 +54,12 @@ public:
     void SetZonePriority( ZONE* aClone, unsigned aPriority );
 
     /**
+     * Remove a zone from the bag (used when marking for deletion)
+     * @param aOriginalZone is the original zone pointer
+     */
+    void RemoveZone( ZONE* aOriginalZone );
+
+    /**
      * The cloned list is the working storage.
      */
     void UpdateClonedZones();

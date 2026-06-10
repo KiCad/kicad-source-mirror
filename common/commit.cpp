@@ -157,6 +157,30 @@ void COMMIT::Unstage( EDA_ITEM* aItem, BASE_SCREEN* aScreen )
 }
 
 
+void COMMIT::Unmodify( EDA_ITEM* aItem, BASE_SCREEN* aScreen )
+{
+    auto changedIt = m_changedItems.find( { aItem, aScreen } );
+
+    if( changedIt == m_changedItems.end() )
+        return;
+
+    std::erase_if( m_entries,
+                   [&]( COMMIT_LINE& line )
+                   {
+                       if( line.m_item == aItem && line.m_screen == aScreen
+                           && ( line.m_type & CHT_TYPE ) == CHT_MODIFY )
+                       {
+                           delete line.m_copy;
+                           return true;
+                       }
+
+                       return false;
+                   } );
+
+    m_changedItems.erase( changedIt );
+}
+
+
 COMMIT& COMMIT::Modified( EDA_ITEM* aItem, EDA_ITEM* aCopy, BASE_SCREEN *aScreen )
 {
     if( undoLevelItem( aItem ) != aItem )

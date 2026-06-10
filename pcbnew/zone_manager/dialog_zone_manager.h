@@ -63,6 +63,8 @@ public:
 
     bool GetRepourOnClose() { return m_checkRepour->GetValue(); }
 
+    const std::vector<ZONE*>& GetZonesToDelete() const { return m_zonesToDelete; }
+
 protected:
     void OnZoneSelectionChanged( ZONE* aZone );
     void OnDataViewCtrlSelectionChanged( wxDataViewEvent& event ) override;
@@ -88,6 +90,7 @@ protected:
     void OnMoveUpClick( wxCommandEvent& aEvent ) override;
     void OnMoveDownClick( wxCommandEvent& aEvent ) override;
     void OnMoveBottomClick( wxCommandEvent& aEvent ) override;
+    void OnDeleteClick( wxCommandEvent& aEvent ) override;
     void OnAutoAssignClick( wxCommandEvent& aEvent ) override;
     void OnFilterCtrlCancel( wxCommandEvent& aEvent ) override;
     void OnFilterCtrlSearch( wxCommandEvent& aEvent ) override;
@@ -118,4 +121,5 @@ private:
     std::unique_ptr<ZONE_FILLER>          m_filler;
     bool                                  m_isFillingZones;
     bool                                  m_zoneFillComplete;
+    std::vector<ZONE*>                    m_zonesToDelete;
 };
