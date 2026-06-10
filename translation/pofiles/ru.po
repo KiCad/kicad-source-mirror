@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-05-07 18:04+0000\n"
+"PO-Revision-Date: 2026-06-11 09:27+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ru/>\n"
@@ -35,7 +35,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.6\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2754,74 +2754,75 @@ msgid "Add Netclass Assignment"
 msgstr "Добавить назначение класса цепи"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:33
-#, fuzzy
 msgid "(missing)"
-msgstr "(файл отсутствует)"
+msgstr "(отсутствует)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:45
 msgid "File"
 msgstr "Файл"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:46
-#, fuzzy
 msgid "Saved version"
-msgstr "Показать все версии"
+msgstr "Сохранённая версия"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:47
-#, fuzzy
 msgid "Auto-saved copy"
-msgstr "Восстановление из автосохранения"
+msgstr "Авто-сохранённая копия"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
-#, fuzzy
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
-"KiCad обнаружил несохраненные изменения с вашего последнего сеанса, которые "
-"новее сохраненных файлов проекта."
+"KiCad обнаружил авто-сохранённые изменения с прошлого сеанса. Обычно это "
+"означает, что KiCad неожиданно закрылся, когда у вас были несохраненные "
+"изменения."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore auto-saved"
-msgstr "Вернуть по умолчанию"
+msgstr "Восстановить авто-сохранённые"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 msgstr ""
+"Заменит ваш сохраненный файл на авто-сохранённую версию. Ранее сохраненное "
+"содержимое будет удалено."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep current"
-msgstr "Ток"
+msgstr "Оставить текущее"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr ""
+"Оставит ваш сохраненный файл без изменений и удалит авто-сохранённые "
+"изменения."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep both"
-msgstr "Запрет размещения"
+msgstr "Оставить оба"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 msgstr ""
+"Сохраняет ваш файл и записывает рядом с ним авто-сохранённую версию в виде "
+"отдельного файла с временной меткой, который вы можете проверить позже."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel open"
-msgstr "Отмена"
+msgstr "Отменить открытие"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:49
 msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"Закрывает этот диалог без внесения изменений. Авто-сохранённые файлы "
+"остаются на диске и будут вновь предложены при следующем открытии проекта."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
@@ -3263,11 +3264,13 @@ msgstr "Изменить свойства группы"
 
 #: common/dialogs/dialog_group_properties.cpp:177
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "Группа не может содержать сама себя."
 
 #: common/dialogs/dialog_group_properties.cpp:185
 msgid "Cannot add this group because it already contains the current group."
 msgstr ""
+"Невозможно добавить эту группу, поскольку в ней уже содержится текущая "
+"группа."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -4071,25 +4074,24 @@ msgstr "Сообщение коммита не может быть пустым"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:73
 msgid "Key passphrase:"
-msgstr ""
+msgstr "Пароль от ключа:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
-#, fuzzy
 msgid "Password / token:"
-msgstr "Пароль:"
+msgstr "Пароль / токен:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
-msgstr ""
+msgstr "Для доступа требуется аутентификация:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "Username and password"
-msgstr ""
+msgstr "Имя пользователя и пароль"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr ""
+msgstr "SSH-ключ"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -4102,14 +4104,12 @@ msgid "Username:"
 msgstr "Имя пользователя:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:63
-#, fuzzy
 msgid "SSH key:"
-msgstr "Пароль ключа SSH:"
+msgstr "SSH-ключ:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "Выберите файл приватного ключа SSH"
+msgstr "Выберите приватный ключ SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -4117,14 +4117,12 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:74
-#, fuzzy
 msgid "Save credentials"
-msgstr "Сохранить все токи"
+msgstr "Сохранить данные для входа"
 
 #: common/dialogs/git/dialog_git_credentials_base.h:57
-#, fuzzy
 msgid "Git Authentication Required"
-msgstr "Аутентификация"
+msgstr "Требуется аутентификация Git"
 
 #: common/dialogs/git/dialog_git_repository.cpp:178
 #: common/dialogs/git/dialog_git_repository.cpp:405
@@ -6703,9 +6701,9 @@ msgid "Failed to recover auto-saved file '%s'."
 msgstr "Не удалось восстановить файл из автосохранения '%s'."
 
 #: common/eda_base_frame.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write recovered file '%s'."
-msgstr "Не удалось записать файл '%s'."
+msgstr "Не удалось записать восстановленный файл '%s'."
 
 #: common/eda_base_frame.cpp:609 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:136
@@ -8102,37 +8100,37 @@ msgstr "Не удалось создать коммит: %s"
 
 #: common/git/libgit_backend.cpp:311 kicad/project_tree_pane.cpp:2768
 msgid "Cannot amend: the branch has no commits yet."
-msgstr ""
+msgstr "Невозможно исправить: в ветке пока нет коммитов."
 
 #: common/git/libgit_backend.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD commit: %s"
-msgstr "Не удалось получить коммит: %s"
+msgstr "Не удалось получить коммит HEAD: %s"
 
 #: common/git/libgit_backend.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent commit: %s"
-msgstr "Не удалось получить коммит: %s"
+msgstr "Не удалось получить родительский коммит: %s"
 
 #: common/git/libgit_backend.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD tree: %s"
-msgstr "Не удалось получить ссылку на HEAD: %s"
+msgstr "Не удалось получить HEAD дерева: %s"
 
 #: common/git/libgit_backend.cpp:373 common/git/libgit_backend.cpp:396
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to reset index: %s"
-msgstr "Не удалось записать индекс: %s"
+msgstr "Не удалось сбросить индекс: %s"
 
 #: common/git/libgit_backend.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent tree: %s"
-msgstr "Не удалось записать дерево: %s"
+msgstr "Не удалось получить родительское дерево: %s"
 
 #: common/git/libgit_backend.cpp:465 kicad/project_tree_pane.cpp:3013
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to amend commit: %s"
-msgstr "Не удалось получить коммит: %s"
+msgstr "Не удалось исправить коммит: %s"
 
 #: common/git/libgit_backend.cpp:492 common/git/libgit_backend.cpp:1071
 #, c-format
@@ -8163,9 +8161,9 @@ msgid "No repository available to set up remote"
 msgstr "Нет доступного репозитория для настройки удаленного подключения"
 
 #: common/git/libgit_backend.cpp:905
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to set up remote: %s"
-msgstr "Не удалось создать удаленный репозиторий: %s"
+msgstr "Не удалось настроить удаленный репозиторий: %s"
 
 #: common/git/libgit_backend.cpp:937
 msgid "No repository available"
@@ -8187,9 +8185,9 @@ msgid "Failed to switch to branch '%s': %s"
 msgstr "Не удалось переключиться на ветку '%s': %s"
 
 #: common/git/libgit_backend.cpp:1004
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create local branch '%s': %s"
-msgstr "Не удалось найти ветку '%s': %s"
+msgstr "Не удалось создать локальную ветку '%s': %s"
 
 #: common/git/libgit_backend.cpp:1018
 #, c-format
@@ -8214,6 +8212,8 @@ msgstr "Не удалось прочитать 'FETCH_HEAD'"
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
+"Нечего получать: в удаленном репозитории нет ветки, соответствующей текущей "
+"локальной ветке."
 
 #: common/git/libgit_backend.cpp:1189
 msgid "Could not lookup commit"
@@ -8281,40 +8281,38 @@ msgid "Merge failed: %s"
 msgstr "Слияние не удалось: %s"
 
 #: common/git/libgit_backend.cpp:1472
-#, fuzzy
 msgid "Could not read repository index after merge."
-msgstr "Не удалось получить индекс репозитория"
+msgstr "Не удалось прочитать индекс репозитория после слияния."
 
 #: common/git/libgit_backend.cpp:1504
-#, fuzzy
 msgid "Could not write the merge result."
-msgstr "Не удалось записать файлы чертежа в каталог '%s'."
+msgstr "Не удалось записать результат слияния."
 
 #: common/git/libgit_backend.cpp:1512
-#, fuzzy
 msgid "Could not get the repository head."
-msgstr "Не удалось получить последний коммит репозитория"
+msgstr "Не удалось получить последний коммит репозитория."
 
 #: common/git/libgit_backend.cpp:1522
-#, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "Не удалось найти целевой коммит"
+msgstr "Не удалось найти коммиты для слияния."
 
 #: common/git/libgit_backend.cpp:1531 common/git/libgit_backend.cpp:1716
 msgid ""
 "Could not create a commit signature.  Set user.name and user.email in your "
 "git configuration."
 msgstr ""
+"Не удалось создать подпись коммита. Укажите user.name и user.email в "
+"настройках Git."
 
 #: common/git/libgit_backend.cpp:1540
-#, fuzzy, c-format
+#, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "Объединить пересекающуюся графику в конт. пл."
+msgstr "Слить ветвь с удаленным отслеживанием в %s"
 
 #: common/git/libgit_backend.cpp:1548
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create merge commit: %s"
-msgstr "Не удалось произвести слияние коммитов"
+msgstr "Не удалось создать коммит слияния: %s"
 
 #: common/git/libgit_backend.cpp:1565
 msgid ""
@@ -8340,39 +8338,36 @@ msgid "Rebase finish failed: %s"
 msgstr "Не удалось завершить перебазирование: %s"
 
 #: common/git/libgit_backend.cpp:1637 common/git/libgit_backend.cpp:1683
-#, fuzzy
 msgid "Another git operation is in progress."
-msgstr "Замкнуть контур текущей зоны"
+msgstr "Выполняется другая операция Git."
 
 #: common/git/libgit_backend.cpp:1645 common/git/libgit_backend.cpp:1698
-#, fuzzy
 msgid "Could not find the matching remote branch."
-msgstr "Не удалось найти '%s' в импортируемой библиотеке."
+msgstr "Не удалось найти соответствующую удаленную ветвь."
 
 #: common/git/libgit_backend.cpp:1654 common/git/libgit_backend.cpp:1707
-#, fuzzy
 msgid "Could not read the remote branch."
-msgstr "Не удалось открыть путь к шаблону '%s'"
+msgstr "Не удалось прочитать удаленную ветвь."
 
 #: common/git/libgit_backend.cpp:1663
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reset to the remote branch: %s"
-msgstr "Не удалось перейти на пульт: %s"
+msgstr "Не удалось сбросить до удаленной ветки: %s"
 
 #: common/git/libgit_backend.cpp:1689
-#, fuzzy
 msgid ""
 "Cannot rebase: you have unstaged changes.  Please commit or stash them first."
 msgstr ""
-"Невозможно выполнить слияние: у вас есть неиндексированные изменения. "
-"Пожалуйста, зафиксируйте (commit) или спрячьте (stash) их перед получением "
-"изменений."
+"Невозможно перебазировать: у вас есть неиндексированные изменения.  Сначала "
+"зафиксируйте их или спрячьте."
 
 #: common/git/libgit_backend.cpp:1747 common/git/libgit_backend.cpp:1758
 msgid ""
 "The rebase ran into conflicts.  This is best resolved from a git command "
 "line."
 msgstr ""
+"При перебазировании возникли конфликты.  Лучше всего устранять их из "
+"командной строки Git."
 
 #: common/grid_tricks.cpp:395 common/tool/actions.cpp:313
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
@@ -9817,9 +9812,9 @@ msgid "The library table is of wrong type"
 msgstr "Тип таблицы библиотеки некорректен"
 
 #: common/libraries/library_table.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Library table '%s' is read-only"
-msgstr "Библиотека '%s' доступна только для чтения."
+msgstr "Таблица библиотек '%s' доступна только для чтения."
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -15771,9 +15766,9 @@ msgid "Derived symbol must have a parent selected"
 msgstr "У производного символа должен быть выбран родитель"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:505
-#, fuzzy, c-format
+#, c-format
 msgid "The unit name '%s' is already in use."
-msgstr "Имя '%s' уже используется."
+msgstr "Имя части '%s' уже используется."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:520
 msgid "Delete extra units from symbol?"
@@ -26601,9 +26596,9 @@ msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "Изменить %s 'Исключить из перечня элементов' с '%s' на '%s'."
 
 #: eeschema/tools/backannotate.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
-msgstr "Изменить %s 'Исключить из перечня элементов' с '%s' на '%s'."
+msgstr "Изменить %s 'Исключить из файлов размещения' с '%s' на '%s'."
 
 #: eeschema/tools/backannotate.cpp:925
 #, c-format
@@ -28740,19 +28735,18 @@ msgid "Reached end of sheet."
 msgstr "Достигнут конец листа."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:389
-#, fuzzy
 msgid "No matches found."
-msgstr "Шаблоны не найдены"
+msgstr "Соответствий не найдено."
 
 #: eeschema/tools/sch_group_tool.cpp:46 eeschema/tools/sch_group_tool.cpp:72
 #: pcbnew/tools/pcb_group_tool.cpp:49 pcbnew/tools/pcb_group_tool.cpp:64
-#, fuzzy
 msgid "Some selected items cannot be grouped."
-msgstr "Добавить выбранные элементы в новую группу"
+msgstr "Некоторые выбранные элементы нельзя сгруппировать."
 
 #: eeschema/tools/sch_group_tool.cpp:57 eeschema/tools/sch_group_tool.cpp:65
 msgid "Child items cannot be grouped separately from their parent item."
 msgstr ""
+"Дочерние элементы нельзя сгруппировать отдельно от их родительского элемента."
 
 #: eeschema/tools/sch_group_tool.cpp:94 pcbnew/tools/pcb_group_tool.cpp:86
 msgid "Click on new member..."
@@ -31674,9 +31668,8 @@ msgid "Plot the layers to a single PDF file with multiple pages"
 msgstr "Чертить слои на одном файле PDF с несколькими страницами"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:132
-#, fuzzy
 msgid "Suppress footprint property popups"
-msgstr "Добавить всплывающие окна с информацией"
+msgstr "Отключить вспл. окна параметров посад. мест"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:195
 msgid "Cannot use more than one mode flag\n"
@@ -33726,13 +33719,14 @@ msgid "Initialize a new repository"
 msgstr "Инициализировать новый репозиторий"
 
 #: kicad/project_tree_pane.cpp:1042
-#, fuzzy
 msgid "Configure Default Remote..."
-msgstr "Настроить пути..."
+msgstr "Настроить удаленный репозиторий по умолчанию..."
 
 #: kicad/project_tree_pane.cpp:1043
 msgid "Set or change the default remote URL and credentials"
 msgstr ""
+"Установить или изменить URL-адрес удаленного репозитория и учетные данные по "
+"умолчанию"
 
 #: kicad/project_tree_pane.cpp:1046
 msgid "Commit Project..."
@@ -33743,13 +33737,12 @@ msgid "Commit changes to the local repository"
 msgstr "Закоммитить изменения в локальный репозиторий"
 
 #: kicad/project_tree_pane.cpp:1050
-#, fuzzy
 msgid "Amend Last Commit..."
-msgstr "Последний коммит"
+msgstr "Исправить последний коммит..."
 
 #: kicad/project_tree_pane.cpp:1051
 msgid "Rewrite the most recent commit on the current branch"
-msgstr ""
+msgstr "Переписать последний коммит в текущей ветке"
 
 #: kicad/project_tree_pane.cpp:1054
 msgid "Push"
@@ -33760,14 +33753,14 @@ msgid "Pull"
 msgstr "Получить (Pull)"
 
 #: kicad/project_tree_pane.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Push %s to %s"
-msgstr "%s %s на %s"
+msgstr "Отправить %s в %s"
 
 #: kicad/project_tree_pane.cpp:1060
-#, fuzzy, c-format
+#, c-format
 msgid "Pull from %s"
-msgstr "из %s"
+msgstr "Подтянуть из %s"
 
 #: kicad/project_tree_pane.cpp:1064
 msgid "Push committed local changes to remote repository"
@@ -33880,43 +33873,39 @@ msgid "Fetch Remote"
 msgstr "Получить из внешнего репозитория"
 
 #: kicad/project_tree_pane.cpp:1988
-#, fuzzy
 msgid "Configure Default Remote"
-msgstr "Установить внешний репозиторий по умолчанию"
+msgstr "Настроить удаленный репозиторий по умолчанию"
 
 #: kicad/project_tree_pane.cpp:2004
-#, fuzzy
 msgid "Failed to configure remote."
-msgstr "Не удалось создать удаленный репозиторий: %s"
+msgstr "Не удалось настроить удаленный репозиторий."
 
 #: kicad/project_tree_pane.cpp:2057
-#, fuzzy
 msgid "Already up to date."
-msgstr "Уже размещенные"
+msgstr "Уже обновлено."
 
 #: kicad/project_tree_pane.cpp:2058
-#, fuzzy, c-format
+#, c-format
 msgid "Already up to date with %s."
-msgstr "Разрешенная ширина мостиков терморазгрузки: %s."
+msgstr "Уже обновлено до %s."
 
 #: kicad/project_tree_pane.cpp:2064
 msgid "Pulled changes (fast-forward)."
-msgstr ""
+msgstr "Полученные изменения (fast-forward)."
 
 #: kicad/project_tree_pane.cpp:2065
 #, c-format
 msgid "Pulled %s into %s (fast-forward)."
-msgstr ""
+msgstr "Получено %s в %s (fast-forward)."
 
 #: kicad/project_tree_pane.cpp:2070
-#, fuzzy
 msgid "Pulled changes."
-msgstr "Построить изменения"
+msgstr "Получены изменения."
 
 #: kicad/project_tree_pane.cpp:2071
-#, fuzzy, c-format
+#, c-format
 msgid "Pulled %s into %s."
-msgstr "Перех. отв. %s на %s"
+msgstr "Получено %s в %s"
 
 #: kicad/project_tree_pane.cpp:2081
 msgid ""
@@ -33926,63 +33915,60 @@ msgid ""
 "You can discard your local commits and use the remote version, or rebase "
 "your commits on top of the remote."
 msgstr ""
+"Ваши локальные изменения конфликтуют с удалёнными, поэтому операция pull "
+"была отменена, а изменения не были внесены.\n"
+"\n"
+"Вы можете отменить локальные коммиты и использовать удалённую версию или "
+"выполнить перебазирование коммитов поверх удалённой версии."
 
 #: kicad/project_tree_pane.cpp:2085
-#, fuzzy
 msgid "Pull Conflict"
-msgstr "Конфликты"
+msgstr "Конфликт при получении изменений"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Use Remote (discard my changes)"
-msgstr ""
+msgstr "Использовать удаленное (отменить мои изменения)"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Rebase"
-msgstr ""
+msgstr "Перебазировать"
 
 #: kicad/project_tree_pane.cpp:2095
-#, fuzzy
 msgid "Reset to the remote version."
-msgstr "Сбросить до текущего угла опорной точки."
+msgstr "Сбросить до версии из удалённого репозитория."
 
 #: kicad/project_tree_pane.cpp:2097
-#, fuzzy
 msgid "Failed to reset to remote"
-msgstr "Не удалось задать внешний репозиторий по умолчанию."
+msgstr "Не удалось выполнить сброс до удалённой версии"
 
 #: kicad/project_tree_pane.cpp:2104
-#, fuzzy
 msgid "Rebased your changes onto the remote."
-msgstr "Не удалось толкнуть изменения во внешний репозиторий."
+msgstr "Изменения перебазированы на удалённый репозиторий."
 
 #: kicad/project_tree_pane.cpp:2106
-#, fuzzy
 msgid "Could not rebase"
-msgstr "Не удалось прочитать файл "
+msgstr "Не удалось перебазировать"
 
 #: kicad/project_tree_pane.cpp:2110
-#, fuzzy
 msgid "Pull cancelled."
-msgstr "Отменено"
+msgstr "Получение отменено."
 
 #: kicad/project_tree_pane.cpp:2119
-#, fuzzy
 msgid "Pull failed."
-msgstr "Все файлы"
+msgstr "Получение не удалось."
 
 #: kicad/project_tree_pane.cpp:2120
 msgid "Failed to pull project"
 msgstr "Не удалось вытащить проект"
 
 #: kicad/project_tree_pane.cpp:2154
-#, fuzzy
 msgid "Pushed to remote."
-msgstr "Не удалось найти внешний репозиторий"
+msgstr "Отправлено в удалённый репозиторий."
 
 #: kicad/project_tree_pane.cpp:2155
-#, fuzzy, c-format
+#, c-format
 msgid "Pushed %s to %s."
-msgstr "Перех. отв. %s на %s"
+msgstr "Отправлено %s в %s."
 
 #: kicad/project_tree_pane.cpp:2168
 #, c-format
@@ -33994,19 +33980,26 @@ msgid ""
 "\n"
 "Anyone who already pulled the previous version will need to reset their copy."
 msgstr ""
+"Отправление отклонено: ваша локальная ветка и %s разошлись.\n"
+"\n"
+"Обычно это происходит после исправления или перезаписи коммита, который уже "
+"был отправлен.  Выполнить принудительную отправку, чтобы перезаписать "
+"удалённую ветку?\n"
+"\n"
+"Всем, кто уже получил предыдущую версию, необходимо будет сбросить свою "
+"копию."
 
 #: kicad/project_tree_pane.cpp:2174
 msgid "Force Push?"
-msgstr ""
+msgstr "Отправить принудительно?"
 
 #: kicad/project_tree_pane.cpp:2176
 msgid "&Force Push"
-msgstr ""
+msgstr "Отправить принудительно"
 
 #: kicad/project_tree_pane.cpp:2185
-#, fuzzy
 msgid "Push failed."
-msgstr "Работа не удалась"
+msgstr "Отправка не удалась."
 
 #: kicad/project_tree_pane.cpp:2186
 msgid "Failed to push project"
@@ -34017,34 +34010,32 @@ msgid "The selected directory is not a Git project."
 msgstr "Выбранный каталог не является проектом Git."
 
 #: kicad/project_tree_pane.cpp:2581
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before committing?"
 msgstr ""
-"Следующие правила содержат несохраненные изменения:\n"
+"Следующие редакторы имеют несохраненные изменения: %s\n"
 "\n"
+"Сохранить их перед коммитом?"
 
 #: kicad/project_tree_pane.cpp:2584 kicad/project_tree_pane.cpp:2859
-#, fuzzy
 msgid "Unsaved Changes"
-msgstr "Отменить изменения"
+msgstr "Несохраненные изменения"
 
 #: kicad/project_tree_pane.cpp:2587
-#, fuzzy
 msgid "&Save and Commit"
-msgstr "Сохранить копию..."
+msgstr "Сохранить и закоммитить"
 
 #: kicad/project_tree_pane.cpp:2587
-#, fuzzy
 msgid "Commit &Anyway"
-msgstr "(%s чтобы зафиксировать все равно.)"
+msgstr "Все равно закоммитить"
 
 #: kicad/project_tree_pane.cpp:2604 kicad/project_tree_pane.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid "Could not save %s."
-msgstr "Не удалось прочитать файл %s"
+msgstr "Не удалось сохранить %s."
 
 #: kicad/project_tree_pane.cpp:2721
 msgid "Discarding commit due to empty commit message."
@@ -34062,55 +34053,54 @@ msgid ""
 "Amending rewrites public history.  Anyone who pulled this commit will need "
 "to reset their copy."
 msgstr ""
+"Последний коммит уже отправлен в %s.\n"
+"\n"
+"Изменение коммита перезаписывает публичную историю.  Всем, кто получил этот "
+"коммит, необходимо будет сбросить свою копию."
 
 #: kicad/project_tree_pane.cpp:2815
 msgid "Amend Published Commit?"
-msgstr ""
+msgstr "Исправить опубликованный коммит?"
 
 #: kicad/project_tree_pane.cpp:2817 kicad/project_tree_pane.cpp:2862
-#, fuzzy
 msgid "Amend &Anyway"
-msgstr "Добавить в любом случае"
+msgstr "Всё равно исправить"
 
 #: kicad/project_tree_pane.cpp:2856
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before amending?"
 msgstr ""
-"Следующие правила содержат несохраненные изменения:\n"
+"Следующие редакторы имеют несохраненные изменения: %s\n"
 "\n"
+"Сохранить их перед исправлением?"
 
 #: kicad/project_tree_pane.cpp:2862
-#, fuzzy
 msgid "&Save and Amend"
-msgstr "Сохранить как изображение"
+msgstr "Сохранить и исправить"
 
 #: kicad/project_tree_pane.cpp:2995
-#, fuzzy
 msgid "Amend Last Commit"
-msgstr "Последний коммит"
+msgstr "Исправить последний коммит"
 
 #: kicad/project_tree_pane.cpp:3003
-#, fuzzy
 msgid "Discarding amend due to empty commit message."
-msgstr "Отмена коммита из-за пустого сообщения."
+msgstr "Отмена исправления из-за пустого сообщения."
 
 #: kicad/project_tree_pane.cpp:3084
-#, fuzzy
 msgid "Fetched from remote."
-msgstr "Получить из внешнего репозитория"
+msgstr "Получено из внешнего репозитория."
 
 #: kicad/project_tree_pane.cpp:3085
-#, fuzzy, c-format
+#, c-format
 msgid "Fetched from %s."
-msgstr "из %s"
+msgstr "Получено из %s."
 
 #: kicad/project_tree_pane.cpp:3092
-#, fuzzy
 msgid "Fetch failed."
-msgstr "Открыть sch файл"
+msgstr "Получение не удалось."
 
 #: kicad/project_tree_traverser.cpp:216
 #, c-format
@@ -40055,9 +40045,9 @@ msgid "Run DRC"
 msgstr "Проверить"
 
 #: pcbnew/dialogs/dialog_drc.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "Elapsed: %s"
-msgstr "Правило: %s"
+msgstr "Прошло: %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:378
 msgid "Report All Errors for Each Track"
@@ -40083,31 +40073,31 @@ msgstr "Показать правила проектирования."
 
 #: pcbnew/dialogs/dialog_drc.cpp:522
 msgid "Elapsed: 0 s"
-msgstr ""
+msgstr "Прошло: 0 с"
 
 #: pcbnew/dialogs/dialog_drc.cpp:537
 #, c-format
 msgid "%1$d min %2$d s"
-msgstr ""
+msgstr "%1$d мин %2$d с"
 
 #: pcbnew/dialogs/dialog_drc.cpp:539
-#, fuzzy, c-format
+#, c-format
 msgid "%.2f s"
-msgstr "%.2f мм"
+msgstr "%.2f с"
 
 #: pcbnew/dialogs/dialog_drc.cpp:544
 msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- DRC отменено пользователем.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid "Canceled after %s"
-msgstr "Отменить изменения"
+msgstr "Отменено после %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:555
-#, fuzzy, c-format
+#, c-format
 msgid "Completed in %s"
-msgstr "Компонент \"%s\" добавлен в \"%s\""
+msgstr "Завершено за %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:897
 #, c-format
@@ -40690,34 +40680,35 @@ msgstr "Выходной файл 3D-модели"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:416
 msgid "Please save the board before exporting STEP."
-msgstr ""
+msgstr "Сохраните плату перед экспортом в STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:423
 msgid ""
 "Board file not found on disk.\n"
 "Save the board before exporting STEP."
 msgstr ""
+"Файл платы не найден на диске.\n"
+"Сохраните плату перед экспортом в STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:435
 msgid ""
 "The board directory no longer exists.\n"
 "Save the board to a valid location before exporting STEP."
 msgstr ""
+"Каталог платы больше не существует.\n"
+"Сохраните плату в допустимом расположении перед экспортом в STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:445
-#, fuzzy
 msgid "Failed to reserve a temporary filename for STEP export."
-msgstr "Не удалось переименовать временный файл '%s'."
+msgstr "Не удалось зарезервировать временное имя файла для экспорта в STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:464
-#, fuzzy
 msgid "Failed to save the current board state for export."
-msgstr "Не удалось сохранить файл библиотеки посад. мест '%s'."
+msgstr "Не удалось сохранить текущее состояние платы для экспорта."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:477
-#, fuzzy
 msgid "Failed to stage the project file for STEP export."
-msgstr "Не удалось толкнуть изменения во внешний репозиторий."
+msgstr "Не удалось подготовить файл проекта к экспорту в STEP."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:516
 msgid "No filename for output file"
@@ -42892,15 +42883,16 @@ msgstr ""
 "KiCad."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:99
-#, fuzzy
 msgid "Keep KiCad layer names"
-msgstr "Оставить наружные слои"
+msgstr "Оставить имена слоев KiCad"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:100
 msgid ""
 "If checked, layers will keep their standard KiCad names instead of being "
 "renamed to the imported layer names."
 msgstr ""
+"Если установлено, слои будут иметь стандартные имена KiCad, а не будут "
+"названы по именам импортированных слоев."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:67
 msgid "Edit Mapping of Imported Layers"
@@ -45445,15 +45437,16 @@ msgid "Unused Pads"
 msgstr "Неиспользуемые конт. пл."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:35
-#, fuzzy
 msgid "Apply design block layouts to new groups"
-msgstr "Применить компоновку связанного дизайн-блока к выбранной группе"
+msgstr "Применить компоновки дизайн-блоков к новым группам"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:36
 msgid ""
 "For each new group created from a design block, apply the block's saved "
 "footprint placement and routing automatically."
 msgstr ""
+"Для каждой новой группы, созданной из дизайн-блока, автоматически применять "
+"сохранённые расположения посад. мест и трассировку блока."
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:47
 msgid "Update Footprints"
@@ -46866,13 +46859,12 @@ msgid "Cancel Changes?"
 msgstr "Отменить изменения?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:157
-#, fuzzy
 msgid "Show Matching Items"
-msgstr "Показать совпадения"
+msgstr "Показать подходящие элементы"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:210
 msgid "Cannot show matching items without an open project."
-msgstr ""
+msgstr "Невозможно отобразить подходящие элементы без открытого проекта."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:232
 #: pcbnew/dialogs/panel_setup_rules.cpp:250
@@ -46888,32 +46880,33 @@ msgid "ERROR:"
 msgstr "ОШИБКА:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Could not scan rules text: %s"
-msgstr "Не удалось перейти на пульт: %s"
+msgstr "Сканирование текста правил не удалось: %s"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:338
 msgid "Place the cursor inside a (rule ...) block to show matching items."
-msgstr ""
+msgstr "Наведите курсор на блок (rule ...), чтобы увидеть подходящие элементы."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:347
 msgid "The rule under the cursor has no name; add a name to identify it."
 msgstr ""
+"Правило под курсором не имеет имени; добавьте имя, чтобы идентифицировать "
+"его."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:367
-#, fuzzy, c-format
+#, c-format
 msgid "Rule '%s' could not be located after parsing."
-msgstr "Не удалось создать файл '%s'."
+msgstr "Правило '%s' не удалось найти после разбора."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:386
-#, fuzzy
 msgid "DRC engine not available."
-msgstr "Список цепей схемы недоступен"
+msgstr "Движок проверки правил DRC недоступен."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:409
 #, c-format
 msgid "Rule '%s': %zu matching item(s)."
-msgstr ""
+msgstr "Правило '%s': найдено %zu подходящих элементов."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:999
 #, c-format
@@ -58387,6 +58380,8 @@ msgid ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
 msgstr ""
+"Посад. места нельзя отражать. Используйте «Перевернуть», чтобы переместить "
+"их на другую сторону платы."
 
 #: pcbnew/tools/edit_tool.cpp:2948 pcbnew/tools/pcb_actions.cpp:709
 msgid "Change Side / Flip"
@@ -60750,9 +60745,8 @@ msgid "Show a manager dialog for Generator objects"
 msgstr "Показать диалог менеджера объектов генератора"
 
 #: pcbnew/tools/pcb_actions.cpp:2849
-#, fuzzy
 msgid "Length Tuning Settings"
-msgstr "Параметры подстройки длины..."
+msgstr "Параметры подстройки длины"
 
 #: pcbnew/tools/pcb_actions.cpp:2850
 msgid "Length Tuning Settings..."
@@ -60846,9 +60840,8 @@ msgid "Design block has no layout to place."
 msgstr "Дизайн-блок не имеет компоновки для размещения."
 
 #: pcbnew/tools/pcb_control.cpp:1493
-#, fuzzy
 msgid "No groups with a linked design block are selected."
-msgstr "Применить компоновку связанного дизайн-блока к выбранной группе"
+msgstr "Нет выбранных групп со связанным дизайн-блоком."
 
 #: pcbnew/tools/pcb_control.cpp:1518 pcbnew/tools/pcb_selection_tool.cpp:4716
 msgid ""
@@ -60858,75 +60851,67 @@ msgstr ""
 "«Разблокировать», чтобы работать с ними."
 
 #: pcbnew/tools/pcb_control.cpp:1541
-#, fuzzy
 msgid "Applying Design Block Layouts"
-msgstr "Применить компоновку дизайн-блока"
+msgstr "Применение компоновки дизайн-блока"
 
 #: pcbnew/tools/pcb_control.cpp:1572
-#, fuzzy
 msgid "design block is not in the loaded libraries"
-msgstr "Дизайн-блок не имеет действительного идентификатора библиотеки."
+msgstr "Дизайн-блок отсутствует в загруженных библиотеках."
 
 #: pcbnew/tools/pcb_control.cpp:1578
-#, fuzzy
 msgid "design block has no saved PCB layout"
-msgstr "Дизайн-блок не имеет компоновки для размещения."
+msgstr "Дизайн-блок не имеет сохраненной компоновки."
 
 #: pcbnew/tools/pcb_control.cpp:1609
-#, fuzzy
 msgid "could not load the design block's layout"
-msgstr "Не удалось найти дизайн-блок %s."
+msgstr "Не удалось загрузить компоновку дизайн-блока."
 
 #: pcbnew/tools/pcb_control.cpp:1636
-#, fuzzy
 msgid "design block layout could not be loaded"
-msgstr "Установить компоновку дизайн-блока на текущую плату"
+msgstr "Не удалось загрузить компоновку дизайн-блока"
 
 #: pcbnew/tools/pcb_control.cpp:1669
-#, fuzzy
 msgid "group has no footprints"
-msgstr "Просмотреть доступные посад. места и выбрать одно из них"
+msgstr "в группе нет посад. мест"
 
 #: pcbnew/tools/pcb_control.cpp:1708
-#, fuzzy
 msgid "layout copy failed"
-msgstr "Не удалось скопировать файл '%s'."
+msgstr "не удалось скопировать компоновку"
 
 #: pcbnew/tools/pcb_control.cpp:1723
 #, c-format
 msgid "Applying layout to group %zu of %zu..."
-msgstr ""
+msgstr "Применение компоновки к группе %zu из %zu..."
 
 #: pcbnew/tools/pcb_control.cpp:1746
-#, fuzzy
 msgid "Apply design block layout cancelled."
-msgstr "Применить компоновку дизайн-блока"
+msgstr "Применение компоновки дизайн-блока отменено."
 
 #: pcbnew/tools/pcb_control.cpp:1752
-#, fuzzy, c-format
+#, c-format
 msgid "Apply design block layout to %d group(s)"
-msgstr "Применить компоновку связанного дизайн-блока к выбранной группе"
+msgstr "Применение компоновки дизайн-блока к %d группам"
 
 #: pcbnew/tools/pcb_control.cpp:1764
-#, fuzzy, c-format
+#, c-format
 msgid "Applied design block layout to %d of %d group(s)."
-msgstr "Применить компоновку связанного дизайн-блока к выбранной группе"
+msgstr "Применена компоновка дизайн-блока к %d из %d группам"
 
 #: pcbnew/tools/pcb_control.cpp:1771
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Skipped %d selected item(s) that are not groups linked to a design block."
-msgstr "Сохранить выбранную группу в связанный дизайн-блок"
+msgstr ""
+"Пропущено %d выбранных элементов, не являющихся группами, связанными с "
+"дизайн-блоком."
 
 #: pcbnew/tools/pcb_control.cpp:1779
-#, fuzzy
 msgid "The following groups could not be processed:"
-msgstr "Следующие каталоги не удалось открыть: \n"
+msgstr "Следующие группы не удалось обработать:"
 
 #: pcbnew/tools/pcb_control.cpp:1783
-#, fuzzy
 msgid "(unnamed group)"
-msgstr "Группы перемычек:"
+msgstr "(безымянная группа)"
 
 #: pcbnew/tools/pcb_control.cpp:1834
 #, c-format
@@ -61029,6 +61014,8 @@ msgstr "%d 3D-моделей успешно внедрены."
 msgid ""
 "Footprint items cannot be grouped separately from their parent footprint."
 msgstr ""
+"Элементы посад. места не могут быть сгруппированы отдельно от их "
+"родительского посад. места."
 
 #: pcbnew/tools/pcb_point_editor.cpp:2743
 msgid "Resize Table Cells"
