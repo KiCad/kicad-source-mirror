@@ -1328,6 +1328,24 @@ void PCB_EDIT_FRAME::setupUIConditions()
                 return false;
             };
 
+    auto connectedOrFootprintCond =
+            [] ( const SELECTION& aSel )
+            {
+                if( aSel.Empty() )
+                    return false;
+
+                for( EDA_ITEM* item : aSel )
+                {
+                    if( item->Type() == PCB_FOOTPRINT_T )
+                        continue;
+
+                    if( !dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+                        return false;
+                }
+
+                return true;
+            };
+
     mgr->SetConditions( PCB_ACTIONS::showNetInRatsnest,     ENABLE( haveNetCond ) );
     mgr->SetConditions( PCB_ACTIONS::hideNetInRatsnest,     ENABLE( haveNetCond ) );
     mgr->SetConditions( PCB_ACTIONS::highlightNet,          ENABLE( SELECTION_CONDITIONS::ShowAlways ) );
@@ -1342,6 +1360,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::selectNet,         ENABLE( SELECTION_CONDITIONS::OnlyTypes( trackTypes ) ) );
     mgr->SetConditions( PCB_ACTIONS::deselectNet,       ENABLE( SELECTION_CONDITIONS::OnlyTypes( trackTypes ) ) );
     mgr->SetConditions( PCB_ACTIONS::selectUnconnected, ENABLE( SELECTION_CONDITIONS::OnlyTypes( padOwnerTypes ) ) );
+    mgr->SetConditions( PCB_ACTIONS::grabUnconnected,   ENABLE( connectedOrFootprintCond ) );
     mgr->SetConditions( PCB_ACTIONS::selectSameSheet,   ENABLE( SELECTION_CONDITIONS::OnlyTypes( footprintTypes ) ) );
     mgr->SetConditions( PCB_ACTIONS::selectOnSchematic, ENABLE( SELECTION_CONDITIONS::HasTypes( crossProbeTypes ) ) );
 

@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
 #include <cmath>
 #include <functional>
 #include <stack>
@@ -2724,52 +2725,82 @@ int PCB_SELECTION_TOOL::grabUnconnected( const TOOL_EVENT& aEvent )
 {
     PCB_SELECTION originalSelection = m_selection;
 
-    // Get all pads
-    std::vector<PAD*> pads;
+    // Get all connected items that can represent the source side of the ratsnest.
+    std::vector<BOARD_CONNECTED_ITEM*> sourceItems;
 
     for( EDA_ITEM* item : m_selection.GetItems() )
     {
         if( item->Type() == PCB_FOOTPRINT_T )
         {
             for( PAD* pad : static_cast<FOOTPRINT*>( item )->Pads() )
-                pads.push_back( pad );
+                sourceItems.push_back( pad );
         }
-        else if( item->Type() == PCB_PAD_T )
+        else if( BOARD_CONNECTED_ITEM* connItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
         {
-            pads.push_back( static_cast<PAD*>( item ) );
+            sourceItems.push_back( connItem );
         }
     }
 
     ClearSelection();
 
-    // Select every footprint on the end of the ratsnest for each pad in our selection
     std::shared_ptr<CONNECTIVITY_DATA> conn = board()->GetConnectivity();
+    std::shared_ptr<CN_CONNECTIVITY_ALGO> connAlgo = conn->GetConnectivityAlgo();
 
-    for( PAD* pad : pads )
+    for( BOARD_CONNECTED_ITEM* sourceItem : sourceItems )
     {
-        const std::vector<CN_EDGE> edges = conn->GetRatsnestForPad( pad );
+        RN_NET* net = conn->GetRatsnestForNet( sourceItem->GetNetCode() );
 
         // Need to have something unconnected to grab
-        if( edges.size() == 0 )
+        if( !net || net->GetEdges().empty() || !connAlgo->ItemExists( sourceItem ) )
             continue;
+
+        std::vector<std::shared_ptr<CN_CLUSTER>> sourceClusters;
+
+        for( CN_ITEM* cnItem : connAlgo->ItemEntry( sourceItem ).GetItems() )
+        {
+            for( const std::shared_ptr<CN_ANCHOR>& anchor : cnItem->Anchors() )
+            {
+                if( anchor->GetCluster() )
+                    sourceClusters.push_back( anchor->GetCluster() );
+            }
+        }
+
+        if( sourceClusters.empty() )
+            continue;
+
+        auto isSourceAnchor =
+                [&]( const std::shared_ptr<const CN_ANCHOR>& aAnchor )
+                {
+                    if( aAnchor->Parent() == sourceItem )
+                        return true;
+
+                    return std::find( sourceClusters.begin(), sourceClusters.end(),
+                                      aAnchor->GetCluster() ) != sourceClusters.end();
+                };
 
         double     currentDistance = DBL_MAX;
         FOOTPRINT* nearest = nullptr;
 
         // Check every ratsnest line for the nearest one
-        for( const CN_EDGE& edge : edges )
+        for( const CN_EDGE& edge : net->GetEdges() )
         {
-            if( edge.GetSourceNode()->Parent()->GetParentFootprint()
-                == edge.GetTargetNode()->Parent()->GetParentFootprint() )
+            const std::shared_ptr<const CN_ANCHOR>& source = edge.GetSourceNode();
+            const std::shared_ptr<const CN_ANCHOR>& target = edge.GetTargetNode();
+
+            wxCHECK2( source && !source->Dirty() && target && !target->Dirty(), continue );
+
+            if( source->Parent()->GetParentFootprint() == target->Parent()->GetParentFootprint() )
             {
                 continue; // This edge is a loop on the same footprint
             }
 
-            // Figure out if we are the source or the target node on the ratnest
-            const CN_ANCHOR* other = edge.GetSourceNode()->Parent() == pad ? edge.GetTargetNode().get()
-                                                                           : edge.GetSourceNode().get();
+            bool sourceMatches = isSourceAnchor( source );
+            bool targetMatches = isSourceAnchor( target );
 
-            wxCHECK2( other && !other->Dirty(), continue );
+            if( sourceMatches == targetMatches )
+                continue;
+
+            const CN_ANCHOR* other = sourceMatches ? target.get() : source.get();
 
             // We only want to grab footprints, so the ratnest has to point to a pad
             if( other->Parent()->Type() != PCB_PAD_T )
