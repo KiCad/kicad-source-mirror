@@ -1038,7 +1038,7 @@ ETEXT::ETEXT( wxXmlNode* aText, IO_BASE* aIo ) :
 }
 
 
-VECTOR2I ETEXT::ConvertSize() const
+VECTOR2I ConvertEagleTextSize( const opt_wxString& font, const ECOORD& size )
 {
     VECTOR2I textsize;
 
@@ -1065,6 +1065,12 @@ VECTOR2I ETEXT::ConvertSize() const
     }
 
     return textsize;
+}
+
+
+VECTOR2I ETEXT::ConvertSize() const
+{
+    return ConvertEagleTextSize( font, size );
 }
 
 

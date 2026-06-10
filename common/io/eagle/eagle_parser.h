@@ -396,6 +396,8 @@ typedef OPTIONAL_XML_ATTRIBUTE<EROT>     opt_erot;
 typedef OPTIONAL_XML_ATTRIBUTE<ECOORD>   opt_ecoord;
 typedef OPTIONAL_XML_ATTRIBUTE<EURN>     opt_eurn;
 
+/// Converts Eagle's text size to KiCad text size depending on the font used.
+VECTOR2I ConvertEagleTextSize( const opt_wxString& font, const ECOORD& size );
 
 struct EAGLE_BASE
 {
