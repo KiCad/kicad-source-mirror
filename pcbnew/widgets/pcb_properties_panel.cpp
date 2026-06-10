@@ -29,8 +29,10 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
+#include <eda_units.h>
 #include <properties/property_mgr.h>
 #include <properties/pg_editors.h>
+#include <board_design_settings.h>
 #include <board_commit.h>
 #include <board_connected_item.h>
 #include <board.h>
@@ -49,6 +51,11 @@
 #include <string_utils.h>
 #include <widgets/net_selector.h>
 #include <widgets/ui_common.h>
+#include <widgets/unit_binder.h>
+
+#include <memory>
+#include <vector>
+#include <wx/combobox.h>
 
 static const wxString MISSING_FIELD_SENTINEL = wxS( "\uE000" );
 
@@ -223,6 +230,195 @@ public:
 const wxString PG_NET_SELECTOR_EDITOR::EDITOR_NAME = wxS( "PG_NET_SELECTOR_EDITOR" );
 
 
+class PG_TRACK_WIDTH_EDITOR : public wxPGEditor
+{
+public:
+    static const wxString EDITOR_NAME;
+
+    PG_TRACK_WIDTH_EDITOR( PCB_BASE_EDIT_FRAME* aFrame ) :
+            m_frame( aFrame )
+    {
+        if( m_frame )
+        {
+            m_unitBinder = std::make_unique<PROPERTY_EDITOR_UNIT_BINDER>( m_frame );
+            m_unitBinder->SetUnits( m_frame->GetUserUnits() );
+        }
+
+        m_editorName = BuildEditorName( m_frame );
+    }
+
+    wxString GetName() const override { return m_editorName; }
+
+    static wxString BuildEditorName( PCB_BASE_EDIT_FRAME* aFrame )
+    {
+        if( !aFrame )
+            return EDITOR_NAME + "NoFrame";
+
+        return EDITOR_NAME + aFrame->GetName();
+    }
+
+    void UpdateFrame( PCB_BASE_EDIT_FRAME* aFrame )
+    {
+        m_frame = aFrame;
+
+        if( m_frame )
+        {
+            m_unitBinder = std::make_unique<PROPERTY_EDITOR_UNIT_BINDER>( m_frame );
+            m_unitBinder->SetUnits( m_frame->GetUserUnits() );
+        }
+        else
+        {
+            m_unitBinder = nullptr;
+        }
+    }
+
+    wxPGWindowList CreateControls( wxPropertyGrid* aGrid, wxPGProperty* aProperty, const wxPoint& aPos,
+                                   const wxSize& aSize ) const override
+    {
+        wxASSERT( m_unitBinder );
+
+        wxComboBox* editor = new wxComboBox( aGrid->GetPanel(), wxID_ANY, wxEmptyString, aPos, aSize, 0, nullptr,
+                                             wxCB_DROPDOWN | wxTE_PROCESS_ENTER );
+
+        m_unitBinder->SetControl( editor );
+        m_unitBinder->RequireEval();
+        m_unitBinder->SetUnits( m_frame->GetUserUnits() );
+
+        setTrackWidthOptions( editor );
+        UpdateControl( aProperty, editor );
+
+        std::shared_ptr<bool> popupShown = std::make_shared<bool>( false );
+        auto commitValue =
+                [this, aGrid, aProperty]()
+                {
+                    wxVariant val( static_cast<long>( m_unitBinder->GetValue() ) );
+                    aGrid->ChangePropertyValue( aProperty, val );
+                };
+
+        editor->Bind( wxEVT_COMBOBOX_DROPDOWN,
+                      [popupShown]( wxCommandEvent& aEvent )
+                      {
+                          *popupShown = true;
+                          aEvent.Skip();
+                      } );
+
+        editor->Bind( wxEVT_COMBOBOX,
+                      [commitValue, popupShown]( wxCommandEvent& aEvent )
+                      {
+                          // Choosing a preset from the dropdown should apply that preset immediately.
+                          if( *popupShown )
+                              commitValue();
+
+                          aEvent.Skip();
+                      } );
+
+        editor->Bind( wxEVT_COMBOBOX_CLOSEUP,
+                      [aGrid, popupShown]( wxCommandEvent& aEvent )
+                      {
+                          aGrid->CallAfter( [popupShown]()
+                                            {
+                                                *popupShown = false;
+                                            } );
+
+                          aEvent.Skip();
+                      } );
+
+        editor->Bind( wxEVT_CHAR_HOOK,
+                      [commitValue, popupShown]( wxKeyEvent& aEvent )
+                      {
+                          // Pressing Enter after typing a custom value should apply the typed value,
+                          // not the first preset in the dropdown.
+                          if( ( aEvent.GetKeyCode() == WXK_RETURN
+                                || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER )
+                              && !*popupShown )
+                          {
+                              commitValue();
+                              return;
+                          }
+
+                          aEvent.Skip();
+                      } );
+
+        editor->Bind( wxEVT_KILL_FOCUS,
+                      [commitValue, popupShown]( wxFocusEvent& aEvent )
+                      {
+                          // Clicking into another property cell should keep any typed custom value.
+                          if( !*popupShown )
+                              commitValue();
+
+                          aEvent.Skip();
+                      } );
+
+        return wxPGWindowList( editor, nullptr );
+    }
+
+    void UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) const override
+    {
+        if( !m_unitBinder )
+            return;
+
+        wxComboBox* editor = dynamic_cast<wxComboBox*>( aCtrl );
+        wxCHECK( editor, /* void */ );
+
+        if( aProperty->IsValueUnspecified() )
+            m_unitBinder->ChangeValue( INDETERMINATE_STATE );
+        else
+            m_unitBinder->ChangeValue( aProperty->GetValue().GetLong() );
+    }
+
+    bool GetValueFromControl( wxVariant& aVariant, wxPGProperty* aProperty, wxWindow* aCtrl ) const override
+    {
+        if( !m_unitBinder )
+            return false;
+
+        wxComboBox* editor = dynamic_cast<wxComboBox*>( aCtrl );
+        wxCHECK_MSG( editor, false, "PG_TRACK_WIDTH_EDITOR requires a combo box!" );
+
+        if( editor->GetValue() == INDETERMINATE_STATE )
+        {
+            aVariant.MakeNull();
+            return true;
+        }
+
+        long result = static_cast<long>( m_unitBinder->GetValue() );
+        bool changed = aVariant.IsNull() || result != aVariant.GetLong();
+
+        if( changed )
+            aVariant = result;
+
+        return changed;
+    }
+
+    bool OnEvent( wxPropertyGrid* aGrid, wxPGProperty* aProperty, wxWindow* aWindow, wxEvent& aEvent ) const override
+    {
+        return false;
+    }
+
+private:
+    void setTrackWidthOptions( wxComboBox* aEditor ) const
+    {
+        std::vector<long long int> trackWidths;
+
+        // 0 is the netclass place-holder.
+        for( unsigned ii = 1; ii < m_frame->GetDesignSettings().m_TrackWidthList.size(); ++ii )
+            trackWidths.push_back( m_frame->GetDesignSettings().m_TrackWidthList[ii] );
+
+        m_unitBinder->SetOptionsList( trackWidths );
+
+        wxString unitLabel = EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() );
+
+        for( unsigned ii = 0; ii < aEditor->GetCount(); ++ii )
+            aEditor->SetString( ii, aEditor->GetString( ii ) + wxS( " " ) + unitLabel );
+    }
+
+    PCB_BASE_EDIT_FRAME*                         m_frame;
+    std::unique_ptr<PROPERTY_EDITOR_UNIT_BINDER> m_unitBinder;
+    wxString                                     m_editorName;
+};
+
+
+const wxString PG_TRACK_WIDTH_EDITOR::EDITOR_NAME = wxS( "PG_TRACK_WIDTH_EDITOR" );
+
 
 PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRAME* aFrame ) :
         PROPERTIES_PANEL( aParent, aFrame ),
@@ -249,6 +445,20 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRA
     {
         PG_UNIT_EDITOR* new_editor = new PG_UNIT_EDITOR( m_frame );
         m_unitEditorInstance = static_cast<PG_UNIT_EDITOR*>( wxPropertyGrid::RegisterEditorClass( new_editor ) );
+    }
+
+    it = wxPGGlobalVars->m_mapEditorClasses.find( PG_TRACK_WIDTH_EDITOR::BuildEditorName( m_frame ) );
+
+    if( it != wxPGGlobalVars->m_mapEditorClasses.end() )
+    {
+        m_trackWidthEditorInstance = static_cast<PG_TRACK_WIDTH_EDITOR*>( it->second );
+        m_trackWidthEditorInstance->UpdateFrame( m_frame );
+    }
+    else
+    {
+        PG_TRACK_WIDTH_EDITOR* trackWidthEditor = new PG_TRACK_WIDTH_EDITOR( m_frame );
+        m_trackWidthEditorInstance =
+                static_cast<PG_TRACK_WIDTH_EDITOR*>( wxPropertyGrid::RegisterEditorClass( trackWidthEditor ) );
     }
 
     it = wxPGGlobalVars->m_mapEditorClasses.find( PG_CHECKBOX_EDITOR::EDITOR_NAME );
@@ -324,6 +534,7 @@ PCB_PROPERTIES_PANEL::~PCB_PROPERTIES_PANEL()
     m_unitEditorInstance->UpdateFrame( nullptr );
     m_fpEditorInstance->UpdateFrame( nullptr );
     m_urlEditorInstance->UpdateFrame( nullptr );
+    m_trackWidthEditorInstance->UpdateFrame( nullptr );
 
     // Note: the shared PG_NET_SELECTOR_EDITOR does not cache frame state; it resolves the
     // owning panel from the property grid on each CreateControls call, so no teardown is
@@ -476,6 +687,10 @@ wxPGProperty* PCB_PROPERTIES_PANEL::createPGProperty( const PROPERTY_BASE* aProp
         prop->SetEditor( PG_FPID_EDITOR::BuildEditorName( m_frame ) );
     else if( aProperty->Name() == GetCanonicalFieldName( FIELD_T::DATASHEET ) )
         prop->SetEditor( PG_URL_EDITOR::BuildEditorName( m_frame ) );
+    // OwnerHash is the class that registered the property.  Routed PCB_ARC items inherit
+    // PCB_TRACK::Width, so this catches track arcs without changing unrelated "Width" properties.
+    else if( aProperty->OwnerHash() == TYPE_HASH( PCB_TRACK ) && aProperty->Name() == _HKI( "Width" ) )
+        prop->SetEditor( PG_TRACK_WIDTH_EDITOR::BuildEditorName( m_frame ) );
 
     return prop;
 }
