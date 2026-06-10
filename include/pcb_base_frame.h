@@ -399,17 +399,6 @@ protected:
 
     virtual void doReCreateMenuBar() override;
 
-    /**
-     * Attempt to load \a aFootprintId from the footprint library table.
-     *
-     * @param aFootprintId is the #LIB_ID of component footprint to load.
-     * @return the #FOOTPRINT if found or NULL if \a aFootprintId not found in any of the
-     *         libraries in the table returned from #Prj().PcbFootprintLibs().
-     * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
-     *                 occurs while reading footprint library files.
-     */
-    FOOTPRINT* loadFootprint( const LIB_ID& aFootprintId );
-
     virtual void unitsChangeRefresh() override;
 
     void rebuildConnectivity();

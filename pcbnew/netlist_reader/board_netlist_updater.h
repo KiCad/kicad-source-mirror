@@ -34,8 +34,13 @@ class REPORTER;
 class NETLIST;
 class COMPONENT;
 class FOOTPRINT;
+class LIB_ID;
+class NETINFO_ITEM;
+class PAD;
 class PCB_EDIT_FRAME;
 class PCB_GROUP;
+class PCBNEW_SETTINGS;
+class TOOL_MANAGER;
 
 #include <board_commit.h>
 
@@ -66,7 +71,15 @@ class PCB_GROUP;
 class BOARD_NETLIST_UPDATER
 {
 public:
+    /**
+     * Construct an updater for interactive use from the board editor.
+     */
     BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBoard );
+
+    /**
+     * Construct an updater without a board editor frame (headless).
+     */
+    BOARD_NETLIST_UPDATER( TOOL_MANAGER* aToolManager, BOARD* aBoard );
     ~BOARD_NETLIST_UPDATER();
 
     /**
@@ -157,10 +170,11 @@ private:
 
     bool testConnectivity( NETLIST& aNetlist, std::map<COMPONENT*, FOOTPRINT*>& aFootprintMap );
 
-    PCB_EDIT_FRAME* m_frame;
-    BOARD_COMMIT    m_commit;
-    BOARD*          m_board;
-    REPORTER*       m_reporter;
+    PCB_EDIT_FRAME*  m_frame;
+    PCBNEW_SETTINGS* m_settings;
+    BOARD_COMMIT     m_commit;
+    BOARD*           m_board;
+    REPORTER*        m_reporter;
 
     std::map<ZONE*, std::vector<PAD*>> m_zoneConnectionsCache;
     std::map<wxString, wxString>       m_oldToNewNets;
@@ -171,20 +185,20 @@ private:
     std::map<wxString, NETINFO_ITEM*>  m_addedNets;
     std::set<wxString>                 m_schematicNetNames;
 
-    bool m_deleteUnusedFootprints;
-    bool m_isDryRun;
-    bool m_replaceFootprints;
-    bool m_transferGroups; // copy component group associations from schematic to PCB
-    bool m_applyDesignBlockLayouts;
-    bool m_lookupByTimestamp;
-    bool m_overrideLocks;
-    bool m_updateFields;
-    bool m_removeExtraFields;
+    bool m_deleteUnusedFootprints = false;
+    bool m_isDryRun = false;
+    bool m_replaceFootprints = true;
+    bool m_transferGroups = false; // copy component group associations from schematic to PCB
+    bool m_applyDesignBlockLayouts = false;
+    bool m_lookupByTimestamp = false;
+    bool m_overrideLocks = false;
+    bool m_updateFields = false;
+    bool m_removeExtraFields = false;
 
-    int m_warningCount;
-    int m_errorCount;
-    int m_newFootprintsCount;   // the count of new footprints
-                                // either really new or replaced by new fp.
+    int m_warningCount = 0;
+    int m_errorCount = 0;
+    int m_newFootprintsCount = 0;   // the count of new footprints
+                                    // either really new or replaced by new fp.
 };
 
 #endif

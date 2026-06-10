@@ -381,17 +381,17 @@ void DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
 
     bool updated = !m_updateMode || aFootprint->FootprintNeedsUpdate( newFootprint );
 
-    m_parent->ExchangeFootprint( aFootprint, newFootprint, m_commit,
-                                 m_matchPadPositions->GetValue(),
-                                 m_removeExtraBox->GetValue(),
-                                 m_resetTextItemLayers->GetValue(),
-                                 m_resetTextItemEffects->GetValue(),
-                                 m_resetTextItemPositions->GetValue(),
-                                 m_resetTextItemContent->GetValue(),
-                                 m_resetFabricationAttrs->GetValue(),
-                                 m_resetClearanceOverrides->GetValue(),
-                                 m_reset3DModels->GetValue(),
-                                 &updated );
+    m_parent->GetBoard()->ExchangeFootprint( aFootprint, newFootprint, m_commit,
+                                             m_matchPadPositions->GetValue(),
+                                             m_removeExtraBox->GetValue(),
+                                             m_resetTextItemLayers->GetValue(),
+                                             m_resetTextItemEffects->GetValue(),
+                                             m_resetTextItemPositions->GetValue(),
+                                             m_resetTextItemContent->GetValue(),
+                                             m_resetFabricationAttrs->GetValue(),
+                                             m_resetClearanceOverrides->GetValue(),
+                                             m_reset3DModels->GetValue(),
+                                             &updated );
 
     if( aFootprint == m_currentFootprint )
         m_currentFootprint = newFootprint;

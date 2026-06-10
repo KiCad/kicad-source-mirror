@@ -58,6 +58,12 @@ public:
 
     bool SavePcbCopy( const wxString& aFileName, bool aCreateProject, bool aHeadless ) override;
 
+    bool ReadNetlistFromFile( const wxString& aFilename, NETLIST& aNetlist, REPORTER& aReporter ) override;
+
+    std::unique_ptr<BOARD_NETLIST_UPDATER> MakeNetlistUpdater() override;
+
+    void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater ) override;
+
 private:
     std::unique_ptr<BOARD> m_board;
     PROJECT* m_project;

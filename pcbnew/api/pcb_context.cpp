@@ -20,7 +20,10 @@
 
 #include <api/pcb_context.h>
 
+#include <netlist_reader/board_netlist_updater.h>
+#include <netlist_reader/pcb_netlist.h>
 #include <pcb_edit_frame.h>
+#include <reporter.h>
 
 
 class PCB_EDIT_FRAME_CONTEXT : public PCB_CONTEXT
@@ -69,6 +72,22 @@ public:
     bool SavePcbCopy( const wxString& aFileName, bool aCreateProject, bool aHeadless ) override
     {
         return m_frame->SavePcbCopy( aFileName, aCreateProject, aHeadless );
+    }
+
+    bool ReadNetlistFromFile( const wxString& aFilename, NETLIST& aNetlist, REPORTER& aReporter ) override
+    {
+        return m_frame->ReadNetlistFromFile( aFilename, aNetlist, aReporter );
+    }
+
+    std::unique_ptr<BOARD_NETLIST_UPDATER> MakeNetlistUpdater() override
+    {
+        return std::make_unique<BOARD_NETLIST_UPDATER>( m_frame, GetBoard() );
+    }
+
+    void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater ) override
+    {
+        bool runDragCommand = false;
+        m_frame->OnNetlistChanged( aUpdater, &runDragCommand );
     }
 
 private:

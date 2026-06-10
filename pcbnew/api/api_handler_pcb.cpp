@@ -19,6 +19,7 @@
  */
 
 #include <magic_enum.hpp>
+#include <memory>
 #include <properties/property.h>
 
 #include <common.h>
@@ -1553,9 +1554,6 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRefillZones( const HANDLER_CONTEXT<
 
 HANDLER_RESULT<ImportNetlistResponse> API_HANDLER_PCB::handleImportNetlist( const HANDLER_CONTEXT<ImportNetlist>& aCtx )
 {
-    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "ImportNetlist" ) )
-        return tl::unexpected( *headless );
-
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
@@ -1575,7 +1573,7 @@ HANDLER_RESULT<ImportNetlistResponse> API_HANDLER_PCB::handleImportNetlist( cons
         return tl::unexpected( e );
     }
 
-    PCB_EDIT_FRAME*    editFrame = frame();
+    PCB_CONTEXT*       ctx = pcbContext();
     WX_STRING_REPORTER reporter;
 
     const bool lookupByTimestamp = aCtx.Request.match_mode() != NetlistMatchMode::NMM_REFERENCE;
@@ -1584,7 +1582,7 @@ HANDLER_RESULT<ImportNetlistResponse> API_HANDLER_PCB::handleImportNetlist( cons
     netlist.SetFindByTimeStamp( lookupByTimestamp );
     netlist.SetReplaceFootprints( aCtx.Request.update_footprints() );
 
-    if( !editFrame->ReadNetlistFromFile( netlistPath.GetFullPath(), netlist, reporter ) )
+    if( !ctx->ReadNetlistFromFile( netlistPath.GetFullPath(), netlist, reporter ) )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
@@ -1594,29 +1592,27 @@ HANDLER_RESULT<ImportNetlistResponse> API_HANDLER_PCB::handleImportNetlist( cons
         return tl::unexpected( e );
     }
 
-    BOARD_NETLIST_UPDATER updater( editFrame, editFrame->GetBoard() );
-    updater.SetReporter( &reporter );
-    updater.SetIsDryRun( aCtx.Request.dry_run() );
-    updater.SetLookupByTimestamp( lookupByTimestamp );
-    updater.SetDeleteUnusedFootprints( aCtx.Request.delete_extra_footprints() );
-    updater.SetReplaceFootprints( aCtx.Request.update_footprints() );
-    updater.SetTransferGroups( aCtx.Request.transfer_groups() );
-    updater.SetOverrideLocks( aCtx.Request.override_locks() );
-    updater.SetUpdateFields( true );
+    std::unique_ptr<BOARD_NETLIST_UPDATER> updater = ctx->MakeNetlistUpdater();
 
-    const bool success = updater.UpdateNetlist( netlist );
+    updater->SetReporter( &reporter );
+    updater->SetIsDryRun( aCtx.Request.dry_run() );
+    updater->SetLookupByTimestamp( lookupByTimestamp );
+    updater->SetDeleteUnusedFootprints( aCtx.Request.delete_extra_footprints() );
+    updater->SetReplaceFootprints( aCtx.Request.update_footprints() );
+    updater->SetTransferGroups( aCtx.Request.transfer_groups() );
+    updater->SetOverrideLocks( aCtx.Request.override_locks() );
+    updater->SetUpdateFields( true );
+
+    const bool success = updater->UpdateNetlist( netlist );
 
     if( !aCtx.Request.dry_run() && success )
-    {
-        bool runDragCommand = false;
-        editFrame->OnNetlistChanged( updater, &runDragCommand );
-    }
+        ctx->OnNetlistChanged( *updater );
 
     ImportNetlistResponse response;
     response.set_report( reporter.GetMessages().ToUTF8() );
-    response.set_error_count( updater.GetErrorCount() );
-    response.set_warning_count( updater.GetWarningCount() );
-    response.set_new_footprint_count( updater.GetNewFootprintCount() );
+    response.set_error_count( updater->GetErrorCount() );
+    response.set_warning_count( updater->GetWarningCount() );
+    response.set_new_footprint_count( updater->GetNewFootprintCount() );
     return response;
 }
 

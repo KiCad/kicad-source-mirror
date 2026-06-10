@@ -27,7 +27,10 @@
 
 #include <api/board_context.h>
 
+class BOARD_NETLIST_UPDATER;
+class NETLIST;
 class PCB_EDIT_FRAME;
+class REPORTER;
 
 
 /// PCB-editor-specific context; extends BOARD_CONTEXT with save/filename operations
@@ -39,6 +42,21 @@ public:
     virtual bool SaveBoard() = 0;
 
     virtual bool SavePcbCopy( const wxString& aFileName, bool aCreateProject, bool aHeadless ) = 0;
+
+    /**
+     * Read a netlist file and preload component footprints.
+     */
+    virtual bool ReadNetlistFromFile( const wxString& aFilename, NETLIST& aNetlist, REPORTER& aReporter ) = 0;
+
+    /**
+     * Create a netlist updater bound to this context's board.
+     */
+    virtual std::unique_ptr<BOARD_NETLIST_UPDATER> MakeNetlistUpdater() = 0;
+
+    /**
+     * Post-import board sync (nets, classes, DRC, ratsnest, new footprint placement).
+     */
+    virtual void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater ) = 0;
 };
 
 

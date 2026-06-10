@@ -40,6 +40,7 @@ using namespace std::placeholders;
 #include <kiway.h>
 #include <lib_id.h>
 #include <macros.h>
+#include <netlist_reader/pcb_netlist_utils.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <board_design_settings.h>
@@ -207,13 +208,7 @@ FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibrary( LIB_ID aPreselect )
     if( !fpid.IsValid() )
         return nullptr;
 
-    try
-    {
-        footprint = loadFootprint( fpid );
-    }
-    catch( const IO_ERROR& )
-    {
-    }
+    footprint = LoadFootprint( fpid );
 
     if( footprint )
     {
@@ -227,54 +222,11 @@ FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibrary( LIB_ID aPreselect )
 
 FOOTPRINT* PCB_BASE_FRAME::LoadFootprint( const LIB_ID& aFootprintId )
 {
-    FOOTPRINT* footprint = nullptr;
-
-    try
-    {
-        footprint = loadFootprint( aFootprintId );
-    }
-    catch( const IO_ERROR& )
-    {
-    }
-
-    return footprint;
-}
-
-
-FOOTPRINT* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
-{
-    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &Prj() );
-    FOOTPRINT *footprint = nullptr;
-
     // When loading a footprint from a library in the footprint editor
     // the items UUIDs must be keep and not reinitialized
     bool keepUUID = IsType( FRAME_FOOTPRINT_EDITOR );
 
-    try
-    {
-        footprint = adapter->LoadFootprintWithOptionalNickname( aFootprintId, keepUUID );
-    }
-    catch( const IO_ERROR& )
-    {
-    }
-
-    if( footprint )
-    {
-        // If the footprint is found, clear all net info to be sure there are no broken links to
-        // any netinfo list (should be not needed, but it can be edited from the footprint editor )
-        footprint->ClearAllNets();
-
-        if( m_pcb && !m_pcb->IsFootprintHolder() )
-        {
-            BOARD_DESIGN_SETTINGS& bds = m_pcb->GetDesignSettings();
-
-            footprint->ApplyDefaultSettings( *m_pcb, bds.m_StyleFPFields, bds.m_StyleFPText,
-                                             bds.m_StyleFPShapes, bds.m_StyleFPDimensions,
-                                             bds.m_StyleFPBarcodes );
-        }
-    }
-
-    return footprint;
+    return LoadFootprintFromProject( m_pcb, aFootprintId, keepUUID );
 }
 
 

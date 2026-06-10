@@ -650,7 +650,7 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
                     id.SetLibNickname( aTab.m_lib );
                     id.SetLibItemName( aTab.m_fpName );
 
-                    if( FOOTPRINT* footprint = loadFootprint( id ) )
+                    if( FOOTPRINT* footprint = LoadFootprint( id ) )
                     {
                         AddFootprintToBoard( footprint );
 
@@ -673,7 +673,7 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
                         return true;
                     }
 
-                    // loadFootprint swallows the IO_ERROR when the library no longer resolves, so
+                    // LoadFootprint swallows the IO_ERROR when the library no longer resolves, so
                     // log the dropped tab to keep a failed restore diagnosable.
                     wxLogTrace( wxT( "KICAD_FP_TABS" ),
                                 wxT( "Dropping persisted footprint tab '%s:%s' (failed to load)" ),
@@ -710,7 +710,7 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
         id.SetLibNickname( libNickname );
         id.SetLibItemName( footprintName );
 
-        FOOTPRINT* footprint = loadFootprint( id );
+        FOOTPRINT* footprint = LoadFootprint( id );
 
         if( footprint )
         {

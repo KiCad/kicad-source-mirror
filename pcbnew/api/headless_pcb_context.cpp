@@ -21,9 +21,18 @@
 #include <api/headless_pcb_context.h>
 #include <board.h>
 #include <board_loader.h>
+#include <component_classes/component_class_manager.h>
+#include <drc/drc_engine.h>
+#include <footprint.h>
+#include <netlist_reader/board_netlist_updater.h>
+#include <netlist_reader/netlist_reader.h>
+#include <netlist_reader/pcb_netlist_utils.h>
 #include <project.h>
+#include <reporter.h>
 #include <settings/settings_manager.h>
+#include <spread_footprints.h>
 #include <tool/tool_manager.h>
+#include <tools/drc_tool.h>
 #include <wx/debug.h>
 
 
@@ -126,4 +135,75 @@ bool HEADLESS_PCB_CONTEXT::SavePcbCopy( const wxString& aFileName, bool aCreateP
     }
 
     return success;
+}
+
+
+bool HEADLESS_PCB_CONTEXT::ReadNetlistFromFile( const wxString& aFilename, NETLIST& aNetlist, REPORTER& aReporter )
+{
+    wxString msg;
+
+    try
+    {
+        std::unique_ptr<NETLIST_READER> netlistReader(
+                NETLIST_READER::GetNetlistReader( &aNetlist, aFilename, wxEmptyString ) );
+
+        if( !netlistReader.get() )
+        {
+            msg.Printf( _( "Cannot open netlist file '%s'." ), aFilename );
+            aReporter.Report( msg, RPT_SEVERITY_ERROR );
+            return false;
+        }
+
+        netlistReader->LoadNetlist();
+        LoadNetlistFootprints( GetBoard(), aNetlist, aReporter );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        msg.Printf( _( "Error loading netlist.\n%s" ), ioe.What().GetData() );
+        aReporter.Report( msg, RPT_SEVERITY_ERROR );
+        return false;
+    }
+
+    return true;
+}
+
+
+std::unique_ptr<BOARD_NETLIST_UPDATER> HEADLESS_PCB_CONTEXT::MakeNetlistUpdater()
+{
+    return std::make_unique<BOARD_NETLIST_UPDATER>( GetToolManager(), GetBoard() );
+}
+
+
+void HEADLESS_PCB_CONTEXT::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater )
+{
+    BOARD* board = GetBoard();
+
+    // Re-sync nets and  netclasses
+    board->SynchronizeNetsAndNetClasses( false );
+
+    // Recompute component classes
+    board->GetComponentClassManager().InvalidateComponentClasses();
+    board->GetComponentClassManager().RebuildRequiredCaches();
+
+    // Resync DRC rules to account for new aggregate netclass / component class rules
+    DRC_TOOL* drcTool = m_toolManager->GetTool<DRC_TOOL>();
+
+    if( DRC_TOOL* drcTool = m_toolManager->GetTool<DRC_TOOL>() )
+    {
+        if( drcTool->GetDRCEngine() )
+        {
+            try
+            {
+                drcTool->GetDRCEngine()->InitEngine( board->GetDesignRulesPath() );
+            }
+            catch( PARSE_ERROR& )
+            {
+            }
+        }
+    }
+
+    std::vector<FOOTPRINT*> newFootprints = aUpdater.GetAddedFootprints();
+    SpreadFootprints( &newFootprints, { 0, 0 }, true );
+
+    board->CompileRatsnest();
 }

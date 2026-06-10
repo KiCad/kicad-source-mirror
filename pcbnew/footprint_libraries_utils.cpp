@@ -966,7 +966,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         // In the main board the new footprint replaces the old one (pos, orient, ref, value,
         // connections and properties are kept) and the sourceFootprint (old footprint) is
         // deleted
-        pcbframe->ExchangeFootprint( sourceFootprint, newFootprint, commit, true );
+        mainpcb->ExchangeFootprint( sourceFootprint, newFootprint, commit, true );
+
         commit.Push( _( "Update Footprint" ) );
     }
     else        // This is an insert command

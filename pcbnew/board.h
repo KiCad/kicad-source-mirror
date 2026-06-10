@@ -27,6 +27,7 @@
 
 #include <board_item_container.h>
 #include <board_stackup_manager/board_stackup.h>
+#include <core/mirror.h>
 #include <embedded_files.h>
 #include <convert_shape_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
 #include <geometry/shape_poly_set.h>
@@ -630,6 +631,17 @@ public:
      * Must be called after a board change (changes to pads, footprints, or a netlist read).
      */
     void CompileRatsnest();
+
+    /**
+     * Replace @a aExisting with @a aNew, preserving connectivity and metadata.
+     */
+    void ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMMIT& aCommit,
+                            bool matchPadPositions,
+                            bool deleteExtraTexts = true, bool resetTextLayers = true,
+                            bool resetTextEffects = true, bool resetTextPositions = true,
+                            bool resetTextContent = true, bool resetFabricationAttrs = true,
+                            bool resetClearanceOverrides = true, bool reset3DModels = true,
+                            bool* aUpdated = nullptr );
 
     /**
      * Reset all high light data to the init state

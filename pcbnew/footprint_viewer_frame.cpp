@@ -243,7 +243,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
         id.SetLibNickname( getCurNickname() );
         id.SetLibItemName( getCurFootprintName() );
 
-        FOOTPRINT* footprint = loadFootprint( id );
+        FOOTPRINT* footprint = LoadFootprint( id );
 
         if( footprint )
         {

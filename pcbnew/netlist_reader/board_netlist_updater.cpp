@@ -37,17 +37,20 @@
 #include <component_classes/component_class_manager.h>
 #include <netinfo.h>
 #include <footprint.h>
+#include <netlist_reader/pcb_netlist_utils.h>
 #include <pad.h>
 #include <pcb_group.h>
 #include <pcb_track.h>
 #include <zone.h>
 #include <string_utils.h>
 #include <limits>
-#include <pcbnew_settings.h>
 #include <pcb_edit_frame.h>
+#include <pcbnew_settings.h>
 #include <netlist_reader/pcb_netlist.h>
 #include <connectivity/connectivity_data.h>
 #include <reporter.h>
+#include <settings/settings_manager.h>
+#include <tool/tool_manager.h>
 #include <wx/log.h>
 
 #include "board_netlist_updater.h"
@@ -55,24 +58,21 @@
 
 BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBoard ) :
     m_frame( aFrame ),
-    m_commit( aFrame ),
-    m_board( aBoard )
+    m_settings( GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) ),
+    m_commit( aFrame->GetToolManager() ),
+    m_board( aBoard ),
+    m_reporter( &NULL_REPORTER::GetInstance() )
 {
-    m_reporter = &NULL_REPORTER::GetInstance();
+}
 
-    m_deleteUnusedFootprints = false;
-    m_isDryRun = false;
-    m_replaceFootprints = true;
-    m_lookupByTimestamp = false;
-    m_transferGroups = false;
-    m_applyDesignBlockLayouts = false;
-    m_overrideLocks = false;
-    m_updateFields = false;
-    m_removeExtraFields = false;
 
-    m_warningCount = 0;
-    m_errorCount = 0;
-    m_newFootprintsCount = 0;
+BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( TOOL_MANAGER* aToolManager, BOARD* aBoard ) :
+    m_frame( nullptr ),
+    m_settings( GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) ),
+    m_commit( aToolManager ),
+    m_board( aBoard ),
+    m_reporter( &NULL_REPORTER::GetInstance() )
+{
 }
 
 
@@ -193,7 +193,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent, const 
         return nullptr;
     }
 
-    FOOTPRINT* footprint = m_frame->LoadFootprint( aFootprintId );
+    FOOTPRINT* footprint = LoadFootprintFromProject( m_board, aFootprintId );
 
     if( footprint == nullptr )
     {
@@ -221,8 +221,12 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::addNewFootprint( COMPONENT* aComponent, const 
     {
         for( PAD* pad : footprint->Pads() )
         {
-            // Set the pads ratsnest settings to the global settings
-            pad->SetLocalRatsnestVisible( m_frame->GetPcbNewSettings()->m_Display.m_ShowGlobalRatsnest );
+            bool showRatsnest = true;
+
+            if( m_settings )
+                showRatsnest = m_settings->m_Display.m_ShowGlobalRatsnest;
+
+            pad->SetLocalRatsnestVisible( showRatsnest );
 
             // Pads in the library all have orphaned nets.  Replace with Default.
             pad->SetNetCode( 0 );
@@ -358,7 +362,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceFootprint( NETLIST& aNetlist, FOOTPRINT
         return nullptr;
     }
 
-    FOOTPRINT* newFootprint = m_frame->LoadFootprint( aNewComponent->GetFPID() );
+    FOOTPRINT* newFootprint = LoadFootprintFromProject( m_board, aNewComponent->GetFPID() );
 
     if( newFootprint == nullptr )
     {
@@ -413,7 +417,7 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceFootprint( NETLIST& aNetlist, FOOTPRINT
              // Expand the footprint pad layers
              newFootprint->FixUpPadsForBoard( m_board );
 
-             m_frame->ExchangeFootprint( aFootprint, newFootprint, m_commit, true );
+             m_board->ExchangeFootprint( aFootprint, newFootprint, m_commit, true );
 
              msg.Printf( _( "Changed %s footprint from '%s' to '%s'."),
                          aFootprint->GetReference(),
@@ -651,8 +655,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
                         // Give the footprint orientation
                         newField->Rotate( aFootprint->GetPosition(), aFootprint->GetOrientation() );
 
-                        if( m_frame )
-                            newField->StyleFromSettings( m_frame->GetDesignSettings(), true );
+                        newField->StyleFromSettings( m_board->GetDesignSettings(), true );
                     }
                 }
             }
@@ -1854,21 +1857,25 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
                     wxString layerNames = zone->LayerMaskDescribe();
                     VECTOR2I         pt = zone->GetPosition();
 
-                    if( m_frame && m_frame->GetPcbNewSettings() )
+                    if( m_settings )
                     {
-                        if( m_frame->GetPcbNewSettings()->m_Display.m_DisplayInvertXAxis )
+                        if( m_settings->m_Display.m_DisplayInvertXAxis )
                             pt.x *= -1;
 
-                        if( m_frame->GetPcbNewSettings()->m_Display.m_DisplayInvertYAxis )
+                        if( m_settings->m_Display.m_DisplayInvertYAxis )
                             pt.y *= -1;
                     }
 
                     msg.Printf( _( "Copper zone on %s at (%s, %s) has no pads connected to net \"%s\"." ),
                                 EscapeHTML( layerNames ),
                                 m_frame ? m_frame->MessageTextFromValue( pt.x )
-                                        : EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, EDA_UNITS::MM, pt.x ),
+                                        : EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale,
+                                                                                    EDA_UNITS::MM,
+                                                                                    pt.x ),
                                 m_frame ? m_frame->MessageTextFromValue( pt.y )
-                                        : EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, EDA_UNITS::MM, pt.y ),
+                                        : EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale,
+                                                                                    EDA_UNITS::MM,
+                                                                                    pt.y ),
                                 zone->GetNetname() );
                 }
 

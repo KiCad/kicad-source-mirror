@@ -358,6 +358,7 @@ set( PCBNEW_DRC_SRCS
 set( PCBNEW_NETLIST_SRCS
     netlist_reader/board_netlist_updater.cpp
     netlist_reader/netlist.cpp
+    netlist_reader/pcb_netlist_utils.cpp
     )
 
 set( ZONE_MANAGER_SRCS

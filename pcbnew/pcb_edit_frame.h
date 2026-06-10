@@ -83,16 +83,6 @@ class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 public:
     virtual ~PCB_EDIT_FRAME();
 
-    /**
-     * Load the footprints for each #SCH_COMPONENT in \a aNetlist from the list of libraries.
-     *
-     * @param aNetlist is the netlist of components to load the footprints into.
-     * @param aReporter is the #REPORTER object to report to.
-     * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
-     *           occurs while reading footprint library files.
-     */
-    void LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter );
-
     void OnQuit( wxCommandEvent& event );
 
     /**
@@ -109,11 +99,6 @@ public:
     void UpdateUserInterface();
 
     void HardRedraw() override;
-
-    /**
-     * Rebuilds board connectivity, refreshes canvas.
-     */
-    void RebuildAndRefresh();
 
     /**
      * Execute a remote command send by Eeschema via a socket, port KICAD_PCB_PORT_SERVICE_NUMBER
@@ -486,11 +471,6 @@ public:
                           const wxString& a3D_Subdir, double aXRef, double aYRef );
 
     /**
-     * Export the current BOARD to a Hyperlynx HYP file.
-     */
-    void OnExportHyperlynx();
-
-    /**
      * Create an IDF3 compliant BOARD (*.emn) and LIBRARY (*.emp) file.
      *
      * @param aPcb a pointer to the board to be exported to IDF.
@@ -505,11 +485,6 @@ public:
     bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
                       bool aUseThou, double aXRef, double aYRef,
                       bool aIncludeUnspecified, bool aIncludeDNP );
-
-    /**
-     * Export the current BOARD to a STEP assembly.
-     */
-    void OnExportSTEP();
 
     /**
      * Export the current BOARD to a specctra dsn file.
@@ -532,28 +507,6 @@ public:
     void ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint );
 
     int ShowExchangeFootprintsDialog( FOOTPRINT* aFootprint, bool aUpdateMode, bool aSelectedMode );
-
-    /**
-     * Replace \a aExisting footprint by \a aNew footprint using the \a Existing footprint
-     * settings (position, orientation, pad netnames ...).
-     *
-     * The \a aExisting footprint is deleted or put in undo list.
-     *
-     * @param aExisting footprint to replace.
-     * @param aNew footprint to put.
-     * @param aCommit commit that should store the changes.
-     */
-    void ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMMIT& aCommit,
-                            bool matchPadPositions,
-                            bool deleteExtraTexts = true,
-                            bool resetTextLayers = true,
-                            bool resetTextEffects = true,
-                            bool resetTextPositions = true,
-                            bool resetTextContent = true,
-                            bool resetFabricationAttrs = true,
-                            bool resetClearanceOverrides = true,
-                            bool reset3DModels = true,
-                            bool* aUpdated = nullptr );
 
     /**
      * Install the corresponding dialog editor for the given item.
