@@ -584,7 +584,8 @@ VECTOR2I PCB_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* a
         layers = aReferenceItem->GetLayerSet();
         item.push_back( aReferenceItem );
     }
-    else if( PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() ) )
+    else if( PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( m_toolMgr->GetToolHolder() );
+             frame && frame->GetScreen() )
     {
         layers = LSET( { frame->GetActiveLayer() } );
     }
