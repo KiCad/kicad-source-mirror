@@ -32,6 +32,7 @@ using namespace std::placeholders;
 #include <connectivity/connectivity_data.h>
 #include <eda_list_dialog.h>
 #include <footprint_edit_frame.h>
+#include <footprint_editor_tab_context.h>
 #include <footprint_chooser_frame.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_library_adapter.h>
@@ -46,6 +47,7 @@ using namespace std::placeholders;
 #include <board_design_settings.h>
 #include <drc/drc_item.h>
 #include <view/view_controls.h>
+#include <widgets/editor_tabs_panel.h>
 #include <widgets/lib_tree.h>
 #include <widgets/wx_progress_reporters.h>
 #include <dialog_pad_properties.h>
@@ -102,73 +104,34 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
     if( wxWindow::FindWindowByName( PAD_PROPERTIES_DLG_NAME ) )
         wxWindow::FindWindowByName( PAD_PROPERTIES_DLG_NAME )->Close();
 
-    if( !Clear_Pcb( true ) )
+    // Open the placed footprint as a session-only instance tab over its own fp-holder board instead
+    // of replacing the working document; re-editing the same footprint focuses the existing tab.
+    wxCHECK( m_tabsPanel, false );
+
+    const wxString instanceKey =
+            FOOTPRINT_EDITOR_TAB_CONTEXT::MakeInstanceTabKey( aFootprint->m_Uuid );
+    const bool     createdNewTab = m_tabsPanel->FindTab( instanceKey ) < 0;
+
+    FOOTPRINT_EDITOR_TAB_CONTEXT* ctx = findOrCreateFootprintInstanceTab( aFootprint );
+
+    if( !ctx )
         return false;
 
-    std::map<int, SEVERITY>& severities = GetBoard()->GetDesignSettings().m_DRCSeverities;
-    severities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_WARNING;
+    newFootprint = ctx->GetBoard()->GetFirstFootprint();
 
-    m_boardFootprintUuids.clear();
-
-    auto recordAndUpdateUuid =
-            [&]( BOARD_ITEM* aItem )
-            {
-                KIID newId;
-                m_boardFootprintUuids[ newId ] = aItem->m_Uuid;
-                aItem->SetUuid( newId );
-            };
-
-    newFootprint = (FOOTPRINT*) aFootprint->Clone();    // Keep existing uuids
-    newFootprint->SetParent( GetBoard() );
-    newFootprint->SetParentGroup( nullptr );
-    newFootprint->SetLink( aFootprint->m_Uuid );
-
-    // Clear flags not used in Fp editor
-    newFootprint->ClearFlags();
-    newFootprint->SetLocked( false );
-
-    recordAndUpdateUuid( newFootprint );
-    newFootprint->RunOnChildren(
-            [&]( BOARD_ITEM* aItem )
-            {
-                if( aItem->Type() == PCB_PAD_T )
-                    aItem->SetLocked( false );
-
-                aItem->ClearFlags();
-                recordAndUpdateUuid( aItem );
-            },
-            RECURSE_MODE::RECURSE );
-
-    AddFootprintToBoard( newFootprint );
-
-    // Clear references to any net info, because the footprint editor does know any thing about
-    // nets handled by the current edited board.
-    // Moreover we do not want to save any reference to an unknown net when saving the footprint
-    // in lib cache so we force the ORPHANED dummy net info for all pads.
-    newFootprint->ClearAllNets();
-
-    GetCanvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
-    PlaceFootprint( newFootprint );
-    newFootprint->SetPosition( VECTOR2I( 0, 0 ) ); // cursor in GAL may not yet be initialized
-
-    // Put it on FRONT layer,
-    // because this is the default in Footprint Editor, and in libs
-    if( newFootprint->GetLayer() != F_Cu )
-    {
-        newFootprint->Flip( newFootprint->GetPosition(),
-                            frame->GetPcbNewSettings()->m_FlipDirection );
-    }
-
-    // Put it in orientation 0,
-    // because this is the default orientation in Footprint Editor, and in libs
-    newFootprint->SetOrientation( ANGLE_0 );
+    // A board-sourced footprint follows the board, not the library, so do not watch a lib file.
+    setFPWatcher( nullptr );
 
     Zoom_Automatique( false );
 
     m_adapter->SetPreselectNode( newFootprint->GetFPID(), 0 );
 
-    ClearUndoRedoList();
-    GetScreen()->SetContentModified( false );
+    // A re-focused instance tab keeps its live edit history; only a freshly opened tab starts clean.
+    if( createdNewTab )
+    {
+        ClearUndoRedoList();
+        GetScreen()->SetContentModified( false );
+    }
 
     // Update the save items if needed.
     if( !is_last_fp_from_brd )

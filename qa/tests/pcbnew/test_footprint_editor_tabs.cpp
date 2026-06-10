@@ -84,6 +84,36 @@ BOOST_AUTO_TEST_CASE( ContextEmptyBoardIsNeverDirty )
 }
 
 
+/// An instance (board) tab owns its fp-holder board, reports IsTransient(), keys off the source
+/// board footprint UUID in a namespace disjoint from library keys, and carries the board-uuid remap
+BOOST_AUTO_TEST_CASE( InstanceTabContextIsTransientAndKeyedByUuid )
+{
+    KIID                   sourceUuid;
+    std::unique_ptr<BOARD> board = makeFpHolder( wxS( "Resistors" ), wxS( "R_0402" ) );
+    BOARD*                 raw = board.get();
+
+    FOOTPRINT_EDITOR_TAB_CONTEXT ctx( sourceUuid, wxS( "R5" ), std::move( board ) );
+
+    BOOST_CHECK( ctx.IsTransient() );
+    BOOST_CHECK( ctx.IsFromBoard() );
+    BOOST_CHECK_EQUAL( ctx.GetReference(), wxS( "R5" ) );
+    BOOST_CHECK_EQUAL( ctx.GetSourceUuid().AsString(), sourceUuid.AsString() );
+    BOOST_CHECK_EQUAL( ctx.GetBoard(), raw );
+    BOOST_CHECK_EQUAL( ctx.GetDisplayName(), wxS( "R5" ) );
+
+    BOOST_CHECK_EQUAL( ctx.GetTabKey(),
+                       FOOTPRINT_EDITOR_TAB_CONTEXT::MakeInstanceTabKey( sourceUuid ) );
+    BOOST_CHECK( ctx.GetTabKey() != wxS( "Resistors:R_0402" ) );
+    BOOST_CHECK( ctx.GetTabKey().StartsWith( wxString( wxT( "\x01" ) ) ) );
+
+    // The remap is mutable and survives on the context for save-back.
+    KIID editorId, boardId;
+    ctx.BoardFootprintUuids()[editorId] = boardId;
+    BOOST_REQUIRE_EQUAL( ctx.BoardFootprintUuids().count( editorId ), 1u );
+    BOOST_CHECK_EQUAL( ctx.BoardFootprintUuids()[editorId].AsString(), boardId.AsString() );
+}
+
+
 BOOST_AUTO_TEST_CASE( SettingsOpenTabsRoundTrip )
 {
     FOOTPRINT_EDITOR_SETTINGS settings;

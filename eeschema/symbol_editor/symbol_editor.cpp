@@ -275,18 +275,10 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibrarySymbolAux( LIB_SYMBOL* aEntry, const wxStr
 
     m_toolManager->RunAction( ACTIONS::cancelInteractive );
 
-    // Symbols from the schematic are edited in place and not managed by the library manager.
+    // Switching away from a schematic-instance tab changes the available menu/toolbar actions. The
+    // instance tab keeps owning its working objects, so nothing is deleted here.
     if( IsSymbolFromSchematic() )
-    {
-        delete m_symbol;
-        m_symbol = nullptr;
-
-        SCH_SCREEN* screen = GetScreen();
-        delete screen;
-        SetScreen( m_dummyScreen );
-        m_isSymbolFromSchematic = false;
         rebuildMenuAndToolbar = true;
-    }
 
     LIB_SYMBOL* lib_symbol = m_libMgr->GetBufferedSymbol( aEntry->GetName(), aLibrary );
     wxCHECK( lib_symbol, false );

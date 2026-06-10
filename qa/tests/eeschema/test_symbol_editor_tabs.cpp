@@ -127,6 +127,37 @@ BOOST_AUTO_TEST_CASE( SymbolTabContextOwnsWorkingCopy )
 }
 
 
+/// An instance (schematic) tab owns its transient working symbol/screen, reports IsTransient(), and
+/// keys off the source instance UUID in a namespace disjoint from library keys
+BOOST_AUTO_TEST_CASE( InstanceTabContextIsTransientAndKeyedByUuid )
+{
+    KIID           sourceUuid;
+    const wxString reference = wxS( "R5" );
+
+    LIB_SYMBOL* symbol = new LIB_SYMBOL( wxS( "R" ) );
+    SCH_SCREEN* screen = new SCH_SCREEN();
+
+    SYMBOL_EDITOR_TAB_CONTEXT ctx( symbol, screen, sourceUuid, reference );
+
+    BOOST_CHECK( ctx.IsTransient() );
+    BOOST_CHECK( ctx.IsFromSchematic() );
+    BOOST_CHECK_EQUAL( ctx.GetReference(), reference );
+    BOOST_CHECK_EQUAL( ctx.GetSchematicSymbolUUID().AsString(), sourceUuid.AsString() );
+    BOOST_CHECK_EQUAL( ctx.GetDisplayName(), reference );
+
+    BOOST_CHECK_EQUAL( ctx.GetTabKey(),
+                       SYMBOL_EDITOR_TAB_CONTEXT::MakeInstanceTabKey( sourceUuid ) );
+
+    // The instance key cannot collide with any library:name key.
+    BOOST_CHECK( ctx.GetTabKey() != SYMBOL_EDITOR_TAB_CONTEXT::MakeTabKey( wxS( "Device" ),
+                                                                          wxS( "R" ) ) );
+    BOOST_CHECK( ctx.GetTabKey().StartsWith( wxString( wxT( "\x01" ) ) ) );
+
+    BOOST_CHECK( ctx.GetSymbol() == symbol );
+    BOOST_CHECK( ctx.GetScreen() == screen );
+}
+
+
 /// Seeding from an already-modified buffer marks the new tab modified
 BOOST_AUTO_TEST_CASE( SymbolTabContextSeedsDirtyFromBuffer )
 {

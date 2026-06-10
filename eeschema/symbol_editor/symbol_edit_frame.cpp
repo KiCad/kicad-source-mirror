@@ -346,20 +346,11 @@ SYMBOL_EDIT_FRAME::~SYMBOL_EDIT_FRAME()
 
     setSymWatcher( nullptr );
 
-    if( IsSymbolFromSchematic() )
+    if( m_activeTab )
     {
-        delete m_symbol;
-        m_symbol = nullptr;
-
-        SCH_SCREEN* screen = GetScreen();
-        delete screen;
-        m_isSymbolFromSchematic = false;
-
-        SetScreen( m_dummyScreen );
-    }
-    else if( m_activeTab )
-    {
-        // Hand the borrowed working objects back so the context deletes them exactly once below.
+        // Hand the working objects back so the context deletes them exactly once below; raw deleting
+        // here would double-free with the context dtor and leak the swapped-in undo list. Covers an
+        // active instance tab too, whose m_isSymbolFromSchematic mirror is only frame state.
         ClearUndoRedoList();
         m_activeTab->AdoptWorkingObjects( m_symbol, static_cast<SCH_SCREEN*>( GetScreen() ) );
         m_activeTab = nullptr;
@@ -368,7 +359,7 @@ SYMBOL_EDIT_FRAME::~SYMBOL_EDIT_FRAME()
     }
     else
     {
-        // current screen is destroyed in EDA_DRAW_FRAME
+        // No active tab owns the current screen, so let EDA_DRAW_FRAME free it.
         SetScreen( m_dummyScreen );
     }
 
@@ -730,15 +721,20 @@ bool SYMBOL_EDIT_FRAME::CanCloseSymbolFromSchematic( bool doClose )
 
 bool SYMBOL_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
-    // Shutdown blocks must be determined and vetoed as early as possible
+    // Shutdown blocks must be determined and vetoed as early as possible, before any modal prompt.
+    // IsContentModified only sees the active tab, so also account for dirty inactive instance tabs.
     if( KIPLATFORM::APP::SupportsShutdownBlockReason()
             && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-            && IsContentModified() )
+            && ( IsContentModified() || hasDirtyInactiveInstanceTabs() ) )
     {
         return false;
     }
 
     if( m_isSymbolFromSchematic && !CanCloseSymbolFromSchematic( false ) )
+        return false;
+
+    // Prompt for any dirty inactive instance tabs, which the active-tab checks above miss.
+    if( !promptToSaveInactiveInstanceTabs() )
         return false;
 
     if( !saveAllLibraries( true ) )
@@ -2080,17 +2076,9 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
 
     symbol->SetFields( fullSetOfFields );
 
-    // Editing a schematic symbol in place leaves the tab model, so close any open library tabs first.
-    closeAllSymbolTabsSilently();
-
-    if( m_symbol )
-        SetCurSymbol( nullptr, false );
-
-    m_isSymbolFromSchematic = true;
-    m_schematicSymbolUUID = aSymbol->m_Uuid;
-    m_reference = symbol->GetReferenceField().GetText();
-    m_unit = std::max( 1, aSymbol->GetUnit() );
-    m_bodyStyle = std::max( 1, aSymbol->GetBodyStyle() );
+    const wxString reference = symbol->GetReferenceField().GetText();
+    const int      unit = std::max( 1, aSymbol->GetUnit() );
+    const int      bodyStyle = std::max( 1, aSymbol->GetBodyStyle() );
 
     // Optimize default edit options for this symbol
     // Usually if units are locked, graphic items are specific to each unit
@@ -2098,12 +2086,16 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
     SYMBOL_EDITOR_DRAWING_TOOLS* tools = GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
     tools->SetDrawSpecificUnit( symbol->UnitsLocked() );
 
-    // The buffered screen for the symbol
+    // Hand the transient working symbol/screen to a session-only instance tab, whose activation
+    // restores the frame's schematic-source state so the save path routes back to the schematic.
     SCH_SCREEN* tmpScreen = new SCH_SCREEN();
 
-    SetScreen( tmpScreen );
-    SetCurSymbol( symbol.release(), true );
     setSymWatcher( nullptr );
+
+    SYMBOL_EDITOR_TAB_CONTEXT* ctx = findOrCreateSymbolInstanceTab( symbol.release(), tmpScreen,
+                                                                    aSymbol->m_Uuid, reference, unit,
+                                                                    bodyStyle );
+    wxCHECK( ctx, /* void */ );
 
     ReCreateMenuBar();
     RecreateToolbars();

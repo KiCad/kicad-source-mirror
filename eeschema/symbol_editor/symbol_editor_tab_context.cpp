@@ -36,7 +36,8 @@ SYMBOL_EDITOR_TAB_CONTEXT::SYMBOL_EDITOR_TAB_CONTEXT( const wxString& aLib, cons
         m_screen( nullptr ),
         m_frameOwns( false ),
         m_unit( 1 ),
-        m_bodyStyle( 1 )
+        m_bodyStyle( 1 ),
+        m_fromSchematic( false )
 {
     // Edit a private clone; the buffer's symbol stays owned by the libMgr.
     if( aBuffer )
@@ -47,6 +48,21 @@ SYMBOL_EDITOR_TAB_CONTEXT::SYMBOL_EDITOR_TAB_CONTEXT( const wxString& aLib, cons
 
     if( aBuffer && aBuffer->IsModified() )
         m_screen->SetContentModified();
+}
+
+
+SYMBOL_EDITOR_TAB_CONTEXT::SYMBOL_EDITOR_TAB_CONTEXT( LIB_SYMBOL* aSymbol, SCH_SCREEN* aScreen,
+                                                      const KIID&     aSchematicSymbolUUID,
+                                                      const wxString& aReference ) :
+        m_symbol( aSymbol ),
+        m_screen( aScreen ),
+        m_frameOwns( false ),
+        m_unit( 1 ),
+        m_bodyStyle( 1 ),
+        m_fromSchematic( true ),
+        m_schematicSymbolUUID( aSchematicSymbolUUID ),
+        m_reference( aReference )
+{
 }
 
 

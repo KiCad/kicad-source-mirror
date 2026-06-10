@@ -34,6 +34,17 @@ FOOTPRINT_EDITOR_TAB_CONTEXT::FOOTPRINT_EDITOR_TAB_CONTEXT( const wxString& aLib
 }
 
 
+FOOTPRINT_EDITOR_TAB_CONTEXT::FOOTPRINT_EDITOR_TAB_CONTEXT( const KIID&            aSourceUuid,
+                                                            const wxString&        aReference,
+                                                            std::unique_ptr<BOARD> aBoard ) :
+        m_board( std::move( aBoard ) ),
+        m_fromBoard( true ),
+        m_sourceUuid( aSourceUuid ),
+        m_reference( aReference )
+{
+}
+
+
 FOOTPRINT_EDITOR_TAB_CONTEXT::~FOOTPRINT_EDITOR_TAB_CONTEXT() = default;
 
 

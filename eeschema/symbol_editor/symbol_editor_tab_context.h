@@ -26,6 +26,7 @@
 
 #include <wx/string.h>
 
+#include <kiid.h>
 #include <widgets/editor_tab_context.h>
 
 class LIB_SYMBOL;
@@ -35,11 +36,26 @@ class SYMBOL_BUFFER;
 
 /**
  * One open symbol tab owning a working LIB_SYMBOL and screen lent to the frame while active.
+ *
+ * A tab is one of two kinds.  A library tab edits a buffered library symbol and is keyed by its
+ * library:name pair and persisted across sessions.  An instance tab edits a symbol pulled from a
+ * placed schematic instance (Ctrl-E); it owns a transient working symbol with no library buffer, is
+ * keyed by the source instance UUID, and is session-only so it is never persisted.
  */
 class SYMBOL_EDITOR_TAB_CONTEXT : public EDITOR_TAB_CONTEXT
 {
 public:
     SYMBOL_EDITOR_TAB_CONTEXT( const wxString& aLib, const wxString& aName, SYMBOL_BUFFER* aBuffer );
+
+    /**
+     * Construct an instance (schematic) tab over an already-built transient working symbol/screen.
+     *
+     * The context takes ownership of both objects, following the same frame-borrow contract as a
+     * library tab.  There is no library buffer.  Save routing is driven by the stored source UUID and
+     * reference, which the frame restores on activation.
+     */
+    SYMBOL_EDITOR_TAB_CONTEXT( LIB_SYMBOL* aSymbol, SCH_SCREEN* aScreen,
+                               const KIID& aSchematicSymbolUUID, const wxString& aReference );
 
     ~SYMBOL_EDITOR_TAB_CONTEXT() override;
 
@@ -51,8 +67,33 @@ public:
         return aLib + wxT( ":" ) + aName;
     }
 
-    wxString GetTabKey() const override     { return MakeTabKey( m_lib, m_name ); }
-    wxString GetDisplayName() const override { return m_name; }
+    /**
+     * De-duplication key for a placed schematic instance, in a namespace disjoint from library keys.
+     *
+     * The leading control character cannot appear in a library nickname, so an instance key can never
+     * collide with a library:name key.
+     */
+    static wxString MakeInstanceTabKey( const KIID& aSchematicSymbolUUID )
+    {
+        return wxString( wxT( "\x01@sym:" ) ) + aSchematicSymbolUUID.AsString();
+    }
+
+    wxString GetTabKey() const override
+    {
+        return m_fromSchematic ? MakeInstanceTabKey( m_schematicSymbolUUID )
+                               : MakeTabKey( m_lib, m_name );
+    }
+
+    wxString GetDisplayName() const override { return m_fromSchematic ? m_reference : m_name; }
+
+    /**
+     * True for an instance (schematic) tab, which is session-only and never persisted.
+     */
+    bool IsTransient() const { return m_fromSchematic; }
+
+    bool        IsFromSchematic() const          { return m_fromSchematic; }
+    const KIID& GetSchematicSymbolUUID() const   { return m_schematicSymbolUUID; }
+    const wxString& GetReference() const         { return m_reference; }
 
     /**
      * True when the working screen carries unsaved edits.
@@ -108,6 +149,15 @@ private:
     bool        m_frameOwns;  ///< True while the tab is active and the frame owns the symbol/screen.
     int         m_unit;
     int         m_bodyStyle;
+
+    ///< True for an instance tab edited in place from a placed schematic symbol.
+    bool        m_fromSchematic;
+
+    ///< Source instance UUID, used as both the de-dup key and the save-back target.
+    KIID        m_schematicSymbolUUID;
+
+    ///< Reference designator of the source instance, shown as the tab label.
+    wxString    m_reference;
 };
 
 #endif // SYMBOL_EDITOR_TAB_CONTEXT_H

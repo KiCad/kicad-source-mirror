@@ -381,6 +381,16 @@ private:
     FOOTPRINT_EDITOR_TAB_CONTEXT* findOrCreateFootprintTab( const LIB_ID& aLibId, bool aAsPreview );
 
     /**
+     * Find or create the instance tab for a placed board footprint and make it the active tab.
+     *
+     * Re-editing the same board footprint focuses the existing tab; otherwise a session-only instance
+     * tab is created over a fresh fp-holder board carrying @p aBoardFootprint cloned, and the
+     * editor-to-board UUID remap is recorded on the new tab for save-back. The clone is created here;
+     * the caller retains ownership of @p aBoardFootprint.
+     */
+    FOOTPRINT_EDITOR_TAB_CONTEXT* findOrCreateFootprintInstanceTab( FOOTPRINT* aBoardFootprint );
+
+    /**
      * Make aCtx the active tab, borrowing its board without deleting the outgoing one.
      */
     void activateFootprintTab( FOOTPRINT_EDITOR_TAB_CONTEXT* aCtx );
@@ -412,6 +422,19 @@ private:
      * Prompt to save if needed, then drop the tab context at aIdx. Returns false to veto.
      */
     bool promptAndCloseFootprintTab( int aIdx );
+
+    /**
+     * Prompt to save each dirty instance (board) tab that is not the active one, since the active
+     * tab's unsaved state is handled by the main canCloseWindow check. Returns false if the user
+     * cancels so the window close can be vetoed.
+     */
+    bool promptToSaveInactiveInstanceTabs();
+
+    /**
+     * True if any non-active instance (board) tab has unsaved edits. Used to veto a session-end query
+     * early, since those tabs are invisible to IsContentModified (which sees only the active tab).
+     */
+    bool hasDirtyInactiveInstanceTabs() const;
 
     /**
      * Free the transient board items a detached context's lists own before it is destroyed, which

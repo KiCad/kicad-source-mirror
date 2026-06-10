@@ -574,6 +574,19 @@ private:
                                                       bool* aWasCreated = nullptr );
 
     /**
+     * Find or create the instance tab for a placed schematic symbol and make it active.
+     *
+     * Re-editing the same placed symbol focuses the existing tab; otherwise a session-only instance
+     * tab is created over the supplied transient working symbol/screen, which the context adopts. The
+     * caller's objects are consumed only when a new tab is created; on a focus of an existing tab they
+     * are deleted here.
+     */
+    SYMBOL_EDITOR_TAB_CONTEXT* findOrCreateSymbolInstanceTab( LIB_SYMBOL* aSymbol, SCH_SCREEN* aScreen,
+                                                              const KIID&     aSchematicSymbolUUID,
+                                                              const wxString& aReference, int aUnit,
+                                                              int aBodyStyle );
+
+    /**
      * Resolve the tab context for a panel tab index, or nullptr. The panel owns tab order, so the
      * index maps through the panel's key, not into m_tabContexts directly.
      */
@@ -594,6 +607,19 @@ private:
      * Prompt for unsaved changes on the tab and drop its context. Returns false if the user cancels.
      */
     bool promptAndCloseSymbolTab( int aIdx );
+
+    /**
+     * Prompt to save each dirty instance (schematic) tab that is not the active one, since the active
+     * tab's unsaved state is handled by CanCloseSymbolFromSchematic. Returns false if the user cancels
+     * so the window close can be vetoed.
+     */
+    bool promptToSaveInactiveInstanceTabs();
+
+    /**
+     * True if any non-active instance (schematic) tab has unsaved edits. Used to veto a session-end
+     * query early, since those tabs are invisible to IsContentModified (which sees only the active tab).
+     */
+    bool hasDirtyInactiveInstanceTabs() const;
 
     /**
      * Close every tab without prompting and return the frame to the empty state. Used by the paths

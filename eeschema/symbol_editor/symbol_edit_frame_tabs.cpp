@@ -176,6 +176,12 @@ void SYMBOL_EDIT_FRAME::activateSymbolTab( SYMBOL_EDITOR_TAB_CONTEXT* aContext )
 
     aContext->ReleaseToFrame();
 
+    // Restore the frame's schematic-source state from the incoming tab so the existing save path
+    // (SaveSymbolToSchematic vs the library) keys off the active tab, not whichever tab loaded last.
+    m_isSymbolFromSchematic = aContext->IsFromSchematic();
+    m_schematicSymbolUUID = aContext->GetSchematicSymbolUUID();
+    m_reference = aContext->GetReference();
+
     m_symbol = aContext->GetSymbol();
     m_unit = aContext->GetUnit();
     m_bodyStyle = aContext->GetBodyStyle();
@@ -422,6 +428,49 @@ SYMBOL_EDITOR_TAB_CONTEXT* SYMBOL_EDIT_FRAME::findOrCreateSymbolTab( const wxStr
 }
 
 
+SYMBOL_EDITOR_TAB_CONTEXT*
+SYMBOL_EDIT_FRAME::findOrCreateSymbolInstanceTab( LIB_SYMBOL* aSymbol, SCH_SCREEN* aScreen,
+                                                  const KIID&     aSchematicSymbolUUID,
+                                                  const wxString& aReference, int aUnit,
+                                                  int aBodyStyle )
+{
+    const wxString key = SYMBOL_EDITOR_TAB_CONTEXT::MakeInstanceTabKey( aSchematicSymbolUUID );
+    const int      unit = aUnit > 0 ? aUnit : 1;
+    const int      bodyStyle = aBodyStyle > 0 ? aBodyStyle : 1;
+
+    if( SYMBOL_EDITOR_TAB_CONTEXT* existing = symbolTabContextForKey( key ) )
+    {
+        // Re-editing the same placed symbol focuses the live tab, so free the redundant new objects.
+        delete aSymbol;
+        delete aScreen;
+
+        existing->SetUnit( unit );
+        existing->SetBodyStyle( bodyStyle );
+
+        if( m_tabsPanel )
+            m_tabsPanel->AddTab( key, existing->GetReference(), false );
+        else
+            activateSymbolTab( existing );
+
+        return existing;
+    }
+
+    m_tabContexts.push_back( std::make_unique<SYMBOL_EDITOR_TAB_CONTEXT>(
+            aSymbol, aScreen, aSchematicSymbolUUID, aReference ) );
+    SYMBOL_EDITOR_TAB_CONTEXT* ctx = m_tabContexts.back().get();
+
+    ctx->SetUnit( unit );
+    ctx->SetBodyStyle( bodyStyle );
+
+    if( m_tabsPanel )
+        m_tabsPanel->AddTab( key, aReference, false );
+    else
+        activateSymbolTab( ctx );
+
+    return ctx;
+}
+
+
 bool SYMBOL_EDIT_FRAME::promptAndCloseSymbolTab( int aIdx )
 {
     SYMBOL_EDITOR_TAB_CONTEXT* ctx = symbolTabContextForIndex( aIdx );
@@ -432,7 +481,7 @@ bool SYMBOL_EDIT_FRAME::promptAndCloseSymbolTab( int aIdx )
     if( ctx->IsModified() && !m_silentSymbolTabClose )
     {
         wxString msg = wxString::Format( _( "Save changes to '%s' before closing?" ),
-                                         ctx->GetName() );
+                                         ctx->GetDisplayName() );
 
         KIDIALOG dlg( this, msg, _( "Confirmation" ), wxYES_NO | wxCANCEL | wxICON_WARNING );
         dlg.SetYesNoCancelLabels( _( "Save" ), _( "Discard Changes" ), _( "Cancel" ) );
@@ -472,6 +521,12 @@ bool SYMBOL_EDIT_FRAME::promptAndCloseSymbolTab( int aIdx )
         m_activeTab = nullptr;
         m_symbol = nullptr;
         SetScreen( m_dummyScreen );
+
+        // Clear the mirrored schematic-source state so the frame no longer looks like it holds an
+        // instance symbol; a successor tab's activateSymbolTab restores these from its own context.
+        m_isSymbolFromSchematic = false;
+        m_schematicSymbolUUID = niluuid;
+        m_reference = wxEmptyString;
     }
     else
     {
@@ -484,6 +539,69 @@ bool SYMBOL_EDIT_FRAME::promptAndCloseSymbolTab( int aIdx )
                    {
                        return aOwned.get() == ctx;
                    } );
+
+    return true;
+}
+
+
+bool SYMBOL_EDIT_FRAME::hasDirtyInactiveInstanceTabs() const
+{
+    for( const std::unique_ptr<SYMBOL_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
+    {
+        if( ctx.get() != m_activeTab && ctx->IsTransient() && ctx->IsModified() )
+            return true;
+    }
+
+    return false;
+}
+
+
+bool SYMBOL_EDIT_FRAME::promptToSaveInactiveInstanceTabs()
+{
+    // Collect first; saving activates a tab, which mutates m_activeTab and m_tabContexts ordering.
+    std::vector<SYMBOL_EDITOR_TAB_CONTEXT*> dirty;
+
+    for( const std::unique_ptr<SYMBOL_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
+    {
+        // The active tab and library tabs are handled by the existing close checks.
+        if( ctx.get() != m_activeTab && ctx->IsTransient() && ctx->IsModified() )
+            dirty.push_back( ctx.get() );
+    }
+
+    // Saving activates each dirty tab in turn; restore the tab the user was on so a vetoed close leaves
+    // the editor where it was and a successful close persists the real active tab, not a discarded one.
+    SYMBOL_EDITOR_TAB_CONTEXT* originalActive = m_activeTab;
+
+    for( SYMBOL_EDITOR_TAB_CONTEXT* ctx : dirty )
+    {
+        wxString msg = wxString::Format( _( "Save changes to '%s' before closing?" ),
+                                         ctx->GetDisplayName() );
+
+        KIDIALOG dlg( this, msg, _( "Confirmation" ), wxYES_NO | wxCANCEL | wxICON_WARNING );
+        dlg.SetYesNoCancelLabels( _( "Save" ), _( "Discard Changes" ), _( "Cancel" ) );
+
+        const int answer = dlg.ShowModal();
+
+        if( answer == wxID_YES )
+        {
+            // saveCurrentSymbol saves the active tab via the mirrored frame state, so activate this
+            // one first; it clears the screen's modified flag on success.
+            activateSymbolTab( ctx );
+
+            if( !saveCurrentSymbol() )
+            {
+                activateSymbolTab( originalActive );
+                return false;
+            }
+        }
+        else if( answer != wxID_NO )
+        {
+            activateSymbolTab( originalActive );
+            return false;
+        }
+    }
+
+    activateSymbolTab( originalActive );
 
     return true;
 }
@@ -578,14 +696,12 @@ void SYMBOL_EDIT_FRAME::storeSymbolTabsToSettings()
     m_settings->m_OpenTabs.clear();
     m_settings->m_ActiveTabKey.clear();
 
-    // Only library symbols are remembered. A symbol opened from the schematic is edited in place
-    // outside the tab model (LoadSymbolFromSchematic closes every library tab first), so it must never
-    // be persisted as a tab.
-    if( m_isSymbolFromSchematic )
-        return;
-
     for( const std::unique_ptr<SYMBOL_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
     {
+        // Instance tabs are session-only and never persisted.
+        if( ctx->IsTransient() )
+            continue;
+
         SYMBOL_EDITOR_SETTINGS::OPEN_TAB tab;
         tab.lib = ctx->GetLibrary();
         tab.name = ctx->GetName();
@@ -595,6 +711,7 @@ void SYMBOL_EDIT_FRAME::storeSymbolTabsToSettings()
         m_settings->m_OpenTabs.push_back( tab );
     }
 
-    if( m_activeTab )
+    // Never restore an instance tab as the active tab, since it is not persisted.
+    if( m_activeTab && !m_activeTab->IsTransient() )
         m_settings->m_ActiveTabKey = m_activeTab->GetTabKey();
 }
