@@ -828,6 +828,11 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
 
     symbol->GetDrawItems().sort();
 
+    // Field mappings (including Description) are applied with SCH_FIELD::SetText, which does not
+    // refresh the cached values the library tree and chooser read. Without this the upper chooser
+    // panel keeps the source symbol's description while the details panel shows the database value.
+    symbol->RefreshLibraryTreeCaches();
+
     return symbol;
 }
 

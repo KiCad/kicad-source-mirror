@@ -1,0 +1,34 @@
+{
+    "meta": {
+        "version": 0,
+        "filename": "qa_dblib_field_description.kicad_dbl"
+    },
+    "name": "QA Database (field-mapped Description)",
+    "description": "Maps Description through a regular field mapping instead of the properties block",
+    "source": {
+        "type": "odbc",
+        "dsn": "",
+        "username": "",
+        "password": "",
+        "timeout_seconds": 2,
+        "connection_string": "Driver={SQLite3};Database=${CWD}/database.sqlite"
+    },
+    "libraries": [
+        {
+            "name": "Resistors",
+            "table": "Resistors",
+            "key": "Part ID",
+            "symbols": "Symbols",
+            "footprints": "Footprints",
+            "fields": [
+                {
+                    "column": "Description",
+                    "name": "Description",
+                    "visible_on_add": false,
+                    "visible_in_chooser": true,
+                    "show_name": false
+                }
+            ]
+        }
+    ]
+}
