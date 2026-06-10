@@ -106,13 +106,22 @@ void KICAD_TAB_ART::DrawTab( wxDC& aDc, wxWindow* aWnd, const wxAuiNotebookPage&
 }
 
 
-wxSize KICAD_TAB_ART::GetTabSize( wxDC& aDc, wxWindow* aWnd, const wxString& aCaption,
-                                  const wxBitmapBundle& aBitmap, bool aActive,
-                                  int aCloseButtonState, int* aXExtent )
+#if wxCHECK_VERSION( 3, 3, 0 )
+wxSize KICAD_TAB_ART::GetTabSize( wxReadOnlyDC& aDc, wxWindow* aWnd, const wxString& aCaption,
+                                  const wxBitmapBundle& aBitmap, bool aActive, int aCloseButtonState, int* aXExtent )
 {
     // Always reserve the leading "*" width since a modified tab prepends one when drawn.
     const wxString reserved = wxT( "*" ) + aCaption;
 
-    return wxAuiDefaultTabArt::GetTabSize( aDc, aWnd, reserved, aBitmap, aActive, aCloseButtonState,
-                                           aXExtent );
+    return wxAuiDefaultTabArt::GetTabSize( aDc, aWnd, reserved, aBitmap, aActive, aCloseButtonState, aXExtent );
 }
+#else
+wxSize KICAD_TAB_ART::GetTabSize( wxDC& aDc, wxWindow* aWnd, const wxString& aCaption, const wxBitmapBundle& aBitmap,
+                                  bool aActive, int aCloseButtonState, int* aXExtent )
+{
+    // Always reserve the leading "*" width since a modified tab prepends one when drawn.
+    const wxString reserved = wxT( "*" ) + aCaption;
+
+    return wxAuiDefaultTabArt::GetTabSize( aDc, aWnd, reserved, aBitmap, aActive, aCloseButtonState, aXExtent );
+}
+#endif

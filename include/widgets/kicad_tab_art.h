@@ -64,9 +64,13 @@ public:
                   int aCloseButtonState, wxRect* aOutTabRect, wxRect* aOutButtonRect,
                   int* aXExtent ) override;
 
-    wxSize GetTabSize( wxDC& aDc, wxWindow* aWnd, const wxString& aCaption,
-                       const wxBitmapBundle& aBitmap, bool aActive, int aCloseButtonState,
-                       int* aXExtent ) override;
+#if wxCHECK_VERSION( 3, 3, 0 )
+    wxSize GetTabSize( wxReadOnlyDC& dc, wxWindow* wnd, const wxString& caption, const wxBitmapBundle& bitmap,
+                       bool active, int closeButtonState, int* xExtent ) override;
+#else
+    wxSize GetTabSize( wxDC& aDc, wxWindow* aWnd, const wxString& aCaption, const wxBitmapBundle& aBitmap, bool aActive,
+                       int aCloseButtonState, int* aXExtent ) override;
+#endif
 
 private:
     /**
