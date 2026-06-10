@@ -93,7 +93,6 @@ public:
     {
         wxString m_lib;
         wxString m_fpName;
-        bool     m_pinned = false;
     };
 
     std::vector<OPEN_TAB> m_OpenTabs;

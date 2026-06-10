@@ -237,7 +237,6 @@ public:
     // Symbol Editor document tabs
     static TOOL_ACTION nextSymbolTab;
     static TOOL_ACTION prevSymbolTab;
-    static TOOL_ACTION pinSymbolTab;
     static TOOL_ACTION closeSymbolTab;
 
     // Hierarchy navigation

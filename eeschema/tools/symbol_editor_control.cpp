@@ -1063,29 +1063,6 @@ int SYMBOL_EDITOR_CONTROL::PrevTab( const TOOL_EVENT& aEvent )
 }
 
 
-int SYMBOL_EDITOR_CONTROL::PinTab( const TOOL_EVENT& aEvent )
-{
-    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-
-    if( editFrame && editFrame->GetTabsPanel() )
-    {
-        EDITOR_TABS_PANEL* panel = editFrame->GetTabsPanel();
-        const int          active = panel->GetActiveTab();
-
-        if( active >= 0 && active < static_cast<int>( panel->Model().Entries().size() ) )
-        {
-            const bool pinned = panel->Model().Entries()[active].pinned;
-
-            // SetPinned mirrors the change into the tab context (which renders and persists the pin)
-            // through the panel's onPinChanged channel, so this one call keeps both in sync.
-            panel->SetPinned( active, !pinned );
-        }
-    }
-
-    return 0;
-}
-
-
 int SYMBOL_EDITOR_CONTROL::CloseTab( const TOOL_EVENT& aEvent )
 {
     SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
@@ -1128,7 +1105,6 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
 
     Go( &SYMBOL_EDITOR_CONTROL::NextTab,               SCH_ACTIONS::nextSymbolTab.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::PrevTab,               SCH_ACTIONS::prevSymbolTab.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::PinTab,                SCH_ACTIONS::pinSymbolTab.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::CloseTab,              SCH_ACTIONS::closeSymbolTab.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::OpenWithTextEditor,    ACTIONS::openWithTextEditor.MakeEvent() );

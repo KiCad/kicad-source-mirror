@@ -321,11 +321,6 @@ public:
     void AdvanceFootprintTab( bool aForward );
 
     /**
-     * Toggle the pinned state of the active tab.
-     */
-    void PinActiveFootprintTab();
-
-    /**
      * Request closing the active tab, prompting to save if it is modified.
      */
     void CloseActiveFootprintTab();

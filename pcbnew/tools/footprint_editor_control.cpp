@@ -1014,13 +1014,6 @@ int FOOTPRINT_EDITOR_CONTROL::PrevTab( const TOOL_EVENT& aEvent )
 }
 
 
-int FOOTPRINT_EDITOR_CONTROL::PinTab( const TOOL_EVENT& aEvent )
-{
-    m_frame->PinActiveFootprintTab();
-    return 0;
-}
-
-
 int FOOTPRINT_EDITOR_CONTROL::CloseTab( const TOOL_EVENT& aEvent )
 {
     m_frame->CloseActiveFootprintTab();
@@ -1061,7 +1054,6 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
 
     Go( &FOOTPRINT_EDITOR_CONTROL::NextTab,              PCB_ACTIONS::nextFootprintTab.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::PrevTab,              PCB_ACTIONS::prevFootprintTab.MakeEvent() );
-    Go( &FOOTPRINT_EDITOR_CONTROL::PinTab,               PCB_ACTIONS::pinFootprintTab.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::CloseTab,             PCB_ACTIONS::closeFootprintTab.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_CONTROL::Properties,           PCB_ACTIONS::footprintProperties.MakeEvent() );

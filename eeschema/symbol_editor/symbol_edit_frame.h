@@ -116,11 +116,6 @@ public:
     void OnTabCharHook( wxKeyEvent& aEvent );
 
     /**
-     * Mirror a tab's pinned flag onto its context so it renders, persists and drives visual state.
-     */
-    void SetSymbolTabPinned( int aIdx, bool aPinned );
-
-    /**
      * Clear the unsaved-edits flag on every tab in a saved library so its dirty indicator clears.
      */
     void clearSymbolTabsModifiedForLibrary( const wxString& aLibrary );

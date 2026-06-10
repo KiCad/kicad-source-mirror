@@ -74,7 +74,6 @@ public:
         wxString name;
         int      unit = 1;
         int      bodyStyle = 1;
-        bool     pinned = false;
     };
 
     SYMBOL_EDITOR_SETTINGS();

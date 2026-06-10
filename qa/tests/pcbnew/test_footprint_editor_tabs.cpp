@@ -89,8 +89,8 @@ BOOST_AUTO_TEST_CASE( SettingsOpenTabsRoundTrip )
     FOOTPRINT_EDITOR_SETTINGS settings;
 
     settings.m_OpenTabs.clear();
-    settings.m_OpenTabs.push_back( { wxS( "Resistors" ), wxS( "R_0402" ), false } );
-    settings.m_OpenTabs.push_back( { wxS( "Caps" ), wxS( "C_0603" ), true } );
+    settings.m_OpenTabs.push_back( { wxS( "Resistors" ), wxS( "R_0402" ) } );
+    settings.m_OpenTabs.push_back( { wxS( "Caps" ), wxS( "C_0603" ) } );
     settings.m_ActiveTab = wxS( "Caps:C_0603" );
 
     settings.Store();
@@ -103,10 +103,8 @@ BOOST_AUTO_TEST_CASE( SettingsOpenTabsRoundTrip )
     BOOST_REQUIRE_EQUAL( settings.m_OpenTabs.size(), 2u );
     BOOST_CHECK_EQUAL( settings.m_OpenTabs[0].m_lib, wxS( "Resistors" ) );
     BOOST_CHECK_EQUAL( settings.m_OpenTabs[0].m_fpName, wxS( "R_0402" ) );
-    BOOST_CHECK( !settings.m_OpenTabs[0].m_pinned );
     BOOST_CHECK_EQUAL( settings.m_OpenTabs[1].m_lib, wxS( "Caps" ) );
     BOOST_CHECK_EQUAL( settings.m_OpenTabs[1].m_fpName, wxS( "C_0603" ) );
-    BOOST_CHECK( settings.m_OpenTabs[1].m_pinned );
     BOOST_CHECK_EQUAL( settings.m_ActiveTab, wxS( "Caps:C_0603" ) );
 }
 

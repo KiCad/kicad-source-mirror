@@ -590,7 +590,6 @@ public:
     // Footprint Editor document tabs
     static TOOL_ACTION nextFootprintTab;
     static TOOL_ACTION prevFootprintTab;
-    static TOOL_ACTION pinFootprintTab;
     static TOOL_ACTION closeFootprintTab;
 
     static TOOL_ACTION inspectClearance;

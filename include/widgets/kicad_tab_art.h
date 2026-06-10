@@ -26,6 +26,7 @@
 
 #include <functional>
 
+#include <wx/version.h>
 #include <wx/aui/auibook.h>
 #include <wx/aui/tabart.h>
 
@@ -42,13 +43,11 @@ struct TAB_VISUAL_STATE
 
 /**
  * Resolve a tab's decorations from its document state flags.
- *
- * The pinned flag has no decoration of its own and is accepted only for API symmetry.
  */
-TAB_VISUAL_STATE ResolveTabVisualState( bool aPreview, bool aModified, bool aPinned );
+TAB_VISUAL_STATE ResolveTabVisualState( bool aPreview, bool aModified );
 
 
-/// A wxAuiTabArt that renders editor tabs with preview/modified/pinned decorations. Per-page state
+/// A wxAuiTabArt that renders editor tabs with preview/modified decorations. Per-page state
 /// comes from a caller callback keyed on the page window, since wxAuiNotebookPage has no slot for it.
 class KICAD_TAB_ART : public wxAuiDefaultTabArt
 {
@@ -60,16 +59,23 @@ public:
 
     wxAuiTabArt* Clone() override;
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+    // wxWidgets 3.3 rewrote wxAUI to a page-based art interface and the tab strip now renders through
+    // DrawPageTab/GetPageTabSize. The legacy DrawTab/GetTabSize are no longer on the draw path for the
+    // default (flat) art, so the decorations must hook the page-based methods instead.
+    int DrawPageTab( wxDC& aDc, wxWindow* aWnd, wxAuiNotebookPage& aPage,
+                     const wxRect& aRect ) override;
+
+    wxSize GetPageTabSize( wxReadOnlyDC& aDc, wxWindow* aWnd, const wxAuiNotebookPage& aPage,
+                           int* aXExtent = nullptr ) override;
+#else
     void DrawTab( wxDC& aDc, wxWindow* aWnd, const wxAuiNotebookPage& aPage, const wxRect& aInRect,
                   int aCloseButtonState, wxRect* aOutTabRect, wxRect* aOutButtonRect,
                   int* aXExtent ) override;
 
-#if wxCHECK_VERSION( 3, 3, 0 )
-    wxSize GetTabSize( wxReadOnlyDC& dc, wxWindow* wnd, const wxString& caption, const wxBitmapBundle& bitmap,
-                       bool active, int closeButtonState, int* xExtent ) override;
-#else
-    wxSize GetTabSize( wxDC& aDc, wxWindow* aWnd, const wxString& aCaption, const wxBitmapBundle& aBitmap, bool aActive,
-                       int aCloseButtonState, int* aXExtent ) override;
+    wxSize GetTabSize( wxDC& aDc, wxWindow* aWnd, const wxString& aCaption,
+                       const wxBitmapBundle& aBitmap, bool aActive, int aCloseButtonState,
+                       int* aXExtent ) override;
 #endif
 
 private:
@@ -77,6 +83,11 @@ private:
      * Visual state for a page, or a default if no provider is set.
      */
     TAB_VISUAL_STATE stateFor( wxWindow* aPageWindow ) const;
+
+    /**
+     * The base caption font for a tab, styled italic for preview and bold for modified.
+     */
+    wxFont decoratedFont( const TAB_VISUAL_STATE& aState, bool aActive ) const;
 
     STATE_FN m_stateFn;
 };

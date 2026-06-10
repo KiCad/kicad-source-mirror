@@ -144,7 +144,6 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->AppendSeparator();
     viewMenu->Add( SCH_ACTIONS::nextSymbolTab );
     viewMenu->Add( SCH_ACTIONS::prevSymbolTab );
-    viewMenu->Add( SCH_ACTIONS::pinSymbolTab );
     viewMenu->Add( SCH_ACTIONS::closeSymbolTab );
 
 

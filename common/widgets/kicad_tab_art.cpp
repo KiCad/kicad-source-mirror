@@ -23,17 +23,14 @@
 
 #include <widgets/kicad_tab_art.h>
 
-#include <algorithm>
+#include <utility>
 
 #include <wx/dc.h>
 #include <wx/pen.h>
 
 
-TAB_VISUAL_STATE ResolveTabVisualState( bool aPreview, bool aModified, bool aPinned )
+TAB_VISUAL_STATE ResolveTabVisualState( bool aPreview, bool aModified )
 {
-    // Pinning has no glyph; a pinned tab is already cleared of preview and renders normal.
-    ( void ) aPinned;
-
     TAB_VISUAL_STATE state;
 
     // An edit promotes a preview to a permanent tab, so modified wins.
@@ -76,6 +73,60 @@ TAB_VISUAL_STATE KICAD_TAB_ART::stateFor( wxWindow* aPageWindow ) const
 }
 
 
+wxFont KICAD_TAB_ART::decoratedFont( const TAB_VISUAL_STATE& aState, bool aActive ) const
+{
+    wxFont font = aActive ? m_selectedFont : m_normalFont;
+    font.SetStyle( aState.italic ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL );
+    font.SetWeight( aState.bold ? wxFONTWEIGHT_BOLD : wxFONTWEIGHT_NORMAL );
+
+    return font;
+}
+
+
+#if wxCHECK_VERSION( 3, 3, 0 )
+
+int KICAD_TAB_ART::DrawPageTab( wxDC& aDc, wxWindow* aWnd, wxAuiNotebookPage& aPage,
+                                const wxRect& aRect )
+{
+    const TAB_VISUAL_STATE st = stateFor( aPage.window );
+
+    // The base writes the laid-out rect back into aPage, so decorate the real page in place and
+    // restore its caption afterwards rather than measuring a throwaway copy.
+    const wxString savedCaption = aPage.caption;
+
+    if( st.showAsterisk )
+        aPage.caption = wxT( "*" ) + aPage.caption;
+
+    const wxFont decorated = decoratedFont( st, aPage.active );
+
+    const wxFont savedNormal = m_normalFont;
+    const wxFont savedSelected = m_selectedFont;
+
+    m_normalFont = decorated;
+    m_selectedFont = decorated;
+
+    const int xExtent = wxAuiDefaultTabArt::DrawPageTab( aDc, aWnd, aPage, aRect );
+
+    m_normalFont = savedNormal;
+    m_selectedFont = savedSelected;
+    aPage.caption = savedCaption;
+
+    return xExtent;
+}
+
+
+wxSize KICAD_TAB_ART::GetPageTabSize( wxReadOnlyDC& aDc, wxWindow* aWnd,
+                                      const wxAuiNotebookPage& aPage, int* aXExtent )
+{
+    // Always reserve the leading "*" width since a modified tab prepends one when drawn.
+    wxAuiNotebookPage reserved = aPage;
+    reserved.caption = wxT( "*" ) + aPage.caption;
+
+    return wxAuiDefaultTabArt::GetPageTabSize( aDc, aWnd, reserved, aXExtent );
+}
+
+#else
+
 void KICAD_TAB_ART::DrawTab( wxDC& aDc, wxWindow* aWnd, const wxAuiNotebookPage& aPage,
                              const wxRect& aInRect, int aCloseButtonState, wxRect* aOutTabRect,
                              wxRect* aOutButtonRect, int* aXExtent )
@@ -88,9 +139,7 @@ void KICAD_TAB_ART::DrawTab( wxDC& aDc, wxWindow* aWnd, const wxAuiNotebookPage&
     if( st.showAsterisk )
         local.caption = wxT( "*" ) + local.caption;
 
-    wxFont decorated = aPage.active ? m_selectedFont : m_normalFont;
-    decorated.SetStyle( st.italic ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL );
-    decorated.SetWeight( st.bold ? wxFONTWEIGHT_BOLD : wxFONTWEIGHT_NORMAL );
+    const wxFont decorated = decoratedFont( st, aPage.active );
 
     const wxFont savedNormal = m_normalFont;
     const wxFont savedSelected = m_selectedFont;
@@ -106,22 +155,15 @@ void KICAD_TAB_ART::DrawTab( wxDC& aDc, wxWindow* aWnd, const wxAuiNotebookPage&
 }
 
 
-#if wxCHECK_VERSION( 3, 3, 0 )
-wxSize KICAD_TAB_ART::GetTabSize( wxReadOnlyDC& aDc, wxWindow* aWnd, const wxString& aCaption,
-                                  const wxBitmapBundle& aBitmap, bool aActive, int aCloseButtonState, int* aXExtent )
+wxSize KICAD_TAB_ART::GetTabSize( wxDC& aDc, wxWindow* aWnd, const wxString& aCaption,
+                                  const wxBitmapBundle& aBitmap, bool aActive,
+                                  int aCloseButtonState, int* aXExtent )
 {
     // Always reserve the leading "*" width since a modified tab prepends one when drawn.
     const wxString reserved = wxT( "*" ) + aCaption;
 
-    return wxAuiDefaultTabArt::GetTabSize( aDc, aWnd, reserved, aBitmap, aActive, aCloseButtonState, aXExtent );
+    return wxAuiDefaultTabArt::GetTabSize( aDc, aWnd, reserved, aBitmap, aActive, aCloseButtonState,
+                                           aXExtent );
 }
-#else
-wxSize KICAD_TAB_ART::GetTabSize( wxDC& aDc, wxWindow* aWnd, const wxString& aCaption, const wxBitmapBundle& aBitmap,
-                                  bool aActive, int aCloseButtonState, int* aXExtent )
-{
-    // Always reserve the leading "*" width since a modified tab prepends one when drawn.
-    const wxString reserved = wxT( "*" ) + aCaption;
 
-    return wxAuiDefaultTabArt::GetTabSize( aDc, aWnd, reserved, aBitmap, aActive, aCloseButtonState, aXExtent );
-}
 #endif

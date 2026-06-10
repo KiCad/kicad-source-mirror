@@ -294,14 +294,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                 return promptAndCloseFootprintTab( aIdx );
             };
 
-    m_tabsPanel->onPinChanged =
-            [this]( int aIdx, bool aPinned )
-            {
-                // The context, not the panel model, persists the pin, so mirror every change there.
-                if( aIdx >= 0 && aIdx < static_cast<int>( m_tabContexts.size() ) )
-                    m_tabContexts[aIdx]->SetPinned( aPinned );
-            };
-
     // onCloseTabRequested installs the successor board atomically, so the panel must not re-activate
     // the fallback after a close and re-borrow a just-installed or just-freed index.
     m_tabsPanel->SetSuppressActivateOnClose( true );
@@ -309,8 +301,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_tabsPanel->onQueryVisualState =
             [this]( int aIdx ) -> TAB_VISUAL_STATE
             {
-                // The panel model owns preview/pinned, but the live dirty flag lives on the shared
-                // frame screen folded into the context, so read modified from the context.
+                // The panel model owns preview, but the live dirty flag lives on the shared frame
+                // screen folded into the context, so read modified from the context.
                 const std::vector<EDITOR_TABS_MODEL::ENTRY>& entries = m_tabsPanel->Model().Entries();
 
                 if( aIdx < 0 || aIdx >= static_cast<int>( entries.size() ) )
@@ -321,8 +313,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                                                                         : nullptr;
                 const bool modified = ctx ? ctx->IsModified() : entries[aIdx].modified;
 
-                return ResolveTabVisualState( entries[aIdx].preview, modified,
-                                              entries[aIdx].pinned );
+                return ResolveTabVisualState( entries[aIdx].preview, modified );
             };
 
     m_auimgr.AddPane( m_tabsPanel, EDA_PANE().Canvas().Name( "DrawFrame" )
@@ -657,19 +648,6 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
                         // A restored tab is a real document, so promote it from preview to permanent.
                         if( m_tabsPanel )
                             findOrCreateFootprintTab( id, false );
-
-                        if( aTab.m_pinned && m_tabsPanel )
-                        {
-                            int idx = m_tabsPanel->FindTab( id.GetLibNickname().wx_str() + wxT( ':' )
-                                                            + id.GetLibItemName().wx_str() );
-
-                            if( idx >= 0 )
-                            {
-                                // SetPinned mirrors into the context through onPinChanged, keeping
-                                // the persisted IsPinned() flag in sync.
-                                m_tabsPanel->SetPinned( idx, true );
-                            }
-                        }
 
                         return true;
                     }
@@ -1218,16 +1196,28 @@ bool FOOTPRINT_EDIT_FRAME::promptAndCloseFootprintTab( int aIdx )
         switch( dlg.ShowModal() )
         {
         case wxID_YES:
+        {
             // SaveFootprint reads the active tab's load baseline for rename detection, so an inactive
-            // tab must be made active first or it saves against the wrong baseline. Veto the close if
-            // the save did not complete so the edits and history are not silently dropped.
-            if( ctx != m_activeTab )
+            // tab must be made active first or it saves against the wrong baseline. Restore the prior
+            // active tab afterwards so closing an inactive tab stays an inactive close, keeping the
+            // panel's suppressed fallback selection aligned with the live board. Veto the close if the
+            // save did not complete so the edits and history are not silently dropped.
+            FOOTPRINT_EDITOR_TAB_CONTEXT* activeBeforeSave = m_activeTab;
+            const bool                    activatedForSave = ( ctx != m_activeTab );
+
+            if( activatedForSave )
                 activateFootprintTab( ctx );
 
-            if( !SaveFootprint( ctx->GetBoard()->GetFirstFootprint() ) )
+            const bool saved = SaveFootprint( ctx->GetBoard()->GetFirstFootprint() );
+
+            if( activatedForSave && activeBeforeSave )
+                activateFootprintTab( activeBeforeSave );
+
+            if( !saved )
                 return false;
 
             break;
+        }
 
         case wxID_NO:     break;
         default:
@@ -1324,24 +1314,6 @@ void FOOTPRINT_EDIT_FRAME::AdvanceFootprintTab( bool aForward )
 {
     if( m_tabsPanel )
         m_tabsPanel->AdvanceTab( aForward );
-}
-
-
-void FOOTPRINT_EDIT_FRAME::PinActiveFootprintTab()
-{
-    if( !m_tabsPanel )
-        return;
-
-    const int active = m_tabsPanel->GetActiveTab();
-
-    if( active >= 0 && active < static_cast<int>( m_tabContexts.size() ) )
-    {
-        const bool pinned = !m_tabContexts[active]->IsPinned();
-
-        // SetPinned mirrors the change into the context through the panel's onPinChanged channel, so
-        // this one call keeps the panel model and the persisted context flag in sync.
-        m_tabsPanel->SetPinned( active, pinned );
-    }
 }
 
 
@@ -1493,7 +1465,7 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         {
             for( const std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT>& ctx : m_tabContexts )
             {
-                cfg->m_OpenTabs.push_back( { ctx->GetLib(), ctx->GetName(), ctx->IsPinned() } );
+                cfg->m_OpenTabs.push_back( { ctx->GetLib(), ctx->GetName() } );
 
                 if( ctx.get() == m_activeTab )
                     cfg->m_ActiveTab = ctx->GetTabKey();

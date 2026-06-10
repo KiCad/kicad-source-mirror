@@ -143,8 +143,8 @@ BOOST_AUTO_TEST_CASE( OpenTabsJsonRoundTrip )
 {
     SYMBOL_EDITOR_SETTINGS source;
 
-    source.m_OpenTabs.push_back( { wxS( "Device" ), wxS( "R" ), 1, 1, false } );
-    source.m_OpenTabs.push_back( { wxS( "Connector" ), wxS( "Conn_01x02" ), 2, 1, true } );
+    source.m_OpenTabs.push_back( { wxS( "Device" ), wxS( "R" ), 1, 1 } );
+    source.m_OpenTabs.push_back( { wxS( "Connector" ), wxS( "Conn_01x02" ), 2, 1 } );
     source.m_ActiveTabKey = wxS( "Connector:Conn_01x02" );
 
     BOOST_REQUIRE( source.Store() );
@@ -159,7 +159,7 @@ BOOST_AUTO_TEST_CASE( OpenTabsJsonRoundTrip )
     SYMBOL_EDITOR_SETTINGS sink;
 
     // Seed a stale entry to catch a reader that fails to clear first.
-    sink.m_OpenTabs.push_back( { wxS( "STALE" ), wxS( "X" ), 1, 1, false } );
+    sink.m_OpenTabs.push_back( { wxS( "STALE" ), wxS( "X" ), 1, 1 } );
 
     JSON_SETTINGS_INTERNALS reparsedInternals;
     static_cast<nlohmann::json&>( reparsedInternals ) = reparsed;
@@ -171,12 +171,10 @@ BOOST_AUTO_TEST_CASE( OpenTabsJsonRoundTrip )
     BOOST_CHECK_EQUAL( sink.m_OpenTabs[0].lib, wxS( "Device" ) );
     BOOST_CHECK_EQUAL( sink.m_OpenTabs[0].name, wxS( "R" ) );
     BOOST_CHECK_EQUAL( sink.m_OpenTabs[0].unit, 1 );
-    BOOST_CHECK( !sink.m_OpenTabs[0].pinned );
 
     BOOST_CHECK_EQUAL( sink.m_OpenTabs[1].lib, wxS( "Connector" ) );
     BOOST_CHECK_EQUAL( sink.m_OpenTabs[1].name, wxS( "Conn_01x02" ) );
     BOOST_CHECK_EQUAL( sink.m_OpenTabs[1].unit, 2 );
-    BOOST_CHECK( sink.m_OpenTabs[1].pinned );
 
     BOOST_CHECK_EQUAL( sink.m_ActiveTabKey, wxS( "Connector:Conn_01x02" ) );
 }

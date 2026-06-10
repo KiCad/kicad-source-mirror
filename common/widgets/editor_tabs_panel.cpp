@@ -27,8 +27,6 @@
 
 #include <wx/aui/auibook.h>
 #include <wx/aui/framemanager.h>
-#include <wx/aui/tabart.h>
-#include <wx/dcclient.h>
 #include <wx/event.h>
 #include <wx/intl.h>
 #include <wx/menu.h>
@@ -43,8 +41,7 @@ enum
     ID_TAB_CLOSE = wxID_HIGHEST + 1,
     ID_TAB_CLOSE_OTHERS,
     ID_TAB_CLOSE_TO_RIGHT,
-    ID_TAB_CLOSE_ALL,
-    ID_TAB_PIN
+    ID_TAB_CLOSE_ALL
 };
 
 
@@ -66,7 +63,7 @@ int EDITOR_TABS_MODEL::PreviewIndex() const
     {
         const ENTRY& e = m_entries[i];
 
-        if( e.preview && !e.pinned && !e.modified )
+        if( e.preview && !e.modified )
             return static_cast<int>( i );
     }
 
@@ -99,7 +96,7 @@ int EDITOR_TABS_MODEL::OpenDocument( const wxString& aKey, bool aAsPreview )
         }
     }
 
-    m_entries.push_back( ENTRY{ aKey, false, aAsPreview, false } );
+    m_entries.push_back( ENTRY{ aKey, aAsPreview, false } );
 
     return static_cast<int>( m_entries.size() ) - 1;
 }
@@ -129,20 +126,6 @@ void EDITOR_TABS_MODEL::MarkModified( const wxString& aKey, bool aModified )
 }
 
 
-void EDITOR_TABS_MODEL::Pin( const wxString& aKey, bool aPinned )
-{
-    const int idx = FindIndex( aKey );
-
-    if( idx < 0 )
-        return;
-
-    m_entries[idx].pinned = aPinned;
-
-    if( aPinned )
-        m_entries[idx].preview = false;
-}
-
-
 void EDITOR_TABS_MODEL::Promote( const wxString& aKey )
 {
     const int idx = FindIndex( aKey );
@@ -167,19 +150,21 @@ EDITOR_TABS_PANEL::EDITOR_TABS_PANEL( wxWindow* aParent, EDA_DRAW_PANEL_GAL* aSh
         wxPanel( aParent ),
         m_sharedCanvas( aSharedCanvas )
 {
-    m_tabs = new wxAuiTabCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                              wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_TAB_MOVE
-                                      | wxAUI_NB_SCROLL_BUTTONS );
+    // wxWidgets 3.3 made wxAuiTabCtrl an internal class that only works as a child of a notebook, so
+    // the strip is a real wxAuiNotebook. Its (empty) page area is collapsed by updateTabStripHeight and
+    // the host-owned canvas sits below it as a sibling; documents are tracked by hidden key windows.
+    //
+    // No wxAUI_NB_TAB_MOVE: the model, m_pageWindows and the host context vectors are index-aligned
+    // with the notebook page order, and there is no reorder handler, so user drag-reordering would
+    // desync them and target the wrong document.
+    m_tabs = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_SCROLL_BUTTONS );
 
     m_tabs->SetArtProvider( new KICAD_TAB_ART( [this]( wxWindow* aPageWindow ) -> TAB_VISUAL_STATE
                                                {
                                                    return visualStateForIndex(
                                                            indexOfWindow( aPageWindow ) );
                                                } ) );
-
-    // A bare wxAuiTabCtrl keeps its default bar-level buttons, so set the flags explicitly to drop
-    // them and arm the per-tab close button. Do it after SetArtProvider so the art provider sees them.
-    m_tabs->SetFlags( wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_TAB_MOVE | wxAUI_NB_SCROLL_BUTTONS );
 
     // Floor the height before first layout so a zero-height paint never trips GTK's invalid bitmap
     // size assert. updateTabStripHeight refines it to the measured tab height once pages exist.
@@ -199,16 +184,13 @@ EDITOR_TABS_PANEL::EDITOR_TABS_PANEL( wxWindow* aParent, EDA_DRAW_PANEL_GAL* aSh
 
     SetSizer( m_sizer );
 
-    // A bare wxAuiTabCtrl has no notebook to promote its raw events, so handle them here.
-    m_tabs->Bind( wxEVT_AUINOTEBOOK_PAGE_CHANGING, &EDITOR_TABS_PANEL::onPageChanging, this );
     m_tabs->Bind( wxEVT_AUINOTEBOOK_PAGE_CHANGED, &EDITOR_TABS_PANEL::onPageChanged, this );
-    m_tabs->Bind( wxEVT_AUINOTEBOOK_BUTTON, &EDITOR_TABS_PANEL::onPageButton, this );
     m_tabs->Bind( wxEVT_AUINOTEBOOK_PAGE_CLOSE, &EDITOR_TABS_PANEL::onPageClose, this );
     m_tabs->Bind( wxEVT_AUINOTEBOOK_TAB_RIGHT_DOWN, &EDITOR_TABS_PANEL::onTabRightDown, this );
 
-    // A bare wxAuiTabCtrl reports no event when a tab itself is double-clicked, so read the raw click.
-    m_tabs->Bind( wxEVT_LEFT_DCLICK, &EDITOR_TABS_PANEL::onTabDClick, this );
-
+    // The notebook has no per-tab double-click event, so read the raw double-click on the tab strip
+    // itself and hit-test it back to a page for preview promotion. updateTabStripHeight() keeps this
+    // binding attached to the live tab-strip control as pages come and go.
     updateTabStripHeight();
 }
 
@@ -233,12 +215,8 @@ EDITOR_TABS_PANEL::~EDITOR_TABS_PANEL()
     // Hand the canvas back before child teardown so wx never frees it. Fallback for when no host did.
     ReleaseSharedCanvas();
 
-    // Remove each key window from the tab control before destroying it so no dead page is dereferenced.
-    for( wxWindow* w : m_pageWindows )
-    {
-        m_tabs->RemovePage( w );
-        w->Destroy();
-    }
+    // The notebook owns the per-tab key windows and frees them with itself, so just drop our handles.
+    m_pageWindows.clear();
 }
 
 
@@ -254,28 +232,38 @@ int EDITOR_TABS_PANEL::indexOfWindow( wxWindow* aWindow ) const
 }
 
 
+void EDITOR_TABS_PANEL::bindTabDClick()
+{
+    // wxAuiNotebook owns the tab-strip control and can destroy and recreate it (wx 3.2 frees the tab
+    // frame when the last page closes and rebuilds it on the next add), so bind to whatever control is
+    // live now. Unbind first so re-binding the same control never stacks a second handler; a control
+    // that was never bound makes the Unbind a harmless no-op, and a destroyed control already dropped
+    // its binding with itself, so no stale pointer is ever dereferenced.
+    wxAuiTabCtrl* tabCtrl = m_tabs->GetActiveTabCtrl();
+
+    if( !tabCtrl )
+        return;
+
+    tabCtrl->Unbind( wxEVT_LEFT_DCLICK, &EDITOR_TABS_PANEL::onTabDClick, this );
+    tabCtrl->Bind( wxEVT_LEFT_DCLICK, &EDITOR_TABS_PANEL::onTabDClick, this );
+}
+
+
 void EDITOR_TABS_PANEL::updateTabStripHeight()
 {
-    // A bare wxAuiTabCtrl reports a near-zero best height, so drive the row from the art provider's
-    // measured size and re-Layout or the strip stays invisible.
+    // The notebook can rebuild its tab-strip control as pages come and go, so keep the double-click
+    // handler attached to the live control.
+    bindTabDClick();
+
+    // Clamp the notebook to its tab-strip height so its unused page area collapses below the visible
+    // region and the shared canvas owns the rest of the pane.
     const bool hasPages = !m_pageWindows.empty();
 
-    int height = 0;
+    int height = hasPages ? m_tabs->GetTabCtrlHeight() : 0;
 
-    if( hasPages )
-    {
-        wxClientDC   dc( m_tabs );
-        wxAuiTabArt* art = m_tabs->GetArtProvider();
-
-        // Pass wxDefaultSize, not wxSize( 0, 0 ). A fully specified required size makes
-        // GetBestTabCtrlSize allocate a measuring bitmap of that size, and 0x0 trips the GTK assert.
-        if( art )
-            height = art->GetBestTabCtrlSize( m_tabs, m_tabs->GetPages(), wxDefaultSize );
-
-        // The art provider returns 0 before it has a valid measuring font, so fall back to a DIP floor.
-        if( height <= 0 )
-            height = FromDIP( 28 );
-    }
+    // GetTabCtrlHeight reports 0 before the strip has a valid measuring font, so fall back to a floor.
+    if( hasPages && height <= 0 )
+        height = FromDIP( 28 );
 
     // Collapse the row when there are no tabs, but keep the control's own min height above zero so a
     // stray paint never sees a zero-height client area and trips the GTK assert.
@@ -302,7 +290,7 @@ TAB_VISUAL_STATE EDITOR_TABS_PANEL::visualStateForIndex( int aIdx ) const
 
     const EDITOR_TABS_MODEL::ENTRY& e = m_model.Entries()[aIdx];
 
-    return ResolveTabVisualState( e.preview, e.modified, e.pinned );
+    return ResolveTabVisualState( e.preview, e.modified );
 }
 
 
@@ -333,22 +321,22 @@ int EDITOR_TABS_PANEL::AddTab( const wxString& aKey, const wxString& aLabel, boo
 
     if( reuse < static_cast<int>( m_pageWindows.size() ) )
     {
-        m_tabs->GetPage( reuse ).caption = aLabel;
+        m_tabs->SetPageText( reuse, aLabel );
 
         if( !reusedOldKey.empty() && reusedOldKey != aKey )
             forgetMru( reusedOldKey );
     }
     else
     {
-        wxWindow* key = new wxWindow( this, wxID_ANY );
+        wxWindow* key = new wxWindow( m_tabs, wxID_ANY );
         key->Hide();
 
-        wxAuiNotebookPage page;
-        page.window = key;
-        page.caption = aLabel;
-        page.active = false;
+        // The notebook force-selects its first page, so swallow that change event and drive activation
+        // explicitly through SelectTab below.
+        m_activating = true;
+        m_tabs->AddPage( key, aLabel, false );
+        m_activating = false;
 
-        m_tabs->AddPage( key, page );
         m_pageWindows.push_back( key );
     }
 
@@ -385,10 +373,12 @@ void EDITOR_TABS_PANEL::closeTabInternal( int aIdx )
         return;
 
     const wxString key = m_model.Entries()[aIdx].key;
-    wxWindow*      keyWindow = m_pageWindows[aIdx];
 
-    m_tabs->RemovePage( keyWindow );
-    keyWindow->Destroy();
+    // DeletePage frees the key window and reselects a neighbour; swallow that change event since the
+    // successor selection is chosen explicitly below.
+    m_activating = true;
+    m_tabs->DeletePage( static_cast<size_t>( aIdx ) );
+    m_activating = false;
 
     m_pageWindows.erase( m_pageWindows.begin() + aIdx );
     m_model.CloseDocument( key );
@@ -417,11 +407,9 @@ void EDITOR_TABS_PANEL::closeTabInternal( int aIdx )
 
         if( visualIdx >= 0 && visualIdx < newCount )
         {
-            // The host already handled activation, so guard the event SetActivePage might provoke.
-            m_activating = true;
-            m_tabs->SetActivePage( static_cast<size_t>( visualIdx ) );
-            m_activating = false;
-
+            // ChangeSelection updates the strip without firing a change event, so the host is not
+            // re-notified to install a document it already installed.
+            m_tabs->ChangeSelection( static_cast<size_t>( visualIdx ) );
             touchMru( m_model.Entries()[visualIdx].key );
         }
     }
@@ -468,21 +456,6 @@ void EDITOR_TABS_PANEL::CloseAll()
 }
 
 
-void EDITOR_TABS_PANEL::SetPinned( int aIdx, bool aPinned )
-{
-    if( aIdx < 0 || aIdx >= static_cast<int>( m_model.Entries().size() ) )
-        return;
-
-    m_model.Pin( m_model.Entries()[aIdx].key, aPinned );
-    RefreshTabLabels();
-
-    // The host context, not the panel model, is what persists the pin, so mirror every change there
-    // through a single channel that the menu, action, and restore paths all funnel into.
-    if( onPinChanged )
-        onPinChanged( aIdx, aPinned );
-}
-
-
 void EDITOR_TABS_PANEL::MarkModified( int aIdx, bool aModified )
 {
     if( aIdx < 0 || aIdx >= static_cast<int>( m_model.Entries().size() ) )
@@ -512,7 +485,9 @@ void EDITOR_TABS_PANEL::SelectTab( int aIdx )
     if( aIdx < 0 || aIdx >= static_cast<int>( m_pageWindows.size() ) )
         return;
 
-    m_tabs->SetActivePage( static_cast<size_t>( aIdx ) );
+    // ChangeSelection moves the strip without firing a change event, so activation is driven once,
+    // here, rather than also arriving through onPageChanged.
+    m_tabs->ChangeSelection( static_cast<size_t>( aIdx ) );
     m_tabs->Refresh();
     activateTab( aIdx );
 }
@@ -574,7 +549,7 @@ void EDITOR_TABS_PANEL::AdvanceTab( bool aForward )
 
 int EDITOR_TABS_PANEL::GetActiveTab() const
 {
-    return m_tabs->GetActivePage();
+    return m_tabs->GetSelection();
 }
 
 
@@ -603,41 +578,14 @@ void EDITOR_TABS_PANEL::forgetMru( const wxString& aKey )
 }
 
 
-void EDITOR_TABS_PANEL::onPageChanging( wxAuiNotebookEvent& aEvent )
-{
-    // A bare wxAuiTabCtrl never updates its active page or fires PAGE_CHANGED, so this is the real
-    // activation path.
-    const int idx = aEvent.GetSelection();
-
-    if( idx >= 0 && idx < static_cast<int>( m_pageWindows.size() ) )
-    {
-        m_tabs->SetActivePage( static_cast<size_t>( idx ) );
-        m_tabs->Refresh();
-        activateTab( idx );
-    }
-}
-
-
 void EDITOR_TABS_PANEL::onPageChanged( wxAuiNotebookEvent& aEvent )
 {
-    // A bare tab ctrl never delivers this, but route it through guarded activation if it ever arrives.
+    // The notebook drives its own active page, so a user tab switch surfaces here as the activation
+    // path. Programmatic selection uses ChangeSelection and is fired explicitly, not through here.
     const int idx = aEvent.GetSelection();
 
     if( idx >= 0 && idx < static_cast<int>( m_model.Entries().size() ) )
         activateTab( idx );
-
-    aEvent.Skip();
-}
-
-
-void EDITOR_TABS_PANEL::onPageButton( wxAuiNotebookEvent& aEvent )
-{
-    // A bare wxAuiTabCtrl emits BUTTON rather than PAGE_CLOSE for the per-tab close button.
-    if( aEvent.GetInt() == wxAUI_BUTTON_CLOSE )
-    {
-        CloseTab( aEvent.GetSelection() );
-        return;
-    }
 
     aEvent.Skip();
 }
@@ -665,10 +613,6 @@ void EDITOR_TABS_PANEL::onTabRightDown( wxAuiNotebookEvent& aEvent )
     menu.Append( ID_TAB_CLOSE_OTHERS, _( "Close Other Tabs" ) );
     menu.Append( ID_TAB_CLOSE_TO_RIGHT, _( "Close Tabs to the Right" ) );
     menu.Append( ID_TAB_CLOSE_ALL, _( "Close All Tabs" ) );
-    menu.AppendSeparator();
-
-    const bool pinned = m_model.Entries()[m_contextMenuIdx].pinned;
-    menu.Append( ID_TAB_PIN, pinned ? _( "Unpin Tab" ) : _( "Pin Tab" ) );
 
     menu.Bind( wxEVT_COMMAND_MENU_SELECTED, &EDITOR_TABS_PANEL::onContextMenu, this );
 
@@ -680,9 +624,16 @@ void EDITOR_TABS_PANEL::onTabDClick( wxMouseEvent& aEvent )
 {
     aEvent.Skip();
 
+    // The handler is bound on the tab strip control, so the click is in its coordinates and hit-tests
+    // against the same control.
+    wxAuiTabCtrl* tabCtrl = m_tabs->GetActiveTabCtrl();
+
+    if( !tabCtrl )
+        return;
+
     wxWindow* page = nullptr;
 
-    if( m_tabs->TabHitTest( aEvent.GetX(), aEvent.GetY(), &page ) )
+    if( tabCtrl->TabHitTest( aEvent.GetX(), aEvent.GetY(), &page ) )
         PromoteTab( indexOfWindow( page ) );
 }
 
@@ -700,7 +651,6 @@ void EDITOR_TABS_PANEL::onContextMenu( wxCommandEvent& aEvent )
     case ID_TAB_CLOSE_OTHERS:   CloseOthers( idx );                             break;
     case ID_TAB_CLOSE_TO_RIGHT: CloseToRight( idx );                            break;
     case ID_TAB_CLOSE_ALL:      CloseAll();                                     break;
-    case ID_TAB_PIN:            SetPinned( idx, !m_model.Entries()[idx].pinned ); break;
     default:                                                                    break;
     }
 }

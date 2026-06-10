@@ -227,13 +227,6 @@ void SYMBOL_EDIT_FRAME::activateSymbolTab( SYMBOL_EDITOR_TAB_CONTEXT* aContext )
 }
 
 
-void SYMBOL_EDIT_FRAME::SetSymbolTabPinned( int aIdx, bool aPinned )
-{
-    if( SYMBOL_EDITOR_TAB_CONTEXT* ctx = symbolTabContextForIndex( aIdx ) )
-        ctx->SetPinned( aPinned );
-}
-
-
 void SYMBOL_EDIT_FRAME::OnTabCharHook( wxKeyEvent& aEvent )
 {
     // Only plain Ctrl+Tab and Ctrl+Shift+Tab are ours; anything else falls through.
@@ -563,11 +556,6 @@ void SYMBOL_EDIT_FRAME::restoreSymbolTabsFromSettings()
 
         const int idx = m_tabsPanel->FindTab( ctx->GetTabKey() );
 
-        ctx->SetPinned( tab.pinned );
-
-        if( idx >= 0 && tab.pinned )
-            m_tabsPanel->SetPinned( idx, true );
-
         if( ctx->GetTabKey() == activeKey )
             activeIdx = idx;
     }
@@ -603,7 +591,6 @@ void SYMBOL_EDIT_FRAME::storeSymbolTabsToSettings()
         tab.name = ctx->GetName();
         tab.unit = ctx->GetUnit();
         tab.bodyStyle = ctx->GetBodyStyle();
-        tab.pinned = ctx->IsPinned();
 
         m_settings->m_OpenTabs.push_back( tab );
     }

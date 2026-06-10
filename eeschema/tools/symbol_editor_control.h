@@ -83,7 +83,6 @@ public:
 
     int NextTab( const TOOL_EVENT& aEvent );
     int PrevTab( const TOOL_EVENT& aEvent );
-    int PinTab( const TOOL_EVENT& aEvent );
     int CloseTab( const TOOL_EVENT& aEvent );
 
 private:

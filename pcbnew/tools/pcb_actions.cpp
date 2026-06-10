@@ -2302,12 +2302,6 @@ TOOL_ACTION PCB_ACTIONS::prevFootprintTab( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Previous Footprint Tab" ) )
         .Tooltip( _( "Switch to the previous open footprint tab" ) ) );
 
-TOOL_ACTION PCB_ACTIONS::pinFootprintTab( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.ModuleEditor.pinFootprintTab" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Pin Footprint Tab" ) )
-        .Tooltip( _( "Pin or unpin the active footprint tab" ) ) );
-
 TOOL_ACTION PCB_ACTIONS::closeFootprintTab( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.closeFootprintTab" )
         .Scope( AS_GLOBAL )

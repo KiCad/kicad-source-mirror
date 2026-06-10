@@ -228,16 +228,10 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                 return promptAndCloseSymbolTab( aIdx );
             };
 
-    m_tabsPanel->onPinChanged =
-            [this]( int aIdx, bool aPinned )
-            {
-                SetSymbolTabPinned( aIdx, aPinned );
-            };
-
     m_tabsPanel->onQueryVisualState =
             [this]( int aIdx ) -> TAB_VISUAL_STATE
             {
-                // The panel model owns preview and pinned. Read modified from the live context.
+                // The panel model owns preview. Read modified from the live context.
                 const std::vector<EDITOR_TABS_MODEL::ENTRY>& entries = m_tabsPanel->Model().Entries();
 
                 if( aIdx < 0 || aIdx >= static_cast<int>( entries.size() ) )
@@ -246,8 +240,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                 const SYMBOL_EDITOR_TAB_CONTEXT* ctx = symbolTabContextForIndex( aIdx );
                 const bool modified = ctx ? ctx->IsModified() : entries[aIdx].modified;
 
-                return ResolveTabVisualState( entries[aIdx].preview, modified,
-                                              entries[aIdx].pinned );
+                return ResolveTabVisualState( entries[aIdx].preview, modified );
             };
 
     m_auimgr.AddPane( m_tabsPanel, wxAuiPaneInfo().Name( "DrawFrame" )

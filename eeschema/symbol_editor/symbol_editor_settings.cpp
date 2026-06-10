@@ -175,7 +175,6 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
                     entry["name"]       = tab.name.ToUTF8();
                     entry["unit"]       = tab.unit;
                     entry["body_style"] = tab.bodyStyle;
-                    entry["pinned"]     = tab.pinned;
 
                     ret.push_back( entry );
                 }
@@ -204,9 +203,6 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
 
                     if( entry.contains( "body_style" ) )
                         tab.bodyStyle = entry["body_style"].get<int>();
-
-                    if( entry.contains( "pinned" ) )
-                        tab.pinned = entry["pinned"].get<bool>();
 
                     m_OpenTabs.push_back( tab );
                 }

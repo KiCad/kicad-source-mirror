@@ -33,21 +33,20 @@
 #include <widgets/kicad_tab_art.h>
 
 class EDA_DRAW_PANEL_GAL;
-class wxAuiTabCtrl;
+class wxAuiNotebook;
 class wxAuiNotebookEvent;
 class wxBoxSizer;
 class wxMouseEvent;
 
 
-/// GUI-free preview/pin/dirty/close state machine. One unpinned unedited preview tab is reused for
-/// the next preview; editing or pinning promotes it to permanent.
+/// GUI-free preview/dirty/close state machine. One unedited preview tab is reused for the next
+/// preview; editing it or double-clicking its tab promotes it to permanent.
 class EDITOR_TABS_MODEL
 {
 public:
     struct ENTRY
     {
         wxString key;
-        bool     pinned = false;
         bool     preview = false;
         bool     modified = false;
     };
@@ -66,11 +65,6 @@ public:
      * Update the modified flag. Turning it on promotes a preview tab to permanent.
      */
     void MarkModified( const wxString& aKey, bool aModified );
-
-    /**
-     * Pin or unpin. A pinned tab is exempt from preview replacement.
-     */
-    void Pin( const wxString& aKey, bool aPinned );
 
     /**
      * Clear the preview flag so the tab becomes permanent and is no longer reused.
@@ -110,12 +104,8 @@ public:
     /// Host prompts as needed; return false to veto the close.
     std::function<bool( int )> onCloseTabRequested;
 
-    /// Host reports the visual state (modified/preview/pinned) for the tab at the given index.
+    /// Host reports the visual state (modified/preview) for the tab at the given index.
     std::function<TAB_VISUAL_STATE( int )> onQueryVisualState;
-
-    /// Host mirrors the pinned flag into its own tab context, which is what gets persisted. Fired for
-    /// every pin change so the menu, action, and restore paths all stay in sync through one channel.
-    std::function<void( int, bool )> onPinChanged;
 
     /**
      * Hand the host-owned canvas back to its original parent.
@@ -136,7 +126,6 @@ public:
     void CloseOthers( int aKeepIdx );
     void CloseToRight( int aIdx );
     void CloseAll();
-    void SetPinned( int aIdx, bool aPinned );
 
     /**
      * Mark the tab modified. An edit also promotes a preview tab to permanent.
@@ -156,16 +145,9 @@ public:
 
     const EDITOR_TABS_MODEL& Model() const { return m_model; }
 
-    /**
-     * Read-only view of the Ctrl+Tab MRU order, front is most recent.
-     */
-    const std::vector<wxString>& MruForTest() const { return m_mru; }
-
 private:
     void onPageChanged( wxAuiNotebookEvent& aEvent );
-    void onPageChanging( wxAuiNotebookEvent& aEvent );
     void onPageClose( wxAuiNotebookEvent& aEvent );
-    void onPageButton( wxAuiNotebookEvent& aEvent );
     void onTabRightDown( wxAuiNotebookEvent& aEvent );
     void onTabDClick( wxMouseEvent& aEvent );
     void onContextMenu( wxCommandEvent& aEvent );
@@ -196,14 +178,21 @@ private:
     int indexOfWindow( wxWindow* aWindow ) const;
 
     /**
-     * Size the strip to the art provider's measured tab height and re-Layout, since a bare
-     * wxAuiTabCtrl reports a near-zero best height and would stay invisible.
+     * Clamp the notebook to its tab-strip height and re-Layout so its (unused) page area collapses
+     * and the shared canvas fills the rest of the pane.
      */
     void updateTabStripHeight();
 
+    /**
+     * (Re)bind the double-click handler to the notebook's current tab-strip control. Double-click is
+     * the only gesture that promotes a preview tab, so the binding must follow the control rather than
+     * be attached once and risk going stale.
+     */
+    void bindTabDClick();
+
     TAB_VISUAL_STATE visualStateForIndex( int aIdx ) const;
 
-    wxAuiTabCtrl*         m_tabs = nullptr;
+    wxAuiNotebook*        m_tabs = nullptr;
     EDA_DRAW_PANEL_GAL*   m_sharedCanvas = nullptr;
 
     /// The canvas's parent before it was borrowed, reparented back on destruction so it is not freed

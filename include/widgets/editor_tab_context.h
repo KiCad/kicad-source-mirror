@@ -59,9 +59,6 @@ public:
 
     virtual bool IsModified() const = 0;
 
-    bool IsPinned() const         { return m_pinned; }
-    void SetPinned( bool aPinned ){ m_pinned = aPinned; }
-
     bool IsPreview() const          { return m_preview; }
     void SetPreview( bool aPreview ){ m_preview = aPreview; }
 
@@ -84,7 +81,6 @@ public:
     std::vector<KIID>& SavedSelection() { return m_savedSelection; }
 
 protected:
-    bool                                 m_pinned = false;
     bool                                 m_preview = false;
     std::unique_ptr<UNDO_REDO_CONTAINER> m_undo;
     std::unique_ptr<UNDO_REDO_CONTAINER> m_redo;
