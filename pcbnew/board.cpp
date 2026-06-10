@@ -1497,6 +1497,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
 {
     std::vector<BOARD_ITEM*> removed;
+    bool                     clearNets = false;
 
     for( const KICAD_T& type : aTypes )
     {
@@ -1506,7 +1507,9 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
             for( NETINFO_ITEM* item : m_NetInfo )
                 removed.emplace_back( item );
 
-            m_NetInfo.clear();
+            // m_NetInfo.clear() deletes its nets, so defer it past the cache purge and
+            // FinalizeBulkRemove() to keep those from dereferencing a freed net.
+            clearNets = true;
             break;
 
         case PCB_MARKER_T:
@@ -1569,9 +1572,30 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
         }
     }
 
+    // Drop the removed items and their footprint/table children from m_itemByIdCache as
+    // BOARD::Remove() does; otherwise DeleteAllFootprints() frees them and ResolveItem() hands a
+    // dangling pointer to consumers like the DRC results panel.
+    auto uncacheChild = [this]( BOARD_ITEM* aChild )
+    {
+        m_itemByIdCache.erase( aChild->m_Uuid );
+    };
+
+    for( BOARD_ITEM* item : removed )
+    {
+        m_itemByIdCache.erase( item->m_Uuid );
+
+        if( item->Type() == PCB_FOOTPRINT_T )
+            static_cast<FOOTPRINT*>( item )->RunOnChildren( uncacheChild, RECURSE_MODE::NO_RECURSE );
+        else if( item->Type() == PCB_TABLE_T )
+            static_cast<PCB_TABLE*>( item )->RunOnChildren( uncacheChild, RECURSE_MODE::NO_RECURSE );
+    }
+
     IncrementTimeStamp();
 
     FinalizeBulkRemove( removed );
+
+    if( clearNets )
+        m_NetInfo.clear();
 }
 
 

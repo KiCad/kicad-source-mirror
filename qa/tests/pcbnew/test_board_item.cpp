@@ -28,6 +28,7 @@
 
 // Code under test
 #include <board.h>
+#include <netinfo.h>
 #include <board_item.h>
 #include <footprint.h>
 #include <pad.h>
@@ -384,6 +385,52 @@ BOOST_AUTO_TEST_CASE( Issue23234_CustomPadstackFlip )
 
     // Verify the returned shape is sane (the B_Cu props, which were originally F_Cu props)
     BOOST_CHECK( pad.GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::CIRCLE );
+}
+
+
+BOOST_AUTO_TEST_CASE( ResolveItemCachePurgedOnRemoveAll )
+{
+    // DeleteAllFootprints() frees the footprints, so their UUIDs (and their pads') must not stay
+    // in m_itemByIdCache or ResolveItem() returns a dangling pointer and the DRC tree crashes.
+
+    BOARD board;
+
+    FOOTPRINT* footprint = new FOOTPRINT( &board );
+    PAD*       pad = new PAD( footprint );
+    footprint->Add( pad );
+
+    const KIID footprintId = footprint->m_Uuid;
+    const KIID padId = pad->m_Uuid;
+
+    board.Add( footprint );
+
+    BOOST_REQUIRE( board.ResolveItem( footprintId, true ) == footprint );
+    BOOST_REQUIRE( board.ResolveItem( padId, true ) == pad );
+
+    board.DeleteAllFootprints();
+
+    BOOST_CHECK( board.ResolveItem( footprintId, true ) == nullptr );
+    BOOST_CHECK( board.ResolveItem( padId, true ) == nullptr );
+}
+
+
+BOOST_AUTO_TEST_CASE( ResolveItemCachePurgedOnRemoveAllNets )
+{
+    // NETINFO_LIST::clear() frees the nets, so the net path must purge the cache entry without
+    // resolving the freed pointer (ASAN catches a regression of the deferred clear()).
+
+    BOARD board;
+
+    NETINFO_ITEM* net = new NETINFO_ITEM( &board, wxT( "Net-(U1-Pad1)" ), 1 );
+    const KIID    netId = net->m_Uuid;
+
+    board.Add( net );
+
+    BOOST_REQUIRE( board.ResolveItem( netId, true ) == net );
+
+    board.RemoveAll();
+
+    BOOST_CHECK( board.ResolveItem( netId, true ) == nullptr );
 }
 
 
