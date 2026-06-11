@@ -92,6 +92,8 @@ set( QA_PCBNEW_SRCS
     test_zone_filler.cpp
     test_poly_simplify.cpp
 
+    net_chains/test_update_pcb_legacy_fpid_dnp.cpp
+
     drc/test_custom_rule_severities.cpp
     drc/test_drc_backdrill_postmachining.cpp
     drc/test_drc_courtyard_invalid.cpp
