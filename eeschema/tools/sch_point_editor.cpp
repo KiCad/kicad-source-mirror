@@ -948,7 +948,7 @@ void SCH_POINT_EDITOR::makePointsAndBehavior( EDA_ITEM* aItem )
             }
 
             m_editBehavior = std::make_unique<EDA_ARC_POINT_EDIT_BEHAVIOR>(
-                    *shape, m_arcEditMode, *getViewControls() );
+                    *shape, m_arcEditMode, *getViewControls(), schIUScale );
             break;
         case SHAPE_T::CIRCLE:
             m_editBehavior = std::make_unique<EDA_CIRCLE_POINT_EDIT_BEHAVIOR>( *shape );
