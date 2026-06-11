@@ -34,6 +34,7 @@
 #include <pcbexpr_evaluator.h>
 
 #include <zone.h>
+#include <board_design_settings.h>
 #include <geometry/convex_hull.h>
 #include <geometry/shape_utils.h>
 #include <pcb_group.h>
@@ -259,8 +260,8 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set
             if( item->Type() == PCB_FOOTPRINT_T )
                 continue;
 
-            // TODO: Preserve nested groups when applying design block layout.
-            if( item->Type() == PCB_GROUP_T )
+            // TODO: Preserve nested groups and generators (meanders) instead of skipping them.
+            if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
                 continue;
 
             // Cells are copied with their owning PCB_TABLE, not as standalone items.
@@ -275,6 +276,43 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set
         }
 
         return aItems.size() > 0;
+    }
+
+    // The design-block apply target uses a scratch zone not on the board, so enclosedByArea()
+    // below finds nothing. Resolve the group's items directly from the group.
+    if( aRuleArea->m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT && !aRuleArea->m_components.empty() )
+    {
+        bool zoneOnBoard = false;
+
+        for( ZONE* zone : board()->Zones() )
+        {
+            if( zone == aRuleArea->m_zone )
+            {
+                zoneOnBoard = true;
+                break;
+            }
+        }
+
+        if( !zoneOnBoard )
+        {
+            if( EDA_GROUP* group = ( *aRuleArea->m_components.begin() )->GetParentGroup() )
+            {
+                for( EDA_ITEM* member : group->GetItems() )
+                {
+                    if( member->Type() == PCB_FOOTPRINT_T || member->Type() == PCB_GROUP_T
+                        || member->Type() == PCB_GENERATOR_T || member->Type() == PCB_TABLECELL_T )
+                        continue;
+
+                    if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( member ) )
+                    {
+                        if( !boardItem->IsConnected() || boardItem->Type() == PCB_ZONE_T )
+                            aItems.insert( boardItem );
+                    }
+                }
+            }
+
+            return aItems.size() > 0;
+        }
     }
 
     PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER );
@@ -999,6 +1037,62 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
         }
 
         return (int) aOutput.size();
+    }
+
+    // The design-block apply target uses a scratch zone not on the board, so enclosedByArea()
+    // below finds nothing. Match routing against the zone outline directly.
+    if( aRuleArea->m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT )
+    {
+        bool zoneOnBoard = false;
+
+        for( ZONE* zone : board()->Zones() )
+        {
+            if( zone == aRuleArea->m_zone )
+            {
+                zoneOnBoard = true;
+                break;
+            }
+        }
+
+        if( !zoneOnBoard )
+        {
+            const SHAPE_POLY_SET& areaOutline = *aRuleArea->m_zone->Outline();
+            int                   maxError = board()->GetDesignSettings().m_MaxError;
+
+            auto enclosedByZone = [&]( BOARD_CONNECTED_ITEM* aItem )
+            {
+                if( aOutput.contains( aItem ) )
+                    return;
+
+                if( !( aRuleArea->m_zone->GetLayerSet() & aItem->GetLayerSet() ).any() )
+                    return;
+
+                SHAPE_POLY_SET itemShape;
+                aItem->TransformShapeToPolygon( itemShape, aItem->GetLayer(), 0, maxError, ERROR_OUTSIDE );
+
+                if( itemShape.IsEmpty() )
+                    return;
+
+                itemShape.BooleanSubtract( areaOutline );
+
+                if( itemShape.IsEmpty() )
+                {
+                    aOutput.insert( aItem );
+                    count++;
+                }
+            };
+
+            for( PCB_TRACK* track : board()->Tracks() )
+                enclosedByZone( track );
+
+            for( BOARD_ITEM* drawing : board()->Drawings() )
+            {
+                if( drawing->IsConnected() )
+                    enclosedByZone( static_cast<BOARD_CONNECTED_ITEM*>( drawing ) );
+            }
+
+            return count;
+        }
     }
 
     PCBEXPR_COMPILER compiler( new PCBEXPR_UNIT_RESOLVER );
