@@ -103,6 +103,7 @@ set( QA_PCBNEW_SRCS
     net_chains/test_net_chain_terminal_pad_assignment.cpp
     net_chains/test_net_chain_terminal_pad_stale.cpp
     net_chains/test_apply_chain_assignments_dry_run.cpp
+    net_chains/test_update_pcb_legacy_fpid_dnp.cpp
     # Net chain aggregation / skew / total length tests
     net_chains/test_net_chain_skew_tuning.cpp
     net_chains/test_net_chain_total_length.cpp

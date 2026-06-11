@@ -1358,6 +1358,15 @@ bool BOARD_NETLIST_UPDATER::updateComponentUnits( FOOTPRINT* aFootprint, COMPONE
 }
 
 
+bool BOARD_NETLIST_UPDATER::fpidsEquivalent( const LIB_ID& aBoardFpid, const LIB_ID& aSchematicFpid )
+{
+    if( aSchematicFpid.IsLegacy() )
+        return aBoardFpid.GetLibItemName() == aSchematicFpid.GetLibItemName();
+
+    return aBoardFpid == aSchematicFpid;
+}
+
+
 void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
                                                     const std::vector<FOOTPRINT*>& aFootprints,
                                                     const LIB_ID& aBaseFpid )
@@ -1481,7 +1490,7 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
             const FOOTPRINT_VARIANT* currentVariant = footprint->GetVariant( info.name );
 
             // Check if this footprint is the active one for this variant
-            bool isAssociatedFootprint = ( footprint->GetFPID() == info.variantFPID );
+            bool isAssociatedFootprint = fpidsEquivalent( footprint->GetFPID(), info.variantFPID );
 
             // If this footprint is not active for this variant, it doesn't need variant info for it.
             // Otherwise, apply explicit overrides from schematic, or reset to base footprint value.
@@ -1630,7 +1639,7 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
 
         // For the default variant: if this footprint is not the base footprint
         // it should be DNP by default
-        bool isBaseFootprint = ( footprint->GetFPID() == aBaseFpid );
+        bool isBaseFootprint = fpidsEquivalent( footprint->GetFPID(), aBaseFpid );
 
         if( !isBaseFootprint && !footprint->IsDNP() )
         {
@@ -2142,19 +2151,6 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             addExpectedFpid( parsedId );
         }
 
-        // When the schematic-side FPID has no library nickname (legacy format like
-        // "DGG56" instead of "Package_SO:DGG56"), matching should compare only the
-        // footprint item name. Otherwise the board footprint (which always has a library
-        // nickname) will never match, causing perpetual "change footprint" notifications.
-        auto fpidMatches =
-                [&]( const LIB_ID& aBoardFpid, const LIB_ID& aExpectedFpid ) -> bool
-                {
-                    if( aExpectedFpid.IsLegacy() )
-                        return aBoardFpid.GetLibItemName() == aExpectedFpid.GetLibItemName();
-
-                    return aBoardFpid == aExpectedFpid;
-                };
-
         auto isExpectedFpid =
                 [&]( const LIB_ID& aFpid ) -> bool
                 {
@@ -2166,7 +2162,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
                     for( const LIB_ID& expected : expectedFpids )
                     {
-                        if( fpidMatches( aFpid, expected ) )
+                        if( fpidsEquivalent( aFpid, expected ) )
                             return true;
                     }
 
@@ -2181,7 +2177,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                         if( usedFootprints.count( footprint ) )
                             continue;
 
-                        if( fpidMatches( footprint->GetFPID(), aFpid ) )
+                        if( fpidsEquivalent( footprint->GetFPID(), aFpid ) )
                             return footprint;
                     }
 
@@ -2236,7 +2232,10 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
         for( const LIB_ID& fpid : expectedFpids )
         {
-            if( fpid == baseFpid )
+            // Both IDs are schematic-derived, so either side may be legacy; compare in both
+            // directions so a bare base name and a qualified variant name for the same
+            // footprint are not split into a duplicate.
+            if( fpidsEquivalent( fpid, baseFpid ) || fpidsEquivalent( baseFpid, fpid ) )
                 continue;
 
             FOOTPRINT* footprint = takeMatchingFootprint( fpid );

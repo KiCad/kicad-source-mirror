@@ -92,6 +92,15 @@ public:
      */
     bool UpdateNetlist( NETLIST& aNetlist );
 
+    /**
+     * Compare a board footprint ID against a schematic-derived footprint ID, ignoring the
+     * library nickname when the schematic side uses a legacy bare footprint name.  A board
+     * footprint always carries a library nickname, so a strict equality test would never match
+     * a legacy schematic FPID and would wrongly treat the matching board footprint as a
+     * non-base variant (which gets flagged 'Do not place').
+     */
+    static bool fpidsEquivalent( const LIB_ID& aBoardFpid, const LIB_ID& aSchematicFpid );
+
     void SetReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
 
     ///< Enable dry run mode (just report, no changes to PCB).
