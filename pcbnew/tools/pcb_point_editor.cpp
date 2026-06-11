@@ -1998,7 +1998,8 @@ std::shared_ptr<EDIT_POINTS> PCB_POINT_EDITOR::makePoints( EDA_ITEM* aItem )
 
         case SHAPE_T::ARC:
             m_editorBehavior = std::make_unique<EDA_ARC_POINT_EDIT_BEHAVIOR>( *shape, m_arcEditMode,
-                                                                              *getViewControls() );
+                                                                              *getViewControls(),
+                                                                              pcbIUScale );
             break;
 
         case SHAPE_T::CIRCLE:
