@@ -274,14 +274,16 @@ void STARTWIZARD::CheckAndRun( wxWindow* aParent )
 
     // Settings import can switch the language after the parent frame was already built in the
     // system locale, so retranslate it to avoid requiring a restart.
-    if( Pgm().GetSelectedLanguageIdentifier() != languageBefore )
+    if( Pgm().GetSelectedLanguageIdentifier() != languageBefore && aParent )
     {
-        if( EDA_BASE_FRAME* frame = dynamic_cast<EDA_BASE_FRAME*>( aParent ) )
-        {
-            frame->ShowChangedLanguage();
+        // A dynamic_cast could be better, but creates link issues because EDA_BASE_FRAME lives in
+        // the common library while this code lives in kicommon, so a static_cast is used.  Every
+        // caller passes an EDA_BASE_FRAME-derived frame.
+        EDA_BASE_FRAME* frame = static_cast<EDA_BASE_FRAME*>( aParent );
 
-            wxCommandEvent e( EDA_LANG_CHANGED );
-            frame->GetEventHandler()->ProcessEvent( e );
-        }
+        frame->ShowChangedLanguage();
+
+        wxCommandEvent e( EDA_LANG_CHANGED );
+        frame->GetEventHandler()->ProcessEvent( e );
     }
 }
