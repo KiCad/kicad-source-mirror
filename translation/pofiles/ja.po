@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-09 22:01+0000\n"
+"PO-Revision-Date: 2026-06-11 19:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -39350,34 +39350,35 @@ msgstr "3Dモデル出力ファイル"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:416
 msgid "Please save the board before exporting STEP."
-msgstr ""
+msgstr "STEPのエクスポートする前に基板を保存してください。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:423
 msgid ""
 "Board file not found on disk.\n"
 "Save the board before exporting STEP."
 msgstr ""
+"ディスク上に基板ファイルが見つかりません。\n"
+"STEPでエクスポートする前に基板を保存してください。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:435
 msgid ""
 "The board directory no longer exists.\n"
 "Save the board to a valid location before exporting STEP."
 msgstr ""
+"基板ディレクトリが存在しません。\n"
+"STEPでエクスポートする前に基板を有効な場所に保存してください。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:445
-#, fuzzy
 msgid "Failed to reserve a temporary filename for STEP export."
-msgstr "一時ファイル '%s' の作成に失敗しました。"
+msgstr "STEPエクスポート時の一時ファイル名の予約に失敗しました。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:464
-#, fuzzy
 msgid "Failed to save the current board state for export."
-msgstr "フットプリント ライブラリ テーブルの保存に失敗しました。"
+msgstr "現在の基板のエクスポートのための保存に失敗しました。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:477
-#, fuzzy
 msgid "Failed to stage the project file for STEP export."
-msgstr "リモートリポジトリへの変更のプッシュが失敗しました。"
+msgstr "STEPエクスポートのためのプロジェクトファイルの準備に失敗しました。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:516
 msgid "No filename for output file"
@@ -41438,15 +41439,16 @@ msgid "Automatically match any unmatched layers to their KiCad equivalent."
 msgstr "一致しないレイヤーを自動的にKiCadの同等ものに一致させます。"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:99
-#, fuzzy
 msgid "Keep KiCad layer names"
-msgstr "外側のレイヤーを維持(&o)"
+msgstr "KiCadのレイヤー名を維持"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:100
 msgid ""
 "If checked, layers will keep their standard KiCad names instead of being "
 "renamed to the imported layer names."
 msgstr ""
+"チェックされている場合、レイヤー名はインポート元のレイヤー名に変更されること"
+"なく標準のKiCadのレイヤー名を維持。"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:67
 msgid "Edit Mapping of Imported Layers"
@@ -43887,15 +43889,16 @@ msgid "Unused Pads"
 msgstr "未使用のパッド"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:35
-#, fuzzy
 msgid "Apply design block layouts to new groups"
-msgstr "選択したグループにリンクされたデザインブロックレイアウトを適用"
+msgstr "新しいグループにデザインブロック レイアウトを適用する"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:36
 msgid ""
 "For each new group created from a design block, apply the block's saved "
 "footprint placement and routing automatically."
 msgstr ""
+"デザインブロックから作成された新しいグループごとに、ブロックに保存されている"
+"フットプリントの配置と配線を自動的に適用します。"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:47
 msgid "Update Footprints"
@@ -56569,6 +56572,8 @@ msgid ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
 msgstr ""
+"フットプリントはミラー出来ません。基板の反対側に反転機能を利用して移動してく"
+"ださい。"
 
 #: pcbnew/tools/edit_tool.cpp:2888 pcbnew/tools/pcb_actions.cpp:674
 msgid "Change Side / Flip"
@@ -58977,9 +58982,8 @@ msgstr ""
 "ら操作してください。"
 
 #: pcbnew/tools/pcb_control.cpp:1541
-#, fuzzy
 msgid "Applying Design Block Layouts"
-msgstr "デザインブロックレイアウトを適用"
+msgstr "デザイン ブロック レイアウトを適用"
 
 #: pcbnew/tools/pcb_control.cpp:1572
 msgid "design block is not in the loaded libraries"
@@ -58994,14 +58998,12 @@ msgid "could not load the design block's layout"
 msgstr "デザインブロックのレイアウトを読み込めませんでした"
 
 #: pcbnew/tools/pcb_control.cpp:1636
-#, fuzzy
 msgid "design block layout could not be loaded"
-msgstr "デザインブロックレイアウトを現在の基板に設定"
+msgstr "デザイン ブロック レイアウトが読み込まれていません"
 
 #: pcbnew/tools/pcb_control.cpp:1669
-#, fuzzy
 msgid "group has no footprints"
-msgstr "フットプリントを参照"
+msgstr "グループにフットプリントがありません"
 
 #: pcbnew/tools/pcb_control.cpp:1708
 msgid "layout copy failed"
@@ -59010,7 +59012,7 @@ msgstr "レイアウトのコピーに失敗しました"
 #: pcbnew/tools/pcb_control.cpp:1723
 #, c-format
 msgid "Applying layout to group %zu of %zu..."
-msgstr ""
+msgstr "グループにレイアウトを適用する %zu/%zu ..."
 
 #: pcbnew/tools/pcb_control.cpp:1746
 msgid "Apply design block layout cancelled."
@@ -59039,9 +59041,8 @@ msgid "The following groups could not be processed:"
 msgstr "以下のグループは処理できませんでした:"
 
 #: pcbnew/tools/pcb_control.cpp:1783
-#, fuzzy
 msgid "(unnamed group)"
-msgstr "ジャンパーピングループ:"
+msgstr "(名称未定のグループ)"
 
 #: pcbnew/tools/pcb_control.cpp:1834
 #, c-format
