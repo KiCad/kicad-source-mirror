@@ -220,10 +220,28 @@ bool PCB_VERTEX_EDITOR_PANE::parseCellValue( const wxString& aText,
                                              ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType,
                                              int& aResult ) const
 {
-    long long displayValue = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_frame->GetUserUnits(), aText );
+    // ValueFromString() returns 0 both for a literal "0" and for unparseable input, so it cannot
+    // by itself tell a valid zero from garbage. Require the leading numeric token to hold at least
+    // one digit before trusting the parse; otherwise blank or non-numeric entries would silently
+    // collapse the vertex onto the display origin instead of being rejected.
+    bool hasDigit = false;
 
-    if( !displayValue )
+    for( wxUniChar ch : aText.Strip( wxString::both ) )
+    {
+        if( wxIsdigit( ch ) )
+        {
+            hasDigit = true;
+            break;
+        }
+
+        if( ch != '+' && ch != '-' && ch != '.' && ch != ',' )
+            break;
+    }
+
+    if( !hasDigit )
         return false;
+
+    long long displayValue = EDA_UNIT_UTILS::UI::ValueFromString( pcbIUScale, m_frame->GetUserUnits(), aText );
 
     long long internal = m_frame->GetOriginTransforms().FromDisplay( displayValue, aCoordType );
 
