@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-11 09:38+0000\n"
+"PO-Revision-Date: 2026-06-12 12:02+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -6022,11 +6022,11 @@ msgstr "Differenzialpaar-Abstand"
 
 #: common/dialogs/panel_setup_netclasses.cpp:711
 msgid "Schematic wire thickness"
-msgstr "Dicke Schaltplanverbindung"
+msgstr "Dicke der Schaltplanverbindung"
 
 #: common/dialogs/panel_setup_netclasses.cpp:712
 msgid "Bus wire thickness"
-msgstr "Dicke Busverbindung"
+msgstr "Dicke der Busverbindung"
 
 #: common/dialogs/panel_setup_netclasses.cpp:713
 msgid "Schematic wire color"
@@ -62873,7 +62873,6 @@ msgid "Type IV-a (plugged and tented bottom)"
 msgstr "Typ IV a (unterseitig versiegelt und abgedeckt)"
 
 #: pcbnew/via_protection_ui_mixin.h:131
-#, fuzzy
 msgid "Type V (filled)"
 msgstr "Typ V (gefüllt)"
 
@@ -63623,12 +63622,12 @@ msgstr "Gesamtlänge"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:132
 #, fuzzy
 msgid "Net Chain Delay"
-msgstr "Gesamtverzögerung"
+msgstr "Netzkettenverzögerung"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:137
 #, fuzzy
 msgid "Net Chain Length"
-msgstr "Netzlänge"
+msgstr "Netzkettenlänge"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:141
 msgid "Via Count"
@@ -63726,7 +63725,7 @@ msgstr "Nach Netzklasse gruppieren"
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1383
 #, fuzzy
 msgid "Group by Net Chain"
-msgstr "Nach Netzklasse gruppieren"
+msgstr "Nach Netzkette gruppieren"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1390
 msgid "Add Custom Group..."
