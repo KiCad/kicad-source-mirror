@@ -260,7 +260,8 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set
             if( item->Type() == PCB_FOOTPRINT_T )
                 continue;
 
-            // TODO: Preserve nested groups and generators (meanders) instead of skipping them.
+            // Generators are copied whole by the routing pass. Nested groups are not yet
+            // preserved (TODO) so they are skipped here.
             if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
                 continue;
 
@@ -1031,6 +1032,13 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
                 if( bci->Type() == PCB_ZONE_T )
                     continue;
 
+                // Tracks inside a generator (meander) are copied with the generator.
+                if( EDA_GROUP* parent = bci->GetParentGroup() )
+                {
+                    if( parent->AsEdaItem()->Type() == PCB_GENERATOR_T )
+                        continue;
+                }
+
                 if( bci->IsConnected() )
                     aOutput.insert( bci );
             }
@@ -1063,6 +1071,13 @@ int MULTICHANNEL_TOOL::findRoutingInRuleArea( RULE_AREA* aRuleArea, std::set<BOA
             {
                 if( aOutput.contains( aItem ) )
                     return;
+
+                // Tracks inside a generator (meander) are removed with the generator.
+                if( EDA_GROUP* parent = aItem->GetParentGroup() )
+                {
+                    if( parent->AsEdaItem()->Type() == PCB_GENERATOR_T )
+                        return;
+                }
 
                 if( !( aRuleArea->m_zone->GetLayerSet() & aItem->GetLayerSet() ).any() )
                     return;
@@ -1354,6 +1369,63 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             copied->Move( disp );
             aCompatData.m_groupableItems.insert( copied );
             aCommit->Add( copied );
+        }
+
+        // Copy generators (meanders) whole so they are not flattened to loose tracks.
+        if( aRefArea->m_sourceType == PLACEMENT_SOURCE_T::DESIGN_BLOCK )
+        {
+            // Remove the target group's existing generators so a re-apply replaces them.
+            if( !aTargetArea->m_components.empty() )
+            {
+                if( EDA_GROUP* targetGroup = ( *aTargetArea->m_components.begin() )->GetParentGroup() )
+                {
+                    std::vector<PCB_GENERATOR*> targetGenerators;
+
+                    for( EDA_ITEM* member : targetGroup->GetItems() )
+                    {
+                        if( member->Type() == PCB_GENERATOR_T )
+                            targetGenerators.push_back( static_cast<PCB_GENERATOR*>( member ) );
+                    }
+
+                    for( PCB_GENERATOR* gen : targetGenerators )
+                    {
+                        gen->RunOnChildren(
+                                [&]( BOARD_ITEM* child )
+                                {
+                                    aCommit->Remove( child );
+                                },
+                                RECURSE_MODE::RECURSE );
+                        aCommit->Remove( gen );
+                    }
+                }
+            }
+
+            for( EDA_ITEM* item : aRefArea->m_designBlockItems )
+            {
+                if( item->Type() != PCB_GENERATOR_T )
+                    continue;
+
+                PCB_GENERATOR* clone = static_cast<PCB_GENERATOR*>( item )->DeepClone();
+
+                clone->ClearFlags();
+                clone->Rotate( VECTOR2( 0, 0 ), rot );
+                clone->Move( disp );
+                aCommit->Add( clone );
+
+                clone->RunOnChildren(
+                        [&]( BOARD_ITEM* child )
+                        {
+                            child->ClearFlags();
+
+                            if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( child ) )
+                                fixupNet( bci, bci, aCompatData.m_matchingComponents );
+
+                            aCommit->Add( child );
+                        },
+                        RECURSE_MODE::RECURSE );
+
+                aCompatData.m_groupableItems.insert( clone );
+            }
         }
     }
 
