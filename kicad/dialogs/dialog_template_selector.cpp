@@ -481,6 +481,7 @@ void TEMPLATE_WIDGET::onDuplicateTemplate( wxCommandEvent& event )
 DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos,
                                                     const wxSize& aSize, const wxString& aUserTemplatesPath,
                                                     const wxString& aSystemTemplatesPath,
+                                                    const wxString& aDefaultTemplatesPath,
                                                     const std::vector<wxString>& aRecentTemplates ) :
         DIALOG_TEMPLATE_SELECTOR_BASE( aParent, wxID_ANY, _( "Project Template Selector" ), aPos, aSize ),
         m_state( DialogState::Initial ),
@@ -488,6 +489,7 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
         m_selectedTemplate( nullptr ),
         m_userTemplatesPath( aUserTemplatesPath ),
         m_systemTemplatesPath( aSystemTemplatesPath ),
+        m_defaultTemplatesPath( aDefaultTemplatesPath ),
         m_recentTemplates( aRecentTemplates ),
         m_searchTimer( this ),
         m_refreshTimer( this ),
@@ -726,6 +728,11 @@ void DIALOG_TEMPLATE_SELECTOR::BuildTemplateList()
 
     scanDirectory( m_userTemplatesPath, true );
     scanDirectory( m_systemTemplatesPath, false );
+
+    // The built-in "default" template lives in the stable default user templates path.  It is
+    // always scanned so that the default remains available even when KICAD_USER_TEMPLATE_DIR
+    // points at a custom location.  Treated as a built-in, not a user template.
+    scanDirectory( m_defaultTemplatesPath, false );
 
     // Sort alphabetically with "Default" first
     std::sort( m_templateWidgets.begin(), m_templateWidgets.end(),
@@ -1001,29 +1008,25 @@ void DIALOG_TEMPLATE_SELECTOR::SetupFileWatcher()
 
     wxLogNull logNo;
 
-    if( !m_userTemplatesPath.IsEmpty() )
-    {
-        wxFileName userDir;
-        userDir.AssignDir( m_userTemplatesPath );
+    auto watchDir =
+            [this]( const wxString& aPath, const char* aLabel )
+            {
+                if( aPath.IsEmpty() )
+                    return;
 
-        if( userDir.DirExists() )
-        {
-            m_watcher->Add( userDir );
-            wxLogTrace( traceTemplateSelector, "Watching user templates: %s", m_userTemplatesPath );
-        }
-    }
+                wxFileName dir;
+                dir.AssignDir( aPath );
 
-    if( !m_systemTemplatesPath.IsEmpty() )
-    {
-        wxFileName systemDir;
-        systemDir.AssignDir( m_systemTemplatesPath );
+                if( dir.DirExists() )
+                {
+                    m_watcher->Add( dir );
+                    wxLogTrace( traceTemplateSelector, "Watching %s templates: %s", aLabel, aPath );
+                }
+            };
 
-        if( systemDir.DirExists() )
-        {
-            m_watcher->Add( systemDir );
-            wxLogTrace( traceTemplateSelector, "Watching system templates: %s", m_systemTemplatesPath );
-        }
-    }
+    watchDir( m_userTemplatesPath, "user" );
+    watchDir( m_systemTemplatesPath, "system" );
+    watchDir( m_defaultTemplatesPath, "default" );
 }
 
 

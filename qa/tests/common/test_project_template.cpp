@@ -34,6 +34,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <sstream>
 
 namespace fs = std::filesystem;
 
@@ -259,6 +260,73 @@ BOOST_AUTO_TEST_CASE( TemplateWithMetaDirButNoInfoHtml )
     BOOST_REQUIRE( title != nullptr );
     BOOST_CHECK_MESSAGE( !title->IsEmpty(),
                          "Template with meta dir but no info.html should have an error title" );
+}
+
+
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24343
+// EnsureDefaultProjectTemplate must seed the built-in "default" template under the given base
+// directory and yield a directory that PROJECT_TEMPLATE can load as a valid template.
+BOOST_AUTO_TEST_CASE( EnsureDefaultTemplateSeedsBaseDir )
+{
+    wxString   baseDir = wxString::FromUTF8( ( m_tempDir / "default_seed" ).string() );
+    wxFileName seeded = EnsureDefaultProjectTemplate( baseDir );
+
+    BOOST_REQUIRE_MESSAGE( seeded.IsOk(), "Seeding the default template should succeed" );
+
+    // The default template must live directly under the requested base directory, not somewhere
+    // derived from an environment variable.
+    fs::path expected = m_tempDir / "default_seed" / "default";
+    BOOST_CHECK( fs::exists( expected ) );
+    BOOST_CHECK( fs::exists( expected / "meta" / "info.html" ) );
+    BOOST_CHECK( fs::exists( expected / "default.kicad_pro" ) );
+
+    // PROJECT_TEMPLATE must recognize the seeded directory as a valid template (meta dir and
+    // info.html present, so no error is reported).
+    PROJECT_TEMPLATE tmpl( seeded.GetPath() );
+
+    BOOST_CHECK_MESSAGE( tmpl.GetError().IsEmpty(),
+                         "Seeded default template should load without error: " + tmpl.GetError() );
+
+    wxString* title = tmpl.GetTitle();
+
+    BOOST_REQUIRE( title != nullptr );
+    BOOST_CHECK( !title->IsEmpty() );
+}
+
+
+// An empty base directory must not create anything and must report failure.
+BOOST_AUTO_TEST_CASE( EnsureDefaultTemplateRejectsEmptyBaseDir )
+{
+    wxFileName seeded = EnsureDefaultProjectTemplate( wxEmptyString );
+
+    BOOST_CHECK( !seeded.IsOk() );
+}
+
+
+// Calling EnsureDefaultProjectTemplate twice must be idempotent and not clobber existing content.
+BOOST_AUTO_TEST_CASE( EnsureDefaultTemplateIsIdempotent )
+{
+    wxString baseDir = wxString::FromUTF8( ( m_tempDir / "default_idempotent" ).string() );
+
+    wxFileName first = EnsureDefaultProjectTemplate( baseDir );
+    BOOST_REQUIRE( first.IsOk() );
+
+    // Overwrite the project file with custom content to verify it survives a second call.
+    fs::path proFile = m_tempDir / "default_idempotent" / "default" / "default.kicad_pro";
+    {
+        std::ofstream f( proFile.string() );
+        f << "{\"custom\":true}";
+    }
+
+    wxFileName second = EnsureDefaultProjectTemplate( baseDir );
+    BOOST_REQUIRE( second.IsOk() );
+    BOOST_CHECK_EQUAL( first.GetPath(), second.GetPath() );
+
+    std::ifstream     in( proFile.string() );
+    std::stringstream buffer;
+    buffer << in.rdbuf();
+
+    BOOST_CHECK_EQUAL( buffer.str(), std::string( "{\"custom\":true}" ) );
 }
 
 
