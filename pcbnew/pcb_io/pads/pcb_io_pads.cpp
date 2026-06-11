@@ -502,26 +502,16 @@ void PCB_IO_PADS::loadFootprints()
 
         auto decal_it = decals.find( decal_name );
 
+        double decalScale = ( decal_it != decals.end() )
+                                    ? decalUnitScale( decal_it->second.units )
+                                    : 0.0;
+
+        auto decalScaler = [&, decalScale]( double val ) {
+            return decalScale > 0.0 ? KiROUND( val * decalScale ) : scaleSize( val );
+        };
+
         if( decal_it != decals.end() )
-        {
-            auto decalScaler = [&]( double val ) {
-                if( m_parser->IsBasicUnits() )
-                    return scaleSize( val );
-
-                const std::string& units = decal_it->second.units;
-
-                if( units == "M" || units == "D" || units == "MILS" || units == "MIL" )
-                    return KiROUND( val * PADS_UNIT_CONVERTER::MILS_TO_NM );
-                else if( units == "MM" || units == "METRIC" )
-                    return KiROUND( val * PADS_UNIT_CONVERTER::MM_TO_NM );
-                else if( units == "I" || units == "INCHES" || units == "INCH" )
-                    return KiROUND( val * PADS_UNIT_CONVERTER::INCHES_TO_NM );
-                else
-                    return scaleSize( val );
-            };
-
             applyAttributes( decal_it->second.attributes, decalScaler );
-        }
         else
         {
              if( m_reporter )
@@ -572,21 +562,6 @@ void PCB_IO_PADS::loadFootprints()
         // Add Pads and Graphics from Decal
         {
             const PADS_IO::PART_DECAL& decal = decal_it->second;
-
-            auto decalScaler = [&]( double val ) {
-                if( m_parser->IsBasicUnits() )
-                    return scaleSize( val );
-
-                if( decal.units == "M" || decal.units == "D" || decal.units == "MILS"
-                    || decal.units == "MIL" )
-                    return KiROUND( val * PADS_UNIT_CONVERTER::MILS_TO_NM );
-                else if( decal.units == "MM" || decal.units == "METRIC" )
-                    return KiROUND( val * PADS_UNIT_CONVERTER::MM_TO_NM );
-                else if( decal.units == "I" || decal.units == "INCHES" || decal.units == "INCH" )
-                    return KiROUND( val * PADS_UNIT_CONVERTER::INCHES_TO_NM );
-                else
-                    return scaleSize( val );
-            };
 
             auto convertPadShape = [&]( const PADS_IO::PAD_STACK_LAYER& layer_def,
                                         PAD* pad, PCB_LAYER_ID kicad_layer,
@@ -2491,6 +2466,24 @@ int PCB_IO_PADS::scaleSize( double aVal ) const
 {
     int64_t nm = m_unitConverter.ToNanometersSize( aVal );
     return static_cast<int>( std::clamp<int64_t>( nm, INT_MIN, INT_MAX ) );
+}
+
+
+double PCB_IO_PADS::decalUnitScale( const std::string& aUnits ) const
+{
+    if( m_parser->IsBasicUnits() )
+        return 0.0;
+
+    if( aUnits == "I" || aUnits == "MIL" || aUnits == "MILS" )
+        return PADS_UNIT_CONVERTER::MILS_TO_NM;
+
+    if( aUnits == "M" || aUnits == "MM" || aUnits == "METRIC" )
+        return PADS_UNIT_CONVERTER::MM_TO_NM;
+
+    if( aUnits == "INCH" || aUnits == "INCHES" )
+        return PADS_UNIT_CONVERTER::INCHES_TO_NM;
+
+    return 0.0;
 }
 
 

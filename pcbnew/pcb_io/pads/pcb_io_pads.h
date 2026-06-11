@@ -75,6 +75,12 @@ private:
     // LoadBoard helper methods -- each handles one logical section of the import
     int         scaleSize( double aVal ) const;
     int         scaleCoord( double aVal, bool aIsX ) const;
+
+    /// Resolve a PADS decal/part UNITS letter to a nm-per-unit scale factor.
+    /// Returns 0.0 to indicate the file's primary unit (use scaleSize) should
+    /// be used. The PADS letter convention is counterintuitive: `I` = Imperial
+    /// (mils, not real inches), `M` = Metric (mm, not mils).
+    double      decalUnitScale( const std::string& aUnits ) const;
     PCB_LAYER_ID getMappedLayer( int aPadsLayer ) const;
     void        ensureNet( const std::string& aNetName );
 
