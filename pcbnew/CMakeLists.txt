@@ -292,6 +292,7 @@ set( PCBNEW_DRC_SRCS
     drc/drc_chain_topology.cpp
     drc/drc_interactive_courtyard_clearance.cpp
     drc/drc_creepage_utils.cpp
+    drc/drc_creepage_engine.cpp
     drc/drc_report.cpp
     drc/drc_test_provider.cpp
     drc/drc_test_provider_annular_width.cpp
@@ -454,6 +455,7 @@ set( PCBNEW_CLASS_SRCS
     tools/board_reannotate_tool.cpp
     tools/convert_tool.cpp
     tools/diff_phase_skew_tool.cpp
+    tools/creepage_overlay.cpp
     tools/drawing_tool.cpp
     tools/drc_tool.cpp
     tools/edit_tool.cpp

@@ -65,6 +65,7 @@ static const wxChar IncrementalConnectivity[] = wxT( "IncrementalConnectivity" )
 static const wxChar Use3DConnexionDriver[] = wxT( "3DConnexionDriver" );
 static const wxChar ExtraFillMargin[] = wxT( "ExtraFillMargin" );
 static const wxChar EnableCreepageSlot[] = wxT( "EnableCreepageSlot" );
+static const wxChar RealtimeCreepage[] = wxT( "RealtimeCreepage" );
 static const wxChar DRCEpsilon[] = wxT( "DRCEpsilon" );
 static const wxChar DRCSliverWidthTolerance[] = wxT( "DRCSliverWidthTolerance" );
 static const wxChar DRCSliverMinimumLength[] = wxT( "DRCSliverMinimumLength" );
@@ -248,6 +249,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_ExtraClearance = 0.0005;
     m_EnableCreepageSlot = false;
+    m_RealtimeCreepage = false;
     m_DRCEpsilon = 0.0005; // 0.5um is small enough not to materially violate
                            // any constraints.
     m_SliverWidthTolerance = 0.08;
@@ -421,6 +423,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableCreepageSlot, &m_EnableCreepageSlot,
                                                            m_EnableCreepageSlot ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::RealtimeCreepage, &m_RealtimeCreepage,
+                                                           m_RealtimeCreepage ) );
 
     m_entries.push_back(
             std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DRCEpsilon, &m_DRCEpsilon, m_DRCEpsilon, 0.0, 1.0 ) );

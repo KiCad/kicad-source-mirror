@@ -149,6 +149,16 @@ public:
     bool m_EnableCreepageSlot;
 
     /**
+     * Use the realtime (V2) creepage engine. Gates the live drag overlay and selects the V2
+     * engine in batch DRC. V2 is designed to produce results identical to the legacy solver.
+     *
+     * Setting name: "RealtimeCreepage"
+     * Valid values: 0 or 1
+     * Default value: false
+     */
+    bool m_RealtimeCreepage;
+
+    /**
      * Epsilon for DRC tests.
      *
      * @note Fo zone tests this is essentially additive with #m_ExtraClearance.  Units are mm.

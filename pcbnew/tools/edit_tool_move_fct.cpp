@@ -52,6 +52,7 @@
 #include <zone_filler.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_interactive_courtyard_clearance.h>
+#include <tools/creepage_overlay.h>
 #include <view/view_controls.h>
 
 #include <connectivity/connectivity_data.h>
@@ -1008,6 +1009,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         drc_on_move->Init( board );
     }
 
+    // No-op unless RealtimeCreepage is set and the board has creepage constraints
+    std::unique_ptr<CREEPAGE_OVERLAY> creepage_on_move = std::make_unique<CREEPAGE_OVERLAY>(
+            board, m_toolMgr->GetTool<DRC_TOOL>()->GetDRCEngine(), m_toolMgr->GetView() );
+
     auto configureAngleSnap =
             [&]( LEADER_MODE aMode )
             {
@@ -1202,6 +1207,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     drc_on_move->UpdateConflicts( m_toolMgr->GetView(), true );
                 }
 
+                creepage_on_move->Update();
+
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
             }
             else if( !m_dragging && ( aAutoStart || !evt->IsAction( &ACTIONS::refreshPreview ) ) )
@@ -1297,6 +1304,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                                     RECURSE_MODE::RECURSE );
                         }
                     }
+
+                    creepage_on_move->Start( sel_items );
 
                     // Use the mouse position over cursor, as otherwise large grids will allow only
                     // snapping to items that are closest to grid points
@@ -1482,6 +1491,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     // Clear temporary COURTYARD_CONFLICT flag and ensure the conflict shadow is cleared
     if( showCourtyardConflicts )
         drc_on_move->ClearConflicts( m_toolMgr->GetView() );
+
+    creepage_on_move->Stop();
 
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );
