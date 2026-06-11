@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-11 09:27+0000\n"
+"PO-Revision-Date: 2026-06-11 09:38+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -28250,17 +28250,17 @@ msgstr "Hebt alle Verbindungen und Pins hervor, die zu einem Netz gehören"
 #: eeschema/tools/sch_actions.cpp:1103 pcbnew/tools/pcb_actions.cpp:1621
 #, fuzzy
 msgid "Highlight Net Chain"
-msgstr "Netze in %s hervorheben"
+msgstr "Netzkette hervorheben"
 
 #: eeschema/tools/sch_actions.cpp:1104
 #, fuzzy
 msgid "Highlight the net chain under the cursor"
-msgstr "Netz unter dem Zeiger hervorheben"
+msgstr "Netzkette unter dem Zeiger hervorheben"
 
 #: eeschema/tools/sch_actions.cpp:1110
 #, fuzzy
 msgid "Remove from Net Chain"
-msgstr "Aus Auswahl entfernen"
+msgstr "Von Netzkette entfernen"
 
 #: eeschema/tools/sch_actions.cpp:1111
 #, fuzzy
@@ -28274,18 +28274,18 @@ msgstr ""
 #: eeschema/tools/sch_actions.cpp:1116
 #, fuzzy
 msgid "Replace Terminal Pin"
-msgstr "Alle vorhandenen Pins ersetzen"
+msgstr "Terminalpin ersetzen"
 
 #: eeschema/tools/sch_actions.cpp:1121
 #: eeschema/tools/sch_editor_control.cpp:1849
 #, fuzzy
 msgid "Name Net Chain"
-msgstr "Textgröße Name"
+msgstr "Netzkette benennen"
 
 #: eeschema/tools/sch_actions.cpp:1122
 #, fuzzy
 msgid "Assign a name to the net chain"
-msgstr "Weist Netzen, die einem Muster entsprechen, eine Netzklasse zu"
+msgstr "Der Netzkette einen Namen zuweisen"
 
 #: eeschema/tools/sch_actions.cpp:1127
 #, fuzzy
@@ -28295,12 +28295,12 @@ msgstr "Netzketten zwischen Pins erstellen"
 #: eeschema/tools/sch_actions.cpp:1128
 #, fuzzy
 msgid "Create a new net chain connecting the two selected pins"
-msgstr "Eine Schnittfläche der ausgewählten Polygone erstellen"
+msgstr "Eine neue Netzkette erstellen, die zwei ausgewählte Pins verbindet"
 
 #: eeschema/tools/sch_actions.cpp:1133
 #, fuzzy
 msgid "Create Net Chain..."
-msgstr "Protokolldatei erstellen..."
+msgstr "Netzkette erstellen ..."
 
 #: eeschema/tools/sch_actions.cpp:1134
 #, fuzzy
