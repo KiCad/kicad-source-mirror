@@ -263,6 +263,10 @@ bool MULTICHANNEL_TOOL::findOtherItemsInRuleArea( RULE_AREA* aRuleArea, std::set
             if( item->Type() == PCB_GROUP_T )
                 continue;
 
+            // Cells are copied with their owning PCB_TABLE, not as standalone items.
+            if( item->Type() == PCB_TABLECELL_T )
+                continue;
+
             if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
             {
                 if( !boardItem->IsConnected() || boardItem->Type() == PCB_ZONE_T )
@@ -1207,6 +1211,9 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
             if( item->Type() == PCB_PAD_T )
                 continue;
 
+            if( aRefArea->m_designBlockItems.count( item ) )
+                continue;
+
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
                 continue;
 
@@ -1278,6 +1285,11 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
         for( BOARD_ITEM* item : targetItems )
         {
             if( item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
+                continue;
+
+            // Don't remove the appended source items: this geometric query can pick them up, but
+            // they're deleted when the temporary append is reverted, leaving dangling pointers.
+            if( aRefArea->m_designBlockItems.count( item ) )
                 continue;
 
             if( item->IsLocked() && !aOpts.m_includeLockedItems )
