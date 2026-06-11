@@ -1608,9 +1608,9 @@ struct EDEVICE : public EAGLE_BASE
     wxString     name;
     opt_wxString package;
 
-    std::vector<std::unique_ptr<ECONNECT>>         connects;
-    std::vector < std::unique_ptr<EPACKAGE3DINST>> package3dinstances;
-    std::vector < std::unique_ptr<ETECHNOLOGY>>    technologies;
+    std::vector<std::unique_ptr<ECONNECT>>           connects;
+    std::vector<std::unique_ptr<EPACKAGE3DINST>>     package3dinstances;
+    std::map<wxString, std::unique_ptr<ETECHNOLOGY>> technologies;
 
     EDEVICE( wxXmlNode* aDevice, IO_BASE* aIo = nullptr );
 };
@@ -1641,10 +1641,10 @@ struct EDEVICE_SET : public EAGLE_BASE
     opt_int      library_version;
     opt_bool     library_locally_modified;
 
-    std::optional<EDESCRIPTION>                description;
-    std::map<wxString, std::unique_ptr<EGATE>> gates;
-    std::vector<std::unique_ptr<EDEVICE>>      devices;
-    std::optional<ESPICE>                      spice;
+    std::optional<EDESCRIPTION>                  description;
+    std::map<wxString, std::unique_ptr<EGATE>>   gates;
+    std::map<wxString, std::unique_ptr<EDEVICE>> devices;
+    std::optional<ESPICE>                        spice;
 
     EDEVICE_SET( wxXmlNode* aDeviceSet, IO_BASE* aIo = nullptr );
 };
