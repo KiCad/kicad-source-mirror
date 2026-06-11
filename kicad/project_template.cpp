@@ -25,6 +25,7 @@
 
 #include <wx/bitmap.h>
 #include <wx/dir.h>
+#include <wx/ffile.h>
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
 #include <wx/log.h>
@@ -32,6 +33,7 @@
 #include <unordered_map>
 
 #include <wildcards_and_files_ext.h>
+#include <wx_filename.h>
 #include "project_template.h"
 
 
@@ -436,4 +438,59 @@ wxString* PROJECT_TEMPLATE::GetTitle()
     }
 
     return &m_title;
+}
+
+
+wxFileName EnsureDefaultProjectTemplate( const wxString& aBaseDir )
+{
+    if( aBaseDir.IsEmpty() )
+        return wxFileName();
+
+    wxFileName templatePath;
+    templatePath.AssignDir( aBaseDir );
+    templatePath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+    templatePath.AppendDir( wxT( "default" ) );
+
+    if( !templatePath.DirExists() && !templatePath.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        return wxFileName();
+
+    wxFileName metaDir = templatePath;
+    metaDir.AppendDir( METADIR );
+
+    if( !metaDir.DirExists() && !metaDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        return wxFileName();
+
+    wxFileName infoFile = metaDir;
+    infoFile.SetFullName( METAFILE_INFO_HTML );
+
+    if( !infoFile.FileExists() )
+    {
+        wxFFile info( infoFile.GetFullPath(), wxT( "w" ) );
+
+        if( !info.IsOpened() )
+            return wxFileName();
+
+        info.Write( wxT( "<html><head><title>Default</title></head><body>"
+                         "<h3>Default KiCad project template.</h3></body></html>" ) );
+        info.Close();
+    }
+
+    wxFileName proFile = templatePath;
+    proFile.SetFullName( wxT( "default.kicad_pro" ) );
+
+    if( !proFile.FileExists() )
+    {
+        wxFFile proj( proFile.GetFullPath(), wxT( "w" ) );
+
+        if( !proj.IsOpened() )
+            return wxFileName();
+
+        proj.Write( wxT( "{}" ) );
+        proj.Close();
+    }
+
+    if( infoFile.FileExists() && proFile.FileExists() )
+        return templatePath;
+
+    return wxFileName();
 }

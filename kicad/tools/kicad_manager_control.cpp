@@ -51,7 +51,6 @@
 #include <paths.h>
 #include <wx/dir.h>
 #include <wx/filedlg.h>
-#include <wx/ffile.h>
 #include "dialog_pcm.h"
 #include <project/project_archiver.h>
 #include <project_tree_pane.h>
@@ -144,87 +143,13 @@ wxFileName KICAD_MANAGER_CONTROL::newProjectDirectory( wxString* aFileName, bool
 }
 
 
-static wxFileName ensureDefaultProjectTemplate()
-{
-    ENV_VAR_MAP_CITER it = Pgm().GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
-
-    if( it == Pgm().GetLocalEnvVariables().end() || it->second.GetValue() == wxEmptyString )
-        return wxFileName();
-
-    // The value may itself reference other environment variables (e.g. ${KICAD_CONFIG_HOME}).
-    // Expand them before touching the filesystem, otherwise we create directories literally
-    // named "${OTHER_VAR}".
-    wxString resolved = ExpandEnvVarSubstitutions( it->second.GetValue(), nullptr );
-
-    // If expansion left an unresolved variable reference in the path, bail out rather than
-    // mkdir a literal "${MISSING}" directory under cwd.
-    if( resolved.Contains( wxT( "${" ) ) || resolved.Contains( wxT( "$(" ) ) )
-        return wxFileName();
-
-    wxFileName templatePath;
-    templatePath.AssignDir( resolved );
-    templatePath.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
-    templatePath.AppendDir( "default" );
-
-    if( !templatePath.DirExists() && !templatePath.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-        return wxFileName();
-
-    wxFileName metaDir = templatePath;
-    metaDir.AppendDir( METADIR );
-
-    if( !metaDir.DirExists() && !metaDir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-        return wxFileName();
-
-    wxFileName infoFile = metaDir;
-    infoFile.SetFullName( METAFILE_INFO_HTML );
-
-    if( !infoFile.FileExists() )
-    {
-        wxFFile info( infoFile.GetFullPath(), wxT( "w" ) );
-
-        if( !info.IsOpened() )
-            return wxFileName();
-
-        info.Write( wxT( "<html><head><title>Default</title></head><body><h3>Default KiCad project template.</h3></body></html>" ) );
-        info.Close();
-    }
-
-    wxFileName proFile = templatePath;
-    proFile.SetFullName( wxT( "default.kicad_pro" ) );
-
-    if( !proFile.FileExists() )
-    {
-        wxFFile proj( proFile.GetFullPath(), wxT( "w" ) );
-
-        if( !proj.IsOpened() )
-            return wxFileName();
-
-        proj.Write( wxT( "{}" ) );
-        proj.Close();
-    }
-
-    if( infoFile.FileExists() && proFile.FileExists() )
-        return templatePath;
-    else
-        return wxFileName();
-}
-
 int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
 {
-    wxFileName defaultTemplate = ensureDefaultProjectTemplate();
-
-    if( !defaultTemplate.IsOk() )
-    {
-        wxFileName pro = newProjectDirectory();
-
-        if( !pro.IsOk() )
-            return -1;
-
-        m_frame->CreateNewProject( pro );
-        m_frame->LoadProject( pro );
-
-        return 0;
-    }
+    // The built-in "default" template lives in the stable default user templates path so that it
+    // is always available regardless of how KICAD_USER_TEMPLATE_DIR is configured.  Seeding it
+    // into KICAD_USER_TEMPLATE_DIR would hide the default whenever the user points that variable
+    // at a custom location of their own.  See https://gitlab.com/kicad/code/kicad/-/issues/24343
+    wxFileName defaultTemplate = EnsureDefaultProjectTemplate( PATHS::GetUserTemplatesPath() );
 
     KICAD_SETTINGS* settings = GetAppSettings<KICAD_SETTINGS>( "kicad" );
 
@@ -257,6 +182,43 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
     if( v && !v->IsEmpty() )
         systemTemplatesPath = resolveTemplateDir( *v );
 
+    // Point the selector at the seeded "default" template directory itself (not the whole user
+    // templates root) so that only the built-in default is offered as a built-in.  Scanning the
+    // root would mislabel the user's own templates there as built-ins and disable editing them.
+    wxString defaultTemplatesPath;
+
+    if( defaultTemplate.IsOk() )
+        defaultTemplatesPath = resolveTemplateDir( defaultTemplate.GetPath() );
+
+    // The selector scans a directory containing a "meta" subdir as a single template, otherwise
+    // it iterates the immediate subdirectories.  The default template's parent directory is the
+    // template root, so if KICAD_USER_TEMPLATE_DIR or the system template dir already point at
+    // that root the default is scanned there; skip the dedicated default scan to avoid duplicates.
+    if( !defaultTemplatesPath.IsEmpty() )
+    {
+        wxFileName defaultRootFn = defaultTemplate;
+        defaultRootFn.RemoveLastDir();
+        wxString defaultRoot = resolveTemplateDir( defaultRootFn.GetPath() );
+
+        if( defaultRoot == userTemplatesPath || defaultRoot == systemTemplatesPath )
+            defaultTemplatesPath = wxEmptyString;
+    }
+
+    // If we have no template source at all and could not seed the default, fall back to creating
+    // an empty project directory directly.
+    if( !defaultTemplate.IsOk() && userTemplatesPath.IsEmpty() && systemTemplatesPath.IsEmpty() )
+    {
+        wxFileName pro = newProjectDirectory();
+
+        if( !pro.IsOk() )
+            return -1;
+
+        m_frame->CreateNewProject( pro );
+        m_frame->LoadProject( pro );
+
+        return 0;
+    }
+
     // Use RunMainStack to show the dialog on the main stack instead of the coroutine stack.
     // This is necessary because the template selector uses a WebView which triggers WebKit's
     // JavaScript VM initialization. WebKit's stack validation fails on coroutine stacks.
@@ -271,7 +233,8 @@ int KICAD_MANAGER_CONTROL::NewProject( const TOOL_EVENT& aEvent )
             {
                 DIALOG_TEMPLATE_SELECTOR ps( m_frame, settings->m_TemplateWindowPos,
                                              settings->m_TemplateWindowSize, userTemplatesPath,
-                                             systemTemplatesPath, settings->m_RecentTemplates );
+                                             systemTemplatesPath, defaultTemplatesPath,
+                                             settings->m_RecentTemplates );
 
                 result = ps.ShowModal();
                 templateWindowPos = ps.GetPosition();

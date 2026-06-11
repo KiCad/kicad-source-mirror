@@ -122,6 +122,7 @@ public:
     DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize,
                               const wxString& aUserTemplatesPath,
                               const wxString& aSystemTemplatesPath,
+                              const wxString& aDefaultTemplatesPath,
                               const std::vector<wxString>& aRecentTemplates );
 
     ~DIALOG_TEMPLATE_SELECTOR();
@@ -170,6 +171,7 @@ private:
 
     wxString                                     m_userTemplatesPath;
     wxString                                     m_systemTemplatesPath;
+    wxString                                     m_defaultTemplatesPath;
     std::vector<wxString>                        m_recentTemplates;
 
     std::vector<std::unique_ptr<PROJECT_TEMPLATE>> m_templates;
