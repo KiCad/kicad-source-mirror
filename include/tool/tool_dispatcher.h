@@ -29,6 +29,7 @@
 
 #include <vector>
 #include <wx/event.h>
+#include <wx/longlong.h>
 #include <tool/tool_event.h>   // Needed for MD_ constants
 
 class TOOL_MANAGER;
@@ -77,6 +78,28 @@ public:
      */
     std::optional<TOOL_EVENT> GetToolEvent( wxKeyEvent* aKeyEvent, bool* aSpecialKeyFlag );
 
+    /// The maximum gap (ms) between two events of the same key for them to count as one OS
+    /// auto-repeat burst rather than two deliberate key presses.
+    static const int AutoRepeatWindowMs = 250;
+
+    /**
+     * Pure decision used to discard backlogged OS key auto-repeat events.
+     *
+     * A repeat event is stale (and must be dropped) only when it belongs to the same burst as
+     * the previously processed event (same key seen less than AutoRepeatWindowMs ago) and the
+     * key is no longer physically held. The leading edge of every press is kept, so a quick tap
+     * whose key has already bounced up still runs once.
+     *
+     * @param aKeyCode    key code of the current event.
+     * @param aNowMs      current time in milliseconds.
+     * @param aKeyIsDown  whether the key is currently physically pressed.
+     * @param aLastKey    in/out key code of the previously processed event; updated to aKeyCode.
+     * @param aLastTimeMs in/out time of the previously processed event; updated to aNowMs.
+     * @return true when the event is a stale auto-repeat that should be dropped.
+     */
+    static bool ShouldDropAutoRepeat( int aKeyCode, wxLongLong aNowMs, bool aKeyIsDown,
+                                      int& aLastKey, wxLongLong& aLastTimeMs );
+
 private:
     /// Handles mouse related events (click, motion, dragging).
     bool handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion );
@@ -85,6 +108,15 @@ private:
     /// dispatched. This ensures clicks are processed before cancel events when both happen
     /// in quick succession.
     void flushPendingClicks();
+
+    /// Decide whether a keyboard event must be dropped because it is a backlogged OS key
+    /// auto-repeat event delivered after the key was physically released.
+    ///
+    /// On Linux a hotkey whose action is slower than the OS auto-repeat interval lets repeat
+    /// events accumulate in the wx event queue; once the key is released the queue keeps
+    /// draining and the action keeps running. The first event of a burst always runs (so a
+    /// quick tap still works), but later repeats only run while the key is still held down.
+    bool isStaleAutoRepeat( const wxKeyEvent& aKeyEvent );
 
     /// Returns the instance of VIEW, used by the application.
     KIGFX::VIEW* getView();
@@ -112,6 +144,14 @@ private:
     /// State of mouse buttons.
     struct BUTTON_STATE;
     std::vector<BUTTON_STATE*> m_buttons;
+
+    /// Key code of the key that was last processed, or 0 when no key is armed. Used together
+    /// with m_lastKeyTime to drop stale auto-repeat events that arrive after the key was
+    /// released while still letting the leading edge of every fresh press through.
+    int       m_lastKeyCode;
+
+    /// Local time (ms) at which m_lastKeyCode was last processed.
+    wxLongLong m_lastKeyTime;
 
     /// Instance of tool manager that cooperates with the dispatcher.
     TOOL_MANAGER* m_toolMgr;
