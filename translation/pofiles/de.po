@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-09 11:20+0000\n"
+"PO-Revision-Date: 2026-06-11 09:27+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -25257,34 +25257,39 @@ msgid "Series MOSFET Vds must be > 0 in %s."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:713
-#, c-format
+#, c-format, fuzzy
 msgid "Rl Series requires L Series in %s."
-msgstr ""
+msgstr "Rl-Reihenschaltung erfordert L-Reihenschaltung in %s."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:716
-#, c-format
+#, c-format, fuzzy
 msgid "Rc/Lc Series requires C Series in %s."
-msgstr ""
+msgstr "Rc/Lc-Reihenschaltung erfordert C-Reihenschaltung in %s."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:725
+#, fuzzy
 msgid "[On] and [Off] are only allowed in Series_switch models."
-msgstr ""
+msgstr "[An] und [Aus] sind nur in \"Series_switch\"-Modellen erlaubt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:732
 msgid "Series model has no series elements."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:743
+#, fuzzy
 msgid "Series_switch model is missing the [On] block."
-msgstr ""
+msgstr "Im \"Series_switch\"-Modell fehlt der [An]-Block."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:749
+#, fuzzy
 msgid "Series_switch model is missing the [Off] block."
-msgstr ""
+msgstr "Im \"Series_switch\"-Modell fehlt der [Aus]-Block."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:755
+#, fuzzy
 msgid "Series_switch model has series elements outside [On]/[Off]."
 msgstr ""
+"\"Series_switch\"-Modell hat serielle Elemente ausserhalb von [An]/[Aus]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:763
 #: eeschema/sim/kibis/ibis_parser.cpp:848
@@ -28298,8 +28303,11 @@ msgid "Create Net Chain..."
 msgstr "Protokolldatei erstellen..."
 
 #: eeschema/tools/sch_actions.cpp:1134
+#, fuzzy
 msgid "Detect net chain paths through passives and create a named net chain"
 msgstr ""
+"Netzkettenpfade durch passive Bauteile erkennen und eine benannte Netzkette "
+"erstellen"
 
 #: eeschema/tools/sch_actions.cpp:1140
 msgid "Show/hide the net navigator"
@@ -55972,97 +55980,109 @@ msgid "CADSTAR PCB Archive files"
 msgstr "CADSTAR PCB Archivdateien"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1065
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace parse error at offset 0x%06zX: %s"
-msgstr ""
+msgstr "DipTrace-Analysefehler bei Offset 0x%06zX: %s"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1151
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace: invalid magic length %u (expected 7 or 11)"
-msgstr ""
+msgstr "DipTrace: ungültige \"Magic\"-Länge %u (erwartet 7 oder 11)"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1159
+#, fuzzy
 msgid "DipTrace: not a valid .dip board file (bad magic)"
-msgstr ""
+msgstr "DipTrace: keine gültige .dip Platinendatei (fehlerhaftes \"Magic\")"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1176
+#, fuzzy
 msgid "DipTrace: invalid legacy board version suffix"
-msgstr ""
+msgstr "DipTrace: ungültiges Suffix einer veralteten Platinenversion"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1354
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace: invalid pattern-name group count %d at offset 0x%06zX"
-msgstr ""
+msgstr "DipTrace: ungültige Gruppenanzahl von Musternamen %d bei Offset 0x%06zX"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1367
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace: invalid pattern-name block count %d"
-msgstr ""
+msgstr "DipTrace: ungültige Blockanzahl von Musternamen %d"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1384
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace: invalid pattern-style group count %d at offset 0x%06zX"
 msgstr ""
+"DipTrace: ungültige Gruppenanzahl von Musterstilen %d bei Offset 0x%06zX"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1406
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace: invalid pattern-style entry count %d"
-msgstr ""
+msgstr "DipTrace: ungültige Anzahl an Einträgen von Musterstilen %d"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1426
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace: invalid implicit pattern-style entry count %d"
-msgstr ""
+msgstr "DipTrace: ungültige implizite Anzahl an Einträgen von Musterstilen %d"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1510
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace: invalid design-rule extra count %d"
-msgstr ""
+msgstr "DipTrace: ungültige zusätzliche Anzahl von Designregeln %d"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1538
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace: invalid ruleset transition marker at 0x%06zX"
-msgstr ""
+msgstr "DipTrace: ungültige Übergangsmarkierung von Regelsätzen bei 0x%06zX"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1861
+#, fuzzy
 msgid "DipTrace: no validated component boundaries found"
-msgstr ""
+msgstr "DipTrace: keine bestätigten Bauteilgrenzen gefunden"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:2109
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace: invalid component flag byte %u at boundary 0x%06zX"
 msgstr ""
+"DipTrace: ungültiges Byte einer Bauteilkennzeichnung %u bei Grenze 0x%06zX"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3350
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace: text object [%d] parse error: %s"
-msgstr ""
+msgstr "DipTrace: Textobjekt [%d] Analysefehler: %s"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3431
-#, c-format
+#, c-format, fuzzy
 msgid "DipTrace import: invalid net name for net index %d at offset 0x%06zX."
 msgstr ""
+"DipTrace-Import: ungültiger Netzname für Netzindex %d bei Offset 0x%06zX."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3720
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "DipTrace import: invalid route-chain node count %d for net '%s' at offset "
 "0x%06zX."
 msgstr ""
+"DipTrace-Import: ungültige Knotenanzahl in der Leiterbahnkette %d für Netz "
+"\"%s\" bei Offset 0x%06zX."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3737
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "DipTrace import: route-chain node count %d for net '%s' overruns record at "
 "offset 0x%06zX."
 msgstr ""
+"DipTrace-Import: Knotenanzahl der Leiterbahnkette %d für Netz \"%s\" "
+"überschreitet Aufzeichnung bei Offset 0x%06zX."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:4463
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "DipTrace import: invalid copper-pour zone header after font preamble at "
 "offset 0x%06zX."
 msgstr ""
+"DipTrace-Import: ungültiger Header für kupfergefüllte Zone nach der "
+"Schriftart-Präambel bei Offset 0x%06zX."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:4969
 #, c-format, fuzzy
@@ -56078,20 +56098,22 @@ msgstr "DipTrace: Netzindex %d ist mehreren Netznamen (%s, %s) zugeordnet"
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:5546
 #, c-format, fuzzy
 msgid "DipTrace: duplicate net metadata for net index %d"
-msgstr "DipTrace: Netz-Metadaten für Net-Index %d duplizieren"
+msgstr "DipTrace: Netz-Metadaten für Netindex %d duplizieren"
 
 #: pcbnew/pcb_io/diptrace/pcb_io_diptrace.h:43
 #, fuzzy
 msgid "DipTrace PCB files"
-msgstr "Fabmaster PCB-Dateien"
+msgstr "DipTrace PCB-Dateien"
 
 #: pcbnew/pcb_io/eagle/eagle_bin_parser.cpp:835
+#, fuzzy
 msgid "Short read in Eagle binary file (field out of bounds)."
-msgstr ""
+msgstr "Zu kurzer Abschnitt in Eagle-Binärdatei (Feld ausserhalb der Grenzen)."
 
 #: pcbnew/pcb_io/eagle/eagle_bin_parser.cpp:937
+#, fuzzy
 msgid "Short read in Eagle binary file (truncated block)."
-msgstr ""
+msgstr "Zu kurzer Abschnitt in Eagle-Binärdatei (abgeschnittener Block)."
 
 #: pcbnew/pcb_io/eagle/eagle_bin_parser.cpp:982
 #, c-format, fuzzy
@@ -56111,7 +56133,7 @@ msgstr "Eagle Binär-Layout fehlt ein Platinen-/Bibliotheksknoten."
 #: pcbnew/pcb_io/eagle/eagle_bin_parser.cpp:2109
 #, fuzzy
 msgid "File is too small to be an Eagle binary board."
-msgstr "Die Datei \"%s\" ist zu klein um eine Sprint Layout-Datei zu sein"
+msgstr "Die Datei ist zu klein, um eine Eagle Binär-Platine zu sein."
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1282
 #, c-format
