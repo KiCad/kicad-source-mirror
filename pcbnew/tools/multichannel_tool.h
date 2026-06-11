@@ -39,6 +39,7 @@
 class wxWindow;
 class EDA_ITEM;
 class FOOTPRINT;
+class PCB_GROUP;
 
 struct REPEAT_LAYOUT_OPTIONS
 {
@@ -73,6 +74,7 @@ struct RULE_AREA
     ZONE*                     m_zone = nullptr;
     std::set<FOOTPRINT*>      m_components;
     std::unordered_set<EDA_ITEM*> m_designBlockItems;
+    PCB_GROUP*                    m_group = nullptr;
     bool                      m_existsAlready = false;
     bool                      m_generateEnabled = false;
     wxString                  m_sheetPath;
