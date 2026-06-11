@@ -734,6 +734,14 @@ void SCH_IO_EAGLE::loadSchematic( const ESCHEMATIC& aSchematic )
     if( aSchematic.sheets.empty() )
         return;
 
+    for( const auto& [name, variantDef] : aSchematic.variantdefs )
+    {
+        m_schematic->AddVariant( name );
+
+        if( variantDef->current && *variantDef->current )
+            m_schematic->SetCurrentVariant( name );
+    }
+
     // N.B. Eagle parts are case-insensitive in matching but we keep the display case
     for( const auto& [name, epart] : aSchematic.parts )
         m_partlist[name.Upper()] = epart.get();
@@ -2076,17 +2084,6 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
         symbol->AddField( newField );
     }
 
-    for( const auto& [variantName, variant] : epart->variants )
-    {
-        SCH_FIELD* field = symbol->AddField( *symbol->GetField( FIELD_T::VALUE ) );
-        field->SetName( wxT( "VARIANT_" ) + variant->name );
-
-        if( variant->value )
-            field->SetText( *variant->value );
-
-        field->SetVisible( false );
-    }
-
     bool valueAttributeFound = false;
     bool nameAttributeFound  = false;
 
@@ -2166,6 +2163,68 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     // disk at the time loadInstance runs.
     symbol->SetLibSymbol( part->Flatten().release() );
 
+    for( const auto& [name, variant] : epart->variants )
+    {
+        SCH_SYMBOL_VARIANT symbolVariant( name );
+
+        if( variant->populate && !*variant->populate )
+            symbolVariant.m_DNP = true;
+
+        if( variant->value )
+            symbolVariant.m_Fields[GetCanonicalFieldName( FIELD_T::VALUE )] = *variant->value;
+
+        if( variant->technology )
+        {
+            auto eLibIt = m_eagleDoc->drawing->schematic->libraries.find( epart->library );
+
+            if( eLibIt == m_eagleDoc->drawing->schematic->libraries.end() )
+            {
+                Report( wxString::Format( wxS( "Library '%s' not found in schematic." ), epart->library ) );
+                continue;
+            }
+
+            auto eDeviceSetIt = eLibIt->second->devicesets.find( epart->deviceset );
+
+            if( eDeviceSetIt == eLibIt->second->devicesets.end() )
+            {
+                Report( wxString::Format( wxS( "Device set '%s' not found in library '%s'." ),
+                                          epart->deviceset, epart->library ) );
+                continue;
+            }
+
+            auto eDeviceIt = eDeviceSetIt->second->devices.find( epart->device );
+
+            if( eDeviceIt == eDeviceSetIt->second->devices.end() )
+            {
+                Report( wxString::Format( wxS( "Device '%s' not found in device set '%s' in library '%s'." ),
+                                          epart->device, epart->deviceset, epart->library ) );
+                continue;
+            }
+
+            auto eTechnologyIt = eDeviceIt->second->technologies.find( *variant->technology );
+
+            if( eTechnologyIt == eDeviceIt->second->technologies.end() )
+            {
+                Report( wxString::Format( wxS( "Technology '%s' not found in device '%s'  in device set '%s' "
+                                               "in library '%s'." ),
+                                          *variant->technology, epart->device, epart->deviceset, epart->library ) );
+                continue;
+            }
+
+            for( const auto& attr : eTechnologyIt->second->attributes )
+            {
+                wxString attrValue;
+
+                if( attr->value )
+                    attrValue = *attr->value;
+
+                symbolVariant.m_Fields[attr->name] == attrValue;
+            }
+        }
+
+        symbol->AddVariant( m_sheetPath, symbolVariant );
+    }
+
     for( const SCH_PIN* pin : symbol->GetLibPins() )
         m_connPoints[symbol->GetPinPhysicalPosition( pin )].emplace( pin );
 
@@ -2193,7 +2252,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
             deviceSetDescr = convertDescription( UnescapeHTML( edeviceset->description->text ) );
 
         // For each device in the device set:
-        for( const std::unique_ptr<EDEVICE>& edevice : edeviceset->devices )
+        for( const auto& [devname, edevice] : edeviceset->devices )
         {
             std::vector<std::unique_ptr<LIB_SYMBOL>> derivedSymbols;
 
@@ -2251,7 +2310,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                 gateindex++;
             }
 
-            for( const std::unique_ptr<ETECHNOLOGY>& technology : edevice->technologies )
+            for( const auto& [techname, technology ] : edevice->technologies )
             {
                 std::unique_ptr<LIB_SYMBOL> derivedSymbol;
                 VECTOR2I nextFieldPosition = getLastSymbolFieldPosition( libSymbol.get() );
@@ -3685,10 +3744,10 @@ void SCH_IO_EAGLE::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* aScr
                         netLabel->SetSpinStyle( SPIN_STYLE::RIGHT );
                         break;
                     case PIN_ORIENTATION::PIN_UP:
-                        netLabel->SetSpinStyle( SPIN_STYLE::UP );
+                        netLabel->SetSpinStyle( SPIN_STYLE::BOTTOM );
                         break;
                     case PIN_ORIENTATION::PIN_DOWN:
-                        netLabel->SetSpinStyle( SPIN_STYLE::BOTTOM );
+                        netLabel->SetSpinStyle( SPIN_STYLE::UP );
                         break;
                     }
 

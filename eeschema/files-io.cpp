@@ -1615,6 +1615,8 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
         SyncView();
 
         UpdateHierarchyNavigator( false, true );
+        UpdateVariantSelectionCtrl( m_schematic->GetVariantNamesForUI() );
+
         CallAfter(
                 [this]()
                 {
