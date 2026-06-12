@@ -626,7 +626,7 @@ message Pad
   // Since: 10.0.0
   kiapi.common.types.Time pad_to_die_delay = 11;
 
-  // Since: 10.0.5
+  // Since: 11.0.0
   PadSimElectricalType sim_electrical_type = 12;
 }
 
