@@ -84,6 +84,10 @@ protected:
 
     void onModified() override;
 
+    SCH_CONTEXT* context() const { return m_context.get(); }
+
+    TOOL_MANAGER* toolManager() const { return context()->GetToolManager(); }
+
 private:
     HANDLER_RESULT<commands::GetOpenDocumentsResponse>
     handleGetOpenDocuments( const HANDLER_CONTEXT<commands::GetOpenDocuments>& aCtx );

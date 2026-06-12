@@ -137,7 +137,10 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
 
 std::unique_ptr<COMMIT> API_HANDLER_SCH::createCommit()
 {
-    return std::make_unique<SCH_COMMIT>( m_frame );
+    if( m_frame )
+        return std::make_unique<SCH_COMMIT>( m_frame );
+
+    return std::make_unique<SCH_COMMIT>( toolManager() );
 }
 
 
