@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-11 19:01+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-06-13 12:01+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -5980,7 +5980,7 @@ msgstr "Dicke der Schaltplanverbindung"
 
 #: common/dialogs/panel_setup_netclasses.cpp:712
 msgid "Bus wire thickness"
-msgstr "Dicke der Busverbindung"
+msgstr "Breite der Busverbindung"
 
 #: common/dialogs/panel_setup_netclasses.cpp:713
 msgid "Schematic wire color"
@@ -18434,7 +18434,7 @@ msgstr "Netzklassenfarbe hervorheben"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:219
 msgid "Color highlight thickness:"
-msgstr "Farb-Hervorhebungsdicke:"
+msgstr "Farb-Hervorhebungsbreite:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:227
 msgid "Color highlight opacity:"
