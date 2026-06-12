@@ -2745,12 +2745,16 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbo
     SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY );
     VECTOR2I   pt, prev_pt;
     opt_double prev_curve;
+    std::optional<VECTOR2I> first_pt;
 
     poly->SetParent( aSymbol.get() );
 
     for( const std::unique_ptr<EVERTEX>& evertex : aPolygon->vertices )
     {
-        pt = VECTOR2I( evertex->x.ToSchUnits(), evertex->y.ToSchUnits() );
+        pt = VECTOR2I( evertex->x.ToSchUnits(), -evertex->y.ToSchUnits() );
+
+        if( !first_pt.has_value() )
+            first_pt = pt;
 
         if( prev_curve )
         {
@@ -2766,6 +2770,9 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbo
         prev_pt = pt;
         prev_curve = evertex->curve;
     }
+
+    if( first_pt.has_value() )
+        poly->AddPoint( first_pt.value() );
 
     poly->SetStroke( STROKE_PARAMS( aPolygon->width.ToSchUnits(), LINE_STYLE::SOLID ) );
     poly->SetFillMode( FILL_T::FILLED_SHAPE );
