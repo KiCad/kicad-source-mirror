@@ -2218,7 +2218,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
                 if( attr->value )
                     attrValue = *attr->value;
 
-                symbolVariant.m_Fields[attr->name] == attrValue;
+                symbolVariant.m_Fields[attr->name] = attrValue;
             }
         }
 
