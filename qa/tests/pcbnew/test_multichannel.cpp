@@ -876,6 +876,104 @@ BOOST_FIXTURE_TEST_CASE( TopoMatchGlobalNetHierarchicalPins, MULTICHANNEL_TEST_F
 
 
 /**
+ * A design block's daisy-chain output net feeds the target instance's inputs, so it appears in
+ * both footprint sets with one pad on the reference side and several on the target side.  It must
+ * not be excluded as a global rail; doing so asymmetrically broke the isomorphism and reported
+ * "No compatible component found in the target area."  Regression test for that case.
+ */
+BOOST_FIXTURE_TEST_CASE( TopoMatchBoundarySignalNetNotExcluded, MULTICHANNEL_TEST_FIXTURE )
+{
+    using TMATCH::CONNECTION_GRAPH;
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+
+    // The board forces consecutive net codes, so register by name and use the assigned code.
+    auto addNet = [&]( const wxString& aName ) -> int
+    {
+        NETINFO_ITEM* net = new NETINFO_ITEM( board.get(), aName );
+        board->Add( net );
+        return net->GetNetCode();
+    };
+
+    const int netGnd = addNet( wxT( "GND" ) );
+    const int netVcc = addNet( wxT( "+5VP" ) );
+    const int netChainInRef = addNet( wxT( "Net-(D-RefChainIn)" ) );
+    const int netBridge = addNet( wxT( "Net-(D38-DOUT)" ) );  // reference output AND target input
+    const int netChainOutTgt = addNet( wxT( "Net-(D43-DOUT)" ) );
+    const int netD2Dout = addNet( wxT( "unconnected-(D2-DOUT)" ) );
+    const int netD3Dout = addNet( wxT( "unconnected-(D3-DOUT)" ) );
+    const int netD5Dout = addNet( wxT( "unconnected-(D5-DOUT)" ) );
+    const int netD6Dout = addNet( wxT( "unconnected-(D6-DOUT)" ) );
+
+    LIB_ID ledId( wxT( "TestLib" ), wxT( "WS2812" ) );
+
+    // Four-pad addressable LED: pad 1 = DOUT, pad 2 = GND, pad 3 = DIN, pad 4 = VCC.
+    auto makeLed = [&]( const wxString& aRef, int aDout, int aDin ) -> FOOTPRINT*
+    {
+        FOOTPRINT* fp = new FOOTPRINT( board.get() );
+        fp->SetFPID( ledId );
+        fp->SetReference( aRef );
+        board->Add( fp );
+
+        auto addPad = [&]( const wxString& aNumber, int aNetCode )
+        {
+            PAD* pad = new PAD( fp );
+            pad->SetNumber( aNumber );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+            pad->SetSize( PADSTACK::ALL_LAYERS,
+                          VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+            pad->SetLayerSet( LSET( { F_Cu } ) );
+            pad->SetNetCode( aNetCode );
+            fp->Add( pad );
+        };
+
+        addPad( wxT( "1" ), aDout );
+        addPad( wxT( "2" ), netGnd );
+        addPad( wxT( "3" ), aDin );
+        addPad( wxT( "4" ), netVcc );
+
+        return fp;
+    };
+
+    // Reference area (design block source instance): three LEDs share the DIN rail; only the
+    // representative LED drives the chain output (the bridge net), the other two are unconnected.
+    std::set<FOOTPRINT*> refFps;
+    refFps.insert( makeLed( wxT( "D1" ), netBridge, netChainInRef ) );
+    refFps.insert( makeLed( wxT( "D2" ), netD2Dout, netChainInRef ) );
+    refFps.insert( makeLed( wxT( "D3" ), netD3Dout, netChainInRef ) );
+
+    // Target area (downstream instance): the three LEDs' DIN rail IS the bridge net coming from
+    // the design block source, and the representative LED drives a fresh chain output.
+    std::set<FOOTPRINT*> tgtFps;
+    tgtFps.insert( makeLed( wxT( "D4" ), netChainOutTgt, netBridge ) );
+    tgtFps.insert( makeLed( wxT( "D5" ), netD5Dout, netBridge ) );
+    tgtFps.insert( makeLed( wxT( "D6" ), netD6Dout, netBridge ) );
+
+    auto cgRef = CONNECTION_GRAPH::BuildFromFootprintSet( refFps, tgtFps );
+    auto cgTarget = CONNECTION_GRAPH::BuildFromFootprintSet( tgtFps, refFps );
+
+    TMATCH::COMPONENT_MATCHES result;
+    std::vector<TMATCH::TOPOLOGY_MISMATCH_REASON> details;
+    bool status = cgRef->FindIsomorphism( cgTarget.get(), result, details );
+
+    if( !status )
+    {
+        for( const auto& reason : details )
+        {
+            BOOST_TEST_MESSAGE( wxString::Format( "Mismatch: %s <-> %s: %s",
+                                                  reason.m_reference, reason.m_candidate,
+                                                  reason.m_reason ) );
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( status,
+                         "Topology match failed because the design-block boundary signal net "
+                         "was misclassified as a global rail and excluded asymmetrically" );
+    BOOST_CHECK_EQUAL( result.size(), refFps.size() );
+}
+
+
+/**
  * Apply Design Block Layout must copy silkscreen graphics that are not associated with any
  * footprint from the design block source to the destination group (issue 24372).
  *

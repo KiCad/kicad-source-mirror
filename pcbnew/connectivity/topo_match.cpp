@@ -1158,42 +1158,39 @@ CONNECTION_GRAPH::BuildFromFootprintSet( const std::set<FOOTPRINT*>& aFps,
     for( auto fp : aFps )
         cgraph->AddFootprint( fp, fp->GetPosition() - ref );
 
-    // Collect all net codes present in this footprint set.
-    std::unordered_set<int> localNets;
+    std::unordered_map<int, int> localNetPadCounts;
 
     for( const FOOTPRINT* fp : aFps )
     {
         for( const PAD* pad : fp->Pads() )
         {
             if( pad->GetNetCode() > 0 )
-                localNets.insert( pad->GetNetCode() );
+                localNetPadCounts[pad->GetNetCode()]++;
         }
     }
 
-    // Collect all net codes present in the comparison channel's footprint set.
-    std::unordered_set<int> otherChannelNets;
+    std::unordered_map<int, int> otherChannelNetPadCounts;
 
     for( const FOOTPRINT* fp : aOtherChannelFps )
     {
         for( const PAD* pad : fp->Pads() )
         {
             if( pad->GetNetCode() > 0 )
-                otherChannelNets.insert( pad->GetNetCode() );
+                otherChannelNetPadCounts[pad->GetNetCode()]++;
         }
     }
 
-    // A net is "external" (cross-channel) only if it appears in both this channel and the
-    // other channel.  Power/global rails (GND, VCC, etc.) appear in every channel and must
-    // be excluded from intra-channel topology comparison because configuration pins may
-    // legitimately be tied to different rails in different channels (e.g. I2C address
-    // selection via pull-up to different supplies).  Signal nets that escape to a board
-    // connector are NOT excluded here; those signals are part of the topology and both
-    // channels should route them identically.
+    // Exclude a net from topology comparison only when it forms a real internal connection (two
+    // or more pads) in BOTH sets.  This drops global rails (GND, VCC) while keeping single-pad
+    // boundary nets, such as an applied design block's daisy-chain output feeding the target
+    // instance's inputs, whose asymmetric exclusion would otherwise break the isomorphism.
     std::unordered_set<int> externalNets;
 
-    for( int netCode : localNets )
+    for( const auto& [netCode, localCount] : localNetPadCounts )
     {
-        if( otherChannelNets.count( netCode ) )
+        auto otherIt = otherChannelNetPadCounts.find( netCode );
+
+        if( localCount >= 2 && otherIt != otherChannelNetPadCounts.end() && otherIt->second >= 2 )
             externalNets.insert( netCode );
     }
 
