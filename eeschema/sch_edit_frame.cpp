@@ -1517,9 +1517,13 @@ void SCH_EDIT_FRAME::ProjectChanged()
 
 void SCH_EDIT_FRAME::OnOpenPcbnew()
 {
-    wxFileName kicad_board = Prj().AbsolutePath( Schematic().GetFileName() );
+    // Use the project's board, not the active sheet's name, which may belong to another project.
+    wxString projectName = Prj().GetProjectFullName();
 
-    if( kicad_board.IsOk() && !Schematic().GetFileName().IsEmpty() )
+    wxFileName kicad_board =
+            projectName.IsEmpty() ? Prj().AbsolutePath( Schematic().GetFileName() ) : wxFileName( projectName );
+
+    if( kicad_board.IsOk() && !kicad_board.GetName().IsEmpty() )
     {
         kicad_board.SetExt( FILEEXT::PcbFileExtension );
         wxFileName legacy_board( kicad_board );
