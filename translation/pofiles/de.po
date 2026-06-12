@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-12 12:02+0000\n"
+"PO-Revision-Date: 2026-06-12 15:53+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -6026,7 +6026,7 @@ msgstr "Dicke der Schaltplanverbindung"
 
 #: common/dialogs/panel_setup_netclasses.cpp:712
 msgid "Bus wire thickness"
-msgstr "Dicke der Busverbindung"
+msgstr "Breite der Busverbindung"
 
 #: common/dialogs/panel_setup_netclasses.cpp:713
 msgid "Schematic wire color"
