@@ -37,7 +37,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
 "PO-Revision-Date: 2026-06-12 15:53+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -5986,7 +5986,7 @@ msgstr "Name der Netzklasse wird bereits benutzt."
 #: common/dialogs/panel_setup_netclasses.cpp:586
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
-msgstr "Der Freiraum war zu groß.   Er wurde auf %s begrenzt."
+msgstr "Der Freiraum war zu groß.  Er wurde auf %s begrenzt."
 
 #: common/dialogs/panel_setup_netclasses.cpp:703
 msgid "Minimum copper clearance"
@@ -6022,7 +6022,7 @@ msgstr "Differenzialpaar-Abstand"
 
 #: common/dialogs/panel_setup_netclasses.cpp:711
 msgid "Schematic wire thickness"
-msgstr "Dicke der Schaltplanverbindung"
+msgstr "Breite der Schaltplanverbindung"
 
 #: common/dialogs/panel_setup_netclasses.cpp:712
 msgid "Bus wire thickness"
