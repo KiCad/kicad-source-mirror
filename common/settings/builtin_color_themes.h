@@ -182,6 +182,7 @@ static const std::map<int, COLOR4D> s_defaultTheme =
             { LAYER_PAD_NETNAMES,           CSS_COLOR( 255, 255, 255, 0.9 ) },
             { LAYER_VIA_NETNAMES,           CSS_COLOR( 50, 50, 50, 0.9 ) },
             { LAYER_POINTS,                 CSS_COLOR( 255, 38,  226, 1 ) },
+            { LAYER_GRIDITEMS,              CSS_COLOR( 194, 194, 0, 1 ) },
 
             { F_Cu,                         CSS_COLOR( 200, 52,  52,  1 ) },
             { In1_Cu,                       CSS_COLOR( 127, 200, 127, 1 ) },
@@ -464,6 +465,7 @@ static const std::map<int, COLOR4D> s_classicTheme =
             { LAYER_PAD_NETNAMES,           CSS_COLOR( 255, 255, 255, 0.9 ) },
             { LAYER_VIA_NETNAMES,           CSS_COLOR( 50, 50, 50, 0.9 ) },
             { LAYER_POINTS,                 COLOR4D( BLUE ) },
+            { LAYER_GRIDITEMS,              COLOR4D( YELLOW ) },
 
             { F_Cu,                         COLOR4D( RED ) },
             { In1_Cu,                       COLOR4D( YELLOW ) },

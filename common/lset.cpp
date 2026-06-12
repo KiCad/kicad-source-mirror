@@ -821,7 +821,8 @@ GAL_SET GAL_SET::DefaultVisible()
         // LAYER_BOARD_OUTLINE_AREA,    // currently hidden by default
         LAYER_CONFLICTS_SHADOW,
         LAYER_CONSTRAINT_SHADOW,
-        LAYER_POINTS
+        LAYER_POINTS,
+        LAYER_GRIDITEMS
     };
 
     static const GAL_SET saved( visible, arrayDim( visible ) );

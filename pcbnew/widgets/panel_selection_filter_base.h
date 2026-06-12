@@ -41,6 +41,7 @@ class PANEL_SELECTION_FILTER_BASE : public WX_PANEL
 		wxCheckBox* m_cbZones;
 		wxCheckBox* m_cbKeepouts;
 		wxCheckBox* m_cbDimensions;
+		wxCheckBox* m_cbGridItems;
 		wxCheckBox* m_cbPoints;
 		wxCheckBox* m_cbOtherItems;
 

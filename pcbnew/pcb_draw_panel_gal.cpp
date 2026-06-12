@@ -108,6 +108,8 @@ const int GAL_LAYER_ORDER[] = {
 
     LAYER_FP_TEXT, LAYER_FP_REFERENCES, LAYER_FP_VALUES,
 
+    LAYER_GRIDITEMS,
+
     LAYER_RATSNEST, LAYER_ANCHOR, LAYER_POINTS, LAYER_LOCKED_ITEM_SHADOW, LAYER_CONSTRAINT_SHADOW,
     LAYER_VIA_HOLES, LAYER_VIA_HOLEWALLS,
     LAYER_PAD_PLATEDHOLES, LAYER_PAD_HOLEWALLS, LAYER_NON_PLATEDHOLES, LAYER_VIA_THROUGH, LAYER_VIA_BLIND,
@@ -354,10 +356,23 @@ void PCB_DRAW_PANEL_GAL::prepareGridSources()
     if( PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() ) )
         board = frame->GetBoard();
 
-    if( !board )
+    // The "Grid Items" object visibility toggle hides the rendered grid
+    // content; the items themselves (selection decorations, snap) follow
+    // the same flag at their own sites.
+    if( !board || !board->IsElementVisible( LAYER_GRIDITEMS ) )
     {
         m_gal->SetGridSources( std::move( sources ) );
         return;
+    }
+
+    // Grid content color comes from the "Grid Items" entry of the color
+    // theme, falling back to the global grid color.
+    COLOR4D gridItemColor = m_gal->GetGridColor();
+
+    if( PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() ) )
+    {
+        if( COLOR_SETTINGS* cs = frame->GetColorSettings() )
+            gridItemColor = cs->GetColor( LAYER_GRIDITEMS );
     }
 
     for( BOARD_ITEM* item : board->Drawings() )
@@ -379,7 +394,7 @@ void PCB_DRAW_PANEL_GAL::prepareGridSources()
         src.tick = grid->GetTickInterval();
         src.highlighted = grid->IsSelected();
         src.snapCursor = grid->Affects().cursor && !grid->IsSelected();
-        src.color = m_gal->GetGridColor(); // inherit display color
+        src.color = gridItemColor;
         src.style = m_gal->GetGridStyle(); // inherit display style
 
         sources.push_back( src );

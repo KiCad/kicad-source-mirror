@@ -368,6 +368,11 @@ VECTOR2I PCB_GRID_HELPER::Align( const VECTOR2I& aPoint, GRID_HELPER_GRIDS aGrid
 
     BOARD* board = static_cast<BOARD*>( m_toolMgr->GetModel() );
 
+    // Hidden grid items don't snap the cursor (placement/routing keep
+    // following them — geometry tools follow data, not display).
+    if( !board->IsElementVisible( LAYER_GRIDITEMS ) )
+        return GRID_HELPER::Align( aPoint, aGrid );
+
     // Priority + coverage-area resolution for the active CURSOR grid lives in
     // FindActiveGridAt; if one covers aPoint, snap exclusively to that grid.
     if( PCB_GRIDITEM* active = FindActiveGridAt( *board, aPoint, PCB_GRIDITEM_ROLE::CURSOR ) )

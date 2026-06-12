@@ -49,6 +49,7 @@ struct KICOMMON_API PCB_SELECTION_FILTER_OPTIONS
     bool keepouts;      ///< Keepout zones
     bool dimensions;    ///< Dimension items
     bool points;        ///< Points
+    bool gridItems;     ///< Grid Items
     bool otherItems;    ///< Anything not fitting one of the above categories
 
     PCB_SELECTION_FILTER_OPTIONS()
@@ -64,6 +65,7 @@ struct KICOMMON_API PCB_SELECTION_FILTER_OPTIONS
         keepouts    = true;
         dimensions  = true;
         points      = true;
+        gridItems   = true;
         otherItems  = true;
     }
 
@@ -73,7 +75,7 @@ struct KICOMMON_API PCB_SELECTION_FILTER_OPTIONS
     bool Any()
     {
         return ( footprints || text || tracks || vias || pads || graphics || zones
-                 || keepouts || dimensions || points || otherItems );
+                 || keepouts || dimensions || points || gridItems || otherItems );
     }
 
     /**
@@ -82,7 +84,7 @@ struct KICOMMON_API PCB_SELECTION_FILTER_OPTIONS
     bool All()
     {
         return ( footprints && text && tracks && vias && pads && graphics && zones
-                 && keepouts && dimensions && points && otherItems );
+                 && keepouts && dimensions && points && gridItems && otherItems );
     }
 
     void SetAll( bool aState )
@@ -97,6 +99,7 @@ struct KICOMMON_API PCB_SELECTION_FILTER_OPTIONS
         keepouts    = aState;
         dimensions  = aState;
         points      = aState;
+        gridItems   = aState;
         otherItems  = aState;
         lockedItems = aState;
     }

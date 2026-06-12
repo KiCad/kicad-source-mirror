@@ -163,6 +163,7 @@ public:
     }
 
     std::vector<int> ViewGetLayers() const override;
+    double           ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
 
     void Move( const VECTOR2I& aMoveVector ) override { m_pos += aMoveVector; }
 

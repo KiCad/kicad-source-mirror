@@ -136,6 +136,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 ret["zones"]       = m_PcbSelectionFilter.zones;
                 ret["keepouts"]    = m_PcbSelectionFilter.keepouts;
                 ret["dimensions"]  = m_PcbSelectionFilter.dimensions;
+                ret["gridItems"]   = m_PcbSelectionFilter.gridItems;
                 ret["otherItems"]  = m_PcbSelectionFilter.otherItems;
 
                 return ret;
@@ -155,6 +156,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 SetIfPresent( aVal, "zones", m_PcbSelectionFilter.zones );
                 SetIfPresent( aVal, "keepouts", m_PcbSelectionFilter.keepouts );
                 SetIfPresent( aVal, "dimensions", m_PcbSelectionFilter.dimensions );
+                SetIfPresent( aVal, "gridItems", m_PcbSelectionFilter.gridItems );
                 SetIfPresent( aVal, "otherItems", m_PcbSelectionFilter.otherItems );
             },
             {
@@ -168,6 +170,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 { "zones", true },
                 { "keepouts", true },
                 { "dimensions", true },
+                { "gridItems", true },
                 { "otherItems", true }
             } ) );
 

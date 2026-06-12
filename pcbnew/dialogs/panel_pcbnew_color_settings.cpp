@@ -725,6 +725,7 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( wxWindow* aParent, BOA
     m_validLayers.push_back( LAYER_DRC_HIGHLIGHTED );
     m_validLayers.push_back( NETNAMES_LAYER_ID_START );
     m_validLayers.push_back( LAYER_PAD_NETNAMES );
+    m_validLayers.push_back( LAYER_GRIDITEMS );
 
     // NOTE: Main board layers are added by createSwatches()
 

@@ -319,6 +319,9 @@ enum GAL_LAYER_ID: int
     /// Shadow layer for items bound to a constraint
     LAYER_CONSTRAINT_SHADOW  = GAL_LAYER_ID_START + 46,
 
+    /// Routing/placement grid items (PCB_GRIDITEM) visibility and color
+    LAYER_GRIDITEMS          = GAL_LAYER_ID_START + 47,
+
     // Add layers below this point that do not have visibility controls, so don't need explicit
     // enum values
 

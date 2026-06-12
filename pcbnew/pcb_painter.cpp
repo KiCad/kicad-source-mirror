@@ -3377,17 +3377,19 @@ void PCB_PAINTER::draw( const PCB_GRIDITEM* aGridItem, int aLayer )
 {
     // Grid content (lines/dots/crosses) is rendered by the GAL backend through
     // GRID_SOURCE (see PCB_DRAW_PANEL_GAL::prepareGridSources).  Only selection
-    // decorations - outline and centre marker - live here, on LAYER_ANCHOR.
+    // decorations - outline and centre marker - live here, on LAYER_GRIDITEMS.
     // The item is also registered on m_layer for VIEW::Query (selection); skip
     // those passes.
-    if( aLayer != LAYER_ANCHOR )
+    const bool shadow = aLayer == LAYER_LOCKED_ITEM_SHADOW; // happens only if locked
+
+    if( aLayer != LAYER_GRIDITEMS && !shadow )
         return;
 
-    if( !aGridItem->IsSelected() )
+    if( !shadow && !aGridItem->IsSelected() )
         return;
 
-    m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-    m_gal->SetStrokeColor( aGridItem->GetColor() );
+    m_gal->SetLineWidth( shadow ? m_lockedShadowMargin : m_pcbSettings.m_outlineWidth );
+    m_gal->SetStrokeColor( m_pcbSettings.GetColor( aGridItem, aLayer ) );
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
 
@@ -3426,6 +3428,12 @@ void PCB_PAINTER::draw( const PCB_GRIDITEM* aGridItem, int aLayer )
     }
 
     default: wxFAIL_MSG( wxT( "draw(PCB_GRIDITEM*): unhandled PCB_GRIDITEM_TYPE" ) ); break;
+    }
+
+    if( shadow )
+    {
+        m_gal->Restore();
+        return;
     }
 
     // Centre marker: screen-pixel-sized '+' cross in the LAYER_ANCHOR color, same

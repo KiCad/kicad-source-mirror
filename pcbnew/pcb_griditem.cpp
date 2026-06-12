@@ -29,6 +29,7 @@
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
 #include <trigo.h>
+#include <view/view.h>
 #include <i18n_utility.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>
@@ -81,7 +82,20 @@ GRID_GEOMETRY PCB_GRIDITEM::AsGridGeometry() const
 
 std::vector<int> PCB_GRIDITEM::ViewGetLayers() const
 {
-    return { LAYER_ANCHOR };
+    if( IsLocked() )
+        return { LAYER_GRIDITEMS, LAYER_LOCKED_ITEM_SHADOW };
+
+    return { LAYER_GRIDITEMS };
+}
+
+
+double PCB_GRIDITEM::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
+{
+    // Hide the locked shadow when grid items themselves are not shown
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW && !aView->IsLayerVisibleCached( LAYER_GRIDITEMS ) )
+        return LOD_HIDE;
+
+    return LOD_SHOW;
 }
 
 

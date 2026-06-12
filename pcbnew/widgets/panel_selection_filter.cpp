@@ -45,6 +45,7 @@ PANEL_SELECTION_FILTER::PANEL_SELECTION_FILTER( wxWindow* aParent ) :
     m_cbKeepouts->SetFont( font );
     m_cbDimensions->SetFont( font );
     m_cbPoints->SetFont( font );
+    m_cbGridItems->SetFont( font );
     m_cbOtherItems->SetFont( font );
     m_cbAllItems->SetFont( font );
 
@@ -67,6 +68,7 @@ PANEL_SELECTION_FILTER::PANEL_SELECTION_FILTER( wxWindow* aParent ) :
     m_cbKeepouts->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
     m_cbDimensions->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
     m_cbPoints->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
+    m_cbGridItems->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
     m_cbOtherItems->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
 
     m_frame->Bind( EDA_LANG_CHANGED, &PANEL_SELECTION_FILTER::OnLanguageChanged, this );
@@ -111,6 +113,7 @@ void PANEL_SELECTION_FILTER::SetCheckboxesFromFilter( PCB_SELECTION_FILTER_OPTIO
     m_cbKeepouts->SetValue( aOptions.keepouts );
     m_cbDimensions->SetValue( aOptions.dimensions );
     m_cbPoints->SetValue( aOptions.points );
+    m_cbGridItems->SetValue( aOptions.gridItems );
     m_cbOtherItems->SetValue( aOptions.otherItems );
 
     m_cbAllItems->SetValue( aOptions.All() );
@@ -135,6 +138,7 @@ void PANEL_SELECTION_FILTER::OnFilterChanged( wxCommandEvent& aEvent )
         m_cbKeepouts->SetValue( newState );
         m_cbDimensions->SetValue( newState );
         m_cbPoints->SetValue( newState );
+        m_cbGridItems->SetValue( newState );
         m_cbOtherItems->SetValue( newState );
     }
 
@@ -159,6 +163,7 @@ bool PANEL_SELECTION_FILTER::setFilterFromCheckboxes( PCB_SELECTION_FILTER_OPTIO
     aOptions.keepouts    = m_cbKeepouts->GetValue();
     aOptions.dimensions  = m_cbDimensions->GetValue();
     aOptions.points      = m_cbPoints->GetValue();
+    aOptions.gridItems = m_cbGridItems->GetValue();
     aOptions.otherItems  = m_cbOtherItems->GetValue();
 
     return aOptions.All();
@@ -203,6 +208,7 @@ void PANEL_SELECTION_FILTER::onPopupSelection( wxCommandEvent& aEvent )
     m_cbKeepouts->SetValue( false );
     m_cbDimensions->SetValue( false );
     m_cbPoints->SetValue( false );
+    m_cbGridItems->SetValue( false );
     m_cbOtherItems->SetValue( false );
 
     m_onlyCheckbox->SetValue( true );
@@ -228,6 +234,7 @@ void PANEL_SELECTION_FILTER::OnLanguageChanged( wxCommandEvent& aEvent )
     m_cbKeepouts->SetLabel( _( "Rule Areas" ) );
     m_cbDimensions->SetLabel( _( "Dimensions" ) );
     m_cbPoints->SetLabel( _( "Points" ) );
+    m_cbGridItems->SetLabel( _( "Grid Items" ) );
     m_cbOtherItems->SetLabel( _( "Other items" ) );
 
     m_cbAllItems->GetParent()->Layout();
@@ -357,6 +364,9 @@ void PANEL_SELECTION_FILTER::OnFlashEvent( PCB_SELECTION_FILTER_EVENT& aEvent )
 
     if( aOptions.points )
         flashCheckbox( m_cbPoints );
+
+    if( aOptions.gridItems )
+        flashCheckbox( m_cbGridItems );
 
     if( aOptions.otherItems )
         flashCheckbox( m_cbOtherItems );
