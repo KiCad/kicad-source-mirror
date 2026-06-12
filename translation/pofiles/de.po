@@ -37,7 +37,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
 "PO-Revision-Date: 2026-06-12 12:02+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -7485,9 +7485,8 @@ msgid "Corner Radius"
 msgstr "Eckradius"
 
 #: common/eda_shape.cpp:3546
-#, fuzzy
 msgid "Ellipse Rotation"
-msgstr "Ellipsen-Drehung"
+msgstr "Ellipsendrehung"
 
 #: common/eda_shape.cpp:3552
 msgid "Arc Start Angle"
@@ -8249,12 +8248,11 @@ msgid "Could not read 'FETCH_HEAD'"
 msgstr "Konnte \"FETCH_HEAD\" nicht lesen"
 
 #: common/git/libgit_backend.cpp:1180
-#, fuzzy
 msgid ""
 "Nothing to pull: the remote has no branch matching the current local branch."
 msgstr ""
-"Es gibt nichts abzurufen: der Remote hat keinen Branch, der zu dem "
-"aktuellen, lokalen Branch passt."
+"Es gibt nichts abzurufen: der Remote hat keinen Branch, der zum aktuellen, "
+"lokalen Branch passt."
 
 #: common/git/libgit_backend.cpp:1189
 msgid "Could not lookup commit"
@@ -19031,7 +19029,7 @@ msgstr "Netzklassenfarbe hervorheben"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:220
 msgid "Color highlight thickness:"
-msgstr "Farb-Hervorhebungsdicke:"
+msgstr "Farb-Hervorhebungsbreite:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:228
 msgid "Color highlight opacity:"
@@ -63620,12 +63618,10 @@ msgid "Total Length"
 msgstr "Gesamtlänge"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:132
-#, fuzzy
 msgid "Net Chain Delay"
 msgstr "Netzkettenverzögerung"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:137
-#, fuzzy
 msgid "Net Chain Length"
 msgstr "Netzkettenlänge"
 
@@ -63723,7 +63719,6 @@ msgid "Group by Netclass"
 msgstr "Nach Netzklasse gruppieren"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1383
-#, fuzzy
 msgid "Group by Net Chain"
 msgstr "Nach Netzkette gruppieren"
 
