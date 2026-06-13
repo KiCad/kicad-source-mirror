@@ -1,19 +1,21 @@
+# Stavro Mueller <stavr00@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-02-23 08:53+0100\n"
-"Last-Translator: \n"
-"Language-Team: jp-charras\n"
-"Language: fr_FR\n"
+"PO-Revision-Date: 2026-06-14 05:43+0000\n"
+"Last-Translator: Stavro Mueller <stavr00@gmail.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/kicad/master-"
+"source/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Basepath: ../../../git_dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
-"X-Generator: Poedit 3.5\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
 "X-Poedit-SearchPath-1: eeschema\n"
@@ -35,7 +37,7 @@ msgstr ""
 #: common/properties/pg_editors.cpp:643
 #: common/widgets/grid_text_button_helpers.cpp:255
 msgid "All Files"
-msgstr "Tous Fichiers"
+msgstr "Tous fichiers"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:343
 msgid "Build board outline"
@@ -161,8 +163,9 @@ msgstr "Chargement OpenGL, couche %s"
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1067
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:896
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2257
+#, fuzzy
 msgid "Loading 3D models..."
-msgstr "Chargement modèles 3D..."
+msgstr "Chargement des modèles 3D..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1078
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1077
@@ -221,8 +224,9 @@ msgstr "Rendu: shader de post traitement"
 #: common/eda_base_frame.cpp:1637 common/hotkey_store.cpp:80
 #: common/tool/actions.cpp:1270 pcbnew/footprint_chooser_frame.cpp:364
 #: pcbnew/footprint_viewer_frame.cpp:968 pcbnew/pcb_base_frame.cpp:689
+#, fuzzy
 msgid "3D Viewer"
-msgstr "Visu 3D"
+msgstr "Visualisation 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:76
 msgid "3D Grid"
@@ -239,8 +243,9 @@ msgid "Move Board"
 msgstr "Déplacer PCB"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:137
+#, fuzzy
 msgid "Reset to Default Settings"
-msgstr "Rétablir les Paramètres par Défaut"
+msgstr "Rétablir les paramètres d'origine"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:144
 #: bitmap2component/bitmap2cmp_frame.cpp:313 cvpcb/menubar.cpp:79
@@ -371,8 +376,9 @@ msgid "Can't save file"
 msgstr "Impossible de sauver le  fichier"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
+#, fuzzy
 msgid "Reload board"
-msgstr "Recharger Circuit Imprimé"
+msgstr "Recharger le circuit imprimé"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:49
 msgid "Reload board and refresh 3D view"
@@ -392,8 +398,10 @@ msgid "Show parts without 3D model"
 msgstr "Afficher pads en mode contour"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
+#, fuzzy
 msgid "Display a placeholder for footprints with missing 3D models"
 msgstr ""
+"Afficher un emplacement réservé pour les empreintes n'ayant pas de modèle 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:70
 msgid "Copy 3D image to clipboard"
@@ -1701,8 +1709,9 @@ msgid "Light 8:"
 msgstr "Lumière 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:521
+#, fuzzy
 msgid "3D Preview Options"
-msgstr "Options de Prévisualisation 3D"
+msgstr "Options de prévisualisation 3D"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:521
 msgid "Board thickness:"
@@ -1712,8 +1721,9 @@ msgstr "Epaisseur du PCB:"
 #: common/dialogs/dialog_print_generic_base.cpp:67 eeschema/sch_bitmap.cpp:245
 #: eeschema/sch_bitmap.cpp:367 pcbnew/pcb_reference_image.cpp:288
 #: pcbnew/pcb_reference_image.cpp:424
+#, fuzzy
 msgid "Scale"
-msgstr "Echelle"
+msgstr "Échelle"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:32
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:77
@@ -1806,8 +1816,9 @@ msgstr "Rechargement circuit et modèles 3D"
 #: bitmap2component/bitmap2cmp_frame.cpp:299
 #: bitmap2component/bitmap2cmp_frame.cpp:362
 #: kicad/tools/kicad_manager_actions.cpp:159
+#, fuzzy
 msgid "Image Converter"
-msgstr "Convertisseur d'Image"
+msgstr "Convertisseur d'image"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
@@ -1828,8 +1839,9 @@ msgstr "Ouvrir Récent"
 #: bitmap2component/bitmap2cmp_frame.cpp:289 eeschema/menubar.cpp:74
 #: include/file_history.h:54 pagelayout_editor/menubar.cpp:64
 #: pcbnew/menubar_pcb_editor.cpp:73
+#, fuzzy
 msgid "Clear Recent Files"
-msgstr "Effacer Liste Fichiers Récents"
+msgstr "Effacer la liste de fichiers récents"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:402
 #: eeschema/tools/sch_drawing_tools.cpp:1281
@@ -1890,8 +1902,9 @@ msgid "Errors"
 msgstr "Erreurs"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:589
+#, fuzzy
 msgid "Replace Loaded File?"
-msgstr "Remplacer Fichier Chargé ?"
+msgstr "Écraser le fichier chargé?"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:590
 msgid "There is already a file loaded. Do you want to replace it?"
@@ -1943,8 +1956,9 @@ msgid "bits"
 msgstr "bits"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:98
+#, fuzzy
 msgid "Load Source Image"
-msgstr "Charger Image Source"
+msgstr "Charger une image source"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:105
 msgid "Output Size"
@@ -2001,8 +2015,9 @@ msgstr "Négatif"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:159
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:56
+#, fuzzy
 msgid "Output Format"
-msgstr "Format de Sortie"
+msgstr "Format de sortie"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:166
 msgid "Symbol (.kicad_sym file)"
@@ -2071,8 +2086,9 @@ msgid "Drawing Sheet (.kicad_wks file)"
 msgstr "Feuille de dessin (fichier .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:200
+#, fuzzy
 msgid "Export to File..."
-msgstr "Export dans Fichier..."
+msgstr "Exporter au fichier..."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:203
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:164
@@ -59251,11 +59267,11 @@ msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:1209
 msgid "Items belong to the same net. Min clearance is 0."
-msgstr "Les objets appartiennent au même net. Isolation min est 0."
+msgstr "Les objets appartiennent au même net. Isolation min. est 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1223
 msgid "Min clearance is 0."
-msgstr "L'isolation min est 0."
+msgstr "L'isolation min. est 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1227
 #, c-format
@@ -59297,8 +59313,9 @@ msgid "Courtyard clearance resolution for:"
 msgstr "Résolution d'isolation de zone d'occupation pour:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1533
+#, fuzzy
 msgid "Physical Clearances"
-msgstr "Isolations Physiques"
+msgstr "Isolations physiques"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1574
 #, c-format
@@ -59347,8 +59364,9 @@ msgid "Resolved hole size constraints: min %s; opt %s; max %s."
 msgstr "Résolu contraintes de taille des trous: min %s ; opt %s ; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1778
+#, fuzzy
 msgid "Solder Mask"
-msgstr "Masque de Soudure"
+msgstr "Masque de soudure"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1779
 msgid "Solder mask expansion resolution for:"
@@ -59404,8 +59422,9 @@ msgid "Run DRC for a full analysis."
 msgstr "Exécuter DRC pour une analyse complète."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1878
+#, fuzzy
 msgid "Item <b>disallowed</b> at current location."
-msgstr "Élément <b>refusé<b> à l’emplacement actuel."
+msgstr "Élément <b>interdit</b> à l’emplacement actuel."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1880
 msgid "Item allowed at current location."
