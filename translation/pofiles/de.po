@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-13 08:09+0000\n"
+"PO-Revision-Date: 2026-06-13 08:32+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -9853,9 +9853,9 @@ msgid "The library table is of wrong type"
 msgstr "Die Bibliothekstabelle hat den falschen Typ"
 
 #: common/libraries/library_table.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Library table '%s' is read-only"
-msgstr "Bibliothekstabelle \"%s\" ist schreibgeschützt"
+msgstr "Bibliothek \"%s\" ist schreibgeschützt"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -62430,7 +62430,7 @@ msgstr "Designblock hat kein Layout das eingefügt werden könnte."
 #: pcbnew/tools/pcb_control.cpp:1493
 #, fuzzy
 msgid "No groups with a linked design block are selected."
-msgstr "Keine Gruppen mit einem verknüpften Designblock ausgewählt."
+msgstr "Es sind keine Gruppen mit verknüpftem Designblock ausgewählt."
 
 #: pcbnew/tools/pcb_control.cpp:1518 pcbnew/tools/pcb_selection_tool.cpp:4716
 msgid ""
@@ -62442,12 +62442,12 @@ msgstr ""
 #: pcbnew/tools/pcb_control.cpp:1541
 #, fuzzy
 msgid "Applying Design Block Layouts"
-msgstr "Designblock-Layout verwenden"
+msgstr "Designblock-Layouts verwenden"
 
 #: pcbnew/tools/pcb_control.cpp:1572
 #, fuzzy
 msgid "design block is not in the loaded libraries"
-msgstr "Designblock befindet sich nicht in den geladenen Bibliotheken"
+msgstr "Designblock ist in den geladenen Bibliotheken nicht vorhanden"
 
 #: pcbnew/tools/pcb_control.cpp:1578
 #, fuzzy
@@ -62457,7 +62457,7 @@ msgstr "Designblock hat kein gespeichertes PCB-Layout"
 #: pcbnew/tools/pcb_control.cpp:1609
 #, fuzzy
 msgid "could not load the design block's layout"
-msgstr "Konnte das Layout vom Designblock nicht laden"
+msgstr "Konnte das Layout des Designblocks nicht laden"
 
 #: pcbnew/tools/pcb_control.cpp:1636
 #, fuzzy
@@ -62465,10 +62465,12 @@ msgid "design block layout could not be loaded"
 msgstr "Designblock-Layout konnte nicht geladen werden"
 
 #: pcbnew/tools/pcb_control.cpp:1669
+#, fuzzy
 msgid "group has no footprints"
 msgstr "Gruppe hat keine Footprints"
 
 #: pcbnew/tools/pcb_control.cpp:1708
+#, fuzzy
 msgid "layout copy failed"
 msgstr "Layoutkopie gescheitert"
 
@@ -62490,15 +62492,15 @@ msgstr "Designblock-Layout auf %d Gruppe(n) anwenden"
 #: pcbnew/tools/pcb_control.cpp:1764
 #, fuzzy, c-format
 msgid "Applied design block layout to %d of %d group(s)."
-msgstr "Designblock-Layout auf %d von %d Gruppe(n) anwenden."
+msgstr "Designblock-Layout auf %d von %d Gruppe(n) angewendet."
 
 #: pcbnew/tools/pcb_control.cpp:1771
 #, fuzzy, c-format
 msgid ""
 "Skipped %d selected item(s) that are not groups linked to a design block."
 msgstr ""
-"%d ausgewählte(s) Element(e), die keine mit einem Designblock verknüpften "
-"Gruppen sind, wurde(n) übersprungen."
+"%d ausgewählte(s) Element(e) übersprungen, die keine mit einem Designblock "
+"verknüpften Gruppen sind."
 
 #: pcbnew/tools/pcb_control.cpp:1779
 #, fuzzy
