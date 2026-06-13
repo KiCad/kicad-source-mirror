@@ -28,12 +28,8 @@
 #include <gal/color4d.h>
 #include <layer_ids.h>
 
-#include <nlohmann/json_fwd.hpp>
+#include <json_common.h>
 #include <wx/string.h>
-
-#ifdef __WINDOWS__
-extern template class KICOMMON_API nlohmann::basic_json<>;
-#endif
 
 #include <cstdint>
 #include <functional>
