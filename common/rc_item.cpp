@@ -556,7 +556,7 @@ void RC_TREE_MODEL::ValueChanged( RC_TREE_NODE* aNode )
     if( marker )
     {
         bool          needsCommentNode = marker->IsExcluded() && !marker->GetComment().IsEmpty();
-        RC_TREE_NODE* commentNode = aNode->m_Children.back();
+        RC_TREE_NODE* commentNode = aNode->m_Children.empty() ? nullptr : aNode->m_Children.back();
 
         if( commentNode && commentNode->m_Type != RC_TREE_NODE::COMMENT )
             commentNode = nullptr;
