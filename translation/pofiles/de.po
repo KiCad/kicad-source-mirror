@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-13 08:32+0000\n"
+"PO-Revision-Date: 2026-06-13 08:33+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -9855,7 +9855,7 @@ msgstr "Die Bibliothekstabelle hat den falschen Typ"
 #: common/libraries/library_table.cpp:309
 #, c-format
 msgid "Library table '%s' is read-only"
-msgstr "Bibliothek \"%s\" ist schreibgeschützt"
+msgstr "Bibliothekstabelle \"%s\" ist schreibgeschützt"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
