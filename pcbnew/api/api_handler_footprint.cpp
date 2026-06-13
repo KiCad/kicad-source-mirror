@@ -335,6 +335,17 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_FOOTPRINT::handleGetItems(
             break;
         }
 
+        case PCB_FIELD_T:
+        {
+            handledAnything = true;
+
+            std::copy( footprint->GetFields().begin(), footprint->GetFields().end(),
+                       std::back_inserter( items ) );
+
+            typesInserted.insert( PCB_FIELD_T );
+            break;
+        }
+
         case PCB_SHAPE_T:
         case PCB_TEXT_T:
         case PCB_TEXTBOX_T:
