@@ -124,11 +124,8 @@ KICOMMON_API BOX2I UnpackBox2( const types::Box2& aInput )
 
 KICOMMON_API void PackPolyLine( types::PolyLine& aOutput, const SHAPE_LINE_CHAIN& aSlc )
 {
-    for( int vertex = 0; vertex < aSlc.PointCount(); vertex = aSlc.NextShape( vertex ) )
+    for( int vertex = 0; vertex < aSlc.PointCount(); ++vertex )
     {
-        if( vertex < 0 )
-            break;
-
         if( aSlc.IsArcStart( vertex ) )
         {
             types::PolyLineNode* node = aOutput.mutable_nodes()->Add();
