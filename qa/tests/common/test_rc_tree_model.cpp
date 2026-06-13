@@ -26,6 +26,7 @@
 #include <memory>
 
 #include <rc_item.h>
+#include <marker_base.h>
 
 
 class TEST_RC_TREE_MODEL : public RC_TREE_MODEL
@@ -49,12 +50,35 @@ public:
         return marker;
     }
 
+    RC_TREE_NODE* AddItemlessMarker( const std::shared_ptr<RC_ITEM>& aRcItem )
+    {
+        auto marker = createNode( nullptr, aRcItem, RC_TREE_NODE::MARKER );
+        m_tree.push_back( marker );
+        return marker;
+    }
+
     void DetachTopLevel( RC_TREE_NODE* aNode )
     {
         std::erase( m_tree, aNode );
         retireNodeTree( aNode );
         deleteNodeTree( aNode );
     }
+};
+
+
+// Concrete marker so the rc-item has a parent.
+class TEST_MARKER : public MARKER_BASE
+{
+public:
+    TEST_MARKER( std::shared_ptr<RC_ITEM> aItem ) :
+            MARKER_BASE( 0, std::move( aItem ) )
+    {
+    }
+
+    const KIID     GetUUID() const override { return m_uuid; }
+    KIGFX::COLOR4D getColor() const override { return KIGFX::COLOR4D(); }
+
+    KIID m_uuid;
 };
 
 
@@ -79,6 +103,29 @@ BOOST_AUTO_TEST_CASE( DetachedHandlesBehaveAsInvalid )
     BOOST_CHECK_EQUAL( model.GetChildren( staleMarker, children ), 0U );
     BOOST_CHECK( children.empty() );
     BOOST_CHECK( RC_TREE_MODEL::ToUUID( staleChild ) == niluuid );
+}
+
+
+BOOST_AUTO_TEST_CASE( ValueChangedItemlessMarkerDoesNotCrash )
+{
+    TEST_RC_TREE_MODEL model;
+
+    auto        rcItem = std::make_shared<RC_ITEM>(); // no items -> marker node has no children
+    TEST_MARKER marker( rcItem );
+    rcItem->SetParent( &marker );
+
+    RC_TREE_NODE* node = model.AddItemlessMarker( rcItem );
+    BOOST_REQUIRE( node->m_Children.empty() );
+
+    // Used to call vector::back() on the empty child list here and crash.
+    model.ValueChanged( node );
+
+    // Excluding with a comment must append a comment node even though there were no children.
+    marker.SetExcluded( true, wxT( "excluded" ) );
+    model.ValueChanged( node );
+
+    BOOST_REQUIRE_EQUAL( node->m_Children.size(), 1u );
+    BOOST_CHECK( node->m_Children[0]->m_Type == RC_TREE_NODE::COMMENT );
 }
 
 
