@@ -315,6 +315,12 @@ public:
     bool operator==( const SCH_ITEM& aItem ) const override;
     bool operator==( const SCH_FIELD& aItem ) const;
 
+    /**
+     * Test if this field has the same name, content and presentation as another field,
+     * ignoring the owning item and ordinal that operator== compares.
+     */
+    bool HasSameContent( const SCH_FIELD& aOther ) const;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
