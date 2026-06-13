@@ -53,6 +53,10 @@ public:
     virtual bool CanAcceptApiCommands() const = 0;
 
     virtual std::optional<SCH_SHEET_PATH> GetCurrentSheet() const = 0;
+
+    virtual bool SaveSchematic() = 0;
+
+    virtual bool SaveSchematicCopy( const wxString& aFileName, bool aCreateProject ) = 0;
 };
 
 

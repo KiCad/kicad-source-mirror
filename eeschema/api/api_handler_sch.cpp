@@ -41,6 +41,8 @@
 #include <sch_sheet_pin.h>
 #include <sch_symbol.h>
 #include <schematic.h>
+#include <project.h>
+#include <wildcards_and_files_ext.h>
 #include <wx/filename.h>
 
 #include <api/common/types/base_types.pb.h>
@@ -113,6 +115,11 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
 
     registerHandler<GetOpenDocuments, GetOpenDocumentsResponse>(
             &API_HANDLER_SCH::handleGetOpenDocuments );
+    registerHandler<SaveDocument, google::protobuf::Empty>(
+            &API_HANDLER_SCH::handleSaveDocument );
+    registerHandler<SaveCopyOfDocument, google::protobuf::Empty>(
+            &API_HANDLER_SCH::handleSaveCopyOfDocument );
+
     registerHandler<GetItems, GetItemsResponse>( &API_HANDLER_SCH::handleGetItems );
     registerHandler<GetItemsById, GetItemsResponse>( &API_HANDLER_SCH::handleGetItemsById );
 
@@ -212,6 +219,85 @@ API_HANDLER_SCH::validateDocumentInternal( const DocumentSpecifier& aDocument ) 
     }
 
     return true;
+}
+
+
+HANDLER_RESULT<google::protobuf::Empty> API_HANDLER_SCH::handleSaveDocument( const HANDLER_CONTEXT<SaveDocument>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    if( !context()->SaveSchematic() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "failed to save schematic" );
+        return tl::unexpected( e );
+    }
+
+    return google::protobuf::Empty();
+}
+
+
+HANDLER_RESULT<google::protobuf::Empty>
+API_HANDLER_SCH::handleSaveCopyOfDocument( const HANDLER_CONTEXT<SaveCopyOfDocument>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    wxFileName schematicPath( project().AbsolutePath( wxString::FromUTF8( aCtx.Request.path() ) ) );
+
+    if( !schematicPath.IsOk() || !schematicPath.IsDirWritable() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message(
+                fmt::format( "save path '{}' could not be opened", schematicPath.GetFullPath().ToStdString() ) );
+        return tl::unexpected( e );
+    }
+
+    if( schematicPath.FileExists() && ( !schematicPath.IsFileWritable() || !aCtx.Request.options().overwrite() ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "save path '{}' exists and cannot be overwritten",
+                                          schematicPath.GetFullPath().ToStdString() ) );
+        return tl::unexpected( e );
+    }
+
+    if( schematicPath.GetExt() != FILEEXT::KiCadSchematicFileExtension )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "save path '{}' must have a kicad_sch extension",
+                                          schematicPath.GetFullPath().ToStdString() ) );
+        return tl::unexpected( e );
+    }
+
+    bool includeProject = true;
+
+    if( aCtx.Request.has_options() )
+        includeProject = aCtx.Request.options().include_project();
+
+    if( !context()->SaveSchematicCopy( schematicPath.GetFullPath(), includeProject ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "failed to save schematic copy" );
+        return tl::unexpected( e );
+    }
+
+    return google::protobuf::Empty();
 }
 
 

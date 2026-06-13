@@ -24,6 +24,8 @@
 #include <api/api_handler_editor.h>
 #include <api/sch_context.h>
 #include <api/common/commands/editor_commands.pb.h>
+#include <api/common/commands/project_commands.pb.h>
+#include <google/protobuf/empty.pb.h>
 #include <api/schematic/schematic_commands.pb.h>
 #include <api/schematic/schematic_jobs.pb.h>
 #include <kiid.h>
@@ -88,7 +90,15 @@ protected:
 
     TOOL_MANAGER* toolManager() const { return context()->GetToolManager(); }
 
+    PROJECT& project() const { return context()->Prj(); }
+
 private:
+    HANDLER_RESULT<google::protobuf::Empty> handleSaveDocument(
+            const HANDLER_CONTEXT<commands::SaveDocument>& aCtx );
+
+    HANDLER_RESULT<google::protobuf::Empty> handleSaveCopyOfDocument(
+            const HANDLER_CONTEXT<commands::SaveCopyOfDocument>& aCtx );
+
     HANDLER_RESULT<commands::GetOpenDocumentsResponse>
     handleGetOpenDocuments( const HANDLER_CONTEXT<commands::GetOpenDocuments>& aCtx );
 

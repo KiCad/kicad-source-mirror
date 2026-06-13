@@ -19,6 +19,7 @@
  */
 
 #include <api/sch_context.h>
+#include <api/sch_api_save.h>
 
 #include <sch_edit_frame.h>
 
@@ -64,6 +65,16 @@ public:
     std::optional<SCH_SHEET_PATH> GetCurrentSheet() const override
     {
         return m_frame->GetCurrentSheet();
+    }
+
+    bool SaveSchematic() override
+    {
+        return SCH_API_SAVE::SaveSchematic( m_frame->Schematic(), m_frame->Prj() );
+    }
+
+    bool SaveSchematicCopy( const wxString& aFileName, bool aCreateProject ) override
+    {
+        return SCH_API_SAVE::SaveSchematicCopy( m_frame->Schematic(), m_frame->Prj(), aFileName, aCreateProject );
     }
 
 private:

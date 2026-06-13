@@ -54,6 +54,10 @@ public:
 
     std::optional<SCH_SHEET_PATH> GetCurrentSheet() const override { return std::nullopt; }
 
+    bool SaveSchematic() override;
+
+    bool SaveSchematicCopy( const wxString& aFileName, bool aCreateProject ) override;
+
 private:
     // All owned by caller (the kiface)
     SCHEMATIC*                    m_schematic;

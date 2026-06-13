@@ -512,6 +512,7 @@ if( KICAD_IPC_API )
         ${EESCHEMA_SRCS}
         api/api_handler_sch.cpp
         api/headless_sch_context.cpp
+        api/sch_api_save.cpp
         api/sch_context.cpp
     )
 endif()
