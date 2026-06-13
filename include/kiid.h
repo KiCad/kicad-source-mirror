@@ -108,6 +108,27 @@ public:
     static KIID Combine( const KIID& aFirst, const KIID& aSecond );
 
     /**
+     * Build a deterministic UUID from an arbitrary name string.
+     *
+     * The same input always yields the same UUID, and distinct inputs almost
+     * always yield distinct UUIDs. This is useful for keying objects that have
+     * a stable name but no native UUID (e.g. library symbols / footprints,
+     * which are file-name keyed rather than UUID keyed) so that two callsites
+     * derive the identical id for the same name.
+     *
+     * The output bytes are part of the diff/merge engine's on-disk contract;
+     * the hashing here must not change once persisted artifacts depend on it.
+     *
+     * Hashing is over wxChar code units, so for non-ASCII input the result
+     * differs between platforms with 16-bit vs 32-bit wxChar (Windows vs
+     * Linux/macOS); do not rely on cross-platform stability for non-ASCII names.
+     *
+     * @param aName the source string to hash.
+     * @return a deterministic KIID derived from @p aName.
+     */
+    static KIID FromDeterministicString( const wxString& aName );
+
+    /**
      * Generates a deterministic replacement for a given ID.
      *
      * NB: destroys uniform distribution!  But it's the only thing we have when a deterministic

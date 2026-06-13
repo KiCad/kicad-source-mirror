@@ -516,11 +516,20 @@ set( PCBNEW_GIT_SRCS
     git/kigit_pcb_merge.cpp
     )
 
+set( PCBNEW_DIFF_MERGE_SRCS
+    diff_merge/pcb_differ.cpp
+    diff_merge/pcb_merge_applier.cpp
+    diff_merge/fp_lib_differ.cpp
+    diff_merge/pcb_geometry_extractor.cpp
+    diff_merge/pcb_diff_canvas_context.cpp
+    )
+
 set( PCBNEW_SRCS
     ${PCBNEW_MICROWAVE_SRCS}
     ${PCBNEW_CLASS_SRCS}
     ${PCBNEW_DIALOGS}
     ${PCBNEW_GIT_SRCS}
+    ${PCBNEW_DIFF_MERGE_SRCS}
     )
 
 #extra sources from common

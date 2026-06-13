@@ -448,6 +448,9 @@ bool BOARD_STACKUP::operator==( const BOARD_STACKUP& aOther ) const
     if( m_EdgePlating              != aOther.m_EdgePlating ) return false;
     if( m_FinishType               != aOther.m_FinishType ) return false;
 
+    if( m_list.size() != aOther.m_list.size() )
+        return false;
+
     if( !std::equal( std::begin( m_list ), std::end( m_list ), std::begin( aOther.m_list ),
                      []( const BOARD_STACKUP_ITEM* aA, const BOARD_STACKUP_ITEM* aB )
                      {

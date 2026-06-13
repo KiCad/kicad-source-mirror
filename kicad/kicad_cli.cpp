@@ -39,7 +39,7 @@
 
 #include <cctype>
 #include <set>
-#include <stdexcept>
+#include <cstdlib>
 
 #include "pgm_kicad.h"
 #include "kicad_manager_frame.h"
@@ -56,7 +56,13 @@
 #include "cli/command_jobset_run.h"
 #include "cli/command_pcb.h"
 #include "cli/command_pcb_export.h"
+#include "cli/command_fp_diff.h"
+#include "cli/command_pcb_diff.h"
 #include "cli/command_pcb_drc.h"
+#include "cli/command_mergetool.h"
+#include "cli/command_git_mergedriver.h"
+#include "cli/command_sch_diff.h"
+#include "cli/command_sym_diff.h"
 #include "cli/command_pcb_render.h"
 #include "cli/command_pcb_export_3d.h"
 #include "cli/command_pcb_export_drill.h"
@@ -117,9 +123,11 @@ KIFACE_BASE& Kiface()
     // This function should never be called.  It is only referenced from
     // EDA_BASE_FRAME::config() and this is only provided to satisfy the linker,
     // not to be actually called.
-    wxLogFatalError( wxT( "Unexpected call to Kiface() in kicad/kicad.cpp" ) );
-
-    throw std::logic_error( "Unexpected call to Kiface() in kicad/kicad.cpp" );
+    wxFprintf( stderr,
+               wxT( "Unexpected call to Kiface() in kicad/kicad_cli.cpp — a "
+                    "code path is reaching into a kiface stub from the CLI "
+                    "process. Re-run with KICAD_TRACE=KICAD for a backtrace.\n" ) );
+    std::abort();
 }
 
 
@@ -139,7 +147,10 @@ struct COMMAND_ENTRY
 static CLI::JOBSET_COMMAND               jobsetCmd{};
 static CLI::JOBSET_RUN_COMMAND           jobsetRunCmd{};
 static CLI::PCB_COMMAND                  pcbCmd{};
+static CLI::PCB_DIFF_COMMAND             pcbDiffCmd{};
 static CLI::PCB_DRC_COMMAND              pcbDrcCmd{};
+static CLI::MERGETOOL_COMMAND            mergetoolCmd{};
+static CLI::GIT_MERGEDRIVER_COMMAND      gitMergeDriverCmd{};
 static CLI::PCB_RENDER_COMMAND           pcbRenderCmd{};
 static CLI::PCB_UPGRADE_COMMAND          pcbUpgradeCmd{};
 static CLI::PCB_IMPORT_COMMAND           pcbImportCmd{};
@@ -180,6 +191,7 @@ static CLI::PCB_EXPORT_ODB_COMMAND       exportPcbOdbCmd{};
 static CLI::PCB_EXPORT_COMMAND           exportPcbCmd{};
 static CLI::SCH_EXPORT_COMMAND           exportSchCmd{};
 static CLI::SCH_COMMAND                  schCmd{};
+static CLI::SCH_DIFF_COMMAND             schDiffCmd{};
 static CLI::SCH_ERC_COMMAND              schErcCmd{};
 static CLI::SCH_UPGRADE_COMMAND          schUpgradeCmd{};
 static CLI::SCH_EXPORT_BOM_COMMAND       exportSchBomCmd{};
@@ -198,10 +210,12 @@ static CLI::SCH_EXPORT_PLOT_COMMAND exportSchSvgCmd{ "svg", UTF8STDSTR( _( "Expo
 static CLI::SCH_EXPORT_PLOT_COMMAND exportSchPngCmd{ "png", UTF8STDSTR( _( "Export PNG" ) ), SCH_PLOT_FORMAT::PNG,
                                                      CLI::COMMAND::IO_TYPE::DIRECTORY };
 static CLI::FP_COMMAND              fpCmd{};
+static CLI::FP_DIFF_COMMAND         fpDiffCmd{};
 static CLI::FP_EXPORT_COMMAND       fpExportCmd{};
 static CLI::FP_EXPORT_SVG_COMMAND   fpExportSvgCmd{};
 static CLI::FP_UPGRADE_COMMAND      fpUpgradeCmd{};
 static CLI::SYM_COMMAND             symCmd{};
+static CLI::SYM_DIFF_COMMAND        symDiffCmd{};
 static CLI::SYM_EXPORT_COMMAND      symExportCmd{};
 static CLI::SYM_EXPORT_SVG_COMMAND  symExportSvgCmd{};
 static CLI::SYM_UPGRADE_COMMAND     symUpgradeCmd{};
@@ -230,6 +244,9 @@ static std::vector<COMMAND_ENTRY> commandStack = {
         &fpCmd,
         {
             {
+                &fpDiffCmd
+            },
+            {
                 &fpExportCmd,
                 {
                     &fpExportSvgCmd
@@ -243,6 +260,9 @@ static std::vector<COMMAND_ENTRY> commandStack = {
     {
         &pcbCmd,
         {
+            {
+                &pcbDiffCmd
+            },
             {
                 &pcbDrcCmd
             },
@@ -290,6 +310,9 @@ static std::vector<COMMAND_ENTRY> commandStack = {
         &schCmd,
         {
             {
+                &schDiffCmd
+            },
+            {
                 &schErcCmd
             },
             {
@@ -314,6 +337,9 @@ static std::vector<COMMAND_ENTRY> commandStack = {
     {
         &symCmd,
         {
+            {
+                &symDiffCmd
+            },
             {
                 &symExportCmd,
                 {
@@ -343,6 +369,14 @@ static std::vector<COMMAND_ENTRY> commandStack = {
                 &gerberDiffCmd
             }
         }
+    },
+    {
+        &mergetoolCmd,
+    },
+    {
+        // Hidden from --help (set_suppress); invoked by git via the
+        // merge.kicad-*.driver config, not by users.
+        &gitMergeDriverCmd,
     },
     {
         &versionCmd,

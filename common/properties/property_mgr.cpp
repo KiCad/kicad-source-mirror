@@ -36,9 +36,7 @@ static const std::map<PROPERTY_BASE*, int> EMPTY_PROP_DISPLAY_ORDER;
 std::vector<wxString>                      EMPTY_GROUP_DISPLAY_ORDER;
 
 
-PROPERTY_MANAGER::~PROPERTY_MANAGER()
-{
-}
+PROPERTY_MANAGER::~PROPERTY_MANAGER() noexcept = default;
 
 
 void PROPERTY_MANAGER::RegisterType( TYPE_ID aType, const wxString& aName )
@@ -297,9 +295,16 @@ PROPERTY_MANAGER::CLASS_DESC& PROPERTY_MANAGER::getClass( TYPE_ID aTypeId )
 }
 
 
-PROPERTY_MANAGER::CLASS_DESC::~CLASS_DESC()
+PROPERTY_MANAGER::CLASS_DESC::CLASS_DESC( TYPE_ID aId ) :
+        m_id( aId )
 {
+    m_groupDisplayOrder.emplace_back( wxEmptyString );
+    m_groups.insert( wxEmptyString );
 }
+
+
+PROPERTY_MANAGER::CLASS_DESC::~CLASS_DESC() noexcept = default;
+PROPERTY_MANAGER::CLASS_DESC::CLASS_DESC( CLASS_DESC&& ) noexcept = default;
 
 
 void PROPERTY_MANAGER::CLASS_DESC::rebuild()
@@ -429,7 +434,7 @@ void PROPERTY_MANAGER::PropertyChanged( INSPECTABLE* aObject, PROPERTY_BASE* aPr
 
                 if( listeners != m_listeners.end() )
                 {
-                    for( const PROPERTY_LISTENER& listener : listeners->second )
+                    for( const auto& [ handle, listener ] : listeners->second )
                         listener( aObject, aProperty, m_managedCommit );
                 }
             };
@@ -458,4 +463,59 @@ PROPERTY_COMMIT_HANDLER::~PROPERTY_COMMIT_HANDLER()
                   wxT( "Something went wrong: m_managedCommit already null!" ) );
 
     PROPERTY_MANAGER::Instance().m_managedCommit = nullptr;
+}
+
+
+PROPERTY_LISTENER_SUBSCRIPTION
+PROPERTY_MANAGER::RegisterListener( TYPE_ID aType, PROPERTY_LISTENER aListenerFunc )
+{
+    PROPERTY_LISTENER_HANDLE handle = ++m_nextListenerHandle;
+    m_listeners[aType].emplace_back( handle, std::move( aListenerFunc ) );
+    return { aType, handle };
+}
+
+
+void PROPERTY_MANAGER::UnregisterListener( TYPE_ID aType, PROPERTY_LISTENER_HANDLE aHandle )
+{
+    auto it = m_listeners.find( aType );
+
+    if( it == m_listeners.end() )
+        return;
+
+    auto& vec = it->second;
+    vec.erase( std::remove_if( vec.begin(), vec.end(),
+                               [aHandle]( const auto& aPair )
+                               { return aPair.first == aHandle; } ),
+               vec.end() );
+}
+
+
+PROPERTY_LISTENER_SUBSCRIPTION::~PROPERTY_LISTENER_SUBSCRIPTION()
+{
+    reset();
+}
+
+
+PROPERTY_LISTENER_SUBSCRIPTION&
+PROPERTY_LISTENER_SUBSCRIPTION::operator=( PROPERTY_LISTENER_SUBSCRIPTION&& aOther ) noexcept
+{
+    if( this != &aOther )
+    {
+        reset();
+        m_type          = aOther.m_type;
+        m_handle        = aOther.m_handle;
+        aOther.m_handle = 0;
+    }
+
+    return *this;
+}
+
+
+void PROPERTY_LISTENER_SUBSCRIPTION::reset()
+{
+    if( m_handle )
+    {
+        PROPERTY_MANAGER::Instance().UnregisterListener( m_type, m_handle );
+        m_handle = 0;
+    }
 }

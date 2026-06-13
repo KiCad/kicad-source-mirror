@@ -369,6 +369,14 @@ set( EESCHEMA_ERC_SRCS
     erc/erc_settings.cpp
     )
 
+set( EESCHEMA_DIFF_MERGE_SRCS
+    diff_merge/sch_differ.cpp
+    diff_merge/sch_geometry_extractor.cpp
+    diff_merge/sch_diff_canvas_context.cpp
+    diff_merge/sch_merge_applier.cpp
+    diff_merge/sym_lib_differ.cpp
+    )
+
 set( EESCHEMA_SRCS
     ${EESCHEMA_DLGS}
     ${EESCHEMA_ERC_SRCS}
@@ -378,6 +386,7 @@ set( EESCHEMA_SRCS
     ${EESCHEMA_WIDGETS}
     ${EESCHEMA_IMPORT_GFX}
     ${SYNC_SHEET_PIN_SRCS}
+    ${EESCHEMA_DIFF_MERGE_SRCS}
     annotate.cpp
     autoplace_fields.cpp
     bom_plugins.cpp

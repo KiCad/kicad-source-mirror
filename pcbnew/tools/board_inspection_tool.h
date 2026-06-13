@@ -94,6 +94,12 @@ public:
     int DiffFootprint( const TOOL_EVENT& aEvent );
     void DiffFootprint( FOOTPRINT* aFootprint, wxTopLevelWindow* aReparentTo = nullptr );
 
+    /// Diff the current board against a user-selected .kicad_pcb file.
+    int CompareBoardWithFile( const TOOL_EVENT& aEvent );
+
+    /// Diff the current board against the most recent local-history commit.
+    int CompareBoardWithHistory( const TOOL_EVENT& aEvent );
+
     /**
      * @return true if a net or nets to highlight have been set
      */
@@ -105,6 +111,10 @@ public:
     wxString m_highlightedNetChain;
 
 private:
+    /// Diff the board at aOtherPath against the live one and show the dialog.
+    int showBoardComparison( const wxString& aOtherPath, const wxString& aProjectPath,
+                             const wxString& aComparisonLabel );
+
     ///< Recalculate dynamic ratsnest for the current selection.
     void calculateSelectionRatsnest( const VECTOR2I& aDelta );
 

@@ -2815,3 +2815,176 @@ std::vector<LOCAL_HISTORY_SNAPSHOT_INFO> LOCAL_HISTORY::LoadSnapshots( const wxS
     git_repository_free( repo );
     return snapshots;
 }
+
+
+std::vector<LOCAL_HISTORY_SNAPSHOT_INFO> LOCAL_HISTORY::GetSnapshots( const wxString& aProjectPath )
+{
+    return LoadSnapshots( aProjectPath );
+}
+
+
+wxString LOCAL_HISTORY::TreeFingerprint( const wxString& aProjectPath, const wxString& aHash,
+                                         const wxString& aExtension )
+{
+    wxString        hist = historyPath( aProjectPath );
+    git_repository* repo = nullptr;
+
+    if( git_repository_open( &repo, hist.mb_str().data() ) != 0 )
+        return wxEmptyString;
+
+    git_oid     oid;
+    git_commit* commit = nullptr;
+    git_tree*   tree = nullptr;
+
+    if( git_oid_fromstr( &oid, aHash.mb_str().data() ) != 0 || git_commit_lookup( &commit, repo, &oid ) != 0 )
+    {
+        git_repository_free( repo );
+        return wxEmptyString;
+    }
+
+    if( git_commit_tree( &tree, commit ) != 0 )
+    {
+        git_commit_free( commit );
+        git_repository_free( repo );
+        return wxEmptyString;
+    }
+
+    struct WALK_CTX
+    {
+        wxString              ext;
+        std::vector<wxString> entries;
+    } ctx{ aExtension, {} };
+
+    auto collect = []( const char* aRoot, const git_tree_entry* aEntry, void* aPayload ) -> int
+    {
+        WALK_CTX* c = static_cast<WALK_CTX*>( aPayload );
+
+        if( git_tree_entry_type( aEntry ) != GIT_OBJECT_BLOB )
+            return 0;
+
+        wxString name = wxString::FromUTF8( git_tree_entry_name( aEntry ) );
+
+        if( !name.EndsWith( c->ext ) )
+            return 0;
+
+        wxString path = wxString::FromUTF8( aRoot ) + name;
+        c->entries.push_back( path + wxS( ":" )
+                              + wxString::FromUTF8( git_oid_tostr_s( git_tree_entry_id( aEntry ) ) ) );
+        return 0;
+    };
+
+    git_tree_walk( tree, GIT_TREEWALK_PRE, collect, &ctx );
+
+    git_tree_free( tree );
+    git_commit_free( commit );
+    git_repository_free( repo );
+
+    std::sort( ctx.entries.begin(), ctx.entries.end() );
+
+    wxString fingerprint;
+
+    for( const wxString& entry : ctx.entries )
+        fingerprint << entry << wxS( "|" );
+
+    return fingerprint;
+}
+
+
+bool LOCAL_HISTORY::ExtractAllFilesAtCommit( const wxString& aProjectPath, const wxString& aHash,
+                                             const wxString& aDestDir, const std::vector<wxString>& aExtensions )
+{
+    wxString        hist = historyPath( aProjectPath );
+    git_repository* repo = nullptr;
+
+    if( git_repository_open( &repo, hist.mb_str().data() ) != 0 )
+        return false;
+
+    git_oid     oid;
+    git_commit* commit = nullptr;
+    git_tree*   tree = nullptr;
+
+    if( git_oid_fromstr( &oid, aHash.mb_str().data() ) != 0 || git_commit_lookup( &commit, repo, &oid ) != 0 )
+    {
+        git_repository_free( repo );
+        return false;
+    }
+
+    if( git_commit_tree( &tree, commit ) != 0 )
+    {
+        git_commit_free( commit );
+        git_repository_free( repo );
+        return false;
+    }
+
+    struct WALK_CTX
+    {
+        git_repository*              repo;
+        wxString                     destDir;
+        const std::vector<wxString>* extensions;
+        bool                         ok;
+    } ctx{ repo, aDestDir, &aExtensions, true };
+
+    // Non-capturing so it converts to the libgit2 C callback; state goes via payload.
+    auto writeEntry = []( const char* aRoot, const git_tree_entry* aEntry, void* aPayload ) -> int
+    {
+        WALK_CTX* c = static_cast<WALK_CTX*>( aPayload );
+
+        if( git_tree_entry_type( aEntry ) != GIT_OBJECT_BLOB )
+            return 0;
+
+        wxString name = wxString::FromUTF8( git_tree_entry_name( aEntry ) );
+
+        if( !c->extensions->empty() )
+        {
+            bool match = false;
+
+            for( const wxString& ext : *c->extensions )
+            {
+                if( name.EndsWith( ext ) )
+                {
+                    match = true;
+                    break;
+                }
+            }
+
+            if( !match )
+                return 0;
+        }
+
+        wxString   rel = wxString::FromUTF8( aRoot ) + name;
+        wxFileName outFn( c->destDir + wxS( "/" ) + rel );
+
+        if( !wxFileName::Mkdir( outFn.GetPath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+        {
+            c->ok = false;
+            return 0;
+        }
+
+        git_blob* blob = nullptr;
+
+        if( git_blob_lookup( &blob, c->repo, git_tree_entry_id( aEntry ) ) == 0 )
+        {
+            const void*  data = git_blob_rawcontent( blob );
+            const size_t size = static_cast<size_t>( git_blob_rawsize( blob ) );
+            wxFFile      out( outFn.GetFullPath(), wxS( "wb" ) );
+
+            if( !( data && out.IsOpened() && out.Write( data, size ) == size ) )
+                c->ok = false;
+
+            git_blob_free( blob );
+        }
+        else
+        {
+            c->ok = false;
+        }
+
+        return 0;
+    };
+
+    git_tree_walk( tree, GIT_TREEWALK_PRE, writeEntry, &ctx );
+
+    git_tree_free( tree );
+    git_commit_free( commit );
+    git_repository_free( repo );
+    return ctx.ok;
+}

@@ -24,8 +24,20 @@
 #include "tools/board_inspection_tool.h"
 
 #include <bitmaps.h>
+#include <board_loader.h>
 #include <collectors.h>
+#include <dialogs/dialog_kicad_diff.h>
+#include <diff_merge/pcb_diff_canvas_context.h>
+#include <diff_merge/pcb_geometry_extractor.h>
+#include <diff_merge/pcb_differ.h>
 #include <footprint.h>
+#include <pcb_io/pcb_io_mgr.h>
+#include <settings/settings_manager.h>
+#include <kiway.h>
+#include <local_history.h>
+#include <wildcards_and_files_ext.h>
+#include <wx/filedlg.h>
+#include <wx/filename.h>
 #include <pcb_group.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
@@ -1935,6 +1947,464 @@ int BOARD_INSPECTION_TOOL::DiffFootprint( const TOOL_EVENT& aEvent )
 }
 
 
+int BOARD_INSPECTION_TOOL::CompareBoardWithFile( const TOOL_EVENT& aEvent )
+{
+    wxCHECK( m_frame, 0 );
+
+    wxFileDialog dlg( m_frame, _( "Choose Board to Compare With" ), wxEmptyString,
+                      wxEmptyString, FILEEXT::PcbFileWildcard(),
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return 0;
+
+    wxFileName otherFn( dlg.GetPath() );
+    otherFn.MakeAbsolute();
+
+    const wxString otherPath = otherFn.GetFullPath();
+
+    wxFileName projectFn = otherFn;
+    projectFn.SetExt( FILEEXT::ProjectFileExtension );
+    const wxString projectPath = projectFn.GetFullPath();
+
+    wxFileName activeProjectFn( m_frame->Prj().GetProjectFullName() );
+    activeProjectFn.MakeAbsolute();
+
+    // Refuse the self-compare before touching SETTINGS_MANAGER — attaching the
+    // active PROJECT to a second BOARD would clobber its m_BoardSettings.  Use
+    // wxFileName::SameAs (path normalization + case folding) rather than a raw
+    // string compare, matching SCH_INSPECTION_TOOL::CompareSchematic.
+    if( projectFn.SameAs( activeProjectFn ) )
+    {
+        m_frame->ShowInfoBarError(
+                _( "Select a board file from another project to compare." ) );
+        return 0;
+    }
+
+    return showBoardComparison( otherPath, projectPath, otherPath );
+}
+
+
+namespace
+{
+// Everything needed to show one board-vs-board comparison: the diff, the clones
+// of removed live-board items (kept alive because the canvas references them),
+// and the canvas-context switcher. Moveable so it can be swapped on reload.
+struct PCB_DIFF_VIEW
+{
+    KICAD_DIFF::DOCUMENT_DIFF                result;
+    std::vector<std::unique_ptr<BOARD_ITEM>> clones;
+    DIALOG_KICAD_DIFF::SHEET_SWITCHER        switcher;
+};
+
+
+PCB_DIFF_VIEW buildPcbDiffView( BOARD* aLive, BOARD* aOther, const wxString& aOtherPath )
+{
+    PCB_DIFF_VIEW view;
+
+    KICAD_DIFF::PCB_DIFFER differ( aLive, aOther, aOtherPath );
+    view.result = differ.Diff();
+
+    const KICAD_DIFF::DIFF_COLOR_THEME theme;
+
+    std::map<KIID, KIGFX::COLOR4D>       refOverrides;
+    std::map<KIID, KIGFX::COLOR4D>       compOverrides;
+    std::map<KIID, KICAD_DIFF::CATEGORY> kiidCategories;
+
+    std::function<void( const KICAD_DIFF::ITEM_CHANGE& )> collect = [&]( const KICAD_DIFF::ITEM_CHANGE& aChange )
+    {
+        if( !aChange.id.empty() )
+        {
+            const KIID& kiid = aChange.id.back();
+            kiidCategories[kiid] = KICAD_DIFF::CategoryFor( aChange.kind );
+
+            switch( aChange.kind )
+            {
+            case KICAD_DIFF::CHANGE_KIND::ADDED: compOverrides[kiid] = theme.added; break;
+            case KICAD_DIFF::CHANGE_KIND::REMOVED:
+                refOverrides[kiid] = theme.removed;
+                compOverrides[kiid] = theme.removed;
+                break;
+            case KICAD_DIFF::CHANGE_KIND::MODIFIED:
+                refOverrides[kiid] = theme.modified;
+                compOverrides[kiid] = theme.modified;
+                break;
+            default:
+                refOverrides[kiid] = theme.conflict;
+                compOverrides[kiid] = theme.conflict;
+                break;
+            }
+        }
+
+        for( const KICAD_DIFF::ITEM_CHANGE& child : aChange.children )
+            collect( child );
+    };
+
+    for( const KICAD_DIFF::ITEM_CHANGE& change : view.result.changes )
+        collect( change );
+
+    // Clone removed items from the live board because their originals are
+    // pinned to the editor's VIEW.
+    for( const auto& [kiid, color] : refOverrides )
+    {
+        if( color != theme.removed )
+            continue;
+
+        if( BOARD_ITEM* found = aLive->ResolveItem( kiid, /*aAllowNullptrReturn=*/true ) )
+        {
+            if( auto* clone = dynamic_cast<BOARD_ITEM*>( found->Clone() ) )
+                view.clones.emplace_back( clone );
+        }
+    }
+
+    std::vector<KIGFX::VIEW_ITEM*> extraItems;
+
+    for( const auto& clone : view.clones )
+        extraItems.push_back( clone.get() );
+
+    view.switcher = [other = aOther, color = theme.modified, overrides = compOverrides,
+                     extras = std::move( extraItems ),
+                     categories = kiidCategories]( WIDGET_DIFF_CANVAS& aCanvas, const KIID_PATH& )
+    {
+        KICAD_DIFF::ConfigurePcbDiffCanvasContext( aCanvas, nullptr, other, color, overrides, extras, categories );
+    };
+
+    return view;
+}
+} // namespace
+
+
+int BOARD_INSPECTION_TOOL::showBoardComparison( const wxString& aOtherPath, const wxString& aProjectPath,
+                                                const wxString& aComparisonLabel )
+{
+    // Load the comparison board into its own non-active PROJECT so the live
+    // project settings are never overwritten. A missing .kicad_pro is fine
+    // (LoadProject returns false but still inserts a defaults-only slot); a
+    // present-but-malformed .kicad_pro is treated as failure.
+    SETTINGS_MANAGER* mgr           = m_frame->GetSettingsManager();
+    bool              projectLoadOk = mgr && mgr->LoadProject( aProjectPath, false );
+    PROJECT*          otherPrj = mgr ? mgr->GetProject( aProjectPath ) : nullptr;
+
+    if( !otherPrj )
+    {
+        m_frame->ShowInfoBarError( wxString::Format( _( "Failed to load project for %s" ), aOtherPath ) );
+        return 0;
+    }
+
+    if( !projectLoadOk && wxFileName( aProjectPath ).FileExists() )
+    {
+        mgr->UnloadProject( otherPrj, false );
+        m_frame->ShowInfoBarError( wxString::Format( _( "Failed to load project for %s" ), aOtherPath ) );
+        return 0;
+    }
+
+    PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::FindPluginTypeFromBoardPath( aOtherPath, KICTL_KICAD_ONLY );
+
+    // Skip editor-frame initialization (drawing sheet singleton, BASE_SCREEN
+    // globals, DRC engine, connectivity) so the read-only compare cannot leak
+    // state into the live frame.
+    BOARD_LOADER::OPTIONS loadOptions;
+    loadOptions.initialize_after_load = false;
+
+    std::unique_ptr<BOARD> otherBoard;
+
+    try
+    {
+        otherBoard = BOARD_LOADER::Load( aOtherPath, pluginType, otherPrj, loadOptions );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        m_frame->ShowInfoBarError( wxString::Format( _( "Failed to load %s: %s" ), aOtherPath, ioe.What() ) );
+        mgr->UnloadProject( otherPrj, false );
+        return 0;
+    }
+    catch( ... )
+    {
+        m_frame->ShowInfoBarError( wxString::Format( _( "Failed to load %s" ), aOtherPath ) );
+        mgr->UnloadProject( otherPrj, false );
+        return 0;
+    }
+
+    if( !otherBoard )
+    {
+        m_frame->ShowInfoBarError( wxString::Format( _( "Failed to load %s" ), aOtherPath ) );
+        mgr->UnloadProject( otherPrj, false );
+        return 0;
+    }
+
+    BOARD*        board = m_frame->GetBoard();
+    PCB_DIFF_VIEW view = buildPcbDiffView( board, otherBoard.get(), aOtherPath );
+
+    auto dlgDiff = std::make_unique<DIALOG_KICAD_DIFF>( m_frame, board->GetFileName(), aComparisonLabel, view.result,
+                                                        KICAD_DIFF::DOCUMENT_GEOMETRY{},
+                                                        KICAD_DIFF::DOCUMENT_GEOMETRY{}, view.switcher );
+    dlgDiff->ShowModal();
+
+    // Destroy the dialog (its canvas drops its references to the board's items)
+    // before the board is freed, or teardown dereferences freed items.
+    dlgDiff.reset();
+
+    otherBoard->ClearProject();
+    otherBoard.reset();
+
+    mgr->UnloadProject( otherPrj, false );
+
+    return 0;
+}
+
+
+int BOARD_INSPECTION_TOOL::CompareBoardWithHistory( const TOOL_EVENT& aEvent )
+{
+    wxCHECK( m_frame, 0 );
+
+    BOARD* liveBoard = m_frame->GetBoard();
+
+    if( !liveBoard || liveBoard->GetFileName().IsEmpty() )
+    {
+        m_frame->ShowInfoBarError( _( "Save the board before comparing against local history." ) );
+        return 0;
+    }
+
+    const wxString projectPath = m_frame->Prj().GetProjectPath();
+    LOCAL_HISTORY& history = m_frame->Kiway().LocalHistory();
+
+    std::vector<LOCAL_HISTORY_SNAPSHOT_INFO> snapshots = history.GetSnapshots( projectPath );
+
+    if( snapshots.empty() )
+    {
+        m_frame->ShowInfoBarError( _( "No local history snapshots for this project." ) );
+        return 0;
+    }
+
+    // The history repo stores files by project-relative path with forward slashes.
+    wxFileName boardFn( liveBoard->GetFileName() );
+    boardFn.MakeRelativeTo( projectPath );
+    const wxString relPath = boardFn.GetFullPath( wxPATH_UNIX );
+
+    wxFileName projFn( m_frame->Prj().GetProjectFullName() );
+    projFn.MakeRelativeTo( projectPath );
+    const wxString projRel = projFn.GetFullPath( wxPATH_UNIX );
+
+    // One entry per distinct board version: newest-first, skipping commits with
+    // no board or whose board content matches the previously kept one. This
+    // drops schematic-only saves and collapses runs that left the board untouched.
+    std::vector<LOCAL_HISTORY_SNAPSHOT_INFO> boardSnapshots;
+    wxString                                 prevFingerprint;
+
+    for( const LOCAL_HISTORY_SNAPSHOT_INFO& s : snapshots )
+    {
+        wxString fingerprint = history.TreeFingerprint( projectPath, s.hash, wxS( ".kicad_pcb" ) );
+
+        if( fingerprint.IsEmpty() || fingerprint == prevFingerprint )
+            continue;
+
+        prevFingerprint = fingerprint;
+        boardSnapshots.push_back( s );
+    }
+
+    if( boardSnapshots.empty() )
+    {
+        m_frame->ShowInfoBarError( _( "No local history snapshots change this board." ) );
+        return 0;
+    }
+
+    snapshots = std::move( boardSnapshots );
+
+    SETTINGS_MANAGER* mgr = m_frame->GetSettingsManager();
+
+    std::vector<wxString> labels;
+
+    for( const LOCAL_HISTORY_SNAPSHOT_INFO& s : snapshots )
+    {
+        wxString summary = s.summary.IsEmpty() ? s.message.BeforeFirst( '\n' ) : s.summary;
+        labels.push_back( wxString::Format( wxS( "%s (%s)" ), summary, s.hash.Left( 8 ) ) );
+    }
+
+    // State for the revision currently shown. Swapped on each dropdown change.
+    std::unique_ptr<BOARD> curBoard;
+    PROJECT*               curPrj = nullptr;
+    wxString               curTempDir;
+
+    auto cleanupCurrent = [&]()
+    {
+        if( curBoard )
+        {
+            curBoard->ClearProject();
+            curBoard.reset();
+        }
+
+        // Skip if the project was already evicted from the manager.
+        if( curPrj && mgr->IsProjectLoaded( curPrj ) )
+            mgr->UnloadProject( curPrj, false );
+
+        curPrj = nullptr;
+
+        if( !curTempDir.IsEmpty() )
+        {
+            wxFileName::Rmdir( curTempDir, wxPATH_RMDIR_RECURSIVE );
+            curTempDir.Clear();
+        }
+    };
+
+    // Extract + load snapshot aIndex into the out-params. Cleans up its own temp
+    // on any failure.
+    auto loadRevision = [&]( int aIndex, std::unique_ptr<BOARD>& aBoard, PROJECT*& aPrj, wxString& aTempDir ) -> bool
+    {
+        const wxString hash = snapshots[aIndex].hash;
+        wxFileName     dirFn;
+        dirFn.AssignDir( wxFileName::GetTempDir() );
+        dirFn.AppendDir( wxS( "kicad-history-" ) + hash.Left( 8 ) );
+        const wxString tempDir = dirFn.GetPath();
+
+        // Extract just the board and project file (its real net classes and
+        // design settings), skipping the schematic, 3D models, gerbers, etc.
+        if( !history.ExtractAllFilesAtCommit( projectPath, hash, tempDir,
+                                              { wxS( ".kicad_pcb" ), wxS( ".kicad_pro" ) } ) )
+        {
+            wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE );
+            return false;
+        }
+
+        const wxString boardPath = tempDir + wxS( "/" ) + relPath;
+        const wxString proPath = tempDir + wxS( "/" ) + projRel;
+
+        mgr->LoadProject( proPath, false );
+        PROJECT* prj = mgr->GetProject( proPath );
+
+        if( !prj )
+        {
+            wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE );
+            return false;
+        }
+
+        BOARD_LOADER::OPTIONS loadOptions;
+        loadOptions.initialize_after_load = false;
+
+        std::unique_ptr<BOARD> loaded;
+
+        try
+        {
+            loaded = BOARD_LOADER::Load( boardPath,
+                                         PCB_IO_MGR::FindPluginTypeFromBoardPath( boardPath, KICTL_KICAD_ONLY ), prj,
+                                         loadOptions );
+        }
+        catch( ... )
+        {
+            // A historical board may be malformed or in a format this build
+            // cannot parse. Skip it rather than letting the throw escape.
+            mgr->UnloadProject( prj, false );
+            wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE );
+            return false;
+        }
+
+        if( !loaded )
+        {
+            mgr->UnloadProject( prj, false );
+            wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE );
+            return false;
+        }
+
+        aBoard = std::move( loaded );
+        aPrj = prj;
+        aTempDir = tempDir;
+        return true;
+    };
+
+    // Load a revision and build its diff view, guarding both the parse and the
+    // diff so a bad snapshot is skipped instead of crashing.
+    auto loadView = [&]( int aIndex, std::unique_ptr<BOARD>& aBoard, PROJECT*& aPrj, wxString& aTempDir,
+                         PCB_DIFF_VIEW& aView ) -> bool
+    {
+        if( !loadRevision( aIndex, aBoard, aPrj, aTempDir ) )
+            return false;
+
+        try
+        {
+            aView = buildPcbDiffView( liveBoard, aBoard.get(), aTempDir + wxS( "/" ) + relPath );
+        }
+        catch( ... )
+        {
+            aBoard->ClearProject();
+            aBoard.reset();
+            mgr->UnloadProject( aPrj, false );
+            aPrj = nullptr;
+            wxFileName::Rmdir( aTempDir, wxPATH_RMDIR_RECURSIVE );
+            aTempDir.Clear();
+            return false;
+        }
+
+        return true;
+    };
+
+    PCB_DIFF_VIEW view;
+    int           startIndex = 0;
+
+    if( !loadView( 0, curBoard, curPrj, curTempDir, view ) )
+    {
+        m_frame->ShowInfoBarError( _( "Could not compare against the selected snapshot." ) );
+        return 0;
+    }
+
+    // Default to the first commit back from HEAD that actually differs from the
+    // current board, so opening lands on real changes rather than an in-sync HEAD.
+    while( view.result.Empty() && startIndex + 1 < static_cast<int>( snapshots.size() ) )
+    {
+        std::unique_ptr<BOARD> nextBoard;
+        PROJECT*               nextPrj = nullptr;
+        wxString               nextTempDir;
+        PCB_DIFF_VIEW          nextView;
+
+        if( !loadView( startIndex + 1, nextBoard, nextPrj, nextTempDir, nextView ) )
+            break;
+
+        cleanupCurrent();
+        view = std::move( nextView );
+        curBoard = std::move( nextBoard );
+        curPrj = nextPrj;
+        curTempDir = nextTempDir;
+        startIndex++;
+    }
+
+    auto dlgDiff = std::make_unique<DIALOG_KICAD_DIFF>( m_frame, liveBoard->GetFileName(), labels[startIndex],
+                                                        view.result, KICAD_DIFF::DOCUMENT_GEOMETRY{},
+                                                        KICAD_DIFF::DOCUMENT_GEOMETRY{}, view.switcher );
+
+    dlgDiff->SetRevisionChooser(
+            labels, startIndex,
+            [&]( int aIndex )
+            {
+                std::unique_ptr<BOARD> newBoard;
+                PROJECT*               newPrj = nullptr;
+                wxString               newTempDir;
+                PCB_DIFF_VIEW          newView;
+
+                if( !loadView( aIndex, newBoard, newPrj, newTempDir, newView ) )
+                {
+                    m_frame->ShowInfoBarError( _( "Could not compare against the selected snapshot." ) );
+                    return;
+                }
+
+                dlgDiff->Reload( liveBoard->GetFileName(), labels[aIndex], newView.result,
+                                 /*aReferenceGeometry=*/{}, /*aComparisonGeometry=*/{}, newView.switcher, {} );
+
+                // The canvas now references newBoard, so the previous one can go.
+                cleanupCurrent();
+                view = std::move( newView );
+                curBoard = std::move( newBoard );
+                curPrj = newPrj;
+                curTempDir = newTempDir;
+            } );
+
+    dlgDiff->ShowModal();
+
+    // Destroy the dialog before the board it references is freed.
+    dlgDiff.reset();
+
+    cleanupCurrent();
+    return 0;
+}
+
+
 int BOARD_INSPECTION_TOOL::ShowFootprintLinks( const TOOL_EVENT& aEvent )
 {
     wxCHECK( m_frame, 0 );
@@ -2718,6 +3188,9 @@ void BOARD_INSPECTION_TOOL::setTransitions()
     Go( &BOARD_INSPECTION_TOOL::InspectClearance,    PCB_ACTIONS::inspectClearance.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::InspectConstraints,  PCB_ACTIONS::inspectConstraints.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::DiffFootprint,       PCB_ACTIONS::diffFootprint.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::CompareBoardWithFile,
+        PCB_ACTIONS::compareBoardWithFile.MakeEvent() );
+    Go( &BOARD_INSPECTION_TOOL::CompareBoardWithHistory, PCB_ACTIONS::compareBoardWithHistory.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::ShowFootprintLinks,  PCB_ACTIONS::showFootprintAssociations.MakeEvent() );
 
     Go( &BOARD_INSPECTION_TOOL::HighlightNet,        PCB_ACTIONS::highlightNet.MakeEvent() );

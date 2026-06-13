@@ -26,7 +26,6 @@
 #include <git2.h>
 #include <git2/sys/merge.h>
 
-#include <memory>
 #include <wx/string.h>
 
 #include <board.h>
@@ -44,9 +43,17 @@ class KIGIT_PCB_MERGE
         KIGIT_PCB_MERGE( git_merge_driver_source* aSource, git_buf* aBuf ) : m_mergeDriver( aSource ), m_result( aBuf )
         {}
 
-        virtual ~KIGIT_PCB_MERGE();
+        virtual ~KIGIT_PCB_MERGE() = default;
 
         int Merge();
+
+        /**
+         * libgit2 merge-driver apply callback shim. Registered with the
+         * driver registry under the name "kicad-pcb" so `.gitattributes`
+         * entries `merge=kicad-pcb` route here.
+         */
+        static int Apply( const git_merge_driver_source* aSrc, const char** aPathOut,
+                          unsigned int* aModeOut, git_buf* aMergedOut );
 
         std::set<BOARD_ITEM*>& GetWeModifiedTheyDeleted()
         {
@@ -64,7 +71,6 @@ class KIGIT_PCB_MERGE
         }
 
     protected:
-        std::unique_ptr<BOARD> readBoard( wxString& aFilename );
         KIGIT_PCB_MERGE_DIFFERENCES compareBoards( BOARD* aAncestor, BOARD* aOther );
         void findSetDifferences( const BOARD_ITEM_SET& aAncestorSet, const BOARD_ITEM_SET& aOtherSet,
                                  std::vector<BOARD_ITEM*>& aAdded, std::vector<BOARD_ITEM*>& aRemoved,

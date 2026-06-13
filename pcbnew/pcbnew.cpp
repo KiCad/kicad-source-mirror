@@ -76,6 +76,11 @@
 #include "invoke_pcb_dialog.h"
 #include <wildcards_and_files_ext.h>
 #include "pcbnew_jobs_handler.h"
+#include <diff_merge/diff_doc_kind.h>
+#include <reporter.h>
+#include "git/kigit_pcb_merge.h"
+#include "git/kigit_fp_merge.h"
+#include <git/kigit_driver_registry.h>
 
 #include <dialogs/panel_toolbar_customization.h>
 #include <3d_viewer/toolbars_3d.h>
@@ -238,6 +243,16 @@ static wxString filterFootprints( const wxString& aFilterJson )
 
 
 namespace PCB {
+
+// Non-job kiface exports for diff/merge (returned by IfaceOrAddress). Defined
+// after the kiface instance so they can route into its jobs handler.
+static int pcbnewMergeExport( int aKind, const wxString& aAncestor, const wxString& aOurs,
+                              const wxString& aTheirs, const wxString& aOutput, bool aInteractive,
+                              bool aSingleFile, REPORTER* aReporter );
+static int pcbnewOpenDiffDialogExport( int aKind, const wxString& aFileA, const wxString& aFileB,
+                                       const wxString& aLabelA, const wxString& aLabelB,
+                                       wxWindow* aParent, REPORTER* aReporter );
+
 
 static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 {
@@ -550,10 +565,19 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             return reinterpret_cast<void*>( &filterFootprints );
         }
 
+        case KIFACE_MERGE_DOCUMENT:
+            return reinterpret_cast<void*>( &pcbnewMergeExport );
+
+        case KIFACE_OPEN_DIFF_DIALOG:
+            return reinterpret_cast<void*>( &pcbnewOpenDiffDialogExport );
+
         default:
             return nullptr;
         }
     }
+
+    /// Accessor for the non-job diff/merge exports (pcbnewMergeExport etc.).
+    PCBNEW_JOBS_HANDLER* JobHandler() const { return m_jobHandler.get(); }
 
     /**
      * Saving a file under a different name is delegated to the various KIFACEs because
@@ -606,6 +630,25 @@ private:
 
 } kiface( "pcbnew", KIWAY::FACE_PCB );
 
+
+int pcbnewMergeExport( int aKind, const wxString& aAncestor, const wxString& aOurs,
+                       const wxString& aTheirs, const wxString& aOutput, bool aInteractive,
+                       bool aSingleFile, REPORTER* aReporter )
+{
+    return kiface.JobHandler()->RunMerge( static_cast<KICAD_DIFF::DOC_KIND>( aKind ), aAncestor,
+                                          aOurs, aTheirs, aOutput, aInteractive, aSingleFile,
+                                          aReporter );
+}
+
+
+int pcbnewOpenDiffDialogExport( int aKind, const wxString& aFileA, const wxString& aFileB,
+                                const wxString& aLabelA, const wxString& aLabelB,
+                                wxWindow* aParent, REPORTER* aReporter )
+{
+    return kiface.JobHandler()->OpenDiffDialog( static_cast<KICAD_DIFF::DOC_KIND>( aKind ), aFileA,
+                                                aFileB, aLabelA, aLabelB, aParent, aReporter );
+}
+
 } // namespace
 
 
@@ -657,6 +700,14 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
         m_jobHandler->SetReporter( &CLI_REPORTER::GetInstance() );
         m_jobHandler->SetProgressReporter( &CLI_PROGRESS_REPORTER::GetInstance() );
     }
+
+    // Register the PCB and footprint merge drivers with libgit2 so
+    // .gitattributes entries `merge=kicad-pcb` and `merge=kicad-fp` route
+    // through our 3-way merge pipeline. git_merge_driver_register is not
+    // thread-safe; this runs once at kiface init before any background work
+    // spawns. The registry is idempotent so re-loads of the kiface are safe.
+    KIGIT::RegisterMergeDriver( "kicad-pcb", &KIGIT_PCB_MERGE::Apply );
+    KIGIT::RegisterMergeDriver( "kicad-fp",  &KIGIT_FP_MERGE::Apply );
 
     return true;
 }

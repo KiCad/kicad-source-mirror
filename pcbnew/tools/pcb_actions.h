@@ -517,6 +517,7 @@ public:
     static TOOL_ACTION importFootprint;
     static TOOL_ACTION exportFootprint;
 
+    static TOOL_ACTION compareFpLibraryWithFile;
     static TOOL_ACTION footprintProperties;
     static TOOL_ACTION defaultPadProperties;
     static TOOL_ACTION padTable;
@@ -595,6 +596,8 @@ public:
     static TOOL_ACTION inspectClearance;
     static TOOL_ACTION inspectConstraints;
     static TOOL_ACTION diffFootprint;
+    static TOOL_ACTION compareBoardWithFile;
+    static TOOL_ACTION compareBoardWithHistory;
     static TOOL_ACTION showFootprintAssociations;
     static TOOL_ACTION collect3DModels;
 

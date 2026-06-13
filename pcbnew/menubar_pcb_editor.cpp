@@ -30,6 +30,8 @@
 #include <kiface_base.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
+#include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <tool/action_manager.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
@@ -84,6 +86,18 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     }
 
     fileMenu->Add( PCB_ACTIONS::appendBoard );
+    fileMenu->Add( PCB_ACTIONS::compareBoardWithFile );
+
+    wxMenuItem*       historyItem = fileMenu->Add( PCB_ACTIONS::compareBoardWithHistory );
+    ACTION_CONDITIONS historyCond;
+    historyCond.Enable(
+            []( const SELECTION& )
+            {
+                COMMON_SETTINGS* cs = Pgm().GetCommonSettings();
+                return cs && cs->m_Backup.enabled && cs->m_Backup.format == BACKUP_FORMAT::INCREMENTAL;
+            } );
+    RegisterUIUpdateHandler( historyItem->GetId(), historyCond );
+
     fileMenu->AppendSeparator();
 
     fileMenu->Add( ACTIONS::save );

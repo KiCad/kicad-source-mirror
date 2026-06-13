@@ -22,6 +22,7 @@
 
 #include <eda_item.h>
 #include <embedded_files.h>
+#include <properties/property_mgr.h>
 #include <schematic_holder.h>
 #include <sch_sheet_path.h>
 #include <schematic_settings.h>
@@ -633,6 +634,11 @@ private:
     /// Reactive text-variable dependency adapter. Installed as a listener
     /// during SCHEMATIC construction.
     std::unique_ptr<class SCHEMATIC_TEXT_VAR_ADAPTER> m_textVarAdapter;
+
+    /// PROPERTY_MANAGER listener subscription installed in the ctor. RAII so
+    /// concurrent SCHEMATIC instances (e.g. a temporary one opened for a diff
+    /// compare) can come and go without clobbering each other's registrations.
+    PROPERTY_LISTENER_SUBSCRIPTION m_fieldListenerSubscription;
 
 public:
     class SCHEMATIC_TEXT_VAR_ADAPTER* GetTextVarAdapter() const { return m_textVarAdapter.get(); }

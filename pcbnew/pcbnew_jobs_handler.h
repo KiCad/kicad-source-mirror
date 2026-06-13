@@ -23,6 +23,7 @@
 
 #include <jobs/job_dispatcher.h>
 #include <pcb_plot_params.h>
+#include <diff_merge/diff_doc_kind.h>
 
 class KIWAY;
 class BOARD;
@@ -32,6 +33,8 @@ class JOB_EXPORT_PCB_GERBER;
 class JOB_EXPORT_PCB_GERBERS;
 class JOB_FP_EXPORT_SVG;
 class TOOL_MANAGER;
+class REPORTER;
+class wxWindow;
 
 class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
 {
@@ -60,6 +63,25 @@ public:
     int JobExportStats( JOB* aJob );
     int JobUpgrade( JOB* aJob );
     int JobImport( JOB* aJob );
+    int JobDiff( JOB* aJob );
+    int JobFpDiff( JOB* aJob );
+
+    /// Non-job entry points (reached via the kiface KIFACE_MERGE_DOCUMENT /
+    /// KIFACE_OPEN_DIFF_DIALOG function exports, not the JOB system).
+    int RunMerge( KICAD_DIFF::DOC_KIND aKind, const wxString& aAncestor, const wxString& aOurs,
+                  const wxString& aTheirs, const wxString& aOutput, bool aInteractive,
+                  bool aSingleFile, REPORTER* aReporter );
+    int OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxString& aFileA, const wxString& aFileB,
+                        const wxString& aLabelA, const wxString& aLabelB, wxWindow* aParent,
+                        REPORTER* aReporter );
+
+private:
+    int runPcbMerge( const wxString& aAncestor, const wxString& aOurs, const wxString& aTheirs,
+                     const wxString& aOutput, bool aInteractive );
+    int runFpLibMerge( const wxString& aAncestor, const wxString& aOurs, const wxString& aTheirs,
+                       const wxString& aOutput, bool aSingleFile );
+
+public:
 
     /**
      * Clear the cached CLI board so the next job reloads from the current project.

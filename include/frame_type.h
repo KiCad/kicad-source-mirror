@@ -62,6 +62,11 @@ enum FRAME_T
 
     FRAME_CALC,
 
+    /// Top-level host for the 3-way merge resolution dialog. Lives in the
+    /// kicad project-manager binary and is launched via the `--mergetool`
+    /// command-line argument so it can serve as a `git mergetool` driver.
+    FRAME_MERGETOOL,
+
     KIWAY_PLAYER_COUNT, // counts subset of FRAME_T's which are KIWAY_PLAYER derivatives
 
     // Kicad project manager is not a KIWAY_PLAYER

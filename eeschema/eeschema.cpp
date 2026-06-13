@@ -35,6 +35,11 @@
 #include <eda_dde.h>
 #include "eeschema_jobs_handler.h"
 #include "eeschema_helpers.h"
+#include <diff_merge/diff_doc_kind.h>
+#include <reporter.h>
+#include "git/kigit_sch_merge.h"
+#include "git/kigit_sym_lib_merge.h"
+#include <git/kigit_driver_registry.h>
 #include <eeschema_settings.h>
 #include <sch_edit_frame.h>
 #include <libraries/symbol_library_adapter.h>
@@ -96,6 +101,16 @@ SCH_SHEET*  g_RootSheet = nullptr;
 
 
 namespace SCH {
+
+// Non-job kiface exports for diff/merge (returned by IfaceOrAddress). Defined
+// after the kiface instance so they can route into its jobs handler.
+static int eeschemaMergeExport( int aKind, const wxString& aAncestor, const wxString& aOurs,
+                                const wxString& aTheirs, const wxString& aOutput, bool aInteractive,
+                                bool aSingleFile, REPORTER* aReporter );
+static int eeschemaOpenDiffDialogExport( int aKind, const wxString& aFileA, const wxString& aFileB,
+                                         const wxString& aLabelA, const wxString& aLabelB,
+                                         wxWindow* aParent, REPORTER* aReporter );
+
 
 
 // TODO: This should move out of this file
@@ -417,10 +432,19 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         {
             case KIFACE_NETLIST_SCHEMATIC:
                 return (void*) generateSchematicNetlist;
+
+            case KIFACE_MERGE_DOCUMENT:
+                return reinterpret_cast<void*>( &eeschemaMergeExport );
+
+            case KIFACE_OPEN_DIFF_DIALOG:
+                return reinterpret_cast<void*>( &eeschemaOpenDiffDialogExport );
         }
 
         return nullptr;
     }
+
+    /// Accessor for the non-job diff/merge exports (eeschemaMergeExport etc.).
+    EESCHEMA_JOBS_HANDLER* JobHandler() const { return m_jobHandler.get(); }
 
     /**
      * Saving a file under a different name is delegated to the various KIFACEs because
@@ -468,6 +492,25 @@ private:
 
 } kiface( "eeschema", KIWAY::FACE_SCH );
 
+
+int eeschemaMergeExport( int aKind, const wxString& aAncestor, const wxString& aOurs,
+                         const wxString& aTheirs, const wxString& aOutput, bool aInteractive,
+                         bool aSingleFile, REPORTER* aReporter )
+{
+    return kiface.JobHandler()->RunMerge( static_cast<KICAD_DIFF::DOC_KIND>( aKind ), aAncestor,
+                                          aOurs, aTheirs, aOutput, aInteractive, aSingleFile,
+                                          aReporter );
+}
+
+
+int eeschemaOpenDiffDialogExport( int aKind, const wxString& aFileA, const wxString& aFileB,
+                                  const wxString& aLabelA, const wxString& aLabelB,
+                                  wxWindow* aParent, REPORTER* aReporter )
+{
+    return kiface.JobHandler()->OpenDiffDialog( static_cast<KICAD_DIFF::DOC_KIND>( aKind ), aFileA,
+                                                aFileB, aLabelA, aLabelB, aParent, aReporter );
+}
+
 } // namespace
 
 using namespace SCH;
@@ -514,6 +557,12 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
         m_jobHandler->SetReporter( &CLI_REPORTER::GetInstance() );
         m_jobHandler->SetProgressReporter( &CLI_PROGRESS_REPORTER::GetInstance() );
     }
+
+    // Register the schematic and symbol-library merge drivers with libgit2 so
+    // `.gitattributes` entries `merge=kicad-sch` and `merge=kicad-sym-lib`
+    // route through KiCad-aware merge logic.
+    KIGIT::RegisterMergeDriver( "kicad-sch",     &KIGIT_SCH_MERGE::Apply );
+    KIGIT::RegisterMergeDriver( "kicad-sym-lib", &KIGIT_SYM_LIB_MERGE::Apply );
 
     return true;
 }

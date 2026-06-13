@@ -385,7 +385,14 @@ public:
 
     const PCB_POINTS& Points() const { return m_points; }
 
+    /// Collect every owned item (tracks, zones, generators, footprints,
+    /// drawings, markers, groups, points) into a UUID-sorted set.
     const BOARD_ITEM_SET GetItemSet();
+
+    /// Const overload of GetItemSet().  Used by the diff/merge subsystem to
+    /// walk three BOARDs (ancestor / ours / theirs) without forcing a
+    /// const_cast at every call site.
+    const BOARD_ITEM_SET GetItemSet() const;
 
     /**
      * The groups must maintain the following invariants. These are checked by

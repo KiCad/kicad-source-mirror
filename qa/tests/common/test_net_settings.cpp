@@ -319,4 +319,199 @@ BOOST_AUTO_TEST_CASE( NetChainClassesJsonDropsEmptyValues )
 }
 
 
+// In-place mutations to the default netclass (the UI's normal edit path goes
+// GetDefaultNetclass()->SetClearance(...) and does not swap the shared_ptr)
+// must propagate to operator==, otherwise editing default clearance / track
+// width during a session was silently dropped on close.
+BOOST_AUTO_TEST_CASE( DefaultNetclassInPlaceEditAffectsEquality )
+{
+    NET_SETTINGS a( nullptr, "" );
+    NET_SETTINGS b( nullptr, "" );
+
+    BOOST_CHECK( a == b );
+
+    // Use a value distinct from DEFAULT_CLEARANCE so the SetClearance call is a
+    // real change.
+    a.GetDefaultNetclass()->SetClearance( 350000 );
+
+    BOOST_CHECK( a != b );
+
+    b.GetDefaultNetclass()->SetClearance( 350000 );
+
+    BOOST_CHECK( a == b );
+
+    a.GetDefaultNetclass()->SetTrackWidth( 254000 );
+
+    BOOST_CHECK( a != b );
+}
+
+
+// Replacing the default netclass shared_ptr entirely (the persistence-layer
+// load path) must also flip equality.
+BOOST_AUTO_TEST_CASE( DefaultNetclassReplacementAffectsEquality )
+{
+    NET_SETTINGS a( nullptr, "" );
+    NET_SETTINGS b( nullptr, "" );
+
+    std::shared_ptr<NETCLASS> replacement = std::make_shared<NETCLASS>( NETCLASS::Default, true );
+    replacement->SetTrackWidth( 300000 );
+
+    a.SetDefaultNetclass( replacement );
+
+    BOOST_CHECK( a != b );
+}
+
+
+// A named netclass parameter edit (in-place via the map's shared_ptr) must
+// flip equality.  Without the deep field comparison in operator==, the std::equal
+// over m_netClasses would only check pointer identity and miss the edit.
+BOOST_AUTO_TEST_CASE( NamedNetclassParameterEditAffectsEquality )
+{
+    NET_SETTINGS a( nullptr, "" );
+    NET_SETTINGS b( nullptr, "" );
+
+    std::shared_ptr<NETCLASS> highSpeedA = std::make_shared<NETCLASS>( wxS( "HighSpeed" ), false );
+    std::shared_ptr<NETCLASS> highSpeedB = std::make_shared<NETCLASS>( wxS( "HighSpeed" ), false );
+
+    a.SetNetclass( wxS( "HighSpeed" ), highSpeedA );
+    b.SetNetclass( wxS( "HighSpeed" ), highSpeedB );
+
+    BOOST_CHECK( a == b );
+
+    highSpeedA->SetClearance( 100000 );
+
+    BOOST_CHECK( a != b );
+
+    highSpeedB->SetClearance( 100000 );
+
+    BOOST_CHECK( a == b );
+}
+
+
+// CopyFrom should produce an instance that compares equal to the source under
+// the new content-aware operator==, regardless of underlying shared_ptr
+// addresses.  Deep verification: spot-check fields that exercise the JSON
+// round-trip used by CopyFrom.
+BOOST_AUTO_TEST_CASE( CopyFromProducesEqualInstance )
+{
+    NET_SETTINGS source( nullptr, "" );
+
+    source.GetDefaultNetclass()->SetClearance( 250000 );
+    source.GetDefaultNetclass()->SetTrackWidth( 200000 );
+    source.GetDefaultNetclass()->SetDescription( wxS( "Project default" ) );
+
+    std::shared_ptr<NETCLASS> highSpeed = std::make_shared<NETCLASS>( wxS( "HighSpeed" ), false );
+    highSpeed->SetClearance( 150000 );
+    highSpeed->SetTrackWidth( 127000 );
+    std::map<wxString, std::shared_ptr<NETCLASS>> classes;
+    classes[wxS( "HighSpeed" )] = highSpeed;
+    source.SetNetclasses( classes );
+
+    source.SetNetclassPatternAssignment( wxS( "DDR_*" ), wxS( "HighSpeed" ) );
+    source.SetNetclassLabelAssignment( wxS( "EXACT_NET" ), { wxS( "HighSpeed" ) } );
+    source.SetNetChainClass( wxS( "DDR_BUS" ), wxS( "HighSpeed" ) );
+
+    NET_SETTINGS sink( nullptr, "" );
+    sink.CopyFrom( source );
+
+    BOOST_CHECK( source == sink );
+
+    // Verify the deep copy detached pointer ownership: editing source after
+    // CopyFrom must not affect sink.
+    source.GetDefaultNetclass()->SetClearance( 999999 );
+
+    BOOST_CHECK( source != sink );
+    BOOST_CHECK_EQUAL( sink.GetDefaultNetclass()->GetClearance(), 250000 );
+}
+
+
+// CopyFrom must drop pre-existing state in the sink rather than merging --
+// otherwise stale netclasses / pattern assignments from a previous load
+// would leak through.
+BOOST_AUTO_TEST_CASE( CopyFromDropsPreExistingSinkState )
+{
+    NET_SETTINGS source( nullptr, "" );
+    source.GetDefaultNetclass()->SetClearance( 100000 );
+
+    NET_SETTINGS sink( nullptr, "" );
+    sink.GetDefaultNetclass()->SetClearance( 999999 );
+
+    std::shared_ptr<NETCLASS> stale = std::make_shared<NETCLASS>( wxS( "StaleClass" ), false );
+    std::map<wxString, std::shared_ptr<NETCLASS>> staleClasses;
+    staleClasses[wxS( "StaleClass" )] = stale;
+    sink.SetNetclasses( staleClasses );
+
+    sink.SetNetclassPatternAssignment( wxS( "STALE_*" ), wxS( "StaleClass" ) );
+    sink.SetNetChainClass( wxS( "STALE_CHAIN" ), wxS( "StaleClass" ) );
+
+    sink.CopyFrom( source );
+
+    BOOST_CHECK( source == sink );
+    BOOST_CHECK_EQUAL( sink.GetDefaultNetclass()->GetClearance(), 100000 );
+    BOOST_CHECK( sink.GetNetclasses().empty() );
+    BOOST_CHECK( sink.GetNetclassPatternAssignments().empty() );
+    BOOST_CHECK( sink.GetNetChainClasses().empty() );
+}
+
+
+// Derived caches in the sink must be dropped, otherwise GetEffectiveNetClass
+// can return a pre-CopyFrom cached result that doesn't match the new source.
+BOOST_AUTO_TEST_CASE( CopyFromClearsStaleDerivedCaches )
+{
+    NET_SETTINGS sink( nullptr, "" );
+
+    std::shared_ptr<NETCLASS> stalePower = std::make_shared<NETCLASS>( wxS( "StalePower" ), false );
+    std::map<wxString, std::shared_ptr<NETCLASS>> staleClasses;
+    staleClasses[wxS( "StalePower" )] = stalePower;
+    sink.SetNetclasses( staleClasses );
+    sink.SetNetclassPatternAssignment( wxS( "VCC_*" ), wxS( "StalePower" ) );
+
+    // Warm the effective-class cache for a net that resolves via the stale pattern.
+    BOOST_REQUIRE( sink.GetEffectiveNetClass( wxS( "VCC_3V3" ) ) != nullptr );
+    BOOST_REQUIRE( sink.HasEffectiveNetClass( wxS( "VCC_3V3" ) ) );
+
+    NET_SETTINGS source( nullptr, "" );
+
+    sink.CopyFrom( source );
+
+    // The stale-pattern cache entry must NOT survive; the post-CopyFrom effective
+    // class for VCC_3V3 should resolve to the default since the source has no
+    // patterns or named classes.
+    BOOST_CHECK( !sink.HasEffectiveNetClass( wxS( "VCC_3V3" ) ) );
+}
+
+
+// Chain-derived pattern assignments are not persisted and must be cleared on
+// CopyFrom -- otherwise the sink's prior chain mappings leak past the swap.
+BOOST_AUTO_TEST_CASE( CopyFromClearsStaleChainDerivedPatterns )
+{
+    NET_SETTINGS sink( nullptr, "" );
+    std::shared_ptr<NETCLASS> highSpeed = std::make_shared<NETCLASS>( wxS( "HighSpeed" ), false );
+    std::map<wxString, std::shared_ptr<NETCLASS>> classes;
+    classes[wxS( "HighSpeed" )] = highSpeed;
+    sink.SetNetclasses( classes );
+    sink.SetChainPatternAssignment( wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) );
+
+    BOOST_REQUIRE( resolvesToNetclass( sink, wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) ) );
+
+    NET_SETTINGS source( nullptr, "" );
+
+    sink.CopyFrom( source );
+
+    BOOST_CHECK( !resolvesToNetclass( sink, wxS( "DDR_DQ0" ), wxS( "HighSpeed" ) ) );
+}
+
+
+// Self-assignment guard.
+BOOST_AUTO_TEST_CASE( CopyFromSelfIsNoop )
+{
+    NET_SETTINGS settings( nullptr, "" );
+    settings.GetDefaultNetclass()->SetClearance( 200000 );
+
+    settings.CopyFrom( settings );
+
+    BOOST_CHECK_EQUAL( settings.GetDefaultNetclass()->GetClearance(), 200000 );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

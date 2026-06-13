@@ -26,7 +26,9 @@
 #include "kicad_id.h"
 #include "pcm.h"
 #include "pgm_kicad.h"
+#include "project_tree.h"
 #include "project_tree_pane.h"
+#include <dialogs/dialog_git_mr_review.h>
 #include "local_history_pane.h"
 #include "widgets/bitmap_button.h"
 
@@ -123,6 +125,8 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_MENU( ID_IMPORT_PADS_PROJECT, KICAD_MANAGER_FRAME::OnImportPadsProjectFiles )
     EVT_MENU( ID_IMPORT_GEDA_PROJECT, KICAD_MANAGER_FRAME::OnImportGedaFiles )
     EVT_MENU( ID_IMPORT_DIPTRACE_PROJECT, KICAD_MANAGER_FRAME::OnImportDipTraceFiles )
+    EVT_MENU( ID_COMPARE_PROJECT_BRANCHES,
+              KICAD_MANAGER_FRAME::OnCompareProjectBranches )
 
     // Range menu events
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, KICAD_MANAGER_FRAME::OnFileHistory )
@@ -1149,6 +1153,65 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, 
     settings->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( settings ) );
 
     m_openSavedWindows = true;
+}
+
+
+void KICAD_MANAGER_FRAME::OnCompareProjectBranches( wxCommandEvent& event )
+{
+    git_repository* repo = ( m_projectTreePane && m_projectTreePane->m_TreeProject )
+                                   ? m_projectTreePane->m_TreeProject->GetGitRepo()
+                                   : nullptr;
+
+    if( !repo )
+    {
+        wxMessageBox( _( "Compare Project Branches requires a project that is "
+                         "tracked by git." ),
+                      _( "Compare Branches" ),
+                      wxOK | wxICON_INFORMATION, this );
+        return;
+    }
+
+    // Seed the picker with the conventional "MR" pair: an integration branch
+    // (main/master) as the base, the current branch as the head. Resolve the
+    // current branch from HEAD so a checked-out feature branch lands at
+    // index 1 (where DIALOG_GIT_MR_REVIEW selects its head ref) instead of
+    // the literal "HEAD" string.
+    wxString currentBranch;
+    git_reference* head = nullptr;
+
+    if( git_repository_head( &head, repo ) == 0 )
+    {
+        const char* shorthand = git_reference_shorthand( head );
+
+        if( shorthand && *shorthand )
+            currentBranch = wxString::FromUTF8( shorthand );
+
+        git_reference_free( head );
+    }
+
+    std::vector<wxString> refs;
+
+    auto pushUnique = [&]( const wxString& aRef )
+    {
+        if( aRef.IsEmpty() )
+            return;
+
+        for( const wxString& existing : refs )
+        {
+            if( existing == aRef )
+                return;
+        }
+
+        refs.push_back( aRef );
+    };
+
+    pushUnique( wxS( "main" ) );
+    pushUnique( wxS( "master" ) );
+    pushUnique( currentBranch );
+    pushUnique( wxS( "HEAD" ) );
+
+    DIALOG_GIT_MR_REVIEW dlg( this, repo, refs );
+    dlg.ShowModal();
 }
 
 

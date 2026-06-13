@@ -22,9 +22,11 @@
  */
 
 #include "kigit_pcb_merge.h"
-#include <git/kicad_git_blob_reader.h>
-#include <git/kicad_git_common.h>
-#include <git/kicad_git_memory.h>
+#include <git/kigit_merge_blob_utils.h>
+
+#include <diff_merge/kicad_merge_engine.h>
+#include <diff_merge/pcb_differ.h>
+#include <diff_merge/pcb_merge_applier.h>
 
 #include <board.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
@@ -83,48 +85,33 @@ KIGIT_PCB_MERGE_DIFFERENCES KIGIT_PCB_MERGE::compareBoards( BOARD* aAncestor, BO
 
 int KIGIT_PCB_MERGE::Merge()
 {
-    auto repo = const_cast<git_repository*>( git_merge_driver_source_repo( m_mergeDriver ) );
-    const git_index_entry* ancestor = git_merge_driver_source_ancestor( m_mergeDriver );
-    const git_index_entry* ours = git_merge_driver_source_ours( m_mergeDriver );
-    const git_index_entry* theirs = git_merge_driver_source_theirs( m_mergeDriver );
-
-    // Read ancestor index entry into a buffer
-
-    git_blob* ancestor_blob;
-    git_blob* ours_blob;
-    git_blob* theirs_blob;
-
-    if( git_blob_lookup( &ancestor_blob, repo, &ancestor->id ) != 0 )
+    // The structural 3-way merge needs all three sides. A null ancestor entry
+    // means one side added a file that doesn't exist on the other; without a
+    // common ancestor there is nothing to diff against, so decline and let
+    // libgit2 fall back to its default handling. LoadMergeBlobs tolerates a
+    // missing ancestor, so this guard is kept explicit to preserve behavior.
+    if( !git_merge_driver_source_ancestor( m_mergeDriver ) )
     {
-        wxLogTrace( traceGit, "Could not find ancestor blob: %s", KIGIT_COMMON::GetLastGitError() );
-        return GIT_ENOTFOUND;
+        wxLogTrace( traceGit, "PCB merge driver: no common ancestor, declining merge" );
+        return GIT_PASSTHROUGH;
     }
 
-    KIGIT::GitBlobPtr ancestor_blob_ptr( ancestor_blob );
+    KIGIT::MERGE_BLOBS blobs;
 
-    if( git_blob_lookup( &ours_blob, repo, &ours->id ) != 0 )
+    if( int rc = KIGIT::LoadMergeBlobs( m_mergeDriver, blobs ); rc != 0 )
     {
-        wxLogTrace( traceGit, "Could not find ours blob: %s", KIGIT_COMMON::GetLastGitError() );
-        return GIT_ENOTFOUND;
+        wxLogTrace( traceGit, "PCB merge driver: could not load merge blobs (rc=%d)", rc );
+        return rc;
     }
 
-    KIGIT::GitBlobPtr ours_blob_ptr( ours_blob );
-
-    if( git_blob_lookup( &theirs_blob, repo, &theirs->id ) != 0 )
-    {
-        wxLogTrace( traceGit, "Could not find theirs blob: %s", KIGIT_COMMON::GetLastGitError() );
-        return GIT_ENOTFOUND;
-    }
-
-    KIGIT::GitBlobPtr theirs_blob_ptr( theirs_blob );
-
-    // Get the raw data from the blobs
-    BLOB_READER ancestor_reader( ancestor_blob );
-    PCB_IO_KICAD_SEXPR_PARSER ancestor_parser( &ancestor_reader, nullptr, nullptr );
-    BLOB_READER ours_reader( ours_blob );
-    PCB_IO_KICAD_SEXPR_PARSER ours_parser( &ours_reader, nullptr, nullptr );
-    BLOB_READER theirs_reader( theirs_blob );
-    PCB_IO_KICAD_SEXPR_PARSER theirs_parser( &theirs_reader, nullptr, nullptr );
+    // Parse each side from its decoded blob contents. LoadMergeBlobs has freed
+    // the underlying git_blob objects, so the boards are built from the strings.
+    STRING_LINE_READER         ancestor_reader( blobs.ancestor, wxS( "ancestor" ) );
+    PCB_IO_KICAD_SEXPR_PARSER  ancestor_parser( &ancestor_reader, nullptr, nullptr );
+    STRING_LINE_READER         ours_reader( blobs.ours, wxS( "ours" ) );
+    PCB_IO_KICAD_SEXPR_PARSER  ours_parser( &ours_reader, nullptr, nullptr );
+    STRING_LINE_READER         theirs_reader( blobs.theirs, wxS( "theirs" ) );
+    PCB_IO_KICAD_SEXPR_PARSER  theirs_parser( &theirs_reader, nullptr, nullptr );
 
     std::unique_ptr<BOARD> ancestor_board;
     std::unique_ptr<BOARD> ours_board;
@@ -147,44 +134,95 @@ int KIGIT_PCB_MERGE::Merge()
         return GIT_EUSER;
     }
 
-    // Parse the differences between the ancestor and ours
-    KIGIT_PCB_MERGE_DIFFERENCES ancestor_ours_differences = compareBoards( ancestor_board.get(), ours_board.get() );
-    KIGIT_PCB_MERGE_DIFFERENCES ancestor_theirs_differences = compareBoards( ancestor_board.get(), theirs_board.get() );
+    // Keep the legacy difference sets populated for any external consumer
+    // (none today, but the accessors are public API). The full 3-way merge
+    // logic runs through the new diff/merge engine.
+    KIGIT_PCB_MERGE_DIFFERENCES ancestor_ours_differences =
+            compareBoards( ancestor_board.get(), ours_board.get() );
+    KIGIT_PCB_MERGE_DIFFERENCES ancestor_theirs_differences =
+            compareBoards( ancestor_board.get(), theirs_board.get() );
 
-    // Find the items that we modified and they deleted
-    std::set_intersection( ancestor_ours_differences.m_changed.begin(), ancestor_ours_differences.m_changed.end(),
-                           ancestor_theirs_differences.m_removed.begin(), ancestor_theirs_differences.m_removed.end(),
+    std::set_intersection( ancestor_ours_differences.m_changed.begin(),
+                           ancestor_ours_differences.m_changed.end(),
+                           ancestor_theirs_differences.m_removed.begin(),
+                           ancestor_theirs_differences.m_removed.end(),
                            std::inserter( we_modified_they_deleted, we_modified_they_deleted.begin() ) );
-
-    // Find the items that they modified and we deleted
-    std::set_intersection( ancestor_theirs_differences.m_changed.begin(), ancestor_theirs_differences.m_changed.end(),
-                           ancestor_ours_differences.m_removed.begin(), ancestor_ours_differences.m_removed.end(),
+    std::set_intersection( ancestor_theirs_differences.m_changed.begin(),
+                           ancestor_theirs_differences.m_changed.end(),
+                           ancestor_ours_differences.m_removed.begin(),
+                           ancestor_ours_differences.m_removed.end(),
                            std::inserter( they_modified_we_deleted, they_modified_we_deleted.begin() ) );
-
-    // Find the items that both we and they modified
-    std::set_intersection( ancestor_ours_differences.m_changed.begin(), ancestor_ours_differences.m_changed.end(),
-                           ancestor_theirs_differences.m_changed.begin(), ancestor_theirs_differences.m_changed.end(),
+    std::set_intersection( ancestor_ours_differences.m_changed.begin(),
+                           ancestor_ours_differences.m_changed.end(),
+                           ancestor_theirs_differences.m_changed.begin(),
+                           ancestor_theirs_differences.m_changed.end(),
                            std::inserter( both_modified, both_modified.begin() ) );
+
+    // Run the structured diff/merge pipeline so we can actually emit a
+    // merged blob into git's buffer. Project pointers from the parser
+    // belong to whichever PROJECT the loader supplied — for blob loads
+    // there is no project, so this is safe.
+    KICAD_DIFF::PCB_DIFFER ourDiffer( ancestor_board.get(), ours_board.get() );
+    KICAD_DIFF::PCB_DIFFER theirDiffer( ancestor_board.get(), theirs_board.get() );
+
+    KICAD_DIFF::KICAD_MERGE_ENGINE engine;
+    KICAD_DIFF::MERGE_PLAN         plan = engine.Plan( ourDiffer.Diff(), theirDiffer.Diff() );
+
+    // Captured before the plan is moved into the applier; drives the
+    // conflict-or-clean return below without a second Plan() recompute.
+    const bool planResolved = plan.Resolved();
+
+    KICAD_DIFF::PCB_MERGE_APPLIER applier( ancestor_board.get(), ours_board.get(),
+                                           theirs_board.get(), std::move( plan ) );
+    std::unique_ptr<BOARD>        merged = applier.Apply();
+
+    if( !merged )
+    {
+        wxLogTrace( traceGit, "PCB merge applier failed to produce a board" );
+        return GIT_EUSER;
+    }
+
+    // Serialize the merged board into a std::string via PCB_IO_KICAD_SEXPR.
+    std::string serialized;
+
+    try
+    {
+        STRING_FORMATTER formatter;
+        PCB_IO_KICAD_SEXPR pcbIO;
+        pcbIO.SetOutputFormatter( &formatter );
+        pcbIO.Format( merged.get() );
+        serialized = formatter.GetString();
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxLogTrace( traceGit, "Failed to serialize merged board: %s", ioe.What() );
+        return GIT_EUSER;
+    }
+
+    if( KIGIT::WriteToGitBuf( m_result, serialized ) != 0 )
+    {
+        wxLogTrace( traceGit, "Failed to allocate git_buf for merged board" );
+        return GIT_EUSER;
+    }
+
+    // The merged board is fully serialized above, so the working-tree file is
+    // always valid. If conflicts remained unresolved, tell libgit2 to record a
+    // conflict; the user resolves it via the mergetool, which recomputes the
+    // plan from ancestor/ours/theirs.
+    if( !planResolved )
+        return GIT_EMERGECONFLICT;
 
     return 0;
 }
 
 
-std::unique_ptr<BOARD> readBoard( wxString& aFilename )
+/**
+ * Trampoline used by the libgit2 merge-driver registry. Constructs a
+ * KIGIT_PCB_MERGE, runs Merge(), and forwards the path/mode out of the
+ * libgit2 source struct.
+ */
+int KIGIT_PCB_MERGE::Apply( const git_merge_driver_source* aSrc, const char** aPathOut,
+                            unsigned int* aModeOut, git_buf* aMergedOut )
 {
-    // Take input from stdin
-    FILE_LINE_READER reader( aFilename );
-
-    PCB_IO_KICAD_SEXPR_PARSER             parser( &reader, nullptr, nullptr );
-    std::unique_ptr<BOARD> board;
-
-    try
-    {
-        board.reset( static_cast<BOARD*>( parser.Parse() ) );
-    }
-    catch( const IO_ERROR& )
-    {
-    }
-
-    return board;
+    return KIGIT::ApplyMergeDriver<KIGIT_PCB_MERGE>( aSrc, aPathOut, aModeOut, aMergedOut );
 }

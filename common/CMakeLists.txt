@@ -107,6 +107,8 @@ set( KICOMMON_SRCS
     git/git_commit_handler.cpp
     git/git_config_handler.cpp
     git/git_compare_handler.cpp
+    git/kigit_driver_registry.cpp
+    git/kigit_merge_blob_utils.cpp
     git/git_init_handler.cpp
     git/project_git_utils.cpp
     git/git_pull_handler.cpp
@@ -123,6 +125,24 @@ set( KICOMMON_SRCS
     git/git_backend.cpp
     git/kigit_orphan_registry.cpp
     git/libgit_backend.cpp
+
+    # Diff/merge engine
+    diff_merge/auto_resolution.cpp
+    diff_merge/diff_tree_grouping.cpp
+    diff_merge/kicad_diff_types.cpp
+    diff_merge/diff_scene.cpp
+    diff_merge/diff_doc_kind.cpp
+    diff_merge/merge_dispatch.cpp
+    diff_merge/identity_reconciler.cpp
+    diff_merge/kicad_differ.cpp
+    diff_merge/kicad_merge_engine.cpp
+    diff_merge/merge_validation_pipeline.cpp
+    diff_merge/merge_validators.cpp
+    diff_merge/project_file_patch.cpp
+    diff_merge/property_value_converter.cpp
+
+    # Properties
+    properties/wx_any_utils.cpp
 
     # Jobs
     jobs/job.cpp
@@ -162,6 +182,11 @@ set( KICOMMON_SRCS
     jobs/job_pcb_import.cpp
     jobs/job_pcb_render.cpp
     jobs/job_pcb_drc.cpp
+    jobs/job_diff_base.cpp
+    jobs/job_pcb_diff.cpp
+    jobs/job_fp_diff.cpp
+    jobs/job_sch_diff.cpp
+    jobs/job_sym_diff.cpp
     jobs/job_rc.cpp
     jobs/job_sch_erc.cpp
     jobs/job_sym_export_svg.cpp
@@ -498,6 +523,12 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_autosave_recovery_base.cpp
     dialogs/dialog_book_reporter.cpp
     dialogs/dialog_book_reporter_base.cpp
+    dialogs/dialog_git_mr_review.cpp
+    dialogs/dialog_git_mr_review_base.cpp
+    dialogs/dialog_kicad_diff.cpp
+    dialogs/dialog_kicad_diff_base.cpp
+    dialogs/dialog_kicad_merge_3way.cpp
+    dialogs/dialog_kicad_merge_3way_base.cpp
     dialogs/dialog_color_picker.cpp
     dialogs/dialog_color_picker_base.cpp
     dialogs/dialog_configure_paths.cpp
@@ -596,6 +627,7 @@ set( COMMON_WIDGET_SRCS
     widgets/footprint_choice.cpp
     widgets/footprint_diff_widget.cpp
     widgets/footprint_preview_widget.cpp
+    widgets/widget_diff_canvas.cpp
     widgets/footprint_select_widget.cpp
     widgets/grid_bitmap_toggle.cpp
     widgets/grid_button.cpp
@@ -804,6 +836,10 @@ set( COMMON_SRCS
 
 set( COMMON_SRCS
     ${COMMON_SRCS}
+
+    diff_merge/diff_renderer_gal.cpp
+    diff_merge/diff_renderer_plotter.cpp
+    diff_merge/diff_job_output.cpp
 
     origin_viewitem.cpp
 

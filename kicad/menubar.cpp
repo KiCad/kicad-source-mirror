@@ -236,6 +236,12 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
     }
 
     toolsMenu->AppendSeparator();
+    toolsMenu->Add( _( "Compare Project Branches..." ),
+                    _( "Review the file changes between two git refs in the "
+                       "current project" ),
+                    ID_COMPARE_PROJECT_BRANCHES,
+                    BITMAPS::change_entry_orient );
+
     toolsMenu->Add( _( "Edit Local File..." ),
                     _( "Edit local file in text editor" ),
                     ID_EDIT_LOCAL_FILE_IN_TEXT_EDITOR,

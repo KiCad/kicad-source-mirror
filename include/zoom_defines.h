@@ -64,3 +64,9 @@
 // Scale limits for zoom (especially mouse wheel) for Pcbnew
 #define ZOOM_MAX_LIMIT_PCBNEW 50000
 #define ZOOM_MIN_LIMIT_PCBNEW 0.1
+
+// Scale limits for zoom in WIDGET_DIFF_CANVAS. Document bboxes can span PCB
+// (nm-scale) or schematic (mil-scale) coordinates, so the limits sit between
+// the two document type extremes.
+#define ZOOM_MAX_LIMIT_DIFF 200.0
+#define ZOOM_MIN_LIMIT_DIFF 0.001

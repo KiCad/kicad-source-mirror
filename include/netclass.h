@@ -58,6 +58,19 @@ public:
 
     bool operator==( const NETCLASS& other ) const;
 
+    /**
+     * Compare every persisted field (name, priority, sized fields, colors,
+     * line style, tuning profile) to detect in-place edits that the shallow
+     * operator== misses.  Used by NET_SETTINGS::operator== to spot user edits
+     * to the default netclass that mutate the existing shared_ptr rather than
+     * swapping it.
+     *
+     * Description is intentionally NOT compared because the JSON serializer
+     * does not persist it -- including it would mark every load-round-tripped
+     * instance unequal.
+     */
+    bool EqualsByPersistedFields( const NETCLASS& aOther ) const;
+
     wxString GetClass() const
     {
         return wxT( "NETCLASS" );

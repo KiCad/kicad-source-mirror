@@ -52,6 +52,7 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <paths.h>
 #include <reporter.h>
+#include <scoped_set_reset.h>
 #include <string_utils.h>
 
 #include <settings/settings_manager.h>
@@ -87,14 +88,12 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
         JOB_DISPATCHER( aKiway ),
         m_cliSchematic( nullptr )
 {
-    Register( "bom",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportBom, this, std::placeholders::_1 ),
+    Register( "bom", std::bind( &EESCHEMA_JOBS_HANDLER::JobExportBom, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
-	              JOB_EXPORT_SCH_BOM* bomJob = dynamic_cast<JOB_EXPORT_SCH_BOM*>( job );
+                  JOB_EXPORT_SCH_BOM* bomJob = dynamic_cast<JOB_EXPORT_SCH_BOM*>( job );
 
-                  SCH_EDIT_FRAME* editFrame =
-                          static_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
+                  SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
 
                   wxCHECK( bomJob && editFrame, false );
 
@@ -105,34 +104,29 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
 
                   return dlg.ShowModal() == wxID_OK;
               } );
-    Register( "pythonbom",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPythonBom, this, std::placeholders::_1 ),
+    Register( "pythonbom", std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPythonBom, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
                   return true;
               } );
-    Register( "netlist",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportNetlist, this, std::placeholders::_1 ),
+    Register( "netlist", std::bind( &EESCHEMA_JOBS_HANDLER::JobExportNetlist, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
                   JOB_EXPORT_SCH_NETLIST* netJob = dynamic_cast<JOB_EXPORT_SCH_NETLIST*>( job );
 
-                  SCH_EDIT_FRAME* editFrame =
-                          static_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
+                  SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
 
                   wxCHECK( netJob && editFrame, false );
 
                   DIALOG_EXPORT_NETLIST dlg( editFrame, aParent, netJob );
                   return dlg.ShowModal() == wxID_OK;
               } );
-    Register( "plot",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPlot, this, std::placeholders::_1 ),
+    Register( "plot", std::bind( &EESCHEMA_JOBS_HANDLER::JobExportPlot, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
                   JOB_EXPORT_SCH_PLOT* plotJob = dynamic_cast<JOB_EXPORT_SCH_PLOT*>( job );
 
-                  SCH_EDIT_FRAME* editFrame =
-                          static_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
+                  SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( aKiway->Player( FRAME_SCH, false ) );
 
                   wxCHECK( plotJob && editFrame, false );
 
@@ -146,14 +140,22 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
                   DIALOG_PLOT_SCHEMATIC dlg( editFrame, aParent, plotJob );
                   return dlg.ShowModal() == wxID_OK;
               } );
-    Register( "symupgrade",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobSymUpgrade, this, std::placeholders::_1 ),
+    Register( "symupgrade", std::bind( &EESCHEMA_JOBS_HANDLER::JobSymUpgrade, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
                   return true;
               } );
-    Register( "symsvg",
-              std::bind( &EESCHEMA_JOBS_HANDLER::JobSymExportSvg, this, std::placeholders::_1 ),
+    Register( "symsvg", std::bind( &EESCHEMA_JOBS_HANDLER::JobSymExportSvg, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return true;
+              } );
+    Register( "sch_diff", std::bind( &EESCHEMA_JOBS_HANDLER::JobSchDiff, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return true;
+              } );
+    Register( "sym_diff", std::bind( &EESCHEMA_JOBS_HANDLER::JobSymDiff, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
                   return true;
@@ -223,9 +225,8 @@ SCHEMATIC* EESCHEMA_JOBS_HANDLER::getSchematic( const wxString& aPath )
     return sch;
 }
 
-void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSettings,
-                                                const wxString& aTheme, SCHEMATIC* aSch,
-                                                const wxString& aDrawingSheetOverride )
+void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSettings, const wxString& aTheme,
+                                                SCHEMATIC* aSch, const wxString& aDrawingSheetOverride )
 {
     COLOR_SETTINGS* cs = ::GetColorSettings( aTheme );
     aRenderSettings->LoadColors( cs );
@@ -244,27 +245,25 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSett
     // Load the drawing sheet from the filename stored in BASE_SCREEN::m_DrawingSheetFileName.
     // If empty, or not existing, the default drawing sheet is loaded.
 
-    auto loadSheet =
-            [&]( const wxString& path ) -> bool
-            {
-                wxString msg;
-                FILENAME_RESOLVER resolve;
-                resolve.SetProject( &aSch->Project() );
-                resolve.SetProgramBase( &Pgm() );
+    auto loadSheet = [&]( const wxString& path ) -> bool
+    {
+        wxString          msg;
+        FILENAME_RESOLVER resolve;
+        resolve.SetProject( &aSch->Project() );
+        resolve.SetProgramBase( &Pgm() );
 
-                wxString absolutePath = resolve.ResolvePath( path, wxGetCwd(),
-                                                             { aSch->GetEmbeddedFiles() } );
+        wxString absolutePath = resolve.ResolvePath( path, wxGetCwd(), { aSch->GetEmbeddedFiles() } );
 
-                if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( absolutePath, &msg ) )
-                {
-                    m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ), path )
-                                            + wxS( "\n" ) + msg + wxS( "\n" ),
-                                        RPT_SEVERITY_ERROR );
-                    return false;
-                }
+        if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( absolutePath, &msg ) )
+        {
+            m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ), path ) + wxS( "\n" ) + msg
+                                        + wxS( "\n" ),
+                                RPT_SEVERITY_ERROR );
+            return false;
+        }
 
-                return true;
-            };
+        return true;
+    };
 
     // try to load the override first
     if( !aDrawingSheetOverride.IsEmpty() && loadSheet( aDrawingSheetOverride ) )
@@ -283,8 +282,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     if( aPlotJob->m_plotFormat == SCH_PLOT_FORMAT::HPGL )
     {
-        m_reporter->Report( _( "Plotting to HPGL is no longer supported as of KiCad 10.0.\n" ),
-                            RPT_SEVERITY_ERROR );
+        m_reporter->Report( _( "Plotting to HPGL is no longer supported as of KiCad 10.0.\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_ARGS;
     }
 
@@ -343,20 +341,20 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     switch( aPlotJob->m_plotFormat )
     {
-    case SCH_PLOT_FORMAT::DXF:    format = PLOT_FORMAT::DXF;    break;
-    case SCH_PLOT_FORMAT::PDF:    format = PLOT_FORMAT::PDF;    break;
-    case SCH_PLOT_FORMAT::SVG:    format = PLOT_FORMAT::SVG;    break;
-    case SCH_PLOT_FORMAT::POST:   format = PLOT_FORMAT::POST;   break;
-    case SCH_PLOT_FORMAT::PNG:    format = PLOT_FORMAT::PNG;    break;
-    case SCH_PLOT_FORMAT::HPGL:   /* no longer supported */     break;
+    case SCH_PLOT_FORMAT::DXF: format = PLOT_FORMAT::DXF; break;
+    case SCH_PLOT_FORMAT::PDF: format = PLOT_FORMAT::PDF; break;
+    case SCH_PLOT_FORMAT::SVG: format = PLOT_FORMAT::SVG; break;
+    case SCH_PLOT_FORMAT::POST: format = PLOT_FORMAT::POST; break;
+    case SCH_PLOT_FORMAT::PNG: format = PLOT_FORMAT::PNG; break;
+    case SCH_PLOT_FORMAT::HPGL: /* no longer supported */ break;
     }
 
     int pageSizeSelect = PageFormatReq::PAGE_SIZE_AUTO;
 
     switch( aPlotJob->m_pageSizeSelect )
     {
-    case JOB_PAGE_SIZE::PAGE_SIZE_A:    pageSizeSelect = PageFormatReq::PAGE_SIZE_A;    break;
-    case JOB_PAGE_SIZE::PAGE_SIZE_A4:   pageSizeSelect = PageFormatReq::PAGE_SIZE_A4;   break;
+    case JOB_PAGE_SIZE::PAGE_SIZE_A: pageSizeSelect = PageFormatReq::PAGE_SIZE_A; break;
+    case JOB_PAGE_SIZE::PAGE_SIZE_A4: pageSizeSelect = PageFormatReq::PAGE_SIZE_A4; break;
     case JOB_PAGE_SIZE::PAGE_SIZE_AUTO: pageSizeSelect = PageFormatReq::PAGE_SIZE_AUTO; break;
     }
 
@@ -477,7 +475,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         m_reporter->Report( _( "Warning: duplicate sheet names.\n" ), RPT_SEVERITY_WARNING );
 
     std::unique_ptr<NETLIST_EXPORTER_BASE> helper;
-    unsigned netlistOption = 0;
+    unsigned                               netlistOption = 0;
 
     wxString fileExt;
 
@@ -597,10 +595,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
                     } )
             > 0 )
         {
-            m_reporter->Report(
-                    _( "Warning: schematic has annotation errors, please use the schematic "
-                       "editor to fix them\n" ),
-                    RPT_SEVERITY_WARNING );
+            m_reporter->Report( _( "Warning: schematic has annotation errors, please use the schematic "
+                                   "editor to fix them\n" ),
+                                RPT_SEVERITY_WARNING );
         }
     }
 
@@ -616,21 +613,20 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     // Mandatory fields first
     for( FIELD_T fieldId : MANDATORY_FIELDS )
     {
-        dataModel.AddColumn( GetCanonicalFieldName( fieldId ),
-                             GetDefaultFieldName( fieldId, DO_TRANSLATE ), false, currentVariant );
+        dataModel.AddColumn( GetCanonicalFieldName( fieldId ), GetDefaultFieldName( fieldId, DO_TRANSLATE ), false,
+                             currentVariant );
     }
 
     // Generated/virtual fields (e.g. ${QUANTITY}, ${ITEM_NUMBER}) present only in the fields table
     dataModel.AddColumn( FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE,
-                         GetGeneratedFieldDisplayName( FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE ),
-                         false, currentVariant );
+                         GetGeneratedFieldDisplayName( FIELDS_EDITOR_GRID_DATA_MODEL::QUANTITY_VARIABLE ), false,
+                         currentVariant );
     dataModel.AddColumn( FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE,
-                         GetGeneratedFieldDisplayName( FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE ),
-                         false, currentVariant );
+                         GetGeneratedFieldDisplayName( FIELDS_EDITOR_GRID_DATA_MODEL::ITEM_NUMBER_VARIABLE ), false,
+                         currentVariant );
 
     // Attribute fields (boolean flags on symbols)
-    dataModel.AddColumn( wxS( "${DNP}" ), GetGeneratedFieldDisplayName( wxS( "${DNP}" ) ),
-                         false, currentVariant );
+    dataModel.AddColumn( wxS( "${DNP}" ), GetGeneratedFieldDisplayName( wxS( "${DNP}" ) ), false, currentVariant );
     dataModel.AddColumn( wxS( "${EXCLUDE_FROM_BOM}" ), GetGeneratedFieldDisplayName( wxS( "${EXCLUDE_FROM_BOM}" ) ),
                          false, currentVariant );
     dataModel.AddColumn( wxS( "${EXCLUDE_FROM_BOARD}" ), GetGeneratedFieldDisplayName( wxS( "${EXCLUDE_FROM_BOARD}" ) ),
@@ -656,8 +652,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         dataModel.AddColumn( fieldName, GetGeneratedFieldDisplayName( fieldName ), true, currentVariant );
 
     // Add any templateFieldNames which aren't already present in the userFieldNames
-    for( const TEMPLATE_FIELDNAME& templateFieldname :
-         sch->Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
+    for( const TEMPLATE_FIELDNAME& templateFieldname : sch->Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
     {
         if( userFieldNames.count( templateFieldname.m_Name ) == 0 )
         {
@@ -694,9 +689,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
         if( !schPreset )
         {
-            m_reporter->Report( wxString::Format( _( "BOM preset '%s' not found" ) + wxS( "\n" ),
-                                                  aBomJob->m_bomPresetName ),
-                                RPT_SEVERITY_ERROR );
+            m_reporter->Report(
+                    wxString::Format( _( "BOM preset '%s' not found" ) + wxS( "\n" ), aBomJob->m_bomPresetName ),
+                    RPT_SEVERITY_ERROR );
 
             return CLI::EXIT_CODES::ERR_UNKNOWN;
         }
@@ -920,8 +915,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
         aJob->AddOutput( outPath );
 
-        m_reporter->Report( wxString::Format( _( "Wrote bill of materials to '%s'." ), outPath ),
-                            RPT_SEVERITY_ACTION );
+        m_reporter->Report( wxString::Format( _( "Wrote bill of materials to '%s'." ), outPath ), RPT_SEVERITY_ACTION );
     }
 
     return CLI::EXIT_CODES::OK;
@@ -967,8 +961,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
     if( erc.TestDuplicateSheetNames( false ) > 0 )
         m_reporter->Report( _( "Warning: duplicate sheet names.\n" ), RPT_SEVERITY_WARNING );
 
-    std::unique_ptr<NETLIST_EXPORTER_XML> xmlNetlist =
-            std::make_unique<NETLIST_EXPORTER_XML>( sch );
+    std::unique_ptr<NETLIST_EXPORTER_XML> xmlNetlist = std::make_unique<NETLIST_EXPORTER_XML>( sch );
 
     if( aNetJob->GetConfiguredOutputPath().IsEmpty() )
     {
@@ -994,8 +987,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
 
     aJob->AddOutput( outPath );
 
-    m_reporter->Report( wxString::Format( _( "Wrote bill of materials to '%s'." ), outPath ),
-                        RPT_SEVERITY_ACTION );
+    m_reporter->Report( wxString::Format( _( "Wrote bill of materials to '%s'." ), outPath ), RPT_SEVERITY_ACTION );
 
     return CLI::EXIT_CODES::OK;
 }
@@ -1033,7 +1025,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG* aSvgJob, SCH_REND
             filename = symbol->GetName();
 
             for( wxChar c : wxFileName::GetForbiddenChars( wxPATH_DOS ) )
-                 filename.Replace( c, ' ' );
+                filename.Replace( c, ' ' );
 
             // Even single units get a unit number in the filename. This simplifies the
             // handling of the files as they have a uniform pattern.
@@ -1047,19 +1039,16 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG* aSvgJob, SCH_REND
             }
             else if( bodyStyle <= (int) symbol->GetBodyStyleNames().size() )
             {
-                filename += wxS( "_" ) + symbol->GetBodyStyleNames()[bodyStyle-1].Lower();
+                filename += wxS( "_" ) + symbol->GetBodyStyleNames()[bodyStyle - 1].Lower();
             }
 
             fn.SetName( filename );
-            m_reporter->Report( wxString::Format( _( "Plotting symbol '%s' unit %d to '%s'\n" ),
-                                                  symbol->GetName(),
-                                                  unit,
-                                                  fn.GetFullPath() ),
+            m_reporter->Report( wxString::Format( _( "Plotting symbol '%s' unit %d to '%s'\n" ), symbol->GetName(),
+                                                  unit, fn.GetFullPath() ),
                                 RPT_SEVERITY_ACTION );
 
             // Get the symbol bounding box to fit the plot page to it
-            BOX2I symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, bodyStyle,
-                                                                    !aSvgJob->m_includeHiddenFields );
+            BOX2I symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, bodyStyle, !aSvgJob->m_includeHiddenFields );
             PAGE_INFO pageInfo( PAGE_SIZE_TYPE::User );
             pageInfo.SetHeightMils( schIUScale.IUToMils( symbolBB.GetHeight() * 1.2 ) );
             pageInfo.SetWidthMils( schIUScale.IUToMils( symbolBB.GetWidth() * 1.2 ) );
@@ -1079,9 +1068,9 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG* aSvgJob, SCH_REND
 
             if( !plotter->OpenFile( fn.GetFullPath() ) )
             {
-                m_reporter->Report( wxString::Format( _( "Unable to open destination '%s'" ) + wxS( "\n" ),
-                                                      fn.GetFullPath() ),
-                                    RPT_SEVERITY_ERROR );
+                m_reporter->Report(
+                        wxString::Format( _( "Unable to open destination '%s'" ) + wxS( "\n" ), fn.GetFullPath() ),
+                        RPT_SEVERITY_ERROR );
 
                 delete plotter;
                 return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
@@ -1148,8 +1137,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
 
         if( !symbol )
         {
-            m_reporter->Report( _( "There is no symbol selected to save." ) + wxS( "\n" ),
-                                RPT_SEVERITY_ERROR );
+            m_reporter->Report( _( "There is no symbol selected to save." ) + wxS( "\n" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_ARGS;
         }
     }
@@ -1166,7 +1154,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
     }
 
     SCH_RENDER_SETTINGS renderSettings;
-    COLOR_SETTINGS* cs = ::GetColorSettings( svgJob->m_colorTheme );
+    COLOR_SETTINGS*     cs = ::GetColorSettings( svgJob->m_colorTheme );
     renderSettings.LoadColors( cs );
     renderSettings.SetDefaultPenWidth( DEFAULT_LINE_WIDTH_MILS * schIUScale.IU_PER_MILS );
     renderSettings.m_ShowHiddenPins = svgJob->m_includeHiddenPins;
@@ -1217,8 +1205,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
     {
         if( wxFile::Exists( upgradeJob->m_outputLibraryPath ) )
         {
-            m_reporter->Report( _( "Output path must not conflict with existing path\n" ),
-                                RPT_SEVERITY_ERROR );
+            m_reporter->Report( _( "Output path must not conflict with existing path\n" ), RPT_SEVERITY_ERROR );
 
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
@@ -1287,7 +1274,6 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
 }
 
 
-
 int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 {
     JOB_SCH_ERC* ercJob = dynamic_cast<JOB_SCH_ERC*>( aJob );
@@ -1331,8 +1317,8 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     {
     case JOB_SCH_ERC::UNITS::INCH: units = EDA_UNITS::INCH; break;
     case JOB_SCH_ERC::UNITS::MILS: units = EDA_UNITS::MILS; break;
-    case JOB_SCH_ERC::UNITS::MM:   units = EDA_UNITS::MM;   break;
-    default:                       units = EDA_UNITS::MM;   break;
+    case JOB_SCH_ERC::UNITS::MM: units = EDA_UNITS::MM; break;
+    default: units = EDA_UNITS::MM; break;
     }
 
     std::shared_ptr<SHEETLIST_ERC_ITEMS_PROVIDER> markersProvider =
@@ -1346,8 +1332,8 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     ERC_TESTER ercTester( sch );
 
     std::unique_ptr<DS_PROXY_VIEW_ITEM> drawingSheet( getDrawingSheetProxyView( sch ) );
-    ercTester.RunTests( drawingSheet.get(), nullptr, m_kiway->KiFACE( KIWAY::FACE_CVPCB ),
-                        &sch->Project(), m_progressReporter );
+    ercTester.RunTests( drawingSheet.get(), nullptr, m_kiway->KiFACE( KIWAY::FACE_CVPCB ), &sch->Project(),
+                        m_progressReporter );
 
     markersProvider->SetSeverities( ercJob->m_severity );
 
@@ -1365,13 +1351,11 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     if( !wroteReport )
     {
-        m_reporter->Report( wxString::Format( _( "Unable to save ERC report to %s\n" ), outPath ),
-                            RPT_SEVERITY_ERROR );
+        m_reporter->Report( wxString::Format( _( "Unable to save ERC report to %s\n" ), outPath ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    m_reporter->Report( wxString::Format( _( "Saved ERC Report to %s\n" ), outPath ),
-                        RPT_SEVERITY_ACTION );
+    m_reporter->Report( wxString::Format( _( "Saved ERC Report to %s\n" ), outPath ), RPT_SEVERITY_ACTION );
 
     if( ercJob->m_exitCodeViolations )
     {
@@ -1434,9 +1418,8 @@ int EESCHEMA_JOBS_HANDLER::JobUpgrade( JOB* aJob )
 DS_PROXY_VIEW_ITEM* EESCHEMA_JOBS_HANDLER::getDrawingSheetProxyView( SCHEMATIC* aSch )
 {
     DS_PROXY_VIEW_ITEM* drawingSheet =
-            new DS_PROXY_VIEW_ITEM( schIUScale, &aSch->RootScreen()->GetPageSettings(),
-                                    &aSch->Project(), &aSch->RootScreen()->GetTitleBlock(),
-                                    aSch->GetProperties() );
+            new DS_PROXY_VIEW_ITEM( schIUScale, &aSch->RootScreen()->GetPageSettings(), &aSch->Project(),
+                                    &aSch->RootScreen()->GetTitleBlock(), aSch->GetProperties() );
 
     drawingSheet->SetPageNumber( TO_UTF8( aSch->RootScreen()->GetPageNumber() ) );
     drawingSheet->SetSheetCount( aSch->RootScreen()->GetPageCount() );
@@ -1454,4 +1437,777 @@ DS_PROXY_VIEW_ITEM* EESCHEMA_JOBS_HANDLER::getDrawingSheetProxyView( SCHEMATIC* 
     drawingSheet->SetSheetPath( "" );
 
     return drawingSheet;
+}
+
+
+// ============================================================================
+// JobSchDiff: sch_diff implementation
+// ============================================================================
+#include <diff_merge/diff_job_output.h>
+#include <diff_merge/diff_renderer_plotter.h>
+#include <diff_merge/diff_scene.h>
+#include <diff_merge/sch_differ.h>
+#include <diff_merge/sch_geometry_extractor.h>
+#include <diff_merge/project_file_patch.h>
+#include <diff_merge/kicad_diff_types.h>
+#include <project/project_file.h>
+#include <settings/json_settings_internals.h>
+#include <jobs/job_sch_diff.h>
+#include <jobs/scratch_doc.h>
+#include <wx/file.h>
+
+
+// Load a schematic into a SCRATCH_DOC<SCHEMATIC> that keeps a dedicated scratch
+// PROJECT attached for the document's lifetime. Without a per-document project,
+// a second LoadProject(path, true) destroys the first project and the first
+// schematic's m_project dangles. The destructor severs the link via
+// SetProject( nullptr ). Shared by every SCH diff/merge job.
+static SCRATCH_DOC<SCHEMATIC> loadScratchSchematic( SETTINGS_MANAGER& aMgr, const wxString& aPath )
+{
+    return LoadScratchDoc<SCHEMATIC>(
+            aMgr, aPath,
+            [aPath]( PROJECT* aProject )
+            {
+                return std::unique_ptr<SCHEMATIC>(
+                        EESCHEMA_HELPERS::LoadSchematic( aPath,
+                                                         /*aSetActive=*/false,
+                                                         /*aForceDefaultProject=*/false, aProject,
+                                                         /*aCalculateConnectivity=*/false ) );
+            },
+            []( SCHEMATIC* aSch )
+            {
+                aSch->SetProject( nullptr );
+            } );
+}
+
+
+int EESCHEMA_JOBS_HANDLER::JobSchDiff( JOB* aJob )
+{
+    JOB_SCH_DIFF* diffJob = dynamic_cast<JOB_SCH_DIFF*>( aJob );
+
+    if( !diffJob )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    // Two schematics in the same SettingsManager need scratch PROJECTs;
+    // otherwise the second LoadProject(path, true) destroys the first
+    // project and the first schematic's m_project dangles, crashing on
+    // any per-instance bbox / field / reference resolution (e.g. inside
+    // SCH_DIFFER's makeDescriptor calling SCH_SYMBOL::GetRef).
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
+    SCRATCH_DOC<SCHEMATIC> a = loadScratchSchematic( mgr, diffJob->m_inputA );
+    SCRATCH_DOC<SCHEMATIC> b = loadScratchSchematic( mgr, diffJob->m_inputB );
+
+    if( !a.doc )
+    {
+        m_reporter->Report( wxString::Format( _( "Failed to load %s\n" ), diffJob->m_inputA ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    if( !b.doc )
+    {
+        m_reporter->Report( wxString::Format( _( "Failed to load %s\n" ), diffJob->m_inputB ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    SCHEMATIC* schA = a.doc.get();
+    SCHEMATIC* schB = b.doc.get();
+
+    KICAD_DIFF::SCH_DIFFER    differ( schA, schB, diffJob->m_inputB );
+    KICAD_DIFF::DOCUMENT_DIFF result = differ.Diff();
+
+    int diffExitCode = KICAD_DIFF::DiffExitCode( result );
+
+    if( diffJob->m_exitCodeOnly )
+        return diffExitCode;
+
+    // The schematic geometry (wires, junctions, symbol/sheet/label bbox
+    // outlines) renders beneath the change rectangles for PNG/SVG, matching
+    // the interactive dialog.
+    KICAD_DIFF::DIFF_EMIT_OPTIONS emitOpts =
+            KICAD_DIFF::MakeEmitOptions( *diffJob, diffJob->m_inputA, diffJob->m_inputB );
+    emitOpts.docKind            = KICAD_DIFF::DOC_KIND::SCH;
+    emitOpts.referenceGeometry  = [&]( const KIGFX::COLOR4D& aColor )
+                                  { return KICAD_DIFF::ExtractSchematicGeometry( *schA, aColor ); };
+    emitOpts.comparisonGeometry = [&]( const KIGFX::COLOR4D& aColor )
+                                  { return KICAD_DIFF::ExtractSchematicGeometry( *schB, aColor ); };
+
+    return KICAD_DIFF::EmitDiffResult( result, emitOpts, diffExitCode, *m_reporter );
+}
+
+
+// ============================================================================
+// JobSymDiff: sym_diff implementation
+// ============================================================================
+#include <diff_merge/sym_lib_differ.h>
+#include <jobs/job_sym_diff.h>
+
+
+// Load one side of a symbol-library diff into its owner vector and name map.
+// When aAllowEmpty is set an empty path resolves to a clean (empty) side; the
+// non-interactive job path leaves it unset so a missing path is an input error.
+static int loadSymbolLibrarySide( const wxString& aPath,
+                                  std::vector<std::unique_ptr<LIB_SYMBOL>>& aOwners,
+                                  KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP& aMap, bool aAllowEmpty,
+                                  REPORTER& aReporter )
+{
+    if( aAllowEmpty && aPath.IsEmpty() )
+        return CLI::EXIT_CODES::SUCCESS;
+
+    try
+    {
+        auto loaded = KICAD_DIFF::SYM_LIB_DIFFER::LoadLibrary( aPath );
+        aOwners = std::move( loaded.first );
+        aMap = std::move( loaded.second );
+        return CLI::EXIT_CODES::SUCCESS;
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        aReporter.Report( wxString::Format( _( "Failed to load %s: %s\n" ), aPath, ioe.What() ),
+                          RPT_SEVERITY_ERROR );
+    }
+    catch( const std::exception& e )
+    {
+        aReporter.Report(
+                wxString::Format( _( "Failed to load %s: %s\n" ), aPath, wxString::FromUTF8( e.what() ) ),
+                RPT_SEVERITY_ERROR );
+    }
+
+    return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+}
+
+
+// Flatten a symbol-library name map into a single DOCUMENT_GEOMETRY tinted with
+// the supplied per-side theme colour.
+static KICAD_DIFF::DOCUMENT_GEOMETRY
+symbolLibraryGeometry( const KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP& aMap, const KIGFX::COLOR4D& aColor )
+{
+    KICAD_DIFF::DOCUMENT_GEOMETRY geometry;
+
+    for( const auto& [name, symbol] : aMap )
+    {
+        if( symbol )
+            KICAD_DIFF::AppendGeometry( geometry, KICAD_DIFF::ExtractSymbolGeometry( *symbol, aColor ) );
+    }
+
+    return geometry;
+}
+
+
+int EESCHEMA_JOBS_HANDLER::JobSymDiff( JOB* aJob )
+{
+    JOB_SYM_DIFF* diffJob = dynamic_cast<JOB_SYM_DIFF*>( aJob );
+
+    if( !diffJob )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    std::vector<std::unique_ptr<LIB_SYMBOL>> ownersA;
+    std::vector<std::unique_ptr<LIB_SYMBOL>> ownersB;
+    KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP   mapA;
+    KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP   mapB;
+
+    if( int rc = loadSymbolLibrarySide( diffJob->m_inputA, ownersA, mapA, false, *m_reporter );
+        rc != CLI::EXIT_CODES::SUCCESS )
+    {
+        return rc;
+    }
+
+    if( int rc = loadSymbolLibrarySide( diffJob->m_inputB, ownersB, mapB, false, *m_reporter );
+        rc != CLI::EXIT_CODES::SUCCESS )
+    {
+        return rc;
+    }
+
+    KICAD_DIFF::SYM_LIB_DIFFER differ( mapA, mapB, diffJob->m_inputB );
+    KICAD_DIFF::DOCUMENT_DIFF  result = differ.Diff();
+
+    int diffExitCode = KICAD_DIFF::DiffExitCode( result );
+
+    if( diffJob->m_exitCodeOnly )
+        return diffExitCode;
+
+    KICAD_DIFF::DIFF_EMIT_OPTIONS emitOpts =
+            KICAD_DIFF::MakeEmitOptions( *diffJob, diffJob->m_inputA, diffJob->m_inputB );
+    emitOpts.docKind            = KICAD_DIFF::DOC_KIND::SYM_LIB;
+    emitOpts.referenceGeometry  = [&]( const KIGFX::COLOR4D& aColor )
+                                  { return symbolLibraryGeometry( mapA, aColor ); };
+    emitOpts.comparisonGeometry = [&]( const KIGFX::COLOR4D& aColor )
+                                  { return symbolLibraryGeometry( mapB, aColor ); };
+
+    return KICAD_DIFF::EmitDiffResult( result, emitOpts, diffExitCode, *m_reporter );
+}
+
+
+// ============================================================================
+// JobOpenDiffDialog: load two on-disk files and open DIALOG_KICAD_DIFF.
+// Dispatched from the project manager / PR-review dialog via KIWAY.
+// ============================================================================
+#include <dialogs/dialog_kicad_diff.h>
+#include <diff_merge/sch_diff_canvas_context.h>
+#include <diff_merge/sch_geometry_extractor.h>
+#include <jobs/scratch_doc.h>
+
+
+int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxString& aFileA,
+                                           const wxString& aFileB, const wxString& aLabelA,
+                                           const wxString& aLabelB, wxWindow* aParent,
+                                           REPORTER* aReporter )
+{
+    // Restore m_reporter on scope exit so a caller's transient (often
+    // stack-local) reporter doesn't outlive this call as a dangling member.
+    SCOPED_SET_RESET<REPORTER*> reporterGuard( m_reporter,
+                                               aReporter ? aReporter : m_reporter );
+
+    wxWindow* parent = aParent ? aParent : ( wxTheApp ? wxTheApp->GetTopWindow() : nullptr );
+
+    KICAD_DIFF::DOCUMENT_DIFF     result;
+    KICAD_DIFF::DOCUMENT_GEOMETRY refGeometry;
+    KICAD_DIFF::DOCUMENT_GEOMETRY compGeometry;
+
+    switch( aKind )
+    {
+    case KICAD_DIFF::DOC_KIND::SCH:
+    {
+        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
+        SCRATCH_DOC<SCHEMATIC> a = loadScratchSchematic( mgr, aFileA );
+        SCRATCH_DOC<SCHEMATIC> b = loadScratchSchematic( mgr, aFileB );
+
+        if( !a.doc && !aFileA.IsEmpty() )
+        {
+            m_reporter->Report( wxString::Format( _( "Failed to load %s\n" ), aFileA ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+        }
+
+        if( !b.doc && !aFileB.IsEmpty() )
+        {
+            m_reporter->Report( wxString::Format( _( "Failed to load %s\n" ), aFileB ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+        }
+
+        // Synthesize empty SCHEMATICs against scratch PROJECTs for any
+        // missing side so SCH_DIFFER sees a valid empty document.
+        PROJECT                    scratchPrjA;
+        PROJECT                    scratchPrjB;
+        std::unique_ptr<SCHEMATIC> emptyA;
+        std::unique_ptr<SCHEMATIC> emptyB;
+
+        if( !a.doc )
+        {
+            emptyA = std::make_unique<SCHEMATIC>( &scratchPrjA );
+            emptyA->CreateDefaultScreens();
+        }
+
+        if( !b.doc )
+        {
+            emptyB = std::make_unique<SCHEMATIC>( &scratchPrjB );
+            emptyB->CreateDefaultScreens();
+        }
+
+        SCHEMATIC* schA = a.doc ? a.doc.get() : emptyA.get();
+        SCHEMATIC* schB = b.doc ? b.doc.get() : emptyB.get();
+
+        KICAD_DIFF::SCH_DIFFER differ( schA, schB, aFileB );
+        result = differ.Diff();
+
+        const KICAD_DIFF::DIFF_COLOR_THEME theme;
+        refGeometry = KICAD_DIFF::ExtractSchematicGeometry( *schA, theme.reference );
+        compGeometry = KICAD_DIFF::ExtractSchematicGeometry( *schB, theme.comparison );
+
+        const wxString labelA = aLabelA.IsEmpty() ? aFileA : aLabelA;
+        const wxString labelB = aLabelB.IsEmpty() ? aFileB : aLabelB;
+
+        DIALOG_KICAD_DIFF dlg(
+                parent, labelA, labelB, result, std::move( refGeometry ), std::move( compGeometry ),
+                [schA, schB, color = theme.reference]( WIDGET_DIFF_CANVAS& aCanvas, const KIID_PATH& aSheetPath )
+                {
+                    SCH_SCREEN* refScreen = schA ? schA->RootScreen() : nullptr;
+                    SCH_SCREEN* compScreen = schB ? schB->RootScreen() : nullptr;
+
+                    if( !aSheetPath.empty() )
+                    {
+                        if( schA )
+                        {
+                            if( auto sp = schA->Hierarchy().GetSheetPathByKIIDPath( aSheetPath, true ) )
+                                refScreen = sp->LastScreen();
+                        }
+
+                        if( schB )
+                        {
+                            if( auto sp = schB->Hierarchy().GetSheetPathByKIIDPath( aSheetPath, true ) )
+                                compScreen = sp->LastScreen();
+                        }
+                    }
+
+                    KICAD_DIFF::ConfigureSchDiffCanvasContext( aCanvas, schA, schB, color, {}, {}, {}, refScreen,
+                                                               compScreen );
+                } );
+        dlg.ShowModal();
+
+        if( emptyA )
+            emptyA->SetProject( nullptr );
+
+        if( emptyB )
+            emptyB->SetProject( nullptr );
+
+        return CLI::EXIT_CODES::SUCCESS;
+    }
+    case KICAD_DIFF::DOC_KIND::SYM_LIB:
+    {
+        std::vector<std::unique_ptr<LIB_SYMBOL>> ownersA;
+        std::vector<std::unique_ptr<LIB_SYMBOL>> ownersB;
+        KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP   mapA;
+        KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP   mapB;
+
+        if( int rc = loadSymbolLibrarySide( aFileA, ownersA, mapA, true, *m_reporter );
+            rc != CLI::EXIT_CODES::SUCCESS )
+        {
+            return rc;
+        }
+
+        if( int rc = loadSymbolLibrarySide( aFileB, ownersB, mapB, true, *m_reporter );
+            rc != CLI::EXIT_CODES::SUCCESS )
+        {
+            return rc;
+        }
+
+        KICAD_DIFF::SYM_LIB_DIFFER differ( mapA, mapB, aFileB );
+        result = differ.Diff();
+
+        const KICAD_DIFF::DIFF_COLOR_THEME theme;
+        refGeometry = symbolLibraryGeometry( mapA, theme.reference );
+        compGeometry = symbolLibraryGeometry( mapB, theme.comparison );
+        break;
+    }
+    default:
+        m_reporter->Report( _( "Unsupported document kind for this dispatcher.\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    const wxString labelA = aLabelA.IsEmpty() ? aFileA : aLabelA;
+    const wxString labelB = aLabelB.IsEmpty() ? aFileB : aLabelB;
+
+    DIALOG_KICAD_DIFF dlg( parent, labelA, labelB, result, std::move( refGeometry ), std::move( compGeometry ) );
+    dlg.ShowModal();
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+// ============================================================================
+// JobSchMerge: sch_merge implementation
+// ============================================================================
+#include <diff_merge/sch_merge_applier.h>
+#include <dialogs/dialog_kicad_merge_3way.h>
+#include <jobs/scratch_doc.h>
+
+
+int EESCHEMA_JOBS_HANDLER::RunMerge( KICAD_DIFF::DOC_KIND aKind, const wxString& aAncestor,
+                                     const wxString& aOurs, const wxString& aTheirs,
+                                     const wxString& aOutput, bool aInteractive, bool aSingleFile,
+                                     REPORTER* aReporter )
+{
+    // Restore m_reporter on scope exit so a caller's transient (often
+    // stack-local) reporter doesn't outlive this call as a dangling member.
+    SCOPED_SET_RESET<REPORTER*> reporterGuard( m_reporter,
+                                               aReporter ? aReporter : m_reporter );
+
+    if( aKind == KICAD_DIFF::DOC_KIND::SYM_LIB )
+        return runSymLibMerge( aAncestor, aOurs, aTheirs, aOutput );
+
+    return runSchMerge( aAncestor, aOurs, aTheirs, aOutput, aInteractive );
+}
+
+
+int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxString& aOurs,
+                                        const wxString& aTheirs, const wxString& aOutput,
+                                        bool aInteractive )
+{
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
+    SCRATCH_DOC<SCHEMATIC> ancestor = loadScratchSchematic( mgr, aAncestor );
+    SCRATCH_DOC<SCHEMATIC> ours = loadScratchSchematic( mgr, aOurs );
+    SCRATCH_DOC<SCHEMATIC> theirs = loadScratchSchematic( mgr, aTheirs );
+
+    if( !ancestor.doc || !ours.doc || !theirs.doc )
+    {
+        m_reporter->Report( _( "Failed to load one or more input schematics\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    // Multi-sheet hierarchies are supported: each non-root sub-sheet is
+    // written alongside the output root using its original basename. Top-level
+    // sheets stay singular — multiple roots is an editor invariant the diff
+    // engine never models, so refuse those.
+    auto hasSingleRoot = []( const SCHEMATIC* aSch )
+    {
+        return aSch->GetTopLevelSheets().size() == 1;
+    };
+
+    if( !hasSingleRoot( ancestor.doc.get() ) || !hasSingleRoot( ours.doc.get() ) || !hasSingleRoot( theirs.doc.get() ) )
+    {
+        m_reporter->Report( _( "sch merge requires each input to have a single top-level sheet\n" ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    KICAD_DIFF::SCH_DIFFER ourDiff( ancestor.doc.get(), ours.doc.get() );
+    KICAD_DIFF::SCH_DIFFER theirDiff( ancestor.doc.get(), theirs.doc.get() );
+
+    KICAD_DIFF::DOCUMENT_DIFF ourDocDiff = ourDiff.Diff();
+    KICAD_DIFF::DOCUMENT_DIFF theirDocDiff = theirDiff.Diff();
+
+    KICAD_DIFF::KICAD_MERGE_ENGINE engine;
+    KICAD_DIFF::MERGE_PLAN         plan = engine.Plan( ourDocDiff, theirDocDiff );
+
+    // A cancelled dialog leaves plan unresolved and falls through to the
+    // marker flow below.
+    if( aInteractive && !plan.Resolved() )
+    {
+        if( !Pgm().IsGUI() )
+        {
+            m_reporter->Report( _( "--interactive requires a GUI KiCad process; the console "
+                                   "kicad-cli cannot open dialogs.\n" ),
+                                RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_ARGS;
+        }
+
+        const KICAD_DIFF::DIFF_COLOR_THEME        theme;
+        DIALOG_KICAD_MERGE_3WAY::CONFLICT_CONTEXT ctx;
+
+        if( ancestor.doc )
+            ctx.ancestorGeometry = KICAD_DIFF::ExtractSchematicGeometry( *ancestor.doc, theme.reference );
+
+        if( ours.doc )
+            ctx.oursGeometry = KICAD_DIFF::ExtractSchematicGeometry( *ours.doc, theme.reference );
+
+        if( theirs.doc )
+            ctx.theirsGeometry = KICAD_DIFF::ExtractSchematicGeometry( *theirs.doc, theme.comparison );
+
+        KICAD_DIFF::CollectChangeBBoxes( ourDocDiff, ctx.oursBBoxes );
+        KICAD_DIFF::CollectChangeBBoxes( theirDocDiff, ctx.theirsBBoxes );
+
+        DIALOG_KICAD_MERGE_3WAY dlg( wxTheApp->GetTopWindow(), plan, std::move( ctx ) );
+
+        if( dlg.ShowModal() == wxID_APPLY )
+            plan = dlg.GetResolvedPlan();
+    }
+
+    // Snapshot of the plan before the applier moves it; drives the
+    // unresolved-conflict report below.
+    const KICAD_DIFF::MERGE_PLAN planSnapshot = plan;
+
+    KICAD_DIFF::SCH_MERGE_APPLIER applier( ancestor.doc.get(), ours.doc.get(), theirs.doc.get(), std::move( plan ) );
+
+    if( !applier.Apply() )
+    {
+        m_reporter->Report( _( "Merge applier failed to produce a schematic\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    // Sheet add/remove/replace resolutions are explicitly skipped by
+    // SCH_MERGE_APPLIER (see isSheetItem); succeeding here would silently
+    // drop hierarchy edits.
+    if( applier.GetReport().sheetActionsSkipped > 0 )
+    {
+        m_reporter->Report( _( "Merge contains hierarchical sheet structure changes that sch merge "
+                               "cannot apply\n" ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    // Refusal above guarantees a single top-level sheet.
+    SCH_SHEET* rootSheet = ancestor.doc->GetTopLevelSheet( 0 );
+
+    wxFileName outFn( aOutput );
+    outFn.MakeAbsolute();
+
+    // Sub-sheets land alongside the root by basename. Preserving the original
+    // relative-path subdirectory structure would force kicad-cli sch merge to
+    // mkdir into user space; the basename-flat scheme is what makes the common
+    // git-mergetool case work without surprises.
+    const wxString outDir = outFn.GetPath();
+
+    SCH_SCREENS screens( rootSheet );
+    SCH_SCREEN* rootScreen = rootSheet->GetScreen();
+
+    // Detect two sub-sheets sharing a basename (e.g., a/foo.kicad_sch and
+    // b/foo.kicad_sch) before any I/O — the flat output layout can't honor
+    // both, and silently overwriting one is the worst outcome.
+    std::map<wxString, SCH_SCREEN*> basenameOwner;
+
+    for( size_t i = 0; i < screens.GetCount(); ++i )
+    {
+        SCH_SCREEN* screen = screens.GetScreen( i );
+
+        if( !screen || screen == rootScreen )
+            continue;
+
+        const wxString basename = wxFileName( screen->GetFileName() ).GetFullName();
+
+        if( basename.IsEmpty() )
+            continue;
+
+        auto [it, inserted] = basenameOwner.emplace( basename, screen );
+
+        if( !inserted && it->second != screen )
+        {
+            m_reporter->Report( wxString::Format( _( "Cannot flatten sub-sheets with duplicate "
+                                                     "basename '%s'\n" ),
+                                                  basename ),
+                                RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+        }
+    }
+
+    // Rewrite every SCH_SHEET symbol's filename field to its child screen's
+    // basename, so the root file (and any intermediate sheet) references the
+    // flattened layout we're about to write.
+    for( size_t i = 0; i < screens.GetCount(); ++i )
+    {
+        SCH_SCREEN* parent = screens.GetScreen( i );
+
+        if( !parent )
+            continue;
+
+        for( SCH_ITEM* item : parent->Items().OfType( SCH_SHEET_T ) )
+        {
+            SCH_SHEET*  childRef = static_cast<SCH_SHEET*>( item );
+            SCH_SCREEN* childScreen = childRef->GetScreen();
+
+            if( !childScreen || childScreen == rootScreen )
+                continue;
+
+            const wxString basename = wxFileName( childScreen->GetFileName() ).GetFullName();
+
+            if( !basename.IsEmpty() )
+                childRef->SetFileName( basename );
+        }
+    }
+
+    try
+    {
+        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+        pi->SaveSchematicFile( outFn.GetFullPath(), rootSheet, ancestor.doc.get() );
+
+        for( size_t i = 0; i < screens.GetCount(); ++i )
+        {
+            SCH_SCREEN* screen = screens.GetScreen( i );
+            SCH_SHEET*  sheet = screens.GetSheet( i );
+
+            if( !screen || !sheet || screen == rootScreen )
+                continue;
+
+            const wxString basename = wxFileName( screen->GetFileName() ).GetFullName();
+
+            if( basename.IsEmpty() )
+                continue;
+
+            wxFileName outSubFn( outDir, basename );
+            pi->SaveSchematicFile( outSubFn.GetFullPath(), sheet, ancestor.doc.get() );
+        }
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        m_reporter->Report( wxString::Format( _( "Failed to save merged schematic: %s\n" ), ioe.What() ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    // If the applier mutated project-file-scoped state (ERC severities, etc),
+    // persist it as a sibling .kicad_pro alongside the .kicad_sch output —
+    // otherwise the resolution dies with the process. Only write when actually
+    // needed; clobbering an existing .kicad_pro with ancestor's project
+    // would lose unrelated user settings (library tables, mru paths).
+    if( applier.GetReport().projectFileTouched && ancestor.project )
+    {
+        wxFileName proFn = outFn;
+        proFn.SetExt( FILEEXT::ProjectFileExtension );
+
+        // JSON-patch path: only the diffed DOC_PROP fields are written into
+        // the output .kicad_pro, so any non-diffed user customisations
+        // (library tables, last paths, layer presets, text variables) are
+        // preserved.  Fall back to SaveProjectCopy on parse failure.
+        PROJECT_FILE& ancProj = ancestor.project->GetProjectFile();
+        ancProj.Store();
+
+        const KICAD_DIFF::SCH_MERGE_APPLIER::REPORT& mergeReport = applier.GetReport();
+
+        // PROJECT_FILE::Store() flushes the project file's own params but not
+        // its registered NESTED_SETTINGS. Flush only the resolved nested
+        // settings so Internals() reflects the merge result without touching
+        // unrelated project subtrees.
+        if( mergeReport.ercSeveritiesTouched && ancestor.doc )
+            ancestor.doc->ErcSettings().SaveToFile( wxEmptyString, true );
+
+        if( mergeReport.drawingSheetFileTouched && ancestor.doc )
+            ancestor.doc->Settings().SaveToFile( wxEmptyString, true );
+
+        std::set<wxString> touched;
+        if( mergeReport.ercSeveritiesTouched )
+            touched.insert( KICAD_DIFF::DOC_PROP_ERC_SEVERITIES );
+
+        if( mergeReport.drawingSheetFileTouched )
+            touched.insert( KICAD_DIFF::DOC_PROP_DRAWING_SHEET );
+
+        if( !KICAD_DIFF::ApplyProjectFilePatches( proFn.GetFullPath(), *ancProj.Internals(), touched,
+                                                  KICAD_DIFF::DOC_KIND::SCH ) )
+        {
+            if( !Pgm().GetSettingsManager().SaveProjectCopy( proFn.GetFullPath(), ancestor.project ) )
+            {
+                m_reporter->Report(
+                        wxString::Format( _( "Failed to save merged project file: %s\n" ), proFn.GetFullPath() ),
+                        RPT_SEVERITY_ERROR );
+                return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+            }
+        }
+    }
+
+    // Surface post-apply validator findings (refdes collisions, schema
+    // mismatch, missed connectivity rebuild). Advisory — they do not change the
+    // exit code, only the merge's resolved/unresolved status does.
+    for( const KICAD_DIFF::VALIDATION_FAILURE& f : applier.GetReport().validation.failures )
+        m_reporter->Report( wxString::Format( wxS( "%s: %s\n" ), f.validator, f.message ), f.severity );
+
+    // The merged schematic was written to m_outputPath above, so the output is
+    // always valid. Unresolved conflicts are reported and signalled via the
+    // exit code; the user resolves them with the interactive mergetool.
+    if( !planSnapshot.Resolved() )
+    {
+        m_reporter->Report( wxString::Format( _( "Merge completed with %zu unresolved conflict(s) in %s\n" ),
+                                              planSnapshot.ConflictCount(), aOutput ),
+                            RPT_SEVERITY_WARNING );
+        return CLI::EXIT_CODES::ERR_RC_VIOLATIONS;
+    }
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+// ============================================================================
+// JobSymLibMerge: 3-way merge of .kicad_sym libraries.
+// ============================================================================
+#include <diff_merge/sym_lib_merge_applier.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.h>
+#include <wx/ffile.h>
+
+
+int EESCHEMA_JOBS_HANDLER::runSymLibMerge( const wxString& aAncestor, const wxString& aOurs,
+                                           const wxString& aTheirs, const wxString& aOutput )
+{
+    if( aOutput.IsEmpty() )
+    {
+        m_reporter->Report( _( "--output is required\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    // Three sides into name -> LIB_SYMBOL maps.
+    struct LIB_SIDE
+    {
+        std::vector<std::unique_ptr<LIB_SYMBOL>> owners;
+        KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP   map;
+    };
+
+    LIB_SIDE ancestor, ours, theirs;
+
+    auto loadSide = [&]( const wxString& aPath, LIB_SIDE& aSide ) -> int
+    {
+        try
+        {
+            auto loaded = KICAD_DIFF::SYM_LIB_DIFFER::LoadLibrary( aPath );
+            aSide.owners = std::move( loaded.first );
+            aSide.map = std::move( loaded.second );
+            return CLI::EXIT_CODES::SUCCESS;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            m_reporter->Report( wxString::Format( _( "Failed to load %s: %s\n" ), aPath, ioe.What() ),
+                                RPT_SEVERITY_ERROR );
+        }
+        catch( const std::exception& e )
+        {
+            m_reporter->Report(
+                    wxString::Format( _( "Failed to load %s: %s\n" ), aPath, wxString::FromUTF8( e.what() ) ),
+                    RPT_SEVERITY_ERROR );
+        }
+
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    };
+
+    if( int rc = loadSide( aAncestor, ancestor ); rc != CLI::EXIT_CODES::SUCCESS )
+        return rc;
+
+    if( int rc = loadSide( aOurs, ours ); rc != CLI::EXIT_CODES::SUCCESS )
+        return rc;
+
+    if( int rc = loadSide( aTheirs, theirs ); rc != CLI::EXIT_CODES::SUCCESS )
+        return rc;
+
+    KICAD_DIFF::SYM_LIB_DIFFER ourDiff( ancestor.map, ours.map, aOurs );
+    KICAD_DIFF::SYM_LIB_DIFFER theirDiff( ancestor.map, theirs.map, aTheirs );
+
+    KICAD_DIFF::DOCUMENT_DIFF ourDocDiff = ourDiff.Diff();
+    KICAD_DIFF::DOCUMENT_DIFF theirDocDiff = theirDiff.Diff();
+
+    KICAD_DIFF::KICAD_MERGE_ENGINE engine;
+    KICAD_DIFF::MERGE_PLAN         plan = engine.Plan( ourDocDiff, theirDocDiff );
+
+    const KICAD_DIFF::MERGE_PLAN planSnapshot = plan;
+
+    KICAD_DIFF::SYM_LIB_MERGE_APPLIER        applier( ancestor.map, ours.map, theirs.map, std::move( plan ) );
+    std::vector<std::unique_ptr<LIB_SYMBOL>> merged = applier.Apply();
+
+    // Per-property symbol merge isn't implemented; MERGE_PROPS resolutions are
+    // downgraded to TAKE_OURS. Surface that as unresolved so the user sees a
+    // marker instead of silent partial-merge.
+    const bool hadSilentFallback = applier.GetReport().mergePropsFallback > 0;
+
+    // Serialize via the sexpr lib cache: create at output path, add each
+    // merged symbol, save. The cache owns its symbols once added; clone
+    // before handing off so the applier's unique_ptrs stay intact for the
+    // post-save report.
+    wxFileName outFn( aOutput );
+    outFn.MakeAbsolute();
+
+    try
+    {
+        SCH_IO_KICAD_SEXPR_LIB_CACHE cache( outFn.GetFullPath() );
+
+        // SCH_IO_LIB_CACHE::AddSymbol takes ownership of the raw pointer; the
+        // cache destructor deletes from m_symbols. Release the unique_ptrs so
+        // we don't double-free.
+        for( auto& sym : merged )
+        {
+            if( sym )
+                cache.AddSymbol( sym.release() );
+        }
+
+        cache.SetModified( true );
+        cache.Save();
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        m_reporter->Report( wxString::Format( _( "Failed to save merged symbol library: %s\n" ), ioe.What() ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    // The merged library was saved above, so the output is always valid.
+    if( !planSnapshot.Resolved() || hadSilentFallback )
+    {
+        // Conflict count = engine-unresolved ∪ applier-downgraded (deduped, so
+        // an item that was both unresolved and silently downgraded counts once).
+        std::set<KIID_PATH> conflicts( planSnapshot.unresolved.begin(), planSnapshot.unresolved.end() );
+
+        for( const KIID_PATH& id : applier.GetReport().mergePropsFallbackIds )
+            conflicts.insert( id );
+
+        m_reporter->Report( wxString::Format( _( "Symbol library merge completed with %zu unresolved "
+                                                 "conflict(s) in %s\n" ),
+                                              conflicts.size(), aOutput ),
+                            RPT_SEVERITY_WARNING );
+        return CLI::EXIT_CODES::ERR_RC_VIOLATIONS;
+    }
+
+    return CLI::EXIT_CODES::SUCCESS;
 }

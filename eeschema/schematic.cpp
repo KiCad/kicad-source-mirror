@@ -86,7 +86,7 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
     m_textVarAdapter = std::make_unique<SCHEMATIC_TEXT_VAR_ADAPTER>( *this );
     AddListener( m_textVarAdapter.get() );
 
-    PROPERTY_MANAGER::Instance().RegisterListener(
+    m_fieldListenerSubscription = PROPERTY_MANAGER::Instance().RegisterListener(
             TYPE_HASH( SCH_FIELD ),
             [&]( INSPECTABLE* aItem, PROPERTY_BASE* aProperty, COMMIT* aCommit )
             {
@@ -155,7 +155,7 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
 
 SCHEMATIC::~SCHEMATIC()
 {
-    PROPERTY_MANAGER::Instance().UnregisterListeners( TYPE_HASH( SCH_FIELD ) );
+    m_fieldListenerSubscription.reset();
 
     delete m_currentSheet;
     delete m_connectionGraph;

@@ -25,6 +25,7 @@
 
 #include <trace_helpers.h>
 #include "git_backend.h"
+#include "git_init_handler.h"
 
 GIT_CLONE_HANDLER::GIT_CLONE_HANDLER( KIGIT_COMMON* aCommon ) :  KIGIT_REPO_MIXIN( aCommon )
 {}
@@ -36,7 +37,15 @@ GIT_CLONE_HANDLER::~GIT_CLONE_HANDLER()
 
 bool GIT_CLONE_HANDLER::PerformClone()
 {
-    return GetGitBackend()->Clone( this );
+    const bool ok = GetGitBackend()->Clone( this );
+
+    // Apply KiCad's conventions to the freshly-cloned repo so subsequent
+    // command-line merges through this clone route through kicad-cli the
+    // same way a locally-initialised repo would.
+    if( ok )
+        ApplyKicadGitConventions( GetClonePath() );
+
+    return ok;
 }
 
 

@@ -18,6 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <richio.h>
 #include <wx/crt.h>
 #include <wx/dir.h>
 #include <wx/zipstrm.h>
@@ -29,8 +30,14 @@
 
 #include "pcbnew_jobs_handler.h"
 #include <board_loader.h>
+#include <jobs/scratch_doc.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
+#include <project/net_settings.h>
+#include <project/project_file.h>
+#include <diff_merge/project_file_patch.h>
+#include <diff_merge/kicad_diff_types.h>
+#include <settings/json_settings_internals.h>
 #include <drc/drc_engine.h>
 #include <board_statistics_report.h>
 #include <drc/drc_item.h>
@@ -97,6 +104,7 @@
 #include <project_pcb.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <reporter.h>
+#include <scoped_set_reset.h>
 #include <progress_reporter.h>
 #include <wildcards_and_files_ext.h>
 #include <export_vrml.h>
@@ -136,16 +144,15 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_3D* svgJob = dynamic_cast<JOB_EXPORT_PCB_3D*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
-                                                                                             false ) );
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
                   wxCHECK( svgJob && editFrame, false );
 
                   DIALOG_EXPORT_STEP dlg( editFrame, aParent, "", svgJob );
                   return dlg.ShowModal() == wxID_OK;
               } );
-    Register( "render",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportRender, this, std::placeholders::_1 ),
+    Register( "render", std::bind( &PCBNEW_JOBS_HANDLER::JobExportRender, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
                   JOB_PCB_RENDER* renderJob = dynamic_cast<JOB_PCB_RENDER*>( job );
@@ -170,22 +177,21 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_SVG* svgJob = dynamic_cast<JOB_EXPORT_PCB_SVG*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
-                                                                                             false ) );
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
                   wxCHECK( svgJob && editFrame, false );
 
                   DIALOG_PLOT dlg( editFrame, aParent, svgJob );
                   return dlg.ShowModal() == wxID_OK;
               } );
-    Register( "gencad",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportGencad, this, std::placeholders::_1 ),
+    Register( "gencad", std::bind( &PCBNEW_JOBS_HANDLER::JobExportGencad, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
                   JOB_EXPORT_PCB_GENCAD* gencadJob = dynamic_cast<JOB_EXPORT_PCB_GENCAD*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
-                                                                                             false ) );
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
                   wxCHECK( gencadJob && editFrame, false );
 
@@ -197,8 +203,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_DXF* dxfJob = dynamic_cast<JOB_EXPORT_PCB_DXF*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
-                                                                                             false ) );
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
                   wxCHECK( dxfJob && editFrame, false );
 
@@ -210,8 +216,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_PDF* pdfJob = dynamic_cast<JOB_EXPORT_PCB_PDF*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
-                                                                                             false ) );
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
                   wxCHECK( pdfJob && editFrame, false );
 
@@ -223,8 +229,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_PNG* pngJob = dynamic_cast<JOB_EXPORT_PCB_PNG*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
-                                                                                             false ) );
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
                   wxCHECK( pngJob && editFrame, false );
 
@@ -236,16 +242,15 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               {
                   JOB_EXPORT_PCB_PS* psJob = dynamic_cast<JOB_EXPORT_PCB_PS*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
-                                                                                             false ) );
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
                   wxCHECK( psJob && editFrame, false );
 
                   DIALOG_PLOT dlg( editFrame, aParent, psJob );
                   return dlg.ShowModal() == wxID_OK;
               } );
-    Register( "stats",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportStats, this, std::placeholders::_1 ),
+    Register( "stats", std::bind( &PCBNEW_JOBS_HANDLER::JobExportStats, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
                   JOB_EXPORT_PCB_STATS* statsJob = dynamic_cast<JOB_EXPORT_PCB_STATS*>( job );
@@ -267,60 +272,56 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
 
                   return dlg.ShowModal() == wxID_OK;
               } );
-    Register( "gerber",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportGerber, this, std::placeholders::_1 ),
+    Register( "gerber", std::bind( &PCBNEW_JOBS_HANDLER::JobExportGerber, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
                   JOB_EXPORT_PCB_GERBER* gJob = dynamic_cast<JOB_EXPORT_PCB_GERBER*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
-                                                                                             false ) );
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
                   wxCHECK( gJob && editFrame, false );
 
                   DIALOG_PLOT dlg( editFrame, aParent, gJob );
                   return dlg.ShowModal() == wxID_OK;
               } );
-    Register( "gerbers",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportGerbers, this, std::placeholders::_1 ),
+    Register( "gerbers", std::bind( &PCBNEW_JOBS_HANDLER::JobExportGerbers, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
                   JOB_EXPORT_PCB_GERBERS* gJob = dynamic_cast<JOB_EXPORT_PCB_GERBERS*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
-                                                                                             false ) );
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
                   wxCHECK( gJob && editFrame, false );
 
                   DIALOG_PLOT dlg( editFrame, aParent, gJob );
                   return dlg.ShowModal() == wxID_OK;
               } );
-    Register( "hpgl",
-              [&]( JOB* aJob )
-              {
-                  m_reporter->Report( _( "Plotting to HPGL is no longer supported as of KiCad 10.0.\n" ),
-                                      RPT_SEVERITY_ERROR );
-                  return CLI::EXIT_CODES::ERR_ARGS;
-              },
-              [aKiway]( JOB* job, wxWindow* aParent ) -> bool
-              {
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
-                                                                                             false ) );
+    Register(
+            "hpgl",
+            [&]( JOB* aJob )
+            {
+                m_reporter->Report( _( "Plotting to HPGL is no longer supported as of KiCad 10.0.\n" ),
+                                    RPT_SEVERITY_ERROR );
+                return CLI::EXIT_CODES::ERR_ARGS;
+            },
+            [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+            {
+                PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
-                  wxCHECK( editFrame, false );
+                wxCHECK( editFrame, false );
 
-                  DisplayErrorMessage( editFrame,
-                                       _( "Plotting to HPGL is no longer supported as of KiCad 10.0." ) );
-                  return false;
-              } );
-    Register( "drill",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrill, this, std::placeholders::_1 ),
+                DisplayErrorMessage( editFrame, _( "Plotting to HPGL is no longer supported as of KiCad 10.0." ) );
+                return false;
+            } );
+    Register( "drill", std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrill, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
                   JOB_EXPORT_PCB_DRILL* drillJob = dynamic_cast<JOB_EXPORT_PCB_DRILL*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
-                                                                                             false ) );
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
                   wxCHECK( drillJob && editFrame, false );
 
@@ -329,25 +330,33 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
               } );
     Register( "pos", std::bind( &PCBNEW_JOBS_HANDLER::JobExportPos, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
-			  {
-				  JOB_EXPORT_PCB_POS* posJob = dynamic_cast<JOB_EXPORT_PCB_POS*>( job );
+              {
+                  JOB_EXPORT_PCB_POS* posJob = dynamic_cast<JOB_EXPORT_PCB_POS*>( job );
 
-				  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
-                                                                                             false ) );
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
                   wxCHECK( posJob && editFrame, false );
 
-				  DIALOG_GEN_FOOTPRINT_POSITION dlg( posJob, editFrame, aParent );
+                  DIALOG_GEN_FOOTPRINT_POSITION dlg( posJob, editFrame, aParent );
                   return dlg.ShowModal() == wxID_OK;
-			  } );
-    Register( "fpupgrade",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpUpgrade, this, std::placeholders::_1 ),
+              } );
+    Register( "fpupgrade", std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpUpgrade, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
                   return true;
               } );
-    Register( "fpsvg",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpSvg, this, std::placeholders::_1 ),
+    Register( "fpsvg", std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpSvg, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return true;
+              } );
+    Register( "pcb_diff", std::bind( &PCBNEW_JOBS_HANDLER::JobDiff, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return true;
+              } );
+    Register( "fp_diff", std::bind( &PCBNEW_JOBS_HANDLER::JobFpDiff, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
                   return true;
@@ -362,34 +371,31 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   DIALOG_DRC_JOB_CONFIG dlg( aParent, drcJob );
                   return dlg.ShowModal() == wxID_OK;
               } );
-    Register( "ipc2581",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportIpc2581, this, std::placeholders::_1 ),
+    Register( "ipc2581", std::bind( &PCBNEW_JOBS_HANDLER::JobExportIpc2581, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
                   JOB_EXPORT_PCB_IPC2581* ipcJob = dynamic_cast<JOB_EXPORT_PCB_IPC2581*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
-                                                                                             false ) );
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
                   wxCHECK( ipcJob && editFrame, false );
 
                   DIALOG_EXPORT_2581 dlg( ipcJob, editFrame, aParent );
                   return dlg.ShowModal() == wxID_OK;
               } );
-    Register( "ipcd356",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportIpcD356, this, std::placeholders::_1 ),
+    Register( "ipcd356", std::bind( &PCBNEW_JOBS_HANDLER::JobExportIpcD356, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
                   return true;
               } );
-    Register( "odb",
-              std::bind( &PCBNEW_JOBS_HANDLER::JobExportOdb, this, std::placeholders::_1 ),
+    Register( "odb", std::bind( &PCBNEW_JOBS_HANDLER::JobExportOdb, this, std::placeholders::_1 ),
               [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
                   JOB_EXPORT_PCB_ODB* odbJob = dynamic_cast<JOB_EXPORT_PCB_ODB*>( job );
 
-                  PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR,
-                                                                                             false ) );
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
                   wxCHECK( odbJob && editFrame, false );
 
@@ -440,49 +446,45 @@ TOOL_MANAGER* PCBNEW_JOBS_HANDLER::getToolManager( BOARD* aBrd )
 
 BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
 {
-    BOARD* brd = nullptr;
+    BOARD*            brd = nullptr;
     SETTINGS_MANAGER& settingsManager = Pgm().GetSettingsManager();
 
-    auto getProjectForBoard =
-            [&]( const wxString& aBoardPath ) -> PROJECT*
-            {
-                wxFileName pro = aBoardPath;
-                pro.SetExt( FILEEXT::ProjectFileExtension );
-                pro.MakeAbsolute();
+    auto getProjectForBoard = [&]( const wxString& aBoardPath ) -> PROJECT*
+    {
+        wxFileName pro = aBoardPath;
+        pro.SetExt( FILEEXT::ProjectFileExtension );
+        pro.MakeAbsolute();
 
-                PROJECT* project = settingsManager.GetProject( pro.GetFullPath() );
+        PROJECT* project = settingsManager.GetProject( pro.GetFullPath() );
 
-                if( !project )
-                {
-                    settingsManager.LoadProject( pro.GetFullPath(), true );
-                    project = settingsManager.GetProject( pro.GetFullPath() );
-                }
+        if( !project )
+        {
+            settingsManager.LoadProject( pro.GetFullPath(), true );
+            project = settingsManager.GetProject( pro.GetFullPath() );
+        }
 
-                return project;
-            };
+        return project;
+    };
 
-    auto loadBoardFromPath =
-            [&]( const wxString& aBoardPath ) -> BOARD*
-            {
-                PROJECT* project = getProjectForBoard( aBoardPath );
+    auto loadBoardFromPath = [&]( const wxString& aBoardPath ) -> BOARD*
+    {
+        PROJECT* project = getProjectForBoard( aBoardPath );
 
-                PCB_IO_MGR::PCB_FILE_T pluginType =
-                        PCB_IO_MGR::FindPluginTypeFromBoardPath( aBoardPath, KICTL_KICAD_ONLY );
+        PCB_IO_MGR::PCB_FILE_T pluginType = PCB_IO_MGR::FindPluginTypeFromBoardPath( aBoardPath, KICTL_KICAD_ONLY );
 
-                if( !project || pluginType == PCB_IO_MGR::FILE_TYPE_NONE )
-                    return nullptr;
+        if( !project || pluginType == PCB_IO_MGR::FILE_TYPE_NONE )
+            return nullptr;
 
-                try
-                {
-                    std::unique_ptr<BOARD> loadedBoard = BOARD_LOADER::Load( aBoardPath, pluginType,
-                                                                             project );
-                    return loadedBoard.release();
-                }
-                catch ( ... )
-                {
-                    return nullptr;
-                }
-            };
+        try
+        {
+            std::unique_ptr<BOARD> loadedBoard = BOARD_LOADER::Load( aBoardPath, pluginType, project );
+            return loadedBoard.release();
+        }
+        catch( ... )
+        {
+            return nullptr;
+        }
+    };
 
     if( !Pgm().IsGUI() && Pgm().GetSettingsManager().IsProjectOpen() )
     {
@@ -531,39 +533,38 @@ LSEQ PCBNEW_JOBS_HANDLER::convertLayerArg( wxString& aLayerString, BOARD* aBoard
     {
         // Add user layer name
         if( aBoard )
-            layerUserMasks[ aBoard->GetLayerName( layer ) ] = LSET( { layer } );
+            layerUserMasks[aBoard->GetLayerName( layer )] = LSET( { layer } );
 
         // Add layer name used in pcb files
-        layerMasks[ LSET::Name( layer ) ] = LSET( { layer } );
+        layerMasks[LSET::Name( layer )] = LSET( { layer } );
         // Add layer name using GUI canonical layer name
-        layerGuiMasks[ LayerName( layer ) ] = LSET( { layer } );
+        layerGuiMasks[LayerName( layer )] = LSET( { layer } );
     }
 
     // Add list of grouped layer names used in pcb files
-    layerMasks[ wxT( "*" ) ]       = LSET::AllLayersMask();
-    layerMasks[ wxT( "*.Cu" ) ]    = LSET::AllCuMask();
-    layerMasks[ wxT( "*In.Cu" ) ]  = LSET::InternalCuMask();
-    layerMasks[ wxT( "F&B.Cu" ) ]  = LSET( { F_Cu, B_Cu } );
-    layerMasks[ wxT( "*.Adhes" ) ] = LSET( { B_Adhes, F_Adhes } );
-    layerMasks[ wxT( "*.Paste" ) ] = LSET( { B_Paste, F_Paste } );
-    layerMasks[ wxT( "*.Mask" ) ]  = LSET( { B_Mask, F_Mask } );
-    layerMasks[ wxT( "*.SilkS" ) ] = LSET( { B_SilkS, F_SilkS } );
-    layerMasks[ wxT( "*.Fab" ) ]   = LSET( { B_Fab, F_Fab } );
-    layerMasks[ wxT( "*.CrtYd" ) ] = LSET( { B_CrtYd, F_CrtYd } );
+    layerMasks[wxT( "*" )] = LSET::AllLayersMask();
+    layerMasks[wxT( "*.Cu" )] = LSET::AllCuMask();
+    layerMasks[wxT( "*In.Cu" )] = LSET::InternalCuMask();
+    layerMasks[wxT( "F&B.Cu" )] = LSET( { F_Cu, B_Cu } );
+    layerMasks[wxT( "*.Adhes" )] = LSET( { B_Adhes, F_Adhes } );
+    layerMasks[wxT( "*.Paste" )] = LSET( { B_Paste, F_Paste } );
+    layerMasks[wxT( "*.Mask" )] = LSET( { B_Mask, F_Mask } );
+    layerMasks[wxT( "*.SilkS" )] = LSET( { B_SilkS, F_SilkS } );
+    layerMasks[wxT( "*.Fab" )] = LSET( { B_Fab, F_Fab } );
+    layerMasks[wxT( "*.CrtYd" )] = LSET( { B_CrtYd, F_CrtYd } );
 
     // Add list of grouped layer names using GUI canonical layer names
-    layerGuiMasks[ wxT( "*.Adhesive" ) ]   = LSET( { B_Adhes, F_Adhes } );
-    layerGuiMasks[ wxT( "*.Silkscreen" ) ] = LSET( { B_SilkS, F_SilkS } );
-    layerGuiMasks[ wxT( "*.Courtyard" ) ]  = LSET( { B_CrtYd, F_CrtYd } );
+    layerGuiMasks[wxT( "*.Adhesive" )] = LSET( { B_Adhes, F_Adhes } );
+    layerGuiMasks[wxT( "*.Silkscreen" )] = LSET( { B_SilkS, F_SilkS } );
+    layerGuiMasks[wxT( "*.Courtyard" )] = LSET( { B_CrtYd, F_CrtYd } );
 
     LSEQ layerMask;
 
-    auto pushLayers =
-            [&]( const LSET& layerSet )
-            {
-                for( PCB_LAYER_ID layer : layerSet.Seq() )
-                    layerMask.push_back( layer );
-            };
+    auto pushLayers = [&]( const LSET& layerSet )
+    {
+        for( PCB_LAYER_ID layer : layerSet.Seq() )
+            layerMask.push_back( layer );
+    };
 
     if( !aLayerString.IsEmpty() )
     {
@@ -610,15 +611,15 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
         switch( aStepJob->m_format )
         {
-        case JOB_EXPORT_PCB_3D::FORMAT::VRML: fn.SetExt( FILEEXT::VrmlFileExtension );       break;
-        case JOB_EXPORT_PCB_3D::FORMAT::STEP: fn.SetExt( FILEEXT::StepFileExtension );       break;
-        case JOB_EXPORT_PCB_3D::FORMAT::BREP: fn.SetExt( FILEEXT::BrepFileExtension );       break;
-        case JOB_EXPORT_PCB_3D::FORMAT::XAO:  fn.SetExt( FILEEXT::XaoFileExtension );        break;
-        case JOB_EXPORT_PCB_3D::FORMAT::GLB:  fn.SetExt( FILEEXT::GltfBinaryFileExtension ); break;
-        case JOB_EXPORT_PCB_3D::FORMAT::PLY:  fn.SetExt( FILEEXT::PlyFileExtension );        break;
-        case JOB_EXPORT_PCB_3D::FORMAT::STL:  fn.SetExt( FILEEXT::StlFileExtension );        break;
-        case JOB_EXPORT_PCB_3D::FORMAT::U3D:  fn.SetExt( FILEEXT::U3DFileExtension );        break;
-        case JOB_EXPORT_PCB_3D::FORMAT::PDF:  fn.SetExt( FILEEXT::PdfFileExtension );        break;
+        case JOB_EXPORT_PCB_3D::FORMAT::VRML: fn.SetExt( FILEEXT::VrmlFileExtension ); break;
+        case JOB_EXPORT_PCB_3D::FORMAT::STEP: fn.SetExt( FILEEXT::StepFileExtension ); break;
+        case JOB_EXPORT_PCB_3D::FORMAT::BREP: fn.SetExt( FILEEXT::BrepFileExtension ); break;
+        case JOB_EXPORT_PCB_3D::FORMAT::XAO: fn.SetExt( FILEEXT::XaoFileExtension ); break;
+        case JOB_EXPORT_PCB_3D::FORMAT::GLB: fn.SetExt( FILEEXT::GltfBinaryFileExtension ); break;
+        case JOB_EXPORT_PCB_3D::FORMAT::PLY: fn.SetExt( FILEEXT::PlyFileExtension ); break;
+        case JOB_EXPORT_PCB_3D::FORMAT::STL: fn.SetExt( FILEEXT::StlFileExtension ); break;
+        case JOB_EXPORT_PCB_3D::FORMAT::U3D: fn.SetExt( FILEEXT::U3DFileExtension ); break;
+        case JOB_EXPORT_PCB_3D::FORMAT::PDF: fn.SetExt( FILEEXT::PdfFileExtension ); break;
         default:
             m_reporter->Report( _( "Unknown export format" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
@@ -637,14 +638,13 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
     if( aStepJob->m_format == JOB_EXPORT_PCB_3D::FORMAT::VRML )
     {
-
         double scale = 0.0;
-        switch ( aStepJob->m_vrmlUnits )
+        switch( aStepJob->m_vrmlUnits )
         {
-        case JOB_EXPORT_PCB_3D::VRML_UNITS::MM:     scale = 1.0;         break;
-        case JOB_EXPORT_PCB_3D::VRML_UNITS::METERS: scale = 0.001;       break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::MM: scale = 1.0; break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::METERS: scale = 0.001; break;
         case JOB_EXPORT_PCB_3D::VRML_UNITS::TENTHS: scale = 10.0 / 25.4; break;
-        case JOB_EXPORT_PCB_3D::VRML_UNITS::INCH:   scale = 1.0 / 25.4;  break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::INCH: scale = 1.0 / 25.4; break;
         }
 
         EXPORTER_VRML vrmlExporter( brd );
@@ -660,22 +660,14 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
             originY = pcbIUScale.IUTomm( bbox.GetCenter().y );
         }
 
-        bool success = vrmlExporter.ExportVRML_File( brd->GetProject(),
-                                                     &messages,
-                                                     outPath,
-                                                     scale,
-                                                     aStepJob->m_3dparams.m_IncludeUnspecified,
-                                                     aStepJob->m_3dparams.m_IncludeDNP,
-                                                     !aStepJob->m_vrmlModelDir.IsEmpty(),
-                                                     aStepJob->m_vrmlRelativePaths,
-                                                     aStepJob->m_vrmlModelDir,
-                                                     originX,
-                                                     originY );
+        bool success = vrmlExporter.ExportVRML_File(
+                brd->GetProject(), &messages, outPath, scale, aStepJob->m_3dparams.m_IncludeUnspecified,
+                aStepJob->m_3dparams.m_IncludeDNP, !aStepJob->m_vrmlModelDir.IsEmpty(), aStepJob->m_vrmlRelativePaths,
+                aStepJob->m_vrmlModelDir, originX, originY );
 
-        if ( success )
+        if( success )
         {
-            m_reporter->Report( wxString::Format( _( "Successfully exported VRML to %s" ),
-                                                  outPath ),
+            m_reporter->Report( wxString::Format( _( "Successfully exported VRML to %s" ), outPath ),
                                 RPT_SEVERITY_INFO );
         }
         else
@@ -690,15 +682,15 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
         switch( aStepJob->m_format )
         {
-        case JOB_EXPORT_PCB_3D::FORMAT::STEP:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STEP;  break;
+        case JOB_EXPORT_PCB_3D::FORMAT::STEP: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STEP; break;
         case JOB_EXPORT_PCB_3D::FORMAT::STEPZ: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STEPZ; break;
-        case JOB_EXPORT_PCB_3D::FORMAT::BREP:  params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::BREP;  break;
-        case JOB_EXPORT_PCB_3D::FORMAT::XAO:   params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::XAO;   break;
-        case JOB_EXPORT_PCB_3D::FORMAT::GLB:   params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::GLB;   break;
-        case JOB_EXPORT_PCB_3D::FORMAT::PLY:   params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::PLY;   break;
-        case JOB_EXPORT_PCB_3D::FORMAT::STL:   params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STL;   break;
-        case JOB_EXPORT_PCB_3D::FORMAT::U3D:   params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::U3D;   break;
-        case JOB_EXPORT_PCB_3D::FORMAT::PDF:   params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::PDF;   break;
+        case JOB_EXPORT_PCB_3D::FORMAT::BREP: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::BREP; break;
+        case JOB_EXPORT_PCB_3D::FORMAT::XAO: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::XAO; break;
+        case JOB_EXPORT_PCB_3D::FORMAT::GLB: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::GLB; break;
+        case JOB_EXPORT_PCB_3D::FORMAT::PLY: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::PLY; break;
+        case JOB_EXPORT_PCB_3D::FORMAT::STL: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::STL; break;
+        case JOB_EXPORT_PCB_3D::FORMAT::U3D: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::U3D; break;
+        case JOB_EXPORT_PCB_3D::FORMAT::PDF: params.m_Format = EXPORTER_STEP_PARAMS::FORMAT::PDF; break;
         default:
             m_reporter->Report( _( "Unknown export format" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
@@ -745,7 +737,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         switch( aRenderJob->m_format )
         {
         case JOB_PCB_RENDER::FORMAT::JPEG: fn.SetExt( FILEEXT::JpegFileExtension ); break;
-        case JOB_PCB_RENDER::FORMAT::PNG:  fn.SetExt( FILEEXT::PngFileExtension );  break;
+        case JOB_PCB_RENDER::FORMAT::PNG: fn.SetExt( FILEEXT::PngFileExtension ); break;
         default:
             m_reporter->Report( _( "Unknown export format" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
@@ -829,25 +821,22 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         cfg.m_Render.raytrace_procedural_textures = aRenderJob->m_proceduralTextures;
     }
 
-    cfg.m_Render.raytrace_lightColorTop = COLOR4D( aRenderJob->m_lightTopIntensity.x,
-                                                   aRenderJob->m_lightTopIntensity.y,
+    cfg.m_Render.raytrace_lightColorTop = COLOR4D( aRenderJob->m_lightTopIntensity.x, aRenderJob->m_lightTopIntensity.y,
                                                    aRenderJob->m_lightTopIntensity.z, 1.0 );
 
-    cfg.m_Render.raytrace_lightColorBottom = COLOR4D( aRenderJob->m_lightBottomIntensity.x,
-                                                      aRenderJob->m_lightBottomIntensity.y,
-                                                      aRenderJob->m_lightBottomIntensity.z, 1.0 );
+    cfg.m_Render.raytrace_lightColorBottom =
+            COLOR4D( aRenderJob->m_lightBottomIntensity.x, aRenderJob->m_lightBottomIntensity.y,
+                     aRenderJob->m_lightBottomIntensity.z, 1.0 );
 
-    cfg.m_Render.raytrace_lightColorCamera = COLOR4D( aRenderJob->m_lightCameraIntensity.x,
-                                                      aRenderJob->m_lightCameraIntensity.y,
-                                                      aRenderJob->m_lightCameraIntensity.z, 1.0 );
+    cfg.m_Render.raytrace_lightColorCamera =
+            COLOR4D( aRenderJob->m_lightCameraIntensity.x, aRenderJob->m_lightCameraIntensity.y,
+                     aRenderJob->m_lightCameraIntensity.z, 1.0 );
 
-    COLOR4D lightColor( aRenderJob->m_lightSideIntensity.x,
-                        aRenderJob->m_lightSideIntensity.y,
+    COLOR4D lightColor( aRenderJob->m_lightSideIntensity.x, aRenderJob->m_lightSideIntensity.y,
                         aRenderJob->m_lightSideIntensity.z, 1.0 );
 
     cfg.m_Render.raytrace_lightColor = {
-        lightColor, lightColor, lightColor, lightColor,
-        lightColor, lightColor, lightColor, lightColor,
+        lightColor, lightColor, lightColor, lightColor, lightColor, lightColor, lightColor, lightColor,
     };
 
     int sideElevation = aRenderJob->m_lightSideElevation;
@@ -903,8 +892,7 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         { JOB_PCB_RENDER::SIDE::BACK, VIEW3D_TYPE::VIEW3D_BACK },
     };
 
-    PROJECTION_TYPE projection =  aRenderJob->m_perspective ? PROJECTION_TYPE::PERSPECTIVE
-                                                            : PROJECTION_TYPE::ORTHO;
+    PROJECTION_TYPE projection = aRenderJob->m_perspective ? PROJECTION_TYPE::PERSPECTIVE : PROJECTION_TYPE::ORTHO;
 
     wxSize     windowSize( aRenderJob->m_width, aRenderJob->m_height );
     TRACK_BALL camera( 2 * RANGE_SCALE_3D );
@@ -924,9 +912,9 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
             // First redraw resets lookat point to the board center, so set up the camera here
             camera.ViewCommand_T1( s_viewCmdMap[aRenderJob->m_side] );
 
-            camera.SetLookAtPos_T1( camera.GetLookAtPos_T1() + SFVEC3F( aRenderJob->m_pivot.x,
-                                                                        aRenderJob->m_pivot.y,
-                                                                        aRenderJob->m_pivot.z ) * cmTo3D );
+            camera.SetLookAtPos_T1( camera.GetLookAtPos_T1()
+                                    + SFVEC3F( aRenderJob->m_pivot.x, aRenderJob->m_pivot.y, aRenderJob->m_pivot.z )
+                                              * cmTo3D );
 
             camera.Pan_T1( SFVEC3F( aRenderJob->m_pan.x, aRenderJob->m_pan.y, aRenderJob->m_pan.z ) );
 
@@ -978,8 +966,8 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
         image = image.Mirror( false );
 
         image.SetOption( wxIMAGE_OPTION_QUALITY, 90 );
-        image.SaveFile( outPath, aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ? wxBITMAP_TYPE_PNG
-                                                                                     : wxBITMAP_TYPE_JPEG );
+        image.SaveFile( outPath,
+                        aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ? wxBITMAP_TYPE_PNG : wxBITMAP_TYPE_JPEG );
     }
 
     if( success )
@@ -1054,7 +1042,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aSvgJob, *m_reporter );
 
-    PCB_PLOTTER     plotter( brd, m_reporter, plotOpts );
+    PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
 
     std::optional<wxString> layerName;
     std::optional<wxString> sheetName;
@@ -1073,9 +1061,9 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
             sheetPath = aSvgJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
     }
 
-    if( !plotter.Plot( outPath, aSvgJob->m_plotLayerSequence, aSvgJob->m_plotOnAllLayersSequence,
-                       false, aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE,
-                       layerName, sheetName, sheetPath, &outputPaths ) )
+    if( !plotter.Plot( outPath, aSvgJob->m_plotLayerSequence, aSvgJob->m_plotOnAllLayersSequence, false,
+                       aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE, layerName, sheetName, sheetPath,
+                       &outputPaths ) )
     {
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
@@ -1145,7 +1133,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     }
 
     PCB_PLOT_PARAMS plotOpts;
-    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aDxfJob, *m_reporter);
+    PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aDxfJob, *m_reporter );
 
     PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
 
@@ -1167,9 +1155,9 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
 
     std::vector<wxString> outputPaths;
 
-    if( !plotter.Plot( outPath, aDxfJob->m_plotLayerSequence, aDxfJob->m_plotOnAllLayersSequence,
-                       false, aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE,
-                       layerName, sheetName, sheetPath, &outputPaths ) )
+    if( !plotter.Plot( outPath, aDxfJob->m_plotLayerSequence, aDxfJob->m_plotOnAllLayersSequence, false,
+                       aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE, layerName, sheetName, sheetPath,
+                       &outputPaths ) )
     {
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
@@ -1264,9 +1252,8 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     std::vector<wxString> outputPaths;
 
-    if( !pcbPlotter.Plot( outPath, pdfJob->m_plotLayerSequence,
-                          pdfJob->m_plotOnAllLayersSequence, false, outputIsSingle,
-                          layerName, sheetName, sheetPath, &outputPaths ) )
+    if( !pcbPlotter.Plot( outPath, pdfJob->m_plotLayerSequence, pdfJob->m_plotOnAllLayersSequence, false,
+                          outputIsSingle, layerName, sheetName, sheetPath, &outputPaths ) )
     {
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
@@ -1339,8 +1326,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPng( JOB* aJob )
 
     std::vector<wxString> outputPaths;
 
-    if( !pcbPlotter.Plot( outPath, pngJob->m_plotLayerSequence,
-                          pngJob->m_plotOnAllLayersSequence, false, false,
+    if( !pcbPlotter.Plot( outPath, pngJob->m_plotLayerSequence, pngJob->m_plotOnAllLayersSequence, false, false,
                           std::nullopt, std::nullopt, std::nullopt, &outputPaths ) )
     {
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -1583,13 +1569,12 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 
         // We are feeding it one layer at the start here to silence a logic check
         GERBER_PLOTTER* plotter;
-        plotter = (GERBER_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName,
-                                                    fn.GetFullPath(), sheetName, sheetPath );
+        plotter = (GERBER_PLOTTER*) StartPlotBoard( brd, &plotOpts, layer, layerName, fn.GetFullPath(), sheetName,
+                                                    sheetPath );
 
         if( plotter )
         {
-            m_reporter->Report( wxString::Format( _( "Plotted to '%s'.\n" ), fn.GetFullPath() ),
-                                RPT_SEVERITY_ACTION );
+            m_reporter->Report( wxString::Format( _( "Plotted to '%s'.\n" ), fn.GetFullPath() ), RPT_SEVERITY_ACTION );
 
             PlotBoardLayers( brd, plotter, plotSequence, plotOpts );
             plotter->EndPlot();
@@ -1663,8 +1648,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGencad( JOB* aJob )
 
     if( !exporter.WriteFile( outPath ) )
     {
-        m_reporter->Report( wxString::Format( _( "Failed to create file '%s'.\n" ), outPath ),
-                            RPT_SEVERITY_ERROR );
+        m_reporter->Report( wxString::Format( _( "Failed to create file '%s'.\n" ), outPath ), RPT_SEVERITY_ERROR );
 
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
@@ -1832,8 +1816,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
         sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
 
     // We are feeding it one layer at the start here to silence a logic check
-    PLOTTER* plotter = StartPlotBoard( brd, &plotOpts, layer, layerName, outPath, sheetName,
-                                       sheetPath );
+    PLOTTER* plotter = StartPlotBoard( brd, &plotOpts, layer, layerName, outPath, sheetName, sheetPath );
 
     if( plotter )
     {
@@ -1842,8 +1825,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     }
     else
     {
-        m_reporter->Report( wxString::Format( _( "Failed to plot to '%s'.\n" ), outPath ),
-                            RPT_SEVERITY_ERROR );
+        m_reporter->Report( wxString::Format( _( "Failed to plot to '%s'.\n" ), outPath ), RPT_SEVERITY_ERROR );
         exitCode = CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
@@ -1894,12 +1876,12 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
 
     switch( aDrillJob->m_mapFormat )
     {
-    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::POSTSCRIPT: mapFormat = PLOT_FORMAT::POST;   break;
-    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::GERBER_X2:  mapFormat = PLOT_FORMAT::GERBER; break;
-    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::DXF:        mapFormat = PLOT_FORMAT::DXF;    break;
-    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::SVG:        mapFormat = PLOT_FORMAT::SVG;    break;
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::POSTSCRIPT: mapFormat = PLOT_FORMAT::POST; break;
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::GERBER_X2: mapFormat = PLOT_FORMAT::GERBER; break;
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::DXF: mapFormat = PLOT_FORMAT::DXF; break;
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::SVG: mapFormat = PLOT_FORMAT::SVG; break;
     default:
-    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::PDF:        mapFormat = PLOT_FORMAT::PDF;    break;
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::PDF: mapFormat = PLOT_FORMAT::PDF; break;
     }
 
 
@@ -1919,22 +1901,14 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
 
         switch( aDrillJob->m_zeroFormat )
         {
-        case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::KEEP_ZEROS:
-            zeroFmt = EXCELLON_WRITER::KEEP_ZEROS;
-            break;
+        case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::KEEP_ZEROS: zeroFmt = EXCELLON_WRITER::KEEP_ZEROS; break;
 
-        case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::SUPPRESS_LEADING:
-            zeroFmt = EXCELLON_WRITER::SUPPRESS_LEADING;
-            break;
+        case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::SUPPRESS_LEADING: zeroFmt = EXCELLON_WRITER::SUPPRESS_LEADING; break;
 
-        case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::SUPPRESS_TRAILING:
-            zeroFmt = EXCELLON_WRITER::SUPPRESS_TRAILING;
-            break;
+        case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::SUPPRESS_TRAILING: zeroFmt = EXCELLON_WRITER::SUPPRESS_TRAILING; break;
 
         case JOB_EXPORT_PCB_DRILL::ZEROS_FORMAT::DECIMAL:
-        default:
-            zeroFmt = EXCELLON_WRITER::DECIMAL_FORMAT;
-            break;
+        default: zeroFmt = EXCELLON_WRITER::DECIMAL_FORMAT; break;
         }
 
         DRILL_PRECISION precision;
@@ -1949,16 +1923,14 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
         if( excellonWriter == nullptr )
             return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-        excellonWriter->SetFormat( aDrillJob->m_drillUnits == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MM,
-                                   zeroFmt, precision.m_Lhs, precision.m_Rhs );
-        excellonWriter->SetOptions( aDrillJob->m_excellonMirrorY,
-                                    aDrillJob->m_excellonMinimalHeader,
-                                    offset, aDrillJob->m_excellonCombinePTHNPTH );
+        excellonWriter->SetFormat( aDrillJob->m_drillUnits == JOB_EXPORT_PCB_DRILL::DRILL_UNITS::MM, zeroFmt,
+                                   precision.m_Lhs, precision.m_Rhs );
+        excellonWriter->SetOptions( aDrillJob->m_excellonMirrorY, aDrillJob->m_excellonMinimalHeader, offset,
+                                    aDrillJob->m_excellonCombinePTHNPTH );
         excellonWriter->SetRouteModeForOvalHoles( aDrillJob->m_excellonOvalDrillRoute );
         excellonWriter->SetMapFileFormat( mapFormat );
 
-        if( !excellonWriter->CreateDrillandMapFilesSet( outPath, true, aDrillJob->m_generateMap,
-                                                        m_reporter ) )
+        if( !excellonWriter->CreateDrillandMapFilesSet( outPath, true, aDrillJob->m_generateMap, m_reporter ) )
         {
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
@@ -2051,39 +2023,31 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::ASCII
-        || aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV )
+    if( aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::ASCII || aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV )
     {
         wxFileName fn( outPath );
         wxString   baseName = fn.GetName();
 
-        auto exportPlaceFile =
-                [&]( bool frontSide, bool backSide, const wxString& curr_outPath ) -> bool
-                {
-                    FILE* file = wxFopen( curr_outPath, wxS( "wt" ) );
-                    wxCHECK( file, false );
+        auto exportPlaceFile = [&]( bool frontSide, bool backSide, const wxString& curr_outPath ) -> bool
+        {
+            FILE* file = wxFopen( curr_outPath, wxS( "wt" ) );
+            wxCHECK( file, false );
 
-                    PLACE_FILE_EXPORTER exporter( brd,
-                                                  aPosJob->m_units == JOB_EXPORT_PCB_POS::UNITS::MM,
-                                                  aPosJob->m_smdOnly,
-                                                  aPosJob->m_excludeFootprintsWithTh,
-                                                  aPosJob->m_excludeDNP,
-                                                  aPosJob->m_excludeBOM,
-                                                  frontSide,
-                                                  backSide,
-                                                  aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
-                                                  aPosJob->m_useDrillPlaceFileOrigin,
-                                                  aPosJob->m_negateBottomX );
+            PLACE_FILE_EXPORTER exporter( brd, aPosJob->m_units == JOB_EXPORT_PCB_POS::UNITS::MM, aPosJob->m_smdOnly,
+                                          aPosJob->m_excludeFootprintsWithTh, aPosJob->m_excludeDNP,
+                                          aPosJob->m_excludeBOM, frontSide, backSide,
+                                          aPosJob->m_format == JOB_EXPORT_PCB_POS::FORMAT::CSV,
+                                          aPosJob->m_useDrillPlaceFileOrigin, aPosJob->m_negateBottomX );
 
-                    // Set variant for variant-aware DNP/BOM/position file filtering
-                    exporter.SetVariant( aPosJob->m_variant );
+            // Set variant for variant-aware DNP/BOM/position file filtering
+            exporter.SetVariant( aPosJob->m_variant );
 
-                    std::string data = exporter.GenPositionData();
-                    fputs( data.c_str(), file );
-                    fclose( file );
+            std::string data = exporter.GenPositionData();
+            fputs( data.c_str(), file );
+            fclose( file );
 
-                    return true;
-                };
+            return true;
+        };
 
         if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH && !aPosJob->m_singleFile )
         {
@@ -2094,8 +2058,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
 
             if( exportPlaceFile( true, false, fn.GetFullPath() ) )
             {
-                m_reporter->Report( wxString::Format( _( "Wrote front position data to '%s'.\n" ),
-                                                      fn.GetFullPath() ),
+                m_reporter->Report( wxString::Format( _( "Wrote front position data to '%s'.\n" ), fn.GetFullPath() ),
                                     RPT_SEVERITY_ACTION );
 
                 aPosJob->AddOutput( fn.GetFullPath() );
@@ -2112,8 +2075,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
 
             if( exportPlaceFile( false, true, fn.GetFullPath() ) )
             {
-                m_reporter->Report( wxString::Format( _( "Wrote back position data to '%s'.\n" ),
-                                                      fn.GetFullPath() ),
+                m_reporter->Report( wxString::Format( _( "Wrote back position data to '%s'.\n" ), fn.GetFullPath() ),
                                     RPT_SEVERITY_ACTION );
 
                 aPosJob->AddOutput( fn.GetFullPath() );
@@ -2126,10 +2088,10 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         else
         {
             bool front = aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::FRONT
-                             || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
+                         || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
 
             bool back = aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK
-                            || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
+                        || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH;
 
             if( !aPosJob->m_nakedFilename )
             {
@@ -2141,8 +2103,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
 
             if( exportPlaceFile( front, back, fn.GetFullPath() ) )
             {
-                m_reporter->Report( wxString::Format( _( "Wrote position data to '%s'.\n" ),
-                                                      fn.GetFullPath() ),
+                m_reporter->Report( wxString::Format( _( "Wrote position data to '%s'.\n" ), fn.GetFullPath() ),
                                     RPT_SEVERITY_ACTION );
 
                 aPosJob->AddOutput( fn.GetFullPath() );
@@ -2160,17 +2121,17 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
         // Set variant for variant-aware DNP/BOM/position file filtering
         exporter.SetVariant( aPosJob->m_variant );
 
-        PCB_LAYER_ID            gbrLayer = F_Cu;
-        wxString                outPath_base = outPath;
+        PCB_LAYER_ID gbrLayer = F_Cu;
+        wxString     outPath_base = outPath;
 
-        if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::FRONT
-                || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH )
+        if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::FRONT || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH )
         {
             if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH || !aPosJob->m_nakedFilename )
                 outPath = exporter.GetPlaceFileName( outPath, gbrLayer );
 
-            if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge,
-                                          aPosJob->m_excludeDNP, aPosJob->m_excludeBOM ) >= 0 )
+            if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge, aPosJob->m_excludeDNP,
+                                          aPosJob->m_excludeBOM )
+                >= 0 )
             {
                 m_reporter->Report( wxString::Format( _( "Wrote front position data to '%s'.\n" ), outPath ),
                                     RPT_SEVERITY_ACTION );
@@ -2183,8 +2144,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
             }
         }
 
-        if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK
-                || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH )
+        if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BACK || aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH )
         {
             gbrLayer = B_Cu;
 
@@ -2193,8 +2153,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
             if( aPosJob->m_side == JOB_EXPORT_PCB_POS::SIDE::BOTH || !aPosJob->m_nakedFilename )
                 outPath = exporter.GetPlaceFileName( outPath, gbrLayer );
 
-            if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge,
-                                          aPosJob->m_excludeDNP, aPosJob->m_excludeBOM ) >= 0 )
+            if( exporter.CreatePlaceFile( outPath, gbrLayer, aPosJob->m_gerberBoardEdge, aPosJob->m_excludeDNP,
+                                          aPosJob->m_excludeBOM )
+                >= 0 )
             {
                 m_reporter->Report( wxString::Format( _( "Wrote back position data to '%s'.\n" ), outPath ),
                                     RPT_SEVERITY_ACTION );
@@ -2223,11 +2184,9 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
 
     if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
     {
-        if( wxFile::Exists( upgradeJob->m_outputLibraryPath )
-            || wxDir::Exists( upgradeJob->m_outputLibraryPath) )
+        if( wxFile::Exists( upgradeJob->m_outputLibraryPath ) || wxDir::Exists( upgradeJob->m_outputLibraryPath ) )
         {
-            m_reporter->Report( _( "Output path must not conflict with existing path\n" ),
-                                RPT_SEVERITY_ERROR );
+            m_reporter->Report( _( "Output path must not conflict with existing path\n" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
     }
@@ -2294,8 +2253,8 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
     }
     else
     {
-        if( !PCB_IO_MGR::ConvertLibrary( {}, upgradeJob->m_libraryPath,
-                                         upgradeJob->m_outputLibraryPath, nullptr /* REPORTER */ ) )
+        if( !PCB_IO_MGR::ConvertLibrary( {}, upgradeJob->m_libraryPath, upgradeJob->m_outputLibraryPath,
+                                         nullptr /* REPORTER */ ) )
         {
             m_reporter->Report( ( "Unable to convert library\n" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -2314,7 +2273,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     PCB_IO_KICAD_SEXPR pcb_io( CTL_FOR_LIBRARY );
-    FP_CACHE   fpLib( &pcb_io, svgJob->m_libraryPath );
+    FP_CACHE           fpLib( &pcb_io, svgJob->m_libraryPath );
 
     if( svgJob->m_argLayers )
     {
@@ -2407,13 +2366,12 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     brd->Add( fp, ADD_MODE::INSERT, true );
 
     wxFileName outputFile;
-    outputFile.SetPath( aSvgJob->GetFullOutputPath(nullptr) );
+    outputFile.SetPath( aSvgJob->GetFullOutputPath( nullptr ) );
     outputFile.SetName( aFootprint->GetFPID().GetLibItemName().wx_str() );
     outputFile.SetExt( FILEEXT::SVGFileExtension );
 
     m_reporter->Report( wxString::Format( _( "Plotting footprint '%s' to '%s'\n" ),
-                                          aFootprint->GetFPID().GetLibItemName().wx_str(),
-                                          outputFile.GetFullPath() ),
+                                          aFootprint->GetFPID().GetLibItemName().wx_str(), outputFile.GetFullPath() ),
                         RPT_SEVERITY_ACTION );
 
     PCB_PLOT_PARAMS plotOpts;
@@ -2432,13 +2390,8 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
 
     PCB_PLOTTER plotter( brd.get(), m_reporter, plotOpts );
 
-    if( !plotter.Plot( outputFile.GetFullPath(),
-                       aSvgJob->m_plotLayerSequence,
-                       aSvgJob->m_plotOnAllLayersSequence,
-                       false,
-                       true,
-                       wxEmptyString, wxEmptyString,
-                       wxEmptyString ) )
+    if( !plotter.Plot( outputFile.GetFullPath(), aSvgJob->m_plotLayerSequence, aSvgJob->m_plotOnAllLayersSequence,
+                       false, true, wxEmptyString, wxEmptyString, wxEmptyString ) )
     {
         m_reporter->Report( _( "Error creating svg file" ) + wxS( "\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -2494,8 +2447,8 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     {
     case JOB_PCB_DRC::UNITS::INCH: units = EDA_UNITS::INCH; break;
     case JOB_PCB_DRC::UNITS::MILS: units = EDA_UNITS::MILS; break;
-    case JOB_PCB_DRC::UNITS::MM:   units = EDA_UNITS::MM;   break;
-    default:                       units = EDA_UNITS::MM;   break;
+    case JOB_PCB_DRC::UNITS::MM: units = EDA_UNITS::MM; break;
+    default: units = EDA_UNITS::MM; break;
     }
 
     std::shared_ptr<DRC_ENGINE> drcEngine = brd->GetDesignSettings().m_DRCEngine;
@@ -2534,16 +2487,14 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
             if( !schematicPath.Exists() )
             {
-                m_reporter->Report( _( "Failed to fetch schematic netlist for parity tests.\n" ),
-                                    RPT_SEVERITY_ERROR );
+                m_reporter->Report( _( "Failed to fetch schematic netlist for parity tests.\n" ), RPT_SEVERITY_ERROR );
                 checkParity = false;
             }
             else
             {
                 typedef bool ( *NETLIST_FN_PTR )( const wxString&, std::string& );
-                KIFACE* eeschema = m_kiway->KiFACE( KIWAY::FACE_SCH );
-                NETLIST_FN_PTR netlister =
-                        (NETLIST_FN_PTR) eeschema->IfaceOrAddress( KIFACE_NETLIST_SCHEMATIC );
+                KIFACE*        eeschema = m_kiway->KiFACE( KIWAY::FACE_SCH );
+                NETLIST_FN_PTR netlister = (NETLIST_FN_PTR) eeschema->IfaceOrAddress( KIFACE_NETLIST_SCHEMATIC );
                 ( *netlister )( schematicPath.GetFullPath(), netlist_str );
             }
         }
@@ -2559,16 +2510,14 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     {
         try
         {
-            STRING_LINE_READER* lineReader = new STRING_LINE_READER( netlist_str,
-                                                                     _( "Eeschema netlist" ) );
+            STRING_LINE_READER*  lineReader = new STRING_LINE_READER( netlist_str, _( "Eeschema netlist" ) );
             KICAD_NETLIST_READER netlistReader( lineReader, netlist.get() );
 
             netlistReader.LoadNetlist();
         }
         catch( const IO_ERROR& )
         {
-            m_reporter->Report( _( "Failed to fetch schematic netlist for parity tests.\n" ),
-                                RPT_SEVERITY_ERROR );
+            m_reporter->Report( _( "Failed to fetch schematic netlist for parity tests.\n" ), RPT_SEVERITY_ERROR );
             checkParity = false;
         }
 
@@ -2603,8 +2552,8 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     // Update the exclusion status on any excluded markers that still exist.
     brd->ResolveDRCExclusions( false );
 
-    std::shared_ptr<DRC_ITEMS_PROVIDER> markersProvider = std::make_shared<DRC_ITEMS_PROVIDER>(
-            brd, MARKER_BASE::MARKER_DRC, MARKER_BASE::MARKER_DRAWING_SHEET );
+    std::shared_ptr<DRC_ITEMS_PROVIDER> markersProvider =
+            std::make_shared<DRC_ITEMS_PROVIDER>( brd, MARKER_BASE::MARKER_DRC, MARKER_BASE::MARKER_DRAWING_SHEET );
 
     std::shared_ptr<DRC_ITEMS_PROVIDER> ratsnestProvider =
             std::make_shared<DRC_ITEMS_PROVIDER>( brd, MARKER_BASE::MARKER_RATSNEST );
@@ -2616,18 +2565,16 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     ratsnestProvider->SetSeverities( drcJob->m_severity );
     fpWarningsProvider->SetSeverities( drcJob->m_severity );
 
-    m_reporter->Report( wxString::Format( _( "Found %d violations\n" ),
-                                          markersProvider->GetCount() ),
+    m_reporter->Report( wxString::Format( _( "Found %d violations\n" ), markersProvider->GetCount() ),
                         RPT_SEVERITY_INFO );
-    m_reporter->Report( wxString::Format( _( "Found %d unconnected items\n" ),
-                                          ratsnestProvider->GetCount() ),
+    m_reporter->Report( wxString::Format( _( "Found %d unconnected items\n" ), ratsnestProvider->GetCount() ),
                         RPT_SEVERITY_INFO );
 
     if( checkParity )
     {
-        m_reporter->Report( wxString::Format( _( "Found %d schematic parity issues\n" ),
-                                              fpWarningsProvider->GetCount() ),
-                            RPT_SEVERITY_INFO );
+        m_reporter->Report(
+                wxString::Format( _( "Found %d schematic parity issues\n" ), fpWarningsProvider->GetCount() ),
+                RPT_SEVERITY_INFO );
     }
 
     DRC_REPORT reportWriter( brd, units, markersProvider, ratsnestProvider, fpWarningsProvider );
@@ -2641,15 +2588,13 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     if( !wroteReport )
     {
-        m_reporter->Report( wxString::Format( _( "Unable to save DRC report to %s\n" ), outPath ),
-                            RPT_SEVERITY_ERROR );
+        m_reporter->Report( wxString::Format( _( "Unable to save DRC report to %s\n" ), outPath ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
     drcJob->AddOutput( outPath );
 
-    m_reporter->Report( wxString::Format( _( "Saved DRC Report to %s\n" ), outPath ),
-                        RPT_SEVERITY_ACTION );
+    m_reporter->Report( wxString::Format( _( "Saved DRC Report to %s\n" ), outPath ), RPT_SEVERITY_ACTION );
 
     if( drcJob->m_refillZones && drcJob->m_saveBoard )
     {
@@ -2667,8 +2612,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     if( drcJob->m_exitCodeViolations )
     {
-        if( markersProvider->GetCount() > 0 || ratsnestProvider->GetCount() > 0
-            || fpWarningsProvider->GetCount() > 0 )
+        if( markersProvider->GetCount() > 0 || ratsnestProvider->GetCount() > 0 || fpWarningsProvider->GetCount() > 0 )
         {
             return CLI::EXIT_CODES::ERR_RC_VIOLATIONS;
         }
@@ -2792,16 +2736,11 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
 
             switch( job->m_compressionMode )
             {
-            case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::ZIP:
-                fn.SetExt( FILEEXT::ArchiveFileExtension );
-                break;
+            case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::ZIP: fn.SetExt( FILEEXT::ArchiveFileExtension ); break;
 
-            case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ:
-                fn.SetExt( "tgz" );
-                break;
+            case JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ: fn.SetExt( "tgz" ); break;
 
-            default:
-                break;
+            default: break;
             };
 
             job->SetWorkingOutputPath( fn.GetFullName() );
@@ -2885,11 +2824,8 @@ wxString PCBNEW_JOBS_HANDLER::resolveJobOutputPath( JOB* aJob, BOARD* aBoard, co
 
 DS_PROXY_VIEW_ITEM* PCBNEW_JOBS_HANDLER::getDrawingSheetProxyView( BOARD* aBrd )
 {
-    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( pcbIUScale,
-                                                               &aBrd->GetPageSettings(),
-                                                               aBrd->GetProject(),
-                                                               &aBrd->GetTitleBlock(),
-                                                               &aBrd->GetProperties() );
+    DS_PROXY_VIEW_ITEM* drawingSheet = new DS_PROXY_VIEW_ITEM( pcbIUScale, &aBrd->GetPageSettings(), aBrd->GetProject(),
+                                                               &aBrd->GetTitleBlock(), &aBrd->GetProperties() );
 
     drawingSheet->SetSheetName( std::string() );
     drawingSheet->SetSheetPath( std::string() );
@@ -2912,30 +2848,27 @@ void PCBNEW_JOBS_HANDLER::loadOverrideDrawingSheet( BOARD* aBrd, const wxString&
     if( aSheetPath.IsEmpty() )
         return;
 
-    auto loadSheet =
-            [&]( const wxString& path ) -> bool
-            {
-                BASE_SCREEN::m_DrawingSheetFileName = path;
-                FILENAME_RESOLVER resolver;
-                resolver.SetProject( aBrd->GetProject() );
-                resolver.SetProgramBase( &Pgm() );
+    auto loadSheet = [&]( const wxString& path ) -> bool
+    {
+        BASE_SCREEN::m_DrawingSheetFileName = path;
+        FILENAME_RESOLVER resolver;
+        resolver.SetProject( aBrd->GetProject() );
+        resolver.SetProgramBase( &Pgm() );
 
-                wxString filename = resolver.ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
-                                                          aBrd->GetProject()->GetProjectPath(),
-                                                          { aBrd->GetEmbeddedFiles() } );
-                wxString msg;
+        wxString filename = resolver.ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
+                                                  aBrd->GetProject()->GetProjectPath(), { aBrd->GetEmbeddedFiles() } );
+        wxString msg;
 
-                if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, &msg ) )
-                {
-                    m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ),
-                                                            path )
-                                        + wxS( "\n" ) + msg + wxS( "\n" ),
-                                        RPT_SEVERITY_ERROR );
-                    return false;
-                }
+        if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename, &msg ) )
+        {
+            m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ), path ) + wxS( "\n" ) + msg
+                                        + wxS( "\n" ),
+                                RPT_SEVERITY_ERROR );
+            return false;
+        }
 
-                return true;
-            };
+        return true;
+    };
 
     if( loadSheet( aSheetPath ) )
         return;
@@ -2957,43 +2890,26 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
 
     switch( job->m_format )
     {
-    case JOB_PCB_IMPORT::FORMAT::AUTO:
-        fileType = PCB_IO_MGR::FindPluginTypeFromBoardPath( job->m_inputFile );
-        break;
+    case JOB_PCB_IMPORT::FORMAT::AUTO: fileType = PCB_IO_MGR::FindPluginTypeFromBoardPath( job->m_inputFile ); break;
 
-    case JOB_PCB_IMPORT::FORMAT::PADS_ASCII:
-        fileType = PCB_IO_MGR::PADS;
-        break;
+    case JOB_PCB_IMPORT::FORMAT::PADS_ASCII: fileType = PCB_IO_MGR::PADS; break;
 
-    case JOB_PCB_IMPORT::FORMAT::ALTIUM:
-        fileType = PCB_IO_MGR::ALTIUM_DESIGNER;
-        break;
+    case JOB_PCB_IMPORT::FORMAT::ALTIUM: fileType = PCB_IO_MGR::ALTIUM_DESIGNER; break;
 
-    case JOB_PCB_IMPORT::FORMAT::EAGLE:
-        fileType = PCB_IO_MGR::EAGLE;
-        break;
+    case JOB_PCB_IMPORT::FORMAT::EAGLE: fileType = PCB_IO_MGR::EAGLE; break;
 
-    case JOB_PCB_IMPORT::FORMAT::CADSTAR:
-        fileType = PCB_IO_MGR::CADSTAR_PCB_ARCHIVE;
-        break;
+    case JOB_PCB_IMPORT::FORMAT::CADSTAR: fileType = PCB_IO_MGR::CADSTAR_PCB_ARCHIVE; break;
 
-    case JOB_PCB_IMPORT::FORMAT::FABMASTER:
-        fileType = PCB_IO_MGR::FABMASTER;
-        break;
+    case JOB_PCB_IMPORT::FORMAT::FABMASTER: fileType = PCB_IO_MGR::FABMASTER; break;
 
-    case JOB_PCB_IMPORT::FORMAT::PCAD:
-        fileType = PCB_IO_MGR::PCAD;
-        break;
+    case JOB_PCB_IMPORT::FORMAT::PCAD: fileType = PCB_IO_MGR::PCAD; break;
 
-    case JOB_PCB_IMPORT::FORMAT::SOLIDWORKS:
-        fileType = PCB_IO_MGR::SOLIDWORKS_PCB;
-        break;
+    case JOB_PCB_IMPORT::FORMAT::SOLIDWORKS: fileType = PCB_IO_MGR::SOLIDWORKS_PCB; break;
     }
 
     if( fileType == PCB_IO_MGR::PCB_FILE_UNKNOWN )
     {
-        m_reporter->Report( wxString::Format( _( "Unable to determine file format for '%s'\n" ),
-                                              job->m_inputFile ),
+        m_reporter->Report( wxString::Format( _( "Unable to determine file format for '%s'\n" ), job->m_inputFile ),
                             RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
@@ -3001,8 +2917,7 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
     // Check that input file exists
     if( !wxFile::Exists( job->m_inputFile ) )
     {
-        m_reporter->Report( wxString::Format( _( "Input file not found: '%s'\n" ),
-                                              job->m_inputFile ),
+        m_reporter->Report( wxString::Format( _( "Input file not found: '%s'\n" ), job->m_inputFile ),
                             RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
@@ -3017,8 +2932,8 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
         outputPath = fn.GetFullPath();
     }
 
-    BOARD* board = nullptr;
-    wxString formatName = PCB_IO_MGR::ShowType( fileType );
+    BOARD*                board = nullptr;
+    wxString              formatName = PCB_IO_MGR::ShowType( fileType );
     std::vector<wxString> warnings;
 
     try
@@ -3027,15 +2942,14 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
 
         if( !pi )
         {
-            m_reporter->Report( wxString::Format( _( "No plugin found for file type '%s'\n" ),
-                                                  formatName ),
+            m_reporter->Report( wxString::Format( _( "No plugin found for file type '%s'\n" ), formatName ),
                                 RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN;
         }
 
-        m_reporter->Report( wxString::Format( _( "Importing '%s' using %s format...\n" ),
-                                              job->m_inputFile, formatName ),
-                            RPT_SEVERITY_INFO );
+        m_reporter->Report(
+                wxString::Format( _( "Importing '%s' using %s format...\n" ), job->m_inputFile, formatName ),
+                RPT_SEVERITY_INFO );
 
         board = pi->LoadBoard( job->m_inputFile, nullptr, nullptr, nullptr );
 
@@ -3049,8 +2963,7 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
         IO_RELEASER<PCB_IO> kicadPlugin( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
         kicadPlugin->SaveBoard( outputPath, board );
 
-        m_reporter->Report( wxString::Format( _( "Successfully saved imported board to '%s'\n" ),
-                                              outputPath ),
+        m_reporter->Report( wxString::Format( _( "Successfully saved imported board to '%s'\n" ), outputPath ),
                             RPT_SEVERITY_INFO );
 
         // Generate report if requested
@@ -3075,16 +2988,14 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
 
             // Build layer mapping info
             nlohmann::json layerMappings = nlohmann::json::object();
-            LSEQ enabledLayers = board->GetEnabledLayers().Seq();
+            LSEQ           enabledLayers = board->GetEnabledLayers().Seq();
 
             for( PCB_LAYER_ID layer : enabledLayers )
             {
                 wxString layerName = board->GetLayerName( layer );
 
-                layerMappings[layerName.ToStdString()] = {
-                    { "kicad_layer", LSET::Name( layer ).ToStdString() },
-                    { "method", "auto" }
-                };
+                layerMappings[layerName.ToStdString()] = { { "kicad_layer", LSET::Name( layer ).ToStdString() },
+                                                           { "method", "auto" } };
             }
 
             if( job->m_reportFormat == JOB_PCB_IMPORT::REPORT_FORMAT::JSON )
@@ -3095,12 +3006,10 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
                 report["source_format"] = formatName.ToStdString();
                 report["output_file"] = outputFn.GetFullName().ToStdString();
                 report["layer_mapping"] = layerMappings;
-                report["statistics"] = {
-                    { "footprints", footprintCount },
-                    { "tracks", trackCount },
-                    { "vias", viaCount },
-                    { "zones", zoneCount }
-                };
+                report["statistics"] = { { "footprints", footprintCount },
+                                         { "tracks", trackCount },
+                                         { "vias", viaCount },
+                                         { "zones", zoneCount } };
 
                 nlohmann::json warningsJson = nlohmann::json::array();
 
@@ -3171,11 +3080,944 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
     }
     catch( const IO_ERROR& ioe )
     {
-        m_reporter->Report( wxString::Format( _( "Error during import: %s\n" ), ioe.What() ),
-                            RPT_SEVERITY_ERROR );
+        m_reporter->Report( wxString::Format( _( "Error during import: %s\n" ), ioe.What() ), RPT_SEVERITY_ERROR );
 
         delete board;
         return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+// ============================================================================
+// JobDiff: pcb_diff implementation
+// ============================================================================
+#include <diff_merge/diff_job_output.h>
+#include <diff_merge/diff_renderer_plotter.h>
+#include <diff_merge/diff_scene.h>
+#include <diff_merge/pcb_differ.h>
+#include <diff_merge/pcb_geometry_extractor.h>
+#include <jobs/job_pcb_diff.h>
+
+
+// Load a board into a SCRATCH_DOC<BOARD> that keeps its project attached for
+// the document's lifetime — the differ/applier read PROJECT_FILE-scoped fields
+// (drawing-sheet path, DRC severities, net classes). The destructor severs the
+// BOARD->project link in the right order. Used by every PCB diff/merge job.
+static SCRATCH_DOC<BOARD> loadScratchBoard( SETTINGS_MANAGER& aMgr, const wxString& aPath,
+                                            bool aInitializeAfterLoad = true )
+{
+    return LoadScratchDoc<BOARD>(
+            aMgr, aPath,
+            [aPath, aInitializeAfterLoad]( PROJECT* aProject ) -> std::unique_ptr<BOARD>
+            {
+                PCB_IO_MGR::PCB_FILE_T pluginType =
+                        PCB_IO_MGR::FindPluginTypeFromBoardPath( aPath, KICTL_KICAD_ONLY );
+
+                if( !aProject || pluginType == PCB_IO_MGR::FILE_TYPE_NONE )
+                    return nullptr;
+
+                BOARD_LOADER::OPTIONS opts;
+                opts.initialize_after_load = aInitializeAfterLoad;
+
+                try
+                {
+                    return BOARD_LOADER::Load( aPath, pluginType, aProject, opts );
+                }
+                catch( ... )
+                {
+                    return nullptr;
+                }
+            },
+            []( BOARD* aBoard )
+            {
+                if( aBoard )
+                    aBoard->ClearProject();
+            } );
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobDiff( JOB* aJob )
+{
+    JOB_PCB_DIFF* diffJob = dynamic_cast<JOB_PCB_DIFF*>( aJob );
+
+    if( !diffJob )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    // SCRATCH_DOC<BOARD> keeps each board's project attached for the lifetime
+    // of the diff, which the differ needs to read project-file-scoped fields
+    // (m_BoardDrawingSheetFile, etc). The previous loadStandaloneBoard +
+    // ClearProject-up-front path would null those out before the differ ran.
+    SETTINGS_MANAGER& diffMgr = Pgm().GetSettingsManager();
+
+    SCRATCH_DOC<BOARD> aScratch = loadScratchBoard( diffMgr, diffJob->m_inputA );
+    SCRATCH_DOC<BOARD> bScratch = loadScratchBoard( diffMgr, diffJob->m_inputB );
+
+    BOARD* boardA = aScratch.doc.get();
+    BOARD* boardB = bScratch.doc.get();
+
+    if( !boardA )
+    {
+        m_reporter->Report( wxString::Format( _( "Failed to load %s\n" ), diffJob->m_inputA ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    if( !boardB )
+    {
+        m_reporter->Report( wxString::Format( _( "Failed to load %s\n" ), diffJob->m_inputB ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    KICAD_DIFF::PCB_DIFFER    differ( boardA, boardB, diffJob->m_inputB );
+    KICAD_DIFF::DOCUMENT_DIFF result = differ.Diff();
+
+    int diffExitCode = KICAD_DIFF::DiffExitCode( result );
+
+    if( diffJob->m_exitCodeOnly )
+        return diffExitCode;
+
+    // The board geometry rendered beneath the change overlay (PNG/SVG only)
+    // matches what the interactive dialog draws.
+    KICAD_DIFF::DIFF_EMIT_OPTIONS emitOpts =
+            KICAD_DIFF::MakeEmitOptions( *diffJob, diffJob->m_inputA, diffJob->m_inputB );
+    emitOpts.docKind            = KICAD_DIFF::DOC_KIND::PCB;
+    emitOpts.referenceGeometry  = [&]( const KIGFX::COLOR4D& aColor )
+                                  { return KICAD_DIFF::ExtractBoardGeometry( *boardA, aColor ); };
+    emitOpts.comparisonGeometry = [&]( const KIGFX::COLOR4D& aColor )
+                                  { return KICAD_DIFF::ExtractBoardGeometry( *boardB, aColor ); };
+
+    return KICAD_DIFF::EmitDiffResult( result, emitOpts, diffExitCode, *m_reporter );
+}
+
+
+// ============================================================================
+// JobMerge: pcb_merge implementation
+// ============================================================================
+#include <diff_merge/pcb_geometry_extractor.h>
+#include <diff_merge/pcb_merge_applier.h>
+#include <diff_merge/kicad_merge_engine.h>
+#include <dialogs/dialog_kicad_merge_3way.h>
+
+
+int PCBNEW_JOBS_HANDLER::RunMerge( KICAD_DIFF::DOC_KIND aKind, const wxString& aAncestor,
+                                   const wxString& aOurs, const wxString& aTheirs,
+                                   const wxString& aOutput, bool aInteractive, bool aSingleFile,
+                                   REPORTER* aReporter )
+{
+    // Restore m_reporter on scope exit so a caller's transient (often
+    // stack-local) reporter doesn't outlive this call as a dangling member.
+    SCOPED_SET_RESET<REPORTER*> reporterGuard( m_reporter,
+                                               aReporter ? aReporter : m_reporter );
+
+    if( aKind == KICAD_DIFF::DOC_KIND::FP_LIB || aKind == KICAD_DIFF::DOC_KIND::FOOTPRINT )
+        return runFpLibMerge( aAncestor, aOurs, aTheirs, aOutput, aSingleFile );
+
+    return runPcbMerge( aAncestor, aOurs, aTheirs, aOutput, aInteractive );
+}
+
+
+int PCBNEW_JOBS_HANDLER::runPcbMerge( const wxString& aAncestor, const wxString& aOurs,
+                                      const wxString& aTheirs, const wxString& aOutput,
+                                      bool aInteractive )
+{
+    // Use SCRATCH_DOC<BOARD> so each input keeps its project attached for the
+    // life of the merge — necessary for any doc-level resolution that mutates
+    // PROJECT_FILE-scoped state (DRC severities, net classes) and needs to be
+    // saved as a sibling .kicad_pro. SCRATCH_DOC's destructor severs the
+    // BOARD->project link in the right order and unloads the project from
+    // the manager, avoiding the dangling-PROJECT_FILE::m_BoardSettings pointer
+    // the previous up-front-ClearProject loadStandaloneBoard path had to
+    // guard against.
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
+    SCRATCH_DOC<BOARD> ancestorScratch = loadScratchBoard( mgr, aAncestor );
+    SCRATCH_DOC<BOARD> oursScratch = loadScratchBoard( mgr, aOurs );
+    SCRATCH_DOC<BOARD> theirsScratch = loadScratchBoard( mgr, aTheirs );
+
+    BOARD* ancestor = ancestorScratch.doc.get();
+    BOARD* ours = oursScratch.doc.get();
+    BOARD* theirs = theirsScratch.doc.get();
+
+    if( !ancestor || !ours || !theirs )
+    {
+        m_reporter->Report( _( "Failed to load one or more input boards\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    KICAD_DIFF::PCB_DIFFER ourDiff( ancestor, ours );
+    KICAD_DIFF::PCB_DIFFER theirDiff( ancestor, theirs );
+
+    KICAD_DIFF::DOCUMENT_DIFF ourDocDiff = ourDiff.Diff();
+    KICAD_DIFF::DOCUMENT_DIFF theirDocDiff = theirDiff.Diff();
+
+    KICAD_DIFF::KICAD_MERGE_ENGINE engine;
+    KICAD_DIFF::MERGE_PLAN         plan = engine.Plan( ourDocDiff, theirDocDiff );
+
+    // A cancelled dialog leaves plan unresolved and falls through to the
+    // marker flow below.
+    if( aInteractive && !plan.Resolved() )
+    {
+        if( !Pgm().IsGUI() )
+        {
+            m_reporter->Report( _( "--interactive requires a GUI KiCad process; the console "
+                                   "kicad-cli cannot open dialogs.\n" ),
+                                RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_ARGS;
+        }
+
+        // Geometry context so the conflict viewer can render the actual
+        // boards behind the conflict bbox highlight.
+        const KICAD_DIFF::DIFF_COLOR_THEME        theme;
+        DIALOG_KICAD_MERGE_3WAY::CONFLICT_CONTEXT ctx;
+        ctx.ancestorGeometry = KICAD_DIFF::ExtractBoardGeometry( *ancestor, theme.reference );
+        ctx.oursGeometry = KICAD_DIFF::ExtractBoardGeometry( *ours, theme.reference );
+        ctx.theirsGeometry = KICAD_DIFF::ExtractBoardGeometry( *theirs, theme.comparison );
+
+        // Build per-side bbox lookups so a "moved on theirs" item highlights
+        // at its theirs-side coordinates when the user previews Theirs.
+        KICAD_DIFF::CollectChangeBBoxes( ourDocDiff, ctx.oursBBoxes );
+        KICAD_DIFF::CollectChangeBBoxes( theirDocDiff, ctx.theirsBBoxes );
+
+        DIALOG_KICAD_MERGE_3WAY dlg( wxTheApp->GetTopWindow(), plan, std::move( ctx ) );
+
+        if( dlg.ShowModal() == wxID_APPLY )
+            plan = dlg.GetResolvedPlan();
+    }
+
+    // Snapshot of the plan before the applier moves it; drives the
+    // unresolved-conflict report below.
+    const KICAD_DIFF::MERGE_PLAN planSnapshot = plan;
+
+    KICAD_DIFF::PCB_MERGE_APPLIER applier( ancestor, ours, theirs, std::move( plan ) );
+    std::unique_ptr<BOARD>        merged = applier.Apply();
+
+    if( !merged )
+    {
+        m_reporter->Report( _( "Merge applier failed to produce a board\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    // Serialize to the output path using the canonical PCB IO.
+    PCB_IO_KICAD_SEXPR pcbIO;
+
+    try
+    {
+        pcbIO.SaveBoard( aOutput, merged.get() );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        m_reporter->Report( wxString::Format( _( "Failed to save merged board: %s\n" ), ioe.What() ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    // BOARD_DESIGN_SETTINGS fields like m_DRCSeverities serialize to
+    // .kicad_pro, not .kicad_pcb. Mirror only those specific fields onto
+    // ancestor (still linked to its project via BOARD::SetProject) then
+    // save ancestor's project alongside the merged board file. Whole-
+    // BOARD_DESIGN_SETTINGS copy would alias shared_ptr<NET_SETTINGS>
+    // across BOARDs and crash on ClearProject during SCRATCH_DOC release;
+    // single-field mirror avoids that.
+    if( applier.GetReport().projectFileTouched && ancestor && ancestor->GetProject() )
+    {
+        ancestor->GetDesignSettings().m_DRCSeverities = merged->GetDesignSettings().m_DRCSeverities;
+
+        // Mirror net settings (the applier copied them onto the result via
+        // NET_SETTINGS::CopyFrom; do the same here to ancestor, which still
+        // owns the project's nested-settings registration so SaveProjectCopy
+        // walks the right entry).
+        if( ancestor->GetDesignSettings().m_NetSettings && merged->GetDesignSettings().m_NetSettings )
+        {
+            ancestor->GetDesignSettings().m_NetSettings->CopyFrom( *merged->GetDesignSettings().m_NetSettings );
+        }
+
+        // The applier stages drawing-sheet resolutions on the report (the
+        // result BOARD is project-less). Mirror onto ancestor's project here
+        // before SaveProjectCopy walks the PROJECT_FILE.
+        if( applier.GetReport().drawingSheetFileSet )
+        {
+            ancestor->GetProject()->GetProjectFile().m_BoardDrawingSheetFile = applier.GetReport().drawingSheetFile;
+        }
+
+        wxFileName proFn( aOutput );
+        proFn.SetExt( FILEEXT::ProjectFileExtension );
+
+        // JSON-patch path: flush ancestor's in-memory project to its JSON
+        // cache, then patch only the diffed DOC_PROP fields onto the output
+        // file.  This preserves any non-diffed fields the user had at the
+        // output path (text variables, last paths, layer presets etc.) that
+        // a full SaveProjectCopy would silently overwrite.
+        PROJECT_FILE& ancProj = ancestor->GetProject()->GetProjectFile();
+        ancProj.Store();
+
+        const KICAD_DIFF::PCB_MERGE_APPLIER::REPORT& mergeReport = applier.GetReport();
+
+        // PROJECT_FILE::Store() flushes the project file's own params but not
+        // its registered NESTED_SETTINGS. Flush only the nested settings the
+        // merge resolved so the surgical patch does not overwrite unrelated
+        // project subtrees.
+        if( mergeReport.drcSeveritiesTouched )
+            ancestor->GetDesignSettings().SaveToFile( wxEmptyString, true );
+
+        if( mergeReport.netClassesTouched && ancestor->GetDesignSettings().m_NetSettings )
+            ancestor->GetDesignSettings().m_NetSettings->SaveToFile( wxEmptyString, true );
+
+        std::set<wxString> touched;
+        if( mergeReport.drcSeveritiesTouched )
+            touched.insert( KICAD_DIFF::DOC_PROP_DRC_SEVERITIES );
+
+        if( mergeReport.netClassesTouched )
+            touched.insert( KICAD_DIFF::DOC_PROP_NET_CLASSES );
+
+        if( applier.GetReport().drawingSheetFileSet )
+            touched.insert( KICAD_DIFF::DOC_PROP_DRAWING_SHEET );
+
+        if( !KICAD_DIFF::ApplyProjectFilePatches( proFn.GetFullPath(), *ancProj.Internals(), touched ) )
+        {
+            // Patch failed (existing output unparseable or write error).
+            // Fall back to the legacy full-copy path so the user still gets
+            // a project file even if it overwrites non-diffed customisations.
+            if( !mgr.SaveProjectCopy( proFn.GetFullPath(), ancestor->GetProject() ) )
+            {
+                m_reporter->Report(
+                        wxString::Format( _( "Failed to save merged project file: %s\n" ), proFn.GetFullPath() ),
+                        RPT_SEVERITY_ERROR );
+                return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+            }
+        }
+
+        // Write a project-dir sibling file from staged report content.  Empty
+        // content removes the file so a TAKE_ANCESTOR resolution against an
+        // ancestor with no file clears stale content at the output path.
+        auto writeStagedFile = [&]( const wxString& aPath, const wxString& aContent, const wxString& aLabel ) -> bool
+        {
+            if( aContent.IsEmpty() )
+            {
+                if( wxFileExists( aPath ) )
+                    wxRemoveFile( aPath );
+
+                return true;
+            }
+
+            wxFile out;
+
+            if( !out.Open( aPath, wxFile::write ) || !out.Write( aContent ) )
+            {
+                m_reporter->Report( wxString::Format( _( "Failed to save merged %s: %s\n" ), aLabel, aPath ),
+                                    RPT_SEVERITY_ERROR );
+                return false;
+            }
+
+            return true;
+        };
+
+        // Custom DRC rules: write the applier's staged content next to the
+        // merged board so the chosen side's rules apply at next DRC run.
+        if( applier.GetReport().customDrcRulesSet )
+        {
+            wxFileName druFn( aOutput );
+            druFn.SetExt( FILEEXT::DesignRulesFileExtension );
+
+            if( !writeStagedFile( druFn.GetFullPath(), applier.GetReport().customDrcRules, _( "custom DRC rules" ) ) )
+            {
+                return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+            }
+        }
+
+        // Footprint / symbol library tables: write into the merged project
+        // directory.  Both files have no extension.
+        if( applier.GetReport().fpLibTableSet )
+        {
+            wxFileName fpFn( aOutput );
+            fpFn.SetFullName( wxString::FromUTF8( FILEEXT::FootprintLibraryTableFileName ) );
+
+            if( !writeStagedFile( fpFn.GetFullPath(), applier.GetReport().fpLibTable, _( "footprint library table" ) ) )
+            {
+                return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+            }
+        }
+
+        if( applier.GetReport().symLibTableSet )
+        {
+            wxFileName symFn( aOutput );
+            symFn.SetFullName( wxString::FromUTF8( FILEEXT::SymbolLibraryTableFileName ) );
+
+            if( !writeStagedFile( symFn.GetFullPath(), applier.GetReport().symLibTable, _( "symbol library table" ) ) )
+            {
+                return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+            }
+        }
+    }
+
+    // Surface post-apply validator findings (refdes collisions, schema
+    // mismatch, missed connectivity rebuild). Advisory — they do not change the
+    // exit code, only the merge's resolved/unresolved status does.
+    for( const KICAD_DIFF::VALIDATION_FAILURE& f : applier.GetReport().validation.failures )
+        m_reporter->Report( wxString::Format( wxS( "%s: %s\n" ), f.validator, f.message ), f.severity );
+
+    // The merged board was written to m_outputPath above, so the output is
+    // always a valid file. Unresolved conflicts are reported and signalled via
+    // the exit code; the user resolves them with the interactive mergetool.
+    if( !planSnapshot.Resolved() )
+    {
+        m_reporter->Report( wxString::Format( _( "Merge completed with %zu unresolved conflict(s) in %s\n" ),
+                                              planSnapshot.ConflictCount(), aOutput ),
+                            RPT_SEVERITY_WARNING );
+        return CLI::EXIT_CODES::ERR_RC_VIOLATIONS;
+    }
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+// ============================================================================
+// JobFpDiff: fp_diff implementation
+// ============================================================================
+#include <diff_merge/fp_lib_differ.h>
+#include <jobs/job_fp_diff.h>
+
+
+// Load one side of a footprint-library diff into its owner vector and name map.
+// When aAllowEmpty is set an empty path resolves to a clean (empty) side; the
+// non-interactive job path leaves it unset so a missing path is an input error.
+static int loadFootprintLibrarySide( const wxString& aPath,
+                                     std::vector<std::unique_ptr<FOOTPRINT>>& aOwners,
+                                     KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP& aMap, bool aAllowEmpty,
+                                     REPORTER& aReporter )
+{
+    if( aAllowEmpty && aPath.IsEmpty() )
+        return CLI::EXIT_CODES::SUCCESS;
+
+    try
+    {
+        auto loaded = KICAD_DIFF::FP_LIB_DIFFER::LoadLibrary( aPath );
+        aOwners = std::move( loaded.first );
+        aMap = std::move( loaded.second );
+        return CLI::EXIT_CODES::SUCCESS;
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        aReporter.Report( wxString::Format( _( "Failed to load %s: %s\n" ), aPath, ioe.What() ),
+                          RPT_SEVERITY_ERROR );
+    }
+    catch( const std::exception& e )
+    {
+        aReporter.Report(
+                wxString::Format( _( "Failed to load %s: %s\n" ), aPath, wxString::FromUTF8( e.what() ) ),
+                RPT_SEVERITY_ERROR );
+    }
+
+    return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+}
+
+
+// Flatten a footprint-library name map into a single DOCUMENT_GEOMETRY tinted
+// with the supplied per-side theme colour.
+static KICAD_DIFF::DOCUMENT_GEOMETRY
+footprintLibraryGeometry( const KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP& aMap, const KIGFX::COLOR4D& aColor )
+{
+    KICAD_DIFF::DOCUMENT_GEOMETRY geometry;
+
+    for( const auto& [name, footprint] : aMap )
+    {
+        if( footprint )
+            KICAD_DIFF::AppendGeometry( geometry, KICAD_DIFF::ExtractFootprintGeometry( *footprint, aColor ) );
+    }
+
+    return geometry;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobFpDiff( JOB* aJob )
+{
+    JOB_FP_DIFF* diffJob = dynamic_cast<JOB_FP_DIFF*>( aJob );
+
+    if( !diffJob )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    wxFileName dirA( diffJob->m_inputA );
+    dirA.MakeAbsolute();
+    wxFileName dirB( diffJob->m_inputB );
+    dirB.MakeAbsolute();
+
+    std::vector<std::unique_ptr<FOOTPRINT>>  ownersA;
+    std::vector<std::unique_ptr<FOOTPRINT>>  ownersB;
+    KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP mapA;
+    KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP mapB;
+
+    if( int rc = loadFootprintLibrarySide( dirA.GetFullPath(), ownersA, mapA, false, *m_reporter );
+        rc != CLI::EXIT_CODES::SUCCESS )
+    {
+        return rc;
+    }
+
+    if( int rc = loadFootprintLibrarySide( dirB.GetFullPath(), ownersB, mapB, false, *m_reporter );
+        rc != CLI::EXIT_CODES::SUCCESS )
+    {
+        return rc;
+    }
+
+    KICAD_DIFF::FP_LIB_DIFFER differ( mapA, mapB, diffJob->m_inputB );
+    KICAD_DIFF::DOCUMENT_DIFF result = differ.Diff();
+
+    int diffExitCode = KICAD_DIFF::DiffExitCode( result );
+
+    if( diffJob->m_exitCodeOnly )
+        return diffExitCode;
+
+    KICAD_DIFF::DIFF_EMIT_OPTIONS emitOpts =
+            KICAD_DIFF::MakeEmitOptions( *diffJob, diffJob->m_inputA, diffJob->m_inputB );
+    emitOpts.docKind            = KICAD_DIFF::DOC_KIND::FP_LIB;
+    emitOpts.referenceGeometry  = [&]( const KIGFX::COLOR4D& aColor )
+                                  { return footprintLibraryGeometry( mapA, aColor ); };
+    emitOpts.comparisonGeometry = [&]( const KIGFX::COLOR4D& aColor )
+                                  { return footprintLibraryGeometry( mapB, aColor ); };
+
+    return KICAD_DIFF::EmitDiffResult( result, emitOpts, diffExitCode, *m_reporter );
+}
+
+
+// ============================================================================
+// JobOpenDiffDialog: load two on-disk files and open DIALOG_KICAD_DIFF.
+// Dispatched from the project manager / PR-review dialog via KIWAY.
+// ============================================================================
+#include <dialogs/dialog_kicad_diff.h>
+#include <diff_merge/pcb_diff_canvas_context.h>
+#include <diff_merge/pcb_geometry_extractor.h>
+#include <jobs/scratch_doc.h>
+
+
+int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxString& aFileA,
+                                         const wxString& aFileB, const wxString& aLabelA,
+                                         const wxString& aLabelB, wxWindow* aParent,
+                                         REPORTER* aReporter )
+{
+    // Restore m_reporter on scope exit so a caller's transient (often
+    // stack-local) reporter doesn't outlive this call as a dangling member.
+    SCOPED_SET_RESET<REPORTER*> reporterGuard( m_reporter,
+                                               aReporter ? aReporter : m_reporter );
+
+    wxWindow* parent = aParent ? aParent : ( wxTheApp ? wxTheApp->GetTopWindow() : nullptr );
+
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
+    auto loadBoardScratch = [&]( const wxString& aPath )
+    {
+        return loadScratchBoard( mgr, aPath, /* aInitializeAfterLoad */ false );
+    };
+
+    KICAD_DIFF::DOCUMENT_DIFF     result;
+    KICAD_DIFF::DOCUMENT_GEOMETRY refGeometry;
+    KICAD_DIFF::DOCUMENT_GEOMETRY compGeometry;
+
+    auto loadFootprintFile = [&]( const wxString& aPath ) -> std::unique_ptr<FOOTPRINT>
+    {
+        if( aPath.IsEmpty() )
+            return nullptr;
+
+        wxFileName fn( aPath );
+        fn.MakeAbsolute();
+
+        // A single .kicad_mod's internal (footprint ...) name need not match its
+        // filename, so load the file's sole footprint via ImportFootprint rather
+        // than FootprintLoad (which treats the directory as a .pretty library and
+        // keys by basename), matching runFpLibMerge's single-file path.
+        PCB_IO_KICAD_SEXPR io;
+        wxString           name;
+        return std::unique_ptr<FOOTPRINT>( io.ImportFootprint( fn.GetFullPath(), name ) );
+    };
+
+    switch( aKind )
+    {
+    case KICAD_DIFF::DOC_KIND::PCB:
+    {
+        SCRATCH_DOC<BOARD> a = loadBoardScratch( aFileA );
+        SCRATCH_DOC<BOARD> b = loadBoardScratch( aFileB );
+
+        // Synthesize empty boards for ADDED / REMOVED sides so the differ
+        // can still produce a meaningful per-item list rather than failing
+        // on an empty input file.
+        BOARD emptyA;
+        BOARD emptyB;
+
+        if( !a.doc && !aFileA.IsEmpty() )
+        {
+            m_reporter->Report( wxString::Format( _( "Failed to load %s\n" ), aFileA ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+        }
+
+        if( !b.doc && !aFileB.IsEmpty() )
+        {
+            m_reporter->Report( wxString::Format( _( "Failed to load %s\n" ), aFileB ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+        }
+
+        BOARD* boardA = a.doc ? a.doc.get() : &emptyA;
+        BOARD* boardB = b.doc ? b.doc.get() : &emptyB;
+
+        KICAD_DIFF::PCB_DIFFER differ( boardA, boardB, aFileB );
+        result = differ.Diff();
+
+        // Extract background geometry so the dialog's canvas shows the
+        // actual board outline + footprint footprints beneath the diff
+        // bbox rectangles. Theme defaults: muted blue (ref) / gold (comp).
+        const KICAD_DIFF::DIFF_COLOR_THEME theme;
+        refGeometry = KICAD_DIFF::ExtractBoardGeometry( *boardA, theme.reference );
+        compGeometry = KICAD_DIFF::ExtractBoardGeometry( *boardB, theme.comparison );
+
+        const wxString labelA = aLabelA.IsEmpty() ? aFileA : aLabelA;
+        const wxString labelB = aLabelB.IsEmpty() ? aFileB : aLabelB;
+
+        DIALOG_KICAD_DIFF dlg(
+                parent, labelA, labelB, result, std::move( refGeometry ), std::move( compGeometry ),
+                [boardA, boardB, color = theme.reference]( WIDGET_DIFF_CANVAS& aCanvas, const KIID_PATH& )
+                {
+                    KICAD_DIFF::ConfigurePcbDiffCanvasContext( aCanvas, boardA, boardB, color );
+                } );
+        dlg.ShowModal();
+
+        return CLI::EXIT_CODES::SUCCESS;
+    }
+    case KICAD_DIFF::DOC_KIND::FP_LIB:
+    {
+        std::vector<std::unique_ptr<FOOTPRINT>>  ownersA;
+        std::vector<std::unique_ptr<FOOTPRINT>>  ownersB;
+        KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP mapA;
+        KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP mapB;
+
+        if( int rc = loadFootprintLibrarySide( aFileA, ownersA, mapA, true, *m_reporter );
+            rc != CLI::EXIT_CODES::SUCCESS )
+        {
+            return rc;
+        }
+
+        if( int rc = loadFootprintLibrarySide( aFileB, ownersB, mapB, true, *m_reporter );
+            rc != CLI::EXIT_CODES::SUCCESS )
+        {
+            return rc;
+        }
+
+        KICAD_DIFF::FP_LIB_DIFFER differ( mapA, mapB, aFileB );
+        result = differ.Diff();
+
+        const KICAD_DIFF::DIFF_COLOR_THEME theme;
+        refGeometry = footprintLibraryGeometry( mapA, theme.reference );
+        compGeometry = footprintLibraryGeometry( mapB, theme.comparison );
+        break;
+    }
+    case KICAD_DIFF::DOC_KIND::FOOTPRINT:
+    {
+        std::unique_ptr<FOOTPRINT> footprintA;
+        std::unique_ptr<FOOTPRINT> footprintB;
+
+        try
+        {
+            footprintA = loadFootprintFile( aFileA );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            m_reporter->Report( wxString::Format( _( "Failed to load %s: %s\n" ), aFileA, ioe.What() ),
+                                RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+        }
+
+        try
+        {
+            footprintB = loadFootprintFile( aFileB );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            m_reporter->Report( wxString::Format( _( "Failed to load %s: %s\n" ), aFileB, ioe.What() ),
+                                RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+        }
+
+        KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP mapA;
+        KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP mapB;
+        const wxString                           nameA = wxFileName( aFileA ).GetName();
+        const wxString                           nameB = wxFileName( aFileB ).GetName();
+        const wxString                           itemName = !nameB.IsEmpty() ? nameB : nameA;
+
+        if( footprintA )
+            mapA[itemName] = footprintA.get();
+
+        if( footprintB )
+            mapB[itemName] = footprintB.get();
+
+        KICAD_DIFF::FP_LIB_DIFFER differ( mapA, mapB, aFileB );
+        result = differ.Diff();
+
+        const KICAD_DIFF::DIFF_COLOR_THEME theme;
+
+        if( footprintA )
+            refGeometry = KICAD_DIFF::ExtractFootprintGeometry( *footprintA, theme.reference );
+
+        if( footprintB )
+            compGeometry = KICAD_DIFF::ExtractFootprintGeometry( *footprintB, theme.comparison );
+
+        break;
+    }
+    default:
+        m_reporter->Report( _( "Unsupported document kind for this dispatcher.\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    const wxString labelA = aLabelA.IsEmpty() ? aFileA : aLabelA;
+    const wxString labelB = aLabelB.IsEmpty() ? aFileB : aLabelB;
+
+    DIALOG_KICAD_DIFF dlg( parent, labelA, labelB, result, std::move( refGeometry ), std::move( compGeometry ) );
+    dlg.ShowModal();
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+// ============================================================================
+// JobFpLibMerge: 3-way merge of .pretty footprint libraries.
+// ============================================================================
+#include <diff_merge/fp_lib_differ.h>
+#include <diff_merge/fp_lib_merge_applier.h>
+
+
+int PCBNEW_JOBS_HANDLER::runFpLibMerge( const wxString& aAncestor, const wxString& aOurs,
+                                        const wxString& aTheirs, const wxString& aOutput,
+                                        bool aSingleFile )
+{
+    if( aOutput.IsEmpty() )
+    {
+        m_reporter->Report( _( "--output is required\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    struct LIB_SIDE
+    {
+        std::vector<std::unique_ptr<FOOTPRINT>>  owners;
+        KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP map;
+    };
+
+    LIB_SIDE ancestor, ours, theirs;
+
+    // Accept either a `.pretty` directory (library mode) or a single `.kicad_
+    // mod` file (git's per-file driver mode). Extension autodetection works
+    // for native invocations, but git's external driver passes temp paths
+    // (`.merge_file_XXX`) with no extension, so the `--single-file` flag
+    // overrides on demand.
+    auto isSingleFile = [&]( const wxString& aPath )
+    {
+        if( aSingleFile )
+            return true;
+
+        return wxFileName( aPath ).GetExt() == FILEEXT::KiCadFootprintFileExtension;
+    };
+
+    auto loadSide = [&]( const wxString& aPath, LIB_SIDE& aSide ) -> int
+    {
+        try
+        {
+            if( isSingleFile( aPath ) )
+            {
+                PCB_IO_KICAD_SEXPR         io;
+                wxString                   name;
+                std::unique_ptr<FOOTPRINT> fp( io.ImportFootprint( aPath, name ) );
+
+                if( !fp )
+                    return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+                // Use the footprint's own item-name (LIB_ID) if set,
+                // falling back to the file basename. Both sides must
+                // agree for the differ/applier to align them.
+                const UTF8&    itemName = fp->GetFPID().GetLibItemName();
+                const wxString key = itemName.empty() ? name : itemName.wx_str();
+
+                aSide.map[key] = fp.get();
+                aSide.owners.push_back( std::move( fp ) );
+                return CLI::EXIT_CODES::SUCCESS;
+            }
+
+            auto loaded = KICAD_DIFF::FP_LIB_DIFFER::LoadLibrary( aPath );
+            aSide.owners = std::move( loaded.first );
+            aSide.map = std::move( loaded.second );
+            return CLI::EXIT_CODES::SUCCESS;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            m_reporter->Report( wxString::Format( _( "Failed to load %s: %s\n" ), aPath, ioe.What() ),
+                                RPT_SEVERITY_ERROR );
+        }
+        catch( const std::exception& e )
+        {
+            m_reporter->Report(
+                    wxString::Format( _( "Failed to load %s: %s\n" ), aPath, wxString::FromUTF8( e.what() ) ),
+                    RPT_SEVERITY_ERROR );
+        }
+
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    };
+
+    if( int rc = loadSide( aAncestor, ancestor ); rc != CLI::EXIT_CODES::SUCCESS )
+        return rc;
+
+    if( int rc = loadSide( aOurs, ours ); rc != CLI::EXIT_CODES::SUCCESS )
+        return rc;
+
+    if( int rc = loadSide( aTheirs, theirs ); rc != CLI::EXIT_CODES::SUCCESS )
+        return rc;
+
+    KICAD_DIFF::FP_LIB_DIFFER ourDiff( ancestor.map, ours.map, aOurs );
+    KICAD_DIFF::FP_LIB_DIFFER theirDiff( ancestor.map, theirs.map, aTheirs );
+
+    KICAD_DIFF::DOCUMENT_DIFF ourDocDiff = ourDiff.Diff();
+    KICAD_DIFF::DOCUMENT_DIFF theirDocDiff = theirDiff.Diff();
+
+    KICAD_DIFF::KICAD_MERGE_ENGINE engine;
+    KICAD_DIFF::MERGE_PLAN         plan = engine.Plan( ourDocDiff, theirDocDiff );
+
+    const KICAD_DIFF::MERGE_PLAN planSnapshot = plan;
+
+    KICAD_DIFF::FP_LIB_MERGE_APPLIER        applier( ancestor.map, ours.map, theirs.map, std::move( plan ) );
+    std::vector<std::unique_ptr<FOOTPRINT>> merged = applier.Apply();
+
+    // Per-property footprint merge isn't implemented; MERGE_PROPS resolutions
+    // are downgraded to TAKE_OURS. Surface that as unresolved so the user sees
+    // a marker instead of silent partial-merge.
+    const bool hadSilentFallback = applier.GetReport().mergePropsFallback > 0;
+
+    const bool singleFileOutput = isSingleFile( aOutput );
+
+    // .pretty is a directory; .kicad_mod is a single file. wxFileName parses
+    // a path ending in `.pretty` as a file with that extension, so library
+    // mode uses DirName(); single-file mode keeps the file path as-is and
+    // hands it directly to FootprintSave, which auto-detects .kicad_mod via
+    // its own extension check.
+    wxFileName outFn;
+
+    if( singleFileOutput )
+        outFn = wxFileName( aOutput );
+    else
+        outFn = wxFileName::DirName( aOutput );
+
+    outFn.MakeAbsolute();
+
+    // In library mode wxFileName::DirName treats `foo.pretty` as a directory,
+    // so GetPath() returns the .pretty itself. In single-file mode GetPath()
+    // returns the file's parent dir. Either way it's the directory we Mkdir
+    // into.
+    const wxString outDir = outFn.GetPath();
+
+    if( !wxFileName::DirExists( outDir ) && !wxFileName::Mkdir( outDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+    {
+        m_reporter->Report( wxString::Format( _( "Cannot create output directory %s\n" ), outDir ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    try
+    {
+        PCB_IO_KICAD_SEXPR io;
+
+        if( singleFileOutput )
+        {
+            // Git per-file driver mode: one merged footprint -> one .kicad_mod.
+            // Multiple survivors would lose data; flag that as an error since
+            // single-file input by definition has at most one footprint per
+            // side.
+            if( merged.size() > 1 )
+            {
+                m_reporter->Report( _( "Single-file fp merge produced multiple footprints; refusing to "
+                                       "collapse into one .kicad_mod\n" ),
+                                    RPT_SEVERITY_ERROR );
+                return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+            }
+
+            if( merged.empty() )
+            {
+                // All sides deleted the footprint. Remove the output file if
+                // it existed, leaving nothing where the merged content would
+                // have gone.
+                if( wxFileName::FileExists( outFn.GetFullPath() ) )
+                    wxRemoveFile( outFn.GetFullPath() );
+            }
+            else if( wxFileName( outFn.GetFullPath() ).GetExt() == FILEEXT::KiCadFootprintFileExtension )
+            {
+                // FootprintSave's .kicad_mod extension autodetection handles
+                // the write to the path as-given.
+                io.FootprintSave( outFn.GetFullPath(), merged.front().get(), nullptr );
+            }
+            else
+            {
+                // Git driver mode: output is an extension-less temp path
+                // (typically `.merge_file_XXX`). FootprintSave's
+                // autodetection would treat it as a library directory.
+                // Format directly via PRETTIFIED_FILE_OUTPUTFORMATTER, the
+                // same writer the sexpr lib cache uses.
+                PRETTIFIED_FILE_OUTPUTFORMATTER formatter( outFn.GetFullPath() );
+                io.SetOutputFormatter( &formatter );
+                io.Format( merged.front().get() );
+                formatter.Finish();
+            }
+        }
+        else
+        {
+            // Library mode. Footprints in `merged` are the survivors. Any
+            // footprint already in the output `.pretty` but absent from
+            // `merged` is a stale leftover from a previous invocation (or a
+            // resolved DELETE / TAKE_ANCESTOR-with-no-ancestor case). Delete
+            // those before saving the survivors, otherwise the resolved
+            // DELETE never propagates to disk.
+            std::set<wxString> mergedNames;
+
+            for( const auto& fp : merged )
+            {
+                if( fp )
+                    mergedNames.insert( fp->GetFPID().GetLibItemName() );
+            }
+
+            wxArrayString existing;
+            io.FootprintEnumerate( existing, outDir, false, nullptr );
+
+            for( const wxString& name : existing )
+            {
+                if( !mergedNames.count( name ) )
+                    io.FootprintDelete( outDir, name, nullptr );
+            }
+
+            for( const auto& fp : merged )
+            {
+                if( !fp )
+                    continue;
+
+                const wxString name = fp->GetFPID().GetLibItemName();
+
+                if( io.FootprintExists( outDir, name, nullptr ) )
+                    io.FootprintDelete( outDir, name, nullptr );
+
+                io.FootprintSave( outDir, fp.get(), nullptr );
+            }
+        }
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        m_reporter->Report( wxString::Format( _( "Failed to save merged footprint library: %s\n" ), ioe.What() ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    // The merged library was saved above, so the output is always valid.
+    if( !planSnapshot.Resolved() || hadSilentFallback )
+    {
+        // Conflict count = engine-unresolved ∪ applier-downgraded (deduped, so
+        // an item that was both unresolved and silently downgraded counts once).
+        std::set<KIID_PATH> conflicts( planSnapshot.unresolved.begin(), planSnapshot.unresolved.end() );
+
+        for( const KIID_PATH& id : applier.GetReport().mergePropsFallbackIds )
+            conflicts.insert( id );
+
+        m_reporter->Report( wxString::Format( _( "Footprint library merge completed with %zu unresolved "
+                                                 "conflict(s) in %s\n" ),
+                                              conflicts.size(), aOutput ),
+                            RPT_SEVERITY_WARNING );
+        return CLI::EXIT_CODES::ERR_RC_VIOLATIONS;
     }
 
     return CLI::EXIT_CODES::SUCCESS;

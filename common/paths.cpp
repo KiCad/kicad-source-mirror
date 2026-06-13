@@ -712,3 +712,24 @@ const wxString& PATHS::GetExecutablePath()
 
     return exe_path;
 }
+
+
+wxString PATHS::ResolveSiblingExecutable( const wxString& aBaseName )
+{
+#ifdef __WXMAC__
+    // GetExecutablePath() returns the bundle root on macOS, but sibling binaries
+    // live next to the running executable in Contents/MacOS.
+    wxFileName sibling( wxFileName( wxStandardPaths::Get().GetExecutablePath() ).GetPath(), aBaseName );
+#else
+    wxFileName sibling( GetExecutablePath(), aBaseName );
+#endif
+
+#ifdef _WIN32
+    sibling.SetExt( wxT( "exe" ) );
+#endif
+
+    if( !sibling.FileExists() )
+        return wxEmptyString;
+
+    return sibling.GetFullPath();
+}

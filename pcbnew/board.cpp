@@ -3872,6 +3872,15 @@ const BOARD_ITEM_SET BOARD::GetItemSet()
 }
 
 
+const BOARD_ITEM_SET BOARD::GetItemSet() const
+{
+    // Delegate to the non-const overload via a single safe const_cast on the
+    // *this pointer.  GetItemSet doesn't mutate the BOARD; the non-const
+    // signature is historical.
+    return const_cast<BOARD*>( this )->GetItemSet();
+}
+
+
 bool BOARD::operator==( const BOARD_ITEM& aItem ) const
 {
     if( aItem.Type() != Type() )

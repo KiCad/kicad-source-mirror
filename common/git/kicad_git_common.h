@@ -29,6 +29,7 @@
 
 #include <git2.h>
 #include <atomic>
+#include <functional>
 #include <mutex>
 #include <set>
 
@@ -241,5 +242,40 @@ extern "C" APIEXPORT int fetchhead_foreach_cb( const char*, const char*,
                                                const git_oid* aOID, unsigned int aIsMerge, void* aPayload );
 extern "C" APIEXPORT int credentials_cb( git_cred** aOut, const char* aUrl, const char* aUsername,
                                          unsigned int aAllowedTypes, void* aPayload );
+
+
+namespace KIGIT
+{
+
+/**
+ * Resolve a string ref (branch name, short OID, full OID, tag) to its tree.
+ *
+ * Runs git_revparse_single followed by git_object_peel( GIT_OBJECT_TREE ), so a
+ * commit, tag or tree ref all resolve to the underlying tree.  Returns nullptr
+ * on error and logs via wxLogTrace( traceGit ).
+ *
+ * The caller owns the returned tree and must free it with git_tree_free (wrap
+ * in KIGIT::GitTreePtr for RAII).  The return type is a raw pointer rather than
+ * GitTreePtr because the lambda-deleter closure type backing GitTreePtr is
+ * distinct per translation unit, so it cannot cross the kicommon ABI boundary.
+ */
+APIEXPORT git_tree* ResolveRefToTree( git_repository* aRepo, const wxString& aRef );
+
+
+/**
+ * Walk every delta in a computed diff, invoking @p aCallback once per delta.
+ *
+ * Centralizes the git_diff_num_deltas / git_diff_get_delta loop.  Null deltas
+ * are skipped.  A null diff is a no-op.
+ *
+ * The callback is a std::function rather than a header-inline template because
+ * this helper lives behind the APIEXPORT/libkicommon ABI boundary; a template
+ * would have to re-expose the git2 loop in the header to every caller.
+ */
+APIEXPORT void CollectDiffDeltas( git_diff*                                           aDiff,
+                                  const std::function<void( const git_diff_delta& )>& aCallback );
+
+} // namespace KIGIT
+
 
 #endif // _GIT_COMMON_H_

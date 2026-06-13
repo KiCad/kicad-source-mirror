@@ -65,6 +65,20 @@ TOOL_ACTION SCH_ACTIONS::diffSymbol( TOOL_ACTION_ARGS()
         .Tooltip( _( "Show differences between schematic symbol and its library equivalent" ) )
         .Icon( BITMAPS::library ) );
 
+TOOL_ACTION SCH_ACTIONS::compareSchematicWithFile( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InspectionTool.CompareSchematicWithFile" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Compare Schematic with File..." ) )
+        .Tooltip( _( "Diff the current schematic against another .kicad_sch file" ) )
+        .Icon( BITMAPS::library ) );
+
+TOOL_ACTION SCH_ACTIONS::compareSchematicWithHistory( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InspectionTool.CompareSchematicWithHistory" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Compare Schematic with Local History..." ) )
+        .Tooltip( _( "Diff the current schematic against the most recent local-history snapshot" ) )
+        .Icon( BITMAPS::library ) );
+
 TOOL_ACTION SCH_ACTIONS::showBusSyntaxHelp( TOOL_ACTION_ARGS()
         .Name( "eeschema.InspectionTool.showBusSyntaxHelp" )
         .Scope( AS_GLOBAL )
@@ -182,6 +196,13 @@ TOOL_ACTION SCH_ACTIONS::saveLibraryAs( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Save As" )
         .FriendlyName( _( "Save Library As..." ) )
         .Tooltip( _( "Save the current library to a new file" ) ) );
+
+TOOL_ACTION SCH_ACTIONS::compareLibraryWithFile( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.CompareLibraryWithFile" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Compare Library with File..." ) )
+        .Tooltip( _( "Diff the current symbol library against another .kicad_sym file" ) )
+        .Icon( BITMAPS::library ) );
 
 TOOL_ACTION SCH_ACTIONS::newSymbol( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolLibraryControl.newSymbol" )

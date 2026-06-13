@@ -133,6 +133,36 @@ bool NETCLASS::operator==( const NETCLASS& other ) const
 }
 
 
+bool NETCLASS::EqualsByPersistedFields( const NETCLASS& aOther ) const
+{
+    // m_Description intentionally omitted: the project-file JSON writer does not
+    // serialize description, so a load round-trip drops it.  Including it here
+    // would mark every fresh load dirty (or every CopyFrom-produced copy unequal).
+    //
+    // This list is a hand-maintained mirror of the netclass JSON serialization in
+    // NET_SETTINGS (common/project/net_settings.cpp, the saveNetclass/readNetClass
+    // lambdas).  Any new persisted field added there must be added here too, or two
+    // netclasses differing only in the new field will silently compare equal.
+    return m_Name            == aOther.m_Name
+        && m_Priority        == aOther.m_Priority
+        && m_Clearance       == aOther.m_Clearance
+        && m_TrackWidth      == aOther.m_TrackWidth
+        && m_ViaDia          == aOther.m_ViaDia
+        && m_ViaDrill        == aOther.m_ViaDrill
+        && m_uViaDia         == aOther.m_uViaDia
+        && m_uViaDrill       == aOther.m_uViaDrill
+        && m_diffPairWidth   == aOther.m_diffPairWidth
+        && m_diffPairGap     == aOther.m_diffPairGap
+        && m_diffPairViaGap  == aOther.m_diffPairViaGap
+        && m_wireWidth       == aOther.m_wireWidth
+        && m_busWidth        == aOther.m_busWidth
+        && m_schematicColor  == aOther.m_schematicColor
+        && m_lineStyle       == aOther.m_lineStyle
+        && m_pcbColor        == aOther.m_pcbColor
+        && m_tuningProfile   == aOther.m_tuningProfile;
+}
+
+
 void NETCLASS::Serialize( google::protobuf::Any &aContainer ) const
 {
     using namespace kiapi::common;

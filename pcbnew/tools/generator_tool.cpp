@@ -39,7 +39,8 @@ GENERATOR_TOOL::GENERATOR_TOOL() :
         GENERATOR_TOOL_PNS_PROXY( "pcbnew.Generators" ),
         m_mgrDialog( nullptr )
 {
-    PROPERTY_MANAGER::Instance().RegisterListener( TYPE_HASH( BOARD_ITEM ),
+    m_boardItemListener = PROPERTY_MANAGER::Instance().RegisterListener(
+            TYPE_HASH( BOARD_ITEM ),
             [&]( INSPECTABLE* aItem, PROPERTY_BASE* aProperty, COMMIT* aCommit )
             {
                 // Special case: propagate lock from generated items to parent generator
@@ -61,7 +62,8 @@ GENERATOR_TOOL::GENERATOR_TOOL() :
                 }
             } );
 
-    PROPERTY_MANAGER::Instance().RegisterListener( TYPE_HASH( PCB_GENERATOR ),
+    m_generatorListener = PROPERTY_MANAGER::Instance().RegisterListener(
+            TYPE_HASH( PCB_GENERATOR ),
             [&]( INSPECTABLE* aItem, PROPERTY_BASE* aProperty, COMMIT* aCommit )
             {
                 // Special case: regenerate generators when their properties change
@@ -80,6 +82,11 @@ GENERATOR_TOOL::GENERATOR_TOOL() :
 
 GENERATOR_TOOL::~GENERATOR_TOOL()
 {
+    // Unregister before the rest of the object tears down so a property
+    // change firing mid-destruction cannot dispatch into a half-destroyed
+    // listener body.
+    m_generatorListener.reset();
+    m_boardItemListener.reset();
 }
 
 

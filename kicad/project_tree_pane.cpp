@@ -78,6 +78,7 @@
 #include <git/git_init_handler.h>
 #include <git/git_branch_handler.h>
 #include <git/git_status_handler.h>
+#include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
 #include <git/project_git_utils.h>
 
@@ -2968,23 +2969,24 @@ void PROJECT_TREE_PANE::onGitAmendCommit( wxCommandEvent& aEvent )
                 {
                     KIGIT::GitDiffPtr diffPtr( diff );
 
-                    for( size_t ii = 0; ii < git_diff_num_deltas( diff ); ++ii )
-                    {
-                        const git_diff_delta* delta = git_diff_get_delta( diff, ii );
-                        const char*           path = delta->new_file.path ? delta->new_file.path : delta->old_file.path;
+                    KIGIT::CollectDiffDeltas( diff,
+                            [&modifiedFiles]( const git_diff_delta& aDelta )
+                            {
+                                const char* path = aDelta.new_file.path ? aDelta.new_file.path
+                                                                        : aDelta.old_file.path;
 
-                        if( !path )
-                            continue;
+                                if( !path )
+                                    return;
 
-                        int flag = GIT_STATUS_INDEX_MODIFIED;
+                                int flag = GIT_STATUS_INDEX_MODIFIED;
 
-                        if( delta->status == GIT_DELTA_ADDED )
-                            flag = GIT_STATUS_INDEX_NEW;
-                        else if( delta->status == GIT_DELTA_DELETED )
-                            flag = GIT_STATUS_INDEX_DELETED;
+                                if( aDelta.status == GIT_DELTA_ADDED )
+                                    flag = GIT_STATUS_INDEX_NEW;
+                                else if( aDelta.status == GIT_DELTA_DELETED )
+                                    flag = GIT_STATUS_INDEX_DELETED;
 
-                        modifiedFiles[wxString::FromUTF8( path )] |= flag;
-                    }
+                                modifiedFiles[wxString::FromUTF8( path )] |= flag;
+                            } );
                 }
             }
         }

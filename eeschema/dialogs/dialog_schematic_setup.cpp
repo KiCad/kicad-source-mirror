@@ -18,6 +18,7 @@
  */
 
 #include <confirm.h>
+#include <jobs/scratch_doc.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
 #include <kiface_base.h>
@@ -189,22 +190,18 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
         return;
 
     wxFileName projectFn( importDlg.GetFilePath() );
-    bool       alreadyLoaded = false;
-    wxString   fullPath = projectFn.GetFullPath();
 
-    if( mgr->GetProject( fullPath ) )
-    {
-        alreadyLoaded = true;
-    }
-    else if( !mgr->LoadProject( fullPath, false ) || !mgr->GetProject( fullPath ) )
+    SCRATCH_PROJECT scratch( *mgr, projectFn.GetFullPath(), /*aRequireProjectFile=*/true );
+
+    if( !scratch.IsValid() )
     {
         DisplayErrorMessage( this, wxString::Format( _( "Error importing settings from project:\n"
                                                         "Project file %s could not be loaded." ),
-                                                     fullPath ) );
+                                                     projectFn.GetFullPath() ) );
         return;
     }
 
-    PROJECT*      otherPrj = mgr->GetProject( fullPath );
+    PROJECT*      otherPrj = scratch.GetProject();
     SCHEMATIC     otherSch( otherPrj );
     PROJECT_FILE& file = otherPrj->GetProjectFile();
 
@@ -271,7 +268,4 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
         static_cast<PANEL_TEXT_VARIABLES*>( m_treebook->ResolvePage( m_textVarsPage ) )
                 ->ImportSettingsFrom( otherPrj );
     }
-
-    if( !alreadyLoaded )
-        m_frame->GetSettingsManager()->UnloadProject( otherPrj, false );
 }

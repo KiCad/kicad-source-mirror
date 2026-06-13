@@ -22,6 +22,7 @@
 ## Unit tests
 add_subdirectory( api )
 add_subdirectory( common )
+add_subdirectory( diff_merge )
 add_subdirectory( gerbview )
 add_subdirectory( eeschema )
 add_subdirectory( libs )

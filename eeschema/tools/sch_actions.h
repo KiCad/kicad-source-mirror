@@ -174,6 +174,8 @@ public:
     static TOOL_ACTION editPageNumber;
     static TOOL_ACTION checkSymbol;
     static TOOL_ACTION diffSymbol;
+    static TOOL_ACTION compareSchematicWithFile;
+    static TOOL_ACTION compareSchematicWithHistory;
     static TOOL_ACTION showBusSyntaxHelp;
 
     static TOOL_ACTION rescueSymbols;
@@ -218,6 +220,7 @@ public:
 
     // Library management
     static TOOL_ACTION saveLibraryAs;
+    static TOOL_ACTION compareLibraryWithFile;
     static TOOL_ACTION saveSymbolAs;
     static TOOL_ACTION saveSymbolCopyAs;
     static TOOL_ACTION newSymbol;

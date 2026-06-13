@@ -47,6 +47,7 @@ set( QA_EESCHEMA_SRCS
 
     # Base internal units (1=100nm) testing.
     test_sch_biu.cpp
+    test_diff_canvas_context.cpp
 
     # Shared between programs, but dependent on the BIU
     ${CMAKE_SOURCE_DIR}/qa/tests/common/test_format_units.cpp
@@ -122,6 +123,9 @@ set( QA_EESCHEMA_SRCS
     test_bus_entry_concurrency.cpp
     test_bus_net_name_determinism.cpp
     test_bus_parsing.cpp
+    test_sch_differ.cpp
+    test_sch_merge_applier.cpp
+    test_sym_lib_differ.cpp
     test_label_bus_connectivity.cpp
     test_label_bounding_box.cpp
     test_lib_part.cpp

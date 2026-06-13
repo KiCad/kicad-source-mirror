@@ -51,6 +51,11 @@
 #include <wx/filedlg.h>
 #include <kiplatform/ui.h>
 
+#include <dialogs/dialog_kicad_diff.h>
+#include <diff_merge/sym_lib_differ.h>
+#include <lib_symbol.h>
+#include <symbol_edit_frame.h>
+
 
 bool SYMBOL_EDITOR_CONTROL::Init()
 {
@@ -1074,6 +1079,86 @@ int SYMBOL_EDITOR_CONTROL::CloseTab( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::CompareLibraryWithFile( const TOOL_EVENT& aEvent )
+{
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+
+    wxCHECK( editFrame, 0 );
+
+    const wxString currentLib = editFrame->GetCurLib();
+
+    if( currentLib.IsEmpty() )
+    {
+        editFrame->ShowInfoBarError( _( "Select a library to compare against a file." ) );
+        return 0;
+    }
+
+    wxFileDialog dlg( editFrame, _( "Choose Library to Compare With" ), wxEmptyString,
+                      wxEmptyString, FILEEXT::KiCadSymbolLibFileWildcard(),
+                      wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return 0;
+
+    wxFileName otherFn( dlg.GetPath() );
+    otherFn.MakeAbsolute();
+
+    if( !otherFn.GetExt().IsSameAs( FILEEXT::KiCadSymbolLibFileExtension, false ) )
+    {
+        editFrame->ShowInfoBarError(
+                _( "Select a KiCad symbol library file (.kicad_sym)." ) );
+        return 0;
+    }
+
+    const wxString otherPath = otherFn.GetFullPath();
+
+    // SYM_LIB_DIFFER::Diff() consumes these borrowed pointers synchronously;
+    // DOCUMENT_DIFF does not retain them.
+    LIB_SYMBOL_LIBRARY_MANAGER& libMgr = editFrame->GetLibManager();
+    wxArrayString               names;
+    libMgr.GetSymbolNames( currentLib, names );
+
+    KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP beforeMap;
+
+    for( const wxString& name : names )
+    {
+        if( LIB_SYMBOL* sym = libMgr.GetSymbol( name, currentLib ) )
+            beforeMap.emplace( sym->GetName(), sym );
+    }
+
+    std::vector<std::unique_ptr<LIB_SYMBOL>> afterStorage;
+    KICAD_DIFF::SYM_LIB_DIFFER::SYMBOL_MAP   afterMap;
+
+    try
+    {
+        auto loaded = KICAD_DIFF::SYM_LIB_DIFFER::LoadLibrary( otherPath );
+        afterStorage = std::move( loaded.first );
+        afterMap     = std::move( loaded.second );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        editFrame->ShowInfoBarError( wxString::Format( _( "Failed to load %s: %s" ),
+                                                       otherPath, ioe.What() ) );
+        return 0;
+    }
+    catch( const std::exception& e )
+    {
+        editFrame->ShowInfoBarError( wxString::Format( _( "Failed to load %s: %s" ),
+                                                       otherPath,
+                                                       wxString::FromUTF8( e.what() ) ) );
+        return 0;
+    }
+
+    KICAD_DIFF::SYM_LIB_DIFFER differ( beforeMap, afterMap, otherPath );
+    KICAD_DIFF::DOCUMENT_DIFF  result = differ.Diff();
+
+    DIALOG_KICAD_DIFF dlgDiff( editFrame, currentLib, otherPath, result );
+    dlgDiff.ShowModal();
+
+    return 0;
+}
+
+
 void SYMBOL_EDITOR_CONTROL::setTransitions()
 {
     Go( &SYMBOL_EDITOR_CONTROL::AddLibrary,            ACTIONS::newLibrary.MakeEvent() );
@@ -1125,6 +1210,9 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
 
     Go( &SYMBOL_EDITOR_CONTROL::ShowLibraryTable,      SCH_ACTIONS::showLibFieldsTable.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ShowLibraryTable,      SCH_ACTIONS::showRelatedLibFieldsTable.MakeEvent() );
+
+    Go( &SYMBOL_EDITOR_CONTROL::CompareLibraryWithFile,
+        SCH_ACTIONS::compareLibraryWithFile.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::previousUnit.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ChangeUnit,            SCH_ACTIONS::nextUnit.MakeEvent() );

@@ -1079,6 +1079,19 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
 }
 
 
+bool SETTINGS_MANAGER::IsProjectLoaded( PROJECT* aProject ) const
+{
+    if( !aProject )
+        return false;
+
+    return std::any_of( m_projects_list.begin(), m_projects_list.end(),
+                        [&]( const std::unique_ptr<PROJECT>& aPtr )
+                        {
+                            return aPtr.get() == aProject;
+                        } );
+}
+
+
 bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
 {
     if( !aProject || !m_projects.count( aProject->GetProjectFullName() ) )
@@ -1265,7 +1278,7 @@ void SETTINGS_MANAGER::SaveProjectAs( const wxString& aFullPath, PROJECT* aProje
 }
 
 
-void SETTINGS_MANAGER::SaveProjectCopy( const wxString& aFullPath, PROJECT* aProject )
+bool SETTINGS_MANAGER::SaveProjectCopy( const wxString& aFullPath, PROJECT* aProject )
 {
     if( !aProject )
         aProject = &Prj();
@@ -1278,9 +1291,12 @@ void SETTINGS_MANAGER::SaveProjectCopy( const wxString& aFullPath, PROJECT* aPro
     project->SetReadOnly( false );
 
     project->SetFilename( fn.GetName() );
-    project->SaveToFile( fn.GetPath() );
+    const bool projectOk = project->SaveToFile( fn.GetPath() );
     project->SetFilename( oldName );
 
+    // PROJECT_LOCAL_SETTINGS save is best-effort: SaveToFile returns false for
+    // benign skips (unchanged content, default settings with m_createIfDefault
+    // == false), so requiring success would false-positive an error.
     PROJECT_LOCAL_SETTINGS& localSettings = aProject->GetLocalSettings();
 
     localSettings.SetFilename( fn.GetName() );
@@ -1288,6 +1304,8 @@ void SETTINGS_MANAGER::SaveProjectCopy( const wxString& aFullPath, PROJECT* aPro
     localSettings.SetFilename( oldName );
 
     project->SetReadOnly( readOnly );
+
+    return projectOk;
 }
 
 

@@ -74,4 +74,21 @@ public:
     void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
 };
 
+
+/**
+ * Apply KiCad's standard repo conventions to a project directory:
+ *   - seed .gitignore with KiCad-generated paths
+ *   - seed .gitattributes with `merge=kicad-*` lines so the in-process
+ *     libgit2 drivers and external `git merge` both route design files
+ *   - configure repo-local merge.kicad-*.driver / mergetool.kicad.cmd
+ *     pointing at the kicad-cli binary alongside the running process
+ *
+ * Each step is append-only: existing user content is preserved, never
+ * overwritten. Safe to call repeatedly. Used by both GIT_INIT_HANDLER
+ * (after init) and GIT_CLONE_HANDLER (after clone) so freshly-cloned
+ * repos get the same setup as freshly-init'd ones.
+ */
+APIEXPORT void ApplyKicadGitConventions( const wxString& aProjectPath );
+
+
 #endif // GIT_INIT_HANDLER_H

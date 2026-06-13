@@ -41,6 +41,20 @@ enum KIFACE_ADDR_ID : int
     KIFACE_LOAD_SCHEMATIC,
     KIFACE_NETLIST_SCHEMATIC,
 
+    /// int (*)( int aKind, const wxString& aAncestor, const wxString& aOurs,
+    ///          const wxString& aTheirs, const wxString& aOutput, bool aInteractive,
+    ///          REPORTER* aReporter )
+    /// aKind is a KICAD_DIFF::DOC_KIND. Runs a 3-way document/library merge in
+    /// the kiface and returns a CLI exit code. Replaces the former merge JOBs.
+    KIFACE_MERGE_DOCUMENT,
+
+    /// int (*)( int aKind, const wxString& aFileA, const wxString& aFileB,
+    ///          const wxString& aLabelA, const wxString& aLabelB, wxWindow* aParent,
+    ///          REPORTER* aReporter )
+    /// aKind is a KICAD_DIFF::DOC_KIND. Loads the two files and opens
+    /// DIALOG_KICAD_DIFF modally. Replaces the former JOB_OPEN_DIFF_DIALOG.
+    KIFACE_OPEN_DIFF_DIALOG,
+
     KIFACE_TEST_FOOTPRINT_LINK,
     KIFACE_TEST_FOOTPRINT_LINK_NO_LIBRARY,
     KIFACE_TEST_FOOTPRINT_LINK_LIBRARY_NOT_ENABLED,

@@ -170,4 +170,33 @@ BOOST_AUTO_TEST_CASE( CombineUniqueness )
 }
 
 
+BOOST_AUTO_TEST_CASE( FromDeterministicStringIsStable )
+{
+    // Same input always yields the same UUID.
+    BOOST_CHECK_EQUAL( KIID::FromDeterministicString( wxS( "Device:R" ) ).AsString(),
+                       KIID::FromDeterministicString( wxS( "Device:R" ) ).AsString() );
+
+    // Distinct inputs yield distinct UUIDs.
+    BOOST_CHECK( KIID::FromDeterministicString( wxS( "Device:R" ) )
+                 != KIID::FromDeterministicString( wxS( "Device:C" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( FromDeterministicStringPinnedOutput )
+{
+    // Pinned literals capture the exact bytes the diff/merge engine persists.
+    // These values come from the original LibraryItemKiidPath dual-FNV-1a
+    // algorithm and must never change, or item matching against existing
+    // diff/merge artifacts silently breaks.
+    BOOST_CHECK_EQUAL( KIID::FromDeterministicString( wxS( "Device:R" ) ).AsString(),
+                       "d645496c-72ea-dfdb-92c1-78b59d2354ae" );
+
+    BOOST_CHECK_EQUAL( KIID::FromDeterministicString( wxS( "R_0402_1005Metric" ) ).AsString(),
+                       "b9495ba4-dc44-bfa3-d088-a4eb656b1fb2" );
+
+    BOOST_CHECK_EQUAL( KIID::FromDeterministicString( wxS( "some known string" ) ).AsString(),
+                       "6cfc0645-11f5-e66f-a194-2648b4eaec33" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

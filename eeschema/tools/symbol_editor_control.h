@@ -85,6 +85,9 @@ public:
     int PrevTab( const TOOL_EVENT& aEvent );
     int CloseTab( const TOOL_EVENT& aEvent );
 
+    /// Diff the currently-open symbol library against another .kicad_sym file.
+    int CompareLibraryWithFile( const TOOL_EVENT& aEvent );
+
 private:
     ///< Set up handlers for various events.
     void setTransitions() override;

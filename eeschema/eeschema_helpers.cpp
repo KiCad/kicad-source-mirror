@@ -114,7 +114,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
 
     IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( aFormat ) );
 
-    SCHEMATIC* schematic = new SCHEMATIC( project );
+    std::unique_ptr<SCHEMATIC> schematic = std::make_unique<SCHEMATIC>( project );
     schematic->CreateDefaultScreens();
 
     wxFileName schFile = aFileName;
@@ -122,10 +122,13 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
 
     try
     {
-        SCH_SHEET* rootSheet = pi->LoadSchematicFile( schFile.GetFullPath(), schematic );
+        SCH_SHEET* rootSheet = pi->LoadSchematicFile( schFile.GetFullPath(), schematic.get() );
 
         if( !rootSheet )
+        {
+            schematic->SetProject( nullptr );
             return nullptr;
+        }
 
         std::vector<SCH_SHEET*> topLevelSheets = schematic->GetTopLevelSheets();
         bool rootIsTopLevel = std::find( topLevelSheets.begin(), topLevelSheets.end(), rootSheet )
@@ -158,6 +161,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
     }
     catch( ... )
     {
+        schematic->SetProject( nullptr );
         return nullptr;
     }
 
@@ -196,7 +200,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
     schematic->ConnectionGraph()->Reset();
 
     TOOL_MANAGER* toolManager = new TOOL_MANAGER;
-    toolManager->SetEnvironment( schematic, nullptr, nullptr, Kiface().KifaceSettings(), nullptr );
+    toolManager->SetEnvironment( schematic.get(), nullptr, nullptr, Kiface().KifaceSettings(), nullptr );
 
     if( aCalculateConnectivity )
     {
@@ -218,5 +222,5 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
     if( aCalculateConnectivity )
         schematic->ConnectionGraph()->Recalculate( sheetList, true );
 
-    return schematic;
+    return schematic.release();
 }

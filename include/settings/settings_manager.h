@@ -339,6 +339,13 @@ public:
     PROJECT* GetProject( const wxString& aFullPath ) const;
 
     /**
+     * True if @p aProject is still owned by the manager. Compares pointers only and
+     * never dereferences @p aProject, so it is safe to call with a possibly-stale
+     * pointer to guard against unloading a project that was evicted underneath us.
+     */
+    bool IsProjectLoaded( PROJECT* aProject ) const;
+
+    /**
      * Return the active project iff its path matches @p aProjectPath, else nullptr.
      * Lets backup/history helpers feed the right PROJECT* into per-project path
      * resolvers without falling back to Prj() for an unrelated project.
@@ -377,8 +384,9 @@ public:
      *
      * @param aFullPath is the full filename to set for the project.
      * @param aProject is the project to save, or nullptr to save the active project (Prj() return).
+     * @return true if both the project file and the local settings were written.
      */
-    void SaveProjectCopy( const wxString& aFullPath, PROJECT* aProject = nullptr );
+    bool SaveProjectCopy( const wxString& aFullPath, PROJECT* aProject = nullptr );
 
     /**
      * @return the full path to where project backups should be stored.

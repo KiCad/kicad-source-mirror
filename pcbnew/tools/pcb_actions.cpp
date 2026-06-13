@@ -973,6 +973,13 @@ TOOL_ACTION PCB_ACTIONS::exportFootprint( TOOL_ACTION_ARGS()
         .Tooltip( _( "Export edited footprint to file" ) )
         .Icon( BITMAPS::export_module ) );
 
+TOOL_ACTION PCB_ACTIONS::compareFpLibraryWithFile( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ModuleEditor.CompareFpLibraryWithFile" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Compare Library with File..." ) )
+        .Tooltip( _( "Diff the current footprint library against another .pretty directory" ) )
+        .Icon( BITMAPS::library ) );
+
 TOOL_ACTION PCB_ACTIONS::footprintProperties( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.footprintProperties" )
         .Scope( AS_GLOBAL )
@@ -2256,6 +2263,20 @@ TOOL_ACTION PCB_ACTIONS::diffFootprint( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Compare Footprint with Library" ) )
         .Tooltip( _( "Show differences between board footprint and its library equivalent" ) )
+        .Icon( BITMAPS::library ) );
+
+TOOL_ACTION PCB_ACTIONS::compareBoardWithFile( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InspectionTool.CompareBoardWithFile" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Compare Board with File..." ) )
+        .Tooltip( _( "Diff the current PCB against another .kicad_pcb file" ) )
+        .Icon( BITMAPS::library ) );
+
+TOOL_ACTION PCB_ACTIONS::compareBoardWithHistory( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InspectionTool.CompareBoardWithHistory" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Compare Board with Local History..." ) )
+        .Tooltip( _( "Diff the current PCB against the most recent local-history snapshot" ) )
         .Icon( BITMAPS::library ) );
 
 TOOL_ACTION PCB_ACTIONS::showFootprintAssociations( TOOL_ACTION_ARGS()

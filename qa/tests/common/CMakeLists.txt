@@ -51,6 +51,7 @@ set( QA_COMMON_SRCS
     test_drawing_sheet_reactive.cpp
     test_file_history.cpp
     test_filename_resolver.cpp
+    test_hashtables.cpp
     test_hotkey_store.cpp
     test_increment.cpp
     test_item_realignment.cpp
@@ -85,6 +86,7 @@ set( QA_COMMON_SRCS
     test_text_attributes.cpp
     test_tool_dispatcher.cpp
     git/test_libgit_backend.cpp
+    git/test_git_compare_handler.cpp
     text_eval/test_text_eval_parser.cpp
     text_eval/test_text_eval_parser_core.cpp
     text_eval/test_text_eval_parser_datetime.cpp
@@ -96,6 +98,7 @@ set( QA_COMMON_SRCS
     test_types.cpp
     test_utf8.cpp
     test_wildcards_and_files_ext.cpp
+    test_wx_any_utils.cpp
     test_wx_filename.cpp
 
     libeval/test_numeric_evaluator.cpp

@@ -27,6 +27,7 @@
 
 #include <tools/generator_tool_pns_proxy.h>
 #include <pcb_generator.h>
+#include <properties/property_mgr.h>
 
 
 class DIALOG_GENERATORS;
@@ -66,7 +67,10 @@ private:
 
     DIALOG_GENERATORS* m_mgrDialog;
 
-private:
+    /// RAII PROPERTY_MANAGER listener subscriptions; auto-unregister on
+    /// destruction so this tool composes cleanly with other listeners.
+    PROPERTY_LISTENER_SUBSCRIPTION m_boardItemListener;
+    PROPERTY_LISTENER_SUBSCRIPTION m_generatorListener;
 };
 
 #endif

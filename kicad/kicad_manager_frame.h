@@ -64,6 +64,10 @@ public:
     void OnOpenFileInTextEditor( wxCommandEvent& event );
     void OnEditAdvancedCfg( wxCommandEvent& event );
 
+    /// Open DIALOG_GIT_MR_REVIEW so the user can pick two refs and review
+    /// the changed-file list between them.
+    void OnCompareProjectBranches( wxCommandEvent& event );
+
     void OnFileHistory( wxCommandEvent& event );
     void OnClearFileHistory( wxCommandEvent& aEvent );
     void OnExit( wxCommandEvent& event );

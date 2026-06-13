@@ -186,6 +186,23 @@ public:
     /** Restore the project files to the state recorded by the given commit hash. */
     bool RestoreCommit( const wxString& aProjectPath, const wxString& aHash, wxWindow* aParent = nullptr );
 
+    /** Snapshots (commits) for the project, newest first. */
+    std::vector<LOCAL_HISTORY_SNAPSHOT_INFO> GetSnapshots( const wxString& aProjectPath );
+
+    /** Write files recorded at aHash into aDestDir, recreating the project's
+     *  relative folder structure. Used to reconstruct a multi-file document (e.g.
+     *  a schematic hierarchy) at a commit. When aExtensions is non-empty only
+     *  files ending in one of them are written, so a compare can skip large
+     *  unrelated files (3D models, gerbers, the other editor's document). */
+    bool ExtractAllFilesAtCommit( const wxString& aProjectPath, const wxString& aHash, const wxString& aDestDir,
+                                  const std::vector<wxString>& aExtensions = {} );
+
+    /** Fingerprint of all files ending in aExtension recorded by commit aHash
+     *  (sorted path:blob pairs). Empty when the commit has no such file. Two
+     *  commits with equal fingerprints hold identical content for that type, so
+     *  callers can collapse consecutive duplicates into one revision. */
+    wxString TreeFingerprint( const wxString& aProjectPath, const wxString& aHash, const wxString& aExtension );
+
     /** Show a dialog allowing the user to choose a snapshot to restore. */
     void ShowRestoreDialog( const wxString& aProjectPath, wxWindow* aParent );
 

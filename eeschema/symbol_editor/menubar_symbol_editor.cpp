@@ -82,6 +82,9 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     fileMenu->Add( submenuExport );
 
     fileMenu->AppendSeparator();
+    fileMenu->Add( SCH_ACTIONS::compareLibraryWithFile );
+
+    fileMenu->AppendSeparator();
     fileMenu->Add( SCH_ACTIONS::symbolProperties );
 
     fileMenu->AppendSeparator();

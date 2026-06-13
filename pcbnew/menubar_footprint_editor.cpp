@@ -83,6 +83,9 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
     fileMenu->Add( submenuExport );
 
     fileMenu->AppendSeparator();
+    fileMenu->Add( PCB_ACTIONS::compareFpLibraryWithFile );
+
+    fileMenu->AppendSeparator();
     fileMenu->Add( PCB_ACTIONS::footprintProperties );
 
     fileMenu->AppendSeparator();

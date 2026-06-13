@@ -56,6 +56,10 @@
 #include <project_pcb.h>
 #include <view/view_controls.h>
 #include <widgets/appearance_controls.h>
+#include <dialogs/dialog_kicad_diff.h>
+#include <diff_merge/fp_lib_differ.h>
+#include <libraries/library_manager.h>
+#include <wx/dirdlg.h>
 
 #include <memory>
 
@@ -605,6 +609,113 @@ int FOOTPRINT_EDITOR_CONTROL::ExportFootprint( const TOOL_EVENT& aEvent )
 }
 
 
+int FOOTPRINT_EDITOR_CONTROL::CompareLibraryWithFile( const TOOL_EVENT& aEvent )
+{
+    wxCHECK( m_frame, 0 );
+
+    const wxString libNickname = m_frame->GetTargetFPID().GetUniStringLibNickname();
+
+    if( libNickname.IsEmpty() )
+    {
+        m_frame->ShowInfoBarError( _( "Select a library to compare against another." ) );
+        return 0;
+    }
+
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() );
+
+    wxCHECK( adapter, 0 );
+
+    std::optional<LIBRARY_TABLE_ROW*> row = adapter->GetRow( libNickname );
+
+    if( !row )
+    {
+        m_frame->ShowInfoBarError( wxString::Format( _( "Library '%s' is not in the footprint "
+                                                        "library table." ),
+                                                     libNickname ) );
+        return 0;
+    }
+
+    // MakeAbsolute so relative table URIs resolve from the project dir, not
+    // the process cwd.
+    wxFileName currentFn = wxFileName::DirName(
+            LIBRARY_MANAGER::GetFullURI( *row, /*aSubstituted=*/true ) );
+    currentFn.MakeAbsolute();
+    const wxString currentPath = currentFn.GetPath();
+
+    wxDirDialog dlg( m_frame, _( "Choose .pretty Folder to Compare With" ), wxEmptyString,
+                     wxDD_DIR_MUST_EXIST );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return 0;
+
+    wxFileName otherFn = wxFileName::DirName( dlg.GetPath() );
+    otherFn.MakeAbsolute();
+
+    if( otherFn.GetDirs().IsEmpty()
+        || !otherFn.GetDirs().Last().EndsWith( wxS( ".pretty" ) ) )
+    {
+        m_frame->ShowInfoBarError(
+                _( "Select a KiCad footprint library folder (ends with .pretty)." ) );
+        return 0;
+    }
+
+    if( otherFn.SameAs( currentFn ) )
+    {
+        m_frame->ShowInfoBarError(
+                _( "Select a different .pretty folder than the active library." ) );
+        return 0;
+    }
+
+    const wxString otherPath = otherFn.GetPath();
+
+    std::vector<std::unique_ptr<FOOTPRINT>>  beforeStorage;
+    std::vector<std::unique_ptr<FOOTPRINT>>  afterStorage;
+    KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP beforeMap;
+    KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP afterMap;
+
+    auto load =
+            [&]( const wxString& aPath,
+                 std::vector<std::unique_ptr<FOOTPRINT>>& aOwners,
+                 KICAD_DIFF::FP_LIB_DIFFER::FOOTPRINT_MAP& aMap ) -> bool
+            {
+                try
+                {
+                    auto loaded = KICAD_DIFF::FP_LIB_DIFFER::LoadLibrary( aPath );
+                    aOwners     = std::move( loaded.first );
+                    aMap        = std::move( loaded.second );
+                    return true;
+                }
+                catch( const IO_ERROR& ioe )
+                {
+                    m_frame->ShowInfoBarError(
+                            wxString::Format( _( "Failed to load %s: %s" ), aPath, ioe.What() ) );
+                }
+                catch( const std::exception& e )
+                {
+                    m_frame->ShowInfoBarError(
+                            wxString::Format( _( "Failed to load %s: %s" ), aPath,
+                                              wxString::FromUTF8( e.what() ) ) );
+                }
+
+                return false;
+            };
+
+    if( !load( currentPath, beforeStorage, beforeMap ) )
+        return 0;
+
+    if( !load( otherPath, afterStorage, afterMap ) )
+        return 0;
+
+    KICAD_DIFF::FP_LIB_DIFFER  differ( beforeMap, afterMap, otherPath );
+    KICAD_DIFF::DOCUMENT_DIFF  result = differ.Diff();
+
+    DIALOG_KICAD_DIFF dlgDiff( m_frame, currentPath, otherPath, result );
+    dlgDiff.ShowModal();
+
+    return 0;
+}
+
+
 int FOOTPRINT_EDITOR_CONTROL::OpenDirectory( const TOOL_EVENT& aEvent )
 {
     // No check for multi selection since the context menu option must be hidden in that case
@@ -1041,6 +1152,8 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
 
     Go( &FOOTPRINT_EDITOR_CONTROL::ImportFootprint,      PCB_ACTIONS::importFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ExportFootprint,      PCB_ACTIONS::exportFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::CompareLibraryWithFile,
+        PCB_ACTIONS::compareFpLibraryWithFile.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_CONTROL::OpenWithTextEditor,   ACTIONS::openWithTextEditor.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::OpenDirectory,        ACTIONS::openDirectory.MakeEvent() );

@@ -27,7 +27,9 @@
 #include <bitmaps.h>
 #include <file_history.h>
 #include <kiface_base.h>
+#include <pgm_base.h>
 #include <schematic.h>
+#include <settings/common_settings.h>
 #include <tool/action_manager.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
@@ -116,6 +118,19 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     submenuExport->Add( SCH_ACTIONS::exportNetlist,          ACTION_MENU::NORMAL, _( "Netlist..." ) );
     submenuExport->Add( SCH_ACTIONS::exportSymbolsToLibrary, ACTION_MENU::NORMAL, _( "Symbols..." ) );
     fileMenu->Add( submenuExport );
+
+    fileMenu->AppendSeparator();
+    fileMenu->Add( SCH_ACTIONS::compareSchematicWithFile );
+
+    wxMenuItem*       historyItem = fileMenu->Add( SCH_ACTIONS::compareSchematicWithHistory );
+    ACTION_CONDITIONS historyCond;
+    historyCond.Enable(
+            []( const SELECTION& )
+            {
+                COMMON_SETTINGS* cs = Pgm().GetCommonSettings();
+                return cs && cs->m_Backup.enabled && cs->m_Backup.format == BACKUP_FORMAT::INCREMENTAL;
+            } );
+    RegisterUIUpdateHandler( historyItem->GetId(), historyCond );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( SCH_ACTIONS::schematicSetup );

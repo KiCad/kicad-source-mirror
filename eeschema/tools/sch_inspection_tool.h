@@ -69,6 +69,12 @@ public:
     int DiffSymbol( const TOOL_EVENT& aEvent );
     void DiffSymbol( SCH_SYMBOL* aSymbol );
 
+    /// Diff the current schematic against a user-selected .kicad_sch file.
+    int CompareSchematicWithFile( const TOOL_EVENT& aEvent );
+
+    /// Diff the current schematic against the most recent local-history commit.
+    int CompareSchematicWithHistory( const TOOL_EVENT& aEvent );
+
     int RunSimulation( const TOOL_EVENT& aEvent );
 
     int ShowDatasheet( const TOOL_EVENT& aEvent );
@@ -77,6 +83,10 @@ public:
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
 private:
+    /// Diff the schematic at aOtherPath against the live one and show the dialog.
+    int showSchematicComparison( const wxString& aOtherPath, const wxString& aProjectPath,
+                                 const wxString& aComparisonLabel );
+
     SYMBOL_DIFF_WIDGET* constructDiffPanel( wxPanel* aParentPanel );
 
     ///< @copydoc TOOL_INTERACTIVE::setTransitions();

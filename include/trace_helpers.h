@@ -280,6 +280,13 @@ extern KICOMMON_API const wxChar* const traceUiProfile;
  */
 extern KICOMMON_API const wxChar* const traceGit;
 
+/**
+ * Flag to enable diff/merge engine and renderer debugging output.
+ *
+ * Use "KICAD_DIFF_MERGE" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceDiffMerge;
+
 /*
  * Flag to enable Eagle I/O debug tracing.
  *

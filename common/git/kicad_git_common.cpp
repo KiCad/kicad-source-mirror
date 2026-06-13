@@ -417,18 +417,15 @@ std::pair<std::set<wxString>, std::set<wxString>> KIGIT_COMMON::GetDifferentFile
                     return;
                 }
 
-                size_t numDeltas = git_diff_num_deltas( diff );
+                KIGIT::CollectDiffDeltas( diff,
+                        [&aOut]( const git_diff_delta& aDelta )
+                        {
+                            if( aDelta.new_file.path )
+                                aOut.insert( wxString::FromUTF8( aDelta.new_file.path ) );
 
-                for( size_t ii = 0; ii < numDeltas; ++ii )
-                {
-                    const git_diff_delta* delta = git_diff_get_delta( diff, ii );
-
-                    if( delta->new_file.path )
-                        aOut.insert( wxString::FromUTF8( delta->new_file.path ) );
-
-                    if( delta->old_file.path )
-                        aOut.insert( wxString::FromUTF8( delta->old_file.path ) );
-                }
+                            if( aDelta.old_file.path )
+                                aOut.insert( wxString::FromUTF8( aDelta.old_file.path ) );
+                        } );
 
                 git_diff_free( diff );
             };
@@ -1156,3 +1153,57 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
 
     return GIT_OK;
 };
+
+
+namespace KIGIT
+{
+
+git_tree* ResolveRefToTree( git_repository* aRepo, const wxString& aRef )
+{
+    if( !aRepo )
+        return nullptr;
+
+    git_object* obj = nullptr;
+    std::string refStr( aRef.ToUTF8() );
+
+    if( git_revparse_single( &obj, aRepo, refStr.c_str() ) != 0 )
+    {
+        wxLogTrace( traceGit, "git_revparse_single failed for ref '%s': %s",
+                    aRef, KIGIT_COMMON::GetLastGitError() );
+        return nullptr;
+    }
+
+    KIGIT::GitObjectPtr objPtr( obj );
+    git_tree*           tree = nullptr;
+
+    if( git_object_peel( reinterpret_cast<git_object**>( &tree ), obj, GIT_OBJECT_TREE ) != 0 )
+    {
+        wxLogTrace( traceGit, "git_object_peel to tree failed for '%s': %s",
+                    aRef, KIGIT_COMMON::GetLastGitError() );
+        return nullptr;
+    }
+
+    return tree;
+}
+
+
+void CollectDiffDeltas( git_diff*                                           aDiff,
+                        const std::function<void( const git_diff_delta& )>& aCallback )
+{
+    if( !aDiff )
+        return;
+
+    std::size_t numDeltas = git_diff_num_deltas( aDiff );
+
+    for( std::size_t ii = 0; ii < numDeltas; ++ii )
+    {
+        const git_diff_delta* delta = git_diff_get_delta( aDiff, ii );
+
+        if( !delta )
+            continue;
+
+        aCallback( *delta );
+    }
+}
+
+} // namespace KIGIT
