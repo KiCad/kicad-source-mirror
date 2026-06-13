@@ -19,6 +19,7 @@
 #include <layer_ids.h>
 #include <pad.h>
 #include <pcb_display_options.h>
+#include <pcb_draw_panel_gal.h>
 #include <pcb_track.h>
 #include <view/view.h>
 #include <widgets/widget_diff_canvas.h>
@@ -49,11 +50,22 @@ public:
     {
         const EDA_ITEM* edaItem = dynamic_cast<const EDA_ITEM*>( aItem );
 
-        if( edaItem && m_dimmed->count( edaItem->m_Uuid ) == 0 )
+        if( edaItem )
         {
-            auto it = m_overrides.find( edaItem->m_Uuid );
+            KIID key = edaItem->m_Uuid;
 
-            if( it != m_overrides.end() )
+            if( m_overrides.count( key ) == 0 )
+            {
+                if( const BOARD_ITEM* boardItem = dynamic_cast<const BOARD_ITEM*>( aItem ) )
+                {
+                    if( const FOOTPRINT* fp = boardItem->GetParentFootprint() )
+                        key = fp->m_Uuid;
+                }
+            }
+
+            auto it = m_overrides.find( key );
+
+            if( it != m_overrides.end() && m_dimmed->count( key ) == 0 )
             {
                 // PCB_PAINTER tints normal items via the layer color, not via
                 // LAYER_BRIGHTENED. Swap the layer color we are drawing on so
@@ -210,6 +222,8 @@ void ConfigurePcbDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, BOARD* aReferen
     items.insert( items.end(), aExtraItems.begin(), aExtraItems.end() );
 
     aCanvas.SetContextItems( items );
+
+    ApplyPcbGalLayerOrder( aCanvas.GetView() );
 
     std::map<KIGFX::VIEW_ITEM*, KICAD_DIFF::CATEGORY> itemCategories;
 

@@ -625,7 +625,7 @@ void PCB_DRAW_PANEL_GAL::OnShow()
 }
 
 
-void PCB_DRAW_PANEL_GAL::setDefaultLayerOrder()
+void ApplyPcbGalLayerOrder( KIGFX::VIEW* aView )
 {
     for( int i = 0; (unsigned) i < sizeof( GAL_LAYER_ORDER ) / sizeof( int ); ++i )
     {
@@ -635,12 +635,18 @@ void PCB_DRAW_PANEL_GAL::setDefaultLayerOrder()
         // MW: Gross hack to make SetTopLayer bring the correct bitmap layer to
         // the top of the other bitmaps, but still below all the other layers
         if( layer >= LAYER_BITMAP_START && layer < LAYER_BITMAP_END )
-            m_view->SetLayerOrder( layer, i - KIGFX::VIEW::TOP_LAYER_MODIFIER, false );
+            aView->SetLayerOrder( layer, i - KIGFX::VIEW::TOP_LAYER_MODIFIER, false );
         else
-            m_view->SetLayerOrder( layer, i, false );
+            aView->SetLayerOrder( layer, i, false );
     }
 
-    m_view->SortOrderedLayers();
+    aView->SortOrderedLayers();
+}
+
+
+void PCB_DRAW_PANEL_GAL::setDefaultLayerOrder()
+{
+    ApplyPcbGalLayerOrder( m_view );
 }
 
 

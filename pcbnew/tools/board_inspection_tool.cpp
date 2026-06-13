@@ -2060,7 +2060,19 @@ PCB_DIFF_VIEW buildPcbDiffView( BOARD* aLive, BOARD* aOther, const wxString& aOt
     std::vector<KIGFX::VIEW_ITEM*> extraItems;
 
     for( const auto& clone : view.clones )
-        extraItems.push_back( clone.get() );
+    {
+        // A footprint draws nothing itself. Its pads, graphics and fields are
+        // independent view items, so add them too or the clone is invisible.
+        if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( clone.get() ) )
+        {
+            std::vector<KIGFX::VIEW_ITEM*> fpItems = KICAD_DIFF::CollectFootprintDiffContextItems( *fp );
+            extraItems.insert( extraItems.end(), fpItems.begin(), fpItems.end() );
+        }
+        else
+        {
+            extraItems.push_back( clone.get() );
+        }
+    }
 
     view.switcher = [other = aOther, color = theme.modified, overrides = compOverrides,
                      extras = std::move( extraItems ),

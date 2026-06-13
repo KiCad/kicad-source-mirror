@@ -35,6 +35,10 @@ class DS_PROXY_VIEW_ITEM;
 class RATSNEST_VIEW_ITEM;
 class PROGRESS_REPORTER;
 
+/// Apply pcbnew's canonical GAL layer order (copper and zones below silk, fab
+/// and courtyard) to any view, including ones that are not a PCB_DRAW_PANEL_GAL.
+void ApplyPcbGalLayerOrder( KIGFX::VIEW* aView );
+
 class PCB_DRAW_PANEL_GAL : public EDA_DRAW_PANEL_GAL
 {
 public:

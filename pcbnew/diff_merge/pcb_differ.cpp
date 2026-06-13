@@ -68,6 +68,9 @@ wxString PCB_DIFFER::itemTypeName( const BOARD_ITEM* aItem )
     if( !aItem )
         return wxEmptyString;
 
+    if( const PCB_FIELD* field = dynamic_cast<const PCB_FIELD*>( aItem ) )
+        return field->GetName();
+
     return aItem->GetClass();
 }
 
@@ -281,7 +284,12 @@ std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBe
         ITEM_DESCRIPTOR d = makeDescriptor( aChild );
         d.id = KIID_PATH();
         d.id.push_back( aFp->m_Uuid );
-        d.id.push_back( aChild->m_Uuid );
+
+        if( const PCB_FIELD* field = dynamic_cast<const PCB_FIELD*>( aChild ) )
+            d.id.push_back( KIID::FromDeterministicString( field->GetCanonicalName() ) );
+        else
+            d.id.push_back( aChild->m_Uuid );
+
         return d;
     };
 
@@ -354,14 +362,9 @@ std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBe
         children.push_back( std::move( c ) );
     }
 
-    // Footprint-internal PCB_SHAPE, PCB_TEXT, and PCB_FIELD add/remove are
-    // dropped here: when a library link is updated, the footprint's body
-    // outlines, silk text, and metadata fields get fresh UUIDs even though
-    // the footprint itself is the same one. The reconciler then reports each
-    // of them as removed-and-readded.
     auto isLibraryUuidNoise = []( const BOARD_ITEM* aItem )
     {
-        return aItem && ( aItem->Type() == PCB_SHAPE_T || aItem->Type() == PCB_TEXT_T || aItem->Type() == PCB_FIELD_T );
+        return aItem && ( aItem->Type() == PCB_SHAPE_T || aItem->Type() == PCB_TEXT_T );
     };
 
     for( const KIID_PATH& idA : recon.aOnly )
