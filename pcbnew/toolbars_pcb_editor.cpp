@@ -831,6 +831,13 @@ void PCB_EDIT_FRAME::ToggleSearch()
 }
 
 
+void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
+{
+    UpdateTrackWidthSelectBox( m_SelTrackWidthBox, true, true );
+    UpdateViaSizeSelectBox( m_SelViaSizeBox, true, true );
+}
+
+
 void PCB_EDIT_FRAME::OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent )
 {
     if( aEvent.GetId() == ID_AUX_TOOLBAR_PCB_TRACK_WIDTH )

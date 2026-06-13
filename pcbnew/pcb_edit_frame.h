@@ -694,6 +694,8 @@ protected:
 
     void configureToolbars() override;
 
+    void ReCreateAuxiliaryToolbar() override;
+
     // The Tool Framework initialization
     void setupTools();
     void setupUIConditions() override;
