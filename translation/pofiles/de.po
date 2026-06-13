@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-12 15:53+0000\n"
+"PO-Revision-Date: 2026-06-13 08:09+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -19562,7 +19562,7 @@ msgstr "Exponentiell"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:85
 #, c-format
 msgid "Name '%s' contains invalid characters."
-msgstr "Symbol \"%s\" enthält ungültige Zeichen."
+msgstr "Name \"%s\" enthält ungültige Zeichen."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:224
 #, c-format
@@ -19698,9 +19698,8 @@ msgstr ""
 "Gruppe über inNetChainClass(\"name\") ansprechen können."
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:142
-#, fuzzy
 msgid "Class Name"
-msgstr "Aliasname"
+msgstr "Klassenname"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:164
 msgid "Add a new net chain class"
@@ -21988,8 +21987,9 @@ msgid "Compare Symbol with Library"
 msgstr "Symbol mit Bibliothek vergleichen"
 
 #: eeschema/sch_edit_frame.cpp:2546 pcbnew/widgets/appearance_controls.cpp:477
+#, fuzzy
 msgid "Filter nets"
-msgstr "Filter Netze"
+msgstr "Netze filtern"
 
 #: eeschema/sch_edit_frame.cpp:2574
 msgid "Wildcard Search"
@@ -23513,9 +23513,8 @@ msgstr "aus Netzklasse"
 #: eeschema/sch_line.cpp:1027 pcbnew/generators/pcb_tuning_pattern.cpp:2205
 #: pcbnew/pad.cpp:1918 pcbnew/pcb_track.cpp:2471
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:116
-#, fuzzy
 msgid "Net Chain"
-msgstr "Netzklasse"
+msgstr "Netzkette"
 
 #: eeschema/sch_marker.cpp:360 pcbnew/pcb_marker.cpp:239
 msgid "Violation"
@@ -26904,7 +26903,7 @@ msgstr "Symbol exportieren"
 #: eeschema/symbol_editor/symbol_editor.cpp:1112
 #, c-format
 msgid "Library '%s' is read-only."
-msgstr "Bibliothek '%s; ist schreibgeschützt."
+msgstr "Bibliothek \"%s\" ist schreibgeschützt."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1152
 #, c-format
@@ -27297,7 +27296,7 @@ msgstr "Ändere %s \"Von Stückliste ausschließen\" von \"%s\" zu \"%s\"."
 #: eeschema/tools/backannotate.cpp:896
 #, fuzzy, c-format
 msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
-msgstr "Ändere %s \"Von Stückliste ausschließen\" von \"%s\" zu \"%s\"."
+msgstr "Ändere %s \"Von Positionsdateien ausschließen\" von \"%s\" zu \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:925
 #, c-format
@@ -29413,14 +29412,13 @@ msgid "No connected net selected."
 msgstr "Keine verbundenen Netze ausgewählt."
 
 #: eeschema/tools/sch_editor_control.cpp:1849
-#, fuzzy
 msgid "Net chain name:"
-msgstr "Netzname:"
+msgstr "Netzkettenname:"
 
 #: eeschema/tools/sch_editor_control.cpp:1885
 #, fuzzy
 msgid "No potential net chain connects the selected pins."
-msgstr "Die ausgewählten Linien können nicht angefast werden."
+msgstr "Keine potenzielle Netzkette verbindet die ausgewählten Pins."
 
 #: eeschema/tools/sch_editor_control.cpp:1893
 #: eeschema/tools/sch_selection_tool.cpp:432
@@ -29637,24 +29635,24 @@ msgstr "Ecke hinzufügen"
 #: eeschema/tools/sch_selection_tool.cpp:173
 #, fuzzy
 msgid "Replace terminal pin"
-msgstr "Alle vorhandenen Pins ersetzen"
+msgstr "Terminalpin ersetzen"
 
 #: eeschema/tools/sch_selection_tool.cpp:211
 #: pcbnew/tools/pcb_selection_tool.cpp:158
 #, fuzzy
 msgid "Terminal A"
-msgstr "Typ mit 3 Anschlüssen"
+msgstr "Terminal A"
 
 #: eeschema/tools/sch_selection_tool.cpp:212
 #: pcbnew/tools/pcb_selection_tool.cpp:159
 #, fuzzy
 msgid "Terminal B"
-msgstr "Typ mit 3 Anschlüssen"
+msgstr "Terminal B"
 
 #: eeschema/tools/sch_selection_tool.cpp:255
 #, fuzzy
 msgid "Net Chain..."
-msgstr "Drehung ..."
+msgstr "Netzkette ..."
 
 #: eeschema/tools/sch_selection_tool.cpp:408
 #, fuzzy
@@ -31988,7 +31986,7 @@ msgstr "3D-Modelle von Bauteilen mit Attribut \"Nicht bestücken\" ausschließen
 
 #: kicad/cli/command_pcb_export_3d.cpp:103
 msgid "Use Grid Origin for output origin"
-msgstr "Benutze Rasterursprung für Ausgabeursprung"
+msgstr "Benutze Rasterursprung als Ausgabeursprung"
 
 #: kicad/cli/command_pcb_export_3d.cpp:107
 msgid "Use Drill Origin for output origin"
@@ -32437,7 +32435,7 @@ msgstr "Lagen in gemeinsame PDF-Datei mit mehreren Seiten plotten"
 #: kicad/cli/command_pcb_export_pdf.cpp:132
 #, fuzzy
 msgid "Suppress footprint property popups"
-msgstr "Popups für Eigenschaften erzeugen"
+msgstr "Popups für Footprinteigenschaften unterdrücken"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:195
 msgid "Cannot use more than one mode flag\n"
@@ -32446,7 +32444,7 @@ msgstr "Kann nicht mehr als eine \"mode\"-Kennzeichnung nutzen\n"
 #: kicad/cli/command_pcb_export_png.cpp:37
 #, fuzzy
 msgid "Generate PNG outputs of a given layer list"
-msgstr "SVG-Ausgaben von einer Liste von Lagen erstellen"
+msgstr "PNG-Ausgaben aus einer Liste von Lagen erstellen"
 
 #: kicad/cli/command_pcb_export_png.cpp:54
 #: kicad/cli/command_pcb_export_svg.cpp:58
@@ -33592,9 +33590,8 @@ msgid "Import gEDA / Lepton EDA Project Files"
 msgstr "gEDA / Lepton EDA-Projektdateien importieren"
 
 #: kicad/import_project.cpp:234
-#, fuzzy
 msgid "Import DipTrace Project Files"
-msgstr "Eagle-Projektdateien importieren"
+msgstr "DipTrace-Projektdateien importieren"
 
 #: kicad/jobs_runner.cpp:243
 #, c-format
@@ -33822,14 +33819,12 @@ msgid "Import gEDA or Lepton EDA schematic and PCB layout"
 msgstr "gEDA oder Lepton EDA-Schaltplan und -platinenlayout importieren"
 
 #: kicad/menubar.cpp:158
-#, fuzzy
 msgid "DipTrace Project..."
-msgstr "Projekt öffnen ..."
+msgstr "DipTrace-Projekt ..."
 
 #: kicad/menubar.cpp:159
-#, fuzzy
 msgid "Import DipTrace schematic and PCB (*.dch, *.dip)"
-msgstr "CADSTAR-Archivschema und PCB importieren (*.csa, *.cpa)"
+msgstr "DipTrace-Schaltplan und -PCB importieren (*.dch, *.dip)"
 
 #: kicad/menubar.cpp:188
 msgid "Edit Advanced Config..."
@@ -34680,7 +34675,7 @@ msgstr "Remote abrufen"
 #: kicad/project_tree_pane.cpp:1988
 #, fuzzy
 msgid "Configure Default Remote"
-msgstr "Standard-Remote setzen"
+msgstr "Standard-Remote konfigurieren"
 
 #: kicad/project_tree_pane.cpp:2004
 #, fuzzy
@@ -34690,12 +34685,12 @@ msgstr "Konfiguration von Remote ist gescheitert."
 #: kicad/project_tree_pane.cpp:2057
 #, fuzzy
 msgid "Already up to date."
-msgstr "Bereits auf dem neuesten Stand."
+msgstr "Bereits aktuell."
 
 #: kicad/project_tree_pane.cpp:2058
 #, fuzzy, c-format
 msgid "Already up to date with %s."
-msgstr "Ermittelte Stegbreite: %s."
+msgstr "Bereits aktuell mit %s."
 
 #: kicad/project_tree_pane.cpp:2064
 msgid "Pulled changes (fast-forward)."
@@ -34734,7 +34729,7 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:2085
 #, fuzzy
 msgid "Pull Conflict"
-msgstr "Konflikte"
+msgstr "Pull-Konflikt"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Use Remote (discard my changes)"
@@ -34747,7 +34742,7 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:2095
 #, fuzzy
 msgid "Reset to the remote version."
-msgstr "Auf den aktuellen Winkel von der Referenzposition zurücksetzen."
+msgstr "Auf die Remote-Version zurücksetzen."
 
 #: kicad/project_tree_pane.cpp:2097
 #, fuzzy
@@ -34888,7 +34883,7 @@ msgstr "Veröffentlichten Commit nachbessern?"
 #: kicad/project_tree_pane.cpp:2817 kicad/project_tree_pane.cpp:2862
 #, fuzzy
 msgid "Amend &Anyway"
-msgstr "Trotzdem hinzufügen"
+msgstr "Trotzdem n&achbessern"
 
 #: kicad/project_tree_pane.cpp:2856
 #, c-format
@@ -34904,17 +34899,17 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:2862
 #, fuzzy
 msgid "&Save and Amend"
-msgstr "Als Bild abspeichern"
+msgstr "&Speichern und nachbessern"
 
 #: kicad/project_tree_pane.cpp:2995
 #, fuzzy
 msgid "Amend Last Commit"
-msgstr "Letzter Commit"
+msgstr "Letzten Commit nachbessern"
 
 #: kicad/project_tree_pane.cpp:3003
 #, fuzzy
 msgid "Discarding amend due to empty commit message."
-msgstr "Verwerfe Commit aufgrund leerer Commit-Nachricht."
+msgstr "Verwerfe Nachbesserung aufgrund leerer Commit-Nachricht."
 
 #: kicad/project_tree_pane.cpp:3084
 #, fuzzy
@@ -35456,7 +35451,7 @@ msgstr "Das aktuelle Zeichnungsblatt wurde geändert. Änderungen speichern?"
 #: pagelayout_editor/files.cpp:82
 #, c-format
 msgid "File '%s' loaded"
-msgstr "Datei ‚%s‘ geladen"
+msgstr "Datei \"%s\" geladen"
 
 #: pagelayout_editor/files.cpp:132
 msgid "Append Existing Drawing Sheet"
@@ -37272,7 +37267,7 @@ msgstr "Lötstopp füllt Spalt"
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:78
 #, fuzzy
 msgid "Mask thickness:"
-msgstr "Leiterbahndicke:"
+msgstr "Lötstopplackdicke:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:85
 msgid "µm"
@@ -37340,7 +37335,7 @@ msgstr "Frequenz:"
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:277
 #, fuzzy
 msgid "Spec frequency:"
-msgstr "Endfrequenz:"
+msgstr "Spez. Frequenz:"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:314
 msgid "Physical Parameters"
@@ -38461,12 +38456,12 @@ msgstr "Bauteilklassen-Zuweisungsregeln konnten nicht geladen werden"
 #: pcbnew/board_loader.cpp:189
 #, fuzzy, c-format
 msgid "Cannot save board '%s': %s"
-msgstr "Kann Symbol \"%s\" nicht importieren: %s"
+msgstr "Kann Platine \"%s\" nicht speichern: %s"
 
 #: pcbnew/board_loader.cpp:195
 #, fuzzy, c-format
 msgid "Unexpected error saving board '%s': %s"
-msgstr "Fehler beim Einlesen der Platine \"%s\": %s"
+msgstr "Unerwarteter Fehler beim Speichern der Platine \"%s\": %s"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:386
 #, c-format
@@ -38561,7 +38556,7 @@ msgstr "Optionen für Randsteckverbinder."
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:80
 #, fuzzy
 msgid "Constant"
-msgstr "Beschränkungen"
+msgstr "Konstant"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:80
 #, fuzzy
@@ -53888,22 +53883,23 @@ msgstr "%s Fertigungsattribut \"Nicht bestücken\" entfernt."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:851
 #, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr "%s 'Von Positionsdateien ausschließen'-Fertigungsattribut hinzufügen."
+msgstr "%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut hinzufügen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:856
 #, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "%s 'Von Positionsdateien ausschließen'-Fertigungsattribut entfernen."
+msgstr "%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut entfernen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:867
 #, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr "%s 'Von Positionsdateien ausschließen'-Fertigungsattribut hinzugefügt."
+msgstr ""
+"%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:873
 #, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "%s 'Von Positionsdateien ausschließen'-Fertigungsattribut entfernt."
+msgstr "%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:896
 #, c-format
@@ -53946,17 +53942,17 @@ msgstr "Jumperpadgruppen %s aktualisieren"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:994
 #, c-format
 msgid "Remove %s from group '%s'."
-msgstr "%s aus der Gruppe ‚%s‘ entfernen."
+msgstr "%s aus der Gruppe \"%s\" entfernen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1000
 #, c-format
 msgid "Removed %s from group '%s'."
-msgstr "%s aus der Gruppe ‚%s‘ entfernt."
+msgstr "%s aus der Gruppe \"%s\" entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1023
 #, c-format
 msgid "Add %s to group '%s'."
-msgstr "%s zur Gruppe ‚%s‘ hinzufügen."
+msgstr "%s zur Gruppe \"%s\" hinzufügen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1029
 #, c-format
@@ -60512,8 +60508,11 @@ msgid "Draw Copper Thieving Zone"
 msgstr "Kupferzone"
 
 #: pcbnew/tools/pcb_actions.cpp:352
+#, fuzzy
 msgid "Add a non-electrical thieving zone for plating-balance copper"
 msgstr ""
+"Eine nicht-elektrische Thieving-Zone für eine ausbalancierte "
+"Kupferbeschichtung hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:363
 msgid "Place Vias"
