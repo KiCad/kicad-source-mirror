@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
 "PO-Revision-Date: 2026-06-13 12:01+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -5940,7 +5940,7 @@ msgstr "Name der Netzklasse wird bereits benutzt."
 #: common/dialogs/panel_setup_netclasses.cpp:586
 #, c-format
 msgid "Clearance was too large.  It has been clipped to %s."
-msgstr "Der Freiraum war zu groß.   Er wurde auf %s begrenzt."
+msgstr "Der Freiraum war zu groß.  Er wurde auf %s begrenzt."
 
 #: common/dialogs/panel_setup_netclasses.cpp:703
 msgid "Minimum copper clearance"
@@ -5976,7 +5976,7 @@ msgstr "Differenzialpaar-Abstand"
 
 #: common/dialogs/panel_setup_netclasses.cpp:711
 msgid "Schematic wire thickness"
-msgstr "Dicke der Schaltplanverbindung"
+msgstr "Breite der Schaltplanverbindung"
 
 #: common/dialogs/panel_setup_netclasses.cpp:712
 msgid "Bus wire thickness"
@@ -9626,9 +9626,9 @@ msgid "The library table is of wrong type"
 msgstr "Die Bibliothekstabelle hat den falschen Typ"
 
 #: common/libraries/library_table.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Library table '%s' is read-only"
-msgstr "Bibliothek '%s; ist schreibgeschützt."
+msgstr "Bibliothekstabelle \"%s\" ist schreibgeschützt"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -21211,8 +21211,9 @@ msgid "Compare Symbol with Library"
 msgstr "Symbol mit Bibliothek vergleichen"
 
 #: eeschema/sch_edit_frame.cpp:2510 pcbnew/widgets/appearance_controls.cpp:477
+#, fuzzy
 msgid "Filter nets"
-msgstr "Filter Netze"
+msgstr "Netze filtern"
 
 #: eeschema/sch_edit_frame.cpp:2538
 msgid "Wildcard Search"
@@ -25855,7 +25856,7 @@ msgstr "Symbol exportieren"
 #: eeschema/symbol_editor/symbol_editor.cpp:1113
 #, c-format
 msgid "Library '%s' is read-only."
-msgstr "Bibliothek '%s; ist schreibgeschützt."
+msgstr "Bibliothek \"%s\" ist schreibgeschützt."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1153
 #, c-format
@@ -26248,7 +26249,7 @@ msgstr "Ändere %s \"Von Stückliste ausschließen\" von \"%s\" zu \"%s\"."
 #: eeschema/tools/backannotate.cpp:896
 #, fuzzy, c-format
 msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
-msgstr "Ändere %s \"Von Stückliste ausschließen\" von \"%s\" zu \"%s\"."
+msgstr "Ändere %s \"Von Positionsdateien ausschließen\" von \"%s\" zu \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:925
 #, c-format
@@ -30624,7 +30625,7 @@ msgstr "3D-Modelle von Bauteilen mit Attribut \"Nicht bestücken\" ausschließen
 
 #: kicad/cli/command_pcb_export_3d.cpp:103
 msgid "Use Grid Origin for output origin"
-msgstr "Benutze Rasterursprung für Ausgabeursprung"
+msgstr "Benutze Rasterursprung als Ausgabeursprung"
 
 #: kicad/cli/command_pcb_export_3d.cpp:107
 msgid "Use Drill Origin for output origin"
@@ -31069,7 +31070,7 @@ msgstr "Lagen in gemeinsame PDF-Datei mit mehreren Seiten plotten"
 #: kicad/cli/command_pcb_export_pdf.cpp:128
 #, fuzzy
 msgid "Suppress footprint property popups"
-msgstr "Popups für Eigenschaften erzeugen"
+msgstr "Popups für Footprinteigenschaften unterdrücken"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:192
 msgid "Cannot use more than one mode flag\n"
@@ -33269,7 +33270,7 @@ msgstr "Remote abrufen"
 #: kicad/project_tree_pane.cpp:1988
 #, fuzzy
 msgid "Configure Default Remote"
-msgstr "Standard-Remote setzen"
+msgstr "Standard-Remote konfigurieren"
 
 #: kicad/project_tree_pane.cpp:2004
 #, fuzzy
@@ -33279,12 +33280,12 @@ msgstr "Konfiguration von Remote ist gescheitert."
 #: kicad/project_tree_pane.cpp:2057
 #, fuzzy
 msgid "Already up to date."
-msgstr "Bereits auf dem neuesten Stand."
+msgstr "Bereits aktuell."
 
 #: kicad/project_tree_pane.cpp:2058
 #, fuzzy, c-format
 msgid "Already up to date with %s."
-msgstr "Ermittelte Stegbreite: %s."
+msgstr "Bereits aktuell mit %s."
 
 #: kicad/project_tree_pane.cpp:2064
 msgid "Pulled changes (fast-forward)."
@@ -33323,7 +33324,7 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:2085
 #, fuzzy
 msgid "Pull Conflict"
-msgstr "Konflikte"
+msgstr "Pull-Konflikt"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Use Remote (discard my changes)"
@@ -33336,7 +33337,7 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:2095
 #, fuzzy
 msgid "Reset to the remote version."
-msgstr "Auf den aktuellen Winkel von der Referenzposition zurücksetzen."
+msgstr "Auf die Remote-Version zurücksetzen."
 
 #: kicad/project_tree_pane.cpp:2097
 #, fuzzy
@@ -33477,7 +33478,7 @@ msgstr "Veröffentlichten Commit nachbessern?"
 #: kicad/project_tree_pane.cpp:2811 kicad/project_tree_pane.cpp:2856
 #, fuzzy
 msgid "Amend &Anyway"
-msgstr "Trotzdem hinzufügen"
+msgstr "Trotzdem n&achbessern"
 
 #: kicad/project_tree_pane.cpp:2850
 #, c-format
@@ -33493,17 +33494,17 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:2856
 #, fuzzy
 msgid "&Save and Amend"
-msgstr "Als Bild abspeichern"
+msgstr "&Speichern und nachbessern"
 
 #: kicad/project_tree_pane.cpp:2989
 #, fuzzy
 msgid "Amend Last Commit"
-msgstr "Letzter Commit"
+msgstr "Letzten Commit nachbessern"
 
 #: kicad/project_tree_pane.cpp:2997
 #, fuzzy
 msgid "Discarding amend due to empty commit message."
-msgstr "Verwerfe Commit aufgrund leerer Commit-Nachricht."
+msgstr "Verwerfe Nachbesserung aufgrund leerer Commit-Nachricht."
 
 #: kicad/project_tree_pane.cpp:3078
 #, fuzzy
@@ -34050,7 +34051,7 @@ msgstr "Das aktuelle Zeichnungsblatt wurde geändert. Änderungen speichern?"
 #: pagelayout_editor/files.cpp:82
 #, c-format
 msgid "File '%s' loaded"
-msgstr "Datei ‚%s‘ geladen"
+msgstr "Datei \"%s\" geladen"
 
 #: pagelayout_editor/files.cpp:132
 msgid "Append Existing Drawing Sheet"
@@ -42040,6 +42041,8 @@ msgid ""
 "If checked, layers will keep their standard KiCad names instead of being "
 "renamed to the imported layer names."
 msgstr ""
+"Wenn aktiviert, behalten Lagen ihre KiCad-Standardnamen bei, anstatt in "
+"Namen importierter Lagen umbenannt zu werden."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:67
 msgid "Edit Mapping of Imported Layers"
@@ -51598,22 +51601,23 @@ msgstr "%s Fertigungsattribut \"Nicht bestücken\" entfernt."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:817
 #, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr "%s 'Von Positionsdateien ausschließen'-Fertigungsattribut hinzufügen."
+msgstr "%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut hinzufügen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:822
 #, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "%s 'Von Positionsdateien ausschließen'-Fertigungsattribut entfernen."
+msgstr "%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut entfernen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:833
 #, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
-msgstr "%s 'Von Positionsdateien ausschließen'-Fertigungsattribut hinzugefügt."
+msgstr ""
+"%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:839
 #, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "%s 'Von Positionsdateien ausschließen'-Fertigungsattribut entfernt."
+msgstr "%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:862
 #, c-format
@@ -51656,17 +51660,17 @@ msgstr "Jumperpadgruppen %s aktualisieren"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:960
 #, c-format
 msgid "Remove %s from group '%s'."
-msgstr "%s aus der Gruppe ‚%s‘ entfernen."
+msgstr "%s aus der Gruppe \"%s\" entfernen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:966
 #, c-format
 msgid "Removed %s from group '%s'."
-msgstr "%s aus der Gruppe ‚%s‘ entfernt."
+msgstr "%s aus der Gruppe \"%s\" entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:989
 #, c-format
 msgid "Add %s to group '%s'."
-msgstr "%s zur Gruppe ‚%s‘ hinzufügen."
+msgstr "%s zur Gruppe \"%s\" hinzufügen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:995
 #, c-format
@@ -59806,7 +59810,7 @@ msgstr "Designblock hat kein Layout das eingefügt werden könnte."
 #: pcbnew/tools/pcb_control.cpp:1493
 #, fuzzy
 msgid "No groups with a linked design block are selected."
-msgstr "Verknüpftes Designblock-Layout auf ausgewählte Gruppe anwenden"
+msgstr "Es sind keine Gruppen mit verknüpftem Designblock ausgewählt."
 
 #: pcbnew/tools/pcb_control.cpp:1518 pcbnew/tools/pcb_selection_tool.cpp:4552
 msgid ""
@@ -59818,73 +59822,75 @@ msgstr ""
 #: pcbnew/tools/pcb_control.cpp:1541
 #, fuzzy
 msgid "Applying Design Block Layouts"
-msgstr "Designblock-Layout verwenden"
+msgstr "Designblock-Layouts verwenden"
 
 #: pcbnew/tools/pcb_control.cpp:1572
 #, fuzzy
 msgid "design block is not in the loaded libraries"
-msgstr "Designblock hat keine gültige Bibliotheks-ID."
+msgstr "Designblock ist in den geladenen Bibliotheken nicht vorhanden"
 
 #: pcbnew/tools/pcb_control.cpp:1578
 #, fuzzy
 msgid "design block has no saved PCB layout"
-msgstr "Designblock hat kein Layout das eingefügt werden könnte."
+msgstr "Designblock hat kein gespeichertes PCB-Layout"
 
 #: pcbnew/tools/pcb_control.cpp:1609
 #, fuzzy
 msgid "could not load the design block's layout"
-msgstr "Konnte Designblock %s nicht finden."
+msgstr "Konnte das Layout des Designblocks nicht laden"
 
 #: pcbnew/tools/pcb_control.cpp:1636
 #, fuzzy
 msgid "design block layout could not be loaded"
-msgstr "Aktuelle Platine als Designblock-Layout nutzen"
+msgstr "Designblock-Layout konnte nicht geladen werden"
 
 #: pcbnew/tools/pcb_control.cpp:1669
 #, fuzzy
 msgid "group has no footprints"
-msgstr "Footprints durchsuchen"
+msgstr "Gruppe hat keine Footprints"
 
 #: pcbnew/tools/pcb_control.cpp:1708
 #, fuzzy
 msgid "layout copy failed"
-msgstr "Datei \"%s\" konnte nicht kopiert werden."
+msgstr "Layoutkopie gescheitert"
 
 #: pcbnew/tools/pcb_control.cpp:1723
-#, c-format
+#, c-format, fuzzy
 msgid "Applying layout to group %zu of %zu..."
-msgstr ""
+msgstr "Layout auf Gruppe %zu von %zu anwenden ..."
 
 #: pcbnew/tools/pcb_control.cpp:1746
 #, fuzzy
 msgid "Apply design block layout cancelled."
-msgstr "Designblock-Layout verwenden"
+msgstr "\"Designblock-Layout verwenden\" abgebrochen."
 
 #: pcbnew/tools/pcb_control.cpp:1752
 #, fuzzy, c-format
 msgid "Apply design block layout to %d group(s)"
-msgstr "Verknüpftes Designblock-Layout auf ausgewählte Gruppe anwenden"
+msgstr "Designblock-Layout auf %d Gruppe(n) anwenden"
 
 #: pcbnew/tools/pcb_control.cpp:1764
 #, fuzzy, c-format
 msgid "Applied design block layout to %d of %d group(s)."
-msgstr "Verknüpftes Designblock-Layout auf ausgewählte Gruppe anwenden"
+msgstr "Designblock-Layout auf %d von %d Gruppe(n) angewendet."
 
 #: pcbnew/tools/pcb_control.cpp:1771
 #, fuzzy, c-format
 msgid ""
 "Skipped %d selected item(s) that are not groups linked to a design block."
-msgstr "Gewählte Gruppe als verknüpften Designblock speichern"
+msgstr ""
+"%d ausgewählte(s) Element(e) übersprungen, die keine mit einem Designblock "
+"verknüpften Gruppen sind."
 
 #: pcbnew/tools/pcb_control.cpp:1779
 #, fuzzy
 msgid "The following groups could not be processed:"
-msgstr "Die folgenden Verzeichnisse konnten nicht geöffnet werden:\n"
+msgstr "Die folgenden Gruppen konnten nicht verarbeitet werden:"
 
 #: pcbnew/tools/pcb_control.cpp:1783
 #, fuzzy
 msgid "(unnamed group)"
-msgstr "Jumpergruppen:"
+msgstr "(unbenannte Gruppe)"
 
 #: pcbnew/tools/pcb_control.cpp:1834
 #, c-format
