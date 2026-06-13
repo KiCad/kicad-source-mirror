@@ -298,6 +298,29 @@ wxString ConvertInvertedNetName( const std::string& aNetName )
 }
 
 
+wxString ConvertText( const std::string& aText )
+{
+    if( aText.empty() )
+        return wxString();
+
+    // PADS ASCII uses an 8-bit codepage, and a UTF-8 conversion drops the whole
+    // string on the first high byte. Length-aware to keep embedded NULs.
+    wxString result = wxString::FromUTF8( aText.data(), aText.size() );
+
+    if( result.IsEmpty() )
+    {
+        wxCSConv cp1252( wxFONTENCODING_CP1252 );
+        result = wxString( aText.data(), cp1252, aText.size() );
+
+        // Latin-1 maps every byte one-to-one when CP1252 has no mapping.
+        if( result.IsEmpty() )
+            result = wxString( aText.data(), wxConvISO8859_1, aText.size() );
+    }
+
+    return result;
+}
+
+
 LINE_STYLE PadsLineStyleToKiCad( int aPadsStyle )
 {
     int8_t s = static_cast<int8_t>( aPadsStyle & 0xFF );

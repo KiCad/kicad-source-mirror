@@ -133,6 +133,17 @@ double ParseDouble( const std::string& aStr, double aDefault = 0.0,
 wxString ConvertInvertedNetName( const std::string& aNetName );
 
 /**
+ * Decode text from a PADS file, which uses an 8-bit codepage rather than UTF-8.
+ *
+ * A direct UTF-8 conversion discards the whole string on the first high byte, so
+ * decode UTF-8 when valid and otherwise fall back to Windows-1252 / ISO-8859-1.
+ *
+ * @param aText Raw text bytes from the PADS file.
+ * @return Decoded wxString.
+ */
+wxString ConvertText( const std::string& aText );
+
+/**
  * Convert a PADS line style integer to a KiCad LINE_STYLE enum value.
  *
  * PADS stores line style as an unsigned int that should be interpreted as

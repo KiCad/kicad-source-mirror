@@ -560,8 +560,7 @@ void PCB_IO_PADS::loadFootprints()
             const PADS_IO::PART_DECAL& decal = decal_it->second;
 
             auto convertPadShape = [&]( const PADS_IO::PAD_STACK_LAYER& layer_def,
-                                        PAD* pad, PCB_LAYER_ID kicad_layer,
-                                        const EDA_ANGLE& part_orient ) {
+                                        PAD* pad, PCB_LAYER_ID kicad_layer ) {
                 const std::string& shape = layer_def.shape;
                 // In PADS, sizeA is height (Y) and sizeB is width (X), opposite of KiCad convention
                 VECTOR2I size( std::max( decalScaler( layer_def.sizeB ), m_minObjectSize ),
@@ -625,8 +624,6 @@ void PCB_IO_PADS::loadFootprints()
                     pad->SetOffset( kicad_layer,
                                     VECTOR2I( decalScaler( layer_def.finger_offset ), 0 ) );
                 }
-
-                pad->SetOrientation( part_orient + EDA_ANGLE( layer_def.rotation, DEGREES_T ) );
             };
 
             EDA_ANGLE part_orient( pads_part.rotation, DEGREES_T );
@@ -708,6 +705,24 @@ void PCB_IO_PADS::loadFootprints()
                         }
                     }
 
+                    // KiCad keeps one orientation per pad; PADS carries it per pad-stack
+                    // layer. Capture from the first converted entry and apply once below,
+                    // so a later (e.g. back-side round) layer can't reset it to zero.
+                    double shape_rotation = 0.0;
+                    bool   shape_rotation_set = false;
+
+                    auto convertGeometry = [&]( const PADS_IO::PAD_STACK_LAYER& aLayerDef,
+                                                PCB_LAYER_ID aKicadLayer )
+                    {
+                        convertPadShape( aLayerDef, pad, aKicadLayer );
+
+                        if( !shape_rotation_set )
+                        {
+                            shape_rotation = aLayerDef.rotation;
+                            shape_rotation_set = true;
+                        }
+                    };
+
                     // Track mask/paste layers explicitly present in the stack regardless
                     // of size. A zero-size entry means "intentionally no pad on this layer"
                     // and must suppress the SMD fallback for that layer.
@@ -784,7 +799,7 @@ void PCB_IO_PADS::loadFootprints()
                             {
                                 layer_set = ( drill > 0 ) ? LSET::AllCuMask()
                                                           : LSET( { F_Cu, B_Cu } );
-                                convertPadShape( layer_def, pad, F_Cu, part_orient );
+                                convertGeometry( layer_def, F_Cu );
 
                                 if( drill == 0 )
                                 {
@@ -866,7 +881,7 @@ void PCB_IO_PADS::loadFootprints()
                                 continue;
                             }
 
-                            convertPadShape( layer_def, pad, kicad_layer, part_orient );
+                            convertGeometry( layer_def, kicad_layer );
 
                             if( is_copper )
                                 normal_copper_set = true;
@@ -876,8 +891,12 @@ void PCB_IO_PADS::loadFootprints()
                     if( layer_set.none() )
                     {
                         layer_set.set( F_Cu );
-                        convertPadShape( stack[0], pad, F_Cu, part_orient );
+                        convertGeometry( stack[0], F_Cu );
                     }
+
+                    // Apply part placement plus finger orientation once, now that all
+                    // pad-stack layers are converted.
+                    pad->SetOrientation( part_orient + EDA_ANGLE( shape_rotation, DEGREES_T ) );
 
                     // For SMD pads, enable mask/paste layers that the stack did not
                     // explicitly mention. A zero-size stack entry for a mask/paste layer
@@ -1341,7 +1360,7 @@ void PCB_IO_PADS::loadTexts()
         }
 
         PCB_TEXT* text = new PCB_TEXT( m_loadBoard );
-        text->SetText( pads_text.content );
+        text->SetText( PADS_COMMON::ConvertText( pads_text.content ) );
 
         // PADS text cell height includes internal leading and descender space.
         // Scale factors calibrated to match PADS rendered character dimensions.
@@ -1382,6 +1401,10 @@ void PCB_IO_PADS::loadTexts()
 
         text->SetKeepUpright( false );
         text->SetLayer( textLayer );
+
+        // Honor the PADS back-side mirror flag.
+        text->SetMirrored( pads_text.mirrored );
+
         m_loadBoard->Add( text );
     }
 }
