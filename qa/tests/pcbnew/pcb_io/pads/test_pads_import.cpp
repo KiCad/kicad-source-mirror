@@ -1746,4 +1746,101 @@ BOOST_AUTO_TEST_CASE( ImportIssue23391 )
 }
 
 
+/**
+ * Issue #23856: PADS PCB import got text and pad details wrong.
+ *
+ *   1. Free text containing non-ASCII bytes (e.g. the copyright sign) was
+ *      dropped entirely because the raw ISO-8859-1 content was treated as UTF-8.
+ *   2. Finger pad orientation (PADS FINORI) was reset to zero by a later round
+ *      pad-stack layer entry, so oval/rectangular fingers were not rotated.
+ *   3. Free text on the back of the board ignored the PADS mirror flag, so it
+ *      read left-to-right instead of mirrored.
+ */
+BOOST_AUTO_TEST_CASE( Issue23856_TextAndPadOrientation )
+{
+    PCB_IO_PADS plugin;
+    wxString filename = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/issue23856.asc";
+
+    std::unique_ptr<BOARD> board;
+    board.reset( plugin.LoadBoard( filename, nullptr, nullptr, nullptr ) );
+    BOOST_REQUIRE( board != nullptr );
+
+    // Issue 1 + 3: free text with the copyright character must survive import,
+    // and back-side text must be mirrored.
+    int copyrightCount = 0;
+    bool frontCopyrightNotMirrored = false;
+    bool backCopyrightMirrored = false;
+
+    for( BOARD_ITEM* item : board->Drawings() )
+    {
+        PCB_TEXT* t = dynamic_cast<PCB_TEXT*>( item );
+
+        if( !t )
+            continue;
+
+        // No imported free text should be empty (empty == dropped on decode).
+        BOOST_CHECK_MESSAGE( !t->GetText().IsEmpty(),
+                "imported free text should not be empty" );
+
+        if( t->GetText().Contains( wxT( "TEXMATE" ) ) )
+        {
+            copyrightCount++;
+
+            // Copyright sign previously broke the UTF-8 decode.
+            BOOST_CHECK_MESSAGE( t->GetText().Contains( wxString::FromUTF8( "©" ) ),
+                    "copyright text should retain the (c) character" );
+
+            if( t->GetLayer() == F_SilkS )
+            {
+                BOOST_CHECK_MESSAGE( !t->IsMirrored(),
+                        "front silkscreen text should not be mirrored" );
+                frontCopyrightNotMirrored = true;
+            }
+            else if( IsBackLayer( t->GetLayer() ) )
+            {
+                BOOST_CHECK_MESSAGE( t->IsMirrored(),
+                        "back-side text should be mirrored" );
+                backCopyrightMirrored = true;
+            }
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( copyrightCount >= 2,
+            "expected the copyright text on both front and back, got " << copyrightCount );
+    BOOST_CHECK( frontCopyrightNotMirrored );
+    BOOST_CHECK( backCopyrightMirrored );
+
+    // Issue 2: CN1 finger pads use FINORI 90, which must not be reset to zero by
+    // the back-side round entry of the through-hole stack.
+    bool foundCN1 = false;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        if( fp->GetReference() != wxT( "CN1" ) )
+            continue;
+
+        foundCN1 = true;
+
+        BOOST_CHECK_MESSAGE( fp->Pads().size() >= 10,
+                "CN1 should have at least 10 pads, got " << fp->Pads().size() );
+
+        for( PAD* pad : fp->Pads() )
+        {
+            // Oval/rectangle finger pads must carry the 90 degree finger rotation.
+            if( pad->GetShape( F_Cu ) == PAD_SHAPE::OVAL
+                || pad->GetShape( F_Cu ) == PAD_SHAPE::RECTANGLE )
+            {
+                BOOST_CHECK_MESSAGE(
+                        pad->GetOrientation() == EDA_ANGLE( 90, DEGREES_T ),
+                        "CN1 finger pad " << pad->GetNumber().ToStdString()
+                            << " should be oriented 90 degrees, got "
+                            << pad->GetOrientation().AsDegrees() );
+            }
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( foundCN1, "CN1 footprint should be imported" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
