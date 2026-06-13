@@ -287,8 +287,8 @@ T VECTOR2<T>::EuclideanNorm() const
     {
         if constexpr( std::is_integral<T>::value )
             return KiROUND<double, T>( std::abs( x ) * M_SQRT2 );
-
-        return static_cast<T>( std::abs( x ) * M_SQRT2 );
+        else
+            return static_cast<T>( std::abs( x ) * M_SQRT2 );
     }
 
     if( x == 0 )
@@ -298,8 +298,8 @@ T VECTOR2<T>::EuclideanNorm() const
 
     if constexpr( std::is_integral<T>::value )
         return KiROUND<double, T>( std::hypot( x, y ) );
-
-    return static_cast<T>( std::hypot( x, y ) );
+    else
+        return static_cast<T>( std::hypot( x, y ) );
 }
 
 

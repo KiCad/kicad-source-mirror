@@ -294,4 +294,6 @@ if( MSVC )
     string( APPEND WARN_FLAGS_CXX " /wd4800" )
     # disable volatile access of '<expression>' is subject to /volatile:[iso|ms] setting;
     string( APPEND WARN_FLAGS_CXX " /wd4746" )
+    # disable "the initialization of a subobject should be wrapped in braces"
+    string( APPEND WARN_FLAGS_CXX " /wd5246" )
 endif()

@@ -86,7 +86,7 @@ public:
     void SetWidth( const int aWidth ) { m_width = aWidth; }
 
     /// Gets the line width
-    const int GetWidth() const { return m_width; }
+    int GetWidth() const { return m_width; }
 
     /// Sets the VIA associated with this item
     void SetVia( const PCB_VIA* aVia )
