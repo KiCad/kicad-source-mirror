@@ -1585,6 +1585,33 @@ bool SCH_FIELD::operator==( const SCH_FIELD& aOther ) const
 }
 
 
+bool SCH_FIELD::HasSameContent( const SCH_FIELD& aOther ) const
+{
+    if( GetCanonicalName() != aOther.GetCanonicalName() )
+        return false;
+
+    if( GetPosition() != aOther.GetPosition() )
+        return false;
+
+    if( IsVisible() != aOther.IsVisible() )
+        return false;
+
+    if( IsPrivate() != aOther.IsPrivate() )
+        return false;
+
+    if( IsGeneratedField() != aOther.IsGeneratedField() )
+        return false;
+
+    if( IsNameShown() != aOther.IsNameShown() )
+        return false;
+
+    if( CanAutoplace() != aOther.CanAutoplace() )
+        return false;
+
+    return EDA_TEXT::operator==( aOther );
+}
+
+
 double SCH_FIELD::Similarity( const SCH_ITEM& aOther ) const
 {
     if( Type() != aOther.Type() )

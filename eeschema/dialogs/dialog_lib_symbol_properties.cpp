@@ -612,8 +612,15 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
         wxString fieldName = field.GetCanonicalName();
 
-        if( m_fields->IsInherited( ii ) && field == m_fields->ParentField( ii ) )
-            continue; // Skip inherited fields
+        // Writing an unmodified inherited row into the derived symbol would stop it from
+        // tracking the parent field.  Fields the symbol already owns (transferred user
+        // fields) are kept even when they match the parent.  operator== is owner-sensitive,
+        // so compare content.
+        if( m_fields->IsInherited( ii ) && !m_libEntry->GetField( fieldName )
+                && field.HasSameContent( m_fields->ParentField( ii ) ) )
+        {
+            continue;
+        }
 
         if( field.GetText().IsEmpty() )
         {
