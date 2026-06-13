@@ -186,8 +186,6 @@ void HEADLESS_PCB_CONTEXT::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater )
     board->GetComponentClassManager().RebuildRequiredCaches();
 
     // Resync DRC rules to account for new aggregate netclass / component class rules
-    DRC_TOOL* drcTool = m_toolManager->GetTool<DRC_TOOL>();
-
     if( DRC_TOOL* drcTool = m_toolManager->GetTool<DRC_TOOL>() )
     {
         if( drcTool->GetDRCEngine() )
