@@ -1836,8 +1836,8 @@ HANDLER_RESULT<types::RunJobResponse> ExecuteBoardJob( PCB_CONTEXT* aContext, JO
     {
         response.set_status( types::JobStatus::JS_ERROR );
         response.set_message( "Internal error" );
-        return response;
         wxCHECK_MSG( false, response, "context missing valid kiway in ExecuteBoardJob?" );
+        return response;
     }
 
     int exitCode = aContext->GetKiway()->ProcessJob( KIWAY::FACE_PCB, &aJob, &reporter );
