@@ -48,6 +48,8 @@ public:
     void Serialize( kiapi::board::types::Field& aOutput ) const;
     bool Deserialize( const kiapi::board::types::Field& aInput );
 
+    void CopyFrom( const BOARD_ITEM* aOther ) override;
+
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && PCB_FIELD_T == aItem->Type();
