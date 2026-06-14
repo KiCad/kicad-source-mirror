@@ -1133,10 +1133,6 @@ void DIALOG_SYMBOL_FIELDS_TABLE::ShowHideColumn( int aCol, bool aShow )
 
     m_dataModel->SetShowColumn( aCol, aShow );
 
-    // The filter only searches shown columns, so changing visibility changes the result set.
-    if( !m_dataModel->GetFilter().IsEmpty() )
-        m_dataModel->RebuildRows();
-
     syncBomPresetSelection();
 
     if( m_nbPages->GetSelection() == 1 )
