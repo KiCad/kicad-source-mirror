@@ -1660,9 +1660,12 @@ void SYMBOL_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 {
     SCH_BASE_FRAME::SetScreen( aScreen );
 
-    // Let tools add things to the view if necessary
     if( m_toolManager )
+    {
+        m_toolManager->SetEnvironment( aScreen, GetCanvas()->GetView(), GetCanvas()->GetViewControls(), GetSettings(),
+                                       this );
         m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    }
 }
 
 
