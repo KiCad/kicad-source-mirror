@@ -85,7 +85,7 @@ bool DIALOG_IMPORT_SETTINGS::UpdateImportSettingsButton()
               || m_NetclassesOpt->IsChecked() || m_SeveritiesOpt->IsChecked() || m_TextAndGraphicsOpt->IsChecked()
               || m_FormattingOpt->IsChecked() || m_TracksAndViasOpt->IsChecked() || m_TuningPatternsOpt->IsChecked()
               || m_CustomRulesOpt->IsChecked() || m_ComponentClassesOpt->IsChecked() || m_TuningProfilesOpt->IsChecked()
-              || m_TeardropsOpt->IsChecked() || m_ZonesOpt->IsChecked() );
+              || m_TeardropsOpt->IsChecked() || m_ZonesOpt->IsChecked() || m_ZoneHatchingOffsetsOpt->IsChecked() );
 
     m_sdbSizer1OK->Enable( buttonEnableState );
 
@@ -149,6 +149,7 @@ void DIALOG_IMPORT_SETTINGS::OnSelectAll( wxCommandEvent& event )
     m_NetclassesOpt->SetValue( m_showSelectAllOnBtn );
     m_TracksAndViasOpt->SetValue( m_showSelectAllOnBtn );
     m_ZonesOpt->SetValue( m_showSelectAllOnBtn );
+    m_ZoneHatchingOffsetsOpt->SetValue( m_showSelectAllOnBtn );
     m_MaskAndPasteOpt->SetValue( m_showSelectAllOnBtn );
     m_SeveritiesOpt->SetValue( m_showSelectAllOnBtn );
     m_TeardropsOpt->SetValue( m_showSelectAllOnBtn );
