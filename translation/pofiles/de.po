@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-14 15:49+0000\n"
+"PO-Revision-Date: 2026-06-15 17:20+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -34066,7 +34066,7 @@ msgstr "Datei %s kann nicht geladen werden"
 #: pagelayout_editor/files.cpp:152
 #, c-format
 msgid "File '%s' inserted"
-msgstr "Datei ‚%s‘ eingefügt"
+msgstr "Datei \"%s\" eingefügt"
 
 #: pagelayout_editor/files.cpp:161
 msgid "Open Drawing Sheet"
@@ -51290,15 +51290,15 @@ msgstr "Ro&ute"
 
 #: pcbnew/microwave/microwave_footprint.cpp:57
 msgid "Gap Size:"
-msgstr "Größe Abstand:"
+msgstr "Spaltbreite:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:63
 msgid "Stub Size:"
-msgstr "Stich/Stub Größe:"
+msgstr "Stichlänge:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:70
 msgid "Arc Stub Radius Value:"
-msgstr "Größe Teilkreisbogen:"
+msgstr "Radiuswert (bogenförmiger Stich):"
 
 #: pcbnew/microwave/microwave_footprint.cpp:81
 #: pcbnew/microwave/microwave_footprint.cpp:96
