@@ -1063,30 +1063,8 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
     {
         SCH_REFERENCE ref = m_symbolsList[i];
 
-        if( !m_filter.IsEmpty() )
-        {
-            bool matched = matcher.Find( ref.GetFullRef().Lower() );
-
-            if( !matched )
-            {
-                KIID_PATH key = makeDataStoreKey( ref.GetSheetPath(), *ref.GetSymbol() );
-
-                for( const DATA_MODEL_COL& col : m_cols )
-                {
-                    if( !col.m_show )
-                        continue;
-
-                    if( matcher.Find( m_dataStore[key][col.m_fieldName].Lower() ) )
-                    {
-                        matched = true;
-                        break;
-                    }
-                }
-            }
-
-            if( !matched )
-                continue;
-        }
+        if( !m_filter.IsEmpty() && !matcher.Find( ref.GetFullRef().Lower() ) )
+            continue;
 
         if( m_excludeDNP )
         {
