@@ -213,11 +213,11 @@ bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, cons
 
     kiapi::schematic::types::SchematicSymbolAttributes* attributes = aOutput->mutable_attributes();
 
-    attributes->set_exclude_from_simulation( instance.m_ExcludedFromSim );
-    attributes->set_exclude_from_bill_of_materials( instance.m_ExcludedFromBOM );
-    attributes->set_exclude_from_board( instance.m_ExcludedFromBoard );
-    attributes->set_exclude_from_position_files( instance.m_ExcludedFromPosFiles );
-    attributes->set_do_not_populate( instance.m_DNP );
+    attributes->set_exclude_from_simulation( aInput->GetExcludedFromSim() );
+    attributes->set_exclude_from_bill_of_materials( aInput->GetExcludedFromBOM() );
+    attributes->set_exclude_from_board( aInput->GetExcludedFromBoard() );
+    attributes->set_exclude_from_position_files( aInput->GetExcludedFromPosFiles() );
+    attributes->set_do_not_populate( aInput->GetDNP() );
 
     // Descriptions belong to the schematic's variant registry rather than to each record.
     SCHEMATIC* schematic = aInput->Schematic();
