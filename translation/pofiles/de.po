@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
 "PO-Revision-Date: 2026-06-15 17:20+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -8225,9 +8225,8 @@ msgid "Could not get the repository head."
 msgstr "Konnte Repository-Head nicht abrufen."
 
 #: common/git/libgit_backend.cpp:1511
-#, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "Konnte nicht in den Commits für die Zusammenführung nachschauen."
+msgstr "Abrufen der zu zusammenführenden git Commits ist fehlgeschlagen."
 
 #: common/git/libgit_backend.cpp:1520 common/git/libgit_backend.cpp:1705
 #, fuzzy
@@ -8239,9 +8238,9 @@ msgstr ""
 "user.email in Ihrer Git-Konfiguration."
 
 #: common/git/libgit_backend.cpp:1529
-#, fuzzy, c-format
+#, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "Den Remote-Tracking-Zweig in %s einbinden"
+msgstr "Den Remote-Tracking-Zweig mit %s zusammenführen"
 
 #: common/git/libgit_backend.cpp:1537
 #, c-format
@@ -51298,7 +51297,7 @@ msgstr "Stichlänge:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:70
 msgid "Arc Stub Radius Value:"
-msgstr "Radiuswert (bogenförmiger Stich):"
+msgstr "Radius (bogenförmiger Stich):"
 
 #: pcbnew/microwave/microwave_footprint.cpp:81
 #: pcbnew/microwave/microwave_footprint.cpp:96
