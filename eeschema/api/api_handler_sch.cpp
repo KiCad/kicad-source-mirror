@@ -824,6 +824,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
     }
 
     SCH_COMMIT* commit = static_cast<SCH_COMMIT*>( getCurrentCommit( aClientName ) );
+    bool connectivityChanged = false;   // an in-place symbol update invalidated the net graph
 
     for( const google::protobuf::Any& anyItem : aItems )
     {
@@ -1019,6 +1020,12 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
             commit->Modify( existingItem, targetScreen );
             existingItem->SwapItemData( static_cast<SCH_ITEM*>( item.get() ) );
 
+            if( existingItem->IsConnectable() )
+            {
+                existingItem->SetConnectivityDirty();
+                connectivityChanged = true;
+            }
+
             if( existingItem->Type() == SCH_SYMBOL_T )
             {
                 SCH_SHEET_PATH path = existingPath;
@@ -1050,6 +1057,8 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
                                                 : _( "Modified items via API" ) );
     }
 
+    if( m_frame && connectivityChanged )
+        m_frame->RecalculateConnections( nullptr, LOCAL_CLEANUP );
 
     return ItemRequestStatus::IRS_OK;
 }
