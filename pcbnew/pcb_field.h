@@ -36,6 +36,8 @@ public:
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
 
+    void CopyFrom( const BOARD_ITEM* aOther ) override;
+
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && PCB_FIELD_T == aItem->Type();

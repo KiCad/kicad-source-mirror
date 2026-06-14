@@ -271,6 +271,13 @@ EDA_ITEM* PCB_FIELD::Clone() const
 }
 
 
+void PCB_FIELD::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_FIELD_T, /* void */ );
+    *this = *static_cast<const PCB_FIELD*>( aOther );
+}
+
+
 void PCB_FIELD::swapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_FIELD_T );
