@@ -37,7 +37,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
 "PO-Revision-Date: 2026-06-15 08:17+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -8332,9 +8332,8 @@ msgid "Could not get the repository head."
 msgstr "Konnte Repository-Head nicht abrufen."
 
 #: common/git/libgit_backend.cpp:1522
-#, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "Konnte nicht in den Commits für die Zusammenführung nachschauen."
+msgstr "Abrufen der zu zusammenführenden git Commits ist fehlgeschlagen."
 
 #: common/git/libgit_backend.cpp:1531 common/git/libgit_backend.cpp:1716
 #, fuzzy
@@ -8346,9 +8345,9 @@ msgstr ""
 "user.email in Ihrer Git-Konfiguration."
 
 #: common/git/libgit_backend.cpp:1540
-#, fuzzy, c-format
+#, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "Den Remote-Tracking-Zweig in %s einbinden"
+msgstr "Den Remote-Tracking-Zweig mit %s zusammenführen"
 
 #: common/git/libgit_backend.cpp:1548
 #, c-format
@@ -53215,7 +53214,6 @@ msgid "Net Chain Full Length"
 msgstr "Gesamtlänge der Netzkette"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2326
-#, fuzzy
 msgid "Net Chain Full Delay"
 msgstr "Gesamtverzögerung der Netzkette"
 
@@ -53574,7 +53572,7 @@ msgstr "Stichlänge:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:70
 msgid "Arc Stub Radius Value:"
-msgstr "Radiuswert (bogenförmiger Stich):"
+msgstr "Radius (bogenförmiger Stich):"
 
 #: pcbnew/microwave/microwave_footprint.cpp:81
 #: pcbnew/microwave/microwave_footprint.cpp:96
@@ -59023,7 +59021,7 @@ msgid "KiCad board netlist files"
 msgstr "KiCad Platinen-Netzlistendateien"
 
 #: pcbnew/tools/board_editor_control.cpp:737
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to export netlist to '%s': %s"
 msgstr "Fehler beim Export der Netzliste nach \"%s\": %s"
 
@@ -59672,22 +59670,18 @@ msgid "Create Arc"
 msgstr "Bogen erstellen"
 
 #: pcbnew/tools/diff_phase_skew_tool.cpp:849
-#, fuzzy
 msgid "Net A Name"
 msgstr "Name Netz-A"
 
 #: pcbnew/tools/diff_phase_skew_tool.cpp:855
-#, fuzzy
 msgid "Net B Name"
 msgstr "Name Netz-B"
 
 #: pcbnew/tools/diff_phase_skew_tool.cpp:862
-#, fuzzy
 msgid "Net P Name"
 msgstr "Name Netz-P"
 
 #: pcbnew/tools/diff_phase_skew_tool.cpp:866
-#, fuzzy
 msgid "Net N Name"
 msgstr "Name Netz-N"
 
@@ -59725,7 +59719,6 @@ msgid "Phase skew initial selection failed"
 msgstr "Anfängliche Auswahl des Phasenversatzes ist gescheitert"
 
 #: pcbnew/tools/diff_phase_skew_tool.cpp:1414
-#, fuzzy
 msgid "Differential pair identification failed"
 msgstr "Differenzialpaar-Bestimmung gescheitert"
 
@@ -61448,7 +61441,6 @@ msgid "Highlight all copper items on the selected net(s)"
 msgstr "Alle Kupfer-Elemente der ausgewählten Netze hervorheben"
 
 #: pcbnew/tools/pcb_actions.cpp:1622
-#, fuzzy
 msgid "Highlight every net in the net chain"
 msgstr "Jedes Netz in der Netzkette hervorheben"
 
