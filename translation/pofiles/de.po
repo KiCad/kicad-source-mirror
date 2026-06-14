@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-13 08:33+0000\n"
+"PO-Revision-Date: 2026-06-14 15:49+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -34542,7 +34542,7 @@ msgstr "Letzten Commit nachbessern ..."
 #: kicad/project_tree_pane.cpp:1051
 #, fuzzy
 msgid "Rewrite the most recent commit on the current branch"
-msgstr "Den neuesten Commit vom aktuellen Zweig abändern"
+msgstr "Den neuesten Commit vom aktuellen Branch abändern"
 
 #: kicad/project_tree_pane.cpp:1054
 msgid "Push"
@@ -34560,7 +34560,7 @@ msgstr "%s nach %s schieben"
 #: kicad/project_tree_pane.cpp:1060
 #, fuzzy, c-format
 msgid "Pull from %s"
-msgstr "aus %s"
+msgstr "Von %s abrufen"
 
 #: kicad/project_tree_pane.cpp:1064
 msgid "Push committed local changes to remote repository"
@@ -34732,12 +34732,14 @@ msgid "Pull Conflict"
 msgstr "Pull-Konflikt"
 
 #: kicad/project_tree_pane.cpp:2088
+#, fuzzy
 msgid "&Use Remote (discard my changes)"
-msgstr ""
+msgstr "Remote &verwenden (Meine Änderungen verwerfen)"
 
 #: kicad/project_tree_pane.cpp:2088
+#, fuzzy
 msgid "&Rebase"
-msgstr ""
+msgstr "&Rebase"
 
 #: kicad/project_tree_pane.cpp:2095
 #, fuzzy
@@ -34752,8 +34754,7 @@ msgstr "Zurücksetzen auf Remote ist gescheitert"
 #: kicad/project_tree_pane.cpp:2104
 #, fuzzy
 msgid "Rebased your changes onto the remote."
-msgstr ""
-"Änderungen konnten nicht zum Remote-Repository übertragen werden (push)."
+msgstr "Ihre Änderungen wurden als Rebase auf dem Remote erstellt."
 
 #: kicad/project_tree_pane.cpp:2106
 msgid "Could not rebase"
@@ -34793,7 +34794,7 @@ msgid ""
 "\n"
 "Anyone who already pulled the previous version will need to reset their copy."
 msgstr ""
-"Ablegen verweigert: Ihr lokaler Zweig und %s haben sich "
+"Ablegen verweigert: Ihr lokaler Branch und %s haben sich "
 "auseinanderentwickelt.\n"
 "\n"
 "Das passiert normalerweise nach dem Abholen oder dem erneuten Schreiben "
@@ -35356,7 +35357,7 @@ msgstr "Maximale Höhe:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:226
 msgid "Set to 0 to use default values"
-msgstr "Auf 0 setzen um Vorgabe zu benutzen"
+msgstr "Auf 0 setzen, um Vorgabe zu benutzen"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:233
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:40
@@ -38642,8 +38643,8 @@ msgid ""
 "Incorrect value for specified frequency (must be positive or null if not "
 "used)"
 msgstr ""
-"Ungültiger Wert für Verlusttangens (Wert muss positiv sein oder Null wenn "
-"nicht benutzt)"
+"Ungültiger Wert für spezifizierte Frequenz (Wert muss positiv sein oder Null "
+"wenn nicht benutzt)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1368
 msgid "A layer thickness is < 0. Fix it"
@@ -39325,7 +39326,7 @@ msgstr "Bauteil %s hat %d Pads, aber das in Frage kommende Bauteil %s hat %d."
 msgid ""
 "Reference prefix mismatch: %s uses prefix '%s' but candidate %s uses '%s'."
 msgstr ""
-"Bezeichnerpräfix stimmt nicht überein: %s nutzt \"%s\", das in Frage "
+"Bezeichnerpräfix stimmt nicht überein: %s nutzt \"%s\", aber das in Frage "
 "kommende Bauteil %s nutzt \"%s\"."
 
 #: pcbnew/connectivity/topo_match.cpp:1098
@@ -39337,7 +39338,7 @@ msgstr "(keine Bibliothek-ID)"
 #, c-format
 msgid "Library link mismatch: %s expects '%s' but candidate %s is '%s'."
 msgstr ""
-"Bibliotheksverknüpfung stimmt nicht überein: %s erwartet \"%s\" aber das in "
+"Bibliotheksverknüpfung stimmt nicht überein: %s erwartet \"%s\", aber das in "
 "Frage kommende Bauteil %s ist \"%s\"."
 
 #: pcbnew/connectivity/topo_match.cpp:1119
@@ -40240,7 +40241,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_create_array.cpp:565
 #, fuzzy
 msgid "Confirm Array"
-msgstr "Änderung bestätigen"
+msgstr "Array bestätigen"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:588
 msgid "Bad parameters"
@@ -41442,12 +41443,12 @@ msgstr ""
 #, c-format
 msgid "Output files '%s' already exists. Do you want to overwrite it?"
 msgstr ""
-"Die Ausgabedatei ‚%s‘ existiert bereits. Möchten Sie diese überschreiben?"
+"Die Ausgabedatei \"%s\" existiert bereits. Möchten Sie diese überschreiben?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:337
 #, c-format
 msgid "Cannot remove existing output file '%s'."
-msgstr "Vorhandene Ausgabedatei ‚%s‘ kann nicht entfernt werden."
+msgstr "Vorhandene Ausgabedatei \"%s\" kann nicht entfernt werden."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:350
 msgid "Cannot create temporary output directory."
@@ -41459,13 +41460,13 @@ msgid ""
 "Output directory '%s' already exists and is not empty. Do you want to "
 "overwrite it?"
 msgstr ""
-"Das Ausgabeverzeichnis ‚%s‘ existiert bereits und ist nicht leer. Möchten "
+"Das Ausgabeverzeichnis \"%s\" existiert bereits und ist nicht leer. Möchten "
 "Sie es überschreiben?"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:379
 #, c-format
 msgid "Cannot remove existing output directory '%s'."
-msgstr "Vorhandenes Ausgabeverzeichnis ‚%s‘ kann nicht entfernt werden."
+msgstr "Vorhandenes Ausgabeverzeichnis \"%s\" kann nicht entfernt werden."
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:407
 #, c-format
@@ -41575,18 +41576,19 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_step.cpp:445
 #, fuzzy
 msgid "Failed to reserve a temporary filename for STEP export."
-msgstr "Temporäre Datei \"%s\" konnte nicht umbenannt werden."
+msgstr ""
+"Reservierung eines vorläufigen Dateinamens für den STEP-Export ist "
+"gescheitert."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:464
 #, fuzzy
 msgid "Failed to save the current board state for export."
-msgstr "Fehler beim Speichern der Footprintbibliothek-Tabelle."
+msgstr "Speichern des aktuellen Platinenstands für den Export ist gescheitert."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:477
 #, fuzzy
 msgid "Failed to stage the project file for STEP export."
-msgstr ""
-"Änderungen konnten nicht zum Remote-Repository übertragen werden (push)."
+msgstr "Vorbereitung der Projektdatei für den STEP-Export ist gescheitert."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:516
 msgid "No filename for output file"
@@ -46867,12 +46869,12 @@ msgstr "Extrudierten Köroer exportieren"
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:908
 #, fuzzy
 msgid "No extrusion outline could be generated for this footprint."
-msgstr "Nur ein Pad für diesen Footprint."
+msgstr "Für dieses Footprint kann kein Extrusionsumriss erstellt werden."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:915
 #, fuzzy
 msgid "Export Extruded 3D Body"
-msgstr "Platinenkörper exportieren"
+msgstr "Extrudierten 3D-Körper exportieren"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:916
 #, fuzzy
@@ -46891,7 +46893,7 @@ msgstr "Konnte Geometrie für extrudierten Körper nicht erstellen."
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:968
 #, fuzzy
 msgid "Failed to write file."
-msgstr "Konnte Datei \"%s\" nicht schreiben."
+msgstr "Schreiben der Datei ist gescheitert."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:45
 msgid "3D Model(s)"
@@ -46904,7 +46906,7 @@ msgstr "Für diesen Footprint extrudierte 3D-Körper aktivieren"
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:101
 #, fuzzy
 msgid "Show extruded 3D model"
-msgstr "3D-Modelle von unbestimmten Bauteilen anzeigen"
+msgstr "Extrudiertes 3D-Modell anzeigen"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:113
 msgid "Overall height:"
@@ -46913,7 +46915,7 @@ msgstr "Gesamthöhe:"
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:126
 #, fuzzy
 msgid "Standoff height:"
-msgstr "Texthöhe:"
+msgstr "Abstandshöhe:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:139
 msgid "Extrusion source:"
@@ -50361,7 +50363,7 @@ msgstr "Nicht erlaubte Elemente"
 #: pcbnew/drc/drc_item.cpp:64
 #, fuzzy
 msgid "Text or graphic on Edge.Cuts layer"
-msgstr "Text (oder Bemaßung) auf Edge.Cuts-Lage"
+msgstr "Text oder Grafik auf Edge.Cuts-Lage"
 
 #: pcbnew/drc/drc_item.cpp:68
 msgid "Clearance violation"
@@ -52069,8 +52071,9 @@ msgid "Conditions"
 msgstr "Bedingungen"
 
 #: pcbnew/edit_zone_helpers.cpp:45
+#, fuzzy
 msgid "Edit copper-thieving parameters in the Properties panel."
-msgstr ""
+msgstr "Copper-Thieving-Parameter im Eigenschaftenfenster editieren."
 
 #: pcbnew/edit_zone_helpers.cpp:92
 msgid "Edit Zone Properties"
@@ -52723,7 +52726,7 @@ msgstr "Platinenseite"
 
 #: pcbnew/footprint.cpp:2132
 msgid "Back (Flipped)"
-msgstr "Rückseite (gedreht)"
+msgstr "Rückseite (gewendet)"
 
 #: pcbnew/footprint.cpp:2153
 msgid "autoplaced"
@@ -53168,9 +53171,9 @@ msgid "Net: %s"
 msgstr "Netz: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2131
-#, fuzzy, c-format
+#, c-format
 msgid "Chain: %s"
-msgstr "Ausführen: %s"
+msgstr "Kette: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2237
 msgid "Routed Lengths"
@@ -53209,12 +53212,12 @@ msgstr "Gesamtverzögerung"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2318
 #, fuzzy
 msgid "Net Chain Full Length"
-msgstr "Volle Länge"
+msgstr "Gesamtlänge der Netzkette"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2326
 #, fuzzy
 msgid "Net Chain Full Delay"
-msgstr "Gesamtverzögerung"
+msgstr "Gesamtverzögerung der Netzkette"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2342
 #, c-format
@@ -56092,7 +56095,7 @@ msgstr "DipTrace: Netzindex %d ist mehreren Netznamen (%s, %s) zugeordnet"
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:5546
 #, c-format, fuzzy
 msgid "DipTrace: duplicate net metadata for net index %d"
-msgstr "DipTrace: Netz-Metadaten für Netindex %d duplizieren"
+msgstr "DipTrace: Netz-Metadaten für Netzindex %d duplizieren"
 
 #: pcbnew/pcb_io/diptrace/pcb_io_diptrace.h:43
 #, fuzzy
@@ -59022,7 +59025,7 @@ msgstr "KiCad Platinen-Netzlistendateien"
 #: pcbnew/tools/board_editor_control.cpp:737
 #, fuzzy, c-format
 msgid "Failed to export netlist to '%s': %s"
-msgstr "Fehler beim Laden der Seite \"%s\": %s"
+msgstr "Fehler beim Export der Netzliste nach \"%s\": %s"
 
 #: pcbnew/tools/board_editor_control.cpp:771
 #: pcbnew/tools/footprint_editor_control.cpp:959
@@ -59671,22 +59674,22 @@ msgstr "Bogen erstellen"
 #: pcbnew/tools/diff_phase_skew_tool.cpp:849
 #, fuzzy
 msgid "Net A Name"
-msgstr "Netzname"
+msgstr "Name Netz-A"
 
 #: pcbnew/tools/diff_phase_skew_tool.cpp:855
 #, fuzzy
 msgid "Net B Name"
-msgstr "Netzname"
+msgstr "Name Netz-B"
 
 #: pcbnew/tools/diff_phase_skew_tool.cpp:862
 #, fuzzy
 msgid "Net P Name"
-msgstr "Netzname"
+msgstr "Name Netz-P"
 
 #: pcbnew/tools/diff_phase_skew_tool.cpp:866
 #, fuzzy
 msgid "Net N Name"
-msgstr "Netzname"
+msgstr "Name Netz-N"
 
 #: pcbnew/tools/diff_phase_skew_tool.cpp:873
 #, fuzzy
@@ -59724,7 +59727,7 @@ msgstr "Anfängliche Auswahl des Phasenversatzes ist gescheitert"
 #: pcbnew/tools/diff_phase_skew_tool.cpp:1414
 #, fuzzy
 msgid "Differential pair identification failed"
-msgstr "Differenzialpaar-Maße"
+msgstr "Differenzialpaar-Bestimmung gescheitert"
 
 #: pcbnew/tools/drawing_tool.cpp:104
 msgid "Select Via Size"
@@ -61447,7 +61450,7 @@ msgstr "Alle Kupfer-Elemente der ausgewählten Netze hervorheben"
 #: pcbnew/tools/pcb_actions.cpp:1622
 #, fuzzy
 msgid "Highlight every net in the net chain"
-msgstr "Hebt alle Verbindungen und Pins hervor, die zu einem Netz gehören"
+msgstr "Jedes Netz in der Netzkette hervorheben"
 
 #: pcbnew/tools/pcb_actions.cpp:1629
 #, fuzzy
