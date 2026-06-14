@@ -22,8 +22,14 @@
 #include "pns_dragger.h"
 
 #include <core/typeinfo.h>
+#include <advanced_config.h>
+#include <base_units.h>
+#include <geometry/eda_angle.h>
+#include <geometry/shape_arc.h>
+#include <wx/translation.h>
 
 #include "pns_arc.h"
+#include "pns_segment.h"
 #include "pns_shove.h"
 #include "pns_router.h"
 #include "pns_debug_decorator.h"
@@ -148,7 +154,100 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
 
 bool DRAGGER::startDragArc( const VECTOR2D& aP, ARC* aArc )
 {
-    m_draggedLine = m_world->AssembleLine( aArc, &m_draggedSegmentIndex );
+    EDA_ANGLE maxDeviation( ADVANCED_CFG::GetCfg().m_MaxTangentAngleDeviation, DEGREES_T );
+
+    EDA_ANGLE centralAngle( std::abs( aArc->CArc().GetCentralAngle().AsDegrees() ), DEGREES_T );
+
+    if( centralAngle + maxDeviation >= ANGLE_180 )
+    {
+        EDA_ANGLE limit = ANGLE_180 - maxDeviation;
+        Router()->SetFailureReason(
+                wxString::Format( _( "Unable to drag arc tracks of %.1f degrees or greater." ), limit.AsDegrees() ) );
+        return false;
+    }
+
+    int  probeIdx = 0;
+    LINE probe = m_world->AssembleLine( aArc, &probeIdx );
+
+    ssize_t arcIdx = -1;
+    int     firstArcPt = -1;
+    int     lastArcPt = -1;
+
+    for( int i = 0; i < probe.PointCount(); i++ )
+    {
+        ssize_t a = probe.CLine().ArcIndex( i );
+
+        if( a < 0 )
+            continue;
+
+        if( arcIdx < 0 )
+            arcIdx = a;
+
+        if( a == arcIdx )
+        {
+            if( firstArcPt < 0 )
+                firstArcPt = i;
+
+            lastArcPt = i;
+        }
+    }
+
+    bool isolatedStart = ( firstArcPt == 0 );
+    bool isolatedEnd = ( lastArcPt == probe.PointCount() - 1 );
+
+    if( isolatedStart || isolatedEnd )
+    {
+        int maxStubIU = KiROUND( ADVANCED_CFG::GetCfg().m_MaxTrackLengthToKeep * pcbIUScale.IU_PER_MM );
+        int stubLen = std::max( 1, maxStubIU / 2 );
+
+        const SHAPE_ARC& sharc = aArc->CArc();
+        VECTOR2I         center = sharc.GetCenter();
+        VECTOR2I         mid = sharc.GetArcMid();
+
+        auto outwardTangent = [&]( const VECTOR2I& aEndpoint ) -> VECTOR2I
+        {
+            VECTOR2I radial = aEndpoint - center;
+            VECTOR2I perp( -radial.y, radial.x );
+            VECTOR2I toMid = mid - aEndpoint;
+
+            if( perp.x * toMid.x + perp.y * toMid.y > 0 )
+                perp = VECTOR2I( radial.y, -radial.x );
+
+            double mag = std::hypot( (double) perp.x, (double) perp.y );
+
+            if( mag <= 0 )
+                return VECTOR2I( stubLen, 0 );
+
+            return VECTOR2I( KiROUND( perp.x * stubLen / mag ), KiROUND( perp.y * stubLen / mag ) );
+        };
+
+        if( isolatedStart )
+        {
+            VECTOR2I p0 = sharc.GetP0();
+            VECTOR2I stubFar = p0 + outwardTangent( p0 );
+            auto     stub = std::make_unique<SEGMENT>( SEG( stubFar, p0 ), aArc->Net() );
+            stub->SetWidth( aArc->Width() );
+            stub->SetLayers( aArc->Layers() );
+            m_preDragNode->Add( std::move( stub ) );
+        }
+
+        if( isolatedEnd )
+        {
+            VECTOR2I p1 = sharc.GetP1();
+            VECTOR2I stubFar = p1 + outwardTangent( p1 );
+            auto     stub = std::make_unique<SEGMENT>( SEG( p1, stubFar ), aArc->Net() );
+            stub->SetWidth( aArc->Width() );
+            stub->SetLayers( aArc->Layers() );
+            m_preDragNode->Add( std::move( stub ) );
+        }
+
+        m_draggedLine = m_preDragNode->AssembleLine( aArc, &m_draggedSegmentIndex );
+    }
+    else
+    {
+        m_draggedLine = m_world->AssembleLine( aArc, &m_draggedSegmentIndex );
+    }
+
     m_mode = DM_ARC;
 
     return true;
@@ -288,7 +387,7 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
         m_lastNode = nullptr;
     }
 
-    m_lastNode = m_world->Branch();
+    m_lastNode = m_preDragNode->Branch();
 
     switch( m_mode )
     {
@@ -307,6 +406,25 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
         else
             dragged.DragCorner( aP, m_draggedSegmentIndex, m_freeAngleMode );
 
+        m_lastNode->Remove( origLine );
+        m_lastNode->Add( dragged );
+
+        m_draggedItems.Clear();
+        m_draggedItems.Add( dragged );
+
+        break;
+    }
+
+    case DM_ARC:
+    {
+        LINE origLine( m_draggedLine );
+        LINE dragged( m_draggedLine );
+        dragged.ClearLinks();
+
+        dragged.DragArc( aP, m_draggedSegmentIndex );
+
+        // A collapsed arc drag leaves an empty chain, so Add() is a no-op and the arc
+        // is simply dropped from the route, which is the intended outcome here.
         m_lastNode->Remove( origLine );
         m_lastNode->Add( dragged );
 
@@ -535,7 +653,7 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
         m_lastNode = nullptr;
     }
 
-    m_lastNode = m_world->Branch();
+    m_lastNode = m_preDragNode->Branch();
 
     switch( m_mode )
     {
@@ -571,6 +689,35 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
         {
             PNS_DBG( Dbg(), AddShape, &origLine.CLine(), BLUE, 50000, wxT( "drag-orig-line" ) );
             PNS_DBG( Dbg(), AddShape, &draggedWalk.CLine(), CYAN, 75000, wxT( "drag-walk" ) );
+            m_lastNode->Remove( origLine );
+            optimizeAndUpdateDraggedLine( draggedWalk, origLine, aP );
+        }
+
+        break;
+    }
+    case DM_ARC:
+    {
+        LINE dragged( m_draggedLine );
+        LINE draggedWalk( m_draggedLine );
+        LINE origLine( m_draggedLine );
+
+        dragged.DragArc( aP, m_draggedSegmentIndex );
+
+        if( m_world->CheckColliding( &dragged ) )
+        {
+            ok = tryWalkaround( m_lastNode, dragged, draggedWalk );
+        }
+        else
+        {
+            draggedWalk = dragged;
+            ok = true;
+        }
+
+        if( draggedWalk.CLine().PointCount() < 2 )
+            ok = false;
+
+        if( ok )
+        {
             m_lastNode->Remove( origLine );
             optimizeAndUpdateDraggedLine( draggedWalk, origLine, aP );
         }
@@ -636,6 +783,49 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
             if( m_shove->HeadsModified() )
                 draggedPostShove = m_shove->GetModifiedHead( 0 );
         }
+
+        m_lastNode = m_shove->CurrentNode()->Branch();
+
+        if( ok )
+        {
+            draggedPostShove.ClearLinks();
+            draggedPostShove.Unmark();
+            optimizeAndUpdateDraggedLine( draggedPostShove, m_draggedLine, aP );
+            m_lastDragSolution = std::move( draggedPostShove );
+        }
+
+        m_dragStatus = ok;
+        break;
+    }
+
+    case DM_ARC:
+    {
+        bool ok = false;
+
+        LINE draggedPreShove( m_draggedLine );
+        draggedPreShove.DragArc( aP, m_draggedSegmentIndex );
+
+        // A collapsed arc drag can leave fewer than two points, which is not a valid
+        // shove head. Treat that as an unsuccessful shove (as dragWalkaround does) rather
+        // than feeding a degenerate line to AddHeads.
+        if( draggedPreShove.CLine().PointCount() >= 2 )
+        {
+            auto preShoveNode = m_shove->CurrentNode();
+
+            if( preShoveNode )
+                preShoveNode->Remove( draggedPreShove );
+
+            int policy = SHOVE::SHP_SHOVE | SHOVE::SHP_DONT_LOCK_ENDPOINTS;
+
+            m_shove->ClearHeads();
+            m_shove->AddHeads( draggedPreShove, policy );
+            ok = m_shove->Run() == SHOVE::SH_OK;
+        }
+
+        LINE draggedPostShove( draggedPreShove );
+
+        if( ok && m_shove->HeadsModified() )
+            draggedPostShove = m_shove->GetModifiedHead( 0 );
 
         m_lastNode = m_shove->CurrentNode()->Branch();
 

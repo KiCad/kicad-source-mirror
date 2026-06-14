@@ -32,6 +32,10 @@
 #include "pns_debug_decorator.h"
 
 #include <geometry/shape_rect.h>
+#include <geometry/circle.h>
+#include <trigo.h>
+#include <advanced_config.h>
+#include <base_units.h>
 
 namespace PNS {
 
@@ -853,6 +857,239 @@ void LINE::DragSegment( const VECTOR2I& aP, int aIndex, bool aFreeAngle )
     {
         dragSegment45( aP, aIndex );
     }
+}
+
+
+void LINE::DragArc( const VECTOR2I& aP, int aIndex )
+{
+    if( aIndex < 0 || aIndex >= m_line.PointCount() )
+        return;
+
+    ssize_t arcIdx = m_line.ArcIndex( aIndex );
+
+    if( arcIdx < 0 )
+        return;
+
+    int firstArcPt = -1;
+    int lastArcPt = -1;
+
+    for( int i = 0; i < m_line.PointCount(); i++ )
+    {
+        if( m_line.ArcIndex( i ) == arcIdx )
+        {
+            if( firstArcPt < 0 )
+                firstArcPt = i;
+
+            lastArcPt = i;
+        }
+    }
+
+    if( firstArcPt < 0 || lastArcPt < 0 )
+        return;
+
+    const SHAPE_ARC& oldArc = m_line.CArcs()[arcIdx];
+    int              width = oldArc.GetWidth();
+
+    auto tangentLineAtArcEndpoint = [&]( const VECTOR2I& aEndpoint ) -> SEG
+    {
+        VECTOR2I center = oldArc.GetCenter();
+        VECTOR2I radial = aEndpoint - center;
+        VECTOR2I perp( -radial.y, radial.x );
+        return SEG( aEndpoint - perp, aEndpoint + perp );
+    };
+
+    auto isCollinearTo = [&]( const SEG& aA, const SEG& aB, double aMaxDeviationDeg ) -> bool
+    {
+        VECTOR2D dirA( aA.B - aA.A );
+        VECTOR2D dirB( aB.B - aB.A );
+        double   magA = dirA.EuclideanNorm();
+        double   magB = dirB.EuclideanNorm();
+
+        if( magA <= 0 || magB <= 0 )
+            return false;
+
+        double crossMag = std::abs( dirA.x * dirB.y - dirA.y * dirB.x );
+        double sinAngle = crossMag / ( magA * magB );
+        double angleDeg = std::asin( std::clamp( sinAngle, 0.0, 1.0 ) ) * 180.0 / M_PI;
+
+        return angleDeg <= aMaxDeviationDeg;
+    };
+
+    double maxDeviation = ADVANCED_CFG::GetCfg().m_MaxTangentAngleDeviation;
+    SEG    arcLineStart = tangentLineAtArcEndpoint( oldArc.GetP0() );
+    SEG    arcLineEnd = tangentLineAtArcEndpoint( oldArc.GetP1() );
+
+    bool useChainStart = false;
+    bool useChainEnd = false;
+
+    if( firstArcPt > 0 )
+    {
+        SEG candidate( m_line.CPoint( firstArcPt - 1 ), m_line.CPoint( firstArcPt ) );
+
+        if( isCollinearTo( candidate, arcLineStart, maxDeviation ) )
+            useChainStart = true;
+    }
+
+    if( lastArcPt < m_line.PointCount() - 1 )
+    {
+        SEG candidate( m_line.CPoint( lastArcPt ), m_line.CPoint( lastArcPt + 1 ) );
+
+        if( isCollinearTo( candidate, arcLineEnd, maxDeviation ) )
+            useChainEnd = true;
+    }
+
+    OPT_VECTOR2I arcOwnTanIntersect = arcLineStart.IntersectLines( arcLineEnd );
+
+    SEG tanStartSeg, tanEndSeg;
+
+    if( useChainStart )
+    {
+        tanStartSeg = SEG( m_line.CPoint( firstArcPt - 1 ), m_line.CPoint( firstArcPt ) );
+    }
+    else
+    {
+        if( !arcOwnTanIntersect )
+            return;
+
+        tanStartSeg = SEG( *arcOwnTanIntersect, oldArc.GetP0() );
+    }
+
+    if( useChainEnd )
+    {
+        tanEndSeg = SEG( m_line.CPoint( lastArcPt ), m_line.CPoint( lastArcPt + 1 ) );
+    }
+    else
+    {
+        if( !arcOwnTanIntersect )
+            return;
+
+        tanEndSeg = SEG( *arcOwnTanIntersect, oldArc.GetP1() );
+    }
+
+    OPT_VECTOR2I tanIntersect = tanStartSeg.IntersectLines( tanEndSeg );
+
+    if( !tanIntersect )
+        return; // parallel tangents have no tangent-circle solution
+
+    // Reorient tangent segments so they emanate from the intersection point, so the
+    // constraint math below operates on the (intersect, arc-endpoint) directed segments.
+    SEG tanStartFromIntersect = SEG( *tanIntersect, oldArc.GetP0() );
+    SEG tanEndFromIntersect = SEG( *tanIntersect, oldArc.GetP1() );
+
+    auto furthestFromIntersect = [&]( const VECTOR2I& aA, const VECTOR2I& aB ) -> VECTOR2I
+    {
+        return ( aA - *tanIntersect ).EuclideanNorm() > ( aB - *tanIntersect ).EuclideanNorm() ? aA : aB;
+    };
+
+    VECTOR2I tanStartFar = furthestFromIntersect( tanStartSeg.A, tanStartSeg.B );
+    VECTOR2I tanEndFar = furthestFromIntersect( tanEndSeg.A, tanEndSeg.B );
+    VECTOR2I tempTangentPoint = furthestFromIntersect( tanStartFar, tanEndFar ) == tanEndFar ? tanStartFar : tanEndFar;
+
+    CIRCLE maxTanCircle;
+    maxTanCircle.ConstructFromTanTanPt( tanStartFromIntersect, tanEndFromIntersect, tempTangentPoint );
+
+    VECTOR2I maxTanPtStart = tanStartFromIntersect.LineProject( maxTanCircle.Center );
+    VECTOR2I maxTanPtEnd = tanEndFromIntersect.LineProject( maxTanCircle.Center );
+
+    SEG cSegTanStart( maxTanPtStart, *tanIntersect );
+    SEG cSegTanEnd( maxTanPtEnd, *tanIntersect );
+    SEG cSegChord( maxTanPtStart, maxTanPtEnd );
+
+    VECTOR2I oldMid = oldArc.GetArcMid();
+    int      cSegTanStartSide = cSegTanStart.Side( oldMid );
+    int      cSegTanEndSide = cSegTanEnd.Side( oldMid );
+    int      cSegChordSide = cSegChord.Side( oldMid );
+
+    VECTOR2I cursor = aP;
+
+    if( cSegTanStartSide != cSegTanStart.Side( cursor ) || cSegTanEndSide != cSegTanEnd.Side( cursor )
+        || cSegChordSide != cSegChord.Side( cursor ) )
+    {
+        VECTOR2I best = cSegTanStart.NearestPoint( cursor );
+
+        for( const VECTOR2I& candidate : { cSegTanEnd.NearestPoint( cursor ), cSegChord.NearestPoint( cursor ) } )
+        {
+            if( ( candidate - cursor ).SquaredEuclideanNorm() < ( best - cursor ).SquaredEuclideanNorm() )
+            {
+                best = candidate;
+            }
+        }
+
+        cursor = best;
+    }
+
+    if( ( cursor - maxTanCircle.Center ).EuclideanNorm() < maxTanCircle.Radius )
+        cursor = maxTanCircle.NearestPoint( cursor );
+
+    CIRCLE c;
+    c.ConstructFromTanTanPt( tanStartSeg, tanEndSeg, cursor );
+
+    if( c.Radius <= 0 )
+        return;
+
+    VECTOR2I newCenter = c.Center;
+    VECTOR2I newStart = tanStartSeg.LineProject( newCenter );
+    VECTOR2I newEnd = tanEndSeg.LineProject( newCenter );
+
+    // Non-tangent side keeps the original arc endpoint in the chain so the corner
+    // stays put while a new tangent stub grows out to newStart.
+    int maxStubIU = KiROUND( ADVANCED_CFG::GetCfg().m_MaxTrackLengthToKeep * pcbIUScale.IU_PER_MM );
+
+    int prefixCutoff = useChainStart ? ( firstArcPt - 1 ) : firstArcPt;
+    int suffixCutoff = useChainEnd ? ( lastArcPt + 1 ) : lastArcPt;
+
+    if( ( newEnd - newStart ).EuclideanNorm() <= maxStubIU )
+    {
+        SHAPE_LINE_CHAIN rebuilt;
+        rebuilt.SetWidth( m_line.Width() );
+
+        if( prefixCutoff >= 0 )
+            rebuilt.Append( m_line.Slice( 0, prefixCutoff ) );
+
+        if( suffixCutoff <= m_line.PointCount() - 1 )
+            rebuilt.Append( m_line.Slice( suffixCutoff, m_line.PointCount() - 1 ) );
+
+        m_line = rebuilt;
+        return;
+    }
+
+    if( firstArcPt > 0 )
+    {
+        VECTOR2I anchor = useChainStart ? m_line.CPoint( firstArcPt - 1 ) : m_line.CPoint( firstArcPt );
+
+        if( ( anchor - newStart ).EuclideanNorm() <= maxStubIU )
+        {
+            newStart = anchor;
+            prefixCutoff = useChainStart ? ( firstArcPt - 2 ) : ( firstArcPt - 1 );
+        }
+    }
+
+    if( lastArcPt < m_line.PointCount() - 1 )
+    {
+        VECTOR2I anchor = useChainEnd ? m_line.CPoint( lastArcPt + 1 ) : m_line.CPoint( lastArcPt );
+
+        if( ( anchor - newEnd ).EuclideanNorm() <= maxStubIU )
+        {
+            newEnd = anchor;
+            suffixCutoff = useChainEnd ? ( lastArcPt + 2 ) : ( lastArcPt + 1 );
+        }
+    }
+
+    VECTOR2I  newMid = CalcArcMid( newStart, newEnd, newCenter );
+    SHAPE_ARC newArc( newStart, newMid, newEnd, width );
+
+    SHAPE_LINE_CHAIN rebuilt;
+    rebuilt.SetWidth( m_line.Width() );
+
+    if( prefixCutoff >= 0 )
+        rebuilt.Append( m_line.Slice( 0, prefixCutoff ) );
+
+    rebuilt.Append( newArc );
+
+    if( suffixCutoff <= m_line.PointCount() - 1 )
+        rebuilt.Append( m_line.Slice( suffixCutoff, m_line.PointCount() - 1 ) );
+
+    m_line = rebuilt;
 }
 
 VECTOR2I LINE::snapDraggedCorner(

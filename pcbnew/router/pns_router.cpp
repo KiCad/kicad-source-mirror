@@ -166,6 +166,7 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM* aItem, int aDragMode )
 bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragMode )
 {
     m_leaderSegments.clear();
+    SetFailureReason( wxEmptyString );
 
     if( aStartItems.Empty() )
         return false;

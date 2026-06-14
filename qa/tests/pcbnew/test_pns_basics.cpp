@@ -31,7 +31,13 @@
 #include <pcbnew/pcbexpr_evaluator.h>
 
 #include <geometry/shape_circle.h>
+#include <geometry/shape_arc.h>
+#include <geometry/eda_angle.h>
 #include <router/pns_component_dragger.h>
+#include <router/pns_dragger.h>
+#include <router/pns_routing_settings.h>
+#include <router/pns_arc.h>
+#include <router/pns_line.h>
 #include <router/pns_item.h>
 #include <router/pns_kicad_iface.h>
 #include <router/pns_node.h>
@@ -853,6 +859,150 @@ BOOST_FIXTURE_TEST_CASE( PNSComponentDraggerBasicDrag, PNS_TEST_FIXTURE )
 
     // Clean up branch nodes before the world is destroyed
     world->KillChildren();
+}
+
+
+// Dragging the apex of an isolated arc outward keeps a single arc in the chain and
+// changes its radius. Exercises the LINE::DragArc geometric core added for in-router
+// arc dragging.
+BOOST_AUTO_TEST_CASE( PNSLineDragArcResize )
+{
+    // 90-degree CCW arc, centre at origin, radius 1mm.
+    SHAPE_ARC arc( VECTOR2I( 0, 0 ), VECTOR2I( 1000000, 0 ), EDA_ANGLE( 90, DEGREES_T ), 250000 );
+
+    SHAPE_LINE_CHAIN chain;
+    chain.SetWidth( 250000 );
+    chain.Append( arc );
+
+    PNS::LINE line;
+    line.SetWidth( 250000 );
+    line.Line() = chain;
+
+    BOOST_REQUIRE_EQUAL( line.CLine().ArcCount(), 1 );
+
+    double oldRadius = line.CLine().CArcs()[0].GetRadius();
+    int    apexIdx = line.CLine().PointCount() / 2;
+
+    // Pull the apex toward the tangent corner at (1mm, 1mm) to grow the radius.
+    line.DragArc( VECTOR2I( 950000, 950000 ), apexIdx );
+
+    BOOST_CHECK_EQUAL( line.CLine().ArcCount(), 1 );
+    BOOST_CHECK( line.CLine().PointCount() >= 2 );
+    BOOST_CHECK( line.CLine().CArcs()[0].GetRadius() != oldRadius );
+}
+
+
+// Driving the arc endpoints together collapses the arc out of the chain (the
+// "collapse to nothing drops it from the route" path in LINE::DragArc).
+BOOST_AUTO_TEST_CASE( PNSLineDragArcCollapse )
+{
+    SHAPE_ARC arc( VECTOR2I( 0, 0 ), VECTOR2I( 1000000, 0 ), EDA_ANGLE( 90, DEGREES_T ), 250000 );
+
+    SHAPE_LINE_CHAIN chain;
+    chain.SetWidth( 250000 );
+    chain.Append( arc );
+
+    PNS::LINE line;
+    line.SetWidth( 250000 );
+    line.Line() = chain;
+
+    BOOST_REQUIRE_EQUAL( line.CLine().ArcCount(), 1 );
+
+    // Drag almost onto the tangent corner at (1mm, 1mm), shrinking the arc until its
+    // endpoints fall within the keep-track threshold and the arc is dropped. Staying a
+    // hair off the corner keeps the constructed radius positive.
+    line.DragArc( VECTOR2I( 999950, 999950 ), line.CLine().PointCount() / 2 );
+
+    BOOST_CHECK_EQUAL( line.CLine().ArcCount(), 0 );
+}
+
+
+// An arc whose central angle reaches 180 degrees cannot be dragged, and the refusal
+// is reported through the router's failure reason so the UI can surface it.
+BOOST_FIXTURE_TEST_CASE( PNSDragArcRejectsNear180, PNS_TEST_FIXTURE )
+{
+    PNS::ROUTING_SETTINGS settings( nullptr, "" );
+    m_router->LoadSettings( &settings );
+
+    PNS::NET_HANDLE net = (PNS::NET_HANDLE) 1;
+
+    auto makeArc = [&]( const EDA_ANGLE& aAngle ) -> PNS::ARC*
+    {
+        SHAPE_ARC sa( VECTOR2I( 0, 0 ), VECTOR2I( 1000000, 0 ), aAngle, 250000 );
+        PNS::ARC* a = new PNS::ARC( sa, net );
+        a->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+        return a;
+    };
+
+    // Shallow arc: drag starts and no failure is reported.
+    {
+        std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+        world->SetMaxClearance( 10000000 );
+        world->SetRuleResolver( &m_ruleResolver );
+
+        PNS::ARC* arc = makeArc( EDA_ANGLE( 90, DEGREES_T ) );
+        world->AddRaw( arc );
+
+        PNS::DRAGGER dragger( m_router );
+        dragger.SetWorld( world.get() );
+        dragger.SetMode( PNS::DM_ARC );
+
+        PNS::ITEM_SET items;
+        items.Add( arc );
+
+        m_router->SetFailureReason( wxEmptyString );
+        BOOST_CHECK( dragger.Start( arc->Anchor( 0 ), items ) );
+        BOOST_CHECK( m_router->FailureReason().IsEmpty() );
+
+        world->KillChildren();
+    }
+
+    // Major arc (>= 180 deg): drag is refused with an explanatory failure reason.
+    {
+        std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+        world->SetMaxClearance( 10000000 );
+        world->SetRuleResolver( &m_ruleResolver );
+
+        PNS::ARC* arc = makeArc( EDA_ANGLE( 270, DEGREES_T ) );
+        world->AddRaw( arc );
+
+        PNS::DRAGGER dragger( m_router );
+        dragger.SetWorld( world.get() );
+        dragger.SetMode( PNS::DM_ARC );
+
+        PNS::ITEM_SET items;
+        items.Add( arc );
+
+        m_router->SetFailureReason( wxEmptyString );
+        BOOST_CHECK( !dragger.Start( arc->Anchor( 0 ), items ) );
+        BOOST_CHECK( !m_router->FailureReason().IsEmpty() );
+
+        world->KillChildren();
+    }
+
+    // Clockwise major arc (negative central angle): the magnitude is what matters, so
+    // it must be refused just like its CCW counterpart.
+    {
+        std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+        world->SetMaxClearance( 10000000 );
+        world->SetRuleResolver( &m_ruleResolver );
+
+        PNS::ARC* arc = makeArc( EDA_ANGLE( -270, DEGREES_T ) );
+        world->AddRaw( arc );
+
+        PNS::DRAGGER dragger( m_router );
+        dragger.SetWorld( world.get() );
+        dragger.SetMode( PNS::DM_ARC );
+
+        PNS::ITEM_SET items;
+        items.Add( arc );
+
+        m_router->SetFailureReason( wxEmptyString );
+        BOOST_CHECK( !dragger.Start( arc->Anchor( 0 ), items ) );
+        BOOST_CHECK( !m_router->FailureReason().IsEmpty() );
+
+        world->KillChildren();
+    }
 }
 
 
