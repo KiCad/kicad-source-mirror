@@ -53,7 +53,27 @@ BINARY_READER::BINARY_READER( const wxString& aFileName ) :
                 wxString::Format( _( "Cannot determine length of file '%s'." ), aFileName ) );
     }
 
-    m_data.resize( static_cast<size_t>( len ) );
+    // Reject absurd sizes before allocating so a corrupt or hostile length cannot drive an
+    // arbitrarily large allocation; real DipTrace files are a few MB.
+    static constexpr long MAX_FILE_SIZE = 1L << 30; // 1 GiB
+
+    if( len > MAX_FILE_SIZE )
+    {
+        fclose( fp );
+        THROW_IO_ERROR( wxString::Format( _( "DipTrace file '%s' is too large (%ld bytes)." ),
+                                          aFileName, len ) );
+    }
+
+    // resize() can throw (bad_alloc/length_error); close the handle on that path too.
+    try
+    {
+        m_data.resize( static_cast<size_t>( len ) );
+    }
+    catch( ... )
+    {
+        fclose( fp );
+        throw;
+    }
 
     fseek( fp, 0, SEEK_SET );
 
@@ -89,7 +109,9 @@ void BINARY_READER::SetOffset( size_t aOffset )
 
 void BINARY_READER::Skip( size_t aBytes )
 {
-    if( m_offset + aBytes > m_data.size() )
+    // Wrap-safe: m_offset <= size is an invariant, so size - m_offset never underflows; writing it
+    // as m_offset + aBytes would wrap for an attacker-sized count and pass the check.
+    if( aBytes > m_data.size() - m_offset )
         ThrowEOFError( aBytes );
 
     m_offset += aBytes;
@@ -135,7 +157,10 @@ int BINARY_READER::ReadInt4()
                      | ( static_cast<unsigned int>( p[2] ) << 8 )
                      | ( static_cast<unsigned int>( p[3] ) );
     m_offset += 4;
-    return static_cast<int>( raw ) - INT4_BIAS;
+
+    // Subtract in int64 so a raw value with the high bit set (>= 2^31) cannot overflow the
+    // intermediate signed int before the bias is applied.
+    return static_cast<int>( static_cast<int64_t>( raw ) - INT4_BIAS );
 }
 
 
@@ -164,7 +189,8 @@ void BINARY_READER::ReadColor( uint8_t& r, uint8_t& g, uint8_t& b )
 
 void BINARY_READER::ReadBytes( uint8_t* aDst, size_t aCount )
 {
-    if( m_offset + aCount > m_data.size() )
+    // Wrap-safe (m_offset <= size invariant); m_offset + aCount would wrap for a huge count.
+    if( aCount > m_data.size() - m_offset )
         ThrowEOFError( aCount );
 
     std::memcpy( aDst, &m_data[m_offset], aCount );
@@ -208,7 +234,9 @@ int BINARY_READER::PeekInt4() const
                      | ( static_cast<unsigned int>( p[1] ) << 16 )
                      | ( static_cast<unsigned int>( p[2] ) << 8 )
                      | ( static_cast<unsigned int>( p[3] ) );
-    return static_cast<int>( raw ) - INT4_BIAS;
+
+    // Subtract in int64 so a raw value with the high bit set cannot overflow the intermediate int.
+    return static_cast<int>( static_cast<int64_t>( raw ) - INT4_BIAS );
 }
 
 

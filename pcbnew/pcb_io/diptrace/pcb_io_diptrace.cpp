@@ -33,6 +33,7 @@
 #include <wx/wfstream.h>
 #include <wx/file.h>
 #include <wx/filename.h>
+#include <wx/log.h>
 
 
 PCB_IO_DIPTRACE::PCB_IO_DIPTRACE() : PCB_IO( wxS( "DipTrace" ) )
@@ -111,6 +112,10 @@ BOARD* PCB_IO_DIPTRACE::LoadBoard( const wxString& aFileName, BOARD* aAppendToMe
 
             if( drcFile.IsOpened() )
                 drcFile.Write( rules );
+            else
+                wxLogWarning( _( "DipTrace import: could not write design rules to '%s'; "
+                                 "imported board is missing DipTrace-specific clearance rules." ),
+                              drcPath.GetFullPath() );
         }
     }
 

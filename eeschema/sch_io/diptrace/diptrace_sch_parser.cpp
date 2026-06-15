@@ -71,6 +71,19 @@ static constexpr int V31_CUTOVER = 34;
 static constexpr int SCHEMATIC_UTF16_STRING_VERSION = V31_CUTOVER;
 
 
+/// Decode a 4-byte big-endian biased integer from raw data at a given offset. The bytes are
+/// assembled in uint32_t and the bias subtracted in int64 so a value with the high bit set cannot
+/// trigger signed-shift or signed-subtraction overflow (UB). Callers must bounds-check aPos+4.
+static int ReadInt4At( const uint8_t* aData, size_t aPos )
+{
+    uint32_t raw = ( static_cast<uint32_t>( aData[aPos] ) << 24 )
+                   | ( static_cast<uint32_t>( aData[aPos + 1] ) << 16 )
+                   | ( static_cast<uint32_t>( aData[aPos + 2] ) << 8 )
+                   | static_cast<uint32_t>( aData[aPos + 3] );
+    return static_cast<int>( static_cast<int64_t>( raw ) - INT4_BIAS );
+}
+
+
 SCH_PARSER::SCH_PARSER( const wxString& aFileName, SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet,
                         PROGRESS_REPORTER* aProgressReporter, REPORTER* aReporter ) :
         m_reader( aFileName ),
@@ -217,7 +230,10 @@ void SCH_PARSER::Parse()
         if( m_numSheets > 0 )
             m_reader.DetectStringEncoding( m_reader.GetOffset() );
 
-        if( m_version < 1 )
+        // Known formats run roughly 1..60; an out-of-range version (e.g. a misread/garbage header)
+        // would otherwise silently select the modern layout and walk the file with wrong field
+        // offsets. Reject up front rather than misparsing.
+        if( m_version < 1 || m_version > 200 )
         {
             THROW_IO_ERROR( wxString::Format( _( "Unsupported DipTrace schematic format version %d." ), m_version ) );
         }
@@ -352,7 +368,9 @@ void SCH_PARSER::parseDisplaySettings()
         uint8_t extraHdr[4] = {};
         m_reader.ReadBytes( extraHdr, 4 );
 
-        uint32_t extraChars = ( extraHdr[0] << 24 ) | ( extraHdr[1] << 16 ) | ( extraHdr[2] << 8 ) | extraHdr[3];
+        uint32_t extraChars = ( static_cast<uint32_t>( extraHdr[0] ) << 24 )
+                              | ( static_cast<uint32_t>( extraHdr[1] ) << 16 )
+                              | ( static_cast<uint32_t>( extraHdr[2] ) << 8 ) | extraHdr[3];
 
         // Some modern files store an optional UTF-16 payload (e.g. "url")
         // after this 4-byte raw length field.
@@ -540,9 +558,7 @@ bool SCH_PARSER::isShapeStart( size_t aOffset ) const
         if( z1 != 0 || z2 != 0 )
             return false;
 
-        int w = ( ( data[aOffset + 12] << 24 ) | ( data[aOffset + 13] << 16 ) | ( data[aOffset + 14] << 8 )
-                  | data[aOffset + 15] )
-                - INT4_BIAS;
+        int w = ReadInt4At( data, aOffset + 12 );
 
         if( w < 0 || w > 200000 )
             return false;
@@ -561,9 +577,7 @@ bool SCH_PARSER::isShapeStart( size_t aOffset ) const
             return false;
         }
 
-        int w = ( ( data[aOffset + 10] << 24 ) | ( data[aOffset + 11] << 16 ) | ( data[aOffset + 12] << 8 )
-                  | data[aOffset + 13] )
-                - INT4_BIAS;
+        int w = ReadInt4At( data, aOffset + 10 );
 
         if( w < 0 || w > 200000 )
             return false;
@@ -603,9 +617,7 @@ bool SCH_PARSER::isFontBearingShapeStart( size_t aOffset ) const
     if( data[aOffset + 20] != 0 || data[aOffset + 21] != 0 )
         return false;
 
-    int lineWidth = ( ( data[aOffset + 22] << 24 ) | ( data[aOffset + 23] << 16 ) | ( data[aOffset + 24] << 8 )
-                      | data[aOffset + 25] )
-                    - INT4_BIAS;
+    int lineWidth = ReadInt4At( data, aOffset + 22 );
 
     if( lineWidth < 0 || lineWidth > 200000 )
         return false;
@@ -942,7 +954,9 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
             uint8_t extraHdr[4] = {};
             m_reader.ReadBytes( extraHdr, 4 );
 
-            uint32_t extraChars = ( extraHdr[0] << 24 ) | ( extraHdr[1] << 16 ) | ( extraHdr[2] << 8 ) | extraHdr[3];
+            uint32_t extraChars = ( static_cast<uint32_t>( extraHdr[0] ) << 24 )
+                                  | ( static_cast<uint32_t>( extraHdr[1] ) << 16 )
+                                  | ( static_cast<uint32_t>( extraHdr[2] ) << 8 ) | extraHdr[3];
 
             if( extraChars >= 10000 && extraHdr[0] == 0 && extraHdr[1] == 0 )
             {
@@ -1195,9 +1209,7 @@ void SCH_PARSER::parseOneComponent( size_t aCompEnd, bool aUseCompEnd )
             return false;
         }
 
-        int width = ( ( data[aOffset + 10] << 24 ) | ( data[aOffset + 11] << 16 ) | ( data[aOffset + 12] << 8 )
-                      | data[aOffset + 13] )
-                    - INT4_BIAS;
+        int width = ReadInt4At( data, aOffset + 10 );
 
         if( width < 0 || width > 200000 )
             return false;
@@ -2250,7 +2262,9 @@ void SCH_PARSER::parseNetSection()
     if( searchStart >= searchEnd )
         return;
 
-    for( size_t off = searchStart; off < searchEnd - 5; off++ )
+    // Written as off + 5 < searchEnd (not searchEnd - 5) so a tiny searchEnd cannot underflow the
+    // size_t bound; the body reads data[off]..data[off+2].
+    for( size_t off = searchStart; off + 5 < searchEnd; off++ )
     {
         if( data[off] != 0x0F || data[off + 1] != 0x42 || data[off + 2] != 0x3F )
             continue;
@@ -2291,12 +2305,8 @@ void SCH_PARSER::parseNetSection()
 
             if( afterStr + 11 <= fileSize )
             {
-                entry.coordX = ( ( data[afterStr] << 24 ) | ( data[afterStr + 1] << 16 ) | ( data[afterStr + 2] << 8 )
-                                 | data[afterStr + 3] )
-                               - INT4_BIAS;
-                entry.coordY = ( ( data[afterStr + 4] << 24 ) | ( data[afterStr + 5] << 16 )
-                                 | ( data[afterStr + 6] << 8 ) | data[afterStr + 7] )
-                               - INT4_BIAS;
+                entry.coordX = ReadInt4At( data, afterStr );
+                entry.coordY = ReadInt4At( data, afterStr + 4 );
                 entry.field1 = ( ( data[afterStr + 8] << 16 ) | ( data[afterStr + 9] << 8 ) | data[afterStr + 10] )
                                - INT3_BIAS;
             }
@@ -2339,12 +2349,8 @@ void SCH_PARSER::parseNetSection()
 
             if( afterStr + 11 <= fileSize )
             {
-                entry.coordX = ( ( data[afterStr] << 24 ) | ( data[afterStr + 1] << 16 ) | ( data[afterStr + 2] << 8 )
-                                 | data[afterStr + 3] )
-                               - INT4_BIAS;
-                entry.coordY = ( ( data[afterStr + 4] << 24 ) | ( data[afterStr + 5] << 16 )
-                                 | ( data[afterStr + 6] << 8 ) | data[afterStr + 7] )
-                               - INT4_BIAS;
+                entry.coordX = ReadInt4At( data, afterStr );
+                entry.coordY = ReadInt4At( data, afterStr + 4 );
                 entry.field1 = ( ( data[afterStr + 8] << 16 ) | ( data[afterStr + 9] << 8 ) | data[afterStr + 10] )
                                - INT3_BIAS;
             }

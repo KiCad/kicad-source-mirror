@@ -221,7 +221,9 @@ static int ReadInt4At( const uint8_t* aData, size_t aPos )
                      | ( static_cast<unsigned int>( aData[aPos + 1] ) << 16 )
                      | ( static_cast<unsigned int>( aData[aPos + 2] ) << 8 )
                      | static_cast<unsigned int>( aData[aPos + 3] );
-    return static_cast<int>( raw ) - INT4_BIAS;
+
+    // Subtract in int64 so a raw value with the high bit set cannot overflow the intermediate int.
+    return static_cast<int>( static_cast<int64_t>( raw ) - INT4_BIAS );
 }
 
 
@@ -1233,6 +1235,13 @@ void PCB_PARSER::ParseBoardProperties()
 void PCB_PARSER::ParseOutline()
 {
     int vertexCount = m_reader.ReadInt3();
+
+    // A negative count would sign-extend to a huge size_t in reserve() (std::length_error); a wild
+    // positive count would over-allocate. Reject before touching the vector, like the other sections.
+    if( vertexCount < 0 || vertexCount > 1000000 )
+        THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid outline vertex count %d." ),
+                                          vertexCount ) );
+
     m_outline.clear();
     m_outline.reserve( vertexCount );
 
@@ -1267,6 +1276,12 @@ void PCB_PARSER::ParsePostOutline()
 void PCB_PARSER::ParseLayers()
 {
     int layerCount = m_reader.ReadInt3();
+
+    // Guard against a negative (huge size_t in reserve) or wild positive count before allocating.
+    if( layerCount < 0 || layerCount > 100000 )
+        THROW_IO_ERROR( wxString::Format( _( "DipTrace import: invalid layer count %d." ),
+                                          layerCount ) );
+
     m_layers.clear();
     m_copperLayerOrdinalById.clear();
     m_layers.reserve( layerCount );
@@ -5473,12 +5488,14 @@ void PCB_PARSER::CreateTextObject( const DT_TEXT_OBJECT& aText )
 
     text->SetLayer( textLayer );
 
-    // Position at the center of the text bounding box
-    int cx = ToKiCadCoord( ( aText.x1 + aText.x2 ) / 2 );
-    int cy = ToKiCadCoord( ( aText.y1 + aText.y2 ) / 2 );
+    // Position at the center of the text bounding box. x1/x2/y1/y2 are raw int4 values that are
+    // not range-checked, so sum/difference them in int64 to avoid signed-int overflow (UB).
+    int cx = ToKiCadCoord( static_cast<int>( ( static_cast<int64_t>( aText.x1 ) + aText.x2 ) / 2 ) );
+    int cy = ToKiCadCoord( static_cast<int>( ( static_cast<int64_t>( aText.y1 ) + aText.y2 ) / 2 ) );
     text->SetPosition( VECTOR2I( cx, cy ) );
 
-    int height = std::abs( ToKiCadCoord( aText.y2 - aText.y1 ) );
+    int height = std::abs(
+            ToKiCadCoord( static_cast<int>( static_cast<int64_t>( aText.y2 ) - aText.y1 ) ) );
 
     if( height > 0 )
         text->SetTextSize( VECTOR2I( height, height ) );
