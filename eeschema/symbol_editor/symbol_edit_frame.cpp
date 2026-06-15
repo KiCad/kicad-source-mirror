@@ -1257,6 +1257,16 @@ wxString SYMBOL_EDIT_FRAME::AddLibraryFile( bool aCreateNew )
 
     if( aCreateNew )
     {
+        // The file browser already asked to overwrite, so drop the old file here.
+        // CreateLibrary fails on an existing path.
+        if( fn.FileExists() && !wxRemoveFile( fn.GetFullPath() ) )
+        {
+            DisplayError( this, wxString::Format( _( "Could not overwrite the library file '%s'.\n"
+                                                     "Make sure you have write permissions and try again." ),
+                                                  fn.GetFullPath() ) );
+            return wxEmptyString;
+        }
+
         if( !m_libMgr->CreateLibrary( fn.GetFullPath(), scope ) )
         {
             DisplayError( this, wxString::Format( _( "Could not create the library file '%s'.\n"
