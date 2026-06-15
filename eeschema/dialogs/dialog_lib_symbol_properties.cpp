@@ -598,7 +598,14 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         opType = UNDO_REDO::LIB_RENAME;
     }
 
-    m_Parent->SaveCopyInUndoList( _( "Edit Symbol Properties" ), m_libEntry, opType );
+    // When invoked from the library tree (Symbol Properties context menu) we edit a buffered
+    // copy that is not the symbol loaded in the editor.  The editor-coupled side effects below
+    // (undo list, view/title refresh) operate on the frame's current symbol, so only run them
+    // when we are actually editing it.  The library-tree path does its own buffer/tree update.
+    bool editingCurrentSymbol = ( m_libEntry == m_Parent->GetCurSymbol() );
+
+    if( editingCurrentSymbol )
+        m_Parent->SaveCopyInUndoList( _( "Edit Symbol Properties" ), m_libEntry, opType );
 
     // The Y axis for components in lib is from bottom to top while the screen axis is top
     // to bottom: we must change the y coord sign when writing back to the library
@@ -761,7 +768,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         }
     }
 
-    m_Parent->UpdateAfterSymbolProperties( &oldName );
+    if( editingCurrentSymbol )
+        m_Parent->UpdateAfterSymbolProperties( &oldName );
 
     return true;
 }

@@ -49,6 +49,7 @@
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_textbox.h>
 #include <lib_symbol_library_manager.h>
+#include <widgets/lib_tree.h>
 #include <wx/textdlg.h>     // for wxTextEntryDialog
 #include <math/util.h>      // for KiROUND
 #include <io/kicad/kicad_io_utils.h>
@@ -1056,15 +1057,24 @@ void SYMBOL_EDITOR_EDIT_TOOL::editSymbolPropertiesFromLibrary( const LIB_ID& aLi
     if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
-    // Update the buffered symbol with the changes
-    libMgr.UpdateSymbol( &tempSymbol, libName );
+    wxString newName = tempSymbol.GetName();
+
+    // Update the buffered symbol with the changes.  A rename has to be keyed on the old name so
+    // the existing buffer is renamed in place rather than a duplicate being created under the new
+    // name.
+    if( newName != symbolName )
+        libMgr.UpdateSymbolAfterRename( &tempSymbol, symbolName, libName );
+    else
+        libMgr.UpdateSymbol( &tempSymbol, libName );
 
     // Mark the library as modified
-    libMgr.SetSymbolModified( symbolName, libName );
+    libMgr.SetSymbolModified( newName, libName );
 
     // Update the tree view
-    wxDataViewItem treeItem = libMgr.GetAdapter()->FindItem( aLibId );
+    LIB_ID         newLibId( libName, newName );
+    wxDataViewItem treeItem = libMgr.GetAdapter()->FindItem( newLibId );
     m_frame->UpdateLibraryTree( treeItem, &tempSymbol );
+    m_frame->GetLibTree()->SelectLibId( newLibId );
 }
 
 
