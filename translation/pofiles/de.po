@@ -31,13 +31,14 @@
 # Markus <git@muckies.com>, 2026.
 # ulikoehler <weblate@techoverflow.net>, 2026.
 # Till Donner <isntyourbusiness@proton.me>, 2026.
+# The Hobbit <dasfilter@posteo.de>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
 "PO-Revision-Date: 2026-06-15 08:17+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: The Hobbit <dasfilter@posteo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -20778,7 +20779,7 @@ msgid ""
 "the new format when saved."
 msgstr ""
 "Diese Datei wurde mit einer älteren KiCad-Version erstellt. Beim Speichern "
-"wird sie automatisch in das neue Format gewandelt."
+"wird sie automatisch in das neue Format umgewandelt."
 
 #: eeschema/files-io.cpp:757 eeschema/files-io.cpp:1581
 msgid "Updating connections..."
