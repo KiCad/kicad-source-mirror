@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-04-20 09:10+0000\n"
+"PO-Revision-Date: 2026-06-15 17:20+0000\n"
 "Last-Translator: Rafael Serrano <rsr.private@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/kicad/master-"
 "source/ca/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: f:/kicad-svn/kicad\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -22449,7 +22449,7 @@ msgstr "Versió RPC no admesa %d."
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:272
 #, c-format
 msgid "DipTrace import: unexpected error at offset 0x%06zX: %s"
-msgstr ""
+msgstr "Importació DipTrace: error inesperat en la posició 0x%06zX: %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:286
 #, c-format
@@ -22468,7 +22468,7 @@ msgstr ""
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:323
 #, c-format
 msgid "Invalid DipTrace schematic sheet count: %d."
-msgstr ""
+msgstr "El nombre de pagines (%d) del esquematic en DipTRace  es incorrecte."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:383
 #, fuzzy, c-format
@@ -22495,6 +22495,8 @@ msgstr "No s'ha pogut analitzar la llista de components: %s"
 #, c-format
 msgid "DipTrace import: found %zu components, but the file header declares %d."
 msgstr ""
+"Importació DipTrace: S'han trobat %zu components, però la capçalera del "
+"fitxer indica que hi han %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:953
 #, c-format
