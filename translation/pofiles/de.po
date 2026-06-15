@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
 "PO-Revision-Date: 2026-06-15 17:20+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -4505,7 +4505,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:197
 msgid "Disable custom cursors"
-msgstr "Benuzerdefinierte Cursor deaktivieren"
+msgstr "Benutzerdefinierte Cursor deaktivieren"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
@@ -43723,7 +43723,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
 msgid "Position Relative To Reference Item"
-msgstr "Positioniere relativ zum Referenelement"
+msgstr "Positioniere relativ zum Referenzelement"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:121
 msgid "Right-click for layer selection commands."
@@ -44519,7 +44519,7 @@ msgstr "Unbenutzte Pads"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:35
 #, fuzzy
 msgid "Apply design block layouts to new groups"
-msgstr "Verknüpftes Designblock-Layout auf ausgewählte Gruppe anwenden"
+msgstr "Designblock-Layouts auf neue Gruppen anwenden"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:36
 #, fuzzy
@@ -57334,7 +57334,7 @@ msgstr ""
 
 #: pcbnew/tools/edit_tool.cpp:2888 pcbnew/tools/pcb_actions.cpp:674
 msgid "Change Side / Flip"
-msgstr "Seite wechseln / spiegeln"
+msgstr "Seite wechseln / wenden"
 
 #: pcbnew/tools/edit_tool.cpp:3081
 msgid "Use the Footprint Properties dialog to remove fields."
