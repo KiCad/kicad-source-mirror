@@ -1188,4 +1188,27 @@ BOOST_AUTO_TEST_CASE( PageSizeIsAppliedWhenStored )
 }
 
 
+/**
+ * re-arm_pub.dch (the Panucatt Re-ARM board, CERN OHL v1.2) contains component U3 whose value field
+ * is the multi-line text "\nIRLML2244TRPb". The component-header detector rejected any header string
+ * carrying a control byte, so U3's leading newline made the structural scan miss its record. The
+ * count-guided check then aborted the whole import with "found 145 components, but the file header
+ * declares 146". Multi-line text values are legal, so every component (including U3) must be found
+ * and the schematic must load with its full symbol set.
+ */
+BOOST_AUTO_TEST_CASE( MultiLineValueComponentIsNotSkipped )
+{
+    const std::string path = GetTestDataDir() + "re-arm_pub.dch";
+
+    SCH_SHEET* root = LoadDipTraceSchematic( path );
+    BOOST_REQUIRE( root != nullptr );
+
+    BOOST_CHECK_EQUAL( CountSymbolsForRefdesOnSheet( wxT( "U3" ), GetSheetNameForRefdes( wxT( "U3" ) ) ), 1 );
+    BOOST_CHECK_GT( CountItemsOfType( SCH_SYMBOL_T ), 0 );
+    BOOST_CHECK_EQUAL( m_reporter.CountOfSeverity( RPT_SEVERITY_ERROR ), 0 );
+
+    RemoveGeneratedLibrary( path );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -2945,7 +2945,9 @@ bool SCH_PARSER::isComponentHeaderAt( size_t aOffset ) const
                                 : ( ( data[dataStart + static_cast<size_t>( k ) * 2] << 8 )
                                     | data[dataStart + static_cast<size_t>( k ) * 2 + 1] );
 
-            if( ch < 0x20 )
+            // Header strings are user text and may be multi-line, so tab, line feed and carriage
+            // return are valid. Any other control byte signals a misparse rather than a real header.
+            if( ch < 0x20 && ch != 0x09 && ch != 0x0A && ch != 0x0D )
                 return false;
         }
 
