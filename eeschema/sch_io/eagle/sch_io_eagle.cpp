@@ -34,6 +34,7 @@
 #include <wx/mstream.h>
 #include <wx/xml/xml.h>
 
+#include <advanced_config.h>
 #include <font/fontconfig.h>
 #include <reporter.h>
 #include <io/eagle/eagle_parser.h>
@@ -2240,6 +2241,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
 EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRARY* aEagleLibrary )
 {
     wxCHECK( aLibrary && aEagleLibrary, nullptr );
+    bool canAutoplace = ADVANCED_CFG::GetCfg().m_EagleImportFieldsCanAutoplace;
 
     // Loop through the device sets and load each of them
     for( const auto& [name, edeviceset] : aLibrary->devicesets )
@@ -2310,6 +2312,12 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                 gateindex++;
             }
 
+            std::vector<SCH_FIELD*> fields;
+            libSymbol->GetFields( fields );
+
+            for( SCH_FIELD* field : fields )
+                field->SetCanAutoplace( canAutoplace );
+
             for( const auto& [techname, technology ] : edevice->technologies )
             {
                 std::unique_ptr<LIB_SYMBOL> derivedSymbol;
@@ -2318,15 +2326,16 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                 if( !technology->name.IsEmpty() )
                 {
                     derivedSymbol = std::make_unique<LIB_SYMBOL>( symbolName + technology->name, libSymbol.get() );
-                    std::vector<SCH_FIELD*> parentFields;
-                    libSymbol->GetFields( parentFields );
 
-                    for( SCH_FIELD* parentField : parentFields )
+                    for( SCH_FIELD* parentField : fields )
                     {
                         SCH_FIELD* childField = derivedSymbol->GetField( parentField->GetName() );
 
-                        if( childField && parentField )
+                        if( childField )
+                        {
                             childField->SetAttributes( *parentField );
+                            childField->SetCanAutoplace( canAutoplace );
+                        }
                     }
                 }
 
@@ -2363,6 +2372,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                         newField->SetText( *attr->value );
                         newField->SetVisible( false );
                         newField->SetPosition( nextFieldPosition );
+                        newField->SetCanAutoplace( canAutoplace );
 
                         if( !derivedSymbol )
                             libSymbol->AddField( newField );
