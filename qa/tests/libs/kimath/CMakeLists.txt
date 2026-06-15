@@ -56,6 +56,7 @@ set( QA_KIMATH_SRCS
     geometry/test_shape_line_chain_collision.cpp
     geometry/test_vector_utils.cpp
     geometry/test_shape_rect_corner.cpp
+    geometry/test_roundrect.cpp
     geometry/test_packed_rtree.cpp
     geometry/test_dynamic_rtree.cpp
 
