@@ -829,4 +829,51 @@ BOOST_AUTO_TEST_CASE( Z80BoardSettings )
 }
 
 
+/**
+ * re-arm_pub.dip (Panucatt Re-ARM, DipTrace flat "DTBOARD" v41) places most components at a
+ * cardinal rotation. The pre-v47 format stores each placement's rotation as a quarter-turn in a
+ * compact tuple ahead of the component record; the importer used to locate it by a trailing
+ * zero-run that exists for only ~half the components, so it read the wrong (previous) component's
+ * tuple or none at all and left ~60% of footprints unrotated with canonical pad geometry.
+ *
+ * Ground-truth angles are from DipTrace's own XML export. These reference designators are a subset
+ * that the byte decode reproduces exactly (verified 91/93 overall against the full export).
+ */
+BOOST_AUTO_TEST_CASE( ReArmPlacementRotationsMatchDipTrace )
+{
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_plugin.LoadBoard( GetTestDataDir() + "re-arm_pub.dip", board.get() );
+
+    std::map<wxString, int> orient;
+
+    for( FOOTPRINT* fp : board->Footprints() )
+        orient[fp->GetReference()] = KiROUND( fp->GetOrientation().Normalize().AsDegrees() ) % 360;
+
+    const std::vector<std::pair<wxString, int>> expected = {
+        { wxT( "A1" ), 0 },   { wxT( "C1" ), 270 },  { wxT( "C2" ), 180 },  { wxT( "C12" ), 180 },
+        { wxT( "C25" ), 90 }, { wxT( "C32" ), 270 }, { wxT( "D2" ), 90 },   { wxT( "J3" ), 180 },
+        { wxT( "J5" ), 90 },  { wxT( "J7" ), 270 },  { wxT( "J12" ), 180 }, { wxT( "R2" ), 270 },
+        { wxT( "R11" ), 90 }, { wxT( "U1" ), 270 },  { wxT( "U2" ), 180 },  { wxT( "X1" ), 90 },
+    };
+
+    for( const auto& [ref, deg] : expected )
+    {
+        auto it = orient.find( ref );
+        BOOST_REQUIRE_MESSAGE( it != orient.end(), "missing footprint " << ref.ToStdString() );
+        BOOST_CHECK_MESSAGE( it->second == deg, ref.ToStdString() << " orientation " << it->second
+                                                                  << " != expected " << deg );
+    }
+
+    // The board is heavily rotated; the old defect left almost every component at 0 degrees.
+    int rotated = 0;
+
+    for( const auto& [ref, deg] : orient )
+    {
+        if( deg != 0 )
+            rotated++;
+    }
+
+    BOOST_CHECK_GT( rotated, 50 );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

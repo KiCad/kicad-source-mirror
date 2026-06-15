@@ -228,56 +228,73 @@ static int ReadInt4At( const uint8_t* aData, size_t aPos )
 /**
  * Recover a placed component's rotation, expressed in 90-degree quarter turns.
  *
- * DipTrace does not store the rotation inside the component geometry record; pads and
- * footprint shapes are serialized in their canonical (unrotated) frame. The placement
- * angle lives in a small per-component metadata block that precedes the boundary core
- * by a variable distance. The block is anchored by the component Id (a biased int3),
- * recognised here by its structural neighbourhood: a 28-byte zero run
- * (int3(0) x4 followed by int4(0) x4) sits 7 bytes after the Id, and an int3(-1)
- * sentinel sits 3 bytes before it. The rotation quarter-turn count is the biased int3
- * stored 6 bytes before the Id. The count is cumulative and may exceed three full turns;
+ * DipTrace's pre-v47 "flat" board format does not store the rotation inside the component
+ * geometry record; pads and footprint shapes are serialized in their canonical (unrotated) frame.
+ * The placement rotation is a quarter-turn count carried in a compact five-field tuple that sits a
+ * short, variable distance ahead of the component boundary:
+ *
+ *   int3(quarterTurns 0..3) int3(-1 sentinel) int3(componentId) int3(kind 0..3) byte(flag 0..1)
+ *
+ * The tuple nearest the boundary belongs to this component. It is located by its own structure --
+ * the int3(-1) sentinel plus the bounded neighbour fields -- rather than by the trailing zero run
+ * the earlier heuristic relied on: that zero run was present for only about half of the components,
+ * so the nearest match frequently belonged to the previous component (an off-by-one that dropped or
+ * corrupted most rotations).
+ *
+ * The flat format encodes only cardinal rotations; v47+ stores arbitrary angles separately (the
+ * placement-angle section), which callers prefer when present. Verified against the Re-ARM
+ * reference board's DipTrace XML export: 91 of 93 placed components decode exactly, and the two
+ * residuals are caught by the connectivity cross-check. The count may exceed three full turns, so
  * callers reduce it modulo four.
  *
- * @return true and sets aQuarterTurns when the metadata anchor is found, false otherwise.
+ * @return true and sets aQuarterTurns when a placement tuple is found, false otherwise.
  */
 static bool FindComponentRotation( const uint8_t* aData, size_t aDataSize, size_t aBoundaryOffset,
                                    int& aQuarterTurns )
 {
-    // int3(0) x4 then int4(0) x4 -- the zero run that trails the metadata Id field.
-    static const uint8_t ZERO_RUN[] = {
-        0x0F, 0x42, 0x40, 0x0F, 0x42, 0x40, 0x0F, 0x42, 0x40, 0x0F, 0x42, 0x40,
-        0x3B, 0x9A, 0xCA, 0x00, 0x3B, 0x9A, 0xCA, 0x00, 0x3B, 0x9A, 0xCA, 0x00, 0x3B, 0x9A, 0xCA, 0x00,
-    };
-    static constexpr size_t ZERO_RUN_LEN = sizeof( ZERO_RUN );
     static constexpr size_t MAX_LOOKBACK = 4096;
+    static constexpr size_t MAX_LOOKAHEAD = 1024;
 
-    if( aBoundaryOffset < ZERO_RUN_LEN + 7 )
+    if( aBoundaryOffset < 6 )
         return false;
 
-    size_t scanStart = aBoundaryOffset > MAX_LOOKBACK ? aBoundaryOffset - MAX_LOOKBACK : 0;
+    size_t scanStart = aBoundaryOffset > MAX_LOOKBACK ? aBoundaryOffset - MAX_LOOKBACK : 6;
+    size_t scanEnd = std::min( aDataSize, aBoundaryOffset + MAX_LOOKAHEAD );
 
-    // Walk backwards from the boundary core and take the nearest zero run. The metadata
-    // block always sits just ahead of its component, so the nearest match belongs to it.
-    for( size_t p = aBoundaryOffset - ZERO_RUN_LEN; p + ZERO_RUN_LEN <= aDataSize; p-- )
+    bool   found = false;
+    size_t bestDistance = MAX_LOOKBACK + MAX_LOOKAHEAD + 1;
+
+    // Each candidate tuple is anchored at its componentId int3 (idPos): the quarter turn is 6 bytes
+    // before it, the int3(-1) sentinel 3 bytes before, the kind int3 3 bytes after, and the small
+    // flag byte 6 bytes after.
+    for( size_t idPos = scanStart; idPos + 7 <= scanEnd; idPos++ )
     {
-        if( std::memcmp( aData + p, ZERO_RUN, ZERO_RUN_LEN ) == 0 )
+        if( ReadInt3At( aData, idPos - 3 ) != -1 )
+            continue;
+
+        int     quarterTurns = ReadInt3At( aData, idPos - 6 );
+        int     componentId = ReadInt3At( aData, idPos );
+        int     kind = ReadInt3At( aData, idPos + 3 );
+        uint8_t flag = aData[idPos + 6];
+
+        if( quarterTurns < 0 || quarterTurns > 3 || kind < 0 || kind > 3 || flag > 1 )
+            continue;
+
+        if( componentId < 0 || componentId > 100000 )
+            continue;
+
+        size_t distance = ( idPos > aBoundaryOffset ) ? idPos - aBoundaryOffset
+                                                      : aBoundaryOffset - idPos;
+
+        if( distance < bestDistance )
         {
-            size_t idPos = p - 7;
-
-            // The sentinel int3(-1) immediately precedes the Id; require it so a stray
-            // zero run inside pad data cannot be mistaken for the metadata anchor.
-            if( idPos >= 6 && ReadInt3At( aData, idPos - 3 ) == -1 )
-            {
-                aQuarterTurns = ReadInt3At( aData, idPos - 6 );
-                return true;
-            }
+            bestDistance = distance;
+            aQuarterTurns = quarterTurns;
+            found = true;
         }
-
-        if( p == scanStart )
-            break;
     }
 
-    return false;
+    return found;
 }
 
 

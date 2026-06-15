@@ -11,3 +11,4 @@ These files are third-party DipTrace examples used by the importer QA tests.
 | `z80_board.dip` | [lightemittingresistor/z80-board-hardware: Z80 Board.dip](https://github.com/lightemittingresistor/z80-board-hardware/blob/master/Z80%20Board.dip) | LightEmittingResistor (`lightemittingresistor`) | No license in upstream repository |
 | `rotate.dip` | Authored for KiCad QA (four capacitors at 0/45/90/309 deg, DipTrace v60) | KiCad Developers | GPL-3.0, see `LICENSE_GPL-3.0.txt` |
 | `rotate4.dip` | Authored for KiCad QA (four capacitors at 0/90/45/328 deg, DipTrace v54) | KiCad Developers | GPL-3.0, see `LICENSE_GPL-3.0.txt` |
+| `re-arm_pub.dip` | Panucatt Devices Re-ARM (RepRap controller) public design files, DipTrace flat v41 | Panucatt Devices | CERN OHL v1.2 |
