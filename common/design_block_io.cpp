@@ -102,9 +102,17 @@ bool DESIGN_BLOCK_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileP
     if( oldFileType == DESIGN_BLOCK_IO_MGR::FILE_TYPE_NONE )
         return false;
 
+    // A nested library table has no plugin to enumerate it; reject it before dereferencing
+    // the null plugin below.
+    if( oldFileType == DESIGN_BLOCK_IO_MGR::NESTED_TABLE )
+        return false;
 
     IO_RELEASER<DESIGN_BLOCK_IO> oldFilePI( DESIGN_BLOCK_IO_MGR::FindPlugin( oldFileType ) );
     IO_RELEASER<DESIGN_BLOCK_IO> kicadPI( DESIGN_BLOCK_IO_MGR::FindPlugin( DESIGN_BLOCK_IO_MGR::KICAD_SEXP ) );
+
+    if( !oldFilePI || !kicadPI )
+        return false;
+
     wxArrayString dbNames;
     wxFileName    newFileName( aNewFilePath );
 

@@ -124,4 +124,37 @@ BOOST_AUTO_TEST_CASE( DatabaseLibraryRejectedByConvertLibrary )
 }
 
 
+/// Issue #23291: a sym-lib-table file is a nested table, not a symbol library, and must be
+/// rejected by ConvertLibrary rather than written out as an empty .kicad_sym.
+BOOST_AUTO_TEST_CASE( NestedTableRejectedByConvertLibrary )
+{
+    wxFileName table( wxFileName::CreateTempFileName( "kicad_qa_issue23291_sym_" ) );
+
+    {
+        wxFFileOutputStream out( table.GetFullPath() );
+        BOOST_REQUIRE( out.IsOk() );
+        const char* contents =
+                "(sym_lib_table\n"
+                "  (version 7)\n"
+                "  (lib (name \"Device\") (type \"KiCad\")"
+                " (uri \"${KICAD9_SYMBOL_DIR}/Device.kicad_sym\") (options \"\") (descr \"\"))\n"
+                ")\n";
+        out.WriteAll( contents, std::strlen( contents ) );
+    }
+
+    BOOST_REQUIRE_EQUAL( SCH_IO_MGR::GuessPluginTypeFromLibPath( table.GetFullPath() ),
+                         SCH_IO_MGR::SCH_NESTED_TABLE );
+
+    wxFileName outLib( table );
+    outLib.SetExt( "kicad_sym" );
+    wxRemoveFile( outLib.GetFullPath() );
+
+    BOOST_CHECK( !SCH_IO_MGR::ConvertLibrary( nullptr, table.GetFullPath(), outLib.GetFullPath() ) );
+    BOOST_CHECK( !outLib.Exists() );
+
+    wxRemoveFile( table.GetFullPath() );
+    wxRemoveFile( outLib.GetFullPath() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

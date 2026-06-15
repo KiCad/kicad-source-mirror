@@ -624,11 +624,15 @@ void PANEL_DESIGN_BLOCK_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
 
     wxArrayInt rowsToMigrate;
     wxString   kicadType = DESIGN_BLOCK_IO_MGR::ShowType( DESIGN_BLOCK_IO_MGR::KICAD_SEXP );
+    wxString   nestedTableType = LIBRARY_TABLE_ROW::TABLE_TYPE_NAME;
     wxString   msg;
 
     for( int row : selectedRows )
     {
-        if( cur_grid()->GetCellValue( row, COL_TYPE ) != kicadType )
+        const wxString& type = cur_grid()->GetCellValue( row, COL_TYPE );
+
+        // Nested library tables are not design block libraries and cannot be migrated.
+        if( type != kicadType && type != nestedTableType )
             rowsToMigrate.push_back( row );
     }
 

@@ -815,16 +815,18 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
     wxString   databaseType = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_DATABASE );
     wxString   httpType = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_HTTP );
     wxString   kicadType = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD );
+    wxString   nestedTableType = LIBRARY_TABLE_ROW::TABLE_TYPE_NAME;
     wxString   msg;
 
     // HTTP and Database libraries are live, dynamic backends that are not file-based.
     // Migrating them to a static .kicad_sym snapshot is not meaningful and would silently
-    // produce an empty library, destroying the original table entry.
+    // produce an empty library, destroying the original table entry.  Nested library tables
+    // are not symbol libraries at all and likewise cannot be migrated.
     for( int row : selectedRows )
     {
         const wxString& type = cur_grid()->GetCellValue( row, COL_TYPE );
 
-        if( type != databaseType && type != httpType && type != kicadType )
+        if( type != databaseType && type != httpType && type != kicadType && type != nestedTableType )
             legacyRows.push_back( row );
     }
 

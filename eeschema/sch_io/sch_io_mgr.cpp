@@ -231,6 +231,11 @@ bool SCH_IO_MGR::ConvertLibrary( std::map<std::string, UTF8>* aOldFileProps, con
     if( oldFileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
         return false;
 
+    // A nested library table has no plugin to enumerate it; reject it before the null-plugin
+    // path below.
+    if( oldFileType == SCH_IO_MGR::SCH_NESTED_TABLE )
+        return false;
+
     // Live backends are not convertible to a static .kicad_sym snapshot.  HTTP requires a
     // library manager adapter that ConvertLibrary cannot provide, and DATABASE has the same
     // semantic mismatch.  Without this guard the call silently produces an empty library.

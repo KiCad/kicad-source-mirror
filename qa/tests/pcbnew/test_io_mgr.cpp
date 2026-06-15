@@ -21,9 +21,15 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <boost/test/data/test_case.hpp>
 
+#include <cstring>
+
+#include <wx/filename.h>
+#include <wx/wfstream.h>
+
 #include <pcbnew_utils/board_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 
+#include <wildcards_and_files_ext.h>
 #include <pcbnew/pcb_io/pcb_io.h>
 #include <pcbnew/pcb_io/pcb_io_mgr.h>
 
@@ -295,5 +301,51 @@ BOOST_DATA_TEST_CASE( CheckCanReadBoard, boost::unit_test::data::make( BoardPlug
         }
     }
 }
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+/**
+ * Issue #23291: migrating a nested library table row crashed because FindPlugin( NESTED_TABLE )
+ * returns nullptr and ConvertLibrary dereferenced it.  The converter must reject nested tables.
+ */
+BOOST_AUTO_TEST_SUITE( Issue23291NestedTableMigrate )
+
+
+BOOST_AUTO_TEST_CASE( NestedTableRejectedByConvertLibrary )
+{
+    wxFileName table( wxFileName::CreateTempFileName( "kicad_qa_issue23291_" ) );
+
+    {
+        wxFFileOutputStream out( table.GetFullPath() );
+        BOOST_REQUIRE( out.IsOk() );
+        const char* contents =
+                "(fp_lib_table\n"
+                "  (version 7)\n"
+                "  (lib (name \"Battery\") (type \"KiCad\")"
+                " (uri \"${KICAD9_FOOTPRINT_DIR}/Battery.pretty\") (options \"\") (descr \"\"))\n"
+                ")\n";
+        out.WriteAll( contents, std::strlen( contents ) );
+    }
+
+    BOOST_REQUIRE_EQUAL( PCB_IO_MGR::GuessPluginTypeFromLibPath( table.GetFullPath() ),
+                         PCB_IO_MGR::NESTED_TABLE );
+
+    // Migration appends the destination name as a .pretty directory; mirror that to confirm
+    // nothing is written for a nested table.
+    wxFileName outLib( table );
+    outLib.SetExt( FILEEXT::KiCadFootprintLibPathExtension );
+
+    std::map<std::string, UTF8> props;
+
+    BOOST_CHECK( !PCB_IO_MGR::ConvertLibrary( props, table.GetFullPath(), outLib.GetFullPath(),
+                                              nullptr ) );
+
+    // DirExists() on a full path tests the directory portion.
+    BOOST_CHECK( !wxFileName::DirExists( outLib.GetFullPath() ) );
+
+    wxRemoveFile( table.GetFullPath() );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
