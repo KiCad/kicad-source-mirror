@@ -291,6 +291,9 @@ public:
         auto commitValue =
                 [this, aGrid, aProperty]()
                 {
+                    if( !m_unitBinder )
+                        return;
+
                     wxVariant val( static_cast<long>( m_unitBinder->GetValue() ) );
                     aGrid->ChangePropertyValue( aProperty, val );
                 };
