@@ -178,6 +178,9 @@ private:
     /// Fixed part of section 3's over-declaration, on top of the directory itself.
     static constexpr int     SECTION3_HEADER_BYTES = 48;
 
+    /// Stride of the section 2 view-state records that precede the board-setup block.
+    static constexpr int     VIEW_STATE_RECORD_BYTES = 48;
+
     std::vector<uint8_t> m_data;
 
     // Declared after m_data so the bound reference targets a live buffer.

@@ -61,6 +61,33 @@ instances:
       boundary, where a 73/74 version table leaves v0x2022 and v0x2024 off by 32.
 
       Guard before trusting it: section1.total_bytes == section1.count * 16.
+      That guard holds on 663 of 663 boards across the whole corpus, so the
+      directory always declares its own byte size and the count can be read
+      without a version branch at all.
+
+      Re-measured on the full 663-board corpus, the stored count by version is
+
+          0x2017   72     6 boards      NOT 73 -- no version rule predicts this
+          0x2019   73     1 board
+          0x2021   73    38 boards
+          0x2022   73    13 boards
+          0x2024   73    17 boards
+          0x2025   74    34 boards
+          0x2026   74   118 boards
+          0x2027   74   436 boards
+
+      v0x2017 is what settles "stored versus implied": it declares 72, a value
+      no 73/74 version table can produce. (The reader rejects 0x2017 and 0x2019
+      as unsupported, so those seven boards are evidence about the container
+      only.) Some v0x2026/v0x2027 boards declare 75 slots, i.e. entry_count 74.
+
+      NOT YET APPLIED IN THE READER. PADS_SDB::directoryEntryCount() still
+      returns the version-implied 73/74. Switching it moves every v0x2022 and
+      v0x2024 data_offset by 16 bytes at once, and the 81 call sites still on
+      data_offset are calibrated against the wrong value, so it can only land
+      together with moving them to payload_offset -- where the offset and the
+      section-3 overshoot both change by 16 and cancel. The origin locator below
+      reads the stored count directly instead of waiting for that migration.
   directory_probe:
     pos: 26
     type: dir_entry
@@ -215,6 +242,32 @@ types:
   # SECTION 1 — board setup / view-state header (single 1200-B blob)
   # =========================================================================
   # Not a record array. Only the first ~180 bytes carry data; the rest is zero.
+  #
+  # LOCATING IT. The block does not start at the accumulated data_offset, and the
+  # displacement is fully explained by two declared quantities:
+  #
+  #     base = 10 + (directory[1].count - 1)*16 + directory[2].count*48
+  #
+  # The first term is the stored slot count (see `num_directory`); using the
+  # version-implied count instead is what made v0x2022 and v0x2024 read 16 bytes
+  # short. The second is section 2, a run of 48-byte view-state records PADS
+  # writes ahead of the block -- its length is just that section's declared
+  # count, so the "variable-length prefix" that used to force a search was in the
+  # directory all along.
+  #
+  # Measured over all 663 boards: directory[2].count equals the observed prefix
+  # length in 48-byte units on 663/663. 570 boards have no prefix at all; the
+  # rest run 1..22 records and every one matches its declared count exactly.
+  #
+  # Against the field-range search this replaces (SCALE / BACKUPTIME / REAL WIDTH
+  # / ALLSIGONOFF / REFNAMESIZE swept byte-by-byte over section 1): they agree on
+  # all 633 boards where both resolve, disagree on none, and the structural rule
+  # additionally resolves 7 boards the search missed. Those five fields are now
+  # a validator -- a file whose layout differs yields no origin rather than a
+  # plausible-looking wrong one.
+  #
+  # This matters more than one section: the origin at +60/+64 shifts every
+  # absolute coordinate in the file, so a wrong base moves the whole board.
   sec1_board_setup:
     seq:
       - id: reserved0
