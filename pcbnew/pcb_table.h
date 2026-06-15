@@ -223,6 +223,8 @@ public:
 
     const BOX2I GetBoundingBox() const override;
 
+    double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
+
     void DrawBorders( const std::function<void( const VECTOR2I& aPt1, const VECTOR2I& aPt2,
                                                 const STROKE_PARAMS& aStroke )>& aCallback ) const;
 

@@ -37,6 +37,7 @@
 #include <board.h>
 #include <geometry/shape_poly_set.h>
 #include <pcb_text.h>
+#include <view/view.h>
 #include <math/util.h> // for KiROUND
 #include <convert_basic_shapes_to_polygon.h>
 #include <wx/log.h>
@@ -644,6 +645,16 @@ BITMAPS PCB_BARCODE::GetMenuImage() const
 const BOX2I PCB_BARCODE::ViewBBox() const
 {
     return m_bbox;
+}
+
+
+double PCB_BARCODE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
+{
+    // Hide the locked shadow when the barcode's own layer is not shown
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW && !aView->IsLayerVisible( m_layer ) )
+        return LOD_HIDE;
+
+    return LOD_SHOW;
 }
 
 

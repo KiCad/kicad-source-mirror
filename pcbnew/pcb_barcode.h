@@ -336,6 +336,8 @@ public:
      */
     virtual const BOX2I ViewBBox() const override;
 
+    double ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const override;
+
     /**
      * Compute a simple similarity score between this barcode and another board item.
      *

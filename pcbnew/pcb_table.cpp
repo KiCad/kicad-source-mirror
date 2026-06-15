@@ -31,6 +31,7 @@
 #include <geometry/geometry_utils.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <pcb_painter.h>    // for PCB_RENDER_SETTINGS
+#include <view/view.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
@@ -464,6 +465,16 @@ const BOX2I PCB_TABLE::GetBoundingBox() const
     bbox.Merge( m_cells[m_cells.size() - 1]->GetBoundingBox() );
 
     return bbox;
+}
+
+
+double PCB_TABLE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
+{
+    // Hide the locked shadow when the table's own layer is not shown
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW && !aView->IsLayerVisible( m_layer ) )
+        return LOD_HIDE;
+
+    return LOD_SHOW;
 }
 
 
