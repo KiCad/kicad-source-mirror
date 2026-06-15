@@ -52,7 +52,7 @@ NET_INSPECTOR_PANEL::NET_INSPECTOR_PANEL( wxWindow* parent, EDA_BASE_FRAME* aFra
     m_configureBtn->SetPadding( 2 );
     m_sizerOuter->Add( m_configureBtn, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
 
-    m_netsList = new wxDataViewCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_MULTIPLE );
+    m_netsList = new WX_DATAVIEWCTRL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_MULTIPLE );
     m_netsList->SetFont( KIUI::GetDockedPaneFont( this ) );
     m_sizerOuter->Add( m_netsList, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
 
