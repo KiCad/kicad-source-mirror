@@ -27,6 +27,8 @@
 #include <sch_io/sch_io_mgr.h>
 #include <wildcards_and_files_ext.h>
 
+#include <set>
+
 class LIBRARY_MANAGER_ADAPTER;
 
 /**
