@@ -3256,6 +3256,43 @@ void PCB_PAINTER::draw( const PCB_DIMENSION_BASE* aDimension, int aLayer )
 {
     const COLOR4D& color = m_pcbSettings.GetColor( aDimension, aLayer );
 
+    if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
+    {
+        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( true );
+        m_gal->SetFillColor( color );
+        m_gal->SetStrokeColor( color );
+        m_gal->SetLineWidth( m_lockedShadowMargin );
+
+        for( const std::shared_ptr<SHAPE>& shape : aDimension->GetShapes() )
+        {
+            switch( shape->Type() )
+            {
+            case SH_SEGMENT:
+            {
+                const SEG& seg = static_cast<const SHAPE_SEGMENT*>( shape.get() )->GetSeg();
+                m_gal->DrawSegment( seg.A, seg.B, m_lockedShadowMargin );
+                break;
+            }
+
+            case SH_CIRCLE:
+            {
+                int radius = static_cast<const SHAPE_CIRCLE*>( shape.get() )->GetRadius();
+                m_gal->DrawCircle( shape->Centre(), radius );
+                break;
+            }
+
+            default: break;
+            }
+        }
+
+        SHAPE_POLY_SET poly;
+        aDimension->PCB_TEXT::TransformShapeToPolygon( poly, aDimension->GetLayer(), 0, m_maxError, ERROR_OUTSIDE );
+        m_gal->DrawPolygon( poly );
+
+        return;
+    }
+
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
     m_gal->SetIsFill( false );
