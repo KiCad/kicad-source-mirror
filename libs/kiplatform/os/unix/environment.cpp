@@ -58,10 +58,12 @@ void KIPLATFORM::ENV::Init()
     if( forceX11 )
         wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
 
-    // Set GTK2-style input instead of xinput2.  This disables touchscreen and smooth
-    // scrolling.  It's needed to ensure that we are not getting multiple mouse scroll
-    // events.
-    wxSetEnv( wxT( "GDK_CORE_DEVICE_EVENTS" ), wxT( "1" ) );
+    // Disable XInput 2 smooth scrolling to prevent duplicate scroll events on X11.
+    // On Wayland (including XWayland sessions), skip this: the Wayland compositor does
+    // not produce the duplicate events, and forcing XInput 1 breaks GtkComboBox popup
+    // grabs, causing dropdowns to close immediately on mouse-button release.
+    if( !wxGetEnv( wxT( "WAYLAND_DISPLAY" ), nullptr ) )
+        wxSetEnv( wxT( "GDK_CORE_DEVICE_EVENTS" ), wxT( "1" ) );
 }
 
 
