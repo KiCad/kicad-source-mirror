@@ -448,6 +448,7 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
 {
     BOARD*            brd = nullptr;
     SETTINGS_MANAGER& settingsManager = Pgm().GetSettingsManager();
+    wxString loadError;
 
     auto getProjectForBoard = [&]( const wxString& aBoardPath ) -> PROJECT*
     {
@@ -479,6 +480,11 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
         {
             std::unique_ptr<BOARD> loadedBoard = BOARD_LOADER::Load( aBoardPath, pluginType, project );
             return loadedBoard.release();
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            loadError = ioe.What();
+            return nullptr;
         }
         catch( ... )
         {
@@ -516,7 +522,14 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
     }
 
     if( !brd )
-        m_reporter->Report( _( "Failed to load board\n" ), RPT_SEVERITY_ERROR );
+    {
+        wxString msg = _( "Failed to load board" );
+
+        if( !loadError.IsEmpty() )
+            msg += wxString::Format( wxS( ": %s" ), loadError );
+
+        m_reporter->Report( msg + '\n', RPT_SEVERITY_ERROR );
+    }
 
     return brd;
 }

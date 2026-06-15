@@ -1039,6 +1039,13 @@ bool IFACE::handleOpenPcb( const wxString& aPath, KICAD_API_SERVER* aServer, wxS
         newContext = std::make_shared<HEADLESS_PCB_CONTEXT>( std::move( loadedBoard ), project,
                                                              GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ), m_kiway );
     }
+    catch( const IO_ERROR& ioe )
+    {
+        if( aError )
+            *aError = wxString::Format( wxS( "Failed to load board: %s" ), ioe.What() );
+
+        return false;
+    }
     catch( ... )
     {
         if( aError )
