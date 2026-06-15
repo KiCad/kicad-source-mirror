@@ -105,6 +105,7 @@ public:
 protected:
     void onSetFocus( wxFocusEvent& aEvent );
     void onKillFocus( wxFocusEvent& aEvent );
+    void onTextChanged( wxCommandEvent& aEvent );
     void onUnitsChanged( wxCommandEvent& aEvent );
 
     /**
