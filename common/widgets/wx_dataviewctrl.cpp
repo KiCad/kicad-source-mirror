@@ -159,3 +159,18 @@ void WX_DATAVIEWCTRL::CollapseAll()
 {
     recursiveDescent( this, wxDataViewItem(), false );
 }
+
+
+void WX_DATAVIEWCTRL::CancelPendingEnsureVisible()
+{
+#ifdef __WXGTK__
+    if( !GetModel() )
+        return;
+
+    // GTK keeps the last EnsureVisible target for a later idle pass.  Re-arm that deferred
+    // target with an invalid item so the idle handler's IsOk() guard skips ExpandAncestors
+    // instead of dereferencing freed memory.  Other ports keep no deferred reference, so
+    // there is nothing to cancel there.
+    EnsureVisible( wxDataViewItem( nullptr ) );
+#endif
+}

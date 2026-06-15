@@ -746,6 +746,11 @@ public:
         if( !aRow )
             return {};
 
+        // A pending EnsureVisible() may hold a deferred pointer to the item (or its now-empty
+        // parent group) we are about to free.  Cancel it so the control's idle handler does not
+        // dereference freed memory.
+        m_parent.m_netsList->CancelPendingEnsureVisible();
+
         std::unique_ptr<LIST_ITEM> i = std::move( **aRow );
 
         LIST_ITEM* parent = i->Parent();
@@ -769,9 +774,14 @@ public:
                                        } );
 
                 wxASSERT( p != m_items.end() );
+
+                // Keep the parent alive through the ItemDeleted notification; erasing it from
+                // m_items destroys the LIST_ITEM, after which parent would be dangling.
+                wxDataViewItem             grandParent( parent->Parent() );
+                std::unique_ptr<LIST_ITEM> removedParent = std::move( *p );
                 m_items.erase( p );
 
-                ItemDeleted( wxDataViewItem( parent->Parent() ), wxDataViewItem( parent ) );
+                ItemDeleted( grandParent, wxDataViewItem( removedParent.get() ) );
             }
         }
 
@@ -802,6 +812,10 @@ public:
 
     void deleteAllItems()
     {
+        // A pending EnsureVisible() may hold a deferred pointer to an item we are about to
+        // free.  Cancel it so the control's idle handler does not dereference freed memory.
+        m_parent.m_netsList->CancelPendingEnsureVisible();
+
         BeforeReset();
         m_items.clear();
         AfterReset();

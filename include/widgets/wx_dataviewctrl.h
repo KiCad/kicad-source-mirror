@@ -70,6 +70,18 @@ public:
 
     void ExpandAll();
     void CollapseAll();
+
+    /**
+     * Cancel any pending deferred EnsureVisible request.
+     *
+     * On GTK, wxDataViewCtrl::EnsureVisible() records the target item and re-scrolls to it
+     * during the next idle cycle (in OnInternalIdle).  If the model is rebuilt and the
+     * underlying item is freed before that idle runs, OnInternalIdle dereferences the stale
+     * pointer in ExpandAncestors and crashes.  Callers that free model items must invoke this
+     * before the rebuild so the deferred reference is replaced by an invalid item, which the
+     * idle handler skips.  This is a no-op on platforms that do not defer the scroll.
+     */
+    void CancelPendingEnsureVisible();
 };
 
 
