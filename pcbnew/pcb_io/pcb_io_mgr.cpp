@@ -207,8 +207,17 @@ bool PCB_IO_MGR::ConvertLibrary( const std::map<std::string, UTF8>& aOldFileProp
     if( oldFileType == PCB_IO_MGR::FILE_TYPE_NONE )
         return false;
 
+    // A nested library table has no plugin to enumerate it; reject it before dereferencing
+    // the null plugin below.
+    if( oldFileType == PCB_IO_MGR::NESTED_TABLE )
+        return false;
+
     IO_RELEASER<PCB_IO> oldFilePI( PCB_IO_MGR::FindPlugin( oldFileType ) );
     IO_RELEASER<PCB_IO> kicadPI( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
+
+    if( !oldFilePI || !kicadPI )
+        return false;
+
     wxArrayString fpNames;
     wxFileName newFileName( aNewFilePath );
 
