@@ -297,6 +297,21 @@ bool BINARY_PARSER::IsBinaryPadsFile( const wxString& aFileName )
 }
 
 
+/// Enabled by setting KICAD_PADS_PROFILE.
+static void logParsePhase( const char* aWhat, std::chrono::steady_clock::time_point aStart )
+{
+    static const bool enabled = getenv( "KICAD_PADS_PROFILE" ) != nullptr;
+
+    if( !enabled )
+        return;
+
+    const double ms =
+            std::chrono::duration<double, std::milli>( std::chrono::steady_clock::now() - aStart ).count();
+
+    fprintf( stderr, "PROF %-32s %8.1f ms\n", aWhat, ms );
+}
+
+
 void BINARY_PARSER::Parse( const wxString& aFileName )
 {
     std::vector<uint8_t> bytes;
@@ -315,8 +330,7 @@ void BINARY_PARSER::Parse( const wxString& aFileName )
     m_parameters.origin.y = static_cast<double>( m_originY );
 
 #define KITIME( call ) do { auto _t0 = std::chrono::steady_clock::now(); call; \
-    fprintf( stderr, "PROF %-32s %8.1f ms\n", #call, \
-             std::chrono::duration<double, std::milli>( std::chrono::steady_clock::now() - _t0 ).count() ); } while( 0 )
+    logParsePhase( #call, _t0 ); } while( 0 )
 
     // The call order below is load-bearing; the dependency edges noted at each group fix it.
 
@@ -4717,7 +4731,7 @@ void BINARY_PARSER::parseRouteVertices()
             bestPhase = phase;
         }
     }
-    fprintf( stderr, "  PROF.%s %8.1f ms\n", "phaseScan", std::chrono::duration<double,std::milli>( std::chrono::steady_clock::now() - _pt_phaseScan ).count() );
+    logParsePhase( "phaseScan", _pt_phaseScan );
 
     if( bestScore == 0 )
         return;
@@ -4769,7 +4783,7 @@ void BINARY_PARSER::parseRouteVertices()
         via.viaIndex = m_cursor.U8At( typeByte - 3 );
         viaLocations.push_back( via );
     }
-    fprintf( stderr, "  PROF.%s %8.1f ms\n", "emitPass", std::chrono::duration<double,std::milli>( std::chrono::steady_clock::now() - _pt_emitPass ).count() );
+    logParsePhase( "emitPass", _pt_emitPass );
 
     for( const PART& part : m_parts )
     {
@@ -4952,7 +4966,7 @@ void BINARY_PARSER::parseRouteVertices()
                 bestLayerOrder = layerOrder;
             }
         }
-        fprintf( stderr, "  PROF.%s %8.1f ms\n", "layerTableScan", std::chrono::duration<double,std::milli>( std::chrono::steady_clock::now() - _pt_layerTableScan ).count() );
+        logParsePhase( "layerTableScan", _pt_layerTableScan );
 
         if( bestLayerTable != 0 )
         {
@@ -5052,7 +5066,7 @@ void BINARY_PARSER::parseRouteVertices()
                     }
                 }
             }
-            fprintf( stderr, "  PROF.%s %8.1f ms\n", "headerScan2024", std::chrono::duration<double,std::milli>( std::chrono::steady_clock::now() - _pt_headerScan2024 ).count() );
+            logParsePhase( "headerScan2024", _pt_headerScan2024 );
 
             auto validHeaderAt = [&]( size_t aBase )
             {
@@ -5160,7 +5174,7 @@ void BINARY_PARSER::parseRouteVertices()
                 if( visited.size() != headers.size() )
                     headerChains.resize( chainsBefore );
             }
-            fprintf( stderr, "  PROF.%s %8.1f ms\n", "headerChainScan", std::chrono::duration<double,std::milli>( std::chrono::steady_clock::now() - _pt_headerChainScan ).count() );
+            logParsePhase( "headerChainScan", _pt_headerChainScan );
 
             struct ROUTE_CELL
             {
