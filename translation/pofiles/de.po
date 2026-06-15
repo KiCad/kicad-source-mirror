@@ -37,8 +37,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-15 08:17+0000\n"
-"Last-Translator: The Hobbit <dasfilter@posteo.de>\n"
+"PO-Revision-Date: 2026-06-15 17:20+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -4550,7 +4550,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:197
 msgid "Disable custom cursors"
-msgstr "Benuzerdefinierte Cursor deaktivieren"
+msgstr "Benutzerdefinierte Cursor deaktivieren"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 msgid ""
@@ -28287,7 +28287,7 @@ msgstr "Der Netzkette einen Namen zuweisen"
 #: eeschema/tools/sch_actions.cpp:1127
 #, fuzzy
 msgid "Create Net Chain Between Pins"
-msgstr "Netzketten zwischen Pins erstellen"
+msgstr "Netzkette zwischen Pins erstellen"
 
 #: eeschema/tools/sch_actions.cpp:1128
 #, fuzzy
@@ -45461,7 +45461,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:73
 msgid "Position Relative To Reference Item"
-msgstr "Positioniere relativ zum Referenelement"
+msgstr "Positioniere relativ zum Referenzelement"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:121
 msgid "Right-click for layer selection commands."
@@ -46308,7 +46308,7 @@ msgstr "Unbenutzte Pads"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:35
 #, fuzzy
 msgid "Apply design block layouts to new groups"
-msgstr "Designblock-Layout auf neue Gruppe anwenden"
+msgstr "Designblock-Layouts auf neue Gruppen anwenden"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:36
 #, fuzzy
