@@ -514,19 +514,19 @@ bool LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE aType, bool aPopulat
 
     wxFileName defaultLib( StockTablePath( aType ) );
 
-    if( !defaultLib.IsFileReadable() )
-    {
-        wxLogTrace( traceLibraries, "Warning: couldn't read default library table for %s at '%s'",
-                    magic_enum::enum_name( aType ), defaultLib.GetFullPath() );
-    }
-
-    if( aPopulateDefaultLibraries )
+    if( aPopulateDefaultLibraries && defaultLib.IsFileReadable() )
     {
         LIBRARY_TABLE_ROW& chained = table.InsertRow();
         chained.SetType( LIBRARY_TABLE_ROW::TABLE_TYPE_NAME );
         chained.SetNickname( wxT( "KiCad" ) );
         chained.SetDescription( _( "KiCad Default Libraries" ) );
         chained.SetURI( StockTableReferenceURI( aType ) );
+    }
+    else if( aPopulateDefaultLibraries )
+    {
+        auto typeName = magic_enum::enum_name( aType );
+        wxLogTrace( traceLibraries, "No stock library table for %s at '%s'; creating empty global table",
+                    wxString( typeName.data(), typeName.size() ), defaultLib.GetFullPath() );
     }
 
     try

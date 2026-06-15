@@ -25,6 +25,8 @@
 #include <utility>
 #include <vector>
 
+#include <wx/ffile.h>
+
 #include <mock_pgm_base.h>
 #include <richio.h>
 #include <io/kicad/kicad_io_utils.h>
@@ -440,6 +442,68 @@ BOOST_AUTO_TEST_CASE( LibOverrideSettings )
     BOOST_REQUIRE( settings->m_LibOverrides.count( tablePath ) == 1 );
     manager.SetLibOverride( tablePath, nickname1, false, false );
     BOOST_REQUIRE( settings->m_LibOverrides.count( tablePath ) == 0 );
+}
+
+
+/**
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24626.
+ *
+ * When KiCad ships no stock design-block-lib-table, CreateGlobalTable must produce a valid
+ * empty table rather than a table with a dangling row pointing at the missing file.
+ */
+BOOST_AUTO_TEST_CASE( CreateGlobalTableEmptyWhenNoStockTable )
+{
+    wxFileName stockPath( LIBRARY_MANAGER::StockTablePath( LIBRARY_TABLE_TYPE::DESIGN_BLOCK ) );
+
+    if( stockPath.IsFileReadable() )
+    {
+        BOOST_TEST_MESSAGE( "Skipping: stock design-block-lib-table exists; test only applies when "
+                            "no stock table is installed" );
+        return;
+    }
+
+    const wxString tablePath =
+            LIBRARY_MANAGER::DefaultGlobalTablePath( LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
+
+    // RAII guard: restore the global table file to its original state after the test.
+    struct FILE_RESTORE
+    {
+        wxString path;
+        bool     existed = false;
+        wxString contents;
+
+        explicit FILE_RESTORE( const wxString& aPath ) : path( aPath )
+        {
+            existed = wxFileName::FileExists( path );
+
+            if( existed )
+            {
+                wxFFile in( path, wxT( "rb" ) );
+                in.ReadAll( &contents );
+            }
+        }
+
+        ~FILE_RESTORE()
+        {
+            if( existed )
+            {
+                wxFFile out( path, wxT( "wb" ) );
+                out.Write( contents );
+            }
+            else if( wxFileName::FileExists( path ) )
+            {
+                wxRemoveFile( path );
+            }
+        }
+    } restore( tablePath );
+
+    BOOST_REQUIRE( LIBRARY_MANAGER::CreateGlobalTable( LIBRARY_TABLE_TYPE::DESIGN_BLOCK, true ) );
+
+    LIBRARY_TABLE reloaded( wxFileName( tablePath ), LIBRARY_TABLE_SCOPE::GLOBAL );
+
+    BOOST_REQUIRE( reloaded.IsOk() );
+    BOOST_CHECK_MESSAGE( reloaded.Rows().empty(),
+                         "CreateGlobalTable must not write a dangling row when the stock table is absent" );
 }
 
 
