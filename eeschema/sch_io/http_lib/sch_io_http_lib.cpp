@@ -166,9 +166,15 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::LoadSymbol( const wxString& aLibraryPath, const wxS
 
 void SCH_IO_HTTP_LIB::GetSubLibraryNames( std::vector<wxString>& aNames )
 {
-    ensureSettings( wxEmptyString );
-
     aNames.clear();
+
+    ensureSettings( wxEmptyString );
+    connect();
+
+    // connect() leaves m_conn null when the endpoint is unreachable so a network loss
+    // degrades to an empty result instead of a null dereference while building the tree.
+    if( !m_conn )
+        return;
 
     std::set<wxString> categoryNames;
 
@@ -185,6 +191,12 @@ void SCH_IO_HTTP_LIB::GetSubLibraryNames( std::vector<wxString>& aNames )
 
 wxString SCH_IO_HTTP_LIB::GetSubLibraryDescription( const wxString& aName )
 {
+    ensureSettings( wxEmptyString );
+    connect();
+
+    if( !m_conn )
+        return wxEmptyString;
+
     return m_conn->getCategoryDescription( std::string( aName.mb_str() ) );
 }
 
