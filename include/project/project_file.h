@@ -114,6 +114,11 @@ public:
         m_project = aProject;
     }
 
+    const PROJECT* GetOwningProject() const override
+    {
+        return m_project;
+    }
+
     std::vector<FILE_INFO_PAIR>& GetSheets()
     {
         return m_sheets;

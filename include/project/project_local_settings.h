@@ -66,6 +66,8 @@ public:
 
     void SetProject( PROJECT* aProject ) { m_project = aProject; }
 
+    const PROJECT* GetOwningProject() const override { return m_project; }
+
     void SaveFileState( const wxString& aFileName, const WINDOW_SETTINGS* aWindowCfg, bool aOpen );
 
     const PROJECT_FILE_STATE* GetFileState( const wxString& aFileName );

@@ -34,6 +34,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <sstream>
 
 namespace fs = std::filesystem;
 
@@ -283,6 +284,96 @@ BOOST_AUTO_TEST_CASE( LoadProjectByAbsolutePathIsStable )
 
     // The held pointer must still resolve to the same project name (i.e. it was not freed).
     BOOST_CHECK_EQUAL( heldProject->GetProjectFullName(), absPath );
+}
+
+
+/**
+ * Unloading a non-active project must save it to its own directory, not the active one's.
+ *
+ * SETTINGS_MANAGER once resolved the save path through Prj() (the active project) rather
+ * than the owning project, so unloading a same-named resident project clobbered the active
+ * project's .kicad_pro with the unloaded project's data.
+ *
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24607
+ */
+BOOST_AUTO_TEST_CASE( UnloadProjectSavesToOwnDirectory )
+{
+    fs::path projADir = m_tempDir / "proj_a";
+    fs::path projBDir = m_tempDir / "proj_b";
+    fs::create_directories( projADir );
+    fs::create_directories( projBDir );
+
+    // Shared basename in different directories reproduces the cross-project clobber.  The
+    // matching schematic keeps LoadFromFile from flagging the project as migrated, which
+    // would otherwise suppress the auto-save under test.
+    const std::string projectName = "shared_name";
+
+    auto writeProject = [&]( const fs::path& aDir )
+    {
+        std::string content = "{\n"
+                              "    \"meta\": {\n"
+                              "        \"filename\": \"" + projectName + ".kicad_pro\",\n"
+                              "        \"version\": 3\n"
+                              "    },\n"
+                              "    \"schematic\": {\n"
+                              "        \"top_level_sheets\": [\n"
+                              "            {\n"
+                              "                \"uuid\": \"00000000-0000-0000-0000-000000000000\",\n"
+                              "                \"name\": \"" + projectName + "\",\n"
+                              "                \"filename\": \"" + projectName + ".kicad_sch\"\n"
+                              "            }\n"
+                              "        ]\n"
+                              "    }\n"
+                              "}\n";
+        std::ofstream out( aDir / ( projectName + ".kicad_pro" ) );
+        out << content;
+        out.close();
+
+        std::ofstream sch( aDir / ( projectName + ".kicad_sch" ) );
+        sch << "(kicad_sch (version 20231120) (generator \"eeschema\") (generator_version \"9.99\")";
+        sch << " (uuid \"12345678-1234-1234-1234-123456789abc\") (paper \"A4\"))";
+        sch.close();
+    };
+
+    fs::path proAPath = projADir / ( projectName + ".kicad_pro" );
+    fs::path proBPath = projBDir / ( projectName + ".kicad_pro" );
+    writeProject( projADir );
+    writeProject( projBDir );
+
+    SETTINGS_MANAGER mgr;
+
+    // A becomes the active project; B is loaded but left non-active so both are resident.
+    BOOST_REQUIRE( mgr.LoadProject( wxString( proAPath.string() ), true ) );
+    BOOST_REQUIRE( mgr.LoadProject( wxString( proBPath.string() ), false ) );
+
+    PROJECT* projB = mgr.GetProject( wxString( proBPath.string() ) );
+    BOOST_REQUIRE( projB != nullptr );
+
+    // Prj() must be A so that a Prj()-based path resolution would target the wrong directory.
+    BOOST_REQUIRE_EQUAL( mgr.Prj().GetProjectFullName(), wxString( proAPath.string() ) );
+
+    // Mark B's project file so the save has something distinctive to persist.
+    projB->GetProjectFile().m_TextVars[wxS( "OWNER" )] = wxS( "proj_b" );
+
+    BOOST_REQUIRE( mgr.UnloadProject( projB, true ) );
+
+    auto readFile = []( const fs::path& aPath )
+    {
+        std::ifstream in( aPath );
+        std::stringstream buffer;
+        buffer << in.rdbuf();
+        return buffer.str();
+    };
+
+    // B's own file must have received B's marker.
+    std::string savedB = readFile( proBPath );
+    BOOST_CHECK_MESSAGE( savedB.find( "OWNER" ) != std::string::npos,
+                         "unloaded project must be saved to its own directory" );
+
+    // A's identically named file must not have been clobbered with B's data.
+    std::string savedA = readFile( proAPath );
+    BOOST_CHECK_MESSAGE( savedA.find( "OWNER" ) == std::string::npos,
+                         "active project's file must not receive the unloaded project's data" );
 }
 
 

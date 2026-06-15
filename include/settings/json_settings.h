@@ -36,6 +36,7 @@
 class wxConfigBase;
 class NESTED_SETTINGS;
 class PARAM_BASE;
+class PROJECT;
 class SETTINGS_MANAGER;
 
 class wxAuiPaneInfo;
@@ -92,6 +93,12 @@ public:
 
     void SetLocation( SETTINGS_LOC aLocation ) { m_location = aLocation; }
     SETTINGS_LOC GetLocation() const { return m_location; }
+
+    /**
+     * Project-located settings override this to report the project they belong to so their
+     * save path is resolved against that project rather than the active one.
+     */
+    virtual const PROJECT* GetOwningProject() const { return nullptr; }
 
     void SetLegacyFilename( const wxString& aFilename ) { m_legacy_filename = aFilename; }
 
