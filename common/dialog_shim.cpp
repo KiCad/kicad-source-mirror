@@ -275,6 +275,11 @@ DIALOG_SHIM::~DIALOG_SHIM()
 
     disconnectUndoRedoHandlers( GetChildren() );
 
+    // The child controls (and the UNIT_BINDERs that live alongside them) outlive this dialog's
+    // member teardown, so sever their back-references now while m_unitBinders is still valid.
+    for( const auto& [window, binder] : m_unitBinders )
+        binder->DetachFromDialogShim();
+
     // if the dialog is quasi-modal, this will end its event loop
     if( IsQuasiModal() )
         EndQuasiModal( wxID_CANCEL );
@@ -862,6 +867,18 @@ void DIALOG_SHIM::ExcludeFromControlUndoRedo( wxWindow* aWindow )
 void DIALOG_SHIM::RegisterUnitBinder( UNIT_BINDER* aUnitBinder, wxWindow* aWindow )
 {
     m_unitBinders[ aWindow ] = aUnitBinder;
+}
+
+
+void DIALOG_SHIM::UnregisterUnitBinder( UNIT_BINDER* aUnitBinder )
+{
+    // Erase by binder identity rather than window key, so that a stale entry whose window has
+    // already been reused by a newer binder is left untouched.
+    std::erase_if( m_unitBinders,
+                   [aUnitBinder]( const auto& aEntry )
+                   {
+                       return aEntry.second == aUnitBinder;
+                   } );
 }
 
 

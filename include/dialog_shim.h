@@ -172,6 +172,17 @@ public:
      */
     void RegisterUnitBinder( UNIT_BINDER* aUnitBinder, wxWindow* aWindow );
 
+    /**
+     * Remove a UNIT_BINDER from the control-state save/restore map.
+     *
+     * Called from ~UNIT_BINDER so that a destroyed binder never leaves a dangling pointer behind
+     * for SaveControlState()/LoadControlState() to dereference when a later control reuses the
+     * freed window's address.
+     *
+     * @param aUnitBinder the binder being destroyed
+     */
+    void UnregisterUnitBinder( UNIT_BINDER* aUnitBinder );
+
 protected:
     /**
      * In all dialogs, we must call the same functions to fix minimal dlg size, the default
