@@ -17,6 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+#include <cmath>
+#include <limits>
+
 #include <preview_items/ruler_item.h>
 #include <preview_items/preview_utils.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -127,17 +131,42 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
 
     RotatePoint( tickLine, ANGLE_90 );
 
-    // number of ticks in whole ruler
-    int           numTicks = (int) std::ceil( aLine.EuclideanNorm() / tickSpace );
+    const double rulerLen = aLine.EuclideanNorm();
+
+    // A degenerate or non-finite ruler makes the unit-axis vectors below divide by zero and the
+    // tick-index casts below undefined; bail before either.
+    if( !( rulerLen > 0.0 ) || !( tickSpace > 0.0 ) || !std::isfinite( rulerLen )
+        || !std::isfinite( tickSpace ) )
+        return;
+
+    // Convert a tick-index double to int64_t without undefined behaviour. The int64_t bounds are
+    // not exactly representable as double, so compare and return the sentinels directly rather
+    // than casting a rounded boundary back to int64_t.
+    auto toTick =
+            []( double aValue ) -> int64_t
+            {
+                constexpr double lo = static_cast<double>( std::numeric_limits<int64_t>::min() );
+                constexpr double hi = static_cast<double>( std::numeric_limits<int64_t>::max() );
+
+                if( aValue <= lo )
+                    return std::numeric_limits<int64_t>::min();
+
+                if( aValue >= hi )
+                    return std::numeric_limits<int64_t>::max();
+
+                return static_cast<int64_t>( aValue );
+            };
+
+    const int64_t lastRulerTick = std::max<int64_t>( 0, toTick( std::ceil( rulerLen / tickSpace ) ) - 1 );
 
     // work out which way up the tick labels go
     TEXT_DIMS     labelDims = GetConstantGlyphHeight( gal, -1 );
     EDA_ANGLE     labelAngle = - EDA_ANGLE( tickLine );
-    VECTOR2I      labelOffset = tickLine.Resize( majorTickLen );
+    VECTOR2D      labelOffset = tickLine.Resize( majorTickLen );
 
     // text is left (or right) aligned, so shadow text need a small offset to be draw
     // around the basic text
-    int shadowXoffset = 0;
+    double shadowXoffset = 0.0;
 
     if( aDrawingDropShadows )
     {
@@ -148,7 +177,7 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
         // it needs an offset = shadowXoffset to be drawn at the same place as normal text
         // But for some reason we need to slightly modify this offset
         // for a better look for KiCad font (better alignment of shadow shape)
-        const float adjust = 1.2f;      // Value chosen after tests
+        const double adjust = 1.2;      // Value chosen after tests
         shadowXoffset *= adjust;
     }
 
@@ -169,8 +198,8 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
         labelAttrs.m_Angle = labelAngle;
 
         // Adjust the text position of the shadow shape:
-        labelOffset.x -= shadowXoffset * labelAttrs.m_Angle.Cos();;
-        labelOffset.y += shadowXoffset * labelAttrs.m_Angle.Sin();;
+        labelOffset.x -= shadowXoffset * labelAttrs.m_Angle.Cos();
+        labelOffset.y += shadowXoffset * labelAttrs.m_Angle.Sin();
     }
     else
     {
@@ -178,24 +207,49 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
         labelAttrs.m_Angle = labelAngle + ANGLE_180;
 
         // Adjust the text position of the shadow shape:
-        labelOffset.x += shadowXoffset * labelAttrs.m_Angle.Cos();;
-        labelOffset.y -= shadowXoffset * labelAttrs.m_Angle.Sin();;
+        labelOffset.x += shadowXoffset * labelAttrs.m_Angle.Cos();
+        labelOffset.y -= shadowXoffset * labelAttrs.m_Angle.Sin();
     }
 
     BOX2D viewportD = aView->GetViewport();
-    BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
-
-    viewport.Inflate( majorTickLen * 2 );   // Doesn't have to be accurate, just big enough not
+    viewportD.Inflate( majorTickLen * 2 );  // Doesn't have to be accurate, just big enough not
                                             // to exclude anything that should be partially drawn
+
+    // Project the inflated viewport onto the ruler axis to skip off-screen ticks.
+    // At extreme zoom tickSpace can be tiny, causing millions of iterations without this cull.
+    // Projecting an AABB onto a unit axis gives center.axis +/- sum( abs( halfExtent_i * axis_i ) ).
+    const VECTOR2D unitLine   = aLine / rulerLen;
+    const VECTOR2D center     = viewportD.Centre();
+    const double   halfWidth  = viewportD.GetWidth() / 2;
+    const double   halfHeight = viewportD.GetHeight() / 2;
+    const double   centerProj = ( center - aOrigin ).Dot( unitLine );
+    const double   halfProj   = std::abs( halfWidth * unitLine.x ) + std::abs( halfHeight * unitLine.y );
+    const double   minProj    = centerProj - halfProj;
+    const double   maxProj    = centerProj + halfProj;
+
+    // Guard the float-to-int casts below against a NaN/inf viewport.
+    if( !std::isfinite( minProj ) || !std::isfinite( maxProj ) )
+        return;
+
+    // The -1/+1 pad is a one-tick safety margin; saturate so it cannot overflow the sentinels.
+    const int64_t minTick = toTick( std::floor( minProj / tickSpace ) );
+    const int64_t maxTick = toTick( std::ceil( maxProj / tickSpace ) );
+    const int64_t firstTick = std::max<int64_t>( 0, minTick > std::numeric_limits<int64_t>::min()
+                                                            ? minTick - 1 : minTick );
+    const int64_t lastTick = std::min<int64_t>( lastRulerTick,
+                                                maxTick < std::numeric_limits<int64_t>::max()
+                                                        ? maxTick + 1 : maxTick );
+
+    if( firstTick > lastTick )
+        return;
 
     int isign = aView->IsMirroredX() ? -1 : 1;
 
-    for( int i = 0; i < numTicks; ++i )
-    {
-        const VECTOR2D tickPos = aOrigin + aLine.Resize( tickSpace * i );
+    const VECTOR2D tickDir = tickLine / rulerLen;   // unit perpendicular to ruler axis
 
-        if( !viewport.Contains( tickPos ) )
-            continue;
+    for( int64_t i = firstTick; i <= lastTick; ++i )
+    {
+        const VECTOR2D tickPos = aOrigin + unitLine * ( tickSpace * i );
 
         double length = aMinorTickLen;
         bool   drawLabel = false;
@@ -212,7 +266,7 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
         }
 
         gal->SetLineWidth( labelAttrs.m_StrokeWidth / 2 );
-        gal->DrawLine( tickPos, tickPos + tickLine.Resize( length*isign ) );
+        gal->DrawLine( tickPos, tickPos + tickDir * ( length * isign ) );
 
         if( drawLabel )
         {
@@ -246,16 +300,14 @@ void drawBacksideTicks( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTO
     backTickVec = backTickVec.Resize( aTickLen * isign );
 
     BOX2D viewportD = aView->GetViewport();
-    BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
-
-    viewport.Inflate( aTickLen * 4 );   // Doesn't have to be accurate, just big enough not to
+    viewportD.Inflate( aTickLen * 4 );  // Doesn't have to be accurate, just big enough not to
                                         // exclude anything that should be partially drawn
 
     for( int i = 0; i < aNumDivisions + 1; ++i )
     {
         const VECTOR2D backTickPos = aOrigin + aLine.Resize( backTickSpace * i );
 
-        if( !viewport.Contains( backTickPos ) )
+        if( !viewportD.Contains( backTickPos ) )
             continue;
 
         gal->SetLineWidth( getTickLineWidth( textDims, aDrawingDropShadows ) );
@@ -416,9 +468,6 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     // basic tick size
     double minorTickLen = 5.0 / gal->GetWorldScale();
     double majorTickLen = minorTickLen * majorTickLengthFactor;
-
-    minorTickLen = std::min( minorTickLen, (double) INT_MAX / 2.0 );
-    majorTickLen = std::min( majorTickLen, (double) INT_MAX / 2.0 );
 
     if( m_showTicks )
     {
