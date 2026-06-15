@@ -671,8 +671,8 @@ void SYMBOL_EDIT_FRAME::restoreSymbolTabsFromSettings()
             continue;
         }
 
-        SYMBOL_EDITOR_TAB_CONTEXT* ctx = findOrCreateSymbolTab( tab.lib, tab.name, tab.unit,
-                                                               tab.bodyStyle, false );
+        SYMBOL_EDITOR_TAB_CONTEXT* ctx =
+                findOrCreateSymbolTab( tab.lib, tab.name, tab.unit, tab.bodyStyle, tab.preview );
 
         if( !ctx )
         {
@@ -716,6 +716,15 @@ void SYMBOL_EDIT_FRAME::storeSymbolTabsToSettings()
         tab.name = ctx->GetName();
         tab.unit = ctx->GetUnit();
         tab.bodyStyle = ctx->GetBodyStyle();
+
+        if( m_tabsPanel )
+        {
+            const int                                    idx = m_tabsPanel->FindTab( ctx->GetTabKey() );
+            const std::vector<EDITOR_TABS_MODEL::ENTRY>& entries = m_tabsPanel->Model().Entries();
+
+            if( idx >= 0 && idx < static_cast<int>( entries.size() ) )
+                tab.preview = entries[idx].preview;
+        }
 
         m_settings->m_OpenTabs.push_back( tab );
     }
