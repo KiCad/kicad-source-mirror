@@ -67,7 +67,8 @@ UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource
         m_selEnd( 0 ),
         m_unitsInValue( false ),
         m_originTransforms( aUnitsProvider->GetOriginTransforms() ),
-        m_coordType( ORIGIN_TRANSFORMS::NOT_A_COORD )
+        m_coordType( ORIGIN_TRANSFORMS::NOT_A_COORD ),
+        m_dialogShim( nullptr )
 {
     if( m_valueCtrl )
     {
@@ -78,7 +79,10 @@ UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource
             parent = parent->GetParent();
 
         if( parent )
-            static_cast<DIALOG_SHIM*>( parent )->RegisterUnitBinder( this, m_valueCtrl );
+        {
+            m_dialogShim = static_cast<DIALOG_SHIM*>( parent );
+            m_dialogShim->RegisterUnitBinder( this, m_valueCtrl );
+        }
     }
 
     wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
@@ -107,6 +111,8 @@ UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource
 
     if( m_valueCtrl )
     {
+        m_valueCtrl->Connect( wxEVT_DESTROY, wxWindowDestroyEventHandler( UNIT_BINDER::onValueCtrlDestroyed ),
+                              nullptr, this );
         m_valueCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), nullptr, this );
         m_valueCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), nullptr, this );
         m_valueCtrl->Connect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ), nullptr, this );
@@ -126,8 +132,13 @@ UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource
 
 UNIT_BINDER::~UNIT_BINDER()
 {
+    if( m_dialogShim )
+        m_dialogShim->UnregisterUnitBinder( this );
+
     if( m_valueCtrl )
     {
+        m_valueCtrl->Disconnect( wxEVT_DESTROY, wxWindowDestroyEventHandler( UNIT_BINDER::onValueCtrlDestroyed ),
+                                 nullptr, this );
         m_valueCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), nullptr, this );
         m_valueCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), nullptr, this );
         m_valueCtrl->Disconnect( wxEVT_LEFT_UP, wxMouseEventHandler( UNIT_BINDER::onClick ), nullptr, this );
@@ -240,6 +251,26 @@ void UNIT_BINDER::onComboBox( wxCommandEvent& aEvent )
             {
                 SetValue( conv );
             } );
+
+    aEvent.Skip();
+}
+
+
+void UNIT_BINDER::onValueCtrlDestroyed( wxWindowDestroyEvent& aEvent )
+{
+    // The bound control is being destroyed before this binder. Drop the dialog registration and
+    // the control reference so neither the binder destructor nor SaveControlState() touches the
+    // freed window.
+    if( aEvent.GetEventObject() == m_valueCtrl )
+    {
+        if( m_dialogShim )
+        {
+            m_dialogShim->UnregisterUnitBinder( this );
+            m_dialogShim = nullptr;
+        }
+
+        m_valueCtrl = nullptr;
+    }
 
     aEvent.Skip();
 }

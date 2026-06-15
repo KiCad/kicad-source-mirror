@@ -33,6 +33,7 @@
 #include <libeval/numeric_evaluator.h>
 #include <wx/event.h>
 
+class DIALOG_SHIM;
 class EDA_BASE_FRAME;
 class EDA_DRAW_FRAME;
 class wxTextEntry;
@@ -231,6 +232,8 @@ protected:
     void onKillFocus( wxFocusEvent& aEvent );
     void delayedFocusHandler( wxCommandEvent& aEvent );
 
+    void onValueCtrlDestroyed( wxWindowDestroyEvent& aEvent );
+
     void onUnitsChanged( wxCommandEvent& aEvent );
 
     /**
@@ -281,6 +284,18 @@ protected:
 
     /// Type of coordinate for display origin transforms.
     ORIGIN_TRANSFORMS::COORD_TYPES_T m_coordType;
+
+    /// The dialog this binder registered itself with, or nullptr if it isn't owned by a dialog.
+    DIALOG_SHIM*        m_dialogShim;
+
+public:
+    /**
+     * Sever the back-reference to the owning dialog.
+     *
+     * Called by DIALOG_SHIM while it is being destroyed so that this binder, which outlives the
+     * dialog's member teardown, does not call back into the half-destroyed dialog.
+     */
+    void DetachFromDialogShim() { m_dialogShim = nullptr; }
 };
 
 
