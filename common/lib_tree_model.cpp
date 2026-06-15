@@ -284,7 +284,8 @@ LIB_TREE_NODE_LIBRARY::LIB_TREE_NODE_LIBRARY( LIB_TREE_NODE* aParent, wxString c
     m_Parent = aParent;
     m_LibId.SetLibNickname( aName );
 
-    m_SearchTerms.emplace_back( SEARCH_TERM( aName, 8 ) );
+    // Use the source list, otherwise RebuildSearchTerms wipes it on the next rebuild.
+    m_sourceSearchTerms.emplace_back( SEARCH_TERM( aName, 8 ) );
 }
 
 
