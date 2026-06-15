@@ -123,8 +123,8 @@ void ROUNDRECT::TransformToPolygon( SHAPE_POLY_SET& aBuffer, int aMaxError ) con
     else if( x_edge == 0 && y_edge == 0 )
     {
         // It's a circle
-        outline.Append( SHAPE_ARC( m_p0 + VECTOR2I( m_radius, m_radius ),
-                                   m_p0 + VECTOR2I( -m_radius, 0 ), ANGLE_360 ), maxError );
+        outline.Append( SHAPE_ARC( m_p0 + VECTOR2I( m_radius, m_radius ), m_p0 + VECTOR2I( 0, m_radius ), ANGLE_360 ),
+                        maxError );
     }
     else
     {
