@@ -20,6 +20,12 @@
 
 #pragma once
 
+#include <map>
+#include <memory>
+#include <set>
+#include <string>
+#include <vector>
+
 #include "http_lib/http_lib_settings.h"
 #include <http_lib/http_lib_connection.h>
 
