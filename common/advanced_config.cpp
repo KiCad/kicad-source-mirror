@@ -156,6 +156,7 @@ static const wxChar DiffSkewTrackGapInflation[] = wxT( "DiffSkewTrackGapInflatio
 static const wxChar DiffSkewCosThetaParallelTestValue[] = wxT( "DiffSkewCosThetaParallelTestValue" );
 static const wxChar DiffSkewColourInterpolationLogStrength[] = wxT( "DiffSkewColourInterpolationLogStrength" );
 static const wxChar DiffSkewTargetDiffSegmentSize[] = wxT( "DiffSkewTargetDiffSegmentSize" );
+static const wxChar EagleImportFieldsCanAutoplace[] = wxT( "EagleImportFieldsCanAutoplace" );
 
 
 } // namespace AC_KEYS
@@ -361,6 +362,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_DiffSkewCosThetaParallelTestValue = 0.9999;
     m_DiffSkewColourInterpolationLogStrength = 9.0;
     m_DiffSkewTargetDiffSegmentSize = 5e4;
+
+    m_EagleImportFieldsCanAutoplace = true;
 
     loadFromConfigFile();
 }
@@ -724,6 +727,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     m_entries.push_back( std::make_unique<PARAM_CFG_DOUBLE>( true, AC_KEYS::DiffSkewTargetDiffSegmentSize,
                                                              &m_DiffSkewTargetDiffSegmentSize,
                                                              m_DiffSkewTargetDiffSegmentSize, 1.0, 1e10 ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EagleImportFieldsCanAutoplace,
+                                                           &m_EagleImportFieldsCanAutoplace, m_EagleImportFieldsCanAutoplace ) );
 
 
     // Special case for trace mask setting...we just grab them and set them immediately

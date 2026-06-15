@@ -1056,6 +1056,19 @@ public:
      */
     double m_DiffSkewTargetDiffSegmentSize;
 
+    /**
+     * Default CanAutoplace value for fields imported from EAGLE files.
+     *
+     * Before this became configurable, all fields imported from EAGLE files had CanAutoplace
+     * set to true. This can be undesireable, e.g., if all fields were carefully arranged in
+     * the EAGLE library and are not intended to be arranged automatically.
+     *
+     * Setting name: "EagleImportFieldsCanAutoplace"
+     * Valid values: true or false
+     * Default value: true
+     */
+    bool m_EagleImportFieldsCanAutoplace;
+
     wxString m_traceMasks; ///< Trace masks for wxLogTrace, loaded from the config file.
     ///@}
 
