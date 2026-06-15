@@ -21,6 +21,8 @@
 #include "eeschema_jobs_handler.h"
 #include <common.h>
 #include <pgm_base.h>
+#include <kiface_base.h>
+#include <kiway_player.h>
 #include <cli/exit_codes.h>
 #include <sch_plotter.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
@@ -30,12 +32,21 @@
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_plot.h>
 #include <jobs/job_sch_erc.h>
+#include <jobs/job_sch_import.h>
 #include <jobs/job_sch_upgrade.h>
+#include <jobs/job_import_utils.h>
 #include <jobs/job_sym_export_svg.h>
 #include <jobs/job_sym_upgrade.h>
 #include <schematic.h>
 #include <schematic_settings.h>
 #include <sch_screen.h>
+#include <sch_sheet.h>
+#include <sch_sheet_path.h>
+#include <sch_commit.h>
+#include <save_project_utils.h>
+#include <tool/tool_manager.h>
+#include <project.h>
+#include <project/project_file.h>
 #include <wx/dir.h>
 #include <wx/file.h>
 #include <memory>
@@ -171,6 +182,11 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
                   return dlg.ShowModal() == wxID_OK;
               } );
     Register( "upgrade", std::bind( &EESCHEMA_JOBS_HANDLER::JobUpgrade, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return true;
+              } );
+    Register( "sch_import", std::bind( &EESCHEMA_JOBS_HANDLER::JobImport, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
                   return true;
@@ -1410,6 +1426,265 @@ int EESCHEMA_JOBS_HANDLER::JobUpgrade( JOB* aJob )
     }
 
     m_reporter->Report( _( "Successfully saved schematic file using the latest format\n" ), RPT_SEVERITY_INFO );
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+int EESCHEMA_JOBS_HANDLER::JobImport( JOB* aJob )
+{
+    JOB_SCH_IMPORT* job = dynamic_cast<JOB_SCH_IMPORT*>( aJob );
+
+    if( !job )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    if( !wxFile::Exists( job->m_inputFile ) )
+    {
+        m_reporter->Report( wxString::Format( _( "Input file not found: '%s'\n" ), job->m_inputFile ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    // AUTO restricts autodetect to non-KiCad plugins so a native file is not re-imported.
+    SCH_IO_MGR::SCH_FILE_T fileType = SCH_IO_MGR::SCH_FILE_UNKNOWN;
+
+    switch( job->m_format )
+    {
+    case JOB_SCH_IMPORT::FORMAT::AUTO:
+        fileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( job->m_inputFile, KICTL_NONKICAD_ONLY );
+        break;
+    case JOB_SCH_IMPORT::FORMAT::ALTIUM:     fileType = SCH_IO_MGR::SCH_ALTIUM;          break;
+    case JOB_SCH_IMPORT::FORMAT::EAGLE:      fileType = SCH_IO_MGR::SCH_EAGLE;           break;
+    case JOB_SCH_IMPORT::FORMAT::CADSTAR:    fileType = SCH_IO_MGR::SCH_CADSTAR_ARCHIVE; break;
+    case JOB_SCH_IMPORT::FORMAT::EASYEDA:    fileType = SCH_IO_MGR::SCH_EASYEDA;         break;
+    case JOB_SCH_IMPORT::FORMAT::EASYEDAPRO: fileType = SCH_IO_MGR::SCH_EASYEDAPRO;      break;
+    case JOB_SCH_IMPORT::FORMAT::LTSPICE:    fileType = SCH_IO_MGR::SCH_LTSPICE;         break;
+    case JOB_SCH_IMPORT::FORMAT::PADS:       fileType = SCH_IO_MGR::SCH_PADS;            break;
+    case JOB_SCH_IMPORT::FORMAT::DIPTRACE:   fileType = SCH_IO_MGR::SCH_DIPTRACE;        break;
+    }
+
+    if( fileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+    {
+        // Quiet sentinel: lets the top-level `import` command treat the file as not-a-schematic.
+        m_reporter->Report( wxString::Format( _( "No schematic importer recognizes the file format "
+                                                 "of '%s'\n" ),
+                                              job->m_inputFile ),
+                            RPT_SEVERITY_INFO );
+        return CLI::EXIT_CODES::ERR_UNKNOWN_FILE_FORMAT;
+    }
+
+    wxString outputPath = job->GetConfiguredOutputPath();
+
+    if( outputPath.IsEmpty() )
+        outputPath = DefaultImportOutputPath( job->m_inputFile, FILEEXT::KiCadSchematicFileExtension );
+
+    wxFileName inputFn( job->m_inputFile );
+    inputFn.MakeAbsolute();
+
+    wxFileName outputFn( outputPath );
+    outputFn.MakeAbsolute();
+
+    // Foreign importers resolve their symbol library against the *active* project, so an import
+    // with no project loaded needs a transient active one at the output location (never written to
+    // disk; LoadProject returns false yet still registers it, hence the GetProject() check).
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PROJECT*          projectPtr = nullptr;
+    bool              createdTransientProject = false;
+
+    if( mgr.IsProjectOpenNotDummy() )
+    {
+        projectPtr = &mgr.Prj();
+    }
+    else
+    {
+        wxFileName projectFn( outputFn );
+        projectFn.SetExt( FILEEXT::ProjectFileExtension );
+
+        mgr.LoadProject( projectFn.GetFullPath(), true );
+        projectPtr = mgr.GetProject( projectFn.GetFullPath() );
+        createdTransientProject = ( projectPtr != nullptr );
+    }
+
+    if( !projectPtr )
+    {
+        m_reporter->Report( _( "Could not establish a project for the import\n" ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    PROJECT& project = *projectPtr;
+
+    // Declared before the SCHEMATIC so reverse-destruction tears the schematic (which references
+    // the project) down first; unloads the transient project on every exit path.
+    struct TRANSIENT_PROJECT_GUARD
+    {
+        SETTINGS_MANAGER& m_mgr;
+        PROJECT*          m_project;
+        bool              m_active;
+
+        ~TRANSIENT_PROJECT_GUARD()
+        {
+            if( m_active )
+                m_mgr.UnloadProject( m_project, false );
+        }
+    } transientProjectGuard{ mgr, projectPtr, createdTransientProject };
+
+    LOCALE_IO dummy;
+
+    std::unique_ptr<SCHEMATIC> schematic = std::make_unique<SCHEMATIC>( &project );
+
+    wxString   formatName = SCH_IO_MGR::ShowType( fileType );
+    SCH_SHEET* loadedSheet = nullptr;
+
+    try
+    {
+        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( fileType ) );
+
+        if( !pi )
+        {
+            m_reporter->Report( wxString::Format( _( "No plugin found for file type '%s'\n" ),
+                                                  formatName ),
+                                RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+
+        m_reporter->Report( wxString::Format( _( "Importing '%s' using %s format...\n" ),
+                                              inputFn.GetFullPath(), formatName ),
+                            RPT_SEVERITY_INFO );
+
+        loadedSheet = pi->LoadSchematicFile( inputFn.GetFullPath(), schematic.get() );
+
+        if( !loadedSheet )
+        {
+            m_reporter->Report( _( "Failed to load schematic\n" ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+        }
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        m_reporter->Report( wxString::Format( _( "Error during import: %s\n" ), ioe.What() ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    size_t symbolCount = 0;
+    size_t sheetCount = 0;
+
+    try
+    {
+        // Some importers build the top-level sheet set themselves; only collapse to the returned
+        // sheet otherwise (mirrors SCH_EDIT_FRAME::importFile()).
+        std::vector<SCH_SHEET*> topLevelSheets = schematic->GetTopLevelSheets();
+        bool loadedIsTopLevel = std::find( topLevelSheets.begin(), topLevelSheets.end(),
+                                           loadedSheet ) != topLevelSheets.end();
+        bool loadedIsVirtualRoot = loadedSheet == &schematic->Root()
+                                   || loadedSheet->IsVirtualRootSheet();
+
+        if( !loadedIsTopLevel && !loadedIsVirtualRoot )
+            schematic->SetTopLevelSheets( { loadedSheet } );
+
+        // Recompute connectivity so instance data is valid before saving, as importFile() does.
+        std::unique_ptr<TOOL_MANAGER> toolManager = std::make_unique<TOOL_MANAGER>();
+        toolManager->SetEnvironment( schematic.get(), nullptr, nullptr, Kiface().KifaceSettings(),
+                                     nullptr );
+
+        {
+            SCH_COMMIT dummyCommit( toolManager.get() );
+            schematic->RecalculateConnections( &dummyCommit, GLOBAL_CLEANUP, toolManager.get() );
+        }
+
+        schematic->SetSheetNumberAndCount();
+
+        if( SCH_SHEET* topSheet = schematic->GetTopLevelSheet() )
+            topSheet->SetFileName( outputFn.GetFullName() );
+
+        schematic->RootScreen()->SetFileName( outputFn.GetFullPath() );
+
+        SCH_SCREENS screens( schematic->Root() );
+
+        std::unordered_map<SCH_SCREEN*, wxString> filenameMap;
+        filenameMap[schematic->RootScreen()] = outputFn.GetFullPath();
+
+        wxString errorMsg;
+
+        if( !PrepareSaveAsFiles( *schematic, screens, inputFn, outputFn, /*aSaveCopy*/ true,
+                                 /*aCopySubsheets*/ true, /*aIncludeExternSheets*/ true,
+                                 filenameMap, errorMsg ) )
+        {
+            m_reporter->Report( errorMsg + wxS( "\n" ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+
+        // PrepareSaveAsFiles seeds an entry (empty for sheets it does not relocate) for every
+        // screen; empty paths are skipped.
+        IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+
+        for( size_t i = 0; i < screens.GetCount(); i++ )
+        {
+            SCH_SCREEN* screen = screens.GetScreen( i );
+            wxString    path = filenameMap[screen];
+
+            if( path.IsEmpty() )
+                continue;
+
+            wxFileName fn( path );
+            fn.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+            pi->SaveSchematicFile( fn.GetFullPath(), screens.GetSheet( i ), schematic.get() );
+            sheetCount++;
+
+            auto symbols = screen->Items().OfType( SCH_SYMBOL_T );
+            symbolCount += std::distance( symbols.begin(), symbols.end() );
+        }
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        m_reporter->Report( wxString::Format( _( "Error saving imported schematic: %s\n" ),
+                                              ioe.What() ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+    catch( const std::exception& exc )
+    {
+        m_reporter->Report( wxString::Format( _( "Error saving imported schematic: %s\n" ),
+                                              exc.what() ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    m_reporter->Report( wxString::Format( _( "Successfully saved imported schematic to '%s'\n" ),
+                                          outputFn.GetFullPath() ),
+                        RPT_SEVERITY_INFO );
+
+    // Linked by the top-level `import` command's subsequent SaveProject().
+    if( Pgm().GetSettingsManager().IsProjectOpenNotDummy() )
+    {
+        std::vector<FILE_INFO_PAIR>& projectSheets = project.GetProjectFile().GetSheets();
+        projectSheets.clear();
+
+        for( const SCH_SHEET_PATH& sheetPath : schematic->Hierarchy() )
+        {
+            SCH_SHEET* sheet = sheetPath.Last();
+
+            if( sheet && !sheet->IsVirtualRootSheet() )
+                projectSheets.emplace_back( std::make_pair( sheet->m_Uuid, sheet->GetName() ) );
+        }
+    }
+
+    if( job->m_reportFormat != IMPORT_REPORT_FORMAT::NONE )
+    {
+        IMPORT_REPORT_DATA reportData;
+
+        reportData.m_sourceFile = inputFn.GetFullName();
+        reportData.m_sourceFormat = formatName;
+        reportData.m_outputFile = outputFn.GetFullName();
+        reportData.m_statistics = {
+            { wxS( "symbols" ), symbolCount },
+            { wxS( "sheets" ), sheetCount }
+        };
+
+        WriteImportReport( m_reporter, job->m_reportFormat, job->m_reportFile, reportData );
+    }
 
     return CLI::EXIT_CODES::SUCCESS;
 }

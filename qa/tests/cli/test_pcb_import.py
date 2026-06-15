@@ -66,6 +66,7 @@ class TestPcbImportHelp:
         assert "Import a non-KiCad PCB file" in stdout
         assert "--format" in stdout
         assert "--report-format" in stdout
+        assert "--layer-map" in stdout
 
 
 class TestPcbImportErrors:
@@ -102,6 +103,43 @@ class TestPcbImportErrors:
         stdout, stderr, return_code = utils.run_and_capture( command )
 
         assert return_code != 0
+
+    def test_import_layer_map_invalid_json( self, kitest: KiTestFixture ):
+        """A malformed layer-map file is rejected before any output is produced"""
+        output_path = get_output_path( kitest, "errors", "bad_map.kicad_pcb" )
+        map_path = get_output_path( kitest, "errors", "bad_map.json" )
+        map_path.parent.mkdir( parents=True, exist_ok=True )
+        map_path.write_text( "{ this is not valid json" )
+
+        command = [
+            utils.kicad_cli(),
+            "pcb", "import",
+            "--layer-map", str( map_path ),
+            "/tmp/test.asc",
+            "-o", str( output_path )
+        ]
+
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code != 0
+        assert not output_path.exists()
+
+    def test_import_layer_map_missing_file( self, kitest: KiTestFixture ):
+        """A nonexistent layer-map file is reported as an argument error"""
+        output_path = get_output_path( kitest, "errors", "no_map.kicad_pcb" )
+
+        command = [
+            utils.kicad_cli(),
+            "pcb", "import",
+            "--layer-map", "/nonexistent/layers.json",
+            "/tmp/test.asc",
+            "-o", str( output_path )
+        ]
+
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code != 0
+        assert not output_path.exists()
 
 
 @pytest.mark.skipif( get_pads_test_file() is None,
@@ -243,3 +281,129 @@ class TestPcbImportPads:
 
         report = json.loads( stdout[json_start:json_end] )
         assert "statistics" in report
+
+    def test_import_report_layer_mapping_by_source( self, kitest: KiTestFixture ):
+        """The report's layer_mapping is keyed by source layer names with a resolution method"""
+        pads_file = get_pads_test_file()
+        output_path = get_output_path( kitest, "layer_map", "report.kicad_pcb" )
+        report_path = get_output_path( kitest, "layer_map", "report.json" )
+
+        command = [
+            utils.kicad_cli(),
+            "pcb", "import",
+            "--format", "pads",
+            "--report-format", "json",
+            "--report-file", str( report_path ),
+            pads_file,
+            "-o", str( output_path )
+        ]
+
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+
+        with open( report_path, "r" ) as f:
+            report = json.load( f )
+
+        mapping = report.get( "layer_mapping" )
+        assert mapping, "report should contain a non-empty layer_mapping"
+
+        for source, entry in mapping.items():
+            assert "kicad_layer" in entry
+            assert entry.get( "method" ) in ( "auto", "explicit" )
+
+    def test_import_layer_map_override( self, kitest: KiTestFixture ):
+        """An explicit --layer-map entry overrides the auto guess and is marked 'explicit'"""
+        pads_file = get_pads_test_file()
+
+        # First pass discovers a real source layer and the KiCad layer the auto-mapper chose for
+        # it.  Reusing that target guarantees the override is a permitted destination.
+        probe_pcb = get_output_path( kitest, "layer_map", "probe.kicad_pcb" )
+        probe_report = get_output_path( kitest, "layer_map", "probe.json" )
+
+        probe_cmd = [
+            utils.kicad_cli(),
+            "pcb", "import",
+            "--format", "pads",
+            "--report-format", "json",
+            "--report-file", str( probe_report ),
+            pads_file,
+            "-o", str( probe_pcb )
+        ]
+
+        _, _, probe_rc = utils.run_and_capture( probe_cmd )
+        assert probe_rc == 0
+
+        with open( probe_report, "r" ) as f:
+            probe_mapping = json.load( f )["layer_mapping"]
+
+        target_source = None
+        target_layer = None
+
+        for source, entry in probe_mapping.items():
+            if source and entry["method"] == "auto" and entry["kicad_layer"]:
+                target_source = source
+                target_layer = entry["kicad_layer"]
+                break
+
+        if target_source is None:
+            pytest.skip( "No auto-mapped source layer available to override" )
+
+        # Second pass pins that source layer explicitly; the method must flip to 'explicit'.
+        map_path = get_output_path( kitest, "layer_map", "override.json" )
+        map_path.parent.mkdir( parents=True, exist_ok=True )
+        map_path.write_text( json.dumps( { target_source: target_layer } ) )
+
+        out_pcb = get_output_path( kitest, "layer_map", "override.kicad_pcb" )
+        out_report = get_output_path( kitest, "layer_map", "override_report.json" )
+
+        command = [
+            utils.kicad_cli(),
+            "pcb", "import",
+            "--format", "pads",
+            "--layer-map", str( map_path ),
+            "--report-format", "json",
+            "--report-file", str( out_report ),
+            pads_file,
+            "-o", str( out_pcb )
+        ]
+
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+
+        with open( out_report, "r" ) as f:
+            mapping = json.load( f )["layer_mapping"]
+
+        assert mapping[target_source]["method"] == "explicit"
+        assert mapping[target_source]["kicad_layer"] == target_layer
+
+    def test_import_layer_map_unmatched_entry_warns( self, kitest: KiTestFixture ):
+        """A layer-map key that matches no source layer is reported as a warning, not silently"""
+        pads_file = get_pads_test_file()
+        out_pcb = get_output_path( kitest, "layer_map", "unmatched.kicad_pcb" )
+        out_report = get_output_path( kitest, "layer_map", "unmatched_report.json" )
+
+        map_path = get_output_path( kitest, "layer_map", "unmatched.json" )
+        map_path.parent.mkdir( parents=True, exist_ok=True )
+        map_path.write_text( json.dumps( { "No Such Source Layer": "F.Cu" } ) )
+
+        command = [
+            utils.kicad_cli(),
+            "pcb", "import",
+            "--format", "pads",
+            "--layer-map", str( map_path ),
+            "--report-format", "json",
+            "--report-file", str( out_report ),
+            pads_file,
+            "-o", str( out_pcb )
+        ]
+
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+
+        with open( out_report, "r" ) as f:
+            report = json.load( f )
+
+        assert any( "No Such Source Layer" in w for w in report.get( "warnings", [] ) )

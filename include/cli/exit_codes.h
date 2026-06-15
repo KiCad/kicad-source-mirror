@@ -36,6 +36,10 @@ namespace CLI
         /// Rules check violation count was greater than 0.
         static const int ERR_RC_VIOLATIONS = 5;
         static const int ERR_JOBS_RUN_FAILED = 6;
+
+        /// No plugin for the requested face recognized the input file format.  Used quietly by the
+        /// import jobs so the top-level import command can probe the other face before failing.
+        static const int ERR_UNKNOWN_FILE_FORMAT = 7;
     };
 }
 

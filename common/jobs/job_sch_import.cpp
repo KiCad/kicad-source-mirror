@@ -17,26 +17,27 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <jobs/job_pcb_import.h>
+#include <jobs/job_sch_import.h>
 #include <wx/intl.h>
 #include <i18n_utility.h>
 
 
-NLOHMANN_JSON_SERIALIZE_ENUM( JOB_PCB_IMPORT::FORMAT,
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_SCH_IMPORT::FORMAT,
                               {
-                                  { JOB_PCB_IMPORT::FORMAT::AUTO, "auto" },
-                                  { JOB_PCB_IMPORT::FORMAT::PADS_ASCII, "pads" },
-                                  { JOB_PCB_IMPORT::FORMAT::ALTIUM, "altium" },
-                                  { JOB_PCB_IMPORT::FORMAT::EAGLE, "eagle" },
-                                  { JOB_PCB_IMPORT::FORMAT::CADSTAR, "cadstar" },
-                                  { JOB_PCB_IMPORT::FORMAT::FABMASTER, "fabmaster" },
-                                  { JOB_PCB_IMPORT::FORMAT::PCAD, "pcad" },
-                                  { JOB_PCB_IMPORT::FORMAT::SOLIDWORKS, "solidworks" }
+                                  { JOB_SCH_IMPORT::FORMAT::AUTO, "auto" },
+                                  { JOB_SCH_IMPORT::FORMAT::ALTIUM, "altium" },
+                                  { JOB_SCH_IMPORT::FORMAT::EAGLE, "eagle" },
+                                  { JOB_SCH_IMPORT::FORMAT::CADSTAR, "cadstar" },
+                                  { JOB_SCH_IMPORT::FORMAT::EASYEDA, "easyeda" },
+                                  { JOB_SCH_IMPORT::FORMAT::EASYEDAPRO, "easyedapro" },
+                                  { JOB_SCH_IMPORT::FORMAT::LTSPICE, "ltspice" },
+                                  { JOB_SCH_IMPORT::FORMAT::PADS, "pads" },
+                                  { JOB_SCH_IMPORT::FORMAT::DIPTRACE, "diptrace" }
                               } )
 
 
-JOB_PCB_IMPORT::JOB_PCB_IMPORT() :
-        JOB( "pcb_import", false )
+JOB_SCH_IMPORT::JOB_SCH_IMPORT() :
+        JOB( "sch_import", false )
 {
     m_params.emplace_back( new JOB_PARAM<FORMAT>( "format", &m_format, m_format ) );
     m_params.emplace_back( new JOB_PARAM<IMPORT_REPORT_FORMAT>( "report_format", &m_reportFormat, m_reportFormat ) );
@@ -44,13 +45,13 @@ JOB_PCB_IMPORT::JOB_PCB_IMPORT() :
 }
 
 
-wxString JOB_PCB_IMPORT::GetDefaultDescription() const
+wxString JOB_SCH_IMPORT::GetDefaultDescription() const
 {
-    return _( "Import PCB" );
+    return _( "Import schematic" );
 }
 
 
-wxString JOB_PCB_IMPORT::GetSettingsDialogTitle() const
+wxString JOB_SCH_IMPORT::GetSettingsDialogTitle() const
 {
-    return _( "PCB Import Job Settings" );
+    return _( "Schematic Import Job Settings" );
 }

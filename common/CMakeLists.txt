@@ -179,7 +179,9 @@ set( KICOMMON_SRCS
     jobs/job_gerber_diff.cpp
     jobs/job_gerber_export_png.cpp
     jobs/job_gerber_info.cpp
+    jobs/job_import_utils.cpp
     jobs/job_pcb_import.cpp
+    jobs/job_sch_import.cpp
     jobs/job_pcb_render.cpp
     jobs/job_pcb_drc.cpp
     jobs/job_diff_base.cpp

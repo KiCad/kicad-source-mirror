@@ -66,6 +66,7 @@
 #include <jobs/job_pcb_render.h>
 #include <jobs/job_pcb_drc.h>
 #include <jobs/job_pcb_import.h>
+#include <jobs/job_import_utils.h>
 #include <jobs/job_pcb_upgrade.h>
 #include <eda_units.h>
 #include <footprint_library_adapter.h>
@@ -103,6 +104,7 @@
 #include <3d_rendering/track_ball.h>
 #include <project_pcb.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <pcb_io/common/plugin_common_layer_mapping.h>
 #include <reporter.h>
 #include <scoped_set_reset.h>
 #include <progress_reporter.h>
@@ -2891,12 +2893,35 @@ void PCBNEW_JOBS_HANDLER::loadOverrideDrawingSheet( BOARD* aBrd, const wxString&
 }
 
 
+// Resolve a KiCad layer name (canonical board-file name such as "F.Cu", or the GUI display name)
+// to its layer id.  Returns UNDEFINED_LAYER when no layer matches.
+static PCB_LAYER_ID resolveKiCadLayerName( const wxString& aName )
+{
+    for( PCB_LAYER_ID layer : LSET::AllLayersMask().Seq() )
+    {
+        if( LSET::Name( layer ) == aName || LayerName( layer ) == aName )
+            return layer;
+    }
+
+    return UNDEFINED_LAYER;
+}
+
+
 int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
 {
     JOB_PCB_IMPORT* job = dynamic_cast<JOB_PCB_IMPORT*>( aJob );
 
     if( !job )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    // Check that input file exists
+    if( !wxFile::Exists( job->m_inputFile ) )
+    {
+        m_reporter->Report( wxString::Format( _( "Input file not found: '%s'\n" ),
+                                              job->m_inputFile ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
 
     // Map job format to PCB_IO file type
     PCB_IO_MGR::PCB_FILE_T fileType = PCB_IO_MGR::PCB_FILE_UNKNOWN;
@@ -2920,34 +2945,39 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
     case JOB_PCB_IMPORT::FORMAT::SOLIDWORKS: fileType = PCB_IO_MGR::SOLIDWORKS_PCB; break;
     }
 
-    if( fileType == PCB_IO_MGR::PCB_FILE_UNKNOWN )
+    // FindPluginTypeFromBoardPath returns FILE_TYPE_NONE (not PCB_FILE_UNKNOWN) when no plugin
+    // claims the file.  Quiet sentinel: lets the top-level `import` command try the schematic face.
+    if( fileType == PCB_IO_MGR::PCB_FILE_UNKNOWN || fileType == PCB_IO_MGR::FILE_TYPE_NONE )
     {
-        m_reporter->Report( wxString::Format( _( "Unable to determine file format for '%s'\n" ), job->m_inputFile ),
-                            RPT_SEVERITY_ERROR );
-        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-    }
-
-    // Check that input file exists
-    if( !wxFile::Exists( job->m_inputFile ) )
-    {
-        m_reporter->Report( wxString::Format( _( "Input file not found: '%s'\n" ), job->m_inputFile ),
-                            RPT_SEVERITY_ERROR );
-        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+        m_reporter->Report( wxString::Format( _( "No PCB importer recognizes the file format of "
+                                                 "'%s'\n" ),
+                                              job->m_inputFile ),
+                            RPT_SEVERITY_INFO );
+        return CLI::EXIT_CODES::ERR_UNKNOWN_FILE_FORMAT;
     }
 
     // Determine output path
     wxString outputPath = job->GetConfiguredOutputPath();
 
     if( outputPath.IsEmpty() )
-    {
-        wxFileName fn( job->m_inputFile );
-        fn.SetExt( FILEEXT::KiCadPcbFileExtension );
-        outputPath = fn.GetFullPath();
-    }
+        outputPath = DefaultImportOutputPath( job->m_inputFile, FILEEXT::KiCadPcbFileExtension );
 
     BOARD*                board = nullptr;
     wxString              formatName = PCB_IO_MGR::ShowType( fileType );
     std::vector<wxString> warnings;
+
+    // Real source-to-KiCad layer decisions, captured by our mapping callback so the report can
+    // show them and so explicit overrides can be validated.
+    struct CAPTURED_LAYER
+    {
+        wxString     m_source;
+        PCB_LAYER_ID m_target;
+        wxString     m_method;
+    };
+
+    std::vector<CAPTURED_LAYER> capturedLayers;
+    std::set<wxString>          seenSourceLayers;
+    bool                        layersCaptured = false;
 
     try
     {
@@ -2958,6 +2988,75 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
             m_reporter->Report( wxString::Format( _( "No plugin found for file type '%s'\n" ), formatName ),
                                 RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+
+        // Replace the plugin's default best-guess callback so we can apply explicit overrides and
+        // capture the resulting mapping.  Only mappable importers expose their source layers; for
+        // others the report falls back to listing the imported board's enabled layers.
+        if( LAYER_MAPPABLE_PLUGIN* mappable = dynamic_cast<LAYER_MAPPABLE_PLUGIN*>( pi.get() ) )
+        {
+            if( !job->m_layerMap.empty() || job->m_reportFormat != IMPORT_REPORT_FORMAT::NONE )
+            {
+                mappable->RegisterCallback(
+                        [&]( const std::vector<INPUT_LAYER_DESC>& aDescs )
+                                -> std::map<wxString, PCB_LAYER_ID>
+                        {
+                            std::map<wxString, PCB_LAYER_ID> result;
+
+                            for( const INPUT_LAYER_DESC& desc : aDescs )
+                            {
+                                PCB_LAYER_ID target = desc.AutoMapLayer;
+                                wxString     method = wxS( "auto" );
+
+                                if( auto it = job->m_layerMap.find( desc.Name );
+                                    it != job->m_layerMap.end() )
+                                {
+                                    PCB_LAYER_ID resolved = resolveKiCadLayerName( it->second );
+
+                                    if( resolved == UNDEFINED_LAYER )
+                                    {
+                                        warnings.push_back( wxString::Format(
+                                                _( "Layer map entry '%s' -> '%s' names an unknown "
+                                                   "KiCad layer; using automatic mapping instead" ),
+                                                desc.Name, it->second ) );
+                                    }
+                                    else if( !desc.PermittedLayers.Contains( resolved ) )
+                                    {
+                                        warnings.push_back( wxString::Format(
+                                                _( "Layer map entry '%s' -> '%s' is not a permitted "
+                                                   "target for this layer; using automatic mapping "
+                                                   "instead" ),
+                                                desc.Name, it->second ) );
+                                    }
+                                    else
+                                    {
+                                        target = resolved;
+                                        method = wxS( "explicit" );
+                                    }
+                                }
+
+                                if( desc.Required && target == UNDEFINED_LAYER )
+                                {
+                                    warnings.push_back( wxString::Format(
+                                            _( "No KiCad layer mapping for required source layer "
+                                               "'%s'; its items will not be imported" ),
+                                            desc.Name ) );
+                                }
+
+                                result.emplace( desc.Name, target );
+                                capturedLayers.push_back( { desc.Name, target, method } );
+                                seenSourceLayers.insert( desc.Name );
+                            }
+
+                            layersCaptured = true;
+                            return result;
+                        } );
+            }
+        }
+        else if( !job->m_layerMap.empty() )
+        {
+            warnings.push_back( _( "A layer map was provided, but this importer does not support "
+                                   "layer remapping; it will be ignored" ) );
         }
 
         m_reporter->Report(
@@ -2972,6 +3071,21 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
             return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
         }
 
+        // Flag explicit map entries that never matched a source layer so typos do not pass silently.
+        if( layersCaptured )
+        {
+            for( const auto& [source, target] : job->m_layerMap )
+            {
+                if( !seenSourceLayers.contains( source ) )
+                {
+                    warnings.push_back( wxString::Format(
+                            _( "Layer map entry '%s' does not match any source layer in the "
+                               "imported file; it will be ignored" ),
+                            source ) );
+                }
+            }
+        }
+
         // Save as KiCad format
         IO_RELEASER<PCB_IO> kicadPlugin( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
         kicadPlugin->SaveBoard( outputPath, board );
@@ -2980,16 +3094,16 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
                             RPT_SEVERITY_INFO );
 
         // Generate report if requested
-        if( job->m_reportFormat != JOB_PCB_IMPORT::REPORT_FORMAT::NONE )
+        if( job->m_reportFormat != IMPORT_REPORT_FORMAT::NONE )
         {
-            wxFileName inputFn( job->m_inputFile );
-            wxFileName outputFn( outputPath );
+            IMPORT_REPORT_DATA reportData;
 
-            // Count board statistics
-            size_t footprintCount = board->Footprints().size();
+            reportData.m_sourceFile = wxFileName( job->m_inputFile ).GetFullName();
+            reportData.m_sourceFormat = formatName;
+            reportData.m_outputFile = wxFileName( outputPath ).GetFullName();
+
             size_t trackCount = 0;
             size_t viaCount = 0;
-            size_t zoneCount = board->Zones().size();
 
             for( PCB_TRACK* track : board->Tracks() )
             {
@@ -2999,94 +3113,55 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
                     trackCount++;
             }
 
-            // Build layer mapping info
+            reportData.m_statistics = {
+                { wxS( "footprints" ), board->Footprints().size() },
+                { wxS( "tracks" ), trackCount },
+                { wxS( "vias" ), viaCount },
+                { wxS( "zones" ), board->Zones().size() }
+            };
+
+            // Build layer mapping info, carried only in the JSON report.  Prefer the real
+            // source-to-KiCad decisions captured during load; fall back to the imported board's
+            // enabled layers for importers that do not expose a mappable layer set.
             nlohmann::json layerMappings = nlohmann::json::object();
-            LSEQ           enabledLayers = board->GetEnabledLayers().Seq();
 
-            for( PCB_LAYER_ID layer : enabledLayers )
+            if( layersCaptured )
             {
-                wxString layerName = board->GetLayerName( layer );
-
-                layerMappings[layerName.ToStdString()] = { { "kicad_layer", LSET::Name( layer ).ToStdString() },
-                                                           { "method", "auto" } };
-            }
-
-            if( job->m_reportFormat == JOB_PCB_IMPORT::REPORT_FORMAT::JSON )
-            {
-                nlohmann::json report;
-
-                report["source_file"] = inputFn.GetFullName().ToStdString();
-                report["source_format"] = formatName.ToStdString();
-                report["output_file"] = outputFn.GetFullName().ToStdString();
-                report["layer_mapping"] = layerMappings;
-                report["statistics"] = { { "footprints", footprintCount },
-                                         { "tracks", trackCount },
-                                         { "vias", viaCount },
-                                         { "zones", zoneCount } };
-
-                nlohmann::json warningsJson = nlohmann::json::array();
-
-                for( const wxString& warning : warnings )
-                    warningsJson.push_back( warning.ToStdString() );
-
-                report["warnings"] = warningsJson;
-                report["errors"] = nlohmann::json::array();
-
-                wxString reportOutput = wxString::FromUTF8( report.dump( 2 ) );
-
-                if( !job->m_reportFile.IsEmpty() )
+                for( const CAPTURED_LAYER& mapped : capturedLayers )
                 {
-                    wxFile file( job->m_reportFile, wxFile::write );
+                    std::string kicadLayer = mapped.m_target == UNDEFINED_LAYER
+                                                     ? std::string()
+                                                     : LSET::Name( mapped.m_target ).ToStdString();
 
-                    if( file.IsOpened() )
-                    {
-                        file.Write( reportOutput );
-                        file.Close();
-                    }
-                }
-                else
-                {
-                    m_reporter->Report( reportOutput + wxS( "\n" ), RPT_SEVERITY_INFO );
+                    layerMappings[mapped.m_source.ToStdString()] = {
+                        { "kicad_layer", kicadLayer },
+                        { "method", mapped.m_method.ToStdString() }
+                    };
                 }
             }
-            else if( job->m_reportFormat == JOB_PCB_IMPORT::REPORT_FORMAT::TEXT )
+            else
             {
-                wxString text;
-
-                text += wxString::Format( wxS( "Import Report\n" ) );
-                text += wxString::Format( wxS( "=============\n\n" ) );
-                text += wxString::Format( wxS( "Source file: %s\n" ), inputFn.GetFullName() );
-                text += wxString::Format( wxS( "Source format: %s\n" ), formatName );
-                text += wxString::Format( wxS( "Output file: %s\n\n" ), outputFn.GetFullName() );
-                text += wxS( "Statistics:\n" );
-                text += wxString::Format( wxS( "  Footprints: %zu\n" ), footprintCount );
-                text += wxString::Format( wxS( "  Tracks: %zu\n" ), trackCount );
-                text += wxString::Format( wxS( "  Vias: %zu\n" ), viaCount );
-                text += wxString::Format( wxS( "  Zones: %zu\n" ), zoneCount );
-
-                if( !warnings.empty() )
+                for( PCB_LAYER_ID layer : board->GetEnabledLayers().Seq() )
                 {
-                    text += wxS( "\nWarnings:\n" );
+                    wxString layerName = board->GetLayerName( layer );
 
-                    for( const wxString& warning : warnings )
-                        text += wxString::Format( wxS( "  - %s\n" ), warning );
-                }
-
-                if( !job->m_reportFile.IsEmpty() )
-                {
-                    wxFile file( job->m_reportFile, wxFile::write );
-
-                    if( file.IsOpened() )
-                    {
-                        file.Write( text );
-                        file.Close();
-                    }
-                }
-                else
-                {
-                    m_reporter->Report( text, RPT_SEVERITY_INFO );
+                    layerMappings[layerName.ToStdString()] = {
+                        { "kicad_layer", LSET::Name( layer ).ToStdString() },
+                        { "method", "auto" }
+                    };
                 }
             }
+
+            reportData.m_extraJson["layer_mapping"] = layerMappings;
+            reportData.m_warnings = warnings;
+
+            WriteImportReport( m_reporter, job->m_reportFormat, job->m_reportFile, reportData );
+        }
+        else
+        {
+            // No report requested, but explicit-mapping problems still need to surface.
+            for( const wxString& warning : warnings )
+                m_reporter->Report( warning + wxS( "\n" ), RPT_SEVERITY_WARNING );
         }
 
         delete board;

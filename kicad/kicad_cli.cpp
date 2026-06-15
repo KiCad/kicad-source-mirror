@@ -85,6 +85,8 @@
 #include "cli/command_sch_export_plot.h"
 #include "cli/command_pcb_upgrade.h"
 #include "cli/command_pcb_import.h"
+#include "cli/command_sch_import.h"
+#include "cli/command_import.h"
 #include "cli/command_fp.h"
 #include "cli/command_fp_export.h"
 #include "cli/command_fp_export_svg.h"
@@ -154,6 +156,8 @@ static CLI::GIT_MERGEDRIVER_COMMAND      gitMergeDriverCmd{};
 static CLI::PCB_RENDER_COMMAND           pcbRenderCmd{};
 static CLI::PCB_UPGRADE_COMMAND          pcbUpgradeCmd{};
 static CLI::PCB_IMPORT_COMMAND           pcbImportCmd{};
+static CLI::SCH_IMPORT_COMMAND           schImportCmd{};
+static CLI::IMPORT_COMMAND               importCmd{};
 static CLI::PCB_EXPORT_DRILL_COMMAND     exportPcbDrillCmd{};
 static CLI::PCB_EXPORT_DXF_COMMAND       exportPcbDxfCmd{};
 static CLI::PCB_EXPORT_3D_COMMAND        exportPcbGlbCmd{ "glb", UTF8STDSTR( _( "Export GLB (binary GLTF)" ) ),
@@ -316,6 +320,9 @@ static std::vector<COMMAND_ENTRY> commandStack = {
                 &schErcCmd
             },
             {
+                &schImportCmd
+            },
+            {
                 &exportSchCmd,
                 {
                     &exportSchDxfCmd,
@@ -377,6 +384,9 @@ static std::vector<COMMAND_ENTRY> commandStack = {
         // Hidden from --help (set_suppress); invoked by git via the
         // merge.kicad-*.driver config, not by users.
         &gitMergeDriverCmd,
+    },
+    {
+        &importCmd,
     },
     {
         &versionCmd,

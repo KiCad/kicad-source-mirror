@@ -17,34 +17,32 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "command_pcb_import.h"
+#include "command_sch_import.h"
 #include <cli/exit_codes.h>
-#include <jobs/job_pcb_import.h>
+#include <jobs/job_sch_import.h>
 #include <jobs/job_import_utils.h>
 #include <kiface_base.h>
 #include <string_utils.h>
 #include <macros.h>
 #include <wx/crt.h>
-#include <wx/filename.h>
 
 
 #define ARG_FORMAT "--format"
 #define ARG_REPORT_FORMAT "--report-format"
 #define ARG_REPORT_FILE "--report-file"
-#define ARG_LAYER_MAP "--layer-map"
 
 
-CLI::PCB_IMPORT_COMMAND::PCB_IMPORT_COMMAND() : COMMAND( "import" )
+CLI::SCH_IMPORT_COMMAND::SCH_IMPORT_COMMAND() : COMMAND( "import" )
 {
     addCommonArgs( true, true, IO_TYPE::FILE, IO_TYPE::FILE );
 
     m_argParser.add_description(
-            UTF8STDSTR( _( "Import a non-KiCad PCB file to KiCad format" ) ) );
+            UTF8STDSTR( _( "Import a non-KiCad schematic file to KiCad format" ) ) );
 
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "auto" ) )
-            .help( UTF8STDSTR( _( "Input format hint: auto, pads, altium, eagle, cadstar, "
-                                  "fabmaster, pcad, solidworks (default: auto)" ) ) )
+            .help( UTF8STDSTR( _( "Input format hint: auto, altium, eagle, cadstar, easyeda, "
+                                  "easyedapro, ltspice, pads, diptrace (default: auto)" ) ) )
             .metavar( "FORMAT" );
 
     m_argParser.add_argument( ARG_REPORT_FORMAT )
@@ -56,18 +54,12 @@ CLI::PCB_IMPORT_COMMAND::PCB_IMPORT_COMMAND() : COMMAND( "import" )
             .default_value( std::string( "" ) )
             .help( UTF8STDSTR( _( "File path for import report (default: stdout)" ) ) )
             .metavar( "FILE" );
-
-    m_argParser.add_argument( ARG_LAYER_MAP )
-            .default_value( std::string( "" ) )
-            .help( UTF8STDSTR( _( "JSON file mapping source layer names to KiCad layer names; "
-                                  "unmapped layers use the automatic best-guess" ) ) )
-            .metavar( "FILE" );
 }
 
 
-int CLI::PCB_IMPORT_COMMAND::doPerform( KIWAY& aKiway )
+int CLI::SCH_IMPORT_COMMAND::doPerform( KIWAY& aKiway )
 {
-    std::unique_ptr<JOB_PCB_IMPORT> importJob = std::make_unique<JOB_PCB_IMPORT>();
+    std::unique_ptr<JOB_SCH_IMPORT> importJob = std::make_unique<JOB_SCH_IMPORT>();
 
     importJob->m_inputFile = m_argInput;
     importJob->SetConfiguredOutputPath( m_argOutput );
@@ -75,37 +67,23 @@ int CLI::PCB_IMPORT_COMMAND::doPerform( KIWAY& aKiway )
     wxString format = From_UTF8( m_argParser.get<std::string>( ARG_FORMAT ).c_str() );
 
     if( format == wxS( "auto" ) )
-    {
-        importJob->m_format = JOB_PCB_IMPORT::FORMAT::AUTO;
-    }
-    else if( format == wxS( "pads" ) )
-    {
-        importJob->m_format = JOB_PCB_IMPORT::FORMAT::PADS_ASCII;
-    }
+        importJob->m_format = JOB_SCH_IMPORT::FORMAT::AUTO;
     else if( format == wxS( "altium" ) )
-    {
-        importJob->m_format = JOB_PCB_IMPORT::FORMAT::ALTIUM;
-    }
+        importJob->m_format = JOB_SCH_IMPORT::FORMAT::ALTIUM;
     else if( format == wxS( "eagle" ) )
-    {
-        importJob->m_format = JOB_PCB_IMPORT::FORMAT::EAGLE;
-    }
+        importJob->m_format = JOB_SCH_IMPORT::FORMAT::EAGLE;
     else if( format == wxS( "cadstar" ) )
-    {
-        importJob->m_format = JOB_PCB_IMPORT::FORMAT::CADSTAR;
-    }
-    else if( format == wxS( "fabmaster" ) )
-    {
-        importJob->m_format = JOB_PCB_IMPORT::FORMAT::FABMASTER;
-    }
-    else if( format == wxS( "pcad" ) )
-    {
-        importJob->m_format = JOB_PCB_IMPORT::FORMAT::PCAD;
-    }
-    else if( format == wxS( "solidworks" ) )
-    {
-        importJob->m_format = JOB_PCB_IMPORT::FORMAT::SOLIDWORKS;
-    }
+        importJob->m_format = JOB_SCH_IMPORT::FORMAT::CADSTAR;
+    else if( format == wxS( "easyeda" ) )
+        importJob->m_format = JOB_SCH_IMPORT::FORMAT::EASYEDA;
+    else if( format == wxS( "easyedapro" ) )
+        importJob->m_format = JOB_SCH_IMPORT::FORMAT::EASYEDAPRO;
+    else if( format == wxS( "ltspice" ) )
+        importJob->m_format = JOB_SCH_IMPORT::FORMAT::LTSPICE;
+    else if( format == wxS( "pads" ) )
+        importJob->m_format = JOB_SCH_IMPORT::FORMAT::PADS;
+    else if( format == wxS( "diptrace" ) )
+        importJob->m_format = JOB_SCH_IMPORT::FORMAT::DIPTRACE;
     else
     {
         wxFprintf( stderr, _( "Invalid format: %s\n" ), format );
@@ -120,23 +98,9 @@ int CLI::PCB_IMPORT_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_ARGS;
     }
 
-    wxString reportFile = From_UTF8( m_argParser.get<std::string>( ARG_REPORT_FILE ).c_str() );
-    importJob->m_reportFile = reportFile;
+    importJob->m_reportFile = From_UTF8( m_argParser.get<std::string>( ARG_REPORT_FILE ).c_str() );
 
-    wxString layerMapFile = From_UTF8( m_argParser.get<std::string>( ARG_LAYER_MAP ).c_str() );
-
-    if( !layerMapFile.IsEmpty() )
-    {
-        wxString error;
-
-        if( !LoadLayerMapFile( layerMapFile, importJob->m_layerMap, error ) )
-        {
-            wxFprintf( stderr, wxS( "%s\n" ), error );
-            return EXIT_CODES::ERR_ARGS;
-        }
-    }
-
-    int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, importJob.get() );
+    int exitCode = aKiway.ProcessJob( KIWAY::FACE_SCH, importJob.get() );
 
     // The sentinel is internal to the top-level `import` classifier; standalone, it is invalid input.
     if( exitCode == EXIT_CODES::ERR_UNKNOWN_FILE_FORMAT )

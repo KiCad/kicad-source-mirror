@@ -17,24 +17,23 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef JOB_PCB_IMPORT_H
-#define JOB_PCB_IMPORT_H
+#ifndef JOB_SCH_IMPORT_H
+#define JOB_SCH_IMPORT_H
 
 #include <kicommon.h>
-#include <map>
 #include "job.h"
 #include "job_import_utils.h"
 
 /**
- * Job to import a non-KiCad PCB file to KiCad format.
+ * Job to import a non-KiCad schematic file to KiCad format.
  *
- * Supports importing from PADS, Altium, Eagle, and other formats supported
- * by the PCB_IO plugins.
+ * Supports importing from Altium, Eagle, CADSTAR, EasyEDA and the other formats supported
+ * by the SCH_IO plugins.
  */
-class KICOMMON_API JOB_PCB_IMPORT : public JOB
+class KICOMMON_API JOB_SCH_IMPORT : public JOB
 {
 public:
-    JOB_PCB_IMPORT();
+    JOB_SCH_IMPORT();
 
     wxString GetDefaultDescription() const override;
     wxString GetSettingsDialogTitle() const override;
@@ -42,24 +41,20 @@ public:
     enum class FORMAT
     {
         AUTO,
-        PADS_ASCII,
         ALTIUM,
         EAGLE,
         CADSTAR,
-        FABMASTER,
-        PCAD,
-        SOLIDWORKS
+        EASYEDA,
+        EASYEDAPRO,
+        LTSPICE,
+        PADS,
+        DIPTRACE
     };
 
     wxString             m_inputFile;
     FORMAT               m_format = FORMAT::AUTO;
     IMPORT_REPORT_FORMAT m_reportFormat = IMPORT_REPORT_FORMAT::NONE;
     wxString             m_reportFile;
-
-    /// Explicit overrides from source layer name to KiCad layer name (canonical board-file name,
-    /// e.g. "F.Cu").  Source layers absent from the map keep the importer's automatic best-guess.
-    /// An empty map means fully automatic layer mapping.
-    std::map<wxString, wxString> m_layerMap;
 };
 
 #endif
