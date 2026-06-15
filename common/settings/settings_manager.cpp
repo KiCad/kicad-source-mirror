@@ -505,6 +505,10 @@ wxString SETTINGS_MANAGER::GetPathForSettingsFile( JSON_SETTINGS* aSettings )
         return PATHS::GetUserSettingsPath();
 
     case SETTINGS_LOC::PROJECT:
+        // Prj() is the active project, which during a switch may not own aSettings.
+        if( const PROJECT* owner = aSettings->GetOwningProject() )
+            return owner->GetProjectPath();
+
         // TODO: MDI support
         return Prj().GetProjectPath();
 
@@ -1350,7 +1354,8 @@ bool SETTINGS_MANAGER::unloadProjectFile( PROJECT* aProject, bool aSave )
 
     if( it != m_settings.end() )
     {
-        wxString projectPath = GetPathForSettingsFile( it->get() );
+        // Resolve from aProject directly; during a switch Prj() is no longer aProject.
+        wxString projectPath = aProject->GetProjectPath();
 
         bool saveLocalSettings = aSave && aProject->GetLocalSettings().ShouldAutoSave();
 
