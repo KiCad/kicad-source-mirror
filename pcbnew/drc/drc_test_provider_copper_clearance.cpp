@@ -1021,20 +1021,21 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
     std::atomic<size_t> done( 1 );
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
-        count += footprint->GraphicalItems().size();
+        count += footprint->GraphicalItems().size() + footprint->GetFields().size();
 
     REPORT_AUX( wxString::Format( wxT( "Testing %d graphics..." ), count ) );
 
     auto isKnockoutText =
             []( BOARD_ITEM* item )
             {
-                return item->Type() == PCB_TEXT_T && static_cast<PCB_TEXT*>( item )->IsKnockout();
+                return ( item->Type() == PCB_TEXT_T || item->Type() == PCB_FIELD_T )
+                        && static_cast<PCB_TEXT*>( item )->IsKnockout();
             };
 
     auto testGraphicAgainstZone =
             [this, isKnockoutText]( BOARD_ITEM* item )
             {
-                if( item->Type() == PCB_REFERENCE_IMAGE_T )
+                if( item->Type() == PCB_REFERENCE_IMAGE_T || isInvisibleText( item ) )
                     return;
 
                 if( !IsCopperLayer( item->GetLayer() ) )
@@ -1159,6 +1160,17 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testGraphicClearances()
                                 testCopperGraphic( static_cast<PCB_SHAPE*>( item ) );
                             }
 
+                            done.fetch_add( 1 );
+                        }
+                    }
+
+                    // Fields (reference, value, etc.) live in their own list but render as real
+                    // copper when placed on a copper layer, so they must be tested too.
+                    for( PCB_FIELD* field : footprint->GetFields() )
+                    {
+                        if( !m_drcEngine->IsCancelled() )
+                        {
+                            testGraphicAgainstZone( field );
                             done.fetch_add( 1 );
                         }
                     }

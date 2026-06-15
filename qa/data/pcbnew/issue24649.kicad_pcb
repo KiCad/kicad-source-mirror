@@ -1,0 +1,148 @@
+(kicad_pcb
+	(version 20260206)
+	(generator "qa_test")
+	(generator_version "10.0")
+	(general
+		(thickness 1.6)
+		(legacy_teardrops no)
+	)
+	(paper "A4")
+	(layers
+		(0 "F.Cu" signal)
+		(2 "B.Cu" signal)
+		(9 "F.Adhes" user "F.Adhesive")
+		(11 "B.Adhes" user "B.Adhesive")
+		(13 "F.Paste" user)
+		(15 "B.Paste" user)
+		(5 "F.SilkS" user "F.Silkscreen")
+		(7 "B.SilkS" user "B.Silkscreen")
+		(1 "F.Mask" user)
+		(3 "B.Mask" user)
+		(17 "Dwgs.User" user "User.Drawings")
+		(19 "Cmts.User" user "User.Comments")
+		(21 "Eco1.User" user "User.Eco1")
+		(23 "Eco2.User" user "User.Eco2")
+		(25 "Edge.Cuts" user)
+		(27 "Margin" user)
+		(31 "F.CrtYd" user "F.Courtyard")
+		(29 "B.CrtYd" user "B.Courtyard")
+		(35 "F.Fab" user)
+		(33 "B.Fab" user)
+	)
+	(setup
+		(pad_to_mask_clearance 0)
+	)
+	(footprint "Test:R9"
+		(layer "B.Cu")
+		(uuid "24649000-0000-0000-0000-000000000001")
+		(at 110 104)
+		(property "Reference" "R9"
+			(at 0 0 0)
+			(layer "B.Cu" knockout)
+			(uuid "24649000-0000-0000-0000-000000000002")
+			(effects
+				(font
+					(size 3 3)
+					(thickness 0.4)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Value" "R"
+			(at 0 6 0)
+			(layer "B.Fab")
+			(uuid "24649000-0000-0000-0000-000000000003")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+	)
+	(footprint "Test:R10"
+		(layer "B.Cu")
+		(uuid "24649000-0000-0000-0000-000000000004")
+		(at 110 100)
+		(property "Reference" "R10"
+			(at 0 0 0)
+			(layer "B.Cu" knockout)
+			(hide yes)
+			(uuid "24649000-0000-0000-0000-000000000005")
+			(effects
+				(font
+					(size 2 2)
+					(thickness 0.3)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Value" "R"
+			(at 0 6 0)
+			(layer "B.Fab")
+			(uuid "24649000-0000-0000-0000-000000000006")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+	)
+	(zone
+		(net "NetA")
+		(layer "B.Cu")
+		(hatch none 0.1)
+		(priority 30000)
+		(attr
+			(teardrop
+				(type padvia)
+			)
+		)
+		(connect_pads yes
+			(clearance 0)
+		)
+		(min_thickness 0.0254)
+		(fill yes
+			(island_removal_mode 1)
+		)
+		(polygon
+			(pts
+				(xy 100 98) (xy 109.5 98) (xy 109.5 110) (xy 100 110)
+			)
+		)
+		(uuid "24649000-0000-0000-0000-000000000010")
+	)
+	(zone
+		(net "NetB")
+		(layer "B.Cu")
+		(hatch none 0.1)
+		(priority 30000)
+		(connect_pads yes
+			(clearance 0)
+		)
+		(min_thickness 0.0254)
+		(fill yes
+			(island_removal_mode 1)
+		)
+		(polygon
+			(pts
+				(xy 110.5 98) (xy 120 98) (xy 120 110) (xy 110.5 110)
+			)
+		)
+		(uuid "24649000-0000-0000-0000-000000000011")
+	)
+	(gr_rect
+		(start 95 95)
+		(end 125 113)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill none)
+		(layer "Edge.Cuts")
+		(uuid "24649000-0000-0000-0000-000000000020")
+	)
+)
