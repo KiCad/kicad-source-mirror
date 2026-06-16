@@ -98,6 +98,7 @@ set( QA_PCBNEW_SRCS
     test_triangulation.cpp
     test_multichannel.cpp
     test_variant.cpp
+    test_text_variable_resolution.cpp
     test_zone.cpp
     test_zone_filler.cpp
     test_poly_simplify.cpp

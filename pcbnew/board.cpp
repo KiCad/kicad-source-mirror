@@ -602,18 +602,21 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
 
     wxString var = *token;
 
+    if( GetTitleBlock().TextVarResolver( token, m_project ) )
+        return true;
+
+    // Resolve from the project's live text variables before the board's cached properties so
+    // changes made outside the board (schematic, project settings) are always reflected.
+    if( GetProject() && GetProject()->TextVarResolver( token ) )
+        return true;
+
+    // Fall back to the board's cached properties for backward compatibility with boards that
+    // may carry properties not present in the project.
     if( m_properties.count( var ) )
     {
         *token = m_properties.at( var );
         return true;
     }
-    else if( GetTitleBlock().TextVarResolver( token, m_project ) )
-    {
-        return true;
-    }
-
-    if( GetProject() && GetProject()->TextVarResolver( token ) )
-        return true;
 
     return false;
 }
