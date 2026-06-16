@@ -71,8 +71,8 @@ private:
     void addHoleKnockout( PAD* aPad, int aGap, SHAPE_POLY_SET& aHoles );
 
     void knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFill,
-                                 std::vector<BOARD_ITEM*>& aThermalConnectionPads,
-                                 std::vector<PAD*>& aNoConnectionPads );
+                                 std::vector<BOARD_ITEM*>& aThermalConnectionPads, std::vector<PAD*>& aNoConnectionPads,
+                                 std::vector<BOARD_ITEM*>& aSolidConnectionItems );
 
     void buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLayer,
                                     const std::vector<PAD*>& aNoConnectionPads,
