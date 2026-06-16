@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-08 20:26+0000\n"
+"PO-Revision-Date: 2026-06-17 03:01+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -2691,37 +2691,32 @@ msgid "Add Netclass Assignment"
 msgstr "Pridať priradenie triedy spojov"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:33
-#, fuzzy
 msgid "(missing)"
-msgstr "(chýba súbor)"
+msgstr "(chýbajúce)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:45
 msgid "File"
 msgstr "Súbor"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:46
-#, fuzzy
 msgid "Saved version"
-msgstr "Zobraziť všetky verzie"
+msgstr "Uložená verzia"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:47
-#, fuzzy
 msgid "Auto-saved copy"
-msgstr "Automatické ukladanie obnovy"
+msgstr "Automaticky uložená kópia"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
-#, fuzzy
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
-"KiCad našiel neuložené zmeny z vašej poslednej relácie, ktoré sú novšie ako "
-"uložené súbory projektu."
+"KiCad našiel automaticky uložené zmeny z predchádzajúcej relácie. To "
+"zvyčajne znamená, že KiCad sa neočakávane zatvoril, pri neuloženej práci."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore auto-saved"
-msgstr "Obnoviť predvolené"
+msgstr "Obnoviť automaticky uložené"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
@@ -2732,18 +2727,16 @@ msgstr ""
 "obsah sa zahodí."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep current"
-msgstr "Prúd"
+msgstr "Zachovať aktuálnu"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr "Ponechá uložený súbor tak, ako je, a zahodí automaticky uložené zmeny."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep both"
-msgstr "Zakázaná oblasť"
+msgstr "Zachovať obe"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
@@ -2754,9 +2747,8 @@ msgstr ""
 "samostatný súbor s časovou pečiatkou, ktorý si môžete neskôr pozrieť."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel open"
-msgstr "Zrušiť načítanie"
+msgstr "Zrušiť otvorenie"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:49
 msgid ""
@@ -3999,9 +3991,8 @@ msgstr "Kľúčová prístupová fráza:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
-#, fuzzy
 msgid "Password / token:"
-msgstr "Heslo:"
+msgstr "Heslo / token:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
@@ -4026,14 +4017,12 @@ msgid "Username:"
 msgstr "Používateľské meno:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:63
-#, fuzzy
 msgid "SSH key:"
-msgstr "Heslo kľúča SSH:"
+msgstr "Kľúč SSH:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "Vybrať súbor súkromného kľúča SSH"
+msgstr "Vybrať súkromný kľúč SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -4041,14 +4030,12 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:74
-#, fuzzy
 msgid "Save credentials"
-msgstr "Uložiť všetky prúdy"
+msgstr "Uložiť prihlasovacie údaje"
 
 #: common/dialogs/git/dialog_git_credentials_base.h:57
-#, fuzzy
 msgid "Git Authentication Required"
-msgstr "Autentifikácia"
+msgstr "Vyžaduje sa overenie v Gite"
 
 #: common/dialogs/git/dialog_git_repository.cpp:178
 #: common/dialogs/git/dialog_git_repository.cpp:401
@@ -6608,9 +6595,9 @@ msgid "Failed to recover auto-saved file '%s'."
 msgstr "Nepodarilo sa obnoviť automaticky uložený súbor '%s'."
 
 #: common/eda_base_frame.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write recovered file '%s'."
-msgstr "Nepodarilo sa zapísať do súboru '%s'."
+msgstr "Nepodarilo sa zapísať obnovený súbor '%s'."
 
 #: common/eda_base_frame.cpp:609 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:135
@@ -7947,19 +7934,19 @@ msgid "Cannot amend: the branch has no commits yet."
 msgstr "Nie je možné zmeniť: vetva ešte nemá žiadne commity."
 
 #: common/git/libgit_backend.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD commit: %s"
-msgstr "Nepodarilo sa získať commit: %s"
+msgstr "Nepodarilo sa získať HEAD commit: %s"
 
 #: common/git/libgit_backend.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent commit: %s"
-msgstr "Nepodarilo sa získať commit: %s"
+msgstr "Nepodarilo sa získať nadradený commit: %s"
 
 #: common/git/libgit_backend.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD tree: %s"
-msgstr "Nepodarilo sa získať referenciu na HEAD: %s"
+msgstr "Nepodarilo sa získať strom HEAD: %s"
 
 #: common/git/libgit_backend.cpp:372 common/git/libgit_backend.cpp:395
 #, fuzzy, c-format
@@ -27974,7 +27961,7 @@ msgstr "Pridajte vybraté položky do novej skupiny"
 
 #: eeschema/tools/sch_group_tool.cpp:57 eeschema/tools/sch_group_tool.cpp:65
 msgid "Child items cannot be grouped separately from their parent item."
-msgstr ""
+msgstr "Podradené položky nemožno zoskupiť oddelene od ich nadradenej položky."
 
 #: eeschema/tools/sch_group_tool.cpp:94 pcbnew/tools/pcb_group_tool.cpp:86
 msgid "Click on new member..."
@@ -31546,7 +31533,7 @@ msgstr "Upraviť globálne a/alebo projektové knižnice symbolov"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:154
 msgid "Edit the project PCB design"
-msgstr "Upraviť projektový návrh DPS"
+msgstr "Upraviť návrh DPS projektu"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:157
 msgid "Edit global and/or project PCB footprint libraries"
@@ -31562,7 +31549,7 @@ msgstr "Previesť bitmapové obrázky na symboly schémy alebo puzdrá DPS"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:166
 msgid "Show tools for calculating resistance, current capacity, etc."
-msgstr "Zobrazit nástroj pre výpočet vodivosti, proudového zaťaženia atď."
+msgstr "Zobrazit nástroje pre výpočet vodivosti, proudového zaťaženia atď."
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:169
 msgid ""
@@ -32708,6 +32695,8 @@ msgstr "Konfigurovať cesty..."
 #: kicad/project_tree_pane.cpp:1043
 msgid "Set or change the default remote URL and credentials"
 msgstr ""
+"Nastavenie alebo zmena predvolenej vzdialenej adresy URL a prihlasovacích "
+"údajov"
 
 #: kicad/project_tree_pane.cpp:1046
 msgid "Commit Project..."
@@ -32724,7 +32713,7 @@ msgstr "Posledný commit"
 
 #: kicad/project_tree_pane.cpp:1051
 msgid "Rewrite the most recent commit on the current branch"
-msgstr ""
+msgstr "Prepísať najnovší commit v aktuálnej vetve"
 
 #: kicad/project_tree_pane.cpp:1054
 msgid "Push"
@@ -32876,12 +32865,12 @@ msgstr "Zistené obmedzenia šírky ramena tep. prep.: %s."
 
 #: kicad/project_tree_pane.cpp:2064
 msgid "Pulled changes (fast-forward)."
-msgstr ""
+msgstr "Prevzaté zmeny (fast-forward)."
 
 #: kicad/project_tree_pane.cpp:2065
 #, c-format
 msgid "Pulled %s into %s (fast-forward)."
-msgstr ""
+msgstr "Prevzaté %s do %s (fast-forward)."
 
 #: kicad/project_tree_pane.cpp:2070
 #, fuzzy
@@ -32901,6 +32890,11 @@ msgid ""
 "You can discard your local commits and use the remote version, or rebase "
 "your commits on top of the remote."
 msgstr ""
+"Vaše lokálne zmeny a vzdialené zmeny sú v konflikte, takže stiahnutie bolo "
+"zrušené a nič sa nezmenilo.\n"
+"\n"
+"Môžete zahodiť svoje lokálne commity a použiť vzdialenú verziu alebo ich "
+"preformátovať na vzdialenú verziu."
 
 #: kicad/project_tree_pane.cpp:2085
 #, fuzzy
@@ -32909,11 +32903,11 @@ msgstr "Konflikty"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Use Remote (discard my changes)"
-msgstr ""
+msgstr "&Použiť vzdialené (zahodiť moje zmeny)"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Rebase"
-msgstr ""
+msgstr "&Rebase"
 
 #: kicad/project_tree_pane.cpp:2095
 #, fuzzy
@@ -32969,14 +32963,21 @@ msgid ""
 "\n"
 "Anyone who already pulled the previous version will need to reset their copy."
 msgstr ""
+"Odoslať zamietnuté: lokálna vetva a %s sa rozišli.\n"
+"\n"
+"Toto sa zvyčajne stáva po úprave alebo prepísaní už odoslaného commitu. "
+"Vynútiť odoslanie, aby sa prepísala vzdialená vetva?\n"
+"\n"
+"Každý, kto už stiahol predchádzajúcu verziu, bude musieť resetovať svoju "
+"kópiu."
 
 #: kicad/project_tree_pane.cpp:2174
 msgid "Force Push?"
-msgstr ""
+msgstr "Nanútiť Push?"
 
 #: kicad/project_tree_pane.cpp:2176
 msgid "&Force Push"
-msgstr ""
+msgstr "&Nanútiť Push"
 
 #: kicad/project_tree_pane.cpp:2185
 #, fuzzy
@@ -33037,10 +33038,14 @@ msgid ""
 "Amending rewrites public history.  Anyone who pulled this commit will need "
 "to reset their copy."
 msgstr ""
+"Posledný commit už bol odoslaný do %s.\n"
+"\n"
+"Úprava prepíše verejnú históriu. Každý, kto stiahol tento commit, bude "
+"musieť resetovať svoju kópiu."
 
 #: kicad/project_tree_pane.cpp:2809
 msgid "Amend Published Commit?"
-msgstr ""
+msgstr "Upraviť publikovaný commit?"
 
 #: kicad/project_tree_pane.cpp:2811 kicad/project_tree_pane.cpp:2856
 #, fuzzy
@@ -39419,19 +39424,23 @@ msgstr "Výstupný súbor 3D modelu"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:416
 msgid "Please save the board before exporting STEP."
-msgstr ""
+msgstr "Pred exportovaním STEPu, prosím, uložte dosku."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:423
 msgid ""
 "Board file not found on disk.\n"
 "Save the board before exporting STEP."
 msgstr ""
+"Súbor dosky sa na disku nenašiel.\n"
+"Pred exportovaním STEPu dosku uložte."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:435
 msgid ""
 "The board directory no longer exists.\n"
 "Save the board to a valid location before exporting STEP."
 msgstr ""
+"Adresár dosky už neexistuje.\n"
+"Pred exportom STEPu uložte dosku na platné miesto."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:445
 #, fuzzy
@@ -39678,7 +39687,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:276
 msgid "Board outline chaining tolerance:"
-msgstr "Tolerancia reťazenia obrysu dosky:"
+msgstr "Tolerancia spojenia obrysu dosky:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:280
 msgid "Tight (0.001 mm)"
