@@ -46,8 +46,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-14 05:43+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2026-06-16 01:35+0000\n"
+"Last-Translator: yanzhen zhu <acme.zhuyanzhen@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -21160,8 +21160,7 @@ msgstr "KiCad 数据库库文件"
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
-msgstr ""
-"'%s' 是 Eagle binary-format 格式文件; 只有 Eagle XML 格式文件才可以被导入。"
+msgstr "'%s' 是 Eagle 二进制格式的文件; 只有 Eagle XML 格式文件才可以被导入。"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:638
 #, c-format
@@ -21208,7 +21207,7 @@ msgstr "Eagle XML 库文件"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:520
 #, c-format
 msgid "Unable to find a valid schematic file in '%s'"
-msgstr "无法在 '%s' 中找到有效的原理图文件"
+msgstr "无法在 '%s' 中找到可用的原理图文件"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:294
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:299
@@ -21216,7 +21215,7 @@ msgstr "无法在 '%s' 中找到有效的原理图文件"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:501
 #, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr "从库 %2$s 加载符号 '%1$s' 出错: %3$s"
+msgstr "从库 '%s' 中加载符号 '%s' 出错: '%s'"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:422
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:427
@@ -21230,7 +21229,7 @@ msgstr "枚举符号库 '%s' 时出错: %s"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:606
 #, c-format
 msgid "Error loading schematic '%s': %s"
-msgstr "加载原理图 '%s' 时出错, 错误: %s"
+msgstr "加载原理图 '%s' 时出错：%s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.h:50
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.h:38
@@ -21241,7 +21240,7 @@ msgstr "EasyEDA (JLCEDA) 标准版文件"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.cpp:76
 #, c-format
 msgid "Failed to parse value: '%s'"
-msgstr "无法解析数值: '%s'"
+msgstr "无法解析值: '%s'"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3646
 #, c-format
@@ -21251,14 +21250,14 @@ msgstr "在 gEDA 库中找不到符号 '%s'。"
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3650
 #, c-format
 msgid " Did you mean '%s'?"
-msgstr " 是否在寻找 '%s'?"
+msgstr " 你是否在寻找 '%s'?"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3797
 #, c-format
 msgid ""
 "Symbol version mismatch for '%s' (%s): schematic has symversion %s, library "
 "symbol has symversion %s."
-msgstr "'%s' (%s) 的符号版本不匹配: 原理图中符号版本为 %s, 符号库中为 %s。"
+msgstr "'%s' (%s) 的符号版本不匹配: 原理图中符号版本为 %s, 符号库中符号版本为 %s。"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4088
 #, c-format
