@@ -41,6 +41,7 @@ set( QA_COMMON_SRCS
     test_color4d.cpp
     test_commit.cpp
     test_coroutine.cpp
+    test_design_block_io.cpp
     test_eda_shape.cpp
     test_eda_text.cpp
     test_embedded_file_compress.cpp
@@ -185,6 +186,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/kicad
     ${CMAKE_SOURCE_DIR}/pcbnew
     ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/common
     ${CMAKE_SOURCE_DIR}/common/io/pads
     ${CMAKE_SOURCE_DIR}/qa/mocks/include
     ${INC_AFTER}

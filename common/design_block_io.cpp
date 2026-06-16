@@ -47,11 +47,13 @@
 
 const wxString DESIGN_BLOCK_IO_MGR::ShowType( DESIGN_BLOCK_FILE_T aFileType )
 {
+    // This token is serialized into the design-block-lib-table file, so it must stay
+    // locale-independent. "KiCad" is a product name and is never translated.
     switch( aFileType )
     {
-    case KICAD_SEXP:   return _( "KiCad" );
+    case KICAD_SEXP:   return wxT( "KiCad" );
     case NESTED_TABLE: return LIBRARY_TABLE_ROW::TABLE_TYPE_NAME;
-    default:           return wxString::Format( _( "UNKNOWN (%d)" ), aFileType );
+    default:           return wxString::Format( wxT( "UNKNOWN (%d)" ), aFileType );
     }
 }
 
@@ -59,10 +61,16 @@ const wxString DESIGN_BLOCK_IO_MGR::ShowType( DESIGN_BLOCK_FILE_T aFileType )
 DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T
 DESIGN_BLOCK_IO_MGR::EnumFromStr( const wxString& aFileType )
 {
-    if( aFileType == _( "KiCad" ) )
+    if( aFileType.CmpNoCase( wxT( "KiCad" ) ) == 0 )
         return DESIGN_BLOCK_FILE_T::KICAD_SEXP;
     else if( aFileType == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
         return DESIGN_BLOCK_FILE_T::NESTED_TABLE;
+    else if( aFileType == _( "KiCad" ) )
+    {
+        // Accept the legacy translated token so tables written by older releases under a
+        // locale that translated "KiCad" still load.
+        return DESIGN_BLOCK_FILE_T::KICAD_SEXP;
+    }
 
     return DESIGN_BLOCK_FILE_T( DESIGN_BLOCK_FILE_UNKNOWN );
 }
