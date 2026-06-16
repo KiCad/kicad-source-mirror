@@ -352,6 +352,14 @@ public:
     void SetTrackWidthIndex( int aIndex );
 
     /**
+     * Compute the next track width list index when cycling predefined sizes, skipping the
+     * index-0 netclass placeholder on roll-over so the sequence stays monotonic.
+     *
+     * @param aForward steps larger when true, smaller when false.
+     */
+    int GetNextTrackWidthIndex( int aIndex, bool aForward ) const;
+
+    /**
      * @return the current track width according to the selected options
      * ( using the default netclass value or a preset/custom value )
      * the default netclass is always in m_TrackWidthList[0]
@@ -380,6 +388,14 @@ public:
      * @param aIndex is the via size list index.
      */
     void SetViaSizeIndex( int aIndex );
+
+    /**
+     * Compute the next via size list index when cycling predefined sizes, skipping the
+     * index-0 netclass placeholder on roll-over so the sequence stays monotonic.
+     *
+     * @param aForward steps larger when true, smaller when false.
+     */
+    int GetNextViaSizeIndex( int aIndex, bool aForward ) const;
 
     /**
      * @return the current via size, according to the selected options
@@ -467,6 +483,14 @@ public:
      * @param aIndex is the diff pair dimensions list index to set.
      */
     void SetDiffPairIndex( int aIndex );
+
+    /**
+     * Compute the next diff pair dimensions list index when cycling predefined sizes, skipping
+     * the index-0 netclass placeholder on roll-over so the sequence stays monotonic.
+     *
+     * @param aForward steps larger when true, smaller when false.
+     */
+    int GetNextDiffPairIndex( int aIndex, bool aForward ) const;
 
     /**
      * Sets custom track width for differential pairs (i.e. not available in netclasses or

@@ -1053,11 +1053,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
     if( routerTool && routerTool->IsToolActive()
         && routerTool->Router()->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
     {
-        int widthIndex = bds.GetDiffPairIndex() + 1;
-
-        // If we go past the last track width entry in the list, start over at the beginning
-        if( widthIndex >= (int) bds.m_DiffPairDimensionsList.size() )
-            widthIndex = 0;
+        int widthIndex = bds.GetNextDiffPairIndex( bds.GetDiffPairIndex(), true );
 
         bds.SetDiffPairIndex( widthIndex );
         bds.UseCustomDiffPairDimensions( false );
@@ -1066,24 +1062,16 @@ int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
     }
     else
     {
-        int widthIndex = bds.GetTrackWidthIndex();
-
+        // Issue #24644: stepping the index unconditionally lets the first press both enter the
+        // connected-width override and advance into the list, instead of no-op'ing.
         if( routerTool && routerTool->IsToolActive()
             && routerTool->Router()->GetState() == PNS::ROUTER::RouterState::ROUTE_TRACK
             && bds.m_UseConnectedTrackWidth && !bds.m_TempOverrideTrackWidth )
         {
             bds.m_TempOverrideTrackWidth = true;
         }
-        else
-        {
-            widthIndex++;
-        }
 
-        // If we go past the last track width entry in the list, start over at the beginning
-        if( widthIndex >= (int) bds.m_TrackWidthList.size() )
-            widthIndex = 0;
-
-        bds.SetTrackWidthIndex( widthIndex );
+        bds.SetTrackWidthIndex( bds.GetNextTrackWidthIndex( bds.GetTrackWidthIndex(), true ) );
         bds.UseCustomTrackViaSize( false );
 
         m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
@@ -1135,11 +1123,7 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
     if( routerTool && routerTool->IsToolActive()
             && routerTool->Router()->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
     {
-        int widthIndex = bds.GetDiffPairIndex() - 1;
-
-        // If we get to the lowest entry start over at the highest
-        if( widthIndex < 0 )
-            widthIndex = bds.m_DiffPairDimensionsList.size() - 1;
+        int widthIndex = bds.GetNextDiffPairIndex( bds.GetDiffPairIndex(), false );
 
         bds.SetDiffPairIndex( widthIndex );
         bds.UseCustomDiffPairDimensions( false );
@@ -1148,24 +1132,16 @@ int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
     }
     else
     {
-        int widthIndex = bds.GetTrackWidthIndex();
-
+        // Issue #24644: mirror TrackWidthInc so the first invocation also advances into the
+        // predefined list instead of merely flipping the override flag.
         if( routerTool && routerTool->IsToolActive()
             && routerTool->Router()->GetState() == PNS::ROUTER::RouterState::ROUTE_TRACK
             && bds.m_UseConnectedTrackWidth && !bds.m_TempOverrideTrackWidth )
         {
             bds.m_TempOverrideTrackWidth = true;
         }
-        else
-        {
-            widthIndex--;
-        }
 
-        // If we get to the lowest entry start over at the highest
-        if( widthIndex < 0 )
-            widthIndex = (int) bds.m_TrackWidthList.size() - 1;
-
-        bds.SetTrackWidthIndex( widthIndex );
+        bds.SetTrackWidthIndex( bds.GetNextTrackWidthIndex( bds.GetTrackWidthIndex(), false ) );
         bds.UseCustomTrackViaSize( false );
 
         m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged );
@@ -1215,11 +1191,7 @@ int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
     }
     else
     {
-        int sizeIndex = bds.GetViaSizeIndex() + 1;
-
-        // If we go past the last via entry in the list, start over at the beginning
-        if( sizeIndex >= (int) bds.m_ViasDimensionsList.size() )
-            sizeIndex = 0;
+        int sizeIndex = bds.GetNextViaSizeIndex( bds.GetViaSizeIndex(), true );
 
         bds.SetViaSizeIndex( sizeIndex );
         bds.UseCustomTrackViaSize( false );
@@ -1275,13 +1247,7 @@ int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 
         // If there are more, cycle through them backwards
         if( bds.m_ViasDimensionsList.size() > 0 )
-        {
-            sizeIndex = bds.GetViaSizeIndex() - 1;
-
-            // If we get to the lowest entry start over at the highest
-            if( sizeIndex < 0 )
-                sizeIndex = bds.m_ViasDimensionsList.size() - 1;
-        }
+            sizeIndex = bds.GetNextViaSizeIndex( bds.GetViaSizeIndex(), false );
 
         bds.SetViaSizeIndex( sizeIndex );
         bds.UseCustomTrackViaSize( false );
