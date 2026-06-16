@@ -379,6 +379,11 @@ private:
     // Helper functions to deal with translating wxGrid values to and from
     // named field values like ${DNP}
     bool     isAttribute( const wxString& aFieldName );
+
+    // True when an ancestor sheet forces this attribute on, not the symbol itself.
+    bool attributeInheritedFromSheet( const SCH_REFERENCE& aRef, const wxString& aAttributeName ) const;
+    bool rowAttributeInheritedFromSheet( const DATA_MODEL_ROW& aGroup, int aCol );
+
     wxString getAttributeValue( const SCH_REFERENCE& aRef, const wxString& aAttributeName,
                                 const wxString& aVariantNames );
 
