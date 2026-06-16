@@ -2150,9 +2150,37 @@ void EAGLE_BIN_PARSER::postProcess( EGB_NODE* aRoot, const DRC_CTX& aDrc )
 
     postprocRotation( aRoot );
 
+    // Custom element attributes decode without a name and would abort the shared
+    // reader; prune them after every naming pass has had a chance to backfill one.
+    postprocAttributes( aRoot );
+
     // Must run last so every dimensional attribute has its final value before
     // the decimicron-to-millimetre rewrite.
     postprocUnits( aRoot );
+}
+
+
+void EAGLE_BIN_PARSER::postprocAttributes( EGB_NODE* aRoot )
+{
+    // The binary attribute record carries the placement of a custom element
+    // attribute but not its name, and there is no reliable path to recover one.
+    // The XML schema makes name required on <attribute>, so emitting a nameless
+    // one aborts the shared reader. Drop the unrecoverable nodes rather than
+    // synthesize invalid XML; only the displayed text placement is lost.
+    std::vector<std::unique_ptr<EGB_NODE>> kept;
+
+    for( auto& child : aRoot->children )
+    {
+        if( child->id == EGKW_SECT_ATTRIBUTE && !child->HasProp( wxS( "name" ) ) )
+            continue;
+
+        kept.push_back( std::move( child ) );
+    }
+
+    aRoot->children = std::move( kept );
+
+    for( const auto& child : aRoot->children )
+        postprocAttributes( child.get() );
 }
 
 

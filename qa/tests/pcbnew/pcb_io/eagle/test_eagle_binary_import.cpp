@@ -113,4 +113,65 @@ BOOST_AUTO_TEST_CASE( LoadBinaryV3 )
 }
 
 
+/**
+ * Regression test for custom element attributes. The binary attribute record has
+ * no name field, so the decoder once emitted nameless <attribute> nodes that the
+ * shared XML reader rejected ("required attribute name is missing"). The decoder
+ * now drops those unrecoverable nodes, so the board loads.
+ */
+BOOST_AUTO_TEST_CASE( LoadV3CustomAttributes )
+{
+    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/rocketgps.brd" ) );
+
+    if( !board )
+        return;
+
+    BOOST_CHECK_GT( board->Footprints().size(), 0u );
+    BOOST_CHECK_GT( board->Tracks().size(), 0u );
+    BOOST_CHECK_GT( board->GetNetInfo().GetNetCount(), 1u );
+}
+
+
+/**
+ * Regression test for unnamed (auto-generated) signals. Their empty net name
+ * collided with the reserved unconnected net, so the net code requested for every
+ * item routed on them was never registered, tripping the m_netinfo assertion in
+ * BOARD_CONNECTED_ITEM::SetNetCode(). Unnamed nets now get a unique fallback name
+ * and items take the net code the board actually assigned.
+ */
+BOOST_AUTO_TEST_CASE( LoadV3UnnamedSignals )
+{
+    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/boomchak.brd" ) );
+
+    if( !board )
+        return;
+
+    BOOST_CHECK_GT( board->Footprints().size(), 0u );
+    BOOST_CHECK_GT( board->Tracks().size(), 0u );
+    BOOST_CHECK_GT( board->GetNetInfo().GetNetCount(), 1u );
+
+    // Every routed item must resolve to a real net; an orphaned net code would
+    // have aborted the load before this point.
+    for( PCB_TRACK* track : board->Tracks() )
+        BOOST_CHECK( track->GetNet() != nullptr );
+}
+
+
+/**
+ * Regression test for degenerate (vertex-less) polygons. A package polygon with
+ * no vertices dereferenced an empty vertex list in packagePolygon(); the loader
+ * now skips polygons with fewer than three vertices, matching loadPolygon().
+ */
+BOOST_AUTO_TEST_CASE( LoadV4V5DegeneratePolygons )
+{
+    std::unique_ptr<BOARD> board( loadBoard( "plugins/eagle_binary/turnemoff.brd" ) );
+
+    if( !board )
+        return;
+
+    BOOST_CHECK_GT( board->Footprints().size(), 0u );
+    BOOST_CHECK_GT( board->Tracks().size(), 0u );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

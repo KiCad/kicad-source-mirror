@@ -47,6 +47,7 @@ Load() TODO's
 */
 
 #include <cerrno>
+#include <set>
 
 #include <wx/string.h>
 #include <wx/xml/xml.h>
@@ -2363,6 +2364,17 @@ void PCB_IO_EAGLE::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) con
         vertex = vertex->GetNext();
     }
 
+    // A polygon needs at least three corners to enclose an area. Degenerate
+    // outlines occur in malformed or partially-decoded sources; skip them rather
+    // than dereferencing an empty vertex list.
+    if( vertices.size() < 3 )
+    {
+        wxLogMessage( wxString::Format( _( "Skipping a polygon on layer '%s' (%d): less than 3 vertices" ),
+                                        eagle_layer_name( p.layer ),
+                                        p.layer ) );
+        return;
+    }
+
     vertices.push_back( vertices[0] );
 
     for( size_t i = 0; i < vertices.size() - 1; i++ )
@@ -2777,6 +2789,19 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
     ZONES zones;      // per net
     int   netCode = 1;
 
+    // Eagle auto-named nets are stored without a name; we synthesize an N$<n>
+    // fallback for them below. Collect the explicit names first so a fallback can
+    // never collide with a real signal and silently merge two distinct nets.
+    std::set<wxString> usedNetNames;
+
+    for( wxXmlNode* signal = aSignals->GetChildren(); signal; signal = signal->GetNext() )
+    {
+        wxString explicitName = escapeName( signal->GetAttribute( "name" ) );
+
+        if( !explicitName.IsEmpty() )
+            usedNetNames.insert( explicitName );
+    }
+
     m_xpath->push( "signals.signal", "name" );
 
     // Get the first signal and iterate
@@ -2790,7 +2815,25 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
 
         zones.clear();
 
-        const wxString&           netName = escapeName( net->GetAttribute( "name" ) );
+        wxString                  netName = escapeName( net->GetAttribute( "name" ) );
+
+        // Eagle leaves auto-generated nets unnamed in the binary stream. An empty
+        // name collides with the board's reserved unconnected net (code 0), so
+        // NETINFO_LIST would silently drop the net and orphan every item routed on
+        // it. Synthesize a unique fallback that avoids every explicit signal name,
+        // matching Eagle's own N$x naming without merging distinct nets.
+        if( netName.IsEmpty() )
+        {
+            int candidate = netCode;
+
+            do
+            {
+                netName = wxString::Format( wxT( "N$%d" ), candidate++ );
+            } while( usedNetNames.count( netName ) );
+
+            usedNetNames.insert( netName );
+        }
+
         NETINFO_ITEM*             netInfo = new NETINFO_ITEM( m_board, netName, netCode );
         std::shared_ptr<NETCLASS> netclass;
 
@@ -2807,6 +2850,11 @@ void PCB_IO_EAGLE::loadSignals( wxXmlNode* aSignals )
         }
 
         m_board->Add( netInfo );
+
+        // AppendNet deduplicates by name and renumbers to keep net codes
+        // consecutive, so the authoritative code for this signal's items is
+        // whatever the board accepted, not the local request counter.
+        netCode = netInfo->GetNetCode();
 
         m_xpath->Value( netName.c_str() );
 

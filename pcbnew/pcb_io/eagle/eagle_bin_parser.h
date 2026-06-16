@@ -124,6 +124,7 @@ private:
     void postprocDrc( EGB_NODE* aDrcNode, const DRC_CTX& aDrc );
     void postprocLibs( EGB_NODE* aLibraries );
     void postprocElements( EGB_NODE* aElements );
+    void postprocAttributes( EGB_NODE* aRoot );
     void postprocNames( EGB_NODE* aLibraries, EGB_NODE* aElements );
     void postprocSignals( EGB_NODE* aSignals );
     void postprocContactRefs( EGB_NODE* aSignals, EGB_NODE* aElements, EGB_NODE* aLibraries );
