@@ -82,6 +82,7 @@ private:
     {
         int                                    id = 0;
         wxString                               name;
+        wxString                               content; ///< PCDATA emitted as the XML node's text body
         std::map<wxString, wxString>           props;
         std::vector<std::unique_ptr<EGB_NODE>> children;
         EGB_NODE*                              parent = nullptr;
@@ -134,8 +135,11 @@ private:
     void postprocSmd( EGB_NODE* aRoot );
     void postprocDimensions( EGB_NODE* aRoot );
     void postprocFreeText( EGB_NODE* aRoot );
+    void postprocLongText( EGB_NODE* aRoot );
+    void postprocTextContent( EGB_NODE* aRoot );
     void postprocRotation( EGB_NODE* aRoot );
     bool isRotatable( int aId ) const;
+    bool isLongTextHost( int aId ) const;
 
     void arcDecode( EGB_NODE* aElem, int aArcType, int aLineType );
     void fixLongText( EGB_NODE* aNode, const wxString& aField );

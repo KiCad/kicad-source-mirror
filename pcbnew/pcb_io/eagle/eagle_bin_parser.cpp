@@ -76,6 +76,7 @@ enum EGKW
     EGKW_SECT_ELEMENT2 = 0x2f00,
     EGKW_SECT_INSTANCE = 0x3000,
     EGKW_SECT_TEXT = 0x3100,
+    EGKW_SECT_LONGTEXT = 0x3200,
     EGKW_SECT_NETBUSLABEL = 0x3300,
     EGKW_SECT_SMASHEDNAME = 0x3400,
     EGKW_SECT_SMASHEDVALUE = 0x3500,
@@ -569,6 +570,9 @@ const SCRIPT_ROW g_script[] = {
         { "spin", T_UBF, 16, BITFIELD( 2, 14, 14 ) },
         { "textfield", T_STR, 18, 5 },
         TERM_A } },
+    // A text-family record whose inline 5-byte string did not fit spills the full
+    // string into a trailing 0x3200 record, with the bytes from offset 2 onward.
+    { EGKW_SECT_LONGTEXT, 0xFFFF, "longtext", { TERM_F }, { TERM_S }, { { "textfield", T_STR, 2, 22 }, TERM_A } },
     { EGKW_SECT_NETBUSLABEL,
       0xFFFF,
       "netbuslabel",
@@ -1686,6 +1690,70 @@ void EAGLE_BIN_PARSER::postprocFreeText( EGB_NODE* aRoot )
 }
 
 
+bool EAGLE_BIN_PARSER::isLongTextHost( int aId ) const
+{
+    switch( aId )
+    {
+    case EGKW_SECT_TEXT:
+    case EGKW_SECT_NETBUSLABEL:
+    case EGKW_SECT_SMASHEDNAME:
+    case EGKW_SECT_SMASHEDVALUE:
+    case EGKW_SECT_SMASHEDPART:
+    case EGKW_SECT_SMASHEDGATE:
+    case EGKW_SECT_ATTRIBUTE:
+    case EGKW_SECT_SMASHEDXREF: return true;
+    default: return false;
+    }
+}
+
+
+void EAGLE_BIN_PARSER::postprocLongText( EGB_NODE* aRoot )
+{
+    // A text-family record with a string too long for its 5-byte inline field is
+    // immediately followed by exactly one 0x3200 record carrying the full string.
+    // Fold that string back onto the preceding text sibling and drop the record;
+    // the XML schema has no standalone longtext element. A longtext with no valid
+    // text predecessor (malformed input, or a second consecutive longtext) is
+    // dropped rather than emitted, so invalid XML never reaches the shared reader.
+    std::vector<std::unique_ptr<EGB_NODE>> kept;
+    EGB_NODE*                              eligible = nullptr;
+
+    for( auto& child : aRoot->children )
+    {
+        if( child->id == EGKW_SECT_LONGTEXT )
+        {
+            if( eligible != nullptr )
+                eligible->props[wxS( "textfield" )] = child->Prop( wxS( "textfield" ) );
+
+            eligible = nullptr;
+            continue;
+        }
+
+        kept.push_back( std::move( child ) );
+        eligible = ( kept.back()->HasProp( wxS( "textfield" ) ) && isLongTextHost( kept.back()->id ) )
+                           ? kept.back().get()
+                           : nullptr;
+    }
+
+    aRoot->children = std::move( kept );
+
+    for( const auto& child : aRoot->children )
+        postprocLongText( child.get() );
+}
+
+
+void EAGLE_BIN_PARSER::postprocTextContent( EGB_NODE* aRoot )
+{
+    // The XML reader takes a text element's string from its PCDATA body, not an
+    // attribute, so surface the decoded textfield as node content.
+    if( isLongTextHost( aRoot->id ) && aRoot->HasProp( wxS( "textfield" ) ) )
+        aRoot->content = aRoot->Prop( wxS( "textfield" ) );
+
+    for( const auto& child : aRoot->children )
+        postprocTextContent( child.get() );
+}
+
+
 void EAGLE_BIN_PARSER::postprocLayers( EGB_NODE* aDrawing, EGB_NODE* aLayers )
 {
     // Move every drawing/layer under the synthetic drawing/layers node, keeping
@@ -2047,6 +2115,10 @@ void EAGLE_BIN_PARSER::postProcess( EGB_NODE* aRoot, const DRC_CTX& aDrc )
         elements = board->FindChildByName( wxS( "elements" ) );
     }
 
+    // Fold trailing longtext records onto their text siblings before any pass
+    // walks the tree by sibling order.
+    postprocLongText( aRoot );
+
     postprocLayers( drawing, layers );
 
     if( drcNode != nullptr )
@@ -2067,6 +2139,10 @@ void EAGLE_BIN_PARSER::postProcess( EGB_NODE* aRoot, const DRC_CTX& aDrc )
     // and before postprocNames disambiguates package names.
     postprocFreeText( aRoot );
 
+    // Move resolved text strings into node content after the free-text pass has
+    // backfilled any 0x7F deferred references.
+    postprocTextContent( aRoot );
+
     // postprocContactRefs reads element library/package ordinals, so it must run
     // before postprocNames rewrites those ordinals into names.
     postprocContactRefs( signals, elements, libraries );
@@ -2086,6 +2162,9 @@ wxXmlNode* EAGLE_BIN_PARSER::toXml( const EGB_NODE* aNode ) const
 
     for( const auto& [key, value] : aNode->props )
         xml->AddAttribute( key, value );
+
+    if( !aNode->content.IsEmpty() )
+        xml->AddChild( new wxXmlNode( wxXML_TEXT_NODE, wxEmptyString, aNode->content ) );
 
     // wxXmlNode::AddChild appends to the end of the sibling chain, preserving
     // document order.
