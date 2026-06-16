@@ -34,6 +34,7 @@
 #include <boost/ptr_container/ptr_map.hpp>
 #include <wx_filename.h>
 #include "widgets/report_severity.h"
+#include <pcb_io/common/plugin_common_layer_mapping.h>
 
 class BOARD;
 class BOARD_ITEM;
@@ -320,7 +321,7 @@ public:
  *
  * @note This class is not thread safe, but it is re-entrant multiple times in sequence.
  */
-class PCB_IO_KICAD_SEXPR : public PCB_IO
+class PCB_IO_KICAD_SEXPR : public PCB_IO, public LAYER_MAPPABLE_PLUGIN
 {
 public:
     const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override

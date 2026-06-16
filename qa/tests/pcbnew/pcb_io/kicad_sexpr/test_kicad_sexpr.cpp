@@ -38,6 +38,7 @@
 #include <netinfo.h>
 #include <pad.h>
 #include <pcb_shape.h>
+#include <pcb_track.h>
 #include <zone.h>
 
 
@@ -347,6 +348,122 @@ BOOST_AUTO_TEST_CASE( Issue24642_AppendBoardPreservesDestinationLayerNames )
     BOOST_CHECK( testBoard->IsLayerEnabled( In3_Cu ) );
     BOOST_CHECK( testBoard->IsLayerEnabled( In4_Cu ) );
     BOOST_CHECK_EQUAL( testBoard->GetCopperLayerCount(), 6 );
+}
+
+
+/**
+ * Verify that a registered layer-mapping handler remaps the appended board's layers onto the
+ * destination layers the handler chooses.  The same source board is appended twice, once with an
+ * identity mapping and once swapping its two inner copper layers, and the per-layer track counts
+ * must swap accordingly.
+ */
+BOOST_AUTO_TEST_CASE( Issue24642_AppendBoardRemapsLayersViaHandler )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir();
+    // four layer board with custom copper names and tracks on In2.Cu
+    std::string sourcePath = dataPath + "issue3812.kicad_pcb";
+
+    std::map<std::string, UTF8> props;
+    props[PCB_IO_LOAD_PROPERTIES::APPEND_PRESERVE_DESTINATION_STACKUP] = "";
+
+    auto countTracksOn = []( BOARD* aBoard, PCB_LAYER_ID aLayer )
+    {
+        int n = 0;
+
+        for( PCB_TRACK* track : aBoard->Tracks() )
+        {
+            if( track->GetLayer() == aLayer )
+                n++;
+        }
+
+        return n;
+    };
+
+    // Source copper user names as the handler sees them
+    const wxString fName = wxS( "Top_layer" );
+    const wxString in1Name = wxS( "GND_layer" );
+    const wxString in2Name = wxS( "VDD_layer" );
+    const wxString bName = wxS( "Bottom_layer" );
+
+    // Identity mapping: appended layers stay where they are
+    std::vector<wxString> seenNames;
+
+    kicadPlugin.RegisterCallback(
+            [&]( const std::vector<INPUT_LAYER_DESC>& aDescs ) -> std::map<wxString, PCB_LAYER_ID>
+            {
+                for( const INPUT_LAYER_DESC& desc : aDescs )
+                    seenNames.push_back( desc.Name );
+
+                return { { fName, F_Cu }, { in1Name, In1_Cu }, { in2Name, In2_Cu }, { bName, B_Cu } };
+            } );
+
+    std::unique_ptr<BOARD> identityBoard = std::make_unique<BOARD>();
+    kicadPlugin.LoadBoard( sourcePath, identityBoard.get(), &props );
+
+    // The dialog must see the source board's own layer names, not the canonical defaults
+    BOOST_CHECK( std::find( seenNames.begin(), seenNames.end(), in1Name ) != seenNames.end() );
+    BOOST_CHECK( std::find( seenNames.begin(), seenNames.end(), in2Name ) != seenNames.end() );
+
+    const int idIn1 = countTracksOn( identityBoard.get(), In1_Cu );
+    const int idIn2 = countTracksOn( identityBoard.get(), In2_Cu );
+
+    BOOST_REQUIRE_GT( idIn2, 0 ); // the source has tracks on In2.Cu
+
+    // Swap mapping: appended In1 <-> In2
+    kicadPlugin.RegisterCallback(
+            [&]( const std::vector<INPUT_LAYER_DESC>& ) -> std::map<wxString, PCB_LAYER_ID>
+            {
+                return { { fName, F_Cu }, { in1Name, In2_Cu }, { in2Name, In1_Cu }, { bName, B_Cu } };
+            } );
+
+    std::unique_ptr<BOARD> swapBoard = std::make_unique<BOARD>();
+    kicadPlugin.LoadBoard( sourcePath, swapBoard.get(), &props );
+
+    const int swIn1 = countTracksOn( swapBoard.get(), In1_Cu );
+    const int swIn2 = countTracksOn( swapBoard.get(), In2_Cu );
+
+    // The inner-copper track counts must have swapped
+    BOOST_CHECK_EQUAL( swIn1, idIn2 );
+    BOOST_CHECK_EQUAL( swIn2, idIn1 );
+}
+
+
+/**
+ * Verify the mapping dialog is only triggered when the appended layers do not already correspond
+ * to the destination by name: appending a board onto one with identical layer names must not
+ * prompt, while appending one with differently-named layers must.
+ */
+BOOST_AUTO_TEST_CASE( Issue24642_AppendBoardPromptsOnlyOnNameMismatch )
+{
+    std::string dataPath = KI_TEST::GetPcbnewTestDataDir();
+    std::string standardNames = dataPath + "issue18142.kicad_pcb"; // six layer, default names
+    std::string customNames = dataPath + "issue3812.kicad_pcb";    // four layer, custom copper names
+
+    std::map<std::string, UTF8> props;
+    props[PCB_IO_LOAD_PROPERTIES::APPEND_PRESERVE_DESTINATION_STACKUP] = "";
+
+    bool handlerCalled = false;
+
+    kicadPlugin.RegisterCallback(
+            [&]( const std::vector<INPUT_LAYER_DESC>& ) -> std::map<wxString, PCB_LAYER_ID>
+            {
+                handlerCalled = true;
+                return {};
+            } );
+
+    // Appending onto a board with identical layer names must not prompt
+    std::unique_ptr<BOARD> matchBoard = std::make_unique<BOARD>();
+    kicadPlugin.LoadBoard( standardNames, matchBoard.get() );
+    handlerCalled = false;
+    kicadPlugin.LoadBoard( standardNames, matchBoard.get(), &props );
+    BOOST_CHECK( !handlerCalled );
+
+    // Appending a board with differently-named layers must prompt
+    std::unique_ptr<BOARD> mismatchBoard = std::make_unique<BOARD>();
+    kicadPlugin.LoadBoard( standardNames, mismatchBoard.get() );
+    handlerCalled = false;
+    kicadPlugin.LoadBoard( customNames, mismatchBoard.get(), &props );
+    BOOST_CHECK( handlerCalled );
 }
 
 

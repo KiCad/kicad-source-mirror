@@ -2313,6 +2313,11 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseLayers()
     std::unordered_map< std::string, std::string > v3_layer_names;
     std::vector<LAYER>  cu;
 
+    // Destination layers before the appended board is applied, used to detect a remap need
+    const LSET         destInitialEnabled = m_appendToExisting ? m_board->GetEnabledLayers() : LSET();
+    const int          destInitialCopperCount = m_appendToExisting ? m_board->GetCopperLayerCount() : 0;
+    std::vector<LAYER> appendedLayers;
+
     createOldLayerMapping( v3_layer_names );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
@@ -2366,6 +2371,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseLayers()
 
             m_layerIndices[ name ] = PCB_LAYER_ID( cu_layer.m_number );
             m_layerMasks[ name ] = LSET( { PCB_LAYER_ID( cu_layer.m_number ) } );
+
+            appendedLayers.push_back( cu_layer );
         }
 
         copperLayerCount = cu.size();
@@ -2413,6 +2420,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseLayers()
         if( !m_preserveDestinationStackup || !m_board->IsLayerEnabled( it->second ) )
             m_board->SetLayerDescr( it->second, layer );
 
+        appendedLayers.push_back( layer );
+
         token = NextTok();
 
         if( token != T_LEFT )
@@ -2444,6 +2453,107 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseLayers()
         if( anyHidden )
             m_board->m_LegacyVisibleLayers = visibleLayers;
     }
+
+    if( m_appendToExisting && m_layerMappingHandler )
+        remapAppendedLayers( appendedLayers, destInitialEnabled, destInitialCopperCount );
+}
+
+
+void PCB_IO_KICAD_SEXPR_PARSER::remapAppendedLayers( const std::vector<LAYER>& aSourceLayers,
+                                                     const LSET& aDestInitialEnabled, int aDestInitialCopperCount )
+{
+    // Only prompt when an appended layer is new to the destination or a named appended layer would
+    // land on a differently-named destination layer
+    int  srcCopperCount = 0;
+    bool mismatch = false;
+
+    for( const LAYER& src : aSourceLayers )
+    {
+        PCB_LAYER_ID id = PCB_LAYER_ID( src.m_number );
+
+        if( IsCopperLayer( src.m_number ) )
+            srcCopperCount++;
+
+        if( !aDestInitialEnabled.Contains( id ) )
+            mismatch = true;
+        else if( !src.m_userName.IsEmpty() && src.m_userName != m_board->GetLayerName( id ) )
+            mismatch = true;
+    }
+
+    if( !mismatch )
+        return;
+
+    std::vector<INPUT_LAYER_DESC> descs;
+
+    for( const LAYER& src : aSourceLayers )
+    {
+        INPUT_LAYER_DESC desc;
+        desc.Name = src.m_userName.IsEmpty() ? src.m_name : src.m_userName;
+        desc.AutoMapLayer = PCB_LAYER_ID( src.m_number );
+        desc.Required = false;
+
+        if( IsCopperLayer( src.m_number ) )
+            desc.PermittedLayers = LSET::AllCuMask( std::max( srcCopperCount, aDestInitialCopperCount ) );
+        else
+            desc.PermittedLayers = LSET( { PCB_LAYER_ID( src.m_number ) } );
+
+        // Prefer a destination layer with the same name as the auto-map suggestion
+        for( PCB_LAYER_ID hid : aDestInitialEnabled.Seq() )
+        {
+            if( m_board->GetLayerName( hid ) == desc.Name )
+            {
+                desc.AutoMapLayer = hid;
+                break;
+            }
+        }
+
+        descs.push_back( desc );
+    }
+
+    // Hide the load progress reporter while the (modal) mapping dialog is up
+    wxWindow* progressWindow = dynamic_cast<wxWindow*>( m_progressReporter );
+
+    if( progressWindow )
+        progressWindow->Hide();
+
+    std::map<wxString, PCB_LAYER_ID> remap = m_layerMappingHandler( descs );
+
+    if( progressWindow )
+        progressWindow->Show();
+
+    LSET enabled = m_board->GetEnabledLayers();
+
+    for( const LAYER& src : aSourceLayers )
+    {
+        wxString     key = src.m_userName.IsEmpty() ? src.m_name : src.m_userName;
+        auto         it = remap.find( key );
+        PCB_LAYER_ID target = ( it != remap.end() ) ? it->second : PCB_LAYER_ID( src.m_number );
+
+        UTF8 name = src.m_name;
+
+        if( target == UNDEFINED_LAYER )
+        {
+            // Not imported, items on it fall through to Rescue
+            m_layerIndices.erase( name );
+            m_layerMasks.erase( name );
+            continue;
+        }
+
+        m_layerIndices[name] = target;
+        m_layerMasks[name] = LSET( { target } );
+
+        // New layer on the destination keeps the appended descriptor
+        if( !aDestInitialEnabled.Contains( target ) )
+        {
+            LAYER descr = src;
+            descr.m_number = target;
+            m_board->SetLayerDescr( target, descr );
+        }
+
+        enabled.set( target );
+    }
+
+    m_board->SetEnabledLayers( enabled );
 }
 
 

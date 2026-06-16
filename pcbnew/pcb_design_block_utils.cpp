@@ -252,6 +252,10 @@ bool PCB_EDIT_FRAME::saveSelectionToDesignBlock( const wxString& aNickname, PCB_
     tempBoard->SetProject( &Prj(), true );
     tempBoard->SynchronizeProperties();
 
+    // Layer names live on the BOARD, not in the design settings, so copy them over
+    for( PCB_LAYER_ID layer : GetBoard()->GetEnabledLayers().Seq() )
+        tempBoard->SetLayerName( layer, GetBoard()->GetLayerName( layer ) );
+
     // For copying net info of selected items into the new board
     auto addNetIfNeeded =
             [&]( EDA_ITEM* aItem )

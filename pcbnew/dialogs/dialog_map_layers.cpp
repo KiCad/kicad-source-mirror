@@ -22,6 +22,7 @@
 #include <layer_ids.h>
 #include <lseq.h>
 #include <dialog_map_layers.h>
+#include <board.h>
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
 
@@ -41,6 +42,15 @@ wxString DIALOG_MAP_LAYERS::UnwrapRequired( const wxString& aLayerName )
         return aLayerName;
 
     return aLayerName.Left( aLayerName.Length() - 2 );
+}
+
+
+wxString DIALOG_MAP_LAYERS::KiCadLayerName( PCB_LAYER_ID aLayer ) const
+{
+    if( m_board )
+        return m_board->GetLayerName( aLayer );
+
+    return LayerName( aLayer );
 }
 
 
@@ -81,7 +91,7 @@ PCB_LAYER_ID DIALOG_MAP_LAYERS::GetSelectedLayerID()
 
     for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
-        if( LayerName( ToLAYER_ID( layer ) ) == selectedKiCadLayerName )
+        if( KiCadLayerName( ToLAYER_ID( layer ) ) == selectedKiCadLayerName )
             return ToLAYER_ID( layer );
     }
 
@@ -122,7 +132,7 @@ void DIALOG_MAP_LAYERS::AddMappings()
             != wxNOT_FOUND )
     {
         wxString selectedLayerName = m_unmatched_layers_list->GetItemText( itemIndex );
-        wxString kiName            = LayerName( selectedKiCadLayerID );
+        wxString kiName = KiCadLayerName( selectedKiCadLayerID );
 
         // add layer pair to the GUI list and also to the map
         long newItemIndex = m_matched_layers_list->InsertItem( 0, selectedLayerName );
@@ -199,7 +209,7 @@ void DIALOG_MAP_LAYERS::OnAutoMatchLayersClicked( wxCommandEvent& event )
         if( autoMatchLayer == PCB_LAYER_ID::UNDEFINED_LAYER )
             continue;
 
-        wxString kiName = LayerName( autoMatchLayer );
+        wxString kiName = KiCadLayerName( autoMatchLayer );
 
         // add layer pair to the GUI list and also to the map
         long newItemIndex = m_matched_layers_list->InsertItem( 0, layerName );
@@ -227,6 +237,9 @@ void DIALOG_MAP_LAYERS::OnAutoMatchLayersClicked( wxCommandEvent& event )
 DIALOG_MAP_LAYERS::DIALOG_MAP_LAYERS( wxWindow* aParent, const std::vector<INPUT_LAYER_DESC>& aLayerDesc ) :
         DIALOG_IMPORTED_LAYERS_BASE( aParent )
 {
+    if( PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( aParent ) )
+        m_board = frame->GetBoard();
+
     LSET kiCadLayers;
 
     // Read in the input layers
@@ -285,7 +298,7 @@ DIALOG_MAP_LAYERS::DIALOG_MAP_LAYERS( wxWindow* aParent, const std::vector<INPUT
 
     for( PCB_LAYER_ID layer : kicadLayersSeq )
     {
-        wxString kiName = LayerName( layer );
+        wxString kiName = KiCadLayerName( layer );
 
         wxListItem item;
         item.SetId( row );

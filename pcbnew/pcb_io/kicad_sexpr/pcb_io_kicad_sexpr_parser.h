@@ -37,6 +37,7 @@
 #include <math/box2.h>
 #include <string_any_map.h>
 #include <padstack.h>
+#include <pcb_io/common/plugin_common_layer_mapping.h>
 
 #include <chrono>
 #include <unordered_map>
@@ -140,6 +141,9 @@ public:
      */
     const std::vector<wxString>& GetParseWarnings() const { return m_parseWarnings; }
 
+    /// Handler to remap an appended board's layers onto the destination board, used on mismatch.
+    void SetLayerMappingHandler( LAYER_MAPPING_HANDLER aHandler ) { m_layerMappingHandler = std::move( aHandler ); }
+
 private:
 
     // Group membership info refers to other Uuids in the file.
@@ -216,6 +220,10 @@ private:
     void parseTITLE_BLOCK();
 
     void parseLayers();
+
+    /// Remap the appended layers onto the destination using m_layerMappingHandler, on mismatch.
+    void remapAppendedLayers( const std::vector<LAYER>& aSourceLayers, const LSET& aDestInitialEnabled,
+                              int aDestInitialCopperCount );
     void parseLayer( LAYER* aLayer );
 
     void parseBoardStackup();
@@ -443,6 +451,7 @@ private:
     wxString            m_generatorVersion; ///< Set to the generator version this board requires
     bool                m_appendToExisting; ///< reading into an existing board; reset UUIDs
     bool                m_preserveDestinationStackup; ///< append keeps destination stackup
+    LAYER_MAPPING_HANDLER m_layerMappingHandler;        ///< optional remap of appended layers onto dest
 
     ///< if resetting UUIDs, record new ones to update groups with.
     KIID_MAP            m_resetKIIDMap;

@@ -3346,6 +3346,9 @@ BOARD* PCB_IO_KICAD_SEXPR::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe,
 
     PCB_IO_KICAD_SEXPR_PARSER parser( &aReader, aAppendToMe, m_queryUserCallback, aProgressReporter, aLineCount,
                                       preserveDestinationStackup );
+
+    parser.SetLayerMappingHandler( m_layer_mapping_handler );
+
     BOARD* board;
 
     try
