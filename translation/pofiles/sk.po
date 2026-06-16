@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-08 16:01+0000\n"
+"PO-Revision-Date: 2026-06-17 03:01+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -2724,37 +2724,32 @@ msgid "Add Netclass Assignment"
 msgstr "Pridať priradenie triedy spojov"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:33
-#, fuzzy
 msgid "(missing)"
-msgstr "(chýba súbor)"
+msgstr "(chýbajúce)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:45
 msgid "File"
 msgstr "Súbor"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:46
-#, fuzzy
 msgid "Saved version"
-msgstr "Zobraziť všetky verzie"
+msgstr "Uložená verzia"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:47
-#, fuzzy
 msgid "Auto-saved copy"
-msgstr "Automatické ukladanie obnovy"
+msgstr "Automaticky uložená kópia"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
-#, fuzzy
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
-"KiCad našiel neuložené zmeny z vašej poslednej relácie, ktoré sú novšie ako "
-"uložené súbory projektu."
+"KiCad našiel automaticky uložené zmeny z predchádzajúcej relácie. To "
+"zvyčajne znamená, že KiCad sa neočakávane zatvoril, pri neuloženej práci."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore auto-saved"
-msgstr "Obnoviť predvolené"
+msgstr "Obnoviť automaticky uložené"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
@@ -2765,18 +2760,16 @@ msgstr ""
 "obsah sa zahodí."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep current"
-msgstr "Prúd"
+msgstr "Zachovať aktuálnu"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr "Ponechá uložený súbor tak, ako je, a zahodí automaticky uložené zmeny."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep both"
-msgstr "Zakázaná oblasť"
+msgstr "Zachovať obe"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
@@ -2787,9 +2780,8 @@ msgstr ""
 "samostatný súbor s časovou pečiatkou, ktorý si môžete neskôr pozrieť."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel open"
-msgstr "Zrušiť načítanie"
+msgstr "Zrušiť otvorenie"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:49
 msgid ""
@@ -4042,9 +4034,8 @@ msgstr "Kľúčová prístupová fráza:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
-#, fuzzy
 msgid "Password / token:"
-msgstr "Heslo:"
+msgstr "Heslo / token:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
@@ -4069,14 +4060,12 @@ msgid "Username:"
 msgstr "Používateľské meno:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:63
-#, fuzzy
 msgid "SSH key:"
-msgstr "Heslo kľúča SSH:"
+msgstr "Kľúč SSH:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "Vybrať súbor súkromného kľúča SSH"
+msgstr "Vybrať súkromný kľúč SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -4084,14 +4073,12 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:74
-#, fuzzy
 msgid "Save credentials"
-msgstr "Uložiť všetky prúdy"
+msgstr "Uložiť prihlasovacie údaje"
 
 #: common/dialogs/git/dialog_git_credentials_base.h:57
-#, fuzzy
 msgid "Git Authentication Required"
-msgstr "Autentifikácia"
+msgstr "Vyžaduje sa overenie v Gite"
 
 #: common/dialogs/git/dialog_git_repository.cpp:178
 #: common/dialogs/git/dialog_git_repository.cpp:405
@@ -6655,9 +6642,9 @@ msgid "Failed to recover auto-saved file '%s'."
 msgstr "Nepodarilo sa obnoviť automaticky uložený súbor '%s'."
 
 #: common/eda_base_frame.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write recovered file '%s'."
-msgstr "Nepodarilo sa zapísať do súboru '%s'."
+msgstr "Nepodarilo sa zapísať obnovený súbor '%s'."
 
 #: common/eda_base_frame.cpp:609 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:136
@@ -7207,9 +7194,8 @@ msgstr "Elipsa"
 
 #: common/eda_shape.cpp:474 common/eda_shape.cpp:1463 common/eda_shape.cpp:3371
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:229
-#, fuzzy
 msgid "Elliptical Arc"
-msgstr "Rozdeliť oblúk"
+msgstr "Eliptický oblúk"
 
 #: common/eda_shape.cpp:1447
 msgid "Pad Number Box"
@@ -7272,26 +7258,22 @@ msgstr "Uhol"
 #: common/eda_shape.cpp:1498 common/eda_shape.cpp:1505
 #: common/eda_shape.cpp:3533 pcbnew/dialogs/dialog_shape_properties.cpp:1143
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1160
-#, fuzzy
 msgid "Major Radius"
-msgstr "Polomer rohu"
+msgstr "Hlavný polomer"
 
 #: common/eda_shape.cpp:1499 common/eda_shape.cpp:1506
 #: common/eda_shape.cpp:3539 pcbnew/dialogs/dialog_shape_properties.cpp:1145
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1162
-#, fuzzy
 msgid "Minor Radius"
-msgstr "Polomer rohu"
+msgstr "Malý polomer"
 
 #: common/eda_shape.cpp:1508 pcbnew/dialogs/dialog_shape_properties.cpp:1166
-#, fuzzy
 msgid "Start Angle"
-msgstr "Počiatočná vrstva:"
+msgstr "Počiatočný uhol"
 
 #: common/eda_shape.cpp:1509 pcbnew/dialogs/dialog_shape_properties.cpp:1168
-#, fuzzy
 msgid "End Angle"
-msgstr "Uhol"
+msgstr "Koncový uhol"
 
 #: common/eda_shape.cpp:1514 common/layer_id.cpp:147
 #: eeschema/sch_rule_area.cpp:395 pcbnew/widgets/appearance_controls.cpp:356
@@ -7407,19 +7389,16 @@ msgid "Corner Radius"
 msgstr "Polomer rohu"
 
 #: common/eda_shape.cpp:3546
-#, fuzzy
 msgid "Ellipse Rotation"
-msgstr "Rotácia"
+msgstr "Otočenie elipsy"
 
 #: common/eda_shape.cpp:3552
-#, fuzzy
 msgid "Arc Start Angle"
-msgstr "Počiatočná vrstva:"
+msgstr "Počiatočný uhol oblúka"
 
 #: common/eda_shape.cpp:3558
-#, fuzzy
 msgid "Arc End Angle"
-msgstr "Uhol oblúka:"
+msgstr "Koncový uhol oblúka"
 
 #: common/eda_shape.cpp:3563 common/stroke_params.cpp:403
 #: eeschema/sch_bus_entry.cpp:714 eeschema/sch_line.cpp:1338
@@ -8061,19 +8040,19 @@ msgid "Cannot amend: the branch has no commits yet."
 msgstr "Nie je možné zmeniť: vetva ešte nemá žiadne commity."
 
 #: common/git/libgit_backend.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD commit: %s"
-msgstr "Nepodarilo sa získať commit: %s"
+msgstr "Nepodarilo sa získať HEAD commit: %s"
 
 #: common/git/libgit_backend.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get parent commit: %s"
-msgstr "Nepodarilo sa získať commit: %s"
+msgstr "Nepodarilo sa získať nadradený commit: %s"
 
 #: common/git/libgit_backend.cpp:364
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD tree: %s"
-msgstr "Nepodarilo sa získať referenciu na HEAD: %s"
+msgstr "Nepodarilo sa získať strom HEAD: %s"
 
 #: common/git/libgit_backend.cpp:373 common/git/libgit_backend.cpp:396
 #, fuzzy, c-format
@@ -13017,12 +12996,16 @@ msgid ""
 "Net chain rebuild failed: %s.  The schematic may have stale chain data; "
 "reload to recover."
 msgstr ""
+"Prerobenie reťazenia spoja zlyhalo: %s. Schéma môže obsahovať zastarané dáta "
+"reťazenia; načítajte ju znova pre obnovenie."
 
 #: eeschema/connection_graph.cpp:3780
 msgid ""
 "Net chain rebuild failed with an unknown error.  The schematic may have "
 "stale chain data; reload to recover."
 msgstr ""
+"Prerobenie sieťového reťazca zlyhalo z dôvodu neznámej chyby.  Schéma môže "
+"obsahovať zastarané dáta reťazca; načítajte ju znova pre obnovenie."
 
 #: eeschema/connection_graph.cpp:5105
 #, c-format
@@ -13706,7 +13689,7 @@ msgstr "Vytvoriť DPS"
 #: eeschema/dialogs/dialog_create_net_chain.cpp:129
 #, c-format
 msgid "Chain created (%d total). Select another or close."
-msgstr ""
+msgstr "Reťazec vytvorený (celkovo %d). Vybrať ďalší alebo zatvoriť."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:142
 #, fuzzy
@@ -13738,7 +13721,7 @@ msgstr "Názvy signálov nemôžu obsahovať medzery"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:178
 msgid "Connection graph not available."
-msgstr ""
+msgstr "Graf prepojení nie je k dispozícii."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:184
 #, fuzzy, c-format
@@ -13787,15 +13770,23 @@ msgid ""
 "\n"
 "Would you like to force-create a manual chain link between these components?"
 msgstr ""
+"Nenašla sa žiadna cesta reťazca spoja medzi %s a %s cez prechádzajúce "
+"komponenty.\n"
+"\n"
+"Chcete vynútiť manuálne vytvorenie reťazenia spoja medzi týmito komponentmi?"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:438
 msgid "Selected components have no connected pins to anchor a manual chain."
 msgstr ""
+"Vybrané komponenty nemajú žiadne pripojené vývody pre ukotvenie manuálneho "
+"reťazca."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:470
 #, c-format
 msgid "Showing manual chain between %s and %s. Use Refresh to restore all."
 msgstr ""
+"Zobrazený je manuálny reťazec medzi %s a %s. Pre obnovenie všetkých položiek "
+"použite funkciu Obnoviť."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:510
 #, c-format
@@ -13803,11 +13794,15 @@ msgid ""
 "All %zu net chain paths between %s and %s are already committed as net "
 "chains."
 msgstr ""
+"Všetky cesty reťazenia spoja %zu medzi %s a %s sú už potvrdené ako reťazenie "
+"spoja."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:546
 #, c-format
 msgid "Showing %zu path(s) between %s and %s. Use Refresh to restore all."
 msgstr ""
+"Zobrazené sú %zu cesty medzi %s a %s. Na obnovenie všetkých použite tlačidlo "
+"Obnoviť."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:767
 #: eeschema/dialogs/dialog_create_net_chain.cpp:784
@@ -13821,13 +13816,13 @@ msgstr "Meno člena"
 #: eeschema/dialogs/dialog_create_net_chain.cpp:794
 #, c-format
 msgid "Member Nets — %s (%zu) [%s]"
-msgstr ""
+msgstr "Člen spojov — %s (%zu) [%s]"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:799
 #: eeschema/dialogs/panel_setup_net_chains.cpp:654
 #, c-format
 msgid "Member Nets — %s (%zu)"
-msgstr ""
+msgstr "Člen spojov — %s (%zu)"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1079
 #, fuzzy, c-format
@@ -13846,11 +13841,15 @@ msgid ""
 "No uncommitted chains match the selected %s. Use Refresh to restore the full "
 "list."
 msgstr ""
+"Žiadne nepotvrdené reťazce nezodpovedajú vybranému %s. Pre obnovenie celého "
+"zoznamu použite Obnoviť."
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:22
 msgid ""
 " Select a detected net chain path and assign a name to create a net chain."
 msgstr ""
+" Vybrať detegovanú cestu reťazenia spoja a priradiť jej názov pre vytvorené "
+"reťazenie spoja."
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:53
 #, fuzzy
@@ -18183,7 +18182,7 @@ msgstr "Hodiny"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:235
 msgid "Force"
-msgstr ""
+msgstr "Nanútiť"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:253
 #: eeschema/sch_edit_frame.cpp:2424
@@ -19363,12 +19362,12 @@ msgstr ": (žiadne zmeny)"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:242
 #, c-format
 msgid "%zu nets"
-msgstr ""
+msgstr "%zu spojov"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:349
 #, c-format
 msgid "Net chain on row %zu cannot have an empty name."
-msgstr ""
+msgstr "Názov reťazenia spoja v riadku %zu nemôže byť prázdny."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:357
 #, fuzzy, c-format
@@ -19383,7 +19382,7 @@ msgstr "Duplikovaný názov netclass „%s“"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:382
 #, c-format
 msgid "Class on row %zu cannot have an empty name."
-msgstr ""
+msgstr "Trieda v riadku %zu nemôže mať prázdny názov."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:384
 #: eeschema/dialogs/panel_setup_net_chains.cpp:392
@@ -19445,6 +19444,8 @@ msgstr "Premenovať súbory"
 msgid ""
 "Delete net chain class '%s'?  Chains assigned to it will become unclassified."
 msgstr ""
+"Odstrániť triedu reťazenia spoja '%s'? Reťazce, ktoré sú k nej priradené, "
+"budú nezaradené."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:747
 #, fuzzy
@@ -19474,13 +19475,15 @@ msgstr "Odstrániť vybraté asociácie stopy"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:116
 msgid "Chains"
-msgstr ""
+msgstr "Reťazenia"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:121
 msgid ""
 "Group net chains under a class label so DRC rules can target the whole group "
 "via inNetChainClass('name')."
 msgstr ""
+"Zoskupiť reťazenia spojov do triedy s názvom, aby pravidlá DRC mohli cieliť "
+"na celú skupinu prostredníctvom inNetChainClass('name')."
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:142
 #, fuzzy
@@ -19495,10 +19498,11 @@ msgstr "Nová trieda siete:"
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:169
 msgid "Rename the selected class (updates every chain that uses it)"
 msgstr ""
+"Premenovať vybranú triedu (aktualizuje každé reťazenie, ktoré ju používa)"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:174
 msgid "Delete the selected class (chains revert to no class)"
-msgstr ""
+msgstr "Odstrániť vybranú triedu (reťazenia sa vrátia do stavu 'bez triedy')"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:228
 msgid "No error or warning"
@@ -22263,12 +22267,12 @@ msgstr "Nepodporovaná verzia RPC %d."
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:272
 #, c-format
 msgid "DipTrace import: unexpected error at offset 0x%06zX: %s"
-msgstr ""
+msgstr "Import DipTrace: neočakávaná chyba na offsete 0x%06zX: %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:286
 #, c-format
 msgid "Invalid DipTrace schematic magic length: %d (expected 7 or 11)."
-msgstr ""
+msgstr "Neplatná magic dĺžka v schéme DipTrace: %d (očakávaná 7 alebo 11)."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:294
 #, fuzzy
@@ -22277,7 +22281,7 @@ msgstr "Neplatná hlavička Sprint Layout súboru"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:308
 msgid "Invalid DipTrace schematic file: bad legacy version suffix."
-msgstr ""
+msgstr "Neplatný súbor DipTrace schémy: chybná prípona staršej verzie."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:323
 #, fuzzy, c-format
@@ -22298,7 +22302,7 @@ msgstr "Celkový počet súčiastok: %d."
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:2199
 #, c-format
 msgid "DipTrace import: invalid bus count %d."
-msgstr ""
+msgstr "Import DipTrace: neplatný počet zberníc %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:690
 #, fuzzy, c-format
@@ -22309,17 +22313,21 @@ msgstr "Nepodarilo sa analyzovať zoznam súčiastok: %s"
 #, c-format
 msgid "DipTrace import: found %zu components, but the file header declares %d."
 msgstr ""
+"Import DipTrace: nájdených komponenty je %zu, ale hlavička súboru deklaruje "
+"%d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:953
 #, c-format
 msgid ""
 "DipTrace import: invalid component extra-tail length %u at offset 0x%06zX."
 msgstr ""
+"Import DipTrace: neplatná extra-tail dĺžka v komponente %u na offsete "
+"0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1101
 #, c-format
 msgid "Invalid pin count %d at component offset 0x%06zX."
-msgstr ""
+msgstr "Neplatný počet vývodov %d komponentu na offsete 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1177
 #, c-format
@@ -22327,28 +22335,33 @@ msgid ""
 "DipTrace import: failed to parse pin %d in component at 0x%06zX (offset "
 "0x%06zX): %s"
 msgstr ""
+"Import DipTrace: nepodarilo sa spracovať vývod %d v komponente na 0x%06zX "
+"(offset 0x%06zX): %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1303
 #, c-format
 msgid ""
 "DipTrace import: invalid component shape point count %d at offset 0x%06zX."
 msgstr ""
+"Import DipTrace: neplatný počet vrcholov tvaru komponentu %d na offsete "
+"0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1932
 #, c-format
 msgid ""
 "DipTrace import: invalid embedded pattern %s count %d at offset 0x%06zX."
 msgstr ""
+"Import DipTrace: neplatný vložený vzor %s v počte %d na offsete 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:2223
 #, c-format
 msgid "DipTrace import: bus entry %d has unexpected terminator %d."
-msgstr ""
+msgstr "Import DipTrace: zbernicové pripojenie %d má neočakávané ukončenie %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:2239
 #, c-format
 msgid "DipTrace import: failed to parse bus entry %d: %s"
-msgstr ""
+msgstr "Import DipTrace: nepodarilo sa spracovať položku zbernice %d: %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3730
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3763
@@ -22357,6 +22370,8 @@ msgid ""
 "DipTrace import: invalid wire-net name for net index %d at offset 0x%06zX: "
 "%s."
 msgstr ""
+"Import DipTrace: neplatný názov spoja pre index spoja %d na offsete 0x%06zX: "
+"%s."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3780
 #, c-format
@@ -22364,22 +22379,26 @@ msgid ""
 "DipTrace import: invalid wire-net pin count %d for net '%s' at offset "
 "0x%06zX."
 msgstr ""
+"Import DipTrace: neplatný počet vývodov %d pre spoj '%s' na offsete 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3793
 #, c-format
 msgid "DipTrace import: invalid wire count %d for net '%s' at offset 0x%06zX."
 msgstr ""
+"Import DipTrace: neplatný počet spojov %d pre spoj '%s' na offsete 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3826
 #, c-format
 msgid ""
 "DipTrace import: invalid wire point count %d for net '%s' at offset 0x%06zX."
 msgstr ""
+"Import DipTrace: neplatný počet bodov zapojenia %d pre spoj '%s' na offsete "
+"0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:4242
 #, c-format
 msgid "DipTrace import: failed to create symbol for %s (%s): %s"
-msgstr ""
+msgstr "Import DipTrace: nepodarilo sa vytvoriť symbol pre %s (%s): %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:4262
 #, c-format
@@ -22387,6 +22406,8 @@ msgid ""
 "DipTrace import: loaded %zu components, %zu buses, %zu net-port labels from "
 "version %d file with %d sheets."
 msgstr ""
+"Import DipTrace: načítaných %zu komponentov, %zu zberníc, %zu označení "
+"spojov, zo súboru verzie %d s %d listami."
 
 #: eeschema/sch_io/diptrace/sch_io_diptrace.cpp:73
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:118
@@ -23413,7 +23434,7 @@ msgstr "%s, %s a %s"
 #: eeschema/sch_shape.cpp:473
 #, c-format
 msgid "Elliptical Arc, %s x %s"
-msgstr ""
+msgstr "Eliptický oblúk, %s x %s"
 
 #: eeschema/sch_shape.cpp:620
 msgid "Body outline color"
@@ -24938,37 +24959,37 @@ msgstr "Neplatná tabuľka ISSO_PD."
 #: eeschema/sim/kibis/ibis_parser.cpp:709
 #, c-format
 msgid "Series MOSFET Vds must be > 0 in %s."
-msgstr ""
+msgstr "Napätie Vds sériového MOSFETu musí byť > 0 v %s."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:713
 #, c-format
 msgid "Rl Series requires L Series in %s."
-msgstr ""
+msgstr "Sériové Rl vyžaduje sériové L v %s."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:716
 #, c-format
 msgid "Rc/Lc Series requires C Series in %s."
-msgstr ""
+msgstr "Sériové Rc/Lc vyžaduje sériové C v %s."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:725
 msgid "[On] and [Off] are only allowed in Series_switch models."
-msgstr ""
+msgstr "Možnosti [Zap.] a [Vyp.] sú povolené iba v modeloch Series_switch."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:732
 msgid "Series model has no series elements."
-msgstr ""
+msgstr "Sériový model nemá žiadne sériové prvky."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:743
 msgid "Series_switch model is missing the [On] block."
-msgstr ""
+msgstr "V modeli Series_switch chýba blok [Zap.]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:749
 msgid "Series_switch model is missing the [Off] block."
-msgstr ""
+msgstr "V modeli Series_switch chýba blok [Vyp.]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:755
 msgid "Series_switch model has series elements outside [On]/[Off]."
-msgstr ""
+msgstr "Model Series_switch má sériové prvky mimo [Zap.]/[Vyp.]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:763
 #: eeschema/sim/kibis/ibis_parser.cpp:848
@@ -25169,11 +25190,11 @@ msgstr "Neplatné dáta Ramp"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1757
 msgid "[Series MOSFET] outside of [Model] context."
-msgstr ""
+msgstr "[Sériový MOSFET] mimo kontextu [Model]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1770
 msgid "Internal error: no current [Series MOSFET] entry."
-msgstr ""
+msgstr "Interná chyba: žiadny aktuálny záznam [Sériový MOSFET]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1850
 msgid "The submodel name is missing."
@@ -25379,7 +25400,7 @@ msgstr "Model má viac ako 2 páry priebehov, pričom používa prvé dva."
 
 #: eeschema/sim/kibis/kibis.cpp:1492
 msgid "Series and Series_switch models are passive devices, not drivers."
-msgstr ""
+msgstr "Modely Series a Series_switch sú pasívne zariadenia, nie zdrojové."
 
 #: eeschema/sim/kibis/kibis.cpp:1497
 msgid "Invalid model type for a driver."
@@ -25387,7 +25408,7 @@ msgstr "Neplatný typ modelu pre ovládač."
 
 #: eeschema/sim/kibis/kibis.cpp:1554
 msgid "Series model has no [Series Pin Mapping] partner pin."
-msgstr ""
+msgstr "Sériový model nemá [Series Pin Mapping] partnerský vývod."
 
 #: eeschema/sim/kibis/kibis.cpp:1606
 msgid "Invalid model type for a device"
@@ -25601,7 +25622,7 @@ msgstr "Neplatný model IBIS '%s'"
 
 #: eeschema/sim/sim_model_ibis.cpp:300
 msgid "Switch state (1 = on, 0 = off)"
-msgstr ""
+msgstr "Stav prepínača (1 = zapnuté, 0 = vypnuté)"
 
 #: eeschema/sim/sim_model_ibis.cpp:447
 msgid "Power supply"
@@ -27891,6 +27912,8 @@ msgid ""
 "Remove the selected net from its net chain by disabling propagation on the "
 "bridging component(s)"
 msgstr ""
+"Odstrániť vybraný spoj z reťazenia vypnutím šírenia na premosťovacom "
+"komponente (komponentoch)"
 
 #: eeschema/tools/sch_actions.cpp:1116
 #, fuzzy
@@ -27910,7 +27933,7 @@ msgstr "Priradiť triedu spojov ku spojom zodpovedajúcim vzoru"
 
 #: eeschema/tools/sch_actions.cpp:1127
 msgid "Create Net Chain Between Pins"
-msgstr ""
+msgstr "Vytvoriť reťazenie spoja medzi vývodmi"
 
 #: eeschema/tools/sch_actions.cpp:1128
 #, fuzzy
@@ -27925,6 +27948,8 @@ msgstr "Vytvoriť prehľad..."
 #: eeschema/tools/sch_actions.cpp:1134
 msgid "Detect net chain paths through passives and create a named net chain"
 msgstr ""
+"Detekcia ciest reťazenia spoja cez pasívne prvky a vytvorenie pomenovaného "
+"reťazenia spoja"
 
 #: eeschema/tools/sch_actions.cpp:1140
 msgid "Show/hide the net navigator"
@@ -29075,7 +29100,7 @@ msgstr "Pridajte vybraté položky do novej skupiny"
 
 #: eeschema/tools/sch_group_tool.cpp:57 eeschema/tools/sch_group_tool.cpp:65
 msgid "Child items cannot be grouped separately from their parent item."
-msgstr ""
+msgstr "Podradené položky nemožno zoskupiť oddelene od ich nadradenej položky."
 
 #: eeschema/tools/sch_group_tool.cpp:94 pcbnew/tools/pcb_group_tool.cpp:86
 msgid "Click on new member..."
@@ -32857,7 +32882,7 @@ msgstr "Upraviť globálne a/alebo projektové knižnice symbolov"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:154
 msgid "Edit the project PCB design"
-msgstr "Upraviť projektový návrh DPS"
+msgstr "Upraviť návrh DPS projektu"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:157
 msgid "Edit global and/or project PCB footprint libraries"
@@ -32873,7 +32898,7 @@ msgstr "Previesť bitmapové obrázky na symboly schémy alebo puzdrá DPS"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:166
 msgid "Show tools for calculating resistance, current capacity, etc."
-msgstr "Zobrazit nástroj pre výpočet vodivosti, proudového zaťaženia atď."
+msgstr "Zobrazit nástroje pre výpočet vodivosti, proudového zaťaženia atď."
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:169
 msgid ""
@@ -34043,6 +34068,8 @@ msgstr "Konfigurovať cesty..."
 #: kicad/project_tree_pane.cpp:1043
 msgid "Set or change the default remote URL and credentials"
 msgstr ""
+"Nastavenie alebo zmena predvolenej vzdialenej adresy URL a prihlasovacích "
+"údajov"
 
 #: kicad/project_tree_pane.cpp:1046
 msgid "Commit Project..."
@@ -34059,7 +34086,7 @@ msgstr "Posledný commit"
 
 #: kicad/project_tree_pane.cpp:1051
 msgid "Rewrite the most recent commit on the current branch"
-msgstr ""
+msgstr "Prepísať najnovší commit v aktuálnej vetve"
 
 #: kicad/project_tree_pane.cpp:1054
 msgid "Push"
@@ -34211,12 +34238,12 @@ msgstr "Zistené obmedzenia šírky ramena tep. prep.: %s."
 
 #: kicad/project_tree_pane.cpp:2064
 msgid "Pulled changes (fast-forward)."
-msgstr ""
+msgstr "Prevzaté zmeny (fast-forward)."
 
 #: kicad/project_tree_pane.cpp:2065
 #, c-format
 msgid "Pulled %s into %s (fast-forward)."
-msgstr ""
+msgstr "Prevzaté %s do %s (fast-forward)."
 
 #: kicad/project_tree_pane.cpp:2070
 #, fuzzy
@@ -34236,6 +34263,11 @@ msgid ""
 "You can discard your local commits and use the remote version, or rebase "
 "your commits on top of the remote."
 msgstr ""
+"Vaše lokálne zmeny a vzdialené zmeny sú v konflikte, takže stiahnutie bolo "
+"zrušené a nič sa nezmenilo.\n"
+"\n"
+"Môžete zahodiť svoje lokálne commity a použiť vzdialenú verziu alebo ich "
+"preformátovať na vzdialenú verziu."
 
 #: kicad/project_tree_pane.cpp:2085
 #, fuzzy
@@ -34244,11 +34276,11 @@ msgstr "Konflikty"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Use Remote (discard my changes)"
-msgstr ""
+msgstr "&Použiť vzdialené (zahodiť moje zmeny)"
 
 #: kicad/project_tree_pane.cpp:2088
 msgid "&Rebase"
-msgstr ""
+msgstr "&Rebase"
 
 #: kicad/project_tree_pane.cpp:2095
 #, fuzzy
@@ -34304,14 +34336,21 @@ msgid ""
 "\n"
 "Anyone who already pulled the previous version will need to reset their copy."
 msgstr ""
+"Odoslať zamietnuté: lokálna vetva a %s sa rozišli.\n"
+"\n"
+"Toto sa zvyčajne stáva po úprave alebo prepísaní už odoslaného commitu. "
+"Vynútiť odoslanie, aby sa prepísala vzdialená vetva?\n"
+"\n"
+"Každý, kto už stiahol predchádzajúcu verziu, bude musieť resetovať svoju "
+"kópiu."
 
 #: kicad/project_tree_pane.cpp:2174
 msgid "Force Push?"
-msgstr ""
+msgstr "Nanútiť Push?"
 
 #: kicad/project_tree_pane.cpp:2176
 msgid "&Force Push"
-msgstr ""
+msgstr "&Nanútiť Push"
 
 #: kicad/project_tree_pane.cpp:2185
 #, fuzzy
@@ -34372,10 +34411,14 @@ msgid ""
 "Amending rewrites public history.  Anyone who pulled this commit will need "
 "to reset their copy."
 msgstr ""
+"Posledný commit už bol odoslaný do %s.\n"
+"\n"
+"Úprava prepíše verejnú históriu. Každý, kto stiahol tento commit, bude "
+"musieť resetovať svoju kópiu."
 
 #: kicad/project_tree_pane.cpp:2815
 msgid "Amend Published Commit?"
-msgstr ""
+msgstr "Upraviť publikovaný commit?"
 
 #: kicad/project_tree_pane.cpp:2817 kicad/project_tree_pane.cpp:2862
 #, fuzzy
@@ -39680,6 +39723,10 @@ msgid ""
 "\n"
 "Proceed anyway?"
 msgstr ""
+"Podľa konfigurácie zoskupenia bude umiestnených %d položiek na rovnakú "
+"pozíciu a v rovnakom otočení, čím budú naskladané na seba.\n"
+"\n"
+"Chcete aj napriek tomu pokračovať?"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:565
 #, fuzzy
@@ -40009,7 +40056,7 @@ msgstr "Neznáma chyba"
 
 #: pcbnew/dialogs/dialog_diff_phase_skew_properties_base.cpp:61
 msgid "Logarithmic color scale"
-msgstr ""
+msgstr "Logaritmická farebná stupnica"
 
 #: pcbnew/dialogs/dialog_diff_phase_skew_properties_base.h:53
 #, fuzzy
@@ -40980,19 +41027,23 @@ msgstr "Výstupný súbor 3D modelu"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:416
 msgid "Please save the board before exporting STEP."
-msgstr ""
+msgstr "Pred exportovaním STEPu, prosím, uložte dosku."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:423
 msgid ""
 "Board file not found on disk.\n"
 "Save the board before exporting STEP."
 msgstr ""
+"Súbor dosky sa na disku nenašiel.\n"
+"Pred exportovaním STEPu dosku uložte."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:435
 msgid ""
 "The board directory no longer exists.\n"
 "Save the board to a valid location before exporting STEP."
 msgstr ""
+"Adresár dosky už neexistuje.\n"
+"Pred exportom STEPu uložte dosku na platné miesto."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:445
 #, fuzzy
@@ -41239,7 +41290,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:276
 msgid "Board outline chaining tolerance:"
-msgstr "Tolerancia reťazenia obrysu dosky:"
+msgstr "Tolerancia spojenia obrysu dosky:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:280
 msgid "Tight (0.001 mm)"
