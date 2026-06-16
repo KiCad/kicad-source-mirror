@@ -23,6 +23,8 @@
 
 #include "sym_lib_differ.h"
 
+#include <diff_merge/property_diff.h>
+#include <diff_merge/sym_item_diff.h>
 #include <lib_symbol.h>
 #include <sch_item.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
@@ -78,22 +80,86 @@ SYM_LIB_DIFFER::LoadLibrary( const wxString& aPath )
         owners.push_back( std::move( owner ) );
     }
 
+    // The clones still point their parent at the IO cache, which dies with the
+    // plugin below. Re-link derived symbols to the copies we own so Flatten can
+    // still pull in the inherited pins and fields.
+    std::map<wxString, LIB_SYMBOL*> byName;
+
+    for( const std::unique_ptr<LIB_SYMBOL>& owner : owners )
+        byName[owner->GetName()] = owner.get();
+
+    for( const std::unique_ptr<LIB_SYMBOL>& owner : owners )
+    {
+        if( owner->GetParentName().IsEmpty() )
+            continue;
+
+        auto it = byName.find( owner->GetParentName() );
+
+        if( it != byName.end() )
+            owner->SetParent( it->second );
+    }
+
     return { std::move( owners ), std::move( map ) };
 }
 
 
+namespace
+{
+    bool hasSymbolDifferences( const LIB_SYMBOL* aBefore, const LIB_SYMBOL* aAfter )
+    {
+        std::unique_ptr<LIB_SYMBOL> before = aBefore->Flatten();
+        std::unique_ptr<LIB_SYMBOL> after = aAfter->Flatten();
+
+        return !DiffItemProperties( before.get(), after.get() ).empty()
+               || !DiffSymbolElements( before.get(), after.get() ).empty();
+    }
+} // namespace
+
+
 DOCUMENT_DIFF SYM_LIB_DIFFER::Diff()
 {
-    return DiffLibraryByName(
+    DOCUMENT_DIFF result = DiffLibraryByName(
             m_before, m_after, m_path, wxS( "kicad_sym" ), wxS( "LIB_SYMBOL" ), m_options,
-            []( const LIB_SYMBOL* aSym ) { return aSym->GetUnitBoundingBox( 0, 0 ); },
+            []( const LIB_SYMBOL* aSym )
+            {
+                return aSym->GetUnitBoundingBox( 0, 0 );
+            },
             []( const LIB_SYMBOL* aA, const LIB_SYMBOL* aB )
             {
-                // Use EQUALITY flag: skip the m_parent.lock() pointer comparison
-                // which would always disagree between two independently-cloned
-                // copies (parent weak_ptrs reference different control blocks).
-                return aA->Compare( *aB, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) != 0;
+                return hasSymbolDifferences( aA, aB );
             } );
+
+    for( ITEM_CHANGE& change : result.changes )
+    {
+        if( change.kind != CHANGE_KIND::MODIFIED || !change.refdes )
+            continue;
+
+        auto beforeIt = m_before.find( *change.refdes );
+        auto afterIt = m_after.find( *change.refdes );
+
+        if( beforeIt == m_before.end() || afterIt == m_after.end() )
+            continue;
+
+        std::unique_ptr<LIB_SYMBOL> before = beforeIt->second->Flatten();
+        std::unique_ptr<LIB_SYMBOL> after = afterIt->second->Flatten();
+
+        change.properties = DiffItemProperties( before.get(), after.get() );
+
+        for( const SYM_ELEMENT& element : DiffSymbolElements( before.get(), after.get() ) )
+        {
+            ITEM_CHANGE child;
+            child.typeName = element.typeName;
+            child.kind = element.kind;
+            child.properties = element.deltas;
+
+            if( !element.key.IsEmpty() )
+                child.refdes = element.key;
+
+            change.children.push_back( std::move( child ) );
+        }
+    }
+
+    return result;
 }
 
 } // namespace KICAD_DIFF

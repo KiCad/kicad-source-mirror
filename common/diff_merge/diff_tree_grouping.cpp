@@ -73,7 +73,9 @@ std::vector<CHANGE_TREE_GROUP> BuildChangeTreeGroups( const DOCUMENT_DIFF& aDiff
     std::map<CHANGE_KIND, std::vector<CHANGE_TREE_ENTRY>>          byKind;
     std::map<std::pair<CHANGE_KIND, wxString>, const ITEM_CHANGE*> netEntries;
 
-    auto collect = [&byKind, &netEntries]( auto& aSelf, const ITEM_CHANGE& aC ) -> void
+    const bool listChildren = aDiff.docType != wxS( "kicad_sym" );
+
+    auto collect = [&byKind, &netEntries, listChildren]( auto& aSelf, const ITEM_CHANGE& aC ) -> void
     {
         if( IsRoutingNetChange( aC ) )
         {
@@ -84,8 +86,11 @@ std::vector<CHANGE_TREE_GROUP> BuildChangeTreeGroups( const DOCUMENT_DIFF& aDiff
             byKind[aC.kind].push_back( { &aC, ChangeDisplayLabel( aC ) } );
         }
 
-        for( const ITEM_CHANGE& child : aC.children )
-            aSelf( aSelf, child );
+        if( listChildren )
+        {
+            for( const ITEM_CHANGE& child : aC.children )
+                aSelf( aSelf, child );
+        }
     };
 
     for( const ITEM_CHANGE& c : aDiff.changes )

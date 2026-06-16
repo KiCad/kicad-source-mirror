@@ -30,6 +30,8 @@
 
 #include <lib_symbol.h>
 #include <sch_item.h>
+#include <sch_pin.h>
+#include <sch_shape.h>
 
 #include <nlohmann/json.hpp>
 
@@ -220,6 +222,186 @@ BOOST_AUTO_TEST_CASE( OutputOrderingIsDeterministicAcrossRuns )
     DOCUMENT_DIFF r2 = differ2.Diff();
 
     BOOST_CHECK_EQUAL( r1.ToJson().dump(), r2.ToJson().dump() );
+}
+
+
+BOOST_AUTO_TEST_CASE( ModifiedSymbolCarriesPinChildDelta )
+{
+    auto [ownersA, mapA] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+    auto [ownersB, mapB] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+
+    LIB_SYMBOL* victim = nullptr;
+
+    for( const std::unique_ptr<LIB_SYMBOL>& owner : ownersB )
+    {
+        if( owner && !owner->IsDerived() && !owner->GetPins().empty() )
+        {
+            victim = owner.get();
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( victim );
+
+    victim->GetPins().front()->Move( VECTOR2I( 1270, 0 ) );
+
+    SYM_LIB_DIFFER differ( mapA, mapB );
+    DOCUMENT_DIFF  result = differ.Diff();
+
+    const ITEM_CHANGE* change = nullptr;
+
+    for( const ITEM_CHANGE& c : result.changes )
+    {
+        if( c.kind == CHANGE_KIND::MODIFIED && c.refdes && *c.refdes == victim->GetName() )
+        {
+            change = &c;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( change );
+
+    bool foundPinChild = false;
+
+    for( const ITEM_CHANGE& child : change->children )
+    {
+        if( child.typeName == wxS( "Pin" ) && !child.properties.empty() )
+            foundPinChild = true;
+    }
+
+    BOOST_CHECK( foundPinChild );
+}
+
+
+BOOST_AUTO_TEST_CASE( PinNameChangeIsDetected )
+{
+    auto [ownersA, mapA] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+    auto [ownersB, mapB] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+
+    LIB_SYMBOL* victim = nullptr;
+
+    for( const std::unique_ptr<LIB_SYMBOL>& owner : ownersB )
+    {
+        if( owner && !owner->IsDerived() && !owner->GetPins().empty() )
+        {
+            victim = owner.get();
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( victim );
+
+    victim->GetPins().front()->SetName( wxS( "QA_RENAMED_PIN" ) );
+
+    SYM_LIB_DIFFER differ( mapA, mapB );
+    DOCUMENT_DIFF  result = differ.Diff();
+
+    const ITEM_CHANGE* change = nullptr;
+
+    for( const ITEM_CHANGE& c : result.changes )
+    {
+        if( c.kind == CHANGE_KIND::MODIFIED && c.refdes && *c.refdes == victim->GetName() )
+        {
+            change = &c;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( change );
+
+    bool foundPinDelta = false;
+
+    for( const ITEM_CHANGE& child : change->children )
+    {
+        if( child.typeName == wxS( "Pin" ) && !child.properties.empty() )
+            foundPinDelta = true;
+    }
+
+    BOOST_CHECK( foundPinDelta );
+}
+
+
+BOOST_AUTO_TEST_CASE( AddedGraphicYieldsSingleAddedElement )
+{
+    auto [ownersA, mapA] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+    auto [ownersB, mapB] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+
+    LIB_SYMBOL* victim = nullptr;
+
+    for( const std::unique_ptr<LIB_SYMBOL>& owner : ownersB )
+    {
+        if( owner && !owner->IsDerived() )
+        {
+            victim = owner.get();
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( victim );
+
+    SCH_SHAPE* rect = new SCH_SHAPE( SHAPE_T::RECTANGLE );
+    rect->SetStart( VECTOR2I( 5080, 5080 ) );
+    rect->SetEnd( VECTOR2I( 7620, 7620 ) );
+    victim->AddDrawItem( rect );
+
+    SYM_LIB_DIFFER differ( mapA, mapB );
+    DOCUMENT_DIFF  result = differ.Diff();
+
+    const ITEM_CHANGE* change = nullptr;
+
+    for( const ITEM_CHANGE& c : result.changes )
+    {
+        if( c.kind == CHANGE_KIND::MODIFIED && c.refdes && *c.refdes == victim->GetName() )
+        {
+            change = &c;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE( change );
+
+    int added = 0;
+    int removed = 0;
+    int modified = 0;
+
+    for( const ITEM_CHANGE& child : change->children )
+    {
+        if( child.kind == CHANGE_KIND::ADDED )
+            added++;
+        else if( child.kind == CHANGE_KIND::REMOVED )
+            removed++;
+        else if( child.kind == CHANGE_KIND::MODIFIED )
+            modified++;
+    }
+
+    BOOST_CHECK_EQUAL( added, 1 );
+    BOOST_CHECK_EQUAL( removed, 0 );
+    BOOST_CHECK_EQUAL( modified, 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( DerivedSymbolKeepsResolvedParentAfterLoad )
+{
+    auto [owners, map] = SYM_LIB_DIFFER::LoadLibrary( getFixturePath() );
+
+    int checked = 0;
+
+    for( const std::unique_ptr<LIB_SYMBOL>& sym : owners )
+    {
+        if( sym->GetParentName().IsEmpty() )
+            continue;
+
+        BOOST_TEST_INFO( sym->GetName().ToStdString() );
+        BOOST_CHECK( sym->IsDerived() );
+
+        std::shared_ptr<LIB_SYMBOL> parent = sym->GetParent().lock();
+        BOOST_REQUIRE( parent );
+        BOOST_CHECK_EQUAL( parent->GetName(), sym->GetParentName() );
+
+        checked++;
+    }
+
+    BOOST_CHECK( checked > 0 );
 }
 
 

@@ -81,6 +81,8 @@ public:
     /// Replace the displayed scene. Pass an empty scene to clear the canvas.
     void SetScene( KICAD_DIFF::DIFF_SCENE aScene );
 
+    void SetWorldUnitLength( double aWorldUnitLength );
+
     /// Install the native painter used for drawing source document context.
     /// pcbnew/eeschema provide module-specific painters configured with a
     /// forced neutral color. The diff overlay remains owned by this widget.

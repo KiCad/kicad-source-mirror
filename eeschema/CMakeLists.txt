@@ -375,6 +375,8 @@ set( EESCHEMA_DIFF_MERGE_SRCS
     diff_merge/sch_diff_canvas_context.cpp
     diff_merge/sch_merge_applier.cpp
     diff_merge/sym_lib_differ.cpp
+    diff_merge/sym_item_diff.cpp
+    diff_merge/sym_diff_canvas_context.cpp
     )
 
 set( EESCHEMA_SRCS

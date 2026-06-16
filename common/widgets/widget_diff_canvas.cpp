@@ -137,6 +137,14 @@ void WIDGET_DIFF_CANVAS::SetScene( KICAD_DIFF::DIFF_SCENE aScene )
 }
 
 
+void WIDGET_DIFF_CANVAS::SetWorldUnitLength( double aWorldUnitLength )
+{
+    m_gal->SetWorldUnitLength( aWorldUnitLength );
+    m_gal->ComputeWorldScreenMatrix();
+    ZoomToFit();
+}
+
+
 void WIDGET_DIFF_CANVAS::SetContextPainter( std::unique_ptr<KIGFX::PAINTER> aPainter )
 {
     if( !aPainter )

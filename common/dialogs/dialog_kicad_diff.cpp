@@ -178,6 +178,8 @@ DIALOG_KICAD_DIFF::DIALOG_KICAD_DIFF( wxWindow* aParent, const wxString& aRefere
         m_listProperties->SetMinSize( wxSize( -1, 40 ) );
         detailSplitter->SplitHorizontally( m_canvas, m_listProperties, -200 );
 
+        propsToggle->SetValue( detailSplitter->IsSplit() );
+
         size_t insertAt = std::min<size_t>( 1, detailSizer->GetItemCount() );
         detailSizer->Insert( insertAt++, filterSizer, wxSizerFlags().Expand().Border( wxLEFT | wxRIGHT | wxTOP, 4 ) );
         detailSizer->Insert( insertAt, detailSplitter, wxSizerFlags( 1 ).Expand().Border( wxALL, 4 ) );
@@ -539,6 +541,9 @@ void DIALOG_KICAD_DIFF::SwitchCanvasToSheet( const KIID_PATH& aSheetPath )
 void DIALOG_KICAD_DIFF::showChange( const KICAD_DIFF::ITEM_CHANGE* aChange )
 {
     m_listProperties->DeleteAllItems();
+
+    if( m_changeSelectedFn )
+        m_changeSelectedFn( aChange ? aChange->id : KIID_PATH() );
 
     if( !aChange )
     {

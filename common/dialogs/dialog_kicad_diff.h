@@ -75,6 +75,10 @@ public:
     /// no chooser is shown.
     void SetRevisionChooser( const std::vector<wxString>& aLabels, int aSelected, REVISION_HANDLER aOnChange );
 
+    using CHANGE_SELECTED_FN = std::function<void( const KIID_PATH& )>;
+
+    void SetChangeSelectedHandler( CHANGE_SELECTED_FN aFn ) { m_changeSelectedFn = std::move( aFn ); }
+
 protected:
     void OnClose( wxCloseEvent& aEvent ) override;
     void OnTreeSelectionChanged( wxTreeEvent& aEvent ) override;
@@ -130,6 +134,8 @@ private:
 
     SHEET_SWITCHER m_sheetSwitcher;
     KIID_PATH      m_currentCanvasSheet;
+
+    CHANGE_SELECTED_FN m_changeSelectedFn;
 };
 
 #endif // DIALOG_KICAD_DIFF_H
