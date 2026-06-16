@@ -38,6 +38,7 @@
 #include <advanced_config.h>
 #include <connectivity/connectivity_data.h>
 #include <teardrop/teardrop.h>
+#include <cmath>
 
 
 /// Assert every outline in @p aFill has at least @p aMinArea — used to verify
@@ -3075,4 +3076,147 @@ BOOST_FIXTURE_TEST_CASE( RegressionNonCopperZoneKeepoutIslands, ZONE_FILL_TEST_F
                                            "Outline 0 of every non-copper multi-island zone "
                                            "was being incorrectly removed (issue 24089).",
                                            storedIslands, refilledIslands ) );
+}
+
+
+/**
+ * A PTH pad on net A, sitting inside both a lower-priority same-net zone and a higher-priority
+ * different-net zone, must still flash on inner layers where the higher-priority zone has no
+ * copper but the same-net zone does.  https://gitlab.com/kicad/code/kicad/-/issues/24175
+ */
+BOOST_FIXTURE_TEST_CASE( OverlappingPriorityPadFlashing, ZONE_FILL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetCopperLayerCount( 4 );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    bds.SetCopperLayerCount( 4 );
+    bds.m_MinClearance = pcbIUScale.mmToIU( 0.2 );
+
+    NETINFO_ITEM* gndNet = new NETINFO_ITEM( m_board.get(), wxT( "GND" ) );
+    m_board->Add( gndNet );
+    int gndNetCode = gndNet->GetNetCode();
+
+    NETINFO_ITEM* vccNet = new NETINFO_ITEM( m_board.get(), wxT( "VCC" ) );
+    m_board->Add( vccNet );
+    int vccNetCode = vccNet->GetNetCode();
+
+    ZONE* gndZone = new ZONE( m_board.get() );
+    gndZone->SetLayer( In1_Cu );
+    gndZone->SetNetCode( gndNetCode );
+    gndZone->SetAssignedPriority( 0 );
+    gndZone->SetMinThickness( pcbIUScale.mmToIU( 0.2 ) );
+    gndZone->SetThermalReliefGap( pcbIUScale.mmToIU( 0.5 ) );
+    gndZone->SetThermalReliefSpokeWidth( pcbIUScale.mmToIU( 0.5 ) );
+    gndZone->SetPadConnection( ZONE_CONNECTION::THERMAL );
+    {
+        SHAPE_POLY_SET outline;
+        outline.NewOutline();
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 0 ),  pcbIUScale.mmToIU( 0 ) ) );
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 0 ) ) );
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 30 ), pcbIUScale.mmToIU( 20 ) ) );
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 0 ),  pcbIUScale.mmToIU( 20 ) ) );
+        gndZone->AddPolygon( outline.COutline( 0 ) );
+    }
+    m_board->Add( gndZone );
+
+    ZONE* vccZone = new ZONE( m_board.get() );
+    vccZone->SetLayer( In1_Cu );
+    vccZone->SetNetCode( vccNetCode );
+    vccZone->SetAssignedPriority( 5 );
+    vccZone->SetMinThickness( pcbIUScale.mmToIU( 4.0 ) );
+    vccZone->SetThermalReliefGap( pcbIUScale.mmToIU( 0.5 ) );
+    vccZone->SetThermalReliefSpokeWidth( pcbIUScale.mmToIU( 0.5 ) );
+    vccZone->SetPadConnection( ZONE_CONNECTION::FULL );
+    {
+        // A "barbell": a bulky right lobe joined to a thin left neck by a 0.5mm-tall corridor.
+        // VCC's 4mm min-thickness prunes the neck and corridor in the deflate/inflate pass, so
+        // VCC fills only the right lobe while its outline still encloses the pad at (15, 10).
+        SHAPE_POLY_SET outline;
+        outline.NewOutline();
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 13.5 ), pcbIUScale.mmToIU( 9.75 ) ) );
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 18 ),   pcbIUScale.mmToIU( 9.75 ) ) );
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 18 ),   pcbIUScale.mmToIU( 0 ) ) );
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 30 ),   pcbIUScale.mmToIU( 0 ) ) );
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 30 ),   pcbIUScale.mmToIU( 20 ) ) );
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 18 ),   pcbIUScale.mmToIU( 20 ) ) );
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 18 ),   pcbIUScale.mmToIU( 10.25 ) ) );
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 13.5 ), pcbIUScale.mmToIU( 10.25 ) ) );
+        vccZone->AddPolygon( outline.COutline( 0 ) );
+    }
+    m_board->Add( vccZone );
+
+    // REMOVE_EXCEPT_START_AND_END makes inner-layer flashing conditional on a same-net
+    // connection, which is what issue 24175 gets wrong.
+    auto footprint = std::make_unique<FOOTPRINT>( m_board.get() );
+
+    PAD* pad = new PAD( footprint.get() );
+    pad->SetAttribute( PAD_ATTRIB::PTH );
+    pad->SetLayerSet( LSET::AllCuMask() );
+    pad->SetSize( PADSTACK::ALL_LAYERS,
+                  VECTOR2I( pcbIUScale.mmToIU( 1.5 ), pcbIUScale.mmToIU( 1.5 ) ) );
+    pad->SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( 0.8 ), pcbIUScale.mmToIU( 0.8 ) ) );
+    pad->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 15 ), pcbIUScale.mmToIU( 10 ) ) );
+    pad->SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
+    pad->SetNetCode( gndNetCode );
+
+    footprint->Add( pad );
+    footprint->SetPosition( VECTOR2I( 0, 0 ) );
+    m_board->Add( footprint.release() );
+
+    m_board->BuildConnectivity();
+    auto drcEngine = std::make_shared<DRC_ENGINE>( m_board.get(), &bds );
+    drcEngine->InitEngine( wxFileName() );
+    bds.m_DRCEngine = drcEngine;
+
+    KI_TEST::FillZones( m_board.get() );
+
+    // Guard the preconditions so a future fill change cannot make this pass for the wrong
+    // reason: VCC's outline must enclose the pad while its fill must not reach it.
+    BOOST_REQUIRE_MESSAGE( vccZone->Outline()->Contains( pad->GetPosition() ),
+                           "VCC outline must contain the pad position to reproduce issue 24175." );
+    BOOST_REQUIRE_MESSAGE( vccZone->HasFilledPolysForLayer( In1_Cu ),
+                           "VCC zone should still have fill in its right lobe." );
+
+    {
+        const std::shared_ptr<SHAPE_POLY_SET>& vccFill = vccZone->GetFilledPolysList( In1_Cu );
+
+        BOOST_REQUIRE_MESSAGE( !vccFill->Contains( pad->GetPosition() ),
+                               "VCC fill should NOT contain the pad position (corridor must be "
+                               "pruned by min-thickness for the test to exercise issue 24175)." );
+    }
+
+    // Before the fix the higher-priority VCC outline forced ZLO_FORCE_NO_ZONE_CONNECTION on
+    // the pad; now the same-net GND zone wins the flashing decision.
+    BOOST_CHECK_MESSAGE( pad->FlashLayer( In1_Cu ),
+                         "PTH pad inside higher-priority different-net zone must still flash "
+                         "when a same-net lower-priority zone covers it (issue 24175)." );
+
+    BOOST_REQUIRE_MESSAGE( gndZone->HasFilledPolysForLayer( In1_Cu ),
+                           "GND zone should have fill on In1.Cu" );
+
+    const std::shared_ptr<SHAPE_POLY_SET>& gndFill = gndZone->GetFilledPolysList( In1_Cu );
+
+    // Sampling a ring just outside the pad proves the GND fill actually surrounds it.
+    int  samples = 16;
+    int  sampleR = pcbIUScale.mmToIU( 1.6 );  // just outside the pad (radius 0.75) + clearance
+    bool foundCopperAround = false;
+
+    for( int i = 0; i < samples; i++ )
+    {
+        double   angle = ( 2.0 * M_PI * i ) / samples;
+        VECTOR2I p( pad->GetPosition().x + KiROUND( sampleR * std::cos( angle ) ),
+                    pad->GetPosition().y + KiROUND( sampleR * std::sin( angle ) ) );
+
+        if( gndFill->Contains( p ) )
+        {
+            foundCopperAround = true;
+            break;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( foundCopperAround,
+                         "Lower-priority GND zone should have copper around GND pad even when "
+                         "a higher-priority different-net zone outline contains the pad "
+                         "(issue 24175)." );
 }

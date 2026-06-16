@@ -471,7 +471,33 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
     registerMigration( 4, 5,
             [&]()
             {
-                // Schema version 5: use named render layers
+                // Pre-v5 ids are offsets from GAL_LAYER_ID_START in the enum current when the
+                // file was written.  Commit 43e327b6 split LAYER_VIA_BBLIND and shifted later
+                // offsets (LAYER_FP_TEXT 5->6), so the live enum can no longer decode them; map
+                // the historical offsets directly.  Offsets without a VISIBILITY_LAYER are
+                // dropped, as before.
+                static const std::map<int, VISIBILITY_LAYER> legacyOffsetToVisibility = {
+                        { 5,  VISIBILITY_LAYER::FOOTPRINT_TEXT },
+                        { 8,  VISIBILITY_LAYER::FOOTPRINT_ANCHORS },
+                        { 11, VISIBILITY_LAYER::RATSNEST },
+                        { 12, VISIBILITY_LAYER::GRID },
+                        { 15, VISIBILITY_LAYER::FOOTPRINTS_FRONT },
+                        { 16, VISIBILITY_LAYER::FOOTPRINTS_BACK },
+                        { 17, VISIBILITY_LAYER::FOOTPRINT_VALUES },
+                        { 18, VISIBILITY_LAYER::FOOTPRINT_REFERENCES },
+                        { 19, VISIBILITY_LAYER::TRACKS },
+                        { 23, VISIBILITY_LAYER::DRC_ERRORS },
+                        { 24, VISIBILITY_LAYER::DRAWING_SHEET },
+                        { 30, VISIBILITY_LAYER::BITMAPS },
+                        { 32, VISIBILITY_LAYER::PADS },
+                        { 33, VISIBILITY_LAYER::ZONES },
+                        { 36, VISIBILITY_LAYER::DRC_WARNINGS },
+                        { 37, VISIBILITY_LAYER::DRC_EXCLUSIONS },
+                        { 39, VISIBILITY_LAYER::LOCKED_ITEM_SHADOWS },
+                        { 40, VISIBILITY_LAYER::CONFLICT_SHADOWS },
+                        { 41, VISIBILITY_LAYER::SHAPES },
+                        { 0,  VISIBILITY_LAYER::VIAS },
+                };
 
                 std::string ptr( "board.visible_items" );
 
@@ -484,11 +510,10 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                         if( !entry.is_number_integer() )
                             continue;
 
-                        if( std::optional<VISIBILITY_LAYER> vl =
-                            VisibilityLayerFromRenderLayer( GAL_LAYER_ID_START + entry.get<int>() ) )
-                        {
-                            newLayers.emplace_back( VisibilityLayerToString( *vl ) );
-                        }
+                        auto it = legacyOffsetToVisibility.find( entry.get<int>() );
+
+                        if( it != legacyOffsetToVisibility.end() )
+                            newLayers.emplace_back( VisibilityLayerToString( it->second ) );
                     }
 
                     At( ptr ) = newLayers;

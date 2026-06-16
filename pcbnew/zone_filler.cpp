@@ -444,10 +444,16 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
         zoneOutlineIndices[zone].Build( *zone->Outline() );
     }
 
+    // Prefer any same-net zone over a higher-priority different-net zone.  A higher-priority
+    // different-net zone only knocks out same-net fill where it actually fills; where it has no
+    // copper (e.g. behind a barrier track) the same-net zone keeps copper around the item, so the
+    // item must still flash.  https://gitlab.com/kicad/code/kicad/-/issues/24175
     auto findHighestPriorityZone =
             [&]( const BOX2I& bbox, PCB_LAYER_ID itemLayer, int netcode,
                  const std::function<bool( const ZONE* )>& testFn ) -> ZONE*
             {
+                unsigned highestSameNetPriority = 0;
+                ZONE*    highestSameNetZone = nullptr;
                 unsigned highestPriority = 0;
                 ZONE*    highestPriorityZone = nullptr;
 
@@ -457,11 +463,22 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                     if( zone->GetIsRuleArea() )
                         continue;
 
-                    if( zone->GetAssignedPriority() < highestPriority )
-                        continue;
-
                     if( !zone->IsOnLayer( itemLayer ) )
                         continue;
+
+                    const unsigned priority = zone->GetAssignedPriority();
+                    const bool     sameNet = zone->GetNetCode() == netcode;
+
+                    // Skip candidates that cannot improve either the same-net or the fall-back best.
+                    if( sameNet )
+                    {
+                        if( highestSameNetZone && priority < highestSameNetPriority )
+                            continue;
+                    }
+                    else if( highestPriorityZone && priority < highestPriority )
+                    {
+                        continue;
+                    }
 
                     // Degenerate zones will cause trouble; skip them
                     if( zone->GetNumCorners() <= 2 )
@@ -473,16 +490,21 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                     if( !testFn( zone ) )
                         continue;
 
-                    // Prefer highest priority and matching netcode
-                    if( zone->GetAssignedPriority() > highestPriority
-                            || zone->GetNetCode() == netcode )
+                    if( sameNet
+                        && ( !highestSameNetZone || priority > highestSameNetPriority ) )
                     {
-                        highestPriority = zone->GetAssignedPriority();
+                        highestSameNetPriority = priority;
+                        highestSameNetZone = zone;
+                    }
+
+                    if( !highestPriorityZone || priority > highestPriority )
+                    {
+                        highestPriority = priority;
                         highestPriorityZone = zone;
                     }
                 }
 
-                return highestPriorityZone;
+                return highestSameNetZone ? highestSameNetZone : highestPriorityZone;
             };
 
     auto isInPourKeepoutArea =
