@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
-"PO-Revision-Date: 2026-06-15 17:20+0000\n"
+"PO-Revision-Date: 2026-06-17 03:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -8764,7 +8764,7 @@ msgstr "Kann \"%s\" in \"%s\" nicht parsen"
 #: common/io/diptrace/diptrace_binary_reader.cpp:57
 #, fuzzy, c-format
 msgid "Cannot determine length of file '%s'."
-msgstr "Kann Protokoll nicht in Datei \"%s\" schreiben."
+msgstr "Kann Länge der Datei \"%s\" nicht bestimmen."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:69
 #, fuzzy, c-format
@@ -18442,14 +18442,14 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"Dieser Schaltplan benutzt derzeit die alte Form der Symbolbibliotheksliste "
+"Dieser Schaltplan benutzt derzeit die alte Form der Symbolbibliotheksliste, "
 "um Bibliothekssymbole zu laden. KiCad wird versuchen, die verwendeten "
 "Schaltzeichen über die neue Symbolbibliothekstabelle neu zuzuordnen. Diese "
 "Änderung der Projekt- und Schaltplandateien macht diese eventuell "
 "inkompatibel mit alten Versionen von KiCad. Unveränderte Kopien aller "
 "veränderten Dateien werden im \"rescue-backup\"-Ordner erstellt, falls Sie "
 "Änderungen zurücknehmen wollen. Sollten Sie die automatische Neuzuordnung "
-"überspringen müssen Sie die Schaltzeichen manuell neu zuordnen."
+"überspringen, müssen Sie die Schaltzeichen manuell neu zuordnen."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:217
 #, c-format
@@ -19654,7 +19654,7 @@ msgstr "Klasse umbenennen"
 msgid ""
 "Delete net chain class '%s'?  Chains assigned to it will become unclassified."
 msgstr ""
-"Netzkettenklasse \\\"%s\\\" löschen?  Die ihr zugeordneten Ketten werden als "
+"Netzkettenklasse \"%s\" löschen?  Die ihr zugeordneten Ketten werden als "
 "nicht klassifiziert eingestuft."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:747
@@ -22587,8 +22587,8 @@ msgstr ""
 msgid ""
 "DipTrace import: invalid component extra-tail length %u at offset 0x%06zX."
 msgstr ""
-"DipTrace-Import: ungültige Länge des zusätzlichen Endstücks %u von Bauteil "
-"0x%06zX."
+"DipTrace-Import: ungültige, zusätzliche Anhangslänge %u im Bauteil mit "
+"Offset 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1101
 #, fuzzy, c-format
@@ -23199,7 +23199,7 @@ msgstr "Leerer Schaltplanpinname"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3007
 msgid "Schematic polyline has too few points"
-msgstr "Schalplanlinienzug hat zu wenig Punkte"
+msgstr "Schaltplanlinienzug hat zu wenig Punkte"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3105
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3118
@@ -25702,8 +25702,11 @@ msgid "Model has more than 2 waveform pairs, using the first two."
 msgstr "Modell hat mehr als zwei Waveform-Paare; verwende die ersten zwei."
 
 #: eeschema/sim/kibis/kibis.cpp:1492
+#, fuzzy
 msgid "Series and Series_switch models are passive devices, not drivers."
 msgstr ""
+"Serien und \"Series_switch\"-Modelle sind passive Bauelemente und keine "
+"Treiber."
 
 #: eeschema/sim/kibis/kibis.cpp:1497
 msgid "Invalid model type for a driver."
@@ -33428,7 +33431,7 @@ msgstr "Ein Projekt erstellen"
 #: kicad/dialogs/template_default_html.h:411
 msgid "Click OK to create a new project folder with this template's contents."
 msgstr ""
-"Klicken Sie auf OK um einen neuen Projektordner mit dem Inhalt dieser "
+"Klicken Sie auf OK, um einen neuen Projektordner mit dem Inhalt dieser "
 "Vorlage zu erstellen."
 
 #: kicad/dialogs/template_default_html.h:417
