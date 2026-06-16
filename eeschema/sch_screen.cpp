@@ -1005,6 +1005,11 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts, const 
                 double arcRadius = defaultLineWidth * hopOverScale;
                 std::vector<VECTOR3I> curr_wire_shape = aLine->BuildWireWithHopShape( this, arcRadius );
 
+                // The hop pieces are standalone copies/shapes without the connection map, so
+                // resolve the net-class color and style from the original wire and reuse them.
+                COLOR4D    lineColor = aLine->GetLineColor();
+                LINE_STYLE lineStyle = aLine->GetEffectiveLineStyle();
+
                 for( size_t ii = 1; ii < curr_wire_shape.size(); ii++ )
                 {
                     VECTOR2I start( curr_wire_shape[ii-1].x, curr_wire_shape[ii-1].y );
@@ -1017,6 +1022,8 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts, const 
                         SCH_LINE curr_line( *aLine );
                         curr_line.SetStartPoint( start );
                         curr_line.SetEndPoint( end );
+                        curr_line.SetLineColor( lineColor );
+                        curr_line.SetLineStyle( lineStyle );
                         curr_line.Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
                     }
                     else   // This is the start point of a arc. there are always 3 points in list for an arc
@@ -1031,6 +1038,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts, const 
                         arc.SetArcGeometry( start, arc_middle, arc_end );
                         // Hop are a small arc, so use a solid line style gives best results
                         arc.SetLineStyle( LINE_STYLE::SOLID );
+                        arc.SetLineColor( lineColor );
                         arc.Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
                     }
                 }
