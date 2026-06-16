@@ -38,7 +38,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-08 23:28+0300\n"
 "PO-Revision-Date: 2026-06-17 03:01+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -25702,10 +25702,9 @@ msgid "Model has more than 2 waveform pairs, using the first two."
 msgstr "Modell hat mehr als zwei Waveform-Paare; verwende die ersten zwei."
 
 #: eeschema/sim/kibis/kibis.cpp:1492
-#, fuzzy
 msgid "Series and Series_switch models are passive devices, not drivers."
 msgstr ""
-"Serien und \"Series_switch\"-Modelle sind passive Bauelemente und keine "
+"\"Series\" und \"Series_switch\"-Modelle sind passive Bauelemente und keine "
 "Treiber."
 
 #: eeschema/sim/kibis/kibis.cpp:1497
