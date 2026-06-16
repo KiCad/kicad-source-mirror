@@ -191,6 +191,16 @@ public:
     }
 
 
+    ~NOTIFICATIONS_LIST()
+    {
+        // Unbind focus handlers before base class destructors run. GTK fires focus-out signals
+        // during window teardown, which would invoke onFocusLoss through a partially-destroyed
+        // object and crash in the wxWidgets event handler chain.
+        Unbind( wxEVT_KILL_FOCUS, &NOTIFICATIONS_LIST::onFocusLoss, this );
+        m_scrolledWindow->Unbind( wxEVT_KILL_FOCUS, &NOTIFICATIONS_LIST::onFocusLoss, this );
+    }
+
+
     void onFocusLoss( wxFocusEvent& aEvent )
     {
         if( IsDescendant( aEvent.GetWindow() ) )
