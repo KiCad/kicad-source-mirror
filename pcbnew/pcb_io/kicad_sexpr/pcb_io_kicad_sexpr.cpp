@@ -3178,6 +3178,8 @@ BOARD* PCB_IO_KICAD_SEXPR::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe,
                                       preserveDestinationStackup );
 
 
+    parser.SetLayerMappingHandler( m_layer_mapping_handler );
+
     std::set<BOARD_ITEM*>   itemsBefore;
     std::set<NETINFO_ITEM*> netsBefore;
 
@@ -3225,7 +3227,6 @@ BOARD* PCB_IO_KICAD_SEXPR::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe,
             delete net;
         }
     };
-
     BOARD* board;
 
     try
