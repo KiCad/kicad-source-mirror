@@ -2578,6 +2578,113 @@ BOOST_FIXTURE_TEST_CASE( HatchZoneViaConnectionRespectsSetting, ZONE_FILL_TEST_F
 
 
 /**
+ * Regression test for issue 24559: a same-net via in a SOLID (FULL) hatch-fill zone must stay
+ * attached to the webbing.  The via is swept across a full hatch grid period so several
+ * positions land inside a hole.  Before the fix those in-hole vias were left isolated because
+ * no hatch hole was dropped around them.
+ */
+BOOST_FIXTURE_TEST_CASE( HatchZoneFullViaStaysConnected, ZONE_FILL_TEST_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetCopperLayerCount( 2 );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    bds.SetCopperLayerCount( 2 );
+    bds.m_MinClearance = pcbIUScale.mmToIU( 0.2 );
+
+    NETINFO_ITEM* gndNet = new NETINFO_ITEM( m_board.get(), wxT( "GND" ) );
+    m_board->Add( gndNet );
+    int gndNetCode = gndNet->GetNetCode();
+
+    // Via diameter (0.4mm) is much smaller than the hatch gap (2.0mm), so a via centred in a
+    // hole sits entirely inside that hole with no copper around it unless the hole is dropped.
+    int viaDiam = pcbIUScale.mmToIU( 0.4 );
+    int viaDrill = pcbIUScale.mmToIU( 0.2 );
+
+    int hatchGap = pcbIUScale.mmToIU( 2.0 );
+    int hatchThickness = pcbIUScale.mmToIU( 0.3 );
+
+    auto makeHatchZone = [&]() -> ZONE*
+    {
+        ZONE* zone = new ZONE( m_board.get() );
+        zone->SetLayer( F_Cu );
+        zone->SetNetCode( gndNetCode );
+        zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
+        zone->SetHatchGap( hatchGap );
+        zone->SetHatchThickness( hatchThickness );
+        zone->SetPadConnection( ZONE_CONNECTION::FULL );
+        zone->SetMinThickness( pcbIUScale.mmToIU( 0.2 ) );
+
+        SHAPE_POLY_SET outline;
+        outline.NewOutline();
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 0 ), pcbIUScale.mmToIU( 0 ) ) );
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 0 ) ) );
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 20 ), pcbIUScale.mmToIU( 20 ) ) );
+        outline.Append( VECTOR2I( pcbIUScale.mmToIU( 0 ), pcbIUScale.mmToIU( 20 ) ) );
+        zone->AddPolygon( outline.COutline( 0 ) );
+
+        m_board->Add( zone );
+        return zone;
+    };
+
+    // Sweep over one full grid period (gridsize = hatchThickness + hatchGap = 2.3mm) so the
+    // via is guaranteed to land inside a hole at several positions regardless of grid phase.
+    const int    steps = 8;
+    const double startMM = 9.0;
+    const double stepMM = 2.3 / steps;
+
+    int isolatedCount = 0;
+    int testedCount = 0;
+
+    for( int ix = 0; ix < steps; ix++ )
+    {
+        for( int iy = 0; iy < steps; iy++ )
+        {
+            VECTOR2I viaPos( pcbIUScale.mmToIU( startMM + ix * stepMM ), pcbIUScale.mmToIU( startMM + iy * stepMM ) );
+
+            PCB_VIA* via = new PCB_VIA( m_board.get() );
+            via->SetPosition( viaPos );
+            via->SetLayerPair( F_Cu, B_Cu );
+            via->SetDrill( viaDrill );
+            via->SetWidth( PADSTACK::ALL_LAYERS, viaDiam );
+            via->SetNetCode( gndNetCode );
+            m_board->Add( via );
+
+            ZONE* zone = makeHatchZone();
+
+            m_board->BuildConnectivity();
+            auto drcEngine = std::make_shared<DRC_ENGINE>( m_board.get(), &bds );
+            drcEngine->InitEngine( wxFileName() );
+            bds.m_DRCEngine = drcEngine;
+
+            KI_TEST::FillZones( m_board.get() );
+
+            BOOST_REQUIRE( zone->HasFilledPolysForLayer( F_Cu ) );
+
+            const std::shared_ptr<SHAPE_POLY_SET>& fill = zone->GetFilledPolysList( F_Cu );
+            std::shared_ptr<SHAPE>                 viaShape = via->GetEffectiveShape( F_Cu );
+
+            // The zone fill must touch the via.  If it does not, the via is isolated copper
+            // inside a hatch hole (the issue 24559 regression).
+            if( !fill->Collide( viaShape.get(), 0 ) )
+                isolatedCount++;
+
+            testedCount++;
+
+            m_board->Remove( via );
+            m_board->Remove( zone );
+            delete via;
+            delete zone;
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( isolatedCount == 0, wxString::Format( "%d of %d FULL-connection via positions were left "
+                                                               "isolated from the hatch fill (issue 24559).",
+                                                               isolatedCount, testedCount ) );
+}
+
+
+/**
  * Regression test for cascading island removal during iterative zone refill.
  *
  * Board layout (all zones on F.Cu):

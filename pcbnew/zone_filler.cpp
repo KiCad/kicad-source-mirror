@@ -1704,10 +1704,10 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
  * Removes thermal reliefs from the shape for any pads connected to the zone.  Does NOT add
  * in spokes, which must be done later.
  */
-void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer,
-                                          SHAPE_POLY_SET& aFill,
+void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aFill,
                                           std::vector<BOARD_ITEM*>& aThermalConnectionPads,
-                                          std::vector<PAD*>& aNoConnectionPads )
+                                          std::vector<PAD*>&        aNoConnectionPads,
+                                          std::vector<BOARD_ITEM*>& aSolidConnectionItems )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     ZONE_CONNECTION        connection;
@@ -2005,7 +2005,9 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
 
             case ZONE_CONNECTION::FULL:
             default:
-                // No knockout - via connects directly to the hatch webbing
+                // No knockout. A small via in a hatch hole would be isolated, so register it
+                // to drop that hole and keep the via on the webbing.
+                aSolidConnectionItems.push_back( via );
                 break;
             }
         }
@@ -2751,6 +2753,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
 
     std::vector<BOARD_ITEM*>     thermalConnectionPads;
     std::vector<PAD*>            noConnectionPads;
+    std::vector<BOARD_ITEM*>     solidConnectionItems;
     std::deque<SHAPE_LINE_CHAIN> thermalSpokes;
     SHAPE_POLY_SET               clearanceHoles;
 
@@ -2764,7 +2767,7 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
      * Knockout thermal reliefs.
      */
 
-    knockoutThermalReliefs( aZone, aLayer, aFillPolys, thermalConnectionPads, noConnectionPads );
+    knockoutThermalReliefs( aZone, aLayer, aFillPolys, thermalConnectionPads, noConnectionPads, solidConnectionItems );
     DUMP_POLYS_TO_COPPER_LAYER( aFillPolys, In2_Cu, wxT( "minus-thermal-reliefs" ) );
 
     if( m_progressReporter && m_progressReporter->IsCancelled() )
@@ -2983,6 +2986,22 @@ bool ZONE_FILLER::fillCopperZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LA
         // the hatch hole-dropping logic considers both types of rings
         SHAPE_POLY_SET ringsToProtect = thermalRings;
         ringsToProtect.BooleanAdd( clearanceHoles );
+
+        // Drop the hatch hole around each fully connected via so it stays on the webbing.
+        // Feed only the hole-drop set, not the fill, so wider vias are left untouched.
+        for( BOARD_ITEM* item : solidConnectionItems )
+        {
+            if( item->Type() != PCB_VIA_T || !item->IsOnLayer( aLayer ) )
+                continue;
+
+            PCB_VIA* via = static_cast<PCB_VIA*>( item );
+
+            SHAPE_POLY_SET disc;
+            TransformCircleToPolygon( disc, via->GetPosition(), via->GetWidth( aLayer ) / 2, m_maxError,
+                                      ERROR_OUTSIDE );
+            disc.BooleanIntersection( aSmoothedOutline );
+            ringsToProtect.BooleanAdd( disc );
+        }
 
         if( !addHatchFillTypeOnZone( aZone, aLayer, aDebugLayer, aFillPolys, ringsToProtect ) )
             return false;
