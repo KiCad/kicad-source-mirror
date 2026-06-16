@@ -313,7 +313,7 @@ HANDLER_RESULT<StringResponse> API_HANDLER_COMMON::handleGetPluginSettingsPath(
         return tl::unexpected( e );
     }
 
-    if( API_PLUGIN::IsValidIdentifier( identifier ) )
+    if( !API_PLUGIN::IsValidIdentifier( identifier ) )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
