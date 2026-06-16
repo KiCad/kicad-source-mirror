@@ -2082,6 +2082,60 @@ BOOST_AUTO_TEST_CASE( SdbContainerDecode )
 }
 
 
+/**
+ * The board-setup block is reached by arithmetic on two declared counts, not by sweeping
+ * section 1 for a field-range signature. The origin lives at that base +60/+64 and shifts
+ * every absolute coordinate in the file, so this pins the most load-bearing offset in the
+ * container.
+ *
+ * Recomputing the base here from the raw bytes keeps the test independent of the reader: a
+ * change that reintroduces a search would still have to land on the declared offset.
+ */
+BOOST_AUTO_TEST_CASE( OriginBaseIsDeclaredNotSearched )
+{
+    const std::vector<std::string> boards = {
+        "Dexter_MotorCtrl/Dexter_MotorCtrl.pcb", "Ems4_Rev2/Ems4_Rev2.pcb",
+        "LCORE_2/LCORE_2.pcb",                   "LCORE_4/LCORE_4.pcb",
+        "MAIS_FC/MAIS_FC.pcb",                   "MC2_PLUS_REV1/MC2_PLUS_REV1.pcb",
+        "TMS1mmX19/TMS1mmX19.pcb",
+    };
+
+    for( const std::string& board : boards )
+    {
+        wxString             path = KI_TEST::GetPcbnewTestDataDir() + "plugins/pads/" + board;
+        std::vector<uint8_t> bytes;
+
+        BOOST_REQUIRE_MESSAGE( PADS_IO::ReadFileToBuffer( path, bytes ), board << " should be readable" );
+
+        auto u32At = [&bytes]( size_t aOffset )
+        {
+            return static_cast<uint32_t>( bytes[aOffset] ) | ( static_cast<uint32_t>( bytes[aOffset + 1] ) << 8 )
+                   | ( static_cast<uint32_t>( bytes[aOffset + 2] ) << 16 )
+                   | ( static_cast<uint32_t>( bytes[aOffset + 3] ) << 24 );
+        };
+
+        const uint32_t slots = u32At( 10 + 16 );          // directory[1].count
+        const uint32_t dirBytes = u32At( 10 + 16 + 4 );   // directory[1].total_bytes
+        const uint32_t viewStates = u32At( 10 + 2 * 16 ); // directory[2].count
+
+        BOOST_TEST_CONTEXT( board )
+        {
+            // The directory declares its own byte size, which is what makes the slot count
+            // trustworthy without a version branch.
+            BOOST_CHECK_EQUAL( dirBytes, slots * 16 );
+
+            const uint32_t expected = 10 + ( slots - 1 ) * 16 + viewStates * 48;
+
+            PADS_IO::PADS_SDB sdb;
+            BOOST_REQUIRE_NO_THROW( sdb.Load( std::move( bytes ) ) );
+
+            BOOST_REQUIRE( sdb.Coords().Found() );
+            BOOST_CHECK_EQUAL( sdb.Coords().HeaderBase(), expected );
+        }
+    }
+}
+
+
 // Matches the "__"-joined, space-to-underscore flattening used for the ground-truth
 // ASCII exports, so dumps and exports pair up by filename.
 static std::string FlattenPath( const std::filesystem::path& aRoot, const std::filesystem::path& aFile )
