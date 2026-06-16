@@ -2192,8 +2192,15 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
 
             if( tmp == 0 )
             {
+                int fieldCompareFlags = aCompareFlags;
+
+                // SCH_FIELD::compare() injects SKIP_TST_POS for ERC, but it is bypassed
+                // by the base-class call below, so mirror it here (issue 24657).
+                if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC )
+                    fieldCompareFlags |= SCH_ITEM::COMPARE_FLAGS::SKIP_TST_POS;
+
                 // Fall back to base class comparison for other properties
-                tmp = aField->SCH_ITEM::compare( *bField, aCompareFlags );
+                tmp = aField->SCH_ITEM::compare( *bField, fieldCompareFlags );
             }
 
             if( tmp != 0 )
