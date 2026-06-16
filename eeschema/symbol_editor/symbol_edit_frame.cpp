@@ -1442,10 +1442,14 @@ void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, bool aPreloadCancelle
 
     std::unique_ptr<bool, decltype( resetGuard )> guard( &m_syncLibrariesInProgress, resetGuard );
 
-    LIB_ID selected;
+    LIB_ID              selected;
+    std::vector<LIB_ID> expanded;
 
     if( m_treePane )
+    {
         selected = GetLibTree()->GetSelectedLibId();
+        expanded = GetLibTree()->GetExpandedLibraries();
+    }
 
     // Ensure any in-progress background library preloading is complete before syncing the
     // tree. Without this, libraries still in LOADING state get skipped by Sync(), resulting
@@ -1498,6 +1502,10 @@ void SYMBOL_EDIT_FRAME::SyncLibraries( bool aShowProgress, bool aPreloadCancelle
 
         wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "SYMBOL_EDIT_FRAME::SyncLibraries Regenerate" ) );
         GetLibTree()->Regenerate( true );
+
+        // Sync() collapsed the tree, so re-expand the libraries that were open before it.
+        for( const LIB_ID& libId : expanded )
+            GetLibTree()->ExpandLibId( libId );
 
         // Try to select the parent library, in case the symbol is not found
         if( !found && selected.IsValid() )

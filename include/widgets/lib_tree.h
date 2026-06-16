@@ -136,6 +136,8 @@ public:
      */
     void ExpandLibId( const LIB_ID& aLibId );
 
+    std::vector<LIB_ID> GetExpandedLibraries() const;
+
     void ExpandAll();
     void CollapseAll();
 
