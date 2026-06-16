@@ -404,6 +404,25 @@ void LIB_TREE::ExpandLibId( const LIB_ID& aLibId )
 }
 
 
+std::vector<LIB_ID> LIB_TREE::GetExpandedLibraries() const
+{
+    std::vector<LIB_ID> expanded;
+    wxDataViewItemArray items;
+    m_adapter->GetChildren( wxDataViewItem( nullptr ), items );
+
+    for( const wxDataViewItem& item : items )
+    {
+        if( m_tree_ctrl->IsExpanded( item ) )
+        {
+            if( LIB_TREE_NODE* node = m_adapter->GetTreeNodeFor( item ) )
+                expanded.push_back( node->m_LibId );
+        }
+    }
+
+    return expanded;
+}
+
+
 void LIB_TREE::ExpandAll()
 {
     m_tree_ctrl->ExpandAll();
