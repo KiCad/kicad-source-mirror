@@ -135,20 +135,25 @@ PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( wxWindow* aParent ) :
     m_errorDialog = new DIALOG_HTML_REPORTER( aParent );
     m_allowErrorDialog = false;
 
+#ifdef KICAD_IPC_API
     wxTheApp->Bind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
           &PANEL_PCBNEW_ACTION_PLUGINS::onPluginAvailabilityChanged, this );
+#endif
 }
 
 
 PANEL_PCBNEW_ACTION_PLUGINS::~PANEL_PCBNEW_ACTION_PLUGINS()
 {
     delete m_errorDialog;
+#ifdef KICAD_IPC_API
     wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
             &PANEL_PCBNEW_ACTION_PLUGINS::onPluginAvailabilityChanged, this );
+#endif
     m_grid->PopEventHandler( true );
 }
 
 
+#ifdef KICAD_IPC_API
 void PANEL_PCBNEW_ACTION_PLUGINS::onPluginAvailabilityChanged( wxCommandEvent& aEvt )
 {
     m_grid->Enable();
@@ -163,6 +168,7 @@ void PANEL_PCBNEW_ACTION_PLUGINS::onPluginAvailabilityChanged( wxCommandEvent& a
 
     aEvt.Skip();
 }
+#endif
 
 
 void PANEL_PCBNEW_ACTION_PLUGINS::OnGridCellClick( wxGridEvent& event )
@@ -215,12 +221,14 @@ void PANEL_PCBNEW_ACTION_PLUGINS::SwapRows( int aRowA, int aRowB )
 
 void PANEL_PCBNEW_ACTION_PLUGINS::OnReloadButtonClick( wxCommandEvent& event )
 {
+#ifdef KICAD_IPC_API
     API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
     m_errorDialog->m_Reporter->Clear();
     auto reporter = std::make_shared<REDIRECT_REPORTER>( m_errorDialog->m_Reporter );
     m_allowErrorDialog = true;
     mgr.ReloadPlugins( std::nullopt, reporter );
     m_grid->Disable();
+#endif
 }
 
 
