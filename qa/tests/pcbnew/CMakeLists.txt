@@ -111,6 +111,7 @@ set( QA_PCBNEW_SRCS
     test_pns_tuning_path_through_pad.cpp
     test_pns_diff_pair_tuning_width.cpp
     test_variant.cpp
+    test_text_variable_resolution.cpp
     test_zone.cpp
     test_zone_filler.cpp
     test_poly_simplify.cpp
