@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-08 16:01+0000\n"
+"PO-Revision-Date: 2026-06-17 15:54+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -2744,37 +2744,33 @@ msgid "Add Netclass Assignment"
 msgstr "Dodaj przypisanie klasy sieci"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:29
-#, fuzzy
 msgid "(missing)"
-msgstr "(brak pliku)"
+msgstr "(brak)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:41
 msgid "File"
 msgstr "Plik"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:42
-#, fuzzy
 msgid "Saved version"
-msgstr "Pokaż wszystkie wersje"
+msgstr "Zapisana wersja"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:43
-#, fuzzy
 msgid "Auto-saved copy"
-msgstr "Przywracanie z autozapisu"
+msgstr "Kopia autozapisu"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
-#, fuzzy
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
-"KiCad znalazł niezapisane zmiany z ostatniej sesji, które są nowsze niż "
-"zapisane pliki projektu."
+"KiCad znalazł automatycznie zapisane zmiany z ostatniej sesji. Zwykle "
+"oznacza to, że KiCad został niespodziewanie zamknięty gdy istniały "
+"niezapisane zmiany."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore auto-saved"
-msgstr "Przywróć domyślne"
+msgstr "Przywróć z autozapisu"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
@@ -2783,18 +2779,16 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep current"
-msgstr "bieżący"
+msgstr "Zachowaj bieżący"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr ""
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep both"
-msgstr "Wyklucz"
+msgstr "Zachowaj oba"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
@@ -2803,9 +2797,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel open"
-msgstr "Anuluj wczytywanie"
+msgstr "Anuluj otwieranie"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:49
 msgid ""
@@ -3158,9 +3151,8 @@ msgid "Old Path"
 msgstr "Wyszukaj następny"
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
-#, fuzzy
 msgid "No git repository available."
-msgstr "Brak dostępnego repozytorium"
+msgstr "Brak dostępnego repozytorium git."
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
 #: common/dialogs/dialog_git_mr_review.cpp:103
@@ -3176,19 +3168,18 @@ msgid "Select base and head refs to compare."
 msgstr ""
 
 #: common/dialogs/dialog_git_mr_review.cpp:117
-#, fuzzy, c-format
+#, c-format
 msgid "Could not resolve ref '%s' to a commit or tree."
-msgstr "Nie można wyszukać zatwierdzenia docelowego"
+msgstr "Nie można przeanalizować odnośnika '%s' do zatwierdzenia lub drzewa."
 
 #: common/dialogs/dialog_git_mr_review.cpp:133
-#, fuzzy
 msgid "No changes between selected refs."
-msgstr "Obetnij rogi między wybranymi liniami"
+msgstr "Nie ma zmian pomiędzy zaznaczonymi odnośnikami."
 
 #: common/dialogs/dialog_git_mr_review.cpp:251
-#, fuzzy, c-format
+#, c-format
 msgid "No diff handler for '%s'."
-msgstr "wymagana liczba dla '%s'"
+msgstr "Brak handlera różnic dla '%s'."
 
 #: common/dialogs/dialog_git_mr_review.cpp:252
 #: common/dialogs/dialog_git_mr_review.cpp:281
@@ -3210,29 +3201,25 @@ msgstr "Nie można utworzyć folderu tymczasowego."
 #: common/dialogs/dialog_git_mr_review.cpp:337
 #: common/dialogs/dialog_git_mr_review.cpp:357
 #: common/dialogs/dialog_git_mr_review.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Could not extract %s from %s."
-msgstr "Nie można załadować obrazu z '%s'."
+msgstr "Nie można wypakować %s z %s."
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:25
-#, fuzzy
 msgid "Base ref:"
-msgstr "Nazwa bazowa"
+msgstr "Odnośnik bazy:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:32
-#, fuzzy
 msgid "Head ref:"
-msgstr "Granica nagłówka"
+msgstr "Odnośnik czoła:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:42
-#, fuzzy
 msgid "Compare"
-msgstr "Komponentów"
+msgstr "Porównaj"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:48
-#, fuzzy
 msgid "Changed files (double-click to open):"
-msgstr "Polecenie (kliknij dwukrotnie by zmienić)"
+msgstr "Zmieniono plików (kliknij dwukrotnie by otworzyć):"
 
 #: common/dialogs/dialog_grid_settings.cpp:81
 msgid "Grid size X out of range."
@@ -3447,9 +3434,8 @@ msgid "After"
 msgstr ""
 
 #: common/dialogs/dialog_kicad_diff.cpp:70
-#, fuzzy
 msgid "Filter changes…"
-msgstr "Filtruj sieci"
+msgstr "Filtruj zmiany…"
 
 #: common/dialogs/dialog_kicad_diff.cpp:122
 #: common/diff_merge/diff_tree_grouping.cpp:37
@@ -3495,9 +3481,9 @@ msgstr "Nie wykryto istotnych różnic."
 
 #: common/dialogs/dialog_kicad_diff.cpp:212
 #: common/dialogs/dialog_kicad_diff.cpp:516
-#, fuzzy, c-format
+#, c-format
 msgid "%zu change(s) detected."
-msgstr "Nie wybrano żadnej sieci."
+msgstr "Wykryto %zu zmian."
 
 #: common/dialogs/dialog_kicad_diff.cpp:334
 #, fuzzy
@@ -3580,14 +3566,13 @@ msgstr "Analiza konfliktów importu"
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:363
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:48
-#, fuzzy
 msgid "Select a conflict on the left to see details."
-msgstr "Wybiera połączony element znajdujący na pozycji kursora"
+msgstr "Wybierz konflikt po lewej stronie by poznać szczegóły."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Conflict on %s"
-msgstr "Konflikty"
+msgstr "Konflikt w %s"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:19
 msgid "Resolve each conflict by picking which side to keep, then click Apply."
@@ -4316,9 +4301,8 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_credentials.cpp:71
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
-#, fuzzy
 msgid "Password / token:"
-msgstr "Hasło:"
+msgstr "Hasło / token:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
@@ -4343,14 +4327,12 @@ msgid "Username:"
 msgstr "Nazwa użytkownika:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:63
-#, fuzzy
 msgid "SSH key:"
-msgstr "Hasło klucza SSH:"
+msgstr "Klucz SSH:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "Wybierz plik klucza prywatnego SSH"
+msgstr "Wybierz klucz prywaty SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -4358,14 +4340,12 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:74
-#, fuzzy
 msgid "Save credentials"
-msgstr "Zapisz wszystkie prądy"
+msgstr "Zapisz dane uwierzytelniające"
 
 #: common/dialogs/git/dialog_git_credentials_base.h:57
-#, fuzzy
 msgid "Git Authentication Required"
-msgstr "Autoryzacja"
+msgstr "Wymagana Autoryzacja Git"
 
 #: common/dialogs/git/dialog_git_repository.cpp:174
 #: common/dialogs/git/dialog_git_repository.cpp:401
@@ -6724,14 +6704,12 @@ msgid "Move Down"
 msgstr "Przesuń w dół"
 
 #: common/diff_merge/auto_resolution.cpp:251
-#, fuzzy
 msgid "Item id: "
-msgstr "Elementy:"
+msgstr "Element id: "
 
 #: common/diff_merge/auto_resolution.cpp:252
-#, fuzzy
 msgid "Current resolution: "
-msgstr "Rozdzielczość X:"
+msgstr "Bieżąca rozdzielczość: "
 
 #: common/diff_merge/auto_resolution.cpp:256
 msgid "Take ours"
@@ -6772,9 +6750,8 @@ msgid "%zu property edit(s) in this resolution.\n"
 msgstr ""
 
 #: common/diff_merge/diff_job_output.cpp:88
-#, fuzzy
 msgid "Failed to render diff image\n"
-msgstr "Nie można odczytać danych obrazu."
+msgstr "Nie można wyrenderować obrazu zmian\n"
 
 #: common/diff_merge/diff_tree_grouping.cpp:40
 msgid "Collision"
@@ -7017,9 +6994,9 @@ msgid "Failed to recover auto-saved file '%s'."
 msgstr "Nie można było odtworzyć automatycznie zapisanego pliku '%s'."
 
 #: common/eda_base_frame.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write recovered file '%s'."
-msgstr "Nie można zapisywać do pliku '%s'."
+msgstr "Nie można zapisać odzyskanego pliku '%s'."
 
 #: common/eda_base_frame.cpp:605 common/tool/actions.cpp:285
 #: pcbnew/dialogs/panel_setup_rules.cpp:132
@@ -8594,9 +8571,8 @@ msgid "Merge failed: %s"
 msgstr "Scalenie nie powiodło się: %s"
 
 #: common/git/libgit_backend.cpp:1468
-#, fuzzy
 msgid "Could not read repository index after merge."
-msgstr "Nie można uzyskać indeksu repozytorium"
+msgstr "Nie można odczytać indeksu repozytorium po scaleniu."
 
 #: common/git/libgit_backend.cpp:1500
 #, fuzzy
@@ -8604,14 +8580,12 @@ msgid "Could not write the merge result."
 msgstr "Nie mogę zapisać plików z rysunkami w folderze '%s'."
 
 #: common/git/libgit_backend.cpp:1508
-#, fuzzy
 msgid "Could not get the repository head."
-msgstr "Nie można pobrać najwyższej pozycji repozytorium"
+msgstr "Nie udało się pobrać nagłówka repozytorium."
 
 #: common/git/libgit_backend.cpp:1518
-#, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "Nie można wyszukać zatwierdzenia docelowego"
+msgstr "Nie można wyszukać zatwierdzeń do scalenia."
 
 #: common/git/libgit_backend.cpp:1527 common/git/libgit_backend.cpp:1712
 msgid ""
@@ -8620,14 +8594,14 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1536
-#, fuzzy, c-format
+#, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "Połącz nakładające się grafiki w pola lutownicze"
+msgstr "Scalenie zdalnej gałęzi śledzącej do %s"
 
 #: common/git/libgit_backend.cpp:1544
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create merge commit: %s"
-msgstr "Nie można scalić zmian"
+msgstr "Nie można utworzyć zatwierdzenia scalenia: %s"
 
 #: common/git/libgit_backend.cpp:1561
 msgid ""
@@ -8653,9 +8627,8 @@ msgid "Rebase finish failed: %s"
 msgstr "Nie udało się ukończyć rebase: %s"
 
 #: common/git/libgit_backend.cpp:1633 common/git/libgit_backend.cpp:1679
-#, fuzzy
 msgid "Another git operation is in progress."
-msgstr "Zamyka obrys strefy jeśli jest ona w trakcie tworzenia"
+msgstr "Inna operacja git jest aktualnie w trakcie."
 
 #: common/git/libgit_backend.cpp:1641 common/git/libgit_backend.cpp:1694
 #, fuzzy
@@ -8663,9 +8636,8 @@ msgid "Could not find the matching remote branch."
 msgstr "Nie można odnaleźć '%s' w zaimportowanej bibliotece."
 
 #: common/git/libgit_backend.cpp:1650 common/git/libgit_backend.cpp:1703
-#, fuzzy
 msgid "Could not read the remote branch."
-msgstr "Nie można otworzyć ścieżki z szablonami! '%s'"
+msgstr "Nie można odczytać zdalnej gałęzi."
 
 #: common/git/libgit_backend.cpp:1659
 #, fuzzy, c-format
@@ -9028,9 +9000,9 @@ msgid "DipTrace file '%s' is too large (%ld bytes)."
 msgstr ""
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading file '%s'."
-msgstr "Błąd podczas odczytywania pliku."
+msgstr "Błąd podczas odczytywania pliku '%s'."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:102
 #, c-format
@@ -9434,9 +9406,9 @@ msgid "Could not read layer map file '%s'"
 msgstr "Nie można odczytać pliku: %s"
 
 #: common/jobs/job_import_utils.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Layer map file '%s' is not valid JSON: %s"
-msgstr "Typ strony '%s' nie jest poprawny."
+msgstr "Plik z mapą warstw '%s' nie jest poprawnym plikiem JSON: %s"
 
 #: common/jobs/job_import_utils.cpp:86
 #, c-format
@@ -9451,9 +9423,9 @@ msgid "Layer map entry for '%s' must be a KiCad layer name string"
 msgstr ""
 
 #: common/jobs/job_import_utils.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write import report to '%s'\n"
-msgstr "Nie mogę zapisać plików z rysunkami w folderze '%s'."
+msgstr "Nie mogę zapisać raportu z importu do '%s'\n"
 
 #: common/jobs/job_pcb_diff.cpp:37
 #, fuzzy
@@ -9499,9 +9471,8 @@ msgid "PCB: Render"
 msgstr "PCB: Renderowanie"
 
 #: common/jobs/job_sch_diff.cpp:37
-#, fuzzy
 msgid "Diff two schematic files"
-msgstr "Pliki schematu programu PADS Logic"
+msgstr "Porównuje dwa pliki schematu"
 
 #: common/jobs/job_sch_diff.cpp:41
 #, fuzzy
@@ -9526,9 +9497,8 @@ msgid "Import schematic"
 msgstr "Importuj Schemat"
 
 #: common/jobs/job_sch_import.cpp:56
-#, fuzzy
 msgid "Schematic Import Job Settings"
-msgstr "Ustawienia zadania kontroli ERC schematu"
+msgstr "Ustawienia zadania importowania schematu"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 msgid "Special: Copy Files"
@@ -10190,9 +10160,9 @@ msgid "The library table is of wrong type"
 msgstr "Tabela bibliotek jest złego typu"
 
 #: common/libraries/library_table.cpp:309
-#, fuzzy, c-format
+#, c-format
 msgid "Library table '%s' is read-only"
-msgstr "Biblioteka '%s' jest tylko do odczytu."
+msgstr "Tabela bibliotek '%s' jest tylko do odczytu"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -14191,9 +14161,8 @@ msgid "Create Net Chain"
 msgstr "Utwórz nowy arkusz"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:162
-#, fuzzy
 msgid "Please enter a name for the net chain."
-msgstr "Wprowadź nazwę repozytorium"
+msgstr "Proszę wprowadzić nazwę dla łańcucha sieci."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:169
 #, fuzzy
@@ -14300,9 +14269,9 @@ msgstr "Tekst '%s'"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1084
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1089
-#, fuzzy, c-format
+#, c-format
 msgid "component %s"
-msgstr "Komponenty"
+msgstr "komponent %s"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1108
 #, c-format
@@ -19848,14 +19817,14 @@ msgid "Potential"
 msgstr "Wykładniczo"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Name '%s' contains invalid characters."
-msgstr "Symbol %s zawiera nieprawidłowy znak '%c'"
+msgstr "Nazwa '%s' zawiera nieprawidłowe znaki."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "%d net chain(s)"
-msgstr ": (bez zmian)"
+msgstr "%d węzłów sieci"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:242
 #, c-format
@@ -19868,14 +19837,14 @@ msgid "Net chain on row %zu cannot have an empty name."
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:357
-#, fuzzy, c-format
+#, c-format
 msgid "Net chain name '%s' contains invalid characters."
-msgstr "Symbol %s zawiera nieprawidłowy znak '%c'"
+msgstr "Nazwa łańcucha sieci '%s' zawiera nieprawidłowe znaki."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate net chain name '%s' on row %zu."
-msgstr "Zduplikowana nazwa klasy sieci '%s'."
+msgstr "Zduplikowana nazwa łańcucha sieci '%s' w wierszu %zu."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:382
 #, c-format
@@ -19890,9 +19859,9 @@ msgid "Net Chain Classes"
 msgstr "Klasy sieci"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:390
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate class name '%s' on row %zu."
-msgstr "Zduplikowana nazwa klasy sieci '%s'."
+msgstr "Zduplikowana nazwa klasy sieci '%s' w wierszu %zu."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:618
 #, fuzzy, c-format
@@ -19905,9 +19874,9 @@ msgid "Delete Net Chain"
 msgstr "Usuń piny arkusza"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:653
-#, fuzzy, c-format
+#, c-format
 msgid "Member Nets (%zu)"
-msgstr "Nazwa członka"
+msgstr "Sieci należące (%zu)"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:672
 #, fuzzy
@@ -20421,9 +20390,9 @@ msgid "Input file not found: '%s'\n"
 msgstr "Nie znaleziono pliku wejściowego: '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1469
-#, fuzzy, c-format
+#, c-format
 msgid "No schematic importer recognizes the file format of '%s'\n"
-msgstr "Plik schematu zostanie skonwertowany do nowego formatu przy zapisie."
+msgstr "Żaden importer schematów nie rozpoznaje formatu pliku '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1510
 msgid "Could not establish a project for the import\n"
@@ -20446,9 +20415,9 @@ msgstr "Błąd podczas importu: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1642
 #: eeschema/eeschema_jobs_handler.cpp:1649
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving imported schematic: %s\n"
-msgstr "Błąd podczas parsowania schematu Altium: %s"
+msgstr "Błąd podczas zapisu zaimportowanego schematu: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1655
 #, fuzzy, c-format
@@ -20461,9 +20430,9 @@ msgstr "Zapis importowanej płytki '%s' zakończył się sukcesem\n"
 #: eeschema/eeschema_jobs_handler.cpp:1959 pcbnew/pcbnew_jobs_handler.cpp:3250
 #: pcbnew/pcbnew_jobs_handler.cpp:3256 pcbnew/pcbnew_jobs_handler.cpp:3734
 #: pcbnew/pcbnew_jobs_handler.cpp:3740
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load %s\n"
-msgstr "Nie można załadować '%s'."
+msgstr "Nie można załadować %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1841
 #: eeschema/eeschema_jobs_handler.cpp:1847
@@ -20472,9 +20441,9 @@ msgstr "Nie można załadować '%s'."
 #: pcbnew/pcbnew_jobs_handler.cpp:3595 pcbnew/pcbnew_jobs_handler.cpp:3808
 #: pcbnew/pcbnew_jobs_handler.cpp:3819 pcbnew/pcbnew_jobs_handler.cpp:3933
 #: pcbnew/pcbnew_jobs_handler.cpp:3939
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load %s: %s\n"
-msgstr "Nie można załadować strony '%s':%s"
+msgstr "Nie można załadować %s: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2058 pcbnew/pcbnew_jobs_handler.cpp:3850
 msgid "Unsupported document kind for this dispatcher.\n"
@@ -20512,14 +20481,14 @@ msgid "Cannot flatten sub-sheets with duplicate basename '%s'\n"
 msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:2287
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged schematic: %s\n"
-msgstr "Nie powiódł się zapis schematu '%s'"
+msgstr "Nie powiódł się zapis dołączonego schematu: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2334 pcbnew/pcbnew_jobs_handler.cpp:3472
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged project file: %s\n"
-msgstr "Nie udało się zapisać drzewa: %s"
+msgstr "Nie powiódł się zapis dołączonego pliku projektu: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2352 pcbnew/pcbnew_jobs_handler.cpp:3552
 #, c-format
@@ -20528,14 +20497,13 @@ msgstr ""
 
 #: eeschema/eeschema_jobs_handler.cpp:2375 kicad/cli/command_mergetool.cpp:117
 #: pcbnew/pcbnew_jobs_handler.cpp:3877
-#, fuzzy
 msgid "--output is required\n"
-msgstr "Wymagana minimalna przerwa"
+msgstr "wymagany parametr --output\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2465
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged symbol library: %s\n"
-msgstr "Nie można było zapisać pliku biblioteki symboli \"%s\""
+msgstr "Nie można zapisać dołączonej biblioteki symboli: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2480
 #, c-format
@@ -20683,9 +20651,9 @@ msgid "Pins of type %s and %s are connected"
 msgstr "Piny typu %s oraz %s są połączone"
 
 #: eeschema/erc/erc.cpp:1409
-#, fuzzy, c-format
+#, c-format
 msgid "Pins of type %s and %s are connected via net chain %s"
-msgstr "Piny typu %s oraz %s są połączone"
+msgstr "Piny typu %s oraz %s są połączone poprzez łańcuch sieci %s"
 
 #: eeschema/erc/erc.cpp:1458
 #, c-format
@@ -22375,9 +22343,9 @@ msgid "[no schematic loaded]"
 msgstr "[nie załadowano schematu]"
 
 #: eeschema/sch_edit_frame.cpp:2108
-#, fuzzy, c-format
+#, c-format
 msgid "Net chain members: %s"
-msgstr "Przynależność do klas sieci"
+msgstr "Członkowie łańcucha sieci: %s"
 
 #: eeschema/sch_edit_frame.cpp:2116
 #, c-format
@@ -22953,9 +22921,9 @@ msgid "Invalid DipTrace schematic sheet count: %d."
 msgstr ""
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid text style count: %d."
-msgstr "Nieprawidłowy ciąg tekstu"
+msgstr "Nieprawidłowa ilość stylów ciągu: %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:455
 #, fuzzy, c-format
@@ -22969,9 +22937,11 @@ msgid "DipTrace import: invalid bus count %d."
 msgstr ""
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:698
-#, fuzzy, c-format
+#, c-format
 msgid "DipTrace import: failed to parse component %zu at offset 0x%06zX: %s"
-msgstr "Wystąpił błąd przy parsowaniu listy komponentów: %s"
+msgstr ""
+"Import DipTrace: nie udało się przeanalizować komponentu %zu przy "
+"przesunięciu 0x%06zX: %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:706
 #, c-format
@@ -24078,9 +24048,9 @@ msgid "Bezier Curve, %d points"
 msgstr "Krzywa Beziera, %d punktów"
 
 #: eeschema/sch_shape.cpp:464
-#, fuzzy, c-format
+#, c-format
 msgid "Ellipse, %s x %s"
-msgstr "%s, %s oraz %s"
+msgstr "Elipsa, %s x %s"
 
 #: eeschema/sch_shape.cpp:469
 #, c-format
@@ -25605,14 +25575,14 @@ msgid "Invalid Composite Current table."
 msgstr "Niepoprawna tabela Prąd Skompensowany."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:701
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Series Current table in %s."
-msgstr "Niepoprawna tabela Prąd Skompensowany."
+msgstr "Nieprawidłowa tabela prądów szeregowych w %s."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:706
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Series MOSFET table in %s."
-msgstr "Nieprawidłowa tabela ISSO_PD."
+msgstr "Nieprawidłowa tabela szeregowych MOSFETów w %s."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:709
 #, c-format
@@ -29820,9 +29790,9 @@ msgstr "Nie można ściąć wybranych linii."
 
 #: eeschema/tools/sch_editor_control.cpp:1889
 #: eeschema/tools/sch_selection_tool.cpp:428
-#, fuzzy, c-format
+#, c-format
 msgid "Create Net Chain between %s:%s and %s:%s"
-msgstr "Wartość musi zawierać się między %s a %s."
+msgstr "Utwórz łańcuch sieci pomiędzy %s:%s i %s:%s"
 
 #: eeschema/tools/sch_editor_control.cpp:2516 pcbnew/tools/pcb_control.cpp:1187
 msgid ""
@@ -29875,15 +29845,13 @@ msgid "Reached end of sheet."
 msgstr "Osiągnięto koniec arkusza."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:385
-#, fuzzy
 msgid "No matches found."
-msgstr "Nie znaleziono żadnych szablonów"
+msgstr "Nie znaleziono pasujących."
 
 #: eeschema/tools/sch_group_tool.cpp:42 eeschema/tools/sch_group_tool.cpp:68
 #: pcbnew/tools/pcb_group_tool.cpp:45 pcbnew/tools/pcb_group_tool.cpp:60
-#, fuzzy
 msgid "Some selected items cannot be grouped."
-msgstr "Dodaj zaznaczone elementy do nowej grupy"
+msgstr "Niektóre z zaznaczonych elementów nie można zgrupować."
 
 #: eeschema/tools/sch_group_tool.cpp:53 eeschema/tools/sch_group_tool.cpp:61
 msgid "Child items cannot be grouped separately from their parent item."
@@ -29982,9 +29950,9 @@ msgstr ""
 #: eeschema/tools/sch_inspection_tool.cpp:636
 #: pcbnew/tools/board_inspection_tool.cpp:2098
 #: pcbnew/tools/board_inspection_tool.cpp:2105
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load project for %s"
-msgstr "Nie udało się pobrać projektu"
+msgstr "Nie udało się załadować projektu dla %s"
 
 #: eeschema/tools/sch_inspection_tool.cpp:653
 #: eeschema/tools/sch_inspection_tool.cpp:677
@@ -29997,9 +29965,8 @@ msgid "Failed to load %s"
 msgstr "Nie można załadować '%s'."
 
 #: eeschema/tools/sch_inspection_tool.cpp:858
-#, fuzzy
 msgid "Save the schematic before comparing against local history."
-msgstr "Zapisać zmiany w schemacie przed zamknięciem?"
+msgstr "Zapisuje zmiany w schemacie przed porównaniem z lokalną histrorią."
 
 #: eeschema/tools/sch_inspection_tool.cpp:869
 #: pcbnew/tools/board_inspection_tool.cpp:2183
@@ -30015,9 +29982,8 @@ msgstr ""
 #: eeschema/tools/sch_inspection_tool.cpp:1240
 #: pcbnew/tools/board_inspection_tool.cpp:2352
 #: pcbnew/tools/board_inspection_tool.cpp:2391
-#, fuzzy
 msgid "Could not compare against the selected snapshot."
-msgstr "Nie można otworzyć ścieżki z szablonami! '%s'"
+msgstr "Nie można porównać z wybraną migawką."
 
 #: eeschema/tools/sch_inspection_tool.cpp:1219
 #, fuzzy
@@ -30108,9 +30074,8 @@ msgid "Net Chain..."
 msgstr "Obrót..."
 
 #: eeschema/tools/sch_selection_tool.cpp:404
-#, fuzzy
 msgid "(No net chain actions)"
-msgstr "Strefa nie ma połączeń."
+msgstr "(Brak operacji łańcuchów sieci)"
 
 #: eeschema/tools/simulator_control.cpp:106
 msgid "Open Simulation Workbook"
@@ -30211,18 +30176,16 @@ msgid "Switch to Tab"
 msgstr "Przełącz gałąź"
 
 #: eeschema/tools/symbol_editor_control.cpp:1092
-#, fuzzy
 msgid "Select a library to compare against a file."
-msgstr "Wybierz katalog dla eksportowanych plików"
+msgstr "Wybierz bibliotekę, którą chcesz porównać z plikiem."
 
 #: eeschema/tools/symbol_editor_control.cpp:1096
 msgid "Choose Library to Compare With"
 msgstr ""
 
 #: eeschema/tools/symbol_editor_control.cpp:1109
-#, fuzzy
 msgid "Select a KiCad symbol library file (.kicad_sym)."
-msgstr "Wszystkie pliki bibliotek symboli programu KiCad"
+msgstr "Wybierz plik biblioteki symboli KiCad (.kicad_sym)."
 
 #: eeschema/tools/symbol_editor_control.cpp:1140
 #: eeschema/tools/symbol_editor_control.cpp:1146
@@ -32186,9 +32149,8 @@ msgid "Footprint and Footprint Libraries"
 msgstr "Footprinty oraz ich biblioteki"
 
 #: kicad/cli/command_fp_diff.cpp:28
-#, fuzzy
 msgid "Diff two .pretty footprint library directories"
-msgstr "Folder bibliotek footprintów programu gEDA / Lepton EDA PCB"
+msgstr "Porównuje dwa foldery z bibliotekami footprintów .pretty"
 
 #: kicad/cli/command_fp_diff.cpp:29
 #, fuzzy
@@ -32390,24 +32352,22 @@ msgid "Unknown --kind '%s' (expected pcb, sch, sym, or fp)\n"
 msgstr ""
 
 #: kicad/cli/command_git_mergedriver.cpp:121
-#, fuzzy
 msgid "Could not create a temporary directory for the merge.\n"
-msgstr "Nie można utworzyć folderu tymczasowego."
+msgstr "Nie można utworzyć folderu tymczasowego by połączyć.\n"
 
 #: kicad/cli/command_git_mergedriver.cpp:141
-#, fuzzy
 msgid "Could not stage merge inputs.\n"
-msgstr "Nie mogę zapisać plików z rysunkami w folderze '%s'."
+msgstr "Nie udało się scalić danych wejściowych.\n"
 
 #: kicad/cli/command_git_mergedriver.cpp:160
-#, fuzzy
 msgid "Could not write merged output.\n"
-msgstr "Nie mogę zapisać plików z rysunkami w folderze '%s'."
+msgstr "Nie można zapisać scalonych danych wyjściowych.\n"
 
 #: kicad/cli/command_import.cpp:47
-#, fuzzy
 msgid "Import non-KiCad board and/or schematic files into a new KiCad project"
-msgstr "Importuj plik PCB spoza KiCad do formatu KiCad"
+msgstr ""
+"Importuj plik obwodu drukowanego lub/oraz plik schematu spoza KiCad do "
+"formatu KiCad"
 
 #: kicad/cli/command_import.cpp:50
 msgid "Input file(s) to import; each is autodetected as a board or schematic"
@@ -32427,19 +32387,18 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_import.cpp:77
-#, fuzzy
 msgid "At least one input file is required\n"
-msgstr "Przynajmniej jeden rozmiar siatki jest wymagany."
+msgstr "Wymagany jest conajmniej jeden plik wejściowy\n"
 
 #: kicad/cli/command_import.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create output directory: %s\n"
-msgstr "Nie można utworzyć folderu '%s'"
+msgstr "Nie można utworzyć folderu wyjściowego: %s\n"
 
 #: kicad/cli/command_import.cpp:139
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create project: %s\n"
-msgstr "Nie można scalić zmian"
+msgstr "Nie można utworzyć projektu: %s\n"
 
 #: kicad/cli/command_import.cpp:199
 #, c-format
@@ -32454,19 +32413,18 @@ msgid "No board or schematic importer recognizes the file: %s\n"
 msgstr ""
 
 #: kicad/cli/command_import.cpp:214
-#, fuzzy
 msgid "No inputs could be imported\n"
-msgstr "Żadne modele 3D nie zostaną zaimportowane."
+msgstr "Nie udało się zaimportować żadnych danych wejściowych\n"
 
 #: kicad/cli/command_import.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid "Created project '%s'\n"
-msgstr "Utwórz nowy projekt"
+msgstr "Utworzony projekt '%s'\n"
 
 #: kicad/cli/command_import.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write project file: %s\n"
-msgstr "Nie udało się zapisać drzewa: %s"
+msgstr "Nie udało się zapisać pliku projektu: %s\n"
 
 #: kicad/cli/command_jobset.h:32
 msgid "Jobset"
@@ -32515,9 +32473,8 @@ msgid "'Ours' file"
 msgstr "Plik wyjściowy"
 
 #: kicad/cli/command_mergetool.cpp:98
-#, fuzzy
 msgid "'Theirs' file"
-msgstr "Plik z listą sieci:"
+msgstr "Plik 'Theirs'"
 
 #: kicad/cli/command_mergetool.cpp:103
 msgid "Output path; extension picks the document type"
@@ -32535,9 +32492,9 @@ msgid "Cannot find the main kicad binary alongside kicad-cli.\n"
 msgstr ""
 
 #: kicad/cli/command_mergetool.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to launch '%s'\n"
-msgstr "Nie można załadować '%s'."
+msgstr "Nie można uruchomić '%s'\n"
 
 #: kicad/cli/command_pcb_diff.cpp:28
 msgid "Diff two .kicad_pcb files and emit JSON, text, PNG, or SVG"
@@ -33585,9 +33542,8 @@ msgstr ""
 "skryptów Python"
 
 #: kicad/cli/command_sch_import.cpp:40
-#, fuzzy
 msgid "Import a non-KiCad schematic file to KiCad format"
-msgstr "Importuj plik PCB spoza KiCad do formatu KiCad"
+msgstr "Importuj plik schematu spoza KiCad do formatu KiCad"
 
 #: kicad/cli/command_sch_import.cpp:44
 #, fuzzy
@@ -35261,9 +35217,8 @@ msgid "Commit changes to the local repository"
 msgstr "Wprowadza zmiany do lokalnego repozytorium"
 
 #: kicad/project_tree_pane.cpp:1047
-#, fuzzy
 msgid "Amend Last Commit..."
-msgstr "Ostatnie zmiany"
+msgstr "Zmień ostatnie zatwierdzenie..."
 
 #: kicad/project_tree_pane.cpp:1048
 msgid "Rewrite the most recent commit on the current branch"
@@ -35278,9 +35233,9 @@ msgid "Pull"
 msgstr "Wyciągnij"
 
 #: kicad/project_tree_pane.cpp:1056
-#, fuzzy, c-format
+#, c-format
 msgid "Push %s to %s"
-msgstr "%s %s na %s"
+msgstr "Wypchnij %s do %s"
 
 #: kicad/project_tree_pane.cpp:1057
 #, fuzzy, c-format
@@ -35404,14 +35359,12 @@ msgid "Configure Default Remote"
 msgstr "Ustaw domyślne repozytorium zdalne"
 
 #: kicad/project_tree_pane.cpp:2001
-#, fuzzy
 msgid "Failed to configure remote."
-msgstr "Nie można było utworzyć zdalnie: %s"
+msgstr "Nie udało się skonfigurować zdalnego repozytorium."
 
 #: kicad/project_tree_pane.cpp:2054
-#, fuzzy
 msgid "Already up to date."
-msgstr "Obecnie umieszczone"
+msgstr "Obecnie aktualny."
 
 #: kicad/project_tree_pane.cpp:2055
 #, fuzzy, c-format
@@ -35428,14 +35381,13 @@ msgid "Pulled %s into %s (fast-forward)."
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2067
-#, fuzzy
 msgid "Pulled changes."
-msgstr "Przetwórz Zmiany"
+msgstr "Pobrane zmiany."
 
 #: kicad/project_tree_pane.cpp:2068
-#, fuzzy, c-format
+#, c-format
 msgid "Pulled %s into %s."
-msgstr "Pole %s na %s"
+msgstr "Pobieram %s do %s."
 
 #: kicad/project_tree_pane.cpp:2078
 msgid ""
@@ -35465,9 +35417,8 @@ msgid "Reset to the remote version."
 msgstr "Przywróć aktualny kąt z pozycji odniesienia."
 
 #: kicad/project_tree_pane.cpp:2094
-#, fuzzy
 msgid "Failed to reset to remote"
-msgstr "Nie udało się ustawić domyślnego repozytorium zdalnego."
+msgstr "Nie udało się zresetować repozytorium zdalnego"
 
 #: kicad/project_tree_pane.cpp:2101
 #, fuzzy
@@ -35479,28 +35430,25 @@ msgid "Could not rebase"
 msgstr "Nie można zmienić bazy"
 
 #: kicad/project_tree_pane.cpp:2107
-#, fuzzy
 msgid "Pull cancelled."
-msgstr "Anulowano"
+msgstr "Anulowano pobranie."
 
 #: kicad/project_tree_pane.cpp:2116
-#, fuzzy
 msgid "Pull failed."
-msgstr "Wszystkie pliki"
+msgstr "Pobranie nie powiodło się."
 
 #: kicad/project_tree_pane.cpp:2117
 msgid "Failed to pull project"
 msgstr "Nie udało się pobrać projektu"
 
 #: kicad/project_tree_pane.cpp:2151
-#, fuzzy
 msgid "Pushed to remote."
-msgstr "Nie można wyszukać zdalnego"
+msgstr "Wypchnięto do zdalnego repozytorium."
 
 #: kicad/project_tree_pane.cpp:2152
-#, fuzzy, c-format
+#, c-format
 msgid "Pushed %s to %s."
-msgstr "Pole %s na %s"
+msgstr "Wypchnięto %s do %s."
 
 #: kicad/project_tree_pane.cpp:2165
 #, c-format
@@ -35522,9 +35470,8 @@ msgid "&Force Push"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2182
-#, fuzzy
 msgid "Push failed."
-msgstr "Zadanie ukończone niepowodzeniem"
+msgstr "Wypchnięcie nie powiodło się."
 
 #: kicad/project_tree_pane.cpp:2183
 msgid "Failed to push project"
@@ -35551,9 +35498,8 @@ msgid "Unsaved Changes"
 msgstr "Cofnij zmiany"
 
 #: kicad/project_tree_pane.cpp:2584
-#, fuzzy
 msgid "&Save and Commit"
-msgstr "Zapisz kopię..."
+msgstr "Zapisz i zatwierdź"
 
 #: kicad/project_tree_pane.cpp:2584
 #, fuzzy
@@ -35561,9 +35507,9 @@ msgid "Commit &Anyway"
 msgstr "(%s i tak pozostało do zatwierdzenia.)"
 
 #: kicad/project_tree_pane.cpp:2601 kicad/project_tree_pane.cpp:2876
-#, fuzzy, c-format
+#, c-format
 msgid "Could not save %s."
-msgstr "Nie można odczytać pliku: %s"
+msgstr "Nie można zapisać %s."
 
 #: kicad/project_tree_pane.cpp:2718
 msgid "Discarding commit due to empty commit message."
@@ -35618,19 +35564,17 @@ msgid "Discarding amend due to empty commit message."
 msgstr "Odrzucanie zatwierdzenia z powodu pustego komunikatu opisującego."
 
 #: kicad/project_tree_pane.cpp:3082
-#, fuzzy
 msgid "Fetched from remote."
-msgstr "Pobieranie repozytorium zdalnego"
+msgstr "Pobrano z repozytorium zdalnego."
 
 #: kicad/project_tree_pane.cpp:3083
-#, fuzzy, c-format
+#, c-format
 msgid "Fetched from %s."
-msgstr "z %s"
+msgstr "Pobrano z %s."
 
 #: kicad/project_tree_pane.cpp:3090
-#, fuzzy
 msgid "Fetch failed."
-msgstr "Zadanie ukończone niepowodzeniem"
+msgstr "Pobranie nie powiodło się."
 
 #: kicad/project_tree_traverser.cpp:212
 #, c-format
@@ -40089,9 +40033,10 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr "(łuk ma zerowy lub bardzo mały rozmiar: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:1204
-#, fuzzy, c-format
+#, c-format
 msgid "(ellipse has null or very small radii: major=%d nm, minor=%d nm)"
-msgstr "(okrąg ma zerowy lub bardzo mały rozmiar: %d nm)"
+msgstr ""
+"(elipsa ma zerowy lub bardzo mały promień: większy=%d nm, mniejszy=%d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:235
 #: pcbnew/dialogs/dialog_drc.cpp:411 pcbnew/pcb_edit_frame.cpp:2612
@@ -41245,24 +41190,20 @@ msgid "Create Array"
 msgstr "Utwórz szyk"
 
 #: pcbnew/dialogs/dialog_diff_phase_skew_properties_base.cpp:30
-#, fuzzy
 msgid "Zero skew color:"
-msgstr "Przywróć do zapisanego koloru"
+msgstr "Kolor zerowego ukosu:"
 
 #: pcbnew/dialogs/dialog_diff_phase_skew_properties_base.cpp:37
-#, fuzzy
 msgid "Negative skew color:"
-msgstr "Rysuj w negatywie"
+msgstr "Kolor negatywnego ukosu:"
 
 #: pcbnew/dialogs/dialog_diff_phase_skew_properties_base.cpp:44
-#, fuzzy
 msgid "Positive skew color:"
-msgstr "Wklej kolor"
+msgstr "Kolor pozytywnego ukosu:"
 
 #: pcbnew/dialogs/dialog_diff_phase_skew_properties_base.cpp:51
-#, fuzzy
 msgid "Unknown skew color:"
-msgstr "Nieznany błąd"
+msgstr "Kolor nieznanego ukosu:"
 
 #: pcbnew/dialogs/dialog_diff_phase_skew_properties_base.cpp:61
 msgid "Logarithmic color scale"
@@ -41654,12 +41595,12 @@ msgstr "-------- DRC przerwane przez użytkownika.<br><br>"
 #: pcbnew/dialogs/dialog_drc.cpp:543
 #, c-format
 msgid "Canceled after %s"
-msgstr "Anuluj po %s"
+msgstr "Anulowano po %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:551
 #, c-format
 msgid "Completed in %s"
-msgstr "Skompletowany w %s"
+msgstr "Wykonano w %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:893
 #, c-format
@@ -48404,9 +48345,8 @@ msgid "Rule '%s' could not be located after parsing."
 msgstr "Plik '%s' nie może zostać utworzony."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:382
-#, fuzzy
 msgid "DRC engine not available."
-msgstr "Lista sieci nie jest dostępna"
+msgstr "Silnik DRC nie jest dostępny."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:405
 #, c-format
@@ -53634,9 +53574,9 @@ msgid "current length"
 msgstr "bieżąca długość"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2065
-#, fuzzy, c-format
+#, c-format
 msgid "Net: %s"
-msgstr "Sieć:"
+msgstr "Sieć: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2127
 #, fuzzy, c-format
@@ -53866,9 +53806,8 @@ msgid "If not checked: use interactive placement."
 msgstr "Jeśli nie zaznaczono: użyj interaktywnego rozmieszczenia."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:140
-#, fuzzy
 msgid "Current Layer"
-msgstr "Bieżąca warstwa:"
+msgstr "Bieżąca warstwa"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:144
 #, fuzzy
@@ -55926,9 +55865,8 @@ msgid "insufficient via fields"
 msgstr ""
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:187
-#, fuzzy
 msgid "insufficient pad fields"
-msgstr "Niewystarczające uprawnienia by odczytać plik '%s'."
+msgstr "niewystarczająca ilość pól"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:219
 msgid "insufficient fill fields"
@@ -55940,14 +55878,13 @@ msgid "insufficient text fields"
 msgstr "Przełącza widoczność ukrytych pól tekstowych"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:292
-#, fuzzy
 msgid "insufficient component fields"
-msgstr "Niewystarczające uprawnienia do folderu '%s'."
+msgstr "niewystarczająca ilość pól komponentu"
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file '%s'."
-msgstr "Nie można odczytać pliku: %s"
+msgstr "Nie można odczytać pliku '%s'."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:155
 #, fuzzy, c-format
@@ -56558,9 +56495,8 @@ msgid "Eagle binary layout is missing a board/libraries node."
 msgstr ""
 
 #: pcbnew/pcb_io/eagle/eagle_bin_parser.cpp:2212
-#, fuzzy
 msgid "File is too small to be an Eagle binary board."
-msgstr "Plik '%s' jest zbyt mały by mógł być plikiem Sprint Layout"
+msgstr "Plik jest zbyt mały by mógł być plikiem płytki formatu binarnego Eagle."
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1279
 #, c-format
@@ -58623,9 +58559,9 @@ msgid "Missing diff-pair name argument to %s."
 msgstr "Brakujący argument z nazwą pary różnicowej dla %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1326 pcbnew/pcbexpr_functions.cpp:1398
-#, fuzzy, c-format
+#, c-format
 msgid "Missing argument to '%s'"
-msgstr "Brakujący argument z nazwą warstwy dla %s."
+msgstr "Brakujący argument dla '%s'"
 
 #: pcbnew/pcbexpr_functions.cpp:1459
 #, c-format
@@ -58649,9 +58585,8 @@ msgid "Loading Footprint Libraries"
 msgstr "Ładowanie bibliotek footprintów"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:528
-#, fuzzy
 msgid "Failed to load board"
-msgstr "Nie można wczytać obwodu drukowanego\n"
+msgstr "Nie można wczytać obwodu drukowanego"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:599
 #, c-format
@@ -58868,14 +58803,14 @@ msgid "Merge applier failed to produce a board\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3398
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged board: %s\n"
-msgstr "Nie można zapisać płytki\n"
+msgstr "Nie można zapisać połączonych płytek: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3495
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged %s: %s\n"
-msgstr "Nie można zapisać arkusza rysunkowego '%s':%s"
+msgstr "Nie można zapisać połączonych %s: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3510
 #, fuzzy
@@ -58893,9 +58828,9 @@ msgid "symbol library table"
 msgstr "Tabela bibliotek symboli"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3998
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create output directory %s\n"
-msgstr "Nie można utworzyć folderu wyjściowego '%s'."
+msgstr "Nie można utworzyć folderu wyjściowego %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:4015
 msgid ""
@@ -58904,9 +58839,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:4089
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save merged footprint library: %s\n"
-msgstr "Nie można było zapisać pliku biblioteki footprintów '%s'."
+msgstr "Nie można było zapisać połączonych bibliotek footprintów: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:4104
 #, c-format
@@ -58962,9 +58897,9 @@ msgstr ""
 "zawierają _N/_P lub +/-."
 
 #: pcbnew/router/pns_dragger.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to drag arc tracks of %.1f degrees or greater."
-msgstr "Nie można zmienić rozmiaru ścieżek po łuku o %s lub więcej."
+msgstr "Nie można przeciągnąć ścieżek o kącie %.1f stopni lub większym."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1111
 #: pcbnew/router/pns_kicad_iface.cpp:1227 pcbnew/router/router_tool.cpp:1002
@@ -62925,9 +62860,8 @@ msgid "Show a manager dialog for Generator objects"
 msgstr "Pokazuje okno dialogowe menedżera obiektów generatora"
 
 #: pcbnew/tools/pcb_actions.cpp:2898
-#, fuzzy
 msgid "Length Tuning Settings"
-msgstr "Ustawienia dostrajania długości ścieżek..."
+msgstr "Ustawienia dostrajania długości ścieżek"
 
 #: pcbnew/tools/pcb_actions.cpp:2899
 msgid "Length Tuning Settings..."
@@ -63021,10 +62955,8 @@ msgid "Design block has no layout to place."
 msgstr "Blok projektowy nie posiada trasowania by je umieścić."
 
 #: pcbnew/tools/pcb_control.cpp:1491
-#, fuzzy
 msgid "No groups with a linked design block are selected."
-msgstr ""
-"Stosuje połączony układ ścieżek bloku projektowego do zaznaczonej grupy"
+msgstr "Nie wybrano żadnej grupy z powiązanej z blokiem projektu."
 
 #: pcbnew/tools/pcb_control.cpp:1516 pcbnew/tools/pcb_selection_tool.cpp:4749
 msgid ""
@@ -63043,14 +62975,12 @@ msgid "design block is not in the loaded libraries"
 msgstr "blok projektowy nie znajduje się w załadowanych bibliotekach"
 
 #: pcbnew/tools/pcb_control.cpp:1577
-#, fuzzy
 msgid "design block has no saved PCB layout"
-msgstr "Blok projektowy nie posiada trasowania by je umieścić."
+msgstr "blok projektowy nie posiada zapisanego trasowania"
 
 #: pcbnew/tools/pcb_control.cpp:1608
-#, fuzzy
 msgid "could not load the design block's layout"
-msgstr "Nie można odnaleźć bloku projektowego %s."
+msgstr "nie można załadować trasowania bloku projektowego"
 
 #: pcbnew/tools/pcb_control.cpp:1635
 #, fuzzy
@@ -63063,9 +62993,8 @@ msgid "group is empty"
 msgstr "Puste wyrażenie"
 
 #: pcbnew/tools/pcb_control.cpp:1724
-#, fuzzy
 msgid "layout copy failed"
-msgstr "Nie można skopiować '%s'."
+msgstr "kopiowanie trasowania nie powiodło się"
 
 #: pcbnew/tools/pcb_control.cpp:1742
 #, c-format
@@ -63073,40 +63002,38 @@ msgid "Applying layout to group %zu of %zu..."
 msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:1765
-#, fuzzy
 msgid "Apply design block layout cancelled."
-msgstr "Zastosuj układ ścieżek bloku projektowego"
+msgstr "Anulowano stosowanie układ ścieżek bloku projektowego."
 
 #: pcbnew/tools/pcb_control.cpp:1771
-#, fuzzy, c-format
+#, c-format
 msgid "Apply design block layout to %d group(s)"
-msgstr ""
-"Stosuje połączony układ ścieżek bloku projektowego do zaznaczonej grupy"
+msgstr "Zastosuj układ bloku projektowego do %d grup"
 
 #: pcbnew/tools/pcb_control.cpp:1774
 msgid "Copied copper has no net assigned. Assign nets to connect it."
 msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:1786
-#, fuzzy, c-format
+#, c-format
 msgid "Applied design block layout to %d of %d group(s)."
-msgstr ""
-"Stosuje połączony układ ścieżek bloku projektowego do zaznaczonej grupy"
+msgstr "Stosuje układ bloku projektowego do %d z %d grup."
 
 #: pcbnew/tools/pcb_control.cpp:1793
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Skipped %d selected item(s) that are not groups linked to a design block."
-msgstr "Zapisuje zaznaczoną grupę w połączonym z nim blokiem projektowym"
+msgstr ""
+"Pominięto %d wybranych elementów, które nie są grupami powiązanymi z blokiem "
+"projektu."
 
 #: pcbnew/tools/pcb_control.cpp:1801
 msgid "The following groups could not be processed:"
 msgstr "Następujące grupy nie mogły zostać przetworzone:"
 
 #: pcbnew/tools/pcb_control.cpp:1805
-#, fuzzy
 msgid "(unnamed group)"
-msgstr "Grupy pinów połączonych:"
+msgstr "(nienazwana grupa)"
 
 #: pcbnew/tools/pcb_control.cpp:1856
 #, c-format
@@ -64537,9 +64464,8 @@ msgid "Zone '%s' %s %s, priority %d"
 msgstr "Strefa '%s' %s %s, priorytet %d"
 
 #: pcbnew/zone.cpp:2002
-#, fuzzy
 msgid "Copper thieving"
-msgstr "Rezystywność miedzi:"
+msgstr "Podebranie miedzi"
 
 #: pcbnew/zone.cpp:2011
 msgid "Squares"
