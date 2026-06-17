@@ -88,6 +88,10 @@ private:
         EGB_NODE*                              parent = nullptr;
 
         EGB_NODE* AddChild( int aId, const wxString& aName );
+
+        /// Move an existing node in as a child, repointing its parent link.
+        EGB_NODE* AdoptChild( std::unique_ptr<EGB_NODE> aChild );
+
         bool      HasProp( const wxString& aKey ) const { return props.count( aKey ) != 0; }
         wxString  Prop( const wxString& aKey ) const;
         long      PropLong( const wxString& aKey ) const;
@@ -97,6 +101,16 @@ private:
         wxString  PropDoubled( const wxString& aKey ) const;
         EGB_NODE* FindChildById( int aId ) const;
         EGB_NODE* FindChildByName( const wxString& aName ) const;
+
+        /// Apply aFn to this node and every descendant, pre-order.
+        template <typename FN>
+        void ForEach( FN&& aFn )
+        {
+            aFn( this );
+
+            for( const auto& child : children )
+                child->ForEach( aFn );
+        }
     };
 
     /// DRC values pulled from the trailing 244-byte block (or sane defaults).
@@ -118,8 +132,22 @@ private:
 
     const wxString& nextLongText();
 
-    // Post-processing passes that rewrite the intermediate tree to match the XML schema.
+    // Each 0x7F-marked string field holds a little-endian pointer into the free-text
+    // blob; resolve them by offset so the result is independent of traversal order.
+    void resolveLongPointers();
+
     void postProcess( EGB_NODE* aRoot, const DRC_CTX& aDrc );
+
+    // Schematic assembly, split into ordered steps. resolveSchLibraries returns the
+    // library list that resegmentSchSheets needs to resolve part references.
+    void postProcessSchematic( EGB_NODE* aRoot );
+    void postprocSchAttrs( EGB_NODE* aRoot );
+    void renameSchSections( EGB_NODE* aSchematic );
+    std::vector<EGB_NODE*> resolveSchLibraries( EGB_NODE* aSchematic );
+    void resegmentSchSheets( EGB_NODE* aSchematic, const std::vector<EGB_NODE*>& aLibList );
+
+    static std::vector<EGB_NODE*> childrenById( EGB_NODE* aParent, int aChildId );
+    static wxString               nameByOrdinal( const std::vector<EGB_NODE*>& aList, long aIdx );
     void postprocLayers( EGB_NODE* aDrawing, EGB_NODE* aLayers );
     void postprocDrc( EGB_NODE* aDrcNode, const DRC_CTX& aDrc );
     void postprocLibs( EGB_NODE* aLibraries );
@@ -167,6 +195,21 @@ private:
     std::vector<wxString> m_freeText; ///< NUL-delimited notes strings
     size_t                m_freeTextCursor = 0;
     wxString              m_invalidText; ///< returned when out of strings
+
+    /// Free-text strings keyed by their byte offset within the blob, for pointer
+    /// (0x7F-reference) resolution.
+    std::map<size_t, wxString> m_freeTextByOffset;
+
+    /// A deferred string field and the absolute blob pointer it resolves to,
+    /// recorded by readBlock() for resolveLongPointers().
+    struct LONG_REF
+    {
+        EGB_NODE* node;
+        wxString  field;
+        uint32_t  ptr;
+    };
+
+    std::vector<LONG_REF> m_longRefs;
 };
 
 #endif // EAGLE_BIN_PARSER_H_

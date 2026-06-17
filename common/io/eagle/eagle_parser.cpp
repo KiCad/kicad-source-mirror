@@ -2648,15 +2648,15 @@ ESCHEMATIC::ESCHEMATIC( wxXmlNode* aSchematic, IO_BASE* aIo ) :
                         for( const auto& [setName, setLibrary] : libraries )
                             usedNames.emplace( setName );
 
-                        if( usedNames.find( libName ) != usedNames.end() )
+                        // One of _1.._N+1 is always free (pigeonhole); the bound also
+                        // stops an infinite loop on malformed names (e.g. embedded
+                        // NULs) whose suffixed variants all compare equal.
+                        for( int i = 1; i <= (int) usedNames.size() + 1; i++ )
                         {
-                            int i = 1;
+                            uniqueName.Format( wxS( "%s_%d" ), libName, i );
 
-                            do
-                            {
-                                uniqueName.Format( wxS( "%s_%d" ), libName, i );
-                                i += 1;
-                            } while( usedNames.find( uniqueName ) != usedNames.end() );
+                            if( usedNames.find( uniqueName ) == usedNames.end() )
+                                break;
                         }
 
                         libName = uniqueName;

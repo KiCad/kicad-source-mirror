@@ -79,7 +79,7 @@ Load() TODO's
 
 #include <pcb_io/pcb_io.h>
 #include <pcb_io/eagle/pcb_io_eagle.h>
-#include <pcb_io/eagle/eagle_bin_parser.h>
+#include <io/eagle/eagle_bin_parser.h>
 
 using namespace std;
 

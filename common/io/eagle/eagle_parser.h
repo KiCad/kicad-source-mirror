@@ -1184,6 +1184,10 @@ struct EPOLYGON : public EAGLE_BASE
 
     // TODO add grouprefs
 
+    /// Fewer than three vertices cannot bound an area; such polygons (which pre-v6
+    /// binary files can carry) would throw on later geometry queries.
+    bool IsValidOutline() const { return vertices.size() >= 3; }
+
     EPOLYGON( wxXmlNode* aPolygon, IO_BASE* aIo = nullptr );
 };
 

@@ -38,6 +38,7 @@
 #include <font/fontconfig.h>
 #include <reporter.h>
 #include <io/eagle/eagle_parser.h>
+#include <io/eagle/eagle_bin_parser.h>
 #include <lib_id.h>
 #include <progress_reporter.h>
 #include <project.h>
@@ -600,6 +601,31 @@ wxXmlDocument SCH_IO_EAGLE::loadXmlDocument( const wxString& aFileName )
                 wxString::Format( _( "Unable to read file '%s'." ), m_filename.GetFullPath() ) );
     }
 
+    // Pre-v6 schematics are a binary stream identified by a two-byte magic. Decode
+    // them into an XML-compatible DOM and adopt that tree, mirroring PCB_IO_EAGLE.
+    // IsBinaryEagle consumes the two-byte magic, so rewind before reading on.
+    bool isBinary = EAGLE_BIN_PARSER::IsBinaryEagle( stream );
+    stream.SeekI( 0 );
+
+    if( isBinary )
+    {
+        std::vector<uint8_t> bytes;
+        bytes.resize( static_cast<size_t>( stream.GetLength() ) );
+        stream.Read( bytes.data(), bytes.size() );
+
+        if( stream.LastRead() != bytes.size() )
+        {
+            THROW_IO_ERROR(
+                    wxString::Format( _( "Unable to read file '%s'." ), m_filename.GetFullPath() ) );
+        }
+
+        EAGLE_BIN_PARSER               binParser;
+        std::unique_ptr<wxXmlDocument> binDocument = binParser.Parse( bytes );
+
+        xmlDocument.SetRoot( binDocument->DetachRoot() );
+        return xmlDocument;
+    }
+
     // read first line to check for Eagle XML format file
     wxTextInputStream text( stream );
     wxString          line = text.ReadLine();
@@ -951,7 +977,10 @@ void SCH_IO_EAGLE::loadSheet( const std::unique_ptr<ESHEET>& aSheet )
     if( aSheet->plain )
     {
         for( const std::unique_ptr<EPOLYGON>& epoly : aSheet->plain->polygons )
-            screen->Append( loadPolyLine( epoly ) );
+        {
+            if( SCH_SHAPE* shape = loadPolyLine( epoly ) )
+                screen->Append( shape );
+        }
 
         for( const std::unique_ptr<EWIRE>& ewire : aSheet->plain->wires )
         {
@@ -1590,6 +1619,9 @@ void SCH_IO_EAGLE::loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& a
 
 SCH_SHAPE* SCH_IO_EAGLE::loadPolyLine( const std::unique_ptr<EPOLYGON>& aPolygon )
 {
+    if( !aPolygon->IsValidOutline() )
+        return nullptr;
+
     std::unique_ptr<SCH_SHAPE> poly = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY );
     VECTOR2I   pt, prev_pt;
     opt_double prev_curve;
@@ -2561,7 +2593,8 @@ bool SCH_IO_EAGLE::loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol,
     }
 
     for( const std::unique_ptr<EPOLYGON>& epolygon : aEsymbol->polygons )
-        aSymbol->AddDrawItem( loadSymbolPolyLine( aSymbol, epolygon, aGateNumber ) );
+        if( SCH_SHAPE* shape = loadSymbolPolyLine( aSymbol, epolygon, aGateNumber ) )
+            aSymbol->AddDrawItem( shape );
 
     for( const std::unique_ptr<ERECT>& erectangle : aEsymbol->rectangles )
         aSymbol->AddDrawItem( loadSymbolRectangle( aSymbol, erectangle, aGateNumber ) );
@@ -2755,6 +2788,9 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbo
                                              int aGateNumber )
 {
     wxCHECK( aSymbol && aPolygon, nullptr );
+
+    if( !aPolygon->IsValidOutline() )
+        return nullptr;
 
     SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY );
     VECTOR2I   pt, prev_pt;

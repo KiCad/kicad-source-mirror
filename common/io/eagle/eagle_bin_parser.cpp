@@ -31,6 +31,8 @@
 
 #include <cmath>
 #include <cstring>
+#include <algorithm>
+#include <functional>
 
 #include <wx/intl.h>
 #include <wx/stream.h>
@@ -190,7 +192,7 @@ const SCRIPT_ROW g_script[] = {
         TERM_A } },
     { EGKW_SECT_UNKNOWN11, 0xFFFF, "unknown11", { TERM_F }, { TERM_S }, { TERM_A } },
     { EGKW_SECT_GRID,
-      0xFFFF,
+      0xFF7F,
       "grid",
       { TERM_F },
       { TERM_S },
@@ -217,7 +219,7 @@ const SCRIPT_ROW g_script[] = {
         { "name", T_STR, 15, 9 },
         TERM_A } },
     { EGKW_SECT_SCHEMA,
-      0xFFFF,
+      0xFF00,
       "schema",
       { TERM_F },
       { { 4, 4, SS_DIRECT, nullptr }, TERM_S },
@@ -256,7 +258,7 @@ const SCRIPT_ROW g_script[] = {
         { "library", T_STR, 16, 8 },
         TERM_A } },
     { EGKW_SECT_SCHEMASHEET,
-      0xFFFF,
+      0xFF00,
       "schemasheet",
       { TERM_F },
       { { 2, 2, SS_DIRECT, nullptr }, TERM_S },
@@ -299,7 +301,7 @@ const SCRIPT_ROW g_script[] = {
         { "name", T_STR, 16, 8 },
         TERM_A } },
     { EGKW_SECT_SYMBOL,
-      0xFFFF,
+      0xFF7F,
       "symbol",
       { TERM_F },
       { { 2, 2, SS_DIRECT, nullptr }, TERM_S },
@@ -322,22 +324,22 @@ const SCRIPT_ROW g_script[] = {
         { "name", T_STR, 18, 6 },
         TERM_A } },
     { EGKW_SECT_SCHEMANET,
-      0xFFFF,
+      0xFF00,
       "schemanet",
       { TERM_F },
-      { { 2, 2, SS_DIRECT, nullptr }, TERM_S },
+      { { 2, 2, SS_RECURSIVE, nullptr }, TERM_S },
       { { "minx", T_INT, 4, 2 },
         { "miny", T_INT, 6, 2 },
         { "maxx", T_INT, 8, 2 },
         { "maxy", T_INT, 10, 2 },
         { "netclass", T_UBF, 13, BITFIELD( 1, 0, 3 ) },
-        { "name", T_STR, 18, 6 },
+        { "name", T_STR, 16, 8 },
         TERM_A } },
     { EGKW_SECT_PATH,
-      0xFFFF,
+      0xFF00,
       "path",
       { TERM_F },
-      { { 2, 2, SS_DIRECT, nullptr }, TERM_S },
+      { { 2, 2, SS_RECURSIVE, nullptr }, TERM_S },
       { { "minx", T_INT, 4, 2 }, { "miny", T_INT, 6, 2 }, { "maxx", T_INT, 8, 2 }, { "maxy", T_INT, 10, 2 }, TERM_A } },
     { EGKW_SECT_POLYGON,
       0xFFF7,
@@ -358,7 +360,7 @@ const SCRIPT_ROW g_script[] = {
         { "orphans", T_BMB, 19, 0x40 },
         TERM_A } },
     { EGKW_SECT_LINE,
-      0xFF43,
+      0xFF00,
       "wire",
       { TERM_F },
       { TERM_S },
@@ -381,7 +383,7 @@ const SCRIPT_ROW g_script[] = {
         { "arc_y2", T_INT, 16, 3 },
         TERM_A } },
     { EGKW_SECT_ARC,
-      0xFFFF,
+      0xFF7F,
       "arc",
       { TERM_F },
       { TERM_S },
@@ -426,7 +428,7 @@ const SCRIPT_ROW g_script[] = {
         { "bin_rot", T_INT, 20, 2 },
         TERM_A } },
     { EGKW_SECT_JUNCTION,
-      0xFFFF,
+      0xFF00,
       "junction",
       { TERM_F },
       { TERM_S },
@@ -543,7 +545,7 @@ const SCRIPT_ROW g_script[] = {
       { TERM_S },
       { { "name", T_STR, 2, 8 }, { "value", T_STR, 10, 14 }, TERM_A } },
     { EGKW_SECT_INSTANCE,
-      0xFFFF,
+      0xFF00,
       "instance",
       { TERM_F },
       { { 2, 2, SS_DIRECT, nullptr }, TERM_S },
@@ -574,7 +576,7 @@ const SCRIPT_ROW g_script[] = {
     // string into a trailing 0x3200 record, with the bytes from offset 2 onward.
     { EGKW_SECT_LONGTEXT, 0xFFFF, "longtext", { TERM_F }, { TERM_S }, { { "textfield", T_STR, 2, 22 }, TERM_A } },
     { EGKW_SECT_NETBUSLABEL,
-      0xFFFF,
+      0xFF00,
       "netbuslabel",
       { TERM_F },
       { TERM_S },
@@ -604,7 +606,7 @@ const SCRIPT_ROW g_script[] = {
         { "textfield", T_STR, 18, 5 },
         TERM_A } },
     { EGKW_SECT_SMASHEDVALUE,
-      0xFF73,
+      0xFF00,
       "value",
       { TERM_F },
       { TERM_S },
@@ -628,7 +630,9 @@ const SCRIPT_ROW g_script[] = {
       0xFF7F,
       "device",
       { TERM_F },
-      { { 2, 2, SS_RECURSIVE, "gates" }, { 4, 2, SS_RECURSIVE, "variants" }, TERM_S },
+      // Subsections stream in [variants, gates] order; the variant count lives at
+      // offset 4 and the gate count at offset 2 (matches pyeagle's DeviceSection).
+      { { 4, 2, SS_RECURSIVE, "variants" }, { 2, 2, SS_RECURSIVE, "gates" }, TERM_S },
       { { "gates", T_INT, 2, 2 },
         { "variants", T_INT, 4, 2 },
         { "prefix", T_STR, 8, 5 },
@@ -636,10 +640,10 @@ const SCRIPT_ROW g_script[] = {
         { "name", T_STR, 18, 5 },
         TERM_A } },
     { EGKW_SECT_PART,
-      0xFFFF,
+      0xFF00,
       "part",
       { TERM_F },
-      { { 2, 2, SS_DIRECT, nullptr }, TERM_S },
+      { { 2, 2, SS_RECURSIVE, nullptr }, TERM_S },
       { { "lib", T_INT, 4, 2 },
         { "device", T_INT, 6, 2 },
         { "variant", T_INT, 8, 1 },
@@ -647,9 +651,9 @@ const SCRIPT_ROW g_script[] = {
         { "name", T_STR, 11, 5 },
         { "value", T_STR, 16, 8 },
         TERM_A } },
-    { EGKW_SECT_SCHEMABUS, 0xFFFF, nullptr, { TERM_F }, { TERM_S }, { TERM_A } },
+    { EGKW_SECT_SCHEMABUS, 0xFF00, nullptr, { TERM_F }, { TERM_S }, { TERM_A } },
     { EGKW_SECT_VARIANTCONNECTIONS, 0xFF7F, "variantconnections", { TERM_F }, { TERM_S }, { TERM_A } },
-    { EGKW_SECT_SCHEMACONNECTION, 0xFFFF, nullptr, { TERM_F }, { TERM_S }, { TERM_A } },
+    { EGKW_SECT_SCHEMACONNECTION, 0xFF00, nullptr, { TERM_F }, { TERM_S }, { TERM_A } },
     { EGKW_SECT_CONTACTREF,
       0xFF57,
       "contactref",
@@ -657,7 +661,7 @@ const SCRIPT_ROW g_script[] = {
       { TERM_S },
       { { "partnumber", T_INT, 4, 2 }, { "pin", T_INT, 6, 2 }, TERM_A } },
     { EGKW_SECT_SMASHEDPART,
-      0xFFFF,
+      0xFF7F,
       "smashedpart",
       { TERM_F },
       { TERM_S },
@@ -672,7 +676,7 @@ const SCRIPT_ROW g_script[] = {
         { "textfield", T_STR, 18, 5 },
         TERM_A } },
     { EGKW_SECT_SMASHEDGATE,
-      0xFFFF,
+      0xFF7F,
       "smashedgate",
       { TERM_F },
       { TERM_S },
@@ -702,13 +706,13 @@ const SCRIPT_ROW g_script[] = {
         { "textfield", T_STR, 18, 5 },
         TERM_A } },
     { EGKW_SECT_ATTRIBUTEVALUE,
-      0xFFFF,
+      0xFF7F,
       "attribute-value",
       { TERM_F },
       { TERM_S },
       { { "symbol", T_STR, 2, 5 }, { "attribute", T_STR, 7, 17 }, TERM_A } },
     { EGKW_SECT_FRAME,
-      0xFFFF,
+      0xFF00,
       "frame",
       { TERM_F },
       { TERM_S },
@@ -722,7 +726,7 @@ const SCRIPT_ROW g_script[] = {
         { "borders", T_INT, 22, 1 },
         TERM_A } },
     { EGKW_SECT_SMASHEDXREF,
-      0xFFFF,
+      0xFF7F,
       "smashedxref",
       { TERM_F },
       { TERM_S },
@@ -752,6 +756,15 @@ EAGLE_BIN_PARSER::EGB_NODE* EAGLE_BIN_PARSER::EGB_NODE::AddChild( int aId, const
     child->name = aName;
     child->parent = this;
     children.push_back( std::move( child ) );
+
+    return children.back().get();
+}
+
+
+EAGLE_BIN_PARSER::EGB_NODE* EAGLE_BIN_PARSER::EGB_NODE::AdoptChild( std::unique_ptr<EGB_NODE> aChild )
+{
+    aChild->parent = this;
+    children.push_back( std::move( aChild ) );
 
     return children.back().get();
 }
@@ -1000,7 +1013,19 @@ int EAGLE_BIN_PARSER::readBlock( long& aNumBlocks, EGB_NODE* aParent )
         case T_UBF: val = wxString::Format( wxS( "%u" ), loadUbf( blockStart + at->offs, at->len ) ); break;
         case T_INT: val = wxString::Format( wxS( "%d" ), loadS32( blockStart + at->offs, at->len ) ); break;
         case T_DBL: val = wxString::FromCDouble( loadDouble( blockStart + at->offs ) ); break;
-        case T_STR: val = loadStr( blockStart + at->offs, at->len ); break;
+        case T_STR:
+        {
+            size_t foff = blockStart + at->offs;
+            val = loadStr( foff, at->len );
+
+            // A 0x7F-marked field defers to a 32-bit little-endian pointer into the
+            // free-text blob. Record the raw pointer (loadStr would NUL-truncate one
+            // whose high byte is zero) while keeping the inline value for fallback.
+            if( foff + 5 <= m_buf->size() && ( *m_buf )[foff] == 0x7F )
+                m_longRefs.push_back( { node, wxString::FromUTF8( at->name ), loadU32( foff + 1, 4 ) } );
+
+            break;
+        }
         }
 
         node->props[wxString::FromUTF8( at->name )] = val;
@@ -1069,8 +1094,13 @@ bool EAGLE_BIN_PARSER::readNotes()
         return false;
 
     // Split the blob into NUL-delimited strings; an empty string terminates.
+    // Each string is also keyed by its byte offset in the blob so deferred 0x7F
+    // pointer references can be resolved directly.
+    size_t blobStart = m_pos;
     size_t end = m_pos + total;
     size_t cur = m_pos;
+
+    m_freeTextByOffset.clear();
 
     while( cur < end && ( *m_buf )[cur] != '\0' )
     {
@@ -1079,7 +1109,10 @@ bool EAGLE_BIN_PARSER::readNotes()
         while( cur < end && ( *m_buf )[cur] != '\0' )
             cur++;
 
-        m_freeText.push_back( wxString::FromUTF8( reinterpret_cast<const char*>( m_buf->data() + s ), cur - s ) );
+        wxString str = wxString::FromUTF8( reinterpret_cast<const char*>( m_buf->data() + s ),
+                                           cur - s );
+        m_freeText.push_back( str );
+        m_freeTextByOffset[s - blobStart] = str;
         cur++; // skip the NUL
     }
 
@@ -1098,6 +1131,86 @@ const wxString& EAGLE_BIN_PARSER::nextLongText()
     }
 
     return m_freeText[m_freeTextCursor++];
+}
+
+
+void EAGLE_BIN_PARSER::resolveLongPointers()
+{
+    if( m_freeTextByOffset.empty() || m_longRefs.empty() )
+        return;
+
+    // The pointers are absolute addresses with an unstored base, so recover it by
+    // consensus: the most common (pointer - boundary) difference is the base. A file
+    // can reference several blob regions with different bases, so iterate, resolving
+    // the dominant base's references each round until no more can be placed.
+    std::vector<bool>     done( m_longRefs.size(), false );
+    std::vector<wxString> value( m_longRefs.size() );
+
+    while( true )
+    {
+        std::map<long long, int> votes;
+
+        for( size_t i = 0; i < m_longRefs.size(); i++ )
+        {
+            if( done[i] )
+                continue;
+
+            for( const auto& [offset, str] : m_freeTextByOffset )
+            {
+                if( offset > m_longRefs[i].ptr )
+                    break;
+
+                votes[static_cast<long long>( m_longRefs[i].ptr ) - static_cast<long long>( offset )]++;
+            }
+        }
+
+        long long base = -1;
+        int       best = 0;
+
+        for( const auto& [cand, count] : votes )
+        {
+            if( count > best )
+            {
+                best = count;
+                base = cand;
+            }
+        }
+
+        if( base < 0 )
+            break;
+
+        int progress = 0;
+
+        for( size_t i = 0; i < m_longRefs.size(); i++ )
+        {
+            if( done[i] )
+                continue;
+
+            auto it = m_freeTextByOffset.find(
+                    static_cast<size_t>( static_cast<long long>( m_longRefs[i].ptr ) - base ) );
+
+            if( it != m_freeTextByOffset.end() )
+            {
+                value[i] = it->second;
+                done[i] = true;
+                progress++;
+            }
+        }
+
+        if( progress == 0 )
+            break;
+    }
+
+    // Commit only if every reference resolved: a partial mix would desync the
+    // sequential fallback for the misses, so in that case leave all the inline 0x7F
+    // markers for postprocFreeText() to resolve in order instead.
+    bool allResolved = std::all_of( done.begin(), done.end(), []( bool d ) { return d; } );
+
+    if( allResolved )
+    {
+        for( size_t i = 0; i < m_longRefs.size(); i++ )
+            m_longRefs[i].node->props[m_longRefs[i].field] = value[i];
+    }
 }
 
 
@@ -1171,8 +1284,11 @@ void EAGLE_BIN_PARSER::fixLongText( EGB_NODE* aNode, const wxString& aField )
     if( it == aNode->props.end() || it->second.IsEmpty() )
         return;
 
-    // A leading 0x7F byte marks a deferred long-text reference into the notes.
-    if( static_cast<unsigned char>( it->second[0] ) == 0x7F )
+    // A leading 0x7F byte marks a deferred long-text reference into the notes that
+    // pointer resolution could not place; fall back to sequential order. Compare the
+    // raw code unit (resolved fields can now hold non-ASCII text whose first
+    // character would assert if cast to a single byte).
+    if( it->second[0].GetValue() == 0x7F )
         it->second = nextLongText();
 }
 
@@ -1645,41 +1761,43 @@ void EAGLE_BIN_PARSER::postprocFreeText( EGB_NODE* aRoot )
     case EGKW_SECT_PIN:
     case EGKW_SECT_GATE: fixLongText( aRoot, wxS( "name" ) ); break;
 
+    // Multi-field records consume free-text in the field order Eagle serialized
+    // them, which matches pyeagle's parse() call order (value-then-name, etc.).
     case EGKW_SECT_ELEMENT2:
     case EGKW_SECT_PART:
-        fixLongText( aRoot, wxS( "name" ) );
         fixLongText( aRoot, wxS( "value" ) );
+        fixLongText( aRoot, wxS( "name" ) );
         break;
 
     case EGKW_SECT_DEVICES:
     case EGKW_SECT_SYMBOLS: fixLongText( aRoot, wxS( "library" ) ); break;
 
     case EGKW_SECT_PACKAGEVARIANT:
-        fixLongText( aRoot, wxS( "table" ) );
         fixLongText( aRoot, wxS( "name" ) );
+        fixLongText( aRoot, wxS( "table" ) );
         break;
 
     case EGKW_SECT_PACKAGE:
-        fixLongText( aRoot, wxS( "desc" ) );
         fixLongText( aRoot, wxS( "name" ) );
+        fixLongText( aRoot, wxS( "desc" ) );
         break;
 
     case EGKW_SECT_PACKAGES:
-        fixLongText( aRoot, wxS( "desc" ) );
         fixLongText( aRoot, wxS( "library" ) );
+        fixLongText( aRoot, wxS( "desc" ) );
         break;
 
     case EGKW_SECT_SCHEMA: fixLongText( aRoot, wxS( "xref_format" ) ); break;
 
     case EGKW_SECT_ATTRIBUTEVALUE:
-        fixLongText( aRoot, wxS( "symbol" ) );
         fixLongText( aRoot, wxS( "attribute" ) );
+        fixLongText( aRoot, wxS( "symbol" ) );
         break;
 
     case EGKW_SECT_DEVICE:
-        fixLongText( aRoot, wxS( "prefix" ) );
-        fixLongText( aRoot, wxS( "desc" ) );
         fixLongText( aRoot, wxS( "name" ) );
+        fixLongText( aRoot, wxS( "desc" ) );
+        fixLongText( aRoot, wxS( "prefix" ) );
         break;
 
     default: break;
@@ -2207,6 +2325,7 @@ std::unique_ptr<wxXmlDocument> EAGLE_BIN_PARSER::Parse( const std::vector<uint8_
 {
     m_buf = &aBytes;
     m_pos = 0;
+    m_longRefs.clear();
 
     if( aBytes.size() < 24 )
         THROW_IO_ERROR( _( "File is too small to be an Eagle binary board." ) );
@@ -2218,18 +2337,446 @@ std::unique_ptr<wxXmlDocument> EAGLE_BIN_PARSER::Parse( const std::vector<uint8_
     long numBlocks = -1;
     readBlock( numBlocks, m_root.get() );
 
-    DRC_CTX drc;
+    // A schematic drawing carries a `schema` section where a board carries `board`.
+    EGB_NODE* drawing = m_root->children.empty() ? nullptr : m_root->children.front().get();
+    bool      isSchematic = drawing && drawing->FindChildById( EGKW_SECT_SCHEMA ) != nullptr;
 
-    // The trailing notes and DRC sections are present only in v4/v5; missing
-    // sections are tolerated and fall back to defaults.
-    readNotes();
-    readDrc( drc );
+    if( isSchematic )
+    {
+        // Long names/values are stored as 0x7F references into the trailing
+        // free-text section, present in schematics as well as boards. Read it and
+        // resolve every reference by its embedded pointer (order-independent).
+        readNotes();
+        resolveLongPointers();
 
-    postProcess( m_root.get(), drc );
+        postProcessSchematic( m_root.get() );
+    }
+    else
+    {
+        DRC_CTX drc;
+
+        // The trailing notes and DRC sections are present only in v4/v5 boards;
+        // missing sections are tolerated and fall back to defaults.
+        readNotes();
+        resolveLongPointers();
+        readDrc( drc );
+
+        postProcess( m_root.get(), drc );
+    }
 
     auto doc = std::make_unique<wxXmlDocument>();
     doc->SetRoot( toXml( m_root.get() ) );
 
     m_buf = nullptr;
     return doc;
+}
+
+
+void EAGLE_BIN_PARSER::postProcessSchematic( EGB_NODE* aRoot )
+{
+    EGB_NODE* drawing = aRoot->children.empty() ? nullptr : aRoot->children.front().get();
+
+    if( drawing == nullptr )
+        THROW_IO_ERROR( _( "Eagle binary schematic has no drawing section." ) );
+
+    EGB_NODE* schematic = drawing->FindChildById( EGKW_SECT_SCHEMA );
+
+    if( schematic == nullptr )
+        THROW_IO_ERROR( _( "Eagle binary file has no schematic section." ) );
+
+    // EAGLE_DOC requires a version attribute on the <eagle> root. Synthesize one
+    // from the drawing's binary version bytes; the value only feeds behavioural
+    // gating that already tolerates a coarse version.
+    long v1 = drawing->HasProp( wxS( "v1" ) ) ? drawing->PropLong( wxS( "v1" ) ) : 5;
+    long v2 = drawing->HasProp( wxS( "v2" ) ) ? drawing->PropLong( wxS( "v2" ) ) : 0;
+    aRoot->props[wxS( "version" )] = wxString::Format( wxS( "%ld.%ld" ), v1, v2 );
+
+    // The schema section becomes the XML <schematic> element.
+    schematic->name = wxS( "schematic" );
+
+    // Normalize geometry and text attributes shared with the board path before
+    // the tree is restructured (these passes match on section id, not name).
+    postprocLongText( aRoot );
+    postprocWires( aRoot );
+    postprocArcs( aRoot );
+    postprocCircles( aRoot );
+    postprocFreeText( aRoot );
+    postprocTextContent( aRoot );
+    postprocRotation( aRoot );
+    postprocSchAttrs( aRoot );
+    postprocUnits( aRoot );
+    renameSchSections( schematic );
+
+    std::vector<EGB_NODE*> libList = resolveSchLibraries( schematic );
+    resegmentSchSheets( schematic, libList );
+}
+
+
+std::vector<EAGLE_BIN_PARSER::EGB_NODE*>
+EAGLE_BIN_PARSER::childrenById( EGB_NODE* aParent, int aChildId )
+{
+    std::vector<EGB_NODE*> out;
+
+    if( aParent != nullptr )
+    {
+        for( const auto& child : aParent->children )
+        {
+            if( child->id == aChildId )
+                out.push_back( child.get() );
+        }
+    }
+
+    return out;
+}
+
+
+wxString EAGLE_BIN_PARSER::nameByOrdinal( const std::vector<EGB_NODE*>& aList, long aIdx )
+{
+    // The binary references symbols/devicesets/variants/gates by 1-based ordinal.
+    if( aIdx >= 1 && aIdx <= (long) aList.size() )
+        return aList[aIdx - 1]->Prop( wxS( "name" ) );
+
+    return wxString();
+}
+
+
+void EAGLE_BIN_PARSER::postprocSchAttrs( EGB_NODE* aRoot )
+{
+    // Normalize per-element attributes to their XML names/values before the unit
+    // conversion rewrites dimensional fields.
+    aRoot->ForEach(
+            [&]( EGB_NODE* aNode )
+            {
+                if( aNode->id == EGKW_SECT_FRAME && aNode->HasProp( wxS( "cols" ) ) )
+                    aNode->props[wxS( "columns" )] = aNode->Prop( wxS( "cols" ) );
+
+                // A placed <attribute> carries its key in the text field; the reader
+                // needs it as the required name attribute.
+                if( aNode->id == EGKW_SECT_ATTRIBUTE && !aNode->HasProp( wxS( "name" ) ) )
+                {
+                    aNode->props[wxS( "name" )] = aNode->HasProp( wxS( "textfield" ) )
+                                                          ? aNode->Prop( wxS( "textfield" ) )
+                                                          : aNode->content;
+                }
+
+                switch( aNode->id )
+                {
+                case EGKW_SECT_TEXT:
+                case EGKW_SECT_SMASHEDNAME:
+                case EGKW_SECT_SMASHEDVALUE:
+                case EGKW_SECT_NETBUSLABEL:
+                case EGKW_SECT_ATTRIBUTE:
+                case EGKW_SECT_SMASHEDXREF:
+                {
+                    // Eagle stores text height at half its real value; reuse the
+                    // overflow-safe doubling accessor the board path uses.
+                    wxString sizeKey;
+
+                    if( aNode->HasProp( wxS( "half_size" ) ) )
+                        sizeKey = wxS( "half_size" );
+                    else if( aNode->HasProp( wxS( "size" ) ) )
+                        sizeKey = wxS( "size" );
+
+                    if( !sizeKey.IsEmpty() && aNode->PropLong( sizeKey ) >= 0 )
+                        aNode->props[wxS( "size" )] = aNode->PropDoubled( sizeKey );
+
+                    break;
+                }
+                default: break;
+                }
+            } );
+}
+
+
+void EAGLE_BIN_PARSER::renameSchSections( EGB_NODE* aSchematic )
+{
+    // Rename binary sections to their XML element names. The binary "device" record
+    // (0x37) is the XML <deviceset>; its "variants" child is the XML <devices>.
+    aSchematic->ForEach(
+            [&]( EGB_NODE* aNode )
+            {
+                switch( aNode->id )
+                {
+                case EGKW_SECT_DEVICES:        aNode->name = wxS( "devicesets" ); break;
+                case EGKW_SECT_DEVICE:         aNode->name = wxS( "deviceset" );  break;
+                case EGKW_SECT_SCHEMASHEET:    aNode->name = wxS( "sheet" );      break;
+                case EGKW_SECT_SCHEMANET:      aNode->name = wxS( "net" );        break;
+                case EGKW_SECT_PACKAGEVARIANT: aNode->name = wxS( "device" );     break;
+                default:
+                    if( aNode->name == wxS( "variants" ) )
+                        aNode->name = wxS( "devices" );
+
+                    break;
+                }
+            } );
+}
+
+
+std::vector<EAGLE_BIN_PARSER::EGB_NODE*>
+EAGLE_BIN_PARSER::resolveSchLibraries( EGB_NODE* aSchematic )
+{
+    auto wrapChildren = []( EGB_NODE* aParent, const wxString& aContainer,
+                            const std::function<bool( const EGB_NODE* )>& aPred ) -> EGB_NODE*
+    {
+        std::vector<std::unique_ptr<EGB_NODE>> kept;
+        std::vector<std::unique_ptr<EGB_NODE>> moved;
+
+        for( auto& child : aParent->children )
+        {
+            if( aPred( child.get() ) )
+                moved.push_back( std::move( child ) );
+            else
+                kept.push_back( std::move( child ) );
+        }
+
+        aParent->children = std::move( kept );
+
+        if( moved.empty() )
+            return nullptr;
+
+        EGB_NODE* container = aParent->AddChild( 0, aContainer );
+
+        for( auto& node : moved )
+            container->AdoptChild( std::move( node ) );
+
+        return container;
+    };
+
+    // Hoist the libraries into their XML container. The binary stores a schema's
+    // sheets, parts and nets as one flat stream where a schemasheet record delimits
+    // a sheet rather than containing it, so they are re-segmented afterwards in
+    // stream order.
+    wrapChildren( aSchematic, wxS( "libraries" ),
+                  []( const EGB_NODE* n ) { return n->id == EGKW_SECT_LIBRARY; } );
+
+    EGB_NODE* libraries = aSchematic->FindChildByName( wxS( "libraries" ) );
+
+    std::vector<EGB_NODE*> libList = childrenById( libraries, EGKW_SECT_LIBRARY );
+
+    // Resolve library names and gate->symbol references.
+    for( size_t li = 0; li < libList.size(); li++ )
+    {
+        EGB_NODE* lib = libList[li];
+        EGB_NODE* devicesets = lib->FindChildById( EGKW_SECT_DEVICES );
+        EGB_NODE* symbolsNode = lib->FindChildById( EGKW_SECT_SYMBOLS );
+
+        // The library name rides on the inner devices/symbols/packages node.
+        wxString libName;
+
+        for( int id : { EGKW_SECT_DEVICES, EGKW_SECT_SYMBOLS, EGKW_SECT_PACKAGES } )
+        {
+            if( EGB_NODE* n = lib->FindChildById( id ); n && !n->Prop( wxS( "library" ) ).IsEmpty() )
+            {
+                libName = n->Prop( wxS( "library" ) );
+                break;
+            }
+        }
+
+        if( libName.IsEmpty() )
+            libName = wxString::Format( wxS( "lib%zu" ), li + 1 );
+
+        lib->props[wxS( "name" )] = libName;
+
+        // Footprint packages are irrelevant to schematic import and only drag in
+        // board-only required attributes (dx/dy on smd/pad). Drop them.
+        lib->children.erase(
+                std::remove_if( lib->children.begin(), lib->children.end(),
+                                []( const std::unique_ptr<EGB_NODE>& n )
+                                { return n->id == EGKW_SECT_PACKAGES; } ),
+                lib->children.end() );
+
+        std::vector<EGB_NODE*> symbols = childrenById( symbolsNode, EGKW_SECT_SYMBOL );
+        std::vector<EGB_NODE*> devicesetList = childrenById( devicesets, EGKW_SECT_DEVICE );
+
+        // Devicesets are keyed by name in the reader, so every name must be
+        // unique and non-empty.
+        std::map<wxString, int> dsSeen;
+
+        for( size_t di = 0; di < devicesetList.size(); di++ )
+        {
+            EGB_NODE* ds = devicesetList[di];
+            wxString  name = ds->Prop( wxS( "name" ) );
+
+            if( name.IsEmpty() )
+                name = wxString::Format( wxS( "dset%zu" ), di + 1 );
+
+            if( int& count = dsSeen[name]; count++ > 0 )
+                name = wxString::Format( wxS( "%s_%d" ), name, count );
+
+            ds->props[wxS( "name" )] = name;
+
+            EGB_NODE* gatesNode = ds->FindChildByName( wxS( "gates" ) );
+
+            for( EGB_NODE* gate : childrenById( gatesNode, EGKW_SECT_GATE ) )
+                gate->props[wxS( "symbol" )] = nameByOrdinal( symbols, gate->PropLong( wxS( "symno" ) ) );
+        }
+    }
+
+    return libList;
+}
+
+
+void EAGLE_BIN_PARSER::resegmentSchSheets( EGB_NODE*                     aSchematic,
+                                           const std::vector<EGB_NODE*>& aLibList )
+{
+    auto adopt = []( EGB_NODE* aParent, EGB_NODE*& aSlot, const wxString& aName,
+                     std::unique_ptr<EGB_NODE> aNode )
+    {
+        if( aSlot == nullptr )
+            aSlot = aParent->AddChild( 0, aName );
+
+        aSlot->AdoptChild( std::move( aNode ) );
+    };
+
+    // Re-segment the flat, stream-ordered schema body into per-sheet structure.
+    // The order is: <libraries>, then for each sheet a schemasheet header followed
+    // by that sheet's parts (each owning its placed instances) and nets, then the
+    // next sheet, and so on. A schemasheet therefore delimits the sheet that the
+    // parts/nets that follow it belong to.
+    std::vector<std::unique_ptr<EGB_NODE>> flat = std::move( aSchematic->children );
+    aSchematic->children.clear();
+
+    std::vector<std::unique_ptr<EGB_NODE>> sheetNodes;
+    std::vector<std::unique_ptr<EGB_NODE>> globalParts;
+    std::map<wxString, bool>               seenPart;
+
+    // Lazily-created containers for the sheet currently being assembled.
+    EGB_NODE* curSheet = nullptr;
+    EGB_NODE* curPlain = nullptr;
+    EGB_NODE* curInstances = nullptr;
+    EGB_NODE* curNets = nullptr;
+    EGB_NODE* curBusses = nullptr;
+
+    for( auto& node : flat )
+    {
+        // Keep the libraries container at the head of <schematic>.
+        if( node->name == wxS( "libraries" ) )
+        {
+            aSchematic->children.push_back( std::move( node ) );
+            continue;
+        }
+
+        switch( node->id )
+        {
+        case EGKW_SECT_SCHEMASHEET:
+        {
+            // Open a new sheet; its already-decoded drawables become <plain>.
+            curSheet = node.get();
+            curPlain = curInstances = curNets = curBusses = nullptr;
+
+            std::vector<std::unique_ptr<EGB_NODE>> drawables = std::move( curSheet->children );
+            curSheet->children.clear();
+
+            for( auto& drawable : drawables )
+                adopt( curSheet, curPlain, wxS( "plain" ), std::move( drawable ) );
+
+            sheetNodes.push_back( std::move( node ) );
+            break;
+        }
+
+        case EGKW_SECT_PART:
+        {
+            EGB_NODE* part = node.get();
+            long      libno = part->PropLong( wxS( "lib" ) );
+            long      devno = part->PropLong( wxS( "device" ) );
+            long      varno = part->PropLong( wxS( "variant" ) );
+
+            EGB_NODE* lib = ( libno >= 1 && libno <= (long) aLibList.size() ) ? aLibList[libno - 1]
+                                                                              : nullptr;
+            std::vector<EGB_NODE*> devicesets =
+                    childrenById( lib ? lib->FindChildById( EGKW_SECT_DEVICES ) : nullptr,
+                                  EGKW_SECT_DEVICE );
+            EGB_NODE* ds = ( devno >= 1 && devno <= (long) devicesets.size() ) ? devicesets[devno - 1]
+                                                                              : nullptr;
+            std::vector<EGB_NODE*> variants =
+                    childrenById( ds ? ds->FindChildByName( wxS( "devices" ) ) : nullptr,
+                                  EGKW_SECT_PACKAGEVARIANT );
+            std::vector<EGB_NODE*> gates =
+                    childrenById( ds ? ds->FindChildByName( wxS( "gates" ) ) : nullptr,
+                                  EGKW_SECT_GATE );
+
+            wxString partName = part->Prop( wxS( "name" ) );
+
+            part->props[wxS( "library" )] = lib ? lib->Prop( wxS( "name" ) ) : wxString();
+            part->props[wxS( "deviceset" )] = ds ? ds->Prop( wxS( "name" ) ) : wxString();
+            part->props[wxS( "device" )] = nameByOrdinal( variants, varno );
+
+            // The decoded "technology" is a raw ordinal, but the XML attribute is a
+            // technology name (almost always empty) that the reader appends to the
+            // symbol lookup key; leaving the ordinal there breaks symbol resolution.
+            part->props.erase( wxS( "technology" ) );
+
+            // Peel the placed gate instances onto the current sheet, resolved.
+            std::vector<std::unique_ptr<EGB_NODE>> partKept;
+
+            for( auto& sub : part->children )
+            {
+                if( sub->id != EGKW_SECT_INSTANCE || curSheet == nullptr )
+                {
+                    partKept.push_back( std::move( sub ) );
+                    continue;
+                }
+
+                sub->props[wxS( "part" )] = partName;
+                sub->props[wxS( "gate" )] = nameByOrdinal( gates, sub->PropLong( wxS( "gateno" ) ) );
+                adopt( curSheet, curInstances, wxS( "instances" ), std::move( sub ) );
+            }
+
+            part->children = std::move( partKept );
+
+            // One global <part> per unique name.
+            if( !seenPart[partName] )
+            {
+                seenPart[partName] = true;
+                node->parent = aSchematic;
+                globalParts.push_back( std::move( node ) );
+            }
+
+            break;
+        }
+
+        case EGKW_SECT_SCHEMANET:
+        {
+            node->props[wxS( "class" )] =
+                    node->HasProp( wxS( "netclass" ) ) ? node->Prop( wxS( "netclass" ) ) : wxS( "0" );
+
+            for( EGB_NODE* seg : childrenById( node.get(), EGKW_SECT_PATH ) )
+                seg->name = wxS( "segment" );
+
+            if( curSheet != nullptr )
+                adopt( curSheet, curNets, wxS( "nets" ), std::move( node ) );
+
+            break;
+        }
+
+        case EGKW_SECT_SCHEMABUS:
+        {
+            if( curSheet != nullptr )
+                adopt( curSheet, curBusses, wxS( "busses" ), std::move( node ) );
+
+            break;
+        }
+
+        default:
+        {
+            // Free graphics that follow the sheet header.
+            if( curSheet != nullptr )
+                adopt( curSheet, curPlain, wxS( "plain" ), std::move( node ) );
+
+            break;
+        }
+        }
+    }
+
+    flat.clear();
+
+    EGB_NODE* sheetsNode = aSchematic->AddChild( 0, wxS( "sheets" ) );
+
+    for( auto& sheet : sheetNodes )
+        sheetsNode->AdoptChild( std::move( sheet ) );
+
+    EGB_NODE* partsNode = aSchematic->AddChild( 0, wxS( "parts" ) );
+
+    for( auto& part : globalParts )
+        partsNode->AdoptChild( std::move( part ) );
 }

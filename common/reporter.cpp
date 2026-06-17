@@ -199,16 +199,18 @@ REPORTER& WXLOG_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
 {
     REPORTER::Report( aMsg, aSeverity );
 
+    // aMsg is finished content; pass it as a "%s" argument so a stray '%' in
+    // reported data is not read as a format specifier (bogus varargs -> assert).
     switch( aSeverity )
     {
-    case RPT_SEVERITY_ERROR:     wxLogError( aMsg );                  break;
-    case RPT_SEVERITY_WARNING:   wxLogWarning( aMsg );                break;
-    case RPT_SEVERITY_UNDEFINED: wxLogMessage( aMsg );                break;
-    case RPT_SEVERITY_INFO:      wxLogInfo( aMsg );                   break;
-    case RPT_SEVERITY_ACTION:    wxLogInfo( aMsg );                   break;
-    case RPT_SEVERITY_DEBUG:     wxLogTrace( traceReporter, aMsg );   break;
-    case RPT_SEVERITY_EXCLUSION:                                      break;
-    case RPT_SEVERITY_IGNORE:                                         break;
+    case RPT_SEVERITY_ERROR:     wxLogError( wxS( "%s" ), aMsg );                break;
+    case RPT_SEVERITY_WARNING:   wxLogWarning( wxS( "%s" ), aMsg );              break;
+    case RPT_SEVERITY_UNDEFINED: wxLogMessage( wxS( "%s" ), aMsg );             break;
+    case RPT_SEVERITY_INFO:      wxLogInfo( wxS( "%s" ), aMsg );                 break;
+    case RPT_SEVERITY_ACTION:    wxLogInfo( wxS( "%s" ), aMsg );                 break;
+    case RPT_SEVERITY_DEBUG:     wxLogTrace( traceReporter, wxS( "%s" ), aMsg ); break;
+    case RPT_SEVERITY_EXCLUSION:                                                 break;
+    case RPT_SEVERITY_IGNORE:                                                    break;
     }
 
     return *this;
