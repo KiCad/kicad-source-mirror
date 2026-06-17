@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 15:54+0000\n"
+"PO-Revision-Date: 2026-06-18 17:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -2208,7 +2208,7 @@ msgstr "chiavi necessarie mancanti o non valide: %s"
 #: common/api/api_plugin.cpp:174
 #, c-format
 msgid "identifier '%s' is invalid"
-msgstr "identificativo '%s' non valido."
+msgstr "identificativo '%s' non valido"
 
 #: common/api/api_plugin.cpp:201
 #, c-format
@@ -2266,9 +2266,8 @@ msgid "could not create plugin environment: %s"
 msgstr "impossibile creare l'ambiente plugin: %s"
 
 #: common/api/api_plugin_manager.cpp:784
-#, fuzzy
 msgid "requirements.txt could not be read"
-msgstr "Il file '%s' non può essere creato."
+msgstr "impossibile leggere requirements.txt"
 
 #: common/background_jobs_monitor.cpp:98
 msgid "Background Jobs"
@@ -60842,9 +60841,8 @@ msgid "KiCad Drawing Sheet"
 msgstr "Foglo di disegno KiCad"
 
 #: scripting/python_manager.cpp:135
-#, fuzzy
 msgid "Process could not be created"
-msgstr "Il file '%s' non può essere creato."
+msgstr "Il processo non può essere creato"
 
 #: scripting/python_scripting.cpp:367
 #, fuzzy, c-format
