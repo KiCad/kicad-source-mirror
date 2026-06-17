@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-05-29 23:52+0000\n"
+"PO-Revision-Date: 2026-06-17 21:34+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
 "source/tr/>\n"
@@ -46,7 +46,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:54
 #: common/dialogs/panel_embedded_files.cpp:392
@@ -6695,14 +6695,12 @@ msgid "Move Down"
 msgstr "Aşağı Taşı"
 
 #: common/diff_merge/auto_resolution.cpp:251
-#, fuzzy
 msgid "Item id: "
-msgstr "Ögeler:"
+msgstr "Öge kimliği: "
 
 #: common/diff_merge/auto_resolution.cpp:252
-#, fuzzy
 msgid "Current resolution: "
-msgstr "X çözünürlüğü:"
+msgstr "Mevcut çözünürlük: "
 
 #: common/diff_merge/auto_resolution.cpp:256
 msgid "Take ours"
