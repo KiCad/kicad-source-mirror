@@ -42,7 +42,11 @@ public:
 
     EDA_ITEM* Clone() const override { return new PCB_TABLECELL( *this ); }
 
-    EDA_GROUP* GetParentGroup() const override { return GetParent()->GetParentGroup(); }
+    EDA_GROUP* GetParentGroup() const override
+    {
+        BOARD_ITEM* parent = GetParent();
+        return parent ? parent->GetParentGroup() : nullptr;
+    }
 
     int GetRow() const;
     int GetColumn() const;
