@@ -216,5 +216,10 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         break;
     }
 
-    m_toolManager->RunAction( PCB_ACTIONS::trackViaSizeChanged );
+    // trackViaSizeChanged triggers ReCreateAuxiliaryToolbar(), which destroys m_SelTrackWidthBox /
+    // m_SelViaSizeBox.  When this handler runs from the wxChoice EVT_CHOICE it is still on the GTK
+    // gtk_combo_box_set_active_iter signal stack for that very combo, so rebuilding the toolbar
+    // synchronously frees the combo mid-signal and crashes on the trailing g_object_notify (#23970).
+    // Defer the action so the GTK signal unwinds first, matching the deferred dialog above.
+    CallAfter( [this]() { m_toolManager->RunAction( PCB_ACTIONS::trackViaSizeChanged ); } );
 }
