@@ -215,9 +215,12 @@ void PADS_SDB::locateOrigin()
     if( backupTime < 0 || backupTime > 100000 )
         return;
 
+    // REAL WIDTH is legitimately zero on boards that never set a default trace width, so the
+    // lower bound the old search used rejected 23 of the corpus outright. Every one of those
+    // rejects failed on this predicate alone and every one of them reads zero here.
     const int32_t realWidth = m_cursor.I32At( base + 80 );
 
-    if( realWidth <= 50 || realWidth >= 100000000 )
+    if( realWidth < 0 || realWidth >= 100000000 )
         return;
 
     const int32_t allSigOnOff = m_cursor.I32At( base + 84 );
