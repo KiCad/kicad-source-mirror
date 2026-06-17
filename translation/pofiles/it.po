@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 15:54+0000\n"
+"PO-Revision-Date: 2026-06-17 21:33+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -2228,7 +2228,7 @@ msgstr "chiavi necessarie mancanti o non valide: %s"
 #: common/api/api_plugin.cpp:167
 #, c-format
 msgid "identifier '%s' is invalid"
-msgstr "identificativo '%s' non valido."
+msgstr "identificativo '%s' non valido"
 
 #: common/api/api_plugin.cpp:194
 #, c-format
@@ -2290,14 +2290,12 @@ msgid "could not create plugin environment: %s"
 msgstr "impossibile creare l'ambiente plugin: %s"
 
 #: common/api/api_plugin_manager.cpp:872
-#, fuzzy
 msgid "requirements.txt could not be read"
-msgstr "Il file '%s' non può essere creato."
+msgstr "impossibile leggere requirements.txt"
 
 #: common/api/python_manager.cpp:138
-#, fuzzy
 msgid "Process could not be created"
-msgstr "Il file '%s' non può essere creato."
+msgstr "Il processo non può essere creato"
 
 #: common/background_jobs_monitor.cpp:94
 msgid "Background Jobs"
@@ -2538,9 +2536,9 @@ msgstr ""
 "Il file scheda '%s' non può essere salvato come blocco progetto su '%s'."
 
 #: common/design_block_io.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save design block metadata '%s': %s"
-msgstr "Fallito salvataggio file libreria blocchi progetto '%s'."
+msgstr "Impossibile salvare i metadati del blocco di progettazione '%s': %s"
 
 #: common/design_block_io.cpp:501
 #, c-format
@@ -3267,9 +3265,8 @@ msgid "Old Path"
 msgstr "Trova il prossimo"
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
-#, fuzzy
 msgid "No git repository available."
-msgstr "Nessun repository disponibile"
+msgstr "Nessun repository git disponibile."
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
 #: common/dialogs/dialog_git_mr_review.cpp:103
@@ -3290,14 +3287,13 @@ msgid "Could not resolve ref '%s' to a commit or tree."
 msgstr "Impossibile trovare il commit di destinazione"
 
 #: common/dialogs/dialog_git_mr_review.cpp:133
-#, fuzzy
 msgid "No changes between selected refs."
-msgstr "Taglia gli spigoli tra le linee selezionate"
+msgstr "Nessuna modifica tra i riferimenti selezionati."
 
 #: common/dialogs/dialog_git_mr_review.cpp:251
-#, fuzzy, c-format
+#, c-format
 msgid "No diff handler for '%s'."
-msgstr "serve un numero per '%s'"
+msgstr "Nessun gestore diff per '%s'."
 
 #: common/dialogs/dialog_git_mr_review.cpp:252
 #: common/dialogs/dialog_git_mr_review.cpp:281
@@ -3319,19 +3315,17 @@ msgstr "Impossibile creare cartella temporanea risultati."
 #: common/dialogs/dialog_git_mr_review.cpp:337
 #: common/dialogs/dialog_git_mr_review.cpp:357
 #: common/dialogs/dialog_git_mr_review.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Could not extract %s from %s."
-msgstr "Impossibile caricare immagine da '%s'."
+msgstr "Impossibile estrarre %s da %s."
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:25
-#, fuzzy
 msgid "Base ref:"
-msgstr "Nome base"
+msgstr "Rif base:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:32
-#, fuzzy
 msgid "Head ref:"
-msgstr "Bordo intestazione"
+msgstr "Rif head:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:42
 #, fuzzy
@@ -3339,9 +3333,8 @@ msgid "Compare"
 msgstr "Compatibile"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:48
-#, fuzzy
 msgid "Changed files (double-click to open):"
-msgstr "Comando (doppio clic per modificare)"
+msgstr "File modificati (doppio clic per aprire):"
 
 #: common/dialogs/dialog_grid_settings.cpp:81
 msgid "Grid size X out of range."
@@ -3558,9 +3551,8 @@ msgid "After"
 msgstr "Dopo"
 
 #: common/dialogs/dialog_kicad_diff.cpp:70
-#, fuzzy
 msgid "Filter changes…"
-msgstr "Filtra collegamenti"
+msgstr "Filtra modifiche…"
 
 #: common/dialogs/dialog_kicad_diff.cpp:122
 #: common/diff_merge/diff_tree_grouping.cpp:37
@@ -3606,9 +3598,9 @@ msgstr "Nessuna differenza rilevante rilevata."
 
 #: common/dialogs/dialog_kicad_diff.cpp:212
 #: common/dialogs/dialog_kicad_diff.cpp:516
-#, fuzzy, c-format
+#, c-format
 msgid "%zu change(s) detected."
-msgstr "Nessun collegamento (net) selezionato."
+msgstr "%zu modifiche rilevate."
 
 #: common/dialogs/dialog_kicad_diff.cpp:334
 #, fuzzy
@@ -3642,7 +3634,7 @@ msgstr "Più recente"
 #: common/dialogs/dialog_kicad_diff.cpp:550
 #: common/dialogs/dialog_kicad_diff_base.cpp:68
 msgid "Select a change in the tree to view details"
-msgstr "Seleziona una modifica nell'albero per visualizzarne i dettagli."
+msgstr "Seleziona una modifica nell'albero per visualizzarne i dettagli"
 
 #: common/dialogs/dialog_kicad_diff_base.cpp:25
 #: pcbnew/dialogs/dialog_text_properties.cpp:121
@@ -6877,11 +6869,11 @@ msgstr "Prendi i loro"
 
 #: common/diff_merge/auto_resolution.cpp:258
 msgid "Take ancestor"
-msgstr ""
+msgstr "Prendi l'antenato"
 
 #: common/diff_merge/auto_resolution.cpp:259
 msgid "Property-level merge"
-msgstr ""
+msgstr "Merge a livello di proprietà"
 
 #: common/diff_merge/auto_resolution.cpp:260 common/grid_tricks.cpp:400
 #: common/tool/actions.cpp:404 common/widgets/listbox_tricks.cpp:208
