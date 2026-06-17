@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 15:54+0000\n"
+"PO-Revision-Date: 2026-06-18 17:01+0000\n"
 "Last-Translator: MHeis <manuheiskanen22@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v10/fi/>\n"
 "Language: fi\n"
@@ -19232,7 +19232,7 @@ msgstr "Kohdehakemistoa '%s'. ei voi luoda."
 #: pcbnew/pcbnew_jobs_handler.cpp:2183
 #, c-format
 msgid "Exporting %s"
-msgstr "Tuodaan %s"
+msgstr "Viedään %s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1192 pcbnew/pcbnew_jobs_handler.cpp:2060
 msgid "Output path must not conflict with existing path\n"
@@ -20824,9 +20824,8 @@ msgid "Unable to save the downloaded symbol: %s"
 msgstr "Ei voitu tallentaa ladattua symbolia: %s"
 
 #: eeschema/remote_symbol_import_job.cpp:354
-#, fuzzy
 msgid "No symbol asset was available to place."
-msgstr "Käytä kytkentäkaavioeditorin väriteemaa"
+msgstr "Symboliresurssia ei ollut saatavilla sijoitettavaksi."
 
 #: eeschema/remote_symbol_import_utils.cpp:79
 msgid "Payload was empty."
@@ -20913,9 +20912,9 @@ msgid "Symbol payload did not include the expected symbol."
 msgstr ""
 
 #: eeschema/remote_symbol_import_utils.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to decode the symbol payload: %s"
-msgstr "Valittuja polygoneja ei voi yhdistää."
+msgstr "Symbolin tietosisältöä ei saatu dekoodattua: %s"
 
 #: eeschema/sch_base_frame.cpp:764
 #, fuzzy
@@ -21018,9 +21017,9 @@ msgid "Bus Alias %s Members"
 msgstr "Väylän vaihtoehto %s -Jäsenet"
 
 #: eeschema/sch_design_block_utils.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Design block '%s' already has a schematic."
-msgstr "Suunnittelulohko '%s' on jo olemassa kirjastossa '%s'."
+msgstr "Suunnittelulohkolla '%s' on jo kytkentäkaavio."
 
 #: eeschema/sch_design_block_utils.cpp:67
 #, fuzzy
@@ -21174,9 +21173,8 @@ msgid "Find in Net Inspector"
 msgstr "Verkkotarkastaja"
 
 #: eeschema/sch_edit_frame.cpp:3066
-#, fuzzy
 msgid "No design variants to edit."
-msgstr "Lisää nykyinen symboli kytkentäkaavioon"
+msgstr "Ei muokattavia suunnitteluvariaatiota."
 
 #: eeschema/sch_edit_frame.cpp:3070
 #, fuzzy
@@ -21199,9 +21197,9 @@ msgid "Remove Design Variant"
 msgstr "Selaa &liitännäisiä"
 
 #: eeschema/sch_field.cpp:961
-#, fuzzy, c-format
+#, c-format
 msgid "Field %s (empty)"
-msgstr "Kenttä %s (%s)"
+msgstr "Kenttä %s (tyhjä)"
 
 #: eeschema/sch_field.cpp:965
 #, c-format
@@ -21277,14 +21275,14 @@ msgid "Members"
 msgstr "Jäsenet"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1040
-#, fuzzy, c-format
+#, c-format
 msgid "Importing %s"
-msgstr "Tuo asetukset"
+msgstr "Tuodaan %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1064
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "Virhe ladattaessa kytkentäkaaviota '%s'."
+msgstr "Virhe lukiessa Altium kytkentäkaaviota: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1130
 #, c-format
@@ -21389,9 +21387,9 @@ msgid "File not found %s."
 msgstr "Tiedostoa %s ei löydy."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5257
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing Altium library: %s"
-msgstr "Virhe ladattaessa symbolikirjastoa '%s'."
+msgstr "Virhe luettaessa Altium symbolikirjastoa: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5280
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -21693,12 +21691,13 @@ msgstr ""
 "tiedostoja voidaan tuoda."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:645
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"Virheellinen anturapinokerros '%s' tiedossa '%s' rivillä %d, offset %d."
+"Tiedostoa '%s' ei pystytty lukemaan.\n"
+"'%s' rivillä %d sarakkeella %d, siirrolla %d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1087
 #, c-format
@@ -21774,14 +21773,14 @@ msgid "Failed to parse value: '%s'"
 msgstr "Arvon jäsentäminen epäonnistui: '%s'"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3646
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' not found in gEDA libraries."
-msgstr "Symbolia %s ei löydy kirjastosta '%s'."
+msgstr "Symbolia '%s' ei löydy gEDA kirjastosta."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3650
-#, fuzzy, c-format
+#, c-format
 msgid " Did you mean '%s'?"
-msgstr "Tiedoston '%s' avaaminen epäonnistui."
+msgstr " Tarkoititko '%s'?"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3797
 #, c-format
@@ -21801,9 +21800,9 @@ msgid "Circular hierarchy detected for '%s', skipping."
 msgstr ""
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4448
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load sub-schematic '%s': %s"
-msgstr "Kytkentäkaavion '%s' tallentaminen epäonnistui"
+msgstr "Alikytkentäkaavion lataaminen epäonnistui '%s':%s"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4558
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:3108
@@ -21817,9 +21816,9 @@ msgid "File '%s' is not a valid gEDA schematic."
 msgstr "'%s' ei ole kelvollinen SPICE-arvo."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4868
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load page '%s': %s"
-msgstr "'%s' lataaminen epäonnistui."
+msgstr "Sivun lataaminen epäonnistui '%s':%s"
 
 #: eeschema/sch_io/geda/sch_io_geda.h:81 kicad/import_proj.cpp:482
 #, fuzzy
@@ -21827,33 +21826,33 @@ msgid "gEDA / Lepton EDA schematic files"
 msgstr "Eagle XML kytkentäkaaviotiedostot"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:212
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s missing or invalid."
-msgstr "HTTP-kirjaston asetustiedosto %s puuttuu tai virheellinen"
+msgstr "HTTP-kirjaston asetustiedosto %s puuttuu tai on virheellinen."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:218
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the API version number."
-msgstr "HTTP-kirjaston asetustiedostosta %s puuttuu API-versionumero!"
+msgstr "HTTP-kirjaston asetustiedostosta %s puuttuu API-versionumero."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:225
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s."
 msgstr ""
 "HTTP-kirjaston asetustiedosto %s käyttää API-versiota %s, mutta KiCad vaatii "
-"version %s"
+"version %s."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s is missing the root URL."
-msgstr "HTTP-kirjaston asetustiedostosta %s puuttuu juuri-URL!"
+msgstr "HTTP-kirjaston asetustiedostosta %s puuttuu juuri-URL."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:242
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s has invalid library type."
-msgstr "HTTP-kirjastoasetustiedostossa %s on virheellinen kirjastotyyppi"
+msgstr "HTTP-kirjastoasetustiedostossa %s on virheellinen kirjastotyyppi."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:283
 #, c-format
@@ -22016,11 +22015,13 @@ msgid "Symbol library folder '%s' cannot be deleted."
 msgstr "Symbolikirjastoa '%s' ei voi poistaa."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' loaded with errors:\n"
 "\n"
-msgstr "Kirjasto '%s' on jo olemassa."
+msgstr ""
+"Kirjasto '%s' latautui virheiden kanssa:\n"
+"\n"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:104
 msgid "The library cannot be saved until these errors are fixed manually."
@@ -22055,9 +22056,9 @@ msgid "Cannot create symbol library path '%s'."
 msgstr "Ei voida luoda yleistä kirjastotaulukon polkua '%s'."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:863
-#, fuzzy, c-format
+#, c-format
 msgid "No parent for extended symbol %s found in library '%s'"
-msgstr "Symbolia %s ei löydy kirjastosta '%s'."
+msgstr "Yläsymbolia ei löytynyt laajennetulle symbolille %s kirjastosta '%s'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:260
 #, c-format
@@ -34469,7 +34470,7 @@ msgstr "koordinaatin alkupiste: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:917
 msgid "New drawing sheet file is unsaved"
-msgstr "Uusi piirustuslehtitiedosto on tallentamaton"
+msgstr "Uusi piirustusarkkitiedosto on tallentamaton"
 
 #: pagelayout_editor/pl_editor_frame.cpp:921
 msgid "Drawing sheet changes are unsaved"
@@ -34549,7 +34550,7 @@ msgstr "Aseta bittikartat"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
 msgid "Append Existing Drawing Sheet..."
-msgstr "Liitä olemassa oleva kytkentäkaavio..."
+msgstr "Liitä olemassa oleva piirustusarkki..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:94
 msgid "Append an existing drawing sheet file to the current file"
@@ -40032,7 +40033,7 @@ msgid ""
 "Can be used only when printing the current sheet"
 msgstr ""
 "Syötä tiedostonimi, jos et halua käyttää oletusnimiä\n"
-"Käytettävissä vain tulostettaessa auki olevaa lehteä"
+"Käytettävissä vain tulostettaessa auki olevaa arkkia"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:70
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:75
@@ -40787,7 +40788,7 @@ msgstr "Symboli:"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:92
 msgid "Sheet: "
-msgstr "Lehti: "
+msgstr "Arkki: "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
 msgid "Library Association"
@@ -42641,7 +42642,7 @@ msgstr "Siirrä kohde"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:63
 msgid "Sheet Path"
-msgstr "Lehtipolku"
+msgstr "Arkin tiedostopolku"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:93
 #: pcbnew/footprint.cpp:2204 pcbnew/footprint.cpp:4925 pcbnew/zone.cpp:1947
@@ -42650,7 +42651,7 @@ msgstr "Komponenttiluokka"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:27
 msgid "Sheets"
-msgstr "Lehdet"
+msgstr "Arkit"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:42
 msgid "Replace existing placement rule areas"
@@ -45049,9 +45050,8 @@ msgid "Add Footprint Field Value Condition"
 msgstr "Lisää Jalanjälkisuodatin"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:371
-#, fuzzy
 msgid "Add Sheet Condition"
-msgstr "Lisää arkin tappi"
+msgstr "Lisää arkin sääntö"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:372
 #, fuzzy
@@ -45075,9 +45075,8 @@ msgid "Import references from selection"
 msgstr "Luo Johtimet Valinnasta"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:19
-#, fuzzy
 msgid "Assign component class per sheet"
-msgstr "Komponenttiluokat"
+msgstr "Aseta komponenttiluokka arkeittain"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:28
 #, fuzzy
@@ -45147,9 +45146,8 @@ msgid "Field value:"
 msgstr "Loppuarvo:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:472
-#, fuzzy
 msgid "Sheet name:"
-msgstr "&Lehden nimi:"
+msgstr "Arkin nimi:"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Use via color for normal through hole padstacks"
@@ -45388,7 +45386,7 @@ msgstr "Ratsnest viivanpaksuus:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:433
 msgid "Draw an outline to show the sheet size."
-msgstr "Piirtää ulkoviivan joka näyttää lehden koon."
+msgstr "Piirtää ulkoviivan joka näyttää arkin koon."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:437
 msgid "Show courtyard collisions when moving/dragging"
@@ -45632,7 +45630,7 @@ msgstr "Ei sijoitusta"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:24
 msgid "Place items from sheet:"
-msgstr "Aseta kohteet arkista:"
+msgstr "Aseta esineitä arkilta:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:33
 msgid "Place items matching component class:"
@@ -51405,22 +51403,22 @@ msgstr "Poistettu %s jalanjälkikenttä, joka ei ole symbolissa."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:680
 #, c-format
 msgid "Update %s sheetname to '%s'."
-msgstr "Päivitä %s sivunimi kohteeseen '%s'."
+msgstr "Päivitä %s arkin nimi kohteeseen '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:687
 #, c-format
 msgid "Updated %s sheetname to '%s'."
-msgstr "Päivitetty %s sivunimi kohteeseen '%s'."
+msgstr "Arkin %s nimi muutettiin '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:699
 #, c-format
 msgid "Update %s sheetfile to '%s'."
-msgstr "Päivitä %s sivutiedosto kohteeseen '%s'."
+msgstr "Päivitä %s arkkitiedosto kohteeksi '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:706
 #, c-format
 msgid "Updated %s sheetfile to '%s'."
-msgstr "Päivitetty %s sivutiedosto kohteeseen '%s'."
+msgstr "Päivitetty %s arkin tiedosto kohteeseen '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:718
 #, c-format
@@ -52565,7 +52563,7 @@ msgstr "Jalanjälkikenttä %s (%s)"
 #: pcbnew/pcb_field.cpp:236
 #, c-format
 msgid "Datasheet field of %s (%s)"
-msgstr "Tietolomakkeen kenttä %s (%s)"
+msgstr "Datalehden kenttä %s (%s)"
 
 #: pcbnew/pcb_field.cpp:240
 #, c-format
@@ -53959,7 +53957,7 @@ msgstr "Tiedostolla %s on tuntematon versio: %d."
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:795
 #, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr "Tuntematon lehtityyppi '%s' rivillä: %d."
+msgstr "Tuntematon arkin tyyppi '%s' rivillä: %d."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:1375
 #, c-format
@@ -55139,7 +55137,7 @@ msgstr "Puuttuva ryhmänimen argumentti %s:sta."
 #: pcbnew/pcbexpr_functions.cpp:998
 #, c-format
 msgid "Missing sheet name argument to %s."
-msgstr "Puuttuva taulukon nimen argumentti %s."
+msgstr "Puuttuva arkin nimen muuttuja %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1119
 #, c-format
@@ -57057,7 +57055,7 @@ msgstr "Vanhemman jalanjäljestä"
 
 #: pcbnew/tools/footprint_editor_control.cpp:712
 msgid "No datasheet found in the footprint."
-msgstr "Jalanjäljestä ei löytynyt tietolomaketta."
+msgstr "Jalanjäljestä ei löytynyt datalehteä."
 
 #: pcbnew/tools/footprint_editor_control.cpp:970
 msgid "No footprint problems found."
@@ -57262,13 +57260,13 @@ msgid ""
 msgstr "Komponenttitietojen lisääminen epäonnistui"
 
 #: pcbnew/tools/multichannel_tool.cpp:1631
-#, fuzzy
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheets, groups, or component classes."
 msgstr ""
 "Sijoitusalueita ei voi luoda automaattisesti, koska kytkentäkaaviossa on "
-"vain yksi tai ei yhtään hierarkkista taulukkoa."
+"vain yksi, tai ei yhtään, hierarkkista arkkia, ryhmää tai komponentin "
+"luokkaa."
 
 #: pcbnew/tools/multichannel_tool.cpp:1821
 msgid "Auto-generate placement rule areas"
@@ -59001,15 +58999,15 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2439
 msgid "Selects all footprints and tracks in the schematic sheet"
-msgstr "Valitsee kaikki jalanjäljet ja johtimet kytkentäkaaviosivulta"
+msgstr "Valitsee kaikki jalanjäljet ja johtimet kytkentäkaaviosta"
 
 #: pcbnew/tools/pcb_actions.cpp:2445
 msgid "Items in Same Hierarchical Sheet"
-msgstr "Kohteet Samassa Hierarkkisessa Lehdessä"
+msgstr "Kohteita samassa hierarkkisessa arkissa"
 
 #: pcbnew/tools/pcb_actions.cpp:2446
 msgid "Selects all footprints and tracks in the same schematic sheet"
-msgstr "Valitsee kaikki jalanjäljet ja johtimet samalta kytkentäkaaviosivulta"
+msgstr "Valitsee kaikki jalanjäljet ja johtimet samalta kytkentäkaaviolta"
 
 #: pcbnew/tools/pcb_actions.cpp:2452
 msgid "Select on Schematic"
@@ -59992,7 +59990,7 @@ msgstr "Näytä levyn kytkentärisukko"
 
 #: pcbnew/widgets/appearance_controls.cpp:360
 msgid "Show drawing sheet borders and title block"
-msgstr "Näytä sivun reunus ja otsikkolohko"
+msgstr "Näytä piirustusarkin reunus ja otsikkolohko"
 
 #: pcbnew/widgets/appearance_controls.cpp:383
 msgid "No Layers"
@@ -61272,7 +61270,7 @@ msgstr "KiCad kytkentäkaaviosymboli"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
-msgstr "KiCad Piirustuslehti"
+msgstr "KiCad piirustusarkki"
 
 #: scripting/python_manager.cpp:135
 msgid "Process could not be created"
