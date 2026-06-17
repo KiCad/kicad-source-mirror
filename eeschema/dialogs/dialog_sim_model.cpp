@@ -24,6 +24,7 @@
 #include <sim/sim_property.h>
 #include <sim/sim_library_ibis.h>
 #include <sim/sim_model.h>
+#include <sim/sim_model_multiunit.h>
 #include <sim/sim_model_ibis.h>
 #include <sim/sim_model_raw_spice.h>
 #include <sim/sim_model_spice_fallback.h>
@@ -361,6 +362,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
     m_saveInValueCheckbox->SetValue( curModel().IsStoredInValue() );
 
+    updateDecompositionControls();
+
     onRadioButton( dummyEvent );
     return DIALOG_SIM_MODEL_BASE::TransferDataToWindow();
 }
@@ -458,6 +461,28 @@ bool DIALOG_SIM_MODEL<T>::TransferDataFromWindow()
     RestoreInferredValue( m_fields, m_inferredValueRestore, m_inferredValueOverwritten,
                           model.IsStoredInValue() );
 
+    // Decomposition is a component-level choice and is independent of the model fields written
+    // above.  Only multi-unit symbols expose it; write it after WriteFields() so it is preserved.
+    if( m_symbol.GetUnitCount() > 1 )
+    {
+        SIM_DECOMPOSITION decomposition;
+
+        if( m_decompositionChoice->GetSelection() == 1 )
+        {
+            decomposition.mode = SIM_DECOMPOSITION::MODE::REPEAT_PER_UNIT;
+
+            wxStringTokenizer sharedTokens( m_sharedPinsText->GetValue(), wxS( ", \t" ),
+                                            wxTOKEN_STRTOK );
+
+            while( sharedTokens.HasMoreTokens() )
+                decomposition.sharedModelPins.push_back( sharedTokens.GetNextToken() );
+        }
+
+        // Whole-device formats to an empty string, which clears any previous repeat selection.
+        SetFieldValue( m_fields, SIM_DECOMPOSITION_FIELD, decomposition.Format().ToStdString(),
+                       false );
+    }
+
     return true;
 }
 
@@ -472,6 +497,56 @@ void DIALOG_SIM_MODEL<T>::RestoreInferredValue( std::vector<SCH_FIELD>& aFields,
 
     if( SCH_FIELD* valueField = FindField( aFields, FIELD_T::VALUE ) )
         valueField->SetText( aOriginalValue );
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::updateDecompositionControls()
+{
+    bool multiUnit = m_symbol.GetUnitCount() > 1;
+
+    m_decompositionLabel->Show( multiUnit );
+    m_decompositionChoice->Show( multiUnit );
+    m_sharedPinsLabel->Show( multiUnit );
+    m_sharedPinsText->Show( multiUnit );
+
+    if( multiUnit )
+    {
+        SIM_DECOMPOSITION decomposition = SIM_DECOMPOSITION::Parse(
+                GetFieldValue( &m_fields, SIM_DECOMPOSITION_FIELD, false, 0 ) );
+
+        bool repeat = decomposition.mode == SIM_DECOMPOSITION::MODE::REPEAT_PER_UNIT;
+
+        m_decompositionChoice->SetSelection( repeat ? 1 : 0 );
+
+        wxString shared;
+
+        for( const wxString& pin : decomposition.sharedModelPins )
+        {
+            if( !shared.IsEmpty() )
+                shared += wxS( ", " );
+
+            shared += pin;
+        }
+
+        m_sharedPinsText->SetValue( shared );
+        m_sharedPinsLabel->Enable( repeat );
+        m_sharedPinsText->Enable( repeat );
+    }
+
+    m_pinAssignmentsPanel->Layout();
+}
+
+
+template <typename T>
+void DIALOG_SIM_MODEL<T>::onDecompositionModeChoice( wxCommandEvent& aEvent )
+{
+    bool repeat = m_decompositionChoice->GetSelection() == 1;
+
+    m_sharedPinsLabel->Enable( repeat );
+    m_sharedPinsText->Enable( repeat );
+
+    aEvent.Skip();
 }
 
 

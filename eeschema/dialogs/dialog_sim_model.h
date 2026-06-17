@@ -119,6 +119,7 @@ private:
     void onPageChanging( wxNotebookEvent& event ) override;
     void onPinAssignmentsGridCellChange( wxGridEvent& aEvent ) override;
     void onPinAssignmentsGridSize( wxSizeEvent& aEvent ) override;
+    void onDecompositionModeChoice( wxCommandEvent& aEvent ) override;
     void onDifferentialCheckbox( wxCommandEvent& event ) override;
     void onSizeParamGrid( wxSizeEvent& event ) override;
 
@@ -127,6 +128,9 @@ private:
     void onUpdateUI( wxUpdateUIEvent& aEvent );
 
     void adjustParamGridColumns( int aWidth, bool aForce );
+
+    ///< Show/populate the decomposition controls (multi-unit only) and sync their enabled state.
+    void updateDecompositionControls();
 
     bool isIbisLoaded() { return dynamic_cast<const SIM_LIBRARY_IBIS*>( library() ); }
 

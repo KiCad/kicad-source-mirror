@@ -52,6 +52,8 @@ set( QA_SPICE_SRCS
 
     # Test SPICE library and models
     test_library_spice.cpp
+    test_sim_decomposition.cpp
+    test_sim_model_multiunit.cpp
     test_sim_model_inference.cpp
     test_sim_model_ngspice.cpp
     test_sim_model_source_pwl.cpp

@@ -48,6 +48,7 @@ class REPORTER;
 #define SIM_DEVICE_FIELD wxT( "Sim.Device" )
 #define SIM_DEVICE_SUBTYPE_FIELD wxT( "Sim.Type" )
 #define SIM_PINS_FIELD wxT( "Sim.Pins" )
+#define SIM_DECOMPOSITION_FIELD wxT( "Sim.Decomposition" )
 #define SIM_PARAMS_FIELD wxT( "Sim.Params" )
 #define SIM_LIBRARY_FIELD wxT( "Sim.Library" )
 #define SIM_NAME_FIELD wxT( "Sim.Name" )

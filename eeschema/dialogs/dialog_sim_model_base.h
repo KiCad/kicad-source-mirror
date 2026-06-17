@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -85,6 +85,10 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxStyledTextCtrl* m_codePreview;
 		wxCheckBox* m_saveInValueCheckbox;
 		wxPanel* m_pinAssignmentsPanel;
+		wxStaticText* m_decompositionLabel;
+		wxChoice* m_decompositionChoice;
+		wxStaticText* m_sharedPinsLabel;
+		wxTextCtrl* m_sharedPinsText;
 		WX_GRID* m_pinAssignmentsGrid;
 		wxStaticText* m_subcktLabel;
 		wxStyledTextCtrl* m_subckt;
@@ -122,6 +126,7 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		virtual void onTypeChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPageChanging( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void onSizeParamGrid( wxSizeEvent& event ) { event.Skip(); }
+		virtual void onDecompositionModeChoice( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridCellChange( wxGridEvent& event ) { event.Skip(); }
 		virtual void onPinAssignmentsGridSize( wxSizeEvent& event ) { event.Skip(); }
 

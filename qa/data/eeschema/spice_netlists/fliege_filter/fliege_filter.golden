@@ -1,0 +1,31 @@
+.title KiCad schematic
+.include "uopamp.lib.spice"
+.save all
+.probe alli
+.probe p(V1)
+.probe p(V5)
+.probe p(XU1)
+.probe p(V4)
+.probe p(R2)
+.probe p(C2)
+.probe p(R4)
+.probe p(R3)
+.probe p(R1)
+.probe p(C1)
+.probe p(R6)
+.probe p(R5)
+.ac oct 10000 500 2k
+V1 /in GND DC 0 AC 1  
+V5 GND Net-_U1C-V-_ DC 5 
+XU1 Net-_U1C-V+_ Net-_U1C-V-_ Net-_U1A-+_ Net-_U1A--_ /out Net-_U1B-+_ Net-_U1A--_ Net-_C2-Pad1_ uopamp_lvl2_2x
+V4 Net-_U1C-V+_ GND DC 5 
+R2 GND Net-_U1A-+_ 1Meg
+C2 Net-_C2-Pad1_ Net-_U1A--_ 10n
+R4 /out Net-_U1A--_ 15k
+R3 Net-_C2-Pad1_ Net-_U1A-+_ 15k
+R1 /in Net-_U1A-+_ 1Meg
+C1 /in Net-_U1A-+_ 10n
+R6 Net-_U1B-+_ /in 100k
+R5 /out Net-_U1B-+_ 100k
+.end
+

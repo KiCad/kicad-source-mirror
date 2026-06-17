@@ -1,0 +1,32 @@
+* Minimal single-unit opamp macromodel for the #1779 repeat-per-unit fixture.
+*
+* This is ONE amplifier with explicit supply pins.  The repeat-per-unit
+* decomposition instantiates this single-unit model once per functional unit
+* of a multi-unit symbol, with the supply pins shared across instances.
+*
+* To the extent possible under law, the author has dedicated all copyright and
+* related and neighboring rights to this software to the public domain
+* worldwide (CC0).
+
+*****************************************
+.subckt uopamp_single +IN -IN VCC VEE OUT
+* PINOUT ORDER  1   2   3   4   5
+* PINOUT ORDER +IN -IN VCC VEE OUT
+*
+* Single-pole opamp.  The supply pins are part of the interface so that the
+* repeat-per-unit wrapper can share them across instances, but the ideal
+* small-signal behavior modeled here is referenced to ground.
+Rin   +IN -IN 100g
+Eamp  N001 0 +IN -IN {Avol}
+Rout  N001 OUT {Rout}
+Cout  OUT 0 {1/(2*pi*GBW*Rout)}
+Riso  OUT 0 100g
+* Keep the supply nodes anchored so ngspice always sees a DC path.
+Rvcc  VCC 0 100g
+Rvee  VEE 0 100g
+.param Avol=100k
+.param GBW=100meg
+.param Rout=1
+.param pi=3.1415926535898
+.ends
+*****************************************

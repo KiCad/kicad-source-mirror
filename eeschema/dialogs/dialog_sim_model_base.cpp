@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -241,6 +241,29 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
 
+	wxBoxSizer* bSizerDecomposition;
+	bSizerDecomposition = new wxBoxSizer( wxHORIZONTAL );
+
+	m_decompositionLabel = new wxStaticText( m_pinAssignmentsPanel, wxID_ANY, _("Decomposition:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_decompositionLabel->Wrap( -1 );
+	bSizerDecomposition->Add( m_decompositionLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxString m_decompositionChoiceChoices[] = { _("Whole device"), _("Repeat per unit") };
+	int m_decompositionChoiceNChoices = sizeof( m_decompositionChoiceChoices ) / sizeof( wxString );
+	m_decompositionChoice = new wxChoice( m_pinAssignmentsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_decompositionChoiceNChoices, m_decompositionChoiceChoices, 0 );
+	m_decompositionChoice->SetSelection( 0 );
+	bSizerDecomposition->Add( m_decompositionChoice, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_sharedPinsLabel = new wxStaticText( m_pinAssignmentsPanel, wxID_ANY, _("Shared model pins:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sharedPinsLabel->Wrap( -1 );
+	bSizerDecomposition->Add( m_sharedPinsLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_sharedPinsText = new wxTextCtrl( m_pinAssignmentsPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerDecomposition->Add( m_sharedPinsText, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+
+
+	bSizer10->Add( bSizerDecomposition, 0, wxEXPAND, 5 );
+
 	m_pinAssignmentsGrid = new WX_GRID( m_pinAssignmentsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
@@ -379,6 +402,7 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_deviceSubtypeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onTypeChoice ), NULL, this );
 	m_modelNotebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEventHandler( DIALOG_SIM_MODEL_BASE::onPageChanging ), NULL, this );
 	m_paramGridMgr->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onSizeParamGrid ), NULL, this );
+	m_decompositionChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onDecompositionModeChoice ), NULL, this );
 	m_pinAssignmentsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridCellChange ), NULL, this );
 	m_pinAssignmentsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridSize ), NULL, this );
 }
@@ -418,6 +442,7 @@ DIALOG_SIM_MODEL_BASE::~DIALOG_SIM_MODEL_BASE()
 	m_deviceSubtypeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onTypeChoice ), NULL, this );
 	m_modelNotebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEventHandler( DIALOG_SIM_MODEL_BASE::onPageChanging ), NULL, this );
 	m_paramGridMgr->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onSizeParamGrid ), NULL, this );
+	m_decompositionChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onDecompositionModeChoice ), NULL, this );
 	m_pinAssignmentsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridCellChange ), NULL, this );
 	m_pinAssignmentsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridSize ), NULL, this );
 
