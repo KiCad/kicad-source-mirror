@@ -338,4 +338,44 @@ LINE_STYLE PadsLineStyleToKiCad( int aPadsStyle )
     }
 }
 
+
+void DecodeJustification( int aJustification, GR_TEXT_H_ALIGN_T& aHJustify,
+                          GR_TEXT_V_ALIGN_T& aVJustify )
+{
+    int hCode = 0;
+    int vGroup = 0;
+
+    if( aJustification >= 8 )
+    {
+        vGroup = 2;  // middle
+        hCode = aJustification - 8;
+    }
+    else if( aJustification >= 2 )
+    {
+        vGroup = 1;  // top
+        hCode = aJustification - 2;
+    }
+    else
+    {
+        vGroup = 0;  // bottom
+        hCode = aJustification;
+    }
+
+    switch( hCode )
+    {
+    default:
+    case 0: aHJustify = GR_TEXT_H_ALIGN_LEFT;   break;
+    case 1: aHJustify = GR_TEXT_H_ALIGN_RIGHT;  break;
+    case 4: aHJustify = GR_TEXT_H_ALIGN_CENTER; break;
+    }
+
+    switch( vGroup )
+    {
+    default:
+    case 0: aVJustify = GR_TEXT_V_ALIGN_BOTTOM; break;
+    case 1: aVJustify = GR_TEXT_V_ALIGN_TOP;    break;
+    case 2: aVJustify = GR_TEXT_V_ALIGN_CENTER; break;
+    }
+}
+
 } // namespace PADS_COMMON

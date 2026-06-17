@@ -20,7 +20,10 @@
 #include <boost/test/unit_test.hpp>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <base_units.h>
 #include <lib_symbol.h>
+#include <sch_field.h>
+#include <sch_label.h>
 #include <schematic.h>
 #include <sch_io/pads/sch_io_pads.h>
 #include <sch_io/sch_io_mgr.h>
@@ -327,6 +330,117 @@ BOOST_AUTO_TEST_CASE( Issue24284_TextItemsPlacedOnCorrectSheet )
                                 bodyText ) != textBySheet[sheetName].end() );
         BOOST_CHECK_EQUAL( lineCountBySheet[sheetName], 1 );
     }
+}
+
+
+// Issue 23855 (#1): an off-page connector whose stub wire is zero-length must take its
+// global-label orientation from the authoritative *NETNAMES* offset, not from the
+// degenerate wire direction. The two SP1 anchors carry opposite X offsets and must yield
+// opposite spin styles.
+BOOST_AUTO_TEST_CASE( Issue23855_GlobalLabelOrientationFromNetNames )
+{
+    SCH_IO_PADS plugin;
+
+    wxString padsFile = wxString::FromUTF8(
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt" );
+
+    SCH_SHEET* rootSheet = plugin.LoadSchematicFile( padsFile, &m_schematic );
+    BOOST_REQUIRE( rootSheet );
+    BOOST_REQUIRE( rootSheet->GetScreen() );
+
+    SCH_SCREEN* screen = rootSheet->GetScreen();
+
+    // PADS anchor positions in mils -> KiCad screen X (Y-up flipped on import).
+    const int milToIU = schIUScale.MilsToIU( 1 );
+    const int cnSideX = 1400 * milToIU;  // @@@O0, x_offset +350 -> text reads right
+    const int r1SideX = 2800 * milToIU;  // @@@O1, x_offset -360 -> text reads left
+
+    SPIN_STYLE cnSpin = SPIN_STYLE::LEFT;
+    SPIN_STYLE r1Spin = SPIN_STYLE::RIGHT;
+    bool       foundCn = false;
+    bool       foundR1 = false;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_GLOBAL_LABEL_T ) )
+    {
+        SCH_LABEL_BASE* lbl = static_cast<SCH_LABEL_BASE*>( item );
+
+        if( lbl->GetText() != wxT( "SP1" ) )
+            continue;
+
+        if( lbl->GetPosition().x == cnSideX )
+        {
+            foundCn = true;
+            cnSpin = lbl->GetSpinStyle();
+        }
+        else if( lbl->GetPosition().x == r1SideX )
+        {
+            foundR1 = true;
+            r1Spin = lbl->GetSpinStyle();
+        }
+    }
+
+    BOOST_REQUIRE( foundCn );
+    BOOST_REQUIRE( foundR1 );
+
+    // The CN1-side label extends to the right; the R1-side label (degenerate wire)
+    // extends to the left thanks to the NETNAMES override.
+    BOOST_CHECK( cnSpin == SPIN_STYLE::RIGHT );
+    BOOST_CHECK( r1Spin == SPIN_STYLE::LEFT );
+}
+
+
+// Issue 23855 (#5): a 90 degree rotated part must place its reference and value fields at
+// the absolute coordinates authored in PADS. PADS stores attribute offsets in the placed
+// (post-rotation) frame, so the importer applies the offset directly without re-rotating.
+BOOST_AUTO_TEST_CASE( Issue23855_RotatedPartFieldPositions )
+{
+    SCH_IO_PADS plugin;
+
+    wxString padsFile = wxString::FromUTF8(
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt" );
+
+    SCH_SHEET* rootSheet = plugin.LoadSchematicFile( padsFile, &m_schematic );
+    BOOST_REQUIRE( rootSheet );
+    BOOST_REQUIRE( rootSheet->GetScreen() );
+
+    SCH_SCREEN* screen = rootSheet->GetScreen();
+    SCH_SHEET_PATH rootPath;
+    rootPath.push_back( rootSheet );
+
+    SCH_SYMBOL* d5 = nullptr;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
+
+        if( sym->GetRef( &rootPath ) == wxT( "D5" ) )
+            d5 = sym;
+    }
+
+    BOOST_REQUIRE( d5 != nullptr );
+
+    SCH_FIELD* refF = d5->GetField( FIELD_T::REFERENCE );
+    SCH_FIELD* valF = d5->GetField( FIELD_T::VALUE );
+
+    VECTOR2I symPos = d5->GetPosition();
+    VECTOR2I refRel = refF->GetPosition() - symPos;
+    VECTOR2I valRel = valF->GetPosition() - symPos;
+
+    // REF-DES PADS offset (210, 230); PART-TYPE/value PADS offset (-70, 520). PADS Y is up,
+    // so the screen Y offset is negated.
+    BOOST_CHECK_EQUAL( refRel.x, schIUScale.MilsToIU( 210 ) );
+    BOOST_CHECK_EQUAL( refRel.y, -schIUScale.MilsToIU( 230 ) );
+    BOOST_CHECK_EQUAL( valRel.x, schIUScale.MilsToIU( -70 ) );
+    BOOST_CHECK_EQUAL( valRel.y, -schIUScale.MilsToIU( 520 ) );
+
+    // Rotated attribute text keeps the PADS text angle and the authored justification
+    // (codes 4 and 5 both decode to top-left in the text's reading frame).
+    BOOST_CHECK_EQUAL( refF->GetTextAngle().AsDegrees(), 90.0 );
+    BOOST_CHECK_EQUAL( valF->GetTextAngle().AsDegrees(), 90.0 );
+    BOOST_CHECK_EQUAL( refF->GetHorizJustify(), GR_TEXT_H_ALIGN_LEFT );
+    BOOST_CHECK_EQUAL( refF->GetVertJustify(), GR_TEXT_V_ALIGN_TOP );
+    BOOST_CHECK_EQUAL( valF->GetHorizJustify(), GR_TEXT_H_ALIGN_LEFT );
+    BOOST_CHECK_EQUAL( valF->GetVertJustify(), GR_TEXT_V_ALIGN_TOP );
 }
 
 

@@ -22,6 +22,7 @@
 
 #include <sch_io/pads/pads_sch_parser.h>
 #include <sch_label.h>
+#include <map>
 #include <set>
 #include <vector>
 #include <memory>
@@ -96,7 +97,18 @@ public:
      */
     int CreateNetLabels( const std::vector<SCH_SIGNAL>& aSignals, SCH_SCREEN* aScreen,
                          const std::set<std::string>& aSignalOpcIds,
-                         const std::set<std::string>& aSkipSignals = {} );
+                         const std::set<std::string>& aSkipSignals = {},
+                         const std::map<std::string, NETNAME_LABEL>& aNetNameLabels = {} );
+
+    /**
+     * Map a PADS *NETNAMES* label entry to a KiCad global-label spin style.
+     *
+     * PADS encodes the label side via the offset of the text from the anchor
+     * point. The dominant offset axis and its sign tell which way the text
+     * reads away from the connection, which is exactly what the spin style
+     * controls.
+     */
+    static SPIN_STYLE SpinFromNetNameLabel( const NETNAME_LABEL& aLabel );
 
     /**
      * Create a global net label for a signal.

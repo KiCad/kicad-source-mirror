@@ -23,6 +23,7 @@
 #include <kiid.h>
 #include <string>
 
+#include <font/text_attributes.h>
 #include <stroke_params.h>
 #include <wx/string.h>
 
@@ -150,6 +151,25 @@ wxString ConvertText( const std::string& aText );
  * a signed int8_t for mapping.
  */
 LINE_STYLE PadsLineStyleToKiCad( int aPadsStyle );
+
+/**
+ * Decode a PADS text justification code into KiCad horizontal and vertical alignment.
+ *
+ * PADS encodes the anchor of a text string as a single integer combining a vertical
+ * band and a horizontal code:
+ *   value = vertical_band + horizontal_code
+ *   vertical bands  bottom (0..1), top (2..7), middle (8..)
+ *   horizontal codes  left=0, right=1, center=4
+ *
+ * The same encoding is used for free text, part field labels and net name labels, so
+ * both the PCB and schematic importers share this decode to stay consistent.
+ *
+ * @param aJustification Raw PADS justification code.
+ * @param aHJustify Receives the decoded horizontal alignment.
+ * @param aVJustify Receives the decoded vertical alignment.
+ */
+void DecodeJustification( int aJustification, GR_TEXT_H_ALIGN_T& aHJustify,
+                          GR_TEXT_V_ALIGN_T& aVJustify );
 
 } // namespace PADS_COMMON
 

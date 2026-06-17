@@ -353,7 +353,10 @@ LIB_SYMBOL* PADS_SCH_SYMBOL_BUILDER::GetOrCreatePartTypeSymbol(
         }
     }
 
-    libSymbol->SetShowPinNumbers( hasPinNames );
+    // Connectors number their pins even though they carry no pin names. A single
+    // multi-pin connector placement (no per-pin reference suffix) still routes here,
+    // so force pin numbers on for connector part types.
+    libSymbol->SetShowPinNumbers( hasPinNames || aPartType.is_connector );
     libSymbol->SetShowPinNames( hasPinNames );
 
     m_symbolCache[cacheKey] = std::unique_ptr<LIB_SYMBOL>( libSymbol );

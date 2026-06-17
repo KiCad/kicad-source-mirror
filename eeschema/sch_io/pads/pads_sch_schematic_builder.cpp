@@ -180,10 +180,10 @@ std::vector<VECTOR2I> PADS_SCH_SCHEMATIC_BUILDER::findJunctionPoints(
 }
 
 
-int PADS_SCH_SCHEMATIC_BUILDER::CreateNetLabels( const std::vector<SCH_SIGNAL>& aSignals,
-                                                  SCH_SCREEN*                    aScreen,
-                                                  const std::set<std::string>&   aSignalOpcIds,
-                                                  const std::set<std::string>&   aSkipSignals )
+int PADS_SCH_SCHEMATIC_BUILDER::CreateNetLabels(
+        const std::vector<SCH_SIGNAL>& aSignals, SCH_SCREEN* aScreen,
+        const std::set<std::string>& aSignalOpcIds, const std::set<std::string>& aSkipSignals,
+        const std::map<std::string, NETNAME_LABEL>& aNetNameLabels )
 {
     int labelCount = 0;
 
@@ -199,7 +199,16 @@ int PADS_SCH_SCHEMATIC_BUILDER::CreateNetLabels( const std::vector<SCH_SIGNAL>& 
             continue;
 
         // Collect label placements from OPC wire endpoints. Each OPC produces one label.
-        std::vector<std::pair<VECTOR2I, VECTOR2I>> opcPlacements;
+        // The anchor ref (@@@O..) is retained so the authoritative *NETNAMES* orientation
+        // can be looked up; the wire direction is only a fallback when no entry exists.
+        struct PLACEMENT
+        {
+            VECTOR2I    labelPos;
+            VECTOR2I    adjPos;
+            std::string anchorRef;
+        };
+
+        std::vector<PLACEMENT> opcPlacements;
 
         for( const auto& wire : signal.wires )
         {
@@ -214,7 +223,7 @@ int PADS_SCH_SCHEMATIC_BUILDER::CreateNetLabels( const std::vector<SCH_SIGNAL>& 
                                    toKiCadY( wire.vertices.front().y ) );
                 VECTOR2I adjPos( toKiCadUnits( wire.vertices[1].x ),
                                  toKiCadY( wire.vertices[1].y ) );
-                opcPlacements.emplace_back( labelPos, adjPos );
+                opcPlacements.push_back( { labelPos, adjPos, wire.endpoint_a } );
             }
 
             if( !wire.endpoint_b.empty() && wire.endpoint_b.substr( 0, 3 ) == "@@@"
@@ -225,14 +234,23 @@ int PADS_SCH_SCHEMATIC_BUILDER::CreateNetLabels( const std::vector<SCH_SIGNAL>& 
                                    toKiCadY( wire.vertices[last].y ) );
                 VECTOR2I adjPos( toKiCadUnits( wire.vertices[last - 1].x ),
                                  toKiCadY( wire.vertices[last - 1].y ) );
-                opcPlacements.emplace_back( labelPos, adjPos );
+                opcPlacements.push_back( { labelPos, adjPos, wire.endpoint_b } );
             }
         }
 
-        for( const auto& [labelPos, adjPos] : opcPlacements )
+        for( const auto& placement : opcPlacements )
         {
-            SPIN_STYLE orient = computeLabelOrientation( labelPos, adjPos );
-            SCH_GLOBALLABEL* label = CreateNetLabel( signal, labelPos, orient );
+            // Prefer the orientation authored in the PADS *NETNAMES* section. The wire
+            // direction is unreliable for off-page connectors whose stub wire is
+            // zero-length, so it is only used when no NETNAMES entry matches.
+            auto nnIt = aNetNameLabels.find( placement.anchorRef );
+
+            SPIN_STYLE orient = ( nnIt != aNetNameLabels.end() )
+                                        ? SpinFromNetNameLabel( nnIt->second )
+                                        : computeLabelOrientation( placement.labelPos,
+                                                                   placement.adjPos );
+
+            SCH_GLOBALLABEL* label = CreateNetLabel( signal, placement.labelPos, orient );
 
             if( label )
             {
@@ -244,6 +262,23 @@ int PADS_SCH_SCHEMATIC_BUILDER::CreateNetLabels( const std::vector<SCH_SIGNAL>& 
     }
 
     return labelCount;
+}
+
+
+SPIN_STYLE PADS_SCH_SCHEMATIC_BUILDER::SpinFromNetNameLabel( const NETNAME_LABEL& aLabel )
+{
+    // PADS net labels are drawn at an offset from the anchor (connection) point. The text
+    // reads away from the connection, so the sign of the dominant offset axis maps directly
+    // to the KiCad spin style. The observed files do not encode the axis reliably in the
+    // rotation field, so the larger offset component selects the axis. PADS uses a Y-up
+    // coordinate system, so a positive Y offset places the text above the anchor.
+    int dx = aLabel.x_offset;
+    int dy = aLabel.y_offset;
+
+    if( std::abs( dx ) >= std::abs( dy ) )
+        return ( dx >= 0 ) ? SPIN_STYLE::RIGHT : SPIN_STYLE::LEFT;
+
+    return ( dy >= 0 ) ? SPIN_STYLE::UP : SPIN_STYLE::BOTTOM;
 }
 
 
@@ -588,8 +623,20 @@ void PADS_SCH_SCHEMATIC_BUILDER::ApplyFieldSettings( SCH_SYMBOL*           aSymb
             if( attr.width > 0 )
                 field->SetTextThickness( schIUScale.MilsToIU( attr.width ) );
 
-            field->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-            field->SetVertJustify( isRef ? GR_TEXT_V_ALIGN_BOTTOM : GR_TEXT_V_ALIGN_CENTER );
+            // Map the PADS justification code so reference and value fields keep the
+            // alignment authored in PADS instead of forcing center.
+            GR_TEXT_H_ALIGN_T hJustify = GR_TEXT_H_ALIGN_LEFT;
+            GR_TEXT_V_ALIGN_T vJustify = GR_TEXT_V_ALIGN_BOTTOM;
+            PADS_COMMON::DecodeJustification( attr.justification, hJustify, vJustify );
+
+            // KiCad applies the symbol transform to field justification. Mirrored-Y
+            // symbols flip horizontal alignment, so pre-compensate to keep the rendered
+            // alignment matching PADS.
+            if( aPlacement.mirror_flags & 1 )
+                hJustify = GetFlippedAlignment( hJustify );
+
+            field->SetHorizJustify( hJustify );
+            field->SetVertJustify( vJustify );
         }
     }
 }

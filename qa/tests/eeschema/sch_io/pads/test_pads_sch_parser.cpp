@@ -28,6 +28,7 @@
 
 #include <sch_io/pads/pads_sch_parser.h>
 #include <sch_io/pads/pads_sch_symbol_builder.h>
+#include <io/pads/pads_common.h>
 #include <lib_symbol.h>
 #include <sch_shape.h>
 #include <sch_pin.h>
@@ -2385,6 +2386,185 @@ BOOST_AUTO_TEST_CASE( IsGlobalSignal_NotGlobal )
     BOOST_CHECK( !PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER::IsGlobalSignal( "DATA", singleSheet ) );
     BOOST_CHECK( !PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER::IsGlobalSignal( "CLK", singleSheet ) );
     BOOST_CHECK( !PADS_SCH::PADS_SCH_SCHEMATIC_BUILDER::IsGlobalSignal( "", singleSheet ) );
+}
+
+
+// Issue 23855: a resistor Value attribute uses display flag 3 (name+value). The low
+// bits select what is shown, so it must remain visible. Only the hidden bit (8) hides.
+BOOST_AUTO_TEST_CASE( Issue23855_ValueVisibleWithDisplayFlag )
+{
+    std::string testFile =
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt";
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+    BOOST_REQUIRE( parser.Parse( testFile ) );
+
+    const PADS_SCH::PART_PLACEMENT* r1 = parser.GetPartPlacement( "R1" );
+    BOOST_REQUIRE( r1 != nullptr );
+
+    bool foundValue = false;
+
+    for( const auto& attr : r1->attributes )
+    {
+        if( attr.name == "Value" )
+        {
+            // Display flag 3 (name+value) must stay visible.
+            BOOST_CHECK( attr.visible );
+            BOOST_CHECK_EQUAL( attr.justification, 6 );
+            foundValue = true;
+        }
+    }
+
+    BOOST_CHECK( foundValue );
+}
+
+
+// Issue 23855: a "CN" category part type must be flagged as a connector so its pin
+// numbers are shown, even when the gate is written in the V9 "GATE" format.
+BOOST_AUTO_TEST_CASE( Issue23855_ConnectorCategoryFlagged )
+{
+    std::string testFile =
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt";
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+    BOOST_REQUIRE( parser.Parse( testFile ) );
+
+    auto ptIt = parser.GetPartTypes().find( "91-HDSKT10DH" );
+    BOOST_REQUIRE( ptIt != parser.GetPartTypes().end() );
+    BOOST_CHECK( ptIt->second.is_connector );
+
+    // A non-connector resistor must not be flagged.
+    auto resIt = parser.GetPartTypes().find( "71=B2002.2" );
+    BOOST_REQUIRE( resIt != parser.GetPartTypes().end() );
+    BOOST_CHECK( !resIt->second.is_connector );
+}
+
+
+// Issue 23855: a connector part type symbol must show pin numbers even though its pins
+// carry no pin names.
+BOOST_AUTO_TEST_CASE( Issue23855_ConnectorShowsPinNumbers )
+{
+    std::string testFile =
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt";
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+    BOOST_REQUIRE( parser.Parse( testFile ) );
+
+    auto ptIt = parser.GetPartTypes().find( "91-HDSKT10DH" );
+    BOOST_REQUIRE( ptIt != parser.GetPartTypes().end() );
+
+    const PADS_SCH::SYMBOL_DEF* symDef = parser.GetSymbolDef( "CONNECTOR-10P" );
+    BOOST_REQUIRE( symDef != nullptr );
+
+    PADS_SCH::PADS_SCH_SYMBOL_BUILDER builder( parser.GetParameters() );
+    LIB_SYMBOL* connSym = builder.GetOrCreatePartTypeSymbol( ptIt->second, *symDef );
+    BOOST_REQUIRE( connSym != nullptr );
+    BOOST_CHECK( connSym->GetShowPinNumbers() );
+
+    // A resistor (non-connector, no pin names) keeps pin numbers off.
+    auto resIt = parser.GetPartTypes().find( "71=B2002.2" );
+    BOOST_REQUIRE( resIt != parser.GetPartTypes().end() );
+
+    const PADS_SCH::SYMBOL_DEF* resDef = parser.GetSymbolDef( "RESZ-H" );
+    BOOST_REQUIRE( resDef != nullptr );
+
+    LIB_SYMBOL* resSym = builder.GetOrCreatePartTypeSymbol( resIt->second, *resDef );
+    BOOST_REQUIRE( resSym != nullptr );
+    BOOST_CHECK( !resSym->GetShowPinNumbers() );
+}
+
+
+// Issue 23855: the shared justification decoder maps PADS codes to KiCad alignment so
+// reference and value fields keep their authored alignment instead of forcing center.
+BOOST_AUTO_TEST_CASE( Issue23855_DecodeJustification )
+{
+    GR_TEXT_H_ALIGN_T h = GR_TEXT_H_ALIGN_CENTER;
+    GR_TEXT_V_ALIGN_T v = GR_TEXT_V_ALIGN_CENTER;
+
+    // 0 = bottom-left
+    PADS_COMMON::DecodeJustification( 0, h, v );
+    BOOST_CHECK_EQUAL( h, GR_TEXT_H_ALIGN_LEFT );
+    BOOST_CHECK_EQUAL( v, GR_TEXT_V_ALIGN_BOTTOM );
+
+    // 6 = top-center (band 2..7 -> top, code 6-2=4 -> center)
+    PADS_COMMON::DecodeJustification( 6, h, v );
+    BOOST_CHECK_EQUAL( h, GR_TEXT_H_ALIGN_CENTER );
+    BOOST_CHECK_EQUAL( v, GR_TEXT_V_ALIGN_TOP );
+
+    // 1 = bottom-right
+    PADS_COMMON::DecodeJustification( 1, h, v );
+    BOOST_CHECK_EQUAL( h, GR_TEXT_H_ALIGN_RIGHT );
+    BOOST_CHECK_EQUAL( v, GR_TEXT_V_ALIGN_BOTTOM );
+
+    // 12 = middle-center (band 8.. -> middle, code 12-8=4 -> center)
+    PADS_COMMON::DecodeJustification( 12, h, v );
+    BOOST_CHECK_EQUAL( h, GR_TEXT_H_ALIGN_CENTER );
+    BOOST_CHECK_EQUAL( v, GR_TEXT_V_ALIGN_CENTER );
+}
+
+
+// Issue 23855: the parser must capture the *NETNAMES* offset/justification for each
+// off-page anchor so the importer can orient global labels correctly, and must read the
+// placed-frame attribute offsets of a 90 degree rotated part.
+BOOST_AUTO_TEST_CASE( Issue23855_NetNamesAndRotatedAttributes )
+{
+    std::string testFile =
+            KI_TEST::GetEeschemaTestDataDir() + "/plugins/pads/issue23855_schematic.txt";
+
+    PADS_SCH::PADS_SCH_PARSER parser;
+    BOOST_REQUIRE( parser.Parse( testFile ) );
+
+    // The SP1 net carries two off-page anchors with opposite X offsets, so its global
+    // labels must take opposite orientations from the *NETNAMES* offsets. @@@O14 sits on
+    // the CN1 side (positive offset) and @@@O22 on the R1 side (negative offset).
+    const PADS_SCH::NETNAME_LABEL* o0 = nullptr;
+    const PADS_SCH::NETNAME_LABEL* o1 = nullptr;
+
+    for( const auto& nn : parser.GetNetNameLabels() )
+    {
+        if( nn.anchor_ref == "@@@O14" )
+            o0 = &nn;
+        else if( nn.anchor_ref == "@@@O22" )
+            o1 = &nn;
+    }
+
+    BOOST_REQUIRE( o0 != nullptr );
+    BOOST_REQUIRE( o1 != nullptr );
+    BOOST_CHECK_GT( o0->x_offset, 0 );
+    BOOST_CHECK_LT( o1->x_offset, 0 );
+
+    // The 90 degree rotated diode keeps its placed-frame attribute offsets and text angle.
+    // PADS writes the named REF-DES and PART-TYPE labels rotated with the part, followed by
+    // unnamed free-attribute slots ("*") that stay axis-aligned; only the named labels matter.
+    const PADS_SCH::PART_PLACEMENT* d5 = parser.GetPartPlacement( "D5" );
+    BOOST_REQUIRE( d5 != nullptr );
+    BOOST_CHECK_EQUAL( d5->rotation, 90.0 );
+
+    bool foundRef = false;
+    bool foundPartType = false;
+
+    for( const auto& attr : d5->attributes )
+    {
+        if( attr.name == "REF-DES" )
+        {
+            foundRef = true;
+            BOOST_CHECK_EQUAL( attr.rotation, 90.0 );
+            BOOST_CHECK_EQUAL( attr.position.x, 210 );
+            BOOST_CHECK_EQUAL( attr.position.y, 230 );
+            BOOST_CHECK_EQUAL( attr.justification, 4 );
+        }
+        else if( attr.name == "PART-TYPE" )
+        {
+            foundPartType = true;
+            BOOST_CHECK_EQUAL( attr.rotation, 90.0 );
+            BOOST_CHECK_EQUAL( attr.position.x, -70 );
+            BOOST_CHECK_EQUAL( attr.position.y, 520 );
+            BOOST_CHECK_EQUAL( attr.justification, 5 );
+        }
+    }
+
+    BOOST_CHECK( foundRef );
+    BOOST_CHECK( foundPartType );
 }
 
 

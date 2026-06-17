@@ -1387,6 +1387,12 @@ size_t PADS_SCH_PARSER::parseSectionPARTTYPE( const std::vector<std::string>& aL
             continue;
         }
 
+        // PADS marks connector part types with a "CN" or "CON" category. Connectors
+        // number their pins regardless of the gate keyword that follows, so flag them
+        // here rather than only in the per-keyword branches below.
+        if( pt.category == "CN" || pt.category == "CON" )
+            pt.is_connector = true;
+
         i++;
 
         // TIMESTAMP line
@@ -1905,7 +1911,11 @@ size_t PADS_SCH_PARSER::parsePartPlacement( const std::vector<std::string>& aLin
             attr.width = w;
             attr.size = h;
             attr.visibility = vis;
-            attr.visible = ( vis == 0 );
+
+            // PADS uses bit 3 (value 8) of the attribute display flag to mark a label
+            // hidden. The lower bits select what is displayed (name and/or value), so a
+            // non-zero flag such as 1 or 3 still denotes a visible label.
+            attr.visible = ( ( vis & 0x8 ) == 0 );
 
             // Parse quoted font name
             std::string rest;
