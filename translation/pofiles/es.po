@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-03-19 00:24+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-06-17 16:16+0000\n"
+"Last-Translator: Jose Perez <mirror.k2@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
 "source/es/>\n"
 "Language: es\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2101,7 +2101,7 @@ msgstr "Modificación desde API"
 #: common/api/api_plugin.cpp:58
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr ""
+msgstr "Configuración de  plugin incorrecta en '%s':%s"
 
 #: common/api/api_plugin.cpp:73
 #, fuzzy, c-format
@@ -2787,6 +2787,8 @@ msgid ""
 "Replaces your saved file with the auto-saved version. The previous saved "
 "content is discarded."
 msgstr ""
+"Sustituye tu archivo guardado por la versión guardada automáticamente. El "
+"contenido guardado anteriormente se descarta."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
 #, fuzzy
@@ -2796,6 +2798,8 @@ msgstr "Intensidad"
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr ""
+"Mantiene tu archivo guardado sin cambio y descarta los cambios guardados "
+"automáticamente."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
 #, fuzzy
