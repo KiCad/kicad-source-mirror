@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 16:16+0000\n"
+"PO-Revision-Date: 2026-06-17 21:33+0000\n"
 "Last-Translator: Jose Perez <mirror.k2@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
 "source/es/>\n"
@@ -2811,6 +2811,8 @@ msgid ""
 "Keeps your saved file and writes the auto-saved version alongside it as a "
 "separate timestamped file you can review later."
 msgstr ""
+"Mantiene tu archivo guardado junto con la versión de autoguardado separada "
+"nombrada con fecha y hora que después puedes revisar."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
 #, fuzzy
@@ -2822,10 +2824,12 @@ msgid ""
 "Closes this dialog without making any changes. The auto-saved files stay on "
 "disk and will be offered again next time you open the project."
 msgstr ""
+"Cierra este diálogo sin hacer ningún cambio. Los archivos autoguardados "
+"permanecerán en el disco y se ofrecerán cuando se vuelva a abrir el proyecto."
 
 #: common/dialogs/dialog_autosave_recovery_base.h:54
 msgid "Auto-Save Recovery"
-msgstr ""
+msgstr "Recuperar autoguardado"
 
 #: common/dialogs/dialog_color_picker.cpp:102
 msgid "Clear Color"
@@ -3357,11 +3361,11 @@ msgstr "Editar propiedades del grupo"
 
 #: common/dialogs/dialog_group_properties.cpp:173
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "Un grupo no puede contenerse a sí mismo."
 
 #: common/dialogs/dialog_group_properties.cpp:181
 msgid "Cannot add this group because it already contains the current group."
-msgstr ""
+msgstr "No se puede añadir este grupo porque ya contiene al grupo actual."
 
 #: common/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -4325,8 +4329,9 @@ msgid "Commit message cannot be empty"
 msgstr "El mensaje de confirmación no puede estar vacío"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:69
+#, fuzzy
 msgid "Key passphrase:"
-msgstr ""
+msgstr "Clave de acceso:"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:71
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
@@ -4336,15 +4341,15 @@ msgstr "Contraseña:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
-msgstr ""
+msgstr "Se requiere autenticación para acceder:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "Username and password"
-msgstr ""
+msgstr "Nombre de usuario y contraseña"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr ""
+msgstr "Clave SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -4972,11 +4977,16 @@ msgid "Zip archive"
 msgstr "&Descomprimir proyecto ..."
 
 #: common/dialogs/panel_common_settings_base.cpp:441
+#, fuzzy
 msgid ""
 "Incremental: maintain a hidden .history git repository with continuous "
 "changes.\n"
 "Zip: create timestamped zip archives on save; autosave uses recovery files."
 msgstr ""
+"Incremental: mantiene un archivo .history oculto en el repositorio git con "
+"cambios continuos. \n"
+"Zip: crea archivos Zip con marca de tiempo cuando se guarda, los archivos "
+"autoguardados usan archivos de recuperación."
 
 #: common/dialogs/panel_common_settings_base.cpp:449
 #, fuzzy
@@ -4993,6 +5003,9 @@ msgid ""
 "Project: store backups and autosave files inside the project directory.\n"
 "User: store them in your KiCad user data directory."
 msgstr ""
+"Proyecto: almacena copias de seguridad y archivos de autoguardado dentro del "
+"directorio del proyecto.\n"
+"Usuario: los almacena en el directorio de datos de usuario de KiCad."
 
 #: common/dialogs/panel_common_settings_base.cpp:457
 msgid "Maximum total backup size:"
@@ -6529,6 +6542,8 @@ msgid ""
 "When enabled, KiCad will replace any existing references to built-in "
 "libraries with references to the latest version"
 msgstr ""
+"Cuando está activo, KiCad reemplazará cualquier referencia existente en las "
+"libretas integradas con las referencias a la última versión"
 
 #: common/dialogs/panel_startwizard_libraries_base.cpp:62
 msgid "Start with no libraries"
