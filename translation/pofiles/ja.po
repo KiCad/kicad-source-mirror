@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-11 09:27+0000\n"
+"PO-Revision-Date: 2026-06-17 15:54+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3125,27 +3125,24 @@ msgid "Status"
 msgstr "ステータス"
 
 #: common/dialogs/dialog_git_mr_review.cpp:49
-#, fuzzy
 msgid "Old Path"
-msgstr "経路を検索"
+msgstr "古いパス"
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
-#, fuzzy
 msgid "No git repository available."
-msgstr "可用なリポジトリがありません"
+msgstr "可用なGit リポジトリがありません。"
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
 #: common/dialogs/dialog_git_mr_review.cpp:103
 #: common/dialogs/dialog_git_mr_review.cpp:119
 #: common/dialogs/dialog_git_mr_review_base.h:58
 #: kicad/kicad_manager_frame.cpp:1165
-#, fuzzy
 msgid "Compare Branches"
-msgstr "クリアランス"
+msgstr "ブランチを比較"
 
 #: common/dialogs/dialog_git_mr_review.cpp:102
 msgid "Select base and head refs to compare."
-msgstr ""
+msgstr "比較するBASEとHEAD refsを選択してください。"
 
 #: common/dialogs/dialog_git_mr_review.cpp:117
 #, fuzzy, c-format
@@ -3174,37 +3171,32 @@ msgid "Compare File"
 msgstr "互換性"
 
 #: common/dialogs/dialog_git_mr_review.cpp:281
-#, fuzzy
 msgid "Could not create a temporary directory."
-msgstr "一時的な出力ディレクトリを作成できませんでした。"
+msgstr "一時的ディレクトリを作成できませんでした。"
 
 #: common/dialogs/dialog_git_mr_review.cpp:322
 #: common/dialogs/dialog_git_mr_review.cpp:337
 #: common/dialogs/dialog_git_mr_review.cpp:357
 #: common/dialogs/dialog_git_mr_review.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Could not extract %s from %s."
-msgstr "'%s' から画像を読み込みできません。"
+msgstr "%s を %s から抽出できませんでした。"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:25
-#, fuzzy
 msgid "Base ref:"
-msgstr "基本のピン名"
+msgstr "Base ref:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:32
-#, fuzzy
 msgid "Head ref:"
-msgstr "ヘッダーの境界"
+msgstr "Head ref:"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:42
-#, fuzzy
 msgid "Compare"
-msgstr "会社名"
+msgstr "比較"
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:48
-#, fuzzy
 msgid "Changed files (double-click to open):"
-msgstr "コマンド (ダブル クリックで編集)"
+msgstr "変更されたファイル (ダブル クリックで開く):"
 
 #: common/dialogs/dialog_grid_settings.cpp:81
 msgid "Grid size X out of range."
@@ -3413,16 +3405,15 @@ msgstr "プロパティ"
 
 #: common/dialogs/dialog_kicad_diff.cpp:63
 msgid "Before"
-msgstr ""
+msgstr "前"
 
 #: common/dialogs/dialog_kicad_diff.cpp:64
 msgid "After"
-msgstr ""
+msgstr "後"
 
 #: common/dialogs/dialog_kicad_diff.cpp:70
-#, fuzzy
 msgid "Filter changes…"
-msgstr "ネットをフィルター"
+msgstr "フィルター変更…"
 
 #: common/dialogs/dialog_kicad_diff.cpp:122
 #: common/diff_merge/diff_tree_grouping.cpp:37
@@ -3431,7 +3422,6 @@ msgstr "追加"
 
 #: common/dialogs/dialog_kicad_diff.cpp:123
 #: common/diff_merge/diff_tree_grouping.cpp:38
-#, fuzzy
 msgid "Removed"
 msgstr "削除"
 
@@ -3442,9 +3432,8 @@ msgid "Modified"
 msgstr "変更"
 
 #: common/dialogs/dialog_kicad_diff.cpp:125
-#, fuzzy
 msgid "Conflict"
-msgstr "競合"
+msgstr "衝突"
 
 #: common/dialogs/dialog_kicad_diff.cpp:143
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:24
@@ -3462,30 +3451,26 @@ msgstr "プロパティ"
 
 #: common/dialogs/dialog_kicad_diff.cpp:210
 #: common/dialogs/dialog_kicad_diff.cpp:514
-#, fuzzy
 msgid "No differences detected."
-msgstr "関連する差異は検出されませんでした。"
+msgstr "差異は検出されませんでした。"
 
 #: common/dialogs/dialog_kicad_diff.cpp:212
 #: common/dialogs/dialog_kicad_diff.cpp:516
-#, fuzzy, c-format
+#, c-format
 msgid "%zu change(s) detected."
-msgstr "ネットが未選択です。"
+msgstr "%z 個の変更が検出されました。"
 
 #: common/dialogs/dialog_kicad_diff.cpp:334
-#, fuzzy
 msgid "Show Change"
-msgstr "変更なし"
+msgstr "変更を表示"
 
 #: common/dialogs/dialog_kicad_diff.cpp:336
-#, fuzzy
 msgid "Hide Change"
-msgstr "変更を反映"
+msgstr "変更を非表示"
 
 #: common/dialogs/dialog_kicad_diff.cpp:338
-#, fuzzy
 msgid "Show All Hidden"
-msgstr "すべてのネットを表示"
+msgstr "すべての非表示を表示"
 
 #: common/dialogs/dialog_kicad_diff.cpp:414
 #: common/dialogs/dialog_page_settings_base.cpp:240
@@ -3493,13 +3478,12 @@ msgid "Revision:"
 msgstr "リビジョン:"
 
 #: common/dialogs/dialog_kicad_diff.cpp:425
-#, fuzzy
 msgid "Older"
-msgstr "フォルダー"
+msgstr "旧"
 
 #: common/dialogs/dialog_kicad_diff.cpp:426
 msgid "Newer"
-msgstr ""
+msgstr "新"
 
 #: common/dialogs/dialog_kicad_diff.cpp:550
 #: common/dialogs/dialog_kicad_diff_base.cpp:68
