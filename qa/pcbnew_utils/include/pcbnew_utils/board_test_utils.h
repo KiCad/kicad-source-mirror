@@ -26,7 +26,9 @@
 #include <mutex>
 #include <functional>
 #include <optional>
+#include <set>
 #include <string>
+#include <system_error>
 
 #include <wx/string.h>
 
@@ -37,6 +39,8 @@
 #include <tool/tool_manager.h>
 #include <pcb_io/pcb_io.h>
 #include <pcb_track_types.h>
+
+#include <pcbnew_utils/board_file_utils.h>
 
 class BOARD;
 class BOARD_ITEM;
@@ -110,6 +114,50 @@ public:
 
 private:
     std::filesystem::path m_path;
+};
+
+
+/**
+ * Several PCB importers (DipTrace, Eagle, PADS) write a .kicad_dru sidecar next to the board file
+ * they load. Tests load boards from the shared read-only data tree, so without cleanup each run
+ * leaves those sidecars behind in the source tree. Installed once as a Boost global fixture, this
+ * records every .kicad_dru already present under the pcbnew test data directory at module startup
+ * and removes any that appear during the run. Removing only newly written files keeps the many
+ * committed .kicad_dru DRC inputs intact.
+ */
+class STALE_DRU_SIDECAR_FIXTURE
+{
+public:
+    STALE_DRU_SIDECAR_FIXTURE() : m_preexisting( scan() ) {}
+
+    ~STALE_DRU_SIDECAR_FIXTURE()
+    {
+        std::error_code ec;
+
+        for( const std::string& path : scan() )
+        {
+            if( m_preexisting.count( path ) == 0 )
+                std::filesystem::remove( path, ec );
+        }
+    }
+
+private:
+    static std::set<std::string> scan()
+    {
+        std::set<std::string> found;
+        std::error_code       ec;
+
+        for( auto it = std::filesystem::recursive_directory_iterator( GetPcbnewTestDataDir(), ec );
+             !ec && it != std::filesystem::recursive_directory_iterator(); it.increment( ec ) )
+        {
+            if( it->path().extension() == ".kicad_dru" )
+                found.insert( it->path().string() );
+        }
+
+        return found;
+    }
+
+    std::set<std::string> m_preexisting;
 };
 
 

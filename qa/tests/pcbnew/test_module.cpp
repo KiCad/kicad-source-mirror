@@ -26,13 +26,17 @@
 #include <settings/settings_manager.h>
 #include <pcbnew_settings.h>
 #include <qa_utils/error_handlers.h>
+#include <pcbnew_utils/board_test_utils.h>
 
 #include <wx/image.h>
 #include <wx/init.h>
 #include <wx/app.h>
 
+using KI_TEST::STALE_DRU_SIDECAR_FIXTURE;
+
 BOOST_TEST_GLOBAL_FIXTURE( KI_SIGNAL_HANDLER_FIXTURE );
 BOOST_TEST_GLOBAL_FIXTURE( KI_STACK_TRACE_FIXTURE );
+BOOST_TEST_GLOBAL_FIXTURE( STALE_DRU_SIDECAR_FIXTURE );
 
 bool init_unit_test()
 {
