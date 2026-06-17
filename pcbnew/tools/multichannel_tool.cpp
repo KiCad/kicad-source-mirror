@@ -1731,6 +1731,32 @@ bool MULTICHANNEL_TOOL::resolveConnectionTopology( RULE_AREA* aRefArea, RULE_ARE
         return true;
     }
 
+    // Placement areas resolve their components from their source, so two areas sharing a sheet,
+    // component class or group resolve to identical footprints. Repeating into such a target would
+    // move and delete the reference's own items, corrupting the placement rather than copying it.
+    if( !aRefArea->m_components.empty() )
+    {
+        std::set<FOOTPRINT*> shared;
+        std::set_intersection( aRefArea->m_components.begin(), aRefArea->m_components.end(),
+                               aTargetArea->m_components.begin(), aTargetArea->m_components.end(),
+                               std::inserter( shared, shared.begin() ) );
+
+        if( !shared.empty() )
+        {
+            aMatches.m_matchingComponents.clear();
+            aMatches.m_isOk = false;
+            aMatches.m_errorMsg = _( "Target Rule Area shares components with the reference area" );
+            aMatches.m_mismatchReasons.clear();
+            aMatches.m_mismatchReasons.push_back(
+                    _( "This target Rule Area selects the same components as the reference area. "
+                       "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
+                       "Area a distinct sheet, component class or group." ) );
+            aMatches.m_mismatchReasons.push_back( wxString::Format( _( "Shared components:\n%s" ),
+                                                                    FormatComponentList( shared ) ) );
+            return false;
+        }
+    }
+
     PROF_TIMER timerBuild;
     std::unique_ptr<CONNECTION_GRAPH> cgRef( CONNECTION_GRAPH::BuildFromFootprintSet( aRefArea->m_components,
                                                                                        aTargetArea->m_components ) );

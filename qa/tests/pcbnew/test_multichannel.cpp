@@ -1622,4 +1622,68 @@ BOOST_FIXTURE_TEST_CASE( ApplyDesignBlockLayoutFootprintFreeReapplyReplaces, MUL
 }
 
 
+/**
+ * Repeat layout must refuse a target Rule Area that resolves to the same components as the
+ * reference area (issue 22318). The repro board has four placement rule areas all bound to the
+ * same sheet "/test sheet 1/", so each resolves to the identical footprint set; copying one onto
+ * another would move and delete the reference's own items.
+ */
+BOOST_FIXTURE_TEST_CASE( RepeatLayoutRefusesDuplicatePlacementAreas, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue22318/issue22318", m_board );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->FindExistingRuleAreas();
+
+    auto ruleData = mtTool->GetData();
+
+    BOOST_TEST_MESSAGE( wxString::Format( "Found %d rule areas",
+                                          static_cast<int>( ruleData->m_areas.size() ) ) );
+
+    BOOST_REQUIRE_EQUAL( ruleData->m_areas.size(), 4 );
+
+    // The shared membership, not the exact count, is what makes the areas invalid targets.
+    const size_t sharedCount = ruleData->m_areas.front().m_components.size();
+
+    BOOST_REQUIRE( sharedCount > 0 );
+
+    for( const RULE_AREA& ra : ruleData->m_areas )
+        BOOST_CHECK_EQUAL( ra.m_components.size(), sharedCount );
+
+    RULE_AREA* refArea = &ruleData->m_areas.front();
+
+    BOOST_REQUIRE( mtTool->CheckRACompatibility( refArea->m_zone ) >= 0 );
+
+    BOOST_REQUIRE_EQUAL( ruleData->m_compatMap.size(), ruleData->m_areas.size() - 1 );
+
+    for( const auto& [targetArea, compatData] : ruleData->m_compatMap )
+    {
+        BOOST_CHECK_MESSAGE( !compatData.m_isOk,
+                             "Duplicate placement area was wrongly reported as a valid copy target "
+                             "(issue 22318)" );
+        BOOST_CHECK( !compatData.m_mismatchReasons.empty() );
+    }
+
+    // The single-target overload must also refuse rather than corrupt the board.
+    RULE_AREA* targetArea = &ruleData->m_areas[1];
+
+    REPEAT_LAYOUT_OPTIONS opts;
+    wxString              err;
+
+    int result = mtTool->RepeatLayout( TOOL_EVENT(), *refArea, *targetArea, opts, nullptr, &err );
+
+    BOOST_CHECK_MESSAGE( result < 0,
+                         "RepeatLayout copied a Rule Area onto an identical-component area "
+                         "(issue 22318)" );
+    BOOST_CHECK( !err.IsEmpty() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
