@@ -25,6 +25,7 @@
 #include <pl_editor_frame.h>
 #include <bitmaps.h>
 #include <class_draw_panel_gal.h>
+#include <navlib_safe_init.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <tool/action_manager.h>
@@ -61,13 +62,17 @@ NL_PL_EDITOR_PLUGIN_IMPL::NL_PL_EDITOR_PLUGIN_IMPL() : CNavigation3D( false, fal
 
 NL_PL_EDITOR_PLUGIN_IMPL::~NL_PL_EDITOR_PLUGIN_IMPL()
 {
-    std::error_code m_errCode;
-    EnableNavigation( false, m_errCode );
-    if( m_errCode.value() != 0 )
+    if( IsEnabled() )
     {
-        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ),
-                    wxT( "Error occured when calling EnableNavigation. Error code: %d" ),
-                    m_errCode.value() );
+        std::error_code errCode;
+        EnableNavigation( false, errCode );
+
+        if( errCode.value() != 0 )
+        {
+            wxLogTrace( wxT( "KI_TRACE_NAVLIB" ),
+                        wxT( "Error occured when calling EnableNavigation. Error code: %d" ),
+                        errCode.value() );
+        }
     }
 }
 
@@ -77,29 +82,23 @@ void NL_PL_EDITOR_PLUGIN_IMPL::SetCanvas( EDA_DRAW_PANEL_GAL* aViewport )
     m_viewport2D = aViewport;
 
     if( m_viewport2D == nullptr )
-    {
         return;
-    }
 
     m_view = m_viewport2D->GetView();
 
     if( m_view == nullptr )
-    {
         return;
-    }
 
     m_viewportWidth = m_view->GetBoundary().GetWidth();
 
     if( !IsEnabled() )
     {
-        // Use the default settings for the connexion to the 3DMouse navigation
-        // They are use a single-threaded threading model and row vectors.
-        EnableNavigation( true );
-
-        // Use the SpaceMouse internal timing source for the frame rate.
-        PutFrameTimingSource( TimingSource::SpaceMouse );
-
-        exportCommandsAndImages();
+        SafeNavlibInit( [this]()
+        {
+            EnableNavigation( true );
+            PutFrameTimingSource( TimingSource::SpaceMouse );
+            exportCommandsAndImages();
+        } );
     }
 }
 

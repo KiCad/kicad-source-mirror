@@ -25,6 +25,7 @@
 #include <gerbview_frame.h>
 #include <bitmaps.h>
 #include <class_draw_panel_gal.h>
+#include <navlib_safe_init.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <tool/action_manager.h>
@@ -61,14 +62,17 @@ NL_GERBVIEW_PLUGIN_IMPL::NL_GERBVIEW_PLUGIN_IMPL() : CNavigation3D( false, false
 
 NL_GERBVIEW_PLUGIN_IMPL::~NL_GERBVIEW_PLUGIN_IMPL()
 {
-    std::error_code m_errCode;
-    EnableNavigation( false, m_errCode );
-
-    if( m_errCode.value() != 0 )
+    if( IsEnabled() )
     {
-        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ),
-                    wxT( "Error occured when calling EnableNavigation. Error code: %d" ),
-                    m_errCode.value() );
+        std::error_code errCode;
+        EnableNavigation( false, errCode );
+
+        if( errCode.value() != 0 )
+        {
+            wxLogTrace( wxT( "KI_TRACE_NAVLIB" ),
+                        wxT( "Error occured when calling EnableNavigation. Error code: %d" ),
+                        errCode.value() );
+        }
     }
 }
 
@@ -89,14 +93,12 @@ void NL_GERBVIEW_PLUGIN_IMPL::SetCanvas( EDA_DRAW_PANEL_GAL* aViewport )
 
     if( !IsEnabled() )
     {
-        // Use the default settings for the connexion to the 3DMouse navigation
-        // They are use a single-threaded threading model and row vectors.
-        EnableNavigation( true );
-
-        // Use the SpaceMouse internal timing source for the frame rate.
-        PutFrameTimingSource( TimingSource::SpaceMouse );
-
-        exportCommandsAndImages();
+        SafeNavlibInit( [this]()
+        {
+            EnableNavigation( true );
+            PutFrameTimingSource( TimingSource::SpaceMouse );
+            exportCommandsAndImages();
+        } );
     }
 }
 

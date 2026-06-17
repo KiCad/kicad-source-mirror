@@ -167,6 +167,9 @@ set( QA_COMMON_SRCS
 
     # Translation integrity tests
     test_translation_format_strings.cpp
+
+    # Navlib safe initialization tests
+    test_navlib_safe_init.cpp
 )
 
 if( KICAD_TEST_DATABASE_LIBRARIES )

@@ -23,12 +23,14 @@
 
 #include <advanced_config.h>
 #include <kiplatform/drivers.h>
+#include <navlib_safe_init.h>
 
 
 NL_GERBVIEW_PLUGIN::NL_GERBVIEW_PLUGIN()
 {
     if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver
-        && KIPLATFORM::DRIVERS::Valid3DConnexionDriverVersion() )
+        && KIPLATFORM::DRIVERS::Valid3DConnexionDriverVersion()
+        && !NavlibDriverCrashed() )
     {
         m_impl = std::make_unique<NL_GERBVIEW_PLUGIN_IMPL>();
     }

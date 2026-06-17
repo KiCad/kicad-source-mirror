@@ -26,6 +26,7 @@
 #include <bitmaps.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <class_draw_panel_gal.h>
+#include <navlib_safe_init.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <tool/action_manager.h>
@@ -64,20 +65,19 @@ NL_PCBNEW_PLUGIN_IMPL::NL_PCBNEW_PLUGIN_IMPL( PCB_DRAW_PANEL_GAL* aViewport ) :
 
     PutProfileHint( "KiCAD PCB" );
 
-    // Use the default settings for the connexion to the 3DMouse navigation
-    // They are use a single-threaded threading model and row vectors.
-    EnableNavigation( true );
-
-    // Use the SpaceMouse internal timing source for the frame rate.
-    PutFrameTimingSource( TimingSource::SpaceMouse );
-
-    exportCommandsAndImages();
+    SafeNavlibInit( [this]()
+    {
+        EnableNavigation( true );
+        PutFrameTimingSource( TimingSource::SpaceMouse );
+        exportCommandsAndImages();
+    } );
 }
 
 
 NL_PCBNEW_PLUGIN_IMPL::~NL_PCBNEW_PLUGIN_IMPL()
 {
-    EnableNavigation( false );
+    if( IsEnabled() )
+        EnableNavigation( false );
 }
 
 
