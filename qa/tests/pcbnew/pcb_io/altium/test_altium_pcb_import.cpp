@@ -38,6 +38,8 @@
 #include <netinfo.h>
 #include <netclass.h>
 #include <pcb_track.h>
+#include <pcb_generator.h>
+#include <generators/pcb_tuning_pattern.h>
 #include <project.h>
 #include <pcb_text.h>
 #include <project/net_settings.h>
@@ -45,6 +47,7 @@
 #include <zone.h>
 
 #include <map>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -587,6 +590,78 @@ BOOST_AUTO_TEST_CASE( CopperAndMaskTextCoincide )
 
     BOOST_CHECK_MESSAGE( matchedPairs > 0,
                          "Expected at least one coincident copper/soldermask text pair" );
+}
+
+
+/**
+ * Regression test for https://gitlab.com/kicad/code/kicad/-/issues/24654
+ *
+ * Altium stores interactive length-tuning meanders as committed tracks and arcs plus a parametric
+ * definition in the SmartUnions stream, referenced from each primitive by a union index.  The
+ * importer used to drop the SmartUnions stream, so a converted board kept the tuned copper but lost
+ * the editable length-tuning tool.  Verify that the Coil sample rebuilds its eight tuning patterns
+ * (four single-track, four differential-pair) as PCB_TUNING_PATTERN generators wrapping the
+ * imported copper.
+ */
+BOOST_AUTO_TEST_CASE( LengthTuningPatterns )
+{
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/issue24654/PCB1.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    BOOST_REQUIRE( board );
+
+    int tuningCount = 0;
+    int singleCount = 0;
+    int diffPairCount = 0;
+
+    for( PCB_GENERATOR* generator : board->Generators() )
+    {
+        PCB_TUNING_PATTERN* pattern = dynamic_cast<PCB_TUNING_PATTERN*>( generator );
+
+        if( !pattern )
+            continue;
+
+        tuningCount++;
+
+        // Each pattern must wrap the real imported copper and carry Altium's meander parameters.
+        BOOST_CHECK_MESSAGE( !pattern->GetBoardItems().empty(),
+                             "Imported tuning pattern wraps no copper" );
+        BOOST_CHECK_GT( pattern->GetMaxAmplitude(), 0 );
+        BOOST_CHECK_GT( pattern->GetSpacing(), 0 );
+
+        // The members must be copper tracks/arcs that the importer placed on the board.
+        std::set<int> memberNets;
+
+        for( BOARD_ITEM* item : pattern->GetBoardItems() )
+        {
+            BOOST_CHECK( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T );
+            BOOST_CHECK( item->GetParentGroup() == pattern );
+
+            if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+                memberNets.insert( bci->GetNetCode() );
+        }
+
+        if( pattern->GetTuningMode() == DIFF_PAIR )
+        {
+            diffPairCount++;
+
+            // A differential-pair meander must keep both nets; collapsing them to one would
+            // corrupt half the routing.
+            BOOST_CHECK_EQUAL( memberNets.size(), 2 );
+        }
+        else if( pattern->GetTuningMode() == SINGLE )
+        {
+            singleCount++;
+            BOOST_CHECK_EQUAL( memberNets.size(), 1 );
+        }
+    }
+
+    BOOST_CHECK_EQUAL( tuningCount, 8 );
+    BOOST_CHECK_EQUAL( singleCount, 4 );
+    BOOST_CHECK_EQUAL( diffPairCount, 4 );
 }
 
 
