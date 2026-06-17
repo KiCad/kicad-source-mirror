@@ -3403,6 +3403,9 @@ void PCB_IO_IPC2581::generateComponents( wxXmlNode* aStepNode )
 
             EDA_ANGLE fp_angle = fp->GetOrientation().Normalize();
 
+            if( fp->IsFlipped() )
+                fp_angle = ( fp_angle.Invert() - ANGLE_180 ).Normalize();
+
             if( fp_angle != ANGLE_0 )
                 addAttribute( xformNode, "rotation", floatVal( fp_angle.AsDegrees(), 2 ) );
 
@@ -4182,6 +4185,13 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD* aBoard,
     m_units_str = "MILLIMETER";
     m_scale = 1.0 / PCB_IU_PER_MM;
     m_sigfig = 6;
+
+    // The base PCB_IO interface permits a null property set; alias it to an empty
+    // map so the optional lookups below remain valid.
+    const std::map<std::string, UTF8> emptyProperties;
+
+    if( !aProperties )
+        aProperties = &emptyProperties;
 
     if( auto it = aProperties->find( "units" ); it != aProperties->end() )
     {
