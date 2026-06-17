@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-04 07:01+0000\n"
+"PO-Revision-Date: 2026-06-17 15:54+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v10/pl/>\n"
 "Language: pl\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -2712,37 +2712,33 @@ msgid "Add Netclass Assignment"
 msgstr "Dodaj przypisanie klasy sieci"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:33
-#, fuzzy
 msgid "(missing)"
-msgstr "(brak pliku)"
+msgstr "(brak)"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:45
 msgid "File"
 msgstr "Plik"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:46
-#, fuzzy
 msgid "Saved version"
-msgstr "Pokaż wszystkie wersje"
+msgstr "Zapisana wersja"
 
 #: common/dialogs/dialog_autosave_recovery.cpp:47
-#, fuzzy
 msgid "Auto-saved copy"
-msgstr "Przywracanie z autozapisu"
+msgstr "Kopia autozapisu"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:18
-#, fuzzy
 msgid ""
 "KiCad found auto-saved changes from a previous session. This usually means "
 "KiCad closed unexpectedly while you had unsaved work."
 msgstr ""
-"KiCad znalazł niezapisane zmiany z ostatniej sesji, które są nowsze niż "
-"zapisane pliki projektu."
+"KiCad znalazł automatycznie zapisane zmiany z ostatniej sesji. Zwykle "
+"oznacza to, że KiCad został niespodziewanie zamknięty gdy istniały "
+"niezapisane zmiany."
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
-#, fuzzy
 msgid "Restore auto-saved"
-msgstr "Przywróć domyślne"
+msgstr "Przywróć z autozapisu"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
@@ -2751,18 +2747,16 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:33
-#, fuzzy
 msgid "Keep current"
-msgstr "bieżący"
+msgstr "Zachowaj bieżący"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:34
 msgid "Keeps your saved file as-is and discards the auto-saved changes."
 msgstr ""
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:38
-#, fuzzy
 msgid "Keep both"
-msgstr "Wyklucz"
+msgstr "Zachowaj oba"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:39
 msgid ""
@@ -2771,9 +2765,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:46
-#, fuzzy
 msgid "Cancel open"
-msgstr "Anuluj wczytywanie"
+msgstr "Anuluj otwieranie"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:49
 msgid ""
@@ -4011,9 +4004,8 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_credentials.cpp:75
 #: common/dialogs/git/dialog_git_credentials_base.cpp:53
-#, fuzzy
 msgid "Password / token:"
-msgstr "Hasło:"
+msgstr "Hasło / token:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:21
 msgid "Authentication is required to access:"
@@ -4038,14 +4030,12 @@ msgid "Username:"
 msgstr "Nazwa użytkownika:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:63
-#, fuzzy
 msgid "SSH key:"
-msgstr "Hasło klucza SSH:"
+msgstr "Klucz SSH:"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
-#, fuzzy
 msgid "Select SSH private key"
-msgstr "Wybierz plik klucza prywatnego SSH"
+msgstr "Wybierz klucz prywaty SSH"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:67
 #: common/dialogs/git/dialog_git_repository_base.cpp:94
@@ -4053,14 +4043,12 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:74
-#, fuzzy
 msgid "Save credentials"
-msgstr "Zapisz wszystkie prądy"
+msgstr "Zapisz dane uwierzytelniające"
 
 #: common/dialogs/git/dialog_git_credentials_base.h:57
-#, fuzzy
 msgid "Git Authentication Required"
-msgstr "Autoryzacja"
+msgstr "Wymagana Autoryzacja Git"
 
 #: common/dialogs/git/dialog_git_repository.cpp:178
 #: common/dialogs/git/dialog_git_repository.cpp:401
@@ -6643,9 +6631,9 @@ msgid "Failed to recover auto-saved file '%s'."
 msgstr "Nie można było odtworzyć automatycznie zapisanego pliku '%s'."
 
 #: common/eda_base_frame.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write recovered file '%s'."
-msgstr "Nie można zapisywać do pliku '%s'."
+msgstr "Nie można zapisać odzyskanego pliku '%s'."
 
 #: common/eda_base_frame.cpp:609 common/tool/actions.cpp:289
 #: pcbnew/dialogs/panel_setup_rules.cpp:135
@@ -8159,9 +8147,8 @@ msgid "Merge failed: %s"
 msgstr "Scalenie nie powiodło się: %s"
 
 #: common/git/libgit_backend.cpp:1462
-#, fuzzy
 msgid "Could not read repository index after merge."
-msgstr "Nie można uzyskać indeksu repozytorium"
+msgstr "Nie można odczytać indeksu repozytorium po scaleniu."
 
 #: common/git/libgit_backend.cpp:1494
 #, fuzzy
@@ -8169,14 +8156,12 @@ msgid "Could not write the merge result."
 msgstr "Nie mogę zapisać plików z rysunkami w folderze '%s'."
 
 #: common/git/libgit_backend.cpp:1502
-#, fuzzy
 msgid "Could not get the repository head."
-msgstr "Nie można pobrać najwyższej pozycji repozytorium"
+msgstr "Nie udało się pobrać nagłówka repozytorium."
 
 #: common/git/libgit_backend.cpp:1512
-#, fuzzy
 msgid "Could not look up the commits to merge."
-msgstr "Nie można wyszukać zatwierdzenia docelowego"
+msgstr "Nie można wyszukać zatwierdzeń do scalenia."
 
 #: common/git/libgit_backend.cpp:1521 common/git/libgit_backend.cpp:1706
 msgid ""
@@ -8185,14 +8170,14 @@ msgid ""
 msgstr ""
 
 #: common/git/libgit_backend.cpp:1530
-#, fuzzy, c-format
+#, c-format
 msgid "Merge remote-tracking branch into %s"
-msgstr "Połącz nakładające się grafiki w pola lutownicze"
+msgstr "Scalenie zdalnej gałęzi śledzącej do %s"
 
 #: common/git/libgit_backend.cpp:1538
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create merge commit: %s"
-msgstr "Nie można scalić zmian"
+msgstr "Nie można utworzyć zatwierdzenia scalenia: %s"
 
 #: common/git/libgit_backend.cpp:1555
 msgid ""
@@ -8218,9 +8203,8 @@ msgid "Rebase finish failed: %s"
 msgstr "Nie udało się ukończyć rebase: %s"
 
 #: common/git/libgit_backend.cpp:1627 common/git/libgit_backend.cpp:1673
-#, fuzzy
 msgid "Another git operation is in progress."
-msgstr "Zamyka obrys strefy jeśli jest ona w trakcie tworzenia"
+msgstr "Inna operacja git jest aktualnie w trakcie."
 
 #: common/git/libgit_backend.cpp:1635 common/git/libgit_backend.cpp:1688
 #, fuzzy
@@ -8228,9 +8212,8 @@ msgid "Could not find the matching remote branch."
 msgstr "Nie można odnaleźć '%s' w zaimportowanej bibliotece."
 
 #: common/git/libgit_backend.cpp:1644 common/git/libgit_backend.cpp:1697
-#, fuzzy
 msgid "Could not read the remote branch."
-msgstr "Nie można otworzyć ścieżki z szablonami! '%s'"
+msgstr "Nie można odczytać zdalnej gałęzi."
 
 #: common/git/libgit_backend.cpp:1653
 #, fuzzy, c-format
@@ -9564,9 +9547,9 @@ msgid "The library table is of wrong type"
 msgstr "Tabela bibliotek jest złego typu"
 
 #: common/libraries/library_table.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Library table '%s' is read-only"
-msgstr "Biblioteka '%s' jest tylko do odczytu."
+msgstr "Tabela bibliotek '%s' jest tylko do odczytu"
 
 #: common/libraries/library_table_parser.cpp:171
 #, c-format
@@ -28150,15 +28133,13 @@ msgid "Reached end of sheet."
 msgstr "Osiągnięto koniec arkusza."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:389
-#, fuzzy
 msgid "No matches found."
-msgstr "Nie znaleziono żadnych szablonów"
+msgstr "Nie znaleziono pasujących."
 
 #: eeschema/tools/sch_group_tool.cpp:46 eeschema/tools/sch_group_tool.cpp:72
 #: pcbnew/tools/pcb_group_tool.cpp:49 pcbnew/tools/pcb_group_tool.cpp:64
-#, fuzzy
 msgid "Some selected items cannot be grouped."
-msgstr "Dodaj zaznaczone elementy do nowej grupy"
+msgstr "Niektóre z zaznaczonych elementów nie można zgrupować."
 
 #: eeschema/tools/sch_group_tool.cpp:57 eeschema/tools/sch_group_tool.cpp:65
 msgid "Child items cannot be grouped separately from their parent item."
@@ -32941,9 +32922,8 @@ msgid "Commit changes to the local repository"
 msgstr "Wprowadza zmiany do lokalnego repozytorium"
 
 #: kicad/project_tree_pane.cpp:1050
-#, fuzzy
 msgid "Amend Last Commit..."
-msgstr "Ostatnie zmiany"
+msgstr "Zmień ostatnie zatwierdzenie..."
 
 #: kicad/project_tree_pane.cpp:1051
 msgid "Rewrite the most recent commit on the current branch"
@@ -32958,9 +32938,9 @@ msgid "Pull"
 msgstr "Wyciągnij"
 
 #: kicad/project_tree_pane.cpp:1059
-#, fuzzy, c-format
+#, c-format
 msgid "Push %s to %s"
-msgstr "%s %s na %s"
+msgstr "Wypchnij %s do %s"
 
 #: kicad/project_tree_pane.cpp:1060
 #, fuzzy, c-format
@@ -33084,14 +33064,12 @@ msgid "Configure Default Remote"
 msgstr "Ustaw domyślne repozytorium zdalne"
 
 #: kicad/project_tree_pane.cpp:2004
-#, fuzzy
 msgid "Failed to configure remote."
-msgstr "Nie można było utworzyć zdalnie: %s"
+msgstr "Nie udało się skonfigurować zdalnego repozytorium."
 
 #: kicad/project_tree_pane.cpp:2057
-#, fuzzy
 msgid "Already up to date."
-msgstr "Obecnie umieszczone"
+msgstr "Obecnie aktualny."
 
 #: kicad/project_tree_pane.cpp:2058
 #, fuzzy, c-format
@@ -33108,14 +33086,13 @@ msgid "Pulled %s into %s (fast-forward)."
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2070
-#, fuzzy
 msgid "Pulled changes."
-msgstr "Przetwórz Zmiany"
+msgstr "Pobrane zmiany."
 
 #: kicad/project_tree_pane.cpp:2071
-#, fuzzy, c-format
+#, c-format
 msgid "Pulled %s into %s."
-msgstr "Pole %s na %s"
+msgstr "Pobieram %s do %s."
 
 #: kicad/project_tree_pane.cpp:2081
 msgid ""
@@ -33145,9 +33122,8 @@ msgid "Reset to the remote version."
 msgstr "Przywróć aktualny kąt z pozycji odniesienia."
 
 #: kicad/project_tree_pane.cpp:2097
-#, fuzzy
 msgid "Failed to reset to remote"
-msgstr "Nie udało się ustawić domyślnego repozytorium zdalnego."
+msgstr "Nie udało się zresetować repozytorium zdalnego"
 
 #: kicad/project_tree_pane.cpp:2104
 #, fuzzy
@@ -33159,28 +33135,25 @@ msgid "Could not rebase"
 msgstr "Nie można zmienić bazy"
 
 #: kicad/project_tree_pane.cpp:2110
-#, fuzzy
 msgid "Pull cancelled."
-msgstr "Anulowano"
+msgstr "Anulowano pobranie."
 
 #: kicad/project_tree_pane.cpp:2119
-#, fuzzy
 msgid "Pull failed."
-msgstr "Wszystkie pliki"
+msgstr "Pobranie nie powiodło się."
 
 #: kicad/project_tree_pane.cpp:2120
 msgid "Failed to pull project"
 msgstr "Nie udało się pobrać projektu"
 
 #: kicad/project_tree_pane.cpp:2154
-#, fuzzy
 msgid "Pushed to remote."
-msgstr "Nie można wyszukać zdalnego"
+msgstr "Wypchnięto do zdalnego repozytorium."
 
 #: kicad/project_tree_pane.cpp:2155
-#, fuzzy, c-format
+#, c-format
 msgid "Pushed %s to %s."
-msgstr "Pole %s na %s"
+msgstr "Wypchnięto %s do %s."
 
 #: kicad/project_tree_pane.cpp:2168
 #, c-format
@@ -33202,9 +33175,8 @@ msgid "&Force Push"
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2185
-#, fuzzy
 msgid "Push failed."
-msgstr "Zadanie ukończone niepowodzeniem"
+msgstr "Wypchnięcie nie powiodło się."
 
 #: kicad/project_tree_pane.cpp:2186
 msgid "Failed to push project"
@@ -33231,9 +33203,8 @@ msgid "Unsaved Changes"
 msgstr "Cofnij zmiany"
 
 #: kicad/project_tree_pane.cpp:2587
-#, fuzzy
 msgid "&Save and Commit"
-msgstr "Zapisz kopię..."
+msgstr "Zapisz i zatwierdź"
 
 #: kicad/project_tree_pane.cpp:2587
 #, fuzzy
@@ -33241,9 +33212,9 @@ msgid "Commit &Anyway"
 msgstr "(%s i tak pozostało do zatwierdzenia.)"
 
 #: kicad/project_tree_pane.cpp:2604 kicad/project_tree_pane.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid "Could not save %s."
-msgstr "Nie można odczytać pliku: %s"
+msgstr "Nie można zapisać %s."
 
 #: kicad/project_tree_pane.cpp:2721
 msgid "Discarding commit due to empty commit message."
@@ -33298,19 +33269,17 @@ msgid "Discarding amend due to empty commit message."
 msgstr "Odrzucanie zatwierdzenia z powodu pustego komunikatu opisującego."
 
 #: kicad/project_tree_pane.cpp:3084
-#, fuzzy
 msgid "Fetched from remote."
-msgstr "Pobieranie repozytorium zdalnego"
+msgstr "Pobrano z repozytorium zdalnego."
 
 #: kicad/project_tree_pane.cpp:3085
-#, fuzzy, c-format
+#, c-format
 msgid "Fetched from %s."
-msgstr "z %s"
+msgstr "Pobrano z %s."
 
 #: kicad/project_tree_pane.cpp:3092
-#, fuzzy
 msgid "Fetch failed."
-msgstr "Zadanie ukończone niepowodzeniem"
+msgstr "Pobranie nie powiodło się."
 
 #: kicad/project_tree_traverser.cpp:216
 #, c-format
@@ -39094,14 +39063,14 @@ msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- DRC przerwane przez użytkownika.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "Canceled after %s"
-msgstr "Anuluj zmiany"
+msgstr "Anulowano po %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "Completed in %s"
-msgstr "Komponent \"%s\" dodany do \"%s\""
+msgstr "Wykonano w %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:817
 #, c-format
@@ -45586,9 +45555,8 @@ msgid "Rule '%s' could not be located after parsing."
 msgstr "Plik '%s' nie może zostać utworzony."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:385
-#, fuzzy
 msgid "DRC engine not available."
-msgstr "Lista sieci nie jest dostępna"
+msgstr "Silnik DRC nie jest dostępny."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:408
 #, c-format
@@ -59415,9 +59383,8 @@ msgid "Show a manager dialog for Generator objects"
 msgstr "Pokazuje okno dialogowe menedżera obiektów generatora"
 
 #: pcbnew/tools/pcb_actions.cpp:2802
-#, fuzzy
 msgid "Length Tuning Settings"
-msgstr "Ustawienia dostrajania długości ścieżek..."
+msgstr "Ustawienia dostrajania długości ścieżek"
 
 #: pcbnew/tools/pcb_actions.cpp:2803
 msgid "Length Tuning Settings..."
@@ -59523,10 +59490,8 @@ msgid "Design block has no layout to place."
 msgstr "Blok projektowy nie posiada trasowania by je umieścić."
 
 #: pcbnew/tools/pcb_control.cpp:1493
-#, fuzzy
 msgid "No groups with a linked design block are selected."
-msgstr ""
-"Stosuje połączony układ ścieżek bloku projektowego do zaznaczonej grupy"
+msgstr "Nie wybrano żadnej grupy z powiązanej z blokiem projektu."
 
 #: pcbnew/tools/pcb_control.cpp:1518 pcbnew/tools/pcb_selection_tool.cpp:4552
 msgid ""
@@ -59541,19 +59506,16 @@ msgid "Applying Design Block Layouts"
 msgstr "Zastosuj układ ścieżek bloku projektowego"
 
 #: pcbnew/tools/pcb_control.cpp:1572
-#, fuzzy
 msgid "design block is not in the loaded libraries"
-msgstr "Blok projektowy nie posiada prawidłowego ID biblioteki."
+msgstr "blok projektowy nie znajduje się w załadowanych bibliotekach"
 
 #: pcbnew/tools/pcb_control.cpp:1578
-#, fuzzy
 msgid "design block has no saved PCB layout"
-msgstr "Blok projektowy nie posiada trasowania by je umieścić."
+msgstr "blok projektowy nie posiada zapisanego trasowania"
 
 #: pcbnew/tools/pcb_control.cpp:1609
-#, fuzzy
 msgid "could not load the design block's layout"
-msgstr "Nie można odnaleźć bloku projektowego %s."
+msgstr "nie można załadować trasowania bloku projektowego"
 
 #: pcbnew/tools/pcb_control.cpp:1636
 #, fuzzy
@@ -59566,9 +59528,8 @@ msgid "group has no footprints"
 msgstr "Przeglądaj footprinty"
 
 #: pcbnew/tools/pcb_control.cpp:1708
-#, fuzzy
 msgid "layout copy failed"
-msgstr "Nie można skopiować '%s'."
+msgstr "kopiowanie trasowania nie powiodło się"
 
 #: pcbnew/tools/pcb_control.cpp:1723
 #, c-format
@@ -59576,37 +59537,34 @@ msgid "Applying layout to group %zu of %zu..."
 msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:1746
-#, fuzzy
 msgid "Apply design block layout cancelled."
-msgstr "Zastosuj układ ścieżek bloku projektowego"
+msgstr "Anulowano stosowanie układ ścieżek bloku projektowego."
 
 #: pcbnew/tools/pcb_control.cpp:1752
-#, fuzzy, c-format
+#, c-format
 msgid "Apply design block layout to %d group(s)"
-msgstr ""
-"Stosuje połączony układ ścieżek bloku projektowego do zaznaczonej grupy"
+msgstr "Zastosuj układ bloku projektowego do %d grup"
 
 #: pcbnew/tools/pcb_control.cpp:1764
-#, fuzzy, c-format
+#, c-format
 msgid "Applied design block layout to %d of %d group(s)."
-msgstr ""
-"Stosuje połączony układ ścieżek bloku projektowego do zaznaczonej grupy"
+msgstr "Stosuje układ bloku projektowego do %d z %d grup."
 
 #: pcbnew/tools/pcb_control.cpp:1771
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Skipped %d selected item(s) that are not groups linked to a design block."
-msgstr "Zapisuje zaznaczoną grupę w połączonym z nim blokiem projektowym"
+msgstr ""
+"Pominięto %d wybranych elementów, które nie są grupami powiązanymi z blokiem "
+"projektu."
 
 #: pcbnew/tools/pcb_control.cpp:1779
-#, fuzzy
 msgid "The following groups could not be processed:"
-msgstr "Następujące foldery nie mogły zostać otwarte: \n"
+msgstr "Następujące grupy nie mogły zostać przetworzone:"
 
 #: pcbnew/tools/pcb_control.cpp:1783
-#, fuzzy
 msgid "(unnamed group)"
-msgstr "Grupy pinów połączonych:"
+msgstr "(nienazwana grupa)"
 
 #: pcbnew/tools/pcb_control.cpp:1834
 #, c-format
