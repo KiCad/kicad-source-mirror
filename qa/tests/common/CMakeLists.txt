@@ -135,6 +135,7 @@ set( QA_COMMON_SRCS
 
     # GAL tests
     test_gal_xor_mode.cpp
+    test_gal_resize_strategy.cpp
 
     # Preview item / drawing utility tests
     test_dashed_line.cpp

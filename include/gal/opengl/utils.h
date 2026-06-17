@@ -22,6 +22,9 @@
 #ifndef __OPENGL_UTILS_H
 #define __OPENGL_UTILS_H
 
+#include <gal/gal.h>
+
+#include <cstddef>
 #include <string>
 
 /**
@@ -43,5 +46,46 @@ int checkGlError( const std::string& aInfo, const char* aFile, int aLine, bool a
  * @param aEnable decides whether the message should be shown.
  */
 void enableGlDebug( bool aEnable );
+
+
+namespace KIGFX
+{
+
+/**
+ * Strategy for growing a GPU vertex buffer, trading copy speed against peak video memory.
+ */
+enum class VRAM_RESIZE_STRATEGY
+{
+    GPU_COPY,  ///< Fast GPU-side copy; the old and new buffers are briefly co-resident.
+    RAM_STAGE, ///< Stage through host memory so only the larger of the two buffers is resident.
+    REFUSE     ///< Neither path fits; the caller should fall back to software rendering.
+};
+
+/**
+ * Query the amount of free video memory the driver reports.
+ *
+ * Uses GL_NVX_gpu_memory_info (NVIDIA) or GL_ATI_meminfo (AMD) when present. Requires a
+ * current OpenGL context.
+ *
+ * @return the free video memory in bytes, or 0 when no driver query is available.
+ */
+GAL_API size_t queryFreeVideoMemoryBytes();
+
+/**
+ * Decide how to grow a GPU vertex buffer given the free video memory budget.
+ *
+ * A doubling resize would otherwise hold the old and new buffers in VRAM at the same time,
+ * which can exceed the budget on a large board and trip a fatal driver out-of-memory abort.
+ *
+ * @param aFreeVRAM is the free video memory in bytes, or 0 when unknown.
+ * @param aOldBytes is the size of the existing buffer in bytes.
+ * @param aNewBytes is the size of the requested buffer in bytes.
+ * @param aMarginFrac is the headroom kept free, as a fraction of the allocation size.
+ * @return the resize strategy to use.
+ */
+GAL_API VRAM_RESIZE_STRATEGY chooseResizeStrategy( size_t aFreeVRAM, size_t aOldBytes,
+                                                   size_t aNewBytes, double aMarginFrac );
+
+} // namespace KIGFX
 
 #endif /* __OPENGL_ERROR_H */

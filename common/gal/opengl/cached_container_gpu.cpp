@@ -21,6 +21,7 @@
  */
 
 #include <gal/opengl/cached_container_gpu.h>
+#include <gal/opengl/gpu_oom_error.h>
 #include <gal/opengl/vertex_manager.h>
 #include <gal/opengl/vertex_item.h>
 #include <gal/opengl/shader.h>
@@ -28,7 +29,9 @@
 
 #include <wx/log.h>
 
+#include <cstring>
 #include <list>
+#include <memory>
 
 #include <core/profile.h>
 #include <trace_helpers.h>
@@ -135,6 +138,27 @@ void CACHED_CONTAINER_GPU::Unmap()
 
 bool CACHED_CONTAINER_GPU::defragmentResize( unsigned int aNewSize )
 {
+    // A doubling resize transiently holds the old and the new buffer in video memory at the
+    // same time.  On a large board this peak can exceed the driver's budget and trip a fatal
+    // out-of-memory abort (e.g. NVIDIA "Error code: 6"), which kills the process before any
+    // GL error can be observed.
+    const size_t oldBytes = static_cast<size_t>( m_currentSize ) * VERTEX_SIZE;
+    const size_t newBytes = static_cast<size_t>( aNewSize ) * VERTEX_SIZE;
+
+    switch( KIGFX::chooseResizeStrategy( KIGFX::queryFreeVideoMemoryBytes(), oldBytes, newBytes,
+                                         0.15 ) )
+    {
+    case KIGFX::VRAM_RESIZE_STRATEGY::REFUSE:
+        throw KIGFX::GPU_OOM_ERROR( "Insufficient GPU memory to render this board; "
+                                    "switching to software rendering." );
+
+    case KIGFX::VRAM_RESIZE_STRATEGY::RAM_STAGE:
+        return defragmentResizeStaged( aNewSize );
+
+    case KIGFX::VRAM_RESIZE_STRATEGY::GPU_COPY:
+        break;
+    }
+
     if( !m_useCopyBuffer )
         return defragmentResizeMemcpy( aNewSize );
 
@@ -320,6 +344,77 @@ bool CACHED_CONTAINER_GPU::defragmentResizeMemcpy( unsigned int aNewSize )
     wxLogTrace( traceGalCachedContainerGpu, "Defragmented container storing %d vertices / %.1f ms",
                 m_currentSize - m_freeSpace, totalTime.msecs() );
 #endif /* KICAD_GAL_PROFILE */
+
+    m_freeSpace += ( aNewSize - m_currentSize );
+    m_currentSize = aNewSize;
+
+    wxLogTrace( traceGalProfile, "VBO size %d used: %d", m_currentSize, AllItemsSize() );
+
+    // Now there is only one big chunk of free memory
+    m_freeChunks.clear();
+    m_freeChunks.insert( std::make_pair( m_freeSpace, m_currentSize - m_freeSpace ) );
+
+    return true;
+}
+
+
+bool CACHED_CONTAINER_GPU::defragmentResizeStaged( unsigned int aNewSize )
+{
+    wxCHECK( IsMapped(), false );
+
+    wxLogTrace( traceGalCachedContainerGpu,
+                wxT( "Resizing & defragmenting container (RAM staged) from %d to %d" ),
+                m_currentSize, aNewSize );
+
+    // No shrinking if we cannot fit all the data
+    if( usedSpace() > aNewSize )
+        return false;
+
+    const unsigned int usedVerts = usedSpace();
+
+    // Stage the compacted vertices in host memory so the old video buffer can be released
+    // before the larger replacement is allocated, keeping the peak VRAM at max(old, new).
+    std::unique_ptr<VERTEX[]> staging;
+
+    try
+    {
+        staging.reset( new VERTEX[usedVerts] );
+    }
+    catch( const std::bad_alloc& )
+    {
+        throw GPU_OOM_ERROR( "Out of memory while staging a GPU buffer resize; "
+                             "switching to software rendering." );
+    }
+
+    // Reads from the mapped old buffer, so it must run before that buffer is released.
+    defragment( staging.get() );
+
+    Unmap();
+    glDeleteBuffers( 1, &m_glBufferHandle );
+
+    GLuint newBuffer;
+    glGenBuffers( 1, &newBuffer );
+    glBindBuffer( GL_ARRAY_BUFFER, newBuffer );
+    glBufferData( GL_ARRAY_BUFFER, aNewSize * VERTEX_SIZE, nullptr, GL_DYNAMIC_DRAW );
+    glBindBuffer( GL_ARRAY_BUFFER, 0 );
+    checkGlError( "allocating staged buffer during defragmentation", __FILE__, __LINE__ );
+
+    m_glBufferHandle = newBuffer;
+
+    try
+    {
+        Map();
+    }
+    catch( const std::runtime_error& )
+    {
+        // Map() failed, likely due to glMapBuffer returning null.
+        return false;
+    }
+
+    if( usedVerts > 0 )
+        memcpy( m_vertices, staging.get(), usedVerts * VERTEX_SIZE );
+
+    checkGlError( "switching buffers during staged defragmentation", __FILE__, __LINE__ );
 
     m_freeSpace += ( aNewSize - m_currentSize );
     m_currentSize = aNewSize;

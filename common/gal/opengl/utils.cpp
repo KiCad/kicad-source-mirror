@@ -24,6 +24,9 @@
 
 #include <kicad_gl/kiglad.h> // Must be included first
 
+#include <gal/opengl/utils.h>
+
+#include <algorithm>
 #include <stdexcept>
 #include <wx/log.h> // wxLogTrace
 
@@ -193,3 +196,58 @@ void enableGlDebug( bool aEnable )
         glDisable( GL_DEBUG_OUTPUT );
     }
 }
+
+
+namespace KIGFX
+{
+
+size_t queryFreeVideoMemoryBytes()
+{
+    GLint availableKiB = 0;
+
+    if( GLAD_GL_NVX_gpu_memory_info )
+    {
+        glGetIntegerv( GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &availableKiB );
+    }
+    else if( GLAD_GL_ATI_meminfo )
+    {
+        GLint info[4] = { 0, 0, 0, 0 };
+        glGetIntegerv( GL_VBO_FREE_MEMORY_ATI, info );
+        availableKiB = info[0];
+    }
+    else
+    {
+        return 0;
+    }
+
+    // Swallow any error a driver that advertises but mishandles the query may raise, so it
+    // does not leak into the next checkGlError().
+    glGetError();
+
+    if( availableKiB <= 0 )
+        return 0;
+
+    return static_cast<size_t>( availableKiB ) * 1024;
+}
+
+
+VRAM_RESIZE_STRATEGY chooseResizeStrategy( size_t aFreeVRAM, size_t aOldBytes, size_t aNewBytes,
+                                           double aMarginFrac )
+{
+    // With no driver information, keep the historical fast path so non-NVIDIA/AMD GPUs are
+    // unaffected.
+    if( aFreeVRAM == 0 )
+        return VRAM_RESIZE_STRATEGY::GPU_COPY;
+
+    const double margin = 1.0 + std::max( 0.0, aMarginFrac );
+
+    if( static_cast<double>( aFreeVRAM ) >= static_cast<double>( aOldBytes + aNewBytes ) * margin )
+        return VRAM_RESIZE_STRATEGY::GPU_COPY;
+
+    if( static_cast<double>( aFreeVRAM ) >= static_cast<double>( aNewBytes ) * margin )
+        return VRAM_RESIZE_STRATEGY::RAM_STAGE;
+
+    return VRAM_RESIZE_STRATEGY::REFUSE;
+}
+
+} // namespace KIGFX
