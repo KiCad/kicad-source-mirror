@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
 "PO-Revision-Date: 2026-06-17 15:54+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -8275,26 +8275,23 @@ msgid "Another git operation is in progress."
 msgstr "Eine andere Git-Operation wird gerade ausgeführt."
 
 #: common/git/libgit_backend.cpp:1635 common/git/libgit_backend.cpp:1688
-#, fuzzy
 msgid "Could not find the matching remote branch."
-msgstr "Konnte \"%s\" nicht in der importierten Bibliothek finden."
+msgstr "Konnte den passenden Remote-Branch nicht finden."
 
 #: common/git/libgit_backend.cpp:1644 common/git/libgit_backend.cpp:1697
-#, fuzzy
 msgid "Could not read the remote branch."
 msgstr "Konnte den Remote-Branch nicht lesen."
 
 #: common/git/libgit_backend.cpp:1653
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reset to the remote branch: %s"
-msgstr "Konnte nicht zu Remote übertragen: %s"
+msgstr "Konnte nicht zu Remote-Branch zurücksetzen: %s"
 
 #: common/git/libgit_backend.cpp:1679
-#, fuzzy
 msgid ""
 "Cannot rebase: you have unstaged changes.  Please commit or stash them first."
 msgstr ""
-"Rebase geht nicht: Sie haben unverarbeitete Änderungen. Bitte vor dem Pull "
+"Rebase nicht möglich: Sie haben unverarbeitete Änderungen.  Bitte zuvor "
 "committen oder stashen."
 
 #: common/git/libgit_backend.cpp:1737 common/git/libgit_backend.cpp:1748
@@ -15393,7 +15390,7 @@ msgid "Derived symbol must have a parent selected"
 msgstr "Abgeleitetes Symbol muss ein übergeordnetes Element ausgewählt haben"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:507
-#, fuzzy, c-format
+#, c-format
 msgid "The unit name '%s' is already in use."
 msgstr "Der Einheitenname \"%s\" wird bereits verwendet."
 
@@ -28314,11 +28311,10 @@ msgid "Some selected items cannot be grouped."
 msgstr "Einige ausgewählte Elemente können nicht gruppiert werden."
 
 #: eeschema/tools/sch_group_tool.cpp:57 eeschema/tools/sch_group_tool.cpp:65
-#, fuzzy
 msgid "Child items cannot be grouped separately from their parent item."
 msgstr ""
-"Kind-Elemente können nicht separat von ihren Eltern-Elementen gruppiert "
-"werden."
+"Untergeordnete Elemente können nicht separat von ihrem übergeordneten "
+"Element gruppiert werden."
 
 #: eeschema/tools/sch_group_tool.cpp:94 pcbnew/tools/pcb_group_tool.cpp:86
 msgid "Click on new member..."
@@ -33106,12 +33102,10 @@ msgid "Initialize a new repository"
 msgstr "Neues Repository initialisieren"
 
 #: kicad/project_tree_pane.cpp:1042
-#, fuzzy
 msgid "Configure Default Remote..."
 msgstr "Standard-Remote konfigurieren ..."
 
 #: kicad/project_tree_pane.cpp:1043
-#, fuzzy
 msgid "Set or change the default remote URL and credentials"
 msgstr "Die Standard-Remote-URL und Zugangsdaten setzen oder ändern"
 
@@ -33124,14 +33118,12 @@ msgid "Commit changes to the local repository"
 msgstr "Änderungen zum lokalen Repository committen"
 
 #: kicad/project_tree_pane.cpp:1050
-#, fuzzy
 msgid "Amend Last Commit..."
 msgstr "Letzten Commit nachbessern ..."
 
 #: kicad/project_tree_pane.cpp:1051
-#, fuzzy
 msgid "Rewrite the most recent commit on the current branch"
-msgstr "Den neuesten Commit vom aktuellen Branch abändern"
+msgstr "Den neuesten Commit im aktuellen Branch überschreiben"
 
 #: kicad/project_tree_pane.cpp:1054
 msgid "Push"
@@ -33147,7 +33139,7 @@ msgid "Push %s to %s"
 msgstr "%s nach %s schieben"
 
 #: kicad/project_tree_pane.cpp:1060
-#, fuzzy, c-format
+#, c-format
 msgid "Pull from %s"
 msgstr "Von %s abrufen"
 
@@ -33262,22 +33254,19 @@ msgid "Fetch Remote"
 msgstr "Remote abrufen"
 
 #: kicad/project_tree_pane.cpp:1988
-#, fuzzy
 msgid "Configure Default Remote"
 msgstr "Standard-Remote konfigurieren"
 
 #: kicad/project_tree_pane.cpp:2004
-#, fuzzy
 msgid "Failed to configure remote."
 msgstr "Konfiguration von Remote ist gescheitert."
 
 #: kicad/project_tree_pane.cpp:2057
-#, fuzzy
 msgid "Already up to date."
 msgstr "Bereits aktuell."
 
 #: kicad/project_tree_pane.cpp:2058
-#, fuzzy, c-format
+#, c-format
 msgid "Already up to date with %s."
 msgstr "Bereits aktuell mit %s."
 
@@ -33394,17 +33383,14 @@ msgstr ""
 "zurücksetzen müssen."
 
 #: kicad/project_tree_pane.cpp:2174
-#, fuzzy
 msgid "Force Push?"
 msgstr "Push erzwingen?"
 
 #: kicad/project_tree_pane.cpp:2176
-#, fuzzy
 msgid "&Force Push"
 msgstr "Push &erzwingen"
 
 #: kicad/project_tree_pane.cpp:2185
-#, fuzzy
 msgid "Push failed."
 msgstr "Push ist gescheitert."
 
@@ -33428,9 +33414,8 @@ msgstr ""
 "Sollen diese vor dem Commit gespeichert werden?"
 
 #: kicad/project_tree_pane.cpp:2584 kicad/project_tree_pane.cpp:2859
-#, fuzzy
 msgid "Unsaved Changes"
-msgstr "Nicht gespeicherte Änderungen"
+msgstr "Ungespeicherte Änderungen"
 
 #: kicad/project_tree_pane.cpp:2587
 msgid "&Save and Commit"
@@ -33454,25 +33439,23 @@ msgid "Discarding commit due to empty file selection."
 msgstr "Verwerfe Commit, da keine Dateien ausgewählt wurden."
 
 #: kicad/project_tree_pane.cpp:2811
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The last commit has already been pushed to %s.\n"
 "\n"
 "Amending rewrites public history.  Anyone who pulled this commit will need "
 "to reset their copy."
 msgstr ""
-"Der letzte Commit wurde bereits auf %s abgelegt.\n"
+"Der letzte Commit wurde bereits zu %s gepusht.\n"
 "\n"
 "Nachbessern schreibt den öffentlichen Verlauf neu.  Jeder, der diesen Commit "
 "abgeholt hat, wird seine Kopie zurücksetzen müssen."
 
 #: kicad/project_tree_pane.cpp:2815
-#, fuzzy
 msgid "Amend Published Commit?"
 msgstr "Veröffentlichten Commit nachbessern?"
 
 #: kicad/project_tree_pane.cpp:2817 kicad/project_tree_pane.cpp:2862
-#, fuzzy
 msgid "Amend &Anyway"
 msgstr "&Trotzdem nachbessern"
 
@@ -33488,24 +33471,20 @@ msgstr ""
 "Diese Änderungen vor dem Abändern speichern?"
 
 #: kicad/project_tree_pane.cpp:2862
-#, fuzzy
 msgid "&Save and Amend"
 msgstr "&Speichern und nachbessern"
 
 #: kicad/project_tree_pane.cpp:2995
-#, fuzzy
 msgid "Amend Last Commit"
 msgstr "Letzten Commit nachbessern"
 
 #: kicad/project_tree_pane.cpp:3003
-#, fuzzy
 msgid "Discarding amend due to empty commit message."
 msgstr "Verwerfe Nachbesserung aufgrund leerer Commit-Nachricht."
 
 #: kicad/project_tree_pane.cpp:3084
-#, fuzzy
 msgid "Fetched from remote."
-msgstr "Von Remote abgeholt (Fetch)."
+msgstr "Von Remote abrufen (Fetch)."
 
 #: kicad/project_tree_pane.cpp:3085
 #, fuzzy, c-format
@@ -61377,6 +61356,11 @@ msgid ""
 "This can happen with complex overlapping zones.  Consider simplifying your "
 "zones."
 msgstr ""
+"Zonenfüllungen sind unter Umständen fehlerhaft: Die iterative Füllung ist "
+"nach %d Durchläufen nicht konvergiert.\n"
+"\n"
+"Dies kann bei komplexen, sich überlappenden Zonen auftreten.  Erwägen Sie "
+"eine Vereinfachung der Zonen."
 
 #: pcbnew/zone_filler.cpp:1498
 msgid "Prototype zone fill enabled. Disable setting and refill?"
