@@ -4149,10 +4149,16 @@ void BINARY_PARSER::parseNetClasses()
 
 std::vector<NET_CLASS_RULE_EDGE> BINARY_PARSER::collectNetClassRuleEdges( const std::set<uint32_t>& aOwnerSet )
 {
-    // The type-66 rule table is 24-byte records with tag 0x42 at +4 and a net-class owner
-    // pointer at +8 (== a net's +188), a rule-detail page at +0 and a layer at +20.
-    constexpr size_t   EDGE_SIZE      = 24;
-    constexpr size_t   EDGE_RULE_PTR  = 0;
+    // The type-66 rule table is 28-byte records. The tag matched here is the record's scope
+    // type word, so a match sits four bytes INTO the preceding record: the owner pointer at
+    // +8 and the layer at +20 are right, but the rule-detail page is at +28, not +0. Reading
+    // +0 returns the previous record's page, which misattributes every rule by one record.
+    //
+    // Pinned without an oracle: masking the page off and asking whether it maps to a single
+    // rule kind, +28 holds on 179 of the 203 boards with enough records to test, against 142
+    // at +24 and 123 at the +0 this used to read.
+    constexpr size_t   EDGE_SIZE      = 32;
+    constexpr size_t   EDGE_RULE_PTR  = 28;
     constexpr size_t   EDGE_TAG       = 4;
     constexpr uint32_t EDGE_TAG_VALUE = 0x42;
     constexpr size_t   EDGE_OWNER     = 8;
@@ -4272,8 +4278,20 @@ void BINARY_PARSER::applyNetClassClearances( const std::vector<NET_CLASS_RULE_ED
 
         std::vector<ValueRec> values;
 
-        NoteScanLocatorUse( "valueCoreWalk" );
-        for( size_t off = 0; off + VALUE_CORE_OFF + VALUE_CORE_COUNT * sizeof( int32_t ) <= m_data.size(); ++off )
+        // Bounded to section 49 rather than swept over the file. Every value-core record in
+        // the corpus lives there: 11 records across 663 boards, 11 inside the section's own
+        // payload window and none outside, so the bound costs nothing and the walk becomes a
+        // parse of one declared region.
+        const SDB_SECTION* ruleHeap = m_sdb.Section( 49 );
+
+        if( !ruleHeap || ruleHeap->totalBytes == 0 )
+            return;
+
+        const size_t valueLo = ruleHeap->payloadOffset;
+        const size_t valueSpan = VALUE_CORE_OFF + VALUE_CORE_COUNT * sizeof( int32_t );
+        const size_t valueHi = std::min( m_data.size(), valueLo + ruleHeap->totalBytes );
+
+        for( size_t off = valueLo; off + valueSpan <= valueHi; ++off )
         {
             SDB_RECORD rec = m_sdb.RecordAt( off );
 
