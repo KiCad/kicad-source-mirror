@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 03:01+0000\n"
+"PO-Revision-Date: 2026-06-17 15:54+0000\n"
 "Last-Translator: MHeis <manuheiskanen22@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -7498,7 +7498,7 @@ msgstr "Nasta"
 
 #: common/eda_item.cpp:489 eeschema/sch_sheet_pin.h:86
 msgid "Sheet Pin"
-msgstr "Arkin Nasta"
+msgstr "Arkin nasta"
 
 #: common/eda_item.cpp:490 eeschema/dialogs/dialog_migrate_buses.cpp:110
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:41
@@ -7761,14 +7761,12 @@ msgid "Corner Radius"
 msgstr "Kulman säde"
 
 #: common/eda_shape.cpp:3542
-#, fuzzy
 msgid "Ellipse Rotation"
-msgstr "Kierto"
+msgstr "Ellipsin kierto"
 
 #: common/eda_shape.cpp:3548
-#, fuzzy
 msgid "Arc Start Angle"
-msgstr "Aloituskulma"
+msgstr "Kaaren aloituskulma"
 
 #: common/eda_shape.cpp:3554
 msgid "Arc End Angle"
@@ -11554,7 +11552,8 @@ msgstr "Zoomaa Sopivaksi"
 #: common/tool/actions.cpp:723
 msgid "Zoom to worksheet area if exists or edited object"
 msgstr ""
-"Zoomaa työlista-alueeseen, jos sellainen on olemassa tai sitä on muokattu"
+"Zoomaa piirustuspohjan alueelle, jos sellainen on olemassa, tai muokattuun "
+"kohteeseen"
 
 #: common/tool/actions.cpp:730
 msgid "Zoom to All Objects"
@@ -13527,8 +13526,8 @@ msgstr ""
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
-"Arkin nastassa %s ei ole yhteensopivaa hierarkkista verkkotunnistetta "
-"arkinsisällä"
+"Arkin nastalla %s ei ole vastaavaa hierarkkista verkkotunnistetta arkin "
+"sisällä"
 
 #: eeschema/connection_graph.cpp:6179
 #, c-format
@@ -14818,7 +14817,7 @@ msgstr "Käytä nykyistä arkkia juurena"
 #: eeschema/dialogs/dialog_export_netlist.cpp:349
 #: eeschema/dialogs/dialog_export_netlist.cpp:394
 msgid "Export netlist only for the current sheet"
-msgstr "Vie verkkolista vain nykyiselle taulukolle"
+msgstr "Vie verkkolista vain nykyiselle arkille"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:352
 #: eeschema/dialogs/dialog_sim_command_base.cpp:647
@@ -16340,8 +16339,8 @@ msgid ""
 "Local power symbols create labels that are limited to the sheet in which "
 "they are used"
 msgstr ""
-"Paikalliset tehosymbolit luovat tarroja, jotka rajoittuvat arkille, jolla "
-"niitä käytetään"
+"Paikalliset tehosymbolit luovat verkkotunnisteita, jotka rajoittuvat "
+"arkille, jolla niitä käytetään"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:196
 msgid "Pin Text Options"
@@ -17600,7 +17599,7 @@ msgstr "Arkin nastan ominaisuudet"
 #: eeschema/dialogs/dialog_sheet_properties.cpp:284
 #: eeschema/widgets/sch_properties_panel.cpp:655
 msgid "A sheet must have a valid file name."
-msgstr "Arkin on oltava kelvollinen tiedostonimi."
+msgstr "Arkilla on oltava kelvollinen tiedostonimi."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:320
 msgid "Use relative path for sheet file?"
@@ -17608,7 +17607,7 @@ msgstr "Käytetäänkö suhteellista polkua arkin tiedostolle?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:321
 msgid "Sheet File Path"
-msgstr "Arkkitiedoston polku"
+msgstr "Arkin tiedostopolku"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:324
 msgid ""
@@ -18570,7 +18569,7 @@ msgstr "Vain nykyinen arkki"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:210
 msgid "Current Sheet and Down"
-msgstr "Nykyinen kaavio ja sen alikaaviot"
+msgstr "Nykyinen arkki ja sen aliarkit"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:269
 msgid "Edit"
@@ -19230,7 +19229,7 @@ msgstr "Värien esikatselu"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:444
 msgid "/path/to/sheet"
-msgstr "/polku/kohde/arkit"
+msgstr "/polku/tiedostoon/arkki"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:33
 #: pcbnew/dialogs/panel_display_options_base.cpp:158
@@ -20531,6 +20530,8 @@ msgstr "Kytkentäkaavion lataaminen epäonnistui\n"
 #: eeschema/eeschema_jobs_handler.cpp:2124
 msgid "sch merge requires each input to have a single top-level sheet\n"
 msgstr ""
+"Arkkien yhdistäminen vaatii, että jokaisella syötetiedostolla on vain yksi "
+"ylatason arkki\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2144 pcbnew/pcbnew_jobs_handler.cpp:3351
 msgid ""
@@ -20548,11 +20549,13 @@ msgid ""
 "Merge contains hierarchical sheet structure changes that sch merge cannot "
 "apply\n"
 msgstr ""
+"Yhdistys sisältää hierarkkisia arkkirakenteen muutoksia, joita arkkien "
+"yhdistäminen ei voi toteuttaa\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2230
 #, c-format
 msgid "Cannot flatten sub-sheets with duplicate basename '%s'\n"
-msgstr ""
+msgstr "Ei voi purkaa aliarkkeja, joilla on sama perusnimi '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2287
 #, fuzzy, c-format
@@ -20664,7 +20667,7 @@ msgstr " (piirustusarkissa)"
 
 #: eeschema/erc/erc.cpp:426
 msgid "Unresolved text variable in drawing sheet"
-msgstr "Piirroslehdellä on tekstimuuttuja, jota ei ole määritelty"
+msgstr "Piirustusarkilla on tekstimuuttuja, jota ei ole määritelty"
 
 #: eeschema/erc/erc.cpp:464 eeschema/erc/erc.cpp:492
 #, c-format
@@ -20792,7 +20795,7 @@ msgstr "Määritetty jalanjälki (%s) ei vastaa jalanjälkisuodattimia (%s)"
 
 #: eeschema/erc/erc.cpp:2283
 msgid "Checking sheet names..."
-msgstr "Tarkistetaan lehtien nimiä ..."
+msgstr "Tarkistetaan arkkien nimiä..."
 
 #: eeschema/erc/erc.cpp:2290
 msgid "Checking conflicts..."
@@ -20871,7 +20874,7 @@ msgstr "Sekalaiset"
 
 #: eeschema/erc/erc_item.cpp:43
 msgid "Duplicate sheet names within a given sheet"
-msgstr "Lehtien nimien kaksoiskappaleet annetussa taulukossa"
+msgstr "Arkin nimien kaksoiskappaleita määritetyn arkin sisällä"
 
 #: eeschema/erc/erc_item.cpp:47
 msgid "Symbol pin or wire end off connection grid"
@@ -20901,7 +20904,7 @@ msgstr "Ristiriita nastojen välillä"
 #: eeschema/erc/erc_item.cpp:83
 msgid "Mismatch between hierarchical labels and sheet pins"
 msgstr ""
-"Yhteensopimattomuus hierarkisten verkkotunnisteiden ja sivulla olevien "
+"Yhteensopimattomuus hierarkisten verkkotunnisteiden ja arkilla olevien "
 "nastojen välillä"
 
 #: eeschema/erc/erc_item.cpp:87
@@ -20968,7 +20971,7 @@ msgstr "Eri verkko on määritelty jaetulle nastalle toisessa yksikön symboliss
 
 #: eeschema/erc/erc_item.cpp:143
 msgid "Conflict between bus alias definitions across schematic sheets"
-msgstr "Ristiriita väyläalias-määritelmien välillä kaavakuvien välillä"
+msgstr "Ristiriita väyläalias-määritelmissä kytkentäkaavion arkeissa"
 
 #: eeschema/erc/erc_item.cpp:147
 msgid "More than one name given to this bus or net"
@@ -21138,8 +21141,8 @@ msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
 msgstr ""
-"Koko kytkentäkaaviota ei voitu ladata.  Hierarkisten taulukoiden kaavioiden "
-"lataamisessa tapahtui virheitä."
+"Koko kytkentäkaaviota ei voitu ladata.  Hierarkisten arkkien lataamisessa "
+"tapahtui virheitä."
 
 #: eeschema/files-io.cpp:388 eeschema/files-io.cpp:397
 #: eeschema/files-io.cpp:1599 eeschema/sheet.cpp:470
@@ -21858,7 +21861,7 @@ msgstr "Valmis."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:211
 msgid "Error: duplicate sheet names. Continue?"
-msgstr "Virhe: Lehtien nimissä kaksoiskappaleita. Jatketaanko?"
+msgstr "Virhe: arkkien nimissä kaksoiskappaleita. Jatketaanko?"
 
 #: eeschema/picksymbol.cpp:125
 #, c-format
@@ -22558,7 +22561,7 @@ msgstr "Siirry sivulle %s (%s)"
 
 #: eeschema/sch_field.cpp:1095
 msgid "Back to Previous Selected Sheet"
-msgstr "Takaisin viimeksi valittuun lehteen"
+msgstr "Takaisin viimeksi valittuun arkkiin"
 
 #: eeschema/sch_field.cpp:1833
 msgid "Show Field Name"
@@ -22798,7 +22801,7 @@ msgstr ""
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:608
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
-msgstr "CADSTAR-kaavio saattaa olla vioittunut: juurta ei ole."
+msgstr "CADSTAR-kytkentäkaavio saattaa olla vioittunut: juuriarkkia ei ole."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:682
 #, c-format
@@ -22915,9 +22918,9 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"Lohkon tunnus %s (Lohkon nimi: '%s') piirretään taululle '%s', mutta sitä ei "
-"ole linkitetty toiseen taulukkoon mallissa. KiCad vaatii, että kaikki "
-"taulukon symbolit liitetään taulukkoon, joten lohkoa ei ladattu."
+"Lohkon tunnus %s (Lohkon nimi: '%s') piirretään arkille '%s', mutta sitä ei "
+"ole linkitetty toiseen arkkiin mallissa. KiCad vaatii, että kaikki arkin "
+"symbolit on liitetty arkkiin, joten lohkoa ei ladattu."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2554
 #, c-format
@@ -22925,8 +22928,8 @@ msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
 "but has no Figure defined."
 msgstr ""
-"CADSTAR-kaavio saattaa olla vioittunut: Lohko %s viittaa alatasoon, mutta "
-"kuvaa ei ole määritelty."
+"CADSTAR-kytkentäkaavio saattaa olla vioittunut: Lohko %s viittaa ala-"
+"arkkiin, mutta kaaviota ei ole määritelty siinä."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:227
 msgid ""
@@ -23010,9 +23013,9 @@ msgid "Invalid DipTrace schematic file: bad legacy version suffix."
 msgstr ""
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid DipTrace schematic sheet count: %d."
-msgstr "Sovita kaaviolehti näytölle"
+msgstr "Virheellinen DipTrace-kytkentäkaavioiden määrä: %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:397
 #, fuzzy, c-format
@@ -23117,6 +23120,8 @@ msgid ""
 "DipTrace import: loaded %zu components, %zu buses, %zu net-port labels from "
 "version %d file with %d sheets."
 msgstr ""
+"DipTrace tuonti: ladatiin %zu komponenttia, %zu väylää, %zu "
+"verkkoporttitunnusta version %d tiedostosta jossa %d arkkia."
 
 #: eeschema/sch_io/diptrace/sch_io_diptrace.cpp:69
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:118
@@ -23246,7 +23251,7 @@ msgstr ""
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4088
 #, c-format
 msgid "Hierarchical source '%s' not found, creating empty sheet."
-msgstr ""
+msgstr "Hierarkkista lähdettä '%s' ei löytynyt, luodaan tyhjä arkki."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4100
 #, c-format
@@ -23411,7 +23416,7 @@ msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
 msgstr ""
-"Taulukkoa %s ei voitu ladata, koska se näkyy jo suorana esi-isänä "
+"Arkkia ”%s” ei voitu ladata, koska se esiintyy jo ylempänä "
 "kytkentäkaaviohierarkiassa."
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:400
@@ -23609,11 +23614,11 @@ msgstr "Virheellinen otsikkolohkon kommenttinumero"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2516
 msgid "Invalid sheet pin name"
-msgstr "Virheellinen lehden nastan nimi"
+msgstr "Virheellinen arkin nastan nimi"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2524
 msgid "Empty sheet pin name"
-msgstr "Tyhjän lehden nastan nimi"
+msgstr "Tyhjä arkin nastan nimi"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3007
 #, fuzzy
@@ -23635,14 +23640,12 @@ msgid "Invalid symbol library ID"
 msgstr "Virheellinen symbolikirjaston tunniste (ID)"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4108
-#, fuzzy
 msgid "Missing sheet name property"
-msgstr "Puuttuva taulukon nimen argumentti %s."
+msgstr "Puuttuva arkin nimen argumentti"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4114
-#, fuzzy
 msgid "Missing sheet file property"
-msgstr "Puuttuva taulukon nimen argumentti %s."
+msgstr "Puuttuva arkin nimen argumentti"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5401
 #, fuzzy
@@ -23805,11 +23808,11 @@ msgstr "Kolmitila"
 
 #: eeschema/sch_label.cpp:219
 msgid "Sheet References"
-msgstr "Sivun Viitteet"
+msgstr "Arkin viitteet"
 
 #: eeschema/sch_label.cpp:1392
 msgid "Hierarchical Sheet Pin"
-msgstr "Hierarkkisen Lehden Nasta"
+msgstr "Hierarkkisen arkin nasta"
 
 #: eeschema/sch_label.cpp:1405 eeschema/sch_tablecell.cpp:362
 #: eeschema/sch_text.cpp:682 eeschema/sch_textbox.cpp:609
@@ -24000,7 +24003,7 @@ msgstr "Nastan Nimi"
 
 #: eeschema/sch_plotter.cpp:114
 msgid "No sheets to plot."
-msgstr "Ei arkkeja piirrettäväksi."
+msgstr "Ei arkkeja plotattavaksi."
 
 #: eeschema/sch_plotter.cpp:225 pcbnew/pcbnew_jobs_handler.cpp:1592
 #, c-format
@@ -24131,9 +24134,9 @@ msgid "Bezier Curve, %d points"
 msgstr "Bezier-käyrä, %d pistettä"
 
 #: eeschema/sch_shape.cpp:464
-#, fuzzy, c-format
+#, c-format
 msgid "Ellipse, %s x %s"
-msgstr "%s, %s ja %s"
+msgstr "Ellipsi, %s x %s"
 
 #: eeschema/sch_shape.cpp:469
 #, c-format
@@ -24165,7 +24168,7 @@ msgstr "Täyttötila"
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:60
 #: pcbnew/zone.cpp:2030
 msgid "Sheet Name"
-msgstr "Lehden nimi"
+msgstr "Arkin nimi"
 
 #: eeschema/sch_sheet.cpp:1131
 msgid "Hierarchical Path"
@@ -24190,9 +24193,9 @@ msgid "Exclude from"
 msgstr "Sulje pois kohteesta"
 
 #: eeschema/sch_sheet.cpp:1467
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet '%s'"
-msgstr "Hierarkinen lehti %s"
+msgstr "Hierarkinen arkki '%s'"
 
 #: eeschema/sch_sheet.cpp:2271 eeschema/sch_table.cpp:544
 #: pcbnew/pcb_table.cpp:900 pcbnew/pcb_tablecell.cpp:289
@@ -24214,9 +24217,9 @@ msgid "(Deleted Item)"
 msgstr "(Poistettu kohde)"
 
 #: eeschema/sch_sheet_pin.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical Sheet Pin '%s'"
-msgstr "Hierarkinen lehtinasta %s"
+msgstr "Hierarkisen arkin nasta '%s'"
 
 #: eeschema/sch_symbol.cpp:1773 eeschema/sch_symbol.cpp:4324
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:172 pcbnew/footprint.cpp:5010
@@ -24370,6 +24373,7 @@ msgid "Align center"
 msgstr "Tasaa keskelle"
 
 #: eeschema/sch_text_help_md.h:2
+#, fuzzy
 msgid ""
 "<table>\n"
 "    <tr>\n"
@@ -24774,6 +24778,792 @@ msgid ""
 "</ul>\n"
 "\n"
 msgstr ""
+"<table>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <th>Markup</th>\n"
+"\n"
+"        <th></th>\n"
+"\n"
+"        <th>Result</th>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
+"samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${REVISION}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>2020.1</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>symbolin <i>refdes</i> kentän <i>field_value</i>"
+"</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>150K</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${ROW}</samp> (taulukoissa)</td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>0, 1, 2...</samp> (0-perustainen)</td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${COL}</samp> (taulukoissa)</td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>0, 1, 2...</samp> (0-perustainen)</td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${ADDR}</samp> (taulukoissa)</td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>A0, B1, C2...</samp> (0-perustainen)</td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>@{expression}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp><i>laskettu_tulos</i></samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>@{2 + 3}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>5</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>@{${ROW} + 1}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>4</samp> (kun ROW=3)</td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <th>Merkkijonojen vertailu ja ehdollinen teksti</th>\n"
+"\n"
+"        <th></th>\n"
+"\n"
+"        <th></th>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>@{\"text\" == \"text\"}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>1</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>@{\"text\" != \"other\"}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>1</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
+"\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Ehdollisen tekstin näyttäminen</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"TOP\", "
+"\"BOTTOM\")}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>TOP</samp> (etupuolen tasolla) tai <samp>BOTTOM</"
+"samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Myös numeeriset vertailut toimivat</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <th>Symbolien nastatoiminnot</th>\n"
+"\n"
+"        <th></th>\n"
+"\n"
+"        <th></th>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${refdes:REFERENCE(pin)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Nastan täysi viitetunnus lohkotiedolla</samp></"
+"td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${J1:REFERENCE(3)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>J1B</samp> (moniosaiselle symbolille)</td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${refdes:SHORT_REFERENCE(pin)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Nastan viitetunnus ilman lohkokirjainta</samp></"
+"td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${J1:SHORT_REFERENCE(3)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>J1</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${refdes:UNIT(pin)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Vain nastan lohkokirjain</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${J1:UNIT(3)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>B</samp> (nastan 3 lohkokirjain)</td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${refdes:NET_NAME(pin)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Nastaan kytketyn verkon nimi</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${R1:NET_NAME(1)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>VCC</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${refdes:PIN_NAME(pin)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Nastan nimi tai valittu vaihtoehtoinen nimi</"
+"samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${U1:PIN_NAME(5)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>USART1_TX</samp> (vaihtoehtoinen) tai <samp>PA9</"
+"samp> (perusnimi)</td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${refdes:PIN_BASE_NAME(pin)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Nastan perusnimi (sivuuttaen vaihtoehtoiset)</"
+"samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${U1:PIN_BASE_NAME(5)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>PA9</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${refdes:PIN_ALT_LIST(pin)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Kaikki nastan vaihtoehtoiset toiminnot (ei "
+"sisällä perusnimeä)</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${U1:PIN_ALT_LIST(5)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>USART1_TX, TIM1_CH2, I2C1_SCL</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${refdes:SHORT_NET_NAME(pin)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Verkon lyhyt nimi, tai NC jos kytkemätön</samp></"
+"td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${J1:SHORT_NET_NAME(3)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>GND</samp> tai <samp>NC</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${refdes:NET_CLASS(pin)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Nastan verkkoluokka</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${J1:NET_CLASS(1)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Power</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <th>Suojauskoodit (Escape Sequences)</th>\n"
+"\n"
+"        <th></th>\n"
+"\n"
+"        <th></th>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>\\${LITERAL}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${LITERAL}</samp> (ei laajenneta)</td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Hinta: \\$25.00</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Hinta: $25.00</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>\\@{x+y}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>@{x+y}</samp> (ei lasketa)</td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <th>Sisäkkäiset muuttujat</th>\n"
+"\n"
+"        <th></th>\n"
+"\n"
+"        <th></th>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${J1:REFERENCE(@{${ROW}+2})}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>J1B</samp> (kun ROW=0, nasta 2 lohkossa B)</td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${J1:NET_NAME(${COL})}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Dynaaminen verkon haku taulukoissa</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <th>Taulukon solusiirtymät</th>\n"
+"\n"
+"        <th></th>\n"
+"\n"
+"        <th></th>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${CELL(\"A0\")}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Laskettu arvo solusta A0</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${CELL(0, 1)}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Arvo riviltä 0, sarakkeesta 1</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${CELL(${ADDR})}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Dynaaminen solusiirtymä</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>${CELL(${ROW}-1, ${COL})}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>Arvo yläpuolisesta solusta (jos ROW > 0)</samp></"
+"td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <th>Väylämääritys</th>\n"
+"\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
+"\n"
+"        <th>Tuloksena olevat verkot</th>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>prefix[m..n]</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>prefixm – prefixn</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>D[0..7]</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>prefix{net1 net2 ...}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>prefix.net1, prefix.net2, ...</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>USB1{D+ D-}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br><samp>USB1.D+, USB1.D-</samp></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
+"\n"
+"        <td></td>\n"
+"\n"
+"        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"    <tr>\n"
+"\n"
+"        <td><br></td>\n"
+"\n"
+"    </tr>\n"
+"\n"
+"</table>\n"
+"\n"
+"<p></p>\n"
+"\n"
+"<p></p>\n"
+"\n"
+"<i>Huomaa, että tekstimuotoilut (markup) ovat ensisijaisia väylämäärityksiin "
+"nähden.</i>\n"
+"\n"
+"<p></p>\n"
+"\n"
+"<p><b>Nastatoiminnot:</b> Etsii automaattisesti oikean lohkosijoittelun. "
+"Moniosaisille symboleille funktiot kuten <samp>NET_NAME(pin)</samp> "
+"toimivat, vaikka nasta sijaitsisi eri lohkossa kuin nykyisessä arkissa "
+"näkyvä osa.</p>\n"
+"\n"
+"<p><b>Taulukon solusiirtymät:</b> Funktion <samp>CELL()</samp> toimii vain "
+"taulukon soluissa. Käytä muotoa <samp>${CELL(\"A0\")}</samp> tai <samp>${CELL"
+"(row, col)}</samp> viittaamaan saman taulukon muihin soluihin. Rivi- ja "
+"sarakenumerot ovat 0-perustaisia (A0 on ensimmäinen rivi, ensimmäinen sarake)"
+". CELL palauttaa lasketun/näytettävän arvon, ei solun raakatekstiä.</p>\n"
+"\n"
+"<p><b>Sisäkkäiset muuttujat:</b> Muuttujat voivat sisältää muita muuttujia. "
+"Sisemmät muuttujat laajennetaan ensin. Suurin sallittu sisäkkäisyysvaihe: 6 "
+"tasoa.</p>\n"
+"\n"
+"<p><b>Virheilmoitukset:</b></p>\n"
+"\n"
+"<ul>\n"
+"\n"
+"<li><samp>&lt;UNRESOLVED: token&gt;</samp> - Muuttujaa tai funktiota ei "
+"voida selvittää</li>\n"
+"\n"
+"<li><samp>&lt;Unit X not placed&gt;</samp> - Nasta kuuluu lohkoon, jota ei "
+"ole sijoitettu millekään arkille</li>\n"
+"\n"
+"<li><samp>&lt;Unresolved: Cell X not found&gt;</samp> - Solun osoite on "
+"taulukon rajojen ulkopuolella</li>\n"
+"\n"
+"</ul>\n"
+"\n"
 
 #: eeschema/sch_textbox.cpp:505
 #, fuzzy, c-format
@@ -24829,8 +25619,8 @@ msgid ""
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
-"Taulukkomuutoksia ei voida tehdä, koska kohdetaulukossa on jo taulukko '%s' "
-"tai jokin sen aliarkeista vanhempana jossakin kytkentäkaaviohierarkiassa."
+"Arkkimuutoksia ei voida tehdä, koska kohdearkilla on jo arkki ”%s” tai jokin "
+"sen aliarkeista ylätason arkkina jossain kytkentäkaaviohierarkiassa."
 
 #: eeschema/sheet.cpp:101
 #, c-format
@@ -24851,7 +25641,7 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
-"Uuden arkin piirikaaviotiedoston polkua:\n"
+"Uuden arkin kytkentäkaavion tiedostopolkua:\n"
 "'%s'\n"
 "ei voitu normalisoida suhteessa ylemmän arkin tiedostopolkuun:\n"
 "'%s'."
@@ -24900,7 +25690,7 @@ msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheet schematics."
 msgstr ""
-"Koko kytkentäkaaviota ei voitu ladata. Hierarkkisten lehtien lataamisessa "
+"Koko kytkentäkaaviota ei voitu ladata. Hierarkkisten arkkien lataamisessa "
 "tapahtui virheitä."
 
 #: eeschema/sheet.cpp:458
@@ -24920,7 +25710,6 @@ msgid "Cancel Load"
 msgstr "Peruuta lataus"
 
 #: eeschema/sheet.cpp:557
-#, fuzzy
 msgid ""
 "There are hierarchical sheets in the loaded schematic file from an older "
 "file version resulting in  missing symbol instance data.  This will result "
@@ -24931,7 +25720,7 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"Ladatussa kytkentäkaaviotiedostossa on hierarkkisia sivuja vanhemmasta "
+"Ladatussa kytkentäkaaviotiedostossa on hierarkkisia arkkeja vanhemmasta "
 "tiedostoversiosta, mikä johtaa   puuttuviin symbolin esiintymistietoihin.  "
 "Tämä johtaa siihen, että kaikki ladatun kytkentäkaavion symbolit käyttävät "
 "joko oletusinstanssiasetusta tai palaavat kirjaston symboliasetuksiin. Tätä "
@@ -25048,7 +25837,7 @@ msgstr "Älä näytä tätä viestiä uudelleen."
 
 #: eeschema/sheet.cpp:1018
 msgid "Create New Sheet"
-msgstr "Luo uusi taulukko"
+msgstr "Luo uusi arkki"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:67
 msgid "Dimension of matrices should be >= 1."
@@ -27114,7 +27903,7 @@ msgstr ""
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:45
 msgid "Synchronize sheet pins and hierarchical labels"
-msgstr "Synkronoi arkin nastat ja hierarkkiset tarrat"
+msgstr "Synkronoi arkin nastat ja hierarkkiset verkkotunnisteet"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:24
 msgid "Symbol name"
@@ -27126,35 +27915,36 @@ msgstr "Lisää hierarkkiset nimikeet"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:37
 msgid "Delete Sheet Pins"
-msgstr "Poista lehtinastat"
+msgstr "Poista arkin nastat"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:59
 msgid "Sheet name"
-msgstr "Lehden nimi"
+msgstr "Arkin nimi"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:69
 msgid "Add Sheet Pins"
-msgstr "Lisää lehden nastat"
+msgstr "Lisää arkin nastoja"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:72
 msgid "Delete Hierarchical Labels"
 msgstr "Poista hierarkiset verkkotunnisteet"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid ""
 "Associate selected sheet pin and hierarchical label using the label name"
-msgstr "Synkronoi arkin nastat ja hierarkkiset tarrat"
+msgstr ""
+"Yhdistä valittu arkin nasta ja hierarkkinen verkkotunniste tunnisteen nimen "
+"perusteella"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
 msgid "Associate selected sheet pin and hierarchical label using the pin name"
 msgstr ""
-"Yhdistä valittu sivun nasta ja hierarkkinen verkkotunniste nastan nimen "
+"Yhdistä valittu arkin nasta ja hierarkkinen verkkotunniste nastan nimen "
 "perusteella"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
-msgstr "Riko sivun nastan ja hierarkkisen verkkotunnisteen yhteydet"
+msgstr "Riko arkin nastan ja hierarkkisen verkkotunnisteen yhteydet"
 
 #: eeschema/toolbars_sch_editor.cpp:50 pcbnew/toolbars_pcb_editor.cpp:129
 #, fuzzy
@@ -27366,6 +28156,8 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is used by "
 "multiple sheet instances (%s)."
 msgstr ""
+"Komponentin ”%s” nastat %s ja %s vaihdettaisiin piirilevyä vastaaviksi, "
+"mutta symboli on käytössä useissa arkkiesiintymissä (%s)."
 
 #: eeschema/tools/backannotate.cpp:1302
 #, c-format
@@ -27508,9 +28300,8 @@ msgid "Update Design Block from Current Sheet"
 msgstr "Luo uusi suunnittelulohko nykyisestä arkista"
 
 #: eeschema/tools/sch_actions.cpp:162
-#, fuzzy
 msgid "Set design block schematic to current sheet"
-msgstr "Lisää valittu suunnittelulohko nykyiseen arkkiin"
+msgstr "Aseta suunnittelulohkon kytkentäkaavio nykyiselle arkille"
 
 #: eeschema/tools/sch_actions.cpp:168 pcbnew/tools/pcb_actions.cpp:558
 #, fuzzy
@@ -27858,12 +28649,11 @@ msgstr "Aseta suunnittelulohko"
 
 #: eeschema/tools/sch_actions.cpp:529
 msgid "Add selected design block to current sheet"
-msgstr "Lisää valittu suunnittelulohko nykyiseen arkkiin"
+msgstr "Lisää valittu suunnittelulohko nykyiselle arkkille"
 
 #: eeschema/tools/sch_actions.cpp:537 pcbnew/tools/pcb_actions.cpp:505
-#, fuzzy
 msgid "Place Linked Design Block"
-msgstr "Aseta suunnittelulohko"
+msgstr "Aseta linkitetty suunnittelulohko"
 
 #: eeschema/tools/sch_actions.cpp:538 pcbnew/tools/pcb_actions.cpp:506
 msgid "Place design block linked to selected group"
@@ -27878,9 +28668,8 @@ msgid "Save selected group to linked design block"
 msgstr "Tallenna valittu ryhmä linkitetyttyyn suunnittelulohkoon"
 
 #: eeschema/tools/sch_actions.cpp:556
-#, fuzzy
 msgid "Place/Remove No Connect Flags"
-msgstr "Aseta ei yhdistetty -lippuja"
+msgstr "Aseta/poista ”ei kytketty” -merkkejä"
 
 #: eeschema/tools/sch_actions.cpp:567
 msgid "Place Junctions"
@@ -27904,7 +28693,7 @@ msgstr "Aseta hierarkkisia verkkotunnisteita"
 
 #: eeschema/tools/sch_actions.cpp:617
 msgid "Draw Hierarchical Sheets"
-msgstr "Piirrä hierarkkisia sivuja"
+msgstr "Piirrä hierarkkisia arkkeja"
 
 #: eeschema/tools/sch_actions.cpp:626
 msgid "Draw Sheet from File"
@@ -27920,45 +28709,41 @@ msgstr "Piirrä arkki suunnittelulohkosta"
 
 #: eeschema/tools/sch_actions.cpp:636
 msgid "Copy design block into project as a sheet on current sheet"
-msgstr "Kopioi suunnittelulohko projektiin nykyisen arkin arkkina"
+msgstr "Kopioi suunnittelulohko projektiin arkkina nykyiselle arkille"
 
 #: eeschema/tools/sch_actions.cpp:644
 msgid "Place Pins from Sheet"
-msgstr "Sijoita nastoja sivulta"
+msgstr "Sijoita nastoja arkilta"
 
 #: eeschema/tools/sch_actions.cpp:645
 msgid "Add sheet pins from existing hierarchical labels found on that sheet"
 msgstr ""
-"Lisää sivun nastat kyseisen sivun olemassa olevista hierarkkisista "
+"Lisää arkin nastat kyseisen arkin olemassa olevista hierarkkisista "
 "verkkotunnisteista"
 
 #: eeschema/tools/sch_actions.cpp:653
-#, fuzzy
 msgid "Autoplace All Sheet Pins"
-msgstr "Aseta sivunastat"
+msgstr "Automaattisesti sijoita kaikki arkin nastat"
 
 #: eeschema/tools/sch_actions.cpp:654
-#, fuzzy
 msgid "Imports and auto places all sheet pins"
-msgstr "Tuo hierarkkiset sivun nastat"
+msgstr "Tuo ja sijoittaa kaikki arkin nastat"
 
 #: eeschema/tools/sch_actions.cpp:659
 msgid "Sync Selected Sheet Pins..."
-msgstr "Synkronoi valitun sivun nastat..."
+msgstr "Synkronoi valitun arkin nastat..."
 
 #: eeschema/tools/sch_actions.cpp:660
-#, fuzzy
 msgid "Synchronize selected sheet pins and hierarchical labels"
-msgstr "Synkronoi arkin nastat ja hierarkkiset tarrat"
+msgstr "Synkronoi valitut arkin nastat ja hierarkkiset verkkotunnisteet"
 
 #: eeschema/tools/sch_actions.cpp:667
 msgid "Sync All Sheet Pins..."
-msgstr "Synkronoi kaikki sivun nastat..."
+msgstr "Synkronoi kaikki arkin nastat..."
 
 #: eeschema/tools/sch_actions.cpp:668
-#, fuzzy
 msgid "Synchronize all sheet pins and hierarchical labels"
-msgstr "Synkronoi arkin nastat ja hierarkkiset tarrat"
+msgstr "Synkronoi kaikki arkin nastat ja hierarkkiset verkkotunnisteet"
 
 #: eeschema/tools/sch_actions.cpp:675
 msgid "Import Sheet..."
@@ -27986,9 +28771,8 @@ msgid "Draw Circles"
 msgstr "Piirrä ympyröitä"
 
 #: eeschema/tools/sch_actions.cpp:739
-#, fuzzy
 msgid "Draw Ellipses"
-msgstr "Piirrä viivat"
+msgstr "Piirrä ellipsejä"
 
 #: eeschema/tools/sch_actions.cpp:748 pcbnew/tools/pcb_actions.cpp:152
 #, fuzzy
@@ -28145,7 +28929,7 @@ msgstr "Sijoita Automaatisesti Kentät"
 msgid ""
 "Runs the automatic placement algorithm on the symbol's (or sheet's) fields"
 msgstr ""
-"Suorittaa automaattisen sijoittelualgoritmin symbolin (tai sivun) kentissä"
+"Suorittaa automaattisen sijoittelualgoritmin symbolin (tai arkin) kentissä"
 
 #: eeschema/tools/sch_actions.cpp:947
 msgid "Change Symbols..."
@@ -28253,11 +29037,11 @@ msgstr "Muuta olemassa oleva kohde tekstiruutuun"
 
 #: eeschema/tools/sch_actions.cpp:1051 eeschema/tools/sch_edit_tool.cpp:3456
 msgid "Cleanup Sheet Pins"
-msgstr "Siivoa lehtinastat"
+msgstr "Siivoa arkin nastat"
 
 #: eeschema/tools/sch_actions.cpp:1052
 msgid "Delete unreferenced sheet pins"
-msgstr "Poista viittaamattomat arkin nastat"
+msgstr "Poista viitauksettomat arkin nastat"
 
 #: eeschema/tools/sch_actions.cpp:1057 pcbnew/tools/pcb_actions.cpp:1088
 msgid "Edit Text & Graphics Properties..."
@@ -28495,11 +29279,11 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1278
 msgid "Edit Sheet Page Number..."
-msgstr "Muokkaa arkin sivunumeroa ..."
+msgstr "Muokkaa arkin sivunumeroa..."
 
 #: eeschema/tools/sch_actions.cpp:1279
 msgid "Edit the page number of the current or selected sheet"
-msgstr "Muokkaa nykyisen tai valitun taulukon sivunumeroa"
+msgstr "Muokkaa nykyisen tai valitun arkin sivunumeroa"
 
 #: eeschema/tools/sch_actions.cpp:1284
 msgid "Rescue Symbols..."
@@ -28565,7 +29349,7 @@ msgstr "Ei-KiCad Kytkentäkaavio..."
 #: eeschema/tools/sch_actions.cpp:1330
 msgid ""
 "Replace current schematic sheet with one imported from another application"
-msgstr "Korvaa nykyinen kaaviokuva toisella sovelluksella tuotavalla"
+msgstr "Korvaa nykyinen kytkentäkaavio toisesta sovelluksesta tuotavalla"
 
 #: eeschema/tools/sch_actions.cpp:1336
 msgid "Switch to PCB Editor"
@@ -28749,7 +29533,7 @@ msgstr "Avaa symbolin seuraava yksikkö"
 
 #: eeschema/tools/sch_actions.cpp:1518
 msgid "Change Sheet"
-msgstr "Vaihda Arkki"
+msgstr "Vaihda arkkia"
 
 #: eeschema/tools/sch_actions.cpp:1519
 msgid "Change to provided sheet's contents in the schematic editor"
@@ -28757,19 +29541,19 @@ msgstr "Vaihda toimitettujen arkkien sisältöön kytkentäkaavioeditorissa"
 
 #: eeschema/tools/sch_actions.cpp:1525
 msgid "Enter Sheet"
-msgstr "Siirry Lehdelle"
+msgstr "Siirry arkkiin"
 
 #: eeschema/tools/sch_actions.cpp:1526
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "Näytä valitun sivun sisältö kytkentäkaavioeditorissa"
+msgstr "Näytä valitun arkin sisältö kytkentäkaavioeditorissa"
 
 #: eeschema/tools/sch_actions.cpp:1534
 msgid "Leave Sheet"
-msgstr "Poistu Lehdeltä"
+msgstr "Poistu arkista"
 
 #: eeschema/tools/sch_actions.cpp:1535
 msgid "Display the parent sheet in the schematic editor"
-msgstr "Näytä edellinen lehti kytkentäkaavioeditorissa"
+msgstr "Näytä yläarkki kytkentäkaavioeditorissa"
 
 #: eeschema/tools/sch_actions.cpp:1542
 msgid "Navigate Up"
@@ -28777,7 +29561,7 @@ msgstr "Siirry Ylös"
 
 #: eeschema/tools/sch_actions.cpp:1543
 msgid "Navigate up one sheet in the hierarchy"
-msgstr "Siirry ylöspäin yksi sivu hierarkiassa"
+msgstr "Siirry ylöspäin yksi arkki hierarkiassa"
 
 #: eeschema/tools/sch_actions.cpp:1550
 msgid "Navigate Back"
@@ -28785,7 +29569,7 @@ msgstr "Siirry Takaisin"
 
 #: eeschema/tools/sch_actions.cpp:1551
 msgid "Move backward in sheet navigation history"
-msgstr "Siirry taaksepäin sivun navigointihistoriassa"
+msgstr "Siirry taaksepäin arkin navigointihistoriassa"
 
 #: eeschema/tools/sch_actions.cpp:1558
 msgid "Navigate Forward"
@@ -28793,23 +29577,23 @@ msgstr "Siirry Eteenpäin"
 
 #: eeschema/tools/sch_actions.cpp:1559
 msgid "Move forward in sheet navigation history"
-msgstr "Siirry eteenpäin sivun navigointihistoriassa"
+msgstr "Siirry eteenpäin arkin navigointihistoriassa"
 
 #: eeschema/tools/sch_actions.cpp:1566
 msgid "Previous Sheet"
-msgstr "Edellinen Sivu"
+msgstr "Edellinen arkki"
 
 #: eeschema/tools/sch_actions.cpp:1567
 msgid "Move to previous sheet by number"
-msgstr "Siirry edelliselle sivulle numeron mukaan"
+msgstr "Siirry numeron mukaan edelliselle arkille"
 
 #: eeschema/tools/sch_actions.cpp:1574
 msgid "Next Sheet"
-msgstr "Seuraava Sivu"
+msgstr "Seuraava arkki"
 
 #: eeschema/tools/sch_actions.cpp:1575
 msgid "Move to next sheet by number"
-msgstr "Siirry seuraavalle sivulle numeron mukaan"
+msgstr "Siirry numeron mukaan seuraavalle arkille"
 
 #: eeschema/tools/sch_actions.cpp:1582
 msgid "Hierarchy Navigator"
@@ -28817,7 +29601,7 @@ msgstr "Hierarkia-navigaattori"
 
 #: eeschema/tools/sch_actions.cpp:1583
 msgid "Show/hide the schematic sheet hierarchy navigator"
-msgstr "Näytä/ piilota kytkentäkaavionarkin hierarkia-navigaattori"
+msgstr "Näytä/piilota kytkentäkaavion hierarkia-navigaattori"
 
 #: eeschema/tools/sch_actions.cpp:1596
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:835
@@ -28935,11 +29719,11 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1734
 msgid "Save Current Sheet Copy As..."
-msgstr "Tallenna Nykyinen Lehti Nimellä..."
+msgstr "Tallenna nykyisen arkin kopio..."
 
 #: eeschema/tools/sch_actions.cpp:1735
 msgid "Save a copy of the current sheet to another location or name"
-msgstr "Tallenna kopio nykyisestä asiakirjasta toiseen sijaintiin tai nimeen"
+msgstr "Tallenna kopio nykyisestä arkista toiseen sijaintiin tai nimeen"
 
 #: eeschema/tools/sch_actions.cpp:1757
 msgid "New Analysis Tab..."
@@ -29151,9 +29935,8 @@ msgid "Add Design Block"
 msgstr "Lisää suunnittelulohko"
 
 #: eeschema/tools/sch_drawing_tools.cpp:987
-#, fuzzy
 msgid "Import Schematic Sheet Content"
-msgstr "Tuo Kytkentäkaaviosivun Sisältö..."
+msgstr "Tuo kytkentäkaavion sisältö"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1022
 msgid "Choose Schematic"
@@ -29241,7 +30024,7 @@ msgstr "Uusia hierarkisia verkkotunnisteita ei löytynyt."
 #: eeschema/tools/sch_drawing_tools.cpp:2349
 #: eeschema/tools/sch_drawing_tools.cpp:3859
 msgid "Add Sheet Pin"
-msgstr "Lisää arkin tappi"
+msgstr "Lisää arkin nasta"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2682
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:498
@@ -29265,11 +30048,11 @@ msgstr "Piirrä taulukko"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3395
 msgid "Press <ESC> to cancel sheet creation."
-msgstr "Paina <ESC> keskeyttääksesi lehden luonnin."
+msgstr "Paina <ESC> keskeyttääksesi arkin luonnin."
 
 #: eeschema/tools/sch_drawing_tools.cpp:3682
 msgid "Modify sheet pin"
-msgstr "Muokkaa lehden nastaa"
+msgstr "Muokkaa arkin nastaa"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3688
 msgid "Modify schematic item"
@@ -29354,6 +30137,8 @@ msgid ""
 "Pin swaps are disabled for symbols shared across other projects. Duplicate "
 "the sheet to edit pins independently."
 msgstr ""
+"Nastojen vaihto ei ole käytössä symboleilla, jotka on jaettu muiden "
+"projektien kesken. Monista arkki muokataksesi nastoja vapaasti."
 
 #: eeschema/tools/sch_edit_tool.cpp:1849
 #, c-format
@@ -29361,6 +30146,8 @@ msgid ""
 "Pin swaps are disabled for symbols shared across other projects (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
+"Nastojen vaihto ei ole käytössä symboleilla, jotka on jaettu muiden "
+"projektien (%s) kesken. Monista arkki muokataksesi nastoja vapaasti."
 
 #: eeschema/tools/sch_edit_tool.cpp:1859
 #, c-format
@@ -29368,12 +30155,16 @@ msgid ""
 "Pin swaps are disabled for symbols used by multiple sheet instances (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
+"Nastojen vaihto ei ole käytössä symboleilla, joita käyttää useampi arkki-"
+"instanssi (%s). Monista arkki muokataksesi nastoja vapaasti."
 
 #: eeschema/tools/sch_edit_tool.cpp:1866
 msgid ""
 "Pin swaps are disabled for shared symbols. Duplicate the sheet to edit pins "
 "independently."
 msgstr ""
+"Nastojen vaihto ei ole käytössä jaetuille symboleille. Monista arkki "
+"muokataksesi nastoja vapaasti."
 
 #: eeschema/tools/sch_edit_tool.cpp:2010
 msgid ""
@@ -29409,7 +30200,7 @@ msgstr "Muokkaa '%s' Kenttää"
 
 #: eeschema/tools/sch_edit_tool.cpp:2830
 msgid "Edit Sheet Properties"
-msgstr "Muokkaa lehden ominaisuuksia"
+msgstr "Muokkaa arkin ominaisuuksia"
 
 #: eeschema/tools/sch_edit_tool.cpp:2954
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:64
@@ -29422,7 +30213,7 @@ msgstr "<tyhjä>"
 
 #: eeschema/tools/sch_edit_tool.cpp:3447
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
-msgstr "Haluatko poistaa viittaamattomat nastat tältä taulukolta?"
+msgstr "Haluatko poistaa viittaamattomat nastat tältä arkilta?"
 
 #: eeschema/tools/sch_edit_tool.cpp:3508
 #, c-format
@@ -29452,7 +30243,7 @@ msgstr "Ladataan verkkoluokkia."
 #, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr ""
-"Palautetaanko '%s' (ja kaikki välisivut) viimeksi tallennettuun versioon?"
+"Palautetaanko '%s' (ja kaikki väliarkit) viimeksi tallennettuun versioon?"
 
 #: eeschema/tools/sch_editor_control.cpp:661
 #, fuzzy
@@ -29475,7 +30266,7 @@ msgstr "Päivitä kytkentäkaaviosymbolit linkittymään vietyihin symboleihin"
 
 #: eeschema/tools/sch_editor_control.cpp:1071
 msgid "Error: duplicate sub-sheet names found in current sheet."
-msgstr "Virhe: päällekkäiset aliarkinimet löytyvät nykyiseltä taulukolta."
+msgstr "Virhe: päällekkäiset aliarkkinimet löytyvät nykyiseltä arkilta."
 
 #: eeschema/tools/sch_editor_control.cpp:1384
 #, fuzzy
@@ -29533,9 +30324,8 @@ msgid ""
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
 msgstr ""
-"Liimattu lehti '%s'\n"
-"hylättiin, koska kohteella on jo taulukko tai yksi sen alilomakkeista "
-"vanhempana."
+"Liitetty arkki '%s'\n"
+"hylättiin, koska kohteella on jo se tai yksi sen aliarkeista ylätasona."
 
 #: eeschema/tools/sch_editor_control.cpp:3279
 msgid "Symbols with broken library symbol links cannot be edited."
@@ -29562,7 +30352,7 @@ msgstr "Saavutettu kaavamaisen loppu."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:376
 msgid "Reached end of sheet."
-msgstr "Saavutettu arkin pää."
+msgstr "Saavutettu arkin pääty."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:385
 #, fuzzy
@@ -29709,13 +30499,12 @@ msgid "Could not compare against the selected snapshot."
 msgstr "Etävaraston haaraa ei voitu lukea."
 
 #: eeschema/tools/sch_inspection_tool.cpp:1219
-#, fuzzy
 msgid "Could not open this sheet for comparison."
-msgstr "Kirjastotiedostoa ei voitu avata."
+msgstr "Arkkia ei voitu avata vertailtavaksi."
 
 #: eeschema/tools/sch_inspection_tool.cpp:1337
 msgid "No datasheet defined."
-msgstr "Tietolomaketta ei ole määriltety."
+msgstr "Datalehteä ei ole määriltety."
 
 #: eeschema/tools/sch_inspection_tool.cpp:1366
 #: pagelayout_editor/tools/pl_editor_control.cpp:157
@@ -30003,19 +30792,16 @@ msgid "Create a new project for this schematic"
 msgstr "Luo uusi projekti tälle kytkentäkaaviolle"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:40
-#, fuzzy
 msgid "Do not copy subsheets"
-msgstr "Suorita toistuvasti alisivuiksi"
+msgstr "Älä kopioi aliarkkeja"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:41
-#, fuzzy
 msgid "Copy internal subsheets only"
-msgstr "Vain nykyinen lehti"
+msgstr "Kopioi vain sisäinen aliarkki"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:42
-#, fuzzy
 msgid "Copy all subsheets"
-msgstr "Kaikki arkit"
+msgstr "Kopioi kaikki aliarkit"
 
 #: eeschema/widgets/hierarchy_pane.cpp:519
 msgid "Edit Page Number"
@@ -30027,34 +30813,30 @@ msgstr "Nimeä uudelleen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:523
 msgid "Change name of this sheet"
-msgstr "Muuta tämän lehden nimeä"
+msgstr "Muuta tämän arkin nimi"
 
 #: eeschema/widgets/hierarchy_pane.cpp:528
 #: eeschema/widgets/hierarchy_pane.cpp:615
 #: eeschema/widgets/hierarchy_pane.cpp:620
-#, fuzzy
 msgid "Delete Top-Level Sheet"
-msgstr "Poista nastalehti"
+msgstr "Poista ylätason arkki"
 
 #: eeschema/widgets/hierarchy_pane.cpp:529
-#, fuzzy
 msgid "Remove this top-level sheet from the project"
-msgstr "Poista signaali kuvaajanäytöltä"
+msgstr "Poista tämä ylätason arkki projektista"
 
 #: eeschema/widgets/hierarchy_pane.cpp:537
 #: eeschema/widgets/hierarchy_pane.cpp:552
-#, fuzzy
 msgid "New Top-Level Sheet"
-msgstr "Poistu Lehdeltä"
+msgstr "Uusi ylätason arkki"
 
 #: eeschema/widgets/hierarchy_pane.cpp:537
-#, fuzzy
 msgid "Create a new top-level sheet"
-msgstr "Luo uusi kansio projektia varten"
+msgstr "Luo uusi ylätason arkki"
 
 #: eeschema/widgets/hierarchy_pane.cpp:551
 msgid "Enter name for new top-level sheet:"
-msgstr ""
+msgstr "Syötä nimi uudelle ylätason arkille:"
 
 #: eeschema/widgets/hierarchy_pane.cpp:553
 #: pcbnew/footprint_libraries_utils.cpp:1227
@@ -30063,7 +30845,7 @@ msgstr "Nimeämätön"
 
 #: eeschema/widgets/hierarchy_pane.cpp:596
 msgid "Add new top-level sheet"
-msgstr ""
+msgstr "Lisää uusi ylätason arkki"
 
 #: eeschema/widgets/hierarchy_pane.cpp:612
 #, c-format
@@ -30072,15 +30854,17 @@ msgid ""
 "\n"
 "This cannot be undone."
 msgstr ""
+"Poista ylätason arkki '%s'?\n"
+"\n"
+"Tätä ei voi peruuttaa."
 
 #: eeschema/widgets/hierarchy_pane.cpp:620
 msgid "Cannot delete the last top-level sheet."
-msgstr ""
+msgstr "Viimeistä ylätason arkkia ei voi poistaa."
 
 #: eeschema/widgets/hierarchy_pane.cpp:630
-#, fuzzy
 msgid "Delete top-level sheet"
-msgstr "Poista valittu verkko"
+msgstr "Poista ylätason arkki"
 
 #: eeschema/widgets/hierarchy_pane.cpp:646
 #, c-format
@@ -30089,7 +30873,7 @@ msgstr "Anna sivunumero arkin polulle %s"
 
 #: eeschema/widgets/hierarchy_pane.cpp:751
 msgid "Renaming sheet"
-msgstr "Lehden uudelleennimeäminen"
+msgstr "Arkin uudelleennimeäminen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:842
 #, c-format
@@ -31634,7 +32418,7 @@ msgstr "Näytä ruudukon (x,y) pisteet"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:135
 msgid "Show drawing sheet border and title block"
-msgstr "Näytä kaavioarkin reunus ja otsikkolohko"
+msgstr "Näytä piirustusarkin reunus ja otsikkolohko"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:137
 msgid "Show drawing sheet page limits"
@@ -33011,7 +33795,7 @@ msgstr "Virkistä näyttö"
 #: kicad/cli/command_pcb_export_svg.cpp:101
 #: kicad/cli/command_sch_export_plot.cpp:72
 msgid "No drawing sheet"
-msgstr "Ei piirustuslehtiötä"
+msgstr "Ei piirustusarkkia"
 
 #: kicad/cli/command_pcb_import.cpp:42
 #, fuzzy
@@ -35484,7 +36268,7 @@ msgstr "Muunna bittikarttakuvat kytkentäkaavioiksi tai piirilevykomponenteiksi"
 
 #: kicad/tools/kicad_manager_actions.cpp:175
 msgid "Edit drawing sheet borders and title block"
-msgstr "Muokkaa sivun reunusta ja otsikkolohkoa"
+msgstr "Muokkaa piirustusarkin reunusta ja otsikkolohkoa"
 
 #: kicad/tools/kicad_manager_actions.cpp:184
 msgid "Run Plugin and Content Manager"
@@ -35770,11 +36554,11 @@ msgstr "Uusi kohde"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:230
 msgid "Print Drawing Sheet"
-msgstr "Tulosta Piirustuslehti"
+msgstr "Tulosta piirustusarkki"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:235
 msgid "An error occurred attempting to print the drawing sheet."
-msgstr "Virhe yritettäessä tulostaa piirustuslehteä."
+msgstr "Virhe yritettäessä tulostaa piirustusarkkia."
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:236
 msgid "Printing"
@@ -35802,11 +36586,11 @@ msgstr "Seuraavat sisäänrakennetut avainsanat ovat olemassa:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:686
 msgid "(sheet number)"
-msgstr "(lehden numero)"
+msgstr "(arkin numero)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:687
 msgid "(sheet count)"
-msgstr "(lehtien lukumäärä)"
+msgstr "(arkkien lukumäärä)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:693
 msgid "(paper size)"
@@ -35950,7 +36734,7 @@ msgstr "Yleiset Asetukset"
 
 #: pagelayout_editor/files.cpp:62 pagelayout_editor/files.cpp:106
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr "Nykyistä piirustuslehteä on muutettu. Tallennetaako muutokset?"
+msgstr "Nykyistä piirustusarkkia on muutettu. Tallennetaako muutokset?"
 
 #: pagelayout_editor/files.cpp:78
 #, fuzzy, c-format
@@ -35959,7 +36743,7 @@ msgstr "Tiedosto \"%s\" ladattu"
 
 #: pagelayout_editor/files.cpp:128
 msgid "Append Existing Drawing Sheet"
-msgstr "Liitä olemassa oleva piirikaavio"
+msgstr "Liitä olemassa oleva piirustusarkki"
 
 #: pagelayout_editor/files.cpp:141 pagelayout_editor/files.cpp:169
 #, c-format
@@ -35973,7 +36757,7 @@ msgstr "Tiedosto \"%s\" lisätty"
 
 #: pagelayout_editor/files.cpp:157
 msgid "Open Drawing Sheet"
-msgstr "Avaa piirustuslehtiö"
+msgstr "Avaa piirustusarkki"
 
 #: pagelayout_editor/files.cpp:185 pcbnew/router/router_tool.cpp:783
 #: pcbnew/router/router_tool.cpp:844
@@ -35983,7 +36767,7 @@ msgstr "Ei voida kirjoittaa '%s'."
 
 #: pagelayout_editor/files.cpp:199
 msgid "Save Drawing Sheet As"
-msgstr "Tallenna piirustuslehti nimellä"
+msgstr "Tallenna piirustusarkki nimellä"
 
 #: pagelayout_editor/files.cpp:276
 msgid "Layout file is read only."
@@ -35991,7 +36775,7 @@ msgstr "Asemointitiedostoon \"%s\" ei ole kirjoitusoikeuksia."
 
 #: pagelayout_editor/pl_editor_frame.cpp:102
 msgid "KiCad Drawing Sheet Editor"
-msgstr "KiCad Piirustuslehtieditori"
+msgstr "KiCad piirustusarkkieditori"
 
 #: pagelayout_editor/pl_editor_frame.cpp:167
 msgid "coord origin: Right Bottom page corner"
@@ -36003,7 +36787,7 @@ msgstr "Virhe asetettaessa tulostimen tietoja"
 
 #: pagelayout_editor/pl_editor_frame.cpp:572
 msgid "[no drawing sheet loaded]"
-msgstr "[Ei piirustuslehteä ladattuna]"
+msgstr "[ei piirustusarkkia ladattuna]"
 
 #: pagelayout_editor/pl_editor_frame.cpp:794
 #, c-format
@@ -39898,9 +40682,10 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr "(kaaren koko on tyhjä tai erittäin pieni: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:1204
-#, fuzzy, c-format
+#, c-format
 msgid "(ellipse has null or very small radii: major=%d nm, minor=%d nm)"
-msgstr "(ympyrän säde on nolla tai hyvin pieni: %d nm)"
+msgstr ""
+"(ellipsin säde on nolla tai hyvin pieni: suurempi=%d nm, pienempi=%d nm)"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:235
 #: pcbnew/dialogs/dialog_drc.cpp:411 pcbnew/pcb_edit_frame.cpp:2612
@@ -46468,9 +47253,9 @@ msgid "Line width must be greater than zero for an unfilled curve."
 msgstr "Viivaleveyden on oltava suurempi kuin nolla täyttämättömälle kaarelle."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1491
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled ellipse."
-msgstr "Täyttämättömän ympyrän viivan leveyden on oltava suurempi kuin nolla."
+msgstr ""
+"Viivan paksuuden tulee olla suurempi kuin nolla täyttämättömälle ellipsille."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1508
 msgid "Error List"
@@ -59447,9 +60232,8 @@ msgid "Draw Circle"
 msgstr "Piirrä Ympyrä"
 
 #: pcbnew/tools/drawing_tool.cpp:480 pcbnew/tools/pcb_actions.cpp:143
-#, fuzzy
 msgid "Draw Ellipse"
-msgstr "Piirrä viiva"
+msgstr "Piirrä ellipsi"
 
 #: pcbnew/tools/drawing_tool.cpp:489
 #, fuzzy
