@@ -2247,9 +2247,10 @@ BOOST_AUTO_TEST_CASE( ViaSpanSurvivesOnlyWhenTypeSetFirst )
  */
 BOOST_AUTO_TEST_CASE( ScanLocatorRatchet )
 {
-    // Lower this as locators become structural. Do not raise it. Measured 2, 2 and 1 on the
-    // three boards below at the time of writing.
-    constexpr int MAX_SCAN_LOCATORS = 2;
+    // Lower this as locators become structural. Do not raise it. Measured 1 on all three
+    // boards below; the value-core walk that used to fire here is now bounded to section 49.
+    // The one left on these boards is the section 60 via phase scan.
+    constexpr int MAX_SCAN_LOCATORS = 1;
 
     struct BOARD_CASE
     {
