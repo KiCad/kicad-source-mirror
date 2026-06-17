@@ -38,6 +38,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <unordered_map>
 #include <unordered_set>
 #include <advanced_config.h>
 #include <properties/property.h>
@@ -1377,6 +1378,47 @@ std::vector<SCH_PIN*> LIB_SYMBOL::GetPins() const
 {
     // Back-compat shim: return graphical pins for all units/body styles, violating const
     return const_cast<LIB_SYMBOL*>( this )->GetGraphicalPins( 0, 0 );
+}
+
+
+void LIB_SYMBOL::SetPinMap( const std::unordered_map<wxString, std::vector<wxString>>& aMap ) const
+{
+    if( aMap.empty() )
+        return;
+
+    for( SCH_PIN* pin : GetPins() )
+    {
+        auto it = aMap.find( pin->GetNumber() );
+
+        if( it == aMap.end() )
+            continue;
+
+        const std::vector<wxString>& fpPins = it->second;
+
+        if( fpPins.empty() )
+            continue;
+
+        if( fpPins.size() == 1 )
+        {
+            pin->SetNumber( fpPins.front() );
+        }
+        else
+        {
+            // Encode multiple footprint pads as stacked-pin notation: [pad1,pad2,...]
+            wxString stacked = wxS( "[" );
+
+            for( size_t i = 0; i < fpPins.size(); ++i )
+            {
+                if( i > 0 )
+                    stacked += wxS( "," );
+
+                stacked += fpPins[i];
+            }
+
+            stacked += wxS( "]" );
+            pin->SetNumber( stacked );
+        }
+    }
 }
 
 

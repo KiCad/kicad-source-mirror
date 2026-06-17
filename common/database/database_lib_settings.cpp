@@ -85,6 +85,7 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
                     table.key_col        = entry["key"].get<std::string>();
                     table.symbols_col    = entry["symbols"].get<std::string>();
                     table.footprints_col = entry["footprints"].get<std::string>();
+                    table.pins_col = fetchOrDefault<std::string>( entry, "pins" );
 
                     // Sanitize library display names; currently only `/` is removed because we
                     // use it as a separator and allow it in symbol names.

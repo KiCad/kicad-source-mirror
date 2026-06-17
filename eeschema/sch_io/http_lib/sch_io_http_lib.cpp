@@ -412,6 +412,8 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath,
         symbol->SetLibId( libId );
     }
 
+    symbol->SetPinMap( aPart.pin_map );
+
     symbol->SetExcludedFromBOM( aPart.exclude_from_bom );
     symbol->SetExcludedFromBoard( aPart.exclude_from_board );
     symbol->SetExcludedFromSim( aPart.exclude_from_sim );

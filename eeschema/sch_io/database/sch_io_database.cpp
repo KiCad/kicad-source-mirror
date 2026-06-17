@@ -27,6 +27,8 @@
 #include <wx/tokenzr.h>
 
 #include <boost/algorithm/string.hpp>
+#include <json_common.h>
+#include <pin_assignment.h>
 
 #include <libraries/symbol_library_adapter.h>
 #include <database/database_connection.h>
@@ -614,8 +616,32 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
     }
 
     LIB_ID libId = symbol->GetLibId();
-    libId.SetSubLibraryName( aTable.name );;
+    libId.SetSubLibraryName( aTable.name );
     symbol->SetLibId( libId );
+
+    if( !aTable.pins_col.empty() && aRow.count( aTable.pins_col ) )
+    {
+        try
+        {
+            std::string jsonStr = std::any_cast<std::string>( aRow.at( aTable.pins_col ) );
+
+            if( !jsonStr.empty() )
+            {
+                nlohmann::json pinsJson = nlohmann::json::parse( jsonStr );
+
+                if( pinsJson.is_array() )
+                    symbol->SetPinMap( ParsePinMapJson( pinsJson ) );
+            }
+        }
+        catch( const std::exception& e )
+        {
+            wxLogTrace( traceDatabase,
+                        wxT( "loadSymbolFromRow: failed to parse pin assignments "
+                             "for %s: %s" ),
+                        aSymbolName, e.what() );
+        }
+    }
+
     wxArrayString footprintsList;
 
     if( aRow.count( aTable.footprints_col ) )

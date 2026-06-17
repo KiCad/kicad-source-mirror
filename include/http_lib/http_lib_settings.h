@@ -21,6 +21,9 @@
 #pragma once
 
 #include <settings/json_settings.h>
+#include <unordered_map>
+#include <vector>
+#include <wx/string.h>
 #include <ctime>
 
 
@@ -58,7 +61,9 @@ struct HTTP_LIB_PART
     std::string              keywords;
     std::vector<std::string> fp_filters;
 
-    std::vector<std::pair<std::string, std::tuple<std::string, bool>>> fields;
+    std::vector<std::pair<std::string, std::tuple<std::string, bool>>>   fields;
+
+    std::unordered_map<wxString, std::vector<wxString>> pin_map;
 };
 
 

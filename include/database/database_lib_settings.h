@@ -90,6 +90,7 @@ struct KICOMMON_API DATABASE_LIB_TABLE
     std::string key_col;           ///< Unique key column name (will form part of the LIB_ID)
     std::string symbols_col;       ///< Column name containing KiCad symbol refs
     std::string footprints_col;    ///< Column name containing KiCad footprint refs
+    std::string pins_col;          ///< Column name containing JSON pin assignments (optional)
 
     MAPPABLE_SYMBOL_PROPERTIES properties;
     std::vector<DATABASE_FIELD_MAPPING> fields;

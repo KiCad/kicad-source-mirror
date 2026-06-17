@@ -25,6 +25,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include <json_common.h>
+#include <pin_assignment.h>
 #include <wx/base64.h>
 
 #include <kicad_curl/kicad_curl_easy.h>
@@ -288,6 +289,14 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
             // if key value doesn't exists default to false
             exclude = response.at( "exclude_from_sim" );
             aFetchedPart.exclude_from_sim = boolFromString( exclude, false );
+        }
+
+        // parse optional pin assignments
+        aFetchedPart.pin_map.clear();
+
+        if( response.contains( "pin_map" ) && response["pin_map"].is_array() )
+        {
+            aFetchedPart.pin_map = ParsePinMapJson( response );
         }
 
         // remove previously loaded fields

@@ -605,6 +605,14 @@ public:
      */
     std::vector<UNIT_PIN_INFO> GetUnitPinInfo() const;
 
+    /**
+     * Remap pin numbers according to \a aMap.  Keys are current symbol pin numbers;
+     * values are the footprint pad numbers to map (one or more). Multiple pads are
+     * encoded as stacked-pin notation. Useful for library plugins that share a base symbol
+     * across parts with different pinouts.
+     */
+    void SetPinMap( const std::unordered_map<wxString, std::vector<wxString>>& aMap ) const;
+
     // Deprecated: use GetGraphicalPins(). This override remains to satisfy SYMBOL's pure virtual.
     std::vector<SCH_PIN*> GetPins() const override;
 
