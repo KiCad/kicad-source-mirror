@@ -41,6 +41,9 @@
 #include <pcb_textbox.h>
 #include <pcb_track.h>
 #include <pcb_barcode.h>
+#include <pcb_generator.h>
+#include <generators/pcb_tuning_pattern.h>
+#include <router/pns_meander.h>
 #include <core/profile.h>
 #include <string_utils.h>
 #include <tools/pad_tool.h>
@@ -418,6 +421,11 @@ void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&                  altiumP
           {
               this->ParseTracks6Data( aFile, fileHeader );
           } },
+        { false, ALTIUM_PCB_DIR::SMARTUNIONS,
+          [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
+          {
+              this->ParseSmartUnions6Data( aFile, fileHeader );
+          } },
         { false, ALTIUM_PCB_DIR::WIDESTRINGS6,
           [this]( const ALTIUM_PCB_COMPOUND_FILE& aFile, auto fileHeader )
           {
@@ -563,6 +571,10 @@ void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&                  altiumP
             }
         }
     }
+
+    // Rebuild interactive length-tuning meanders from the SmartUnions definitions now that all
+    // copper that the unions reference has been created and added to the board.
+    HelperCreateTuningPatterns();
 
     // fixup zone priorities since Altium stores them in the opposite order
     for( ZONE* zone : m_polygons )
@@ -3383,7 +3395,11 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItemOnLayer( const AARC6& aElem, PCB_LAYER_I
             arc->SetLayer( aLayer );
             arc->SetNetCode( GetNetCode( aElem.net ) );
 
-            m_board->Add( arc.release(), ADD_MODE::APPEND );
+            PCB_ARC* added = arc.release();
+            m_board->Add( added, ADD_MODE::APPEND );
+
+            if( aElem.unionindex != 0 )
+                m_unionToBoardItems[static_cast<int>( aElem.unionindex )].push_back( added );
         }
     }
     else
@@ -4460,7 +4476,11 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItemOnLayer( const ATRACK6& aElem, PCB_LAY
         track->SetLayer( aLayer );
         track->SetNetCode( GetNetCode( aElem.net ) );
 
-        m_board->Add( track.release(), ADD_MODE::APPEND );
+        PCB_TRACK* added = track.release();
+        m_board->Add( added, ADD_MODE::APPEND );
+
+        if( aElem.unionindex != 0 )
+            m_unionToBoardItems[static_cast<int>( aElem.unionindex )].push_back( added );
     }
     else
     {
@@ -4503,6 +4523,107 @@ void ALTIUM_PCB::ParseWideStrings6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAlt
     if( reader.GetRemainingBytes() != 0 )
         THROW_IO_ERROR( wxT( "WideStrings6 stream is not fully parsed" ) );
 }
+
+void ALTIUM_PCB::ParseSmartUnions6Data( const ALTIUM_PCB_COMPOUND_FILE&  aAltiumPcbFile,
+                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
+{
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
+
+    while( reader.GetRemainingBytes() >= 4 )
+    {
+        checkpoint();
+        ASMARTUNION6 elem( reader );
+
+        if( elem.is_tuning && elem.unionindex != 0 )
+            m_tuningUnions.emplace_back( std::move( elem ) );
+    }
+
+    if( reader.GetRemainingBytes() != 0 )
+        THROW_IO_ERROR( wxT( "SmartUnions6 stream is not fully parsed" ) );
+}
+
+
+void ALTIUM_PCB::HelperCreateTuningPatterns()
+{
+    int created = 0;
+
+    for( const ASMARTUNION6& tuning : m_tuningUnions )
+    {
+        auto itemsIt = m_unionToBoardItems.find( tuning.unionindex );
+
+        // Altium commits the tuned copper as ordinary tracks and arcs.  Without those primitives
+        // there is nothing to wrap, so drop the meander rather than fabricate geometry.
+        if( itemsIt == m_unionToBoardItems.end() || itemsIt->second.empty() )
+            continue;
+
+        const std::vector<BOARD_ITEM*>& items = itemsIt->second;
+
+        LENGTH_TUNING_MODE mode = tuning.is_diffpair ? LENGTH_TUNING_MODE::DIFF_PAIR
+                                                     : LENGTH_TUNING_MODE::SINGLE;
+
+        PCB_LAYER_ID layer = items.front()->GetLayer();
+
+        std::unique_ptr<PCB_TUNING_PATTERN> pattern =
+                std::make_unique<PCB_TUNING_PATTERN>( m_board, layer, mode );
+
+        pattern->SetMaxAmplitude( tuning.amplitude );
+        pattern->SetMinAmplitude( tuning.minamplitude );
+        pattern->SetSpacing( tuning.gap );
+        pattern->SetSingleSided( tuning.singleside );
+
+        // Altium "Style" selects mitered (chamfered) versus rounded corners.  The committed
+        // copper carries the real geometry; this only governs a later interactive re-tune.
+        pattern->SetRounded( tuning.style != 0 );
+
+        if( tuning.mitterradiusratio > 0.0 )
+        {
+            int percent = KiROUND( tuning.mitterradiusratio * 100.0 );
+            pattern->SetCornerRadiusPercentage( std::clamp( percent, 0, 100 ) );
+        }
+
+        BOX2I bbox;
+        int   netCode = -1;
+        bool  singleNet = true;
+
+        for( BOARD_ITEM* item : items )
+        {
+            pattern->AddItem( item );
+            bbox.Merge( item->GetBoundingBox() );
+
+            if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+            {
+                if( netCode < 0 )
+                    netCode = bci->GetNetCode();
+                else if( netCode != bci->GetNetCode() )
+                    singleNet = false;
+            }
+        }
+
+        // SetNetCode reassigns the net of every member, so only apply it when the union is on a
+        // single net.  Differential-pair meanders span two nets that must both be preserved.
+        if( netCode >= 0 && singleNet )
+            pattern->SetNetCode( netCode );
+
+        if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( items.front() ) )
+            pattern->SetWidth( track->GetWidth() );
+
+        // The router rebuilds the baseline from the member tracks when the pattern is edited;
+        // the stored endpoints are only an initial hint, so the member extents suffice.
+        pattern->SetPosition( bbox.GetOrigin() );
+        pattern->SetEnd( bbox.GetEnd() );
+
+        m_board->Add( pattern.release(), ADD_MODE::INSERT );
+        created++;
+    }
+
+    if( m_reporter && created > 0 )
+    {
+        m_reporter->Report( wxString::Format( _( "Imported %d length-tuning pattern(s)." ),
+                                              created ),
+                            RPT_SEVERITY_INFO );
+    }
+}
+
 
 void ALTIUM_PCB::ParseTexts6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )

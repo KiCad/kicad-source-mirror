@@ -85,6 +85,7 @@ enum class ALTIUM_PCB_DIR
 
 
 class BOARD;
+class BOARD_ITEM;
 class EDA_TEXT;
 class FP_SHAPE;
 class PCB_SHAPE;
@@ -200,6 +201,9 @@ private:
     void ConvertTracks6ToBoardItemOnLayer( const ATRACK6& aElem, PCB_LAYER_ID aLayer );
     void ConvertTracks6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const ATRACK6& aElem,
                                                PCB_LAYER_ID aLayer );
+    void ParseSmartUnions6Data( const ALTIUM_PCB_COMPOUND_FILE&  aAltiumPcbFile,
+                                const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    void HelperCreateTuningPatterns();
     void ParseTexts6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                           const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ConvertTexts6ToBoardItem( const ATEXT6& aElem );
@@ -284,6 +288,9 @@ private:
     std::map<ALTIUM_RULE_KIND, std::vector<ARULE6>> m_rules;
     std::map<ALTIUM_RECORD, std::multimap<int, const AEXTENDED_PRIMITIVE_INFORMATION>>
             m_extendedPrimitiveInformationMaps;
+
+    std::vector<ASMARTUNION6>                  m_tuningUnions;
+    std::map<int, std::vector<BOARD_ITEM*>>    m_unionToBoardItems;
 
     std::map<ALTIUM_LAYER, ZONE*>        m_outer_plane;
 
