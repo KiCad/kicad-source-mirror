@@ -344,6 +344,8 @@ public:
         SCH_SYMBOL* m_Symbol = nullptr;
         ///< If a symbol is provide, reannotate it?
         bool m_Reannotate = true;
+        ///< For a preselected multi-unit symbol, keep placing remaining units instead of exiting
+        bool m_PlaceAllUnits = false;
     };
 
     struct PLACE_SYMBOL_UNIT_PARAMS

@@ -162,8 +162,9 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
     SCH_SYMBOL* symbol = toolParams.m_Symbol;
 
-    // If we get a parameterised symbol, we probably just want to place that and get out of the placmeent tool,
-    // rather than popping up the chooser afterwards
+    // If we get a parameterised symbol, we probably just want to place that and get out of the placement tool,
+    // rather than popping up the chooser afterwards.  A multi-unit symbol may still request that its remaining
+    // units be placed before the tool exits.
     bool placeOneOnly = symbol != nullptr;
 
     SYMBOL_LIBRARY_FILTER       filter;
@@ -173,7 +174,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
     SCHEMATIC_SETTINGS&         schSettings = m_frame->Schematic().Settings();
     SCH_SCREEN*                 screen = m_frame->GetScreen();
     bool                        keepSymbol = false;
-    bool                        placeAllUnits = false;
+    bool                        placeAllUnits = toolParams.m_PlaceAllUnits;
 
     if( m_inDrawingTool )
         return 0;
@@ -291,6 +292,13 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
         if( toolParams.m_Reannotate )
             annotate();
+
+        // Seed the placed-reference list so multi-unit stepping sees this symbol's first unit
+        // as taken.  The chooser path seeds it when it builds the symbol; this path bypasses
+        // that branch.
+        SCH_REFERENCE placedSymbolReference( symbol, m_frame->GetCurrentSheet() );
+        existingRefs.AddItem( placedSymbolReference );
+        existingRefs.SortByReferenceOnly();
 
         getViewControls()->WarpMouseCursor( getViewControls()->GetMousePosition( false ) );
     }
@@ -505,7 +513,10 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 
                 commit.Push( _( "Place Symbol" ) );
 
-                if( placeOneOnly )
+                // A preselected single-unit symbol exits here rather than re-opening the
+                // chooser.  Multi-unit placement must fall through to the unit continuation
+                // below, which exits once the units are exhausted.
+                if( placeOneOnly && !placeAllUnits )
                 {
                     m_frame->PopTool( aEvent );
                     break;
@@ -577,6 +588,13 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 }
 
                 symbol = nextSymbol;
+
+                // A preselected multi-unit symbol leaves the tool once its last unit is placed.
+                if( placeOneOnly && !symbol )
+                {
+                    m_frame->PopTool( aEvent );
+                    break;
+                }
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )

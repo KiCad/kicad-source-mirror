@@ -243,7 +243,7 @@ bool PlaceRemoteDownloadedSymbol( SCH_EDIT_FRAME* aFrame, const wxString& aNickn
 
     aFrame->Raise();
     toolMgr->PostAction( SCH_ACTIONS::placeSymbol,
-                         SCH_ACTIONS::PLACE_SYMBOL_PARAMS{ symbol, true } );
+                         SCH_ACTIONS::PLACE_SYMBOL_PARAMS{ symbol, true, symbol->IsMultiUnit() } );
     return true;
 }
 
