@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 03:01+0000\n"
+"PO-Revision-Date: 2026-06-17 15:54+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -8230,7 +8230,6 @@ msgid "Could not look up the commits to merge."
 msgstr "Abrufen der zu zusammenführenden git Commits ist fehlgeschlagen."
 
 #: common/git/libgit_backend.cpp:1521 common/git/libgit_backend.cpp:1706
-#, fuzzy
 msgid ""
 "Could not create a commit signature.  Set user.name and user.email in your "
 "git configuration."
@@ -8283,7 +8282,7 @@ msgstr "Konnte \"%s\" nicht in der importierten Bibliothek finden."
 #: common/git/libgit_backend.cpp:1644 common/git/libgit_backend.cpp:1697
 #, fuzzy
 msgid "Could not read the remote branch."
-msgstr "Konnte den Remote-Zweig nicht lesen."
+msgstr "Konnte den Remote-Branch nicht lesen."
 
 #: common/git/libgit_backend.cpp:1653
 #, fuzzy, c-format
@@ -8299,7 +8298,6 @@ msgstr ""
 "committen oder stashen."
 
 #: common/git/libgit_backend.cpp:1737 common/git/libgit_backend.cpp:1748
-#, fuzzy
 msgid ""
 "The rebase ran into conflicts.  This is best resolved from a git command "
 "line."
@@ -15397,7 +15395,7 @@ msgstr "Abgeleitetes Symbol muss ein übergeordnetes Element ausgewählt haben"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:507
 #, fuzzy, c-format
 msgid "The unit name '%s' is already in use."
-msgstr "Der Name \"%s\" wird bereits verwendet."
+msgstr "Der Einheitenname \"%s\" wird bereits verwendet."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:522
 msgid "Delete extra units from symbol?"
@@ -21211,7 +21209,6 @@ msgid "Compare Symbol with Library"
 msgstr "Symbol mit Bibliothek vergleichen"
 
 #: eeschema/sch_edit_frame.cpp:2514 pcbnew/widgets/appearance_controls.cpp:477
-#, fuzzy
 msgid "Filter nets"
 msgstr "Netze filtern"
 
@@ -26247,7 +26244,7 @@ msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "Ändere %s \"Von Stückliste ausschließen\" von \"%s\" zu \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
 msgstr "Ändere %s \"Von Positionsdateien ausschließen\" von \"%s\" zu \"%s\"."
 
@@ -28308,13 +28305,11 @@ msgid "Reached end of sheet."
 msgstr "Ende des Blatts erreicht."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:389
-#, fuzzy
 msgid "No matches found."
 msgstr "Keine Übereinstimmungen gefunden."
 
 #: eeschema/tools/sch_group_tool.cpp:46 eeschema/tools/sch_group_tool.cpp:72
 #: pcbnew/tools/pcb_group_tool.cpp:49 pcbnew/tools/pcb_group_tool.cpp:64
-#, fuzzy
 msgid "Some selected items cannot be grouped."
 msgstr "Einige ausgewählte Elemente können nicht gruppiert werden."
 
@@ -31068,7 +31063,6 @@ msgid "Plot the layers to a single PDF file with multiple pages"
 msgstr "Lagen in gemeinsame PDF-Datei mit mehreren Seiten plotten"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:128
-#, fuzzy
 msgid "Suppress footprint property popups"
 msgstr "Popups für Footprinteigenschaften unterdrücken"
 
@@ -33114,12 +33108,12 @@ msgstr "Neues Repository initialisieren"
 #: kicad/project_tree_pane.cpp:1042
 #, fuzzy
 msgid "Configure Default Remote..."
-msgstr "Pfade konfigurieren ..."
+msgstr "Standard-Remote konfigurieren ..."
 
 #: kicad/project_tree_pane.cpp:1043
 #, fuzzy
 msgid "Set or change the default remote URL and credentials"
-msgstr "Die Standard-Remote-URL und Zugangsdaten einstellen oder ändern"
+msgstr "Die Standard-Remote-URL und Zugangsdaten setzen oder ändern"
 
 #: kicad/project_tree_pane.cpp:1046
 msgid "Commit Project..."
@@ -33358,12 +33352,12 @@ msgstr "Rebase nicht möglich"
 #: kicad/project_tree_pane.cpp:2110
 #, fuzzy
 msgid "Pull cancelled."
-msgstr "Abruf (Pull) abgebrochen."
+msgstr "Pull abgebrochen."
 
 #: kicad/project_tree_pane.cpp:2119
 #, fuzzy
 msgid "Pull failed."
-msgstr "Abruf (Pull) ist gescheitert."
+msgstr "Pull ist gescheitert."
 
 #: kicad/project_tree_pane.cpp:2120
 msgid "Failed to pull project"
@@ -33402,16 +33396,17 @@ msgstr ""
 #: kicad/project_tree_pane.cpp:2174
 #, fuzzy
 msgid "Force Push?"
-msgstr "Ablegen (Push) erzwingen?"
+msgstr "Push erzwingen?"
 
 #: kicad/project_tree_pane.cpp:2176
+#, fuzzy
 msgid "&Force Push"
-msgstr ""
+msgstr "Push &erzwingen"
 
 #: kicad/project_tree_pane.cpp:2185
 #, fuzzy
 msgid "Push failed."
-msgstr "Ablegen (Push) gescheitert."
+msgstr "Push ist gescheitert."
 
 #: kicad/project_tree_pane.cpp:2186
 msgid "Failed to push project"
@@ -33468,7 +33463,7 @@ msgid ""
 msgstr ""
 "Der letzte Commit wurde bereits auf %s abgelegt.\n"
 "\n"
-"Ein Ändern schreibt den öffentlichen Verlauf neu.  Jeder, der diesen Commit "
+"Nachbessern schreibt den öffentlichen Verlauf neu.  Jeder, der diesen Commit "
 "abgeholt hat, wird seine Kopie zurücksetzen müssen."
 
 #: kicad/project_tree_pane.cpp:2815
@@ -33479,7 +33474,7 @@ msgstr "Veröffentlichten Commit nachbessern?"
 #: kicad/project_tree_pane.cpp:2817 kicad/project_tree_pane.cpp:2862
 #, fuzzy
 msgid "Amend &Anyway"
-msgstr "Trotzdem n&achbessern"
+msgstr "&Trotzdem nachbessern"
 
 #: kicad/project_tree_pane.cpp:2856
 #, c-format
@@ -33515,12 +33510,12 @@ msgstr "Von Remote abgeholt (Fetch)."
 #: kicad/project_tree_pane.cpp:3085
 #, fuzzy, c-format
 msgid "Fetched from %s."
-msgstr "Von %s abgeholt (Fetch)."
+msgstr "Von %s abgeholt."
 
 #: kicad/project_tree_pane.cpp:3092
 #, fuzzy
 msgid "Fetch failed."
-msgstr "Abholung (Fetch) gescheitert."
+msgstr "Abholung gescheitert (Fetch)."
 
 #: kicad/project_tree_traverser.cpp:216
 #, c-format
@@ -39913,7 +39908,6 @@ msgid "Please save the board before exporting STEP."
 msgstr "Bitte speichern Sie die Platine vor dem STEP-Export."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:423
-#, fuzzy
 msgid ""
 "Board file not found on disk.\n"
 "Save the board before exporting STEP."
@@ -39922,7 +39916,6 @@ msgstr ""
 "Speichern Sie die Platine vor dem STEP-Export."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:435
-#, fuzzy
 msgid ""
 "The board directory no longer exists.\n"
 "Save the board to a valid location before exporting STEP."
@@ -42034,9 +42027,8 @@ msgstr ""
 "abgleichen."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:99
-#, fuzzy
 msgid "Keep KiCad layer names"
-msgstr "&Behalte äußere Lagen"
+msgstr "KiCad-Lagennamen behalten"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:100
 msgid ""
@@ -45834,14 +45826,13 @@ msgstr "Änderungen verwerfen?"
 #: pcbnew/dialogs/panel_setup_rules.cpp:156
 #, fuzzy
 msgid "Show Matching Items"
-msgstr "Übereinstimmungen anzeigen"
+msgstr "Passende Elemente anzeigen"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:209
 #, fuzzy
 msgid "Cannot show matching items without an open project."
 msgstr ""
-"Übereinstimmende Elemente können ohne geöffnetem Projekt nicht angezeigt "
-"werden."
+"Passende Elemente können ohne geöffnetem Projekt nicht angezeigt werden."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:231
 #: pcbnew/dialogs/panel_setup_rules.cpp:249
@@ -45859,7 +45850,7 @@ msgstr "FEHLER:"
 #: pcbnew/dialogs/panel_setup_rules.cpp:329
 #, fuzzy, c-format
 msgid "Could not scan rules text: %s"
-msgstr "Konnte nicht zu Remote übertragen: %s"
+msgstr "Konnte Regeltext nicht einlesen: %s"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:337
 #, fuzzy
@@ -45878,7 +45869,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_rules.cpp:366
 #, fuzzy, c-format
 msgid "Rule '%s' could not be located after parsing."
-msgstr "Konnte die Datei \"%s\" nicht erstellen."
+msgstr "Regel \"%s\" konnte nach dem Parsen nicht lokalisiert werden."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:385
 #, fuzzy
@@ -59830,10 +59821,9 @@ msgstr "Designblock-Layouts verwenden"
 #: pcbnew/tools/pcb_control.cpp:1572
 #, fuzzy
 msgid "design block is not in the loaded libraries"
-msgstr "Designblock ist in den geladenen Bibliotheken nicht vorhanden"
+msgstr "Designblock ist nicht in den geladenen Bibliotheken vorhanden"
 
 #: pcbnew/tools/pcb_control.cpp:1578
-#, fuzzy
 msgid "design block has no saved PCB layout"
 msgstr "Designblock hat kein gespeichertes PCB-Layout"
 
@@ -59843,12 +59833,10 @@ msgid "could not load the design block's layout"
 msgstr "Konnte das Layout des Designblocks nicht laden"
 
 #: pcbnew/tools/pcb_control.cpp:1636
-#, fuzzy
 msgid "design block layout could not be loaded"
 msgstr "Designblock-Layout konnte nicht geladen werden"
 
 #: pcbnew/tools/pcb_control.cpp:1669
-#, fuzzy
 msgid "group has no footprints"
 msgstr "Gruppe hat keine Footprints"
 
@@ -59868,12 +59856,12 @@ msgid "Apply design block layout cancelled."
 msgstr "\"Designblock-Layout verwenden\" abgebrochen."
 
 #: pcbnew/tools/pcb_control.cpp:1752
-#, fuzzy, c-format
+#, c-format
 msgid "Apply design block layout to %d group(s)"
 msgstr "Designblock-Layout auf %d Gruppe(n) anwenden"
 
 #: pcbnew/tools/pcb_control.cpp:1764
-#, fuzzy, c-format
+#, c-format
 msgid "Applied design block layout to %d of %d group(s)."
 msgstr "Designblock-Layout auf %d von %d Gruppe(n) angewendet."
 
