@@ -115,7 +115,6 @@ static const uint8_t CHAIN_HEADER[] = {
 
 static constexpr size_t CHAIN_HEADER_LEN = 6;
 
-/// Track node record size in bytes.
 static constexpr size_t TRACK_NODE_SIZE = 41;
 
 /// Zone section preamble constant: int4(-20000), the last field of the font block.
@@ -188,9 +187,6 @@ static constexpr size_t PAD_POLYGON_VERTEX_SIZE = 8;  // int4(x) + int4(y) per v
 static constexpr int PAD_MAX_NET_INDEX = 10000;
 
 
-/**
- * Read a 3-byte RGB color from the reader and return it packed as 0x00RRGGBB.
- */
 static uint32_t ReadColorPacked( BINARY_READER& aReader )
 {
     uint8_t r, g, b;
@@ -201,9 +197,6 @@ static uint32_t ReadColorPacked( BINARY_READER& aReader )
 }
 
 
-/**
- * Decode a 3-byte big-endian biased integer from raw data at a given offset.
- */
 static int ReadInt3At( const uint8_t* aData, size_t aPos )
 {
     return ( ( static_cast<int>( aData[aPos] ) << 16 )
@@ -212,9 +205,6 @@ static int ReadInt3At( const uint8_t* aData, size_t aPos )
 }
 
 
-/**
- * Decode a 4-byte big-endian biased integer from raw data at a given offset.
- */
 static int ReadInt4At( const uint8_t* aData, size_t aPos )
 {
     unsigned int raw = ( static_cast<unsigned int>( aData[aPos] ) << 24 )
@@ -1209,21 +1199,13 @@ void PCB_PARSER::ParseBoardProperties()
 
     wxLogTrace( traceDiptraceIo, wxT( "DipTrace: file version %d" ), m_version );
 
-    /* int field0b = */ m_reader.ReadInt4();
-    /* int field0f = */ m_reader.ReadInt3();
-    /* int field12 = */ m_reader.ReadInt3();
+    m_reader.ReadInt4();
+    m_reader.ReadInt3();
+    m_reader.ReadInt3();
 
-    // v37 has no schematic path string; an int3(0) appears instead
-    if( m_version <= LEGACY_STRING_VERSION )
-    {
-        m_reader.ReadInt3();  // placeholder (always 0)
-    }
-    else
-    {
-        /* wxString schematicPath = */ m_reader.ReadString();
-    }
+    m_reader.ReadString();   // schematic path
 
-    /* uint8_t flagByte = */ m_reader.ReadByte();
+    m_reader.ReadByte();
 
     m_bboxXMin = m_reader.ReadInt4();
     m_bboxYMin = m_reader.ReadInt4();
@@ -1312,11 +1294,10 @@ void PCB_PARSER::ParseLayers()
 
 void PCB_PARSER::ParseFontStyle()
 {
-    // 6 int3 prefix fields
     for( int i = 0; i < 6; i++ )
         m_reader.ReadInt3();
 
-    /* wxString fontName = */ m_reader.ReadString();
+    m_reader.ReadString();   // font name
 
     m_reader.ReadInt4();    // field_a
     m_reader.ReadInt4();    // field_b
@@ -1361,7 +1342,7 @@ void PCB_PARSER::ParseFontStyle()
 
     int fieldCOrGroupCount = m_reader.ReadInt3();
 
-    if( m_version > LEGACY_STRING_VERSION && fieldCOrGroupCount > 0 )
+    if( fieldCOrGroupCount > 0 )
     {
         ParsePatternStyleGroups( fieldCOrGroupCount );
     }
@@ -1385,7 +1366,7 @@ void PCB_PARSER::ParsePatternNameGroups( int aGroupCount )
 
     for( int i = 0; i < aGroupCount; i++ )
     {
-        /* wxString groupName = */ m_reader.ReadString();
+        m_reader.ReadString();  // group name
         m_reader.ReadInt3();    // field_a
         int blockCount = m_reader.ReadInt3();
 
@@ -1398,7 +1379,7 @@ void PCB_PARSER::ParsePatternNameGroups( int aGroupCount )
         for( int j = 0; j < blockCount; j++ )
         {
             m_reader.ReadInt3();    // block_id
-            /* wxString blockName = */ m_reader.ReadString();
+            m_reader.ReadString();  // block name
         }
     }
 }
@@ -1417,7 +1398,7 @@ void PCB_PARSER::ParsePatternStyleGroups( int aGroupCount )
 
     for( int i = 0; i < aGroupCount; i++ )
     {
-        /* wxString groupName = */ m_reader.ReadString();
+        m_reader.ReadString();  // group name
 
         uint8_t color[3];
         m_reader.ReadBytes( color, sizeof( color ) );
@@ -1441,7 +1422,7 @@ void PCB_PARSER::ParsePatternStyleGroups( int aGroupCount )
 
 void PCB_PARSER::ParseImplicitPatternStyleGroup()
 {
-    /* wxString groupName = */ m_reader.ReadString();
+    m_reader.ReadString();   // group name
     m_reader.ReadByte();     // flag
     m_reader.ReadInt3();     // field_a
     m_reader.ReadInt3();     // field_b
@@ -1463,11 +1444,11 @@ void PCB_PARSER::ParseDesignRules()
     m_viaStyles.clear();
     bool dumpRuleSets = EnvFlagEnabled( "KICAD_DIPTRACE_DUMP_RULESETS" );
 
-    // Parse all entries (rule names and ViaStyles share the same structure)
+    // Rule names and ViaStyles share the same record structure.
     for( int i = 0; i < m_ruleNameCount; i++ )
     {
         wxString name = m_reader.ReadString();
-        /* uint8_t flag = */ m_reader.ReadByte();
+        m_reader.ReadByte();    // flag
         int val1 = m_reader.ReadInt4();
         int val2 = m_reader.ReadInt4();
         int fieldA = m_reader.ReadInt3();
@@ -1496,7 +1477,6 @@ void PCB_PARSER::ParseDesignRules()
     // Global field_c after all entries -- total rule set count
     int ruleSetCount = m_reader.ReadInt3();
 
-    // Parse rule sets
     for( int i = 0; i < ruleSetCount; i++ )
     {
         wxString setName = m_reader.ReadString();
@@ -1715,7 +1695,7 @@ void PCB_PARSER::FindAndParseComponents()
 
     size_t parsedEnd = m_postDesignRulesOffset;
 
-    // Step 1: Find upper bound using known landmarks
+    // Bound the component region above by the nearest known post-component landmark.
     size_t projLib = m_reader.FindString( wxT( "Project Libraries" ), 0, 0 );
     size_t fontMarker = m_reader.FindPattern( BOARD_SETTINGS_FONT_MARKER, 9,
                                               m_postLayersOffset, 0 );
@@ -1746,7 +1726,6 @@ void PCB_PARSER::FindAndParseComponents()
             FieldWalkComponentBoundaries( m_componentUpperBound );
 
     {
-    // Step 2: Find all boundary patterns between design rules and the upper bound
     size_t searchStart = ( parsedEnd > 200 ) ? parsedEnd - 200 : m_postLayersOffset;
 
     std::vector<size_t> stdOffsets = FindAllBoundaries(
@@ -1759,7 +1738,6 @@ void PCB_PARSER::FindAndParseComponents()
             BOUNDARY_ALT, BOUNDARY_CORE_LEN,
             searchStart, m_componentUpperBound );
 
-    // Remove alt boundaries that overlap with standard ones
     std::set<size_t> stdSet( stdOffsets.begin(), stdOffsets.end() );
     std::vector<size_t> pureAlt;
 
@@ -1769,21 +1747,18 @@ void PCB_PARSER::FindAndParseComponents()
             pureAlt.push_back( off );
     }
 
-    // Merge and sort all boundary offsets
     std::vector<size_t> allBoundaries( stdOffsets );
     allBoundaries.insert( allBoundaries.end(), pureAlt.begin(), pureAlt.end() );
     std::sort( allBoundaries.begin(), allBoundaries.end() );
 
-    // Remove duplicates
     allBoundaries.erase( std::unique( allBoundaries.begin(), allBoundaries.end() ),
                          allBoundaries.end() );
 
     if( allBoundaries.empty() )
         return;
 
-    // Step 3: Determine the string offset from boundary core.
-    // Both standard and alternate patterns have 13-byte cores.
-    // Typically 1 trailing byte follows, so strings start at +14.
+    // Both standard and alternate patterns have 13-byte cores, typically followed by 1 trailing
+    // byte, so header strings usually start at +14.
     static const int STRING_OFFSETS[] = { 14, 15, 16, 17, 18, 19, 20 };
     int stringDelta = 14;  // default
 
@@ -1816,7 +1791,7 @@ void PCB_PARSER::FindAndParseComponents()
             break;
     }
 
-    // Step 4: Validate boundaries that have readable strings at the expected offset
+    // Validate boundaries that have a readable header string at the chosen offset.
     for( size_t bOff : allBoundaries )
     {
         if( parsedEnd > 50 && bOff < parsedEnd - 50 )
@@ -1890,7 +1865,7 @@ void PCB_PARSER::FindAndParseComponents()
         return;
     }
 
-    // Step 5: Parse components sequentially. Stop on consecutive failures.
+    // Parse components sequentially, stopping after a run of consecutive failures.
     int  consecutiveFailures = 0;
     bool seenSuccess = false;
     static constexpr int MAX_CONSECUTIVE_FAILURES = 3;
@@ -2333,7 +2308,6 @@ void PCB_PARSER::FindPadsInRegion( DT_COMPONENT& aComp, size_t aRegionStart, siz
         int padX        = ReadInt4At( data, chainPos + 6 );
         int padY        = ReadInt4At( data, chainPos + 10 );
 
-        // Validate pre-header fields
         if( padIndex != padNum )
             break;
 
@@ -2368,7 +2342,6 @@ void PCB_PARSER::FindPadsInRegion( DT_COMPONENT& aComp, size_t aRegionStart, siz
         if( padW <= 0 || padH <= 0 || padW > 10000000 || padH > 10000000 )
             break;
 
-        // Post-dimension block
         size_t postDimPos = dimPos + PAD_DIMENSIONS_SIZE;
         size_t postDimSize = PAD_POST_DIM_FIXED_SIZE;
 
@@ -2400,7 +2373,7 @@ void PCB_PARSER::FindPadsInRegion( DT_COMPONENT& aComp, size_t aRegionStart, siz
         if( pad.number.IsEmpty() && !pad.label.IsEmpty() )
             pad.number = pad.label;
 
-        // Handle polygon pads (C=3) with inline vertex data
+        // Polygon pads (style C=3) carry inline vertex data after the post-dim header.
         if( padStyleC == 3 )
         {
             int vertexCount = ReadInt3At( data, postDimPos + 8 );
@@ -2451,10 +2424,8 @@ static constexpr int FP_SHAPE_COUNT_OFFSET = 71;
 /// Shape record data starts at this offset past the end of the pad region.
 static constexpr int FP_SHAPE_DATA_OFFSET = 74;
 
-/// Record size for v37 (legacy) format.
 static constexpr int FP_SHAPE_RECORD_SIZE_V37 = 62;
 
-/// Record size for v45+ format.
 static constexpr int FP_SHAPE_RECORD_SIZE_V45 = 60;
 
 /// v46+ chained-shape block layout used by some footprints (e.g. TO-92 in PCB_6).
@@ -2697,7 +2668,6 @@ void PCB_PARSER::FindShapesInRegion( DT_COMPONENT& aComp, size_t aRegionStart, s
         return;
     }
 
-    // Use the chain-derived pad region end position for shape lookup
     if( aComp.padRegionEnd == 0 || aComp.pads.empty() )
     {
         wxLogTrace( traceDiptraceIo, wxT( "DipTrace: no pad region end for shape finding in '%s'" ),
@@ -3325,7 +3295,6 @@ void PCB_PARSER::ParseTextRecords( int aCount )
         {
             DT_TEXT_OBJECT text;
 
-            // Header fields
             m_reader.ReadInt3();    // type_a
             m_reader.ReadByte();    // flag_a
             m_reader.ReadInt3();    // type_b
@@ -3335,26 +3304,21 @@ void PCB_PARSER::ParseTextRecords( int aCount )
             m_reader.ReadInt3();    // field_d
             m_reader.ReadInt3();    // field_e
 
-            // Colors
             text.color = ReadColorPacked( m_reader );
             ReadColorPacked( m_reader );   // color2
             ReadColorPacked( m_reader );   // color3
 
-            // Line/Layer
             text.lineWidth = m_reader.ReadInt4();
             text.layer = m_reader.ReadInt3();
 
-            // Geometry
             text.x1 = m_reader.ReadInt4();
             text.y1 = m_reader.ReadInt4();
             text.x2 = m_reader.ReadInt4();
             text.y2 = m_reader.ReadInt4();
 
-            // Content
             text.text = m_reader.ReadString();
             text.fontName = m_reader.ReadString();
 
-            // Post-font fields
             m_reader.ReadByte();    // separator
             m_reader.ReadInt3();    // field_pf_1
             m_reader.ReadByte();    // flag_pf
@@ -3586,11 +3550,10 @@ void PCB_PARSER::ParseNetRouting( DT_NET& aNet )
 
     size_t startPos = m_reader.GetOffset();
 
-    // Determine scan boundary: next net sentinel or capped distance
     static constexpr size_t MAX_NET_BODY = 65536;
     size_t scanEnd = std::min( startPos + MAX_NET_BODY, m_reader.GetFileSize() );
 
-    // Find the next net sentinel to avoid reading into the next net
+    // Cap the scan at the next net sentinel so it cannot read into the following net.
     size_t nextSentinel = m_reader.FindPattern( NET_SENTINEL, NET_SENTINEL_LEN,
                                                  startPos + 20, scanEnd );
 
@@ -3669,7 +3632,6 @@ void PCB_PARSER::ParseNetRouting( DT_NET& aNet )
         }
     }
 
-    // Scan for chain headers within this net body
     size_t pos = chainScanStart;
 
     while( pos + CHAIN_HEADER_LEN + 6 + TRACK_NODE_SIZE <= scanEnd )
@@ -3834,7 +3796,6 @@ void PCB_PARSER::ParseNetRouting( DT_NET& aNet )
             // byte(+22) is not reliable for via placement (set on many non-via nodes).
             node.hasVia = ( node.viaStyleIdx >= 0 );
 
-            // Sanity checks
             if( node.width <= 0 || node.width > 5000000 )
             {
                 valid = false;
@@ -4581,7 +4542,6 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
         int fieldB    = ReadInt3At( data, pos + 24 );
         int vtxCount  = ReadInt3At( data, pos + 27 );
 
-        // Validate header fields
         if( fieldA < 0 || fieldA > 10000 )
             break;
 
@@ -4615,7 +4575,6 @@ void PCB_PARSER::FindAndParseZones( size_t aSearchStart, size_t aSearchEnd )
         if( vtxEnd > aSearchEnd )
             break;
 
-        // Parse outline vertices and validate they're within board bounds
         DT_ZONE zone;
         zone.netIndex  = fieldB;
         zone.layer     = layer;
@@ -4822,12 +4781,10 @@ void PCB_PARSER::ApplyBoardSettings()
 
     m_board->SetCopperLayerCount( copperCount );
 
-    // Build the board stackup from the copper layer count
     BOARD_STACKUP& stackup = bds.GetStackupDescriptor();
     stackup.RemoveAll();
     stackup.BuildDefaultStackupList( &bds, copperCount );
 
-    // Enable the layers used by the design
     LSET enabledLayers = m_board->GetEnabledLayers();
 
     for( const DT_LAYER& layer : m_layers )
@@ -4848,7 +4805,6 @@ void PCB_PARSER::ApplyBoardSettings()
 
     m_board->SetEnabledLayers( enabledLayers );
 
-    // Apply default track width and clearance from the first design rule
     std::shared_ptr<NETCLASS> defNetclass = bds.m_NetSettings->GetDefaultNetclass();
 
     if( !m_designRules.empty() )
@@ -4862,7 +4818,6 @@ void PCB_PARSER::ApplyBoardSettings()
             defNetclass->SetClearance( ToKiCadCoord( firstRule.clearance ) );
     }
 
-    // Apply via definitions from parsed ViaStyles
     if( !m_viaStyles.empty() )
     {
         const DT_VIA_STYLE& firstVia = m_viaStyles[0];
@@ -4885,7 +4840,6 @@ void PCB_PARSER::CreateBoardOutline()
 
     if( !m_outline.empty() )
     {
-        // Build a list of converted points and their arc flags.
         size_t n = m_outline.size();
 
         if( n < 2 )
@@ -4902,7 +4856,6 @@ void PCB_PARSER::CreateBoardOutline()
             arcs.push_back( v.arc );
         }
 
-        // Walk the vertex list and emit individual Edge_Cuts segments and arcs.
         // In DipTrace, a vertex with arc=1 is an arc midpoint: the arc runs from the
         // previous (non-arc) vertex through this midpoint to the next (non-arc) vertex.
         size_t i = 0;
@@ -4953,8 +4906,6 @@ void PCB_PARSER::CreateBoardOutline()
 
             if( arcs[next] == 1 )
             {
-                // Next vertex is an arc midpoint.  The arc goes from pts[i] (start)
-                // through pts[next] (mid) to the vertex after that (end).
                 size_t afterArc = ( next + 1 ) % n;
 
                 const VECTOR2I& start = pts[i];
@@ -4976,12 +4927,10 @@ void PCB_PARSER::CreateBoardOutline()
                     addArc( start, mid, end );
                 }
 
-                // Advance past the arc midpoint; the end point becomes the new start
                 i = afterArc;
             }
             else
             {
-                // Straight segment from pts[i] to pts[next]
                 addSegment( pts[i], pts[next] );
 
                 i = next;
@@ -5027,7 +4976,7 @@ void PCB_PARSER::CreateBoardOutline()
     }
     else
     {
-        // Use bounding box as a closed rectangular outline (4 segments)
+        // Fall back to the board bounding box as a closed rectangular outline.
         int x1 = ToKiCadCoord( m_bboxXMin );
         int y1 = ToKiCadCoord( m_bboxYMin );
         int x2 = ToKiCadCoord( m_bboxXMax );
@@ -5785,7 +5734,6 @@ void PCB_PARSER::CreateTracksAndVias()
         if( !net && chain.netIndex >= 0 )
             missingChainNets++;
 
-        // Create track segments between consecutive nodes
         for( size_t i = 0; i + 1 < chain.nodes.size(); i++ )
         {
             const DT_TRACK_NODE& n0 = chain.nodes[i];
