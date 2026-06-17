@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 15:54+0000\n"
+"PO-Revision-Date: 2026-06-17 21:34+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -35675,17 +35675,15 @@ msgid "Pulled %s into %s (fast-forward)."
 msgstr ""
 
 #: kicad/project_tree_pane.cpp:2067
-#, fuzzy
 msgid "Pulled changes."
 msgstr "Abgerufene Änderungen (Pull)."
 
 #: kicad/project_tree_pane.cpp:2068
-#, fuzzy, c-format
+#, c-format
 msgid "Pulled %s into %s."
 msgstr "%s in %s hinein abgerufen."
 
 #: kicad/project_tree_pane.cpp:2078
-#, fuzzy
 msgid ""
 "Your local changes and the remote changes conflict, so the pull was "
 "cancelled and nothing was changed.\n"
@@ -35697,30 +35695,25 @@ msgstr ""
 "der Abruf abgebrochen und nichts geändert wurde.\n"
 "\n"
 "Sie können ihre lokalen Commits verwerfen und die Remoteversion verwenden "
-"oder ihre Commits als Rebase an erster Stelle von Remote setzen."
+"oder ihre Commits auf der Remoteversion \"rebasen\"."
 
 #: kicad/project_tree_pane.cpp:2082
-#, fuzzy
 msgid "Pull Conflict"
 msgstr "Pull-Konflikt"
 
 #: kicad/project_tree_pane.cpp:2085
-#, fuzzy
 msgid "&Use Remote (discard my changes)"
-msgstr "Remote &verwenden (Meine Änderungen verwerfen)"
+msgstr "Remote &verwenden (meine Änderungen verwerfen)"
 
 #: kicad/project_tree_pane.cpp:2085
-#, fuzzy
 msgid "&Rebase"
 msgstr "&Rebase"
 
 #: kicad/project_tree_pane.cpp:2092
-#, fuzzy
 msgid "Reset to the remote version."
 msgstr "Auf die Remote-Version zurücksetzen."
 
 #: kicad/project_tree_pane.cpp:2094
-#, fuzzy
 msgid "Failed to reset to remote"
 msgstr "Zurücksetzen auf Remote ist gescheitert"
 
@@ -35758,7 +35751,7 @@ msgid "Pushed %s to %s."
 msgstr "%s auf %s abgelegt."
 
 #: kicad/project_tree_pane.cpp:2165
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Push rejected: your local branch and %s have diverged.\n"
 "\n"
@@ -35770,8 +35763,8 @@ msgstr ""
 "Ablegen verweigert: Ihr lokaler Branch und %s haben sich "
 "auseinanderentwickelt.\n"
 "\n"
-"Das passiert normalerweise nach dem Abholen oder dem erneuten Schreiben "
-"eines Commits, der bereits abgelegt wurde.  Ablegen erzwingen, um Remote zu "
+"Das passiert normalerweise nach dem Abrufen oder dem erneuten Schreiben "
+"eines Commits, der bereits abgelegt wurde.  Push erzwingen, um Remote zu "
 "überschreiben?\n"
 "\n"
 "Jeder, der die vorhergehende Version bereits abgerufen hat, wird seine Kopie "
@@ -35879,17 +35872,16 @@ msgstr "Verwerfe Nachbesserung aufgrund leerer Commit-Nachricht."
 
 #: kicad/project_tree_pane.cpp:3082
 msgid "Fetched from remote."
-msgstr "Von Remote abrufen (Fetch)."
+msgstr "Von Remote abgerufen (Fetch)."
 
 #: kicad/project_tree_pane.cpp:3083
-#, fuzzy, c-format
+#, c-format
 msgid "Fetched from %s."
-msgstr "Von %s abgeholt."
+msgstr "Von %s abgerufen."
 
 #: kicad/project_tree_pane.cpp:3090
-#, fuzzy
 msgid "Fetch failed."
-msgstr "Abholung gescheitert (Fetch)."
+msgstr "Abrufen gescheitert (Fetch)."
 
 #: kicad/project_tree_traverser.cpp:212
 #, c-format
@@ -47287,12 +47279,10 @@ msgid "Unused Pads"
 msgstr "Unbenutzte Pads"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:35
-#, fuzzy
 msgid "Apply design block layouts to new groups"
 msgstr "Designblock-Layouts auf neue Gruppen anwenden"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:36
-#, fuzzy
 msgid ""
 "For each new group created from a design block, apply the block's saved "
 "footprint placement and routing automatically."
@@ -48719,15 +48709,13 @@ msgid "Cancel Changes?"
 msgstr "Änderungen verwerfen?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:153
-#, fuzzy
 msgid "Show Matching Items"
 msgstr "Passende Elemente anzeigen"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:206
-#, fuzzy
 msgid "Cannot show matching items without an open project."
 msgstr ""
-"Passende Elemente können ohne geöffnetem Projekt nicht angezeigt werden."
+"Passende Elemente können ohne geöffnetes Projekt nicht angezeigt werden."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:228
 #: pcbnew/dialogs/panel_setup_rules.cpp:246
@@ -48743,7 +48731,7 @@ msgid "ERROR:"
 msgstr "FEHLER:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "Could not scan rules text: %s"
 msgstr "Konnte Regeltext nicht einlesen: %s"
 
