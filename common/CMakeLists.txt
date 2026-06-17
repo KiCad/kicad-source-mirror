@@ -333,6 +333,10 @@ if( UNIX AND NOT APPLE )
     )
 endif()
 
+list( APPEND KICOMMON_SRCS
+    navlib_safe_init.cpp
+)
+
 if( KICAD_IPC_API )
     set( KICOMMON_SRCS
         ${KICOMMON_SRCS}

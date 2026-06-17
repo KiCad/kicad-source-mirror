@@ -22,11 +22,13 @@
 #include "nl_pcbnew_plugin_impl.h"
 #include <advanced_config.h>
 #include <kiplatform/drivers.h>
+#include <navlib_safe_init.h>
 
 NL_PCBNEW_PLUGIN::NL_PCBNEW_PLUGIN( PCB_DRAW_PANEL_GAL* aViewport ) : m_impl( nullptr )
 {
     if( ADVANCED_CFG::GetCfg().m_Use3DConnexionDriver
-        && KIPLATFORM::DRIVERS::Valid3DConnexionDriverVersion() )
+        && KIPLATFORM::DRIVERS::Valid3DConnexionDriverVersion()
+        && !NavlibDriverCrashed() )
     {
         m_impl = std::make_unique<NL_PCBNEW_PLUGIN_IMPL>( aViewport );
     }

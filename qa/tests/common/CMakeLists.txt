@@ -141,6 +141,9 @@ set( QA_COMMON_SRCS
     test_job_sch_erc.cpp
     test_jobs_runner.cpp
     test_jobs_output_archive.cpp
+
+    # Navlib safe initialization tests
+    test_navlib_safe_init.cpp
 )
 
 if( KICAD_TEST_DATABASE_LIBRARIES )
