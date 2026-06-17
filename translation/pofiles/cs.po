@@ -28,8 +28,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 15:54+0000\n"
-"Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
+"PO-Revision-Date: 2026-06-18 17:01+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v10/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -4707,7 +4707,7 @@ msgstr "Souhlasím s odesláním anonymních výkazů"
 
 #: common/dialogs/panel_data_collection_base.cpp:35
 msgid "Reset Unique Id"
-msgstr "Obnovit jedinečné ID"
+msgstr "Obnovit jedinečné Id"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:179
 msgid "Design Block Library Tables"
@@ -28956,7 +28956,7 @@ msgstr "<b>chyba čtení rozbaleného souboru %s</b>"
 
 #: gerbview/files.cpp:661
 msgid "Open Zip File"
-msgstr "Otevřít soubor ZIP"
+msgstr "Otevřít soubor Zip"
 
 #: gerbview/gerber_draw_item.cpp:666
 msgid "Attribute"
@@ -29121,7 +29121,7 @@ msgstr "Otevřete soubor Job"
 
 #: gerbview/menubar.cpp:139
 msgid "Open Recent Zip File"
-msgstr "Otevřít poslední soubor ZIP"
+msgstr "Otevřít nedávný soubor Zip"
 
 #: gerbview/menubar.cpp:184
 msgid "&Units"
@@ -32602,14 +32602,15 @@ msgid "The selected directory is not a Git project."
 msgstr "Vybraný adresář není projekt Git."
 
 #: kicad/project_tree_pane.cpp:2581
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before committing?"
 msgstr ""
-"Následující pravidla mají neuložené změny:\n"
+"Následující editory mají neuložené změny:%s\n"
 "\n"
+"Uložit před závazkem?"
 
 #: kicad/project_tree_pane.cpp:2584 kicad/project_tree_pane.cpp:2859
 #, fuzzy
@@ -32658,14 +32659,15 @@ msgid "Amend &Anyway"
 msgstr "Přidat každopádně"
 
 #: kicad/project_tree_pane.cpp:2856
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following editors have unsaved changes:%s\n"
 "\n"
 "Save them before amending?"
 msgstr ""
-"Následující pravidla mají neuložené změny:\n"
+"Následující editory mají neuložené změny:%s\n"
 "\n"
+"Uložit je před změnou?"
 
 #: kicad/project_tree_pane.cpp:2862
 #, fuzzy
