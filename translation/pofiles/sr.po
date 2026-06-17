@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-06 10:01+0000\n"
+"PO-Revision-Date: 2026-06-17 15:54+0000\n"
 "Last-Translator: Damjan <damjanovmail@gmail.com>\n"
 "Language-Team: Serbian <https://hosted.weblate.org/projects/kicad/v10/sr/>\n"
 "Language: sr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-Bookmarks: -1,-1,5234,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
@@ -9045,60 +9045,49 @@ msgid "Sheet borders"
 msgstr "Име:"
 
 #: common/layer_id.cpp:94
-#, fuzzy
 msgid "Sheet backgrounds"
-msgstr "Тијело"
+msgstr "Позадине листова"
 
 #: common/layer_id.cpp:95
-#, fuzzy
 msgid "Sheet names"
-msgstr "Име:"
+msgstr "Називи листова"
 
 #: common/layer_id.cpp:96
-#, fuzzy
 msgid "Sheet fields"
-msgstr "Избриши поље"
+msgstr "Поља листова"
 
 #: common/layer_id.cpp:97
-#, fuzzy
 msgid "Sheet file names"
-msgstr "фајл не постоји"
+msgstr "Називи датотека листова"
 
 #: common/layer_id.cpp:98
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:63
-#, fuzzy
 msgid "Sheet pins"
-msgstr "Додај поље"
+msgstr "Прикључци листова"
 
 #: common/layer_id.cpp:99
-#, fuzzy
 msgid "No-connect symbols"
-msgstr "Симбол"
+msgstr "Симболи без повезивања"
 
 #: common/layer_id.cpp:100
-#, fuzzy
 msgid "DNP markers"
-msgstr "Маркери"
+msgstr "Не попуњавај маркери"
 
 #: common/layer_id.cpp:101
-#, fuzzy
 msgid "Excluded-from-simulation markers"
-msgstr "Име симбола:"
+msgstr "Искључено из симулације маркери"
 
 #: common/layer_id.cpp:102
-#, fuzzy
 msgid "ERC warnings"
-msgstr "ERC упозорење"
+msgstr "ERC упозорења"
 
 #: common/layer_id.cpp:103
-#, fuzzy
 msgid "ERC errors"
-msgstr "ERC грешка"
+msgstr "ERC грешке"
 
 #: common/layer_id.cpp:104
-#, fuzzy
 msgid "ERC exclusions"
-msgstr "Избриши"
+msgstr "ЕРЦ искључења"
 
 #: common/layer_id.cpp:105 common/layer_id.cpp:145
 #: pcbnew/widgets/appearance_controls.cpp:355
@@ -9106,9 +9095,8 @@ msgid "Anchors"
 msgstr "Сидра"
 
 #: common/layer_id.cpp:106 common/layer_id.cpp:150
-#, fuzzy
 msgid "Helper items"
-msgstr "Избриши"
+msgstr "Помоћни предмети"
 
 #: common/layer_id.cpp:107 common/layer_id.cpp:151 common/tool/grid_menu.cpp:56
 #: eeschema/tools/sch_editor_control.cpp:3364
@@ -9126,29 +9114,24 @@ msgstr "Осе"
 #: common/layer_id.cpp:109 common/layer_id.cpp:153
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:99
 #: gerbview/widgets/gerbview_layer_widget.cpp:142
-#, fuzzy
 msgid "Background"
-msgstr "Боја позадине"
+msgstr "Позадина"
 
 #: common/layer_id.cpp:111
-#, fuzzy
 msgid "Hovered items"
-msgstr "Помјери"
+msgstr "Ставке са лебдећим мишем"
 
 #: common/layer_id.cpp:112
-#, fuzzy
 msgid "Highlighted items"
-msgstr "Избриши"
+msgstr "Истакнуте ставке"
 
 #: common/layer_id.cpp:113
-#, fuzzy
 msgid "Hidden items"
-msgstr "Сакривен текст"
+msgstr "Скривене ставке"
 
 #: common/layer_id.cpp:114
-#, fuzzy
 msgid "Net color highlight"
-msgstr "Чисто"
+msgstr "Истакнута боја мреже"
 
 #: common/layer_id.cpp:115
 #, fuzzy
@@ -9156,24 +9139,20 @@ msgid "Drag net collisions"
 msgstr "Нема конекције"
 
 #: common/layer_id.cpp:116 common/layer_id.cpp:154
-#, fuzzy
 msgid "Selection highlight"
-msgstr "Чисто"
+msgstr "Истицање избора"
 
 #: common/layer_id.cpp:117 common/layer_id.cpp:147
-#, fuzzy
 msgid "Drawing sheet"
-msgstr "Опције цртања"
+msgstr "Лист за цртање"
 
 #: common/layer_id.cpp:119
-#, fuzzy
 msgid "Operating point voltages"
-msgstr "(крајња тачка)"
+msgstr "Напони радне тачке"
 
 #: common/layer_id.cpp:120
-#, fuzzy
 msgid "Operating point currents"
-msgstr "(крајња тачка)"
+msgstr "Струје радне тачке"
 
 #: common/layer_id.cpp:124
 #, fuzzy
