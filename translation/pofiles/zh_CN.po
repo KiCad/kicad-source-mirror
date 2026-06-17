@@ -46,8 +46,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-17 03:01+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-06-17 15:54+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -21216,7 +21216,7 @@ msgstr "无法在 '%s' 中找到可用的原理图文件"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:501
 #, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr "从库 '%s' 中加载符号 '%s' 出错: '%s'"
+msgstr "从 %2$s 库加载符号 '%1$s' 出错: %3$s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:422
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:427
