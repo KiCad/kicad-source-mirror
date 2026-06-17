@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-08 23:28+0300\n"
+"POT-Creation-Date: 2026-06-17 09:05+0300\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1349,10 +1349,6 @@ msgstr "&No"
 msgid "KiCad"
 msgstr "KiCad"
 
-#, c-format
-msgid "UNKNOWN (%d)"
-msgstr "UNKNOWN (%d)"
-
 msgid "KiCad Design Block folders"
 msgstr "KiCad Design Block folders"
 
@@ -1847,6 +1843,54 @@ msgstr "Unable to connect to database"
 msgid "Database Error"
 msgstr "Database Error"
 
+msgid "Status"
+msgstr "Status"
+
+msgid "Old Path"
+msgstr "Old Path"
+
+msgid "No git repository available."
+msgstr "No git repository available."
+
+msgid "Compare Branches"
+msgstr "Compare Branches"
+
+msgid "Select base and head refs to compare."
+msgstr "Select base and head refs to compare."
+
+#, c-format
+msgid "Could not resolve ref '%s' to a commit or tree."
+msgstr "Could not resolve ref '%s' to a commit or tree."
+
+msgid "No changes between selected refs."
+msgstr "No changes between selected refs."
+
+#, c-format
+msgid "No diff handler for '%s'."
+msgstr "No diff handler for '%s'."
+
+msgid "Compare File"
+msgstr "Compare File"
+
+msgid "Could not create a temporary directory."
+msgstr "Could not create a temporary directory."
+
+#, c-format
+msgid "Could not extract %s from %s."
+msgstr "Could not extract %s from %s."
+
+msgid "Base ref:"
+msgstr "Base ref:"
+
+msgid "Head ref:"
+msgstr "Head ref:"
+
+msgid "Compare"
+msgstr "Compare"
+
+msgid "Changed files (double-click to open):"
+msgstr "Changed files (double-click to open):"
+
 msgid "Grid size X out of range."
 msgstr "Grid size X out of range."
 
@@ -1917,6 +1961,119 @@ msgstr ""
 
 msgid "Choose Project to Import"
 msgstr "Choose Project to Import"
+
+msgid "Property"
+msgstr "Property"
+
+msgid "Before"
+msgstr "Before"
+
+msgid "After"
+msgstr "After"
+
+msgid "Filter changes…"
+msgstr "Filter changes…"
+
+msgid "Added"
+msgstr "Added"
+
+msgid "Removed"
+msgstr "Removed"
+
+msgid "Modified"
+msgstr "Modified"
+
+msgid "Conflict"
+msgstr "Conflict"
+
+msgid "Layers:"
+msgstr "Layers:"
+
+msgid "Properties"
+msgstr "Properties"
+
+msgid "No differences detected."
+msgstr "No differences detected."
+
+#, c-format
+msgid "%zu change(s) detected."
+msgstr "%zu change(s) detected."
+
+msgid "Show Change"
+msgstr "Show Change"
+
+msgid "Hide Change"
+msgstr "Hide Change"
+
+msgid "Show All Hidden"
+msgstr "Show All Hidden"
+
+msgid "Revision:"
+msgstr "Revision:"
+
+msgid "Older"
+msgstr "Older"
+
+msgid "Newer"
+msgstr "Newer"
+
+msgid "Select a change in the tree to view details"
+msgstr "Select a change in the tree to view details"
+
+msgid "Reference:"
+msgstr "Reference:"
+
+msgid "(none)"
+msgstr "(none)"
+
+msgid "Comparison:"
+msgstr "Comparison:"
+
+msgid "Compare Files"
+msgstr "Compare Files"
+
+msgid "No conflicts to resolve."
+msgstr "No conflicts to resolve."
+
+#, c-format
+msgid "%zu conflict(s) require resolution."
+msgstr "%zu conflict(s) require resolution."
+
+#, c-format
+msgid ""
+"%zu conflict(s) still need a resolution. Pick Ours, Theirs, or Ancestor for "
+"each one."
+msgstr ""
+"%zu conflict(s) still need a resolution. Pick Ours, Theirs, or Ancestor for "
+"each one."
+
+msgid "Resolve Merge Conflicts"
+msgstr "Resolve Merge Conflicts"
+
+msgid "Select a conflict on the left to see details."
+msgstr "Select a conflict on the left to see details."
+
+#, c-format
+msgid "Conflict on %s"
+msgstr "Conflict on %s"
+
+msgid "Resolve each conflict by picking which side to keep, then click Apply."
+msgstr "Resolve each conflict by picking which side to keep, then click Apply."
+
+msgid "Conflicts"
+msgstr "Conflicts"
+
+msgid "Pick a side"
+msgstr "Pick a side"
+
+msgid "Ours"
+msgstr "Ours"
+
+msgid "Theirs"
+msgstr "Theirs"
+
+msgid "Ancestor"
+msgstr "Ancestor"
 
 msgid "Preview Settings"
 msgstr "Preview Settings"
@@ -1997,9 +2154,6 @@ msgstr "Issue Date:"
 
 msgid "<<<"
 msgstr "<<<"
-
-msgid "Revision:"
-msgstr "Revision:"
 
 msgid "Title:"
 msgstr "Title:"
@@ -2255,14 +2409,8 @@ msgstr "Commit Changes"
 msgid "Filename"
 msgstr "Filename"
 
-msgid "Status"
-msgstr "Status"
-
 msgid "New"
 msgstr "New"
-
-msgid "Modified"
-msgstr "Modified"
 
 msgid "Deleted"
 msgstr "Deleted"
@@ -3810,6 +3958,43 @@ msgstr "Move Up"
 msgid "Move Down"
 msgstr "Move Down"
 
+msgid "Item id: "
+msgstr "Item id: "
+
+msgid "Current resolution: "
+msgstr "Current resolution: "
+
+msgid "Take ours"
+msgstr "Take ours"
+
+msgid "Take theirs"
+msgstr "Take theirs"
+
+msgid "Take ancestor"
+msgstr "Take ancestor"
+
+msgid "Property-level merge"
+msgstr "Property-level merge"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Keep (default)"
+msgstr "Keep (default)"
+
+#, c-format
+msgid "%zu property edit(s) in this resolution.\n"
+msgstr "%zu property edit(s) in this resolution.\n"
+
+msgid "Failed to render diff image\n"
+msgstr "Failed to render diff image\n"
+
+msgid "Collision"
+msgstr "Collision"
+
+msgid "Duplicate ID"
+msgstr "Duplicate ID"
+
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "Could not use OpenGL, falling back to software rendering"
 
@@ -4119,9 +4304,6 @@ msgstr "Constrain to H, V, 45"
 
 msgid "Search"
 msgstr "Search"
-
-msgid "Properties"
-msgstr "Properties"
 
 msgid "Net Inspector"
 msgstr "Net Inspector"
@@ -4970,9 +5152,6 @@ msgstr "Paste"
 msgid "Paste clipboard cells to matrix at current cell"
 msgstr "Paste clipboard cells to matrix at current cell"
 
-msgid "Delete"
-msgstr "Delete"
-
 msgid "Clear contents of selected cells"
 msgstr "Clear contents of selected cells"
 
@@ -5159,6 +5338,10 @@ msgstr "Unable to parse '%s' in '%s'"
 #, c-format
 msgid "Cannot determine length of file '%s'."
 msgstr "Cannot determine length of file '%s'."
+
+#, c-format
+msgid "DipTrace file '%s' is too large (%ld bytes)."
+msgstr "DipTrace file '%s' is too large (%ld bytes)."
 
 #, c-format
 msgid "Error reading file '%s'."
@@ -5422,6 +5605,12 @@ msgstr "Schematic: Export PNG"
 msgid "Schematic PythonBOM export"
 msgstr "Schematic PythonBOM export"
 
+msgid "Diff two .pretty footprint libraries"
+msgstr "Diff two .pretty footprint libraries"
+
+msgid "Footprint Library: Diff"
+msgstr "Footprint Library: Diff"
+
 msgid "Gerber Diff"
 msgstr "Gerber Diff"
 
@@ -5449,6 +5638,40 @@ msgstr "Gerber Info Job Settings"
 msgid "Gerber: Info"
 msgstr "Gerber: Info"
 
+#, c-format
+msgid "Could not open layer map file '%s'"
+msgstr "Could not open layer map file '%s'"
+
+#, c-format
+msgid "Could not read layer map file '%s'"
+msgstr "Could not read layer map file '%s'"
+
+#, c-format
+msgid "Layer map file '%s' is not valid JSON: %s"
+msgstr "Layer map file '%s' is not valid JSON: %s"
+
+#, c-format
+msgid ""
+"Layer map file '%s' must be a JSON object mapping source layer names to "
+"KiCad layer names"
+msgstr ""
+"Layer map file '%s' must be a JSON object mapping source layer names to "
+"KiCad layer names"
+
+#, c-format
+msgid "Layer map entry for '%s' must be a KiCad layer name string"
+msgstr "Layer map entry for '%s' must be a KiCad layer name string"
+
+#, c-format
+msgid "Failed to write import report to '%s'\n"
+msgstr "Failed to write import report to '%s'\n"
+
+msgid "Diff two PCB files"
+msgstr "Diff two PCB files"
+
+msgid "PCB: Diff"
+msgstr "PCB: Diff"
+
 msgid "Perform DRC"
 msgstr "Perform DRC"
 
@@ -5474,6 +5697,12 @@ msgstr "Render PCB Job Settings"
 msgid "PCB: Render"
 msgstr "PCB: Render"
 
+msgid "Diff two schematic files"
+msgstr "Diff two schematic files"
+
+msgid "Schematic: Diff"
+msgstr "Schematic: Diff"
+
 msgid "Perform ERC"
 msgstr "Perform ERC"
 
@@ -5483,11 +5712,23 @@ msgstr "Schematic ERC Job Settings"
 msgid "Schematic: Perform ERC"
 msgstr "Schematic: Perform ERC"
 
+msgid "Import schematic"
+msgstr "Import schematic"
+
+msgid "Schematic Import Job Settings"
+msgstr "Schematic Import Job Settings"
+
 msgid "Special: Copy Files"
 msgstr "Special: Copy Files"
 
 msgid "Special: Execute Command"
 msgstr "Special: Execute Command"
+
+msgid "Diff two .kicad_sym libraries"
+msgstr "Diff two .kicad_sym libraries"
+
+msgid "Symbol Library: Diff"
+msgstr "Symbol Library: Diff"
 
 msgid "Archive"
 msgstr "Archive"
@@ -7472,6 +7713,18 @@ msgstr "Design block '%s' already exists in library '%s'."
 
 msgid "Overwrite existing design block?"
 msgstr "Overwrite existing design block?"
+
+msgid "Close Tab"
+msgstr "Close Tab"
+
+msgid "Close Other Tabs"
+msgstr "Close Other Tabs"
+
+msgid "Close Tabs to the Right"
+msgstr "Close Tabs to the Right"
+
+msgid "Close All Tabs"
+msgstr "Close All Tabs"
 
 msgid "Filter:"
 msgstr "Filter:"
@@ -12830,6 +13083,98 @@ msgstr ""
 msgid "Successfully saved schematic file using the latest format\n"
 msgstr "Successfully saved schematic file using the latest format\n"
 
+#, c-format
+msgid "Input file not found: '%s'\n"
+msgstr "Input file not found: '%s'\n"
+
+#, c-format
+msgid "No schematic importer recognizes the file format of '%s'\n"
+msgstr "No schematic importer recognizes the file format of '%s'\n"
+
+msgid "Could not establish a project for the import\n"
+msgstr "Could not establish a project for the import\n"
+
+#, c-format
+msgid "No plugin found for file type '%s'\n"
+msgstr "No plugin found for file type '%s'\n"
+
+#, c-format
+msgid "Importing '%s' using %s format...\n"
+msgstr "Importing '%s' using %s format...\n"
+
+#, c-format
+msgid "Error during import: %s\n"
+msgstr "Error during import: %s\n"
+
+#, c-format
+msgid "Error saving imported schematic: %s\n"
+msgstr "Error saving imported schematic: %s\n"
+
+#, c-format
+msgid "Successfully saved imported schematic to '%s'\n"
+msgstr "Successfully saved imported schematic to '%s'\n"
+
+#, c-format
+msgid "Failed to load %s\n"
+msgstr "Failed to load %s\n"
+
+#, c-format
+msgid "Failed to load %s: %s\n"
+msgstr "Failed to load %s: %s\n"
+
+msgid "Unsupported document kind for this dispatcher.\n"
+msgstr "Unsupported document kind for this dispatcher.\n"
+
+msgid "Failed to load one or more input schematics\n"
+msgstr "Failed to load one or more input schematics\n"
+
+msgid "sch merge requires each input to have a single top-level sheet\n"
+msgstr "sch merge requires each input to have a single top-level sheet\n"
+
+msgid ""
+"--interactive requires a GUI KiCad process; the console kicad-cli cannot "
+"open dialogs.\n"
+msgstr ""
+"--interactive requires a GUI KiCad process; the console kicad-cli cannot "
+"open dialogs.\n"
+
+msgid "Merge applier failed to produce a schematic\n"
+msgstr "Merge applier failed to produce a schematic\n"
+
+msgid ""
+"Merge contains hierarchical sheet structure changes that sch merge cannot "
+"apply\n"
+msgstr ""
+"Merge contains hierarchical sheet structure changes that sch merge cannot "
+"apply\n"
+
+#, c-format
+msgid "Cannot flatten sub-sheets with duplicate basename '%s'\n"
+msgstr "Cannot flatten sub-sheets with duplicate basename '%s'\n"
+
+#, c-format
+msgid "Failed to save merged schematic: %s\n"
+msgstr "Failed to save merged schematic: %s\n"
+
+#, c-format
+msgid "Failed to save merged project file: %s\n"
+msgstr "Failed to save merged project file: %s\n"
+
+#, c-format
+msgid "Merge completed with %zu unresolved conflict(s) in %s\n"
+msgstr "Merge completed with %zu unresolved conflict(s) in %s\n"
+
+msgid "--output is required\n"
+msgstr "--output is required\n"
+
+#, c-format
+msgid "Failed to save merged symbol library: %s\n"
+msgstr "Failed to save merged symbol library: %s\n"
+
+#, c-format
+msgid "Symbol library merge completed with %zu unresolved conflict(s) in %s\n"
+msgstr "Symbol library merge completed with %zu unresolved conflict(s) in %s\n"
+
 msgid "Net Navigator"
 msgstr "Net Navigator"
 
@@ -13032,9 +13377,6 @@ msgstr "Checking for labels on more than one wire..."
 
 msgid "Checking for undefined netclasses..."
 msgstr "Checking for undefined netclasses..."
-
-msgid "Conflicts"
-msgstr "Conflicts"
 
 msgid "Miscellaneous"
 msgstr "Miscellaneous"
@@ -17824,6 +18166,14 @@ msgstr "Add Symbol Library"
 
 #, c-format
 msgid ""
+"Could not overwrite the library file '%s'.\n"
+"Make sure you have write permissions and try again."
+msgstr ""
+"Could not overwrite the library file '%s'.\n"
+"Make sure you have write permissions and try again."
+
+#, c-format
+msgid ""
 "Could not create the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
@@ -17860,6 +18210,9 @@ msgstr "Symbol library not enabled."
 
 msgid "ALL"
 msgstr "ALL"
+
+msgid "Discard Changes"
+msgstr "Discard Changes"
 
 msgid "[from schematic]"
 msgstr "[from schematic]"
@@ -18338,6 +18691,20 @@ msgstr "Show the symbol checker window"
 msgid "Show differences between schematic symbol and its library equivalent"
 msgstr "Show differences between schematic symbol and its library equivalent"
 
+msgid "Compare Schematic with File..."
+msgstr "Compare Schematic with File..."
+
+msgid "Diff the current schematic against another .kicad_sch file"
+msgstr "Diff the current schematic against another .kicad_sch file"
+
+msgid "Compare Schematic with Local History..."
+msgstr "Compare Schematic with Local History..."
+
+msgid ""
+"Diff the current schematic against the most recent local-history snapshot"
+msgstr ""
+"Diff the current schematic against the most recent local-history snapshot"
+
 msgid "Show Bus Syntax Help"
 msgstr "Show Bus Syntax Help"
 
@@ -18414,6 +18781,12 @@ msgstr "Save Library As..."
 msgid "Save the current library to a new file"
 msgstr "Save the current library to a new file"
 
+msgid "Compare Library with File..."
+msgstr "Compare Library with File..."
+
+msgid "Diff the current symbol library against another .kicad_sym file"
+msgstr "Diff the current symbol library against another .kicad_sym file"
+
 msgid "New Symbol..."
 msgstr "New Symbol..."
 
@@ -18479,6 +18852,24 @@ msgstr "Flatten Symbol"
 
 msgid "Remove inheritance from symbol"
 msgstr "Remove inheritance from symbol"
+
+msgid "Next Symbol Tab"
+msgstr "Next Symbol Tab"
+
+msgid "Switch to the next open symbol tab"
+msgstr "Switch to the next open symbol tab"
+
+msgid "Previous Symbol Tab"
+msgstr "Previous Symbol Tab"
+
+msgid "Switch to the previous open symbol tab"
+msgstr "Switch to the previous open symbol tab"
+
+msgid "Close Symbol Tab"
+msgstr "Close Symbol Tab"
+
+msgid "Close the active symbol tab"
+msgstr "Close the active symbol tab"
 
 msgid "Bulk Edit Symbol Fields..."
 msgstr "Bulk Edit Symbol Fields..."
@@ -18998,6 +19389,9 @@ msgstr "Set the exclude from simulation attribute"
 
 msgid "Set the exclude from board attribute"
 msgstr "Set the exclude from board attribute"
+
+msgid "Set the exclude from position files attribute"
+msgstr "Set the exclude from position files attribute"
 
 msgid "Set the do not populate attribute"
 msgstr "Set the do not populate attribute"
@@ -19869,6 +20263,38 @@ msgstr "No relevant differences detected."
 msgid "Visual"
 msgstr "Visual"
 
+msgid "Choose Schematic to Compare With"
+msgstr "Choose Schematic to Compare With"
+
+msgid "Select a KiCad s-expression schematic file (.kicad_sch)."
+msgstr "Select a KiCad s-expression schematic file (.kicad_sch)."
+
+msgid "Select a schematic file from another project to compare."
+msgstr "Select a schematic file from another project to compare."
+
+#, c-format
+msgid "Failed to load project for %s"
+msgstr "Failed to load project for %s"
+
+#, c-format
+msgid "Failed to load %s"
+msgstr "Failed to load %s"
+
+msgid "Save the schematic before comparing against local history."
+msgstr "Save the schematic before comparing against local history."
+
+msgid "No local history snapshots for this project."
+msgstr "No local history snapshots for this project."
+
+msgid "No local history snapshots change this schematic."
+msgstr "No local history snapshots change this schematic."
+
+msgid "Could not compare against the selected snapshot."
+msgstr "Could not compare against the selected snapshot."
+
+msgid "Could not open this sheet for comparison."
+msgstr "Could not open this sheet for comparison."
+
 msgid "No datasheet defined."
 msgstr "No datasheet defined."
 
@@ -19990,6 +20416,22 @@ msgstr "Failed to flatten symbol"
 
 msgid "Failed to update library with flattened symbol"
 msgstr "Failed to update library with flattened symbol"
+
+msgid "Switch to Tab"
+msgstr "Switch to Tab"
+
+msgid "Select a library to compare against a file."
+msgstr "Select a library to compare against a file."
+
+msgid "Choose Library to Compare With"
+msgstr "Choose Library to Compare With"
+
+msgid "Select a KiCad symbol library file (.kicad_sym)."
+msgstr "Select a KiCad symbol library file (.kicad_sym)."
+
+#, c-format
+msgid "Failed to load %s: %s"
+msgstr "Failed to load %s: %s"
 
 msgid "Place Pin"
 msgstr "Place Pin"
@@ -21326,8 +21768,35 @@ msgstr "Override API socket path"
 msgid "Failed to start API server\n"
 msgstr "Failed to start API server\n"
 
+msgid "Output format: json, text, png, or svg (default: json)"
+msgstr "Output format: json, text, png, or svg (default: json)"
+
+msgid ""
+"Output file path; required for png/svg, otherwise prints to stdout if omitted"
+msgstr ""
+"Output file path; required for png/svg, otherwise prints to stdout if omitted"
+
+msgid ""
+"Only set exit code (0=identical, 5=differences found, non-zero on error), no "
+"output"
+msgstr ""
+"Only set exit code (0=identical, 5=differences found, non-zero on error), no "
+"output"
+
+msgid "--output is required for png/svg formats\n"
+msgstr "--output is required for png/svg formats\n"
+
 msgid "Footprint and Footprint Libraries"
 msgstr "Footprint and Footprint Libraries"
+
+msgid "Diff two .pretty footprint library directories"
+msgstr "Diff two .pretty footprint library directories"
+
+msgid "Reference .pretty directory"
+msgstr "Reference .pretty directory"
+
+msgid "Comparison .pretty directory"
+msgstr "Comparison .pretty directory"
 
 msgid "Export utilities (svg)"
 msgstr "Export utilities (svg)"
@@ -21456,6 +21925,85 @@ msgstr "Output units, options: mm, inch, mils (default: mm)"
 msgid "Calculate and display copper area"
 msgstr "Calculate and display copper area"
 
+msgid ""
+"Internal git merge-driver hook (configured automatically by KiCad's git "
+"integration; not intended for direct use)."
+msgstr ""
+"Internal git merge-driver hook (configured automatically by KiCad's git "
+"integration; not intended for direct use)."
+
+msgid "Document kind: pcb, sch, sym, or fp"
+msgstr "Document kind: pcb, sch, sym, or fp"
+
+#, c-format
+msgid "Unknown --kind '%s' (expected pcb, sch, sym, or fp)\n"
+msgstr "Unknown --kind '%s' (expected pcb, sch, sym, or fp)\n"
+
+msgid "Could not create a temporary directory for the merge.\n"
+msgstr "Could not create a temporary directory for the merge.\n"
+
+msgid "Could not stage merge inputs.\n"
+msgstr "Could not stage merge inputs.\n"
+
+msgid "Could not write merged output.\n"
+msgstr "Could not write merged output.\n"
+
+msgid "Import non-KiCad board and/or schematic files into a new KiCad project"
+msgstr "Import non-KiCad board and/or schematic files into a new KiCad project"
+
+msgid "Input file(s) to import; each is autodetected as a board or schematic"
+msgstr "Input file(s) to import; each is autodetected as a board or schematic"
+
+msgid ""
+"Output project path stem; produces <stem>.kicad_pro plus the imported <stem>."
+"kicad_pcb and/or <stem>.kicad_sch beside it. Defaults to the first input's "
+"name in the current directory."
+msgstr ""
+"Output project path stem; produces <stem>.kicad_pro plus the imported <stem>."
+"kicad_pcb and/or <stem>.kicad_sch beside it. Defaults to the first input's "
+"name in the current directory."
+
+msgid ""
+"JSON file mapping source layer names to KiCad layer names for imported "
+"boards; unmapped layers use the automatic best-guess"
+msgstr ""
+"JSON file mapping source layer names to KiCad layer names for imported "
+"boards; unmapped layers use the automatic best-guess"
+
+msgid "At least one input file is required\n"
+msgstr "At least one input file is required\n"
+
+#, c-format
+msgid "Could not create output directory: %s\n"
+msgstr "Could not create output directory: %s\n"
+
+#, c-format
+msgid "Could not create project: %s\n"
+msgstr "Could not create project: %s\n"
+
+#, c-format
+msgid ""
+"Could not import '%s': a board and a schematic have already been imported "
+"for this project\n"
+msgstr ""
+"Could not import '%s': a board and a schematic have already been imported "
+"for this project\n"
+
+#, c-format
+msgid "No board or schematic importer recognizes the file: %s\n"
+msgstr "No board or schematic importer recognizes the file: %s\n"
+
+msgid "No inputs could be imported\n"
+msgstr "No inputs could be imported\n"
+
+#, c-format
+msgid "Created project '%s'\n"
+msgstr "Created project '%s'\n"
+
+#, c-format
+msgid "Failed to write project file: %s\n"
+msgstr "Failed to write project file: %s\n"
+
 msgid "Jobset"
 msgstr "Jobset"
 
@@ -21478,6 +22026,55 @@ msgid ""
 msgstr ""
 "Jobset file output to generate, leave blank for all outputs defined in the "
 "jobset"
+
+msgid ""
+"Three-way merge driver for `git mergetool`. Detects PCB vs schematic vs "
+"library item from the output extension, opens the resolution dialog in the "
+"GUI kicad binary for any unresolved conflicts where available, and writes "
+"the merged file."
+msgstr ""
+"Three-way merge driver for `git mergetool`. Detects PCB vs schematic vs "
+"library item from the output extension, opens the resolution dialog in the "
+"GUI kicad binary for any unresolved conflicts where available, and writes "
+"the merged file."
+
+msgid ""
+"Common-ancestor file (.kicad_pcb, .kicad_sch, .kicad_sym, or .kicad_mod)"
+msgstr ""
+"Common-ancestor file (.kicad_pcb, .kicad_sch, .kicad_sym, or .kicad_mod)"
+
+msgid "'Ours' file"
+msgstr "'Ours' file"
+
+msgid "'Theirs' file"
+msgstr "'Theirs' file"
+
+msgid "Output path; extension picks the document type"
+msgstr "Output path; extension picks the document type"
+
+#, c-format
+msgid ""
+"Unsupported output extension '%s'. Expected .kicad_pcb, .kicad_sch, ."
+"kicad_sym, or .kicad_mod\n"
+msgstr ""
+"Unsupported output extension '%s'. Expected .kicad_pcb, .kicad_sch, ."
+"kicad_sym, or .kicad_mod\n"
+
+msgid "Cannot find the main kicad binary alongside kicad-cli.\n"
+msgstr "Cannot find the main kicad binary alongside kicad-cli.\n"
+
+#, c-format
+msgid "Failed to launch '%s'\n"
+msgstr "Failed to launch '%s'\n"
+
+msgid "Diff two .kicad_pcb files and emit JSON, text, PNG, or SVG"
+msgstr "Diff two .kicad_pcb files and emit JSON, text, PNG, or SVG"
+
+msgid "Reference PCB file"
+msgstr "Reference PCB file"
+
+msgid "Comparison PCB file"
+msgstr "Comparison PCB file"
 
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
 msgstr "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -21977,6 +22574,13 @@ msgstr "Import report format: none, json, text (default: none)"
 msgid "File path for import report (default: stdout)"
 msgstr "File path for import report (default: stdout)"
 
+msgid ""
+"JSON file mapping source layer names to KiCad layer names; unmapped layers "
+"use the automatic best-guess"
+msgstr ""
+"JSON file mapping source layer names to KiCad layer names; unmapped layers "
+"use the automatic best-guess"
+
 #, c-format
 msgid "Invalid format: %s\n"
 msgstr "Invalid format: %s\n"
@@ -22095,6 +22699,15 @@ msgstr "Forces the board file to be resaved regardless of versioning"
 msgid "Schematics"
 msgstr "Schematics"
 
+msgid "Diff two .kicad_sch files and emit JSON, text, PNG, or SVG"
+msgstr "Diff two .kicad_sch files and emit JSON, text, PNG, or SVG"
+
+msgid "Reference schematic file"
+msgstr "Reference schematic file"
+
+msgid "Comparison schematic file"
+msgstr "Comparison schematic file"
+
 msgid ""
 "Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
 msgstr ""
@@ -22188,6 +22801,16 @@ msgstr ""
 "Export the legacy BOM XML format used in the schematic editor with Python "
 "scripts"
 
+msgid "Import a non-KiCad schematic file to KiCad format"
+msgstr "Import a non-KiCad schematic file to KiCad format"
+
+msgid ""
+"Input format hint: auto, altium, eagle, cadstar, easyeda, easyedapro, "
+"ltspice, pads, diptrace (default: auto)"
+msgstr ""
+"Input format hint: auto, altium, eagle, cadstar, easyeda, easyedapro, "
+"ltspice, pads, diptrace (default: auto)"
+
 msgid "Upgrade the schematic file's format to the latest one"
 msgstr "Upgrade the schematic file's format to the latest one"
 
@@ -22196,6 +22819,15 @@ msgstr "Forces the schematic file to be resaved regardless of versioning"
 
 msgid "Symbol and Symbol Libraries"
 msgstr "Symbol and Symbol Libraries"
+
+msgid "Diff two .kicad_sym symbol libraries"
+msgstr "Diff two .kicad_sym symbol libraries"
+
+msgid "Reference .kicad_sym file"
+msgstr "Reference .kicad_sym file"
+
+msgid "Comparison .kicad_sym file"
+msgstr "Comparison .kicad_sym file"
 
 msgid "Exports the symbol or entire symbol library to SVG"
 msgstr "Exports the symbol or entire symbol library to SVG"
@@ -22229,6 +22861,11 @@ msgstr "Reports the version info in various formats"
 
 msgid "version info format (plain, commit, about)"
 msgstr "version info format (plain, commit, about)"
+
+#, c-format
+msgid "Invalid output format '%s' (expected 'json', 'text', 'png', or 'svg')\n"
+msgstr ""
+"Invalid output format '%s' (expected 'json', 'text', 'png', or 'svg')\n"
 
 msgid "Destination:"
 msgstr "Destination:"
@@ -22790,6 +23427,9 @@ msgstr ""
 "Choose 'Restore' to recover those changes, or 'Discard' to keep the "
 "currently saved files."
 
+msgid "Compare Project Branches requires a project that is tracked by git."
+msgstr "Compare Project Branches requires a project that is tracked by git."
+
 msgid "Edit File in Text Editor"
 msgstr "Edit File in Text Editor"
 
@@ -22881,11 +23521,28 @@ msgstr "Edit Advanced Config..."
 msgid "Edit advanced settings"
 msgstr "Edit advanced settings"
 
+msgid "Compare Project Branches..."
+msgstr "Compare Project Branches..."
+
+msgid "Review the file changes between two git refs in the current project"
+msgstr "Review the file changes between two git refs in the current project"
+
 msgid "Edit Local File..."
 msgstr "Edit Local File..."
 
 msgid "Edit local file in text editor"
 msgstr "Edit local file in text editor"
+
+msgid "KiCad Merge Tool"
+msgstr "KiCad Merge Tool"
+
+#, c-format
+msgid ""
+"No mergetool handler for output '%s'.\n"
+"Output extension must be .kicad_pcb, .kicad_sch, .kicad_sym, or .kicad_mod."
+msgstr ""
+"No mergetool handler for output '%s'.\n"
+"Output extension must be .kicad_pcb, .kicad_sch, .kicad_sym, or .kicad_mod."
 
 msgid "Add Default Repository"
 msgstr "Add Default Repository"
@@ -25739,7 +26396,39 @@ msgid ""
 "and creepage distances can be reduced. Soldermask is usually not considered "
 "as a conformal coating.\n"
 "- Insulations trough liquids, compressed air or gases other than air are not "
-"in the scope of IEC60664"
+"in the scope of IEC60664\n"
+"- The dimensions for creepage distance cannot be specified where permanently "
+"conductive pollution is present (pollution degree 4)\n"
+"\n"
+"The OVC category can be determined as follows:\n"
+"\n"
+"- OVC I: Equipment connected to circuits in which measures are taken to "
+"limit transient overvoltages to an appropriately low level\n"
+"- OVC II: Equipment connected to the mains through outlets or plugs, such as "
+"household appliances and portable tools\n"
+"- OVC III: Equipment that is part of the fixed installation, such as "
+"switches, circuit breakers, distribution boards, ACs, and permanently "
+"installed industrial equipment\n"
+"- OVC IV: Equipment installed at the origin of the electrical installation, "
+"such as electricity meters, primary overcurrent protection devices, or "
+"equipment connected directly to the grid\n"
+"\n"
+"The PD category can be determined as follows:\n"
+"\n"
+"- PD1: Sealed or in clean laboratory (non-conductive pollution).\n"
+"- PD2: General commercial indoor (non-conductive pollution, but temporary "
+"conductivity caused by condensation may occasionally be expected)\n"
+"- PD3: Industrial environments, or humid areas (conductive pollution, or non-"
+"conductive pollution becomes conductive due to expected condensation)\n"
+"- PD4: Outdoors or exposed equipment (persistent conductive pollution)\n"
+"\n"
+"Material Insulation Groups (For reference only, verify the final "
+"calculations with your supplier):\n"
+"\n"
+"- I: PTFE, PE, PA, PP, PVC, ABS (CTI >= 600V)\n"
+"- II: PBT, PS, Non-Brominated Epoxy (400V <= CTI < 600V)\n"
+"- IIIa: Standard FR4, CEM-1, Brominated Epoxy (175V <= CTI < 400V)\n"
+"- IIIb: PEEK, PI, PF (100V <= CTI < 175V)\n"
 msgstr ""
 "The goal of the IEC60664-1 is to provide guidance on designing insulation "
 "for products that have a connection to mains supply.\n"
@@ -25753,7 +26442,39 @@ msgstr ""
 "and creepage distances can be reduced. Soldermask is usually not considered "
 "as a conformal coating.\n"
 "- Insulations trough liquids, compressed air or gases other than air are not "
-"in the scope of IEC60664"
+"in the scope of IEC60664\n"
+"- The dimensions for creepage distance cannot be specified where permanently "
+"conductive pollution is present (pollution degree 4)\n"
+"\n"
+"The OVC category can be determined as follows:\n"
+"\n"
+"- OVC I: Equipment connected to circuits in which measures are taken to "
+"limit transient overvoltages to an appropriately low level\n"
+"- OVC II: Equipment connected to the mains through outlets or plugs, such as "
+"household appliances and portable tools\n"
+"- OVC III: Equipment that is part of the fixed installation, such as "
+"switches, circuit breakers, distribution boards, ACs, and permanently "
+"installed industrial equipment\n"
+"- OVC IV: Equipment installed at the origin of the electrical installation, "
+"such as electricity meters, primary overcurrent protection devices, or "
+"equipment connected directly to the grid\n"
+"\n"
+"The PD category can be determined as follows:\n"
+"\n"
+"- PD1: Sealed or in clean laboratory (non-conductive pollution).\n"
+"- PD2: General commercial indoor (non-conductive pollution, but temporary "
+"conductivity caused by condensation may occasionally be expected)\n"
+"- PD3: Industrial environments, or humid areas (conductive pollution, or non-"
+"conductive pollution becomes conductive due to expected condensation)\n"
+"- PD4: Outdoors or exposed equipment (persistent conductive pollution)\n"
+"\n"
+"Material Insulation Groups (For reference only, verify the final "
+"calculations with your supplier):\n"
+"\n"
+"- I: PTFE, PE, PA, PP, PVC, ABS (CTI >= 600V)\n"
+"- II: PBT, PS, Non-Brominated Epoxy (400V <= CTI < 600V)\n"
+"- IIIa: Standard FR4, CEM-1, Brominated Epoxy (175V <= CTI < 400V)\n"
+"- IIIb: PEEK, PI, PF (100V <= CTI < 175V)\n"
 
 msgid "KiCad Calculator Tools"
 msgstr "KiCad Calculator Tools"
@@ -26134,6 +26855,18 @@ msgstr "km/h"
 
 msgid "mi/h"
 msgstr "mi/h"
+
+#, c-format
+msgid "Cannot open netlist file '%s'."
+msgstr "Cannot open netlist file '%s'."
+
+#, c-format
+msgid ""
+"Error loading netlist.\n"
+"%s"
+msgstr ""
+"Error loading netlist.\n"
+"%s"
 
 msgid "Autoplacing components..."
 msgstr "Autoplacing components…"
@@ -27394,9 +28127,6 @@ msgstr "Convert to Copper Zone"
 
 msgid "No layer selected."
 msgstr "No layer selected."
-
-msgid "Layers:"
-msgstr "Layers:"
 
 msgid "Open Zone Manager..."
 msgstr "Open Zone Manager..."
@@ -28733,9 +29463,6 @@ msgstr "Restart Search"
 
 msgid "Find by Properties"
 msgstr "Find by Properties"
-
-msgid "Property"
-msgstr "Property"
 
 msgid "Match"
 msgstr "Match"
@@ -31426,9 +32153,6 @@ msgstr "Target Properties"
 msgid "Footprint Reference Properties"
 msgstr "Footprint Reference Properties"
 
-msgid "Reference:"
-msgstr "Reference:"
-
 msgid "Footprint Value Properties"
 msgstr "Footprint Value Properties"
 
@@ -32769,7 +33493,7 @@ msgstr ""
 msgid ""
 "### Top-level Clauses\n"
 "\n"
-"    (version 1)\n"
+"    (version 2)\n"
 "\n"
 "    (rule <rule_name> <rule_clause> ...)\n"
 "\n"
@@ -32791,7 +33515,7 @@ msgid ""
 msgstr ""
 "### Top-level Clauses\n"
 "\n"
-"    (version 1)\n"
+"    (version 2)\n"
 "\n"
 "    (rule <rule_name> <rule_clause> ...)\n"
 "\n"
@@ -33423,7 +34147,7 @@ msgstr ""
 msgid ""
 "### Examples\n"
 "\n"
-"    (version 1)\n"
+"    (version 2)\n"
 "\n"
 "    (rule HV\n"
 "       (constraint clearance (min 1.5mm))\n"
@@ -33489,7 +34213,7 @@ msgid ""
 msgstr ""
 "### Examples\n"
 "\n"
-"    (version 1)\n"
+"    (version 2)\n"
 "\n"
 "    (rule HV\n"
 "       (constraint clearance (min 1.5mm))\n"
@@ -34909,8 +35633,8 @@ msgid "Constraint layer not matched."
 msgstr "Constraint layer not matched."
 
 #, c-format
-msgid "%s is not a drilled hole; rule ignored."
-msgstr "%s is not a drilled hole; rule ignored."
+msgid "%s does not have a hole; rule ignored."
+msgstr "%s does not have a hole; rule ignored."
 
 msgid "Unconditional constraint applied."
 msgstr "Unconditional constraint applied."
@@ -36878,6 +37602,9 @@ msgstr "[no footprint loaded]"
 msgid "No footprint selected."
 msgstr "No footprint selected."
 
+msgid "The current footprint has been modified.  Save changes?"
+msgstr "The current footprint has been modified.  Save changes?"
+
 msgid "Edit Zone"
 msgstr "Edit Zone"
 
@@ -37260,9 +37987,6 @@ msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
 msgstr ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
-
-msgid "The current footprint has been modified.  Save changes?"
-msgstr "The current footprint has been modified.  Save changes?"
 
 msgid "Clipboard content is not KiCad compatible"
 msgstr "Clipboard content is not KiCad compatible"
@@ -37876,18 +38600,6 @@ msgstr "Update Netlist"
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "Total warnings: %d, errors: %d."
-
-#, c-format
-msgid "Cannot open netlist file '%s'."
-msgstr "Cannot open netlist file '%s'."
-
-#, c-format
-msgid ""
-"Error loading netlist.\n"
-"%s"
-msgstr ""
-"Error loading netlist.\n"
-"%s"
 
 #, c-format
 msgid "No footprint defined for symbol %s."
@@ -39246,6 +39958,14 @@ msgid "DipTrace: invalid legacy board version suffix"
 msgstr "DipTrace: invalid legacy board version suffix"
 
 #, c-format
+msgid "DipTrace import: invalid outline vertex count %d."
+msgstr "DipTrace import: invalid outline vertex count %d."
+
+#, c-format
+msgid "DipTrace import: invalid layer count %d."
+msgstr "DipTrace import: invalid layer count %d."
+
+#, c-format
 msgid "DipTrace: invalid pattern-name group count %d at offset 0x%06zX"
 msgstr "DipTrace: invalid pattern-name group count %d at offset 0x%06zX"
 
@@ -39323,6 +40043,14 @@ msgstr "DipTrace: net index %d maps to multiple net names (%s, %s)"
 #, c-format
 msgid "DipTrace: duplicate net metadata for net index %d"
 msgstr "DipTrace: duplicate net metadata for net index %d"
+
+#, c-format
+msgid ""
+"DipTrace import: could not write design rules to '%s'; imported board is "
+"missing DipTrace-specific clearance rules."
+msgstr ""
+"DipTrace import: could not write design rules to '%s'; imported board is "
+"missing DipTrace-specific clearance rules."
 
 msgid "DipTrace PCB files"
 msgstr "DipTrace PCB files"
@@ -39824,6 +40552,14 @@ msgid "Undefined Layers Warning"
 msgstr "Undefined Layers Warning"
 
 #, c-format
+msgid ""
+"One or more items were found on undefined layers (%s). Open the board in the "
+"PCB Editor to resolve."
+msgstr ""
+"One or more items were found on undefined layers (%s). Open the board in the "
+"PCB Editor to resolve."
+
+#, c-format
 msgid "Cannot create generated object of type '%s'"
 msgstr "Cannot create generated object of type '%s'"
 
@@ -40048,6 +40784,10 @@ msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
 msgstr ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
+
+#, c-format
+msgid "UNKNOWN (%d)"
+msgstr "UNKNOWN (%d)"
 
 #, c-format
 msgid "Failed to parse Sprint Layout file '%s'"
@@ -41038,8 +41778,8 @@ msgstr "Missing component class name argument to hasComponentClass()"
 msgid "Loading Footprint Libraries"
 msgstr "Loading Footprint Libraries"
 
-msgid "Failed to load board\n"
-msgstr "Failed to load board\n"
+msgid "Failed to load board"
+msgstr "Failed to load board"
 
 #, c-format
 msgid "Invalid layer name '%s'\n"
@@ -41157,28 +41897,98 @@ msgid "Board file was not updated\n"
 msgstr "Board file was not updated\n"
 
 #, c-format
-msgid "Unable to determine file format for '%s'\n"
-msgstr "Unable to determine file format for '%s'\n"
+msgid "No PCB importer recognizes the file format of '%s'\n"
+msgstr "No PCB importer recognizes the file format of '%s'\n"
 
 #, c-format
-msgid "Input file not found: '%s'\n"
-msgstr "Input file not found: '%s'\n"
+msgid ""
+"Layer map entry '%s' -> '%s' names an unknown KiCad layer; using automatic "
+"mapping instead"
+msgstr ""
+"Layer map entry '%s' -> '%s' names an unknown KiCad layer; using automatic "
+"mapping instead"
 
 #, c-format
-msgid "No plugin found for file type '%s'\n"
-msgstr "No plugin found for file type '%s'\n"
+msgid ""
+"Layer map entry '%s' -> '%s' is not a permitted target for this layer; using "
+"automatic mapping instead"
+msgstr ""
+"Layer map entry '%s' -> '%s' is not a permitted target for this layer; using "
+"automatic mapping instead"
 
 #, c-format
-msgid "Importing '%s' using %s format...\n"
-msgstr "Importing '%s' using %s format...\n"
+msgid ""
+"No KiCad layer mapping for required source layer '%s'; its items will not be "
+"imported"
+msgstr ""
+"No KiCad layer mapping for required source layer '%s'; its items will not be "
+"imported"
+
+msgid ""
+"A layer map was provided, but this importer does not support layer "
+"remapping; it will be ignored"
+msgstr ""
+"A layer map was provided, but this importer does not support layer "
+"remapping; it will be ignored"
+
+msgid "Failed to load board\n"
+msgstr "Failed to load board\n"
+
+#, c-format
+msgid ""
+"Layer map entry '%s' does not match any source layer in the imported file; "
+"it will be ignored"
+msgstr ""
+"Layer map entry '%s' does not match any source layer in the imported file; "
+"it will be ignored"
 
 #, c-format
 msgid "Successfully saved imported board to '%s'\n"
 msgstr "Successfully saved imported board to '%s'\n"
 
+msgid "Failed to load one or more input boards\n"
+msgstr "Failed to load one or more input boards\n"
+
+msgid "Merge applier failed to produce a board\n"
+msgstr "Merge applier failed to produce a board\n"
+
 #, c-format
-msgid "Error during import: %s\n"
-msgstr "Error during import: %s\n"
+msgid "Failed to save merged board: %s\n"
+msgstr "Failed to save merged board: %s\n"
+
+#, c-format
+msgid "Failed to save merged %s: %s\n"
+msgstr "Failed to save merged %s: %s\n"
+
+msgid "custom DRC rules"
+msgstr "custom DRC rules"
+
+msgid "footprint library table"
+msgstr "footprint library table"
+
+msgid "symbol library table"
+msgstr "symbol library table"
+
+#, c-format
+msgid "Cannot create output directory %s\n"
+msgstr "Cannot create output directory %s\n"
+
+msgid ""
+"Single-file fp merge produced multiple footprints; refusing to collapse into "
+"one .kicad_mod\n"
+msgstr ""
+"Single-file fp merge produced multiple footprints; refusing to collapse into "
+"one .kicad_mod\n"
+
+#, c-format
+msgid "Failed to save merged footprint library: %s\n"
+msgstr "Failed to save merged footprint library: %s\n"
+
+#, c-format
+msgid ""
+"Footprint library merge completed with %zu unresolved conflict(s) in %s\n"
+msgstr ""
+"Footprint library merge completed with %zu unresolved conflict(s) in %s\n"
 
 msgid "Multiple Layers"
 msgstr "Multiple Layers"
@@ -41215,6 +42025,10 @@ msgstr ""
 "Unable to find complementary differential pair net for length tuning. Make "
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
+
+#, c-format
+msgid "Unable to drag arc tracks of %.1f degrees or greater."
+msgstr "Unable to drag arc tracks of %.1f degrees or greater."
 
 msgid "board minimum clearance"
 msgstr "board minimum clearance"
@@ -42066,6 +42880,18 @@ msgstr "Item allowed at current location."
 msgid "Select a footprint to diff with its library equivalent."
 msgstr "Select a footprint to diff with its library equivalent."
 
+msgid "Choose Board to Compare With"
+msgstr "Choose Board to Compare With"
+
+msgid "Select a board file from another project to compare."
+msgstr "Select a board file from another project to compare."
+
+msgid "Save the board before comparing against local history."
+msgstr "Save the board before comparing against local history."
+
+msgid "No local history snapshots change this board."
+msgstr "No local history snapshots change this board."
+
 msgid "Select a footprint for a footprint associations report."
 msgstr "Select a footprint for a footprint associations report."
 
@@ -42222,13 +43048,6 @@ msgstr "Swap Gate Nets..."
 #, c-format
 msgid "Swap with %s"
 msgstr "Swap with %s"
-
-#, c-format
-msgid "Unable to resize arc tracks of %s or greater."
-msgstr "Unable to resize arc tracks of %s or greater."
-
-msgid "Drag Arc Track"
-msgstr "Drag Arc Track"
 
 msgid "Edit Track Width/Via Size"
 msgstr "Edit Track Width/Via Size"
@@ -42400,6 +43219,18 @@ msgstr "Change Footprint Name"
 msgid "Error renaming footprint"
 msgstr "Error renaming footprint"
 
+msgid "Select a library to compare against another."
+msgstr "Select a library to compare against another."
+
+msgid "Choose .pretty Folder to Compare With"
+msgstr "Choose .pretty Folder to Compare With"
+
+msgid "Select a KiCad footprint library folder (ends with .pretty)."
+msgstr "Select a KiCad footprint library folder (ends with .pretty)."
+
+msgid "Select a different .pretty folder than the active library."
+msgstr "Select a different .pretty folder than the active library."
+
 msgid "No datasheet found in the footprint."
 msgstr "No datasheet found in the footprint."
 
@@ -42494,9 +43325,6 @@ msgstr "Unable to outset the selected items."
 
 msgid "Some of the items could not be outset."
 msgstr "Some of the items could not be outset."
-
-msgid "(none)"
-msgstr "(none)"
 
 msgid "Topology mismatch"
 msgstr "Topology mismatch"
@@ -42812,6 +43640,12 @@ msgstr "Set design block layout to current selection"
 msgid "Open in Footprint Editor"
 msgstr "Open in Footprint Editor"
 
+msgid "Toggle the exclude from bill of materials attribute"
+msgstr "Toggle the exclude from bill of materials attribute"
+
+msgid "Toggle the exclude from position files attribute"
+msgstr "Toggle the exclude from position files attribute"
+
 msgid "Find by Properties..."
 msgstr "Find by Properties..."
 
@@ -43010,6 +43844,9 @@ msgstr "Export Current Footprint..."
 
 msgid "Export edited footprint to file"
 msgstr "Export edited footprint to file"
+
+msgid "Diff the current footprint library against another .pretty directory"
+msgstr "Diff the current footprint library against another .pretty directory"
 
 msgid "Footprint Properties..."
 msgstr "Footprint Properties..."
@@ -43693,6 +44530,18 @@ msgstr "Show constraints resolution for the selected object"
 msgid "Show differences between board footprint and its library equivalent"
 msgstr "Show differences between board footprint and its library equivalent"
 
+msgid "Compare Board with File..."
+msgstr "Compare Board with File..."
+
+msgid "Diff the current PCB against another .kicad_pcb file"
+msgstr "Diff the current PCB against another .kicad_pcb file"
+
+msgid "Compare Board with Local History..."
+msgstr "Compare Board with Local History..."
+
+msgid "Diff the current PCB against the most recent local-history snapshot"
+msgstr "Diff the current PCB against the most recent local-history snapshot"
+
 msgid "Show Footprint Associations"
 msgstr "Show Footprint Associations"
 
@@ -43716,6 +44565,24 @@ msgstr "Repair Footprint"
 
 msgid "Run various diagnostics and attempt to repair footprint"
 msgstr "Run various diagnostics and attempt to repair footprint"
+
+msgid "Next Footprint Tab"
+msgstr "Next Footprint Tab"
+
+msgid "Switch to the next open footprint tab"
+msgstr "Switch to the next open footprint tab"
+
+msgid "Previous Footprint Tab"
+msgstr "Previous Footprint Tab"
+
+msgid "Switch to the previous open footprint tab"
+msgstr "Switch to the previous open footprint tab"
+
+msgid "Close Footprint Tab"
+msgstr "Close Footprint Tab"
+
+msgid "Close the active footprint tab"
+msgstr "Close the active footprint tab"
 
 msgid "Distribute Horizontally by Centers"
 msgstr "Distribute Horizontally by Centers"
@@ -44152,11 +45019,11 @@ msgstr "design block has no saved PCB layout"
 msgid "could not load the design block's layout"
 msgstr "could not load the design block's layout"
 
-msgid "design block layout could not be loaded"
-msgstr "design block layout could not be loaded"
+msgid "design block contains no items to apply"
+msgstr "design block contains no items to apply"
 
-msgid "group has no footprints"
-msgstr "group has no footprints"
+msgid "group is empty"
+msgstr "group is empty"
 
 msgid "layout copy failed"
 msgstr "layout copy failed"
@@ -44171,6 +45038,9 @@ msgstr "Apply design block layout cancelled."
 #, c-format
 msgid "Apply design block layout to %d group(s)"
 msgstr "Apply design block layout to %d group(s)"
+
+msgid "Copied copper has no net assigned. Assign nets to connect it."
+msgstr "Copied copper has no net assigned. Assign nets to connect it."
 
 #, c-format
 msgid "Applied design block layout to %d of %d group(s)."
@@ -44194,6 +45064,10 @@ msgstr "Design block %s does not have a board file."
 
 msgid "Error loading board."
 msgstr "Error loading board."
+
+#, c-format
+msgid "Board changed from %d to %d copper layers, stackup updated."
+msgstr "Board changed from %d to %d copper layers, stackup updated."
 
 msgid "Append Board"
 msgstr "Append Board"
@@ -45358,12 +46232,19 @@ msgstr "Offset X"
 msgid "Offset Y"
 msgstr "Offset Y"
 
+#, c-format
+msgid "Delete zone '%s'?"
+msgstr "Delete zone '%s'?"
+
 msgid ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
 "its priority is higher, its outlines are removed from the other zone."
 msgstr ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
 "its priority is higher, its outlines are removed from the other zone."
+
+msgid "Delete selected zone"
+msgstr "Delete selected zone"
 
 msgid ""
 "Automatically assign zone priorities based on connectivity analysis of "
@@ -45512,6 +46393,236 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid ""
+#~ "The goal of the IEC60664-1 is to provide guidance on designing insulation "
+#~ "for products that have a connection to mains supply.\n"
+#~ "\n"
+#~ "However some cases are not covered by this calculator:\n"
+#~ "\n"
+#~ "- For frequencies higher than 30kHz, the dielectric performances are "
+#~ "degraded. IEC60664-4 covers those cases\n"
+#~ "- When using a conformal coating or a potting in order to protect for "
+#~ "pollution, if all conditions specified by IEC60664-3 are met, the "
+#~ "clearance and creepage distances can be reduced. Soldermask is usually "
+#~ "not considered as a conformal coating.\n"
+#~ "- Insulations trough liquids, compressed air or gases other than air are "
+#~ "not in the scope of IEC60664"
+#~ msgstr ""
+#~ "The goal of the IEC60664-1 is to provide guidance on designing insulation "
+#~ "for products that have a connection to mains supply.\n"
+#~ "\n"
+#~ "However some cases are not covered by this calculator:\n"
+#~ "\n"
+#~ "- For frequencies higher than 30kHz, the dielectric performances are "
+#~ "degraded. IEC60664-4 covers those cases\n"
+#~ "- When using a conformal coating or a potting in order to protect for "
+#~ "pollution, if all conditions specified by IEC60664-3 are met, the "
+#~ "clearance and creepage distances can be reduced. Soldermask is usually "
+#~ "not considered as a conformal coating.\n"
+#~ "- Insulations trough liquids, compressed air or gases other than air are "
+#~ "not in the scope of IEC60664"
+
+#~ msgid ""
+#~ "### Top-level Clauses\n"
+#~ "\n"
+#~ "    (version 1)\n"
+#~ "\n"
+#~ "    (rule <rule_name> <rule_clause> ...)\n"
+#~ "\n"
+#~ "<br>\n"
+#~ "\n"
+#~ "### Rule Clauses\n"
+#~ "\n"
+#~ "    (constraint <constraint_type> ...)\n"
+#~ "\n"
+#~ "    (condition \"<expression>\")\n"
+#~ "\n"
+#~ "    (layer \"<layer_name>\")\n"
+#~ "\n"
+#~ "    (severity <severity_name>)\n"
+#~ "\n"
+#~ "\n"
+#~ "<br>\n"
+#~ "\n"
+#~ msgstr ""
+#~ "### Top-level Clauses\n"
+#~ "\n"
+#~ "    (version 1)\n"
+#~ "\n"
+#~ "    (rule <rule_name> <rule_clause> ...)\n"
+#~ "\n"
+#~ "<br>\n"
+#~ "\n"
+#~ "### Rule Clauses\n"
+#~ "\n"
+#~ "    (constraint <constraint_type> ...)\n"
+#~ "\n"
+#~ "    (condition \"<expression>\")\n"
+#~ "\n"
+#~ "    (layer \"<layer_name>\")\n"
+#~ "\n"
+#~ "    (severity <severity_name>)\n"
+#~ "\n"
+#~ "\n"
+#~ "<br>\n"
+#~ "\n"
+
+#~ msgid ""
+#~ "### Examples\n"
+#~ "\n"
+#~ "    (version 1)\n"
+#~ "\n"
+#~ "    (rule HV\n"
+#~ "       (constraint clearance (min 1.5mm))\n"
+#~ "       (condition \"A.hasNetclass('HV')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV\n"
+#~ "       (layer outer)\n"
+#~ "       (constraint clearance (min 1.5mm))\n"
+#~ "       (condition \"A.hasNetclass('HV')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV_HV\n"
+#~ "       # wider clearance between HV tracks\n"
+#~ "       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+#~ "       (condition \"A.hasNetclass('HV') && B.hasNetclass('HV')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV_unshielded\n"
+#~ "       (constraint clearance (min 2mm))\n"
+#~ "       (condition \"A.hasNetclass('HV') && !A."
+#~ "enclosedByArea('Shield*')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule heavy_thermals\n"
+#~ "       (constraint thermal_spoke_width (min 0.5mm))\n"
+#~ "       (condition \"A.hasNetclass('HV')\"))\n"
+#~ "\n"
+#~ "    # Total routed length across every net in chain SIG_A\n"
+#~ "    (rule sig_group_length\n"
+#~ "       (constraint net_chain_length (min 40mm) (max 60mm))\n"
+#~ "       (condition \"A.Net.NetChain == 'SIG_A'\") )\n"
+#~ "\n"
+#~ "    # Total propagation delay across every net in chain CLK_GRP\n"
+#~ "    (rule sig_group_delay\n"
+#~ "       (constraint net_chain_length (min 180ps) (max 220ps) (time_domain "
+#~ "yes))\n"
+#~ "       (condition \"A.Net.NetChain == 'CLK_GRP'\") )\n"
+#~ "\n"
+#~ "    # --- Net chain rules: multi-net signals through series passives ---\n"
+#~ "\n"
+#~ "    # Same effect as sig_group_length, scoped via inNetChain() instead.\n"
+#~ "    (rule \"DDR_DQ chain length\"\n"
+#~ "       (constraint net_chain_length (min 40mm) (max 60mm))\n"
+#~ "       (condition \"A.inNetChain('DDR_DQ*')\") )\n"
+#~ "\n"
+#~ "    # Stub branches off the trunk of any DDR chain may not exceed 2 mm.\n"
+#~ "    (rule \"DDR stub length\"\n"
+#~ "       (constraint stub_length (max 2mm))\n"
+#~ "       (condition \"A.inNetChain('DDR_*')\") )\n"
+#~ "\n"
+#~ "    # Every chain in the HighSpeed class needs an unbroken B.Cu return.\n"
+#~ "    (rule \"HS return path\"\n"
+#~ "       (constraint return_path (layer \"B.Cu\"))\n"
+#~ "       (condition \"A.inNetChainClass('HighSpeed')\") )\n"
+#~ "\n"
+#~ "    # Tighter clearance for any net that belongs to a chain.\n"
+#~ "    (rule \"chain members tighter clearance\"\n"
+#~ "       (constraint clearance (min 0.2mm))\n"
+#~ "       (condition \"A.hasNetChain()\") )\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "\n"
+#~ msgstr ""
+#~ "### Examples\n"
+#~ "\n"
+#~ "    (version 1)\n"
+#~ "\n"
+#~ "    (rule HV\n"
+#~ "       (constraint clearance (min 1.5mm))\n"
+#~ "       (condition \"A.hasNetclass('HV')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV\n"
+#~ "       (layer outer)\n"
+#~ "       (constraint clearance (min 1.5mm))\n"
+#~ "       (condition \"A.hasNetclass('HV')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV_HV\n"
+#~ "       # wider clearance between HV tracks\n"
+#~ "       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
+#~ "       (condition \"A.hasNetclass('HV') && B.hasNetclass('HV')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule HV_unshielded\n"
+#~ "       (constraint clearance (min 2mm))\n"
+#~ "       (condition \"A.hasNetclass('HV') && !A."
+#~ "enclosedByArea('Shield*')\"))\n"
+#~ "\n"
+#~ "\n"
+#~ "    (rule heavy_thermals\n"
+#~ "       (constraint thermal_spoke_width (min 0.5mm))\n"
+#~ "       (condition \"A.hasNetclass('HV')\"))\n"
+#~ "\n"
+#~ "    # Total routed length across every net in chain SIG_A\n"
+#~ "    (rule sig_group_length\n"
+#~ "       (constraint net_chain_length (min 40mm) (max 60mm))\n"
+#~ "       (condition \"A.Net.NetChain == 'SIG_A'\") )\n"
+#~ "\n"
+#~ "    # Total propagation delay across every net in chain CLK_GRP\n"
+#~ "    (rule sig_group_delay\n"
+#~ "       (constraint net_chain_length (min 180ps) (max 220ps) (time_domain "
+#~ "yes))\n"
+#~ "       (condition \"A.Net.NetChain == 'CLK_GRP'\") )\n"
+#~ "\n"
+#~ "    # --- Net chain rules: multi-net signals through series passives ---\n"
+#~ "\n"
+#~ "    # Same effect as sig_group_length, scoped via inNetChain() instead.\n"
+#~ "    (rule \"DDR_DQ chain length\"\n"
+#~ "       (constraint net_chain_length (min 40mm) (max 60mm))\n"
+#~ "       (condition \"A.inNetChain('DDR_DQ*')\") )\n"
+#~ "\n"
+#~ "    # Stub branches off the trunk of any DDR chain may not exceed 2 mm.\n"
+#~ "    (rule \"DDR stub length\"\n"
+#~ "       (constraint stub_length (max 2mm))\n"
+#~ "       (condition \"A.inNetChain('DDR_*')\") )\n"
+#~ "\n"
+#~ "    # Every chain in the HighSpeed class needs an unbroken B.Cu return.\n"
+#~ "    (rule \"HS return path\"\n"
+#~ "       (constraint return_path (layer \"B.Cu\"))\n"
+#~ "       (condition \"A.inNetChainClass('HighSpeed')\") )\n"
+#~ "\n"
+#~ "    # Tighter clearance for any net that belongs to a chain.\n"
+#~ "    (rule \"chain members tighter clearance\"\n"
+#~ "       (constraint clearance (min 0.2mm))\n"
+#~ "       (condition \"A.hasNetChain()\") )\n"
+#~ "<br><br>\n"
+#~ "\n"
+#~ "\n"
+
+#, c-format
+#~ msgid "%s is not a drilled hole; rule ignored."
+#~ msgstr "%s is not a drilled hole; rule ignored."
+
+#, c-format
+#~ msgid "Unable to determine file format for '%s'\n"
+#~ msgstr "Unable to determine file format for '%s'\n"
+
+#, c-format
+#~ msgid "Unable to resize arc tracks of %s or greater."
+#~ msgstr "Unable to resize arc tracks of %s or greater."
+
+#~ msgid "Drag Arc Track"
+#~ msgstr "Drag Arc Track"
+
+#~ msgid "design block layout could not be loaded"
+#~ msgstr "design block layout could not be loaded"
+
+#~ msgid "group has no footprints"
+#~ msgstr "group has no footprints"
 
 #, c-format
 #~ msgid ""
@@ -53064,9 +54175,6 @@ msgstr "KiCad Drawing Sheet"
 #~ msgid "Changed"
 #~ msgstr "Changed"
 
-#~ msgid "Added"
-#~ msgstr "Added"
-
 #~ msgid "Conflicts detected during rebase"
 #~ msgstr "Conflicts detected during rebase"
 
@@ -57783,9 +58891,6 @@ msgstr "KiCad Drawing Sheet"
 #~ msgid "Toggle Exclude from Bill of Materials"
 #~ msgstr "Toggle Exclude from Bill of Materials"
 
-#~ msgid "Toggle the exclude from bill of materials attribute"
-#~ msgstr "Toggle the exclude from bill of materials attribute"
-
 #~ msgid "Include in Simulation"
 #~ msgstr "Include in Simulation"
 
@@ -60997,9 +62102,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Open Anyway"
 #~ msgstr "Open Anyway"
-
-#~ msgid "Discard Changes"
-#~ msgstr "Discard Changes"
 
 #~ msgid "Apply to all"
 #~ msgstr "Apply to all"
