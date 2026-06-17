@@ -114,6 +114,14 @@ PARAM_LAYER_PRESET_3D::PARAM_LAYER_PRESET_3D( const std::string& aPath,
     LAYER( "dnp_models",          LAYER_3D_MODELS_MARKED_DNP );
     LAYER( "bounding_boxes",      LAYER_3D_BOUNDING_BOXES    );
     LAYER( "off_board_silk",      LAYER_3D_OFF_BOARD_SILK    );
+    LAYER( "3d_axes", LAYER_GRID_AXES );
+
+    for( int layer = LAYER_3D_USER_1; layer <= LAYER_3D_USER_45; ++layer )
+    {
+        wxString name = wxString::Format( wxS( "user_%d" ), layer - LAYER_3D_USER_1 + 1 );
+        m_layerToLayerNameMap[layer] = name;
+        m_layerNameToLayerMap[name] = layer;
+    }
 }
 
 
@@ -131,8 +139,11 @@ nlohmann::json PARAM_LAYER_PRESET_3D::presetsToJson()
 
         for( int layer = 0; layer < LAYER_3D_END; ++layer )
         {
-            if( preset.layers.test( layer ) )
-                layers.push_back( m_layerToLayerNameMap[layer] );
+            if( !preset.layers.test( layer ) )
+                continue;
+
+            if( auto it = m_layerToLayerNameMap.find( layer ); it != m_layerToLayerNameMap.end() )
+                layers.push_back( it->second );
         }
 
         js["layers"] = layers;
@@ -141,10 +152,12 @@ nlohmann::json PARAM_LAYER_PRESET_3D::presetsToJson()
 
         for( const auto& [ layer, color ] : preset.colors )
         {
-            nlohmann::json layerColor = {
-                { "layer", m_layerToLayerNameMap[layer] },
-                { "color", color.ToCSSString() }
-            };
+            auto it = m_layerToLayerNameMap.find( layer );
+
+            if( it == m_layerToLayerNameMap.end() )
+                continue;
+
+            nlohmann::json layerColor = { { "layer", it->second }, { "color", color.ToCSSString() } };
 
             colors.push_back( layerColor );
         }
@@ -177,8 +190,13 @@ void PARAM_LAYER_PRESET_3D::jsonToPresets( const nlohmann::json& aJson )
 
                 for( const nlohmann::json& layer : preset.at( "layers" ) )
                 {
-                    if( layer.is_string() )
-                        p.layers.set( m_layerNameToLayerMap[layer.get<wxString>()] );
+                    if( !layer.is_string() )
+                        continue;
+
+                    auto it = m_layerNameToLayerMap.find( layer.get<wxString>() );
+
+                    if( it != m_layerNameToLayerMap.end() )
+                        p.layers.set( it->second );
                 }
             }
 
@@ -189,8 +207,10 @@ void PARAM_LAYER_PRESET_3D::jsonToPresets( const nlohmann::json& aJson )
                     if( entry.contains( "layer" ) && entry.contains( "color" )
                         && entry.at( "layer" ).is_string() )
                     {
-                        int layerNum = m_layerNameToLayerMap[entry.at( "layer" ).get<wxString>()];
-                        p.colors[ layerNum ] = entry.at( "color" ).get<COLOR4D>();
+                        auto it = m_layerNameToLayerMap.find( entry.at( "layer" ).get<wxString>() );
+
+                        if( it != m_layerNameToLayerMap.end() )
+                            p.colors[it->second] = entry.at( "color" ).get<COLOR4D>();
                     }
                 }
             }
