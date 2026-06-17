@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-05-07 02:14+0000\n"
+"PO-Revision-Date: 2026-06-17 15:54+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v10/cs/>\n"
 "Language: cs\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -2071,7 +2071,7 @@ msgstr "Modifikace z API"
 #: common/api/api_plugin.cpp:60
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr ""
+msgstr "neplatná konfigurace pluginu v '%s': %s"
 
 #: common/api/api_plugin.cpp:80
 #, fuzzy, c-format
@@ -2084,9 +2084,9 @@ msgid "could not read plugin configuration file"
 msgstr "Nelze získat přístup ke konfiguraci repozitáře"
 
 #: common/api/api_plugin.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "plugin configuration file error: %s"
-msgstr "Chyba nastavení"
+msgstr "chyba konfiguračního souboru pluginu: %s"
 
 #: common/api/api_plugin.cpp:165
 #, fuzzy, c-format
@@ -2109,9 +2109,9 @@ msgid "Plugin action '%s': %s"
 msgstr "Volby zásuvného modulu:"
 
 #: common/api/api_plugin_manager.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin '%s': %s"
-msgstr "Pluginy (%d)"
+msgstr "Plugin '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:124
 #, fuzzy, c-format
@@ -2140,9 +2140,8 @@ msgid "entrypoint '%s' is not executable"
 msgstr "Adresář '%s' není zapisovatelný."
 
 #: common/api/api_plugin_manager.cpp:500
-#, fuzzy
 msgid "could not launch plugin"
-msgstr "Nelze použít OpenGL"
+msgstr "nelze spustit plugin"
 
 #: common/api/api_plugin_manager.cpp:661 common/api/api_plugin_manager.cpp:743
 #: common/api/api_plugin_manager.cpp:833
@@ -2152,9 +2151,9 @@ msgstr "Kód chyby: %d"
 
 #: common/api/api_plugin_manager.cpp:663 common/api/api_plugin_manager.cpp:745
 #: common/api/api_plugin_manager.cpp:835
-#, fuzzy, c-format
+#, c-format
 msgid "could not create plugin environment: %s"
-msgstr "Znovu vytvořit prostředí pluginu"
+msgstr "nelze vytvořit prostředí pluginu: %s"
 
 #: common/api/api_plugin_manager.cpp:784
 #, fuzzy
@@ -3204,7 +3203,7 @@ msgstr "Upravit vlastnosti skupiny"
 
 #: common/dialogs/dialog_group_properties.cpp:177
 msgid "A group cannot contain itself."
-msgstr ""
+msgstr "Skupina nemůže obsahovat sama sebe."
 
 #: common/dialogs/dialog_group_properties.cpp:185
 msgid "Cannot add this group because it already contains the current group."
@@ -4010,11 +4009,11 @@ msgstr ""
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "Username and password"
-msgstr ""
+msgstr "Uživatelské jméno a heslo"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:30
 msgid "SSH key"
-msgstr ""
+msgstr "SSH klíč"
 
 #: common/dialogs/git/dialog_git_credentials_base.cpp:32
 #: common/dialogs/git/dialog_git_repository_base.cpp:79
@@ -7885,9 +7884,9 @@ msgid "Could not create directory '%s'"
 msgstr "Nelze vytvořit adresář '%s'"
 
 #: common/git/libgit_backend.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s' : %s"
-msgstr "Nelze klonovat repozitář '%s'"
+msgstr "Nelze klonovat repozitář '%s' : %s"
 
 #: common/git/libgit_backend.cpp:197 common/git/libgit_backend.cpp:339
 #, c-format
@@ -18777,9 +18776,8 @@ msgid "Symbol Library Tables"
 msgstr "Tabulky knihoven symbolů"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:201
-#, fuzzy
 msgid "Unable to load library table."
-msgstr "Nelze načíst knihovnu\n"
+msgstr "Nelze načíst tabulku knihoven."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:424
 msgid "folder with .kicad_sym files"
@@ -21031,7 +21029,7 @@ msgstr "Blanket není v současné době podporován."
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5142
 #, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr "Neznámé nebo neočekávané ID záznamu %d nalezeno v %s."
+msgstr "Neznámý nebo neočekávaný záznam s id %d nalezen v %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1772
 #, c-format
@@ -38439,14 +38437,14 @@ msgid "-------- DRC canceled by user.<br><br>"
 msgstr "-------- DRC zrušeno uživatelem.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "Canceled after %s"
-msgstr "Zrušit změny"
+msgstr "Přerušeno po %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "Completed in %s"
-msgstr "Součástka \"%s\" přidána do \"%s\""
+msgstr "Dokončeno za %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:817
 #, c-format
@@ -41196,9 +41194,8 @@ msgid "Missing 3D model references:"
 msgstr "Tisknout reference modulu"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:54
-#, fuzzy
 msgid "Potential replacements:"
-msgstr "Soubory umístění komponent"
+msgstr "Možné náhrady:"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models_base.cpp:64
 #, fuzzy
@@ -50071,7 +50068,7 @@ msgid ""
 "If unchecked, use the Board Editor active layer"
 msgstr ""
 "Je-li zaškrtnuto, použije se vrstva vybraná v tomto dialogu\n"
-"Není-li zaškrtnuto, použije se aktivní vrstva editoru DPS"
+"Není-li zaškrtnuto, použije se aktivní vrstva editoru desky"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:158
 msgid "Group imported items"
@@ -50108,7 +50105,7 @@ msgstr "Obsah schránky není kompatibilní s KiCadem"
 #: pcbnew/load_select_footprint.cpp:292
 #, c-format
 msgid "Footprints [%u items]"
-msgstr "POuzdra [%u položek]"
+msgstr "Pouzdra [%u položek]"
 
 #: pcbnew/load_select_footprint.cpp:331
 msgid "Save Footprint Library As"
@@ -51501,9 +51498,9 @@ msgstr "Nový soubor DPS není uložen"
 #, c-format
 msgid "%d WRL 3D model could not be matched to an equivalent STEP model."
 msgid_plural "%d WRL 3D models could not be matched to equivalent STEP models."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d WRL 3D model nelze přiřadit ekvivaletnímu STEP modelu."
+msgstr[1] "%d WRL 3D modely nelze přiřadit ekvivaletním STEP modelům."
+msgstr[2] "%d WRL 3D modelů nelze přiřadit ekvivaletním STEP modelům."
 
 #: pcbnew/pcb_edit_frame.cpp:1967
 #, fuzzy
@@ -51770,7 +51767,7 @@ msgid ""
 "been moved to KiCad layer Eco1_User."
 msgstr ""
 "Rozměr na vrstvě Altium (%d) nemá ekvivalent KiCadu. Místo toho byl přesunut "
-"na vrstvu ECO1_USER."
+"na vrstvu Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2177
 msgid "Loading dimension drawings..."
@@ -55413,9 +55410,8 @@ msgid "Move Zone to Top Priority"
 msgstr "Přesunout roh na místo"
 
 #: pcbnew/tools/board_editor_control.cpp:1971
-#, fuzzy
 msgid "Raise Zone Priority"
-msgstr "Úroveň priority zóny:"
+msgstr "Zvýšit prioritu zóny"
 
 #: pcbnew/tools/board_editor_control.cpp:2025
 #, fuzzy
@@ -57114,7 +57110,7 @@ msgstr "Načítání 3D modelů..."
 
 #: pcbnew/tools/pcb_actions.cpp:997
 msgid "Replace obsolete WRL 3D model references with current STEP models"
-msgstr ""
+msgstr "Nahradit reference na zastaralé WRL 3D modely současnými STEP modely"
 
 #: pcbnew/tools/pcb_actions.cpp:1003
 msgid "Remove Unused Pads..."
@@ -57534,7 +57530,7 @@ msgstr "Přesunout do koše"
 
 #: pcbnew/tools/pcb_actions.cpp:1434
 msgid "Raise"
-msgstr ""
+msgstr "Zvýšit"
 
 #: pcbnew/tools/pcb_actions.cpp:1440
 #, fuzzy
@@ -58612,14 +58608,14 @@ msgid "Apply design block layout cancelled."
 msgstr "Použít rozložení návrhového bloku"
 
 #: pcbnew/tools/pcb_control.cpp:1752
-#, fuzzy, c-format
+#, c-format
 msgid "Apply design block layout to %d group(s)"
-msgstr "Použít rozložení propojeného návrhového bloku na vybranou skupinu"
+msgstr "Použít rozložení návrhového bloku na %d skupin"
 
 #: pcbnew/tools/pcb_control.cpp:1764
-#, fuzzy, c-format
+#, c-format
 msgid "Applied design block layout to %d of %d group(s)."
-msgstr "Použít rozložení propojeného návrhového bloku na vybranou skupinu"
+msgstr "Rozložení návrhového bloku bylo uplatněno na %d z %d skupin."
 
 #: pcbnew/tools/pcb_control.cpp:1771
 #, fuzzy, c-format
@@ -58633,9 +58629,8 @@ msgid "The following groups could not be processed:"
 msgstr "Nelze otevřít následující adresáře: \n"
 
 #: pcbnew/tools/pcb_control.cpp:1783
-#, fuzzy
 msgid "(unnamed group)"
-msgstr "Skupiny propojek:"
+msgstr "(bezejmenná skupina)"
 
 #: pcbnew/tools/pcb_control.cpp:1834
 #, c-format
