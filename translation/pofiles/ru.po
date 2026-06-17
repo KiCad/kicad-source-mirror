@@ -26,7 +26,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
 "PO-Revision-Date: 2026-06-17 15:54+0000\n"
-"Last-Translator: Free_squire <danil_pyankov_2004@mail.ru>\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ru/>\n"
 "Language: ru\n"
@@ -63657,14 +63657,14 @@ msgid "Refilling zones after island removal..."
 msgstr "Перезаливка зон после удаления островков..."
 
 #: pcbnew/zone_filler.cpp:1282
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Zone fills may be incorrect: iterative refill did not converge after %d "
 "passes.\n"
 "\n"
 "This can happen with complex overlapping zones.  Consider simplifying your "
 "zones."
-msgstr ""
+msgstr "test"
 
 #: pcbnew/zone_filler.cpp:1546
 msgid "Prototype zone fill enabled. Disable setting and refill?"
