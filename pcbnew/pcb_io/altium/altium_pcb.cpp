@@ -38,6 +38,7 @@
 #include <pcb_track.h>
 #include <pcb_barcode.h>
 #include <pcb_generator.h>
+#include <generators_mgr.h>
 #include <generators/pcb_tuning_pattern.h>
 #include <router/pns_meander.h>
 #include <core/profile.h>
@@ -4559,8 +4560,15 @@ void ALTIUM_PCB::HelperCreateTuningPatterns()
 
         PCB_LAYER_ID layer = items.front()->GetLayer();
 
-        std::unique_ptr<PCB_TUNING_PATTERN> pattern =
-                std::make_unique<PCB_TUNING_PATTERN>( m_board, layer, mode );
+        PCB_GENERATOR* generator = GENERATORS_MGR::Instance().CreateFromType( wxS( "tuning_pattern" ) );
+
+        if( !generator )
+            continue;
+
+        std::unique_ptr<PCB_TUNING_PATTERN> pattern( static_cast<PCB_TUNING_PATTERN*>( generator ) );
+        pattern->SetParent( m_board );
+        pattern->SetLayer( layer );
+        pattern->SetTuningMode( mode );
 
         pattern->SetMaxAmplitude( tuning.amplitude );
         pattern->SetMinAmplitude( tuning.minamplitude );
