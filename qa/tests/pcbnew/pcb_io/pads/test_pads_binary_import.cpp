@@ -2236,14 +2236,22 @@ BOOST_AUTO_TEST_CASE( ViaSpanSurvivesOnlyWhenTypeSetFirst )
  * than by a structural offset derived from the section directory.
  *
  * The container rules that let a locator be retired are recorded in pads_binary.ksy. Every
- * scan removed should lower MAX_SCAN_LOCATORS here; the target is zero, matching DipTrace's
- * ObjectsAreFieldLocatedNotScanned. The test exists so that a change which reintroduces a
- * scan, or a new section decoded by scanning, fails rather than passing quietly.
+ * scan removed should lower MAX_SCAN_LOCATORS here. The test exists so that a change which
+ * reintroduces a scan, or a new section decoded by scanning, fails rather than passing quietly.
  *
- * The counter currently covers the whole-file locators -- the cluster and layer-stackup
- * signature searches, the via phase scan, and the three unbounded record walks. The
- * section-bounded walks that search within one section's own declared extent are not counted
- * yet, so this number is a floor on the remaining work, not the whole of it.
+ * READ THIS NUMBER AS A FLOOR, AND A LOW ONE. It covers four whole-file locators -- the
+ * cluster and layer-stackup signature searches, the via phase scan and the rule-edge walk. An
+ * audit counted 41 search sites in the parser and 28 more in the SCH reader, ten of the
+ * uncounted ones whole-file, so 5 of 69 are instrumented. A realistic count for a v0x2027
+ * board is nearer 27.
+ *
+ * It is also blind by construction to PADS_SDB, which is a separate class with no access to
+ * the counter, and which until recently held the origin locator -- the offset that shifts
+ * every coordinate in the file.
+ *
+ * A locator whose arithmetic is anchored on a quantity found by a walk is NOT structural, and
+ * retiring its leaf search while the walk goes uncounted lowers this number without reducing
+ * any scanning. The pending section 60 and 68/69 patches are both that shape.
  */
 BOOST_AUTO_TEST_CASE( ScanLocatorRatchet )
 {
