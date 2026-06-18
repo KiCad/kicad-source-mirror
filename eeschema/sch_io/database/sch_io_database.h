@@ -121,9 +121,12 @@ private:
 
     long long m_cacheTimestamp;
 
-    int m_cacheModifyHash;
+    /// True once the LIB_SYMBOL cache has been materialized at least once.
+    bool m_cachePopulated;
 
-
+    /// Signature of the raw database rows at last materialization; used to skip rebuilding the
+    /// LIB_SYMBOL cache when a re-query returns identical data.
+    size_t m_cacheSignature;
 
     wxString m_lastError;
 };

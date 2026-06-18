@@ -23,6 +23,7 @@
 #define SYMBOL_LIBRARY_MANAGER_ADAPTER_H
 
 #include <future>
+#include <optional>
 #include <lib_id.h>
 #include <core/leak_at_exit.h>
 #include <libraries/library_manager.h>
@@ -153,6 +154,18 @@ public:
     bool IsSymbolLibWritable( const wxString& aNickname );
 
     int GetModifyHash() const;
+
+    /**
+     * Return the modify hash of a single library if it is currently loaded.
+     *
+     * Unlike GetModifyHash(), which sums the hashes of every loaded library, this reports just the
+     * named library so callers can react to changes in a specific dependency without being disturbed
+     * by unrelated (for example asynchronously loading) libraries.
+     *
+     * @param aNickname is the library nickname in the symbol library table.
+     * @return the library's modify hash, or std::nullopt if it is not loaded.
+     */
+    std::optional<int> GetLibraryModifyHash( const wxString& aNickname ) const;
 
 protected:
     std::map<wxString, LIB_DATA>& globalLibs() override { return GlobalLibraries.Get(); }

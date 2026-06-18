@@ -416,3 +416,16 @@ int SYMBOL_LIBRARY_ADAPTER::GetModifyHash() const
 
     return hash;
 }
+
+
+std::optional<int> SYMBOL_LIBRARY_ADAPTER::GetLibraryModifyHash( const wxString& aNickname ) const
+{
+    if( std::optional<const LIB_DATA*> result = fetchIfLoaded( aNickname ) )
+    {
+        const LIB_DATA* rowData = *result;
+        wxCHECK( rowData->row, std::nullopt );
+        return schplugin( rowData )->GetModifyHash();
+    }
+
+    return std::nullopt;
+}
