@@ -1732,32 +1732,40 @@ void PCB_VIA::SanitizeLayers()
     if( !IsCopperLayerLowerThan( Padstack().Drill().end, Padstack().Drill().start) )
         std::swap( Padstack().Drill().end, Padstack().Drill().start );
 
-    PADSTACK::DRILL_PROPS& secondary = Padstack().SecondaryDrill();
-
-    if( secondary.start != UNDEFINED_LAYER && !IsCopperLayer( secondary.start ) )
-        secondary.start = UNDEFINED_LAYER;
-
-    if( secondary.end != UNDEFINED_LAYER && !IsCopperLayer( secondary.end ) )
-        secondary.end = UNDEFINED_LAYER;
-
     int copperCount = BoardCopperLayerCount();
 
-    if( copperCount > 0 )
-    {
-        LSET cuMask = LSET::AllCuMask( copperCount );
+    auto sanitizeBackdrill =
+            [copperCount]( PADSTACK::DRILL_PROPS& aDrill )
+            {
+                if( aDrill.start != UNDEFINED_LAYER && !IsCopperLayer( aDrill.start ) )
+                    aDrill.start = UNDEFINED_LAYER;
 
-        if( secondary.start != UNDEFINED_LAYER && !cuMask.Contains( secondary.start ) )
-            secondary.start = UNDEFINED_LAYER;
+                if( aDrill.end != UNDEFINED_LAYER && !IsCopperLayer( aDrill.end ) )
+                    aDrill.end = UNDEFINED_LAYER;
 
-        if( secondary.end != UNDEFINED_LAYER && !cuMask.Contains( secondary.end ) )
-            secondary.end = UNDEFINED_LAYER;
-    }
+                if( copperCount > 0 )
+                {
+                    LSET cuMask = LSET::AllCuMask( copperCount );
 
-    if( secondary.start != UNDEFINED_LAYER && secondary.end != UNDEFINED_LAYER
-            && secondary.start == secondary.end )
-    {
-        secondary.end = UNDEFINED_LAYER;
-    }
+                    if( aDrill.start != UNDEFINED_LAYER && !cuMask.Contains( aDrill.start ) )
+                        aDrill.start = UNDEFINED_LAYER;
+
+                    if( aDrill.end != UNDEFINED_LAYER && !cuMask.Contains( aDrill.end ) )
+                        aDrill.end = UNDEFINED_LAYER;
+                }
+
+                // A must-cut equal to the entry layer is a zero-depth backdrill, which is not
+                // manufacturable. The drill exporter requires the must-cut to be strictly deeper.
+                if( aDrill.start != UNDEFINED_LAYER && aDrill.start == aDrill.end )
+                    aDrill.end = UNDEFINED_LAYER;
+
+                // A backdrill side with no must-cut layer does not exist.
+                if( aDrill.end == UNDEFINED_LAYER )
+                    aDrill.size = { 0, 0 };
+            };
+
+    sanitizeBackdrill( Padstack().SecondaryDrill() );
+    sanitizeBackdrill( Padstack().TertiaryDrill() );
 }
 
 

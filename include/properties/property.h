@@ -737,6 +737,8 @@ public:
         return *this;
     }
 
+    T GetUndefined() const { return m_undefined; }
+
     const wxString& ToString( T value ) const
     {
         static const wxString s_undef = "UNDEFINED";
@@ -784,38 +786,41 @@ private:
 
 
 // Helper macros to handle enum types
-#define DECLARE_ENUM_TO_WXANY( type )                                                       \
-    template <>                                                                             \
-    class wxAnyValueTypeImpl<type> : public wxAnyValueTypeImplBase<type>                    \
-    {                                                                                       \
-        WX_DECLARE_ANY_VALUE_TYPE( wxAnyValueTypeImpl<type> )                               \
-    public:                                                                                 \
-        wxAnyValueTypeImpl() : wxAnyValueTypeImplBase<type>() {}                            \
-        virtual ~wxAnyValueTypeImpl() {}                                                    \
-        virtual bool ConvertValue( const wxAnyValueBuffer& src, wxAnyValueType* dstType,    \
-                                   wxAnyValueBuffer& dst ) const override                   \
-        {                                                                                   \
-            type            value = GetValue( src );                                        \
-            ENUM_MAP<type>& conv = ENUM_MAP<type>::Instance();                              \
-            if( ! conv.IsValueDefined( value ) )                                            \
-            {                                                                               \
-                return false;                                                               \
-            }                                                                               \
-            if( dstType->CheckType<wxString>() )                                            \
-            {                                                                               \
-                wxAnyValueTypeImpl<wxString>::SetValue( conv.ToString( value ), dst );      \
-                return true;                                                                \
-            }                                                                               \
-            if( dstType->CheckType<int>() )                                                 \
-            {                                                                               \
-                wxAnyValueTypeImpl<int>::SetValue( static_cast<int>( value ), dst );        \
-                return true;                                                                \
-            }                                                                               \
-            else                                                                            \
-            {                                                                               \
-                return false;                                                               \
-            }                                                                               \
-        }                                                                                   \
+#define DECLARE_ENUM_TO_WXANY( type )                                                                                  \
+    template <>                                                                                                        \
+    class wxAnyValueTypeImpl<type> : public wxAnyValueTypeImplBase<type>                                               \
+    {                                                                                                                  \
+        WX_DECLARE_ANY_VALUE_TYPE( wxAnyValueTypeImpl<type> )                                                          \
+    public:                                                                                                            \
+        wxAnyValueTypeImpl() :                                                                                         \
+                wxAnyValueTypeImplBase<type>()                                                                         \
+        {                                                                                                              \
+        }                                                                                                              \
+        virtual ~wxAnyValueTypeImpl() {}                                                                               \
+        virtual bool ConvertValue( const wxAnyValueBuffer& src, wxAnyValueType* dstType,                               \
+                                   wxAnyValueBuffer& dst ) const override                                              \
+        {                                                                                                              \
+            type            value = GetValue( src );                                                                   \
+            ENUM_MAP<type>& conv = ENUM_MAP<type>::Instance();                                                         \
+            if( !conv.IsValueDefined( value ) && value != conv.GetUndefined() )                                        \
+            {                                                                                                          \
+                return false;                                                                                          \
+            }                                                                                                          \
+            if( dstType->CheckType<wxString>() )                                                                       \
+            {                                                                                                          \
+                wxAnyValueTypeImpl<wxString>::SetValue( conv.ToString( value ), dst );                                 \
+                return true;                                                                                           \
+            }                                                                                                          \
+            if( dstType->CheckType<int>() )                                                                            \
+            {                                                                                                          \
+                wxAnyValueTypeImpl<int>::SetValue( static_cast<int>( value ), dst );                                   \
+                return true;                                                                                           \
+            }                                                                                                          \
+            else                                                                                                       \
+            {                                                                                                          \
+                return false;                                                                                          \
+            }                                                                                                          \
+        }                                                                                                              \
     };
 
 #define IMPLEMENT_ENUM_TO_WXANY( type ) WX_IMPLEMENT_ANY_VALUE_TYPE( wxAnyValueTypeImpl<type> )

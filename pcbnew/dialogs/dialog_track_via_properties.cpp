@@ -229,6 +229,25 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
                 }
             };
 
+    auto getBackdrillDrills = []( const PCB_VIA* via, PADSTACK::DRILL_PROPS& aTop, PADSTACK::DRILL_PROPS& aBottom )
+    {
+        const PADSTACK::DRILL_PROPS& sec = via->Padstack().SecondaryDrill();
+        const PADSTACK::DRILL_PROPS& ter = via->Padstack().TertiaryDrill();
+
+        aTop = PADSTACK::DRILL_PROPS();
+        aBottom = PADSTACK::DRILL_PROPS();
+
+        if( sec.start == F_Cu )
+            aTop = sec;
+        else if( ter.start == F_Cu )
+            aTop = ter;
+
+        if( sec.start == B_Cu )
+            aBottom = sec;
+        else if( ter.start == B_Cu )
+            aBottom = ter;
+    };
+
     // Look for values that are common for every item that is selected
     for( EDA_ITEM* item : m_items )
     {
@@ -329,21 +348,22 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
                     secondary_post_machining_depth = v->Padstack().BackPostMachining().depth;
                     secondary_post_machining_angle = v->Padstack().BackPostMachining().angle;
 
-                    const PADSTACK::DRILL_PROPS& tertiaryDrill  = v->Padstack().TertiaryDrill();
-                    const PADSTACK::DRILL_PROPS& secondaryDrill = v->Padstack().SecondaryDrill();
+                    PADSTACK::DRILL_PROPS topDrill;
+                    PADSTACK::DRILL_PROPS bottomDrill;
+                    getBackdrillDrills( v, topDrill, bottomDrill );
 
-                    tertiary_drill_end_layer  = tertiaryDrill.end;
-                    secondary_drill_end_layer = secondaryDrill.end;
+                    // secondary_* holds the top (front) backdrill, tertiary_* the bottom (back) one
+                    secondary_drill_end_layer = topDrill.end;
+                    tertiary_drill_end_layer = bottomDrill.end;
 
-                    tertiary_drill_size = tertiaryDrill.size.x;
-                    secondary_drill_size = secondaryDrill.size.x;
+                    secondary_drill_size = topDrill.size.x;
+                    tertiary_drill_size = bottomDrill.size.x;
 
-                    // Determine types of backdrills (top = secondary, bottom = tertiary)
-                    if( tertiary_drill_end_layer != UNDEFINED_LAYER && secondary_drill_end_layer != UNDEFINED_LAYER)
+                    if( topDrill.end != UNDEFINED_LAYER && bottomDrill.end != UNDEFINED_LAYER )
                         backdrill_dir = BACKDRILL_MODE::BACKDRILL_BOTH;
-                    else if( tertiary_drill_end_layer != UNDEFINED_LAYER )
+                    else if( bottomDrill.end != UNDEFINED_LAYER )
                         backdrill_dir = BACKDRILL_MODE::BACKDRILL_BOTTOM;
-                    else if( secondary_drill_end_layer != UNDEFINED_LAYER )
+                    else if( topDrill.end != UNDEFINED_LAYER )
                         backdrill_dir = BACKDRILL_MODE::BACKDRILL_TOP;
                     else
                         backdrill_dir = BACKDRILL_MODE::NO_BACKDRILL;
@@ -455,34 +475,34 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataToWindow()
                             secondary_post_machining_angle_mixed = true;
                     }
 
-                    const PADSTACK::DRILL_PROPS& tertiaryDrill  = v->Padstack().TertiaryDrill();
-                    const PADSTACK::DRILL_PROPS& secondaryDrill = v->Padstack().SecondaryDrill();
+                    PADSTACK::DRILL_PROPS topDrill;
+                    PADSTACK::DRILL_PROPS bottomDrill;
+                    getBackdrillDrills( v, topDrill, bottomDrill );
 
                     BACKDRILL_MODE new_backdrill_dir = BACKDRILL_MODE::NO_BACKDRILL;
 
-                    // Determine types of backdrills (top = secondary, bottom = tertiary)
-                    if( tertiaryDrill.end != UNDEFINED_LAYER && secondaryDrill.end != UNDEFINED_LAYER)
+                    if( topDrill.end != UNDEFINED_LAYER && bottomDrill.end != UNDEFINED_LAYER )
                         new_backdrill_dir = BACKDRILL_MODE::BACKDRILL_BOTH;
-                    else if( tertiaryDrill.end != UNDEFINED_LAYER )
+                    else if( bottomDrill.end != UNDEFINED_LAYER )
                         new_backdrill_dir = BACKDRILL_MODE::BACKDRILL_BOTTOM;
-                    else if( secondaryDrill.end != UNDEFINED_LAYER )
+                    else if( topDrill.end != UNDEFINED_LAYER )
                         new_backdrill_dir = BACKDRILL_MODE::BACKDRILL_TOP;
                     else
                         new_backdrill_dir = BACKDRILL_MODE::NO_BACKDRILL;
 
-                    if( secondary_drill_end_layer != secondaryDrill.end )
+                    if( secondary_drill_end_layer != topDrill.end )
                         secondary_drill_end_layer_mixed = true;
 
-                    if( tertiary_drill_end_layer != tertiaryDrill.end )
+                    if( tertiary_drill_end_layer != bottomDrill.end )
                         tertiary_drill_end_layer_mixed = true;
 
                     if( backdrill_dir != new_backdrill_dir )
                         backdrill_dir_mixed = true;
 
-                    if( tertiaryDrill.size.x != tertiary_drill_size )
+                    if( bottomDrill.size.x != tertiary_drill_size )
                         tertiary_drill_size_mixed = true;
 
-                    if( secondaryDrill.size.x != secondary_drill_size )
+                    if( topDrill.size.x != secondary_drill_size )
                         secondary_drill_size_mixed = true;
                 }
 
