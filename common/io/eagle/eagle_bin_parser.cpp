@@ -2738,7 +2738,7 @@ void EAGLE_BIN_PARSER::resegmentSchSheets( EGB_NODE*                     aSchema
         case EGKW_SECT_SCHEMANET:
         {
             node->props[wxS( "class" )] =
-                    node->HasProp( wxS( "netclass" ) ) ? node->Prop( wxS( "netclass" ) ) : wxS( "0" );
+                    node->HasProp( wxS( "netclass" ) ) ? node->Prop( wxS( "netclass" ) ) : wxString( wxS( "0" ) );
 
             for( EGB_NODE* seg : childrenById( node.get(), EGKW_SECT_PATH ) )
                 seg->name = wxS( "segment" );
