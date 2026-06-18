@@ -38,7 +38,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
 "PO-Revision-Date: 2026-06-18 23:02+0000\n"
-"Last-Translator: The Hobbit <dasfilter@posteo.de>\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -3193,9 +3193,8 @@ msgid "Status"
 msgstr "Status"
 
 #: common/dialogs/dialog_git_mr_review.cpp:49
-#, fuzzy
 msgid "Old Path"
-msgstr "Pfad finden"
+msgstr "Alter Pfad"
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
 #, fuzzy
@@ -3237,14 +3236,12 @@ msgstr "benötige eine Zahl für \"%s\""
 #: common/dialogs/dialog_git_mr_review.cpp:359
 #: common/dialogs/dialog_git_mr_review.cpp:373
 #: common/dialogs/dialog_git_mr_review.cpp:389
-#, fuzzy
 msgid "Compare File"
-msgstr "Kompatibel"
+msgstr "Datei vergleichen"
 
 #: common/dialogs/dialog_git_mr_review.cpp:281
-#, fuzzy
 msgid "Could not create a temporary directory."
-msgstr "Temporäres Ausgabeverzeichnis kann nicht erstellt werden."
+msgstr "Temporäres Verzeichnis kann nicht erstellt werden."
 
 #: common/dialogs/dialog_git_mr_review.cpp:322
 #: common/dialogs/dialog_git_mr_review.cpp:337
