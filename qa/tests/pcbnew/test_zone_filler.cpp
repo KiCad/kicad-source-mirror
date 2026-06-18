@@ -27,6 +27,7 @@
 #include <pcbnew_utils/board_test_utils.h>
 #include <board.h>
 #include <board_commit.h>
+#include <zone_filler.h>
 #include <board_design_settings.h>
 #include <drc/drc_engine.h>
 #include <pad.h>
@@ -2847,4 +2848,55 @@ BOOST_FIXTURE_TEST_CASE( IterativeRefillConvergenceLimit, ZONE_FILL_TEST_FIXTURE
     BOOST_CHECK_MESSAGE( capture->m_hadWarning, "Expected a wxLogWarning when iterative refill hits the iteration "
                                                 "limit, but none was emitted.  The convergence-limit board may no "
                                                 "longer trigger the cap, or the warning path has changed." );
+}
+
+
+// Reproduces the scripting/API zone-fill path used by KiKit panelization (issue 24643).
+//
+// The interactive GUI and the board loader always create and initialize the board's DRC engine
+// before filling.  The Python/API ZONE_FILLER path can reach Fill() with no engine, so the
+// worker-thread EvalRules() calls dereferenced a null engine and crashed the process.  This test
+// drops the engine after loading to drive that path, then verifies Fill() completes and leaves a
+// usable engine behind.
+BOOST_FIXTURE_TEST_CASE( RegressionApiSubsetFillPanelized, ZONE_FILL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue24643/issue24643", m_board );
+
+    // The test harness loads boards with an initialized engine; the headless API path does not.
+    // Drop it so Fill() must reconstruct one, which is the condition that crashed.
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    bds.m_DRCEngine.reset();
+    BOOST_REQUIRE( !bds.m_DRCEngine );
+
+    // Mirror the script: select non-rule-area zones on B.Cu that are not already filled.
+    PCB_LAYER_ID       targetLayer = m_board->GetLayerID( wxT( "B.Cu" ) );
+    std::vector<ZONE*> toFill;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->GetIsRuleArea() )
+            continue;
+
+        if( !zone->IsOnLayer( targetLayer ) )
+            continue;
+
+        if( zone->IsFilled() )
+            continue;
+
+        toFill.push_back( zone );
+    }
+
+    BOOST_REQUIRE_MESSAGE( !toFill.empty(),
+                           "Expected at least one unfilled B.Cu zone to exercise the API path." );
+
+    // The API path builds the filler with a null commit (see new_ZONE_FILLER in the SWIG
+    // wrapper) and fills only the selected subset.  This must complete without crashing
+    // (issue 24643).
+    ZONE_FILLER filler( m_board.get(), nullptr );
+
+    BOOST_CHECK_NO_THROW( filler.Fill( toFill ) );
+
+    // Fill() must have created and initialized a usable engine in place of the one we dropped.
+    BOOST_REQUIRE( bds.m_DRCEngine );
+    BOOST_CHECK( bds.m_DRCEngine->RulesValid() );
 }

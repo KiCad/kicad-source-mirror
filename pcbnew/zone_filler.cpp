@@ -25,6 +25,7 @@
 
 #include <atomic>
 #include <future>
+#include <wx/filename.h>
 #include <hash.h>
 #include <set>
 #include <unordered_set>
@@ -56,6 +57,7 @@
 #include <thread_pool.h>
 #include <math/util.h>      // for KiROUND
 #include "zone_filler.h"
+#include <wildcards_and_files_ext.h>
 #include "project.h"
 #include "project/project_local_settings.h"
 #include "pcb_barcode.h"
@@ -379,6 +381,40 @@ void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
 bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aParent )
 {
     std::lock_guard<KISPINLOCK> lock( m_board->GetConnectivity()->GetLock() );
+
+    // The fill evaluates thermal-relief and clearance rules through the board's DRC engine on
+    // worker threads.  Interactive callers always supply an initialized engine, but headless
+    // consumers (the Python/API ZONE_FILLER) can reach here with none, which would crash on the
+    // first EvalRules() call.
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+    if( !bds.m_DRCEngine )
+    {
+        std::shared_ptr<DRC_ENGINE> drcEngine = std::make_shared<DRC_ENGINE>( m_board, &bds );
+
+        wxString rulesPath;
+
+        if( !m_board->GetFileName().IsEmpty() && m_board->GetProject() )
+        {
+            wxFileName fn( m_board->GetFileName() );
+            fn.SetExt( FILEEXT::DesignRulesFileExtension );
+            rulesPath = m_board->GetProject()->AbsolutePath( fn.GetFullName() );
+        }
+
+        try
+        {
+            drcEngine->InitEngine( wxFileName( rulesPath ) );
+        }
+        catch( ... )
+        {
+            // Rules failing to compile only matters when the user runs DRC; the fill falls back
+            // to the implicit constraints, which is enough to avoid the crash.
+        }
+
+        // Publish only after InitEngine() has fully populated the engine so a concurrent reader
+        // never observes a non-null but half-initialized engine.
+        bds.m_DRCEngine = drcEngine;
+    }
 
     std::vector<std::pair<ZONE*, PCB_LAYER_ID>>               toFill;
     std::map<std::pair<ZONE*, PCB_LAYER_ID>, HASH_128>        oldFillHashes;
