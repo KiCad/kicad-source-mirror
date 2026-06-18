@@ -222,7 +222,9 @@ PCB_GROUP* PCB_GROUP::DeepDuplicate( bool addToParentGroup, BOARD_COMMIT* aCommi
 
     for( EDA_ITEM* member : m_items )
     {
-        if( member->Type() == PCB_GROUP_T )
+        // A PCB_GENERATOR owns member items that are not in this group's m_items, so a shallow
+        // copy would leave the duplicate referencing the original's members.
+        if( member->Type() == PCB_GROUP_T || member->Type() == PCB_GENERATOR_T )
             newGroup->AddItem( static_cast<PCB_GROUP*>( member )->DeepDuplicate( IGNORE_PARENT_GROUP ) );
         else
             newGroup->AddItem( static_cast<BOARD_ITEM*>( member )->Duplicate( IGNORE_PARENT_GROUP ) );
