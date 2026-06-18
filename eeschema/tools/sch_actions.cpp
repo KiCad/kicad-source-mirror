@@ -1064,6 +1064,13 @@ TOOL_ACTION SCH_ACTIONS::symbolProperties( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Symbol Properties..." ) )
         .Icon( BITMAPS::part_properties ) );
 
+TOOL_ACTION SCH_ACTIONS::editSymbolPinMaps( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveEdit.editSymbolPinMaps" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Symbol Pin Maps..." ) )
+        .Tooltip( _( "Edit the symbol's pin-to-pad maps and associated footprints" ) )
+        .Icon( BITMAPS::pin_table ) );
+
 TOOL_ACTION SCH_ACTIONS::pinTable( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveEdit.pinTable" )
         .Scope( AS_GLOBAL )

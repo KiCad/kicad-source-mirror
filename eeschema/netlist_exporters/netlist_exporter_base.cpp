@@ -172,21 +172,7 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
                         continue;
                 }
 
-                bool                  valid;
-                std::vector<wxString> numbers = pin->GetStackedPinNumbers( &valid );
-                wxString              baseName = pin->GetShownName();
-                wxLogTrace( traceStackedPins,
-                            wxString::Format( "CreatePinList(single): ref='%s' pinNameBase='%s' shownNum='%s' net='%s' "
-                                              "valid=%d expand=%zu",
-                                              ref, baseName, pin->GetShownNumber(), netName, valid, numbers.size() ) );
-
-                for( const wxString& num : numbers )
-                {
-                    wxString pinName = baseName.IsEmpty() ? num : baseName + wxT( "_" ) + num;
-                    wxLogTrace( traceStackedPins,
-                                wxString::Format( " -> emit pin num='%s' name='%s' net='%s'", num, pinName, netName ) );
-                    pins.emplace_back( num, netName, pinName );
-                }
+                appendResolvedPins( pins, pin, aSheetPath, netName );
             }
         }
     }
@@ -205,6 +191,33 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
     m_libParts.insert( aSymbol->GetLibSymbolRef().get() ); // rejects non-unique pointers
 
     return pins;
+}
+
+
+std::vector<wxString> NETLIST_EXPORTER_BASE::resolvePadNumbers( const SCH_PIN* aPin,
+                                                               const SCH_SHEET_PATH& aSheetPath ) const
+{
+    // The single resolution kernel for every netlist path (issue #2282): map the symbol pin to its
+    // effective pad(s) and expand any bracketed stacked target.  Both the PIN_INFO path
+    // (appendResolvedPins) and the XML net-tree path (makeListOfNets) route through here so they
+    // cannot drift; an unmapped pin resolves to its own number (assumed identity).
+    const wxString variantName = m_schematic ? m_schematic->GetCurrentVariant() : wxString();
+
+    return ExpandStackedPinNotation( aPin->GetEffectivePadNumber( aSheetPath, variantName ) );
+}
+
+
+void NETLIST_EXPORTER_BASE::appendResolvedPins( std::vector<PIN_INFO>& aPins, const SCH_PIN* aPin,
+                                                const SCH_SHEET_PATH& aSheetPath,
+                                                const wxString& aNetName )
+{
+    const wxString baseName = aPin->GetShownName();
+
+    for( const wxString& padNum : resolvePadNumbers( aPin, aSheetPath ) )
+    {
+        wxString pinName = baseName.IsEmpty() ? padNum : baseName + wxT( "_" ) + padNum;
+        aPins.emplace_back( padNum, aNetName, pinName, aPin->GetNumber() );
+    }
 }
 
 
@@ -238,6 +251,17 @@ void NETLIST_EXPORTER_BASE::eraseDuplicatePins( std::vector<PIN_INFO>& aPins )
 
             if( aPins[idxBest].num != aPins[jj].num )
                 break;
+
+            // A genuine many-to-one mapping collision - two *different* symbol pins resolved to
+            // the same pad on *different* nets - must survive so it stays visible and is flagged
+            // by ERC (issue #2282).  Shared multi-unit pins and jumpers carry the same source pin
+            // number, so they still collapse below as before.
+            if( aPins[idxBest].netName != aPins[jj].netName
+                && !aPins[idxBest].srcPin.IsEmpty() && !aPins[jj].srcPin.IsEmpty()
+                && aPins[idxBest].srcPin != aPins[jj].srcPin )
+            {
+                continue;
+            }
 
             // Check if jj has a better (user-assigned) net than the current best.
             // Prefer user-assigned nets over auto-generated "unconnected-(" or "Net-(" nets.
@@ -294,20 +318,7 @@ void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol,
                             continue;
                     }
 
-                    bool                        valid;
-                    std::vector<wxString> numbers = pin->GetStackedPinNumbers( &valid );
-                    wxString                     baseName = pin->GetShownName();
-                    wxLogTrace( traceStackedPins,
-                               wxString::Format( "CreatePinList(multi): ref='%s' pinNameBase='%s' shownNum='%s' net='%s' valid=%d expand=%zu",
-                                                 ref2, baseName, pin->GetShownNumber(), netName, valid, numbers.size() ) );
-
-                    for( const wxString& num : numbers )
-                    {
-                        wxString pinName = baseName.IsEmpty() ? num : baseName + wxT( "_" ) + num;
-                        wxLogTrace( traceStackedPins,
-                                    wxString::Format( " -> emit pin num='%s' name='%s' net='%s'", num, pinName, netName ) );
-                        aPins.emplace_back( num, netName, pinName );
-                    }
+                    appendResolvedPins( aPins, pin, sheet, netName );
                 }
             }
         }

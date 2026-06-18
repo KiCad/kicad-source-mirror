@@ -65,6 +65,7 @@ public:
         wxString default_font;
         bool show_hidden_pins;
         bool show_hidden_fields;
+        bool show_remapped_pin_numbers;
         bool show_directive_labels;
         bool mark_sim_exclusions;
         bool show_erc_warnings;

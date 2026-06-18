@@ -30,6 +30,7 @@ class LIB_SYMBOL;
 class SCH_PIN_TABLE_DATA_MODEL;
 class SCH_EDIT_FRAME;
 class PANEL_EMBEDDED_FILES;
+class PANEL_SYMBOL_PIN_MAP;
 
 
 // The dialog can be closed for several reasons.
@@ -56,6 +57,12 @@ public:
     ~DIALOG_SYMBOL_PROPERTIES() override;
 
     SCH_EDIT_FRAME* GetParent();
+
+    /**
+     * Select the Pin Map page so the dialog opens directly on the pin-to-pad mapping editor
+     * (issue #2282).  Call before showing the dialog.
+     */
+    void SelectPinMapPage();
 
 private:
     bool TransferDataToWindow() override;
@@ -105,6 +112,7 @@ private:
     FIELDS_GRID_TABLE*        m_fields;
     SCH_PIN_TABLE_DATA_MODEL* m_dataModel;
     PANEL_EMBEDDED_FILES*     m_embeddedFiles;
+    PANEL_SYMBOL_PIN_MAP*     m_pinMapPanel;
 };
 
 #endif // DIALOG_SYMBOL_PROPERTIES_H

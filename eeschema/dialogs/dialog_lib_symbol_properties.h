@@ -31,6 +31,7 @@ class SYMBOL_EDIT_FRAME;
 class LIB_SYMBOL;
 class LISTBOX_TRICKS;
 class PANEL_EMBEDDED_FILES;
+class PANEL_SYMBOL_PIN_MAP;
 class WX_GRID;
 
 
@@ -39,6 +40,9 @@ class DIALOG_LIB_SYMBOL_PROPERTIES: public DIALOG_LIB_SYMBOL_PROPERTIES_BASE
 public:
     DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_SYMBOL* aLibEntry );
     ~DIALOG_LIB_SYMBOL_PROPERTIES();
+
+    /// Switch the notebook to the Pin Map page (issue #2282).
+    void SelectPinMapPage();
 
 protected:
     bool TransferDataToWindow() override;
@@ -103,9 +107,14 @@ public:
     std::bitset<64>    m_shownColumns;
 
     PANEL_EMBEDDED_FILES* m_embeddedFiles;
+    PANEL_SYMBOL_PIN_MAP* m_pinMapPanel;
 
 private:
     static int m_lastOpenedPage;    // To remember the last notebook selection
+
+    /// When set by SelectPinMapPage(), TransferDataToWindow opens the Pin Map page instead of the
+    /// remembered last page (issue #2282).
+    bool m_forcePinMapPage = false;
 
     enum class LAST_LAYOUT {
         NONE,

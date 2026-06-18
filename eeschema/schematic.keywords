@@ -2,6 +2,7 @@ alternate
 anchor
 angles
 arc
+associated_footprints
 at
 atomic
 background
@@ -34,6 +35,7 @@ data
 date
 default
 default_instance
+delegate
 demorgan
 diameter
 diamond
@@ -43,6 +45,7 @@ do_not_autoplace
 dot
 duplicate_pin_numbers_are_jumpers
 edge_clock_high
+edit
 effects
 ellipse
 ellipse_arc
@@ -50,6 +53,7 @@ embedded_fonts
 embedded_files
 end
 end_angle
+entry
 extends
 external
 exclude_from_sim
@@ -80,6 +84,7 @@ input
 input_low
 instances
 inverted
+identity
 inverted_clock
 in_bom
 in_pos_files
@@ -100,13 +105,17 @@ line
 line_spacing
 local
 locked
+library_default
 major_radius
+map
 margins
 members
 mid
 minor_radius
 mirror
+mode
 name
+named_map
 net_class
 netclass_flag
 no
@@ -129,6 +138,9 @@ passthrough
 path
 pin
 pin_del
+pin_map
+pin_map_override
+pin_maps
 pin_names
 pin_numbers
 pin_merge

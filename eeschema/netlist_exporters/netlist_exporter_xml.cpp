@@ -1293,7 +1293,10 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
                 added = true;
             }
 
-            std::vector<wxString> nums = netNode.m_Pin->GetStackedPinNumbers();
+            // Emit the resolved footprint pad number(s), not the raw symbol pin number, so a
+            // remapped pin's net lands on the right pad when the board reads this netlist
+            // (issue #2282).  Shared with the PIN_INFO path via resolvePadNumbers.
+            std::vector<wxString> nums = resolvePadNumbers( netNode.m_Pin, netNode.m_Sheet );
             wxString              baseName = netNode.m_Pin->GetShownName();
             wxString              pinType = netNode.m_Pin->GetCanonicalElectricalTypeName();
 

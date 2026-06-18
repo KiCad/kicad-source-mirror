@@ -46,6 +46,10 @@ public:
     int Duplicate( const TOOL_EVENT& aEvent );
 
     int Properties( const TOOL_EVENT& aEvent );
+
+    /// Open the symbol properties dialog directly on its Pin Map page (issue #2282).
+    int EditSymbolPinMaps( const TOOL_EVENT& aEvent );
+
     int PinTable( const TOOL_EVENT& aEvent );
     int ConvertStackedPins( const TOOL_EVENT& aEvent );
     int ExplodeStackedPin( const TOOL_EVENT& aEvent );

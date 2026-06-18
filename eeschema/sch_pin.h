@@ -24,6 +24,7 @@
 #pragma once
 
 #include <memory>
+#include <set>
 #include <vector>
 
 #include <pin_type.h>
@@ -31,6 +32,8 @@
 
 class LIB_SYMBOL;
 class SCH_SYMBOL;
+class LIB_ID;
+class SCH_SHEET_PATH;
 class PIN_LAYOUT_CACHE;
 
 // Circle diameter drawn at the active end of pins:
@@ -151,7 +154,46 @@ public:
      * auto‑generated net names.  For stacked pins this is the smallest logical
      * number; otherwise it is the shown number.
      */
-    wxString GetEffectivePadNumber() const;
+    wxString GetSmallestStackedPadNumber() const;
+
+    /// Outcome of pin-to-pad resolution (issue #2282).
+    enum class PAD_RESOLUTION
+    {
+        MAPPED,    ///< An explicit map entry (or instance edit) supplied the pad number.
+        IDENTITY,  ///< No entry, but the footprint has a pad whose number equals the pin number.
+        UNMAPPED   ///< No entry and the footprint has no matching pad.
+    };
+
+    /**
+     * Resolve the footprint pad number this symbol pin lands on (issue #2282).
+     *
+     * This is the single resolution chokepoint every consumer (netlist, painter, ERC, IPC,
+     * cross-probe) routes through; GetNumber() semantics are unchanged.  MAPPED resolves with no
+     * footprint required; only the IDENTITY-vs-UNMAPPED split needs the footprint's pad numbers.
+     *
+     * The footprint is passed as its set of pad-number strings rather than a FOOTPRINT object so
+     * the resolver stays within the eeschema layer (FOOTPRINT lives in pcbcommon, which eeschema
+     * does not link).  Callers that have a footprint build the set from its pads; callers without
+     * one (the painter, which must not load footprints on every repaint) pass null, which yields
+     * the two-state form: MAPPED entries still resolve and everything else is assumed IDENTITY.
+     *
+     * @param aSheet                sheet path of the placement
+     * @param aVariantName          active variant (footprint and override are variant-scoped)
+     * @param aFootprintLibId       the footprint the pins resolve against
+     * @param aFootprintPadNumbers  the footprint's pad numbers, or null for the two-state form
+     * @param aState                optional out-parameter receiving the resolution state
+     * @return the resolved pad number (possibly a bracketed stacked list), or empty when UNMAPPED
+     */
+    wxString GetEffectivePadNumber( const SCH_SHEET_PATH& aSheet, const wxString& aVariantName,
+                                    const LIB_ID& aFootprintLibId,
+                                    const std::set<wxString>* aFootprintPadNumbers,
+                                    PAD_RESOLUTION* aState = nullptr ) const;
+
+    /// Convenience overload using the parent symbol's current (variant-scoped) Footprint field
+    /// and no loaded footprint (two-state form).
+    wxString GetEffectivePadNumber( const SCH_SHEET_PATH& aSheet,
+                                    const wxString& aVariantName = wxEmptyString ) const;
+
     void SetNumber( const wxString& aNumber );
 
     int GetNameTextSize() const;
@@ -342,6 +384,17 @@ public:
     const wxString& GetOperatingPoint() const { return m_operatingPoint; }
     void SetOperatingPoint( const wxString& aText ) { m_operatingPoint = aText; }
 
+    /**
+     * Transient, render-only original pin number for a pad-remapped pin (issue #2282).
+     *
+     * Set by the painter on the temporary pin it draws when the effective pad differs from the
+     * symbol's pin number and the show-remapped-numbers preference is on.  The painter draws this
+     * as a dimmed secondary label beside the effective pad.  Empty means the pin is not remapped or
+     * the secondary label is not requested.  This is never serialized.
+     */
+    const wxString& GetRemappedFromNumber() const { return m_remappedFromNumber; }
+    void            SetRemappedFromNumber( const wxString& aNumber ) { m_remappedFromNumber = aNumber; }
+
     double Similarity( const SCH_ITEM& aOther ) const override;
 
     bool operator>( const SCH_ITEM& aRhs ) const { return compare( aRhs, EQUALITY ) > 0; }
@@ -409,6 +462,9 @@ protected:
     wxString                m_alt;             // The current alternate for an instance
 
     wxString                m_operatingPoint;
+
+    /// Render-only original number for a pad-remapped pin; see GetRemappedFromNumber().  Not saved.
+    wxString                m_remappedFromNumber;
 
     bool                    m_isDangling;
 

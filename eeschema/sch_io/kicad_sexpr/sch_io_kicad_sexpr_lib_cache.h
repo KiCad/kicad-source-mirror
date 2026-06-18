@@ -86,6 +86,9 @@ private:
     static void saveTextBox( SCH_TEXTBOX* aTextBox, OUTPUTFORMATTER& aFormatter );
 
     static void saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter );
+
+    /// Write the symbol's own (non-inherited) pin maps and associated footprints (issue #2282).
+    static void savePinMapData( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter );
 };
 
 #endif    // SCH_IO_KICAD_SEXPR_LIB_CACHE_H_

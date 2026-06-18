@@ -93,8 +93,12 @@ enum ERCE_T
     ERCE_UNCONNECTED_WIRE_ENDPOINT,         ///< A label is connected to more than one wire.
     ERCE_STACKED_PIN_SYNTAX,                ///< Pin name resembles stacked pin notation.
     ERCE_FIELD_NAME_WHITESPACE,             ///< Field name has leading or trailing whitespace.
+    ERCE_PIN_MAP_BAD_PAD,                   ///< Pin map references a pad absent from the footprint.
+    ERCE_PIN_MAP_UNMAPPED_PIN,              ///< A connected pin resolves to no footprint pad.
+    ERCE_PIN_MAP_DUPLICATE_PAD,             ///< Two symbol pins map to one pad (not stacked/jumper).
+    ERCE_PIN_MAP_STALE_PIN,                 ///< Pin map references a pin number not on the symbol.
 
-    ERCE_LAST = ERCE_FIELD_NAME_WHITESPACE,
+    ERCE_LAST = ERCE_PIN_MAP_STALE_PIN,
 
     ERCE_DUPLICATE_PIN_ERROR,
     ERCE_PIN_TO_PIN_WARNING, // pin connected to an other pin: warning level

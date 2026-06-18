@@ -28,6 +28,7 @@
 #include <sch_field.h>
 #include <sch_pin.h>
 #include <lib_tree_item.h>
+#include <pin_map.h>
 #include <vector>
 #include <core/multivector.h>
 #include <default_values.h>
@@ -213,6 +214,57 @@ public:
         }
 
         return m_fpFilters;
+    }
+
+    /// Pin-to-pad mapping (issue #2282).  The pin maps and the associated-footprint list are a
+    /// coupled bundle for inheritance purposes; see GetEffectivePinMaps().
+
+    const PIN_MAP_SET& GetPinMaps() const { return m_pinMaps; }
+    PIN_MAP_SET&       PinMaps() { return m_pinMaps; }
+    void               SetPinMaps( const PIN_MAP_SET& aPinMaps ) { m_pinMaps = aPinMaps; }
+
+    const std::vector<ASSOCIATED_FOOTPRINT>& GetAssociatedFootprints() const
+    {
+        return m_associatedFootprints;
+    }
+
+    void SetAssociatedFootprints( std::vector<ASSOCIATED_FOOTPRINT> aList )
+    {
+        m_associatedFootprints = std::move( aList );
+    }
+
+    /**
+     * @return the pin maps in effect for this symbol.
+     *
+     * Pin maps and associated footprints inherit as a single bundle.  If this symbol defines
+     * either its own pin maps or its own associated footprints, both come from this symbol;
+     * otherwise both are inherited from the parent chain together.  This prevents a derived
+     * symbol from mixing its own associations with the parent's maps (or vice versa).
+     */
+    const PIN_MAP_SET& GetEffectivePinMaps() const
+    {
+        if( !definesOwnPinMapBundle() && IsDerived() )
+        {
+            if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+                return parent->GetEffectivePinMaps();
+        }
+
+        return m_pinMaps;
+    }
+
+    /**
+     * @return the associated footprints in effect for this symbol, inherited as a coupled bundle
+     *         with the pin maps.  @see GetEffectivePinMaps().
+     */
+    const std::vector<ASSOCIATED_FOOTPRINT>& GetEffectiveAssociatedFootprints() const
+    {
+        if( !definesOwnPinMapBundle() && IsDerived() )
+        {
+            if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+                return parent->GetEffectiveAssociatedFootprints();
+        }
+
+        return m_associatedFootprints;
     }
 
     /**
@@ -605,13 +657,6 @@ public:
      */
     std::vector<UNIT_PIN_INFO> GetUnitPinInfo() const;
 
-    /**
-     * Remap pin numbers according to \a aMap.  Keys are current symbol pin numbers;
-     * values are the footprint pad numbers to map (one or more). Multiple pads are
-     * encoded as stacked-pin notation. Useful for library plugins that share a base symbol
-     * across parts with different pinouts.
-     */
-    void SetPinMap( const std::unordered_map<wxString, std::vector<wxString>>& aMap ) const;
 
     // Deprecated: use GetGraphicalPins(). This override remains to satisfy SYMBOL's pure virtual.
     std::vector<SCH_PIN*> GetPins() const override;
@@ -877,6 +922,13 @@ private:
 
     void deleteAllFields();
 
+    /// @return true when this symbol defines its own pin-map bundle (either named maps or
+    ///         associated footprints), so the bundle is not inherited from the parent.
+    bool definesOwnPinMapBundle() const
+    {
+        return !m_pinMaps.IsEmpty() || !m_associatedFootprints.empty();
+    }
+
     void cacheSearchTerms();
     void cachePinCount();
     void cacheShownDescription();
@@ -909,6 +961,13 @@ private:
     wxString            m_keyWords;         ///< Search keywords
     wxArrayString       m_fpFilters;        ///< List of suitable footprint names for the symbol (wild card
                                             ///< names accepted).
+
+    /// Named pin-to-pad maps owned by this symbol (issue #2282).
+    PIN_MAP_SET         m_pinMaps;
+
+    /// Footprints associated with this symbol, each tied to a named pin map.  Coupled with
+    /// m_pinMaps for inheritance.
+    std::vector<ASSOCIATED_FOOTPRINT> m_associatedFootprints;
 
     /// A list of jumper pin groups, each of which is a set of pin numbers that should be jumpered
     /// together (treated as internally connected for the purposes of connectivity)

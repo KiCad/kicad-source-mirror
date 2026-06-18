@@ -492,6 +492,8 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
 
         saveDcmInfoAsFields( aSymbol, aFormatter );
 
+        savePinMapData( aSymbol, aFormatter );
+
         // Save the draw items grouped by units.
         std::vector<LIB_SYMBOL_UNIT> units = aSymbol->GetUnitDrawItems();
         std::sort( units.begin(), units.end(),
@@ -573,6 +575,8 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
 
         saveDcmInfoAsFields( aSymbol, aFormatter );
 
+        savePinMapData( aSymbol, aFormatter );
+
         KICAD_FORMAT::FormatBool( &aFormatter, "embedded_fonts", aSymbol->GetAreFontsEmbedded() );
 
         if( !aSymbol->EmbeddedFileMap().empty() )
@@ -617,6 +621,57 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol,
         description.SetVisible( false );
         description.SetText( tmp );
         saveField( &description, aFormatter );
+    }
+}
+
+
+void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePinMapData( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter )
+{
+    wxCHECK_RET( aSymbol, "Invalid LIB_SYMBOL pointer." );
+
+    // Emit only the symbol's own bundle; derived symbols inheriting the parent's maps write
+    // nothing here so the inheritance is preserved on round-trip.
+    const std::vector<ASSOCIATED_FOOTPRINT>& associations = aSymbol->GetAssociatedFootprints();
+
+    if( !associations.empty() )
+    {
+        aFormatter.Print( "(associated_footprints" );
+
+        for( const ASSOCIATED_FOOTPRINT& assoc : associations )
+        {
+            aFormatter.Print( "(footprint %s",
+                              aFormatter.Quotew( assoc.m_FootprintLibId.GetUniStringLibId() ).c_str() );
+
+            if( !assoc.m_MapName.IsEmpty() )
+                aFormatter.Print( "(map %s)", aFormatter.Quotew( assoc.m_MapName ).c_str() );
+
+            aFormatter.Print( ")" );
+        }
+
+        aFormatter.Print( ")" );
+    }
+
+    const std::vector<PIN_MAP>& maps = aSymbol->GetPinMaps().GetAll();
+
+    if( !maps.empty() )
+    {
+        aFormatter.Print( "(pin_maps" );
+
+        for( const PIN_MAP& map : maps )
+        {
+            aFormatter.Print( "(pin_map %s", aFormatter.Quotew( map.GetName() ).c_str() );
+
+            for( const PIN_MAP_ENTRY& entry : map.GetEntries() )
+            {
+                aFormatter.Print( "(entry %s %s)",
+                                  aFormatter.Quotew( entry.m_PinNumber ).c_str(),
+                                  aFormatter.Quotew( entry.m_PadNumber ).c_str() );
+            }
+
+            aFormatter.Print( ")" );
+        }
+
+        aFormatter.Print( ")" );
     }
 }
 

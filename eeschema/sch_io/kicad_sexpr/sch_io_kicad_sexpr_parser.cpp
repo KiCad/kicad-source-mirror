@@ -402,6 +402,14 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
             parsePinNumbers( symbol );
             break;
 
+        case T_associated_footprints:
+            parseAssociatedFootprints( symbol );
+            break;
+
+        case T_pin_maps:
+            parsePinMaps( symbol );
+            break;
+
         case T_exclude_from_sim:
             symbol->SetExcludedFromSim( parseBool() );
             NeedRIGHT();
@@ -1063,6 +1071,221 @@ void SCH_IO_KICAD_SEXPR_PARSER::parsePinNumbers( std::unique_ptr<LIB_SYMBOL>& aS
             break;
         }
     }
+}
+
+
+void SCH_IO_KICAD_SEXPR_PARSER::parseAssociatedFootprints( std::unique_ptr<LIB_SYMBOL>& aSymbol )
+{
+    wxCHECK_RET( CurTok() == T_associated_footprints,
+                 "Cannot parse " + GetTokenString( CurTok() ) + " as an associated_footprints token." );
+
+    /**
+     * (associated_footprints
+     *    (footprint "<lib_id>" (map "STD-8"))   ; map is optional
+     *    ...
+     * )
+     */
+
+    std::vector<ASSOCIATED_FOOTPRINT> list;
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        if( token != T_footprint )
+            Expecting( "footprint" );
+
+        token = NextTok();
+
+        if( !IsSymbol( token ) )
+            Expecting( "footprint library identifier" );
+
+        ASSOCIATED_FOOTPRINT assoc;
+        assoc.m_FootprintLibId.Parse( FromUTF8() );
+
+        for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+        {
+            if( token != T_LEFT )
+                Expecting( T_LEFT );
+
+            token = NextTok();
+
+            switch( token )
+            {
+            case T_map:
+                token = NextTok();
+
+                if( !IsSymbol( token ) )
+                    Expecting( "map name" );
+
+                assoc.m_MapName = FromUTF8();
+                NeedRIGHT();
+                break;
+
+            default:
+                Expecting( "map" );
+                break;
+            }
+        }
+
+        list.push_back( std::move( assoc ) );
+    }
+
+    aSymbol->SetAssociatedFootprints( std::move( list ) );
+}
+
+
+void SCH_IO_KICAD_SEXPR_PARSER::parsePinMaps( std::unique_ptr<LIB_SYMBOL>& aSymbol )
+{
+    wxCHECK_RET( CurTok() == T_pin_maps,
+                 "Cannot parse " + GetTokenString( CurTok() ) + " as a pin_maps token." );
+
+    /**
+     * (pin_maps
+     *    (pin_map "STD-8" (entry "1" "1") (entry "4" "[4,9]") ...)
+     *    ...
+     * )
+     */
+
+    PIN_MAP_SET set;
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        if( token != T_pin_map )
+            Expecting( "pin_map" );
+
+        set.AddOrReplace( parseOnePinMap() );
+    }
+
+    aSymbol->SetPinMaps( set );
+}
+
+
+PIN_MAP SCH_IO_KICAD_SEXPR_PARSER::parseOnePinMap()
+{
+    wxCHECK_MSG( CurTok() == T_pin_map, PIN_MAP(),
+                 "Cannot parse " + GetTokenString( CurTok() ) + " as a pin_map token." );
+
+    T token = NextTok();
+
+    if( !IsSymbol( token ) )
+        Expecting( "pin map name" );
+
+    PIN_MAP map( FromUTF8() );
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        if( token != T_entry )
+            Expecting( "entry" );
+
+        token = NextTok();
+
+        if( !IsSymbol( token ) )
+            Expecting( "pin number" );
+
+        wxString pinNumber = FromUTF8();
+
+        token = NextTok();
+
+        if( !IsSymbol( token ) )
+            Expecting( "pad number" );
+
+        map.SetEntry( pinNumber, FromUTF8() );
+
+        NeedRIGHT();
+    }
+
+    return map;
+}
+
+
+PIN_MAP_INSTANCE_OVERRIDE SCH_IO_KICAD_SEXPR_PARSER::parsePinMapOverride()
+{
+    wxCHECK_MSG( CurTok() == T_pin_map_override, PIN_MAP_INSTANCE_OVERRIDE(),
+                 "Cannot parse " + GetTokenString( CurTok() ) + " as a pin_map_override token." );
+
+    /**
+     * (pin_map_override
+     *    (mode library_default|named_map|identity|delegate)
+     *    (map "<name>")     ; only with named_map
+     *    (edit "<pin>" "<pad>") ...
+     * )
+     */
+
+    PIN_MAP_INSTANCE_OVERRIDE override;
+
+    for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_mode:
+            token = NextTok();
+
+            switch( token )
+            {
+            case T_library_default: override.m_Mode = PIN_MAP_OVERRIDE_MODE::USE_LIBRARY_DEFAULT; break;
+            case T_named_map:       override.m_Mode = PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP;        break;
+            case T_identity:        override.m_Mode = PIN_MAP_OVERRIDE_MODE::FORCE_IDENTITY;       break;
+            case T_delegate:        override.m_Mode = PIN_MAP_OVERRIDE_MODE::DELEGATE_TO_UNIT_1;   break;
+            default:                Expecting( "library_default, named_map, identity, or delegate" );
+            }
+
+            NeedRIGHT();
+            break;
+
+        case T_map:
+            token = NextTok();
+
+            if( !IsSymbol( token ) )
+                Expecting( "map name" );
+
+            override.m_ActiveMapName = FromUTF8();
+            NeedRIGHT();
+            break;
+
+        case T_edit:
+        {
+            token = NextTok();
+
+            if( !IsSymbol( token ) )
+                Expecting( "pin number" );
+
+            wxString pinNumber = FromUTF8();
+
+            token = NextTok();
+
+            if( !IsSymbol( token ) )
+                Expecting( "pad number" );
+
+            override.m_Edits.push_back( { pinNumber, FromUTF8() } );
+            NeedRIGHT();
+            break;
+        }
+
+        default:
+            Expecting( "mode, map, or edit" );
+        }
+    }
+
+    return override;
 }
 
 
@@ -3334,6 +3557,10 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
             NeedRIGHT();
             break;
 
+        case T_pin_map_override:
+            symbol->SetPinMapOverride( parsePinMapOverride() );
+            break;
+
         case T_locked:
             symbol->SetLocked( parseBool() );
             NeedRIGHT();
@@ -3592,8 +3819,13 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
                                     break;
                                 }
 
+                                case T_pin_map_override:
+                                    variant.m_PinMapOverride = parsePinMapOverride();
+                                    break;
+
                                 default:
-                                    Expecting( "dnp, exclude_from_sim, field, in_bom, in_pos_files, name, or on_board" );
+                                    Expecting( "dnp, exclude_from_sim, field, in_bom, in_pos_files, name, "
+                                               "on_board, or pin_map_override" );
                                 }
 
                                 instance.m_Variants[variant.m_Name] = variant;

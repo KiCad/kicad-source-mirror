@@ -44,6 +44,7 @@
 #include "api_sch_utils.h"
 
 #include <api/api_utils.h>
+#include <api/api_enums.h>
 
 
 using namespace kiapi::common;
@@ -101,6 +102,40 @@ std::unique_ptr<EDA_ITEM> CreateItemForType( KICAD_T aType, EDA_ITEM* aContainer
 }
 
 
+void PackPinMapOverride( kiapi::schematic::types::PinMapInstanceOverride* aOutput,
+                         const PIN_MAP_INSTANCE_OVERRIDE& aOverride )
+{
+    aOutput->Clear();
+    aOutput->set_mode( ToProtoEnum<PIN_MAP_OVERRIDE_MODE,
+                                   kiapi::schematic::types::PinMapOverrideMode>( aOverride.m_Mode ) );
+    aOutput->set_active_map_name( aOverride.m_ActiveMapName.ToUTF8() );
+
+    for( const PIN_MAP_ENTRY& edit : aOverride.m_Edits )
+    {
+        kiapi::schematic::types::PinMapEntry* e = aOutput->add_edits();
+        e->set_pin_number( edit.m_PinNumber.ToUTF8() );
+        e->set_pad_number( edit.m_PadNumber.ToUTF8() );
+    }
+}
+
+
+PIN_MAP_INSTANCE_OVERRIDE UnpackPinMapOverride(
+        const kiapi::schematic::types::PinMapInstanceOverride& aInput )
+{
+    PIN_MAP_INSTANCE_OVERRIDE override;
+    override.m_Mode = FromProtoEnum<PIN_MAP_OVERRIDE_MODE>( aInput.mode() );
+    override.m_ActiveMapName = wxString::FromUTF8( aInput.active_map_name() );
+
+    for( const kiapi::schematic::types::PinMapEntry& e : aInput.edits() )
+    {
+        override.m_Edits.push_back( { wxString::FromUTF8( e.pin_number() ),
+                                      wxString::FromUTF8( e.pad_number() ) } );
+    }
+
+    return override;
+}
+
+
 bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, const SCH_SYMBOL* aInput,
                  const SCH_SHEET_PATH& aPath )
 {
@@ -142,6 +177,38 @@ bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, cons
         item->set_is_private( pin->IsPrivate() );
         pin->Serialize( *item->mutable_item() );
     }
+
+    // Pin-to-pad maps (issue #2282): report the library symbol's effective bundle and, on the
+    // instance, the active override.
+    if( const LIB_SYMBOL* lib = aInput->GetLibSymbolRef().get() )
+    {
+        kiapi::schematic::types::LibSymbolPinMaps* pinMaps = def->mutable_pin_maps();
+
+        for( const ASSOCIATED_FOOTPRINT& assoc : lib->GetEffectiveAssociatedFootprints() )
+        {
+            kiapi::schematic::types::AssociatedFootprint* a = pinMaps->add_associated_footprints();
+            PackLibId( a->mutable_footprint(), assoc.m_FootprintLibId );
+            a->set_map_name( assoc.m_MapName.ToUTF8() );
+        }
+
+        for( const PIN_MAP& map : lib->GetEffectivePinMaps().GetAll() )
+        {
+            kiapi::schematic::types::PinMap* m = pinMaps->add_pin_maps();
+            m->set_name( map.GetName().ToUTF8() );
+
+            for( const PIN_MAP_ENTRY& entry : map.GetEntries() )
+            {
+                kiapi::schematic::types::PinMapEntry* e = m->add_entries();
+                e->set_pin_number( entry.m_PinNumber.ToUTF8() );
+                e->set_pad_number( entry.m_PadNumber.ToUTF8() );
+            }
+        }
+    }
+
+    PIN_MAP_INSTANCE_OVERRIDE override = aInput->GetPinMapOverride( &aPath );
+
+    if( !override.IsDefault() )
+        PackPinMapOverride( aOutput->mutable_pin_map_override(), override );
 
     kiapi::schematic::types::SchematicSymbolAttributes* attributes = aOutput->mutable_attributes();
 
@@ -224,6 +291,9 @@ bool UnpackSymbol( SCH_SYMBOL* aOutput, const kiapi::schematic::types::Schematic
 
         instance.m_Variants.emplace( variant.m_Name, std::move( variant ) );
     }
+
+    if( aInput.has_pin_map_override() )
+        aOutput->SetPinMapOverride( UnpackPinMapOverride( aInput.pin_map_override() ) );
 
     aOutput->AddHierarchicalReference( instance );
     return true;

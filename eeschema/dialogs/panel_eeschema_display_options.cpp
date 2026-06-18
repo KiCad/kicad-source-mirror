@@ -49,6 +49,7 @@ void PANEL_EESCHEMA_DISPLAY_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* cf
         m_defaultFontCtrl->SetSelection( 0 );
 
     m_checkShowHiddenPins->SetValue( cfg->m_Appearance.show_hidden_pins );
+    m_checkShowRemappedPinNumbers->SetValue( cfg->m_Appearance.show_remapped_pin_numbers );
     m_checkShowHiddenFields->SetValue( cfg->m_Appearance.show_hidden_fields );
     m_checkShowERCErrors->SetValue( cfg->m_Appearance.show_erc_errors );
     m_checkShowERCWarnings->SetValue( cfg->m_Appearance.show_erc_warnings );
@@ -93,6 +94,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
                                          ? wxString( KICAD_FONT_NAME )
                                          : m_defaultFontCtrl->GetStringSelection();
         cfg->m_Appearance.show_hidden_pins = m_checkShowHiddenPins->GetValue();
+        cfg->m_Appearance.show_remapped_pin_numbers = m_checkShowRemappedPinNumbers->GetValue();
         cfg->m_Appearance.show_hidden_fields = m_checkShowHiddenFields->GetValue();
         cfg->m_Appearance.show_erc_warnings = m_checkShowERCWarnings->GetValue();
         cfg->m_Appearance.show_erc_errors = m_checkShowERCErrors->GetValue();

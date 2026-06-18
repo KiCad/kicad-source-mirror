@@ -28,7 +28,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include <json_common.h>
-#include <pin_assignment.h>
+#include <pin_map.h>
 
 #include <libraries/symbol_library_adapter.h>
 #include <database/database_connection.h>
@@ -619,29 +619,6 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
     libId.SetSubLibraryName( aTable.name );
     symbol->SetLibId( libId );
 
-    if( !aTable.pins_col.empty() && aRow.count( aTable.pins_col ) )
-    {
-        try
-        {
-            std::string jsonStr = std::any_cast<std::string>( aRow.at( aTable.pins_col ) );
-
-            if( !jsonStr.empty() )
-            {
-                nlohmann::json pinsJson = nlohmann::json::parse( jsonStr );
-
-                if( pinsJson.is_array() )
-                    symbol->SetPinMap( ParsePinMapJson( pinsJson ) );
-            }
-        }
-        catch( const std::exception& e )
-        {
-            wxLogTrace( traceDatabase,
-                        wxT( "loadSymbolFromRow: failed to parse pin assignments "
-                             "for %s: %s" ),
-                        aSymbolName, e.what() );
-        }
-    }
-
     wxArrayString footprintsList;
 
     if( aRow.count( aTable.footprints_col ) )
@@ -661,6 +638,60 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
     {
         wxLogTrace( traceDatabase, wxT( "loadSymboFromRow: footprint field %s not found." ),
                     aTable.footprints_col );
+    }
+
+    // Pin-to-pad maps (issue #2282): attach non-destructively.  The pins column carries either the
+    // spec-form named object { "pin_maps": [...], "associated_footprints": [...] } or the legacy
+    // flat MR !2540 array (read for one release, bound to the row's footprints).
+    if( !aTable.pins_col.empty() && aRow.count( aTable.pins_col ) )
+    {
+        try
+        {
+            std::string jsonStr = std::any_cast<std::string>( aRow.at( aTable.pins_col ) );
+
+            if( !jsonStr.empty() )
+            {
+                nlohmann::json json = nlohmann::json::parse( jsonStr );
+
+                if( json.is_object() && json.contains( "pin_maps" ) )
+                {
+                    symbol->SetPinMaps( ParsePinMapSet( json ) );
+                    symbol->SetAssociatedFootprints( ParseAssociatedFootprints( json ) );
+                }
+                else if( !footprintsList.IsEmpty() )
+                {
+                    std::unordered_map<wxString, std::vector<wxString>> assignments =
+                            ParseLegacyPinAssignments( json );
+
+                    if( !assignments.empty() )
+                    {
+                        const wxString mapName = wxS( "Database" );
+
+                        symbol->PinMaps().AddOrReplace( MakeLegacyPinMap( mapName, assignments ) );
+
+                        // Bind the one named map to every footprint the row offers, mirroring the
+                        // old behaviour where the assignment applied regardless of footprint.
+                        std::vector<ASSOCIATED_FOOTPRINT> associations;
+
+                        for( const wxString& footprint : footprintsList )
+                        {
+                            LIB_ID fpId;
+                            fpId.Parse( footprint );
+                            associations.push_back( { fpId, mapName } );
+                        }
+
+                        symbol->SetAssociatedFootprints( std::move( associations ) );
+                    }
+                }
+            }
+        }
+        catch( const std::exception& e )
+        {
+            // Surface a malformed pin-map payload to the user instead of silently dropping it; the
+            // symbol still loads without the map (issue #2282).
+            wxLogError( _( "Error parsing pin map for database symbol '%s': %s" ),
+                        aSymbolName, e.what() );
+        }
     }
 
     if( !aTable.properties.description.empty() && aRow.count( aTable.properties.description ) )

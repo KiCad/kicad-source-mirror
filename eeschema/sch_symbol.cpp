@@ -1285,6 +1285,91 @@ bool SCH_SYMBOL::GetDNP( const SCH_SHEET_PATH* aInstance, const wxString& aVaria
 }
 
 
+void SCH_SYMBOL::SetPinMapOverride( const PIN_MAP_INSTANCE_OVERRIDE& aOverride,
+                                    const SCH_SHEET_PATH* aInstance, const wxString& aVariantName )
+{
+    if( !aInstance || aVariantName.IsEmpty() )
+    {
+        m_pinMapOverride = aOverride;
+        return;
+    }
+
+    SCH_SYMBOL_INSTANCE* instance = getInstance( *aInstance );
+
+    wxCHECK_MSG( instance, /* void */,
+                 wxString::Format( wxS( "Cannot set pin map override for invalid sheet path '%s'." ),
+                                   aInstance->PathHumanReadable() ) );
+
+    if( instance->m_Variants.contains( aVariantName ) )
+    {
+        instance->m_Variants[aVariantName].m_PinMapOverride = aOverride;
+    }
+    else
+    {
+        SCH_SYMBOL_VARIANT variant( aVariantName );
+
+        variant.InitializeAttributes( *this );
+        variant.m_PinMapOverride = aOverride;
+        AddVariant( *aInstance, variant );
+    }
+}
+
+
+PIN_MAP_INSTANCE_OVERRIDE SCH_SYMBOL::GetPinMapOverride( const SCH_SHEET_PATH* aInstance,
+                                                        const wxString& aVariantName ) const
+{
+    PIN_MAP_INSTANCE_OVERRIDE result = m_pinMapOverride;
+
+    if( aInstance && !aVariantName.IsEmpty() )
+    {
+        SCH_SYMBOL_INSTANCE instance;
+
+        if( GetInstance( instance, aInstance->Path() ) && instance.m_Variants.contains( aVariantName ) )
+            result = instance.m_Variants[aVariantName].m_PinMapOverride;
+    }
+
+    // Units 2..N follow unit 1's record; resolve that here so callers never see a delegate.
+    if( result.IsDelegate() && aInstance )
+        result = resolveDelegatedPinMapOverride( *aInstance, aVariantName );
+
+    return result;
+}
+
+
+PIN_MAP_INSTANCE_OVERRIDE SCH_SYMBOL::resolveDelegatedPinMapOverride( const SCH_SHEET_PATH& aSheet,
+                                                                     const wxString& aVariantName ) const
+{
+    if( !Schematic() )
+        return PIN_MAP_INSTANCE_OVERRIDE();
+
+    wxString ref = GetRef( &aSheet );
+
+    for( const SCH_SHEET_PATH& sheet : Schematic()->Hierarchy() )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* sibling = static_cast<SCH_SYMBOL*>( item );
+
+            if( sibling == this || sibling->GetUnit() != 1 )
+                continue;
+
+            if( sibling->GetRef( &sheet ).CmpNoCase( ref ) != 0 )
+                continue;
+
+            PIN_MAP_INSTANCE_OVERRIDE unit1 = sibling->GetPinMapOverride( &sheet, aVariantName );
+
+            // Guard against a unit-1 record that itself (incorrectly) delegates.
+            if( unit1.IsDelegate() )
+                return PIN_MAP_INSTANCE_OVERRIDE();
+
+            return unit1;
+        }
+    }
+
+    return PIN_MAP_INSTANCE_OVERRIDE();
+}
+
+
 void SCH_SYMBOL::SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH* aInstance, const wxString& aVariantName )
 {
     if( !aInstance || aVariantName.IsEmpty() )
@@ -1892,6 +1977,27 @@ SCH_PIN* SCH_SYMBOL::GetPin( const wxString& aNumber ) const
 }
 
 
+SCH_PIN* SCH_SYMBOL::GetPinByEffectivePadNumber( const wxString& aPadNumber,
+                                                 const SCH_SHEET_PATH* aSheet,
+                                                 const wxString& aVariantName ) const
+{
+    if( !aSheet )
+        return nullptr;
+
+    for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
+    {
+        for( const wxString& pad : ExpandStackedPinNotation(
+                     pin->GetEffectivePadNumber( *aSheet, aVariantName ) ) )
+        {
+            if( pad == aPadNumber )
+                return pin.get();
+        }
+    }
+
+    return nullptr;
+}
+
+
 std::vector<SCH_PIN*> SCH_SYMBOL::GetPinsByNumber( const wxString& aNumber ) const
 {
     std::vector<SCH_PIN*> pins;
@@ -2058,6 +2164,7 @@ void SCH_SYMBOL::swapData( SCH_ITEM* aItem )
     std::swap( m_DNP, symbol->m_DNP );
     std::swap( m_excludedFromBoard, symbol->m_excludedFromBoard );
     std::swap( m_excludedFromPosFiles, symbol->m_excludedFromPosFiles );
+    std::swap( m_pinMapOverride, symbol->m_pinMapOverride );
 
     std::swap( m_instances, symbol->m_instances );
     std::swap( m_schLibSymbolName, symbol->m_schLibSymbolName );

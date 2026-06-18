@@ -208,6 +208,8 @@ set( EESCHEMA_DLGS
     dialogs/panel_setup_formatting_base.cpp
     dialogs/panel_setup_pinmap.cpp
     dialogs/panel_setup_pinmap_base.cpp
+    dialogs/panel_symbol_pin_map.cpp
+    dialogs/panel_symbol_pin_map_base.cpp
     dialogs/panel_simulator_preferences.cpp
     dialogs/panel_simulator_preferences_base.cpp
     dialogs/panel_sch_data_sources.cpp

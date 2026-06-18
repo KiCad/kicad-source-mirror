@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -75,6 +75,8 @@ class DIALOG_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxButton* m_editLibrarySymbolBtn;
 		wxPanel* m_pinTablePage;
 		WX_GRID* m_pinGrid;
+		wxPanel* m_pinMapPage;
+		wxBoxSizer* bPinMapPageSizer;
 		wxStaticText* m_libraryIDLabel;
 		wxTextCtrl* m_tcLibraryID;
 		wxButton* m_spiceFieldsButton;

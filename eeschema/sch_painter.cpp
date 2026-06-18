@@ -1663,7 +1663,38 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
     // Request text layout info and draw it
 
     if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> numInfo = cache.GetPinNumberInfo( shadowWidth ) )
+    {
         drawTextInfo( *numInfo, getColorForLayer( LAYER_PINNUM ) );
+
+        // Pin-to-pad mapping (issue #2282): when the effective pad differs from the symbol pin
+        // number and the preference is on, draw the original number as a dimmed secondary label
+        // ("effective / original") one font size smaller, in the pin-number colour at 50% alpha.
+        // The secondary label is positioned just past the primary number's bounding box along the
+        // number's writing axis so the slash reads naturally after the effective pad.
+        if( !drawingShadows && !aPin->GetRemappedFromNumber().IsEmpty() )
+        {
+            PIN_LAYOUT_CACHE::TEXT_INFO origInfo = *numInfo;
+            origInfo.m_Text = wxT( "/" ) + aPin->GetRemappedFromNumber();
+            origInfo.m_TextSize = std::max( 1, ( numInfo->m_TextSize * 4 ) / 5 );
+
+            if( OPT_BOX2I numBox = cache.GetPinNumberBBox() )
+            {
+                const bool vertical = numInfo->m_Angle == ANGLE_VERTICAL;
+
+                if( vertical )
+                    origInfo.m_TextPosition.y = numBox->GetBottom();
+                else
+                    origInfo.m_TextPosition.x = numBox->GetRight();
+
+                origInfo.m_HAlign = GR_TEXT_H_ALIGN_LEFT;
+            }
+
+            COLOR4D dimmed = getColorForLayer( LAYER_PINNUM );
+            dimmed.a *= 0.5;
+
+            drawTextInfo( origInfo, dimmed );
+        }
+    }
 
     if( std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> nameInfo = cache.GetPinNameInfo( shadowWidth ) )
     {
@@ -2837,6 +2868,30 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         tempPin->SetName( expandLibItemTextVars( symbolPin->GetShownName(), aSymbol ) );
         tempPin->SetType( symbolPin->GetType() );
         tempPin->SetShape( symbolPin->GetShape() );
+
+        // Pin-to-pad mapping (issue #2282): show the effective pad number on the schematic.  The
+        // resolution needs the SCH_SYMBOL context that symbolPin carries, so substitute the temp
+        // pin's number here, which lets the layout cache recompute geometry for the shown text.
+        if( m_schematic )
+        {
+            const wxString original = symbolPin->GetShownNumber();
+            const wxString effective = symbolPin->GetEffectivePadNumber(
+                    m_schematic->CurrentSheet(), m_schematic->GetCurrentVariant() );
+
+            if( effective != original )
+            {
+                bool showOriginal = eeconfig() ? eeconfig()->m_Appearance.show_remapped_pin_numbers
+                                               : m_schSettings.m_ShowRemappedPinNumbers;
+
+                // The effective pad is the primary number; the layout cache positions and sizes it.
+                // When the preference is on, the original symbol-pin number is carried on the temp
+                // pin so draw( SCH_PIN* ) can render it as a dimmed secondary label.
+                tempPin->SetNumber( effective );
+
+                if( showOriginal )
+                    tempPin->SetRemappedFromNumber( original );
+            }
+        }
 
         if( symbolPin->IsDangling() )
             tempPin->SetFlags( IS_DANGLING );

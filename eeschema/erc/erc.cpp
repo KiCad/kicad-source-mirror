@@ -46,6 +46,9 @@
 #include <sch_textbox.h>
 #include <sch_line.h>
 #include <schematic.h>
+#include <lib_symbol.h>
+#include <sch_symbol.h>
+#include <pin_map.h>
 #include <drawing_sheet/ds_draw_item.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <vector>
@@ -177,6 +180,108 @@ int ERC_TESTER::TestDuplicateSheetNames( bool aCreateMarker )
     }
 
     return err_count;
+}
+
+
+int ERC_TESTER::TestPinMap()
+{
+    int        errors = 0;
+    const bool checkStale = m_settings.IsTestEnabled( ERCE_PIN_MAP_STALE_PIN );
+    const bool checkDuplicate = m_settings.IsTestEnabled( ERCE_PIN_MAP_DUPLICATE_PAD );
+
+    // Pin maps and the symbol's pin numbers are library-symbol properties, so iterate unique
+    // screens (not sheet paths) to avoid double-reporting on reused hierarchical sheets.
+    for( SCH_SCREEN* screen = m_screens.GetFirst(); screen; screen = m_screens.GetNext() )
+    {
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            LIB_SYMBOL* lib = symbol->GetLibSymbolRef().get();
+
+            if( !lib )
+                continue;
+
+            const PIN_MAP_SET& maps = lib->GetEffectivePinMaps();
+
+            if( maps.IsEmpty() )
+                continue;
+
+            std::set<wxString> pinNumbers;
+
+            for( const SCH_PIN* pin : lib->GetPins() )
+                pinNumbers.insert( pin->GetNumber() );
+
+            const std::vector<std::set<wxString>>& jumperGroups = lib->JumperPinGroups();
+
+            auto sharesJumperGroup =
+                    [&]( const wxString& aPinA, const wxString& aPinB )
+                    {
+                        for( const std::set<wxString>& group : jumperGroups )
+                        {
+                            if( group.count( aPinA ) && group.count( aPinB ) )
+                                return true;
+                        }
+
+                        return false;
+                    };
+
+            for( const PIN_MAP& map : maps.GetAll() )
+            {
+                // Stale pin reference: an entry names a pin that no longer exists on the symbol.
+                if( checkStale )
+                {
+                    for( const PIN_MAP_ENTRY& entry : map.GetEntries() )
+                    {
+                        if( pinNumbers.count( entry.m_PinNumber ) )
+                            continue;
+
+                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_PIN_MAP_STALE_PIN );
+                        ercItem->SetItems( symbol );
+                        ercItem->SetErrorMessage( wxString::Format(
+                                _( "Pin map '%s' references unknown symbol pin '%s'" ),
+                                map.GetName(), entry.m_PinNumber ) );
+                        screen->Append( new SCH_MARKER( std::move( ercItem ), symbol->GetPosition() ) );
+                        errors++;
+                    }
+                }
+
+                // Duplicate pad target: two different pins map to the same pad without a deliberate
+                // jumper relationship.  A single pin mapped to several pads (stacked) is allowed.
+                if( checkDuplicate )
+                {
+                    std::map<wxString, wxString> padToPin;
+
+                    for( const PIN_MAP_ENTRY& entry : map.GetEntries() )
+                    {
+                        for( const wxString& pad : ExpandStackedPinNotation( entry.m_PadNumber ) )
+                        {
+                            auto it = padToPin.find( pad );
+
+                            if( it == padToPin.end() )
+                            {
+                                padToPin[pad] = entry.m_PinNumber;
+                            }
+                            else if( it->second != entry.m_PinNumber
+                                     && !sharesJumperGroup( it->second, entry.m_PinNumber ) )
+                            {
+                                std::shared_ptr<ERC_ITEM> ercItem =
+                                        ERC_ITEM::Create( ERCE_PIN_MAP_DUPLICATE_PAD );
+                                ercItem->SetItems( symbol );
+                                ercItem->SetErrorMessage( wxString::Format(
+                                        _( "Symbol pins '%s' and '%s' both map to pad '%s'" ),
+                                        it->second, entry.m_PinNumber, pad ) );
+                                screen->Append( new SCH_MARKER( std::move( ercItem ),
+                                                                symbol->GetPosition() ) );
+                                errors++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return errors;
 }
 
 
@@ -2286,6 +2391,16 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
             aProgressReporter->AdvancePhase( _( "Checking sheet names..." ) );
 
         TestDuplicateSheetNames( true );
+    }
+
+    // Test pin-to-pad maps for stale pin references and duplicate pad targets (issue #2282).
+    if( m_settings.IsTestEnabled( ERCE_PIN_MAP_STALE_PIN )
+        || m_settings.IsTestEnabled( ERCE_PIN_MAP_DUPLICATE_PAD ) )
+    {
+        if( aProgressReporter )
+            aProgressReporter->AdvancePhase( _( "Checking pin maps..." ) );
+
+        TestPinMap();
     }
 
     // The connection graph has a whole set of ERC checks it can run

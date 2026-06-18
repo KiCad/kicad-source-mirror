@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -327,6 +327,14 @@ DIALOG_SYMBOL_PROPERTIES_BASE::DIALOG_SYMBOL_PROPERTIES_BASE( wxWindow* parent, 
 	m_pinTablePage->Layout();
 	pinTableSizer->Fit( m_pinTablePage );
 	m_notebook1->AddPage( m_pinTablePage, _("Pin Functions"), false );
+	m_pinMapPage = new wxPanel( m_notebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	bPinMapPageSizer = new wxBoxSizer( wxVERTICAL );
+
+
+	m_pinMapPage->SetSizer( bPinMapPageSizer );
+	m_pinMapPage->Layout();
+	bPinMapPageSizer->Fit( m_pinMapPage );
+	m_notebook1->AddPage( m_pinMapPage, _("Pin Map"), false );
 
 	mainSizer->Add( m_notebook1, 1, wxEXPAND|wxALL, 10 );
 

@@ -25,6 +25,7 @@
 #include <schematic.h>
 
 class SCH_SYMBOL;
+class SCH_PIN;
 class LIB_SYMBOL;
 class REPORTER;
 
@@ -67,15 +68,18 @@ struct LIB_SYMBOL_LESS_THAN
 
 struct PIN_INFO
 {
-    PIN_INFO( const wxString& aPinNumber, const wxString& aNetName, const wxString& aPinName ) :
+    PIN_INFO( const wxString& aPinNumber, const wxString& aNetName, const wxString& aPinName,
+              const wxString& aSourcePin = wxEmptyString ) :
             num( aPinNumber ),
             netName( aNetName ),
-            pinName( aPinName )
+            pinName( aPinName ),
+            srcPin( aSourcePin )
     {}
 
-    wxString num;
+    wxString num;       ///< Resolved footprint pad number.
     wxString netName;
     wxString pinName;
+    wxString srcPin;    ///< Original symbol pin number that mapped to this pad (issue #2282).
 };
 
 
@@ -170,6 +174,22 @@ protected:
      * Also set the m_Flag member of "removed" NETLIST_OBJECT pin item to 1
      */
     void eraseDuplicatePins( std::vector<PIN_INFO>& pins );
+
+    /**
+     * Resolve @a aPin to its effective footprint pad number(s) (issue #2282) and append a PIN_INFO
+     * for each, expanding any bracketed stacked-pad target.  A mapped pin emits its mapped pad(s);
+     * an unmapped pin emits its pin number unchanged (assumed identity, the two-state form, since
+     * eeschema cannot load the footprint to distinguish identity from unmapped).
+     */
+    void appendResolvedPins( std::vector<PIN_INFO>& aPins, const SCH_PIN* aPin,
+                             const SCH_SHEET_PATH& aSheetPath, const wxString& aNetName );
+
+    /**
+     * Resolve @a aPin to its effective footprint pad number(s) on @a aSheetPath, expanding any
+     * bracketed stacked target (issue #2282).  The shared resolution kernel for all netlist paths.
+     */
+    std::vector<wxString> resolvePadNumbers( const SCH_PIN* aPin,
+                                             const SCH_SHEET_PATH& aSheetPath ) const;
 
     /**
      * Find all units for symbols with multiple symbols per package.

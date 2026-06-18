@@ -203,6 +203,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "appearance.show_hidden_fields",
             &m_Appearance.show_hidden_fields, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_remapped_pin_numbers",
+            &m_Appearance.show_remapped_pin_numbers, true ) );
+
     m_params.emplace_back( new PARAM<bool>( "appearance.show_directive_labels",
             &m_Appearance.show_directive_labels, true ) );
 

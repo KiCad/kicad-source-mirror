@@ -24,6 +24,8 @@
 #include <widgets/properties_panel.h>
 #include <set>
 
+class wxButton;
+class wxCommandEvent;
 class SELECTION;
 class SCHEMATIC;
 class SCH_BASE_FRAME;
@@ -80,6 +82,15 @@ protected:
      */
     EDA_ITEM* getFrontItem();
 
+    /**
+     * Open the symbol properties dialog on its Pin Map page for the single selected symbol
+     * (issue #2282).  Only enabled in the schematic editor.
+     */
+    void onEditPinMap( wxCommandEvent& aEvent );
+
+    /// @return the single selected SCH_SYMBOL with an effective associated footprint, else nullptr.
+    SCH_SYMBOL* getSinglePinMappedSymbol();
+
 protected:
     SCH_BASE_FRAME*     m_frame;
     PROPERTY_MANAGER&   m_propMgr;
@@ -91,5 +102,10 @@ protected:
 
     static std::set<wxString> m_currentSymbolFieldNames;
     static std::set<wxString> m_currentSheetFieldNames;
+
+    /// Distinct pin numbers of the selected pin-mapped symbol, gating the per-pin table rows.
+    static std::set<wxString> m_currentPinMapPinNumbers;
     wxPGChoices               m_nets;
+
+    wxButton*                 m_editPinMapButton;
 };

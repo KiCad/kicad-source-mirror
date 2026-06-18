@@ -235,6 +235,10 @@ private:
     static ERC_ITEM groundPinNotGround;
     static ERC_ITEM stackedPinName;
     static ERC_ITEM fieldNameWhitespace;
+    static ERC_ITEM pinMapBadPad;
+    static ERC_ITEM pinMapUnmappedPin;
+    static ERC_ITEM pinMapDuplicatePad;
+    static ERC_ITEM pinMapStalePin;
     static ERC_ITEM unresolvedVariable;
     static ERC_ITEM undefinedNetclass;
     static ERC_ITEM simulationModelIssues;

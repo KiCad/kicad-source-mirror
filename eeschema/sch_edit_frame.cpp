@@ -2002,6 +2002,7 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( int aFlags )
         view->SetLayerVisible( LAYER_OP_CURRENTS, cfg->m_Appearance.show_op_currents );
 
         GetRenderSettings()->m_ShowPinAltIcons = cfg->m_Appearance.show_pin_alt_icons;
+        GetRenderSettings()->m_ShowRemappedPinNumbers = cfg->m_Appearance.show_remapped_pin_numbers;
 
         RefreshOperatingPointDisplay();
 

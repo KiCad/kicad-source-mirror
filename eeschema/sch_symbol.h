@@ -601,6 +601,16 @@ public:
     SCH_PIN* GetPin( const wxString& number ) const;
 
     /**
+     * Find the pin whose effective footprint pad number (issue #2282) is @a aPadNumber on
+     * @a aSheet, expanding bracketed stacked targets.  This is the reverse of pin-to-pad
+     * resolution, used by cross-probe (PCB pad -> schematic pin).
+     *
+     * @return the owning SCH_PIN, or nullptr if no pin resolves to that pad.
+     */
+    SCH_PIN* GetPinByEffectivePadNumber( const wxString& aPadNumber, const SCH_SHEET_PATH* aSheet,
+                                         const wxString& aVariantName = wxEmptyString ) const;
+
+    /**
      * Find all symbol pins with the given number.
      *
      * This is useful for symbols that intentionally have multiple pins with the same number,
@@ -711,6 +721,25 @@ public:
 
     void SetDNPProp( bool aEnable ) { SetDNP( aEnable, &Schematic()->CurrentSheet(),
                                               Schematic()->GetCurrentVariant() ); }
+
+    /**
+     * Set the per-instance pin-to-pad map override (issue #2282).
+     *
+     * Mirrors SetDNP: with no sheet/variant the base override is set; otherwise the override is
+     * stored on the variant record for the sheet path.
+     */
+    void SetPinMapOverride( const PIN_MAP_INSTANCE_OVERRIDE& aOverride,
+                            const SCH_SHEET_PATH* aInstance = nullptr,
+                            const wxString& aVariantName = wxEmptyString );
+
+    /**
+     * @return the pin-to-pad map override in effect for the given sheet/variant.
+     *
+     * A DELEGATE_TO_UNIT_1 override is resolved here by returning unit 1's override, so callers
+     * never have to special-case multi-unit delegation.
+     */
+    PIN_MAP_INSTANCE_OVERRIDE GetPinMapOverride( const SCH_SHEET_PATH* aInstance = nullptr,
+                                                 const wxString& aVariantName = wxEmptyString ) const;
 
     void SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH* aInstance = nullptr,
                              const wxString& aVariantName = wxEmptyString ) override;
@@ -1018,6 +1047,10 @@ private:
     SCH_SYMBOL_INSTANCE* getInstance( const SCH_SHEET_PATH& aPath ) { return getInstance( aPath.Path() ); }
     const SCH_SYMBOL_INSTANCE* getInstance( const SCH_SHEET_PATH& aPath ) const { return getInstance( aPath.Path() ); }
 
+    /// Return unit 1's pin-map override for a unit that delegates to it (issue #2282).
+    PIN_MAP_INSTANCE_OVERRIDE resolveDelegatedPinMapOverride( const SCH_SHEET_PATH& aSheet,
+                                                              const wxString& aVariantName ) const;
+
 private:
     VECTOR2I    m_pos;
     LIB_ID      m_lib_id;       ///< Name and library the symbol was loaded from, i.e. 74xx:74LS00.
@@ -1047,6 +1080,10 @@ private:
 
     std::vector<std::unique_ptr<SCH_PIN>>  m_pins;     ///< A #SCH_PIN for every #LIB_PIN.
     std::unordered_map<SCH_PIN*, SCH_PIN*> m_pinMap;   ///< Library pin pointer : #SCH_PIN indices.
+
+    /// Base (no-variant) pin-to-pad map override applied when no variant override exists for the
+    /// sheet path (issue #2282).
+    PIN_MAP_INSTANCE_OVERRIDE              m_pinMapOverride;
 
     /**
      * Define the hierarchical path and reference of the symbol.

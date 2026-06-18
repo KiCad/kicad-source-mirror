@@ -99,6 +99,10 @@ void SCH_SYMBOL_VARIANT::InitializeAttributes( const SCH_SYMBOL& aSymbol )
     m_ExcludedFromSim = aSymbol.GetExcludedFromSim();
     m_ExcludedFromBoard = aSymbol.GetExcludedFromBoard();
     m_ExcludedFromPosFiles = aSymbol.GetExcludedFromPosFiles();
+
+    // Snapshot the base pin-map override so a variant created for an unrelated attribute does not
+    // mask the base override on read (issue #2282).
+    m_PinMapOverride = aSymbol.GetPinMapOverride();
 }
 
 

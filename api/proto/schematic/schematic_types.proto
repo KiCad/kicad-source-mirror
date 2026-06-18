@@ -363,6 +363,51 @@ message SchematicSymbolVariant
   map<string, string> fields = 4;
 }
 
+// One symbol-pin to footprint-pad mapping (issue #2282).
+message PinMapEntry
+{
+  string pin_number = 1;
+  string pad_number = 2;   // bracketed stacked list allowed, e.g. "[4,9]"
+}
+
+// A named, footprint-agnostic pin map.
+message PinMap
+{
+  string name                  = 1;
+  repeated PinMapEntry entries = 2;
+}
+
+// A footprint choice on a symbol, tied to a named pin map.
+message AssociatedFootprint
+{
+  kiapi.common.types.LibraryIdentifier footprint = 1;
+  string map_name                                 = 2;
+}
+
+// The pin-map bundle owned by a library symbol.
+message LibSymbolPinMaps
+{
+  repeated AssociatedFootprint associated_footprints = 1;
+  repeated PinMap pin_maps                           = 2;
+}
+
+enum PinMapOverrideMode
+{
+  PMOM_UNKNOWN             = 0;
+  PMOM_USE_LIBRARY_DEFAULT = 1;
+  PMOM_USE_NAMED_MAP       = 2;
+  PMOM_FORCE_IDENTITY      = 3;
+  PMOM_DELEGATE_TO_UNIT_1  = 4;
+}
+
+// A per-instance override of the active pin map (issue #2282).
+message PinMapInstanceOverride
+{
+  PinMapOverrideMode mode      = 1;
+  string active_map_name       = 2;
+  repeated PinMapEntry edits   = 3;
+}
+
 message SchematicSymbol
 {
   kiapi.common.types.LibraryIdentifier id = 1;
@@ -384,6 +429,8 @@ message SchematicSymbol
 
   string keywords = 12;
   repeated string footprint_filters = 13;
+
+  LibSymbolPinMaps pin_maps = 14;
 }
 
 message SchematicSymbolTransform
@@ -426,6 +473,8 @@ message SchematicSymbolInstance
   repeated SchematicSymbolVariant variants = 18;
 
   repeated SchematicField user_fields = 19;
+
+  PinMapInstanceOverride pin_map_override = 20;
 }
 
 message SheetInstance

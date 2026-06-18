@@ -156,6 +156,7 @@ public:
     static TOOL_ACTION showLibFieldsTable;
     static TOOL_ACTION showRelatedLibFieldsTable;
     static TOOL_ACTION symbolProperties;
+    static TOOL_ACTION editSymbolPinMaps;
     static TOOL_ACTION pinTable;
     static TOOL_ACTION convertStackedPins;
     static TOOL_ACTION explodeStackedPin;

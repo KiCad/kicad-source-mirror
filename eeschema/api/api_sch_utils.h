@@ -26,6 +26,7 @@
 #include <core/typeinfo.h>
 #include <api/common/envelope.pb.h>
 #include <api/schematic/schematic_types.pb.h>
+#include <pin_map.h>
 
 class EDA_ITEM;
 class SCH_SYMBOL;
@@ -38,6 +39,13 @@ bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, cons
                  const SCH_SHEET_PATH& aPath );
 
 bool UnpackSymbol( SCH_SYMBOL* aOutput, const kiapi::schematic::types::SchematicSymbolInstance& aInput );
+
+/// Pack/unpack a pin-to-pad map instance override to/from its protobuf form (issue #2282).
+void PackPinMapOverride( kiapi::schematic::types::PinMapInstanceOverride* aOutput,
+                         const PIN_MAP_INSTANCE_OVERRIDE& aOverride );
+
+PIN_MAP_INSTANCE_OVERRIDE UnpackPinMapOverride(
+        const kiapi::schematic::types::PinMapInstanceOverride& aInput );
 
 bool PackSheet( kiapi::schematic::types::SheetSymbol* aOutput, const SCH_SHEET* aInput,
                 const SCH_SHEET_PATH& aPath );

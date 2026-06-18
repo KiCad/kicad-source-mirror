@@ -553,6 +553,14 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_PanelPinConnections->Layout();
 	bSizerPinConnections->Fit( m_PanelPinConnections );
 	m_NoteBook->AddPage( m_PanelPinConnections, _("Pin Connections"), true );
+	m_pinMapPage = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	bPinMapPageSizer = new wxBoxSizer( wxVERTICAL );
+
+
+	m_pinMapPage->SetSizer( bPinMapPageSizer );
+	m_pinMapPage->Layout();
+	bPinMapPageSizer->Fit( m_pinMapPage );
+	m_NoteBook->AddPage( m_pinMapPage, _("Pin Map"), false );
 
 	bUpperSizer->Add( m_NoteBook, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 

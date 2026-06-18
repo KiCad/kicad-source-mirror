@@ -412,8 +412,6 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath,
         symbol->SetLibId( libId );
     }
 
-    symbol->SetPinMap( aPart.pin_map );
-
     symbol->SetExcludedFromBOM( aPart.exclude_from_bom );
     symbol->SetExcludedFromBoard( aPart.exclude_from_board );
     symbol->SetExcludedFromSim( aPart.exclude_from_sim );
@@ -502,6 +500,30 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString& aLibraryPath,
         fp_filters.push_back( filter );
 
     symbol->SetFPFilters( fp_filters );
+
+    // Pin-to-pad maps (issue #2282): attach non-destructively.  Prefer the spec-form named maps +
+    // associations when the payload supplies them; otherwise fall back to the legacy flat form for
+    // one release, bound to the symbol's concrete Footprint field (fp_filters may carry globs).
+    if( !aPart.named_pin_maps.IsEmpty() || !aPart.associated_footprints.empty() )
+    {
+        symbol->SetPinMaps( aPart.named_pin_maps );
+        symbol->SetAssociatedFootprints( aPart.associated_footprints );
+    }
+    else
+    {
+        const wxString assignedFootprint = symbol->GetFootprintField().GetText();
+
+        if( !aPart.pin_map.empty() && !assignedFootprint.IsEmpty() )
+        {
+            const wxString mapName = wxS( "HTTP Library" );
+
+            symbol->PinMaps().AddOrReplace( MakeLegacyPinMap( mapName, aPart.pin_map ) );
+
+            LIB_ID fpId;
+            fpId.Parse( assignedFootprint );
+            symbol->SetAssociatedFootprints( { { fpId, mapName } } );
+        }
+    }
 
     return symbol;
 }

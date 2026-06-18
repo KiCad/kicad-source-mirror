@@ -772,6 +772,37 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SELECTION* aSelection, SCH_SHEET_PATH* aSel
 }
 
 
+static void formatPinMapOverride( OUTPUTFORMATTER* aOut, const PIN_MAP_INSTANCE_OVERRIDE& aOverride )
+{
+    if( aOverride.IsDefault() )
+        return;
+
+    const char* mode = "library_default";
+
+    switch( aOverride.m_Mode )
+    {
+    case PIN_MAP_OVERRIDE_MODE::USE_LIBRARY_DEFAULT: mode = "library_default"; break;
+    case PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP:       mode = "named_map";       break;
+    case PIN_MAP_OVERRIDE_MODE::FORCE_IDENTITY:      mode = "identity";        break;
+    case PIN_MAP_OVERRIDE_MODE::DELEGATE_TO_UNIT_1:  mode = "delegate";        break;
+    }
+
+    aOut->Print( "(pin_map_override (mode %s)", mode );
+
+    if( aOverride.m_Mode == PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP && !aOverride.m_ActiveMapName.IsEmpty() )
+        aOut->Print( "(map %s)", aOut->Quotew( aOverride.m_ActiveMapName ).c_str() );
+
+    for( const PIN_MAP_ENTRY& edit : aOverride.m_Edits )
+    {
+        aOut->Print( "(edit %s %s)",
+                     aOut->Quotew( edit.m_PinNumber ).c_str(),
+                     aOut->Quotew( edit.m_PadNumber ).c_str() );
+    }
+
+    aOut->Print( ")" );
+}
+
+
 void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSchematic,
                                      const SCH_SHEET_LIST& aSheetList, bool aForClipboard,
                                      const SCH_SHEET_PATH* aRelativePath )
@@ -872,6 +903,7 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
     KICAD_FORMAT::FormatBool( m_out, "on_board", !aSymbol->GetExcludedFromBoard() );
     KICAD_FORMAT::FormatBool( m_out, "in_pos_files", !aSymbol->GetExcludedFromPosFiles() );
     KICAD_FORMAT::FormatBool( m_out, "dnp", aSymbol->GetDNP() );
+    formatPinMapOverride( m_out, aSymbol->GetPinMapOverride() );
     // Persist passthrough mode as enum string for tri-state support, but omit when DEFAULT
     // to avoid file churn and keep files compact/back-compatible.
     if( aSymbol->GetPassthroughMode() != SCH_SYMBOL::PASSTHROUGH_MODE::DEFAULT )
@@ -1087,6 +1119,8 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
                             m_out->Print( "(field (name %s) (value %s))",
                                           m_out->Quotew( fname ).c_str(), m_out->Quotew( fvalue ).c_str() );
                         }
+
+                        formatPinMapOverride( m_out, variant.m_PinMapOverride );
 
                         m_out->Print( ")" );  // Closes `variant` token.
                     }

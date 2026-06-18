@@ -40,6 +40,7 @@
 #include <vector>
 
 #include <panel_embedded_files.h>
+#include <panel_symbol_pin_map.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
 #include <widgets/listbox_tricks.h>
@@ -79,6 +80,9 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
 
     m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_NoteBook, m_libEntry, 0, std::move( inheritedEmbeddedFiles ) );
     m_NoteBook->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
+
+    m_pinMapPanel = new PANEL_SYMBOL_PIN_MAP( m_pinMapPage );
+    bPinMapPageSizer->Add( m_pinMapPanel, 1, wxEXPAND, 5 );
 
     m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_libEntry, { m_embeddedFiles->GetLocalFiles() } );
     m_grid->SetTable( m_fields );
@@ -188,6 +192,22 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     Layout();
 
     finishDialogSettings();
+}
+
+
+void DIALOG_LIB_SYMBOL_PROPERTIES::SelectPinMapPage()
+{
+    // TransferDataToWindow restores the remembered page, so defer the switch to a flag it honours.
+    m_forcePinMapPage = true;
+
+    for( size_t page = 0; page < m_NoteBook->GetPageCount(); ++page )
+    {
+        if( m_NoteBook->GetPage( page ) == m_pinMapPage )
+        {
+            m_NoteBook->SetSelection( page );
+            return;
+        }
+    }
 }
 
 
@@ -419,6 +439,21 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_embeddedFiles->TransferDataToWindow();
 
     m_grid->SetMinVisibleRows( this, 4 );
+
+    m_pinMapPanel->SetSymbol( m_libEntry );
+    m_pinMapPanel->TransferDataToWindow();
+
+    if( m_forcePinMapPage )
+    {
+        for( size_t page = 0; page < m_NoteBook->GetPageCount(); ++page )
+        {
+            if( m_NoteBook->GetPage( page ) == m_pinMapPage )
+            {
+                m_NoteBook->SetSelection( page );
+                break;
+            }
+        }
+    }
 
     return true;
 }
@@ -771,6 +806,11 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
             group.insert( token );
         }
     }
+
+    if( !m_pinMapPanel->CommitPendingChanges() )
+        return false;
+
+    m_pinMapPanel->ApplyToSymbol( m_libEntry );
 
     if( editingCurrentSymbol )
         m_Parent->UpdateAfterSymbolProperties( &oldName );

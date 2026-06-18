@@ -321,6 +321,7 @@ set( KICOMMON_SRCS
     oauth/oauth_session.cpp
     oauth/secure_token_store.cpp
     paths.cpp
+    pin_map.cpp
     project.cpp
     remote_provider_client.cpp
     remote_provider_metadata.cpp

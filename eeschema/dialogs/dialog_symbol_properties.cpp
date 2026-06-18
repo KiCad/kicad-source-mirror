@@ -45,6 +45,7 @@
 
 #include <dialog_sim_model.h>
 #include <panel_embedded_files.h>
+#include <panel_symbol_pin_map.h>
 
 
 wxDEFINE_EVENT( SYMBOL_DELAY_FOCUS, wxCommandEvent );
@@ -313,7 +314,8 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
         m_editorShown( false ),
         m_fields( nullptr ),
         m_dataModel( nullptr ),
-        m_embeddedFiles( nullptr )
+        m_embeddedFiles( nullptr ),
+        m_pinMapPanel( nullptr )
 {
     m_symbol = aSymbol;
     m_part = m_symbol->GetLibSymbolRef().get();
@@ -343,6 +345,9 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
         m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_notebook1, m_symbol->GetEmbeddedFiles() );
         m_notebook1->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
     }
+
+    m_pinMapPanel = new PANEL_SYMBOL_PIN_MAP( m_pinMapPage );
+    bPinMapPageSizer->Add( m_pinMapPanel, 1, wxEXPAND, 5 );
 
     if( m_part && m_part->IsMultiBodyStyle() )
     {
@@ -437,6 +442,19 @@ DIALOG_SYMBOL_PROPERTIES::~DIALOG_SYMBOL_PROPERTIES()
 SCH_EDIT_FRAME* DIALOG_SYMBOL_PROPERTIES::GetParent()
 {
     return dynamic_cast<SCH_EDIT_FRAME*>( wxDialog::GetParent() );
+}
+
+
+void DIALOG_SYMBOL_PROPERTIES::SelectPinMapPage()
+{
+    for( size_t page = 0; page < m_notebook1->GetPageCount(); ++page )
+    {
+        if( m_notebook1->GetPage( page ) == m_pinMapPage )
+        {
+            m_notebook1->SetSelection( page );
+            return;
+        }
+    }
 }
 
 
@@ -579,6 +597,9 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     if( m_embeddedFiles && !m_embeddedFiles->TransferDataToWindow() )
         return false;
 
+    m_pinMapPanel->SetSymbol( m_part );
+    m_pinMapPanel->TransferDataToWindow();
+
     m_fieldsGrid->Layout();
     Layout();
     m_fieldsGrid->SetMinVisibleRows( this, 4 );
@@ -712,6 +733,9 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     if( !m_pinGrid->CommitPendingChanges() )
         return false;
 
+    if( !m_pinMapPanel->CommitPendingChanges() )
+        return false;
+
     SCH_COMMIT     commit( GetParent() );
     SCH_SCREEN*    currentScreen = GetParent()->GetScreen();
     SCH_SHEET_PATH currentSheet = GetParent()->Schematic().CurrentSheet();
@@ -727,6 +751,10 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     // save old cmp in undo list if not already in edit, or moving ...
     if( m_symbol->GetEditFlags() == 0 )
         commit.Modify( m_symbol, currentScreen );
+
+    // Apply pin-map edits after the undo snapshot so undo restores them (issue #2282).
+    if( m_part )
+        m_pinMapPanel->ApplyToSymbol( m_part );
 
     // Save current flags which could be modified by next change settings
     EDA_ITEM_FLAGS flags = m_symbol->GetFlags();

@@ -1111,6 +1111,34 @@ void SYMBOL_EDITOR_EDIT_TOOL::editSymbolProperties()
 }
 
 
+int SYMBOL_EDITOR_EDIT_TOOL::EditSymbolPinMaps( const TOOL_EVENT& aEvent )
+{
+    LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
+
+    if( !symbol )
+    {
+        wxBell();
+        return 0;
+    }
+
+    m_toolMgr->RunAction( ACTIONS::cancelInteractive );
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
+
+    DIALOG_LIB_SYMBOL_PROPERTIES dlg( m_frame, symbol );
+    dlg.SelectPinMapPage();
+
+    // This dialog can subsequently invoke a KIWAY_PLAYER as a quasimodal frame, so it must be run
+    // quasimodally to keep that support working.
+    if( dlg.ShowQuasiModal() != wxID_OK )
+        return 0;
+
+    m_frame->RebuildSymbolUnitAndBodyStyleLists();
+    m_frame->OnModify();
+
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 {
     SCH_COMMIT  commit( m_frame );
@@ -1862,6 +1890,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::setTransitions()
 
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         SCH_ACTIONS::properties.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         SCH_ACTIONS::symbolProperties.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::EditSymbolPinMaps,  SCH_ACTIONS::editSymbolPinMaps.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::PinTable,           SCH_ACTIONS::pinTable.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::ConvertStackedPins, SCH_ACTIONS::convertStackedPins.MakeEvent() );
     Go( &SYMBOL_EDITOR_EDIT_TOOL::ExplodeStackedPin,  SCH_ACTIONS::explodeStackedPin.MakeEvent() );

@@ -31,6 +31,7 @@
 #include <progress_reporter.h>
 #include <schematic_lexer.h>
 #include <sch_file_versions.h>
+#include <pin_map.h>
 #include <default_values.h>    // For some default values
 #include <map>
 #include <set>
@@ -242,6 +243,12 @@ private:
     void parseBodyStyles( std::unique_ptr<LIB_SYMBOL>& aSymbol );
     void parsePinNames( std::unique_ptr<LIB_SYMBOL>& aSymbol );
     void parsePinNumbers( std::unique_ptr<LIB_SYMBOL>& aSymbol );
+
+    void    parseAssociatedFootprints( std::unique_ptr<LIB_SYMBOL>& aSymbol );
+    void    parsePinMaps( std::unique_ptr<LIB_SYMBOL>& aSymbol );
+    PIN_MAP parseOnePinMap();
+
+    PIN_MAP_INSTANCE_OVERRIDE parsePinMapOverride();
 
     SCH_FIELD* parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol );
 

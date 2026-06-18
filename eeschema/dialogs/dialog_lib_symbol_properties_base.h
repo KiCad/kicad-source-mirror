@@ -103,6 +103,8 @@ class DIALOG_LIB_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		WX_GRID* m_jumperGroupsGrid;
 		STD_BITMAP_BUTTON* m_bpAddJumperGroup;
 		STD_BITMAP_BUTTON* m_bpRemoveJumperGroup;
+		wxPanel* m_pinMapPage;
+		wxBoxSizer* bPinMapPageSizer;
 		wxButton* m_spiceFieldsButton;
 		wxStdDialogButtonSizer* m_stdSizerButton;
 		wxButton* m_stdSizerButtonOK;

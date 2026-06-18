@@ -86,6 +86,7 @@ public:
     bool   m_ShowPinNumbers;         // Force showing of pin numbers (normally symbol-specific)
     bool   m_ShowPinNames;           // Force showing of pin names (normally symbol-specific)
     bool   m_ShowPinAltIcons;
+    bool   m_ShowRemappedPinNumbers; // Append the original pin number when a pin is remapped to a pad
     bool   m_ShowDisabled;
     bool   m_ShowGraphicsDisabled;
     bool   m_ShowConnectionPoints;

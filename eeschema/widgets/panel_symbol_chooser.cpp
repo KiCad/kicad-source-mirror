@@ -619,6 +619,12 @@ void PANEL_SYMBOL_CHOOSER::populateFootprintSelector( LIB_ID const& aLibId )
         SCH_FIELD* fp_field = symbol->GetField( FIELD_T::FOOTPRINT );
         wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
+        // Explicitly associated footprints (issue #2282) are listed ahead of the glob matches in
+        // written order and bypass the pin-count filter; a mapped EP/NC footprint legally has more
+        // pads than the symbol has pins.
+        for( const ASSOCIATED_FOOTPRINT& assoc : symbol->GetEffectiveAssociatedFootprints() )
+            m_fp_sel_ctrl->AddAlwaysIncludedFootprint( assoc.m_FootprintLibId );
+
         m_fp_sel_ctrl->FilterByPinCount( pinCount );
         m_fp_sel_ctrl->FilterByFootprintFilters( symbol->GetFPFilters(), true );
         m_fp_sel_ctrl->SetDefaultFootprint( fp_name );

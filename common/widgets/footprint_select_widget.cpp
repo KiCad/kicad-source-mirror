@@ -23,6 +23,7 @@
 #include <widgets/footprint_choice.h>
 #include <widgets/footprint_select_widget.h>
 #include <json_common.h>
+#include <set>
 #include <wx/wupdlock.h>
 
 
@@ -77,6 +78,22 @@ void FOOTPRINT_SELECT_WIDGET::ClearFilters()
     m_filters.Clear();
     m_default_footprint.Clear();
     m_zero_filter = false;
+    m_always_included.clear();
+}
+
+
+void FOOTPRINT_SELECT_WIDGET::AddAlwaysIncludedFootprint( const LIB_ID& aFootprintId )
+{
+    if( !aFootprintId.IsValid() )
+        return;
+
+    for( const LIB_ID& existing : m_always_included )
+    {
+        if( existing == aFootprintId )
+            return;
+    }
+
+    m_always_included.push_back( aFootprintId );
 }
 
 
@@ -115,7 +132,20 @@ bool FOOTPRINT_SELECT_WIDGET::UpdateList()
 
     m_fp_sel_ctrl->Append( defaultLabel, new wxStringClientData( m_default_footprint ) );
 
-    // If zero_filter is set and we have no filters, show no footprints
+    // Explicitly associated footprints are listed first and always shown, bypassing the
+    // pin-count and glob filters (issue #2282).  Track their names so the filtered results below
+    // can be deduplicated against them.
+    std::set<wxString> alwaysIncludedNames;
+
+    for( const LIB_ID& fpId : m_always_included )
+    {
+        wxString fpName = fpId.Format().wx_str();
+
+        if( alwaysIncludedNames.insert( fpName ).second )
+            m_fp_sel_ctrl->Append( fpName, new wxStringClientData( fpName ) );
+    }
+
+    // If zero_filter is set and we have no filters, show only the always-included footprints
     if( m_zero_filter && m_filters.IsEmpty() && m_pin_count == 0 )
     {
         SelectDefault();
@@ -172,6 +202,10 @@ bool FOOTPRINT_SELECT_WIDGET::UpdateList()
                 if( item.is_string() )
                 {
                     wxString fpName = wxString::FromUTF8( item.get<std::string>() );
+
+                    if( alwaysIncludedNames.count( fpName ) )
+                        continue;
+
                     m_fp_sel_ctrl->Append( fpName, new wxStringClientData( fpName ) );
                 }
             }

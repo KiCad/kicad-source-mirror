@@ -32,6 +32,7 @@
 #include <optional>
 
 #include <kiid.h>
+#include <pin_map.h>
 #include <wx/string.h>
 
 class SCH_SYMBOL;
@@ -91,6 +92,9 @@ public:
     void InitializeAttributes( const SCH_SYMBOL& aSymbol );
 
     virtual ~SCH_SYMBOL_VARIANT() = default;
+
+    /// Per-instance pin-to-pad map override for this variant (issue #2282).
+    PIN_MAP_INSTANCE_OVERRIDE m_PinMapOverride;
 };
 
 

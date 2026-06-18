@@ -21,6 +21,7 @@
 
 #include "sch_properties_panel.h"
 
+#include <dialog_symbol_properties.h>
 #include <font/fontconfig.h>
 #include <pgm_base.h>
 #include <common.h>
@@ -37,7 +38,9 @@
 #include <symbol_viewer_frame.h>
 #include <schematic.h>
 #include <sch_symbol.h>
+#include <lib_symbol.h>
 #include <sch_field.h>
+#include <pin_map.h>
 #include <template_fieldnames.h>
 #include <settings/color_settings.h>
 #include <string_utils.h>
@@ -45,6 +48,7 @@
 #include <tools/sch_selection_tool.h>
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
+#include <wx/button.h>
 #include <set>
 
 static const wxString MISSING_FIELD_SENTINEL = wxS( "\uE000" );
@@ -213,8 +217,253 @@ private:
     wxString m_name;
 };
 
+// Stable property names for the Pin Map group (issue #2282).  Kept canonical (untranslated) so the
+// PROPERTY_MANAGER lookup is locale-independent; the displayed captions are translated by the grid.
+static const wxString PIN_MAP_GROUP = _HKI( "Pin Map" );
+static const wxString PIN_MAP_FOOTPRINT_PROP = wxS( "Pin Map Footprint" );
+static const wxString PIN_MAP_MODE_PROP = wxS( "Pin Map Mode" );
+
+
+/**
+ * @return the associated footprint that the symbol's current footprint resolves to, or the first
+ *         associated footprint when the symbol's footprint field matches none of them.  Returns
+ *         nullptr when the symbol has no effective associated footprints.
+ */
+static const ASSOCIATED_FOOTPRINT* activeAssociatedFootprint( const SCH_SYMBOL* aSymbol )
+{
+    const std::unique_ptr<LIB_SYMBOL>& libSymbol = aSymbol->GetLibSymbolRef();
+
+    if( !libSymbol )
+        return nullptr;
+
+    const std::vector<ASSOCIATED_FOOTPRINT>& assoc = libSymbol->GetEffectiveAssociatedFootprints();
+
+    if( assoc.empty() )
+        return nullptr;
+
+    LIB_ID fpId;
+
+    if( const SCH_FIELD* fpField = aSymbol->GetField( FIELD_T::FOOTPRINT ) )
+        fpId.Parse( fpField->GetText() );
+
+    for( const ASSOCIATED_FOOTPRINT& candidate : assoc )
+    {
+        if( candidate.m_FootprintLibId == fpId )
+            return &candidate;
+    }
+
+    return &assoc.front();
+}
+
+
+static bool symbolHasAssociatedFootprint( INSPECTABLE* aObject )
+{
+    const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( aObject );
+
+    return symbol && activeAssociatedFootprint( symbol ) != nullptr;
+}
+
+
+/**
+ * Read-only property showing the footprint a symbol's pin map resolves against (issue #2282).
+ */
+class SCH_SYMBOL_PIN_MAP_FOOTPRINT_PROPERTY : public PROPERTY_BASE
+{
+public:
+    SCH_SYMBOL_PIN_MAP_FOOTPRINT_PROPERTY() :
+            PROPERTY_BASE( PIN_MAP_FOOTPRINT_PROP )
+    {
+    }
+
+    size_t OwnerHash() const override { return TYPE_HASH( SCH_SYMBOL ); }
+    size_t BaseHash() const override { return TYPE_HASH( SCH_SYMBOL ); }
+    size_t TypeHash() const override { return TYPE_HASH( wxString ); }
+
+    bool Writeable( INSPECTABLE* aObject ) const override { return false; }
+
+    void setter( void* obj, wxAny& v ) override { }
+
+    wxAny getter( const void* obj ) const override
+    {
+        const SCH_SYMBOL* symbol = reinterpret_cast<const SCH_SYMBOL*>( obj );
+
+        if( const ASSOCIATED_FOOTPRINT* active = activeAssociatedFootprint( symbol ) )
+            return wxAny( active->m_FootprintLibId.Format().wx_str() );
+
+        return wxAny( wxEmptyString );
+    }
+};
+
+
+/**
+ * Override-mode selector for a symbol's per-instance pin map (issue #2282).
+ *
+ * The three user-selectable modes are Library default, Named map and Identity.  DELEGATE_TO_UNIT_1
+ * is internal to multi-unit symbols and is resolved away by SCH_SYMBOL::GetPinMapOverride, so it is
+ * never offered here.
+ */
+class SCH_SYMBOL_PIN_MAP_MODE_PROPERTY : public PROPERTY_BASE
+{
+public:
+    SCH_SYMBOL_PIN_MAP_MODE_PROPERTY() :
+            PROPERTY_BASE( PIN_MAP_MODE_PROP )
+    {
+    }
+
+    size_t OwnerHash() const override { return TYPE_HASH( SCH_SYMBOL ); }
+    size_t BaseHash() const override { return TYPE_HASH( SCH_SYMBOL ); }
+    size_t TypeHash() const override { return TYPE_HASH( int ); }
+
+    static wxPGChoices BuildChoices()
+    {
+        wxPGChoices choices;
+        choices.Add( _( "Library default" ), static_cast<int>( PIN_MAP_OVERRIDE_MODE::USE_LIBRARY_DEFAULT ) );
+        choices.Add( _( "Named map" ), static_cast<int>( PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP ) );
+        choices.Add( _( "Identity" ), static_cast<int>( PIN_MAP_OVERRIDE_MODE::FORCE_IDENTITY ) );
+
+        return choices;
+    }
+
+    void setter( void* obj, wxAny& v ) override
+    {
+        int value = 0;
+
+        if( !v.GetAs( &value ) )
+            return;
+
+        SCH_SYMBOL* symbol = reinterpret_cast<SCH_SYMBOL*>( obj );
+
+        const SCH_SHEET_PATH* sheetPath = nullptr;
+        wxString              variantName;
+
+        if( symbol->Schematic() )
+        {
+            sheetPath = &symbol->Schematic()->CurrentSheet();
+            variantName = symbol->Schematic()->GetCurrentVariant();
+        }
+
+        PIN_MAP_INSTANCE_OVERRIDE override = symbol->GetPinMapOverride( sheetPath, variantName );
+        override.m_Mode = static_cast<PIN_MAP_OVERRIDE_MODE>( value );
+
+        // The active-map name is meaningful only in named-map mode; the library default is used
+        // otherwise.  Seed it from the symbol's active associated footprint when switching to
+        // named-map mode and no name has been chosen yet.
+        if( override.m_Mode == PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP && override.m_ActiveMapName.IsEmpty() )
+        {
+            if( const ASSOCIATED_FOOTPRINT* active = activeAssociatedFootprint( symbol ) )
+                override.m_ActiveMapName = active->m_MapName;
+        }
+
+        symbol->SetPinMapOverride( override, sheetPath, variantName );
+    }
+
+    wxAny getter( const void* obj ) const override
+    {
+        const SCH_SYMBOL* symbol = reinterpret_cast<const SCH_SYMBOL*>( obj );
+
+        const SCH_SHEET_PATH* sheetPath = nullptr;
+        wxString              variantName;
+
+        if( symbol->Schematic() )
+        {
+            sheetPath = &symbol->Schematic()->CurrentSheet();
+            variantName = symbol->Schematic()->GetCurrentVariant();
+        }
+
+        PIN_MAP_INSTANCE_OVERRIDE override = symbol->GetPinMapOverride( sheetPath, variantName );
+
+        // Internal delegation is resolved away by GetPinMapOverride, but guard against any leak by
+        // mapping unknown modes to the library default for display.
+        switch( override.m_Mode )
+        {
+        case PIN_MAP_OVERRIDE_MODE::USE_LIBRARY_DEFAULT:
+        case PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP:
+        case PIN_MAP_OVERRIDE_MODE::FORCE_IDENTITY:
+            return wxAny( static_cast<int>( override.m_Mode ) );
+
+        default:
+            return wxAny( static_cast<int>( PIN_MAP_OVERRIDE_MODE::USE_LIBRARY_DEFAULT ) );
+        }
+    }
+};
+
+
+// Stable group caption for the effective pin->pad table rows (issue #2282).  Nested under the Pin
+// Map group as one read-only child property per symbol pin.
+static const wxString PIN_MAP_TABLE_GROUP = _HKI( "Effective Pin Map" );
+
+// Caption prefix for a per-pin table property.  The property name doubles as its displayed label in
+// wxPropertyGrid, so it is kept human-readable ("Pin <number>") and untranslated for a stable,
+// locale-independent PROPERTY_MANAGER lookup key.
+static const wxString PIN_MAP_ENTRY_PREFIX = wxS( "Pin " );
+
+
+/**
+ * Read-only per-pin row of the effective pin->pad table (issue #2282).
+ *
+ * One property is registered per distinct symbol pin number; its value is the effective pad the pin
+ * resolves to for the current sheet and variant.  An unmapped pin (identity resolution) is shown as
+ * "<pad> (unmapped)" so a reviewer can see at a glance which pins the active map actually remaps.
+ */
+class SCH_SYMBOL_PIN_MAP_ENTRY_PROPERTY : public PROPERTY_BASE
+{
+public:
+    SCH_SYMBOL_PIN_MAP_ENTRY_PROPERTY( const wxString& aName, const wxString& aPinNumber ) :
+            PROPERTY_BASE( aName ),
+            m_pinNumber( aPinNumber )
+    {
+    }
+
+    size_t OwnerHash() const override { return TYPE_HASH( SCH_SYMBOL ); }
+    size_t BaseHash() const override { return TYPE_HASH( SCH_SYMBOL ); }
+    size_t TypeHash() const override { return TYPE_HASH( wxString ); }
+
+    bool Writeable( INSPECTABLE* aObject ) const override { return false; }
+
+    void setter( void* obj, wxAny& v ) override {}
+
+    wxAny getter( const void* obj ) const override
+    {
+        const SCH_SYMBOL* symbol = reinterpret_cast<const SCH_SYMBOL*>( obj );
+
+        const SCH_SHEET_PATH* sheetPath = nullptr;
+        wxString              variantName;
+
+        if( symbol->Schematic() )
+        {
+            sheetPath = &symbol->Schematic()->CurrentSheet();
+            variantName = symbol->Schematic()->GetCurrentVariant();
+        }
+
+        if( !sheetPath )
+            return wxAny( m_pinNumber );
+
+        for( const SCH_PIN* pin : symbol->GetPins( sheetPath ) )
+        {
+            std::vector<wxString> logical = pin->GetStackedPinNumbers();
+
+            if( std::find( logical.begin(), logical.end(), m_pinNumber ) == logical.end() )
+                continue;
+
+            wxString pad = pin->GetEffectivePadNumber( *sheetPath, variantName );
+
+            if( pad == m_pinNumber )
+                return wxAny( wxString::Format( _( "%s (unmapped)" ), pad ) );
+
+            return wxAny( pad );
+        }
+
+        return wxAny( m_pinNumber );
+    }
+
+private:
+    wxString m_pinNumber;
+};
+
+
 std::set<wxString> SCH_PROPERTIES_PANEL::m_currentSymbolFieldNames;
 std::set<wxString> SCH_PROPERTIES_PANEL::m_currentSheetFieldNames;
+std::set<wxString> SCH_PROPERTIES_PANEL::m_currentPinMapPinNumbers;
 
 SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* aFrame ) :
         PROPERTIES_PANEL( aParent, aFrame ),
@@ -224,8 +473,16 @@ SCH_PROPERTIES_PANEL::SCH_PROPERTIES_PANEL( wxWindow* aParent, SCH_BASE_FRAME* a
         m_checkboxEditorInstance( nullptr ),
         m_colorEditorInstance( nullptr ),
         m_fpEditorInstance( nullptr ),
-        m_urlEditorInstance( nullptr )
+        m_urlEditorInstance( nullptr ),
+        m_editPinMapButton( nullptr )
 {
+    // Pin Map editor launcher (issue #2282).  The button lives below the property grid and is only
+    // shown when a single symbol with an effective associated footprint is selected.
+    m_editPinMapButton = new wxButton( this, wxID_ANY, _( "Edit Pin Map..." ) );
+    m_editPinMapButton->Hide();
+    GetSizer()->Add( m_editPinMapButton, 0, wxALL | wxEXPAND, 5 );
+    m_editPinMapButton->Bind( wxEVT_BUTTON, &SCH_PROPERTIES_PANEL::onEditPinMap, this );
+
     m_propMgr.Rebuild();
     bool found = false;
 
@@ -404,6 +661,27 @@ void SCH_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
 {
     m_currentSymbolFieldNames.clear();
     m_currentSheetFieldNames.clear();
+    m_currentPinMapPinNumbers.clear();
+
+    // The effective pin->pad table is only meaningful for a single pin-mapped symbol; collecting the
+    // pin numbers here lets the per-pin rows hide for everything else.
+    if( SCH_SYMBOL* pinMapped = getSinglePinMappedSymbol() )
+    {
+        const SCH_SHEET_PATH* sheetPath = pinMapped->Schematic() ? &pinMapped->Schematic()->CurrentSheet() : nullptr;
+
+        if( sheetPath )
+        {
+            // Use logical (stacked-expanded) pin numbers so the rows match the editor grid's keys.
+            for( const SCH_PIN* pin : pinMapped->GetPins( sheetPath ) )
+            {
+                for( const wxString& number : pin->GetStackedPinNumbers() )
+                {
+                    if( !number.IsEmpty() )
+                        m_currentPinMapPinNumbers.insert( number );
+                }
+            }
+        }
+    }
 
     for( EDA_ITEM* item : aSelection )
     {
@@ -461,7 +739,94 @@ void SCH_PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         }
     }
 
+    // Pin Map group (issue #2282).  These properties are only available when the symbol carries at
+    // least one effective associated footprint, so they stay hidden for ordinary symbols.
+    const wxString groupPinMap = PIN_MAP_GROUP;
+
+    if( !m_propMgr.GetProperty( TYPE_HASH( SCH_SYMBOL ), PIN_MAP_FOOTPRINT_PROP ) )
+    {
+        m_propMgr.AddProperty( new SCH_SYMBOL_PIN_MAP_FOOTPRINT_PROPERTY(), groupPinMap )
+                .SetAvailableFunc( symbolHasAssociatedFootprint );
+    }
+
+    if( !m_propMgr.GetProperty( TYPE_HASH( SCH_SYMBOL ), PIN_MAP_MODE_PROP ) )
+    {
+        m_propMgr.AddProperty( new SCH_SYMBOL_PIN_MAP_MODE_PROPERTY(), groupPinMap )
+                .SetAvailableFunc( symbolHasAssociatedFootprint )
+                .SetChoicesFunc(
+                        []( INSPECTABLE* ) -> wxPGChoices
+                        {
+                            return SCH_SYMBOL_PIN_MAP_MODE_PROPERTY::BuildChoices();
+                        } );
+    }
+
+    // One read-only row per symbol pin under a collapsible group, showing the effective pad each pin
+    // resolves to (issue #2282).  wxPropertyGrid has no table widget, so the table is expressed as
+    // nested category rows; they register once per pin number and gate on the current selection.
+    const wxString groupPinMapTable = PIN_MAP_TABLE_GROUP;
+
+    for( const wxString& pinNumber : m_currentPinMapPinNumbers )
+    {
+        const wxString propName = PIN_MAP_ENTRY_PREFIX + pinNumber;
+
+        if( !m_propMgr.GetProperty( TYPE_HASH( SCH_SYMBOL ), propName ) )
+        {
+            m_propMgr.AddProperty( new SCH_SYMBOL_PIN_MAP_ENTRY_PROPERTY( propName, pinNumber ), groupPinMapTable )
+                    .SetAvailableFunc(
+                            [pinNumber]( INSPECTABLE* )
+                            {
+                                return SCH_PROPERTIES_PANEL::m_currentPinMapPinNumbers.count( pinNumber );
+                            } );
+        }
+    }
+
     PROPERTIES_PANEL::rebuildProperties( aSelection );
+
+    // The Edit Pin Map button targets the schematic-editor symbol properties dialog, so it is only
+    // shown there for a single pin-mapped symbol.
+    bool showEditButton = m_frame->IsType( FRAME_SCH ) && getSinglePinMappedSymbol() != nullptr;
+
+    if( m_editPinMapButton && m_editPinMapButton->IsShown() != showEditButton )
+    {
+        m_editPinMapButton->Show( showEditButton );
+        Layout();
+    }
+}
+
+
+SCH_SYMBOL* SCH_PROPERTIES_PANEL::getSinglePinMappedSymbol()
+{
+    SELECTION        fallbackSelection;
+    const SELECTION& selection = getSelection( fallbackSelection );
+
+    if( selection.Size() != 1 || selection.Front()->Type() != SCH_SYMBOL_T )
+        return nullptr;
+
+    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( selection.Front() );
+
+    return symbolHasAssociatedFootprint( symbol ) ? symbol : nullptr;
+}
+
+
+void SCH_PROPERTIES_PANEL::onEditPinMap( wxCommandEvent& aEvent )
+{
+    SCH_SYMBOL* symbol = getSinglePinMappedSymbol();
+
+    if( !symbol || !m_frame->IsType( FRAME_SCH ) )
+        return;
+
+    SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    DIALOG_SYMBOL_PROPERTIES dlg( editFrame, symbol );
+    dlg.SelectPinMapPage();
+
+    // The dialog can subsequently invoke a KIWAY_PLAYER as a quasimodal frame, so it must run
+    // quasimodally to keep that support working.
+    if( dlg.ShowQuasiModal() == SYMBOL_PROPS_EDIT_OK )
+    {
+        editFrame->OnModify();
+        AfterCommit();
+    }
 }
 
 

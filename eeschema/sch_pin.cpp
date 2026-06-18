@@ -23,6 +23,11 @@
 
 #include "sch_pin.h"
 
+#include <lib_id.h>
+#include <lib_symbol.h>
+#include <pin_map.h>
+#include <sch_symbol.h>
+#include <sch_sheet_path.h>
 #include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <base_units.h>
@@ -722,12 +727,107 @@ std::optional<wxString> SCH_PIN::GetSmallestLogicalNumber() const
 }
 
 
-wxString SCH_PIN::GetEffectivePadNumber() const
+wxString SCH_PIN::GetSmallestStackedPadNumber() const
 {
     if( auto smallest = GetSmallestLogicalNumber() )
         return *smallest;
 
     return GetShownNumber();
+}
+
+
+wxString SCH_PIN::GetEffectivePadNumber( const SCH_SHEET_PATH& aSheet, const wxString& aVariantName,
+                                         const LIB_ID& aFootprintLibId,
+                                         const std::set<wxString>* aFootprintPadNumbers,
+                                         PAD_RESOLUTION* aState ) const
+{
+    const wxString& pinNumber = GetNumber();
+    const PIN_MAP*  map = nullptr;
+
+    if( const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( GetParentSymbol() ) )
+    {
+        PIN_MAP_INSTANCE_OVERRIDE ovr = symbol->GetPinMapOverride( &aSheet, aVariantName );
+
+        switch( ovr.m_Mode )
+        {
+        case PIN_MAP_OVERRIDE_MODE::FORCE_IDENTITY:
+            map = nullptr;
+            break;
+
+        case PIN_MAP_OVERRIDE_MODE::USE_NAMED_MAP:
+            if( const LIB_SYMBOL* lib = symbol->GetLibSymbolRef().get() )
+                map = lib->GetEffectivePinMaps().FindByName( ovr.m_ActiveMapName );
+
+            break;
+
+        default:    // USE_LIBRARY_DEFAULT; DELEGATE_TO_UNIT_1 is already resolved away
+            if( const LIB_SYMBOL* lib = symbol->GetLibSymbolRef().get() )
+            {
+                for( const ASSOCIATED_FOOTPRINT& assoc : lib->GetEffectiveAssociatedFootprints() )
+                {
+                    if( assoc.m_FootprintLibId == aFootprintLibId )
+                    {
+                        map = lib->GetEffectivePinMaps().FindByName( assoc.m_MapName );
+                        break;
+                    }
+                }
+            }
+
+            break;
+        }
+
+        // Instance-local sparse edits patch the resolved map, but are ignored under forced
+        // identity per the PIN_MAP_INSTANCE_OVERRIDE contract.
+        if( ovr.m_Mode != PIN_MAP_OVERRIDE_MODE::FORCE_IDENTITY )
+        {
+            for( const PIN_MAP_ENTRY& edit : ovr.m_Edits )
+            {
+                if( edit.m_PinNumber == pinNumber )
+                {
+                    if( aState )
+                        *aState = PAD_RESOLUTION::MAPPED;
+
+                    return edit.m_PadNumber;
+                }
+            }
+        }
+    }
+
+    // 1. MAPPED - an explicit entry wins and needs no footprint.
+    if( map && map->HasEntry( pinNumber ) )
+    {
+        if( aState )
+            *aState = PAD_RESOLUTION::MAPPED;
+
+        return map->GetPadNumber( pinNumber );
+    }
+
+    // 2. IDENTITY - no entry, but the footprint carries a pad with this number.
+    if( aFootprintPadNumbers && aFootprintPadNumbers->count( pinNumber ) )
+    {
+        if( aState )
+            *aState = PAD_RESOLUTION::IDENTITY;
+
+        return pinNumber;
+    }
+
+    // 3. UNMAPPED, or assumed identity when no footprint is available (the painter path).
+    if( aState )
+        *aState = aFootprintPadNumbers ? PAD_RESOLUTION::UNMAPPED : PAD_RESOLUTION::IDENTITY;
+
+    return aFootprintPadNumbers ? wxString() : pinNumber;
+}
+
+
+wxString SCH_PIN::GetEffectivePadNumber( const SCH_SHEET_PATH& aSheet,
+                                         const wxString& aVariantName ) const
+{
+    LIB_ID footprintLibId;
+
+    if( const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( GetParentSymbol() ) )
+        footprintLibId.Parse( symbol->GetFootprintFieldText( true, &aSheet, false, aVariantName ) );
+
+    return GetEffectivePadNumber( aSheet, aVariantName, footprintLibId, nullptr );
 }
 
 
@@ -1582,7 +1682,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
 
     wxString libPinShownName   = m_libPin ? m_libPin->GetShownName()   : wxString( "??" );
     wxString libPinShownNumber = m_libPin ? m_libPin->GetShownNumber() : wxString( "??" );
-    wxString effectivePadNumber = m_libPin ? m_libPin->GetEffectivePadNumber() : libPinShownNumber;
+    wxString effectivePadNumber = m_libPin ? m_libPin->GetSmallestStackedPadNumber() : libPinShownNumber;
 
     if( effectivePadNumber != libPinShownNumber )
     {

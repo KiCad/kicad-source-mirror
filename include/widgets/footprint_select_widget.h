@@ -23,6 +23,10 @@
 #include <wx/arrstr.h>
 #include <wx/panel.h>
 
+#include <vector>
+
+#include <lib_id.h>
+
 class KIWAY;
 class PROJECT;
 class FOOTPRINT_CHOICE;
@@ -63,6 +67,16 @@ public:
      * Clear all filters. Does not update the list.
      */
     void ClearFilters();
+
+    /**
+     * Add a footprint that is always listed regardless of the pin-count and glob filters
+     * (issue #2282).  Explicitly associated footprints are sorted ahead of the glob matches and
+     * are never excluded by the graphical pin-count filter, since a mapped EP/NC footprint legally
+     * has more pads than the symbol has pins.  Does not update the list.
+     *
+     * @param aFootprintId is the concrete footprint LIB_ID to always include.
+     */
+    void AddAlwaysIncludedFootprint( const LIB_ID& aFootprintId );
 
     /**
      * Filter by pin count. Does not update the list.
@@ -113,9 +127,10 @@ private:
     wxString          m_default_footprint;
 
     // Filter parameters
-    int               m_pin_count;
-    wxArrayString     m_filters;
-    bool              m_zero_filter;
+    int                  m_pin_count;
+    wxArrayString        m_filters;
+    bool                 m_zero_filter;
+    std::vector<LIB_ID>  m_always_included;
 
     KIWAY*            m_kiway;
 

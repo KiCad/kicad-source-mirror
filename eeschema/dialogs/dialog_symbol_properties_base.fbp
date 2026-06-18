@@ -2335,6 +2335,41 @@
                 </object>
               </object>
             </object>
+            <object class="notebookpage" expanded="false">
+              <property name="bitmap"></property>
+              <property name="label">Pin Map</property>
+              <property name="select">0</property>
+              <object class="wxPanel" expanded="false">
+                <property name="aui_managed">0</property>
+                <property name="aui_manager_style">wxAUI_MGR_DEFAULT</property>
+                <property name="bg"></property>
+                <property name="context_help"></property>
+                <property name="context_menu">1</property>
+                <property name="drag_accept_files">0</property>
+                <property name="enabled">1</property>
+                <property name="fg"></property>
+                <property name="font"></property>
+                <property name="hidden">0</property>
+                <property name="id">wxID_ANY</property>
+                <property name="maximum_size"></property>
+                <property name="minimum_size"></property>
+                <property name="name">m_pinMapPage</property>
+                <property name="pos"></property>
+                <property name="size"></property>
+                <property name="subclass">; ; forward_declare</property>
+                <property name="tooltip"></property>
+                <property name="two_step_creation">0</property>
+                <property name="window_extra_style"></property>
+                <property name="window_name"></property>
+                <property name="window_style">wxTAB_TRAVERSAL</property>
+                <object class="wxBoxSizer" expanded="false">
+                  <property name="minimum_size"></property>
+                  <property name="name">bPinMapPageSizer</property>
+                  <property name="orient">wxVERTICAL</property>
+                  <property name="permission">protected</property>
+                </object>
+              </object>
+            </object>
           </object>
         </object>
         <object class="sizeritem" expanded="true">

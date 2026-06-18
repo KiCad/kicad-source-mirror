@@ -111,6 +111,9 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	m_checkShowHiddenPins = new wxCheckBox( this, wxID_ANY, _("S&how hidden pins"), wxDefaultPosition, wxDefaultSize, 0 );
 	bAppearanceSizer->Add( m_checkShowHiddenPins, 0, wxEXPAND|wxALL, 5 );
 
+	m_checkShowRemappedPinNumbers = new wxCheckBox( this, wxID_ANY, _("Show original pin numbers when remapped"), wxDefaultPosition, wxDefaultSize, 0 );
+	bAppearanceSizer->Add( m_checkShowRemappedPinNumbers, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+
 	m_checkShowHiddenFields = new wxCheckBox( this, wxID_ANY, _("Show hidden fields"), wxDefaultPosition, wxDefaultSize, 0 );
 	bAppearanceSizer->Add( m_checkShowHiddenFields, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 

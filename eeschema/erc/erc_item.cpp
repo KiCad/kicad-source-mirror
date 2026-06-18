@@ -171,6 +171,22 @@ ERC_ITEM ERC_ITEM::fieldNameWhitespace( ERCE_FIELD_NAME_WHITESPACE,
         _HKI( "Field name has leading or trailing whitespace" ),
         wxT( "field_name_whitespace" ) );
 
+ERC_ITEM ERC_ITEM::pinMapBadPad( ERCE_PIN_MAP_BAD_PAD,
+        _HKI( "Pin map references a pad that does not exist on the footprint" ),
+        wxT( "pin_map_bad_pad" ) );
+
+ERC_ITEM ERC_ITEM::pinMapUnmappedPin( ERCE_PIN_MAP_UNMAPPED_PIN,
+        _HKI( "Connected pin is not mapped to any footprint pad" ),
+        wxT( "pin_map_unmapped_pin" ) );
+
+ERC_ITEM ERC_ITEM::pinMapDuplicatePad( ERCE_PIN_MAP_DUPLICATE_PAD,
+        _HKI( "Two symbol pins are mapped to the same footprint pad" ),
+        wxT( "pin_map_duplicate_pad" ) );
+
+ERC_ITEM ERC_ITEM::pinMapStalePin( ERCE_PIN_MAP_STALE_PIN,
+        _HKI( "Pin map references a pin number that no longer exists on the symbol" ),
+        wxT( "pin_map_stale_pin" ) );
+
 ERC_ITEM ERC_ITEM::unresolvedVariable( ERCE_UNRESOLVED_VARIABLE,
         _HKI( "Unresolved text variable" ),
         wxT( "unresolved_variable" ) );
@@ -281,6 +297,10 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
                 ERC_ITEM::heading_misc,
                 ERC_ITEM::stackedPinName,
                 ERC_ITEM::fieldNameWhitespace,
+                ERC_ITEM::pinMapBadPad,
+                ERC_ITEM::pinMapUnmappedPin,
+                ERC_ITEM::pinMapDuplicatePad,
+                ERC_ITEM::pinMapStalePin,
                 ERC_ITEM::unannotated,
                 ERC_ITEM::unresolvedVariable,
                 ERC_ITEM::undefinedNetclass,
@@ -367,6 +387,10 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_UNCONNECTED_WIRE_ENDPOINT: return std::make_shared<ERC_ITEM>( unconnectedWireEndpoint );
     case ERCE_STACKED_PIN_SYNTAX:      return std::make_shared<ERC_ITEM>( stackedPinName );
     case ERCE_FIELD_NAME_WHITESPACE:   return std::make_shared<ERC_ITEM>( fieldNameWhitespace );
+    case ERCE_PIN_MAP_BAD_PAD:         return std::make_shared<ERC_ITEM>( pinMapBadPad );
+    case ERCE_PIN_MAP_UNMAPPED_PIN:    return std::make_shared<ERC_ITEM>( pinMapUnmappedPin );
+    case ERCE_PIN_MAP_DUPLICATE_PAD:   return std::make_shared<ERC_ITEM>( pinMapDuplicatePad );
+    case ERCE_PIN_MAP_STALE_PIN:       return std::make_shared<ERC_ITEM>( pinMapStalePin );
     case ERCE_UNSPECIFIED:
     default:
         wxFAIL_MSG( wxS( "Unknown ERC error code" ) );

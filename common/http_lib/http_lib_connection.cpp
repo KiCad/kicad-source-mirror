@@ -25,7 +25,6 @@
 
 #include <boost/algorithm/string.hpp>
 #include <json_common.h>
-#include <pin_assignment.h>
 #include <wx/base64.h>
 
 #include <kicad_curl/kicad_curl_easy.h>
@@ -291,13 +290,15 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
             aFetchedPart.exclude_from_sim = boolFromString( exclude, false );
         }
 
-        // parse optional pin assignments
+        // parse optional pin assignments (legacy flat form; issue #2282)
         aFetchedPart.pin_map.clear();
 
-        if( response.contains( "pin_map" ) && response["pin_map"].is_array() )
-        {
-            aFetchedPart.pin_map = ParsePinMapJson( response );
-        }
+        if( response.contains( "pin_map" ) )
+            aFetchedPart.pin_map = ParseLegacyPinAssignments( response["pin_map"] );
+
+        // parse the spec-form named pin maps + footprint associations (issue #2282)
+        aFetchedPart.named_pin_maps = ParsePinMapSet( response );
+        aFetchedPart.associated_footprints = ParseAssociatedFootprints( response );
 
         // remove previously loaded fields
         aFetchedPart.fields.clear();
