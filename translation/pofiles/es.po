@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-17 09:05+0300\n"
-"PO-Revision-Date: 2026-06-18 17:01+0000\n"
+"PO-Revision-Date: 2026-06-19 15:02+0000\n"
 "Last-Translator: Jose Perez <mirror.k2@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v10/es/>\n"
 "Language: es\n"
@@ -9636,7 +9636,7 @@ msgstr "Recortando el historial local..."
 
 #: common/local_history.cpp:1943
 msgid "Compacting trimmed history..."
-msgstr ""
+msgstr "Compactando el historial recortado..."
 
 #: common/local_history.cpp:2289
 msgid ""
@@ -9687,6 +9687,8 @@ msgstr ""
 msgid ""
 "Files removed by 'Proceed' are archived to %s and can be recovered manually."
 msgstr ""
+"Los archivos eliminados por 'Proceder' son archivados en %s y pueden ser "
+"eliminados manualmente."
 
 #: common/local_history.cpp:2548
 msgid "Cannot restore - the following files are open by another user:"
@@ -9824,27 +9826,27 @@ msgstr "No hay notificaciones disponibles"
 
 #: common/oauth/oauth_loopback_server.cpp:126
 msgid "Missing HTTP method in callback request."
-msgstr ""
+msgstr "Falta el método HTTP en la petición de callback."
 
 #: common/oauth/oauth_loopback_server.cpp:134
 msgid "Missing callback URL in request."
-msgstr ""
+msgstr "Falta la URL de callback en la petición."
 
 #: common/oauth/oauth_loopback_server.cpp:145
 msgid "Unexpected callback path."
-msgstr ""
+msgstr "Ruta de callback inesperada."
 
 #: common/oauth/oauth_loopback_server.cpp:153
 msgid "OAuth callback state did not match."
-msgstr ""
+msgstr "El estado de la respuesta de OAuth no coinciden."
 
 #: common/oauth/oauth_loopback_server.cpp:163
 msgid "Authorization server returned an OAuth error."
-msgstr ""
+msgstr "El servidor de autorización devolvió un error de OAuth."
 
 #: common/oauth/oauth_loopback_server.cpp:171
 msgid "Missing authorization code in callback."
-msgstr ""
+msgstr "Falta el código de autorización en la devolución de la llamada."
 
 #: common/page_info.cpp:48
 msgid "A5 148 x 210mm"
@@ -10083,44 +10085,47 @@ msgstr "Error: "
 
 #: common/remote_provider_client.cpp:287
 msgid "Sign in required for this provider."
-msgstr ""
+msgstr "Se requiere iniciar sesión para este proveedor."
 
 #: common/remote_provider_client.cpp:329
+#, fuzzy
 msgid "Provider metadata does not include a session bootstrap URL."
-msgstr ""
+msgstr "Los metros del proveedor no incluyen una URL de inicio de sesión."
 
 #: common/remote_provider_client.cpp:352
 msgid "Bootstrap response did not include a nonce URL."
-msgstr ""
+msgstr "La respuesta de bootstrap no incluida una URL de nonce."
 
 #: common/remote_provider_client.cpp:371
 msgid "Bootstrap nonce URL origin does not match the bootstrap endpoint."
 msgstr ""
+"El origen de la URL del nonce de bootstrap no coincide con el endpoint de "
+"bootstrap."
 
 #: common/remote_provider_client.cpp:407
 #, c-format
 msgid "Remote provider request failed with HTTP %d."
-msgstr ""
+msgstr "La solicitud del proveedor remoto falló con HTTP %d."
 
 #: common/remote_provider_client.cpp:432
 #, c-format
 msgid "Remote provider returned invalid JSON: %s"
-msgstr ""
+msgstr "El proveedor remoto devolvió un JSON inválido: %s"
 
 #: common/remote_provider_client.cpp:453
 #, c-format
 msgid "Remote provider returned invalid token JSON: %s"
-msgstr ""
+msgstr "El proveedor remoto devolvió un token JSON inválido: %s"
 
 #: common/remote_provider_client.cpp:485
 #, c-format
 msgid "Remote provider token response was incomplete: %s"
-msgstr ""
+msgstr "La respuesta del token del proveedor remoto fue incompleta: %s"
 
 #: common/remote_provider_metadata.cpp:53
 #, c-format
 msgid "Remote provider metadata schema '%s' is not readable."
-msgstr ""
+msgstr "El esquema de meta datos del proveedor remoto '%s' es ilegible."
 
 #: common/remote_provider_metadata.cpp:64
 #, c-format
