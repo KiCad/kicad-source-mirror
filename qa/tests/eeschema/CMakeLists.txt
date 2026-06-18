@@ -210,6 +210,16 @@ if( EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/sch_io/diptrace/test_diptrace_sch_import
     list( APPEND QA_EESCHEMA_SRCS sch_io/diptrace/test_diptrace_sch_import_local.cpp )
 endif()
 
+# Database library tests need a live ODBC driver, so gate them the same way the common suite does.
+if( KICAD_TEST_DATABASE_LIBRARIES )
+    list( APPEND QA_EESCHEMA_SRCS sch_io/database/test_sch_io_database.cpp )
+
+    set_source_files_properties( sch_io/database/test_sch_io_database.cpp PROPERTIES
+            COMPILE_DEFINITIONS
+            "QA_DBLIB_SETTINGS_PATH=(\"${CMAKE_SOURCE_DIR}/qa/data/dblib/qa_dblib.kicad_dbl\")"
+            )
+endif()
+
 if( WIN32 )
     # We want to declare a resource manifest on Windows to enable UTF8 mode
     # Without UTF8 mode, some random IO tests may fail, we set the active code page on normal
